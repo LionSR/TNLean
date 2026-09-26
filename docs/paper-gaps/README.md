@@ -662,6 +662,16 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
   tends to `1/√5` for every blocking length.
+- `mswc24_block_form_mixed_overlap.tex` records that the block form of the
+  positive part in eq. (S5) also fails when every multiplicity is one, because
+  `B†B` couples distinct blocks through the overlaps of their `q`-site states,
+  and that part (ii) of the approximation-error lemma fails for the state of
+  eq. (S7): for `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` the error is at least
+  `(9/25)^q/16` for `M ≥ 3`, which the printed rate `(N/q) e^{-γq/ξ_diag}` does
+  not control since the one-dimensional blocks leave `ξ_diag` unconstrained.
+  Under the added hypothesis that the `q`-site states of distinct blocks are
+  orthogonal, the block form holds for multiplicity one and part (ii) is proved
+  with no condition `q = o(N)`.
 - `mswc24_decaying_correlations_windowed_connected.tex` records that the
   correlation estimate of Lemma 2 of the Supplemental Material is proved with
   the bound in every window of `K ≤ 2` consecutive separations and for the

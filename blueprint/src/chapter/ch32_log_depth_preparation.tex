@@ -357,13 +357,17 @@ injective.
     \label{thm:ldp_polar_uniqueness}
     \lean{Matrix.polarPos_eq_of_eq_mul, Matrix.polarSupport_eq_of_eq_mul,
         Matrix.polarIso_eq_of_eq_mul,
-        Matrix.mul_eq_self_of_conjTranspose_mul_self_eq}
+        Matrix.mul_eq_self_of_conjTranspose_mul_self_eq,
+        Matrix.polarPos_eq_of_mul_self_eq, Matrix.polarSupport_eq_of_range_eq}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldpolar_support}
     Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
     projector $E$ onto the range of $Q$. Then $Q=(M^\dagger M)^{1/2}$, $E$ is the
     support projector of $M$, and $W$ is the partial isometry of the polar
-    decomposition of $M$. This is the step needed to identify the layers of
+    decomposition of $M$. In particular, every positive semidefinite $Q$ with
+    $Q^2=M^\dagger M$ is the positive part of $M$, and every orthogonal projector
+    with the range of that positive part is the support projector. This is the
+    step needed to identify the layers of
     \cite[eq.~(16)]{Malz2024Preparation} with the isometry of the blocked
     tensor, which the source asserts (``to the same effect'') without proof.
 \end{theorem}
@@ -455,7 +459,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \begin{lemma}[Overlap of the positive part with the fixed point]
     \label{lem:ldp_positive_part_overlap}
     \lean{MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul,
-        MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le}
+        MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le,
+        MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
         lem:ldp_positive_part_converges, def:correlation_length}
@@ -473,7 +478,9 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$ equals $(N/q)\,e^{-\gamma q/\xi}$
     when $q\ge1$. Explicitly, there is $C>0$ with
     $\bigl\lvert1-\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\rvert\bigr\rvert
-        \le Cy\,e^{Cy}$ for all $q\ge0$ and $M\ge1$.
+        \le Cy\,e^{Cy}$ for all $q\ge0$ and $M\ge1$. The same bound holds for the
+    overlap itself:
+    $\bigl\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle-1\bigr\rvert\le Cy\,e^{Cy}$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -501,7 +508,9 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     with $c\ge\max(1,\lVert\tau_\infty\rVert)$, induction on $M$ gives
     $\lVert\tau_q^M-\tau_\infty^M\rVert\le c\bigl((1+c\delta)^M-1\bigr)
         \le c\,Mc\delta\,e^{Mc\delta}$.
-    This proves the explicit bound. When $y\le1$ it is at most $Ce^{C}y$.
+    Since $\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle-1=\Tr\tau_q^M-\Tr\tau_\infty^M$,
+    this bounds the overlap itself, and hence also its modulus, which proves the
+    explicit bounds. When $y\le1$ it is at most $Ce^{C}y$.
     When $y>1$, the overlap is at most
     $\lVert\phi_M(P_q)\rVert=\lVert\phi_N(A)\rVert$, and these norms are
     bounded because $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ converges to $1$.
@@ -1407,6 +1416,7 @@ of $A$ along $w$.
 \begin{theorem}[Approximation error, general case]
     \label{thm:ldp_approximation_error_general}
     \uses{def:ldp_non_normal_fixed_point, def:correlation_length}
+    \notready
     With the notation of Definition~\ref{def:ldp_non_normal_fixed_point},
     including the approximating state $\widetilde\phi_N$ defined there,
     $\xi_{\mathrm{diag}}=\max_j\xi_j$ the largest correlation length of the
@@ -1416,11 +1426,262 @@ of $A$ along $w$.
          & =O\!\left(\frac Nq\,e^{-\gamma q/\xi_{\mathrm{diag}}}\right).
         \label{eq:ldp_approximation_error_general}
     \end{align}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation}.
+    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation}. As printed it is
+    false: it fails both for a block of multiplicity two
+    (Theorem~\ref{thm:ldp_approximation_error_repeated_block}, with the pair of
+    that block on one of its copies; the source does not say where the pair
+    sits, and the same computation, recorded in the gap note but not
+    formalized, gives the failure for every placement) and for two
+    blocks of multiplicity one whose states on $q$ sites are not orthogonal
+    (Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks})
+    \cite{gap:mswc24_multiplicity_fixed_point,gap:mswc24_block_form_mixed_overlap}.
+    For blocks of multiplicity one whose states on $q$ sites are orthogonal it
+    holds without the condition $q=o(N)$
+    (Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}).
 \end{theorem}
 %% The direct sum A is not normal, so Lemma lem:ldp_positive_part_overlap
-%% does not apply to it. The mixed-block overlap estimate is the content of
-%% Lemma 1'(ii) of the source and is cited, not derived, here. The source
-%% writes the diagonal correlation lengths with a double index, referring to
-%% the diagonal blocks E_{A_j} of the transfer map of A as opposed to the
-%% mixed blocks; here xi_j denotes the correlation length of A_j.
+%% does not apply to it. The source's proof rests on the block form (S5) of
+%% the positive part, which holds only when the q-site states of distinct
+%% blocks are orthogonal and every multiplicity is one; the two theorems
+%% below refute the statement outside that case, and the statement is
+%% proved in that case (thm:ldp_approximation_error_orthogonal_blocks). The source writes the
+%% diagonal correlation lengths with a double index, referring to the
+%% diagonal blocks E_{A_j} of the transfer map of A as opposed to the mixed
+%% blocks; here xi_j denotes the correlation length of A_j. This entry carries
+%% no formalization tag: the statement is false as printed, and the
+%% corrected statement below adds the orthogonality of the blocks.
+
+% **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for a
+% block of multiplicity two; docs/paper-gaps/mswc24_multiplicity_fixed_point.tex.
+% No completion tag on this entry or its proof: the linked declarations
+% compute the overlap and the error for the displayed tensor, but that its
+% blocks are normal and that the tensor is their canonical form (S2) are not
+% formalized, so the refutation of Lemma 1'(ii) on its stated domain is not
+% yet certified.
+\begin{theorem}[The approximating state for a repeated block]
+    \label{thm:ldp_approximation_error_repeated_block}
+    \lean{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor,
+        MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor,
+        MPSTensor.norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis,
+        MPSTensor.not_approximationError_le_repeatedBlockTensor}
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
+        def:correlation_length}
+    Let $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$,
+    the canonical form with the normal block $A_1=(1,0)$ of multiplicity two and
+    weights $(1,1)$ and the normal block $A_2=(0,1)$ of multiplicity one, so that
+    $\beta=(2,1)$ and $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$. Place
+    the pair of the first block on its first copy. For every $q\geq1$ and
+    $M\geq1$ the approximating state of
+    Definition~\ref{def:ldp_non_normal_fixed_point} satisfies
+    \begin{align}
+        \braket{\widetilde\phi_N}{\phi_N}
+         & =\frac{4\cdot2^{-M/2}+1}{\sqrt5\,(4\cdot2^{-M}+1)^{1/2}},
+        \label{eq:ldp_repeated_block_overlap}
+    \end{align}
+    which does not depend on $q$ and tends to $1/\sqrt5$ as $M\to\infty$. The
+    transfer maps of both blocks have no eigenvalue other than one, so every
+    $\lambda_2$ with $0<\lvert\lambda_2\rvert<1$ bounds their subleading
+    eigenvalues. For every such $\lambda_2$, every $\gamma>0$ and every constant
+    $C$ there is $M\geq1$ such that, with $q=M$, $N=M^2$ and
+    $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
+    $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$
+    satisfies $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general})
+    fails for this tensor \cite{gap:mswc24_multiplicity_fixed_point}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    For a tensor of diagonal matrices the blocked map factors as $B=CJ^\dagger$,
+    where $J\colon\ket e\mapsto\ket{e\,e}$ and the column $e$ of $C$ is the state
+    of the diagonal coordinate $e$ on $q$ sites; here these are $\ket{0\cdots0}$
+    for $e=0,1$ and $\ket{1\cdots1}$ for $e=2$. Hence $B^\dagger B=JGJ^\dagger$ with
+    $G$ the Gram matrix of the columns. The positive semidefinite square root of $G$
+    is $Q=2^{-1/2}\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)\oplus1$,
+    and $E=\tfrac12\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)\oplus1$
+    is the projector onto its range, so uniqueness of positive square roots gives
+    $P=JQJ^\dagger$ and $\Pi=JEJ^\dagger$. The pairs are $e_{00}$ and $e_{22}$, so
+    $V^{\otimes M}\sum_j\alpha_j\ket{\Omega_j}$ has components
+    $\sum_j\alpha_j\prod_kV_{\tau_k,(c_j,c_j)}$. From $V^\dagger B=P$ and
+    $V^\dagger V=\Pi$, the overlap with the unnormalized target is
+    $\sum_j\sum_e\overline{\alpha_j}Q_{c_je}^M$, the squared norm of the
+    approximating vector is $\sum_{j,j'}\overline{\alpha_j}\alpha_{j'}E_{c_jc_{j'}}^M$,
+    and $\lVert\phi_N(A)\rVert^2=\sum_{e,e'}G_{ee'}^M=5$. With
+    $\alpha=(2,1)/\sqrt5$ this gives (\ref{eq:ldp_repeated_block_overlap}). Since
+    $1/\sqrt5<1/2$, the error exceeds $1/2$ for large $M$, while $Cy\,e^{Cy}$ with
+    $y=Mr^M$ and $r=e^{-\gamma/\xi_{\mathrm{diag}}}<1$ tends to zero.
+\end{proof}
+
+% **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for two
+% blocks of multiplicity one; docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
+% No completion tag on this entry or its proof, for the same reason as for
+% thm:ldp_approximation_error_repeated_block: the normality of the blocks
+% and the canonical form (S2) of the displayed tensor are not formalized.
+\begin{theorem}[The approximating state for overlapping blocks]
+    \label{thm:ldp_approximation_error_overlapping_blocks}
+    \lean{MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
+        MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor,
+        MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis,
+        MPSTensor.not_approximationError_le_overlappingBlockTensor}
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
+        def:correlation_length}
+    Let $A^0=\operatorname{diag}(1,3/5)$ and $A^1=\operatorname{diag}(0,4/5)$,
+    the canonical form with the normal blocks $A_1=(1,0)$ and $A_2=(3/5,4/5)$, each
+    of multiplicity one and weight one, so that $\beta=(1,1)$. Put $s=(3/5)^q$,
+    the overlap of the states of the two blocks on $q$ sites,
+    $u=\bigl(\sqrt{1+s}+\sqrt{1-s}\bigr)/2$ and
+    $v=\bigl(\sqrt{1+s}-\sqrt{1-s}\bigr)/2$. For every $q\geq1$ and $M\geq1$ the
+    approximating state of Definition~\ref{def:ldp_non_normal_fixed_point}
+    satisfies
+    \begin{align}
+        \braket{\widetilde\phi_N}{\phi_N}
+         & =\frac{u^M+v^M}{(1+s^M)^{1/2}},
+        \label{eq:ldp_overlapping_blocks_overlap}
+    \end{align}
+    and for $M\geq3$ the error is at least $(9/25)^q/16$. The transfer maps of both
+    blocks have no eigenvalue other than one, so every $\lambda_2$ bounds their
+    subleading eigenvalues. If $r=e^{-\gamma/\xi_{\mathrm{diag}}}<9/25$, then for every
+    constant $C$ there is $q\geq3$ such that, with $M=q$, $N=q^2$ and
+    $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
+    $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$ satisfies
+    $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general}) fails even
+    when every multiplicity is one \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    As in the proof of Theorem~\ref{thm:ldp_approximation_error_repeated_block},
+    the Gram matrix of the blocked map on the diagonal coordinates is
+    $G=\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)$, whose positive
+    square root is $Q=\bigl(\begin{smallmatrix}u&v\\v&u\end{smallmatrix}\bigr)$,
+    since $u^2+v^2=1$ and $2uv=s$. The determinant of $Q$ is $\sqrt{1-s^2}>0$, so
+    the support projector is $JJ^\dagger$. With $\alpha=(1,1)/\sqrt2$ the overlap
+    with the unnormalized target is $\sqrt2\,(u^M+v^M)$, the approximating vector
+    has norm one, and $\lVert\phi_N(A)\rVert^2=2+2s^M$, which gives
+    (\ref{eq:ldp_overlapping_blocks_overlap}). For $M\geq3$,
+    \begin{align*}
+        u^M+v^M\leq u^3+v^2=1-u^2(1-u)\leq1-\frac{s^2}{16},
+    \end{align*}
+    because $u^2=\bigl(1+\sqrt{1-s^2}\bigr)/2\geq1/2$ and
+    $1-u\geq(1-u^2)/2\geq s^2/8$. Finally $Cy\,e^{Cy}$ with $y=qr^q$ is eventually
+    below $(9/25)^q/16$, because $q(25r/9)^q\to0$.
+\end{proof}
+
+\begin{lemma}[Polar decomposition of an orthogonal sum]
+    \label{lem:ldp_orthogonal_sum_polar}
+    \lean{Matrix.polarIso_sum_of_orthogonal, Matrix.exists_polarIso_eq_mul,
+        Matrix.conjTranspose_polarIso_mul_polarIso_eq_zero,
+        Matrix.conjTranspose_polarIso_mul_eq_zero}
+    \leanok
+    \uses{thm:ldp_polar_uniqueness}
+    Let $B=\sum_jc_jB_jK_j^\dagger$ with $c_j>0$, isometries $K_j$ with
+    orthogonal ranges, so that $K_j^\dagger K_{j'}=\delta_{jj'}$, and
+    $B_j^\dagger B_{j'}=0$ for $j\neq j'$. With $B_j=V_jP_j$ the polar
+    decompositions of the summands, the polar decomposition of $B$ has
+    \begin{align*}
+        V=\sum_jV_jK_j^\dagger,\qquad P=\sum_jc_jK_jP_jK_j^\dagger.
+    \end{align*}
+    This is the block form of the positive part asserted in
+    \cite[eq.~(S5)]{Malz2024Preparation} (``Since $V$ is an isometry, $P$
+    inherits the block structure of $A$''), for blocks of multiplicity one
+    under the orthogonality of their states, which the source does not state
+    and without which the block form fails
+    \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Every partial isometry is $V_j=B_jR_j$ for some $R_j$: the support
+    projector $\Pi_j$ satisfies $\Pi_j=P_jR_j$ for some $R_j$, because both
+    have the same range, and $V_j=V_j\Pi_j=B_jR_j$. Hence
+    $V_j^\dagger V_{j'}=R_j^\dagger B_j^\dagger B_{j'}R_{j'}=0$ for $j\neq j'$. Put
+    $W=\sum_jV_jK_j^\dagger$, $Q=\sum_jc_jK_jP_jK_j^\dagger\geq0$ and
+    $E=\sum_jK_j\Pi_jK_j^\dagger$. The orthogonality of the $K_j$ and of the
+    $V_j$ removes all cross terms, so $WQ=B$, $W^\dagger W=E$, $E^2=E=E^\dagger$,
+    $EQ=Q$ and $Q\sum_jc_j^{-1}K_jR_jK_j^\dagger=E$. Thus $E$ is the projector
+    onto the range of $Q$, and Theorem~\ref{thm:ldp_polar_uniqueness} gives
+    $V=W$ and $P=Q$.
+\end{proof}
+
+\begin{theorem}[Approximation error for orthogonal blocks of multiplicity one]
+    \label{thm:ldp_approximation_error_orthogonal_blocks}
+    \lean{MPSTensor.exists_approximationError_le_mul_blockSum,
+        MPSTensor.exists_approximationError_le_blockSum, MPSTensor.blockSum,
+        MPSTensor.nonNormalApproxVector_blockSum,
+        MPSTensor.norm_nonNormalApproxOverlap_blockSum,
+        MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
+        lem:ldp_orthogonal_sum_polar, lem:ldp_positive_part_overlap,
+        thm:ldp_approximation_error_normal, def:correlation_length}
+    Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ with $b\geq1$, weights $\mu_j>0$, and
+    normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
+    points $\rho_j$, each placed on its own bond coordinates. Let $\lambda_2$
+    bound the moduli of the eigenvalues other than one of every transfer map
+    $\E_{A_j}$, so that its correlation length $\xi$ bounds every $\xi_j$, and
+    let $0<\gamma<1/2$. Form the approximating state $\widetilde\phi_N$ of
+    Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of the
+    $\rho_j$ on the bond coordinates of their blocks and $\beta_j=\mu_j^N$.
+    There is $C>0$ such that for every block length $q$ at which the $q$-site
+    states of distinct blocks are orthogonal,
+    $\sum_{i_1,\dots,i_q}\overline{(A_j^{i_1}\cdots A_j^{i_q})_{ab}}\,
+        (A_{j'}^{i_1}\cdots A_{j'}^{i_q})_{a'b'}=0$ for $j\neq j'$ and all
+    $a,b,a',b'$, and every $M\geq1$, with $N=qM$ and
+    $y=(N/q)\,e^{-\gamma q/\xi}$,
+    \begin{align}
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy
+        \qquad\text{and}\qquad
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
+        \label{eq:ldp_approximation_error_orthogonal_blocks}
+    \end{align}
+    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} restricted to
+    multiplicity one and to blocks whose $q$-site states are orthogonal. For
+    multiplicity one the phase of $\mu_j$ can be absorbed into $A_j$, which
+    stays normal with the same transfer map, so the condition $\mu_j>0$ only
+    fixes this presentation. The orthogonality is an added hypothesis: without
+    it the statement fails
+    (Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}). Under it no
+    condition $q=o(N)$ is needed
+    \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $B_j$ be the $q$-site blocked map of $A_j$, with polar decomposition
+    $B_j=V_jP_j$, and $K_j$ the isometry placing the bond pairs of block $j$.
+    For $q\geq1$ every word of $A$ of length $q$ is the direct sum of the
+    words of the blocks, so the blocked map of $A$ is
+    $B=\sum_j\mu_j^qB_jK_j^\dagger$, and
+    Lemma~\ref{lem:ldp_orthogonal_sum_polar} gives $V=\sum_jV_jK_j^\dagger$.
+    The pair of block $j$ is $K_j^{\otimes M}$ applied to the product of the
+    pairs of $\rho_j$, and $VK_j=V_j$, so
+    $V^{\otimes M}\ket{\Omega'}=\sum_j\alpha_j\ket{s_j}$ with
+    $\ket{s_j}=\ket{\phi_M(V_jP_{j,\infty})}$, while
+    $\ket{\phi_N(A)}=\sum_j\mu_j^N\ket{t_j}$ with
+    $\ket{t_j}=\ket{\phi_N(A_j)}$. The tensors generating $s_j$, $t_j$, $s_{j'}$
+    and $t_{j'}$ have mixed transfer maps equal to zero for $j\neq j'$, because
+    $B_j^\dagger B_{j'}=0$ and hence $V_j^\dagger B_{j'}=V_j^\dagger V_{j'}=0$;
+    so all cross overlaps vanish.
+
+    Let $q$ be at least the injectivity lengths of all blocks; the smaller $q$
+    are covered by $\varepsilon\leq1$ once $C$ is large. Then
+    $\braket{s_j}{s_j}=1$, $\braket{s_j}{t_j}=z_j$ with
+    $z_j=\bra{\phi_M(P_{j,\infty})}\phi_M(P_{j,q})\rangle$, and
+    $\braket{t_j}{t_j}=c_j=\Tr\E_{A_j}^{\,N}$. With $p_j=\mu_j^{2N}$ this gives
+    \begin{align*}
+        \lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
+        =\frac{\bigl\lvert\sum_jp_jz_j\bigr\rvert}
+        {\bigl(\sum_jp_j\bigr)^{1/2}\bigl(\sum_jp_jc_j\bigr)^{1/2}}.
+    \end{align*}
+    For weights $w_j=p_j/\sum_lp_l$ put $a=\sum_jw_jz_j$ and
+    $s^2=\sum_jw_jc_j$. Then $\lvert a-1\rvert\leq\sum_j\lvert z_j-1\rvert$ and
+    $\lvert s^2-1\rvert\leq\sum_j\lvert c_j-1\rvert=:\eta$. If $\eta>1/2$ then
+    $\varepsilon\leq1<2\eta$. Otherwise $s\geq1/2$ and
+    $\varepsilon=(s-\lvert a\rvert)/s\leq2\bigl(\lvert s-1\rvert+\lvert a-1\rvert\bigr)$,
+    so in both cases
+    $\varepsilon\leq2\sum_j\bigl(\lvert z_j-1\rvert+\lvert c_j-1\rvert\bigr)$.
+    The proof of Lemma~\ref{lem:ldp_positive_part_overlap} bounds
+    $\lvert z_j-1\rvert$ itself, not only $\bigl\lvert1-\lvert z_j\rvert\bigr\rvert$,
+    by $C_jy\,e^{C_jy}$, and the proof of
+    Theorem~\ref{thm:ldp_approximation_error_normal} gives
+    $\lvert c_j-1\rvert\leq K_je^{-2\gamma N/\xi}\leq K_jy$. Summing over the
+    blocks gives the second bound, and the first follows as in
+    Theorem~\ref{thm:ldp_approximation_error_normal}, because $\varepsilon\leq1$.
+\end{proof}

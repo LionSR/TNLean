@@ -78,9 +78,32 @@ pairs, $V$ annihilates the configurations whose two legs lie in different copies
 and only the two copy-uniform configurations survive, each with amplitude
 $2^{-M}$, so the first term is suppressed by $2^{1-M}$ relative to the
 target (\ref{eq:mswc24_counterexample_target}), instead of the factor
-$2^{-M/2}$ of (\ref{eq:mswc24_counterexample_approx}). The failure is not in
-the choice of pair: the fixed point of the positive part of the first block is not a product of nearest-neighbour pairs
-carrying the weight $\beta_1$.
+$2^{-M/2}$ of (\ref{eq:mswc24_counterexample_approx}).
+
+No placement of the pair helps. The source does not say where $\omega_1$ sits
+among the copies of the first block, so let $\omega_1=\sum_{x,y\in\{0,1\}}W_{xy}e_{xy}$
+be any unit vector on those copies, with $W$ the $2\times2$ matrix of its
+coefficients and $\lVert W\rVert_F=1$. The map $V$ sends $e_{00}$ and $e_{11}$ to
+$\ket{0\cdots0}/\sqrt2$ and annihilates $e_{01}$ and $e_{10}$, because $V=V\Pi$ and
+$\Pi$ is supported on the diagonal pairs. At each site the two legs come from
+neighbouring pairs, so
+\begin{align*}
+    V^{\otimes M}\ket{\Omega_1}
+    =2^{-M/2}\sum_{x\in\{0,1\}^M}\prod_{k=1}^MW_{x_kx_{k+1}}\ket{0\cdots0}
+    =2^{-M/2}\operatorname{Tr}(W^M)\ket{0\cdots0}.
+\end{align*}
+The eigenvalues $\lambda_1,\lambda_2$ of $W$ satisfy
+$\lvert\lambda_1\rvert^2+\lvert\lambda_2\rvert^2\leq\lVert W\rVert_F^2=1$
+by Schur's inequality, so $T=\operatorname{Tr}(W^M)$ satisfies
+$\lvert T\rvert\leq1$ for $M\geq2$. The overlap of the approximating state with the
+normalized target is then
+$\bigl\lvert4\cdot2^{-M/2}\,\overline T+1\bigr\rvert/
+    \bigl(\sqrt5\,(4\cdot2^{-M}\lvert T\rvert^2+1)^{1/2}\bigr)$, which tends to
+$1/\sqrt5$ for every choice of the pairs. The one-copy placement is $W=e_{cc}$ with
+$T=1$, and the spread pair above is $W=\mathbf 1/\sqrt2$ with $T=2^{1-M/2}$. The
+failure is therefore not in the choice of pair: the fixed point of the positive part
+of the first block is not a product of nearest-neighbour pairs carrying the weight
+$\beta_1$.
 
 \section{What is formalized}
 The fixed-point pairs of the blocks of a canonical form, each placed on one copy
@@ -89,17 +112,43 @@ formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.SectorDecomposition.embeddedFixedPointPair} and
     \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState} in
     \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
-The formula (\ref{eq:mswc24_approx_state}) is formalized only for an arbitrary
-family of pairs and is not instantiated with these pairs. Neither the block form
-(\ref{eq:mswc24_block_form}) nor the error estimate is formalized.
+The counterexample is formalized for the source's construction with the pairs
+placed on one copy: for every $q\geq1$ and $M\geq1$ the overlap of
+(\ref{eq:mswc24_counterexample_approx}) with the normalized target is
+$(4\cdot2^{-M/2}+1)/\bigl(\sqrt5\,(4\cdot2^{-M}+1)^{1/2}\bigr)$, which tends to
+$1/\sqrt5$. The transfer maps of the two one-dimensional blocks have no eigenvalue
+other than one. The subleading eigenvalue of the source's definition of
+$\xi_{\mathrm{diag}}$ therefore does not exist; the formal statement reads
+$\xi_{\mathrm{diag}}$ as the correlation length at any $\lambda_2$ with
+$0<\lvert\lambda_2\rvert<1$ bounding the subleading eigenvalues, which here is
+every such $\lambda_2$, so that $e^{-\gamma/\xi_{\mathrm{diag}}}<1$; along $q=M$,
+$N=M^2$, which satisfies $q=o(N)$, the error exceeds
+$C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}\exp\bigl(C(N/q)e^{-\gamma
+q/\xi_{\mathrm{diag}}}\bigr)$ for every constant $C$.\footnote{Formal declarations:
+    \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor},
+    \leanid{MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor},
+    \leanid{MPSTensor.not_approximationError_le_repeatedBlockTensor} in
+    \doclink{TNLean/MPS/Preparation/RepeatedBlockCounterexample}.}
+The positive part and the support projector of the blocked tensor are computed
+from the uniqueness of the positive square root of $B^\dagger B$. The computation
+above for an arbitrary placement of the pair of the first block is not formalized.
+
+The block form (\ref{eq:mswc24_block_form}) also fails when every multiplicity is
+one, as soon as the $q$-site states of distinct blocks are not orthogonal
+\cite{gap:mswc24_block_form_mixed_overlap}. Restricting to multiplicity one
+therefore does not give a version of part~(ii) of the lemma; restricting also to
+blocks whose $q$-site states are orthogonal does.
 
 \section{Elimination}
-When every $m_j=1$ the counterexample does not apply. A correct statement for
-repeated blocks must replace $\sum_j\beta_j\ket{\Omega_j}$ by the fixed point of
-the actual positive part, whose restriction to the copies of block $j$ has rank
-one in the copy index, and carry the weights through $V$. The first step is to
-formalize the counterexample above and a corrected form of
-(\ref{eq:mswc24_block_form}).
+A correct statement for repeated blocks must replace $\sum_j\beta_j\ket{\Omega_j}$
+by the fixed point of the actual positive part, whose restriction to the copies of
+block $j$ has rank one in the copy index, and carry the weights through $V$. It
+must also account for the overlaps of distinct blocks recorded in
+\cite{gap:mswc24_block_form_mixed_overlap}. For multiplicity one, the corrected form of
+(\ref{eq:mswc24_block_form}) for blocks whose $q$-site states are orthogonal and
+the resulting error bound, with no condition $q=o(N)$, are formalized; see
+\cite{gap:mswc24_block_form_mixed_overlap}. For $m_j\geq2$ no corrected
+construction is formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}

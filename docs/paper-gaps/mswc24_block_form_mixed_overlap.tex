@@ -1,0 +1,145 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Positive Part of a Blocked Tensor with Overlapping Blocks}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{What the source states}
+Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
+    \otimes A_j^i$ with normal $A_j$ forming a basis of normal tensors
+\cite[eq.~(S2)]{Malz2024Preparation}, block $q$ sites, and write the polar
+decomposition of the blocked map as $B=VP$. The source argues ``Since $V$ is
+an isometry, $P$ inherits the block structure of $A$'',
+\begin{align}
+    P & =\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)
+    \otimes P_j
+    \label{eq:mswc24_mixed_block_form}
+\end{align}
+with normal $P_j$ \cite[eq.~(S5)]{Malz2024Preparation}. It then approximates the
+state on $N=qM$ sites by
+$\ket{\widetilde\phi_N}\propto V^{\otimes M}\sum_j\beta_j\ket{\Omega_j}$ with
+$\beta_j=\sum_k\mu_{j,k}^N$ \cite[eq.~(S7)]{Malz2024Preparation}, and part~(ii)
+of the approximation-error lemma bounds
+$\varepsilon=1-\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert$ by
+$O\bigl((N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}\bigr)$ for $q=o(N)$
+\cite[eq.~(S12)]{Malz2024Preparation}, where
+$\xi_{\mathrm{diag}}=\max_j\xi_{jj}$ is the largest correlation length of the
+blocks. In the proof, the overlaps of distinct blocks enter only through a
+term $O(e^{-N/\xi_{\mathrm{off\text{-}diag}}})$, which $q=o(N)$ removes.
+
+\section{Where the argument fails}
+The positive part is $P=(B^\dagger B)^{1/2}$, and $B^\dagger B$ is the transfer
+matrix of $B$ with its legs regrouped. Its block between two distinct blocks
+$A_j$ and $A_{j'}$ is the $q$-th power of the mixed transfer matrix
+$E_{jj'}=\sum_iA_j^{i*}\otimes A_{j'}^i$. The source uses that
+$E_{jj'}$ has spectral radius $\tau<1$ \cite[proof of Lemma~1$'$]{Malz2024Preparation},
+but $E_{jj'}^q$ is not zero, so $B^\dagger B$ and its square root are not block
+diagonal. The block form (\ref{eq:mswc24_mixed_block_form}) holds only when the
+$q$-site states of distinct blocks are orthogonal. This failure is separate from
+the one for repeated blocks \cite{gap:mswc24_multiplicity_fixed_point}: it occurs
+when every multiplicity is one.
+
+\section{The counterexample}
+Take $d=2$ and the two one-dimensional normal blocks $A_1=(1,0)$ and
+$A_2=(3/5,4/5)$, each of multiplicity one with weight one, so that
+$A^0=\operatorname{diag}(1,3/5)$ and $A^1=\operatorname{diag}(0,4/5)$. Both
+blocks satisfy $\sum_i\lvert a_i\rvert^2=1$ and are not proportional, so they form a
+basis of normal tensors, and $\beta=(1,1)$. The $q$-site states of the blocks are
+$\ket{0\cdots0}$ and $(\tfrac35\ket0+\tfrac45\ket1)^{\otimes q}$, with overlap
+$s=(3/5)^q$. On the diagonal bond coordinates $(0,0)$ and $(1,1)$, the only ones
+on which $B$ does not vanish,
+\begin{align}
+    B^\dagger B=\begin{pmatrix}1&s\\s&1\end{pmatrix},\qquad
+    P=\begin{pmatrix}u&v\\v&u\end{pmatrix},\qquad
+    u=\frac{\sqrt{1+s}+\sqrt{1-s}}2,\quad
+    v=\frac{\sqrt{1+s}-\sqrt{1-s}}2,
+    \label{eq:mswc24_mixed_positive_part}
+\end{align}
+and the support projector of $P$ is the projector onto these two coordinates. The
+fixed point of a one-dimensional block is $\sigma=1$, so the pairs are
+$\omega_1=e_{00}$ and $\omega_2=e_{11}$. Since $V^\dagger B=P$ and
+$V^\dagger V$ fixes the pairs, for every $q,M\geq1$,
+\begin{align}
+    \braket{\widetilde\phi_N}{\phi_N}
+     & =\frac{u^M+v^M}{(1+s^M)^{1/2}}.
+    \label{eq:mswc24_mixed_overlap}
+\end{align}
+For $q=1$ this is $(3^M+1)/(10^M+6^M)^{1/2}$, which tends to zero. Since
+$u^2+v^2=1$, $u^2=(1+\sqrt{1-s^2})/2\geq1/2$, and $1-u\geq s^2/8$, one has
+$u^M+v^M\leq u^3+v^2=1-u^2(1-u)\leq1-s^2/16$ for $M\geq3$, so
+\begin{align}
+    \varepsilon & \geq\frac{s^2}{16}=\frac1{16}\Bigl(\frac9{25}\Bigr)^q
+    \qquad(M\geq3).
+    \label{eq:mswc24_mixed_lower_bound}
+\end{align}
+
+The transfer maps of one-dimensional blocks are the identity and have no
+eigenvalue other than one. The source defines
+$\xi_{jj}=-1/\ln\lvert\lambda_2^{(j)}\rvert$ with $\lambda_2^{(j)}$ the subleading
+eigenvalue of the transfer matrix of $A_j$ \cite{Malz2024Preparation}; here there
+is none, so $\xi_{\mathrm{diag}}$ is degenerate. Under the usual convention
+$\lambda_2^{(j)}=0$ it is $0$, and the printed bound then asserts $\varepsilon=0$,
+which (\ref{eq:mswc24_mixed_lower_bound}) refutes directly. The formal statement
+avoids the convention: it reads $\xi_{\mathrm{diag}}$ as the correlation length at any
+$\lambda_2$ with $0<\lvert\lambda_2\rvert<1$ bounding the subleading eigenvalues,
+which here is every such $\lambda_2$, and covers those with
+$r=e^{-\gamma/\xi_{\mathrm{diag}}}=\lvert\lambda_2\rvert^\gamma<9/25$. Take the
+sequence $q=M$, $N=q^2$, which satisfies $q=o(N)$.
+The printed bound $C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}=Cqr^q$ is eventually
+smaller than $(9/25)^q/16$ for every constant $C$, and so is
+$Cqr^q\exp(Cqr^q)$. The error is governed by the overlap $s=\tau^q$ of the blocks,
+with $\tau=3/5$ the eigenvalue of the mixed transfer matrix, and is of order
+$Ms^2=(N/q)\tau^{2q}$, a contribution that the source's estimate does not contain.
+
+\section{What is formalized}
+The overlap (\ref{eq:mswc24_mixed_overlap}) for all $q,M\geq1$, the lower bound
+(\ref{eq:mswc24_mixed_lower_bound}), the fact that every $\lambda_2$ bounds the
+subleading eigenvalues of the two blocks, and the failure of the printed bound
+along $q=M$ are formalized.\footnote{Formal declarations:
+    \leanid{MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor},
+    \leanid{MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor},
+    \leanid{MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis},
+    \leanid{MPSTensor.not_approximationError_le_overlappingBlockTensor} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.} The
+positive part and the support projector are computed from the uniqueness of the
+positive square root of $B^\dagger B$.
+
+\section{Elimination}
+Two statements would repair part~(ii) for multiplicity one. The first adds the
+hypothesis that the $q$-site states of distinct blocks are orthogonal,
+$\sum_{i_1,\dots,i_q}\overline{(A_j^{i_1}\cdots A_j^{i_q})_{ab}}\,
+(A_{j'}^{i_1}\cdots A_{j'}^{i_q})_{a'b'}=0$ for $j\neq j'$. Under it
+(\ref{eq:mswc24_mixed_block_form}) holds with $\lvert\mu_j\rvert^q$ in place of
+$\mu_j^q$: writing the blocked map as $B=\sum_j\mu_j^qB_jK_j^\dagger$ with the
+isometries $K_j$ that place the bond pairs of block $j$, the polar decomposition of
+$B$ is $V=\sum_jV_jK_j^\dagger$, $P=\sum_j\mu_j^qK_jP_jK_j^\dagger$ for $\mu_j>0$.
+The states of distinct blocks, before and after the replacement by the fixed
+points, are then exactly orthogonal, the term $O(e^{-N/\xi_{\mathrm{off\text{-}diag}}})$
+vanishes, and part~(ii) reduces to part~(i) for each block, with no condition
+$q=o(N)$. For multiplicity one the phase of $\mu_j$ can be absorbed into $A_j$,
+which stays normal with the same transfer map, so $\mu_j>0$ is no loss. This
+repair is formalized.\footnote{Formal declarations:
+    \leanid{Matrix.polarIso_sum_of_orthogonal} in
+    \doclink{TNLean/MPS/Preparation/OrthogonalSumPolar};
+    \leanid{MPSTensor.nonNormalApproxVector_blockSum} in
+    \doclink{TNLean/MPS/Preparation/OrthogonalBlockSum};
+    \leanid{MPSTensor.exists_approximationError_le_blockSum} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_blockSum} in
+    \doclink{TNLean/MPS/Preparation/OrthogonalBlockError}.}
+The orthogonality holds for instance when distinct blocks use disjoint sets of
+physical indices.
+
+The second keeps the source's hypotheses and adds to the rate a term controlled
+by the mixed transfer matrices, of the form $(N/q)\,\tau^{2q}$ suggested by the
+counterexample; it needs a perturbation bound for the square root of $B^\dagger B$
+around its block-diagonal part. It is not formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -17,6 +17,7 @@ allows different row and column index types, as needed for the isometry
 ## Main declarations
 
 * `Matrix.tensorPower` — the matrix `W^{⊗M}` with entries `∏ₖ W (p k) (s k)`.
+* `Matrix.tensorPower_mul` — the tensor power is multiplicative.
 * `Matrix.IsIsometry.tensorPower` — the tensor power of an isometry is an isometry.
 -/
 
@@ -29,6 +30,16 @@ configurations of `M` sites: its entry at `(p, s)` is `∏ₖ W (p k) (s k)`
 (arXiv:2307.01696, the map `W^{⊗M}` in the paragraph after eq. (19)). -/
 def tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ ℂ) : Matrix (Fin M → ι) (Fin M → κ) ℂ :=
   Matrix.of fun p s => ∏ k, W (p k) (s k)
+
+/-- The tensor power of a product is the product of the tensor powers:
+`X^{⊗M} Y^{⊗M} = (X Y)^{⊗M}`. -/
+theorem tensorPower_mul {ι₁ ι₂ ι₃ : Type*} [Fintype ι₂] (M : ℕ) (X : Matrix ι₁ ι₂ ℂ)
+    (Y : Matrix ι₂ ι₃ ℂ) :
+    tensorPower M X * tensorPower M Y = tensorPower M (X * Y) := by
+  ext s t
+  simp only [mul_apply, tensorPower, of_apply]
+  rw [Fintype.prod_sum]
+  exact Finset.sum_congr rfl fun τ _ => (Finset.prod_mul_distrib).symm
 
 /-- The tensor power of an isometry is an isometry, so `W^{⊗M}` in arXiv:2307.01696,
 the paragraph after eq. (19), is an isometry from `(ℂ^b)^{⊗M}` to the bonds. -/
