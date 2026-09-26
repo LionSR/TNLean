@@ -21,6 +21,17 @@ lines 2170--2172, for the parent interactions defined at lines 1996--1999,
 and supplies the gap assertion at lines 2183--2187. The interaction is fixed
 before the chain length varies. For chains shorter than its range, the
 periodic Hamiltonian is zero, as for the canonical interaction.
+
+**Scope restriction (simultaneous injectivity range):**
+`CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop`
+and `IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop`
+prove the gap only at ranges \(R\geq S+1\), for a supplied \(S>0\) at which the
+length-\(S\) word tuples of the normal representatives span the full product
+matrix algebra (lines 2114--2129). The gap theorem at lines 2183--2187 is stated
+for all parent Hamiltonians without a range hypothesis. The two comparison
+theorems `IsParentInteraction.exists_pos_periodic_comparison` and
+`IsParentInteraction.exists_uniform_gap_of_canonical_gap` carry no such
+restriction. Documented in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 -/
 
 open scoped ComplexOrder
