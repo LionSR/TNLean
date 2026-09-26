@@ -991,9 +991,10 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   compatibility of a same-name `abbrev`, and `decide +kernel` reduction at ℤ
   and ℤ√2. `RingHom.mapMatrix` is square-only, so the survivor is the
   rectangular `X.map f`. The normality certificates and the
-  `ofGolden`/`ofEisenstein`/`ofConjInt` constructors are three designs, not one
-  statement, and are excluded (`thm:asymex_normal_units` must not be redirected
-  to a no-prefactor certificate).
+  `ofGolden`/`ofEisenstein`/`ofConjInt` constructors were first excluded as
+  three designs; they are now unified (see the progress note of 2026-09-25,
+  second entry). `thm:asymex_normal_units` still points at the prefactor
+  certificate, whose statement is unchanged.
 - **Remediation**: one generic module with `complexOfRing (f : R →+* ℂ)`,
   its ladder closed by the Mathlib lemmas, generic bond product, action and
   word evaluation; the four heads become same-name `abbrev`s so definition
@@ -1014,6 +1015,22 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   (`ofGolden`, `ofEisenstein`, `ofConjInt`), excluded above as distinct
   designs, and the Kramers--Wannier call sites. Audit:
   `docs/audits/2026-09-25_ring_embedding_transport_second_slice.md`.
+- **Progress (2026-09-25, compression constructors)**: the compression
+  constructors are unified. `MultiBlockCompression.ofRing` in
+  `Reduction/ExplicitGauge.lean` takes any gauge whose conjugation of every
+  letter is the image of a matrix over a ring `R →+* ℂ`, and the decided
+  clauses over `R`; `ofGolden`, `ofEisenstein`, `ofConjMatrix` (along the
+  identity of `ℂ`, so `ofConjInt` too) and `ofScalarFlagFour` are instances,
+  and `ofRingBlockDiagonal`, `remainder_ofRing`, `remainder_oneSlot` replace the
+  per-example remainder proofs. The Kramers--Wannier, Ising, `CZXPlusIdentity`,
+  `CZXSquare`, `ParityGraded` and Fibonacci data are migrated; the scaled
+  Kramers--Wannier gauges enter through their own conjugation lemmas. The normality certificates share
+  `isNormal_of_complexOfRing_single` and
+  `isNormal_of_complexOfRing_letter_eq_smul_single`. The `ℤ₃` fusion examples
+  and `CZXSquare` share the single slot `MPSTensor.oneSlot`; the removed local
+  slot abbreviations are recorded in
+  `docs/audits/2026-09-26_single_slot_oneSlot_fold.md`. Remaining: the
+  complex-literal `GHZSectors` and `RepeatedBlock` data.
 
 ## D17. Three MPDO carriers restate the twelve vertical-decomposition fields instead of extending one  —  duplication, impact 5/10, effort 4/10
 - **Status**: open ([#7847](https://github.com/LionSR/TNLean/issues/7847); 2026-09-19 architectural survey)

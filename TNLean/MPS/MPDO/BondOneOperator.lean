@@ -5,8 +5,7 @@ Authors: Sirui Lu
 -/
 import QICLean.Kraus.Injectivity
 import TNLean.Algebra.MatrixSingleSpan
-import TNLean.MPS.Core.CyclicTrace
-import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.MPDO.OperatorCyclicSum
 
 /-!
 # Matrix product operators of bond dimension one
@@ -37,16 +36,13 @@ corresponding one-site matrix. -/
   rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
 /-- The periodic operator of a bond-one tensor is the tensor product of its one-site
-matrices. -/
+matrices. This is the bond-one case of `MPOTensor.mpo_apply_eq_prod_of_forced_bond`: there is
+only one closed bond configuration, so no other configuration has to vanish. -/
 theorem mpo_apply_of_bondOne {N : ℕ} [NeZero N] {d : ℕ} (M : MPOTensor d 1)
     (σ τ : Fin N → Fin d) :
     M.mpo N σ τ = ∏ k, M (σ k) (τ k) 0 0 := by
-  change Matrix.trace (MPOTensor.evalWord M (List.ofFn σ) (List.ofFn τ)) = _
-  rw [← MPOTensor.evalWord_toMPSTensor_pairConfig, MPSTensor.trace_evalWord_eq_sum_cyclic,
-    Fintype.sum_unique]
-  refine Finset.prod_congr rfl fun k _ => ?_
-  rw [toMPSTensor_finProdFinEquiv, Subsingleton.elim ((default : Fin N → Fin 1) k) 0,
-    Subsingleton.elim ((default : Fin N → Fin 1) (k + 1)) 0]
+  rw [mpo_apply_eq_prod_of_forced_bond M σ τ 0 fun g hg ↦ absurd (Subsingleton.elim g 0) hg]
+  rfl
 
 /-- A bond-one tensor one of whose one-site matrices is the scalar `1` is normal: that
 matrix already spans the one-by-one matrices. -/

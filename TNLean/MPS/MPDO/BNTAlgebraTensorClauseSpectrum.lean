@@ -188,8 +188,7 @@ noncomputable def toTwoSiteExactSectorGauge
     by_contra h
     have hzero : productDim γ = 0 := Nat.eq_zero_of_not_pos h
     have hsumZero : ∑ r, productEntry γ r = 0 := by
-      have : IsEmpty (Fin (productDim γ)) :=
-        Fintype.card_eq_zero_iff.mp (by simpa using hzero)
+      have : IsEmpty (Fin (productDim γ)) := Fin.isEmpty_iff.mpr hzero
       exact Finset.sum_eq_zero fun r _ ↦ isEmptyElim r
     have hTracePos :
         (0 : ℂ) < H.traceScalars.traceScalar γ := by
