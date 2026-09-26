@@ -134,7 +134,7 @@ theorem twistedTransfer_modulus_one_implies_gaugePhase
       simpa using hev.symm
     have hnorm_ev : (1 : ENNReal) = ‖ev‖₊ := by
       exact congrArg (fun r : NNReal => (r : ENNReal)) hnorm_ev_nn
-    rw [ge_iff_le, hnorm_ev]
+    rw [ge_iff_le, hnorm_ev, spectralRadius_eq_of_unital]
     exact @le_iSup₂ ENNReal ℂ (· ∈ spectrum ℂ (Φ (Kraus.mixedMapLM setup.A' setup.B'))) _
       (fun k _ => (‖k‖₊ : ENNReal)) ev hspec
   have hGauge' : GaugePhaseEquiv setup.A' setup.B' :=
@@ -195,7 +195,10 @@ theorem gaugePhaseEquiv_twisted_of_hasStringOrder
   obtain ⟨μ, hμ_spec, hμ_max⟩ :=
     hcompact.exists_isMaxOn hF'_nonempty continuous_nnnorm.continuousOn
   have hμ_rad : (‖μ‖₊ : ENNReal) = spectralRadius ℂ F' := by
-    exact le_antisymm (le_iSup₂ (α := ENNReal) μ hμ_spec) (iSup₂_le <| mod_cast hμ_max)
+    rw [spectralRadius_eq_of_unital]
+    exact le_antisymm
+      (le_iSup₂ (f := fun k (_ : k ∈ spectrum ℂ F') ↦ (‖k‖₊ : ENNReal)) μ hμ_spec)
+      (iSup₂_le <| mod_cast hμ_max)
   have hμ_spec_Φ : μ ∈ spectrum ℂ (Φ (twistedTransferMap A u)) := by
     change μ ∈ spectrum ℂ F'
     exact hμ_spec
