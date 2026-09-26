@@ -197,23 +197,8 @@ theorem isNormal_of_single_eq_smul {D : ℕ} {A : MPSTensor d D}
     (hA : ∀ a, A a = c • complexOfInt (AInt a)) (ℓ : Fin D → Fin D → Fin d)
     (w : Fin D → Fin D → ℤ) (hw : ∀ x y, w x y ≠ 0)
     (h : ∀ x y, AInt (ℓ x y) = w x y • Matrix.single x y 1) :
-    Kraus.IsNormal A := by
-  refine Kraus.IsInjective.isNormal ?_
-  have hsingle : ∀ x y : Fin D,
-      complexOfInt (Matrix.single x y (1 : ℤ)) = Matrix.single x y (1 : ℂ) := by
-    intro x y
-    ext p q
-    simp [complexOfInt, Matrix.single_apply]
-  have hmem : ∀ x y : Fin D,
-      Matrix.single x y (1 : ℂ) ∈ Submodule.span ℂ (Set.range A) := by
-    intro x y
-    have hAl : A (ℓ x y) = (c * (w x y : ℂ)) • Matrix.single x y (1 : ℂ) := by
-      rw [hA, h x y, complexOfInt_zsmul, smul_smul, hsingle]
-    have hne : c * (w x y : ℂ) ≠ 0 :=
-      mul_ne_zero hc (Int.cast_ne_zero.mpr (hw x y))
-    have hmul := Submodule.smul_mem (Submodule.span ℂ (Set.range A)) (c * (w x y : ℂ))⁻¹
-      (Submodule.subset_span (Set.mem_range_self (ℓ x y)))
-    rwa [hAl, smul_smul, inv_mul_cancel₀ hne, one_smul] at hmul
-  exact Submodule.eq_top_of_forall_single_mem _ hmem
+    Kraus.IsNormal A :=
+  isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) AInt hc hA ℓ w
+    (fun x y => Int.cast_ne_zero.mpr (hw x y)) h
 
 end P6Compression

@@ -43,6 +43,7 @@ import TNLean.MPS.MPU.InverseCompatibleWordUnitarity
 import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
+import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
@@ -53,6 +54,7 @@ import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleTensorEquivalence
+import TNLean.MPS.MPU.SimpleTensorProduct
 import TNLean.MPS.MPU.SourceCuts
 import TNLean.MPS.MPU.SourceDecompositionUniqueness
 import TNLean.MPS.MPU.SourceFactorContraction
@@ -83,4 +85,6 @@ import TNLean.MPS.MPU.TransferStabilizationConverse
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth
 import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TwoSiteStandardForm
+import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.VirtualSandwich
+import TNLean.MPS.MPU.VirtualUnitaryGauge
