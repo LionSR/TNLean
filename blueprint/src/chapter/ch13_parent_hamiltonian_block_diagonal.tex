@@ -613,17 +613,16 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_three_block_pairwise_separation}
     \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
-    \uses{def:pairwise_block_separating_words, def:pair_trace_separation_words,
-        def:l_blk_injective, def:blocks_not_gauge_phase_equiv}
+    \uses{def:pairwise_block_separating_words, def:l_blk_injective,
+        def:blocks_not_gauge_phase_equiv}
     Let $A^0,\ldots,A^{r-1}$ be tensors with positive bond dimensions such
     that each $A^j$ is irreducible, satisfies
     $\sum_a(A^{j,a})^\dagger A^{j,a}=\Id$, and has self-overlap tending to
     $1$ with the chain length. Suppose that no two distinct blocks are
     related by a virtual gauge and a nonzero complex scalar. Let $L_0>0$ and
     suppose that every $A^j$ is block injective at the lengths $L_0$,
-    $L_0+1$ and $S=3(L_0+1)$. Then every ordered pair of distinct blocks is
-    trace separated at length $S$, and for all $k\ne j$ there are
-    coefficients $c_\omega$ with
+    $L_0+1$ and $S=3(L_0+1)$. Then for all $k\ne j$ there are coefficients
+    $c_\omega$ with
     \begin{align}
         \sum_{|\omega|=S}c_\omega A_k^\omega & =I,
         \notag                                     \\
@@ -688,7 +687,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \leanok
     \uses{def:primitive_mps, def:gauge_phase_equiv}
     Let $A^0,\ldots,A^{r-1}$ be trace-preserving primitive tensors with
-    positive bond dimensions and positive definite invariant matrices.
+    positive bond dimensions and positive definite fixed points.
     Suppose that no two distinct blocks are related by conjugation and a
     nonzero complex scalar. Then there is $L_0$ such that, for every $L\ge L_0$,
     the tuples $(A^{0,w},\ldots,A^{r-1,w})$, with $|w|=L$, span
@@ -737,7 +736,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{def:primitive_mps, def:gauge_phase_equiv}
     Let $d>0$ and $B=\bigoplus_j\mu_jA^j$, with nonzero coefficients $\mu_j$.
     Suppose that the blocks have positive bond dimensions, are trace-preserving
-    and primitive with positive definite invariant matrices, and are pairwise
+    and primitive with positive definite fixed points, and are pairwise
     inequivalent under conjugation and a nonzero scalar.
     There is $L_0>0$ such that for every $L_0\le L\le N$,
     \begin{align}
@@ -784,7 +783,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     and a nonzero complex scalar. Then there are tensors $(B^i)_{i\in I}$
     of the same respective bond dimensions and positive definite matrices
     $\rho_i$ such that each $B^i$ is primitive and trace preserving,
-    $\rho_i$ is its invariant matrix, and $G_L(A^i)=G_L(B^i)$ for every
+    $\rho_i$ is its fixed point, and $G_L(A^i)=G_L(B^i)$ for every
     $i$ and every length $L$. The tensors $B^i$ remain pairwise inequivalent
     under a virtual gauge and a nonzero scalar.
 \end{theorem}

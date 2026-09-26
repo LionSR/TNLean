@@ -30,7 +30,11 @@ variable {d r : ℕ} {dim : Fin r → ℕ}
 /-- In the trace-preserving normalization, the boundary compatibility relation
 \(A_b C_a=D_b A_a\) gives \(C_a=E A_a\), where
 \(E=\sum_b A_b^\dagger D_b\). This is the left-normalized form of the
-boundary argument in PGVWC07, Theorem 12, lines 1446--1451. -/
+boundary argument in PGVWC07, Theorem 12, lines 1446--1451. The cited lines use
+the dual normalization \(\sum_a A_aA_a^\dagger=I\) of the canonical form
+(line 754), set \(E=\sum_a C_aA_a\), and conclude only
+\(A_bC_a=A_bEA_a\); the normalization \(\sum_a A_a^\dagger A_a=I\) used
+here gives \(C_a=EA_a\) directly. -/
 theorem boundary_matrix_eq_of_compatibility_of_tracePreserving
     {D : ℕ} (A : MPSTensor d D)
     (C Dmat : Fin d → Matrix (Fin D) (Fin D) ℂ)
