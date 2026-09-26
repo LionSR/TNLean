@@ -38,11 +38,12 @@ on:
   workflow_dispatch:
 
 # Rapid pushes to main only need the newest build; actual Pages deployments
-# are serialized by the deploy job in deploy-pages.yml.
+# are serialized by the deploy job in deploy-pages.yml. A manual run on
+# another branch builds in its own group and never deploys.
 concurrency:
-  group: blueprint-build
+  group: blueprint-build-${{ github.ref }}
   # Let a running build finish: with merges to main every few minutes and a
-  # build of about twelve minutes, cancelling in progress meant no run ever
+  # build of about half an hour, cancelling in progress meant no run ever
   # reached the deploy job. GitHub still keeps only the newest pending run.
   cancel-in-progress: false
 
@@ -50,9 +51,11 @@ permissions:
   contents: read
 
 jobs:
-  blueprint:
+  # The print volumes and the web pages share no build output, so they are
+  # built on separate runners at once; the site job below joins them.
+  pdf:
     runs-on: ubuntu-latest
-    name: Build blueprint site components
+    name: Build blueprint PDFs
     steps:
       - name: Checkout project
         uses: actions/checkout@v7
@@ -97,20 +100,59 @@ jobs:
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
 
-      - name: Build blueprint
+      - name: Build blueprint PDF
+        run: leanblueprint pdf
+
+      - name: Build FT-MPS blueprint volume
+        run: ./scripts/build_blueprint_ch01_12.sh
+
+      - name: Package PDFs
+        run: |
+          mkdir -p site-pdf
+          cp blueprint/print/print.pdf site-pdf/blueprint.pdf
+          cp blueprint/print/print12.pdf site-pdf/blueprint-ch01-12.pdf
+          texra-blueprint --root . paper-gaps site site-pdf/paper-gaps
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v7
+        with:
+          name: blueprint-pdf-part
+          path: site-pdf
+          retention-days: 1
+
+  web:
+    runs-on: ubuntu-latest
+    name: Build blueprint web pages
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v7
+
+      - name: Install system dependencies
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
+
+      - name: Fetch pinned tenkz package
+        run: python3 scripts/fetch_tenkz.py
+
+      - name: Build blueprint bibliography
+        run: texra-blueprint bbl
+
+      - name: Generate paper source aux for paper-gap references
+        run: |
+          ./scripts/generate_paper_aux.sh 1606.00608
+          ./scripts/generate_paper_aux.sh 2502.20257
+
+      - name: Build blueprint web pages
         run: |
           set -o pipefail
           tmp_output_file="$(mktemp)"
-
-          leanblueprint pdf
-
-          # `leanblueprint pdf` finishes by copying print/print.bbl over
-          # src/web.bbl. The print build's bibtex run uses the `plain`
-          # style, whose `\bibitem{key}` carries no natbib optional label,
-          # and plasTeX then renders every citation as "??" (the reader-facing
-          # check below catches it). Regenerate the natbib-style web
-          # bibliography that web.tex needs after the PDF build has run.
-          texra-blueprint bbl
 
           # texra-blueprint web wraps leanblueprint web and fails when the
           # renderer meets a command it does not know (unrecognized
@@ -140,20 +182,40 @@ jobs:
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
-      - name: Build FT-MPS blueprint volume
-        run: ./scripts/build_blueprint_ch01_12.sh
+      - name: Upload web pages
+        uses: actions/upload-artifact@v7
+        with:
+          name: blueprint-web-part
+          path: blueprint/web
+          retention-days: 1
 
-      - name: Package site components
+  site:
+    needs: [pdf, web]
+    runs-on: ubuntu-latest
+    name: Build blueprint site components
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v7
+
+      - name: Download web pages
+        uses: actions/download-artifact@v8
+        with:
+          name: blueprint-web-part
+          path: site-blueprint/blueprint
+
+      - name: Download PDFs
+        uses: actions/download-artifact@v8
+        with:
+          name: blueprint-pdf-part
+          path: site-blueprint
+
+      - name: Write badges
         run: |
-          mkdir -p site-blueprint site-badges
-          cp -r blueprint/web site-blueprint/blueprint
-          cp blueprint/print/print.pdf site-blueprint/blueprint.pdf
-          cp blueprint/print/print12.pdf site-blueprint/blueprint-ch01-12.pdf
-          texra-blueprint --root . paper-gaps site site-blueprint/paper-gaps
+          mkdir -p site-badges
           python3 scripts/write_badges.py site-badges
 
       # Runs in Docker and produces root-owned output; keep it after the
-      # packaging step so it only writes into the pre-created directory.
+      # other steps so it only writes into the pre-created directory.
       - name: Build homepage
         uses: actions/jekyll-build-pages@v1
         with:
@@ -176,7 +238,8 @@ jobs:
 
   deploy:
     name: Deploy Pages site
-    needs: blueprint
+    needs: site
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-pages.yml
     permissions:
       contents: read
