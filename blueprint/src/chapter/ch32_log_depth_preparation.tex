@@ -681,8 +681,8 @@ $1/\gamma$ in the block length here
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
         MPSPreparation.IsCircuitOn.finset_noncommProd}
     \leanok
-    Let $A$ be a tensor and let $\sigma\ge0$ with $\Tr\sigma=1$. There is
-    $C$, depending only on $d$ and $D$, such that the following holds. Let
+    There is $C$, depending only on $d$ and $D$, such that the following
+    holds. Let $A$ be a tensor, let $\sigma\ge0$ with $\Tr\sigma=1$, let
     $q\ge3D$ be a block length for which the $q$-site blocked tensor is
     injective, and let $M\ge1$. Then the approximating state of
     Definition~\ref{def:ldp_approximating_state} on $N=Mq$ sites is prepared
@@ -692,8 +692,10 @@ $1/\gamma$ in the block length here
 \end{theorem}
 \begin{proof}
     \leanok
-    Injectivity of the blocked tensor gives $D^2\le d^q$, hence $D\le d^D$,
-    so each bond index can be encoded in $D$ sites. Encode the two bond indices
+    The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
+    $D\ge1$, injectivity of the blocked tensor gives $D^2\le d^q$, which
+    forces $d=D=1$. In either case $D\le d^D$, so each bond index can be
+    encoded in $D$ sites. Encode the two bond indices
     of a block in its first and last $D$ sites, and write $\ket{l,0,r}$ for the block with $l$ on the first $D$ sites, $r$
     on the last $D$ sites, and $\ket0$ elsewhere. A first layer of unitaries,
     one on the last $D$ sites of each block and the first $D$ sites of the
@@ -726,9 +728,10 @@ $1/\gamma$ in the block length here
     $c\log(N/\varepsilon)$. This is \cite[eq.~(1)]{Malz2024Preparation}.
 \end{theorem}
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
-%% R_k are realized on groups of ceil(log_d D) sites as in
-%% Lemma lem:ldp_unitary_implementing_isometry; the depth estimate is
-%% unchanged up to constants. The pair layer has constant depth, and the
+%% R_k are realized on groups of D sites, as in
+%% thm:ldp_approximating_state_depth (groups of ceil(log_d D) sites would also
+%% do, but that is not what is formalized); the depth estimate is unchanged
+%% up to constants. The pair layer has constant depth, and the
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
 

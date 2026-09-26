@@ -314,31 +314,31 @@ theorem mul_self_le_pow_of_isInjective (A : MPSTensor d D) {q : ℕ}
     Module.finrank_self, mul_one] at h1
   simpa [blockPhysDim_eq_pow] using h1
 
-/-- **The approximating state is prepared in depth `O(q)`.** For a tensor `A` and
-`σ ≥ 0` with `Tr σ = 1` there is `C`, depending only on `A` through `d` and `D`, such that for
-every block length `q ≥ 3D` for which the `q`-site blocked tensor is injective and every number
-of blocks `M ≥ 1`, the approximating state `|φ'_N⟩` on `N = M q` sites is prepared in depth at
-most `C q` from a product state.
+/-- **The approximating state is prepared in depth `O(q)`.** There is `C`, depending only on
+`d` and `D`, such that for every tensor `A`, every `σ ≥ 0` with `Tr σ = 1`, every block length
+`q ≥ 3D` for which the `q`-site blocked tensor is injective and every number of blocks `M ≥ 1`,
+the approximating state `|φ'_N⟩` on `N = M q` sites is prepared in depth at most `C q` from a
+product state.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the pairs are prepared in
 constant depth (eq. (12)), and each block unitary of eq. (11) is a sequential circuit of depth
 `O(q)` applied to all blocks in parallel. Each bond index is encoded in `D` sites, which gives
 `D ≤ d^D` whenever the blocked tensor is injective. -/
-theorem exists_isPreparedInDepth_approximatingMPVState (A : MPSTensor d D)
-    {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) (htr : σ.trace = 1) :
-    ∃ C : ℕ, ∀ q, 3 * D ≤ q → Kraus.IsInjective (blockTensor A q) →
-      ∀ (M : ℕ) [NeZero (M * q)],
-        IsPreparedInDepth (C * q) fun s => approximatingMPVState A σ q M s := by
+theorem exists_isPreparedInDepth_approximatingMPVState (d D : ℕ) :
+    ∃ C : ℕ, ∀ (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
+      σ.trace = 1 → ∀ q, 3 * D ≤ q → Kraus.IsInjective (blockTensor A q) →
+        ∀ (M : ℕ) [NeZero (M * q)],
+          IsPreparedInDepth (C * q) fun s => approximatingMPVState A σ q M s := by
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · -- no bond: the state vanishes
-    refine ⟨0, fun q _ _ M _ => ⟨1, ⟨[], by simp, rfl⟩, fun _ _ => 0, funext fun s => ?_⟩⟩
+    refine ⟨0, fun A σ _ _ q _ _ M _ => ⟨1, ⟨[], by simp, rfl⟩, fun _ _ => 0, funext fun s => ?_⟩⟩
     have hN : Nonempty (Fin (M * q)) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne _)⟩⟩
     have h0 : (0 : ℂ) ^ (M * q) = 0 := zero_pow (NeZero.ne _)
     simp [approximatingMPVState, productVector, mulVec, dotProduct, Matrix.trace, h0]
   by_cases hDd : D ≤ d ^ D
   swap
-  · refine ⟨0, fun q hq hinj M _ => absurd (mul_self_le_pow_of_isInjective A hinj) ?_⟩
+  · refine ⟨0, fun A _ _ _ q hq hinj M _ => absurd (mul_self_le_pow_of_isInjective A hinj) ?_⟩
     have hq1 : 1 ≤ q := by omega
     rcases Nat.lt_or_ge d 2 with hd | hd
     · interval_cases d
@@ -354,10 +354,10 @@ theorem exists_isPreparedInDepth_approximatingMPVState (A : MPSTensor d D)
     Function.Embedding.nonempty_of_card_le (by simpa using hDd)
   have hdig : Function.Injective dig := dig.injective
   obtain ⟨Cb, hCb⟩ := exists_blockUnitary hd (r₁ := D) (by omega) hdig hD
+  obtain ⟨Kw, hKw⟩ := exists_isPairProduct (n := D + D) hd (by omega)
+  refine ⟨Cb + Kw, fun A σ hσ htr q hq hinj M _ => ?_⟩
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd hdig (fixedPointPair σ)
     (by rw [fixedPointPair_norm_sq hσ, htr])
-  obtain ⟨Kw, hKw⟩ := exists_isPairProduct (n := D + D) hd (by omega)
-  refine ⟨Cb + Kw, fun q hq hinj M _ => ?_⟩
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
   have hq0 : 0 < q := by omega
   obtain ⟨b, Q, hb0, hbq, -, hrow, -, hiso, hVQ⟩ :=

@@ -55,10 +55,6 @@ theorem disjoint_range_blockSite {k k' : Fin M} (h : k ≠ k') :
   rintro _ ⟨j, rfl⟩ ⟨j', hj'⟩
   exact h (blockSite_eq_iff.mp hj').1.symm
 
-theorem val_add_one_of_lt {N : ℕ} [NeZero N] {a : Fin N} (h : a.val + 1 < N) :
-    (a + 1).val = a.val + 1 := by
-  rw [Fin.val_add, Fin.val_one', Nat.add_mod_mod, Nat.mod_eq_of_lt h]
-
 theorem blockSite_succ [NeZero (M * q)] (k : Fin M) (j j' : Fin q) (h : j'.val = j.val + 1) :
     blockSite M q k j' = blockSite M q k j + 1 := by
   have hk := k.isLt
@@ -67,7 +63,7 @@ theorem blockSite_succ [NeZero (M * q)] (k : Fin M) (j j' : Fin q) (h : j'.val =
     have : q * k.val + q ≤ M * q := by nlinarith
     omega
   ext
-  rw [val_add_one_of_lt hlt, blockSite_val, blockSite_val, h]
+  rw [Fin.val_add_one_of_lt' hlt, blockSite_val, blockSite_val, h]
   ring
 
 /-! ### Pair windows -/
@@ -151,7 +147,7 @@ theorem pairSite_succ [NeZero (M * q)] (hq : r₁ + r₁ ≤ q) (hr : 1 ≤ r₁
         simp only [blockSite_val]
         have : q * k.val + q + q ≤ M * q := by nlinarith
         omega
-      rw [val_add_one_of_lt hlt, blockSite_val, blockSite_val, hrot]
+      rw [Fin.val_add_one_of_lt' hlt, blockSite_val, blockSite_val, hrot]
       simp only
       rw [Nat.mul_add]
       omega

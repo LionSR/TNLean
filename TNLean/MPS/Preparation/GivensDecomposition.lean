@@ -304,10 +304,6 @@ theorem exists_isTwoLevelWord_elim (a : ι) (X : Matrix ι ι ℂ) :
         rw [ite_eq_right hca, ite_eq_right hcb]
         exact hWX c hc
 
-theorem mem_unitary_iff_conjTranspose {X : Matrix ι ι ℂ} :
-    X ∈ unitary (Matrix ι ι ℂ) ↔ Xᴴ * X = 1 ∧ X * Xᴴ = 1 := by
-  rw [Unitary.mem_iff]; rfl
-
 /-- **Givens decomposition.** A unitary `X` with `det X = 1` acting as the identity outside a
 set `T` of basis vectors is a product of at most `3 |T|²` two-level rotations and phases on
 pairs of elements of `T`. -/
@@ -335,7 +331,7 @@ theorem isTwoLevelWord_of_fixesOutside :
       · exact hWX c hc
       · rw [hYfix c a (Or.inl (by simp [hca, hc])), ite_eq_right hca]
     set lam := Y a a with hlam
-    have hYu' := mem_unitary_iff_conjTranspose.mp hYu
+    have hYu' : Yᴴ * Y = 1 ∧ Y * Yᴴ = 1 := Unitary.mem_iff.mp hYu
     have hlam1 : star lam * lam = 1 := by
       have h := congrFun (congrFun hYu'.1 a) a
       rw [mul_apply, one_apply_eq, Finset.sum_eq_single a] at h
@@ -358,7 +354,8 @@ theorem isTwoLevelWord_of_fixesOutside :
       exact_mod_cast (pow_eq_one_iff_of_nonneg (norm_nonneg lam) two_ne_zero).mp
         (by exact_mod_cast h)
     have hXW : X = Wᴴ * Y := by
-      rw [hY, ← Matrix.mul_assoc, (mem_unitary_iff_conjTranspose.mp hWu).1, Matrix.one_mul]
+      rw [hY, ← Matrix.mul_assoc, (show Wᴴ * W = 1 from (Unitary.mem_iff.mp hWu).1),
+        Matrix.one_mul]
     rcases T.eq_empty_or_nonempty with rfl | ⟨b, hb⟩
     · -- `Y` is the identity
       have hY1 : Y = 1 := by

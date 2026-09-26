@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.InformationTheory.Hamming
 import TNLean.MPS.Preparation.GivensDecomposition
 
 /-!
@@ -71,17 +72,6 @@ end Conj
 
 variable {d n : ℕ}
 
-/-- The number of sites at which two configurations differ. -/
-def hammingDist' (a b : Cfg d n) : ℕ := (Finset.univ.filter fun i => a i ≠ b i).card
-
-theorem hammingDist'_le (a b : Cfg d n) : hammingDist' a b ≤ n := by
-  unfold hammingDist'
-  exact (Finset.card_filter_le _ _).trans (by simp)
-
-theorem hammingDist'_pos {a b : Cfg d n} (hab : a ≠ b) : 0 < hammingDist' a b := by
-  obtain ⟨i, hi⟩ := Function.ne_iff.mp hab
-  exact Finset.card_pos.mpr ⟨i, by simp [hi]⟩
-
 /-- **Two-level rotations are products of two-site gates.** For `d ≥ 1` and `n ≥ 2` there is
 `K` such that every two-level rotation or phase between two distinct configurations of the
 chain of `n` sites is a product of at most `K` gates on neighbouring sites. -/
@@ -96,7 +86,7 @@ theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
     rw [twoLevel_update_eq_ctrlOp a t hβ g]
     exact hK₁ _ ((Finset.card_le_univ _).trans (by simp)) t (by simp) a (a t) β
       (Ne.symm hβ) g hg
-  have key : ∀ h : ℕ, ∀ a b : Cfg d n, hammingDist' a b = h + 1 → ∀ g, IsSpecialTwo g →
+  have key : ∀ h : ℕ, ∀ a b : Cfg d n, hammingDist a b = h + 1 → ∀ g, IsSpecialTwo g →
       IsPairProduct d n ((2 * h + 1) * K₁) (twoLevel a b g) := by
     intro h
     induction h with
@@ -120,7 +110,7 @@ theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
     | succ h ih =>
       intro a b hab g hg
       obtain ⟨t, ht⟩ : (Finset.univ.filter fun i => a i ≠ b i).Nonempty :=
-        Finset.card_pos.mp (by unfold hammingDist' at hab; omega)
+        Finset.card_pos.mp (by unfold hammingDist at hab; omega)
       have hat : a t ≠ b t := (Finset.mem_filter.mp ht).2
       set c := Function.update b t (a t) with hc
       have hfilter : (Finset.univ.filter fun i => a i ≠ c i) =
@@ -130,16 +120,12 @@ theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
         by_cases hi : i = t
         · subst hi; simp
         · simp [hi]
-      have hac' : hammingDist' a c = h + 1 := by
-        unfold hammingDist'
+      have hac' : hammingDist a c = h + 1 := by
+        unfold hammingDist
         rw [hfilter, Finset.card_erase_of_mem ht]
-        unfold hammingDist' at hab
+        unfold hammingDist at hab
         omega
-      have hac : a ≠ c := fun h' => by
-        have := hammingDist'_pos (a := a) (b := c)
-        rw [hac'] at this
-        rw [← h'] at hac'
-        simp [hammingDist'] at hac'
+      have hac : a ≠ c := hammingDist_pos.mp (by omega)
       have hbc : b ≠ c := fun h' => by
         have := congrFun h' t
         rw [hc, Function.update_self] at this
@@ -156,10 +142,10 @@ theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
       refine this.mono (le_of_eq ?_)
       ring
   refine ⟨(2 * n + 1) * K₁, fun a b hab g hg => ?_⟩
-  obtain ⟨h, hh⟩ : ∃ h, hammingDist' a b = h + 1 :=
-    ⟨hammingDist' a b - 1, by have := hammingDist'_pos hab; omega⟩
+  obtain ⟨h, hh⟩ : ∃ h, hammingDist a b = h + 1 :=
+    ⟨hammingDist a b - 1, by have := hammingDist_pos.mpr hab; omega⟩
   refine (key h a b hh g hg).mono (Nat.mul_le_mul_right _ ?_)
-  have := hammingDist'_le a b
+  have := (hammingDist_le_card_fintype (x := a) (y := b)).trans_eq (Fintype.card_fin n)
   omega
 
 /-- A global phase `μ • 1` with `|μ| = 1` is a product of at most `2n` gates on neighbouring

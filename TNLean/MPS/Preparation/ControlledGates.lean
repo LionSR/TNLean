@@ -47,14 +47,6 @@ theorem ctrlElem_ctrlElem (p₁ p₂ w : R) :
     ctrlElem p₁ (ctrlElem p₂ w) = ctrlElem (p₁ * p₂) w := by
   simp only [ctrlElem]; noncomm_ring
 
-theorem one_sub_mul_self_of_isIdempotentElem {p : R} (hp : IsIdempotentElem p) :
-    (1 - p) * p = 0 := by
-  rw [sub_mul, one_mul, hp.eq, sub_self]
-
-theorem mul_one_sub_self_of_isIdempotentElem {p : R} (hp : IsIdempotentElem p) :
-    p * (1 - p) = 0 := by
-  rw [mul_sub, mul_one, hp.eq, sub_self]
-
 /-- For `p` idempotent and commuting with `x`, `C(p, x) C(p, y) = C(p, x y)`. -/
 theorem ctrlElem_mul {p x y : R} (hp : IsIdempotentElem p) (hx : Commute p x) :
     ctrlElem p x * ctrlElem p y = ctrlElem p (x * y) := by
@@ -63,9 +55,9 @@ theorem ctrlElem_mul {p x y : R} (hp : IsIdempotentElem p) (hx : Commute p x) :
   have h2 : p * x * (1 - p) = 0 := by
     rw [mul_assoc, mul_sub, mul_one, ← hx.eq, mul_sub, ← mul_assoc p p x, hp.eq, sub_self]
   have h3 : (1 - p) * (p * y) = 0 := by
-    rw [← mul_assoc, one_sub_mul_self_of_isIdempotentElem hp, zero_mul]
+    rw [← mul_assoc, hp.one_sub_mul_self, zero_mul]
   have h4 : (1 - p) * (1 - p) = 1 - p := by
-    rw [sub_mul, one_mul, mul_one_sub_self_of_isIdempotentElem hp, sub_zero]
+    rw [sub_mul, one_mul, hp.mul_one_sub_self, sub_zero]
   calc ctrlElem p x * ctrlElem p y
       = p * x * (p * y) + p * x * (1 - p) + (1 - p) * (p * y) + (1 - p) * (1 - p) := by
         simp only [ctrlElem]; noncomm_ring
@@ -109,10 +101,10 @@ theorem ctrlElem_commutator {p₁ p₂ v v' w w' : R} (hp₁ : IsIdempotentElem 
         ← h1v.eq, ← mul_assoc p₁ p₁, hp₁.eq, sub_self]
     have e3 : (1 - p₁) * w * (p₁ * v') = 0 := by
       rw [mul_assoc (1 - p₁) w, ← mul_assoc w p₁, ← h1w.eq, mul_assoc, ← mul_assoc (1 - p₁),
-        one_sub_mul_self_of_isIdempotentElem hp₁, zero_mul]
+        hp₁.one_sub_mul_self, zero_mul]
     have e4 : (1 - p₁) * w * (1 - p₁) = (1 - p₁) * w := by
       rw [mul_assoc, mul_sub, mul_one, ← h1w.eq, mul_sub, ← mul_assoc (1 - p₁) p₁ w,
-        one_sub_mul_self_of_isIdempotentElem hp₁, zero_mul, sub_zero]
+        hp₁.one_sub_mul_self, zero_mul, sub_zero]
     calc A * w * A' = p₁ * v * w * (p₁ * v') + p₁ * v * w * (1 - p₁) +
           (1 - p₁) * w * (p₁ * v') + (1 - p₁) * w * (1 - p₁) := by
           simp only [A, A', ctrlElem]; noncomm_ring
