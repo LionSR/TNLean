@@ -2130,6 +2130,27 @@ abstracted — record why, so it is not re-proposed).
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 
+### ambient left-canonical normalization from a unique full-support MPU block — candidate
+- **Pattern:** from the shifted transfer-trace identity, obtain the sole
+  canonical-form-II block and its unit-modulus weight; use full support to make
+  the block inclusion unitary, then transport the block's left-canonical sum
+  through the intertwining relation to the ambient tensor.
+- **Seen:** two occurrences across two files (2026-09-26): the local
+  `hweightedLeft`/`hAleft` argument in
+  `TNLean/MPS/MPU/TransferStabilization.lean` and
+  `IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening` in
+  `TNLean/MPS/MPU/VirtualUnitaryGauge.lean`.
+- **Abstraction:** the new public theorem
+  `IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening` is reusable for
+  full-support canonical-form-II data. A later refactor can replace the local
+  argument in `TransferStabilization.lean` once its supplied CFII data are
+  presented in that theorem's type.
+- **Notes:** the existing transfer-stabilization theorem requires `1 < D`, so
+  it cannot establish ambient left canonicity for the general positive-bond
+  case. The virtual-gauge proof uses no such extra dimension hypothesis. Two
+  occurrences do not yet meet the three-occurrence promotion threshold for a
+  further generic block-inclusion abstraction.
+
 ### integer-matrix verification of an explicit compression datum — promoted
 - **Pattern:** define every matrix of a worked example as the entrywise
   coercion of an integer matrix, push the coercion through the bond-space
