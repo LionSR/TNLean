@@ -526,6 +526,14 @@ and reflected-kernel residue), and D15 (the duplicated canonical-form structure
 behind `IsMPUCanonicalForm`, whose gauge-free "in CF" clause is the paper's
 and stays). Each names the evidence counted above and the first one-week PR.
 
+**2026-09-26 update (D15).** The canonical-form predicate now requires
+nonzero retained weights and full ambient support. A common reconstruction
+base leaves the CPSV optional complement intact. The normality assertion of
+`prop:normal-tensor` is proved for the original-tensor CF endpoint, using
+nonzero scalar transport to the normalized flattening, Perron--Frobenius
+eigenvectors of the weighted blocks, and transfer multiplicity. The
+`StrictlyEquivalent` endpoint remains the gauge-free CF predicate.
+
 ## Proposed follow-up issues
 
 No issue was opened by this audit. The proposed issues, each one step of the

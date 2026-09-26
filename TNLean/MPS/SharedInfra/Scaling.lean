@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Periodic.Defs
 import QICLean.Analysis.SpectralRadius
 
@@ -148,13 +149,6 @@ theorem isPeriodic_smul_of_norm_one
     leftCanonical_smul_of_norm_one c hc A hA.leftCanonical,
     hA.period_pos, ?_⟩
   simpa [hTransfer] using hA.peripheral_eq
-
-/-- Scaling a tensor by `c` scales MPVs by `c^N`. -/
-theorem mpv_smul (c : ℂ) (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (fun i => c • A i) σ = c ^ N * mpv A σ := by
-  simp only [mpv, coeff]
-  rw [Kraus.evalWord_smul]
-  simp [List.length_ofFn, Matrix.trace_smul]
 
 /-- The phase `μ / ‖μ‖` of a nonzero scalar has unit norm. -/
 theorem phase_norm_one {μ : ℂ} (hμ : μ ≠ 0) :
