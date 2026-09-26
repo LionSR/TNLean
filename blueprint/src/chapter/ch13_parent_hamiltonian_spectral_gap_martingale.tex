@@ -5930,12 +5930,13 @@ tensors.
         lem:right-spectator-kernel-projection}
     Decompose a vector $v$ on $n+r$ sites according to the last $r$
     physical coordinates, writing $v_s$ for the vector on $n$ sites
-    obtained by fixing these coordinates to $s\in\{1,\ldots,d\}^r$.
+    obtained by fixing these coordinates to $s\in\{0,\ldots,d-1\}^r$.
     The prefix Hamiltonian acts on each component $v_s$ by the length-$n$
     open Hamiltonian, whose kernel is $G_n(A)$. Hence
+    $v\in G_n(A)\otimes(\C^d)^{\otimes r}$ if and only if, for every
+    $s\in\{0,\ldots,d-1\}^r$,
     \begin{align}
-        v\in G_n(A)\otimes(\C^d)^{\otimes r}
-         & \iff v_s\in G_n(A)\ \text{for every } s\in\{1,\ldots,d\}^r.
+        v_s & \in G_n(A).
     \end{align}
 \end{proof}
 
