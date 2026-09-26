@@ -341,30 +341,80 @@ with the corresponding composite embeddings.
 
 \begin{lemma}[Composite reductions]%
     \label{lem:mpoalg_composite_reduction}
-    \notready
-    % The reduction property is formalized as thm:mpug_reduction_composition and
-    %   thm:mpug_fusion_trees_reductions (ch29); the nilpotency of the composite
-    %   remainder is not formalized.
+    \lean{MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans,
+        MPSTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul,
+        MPSTensor.isReductionResidualNilpotencyBound_of_intertwine,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_idKron,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_assoc_left,
+        MPOTensor.isReductionResidualNilpotencyBound_actTensor_kronId,
+        MPOTensor.isReductionResidualNilpotencyBound_actTensor_idKron,
+        MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_left,
+        MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_right}
+    \leanok
     \uses{def:mpoalg_fusion_tensors, thm:mpug_reduction_composition,
         thm:mpug_fusion_trees_reductions}
-    If $(V,W)$ is a reduction of $T_aT_b$ onto $T_c$ and $(V',W')$ a
-    reduction of $T_cT_d$ onto $T_e$, then
-    $(V'(V\otimes\Id),(W\otimes\Id)W')$ is a reduction of $T_aT_bT_d$ onto
-    $T_e$ with a nilpotent remainder; the same holds on the other side and for
-    an operator tensor acting on a state tensor. The reduction property,
-    without the nilpotency of the remainder, is
-    Lemma~\ref{thm:mpug_reduction_composition}, and for the two fusion trees
-    of a triple product it is Lemma~\ref{thm:mpug_fusion_trees_reductions}.
+    Let $(V_1,W_1)$ be a reduction of a tensor $C$ onto $B$ whose residual
+    letters $N^i=C^i-W_1B^iV_1$ have vanishing products of length $N_1$, and
+    let $(V_2,W_2)$ be a reduction of $B$ onto $A$ whose residual letters
+    $M^i=B^i-W_2A^iV_2$ have vanishing products of length $N_2$. Then the
+    residual letters $R^i=C^i-W_1W_2A^iV_2V_1$ of the composite reduction
+    $(V_2V_1,W_1W_2)$ have vanishing products of length $2N_1+N_2$. The
+    residual bound is unchanged when a reduction is tensored with an identity
+    strand, $(V\otimes\Id,W\otimes\Id)$ on $T_aT_d$ or
+    $(\Id\otimes V,\Id\otimes W)$ on $T_dT_a$, and likewise for an operator
+    tensor acting on a state tensor, and it is unchanged under the bond
+    associator. In particular, if $(V,W)$ reduces $T_aT_b$ onto $T_c$ and
+    $(V',W')$ reduces $T_cT_d$ onto $T_e$, both with residual bound $K$, then
+    $(V'(V\otimes\Id),(W\otimes\Id)W')$ reduces $T_aT_bT_d$ onto $T_e$ with
+    residual bound $3K$. The reduction property, without the residual bound,
+    is Lemma~\ref{thm:mpug_reduction_composition}, and for the two fusion
+    trees of a triple product it is
+    Lemma~\ref{thm:mpug_fusion_trees_reductions}.
+
+    The factors must have nilpotent residuals: a single slot of a reduction
+    onto several blocks has a residual that is not nilpotent, and composing
+    it with the identity reduction of $T_cT_d$ for a trivial $T_d$ returns it
+    unchanged. The bound $N_1+N_2$ fails: for one letter acting as the shift
+    $f_0\to f_1\to e_1\to e_2\to f_3\to f_4$ on $\C^6$, with $(V_1,W_1)$ the
+    compression onto $\operatorname{span}\{e_1,e_2\}$ and $(V_2,W_2)$ the
+    compression of the shift $e_1\to e_2$ onto $\operatorname{span}\{e_2\}$
+    with $A=0$, one has $N_1=3$, $N_2=2$, and $R^5\neq0$.
+    % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3147--3152
+    %   (Definition 8) and 3946--3970 (Lemma VNW=0); arXiv:2203.12563, lines
+    %   1026--1060; arXiv:2502.20257, main.tex lines 1506--1535.
 \end{lemma}
 
 \begin{proof}
-    For a word $\mathbf w=((i_1,j_1),\ldots,(i_N,j_N))$, the stacked product
-    factors as
-    $(V\otimes\Id)(T_aT_bT_d)^{\mathbf w}(W\otimes\Id)
-        =\sum_{\mathbf m}V(T_aT_b)^{(\mathbf i,\mathbf m)}W\otimes
-        T_d^{(\mathbf m,\mathbf j)}
-        =(T_cT_d)^{\mathbf w}$, and applying $(V',W')$ gives $T_e^{\mathbf w}$.
-    The remainder is block upper triangular with nilpotent diagonal blocks.
+    \leanok
+    The letters satisfy $R^i=N^i+W_1M^iV_1$, and $V_1N^{\mathbf q}W_1=0$ for
+    every nonempty word $\mathbf q$ because $(V_1,W_1)$ is a reduction. Three
+    inductions on words give the following.
+    \begin{enumerate}
+        \item $V_1R^{\mathbf w}W_1=M^{\mathbf w}$, and
+              $V_1R^{\mathbf w}N^{\mathbf q}W_1=0$ for nonempty $\mathbf q$.
+              Append a letter $x$ to $\mathbf w$: since
+              $R^{\mathbf wx}=R^{\mathbf w}N^x+R^{\mathbf w}W_1M^xV_1$, both
+              identities for $\mathbf wx$ follow from those for $\mathbf w$
+              and from $V_1W_1=\Id$.
+        \item $N^{\mathbf p}R^{\mathbf w}W_1=0$ when
+              $|\mathbf p|+|\mathbf w|\geq N_1+N_2$. Prepend a letter $x$:
+              $N^{\mathbf p}R^{x\mathbf w}W_1=N^{\mathbf px}R^{\mathbf w}W_1
+                  +N^{\mathbf p}W_1M^{x\mathbf w}$ by the first step, and the
+              last term vanishes because $|\mathbf p|\geq N_1$ or
+              $|x\mathbf w|\geq N_2$.
+        \item $R^{\mathbf w}N^{\mathbf q}=0$ when
+              $|\mathbf w|+|\mathbf q|\geq 2N_1+N_2$. Append a letter $x$:
+              $R^{\mathbf wx}N^{\mathbf q}=R^{\mathbf w}N^{x\mathbf q}
+                  +R^{\mathbf w}W_1M^xV_1N^{\mathbf q}$, and the last term
+              vanishes because $|\mathbf q|\geq N_1$, or else
+              $|\mathbf w|\geq N_1+N_2$ and the second step applies.
+    \end{enumerate}
+    The third step with $\mathbf q$ empty is the claim. The residual of
+    $(V\otimes\Id,W\otimes\Id)$ on $T_aT_d$ has words
+    $\sum_{\mathbf m}(T_a-WT_cV)^{(\mathbf i,\mathbf m)}\otimes
+        T_d^{(\mathbf m,\mathbf j)}$, which vanish at the same length, and an
+    invertible intertwiner of letters conjugates the residual letters.
 \end{proof}
 
 \begin{definition}[Associator]%
