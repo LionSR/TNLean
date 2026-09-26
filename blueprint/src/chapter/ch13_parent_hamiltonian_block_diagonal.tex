@@ -576,7 +576,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:ph_tp_block_intersection,
         lem:open_chain_iteration_subspace_sequence,
         thm:block_sum_local_ground_space, def:open_parent_hamiltonian_es,
-        thm:open_parent_hamiltonian_zero_local_terms}
+        thm:open_parent_hamiltonian_zero_local_terms,
+        lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es,
+        thm:open_ground_space_le_hamiltonian_kernel}
     By Definition~\ref{def:open_parent_hamiltonian_es}, the Hamiltonian is a
     sum of orthogonal projectors,
     \begin{align}
@@ -590,14 +592,17 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         =\bigcap_{i\in I_{L,N}}\ker h_{i,\mathrm{ES}}(B,L),
         \notag
     \end{align}
-    so a zero-energy vector satisfies every contiguous length-$L$
-    constraint. The block intersection
+    so, by Lemma~\ref{lem:local_term_es_kernel_restrictions}, every
+    contiguous length-$L$ restriction of a zero-energy vector lies in
+    $G_L(B)$ under the identification of
+    Lemma~\ref{lem:mem_ground_space_es}. The block intersection
     identity of Theorem~\ref{thm:ph_tp_block_intersection} extends these
     constraints one site at a time
     (Lemma~\ref{lem:open_chain_iteration_subspace_sequence}), giving
-    membership in $G_N(B)$. Conversely, every boundary-condition vector
-    satisfies each local constraint. Nonzero block weights identify $G_N(B)$
-    with the sum of the block spaces
+    membership in $G_N(B)$. Conversely,
+    $G_N(B)\subseteq\ker H^{\mathrm{open}}_{B,L,N}$ by
+    Theorem~\ref{thm:open_ground_space_le_hamiltonian_kernel}. Nonzero
+    block weights identify $G_N(B)$ with the sum of the block spaces
     (Theorem~\ref{thm:block_sum_local_ground_space}).
 \end{proof}
 
