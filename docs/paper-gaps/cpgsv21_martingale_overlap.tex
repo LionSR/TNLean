@@ -6,7 +6,7 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 
-\input{command}
+\input{./command}
 \providecommand{\Fin}[1]{\{0,\ldots,#1{-}1\}}
 
 \title{The Martingale Principal-Angle Estimate for MPS Parent Hamiltonians}
@@ -1820,15 +1820,19 @@ by
 $\lambda$ strictly above the weighted spectral radius of the transfer
 remainder $\mathcal E_A-E_\infty^\rho$. The source instead phrases its
 condition through the transfer eigenvalues, $\lambda_i<\lambda<1$ for
-$\lambda_i\neq1$. The two phrasings are not shown here to describe the same
-rates. What is formalized about the remainder's spectrum is
-\leanid{MPSTensor.IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one}: every
-eigenvalue of the remainder has modulus below one. That is a bound, not a
-characterization. It does not exhibit the remainder's spectrum as the nonunit
-transfer eigenvalues together with $0$, and it does not identify the weighted
-spectral radius with the largest modulus among the nonunit transfer
-eigenvalues. The geometric theorem therefore uses the spectral-radius form
-alone, and the source's eigenvalue prescription remains unformalized.
+$\lambda_i\neq1$. The source eigenvalue prescription now implies this spectral-radius
+condition. Write $E=\mathcal E_A$ and $P=E_\infty^\rho$. Since
+$PE=P$ and $P^2=P$, a nonzero eigenvalue $\nu$ of $E-P$ with eigenvector
+$X$ satisfies $PX=0$, and hence $EX=\nu X$. Primitivity excludes $\nu=1$
+for the remainder. Thus, if $\lambda>0$ exceeds the moduli of all nonunit
+transfer eigenvalues, every remainder eigenvalue has modulus below
+$\lambda$. Finite dimensionality gives the required strict spectral-radius
+bound, also in the weighted norm. The declarations
+\leanid{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
+and
+\leanid{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
+therefore establish the prescribed-rate estimate without a diagonalizability
+assumption.
 
 Also unmatched is the source's assertion that the prefactor may be
 taken equal to $k^2$, where $k$ is the dimension of the auxiliary space of the
@@ -1950,14 +1954,26 @@ formalized, and the resulting whole-increment theorem proves the exact
 coefficient $a(m)(1+a(m))/a_-(m)$ from Lemma~6.2. The threshold that feeds the
 gap theorems now runs through that estimate and its geometric form
 $c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$; the earlier inverse-Gram
-reconstruction and its unidentified constant have been deleted. Two
-restrictions remain. The first is the rate: the formal condition admits any
-$\lambda$ strictly above the weighted spectral radius of the transfer
-remainder, whereas the source prescribes $\lambda$ through the nonunit transfer
-eigenvalues, and the two phrasings are not shown here to describe the same
-rates, so the source's eigenvalue prescription remains unformalized. The second
-is the prefactor: the formal $c$ is the existential rate-dependent constant of
-Lemma~5.2, and the source value $k^2$ is not asserted.
+reconstruction and its unidentified constant have been deleted. The eigenvalue-rate condition is now formalized: every positive
+$\lambda$ strictly above the moduli of the nonunit transfer eigenvalues
+satisfies the weighted remainder spectral-radius condition. The remaining
+restriction is the prefactor. The formal $c$ is the existential
+rate-dependent constant of Lemma~5.2; the dimension-only value $k^2$ in the
+source projector estimate is not asserted from the injectivity threshold.
+
+A corrected eventual statement permits any prescribed $c>0$. Choose a rate
+$\mu$ strictly between the remainder spectral radius and $\lambda$. The bound
+$a(n)\leq C_\mu\mu^n$ implies $a(n)\leq c\lambda^n$ for all sufficiently
+large $n$, since $(\mu/\lambda)^n\to0$. Increasing this onset to exceed an
+injectivity length and to ensure $c\lambda^n<1$ gives the same rational
+projector bound, uniformly in both exterior interval lengths. The two
+formal statements are
+\leanid{MPSTensor.IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor}
+and
+\leanid{MPSTensor.IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor}.
+The onset depends on the state, rate, and prefactor. In particular, taking
+$c=k^2$ in this eventual statement does not establish the printed assertion
+from the original injectivity threshold.
 
 An earlier blocked-to-original comparison derived the bound
 $\operatorname{gap}(H_{Np,2p}(A))\geq1/8$ for $N\geq4$, on periodic lengths
