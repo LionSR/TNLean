@@ -257,8 +257,16 @@ def collect_file_lean_decls(lean_file: Path, lean_root: Path) -> list[LeanDecl]:
         if m:
             kind = m.group(1)
             short_name = m.group(2)
-            prefix = ".".join(ns_stack) + "." if ns_stack else ""
-            fqn = prefix + short_name
+            if short_name.startswith("_root_."):
+                # `_root_.` escapes the enclosing namespace: the declaration's
+                # fully-qualified name is exactly the remainder, independent of
+                # the namespace stack (e.g. `theorem _root_.Foo.bar` inside
+                # `namespace Baz` declares `Foo.bar`, not `Baz.Foo.bar`).
+                short_name = short_name[len("_root_.") :]
+                fqn = short_name
+            else:
+                prefix = ".".join(ns_stack) + "." if ns_stack else ""
+                fqn = prefix + short_name
             decl_source = m.string[m.start():m.end(1) + 1]
             is_private = bool(_LEAN_PRIVATE_RE.match(decl_source))
             decls.append(
