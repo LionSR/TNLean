@@ -22,4 +22,5 @@ import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
+import TNLean.MPS.Symmetry.MPOSymmetry.Similarity
 import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness

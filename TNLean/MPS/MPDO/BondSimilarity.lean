@@ -19,6 +19,8 @@ the matrix elements of the periodic operator are read off from the cyclic chaini
 
 * `MPOTensor.evalWord_eq_mul_mul_of_conj`: a bond similarity transports word evaluations.
 * `MPOTensor.mpo_eq_of_conj`: a letterwise bond similarity preserves periodic operators.
+* `MPOTensor.mpo_apply_comp`: restricting the physical alphabet along a map restricts the
+  periodic operators.
 * `MPOTensor.mpo_zero_of_pos`: the zero tensor has the zero periodic operator at positive length.
 * `MPOTensor.mpo_apply_of_eq_smul_single`: the periodic operator of a tensor whose letters are
   scaled matrix units.
@@ -56,6 +58,14 @@ theorem mpo_eq_of_conj {M : MPOTensor d D} {N : MPOTensor d D'}
   simp only [mpo_apply, mpoMatrixEntry]
   rw [evalWord_eq_mul_mul_of_conj hGH hHG hconj, Matrix.trace_mul_comm, ← Matrix.mul_assoc,
     hGH, Matrix.one_mul]
+
+/-- Restricting both physical legs of a tensor along a map `g` of alphabets restricts its
+periodic operators: the entry of `mpo M L` at `(g ∘ σ, g ∘ τ)` is the entry at `(σ, τ)` of the
+periodic operator of the tensor with letters `M^{g i, g j}`. -/
+theorem mpo_apply_comp {d' : ℕ} (M : MPOTensor d D) (g : Fin d' → Fin d) (L : ℕ)
+    (σ τ : Fin L → Fin d') :
+    mpo M L (g ∘ σ) (g ∘ τ) = mpo (fun i j => M (g i) (g j)) L σ τ := by
+  simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Function.comp_apply]
 
 /-- The MPO of the zero local tensor vanishes at every positive chain length. -/
 theorem mpo_zero_of_pos {L : ℕ} (hL : 0 < L) : mpo (0 : MPOTensor d D) L = 0 := by

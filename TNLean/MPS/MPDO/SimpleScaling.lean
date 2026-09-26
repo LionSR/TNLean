@@ -20,6 +20,8 @@ chain length `N`, the closed operator is multiplied by `c ^ N`, not by
 
 * `MPOTensor.mpo_smul`: scaling every tensor letter by `c` scales the length-`N`
   closed MPO by `c ^ N`.
+* `MPOTensor.mpo_letterwise_smul`: scaling each letter `M^{ij}` by its own scalar `c i j`
+  multiplies the `(σ, τ)` entry of the closed MPO by `∏_k c (σ k) (τ k)`.
 * `MPOTensor.blockTensor_smul`: length-`L` blocking turns a scalar `c` into
   `c ^ L`.
 * `MPOTensor.normalizedMPO_smul`: the normalized density operator is unchanged
@@ -72,6 +74,28 @@ theorem mpo_smul (c : ℂ) (M : MPOTensor d D) (N : ℕ) :
   simp only [mpo_apply, mpoMatrixEntry, Matrix.smul_apply]
   rw [evalWord_smul c M (List.ofFn σ) (List.ofFn τ) (by simp), Matrix.trace_smul]
   simp
+
+/-- Scaling each letter `M^{ij}` by its own scalar `c i j` scales the word evaluation on a
+configuration by the product of the scalars along it. -/
+theorem evalWord_ofFn_letterwise_smul (c : Fin d → Fin d → ℂ) (M : MPOTensor d D) {N : ℕ}
+    (σ τ : Fin N → Fin d) :
+    evalWord (fun i j => c i j • M i j) (List.ofFn σ) (List.ofFn τ) =
+      (∏ k, c (σ k) (τ k)) • evalWord M (List.ofFn σ) (List.ofFn τ) := by
+  induction N with
+  | zero => simp
+  | succ n ih =>
+      simp only [List.ofFn_succ, evalWord_cons, Fin.prod_univ_succ]
+      rw [ih (fun k => σ k.succ) (fun k => τ k.succ), Matrix.smul_mul, Matrix.mul_smul,
+        smul_smul]
+
+/-- **Letterwise scalar law for closed MPOs.** If every letter is rescaled by its own scalar,
+`N^{ij} = c i j • M^{ij}`, the entry of the periodic operator at `(σ, τ)` is multiplied by the
+product `∏_k c (σ k) (τ k)` of the scalars along the configuration. -/
+theorem mpo_letterwise_smul (c : Fin d → Fin d → ℂ) (M : MPOTensor d D) (N : ℕ)
+    (σ τ : Fin N → Fin d) :
+    mpo (fun i j => c i j • M i j) N σ τ = (∏ k, c (σ k) (τ k)) * mpo M N σ τ := by
+  simp only [mpo_apply, mpoMatrixEntry]
+  rw [evalWord_ofFn_letterwise_smul, Matrix.trace_smul, smul_eq_mul]
 
 /-- Exact scalar law for physical blocking: an `L`-site block carries `c ^ L`.
 

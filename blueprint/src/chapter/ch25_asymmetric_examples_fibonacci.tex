@@ -173,7 +173,8 @@ The review writes the operator with the prefactor $1/\sqrt{d_Ad_D}$
 arising from the normalization of the fusion basis, where $d_A$ and
 $d_D$ are the quantum dimensions of the labels on the adjacent
 bonds~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix};
-that prefactor is omitted in the blocks defined here.
+that prefactor is omitted in the blocks defined here, and its effect on the
+periodic operators is Theorem~\ref{thm:asymex_fib_review_congruence}.
 
 \begin{theorem}[The one-site matrices of the $\tau$ block]
     \label{thm:asymex_fib_entries}
@@ -204,6 +205,8 @@ print in the following form. The former gives the operator tensor only
 as a diagram and prints no entries of $B_1$ or $B_\tau$; the placement of the $F$-symbols used
 here, without the closed-loop factors of the source and without the
 prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+Theorem~\ref{thm:asymex_fib_gsymbol_similarity} relates these blocks to the
+source's tensor built from the $G$-symbols.
 
 \begin{definition}[Fibonacci fusion data of the review]
     \label{def:asymex_fib_fsymbols}
@@ -317,6 +320,133 @@ prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entri
     matrices over $\Z[\sigma]$ and are compared entrywise using
     (\ref{eq:asymex_fib_fsymbol}) and (\ref{eq:asymex_fib_ftau}). The
     complex statement follows by the entrywise embedding.
+\end{proof}
+
+\begin{definition}[The string-net tensors of the source and of the review]
+    \label{def:asymex_fib_gsymbol_tensor}
+    \lean{FibonacciCompression.fibLoopFactor, FibonacciCompression.fibGSymbol,
+        FibonacciCompression.fibBondLetter, FibonacciCompression.fibSiteLetter,
+        FibonacciCompression.fibEdgeTauLetter, FibonacciCompression.fibStringNetTensor,
+        FibonacciCompression.fibStringNetEdgeTau, FibonacciCompression.fibReviewTensor,
+        FibonacciCompression.fibReviewWeight,
+        FibonacciCompression.fibReviewWeightedTensor}
+    \leanok
+    \uses{def:asymex_fib_fsymbols}
+    Over $\C$ write $v_a=\sqrt{d_a}$ and $G^{abc}_{def}=v_e^{-1}v_f^{-1}[F^{abc}_d]_e^f$.
+    For a label $f$, the bond letters of the block $f$ are the pairs
+    $(u,l)$ of labels with $N_{ul}^f>0$: the letters $(1,1)$, $(\tau,\tau)$
+    for $f=1$ and $(1,\tau)$, $(\tau,1)$, $(\tau,\tau)$ for $f=\tau$. A
+    physical letter of the source's tensor is a pair $(x,e)$ of a plaquette
+    label and an edge label. The operator tensor of~\cite[Section~6.2 and
+    Appendix~D.1]{Bultinck2017Anyons} is drawn as the crossing of the
+    operator line $f$ with an edge line $e$, with the plaquettes $b$ upper
+    left, $q'$ upper right, $c$ lower left and $q''$ lower right; its
+    entries are
+    \begin{align}
+        \bigl(S_f^{(b,e'),(c,e)}\bigr)_{p,(q',q'')}
+         & =\delta_{e'e}\,\delta_{p,(b,c)}\,
+        G^{q'bc}_{q''ef}\sqrt{v_{q'}v_bv_cv_{q''}},
+        \label{eq:asymex_fib_gsymbol_tensor}
+    \end{align}
+    and its letters at edge label $\tau$ are
+    $S_f^{x'x}=S_f^{(x',\tau),(x,\tau)}$. The operator tensor
+    of~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix},
+    at the vertical label $\tau$, has the entries
+    \begin{align}
+        \bigl(R_f^{x'x}\bigr)_{p,(q',q'')}
+         & =\delta_{p,(x',x)}\,\frac{1}{\sqrt{d_{x'}d_{q''}}}\,
+        [F^{f x\tau}_{q'}]_{x'}^{q''}.
+        \label{eq:asymex_fib_review_tensor}
+    \end{align}
+    On configurations $x\in\{1,\tau\}^N$ let
+    $\Delta=\operatorname{diag}\prod_k d_{x_k}$, and let $\widetilde R_f$ be
+    the tensor with letters $d_x R_f^{x'x}$.
+\end{definition}
+
+\begin{theorem}[The source's blocks on edge label $\tau$]
+    \label{thm:asymex_fib_gsymbol_similarity}
+    % Principal declaration: FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau.
+    \lean{FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau,
+        FibonacciCompression.fibGSymbolGolden_tetrahedral,
+        FibonacciCompression.fibOneGolden_eq_fSymbol,
+        FibonacciCompression.fibBlock_apply_eq_fSymbol,
+        FibonacciCompression.fibStringNetEdgeTau_conj,
+        FibonacciCompression.mpo_fibStringNetEdgeTau,
+        FibonacciCompression.mpo_fibStringNetTensor_edgeTau,
+        MPOTensor.mpo_apply_comp, MPOTensor.IsMPOFusionAlgebra.of_mpo_eq_mul_mul}
+    \leanok
+    \uses{def:asymex_fib_gsymbol_tensor, thm:asymex_fib_tau_fsymbol,
+        thm:asymex_fib_anomaly_fusion_algebra, def:mpo_fusion_algebra}
+    The $G$-symbols satisfy $G^{abc}_{def}=G^{fce}_{abd}$, and both blocks
+    are $F$-symbol tensors: $(B_f^{x'x})_{p,(q',q'')}=\delta_{p,(x',x)}
+    [F^{fx\tau}_{q'}]_{x'}^{q''}$ for $f=1,\tau$. Let $h$ be the diagonal
+    matrix on the bond letters with $h(u,l)=(v_u/v_l)^{1/2}$. Then
+    \begin{align}
+        h\,S_f^{x'x}\,h^{-1} & =B_f^{x'x}
+        \label{eq:asymex_fib_gsymbol_conj}
+    \end{align}
+    for both labels $f$ and all $x',x$. Consequently, on the
+    configurations whose edge labels are all $\tau$, the periodic operators
+    of $S_1$ and $S_\tau$ equal those of $B_1$ and $B_\tau$ at every length,
+    and they satisfy the Fibonacci fusion rules $O_1^2=O_1$,
+    $O_1O_\tau=O_\tau O_1=O_\tau$ and $O_\tau^2=O_1+O_\tau$ at every positive
+    length. This is the fusion statement of~\cite[Appendix~D.1]{Bultinck2017Anyons}
+    restricted to edge label $\tau$; the statement on the full alphabet, with
+    edge labels $1$ and $\tau$, is not formalized
+    here~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_golden_ring}
+    The symmetry of the $G$-symbols and the $F$-symbol form of $B_1$ are
+    finite computations in $\Z[\sigma]$. By the symmetry,
+    $G^{q'x'x}_{q''\tau f}=v_{x'}^{-1}v_{q''}^{-1}[F^{fx\tau}_{q'}]_{x'}^{q''}$,
+    so the nonzero entries of $S_f^{x'x}$ are those of $B_f^{x'x}$ multiplied
+    by
+    $\sqrt{v_{q'}v_{x'}v_xv_{q''}}/(v_{x'}v_{q''})=h(q',q'')/h(x',x)$, which
+    is (\ref{eq:asymex_fib_gsymbol_conj}). The similarity $h$ cancels in the
+    trace defining the periodic operator, so the operators agree, and the
+    fusion rules are those of
+    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra}.
+\end{proof}
+
+\begin{theorem}[The prefactor of the review]
+    \label{thm:asymex_fib_review_congruence}
+    % Principal declaration: FibonacciCompression.mpo_fibReviewTensor.
+    \lean{FibonacciCompression.mpo_fibReviewTensor,
+        FibonacciCompression.fibReviewTensor_conj,
+        FibonacciCompression.not_isMPOFusionAlgebra_fibReviewTensor,
+        FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor,
+        MPOTensor.mpo_letterwise_smul}
+    \leanok
+    \uses{def:asymex_fib_gsymbol_tensor, thm:asymex_fib_gsymbol_similarity,
+        thm:asymex_fib_anomaly_fusion_algebra, def:mpo_fusion_algebra}
+    For both labels $f$ and every length $N$, the periodic operator of the
+    tensor (\ref{eq:asymex_fib_review_tensor}) is the congruence
+    \begin{align}
+        O_N(R_f) & =\Delta^{-1/2}\,O_N(B_f)\,\Delta^{-1/2}.
+        \label{eq:asymex_fib_review_congruence}
+    \end{align}
+    These operators do not satisfy the Fibonacci fusion rules: at $N=1$,
+    $O_N(R_1)=\operatorname{diag}(0,1/\varphi)$, whose square has the entry
+    $1/\varphi^2\neq1/\varphi$. The operators
+    $O_N(\widetilde R_f)=O_N(R_f)\Delta=\Delta^{-1/2}O_N(B_f)\Delta^{1/2}$
+    satisfy them at every positive length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The diagonal bond matrix $g(u,l)=d_l^{-1/2}$ carries $R_f^{x'x}$ to
+    $(d_{x'}d_x)^{-1/2}B_f^{x'x}$, a multiple of each letter by its own
+    scalar. The periodic operator of such a tensor is the operator of $B_f$
+    with its entry at $(x,y)$ multiplied by $\prod_k(d_{x_k}d_{y_k})^{-1/2}$,
+    which is (\ref{eq:asymex_fib_review_congruence}). At $N=1$,
+    $O_N(B_1)=\operatorname{diag}(0,1)$ gives the stated entry. Finally,
+    $O_N(\widetilde R_f)=\Delta^{-1/2}O_N(B_f)\Delta^{1/2}$ is similar to
+    $O_N(B_f)$ by one matrix for all labels, so products and linear
+    combinations are carried along and the fusion rules of
+    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} transfer.
 \end{proof}
 
 \begin{theorem}[Normality of the two Fibonacci blocks]

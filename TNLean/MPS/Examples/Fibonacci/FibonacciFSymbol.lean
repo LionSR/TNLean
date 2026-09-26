@@ -35,8 +35,8 @@ numeric entries of `B_1`, `B_τ`; the blocks used here place the bare F-symbol
 `[F^{τ x τ}_{x'_{j+1}}]_{x'_j}^{x_{j+1}}` at the physical letter `(x', x)` and the bond letters
 `(x'_j, x_j)`, `(x'_{j+1}, x_{j+1})`, without the source's closed-loop factors `v_a` and without
 the review's prefactor `1/√(d_A d_D)`; it is for these entries that `O_τ² = O_1 + O_τ` holds.
-The blocks are not identified with the source's diagram tensor, and no operator statement is made
-for a rescaled tensor. Documented in
+On edge label `τ` the source's G-symbol tensor is carried to these blocks by a diagonal bond
+similarity (`FibonacciGSymbol.lean`, `fibStringNetEdgeTau_conj`). Documented in
 `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 **Local fix (positive length):** the source asks for `P_L² = P_L` for all `L`
@@ -285,8 +285,9 @@ def fibDelta : Matrix (Fin (2 + 3)) (Fin (2 + 3)) ℂ :=
 operator `P_L` is the boundary-weighted matrix product operator
 `∑ tr(Δ B^{i_1 j_1} ⋯ B^{i_L j_L}) |i⟩⟨j|`, in the source's form, of the locally chosen
 bond-five tensor `fibPMPO` with the boundary matrix `Δ = fibDelta`. The blocks of `fibPMPO`
-carry the bare F-symbol entries of the module's Local fix (provenance) and are not identified
-with the source's diagram tensor. -/
+carry the bare F-symbol entries of the module's Local fix (provenance); on edge label `τ` their
+periodic operators are those of the source's G-symbol tensor
+(`mpo_fibStringNetTensor_edgeTau`). -/
 theorem fibProjector_eq_trace_fibDelta (L : ℕ) :
     fibProjector L = Matrix.of fun σ τ =>
       Matrix.trace (fibDelta * evalWord fibPMPO (List.ofFn σ) (List.ofFn τ)) := by

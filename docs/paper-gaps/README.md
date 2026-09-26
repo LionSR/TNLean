@@ -15,8 +15,11 @@ For the Fibonacci string-net example of arXiv:1511.08090:
 
 - `bmwshv17_fibonacci_block_entries_provenance.tex` records that the source
   prints the Fibonacci F-symbols but no numeric entries of the two operator
-  blocks, the placement of the F-symbols used for the blocks, and that the
-  checked fusion rules and projector identity concern the bare F-symbols.
+  blocks, the placement of the F-symbols used for the blocks, that on edge
+  label `τ` a diagonal bond similarity relates the source's G-symbol tensor to
+  these blocks (so the periodic operators and fusion rules agree there), and
+  that the review's prefactor `1/√(d_A d_D)` gives the congruence
+  `Δ^{-1/2} O Δ^{-1/2}`, which fails the fusion rules in the orthonormal basis.
 - `bmwshv17_joint_block_left_inverse.tex` records that the simultaneous left
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical

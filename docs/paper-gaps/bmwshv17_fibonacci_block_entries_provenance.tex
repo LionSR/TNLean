@@ -65,21 +65,80 @@ $P_L=w_1O_1+w_\tau O_\tau$, which is idempotent at every positive length.\footno
     \leanid{FibonacciCompression.isMPOFusionAlgebra_fibBlock},
     \leanid{FibonacciCompression.fibProjector_eq_trace_fibDelta},
     \leanid{FibonacciCompression.fibProjector_mul_self}.}
-The review \cite{Cirac2021Matrix} writes the operator tensor with an
-additional prefactor $1/\sqrt{d_Ad_D}$, and the source builds its tensor from
-the G-symbols $G^{abc}_{def}=F^{abc}_{def}/(v_ev_f)$ together with closed-loop
-factors $v_a$. The checked statements concern the
-bare F-symbols (\ref{eq:fib_block}). No relation between these blocks and the
-source's diagram tensor is established: in particular it is not shown that the
-two are related by a local diagonal similarity preserving the fusion rules. The
-blocks (\ref{eq:fib_block}) are therefore not identified with the source's
-tensor, and no operator statement is made for the prefactored or the
-G-symbol tensor. Since the source prints no numeric entries, what is recorded
-is a choice of explicit blocks with the printed block dimensions, weights and
-fusion rules, not an error in the source.\footnote{Review traceability:
-    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2613--2625; source:
-    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1026--1040 and
-    1257--1260.}
+Since the source prints no numeric entries, what is recorded is a choice of
+explicit blocks with the printed block dimensions, weights and fusion rules,
+not an error in the source.
+
+\section{Relation to the source's tensor}
+The source draws one site of its operator as the crossing of the horizontal
+operator line $f$ with a vertical edge line $e$, with corner plaquettes $b$
+(upper left), $a$ (upper right), $c$ (lower left) and $d$ (lower right), and
+gives it the entry
+\begin{align}
+    S_f\bigl[(b,e),(c,e);(b,c),(a,d)\bigr]
+     & =G^{abc}_{def}\sqrt{v_av_bv_cv_d},
+    \qquad G^{abc}_{def}=\frac{F^{abc}_{def}}{v_ev_f},\quad v_i=\sqrt{d_i},
+    \label{eq:fib_source}
+\end{align}
+where a physical letter records the left plaquette and the edge label, the
+edge label passes through the site unchanged, and the bond letters are the
+admissible pairs of plaquettes above and below the operator line; the
+upper-right plaquette of a site is the upper-left plaquette of the next
+one.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1044--1050 and
+    1257--1268, figure file \path{StringNetMPO_RHS.pdf}.}
+The Fibonacci G-symbols have the tetrahedral symmetry
+$G^{abc}_{def}=G^{fce}_{abd}$. On the configurations whose edge labels are all
+$\tau$ this moves the G-symbol of (\ref{eq:fib_source}) to the F-symbol slots
+of (\ref{eq:fib_block}), and the remaining factors are
+$\sqrt{v_av_bv_cv_d}/(v_bv_d)=h(a,d)/h(b,c)$ with
+$h(u,l)=(v_u/v_l)^{1/2}$. Hence the diagonal bond matrix $h$ conjugates every
+letter of the source's tensor on edge label $\tau$ into the corresponding letter
+of $B_1$ or $B_\tau$,
+\begin{align}
+    h\,S_f^{(x',x)}\,h^{-1} & =B_f^{(x',x)},
+    \label{eq:fib_conj}
+\end{align}
+the entries of $S_f$ involving $\phi^{\pm1/4}$ while those of $B_f$ lie in
+$\mathbb{Z}[\phi^{-1/2}]$. The similarity cancels in the trace, so on edge label
+$\tau$ the periodic operators of the source's blocks equal those of $B_1$ and
+$B_\tau$ at every length, and they satisfy the Fibonacci fusion
+rules.\footnote{Results:
+    \leanid{FibonacciCompression.fibStringNetEdgeTau_conj},
+    \leanid{FibonacciCompression.mpo_fibStringNetTensor_edgeTau},
+    \leanid{FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau}.}
+The operator statements are restricted to edge label $\tau$: when an edge
+carries the label $1$ the two plaquettes on either side of it coincide, and the
+fusion rules of the source's tensor on the full alphabet of four letters per
+site (plaquette and edge label) were checked numerically for one to four sites
+but are not proved.
+
+The review \cite{Cirac2021Matrix} writes the operator tensor with plaquettes
+$A$ (upper left), $B$ (upper right), $C$ (lower left), $D$ (lower right), and
+entry $(1/\sqrt{d_Ad_D})\,(F^{aC\alpha}_B)^D_A$.\footnote{Review traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2613--2625, figure
+    file \path{fig3_mpo.pdf}.}
+At $\alpha=\tau$ this is the bare block (\ref{eq:fib_block}) multiplied by
+$1/\sqrt{d_{x'}d_D}$, with $D$ the lower-right plaquette. The bond gauge $g(u,l)=d_l^{-1/2}$ turns this factor
+into the letterwise scalar $(d_{x'}d_x)^{-1/2}$, and the periodic operator is
+the congruence
+\begin{align}
+    O_f^{\mathrm{rev}} & =\Delta^{-1/2}\,O_f\,\Delta^{-1/2},
+    \qquad \Delta=\operatorname{diag}\prod_k d_{x_k},
+    \label{eq:fib_review}
+\end{align}
+not a similarity of $O_f$. Read in the orthonormal basis of plaquette
+configurations, these operators do not satisfy the fusion rules: at one site
+$O_1^{\mathrm{rev}}=\operatorname{diag}(0,1/\phi)$, whose square has the entry
+$1/\phi^2\neq1/\phi$. The operators
+$O_f^{\mathrm{rev}}\Delta=\Delta^{-1/2}O_f\Delta^{1/2}$ are similar to $O_f$
+and do satisfy them, so the review's normalization gives the fusion algebra
+with respect to the $\Delta$-weighted inner product.\footnote{Results:
+    \leanid{FibonacciCompression.mpo_fibReviewTensor},
+    \leanid{FibonacciCompression.not_isMPOFusionAlgebra_fibReviewTensor},
+    \leanid{FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor}.}
+The review makes no fusion statement for its prefactored tensor at this
+passage, so this is a remark on normalization, not an error in the review.
 
 \section{The empty chain}
 The source asks for $P_L^2=P_L$ at every length; the exclusion of the empty
