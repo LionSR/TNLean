@@ -645,3 +645,171 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     dividing by the nonzero normalization factors would give an equivalence
     between the corresponding original blocks, contrary to the hypothesis.
 \end{proof}
+
+\begin{theorem}[Blockwise replacement preserves parent Hamiltonians]
+    \label{thm:ph_block_replacement_parent_equality}
+    \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq,
+        MPSTensor.parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq}
+    \leanok
+    Let $A^j$ and $B^j$ have the same respective bond dimensions, and let
+    all coefficients $\mu_j,\nu_j$ be nonzero. If $G_L(A^j)=G_L(B^j)$ for
+    every $j$, then the assembled tensors $A=\bigoplus_j\mu_jA^j$ and
+    $B=\bigoplus_j\nu_jB^j$ satisfy $G_L(A)=G_L(B)$.
+    Their canonical periodic parent Hamiltonians of range $L$ coincide at
+    every volume: $H_{A,L,N}=H_{B,L,N}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:block_sum_local_ground_space}
+    The assembled local ground spaces are the sums of the respective block
+    spaces. Equality of these spaces gives equality of their orthogonal
+    complement projections and hence of every translated parent interaction.
+\end{proof}
+
+\begin{theorem}[Primitive block representatives with unchanged Hamiltonians]
+    \label{thm:ph_primitive_representatives_parent_equality}
+    \lean{MPSTensor.exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_isNormal}
+    \leanok
+    Let $A=\bigoplus_j\mu_jA^j$ have nonzero coefficients and normal blocks
+    of positive bond dimensions. Suppose that no two distinct blocks are
+    related by conjugation and a nonzero scalar.
+    There are normalized primitive blocks $B^j$, with positive definite
+    invariant matrices, which remain pairwise inequivalent and satisfy
+    $H_{A,L,N}=H_{B,L,N}$ for every $L,N$, where
+    $B=\bigoplus_j\mu_jB^j$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normal_blocks_primitive_representatives,
+        thm:ph_block_replacement_parent_equality}
+    Normalize each block while retaining its local ground spaces and the
+    inequivalence of distinct blocks. The assembled parent Hamiltonians
+    therefore coincide at each interaction range and volume.
+\end{proof}
+
+\begin{lemma}[Primitive normalization at a fixed C1 length]
+    \label{lem:normal-block-primitive-c1-normalization}
+    \lean{MPSTensor.exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_common_isNBlkInjective}
+    \leanok
+    Suppose that a finite family of nonzero-dimensional MPS tensors is
+    injective at a common positive word length $L_0$, and that its members
+    are pairwise inequivalent under virtual conjugation and nonzero scalar
+    multiplication. Then each tensor admits a normalized primitive
+    representative which remains injective at length $L_0$.
+    The representatives remain pairwise inequivalent. For any nonzero
+    weights, the original and normalized block sums have exactly the same
+    periodic parent Hamiltonians at every interaction range and chain length.
+\end{lemma}
+\begin{proof}\leanok
+    Normalize each tensor by a nonzero scalar and an invertible virtual
+    conjugation. These operations preserve injectivity at each fixed word
+    length, preserve all local ground spaces, and preserve inequivalence.
+    The ground space of a weighted block sum is the sum of the block ground
+    spaces. Hence every local parent projection, and therefore every periodic
+    parent Hamiltonian, is unchanged.
+\end{proof}
+
+\begin{theorem}[Propagation of simultaneous spans in trace-preserving form]
+    \label{thm:ph_tp_word_span_propagation}
+    \lean{MPSTensor.wordTupleSpanTop_succ_of_tracePreserving,
+        MPSTensor.wordTupleSpanTop_of_ge_of_tracePreserving}
+    \leanok
+    Suppose that $\sum_a(A^{j,a})^\dagger A^{j,a}=\Id$ for every block $j$.
+    If the simultaneous length-$L$ word tuples span the product matrix
+    algebra, the same holds at every length $n\ge L$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For an arbitrary tuple $(M_j)_j$, represent
+    $(M_j(A^{j,a})^\dagger)_j$ as a linear combination of length-$L$ word
+    tuples. Append the letter $a$ and sum over $a$. The resulting tuple is
+    $(M_j)_j$ by trace-preserving normalization. This proves the one-site
+    extension, and induction gives every larger length.
+\end{proof}
+
+\begin{theorem}[The printed open-chain threshold for primitive blocks]
+    \label{thm:ph_primitive_blocks_sharp_open_kernel}
+    \lean{MPSTensor.ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound}
+    \leanok
+    Let $d>0$, $r\ge2$, and $B=\bigoplus_{j=1}^r\mu_jA^j$, with all
+    coefficients nonzero. Suppose that the blocks have positive bond
+    dimensions, are trace-preserving and primitive with positive definite
+    invariant matrices, and are pairwise inequivalent under conjugation
+    and multiplication by a nonzero scalar.
+    Suppose that each block is injective at the supplied common length
+    $L_0>0$. Then for
+    \begin{align}
+        3(r-1)(L_0+1)+1\le R\le N,
+        \notag
+    \end{align}
+    the open-chain parent Hamiltonian satisfies
+    $\ker H^{\mathrm{open}}_{B,R,N}=G_N(B)$.
+    This is the interaction threshold of
+    \cite[Theorem~12]{PerezGarcia2007Matrix} in trace-preserving coordinates.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_tp_word_span_propagation,
+        thm:ph_tp_block_open_ground_space}
+    The simultaneous-span estimate of
+    \cite[Lemma~10]{PerezGarcia2007Matrix} gives the full product matrix
+    algebra at length $3(r-1)(L_0+1)$. Trace-preserving propagation keeps
+    the span full at every larger length. The block intersection theorem
+    therefore gives the kernel identity at the stated interaction range.
+\end{proof}
+
+\begin{theorem}[A periodic gap for normal block sums]
+    \label{thm:normal_block_sum_parent_gap}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isNormal, MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isNormal}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ be normal MPS tensors with positive physical and
+    bond dimensions, pairwise inequivalent under virtual conjugation and
+    nonzero scalar multiplication. Let $B=\bigoplus_j\mu_j A^j$, where
+    every $\mu_j$ is nonzero.
+    There is a positive integer $R_0$ such that, for every $R\geq R_0$,
+    there are constants $\gamma_R>0$ and $N_R\in\mathbb N$ for which
+    the canonical periodic parent Hamiltonian $H_{R,N}$ satisfies
+    \begin{align}
+        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
+    \end{align}
+    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}$.
+    In particular, at least one positive interaction range has a uniform
+    eventual periodic gap.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ph_primitive_representatives_parent_equality, thm:primitive_block_sum_parent_gap_threshold}
+    Replace each block by a normalized primitive representative. This preserves
+    inequivalence and leaves every parent Hamiltonian unchanged. The uniform
+    gap theorem for primitive block sums therefore applies with the same
+    interaction ranges and the same constants.
+\end{proof}
+
+\begin{theorem}[The gap at the prescribed interaction range]
+    \label{thm:normal-block-parent-gap-three-block-bound}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_common_isNBlkInjective}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$, $r\geq2$, be MPS tensors with positive
+    physical and bond dimensions, injective at a common positive word length
+    $L_0$, and pairwise inequivalent under virtual conjugation and nonzero
+    scalar multiplication. Let $B=\bigoplus_j\mu_j A^j$, with every
+    $\mu_j\ne0$. For every prescribed range
+    \begin{align}
+        R\geq3(r-1)(L_0+1)+1,
+    \end{align}
+    there is a constant $\gamma_R>0$ such that the canonical periodic parent
+    Hamiltonian $H_{R,N}$ of $B$ satisfies
+    \begin{align}
+        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
+    \end{align}
+    for every chain length $N\in\mathbb N$ and every $v\perp\ker H_{R,N}$.
+    This is the block-injective parent-Hamiltonian gap of
+    \cite[Section~IV.C]{Cirac2021Matrix} at the interaction bound of
+    \cite[Theorem~12]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:normal-block-primitive-c1-normalization, thm:primitive-block-parent-uniform-gap-three-block-bound}
+    Normalize the blocks to primitive representatives without changing the
+    specified injectivity length $L_0$. Their periodic parent Hamiltonians
+    agree with the original ones at every range and chain length. Apply the
+    primitive-block gap theorem at the prescribed range.
+\end{proof}

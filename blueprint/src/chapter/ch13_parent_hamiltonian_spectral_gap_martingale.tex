@@ -5849,3 +5849,356 @@ tensors.
     extension. Conjugation preserves the operator norm, and
     fiberwise extension does not increase it.
 \end{proof}
+
+\begin{theorem}[Grouped C3 from a three-interval estimate]
+    \label{thm:grouped_c3_from_projector_defect}
+    \lean{MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect,
+        MPSTensor.grouped_martingaleDifference_norm_le_of_two_le}
+    \leanok
+    Let $p\geq1$. Suppose that the range-$2p$ open parent
+    Hamiltonian of a tensor has its boundary-condition space as kernel
+    at every length at least $2p$. For every $K\geq0$, let
+    $P_K$, $T_K$, and $F_K$ be the boundary-space projections
+    on the first $K+p$ sites, the last $2p$ sites, and all
+    $K+2p$ sites, respectively, with free sites elsewhere.
+    Suppose that $\epsilon\geq0$ and that, for every $K\geq0$,
+    \begin{align}
+        \|F_K-P_KT_K\|\leq\epsilon.
+        \notag
+    \end{align}
+    Then on every chain of length $pM$ with $M\geq2$, the grouped
+    martingale projections satisfy
+    \begin{align}
+        \|Q_nE_n\|\leq\epsilon
+        \notag
+    \end{align}
+    for every $0\leq n<M$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:grouped_open_ground_projection_locality,
+        thm:ph_active_grouped_projector_error,thm:grouped_spectator_norm}
+    The products at indices zero and one vanish. For $n\geq2$,
+    put $K=p(n-1)$. The active interval has length $p(n+1)$,
+    and its preceding prefix has length $pn$. The kernel hypothesis
+    and the active projector identity give the desired bound on this
+    interval. Adjoining the remaining $pM-p(n+1)$ sites does not
+    increase the operator norm.
+\end{proof}
+
+\begin{theorem}[Uniformly gapped interaction ranges for primitive block sums]
+    \label{thm:primitive_block_sum_parent_gap}
+    \lean{MPSTensor.exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS,
+        MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS}
+    \leanok
+    Let $A_1,\ldots,A_r$ be normalized primitive tensors with
+    common physical dimension $d\geq1$, positive bond dimensions,
+    and positive-definite invariant matrices. Assume that no two blocks
+    are related by a virtual similarity and a phase. Let
+    $\mu_j\ne0$ for every $j$, and set
+    $B=\bigoplus_{j=1}^{r}\mu_jA_j$.
+    For every prescribed lower bound $R_*$, there exist
+    $R\geq\max\{1,R_*\}$, $\gamma>0$, and $N_0$ such that
+    the periodic range-$R$ parent Hamiltonian satisfies
+    \begin{align}
+        \gamma\|v\|\leq\|H_{R,N}v\|
+        \notag
+    \end{align}
+    for every $N\geq N_0$ and every $v\perp\ker H_{R,N}$.
+    In particular, the block sum admits a parent interaction with a
+    uniform positive periodic gap.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_primitive_blocks_open_kernel,
+        thm:ph_block_diagonal_projector_decay,
+        thm:grouped_c3_from_projector_defect,
+        thm:grouped_open_parent_gap,thm:periodic_gap_from_divisible_open}
+    Choose $p$ above the prescribed bound and the open-kernel threshold,
+    and sufficiently large that the three-interval projector error is at
+    most $1/2$, uniformly in the two outer lengths. Set $R=2p$.
+    The preceding theorem gives grouped C3 with $\epsilon=1/2$.
+    Since $1/2<1/\sqrt2$, the grouped open-chain estimate gives the
+    positive coefficient $(1-\sqrt2/2)^2$ at every length $pM$
+    with $M\geq2$. The finite-range comparison then supplies a positive
+    periodic gap at every sufficiently large length.
+\end{proof}
+
+\begin{theorem}[Operator order after adjoining free sites]
+    \label{thm:ph_spectator_operator_order}
+    \lean{ContinuousLinearMap.inner_rightFiberwiseMap,
+        ContinuousLinearMap.isPositive_rightFiberwiseMap,
+        ContinuousLinearMap.rightFiberwiseMap_mono,
+        ContinuousLinearMap.rightFiberwiseMap_smul,
+        LinearIsometryEquiv.conj_le_conj_iff}
+    \leanok
+    Let $T$ be an operator on a finite-dimensional physical space and
+    let $(e_s)_s$ be an orthonormal basis for an additional physical space.
+    For $x=\sum_s x_s\otimes e_s$ and $y=\sum_s y_s\otimes e_s$,
+    \begin{align}
+        \langle (T\otimes\Id)x,y\rangle
+        =\sum_s\langle Tx_s,y_s\rangle.
+        \notag
+    \end{align}
+    Consequently $T\ge0$ implies $T\otimes\Id\ge0$, and $T\le U$ implies
+    $T\otimes\Id\le U\otimes\Id$. Scalar multiplication commutes with
+    extension: $(cT)\otimes\Id=c(T\otimes\Id)$.
+    If $V$ is a unitary identification of physical spaces, then
+    $VTV^{-1}\le VUV^{-1}$ if and only if $T\le U$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand the inner product in the product orthonormal basis and sum first
+    over the additional coordinates. Positivity follows term by term;
+    the order assertion follows by applying positivity to $U-T$.
+    The scalar identity follows on each coordinate. Unitary conjugation
+    preserves and reflects positivity, hence also operator order.
+\end{proof}
+
+\begin{lemma}[Comparison on a finite interval]
+    \label{lem:parent-finite-interval-comparison}
+    \lean{MPSTensor.exists_pos_parentInteractionES_openParentHamiltonianES_comparison}
+    \leanok
+    Let $A$ be an MPS tensor, and let $R,W$ be interaction and interval lengths.
+    Suppose that the kernel of the open parent Hamiltonian $K_{R,W}$ is
+    $\mathcal G_W(A)$. Writing $h_W$ for the orthogonal projection onto
+    $\mathcal G_W(A)^\perp$, there are positive constants $\kappa,C$ such that
+    \begin{align}
+        \kappa h_W \leq K_{R,W} \leq C h_W.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The restriction of $K_{R,W}$ to its kernel complement is injective.
+    Finite dimensionality therefore gives a positive lower bound for its
+    smallest singular value. Positivity turns this into the lower
+    quadratic-form bound. The operator norm gives the upper bound.
+    Both quadratic forms vanish on the common kernel.
+\end{proof}
+
+\begin{lemma}[Comparison with the kernel projection]
+    \label{lem:positive-kernel-projection-comparison}
+    \lean{LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le, LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection}
+    \leanok
+    Let $H$ be a positive operator on a finite-dimensional complex Hilbert
+    space. If $P$ is the orthogonal projection onto $(\ker H)^\perp$,
+    then $aP\leq H\leq bP$ for some $a,b>0$.
+\end{lemma}
+\begin{proof}\leanok
+    The restriction of $H$ to $(\ker H)^\perp$ is injective and thus has
+    a positive norm lower bound. Since $H$ is positive, its eigenvalues
+    on this subspace have the same lower bound. The operator norm gives
+    the upper bound. Orthogonal projection onto $(\ker H)^\perp$
+    leaves the quadratic form of $H$ unchanged.
+\end{proof}
+
+\begin{lemma}[Kernels and gaps under positive comparison]
+    \label{lem:positive-comparison-kernel-gap}
+    \lean{LinearMap.IsPositive.ker_le_of_le, LinearMap.IsPositive.ker_eq_of_smul_le_of_le_smul, LinearMap.IsPositive.norm_gap_of_smul_le_of_le_smul}
+    \leanok
+    If $0\leq P\leq Q$, then $\ker Q\subseteq\ker P$.
+    Consequently, if $P,Q$ are positive operators and $a,b,c>0$ satisfy
+    \begin{align}
+        aP\leq bQ\leq cP,
+        \notag
+    \end{align}
+    their kernels agree. In finite dimension, a norm gap $\gamma>0$
+    for $P$ on its kernel complement implies a norm gap
+    $a\gamma/b$ for $Q$ on the same subspace.
+\end{lemma}
+\begin{proof}\leanok
+    A positive quadratic form vanishes only on the kernel of its operator.
+    Evaluating the order bounds on kernel vectors proves the inclusions.
+    On the common kernel complement, the norm gap for $P$ is equivalent
+    to $P\geq\gamma I$. Hence $bQ\geq a\gamma I$, which gives the
+    stated norm gap by Cauchy--Schwarz.
+\end{proof}
+
+\begin{theorem}[Transfer to a prescribed interaction range]
+    \label{thm:parent-gap-fixed-range-transfer}
+    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_larger_range}
+    \leanok
+    \uses{lem:parent-finite-interval-comparison, thm:periodic-parent-range-comparison, lem:positive-comparison-kernel-gap}
+    Let $A$ be an MPS tensor, and let $R,W$ be positive integers with
+    $W\geq2R$. Suppose that the open range-$R$ Hamiltonian on $W$
+    sites has kernel $\mathcal G_W(A)$. If the periodic parent Hamiltonians
+    of range $W$ have a uniform positive gap for all sufficiently large
+    chain lengths, then the same holds at range $R$.
+\end{theorem}
+\begin{proof}\leanok
+    Choose $\kappa,C>0$ such that
+    $\kappa h_W\leq K_{R,W}\leq Ch_W$. Summing all cyclic translates
+    gives
+    \begin{align}
+        \kappa H_{W,N}\leq (W-R+1)H_{R,N}\leq C H_{W,N}
+        \notag
+    \end{align}
+    for sufficiently large $N$. The periodic kernels therefore agree.
+    A gap $\gamma$ at range $W$ transfers to the gap
+    $\kappa\gamma/(W-R+1)$ at range $R$.
+\end{proof}
+
+\begin{lemma}[The interaction on a full interval]
+    \label{lem:full-interval-parent-interaction}
+    \lean{MPSTensor.localTermES_self_zero_eq_parentInteractionES}
+    \leanok
+    For an MPS tensor $A$ and an interval of positive length $W$,
+    the length-$W$ parent interaction starting at the first site is the
+    orthogonal projection $h_W$ onto $\mathcal G_W(A)^\perp$.
+\end{lemma}
+\begin{proof}\leanok
+    Restriction to the full interval is the identity, so the local interaction
+    is precisely the defining orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Periodic comparison from an open interval]
+    \label{thm:periodic-parent-range-comparison}
+    \lean{MPSTensor.parentHamiltonianES_comparison_of_local_open_comparison}
+    \leanok
+    Let $1\leq R\leq m$, $N\geq 2m$, and $W=m+R-1$.
+    Write $K_{R,W}$ for the open parent Hamiltonian of interaction length
+    $R$ on $W$ sites, and $H_{R,N}$ for the corresponding periodic
+    Hamiltonian on $N$ sites. If real constants $\kappa,C$ satisfy
+    \begin{align}
+        \kappa h_W\leq K_{R,W}\leq C h_W,
+        \notag
+    \end{align}
+    where $h_W$ projects onto $\mathcal G_W(A)^\perp$, then
+    \begin{align}
+        \kappa H_{W,N}\leq mH_{R,N}\leq C H_{W,N}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:full-interval-parent-interaction,
+        thm:cyclic_active_block_local_conjugacy,
+        thm:cyclic_knabe_block_open_parent_hamiltonian}
+    Extend each local inequality by the identity on the complementary sites
+    and conjugate by the cyclic identification of the chosen interval.
+    Both operations preserve operator order. Summing over all cyclic
+    origins gives the asserted bounds: each range-$R$ interaction occurs
+    exactly $m$ times, once for each of its possible positions in the
+    open interval.
+\end{proof}
+
+\begin{theorem}[Uniform gap above an interaction threshold]
+    \label{thm:primitive_block_sum_parent_gap_threshold}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isPrimitiveMPS}
+    \leanok
+    Let $B=\bigoplus_j\mu_j A_j$, where the coefficients are nonzero and
+    $(A_j)_j$ is a finite family of normalized primitive tensors of positive
+    bond dimension, pairwise inequivalent under similarity and phase. Assume that
+    each recorded invariant density is positive definite and that the physical
+    dimension is positive. There exists $R_0\geq1$ such that, for every
+    $R\geq R_0$, there exist $\gamma_R>0$ and $N_R$ for which
+    \begin{align}
+        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
+        \notag
+    \end{align}
+    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_block_sum_parent_gap,thm:ph_primitive_blocks_open_kernel,thm:parent-gap-fixed-range-transfer}
+    Choose $R_0$ so that every open parent Hamiltonian of range at least
+    $R_0$ has the expected local ground space. Fix $R\geq R_0$, and choose
+    a uniformly gapped range $W\geq2R$. On $W$ sites, the range-$R$
+    Hamiltonian and the orthogonal projection onto the complement of the local
+    MPS space have the same kernel. Finite dimensionality gives two-sided
+    positive order bounds. Summing their cyclic translates gives two-sided
+    bounds between the periodic Hamiltonians of ranges $R$ and $W$.
+    These bounds identify their kernels and transfer the positive gap to range
+    $R$.
+\end{proof}
+
+\begin{theorem}[Gap at the common block-injectivity range]
+    \label{thm:primitive-block-parent-gap-three-block-bound}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS_of_threeBlock_bound}
+    \leanok
+    Let $B=\bigoplus_{j=1}^r\mu_j A_j$, where $r\geq2$, all coefficients
+    are nonzero, and the normalized primitive tensors $A_j$ are pairwise
+    inequivalent under similarity and phase. Assume positive physical and bond
+    dimensions, positive definite recorded invariant densities, and a common
+    block-injectivity length $L_0\geq1$. For every
+    $R\geq3(r-1)(L_0+1)+1$, there exist $\gamma_R>0$ and $N_R$ such that
+    \begin{align}
+        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
+        \notag
+    \end{align}
+    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,
+        thm:ph_primitive_blocks_sharp_open_kernel}
+    The common block-injectivity hypothesis identifies the kernel of the
+    open-chain range-$R$ Hamiltonian on every interval of length at least
+    $R$ with the local MPS space. Choose a uniformly gapped range
+    $W\geq2R$. The two-sided comparison on the interval of length $W$
+    and its cyclic translates transfers the gap from range $W$ to range
+    $R$.
+\end{proof}
+
+\begin{theorem}[Positive gap at a fixed length]
+    \label{thm:parent_hamiltonian_fixed_length_gap}
+    \lean{MPSTensor.parentHamiltonianES_exists_gap}
+    \leanok
+    \uses{def:parent_hamiltonian_es}
+    For any tensor $A$, interaction range $L$, and chain length $N$, there
+    exists $\delta_N>0$ such that
+    $\delta_N\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
+    for every $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The restriction of $H_{N,L}^{\mathrm{ES}}(A)$ to its kernel complement
+    is injective. Its inverse on its image is bounded, since the domain is
+    finite dimensional. Thus $\lVert v\rVert\leq C_N\lVert
+        H_{N,L}^{\mathrm{ES}}(A)v\rVert$ for some $C_N>0$; take
+    $\delta_N=C_N^{-1}$. If the kernel complement is zero, any positive
+    constant suffices.
+\end{proof}
+
+\begin{theorem}[Extension of an eventual uniform gap]
+    \label{thm:parent_hamiltonian_eventual_gap}
+    \lean{MPSTensor.parentHamiltonianES_gap_of_eventual_gap}
+    \leanok
+    \uses{def:parent_hamiltonian_es}
+    Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ satisfy
+    $\delta\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
+    for every $N\geq M$ and every
+    $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    Then some $\gamma>0$ satisfies the inequality with $\gamma$ in place of
+    $\delta$ for every $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:parent_hamiltonian_fixed_length_gap}
+    Take the minimum of $\delta$ and the finitely many positive constants
+    $\delta_N$ supplied by Theorem~\ref{thm:parent_hamiltonian_fixed_length_gap}
+    for $N<M$. Equivalently, induct on $M$, replacing $\delta$ by
+    $\min\{\delta,\delta_{M-1}\}$ at each step.
+\end{proof}
+
+\begin{theorem}[Gap uniform in every chain length]
+\label{thm:primitive-block-parent-uniform-gap-three-block-bound}
+\lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
+\leanok
+Let $B=\bigoplus_{0\leq j<r}\mu_j A_j$, where $r\geq2$, all coefficients
+are nonzero, and the normalized primitive tensors $A_j$ are pairwise
+inequivalent under similarity and phase. Assume positive physical and bond
+dimensions, positive definite recorded invariant densities, and a common
+block-injectivity length $L_0\geq1$. For every
+$R\geq3(r-1)(L_0+1)+1$, there exists $\gamma_R>0$ such that, for every
+$N\in\mathbb N$ and every $v\perp\ker H_{R,N}(B)$,
+\begin{align}
+ \gamma_R\|v\|\leq\|H_{R,N}(B)v\|.
+\end{align}
+\end{theorem}
+\begin{proof}\leanok
+\uses{thm:primitive-block-parent-gap-three-block-bound,thm:parent_hamiltonian_eventual_gap}
+The eventual uniform gap leaves only finitely many chain lengths untreated.
+At each such length the Hamiltonian, restricted to its kernel complement,
+has a positive lower norm bound. Taking the minimum of these bounds and the
+eventual uniform constant proves the assertion.
+\end{proof}
