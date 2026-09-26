@@ -4559,7 +4559,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (source data for the same tensor):** this datum is an
     % explicit hypothesis, not a construction of a reduced representative.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one}
+    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_canonical_form_ii_stabilization_converse}
     Let $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ be the normalized
     flattening, and let $E$ be its transfer matrix. A reduced full-support source
     datum for $\mathcal U$, with physical dimension $d>0$ and positive bond
@@ -4581,7 +4581,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     For $D>1$, this states the fixed-pair convention in
     \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
         proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
-    one-dimensional specialization.
+    one-dimensional specialization. When $\mathcal U$ is an MPU,
+    Theorem~\ref{thm:mpu_canonical_form_ii_stabilization_converse} gives a
+    canonical-form-II presentation of this same tensor whose ambient fixed
+    matrix is the supplied $\rho$; it makes no assertion about continuous
+    choices along a path.
     % Source lines: paper_v2.tex 269--280 and 397--405.
 \end{definition}
 
@@ -5010,86 +5014,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal U$ is simple.
 \end{proof}
 
-\begin{theorem}[Admissible simple-tensor equivalence theorem]
-    \label{thm:mpu_admissible_simple_tensor_equivalence}
-    \notready
-    \discussion{5708}
-    % **Scope restriction (supplied reduced full-support fixed-pair data):**
-    % this entry assumes a chosen positive diagonal weight and stabilized
-    % fixed pair on the reduced full-support representative, rather than
-    % deriving that datum from the source's standing convention. See
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    % Retained under #7660: the source-labelled theorem now uses the bundled
-    % canonical-form-II presentation, but downstream supplied-fixed-pair
-    % statements cannot yet be redirected to it. The stabilization converse
-    % and exponent-dependent normalization in #7758 must first justify that
-    % change of hypotheses. This is one of the three same-tensor merge
-    % candidates, not a derived-tensor preservation statement. See
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_reduced_full_support_source_datum}
-    Let $\mathcal U$ be an MPU tensor equipped with a reduced full-support
-    source datum, and let $\rho$ and $(\Phi\rvert$ be its normalized fixed pair.
-    Compute the source-cut ranks $r$ and $\ell$ and the source operators $u$ and
-    $v$ from this same tensor $\mathcal U$ using $\rho$. Then the following
-    conditions are equivalent:
-    \begin{enumerate}
-        \item $\mathcal U$ is simple;
-        \item $r\ell=d^2$;
-        \item $u$ is unitary;
-        \item $v$ is unitary.
-    \end{enumerate}
-    This is the reduced-source version of
-    \cite[Theorem~III.8]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 563--601.
-\end{theorem}
-
-\begin{proof}
-    \uses{lem:mpu_admissible_source_u_isometry,
-        thm:mpu_simple_source_v_isometry,
-        thm:mpu_simple_of_source_v_isometry,
-        thm:mpu_source_gates_two_site_factorization}
-    Lemma~\ref{lem:mpu_admissible_source_u_isometry} gives
-    $u^\dagger u=\Id$ before any of the four
-    conditions is assumed. Thus $u$ is a standing isometry and
-    $r\ell\geq d^2$ throughout the proof.
-
-    Suppose first that $\mathcal U$ is simple.
-    Theorem~\ref{thm:mpu_simple_source_v_isometry} gives
-    $v^\dagger v=\Id$ for the source operator built from the ambient fixed
-    matrix of a canonical-form-II presentation, hence $r\ell\leq d^2$. The
-    reduced full-support datum supplies only a diagonal positive weight
-    $\rho$ together with the stabilized power
-    $E^{J}=\lvert\rho)(\Phi\rvert$; it becomes a canonical-form-II
-    presentation exactly when that weight is the ambient fixed matrix of the
-    convention, and the passage from the supplied datum to the presentation
-    is the open step recorded in
-    \cite{gap:mpu_canonical_form_full_support}. Until
-    that step is available, this implication is the reason the present
-    theorem is not ready.
-
-    If $r\ell=d^2$, the standing isometry $u$ is square and therefore unitary.
-    Theorem~\ref{thm:mpu_source_gates_two_site_factorization} gives the exact
-    CPSV17 two-site factorization
-    \begin{align}
-        \operatorname{reindex}(U^{(2)})
-         & =v\,\operatorname{swap}_{r,\ell}(u).
-    \end{align}
-    Since $\operatorname{reindex}(U^{(2)})$ and $u$, hence also
-    $\operatorname{swap}_{r,\ell}(u)$, are unitary,
-    \begin{align}
-        v
-         & =\operatorname{reindex}(U^{(2)})
-        \,\operatorname{swap}_{r,\ell}(u)^\dagger.
-    \end{align}
-    Thus $v$ is a product of unitaries and is unitary. This step uses the
-    corrected source-cut orientation recorded in
-    \cite{gap:mpu_source_cut_orientation}.
-
-    Finally, suppose that $v$ is unitary. Then $v^\dagger v=\Id$, and
-    Theorem~\ref{thm:mpu_simple_of_source_v_isometry} shows that
-    $\mathcal U$ is simple.
-\end{proof}
-
 \begin{definition}[Standard form]
     \label{SF}
     \notready
@@ -5110,39 +5034,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     This is the unrestricted definition of
     \cite[Definition~III.9]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 603--622.
-\end{definition}
-
-\begin{definition}[Admissible standard form]
-    \label{def:mpu_admissible_standard_form}
-    \notready
-    \discussion{6019}
-    % **Scope restriction (supplied reduced full-support fixed-pair data):**
-    % this standard form uses source unitaries constructed from a chosen
-    % reduced full-support datum with its positive diagonal weight and
-    % stabilized fixed pair. The passage from this supplied datum to the
-    % source's standing convention remains open; see
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    % Retained under #7660 with the supplied-fixed-pair equivalence theorem.
-    % Redirecting its downstream uses to SF requires the stabilization
-    % converse and normalization tracked by #7758; the bundled convention
-    % alone does not justify that change of hypotheses. Keep the twelve
-    % derived-tensor restrictions and the pathwise data separate. See
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_simple_tensor_equivalence, def:mpu_source_uv, def:mpu_reduced_full_support_source_datum}
-    Let $\mathcal U$ be a simple tensor equipped with a reduced full-support
-    source datum. The admissible standard form of the two-site blocking
-    $\mathcal U_2$ is the depth-two form determined by the source unitaries
-    \begin{align}
-        u & \colon\mathbb C^d\otimes\mathbb C^d
-        \longrightarrow\mathbb C^\ell\otimes\mathbb C^r, \\
-        v & \colon\mathbb C^r\otimes\mathbb C^\ell
-        \longrightarrow\mathbb C^d\otimes\mathbb C^d.
-    \end{align}
-    On four consecutive blocked legs its unitary is
-    \begin{align}
-        U & =v_{23}v_{41}u_{12}u_{34}.
-    \end{align}
     % Source lines: paper_v2.tex 603--622.
 \end{definition}
 
@@ -5169,44 +5060,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $z$ and on their source legs by $x$ and $y$. This is the unrestricted
     statement of the source's Fundamental Theorem of MPU.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
-\end{theorem}
-
-\begin{theorem}[Admissible Fundamental Theorem of MPU]
-    \label{thm:mpu_admissible_fundamental}
-    \notready
-    \discussion{6020}
-    % **Scope restriction (supplied reduced full-support fixed-pair data):**
-    % both tensors carry chosen reduced full-support source data, including
-    % positive diagonal weights and stabilized fixed pairs, for their
-    % admissible standard forms. These supplied hypotheses have not yet been
-    % identified with the source's standing convention; see
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    % Retained under #7660: both supplied-fixed-pair presentations must be
-    % related to the standing canonical-form-II convention before downstream
-    % uses can be redirected to FundamentalMPU. The converse and normalization
-    % in #7758 address this same-tensor obstruction, not preservation under
-    % derived-tensor operations or continuous choice along paths. The generic
-    % supplied-pair source-u lemma remains a reusable step. See
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_standard_form, thm:mpu_admissible_simple_tensor_equivalence, def:mpu_reduced_full_support_source_datum}
-    Let $\mathcal U$ and $\mathcal V$ be simple tensors equipped with reduced
-    full-support source data and written in admissible standard form, with
-    source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
-    $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
-    $N$,
-    \begin{align}
-        U^{(N)} & =V^{(N)},
-    \end{align}
-    if and only if their admissible standard forms are related by the local
-    unitary gauges
-    of \cite[Eqns.~(SFuu) and (SFvv)]{Cirac2017MPU}: there are unitaries $x$,
-    $y$, and $z$ on the three corresponding source and canonical-form-II legs.
-    In particular, the source unitaries obey the local relation
-    \begin{align}
-        u_{\mathcal V} & =(x\otimes y)u_{\mathcal U},
-    \end{align}
-    while the two canonical-form-II tensors are related on their virtual leg by
-    $z$ and on their source legs by $x$ and $y$.
 \end{theorem}
 
 \begin{theorem}[Rank of a Kronecker product]
@@ -5355,7 +5208,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (admissible simple block):** the index is defined only
     % from a simple block carrying its own reduced full-support source datum.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_simple_tensor_equivalence, thm:mpu_bounded_simple_blocking, thm:mpu_right_rank_bound, thm:mpu_left_rank_bound, def:mpu_reduced_full_support_source_datum}
+    \uses{ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, thm:mpu_bounded_simple_blocking, thm:mpu_right_rank_bound, thm:mpu_left_rank_bound, def:mpu_reduced_full_support_source_datum}
     Let $k$ be a blocking length for which $\mathcal U_k$ is simple and is
     equipped with a reduced full-support source datum, and let $r$ and $\ell$
     be its right and left source-cut ranks. Define
@@ -5396,7 +5249,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (admissible simple blocks):** independence is proved
     % only between simple blocks carrying their own reduced full-support source
     % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_index, thm:mpu_admissible_simple_tensor_equivalence, thm:mpu_source_cut_rank_blocking, thm:mpu_all_later_simple_blockings, def:mpu_reduced_full_support_source_datum}
+    \uses{def:mpu_admissible_index, ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, thm:mpu_source_cut_rank_blocking, thm:mpu_all_later_simple_blockings, def:mpu_reduced_full_support_source_datum}
     The admissible index is independent of the chosen admissible simple
     blocking. More precisely, if $k\geq k_0$, both $\mathcal U_{k_0}$ and
     $\mathcal U_k$ are simple, and each is equipped with a reduced full-support
@@ -5542,7 +5395,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (six admissible blocks):** every actual block used in
     % the source rank computation carries its own source datum. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_standard_form, def:mpu_admissible_index, prop:mpu_admissible_index_well_defined, thm:mpu_source_cut_rank_blocking, lem:mpu_four_site_composition_source_rank_bounds, def:mpu_reduced_full_support_source_datum}
+    \uses{SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_admissible_index, prop:mpu_admissible_index_well_defined, thm:mpu_source_cut_rank_blocking, lem:mpu_four_site_composition_source_rank_bounds, def:mpu_reduced_full_support_source_datum}
     Suppose there is a positive integer $k$ such that
     $\mathcal U_k$, $\mathcal U'_k$, and the composition tensor
     $\mathcal W_k$ are simple and each carries its own reduced full-support
@@ -6661,10 +6514,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{6022}
     % **Scope restriction (pathwise reduced source data):** every associated
-    % simple tensor must carry the datum required by
-    % Theorem~\ref{thm:mpu_admissible_simple_tensor_equivalence}.
+    % simple tensor must carry a supplied fixed pair, to which the
+    % same-tensor converse applies before Theorem~\ref{ThmFund1}.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_simple_tensor_equivalence, thm:mpu_bounded_simple_blocking, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, thm:mpu_bounded_simple_blocking, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
     generating MPUs, without requiring the path to be in canonical form.
     Suppose that the path carries an admissible equivalence datum with blocking
@@ -6700,7 +6553,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (admissible tensors and operations):** every simple
     % block and standard form used below carries reduced full-support source
     % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_index_well_defined, lem:mpu_admissible_index_tensor, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, def:mpu_admissible_standard_form, thm:mpu_admissible_fundamental, def:mpu_reduced_full_support_source_datum}
+    \uses{prop:mpu_admissible_index_well_defined, lem:mpu_admissible_index_tensor, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
     Assume the following operation-specific admissibility hypotheses. Every pair
     of simple blockings compared for blocking independence carries reduced
     full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
@@ -6745,11 +6598,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{cor:mpu_admissible_continuous_standard_form}
     \notready
     \discussion{6024}
-    % **Scope restriction (continuous admissible standard forms):** the chosen
+    % **Scope restriction (continuous source-derived standard forms):** the chosen
     % simple blocks carry reduced full-support source data varying continuously
     % along the path. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_continuity_index, thm:mpu_admissible_index, def:mpu_admissible_standard_form, thm:mpu_admissible_simple_tensor_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{prop:mpu_admissible_continuity_index, thm:mpu_admissible_index, SF, ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Let $k_0$ be the common blocking length in an admissible equivalence
     datum for a continuous path $\mathcal U(p)$ of MPU tensors, and suppose that
     this supplied length satisfies $k_0\leq D^4$. Then there are continuous
@@ -6818,13 +6671,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{5713}
     % **Scope restriction (conjugate comparison tensor):** both standard-form
-    % tensors compared by Theorem~\ref{thm:mpu_admissible_fundamental} carry
+    % tensors compared by Theorem~\ref{FundamentalMPU} carry
     % reduced full-support
     % source data. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_fundamental, def:mpu_admissible_standard_form, def:mpu_reduced_full_support_source_datum}
+    \uses{FundamentalMPU, SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
     Let a tensor and its conjugate comparison tensor both be equipped with
-    reduced full-support source data and written in admissible standard form.
+    reduced full-support source data and written in the standard forms
+    determined by those data.
     The generated
     MPU is invariant under complex conjugation if and only if there are
     unitaries $x$ and $y$ such that either
@@ -7019,8 +6873,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % standard-form tensor compared by the fundamental theorem carries its own
     % reduced full-support source datum. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_conjugation_symmetry, lemma:conjclass-normalform-continuous, thm:mpu_admissible_fundamental, def:mpu_reduced_full_support_source_datum}
-    Let an MPU in admissible standard form be invariant under complex
+    \uses{prop:mpu_admissible_conjugation_symmetry, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
+    Let an MPU in the standard form determined by its supplied source datum
+    be invariant under complex
     conjugation, and
     suppose every standard-form tensor compared below carries reduced
     full-support source data. Its
@@ -7087,7 +6942,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{cor:mpu_admissible_symplectic_to_orthogonal}
     \notready
     \discussion{5713}
-    % **Scope restriction (admissible standard form):** Case II refers to the
+    % **Scope restriction (source-derived standard form):** Case II refers to the
     % source-data-restricted standard form of Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_conjugation_standard_forms, def:mpu_reduced_full_support_source_datum}
@@ -7159,8 +7014,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % fundamental theorem is applied, carry reduced full-support source data.
     % No preservation under blocking is asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_fundamental, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, def:mpu_admissible_standard_form, def:mpu_reduced_full_support_source_datum}
-    Let an MPU be in admissible standard form. Suppose its one-site tensor
+    \uses{FundamentalMPU, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
+    Let an MPU be in the standard form determined by its supplied source datum.
+    Suppose its one-site tensor
     $\mathcal U$, its actual two-site block $\mathcal U_2$, and the
     physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and each
     carries its own reduced full-support source datum. Write the one-site
@@ -7177,9 +7033,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-    \uses{thm:mpu_admissible_fundamental, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
+    \uses{FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
     Under time reversal, $\mathcal U_2$ and $\mathcal U_2^\sharp$ generate the
-    same MPU. The admissible fundamental theorem identifies their source spaces,
+    same MPU. Apply the same-tensor converse to each supplied pair; the
+    resulting presentations record the original fixed matrices. Theorem~\ref{FundamentalMPU}
+    then identifies their source spaces,
     so their corresponding source-cut ranks agree. Physical adjunction exchanges
     the two cuts. Hence
     \begin{align}
@@ -7189,8 +7047,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Definition~\ref{def:mpu_admissible_index} therefore gives
     $\operatorname{ind}(\mathcal U_2)=0$, and blocking independence gives
-    $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental theorem
-    to the supplied standard forms of $\mathcal U_2$ and
+    $\operatorname{ind}(\mathcal U)=0$. Apply Theorem~\ref{FundamentalMPU}
+    to the standard forms of $\mathcal U_2$ and
     $\mathcal U_2^\sharp$ and follow the source proof. The converse follows by
     contracting the displayed local relation around every even periodic chain.
     % Source lines: paper_v2.tex 1201--1252.
@@ -7250,8 +7108,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % fundamental theorem is applied, carry reduced full-support source data.
     % No preservation under blocking is asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_fundamental, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, def:mpu_admissible_standard_form, def:mpu_reduced_full_support_source_datum}
-    Let an MPU be in admissible standard form. Suppose its one-site tensor
+    \uses{FundamentalMPU, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
+    Let an MPU be in the standard form determined by its supplied source datum.
+    Suppose its one-site tensor
     $\mathcal U$, its actual two-site block $\mathcal U_2$, and the transposed
     comparison tensor $\mathcal U_2^{\mathsf T}$ are simple and each carries its
     own reduced full-support source datum. Write the one-site physical space as
@@ -7268,10 +7127,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}
-    \uses{thm:mpu_admissible_fundamental, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
+    \uses{FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
     Under transposition, $\mathcal U_2$ and $\mathcal U_2^{\mathsf T}$ generate
-    the same MPU. The admissible fundamental theorem identifies their source
-    spaces, so their corresponding source-cut ranks agree. Transposition
+    the same MPU. Apply the same-tensor converse to each supplied pair; the
+    resulting presentations record the original fixed matrices. Theorem~\ref{FundamentalMPU}
+    then identifies their source spaces, so their corresponding source-cut
+    ranks agree. Transposition
     exchanges the two cuts. Hence
     \begin{align}
         r(\mathcal U_2)
@@ -7280,8 +7141,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Thus $\operatorname{ind}(\mathcal U_2)=0$ by
     Definition~\ref{def:mpu_admissible_index}, and blocking independence gives
-    $\operatorname{ind}(\mathcal U)=0$. Apply the admissible fundamental theorem
-    to the supplied standard forms of $\mathcal U_2$ and
+    $\operatorname{ind}(\mathcal U)=0$. Apply Theorem~\ref{FundamentalMPU}
+    to the standard forms of $\mathcal U_2$ and
     $\mathcal U_2^{\mathsf T}$ and repeat the time-reversal argument, retaining
     the unrestricted phase $e^{i\phi}$. The converse follows by contracting the
     local relation around every even periodic chain.
@@ -7548,7 +7409,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % witness carries the path datum of
     % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_strict_symmetry_equivalence, cor:mpu_admissible_continuous_standard_form, thm:mpu_admissible_fundamental, def:mpu_admissible_equivalence_datum}
+    \uses{def:mpu_admissible_strict_symmetry_equivalence, cor:mpu_admissible_continuous_standard_form, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_admissible_equivalence_datum}
     Fix a positive integer $m\leq D^4$. The actual $m$-site blocked endpoint
     MPUs $U_1^{(mN)}$ and $U_2^{(mN)}$ are admissibly strictly equivalent under
     $\mathcal S$ if and only if there are continuous families of unitaries
@@ -7714,7 +7575,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{prop:mpu_admissible_conjugation_standard_forms, cor:mpu_admissible_symplectic_to_orthogonal, lem:mpu_admissible_symmetry_path_criterion, lemma:conjclass-normalform-continuous, def:mpu_admissible_equivalence_datum}
     Suppose that $r$ and $\ell$ are both even and that the standard-form
     interpolation determined below carries an admissible path datum of blocking
-    length one. Choose admissible standard forms of two conjugation-invariant
+    length one. Choose standard forms from the supplied source data of two
+    conjugation-invariant
     MPUs as in
     Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}. They are admissibly strictly equivalent under
     conjugation symmetry if and only if they belong
@@ -7914,7 +7776,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % the blocked source data required by Proposition~\ref{prop:mpu_admissible_local_time_reversal}.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum}
-    For a time-reversal-invariant MPU in admissible standard form, suppose its
+    For a time-reversal-invariant MPU in the standard form determined by its
+    supplied source datum, suppose its
     one-site tensor $\mathcal U$, its actual two-site block $\mathcal U_2$, and
     the physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and
     each carries its own reduced full-support source datum. Then the sign
@@ -8243,7 +8106,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % used to define both $\sigma^{(1)}$ and $\sigma^{(2)}$ carry their own data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_local_time_reversal, prop:mpu_admissible_sigma_blocking_parity, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let an MPU in admissible standard form be invariant under time reversal.
+    Let an MPU in the standard form determined by its supplied source datum
+    be invariant under time reversal.
     Suppose $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$, together with the
     physical-adjoint comparison tensors $\mathcal U_2^\sharp$ and
     $\mathcal U_4^\sharp$, are simple and each carries its own reduced
@@ -8272,7 +8136,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{ex:mpu_admissible_all_conjugation_phases}
     \notready
     \discussion{5715}
-    % **Scope restriction (realization by admissible standard forms):** each
+    % **Scope restriction (realization by source-derived standard forms):** each
     % displayed standard-form tensor carries reduced full-support source data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, prop:mpu_admissible_conjugation_standard_forms, cor:mpu_admissible_symplectic_to_orthogonal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
