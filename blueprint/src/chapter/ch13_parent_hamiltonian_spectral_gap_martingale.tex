@@ -4613,10 +4613,19 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
             -\sum_i\lVert v_i\rVert^2\right]
         \leq\varepsilon(m-1)\sum_i\lVert v_i\rVert^2.
     \end{align}
-    Take $a_i=\varepsilon$ and $B_{ij}=\varepsilon(1-\delta_{ij})$. Since $B$
-    is symmetric with nonnegative entries, its norm is attained on vectors
-    with nonnegative entries, so the displayed estimate gives
-    $\lVert B\rVert\leq\varepsilon(m-1)\leq1-\varepsilon$, which is less
+    Take $a_i=\varepsilon$ and $B_{ij}=\varepsilon(1-\delta_{ij})$. For
+    $w\in\R^m$ write $|w|$ for the vector with entries $|w_i|$. Since $B$ is
+    symmetric with nonnegative entries, the same computation applied to $|w|$
+    gives
+    \begin{align}
+        |\langle w,Bw\rangle|
+         & \leq\langle|w|,B|w|\rangle
+        =\varepsilon\left[\left(\sum_i|w_i|\right)^2-\sum_i w_i^2\right]
+        \leq\varepsilon(m-1)\lVert w\rVert^2,
+    \end{align}
+    and hence
+    $\lVert B\rVert=\sup_{\lVert w\rVert=1}|\langle w,Bw\rangle|
+        \leq\varepsilon(m-1)\leq1-\varepsilon$, which is less
     than one when $\varepsilon>0$ and vanishes when $\varepsilon=0$. With
     $\lVert a\rVert=\varepsilon\sqrt m$,
     Theorem~\ref{thm:subspace_overlap_sum} gives
