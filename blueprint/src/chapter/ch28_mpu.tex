@@ -7643,6 +7643,51 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     admissible equivalence.
 \end{proof}
 
+\begin{theorem}[Determinants of orthogonal Kronecker products]
+    \label{thm:mpu_orthogonal_kronecker_determinant}
+    \lean{Matrix.det_eq_one_or_neg_one_of_mem_orthogonalGroup,
+        Matrix.det_pow_eq_one_of_mem_orthogonalGroup_of_even,
+        Matrix.det_kronecker_eq_one_of_mem_orthogonalGroup}
+    \leanok
+    Let $O$ and $O'$ be orthogonal matrices over a commutative ring,
+    indexed by finite sets of cardinalities $m$ and $n$. For every even
+    integer $k\geq0$, $\det(O)^k=1$. Over an integral domain one also has
+    $\det(O)\in\{1,-1\}$. If $m$ and $n$ are even, then
+    \begin{align}
+        \det(O\otimes O') & =\det(O)^n\det(O')^m=1.
+    \end{align}
+    These identities give the orthogonal determinant calculation in
+    \cite{Cirac2017MPU}.
+    % Source: paper_v2.tex lines 1464--1477.
+\end{theorem}
+
+\begin{proof}\leanok
+    Taking determinants in $OO^T=\Id$ gives $\det(O)^2=1$, and the same holds
+    for $O'$. The determinant of a Kronecker product is
+    $\det(O)^n\det(O')^m$; both powers are one when $m$ and $n$ are even.
+\end{proof}
+
+\begin{theorem}[Determinant of a symplectic Kronecker product]
+    \label{thm:mpu_symplectic_kronecker_determinant}
+    \lean{Matrix.det_kronecker_eq_one_of_mem_symplecticGroup}
+    \leanok
+    Let $S$ and $S'$ preserve the standard symplectic forms on spaces of
+    dimensions $2p$ and $2q$ over a commutative ring. Then
+    \begin{align}
+        \det(S\otimes S') & =\det(S)^{2q}\det(S')^{2p}=1.
+    \end{align}
+    No positivity assumption on either dimension is needed. This theorem
+    uses the standard symplectic form; the interleaved form in
+    \cite{Cirac2017MPU} requires a separate change of coordinates before
+    this calculation applies to its matrices.
+    % Source: paper_v2.tex lines 1464--1477.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each symplectic determinant equals one. Apply the Kronecker determinant
+    formula.
+\end{proof}
+
 \begin{theorem}[Strict conjugation equivalence for even source ranks]
     \label{prop:conjsym-strict-equiv}
     \notready
