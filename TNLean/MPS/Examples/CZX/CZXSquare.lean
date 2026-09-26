@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXTensor
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 
 /-!
 # CZX: compression of the stacked square onto `-δ`
@@ -274,69 +274,20 @@ theorem czxSquare_dim_eq : (4 : ℕ) = ∑ s ∈ squareSlots, squareDim s + 3 :=
 
 /-! ### Absence of sitewise intertwiners -/
 
-theorem czxSquare_apply_zero :
-    czxSquare 0 = !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0] := by
-  rw [czxSquare_eq]
-  ext p q
-  fin_cases p <;> fin_cases q <;> norm_num [czxSquareInt, complexOfInt]
-
-theorem czxSquare_apply_three :
-    czxSquare 3 = !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0] := by
-  rw [czxSquare_eq]
-  ext p q
-  fin_cases p <;> fin_cases q <;> norm_num [czxSquareInt, complexOfInt]
-
-private theorem czxSquareTarget_scalar_zero : czxSquareTarget () 0 0 0 = (-1 : ℂ) := by
-  rw [czxSquareTarget_eq]
-  norm_num [negIdentityIntMPS, identityIntMPS, complexOfInt]
-
-private theorem czxSquareTarget_scalar_three : czxSquareTarget () 3 0 0 = (-1 : ℂ) := by
-  rw [czxSquareTarget_eq]
-  norm_num [negIdentityIntMPS, identityIntMPS, complexOfInt]
-
 /-- **No nonzero right sitewise intertwiner in Example D** (P5 note, `ex:p5ft-czx`). -/
 theorem czxSquare_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
-    (h : ∀ i, czxSquare i *ᵥ v = czxSquareTarget () i 0 0 • v) : v = 0 := by
-  have h0 := h 0
-  have h3 := h 3
-  rw [czxSquare_apply_zero, czxSquareTarget_scalar_zero] at h0
-  rw [czxSquare_apply_three, czxSquareTarget_scalar_three] at h3
-  have e0 := congrFun h0 0
-  have e1 := congrFun h0 1
-  have e3 := congrFun h0 3
-  have f0 := congrFun h3 0
-  have f2 := congrFun h3 2
-  simp only [Matrix.mulVec_apply_eq_sum, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-    Matrix.cons_val_one, Matrix.cons_val, Matrix.cons_val_fin_one, Fin.sum_univ_four, zero_mul,
-    one_mul, neg_mul, zero_add, add_zero, Pi.smul_apply, smul_eq_mul] at e0 e1 e3 f0 f2
-  have hv1 : v 1 = 0 := by linear_combination (e1 + f0 - e0) / 2
-  have hv2 : v 2 = 0 := by linear_combination f2 - hv1
-  have hv0 : v 0 = 0 := by linear_combination e0 - hv2
-  have hv3 : v 3 = 0 := by linear_combination e3 + hv2
-  funext k
-  fin_cases k
-  exacts [hv0, hv1, hv2, hv3]
+    (h : ∀ i, czxSquare i *ᵥ v = czxSquareTarget () i 0 0 • v) : v = 0 :=
+  mulVec_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
+    negIdentityIntMPS (czxSquareTarget_eq ()) ![(0, 0, 0), (0, 3, 0), (3, 2, 0), (3, 3, 0)]
+    (Matrix.of fun x => ![![2, 1, -1, -1], ![0, 1, 1, -1], ![0, -1, 1, 1], ![0, 1, 1, 1]] x.1)
+    (c := 2) (by norm_num) (by decide) v h
 
 /-- **No nonzero left sitewise intertwiner in Example D** (P5 note, `ex:p5ft-czx`). -/
 theorem czxSquare_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
-    (h : ∀ i, u ᵥ* czxSquare i = czxSquareTarget () i 0 0 • u) : u = 0 := by
-  have h0 := h 0
-  have h3 := h 3
-  rw [czxSquare_apply_zero, czxSquareTarget_scalar_zero] at h0
-  rw [czxSquare_apply_three, czxSquareTarget_scalar_three] at h3
-  have e0 := congrFun h0 0
-  have e1 := congrFun h0 1
-  have e3 := congrFun h0 3
-  have f2 := congrFun h3 2
-  simp only [Matrix.vecMul_apply_eq_sum, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-    Matrix.cons_val_one, Matrix.cons_val, Matrix.cons_val_fin_one, Fin.sum_univ_four, mul_zero,
-    add_zero, Pi.smul_apply, smul_eq_mul, neg_one_mul] at e0 e1 e3 f2
-  have hu0 : u 0 = 0 := by linear_combination e0
-  have hu1 : u 1 = 0 := by linear_combination e1
-  have hu3 : u 3 = 0 := by linear_combination e3
-  have hu2 : u 2 = 0 := by linear_combination f2
-  funext k
-  fin_cases k
-  exacts [hu0, hu1, hu2, hu3]
+    (h : ∀ i, u ᵥ* czxSquare i = czxSquareTarget () i 0 0 • u) : u = 0 :=
+  vecMul_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
+    negIdentityIntMPS (czxSquareTarget_eq ()) ![(0, 1, 0), (0, 2, 0), (0, 3, 0), (3, 2, 0)]
+    (Matrix.of fun x => ![![-1, 1, 1, 0], ![1, 0, 0, 0], ![0, 0, 0, 1], ![0, 0, 1, 0]] x.1)
+    (c := 1) (by norm_num) (by decide) u h
 
 end CZXCompression
