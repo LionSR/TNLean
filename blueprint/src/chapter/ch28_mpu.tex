@@ -5682,7 +5682,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_standard_form_parity_obstruction}
     \lean{MPOTensor.exists_simple_blockTwo_eq_mpo_three_ne}
     \leanok
-    \uses{def:mpu_simple, lem:mpu_blocking}
+    \uses{def:mpu_simple, def:mpdo_physical_blocking, def:mpo_family}
     There are simple matrix product unitaries $\mathcal U,\mathcal V$ of
     physical dimension two and bond dimension one whose two-site blocked
     tensors agree, but whose periodic operators differ at length three:
@@ -5698,7 +5698,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_simple, lem:mpu_blocking}
+    \uses{def:mpu_simple, def:mpo_family,
+        thm:mpdo_block_tensor_scalar_scaling,
+        thm:mpdo_mpo_scalar_scaling}
     Let $\mathcal U^{ij}=\delta_{ij}$ on its one-dimensional bond space and
     set $\mathcal V^{ij}=-\mathcal U^{ij}$. Their double-layer letters are
     both $\delta_{ij}$, so the simplicity contractions hold with unit
