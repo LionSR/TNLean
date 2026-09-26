@@ -35,7 +35,7 @@ Gelfand's formula for `E_A - P`, whose spectral radius is `|λ₂|`.
 
 * `exists_isHermitian_physicalObservableTransfer_eq`: Hermitian observables
   realize every map preserving Hermitian matrices.
-* `exists_hermitian_peripheral_pair`: the Hermitian vector and functional.
+* `exists_hermitian_vector_functional_compl_pow`: the Hermitian vector and functional.
 * `exists_decayingCorrelations`: the chapter statement.
 -/
 
@@ -86,12 +86,6 @@ theorem exists_isHermitian_physicalObservableTransfer_eq {A : MPSTensor d D} {L 
 
 /-! ### The transfer map on Hermitian matrices and on its eigenvectors -/
 
-/-- The transfer map preserves adjoints, `E_A(Z†) = E_A(Z)†`. This is used for the
-correlators of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem transferMap_conjTranspose (A : MPSTensor d D) (Z : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap A Zᴴ = (Kraus.transferMap A Z)ᴴ := by
-  simp [Matrix.conjTranspose_sum, Matrix.conjTranspose_mul, Matrix.mul_assoc]
-
 /-- An eigenvector of a trace-preserving transfer map for an eigenvalue other than `1`
 is traceless. This is used for the correlators of arXiv:2307.01696, Supplemental
 Material, proof of Lemma 2. -/
@@ -123,18 +117,18 @@ theorem compl_pow_apply_of_transferMap_eq_smul {A : MPSTensor d D}
 of `E_A - P` is an exponential sum with at most two unimodular frequencies at the
 rate `|λ|`. For real `λ` it is `λ^t`, for non-real `λ` it is `λ^t + conj(λ)^t`.
 
-This replaces the choice "`⟨L_1|E_O|R_2⟩⟨L_2|E_{O'}|R_1⟩ = 1`" of arXiv:2307.01696,
+This replaces the choice "`⟨L_1|E_O|R_2⟩⟨L_2|E_{O'}|R_1⟩ = c' > 0`" of arXiv:2307.01696,
 Supplemental Material, proof of Lemma 2, by one compatible with Hermitian
 observables: for non-real `λ₂` the eigenvector `R_2` is not Hermitian, and a
 Hermitian observable pairs it with its adjoint, the eigenvector for `conj(λ₂)`. -/
-theorem exists_hermitian_peripheral_pair {A : MPSTensor d D}
+theorem exists_hermitian_vector_functional_compl_pow {A : MPSTensor d D}
     (hA : ∑ i, (A i)ᴴ * A i = 1) {ρ : Matrix (Fin D) (Fin D) ℂ}
     (htr : Matrix.trace ρ ≠ 0) {lam : ℂ}
     (hlam : Module.End.HasEigenvalue (Kraus.transferMap A) lam) (hlam1 : lam ≠ 1)
     (hlam0 : lam ≠ 0) :
     ∃ (ℓ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ) (v : Matrix (Fin D) (Fin D) ℂ),
       vᴴ = v ∧ (∀ Z, ℓ Zᴴ = star (ℓ Z)) ∧
-      ∃ (K : ℕ) (μ : Fin K → ℂ) (a : Fin K → ℂ), 1 ≤ K ∧ K ≤ 2 ∧
+      ∃ (K : ℕ) (μ : Fin K → ℂ) (a : Fin K → ℂ), 1 ≤ K ∧ K ≤ 2 ∧ (star lam = lam → K = 1) ∧
         Function.Injective μ ∧ (∀ j, ‖μ j‖ = 1) ∧ a ≠ 0 ∧
         ∀ t : ℕ, ℓ (((Kraus.transferMap A - fixedPointProj ρ htr) ^ t) v) =
           (‖lam‖ : ℂ) ^ t * ∑ j, a j * μ j ^ t := by
@@ -143,7 +137,8 @@ theorem exists_hermitian_peripheral_pair {A : MPSTensor d D}
   have hRE : Kraus.transferMap A R = lam • R := hRv.apply_eq_smul
   have hR0 : R ≠ 0 := hRv.2
   have hRHE : Kraus.transferMap A Rᴴ = star lam • Rᴴ := by
-    rw [transferMap_conjTranspose, hRE, Matrix.conjTranspose_smul]
+    rw [show Kraus.transferMap A Rᴴ = (Kraus.transferMap A R)ᴴ from
+      (Kraus.map_conjTranspose A R).symm, hRE, Matrix.conjTranspose_smul]
   have hnorm0 : (‖lam‖ : ℂ) ≠ 0 := by exact_mod_cast norm_ne_zero_iff.mpr hlam0
   have hpowdiv : ∀ (z : ℂ) (t : ℕ), (‖lam‖ : ℂ) ^ t * (z / ‖lam‖) ^ t = z ^ t := by
     intro z t
@@ -185,7 +180,7 @@ theorem exists_hermitian_peripheral_pair {A : MPSTensor d D}
       c⁻¹ • (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulLeft ℂ H)
     have hℓ : ∀ Z, ℓ Z = c⁻¹ * Matrix.trace (H * Z) := fun Z ↦ rfl
     refine ⟨ℓ, H, hHh, ?_, 1, fun _ ↦ lam / ‖lam‖, fun _ ↦ 1, le_rfl, by norm_num,
-      Function.injective_of_subsingleton _, fun _ ↦ hnormdiv lam rfl,
+      fun _ ↦ rfl, Function.injective_of_subsingleton _, fun _ ↦ hnormdiv lam rfl,
       fun h ↦ one_ne_zero (congrFun h 0), ?_⟩
     · intro Z
       rw [hℓ, hℓ, star_mul', star_inv₀, hcstar, ← Matrix.trace_conjTranspose,
@@ -232,7 +227,7 @@ theorem exists_hermitian_peripheral_pair {A : MPSTensor d D}
       rw [hℓ, hfRH, Matrix.conjTranspose_conjTranspose, hfR, star_one, zero_add]
     refine ⟨ℓ, R + Rᴴ, by rw [Matrix.conjTranspose_add, Matrix.conjTranspose_conjTranspose,
       add_comm], ?_, 2, ![lam / ‖lam‖, star lam / ‖lam‖], ![1, 1], by norm_num, le_rfl,
-      ?_, ?_, fun h ↦ one_ne_zero (congrFun h 0), ?_⟩
+      fun h ↦ absurd h hreal, ?_, ?_, fun h ↦ one_ne_zero (congrFun h 0), ?_⟩
     · intro Z
       rw [hℓ, hℓ, Matrix.conjTranspose_conjTranspose, star_add, star_star, add_comm]
     · intro a b hab
@@ -293,9 +288,10 @@ are within `ε ≤ 1/2` of `1`, `ab + g` and `a, b`, then the connected correlat
 "Replacing the last power by `P` … changes `G_N(X,Y;s)` by at most `C r^{N-s-L+1}`"
 of the chapter's proof of `lem:ldp_decaying_correlations`, which makes precise the
 large-`N` limit of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem norm_connected_sub_le {Z nXY nX nY a b g : ℂ} {ε M : ℝ} (hε0 : 0 ≤ ε)
-    (hε : ε ≤ 1 / 2) (hM : 0 ≤ M) (hZ : ‖Z - 1‖ ≤ ε) (hXY : ‖nXY - (a * b + g)‖ ≤ ε)
-    (hX : ‖nX - a‖ ≤ ε) (hY : ‖nY - b‖ ≤ ε) (ha : ‖a‖ ≤ M) (hb : ‖b‖ ≤ M) (hg : ‖g‖ ≤ M) :
+theorem _root_.Complex.norm_div_sub_div_mul_div_sub_le {Z nXY nX nY a b g : ℂ} {ε M : ℝ}
+    (hε0 : 0 ≤ ε) (hε : ε ≤ 1 / 2) (hM : 0 ≤ M) (hZ : ‖Z - 1‖ ≤ ε)
+    (hXY : ‖nXY - (a * b + g)‖ ≤ ε) (hX : ‖nX - a‖ ≤ ε) (hY : ‖nY - b‖ ≤ ε) (ha : ‖a‖ ≤ M)
+    (hb : ‖b‖ ≤ M) (hg : ‖g‖ ≤ M) :
     ‖nXY / Z - nX / Z * (nY / Z) - g‖ ≤ 4 * (M + 2) ^ 2 * ε := by
   set eZ := Z - 1
   set eXY := nXY - (a * b + g)
@@ -383,13 +379,13 @@ theorem exists_normalized_observables_limitCorrelator {A : MPSTensor d D} {L : �
       O.IsHermitian ∧ O'.IsHermitian ∧
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O‖ = 1 ∧
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O'‖ = 1 ∧
-      ∃ (K : ℕ) (μ : Fin K → ℂ) (a : Fin K → ℂ), 1 ≤ K ∧ K ≤ 2 ∧
+      ∃ (K : ℕ) (μ : Fin K → ℂ) (a : Fin K → ℂ), 1 ≤ K ∧ K ≤ 2 ∧ (star lam = lam → K = 1) ∧
         Function.Injective μ ∧ (∀ j, ‖μ j‖ = 1) ∧ a ≠ 0 ∧
         ∀ t : ℕ, limitCorrelator A ρ htr L O O' t = (‖lam‖ : ℂ) ^ t * ∑ j, a j * μ j ^ t := by
   classical
   have hpos : 0 < ‖lam‖ := norm_pos_iff.mpr hlam0
-  obtain ⟨ℓ, v, hv, hℓ, K, μ, a, hK1, hK2, hμ, hμ1, ha, hform⟩ :=
-    exists_hermitian_peripheral_pair hA htr hlam hlam1 hlam0
+  obtain ⟨ℓ, v, hv, hℓ, K, μ, a, hK1, hK2, hKreal, hμ, hμ1, ha, hform⟩ :=
+    exists_hermitian_vector_functional_compl_pow hA htr hlam hlam1 hlam0
   obtain ⟨X, hXh, hXE⟩ := exists_isHermitian_physicalObservableTransfer_eq hL (ℓ.smulRight ρ)
     (fun Z ↦ by
       rw [LinearMap.smulRight_apply, LinearMap.smulRight_apply, hℓ,
@@ -438,7 +434,8 @@ theorem exists_normalized_observables_limitCorrelator {A : MPSTensor d D} {L : �
   have hnY : 0 < nY := hnormpos Y hY0
   have hκ : (0 : ℝ) < nX⁻¹ * nY⁻¹ := by positivity
   refine ⟨((nX⁻¹ : ℝ) : ℂ) • X, ((nY⁻¹ : ℝ) : ℂ) • Y, hherm _ _ hXh, hherm _ _ hYh,
-    hnorm1 X hnX, hnorm1 Y hnY, K, μ, fun j ↦ ((nX⁻¹ * nY⁻¹ : ℝ) : ℂ) * a j, hK1, hK2, hμ,
+    hnorm1 X hnX, hnorm1 Y hnY, K, μ, fun j ↦ ((nX⁻¹ * nY⁻¹ : ℝ) : ℂ) * a j, hK1, hK2,
+    hKreal, hμ,
     hμ1, ?_, ?_⟩
   · intro h
     apply ha
@@ -455,12 +452,38 @@ theorem exists_normalized_observables_limitCorrelator {A : MPSTensor d D} {L : �
     push_cast
     ring
 
-/-- The powers of the complement `E_A - P` of the fixed-point projection decay at every
-rate `r` above `|λ₂|`, measured by a submultiplicative size function on linear maps
-that dominates the trace.
+/-- The trace of a linear map on `D × D` matrices is bounded by a constant times the
+operator norm of the map, for the `ℓ^∞` operator norm on matrices. This controls the
+traces of the finite-size corrections in arXiv:2307.01696, Supplemental Material,
+proof of Lemma 2. -/
+theorem _root_.Matrix.norm_linearMap_trace_le_mul_norm
+    (F : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
+    ‖LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) F‖ ≤
+      (∑ p : Fin D, ∑ q : Fin D, ‖Matrix.single p q (1 : ℂ)‖) *
+        ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F‖ := by
+  classical
+  have hentry : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D), ‖M p q‖ ≤ ‖M‖ := by
+    intro M p q
+    rw [← coe_nnnorm, ← coe_nnnorm, NNReal.coe_le_coe, Matrix.linfty_opNNNorm_def]
+    calc ‖M p q‖₊ ≤ ∑ j, ‖M p j‖₊ :=
+          Finset.single_le_sum (f := fun j ↦ ‖M p j‖₊) (fun _ _ ↦ bot_le)
+            (Finset.mem_univ q)
+      _ ≤ Finset.univ.sup fun i ↦ ∑ j, ‖M i j‖₊ :=
+          Finset.le_sup (f := fun i ↦ ∑ j, ‖M i j‖₊) (Finset.mem_univ p)
+  rw [Matrix.linearMap_trace_eq_sum_apply_single, Finset.sum_mul]
+  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun p _ ↦ ?_)
+  rw [Finset.sum_mul]
+  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun q _ ↦ ?_)
+  refine (hentry _ p q).trans ?_
+  rw [mul_comm]
+  exact (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F).le_opNorm
+    (Matrix.single p q 1)
 
-This is the step "`E_A - P` has spectral radius `|λ₂|` … `‖(E_A - P)^n‖ ≤ C_r r^n`"
-of the chapter's proof of `lem:ldp_decaying_correlations`, which makes precise the
+/-- The powers of the complement `E_A - P` of the fixed-point projection decay at every
+rate `r` above `|λ₂|` in operator norm.
+
+This is the step "Gelfand's formula gives `‖(E_A - P)^n‖ ≤ C_r r^n`" of the chapter's
+proof of `lem:ldp_decaying_correlations`, which makes precise the
 expansion `E_1^{N-s-1} = |R_1⟩⟨L_1| + …` of arXiv:2307.01696, Supplemental Material,
 proof of Lemma 2. -/
 theorem exists_compl_pow_bound [NeZero D] {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
@@ -469,11 +492,9 @@ theorem exists_compl_pow_bound [NeZero D] {A : MPSTensor d D} {L : ℕ} (hL1 : 1
     (hρtr : Matrix.trace ρ = 1) (htr : Matrix.trace ρ ≠ 0) {lam₂ : ℂ}
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {r : ℝ} (hr : ‖lam₂‖ < r) :
-    ∃ (Nm : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) → ℝ) (C : ℝ),
-      0 < C ∧ (∀ F, 0 ≤ Nm F) ∧ (∀ F G, Nm (F * G) ≤ Nm F * Nm G) ∧
-      (∀ F G, Nm (F + G) ≤ Nm F + Nm G) ∧
-      (∀ F, ‖LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) F‖ ≤ Nm F) ∧
-      ∀ k : ℕ, Nm ((Kraus.transferMap A - fixedPointProj ρ htr) ^ k) ≤ C * r ^ k := by
+    ∃ C : ℝ, 0 < C ∧ ∀ k : ℕ,
+      ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)
+        ((Kraus.transferMap A - fixedPointProj ρ htr) ^ k)‖ ≤ C * r ^ k := by
   classical
   set E := Kraus.transferMap A with hE_def
   set P := fixedPointProj ρ htr with hP_def
@@ -529,48 +550,11 @@ theorem exists_compl_pow_bound [NeZero D] {A : MPSTensor d D} {L : ℕ} (hL1 : 1
     rw [← NNReal.coe_lt_coe, coe_nnnorm, Real.coe_toNNReal _ hr0.le]
     exact lt_of_le_of_lt (hTeig z hz') hr
   obtain ⟨C, hC0, hC⟩ := geometric_bound_of_spectralRadius_lt (Φ T) r.toNNReal hspec
-  have hentry : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D), ‖M p q‖ ≤ ‖M‖ := by
-    intro M p q
-    rw [← coe_nnnorm, ← coe_nnnorm, NNReal.coe_le_coe, Matrix.linfty_opNNNorm_def]
-    calc ‖M p q‖₊ ≤ ∑ j, ‖M p j‖₊ :=
-          Finset.single_le_sum (f := fun j ↦ ‖M p j‖₊) (fun _ _ ↦ bot_le)
-            (Finset.mem_univ q)
-      _ ≤ Finset.univ.sup fun i ↦ ∑ j, ‖M i j‖₊ :=
-          Finset.le_sup (f := fun i ↦ ∑ j, ‖M i j‖₊) (Finset.mem_univ p)
-  set Ct : ℝ := ∑ p : Fin D, ∑ q : Fin D, ‖Matrix.single p q (1 : ℂ)‖ with hCt_def
-  have hCt : ∀ F, ‖LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) F‖ ≤ Ct * ‖Φ F‖ := by
-    intro F
-    rw [Matrix.linearMap_trace_eq_sum_apply_single, hCt_def, Finset.sum_mul]
-    refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun p _ ↦ ?_)
-    rw [Finset.sum_mul]
-    refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun q _ ↦ ?_)
-    refine (hentry _ p q).trans ?_
-    rw [mul_comm]
-    exact (Φ F).le_opNorm (Matrix.single p q 1)
-  set Ct' : ℝ := max Ct 1 with hCt'_def
-  have hCt'1 : 1 ≤ Ct' := le_max_right _ _
-  refine ⟨fun F ↦ Ct' * ‖Φ F‖, Ct' * C, by positivity, fun F ↦ by positivity,
-    fun F G ↦ ?_, fun F G ↦ ?_, fun F ↦ ?_, fun k ↦ ?_⟩
-  · dsimp only
-    rw [map_mul]
-    calc Ct' * ‖Φ F * Φ G‖ ≤ Ct' * (‖Φ F‖ * ‖Φ G‖) := by gcongr; exact norm_mul_le _ _
-      _ ≤ Ct' * (Ct' * (‖Φ F‖ * ‖Φ G‖)) := by
-          refine mul_le_mul_of_nonneg_left ?_ (by positivity)
-          calc ‖Φ F‖ * ‖Φ G‖ = 1 * (‖Φ F‖ * ‖Φ G‖) := (one_mul _).symm
-            _ ≤ Ct' * (‖Φ F‖ * ‖Φ G‖) := mul_le_mul_of_nonneg_right hCt'1 (by positivity)
-      _ = Ct' * ‖Φ F‖ * (Ct' * ‖Φ G‖) := by ring
-  · dsimp only
-    rw [map_add, ← mul_add]
-    gcongr
-    exact norm_add_le _ _
-  · dsimp only
-    exact (hCt F).trans (by gcongr; exact le_max_left _ _)
-  · dsimp only
-    have h1 := hC k
-    simp only [Real.coe_toNNReal _ hr0.le] at h1
-    rw [map_pow, mul_assoc]
-    gcongr
-    exact h1
+  refine ⟨C, hC0, fun k ↦ ?_⟩
+  have h1 := hC k
+  simp only [Real.coe_toNNReal _ hr0.le] at h1
+  rw [map_pow]
+  exact h1
 
 /-- The connected correlator on `N = L + t + L + n` sites, with `X` on the first `L`
 sites and `Y` on the sites `L + t + 1, …, 2L + t`, written through the complement
@@ -675,8 +659,9 @@ Let `A` be a tensor whose products of `L ≥ 1` matrices span the matrix algebra
 of the chapter display `eq:ldp_normal_gauge` (the gauge of arXiv:2307.01696,
 eq. (5)), and let `λ₂` be an eigenvalue of `E_A` of largest modulus other than `1`,
 with correlation length `ξ = -1/log|λ₂| > 0`. Then there are Hermitian operators
-`O, O'` on `L` sites of norm one, a constant `c > 0`, an integer `K ∈ {1, 2}` and
-`s₀ ≥ L + 2` such that for every `s ≥ s₀` some `s' ∈ {s, …, s + K - 1}` satisfies
+`O, O'` on `L` sites of norm one, a constant `c > 0`, an integer `K ∈ {1, 2}`, with
+`K = 1` when `λ₂` is real, and `s₀ ≥ L + 2` such that for every `s ≥ s₀` some
+`s' ∈ {s, …, s + K - 1}` satisfies
 `|G_N(O,O';s')| ≥ c e^{-(s'-1)/ξ}` for every `N ≥ 3s'`, where
 `G_N(O,O';s') = ⟨O_1 O'_{s'}⟩ - ⟨O_1⟩⟨O'_{s'}⟩` in the normalized vector `φ_N`
 with `O` on the sites `1, …, L` and `O'` on the sites `s', …, s'+L-1`.
@@ -699,10 +684,11 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
       O.IsHermitian ∧ O'.IsHermitian ∧
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O‖ = 1 ∧
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O'‖ = 1 ∧
-      ∃ c : ℝ, 0 < c ∧ ∃ K : ℕ, 1 ≤ K ∧ K ≤ 2 ∧ ∃ s₀ : ℕ, L + 2 ≤ s₀ ∧
-        ∀ s, s₀ ≤ s → ∃ s', s ≤ s' ∧ s' < s + K ∧ ∀ N, 3 * s' ≤ N →
-          c * Real.exp (-((s' : ℝ) - 1) / correlationLength lam₂) ≤
-            ‖mpvConnectedCorrelator A N 0 (s' - 1) O O'‖ := by
+      ∃ c : ℝ, 0 < c ∧ ∃ K : ℕ, 1 ≤ K ∧ K ≤ 2 ∧ (star lam₂ = lam₂ → K = 1) ∧
+        ∃ s₀ : ℕ, L + 2 ≤ s₀ ∧
+          ∀ s, s₀ ≤ s → ∃ s', s ≤ s' ∧ s' < s + K ∧ ∀ N, 3 * s' ≤ N →
+            c * Real.exp (-((s' : ℝ) - 1) / correlationLength lam₂) ≤
+              ‖mpvConnectedCorrelator A N 0 (s' - 1) O O'‖ := by
   classical
   /- Elementary facts about the gauge and `λ₂`. -/
   have htr : Matrix.trace ρ ≠ 0 := by rw [hρtr]; exact one_ne_zero
@@ -722,7 +708,7 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
   have hlt1 : ‖lam₂‖ < 1 := (Real.log_neg_iff hpos).mp hlog
   have hlam0 : lam₂ ≠ 0 := norm_pos_iff.mp hpos
   /- The observables. -/
-  obtain ⟨O, O', hOh, hO'h, hOn, hO'n, K, μ, a, hK1, hK2, hμ, hμ1, ha, hGO⟩ :=
+  obtain ⟨O, O', hOh, hO'h, hOn, hO'n, K, μ, a, hK1, hK2, hKreal, hμ, hμ1, ha, hGO⟩ :=
     exists_normalized_observables_limitCorrelator hL hA hρ.1 hρtr htr hlam₂ hlam₂1 hlam0
   obtain ⟨c₀, hc₀, hwin⟩ := Complex.exists_window_le_norm_sum_mul_pow hμ hμ1 ha
   /- The rate `r` and the decay of `E_A - P`. -/
@@ -738,8 +724,44 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
   have hr0 : 0 < r := hpos.trans hr1
   have hrlt1 : r < 1 := hr2.trans hsq1
   have hrsq : r ^ 2 < ‖lam₂‖ := (Real.lt_sqrt hr0.le).mp hr2
-  obtain ⟨Nm, C, hC0, hNm0, hNmul, hNadd, hNtr, hNT⟩ :=
-    exists_compl_pow_bound hL1 hL hA hρ hρfix hρtr htr hmax hr1
+  obtain ⟨C₁, hC₁0, hC₁⟩ := exists_compl_pow_bound hL1 hL hA hρ hρfix hρtr htr hmax hr1
+  /- A submultiplicative size of linear maps dominating the trace. -/
+  obtain ⟨Ct', hCt'1, hCt'⟩ : ∃ Ct' : ℝ, 1 ≤ Ct' ∧
+      ∑ p : Fin D, ∑ q : Fin D, ‖Matrix.single p q (1 : ℂ)‖ ≤ Ct' :=
+    ⟨_, le_max_right _ 1, le_max_left _ _⟩
+  obtain ⟨Nm, hNm⟩ : ∃ Nm : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) → ℝ,
+      ∀ F, Nm F = Ct' * ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F‖ :=
+    ⟨_, fun _ ↦ rfl⟩
+  obtain ⟨C, hC_def⟩ : ∃ C : ℝ, C = Ct' * C₁ := ⟨_, rfl⟩
+  have hC0 : 0 < C := by rw [hC_def]; positivity
+  have hNm0 : ∀ F, 0 ≤ Nm F := fun F ↦ by rw [hNm F]; positivity
+  have hNmul : ∀ F G, Nm (F * G) ≤ Nm F * Nm G := by
+    intro F G
+    rw [hNm, hNm, hNm, map_mul]
+    set x := ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F‖
+    set y := ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) G‖
+    have hx : 0 ≤ x := norm_nonneg _
+    have hy : 0 ≤ y := norm_nonneg _
+    calc Ct' * ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F *
+          Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) G‖ ≤ Ct' * (x * y) := by
+          gcongr; exact norm_mul_le _ _
+      _ ≤ Ct' * x * (Ct' * y) := by
+          nlinarith [mul_nonneg (mul_nonneg (by linarith : (0 : ℝ) ≤ Ct')
+            (by linarith : (0 : ℝ) ≤ Ct' - 1)) (mul_nonneg hx hy)]
+  have hNadd : ∀ F G, Nm (F + G) ≤ Nm F + Nm G := by
+    intro F G
+    rw [hNm, hNm, hNm, map_add, ← mul_add]
+    gcongr
+    exact norm_add_le _ _
+  have hNtr : ∀ F, ‖LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) F‖ ≤ Nm F := fun F ↦ by
+    rw [hNm]
+    exact (Matrix.norm_linearMap_trace_le_mul_norm F).trans (by gcongr)
+  have hNT : ∀ k : ℕ, Nm ((Kraus.transferMap A - fixedPointProj ρ htr) ^ k) ≤ C * r ^ k := by
+    intro k
+    rw [hNm, hC_def, mul_assoc]
+    gcongr
+    exact hC₁ k
+  clear hNm hC_def hC₁ hC₁0 hCt' hCt'1
   set E := Kraus.transferMap A with hE_def
   set P := fixedPointProj ρ htr with hP_def
   set T := E - P with hT_def
@@ -780,7 +802,7 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
   set δ : ℝ := min (1 / (2 * K₀)) (c₀ / (8 * (M + 2) ^ 2 * K₀)) with hδ_def
   have hδ : 0 < δ := lt_min (by positivity) (by positivity)
   obtain ⟨t₀, ht₀⟩ := exists_pow_lt_of_lt_one hδ hq1
-  refine ⟨O, O', hOh, hO'h, hOn, hO'n, c₀ / 2, by positivity, K, hK1, hK2, L + 2 + t₀,
+  refine ⟨O, O', hOh, hO'h, hOn, hO'n, c₀ / 2, by positivity, K, hK1, hK2, hKreal, L + 2 + t₀,
     by omega, ?_⟩
   intro s hs
   obtain ⟨u, hu⟩ := hwin (s - L - 1)
@@ -853,7 +875,8 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
       hrn.trans ((mul_le_of_le_one_right (pow_nonneg hq0.le _) hlampow).trans hqt)
     calc K₀ * r ^ n ≤ K₀ * (1 / (2 * K₀)) := by gcongr; exact h2.trans h1
       _ = 1 / 2 := by rw [mul_one_div, mul_comm 2 K₀, ← div_div, div_self hK₀.ne']
-  have hdiff := norm_connected_sub_le (a := α) (b := β) (g := g) (by positivity) hε hM
+  have hdiff := Complex.norm_div_sub_div_mul_div_sub_le (a := α) (b := β) (g := g)
+    (by positivity) hε hM
     (by rw [add_sub_cancel_left]; exact hbZ)
     (by rw [add_sub_cancel_left]; exact hbXY)
     (by rw [add_sub_cancel_left]; exact hbX)

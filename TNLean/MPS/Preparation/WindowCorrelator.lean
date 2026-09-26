@@ -40,14 +40,6 @@ variable {d D : ℕ}
 
 /-! ### Tensor products of block observables -/
 
-/-- The inserted transfer map in coordinates,
-`E_O(Z) = ∑_{σ,τ} O_{τσ} A^σ Z (A^τ)†` (arXiv:1606.00608, lines 490--496). -/
-theorem physicalObservableTransfer_apply' (A : MPSTensor d D) (L : ℕ)
-    (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (Z : Matrix (Fin D) (Fin D) ℂ) :
-    physicalObservableTransfer A L O Z = ∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
-      O τ σ • (Kraus.evalWord A (List.ofFn σ) * Z * (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
-  simp [physicalObservableTransfer, Matrix.mul_assoc]
-
 /-- The tensor product of an operator on `L₁` consecutive sites and an operator on
 the next `L₂` sites, as an operator on `L₁ + L₂` sites. This is the product of
 block observables in the correlators of arXiv:2307.01696, Supplemental Material,
@@ -115,8 +107,8 @@ theorem physicalObservableTransfer_appendObservable (A : MPSTensor d D) {L₁ L�
     rfl
   apply LinearMap.ext
   intro Z
-  rw [Module.End.mul_apply, physicalObservableTransfer_apply', hsum]
-  simp_rw [hsum, physicalObservableTransfer_apply', appendObservable_append, List.ofFn_fin_append,
+  rw [Module.End.mul_apply, physicalObservableTransfer_apply, hsum]
+  simp_rw [hsum, physicalObservableTransfer_apply, appendObservable_append, List.ofFn_fin_append,
     Kraus.evalWord_append, Matrix.conjTranspose_mul, Finset.mul_sum, Finset.sum_mul,
     Matrix.mul_smul, Matrix.smul_mul, Finset.smul_sum, smul_smul, Matrix.mul_assoc]
   exact Finset.sum_congr rfl fun _ _ ↦ Finset.sum_comm
@@ -129,7 +121,7 @@ theorem physicalObservableTransfer_one (A : MPSTensor d D) (L : ℕ) :
   classical
   apply LinearMap.ext
   intro Z
-  rw [Kraus.transferMap, Kraus.mapLM_pow_apply, physicalObservableTransfer_apply']
+  rw [Kraus.transferMap, Kraus.mapLM_pow_apply, physicalObservableTransfer_apply]
   refine Finset.sum_congr rfl fun σ _ ↦ ?_
   rw [Finset.sum_eq_single σ (fun τ _ hτ ↦ by rw [Matrix.one_apply_ne hτ, zero_smul])
     (by simp), Matrix.one_apply_eq, one_smul]
@@ -311,10 +303,12 @@ theorem chainWindowOperator_add_eq_appendObservable {L : ℕ} (hL : 0 < L) (m n 
 on the sites `1, …, L` and `Y` on the sites `L + m + 1, …, 2L + m`,
 `⟨φ_N|X_1 Y_{L+m+1}|φ_N⟩ = tr(E_X E_A^m E_Y E_A^n)`.
 
-This is the expansion "Expanding the traces in (eq:TI-MPS2)" of the connected
-correlator in arXiv:2307.01696, Supplemental Material, proof of Lemma 2, where
-the source writes `⟨O_1 O'_s⟩ ∝ tr(E_O E_1^{s-2} E_{O'} E_1^{N-s})` for one-site
-observables. -/
+This is the step "Expanding the traces in (eq:ldp_ti_mps)" of the chapter's proof of
+`lem:ldp_decaying_correlations`. It makes precise the trace expansion of the
+connected correlator in arXiv:2307.01696, Supplemental Material, proof of Lemma 2,
+where the source writes `Tr(E_1^{N-s-1} E_O E_1^{s-1} E_{O'})` for one-site
+observables at the sites `1` and `s`; the number of transfer maps between the two
+sites is `s - 2`, which is `m` here for `L = 1`. -/
 theorem inner_mpvState_chainWindowOperator_mul (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
     (m n : ℕ) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     ⟪mpvState A (L + m + L + n), Matrix.toEuclideanLin
@@ -330,6 +324,21 @@ theorem inner_mpvState_chainWindowOperator_mul (A : MPSTensor d D) {L : ℕ} (hL
     physicalObservableTransfer_appendObservable,
     physicalObservableTransfer_appendObservable, physicalObservableTransfer_appendObservable,
     physicalObservableTransfer_one, physicalObservableTransfer_one]
+
+/-- The two-window expectation is the two-observable transfer trace
+`physicalTwoPointExpectation` of arXiv:1606.00608, lines 490--496, with the gaps `m`
+after the first window and `n` after the second. -/
+theorem inner_mpvState_chainWindowOperator_mul_eq_physicalTwoPointExpectation
+    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L) (m n : ℕ)
+    (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    ⟪mpvState A (L + m + L + n), Matrix.toEuclideanLin
+        (chainWindowOperator (L + m + L + n) 0 X *
+          chainWindowOperator (L + m + L + n) (L + m) Y)
+        (mpvState A (L + m + L + n))⟫_ℂ =
+      physicalTwoPointExpectation A L L X Y m n := by
+  rw [inner_mpvState_chainWindowOperator_mul A hL, physicalTwoPointExpectation,
+    mul_assoc _ _ (Kraus.transferMap A ^ n), LinearMap.trace_mul_comm]
+  rfl
 
 /-- The window operator of the identity is the identity. This is used for the
 correlators of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/

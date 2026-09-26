@@ -391,8 +391,7 @@ of $A$ along $w$.
 \begin{proof}
     \leanok
     \uses{def:transfer_map, lem:ldp_observable_transfer_surjective,
-        lem:ldp_limit_correlator_eigenvalue, lem:ldp_vandermonde_window,
-        thm:wielandt_proposition_three}
+        lem:ldp_vandermonde_window, thm:wielandt_proposition_three}
     With the inserted transfer maps $\E_X$ defined before
     Lemma~\ref{lem:ldp_observable_transfer_surjective}, $\E_{\Id}=\E_A^{\,L}$,
     and the map of a tensor product of operators on consecutive blocks is the
@@ -485,7 +484,10 @@ of $A$ along $w$.
 %% vanish at finite N. It is stated for normal A with observables on L sites
 %% so that Theorem thm:ldp_depth_lower_bound applies at every N; for
 %% injective A and L = 1 it is the source's setting. The gauge
-%% (eq:ldp_normal_gauge) is the normalization in which xi is defined.
+%% (eq:ldp_normal_gauge) is the one the source's proof uses ("in the main text
+%% we use the gauge in which R_1 = rho and L_1 = 1"); every normal tensor
+%% reaches it without changing phi_N/|phi_N| or xi, as in the proof of
+%% Theorem thm:ldp_depth_lower_bound.
 
 \begin{theorem}[No preparation in depth $o(\log N)$]
     \label{thm:ldp_depth_lower_bound}
@@ -497,7 +499,21 @@ of $A$ along $w$.
     \cite[Theorem~1]{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
-    \uses{lem:ldp_decaying_correlations, lem:ldp_expectation_overlap}
+    \uses{lem:ldp_decaying_correlations, lem:ldp_expectation_overlap,
+        thm:wielandt_proposition_three}
+    We may assume that $A$ is in the gauge (\ref{eq:ldp_normal_gauge}). Since
+    $A$ is normal, $\E_A$ is strongly irreducible
+    (Theorem~\ref{thm:wielandt_proposition_three}), so its spectral radius
+    $\lambda_1$ is a positive eigenvalue whose right eigenvector $\rho$ and
+    whose eigenvector $\sigma$ for the dual map are positive definite. Replacing
+    $A^i$ by $\lambda_1^{-1/2}\sigma^{1/2}A^i\sigma^{-1/2}$ gives
+    (\ref{eq:ldp_normal_gauge}), with fixed point $\sigma^{1/2}\rho\sigma^{1/2}$
+    scaled to unit trace. The scaling multiplies
+    $\ket{\phi_N}$ by a positive constant and the conjugation leaves every trace
+    in (\ref{eq:ldp_ti_mps}) unchanged, so $\phi_N/\lVert\phi_N\rVert$ is
+    unchanged; the eigenvalues of $\E_A$ are divided by $\lambda_1$, which is
+    the normalization $\lambda_1=1$ in which $\xi$ is computed.
+
     Take $L,\mathcal O,\mathcal O',c,K,s_0$ from
     Lemma~\ref{lem:ldp_decaying_correlations}, and suppose
     $\varepsilon(\phi_N,\psi_N)\le1/2$, that is
