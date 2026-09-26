@@ -74,10 +74,8 @@ variable {width height} [Fact (2 < width)] [Fact (2 < height)]
 The cluster PEPS on a torus of `width · height` sites has coefficient
 $2^{-\mathrm{width}\cdot\mathrm{height}}(-1)^{\sum_v \sigma_v\sigma_{v+e_1}+\sigma_v
 \sigma_{v+e_2}}$: up to the factor `2^{-N/2}`, the coefficient of the controlled-`Z` gates on
-all nearest-neighbour bonds applied to $\lvert +\rangle^{\otimes N}$.
-
-**Scope restriction (torus size):** stated for width and height at least three; see
-`docs/paper-gaps/rmp_peps_examples_small_torus.tex`. -/
+all nearest-neighbour bonds applied to $\lvert +\rangle^{\otimes N}$. Stated for width and
+height at least three (the module's scope restriction on the torus size). -/
 theorem stateCoeff_clusterPEPS (σ : TorusVertex width height → Fin 2) :
     stateCoeff (clusterPEPS width height) σ =
       (2⁻¹ : ℂ) ^ (width * height) *

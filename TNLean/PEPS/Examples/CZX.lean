@@ -26,13 +26,18 @@ when, for every site `v`, the four qubits around the plaquette at the upper righ
 
 The qubits `|ijkl⟩` of a site are its top-left, top-right, bottom-right and bottom-left
 corners, and the four virtual legs are ordered top, right, down, left (line 2415), so each
-leg carries the pair of corner qubits on its side, listed clockwise around the site. Two
-neighbouring sites traverse the corners of their common side in opposite directions, and the
-review's figure of the blocked state joins equal qubits across each bond. The bond therefore
-identifies the pair `(a, b)` at one end with the pair `(b, a)` at the other end; the PEPS
-below reads the down and left labels of the printed tensor in reverse (`czxBondSwap`), which
-is the same as labelling each bond by its two qubits in a fixed orientation, left to right
-on vertical bonds and top to bottom on horizontal bonds.
+leg carries the pair of corner qubits on its side, listed clockwise around the site.
+
+**Local fix (CZX bond orientation):** the review contracts every bond by the maximally
+entangled pair $\sum_n\lvert n)\lvert n)$ (lines 273–279), identifying equal bond labels at
+its two ends. With the printed tensor this sets the top-right qubit of a site equal to the
+bottom-left qubit of its right neighbour and of its upper neighbour, and the resulting state
+is a product of GHZ states along diagonal loops winding around the torus, not the product of
+plaquette states. Two neighbouring sites list the qubits of their common side in opposite
+orders, so the plaquette state is obtained by identifying the pair `(a, b)` at one end of a
+bond with `(b, a)` at the other; `czxPEPS` reads the down and left labels of the printed
+tensor in reverse (`czxBondSwap`). Documented in
+`docs/paper-gaps/rmp_peps_czx_bond_orientation.tex`.
 
 **Scope restriction (torus size):** the plaquette formula is stated for a torus of width
 and height at least three sites. On a torus of width two the two horizontal bonds between a
@@ -116,9 +121,9 @@ variable (width height : ℕ) [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2497–2509.
-The CZX tensor at every site of the `width × height` torus. Each bond identifies the pair
-`(a, b)` at one end with `(b, a)` at the other, the pairs being listed clockwise around each
-site; accordingly the down and left labels of `czxSiteTensor` are read in reverse. -/
+The CZX tensor at every site of the `width × height` torus, with the down and left labels of
+`czxSiteTensor` read in reverse, so that each bond identifies the pair `(a, b)` at one end with
+`(b, a)` at the other (the module's local fix on the bond orientation). -/
 def czxPEPS : Tensor (torusGraph width height) 16 :=
   torusSiteTensor fun t r b l s => czxSiteTensor t r (czxBondSwap b) (czxBondSwap l) s
 
@@ -156,10 +161,8 @@ arXiv:1106.4752, `References/1106.4752/source/dDSPTmodel.tex` lines 317–321.
 The CZX PEPS is the product over plaquettes of the unnormalized four-qubit GHZ states
 $\lvert 0000\rangle+\lvert 1111\rangle$: its coefficient at `σ` is the product, over the
 plaquettes at the upper right corner of each site `v`, of the indicator that the four qubits
-of the plaquette agree.
-
-**Scope restriction (torus size):** stated for width and height at least three; see the
-module docstring and `docs/paper-gaps/rmp_peps_examples_small_torus.tex`. -/
+of the plaquette agree. Stated for width and height at least three (the module's scope
+restriction on the torus size). -/
 theorem stateCoeff_czxPEPS (σ : TorusVertex width height → Fin 16) :
     stateCoeff (czxPEPS width height) σ =
       ∏ v, if czxTopRight (σ v) = czxTopLeft (σ (v.1 + 1, v.2)) ∧

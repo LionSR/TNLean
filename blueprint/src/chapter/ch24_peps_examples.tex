@@ -139,10 +139,6 @@ source constructions are local and apply to every torus
         +\sigma_v\sigma_{v+(0,1)}}.
         \notag
     \end{align}
-    Up to the factor $2^{-N/2}$ this is the coefficient of the state obtained
-    by applying controlled-$Z$ gates on all nearest-neighbour bonds to
-    $\ket{+}^{\otimes N}$, the cluster state of
-    \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -154,6 +150,13 @@ source constructions are local and apply to every torus
     shifting the product over $v$ by one site in each direction gives the
     formula.
 \end{proof}
+
+Up to the factor $2^{-N/2}$ the coefficient in
+Theorem~\ref{thm:peps_cluster_state} is that of the state obtained by
+applying controlled-$Z$ gates on all nearest-neighbour bonds to
+$\ket{+}^{\otimes N}$, the cluster state of
+\cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}. The circuit and
+this identification are not formalized.
 
 \subsection{The CZX model}
 
@@ -183,12 +186,22 @@ PEPS of bond dimension four.
     \end{align}
     so each leg carries the pair of corner qubits on its side, listed
     clockwise around the site
-    \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. Two neighbouring
-    sites list the qubits of their common side in opposite orders, and the
-    bond joins equal qubits: it identifies the pair $(a,b)$ at one end with
-    the pair $(b,a)$ at the other. The CZX PEPS reads the down and left labels
-    of the tensor in reverse.
+    \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. The CZX PEPS
+    places this tensor at every site with its down and left labels read in
+    reverse, so that each bond identifies the pair $(a,b)$ at one end with
+    the pair $(b,a)$ at the other.
 \end{definition}
+
+The reversal corrects the printed formula. The review contracts every bond
+with equal labels at its two ends
+\cite[Section~``MPS and PEPS'']{Cirac2021Matrix}. Contracted in this way,
+the printed tensor sets the top-right qubit of a site equal to the
+bottom-left qubits of its right and upper neighbours, and the resulting state
+is a product of GHZ states on diagonal loops that wind around the torus, not
+the plaquette state. Two neighbouring sites list the qubits of their common
+side in opposite orders, and the plaquette state is obtained by identifying
+the pair $(a,b)$ at one end of a bond with $(b,a)$ at the other
+\cite{gap:rmp_peps_czx_bond_orientation}.
 
 \begin{theorem}[The CZX PEPS is a product of plaquette GHZ states]%
     \label{thm:peps_czx_plaquette_product}

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.RegionBlock.AbsorbedEquality
-import TNLean.PEPS.TorusSiteTensor
 
 /-!
 # Translation covariance of the orientation-adapted absorbing gauge
