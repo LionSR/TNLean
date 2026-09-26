@@ -61,7 +61,7 @@ theorem IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor
     r[MPOTensor.blockTensor U k] * ℓ[MPOTensor.blockTensor U k] = d ^ (2 * k) := by
   have hprod : r[MPOTensor.blockTensor U k] * ℓ[MPOTensor.blockTensor U k] =
       MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k :=
-    ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS
+    ((hU.blockTensor k hk).isMPUSimple_tfae.out 0 1).mp hS
   simpa [MPSTensor.blockPhysDim, Kraus.blockPhysDim, pow_mul, pow_two, Nat.mul_comm] using hprod
 
 private theorem sourceIndexValue_blockTensor_eq_of_le
@@ -176,7 +176,7 @@ theorem IsMPUCanonicalFormII.index_eq_logb_rightRank_div
             (by simpa only [MPSTensor.blockPhysDim_eq_pow] using
               Nat.pow_pos (n := k) (Nat.pos_of_ne_zero hU.neZero_phys.out))
             (by simpa only [pow_two] using
-              ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS)))
+              ((hU.blockTensor k hk).isMPUSimple_tfae.out 0 1).mp hS)))
 
 /-- The left-rank expression for the index at any positive simple block.
 Source: arXiv:1703.09188, the formulas following `def:index`, lines 686--688. -/
@@ -192,7 +192,7 @@ theorem IsMPUCanonicalFormII.index_eq_neg_logb_leftRank_div
             (by simpa only [MPSTensor.blockPhysDim_eq_pow] using
               Nat.pow_pos (n := k) (Nat.pos_of_ne_zero hU.neZero_phys.out))
             (by simpa only [pow_two] using
-              ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS)))
+              ((hU.blockTensor k hk).isMPUSimple_tfae.out 0 1).mp hS)))
 
 /-- Physical adjunction reverses the sign of the index.
 Source: arXiv:1703.09188, `def:index` and the time-reversal discussion,
@@ -202,9 +202,9 @@ theorem IsMPUCanonicalFormII.index_physicalAdjointTensor
   obtain ⟨k, hk, _, hS, _⟩ := hU.exists_sourceV_blockTensor_isIsometry
   have hprod : r[MPOTensor.blockTensor U k] * ℓ[MPOTensor.blockTensor U k] =
       MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k :=
-    ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS
+    ((hU.blockTensor k hk).isMPUSimple_tfae.out 0 1).mp hS
   have hSad : IsMPUSimple (MPOTensor.physicalAdjointTensor (MPOTensor.blockTensor U k)) :=
-    (((hU.blockTensor k hk).physicalAdjointTensor).isMPUSimple_tfae.out 1 2).mpr
+    (((hU.blockTensor k hk).physicalAdjointTensor).isMPUSimple_tfae.out 0 1).mpr
       (by simpa only [rightRank_physicalAdjointTensor, leftRank_physicalAdjointTensor,
         mul_comm] using hprod)
   rw [hU.index_eq_neg_logb_leftRank_div hk hS, neg_neg,

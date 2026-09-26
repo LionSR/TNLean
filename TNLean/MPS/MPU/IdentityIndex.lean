@@ -66,7 +66,7 @@ CPSV17, arXiv:1703.09188, lines 681–704. -/
 theorem IsMPUCanonicalFormII.index_identityMPUTensor (d : ℕ) [NeZero d]
     (hI : IsMPUCanonicalFormII (identityMPUTensor d)) : hI.index = 0 := by
   have hS : IsMPUSimple (identityMPUTensor d) :=
-    (hI.isMPUSimple_tfae.out 2 1).mp (by
+    (hI.isMPUSimple_tfae.out 1 0).mp (by
       rw [rightRank_identityMPUTensor, leftRank_identityMPUTensor])
   have hS₁ : IsMPUSimple (MPOTensor.blockTensor (identityMPUTensor d) 1) := by
     rw [blockTensor_one_eq_reindexPhysical]

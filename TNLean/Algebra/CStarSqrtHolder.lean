@@ -27,7 +27,7 @@ theorem IsSelfAdjoint.norm_le_of_le_algebraMap {A : Type*} [CStarAlgebra A] [Par
   · rw [Subsingleton.elim a 0, norm_zero]; exact hr
   have hup := (le_algebraMap_iff_spectrum_le (R := ℝ) ha).1 h₁
   have hlo := (algebraMap_le_iff_le_spectrum (R := ℝ) ha).1 (by rwa [map_neg])
-  rcases CStarAlgebra.norm_or_neg_norm_mem_spectrum a ha with h | h
+  rcases CStarAlgebra.norm_or_neg_norm_mem_spectrum ha with h | h
   · exact hup _ h
   · linarith [hlo _ h]
 
@@ -40,7 +40,7 @@ theorem CFC.sqrt_sub_sqrt_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrd
   set c := algebraMap ℝ A (Real.sqrt ε)
   have h₁ : a ≤ b + algebraMap ℝ A ε :=
     sub_le_iff_le_add'.1
-      (IsSelfAdjoint.le_algebraMap_norm_self (a - b) (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
+      (IsSelfAdjoint.le_algebraMap_norm_self (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
   have hS : 0 ≤ S := CFC.sqrt_nonneg b
   have hcS : c * S = Real.sqrt ε • S := (Algebra.smul_def _ _).symm
   have hSc : S * c = Real.sqrt ε • S := by rw [← Algebra.commutes, hcS]
