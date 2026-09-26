@@ -76,10 +76,9 @@ theorem isSeparatedBy_window {a w b w' s : ℕ} (hab : a + w + s ≤ b)
   obtain ⟨hxa, hxw⟩ := hx
   obtain ⟨hyb, hyw⟩ := hy
   obtain ⟨hm1, hm2⟩ := abs_le.mp hm
-  have hpos : 0 ≤ (y.val : ℤ) - x.val - m := by push_cast at hm1 hm2 ⊢; omega
-  have hlt : (y.val : ℤ) - x.val - m < N := by push_cast at hm1 hm2 ⊢; omega
+  have hpos : 0 ≤ (y.val : ℤ) - x.val - m := by omega
+  have hlt : (y.val : ℤ) - x.val - m < N := by omega
   have := Int.eq_zero_of_dvd_of_nonneg_of_lt hpos hlt hdvd
-  push_cast at hm1 hm2 this
   omega
 
 end Ring
@@ -88,7 +87,8 @@ end Ring
 theorem inner_toLp_toEuclideanLin (ψ : Cfg d N → ℂ) (A : Matrix (Cfg d N) (Cfg d N) ℂ) :
     ⟪(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N)),
         Matrix.toEuclideanLin A (WithLp.toLp 2 ψ)⟫_ℂ = expect ψ A := by
-  simp only [Matrix.toLpLin_apply, PiLp.inner_apply, RCLike.inner_apply, expect, dotProduct, Pi.star_apply, RCLike.star_def]
+  simp only [Matrix.toLpLin_apply, PiLp.inner_apply, RCLike.inner_apply, expect, dotProduct,
+    Pi.star_apply, RCLike.star_def]
   exact Finset.sum_congr rfl fun _ _ ↦ mul_comm _ _
 
 /-- A vector with `star ψ ⬝ᵥ ψ = 1` is a unit vector of `EuclideanSpace`. -/

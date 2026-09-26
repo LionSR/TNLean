@@ -193,7 +193,8 @@ This is arXiv:2307.01696, Theorem 1 (label `th:1`: "If `T=o(log N)` there is som
 that for all `N>N_0` we have `ε > 1/2`"), in the setting stated before it: `φ_N` generated
 "by a normal tensor `A`, with finite correlation length `ξ>0`", and `ψ_N` "obtained from
 depth-`T` local quantum circuits applied to product states". The tensor is taken in the gauge
-of the source's eq. (5); see the module docstring for this scope restriction. The hypothesis `T_N = o(log N)` is `Asymptotics.IsLittleO` along `atTop`. -/
+of the source's eq. (5); see the module docstring for this scope restriction. The hypothesis
+`T_N = o(log N)` is `Asymptotics.IsLittleO` along `atTop`. -/
 theorem eventually_one_half_lt_infidelity_of_isLittleO_log {A : MPSTensor d D} {L : ℕ}
     (hL1 : 1 ≤ L) (hL : Kraus.IsNBlkInjective A L) (hA : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρfix : Kraus.transferMap A ρ = ρ)
@@ -217,7 +218,7 @@ theorem eventually_one_half_lt_infidelity_of_isLittleO_log {A : MPSTensor d D} {
     filter_upwards [eventually_ge_atTop m] with N hN
     exact hm.trans_le (by exact_mod_cast hN)
   filter_upwards [hTb, hbig, eventually_ge_atTop 1] with N hTN hN hN1
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hNpos : (0 : ℝ) < N := by exact_mod_cast (by omega : 0 < N)
   have hlog : 0 ≤ Real.log N := Real.log_nonneg (by exact_mod_cast hN1)
   rw [Real.norm_natCast, Real.norm_of_nonneg hlog] at hTN
@@ -282,7 +283,6 @@ theorem eventually_one_half_lt_infidelity_of_isLittleO_log {A : MPSTensor d D} {
       _ < Real.sqrt N * Real.sqrt N :=
           mul_lt_mul_of_pos_right hKsqrt (Real.sqrt_pos.mpr hNpos)
       _ = N := Real.mul_self_sqrt hNpos.le
-  push_cast at hle
   linarith
 
 end MPSTensor

@@ -154,7 +154,7 @@ theorem star_mpvExpectation_of_isHermitian (A : MPSTensor d D) {N : ℕ}
   exact Complex.conj_ofReal _
 
 /-- A Hermitian matrix minus a real multiple of the identity is Hermitian. -/
-theorem _root_.Matrix.IsHermitian.sub_smul_one {n : Type*} [Fintype n] [DecidableEq n]
+theorem _root_.Matrix.IsHermitian.sub_smul_one {n : Type*} [DecidableEq n]
     {X : Matrix n n ℂ} (hX : X.IsHermitian) {e : ℂ} (he : star e = e) :
     (X - e • (1 : Matrix n n ℂ)).IsHermitian := by
   rw [Matrix.IsHermitian, Matrix.conjTranspose_sub, Matrix.conjTranspose_smul,

@@ -1204,6 +1204,7 @@ of $A$ along $w$.
         MPSTensor.norm_toContinuousLinearMap_physicalObservableTransfer_le,
         MPSPreparation.norm_sub_inner_smul_sq_le,
         MPSPreparation.norm_sub_inner_smul_sq_le_of_isPreparedInDepth,
+        MPSTensor.exists_norm_sub_inner_smul_add_le_div_sqrt,
         MPSPreparation.isSeparatedBy_window}
     \leanok
     \uses{lem:ldp_two_window_trace, lem:ldp_finite_size_correction,
@@ -1255,7 +1256,10 @@ of $A$ along $w$.
 \begin{theorem}[No preparation in depth $o(\log N)$, gauge form]
     \label{thm:ldp_depth_lower_bound_gauge}
     \lean{MPSTensor.eventually_one_half_lt_infidelity_of_isLittleO_log,
-        MPSTensor.exists_depth_lower_bound}
+        MPSTensor.exists_depth_lower_bound,
+        MPSTensor.norm_mpvConnectedCorrelator_le_of_overlap,
+        MPSTensor.mpvExpectation_centred_pair,
+        MPSPreparation.sum_norm_inner_div_le_of_overlap}
     \leanok
     \uses{def:ldp_local_circuit, def:correlation_length}
     Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), let $L\ge1$

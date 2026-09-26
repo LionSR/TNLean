@@ -107,7 +107,8 @@ theorem exists_norm_sub_inner_smul_sq_le_mpv [NeZero D] {A : MPSTensor d D} {L�
       have : 0 ≤ C * (r ^ 0 + r ^ n) := by positivity
       linarith)
     (fun k l hkl ↦ by
-      obtain ⟨j, hj⟩ : ∃ j, l.val = k.val + j := ⟨l.val - k.val, by have := Fin.lt_def.mp hkl; omega⟩
+      obtain ⟨j, hj⟩ : ∃ j, l.val = k.val + j :=
+        ⟨l.val - k.val, by have := Fin.lt_def.mp hkl; omega⟩
       have hj1 : 1 ≤ j := by have := Fin.lt_def.mp hkl; omega
       have hjn : j < n := by have := l.isLt; omega
       have hjk : l.val - k.val = j := by omega
