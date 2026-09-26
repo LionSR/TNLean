@@ -10,7 +10,7 @@ import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 
 A full simultaneous word span at one length remains full at every larger
 length when each block is trace-preserving. To extend by one site, express
-$M_j(A^{j,a})^\dagger$ at the given length, append $A^{j,a}$, and sum over the
+\(M_j(A^{j,a})^\dagger\) at the given length, append \(A^{j,a}\), and sum over the
 physical letter. This is the trace-preserving counterpart of the unital
 propagation in PGVWC07, arXiv:quant-ph/0608197, lines 893--898.
 -/
