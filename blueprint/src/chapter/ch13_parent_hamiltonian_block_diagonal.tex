@@ -999,7 +999,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \leanok
     \uses{lem:block_boundary_intertwiner_from_global_cut,
         thm:cyclic-boundary-intertwining,
-        thm:ground_space_map_mpv_of_long_word_commutes}
+        thm:ground_space_map_mpv_of_long_word_commutes,
+        lem:bnt_span_eq_sum_mpv_submodules}
     Choose the boundary matrices $X_i^j$ of the hypothesis at each cyclic
     cut $i$. Comparing adjacent cuts against all complementary words of length $N-1$
     gives $X_i^j A^{j,a}=A^{j,a}X_{i-1}^j$.
@@ -1012,7 +1013,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     Each block is injective at length $N-1$, hence also at length $N$.
     Its boundary matrix therefore commutes with the full matrix algebra
     and is scalar. The representation at cut zero is consequently a
-    linear combination of the periodic block vectors.
+    linear combination of the periodic block vectors, that is, an element of
+    the sum of their lines
+    (Lemma~\ref{lem:bnt_span_eq_sum_mpv_submodules}).
 \end{proof}
 
 \begin{theorem}[Periodic ground space at a simultaneous injectivity length]
@@ -1025,7 +1028,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     algebra. For every $S+1\leq L\leq N$, the periodic parent Hamiltonian
     satisfies
     \begin{align}
-        \ker H_{B,L,N}=\operatorname{span}\{V_N(A^j):j\}.
+        \ker H_L^{(N)}(B)=\operatorname{span}\{V^{(N)}(A^j):j\}.
         \notag
     \end{align}
 \end{theorem}
@@ -1078,7 +1081,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_word_span_independent_rescaling, thm:word_tuple_span_gauge_invariance,
-        thm:normalized_primitive_gauge, thm:block_sum_local_ground_space}
+        thm:normalized_primitive_gauge, thm:block_sum_local_ground_space,
+        lem:bnt_span_eq_sum_mpv_submodules}
     Projection of the simultaneous span onto each matrix summand proves
     injectivity of every block at length $S$. Each block is therefore normal
     and admits a primitive representative obtained by a rescaling by some
@@ -1089,7 +1093,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \begin{align}
         V^{(N)}(B^j) & =\zeta_j^{\,N}\,V^{(N)}(A^j).\notag
     \end{align}
-    Since $\zeta_j^{\,N}\neq0$, the two spans agree. Taking sums of the
+    Since $\zeta_j^{\,N}\neq0$, each block spans the same line for $A^j$ and
+    $B^j$, and the two spans, being the sums of these lines
+    (Lemma~\ref{lem:bnt_span_eq_sum_mpv_submodules}), agree. Taking sums of the
     component ground spaces proves equality of the assembled parent
     Hamiltonians.
 \end{proof}
@@ -1170,7 +1176,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     every periodic parent Hamiltonian with positive interactions and the
     prescribed length-$L$ local kernels satisfies
     \begin{align}
-        \ker H_{A,L,N}=\operatorname{span}\{V_N(B^j):0\leq j<g\}.
+        \ker H_L^{(N)}(A)=\operatorname{span}\{V^{(N)}(B^j):0\leq j<g\}.
         \notag
     \end{align}
     The conclusion includes the minimal ring $N=L=S+1$ and the canonical
