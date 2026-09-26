@@ -23,11 +23,20 @@ $H^3(\mathbb{Z}_2\times\mathbb{Z}_2,U(1))\cong\mathbb{Z}_2^3$ and lists
 representatives of the classes. Its mixed type-II representative takes the
 value $-1$ on the triples $(g_1g_2^i,g_1^jg_2,g_1^kg_2)$ with
 $i,j,k\in\{0,1\}$ and $1$ elsewhere, where $g_1,g_2$ are the two generators.
-Equivalently, $\omega(a,b,c)=(-1)^{a_1b_2c_2}$ in the coordinates
-$a=(a_1,a_2)$. The source says that the values
-$\omega_g=\omega(g,g,g)$ in a normalized gauge, at the three elements of
-order two, distinguish the classes. Its table assigns
-$(\omega_a,\omega_b,\omega_{ab})=(+1,+1,-1)$ to the type-II class. The
+Equivalently, in the coordinates $a=(a_1,a_2)$,
+\begin{align}
+    \omega_{\mathrm{II}}(a,b,c)
+     & =(-1)^{a_1b_2c_2}.
+    \label{eq:glm23z2z2_type_two_cocycle}
+\end{align}
+The source says that the values $\omega_g=\omega(g,g,g)$ in a normalized
+gauge, at the three elements of order two, distinguish the classes. Its table
+assigns to the type-II class the values
+\begin{align}
+    (\omega_a,\omega_b,\omega_{ab})
+     & =(+1,+1,-1).
+    \label{eq:glm23z2z2_type_two_detectors}
+\end{align} The
 periodic-boundary construction of the same reference represents a finite
 group exactly by matrix product operators built from a three-cocycle. The
 anomaly three-cocycle of an exact representation by normal tensors is
@@ -51,13 +60,20 @@ construction, so they form an exact representation of
 $\mathbb{Z}_2\times\mathbb{Z}_2$. Their doubled-index tensors are normal,
 since the letters differ from those of $M_g$ by signs.
 
-For this exact representation the formalization proves, for every choice of
-fusion tensors and every $g$, that
-$\omega(g,e,g)\,\omega(g,g,g)$ equals the same product for
-$(-1)^{a_1b_2c_2}$: it is $+1$ at $(1,0)$ and $(0,1)$ and $-1$ at $(1,1)$.
-This product is invariant under the gauge action of the fusion tensors
-because $g^2=e$, and in a normalized gauge it is $\omega(g,g,g)$. So these
-are the values $(+1,+1,-1)$ of the table. In particular the anomaly class of
+For this exact representation, let $\omega$ be the anomaly three-cochain of
+any choice of fusion tensors. The formalization proves, for every
+$g\in\mathbb{Z}_2\times\mathbb{Z}_2$,
+\begin{align}
+    \omega(g,e,g)\,\omega(g,g,g)
+     & =\omega_{\mathrm{II}}(g,e,g)\,\omega_{\mathrm{II}}(g,g,g)
+    =(-1)^{g_1g_2}.
+    \label{eq:glm23z2z2_detector_identity}
+\end{align}
+The right side of \eqref{eq:glm23z2z2_detector_identity} is $+1$ at $(1,0)$
+and $(0,1)$ and $-1$ at $(1,1)$. The left side is invariant under the gauge
+action of the fusion tensors because $g^2=e$, and in a normalized gauge it is
+$\omega(g,g,g)$. So these are the values \eqref{eq:glm23z2z2_type_two_detectors}
+of the table. In particular the anomaly class of
 the full group is nontrivial.\footnote{Formal declarations:
 \leanid{Z2Z2Condensation.kleinFamily\_isNormalRepresentation} in
 \doclink{TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Exact},
@@ -75,9 +91,16 @@ The formalization identifies the three detector values with those of the
 type-II cocycle. It does not identify the classes. The missing step is the
 algebraic statement of the source that the detector values separate the
 eight classes of $H^3(\mathbb{Z}_2\times\mathbb{Z}_2,\mathbb{C}^\times)$:
-two three-cocycles of $\mathbb{Z}_2\times\mathbb{Z}_2$ with the same values
-of $\omega(g,e,g)\,\omega(g,g,g)$ at the three elements of order two are
-cohomologous. With that lemma, the formalized equality of detector values
+for three-cocycles $\omega,\eta$ of $\mathbb{Z}_2\times\mathbb{Z}_2$,
+\begin{align}
+    \omega(g,e,g)\,\omega(g,g,g)
+     & =\eta(g,e,g)\,\eta(g,g,g)
+    \quad\text{for } g=(1,0),(0,1),(1,1)
+    \notag\\
+    \Longrightarrow\quad
+    [\omega] & =[\eta].
+    \label{eq:glm23z2z2_detector_separation}
+\end{align} With that lemma, the formalized equality of detector values
 gives that the anomaly three-cocycle is cohomologous to
 $(-1)^{a_1b_2c_2}$ for every choice of fusion tensors. The lemma needs a
 normalization of three-cocycles by coboundaries and square roots in
@@ -87,6 +110,63 @@ $\mathbb{C}^\times$. It is independent of the tensors.
 for the full group. They state the detector values of the table for the
 exact dressed representation, and the equality of classes awaits the
 separation lemma.
+
+\section{Replaced declarations}
+
+The formalization previously covered only the diagonal subgroup $\{e,xy\}$,
+with the rescaled family $e\mapsto M_e$, $xy\mapsto iM_{xy}$. Those
+declarations, set in typewriter type below, are removed without
+compatibility aliases. Their replacements
+are as follows.
+\begin{itemize}
+    \item \texttt{Z2Z2Condensation.diagFamily} and
+    \texttt{Z2Z2Condensation.diagFamily\_isNormalRepresentation}: the family
+    restricted to the diagonal is \leanid{Z2Z2Condensation.pairFamily} applied
+    to \leanid{Z2Z2Condensation.kxyTensor}, equal to the restriction of
+    \leanid{Z2Z2Condensation.kleinFamily} along
+    \leanid{Z2Z2Condensation.xyHom} by
+    \leanid{Z2Z2Condensation.comap\_xyHom}; its normality and exactness are
+    \leanid{Z2Z2Condensation.pairFamily\_kxy\_isNormalRepresentation}.
+    \item \texttt{Z2Z2Condensation.diagFusionData}:
+    \leanid{Z2Z2Condensation.xyFusionData}.
+    \item \texttt{Z2Z2Condensation.diagFusionData\_isAssociator\_gen\_gen\_gen}
+    and \texttt{Z2Z2Condensation.diagFusionData\_omega\_gen\_gen\_gen}:
+    \leanid{Z2Z2Condensation.xyFusionData\_isAssociator\_gen\_gen\_gen}.
+    \item \texttt{Z2Z2Condensation.diagFusionData\_omega\_gen\_one\_gen}:
+    \leanid{Z2Z2Condensation.pairFusionData\_omega\_gen\_one\_gen}.
+    \item \texttt{Z2Z2Condensation.cyclicInvariant\_diagFusionData} and
+    \texttt{Z2Z2Condensation.cyclicInvariant\_omega\_diag}:
+    \leanid{Z2Z2Condensation.cyclicInvariant\_omega\_kleinFamily\_xy}.
+    \item \texttt{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_diag}:
+    \leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_kleinFamily}.
+    \item \texttt{Z2Z2Condensation.diagBondDim},
+    \texttt{Z2Z2Condensation.diagLabelTensor},
+    \texttt{Z2Z2Condensation.diagLabelV},
+    \texttt{Z2Z2Condensation.diagLabelW}:
+    \leanid{Z2Z2Condensation.pairBondDim},
+    \leanid{Z2Z2Condensation.pairLabelTensor},
+    \leanid{Z2Z2Condensation.pairLabelV},
+    \leanid{Z2Z2Condensation.pairLabelW}.
+    \item \texttt{Z2Z2Condensation.diagGen} and
+    \texttt{Z2Z2Condensation.diagGen\_pow\_two}:
+    \leanid{Z2Z2Condensation.z2Gen} and
+    \leanid{Z2Z2Condensation.z2Gen\_pow\_two}.
+    \item \texttt{Z2Z2Condensation.diagCubeInt},
+    \texttt{Z2Z2Condensation.diagCube},
+    \texttt{Z2Z2Condensation.tripleTensor\_gen\_toMPSTensor},
+    \texttt{Z2Z2Condensation.diagLeftTreeInt},
+    \texttt{Z2Z2Condensation.diagRightTreeInt},
+    \texttt{Z2Z2Condensation.diagFusionData\_leftV\_gen\_gen\_gen},
+    \texttt{Z2Z2Condensation.diagFusionData\_rightV\_gen\_gen\_gen},
+    \texttt{Z2Z2Condensation.diag\_leftTree\_evalWord},
+    \texttt{Z2Z2Condensation.diag\_leftTree\_evalWord\_smul}: the cube
+    table \leanid{Z2Z2Condensation.kxyCubeInt}, the generic trees
+    \leanid{Z2Z2Condensation.pairFusionData\_leftV\_gen\_gen\_gen} and
+    \leanid{Z2Z2Condensation.pairFusionData\_rightV\_gen\_gen\_gen}, and the
+    integer certificate
+    \leanid{MPSTensor.isDressedProportional\_complexOfInt\_of\_mem}.
+    \item \leanid{Z2Z2Condensation.columnInt} is kept.
+\end{itemize}
 
 \bibliographystyle{alpha}
 \bibliography{references}
