@@ -3,9 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.Examples.Rings.GoldenRing
-import TNLean.MPS.MPDO.ActionTensor
 
 /-!
 # Golden compression: compression data with gauges over `ℤ[σ]`
@@ -25,7 +23,6 @@ identities.
 
 ## Main definitions
 
-* `MPSTensor.actGoldenTensor`: the action of an operator tensor on a state tensor over `ℤ[σ]`.
 * `MPSTensor.goldenGauge`, `MPSTensor.MultiBlockCompression.ofGolden`: the gauge attached to a
   pair of mutually inverse matrices over `ℤ[σ]`, and the multi-block compression datum assembled
   from it and the decided block structure of the conjugated letters.
@@ -34,8 +31,6 @@ identities.
 
 ## Main results
 
-* `MPSTensor.actTensor_complexOfGolden`: the action tensor commutes with the entrywise embedding
-  of `ℤ[σ]`.
 * `MPSTensor.isNormal_of_golden_single`: normality of a tensor over `ℤ[σ]` from a decided table
   expressing every matrix unit as a combination of words of one positive length.
 * `MPSTensor.conjMatrix_goldenGauge`: conjugating a letter by a golden gauge gives the recorded
@@ -50,30 +45,11 @@ identities.
   operator algebras*
 -/
 
-open scoped Matrix Kronecker
+open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D D₁ D₂ : ℕ}
-
-/-! ### Action tensors over the golden integers -/
-
-/-- The bond-space action of an operator tensor on a state tensor over the golden integers,
-`(M · A)^i = ∑_j M^{ij} ⊗ A^j`, in the bond order of `finProdFinEquiv`, matching
-`MPOTensor.actTensor`. -/
-def actGoldenTensor (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
-    (A : Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (i : Fin d) :
-    Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) GoldenInt :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (A j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
-
-/-- The action tensor commutes with the entrywise embedding of the golden integers. -/
-theorem actTensor_complexOfGolden (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) GoldenInt)
-    (A : Fin d → Matrix (Fin D₂) (Fin D₂) GoldenInt) (i : Fin d) :
-    MPOTensor.actTensor (fun i j => complexOfGolden (M i j)) (fun j => complexOfGolden (A j)) i =
-      complexOfGolden (actGoldenTensor M A i) := by
-  ext x y
-  simp only [MPOTensor.actTensor_apply, actGoldenTensor, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, complexOfGolden_apply, map_sum, map_mul]
+variable {d D : ℕ}
 
 /-! ### Normality from a decided table of matrix units -/
 
@@ -87,21 +63,9 @@ theorem isNormal_of_golden_single {A : MPSTensor d D}
     (word : Fin D → Fin D → κ → Fin ℓ → Fin d) (coef : Fin D → Fin D → κ → GoldenInt)
     (h : ∀ i j, ∑ k, coef i j k • evalWordGolden Ag (List.ofFn (word i j k)) =
       Matrix.single i j 1) :
-    Kraus.IsNormal A := by
-  refine ⟨ℓ, hℓ, ?_⟩
-  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
-  set T := Submodule.span ℂ
-    (Set.range fun w : Fin ℓ → Fin d => Kraus.evalWord A (List.ofFn w)) with hT
-  have hA' : A = fun a => complexOfGolden (Ag a) := funext hA
-  have hunit : ∀ i j : Fin D, Matrix.single i j (1 : ℂ) ∈ T := by
-    intro i j
-    have h' := congrArg complexOfGolden (h i j)
-    rw [complexOfGolden_single, complexOfGolden_sum] at h'
-    rw [← h']
-    refine Submodule.sum_mem _ fun k _ => ?_
-    rw [complexOfGolden_smul, ← evalWord_complexOfGolden, ← hA']
-    exact T.smul_mem _ (Submodule.subset_span ⟨word i j k, rfl⟩)
-  exact Submodule.eq_top_of_forall_single_mem T hunit
+    Kraus.IsNormal A :=
+  isNormal_of_complexOfRing_smul_single goldenToComplex Ag hA hℓ word coef
+    (c := 1) (by rw [map_one]; exact one_ne_zero) fun i j => (h i j).trans (one_smul _ _).symm
 
 /-! ### Compression data from a golden gauge -/
 
@@ -113,8 +77,7 @@ noncomputable def goldenGauge (τ : BlockSpace Dι S z ≃ Fin DB)
     (G Ginv : Matrix (Fin DB) (Fin DB) GoldenInt) (hG : G * Ginv = 1) (hG' : Ginv * G = 1) :
     (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace Dι S z → ℂ) :=
   gaugeOfMatrix τ (complexOfGolden G) (complexOfGolden Ginv)
-    (by rw [← complexOfGolden_mul, hG, complexOfGolden_one])
-    (by rw [← complexOfGolden_mul, hG', complexOfGolden_one])
+    (complexOfRing_mul_eq_one _ hG) (complexOfRing_mul_eq_one _ hG')
 
 /-- Conjugating a letter by a golden gauge reads off the recorded conjugated letter: if
 `Bg^i Ginv = Ginv K^i` over `ℤ[σ]`, the matrix of `B^i` in the block coordinates is `K^i`

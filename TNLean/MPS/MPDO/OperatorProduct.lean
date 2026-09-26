@@ -151,6 +151,26 @@ noncomputable def mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
     mulTensor M N i k = (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix
       finProdFinEquiv.symm finProdFinEquiv.symm := rfl
 
+/-- The bond-space product of rescaled tensors is the rescaled product:
+`(a M)(b N) = (a b) (M N)`. -/
+theorem mulTensor_smul_smul (a b : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
+    mulTensor (a • M) (b • N) = (a * b) • mulTensor M N := by
+  funext i k
+  ext r c
+  simp only [mulTensor_apply, Pi.smul_apply, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun j _ ↦ by ring
+
+/-- Rescaling the first factor of a bond-space product rescales the product. -/
+theorem mulTensor_smul_left (a : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
+    mulTensor (a • M) N = a • mulTensor M N := by
+  simpa using mulTensor_smul_smul a 1 M N
+
+/-- Rescaling the second factor of a bond-space product rescales the product. -/
+theorem mulTensor_smul_right (b : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
+    mulTensor M (b • N) = b • mulTensor M N := by
+  simpa using mulTensor_smul_smul 1 b M N
+
 /-- The canonical reassociation equivalence of three bond spaces,
 \(((\mathbb C^{D_1}\otimes\mathbb C^{D_2})\otimes\mathbb C^{D_3})\) with
 \(\mathbb C^{D_1}\otimes(\mathbb C^{D_2}\otimes\mathbb C^{D_3})\).

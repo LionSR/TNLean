@@ -105,6 +105,10 @@ theorem SameMPV₂.toSameMPV₂Pos {d D₁ D₂ : ℕ}
     (h : SameMPV₂ A B) : SameMPV₂Pos A B :=
   fun N _hN σ => h N σ
 
+/-- Positive-length MPV equality is reflexive. -/
+theorem SameMPV₂Pos.refl {d D : ℕ} (A : MPSTensor d D) : SameMPV₂Pos A A :=
+  fun _ _ _ => rfl
+
 /-- Positive-length MPV equality is symmetric. -/
 theorem SameMPV₂Pos.symm {d D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
