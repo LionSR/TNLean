@@ -13,7 +13,7 @@ import TNLean.MPS.Symmetry.StringOrderAux
 
 **Source.** Cirac, Pérez-García, Schuch, Verstraete (arXiv:2011.12127), §III.A,
 paragraph "Entanglement spectrum and edge modes",
-`Papers/2011.12127/TN-Review-main.tex` lines 1171–1172: for an injective MPS in
+`Papers/2011.12127/TN-Review-main.tex` line 1171: for an injective MPS in
 canonical form with on-site symmetry, the fixed point `ρ` of the transfer map
 inherits the symmetry, `X_g ρ X_g† = ρ`, and a projective virtual representation
 with no one-dimensional invariant subspaces forces every eigenvalue of `ρ` to be
@@ -64,7 +64,7 @@ private lemma twistedMixedCompanion_conjTranspose (A : MPSTensor d D)
 
 /-- **Virtual gauges can be chosen unitary and fix the boundary state.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
-lines 1083 and 1172): for an injective tensor in canonical form the gauge of an
+lines 1084 and 1171): for an injective tensor in canonical form the gauge of an
 on-site symmetry is unitary up to a scalar, and by uniqueness of the fixed point
 it leaves `Λ` invariant.
 
@@ -149,7 +149,7 @@ theorem exists_unitary_gauge_of_symmetry
 
 /-- **The virtual gauges commute with the boundary state.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
-line 1172): "Because of the uniqueness of the corresponding eigenvalue, `ρ` has
+line 1171): "Because of the uniqueness of the corresponding eigenvalue, `ρ` has
 to inherit all symmetries of the MPS and will hence be invariant under the
 transformation `X_g ρ X_g† = ρ`." -/
 theorem commute_boundaryState_of_symmetry
@@ -174,7 +174,7 @@ theorem commute_boundaryState_of_symmetry
 
 /-- **Even degeneracy of the entanglement spectrum.**
 Source: arXiv:2011.12127, §III.A, paragraph "Entanglement spectrum and edge
-modes" (`Papers/2011.12127/TN-Review-main.tex` line 1172): a non-abelian
+modes" (`Papers/2011.12127/TN-Review-main.tex` line 1171): a non-abelian
 projective virtual representation forces every eigenvalue of the fixed point `ρ`
 to be degenerate.
 
