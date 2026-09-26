@@ -967,9 +967,8 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         MPOTensor.GroupFamily.FusionData.ofBondOne,
         MPOTensor.GroupFamily.FusionData.omega_ofBondOne}
     \leanok
-    \uses{thm:asymex_z2z2_exact, thm:asymex_z2z2_split,
-        thm:asymex_z2z2_nonsplit, thm:mpug_anomaly_three_cochain_spec,
-        thm:mpug_family_restriction_omega, thm:mpug_cyclic_invariant_gauge}
+    \uses{thm:asymex_z2z2_exact, def:mpug_anomaly_three_cochain,
+        def:mpug_trivial_gauge_class}
     Let $\omega$ be the anomaly three-cochain of any choice of fusion
     tensors of the representation $g\mapsto M'_g$ of
     Theorem~\ref{thm:asymex_z2z2_exact}. For every
@@ -986,6 +985,9 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_z2z2_split, thm:asymex_z2z2_nonsplit,
+        thm:mpug_anomaly_three_cochain_spec, thm:mpug_family_restriction_omega,
+        thm:mpug_cyclic_invariant_gauge}
     Since $g^2=e$, the product $\omega(g,e,g)\,\omega(g,g,g)$ does not
     depend on the fusion tensors and can be computed on the restriction of
     the family along an embedding of $\Z_2$ onto $\{e,g\}$, by
