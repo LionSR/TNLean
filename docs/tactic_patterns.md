@@ -2058,6 +2058,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Decomposing membership in a finite sum of subspaces — candidate
+- **Pattern:** obtain vectors in the individual subspaces from membership in
+  their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
+  apply a norm or inner-product estimate to their sum.
+- **Occurrences:** two proofs in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`.
+- **Status:** the existing Mathlib theorem supplies the decomposition. No
+  additional abstraction is needed for these two uses in one file.
+
 ### carrying a boundary through one Kronecker factor of a letter sum — candidate
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
   `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
