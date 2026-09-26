@@ -704,9 +704,10 @@ normality in the following two theorems.
 
 \begin{proof}
     \leanok
-    Each nearest-neighbour transposition occurs in two windows $i,i+1,i+2$ and
-    each next-nearest-neighbour one in one, so
     Theorem~\ref{thm:spin_exchange_swap} gives
+    $H_{N}=\tfrac12\sum_{i}P_{i,i+1}+\tfrac14\sum_{i}P_{i,i+2}-\tfrac{3N}{8}$.
+    The cyclic shift of the summation index gives
+    $\sum_{i}P_{i+1,i+2}=\sum_{i}P_{i,i+1}$, so
     $H_{N}=\tfrac14\sum_{i}\bigl(P_{i,i+1}+P_{i+1,i+2}+P_{i,i+2}\bigr)
         -\tfrac{3N}{8}$.
     By Theorem~\ref{thm:majumdar_ghosh_term_projector},
