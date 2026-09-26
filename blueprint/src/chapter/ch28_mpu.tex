@@ -6068,7 +6068,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_canonical_representative_reduction}
     \lean{MPOTensor.exists_isReduction_of_mpo_eq_cfii}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mps_rectangular_reduction}
+    \uses{def:mpu_canonical_form_ii, def:mps_rectangular_reduction,
+        def:mpo_family}
     Let $\mathcal U$ and $\mathcal V$ have the same physical dimension and
     bond dimensions $D$ and $E$, respectively. Suppose $\mathcal V$ is in
     canonical form II and their periodic operators agree at every positive
@@ -6082,7 +6083,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mps_equality_reduction_exists, def:mpu_canonical_form_ii}
+    \uses{thm:mps_equality_reduction_exists, def:mpu_canonical_form_ii,
+        thm:mpu_canonical_form_ii_normal}
     The normalized flattening of $\mathcal V$ is normal. Multiplication by
     the nonzero scalar $\sqrt d$ preserves normality, so its unnormalized
     flattening is normal as well. Equality of the periodic operators gives
@@ -6122,11 +6124,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proof}
 
 \begin{theorem}[Composition additivity of the representative index]
-    \label{lem:mpu_admissible_index_composition}
+    \label{thm:mpu_admissible_index_composition}
     \lean{MPOTensor.IsMPU.index_mulTensor,
         MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}
     \leanok
-    \uses{def:mpu_reduced_representative_index, def:mpdo_operator_product}
+    \uses{def:mpu_reduced_representative_index, def:mpdo_operator_product,
+        def:mpo_family}
     Let $\mathcal U$ and $\mathcal V$ be MPUs with a common positive physical
     dimension and positive bond dimensions. For the index defined through a reduced canonical-form-II
     representative,
@@ -7277,7 +7280,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (admissible tensors and operations):** every simple
     % block and standard form used below carries reduced full-support source
     % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_index_well_defined, lem:mpu_admissible_index_tensor, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
+    \uses{prop:mpu_admissible_index_well_defined, lem:mpu_admissible_index_tensor, thm:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
     Assume the following operation-specific admissibility hypotheses. Every pair
     of simple blockings compared for blocking independence carries reduced
     full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
