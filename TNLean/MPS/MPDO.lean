@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPDO
 
 import TNLean.MPS.MPDO.ActionTensor
+import TNLean.MPS.MPDO.ActionTensorReduction
 import TNLean.MPS.MPDO.ActiveSectorInverseMapProvenance
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample
@@ -136,6 +137,7 @@ import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CompleteZipperFusion
+import TNLean.MPS.MPDO.CompleteZipperFusionBlocked
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
 import TNLean.MPS.MPDO.CompleteZipperFusionGauge
@@ -189,6 +191,7 @@ import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
@@ -229,6 +232,7 @@ import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPDO.PhysicalBlockingResiduals
 import TNLean.MPS.MPDO.PhysicalClosure
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.MPDO.PhysicalIsometricEmbedding

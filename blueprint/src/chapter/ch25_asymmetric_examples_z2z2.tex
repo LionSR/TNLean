@@ -16,8 +16,10 @@ apply a controlled phase between neighboring second qubits. The
 construction targets the mixed three-cocycle of type II whose exponent
 $(-1)^{a_1b_2c_2}$ couples the first factor of the group to the second,
 motivated by anomalous $\Z_2\times\Z_2$ symmetry-protected topological
-phases~\cite{ChenGuWen2011}; the identification of the anomaly class is
-not proved here. Matrix product operator symmetries of this kind are
+phases~\cite{ChenGuWen2011}. The four operators do not form an exact
+representation, so the anomaly class of the full group is not defined for
+them; the class of the diagonal subgroup of order two is computed in
+Theorem~\ref{thm:asymex_z2z2_diagonal_anomaly_class}, and it is nontrivial. Matrix product operator symmetries of this kind are
 reviewed in~\cite[Section~III.A.6]{Cirac2021Matrix}. The local tensors are
 assembled from the letters of the CZX matrix product
 unitary~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix}, whose
@@ -852,3 +854,72 @@ the full stacked tensor.
     every word of length at least four; the twelve split pair blocks
     have identically vanishing remainders.
 \end{remark}
+
+\subsection{The anomaly class of the diagonal subgroup}%
+\label{sec:asymex_z2z2_diagonal_anomaly}
+
+By Theorem~\ref{thm:asymex_z2z2_fusion} the four operators compose only
+projectively on odd rings, and since $\lambda(x,y)\neq\lambda(y,x)$ no
+rescaling of the four tensors removes the signs. On the diagonal subgroup
+$\{e,xy\}$ the sign is $\lambda(xy,xy)=-1$, and it is removed by the phase
+$i$: the operators of $M_e$ and $iM_{xy}$ multiply as the group of order two
+on every ring, since $i^{2L}(-1)^L=1$. The anomaly three-cochain of the
+fusion tensors of Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} is
+therefore defined for this subgroup, and not for the full group; the
+class of the full family is left open~\cite{gap:glm23_z2z2_diagonal_anomaly_scope}.
+
+\begin{theorem}[The anomaly class of the diagonal subgroup]%
+    \label{thm:asymex_z2z2_diagonal_anomaly_class}
+    \lean{Z2Z2Condensation.diagFamily,
+        Z2Z2Condensation.diagFamily_isNormalRepresentation,
+        Z2Z2Condensation.diagFusionData,
+        Z2Z2Condensation.tripleTensor_gen_toMPSTensor,
+        Z2Z2Condensation.diag_leftTree_evalWord,
+        Z2Z2Condensation.diagFusionData_isAssociator_gen_gen_gen,
+        Z2Z2Condensation.diagFusionData_omega_gen_gen_gen,
+        Z2Z2Condensation.diagFusionData_omega_gen_one_gen,
+        Z2Z2Condensation.cyclicInvariant_omega_diag,
+        Z2Z2Condensation.not_isTrivialGaugeClass_omega_diag}
+    \leanok
+    \uses{thm:asymex_z2z2_fusion, thm:asymex_z2z2_normal,
+        thm:asymex_z2z2_split, thm:asymex_z2z2_nonsplit,
+        thm:mpug_anomaly_three_cochain_spec, thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_cyclic_invariant_gauge}
+    This statement concerns the diagonal subgroup $\{e,xy\}\cong\Z_2$ only.
+    Write $s=xy$. The tensors $M_e$ for $e$ and $iM_{xy}$ for $s$ are normal
+    and their periodic operators multiply as $\Z_2$ on every nonempty
+    chain. Choose the fusion tensors to be the identity whenever a factor
+    is $e$, and the compression pair $(V,W)$ of the block $(xy,xy)$ of
+    Theorem~\ref{thm:asymex_z2z2_nonsplit} for $(s,s)$, where
+    $V=(0,1,0,0)$. Let $R=M_{xy}\cdot M_{xy}\cdot M_{xy}$ be the unscaled
+    triple product, of bond dimension eight. Then
+    \begin{align}
+        (V\otimes\Id)R^{\mathbf w}
+         & =-(\Id\otimes V)R^{\mathbf w}
+        \notag
+    \end{align}
+    for every nonempty word $\mathbf w$, so $\omega(s,s,s)=-1$, while
+    $\omega(s,e,s)=1$. For every choice of fusion tensors,
+    $\omega(s,e,s)\,\omega(s,s,s)=-1$, and the anomaly three-cocycle of
+    the diagonal subgroup is not cohomologous to the constant cochain one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The phases $i\cdot i=-1$ of two generators cancel the weight $-1$ of
+    the target $-M_e$ of the block $(xy,xy)$, so $(V,W)$ is a fusion pair
+    for $(s,s)$; the pairs with a factor $e$ are the split blocks
+    $(e,xy)$ and $(xy,e)$, whose stacked tensors equal $M_{xy}$. The triple
+    product of $iM_{xy}$ is $i^3R$, and the scalar $i^3$ occurs on both
+    sides of the comparison of the two trees. Both trees intertwine two
+    letters with the tensor $-M_{xy}$: $XR^aR^b=-M_{xy}^aXR^b$ for
+    $X=V\otimes\Id$ and $X=\Id\otimes V$ and all letters $a,b$, and on a
+    single letter $(V\otimes\Id)R^a=-(\Id\otimes V)R^a$. These are integer
+    identities checked letter by letter, and induction on the word gives
+    the displayed identity. For $(s,e,s)$ both trees reduce to $V$. The
+    product $\omega(s,e,s)\,\omega(s,s,s)$ is invariant under the
+    fusion-tensor gauge action because $s^2=e$, and changing the fusion
+    tensors acts by that gauge action. The value $-1$ agrees with the
+    product $\omega(s,e,s)\,\omega(s,s,s)$ of the mixed cocycle
+    $(-1)^{a_1b_2c_2}$ at $s=(1,1)$.
+\end{proof}

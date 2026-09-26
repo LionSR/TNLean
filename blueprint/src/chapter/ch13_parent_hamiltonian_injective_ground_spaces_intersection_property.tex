@@ -62,6 +62,67 @@
 
 \subsection{The intersection property}
 
+The following two statements hold for every tensor $A$; injectivity enters
+only through the choice of the matrices $R_j$ in the second one.
+
+\begin{theorem}[Overlap of one-site restrictions]%
+    \label{thm:ground_space_restriction_overlap}
+    \lean{MPSTensor.groundSpaceMap_mul_eq_of_restrict}
+    \leanok
+    \uses{def:ground_space_map}
+    Let $\psi$ be a vector on $K+2$ sites and let $Y_i,Z_j\in\MN{D}$ satisfy
+    $\psi(i,\tau)=\Gamma_{K+1}(Y_i)(\tau)$ and
+    $\psi(\tau,j)=\Gamma_{K+1}(Z_j)(\tau)$ for all letters $i,j$ and all words
+    $\tau$ of length $K+1$. Then
+    \begin{align}
+        \Gamma_{K}(A^jY_i) & =\Gamma_{K}(Z_jA^i)
+        \notag
+    \end{align}
+    for all letters $i,j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For a word $\sigma$ of length $K$, cyclicity of the trace gives
+    \begin{align}
+        \Gamma_{K}(A^jY_i)(\sigma)
+         & =\tr(A^\sigma A^jY_i)
+        =\psi(i,\sigma,j)
+        =\tr(A^iA^\sigma Z_j)
+        =\Gamma_{K}(Z_jA^i)(\sigma).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Growing back from intertwined boundary matrices]%
+    \label{thm:ground_space_grow_back}
+    \lean{MPSTensor.mem_groundSpace_succ_of_intertwine}
+    \leanok
+    \uses{def:ground_space_map, def:ground_space_parent}
+    Let $\psi$ be a vector on $K+1$ sites and let $Y_i,Z_j\in\MN{D}$ satisfy
+    $\psi(i,\tau)=\Gamma_{K}(Y_i)(\tau)$ for all letters $i$ and words $\tau$
+    of length $K$, and $A^jY_i=Z_jA^i$ for all letters $i,j$. If matrices
+    $R_j\in\MN{D}$ satisfy $\sum_jR_jA^j=\Id$, then $\psi\in G_{K+1}(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Put $X=\sum_jR_jZ_j$. Then
+    \begin{align}
+        Y_i
+         & =\sum_jR_jA^jY_i
+        =\sum_jR_jZ_jA^i
+        =XA^i,
+        \notag               \\
+        \psi(i,\tau)
+         & =\tr(A^\tau XA^i)
+        =\tr(A^iA^\tau X)
+        =\Gamma_{K+1}(X)(i,\tau),
+        \notag
+    \end{align}
+    so $\psi=\Gamma_{K+1}(X)$.
+\end{proof}
+
 \begin{theorem}[One inclusion of the intersection property]\label{thm:ground_space_intersection}
     \lean{MPSTensor.groundSpace_intersection}
     \leanok
@@ -77,6 +138,7 @@
 
 \begin{proof}
     \leanok
+    \uses{thm:ground_space_restriction_overlap, thm:ground_space_grow_back}
     Comparing the left and right restrictions on their common $(L-1)$-site
     overlap determines a boundary matrix $X'$ that reconstructs the
     full $(L+1)$-site word:
@@ -111,13 +173,17 @@
         \item Similarly, from the left ground condition, for each~$j$ there
               exists a unique $Z_j$ such that
               $\psi(\sigma,j) = \tr(A^\sigma Z_j)$.
-        \item Matching on the $(L-1)$-site overlap and using nondegeneracy of the
-              trace pairing gives $A^jY_i = Z_jA^i$ for all $i,j$.
+        \item Matching on the $(L-1)$-site overlap
+              (Theorem~\ref{thm:ground_space_restriction_overlap}) and using
+              injectivity of $\Gamma_{L-1}$ gives $A^jY_i = Z_jA^i$ for all
+              $i,j$.
         \item Since $A$ is injective, the matrices $\{A^j\}$ span $\MN{D}$
               (Definition~\ref{def:injective}), so
               $\Id = \sum_j c_jA^j$ for some coefficients $c_j \in \C$. Thus,
               with $X' := \sum_j c_jZ_j$,
               $Y_i = \Id Y_i = \sum_j c_jA^jY_i = \sum_j c_jZ_jA^i = X'A^i$.
+              This is Theorem~\ref{thm:ground_space_grow_back} with
+              $R_j=c_j\Id$.
         \item By trace cyclicity, $\psi(\sigma) = \tr(A^\sigma X')$, so
               $\psi \in G_{L+1}(A)$.
     \end{enumerate}

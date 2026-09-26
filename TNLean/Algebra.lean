@@ -57,6 +57,7 @@ import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
+import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PermutationMatrixUnitary
