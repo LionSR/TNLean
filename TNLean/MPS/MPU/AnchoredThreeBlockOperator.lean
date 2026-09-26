@@ -35,6 +35,8 @@ interval-independent QCA conjugation.
 * arXiv:1606.00608, Appendix C.4, lines 1952--2017.
 -/
 
+open scoped Matrix
+
 namespace MPOTensor
 
 private def sixCellShuffle (P : Type*) :
