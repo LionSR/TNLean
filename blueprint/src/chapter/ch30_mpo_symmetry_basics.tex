@@ -195,9 +195,8 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 
 \begin{definition}[Fusion matrices and Perron--Frobenius dimension]%
     \label{def:mposym_pf_dimension}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Dimension.lean,
-    %   MPOTensor.fusionMatrix and MPOTensor.perronFrobeniusDim.
+    \lean{MPOTensor.fusionMatrix, MPOTensor.perronFrobeniusDim}
+    \leanok
     \uses{def:mpo_fusion_algebra}
     Let $N_{ab}^c\in\N$ be structure constants on a finite label set $I$. The
     \emph{fusion matrix} of a label $a$ is the nonnegative integer matrix
@@ -212,7 +211,10 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 
 \begin{theorem}[A nonnegative eigenvector for the Perron--Frobenius dimension]%
     \label{thm:mposym_pf_eigenvector}
-    \notready
+    \lean{MPOTensor.exists_nonneg_eigenvector_perronFrobeniusDim,
+        MPOTensor.perronFrobeniusDim_mem_spectrum,
+        Matrix.exists_nonneg_mulVec_eq_spectralRadius_smul}
+    \leanok
     \uses{def:mposym_pf_dimension}
     For every label $a$, the Perron--Frobenius dimension $d_a$ is an
     eigenvalue of $N_a$, and there is a column vector $v\neq0$ with
@@ -220,19 +222,31 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \end{theorem}
 
 \begin{proof}
-    This is the Perron--Frobenius theorem for nonnegative matrices. For
-    $\varepsilon>0$ the matrix $N_a+\varepsilon J$, with $J$ the all-ones
-    matrix, has positive entries, so it has a positive eigenvector
-    $v_\varepsilon$ of norm one for the eigenvalue
-    $\rho(N_a+\varepsilon J)$. A limit point $v$ of $v_\varepsilon$ as
-    $\varepsilon\to0$ is nonnegative of norm one, and continuity of the
-    spectral radius gives $N_av=\rho(N_a)v=d_av$.
+    \leanok
+    This is the Perron--Frobenius theorem for nonnegative matrices; we prove
+    it for any square matrix $M$ with nonnegative real entries, and write
+    $\rho=\rho(M)$. Choose a complex eigenvalue $\mu$ with $|\mu|=\rho$ and
+    an eigenvector $u\neq0$, and let $|u|$ be the vector of moduli
+    $|u_i|$. The triangle inequality gives $M|u|\geq\rho\,|u|$ entrywise.
+    Hence the set $K$ of vectors $x$ with nonnegative entries,
+    $\sum_ix_i=1$ and $Mx\geq\rho x$ entrywise is nonempty; it is compact
+    and convex. For $x\in K$ the vector $(M+1)x$ is nonnegative with
+    positive entry sum, and the map
+    $x\mapsto(M+1)x/\sum_i((M+1)x)_i$ sends $K$ into itself, because
+    $M(M+1)x-\rho(M+1)x=(M+1)(Mx-\rho x)$ and $M+1$ has nonnegative
+    entries. The map is continuous on $K$. By
+    Brouwer's fixed-point theorem it has a fixed point $x$, so $Mx=sx$ for
+    some real $s$, and $x\neq0$ is nonnegative. From $x\in K$ we get
+    $s\geq\rho$, and $s$ is an eigenvalue of $M$, so $s\leq\rho$. Thus
+    $Mx=\rho x$ and $\rho$ is an eigenvalue. Applied to $M=N_a$ this gives
+    the statement.
 \end{proof}
 
 \begin{lemma}[A positive left eigenvector gives the Perron--Frobenius dimension]%
     \label{lem:mposym_pf_dimension_positive}
-    \notready
-    % Planned Lean: MPOTensor.perronFrobeniusDim_eq_of_pos_left_eigenvector.
+    \lean{MPOTensor.perronFrobeniusDim_eq_of_pos_left_eigenvector,
+        MPOTensor.perronFrobeniusDim_eq_of_dimension_relation}
+    \leanok
     \uses{def:mposym_pf_dimension}
     Let $a$ be a label, $\lambda\in\R$, and let $(\delta_b)_{b\in I}$ be real
     numbers with $\delta_b>0$ for all $b$ and
@@ -250,15 +264,19 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:mposym_pf_eigenvector}
+    \leanok
     Write $\delta$ for the row vector with entries $\delta_b$, so that
-    $\delta N_a=\lambda\delta$. By
-    Theorem~\ref{thm:mposym_pf_eigenvector} there is a column vector
-    $v\neq0$ with nonnegative entries and $N_av=d_av$. Then
-    $\lambda\,\delta v=\delta N_av=d_a\,\delta v$, and $\delta v>0$ because
-    every $\delta_b$ is positive and $v$ is nonnegative and nonzero. Hence
-    $\lambda=d_a$. The second statement is the first with
-    $\lambda=\delta_a$.
+    $\delta N_a=\lambda\delta$. Since $\delta\neq0$, the matrix
+    $\lambda-N_a$ has a nonzero left null vector, so its determinant
+    vanishes and $\lambda$ is an eigenvalue of $N_a$. Let $\mu$ be any
+    complex eigenvalue of $N_a$ with eigenvector $v\neq0$, and let $|v|$ be
+    the vector of moduli $|v_b|$. The triangle inequality gives
+    $|\mu|\,|v|\leq N_a|v|$ entrywise, and pairing with $\delta$ gives
+    $|\mu|\,\delta|v|\leq\delta N_a|v|=\lambda\,\delta|v|$. Here
+    $\delta|v|>0$ because every $\delta_b$ is positive and $v\neq0$, so
+    $|\mu|\leq\lambda$. Thus $\lambda$ is an eigenvalue of largest modulus,
+    and it is nonnegative, so $\lambda=\rho(N_a)=d_a$. The second statement
+    is the first with $\lambda=\delta_a$.
 \end{proof}
 
 For matrix product operator representations of a weak Hopf algebra whose
@@ -302,8 +320,14 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
 
 \begin{example}[Fibonacci fusion rule and the golden ratio]%
     \label{ex:mposym_fibonacci_dimension}
-    \notready
-    % Planned Lean: FibonacciCompression.perronFrobeniusDim_fibFusion_tau.
+    \lean{FibonacciCompression.fusionMatrix_fibNim_tau,
+        FibonacciCompression.charpoly_fusionMatrix_fibNim_tau,
+        FibonacciCompression.spectrum_fusionMatrix_fibNim_tau,
+        FibonacciCompression.fibNim_dimension_relation,
+        FibonacciCompression.perronFrobeniusDim_fibNim_tau,
+        FibonacciCompression.perronFrobeniusDim_fibNim_one,
+        FibonacciCompression.not_isInvertibleLabel_fibNim_tau}
+    \leanok
     \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
         def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
         def:asymex_fib_fsymbols}
