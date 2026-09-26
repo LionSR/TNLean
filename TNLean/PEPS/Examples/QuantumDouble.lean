@@ -384,6 +384,11 @@ sides. Around one site the two paths are `π(l) π(b)` and `π(t) π(r)`, so the
 around a site is `π(t) π(r) π(b)⁻¹ π(l)⁻¹`, with `π` on the top and right legs and `π⁻¹` on
 the down and left legs.
 
+arXiv:1001.3807 does not treat the primal tensor; its string deformation,
+`Papers/1001.3807/paper_v3.tex` lines 1624–1648, concerns strings of `U_g` on the `G`-injective
+(dual) tensor, and the review's bimodule remark (line 2467) assigns the group-labelled string
+operators to the dual tensor and the representation-labelled ones to the primal tensor.
+
 The statement holds on every torus of width and height at least two. On a torus of width or
 height two the left and right (or down and top) legs of a site are one edge of the lattice
 graph, so the source's network, with four distinct bonds at each site, is the case of width and

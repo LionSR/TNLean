@@ -23,9 +23,15 @@ If on the support of `a` the string can be moved across one site,
 `X t * X r = X l * X b` whenever `a t r b l s ≠ 0`, then on every nonvanishing term of the
 contraction the two strings agree for every rectangle, and so the contracted network with the
 string inserted does not depend on which of the two paths the string takes. This is the
-pulling-through property of a virtual symmetry of a PEPS, arXiv:2011.12127, Section
-"MPO-injectivity" and Appendix A, "The Toric Code and quantum double models",
-`Papers/2011.12127/TN-Review-main.tex` line 2465.
+pulling-through property of a matrix product operator symmetry of a PEPS, arXiv:2011.12127,
+Section "MPO and PEPO", `Papers/2011.12127/TN-Review-main.tex` lines 405–408, used for the
+primal quantum-double tensor in Appendix A, "The Toric Code and quantum double models",
+line 2465.
+
+The strings here are diagonal in the bond basis. The deformation of strings of `U_g` across a
+`G`-injective PEPS, arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 1624–1648
+(equation `eq:2d:move-strings`) and lines 2199–2211, acts on the bonds by the regular
+representation and is a different statement, not formalized here.
 
 The combinatorial core is a statement about a grid of monoid elements: if every elementary
 square commutes, then the two boundary paths of a rectangle have the same product
