@@ -6815,9 +6815,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_{\mathcal V} & =(x\otimes y)\widetilde u,                 &
         v_{\mathcal V} & =\widetilde v(y^\dagger\otimes x^\dagger).
     \end{align}
-    These are the forward local relations in
-    \cite[Equations~(SFuu) and (SFvv)]{Cirac2017MPU}. They do not assert a
-    converse for the original periodic operators at odd length.
+    The first equality is the forward $u$ relation of
+    \cite[Equation~(SFuu)]{Cirac2017MPU}. The source's
+    \cite[Equation~(SFvv)]{Cirac2017MPU} displays two relations between the
+    open half-factors involving $z$; the second equality follows by
+    contracting those half-factors. No converse for the original periodic
+    operators at odd length is asserted.
     % Source: paper_v2.tex 624--648; II_RelationStandard1/2.png.
 \end{theorem}
 
@@ -6825,11 +6828,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpu_source_factors_virtual_unitary_gauge}
     Use the four selected-factor identities of
     Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}. Their
-    source-rank changes are $x=W_2^\dagger$ and $y=W_1^\dagger$. In the
-    contraction $u=Y_2\mathbin{-}Y_1$, the two virtual matrices cancel as
-    $z^\dagger z=I_D$, leaving $(x\otimes y)\widetilde u$. In the contraction
-    $v=X_1\mathbin{-}X_2$, the first-cut transpose and second-cut left action
-    likewise contract to $z^\dagger z=I_D$, leaving
+    source-rank changes are $x=W_2^\dagger$ and $y=W_1^\dagger$. The
+    two source-gate contractions have entries
+    \begin{align}
+        u_{(\ell,r),(p,q)}
+         & =\sum_\beta (Y_2)_{\ell,(p,\beta)}(Y_1)_{r,(\beta,q)},    \\
+        v_{(p,q),(r,\ell)}
+         & =\sum_\alpha (X_1)_{(p,\alpha),r}(X_2)_{(\alpha,q),\ell}.
+    \end{align}
+    In the first contraction, the two virtual matrices cancel as
+    $z^\dagger z=I_D$, leaving $(x\otimes y)\widetilde u$. In the second,
+    the first-cut transpose and second-cut left action likewise contract
+    to $z^\dagger z=I_D$, leaving
     $\widetilde v(y^\dagger\otimes x^\dagger)$.
 \end{proof}
 

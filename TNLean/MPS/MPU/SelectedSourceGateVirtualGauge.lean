@@ -8,9 +8,9 @@ import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 /-!
 # Selected source gates under a virtual unitary gauge
 
-The four selected source-factor identities imply the two literal source-gate
-relations. The first gate has output rank coordinates in the order
-$\ell\times r$; the second gate has input rank coordinates in the order
+The four selected source-factor identities imply the source $u$ relation and
+a contracted source $v$ relation. The first gate has output rank coordinates
+in the order $\ell\times r$; the second gate has input rank coordinates in the order
 $r\times\ell$. The virtual unitary cancels at the contracted virtual leg.
 Writing $e_r:r[U]\simeq r[V]$ and $e_\ell:\ell[U]\simeq\ell[V]$ for the
 rank identifications, the four factor identities, with these identifications
@@ -284,7 +284,8 @@ private theorem supplied_source_factor_gate_relations
     T.X₁ T.Y₁ T.X₂ T.Y₂ W₁ W₂ hX₁ hY₁ hX₂ hY₂
 
 /-- For a supplied virtual unitary conjugation, the selected literal source
-gates satisfy the two standard-form relations. If $e_r:r[U]\simeq r[V]$
+gates satisfy the $u$ relation and the contraction of the two $v$ half-factor
+relations. If $e_r:r[U]\simeq r[V]$
 and $e_\ell:\ell[U]\simeq\ell[V]$ identify the two source ranks, then
 \[
   u_V=(x\otimes y)\,\operatorname{reindex}_{e_\ell\times e_r}(u_U),\qquad
@@ -294,9 +295,10 @@ and $e_\ell:\ell[U]\simeq\ell[V]$ identify the two source ranks, then
 Here $x$ acts on the left rank and $y$ on the right rank; the proof takes
 $x=W_2^\dagger$ and $y=W_1^\dagger$ from the selected-factor comparison.
 
-This proves the forward local gate equations in CPSV17, arXiv:1703.09188,
-Theorem `FundamentalMPU`, equations `SFuu` and `SFvv` (lines 624–648), under
-the supplied virtual unitary gauge. It asserts neither the converse nor
+The first equation is CPSV17, arXiv:1703.09188, Theorem `FundamentalMPU`,
+equation `SFuu` (lines 624–648). The source's `SFvv` diagrams state the two
+open half-factor relations involving $z$; the second displayed equation here
+follows by contracting those relations. It asserts neither the converse nor
 equality of the original odd-length periodic families. -/
 theorem IsMPUCanonicalFormII.exists_selected_source_gate_unitary_gauges
     {d D : ℕ} {U : MPOTensor d D}
