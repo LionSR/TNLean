@@ -1987,7 +1987,7 @@ ambient length and interval endpoints. A `change` then exposes ordinary natural
 number arguments, and `rw` transports the scalar expression without transporting
 the underlying Hilbert space explicitly.
 
-Example: `GroupedC3.lean`, in
+Example: `GroupedProjectorEstimate.lean`, in
 `grouped_martingaleDifference_norm_le_of_projector_defect`, uses
 `F N a b : ℝ` for the norm of a suffix projection composed with a difference of
 prefix projections. This permits the active-volume identity and spectator bound
