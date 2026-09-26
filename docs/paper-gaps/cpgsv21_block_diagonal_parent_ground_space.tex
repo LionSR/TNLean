@@ -214,11 +214,10 @@ range-one Hamiltonian is zero. For $N\geq2$ its kernel has dimension $2^N$,
 whereas the two block vectors span a space of dimension two. The
 range-two parent Hamiltonian is the one covered by the source theorem.
 
-The longer-range theorem proved below does not yet establish this
-$S+1$ interaction bound at the minimal ring length $N=S+1$.
-The remaining assertion is periodic closure from the simultaneous span
-(\ref{eq:block_parent_simultaneous_length}), without substituting the
-larger separation bound derived from individual block injectivity.
+The longer-range theorem below uses individual block injectivity.
+The simultaneous-span argument in the final section establishes the
+$S+1$ interaction bound, including the minimal ring $N=S+1$, without
+substituting the larger separation bound.
 
 \section{Normalization scope}
 
@@ -980,6 +979,53 @@ degenerate parent-Hamiltonian ground-space equality
     \{V^{(N)}(A_j):1\leq j\leq b\}.
   \label{eq:cpgsv21_block_diagonal_parent_ground_space_final_kernel}
 \end{align}
+
+\section{Closure at the simultaneous injectivity length}
+
+Assume positive physical and bond dimensions, nonzero block weights, and
+(\ref{eq:block_parent_simultaneous_length}) at a positive length $S$.
+For every $S+1\leq L\leq N$, the strengthened conclusion is
+\begin{align}
+  \mathcal K_{N,L}(\widehat A)
+  &=\ker H_L^{(N)}(\widehat A)
+    =\operatorname{span}\{V^{(N)}(A_j):1\leq j\leq b\}.
+  \label{eq:block_parent_simultaneous_kernel}
+\end{align}
+There is no normalization or separate inequivalence hypothesis on the
+original blocks. This includes $N=L=S+1$.
+
+To prove (\ref{eq:block_parent_simultaneous_kernel}), first normalize each
+block independently. A nonzero rescaling by $\zeta_j$ multiplies its
+length-$S$ words by $\zeta_j^S$, and a virtual gauge conjugates every
+word by the same invertible matrix. These operations preserve the full
+simultaneous span at exactly $S$, all component ground spaces, and the
+span of the periodic component vectors. In trace-preserving form, the
+simultaneous span propagates to every length at least $S$.
+
+The open-chain intersection property then supplies boundary matrices
+$X_i^j$ at every cyclic cut $i\in\mathbb Z/N\mathbb Z$ for a periodic
+ground vector. Comparing adjacent cuts against all complementary words
+of length $N-1$ gives, for every physical letter $a$,
+\begin{align}
+  X_i^j A_j^a&=A_j^a X_{i-1}^j.
+  \label{eq:block_parent_cyclic_intertwiner}
+\end{align}
+Iterating (\ref{eq:block_parent_cyclic_intertwiner}) once around the ring
+shows that $X_i^j$ commutes with every length-$N$ word. The word span of
+each block is the full matrix algebra, so $X_i^j$ is scalar. The boundary
+representation at cut zero is therefore a linear combination of the
+periodic component vectors. The reverse containment follows because
+each component vector satisfies every local parent constraint.
+
+The conclusion also holds for positive parent terms that are not
+projections. If $K_i\geq0$ has the same kernel as the canonical term at
+site $i$, then
+\begin{align}
+  \ker\Bigl(\sum_i K_i\Bigr)
+  &=\bigcap_i\ker K_i=\ker H_L^{(N)}(\widehat A).
+\end{align}
+The formal statements are in
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpaceAtInjectivityLength.lean}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
