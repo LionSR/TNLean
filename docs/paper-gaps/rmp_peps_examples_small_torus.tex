@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Two-Dimensional PEPS Examples: Tori of Width Two}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the sources print}
+Appendix~A of \cite{Cirac2021Matrix}, under ``Two dimensions: PEPS'', gives
+single-site tensors with four virtual indices ordered top, right, down and
+left, to be placed at every site of a square lattice.\footnote{Source
+    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, line 2415.}
+The cluster state is written with the tensor
+$A=\ket{0}(00{+}{+}|+\ket{1}(11{-}{-}|$ on the square lattice, with no
+restriction on its size.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2424--2429.}
+The CZX state of \cite{ChenLiuWen2011CZX} is placed on a torus of
+$2N\times 2M$ qubits, blocked into $N\times M$ sites of four qubits, and is
+the product over plaquettes of the states $\ket{0000}+\ket{1111}$; its tensor
+is $\sum_{i,j,k,l}\ket{ijkl}((i,j),(j,k),(k,l),(l,i)|$ of bond dimension
+four.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2502--2514;
+    \path{References/1106.4752/source/dDSPTmodel.tex}, lines 317--321.}
+The AKLT state places a singlet on every link of the square lattice and
+projects the four spin-$\tfrac12$ at each site onto their symmetric
+subspace, and the nearest-neighbour RVB state is the superposition of all
+coverings of the lattice by nearest-neighbour singlets; the review writes
+both as PEPS with tensors of the form
+$A=P(\mathbb 1\otimes\mathbb 1\otimes Y\otimes Y)$, again with no
+restriction on the lattice size.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2432--2448.}
+All four constructions are local, so they apply for every $N,M\ge 1$ once the
+lattice is read as a multigraph: a site on a torus of width two has two
+distinct horizontal bonds to its neighbour, one on each side.
+
+\section{The restriction}
+The formal PEPS lives on a finite simple graph, and the torus is the simple
+graph on $\mathbb Z_{w}\times\mathbb Z_{h}$ with cyclic nearest-neighbour
+edges. For $w=2$ the right and the left neighbour of a site coincide, and so
+do the two edges joining them: the four legs of a site are not four distinct
+bonds. The contraction of the four tensors on this graph is therefore a
+different network from the source's at $w=2$ or $h=2$. For the RVB tensor
+the difference is visible on the coefficients: at $w=2$ the right and left
+legs of a site carry the same bond label, so a horizontal dimer would occupy
+two legs of the same site and the tensor vanishes on it. On a torus of
+$2\times 3$ sites the formal network then has only vertical dimers, which
+cannot cover a cycle of three sites, and its state is zero, while the
+source's state, with its two horizontal bonds between the two sites of a
+row, is a nonzero superposition of horizontal coverings. For
+$w,h\ge 3$ the right and up edges of the sites are pairwise distinct and
+exhaust the edge set, and the formal statements hold there:
+\begin{enumerate}
+    \item the cluster tensor on a torus of $N=wh$ sites has coefficient
+    $2^{-N}(-1)^{\sum_{\langle u,v\rangle}\sigma_u\sigma_v}$, the sum running
+    over nearest-neighbour bonds;
+    \item the CZX tensor has coefficient $1$ at a configuration in which the
+    four qubits around every plaquette agree, and $0$ otherwise;
+    \item the AKLT tensor gives the symmetric projector at every site
+    applied to a singlet on every edge;
+    \item the RVB tensor gives the sum over nearest-neighbour dimer
+    coverings of the torus of the product of the singlets on the covered
+    edges.
+\end{enumerate}
+The GHZ example is not restricted: its coefficient depends only on whether
+the configuration is constant, and it is proved on every torus with
+$w,h\ge 2$.\footnote{Results: \leanid{TNLean.PEPS.stateCoeff_clusterPEPS},
+    \leanid{TNLean.PEPS.stateCoeff_czxPEPS},
+    \leanid{TNLean.PEPS.stateCoeff_akltPEPS},
+    \leanid{TNLean.PEPS.stateCoeff_rvbPEPS},
+    \leanid{TNLean.PEPS.stateCoeff_ghzPEPS}.}
+
+\section{Elimination plan}
+Formalize PEPS on finite multigraphs, where a torus of width two has two
+edges between neighbouring sites, and restate the four examples there. The
+proofs carry over unchanged once the edges of the torus are parametrized by
+the right and up edges of the sites.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

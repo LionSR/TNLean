@@ -7,6 +7,7 @@ import TNLean.MPS.Examples.Ising.IsingLetterSectorOne
 import TNLean.MPS.Examples.Ising.IsingLetterSectorPsi
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaAbelian
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaSigma
+import TNLean.MPS.MPDO.OperatorFromWordTrace
 
 /-!
 # Weighted Ising twist: the hidden bond objects
@@ -136,40 +137,24 @@ theorem isingBondObject_conjMatrix (a : Fin 100) :
 Theorem 7.7(i)–(iii); data file §1.2–1.3): two weighted copies of the normal tensor `√2 A_σ`,
 with the weights `5` and `3`, and sixteen zero slots. -/
 noncomputable def isingCompression :
-    MultiBlockCompression isingBondObject isingSlots isingTargets where
-  z := 16
-  ord := isingOrd
-  gauge := isingGauge
-  triangular a x y h := by
-    have h' : isingOrd y.1 < isingOrd x.1 := h
-    have hxy : x.1 ≠ y.1 := fun e => by rw [e] at h'; exact lt_irrefl _ h'
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hxy,
-      map_zero]
-  matched a s := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [isingBlockZ, isingTargets, isingSigma, MPOTensor.toMPSTensor,
-      zsqrt2ToComplex_isingWeightsZ]
-  unmatched a t := by
-    rw [isingBondObject_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [isingBlockZ]
+    MultiBlockCompression isingBondObject isingSlots isingTargets :=
+  MultiBlockCompression.ofRingBlockDiagonal zsqrt2ToComplex isingOrd isingTau isingGauge
+    (fun a => isingBlockZ (isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
+      (Fin.modNat (m := 10) (n := 10) a)))
+    isingBondObject_conjMatrix
+    (fun s a => isingWeightsZ s • isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
+      (Fin.modNat (m := 10) (n := 10) a))
+    (fun s a => by
+      rw [complexOfRing_smul, zsqrt2ToComplex_isingWeightsZ]
+      rfl)
+    (fun _ _ => rfl) fun _ _ => rfl
 
 /-- **The remainder of the Ising bond-object compression vanishes** (P5 note, Theorem 7.7(vi);
 data file §1.3, check T2-G6): the conjugated letters are block diagonal, so the extension
 splits. -/
 theorem isingBondObject_remainder : isingCompression.remainder = 0 := by
-  funext a
-  have h : conjMatrix isingGauge (isingCompression.remainder a) =
-      conjMatrix isingGauge (isingBondObject a) -
-        Matrix.blockDiagonal' (conjMatrix isingGauge (isingBondObject a)).blockDiag' :=
-    isingCompression.conjMatrix_remainder a
-  refine conjMatrix_injective isingGauge ?_
-  rw [h, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, isingBondObject_conjMatrix,
-    complexOfZsqrt2, complexOfRing,
-    Matrix.blockDiagonal'_map _ _ (map_zero _), Matrix.blockDiag'_blockDiagonal']
+  unfold isingCompression
+  exact funext MultiBlockCompression.remainder_ofRingBlockDiagonal
 
 /-! ### Consequences -/
 
@@ -203,13 +188,11 @@ theorem isingTwist_mpo (L : ℕ) (hL : 0 < L) :
       ((5 : ℂ) ^ L + 3 ^ L) • MPOTensor.mpo isingSigma L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  have hw : (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) ≠ [] := by
-    simp only [ne_eq, List.ofFn_eq_nil_iff]
-    omega
-  have h := isingBondObject_trace_evalWord (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) hw
-  unfold isingBondObject at h
-  rw [MPOTensor.evalWord_toMPSTensor_pairConfig, MPOTensor.evalWord_toMPSTensor_pairConfig] at h
-  simpa [MPOTensor.mpoMatrixEntry] using h
+  have h := isingBondObject_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)
+  rw [List.length_ofFn] at h
+  rw [Matrix.smul_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
+    smul_eq_mul]
+  exact h
 
 /-- The Ising bond-object compression has sixteen zero slots. -/
 theorem isingBondObject_z_eq : isingCompression.z = 16 := rfl

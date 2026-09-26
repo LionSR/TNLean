@@ -96,16 +96,45 @@ theorem IsRepresentation.isNormalRepresentation {F : GroupFamily G d}
 
 variable {F : GroupFamily G d}
 
+/-- The permutation matrix identifying the spaces `Fin (f a)` and `Fin (f b)` attached to two
+equal indices `a = b` of a family of dimensions `f`, such as the bond spaces of the tensors
+indexed by `g * (h * k)` and `g * h * k`, or of two blocks at equal points of a set. -/
+noncomputable def castIndex {ι : Type*} (f : ι → ℕ) {a b : ι} (e : a = b) :
+    Matrix (Fin (f b)) (Fin (f a)) ℂ :=
+  (finCongr (congrArg f e.symm)).toPEquiv.toMatrix
+
+/-- Identifying a space with itself is the identity. -/
+@[simp] theorem castIndex_rfl {ι : Type*} (f : ι → ℕ) (a : ι) :
+    castIndex f (rfl : a = a) = 1 := by
+  simp [castIndex]
+
+/-- Identifications compose, against a trailing factor. -/
+@[simp] theorem castIndex_mul_castIndex_assoc {ι : Type*} {f : ι → ℕ} {a b c : ι} {n : ℕ}
+    (e₁ : a = b) (e₂ : b = c) (X : Matrix (Fin (f a)) (Fin n) ℂ) :
+    castIndex f e₂ * (castIndex f e₁ * X) = castIndex f (e₁.trans e₂) * X := by
+  subst e₁ e₂
+  simp
+
+/-- A reduction onto the member `a` of a family of tensors is a reduction onto the member
+`b = a`, after identifying the bond spaces. -/
+theorem isReduction_castIndex {ι : Type*} {f : ι → ℕ} {d' n : ℕ}
+    {A : (i : ι) → MPSTensor d' (f i)} {B : MPSTensor d' n} {a b : ι}
+    {V : Matrix (Fin (f a)) (Fin n) ℂ} {W : Matrix (Fin n) (Fin (f a)) ℂ}
+    (h : MPSTensor.IsReduction B (A a) V W) (e : a = b) :
+    MPSTensor.IsReduction B (A b) (castIndex f e * V) (W * castIndex f e.symm) := by
+  subst e
+  simpa using h
+
 /-- The permutation matrix identifying the bond spaces of the tensors indexed by
 two equal group elements, such as `g * (h * k)` and `g * h * k`. -/
 noncomputable def castMat (F : GroupFamily G d) {a b : G} (e : a = b) :
     Matrix (Fin (F.bondDim b)) (Fin (F.bondDim a)) ℂ :=
-  (finCongr (congrArg F.bondDim e.symm)).toPEquiv.toMatrix
+  castIndex F.bondDim e
 
 omit [Group G] in
 /-- Identifying a bond space with itself is the identity. -/
-@[simp] theorem castMat_rfl (a : G) : F.castMat (rfl : a = a) = 1 := by
-  simp [castMat]
+@[simp] theorem castMat_rfl (a : G) : F.castMat (rfl : a = a) = 1 :=
+  castIndex_rfl _ a
 
 omit [Group G] in
 /-- Bond identifications compose. -/
@@ -118,8 +147,8 @@ omit [Group G] in
 /-- Bond identifications compose, against a trailing factor. -/
 @[simp] theorem castMat_mul_castMat_assoc {a b c : G} {n : ℕ} (e₁ : a = b) (e₂ : b = c)
     (X : Matrix (Fin (F.bondDim a)) (Fin n) ℂ) :
-    F.castMat e₂ * (F.castMat e₁ * X) = F.castMat (e₁.trans e₂) * X := by
-  rw [← Matrix.mul_assoc, castMat_mul_castMat]
+    F.castMat e₂ * (F.castMat e₁ * X) = F.castMat (e₁.trans e₂) * X :=
+  castIndex_mul_castIndex_assoc e₁ e₂ X
 
 omit [Group G] in
 /-- A reduction onto the tensor of `a` is a reduction onto the tensor of any
@@ -128,9 +157,8 @@ theorem isReduction_castMat {D : ℕ} {B : MPSTensor (d * d) D} {a b : G}
     {V : Matrix (Fin (F.bondDim a)) (Fin D) ℂ} {W : Matrix (Fin D) (Fin (F.bondDim a)) ℂ}
     (h : MPSTensor.IsReduction B (F.tensor a).toMPSTensor V W) (e : a = b) :
     MPSTensor.IsReduction B (F.tensor b).toMPSTensor (F.castMat e * V)
-      (W * F.castMat e.symm) := by
-  subst e
-  simpa using h
+      (W * F.castMat e.symm) :=
+  isReduction_castIndex (A := fun g ↦ (F.tensor g).toMPSTensor) h e
 
 /-- A choice of fusion tensors: for every pair `g, h`, a reduction `(V, W)` of the
 stacked product of the tensors of `g` and `h` onto the tensor of `g * h`.
