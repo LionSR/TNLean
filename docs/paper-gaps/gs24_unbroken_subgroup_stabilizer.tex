@@ -20,7 +20,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{false-source}{resolved}
 
 Let a finite group $G$ act by matrix product unitaries with three-cocycle
 $\omega$ on the set $\mathcal I$ of blocks $x$ of a symmetry-broken ground space,
@@ -53,7 +53,12 @@ For a transitive action $\operatorname{Stab}(g\cdot x_0)=g\operatorname{Stab}(x_
 so $K$ is the normal core of $\operatorname{Stab}(x_0)$, the largest normal
 subgroup of $G$ contained in it. The two definitions agree exactly when
 $\operatorname{Stab}(x_0)$ is normal in $G$. This holds for every abelian $G$,
-and therefore for every example printed in either source.
+and therefore for the cyclic examples worked out in the first source. It
+fails for members of the general construction of the second source, which
+builds a symmetry-broken state for every subgroup $H\leq G$ trivializing
+$\omega$~\cite{GarreRubio2023MPOSym}.\footnote{Source traceability:
+\path{Papers/2203.12563/REsubmission.tex}, lines 1997--2005 and
+2098--2100.}
 
 \section{Which definition the classification needs}
 
@@ -78,9 +83,16 @@ The classification needs the stabilizer, for three reasons.
           $y=k_y\cdot x_0$ and the unique factorization $gk_x=k_yh$ with
           $h\in H$. This factorization is the coset decomposition of $G$ by
           $\operatorname{Stab}(x_0)$; with $K$ in its place the
-          representatives do not correspond to blocks. The pairs $(H,\psi)$,
-          with $H$ determined up to conjugacy, are the data classifying the
-          indecomposable module categories of $\mathrm{Vec}_G^\omega$.
+          representatives do not correspond to blocks. The restriction of
+          $L^{x_0}$ to $H$ is a trivializing two-cochain of $\omega|_H$; only
+          after a choice of trivializing gauge $\beta$ is
+          $\psi_{x_0}=L^{x_0}/\beta$ a two-cocycle. For fixed $(G,\omega,H)$
+          the gauge classes of solutions therefore form a torsor for
+          $\mathcal H^2(H,U(1))$, as stated at line 761 of the second
+          source, and the classifying data are the stabilizer $H$ up to
+          conjugacy together with a point of that torsor, the data
+          classifying the indecomposable module categories of
+          $\mathrm{Vec}_G^\omega$.
 \end{enumerate}
 
 The domain-wall discussion of the first source also uses the stabilizer
@@ -116,11 +128,12 @@ reading.\footnote{Formal declaration:
 in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks}.} It applies in
 particular to the kernel, which fixes every block.
 
-\textbf{Verdict: resolved local correction.} In the classification of
-arXiv:2405.00439, the unbroken subgroup $H$ is read as the stabilizer of one
-block, as in arXiv:2203.12563; the printed definition as the kernel of the
-action agrees with it whenever the stabilizer is normal, in particular for
-every abelian group.
+\textbf{Verdict: false as printed, resolved.} With the unbroken subgroup
+defined as the kernel of the action, the printed degeneracy $|G/H|$ fails for
+$S_3$ acting transitively on three blocks. The correct statement, available in
+arXiv:2203.12563, reads $H$ as the stabilizer of one block; the kernel agrees
+with it whenever the stabilizer is normal, in particular for every abelian
+group, so the cyclic examples of arXiv:2405.00439 are unaffected.
 
 \bibliographystyle{alpha}
 \bibliography{references}
