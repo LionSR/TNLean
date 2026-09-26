@@ -11972,6 +11972,81 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     identity to each MPO coefficient.
 \end{proof}
 
+\begin{definition}[Three-block coordinates on an anchored finite chain]
+    \label{def:mpu_anchored_three_block_coordinates}
+    \lean{MPOTensor.threeBlockOutputEquiv,
+        MPOTensor.threeBlockOutputEquiv_apply,
+        MPOTensor.threeBlockInputEquiv,
+        MPOTensor.threeBlockInputEquiv_apply,
+        MPOTensor.threeBlockOutputConfigEquiv,
+        MPOTensor.threeBlockOutputConfigEquiv_apply,
+        MPOTensor.threeBlockInputConfigEquiv,
+        MPOTensor.threeBlockInputConfigEquiv_apply,
+        MPOTensor.threeBlockFiniteChainMatrix}
+    \leanok
+    \uses{def:mpu_anchored_residual_configurations,
+        def:mpu_finite_chain_realization,
+        def:mpu_two_site_open_three_block}
+    Fix $k,p,s\geq0$ and an integer anchor $a$. On the interval of length
+    $N=p+3(2k)+s$, distinguish three consecutive complete blocks of
+    length $2k$ between an arbitrary prefix and suffix. Let $H=d^k$.
+    On the output side, the four neighboring half-blocks form a factor
+    $X$ of dimension $H^4$; the prefix, suffix, and two exposed outer
+    half-blocks form the exterior factor $E_{\mathrm{out}}$. On the input
+    side, the central complete block forms a factor $J$ of dimension
+    $H^2$; the prefix, suffix, and the two outer complete blocks form
+    $E_{\mathrm{in}}$. Ordered concatenation gives bijections from
+    $E_{\mathrm{out}}\times X$ and $E_{\mathrm{in}}\times J$ to the
+    respective configuration bases of the same finite interval. Write
+    $M_{a;p,k,s}$ for the finite-chain MPO matrix in these two bases.
+\end{definition}
+
+\begin{theorem}[Anchored three-block operator identity]
+    \label{thm:mpu_anchored_three_block_operator}
+    \lean{MPOTensor.threeBlockFiniteChainMatrix_slice,
+        Matrix.intertwiner_of_slices,
+        MPOTensor.threeBlockFiniteChainMatrix_intertwiner,
+        MPOTensor.threeBlockFiniteChainMatrix_conjugation}
+    \leanok
+    \uses{def:mpu_anchored_three_block_coordinates,
+        thm:mpu_original_site_three_block_window_entry,
+        lem:mpu_two_site_open_three_block_locality,
+        thm:mpu_anchored_residual_mpo_entry,
+        def:mpu_finite_chain_conjugation}
+    Suppose the two-site blocking of $U$ at length $k$ is supplied with
+    standard-form factors $u,v$. For every observable $A$ on the central
+    input block, let $B(A)$ be the corresponding observable on the two
+    neighboring output links. Then
+    \begin{align}
+        M_{a;p,k,s}(I_{E_{\mathrm{in}}}\otimes A)
+         & =(I_{E_{\mathrm{out}}}\otimes B(A))M_{a;p,k,s}.
+    \end{align}
+    This identity holds for arbitrary original-site prefix and suffix
+    words; $U$ need not be an MPU. If $U$ is an MPU and $N>1$, then
+    \begin{align}
+        M_{a;p,k,s}(I_{E_{\mathrm{in}}}\otimes A)M_{a;p,k,s}^{\dagger}
+         & =I_{E_{\mathrm{out}}}\otimes B(A).
+    \end{align}
+    Thus the conjugated operator is the identity on every exterior
+    output coordinate. This statement assumes the displayed supplied
+    standard form and does not yet identify the right-hand side with
+    a site-indexed local inclusion or prove independence of the
+    enclosing interval.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_original_site_three_block_window_entry,
+        lem:mpu_two_site_open_three_block_locality,
+        def:mpu_anchored_three_block_coordinates,
+        def:mpu_finite_chain_conjugation}
+    Fixing all exterior input and output coordinates makes a slice of
+    $M_{a;p,k,s}$ equal to the original-site three-block window.
+    The open-word identity intertwines each slice with the same $B(A)$.
+    Summing over exterior coordinates gives the operator identity.
+    When $U$ is an MPU, the finite-chain matrix is unitary; multiplying
+    the identity on the right by its adjoint proves the second equation.
+\end{proof}
+
 \begin{definition}[Finite-chain term on a local observable]
     \label{def:mpu_finite_chain_local_observable}
     \lean{SpinChain.finiteChainLocalObservable,
