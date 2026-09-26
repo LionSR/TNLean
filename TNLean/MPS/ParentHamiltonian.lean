@@ -98,6 +98,7 @@ import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.NormalBlockC1Normalization
 import TNLean.MPS.ParentHamiltonian.NormalBlockPrimitiveGauges
 import TNLean.MPS.ParentHamiltonian.PGVWCCDEIdentities
+import TNLean.MPS.ParentHamiltonian.ParentInteractionComparison
 import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
