@@ -71,9 +71,9 @@ lines 824–845. -/
 theorem IsMPU.index_tensorProduct_identityMPUTensor
     {d D : ℕ} [NeZero d] [NeZero D] {U : MPOTensor d D}
     (hU : IsMPU U) (n : ℕ) [NeZero n] :
-    (IsMPU.tensorProduct hU (identityMPUTensor_isMPU n)).index = hU.index := by
+    (hU.tensorProduct (identityMPUTensor_isMPU n)).index = hU.index := by
   calc
-    (IsMPU.tensorProduct hU (identityMPUTensor_isMPU n)).index =
+    (hU.tensorProduct (identityMPUTensor_isMPU n)).index =
         hU.index + (identityMPUTensor_isMPU n).index :=
       hU.index_tensorProduct (identityMPUTensor_isMPU n)
     _ = hU.index + 0 := congrArg (hU.index + ·) (IsMPU.index_identityMPUTensor n)
