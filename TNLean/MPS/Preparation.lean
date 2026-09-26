@@ -13,8 +13,11 @@ import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.ControlledGateProducts
 import TNLean.MPS.Preparation.ControlledGates
+import TNLean.MPS.Preparation.CorrelatorFiniteSize
+import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.MPS.Preparation.GivensDecomposition
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.MatrixPolar
@@ -30,3 +33,4 @@ import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.SiteEmbedding
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TwoLevel
+import TNLean.MPS.Preparation.WindowCorrelator

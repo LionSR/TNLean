@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
 import Mathlib.Data.Matrix.Mul
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Tactic.FinCases

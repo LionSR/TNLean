@@ -25,6 +25,8 @@ import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupCocycleMPO
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.GroupRepresentation
+import TNLean.MPS.MPU.IdentityIndex
+import TNLean.MPS.MPU.Index
 import TNLean.MPS.MPU.InverseCompatibleComparisonUnitarity
 import TNLean.MPS.MPU.InverseCompatibleCutComparison
 import TNLean.MPS.MPU.InverseCompatibleFamilyProperties
@@ -46,12 +48,14 @@ import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
+import TNLean.MPS.MPU.RectangularSourceRanks
 import TNLean.MPS.MPU.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.ReducedRepresentative
 import TNLean.MPS.MPU.ReducedToHatTransport
 import TNLean.MPS.MPU.ReductionCommonBlocking
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
+import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleTensorEquivalence

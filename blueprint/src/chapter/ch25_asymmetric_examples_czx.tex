@@ -11,10 +11,7 @@ reduction~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix}; the
 symmetry-protected context is \cite[Section~III.B.1]{Cirac2021Matrix}. The
 decorated representative with additional Pauli $Z$ factors
 in~\cite[Section~III.D]{GarreRubioSchuch2024DomainWall} is a different
-tensor. This section treats the undecorated periodic operator on a ring of
-$N$ qubits, the tensor printed in the review and the reduction of its square
-to canonical form, the decorated representative and its associator sign, the
-asymmetric compression of the square, and a non-simple family built from it.
+tensor.
 
 \subsection{The bond-two tensor and the periodic operator}
 
@@ -247,8 +244,8 @@ therefore retain their positive-length or nonempty-word hypotheses.
 The review~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix} prints the
 CZX matrix product unitary through its two nonzero matrices and reduces its
 square to canonical form in two steps, following the construction of the
-canonical form in~\cite[Section~IV]{Cirac2021Matrix}. This subsection
-formalizes that passage in the review's own coordinates. Throughout, the
+canonical form in~\cite[Section~IV]{Cirac2021Matrix}. The presentation
+below uses the review's coordinates. Throughout, the
 first physical index is the output, and for a configuration
 $s\in\{0,1\}^N$ the exponent $q(s)$ is~(\ref{eq:asymex_czx_exponent}).
 
@@ -623,7 +620,7 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
         O_N(\widehat T)(s,t) & =\delta_{s,\bar t}(-1)^{q(s)+|s|}.
         \notag
     \end{align}
-    Thus $O_N(\widehat T)=Z^{\otimes N}O_N(A)$. Moreover $O_N(\widehat T)$ is unitary and
+    Thus $O_N(\widehat T)=Z^{\otimes N}O_N(A)$, $O_N(\widehat T)$ is unitary, and
     \begin{align}
         O_N(\widehat T)^2 & =\Id.
         \notag
@@ -920,13 +917,13 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \subsection{Asymmetric compression of the square}
 
-The physical square law supplies the periodic comparison for
-asymmetric compression: $B$ has the nonempty-word traces of the
-bond-one identity tensor with weight $-1$. This comparison lies
-beyond the unit-weight setting. The sitewise theory
-of~\cite[Appendix~A]{GarreRubio2023MPOSym} imposes a closedness
-requirement for arbitrary boundary conditions. The following example
-distinguishes a word-level compression from a sitewise intertwiner.
+By~\eqref{eq:asymex_czx_square_operator}, the periodic operator satisfies
+$O_N(B)=U_N^2=(-1)^N\Id$, and $\tr(B^w)=(-1)^{|w|}\tr(\delta^w)$ for all
+nonempty words $w$. This periodic comparison with the bond-one identity tensor with weight $-1$
+lies beyond the unit-weight setting. The sitewise theory
+of~\cite[Appendix~A]{GarreRubio2023MPOSym} imposes a closedness requirement for
+arbitrary boundary conditions. The following example distinguishes a
+word-level compression from a sitewise intertwiner.
 
 For a word $w=((i_1,j_1),\ldots,(i_{|w|},j_{|w|}))$,
 write $B^w=B^{i_1j_1}\cdots B^{i_{|w|}j_{|w|}}$, and use the
@@ -1116,14 +1113,11 @@ the identity matrix on the corresponding bond space.
 \subsection{A non-simple family with an oscillating coefficient}%
 \label{sec:asymex_czx_plus}
 
-The family of this subsection is a construction of this development built on
-the CZX operator; it has no literature source. Let $M$ be the bond-two tensor
-of Definition~\ref{def:asymex_czx_tensors}, with the first physical index
-denoting the output. For a bit configuration $t=(t_0,\ldots,t_{N-1})$, write
-$\bar t_n=1-t_n$ and $E(t)=\sum_{n=0}^{N-1}t_nt_{n+1}$, with cyclic
-subscripts, so that $E$ is the exponent~(\ref{eq:asymex_czx_exponent}) in
-the notation of this subsection. By Theorem~\ref{thm:asymex_czx_kernel},
-the periodic operator acts as
+Let $M$ be the bond-two tensor of Definition~\ref{def:asymex_czx_tensors},
+with the first physical index denoting the output. For a bit configuration
+$t=(t_0,\ldots,t_{N-1})$, write $\bar t_n=1-t_n$ and
+$E(t)=\sum_{n=0}^{N-1}t_nt_{n+1}$ (with cyclic subscripts).
+By Theorem~\ref{thm:asymex_czx_kernel}, the periodic operator acts as
 \begin{align}
     U_N\ket{t} & =(-1)^{E(t)}\ket{\bar t}.
     \label{eq:asymex_plus_basis}
