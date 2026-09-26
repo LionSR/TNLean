@@ -3793,12 +3793,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:mpu_cfii_blocking_reindexing, thm:mpu_full_support_blocking,
-        thm:mpu_normalized_flattening_blocking}
+        thm:mpu_normalized_flattening_blocking, lem:mpu_blocking,
+        thm:cpsv_physical_reindexing, thm:mpu_full_support_reindexing}
     Block each canonical tensor and relabel the blocked physical alphabet.
     Blocking leaves the retained bond dimensions unchanged, so their sum is
-    still the ambient bond dimension. The blocked transfer map is the $p$th
-    power of the original one; hence it fixes $\rho$. Physical relabeling
-    leaves this transfer map unchanged. Positive definiteness, diagonality,
+    still the ambient bond dimension. The transfer identities in
+    Definition~\ref{def:mpu_cfii_blocking_reindexing}, together with invariance
+    under physical relabeling, give
+    \begin{align}
+        \E_{\widetilde{\mathcal U^{[p]}}}(\rho)
+         & =\E_{\widetilde{\mathcal U}}^p(\rho)=\rho.
+    \end{align}
+    Positive definiteness, diagonality,
     and trace normalization of $\rho$ are unchanged, and blocking preserves
     the MPU property.
 \end{proof}
@@ -4909,7 +4915,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{thm:mpu_canonical_form_ii_positive_blocking,
-        thm:mpu_simple_source_v_isometry, thm:mpu_bounded_simple_blocking}
+        thm:mpu_simple_source_v_isometry, thm:mpu_bounded_simple_blocking,
+        thm:mpu_canonical_form_ii_positive_dimensions}
     The blocked tensor retains canonical form II with the same recorded
     matrix $\rho$. The source-$v$ contraction for a simple tensor therefore
     applies to its own source cuts and gives the isometry. A positive simple
