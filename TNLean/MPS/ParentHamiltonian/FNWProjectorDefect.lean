@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.TwoProjectionCompression
 import TNLean.MPS.ParentHamiltonian.FNWAggregateOrthogonality
-import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
+import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
@@ -165,31 +165,6 @@ private theorem euclideanSpace_threeBlock_ext
   rw [← (fnwThreeBlockConfigEquiv d r m ℓ).apply_symm_apply σ]
   obtain ⟨⟨μr, μm⟩, μℓ⟩ := (fnwThreeBlockConfigEquiv d r m ℓ).symm σ
   exact h μr μm μℓ
-
-private theorem reassocTailBoundaryMapES_apply_threeBlock
-    (A : MPSTensor d D) (r m ℓ : ℕ)
-    (y : BoundaryFamilySpace (D := D) (Cfg d r))
-    (μr : Cfg d r) (μm : Cfg d m) (μℓ : Cfg d ℓ) :
-    reassocTailBoundaryMapES A r m ℓ y
-        (Fin.append (Fin.append μr μm) μℓ) =
-      groundSpaceMap A (m + ℓ)
-        (boundaryFamilyEquiv (D := D) (Cfg d r) y μr)
-        (Fin.append μm μℓ) := by
-  change tailBoundaryMapES A r (m + ℓ) y
-      (((finCongr (Nat.add_assoc r m ℓ)).arrowCongr
-        (Equiv.refl (Fin d))) (Fin.append (Fin.append μr μm) μℓ)) = _
-  have hcfg :
-      ((finCongr (Nat.add_assoc r m ℓ)).arrowCongr
-        (Equiv.refl (Fin d))) (Fin.append (Fin.append μr μm) μℓ) =
-        Fin.append μr (Fin.append μm μℓ) := by
-    rw [Fin.append_assoc]
-    rfl
-  rw [hcfg]
-  change tailBoundaryMap A r (m + ℓ)
-      (boundaryFamilyEquiv (D := D) (Cfg d r) y)
-      (Fin.append μr (Fin.append μm μℓ)) = _
-  exact tailBoundaryMap_append A r (m + ℓ)
-    (boundaryFamilyEquiv (D := D) (Cfg d r) y) μr (Fin.append μm μℓ)
 
 /-- Global physical reversal carries the left FNW overlap range to the
 reassociated tail boundary range. -/

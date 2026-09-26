@@ -1978,6 +1978,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Preserving overlap bounds under finite orthogonal sums — locally factored
+- **Pattern:** expand the inner product over fixed spectator configurations,
+  apply the pointwise overlap bound, and finish with finite Cauchy–Schwarz.
+- **Occurrences:** the two nested restrictions to a middle interval in
+  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`.
+- **Status:** private lemmas express the finite orthogonal-sum estimate and
+  its transport along a configuration equivalence. The three boundary-range
+  cases use the same middle-interval theorem. The previously private
+  three-interval evaluation of the right boundary map is shared with
+  `FNWProjectorDefect.lean` through `SpectatorBoundaryCoordinates.lean`.
+
 ### Lower Gram bounds and off-diagonal pairings — locally factored
 - **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
   norm of the component norms, then apply a bilinear matrix estimate.

@@ -681,7 +681,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \end{definition}
 
 \begin{theorem}[Tail boundary map on a prefix--suffix pair]\label{thm:tail_boundary_map_append}
-    \lean{MPSTensor.tailBoundaryMap_append}
+    \lean{MPSTensor.tailBoundaryMap_append, MPSTensor.reassocTailBoundaryMapES_apply_threeBlock}
     \leanok
     \uses{def:tail_boundary_map, def:ground_space_map}
     For every prefix $u\colon\Fin K\to\Fin d$ and suffix $\tau\colon\Fin L\to\Fin d$,
@@ -689,6 +689,9 @@ linear maps on the same ambient space to compare their orthogonal projectors.
         \Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)
          & =\Gamma_L(Y_u)(\tau).
     \end{align}
+    Grouping three successive intervals of lengths $K,L,Q$ gives
+    $\Gamma^{\mathrm{tail}}_{K,L+Q}(Y)(u,w,v)=\Gamma_{L+Q}(Y_u)(w,v)$
+    in the common physical coordinates.
 \end{theorem}
 
 \begin{proof}
@@ -4736,6 +4739,100 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
     Here $\lVert X_U X_V-PQ\rVert\leq aq+a$ follows by expanding
     $(X_U-P)X_V+P(X_V-Q)$, and $a\leq aq$ since $q\geq1$.
+\end{proof}
+
+\section{Overlap bounds with spectator sites}
+
+\begin{theorem}[Overlap from restrictions to a common interval]
+    \label{thm:ph_middle_interval_overlap}
+    \lean{MPSTensor.norm_inner_le_of_middle_groundSpaceES}
+    \leanok
+    Let $A,B$ be tensors with the same physical dimension and arbitrary bond
+    dimensions. Suppose $\varepsilon\geq0$ and
+    $|\langle a,b\rangle|\leq\varepsilon\lVert a\rVert\lVert b\rVert$
+    for every $a\in G_L(A)$ and $b\in G_L(B)$.
+    Let $x,y$ be vectors on three successive intervals of lengths $K,L,Q$.
+    For each prefix configuration $u$ and suffix configuration $v$, define
+    $x_{u,v}(w)=x(u,w,v)$ and $y_{u,v}(w)=y(u,w,v)$.
+    If $x_{u,v}\in G_L(A)$ and $y_{u,v}\in G_L(B)$ for all $u,v$, then
+    \begin{align}
+        |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
+    \end{align}
+    No positivity assumption on $K,L,Q$ is required.
+    This is the finite-sum estimate used to extend the overlap bounds in
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The configuration decomposition preserves the inner product and norm.
+    The triangle inequality and Cauchy--Schwarz give
+    \begin{align}
+        |\langle x,y\rangle|
+         & \leq\sum_{u,v}|\langle x_{u,v},y_{u,v}\rangle|                    \\
+         & \leq\varepsilon\sum_{u,v}\lVert x_{u,v}\rVert\lVert y_{u,v}\rVert
+        \leq\varepsilon\lVert x\rVert\lVert y\rVert.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Overlap of extended boundary ranges]
+    \label{thm:ph_extended_boundary_overlap}
+    \lean{MPSTensor.norm_inner_leftBoundaryMapES_le}
+    \lean{MPSTensor.norm_inner_reassocTailBoundaryMapES_le}
+    \lean{MPSTensor.norm_inner_left_reassocTailBoundaryMapES_le}
+    \leanok
+    Assume the ground-space overlap bound of
+    Theorem~\ref{thm:ph_middle_interval_overlap}.
+    Let $U_A$ be the range of $\Gamma^{\mathrm{left}}_{K+L,Q}(A)$
+    and $V_A$ the range of $\Gamma^{\mathrm{tail}}_{K,L+Q}(A)$,
+    both in the physical space on $K+L+Q$ sites. Define $U_B,V_B$ in the same way.
+    Then $|\langle x,y\rangle|\leq\varepsilon\lVert x\rVert\lVert y\rVert$
+    for vectors in any of the pairs of ranges
+    $U_A\times U_B$, $V_A\times V_B$, and $U_A\times V_B$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_middle_interval_overlap, thm:tail_boundary_map_append, thm:left_boundary_map_append}
+    For a left boundary vector with boundary family $(Z_v)$, fixing $u,v$
+    leaves the middle vector $\Gamma_L(Z_vA^u)$.
+    For a right boundary vector with boundary family $(Y_u)$, the corresponding
+    middle vector is $\Gamma_L(A^vY_u)$.
+    Both belong to the appropriate length-$L$ ground space, so the
+    common-interval estimate applies to each of the three pairs.
+\end{proof}
+
+\begin{theorem}[Joint projectors on overlapping MPS intervals]
+    \label{thm:ph_block_interval_projectors}
+    \lean{MPSTensor.norm_iSup_groundSpaceES_sub_comp_le_of_overlapMatrix}
+    \leanok
+    Let $(A_i)$ be a finite family of tensors with the same physical dimension,
+    with bond dimensions allowed to depend on $i$. Let $B$ be a nonnegative
+    real matrix with zero diagonal and $\beta=\lVert B\rVert<1/2$.
+    Suppose that for $i\ne j$, $x\in G_L(A_i)$, and $y\in G_L(A_j)$,
+    $|\langle x,y\rangle|\leq B_{ij}\lVert x\rVert\lVert y\rVert$.
+    In the physical space on $K+L+Q$ sites, put
+    \begin{align}
+        U_i & =G_{K+L}(A_i)\otimes\mathcal H_Q,  &
+        V_i & =\mathcal H_K\otimes G_{L+Q}(A_i), &
+        W_i & =G_{K+L+Q}(A_i).
+    \end{align}
+    Let $P_i,Q_i,R_i$ be the orthogonal projectors onto these spaces, and let
+    $P,Q,R$ project onto their respective sums. With
+    $\delta=\beta/(1-\beta)$,
+    \begin{align}
+        \lVert R-PQ\rVert & \leq\frac{4\delta}{(1-\delta)^2}
+        +\sum_i\lVert R_i-P_iQ_i\rVert.
+    \end{align}
+    This is the physical interval comparison in the proof of
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral}, before inserting the
+    individual block error bounds.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_extended_boundary_overlap, thm:ph_joint_projector_comparison, thm:spectator_boundary_hilbert_factorization}
+    The boundary-map factorization gives $W_i\subseteq U_i$.
+    The extended-boundary overlap estimate supplies all three bounds for
+    $U_i\times U_j$, $V_i\times V_j$, and $U_i\times V_j$ with the same
+    matrix $B$. Apply the joint-projector comparison.
 \end{proof}
 
 \section{The normalized primitive gauge of a normal tensor}
