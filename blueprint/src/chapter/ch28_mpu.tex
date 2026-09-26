@@ -8800,22 +8800,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Both source ranks of the blockings of $U_2$ and $U_3$ equal $d^{2k+2}$.
     Consequently
     \begin{align}
-        \operatorname{ind}_{\mathrm{src}}(T_{k+1})        & =\log_2 d, &
+        \operatorname{ind}_{\mathrm{src}}(T_{k+1})        & =\log_2 d,  &
         \operatorname{ind}_{\mathrm{src}}(T^\sharp_{k+1}) & =-\log_2 d,
     \end{align}
     and the blockings of $U_2$ and $U_3$ have value zero. If $d>1$, then
     $r(T_{k+1})\ne\ell(T_{k+1})$ and
     $\operatorname{ind}_{\mathrm{src}}(T_{k+1})\ne0$.
 
-    These values hold at every simple blocking of the displayed tensors, so the
-    choice of blocking in Definition~\ref{def:index} does not affect them. They
-    are not asserted for an arbitrary tensor generating the same operators;
-    that step needs the canonical form of the shift and its uniqueness. The
-    statement that the shift is not equivalent to the identity is part (iv) of
-    Theorem~\ref{IndexTh} and is not asserted here.
+    For $T$ and $T^\sharp$ every blocking is simple, so the choice of blocking
+    in Definition~\ref{def:index} does not affect their values. Simplicity of
+    the blockings of $U_2$ and $U_3$ is not asserted, so their zero values are
+    values of the source-index expression only. None of the values is asserted
+    for an arbitrary tensor generating the same operators; that step needs the
+    canonical form of the shift and its uniqueness. Unequal ranks do not by
+    themselves exclude a circuit: after blocking, every matrix product unitary,
+    the shift included, is a depth-two circuit of nearest-neighbour unitaries
+    in its standard form. The statement that the shift is not a finite-depth
+    circuit of local gates needs parts (ii)--(iv) of Theorem~\ref{IndexTh}
+    together with index zero for one layer of nearest-neighbour gates, and is
+    not asserted here.
     % Scope restriction (specified tensors): documented in
     % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex.
-    % Source: paper_v2.tex lines 681--704, 1980--2001, 2037--2041, 2308;
+    % Source: paper_v2.tex lines 605--622, 681--704, 1980--2001, 2037--2041, 2308;
     % review TN-Review-main.tex lines 2607--2611.
 \end{theorem}
 

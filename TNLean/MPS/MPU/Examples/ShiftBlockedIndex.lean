@@ -21,21 +21,25 @@ Review: arXiv:2011.12127, Appendix A, "The shift MPU",
 paradigmatic MPU that cannot be approximated by a short-range time evolution,
 citing arXiv:1703.09188.
 
-**Formalized here.** For every $k$, the shift tensors blocked over $k+1$ sites
-are simple, and their source ranks are computed exactly: the right shift has
+**Formalized here.** For every $k$, the source ranks of the shift tensors
+blocked over $k+1$ sites are computed exactly: the right shift has
 $(r,\ell)=(d^{k+2},d^k)$, the left shift $(d^k,d^{k+2})$, and $U_2$, $U_3$ have
-$r=\ell=d^{2k+2}$. Hence the index values $\log_2 d$, $-\log_2 d$, $0$, $0$ hold
-at every simple blocking of these tensors, not only at the displayed one. For
-$d>1$ the right and left ranks of every blocked shift differ, so its index value
-is nonzero. By the source's appendix, line 2308, a depth-two circuit of
-nearest-neighbour gates is the standard form of an MPU; its two gate outputs have
-the dimensions $\ell$ and $r$, and the rank inequality says that no blocked shift
-tensor has equal gate outputs.
+$r=\ell=d^{2k+2}$, giving the values $\log_2 d$, $-\log_2 d$, $0$, $0$ at every
+blocking. The right and left shifts and all their blockings are simple, so for
+these two tensors the values hold at every simple blocking, as Definition IV.1
+requires. Simplicity of the blockings of $U_2$ and $U_3$ is not proved here, so
+their zero values are values of the source-index expression at those blockings,
+not yet the index of Definition IV.1. For $d>1$ the right and left ranks of every
+blocked shift differ, so its index value is nonzero.
 
-The review sentence itself is not formalized. Its content in the source is
-Theorem `IndexTh` (iii)--(iv), lines 824--853: the index is robust and equal
-indices characterize equivalence, while the identity has index zero. Neither
-part is proved here.
+The review sentence itself is not formalized. The unequal ranks are no
+obstruction to a circuit: after blocking, every MPU, the shift included, is a
+depth-two circuit of nearest-neighbour unitaries in its standard form
+(Definition `SF`, lines 605--622; appendix, line 2308). The statement that the
+shift is not a finite-depth circuit of local gates needs Theorem `IndexTh`
+(ii)--(iv), lines 824--853 (the index is additive under composition, robust,
+and characterizes equivalence), together with index zero for one layer of
+nearest-neighbour gates. None of these is proved here.
 
 **Scope restriction (specified tensors):** The values are for the displayed
 shift tensors and their blockings. Definition IV.1 defines the index for a
@@ -53,7 +57,8 @@ and the uniqueness of that form. Documented in
 * `sourceIndexValue_blockTensor_rightShiftTensor`,
   `sourceIndexValue_blockTensor_leftShiftTensor`,
   `sourceIndexValue_blockTensor_shiftExampleU₂`,
-  `sourceIndexValue_blockTensor_shiftExampleU₃`: index values at every blocking.
+  `sourceIndexValue_blockTensor_shiftExampleU₃`: values of the source-index
+  expression at every blocking.
 * `rightShiftTensor_isMPUSimple`, `leftShiftTensor_isMPUSimple`,
   `blockTensor_rightShiftTensor_isMPUSimple`,
   `blockTensor_leftShiftTensor_isMPUSimple`: simplicity at every blocking.
@@ -285,7 +290,8 @@ theorem sourceIndexValue_blockTensor_rightShiftTensor [NeZero d] (k : ℕ) :
 
 /-- Blocking the left shift is the physical adjoint of blocking the right shift.
 
-Bridge: arXiv:1703.09188, lines 390--405 and 1980--1987. -/
+Bridge: arXiv:1703.09188, lines 1980--1987 (the shift $T^{(N)}$ and its adjoint,
+which shifts to the left). -/
 theorem blockTensor_leftShiftTensor (k : ℕ) :
     blockTensor (leftShiftTensor d) k =
       physicalAdjointTensor (blockTensor (rightShiftTensor d) k) := by
@@ -401,6 +407,22 @@ theorem sourceIndexValue_blockTensor_shiftExampleU₃ [NeZero d] (k : ℕ) :
 
 /-! ### Simplicity of the shifts at every blocking -/
 
+/-- The maximally entangled boundary vector $\Phi=\sum_j|jj)$ on the doubled bond. -/
+private def shiftPhi (d : ℕ) : Fin (d * d) → ℂ := fun x ↦
+  if (finProdFinEquiv.symm x).1 = (finProdFinEquiv.symm x).2 then 1 else 0
+
+/-- The basis vector $|ik)$ on the doubled bond. -/
+private def shiftBasis (d : ℕ) (i k : Fin d) : Fin (d * d) → ℂ :=
+  Pi.single (finProdFinEquiv (i, k)) 1
+
+private theorem shiftBasis_dotProduct_shiftPhi (i k : Fin d) :
+    shiftBasis d i k ⬝ᵥ shiftPhi d = if i = k then 1 else 0 := by
+  simp [shiftBasis, shiftPhi]
+
+private theorem shiftPhi_dotProduct_shiftBasis (i k : Fin d) :
+    shiftPhi d ⬝ᵥ shiftBasis d i k = if i = k then 1 else 0 := by
+  simp [shiftBasis, shiftPhi]
+
 /-- The right-shift tensor is simple. Its double-layer letters are
 $W^{ik}=|\Phi)(ik|$ with $\Phi=\sum_j|jj)$, so the boundary vectors
 $a=|00)$ and $b=\Phi$ satisfy both simplicity identities.
@@ -410,10 +432,8 @@ lines 1980--1987. -/
 theorem rightShiftTensor_isMPUSimple (d : ℕ) [NeZero d] :
     IsMPUSimple (rightShiftTensor d) := by
   classical
-  let Φ : Fin (d * d) → ℂ := fun x ↦
-    if (finProdFinEquiv.symm x).1 = (finProdFinEquiv.symm x).2 then 1 else 0
-  let e : Fin d → Fin d → Fin (d * d) → ℂ := fun i k ↦ Pi.single (finProdFinEquiv (i, k)) 1
-  have hW : ∀ i k, doubleLayerTensor (rightShiftTensor d) i k = Matrix.vecMulVec Φ (e i k) := by
+  have hW : ∀ i k, doubleLayerTensor (rightShiftTensor d) i k =
+      Matrix.vecMulVec (shiftPhi d) (shiftBasis d i k) := by
     intro i k
     ext x y
     obtain ⟨⟨x₁, x₂⟩, rfl⟩ := finProdFinEquiv.surjective x
@@ -422,18 +442,15 @@ theorem rightShiftTensor_isMPUSimple (d : ℕ) [NeZero d] :
       Equiv.symm_apply_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
       physicalAdjointTensor_apply, Matrix.single_apply, RCLike.star_def,
       MonoidWithZeroHom.map_ite_one_zero, mul_ite, mul_one, mul_zero,
-      finProdFinEquiv_symm_apply, Matrix.vecMulVec_apply, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat, Pi.single_apply, EmbeddingLike.apply_eq_iff_eq,
-      Prod.mk.injEq, Φ, e]
+      Matrix.vecMulVec_apply, Pi.single_apply, EmbeddingLike.apply_eq_iff_eq,
+      Prod.mk.injEq, shiftPhi, shiftBasis]
     rw [Fintype.sum_eq_single x₂ (fun c hc ↦ by simp [hc])]
     split_ifs <;> grind
-  have hΦe : ∀ i k, e i k ⬝ᵥ Φ = if i = k then 1 else 0 := by
-    intro i k
-    simp [e, Φ]
-  refine ⟨e 0 0, Φ, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
-  · rw [hW, Matrix.vecMulVec_mulVec, hΦe]
-    split_ifs <;> simp [hΦe]
-  · simp only [hW, Matrix.vecMulVec_mul_vecMulVec, smul_dotProduct, hΦe]
+  refine ⟨shiftBasis d 0 0, shiftPhi d, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
+  · rw [hW, Matrix.vecMulVec_mulVec, shiftBasis_dotProduct_shiftPhi]
+    split_ifs <;> simp [shiftBasis_dotProduct_shiftPhi]
+  · simp only [hW, Matrix.vecMulVec_mul_vecMulVec, smul_dotProduct,
+      shiftBasis_dotProduct_shiftPhi]
     simp
 
 /-- The left-shift tensor is simple. Its double-layer letters are
@@ -445,10 +462,8 @@ tensor at lines 1980--1987. -/
 theorem leftShiftTensor_isMPUSimple (d : ℕ) [NeZero d] :
     IsMPUSimple (leftShiftTensor d) := by
   classical
-  let Φ : Fin (d * d) → ℂ := fun x ↦
-    if (finProdFinEquiv.symm x).1 = (finProdFinEquiv.symm x).2 then 1 else 0
-  let e : Fin d → Fin d → Fin (d * d) → ℂ := fun i k ↦ Pi.single (finProdFinEquiv (i, k)) 1
-  have hW : ∀ i k, doubleLayerTensor (leftShiftTensor d) i k = Matrix.vecMulVec (e i k) Φ := by
+  have hW : ∀ i k, doubleLayerTensor (leftShiftTensor d) i k =
+      Matrix.vecMulVec (shiftBasis d i k) (shiftPhi d) := by
     intro i k
     ext x y
     obtain ⟨⟨x₁, x₂⟩, rfl⟩ := finProdFinEquiv.surjective x
@@ -457,18 +472,15 @@ theorem leftShiftTensor_isMPUSimple (d : ℕ) [NeZero d] :
       physicalAdjointTensor_physicalAdjointTensor, rightShiftTensor, Matrix.submatrix_apply,
       Equiv.symm_apply_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply, Matrix.single_apply,
       physicalAdjointTensor_apply, RCLike.star_def, MonoidWithZeroHom.map_ite_one_zero, mul_ite,
-      mul_one, mul_zero, finProdFinEquiv_symm_apply, Matrix.vecMulVec_apply, Pi.single_apply,
-      EmbeddingLike.apply_eq_iff_eq, Prod.mk.injEq, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat, e, Φ]
+      mul_one, mul_zero, Matrix.vecMulVec_apply, Pi.single_apply,
+      EmbeddingLike.apply_eq_iff_eq, Prod.mk.injEq, shiftBasis, shiftPhi]
     rw [Fintype.sum_eq_single y₂ (fun c hc ↦ by simp [hc])]
     split_ifs <;> grind
-  have hΦe : ∀ i k, Φ ⬝ᵥ e i k = if i = k then 1 else 0 := by
-    intro i k
-    simp [e, Φ]
-  refine ⟨Φ, e 0 0, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
+  refine ⟨shiftPhi d, shiftBasis d 0 0, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
   · rw [hW, Matrix.vecMulVec_mulVec]
-    simp [hΦe]
-  · simp only [hW, Matrix.vecMulVec_mul_vecMulVec, smul_dotProduct, hΦe]
+    simp [shiftPhi_dotProduct_shiftBasis]
+  · simp only [hW, Matrix.vecMulVec_mul_vecMulVec, smul_dotProduct,
+      shiftPhi_dotProduct_shiftBasis]
     simp
 
 /-- Every nontrivial blocking of the right shift is simple.
@@ -492,9 +504,7 @@ theorem blockTensor_leftShiftTensor_isMPUSimple (d : ℕ) [NeZero d] (k : ℕ) :
 /-- For $d>1$, no nontrivial blocking of the right shift has equal source ranks:
 $r=d^{k+2}\ne d^k=\ell$.
 
-Source: arXiv:1703.09188, lines 2037--2041 (the shift has nonzero index) and
-line 2308 (a depth-two circuit of nearest-neighbour gates is the standard form,
-whose two gate outputs have the dimensions $\ell$ and $r$). -/
+Source: arXiv:1703.09188, lines 2037--2041 (the shift has nonzero index). -/
 theorem rightRank_blockTensor_rightShiftTensor_ne_leftRank (hd : 1 < d) (k : ℕ) :
     r[blockTensor (rightShiftTensor d) (k + 1)] ≠
       ℓ[blockTensor (rightShiftTensor d) (k + 1)] := by
