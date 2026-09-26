@@ -7,6 +7,7 @@ import TNLean.MPS.Examples.Ising.IsingLetterSectorOne
 import TNLean.MPS.Examples.Ising.IsingLetterSectorPsi
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaAbelian
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaSigma
+import TNLean.MPS.MPDO.OperatorFromWordTrace
 
 /-!
 # Weighted Ising twist: the hidden bond objects
@@ -203,13 +204,11 @@ theorem isingTwist_mpo (L : ℕ) (hL : 0 < L) :
       ((5 : ℂ) ^ L + 3 ^ L) • MPOTensor.mpo isingSigma L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  have hw : (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) ≠ [] := by
-    simp only [ne_eq, List.ofFn_eq_nil_iff]
-    omega
-  have h := isingBondObject_trace_evalWord (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) hw
-  unfold isingBondObject at h
-  rw [MPOTensor.evalWord_toMPSTensor_pairConfig, MPOTensor.evalWord_toMPSTensor_pairConfig] at h
-  simpa [MPOTensor.mpoMatrixEntry] using h
+  have h := isingBondObject_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)
+  rw [List.length_ofFn] at h
+  rw [Matrix.smul_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
+    smul_eq_mul]
+  exact h
 
 /-- The Ising bond-object compression has sixteen zero slots. -/
 theorem isingBondObject_z_eq : isingCompression.z = 16 := rfl
