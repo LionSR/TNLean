@@ -12,6 +12,7 @@ import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
+import TNLean.Algebra.CStarSqrtHolder
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
@@ -26,8 +27,11 @@ import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
+import TNLean.Algebra.ExpectationOverlap
+import TNLean.Algebra.ExponentialSumWindow
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
+import TNLean.Algebra.FinOrderedProduct
 import TNLean.Algebra.FinSumPermutation
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
@@ -44,13 +48,16 @@ import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
+import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum
+import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
+import TNLean.Algebra.MatrixTensorPower
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
@@ -58,6 +65,7 @@ import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
+import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PermutationMatrixUnitary
@@ -74,6 +82,7 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
+import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition

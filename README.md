@@ -67,7 +67,7 @@ formalization was carried out by agents running on
 [TeXRA](https://texra.ai), whose `lean-env-action` also sets up the Lean and
 blueprint toolchain used in the workflows under `.github/workflows/`.
 
-The library loads as a single import (Lean 4 / Mathlib `v4.34.0-rc1`):
+The library loads as a single import (Lean 4 / Mathlib `v4.35.0-rc3`):
 
 ```lean
 import TNLean

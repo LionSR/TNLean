@@ -9,7 +9,7 @@ import Mathlib.LinearAlgebra.Projection
 import Mathlib.LinearAlgebra.Dimension.RankNullity
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.Data.Matrix.Block
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 
 /-!
 # Flag-adapted coordinates give block-triangular matrices

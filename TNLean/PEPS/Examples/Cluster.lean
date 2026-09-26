@@ -97,17 +97,13 @@ theorem stateCoeff_clusterPEPS (σ : TorusVertex width height → Fin 2) :
     have hdown :
         ∏ v : TorusVertex width height, (-1 : ℂ) ^ ((σ v).val * (σ (v.1, v.2 - 1)).val) =
         ∏ v : TorusVertex width height, (-1 : ℂ) ^ ((σ v).val * (σ (v.1, v.2 + 1)).val) :=
-      (Fintype.prod_equiv (Equiv.addRight ((0, 1) : TorusVertex width height)) _ _ fun u => by
-        simp only [Equiv.coe_addRight]
-        rw [show u + (0, 1) = (u.1, u.2 + 1) from Prod.ext (add_zero _) rfl]
-        simp [mul_comm]).symm
+      (prod_torus_sub_snd fun a b => (-1 : ℂ) ^ ((σ a).val * (σ b).val)).trans
+        (Finset.prod_congr rfl fun v _ => by rw [mul_comm])
     have hleft :
         ∏ v : TorusVertex width height, (-1 : ℂ) ^ ((σ v).val * (σ (v.1 - 1, v.2)).val) =
         ∏ v : TorusVertex width height, (-1 : ℂ) ^ ((σ v).val * (σ (v.1 + 1, v.2)).val) :=
-      (Fintype.prod_equiv (Equiv.addRight ((1, 0) : TorusVertex width height)) _ _ fun u => by
-        simp only [Equiv.coe_addRight]
-        rw [show u + (1, 0) = (u.1 + 1, u.2) from Prod.ext rfl (add_zero _)]
-        simp [mul_comm]).symm
+      (prod_torus_sub_fst fun a b => (-1 : ℂ) ^ ((σ a).val * (σ b).val)).trans
+        (Finset.prod_congr rfl fun v _ => by rw [mul_comm])
     rw [hcard, hdown, hleft]
     ring
   · intro vb hvb

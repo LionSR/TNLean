@@ -143,8 +143,7 @@ theorem perronFrobeniusDim_eq_of_pos_right_eigenvector [DecidableEq ι] {N : ι 
       Finset.sum_nonneg fun c _ => mul_nonneg (Nat.cast_nonneg _) (hχ c).le
     rw [h a] at hsum
     exact nonneg_of_mul_nonneg_left hsum (hχ a)
-  rw [perronFrobeniusDim, hmap, spectralRadius, Matrix.spectrum_transpose, ← spectralRadius,
-    hr, ENNReal.toReal_ofReal hlam]
+  rw [perronFrobeniusDim, hmap, Matrix.spectralRadius_transpose, hr, ENNReal.toReal_ofReal hlam]
 
 /-- **A positive real fusion character is the Perron–Frobenius dimension.** A fusion character
 `χ_a χ_b = ∑_c N_{ab}^c χ_c` with positive real values makes `χ` a positive right eigenvector of

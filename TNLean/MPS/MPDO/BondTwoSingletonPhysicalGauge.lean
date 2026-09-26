@@ -380,8 +380,7 @@ private theorem gaugeDeformedBaseMPO_toMPSTensor_apply
       (finProdFinEquiv : I × I ≃ Fin 4).surjective x
     fin_cases pi <;> fin_cases pj <;> fin_cases xi <;> fin_cases xj <;>
       norm_num [toMPSTensor, ketLeftMul, braRightMul, baseMPO, gaugeMatrix,
-        gaugeDeformedSymbolCoefficient, Matrix.single, Fin.modNat, Fin.divNat] <;>
-        simp_all
+        gaugeDeformedSymbolCoefficient, Matrix.single, Fin.modNat, Fin.divNat]
   · simp only [ite_eq_right hxy]
     simp [toMPSTensor, ketLeftMul, braRightMul, baseMPO, Matrix.single]
     aesop
