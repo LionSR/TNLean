@@ -21,7 +21,8 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical
   dimension two, and names joint one-site independence as the missing
-  hypothesis, with blocking as the elimination route.
+  hypothesis, and records its elimination after blocking for normal blocks
+  that are pairwise inequivalent up to a nonzero scalar.
 
 - `bmwshv17_fibonacci_projector_positive_length.tex` records that the source
   asks for the projector identity `P_L^2 = P_L` at every length `L`, that at
