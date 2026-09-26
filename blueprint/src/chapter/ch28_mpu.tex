@@ -6880,11 +6880,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \label{eq:mpu_factor_free_contraction}
     \end{align}
     If $E(\mathcal W)$ denotes the normalized physical diagonal of the
-    physical-adjoint double layer of $\mathcal W$, define
+    physical-adjoint double layer of $\mathcal W$, let
+    $s(q(a,c))=q(c,a)$ and define
     \begin{align}
         \widehat{\mathcal W}_{\mathrm{ff}}
-         & =C\bigl(\mathcal W,E(\mathcal W)\bigr).
+         & =C\bigl(\mathcal W,E(\mathcal W)_{\cdot,s(\cdot)}\bigr),
         \label{eq:mpu_factor_free_sandwich}
+        \\
+        (\widehat W_{\mathrm{ff}}^{ij})_{ab}
+         & =\sum_{c,e=0}^{D-1}E(\mathcal W)_{q(b,e),q(a,c)}W^{ij}_{ce}.
     \end{align}
     This is the contraction shown in Figure~\texttt{IV\_index4.png} of
     \cite[Proposition~IV.5]{Cirac2017MPU}.
@@ -6899,7 +6903,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.continuous_doubleLayerTensor,
         MPOTensor.continuous_normalizedDiagonal,
         MPOTensor.continuous_normalizedDiagonal_doubleLayerTensor,
+        MPOTensor.factorFreeSandwich_eq_of_trace_pair,
         MPOTensor.continuous_factorFreeSandwich,
+        MPOTensor.continuous_virtualSandwich_of_trace_pair,
         Continuous.factorFreeSandwich}
     \leanok
     \uses{def:mpu_factor_free_sandwich, def:mpu_virtual_sandwich}
@@ -6921,6 +6927,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $(\mathcal W,E)\mapsto C(\mathcal W,E)$, the map
     $\mathcal W\mapsto E(\mathcal W)$, and consequently the map
     $\mathcal W\mapsto\widehat{\mathcal W}_{\mathrm{ff}}$ are continuous.
+    If $d>0$ and the normalized transfer map satisfies
+    $\mathcal E_{\mathcal W}(X)=\tr(LX)R$ for every $X$, then
+    $\widehat W_{\mathrm{ff}}^{ij}=LW^{ij}R$.
+    Consequently, for a continuous family $\mathcal W(x)$ with pointwise
+    trace factors $L(x),R(x)$, the tensors $L(x)W^{ij}(x)R(x)$ are continuous,
+    whether or not the factors themselves are chosen continuously.
     These assertions neither choose $L$ and $R$ continuously nor infer their
     positivity. They make no claim about reduced representatives or constancy
     of ranks.
@@ -6945,7 +6957,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     normalized physical diagonal is another finite sum. Hence
     $\mathcal W\mapsto E(\mathcal W)$ is continuous. Substitution into
     (\ref{eq:mpu_factor_free_sandwich}) proves continuity of the factor-free
-    sandwich.
+    sandwich. For the trace-factor identity, column vectorization gives
+    $E(\mathcal W)=\operatorname{vec}(R)\operatorname{vec}(L^{\mathsf T})^T$.
+    Reversing its column pair therefore gives
+    $\operatorname{vec}(R)\operatorname{vec}(L)^T$, and
+    (\ref{eq:mpu_factor_free_rank_one}) yields
+    $\widehat W_{\mathrm{ff}}^{ij}=LW^{ij}R$. Applied pointwise, this equality
+    proves the asserted continuity without any regularity of the factors.
 \end{proof}
 
 \begin{theorem}[Source cuts of a virtual sandwich]
