@@ -12,7 +12,7 @@ import TNLean.MPS.Symmetry.GaugeUniqueness
 
 **Source.** Cirac, Pérez-García, Schuch, Verstraete (arXiv:2011.12127), §III.A,
 `Papers/2011.12127/TN-Review-main.tex` lines 1085–1086 (eq. `eq:XAX=B`), lines
-1117–1118 (time reversal and the Kramers obstruction) and line 1120 (reflection):
+1116–1117 (time reversal and the Kramers obstruction) and line 1120 (reflection):
 for a normal tensor with `Āⁱ = e^{iφ} X† Aⁱ X`, applying the symmetry twice gives
 `Aⁱ = (X X̄)† Aⁱ (X X̄)`, so `X X̄ = ±1`, a topological index; for the Wigner time
 reversal `Aⁱ ↦ ∑ⱼ (σ_y)ᵢⱼ Āʲ` the same computation gives `Aⁱ = -Aⁱ` up to gauge,
