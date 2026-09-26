@@ -1,18 +1,12 @@
 \section{Strong and weak symmetries}
 
-Symmetries of a mixed state come in two kinds. For a unitary on-site
-symmetry $U$, a density operator can commute with $U$, or it can be
-invariant under $U$ applied on one side only. These are the weak and strong
-symmetries of de Groot, Turzillo and Schuch, who define them for
-channels~\cite{deGroot2022SPTOpen}; their form for density operators is
-recalled in~\cite{GarreRubio2026LocalCharacterization}. Sun formulates
-both notions for a family of matrix product
-operators~\cite{Sun2025Anomalous}. In this section the density operators
-are the periodic operators $\rho^{(L)}=\rho^{(L)}(M)$ of
-Definition~\ref{def:mpo_family}. The source also allows a boundary matrix
-commuting with every $M^{ij}$, and the family definitions below take it to
-be the identity, so every family statement of this section is restricted to
-the identity boundary~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
+For a unitary on-site symmetry $U$, a density operator $\rho$ satisfies
+$[U,\rho]=0$ (weak symmetry) or $U\rho=\lambda\rho$ (strong
+symmetry)~\cite{deGroot2022SPTOpen,GarreRubio2026LocalCharacterization}.
+Sun formulates both notions for families of matrix product
+operators~\cite{Sun2025Anomalous}. The statements below consider periodic
+operators $\rho^{(L)}=\rho^{(L)}(M)$ with identity boundary
+matrix~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
 
 \begin{definition}[Strong and weak symmetry]\label{def:mpdo_strong_weak_symmetry}
     \lean{Matrix.IsStrongSymmetry, Matrix.IsWeakSymmetry,
@@ -28,10 +22,9 @@ the identity boundary~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
     every $L\ge 1$. It is a weak symmetry if
     $[O_a^{(L)},\rho^{(L)}]=0$ for every $a$ and every
     $L\ge 1$~\cite{Sun2025Anomalous}. The eigenvalues may depend on $L$ and
-    need not be phases. In the source the operators $O_a$ form a fusion
-    algebra of normal matrix product operators and $\rho^{(L)}$ is positive;
-    the definition assumes neither, and the results below state the fusion
-    rules or Hermiticity where they use them.
+    need not be phases. The definition requires neither positivity of
+    $\rho^{(L)}$ nor fusion algebra relations on $O_a$; these hypotheses are
+    stated where used.
 \end{definition}
 
 \begin{definition}[On-site symmetry]\label{def:mpdo_onsite_symmetry}
