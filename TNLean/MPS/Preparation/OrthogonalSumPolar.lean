@@ -42,9 +42,9 @@ namespace Matrix
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
 
-omit [DecidableEq κ] in
+omit [Fintype κ] [DecidableEq κ] in
 /-- If the range of `X` lies in the range of `Y`, then `X = Y R` for some `R`. -/
-theorem exists_mul_eq_of_range_le {ρ ρ' : Type*} [Fintype ρ] [DecidableEq ρ']
+theorem exists_mul_eq_of_range_le {ρ ρ' : Type*} [Fintype ρ] [Fintype ρ'] [DecidableEq ρ']
     {X : Matrix κ ρ' ℂ} {Y : Matrix κ ρ ℂ}
     (h : LinearMap.range X.mulVecLin ≤ LinearMap.range Y.mulVecLin) :
     ∃ R : Matrix ρ ρ' ℂ, Y * R = X := by
@@ -74,6 +74,7 @@ theorem exists_polarIso_eq_mul (M : Matrix ι κ ℂ) : ∃ R : Matrix κ κ ℂ
 
 variable {κ' : Type*} [Fintype κ'] [DecidableEq κ']
 
+omit [Fintype κ'] [DecidableEq κ'] in
 /-- If `Mᴴ M' = 0`, then `Vᴴ M' = 0` for the partial isometry `V` of `M`. -/
 theorem conjTranspose_polarIso_mul_eq_zero {M : Matrix ι κ ℂ} {M' : Matrix ι κ' ℂ}
     (h : Mᴴ * M' = 0) : (polarIso M)ᴴ * M' = 0 := by
@@ -93,9 +94,9 @@ products. -/
 theorem sum_mul_sum_of_mul_eq_zero {β α γ : Type*} [Fintype β] [DecidableEq β] [Fintype κ]
     {X : β → Matrix α κ ℂ} {Y : β → Matrix κ γ ℂ} (h : ∀ j j', j ≠ j' → X j * Y j' = 0) :
     (∑ j, X j) * (∑ j, Y j) = ∑ j, X j * Y j := by
-  rw [Finset.sum_mul]
+  rw [Matrix.sum_mul]
   refine Finset.sum_congr rfl fun j _ => ?_
-  rw [Finset.mul_sum, Finset.sum_eq_single j (fun j' _ hj' => h j j' (Ne.symm hj'))
+  rw [Matrix.mul_sum, Finset.sum_eq_single j (fun j' _ hj' => h j j' (Ne.symm hj'))
     (fun hj => absurd (Finset.mem_univ j) hj)]
 
 variable {β : Type*} [Fintype β] [DecidableEq β] {κj : β → Type*} [∀ j, Fintype (κj j)]
@@ -122,27 +123,37 @@ theorem polarIso_sum_of_orthogonal {B : (j : β) → Matrix ι (κj j) ℂ}
   set E := ∑ j, K j * polarSupport (B j) * (K j)ᴴ
   choose R hR using fun j => exists_polarPos_mul_eq_polarSupport (B j)
   set R' := ∑ j, ((c j : ℂ)⁻¹) • (K j * R j * (K j)ᴴ)
-  -- The cross terms of every product below contain `Kⱼᴴ Kⱼ'`, which vanishes.
-  have hKK : ∀ j j' (X : Matrix ι (κj j) ℂ) (Y : Matrix (κj j') κ ℂ), j ≠ j' →
-      X * (K j)ᴴ * (K j' * Y) = 0 := fun j j' X Y h => by
-    rw [Matrix.mul_assoc, ← Matrix.mul_assoc (K j)ᴴ, hK' j j' h, Matrix.zero_mul,
-      Matrix.mul_zero]
-  have hKK' : ∀ j j' (X : Matrix κ (κj j) ℂ) (Y : Matrix (κj j') κ ℂ), j ≠ j' →
-      X * (K j)ᴴ * (K j' * Y) = 0 := fun j j' X Y h => by
-    rw [Matrix.mul_assoc, ← Matrix.mul_assoc (K j)ᴴ, hK' j j' h, Matrix.zero_mul,
-      Matrix.mul_zero]
-  have hdiag : ∀ j {α γ : Type*} [Fintype α] (X : Matrix α (κj j) ℂ) (Y : Matrix (κj j) γ ℂ),
-      X * (K j)ᴴ * (K j * Y) = X * Y := fun j _ _ _ X Y => by
-    rw [Matrix.mul_assoc, ← Matrix.mul_assoc (K j)ᴴ, hK j, Matrix.one_mul]
-  have hPpos : ∀ j, polarSupport (B j) * polarPos (B j) = polarPos (B j) :=
-    fun j => polarSupport_mul_polarPos (B j)
+  -- Products are normalized to right-associated form; every cross term contains `Kⱼᴴ Kⱼ'`.
+  have hKr : ∀ j j' (Y : Matrix (κj j') κ ℂ), j ≠ j' →
+      (K j)ᴴ * (K j' * Y) = 0 := fun j j' Y h => by
+    rw [← Matrix.mul_assoc, hK' j j' h, Matrix.zero_mul]
+  have hKd : ∀ j (Y : Matrix (κj j) κ ℂ), (K j)ᴴ * (K j * Y) = Y :=
+    fun j Y => by rw [← Matrix.mul_assoc, hK j, Matrix.one_mul]
+  have hVr : ∀ j j' (Y : Matrix (κj j') κ ℂ), j ≠ j' →
+      (polarIso (B j))ᴴ * (polarIso (B j') * Y) = 0 := fun j j' Y h => by
+    rw [← Matrix.mul_assoc, conjTranspose_polarIso_mul_polarIso_eq_zero (hB j j' h),
+      Matrix.zero_mul]
+  have hVd : ∀ j (Y : Matrix (κj j) κ ℂ),
+      (polarIso (B j))ᴴ * (polarIso (B j) * Y) = polarSupport (B j) * Y := fun j Y => by
+    rw [← Matrix.mul_assoc, conjTranspose_polarIso_mul_polarIso]
+  have hVP : ∀ j (Y : Matrix (κj j) κ ℂ),
+      polarIso (B j) * (polarPos (B j) * Y) = B j * Y := fun j Y => by
+    rw [← Matrix.mul_assoc, polarIso_mul_polarPos]
+  have hSS : ∀ j (Y : Matrix (κj j) κ ℂ),
+      polarSupport (B j) * (polarSupport (B j) * Y) = polarSupport (B j) * Y := fun j Y => by
+    rw [← Matrix.mul_assoc, polarSupport_mul_polarSupport]
+  have hSP : ∀ j (Y : Matrix (κj j) κ ℂ),
+      polarSupport (B j) * (polarPos (B j) * Y) = polarPos (B j) * Y := fun j Y => by
+    rw [← Matrix.mul_assoc, polarSupport_mul_polarPos]
+  have hPR : ∀ j (Y : Matrix (κj j) κ ℂ),
+      polarPos (B j) * (R j * Y) = polarSupport (B j) * Y := fun j Y => by
+    rw [← Matrix.mul_assoc, hR j]
   -- `B = W Q`.
   have hWQ : ∑ j, (c j : ℂ) • (B j * (K j)ᴴ) = W * Q := by
     rw [sum_mul_sum_of_mul_eq_zero fun j j' h => by
-      rw [Matrix.mul_smul, ← Matrix.mul_assoc (K j'), hKK j j' _ _ h, smul_zero]]
+      simp only [Matrix.mul_smul, Matrix.mul_assoc, hKr j j' _ h, Matrix.mul_zero, smul_zero]]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Matrix.mul_smul, ← Matrix.mul_assoc (K j), hdiag, ← Matrix.mul_assoc,
-      polarIso_mul_polarPos]
+    simp only [Matrix.mul_smul, Matrix.mul_assoc, hKd, hVP]
   -- `Q ≥ 0`.
   have hQ : Q.PosSemidef := posSemidef_sum _ fun j _ =>
     ((posSemidef_polarPos (B j)).mul_mul_conjTranspose_same (K j)).smul
@@ -152,12 +163,9 @@ theorem polarIso_sum_of_orthogonal {B : (j : β) → Matrix ι (κj j) ℂ}
     rw [conjTranspose_sum]
     simp only [conjTranspose_mul, conjTranspose_conjTranspose]
     rw [sum_mul_sum_of_mul_eq_zero fun j j' h => by
-      rw [Matrix.mul_assoc, ← Matrix.mul_assoc (polarIso (B j))ᴴ,
-        conjTranspose_polarIso_mul_polarIso_eq_zero (hB j j' h), Matrix.zero_mul,
-        Matrix.mul_zero]]
+      simp only [Matrix.mul_assoc, hVr j j' _ h, Matrix.mul_zero]]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Matrix.mul_assoc, ← Matrix.mul_assoc (polarIso (B j))ᴴ,
-      conjTranspose_polarIso_mul_polarIso, Matrix.mul_assoc]
+    simp only [Matrix.mul_assoc, hVd]
   -- `E` is a Hermitian idempotent.
   have hE : E.IsHermitian := by
     rw [IsHermitian, conjTranspose_sum]
@@ -166,23 +174,23 @@ theorem polarIso_sum_of_orthogonal {B : (j : β) → Matrix ι (κj j) ℂ}
       (isHermitian_polarSupport (B j)).eq, Matrix.mul_assoc]
   have hEE : E * E = E := by
     rw [sum_mul_sum_of_mul_eq_zero fun j j' h => by
-      rw [← Matrix.mul_assoc (K j'), hKK' j j' _ _ h]]
+      simp only [Matrix.mul_assoc, hKr j j' _ h, Matrix.mul_zero]]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [← Matrix.mul_assoc (K j), hdiag, Matrix.mul_assoc (K j), polarSupport_mul_polarSupport]
+    simp only [Matrix.mul_assoc, hKd, hSS]
   -- `E` and `Q` have the same range.
   have hEQ : E * Q = Q := by
     rw [sum_mul_sum_of_mul_eq_zero fun j j' h => by
-      rw [Matrix.mul_smul, ← Matrix.mul_assoc (K j'), hKK' j j' _ _ h, smul_zero]]
+      simp only [Matrix.mul_smul, Matrix.mul_assoc, hKr j j' _ h, Matrix.mul_zero, smul_zero]]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Matrix.mul_smul, ← Matrix.mul_assoc (K j), hdiag, Matrix.mul_assoc (K j), hPpos]
+    simp only [Matrix.mul_smul, Matrix.mul_assoc, hKd, hSP]
   have hQR : Q * R' = E := by
     rw [sum_mul_sum_of_mul_eq_zero fun j j' h => by
-      rw [Matrix.smul_mul, Matrix.mul_smul, ← Matrix.mul_assoc (K j'), hKK' j j' _ _ h,
-        smul_zero, smul_zero]]
+      simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.mul_assoc, hKr j j' _ h,
+        Matrix.mul_zero, smul_zero]]
     refine Finset.sum_congr rfl fun j _ => ?_
     have hcj : (c j : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (hc j).ne'
-    rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_inv_cancel₀ hcj, one_smul,
-      ← Matrix.mul_assoc (K j), hdiag, Matrix.mul_assoc (K j), hR j]
+    simp only [Matrix.smul_mul, Matrix.mul_smul, Matrix.mul_assoc, hKd, hPR, smul_smul,
+      inv_mul_cancel₀ hcj, one_smul]
   have hran := range_mulVecLin_eq_of_mul_eq hEQ hQR
   exact ⟨polarIso_eq_of_eq_mul hWQ hQ hWW hE hEE hran,
     polarPos_eq_of_eq_mul hWQ hQ hWW hE hEE hran⟩
