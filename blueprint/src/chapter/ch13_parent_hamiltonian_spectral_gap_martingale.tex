@@ -6446,8 +6446,9 @@ tensors.
     \lean{MPSTensor.IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
-    Let $A$ be primitive with nonzero bond dimension, let $E$ be its observable
-    transfer map, and let $P$ be its stationary projection. Every nonzero
+    Let $A$ be primitive with nonzero bond dimension and fixed point $\rho$.
+    Write $E=E_{\mathrm{FNW},A}$ for its observable transfer map and
+    $P=E_\infty^\rho$ for its stationary projection. Every nonzero
     eigenvalue of $E-P$ is an eigenvalue of $E$.
 \end{theorem}
 \begin{proof}\leanok
@@ -6753,9 +6754,13 @@ tensors.
 
 \begin{theorem}[Scalar path sums]
     \label{thm:fnw_dimension_markov_path_sums}
-    \lean{MPSTensor.FNWDimensionConstant.realMarkovMatrix, MPSTensor.FNWDimensionConstant.realHadamardU, MPSTensor.FNWDimensionConstant.realHadamardW, MPSTensor.FNWDimensionConstant.markovAmplitude, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardU_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardUW_sum, MPSTensor.FNWDimensionConstant.markovAmplitude_sq, MPSTensor.FNWDimensionConstant.markovAmplitude_pos}
+    \lean{MPSTensor.FNWDimensionConstant.realMarkovMatrix, MPSTensor.FNWDimensionConstant.realHadamardU, MPSTensor.FNWDimensionConstant.realHadamardW, MPSTensor.FNWDimensionConstant.markovAmplitude, MPSTensor.FNWDimensionConstant.realMarkovMatrix_mul_hadamardU, MPSTensor.FNWDimensionConstant.realHadamardW_mul_markovMatrix, MPSTensor.FNWDimensionConstant.realMarkovMatrix_pow_two, MPSTensor.FNWDimensionConstant.realMarkovMatrix_pow_three, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardU_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardUW_sum, MPSTensor.FNWDimensionConstant.markovAmplitude_sq, MPSTensor.FNWDimensionConstant.markovAmplitude_pos}
     \leanok
-    Regard $P$, $u$ and $w$ above as real. For every pair of endpoints $a,f$, set
+    \uses{thm:fnw_dimension_markov_matrix}
+    Regard $P$, $u$ and $w$ above as real. The identities $Pu=0$,
+    $w^{\mathsf T}P=0$, $P^2=Q+uw^{\mathsf T}/64$ and $P^3=Q$ of
+    Theorem~\ref{thm:fnw_dimension_markov_matrix} then hold over $\R$.
+    For every pair of endpoints $a,f$, set
     $p_{abcef}=P_{ab}P_{bc}P_{ce}P_{ef}$. Then
     \begin{align}
         \sum_{b,c,e}p_{abcef}        & =\frac14,    &
