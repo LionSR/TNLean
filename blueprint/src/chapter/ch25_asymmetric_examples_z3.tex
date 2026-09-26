@@ -756,26 +756,29 @@ targets separately.
 
 \begin{theorem}[Compression of the stacked square]
     \label{thm:asymex_z3anomalous_defect_compression}
-    \lean{Z3Anomalous.pairTarget, Z3Anomalous.defectSquare_compression,
+    \lean{Z3Anomalous.pairTarget, Z3Anomalous.pairStackMPS,
+        Z3Anomalous.defectSquare_eq_blockDiagonal, Z3Anomalous.pairCompression,
+        Z3Anomalous.defectSquare_compression, Z3Anomalous.defectSquare_compression_z,
         Z3Anomalous.defectSquare_isReduction, Z3Anomalous.defectSquare_left_mul_right_of_ne,
-        Z3Anomalous.defectSquare_dim_eq, Z3Anomalous.defectSquare_evalWord_remainder_eq_zero,
-        Z3Anomalous.sum_pairTargetDim}
+        Z3Anomalous.defectSquare_dim_eq, Z3Anomalous.pairCompression_evalWord_remainder_eq_zero,
+        Z3Anomalous.defectSquare_evalWord_remainder_eq_zero,
+        Z3Anomalous.defectSquare_remainder_mul_ne_zero, Z3Anomalous.sum_pairTargetDim}
     \leanok
     \uses{thm:asymex_z3anomalous_defect_square_blocks, thm:asym_multiblock,
         thm:asymex_z3anomalous_uu_compression, thm:asymex_z3anomalous_ud_compression,
-        thm:asymex_explicit_gauge}
+        thm:asymex_explicit_gauge, thm:asymex_direct_sum_compression}
     The stacked tensor $A\cdot A$ has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for the nine targets $M_{g+h}$,
     $(g,h)\in\{0,1,2\}^2$, with $z=10$ one-dimensional zero diagonal
     blocks and $25=15+10$. The nine compression pairs are mutually
-    biorthogonal, and the remainder is nilpotent of order at most nineteen.
+    biorthogonal, and the remainder is nilpotent of order exactly three.
     Explicitly, writing $s=(g,h)$ and $C_s=M_{g+h}$, the pairs satisfy
     $W_s(A\cdot A)^wV_s=C_s^w$ for every word and $W_sV_t=0$ for $s\neq t$.
     The remainder is
     \begin{align}
         R^a & =(A\cdot A)^a-\sum_s V_sC_s^aW_s,
     \end{align}
-    and $R^w=0$ whenever $|w|\geq19$.
+    and $R^w=0$ whenever $|w|\geq3$, while $R^1R^5\neq0$.
 \end{theorem}
 
 \begin{proof}
@@ -788,7 +791,8 @@ targets separately.
     Theorem~\ref{thm:asymex_z3anomalous_ud_compression}.
     Their direct sum, transported along the bond reindexing of
     Theorem~\ref{thm:asymex_z3anomalous_defect_square_blocks}, gives
-    the required triangular form. Distinct pair blocks have disjoint
+    the required triangular form
+    (Theorem~\ref{thm:asymex_direct_sum_compression}). Distinct pair blocks have disjoint
     coordinates, which gives $W_sV_t=0$ for $s\neq t$.
 
     The original block dimensions sum to
@@ -796,6 +800,13 @@ targets separately.
     The target dimensions sum to $1+2+2+2+2+1+2+1+2=15$,
     and the zero diagonal blocks number $0+0+0+0+2+3+0+3+2=10$.
     Clause~(vi) of Theorem~\ref{thm:asym_multiblock} bounds the
-    nilpotency order by $|S|+z=9+10=19$, where $S$ is the set of
-    nine target slots.
+    nilpotency order only by $|S|+z=9+10=19$, where $S$ is the set of
+    nine target slots. By
+    Theorem~\ref{thm:asymex_direct_sum_compression}, the remainder is the
+    direct sum of the nine pair remainders. These vanish on the five pairs
+    with $g=0$ or $h=0$, and on the four other pairs every word of length
+    three vanishes while $R^1R^5\neq0$ on the pair $(1,1)$, by
+    Theorems~\ref{thm:asymex_z3anomalous_uu_compression}
+    and~\ref{thm:asymex_z3anomalous_ud_compression}. Hence the order is
+    exactly three.
 \end{proof}
