@@ -93,21 +93,18 @@ pair alphabet.
 
 \begin{theorem}[Existence of fusion tensors]%
     \label{thm:mpoalg_fusion_tensors_exist}
-    \notready
-    % Lean (PR #7988, not yet on main): MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors,
-    %   MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum,
-    %   MPSTensor.exists_multiplicityReductions_of_isNormal, tagged on
-    %   cor:asym_fusion_action_multiplicity and thm:asym_multiplicity_reductions
-    %   (ch25). After #7988 merges, add those labels to \uses and cite them;
-    %   do not duplicate the tags here.
+    % Formalized as cor:asym_fusion_action_multiplicity and
+    %   thm:asym_multiplicity_reductions (ch25), which carry the Lean tags.
     % Existing Lean special cases:
     %   MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum
     %   (Theorem thm:asym_mpo_product) and
     %   MPOTensor.GroupFamily.IsRepresentation.exists_fusionTensors
     %   (Corollary cor:asym_fusion_tensors_group).
-    \uses{def:mpoalg_fusion_tensors, thm:asym_mpo_product}
+    \uses{def:mpoalg_fusion_tensors, thm:asym_mpo_product,
+        cor:asym_fusion_action_multiplicity, thm:asym_multiplicity_reductions}
     Every pair $(a,b)$ of labels of a fusion algebra of normal tensors of
-    positive bond dimension admits a family of fusion tensors. This is the
+    positive bond dimension admits a family of fusion tensors; this is
+    Corollary~\ref{cor:asym_fusion_action_multiplicity}. This is the
     existence statement of \cite[Appendix~A]{GarreRubio2023MPOSym}, which the
     source proves under its closedness condition; here only the fusion rule
     (\ref{eq:mpo_fusion_algebra}) at periodic boundary conditions is
@@ -117,11 +114,12 @@ pair alphabet.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:asym_mpo_product}
+    \uses{thm:asym_mpo_product, thm:asym_multiplicity_reductions}
     Apply Theorem~\ref{thm:asym_mpo_product} with the target family
     consisting of $N_{ab}^c$ copies of $T_c$ for each $c$, all with weight
     $1$. Its compression pairs, indexed by $(c,\mu)$, are mutually
-    biorthogonal reductions with a nilpotent remainder.
+    biorthogonal reductions with a nilpotent remainder; this is
+    Theorem~\ref{thm:asym_multiplicity_reductions} for the stacked product.
 \end{proof}
 
 For a group-like algebra, with labels in a group $G$ and
@@ -148,18 +146,17 @@ matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 
 \begin{theorem}[Existence of action tensors]%
     \label{thm:mpoalg_action_tensors_exist}
-    \notready
-    % Lean (PR #7988, not yet on main): MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum
-    %   (natural-number multiplicities), tagged on
-    %   cor:asym_fusion_action_multiplicity (ch25). After #7988 merges, add that
-    %   label to \uses and cite it; do not duplicate the tag here.
+    % Formalized as the action clause of cor:asym_fusion_action_multiplicity
+    %   (ch25), which carries the Lean tag.
     % Existing Lean: MPOTensor.exists_isReduction_actTensor_of_isNormal,
     %   MPOTensor.exists_multiBlockCompression_actTensor_of_isNormal
     %   (Corollary cor:asym_action_tensors).
     \uses{def:mpoalg_action_tensors, cor:asym_action_tensors,
-        thm:mpo_symmetric_nimrep}
+        thm:mpo_symmetric_nimrep, cor:asym_fusion_action_multiplicity}
     Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, every
-    pair $(a,x)$ admits a family of action tensors. This is the existence of
+    pair $(a,x)$ admits a family of action tensors; for integer
+    coefficients this is the action clause of
+    Corollary~\ref{cor:asym_fusion_action_multiplicity}. This is the existence of
     action tensors in \cite[Section~3]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 459--460 and 1065--1091.
 \end{theorem}
@@ -185,18 +182,12 @@ the multiplicity gauge. Outside these settings uniqueness fails
 
 \begin{corollary}[Uniqueness of a single-target reduction]%
     \label{cor:mpoalg_single_target_uniqueness}
-    \notready
-    % Not tagged: the existence clause is verbatim
-    %   MPSTensor.IsReduction.exists_boundary_dressed_proportional, already
-    %   tagged on thm:mps_reduction_boundary_dressed_uniqueness (the sync check
-    %   rejects duplicate tags); uniqueness of lambda is not part of that
-    %   statement. PR #7971 supplies uniqueness
-    %   (MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero) and PR #7988
-    %   the fusion-specific form
-    %   (MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq,
-    %   cor:asym_fusion_gauge_single).
+    % Formalized as thm:mps_reduction_boundary_dressed_uniqueness and
+    %   cor:asym_fusion_gauge_single (existence of lambda) and
+    %   thm:mpug_dressed_proportionality (uniqueness), which carry the Lean tags.
     \uses{thm:mps_reduction_boundary_dressed_uniqueness,
-        def:mps_rectangular_reduction}
+        def:mps_rectangular_reduction, cor:asym_fusion_gauge_single,
+        thm:mpug_dressed_proportionality}
     Let $B$ be a tensor, $C$ a normal tensor, and $(V,W)$, $(\widetilde
         V,\widetilde W)$ two reductions of $B$ onto $C$ whose residual tensors
     $B-WCV$ and $B-\widetilde WC\widetilde V$ are nilpotent with a common
@@ -214,27 +205,25 @@ the multiplicity gauge. Outside these settings uniqueness fails
     of a reduction onto several blocks, whose residual is not nilpotent.
     % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3156--3162
     %   (Theorem 22); arXiv:2203.12563, lines 1028--1060.
-    % Existing Lean: MPSTensor.IsReduction.exists_boundary_dressed_proportional
-    %   (tagged on thm:mps_reduction_boundary_dressed_uniqueness).
-    % Lean (PR #7988, not yet on main):
-    %   MPSTensor.IsReduction.exists_boundary_dressed_proportional_of_forall_le,
-    %   MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq, tagged on
-    %   cor:asym_fusion_gauge_single (ch25). After #7988 merges, add that label to
-    %   \uses and cite it; do not duplicate the tags here.
 \end{corollary}
 
 \begin{proof}
-    \uses{thm:mps_reduction_boundary_dressed_uniqueness}
-    This is Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}
-    written for compressions on the left and embeddings on the right.
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness,
+        cor:asym_fusion_gauge_single, thm:mpug_dressed_proportionality}
+    Existence of $\lambda$ is
+    Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness} written for
+    compressions on the left and embeddings on the right, and for fusion
+    tensors Corollary~\ref{cor:asym_fusion_gauge_single}. Uniqueness is
+    Lemma~\ref{thm:mpug_dressed_proportionality}: $VB^{\mathbf w}W=
+        C^{\mathbf w}$ is nonzero for arbitrarily long words.
 \end{proof}
 
 \begin{theorem}[Uniqueness of zipper fusion tensors up to multiplicity gauge]%
     \label{thm:mpoalg_zipper_fusion_uniqueness}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.FusionTensors.exists_multiplicity_gauge_of_remainder_eq_zero.
-    \uses{def:mpoalg_fusion_tensors, def:normal}
+    % Formalized as cor:asym_zipper_fusion_uniqueness (ch25), which carries the
+    %   Lean tag.
+    \uses{def:mpoalg_fusion_tensors, def:normal,
+        cor:asym_zipper_fusion_uniqueness}
     Let the blocks $T_c$ of a fusion algebra be normal and pairwise not
     related by a gauge transformation, and let
     $(V_{ab}^{c,\mu},W_{ab}^{c,\mu})$ and
@@ -256,7 +245,8 @@ the multiplicity gauge. Outside these settings uniqueness fails
     $\bigoplus_c\GL_{N_{ab}^c}(\C)$ and no dressing by words is needed. This
     is the uniqueness of fusion tensors under the zipper condition in
     \cite{Bultinck2017Anyons}, and the basis change of
-    \cite[Section~4]{Molnar2022MPOAlgebrasI}.
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}; it is
+    Corollary~\ref{cor:asym_zipper_fusion_uniqueness}.
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200;
     %   arXiv:2204.05940, mpo.tex line 1725;
     %   arXiv:2203.12563, lines 416--424.
@@ -265,7 +255,8 @@ the multiplicity gauge. Outside these settings uniqueness fails
 \end{theorem}
 
 \begin{proof}
-    \uses{def:normal}
+    \uses{def:normal, thm:asym_zipper_uniqueness}
+    This is the argument of Theorem~\ref{thm:asym_zipper_uniqueness}.
     Multiply (\ref{eq:mpoalg_zipper_decomposition}) by
     $\widetilde V_{ab}^{c,\mu}$ on the left and $W_{ab}^{e,\nu}$ on the right
     and use biorthogonality of both families:
@@ -281,17 +272,18 @@ the multiplicity gauge. Outside these settings uniqueness fails
 
 \begin{theorem}[Uniqueness of zipper action tensors up to multiplicity gauge]%
     \label{thm:mpoalg_zipper_action_uniqueness}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.ActionTensors.exists_multiplicity_gauge_of_remainder_eq_zero.
-    \uses{def:mpoalg_action_tensors, def:normal}
+    % Formalized as cor:asym_zipper_action_uniqueness (ch25), which carries the
+    %   Lean tag.
+    \uses{def:mpoalg_action_tensors, def:normal,
+        cor:asym_zipper_action_uniqueness}
     Let the blocks $A_y$ be normal and pairwise not related by a gauge
     transformation. Two families of action tensors for $(a,x)$ with
     vanishing remainder, $(T_a\cdot A_x)^w=\sum_{y,i}W_{ax}^{y,i}A_y^w
         V_{ax}^{y,i}$ for every nonempty word, are related by a unique
     $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$, in the sense of
     Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}. This is the gauge
-    freedom of the action tensors in \cite[Section~3.1]{GarreRubio2023MPOSym}.
+    freedom of the action tensors in \cite[Section~3.1]{GarreRubio2023MPOSym},
+    and it is Corollary~\ref{cor:asym_zipper_action_uniqueness}.
     % Source anchor: arXiv:2203.12563, lines 595--602.
 \end{theorem}
 
@@ -364,16 +356,19 @@ with the corresponding composite embeddings.
 \begin{lemma}[Composite reductions]%
     \label{lem:mpoalg_composite_reduction}
     \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
-    %   MPOTensor.isReduction_mulTensor_comp.
-    %   Pending PR #7971 (not yet on main): once merged, replace this entry's
-    %   planned statement by a \ref to thm:mpug_reduction_composition (ch29).
-    \uses{def:mpoalg_fusion_tensors}
+    % The reduction property is formalized as thm:mpug_reduction_composition and
+    %   thm:mpug_fusion_trees_reductions (ch29); the nilpotency of the composite
+    %   remainder is not formalized.
+    \uses{def:mpoalg_fusion_tensors, thm:mpug_reduction_composition,
+        thm:mpug_fusion_trees_reductions}
     If $(V,W)$ is a reduction of $T_aT_b$ onto $T_c$ and $(V',W')$ a
     reduction of $T_cT_d$ onto $T_e$, then
     $(V'(V\otimes\Id),(W\otimes\Id)W')$ is a reduction of $T_aT_bT_d$ onto
     $T_e$ with a nilpotent remainder; the same holds on the other side and for
-    an operator tensor acting on a state tensor.
+    an operator tensor acting on a state tensor. The reduction property,
+    without the nilpotency of the remainder, is
+    Lemma~\ref{thm:mpug_reduction_composition}, and for the two fusion trees
+    of a triple product it is Lemma~\ref{thm:mpug_fusion_trees_reductions}.
 \end{lemma}
 
 \begin{proof}
@@ -388,15 +383,11 @@ with the corresponding composite embeddings.
 
 \begin{definition}[Associator]%
     \label{def:mpoalg_associator}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
-    %   MPOTensor.GroupFusionAlgebra.associator.
-    %   Pending PR #7971 (not yet on main): once merged, replace this entry's
-    %   planned statement by a \ref to def:mpug_anomaly_three_cochain,
-    %   thm:mpug_anomaly_three_cochain_spec and thm:mpug_dressed_proportionality
-    %   (ch29).
+    % Formalized as def:mpug_anomaly_three_cochain with its characterization
+    %   thm:mpug_anomaly_three_cochain_spec (ch29), which carry the Lean tags.
     \uses{lem:mpoalg_composite_reduction,
-        cor:mpoalg_single_target_uniqueness}
+        cor:mpoalg_single_target_uniqueness, def:mpug_anomaly_three_cochain,
+        thm:mpug_anomaly_three_cochain_spec}
     The \emph{associator} of the chosen fusion tensors is the function
     $\omega\colon G^3\to\C^\times$ defined by
     \begin{align}
@@ -412,22 +403,23 @@ with the corresponding composite embeddings.
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} applied to the two
     composite reductions of Lemma~\ref{lem:mpoalg_composite_reduction}, and
     it is unique because $T_{ghk}^{\mathbf w}\neq0$ for some long word. This is
-    the three-cocycle of \cite[Section~4.4]{GarreRubio2023MPOSym}.
+    the three-cocycle of \cite[Section~4.4]{GarreRubio2023MPOSym}, and it is
+    the anomaly three-cochain of
+    Definition~\ref{def:mpug_anomaly_three_cochain}, characterized by
+    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
     % Source anchor: arXiv:2502.20257, main.tex lines 1507--1537 (defining
     %   display: right fusion trees, g(hk) = omega(g,h,k) (gh)k), eq:omegagauge
-    %   at lines 1542--1543; matches #7971's IsAssociator orientation.
+    %   at lines 1542--1543; the orientation of def:mpug_anomaly_three_cochain.
     % Source anchor: arXiv:2203.12563, lines 1028--1060 (periodic-boundary
     %   definition, words of length at least ell) and lines 664--676.
 \end{definition}
 
-\begin{theorem}[The associator is a normalized three-cocycle]%
+\begin{theorem}[The associator is a three-cocycle]%
     \label{thm:mpoalg_associator_cocycle}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
-    %   MPOTensor.GroupFusionAlgebra.associator_isCocycle.
-    %   Pending PR #7971 (not yet on main): once merged, replace this entry's
-    %   planned statement by a \ref to thm:mpug_anomaly_three_cocycle (ch29).
-    \uses{def:mpoalg_associator, def:mpug_three_cocycle}
+    % Formalized as thm:mpug_anomaly_three_cocycle (ch29), which carries the Lean
+    %   tag.
+    \uses{def:mpoalg_associator, def:mpug_three_cocycle,
+        thm:mpug_anomaly_three_cocycle}
     The associator satisfies the three-cocycle relation
     (\ref{eq:mpug_three_cocycle}),
     \begin{align}
@@ -436,7 +428,8 @@ with the corresponding composite embeddings.
         \label{eq:mpoalg_pentagon_group}
     \end{align}
     which is the pentagon equation for a group-like algebra
-    \cite[Section~4]{GarreRubio2023MPOSym}.
+    \cite[Section~4]{GarreRubio2023MPOSym}. This is
+    Theorem~\ref{thm:mpug_anomaly_three_cocycle}.
     % Source anchor: arXiv:2203.12563, lines 677--679.
 \end{theorem}
 
@@ -468,13 +461,11 @@ with the corresponding composite embeddings.
 
 \begin{theorem}[Gauge dependence of the associator]%
     \label{thm:mpoalg_associator_gauge}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
-    %   MPOTensor.GroupFusionAlgebra.associator_cohomologousTo.
-    %   Pending PR #7971 (not yet on main): once merged, replace this entry's
-    %   planned statement by a \ref to thm:mpug_anomaly_three_cocycle_gauge (ch29).
+    % Formalized as thm:mpug_anomaly_three_cocycle_gauge (ch29), which carries the
+    %   Lean tags.
     \uses{def:mpoalg_associator, cor:mpoalg_single_target_uniqueness,
-        def:mpug_fusion_gauge, def:mpug_cohomologous_to}
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        thm:mpug_anomaly_three_cocycle_gauge}
     Replacing the fusion tensors by $(\beta_{g,h}^{-1}V_{g,h},
         \beta_{g,h}W_{g,h})$, so that $V_{g,h}B^{\mathbf w}=\beta_{g,h}\,
         V'_{g,h}B^{\mathbf w}$ for the new compression $V'_{g,h}$, with $\beta\colon G^2\to\C^\times$ replaces
@@ -483,7 +474,8 @@ with the corresponding composite embeddings.
     $\omega$ under the relation of
     Definition~\ref{def:mpug_cohomologous_to} does not depend on the choice
     of fusion tensors, and depends only on the family $(T_g)_{g\in G}$.
-    This is the coboundary freedom of \cite[Section~4]{GarreRubio2023MPOSym}.
+    This is the coboundary freedom of \cite[Section~4]{GarreRubio2023MPOSym},
+    and it is Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
     % Source anchor: arXiv:2203.12563, lines 680--682 and 720--726.
 \end{theorem}
 
@@ -500,6 +492,18 @@ with the corresponding composite embeddings.
     Corollary~\ref{cor:mpoalg_single_target_uniqueness} every other choice of
     fusion tensors is boundary-dressed equal to such a rescaling.
 \end{proof}
+
+\begin{remark}[A computed anomaly class]%
+    \label{rem:mpoalg_associator_examples}
+    \uses{thm:mpoalg_associator_gauge, thm:asymex_z3anomalous_anomaly_class}
+    For a cyclic group generated by $g$ of order $n$, the product
+    $\prod_{k<n}\omega(g,g^k,g)$ is unchanged by the gauge action of
+    Theorem~\ref{thm:mpoalg_associator_gauge}, so it depends only on the
+    family $(T_g)_{g\in G}$. For the phase-decorated shift representation of
+    $\Z_3$ it is a primitive cube root of unity
+    (Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}), so its associator
+    does not have trivial gauge class.
+\end{remark}
 
 \begin{remark}[F-symbols with multiplicity under the zipper condition]%
     \label{rem:mpoalg_f_symbols}
@@ -669,8 +673,6 @@ with the corresponding composite embeddings.
 
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%
     \label{rem:mpoalg_kramers_wannier}
-    % Pending PR #8009 (not yet on main): once merged, cite
-    %   sec:asymex_kw_bimodule (ch25 Kramers--Wannier section) in this remark.
     The Kramers--Wannier operator of Section~\ref{sec:asymex_kw} does not
     belong to a fusion algebra on one lattice: by
     (\ref{eq:asymex_kw_fusion}) its square is $(\Id+\eta)T$ up to
@@ -681,7 +683,9 @@ with the corresponding composite embeddings.
     dual chains, rather than a symmetry of one of them
     \cite{Lootens2023Dualities,Lootens2021MPOStringNet}. Fusion and action
     tensors for such intertwiners come from the same asymmetric compression
-    theorem, applied to products of operators between different chains.
+    theorem, applied to products of operators between different chains; the
+    Kramers--Wannier case is worked out in
+    Section~\ref{sec:asymex_kw_bimodule}.
     % Source anchor: arXiv:2112.09091, _Hamiltonian.tex lines 22--28 and
     %   _Examples.tex lines 55--63.
 \end{remark}
