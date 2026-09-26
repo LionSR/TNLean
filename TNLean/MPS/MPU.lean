@@ -79,6 +79,7 @@ import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
+import TNLean.MPS.MPU.TransferStabilizationConverse
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth
 import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TwoSiteStandardForm

@@ -431,6 +431,39 @@ model different levels of data and different sources.
   primitivity, positivity of block dimensions, ordering of weights, or BNT
   minimality. It is data, not a proposition equivalent to the predicates below.
 
+### Retained-block reconstruction and literal CPSV canonical form
+
+- **Declarations:** `MPSTensor.RetainedBlockReconstructionData A` and
+  `MPSTensor.CPSVCanonicalFormData A`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/Definitions.lean`; block inclusions
+  in `TNLean/MPS/CanonicalForm/RetainedBlockReconstruction.lean`.
+- **Meaning:** the common reconstruction is
+  $A^i=C^\dagger(\bigoplus_k\mu_k A_k^i)C$ with nonzero weights and
+  $CC^\dagger=1$. Literal CPSV data additionally require normal blocks and
+  $\sum_k D_k\le D$, permitting an unused ambient zero complement.
+- **Source:** arXiv:1606.00608, equation `II_CF1`, lines 214--245.
+- **Caveat:** the common reconstruction imposes no normality or full-support
+  condition. The nonzero-weight convention is recorded in
+  `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`.
+
+### `MPSTensor.IsMPUCanonicalForm`
+
+- **Declarations:** `MPSTensor.MPUCanonicalFormData A` and
+  `MPSTensor.IsMPUCanonicalForm A`.
+- **Defined in:** `TNLean/MPS/MPU/MPUCanonicalForm.lean`.
+- **Meaning:** the same weighted reconstruction with irreducible blocks of
+  transfer spectral radius one, nonzero weights, and full ambient support
+  $\sum_k D_k=D$. Periodic blocks are permitted.
+- **Source:** arXiv:1703.09188, canonical-form definition, lines 259--267.
+- **Sanctioned result:** for an MPU whose original local tensor has this form,
+  `MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm`
+  proves the normality conclusion of Proposition `prop:normal-tensor`.
+- **Caveat:** the nonzero-weight and full-support conventions are recorded in
+  `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex` and
+  `docs/paper-gaps/mpu_canonical_form_full_support.tex`. Literal CPSV data keep
+  their optional ambient complement. The PGVWC07 form has a distinct
+  reconstruction using a bond-index equivalence and real weights.
+
 ### `MPSTensor.IsCanonicalForm`
 
 - **Declaration:** `MPSTensor.IsCanonicalForm μ A : Prop`.
