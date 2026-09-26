@@ -448,6 +448,70 @@ ring of $L$ sites.
     of~(\ref{eq:asymex_z2z2_action}).
 \end{proof}
 
+\begin{lemma}[Dressing by a diagonal on-site operator]%
+    \label{lem:asymex_z2z2_diagonal_dressing}
+    \lean{MPOTensor.mulDiagonal,
+        MPOTensor.mpo_mulDiagonal,
+        MPOTensor.toMPSTensor_mulDiagonal,
+        MPOTensor.isNormal_toMPSTensor_mulDiagonal_iff,
+        MPSTensor.evalWord_letterSmul,
+        MPSTensor.wordSpan_letterSmul_le,
+        MPSTensor.wordSpan_letterSmul_eq,
+        MPSTensor.isNBlkInjective_letterSmul_iff,
+        MPSTensor.isNormal_letterSmul_iff}
+    \leanok
+    Let $M$ be a matrix product operator tensor with periodic operators
+    $O_L$, and let $c\in\C^d$. The tensor with letters $c_jM^{ij}$ has
+    periodic operators $O_L\,\operatorname{diag}(c)^{\otimes L}$. If
+    every $c_j$ is nonzero, its doubled-index tensor is normal exactly when
+    that of $M$ is.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace of $\prod_n c_{t_n}M^{s_nt_n}$ is
+    $\bigl(\prod_nc_{t_n}\bigr)\operatorname{tr}\prod_nM^{s_nt_n}$.
+    Every word of the doubled-index tensor is multiplied by the product of
+    the scalars of its letters, which is nonzero, so the span of the words
+    of each length is unchanged.
+\end{proof}
+
+\begin{theorem}[An exact normal representation by dressed tensors]%
+    \label{thm:asymex_z2z2_exact}
+    \lean{Z2Z2Condensation.secondZSign,
+        Z2Z2Condensation.diagonal_prod_secondZSign,
+        Z2Z2Condensation.secondZDressing_mul_self,
+        Z2Z2Condensation.kleinTensor,
+        Z2Z2Condensation.mpo_kleinTensor,
+        Z2Z2Condensation.kleinTensor_isNormal,
+        Z2Z2Condensation.kleinFamily,
+        Z2Z2Condensation.kleinFamily_isNormalRepresentation}
+    \leanok
+    \uses{def:asymex_z2z2_tensors, def:asymex_group_cocycle_klein,
+        def:mpug_anomaly_three_cochain}
+    For $g\in\Z_2\times\Z_2$ let $M'_g$ be the tensor $M_g$ of
+    Definition~\ref{def:asymex_z2z2_tensors} with the letter of input label
+    $i$ multiplied by $(-1)^{g_1i_2}$. It has the bond dimension of $M_g$,
+    its doubled-index tensor is normal, and its periodic operator on every
+    ring of $L>0$ sites is $U^{\omega}_{g,L}$. In particular the tensors
+    $M'_g$ form an exact representation of $\Z_2\times\Z_2$ by normal
+    tensors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_z2z2_group_cocycle, thm:asymex_z2z2_normal,
+        thm:asymex_group_cocycle_klein, lem:asymex_z2z2_diagonal_dressing}
+    By Lemma~\ref{lem:asymex_z2z2_diagonal_dressing} the periodic operator
+    of $M'_g$ is $U_{g,L}Z_{2,L}^{\,g_1}$, which is $U^{\omega}_{g,L}$ by
+    \eqref{eq:asymex_z2z2_group_cocycle} and $Z_{2,L}^2=\Id$. The
+    operators $U^{\omega}_{g,L}$ multiply as the group by
+    Theorem~\ref{thm:asymex_group_cocycle_klein}. The letters of $M'_g$
+    are those of the normal tensor $M_g$ of
+    Theorem~\ref{thm:asymex_z2z2_normal} multiplied by signs, so
+    Lemma~\ref{lem:asymex_z2z2_diagonal_dressing} gives normality.
+\end{proof}
+
 \begin{theorem}[The condensation defect squares to a length-dependent
         multiple of itself]%
     \label{thm:asymex_z2z2_defect_sq}

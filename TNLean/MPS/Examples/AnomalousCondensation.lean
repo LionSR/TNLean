@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Defect
+import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Exact
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Instance
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Split
