@@ -27,13 +27,18 @@ namespace Submodule
 variable {E ι : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [Fintype ι] [DecidableEq ι]
 
+private theorem overlapMatrix_bilinear_le (B : Matrix ι ι ℝ)
+    (v w : EuclideanSpace ℝ ι) :
+    ∑ i, ∑ j, B i j * v i * w j ≤ ‖B‖ * ‖v‖ * ‖w‖ := by
+  have h := (real_inner_le_norm v (Matrix.toEuclideanCLM (𝕜 := ℝ) (n := ι) B w)).trans
+    (mul_le_mul_of_nonneg_left
+      ((Matrix.toEuclideanCLM (𝕜 := ℝ) (n := ι) B).le_opNorm w) (norm_nonneg v))
+  simpa [Matrix.inner_toEuclideanCLM, Matrix.mulVec, dotProduct, Finset.mul_sum,
+    Matrix.l2_opNorm_toEuclideanCLM, mul_assoc, mul_left_comm] using h
+
 private theorem overlapMatrix_quadratic_le (B : Matrix ι ι ℝ) (w : EuclideanSpace ℝ ι) :
     ∑ i, ∑ j, B i j * w i * w j ≤ ‖B‖ * ‖w‖ ^ 2 := by
-  have h := (real_inner_le_norm w (Matrix.toEuclideanCLM (𝕜 := ℝ) (n := ι) B w)).trans
-    (mul_le_mul_of_nonneg_left
-      ((Matrix.toEuclideanCLM (𝕜 := ℝ) (n := ι) B).le_opNorm w) (norm_nonneg w))
-  simpa [Matrix.inner_toEuclideanCLM, Matrix.mulVec, dotProduct, Finset.mul_sum,
-    Matrix.l2_opNorm_toEuclideanCLM, pow_two, mul_assoc, mul_left_comm] using h
+  simpa only [pow_two, mul_assoc] using overlapMatrix_bilinear_le B w w
 
 omit [DecidableEq ι] in
 /-- The pairwise overlap bounds give the lower Gram estimate in the proof of
@@ -67,6 +72,19 @@ theorem norm_sum_sq_ge_of_overlapMatrix (v : ι → E) (B : Matrix ι ι ℝ)
       overlapMatrix_quadratic_le B (WithLp.toLp 2 fun i ↦ ‖v i‖)
   linarith [sum_norm_sq_le_norm_sum_sq_add_overlapMatrix v B hdiag hpair]
 
+omit [DecidableEq ι] [InnerProductSpace ℂ E] in
+private theorem norm_norms_le_of_lower_bound (v : ι → E) {b : ℝ} (hb : b < 1)
+    (hLower : (1 - b) * (∑ i, ‖v i‖ ^ 2) ≤ ‖∑ i, v i‖ ^ 2) :
+    ‖(WithLp.toLp 2 (fun i ↦ ‖v i‖) : EuclideanSpace ℝ ι)‖ ≤
+      ‖∑ i, v i‖ / Real.sqrt (1 - b) := by
+  let w : EuclideanSpace ℝ ι := WithLp.toLp 2 fun i ↦ ‖v i‖
+  have hSq : (‖w‖ * Real.sqrt (1 - b)) ^ 2 ≤ ‖∑ i, v i‖ ^ 2 := by
+    simpa only [mul_pow, Real.sq_sqrt (sub_pos.mpr hb).le,
+      EuclideanSpace.real_norm_sq_eq, w, WithLp.ofLp_toLp, mul_comm] using hLower
+  exact (le_div_iff₀ (Real.sqrt_pos.mpr (sub_pos.mpr hb))).mpr
+    ((sq_le_sq₀ (mul_nonneg (norm_nonneg w) (Real.sqrt_nonneg _))
+      (norm_nonneg _)).mp hSq)
+
 omit [DecidableEq ι] in
 private theorem norm_inner_sum_le_of_lower_bound (x : E) (v : ι → E)
     (a : EuclideanSpace ℝ ι) {b : ℝ} (hb : b < 1)
@@ -74,13 +92,8 @@ private theorem norm_inner_sum_le_of_lower_bound (x : E) (v : ι → E)
     (hCross : ∀ i, ‖⟪x, v i⟫_ℂ‖ ≤ a i * ‖x‖ * ‖v i‖) :
     ‖⟪x, ∑ i, v i⟫_ℂ‖ ≤ ‖a‖ / Real.sqrt (1 - b) * ‖x‖ * ‖∑ i, v i‖ := by
   let w : EuclideanSpace ℝ ι := WithLp.toLp 2 fun i ↦ ‖v i‖
-  have hSq : (‖w‖ * Real.sqrt (1 - b)) ^ 2 ≤ ‖∑ i, v i‖ ^ 2 := by
-    simpa only [mul_pow, Real.sq_sqrt (sub_pos.mpr hb).le,
-      EuclideanSpace.real_norm_sq_eq, w, WithLp.ofLp_toLp, mul_comm] using hLower
   have hw : ‖w‖ ≤ ‖∑ i, v i‖ / Real.sqrt (1 - b) :=
-    (le_div_iff₀ (Real.sqrt_pos.mpr (sub_pos.mpr hb))).mpr
-      ((sq_le_sq₀ (mul_nonneg (norm_nonneg w) (Real.sqrt_nonneg _))
-        (norm_nonneg _)).mp hSq)
+    norm_norms_le_of_lower_bound v hb hLower
   have hCauchy : ∑ i, a i * ‖v i‖ ≤ ‖a‖ * ‖w‖ := by
     simpa [EuclideanSpace.inner_eq_star_dotProduct, dotProduct, w, mul_comm] using
       real_inner_le_norm a w
@@ -163,5 +176,38 @@ theorem iSup_overlap_bound_of_uniform (U : Submodule ℂ E)
     (norm_sum_sq_ge_of_uniform_overlap _ hε
       (fun i j hij ↦ hpair i j hij _ (v i).property _ (v j).property))
     (fun i ↦ hCross i x hx _ (v i).property)
+
+/-- The off-diagonal pairing estimate in Nachtergaele,
+arXiv:cond-mat/9410110, Lemma `commutation`, equation `5d`
+(local source lines 2465--2500). The same matrix bounds the internal
+overlaps of both families and their off-diagonal cross overlaps. -/
+theorem sum_offDiagonal_norm_inner_le_of_overlapMatrix
+    (v w : ι → E) (B : Matrix ι ι ℝ) (hdiag : ∀ i, B i i = 0) (hB : ‖B‖ < 1)
+    (hv : ∀ i j, i ≠ j → ‖⟪v i, v j⟫_ℂ‖ ≤ B i j * ‖v i‖ * ‖v j‖)
+    (hw : ∀ i j, i ≠ j → ‖⟪w i, w j⟫_ℂ‖ ≤ B i j * ‖w i‖ * ‖w j‖)
+    (hcross : ∀ i j, i ≠ j → ‖⟪v i, w j⟫_ℂ‖ ≤ B i j * ‖v i‖ * ‖w j‖) :
+    (∑ i, ∑ j, if i = j then 0 else ‖⟪v i, w j⟫_ℂ‖) ≤
+      ‖B‖ / (1 - ‖B‖) * ‖∑ i, v i‖ * ‖∑ i, w i‖ := by
+  let a : EuclideanSpace ℝ ι := WithLp.toLp 2 fun i ↦ ‖v i‖
+  let b : EuclideanSpace ℝ ι := WithLp.toLp 2 fun i ↦ ‖w i‖
+  have hab : (∑ i, ∑ j, if i = j then 0 else ‖⟪v i, w j⟫_ℂ‖) ≤
+      ‖B‖ * ‖a‖ * ‖b‖ := by
+    apply le_trans _ (overlapMatrix_bilinear_le B a b)
+    apply Finset.sum_le_sum fun i _ ↦ Finset.sum_le_sum fun j _ ↦ ?_
+    by_cases hij : i = j
+    · simp [hij, hdiag]
+    · simpa [hij, a, b] using hcross i j hij
+  have ha : ‖a‖ ≤ ‖∑ i, v i‖ / Real.sqrt (1 - ‖B‖) :=
+    norm_norms_le_of_lower_bound v hB (norm_sum_sq_ge_of_overlapMatrix v B hdiag hv)
+  have hb : ‖b‖ ≤ ‖∑ i, w i‖ / Real.sqrt (1 - ‖B‖) :=
+    norm_norms_le_of_lower_bound w hB (norm_sum_sq_ge_of_overlapMatrix w B hdiag hw)
+  calc
+    _ ≤ ‖B‖ * ‖a‖ * ‖b‖ := hab
+    _ ≤ ‖B‖ * (‖∑ i, v i‖ / Real.sqrt (1 - ‖B‖)) *
+        (‖∑ i, w i‖ / Real.sqrt (1 - ‖B‖)) := by gcongr
+    _ = _ := by
+      field_simp
+      rw [Real.sq_sqrt (sub_pos.mpr hB).le]
+
 
 end Submodule

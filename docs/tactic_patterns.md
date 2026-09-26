@@ -1978,6 +1978,16 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Lower Gram bounds and off-diagonal pairings — locally factored
+- **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
+  norm of the component norms, then apply a bilinear matrix estimate.
+- **Occurrences:** three uses of `norm_norms_le_of_lower_bound` in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`.
+- **Status:** factored into a private lemma. The two projector-pairing
+  expansions in `BlockProjectorSum.lean` likewise share private lemmas
+  for removing the diagonal and bounding the remaining finite sum.
+  No new tactic is needed.
+
 ### Decomposing membership in a finite sum of subspaces — candidate
 - **Pattern:** obtain vectors in the individual subspaces from membership in
   their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
