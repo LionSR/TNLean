@@ -59,6 +59,7 @@ import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.OperatorSchmidt
+import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
@@ -80,6 +81,7 @@ import TNLean.Algebra.StarClosedSemisimple
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
+import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TwistedRegularRepresentation
