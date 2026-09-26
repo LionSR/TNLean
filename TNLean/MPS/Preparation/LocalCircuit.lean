@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Overlap.Basic
+import TNLean.Algebra.FinKronecker
+import TNLean.MPS.Core.ProductVector
 import Mathlib.Algebra.Algebra.Operations
 import Mathlib.Algebra.Star.BigOperators
 import Mathlib.Data.Finset.NoncommProd
@@ -42,7 +43,6 @@ that pair. Layers are listed in the order in which they are applied.
 
 ## Main definitions
 
-* `MPSPreparation.siteProduct` — the product operator `⊗ᵢ mᵢ`.
 * `MPSPreparation.supportedOperators` — operators acting on a set of sites.
 * `MPSPreparation.neighbourhood` — the sites within ring distance `r` of a set.
 * `MPSPreparation.Layer`, `MPSPreparation.circuitOp` — layers and local circuits.
@@ -69,29 +69,6 @@ variable {d N : ℕ}
 
 /-! ### Product operators and support -/
 
-/-- The product operator `⊗ᵢ mᵢ` on the chain, with entries
-`(⊗ᵢ mᵢ)_{στ} = ∏ᵢ (mᵢ)_{σᵢ τᵢ}`.
-
-Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (operators acting on
-sets of sites). -/
-def siteProduct (m : Fin N → Matrix (Fin d) (Fin d) ℂ) : Matrix (Cfg d N) (Cfg d N) ℂ :=
-  Matrix.of fun σ τ ↦ ∏ i, m i (σ i) (τ i)
-
-theorem siteProduct_mul (m m' : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    siteProduct m * siteProduct m' = siteProduct (fun i ↦ m i * m' i) := by
-  ext σ τ
-  simp only [siteProduct, mul_apply, of_apply, Fintype.prod_sum, ← Finset.prod_mul_distrib]
-
-theorem siteProduct_one : siteProduct (fun _ : Fin N ↦ (1 : Matrix (Fin d) (Fin d) ℂ)) = 1 := by
-  ext σ τ
-  simp only [siteProduct, of_apply, one_apply, Finset.prod_boole, Finset.mem_univ, true_implies]
-  simp [funext_iff]
-
-theorem conjTranspose_siteProduct (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    (siteProduct m)ᴴ = siteProduct (fun i ↦ (m i)ᴴ) := by
-  ext σ τ
-  simp [siteProduct, conjTranspose_apply, star_prod]
-
 /-- The operators acting on the set of sites `S`: the complex span of the product operators
 `⊗ᵢ mᵢ` with `mᵢ = 1` off `S`, that is, `M_d^{⊗ S} ⊗ 1`.
 
@@ -100,11 +77,11 @@ acting on sites of the chain). -/
 def supportedOperators (d : ℕ) (S : Set (Fin N)) :
     Submodule ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
   Submodule.span ℂ {A | ∃ m : Fin N → Matrix (Fin d) (Fin d) ℂ,
-    (∀ i ∉ S, m i = 1) ∧ A = siteProduct m}
+    (∀ i ∉ S, m i = 1) ∧ A = finKronecker m}
 
-theorem siteProduct_mem_supportedOperators {S : Set (Fin N)}
+theorem finKronecker_mem_supportedOperators {S : Set (Fin N)}
     {m : Fin N → Matrix (Fin d) (Fin d) ℂ} (hm : ∀ i ∉ S, m i = 1) :
-    siteProduct m ∈ supportedOperators d S :=
+    finKronecker m ∈ supportedOperators d S :=
   Submodule.subset_span ⟨m, hm, rfl⟩
 
 theorem supportedOperators_mono {S S' : Set (Fin N)} (h : S ⊆ S') :
@@ -115,8 +92,8 @@ theorem supportedOperators_mono {S S' : Set (Fin N)} (h : S ⊆ S') :
 
 theorem one_mem_supportedOperators (S : Set (Fin N)) :
     (1 : Matrix (Cfg d N) (Cfg d N) ℂ) ∈ supportedOperators d S := by
-  rw [← siteProduct_one]
-  exact siteProduct_mem_supportedOperators fun _ _ ↦ rfl
+  rw [← finKronecker_one]
+  exact finKronecker_mem_supportedOperators fun _ _ ↦ rfl
 
 theorem mul_mem_supportedOperators {S : Set (Fin N)} {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S) :
@@ -125,17 +102,17 @@ theorem mul_mem_supportedOperators {S : Set (Fin N)} {A B : Matrix (Cfg d N) (Cf
   rw [supportedOperators, Submodule.span_mul_span] at hAB
   refine Submodule.span_le.mpr ?_ hAB
   rintro _ ⟨_, ⟨m, hm, rfl⟩, _, ⟨m', hm', rfl⟩, rfl⟩
-  change siteProduct m * siteProduct m' ∈ _
-  rw [siteProduct_mul]
-  exact siteProduct_mem_supportedOperators fun i hi ↦ by simp [hm i hi, hm' i hi]
+  change finKronecker m * finKronecker m' ∈ _
+  rw [finKronecker_mul]
+  exact finKronecker_mem_supportedOperators fun i hi ↦ by simp [hm i hi, hm' i hi]
 
 theorem star_mem_supportedOperators {S : Set (Fin N)} {A : Matrix (Cfg d N) (Cfg d N) ℂ}
     (hA : A ∈ supportedOperators d S) : star A ∈ supportedOperators d S := by
   induction hA using Submodule.span_induction with
   | mem x hx =>
     obtain ⟨m, hm, rfl⟩ := hx
-    rw [star_eq_conjTranspose, conjTranspose_siteProduct]
-    exact siteProduct_mem_supportedOperators fun i hi ↦ by simp [hm i hi]
+    rw [star_eq_conjTranspose, finKronecker_conjTranspose]
+    exact finKronecker_mem_supportedOperators fun i hi ↦ by simp [hm i hi]
   | zero => simp
   | add x y _ _ hx hy => rw [star_add]; exact Submodule.add_mem _ hx hy
   | smul c x _ hx => rw [star_smul]; exact Submodule.smul_mem _ _ hx
@@ -150,8 +127,8 @@ theorem commute_of_mem_supportedOperators {S S' : Set (Fin N)} (hSS' : Disjoint 
     induction hB using Submodule.span_induction with
     | mem y hy =>
       obtain ⟨m', hm', rfl⟩ := hy
-      change siteProduct m * siteProduct m' = siteProduct m' * siteProduct m
-      rw [siteProduct_mul, siteProduct_mul]
+      change finKronecker m * finKronecker m' = finKronecker m' * finKronecker m
+      rw [finKronecker_mul, finKronecker_mul]
       congr 1
       funext i
       by_cases hi : i ∈ S
@@ -195,17 +172,10 @@ theorem expect_mulVec (U A : Matrix (Cfg d N) (Cfg d N) ℂ) (ψ : Cfg d N → �
   simp only [expect, star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, star_eq_conjTranspose,
     Matrix.mul_assoc]
 
-/-- The product vector `⊗ᵢ vᵢ`, with coefficients `∏ᵢ vᵢ(σᵢ)`.
-
-Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits
-applied to product states"). -/
-def productVector (v : Fin N → Fin d → ℂ) : Cfg d N → ℂ :=
-  fun σ ↦ ∏ i, v i (σ i)
-
-theorem expect_productVector_siteProduct (v : Fin N → Fin d → ℂ)
+theorem expect_productVector_finKronecker (v : Fin N → Fin d → ℂ)
     (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    expect (productVector v) (siteProduct m) = ∏ i, star (v i) ⬝ᵥ (m i *ᵥ v i) := by
-  simp only [expect, productVector, siteProduct, dotProduct, mulVec, of_apply, Pi.star_apply,
+    expect (productVector v) (finKronecker m) = ∏ i, star (v i) ⬝ᵥ (m i *ᵥ v i) := by
+  simp only [expect, productVector, finKronecker, dotProduct, mulVec, of_apply, Pi.star_apply,
     star_prod, Finset.mul_sum]
   rw [Fintype.prod_sum]
   refine Finset.sum_congr rfl fun σ _ ↦ ?_
@@ -226,9 +196,9 @@ theorem expect_productVector_mul {S S' : Set (Fin N)} (hSS' : Disjoint S S')
     induction hB using Submodule.span_induction with
     | mem y hy =>
       obtain ⟨m', hm', rfl⟩ := hy
-      rw [siteProduct_mul, ← siteProduct_one, expect_productVector_siteProduct,
-        expect_productVector_siteProduct, expect_productVector_siteProduct,
-        expect_productVector_siteProduct, ← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
+      rw [finKronecker_mul, ← finKronecker_one, expect_productVector_finKronecker,
+        expect_productVector_finKronecker, expect_productVector_finKronecker,
+        expect_productVector_finKronecker, ← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
       refine Finset.prod_congr rfl fun i _ ↦ ?_
       by_cases hi : i ∈ S
       · simp [hm' i (Set.disjoint_left.mp hSS' hi)]
@@ -481,8 +451,11 @@ theorem expect_mul_mul_expect_one_of_isPreparedInDepth {T : ℕ} {ψ : Cfg d N �
 /-- For a unit vector `ψ` prepared in depth `T`, the connected correlation of operators at
 ring distance larger than `2T` vanishes: `⟨AB⟩ = ⟨A⟩⟨B⟩`.
 
-Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1
-(`b_{𝒪₁𝒪'ₛ} = b_{𝒪₁} b_{𝒪'ₛ}` for `s = 2T + 1`). -/
+Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 ("every connected
+correlation for operators at a distance larger than `2T` vanishes"). The source then applies
+this at `s = 2T + 1`, where `𝒪₁` and `𝒪'ₛ` sit at ring distance exactly `2T`; the separation
+hypothesis here excludes that case, which would need a sharper light cone than the symmetric
+one proved here, such as that of a brickwork circuit. -/
 theorem expect_mul_eq_of_isPreparedInDepth {T : ℕ} {ψ : Cfg d N → ℂ}
     (hψ : IsPreparedInDepth T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) {X Y : Set (Fin N)}
     (hXY : IsSeparatedBy X Y (2 * T)) {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
