@@ -382,7 +382,13 @@ torus this string can be pulled through every rectangle of sites: inserted along
 bottom sides of the rectangle it gives the same network as inserted along its top and right
 sides. Around one site the two paths are `π(l) π(b)` and `π(t) π(r)`, so the closed string
 around a site is `π(t) π(r) π(b)⁻¹ π(l)⁻¹`, with `π` on the top and right legs and `π⁻¹` on
-the down and left legs. -/
+the down and left legs.
+
+The statement holds on every torus of width and height at least two. On a torus of width or
+height two the left and right (or down and top) legs of a site are one edge of the lattice
+graph, so the source's network, with four distinct bonds at each site, is the case of width and
+height at least three (`docs/paper-gaps/rmp_peps_examples_small_torus.tex`); no hypothesis is
+needed for the pulling-through identity itself. -/
 theorem sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq {M : Type*} [Semiring M]
     [Module ℂ M] (π : G →* M) {width height : ℕ} [NeZero width] [NeZero height]
     [Fact (1 < width)] [Fact (1 < height)]

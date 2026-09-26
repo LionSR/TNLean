@@ -481,8 +481,7 @@ trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
         TNLean.PEPS.quantumDoublePrimalPEPS,
         TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq}
     \leanok
-    \uses{def:peps_quantum_double_primal, thm:peps_quantum_double_primal_fusion,
-        lem:peps_torus_string_pull_through}
+    \uses{def:peps_quantum_double_primal, lem:peps_torus_string_pull_through}
     Place the primal quantum-double tensor at every site of the torus, and
     let $\pi$ be a representation of $G$, in particular an irreducible one.
     The virtual string that multiplies $\pi(g)$ for each bond with label $g$
@@ -493,7 +492,10 @@ trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
         models'']{Cirac2021Matrix}. Around one site the two paths give
     $\pi(l)\pi(b)$ and $\pi(t)\pi(r)$, so the closed string around a site is
     the operator $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}$ of
-    Theorem~\ref{thm:peps_quantum_double_primal_fusion}.
+    Theorem~\ref{thm:peps_quantum_double_primal_fusion}. The statement holds
+    on every torus of width and height at least two; the source's network,
+    with four distinct bonds at each site, is the case of width and height
+    at least three \cite{gap:rmp_peps_examples_small_torus}.
 \end{theorem}
 
 \begin{proof}\leanok
