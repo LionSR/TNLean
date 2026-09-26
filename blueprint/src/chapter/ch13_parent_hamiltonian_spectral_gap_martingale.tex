@@ -7208,13 +7208,13 @@ tensors.
     This is the projector reduction of \cite[Section~IV.C]{Cirac2021Matrix}.
 \end{proof}
 
-\begin{theorem}[Positive parent interactions at the simultaneous injectivity range]
-    \label{thm:canonical-positive-parent-gap-simultaneous-injectivity}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop,MPSTensor.IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop}
+\begin{theorem}[Positive parent interactions for every canonical decomposition]
+    \label{thm:canonical-decomposition-positive-parent-gap-simultaneous-injectivity}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
-    Let $A$ be a tensor in canonical form with positive physical dimension, with
-    its multiplicities retained, and choose its normal representatives $B_j$,
-    indexed by $0\leq j<r$.
+    Let $A$ be a tensor in canonical form with positive physical dimension.
+    Fix any canonical decomposition of $A$, and let $B_0,\ldots,B_{g-1}$ be
+    its distinct normal representatives.
     Suppose that $S>0$ and the tuples of length-$S$ words span the direct sum of
     the matrix algebras of these representatives. For every $R\geq S+1$ and
     every fixed positive operator $h$ on $R$ sites with kernel $G_R(A)$,
@@ -7222,7 +7222,31 @@ tensors.
     \begin{align}
         \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
     \end{align}
-    The representatives can be chosen once, independently of $S$, $R$, and $h$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:canonical-decomposition-gap-simultaneous-injectivity,thm:positive-parent-interaction-uniform-gap}
+    Apply the canonical projector gap of
+    Theorem~\ref{thm:canonical-decomposition-gap-simultaneous-injectivity} at
+    range $R$, then the comparison theorem for the fixed interaction $h$. The
+    constants depend on $h$ but not on $N$.
+\end{proof}
+
+\begin{theorem}[Positive parent interactions at the simultaneous injectivity range]
+    \label{thm:canonical-positive-parent-gap-simultaneous-injectivity}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a tensor in canonical form with positive physical dimension.
+    One may choose a basis of normal tensors $B_0,\ldots,B_{g-1}$ such that
+    the following holds. Suppose that $S>0$ and the tuples of length-$S$ words
+    span the direct sum of the matrix algebras of these representatives. For
+    every $R\geq S+1$ and every fixed positive operator $h$ on $R$ sites with
+    kernel $G_R(A)$, there is $\gamma>0$ such that, for every $N$ and every
+    $v\perp\ker H_N(h)$,
+    \begin{align}
+        \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
+    \end{align}
+    The representatives are chosen once, independently of $S$, $R$, and $h$.
 \end{theorem}
 \begin{proof}
     \leanok
