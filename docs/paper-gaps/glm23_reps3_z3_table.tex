@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{The $\mathbb Z_3$ Phase of $\mathrm{Rep}(S_3)$: the Printed Action of $\psi$}
+\author{}
+\date{2026-09-27}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The source claim}
+Garre-Rubio, Lootens and Moln\'ar list the phases of matrix product states
+symmetric under matrix product operators representing $\mathrm{Rep}(S_3)$,
+with labels $1,\pi,\psi$ and fusion rules $\pi\times\pi=1+\pi+\psi$,
+$\psi\times\psi=1$, $\psi\times\pi=\pi\times\psi=\pi$, and print the action of
+the labels on the blocks of each phase~\cite{GarreRubio2023MPOSym}. The
+multiplicities $M_{a,x}^y$ of the action of $a$ on a block $x$ satisfy
+\begin{align}
+    \sum_c N_{ab}^c M_{c,x}^y & =\sum_z M_{b,x}^z M_{a,z}^y ,
+    \label{eq:glm23_z3_nimrep}
+\end{align}
+a consequence of the associativity of the action.\footnote{Source
+    traceability: \path{Papers/2203.12563/REsubmission.tex}, lines 564--565
+    for (\ref{eq:glm23_z3_nimrep}), line 1934 for the fusion rules.}
+
+\section{The printed action}
+The printed $\mathbb Z_3$ action is
+$\pi\cdot x=y+z$, $\pi\cdot y=x+z$, $\pi\cdot z=x+y$ and
+$\psi\cdot x=x$, $\psi\cdot y=z$, $\psi\cdot z=y$.\footnote{Source
+    traceability: lines 1959--1971.} It does not satisfy
+(\ref{eq:glm23_z3_nimrep}) for $\pi\times\pi=1+\pi+\psi$: on the block $y$,
+$\pi\cdot(\pi\cdot y)=x+2y+z$, while $(1+\pi+\psi)\cdot y=x+y+2z$. With $\psi$
+fixing every block, (\ref{eq:glm23_z3_nimrep}) holds. This corrected action
+is the one the source itself describes when it identifies the phase with the
+blocks $x,y,z$ of $\mathcal M_{TY}$ of $su(2)_4$, along the embedding $1,\pi,\psi\mapsto0,1,2$, and the label $2$ of $su(2)_4$ fixes every block of $\mathcal M_{TY}$.\footnote{Source traceability: lines 1911--1925 for the action on $\mathcal M_{TY}$, line 1934 for the embedding, line 1972 for the identification.} It is
+also the action that the representation theory predicts: the blocks are the
+three characters of $\mathbb Z_3$, and $\psi$ acts by tensoring with the
+restriction of the sign representation to $\mathbb Z_3$, which is trivial.
+The formal $\mathbb Z_3$ action is the corrected one. That the printed one
+fails (\ref{eq:glm23_z3_nimrep}) is proved
+separately.\footnote{Results: \leanid{MPOTensor.isNIMRep_repS3Z3},
+    \leanid{MPOTensor.not_isNIMRep_repS3Z3Printed} and
+    \leanid{MPOTensor.su24TY_repS3ToSU24_castSucc}.}
+
+
+\section{Verdict}
+The printed $\mathbb Z_3$ action is false as printed: it does not satisfy the
+relation (\ref{eq:glm23_z3_nimrep}) that every action on blocks satisfies.
+The correction changes only the $\psi$ row and is forced by the source's own
+identification of the phase. The remaining claims about this phase are
+unaffected.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

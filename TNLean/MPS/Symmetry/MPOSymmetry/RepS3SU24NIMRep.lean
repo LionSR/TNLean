@@ -28,7 +28,7 @@ action of `Rep(S₃)` on one block with the unit acting trivially is the `ℤ₁
 **Local fix (`ℤ₃` table):** the printed `ℤ₃` action has `ψ` exchanging `y` and `z`, which is
 not a representation (`MPOTensor.not_isNIMRep_repS3Z3Printed`); `ψ` fixes every block, as in
 the source's own identification of this phase with `𝓜_TY` on `{x, y, z}` (line 1972).
-Documented in `docs/paper-gaps/glm23_reps3_su24_module_list.tex`.
+Documented in `docs/paper-gaps/glm23_reps3_z3_table.tex`.
 
 **Scope restriction (printed list):** the source's statements that `su(2)₄` has exactly two
 phases and `Rep(S₃)` exactly the four listed ones rest on the classification of module

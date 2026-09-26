@@ -578,13 +578,14 @@ note.
 
 For the matrix product operator symmetries of arXiv:2203.12563:
 
-- `glm23_reps3_su24_module_list.tex` records that the printed action of `ψ`
-  in the `ℤ₃` phase of `Rep(S₃)` fails the representation identity and is
-  corrected to the trivial action, as in the source's identification of that
-  phase with part of `𝓜_TY`; and that completeness of the listed `Rep(S₃)` and
-  `su(2)₄` phases is formalized only on one block, with a two-block
-  representation of `Rep(S₃)` showing that the identity alone does not
-  determine the list.
+- `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
+  `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
+  trivial action of `ψ` is forced by the source's identification of that phase
+  with part of `𝓜_TY`.
+- `glm23_reps3_su24_module_list.tex` records that completeness of the listed
+  `Rep(S₃)` and `su(2)₄` phases is formalized only on one block, with a
+  two-block representation of `Rep(S₃)` showing that the representation
+  identity alone does not determine the list.
 - `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
   algebras, symmetric families, and nonnegative integer representations uses
   only the periodic-boundary form of the source's arbitrary-boundary

@@ -4,7 +4,7 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 \input{./command}
-\title{The $\mathrm{Rep}(S_3)$ and $su(2)_4$ Phases: a Typo in the $\mathbb Z_3$ Table and the Completeness of the Lists}
+\title{The $\mathrm{Rep}(S_3)$ and $su(2)_4$ Phases: Completeness of the Lists}
 \author{}
 \date{2026-09-27}
 \begin{document}
@@ -36,29 +36,10 @@ representation of the fusion ring,
 \end{align}
 with the unit acting as the identity.
 
-\section{The $\mathbb Z_3$ table}
-The printed $\mathbb Z_3$ action is
-$\pi\cdot x=y+z$, $\pi\cdot y=x+z$, $\pi\cdot z=x+y$ and
-$\psi\cdot x=x$, $\psi\cdot y=z$, $\psi\cdot z=y$.\footnote{Source
-    traceability: lines 1959--1971.} It does not satisfy
-(\ref{eq:glm23_list_nimrep}) for $\pi\times\pi=1+\pi+\psi$: on the block $y$,
-$\pi\cdot(\pi\cdot y)=x+2y+z$, while $(1+\pi+\psi)\cdot y=x+y+2z$. With $\psi$
-fixing every block, (\ref{eq:glm23_list_nimrep}) holds. This corrected action
-is the one the source itself describes when it identifies the phase with the
-blocks $x,y,z$ of $\mathcal M_{TY}$, where the label $2$ fixes every block. It is
-also the action that the representation theory predicts: the blocks are the
-three characters of $\mathbb Z_3$, and $\psi$ acts by tensoring with the
-restriction of the sign representation to $\mathbb Z_3$, which is trivial.
-The formal $\mathbb Z_3$ action is the corrected one. That the printed one
-fails (\ref{eq:glm23_list_nimrep}) is proved
-separately.\footnote{Results: \leanid{MPOTensor.isNIMRep_repS3Z3},
-    \leanid{MPOTensor.not_isNIMRep_repS3Z3Printed} and
-    \leanid{MPOTensor.su24TY_repS3ToSU24_castSucc}.}
-
 \section{Completeness of the lists}
-Formalized: every listed action (with the corrected $\mathbb Z_3$ table)
-satisfies (\ref{eq:glm23_list_nimrep}), the restrictions stated by the source
-hold, and on a single block the list is complete. A representation on one
+Formalized: every listed action satisfies (\ref{eq:glm23_list_nimrep}), with the $\mathbb Z_3$ action
+corrected as recorded in the note on the $\mathbb Z_3$ table, the restrictions
+stated by the source hold, and on a single block the list is complete. A representation on one
 block with the unit acting trivially is a ring homomorphism to $\mathbb Z$
 that is nonnegative on the labels; for $\mathrm{Rep}(S_3)$ the only one is
 $(1,2,1)$, the $\mathbb Z_1$ phase, and $su(2)_4$ has none, since it would force
