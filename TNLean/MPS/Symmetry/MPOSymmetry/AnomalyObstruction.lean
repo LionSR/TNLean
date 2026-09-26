@@ -13,9 +13,9 @@ import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 Let `g ↦ O_g` be a group of matrix product operators with normal tensors and the exact
 operator law `O_g O_h = O_{gh}` on every nonempty chain, and let `A` be a normal matrix
 product state tensor whose periodic vector is invariant, `O_g |V_N(A)⟩ = |V_N(A)⟩` for every
-`g` and every `N > 0`. The action tensors `X_g` reduce `O_g · A` onto `A`. For two elements
-the stacked action `(O_g O_h) · A` reduces onto `A` in two ways: by two successive action
-tensors, and by the fusion tensor of `(g, h)` followed by the action tensor of `gh`. The two
+`g` and every `N > 0`. The action tensors are reductions `(V_g, W_g)` of `O_g · A` onto `A`.
+For two elements the stacked action `(O_g O_h) · A` reduces onto `A` in two ways: by two
+successive action tensors, and by the fusion tensor of `(g, h)` followed by the action tensor of `gh`. The two
 reductions agree against long words up to a nonzero scalar `L(g,h)`, the L-symbol of the
 single block.
 
