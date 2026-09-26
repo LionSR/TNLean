@@ -64,14 +64,16 @@ theorem CFC.sqrt_sub_sqrt_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrd
   set S := CFC.sqrt b
   set c := algebraMap ℝ A (Real.sqrt ε)
   have h₁ : a ≤ b + algebraMap ℝ A ε :=
-    sub_le_iff_le_add'.1 (IsSelfAdjoint.le_algebraMap_norm_self (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
+    sub_le_iff_le_add'.1
+      (IsSelfAdjoint.le_algebraMap_norm_self (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
   have hS : 0 ≤ S := CFC.sqrt_nonneg b
   have hcS : c * S = Real.sqrt ε • S := (Algebra.smul_def _ _).symm
   have hSc : S * c = Real.sqrt ε • S := by rw [← Algebra.commutes, hcS]
   have hcc : c * c = algebraMap ℝ A ε := by
     rw [← map_mul, Real.mul_self_sqrt (norm_nonneg _)]
   have hc : 0 ≤ c := by
-    simp only [c, Algebra.algebraMap_eq_smul_one]; exact smul_nonneg (Real.sqrt_nonneg _) zero_le_one
+    simp only [c, Algebra.algebraMap_eq_smul_one]
+    exact smul_nonneg (Real.sqrt_nonneg _) zero_le_one
   have hsq : b + algebraMap ℝ A ε ≤ (S + c) ^ 2 := by
     have hexp : (S + c) ^ 2 = b + algebraMap ℝ A ε + (Real.sqrt ε • S + Real.sqrt ε • S) := by
       rw [sq, add_mul, mul_add, mul_add, CFC.sqrt_mul_sqrt_self b hb, hcS, hSc, hcc]
