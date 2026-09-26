@@ -1,0 +1,93 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The CZX Tensor: Orientation of the Bond Labels}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{What the source prints}
+Section~``MPS and PEPS'' of \cite{Cirac2021Matrix} contracts a PEPS by
+placing on every edge the maximally entangled pair
+$\sum_{n}\lvert n)\otimes\lvert n)$, so the two ends of a bond carry the same
+label.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 271--276.}
+In Appendix~A, under ``Two dimensions: PEPS'', the virtual indices of a site
+tensor are ordered top, right, down and left.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, line 2415.}
+The CZX state of \cite{ChenLiuWen2011CZX} is the product over plaquettes of
+the four-qubit states $\ket{0000}+\ket{1111}$, and the review writes it,
+after blocking the four qubits of a site, as the PEPS with tensor
+\begin{align}
+    \sum_{i,j,k,l=0}^{1}\ket{ijkl}\bigl((i,j),(j,k),(k,l),(l,i)\bigr|,
+    \label{eq:rmp_peps_czx_printed_tensor}
+\end{align}
+where $i,j,k,l$ are the qubits at the top-left, top-right, bottom-right and
+bottom-left corners of the site.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2502--2514;
+    \path{References/1106.4752/source/dDSPTmodel.tex}, lines 317--321.}
+
+\section{The literal contraction}
+Write $(i_v,j_v,k_v,l_v)$ for the qubits of the site $v$, and $v+e_1$,
+$v+e_2$ for its right and upper neighbours. Contracting
+\eqref{eq:rmp_peps_czx_printed_tensor} with equal labels at the two ends of
+every bond, the
+right leg $(j_v,k_v)$ of $v$ meets the left leg $(l_{v+e_1},i_{v+e_1})$ of
+$v+e_1$, and the top leg $(i_v,j_v)$ of $v$ meets the down leg
+$(k_{v+e_2},l_{v+e_2})$ of $v+e_2$. The nonzero coefficients are those with
+\begin{align}
+    j_v=l_{v+e_1}=l_{v+e_2},\qquad k_v=i_{v+e_1},\qquad i_v=k_{v+e_2}
+    \quad\text{for every site } v.
+    \label{eq:rmp_peps_czx_literal_constraints}
+\end{align}
+The conditions~\eqref{eq:rmp_peps_czx_literal_constraints} join the
+top-right qubit of $v$ to bottom-left qubits of two different sites, and they
+chain the qubits along the diagonals
+$v\mapsto v+e_1-e_2$ and $v\mapsto v+e_1+e_2$. The state is a product of
+GHZ states on diagonal loops that wind around the torus, not the product of
+plaquette states. For instance, on a torus of $3\times 3$ sites let $\sigma$ set
+the four qubits around one plaquette to $1$ and every other qubit to $0$.
+This configuration has coefficient $1$ in the product of plaquette states,
+but the top-right qubit $j_v=1$ of the site $v$ at the lower left of that
+plaquette differs from the bottom-left qubit $l_{v+e_2}=0$ of its upper
+neighbour, so $\sigma$ violates~\eqref{eq:rmp_peps_czx_literal_constraints}
+and has coefficient $0$ in the literal contraction. The printed claim thus
+fails on nondegenerate data, and the note is filed as a false source claim.
+The corrected statement below keeps the printed tensor and changes only how
+its labels are joined across a bond.
+
+\section{The correction}
+Two neighbouring sites list the two qubits of their common side in opposite
+orders, clockwise around each site. The plaquette state is obtained when a
+bond identifies the pair $(a,b)$ at one end with $(b,a)$ at the other, so
+that each bond joins the two qubits of one plaquette to the two qubits of the
+same plaquette across the common side, as in the figure of the blocked state
+in \cite{Cirac2021Matrix}. Equivalently, the tensor
+\eqref{eq:rmp_peps_czx_printed_tensor} is used with its down and left labels
+reversed. With this reading the contraction gives
+\begin{align}
+    c(\sigma)=\prod_{v}\delta\bigl[j_v=i_{v+e_1}=k_{v+e_2}
+    =l_{v+e_1+e_2}\bigr],
+    \label{eq:rmp_peps_czx_plaquette_coefficient}
+\end{align}
+where $c(\sigma)$ is the coefficient of the configuration $\sigma$.
+Formula~\eqref{eq:rmp_peps_czx_plaquette_coefficient} is the product over
+plaquettes of the
+unnormalized states
+$\ket{0000}+\ket{1111}$, on every torus of width and height at least
+three.\footnote{Results: \leanid{TNLean.PEPS.czxPEPS},
+    \leanid{TNLean.PEPS.stateCoeff_czxPEPS}.}
+
+\section{Elimination plan}
+None needed beyond this record: the printed tensor is kept, and the reversal
+of the down and left labels is part of the definition of the PEPS. A reading
+of the source with the reversed identification on every bond would state the
+same theorem.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

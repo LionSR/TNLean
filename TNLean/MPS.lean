@@ -22,6 +22,7 @@ import TNLean.MPS.OpenBoundary
 import TNLean.MPS.Overlap
 import TNLean.MPS.ParentHamiltonian
 import TNLean.MPS.Periodic
+import TNLean.MPS.Preparation
 import TNLean.MPS.RFP
 import TNLean.MPS.SharedInfra
 import TNLean.MPS.Structure
