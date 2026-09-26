@@ -85,7 +85,19 @@ theorem conjTranspose_coordEmbedding_mul_eq_zero {D' D'' : ℕ} {ι : Fin D' →
     {ι' : Fin D'' → Fin D} (h : ∀ a a', ι a ≠ ι' a') :
     (coordEmbedding ι)ᴴ * coordEmbedding ι' = 0 := by
   ext a a'
-  rw [conjTranspose_coordEmbedding_mul_apply, zero_apply, if_neg (h a a')]
+  rw [conjTranspose_coordEmbedding_mul_apply, Matrix.zero_apply, ite_eq_right (h a a')]
+
+/-- `E_ιᴴ (E_ι' Y) = 0` for coordinate maps with disjoint ranges. -/
+theorem conjTranspose_coordEmbedding_mul_mul_eq_zero {D' D'' : ℕ} {ι : Fin D' → Fin D}
+    {ι' : Fin D'' → Fin D} (h : ∀ a a', ι a ≠ ι' a') {γ : Type*} (Y : Matrix (Fin D'') γ ℂ) :
+    (coordEmbedding ι)ᴴ * (coordEmbedding ι' * Y) = 0 := by
+  rw [← Matrix.mul_assoc, conjTranspose_coordEmbedding_mul_eq_zero h, Matrix.zero_mul]
+
+/-- `E_ιᴴ (E_ι Y) = Y` for an injective coordinate map. -/
+theorem conjTranspose_coordEmbedding_mul_mul_self {D' : ℕ} {ι : Fin D' → Fin D}
+    (hι : Function.Injective ι) {γ : Type*} (Y : Matrix (Fin D') γ ℂ) :
+    (coordEmbedding ι)ᴴ * (coordEmbedding ι * Y) = Y := by
+  rw [← Matrix.mul_assoc, conjTranspose_coordEmbedding_mul_self hι, Matrix.one_mul]
 
 /-- The isometry `K = E_ι ⊗ E_ι` embedding the bond pairs `ℂ^{D'} ⊗ ℂ^{D'}` of a block into the
 bond pairs of the direct sum; these index the columns of the physical matrix. -/
@@ -136,15 +148,14 @@ theorem evalWord_blockSum (hι : ∀ j, Function.Injective (ι j))
   | i :: i' :: w, _ => by
     rw [Kraus.evalWord_cons, evalWord_blockSum hι hdisj μ (i' :: w) (List.cons_ne_nil _ _),
       blockSum, sum_mul_sum_of_mul_eq_zero fun j j' h => by
-        rw [smul_mul_smul_comm, Matrix.mul_assoc, Matrix.mul_assoc,
-          ← Matrix.mul_assoc (coordEmbedding (ι j))ᴴ,
-          conjTranspose_coordEmbedding_mul_eq_zero (hdisj j j' h)]
-        simp]
+        rw [smul_mul_smul_comm]
+        simp only [Matrix.mul_assoc,
+          conjTranspose_coordEmbedding_mul_mul_eq_zero (hdisj j j' h), Matrix.mul_zero,
+          smul_zero]]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [smul_mul_smul_comm, Matrix.mul_assoc, Matrix.mul_assoc,
-      ← Matrix.mul_assoc (coordEmbedding (ι j))ᴴ, conjTranspose_coordEmbedding_mul_self (hι j),
-      Matrix.one_mul, Kraus.evalWord_cons, List.length_cons, pow_succ']
-    simp only [Matrix.mul_assoc]
+    rw [smul_mul_smul_comm]
+    simp only [Kraus.evalWord_cons, List.length_cons, pow_succ', Matrix.mul_assoc,
+      conjTranspose_coordEmbedding_mul_mul_self (hι j)]
 
 /-- The periodic state of the direct sum on `N ≥ 1` sites:
 `|φ_N(A)⟩ = ∑ⱼ μⱼ^N |φ_N(A_j)⟩` (arXiv:2307.01696, Supplemental Material, eqs. (S3) and (S4),
@@ -172,13 +183,15 @@ theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι
   rw [evalWord_blockSum hι hdisj μ _ hw, Kraus.length_wordOfBlock, Matrix.sum_apply,
     Matrix.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_
-  rw [smul_apply, smul_apply, mul_apply, mul_apply, Fintype.sum_prod_type]
+  rw [Matrix.smul_apply, Matrix.smul_apply]
   congr 1
-  refine Finset.sum_congr rfl fun c _ => ?_
-  rw [mul_apply, Finset.sum_mul]
-  refine Finset.sum_congr rfl fun a _ => ?_
-  simp only [conjTranspose_apply, pairEmbedding_apply, coordEmbedding, of_apply, Prod.mk.injEq]
-  by_cases h1 : p.1 = ι j a <;> by_cases h2 : p.2 = ι j c <;> simp [h1, h2]
+  simp only [mul_apply, Finset.sum_mul, Fintype.sum_prod_type]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun c _ => ?_
+  rcases p with ⟨x, y⟩
+  simp only [conjTranspose_apply, pairEmbedding_apply, coordEmbedding, of_apply, Prod.mk.injEq,
+    physicalMatrix]
+  by_cases h1 : x = ι j a <;> by_cases h2 : y = ι j c <;> simp [h1, h2, Kraus.blockTensor]
 
 /-! ### The approximating state -/
 
@@ -195,7 +208,7 @@ theorem tensorPower_mul {ι₁ ι₂ ι₃ : Type*} [Fintype ι₂] (M : ℕ) (X
 lies outside the range of `ι`. -/
 theorem embedPair_eq_zero {D' : ℕ} {ι : Fin D' → Fin D} (ω : Fin D' × Fin D' → ℂ)
     {p : Fin D × Fin D} (hp : p.1 ∉ Set.range ι ∨ p.2 ∉ Set.range ι) : embedPair ι ω p = 0 := by
-  refine Finset.sum_eq_zero fun x _ => if_neg fun h => ?_
+  refine Finset.sum_eq_zero fun x _ => ite_eq_right fun h => ?_
   rcases hp with hp | hp
   · exact hp ⟨x.1, congrArg Prod.fst h⟩
   · exact hp ⟨x.2, congrArg Prod.snd h⟩
@@ -212,11 +225,11 @@ theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D
   by_cases hx : ∃ x₀ : Fin M → Fin D' × Fin D', x = fun k => (ι (x₀ k).1, ι (x₀ k).2)
   · obtain ⟨x₀, rfl⟩ := hx
     rw [Finset.sum_eq_single x₀]
-    · simp only [if_true, Finset.prod_const_one, one_mul]
+    · simp only [ite_true, Finset.prod_const_one, one_mul]
       exact pairProductState_embedPair hι ω x₀
     · intro y _ hy
       obtain ⟨k, hk⟩ := Function.ne_iff.1 hy
-      refine mul_eq_zero_of_left (Finset.prod_eq_zero (Finset.mem_univ k) (if_neg fun h => hk ?_)) _
+      refine mul_eq_zero_of_left (Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right fun h => hk ?_)) _
       obtain ⟨h1, h2⟩ := Prod.mk.inj h
       exact (Prod.ext (hι h1) (hι h2)).symm
     · simp
@@ -224,7 +237,7 @@ theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D
     · -- Some leg of some site lies outside the range of `ι`.
       have hleg : ∃ k, (x k).1 ∉ Set.range ι ∨ (x k).2 ∉ Set.range ι := by
         by_contra hne
-        push_neg at hne
+        push Not at hne
         choose f hf using fun k => (hne k).1
         choose g hg using fun k => (hne k).2
         exact hx ⟨fun k => (f k, g k), funext fun k => Prod.ext (hf k).symm (hg k).symm⟩
@@ -233,12 +246,12 @@ theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D
       rcases hk with hk | hk
       · refine Finset.prod_eq_zero (Finset.mem_univ ((finRotate M).symm k)) ?_
         refine embedPair_eq_zero ω (Or.inr ?_)
-        simpa using hk
+        simpa only [Equiv.apply_symm_apply] using hk
       · exact Finset.prod_eq_zero (Finset.mem_univ k) (embedPair_eq_zero ω (Or.inl hk))
     · refine mul_eq_zero_of_left ?_ _
       have hne : x ≠ fun k => (ι (y k).1, ι (y k).2) := fun h => hx ⟨y, h⟩
       obtain ⟨k, hk⟩ := Function.ne_iff.1 hne
-      exact Finset.prod_eq_zero (Finset.mem_univ k) (if_neg hk)
+      exact Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right hk)
 
 /-- `V^{⊗M}` applied to the product of the pairs of `σ` is the periodic state of the tensor
 `V P_∞` of the normal case (arXiv:2307.01696, eqs. (9) and (10)). -/
@@ -286,7 +299,7 @@ theorem nonNormalApproxVector_blockSum (hι : ∀ j, Function.Injective (ι j))
   have hV := polarIso_blockTensor_blockSum hι hdisj hμ hq horth
   have hVK : ∀ j, polarIso (physicalMatrix (blockTensor (blockSum Aj ι fun j => (μ j : ℂ)) q)) *
       pairEmbedding (ι j) = polarIso (physicalMatrix (blockTensor (Aj j) q)) := fun j => by
-    rw [hV, Finset.sum_mul, Finset.sum_eq_single j]
+    rw [hV, Matrix.sum_mul, Finset.sum_eq_single j]
     · rw [Matrix.mul_assoc, conjTranspose_pairEmbedding_mul_self (hι j), Matrix.mul_one]
     · intro j' _ hj'
       rw [Matrix.mul_assoc, conjTranspose_pairEmbedding_mul_eq_zero (hdisj j' j hj'),
@@ -306,13 +319,6 @@ theorem nonNormalApproxVector_blockSum (hι : ∀ j, Function.Injective (ι j))
 
 /-! ### Orthogonality of states -/
 
-/-- The physical matrix of a tensor with rotated physical index is the rotation times the
-physical matrix. -/
-theorem physicalMatrix_rotatePhysical {m n D' : ℕ} (V : Matrix (Fin m) (Fin n) ℂ)
-    (F : MPSTensor n D') : physicalMatrix (rotatePhysical V F) = V * physicalMatrix F := by
-  ext i p
-  simp [physicalMatrix, rotatePhysical, mul_apply, Matrix.sum_apply]
-
 /-- **Orthogonal states.** If the physical matrices of two tensors have orthogonal columns,
 `(Y)ᴴ X = 0`, i.e. `∑ᵢ conj(Yⁱ_{a'c'}) Xⁱ_{ac} = 0`, then the mixed transfer map vanishes and
 the periodic states on `M ≥ 1` sites are orthogonal: `∑_s φ_M(X)(s) conj(φ_M(Y)(s)) = 0`. -/
@@ -324,7 +330,7 @@ theorem mpvOverlap_eq_zero {n D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] {X : 
     have hij : ∀ a c a' c', ∑ i, X i a c * star (Y i a' c') = 0 := fun a c a' c' => by
       have := congrFun (congrFun h (a', c')) (a, c)
       simpa [mul_apply, physicalMatrix, conjTranspose_apply, mul_comm] using this
-    simp only [Kraus.mixedMapLM_apply, LinearMap.zero_apply, zero_apply, Matrix.sum_apply,
+    simp only [Kraus.mixedMapLM_apply, LinearMap.zero_apply, Matrix.zero_apply, Matrix.sum_apply,
       mul_apply, conjTranspose_apply, Finset.sum_mul]
     rw [Finset.sum_comm]
     refine Finset.sum_eq_zero fun c' _ => ?_
@@ -345,8 +351,9 @@ theorem conjTranspose_physicalMatrix_approximatingTensor_mul {n D₁ D₂ : ℕ}
       0 := by
   simp only [approximatingTensor, physicalMatrix_rotatePhysical, polarIsoMatrix,
     conjTranspose_mul, conjTranspose_submatrix]
-  rw [Matrix.mul_assoc, ← Matrix.mul_assoc (Matrix.submatrix _ _ _),
-    submatrix_mul _ _ _ id _ Function.bijective_id, conjTranspose_polarIso_mul_polarIso_eq_zero h]
+  rw [Matrix.mul_assoc, ← Matrix.mul_assoc (Matrix.submatrix _ _ _) (Matrix.submatrix _ _ _),
+    ← Matrix.submatrix_mul _ _ _ _ _ Function.bijective_id,
+    conjTranspose_polarIso_mul_polarIso_eq_zero h]
   simp
 
 /-- The approximating tensor `V_j P_{j,∞}` of one block and the blocked tensor of another block
@@ -358,7 +365,7 @@ theorem conjTranspose_physicalMatrix_approximatingTensor_mul_blocked {n D₁ D�
   simp only [approximatingTensor, physicalMatrix_rotatePhysical, polarIsoMatrix,
     conjTranspose_mul, conjTranspose_submatrix]
   rw [Matrix.mul_assoc, ← submatrix_id_id (physicalMatrix B₂),
-    submatrix_mul _ _ _ id _ Function.bijective_id, conjTranspose_polarIso_mul_eq_zero h]
+    ← Matrix.submatrix_mul _ _ _ _ _ Function.bijective_id, conjTranspose_polarIso_mul_eq_zero h]
   simp
 
 end MPSTensor
