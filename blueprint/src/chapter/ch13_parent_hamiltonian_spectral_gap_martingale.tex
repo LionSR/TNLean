@@ -681,7 +681,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \end{definition}
 
 \begin{theorem}[Tail boundary map on a prefix--suffix pair]\label{thm:tail_boundary_map_append}
-    \lean{MPSTensor.tailBoundaryMap_append, MPSTensor.reassocTailBoundaryMapES_apply_threeBlock}
+    \lean{MPSTensor.tailBoundaryMap_append}
     \leanok
     \uses{def:tail_boundary_map, def:ground_space_map}
     For every prefix $u\colon\Fin K\to\Fin d$ and suffix $\tau\colon\Fin L\to\Fin d$,
@@ -689,9 +689,6 @@ linear maps on the same ambient space to compare their orthogonal projectors.
         \Gamma^{\mathrm{tail}}_{K,L}(Y)(u,\tau)
          & =\Gamma_L(Y_u)(\tau).
     \end{align}
-    Grouping three successive intervals of lengths $K,L,Q$ gives
-    $\Gamma^{\mathrm{tail}}_{K,L+Q}(Y)(u,w,v)=\Gamma_{L+Q}(Y_u)(w,v)$
-    in the common physical coordinates.
 \end{theorem}
 
 \begin{proof}
@@ -2695,6 +2692,41 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Reassociating a window whose last block carries a single site is the
     identity, so the reassociated tail map is the ordinary tail map with $L+1$
     spectator sites.
+\end{proof}
+
+\begin{theorem}[Reassociated tail boundary map on three intervals]
+    \label{thm:reassociated_tail_boundary_three_block}
+    \lean{MPSTensor.reassocTailBoundaryMapES_apply_threeBlock}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map, def:ground_space_map}
+    Let $K,L,Q\in\N$ and let $Y\colon(\Fin K\to\Fin d)\to\MN{D}$ be a
+    boundary family. For all $u\colon\Fin K\to\Fin d$,
+    $w\colon\Fin L\to\Fin d$, and $v\colon\Fin Q\to\Fin d$,
+    \begin{align}
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}(Y)\bigl((u,w),v\bigr)
+         & =\Gamma_{L+Q}(Y_u)(w,v).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:reassociated_tail_boundary_map,
+        def:whole_increment_physical_reassociation,
+        thm:tail_boundary_map_append}
+    The reassociation map only regroups the physical coordinates:
+    for every vector $f$ on $K+(L+Q)$ sites,
+    \begin{align}
+        (\mathscr A_{K,L,Q}f)\bigl((u,w),v\bigr)
+         & =f\bigl(u,(w,v)\bigr).
+    \end{align}
+    Applying this to $f=\Gamma^{\mathrm{tail}}_{K,L+Q}(Y)$ and then
+    Theorem~\ref{thm:tail_boundary_map_append} with suffix $(w,v)$ of
+    length $L+Q$ gives
+    \begin{align}
+        \widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}(Y)\bigl((u,w),v\bigr)
+         & =\Gamma^{\mathrm{tail}}_{K,L+Q}(Y)\bigl(u,(w,v)\bigr)
+        =\Gamma_{L+Q}(Y_u)(w,v).
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Factorization of the reassociated tail map]
@@ -4800,10 +4832,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.norm_inner_reassocTailBoundaryMapES_le}
     \lean{MPSTensor.norm_inner_left_reassocTailBoundaryMapES_le}
     \leanok
+    \uses{def:spectator_boundary_maps_es, def:reassociated_tail_boundary_map}
     Assume the ground-space overlap bound of
     Theorem~\ref{thm:ph_middle_interval_overlap}.
     Let $U_A$ be the range of $\Gamma^{\mathrm{left}}_{K+L,Q}(A)$
-    and $V_A$ the range of $\Gamma^{\mathrm{tail}}_{K,L+Q}(A)$,
+    and $V_A$ the range of the reassociated tail boundary map
+    $\widetilde\Gamma^{\mathrm{tail}}_{K;L,Q}(A)$,
     both in the physical space on $K+L+Q$ sites. Define $U_B,V_B$ in the same way.
     Then $|\langle x,y\rangle|\leq\varepsilon\lVert x\rVert\lVert y\rVert$
     for vectors in any of the pairs of ranges
@@ -4811,7 +4845,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_middle_interval_overlap, thm:tail_boundary_map_append, thm:left_boundary_map_append,
+    \uses{thm:ph_middle_interval_overlap, def:reassociated_tail_boundary_map,
+        thm:reassociated_tail_boundary_three_block, thm:left_boundary_map_append,
         lem:ground_space_in_tail_ground, lem:prefix_restrict_ground_space_map}
     For a left boundary vector with boundary family $(Z_v)$, fixing $u,v$
     leaves the middle vector $\Gamma_L(Z_vA^u)$.
