@@ -640,22 +640,78 @@ with the corresponding composite embeddings.
 
 \begin{remark}[Fusion tensors from a coproduct]%
     \label{rem:mpoalg_weak_hopf}
-    For a matrix product operator representation of a cosemisimple weak Hopf
-    algebra $\mathcal A$, the operators are indexed by irreducible
-    representations $\psi_a$ of the dual algebra and the fusion tensors
-    decompose the coproduct,
+    For a matrix product operator representation of a cosemisimple
+    pre-bialgebra $\mathcal A$, the operators are indexed by irreducible
+    representations $\psi_a$ of the dual algebra, and the fusion tensors
+    decompose the coproduct of $\mathcal A^*$,
     $(\psi_a\otimes\psi_b)\circ\Delta(f)=\sum_{c,\mu}W_{ab}^{c\mu}\psi_c(f)
         V_{ab}^{c\mu}$ with $V_{ab}^{c\mu}W_{ab}^{d\nu}=
         \delta_{cd}\delta_{\mu\nu}\Id$ \cite[Section~4]{Molnar2022MPOAlgebrasI}.
-    These are exact identities, and they are fusion tensors in the sense of
-    Definition~\ref{def:mpoalg_fusion_tensors} with zero remainder;
-    coassociativity of $\Delta$ is the associativity used in
-    Remark~\ref{rem:mpoalg_f_symbols}. No other part of the correspondence
-    between weak Hopf algebras and matrix product operators is stated here.
-    % Source anchor: arXiv:2204.05940, mpo.tex lines 1640--1660 (fusion
-    %   tensors from the coproduct) and 1725--1892 (basis change, F-symbols,
+    The maps are named as in Definition~\ref{def:mpoalg_fusion_tensors}; the
+    source writes the same identity as $\sum_{c,\mu}V_{ab}^{c\mu}\psi_c(f)
+        W_{ab}^{c\mu}$ with $W_{ab}^{c\mu}V_{ab}^{d\nu}=\delta_{cd}\delta_{\mu\nu}\Id$,
+    so the letters $V$ and $W$ are swapped. Theorem~\ref{thm:mpoalg_fusion_coproduct}
+    reads this identity backwards: the fusion tensors of a complete zipper
+    fusion family define the coproduct. No part of the correspondence
+    concerning units, counits, or antipodes is stated here.
+    % Source anchor: arXiv:2204.05940, mpo.tex line 1655
+    %   (eq:splitting_algebraic) and 1725--1892 (basis change, F-symbols,
     %   pentagon).
 \end{remark}
+
+\begin{theorem}[Coproduct of a complete zipper fusion family]%
+    \label{thm:mpoalg_fusion_coproduct}
+    \lean{MPOTensor.CompleteZipperFusionFamily.coproduct,
+        MPOTensor.CompleteZipperFusionFamily.span_letter_eq_top,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_letter,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_unique,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_mul,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_one}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family}
+    Let $(B_a)_{a\in\Lambda}$ be a complete zipper fusion family
+    (Definition~\ref{def:mpdo_complete_zipper_fusion_family}) with fusion
+    tensors $X^c_{ab,\mu}$ and left inverses $X^{c+}_{ab,\mu}$. For
+    $X=(X_c)_c\in\bigoplus_c\MN{D_c}$ put
+    \begin{align}
+        \Delta(X)_{ab}
+         & =\sum_{c,\mu}X^c_{ab,\mu}\,X_c\,X^{c+}_{ab,\mu}
+        \in\MN{D_a}\otimes\MN{D_b}.
+        \label{eq:mpoalg_fusion_coproduct}
+    \end{align}
+    Then the elements $(B_c^{ik})_c$ span $\bigoplus_c\MN{D_c}$, and
+    \begin{align}
+        \Delta\big((B_c^{ik})_c\big)_{ab}
+         & =\sum_jB_a^{ij}\otimes B_b^{jk}.
+        \label{eq:mpoalg_fusion_coproduct_letter}
+    \end{align}
+    The map $\Delta$ is the only linear map with
+    (\ref{eq:mpoalg_fusion_coproduct_letter}), so it depends only on the
+    blocks. It is multiplicative, $\Delta(XY)=\Delta(X)\Delta(Y)$, and
+    $\Delta(\Id)_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X^{c+}_{ab,\mu}$ is the support
+    projector of the fusion tensors. In the notation of
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}, $X^c_{ab,\mu}$ and
+    $X^{c+}_{ab,\mu}$ are the source's $V_{ab}^{c\mu}$ and $W_{ab}^{c\mu}$,
+    (\ref{eq:mpoalg_fusion_coproduct}) is the decomposition of the coproduct of
+    the dual algebra, (\ref{eq:mpoalg_fusion_coproduct_letter}) is the
+    coproduct of the matrix coefficients of the physical representation, and
+    multiplicativity is the pre-bialgebra axiom.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 1409--1419
+    %   (pre-bialgebra), 1655 (eq:splitting_algebraic), 1708
+    %   (eq:delta_epsilon), 1182 (injectivity), 2003--2006
+    %   (eq:MPO_tensor_product).
+\end{theorem}
+
+\begin{proof}
+    \uses{def:mpdo_complete_zipper_fusion_family}
+    The simultaneous left inverse of the block letters writes every matrix
+    unit of every block as a combination of the elements $(B_c^{ik})_c$, so
+    they span. Equation (\ref{eq:mpoalg_fusion_coproduct_letter}) is the
+    reconstruction of the product letters through the fusion support, and
+    uniqueness follows from spanning. Multiplicativity follows from
+    $X^{d+}_{ab,\nu}X^c_{ab,\mu}=\delta_{cd}\delta_{\mu\nu}\Id$, which gives
+    $\Delta(X)\Delta(Y)=\sum_{c,\mu}X^c_{ab,\mu}X_cY_cX^{c+}_{ab,\mu}$.
+\end{proof}
 
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%
     \label{rem:mpoalg_kramers_wannier}
