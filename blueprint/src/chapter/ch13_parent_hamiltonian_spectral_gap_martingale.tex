@@ -7013,16 +7013,16 @@ tensors.
     \leanok
     Let $h$ be a positive interaction on $R$ sites whose kernel is the local
     MPS space $G_R(A)$, in the sense of
-    \cite[Section IV.C]{Cirac2021Matrix}. Write $q_R=I-P_{G_R(A)}$ for the
+    \cite[Section IV.C]{Cirac2021Matrix}. Write $h_R=I-P_{G_R(A)}$ for the
     canonical parent projection. There are constants $\kappa,C>0$ such that
     \begin{align}
-        \kappa q_R\leq h\leq Cq_R.
+        \kappa h_R\leq h\leq Ch_R.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:positive-kernel-projection-comparison}
     Apply the finite-dimensional comparison with the projection onto the
-    orthogonal complement of the kernel of $h$. This projection is $q_R$.
+    orthogonal complement of the kernel of $h$. This projection is $h_R$.
 \end{proof}
 
 \begin{definition}[Periodic sum of a fixed interaction]
@@ -7092,10 +7092,10 @@ tensors.
     \lean{MPSTensor.IsParentInteraction.exists_pos_periodic_comparison}
     \leanok
     Let $R>0$ and let $h$ be a fixed positive operator with kernel
-    $G_R(A)$. Write $H_N$ for the canonical periodic parent Hamiltonian.
-    There are $\kappa,C>0$, independent of $N$, such that
+    $G_R(A)$, and let $H_{R,N}(A)$ be the canonical periodic parent
+    Hamiltonian. There are $\kappa,C>0$, independent of $N$, such that
     \begin{align}
-        \kappa H_N\leq H_N(h)\leq C H_N.
+        \kappa H_{R,N}(A)\leq H_N(h)\leq C H_{R,N}(A).
     \end{align}
 \end{theorem}
 \begin{proof}
@@ -7124,7 +7124,8 @@ tensors.
     \leanok
     \uses{thm:positive-parent-interaction-periodic-comparison,lem:positive-comparison-kernel-gap}
     Finite-dimensional positivity gives constants $\kappa,C>0$ such that
-    $\kappa P_R\leq h\leq C P_R$, where $P_R$ is the canonical parent projection.
+    $\kappa h_R\leq h\leq C h_R$, where $h_R=I-P_{G_R(A)}$ is the canonical
+    parent projection.
     Cyclic extension and summation give the same inequalities for the periodic
     Hamiltonians, with constants independent of $N$. The two inequalities imply
     equality of the kernels. Restriction to their common orthogonal complement

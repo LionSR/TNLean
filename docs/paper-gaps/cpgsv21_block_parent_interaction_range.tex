@@ -122,19 +122,21 @@ $S$ or $R$.
 
 The definition in Ref.~\cite[Section~IV.C]{Cirac2021Matrix}, local source
 lines~1996--1999, permits any fixed positive local operator $h$ with
-$\ker h=G_R(A)$. Let $q_R$ be the orthogonal projection onto $G_R(A)^\perp$.
-Finite dimensionality gives constants $\kappa,C>0$ such that
+$\ker h=G_R(A)$. Let $h_R=I-P_{G_R(A)}$ be the orthogonal projection onto
+$G_R(A)^\perp$. Finite dimensionality gives constants $\kappa,C>0$ such that
 \begin{align}
-    \kappa q_R\leq h\leq Cq_R.
+    \kappa h_R\leq h\leq Ch_R.
+    \label{eq:block_range_interaction_local_comparison}
 \end{align}
-If $h=0$, then $q_R=0$ and any positive constants suffice. Otherwise one may
+If $h=0$, then $h_R=0$ and any positive constants suffice. Otherwise one may
 use the least and greatest positive eigenvalues of $h$.
 
 Tensoring with the identity, conjugating by cyclic translations, and summing
-over initial sites preserve these inequalities. Thus, with the same constants
-for every chain length $N\geq R$,
+over initial sites preserve (\ref{eq:block_range_interaction_local_comparison}).
+Thus, with the same constants for every chain length $N\geq R$,
 \begin{align}
     \kappa H_{R,N}(A)\leq H_N(h)\leq C H_{R,N}(A).
+    \label{eq:block_range_interaction_periodic_comparison}
 \end{align}
 The two Hamiltonians have the same kernel. A uniform gap $\gamma$ for the
 canonical projection Hamiltonian therefore gives a uniform gap
