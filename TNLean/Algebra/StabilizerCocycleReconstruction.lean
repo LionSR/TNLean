@@ -39,8 +39,9 @@ equivalence relation.
 * `LSymbol.ActionGaugeEquiv`: equality up to an action-tensor gauge.
 * `StabilizerRepresentatives.reconstructedLSymbol`: the L-symbol of Equation (20).
 * `StabilizerRepresentatives.solutionSetoid`: action-gauge classes of compatible L-symbols.
-* `StabilizerRepresentatives.solutionAction`: the action of `H²(H, ℂˣ)` on solution classes by
-  multiplication with induced L-symbols.
+* `H2.instCommGroup`: the group structure of `H²(H, ℂˣ)` by pointwise multiplication.
+* `StabilizerRepresentatives.solutionAction` and `StabilizerRepresentatives.solutionMulAction`:
+  the action of `H²(H, ℂˣ)` on solution classes by multiplication with induced L-symbols.
 * `StabilizerRepresentatives.h2EquivSolutionClasses`: the bijection `H²(H, ℂˣ) ≃` solution
   classes determined by a base solution.
 
@@ -58,9 +59,9 @@ equivalence relation.
 * `StabilizerRepresentatives.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol` and
   `StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff`: transitivity and freeness
   of the `H²(H, ℂˣ)` action on solution classes, packaged as the bijection
-  `StabilizerRepresentatives.h2EquivSolutionClasses`; the torsor laws of `solutionAction` are
-  `solutionAction_mk_mk_mul` (compatibility with the product of cocycles) and
-  `existsUnique_solutionAction_eq` (free and transitive).
+  `StabilizerRepresentatives.h2EquivSolutionClasses`. With the group structure `H2.instCommGroup`,
+  `solutionMulAction` is a `MulAction` of `H²(H, ℂˣ)`, and `existsUnique_solutionAction_eq`
+  shows that it is free and transitive.
 
 No finiteness, normalization, or tensor assumption is used.
 
@@ -181,6 +182,110 @@ theorem exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap {ω : ScalarThree
   field_simp
 
 end ScalarThreeCochain
+
+namespace ScalarCocycle
+
+variable {H : Type*} [Group H]
+
+/-- The pointwise product of scalar two-cocycles is a scalar two-cocycle. -/
+theorem IsCocycle.mul {ψ₁ ψ₂ : ScalarCocycle H} (h₁ : ψ₁.IsCocycle) (h₂ : ψ₂.IsCocycle) :
+    (ψ₁ * ψ₂).IsCocycle := by
+  intro a b c
+  simp only [Pi.mul_apply]
+  calc
+    _ = (ψ₁ a b * ψ₁ (a * b) c) * (ψ₂ a b * ψ₂ (a * b) c) := by ac_rfl
+    _ = (ψ₁ a (b * c) * ψ₁ b c) * (ψ₂ a (b * c) * ψ₂ b c) := by rw [h₁, h₂]
+    _ = _ := by ac_rfl
+
+/-- The pointwise inverse of a scalar two-cocycle is a scalar two-cocycle. -/
+theorem IsCocycle.inv {ψ : ScalarCocycle H} (hψ : ψ.IsCocycle) : ψ⁻¹.IsCocycle := by
+  intro a b c
+  simp only [Pi.inv_apply]
+  rw [← mul_inv, hψ, mul_inv]
+
+/-- The constant two-cochain one is a scalar two-cocycle. -/
+theorem isCocycle_one : (1 : ScalarCocycle H).IsCocycle := by
+  intro a b c
+  simp
+
+/-- Cohomology is compatible with pointwise products. -/
+theorem CohomologousTo.mul {ψ₁ ψ₁' ψ₂ ψ₂' : ScalarCocycle H} (h₁ : CohomologousTo ψ₁ ψ₁')
+    (h₂ : CohomologousTo ψ₂ ψ₂') : CohomologousTo (ψ₁ * ψ₂) (ψ₁' * ψ₂') := by
+  obtain ⟨φ₁, hφ₁⟩ := h₁
+  obtain ⟨φ₂, hφ₂⟩ := h₂
+  refine ⟨φ₁ * φ₂, fun a b ↦ ?_⟩
+  simp only [Pi.mul_apply, hφ₁, hφ₂, mul_inv]
+  ac_rfl
+
+/-- Cohomology is compatible with pointwise inverses. -/
+theorem CohomologousTo.inv {ψ ψ' : ScalarCocycle H} (h : CohomologousTo ψ ψ') :
+    CohomologousTo ψ⁻¹ ψ'⁻¹ := by
+  obtain ⟨φ, hφ⟩ := h
+  refine ⟨φ⁻¹, fun a b ↦ ?_⟩
+  simp only [Pi.inv_apply, hφ, mul_inv, inv_inv]
+
+end ScalarCocycle
+
+namespace H2
+
+variable {H : Type*} [Group H]
+
+/-- Multiplication of cohomology classes: the class of the pointwise product. -/
+instance : Mul (H2 H) :=
+  ⟨Quotient.map₂ (sa := ScalarCocycle.IsCocycle.instSetoid)
+    (sb := ScalarCocycle.IsCocycle.instSetoid) (sc := ScalarCocycle.IsCocycle.instSetoid)
+    (fun ψ₁ ψ₂ ↦ ⟨ψ₁.1 * ψ₂.1, ψ₁.2.mul ψ₂.2⟩) (fun _ _ h₁ _ _ h₂ ↦ h₁.mul h₂)⟩
+
+/-- The unit class: the class of the constant cocycle one. -/
+instance : One (H2 H) :=
+  ⟨Quotient.mk ScalarCocycle.IsCocycle.instSetoid ⟨1, ScalarCocycle.isCocycle_one⟩⟩
+
+/-- Inversion of cohomology classes: the class of the pointwise inverse. -/
+instance : Inv (H2 H) :=
+  ⟨Quotient.map (sa := ScalarCocycle.IsCocycle.instSetoid)
+    (sb := ScalarCocycle.IsCocycle.instSetoid)
+    (fun ψ ↦ ⟨ψ.1⁻¹, ψ.2.inv⟩) (fun _ _ h ↦ h.inv)⟩
+
+/-- The class of a scalar two-cocycle. -/
+def mk (ψ : {ψ : ScalarCocycle H // ψ.IsCocycle}) : H2 H :=
+  Quotient.mk _ ψ
+
+/-- The product of two classes is the class of the pointwise product of representatives. -/
+theorem mk_mul (ψ₁ ψ₂ : {ψ : ScalarCocycle H // ψ.IsCocycle}) :
+    mk ψ₁ * mk ψ₂ = mk ⟨ψ₁.1 * ψ₂.1, ψ₁.2.mul ψ₂.2⟩ :=
+  rfl
+
+/-- The unit class is the class of the constant cocycle one. -/
+theorem one_def : (1 : H2 H) = mk ⟨1, ScalarCocycle.isCocycle_one⟩ :=
+  rfl
+
+/-- The inverse of a class is the class of the pointwise inverse of a representative. -/
+theorem mk_inv (ψ : {ψ : ScalarCocycle H // ψ.IsCocycle}) :
+    (mk ψ)⁻¹ = mk ⟨ψ.1⁻¹, ψ.2.inv⟩ :=
+  rfl
+
+/-- `H²(H, ℂˣ)` is a commutative group under pointwise multiplication of cocycles. -/
+instance instCommGroup : CommGroup (H2 H) where
+  mul_assoc a b c := by
+    induction a using Quotient.ind with | _ a =>
+    induction b using Quotient.ind with | _ b =>
+    induction c using Quotient.ind with | _ c =>
+    exact congrArg (Quotient.mk _) (Subtype.ext (mul_assoc a.1 b.1 c.1))
+  one_mul a := by
+    induction a using Quotient.ind with | _ a =>
+    exact congrArg (Quotient.mk _) (Subtype.ext (one_mul a.1))
+  mul_one a := by
+    induction a using Quotient.ind with | _ a =>
+    exact congrArg (Quotient.mk _) (Subtype.ext (mul_one a.1))
+  inv_mul_cancel a := by
+    induction a using Quotient.ind with | _ a =>
+    exact congrArg (Quotient.mk _) (Subtype.ext (inv_mul_cancel a.1))
+  mul_comm a b := by
+    induction a using Quotient.ind with | _ a =>
+    induction b using Quotient.ind with | _ b =>
+    exact congrArg (Quotient.mk _) (Subtype.ext (mul_comm a.1 b.1))
+
+end H2
 
 namespace StabilizerRepresentatives
 
@@ -517,21 +622,36 @@ theorem solutionAction_mk (K : StabilizerRepresentatives G X x₀) {ω : ScalarT
           mul_one] at h⟩ :=
   rfl
 
-/-- **Action law.** Acting by `[ψ₂]` and then by `[ψ₁]` is acting by the class of the pointwise
-product `ψ₁ψ₂`, which is the product in `H²(H, ℂˣ)`. -/
-theorem solutionAction_mk_mk_mul (K : StabilizerRepresentatives G X x₀)
-    {ω : ScalarThreeCochain G}
-    (ψ₁ ψ₂ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle})
-    (hψ : (ψ₁.1 * ψ₂.1).IsCocycle) (c : Quotient (solutionSetoid (X := X) ω)) :
-    K.solutionAction (Quotient.mk _ ψ₁) (K.solutionAction (Quotient.mk _ ψ₂) c) =
-      K.solutionAction (Quotient.mk _ ⟨ψ₁.1 * ψ₂.1, hψ⟩) c := by
+/-- The unit class acts trivially. -/
+theorem solutionAction_one (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G}
+    (c : Quotient (solutionSetoid (X := X) ω)) : K.solutionAction 1 c = c := by
   induction c using Quotient.ind with
   | _ L =>
-    simp only [solutionAction_mk]
-    congr 2
+    refine congrArg (Quotient.mk _) (Subtype.ext ?_)
     funext x g h
-    simp only [inducedLSymbol, Pi.mul_apply]
-    ac_rfl
+    simp [inducedLSymbol]
+
+/-- **Action law.** Acting by `b` and then by `a` is acting by the product `a * b` in
+`H²(H, ℂˣ)`. -/
+theorem solutionAction_mul (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G}
+    (a b : H2 (MulAction.stabilizer G x₀)) (c : Quotient (solutionSetoid (X := X) ω)) :
+    K.solutionAction (a * b) c = K.solutionAction a (K.solutionAction b c) := by
+  induction a using Quotient.ind with | _ ψ₁ =>
+  induction b using Quotient.ind with | _ ψ₂ =>
+  induction c using Quotient.ind with | _ L =>
+  refine congrArg (Quotient.mk _) (Subtype.ext ?_)
+  funext x g h
+  simp only [inducedLSymbol, Pi.mul_apply]
+  ac_rfl
+
+/-- The action of `H²(H, ℂˣ)` on action-gauge classes of L-symbols compatible with `ω`,
+`[ψ] • [L] = [L · L[ψ]]`. -/
+@[instance_reducible]
+def solutionMulAction (K : StabilizerRepresentatives G X x₀) (ω : ScalarThreeCochain G) :
+    MulAction (H2 (MulAction.stabilizer G x₀)) (Quotient (solutionSetoid (X := X) ω)) where
+  smul := K.solutionAction
+  one_smul := K.solutionAction_one
+  mul_smul := K.solutionAction_mul
 
 /-- **The torsor property.** The action of `H²(H, ℂˣ)` on action-gauge classes of L-symbols
 compatible with `ω` is free and transitive: for any two classes there is exactly one
