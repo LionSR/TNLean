@@ -274,8 +274,9 @@ of $A$ along $w$.
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$. Then every
     linear map $\Phi$ on $\MN{D}$ equals $\E_X$ for some operator $X$ on
     $(\C^d)^{\otimes L}$. For $L=1$ and injective $A$ this is the step
-    ``we can always choose $\mathcal O$ such that
-    $E_{\mathcal O}=\ket{A}\bra{B}$'' in the proof of
+    ``we can always choose $\mathcal O$ (and $\mathcal O'$), such that the
+    corresponding transfer matrix $E_{\mathcal O}=\ket{A}\bra{B}$ for
+    arbitrary $A,B$ (up to a normalization constant)'' in the proof of
     \cite[Lemma~2]{Malz2024Preparation}.
 \end{lemma}
 \begin{proof}
@@ -300,7 +301,8 @@ of $A$ along $w$.
          & =\lambda^t.
         \notag
     \end{align}
-    The left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
+    When $\rho$ is the fixed point of the gauge (\ref{eq:ldp_normal_gauge}),
+    the left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
     $t=s-L-1$. This is the choice of observables in the proof of
     \cite[Lemma~2]{Malz2024Preparation}, without the source's requirement that
     the one-point functions vanish.
@@ -316,13 +318,14 @@ of $A$ along $w$.
 
 \begin{lemma}[Exponential sums on windows]
     \label{lem:ldp_vandermonde_window}
-    \lean{MPSTensor.exists_window_le_norm_sum_mul_pow}
+    \lean{Complex.exists_window_le_norm_sum_mul_pow}
     \leanok
     Let $\mu_1,\dots,\mu_K$ be distinct complex numbers of modulus one and
     $a\in\C^K$ nonzero. There is $c_0>0$ such that for every integer $t\ge0$
     some $u\in\{0,\dots,K-1\}$ satisfies
-    $\bigl\lvert\sum_{j=1}^Ka_j\mu_j^{\,t+u}\bigr\rvert\ge c_0$. This is the
-    estimate (\ref{eq:ldp_vandermonde_window}).
+    $\bigl\lvert\sum_{j=1}^Ka_j\mu_j^{\,t+u}\bigr\rvert\ge c_0$. This gives
+    the lower bound of (\ref{eq:ldp_vandermonde_window}) for some positive
+    constant $c_0$, not necessarily the explicit constant displayed there.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -333,7 +336,7 @@ of $A$ along $w$.
 
 \begin{lemma}[Expectations in overlapping states]
     \label{lem:ldp_expectation_overlap}
-    \lean{MPSTensor.norm_inner_mul_norm_sub_le}
+    \lean{LinearMap.IsSymmetric.norm_inner_mul_norm_sub_le}
     \leanok
     For a Hermitian operator $Z$ and unit vectors $\phi,\psi$, with
     $\sigma_\chi(Z)=\lVert(Z-\langle Z\rangle_\chi)\chi\rVert$, the inequality
@@ -466,10 +469,12 @@ of $A$ along $w$.
     $\lvert\lambda_2\rvert^{t'}=e^{-(s'-L-1)/\xi}\ge e^{-(s'-1)/\xi}$, which
     gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/4$.
 \end{proof}
-%% The source's Lemma 2 (lm:2) is not available locally and could not be
-%% checked. An earlier version of this entry asserted the bound for every
-%% s > 1, with one-point functions vanishing exactly. Neither is justified
-%% in general. The correlator of Hermitian observables is real, and its
+%% The source's Lemma 2 (lm:2, References/2307.01696/main.tex) asserts, for
+%% injective A with xi > 0, observables O_1, O'_s of norm one such that for
+%% every integer s > 1 and sufficiently large N the one-point functions
+%% vanish exactly (auxform1) and the correlator itself satisfies the real
+%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). Neither the bound
+%% at every s > 1 nor the exact vanishing is justified in general. The correlator of Hermitian observables is real, and its
 %% leading part is an exponential sum over the eigenvalues of modulus
 %% |lambda_2|, which come in complex-conjugate pairs; such a sum, a cosine
 %% for a single conjugate pair, can vanish at individual s. The statement
