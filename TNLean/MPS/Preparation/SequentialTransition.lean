@@ -64,7 +64,7 @@ open scoped Matrix Kronecker
 
 namespace MPSPreparation
 
-open MPSChainTensor (eval eval_succ')
+open MPSChainTensor (eval_succ')
 
 variable {D N : ℕ}
 
@@ -174,6 +174,8 @@ def rowsAt (W : Matrix (Fin D × Fin 2) (Fin D × Fin 2) ℂ) (i : Fin 2) :
     Matrix (Fin D) (Fin D × Fin 2) ℂ :=
   fun α y => W (α, i) y
 
+/-- A step factors as `S_i(W) = E R_i` through the tag-zero embedding `E`,
+`E|φ⟩ = |φ⟩|0⟩`, with `(R_i)_{α,y} = W_{(α,i),y}`. -/
 theorem transitionStep_eq_mul (W : Matrix (Fin D × Fin 2) (Fin D × Fin 2) ℂ) (i : Fin 2) :
     transitionStep W i = tagZeroEmbed D * rowsAt W i := by
   ext x y
@@ -183,6 +185,8 @@ theorem transitionStep_eq_mul (W : Matrix (Fin D × Fin 2) (Fin D × Fin 2) ℂ)
     simp [tagZeroEmbed, Ne.symm hβ]
   · simp
 
+/-- On the tag-zero subspace the rows `R_i` of `W` give the step matrices of
+the deterministic scheme: `R_i E` is `MPSPreparation.stepMatrix W i`. -/
 theorem rowsAt_mul_tagZeroEmbed (W : Matrix (Fin D × Fin 2) (Fin D × Fin 2) ℂ) (i : Fin 2) :
     rowsAt W i * tagZeroEmbed D = stepMatrix W i := by
   ext α β
@@ -195,6 +199,7 @@ theorem rowsAt_mul_tagZeroEmbed (W : Matrix (Fin D × Fin 2) (Fin D × Fin 2) �
     simp [tagZeroEmbed, this]
   · simp
 
+/-- The coordinates of `E v = |v⟩|0⟩`. -/
 theorem tagZeroEmbed_mulVec_apply (v : Fin D → ℂ) (x : Fin D × Fin 2) :
     (tagZeroEmbed D *ᵥ v) x = if x.2 = 0 then v x.1 else 0 := by
   rw [Matrix.mulVec, dotProduct, Finset.sum_eq_single x.1]
@@ -203,6 +208,7 @@ theorem tagZeroEmbed_mulVec_apply (v : Fin D → ℂ) (x : Fin D × Fin 2) :
     simp [tagZeroEmbed, Ne.symm hβ]
   · simp
 
+/-- The tag-zero embedding `E` is an isometry: `‖E v‖² = ‖v‖²`. -/
 theorem star_tagZeroEmbed_mulVec_dotProduct (v : Fin D → ℂ) :
     star (tagZeroEmbed D *ᵥ v) ⬝ᵥ (tagZeroEmbed D *ᵥ v) = star v ⬝ᵥ v := by
   simp only [dotProduct, Fintype.sum_prod_type, Pi.star_apply, tagZeroEmbed_mulVec_apply,
