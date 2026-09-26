@@ -14,10 +14,11 @@ defined by~\eqref{eq:asymex_z2z2_action}. The construction targets the mixed
 three-cocycle of type II whose exponent $(-1)^{a_1b_2c_2}$ couples the first
 factor of the group to the second, motivated by anomalous
 $\Z_2\times\Z_2$ symmetry-protected topological phases~\cite{ChenGuWen2011}.
-The four operators do not form an exact representation, so the anomaly class
-of the full group is not defined for them; the class of the diagonal subgroup
-of order two is computed in
-Theorem~\ref{thm:asymex_z2z2_diagonal_anomaly_class}, and it is nontrivial.
+The four operators do not form an exact representation. After an on-site
+dressing they do (Theorem~\ref{thm:asymex_z2z2_exact}), and the anomaly
+class of the dressed representation has the detector values of the type-II
+class (Theorem~\ref{thm:asymex_z2z2_anomaly_class}); in particular it is
+nontrivial.
 Matrix product operator symmetries of this kind are reviewed
 in~\cite[Section~III.A.6]{Cirac2021Matrix}. The local tensors are assembled from
 the letters of the CZX matrix product
@@ -448,6 +449,70 @@ ring of $L$ sites.
     of~(\ref{eq:asymex_z2z2_action}).
 \end{proof}
 
+\begin{lemma}[Dressing by a diagonal on-site operator]%
+    \label{lem:asymex_z2z2_diagonal_dressing}
+    \lean{MPOTensor.mulDiagonal,
+        MPOTensor.mpo_mulDiagonal,
+        MPOTensor.toMPSTensor_mulDiagonal,
+        MPOTensor.isNormal_toMPSTensor_mulDiagonal_iff,
+        MPSTensor.evalWord_letterSmul,
+        MPSTensor.wordSpan_letterSmul_le,
+        MPSTensor.wordSpan_letterSmul_eq,
+        MPSTensor.isNBlkInjective_letterSmul_iff,
+        MPSTensor.isNormal_letterSmul_iff}
+    \leanok
+    Let $M$ be a matrix product operator tensor with periodic operators
+    $O_L$, and let $c\in\C^d$. The tensor with letters $c_jM^{ij}$ has
+    periodic operators $O_L\,\operatorname{diag}(c)^{\otimes L}$. If
+    every $c_j$ is nonzero, its doubled-index tensor is normal exactly when
+    that of $M$ is.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The trace of $\prod_n c_{t_n}M^{s_nt_n}$ is
+    $\bigl(\prod_nc_{t_n}\bigr)\operatorname{tr}\prod_nM^{s_nt_n}$.
+    Every word of the doubled-index tensor is multiplied by the product of
+    the scalars of its letters, which is nonzero, so the span of the words
+    of each length is unchanged.
+\end{proof}
+
+\begin{theorem}[An exact normal representation by dressed tensors]%
+    \label{thm:asymex_z2z2_exact}
+    \lean{Z2Z2Condensation.secondZSign,
+        Z2Z2Condensation.diagonal_prod_secondZSign,
+        Z2Z2Condensation.secondZDressing_mul_self,
+        Z2Z2Condensation.kleinTensor,
+        Z2Z2Condensation.mpo_kleinTensor,
+        Z2Z2Condensation.kleinTensor_isNormal,
+        Z2Z2Condensation.kleinFamily,
+        Z2Z2Condensation.kleinFamily_isNormalRepresentation}
+    \leanok
+    \uses{def:asymex_z2z2_tensors, def:asymex_group_cocycle_klein,
+        def:mpug_anomaly_three_cochain}
+    For $g\in\Z_2\times\Z_2$ let $M'_g$ be the tensor $M_g$ of
+    Definition~\ref{def:asymex_z2z2_tensors} with the letter of input label
+    $i$ multiplied by $(-1)^{g_1i_2}$. It has the bond dimension of $M_g$,
+    its doubled-index tensor is normal, and its periodic operator on every
+    ring of $L>0$ sites is $U^{\omega}_{g,L}$. In particular the tensors
+    $M'_g$ form an exact representation of $\Z_2\times\Z_2$ by normal
+    tensors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_z2z2_group_cocycle, thm:asymex_z2z2_normal,
+        thm:asymex_group_cocycle_klein, lem:asymex_z2z2_diagonal_dressing}
+    By Lemma~\ref{lem:asymex_z2z2_diagonal_dressing} the periodic operator
+    of $M'_g$ is $U_{g,L}Z_{2,L}^{\,g_1}$, which is $U^{\omega}_{g,L}$ by
+    \eqref{eq:asymex_z2z2_group_cocycle} and $Z_{2,L}^2=\Id$. The
+    operators $U^{\omega}_{g,L}$ multiply as the group by
+    Theorem~\ref{thm:asymex_group_cocycle_klein}. The letters of $M'_g$
+    are those of the normal tensor $M_g$ of
+    Theorem~\ref{thm:asymex_z2z2_normal} multiplied by signs, so
+    Lemma~\ref{lem:asymex_z2z2_diagonal_dressing} gives normality.
+\end{proof}
+
 \begin{theorem}[The condensation defect squares to a length-dependent
         multiple of itself]%
     \label{thm:asymex_z2z2_defect_sq}
@@ -855,71 +920,88 @@ the full stacked tensor.
     have identically vanishing remainders.
 \end{remark}
 
-\subsection{The anomaly class of the diagonal subgroup}%
-\label{sec:asymex_z2z2_diagonal_anomaly}
+\subsection{The anomaly class of the full group}%
+\label{sec:asymex_z2z2_anomaly}
 
-By Theorem~\ref{thm:asymex_z2z2_fusion} the four operators compose only
-projectively on odd rings, and since $\lambda(x,y)\neq\lambda(y,x)$ no
-rescaling of the four tensors removes the signs. On the diagonal subgroup
-$\{e,xy\}$ the sign is $\lambda(xy,xy)=-1$, and it is removed by the phase
-$i$: the operators of $M_e$ and $iM_{xy}$ multiply as the group of order two
-on every ring, since $i^{2L}(-1)^L=1$. The anomaly three-cochain of the
-fusion tensors of Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} is
-therefore defined for this subgroup, and not for the full group; the
-class of the full family is left open~\cite{gap:glm23_z2z2_diagonal_anomaly_scope}.
+By Theorem~\ref{thm:asymex_z2z2_fusion} the four operators $U_{g,L}$
+compose only projectively on odd rings, and no rescaling of the four
+tensors removes the signs, since $\lambda(x,y)\neq\lambda(y,x)$. The
+dressed tensors $M'_g$ of Theorem~\ref{thm:asymex_z2z2_exact} form an
+exact representation by normal tensors, so the anomaly three-cochain of
+Definition~\ref{def:mpug_anomaly_three_cochain} is defined for them.
+According to~\cite{GarreRubio2023MPOSym}, the values
+$\omega(g,g,g)$ in a normalized gauge at the three elements of order two
+distinguish the eight classes of
+$H^3(\Z_2\times\Z_2,\C^\times)\cong\Z_2^3$, and the type-II class has the
+values $(+1,+1,-1)$ at $x$, $y$ and $xy$. The theorem below states these
+detector values for the dressed representation. The source's statement that
+they separate the classes is not formalized, so the equality of classes with
+$(-1)^{a_1b_2c_2}$ is not
+claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
-\begin{theorem}[The anomaly class of the diagonal subgroup]%
-    \label{thm:asymex_z2z2_diagonal_anomaly_class}
-    \lean{Z2Z2Condensation.diagFamily,
-        Z2Z2Condensation.diagFamily_isNormalRepresentation,
-        Z2Z2Condensation.diagFusionData,
-        Z2Z2Condensation.tripleTensor_gen_toMPSTensor,
-        Z2Z2Condensation.diag_leftTree_evalWord,
-        Z2Z2Condensation.diagFusionData_isAssociator_gen_gen_gen,
-        Z2Z2Condensation.diagFusionData_omega_gen_gen_gen,
-        Z2Z2Condensation.diagFusionData_omega_gen_one_gen,
-        Z2Z2Condensation.cyclicInvariant_omega_diag,
-        Z2Z2Condensation.not_isTrivialGaugeClass_omega_diag}
+\begin{theorem}[The anomaly class of the full group]%
+    \label{thm:asymex_z2z2_anomaly_class}
+    \lean{Z2Z2Condensation.xHom,
+        Z2Z2Condensation.yHom,
+        Z2Z2Condensation.xyHom,
+        Z2Z2Condensation.pairFamily,
+        Z2Z2Condensation.pairFusionData,
+        Z2Z2Condensation.pairFusionData_omega_gen_one_gen,
+        Z2Z2Condensation.kx_isReduction,
+        Z2Z2Condensation.kxy_isReduction,
+        Z2Z2Condensation.comap_xHom,
+        Z2Z2Condensation.comap_yHom,
+        Z2Z2Condensation.comap_xyHom,
+        Z2Z2Condensation.xFusionData_isAssociator_gen_gen_gen,
+        Z2Z2Condensation.xyFusionData_isAssociator_gen_gen_gen,
+        Z2Z2Condensation.cyclicInvariant_kleinCocycle,
+        Z2Z2Condensation.cyclicInvariant_omega_kleinFamily_x,
+        Z2Z2Condensation.cyclicInvariant_omega_kleinFamily_y,
+        Z2Z2Condensation.cyclicInvariant_omega_kleinFamily_xy,
+        Z2Z2Condensation.cyclicInvariant_omega_kleinFamily,
+        Z2Z2Condensation.not_isTrivialGaugeClass_omega_kleinFamily}
     \leanok
-    \uses{thm:asymex_z2z2_fusion, thm:asymex_z2z2_normal,
-        thm:asymex_z2z2_split, thm:asymex_z2z2_nonsplit,
-        thm:mpug_anomaly_three_cochain_spec, thm:mpug_anomaly_three_cocycle_gauge,
-        thm:mpug_cyclic_invariant_gauge}
-    This statement concerns the diagonal subgroup $\{e,xy\}\cong\Z_2$ only.
-    Write $s=xy$. The tensors $M_e$ for $e$ and $iM_{xy}$ for $s$ are normal
-    and their periodic operators multiply as $\Z_2$ on every nonempty
-    chain. Choose the fusion tensors to be the identity whenever a factor
-    is $e$, and the compression pair $(V,W)$ of the block $(xy,xy)$ of
-    Theorem~\ref{thm:asymex_z2z2_nonsplit} for $(s,s)$, where
-    $V=(0,1,0,0)$. Let $R=M_{xy}\cdot M_{xy}\cdot M_{xy}$ be the unscaled
-    triple product, of bond dimension eight. Then
+    \uses{thm:asymex_z2z2_exact, def:mpug_anomaly_three_cochain,
+        def:mpug_trivial_gauge_class}
+    Let $\omega$ be the anomaly three-cochain of any choice of fusion
+    tensors of the representation $g\mapsto M'_g$ of
+    Theorem~\ref{thm:asymex_z2z2_exact}. For every
+    $g\in\Z_2\times\Z_2$,
     \begin{align}
-        (V\otimes\Id)R^{\mathbf w}
-         & =-(\Id\otimes V)R^{\mathbf w}
+        \omega(g,e,g)\,\omega(g,g,g)
+         & =(-1)^{g_1g_2},
         \notag
     \end{align}
-    for every nonempty word $\mathbf w$, so $\omega(s,s,s)=-1$, while
-    $\omega(s,e,s)=1$. For every choice of fusion tensors,
-    $\omega(s,e,s)\,\omega(s,s,s)=-1$, and the anomaly three-cocycle of
-    the diagonal subgroup is not cohomologous to the constant cochain one.
+    which is the same product for the cocycle $(-1)^{a_1b_2c_2}$. It equals
+    $+1$ at $x$ and $y$ and $-1$ at $xy$. In particular $\omega$ is not
+    cohomologous to the constant cochain one.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    The phases $i\cdot i=-1$ of two generators cancel the weight $-1$ of
-    the target $-M_e$ of the block $(xy,xy)$, so $(V,W)$ is a fusion pair
-    for $(s,s)$; the pairs with a factor $e$ are the split blocks
-    $(e,xy)$ and $(xy,e)$, whose stacked tensors equal $M_{xy}$. The triple
-    product of $iM_{xy}$ is $i^3R$, and the scalar $i^3$ occurs on both
-    sides of the comparison of the two trees. Both trees intertwine two
-    letters with the tensor $-M_{xy}$: $XR^aR^b=-M_{xy}^aXR^b$ for
-    $X=V\otimes\Id$ and $X=\Id\otimes V$ and all letters $a,b$, and on a
-    single letter $(V\otimes\Id)R^a=-(\Id\otimes V)R^a$. These are integer
-    identities checked letter by letter, and induction on the word gives
-    the displayed identity. For $(s,e,s)$ both trees reduce to $V$. The
-    product $\omega(s,e,s)\,\omega(s,s,s)$ is invariant under the
-    fusion-tensor gauge action because $s^2=e$, and changing the fusion
-    tensors acts by that gauge action. The value $-1$ agrees with the
-    product $\omega(s,e,s)\,\omega(s,s,s)$ of the mixed cocycle
-    $(-1)^{a_1b_2c_2}$ at $s=(1,1)$.
+    \uses{thm:asymex_z2z2_split, thm:asymex_z2z2_nonsplit,
+        thm:mpug_anomaly_three_cochain_spec, thm:mpug_family_restriction_omega,
+        thm:mpug_cyclic_invariant_gauge, lem:mpug_omega_integer_certificate}
+    Since $g^2=e$, the product $\omega(g,e,g)\,\omega(g,g,g)$ does not
+    depend on the fusion tensors and can be computed on the restriction of
+    the family along an embedding of $\Z_2$ onto $\{e,g\}$, by
+    Theorem~\ref{thm:mpug_family_restriction_omega}. On $\{e,y\}$ all bond
+    dimensions are one. The fusion tensors can be taken to be the identity,
+    since $M'_y=M_y$ and the blocks with factors in $\{e,y\}$ are split, so
+    every value of $\omega$ is one. On $\{e,x\}$ and $\{e,xy\}$ choose the
+    identity whenever a factor is $e$, and for the generator the compression
+    pair $(V,W)$ of the block $(x,x)$, respectively $(xy,xy)$, of
+    Theorem~\ref{thm:asymex_z2z2_nonsplit}. This pair is a reduction onto
+    $M_e$ because the stacked square of $M'_x$ equals that of $M_x$, and the
+    stacked square of $M'_{xy}$ is minus that of $M_{xy}$, which cancels the
+    weight $-1$ of the target of that block. With these choices
+    $\omega(g,e,g)=1$, since both fusion trees equal $V$. Let $R$ be the
+    triple product of the generator tensor. The trees $X=V\otimes\Id$ and
+    $X=\Id\otimes V$ both intertwine two letters with the generator tensor,
+    $XR^aR^b=M'^aXR^b$, and on single letters
+    $(V\otimes\Id)R^a=\pm(\Id\otimes V)R^a$, with the sign $+$ for $x$ and
+    $-$ for $xy$. These are integer identities over the few distinct
+    letters, and induction on the word gives $\omega(g,g,g)=+1$ for $x$
+    and $-1$ for $xy$. The value $-1$ at $xy$ shows that the class is
+    nontrivial, by Theorem~\ref{thm:mpug_cyclic_invariant_gauge}.
 \end{proof}

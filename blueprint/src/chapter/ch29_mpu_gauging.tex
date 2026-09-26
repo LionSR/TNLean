@@ -6494,6 +6494,99 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     and~\ref{def:mpug_trivial_gauge_class}.
 \end{proof}
 
+\begin{definition}[Restriction of a group of matrix product operators]
+    \label{def:mpug_family_restriction}
+    \lean{MPOTensor.GroupFamily.comap,
+        MPOTensor.GroupFamily.FusionData.comap}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain}
+    For a group homomorphism $f\colon H\to G$ and a family
+    $\{O_g\}_{g\in G}$ as in Definition~\ref{def:mpug_anomaly_three_cochain},
+    the restricted family is $\{O_{f(a)}\}_{a\in H}$. A choice of fusion
+    tensors $(F^<_{g,h},F^>_{g,h})$ of the family restricts to the fusion
+    tensors $(F^<_{f(a),f(b)},F^>_{f(a),f(b)})$ of the restricted family,
+    where the bond space of $O_{f(a)f(b)}$ is identified with that of
+    $O_{f(ab)}$ through the equality $f(a)f(b)=f(ab)$.
+\end{definition}
+
+\begin{theorem}[Anomaly three-cochains of restrictions]
+    \label{thm:mpug_family_restriction_omega}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.comap,
+        MPOTensor.GroupFamily.castMat_comap,
+        MPOTensor.GroupFamily.ext_of_heq,
+        MPOTensor.GroupFamily.FusionData.comap_leftV,
+        MPOTensor.GroupFamily.FusionData.comap_rightV,
+        MPOTensor.GroupFamily.FusionData.omega_comap,
+        MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map,
+        MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq}
+    \leanok
+    \uses{def:mpug_family_restriction, def:mpug_cochain_restriction,
+        def:mpug_cyclic_invariant}
+    The restriction of a family satisfying the hypotheses of
+    Definition~\ref{def:mpug_anomaly_three_cochain} along $f\colon H\to G$
+    satisfies them for $H$, and the anomaly three-cochain of the restricted
+    fusion tensors is $f^*\omega$. Consequently, if $a\in H$ and $a^n=e$,
+    then for every choice of fusion tensors of the restricted family, with
+    anomaly three-cochain $\omega_H$,
+    \begin{align}
+        I_{f(a),n}(\omega) & =I_{a,n}(\omega_H).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_family_restriction, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_cyclic_invariant_gauge}
+    The operator law of the restricted family is that of the family at the
+    elements $f(a)$, $f(b)$ and $f(ab)=f(a)f(b)$. The two fusion trees of the
+    restricted fusion tensors at $(a,b,c)$ are those of the family at
+    $(f(a),f(b),f(c))$, followed by one identification of the bond space of
+    $O_{f(a)f(b)f(c)}$ with that of $O_{f(abc)}$. Left multiplication by this
+    permutation matrix preserves the dressed identity, so
+    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    $\omega_H(a,b,c)=\omega(f(a),f(b),f(c))$ for the restricted fusion
+    tensors. For any other choice of fusion tensors of the restricted family,
+    Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge} makes the two
+    three-cochains cohomologous, and
+    Theorem~\ref{thm:mpug_cyclic_invariant_gauge} makes their cyclic
+    invariants at $a$ equal. Finally $I_{a,n}(f^*\omega)=I_{f(a),n}(\omega)$
+    because $f(a^k)=f(a)^k$.
+\end{proof}
+
+\begin{lemma}[Values of the anomaly three-cochain from finitely many identities]%
+    \label{lem:mpug_omega_integer_certificate}
+    \lean{MPSTensor.isDressedProportional_complexOfInt,
+        MPSTensor.isDressedProportional_complexOfInt_of_mem,
+        MPOTensor.GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV,
+        MPOTensor.GroupFamily.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.omega_ofBondOne}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain}
+    Let $T$ be a tensor with integer letters, $A$ a family of integer
+    matrices, $L$ and $R$ integer matrices, and $z\in\{1,-1\}$. Suppose
+    that $LT^aT^b=A^aLT^b$ for all letters $a,b$ and that $LT^a=zRT^a$ for
+    every letter $a$. Then $LT^{\mathbf w}=zRT^{\mathbf w}$ for every nonempty
+    word $\mathbf w$. It suffices to check these identities on a list of pairs
+    $(T^a,A^a)$ that contains the pair of every letter. In particular, for the
+    anomaly three-cochain of Definition~\ref{def:mpug_anomaly_three_cochain}:
+    if the two fusion trees of a triple coincide, then $\omega$ is one at
+    that triple; and a family of bond-one tensors whose stacked products
+    $O_gO_h$ equal $O_{gh}$ has, with all fusion tensors equal to one, the
+    constant three-cochain one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Since $z^2=1$, the identity $LT^a=zRT^a$ gives $RT^a=zLT^a$, and hence
+    $RT^aT^b=zA^aLT^b=A^aRT^b$. Induction on the word gives the dressed
+    identity, and the entrywise image in $\C$ preserves all products. When
+    the two fusion trees coincide, the scalar $1$ satisfies the dressed
+    identity, so Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    $\omega=1$. For bond dimension one, both fusion trees are products of
+    one-by-one identity matrices and identifications of one-dimensional
+    spaces, so they coincide.
+\end{proof}
+
 \begin{definition}[L-symbols and compatibility]
     \label{def:mpug_l_symbols}
     \lean{TNLean.Algebra.LSymbol,

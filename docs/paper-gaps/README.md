@@ -629,6 +629,12 @@ For the group matrix product operators of arXiv:2203.12563:
   $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
+- `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
+  $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
+  $Z$ on the second qubit, form an exact normal representation whose
+  anomaly three-cocycle has the detector values $(+1,+1,-1)$ of the type-II
+  row of the table, and that the separation of the eight classes by these
+  values is not formalized.
 
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
