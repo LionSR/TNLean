@@ -638,16 +638,108 @@ normality in the following two theorems.
     $X_{01}=X_{02}=0$, and $X=0$.
 \end{proof}
 
+\begin{lemma}[The three-site term as a projector]%
+    \label{lem:majumdar_ghosh_term_projector}
+    \lean{MPSTensor.majumdarGhoshTerm_apply,
+        MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction}
+    \leanok
+    \uses{def:majumdar_ghosh_hamiltonian, def:parent_interaction,
+        thm:spin_exchange_swap, thm:majumdar_ghosh_local_ground_space}
+    The operator
+    $\tfrac43\bigl(h+\tfrac38\bigr)=\tfrac13(P_{01}+P_{12}+P_{02})$ is the
+    orthogonal projector onto $\mathcal G_{3}(A)^{\perp}$, the three-site parent
+    interaction of the Majumdar--Ghosh tensor. It is the projector
+    $P^{3/2}$ onto total spin $\tfrac32$ of three spin-$\tfrac12$ sites.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $Q=\tfrac13(P_{01}+P_{12}+P_{02})$, which equals
+    $\tfrac43(h+\tfrac38)$ by Theorem~\ref{thm:spin_exchange_swap}. Each
+    transposition is a permutation of the configurations, hence self-adjoint,
+    so $Q$ is self-adjoint. On three spin-$\tfrac12$ sites the antisymmetric part
+    vanishes, so $1+C+C^{2}=P_{01}+P_{12}+P_{02}$ for the cyclic shift $C$, and
+    $(P_{01}+P_{12}+P_{02})^{2}=3+3(C+C^{2})=3(P_{01}+P_{12}+P_{02})$; this is
+    checked on the eight configurations. Hence $Q^{2}=Q$. The kernel of $Q$ is
+    the eigenspace of $h$ for $-\tfrac38$, which is $\mathcal G_{3}(A)$ by
+    Theorem~\ref{thm:majumdar_ghosh_local_ground_space}. A self-adjoint
+    idempotent is the orthogonal projector onto the orthogonal complement of its
+    kernel.
+\end{proof}
+
+\begin{theorem}[Ground space of the Majumdar--Ghosh Hamiltonian]%
+    \label{thm:majumdar_ghosh_review_hamiltonian}
+    \lean{MPSTensor.majumdarGhoshHamiltonian_apply,
+        MPSTensor.majumdarGhosh_parentHamiltonian_three_apply,
+        MPSTensor.majumdarGhoshHamiltonian_add_eq_parentHamiltonian,
+        MPSTensor.majumdarGhoshHamiltonian_add_isPositive,
+        MPSTensor.majumdarGhoshHamiltonian_eigenvalue_ge,
+        MPSTensor.majumdarGhoshHamiltonian_eigenspace_eq_ker,
+        MPSTensor.majumdarGhoshHamiltonian_eigenspace_eq_span,
+        MPSTensor.majumdarGhoshHamiltonian_hasEigenvalue}
+    \leanok
+    \uses{def:majumdar_ghosh_hamiltonian, def:parent_hamiltonian,
+        lem:majumdar_ghosh_term_projector, lem:transported_es_positive,
+        thm:majumdar_ghosh_ground_space, thm:majumdar_ghosh_hamiltonian_eigen}
+    For $N\ge3$, the Hamiltonian~(\ref{eq:mg_hamiltonian}) satisfies
+    \begin{align}
+        H_{N}+\tfrac{3N}{8}
+         & =\tfrac34\sum_{i}P^{3/2}_{i,i+1,i+2}
+        =\tfrac34H_{N,\mathrm{MG}}^{(3)},
+        \label{eq:mg_hamiltonian_projectors}
+    \end{align}
+    so $H_{N}\ge-\tfrac{3N}{8}$, and the eigenspace of $H_{N}$ for
+    $-\tfrac{3N}{8}$ is the kernel of $H_{N,\mathrm{MG}}^{(3)}$. For even
+    $N\ge4$, $-\tfrac{3N}{8}$ is the smallest eigenvalue of $H_{N}$, and its
+    eigenspace is spanned by the two singlet coverings
+    $(1,2)(3,4)\cdots(N-1,N)$ and $(2,3)(4,5)\cdots(N,1)$. This is the
+    statement of \cite[Appendix~A, ``The Majumdar-Ghosh model'']{Cirac2021Matrix}
+    that the Majumdar--Ghosh state is the ground state of $H_{N}$ and a
+    superposition of the two coverings.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:spin_exchange_swap}, $H_{N}+\tfrac{3N}{8}$ is a quarter of
+    the sum over the windows $i,i+1,i+2$ of the three transpositions within the
+    window, since each nearest-neighbour transposition occurs in two windows and
+    each next-nearest-neighbour one in one. By
+    Lemma~\ref{lem:majumdar_ghosh_term_projector}, the parent interaction on the
+    window starting at $i$ is a third of the same sum of three transpositions,
+    which gives~(\ref{eq:mg_hamiltonian_projectors}). The parent Hamiltonian is
+    positive by Lemma~\ref{lem:transported_es_positive}, so pairing an
+    eigenvector of $H_{N}$ with eigenvalue $\mu$ against itself shows
+    $\mu+\tfrac{3N}{8}\ge0$. The eigenspace for $-\tfrac{3N}{8}$ is the kernel of
+    the right side of~(\ref{eq:mg_hamiltonian_projectors}), which is the span of
+    the two coverings by Theorem~\ref{thm:majumdar_ghosh_ground_space}. The
+    coverings are nonzero, so $-\tfrac{3N}{8}$ is an eigenvalue.
+\end{proof}
+
+\begin{theorem}[The dimer energy on odd rings]%
+    \label{thm:majumdar_ghosh_review_hamiltonian_odd}
+    \lean{MPSTensor.majumdarGhoshHamiltonian_not_hasEigenvalue_of_odd}
+    \leanok
+    \uses{thm:majumdar_ghosh_review_hamiltonian,
+        thm:majumdar_ghosh_ground_space_odd,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    For odd $N\ge5$, $-\tfrac{3N}{8}$ is not an eigenvalue of $H_{N}$, so every
+    eigenvalue of $H_{N}$ is strictly larger than $-\tfrac{3N}{8}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:majumdar_ghosh_review_hamiltonian}, the eigenspace for
+    $-\tfrac{3N}{8}$ is the kernel of $H_{N,\mathrm{MG}}^{(3)}$, which is
+    $\mathcal G_{N,3}(A)$ by
+    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} and zero by
+    Theorem~\ref{thm:majumdar_ghosh_ground_space_odd}.
+\end{proof}
+
 \begin{remark}\label{rem:majumdar_ghosh_review_hamiltonian}
-    By Theorem~\ref{thm:majumdar_ghosh_hamiltonian_eigen}, every vector of
-    $\mathcal G_{N,3}(A)$ is an eigenvector of the spin-$\tfrac12$ chain
-    $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
-        +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$
-    of \cite{Cirac2021Matrix} with eigenvalue $-\tfrac{3N}{8}$. If
-    $-\tfrac{3N}{8}$ is the smallest eigenvalue of $H$, then the two-fold
-    degeneracy of Theorem~\ref{thm:majumdar_ghosh_ground_space} reflects the
-    spontaneous breaking of the one-site translation symmetry of this chain.
-    % The lower bound H >= -3N/8 is not formalized here; tracked in #8117.
+    By Theorem~\ref{thm:majumdar_ghosh_review_hamiltonian}, on an even ring the
+    ground space of $H_{N}$ is two-dimensional. The one-site translation
+    exchanges the two singlet coverings, so this degeneracy reflects the
+    spontaneous breaking of the one-site translation symmetry of the chain.
 \end{remark}
 
 %% ===================================================================
