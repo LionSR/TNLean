@@ -83,6 +83,48 @@ $w,h\ge 3$; the
 source constructions are local and apply to every torus
 \cite{gap:rmp_peps_examples_small_torus}.
 
+A virtual string on a torus PEPS acts on the bonds it crosses, diagonally in
+the bond basis: a bond carrying the index $\alpha$ contributes an element
+$X_\alpha$ of a monoid $M$, and the contributions are multiplied in the order
+in which the string crosses the bonds. For a matrix algebra $M$ this is a
+matrix product operator on the virtual level.
+
+\begin{lemma}[Pulling a virtual string through a rectangle]%
+    \label{lem:peps_torus_string_pull_through}
+    \lean{TNLean.PEPS.gridPath_column_prod_eq, TNLean.PEPS.gridPath_prod_eq,
+        TNLean.PEPS.torusWestSouthString, TNLean.PEPS.torusNorthEastString,
+        TNLean.PEPS.torusWestSouthString_eq_torusNorthEastString,
+        TNLean.PEPS.sum_smul_torusWestSouthString_eq}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    Let $a$ be a four-leg tensor and $\alpha\mapsto X_\alpha$ a map from the
+    bond indices to a monoid $M$ with $X_tX_r=X_lX_b$ whenever
+    $a^{s}_{trbl}\neq0$. Fix a rectangle of $m$ columns and $n$ rows of sites
+    of the torus. Consider the string from its upper left to its lower right
+    corner that crosses the left legs of the leftmost column, from top to
+    bottom, and then the down legs of the bottom row, from left to right, and
+    the string that crosses the top legs of the top row and then the right
+    legs of the rightmost column. On every labelling of the bonds whose term
+    in the contraction of the torus PEPS of $a$ is nonzero the two strings
+    have the same product, and so, for an algebra $M$ over $\C$, the
+    contracted network with the first string inserted equals the contracted
+    network with the second string inserted.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $P_{ij}$ for the contribution of the left leg of the site in
+    column $i$ and row $j$ of the rectangle, counted from its upper left
+    site, and $Q_{ij}$ for that of its top leg. The right leg of that site is
+    the left leg of the site in column $i+1$, and its down leg is the top leg
+    of the site in row $j+1$, so the hypothesis at a site with nonzero entry
+    reads $Q_{ij}P_{i+1,j}=P_{ij}Q_{i,j+1}$. Induction on $n$ gives
+    $P_{i0}\cdots P_{i,n-1}\,Q_{in}=Q_{i0}\,P_{i+1,0}\cdots P_{i+1,n-1}$
+    for one column, and induction on $m$, moving one column at a time, gives
+    the identity for the rectangle. A nonzero term of the contraction has a
+    nonzero entry at every site, and the terms that vanish contribute zero
+    to both sides.
+\end{proof}
+
 \subsection{The GHZ state}
 
 \begin{definition}[Two-dimensional GHZ tensor]%
@@ -416,8 +458,8 @@ trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
     the tensor is invariant under this virtual action
     \cite[Appendix~A, ``The Toric Code and quantum double
         models'']{Cirac2021Matrix}. This is a statement about one tensor; the
-    resulting symmetry of the contracted network is not formalized
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    resulting symmetry of the contracted network is
+    Theorem~\ref{thm:peps_quantum_double_primal_network}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -430,6 +472,34 @@ trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
     on the support, which gives the operator identity entrywise. A
     one-dimensional representation is the case of a character $\chi$, where
     the identity reads $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}=1$.
+\end{proof}
+
+\begin{theorem}[Virtual symmetry of the primal quantum-double network]%
+    \label{thm:peps_quantum_double_primal_network}
+    \lean{TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_mul,
+        TNLean.PEPS.quantumDoublePrimalSiteTensor,
+        TNLean.PEPS.quantumDoublePrimalPEPS,
+        TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq}
+    \leanok
+    \uses{def:peps_quantum_double_primal, thm:peps_quantum_double_primal_fusion,
+        lem:peps_torus_string_pull_through}
+    Place the primal quantum-double tensor at every site of the torus, and
+    let $\pi$ be a representation of $G$, in particular an irreducible one.
+    The virtual string that multiplies $\pi(g)$ for each bond with label $g$
+    it crosses can be pulled through every rectangle of sites of the
+    contracted network: inserted along the left and bottom sides of the
+    rectangle it gives the same network as inserted along its top and right
+    sides \cite[Appendix~A, ``The Toric Code and quantum double
+        models'']{Cirac2021Matrix}. Around one site the two paths give
+    $\pi(l)\pi(b)$ and $\pi(t)\pi(r)$, so the closed string around a site is
+    the operator $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}$ of
+    Theorem~\ref{thm:peps_quantum_double_primal_fusion}.
+\end{theorem}
+
+\begin{proof}\leanok
+    On the support of the primal tensor $t\,r\,b^{-1}l^{-1}=1$, so
+    $tr=lb$ and $\pi(t)\pi(r)=\pi(l)\pi(b)$. This is the hypothesis of
+    Lemma~\ref{lem:peps_torus_string_pull_through} for $X_g=\pi(g)$.
 \end{proof}
 
 \subsection{The AKLT state}
