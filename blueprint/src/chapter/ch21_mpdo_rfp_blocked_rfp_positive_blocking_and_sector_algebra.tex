@@ -167,9 +167,11 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpo_eval_word_block}
+    \uses{thm:mpo_eval_word_block, lem:eval_word_block}
     The word of $N$ blocked letters $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$
-    has concatenation $\Phi_{N,L}(\sigma)$, and similarly for $\tau$. By
+    has concatenation $\Phi_{N,L}(\sigma)$, and similarly for $\tau$; this
+    concatenation is the blocked-configuration bijection of
+    Lemma~\ref{lem:eval_word_block}. By
     Theorem~\ref{thm:mpo_eval_word_block},
     \begin{align}
         (M^{[L]})^{\sigma,\tau}
@@ -206,7 +208,9 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpo_eval_word_append, thm:mpo_eval_word_block}
+    \uses{lem:mpo_eval_word_append, thm:mpo_eval_word_block, lem:eval_word_block}
+    The concatenations $\widetilde\sigma,\widetilde\tau$ are identified with
+    the flattened blocked configurations by Lemma~\ref{lem:eval_word_block}.
     Applying word concatenation at the two boundaries
     (Lemma~\ref{lem:mpo_eval_word_append}) and then evaluating the middle
     segment as a word of blocked matrices (Theorem~\ref{thm:mpo_eval_word_block})
