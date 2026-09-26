@@ -8,6 +8,7 @@ import QICLean.Channel.FixedPoint.MeanErgodicAdjoint
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.Irreducible.FromSpectral
 import TNLean.MPS.MPU.TransferStabilization
+import TNLean.MPS.CanonicalForm.SingleBlock
 
 /-!
 # Converse to stabilization for an MPU in canonical form II
@@ -107,57 +108,6 @@ theorem IsMPU.neZero_bond [NeZero d] (hU : IsMPU U) : NeZero D := ⟨by
   have hentry := congrFun (congrFun hunit c) c
   simp at hentry⟩
 
-/-- A normal left-canonical tensor with a diagonal positive fixed matrix is
-already in one-block canonical form II in its given bond coordinates.
-
-Source: arXiv:1606.00608, Appendix A, lines 1054–1077. -/
-private noncomputable def oneBlockCFIIData {A : MPSTensor d D}
-    [NeZero D] (hNormal : MPSTensor.IsNormalTensor A)
-    (hLeft : MPSTensor.IsLeftCanonical A)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρpd : ρ.PosDef) (hρdiag : ρ.IsDiag)
-    (hρfix : Kraus.transferMap A ρ = ρ) :
-    MPSTensor.CPSVCanonicalFormIIData A := by
-  classical
-  refine {
-    r := 1
-    dim := fun _ => D
-    dim_pos := fun _ => NeZero.pos D
-    weights := fun _ => 1
-    weights_ne_zero := fun _ => one_ne_zero
-    blocks := fun _ => A
-    blocks_normal := fun _ => hNormal
-    total_dim_le := by simp
-    ambient_coisometry := MPSTensor.blockInclusion (fun _ : Fin 1 => D) 0
-    coisometric := ?_
-    reconstruct := ?_
-    blocks_left_canonical := fun _ => hLeft
-    blocks_fixed_point := fun _ => ⟨ρ, hρpd, hρdiag, hρfix⟩ }
-  · let V : Matrix (Fin (∑ _ : Fin 1, D)) (Fin D) ℂ :=
-      MPSTensor.blockInclusion (fun _ : Fin 1 => D) 0
-    have hV : (Vᴴ * V : Matrix (Fin D) (Fin D) ℂ) = 1 :=
-      MPSTensor.blockInclusion_conjTranspose_mul_self _ _
-    have hcard : Fintype.card (Fin D) = Fintype.card (Fin (∑ _ : Fin 1, D)) := by simp
-    exact (Matrix.mul_eq_one_comm_of_card_eq _ _ ℂ
-      (A := (Vᴴ : Matrix (Fin D) (Fin (∑ _ : Fin 1, D)) ℂ))
-      (B := V) hcard).mp hV
-  · intro i
-    let V : Matrix (Fin (∑ _ : Fin 1, D)) (Fin D) ℂ :=
-      MPSTensor.blockInclusion (fun _ : Fin 1 => D) 0
-    have hV : (Vᴴ * V : Matrix (Fin D) (Fin D) ℂ) = 1 :=
-      MPSTensor.blockInclusion_conjTranspose_mul_self _ _
-    have hmul := MPSTensor.toTensorFromBlocks_mul_blockInclusion
-      (fun _ : Fin 1 => (1 : ℂ)) (fun _ : Fin 1 => A) 0 i
-    have hmul' : MPSTensor.toTensorFromBlocks (fun _ : Fin 1 => (1 : ℂ))
-        (fun _ : Fin 1 => A) i * V = V * A i := by
-      simpa only [one_smul] using hmul
-    calc
-      A i = (Vᴴ * V) * A i := by rw [hV, Matrix.one_mul]
-      _ = Vᴴ * (MPSTensor.toTensorFromBlocks
-            (fun _ : Fin 1 => (1 : ℂ)) (fun _ : Fin 1 => A) i * V) := by
-              rw [hmul', Matrix.mul_assoc]
-      _ = (Vᴴ * MPSTensor.toTensorFromBlocks (fun _ : Fin 1 => (1 : ℂ))
-            (fun _ : Fin 1 => A) i) * V := by
-              exact (Matrix.mul_assoc Vᴴ _ V).symm
 
 /-- A trace-normalized positive diagonal factor of a positive stabilized power
 gives canonical-form-II data for the original tensor, in its original bond
@@ -263,7 +213,8 @@ private noncomputable def IsMPU.canonicalFormIIOfTransferPowerWithRho
     spectralRadius_eq_one_and_isPrimitive_of_transferMatrix_shifted_trace T
       (fun N hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
   have hnormal : MPSTensor.IsNormalTensor A := ⟨hIrr, hrad, hprim⟩
-  let cfii := oneBlockCFIIData hnormal hTP ρ hρpd hρdiag hρfix
+  let cfii :=
+    MPSTensor.CPSVCanonicalFormIIData.ofNormalLeftCanonical hnormal hTP ρ hρpd hρdiag hρfix
   refine ⟨{
     isMPU := hU
     cfii := cfii
