@@ -1978,6 +1978,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### virtual-leg cancellation in source-gate contractions — candidate
+- **Pattern:** express the two transported source factors as matrices on the
+  contracted virtual coordinate and reduce their product with
+  $z^\dagger z=I$. The entrywise Kronecker expansion then identifies the
+  original source-gate contraction.
+- **Seen:** three occurrences across two files (2026-09-26):
+  `transported_source_u_contraction` in
+  `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and
+  `rawU_virtual_cancel` and `rawV_virtual_cancel` in
+  `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
+- **Abstraction (proposed):** a matrix lemma for cancelling a unitary at one
+  finite contracted coordinate, with the Kronecker entry expansions left to
+  the two source-gate specializations.
+- **Notes:** The first occurrence belongs to the separately reviewed
+  source-factor transport module. The new theorem keeps its two gate
+  identities together rather than reorganizing that module in this PR;
+  promotion should refactor all three sites when those dependent branches
+  are consolidated.
+
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
 

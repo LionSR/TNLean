@@ -6791,6 +6791,48 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the two unitary changes $W_1,W_2$ and the four displayed equalities.
 \end{proof}
 
+\begin{theorem}[Source gates under a unitary virtual conjugation]
+    \label{thm:mpu_source_gates_virtual_unitary_gauge}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_selected_source_gate_unitary_gauges}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
+        def:mpu_source_uv,
+        thm:mpu_virtual_sandwich_source_ranks}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$. Let
+    $e_r:r[\mathcal U]\to r[\mathcal V]$ and
+    $e_\ell:\ell[\mathcal U]\to\ell[\mathcal V]$ be the source-rank
+    identifications. Reindex the source gates of $\mathcal U$ by
+    \begin{align}
+        \widetilde u_{(\ell,r),(p,q)}
+         & =u_{\mathcal U,(e_\ell^{-1}\ell,e_r^{-1}r),(p,q)},
+         & \widetilde v_{(p,q),(r,\ell)}
+         & =v_{\mathcal U,(p,q),(e_r^{-1}r,e_\ell^{-1}\ell)}.
+    \end{align}
+    There are unitaries $x$ on $\ell[\mathcal V]$ and $y$ on
+    $r[\mathcal V]$ such that
+    \begin{align}
+        u_{\mathcal V} & =(x\otimes y)\widetilde u,                 &
+        v_{\mathcal V} & =\widetilde v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    These are the forward local relations in
+    \cite[Equations~(SFuu) and (SFvv)]{Cirac2017MPU}. They do not assert a
+    converse for the original periodic operators at odd length.
+    % Source: paper_v2.tex 624--648; II_RelationStandard1/2.png.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factors_virtual_unitary_gauge}
+    Use the four selected-factor identities of
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}. Their
+    source-rank changes are $x=W_2^\dagger$ and $y=W_1^\dagger$. In the
+    contraction $u=Y_2\mathbin{-}Y_1$, the two virtual matrices cancel as
+    $z^\dagger z=I_D$, leaving $(x\otimes y)\widetilde u$. In the contraction
+    $v=X_1\mathbin{-}X_2$, the first-cut transpose and second-cut left action
+    likewise contract to $z^\dagger z=I_D$, leaving
+    $\widetilde v(y^\dagger\otimes x^\dagger)$.
+\end{proof}
+
 \begin{definition}[Ambient support-inverse extension]
     \label{def:mpu_ambient_support_inverse_extension}
     \lean{Matrix.PosSemidef.supportInvExtension,
