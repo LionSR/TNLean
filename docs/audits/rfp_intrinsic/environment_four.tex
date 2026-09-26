@@ -1,0 +1,39 @@
+% Build here: latexmk -pdf -outdir=../../../build/audits/rfp_intrinsic environment_four.tex
+\documentclass[aps,pra,reprint,nofootinbib,onecolumn]{revtex4-2}
+\input{preamble}
+\usepackage{cleveref}
+\begin{document}
+
+\title{An obstruction to coefficient compatibility in the environment-four MPDO search}
+\date{16 September 2026}
+
+\begin{abstract}
+	We investigate the trace-one, full-span matrix product density operator
+	ansatz with physical dimension five, horizontal bond dimension four,
+	and local purification Gram ranks $(1,2)$. We give an exhaustive
+	parameterization of its rank-one idempotent trace transfer modulo
+	specified virtual and physical gauges. Rank-deficient transfer weights
+	cannot support coefficient span five. On the faithful locus, the
+	parameters reduce to a diagonal qubit state and a two-dimensional
+	Hilbert--Schmidt subspace of $M_2(\C)$. We then prove that the one-site
+	coefficient kernel is never contained in the two-site coefficient
+	kernel. The proof uses the left and right orbits of the rank-one
+	transfer: closure would force both orbit dimensions to be two, which
+	in turn forces an active matrix pencil whose products violate closure.
+	Thus no linear refinement map, and hence no full-space quantum-channel
+	fixed-point certificate, exists in this bounded stratum. Positivity
+	of the periodic operators follows independently from local purification.
+	The same obstruction holds for any scalar Gram rank while the active
+	Gram rank remains one. It does not exclude active Gram rank at least two
+	or idempotent trace transfers of rank greater than one.
+\end{abstract}
+
+\maketitle
+
+\input{sections/environment_four/ansatz}
+\input{sections/environment_four/reduction}
+\input{sections/environment_four/obstruction}
+\input{sections/environment_four/numerics}
+\input{sections/environment_four/scope}
+\input{bibliography/environment_four}
+\end{document}

@@ -1,0 +1,196 @@
+\section{Physical ansatz and equivalences}
+\label{sec:ansatz}
+
+\subsection{Scope and logical encoding}
+
+The channel-first construction in the accepted target
+specification~\cite{Targets} fixes a small physical encoding before
+imposing tensor stationarity. The question addressed here is whether
+the coefficients of that encoding can be compatible with blocking
+one site into two. This is a necessary linear condition for the
+renormalization fixed-point equations of
+Cirac, P\'erez-Garc\'ia, Schuch, and Verstraete~\cite{CPSV}.
+It precedes complete positivity, recovery, and canonical analysis.
+
+The logical algebra, physical Hilbert space, and redundant state are
+\begin{align}
+	\mc A & =M_2(\C)\oplus\C,
+	      &
+	\mc H & =(\C^2\otimes\C^2)\oplus\C,
+	      &
+	\tau  & =\diag(1/3,2/3).
+	\label{eq:spaces}
+\end{align}
+The logical trace is $\tr(X\oplus z)=\tr X+z$. The accepted encoding is
+\begin{align}
+	J_1(X\oplus z) & =(X\otimes\tau)\oplus z.
+	\label{eq:encoding}
+\end{align}
+The last physical basis vector is denoted by $\ket4$.
+If $P_0$ projects onto the four-dimensional physical summand, define
+\begin{align}
+	D_1(Y)
+	 & =\tr_{\mathrm{red}}(P_0YP_0)\oplus\bra4Y\ket4,
+	\nonumber                                         \\
+	D_1J_1(X\oplus z)
+	 & =X\tr\tau\oplus z=X\oplus z,
+	\nonumber                                         \\
+	\tr D_1(Y)
+	 & =\tr(P_0Y)+\bra4Y\ket4=\tr Y.
+	\label{eq:decoder}
+\end{align}
+Here the partial trace acts on the second qubit of the first summand.
+Compression, partial trace, and preparation of $\tau$ are completely
+positive (CP). Thus $J_1$ and $D_1$ are CP and trace preserving with
+the indicated direct-sum trace.
+
+The horizontal indices are pairs
+$\alpha=(u,u')$ and $\beta=(v,v')$, with all component indices in
+$\{0,1\}$. The horizontal MPDO bond dimension is therefore four.
+For physical operator letters $M^{\alpha\beta}$, periodic contraction
+and blocking mean
+\begin{align}
+	\rho_N(M)
+	 & =\sum_{\alpha_1,\ldots,\alpha_N}
+	M^{\alpha_1\alpha_2}\otimes\cdots\otimes
+	M^{\alpha_N\alpha_1},
+	\nonumber                                                \\
+	G^{\alpha\beta}
+	 & =\sum_\gamma M^{\alpha\gamma}\otimes M^{\gamma\beta}.
+	\label{eq:contractions}
+\end{align}
+A physical fixed-point certificate requires completely positive,
+trace-preserving (CPTP) maps on the complete physical operator spaces:
+\begin{align}
+	\mc T:\End(\mc H)            & \longrightarrow\End(\mc H^{\otimes2}),
+	                             &
+	\mc T(M^{\alpha\beta})       & =G^{\alpha\beta},
+	\nonumber                                                             \\
+	\mc S:\End(\mc H^{\otimes2}) & \longrightarrow\End(\mc H),
+	                             &
+	\mc S(G^{\alpha\beta})       & =M^{\alpha\beta}.
+	\label{eq:rfp}
+\end{align}
+These are identities for every complex letter. Recovery of encoded
+states alone does not establish them.
+
+\subsection{Local purification and Gram ranks}
+
+Let $A_0,A_1,C_0,C_1$ be $2\times2$ complex matrices. Define physical
+vectors by
+\begin{align}
+	v_{uv}   & =(A_0)_{uv}\ket0+(A_1)_{uv}\ket1,
+	\nonumber                                    \\
+	a_{uv,1} & =\sqrt{1/3}\,v_{uv}\otimes\ket0,
+	         &
+	a_{uv,2} & =\sqrt{2/3}\,v_{uv}\otimes\ket1,
+	\nonumber                                    \\
+	a_{uv,3} & =(C_0)_{uv}\ket4,
+	         &
+	a_{uv,4} & =(C_1)_{uv}\ket4.
+	\label{eq:purification}
+\end{align}
+The first two vectors lie in the four-dimensional physical summand.
+The locally purified tensor is
+\begin{align}
+	M^{(u,u'),(v,v')}
+	 & =\sum_{e=1}^4
+	\ket{a_{uv,e}}\bra{a_{u'v',e}}
+	=J_1(X_{(u,u'),(v,v')}),
+	\nonumber                                         \\
+	X_{(u,u'),(v,v')}
+	 & =\sum_{j,k=0}^1
+	    (A_j)_{uv}\overline{(A_k)_{u'v'}}\ket j\bra k
+	\nonumber                                         \\
+	 & \quad\oplus
+	\left((C_0)_{uv}\overline{(C_0)_{u'v'}}
+	                +(C_1)_{uv}\overline{(C_1)_{u'v'}}\right).
+	\label{eq:letters}
+\end{align}
+
+To identify the Gram ranks, introduce
+\begin{align}
+	\ket a    & =\sum_{u,v}\ket{u,v}\otimes v_{uv},
+	          &
+	\ket{c_l} & =\sum_{u,v}(C_l)_{uv}\ket{u,v},
+	\nonumber                                           \\
+	B_0       & =\ket a\bra a,
+	          &
+	B_1       & =\ket{c_0}\bra{c_0}+\ket{c_1}\bra{c_1}.
+	\label{eq:sector-grams}
+\end{align}
+After ordering physical summands, the full positive Gram operator is
+\begin{align}
+	B & =(B_0\otimes\tau)\oplus B_1,
+	\nonumber                           \\
+	\rank B
+	  & =\rank B_0\,\rank\tau+\rank B_1
+	=2\rank B_0+\rank B_1.
+	\label{eq:gram-rank}
+\end{align}
+The stratum studied here has
+\begin{align}
+	\rank B_0=1,\qquad \rank B_1=2.
+	\label{eq:gram-stratum}
+\end{align}
+Its minimal environment dimension is exactly four.
+
+Conversely, every positive Gram operator compatible with
+\cref{eq:encoding} and satisfying \cref{eq:gram-stratum} admits
+\cref{eq:purification}. A positive rank-one $B_0$ has a vector factor
+$\ket a$. A positive rank-two $B_1$ has two independent vector factors,
+obtained from its two positive eigenvalues and corresponding
+orthonormal eigenvectors. Resolving those factors in the basis
+$\ket{u,v}$ gives $A_0,A_1,C_0,C_1$ as above. Thus the four-matrix
+description does not omit any tensor in the specified Gram stratum.
+
+Local purification proves positivity at every length, independently
+of stationarity. For an environment string $\boldsymbol e$, put
+\begin{align}
+	\ket{\Psi_{\boldsymbol e}}
+	 & =\sum_{u_1,\ldots,u_N}
+	\bigotimes_{n=1}^N\ket{a_{u_nu_{n+1},e_n}},
+	\qquad u_{N+1}=u_1.
+\end{align}
+Expanding the periodic contraction gives
+\begin{align}
+	\rho_N(M)
+	 & =\sum_{\boldsymbol e,\boldsymbol u,\boldsymbol u'}
+	\bigotimes_{n=1}^N
+	\ket{a_{u_nu_{n+1},e_n}}
+	\bra{a_{u'_nu'_{n+1},e_n}}
+	\nonumber                                             \\
+	 & =\sum_{\boldsymbol e}
+	\ket{\Psi_{\boldsymbol e}}\bra{\Psi_{\boldsymbol e}}
+	\geq0.
+	\label{eq:positivity}
+\end{align}
+This positivity statement is not a fixed-point certificate.
+
+\subsection{Allowed gauges}
+
+A common virtual similarity acts as
+\begin{align}
+	K & \longmapsto SKS^{-1},
+	\qquad
+	K\in\{A_0,A_1,C_0,C_1\},
+	\qquad S\in\operatorname{GL}_2(\C).
+	\label{eq:virtual-gauge}
+\end{align}
+It induces similarity by $S\otimes\overline S$ on all horizontal
+coordinate matrices. It preserves periodic contractions and the
+existence of maps satisfying \cref{eq:rfp}. It also preserves the
+Gram ranks, because its action on the virtual vector factors is
+invertible.
+
+A unitary change of the pair $(C_0,C_1)$ leaves the letters unchanged.
+A unitary change of $(A_0,A_1)$ conjugates the logical $M_2$ sector,
+and is implemented physically by $(U\otimes\Id_2)\oplus1$.
+It preserves coefficient compatibility and channel feasibility.
+These frame changes will be quotiented out.
+
+In contrast, a unitary mixing all four matrices preserves the trace
+transfer but generally changes the physical tensor. Such mixing
+cannot be discarded as a gauge of the fixed encoding. The relative
+position of the active pair and the scalar pair is part of the
+search.
