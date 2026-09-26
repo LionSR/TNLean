@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPU
 
 import TNLean.MPS.MPU.AdjointSimpleContraction
+import TNLean.MPS.MPU.AnchoredResidualCoordinates
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
