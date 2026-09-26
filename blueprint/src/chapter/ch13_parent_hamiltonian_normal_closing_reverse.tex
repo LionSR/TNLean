@@ -447,6 +447,35 @@ left-multiplied boundary comparison.
     desired equality of boundary matrices.
 \end{proof}
 
+\begin{theorem}[Change of cut on the full ring]
+    \label{thm:full_ring_boundary_change_of_cut}
+    \lean{MPSTensor.groundSpaceMap_mul_eq_of_cyclicTranslate_groundSpaceMap_eq}
+    \leanok
+    \uses{def:ground_space_map, def:parent_cyclic_translate_state}
+    Let $A$ be any tensor. If
+    \begin{align}
+        T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)
+         & =\Gamma_{L_0+1}(Y),
+        \notag
+    \end{align}
+    then $\Gamma_{L_0}(XA^j)=\Gamma_{L_0}(A^jY)$ for every physical letter $j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_cyclic_translate_append}
+    Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
+    Cyclic translation exchanges the two parts of the word, and cyclicity of the
+    trace gives
+    \begin{align}
+        \Gamma_{L_0}(XA^j)(\beta)
+         & =\tr(A^jA^\beta X)
+        =\tr(A^\beta A^jY)
+        =\Gamma_{L_0}(A^jY)(\beta).
+        \notag
+    \end{align}
+\end{proof}
+
 \begin{theorem}[One-step full-ring boundary comparison]
     \label{thm:full_ring_boundary_intertwines_step}
     \lean{MPSTensor.full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq}
@@ -463,16 +492,14 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_cyclic_translate_append, thm:ground_space_map_injective_blk}
-    Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
-    Cyclic translation exchanges the two parts of the word, and cyclicity of the
-    trace gives
+    \uses{thm:full_ring_boundary_change_of_cut, thm:ground_space_map_injective_blk}
+    Theorem~\ref{thm:full_ring_boundary_change_of_cut} gives
     \begin{align}
-        \Gamma_{L_0}(XA^j)(\beta)
-         & =\Gamma_{L_0}(A^jY)(\beta).
+        \Gamma_{L_0}(XA^j)
+         & =\Gamma_{L_0}(A^jY),
         \notag
     \end{align}
-    Injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
+    and injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
 \end{proof}
 
 \begin{theorem}[Full-ring boundary comparison]

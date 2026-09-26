@@ -178,32 +178,11 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1128–1129 and 1
 theorem mpo_czxDecoratedTensor_apply (s t : Fin N → Fin 2) :
     MPOTensor.mpo czxDecoratedTensor N s t =
       if s = spinFlip N t then (-1 : ℂ) ^ (czExponent s + spinParity s) else 0 := by
-  let g0 : Fin N → Fin 2 := fun n ↦ s (n - 1)
-  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond czxDecoratedTensor s t g0 fun g hg ↦ by
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
-    refine ⟨n - 1, ?_⟩
-    rw [czxDecoratedTensor_apply, ite_eq_right]
-    intro h
-    apply hn
-    simpa [g0] using h.2]
-  by_cases hst : s = spinFlip N t
-  · have hp : ∀ n, s n = (t n).rev := fun n ↦ congrFun hst n
-    rw [ite_eq_left hst]
-    calc
-      _ = ∏ n, (-1 : ℂ) ^ ((s (n - 1)).val * (s n).val + (s n).val) := by
-        refine Finset.prod_congr rfl fun n _ ↦ ?_
-        rw [czxDecoratedTensor_apply, ite_eq_left ⟨hp n, by simp [g0]⟩]
-      _ = (-1 : ℂ) ^ ∑ n, ((s (n - 1)).val * (s n).val + (s n).val) :=
-        Finset.prod_pow_eq_pow_sum _ _ _
-      _ = _ := by
-        rw [Finset.sum_add_distrib, czExponent, spinParity]
-        congr 2
-        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
-  · rw [ite_eq_right hst]
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
-    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
-    rw [czxDecoratedTensor_apply, ite_eq_right]
-    exact fun h ↦ hn h.1
+  rw [MPOTensor.mpo_apply_of_forced_right_bond czxDecoratedTensor_apply,
+    Finset.prod_pow_eq_pow_sum, Finset.sum_add_distrib,
+    Fintype.sum_equiv (Equiv.addRight 1) (fun n ↦ (s (n + 1)).val) (fun n ↦ (s n).val)
+      fun _ ↦ rfl]
+  rfl
 
 /-- The periodic operator of the decorated tensor is the monomial matrix of the global spin flip
 whose phase at the input `t` is the sign `(-1)^{∑_n s_n s_{n+1} + ∑_n s_n}` of the output. -/
