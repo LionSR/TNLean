@@ -2138,12 +2138,20 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** expand the inner product over fixed spectator configurations,
   apply the pointwise overlap bound, and finish with finite Cauchy–Schwarz.
 - **Occurrences:** the two nested restrictions to a middle interval in
-  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`.
+  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the hand-written
+  calculation in `norm_inner_overlap_sub_inner_aggregates_le` in
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean` (lines 47–92),
+  which runs the same chain `norm_sum_le`, `Finset.sum_le_sum`,
+  `Finset.mul_sum`, `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator
+  configurations.
 - **Status:** private lemmas express the finite orthogonal-sum estimate and
   its transport along a configuration equivalence. The three boundary-range
   cases use the same middle-interval theorem. The previously private
   three-interval evaluation of the right boundary map is shared with
   `FNWProjectorDefect.lean` through `SpectatorBoundaryCoordinates.lean`.
+  With the occurrence in `FNWOverlapEstimate.lean` the pattern meets the rule
+  of three; promotion means making the finite orthogonal-sum estimate public
+  and rewriting that calculation through it, which needs a Lean build.
 
 ### Lower Gram bounds and off-diagonal pairings — locally factored
 - **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
