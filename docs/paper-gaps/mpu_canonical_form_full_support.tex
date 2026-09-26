@@ -616,13 +616,18 @@ or conjugate comparison tensor, a tensor product, or a composition. Assuming
 the presentation there is not the presentation on $\mathcal U$; it is the
 assertion that the presentation survives those operations. For blocking the
 source asserts exactly that, writing that the blocked tensor is again normal
-and in canonical form II \cite[line~356]{Cirac2017MPU}; for the comparison
-tensors, products, and compositions it is the content of \ghissue{6139}. In
-neither case is a preservation statement available, so all twelve keep their
-restriction.
+and in canonical form II \cite[line~356]{Cirac2017MPU}. Physical adjunction
+and independent tensor products preserve the bundled presentation by
+\leanid{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor} and
+\leanid{MPOTensor.IsMPUCanonicalFormII.tensorProduct}, respectively. Positive
+blocking is addressed separately in \ghissue{6067}. Their downstream
+derived-tensor entries have not yet been consolidated. Separate
+conjugation and transposition comparisons, symmetry transforms, and
+composition retain distinct obligations under \ghissue{6139}.
 
-The census behind that unavailability is the following. Sixteen formal
-declarations mention the bundled presentation: the structure itself, thirteen
+Before these preservation constructors, the recorded census was the
+following. Sixteen formal declarations mentioned the bundled presentation:
+the structure itself, thirteen
 that consume it, and two that construct one. The thirteen consumers conclude,
 about the same tensor, that its retained blocks fill the ambient bond space,
 that its bond space is nonempty, that its physical space is nonempty, that its
@@ -632,11 +637,15 @@ the two stabilized transfer identities, the normalized diagonal power, and the
 four source-factor isometry and rank statements. The two constructions produce
 a presentation from canonical data for a tensor equal to a normalized
 flattening, and from an arbitrary matrix product unitary by dimension
-reduction. Not one of the sixteen carries a presentation on $\mathcal U$ to a
+reduction. None of those sixteen carried a presentation on $\mathcal U$ to a
 presentation on a physical block, an adjoint, a transpose, a conjugate, a
 tensor product, or a composition, which is what the twelve entries would need;
 for the composition entry the transport has to run through a reduced
-representative, as the last part of this subsection shows.
+representative, as the last part of this subsection shows. The two
+subsequently identified constructors preserve the bundled presentation for
+physical adjunction and independent products; they do not identify
+the source cuts or chosen source factors of a derived tensor with those of
+$\mathcal U$.
 
 As the development stands today, the three candidates cannot be removed while
 the twelve stand, and what blocks them is a citation obstruction rather than a
@@ -738,7 +747,9 @@ prerequisite for the other.
     \item Preservation of the bundled presentation along each operation the
           twelve use: positive physical blocking, physical adjunction,
           transposition, complex conjugation, independent tensor products,
-          and composition. A preservation statement must deliver all four
+          and composition. Physical adjunction and independent products are
+          proved by the constructors cited above; positive blocking is
+          addressed separately in \ghissue{6067}. A preservation statement must deliver all four
           clauses of the presentation for the derived tensor: unitarity of
           its periodic operator family, literal canonical-form-II data for
           its normalized flattening, full support of those data, and a
@@ -749,20 +760,16 @@ prerequisite for the other.
           go through a reduced representative instead.
 \end{itemize}
 
-The second item is not uniformly distant. For blocking, physical adjunction,
-and independent tensor products all four clauses are separately available and
-only the assembled statement is missing. Blocking preserves unitarity,
-transports canonical-form-II data to the blocked normalized flattening,
-preserves full support, and iterates the transfer map, so the same ambient
-matrix stays fixed. Physical adjunction preserves unitarity, transports the
-data together with their full support, and conjugates the transfer map
-entrywise. Independent tensor products preserve unitarity, carry product
-canonical-form-II data whose full support follows from full support of the two
-factors, and act on transfer maps as a Kronecker product, under which the
-Kronecker product of the two ambient matrices is again positive definite,
-diagonal, of trace one, and fixed. Transposition and conjugation are
-transported only through their composite, physical adjunction; neither half is
-transported on its own.
+The second item is not uniformly distant. For physical adjunction and
+independent tensor products, all four clauses are assembled. Physical
+adjunction retains the same ambient fixed matrix because a positive diagonal
+matrix is entrywise real. For an independent
+product, the ambient matrix is the reindexed Kronecker product of the two
+recorded matrices. It is positive definite, diagonal, of trace one, and fixed
+by the product transfer map. These preservation results do not transport raw
+source cuts or chosen compact-SVD factors. Transposition and conjugation are
+transported only through their composite, physical adjunction; neither half
+is transported on its own.
 
 Composition is the far case, and it differs from the other five in kind and
 not only in distance. Unitarity of a composition is available, but the only
@@ -823,7 +830,11 @@ Until the first item exists, deleting any of the three candidates moves a
 hypothesis boundary out of sight without removing it, so all sixteen pointwise
 entries remain. Once it exists, the three candidates merge and thirteen remain:
 the generic supplied-pair step, which is kept deliberately, and the twelve
-derived-tensor entries, each waiting on its own operation in the second item.
+derived-tensor entries. Their physical-adjoint and independent-product cases
+now have bundled preservation theorems, but those downstream entries
+have not yet been consolidated. Separate conjugation and transposition
+comparisons, positive blocking, symmetry transforms, and composition still require their own
+preservation or reduction arguments.
 
 \section{Verdict}
 

@@ -3633,6 +3633,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     and physical relabeling to obtain the MPO statement.
 \end{proof}
 
+\begin{theorem}[Canonical form II under independent tensor products]
+    \label{thm:mpu_canonical_form_ii_tensor_product}
+    \lean{MPOTensor.IsMPUCanonicalFormII.tensorProduct}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, thm:mpu_tensor_product_cfii_data,
+        thm:mpu_tensor_product}
+    Let $\mathcal U$ and $\mathcal V$ be independent MPUs in canonical form II,
+    with recorded ambient right fixed matrices $\rho_U$ and $\rho_V$. Their
+    independent tensor product is in canonical form II in the product bond
+    coordinates. Its recorded matrix is
+    \begin{align}
+        \rho_{U\boxtimes V}
+         & =\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}
+        (\rho_U\otimes\rho_V).
+    \end{align}
+    In particular, the product presentation has full support. This is the
+    canonical-form-II consequence of the independent-product construction
+    used in \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; the full-support convention
+    is recorded in \cite{gap:mpu_canonical_form_full_support}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_tensor_product_cfii_data, thm:mpu_tensor_product}
+    Tensor the chosen canonical blocks and their diagonal positive fixed
+    matrices, then apply the doubled physical-coordinate relabeling. The
+    retained dimensions multiply and their sum is the product bond dimension.
+    Independent tensor products preserve the MPU property. The product of the
+    two ambient fixed matrices is positive definite, diagonal, and of trace
+    one. The product transfer identity shows that it remains fixed after
+    reindexing to the product bond coordinates.
+\end{proof}
+
 \begin{lemma}[Normalized flattening of a composition tensor]
     \label{lem:mpu_normalized_flattening_composition}
     \lean{MPOTensor.normalizedFlattening_mulTensor_apply}
