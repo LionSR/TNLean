@@ -5,9 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Filter
-
 /-!
 # Common blocked cyclic-sector construction
 
@@ -16,6 +13,9 @@ canonical-form reduction.  The cyclic-sector decomposition itself lives in
 `CyclicSectorDecomposition`; this module encodes the one-block period-removal
 data and chooses a common physical blocking length for a finite block family.
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
 
 namespace MPSTensor
 

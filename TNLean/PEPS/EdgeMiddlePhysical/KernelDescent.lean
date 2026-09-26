@@ -5,6 +5,31 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.EdgeMiddlePhysical.Basic
 
+/-!
+# Kernel descent for the edge-middle block
+
+For an edge `e = (u, v)` of a vertex-injective PEPS with positive bond
+dimensions, this file shows that the tensor obtained by contracting every vertex
+other than `u` and `v` is injective as a map on boundary labels. A vanishing
+linear combination of its components gives a kernel condition on the full
+middle region; the condition descends one middle vertex at a time through the
+one-sided inverse at that vertex, and at the empty region it forces every
+coefficient to vanish. This is the edge-blocking step of arXiv:1804.04964,
+Section 3.
+
+## Main results
+
+* `TNLean.PEPS.edgeMiddleKernelCondition_erase` — the kernel condition descends
+  when a middle vertex is removed.
+* `TNLean.PEPS.edgeMiddleKernelCondition_empty_eq_zero` — the kernel condition
+  at the empty region forces the coefficients to vanish.
+* `TNLean.PEPS.initial_kernelCondition` — a vanishing combination of the middle
+  tensor family gives the kernel condition at the full middle region.
+* `TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective` — vertex
+  injectivity with positive bond dimensions makes every edge blocking an
+  injective three-site chain.
+-/
+
 namespace TNLean
 namespace PEPS
 

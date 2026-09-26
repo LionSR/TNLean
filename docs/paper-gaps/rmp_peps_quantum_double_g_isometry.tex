@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Quantum-Double PEPS: Normalization, Representations and Scope}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the sources print}
+Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
+$A$ $G$-injective for a semi-regular representation $g\mapsto U_g$, one
+containing every irreducible representation of the finite group $G$, if
+$\mathcal P(A)U_g=\mathcal P(A)$ and $\mathcal P(A)$ has a left inverse
+$L$ with $L\,\mathcal P(A)=\Pi_U$, the projector onto the invariant
+subspace.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1010--1013 and
+    1278--1296.}
+Definition~``def:iso:isopeps'' calls it $G$-isometric if moreover $U_g$ is
+the left-regular representation $L_g\ket h=\ket{gh}$ and $\mathcal P(A)$,
+restricted to its domain and range, is unitary.\footnote{Source
+    traceability: \path{Papers/1001.3807/paper_v3.tex}, lines
+    1692--1700.}
+The quantum-double tensor
+\begin{align}
+    K=\sum_{p,q,r,s\in G}\ket{pq^{-1},qr^{-1},rs^{-1},sp^{-1}}\otimes
+    \ket{p,q}\bra{r,s}
+    \label{eq:rmp_peps_qd_tensor}
+\end{align}
+is then called $G$-isometric.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 2904--2911.}
+Appendix~A of \cite{Cirac2021Matrix}, under ``The Toric Code and quantum
+double models'', gives the same tensor with plaquette colors on the
+virtual legs and the differences of adjacent colors as physical spins,
+states that it is $G$-isometric for the regular representation, and
+states that the virtual labels of the primal tensor fuse to the identity,
+so that the primal tensor has a symmetry under every irreducible
+representation.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2450--2465.}
+
+\section{Normalization}
+Neither tensor is normalized. Each physical configuration of differences
+arises from exactly $|G|$ colorings, those related by one global shift
+$h_i\mapsto h_ig$. For vectors $x,y$ invariant under the shift,
+\begin{align}
+    \langle Kx,Ky\rangle=|G|\,\langle x,y\rangle .
+    \label{eq:rmp_peps_qd_isometry}
+\end{align}
+So $K$ restricted to the invariant subspace is $\sqrt{|G|}$ times a
+unitary onto its range, and $K/\sqrt{|G|}$ satisfies the printed
+definition. The formal notion of $G$-isometry asks for
+$\langle Kx,Ky\rangle=c\,\langle x,y\rangle$ with one constant $c>0$,
+which the rescaling by $c^{-1/2}$ turns into the printed notion; the
+quantum-double tensor satisfies it with $c=|G|$.
+
+\section{Representations}
+The formal notions of $G$-injectivity and $G$-isometry take the
+representation as a parameter and do not require it to be semi-regular
+or left-regular; each instance names the representation it uses. The
+quantum-double instance shifts every color by right multiplication,
+$h\mapsto hg$, which leaves the differences $hh'^{-1}$ unchanged also for
+non-abelian $G$. On each leg this is the right-regular representation
+$R_g\ket h=\ket{hg^{-1}}$, and the unitary $\ket h\mapsto\ket{h^{-1}}$ intertwines it with the left-regular
+one. Both are semi-regular.
+
+\section{Scope: statements about the whole network}
+Two statements of the review concern the contracted lattice rather than
+one tensor.
+\begin{enumerate}
+    \item The primal tensor's virtual symmetry under every irreducible
+    representation $\pi$ is formalized as the single-tensor identity
+    $A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=A_{t,r,b,l}\,\mathbb 1$
+    for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support.
+    The resulting matrix product operator symmetry of the contracted
+    network is not formalized.
+    \item The review states that the equal-weight superposition of
+    plaquette colorings is the equal-weight superposition of the
+    configurations obeying Gauss' law. On a plane, or on a disc with open
+    boundary, every Gauss-law configuration is a difference of colorings.
+    On a torus the differences of plaquette colorings are exactly the
+    Gauss-law configurations of trivial holonomy around the two
+    non-contractible cycles, so the statement holds for that sector only.
+    It is not formalized. The review also prints the Gauss law as
+    $g_1g_2g_3^{-1}g_4^{-1}=0$, where the identity element $1$ is
+    meant.\footnote{Source traceability:
+        \path{Papers/2011.12127/TN-Review-main.tex}, line 2452.}
+\end{enumerate}
+
+\section{Verdict and elimination plan}
+The note is a scope restriction: the review's statements about the
+contracted network are formalized only for one tensor or not at all. The
+normalization and the representation are local corrections within that
+restriction.
+The normalization and the choice of regular representation are
+conventions and need no further work. For the scope restrictions, place
+the quantum-double tensors on the torus, prove the pulling-through
+identity of the representation operators across the contracted network,
+and state the coloring superposition as the trivial-holonomy sector of
+the Gauss-law configurations.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

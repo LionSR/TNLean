@@ -10,9 +10,6 @@ import TNLean.MPS.Periodic.SectorIrreducibility.HLift
 import TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge
 import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Filter
-
 /-!
 # Period removal (cyclic-sector decomposition) after blocking
 
@@ -43,6 +40,9 @@ exposed as independent results of CPSV.
 * [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, §IV]
 * [Wolf, Quantum Channels & Operations (2012), §6.5–6.6]
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
 
 namespace MPSTensor
 
