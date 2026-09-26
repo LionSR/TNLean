@@ -549,9 +549,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     (Lemmas~\ref{lem:ground_space_in_left_ground}
     and~\ref{lem:ground_space_in_right_ground}):
     \begin{align}
-        G_{n+2}(A^j)\subseteq\C^d\otimes G_{n+1}(A^j),
-        \qquad
-        G_{n+2}(A^j)\subseteq G_{n+1}(A^j)\otimes\C^d.
+        G_{n+2}(A^j) & \subseteq\C^d\otimes G_{n+1}(A^j),
+        \notag                                            \\
+        G_{n+2}(A^j) & \subseteq G_{n+1}(A^j)\otimes\C^d.
         \notag
     \end{align}
 \end{proof}
@@ -578,12 +578,15 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         thm:block_sum_local_ground_space, def:open_parent_hamiltonian_es,
         thm:open_parent_hamiltonian_zero_local_terms,
         lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es,
-        thm:open_ground_space_le_hamiltonian_kernel}
+        thm:open_ground_space_le_hamiltonian_kernel,
+        rem:cyclic_window_operators,
+        rem:euclidean_local_projector_ingredients}
     By Definition~\ref{def:open_parent_hamiltonian_es}, the Hamiltonian is a
     sum of orthogonal projectors,
     \begin{align}
-        H^{\mathrm{open}}_{B,L,N}=\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(B,L),
-        \qquad h_{i,\mathrm{ES}}(B,L)\ge0.
+        H^{\mathrm{open}}_{B,L,N} & =\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(B,L),
+        \notag                                                                  \\
+        h_{i,\mathrm{ES}}(B,L)    & \ge0.
         \notag
     \end{align}
     Hence, by Theorem~\ref{thm:open_parent_hamiltonian_zero_local_terms},
@@ -622,9 +625,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     trace separated at length $S$, and for all $k\ne j$ there are
     coefficients $c_\omega$ with
     \begin{align}
-        \sum_{|\omega|=S}c_\omega A_k^\omega=I,
-        \qquad
-        \sum_{|\omega|=S}c_\omega A_j^\omega=0.
+        \sum_{|\omega|=S}c_\omega A_k^\omega & =I,
+        \notag                                     \\
+        \sum_{|\omega|=S}c_\omega A_j^\omega & =0.
         \notag
     \end{align}
 \end{theorem}
@@ -695,6 +698,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:normal_from_primitive_posdef,
         thm:common_exact_block_injectivity_normal_left_canonical,
         thm:wordspan_blk_inj_succ,
+        thm:peripheral_primitive_irreducible_overlap_one,
         thm:ph_three_block_pairwise_separation,
         lem:block_separating_equations_from_pairwise_separation,
         thm:ph_eventual_word_span_from_selectors}
@@ -704,7 +708,10 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     (Theorem~\ref{thm:common_exact_block_injectivity_normal_left_canonical}).
     Injectivity persists at every length at least $p$
     (Theorem~\ref{thm:wordspan_blk_inj_succ}), in particular at $p+1$ and
-    $3(p+1)$. Theorem~\ref{thm:ph_three_block_pairwise_separation} with
+    $3(p+1)$. Each block is irreducible and has primitive transfer map, so
+    its self-overlap satisfies $O_{A^jA^j}(N)\to1$
+    (Theorem~\ref{thm:peripheral_primitive_irreducible_overlap_one}).
+    Theorem~\ref{thm:ph_three_block_pairwise_separation} with
     $L_0=p$ gives, for every ordered pair $k\ne j$, a word polynomial of
     length $3(p+1)$ equal to $I$ on block $k$ and to $0$ on block $j$.
     Lemma~\ref{lem:block_separating_equations_from_pairwise_separation}
@@ -745,6 +752,25 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     Theorem~\ref{thm:ph_tp_block_open_ground_space}.
 \end{proof}
 
+\begin{theorem}[Nonzero rescalings preserve gauge-phase equivalence]
+    \label{thm:gauge_phase_equiv_of_nonzero_rescalings}
+    \lean{MPSTensor.gaugePhaseEquiv_of_smul_smul_cast}
+    \leanok
+    \uses{def:gauge_phase_equiv}
+    Let $A$ and $B$ be tensors of the same bond dimension, and let
+    $c,e\in\C$ be nonzero. If $cA$ and $eB$ are gauge-phase equivalent,
+    then $A$ and $B$ are gauge-phase equivalent.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $eB^i=\zeta X(cA^i)X^{-1}$ for every $i$, with $\zeta\ne0$, then
+    \begin{align}
+        B^i=\frac{\zeta c}{e}\,XA^iX^{-1}
+        \notag
+    \end{align}
+    for every $i$, and $\zeta c/e\ne0$.
+\end{proof}
+
 \begin{theorem}[Primitive representatives of inequivalent normal blocks]
     \label{thm:normal_blocks_primitive_representatives}
     \lean{MPSTensor.exists_isPrimitiveMPS_family_of_isNormal}
@@ -763,7 +789,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \begin{proof}
     \leanok
     \uses{thm:normalized_primitive_gauge,
-        lem:gauge_phase_equiv_transport_left_right}
+        lem:gauge_phase_equiv_transport_left_right,
+        thm:gauge_phase_equiv_of_nonzero_rescalings}
     Normalize each block independently by
     Theorem~\ref{thm:normalized_primitive_gauge}. The resulting nonzero
     rescaling and virtual gauge leave its local ground spaces unchanged.
@@ -776,8 +803,10 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         \bigl(X_i^{-1}YX_j\bigr)A^{j,a}\bigl(X_i^{-1}YX_j\bigr)^{-1}
         \notag
     \end{align}
-    for every $a$ (Lemma~\ref{lem:gauge_phase_equiv_transport_left_right}),
-    contrary to the hypothesis.
+    for every $a$ (Lemma~\ref{lem:gauge_phase_equiv_transport_left_right}
+    transports the gauges, and
+    Theorem~\ref{thm:gauge_phase_equiv_of_nonzero_rescalings} removes the
+    nonzero rescalings), contrary to the hypothesis.
 \end{proof}
 
 \begin{theorem}[Blockwise replacement preserves parent Hamiltonians]

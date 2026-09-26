@@ -5065,10 +5065,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:ph_block_diagonal_projector_decay}
     \lean{MPSTensor.eventually_toTensorFromBlocks_projector_defect_le}
     \leanok
+    \uses{def:primitive_mps}
     Let $B=\bigoplus_{j=1}^r\mu_jA_j$, where every $\mu_j$ is nonzero
     and the $A_j$ are pairwise gauge-phase inequivalent normalized primitive
-    tensors with positive bond dimensions and positive definite invariant
-    densities. Write $P_I(B)$ for the orthogonal projector onto the ground
+    tensors with positive bond dimensions and positive-definite fixed
+    points. Write $P_I(B)$ for the orthogonal projector onto the ground
     space on the interval $I$, extended by the identity on the remaining
     sites. For every $\eta>0$, all sufficiently large $L$, and every
     $K\geq0$ and $Q>0$,
