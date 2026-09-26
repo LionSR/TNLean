@@ -39,7 +39,7 @@ unitary gauge. Source: CPSV17 `ThmFund1` (lines 563–571), combined with the
 FBC25 cut comparison (lines 5432–5443). No phase relation is assumed. -/
 theorem inverseCompatible_sourceRanks_eq_physical : ℓ[U] = d ∧ r[U] = d := by
   have hr := rightRank_eq_leftRank_of_physicalAdjointTensor_eq_unitary_gauge U T hT
-  have hprod : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 0 1).mp hsimple
+  have hprod : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
   rw [hr] at hprod
   have hl : ℓ[U] = d := Nat.mul_self_inj.mp hprod
   exact ⟨hl, hr.trans hl⟩

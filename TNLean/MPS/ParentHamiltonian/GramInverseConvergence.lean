@@ -40,6 +40,16 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+/-- Operators on the finite-dimensional boundary space have summable geometric series, since
+that operator space is complete. Stating the completeness directly keeps instance search
+from timing out on the Neumann-series lemmas below. -/
+local instance : HasSummableGeomSeries
+    (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) :=
+  have : CompleteSpace
+      (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) :=
+    FiniteDimensional.complete ℂ _
+  inferInstance
+
 /-- A unit finite-volume Gram operator implies injectivity of the corresponding
 Hilbert-space boundary map. -/
 theorem groundSpaceMapES_injective_of_isUnit_groundSpaceGram {A : MPSTensor d D} {n : ℕ}

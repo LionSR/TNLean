@@ -53,7 +53,7 @@ theorem physicalInclusion_isometry :
     physicalInclusionᴴ * physicalInclusion = 1 := by
   ext p q
   fin_cases p <;> fin_cases q <;>
-    norm_num [physicalInclusion, Matrix.mul_apply, Fin.sum_univ_five] <;> omega
+    norm_num [physicalInclusion, Matrix.mul_apply, Fin.sum_univ_five]
 
 /-- The projection onto the first four ambient physical coordinates. -/
 def obstructionPhysicalSupport : Matrix (Fin 5) (Fin 5) ℂ :=
@@ -410,7 +410,7 @@ theorem obstructionPhysicalSupport_mul_terminalPhysicalSupport :
   fin_cases i <;> fin_cases j <;>
     norm_num [obstructionPhysicalSupport, terminalPhysicalSupport, physicalInclusion,
       terminalPhysicalInclusion, Matrix.mul_apply, Fin.sum_univ_one,
-      Fin.sum_univ_four, Fin.sum_univ_five] <;> simp
+      Fin.sum_univ_four, Fin.sum_univ_five]
 
 /-- The terminal and obstruction physical supports are orthogonal, in the reverse order. -/
 theorem terminalPhysicalSupport_mul_obstructionPhysicalSupport :
@@ -419,7 +419,7 @@ theorem terminalPhysicalSupport_mul_obstructionPhysicalSupport :
   fin_cases i <;> fin_cases j <;>
     norm_num [obstructionPhysicalSupport, terminalPhysicalSupport, physicalInclusion,
       terminalPhysicalInclusion, Matrix.mul_apply, Fin.sum_univ_one,
-      Fin.sum_univ_four, Fin.sum_univ_five] <;> simp
+      Fin.sum_univ_four, Fin.sum_univ_five]
 
 /-- The obstruction and terminal physical supports resolve the ambient identity. -/
 theorem obstructionPhysicalSupport_add_terminalPhysicalSupport :
@@ -428,7 +428,7 @@ theorem obstructionPhysicalSupport_add_terminalPhysicalSupport :
   fin_cases i <;> fin_cases j <;>
     norm_num [obstructionPhysicalSupport, terminalPhysicalSupport, physicalInclusion,
       terminalPhysicalInclusion, Matrix.mul_apply, Fin.sum_univ_one,
-      Fin.sum_univ_four, Fin.sum_univ_five] <;> simp
+      Fin.sum_univ_four, Fin.sum_univ_five]
 
 /-! ## The two-block BNT canonical form -/
 
