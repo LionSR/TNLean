@@ -176,7 +176,7 @@ variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
 /-- The overlap of the approximating state of eq. (S7) with the target, for orthogonal blocks
 of multiplicity one whose blocked tensors are injective: with `pⱼ = μⱼ^{2N}`,
 `zⱼ = ⟨φ_M(P_{j,∞})|φ_M(P_{j,q})⟩` and `cⱼ = ‖φ_N(A_j)‖²`,
-`|⟨φ̃_N|φ_N⟩| = |∑ⱼ pⱼ zⱼ| / (√(∑ⱼ pⱼ) √(∑ⱼ pⱼ cⱼ))`. -/
+`|⟨φ~_N|φ_N⟩| = |∑ⱼ pⱼ zⱼ| / (√(∑ⱼ pⱼ) √(∑ⱼ pⱼ cⱼ))`. -/
 theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') {μ : Fin b → ℝ} (hμ : ∀ j, 0 < μ j)
     [NeZero b] {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ}
@@ -314,7 +314,7 @@ transfer map `E_{A_j}`, so that `ξ = -1/log|λ₂|` bounds the correlation leng
 `0 < γ < 1/2`. There is `C > 0` such that for every block length `q` at which the `q`-site
 states of distinct blocks are orthogonal, `B_jᴴ B_{j'} = 0`, and every number of blocks
 `M ≥ 1`, with `N = qM`, `βⱼ = μⱼ^N` (eq. (S4) for `m_j = 1`), the pairs of the `σ_j` embedded
-along `ι_j`, and `y = (N/q) e^{-γ q/ξ}`, the error `ε = 1 - |⟨φ̃_N|φ_N⟩|` of the approximating
+along `ι_j`, and `y = (N/q) e^{-γ q/ξ}`, the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating
 state of eq. (S7) satisfies `ε ≤ C y e^{C y}`.
 
 No condition `q = o(N)` is needed: under the orthogonality the source's off-diagonal term

@@ -213,7 +213,7 @@ theorem polarSupport_overlappingBlockTensor {q : ℕ} (hq : q ≠ 0) :
 /-- **The overlap for overlapping blocks** (arXiv:2307.01696, eq. (S7)). For the tensor
 `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)`, the fixed-point pairs of its two one-dimensional
 blocks, the coefficients `α^{(N)}` of the weights `β = (1, 1)`, every block length `q ≥ 1`, and
-every number of blocks `M ≥ 1`, `⟨φ̃_N|φ_N⟩ = (u^M + v^M) / (1 + s^M)^{1/2}`. -/
+every number of blocks `M ≥ 1`, `⟨φ~_N|φ_N⟩ = (u^M + v^M) / (1 + s^M)^{1/2}`. -/
 theorem nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ} (hq : q ≠ 0) (hM : M ≠ 0) :
     nonNormalApproxOverlap overlappingBlockTensor q M
         (ghzAmplitude (bntWeight overlappingBlockWeight (M * q)))

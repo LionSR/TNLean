@@ -35,7 +35,7 @@ The overlap of the approximating state with the target reduces to entries of `P`
 * `Matrix.diagPairEmbedding` — the isometry `J : |e⟩ ↦ |e e⟩`.
 * `MPSTensor.basisPair`, `MPSTensor.embedPair_fixedPointPair_one` — the pair of a
   one-dimensional block.
-* `MPSTensor.nonNormalApproxOverlap` — the overlap `⟨φ̃_N|φ_N⟩` of the approximating state of
+* `MPSTensor.nonNormalApproxOverlap` — the overlap `⟨φ~_N|φ_N⟩` of the approximating state of
   eq. (S7) with the normalized target, on `N = qM` sites.
 * `MPSTensor.nonNormalApproxOverlap_diagonal` — its value for a diagonal tensor and basis pairs.
 
@@ -280,10 +280,10 @@ theorem nonNormalApproxVector_basisPair (A : MPSTensor d D) (q M : ℕ) (α : Fi
 
 /-! ### The overlap with the target -/
 
-/-- The overlap `⟨φ̃_N|φ_N⟩` of the approximating state `φ̃_N` of arXiv:2307.01696, eq. (S7)
+/-- The overlap `⟨φ~_N|φ_N⟩` of the approximating state `φ~_N` of arXiv:2307.01696, eq. (S7)
 (`nonNormalApproxState`, formed from the pairs `ω_j` and the coefficients `αⱼ`) with the
 normalized periodic state `φ_N` of `A` (eq. (S1)), on `N = qM` sites read as `M` blocks of `q`
-sites. The approximation error of Lemma 1' of the source is `ε = 1 - |⟨φ̃_N|φ_N⟩|`. -/
+sites. The approximation error of Lemma 1' of the source is `ε = 1 - |⟨φ~_N|φ_N⟩|`. -/
 noncomputable def nonNormalApproxOverlap (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
     (ω : Fin b → Fin D × Fin D → ℂ) : ℂ :=
   ∑ τ, star (nonNormalApproxState A q M α ω τ) *
@@ -406,7 +406,7 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
 
 /-- **The overlap for a diagonal tensor and basis pairs.** For `Aⁱ = diag(aⁱ)` and the pairs
 `|c_j c_j⟩`, with `V`, `P`, `Π` the polar data of the `q`-site blocked tensor,
-`⟨φ̃_N|φ_N⟩ = S / (‖V^{⊗M} ∑ⱼ αⱼ|Ω_j⟩‖ ‖φ_N(A)‖)` with `S = ∑ⱼ ∑_e conj(αⱼ) P_{(c_j c_j),(e e)}^M`,
+`⟨φ~_N|φ_N⟩ = S / (‖V^{⊗M} ∑ⱼ αⱼ|Ω_j⟩‖ ‖φ_N(A)‖)` with `S = ∑ⱼ ∑_e conj(αⱼ) P_{(c_j c_j),(e e)}^M`,
 `‖V^{⊗M} ∑ⱼ αⱼ|Ω_j⟩‖² = ∑ⱼ,ⱼ' conj(αⱼ) αⱼ' Π_{(c_j c_j),(c_j' c_j')}^M`, and
 `‖φ_N(A)‖² = ∑_{e,e'} G_{e e'}^M`. -/
 theorem nonNormalApproxOverlap_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ) (α : Fin b → ℂ)

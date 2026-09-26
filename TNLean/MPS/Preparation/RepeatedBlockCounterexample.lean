@@ -171,7 +171,7 @@ theorem polarSupport_repeatedBlockTensor {q : ℕ} (hq : q ≠ 0) :
 blocks placed on the first copy of the first block and on the second block, the coefficients
 `α^{(N)}` of the weights `β = (2, 1)`, every block length `q ≥ 1` and every number of blocks
 `M ≥ 1`,
-`⟨φ̃_N|φ_N⟩ = (4 · 2^{-M/2} + 1) / (√5 (4 · 2^{-M} + 1)^{1/2})`, independently of `q`. -/
+`⟨φ~_N|φ_N⟩ = (4 · 2^{-M/2} + 1) / (√5 (4 · 2^{-M} + 1)^{1/2})`, independently of `q`. -/
 theorem nonNormalApproxOverlap_repeatedBlockTensor {q M : ℕ} (hq : q ≠ 0) (hM : M ≠ 0) :
     nonNormalApproxOverlap repeatedBlockTensor q M
         (ghzAmplitude (bntWeight repeatedBlockWeight (M * q)))
