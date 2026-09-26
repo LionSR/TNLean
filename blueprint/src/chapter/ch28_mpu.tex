@@ -6209,6 +6209,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     indices agree by Theorem~\ref{thm:mpu_cfii_index_periodic_comparison}.
 \end{proof}
 
+\begin{theorem}[Blocking and adjunction of the representative index]
+    \label{thm:mpu_representative_index_blocking_adjoint}
+    \lean{MPOTensor.IsMPU.index_blockTensor,
+        MPOTensor.IsMPU.index_physicalAdjointTensor}
+    \leanok
+    \uses{def:mpu_reduced_representative_index,
+        def:mpdo_physical_blocking, def:mpdo_physical_adjoint}
+    Let $U$ be a positive-dimensional MPU tensor. For every positive integer
+    $p$, physical blocking preserves its representative index, while
+    physical adjunction reverses its sign:
+    \begin{align}
+        \operatorname{ind}(U_p)       & =\operatorname{ind}(U),  \\
+        \operatorname{ind}(U^\dagger) & =-\operatorname{ind}(U).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mpu_reduced_representative_index_invariance,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_cfii_index_physical_adjoint}
+    Choose a reduced canonical-form-II representative $U_{\mathrm{red}}$.
+    Blocking and adjunction preserve equality of the positive-length
+    periodic operators. The respective canonical-form-II index identities
+    give
+    $\operatorname{ind}((U_{\mathrm{red}})_p)
+        =\operatorname{ind}(U_{\mathrm{red}})$ and
+    $\operatorname{ind}(U_{\mathrm{red}}^\dagger)
+        =-\operatorname{ind}(U_{\mathrm{red}})$.
+    Representative independence then gives both displayed identities.
+\end{proof}
+
 \begin{proposition}[Well-definedness of the index]
     \label{index-well-defined}
     \notready
