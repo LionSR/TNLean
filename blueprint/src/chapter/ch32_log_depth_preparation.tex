@@ -1216,11 +1216,126 @@ of $A$ along $w$.
          & =O\!\left(\frac Nq\,e^{-\gamma q/\xi_{\mathrm{diag}}}\right).
         \label{eq:ldp_approximation_error_general}
     \end{align}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation}.
+    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation}. As printed it fails
+    both for a block of multiplicity two
+    (Theorem~\ref{thm:ldp_approximation_error_repeated_block}) and for two
+    blocks of multiplicity one whose states on $q$ sites are not orthogonal
+    (Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks})
+    \cite{gap:mswc24_multiplicity_fixed_point,gap:mswc24_block_form_mixed_overlap}.
 \end{theorem}
 %% The direct sum A is not normal, so Lemma lem:ldp_positive_part_overlap
-%% does not apply to it. The mixed-block overlap estimate is the content of
-%% Lemma 1'(ii) of the source and is cited, not derived, here. The source
-%% writes the diagonal correlation lengths with a double index, referring to
-%% the diagonal blocks E_{A_j} of the transfer map of A as opposed to the
-%% mixed blocks; here xi_j denotes the correlation length of A_j.
+%% does not apply to it. The source's proof rests on the block form (S5) of
+%% the positive part, which holds only when the q-site states of distinct
+%% blocks are orthogonal and every multiplicity is one; the two theorems
+%% below refute the statement outside that case. The source writes the
+%% diagonal correlation lengths with a double index, referring to the
+%% diagonal blocks E_{A_j} of the transfer map of A as opposed to the mixed
+%% blocks; here xi_j denotes the correlation length of A_j. This entry carries
+%% no formalization tag: no corrected statement is formalized.
+
+\begin{theorem}[The approximating state for a repeated block]
+    \label{thm:ldp_approximation_error_repeated_block}
+    \lean{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor,
+        MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor,
+        MPSTensor.norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis,
+        MPSTensor.not_approximationError_le_repeatedBlockTensor}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
+        def:correlation_length}
+    Let $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$,
+    the canonical form with the normal block $A_1=(1,0)$ of multiplicity two and
+    weights $(1,1)$ and the normal block $A_2=(0,1)$ of multiplicity one, so that
+    $\beta=(2,1)$ and $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$. Place
+    the pair of the first block on its first copy. For every $q\geq1$ and
+    $M\geq1$ the approximating state of
+    Definition~\ref{def:ldp_non_normal_fixed_point} satisfies
+    \begin{align}
+        \braket{\widetilde\phi_N}{\phi_N}
+         & =\frac{4\cdot2^{-M/2}+1}{\sqrt5\,(4\cdot2^{-M}+1)^{1/2}},
+        \label{eq:ldp_repeated_block_overlap}
+    \end{align}
+    which does not depend on $q$ and tends to $1/\sqrt5$ as $M\to\infty$. The
+    transfer maps of both blocks have no eigenvalue other than one, so every
+    $\lambda_2$ with $0<\lvert\lambda_2\rvert<1$ bounds their subleading
+    eigenvalues. For every such $\lambda_2$, every $\gamma>0$ and every constant
+    $C$ there is $M\geq1$ such that, with $q=M$, $N=M^2$ and
+    $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
+    $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$
+    satisfies $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general})
+    fails for this tensor \cite{gap:mswc24_multiplicity_fixed_point}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_ghz_form}
+    For a tensor of diagonal matrices the blocked map factors as $B=CJ^\dagger$,
+    where $J\colon\ket e\mapsto\ket{e\,e}$ and the column $e$ of $C$ is the state
+    of the diagonal coordinate $e$ on $q$ sites; here these are $\ket{0\cdots0}$
+    for $e=0,1$ and $\ket{1\cdots1}$ for $e=2$. Hence $B^\dagger B=JGJ^\dagger$ with
+    $G$ the Gram matrix of the columns. The positive semidefinite square root of $G$
+    is $Q=2^{-1/2}\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)\oplus1$,
+    and $E=\tfrac12\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)\oplus1$
+    is the projector onto its range, so uniqueness of positive square roots gives
+    $P=JQJ^\dagger$ and $\Pi=JEJ^\dagger$. The pairs are $e_{00}$ and $e_{22}$, so
+    $V^{\otimes M}\sum_j\alpha_j\ket{\Omega_j}$ has components
+    $\sum_j\alpha_j\prod_kV_{\tau_k,(c_j,c_j)}$. From $V^\dagger B=P$ and
+    $V^\dagger V=\Pi$, the overlap with the unnormalized target is
+    $\sum_j\sum_e\overline{\alpha_j}Q_{c_je}^M$, the squared norm of the
+    approximating vector is $\sum_{j,j'}\overline{\alpha_j}\alpha_{j'}E_{c_jc_{j'}}^M$,
+    and $\lVert\phi_N(A)\rVert^2=\sum_{e,e'}G_{ee'}^M=5$. With
+    $\alpha=(2,1)/\sqrt5$ this gives (\ref{eq:ldp_repeated_block_overlap}). Since
+    $1/\sqrt5<1/2$, the error exceeds $1/2$ for large $M$, while $Cy\,e^{Cy}$ with
+    $y=Mr^M$ and $r=e^{-\gamma/\xi_{\mathrm{diag}}}<1$ tends to zero.
+\end{proof}
+
+\begin{theorem}[The approximating state for overlapping blocks]
+    \label{thm:ldp_approximation_error_overlapping_blocks}
+    \lean{MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
+        MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor,
+        MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis,
+        MPSTensor.not_approximationError_le_overlappingBlockTensor}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
+        def:correlation_length}
+    Let $A^0=\operatorname{diag}(1,3/5)$ and $A^1=\operatorname{diag}(0,4/5)$,
+    the canonical form with the normal blocks $A_1=(1,0)$ and $A_2=(3/5,4/5)$, each
+    of multiplicity one and weight one, so that $\beta=(1,1)$. Put $s=(3/5)^q$,
+    the overlap of the states of the two blocks on $q$ sites,
+    $u=\bigl(\sqrt{1+s}+\sqrt{1-s}\bigr)/2$ and
+    $v=\bigl(\sqrt{1+s}-\sqrt{1-s}\bigr)/2$. For every $q\geq1$ and $M\geq1$ the
+    approximating state of Definition~\ref{def:ldp_non_normal_fixed_point}
+    satisfies
+    \begin{align}
+        \braket{\widetilde\phi_N}{\phi_N}
+         & =\frac{u^M+v^M}{(1+s^M)^{1/2}},
+        \label{eq:ldp_overlapping_blocks_overlap}
+    \end{align}
+    and for $M\geq3$ the error is at least $(9/25)^q/16$. The transfer maps of both
+    blocks have no eigenvalue other than one, so every $\lambda_2$ bounds their
+    subleading eigenvalues. If $r=e^{-\gamma/\xi_{\mathrm{diag}}}<9/25$, then for every
+    constant $C$ there is $q\geq3$ such that, with $M=q$, $N=q^2$ and
+    $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
+    $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$ satisfies
+    $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general}) fails even
+    when every multiplicity is one \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_ghz_form}
+    As in the proof of Theorem~\ref{thm:ldp_approximation_error_repeated_block},
+    the Gram matrix of the blocked map on the diagonal coordinates is
+    $G=\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)$, whose positive
+    square root is $Q=\bigl(\begin{smallmatrix}u&v\\v&u\end{smallmatrix}\bigr)$,
+    since $u^2+v^2=1$ and $2uv=s$. The determinant of $Q$ is $\sqrt{1-s^2}>0$, so
+    the support projector is $JJ^\dagger$. With $\alpha=(1,1)/\sqrt2$ the overlap
+    with the unnormalized target is $\sqrt2\,(u^M+v^M)$, the approximating vector
+    has norm one, and $\lVert\phi_N(A)\rVert^2=2+2s^M$, which gives
+    (\ref{eq:ldp_overlapping_blocks_overlap}). For $M\geq3$,
+    \begin{align*}
+        u^M+v^M\leq u^3+v^2=1-u^2(1-u)\leq1-\frac{s^2}{16},
+    \end{align*}
+    because $u^2=\bigl(1+\sqrt{1-s^2}\bigr)/2\geq1/2$ and
+    $1-u\geq(1-u^2)/2\geq s^2/8$. Finally $Cy\,e^{Cy}$ with $y=qr^q$ is eventually
+    below $(9/25)^q/16$, because $q(25r/9)^q\to0$.
+\end{proof}

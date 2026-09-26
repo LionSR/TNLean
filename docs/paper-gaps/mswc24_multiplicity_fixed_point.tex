@@ -89,17 +89,36 @@ formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.SectorDecomposition.embeddedFixedPointPair} and
     \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState} in
     \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
-The formula (\ref{eq:mswc24_approx_state}) is formalized only for an arbitrary
-family of pairs and is not instantiated with these pairs. Neither the block form
-(\ref{eq:mswc24_block_form}) nor the error estimate is formalized.
+The counterexample is formalized for the source's construction with the pairs
+placed on one copy: for every $q\geq1$ and $M\geq1$ the overlap of
+(\ref{eq:mswc24_counterexample_approx}) with the normalized target is
+$(4\cdot2^{-M/2}+1)/\bigl(\sqrt5\,(4\cdot2^{-M}+1)^{1/2}\bigr)$, which tends to
+$1/\sqrt5$. The transfer maps of the two one-dimensional blocks have no eigenvalue
+other than one, so every bound $\lvert\lambda_2\rvert<1$ on their subleading
+eigenvalues is admissible and $e^{-\gamma/\xi_{\mathrm{diag}}}<1$; along $q=M$,
+$N=M^2$, which satisfies $q=o(N)$, the error exceeds
+$C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}\exp\bigl(C(N/q)e^{-\gamma
+q/\xi_{\mathrm{diag}}}\bigr)$ for every constant $C$.\footnote{Formal declarations:
+    \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor},
+    \leanid{MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor},
+    \leanid{MPSTensor.not_approximationError_le_repeatedBlockTensor} in
+    \doclink{TNLean/MPS/Preparation/RepeatedBlockCounterexample}.}
+The positive part and the support projector of the blocked tensor are computed
+from the uniqueness of the positive square root of $B^\dagger B$. The state with
+the pair of the first block spread over both copies is not formalized.
+
+The block form (\ref{eq:mswc24_block_form}) also fails when every multiplicity is
+one, as soon as the $q$-site states of distinct blocks are not orthogonal
+\cite{gap:mswc24_block_form_mixed_overlap}. Part~(ii) of the lemma therefore has
+no formalized version, and restricting to multiplicity one does not give one.
 
 \section{Elimination}
-When every $m_j=1$ the counterexample does not apply. A correct statement for
-repeated blocks must replace $\sum_j\beta_j\ket{\Omega_j}$ by the fixed point of
-the actual positive part, whose restriction to the copies of block $j$ has rank
-one in the copy index, and carry the weights through $V$. The first step is to
-formalize the counterexample above and a corrected form of
-(\ref{eq:mswc24_block_form}).
+A correct statement for repeated blocks must replace $\sum_j\beta_j\ket{\Omega_j}$
+by the fixed point of the actual positive part, whose restriction to the copies of
+block $j$ has rank one in the copy index, and carry the weights through $V$. It
+must also account for the overlaps of distinct blocks recorded in
+\cite{gap:mswc24_block_form_mixed_overlap}. The first step is a corrected form of
+(\ref{eq:mswc24_block_form}) for blocks whose $q$-site states are orthogonal.
 
 \bibliographystyle{alpha}
 \bibliography{references}

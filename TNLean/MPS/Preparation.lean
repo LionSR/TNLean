@@ -12,14 +12,17 @@ import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.DecayingCorrelations
+import TNLean.MPS.Preparation.DiagonalPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
+import TNLean.MPS.Preparation.OverlappingBlockCounterexample
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
+import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
