@@ -5933,7 +5933,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{theorem}[Tensor-product additivity in canonical form II]
-    \label{lem:mpu_admissible_index_tensor}
+    \label{thm:mpu_admissible_index_tensor}
     \lean{MPOTensor.IsMPUCanonicalFormII.index_tensorProduct,
         MPOTensor.IsMPUCanonicalFormII.index_tensorProduct_identityMPUTensor}
     \leanok
@@ -5942,7 +5942,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % representative is claimed.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii,
-        def:mpu_independent_tensor_product, def:mpu_shift_tensors}
+        def:mpu_independent_tensor_product, threeMPU}
     Let $\mathcal U$ and $\mathcal V$ be MPUs in canonical form II. Their
     independent tensor product is again in canonical form II, and
     \begin{align}
@@ -5990,7 +5990,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}
     \leanok
     \uses{def:mpu_reduced_representative_index,
-        def:mpu_independent_tensor_product, def:mpu_shift_tensors}
+        def:mpu_independent_tensor_product, threeMPU}
     Let $U$ and $V$ be positive-dimensional MPU tensors, possibly with
     different physical and bond dimensions. Their independent tensor product
     satisfies
@@ -6007,12 +6007,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{thm:mpu_reduced_cfii_representative,
         thm:mpu_reduced_representative_index_invariance,
-        lem:mpu_admissible_index_tensor, thm:mpu_identity_index,
+        thm:mpu_admissible_index_tensor, thm:mpu_identity_index,
         thm:mpu_finite_tensor_product}
     Choose reduced canonical-form-II representatives $U_{\mathrm{red}}$ and
-    $V_{\mathrm{red}}$. The periodic operator of their independent tensor
-    product is the reindexed Kronecker product of their periodic operators,
-    so it agrees at every positive length with that of $U\boxtimes V$.
+    $V_{\mathrm{red}}$. By Theorem~\ref{thm:mpu_finite_tensor_product},
+    for every $N>0$,
+    \begin{align}
+        (U_{\mathrm{red}}\boxtimes V_{\mathrm{red}})^{(N)}
+         & \cong U_{\mathrm{red}}^{(N)}\otimes V_{\mathrm{red}}^{(N)}
+        = U^{(N)}\otimes V^{(N)}
+        \cong (U\boxtimes V)^{(N)}.
+    \end{align}
     Representative independence and canonical tensor-product additivity give
     \begin{align}
         \operatorname{ind}(U\boxtimes V)
@@ -7252,7 +7257,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (admissible tensors and operations):** every simple
     % block and standard form used below carries reduced full-support source
     % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_index_well_defined, lem:mpu_admissible_index_tensor, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
+    \uses{prop:mpu_admissible_index_well_defined, thm:mpu_admissible_index_tensor, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
     Assume the following operation-specific admissibility hypotheses. Every pair
     of simple blockings compared for blocking independence carries reduced
     full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
