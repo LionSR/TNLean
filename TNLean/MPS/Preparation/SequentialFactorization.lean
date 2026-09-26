@@ -190,7 +190,7 @@ theorem exists_isometric_chain_of_eq_mul (A : Fin d → Matrix (Fin D) (Fin D) �
   · by_cases hp : p = Fin.last n
     · subst hp
       intro x y _ _
-      have h := sum_star_mulVec_dotProduct_of_isometryOn (hisoQ (Fin.last n))
+      have h := sum_star_mulVec_dotProduct_of_isIsometryOn (hisoQ (Fin.last n))
         (v := col x) (w := col y) (by rw [Fin.succ_last]; exact hcol_supp x)
         (by rw [Fin.succ_last]; exact hcol_supp y)
       rw [hCiso] at h

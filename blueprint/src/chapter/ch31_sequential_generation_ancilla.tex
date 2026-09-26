@@ -65,11 +65,12 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     Let $d\ge 1$. A unitary $U$ on $\C^D\otimes\C^d$ acting on the site state
     $\ket{0}$ induces the matrices
     $(A^i)_{\alpha\beta}=\bra{\alpha,i}U\ket{\beta,0}$. For unitaries
-    $U_0,\dots,U_{N-1}$, with $U_k$ acting on site $k$, and an initial
-    ancilla state $\ket{\varphi_I}$, the ancilla component of the joint state
-    at the configuration $\sigma$ is $A_0^{\sigma_0}\cdots
-        A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}\in\C^D$, where $A_k$ is induced
-    by $U_k$. This is \cite[Section~5.1]{PerezGarcia2007Matrix}.
+    $U_0,\dots,U_{N-1}$, with $U_k$ applied at step $k+1$ and acting on site
+    $N-1-k$, and an initial ancilla state $\ket{\varphi_I}$, the ancilla
+    component of the joint state at the configuration $\sigma$ is
+    $A_0^{\sigma_0}\cdots A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}\in\C^D$, where
+    $A_k$ is induced by $U_{N-1-k}$. This is
+    \cite[Section~5.1]{PerezGarcia2007Matrix}.
 \end{definition}
 
 \begin{definition}[Deterministic sequential scheme]
@@ -192,7 +193,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 
 \begin{theorem}[One decomposition step]
     \label{thm:seqanc_one_step}
-    \lean{MPSPreparation.exists_isometryOn_mul}
+    \lean{MPSPreparation.exists_isIsometryOn_mul}
     \leanok
     \uses{def:seqanc_isometry_on, def:seqanc_support}
     Let $Y^i\in\MN{D}$ be row-supported below $a$ for every $i$. Then there
@@ -248,7 +249,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 
 \begin{theorem}[Isometric chains preserve the norm]
     \label{thm:seqanc_norm}
-    \lean{MPSPreparation.sum_normSq_mulVec_of_isometryOn,
+    \lean{MPSPreparation.sum_normSq_mulVec_of_isIsometryOn,
         MPSPreparation.sum_normSq_eval_mulVec}
     \leanok
     \uses{def:seqanc_isometry_on, def:seqanc_support}
@@ -260,13 +261,16 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_support_propagation, thm:seqanc_eval_last}
+    \uses{thm:seqanc_support_propagation}
     Expand $\sum_i\|Q^iv\|^2=\sum_{\beta,\beta'<b}\overline{v_\beta}v_{\beta'}
         \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}$ and use the
-    isometry condition. For the chain, peel off the last site, apply the
-    one-site identity to $Q_{n-1}$ and $v$, and apply the induction
-    hypothesis to the vector $Q_{n-1}^{\sigma_{n-1}}v$, which is supported
-    below $b_{n-1}$.
+    isometry condition. For the chain, write
+    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
+    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
+    vector $w=Q'^{\sigma'}v$ is supported below $b_1$ by
+    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity
+    for $Q_0$ gives $\sum_{\sigma_0}\|Q_0^{\sigma_0}w\|^2=\|w\|^2$, and the
+    induction hypothesis for $Q'$ gives $\sum_{\sigma'}\|Q'^{\sigma'}v\|^2=\|v\|^2$.
 \end{proof}
 
 \begin{theorem}[Changing sites outside the used block]
@@ -567,7 +571,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \begin{proof}
     \leanok
     \uses{thm:seqanc_sweep_obc, thm:seqanc_unitary_extension,
-        thm:seqanc_block_congr}
+        thm:seqanc_block_congr, thm:seqanc_boundary_coords}
     For $N=0$ take $\ket{\varphi_I}=\psi()\ket{0}$ and
     $\ket{\varphi_F}=\ket{0}$. Otherwise apply
     Theorem~\ref{thm:seqanc_sweep_obc} with the scalar $c^{-1}$: this gives
