@@ -589,8 +589,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{theorem}[Three-block pairwise separation from block injectivity]
     \label{thm:ph_three_block_pairwise_separation}
-    \lean{MPSTensor.forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1,
-        MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
+    \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
     \uses{def:pairwise_block_separating_words, def:pair_trace_separation_words,
         def:l_blk_injective, def:blocks_not_gauge_phase_equiv}
@@ -612,7 +611,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:direct_sum_two_block_dimension_step,
+    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
+        lem:direct_sum_two_block_dimension_step,
         lem:pair_trace_separation_to_pairwise_block_separation}
     Fix $k\ne j$. If $D_k\ne D_j$, the strict-size branch of
     Lemma~\ref{lem:direct_sum_two_block_dimension_step} at the comparison
@@ -625,7 +625,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     scalar, so their periodic matrix product vectors are not proportional at
     arbitrarily long chain lengths, and the same lemma gives
     $\mathcal G_S^{A_k}\cap\mathcal G_S^{A_j}=\{0\}$ and the same pair span.
-    In both cases the pair is trace separated at length $S$, and
+    In both cases the pair is trace separated at length $S$, which is
+    Lemma~\ref{lem:bnt_direct_sum_injective_prefix_word_span}, and
     Lemma~\ref{lem:pair_trace_separation_to_pairwise_block_separation}
     converts the pair span into the displayed equations.
 \end{proof}
