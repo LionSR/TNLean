@@ -222,10 +222,11 @@ theorem nonNormalFixedPointState_norm_sq {M : ℕ} (hM : M ≠ 0) {β : Fin b �
 
 /-- The unnormalized approximating state `V^{⊗M}|Ω'⟩`, where `V` is the partial isometry
 of the polar decomposition of the `q`-site blocked tensor `B` of `A`, read as a map from the
-legs `L_k ⊗ R_k` of each blocked site to its physical space (`polarIsoMatrix B` with its
-columns indexed by pairs): arXiv:2307.01696, Supplemental Material, the display
-eq. (S7) and the text following it, which replaces the positive part of each blocked site
-by the fixed point and keeps `V`. -/
+legs `L_k ⊗ R_k` of each blocked site to its physical space (`Matrix.polarIso` of
+`physicalMatrix B`, whose columns are indexed by pairs; `polarIsoMatrix B` is the same matrix
+with its columns reindexed along `virtualPairEquiv D`): arXiv:2307.01696, Supplemental
+Material, the display eq. (S7) and the text following it, which replaces the positive part
+of each blocked site by the fixed point and keeps `V`. -/
 noncomputable def nonNormalApproxVector {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
     (α : Fin b → ℂ) (ω : Fin b → Fin D × Fin D → ℂ) :
     (Fin M → Fin (blockPhysDim d q)) → ℂ :=

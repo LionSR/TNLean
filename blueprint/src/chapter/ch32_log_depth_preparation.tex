@@ -540,8 +540,8 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     imposed here.
 \end{definition}
 
-\begin{lemma}[GHZ form of the fixed-point state]
-    \label{lem:ldp_ghz_form}
+\begin{theorem}[GHZ form of the fixed-point state]
+    \label{thm:ldp_ghz_form}
     \lean{MPSTensor.isIsometry_pairIsometry,
         MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
         MPSTensor.nonNormalFixedPointState_norm_sq}
@@ -556,10 +556,11 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}. The same
     holds for the state of Definition~\ref{def:ldp_pair_family_fixed_point} with
     $\alpha=\alpha^{(N)}$ for any orthonormal pairs $\omega_j$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:prep_pair_product_norm}
     The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$. Expanding
     $\ket{j}^{\otimes M}$ in the product basis gives
     $W^{\otimes M}\ket{j}^{\otimes M}=\bigotimes_k\ket{\omega_j}$, and summing with the
