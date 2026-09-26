@@ -217,6 +217,130 @@ illustrates this remark by closing the same tensor with a trace.
     $1\leq N\leq D+1$, the case $N=D+1$ would contradict this.
 \end{proof}
 
+\begin{definition}[Excitation-number indicator]\label{def:weight_indicator}
+    \lean{MPSTensor.weightIndicator}
+    \leanok
+    \uses{def:w_indicator}
+    For $N\geq0$ and $m\geq0$, let $u^{(N)}_m$ be the indicator of the
+    configurations of $N$ sites with exactly $m$ excitations. In particular
+    $u^{(N)}_1$ is the W amplitude of Definition~\ref{def:w_indicator}.
+\end{definition}
+
+\begin{lemma}[Cut rank of the W state]\label{lem:w_state_cut_rank}
+    \lean{MPSTensor.wIndicator_append,
+        MPSTensor.wIndicator_append_mem_span,
+        MPSTensor.finrank_span_wIndicator_append_le_two}
+    \leanok
+    \uses{def:weight_indicator}
+    Split $N=R+R'$ sites into a first piece of $R$ sites and a second piece of
+    $R'$ sites. For configurations $\sigma$ of the first piece and $\tau$ of the
+    second,
+    \begin{align}
+        \braket{\sigma\tau}{W_N}
+         & =u^{(R)}_1(\sigma)\,u^{(R')}_0(\tau)+u^{(R)}_0(\sigma)\,u^{(R')}_1(\tau).
+        \label{eq:w_state_cut}
+    \end{align}
+    Hence for every $\tau$ the function $\sigma\mapsto\braket{\sigma\tau}{W_N}$
+    lies in the span of $u^{(R)}_0$ and $u^{(R)}_1$, and the reduced state of
+    $\ket{W_N}$ on the first piece has rank at most two.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The word $\sigma\tau$ has exactly one excitation if and only if one of the two
+    pieces has one excitation and the other has none, which
+    is~\eqref{eq:w_state_cut}. Fixing $\tau$, the right-hand side is
+    $u^{(R')}_0(\tau)\,u^{(R)}_1+u^{(R')}_1(\tau)\,u^{(R)}_0$.
+\end{proof}
+
+\begin{lemma}[Simultaneous product span of distinct blocks]%
+    \label{lem:pgvwc07_block_tuple_span}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
+        def:blocks_not_gauge_phase_equiv}
+    Let $A$ be in the canonical form of
+    Definition~\ref{def:pgvwc07_ti_canonical_representation} with blocks
+    $A^1,\ldots,A^b$ of sizes $D_1,\ldots,D_b$, each $L_0$-block injective for a
+    common $L_0>0$, no two related by a gauge transformation and a phase. For every
+    $n\geq\max(L_0,3(b-1)(L_0+1))$ the tuples $(A^1_{w},\ldots,A^b_{w})$ over words
+    $w$ of length $n$ span $\bigoplus_{j}\MN{D_j}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For one block this is $L_0$-block injectivity, which persists at all larger
+    lengths. For several blocks it is the direct-sum lemma
+    of~\cite{PerezGarcia2007Matrix} for distinct blocks with condition C1; the
+    length $L_0$ in the threshold covers the single-block case.
+\end{proof}
+
+\begin{lemma}[Cut-rank lower bound]\label{lem:pgvwc07_cut_rank_lower_bound}
+    \lean{MPSTensor.sum_sq_dim_le_finrank_of_forall_mem}
+    \leanok
+    \uses{lem:pgvwc07_block_tuple_span}
+    Let $A^1,\ldots,A^b$ be tensors of bond dimensions $D_1,\ldots,D_b$ whose word
+    tuples span $\bigoplus_j\MN{D_j}$ at lengths $R$ and $R'$, and let
+    $c_1,\ldots,c_b$ be nonzero. If for every word $\tau$ of length $R'$ the
+    function $\sigma\mapsto\sum_j c_j\,\tr\bigl(A^j_{\sigma}A^j_{\tau}\bigr)$ of
+    words $\sigma$ of length $R$ lies in a subspace $V$, then
+    $\sum_jD_j^2\leq\dim V$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The linear map sending $(X_j)_j\in\bigoplus_j\MN{D_j}$ to
+    $\sigma\mapsto\sum_jc_j\tr(A^j_\sigma X_j)$ is injective, because the word
+    tuples at length $R$ span and the trace pairing is nondegenerate. Its image
+    lies in $V$, because the word tuples at length $R'$ span as well.
+\end{proof}
+
+\begin{theorem}[Single-length bound under a canonical form with condition C1]%
+    \label{thm:w_state_canonical_bound}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator,
+        MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit,
+        MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive}
+    \leanok
+    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
+        def:blocks_not_gauge_phase_equiv, def:w_indicator}
+    Let $A$ be a translation-invariant tensor of bond dimension $D$ in the
+    canonical form of Definition~\ref{def:pgvwc07_ti_canonical_representation},
+    with $b$ blocks, no two of which are related by a gauge transformation and a
+    phase. Suppose that for some $N$ and some $c\neq0$ the periodic vector of $A$
+    on $N$ sites is $c\ket{W_N}$.
+    \begin{enumerate}
+        \item If every block is $L_0$-block injective for a common $L_0>0$, then
+              $N<2\max\bigl(L_0,\,3(b-1)(L_0+1)\bigr)$.
+        \item If every block is $L$-block injective for some $L>0$ and its matrix $A_0^j$ for the letter $0$ is invertible, then
+              $N<2\max\bigl(D^2+1,\,3(D-1)(D^2+2)\bigr)$, so $D=\Omega(N^{1/3})$.
+        \item If the dual transfer channel of every block is primitive, then
+              $N<2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr)$.
+    \end{enumerate}
+    The first item is the inequality of the proof in
+    \cite{PerezGarcia2007Matrix}, conditional on the canonical form with condition
+    C1, and with the threshold enlarged by $L_0$ so that it also covers a single
+    block. The distinctness hypothesis is stricter than the source's
+    pairwise-different block states. The reduction of an arbitrary tensor to this
+    form and the review's $D^3\log D=\Omega(N)$ are not formalized
+    \cite{gap:rmp_w_state_ti_bound}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:w_state_cut_rank, lem:pgvwc07_block_tuple_span,
+        lem:pgvwc07_cut_rank_lower_bound}
+    Cut the chain into two pieces of at least
+    $n_0=\max(L_0,3(b-1)(L_0+1))$ sites. By Lemmas~\ref{lem:pgvwc07_block_tuple_span}
+    and~\ref{lem:pgvwc07_cut_rank_lower_bound}, the reduced state of the first
+    piece has rank at least $\sum_j D_j^2$,
+    while Lemma~\ref{lem:w_state_cut_rank} bounds it by two. Hence there are at
+    most two blocks, each of size one by one. A sum of at most two
+    translation-invariant product states is not a nonzero multiple of
+    $\ket{W_N}$ for $N\geq3$, a contradiction when $N\geq2n_0$. For the second
+    item, an invertible letter gives condition C1 at $L_0=D^2+1$ by the fixed-length Wielandt theorem; for the third, the general quantum Wielandt bound gives
+    $L_0\leq(D^2+1)^2$.
+\end{proof}
+
 \begin{remark}[Growth of the translation-invariant bond dimension]%
     \label{rem:w_state_ti_bound}
     \uses{def:w_state_periodic_rep}
@@ -228,7 +352,8 @@ illustrates this remark by closing the same tensor with a trace.
     representation theory of translation-invariant matrix product states with a
     quantitative quantum Wielandt inequality
     \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}. This single-length bound
-    is not formalized (see~\cite{gap:rmp_w_state_ti_bound}).
+    is not formalized; Theorem~\ref{thm:w_state_canonical_bound} proves the
+    conditional single-length bound of its source~\cite{gap:rmp_w_state_ti_bound}.
 \end{remark}
 
 %% ===================================================================
