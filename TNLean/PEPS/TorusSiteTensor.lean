@@ -24,7 +24,9 @@ arrays `hb, vb : TorusVertex width height → Fin D` of horizontal and vertical 
 (`torusEdgeEquiv`). The state coefficient becomes the familiar lattice contraction
 (`stateCoeff_torusSiteTensor`). On a torus of width two the right edges of `(0, y)` and
 `(1, y)` coincide in the simple graph, so the four legs of a vertex are not four distinct
-bonds; the bridge is stated for width and height at least three.
+bonds; the bridge is stated for width and height at least three. The resulting restriction
+on the cluster and CZX examples is documented in
+`docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 ## Main definitions
 
