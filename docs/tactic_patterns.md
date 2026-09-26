@@ -214,6 +214,22 @@ abstracted — record why, so it is not re-proposed).
   under every torus translation.  Both the tensor-level and state-level
   wrappers now supply their respective translated-edge equality theorem.
 
+### torus shift of a product over sites — promoted
+- **Pattern:** reindex a product over torus sites by `Equiv.addRight (1, 0)`
+  (or `(0, 1)`), rewrite `u + (1, 0)` as `(u.1 + 1, u.2)` and cancel with
+  `add_sub_cancel_right`, turning factors on the left (or down) leg of each
+  site into factors on the right (or up) leg of its neighbour.
+- **Seen:** six occurrences across three files before promotion (2026-09-26):
+  `TNLean/PEPS/Examples/Cluster.lean` (`stateCoeff_clusterPEPS`),
+  `TNLean/PEPS/Examples/AKLT.lean` (`stateCoeff_akltPEPS`), and
+  `TNLean/PEPS/Examples/RVB.lean` (`stateCoeff_rvbPEPS`), one horizontal and
+  one vertical shift each.
+- **Abstraction:** `TNLean.PEPS.prod_torus_sub_fst` and
+  `TNLean.PEPS.prod_torus_sub_snd` in `TNLean/PEPS/TorusSiteTensor.lean`.
+- **Notes:** pass the two-site factor `f` explicitly, since the product
+  `∏ v, f v (v.1 - 1, v.2)` is not a higher-order pattern; a symmetric factor
+  written in the other order needs one `Finset.prod_congr` with `mul_comm`.
+
 ### permutation-matrix unitarity — promoted
 - **Pattern:** unfold unitary-group membership, rewrite the conjugate transpose
   of a permutation matrix as the inverse permutation matrix, and reduce their
@@ -2092,6 +2108,19 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
+
+### Wielandt block-injectivity length below the uniform square bound — candidate
+- **Pattern:**
+  ```lean
+  calc (dim k ^ 2 - Kraus.krausRank K + 1) * dim k ^ 2
+      ≤ (D ^ 2 + 1) * D ^ 2 := Nat.mul_le_mul (by omega) hd
+    _ ≤ (D ^ 2 + 1) ^ 2 := by nlinarith
+  ```
+- **Seen:** 2 occurrences (`TNLean/MPS/Examples/WStateCanonicalBound.lean:376`,
+  `TNLean/MPS/Examples/WStatePrimeLengthBound.lean:149`).
+- **Abstraction:** proposed lemma bounding the Wielandt length
+  `(m ^ 2 - r + 1) * m ^ 2 ≤ (D ^ 2 + 1) ^ 2` for `m ≤ D`, stated over `ℕ`.
+- **Notes:** promote at a third occurrence, for example a reduction at composite length.
 
 ### Decomposing membership in a finite sum of subspaces — candidate
 - **Pattern:** obtain vectors in the individual subspaces from membership in

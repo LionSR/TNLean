@@ -162,7 +162,8 @@ results are the following.
     block.\footnote{Formal declaration:
     \leanid{MPSTensor.not_sum_pow_mul_pow_eq}.}
 
-    \item The conclusion:\footnote{Formal declaration:
+    \item The conclusion:\footnote{Formal declarations:
+    \leanid{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator} and
     \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator}.}
     if the periodic vector on $N$ sites is $c\ket{W_N}$ with $c\neq0$, then
     \begin{align}
@@ -171,6 +172,9 @@ results are the following.
             2\max\bigl(L_0,\,3(b-1)(L_0+1)\bigr).
         \label{eq:rmp_w_state_ti_bound_conditional}
     \end{align}
+    The same bound holds for $\sum_jc_j\ket{\phi_{A^j}}=c\ket{W_N}$ with
+    arbitrary nonzero coefficients $c_j$ in place of $\lambda_j^N$, for blocks
+    that satisfy the three conditions of the canonical form.
 
     \item Step~5 when every $A^j_0$ is invertible. The source proves that
     condition C1 then holds at $L_0=D^2$
@@ -193,6 +197,61 @@ results are the following.
     $D=\Omega(N^{1/5})$.\footnote{Formal declaration:
     \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive}.}
 \end{itemize}
+
+\section{Formalized reduction at prime length}
+
+The source removes the peripheral eigenvalues of modulus one by grouping the
+spins into blocks or by taking $N$ prime, and obtains condition C1 from
+condition C2 \cite[lines~2090--2097]{PerezGarcia2007MPSReps}. The second
+device is formalized, with Wolf's general Wielandt bound in place of
+Conjecture~2. Let $A$ be an arbitrary tensor of bond dimension $D$, let $N$
+be prime, and let the periodic vector of $A$ on $N$ sites be $c\ket{W_N}$
+with $c\neq0$. Then
+\begin{align}
+    N
+        &<
+        2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr),
+    \label{eq:rmp_w_state_ti_bound_prime}
+\end{align}
+that is, $D=\Omega(N^{1/5})$ along the prime lengths.\footnote{Formal
+declarations: \leanid{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime} and
+\leanid{MPSTensor.IsPeriodic.period_le_sq}.} The proof runs as follows.
+\begin{enumerate}
+    \item For $N\leq D^2$ there is nothing to prove. Otherwise write the
+    periodic vector as $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with unital blocks
+    $A^j$ that have a positive definite fixed point of the dual map and only
+    scalar fixed points (the canonical form of
+    \cite[lines~742--763]{PerezGarcia2007MPSReps}, with at most $D$ blocks in
+    total dimension at most $D$). These conditions make every block
+    irreducible.
+
+    \item Rescaled and gauged to trace-preserving form, each block is periodic
+    with a period $m_j$. The $m_j$ peripheral eigenvalues are distinct
+    eigenvalues of an endomorphism of $\mathcal{M}_{D_j}$, so
+    $m_j\leq D_j^2\leq D^2<N$.
+
+    \item If $m_j\neq1$, then $m_j$ does not divide the prime $N$, and the block
+    state vanishes at length $N$ by Theorem~5 of
+    \cite[lines~849--858]{PerezGarcia2007MPSReps}.
+
+    \item If $m_j=1$, the block is primitive, and the general quantum Wielandt
+    bound $(D_j^2-k+1)D_j^2\leq(D^2+1)^2$
+    \cite{Sanz2010Quantum,Wolf2012Quantum} gives condition C1 at
+    $L_0=(D^2+1)^2$.
+
+    \item Group the blocks whose states agree up to a phase power. The class
+    representatives are pairwise not related by a gauge transformation and a
+    phase, and the vector becomes $\sum_jc_j\ket{\phi_{A^j}}$ over the
+    representatives. Dropping the classes with $c_j=0$ or with period other
+    than one leaves at most $D$ blocks, and the coefficient form of
+    (\ref{eq:rmp_w_state_ti_bound_conditional}) gives
+    (\ref{eq:rmp_w_state_ti_bound_prime}).
+\end{enumerate}
+Step~5 also supplies, at prime length, the distinctness used by the
+direct-sum lemma: the grouping absorbs the blocks whose states differ only by
+a weight or a phase power, which is what separates the source's pairwise
+different block states \cite[lines~1329--1330]{PerezGarcia2007MPSReps} from
+the formal hypothesis.
 
 \section{Local fix: the single-block threshold}
 
@@ -219,29 +278,25 @@ $N\geq 2\cdot3(L_0+1)\geq12$ in its range, where the argument above applies.
 
 \section{What remains open}
 
-The bound (\ref{eq:rmp_w_state_ti_bound_conditional}) is conditional. Three
-inputs are missing for
+The bound (\ref{eq:rmp_w_state_ti_bound_conditional}) is conditional, and
+the unconditional bound (\ref{eq:rmp_w_state_ti_bound_prime}) holds at prime
+lengths only. Two inputs are missing for
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and for the source's
 $D\succeq O(N^{1/3})$.
 \begin{itemize}
-    \item A reduction of an arbitrary $D\times D$ tensor whose periodic vector
-    at one length $N$ is $\ket{W_N}$ to a canonical form whose blocks satisfy
-    condition C1 at a controlled length. The source obtains this from
-    Conjecture~2 and neglects peripheral eigenvalues of modulus one, which it
-    removes by blocking or by taking $N$ prime
-    \cite[lines~2090--2097]{PerezGarcia2007MPSReps}.
+    \item Composite lengths. The reduction to a canonical form whose blocks
+    satisfy condition C1 at a controlled length, and to blocks that are
+    pairwise distinct in the sense of the direct-sum lemma, is formalized for
+    prime $N$. For composite $N$ the source's other device, grouping the spins
+    into blocks of the least common multiple of the periods
+    \cite[lines~2094--2096]{PerezGarcia2007MPSReps}, is not formalized; it
+    changes the length to $N/p$ and needs the periods to divide $N$.
 
     \item The explicit Wielandt index $L_0=O(D^2)$ (Conjecture~2) or
     $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov) for blocks without an
     invertible matrix. Wolf's general bound $(D^2-k+1)D^2$ is formalized,
-    which yields $D=\Omega(N^{1/5})$ for primitive blocks; the bound $D^2$
-    is formalized only when every $A^j_0$ is invertible.
-
-    \item The reduction to blocks that are pairwise distinct in the sense of
-    the direct-sum lemma. The source assumes without loss of generality only
-    that the block states are pairwise different
-    \cite[lines~1329--1330]{PerezGarcia2007MPSReps}; the stricter
-    distinctness used here is a hypothesis of the formal bound.
+    which yields $D=\Omega(N^{1/5})$; the bound $D^2$ is formalized only when
+    every $A^j_0$ is invertible.
 \end{itemize}
 
 \section{Formalized open-boundary representation}
@@ -307,12 +362,14 @@ source proof is formalized as the conditional bound
 (\ref{eq:rmp_w_state_ti_bound_conditional}), with the single-block threshold
 corrected. When every $A^j_0$ is invertible it gives the source's
 $D=\Omega(N^{1/3})$, and with primitive blocks it gives
-$D=\Omega(N^{1/5})$. The review's bound
+$D=\Omega(N^{1/5})$. For an arbitrary tensor at prime length the reduction is
+formalized, which gives the unconditional
+(\ref{eq:rmp_w_state_ti_bound_prime}), $D=\Omega(N^{1/5})$ along the primes.
+The review's bound
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and the source's
-unconditional $D\succeq O(N^{1/3})$ remain unformalized: they need a
-reduction of an arbitrary tensor to a canonical form with condition C1 at a
-fixed length and pairwise distinct blocks, and the explicit $O(D^2)$ or
-$O(D^2\log D)$ Wielandt index.
+unconditional $D\succeq O(N^{1/3})$ remain unformalized: they need the
+explicit $O(D^2)$ or $O(D^2\log D)$ Wielandt index, and composite lengths
+need the reduction by blocking.
 
 \bibliographystyle{alpha}
 \bibliography{references}
