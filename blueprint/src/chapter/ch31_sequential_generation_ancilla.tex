@@ -1,0 +1,689 @@
+%% ==================================================
+%% Chapter: Sequential generation of matrix product states
+%% Source: arXiv:quant-ph/0608197, section "Generation of MPS"
+%% (lines 1504--1616 of Papers/quant-ph_0608197/MPSarchive.tex), and the
+%% successive-decomposition construction of arXiv:quant-ph/0501096,
+%% eq. induction.
+%% ==================================================
+
+\chapter{Sequential Generation of Matrix Product States}\label{ch:seqanc}
+
+A chain of $N$ sites with local dimension $d$ starts in $\ket{0}^{\otimes N}$,
+and an ancilla $\C^D$ interacts with the sites one after another. This chapter
+records the probabilistic and deterministic schemes of
+\cite[Section~5.1]{PerezGarcia2007Matrix} and the characterization of the states
+they produce by open-boundary matrix product representations of bond dimension
+at most $D$. The last two sections state the deterministic transition scheme
+for $d=2$ and sequential generation without an ancilla, which are not yet
+formalized.
+
+Sites are labelled $k=0,\dots,N-1$ in the order of the tensor factors of the
+ket, and a configuration is $\sigma=(\sigma_0,\dots,\sigma_{N-1})$. The source
+writes the generated state as $\sum\bra{\varphi_F}A^{[N]}_{i_N}\cdots
+    A^{[1]}_{i_1}\ket{\varphi_I}\ket{i_N\cdots i_1}$; in the present labelling
+the matrix $A_k$ at ket position $k$ is the source's $A^{[N-k]}$, the operation
+applied at step $N-k$. For square matrices $Q_0,\dots,Q_{n-1}$ indexed by the
+physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
+
+\section{Sequential schemes}
+
+\begin{definition}[Sequentially generated state]
+    \label{def:seqanc_state}
+    \lean{MPSPreparation.seqAmplitude}
+    \leanok
+    Let $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$ and let
+    $A_k^i\in\MN{D}$ for $k=0,\dots,N-1$ and $i=0,\dots,d-1$. The state
+    produced by the operations
+    $\sum_{i,\alpha,\beta}(A_k^i)_{\alpha\beta}\ketbra{\alpha,i}{\beta,0}$
+    followed by the projection of the ancilla onto $\ket{\varphi_F}$ is
+    \begin{align}
+        \psi(\sigma)
+         & =\bra{\varphi_F}A_0^{\sigma_0}A_1^{\sigma_1}\cdots
+        A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}.
+        \label{eq:seqanc_state}
+    \end{align}
+    This is \cite[Section~5.1]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{definition}[Probabilistic sequential scheme]
+    \label{def:seqanc_probabilistic}
+    \lean{MPSPreparation.IsProbabilisticallyGenerated}
+    \leanok
+    \uses{def:seqanc_state}
+    A vector $\psi\in(\C^d)^{\otimes N}$ is \emph{probabilistically generated
+        with a $D$-dimensional ancilla} if it has the form
+    (\ref{eq:seqanc_state}) for some matrices $A_k^i\in\MN{D}$ and some
+    vectors $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$. The vector is the
+    unnormalized post-measurement vector, as in the source's ``up to
+    normalization''.
+\end{definition}
+
+\begin{definition}[Operations induced by unitaries]
+    \label{def:seqanc_step}
+    \lean{MPSPreparation.stepMatrix, MPSPreparation.jointState}
+    \leanok
+    Let $d\ge 1$. A unitary $U$ on $\C^D\otimes\C^d$ acting on the site state
+    $\ket{0}$ induces the matrices
+    $(A^i)_{\alpha\beta}=\bra{\alpha,i}U\ket{\beta,0}$. For unitaries
+    $U_0,\dots,U_{N-1}$, with $U_k$ applied at step $k+1$ and acting on site
+    $N-1-k$, and an initial ancilla state $\ket{\varphi_I}$, the ancilla
+    component of the joint state at the configuration $\sigma$ is
+    $A_0^{\sigma_0}\cdots A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}\in\C^D$, where
+    $A_k$ is induced by $U_{N-1-k}$. This is
+    \cite[Section~5.1]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{definition}[Deterministic sequential scheme]
+    \label{def:seqanc_deterministic}
+    \lean{MPSPreparation.IsDeterministicallyGenerated}
+    \leanok
+    \uses{def:seqanc_step}
+    Let $d\ge 1$. A vector $\psi$ is \emph{deterministically generated with a
+        $D$-dimensional ancilla} if there are unitaries $U_0,\dots,U_{N-1}$ on
+    $\C^D\otimes\C^d$ and unit vectors $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$
+    such that the ancilla component of the joint state at every
+    configuration $\sigma$ equals $\psi(\sigma)\ket{\varphi_F}$; that is, the
+    final joint state is $\ket{\varphi_F}\otimes\ket{\psi}$ and the ancilla
+    decouples in the last step without measurement.
+\end{definition}
+
+\begin{definition}[Open-boundary representation with bounded bond dimension]
+    \label{def:seqanc_obc_rep}
+    \lean{MPSPreparation.HasOBCRep}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    A vector $\psi$ has an \emph{open-boundary representation with bond
+        dimension at most $D$} if $\psi=c_A$ for some varying-bond open chain
+    $A$ with common bound $D$, with $c_A$ as in
+    (\ref{eq:varying_bond_obc_coeff}).
+\end{definition}
+
+\section{Isometric decompositions}
+
+\begin{definition}[Isometry on a bond block]
+    \label{def:seqanc_isometry_on}
+    \lean{MPSPreparation.IsIsometryOn}
+    \leanok
+    A family $Q^i\in\MN{D}$, $i=0,\dots,d-1$, is \emph{isometric on its first
+        $b$ columns} if for all $\beta,\beta'<b$
+    \begin{align}
+        \sum_{i=0}^{d-1}\sum_{\alpha=0}^{D-1}
+        \overline{Q^i_{\alpha\beta}}\,Q^i_{\alpha\beta'}
+         & =\delta_{\beta\beta'}.
+        \notag
+    \end{align}
+    For $b=D$ this is $\sum_i(Q^i)^\dagger Q^i=\Id_D$.
+\end{definition}
+
+\begin{definition}[Supports below a level]
+    \label{def:seqanc_support}
+    \lean{MPSPreparation.IsSupportedBelow, MPSPreparation.IsRowSupportedBelow}
+    \leanok
+    A vector $v\in\C^D$ is \emph{supported below $b$} if $v_\beta=0$ for
+    $\beta\ge b$. A matrix $M\in\MN{D}$ is \emph{row-supported below $a$} if
+    $M_{\alpha\beta}=0$ for $\alpha\ge a$.
+\end{definition}
+
+\begin{theorem}[Propagation of supports]
+    \label{thm:seqanc_support_propagation}
+    \lean{MPSPreparation.IsRowSupportedBelow.mul,
+        MPSPreparation.IsRowSupportedBelow.mulVec,
+        MPSPreparation.isSupportedBelow_eval_mulVec}
+    \leanok
+    \uses{def:seqanc_support}
+    If $M$ is row-supported below $a$, then so is $MN$ for every $N$, and
+    $Mv$ is supported below $a$ for every $v$. Consequently, if $Q_p^i$ is
+    row-supported below $b_p$ for $p=0,\dots,n-1$ and $v$ is supported
+    below $b_n$, then $Q^\sigma v$ is supported below $b_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The rows $\alpha\ge a$ of $MN$ and of $Mv$ are sums of multiples of
+    vanishing entries. The chain statement follows by induction on $n$,
+    applying the vector statement to the first factor.
+\end{proof}
+
+\begin{definition}[Boundary vector and boundary matrices]
+    \label{def:seqanc_boundary}
+    \lean{MPSPreparation.basisVecZero, MPSPreparation.rowMat,
+        MPSPreparation.colMat}
+    \leanok
+    Let $\ket{0}\in\C^D$ be the first standard basis vector. For
+    $v,r\in\C^D$ let $\ket{0}v^{\mathsf T}$ be the matrix with first row $v$
+    and all other rows zero, and $r\bra{0}$ the matrix with first column $r$
+    and all other columns zero.
+\end{definition}
+
+\begin{theorem}[Coordinates of the boundary vector and matrices]
+    \label{thm:seqanc_boundary_coords}
+    \lean{MPSPreparation.isRowSupportedBelow_rowMat,
+        MPSPreparation.basisVecZero_dotProduct, MPSPreparation.star_basisVecZero,
+        MPSPreparation.mulVec_basisVecZero_apply,
+        MPSPreparation.rowMat_mul_mulVec_zero, MPSPreparation.mul_colMat_apply,
+        MPSPreparation.mul_colMat_apply_of_ne,
+        MPSPreparation.eq_smul_basisVecZero_of_isSupportedBelow_one,
+        MPSPreparation.star_smul_basisVecZero_dotProduct_self,
+        MPSPreparation.star_basisVecZero_dotProduct_self}
+    \leanok
+    \uses{def:seqanc_boundary, def:seqanc_support}
+    Let $D>0$. The matrix $\ket{0}v^{\mathsf T}$ is row-supported below one;
+    $\ket{0}$ is real and of norm one; $\bra{0}w=w_0$ and
+    $(M\ket{0})_\alpha=M_{\alpha 0}$; the first coordinate of
+    $\ket{0}v^{\mathsf T}Mw$ is $v^{\mathsf T}Mw$; the first column of
+    $M\,r\bra{0}$ is $Mr$ and its other columns vanish; a vector supported
+    below one equals $w_0\ket{0}$; and $\|x\ket{0}\|^2=|x|^2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Direct computation of coordinates.
+\end{proof}
+
+\begin{theorem}[Peeling off the last site]
+    \label{thm:seqanc_eval_last}
+    \lean{MPSChainTensor.eval_succ'}
+    \leanok
+    For square matrices $Q_0,\dots,Q_n$ and a configuration $\sigma$ of $n+1$
+    sites, $Q^\sigma=(Q_0^{\sigma_0}\cdots
+        Q_{n-1}^{\sigma_{n-1}})\,Q_n^{\sigma_n}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Associativity of the ordered product.
+\end{proof}
+
+\begin{theorem}[One decomposition step]
+    \label{thm:seqanc_one_step}
+    \lean{MPSPreparation.exists_isIsometryOn_mul}
+    \leanok
+    \uses{def:seqanc_isometry_on, def:seqanc_support}
+    Let $Y^i\in\MN{D}$ be row-supported below $a$ for every $i$. Then there
+    are $b\le D$, matrices $Q^i$ and a matrix $R$ with $Y^i=Q^iR$ for every
+    $i$, such that each $Q^i$ is row-supported below $a$ and vanishes on the
+    columns $\beta\ge b$, the family $Q$ is isometric on its first $b$
+    columns, and $R$ is row-supported below $b$. Moreover $b\le c$ whenever
+    every $Y^i$ vanishes on the columns $\gamma\ge c$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Stack the matrices $Y^i$ into one matrix with rows indexed by
+    $(\alpha,i)$, choose an orthonormal basis $q_0,\dots,q_{b-1}$ of its
+    column space, and let $Q^i$ have the columns $q_\beta$ for $\beta<b$ and
+    zero columns otherwise. The coefficients of the columns of the stacked
+    matrix in this basis form $R$. The column space is spanned by the at most
+    $c$ nonzero columns, so $b\le c$. This gives the same factorization as the
+    singular value decomposition used in the proof cited in
+    \cite[Section~5.1]{PerezGarcia2007Matrix}.
+\end{proof}
+
+\begin{theorem}[Successive decompositions]
+    \label{thm:seqanc_sweep}
+    \lean{MPSPreparation.exists_isometric_chain}
+    \leanok
+    \uses{def:seqanc_isometry_on, def:seqanc_support}
+    Let $a\le D$, let $R_{-1}\in\MN{D}$ be row-supported below $a$, let
+    $P_0,\dots,P_{n-1}$ be families of $D\times D$ matrices, and let
+    $r\in\C^D$. Then there are $b_0=a$ and $b_1,\dots,b_n\le D$, families
+    $Q_0,\dots,Q_{n-1}$ such that $Q_p^i$ is row-supported below $b_p$,
+    vanishes on the columns $\beta\ge b_{p+1}$, and $Q_p$ is isometric on its
+    first $b_{p+1}$ columns, and a vector $r'$ supported below $b_n$, such
+    that for every configuration $\sigma$
+    \begin{align}
+        R_{-1}\,P^\sigma\,r
+         & =Q^\sigma\,r'.
+        \notag
+    \end{align}
+    Moreover $b_{p+1}\le c$ whenever every $P_p^i$ vanishes on the columns
+    $\gamma\ge c$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
+    By induction on $n$. For $n=0$ take $r'=R_{-1}r$. Otherwise apply
+    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
+    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
+    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$. This is the
+    construction by successive singular value decompositions of Schön,
+    Solano, Verstraete, Cirac and Wolf, on which the proof in
+    \cite[Section~5.1]{PerezGarcia2007Matrix} is based.
+\end{proof}
+
+\begin{theorem}[Isometric chains preserve the norm]
+    \label{thm:seqanc_norm}
+    \lean{MPSPreparation.sum_normSq_mulVec_of_isIsometryOn,
+        MPSPreparation.sum_normSq_eval_mulVec}
+    \leanok
+    \uses{def:seqanc_isometry_on, def:seqanc_support}
+    If $Q$ is isometric on its first $b$ columns and $v$ is supported below
+    $b$, then $\sum_i\|Q^iv\|^2=\|v\|^2$. Consequently, if $Q_p^i$ is
+    row-supported below $b_p$, $Q_p$ is isometric on its first $b_{p+1}$
+    columns, and $v$ is supported below $b_n$, then
+    $\sum_\sigma\|Q^\sigma v\|^2=\|v\|^2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_support_propagation}
+    Expand $\sum_i\|Q^iv\|^2=\sum_{\beta,\beta'<b}\overline{v_\beta}v_{\beta'}
+        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}$ and use the
+    isometry condition. For the chain, write
+    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
+    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
+    vector $w=Q'^{\sigma'}v$ is supported below $b_1$ by
+    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity
+    for $Q_0$ gives $\sum_{\sigma_0}\|Q_0^{\sigma_0}w\|^2=\|w\|^2$, and the
+    induction hypothesis for $Q'$ gives $\sum_{\sigma'}\|Q'^{\sigma'}v\|^2=\|v\|^2$.
+\end{proof}
+
+\begin{theorem}[Changing sites outside the used block]
+    \label{thm:seqanc_block_congr}
+    \lean{MPSPreparation.mulVec_eq_of_isSupportedBelow,
+        MPSPreparation.eval_mulVec_congr}
+    \leanok
+    \uses{def:seqanc_support}
+    If $M'_{\alpha\beta}=M_{\alpha\beta}$ for all $\beta<b$ and $w$ is
+    supported below $b$, then $M'w=Mw$. Consequently, if $Q_p^i$ is
+    row-supported below $b_p$, the families $Q'_p$ agree with $Q_p$ on the
+    columns $\beta<b_{p+1}$, and $v$ is supported below $b_n$, then
+    $Q'^\sigma v=Q^\sigma v$ for every $\sigma$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_support_propagation}
+    The first claim holds entrywise. The second follows by induction on the
+    chain from the right, since each partial product applied to $v$ is
+    supported below the next bond level.
+\end{proof}
+
+\begin{theorem}[Unitary extension of a block isometry]
+    \label{thm:seqanc_unitary_extension}
+    \lean{MPSPreparation.exists_unitary_extension}
+    \leanok
+    \uses{def:seqanc_isometry_on}
+    Let $d\ge 1$ and let $Q$ be isometric on its first $b$ columns. Then
+    there is a unitary $U$ on $\C^D\otimes\C^d$ with
+    $\bra{\alpha,i}U\ket{\beta,0}=Q^i_{\alpha\beta}$ for all $i$, $\alpha$
+    and $\beta<b$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The vectors $\sum_{\alpha,i}Q^i_{\alpha\beta}\ket{\alpha,i}$, $\beta<b$,
+    are orthonormal. Extend them to an orthonormal basis of
+    $\C^D\otimes\C^d$ and let $U$ send the standard basis, with the vectors
+    $\ket{\beta,0}$, $\beta<b$, first, to this basis.
+\end{proof}
+
+\begin{theorem}[Positive bond bound]
+    \label{thm:seqanc_bond_bound_pos}
+    \lean{OBCChainTensor.bondBound_pos}
+    \leanok
+    \uses{def:varying_bond_obc_chain}
+    The common bound $D$ of a varying-bond open chain is positive.
+\end{theorem}
+\begin{proof}
+    \leanok
+    $1=D_0\le D$.
+\end{proof}
+
+\begin{theorem}[Open-chain coefficient as a corner entry]
+    \label{thm:seqanc_coeff_corner}
+    \lean{OBCChainTensor.coeff_eq_eval_zeroPad}
+    \leanok
+    \uses{def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
+    For a varying-bond open chain with square padding $\widetilde A$, and
+    every configuration $\sigma$ of any length $N\ge 0$,
+    $c_A(\sigma)=(\widetilde A^\sigma)_{00}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:varying_bond_obc_coeff_zero, thm:varying_bond_obc_zero_pad_coeff}
+    For $N=0$ both sides are one. Otherwise $c_A(\sigma)$ is the trace of
+    $\widetilde A^\sigma$, and all diagonal entries except the first vanish
+    because the first padded site matrix is row-supported below $D_0=1$.
+\end{proof}
+
+\begin{definition}[Cutting a square chain down to its bond blocks]
+    \label{def:seqanc_cut_down}
+    \lean{OBCChainTensor.ofSupported}
+    \leanok
+    \uses{def:varying_bond_obc_chain}
+    Given $b_0,\dots,b_N\le D$ with $b_0=b_N=1$ and square matrices $Q_k^i$,
+    the varying-bond open chain with dimensions $b_k$ has as site matrices
+    the upper-left $b_k\times b_{k+1}$ corners of $Q_k^i$.
+\end{definition}
+
+\begin{theorem}[Cutting down and padding]
+    \label{thm:seqanc_cut_down}
+    \lean{OBCChainTensor.zeroPad_ofSupported,
+        OBCChainTensor.sum_conjTranspose_mul_ofSupported}
+    \leanok
+    \uses{def:seqanc_cut_down, def:varying_bond_obc_zero_pad,
+        def:seqanc_isometry_on}
+    If every $Q_k^i$ is row-supported below $b_k$ and vanishes on the
+    columns $\beta\ge b_{k+1}$, then padding the cut-down chain returns
+    $Q$. If $Q_k^i$ is row-supported below $b_k$ and $Q_k$ is isometric on
+    its first $b_{k+1}$ columns, then the cut-down site matrices $A_k^i$
+    satisfy $\sum_i(A_k^i)^\dagger A_k^i=\Id_{b_{k+1}}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Entrywise comparison; for the second claim the sum over rows $\alpha$
+    may be restricted to $\alpha<b_k$.
+\end{proof}
+
+\begin{theorem}[Assembling an open chain]
+    \label{thm:seqanc_assemble}
+    \lean{OBCChainTensor.exists_of_isometric_chain}
+    \leanok
+    \uses{def:varying_bond_obc_coeff, def:seqanc_isometry_on, def:seqanc_support}
+    Let $b_0,\dots,b_{n+1}\le D$ with $b_0=1$, and let $Q_0,\dots,Q_n$ be
+    families with $Q_p^i$ row-supported below $b_p$, vanishing on the columns
+    $\beta\ge b_{p+1}$, and isometric on the first $b_{p+1}$ columns. For
+    every $r'\in\C^D$ there is a varying-bond open chain $A$ with common
+    bound $D$ such that $c_A(\sigma)=(Q^\sigma r')_0$ for every $\sigma$,
+    $D_k=b_k$ for $k\le n$, and $\sum_i(A_p^i)^\dagger A_p^i=\Id$ for
+    $p<n$. If moreover $r'$ is supported below $b_{n+1}$ and $\|r'\|=1$,
+    then also $\sum_i(A_n^i)^\dagger A_n^i=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:seqanc_cut_down, thm:seqanc_cut_down, thm:seqanc_coeff_corner,
+        thm:seqanc_eval_last, thm:seqanc_norm, thm:seqanc_boundary_coords}
+    Replace the last family by $Q_n^i\,r'\bra{0}$, set the last bond
+    dimension to one, and cut down. By Theorems~\ref{thm:seqanc_coeff_corner}
+    and~\ref{thm:seqanc_eval_last}, the coefficient at $\sigma$ is the first
+    coordinate of $Q^\sigma r'$. If $r'$ is a unit vector supported below $b_{n+1}$, the isometry of
+    $Q_n$ on its first $b_{n+1}$ columns gives
+    $\sum_i\|Q_n^ir'\|^2=\|r'\|^2=1$.
+\end{proof}
+
+\begin{theorem}[Successive decompositions of an open chain]
+    \label{thm:seqanc_sweep_obc}
+    \lean{OBCChainTensor.exists_isometric_chain_coeff}
+    \leanok
+    \uses{def:varying_bond_obc_coeff, def:seqanc_isometry_on}
+    Let $A$ be a varying-bond open chain of length $n+1$ with dimensions
+    $D_k$ and common bound $D$, and let $c\in\C$. There are $b_0=1$ and
+    $b_k\le D_k$, families $Q_0,\dots,Q_n$ as in
+    Theorem~\ref{thm:seqanc_sweep}, and a vector $r'$ supported below
+    $b_{n+1}$, such that $Q^\sigma r'=c\,c_A(\sigma)\ket{0}$ for every
+    $\sigma$ and $\|r'\|^2=\sum_\sigma|c\,c_A(\sigma)|^2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_sweep, thm:seqanc_coeff_corner, thm:seqanc_norm,
+        thm:seqanc_support_propagation, thm:seqanc_boundary_coords}
+    Apply Theorem~\ref{thm:seqanc_sweep} with $a=1$, $R_{-1}=c\ketbra{0}{0}$,
+    the square padding of $A$, and $r=\ket{0}$. The padded site matrix
+    $\widetilde A_p$ vanishes on the columns $\gamma\ge D_{p+1}$, so
+    $b_{p+1}\le D_{p+1}$. The vector $Q^\sigma r'$ is supported below
+    $b_0=1$, so it is its first coordinate times $\ket{0}$, and that
+    coordinate is $c\,c_A(\sigma)$ by Theorem~\ref{thm:seqanc_coeff_corner}.
+    The norm identity is Theorem~\ref{thm:seqanc_norm}.
+\end{proof}
+
+\begin{theorem}[Left-canonical open-boundary representation]
+    \label{thm:seqanc_left_canonical}
+    \lean{OBCChainTensor.exists_isometric_coeff_eq}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    Every varying-bond open chain $A$ of length $n+1$ has a varying-bond
+    open chain $A'$ with the same common bound, $c_{A'}=c_A$, and
+    $D'_k\le D_k$ for every $k$, such that
+    $\sum_i(A'^i_p)^\dagger A'^i_p=\Id$ for every site $p<n$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_sweep_obc, thm:seqanc_assemble}
+    Apply Theorem~\ref{thm:seqanc_sweep_obc} with $c=1$ and assemble the
+    result by Theorem~\ref{thm:seqanc_assemble}. The last bond has
+    dimension one on both sides, and the others are bounded by
+    Theorem~\ref{thm:seqanc_sweep_obc}.
+\end{proof}
+
+\begin{theorem}[Left-canonical representation of a normalized state]
+    \label{thm:seqanc_left_canonical_norm}
+    \lean{OBCChainTensor.exists_isometric_coeff_eq_of_norm}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    If moreover $\sum_\sigma|c_A(\sigma)|^2=1$, the chain $A'$ of
+    Theorem~\ref{thm:seqanc_left_canonical} can be chosen with
+    $\sum_i(A'^i_p)^\dagger A'^i_p=\Id$ at every site $p\le n$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_sweep_obc, thm:seqanc_assemble}
+    In the construction of Theorem~\ref{thm:seqanc_left_canonical}, the
+    final vector $r'$ has norm one by Theorem~\ref{thm:seqanc_sweep_obc}, so
+    Theorem~\ref{thm:seqanc_assemble} makes the last site isometric as well.
+\end{proof}
+
+\section{Sequential generation with an ancilla}
+
+\begin{theorem}[Generated states are open-boundary states]
+    \label{thm:seqanc_generated_obc}
+    \lean{MPSPreparation.exists_hasOBCRep_of_isProbabilisticallyGenerated}
+    \leanok
+    \uses{def:seqanc_probabilistic, def:seqanc_obc_rep}
+    If a nonzero vector $\psi$ is probabilistically generated with a
+    $D$-dimensional ancilla, then $c\,\psi$ has an open-boundary
+    representation with bond dimension at most $D$ for some $c\ne 0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_sweep, thm:seqanc_assemble, thm:seqanc_boundary_coords}
+    Since $\psi\ne 0$, $D>0$. For $N=0$ take $c=\psi()^{-1}$ and the empty
+    chain. For $N\ge 1$ apply Theorem~\ref{thm:seqanc_sweep} with
+    $R_{-1}=\ket{0}\bra{\varphi_F}$, the matrices $A_k$, and
+    $r=\ket{\varphi_I}$, assemble the result by
+    Theorem~\ref{thm:seqanc_assemble}, and take $c=1$.
+\end{proof}
+
+\begin{theorem}[Open-boundary states are generated]
+    \label{thm:seqanc_obc_generated}
+    \lean{MPSPreparation.isProbabilisticallyGenerated_of_hasOBCRep}
+    \leanok
+    \uses{def:seqanc_probabilistic, def:seqanc_obc_rep}
+    If $c\ne 0$ and $c\,\psi$ has an open-boundary representation with bond
+    dimension at most $D$, then $\psi$ is probabilistically generated with a
+    $D$-dimensional ancilla.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_coeff_corner, thm:seqanc_bond_bound_pos,
+        thm:seqanc_boundary_coords}
+    Take the square padding $\widetilde A$ of the representation,
+    $\ket{\varphi_F}=\ket{0}$ and $\ket{\varphi_I}=c^{-1}\ket{0}$; then
+    $\bra{0}\widetilde A^\sigma c^{-1}\ket{0}=c^{-1}c\,\psi(\sigma)$ by
+    Theorem~\ref{thm:seqanc_coeff_corner}.
+\end{proof}
+
+\begin{theorem}[Probabilistic sequential generation]
+    \label{thm:seqanc_probabilistic}
+    \lean{MPSPreparation.isProbabilisticallyGenerated_iff}
+    \leanok
+    \uses{def:seqanc_probabilistic, def:seqanc_obc_rep}
+    A nonzero vector $\psi$ is probabilistically generated with a
+    $D$-dimensional ancilla if and only if $c\,\psi$ has an open-boundary
+    representation with bond dimension at most $D$ for some $c\ne 0$.
+    This is the probabilistic part of \cite[Section~5, Theorem ``Sequential
+        generation with ancilla'']{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_generated_obc, thm:seqanc_obc_generated}
+    Theorems~\ref{thm:seqanc_generated_obc}
+    and~\ref{thm:seqanc_obc_generated}.
+\end{proof}
+
+\begin{theorem}[Unitaries induce isometric operations]
+    \label{thm:seqanc_step_isometry}
+    \lean{MPSPreparation.isIsometryOn_stepMatrix}
+    \leanok
+    \uses{def:seqanc_step, def:seqanc_isometry_on}
+    The matrices induced by a unitary on $\C^D\otimes\C^d$ satisfy
+    $\sum_i(A^i)^\dagger A^i=\Id_D$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    This is the $(\ket{\beta,0},\ket{\beta',0})$ entry of $U^\dagger U=\Id$.
+\end{proof}
+
+\begin{theorem}[Deterministically generated states are normalized]
+    \label{thm:seqanc_deterministic_norm}
+    \lean{MPSPreparation.star_dotProduct_self_of_isDeterministicallyGenerated}
+    \leanok
+    \uses{def:seqanc_deterministic}
+    Every deterministically generated vector $\psi$ satisfies
+    $\sum_\sigma|\psi(\sigma)|^2=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_step_isometry, thm:seqanc_norm}
+    By Theorems~\ref{thm:seqanc_step_isometry} and~\ref{thm:seqanc_norm},
+    $\sum_\sigma\|A^\sigma\varphi_I\|^2=\|\varphi_I\|^2=1$, and
+    $\|A^\sigma\varphi_I\|^2=|\psi(\sigma)|^2\|\varphi_F\|^2=|\psi(\sigma)|^2$.
+\end{proof}
+
+\begin{theorem}[Deterministic schemes are probabilistic]
+    \label{thm:seqanc_deterministic_probabilistic}
+    \lean{MPSPreparation.isProbabilisticallyGenerated_of_isDeterministicallyGenerated}
+    \leanok
+    \uses{def:seqanc_deterministic, def:seqanc_probabilistic}
+    Every deterministically generated vector is probabilistically generated
+    with an ancilla of the same dimension.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Use the induced matrices and project onto $\ket{\varphi_F}$:
+    $\bra{\varphi_F}A^\sigma\ket{\varphi_I}
+        =\psi(\sigma)\braket{\varphi_F}{\varphi_F}=\psi(\sigma)$.
+\end{proof}
+
+\begin{theorem}[Normalized open-boundary states are deterministically generated]
+    \label{thm:seqanc_obc_deterministic}
+    \lean{MPSPreparation.isDeterministicallyGenerated_of_hasOBCRep}
+    \leanok
+    \uses{def:seqanc_deterministic, def:seqanc_obc_rep}
+    Let $d\ge 1$. If $\sum_\sigma|\psi(\sigma)|^2=1$, $c\ne 0$, and
+    $c\,\psi$ has an open-boundary representation with bond dimension at
+    most $D$, then $\psi$ is deterministically generated with a
+    $D$-dimensional ancilla.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_sweep_obc, thm:seqanc_unitary_extension,
+        thm:seqanc_block_congr, thm:seqanc_boundary_coords}
+    For $N=0$ take $\ket{\varphi_I}=\psi()\ket{0}$ and
+    $\ket{\varphi_F}=\ket{0}$. Otherwise apply
+    Theorem~\ref{thm:seqanc_sweep_obc} with the scalar $c^{-1}$: this gives
+    isometric families $Q_p$ and a vector $r'$ with
+    $Q^\sigma r'=\psi(\sigma)\ket{0}$ and $\|r'\|^2=\sum_\sigma|\psi(\sigma)|^2=1$.
+    Extend each $Q_p$ to a unitary $U_p$ by
+    Theorem~\ref{thm:seqanc_unitary_extension}, and take
+    $\ket{\varphi_I}=r'$ and $\ket{\varphi_F}=\ket{0}$. The induced matrices
+    agree with $Q_p$ on the used columns, so by
+    Theorem~\ref{thm:seqanc_block_congr} the ancilla component at $\sigma$
+    is $Q^\sigma r'=\psi(\sigma)\ket{0}$. The ancilla decouples because the
+    first bond is one-dimensional.
+\end{proof}
+
+\begin{theorem}[Deterministic sequential generation]
+    \label{thm:seqanc_deterministic}
+    \lean{MPSPreparation.isDeterministicallyGenerated_iff}
+    \leanok
+    \uses{def:seqanc_deterministic, def:seqanc_obc_rep}
+    Let $d\ge 1$. A vector $\psi$ is deterministically generated with a
+    $D$-dimensional ancilla if and only if $\sum_\sigma|\psi(\sigma)|^2=1$
+    and $c\,\psi$ has an open-boundary representation with bond dimension at
+    most $D$ for some $c\ne 0$. This is the deterministic part of
+    \cite[Section~5, Theorem ``Sequential generation with
+        ancilla'']{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_deterministic_norm,
+        thm:seqanc_deterministic_probabilistic, thm:seqanc_generated_obc,
+        thm:seqanc_obc_deterministic}
+    For the forward direction, $\psi$ is normalized by
+    Theorem~\ref{thm:seqanc_deterministic_norm}, hence nonzero, and
+    probabilistically generated by
+    Theorem~\ref{thm:seqanc_deterministic_probabilistic}; apply
+    Theorem~\ref{thm:seqanc_generated_obc}. The converse is
+    Theorem~\ref{thm:seqanc_obc_deterministic}.
+\end{proof}
+
+\begin{theorem}[Both schemes agree on normalized states]
+    \label{thm:seqanc_det_iff_prob}
+    \lean{MPSPreparation.isDeterministicallyGenerated_iff_isProbabilisticallyGenerated}
+    \leanok
+    \uses{def:seqanc_deterministic, def:seqanc_probabilistic}
+    Let $d\ge 1$. A vector $\psi$ with $\sum_\sigma|\psi(\sigma)|^2=1$ is
+    deterministically generated with a $D$-dimensional ancilla if and only if
+    it is probabilistically generated with a $D$-dimensional ancilla.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_probabilistic, thm:seqanc_deterministic}
+    Theorems~\ref{thm:seqanc_probabilistic}
+    and~\ref{thm:seqanc_deterministic}.
+\end{proof}
+
+\section{The deterministic transition scheme}
+
+\begin{definition}[Deterministic transition scheme]
+    \label{def:seqanc_transition}
+    \uses{def:seqanc_deterministic}
+    Let $d=2$ and let the ancilla be $\C^D\otimes\C^2$. In every step an
+    arbitrary unitary acts on the ancilla, followed by the fixed interaction
+    of the ancilla with the current site
+    \begin{align}
+        \ket{\varphi}\ket{1}\ket{0}
+         & \mapsto\ket{\varphi}\ket{0}\ket{1},
+         &
+        \ket{\varphi}\ket{0}\ket{0}
+         & \mapsto\ket{\varphi}\ket{0}\ket{0},
+        \label{eq:seqanc_transition}
+    \end{align}
+    and the ancilla decouples after the last step. This is the third scheme
+    of \cite[Section~5.1]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{theorem}[Transition schemes generate the open-boundary states]
+    \label{thm:seqanc_transition}
+    \uses{def:seqanc_transition, def:seqanc_obc_rep}
+    Let $d=2$. A vector $\psi$ is generated by a deterministic transition
+    scheme with ancilla $\C^D\otimes\C^2$ if and only if
+    $\sum_\sigma|\psi(\sigma)|^2=1$ and $c\,\psi$ has an open-boundary
+    representation with bond dimension at most $D$ for some $c\ne 0$. This is
+    the transition part of \cite[Section~5, Theorem ``Sequential generation
+        with ancilla'']{PerezGarcia2007Matrix}.
+\end{theorem}
+
+\section{Sequential generation without an ancilla}
+
+\begin{definition}[Sequential scheme without an ancilla]
+    \label{def:seqanc_no_ancilla}
+    Starting from $\ket{0}^{\otimes N}$, an operation $U^{[k]}$ acts on sites
+    $k$ and $k+1$, for $k=1,\dots,N-1$ in turn. The scheme is deterministic if
+    every $U^{[k]}$ is unitary and probabilistic if the operations are
+    arbitrary \cite[Section~5.2]{PerezGarcia2007Matrix}.
+\end{definition}
+
+\begin{theorem}[Sequential generation without an ancilla]
+    \label{thm:seqanc_no_ancilla}
+    \uses{def:seqanc_no_ancilla, def:seqanc_obc_rep}
+    The states generated by sequential schemes without an ancilla, either
+    deterministically or probabilistically (the latter up to normalization),
+    are exactly the states with an open-boundary representation of bond
+    dimension at most $d$. This is \cite[Section~5, Theorem ``Sequential
+        generation without ancilla'']{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:seqanc_deterministic, thm:seqanc_probabilistic}
+    For $k<N-1$ the matrices
+    $A^{[k]}_{i,\alpha,\beta}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$ are the site
+    matrices, with $\alpha=0$ at $k=1$; a singular value decomposition of
+    $\bra{i,j}U^{[N-1]}\ket{\alpha,0}$ in the grouping $i\mid\alpha,j$ gives the
+    last two sites. Conversely, run the deterministic scheme of
+    Theorem~\ref{thm:seqanc_deterministic} using site $k+1$ as the ancilla of
+    the $k$-th step, followed by a swap of sites $k+1$ and $k+2$.
+\end{proof}

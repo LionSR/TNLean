@@ -25,6 +25,7 @@ import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceOverlap
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionBoundaryDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
 import TNLean.MPS.ParentHamiltonian.BlockStrip
+import TNLean.MPS.ParentHamiltonian.BlockSubspaceOverlap
 import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockedGroundSpaceTransport
 import TNLean.MPS.ParentHamiltonian.BoundaryBlockMatEq
