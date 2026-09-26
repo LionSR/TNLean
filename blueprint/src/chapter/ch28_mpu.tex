@@ -6652,6 +6652,74 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
 \end{proof}
 
+\begin{theorem}[Simplicity under a rectangular bond inclusion]
+    \label{thm:mpu_simple_rectangular_inclusion}
+    \lean{MPOTensor.IsMPUSimple.rectangularSandwich,
+        MPOTensor.isMPUSimple_of_rectangularSandwich,
+        MPOTensor.isMPUSimple_supportCoordinates}
+    \leanok
+    \uses{def:mpu_simple}
+    Let $W$ have bond dimension $D$, and let
+    $A\in\mathbb C^{E\times D}$ and $C\in\mathbb C^{D\times E}$ satisfy
+    $CA=I_D$. The tensor with letters $AW^{ij}C$ is simple if and only if
+    $W$ is simple. In particular, if $V^\dagger V=I_k$ and $VV^\dagger=T$,
+    simplicity of $(TW^{ij}T)$ implies simplicity of $(V^\dagger W^{ij}V)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_simple}
+    Put $\mathcal A=\overline A\otimes A$ and
+    $\mathcal C=\overline C\otimes C$, in the doubled bond coordinates.
+    The double-layer letters $F^{ij}$ of $W$ transform to
+    $\mathcal A F^{ij}\mathcal C$, and $\mathcal C\mathcal A=I$.
+    If $(a|,|b)$ are simplicity witnesses for $W$, then
+    $(a|\mathcal C,\mathcal A|b)$ are witnesses for the included tensor.
+    Conversely, witnesses $(a|,|b)$ for the included tensor give
+    $(a|\mathcal A,\mathcal C|b)$ for $W$. Substitution in
+    (\ref{eq:mpu_simple1}) and (\ref{eq:mpu_simple2}) proves both claims.
+    For the assertion about support coordinates, use
+    $V(V^\dagger W^{ij}V)V^\dagger=TW^{ij}T$.
+\end{proof}
+
+\begin{theorem}[Simplicity under reduced support compression]
+    \label{thm:mpu_simple_reduced_support}
+    \lean{MPOTensor.IsMPUSimple.reducedProjection}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_matrix_reduced_projection}
+    Let $W$ be simple with $d>0$. Let $P$ be an orthogonal projection and
+    $Q$ a square matrix on its bond space, with $W^{ij}P=W^{ij}=QW^{ij}$.
+    Suppose the normalized diagonal $E$ of its double layer has a rank-one
+    factorization $E=|\rho)(\Phi|$. If $T$ is the reduced projection
+    associated with $P,Q$, then $(TW^{ij}T)$ is simple.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_matrix_reduced_projection, thm:mpu_reduced_representative,
+        thm:mpu_supplied_projector_simple2, thm:mpu_all_later_simple_blockings,
+        thm:mpu_simple_is_mpu}
+    Write $F^{ij}$ for the double-layer letters and put
+    $\mathcal P=\overline P\otimes P$,
+    $\mathcal Q=\overline Q\otimes Q$, and $H=\overline T\otimes T$.
+    The letterwise support identities also hold for their normalized diagonal
+    $E$. Since $TQ=PQ$, they give
+    \begin{align}
+        XHY & =XH\mathcal QY=X\mathcal P\mathcal QY=XY
+        \label{eq:mpu_simple_support_insertion}
+    \end{align}
+    whenever $X,Y$ are double-layer letters or $E$.
+    The supplied-projector identity is $F^{ij}F^{k\ell}=F^{ij}EF^{k\ell}$.
+    Using (\ref{eq:mpu_simple_support_insertion}) and $H^2=H$ therefore yields
+    \begin{align}
+        (HF^{ij}H)(HF^{k\ell}H)
+         & =(HF^{ij}H)(HEH)(HF^{k\ell}H).
+    \end{align}
+    These are the double-layer letters of the compressed tensor, and
+    $HEH=(H|\rho))((\Phi|H)$ supplies its two simplicity witnesses.
+    Support compression preserves the periodic operators, so the compressed
+    tensor still generates an MPU. Its two-letter insertion identity then
+    implies the first simplicity contraction with the same witnesses.
+\end{proof}
+
 \begin{theorem}[Invertible factor for a reduced projection]
     \label{thm:reduced_projection_invertible_factor}
     \lean{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor}
