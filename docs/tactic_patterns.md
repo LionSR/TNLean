@@ -2137,12 +2137,30 @@ abstracted — record why, so it is not re-proposed).
   `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
   and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
   in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and the
-  local `hproj` in the norm-contraction theorem of
-  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`.
+  fourth, already parametrized, local `hproj` (lines 40–51) in
+  `norm_suffixGroundProjection_comp_prefixDifference_le_active` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`, used
+  there for both the prefix and the suffix projections.
 - **Abstraction (proposed):** a top-level theorem
   `ker_starProjection_conj_of_rightFiberwiseMap` in `SpectatorTransport.lean`
-  with the parametrized statement of the local `hproj`; refactor the four call
-  sites to use it.
+  with the parametrized statement of the local `hproj`:
+
+  ```lean
+  theorem ker_starProjection_conj_of_rightFiberwiseMap
+      (G : EuclideanSpace ℂ (Cfg d (n + r)) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d (n + r)))
+      (H : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n))
+      (hc : (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.conj G =
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.toContinuousLinearMap H)).toLinearMap) :
+      (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.conj
+          (LinearMap.ker G).starProjection.toLinearMap =
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.ker H).starProjection).toLinearMap
+  ```
+
+  The local `hproj` then becomes this theorem, and the three
+  `SpectatorTransport.lean` proofs replace their
+  `have hproj … rw … change … at hproj` blocks by one application.
 - **Notes:** meets the rule of three. Promotion needs a verified Lean build,
   so it is deferred to a follow-up change with build access.
 
