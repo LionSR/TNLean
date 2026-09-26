@@ -237,11 +237,70 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{definition}[Local circuit of depth $T$]
     \label{def:ldp_local_circuit}
+    \lean{MPSPreparation.IsLocalCircuitOfDepth, MPSPreparation.IsPreparedInDepth,
+        MPSPreparation.Layer, MPSPreparation.circuitOp,
+        MPSPreparation.supportedOperators}
+    \leanok
     A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
     $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
     neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
     local circuit of depth $T$ applied to a product state.
+
+    The chain is a ring: the neighbouring pairs are $\{k,k+1\}$ with indices
+    modulo $N$, and a circuit whose gates avoid the pair $\{N,1\}$ is a circuit
+    on the open chain. An operator \emph{acts on} a set of sites $X$ if it
+    lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
+    $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
+    are at distance larger than $s$ if no site of one is within ring distance
+    $s$ of a site of the other.
 \end{definition}
+
+\begin{lemma}[Light cone of a local circuit]
+    \label{lem:ldp_light_cone}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.conj_circuitOp_mem_supportedOperators}
+    \leanok
+    Let $U$ be a local circuit of depth $T$ and let $Z$ act on a set of sites
+    $X$. Then $U^\dagger ZU$ acts on the sites within ring distance $T$ of $X$.
+    This is the finite light cone of \cite[Theorem~1]{Malz2024Preparation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the layers it suffices to treat one layer $W$. Split its
+    gates into those whose pair meets $X$, with product $G$, and the others,
+    with product $H$. The gates commute, so $W=HG$. The operator $H$ is unitary
+    and acts on the complement of $X$, so it commutes with $Z$ and
+    $W^\dagger ZW=G^\dagger ZG$. The pairs of $G$ lie within distance $1$ of
+    $X$, and products and adjoints of operators acting on a set act on it.
+\end{proof}
+
+\begin{lemma}[No connected correlations beyond the light cone]
+    \label{lem:ldp_light_cone_correlations}
+    \uses{lem:ldp_light_cone}
+    \lean{MPSPreparation.expect_mul_eq_of_isPreparedInDepth,
+        MPSPreparation.expect_mul_mul_expect_one_of_isPreparedInDepth}
+    \leanok
+    Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
+    act on sets of sites at distance larger than $2T$. Then
+    $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
+    This is the statement in the proof of
+    \cite[Theorem~1]{Malz2024Preparation} that every connected correlation of
+    such operators vanishes.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\ket{\psi}=U\ket{\pi}$ with $\ket{\pi}=\bigotimes_i\ket{v_i}$. Since
+    $UU^\dagger=\mathbb 1$,
+    $\bra{\psi}ZZ'\ket{\psi}=\bra{\pi}(U^\dagger ZU)(U^\dagger Z'U)\ket{\pi}$,
+    and by Lemma~\ref{lem:ldp_light_cone} the two factors act on disjoint sets
+    of sites. For products $\bigotimes_i m_i$ and $\bigotimes_i m'_i$ with
+    disjoint supports the expectation in $\ket{\pi}$ is
+    $\prod_i\bra{v_i}m_im'_i\ket{v_i}$, and at each site one of $m_i$, $m'_i$
+    is the identity; bilinearity then gives
+    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
+        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
+    disjoint sets.
+\end{proof}
 
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
