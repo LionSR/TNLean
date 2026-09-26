@@ -45,7 +45,7 @@ presentation with the one-by-one fixed matrix `ρ = 1`.
 The construction specializes the transfer-power criterion to bond dimension
 one. Source: CPSV17, arXiv:1703.09188, canonical form II (lines 269–281)
 and the bond-one transfer discussion (lines 397–409). -/
-noncomputable def identityMPUTensor_canonicalFormII (d : ℕ) [NeZero d] :
+noncomputable def identityMPUTensorCanonicalFormII (d : ℕ) [NeZero d] :
     IsMPUCanonicalFormII (identityMPUTensor d) := by
   refine (identityMPUTensor_isMPU d).canonicalFormIIOfSuppliedTransferPower
     (1 : Matrix (Fin 1) (Fin 1) ℂ) Matrix.PosDef.one (by simp) 1 ?_
@@ -81,7 +81,7 @@ theorem IsMPUCanonicalFormII.index_identityMPUTensor (d : ℕ) [NeZero d]
 This follows from the index definition of CPSV17, arXiv:1703.09188,
 lines 681–704, for its bond-one representative. -/
 theorem identityMPUTensor_index (d : ℕ) [NeZero d] :
-    (identityMPUTensor_canonicalFormII d).index = 0 :=
-  IsMPUCanonicalFormII.index_identityMPUTensor d (identityMPUTensor_canonicalFormII d)
+    (identityMPUTensorCanonicalFormII d).index = 0 :=
+  IsMPUCanonicalFormII.index_identityMPUTensor d (identityMPUTensorCanonicalFormII d)
 
 end MPOTensor
