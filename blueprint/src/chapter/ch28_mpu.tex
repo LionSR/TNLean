@@ -5705,6 +5705,36 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $W^{\eta\sigma,\eta\tau}$; the prefix and suffix products are unchanged.
 \end{proof}
 
+\begin{theorem}[Original-chain coefficient at a three-block window]
+    \label{thm:mpu_original_site_three_block_window_entry}
+    \lean{MPOTensor.originalSite_threeBlock_window_entry}
+    \leanok
+    \uses{lem:mpu_original_site_residual_two_site_word,
+        def:mpu_two_site_open_three_block}
+    Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
+    Let three consecutive blocks of length $2k$ lie between an arbitrary
+    original-site prefix of length $p$ and suffix of length $s$. Under the
+    two-site relabeling, suppose their output labels are
+    $(e_-,a_0),(a_1,b_0),(b_1,e_+)$ and their input labels are
+    $j_0,j,j_2$. Let $P=U^{i^-,j^-}$ and $Q=U^{i^+,j^+}$ be the residual
+    products. The corresponding entry of the original length-$p+6k+s$
+    MPO is
+    \begin{align}
+        \rho^{(p+6k+s)}(U)_{i^-\widehat\sigma i^+,\,
+            j^-\widehat\tau j^+}
+         & = F_{P,Q}(a,b;j).
+    \end{align}
+    The equality holds for every choice of the residual words and window
+    labels; no unitarity or MPU hypothesis on $U$ is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_original_site_residual_two_site_word}
+    Apply the residual-word identity to the three middle blocks. Their
+    relabeled words are precisely the three displayed letters, so the
+    middle product is the one defining $F_{P,Q}$.
+\end{proof}
+
 \begin{lemma}[Three-block locality with original-site residuals]
     \label{lem:mpu_two_site_original_residual_locality}
     \lean{MPOTensor.twoSite_threeBlock_originalSite_residual_intertwiner}

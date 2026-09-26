@@ -81,4 +81,57 @@ theorem twoSite_threeBlock_originalSite_residual_intertwiner
           (evalWord U preI preJ) (evalWord U sufI sufJ) eL eR j₀ j₂ := by
   exact twoSite_threeBlock_trace_intertwiner_with_endpoints S _ _ eL eR j₀ j₂ A
 
+/-- A three-block window of the original MPO, with arbitrary original-site
+residual words, is the corresponding three-letter standard-form trace. The
+coordinate equalities specify the row and column labels of this window
+after the direct `2 * k` blocks are relabeled as two-site blocks. They are
+independent of any canonical-form or MPU hypothesis on `U`.
+
+Source context: arXiv:1703.09188, lines 603--622 and 2300--2306;
+arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
+theorem originalSite_threeBlock_window_entry
+    {d D ℓ r : ℕ} (U : MPOTensor d D) (k p s : ℕ)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    (preI preJ : Fin p → Fin d) (sufI sufJ : Fin s → Fin d)
+    (midI midJ : Fin 3 → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (eL eR : Fin (MPSTensor.blockPhysDim d k))
+    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (x : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)))
+    (j : Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+    (hI : (fun t => twoSiteDirectBlockEquiv d k (midI t)) =
+      ![finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
+        finProdFinEquiv (x.2.2, eR)])
+    (hJ : (fun t => twoSiteDirectBlockEquiv d k (midJ t)) =
+      ![j₀, finProdFinEquiv j, j₂]) :
+    mpo U (p + (3 * (2 * k) + s))
+        (Fin.append preI (Fin.append
+          (MPSTensor.blockedConfigEquiv d 3 (2 * k) midI) sufI))
+        (Fin.append preJ (Fin.append
+          (MPSTensor.blockedConfigEquiv d 3 (2 * k) midJ) sufJ)) =
+      twoSiteThreeBlockTrace S
+        (evalWord U (List.ofFn preI) (List.ofFn preJ))
+        (evalWord U (List.ofFn sufI) (List.ofFn sufJ))
+        eL eR j₀ j₂ x j := by
+  rw [mpo_apply_prefix_twoSiteBlock_suffix U k p 3 s
+    preI preJ midI midJ sufI sufJ]
+  have hmI : (List.ofFn midI).map (twoSiteDirectBlockEquiv d k) =
+      [finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
+        finProdFinEquiv (x.2.2, eR)] := by
+    rw [← List.ofFn_comp']
+    rw [hI]
+    rfl
+  have hmJ : (List.ofFn midJ).map (twoSiteDirectBlockEquiv d k) =
+      [j₀, finProdFinEquiv j, j₂] := by
+    rw [← List.ofFn_comp']
+    rw [hJ]
+    rfl
+  rw [hmI, hmJ]
+  rfl
+
 end MPOTensor
