@@ -31,6 +31,7 @@ import TNLean.MPS.Core.ReductionCrossMatrix
 import TNLean.MPS.Core.ReductionExistence
 import TNLean.MPS.Core.ReductionResidual
 import TNLean.MPS.Core.ReductionResidual.Basic
+import TNLean.MPS.Core.ReductionResidualComposition
 import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.ScaledNormality
