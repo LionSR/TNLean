@@ -17,6 +17,8 @@ prefactor and rate assertions following Nachtergaele, arXiv:cond-mat/9410110,
 Section 6, equation `boundAm`; see `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 -/
 
+open scoped ComplexOrder
+
 namespace MPSTensor.FNWDimensionConstant
 
 /-- The four-site physical defect exceeds the proposed dimension-only
