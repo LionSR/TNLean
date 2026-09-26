@@ -6054,27 +6054,57 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 824--833.
 \end{lemma}
 
-\begin{lemma}[Admissible tensor-product additivity]
+\begin{theorem}[Tensor-product additivity in canonical form II]
     \label{lem:mpu_admissible_index_tensor}
-    \notready
-    \discussion{6015}
-    % **Scope restriction (common admissible block):** all three indices are
-    % computed from actual simple blocks carrying their own source data.
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_tensorProduct,
+        MPOTensor.IsMPUCanonicalFormII.index_tensorProduct_identityMPUTensor}
+    \leanok
+    % **Scope restriction (canonical representatives):** the two factors are
+    % already in canonical form II. No comparison with an arbitrary unreduced
+    % representative is claimed.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_index, prop:mpu_admissible_index_well_defined, thm:mpu_tensor_product_source_ranks, def:mpu_reduced_full_support_source_datum}
-    Suppose there is one positive blocking length $k$ such that
-    $\mathcal U_k$, $\mathcal V_k$, and
-    $(\mathcal U\otimes\mathcal V)_k$ are simple and each carries its own
-    reduced full-support source datum. Define all three indices from these
-    blocks. Then
+    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii,
+        def:mpu_independent_tensor_product, def:mpu_shift_tensors}
+    Let $\mathcal U$ and $\mathcal V$ be MPUs in canonical form II. Their
+    independent tensor product is again in canonical form II, and
     \begin{align}
-        \operatorname{ind}(\mathcal U\otimes\mathcal V)
+        \operatorname{ind}(\mathcal U\boxtimes\mathcal V)
          & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
     \end{align}
-    This is the common-block reduced-source version of
+    In particular, if $n>0$ and $\Id_n$ is the bond-one tensor generating
+    the identity on a physical space of dimension $n$, then
+    \begin{align}
+        \operatorname{ind}(\mathcal U\boxtimes\Id_n)
+         & =\operatorname{ind}(\mathcal U).
+    \end{align}
+    This is the canonical-form-II representative case of the tensoring claim in
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--833.
-\end{lemma}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_tensor_product,
+        thm:mpu_all_later_simple_blockings,
+        thm:mpu_block_tensor_product,
+        thm:mpu_tensor_product_source_ranks,
+        thm:mpu_specified_source_index_identities,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_identity_index}
+    Choose positive simple blocking lengths for $\mathcal U$, $\mathcal V$,
+    and their tensor product. A sufficiently large common length $k$ remains
+    simple for all three. Blocking commutes with the independent tensor product
+    up to a physical relabeling, so their source ranks satisfy
+    \begin{align}
+        r((\mathcal U\boxtimes\mathcal V)_k)
+         & =r(\mathcal U_k)r(\mathcal V_k),       \\
+        \ell((\mathcal U\boxtimes\mathcal V)_k)
+         & =\ell(\mathcal U_k)\ell(\mathcal V_k).
+    \end{align}
+    Taking the half-difference of the base-two logarithms gives additivity;
+    independence of $k$ identifies these values with the three indices.
+    The bond-one identity has index zero by
+    Theorem~\ref{thm:mpu_identity_index}, giving the last assertion.
+\end{proof}
 
 \begin{lemma}[Four-site composition source-rank bounds]
     \label{lem:mpu_four_site_composition_source_rank_bounds}
