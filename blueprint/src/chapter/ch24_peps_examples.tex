@@ -1,0 +1,258 @@
+\section{Examples of PEPS on the torus}\label{sec:peps_examples}
+
+This section collects the two-dimensional examples of
+\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} whose states
+can be computed on the discrete torus. Each example is a single tensor
+$A^i_{\alpha\beta\gamma\delta}$ with one physical index $i$ and four virtual
+indices, ordered top, right, down, left, placed at every site of a square
+lattice. On the torus the four legs of the site $v=(x,y)$ are the edges from
+$v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
+(down) and from $(x-1,y)$ to $v$ (left).
+
+\begin{definition}[Torus PEPS of a four-leg tensor]%
+    \label{def:peps_torus_site_tensor}
+    \lean{TNLean.PEPS.torusDownEdge, TNLean.PEPS.torusLeftEdge,
+        TNLean.PEPS.torusTopLeg, TNLean.PEPS.torusRightLeg,
+        TNLean.PEPS.torusDownLeg, TNLean.PEPS.torusLeftLeg,
+        TNLean.PEPS.torusSiteTensor}
+    \leanok
+    \uses{def:peps_tensor, def:peps_torus_uniform_bond_dim}
+    Let $a^i_{\alpha\beta\gamma\delta}$ be a tensor with physical dimension
+    $d$ and bond dimension $D$. Its torus PEPS on the torus of width $w$ and
+    height $h$ has bond dimension $D$ on every edge and, at every site $v$,
+    the local tensor $a$ with its four virtual indices read on the top,
+    right, down and left legs of $v$
+    \cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{lemma}[Shift-invariant functions on the torus are constant]%
+    \label{lem:peps_torus_shift_const}
+    \lean{TNLean.PEPS.torusVertex_apply_eq_apply_zero_of_shift}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    If a function $f$ on the sites of the torus satisfies $f(x+1,y)=f(x,y)$
+    and $f(x,y+1)=f(x,y)$ for all $(x,y)$, then $f$ is constant.
+\end{lemma}
+
+\begin{proof}\leanok
+    Induction on the representatives $0,\ldots,w-1$ of the first coordinate
+    and $0,\ldots,h-1$ of the second.
+\end{proof}
+
+\begin{lemma}[Contraction of a torus PEPS]%
+    \label{lem:peps_torus_site_tensor_contraction}
+    \lean{TNLean.PEPS.stateCoeff_torusSiteTensor_eq_sum_edge,
+        TNLean.PEPS.isHorizontalTorusEdge_torusRightEdge,
+        TNLean.PEPS.isVerticalTorusEdge_torusUpEdge,
+        TNLean.PEPS.torusRightEdge_injective, TNLean.PEPS.torusUpEdge_injective,
+        TNLean.PEPS.torusRightEdge_ne_torusUpEdge, TNLean.PEPS.torusEdgeEquiv,
+        TNLean.PEPS.stateCoeff_torusSiteTensor}
+    \leanok
+    \uses{def:peps_torus_site_tensor, def:peps_stateCoeff}
+    Let $w,h\ge 3$. The right edges and the up edges of the sites are
+    pairwise distinct and exhaust the edges of the torus, and the coefficient
+    of the torus PEPS of $a$ is
+    \begin{align}
+        \Coeff(\sigma)=\sum_{h_\bullet,v_\bullet}\ \prod_{(x,y)}
+        a^{\sigma(x,y)}_{v_{(x,y)}\,h_{(x,y)}\,v_{(x,y-1)}\,h_{(x-1,y)}},
+        \notag
+    \end{align}
+    the sum running over all assignments of bond indices $h_{(x,y)}$ to the
+    horizontal edges from $(x,y)$ to $(x+1,y)$ and $v_{(x,y)}$ to the
+    vertical edges from $(x,y)$ to $(x,y+1)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every edge is horizontal or vertical, and every horizontal edge is the
+    right edge of one of its endpoints and every vertical edge the up edge
+    of one of its endpoints. For $w\ge 3$ the right edges of distinct sites
+    are distinct: otherwise $p=q+(1,0)$ and $q=p+(1,0)$, so $2=0$ in the
+    horizontal coordinate. The same holds vertically for $h\ge 3$. A
+    horizontal edge is never vertical. Reindexing the sum over edge
+    labellings along this bijection gives the formula.
+\end{proof}
+
+On a torus of width two the right and left neighbours of a site coincide and
+the two edges joining them are one edge of the lattice graph, so the four
+legs of a site are not four distinct bonds. The contraction formula, and the
+cluster and CZX statements below, therefore require $w,h\ge 3$; the
+source constructions are local and apply to every torus
+\cite{gap:rmp_peps_examples_small_torus}.
+
+\subsection{The GHZ state}
+
+\begin{definition}[Two-dimensional GHZ tensor]%
+    \label{def:peps_ghz_tensor}
+    \lean{TNLean.PEPS.ghzSiteTensor, TNLean.PEPS.ghzPEPS}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    The GHZ tensor has $D=d$ and
+    $A^i_{\alpha\beta\gamma\delta}=\delta_{i=\alpha=\beta=\gamma=\delta}$
+    \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[The GHZ PEPS is the GHZ state]%
+    \label{thm:peps_ghz_state}
+    \lean{TNLean.PEPS.stateCoeff_ghzPEPS}
+    \leanok
+    \uses{def:peps_ghz_tensor, def:peps_stateCoeff}
+    On every torus with $w,h\ge 2$ the GHZ PEPS generates the unnormalized
+    GHZ state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$: its coefficient at
+    $\sigma$ is $\sum_{i}\prod_{v}\delta_{\sigma(v),i}$
+    \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_shift_const}
+    A virtual configuration contributes only if every leg of every site
+    carries the physical index of that site. The right leg of $v$ is the left
+    leg of $v+(1,0)$ and the top leg of $v$ is the down leg of $v+(0,1)$, so
+    $\sigma$ is invariant under both unit shifts and is constant by
+    Lemma~\ref{lem:peps_torus_shift_const}. Every edge is then labelled by
+    that constant, so exactly one virtual configuration contributes when
+    $\sigma$ is constant and none otherwise.
+\end{proof}
+
+\subsection{The cluster state}
+
+\begin{definition}[Two-dimensional cluster tensor]%
+    \label{def:peps_cluster_tensor}
+    \lean{TNLean.PEPS.clusterSiteTensor, TNLean.PEPS.clusterPEPS}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    The cluster tensor is $A=\ket{0}(00{+}{+}|+\ket{1}(11{-}{-}|$ with
+    $(\pm|=[(0|\pm(1|]/\sqrt{2}$: the top and right legs copy the physical
+    index $s$, and the down and left legs carry
+    $(-1)^{sb}/\sqrt{2}$ at bond index $b$
+    \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[The cluster PEPS]%
+    \label{thm:peps_cluster_state}
+    \lean{TNLean.PEPS.stateCoeff_clusterPEPS}
+    \leanok
+    \uses{def:peps_cluster_tensor, def:peps_stateCoeff}
+    On a torus with $w,h\ge 3$ and $N=wh$ sites the cluster PEPS has
+    coefficient
+    \begin{align}
+        \Coeff(\sigma)=2^{-N}\prod_{v}(-1)^{\sigma_v\sigma_{v+(1,0)}
+        +\sigma_v\sigma_{v+(0,1)}}.
+        \notag
+    \end{align}
+    Up to the factor $2^{-N/2}$ this is the coefficient of the state obtained
+    by applying controlled-$Z$ gates on all nearest-neighbour bonds to
+    $\ket{+}^{\otimes N}$, the cluster state of
+    \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the top and right
+    legs force every bond index to equal the physical index of the site
+    below or to the left of it. The remaining factor at $v$ is
+    $\tfrac12(-1)^{\sigma_v\sigma_{v-(0,1)}+\sigma_v\sigma_{v-(1,0)}}$;
+    shifting the product over $v$ by one site in each direction gives the
+    formula.
+\end{proof}
+
+\subsection{The CZX model}
+
+In the CZX model of \cite{ChenLiuWen2011CZX} every site of the square lattice
+carries four qubits, one at each corner, and the ground state on a closed
+surface is the product over plaquettes of the states $\ket{0000}+\ket{1111}$
+on the four qubits around each plaquette. Blocking the four qubits of a site,
+\cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix} writes this state as a
+PEPS of bond dimension four.
+
+\begin{definition}[CZX tensor]%
+    \label{def:peps_czx_tensor}
+    \lean{TNLean.PEPS.czxBond, TNLean.PEPS.czxQubits, TNLean.PEPS.czxTopLeft,
+        TNLean.PEPS.czxTopRight, TNLean.PEPS.czxBottomRight,
+        TNLean.PEPS.czxBottomLeft, TNLean.PEPS.czxSiteTensor,
+        TNLean.PEPS.czxBondSwap, TNLean.PEPS.czxBondSwap_czxBond,
+        TNLean.PEPS.czxPEPS}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    Label the four qubits of a site $\ket{ijkl}$, with $i$ at the top left,
+    $j$ at the top right, $k$ at the bottom right and $l$ at the bottom left,
+    and label the four basis vectors of a bond by pairs of qubits. The CZX
+    tensor is
+    \begin{align}
+        \sum_{i,j,k,l=0}^{1}\ket{ijkl}\bigl((i,j),(j,k),(k,l),(l,i)\bigr|,
+        \notag
+    \end{align}
+    so each leg carries the pair of corner qubits on its side, listed
+    clockwise around the site
+    \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. Two neighbouring
+    sites list the qubits of their common side in opposite orders, and the
+    bond joins equal qubits: it identifies the pair $(a,b)$ at one end with
+    the pair $(b,a)$ at the other. The CZX PEPS reads the down and left labels
+    of the tensor in reverse.
+\end{definition}
+
+\begin{theorem}[The CZX PEPS is a product of plaquette GHZ states]%
+    \label{thm:peps_czx_plaquette_product}
+    \lean{TNLean.PEPS.czx_bond_iff_plaquette, TNLean.PEPS.stateCoeff_czxPEPS}
+    \leanok
+    \uses{def:peps_czx_tensor, def:peps_stateCoeff}
+    On a torus with $w,h\ge 3$ the CZX PEPS has coefficient
+    \begin{align}
+        \Coeff(\sigma)=\prod_{v}\delta\bigl[j_v=i_{v+(1,0)}=k_{v+(0,1)}
+        =l_{v+(1,1)}\bigr],
+        \notag
+    \end{align}
+    where $(i_v,j_v,k_v,l_v)$ are the four qubits of $\sigma(v)$ and the
+    factor at $v$ is the coefficient of $\ket{0000}+\ket{1111}$ on the four
+    qubits around the plaquette at the upper right corner of $v$
+    \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix},
+    \cite{ChenLiuWen2011CZX}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the top and right
+    legs force the vertical bond above $v$ to carry $(i_v,j_v)$ and the
+    horizontal bond to its right to carry $(j_v,k_v)$. The down and left legs
+    then require $(i_{v-(0,1)},j_{v-(0,1)})=(l_v,k_v)$ and
+    $(j_{v-(1,0)},k_{v-(1,0)})=(i_v,l_v)$ at every site, and these
+    conditions, shifted by one site, are equivalent to the plaquette
+    conditions.
+\end{proof}
+
+The review states that the CZX model lies in the non-trivial
+symmetry-protected sector of its on-site $\mathbb{Z}_2$ symmetry
+\cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. This classification is
+not formalized for the two-dimensional state. The boundary symmetry of the
+model is a matrix product unitary, and the three-cocycle attached to a group
+of matrix product unitaries is constructed in
+Theorems~\ref{thm:mpug_anomaly_three_cocycle}
+and~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+
+\subsection{Examples not formalized}
+
+The remaining two-dimensional examples of
+\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} are recorded
+here without formal statements.
+\begin{itemize}
+    \item The two-dimensional AKLT state places singlets on the edges of the
+    lattice and projects onto the symmetric subspace at each site; on the
+    square lattice the tensor is $\Pi_{\mathrm{sym}}(\mathbb{1}\otimes
+    \mathbb{1}\otimes Y\otimes Y)$ with $Y$ the singlet matrix.
+    \item The nearest-neighbour resonating valence bond state is the
+    superposition of all nearest-neighbour singlet coverings, a PEPS of bond
+    dimension three built from a projector onto configurations with exactly
+    one non-vacuum leg together with singlet matrices on the edges.
+    \item The toric code and, more generally, the quantum double of a finite
+    group $G$ have two PEPS representations: a primal one enforcing Gauss'
+    law on the virtual indices at the vertices, and a dual one with group
+    variables on the plaquettes, which is $G$-injective, in fact
+    $G$-isometric, for the regular representation. Neither tensor is given in
+    the source by explicit entries, and $G$-injectivity is not formalized.
+    \item String-net models give PEPS tensors built from the $F$-symbols of a
+    bimodule category.
+    \item A classical model with nearest-neighbour interactions at inverse
+    temperature $\beta$ gives the PEPS
+    $\bigl[\sum_i\ket{i}(i\,i\,i\,i|\bigr](\mathbb{1}\otimes\mathbb{1}
+    \otimes M\otimes M)$ with $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$,
+    whose diagonal expectation values reproduce those of the Gibbs state.
+\end{itemize}

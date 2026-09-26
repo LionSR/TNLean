@@ -40,6 +40,14 @@ For the Kitaev chain of arXiv:2011.12127, Appendix A:
   the decomposition into two injective bond-dimension-one states), and
   that the fermionic injectivity claim awaits graded tensor networks.
 
+For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
+
+- `rmp_peps_examples_small_torus.tex` records that the cluster and CZX
+  tensors are placed on the simple torus graph, on which a torus of width or
+  height two has a single edge between neighbouring sites, so their state
+  formulas are stated for tori of width and height at least three; the GHZ
+  example holds on every torus.
+
 For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
