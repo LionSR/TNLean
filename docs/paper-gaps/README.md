@@ -621,6 +621,11 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
+- `mswc24_sequential_factorization_positive_block_length.tex` records that the
+  sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
+  is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
+  restriction could be traded for the positive bond dimension the source assumes.
 - `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
   fixed-point state of a basis of normal tensors, eq. (19), is stated for an
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
