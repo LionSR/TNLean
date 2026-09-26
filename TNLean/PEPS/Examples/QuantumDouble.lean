@@ -46,7 +46,7 @@ multiplication, `h ↦ h g`, which leaves the differences `h h'⁻¹` unchanged 
 as well; on each leg this is the right-regular representation, unitarily equivalent to the
 left-regular one of arXiv:1001.3807, line 1697, through `h ↦ h⁻¹`. Neither source normalizes
 the tensor, so `G`-isometry holds with the factor `|G|` (see `TNLean.PEPS.IsGIsometric`).
-Documented in `docs/paper-gaps/scp10_quantum_double_g_isometry.tex`.
+Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 **Scope restriction (single tensor):** the review's statements about the whole network are
 not formalized: the virtual symmetry of the primal PEPS under every irreducible representation
@@ -54,7 +54,7 @@ is proved as an identity of one tensor, not as a matrix product operator symmetr
 contracted lattice, and the identification of the equal-weight superposition of plaquette
 colorings with that of the Gauss-law configurations (lines 2460–2461) is not stated; on a
 torus the differences of plaquette colorings are the Gauss-law configurations of trivial
-holonomy. Documented in `docs/paper-gaps/scp10_quantum_double_g_isometry.tex`.
+holonomy. Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 ## Main definitions
 

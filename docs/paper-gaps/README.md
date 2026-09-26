@@ -53,7 +53,7 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
-- `scp10_quantum_double_g_isometry.tex` records that the formal notions of
+- `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the
   printed quantum-double tensor is not normalized (factor `|G|`); that the

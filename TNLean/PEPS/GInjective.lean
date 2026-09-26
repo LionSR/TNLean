@@ -34,7 +34,7 @@ a parameter, and each instance states which representation it uses. The source's
 quantum-double tensor `K` (lines 2906–2911), which it calls `G`-isometric, is not normalized,
 and neither is the review's (line 2465); `IsGIsometric` therefore allows a positive factor `c`
 in `⟪T x, T y⟫ = c ⟪x, y⟫`, which the normalization `T / √c` removes. Documented in
-`docs/paper-gaps/scp10_quantum_double_g_isometry.tex`.
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 ## Main definitions
 
