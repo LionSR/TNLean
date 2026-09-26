@@ -15,14 +15,15 @@ tensors, gauges and targets have entries in the Eisenstein integers `ℤ[ω]` is
 deciding finitely many identities over `ℤ[ω]` and transporting them along the embedding
 `eisensteinToComplex`. This file packages the three transports that every such example needs.
 
-* `MPSTensor.MultiBlockCompression.ofEisenstein` builds the compression datum of
-  Theorem 7.7 from an Eisenstein-integral gauge, its inverse, and the decided block-triangular,
-  matched and unmatched clauses of the conjugated letters; its compression pair is then read off
+* `MPSTensor.MultiBlockCompression.ofEisenstein` builds, as an instance of the ring-generic
+  `MPSTensor.MultiBlockCompression.ofRing`, the compression datum of Theorem 7.7 from an
+  Eisenstein-integral gauge, its inverse, and the decided block-triangular, matched and
+  unmatched clauses of the conjugated letters; its compression pair is then read off
   by `MPSTensor.MultiBlockCompression.left_gaugeOfMatrix` and
   `MPSTensor.MultiBlockCompression.right_gaugeOfMatrix`.
-* `MPSTensor.isNBlkInjective_of_scaled_single` certifies injectivity at a fixed word length,
-  and `MPSTensor.isNormal_of_scaled_single` normality, from finitely many words whose
-  combinations are the matrix units scaled by a common nonzero Eisenstein integer.
+* `MPSTensor.isNBlkInjective_of_scaled_single` certifies injectivity at a fixed word length
+  from finitely many words whose combinations are the matrix units scaled by a common nonzero
+  Eisenstein integer.
 * `MPSTensor.right_intertwiner_eq_zero_of_eisenstein` and
   `MPSTensor.left_intertwiner_eq_zero_of_eisenstein` transport the intertwiner certificates of
   `AssemblyLemmas.lean` from `ℤ[ω]` to the complex numbers.
@@ -34,8 +35,7 @@ deciding finitely many identities over `ℤ[ω]` and transporting them along the
 
 ## Main results
 
-* `MPSTensor.isNBlkInjective_of_scaled_single`, `MPSTensor.isNormal_of_scaled_single`: the
-  block-injectivity and normality certificates.
+* `MPSTensor.isNBlkInjective_of_scaled_single`: the block-injectivity certificate.
 * `MPSTensor.right_intertwiner_eq_zero_of_eisenstein`,
   `MPSTensor.left_intertwiner_eq_zero_of_eisenstein`: the intertwiner certificates.
 -/
@@ -69,24 +69,11 @@ noncomputable def ofEisenstein (BE : Fin d → Matrix (Fin DB) (Fin DB) Eisenste
       (G * BE i * Ginv) (coord ⟨Sum.inl s, p⟩) (coord ⟨Sum.inl s, q⟩) = CE s.1 i p q)
     (hunmatched : ∀ (i : Fin d) (t : Fin z) (p q : Fin 1),
       (G * BE i * Ginv) (coord ⟨Sum.inr t, p⟩) (coord ⟨Sum.inr t, q⟩) = 0) :
-    MultiBlockCompression B S C where
-  z := z
-  ord := ord
-  gauge := gaugeOfMatrix coord (complexOfEisenstein G) (complexOfEisenstein Ginv)
-    (complexOfRing_mul_eq_one _ hG) (complexOfRing_mul_eq_one _ hG')
-  triangular i x y h := by
-    rw [conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hB, ← complexOfEisenstein_mul,
-      ← complexOfEisenstein_mul, complexOfEisenstein_apply, htri i x y h, map_zero]
-  matched i s := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hB,
-      ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, complexOfEisenstein_apply,
-      hmatched i s p q, hC, complexOfEisenstein_apply]
-  unmatched i t := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hB,
-      ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, complexOfEisenstein_apply,
-      hunmatched i t p q, map_zero, Matrix.zero_apply]
+    MultiBlockCompression B S C :=
+  ofRing eisensteinToComplex ord coord
+    (gaugeOfRingMatrix eisensteinToComplex coord G Ginv hG hG')
+    (fun i => G * BE i * Ginv) (fun i => conjMatrix_gaugeOfRingMatrix _ coord hG hG' (hB i))
+    CE hC htri hmatched hunmatched
 
 end MultiBlockCompression
 
@@ -105,20 +92,6 @@ theorem isNBlkInjective_of_scaled_single {D : ℕ} {A : MPSTensor d D}
       c • Matrix.single i j 1) :
     Kraus.IsNBlkInjective A N :=
   isNBlkInjective_of_complexOfRing_smul_single eisensteinToComplex AE hA word coeff
-    (eisensteinToComplex_ne_zero hc) h
-
-/-- **A normality certificate over the Eisenstein integers**: the certificate of
-`isNBlkInjective_of_scaled_single` at a positive length `N` shows the tensor is normal at
-blocking length `N`. -/
-theorem isNormal_of_scaled_single {D : ℕ} {A : MPSTensor d D}
-    (AE : Fin d → Matrix (Fin D) (Fin D) EisensteinInt)
-    (hA : ∀ a, A a = complexOfEisenstein (AE a)) {N : ℕ} (hN : 0 < N) {K : ℕ}
-    (word : Fin D → Fin D → Fin K → Fin N → Fin d) (coeff : Fin D → Fin D → Fin K → EisensteinInt)
-    {c : EisensteinInt} (hc : c ≠ 0)
-    (h : ∀ i j, ∑ k, coeff i j k • evalWordR AE (List.ofFn (word i j k)) =
-      c • Matrix.single i j 1) :
-    Kraus.IsNormal A :=
-  isNormal_of_complexOfRing_smul_single eisensteinToComplex AE hA hN word coeff
     (eisensteinToComplex_ne_zero hc) h
 
 /-! ### Intertwiner certificates over the Eisenstein integers -/
