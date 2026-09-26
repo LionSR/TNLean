@@ -355,6 +355,9 @@ By multilinearity of the periodic contraction,
 
 \begin{theorem}[Sigma action on the constant closed path]%
     \label{thm:asymex_ising_sigma_product}
+    \lean{IsingTwist.mpo_isingSigma_mulVec_const_six,
+        IsingTwist.mpo_isingSigma_normalized_mulVec_const_six}
+    \leanok
     For $N\geq1$,
     \begin{align}
         O_N(\widehat A_\sigma)\ket{6}^{\otimes N}
@@ -367,6 +370,7 @@ By multilinearity of the periodic contraction,
 \end{theorem}
 
 \begin{proof}
+    \leanok
     At input label $6=(\sigma,1,\sigma)$ the only nonzero matrices are
     $\widehat A_\sigma^{0,6}=\sqrt2E_{22}$ and
     $\widehat A_\sigma^{3,6}=\sqrt2E_{33}$.
