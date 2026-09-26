@@ -8,7 +8,7 @@
 \date{2026-09-26}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{What the source states}
 Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
@@ -56,33 +56,41 @@ where $S$ and $S'$ are disjoint sets of virtual indices, then $\braket{\omega}{\
     \leanid{MPSTensor.inner_pair_eq_zero_of_disjoint} in the same module.}
 The embedded pairs of distinct blocks are supported in this way.
 
-\section{Elimination}
-The restriction is eliminated for the pairs of the source.\footnote{Formal
-    declarations: \leanid{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair},
+\section{A discharged instance}
+The hypothesis is discharged for one identification of the pairs, which the
+source does not make.\footnote{Formal declarations:
+    \leanid{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair},
     \leanid{MPSTensor.SectorDecomposition.isIsometry_pairIsometry_embeddedFixedPointPair},
     \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_tensorPower_mulVec_ghzState}
     and \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq} in
     \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
 The canonical form is taken as a sector decomposition, whose bond space is
-$\C^D$ with $D=\sum_jm_jD_j$. The pair of block $j$ is the fixed-point pair of
-a positive semidefinite, unit-trace matrix $\sigma_j$ on the bond space
-$\C^{D_j}$ of $A_j$, placed on both legs on the bond coordinates of one chosen
-copy $k_j$ of that block. The source does not say which copy carries the pair
-when $m_j>1$; every choice is allowed, and the multiplicities enter only through
-the weights $\beta_j=\sum_k\mu_{j,k}^N$, since replacing $P_j$ by
-$P_{j,\infty}$ in $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$
-gives the state $\beta_j\ket{\Omega_j}$ with $N=qM$.
+$\C^D$ with $D=\sum_jm_jD_j$ and whose blocks carry no normality or gauge
+condition. The pair of block $j$ is the fixed-point pair of a positive
+semidefinite, unit-trace matrix $\sigma_j$ on $\C^{D_j}$, a free parameter,
+placed on both legs on the bond coordinates of one chosen copy $k_j$ of that
+block. The coordinates of distinct blocks are distinct, so the right legs of
+the pairs of distinct blocks have disjoint supports and the pairs are
+orthogonal by the disjoint-support lemma; the coordinates of one copy are
+distinct, so $\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. For
+these pairs (\ref{eq:mswc24_local_orthogonality}) holds, and the isometry of
+$W$, the GHZ form and the normalization hold without the hypothesis.
 
-For every choice of copies, the coordinates of distinct blocks are distinct, so
-the right legs of the pairs of distinct blocks have disjoint supports and the
-pairs are orthogonal by the disjoint-support lemma. The coordinates of one copy
-are distinct, so embedding preserves the overlap, and
-$\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. Hence
-(\ref{eq:mswc24_local_orthogonality}) holds for these pairs, and the isometry of
-$W$, the GHZ form, and the normalization $\braket{\Omega'}{\Omega'}=1$ (for
-$M\ge1$ and $(\beta_1,\dots,\beta_b)\ne0$) hold without the hypothesis. The
-statements for an arbitrary family keep the hypothesis, which is then a
-statement about other pairs, not a restriction of the source's claim.
+This orthogonality follows from the placement alone. It uses neither the
+normality of the blocks nor the basis-of-normal-tensors property, which is the
+reason the source gives. The source's pairs are the fixed points of the
+positive parts $P_j$ of the blocked tensor, and the block form of the positive
+part that would identify them with the pairs above is not formalized. When some
+block has multiplicity $m_j\ge2$ that block form fails and no product of pairs
+carrying the weights $\beta_j$ gives the approximating state
+\cite{gap:mswc24_multiplicity_fixed_point}.
+
+\section{Elimination}
+Formalize the block form of the positive part of the blocked tensor for
+$m_j=1$, identify its fixed-point pairs with the embedded pairs above, and
+derive (\ref{eq:mswc24_local_orthogonality}) for them; the case $m_j\ge2$ is
+governed by the false-source record
+\cite{gap:mswc24_multiplicity_fixed_point}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

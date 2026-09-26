@@ -33,18 +33,19 @@ blocks, embedded in the full bond space.
 local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` as a hypothesis. The source asserts it for the
 pairs of the blocks of eq. (S2) after eq. (S7), citing the canonical-form theory, and this
 file does not derive it. Documented in
-`docs/paper-gaps/mswc24_ghz_form_local_orthogonality.tex`. For the pairs of the source,
-the embedded fixed-point pairs of the blocks of a canonical form, the hypothesis is proved
-in `TNLean.MPS.Preparation.NonNormalCanonicalForm`, which specializes these statements
-without it. `inner_pair_eq_zero_of_disjoint` records the off-diagonal half: pair vectors
+`docs/paper-gaps/mswc24_ghz_form_local_orthogonality.tex`. The hypothesis is proved in
+`TNLean.MPS.Preparation.NonNormalCanonicalForm` for fixed-point pairs placed on one copy of
+each block of a canonical form, an identification the source does not make; the source's
+pairs, the fixed points of the positive parts of the blocked tensor, are not formalized.
+`inner_pair_eq_zero_of_disjoint` records the off-diagonal half: pair vectors
 supported on disjoint sets of virtual indices are orthogonal.
 
 The definitions `nonNormalFixedPointState` and
 `nonNormalApproxState` take the pairs `ω_j` and the coefficients `αⱼ` as parameters. Nothing
 here ties `ω_j` to the fixed-point pair of the `j`-th block of a basis of normal tensors,
 `αⱼ` to `ghzAmplitude (bntWeight μ N)`, or the number of blocked sites `M` to `N = qM`;
-these are the intended instances of arXiv:2307.01696, eqs. (19) and (S7), made in
-`TNLean.MPS.Preparation.NonNormalCanonicalForm`.
+these are the intended instances of arXiv:2307.01696, eqs. (19) and (S7), one version of
+which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
 
 ## Main declarations
 

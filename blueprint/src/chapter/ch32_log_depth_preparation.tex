@@ -495,8 +495,7 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     \lean{MPSTensor.SectorDecomposition.copyCoord,
         MPSTensor.SectorDecomposition.embeddedFixedPointPair,
         MPSTensor.SectorDecomposition.canonicalFixedPointState,
-        MPSTensor.SectorDecomposition.canonicalApproxState,
-        MPSTensor.SectorDecomposition.bntWeight_weight, MPSTensor.embedPair}
+        MPSTensor.embedPair}
     \leanok
     \uses{def:bnt, def:sector_weight_data, def:prep_fixed_point_tensor,
         thm:ldpolar_tensor_decomposition, def:correlation_length}
@@ -527,17 +526,26 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     The following identifications are made. The canonical form is a sector
     decomposition, whose flattened direct sum $\bigoplus_{(j,k)}\mu_{j,k}A_j$
     is the displayed tensor up to the order of the bond coordinates, so the
-    bond space of $A$ is $\C^D$ with $D=\sum_jm_jD_j$. The pair state of
-    $A_j$ is $\ket{\omega_j}=\sum_{r,l}(\sqrt{\sigma_j})_{rl}\ket{r}\ket{l}$
-    for the unit-trace right fixed point $\sigma_j$ of $\E_{A_j}$ in the gauge
-    (\ref{eq:ldp_normal_gauge}). The source
-    calls the pairs vectors of $\C^{D^2}=\C^D\otimes\C^D$ without saying where
-    the pair of block $j$ sits when $m_j>1$; here it is placed, on both legs,
-    on the bond coordinates of one chosen copy $k_j$ of that block, and every
-    choice is allowed. The multiplicities enter only through $\beta_j$:
-    replacing $P_j$ by $P_{j,\infty}$ in the block
-    $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$ gives the
-    state $\beta_j\ket{\Omega_j}$ (Theorem~\ref{thm:ldp_local_orthogonality}).
+    bond space of $A$ is $\C^D$ with $D=\sum_jm_jD_j$; the blocks carry no
+    normality, basis-of-normal-tensors or gauge condition. The pair state of
+    block $j$ is $\ket{\omega_j}=\sum_{r,l}(\sqrt{\sigma_j})_{rl}\ket{r}\ket{l}$
+    for a matrix $\sigma_j$ on $\C^{D_j}$ that is a parameter of the
+    construction, intended to be the unit-trace right fixed point of
+    $\E_{A_j}$ in the gauge (\ref{eq:ldp_normal_gauge}). The source calls the
+    pairs vectors of $\C^{D^2}=\C^D\otimes\C^D$ without saying where the pair
+    of block $j$ sits when $m_j>1$; here it is placed, on both legs, on the
+    bond coordinates of one chosen copy $k_j$ of that block. With these pairs
+    the fixed-point state $\ket{\Omega'}$ is formalized; the approximating
+    state is formalized only as a family over arbitrary pairs
+    (Definition~\ref{def:ldp_pair_family_fixed_point}).
+
+    When some block has multiplicity $m_j\geq2$, the source's construction
+    fails: no product of pairs carrying the weights $\beta_j$ gives, after
+    $V^{\otimes M}$, an approximation of $\ket{\phi_N}$. For
+    $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$ the
+    overlap with $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$ tends to
+    $1/\sqrt5$ as $M\to\infty$, for every $q$
+    \cite{gap:mswc24_multiplicity_fixed_point}.
 \end{definition}
 
 \begin{definition}[Fixed-point state of a family of pairs]
@@ -583,16 +591,23 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     of the copies $k_j$ the embedded pairs satisfy
     $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$. The chosen coordinates of
     block $j$ carry the block $\mu_{j,k_j}A_j$ of $A$, and embedding the pair
-    embeds its product state. Moreover, for $M\geq1$ the tensor
+    embeds its product state. Moreover, for $M\geq1$, in the bond space
+    $\C^{D_j}\otimes\C^{D_j}$ of block $j$ alone, the tensor
     $\bigoplus_k\mu_{j,k}^qP_{j,\infty}$ generates on $M$ sites the state
     $\bigl(\sum_k\mu_{j,k}^{qM}\bigr)\ket{\Omega_j}=\beta_j\ket{\Omega_j}$ with
-    $N=qM$. The orthogonality is asserted after
-    \cite[eq.~(S7)]{Malz2024Preparation}.
+    $N=qM$ and $\ket{\Omega_j}$ formed from the unembedded pair. The
+    orthogonality is asserted after \cite[eq.~(S7)]{Malz2024Preparation},
+    where the reason given is that the blocks form a basis of normal tensors;
+    here it follows from the placement of the pairs alone, and the
+    identification of these pairs with the fixed points of the positive parts
+    of the blocked tensor is not formalized
+    \cite{gap:mswc24_ghz_form_local_orthogonality}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:prep_pair_product_norm}
+    \uses{thm:prep_pair_norm, thm:prep_mpv_fixed_point_tensor,
+        thm:mpv_decomposition}
     Copies of distinct blocks occupy distinct bond coordinates, so the right
     legs of $\omega_j$ and $\omega_{j'}$ with $j\neq j'$ are supported on
     disjoint sets and the pairs are orthogonal by

@@ -19,10 +19,12 @@ normal positive part `P_j` by its fixed point `P_{j,∞}` and obtain the state
 gives the GHZ form `|Ω'⟩ = W^{⊗M} |χ_M⟩` of eq. (19).
 
 `TNLean.MPS.Preparation.NonNormalFixedPoint` states these objects for an arbitrary pair
-family and takes the local orthogonality as a hypothesis. This file supplies the instance
-of the source: the pairs are the fixed-point pairs of the blocks of a sector
-decomposition, embedded in the bond space of the assembled tensor, and the local
-orthogonality is proved.
+family and takes the local orthogonality as a hypothesis. This file makes one instance of
+these objects for a canonical form: the pairs are the fixed-point pairs of the blocks of a
+sector decomposition, each embedded in the bond space of the assembled tensor on the
+coordinates of one copy of its block, and their local orthogonality is proved. The source
+does not make this identification, and the orthogonality proved here follows from the
+placement alone.
 
 ## Identifications made
 
@@ -30,30 +32,38 @@ The canonical form of eq. (S2) is a `SectorDecomposition`: its basis blocks are 
 `A_j`, its copies of block `j` carry the weights `μ_{j,k}`, and its assembled tensor
 `SectorDecomposition.toTensor` is the direct sum `⊕_{(j,k)} μ_{j,k} A_j`, which is
 `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j` up to the order of the bond coordinates. The bond
-space of `A` is `ℂ^D` with `D = P.totalDim`.
+space of `A` is `ℂ^D` with `D = P.totalDim`. A `SectorDecomposition` carries no normality,
+basis-of-normal-tensors, or gauge condition on its blocks.
 
-* **The weights.** `βⱼ` is `bntWeight P.weight N`, which is the sector coefficient
-  `P.coeff N j` (`bntWeight_weight`), and `αⱼ^{(N)}` is `ghzAmplitude` of it.
-* **The pairs.** Block `j` carries a matrix `σ_j` on its own bond space `ℂ^{D_j}`; in the
-  gauge of eq. `eq:Ek_decomp` it is the positive definite, unit-trace right fixed point of
-  the transfer map of `A_j`, and its pair is `fixedPointPair σ_j` (see
-  `TNLean.MPS.Preparation.FixedPointPairs` for the vectorization convention). The only
-  properties used here are `σ_j ≥ 0` and `Tr σ_j = 1`.
+* **The weights.** `βⱼ` is the sector coefficient `P.coeff N j = ∑ₖ μ_{j,k}^N`, and
+  `αⱼ^{(N)}` is `ghzAmplitude` of it.
+* **The pairs.** Block `j` carries a matrix `σ_j` on its own bond space `ℂ^{D_j}`, a
+  parameter of the construction; the intended instance is the positive definite,
+  unit-trace right fixed point of the transfer map of `A_j` in the gauge of eq.
+  `eq:Ek_decomp`, but nothing here ties `σ_j` to `A_j`. Its pair is `fixedPointPair σ_j`
+  (see `TNLean.MPS.Preparation.FixedPointPairs` for the vectorization convention). The
+  only properties used are `σ_j ≥ 0` and `Tr σ_j = 1`.
 * **The embedding.** The source calls the pairs vectors of `ℂ^{D²}`, the physical space of
   the positive part `P` of the blocked tensor, which is the bond space `ℂ^D ⊗ ℂ^D` of `A`,
-  but does not say where the pair of block `j` sits there when `m_j > 1`. Here the pair of
+  but does not say where the pair of block `j` sits when `m_j > 1`. Here the pair of
   block `j` is placed on the coordinates of one chosen copy `κ j` of that block
-  (`SectorDecomposition.copyCoord`), on both legs. Every choice gives an isometric copy of
-  the pair, and pairs of distinct blocks sit on disjoint coordinates whatever copies are
-  chosen, so the family is orthonormal for every choice.
-* **The multiplicity.** Replacing `P_j` by `P_{j,∞}` in the block
-  `diag(μ_{j,1}^q, …, μ_{j,m_j}^q) ⊗ P_j` of the positive part gives a tensor whose state on
-  `M` blocked sites is `βⱼ |Ω_j⟩` with `N = qM`
-  (`mpv_toTensorFromBlocks_fixedPointTensor`); this is how the multiplicities enter the
-  weights of eq. (S7), and the pair `ω_j` itself does not depend on them.
+  (`SectorDecomposition.copyCoord`), on both legs. Pairs of distinct blocks then sit on
+  disjoint coordinates whatever copies are chosen, so the family is orthonormal; this uses
+  neither normality nor the basis-of-normal-tensors property.
 
-The statement of eq. (S2) that the positive part `P` of the blocked tensor has the block
-form `⊕ⱼ diag(μ_{j,k}^q) ⊗ P_j` is not formalized here, and neither is the error estimate.
+**False source (multiplicity):** when some block has multiplicity `m_j ≥ 2`, no product
+of pairs, on one copy or spread over the copies, makes the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of
+eq. (S7) approximate `|φ_N⟩`. For `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` (two
+one-dimensional normal blocks, the first with `m_1 = 2` and weights `(1, 1)`) the target is
+proportional to `2|0⋯0⟩ + |1⋯1⟩`, but `V` maps the one-copy pair of the first block to
+`|0⋯0⟩/√2` at every site, and the overlap with the target tends to `1/√5` as `M → ∞`,
+for every `q`. The block form `⊕ⱼ diag(μ_{j,k}^q) ⊗ P_j` of the positive part asserted
+in eq. (S5) fails in this case. Documented in
+`docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`. The approximating state is
+therefore not instantiated with these pairs; `nonNormalApproxState` states it for an
+arbitrary family.
+
+Neither the block form of eq. (S5) nor the error estimate is formalized here.
 
 ## Main declarations
 
@@ -62,22 +72,21 @@ form `⊕ⱼ diag(μ_{j,k}^q) ⊗ P_j` is not formalized here, and neither is th
 * `MPSTensor.inner_embedPair_self`, `MPSTensor.inner_embedPair_eq_zero_of_disjoint` —
   embedding along one injective map preserves overlaps, and embeddings along maps with
   disjoint ranges are orthogonal.
-* `MPSTensor.mpv_toTensorFromBlocks_fixedPointTensor` — `⊕ₖ μₖ^q P_∞` generates
-  `(∑ₖ μₖ^{qM}) |Ω⟩` on `M` sites.
+* `MPSTensor.mpv_toTensorFromBlocks_fixedPointTensor` — `⊕ₖ μₖ^q P_∞`, formed in the
+  bond space of one block, generates `(∑ₖ μₖ^{qM}) |Ω⟩` on `M` sites.
 * `MPSTensor.SectorDecomposition.copyCoord` — the bond coordinates of one copy of a block.
-* `MPSTensor.SectorDecomposition.embeddedFixedPointPair` — the pairs `ω_j` of eq. (S7).
+* `MPSTensor.SectorDecomposition.embeddedFixedPointPair` — the fixed-point pairs of the
+  blocks, each on one copy of its block.
 * `MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair` — local orthogonality
-  `⟨ω_j|ω_{j'}⟩ = δ_{jj'}`.
+  `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` of these pairs.
 * `MPSTensor.SectorDecomposition.canonicalFixedPointState` — `|Ω'⟩` of eq. (19) for the
   canonical form, with its GHZ form and normalization.
-* `MPSTensor.SectorDecomposition.canonicalApproxState` — the approximating state of
-  eq. (S7) for the canonical form.
 
 ## References
 
 * [MSWC23] D. Malz, G. Styliaris, Z.-Y. Wei, J. I. Cirac,
   *Preparation of matrix product states with log-depth quantum circuits*,
-  arXiv:2307.01696, eqs. (19), (S2), (S4), (S7).
+  arXiv:2307.01696, eqs. (19), (S2), (S4), (S5), (S7).
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -194,10 +203,14 @@ theorem pairProductState_embedPair {M : ℕ} {ι : Fin D' → Fin D} (hι : Func
 
 /-! ## The multiplicity of a block -/
 
-/-- Replacing the normal part `P_j` of the block `diag(μ_{j,1}^q, …, μ_{j,m_j}^q) ⊗ P_j` by
-its fixed point `P_{j,∞}` (arXiv:2307.01696, the sentence before eq. (S7)) gives the tensor
-`⊕ₖ μ_{j,k}^q P_{j,∞}`, whose state on `M ≥ 1` blocked sites is
-`(∑ₖ μ_{j,k}^{qM}) |Ω_j⟩ = βⱼ |Ω_j⟩` with `N = qM` (eqs. (S4) and (S7)). -/
+/-- The tensor `⊕ₖ μₖ^q P_∞`, formed in the bond space `ℂ^D ⊗ ℂ^D` of one block from the
+fixed-point tensor `P_∞` of a matrix `σ`, generates on `M ≥ 1` blocked sites the state
+`(∑ₖ μₖ^{qM}) |Ω⟩`, with `|Ω⟩` the product of the pairs of `σ` in that same bond space.
+This is the replacement of `P_j` by `P_{j,∞}` in the block
+`diag(μ_{j,1}^q, …, μ_{j,m_j}^q) ⊗ P_j` of arXiv:2307.01696, eq. (S5), read in the block's
+own bond space; it is not a statement about the embedded pairs of the assembled tensor, and
+it does not show that the multiplicities enter eq. (S7) only through `βⱼ`, which fails when
+some `m_j ≥ 2` (`docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`). -/
 theorem mpv_toTensorFromBlocks_fixedPointTensor {m : ℕ} (μ : Fin m → ℂ)
     (σ : Matrix (Fin D) (Fin D) ℂ) (q : ℕ) {M : ℕ} [NeZero M] (τ : Fin M → Fin (D * D)) :
     mpv (toTensorFromBlocks (dim := fun _ : Fin m => D) (fun k => μ k ^ q)
@@ -211,12 +224,6 @@ theorem mpv_toTensorFromBlocks_fixedPointTensor {m : ℕ} (μ : Fin m → ℂ)
 /-! ## The pairs of a canonical form -/
 
 namespace SectorDecomposition
-
-/-- The weight `βⱼ = ∑ₖ μ_{j,k}^N` of arXiv:2307.01696, eq. (S4), for a canonical form
-of eq. (S2) given as a sector decomposition, is its sector coefficient. -/
-theorem bntWeight_weight (P : SectorDecomposition d) (N : ℕ) :
-    bntWeight P.weight N = P.coeff N :=
-  rfl
 
 /-- The bond coordinate, in the assembled tensor `P.toTensor`, of the coordinate `a` of the
 copy `k` of the block `j`: the position of the block `μ_{j,k} A_j` in the direct sum
@@ -263,10 +270,12 @@ theorem toTensor_copyCoord (P : SectorDecomposition d) (i : Fin d) (j : Fin P.ba
 
 /-- The fixed-point pair `|ω_j⟩` of the block `j` of a canonical form (arXiv:2307.01696,
 eq. (S2)), embedded in the bond space `ℂ^D ⊗ ℂ^D` of the assembled tensor on the
-coordinates of the copy `κ j` of that block: the pairs of `|Ω_j⟩` in eq. (S7). Here `σ j`
-is the right fixed point of the block `A_j` in the gauge of eq. `eq:Ek_decomp`. The source
-does not say which copy carries the pair; the choice is the parameter `κ`, and every choice
-gives an orthonormal family (`inner_embeddedFixedPointPair`). -/
+coordinates of the copy `κ j` of that block. The matrix `σ j` is a parameter; the intended
+instance is the right fixed point of the block `A_j` in the gauge of eq. `eq:Ek_decomp`.
+The source does not say where the pair sits when the block has several copies; the copy
+is the parameter `κ`. Every choice gives an orthonormal family
+(`inner_embeddedFixedPointPair`), but when some block has several copies no choice makes
+eq. (S7) approximate the state (`docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`). -/
 noncomputable def embeddedFixedPointPair (P : SectorDecomposition d)
     (σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (j : Fin P.basisCount) :
@@ -274,8 +283,10 @@ noncomputable def embeddedFixedPointPair (P : SectorDecomposition d)
   embedPair (P.copyCoord j (κ j)) (fixedPointPair (σ j))
 
 /-- Local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` of the embedded fixed-point pairs of a
-canonical form, asserted in arXiv:2307.01696 after eq. (S7): distinct blocks occupy
-disjoint bond coordinates, and each pair has norm `Tr σ_j = 1`. -/
+canonical form, the property asserted in arXiv:2307.01696 after eq. (S7): distinct blocks
+occupy disjoint bond coordinates, and each pair has norm `Tr σ_j = 1`. The proof uses only
+the placement and `σ_j ≥ 0`, `Tr σ_j = 1`, not normality or the basis-of-normal-tensors
+property the source invokes. -/
 theorem inner_embeddedFixedPointPair (P : SectorDecomposition d)
     {σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1)
@@ -309,7 +320,7 @@ noncomputable def canonicalFixedPointState (P : SectorDecomposition d)
     (σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (N M : ℕ) :
     (Fin M → Fin P.totalDim × Fin P.totalDim) → ℂ :=
-  nonNormalFixedPointState (ghzAmplitude (bntWeight P.weight N)) (P.embeddedFixedPointPair σ κ)
+  nonNormalFixedPointState (ghzAmplitude (P.coeff N)) (P.embeddedFixedPointPair σ κ)
 
 /-- The GHZ form of the fixed-point state of a canonical form, arXiv:2307.01696, the
 paragraph after eq. (19): `|Ω'⟩ = W^{⊗M} |χ_M⟩` in the bond coordinates `R_k L_{k+1}`, with
@@ -320,7 +331,7 @@ theorem canonicalFixedPointState_eq_tensorPower_mulVec_ghzState (P : SectorDecom
     (p : Fin M → Fin P.totalDim × Fin P.totalDim) :
     P.canonicalFixedPointState σ κ N M ((bondRegrouping M P.totalDim).symm p) =
       (Matrix.tensorPower M (pairIsometry (P.embeddedFixedPointPair σ κ)) *ᵥ
-        ghzState (ghzAmplitude (bntWeight P.weight N))) p :=
+        ghzState (ghzAmplitude (P.coeff N))) p :=
   nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState _ _ p
 
 /-- The fixed-point state of a canonical form is normalized, `⟨Ω'|Ω'⟩ = 1`, on every ring
@@ -331,23 +342,11 @@ theorem canonicalFixedPointState_norm_sq (P : SectorDecomposition d)
     {σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) {N M : ℕ} (hM : M ≠ 0)
-    (hβ : bntWeight P.weight N ≠ 0) :
+    (hβ : P.coeff N ≠ 0) :
     ∑ c : Fin M → Fin P.totalDim × Fin P.totalDim,
       star (P.canonicalFixedPointState σ κ N M c) * P.canonicalFixedPointState σ κ N M c =
         1 :=
   nonNormalFixedPointState_norm_sq hM hβ (P.inner_embeddedFixedPointPair hσ htr κ)
-
-/-- The approximating state `|\tilde{φ}_N⟩ = V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` of
-arXiv:2307.01696, eq. (S7) and the text following it, for a canonical form of eq. (S2): `V`
-is the partial isometry of the polar decomposition of the `q`-site blocked assembled
-tensor, `|Ω'⟩` is `canonicalFixedPointState` with `N = qM`, and the value is the zero
-vector when the denominator vanishes. -/
-noncomputable def canonicalApproxState (P : SectorDecomposition d)
-    (σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
-    (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (q M : ℕ) :
-    (Fin M → Fin (blockPhysDim d q)) → ℂ :=
-  nonNormalApproxState P.toTensor q M (ghzAmplitude (bntWeight P.weight (q * M)))
-    (P.embeddedFixedPointPair σ κ)
 
 end SectorDecomposition
 
