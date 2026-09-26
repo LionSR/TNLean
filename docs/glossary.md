@@ -14,6 +14,37 @@ For new declarations, prefer namespace overloading (`Kraus.IsInjective`,
 the predicate name. Preserve a paper's established terminology when a declaration
 is deliberately source-faithful.
 
+## Two-site matrix product unitaries
+
+### `MPOTensor.TwoSiteStandardFormData`
+
+- **Declaration:** `MPOTensor.TwoSiteStandardFormData W u v`, for a tensor
+  `W : MPOTensor (d * d) D`, a gate from the physical pair to the ordered
+  intermediate pair `(ℓ,r)`, and a gate from `(r,ℓ)` back to the physical pair.
+- **Defined in:** `TNLean/MPS/MPU/TwoSiteStandardForm.lean`.
+- **Meaning:** the dimensions are positive, both supplied gates are unitary
+  between their coordinate spaces, the second gate contracts as
+  $v^{(i_1,i_2)}_{s,l}=\sum_\beta (X_1)_{(i_1,\beta),s}(X_2)_{(\beta,i_2),l}$,
+  and the open tensor contracts as
+  $W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}
+  =\sum_{l,s}(X_2)_{(\alpha,i_1),l}u_{(l,s),(j_1,j_2)}
+  (X_1)_{(i_2,\gamma),s}$.
+- **Source:** arXiv:1703.09188, equations `uuvv` and `StandardForm`, and
+  Definition `SF`, `Papers/1703.09188/paper_v2.tex:532-543,603-622`.
+- **Sanctioned bridge:**
+  `MPOTensor.IsMPUCanonicalFormII.twoSiteStandardFormData` constructs this
+  datum for `blockTwo U` when `U` is simple and carries the full-support
+  canonical-form-II presentation.
+  `MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_blockTensor`
+  chooses a positive simple block of length at most $D^4$ and relates its
+  two-site block to direct blocking at length $2k$ by an explicit physical
+  relabeling.
+- **Caveat:** the generic datum does not assume `W.IsMPU` or identify its
+  supplied gates with a selected source-cut factorization. The open equation
+  has input pair `(j₁,j₂)` in that order; the alternative reflected periodic
+  equation is source-specific. The construction from canonical form II is
+  restricted as recorded in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+
 ## Normality
 
 ### `Kraus.IsNormal`
