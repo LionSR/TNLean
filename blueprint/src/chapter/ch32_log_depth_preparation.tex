@@ -522,7 +522,8 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 \begin{definition}[Fixed-point state of a family of pairs]
     \label{def:ldp_pair_family_fixed_point}
     \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
-        MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState}
+        MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
+        MPSTensor.pairIsometry, MPSTensor.ghzState, Matrix.tensorPower}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition}
     Let $\omega_1,\dots,\omega_b\in\mathbb C^D\otimes\mathbb C^D$ be any vectors,
@@ -534,6 +535,11 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     $V^{\otimes M}\ket{\Omega'}/\lVert V^{\otimes M}\ket{\Omega'}\rVert$, and zero when
     the denominator vanishes. For multiplicity coefficients $\mu_{j,k}$ put
     $\beta_j=\sum_k\mu_{j,k}^N$ and $\alpha^{(N)}_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$.
+    Let $W\colon\mathbb C^b\to\mathbb C^D\otimes\mathbb C^D$,
+    $\ket{j}\mapsto\ket{\omega_j}$, be the map whose $j$-th column is $\omega_j$,
+    let $X^{\otimes M}$ denote the $M$-fold tensor power of a matrix $X$, with entries
+    $(X^{\otimes M})_{p,s}=\prod_{k=1}^M X_{p_k,s_k}$, and put
+    $\ket{\chi_M}=\sum_j\alpha_j\ket{j}^{\otimes M}\in(\mathbb C^b)^{\otimes M}$.
     Definition~\ref{def:ldp_non_normal_fixed_point} is the instance in which
     $\omega_j$ is the pair state of the normal block $A_j$ embedded in the bond space
     of $A$, $\alpha=\alpha^{(N)}$, and $N=qM$; none of these three identifications is
@@ -542,15 +548,16 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{theorem}[GHZ form of the fixed-point state]
     \label{thm:ldp_ghz_form}
-    \lean{MPSTensor.isIsometry_pairIsometry,
+    \lean{MPSTensor.isIsometry_pairIsometry, Matrix.IsIsometry.tensorPower,
         MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
         MPSTensor.nonNormalFixedPointState_norm_sq}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point}
-    If $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
-    $W\colon\ket{j}\mapsto\ket{\omega_j}$ is an isometry and
-    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ with
-    $\ket{\chi_M}=\sum_j\alpha^{(N)}_j\ket{j}^{\otimes M}$, up to the
+    With $W$, $X^{\otimes M}$ and $\chi_M$ as in
+    Definition~\ref{def:ldp_pair_family_fixed_point}, formed with
+    $\alpha=\alpha^{(N)}$, if $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
+    $W$ and $W^{\otimes M}$ are isometries and
+    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$, up to the
     regrouping of the legs $R_kL_{k+1}$. If moreover $M\geq1$ and
     $(\beta_1,\dots,\beta_b)\neq0$, then $\braket{\Omega'}{\Omega'}=1$.
     This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}. The same
@@ -561,7 +568,13 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 \begin{proof}
     \leanok
     \uses{thm:prep_pair_product_norm}
-    The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$. Expanding
+    The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$, and the
+    entries of $(W^{\otimes M})^\dagger W^{\otimes M}$ factor over the sites,
+    \begin{align*}
+        \bigl((W^{\otimes M})^\dagger W^{\otimes M}\bigr)_{s,t}
+        =\prod_{k=1}^M(W^\dagger W)_{s_k,t_k}=\delta_{st}.
+    \end{align*}
+    Expanding
     $\ket{j}^{\otimes M}$ in the product basis gives
     $W^{\otimes M}\ket{j}^{\otimes M}=\bigotimes_k\ket{\omega_j}$, and summing with the
     weights $\alpha^{(N)}_j$ gives $\ket{\Omega'}$. Overlaps of the product states factor
