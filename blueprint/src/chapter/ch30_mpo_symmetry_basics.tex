@@ -153,8 +153,9 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 
 A matrix product operator symmetry is given by a finite family of operators
 satisfying the fusion rule~\eqref{eq:mpo_fusion_algebra}~\cite{GarreRubio2023MPOSym}.
-Under periodic boundary conditions, the symmetry acts on periodic matrix product
-states as an invariant subspace~\cite[Section~3]{GarreRubio2023MPOSym}; see
+The source defines the symmetry by invariance of the states with arbitrary
+boundary conditions; the statements below use only its consequence for
+periodic boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \cite{gap:glm23_mpo_symmetric_mps_scope}.
 
 \begin{definition}[Matrix product operator fusion algebra]%
@@ -721,9 +722,9 @@ relation between word traces has nonnegative integer coefficients.
     \uses{def:fusion_unit_invertible}
     The operators $1,U,U^\dagger$ of
     Section~\ref{sec:asymex_z3anomalous} form a group-like fusion algebra in
-    which every label is invertible. The fusion ring isomorphism
-    $\C[\Z_3]\cong \C^3$ does not detect the nontrivial three-cocycle
-    $[\omega]\neq 1\in H^3(\Z_3,\mathrm{U}(1))$ of this representation; the
+    which every label is invertible. The fusion ring does not detect the
+    nontrivial three-cocycle class $[\omega]\neq 1\in H^3(\Z_3,\C^\times)$ of
+    this representation; the
     obstruction to invariant normal states comes from
     Theorem~\ref{thm:mpoalg_no_symmetric_normal}.
 \end{example}
