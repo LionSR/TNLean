@@ -217,12 +217,15 @@ stacking and $\sigma$ for column stacking.
 
 \begin{theorem}[Convergence of the blocked transfer map of a normal tensor]
     \label{thm:prep_blocked_transfer_limit_normal}
-    \lean{MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive}
+    \lean{MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive,
+        MPSTensor.isNormalTensor_of_isIrreducibleFamily_leftCanonical}
     \leanok
     \uses{def:prep_fixed_point_tensor, def:blocked_tensor,
-        def:left_canonical_tensor, def:irreducible_tensor}
+        def:left_canonical_tensor, def:irreducible_tensor, def:nt_cpsv}
     Let $A$ be irreducible and left-canonical, with $1$ the only eigenvalue
-    of $\E_A$ of modulus one, and let $\sigma$ be positive definite with
+    of $\E_A$ of modulus one. Then $A$ is a normal tensor in the sense of
+    Definition~\ref{def:nt_cpsv}, since $\E_A$ is a channel and so has
+    spectral radius one. Let $\sigma$ be positive definite with
     $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$. Then
     $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$, for every
     $X\in\MN{D}$.

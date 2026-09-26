@@ -36,6 +36,7 @@ import TNLean.MPS.Examples.MajumdarGhoshDimer
 import TNLean.MPS.Examples.MajumdarGhoshGroundSpace
 import TNLean.MPS.Examples.MajumdarGhoshHamiltonian
 import TNLean.MPS.Examples.MajumdarGhoshLowerBound
+import TNLean.MPS.Examples.MajumdarGhoshTotalSpin
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
