@@ -2051,7 +2051,9 @@ every prescribed admissible rate from the fixed intersection threshold, as
 Section~\ref{sec:fnw-dimension-prefactor-obstruction} demonstrates. The formal
 $c$ is the rate-dependent constant of Lemma~5.2.
 
-A corrected eventual statement permits any prescribed $c>0$. Choose a rate
+A corrected eventual statement permits any prescribed $c>0$, for every rate
+$\lambda>0$ strictly above the moduli of the nonunit transfer eigenvalues;
+the projector bound additionally requires $\lambda<1$. Choose a rate
 $\mu$ strictly between the remainder spectral radius and $\lambda$. The bound
 $a(n)\leq C_\mu\mu^n$ implies $a(n)\leq c\lambda^n$ for all sufficiently
 large $n$, since $(\mu/\lambda)^n\to0$. Increasing this onset to exceed an
@@ -2061,9 +2063,10 @@ formal statements are
 \leanid{MPSTensor.IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor}
 and
 \leanid{MPSTensor.IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor}.
-The onset depends on the state, rate, and prefactor. In particular, taking
-$c=k^2$ in this eventual statement does not establish the printed assertion
-from the original injectivity threshold.
+The onset depends on the state, rate, and prefactor. For no value of $c$,
+including $c=k^2$, is this onset shown to equal the injectivity threshold, so
+the printed assertion, with prefactor $k^2$ from that threshold, remains
+unformalized.
 
 An earlier blocked-to-original comparison derived the bound
 $\operatorname{gap}(H_{Np,2p}(A))\geq1/8$ for $N\geq4$, on periodic lengths

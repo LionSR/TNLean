@@ -491,6 +491,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   with constants uniform in the volume and violates the printed bound. The
   note also shows that the vanishing of the martingale differences below the
   threshold is the minimal repair, and that repaired theorem is formalized.
+- `cpgsv21_block_parent_interaction_range.tex` records that the overlap
+  argument for block-injective parent Hamiltonians first constructs a gapped
+  range chosen by the argument, and the two-range comparison that transfers
+  the gap to every range allowed by the printed interaction condition.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison, including the lower-endpoint mismatch in the printed proof of
   Nachtergaele's Theorem 2.1(i), whose resolution is in the note above. The
