@@ -15,10 +15,11 @@ import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 The decorated CZX matrix product unitary `U` of arXiv:2405.00439, Section III.D, exchanges the
 product states `|0⟩^{⊗ N}` and `|1⟩^{⊗ N}` at every positive length. With the representation
 `czxFamily` of `ℤ₂`, the two product states form a pair of blocks permuted by the group, and
-the L-symbols of `MPOTensor.GroupFamily.BlockActionData` are defined. This file computes them
-for explicit action tensors and recovers the anomaly from them:
-`L^0_{g,g} = 1`, `L^1_{g,g} = -1`, and the compatibility relation gives
-`ω(g,g,g) = L^0_{g,g} / L^1_{g,g} = -1`. This is the second route to the anomaly in
+the L-symbols of `MPOTensor.GroupFamily.BlockActionData` are defined. This file gives explicit
+action tensors and recovers the anomaly from the L-symbols: for every choice of action tensors
+the compatibility relation gives `ω(g,g,g) = L^0_{g,g} L^0_{g,e} / (L^1_{g,g} L^0_{e,g})`, and
+this ratio equals `-1`. The individual L-symbols depend on the choice of action tensors and are
+not computed here. This is the second route to the anomaly in
 arXiv:2405.00439, lines 1246--1339, and it agrees with the direct computation
 `CZXCompression.czxFusionData_omega_gen_gen_gen`.
 

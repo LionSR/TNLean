@@ -999,6 +999,23 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
   theorem; the two definitions agree by unfolding.
 
+### `MPOTensor.GroupFamily.CarriesMPV`
+
+- **Declaration:** `MPOTensor.GroupFamily.CarriesMPV T B B' : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`.
+- **Meaning:** the periodic operator $O_N(T)$ carries the periodic vector
+  $\ket{V^{(N)}(B)}$ to $\ket{V^{(N)}(B')}$ for every chain length $N\geq1$;
+  nothing is asserted at $N=0$. The two tensors may have different bond
+  dimensions.
+- **Source:** arXiv:2203.12563, line 1064, the relation
+  $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ for blocks permuted by the group.
+- **Sanctioned bridges:** `FixesMPV T A` is the case $B=B'=A$, by unfolding.
+  `CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
+  equality of the action tensor with $B'$, the input of
+  `MPOTensor.GroupFamily.nonempty_blockActionData`.
+- **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
+  definitions agree by unfolding.
+
 ## Symmetries of matrix product density operators
 
 ### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
