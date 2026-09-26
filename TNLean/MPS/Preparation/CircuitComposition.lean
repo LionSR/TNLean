@@ -222,7 +222,7 @@ private theorem zip_union :
       rcases List.mem_cons.mp hL with rfl | hL
       · exact Layer.union_isIn hL₁ hL₂ hR
       · exact hMs L hL
-    · show circuitOp Ls₁ * L₁.op * (circuitOp Ls₂ * L₂.op) =
+    · change circuitOp Ls₁ * L₁.op * (circuitOp Ls₂ * L₂.op) =
         circuitOp Ms * (Layer.union L₁ L₂ hL₁ hL₂ hR).op
       rw [← hMeq, Layer.union_op]
       have hc : Commute (circuitOp Ls₂) L₁.op :=
@@ -247,11 +247,12 @@ theorem par {R₁ R₂ : Set (Fin N)} (hR : Disjoint R₁ R₂) {U₁ U₂ : Mat
 
 /-- Circuits in parallel: a family of circuits of depth `T` acting inside pairwise disjoint
 sets of sites is a circuit of depth `T`. -/
-theorem finset_noncommProd {ι : Type*} [DecidableEq ι] (s : Finset ι) (R : ι → Set (Fin N))
+theorem finset_noncommProd {ι : Type*} (s : Finset ι) (R : ι → Set (Fin N))
     (hR : (s : Set ι).PairwiseDisjoint R) (U : ι → Matrix (Cfg d N) (Cfg d N) ℂ)
     (hU : ∀ i ∈ s, IsCircuitOn (R i) T (U i))
     (hcomm : (s : Set ι).Pairwise (Function.onFun Commute U)) :
     IsCircuitOn (⋃ i ∈ s, R i) T (s.noncommProd U hcomm) := by
+  classical
   induction s using Finset.induction_on with
   | empty => simpa using one (d := d) (∅ : Set (Fin N)) T
   | insert a s ha ih =>

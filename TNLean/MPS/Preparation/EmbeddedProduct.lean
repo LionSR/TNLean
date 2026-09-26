@@ -31,9 +31,9 @@ theorem commute_embedOp_of_disjoint {e e' : Fin m → Fin n} (he : Function.Inje
     (embedOp_mem_supportedOperators he' X')
 
 /-- **Matrix elements of a product of placed operators.** -/
-theorem noncommProd_embedOp_apply {ι : Type*} [DecidableEq ι] (e : ι → Fin m → Fin n)
+theorem noncommProd_embedOp_apply {ι : Type*} (e : ι → Fin m → Fin n)
     (he : ∀ k, Function.Injective (e k)) (X : ι → Matrix (Cfg d m) (Cfg d m) ℂ) :
-    ∀ (s : Finset ι) (hdisj : (s : Set ι).PairwiseDisjoint fun k => Set.range (e k))
+    ∀ (s : Finset ι) (_ : (s : Set ι).PairwiseDisjoint fun k => Set.range (e k))
       (hcomm : (s : Set ι).Pairwise (Function.onFun Commute fun k => embedOp (e k) (X k)))
       (x y : Cfg d n),
       s.noncommProd (fun k => embedOp (e k) (X k)) hcomm x y =

@@ -35,10 +35,11 @@ variable {d D M q : ℕ}
 /-- The site `j` of the block `k`, that is `k q + j`. -/
 def blockSite (M q : ℕ) (k : Fin M) : Fin q → Fin (M * q) := fun j => finProdFinEquiv (k, j)
 
-@[simp] theorem blockSite_val (k : Fin M) (j : Fin q) : (blockSite M q k j).val = j.val + q * k.val :=
+@[simp] theorem blockSite_val (k : Fin M) (j : Fin q) :
+    (blockSite M q k j).val = j.val + q * k.val :=
   rfl
 
-theorem blockSite_injective (k : Fin M) : Function.Injective (blockSite M q k) := fun j j' h =>
+theorem blockSite_injective (k : Fin M) : Function.Injective (blockSite M q k) := fun _ _ h =>
   (Prod.ext_iff.mp (finProdFinEquiv.injective h)).2
 
 theorem blockSite_eq_iff {k k' : Fin M} {j j' : Fin q} :

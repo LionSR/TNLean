@@ -51,7 +51,7 @@ theorem twoLevel_quarterTwo_mul {a b c : ι} (hab : a ≠ b) (hac : a ≠ c) (hb
   ext x y
   rw [twoLevel_mul_apply (Ne.symm hbc), twoLevel_mul_apply hac]
   simp only [twoLevel, of_apply, twoLevelIdx, quarterTwo, cons_val', cons_val_zero,
-    cons_val_one, head_cons, empty_val', cons_val_fin_one, head_fin_const]
+    cons_val_one, empty_val', cons_val_fin_one]
   by_cases hxa : x = a <;> by_cases hxb : x = b <;> by_cases hxc : x = c <;>
     by_cases hya : y = a <;> by_cases hyb : y = b <;> by_cases hyc : y = c <;>
     simp_all [eq_comm]
@@ -129,7 +129,7 @@ theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
         simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_erase, hc]
         by_cases hi : i = t
         · subst hi; simp
-        · simp [Function.update_of_ne hi, hi]
+        · simp [hi]
       have hac' : hammingDist' a c = h + 1 := by
         unfold hammingDist'
         rw [hfilter, Finset.card_erase_of_mem ht]

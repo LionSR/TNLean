@@ -178,7 +178,7 @@ theorem ctrlProj_mem_supportedOperators (S : Finset (Fin n)) (c : Cfg d n) :
     have hfac : ∀ i, (if i ∈ S then diagonal (fun a : Fin d => if a = c i then (1 : ℂ) else 0)
         else 1) (x i) (y i) = (if x i = y i then 1 else 0) *
           (if i ∈ S then (if x i = c i then 1 else 0) else 1) := fun i => by
-      split_ifs <;> simp_all [diagonal_apply, one_apply]
+      split_ifs <;> simp_all [one_apply]
     rw [Finset.prod_congr rfl fun i _ => hfac i, Finset.prod_mul_distrib, Finset.prod_boole,
       Finset.prod_ite, Finset.prod_const_one, mul_one, Finset.prod_boole]
     by_cases hxy : x = y

@@ -54,7 +54,7 @@ theorem inputCfg_injective (hd : 0 < d) {r n : ℕ} (hr : r ≤ n) :
 
 /-! ### Sums over extensions by zero -/
 
-theorem sum_extend_zero {α β : Type*} [Fintype α] [Fintype β] [DecidableEq β] {s : α → β}
+theorem sum_extend_zero {α β : Type*} [Fintype α] [Fintype β] {s : α → β}
     (hs : Function.Injective s) (f : α → ℂ) (H : β → ℂ → ℂ) (hH : ∀ u, H u 0 = 0) :
     ∑ u, H u (Function.extend s f 0 u) = ∑ p, H (s p) (f p) := by
   classical
@@ -167,7 +167,7 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
       have hs : ∀ σ, star (eval Q σ *ᵥ Pi.single x.1 1) ⬝ᵥ (eval Q σ *ᵥ Pi.single x'.1 1) =
           star (V σ x) * V σ x' := fun σ => by
         rw [dotProduct, Finset.sum_eq_single ⟨0, hD'⟩]
-        · simp [V, mulVec_single_one]
+        · simp [V]
         · intro β _ hβ
           rw [isSupportedBelow_eval_mulVec b Q hrow _ (hsx x') σ β (by
             rw [hb0]; exact Nat.one_le_iff_ne_zero.mpr fun h => hβ (Fin.ext h)), mul_zero]
@@ -178,7 +178,7 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
         · by_cases hxx : x = x'
           · subst hxx; simp
           · have : x.1 ≠ x'.1 := fun h => hxx (Subtype.ext h)
-            simp [Pi.single_apply, this, hxx]
+            simp [this, hxx]
         · intro β _ hβ; simp [Pi.single_apply, hβ]
         · simp
       rw [mul_apply, one_apply]

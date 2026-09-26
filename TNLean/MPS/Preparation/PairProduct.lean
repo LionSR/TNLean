@@ -103,10 +103,11 @@ theorem list_prod {K : ℕ} (l : List (Matrix (Cfg d n) (Cfg d n) ℂ))
     rw [List.prod_cons, List.length_cons, Nat.succ_mul, Nat.add_comm]
     exact (hl X (by simp)).mul (ih fun Y h => hl Y (by simp [h]))
 
-theorem finset_prod {ι : Type*} [DecidableEq ι] (s : Finset ι) {K : ℕ}
+theorem finset_prod {ι : Type*} (s : Finset ι) {K : ℕ}
     (f : ι → Matrix (Cfg d n) (Cfg d n) ℂ) (hf : ∀ i ∈ s, IsPairProduct d n K (f i))
     (hcomm : (s : Set ι).Pairwise (Function.onFun Commute f)) :
     IsPairProduct d n (s.card * K) (s.noncommProd f hcomm) := by
+  classical
   induction s using Finset.induction_on with
   | empty => simpa using one 0
   | insert a s ha ih =>

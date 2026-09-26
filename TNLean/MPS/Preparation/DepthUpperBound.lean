@@ -177,7 +177,8 @@ theorem embeddedPairState_blockedConfigEquiv_symm (hd : 0 < d) (hq : 3 * r₁ �
     split_ifs with h0
     · symm
       by_contra hne
-      have hall : ∀ k, ∃ p : Fin D × Fin D, y ∘ pairSite M q r₁ (by omega) k = twoCfg dig p.1 p.2 := by
+      have hall : ∀ k, ∃ p : Fin D × Fin D,
+          y ∘ pairSite M q r₁ (by omega) k = twoCfg dig p.1 p.2 := by
         intro k
         by_contra hk
         simp only [not_exists] at hk
@@ -195,12 +196,14 @@ section Layers
 
 variable [NeZero (M * q)]
 
+omit [NeZero (M * q)] in
 theorem pairwise_commute_blockSite (U : Matrix (Cfg d q) (Cfg d q) ℂ) :
     ((Finset.univ : Finset (Fin M)) : Set (Fin M)).Pairwise
       (Function.onFun Commute fun k => embedOp (blockSite M q k) U) :=
   fun k _ k' _ h => commute_embedOp_of_disjoint (blockSite_injective k) (blockSite_injective k')
     (disjoint_range_blockSite h) U U
 
+omit [NeZero (M * q)] in
 theorem pairwise_commute_pairSite (hq : r₁ + r₁ ≤ q)
     (W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) :
     ((Finset.univ : Finset (Fin M)) : Set (Fin M)).Pairwise
@@ -221,6 +224,7 @@ noncomputable def pairLayerOp (hq : r₁ + r₁ ≤ q)
   Finset.univ.noncommProd (fun k : Fin M => embedOp (pairSite M q r₁ (by omega) k) W)
     (pairwise_commute_pairSite hq W)
 
+omit [NeZero (M * q)] in
 theorem blockLayerOp_apply (U : Matrix (Cfg d q) (Cfg d q) ℂ) (x y : Cfg d (M * q)) :
     blockLayerOp (M := M) U x y = ∏ k, U (x ∘ blockSite M q k) (y ∘ blockSite M q k) := by
   rw [blockLayerOp, noncommProd_embedOp_apply _ (fun k => blockSite_injective k) _ _
@@ -229,6 +233,7 @@ theorem blockLayerOp_apply (U : Matrix (Cfg d q) (Cfg d q) ℂ) (x y : Cfg d (M 
   obtain ⟨k, j, rfl⟩ := exists_blockSite (M := M) (q := q) i
   exact absurd rfl (hi k (Finset.mem_univ k) j)
 
+omit [NeZero (M * q)] in
 theorem pairLayerOp_apply (hq : r₁ + r₁ ≤ q) (W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ)
     (x y : Cfg d (M * q)) :
     pairLayerOp (M := M) hq W x y =
@@ -260,6 +265,7 @@ pair `|ω⟩` on a window, then the periodic state of `B' = V P_∞` on `M` bloc
 `U^{⊗M} W^{⊗M} |0 ⋯ 0⟩`.
 
 arXiv:2307.01696, eqs. (10), (11), and (12). -/
+omit [NeZero (M * q)] in
 theorem approximatingMPVStateRaw_eq_mulVec (hd : 0 < d) (hq : 3 * r₁ ≤ q)
     {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig) (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ) [NeZero M] {U : Matrix (Cfg d q) (Cfg d q) ℂ}
