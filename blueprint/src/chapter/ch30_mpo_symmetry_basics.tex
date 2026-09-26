@@ -639,14 +639,12 @@ relation between word traces has nonnegative integer coefficients.
 
 \begin{example}[Fibonacci]%
     \label{ex:mpo_symmetry_fibonacci}
-    \lean{FibonacciCompression.isMPOFusionAlgebra_fibBlock,
-        FibonacciCompression.isFusionUnit_fibFusion,
-        FibonacciCompression.isMPOSymmetricFamily_fibNimTargets,
-        FibonacciCompression.isNIMRep_fibFusion,
-        FibonacciCompression.not_isFusionCharacter_fibFusion}
+    \lean{FibonacciCompression.isFusionUnit_fibNim,
+        FibonacciCompression.isNIMRep_fibNim,
+        FibonacciCompression.not_isFusionCharacter_fibNim}
     \leanok
     \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
-        thm:asymex_fib_anomaly_nim_rep, thm:asymex_fib_anomaly_no_go}
+        thm:asymex_fib_anomaly_nim_rep}
     The Fibonacci operators of Section~\ref{sec:asymex_fibonacci} form a
     fusion algebra with unit $1$ and $\tau\times\tau=1+\tau$; the two normal
     states with $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$ form
@@ -657,6 +655,44 @@ relation between word traces has nonnegative integer coefficients.
     $O_\tau^{(N)}\ket{V^{(N)}(A)}=c\ket{V^{(N)}(A)}$ for all $N\geq1$
     (Theorem~\ref{thm:asymex_fib_anomaly_no_go}).
     % Source anchor: arXiv:2203.12563, line 1993; arXiv:1511.08090, App. D.1.
+\end{example}
+
+\begin{definition}[The Ising fusion algebra data]%
+    \label{def:mpo_symmetry_ising_data}
+    \lean{IsingTwist.isingDim, IsingTwist.isingBlock, IsingTwist.isingFusion}
+    \leanok
+    \uses{def:asymex_ising_tensors}
+    Index the three simple objects of the Ising category by $0$, $1$ and
+    $2$, corresponding respectively to $1$, $\psi$ and $\sigma$. The blocks
+    are the matrix product operator tensors $A_1$, $A_\psi$ and
+    $\tfrac1{\sqrt2}A_\sigma$ of Definition~\ref{def:asymex_ising_tensors},
+    of bond dimensions $3$, $3$ and $4$; the factor $\tfrac1{\sqrt2}$ undoes
+    the scaling of $A_\sigma$ there. The structure constants $N_{ab}^c$ are
+    those of the Ising fusion ring: $N_{1b}^c=N_{b1}^c=\delta_{bc}$,
+    $\psi\times\psi=1$, $\psi\times\sigma=\sigma\times\psi=\sigma$ and
+    $\sigma\times\sigma=1+\psi$, that is, $N_{ab}^c=1$ exactly for these
+    products and $N_{ab}^c=0$ otherwise \cite{Bultinck2017Anyons}.
+    % Source anchor: arXiv:1511.08090, lines 1308--1312 and 1323.
+\end{definition}
+
+\begin{example}[Ising]%
+    \label{ex:mpo_symmetry_ising}
+    \lean{IsingTwist.isMPOFusionAlgebra_ising,
+        IsingTwist.isFusionUnit_isingFusion,
+        IsingTwist.not_isFusionCharacter_isingFusion,
+        IsingTwist.not_isMPOSymmetric_ising}
+    \leanok
+    \uses{def:mpo_symmetry_ising_data, cor:mpo_symmetric_no_go,
+        thm:asymex_ising_path_operators, cor:asymex_ising_sigma_fusion_unscaled,
+        thm:asymex_ising_sigma_square}
+    The blocks of Definition~\ref{def:mpo_symmetry_ising_data} form a fusion
+    algebra with unit $1$ and these structure constants
+    \cite{Bultinck2017Anyons}. A fusion character
+    in $\N$ would satisfy $m_\psi^2=1$, hence $m_\psi=1$, and then
+    $m_\sigma^2=1+m_\psi=2$, which has no solution in $\N$. So no normal
+    tensor of positive bond dimension is symmetric under the Ising algebra
+    with the unit acting trivially.
+    % Source anchor: arXiv:1511.08090, lines 1308--1312 and 1323.
 \end{example}
 
 \begin{example}[Anomalous cyclic group of order three]%

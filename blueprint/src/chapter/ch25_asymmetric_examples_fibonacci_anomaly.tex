@@ -87,7 +87,7 @@ discussed in the same source.
 
 \begin{theorem}[The fusion ring on the periodic operators]%
     \label{thm:asymex_fib_anomaly_fusion_algebra}
-    \lean{FibonacciCompression.fibonacci_fusion_algebra}
+    \lean{FibonacciCompression.isMPOFusionAlgebra_fibBlock}
     \leanok
     \uses{def:asymex_fib_anomaly_nim}
     For every pair of labels $a,b\in\{1,\tau\}$ and every positive system
@@ -167,7 +167,7 @@ matrices.
 
 \begin{theorem}[The regular representation on a pair of normal states]%
     \label{thm:asymex_fib_anomaly_nim_rep}
-    \lean{FibonacciCompression.fibonacci_nim_rep,
+    \lean{FibonacciCompression.isMPOSymmetricFamily_fibNimTargets,
         FibonacciCompression.mpo_fibOne_mulVec_chain}
     \leanok
     \uses{def:asymex_fib_anomaly_nim, cor:asym_action_tensors}
@@ -323,33 +323,31 @@ of Chapter~\ref{ch:mpo_symmetry_basics}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_fib_anomaly_fusion_algebra,
-        thm:asymex_fib_anomaly_integral_action}
-    By Theorem~\ref{thm:asymex_fib_anomaly_integral_action},
-    $c=m$ for some $m\in\N$. Suppose $m\neq0$. Choose a positive
-    injectivity length $\ell$ of $A$ and set $N=\ell+1$.
-    Normality ensures $\Psi_A(N)\neq0$.
-    Suppress $N$ in the notation. The unit law of
+    \uses{thm:asymex_fib_anomaly_fusion_algebra, thm:mpo_symmetric_character,
+        ex:mpo_symmetry_fibonacci}
+    Suppose $c\neq0$ and suppress $N\geq1$ in the notation. The unit law
+    $O_1O_\tau=O_\tau$ of
     Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} gives
     \begin{align}
-        mO_1\Psi_A
-         & =O_1O_\tau\Psi_A=O_\tau\Psi_A=m\Psi_A.
+        c\,O_1\Psi_A
+         & =O_1O_\tau\Psi_A=O_\tau\Psi_A=c\Psi_A.
     \end{align}
-    Cancelling $m$ yields $O_1\Psi_A=\Psi_A$. Applying the fusion rule
-    at this same length gives
+    Cancelling $c$ yields $O_1\Psi_A=\Psi_A$ for every $N\geq1$. Hence $A$
+    is symmetric under the Fibonacci fusion algebra with eigenvalues
+    $(c_1,c_\tau)=(1,c)$, and
+    Theorem~\ref{thm:mpo_symmetric_character} makes $c\in\N$ with
     \begin{align}
-        m^2\Psi_A
-         & =O_\tau^2\Psi_A=(O_1+O_\tau)\Psi_A=(1+m)\Psi_A.
+        c^2 & =c_\tau c_\tau=c_1+c_\tau=1+c.
     \end{align}
-    Since $\Psi_A\neq0$, it follows that $m^2=m+1$, which no
-    nonnegative integer satisfies. Therefore $m=0$.
+    No nonnegative integer satisfies this equation
+    (Example~\ref{ex:mpo_symmetry_fibonacci}), so $c=0$.
 \end{proof}
 
 \begin{theorem}[No normal matrix product state is Fibonacci symmetric]%
     \label{thm:asymex_fib_anomaly_no_go}
     \lean{FibonacciCompression.not_exists_normal_fibonacci_symmetric}
     \leanok
-    \uses{thm:asymex_fib_anomaly_eigenvalue_zero, thm:asymex_fib_fusion}
+    \uses{def:asymex_fib, def:normal}
     There is no positive bond dimension $D$, word-normal tensor $A$ of
     physical dimension two and bond dimension $D$, and single scalar
     $c\in\C$, such that for every $N\geq1$,
@@ -376,17 +374,20 @@ of Chapter~\ref{ch:mpo_symmetry_basics}.
 
 \begin{proof}
     \leanok
+    \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
+        ex:mpo_symmetry_fibonacci}
     Suppose $A$ and $c$ satisfy
-    Eq.~\ref{eq:asymex_fib_anomaly_symmetry}.
-    Theorem~\ref{thm:asymex_fib_anomaly_eigenvalue_zero} gives $c=0$.
-    Choose an injectivity length $\ell>0$ and set $N=\ell+1$, so that
-    $\Psi_A(N)\neq0$. At this length, the fusion rule gives
+    Eq.~\ref{eq:asymex_fib_anomaly_symmetry}. Then $A$ is symmetric under
+    the Fibonacci fusion algebra of
+    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} with eigenvalues
+    $(c_1,c_\tau)=(1,c)$. A fusion character $m$ with values in $\N$ would
+    satisfy $m_1=1$ and
     \begin{align}
-        0
-         & =O_\tau(N)^2\Psi_A(N) \nonumber         \\
-         & =(O_1(N)+O_\tau(N))\Psi_A(N)=\Psi_A(N),
+        m_\tau^2 & =m_1+m_\tau=1+m_\tau,
     \end{align}
-    a contradiction.
+    which no nonnegative integer does
+    (Example~\ref{ex:mpo_symmetry_fibonacci}).
+    Corollary~\ref{cor:mpo_symmetric_no_go} therefore excludes $A$.
 \end{proof}
 
 The scalar hypothesis concerns the raw periodic vectors of one fixed
