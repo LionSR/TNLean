@@ -5743,7 +5743,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{definition}[Index of a canonical-form-II tensor]
     \label{def:mpu_admissible_index}
     \lean{MPOTensor.IsMPUCanonicalFormII.index,
-        MPOTensor.IsMPUCanonicalFormII.index_eq_logb_of_isMPUSimple_blockTensor,
         MPOTensor.IsMPUCanonicalFormII.index_eq_logb_rightRank_div,
         MPOTensor.IsMPUCanonicalFormII.index_eq_neg_logb_leftRank_div}
     \leanok
@@ -5790,7 +5789,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Well-definedness on a canonical-form-II representative]
     \label{prop:mpu_admissible_index_well_defined}
-    \lean{MPOTensor.IsMPUCanonicalFormII.sourceIndexValue_blockTensor_eq,
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_eq_logb_of_isMPUSimple_blockTensor,
+        MPOTensor.IsMPUCanonicalFormII.sourceIndexValue_blockTensor_eq,
         MPOTensor.IsMPUCanonicalFormII.sourceIndexValue_eq_index,
         MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor,
         MPOTensor.IsMPUCanonicalFormII.sourceRanks_blockTensor_pos,
@@ -9290,7 +9290,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{theorem}[Index of the bond-one identity tensor]
     \label{thm:mpu_identity_index}
     \lean{MPOTensor.IsMPUCanonicalFormII.index_identityMPUTensor,
-        MPOTensor.identityMPUTensor_canonicalFormII,
+        MPOTensor.identityMPUTensorCanonicalFormII,
         MPOTensor.identityMPUTensor_index,
         MPOTensor.rightRank_identityMPUTensor,
         MPOTensor.leftRank_identityMPUTensor}
