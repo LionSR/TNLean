@@ -104,7 +104,7 @@ private theorem norm_sum_starProjection_sub_iSup_le_mul
 /-- Nachtergaele, arXiv:cond-mat/9410110, Lemma `commutation` (i),
 equation `boundXm` (local source lines 2442--2531): the sum of the block
 projectors is close to the projector onto their joint span. Here
-`δ = ‖B‖ / (1 - ‖B‖)`, with `‖B‖ < 1/2`. -/
+\(\delta = \lVert B\rVert/(1-\lVert B\rVert)\), with \(\lVert B\rVert<1/2\). -/
 theorem norm_sum_starProjection_sub_iSup_le
     (V : ι → Submodule ℂ E) (B : Matrix ι ι ℝ)
     (hdiag : ∀ i, B i i = 0) (hB : ‖B‖ < 1 / 2)
@@ -128,7 +128,7 @@ theorem norm_sum_starProjection_sub_iSup_le
   apply (le_div_iff₀ (sub_pos.mpr hδ₁)).mpr
   nlinarith [mul_le_mul_of_nonneg_left hnorm hδ]
 
-/-- The norm of the sum of block projectors is at most `(1 - δ)⁻¹`.
+/-- The norm of the sum of block projectors is at most \((1-\delta)^{-1}\).
 This is the consequence of `boundXm` used in Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `commutation` (ii), lines 2533--2577. -/
 theorem norm_sum_starProjection_le_of_overlapMatrix
