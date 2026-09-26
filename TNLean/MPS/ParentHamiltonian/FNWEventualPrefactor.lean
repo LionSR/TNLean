@@ -14,7 +14,7 @@ A decay rate strictly above all nonunit transfer eigenvalue moduli permits
 any prescribed positive prefactor after a sufficiently large overlap.
 An intermediate rate absorbs the original geometric constant.
 
-**Local fix (rate-dependent onset):** the prefactor assertion following
+**Scope restriction (rate-dependent onset):** the prefactor assertion following
 Nachtergaele, arXiv:cond-mat/9410110, Section 6, equation `boundAm`, lines
 2401--2412, is proved here with an additional onset depending on the state,
 rate, and prescribed prefactor. This is not a bound from the injectivity
@@ -32,7 +32,7 @@ variable {d D : ℕ}
 /-- Any positive prefactor bounds the FNW mixing quantity eventually at a
 prescribed rate above every nonunit transfer eigenvalue modulus. This is the
 version of Nachtergaele's `boundAm` with the rate-dependent onset specified
-in the module's local-fix statement. -/
+in the module's scope-restriction statement. -/
 theorem IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
