@@ -739,6 +739,42 @@ relation between word traces has nonnegative integer coefficients.
     % Source anchor: arXiv:2203.12563, line 1993; arXiv:1511.08090, App. D.1.
 \end{example}
 
+\begin{theorem}[Fibonacci representations on at most two blocks]%
+    \label{thm:mpo_symmetry_fibonacci_rank_two}
+    \lean{FibonacciCompression.fibNim_entries_of_sq,
+        FibonacciCompression.not_isNIMRep_fibNim_of_card_eq_one,
+        FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two,
+        FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock}
+    \leanok
+    \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
+        thm:mpo_symmetric_nimrep}
+    Let $M$ be a nonnegative integer representation of the Fibonacci ring on
+    a set $K$ of blocks with $M_{1,x}^y=\delta_{xy}$. If $K$ has one element,
+    no such $M$ exists. If $K$ has two elements, then after labelling the
+    blocks by $1$ and $\tau$ one has $M_a=N_a$ for both labels, that is
+    $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$. Consequently a
+    symmetric family of at most two normal tensors as in
+    Theorem~\ref{thm:mpo_symmetric_nimrep}, on which the unit acts trivially,
+    has exactly two blocks transforming in this way. The source states the
+    uniqueness of this two-block family without a bound on the number of
+    blocks \cite[Section~6]{GarreRubio2023MPOSym}; only one and two blocks
+    are treated here \cite{gap:glm23_fibonacci_module_rank_scope}.
+    % Source anchor: arXiv:2203.12563, lines 1991--1993.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Relation (\ref{eq:mpo_nimrep}) at $a=b=\tau$ with
+    $\tau\times\tau=1+\tau$ gives $M_\tau^2=\Id+M_\tau$. On one block this is
+    $m^2=1+m$, which has no solution in $\N$. On two blocks write
+    $M_\tau=\begin{pmatrix}a&b\\c&d\end{pmatrix}$. The diagonal equations give
+    $a^2\leq1+a$ and $d^2\leq1+d$, so $a,d\in\{0,1\}$ and $bc=1$, hence
+    $b=c=1$. The off-diagonal equation $b=(a+d)b$ gives $a+d=1$, so $M_\tau$
+    is $N_\tau$ or its conjugate by the transposition of the two blocks. For
+    the family, the coefficients form such a representation by
+    Theorem~\ref{thm:mpo_symmetric_nimrep}.
+\end{proof}
+
 \begin{definition}[The Ising fusion algebra data]%
     \label{def:mpo_symmetry_ising_data}
     \lean{IsingTwist.isingDim, IsingTwist.isingBlock, IsingTwist.isingFusion}

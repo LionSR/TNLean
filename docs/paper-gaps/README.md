@@ -584,6 +584,11 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   invariance, derives integrality of the action coefficients from it, and
   formalizes the single-block obstruction only in its fusion-ring form, not
   the cohomological form of the source.
+- `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
+  the Fibonacci algebra has only the two-block invariant subspace is
+  formalized for at most two blocks, where the nonnegative integer
+  representations with trivial unit action are classified directly, and
+  sketches the Perron--Frobenius argument for any number of blocks.
 
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
