@@ -61,12 +61,13 @@ open Matrix Filter Topology Complex
 namespace MPSTensor
 
 /-- The diagonal entries of `A⁰ = diag(1, 3/5)` and `A¹ = diag(0, 4/5)`. -/
-def overlappingBlockDiag : Fin 2 → Fin 2 → ℂ := ![![1, 3 / 5], ![0, 4 / 5]]
+noncomputable def overlappingBlockDiag : Fin 2 → Fin 2 → ℂ := ![![1, 3 / 5], ![0, 4 / 5]]
 
 /-- The tensor `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)`: the canonical form of
 arXiv:2307.01696, eq. (S2), with the two one-dimensional normal blocks `A_1 = (1, 0)` and
 `A_2 = (3/5, 4/5)`, each of multiplicity one and weight one. -/
-abbrev overlappingBlockTensor : MPSTensor 2 2 := fun i => diagonal (overlappingBlockDiag i)
+noncomputable abbrev overlappingBlockTensor : MPSTensor 2 2 :=
+  fun i => diagonal (overlappingBlockDiag i)
 
 /-- The multiplicities `m = (1, 1)`. -/
 def overlappingBlockMult : Fin 2 → ℕ := ![1, 1]
@@ -76,7 +77,7 @@ def overlappingBlockWeight : (j : Fin 2) → Fin (overlappingBlockMult j) → �
 
 /-- The two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (3/5, 4/5)`, each in the
 gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp`. -/
-def overlappingBlockBasis (j : Fin 2) : MPSTensor 2 1 :=
+noncomputable def overlappingBlockBasis (j : Fin 2) : MPSTensor 2 1 :=
   fun i => of fun _ _ => overlappingBlockDiag i j
 
 /-- The transfer maps of the blocks have no eigenvalue other than `1`, so the hypothesis on the
@@ -86,9 +87,8 @@ theorem norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis (j : Fin 2) (
     (h : Module.End.HasEigenvalue (Kraus.transferMap (overlappingBlockBasis j)) μ)
     (hμ : μ ≠ 1) : ‖μ‖ ≤ ‖lam₂‖ := by
   refine norm_le_of_hasEigenvalue_transferMap_of_dim_one _ ?_ lam₂ μ h hμ
-  have h35 : star (3 / 5 : ℂ) = 3 / 5 := by rw [Complex.star_def, map_div₀]; norm_num
-  have h45 : star (4 / 5 : ℂ) = 4 / 5 := by rw [Complex.star_def, map_div₀]; norm_num
-  fin_cases j <;> simp [overlappingBlockBasis, overlappingBlockDiag, Fin.sum_univ_two, h35, h45]
+  fin_cases j <;>
+    simp [overlappingBlockBasis, overlappingBlockDiag, Fin.sum_univ_two, map_ofNat]
   norm_num
 
 /-- The normalized weights `α^{(N)} = (1, 1)/√2`. -/
@@ -96,7 +96,7 @@ theorem ghzAmplitude_overlappingBlock (N : ℕ) :
     ghzAmplitude (bntWeight overlappingBlockWeight N) = ![invSqrtTwo, invSqrtTwo] := by
   have hβ : bntWeight overlappingBlockWeight N = ![1, 1] := by
     funext j
-    fin_cases j <;> simp [bntWeight, overlappingBlockWeight, overlappingBlockMult]
+    fin_cases j <;> simp [bntWeight, overlappingBlockWeight] <;> rfl
   rw [hβ]
   have h : (∑ l, ‖(![1, 1] : Fin 2 → ℂ) l‖ ^ 2) = 2 := by
     simp [Fin.sum_univ_two]; norm_num
@@ -111,13 +111,9 @@ noncomputable def overlappingBlockOverlap (q : ℕ) : ℝ := (3 / 5) ^ q
 theorem diagGram_overlappingBlockDiag (q : ℕ) :
     diagGram overlappingBlockDiag q =
       !![1, (overlappingBlockOverlap q : ℂ); (overlappingBlockOverlap q : ℂ), 1] := by
-  have h35 : star (3 / 5 : ℂ) = 3 / 5 := by
-    rw [Complex.star_def, map_div₀]; norm_num
-  have h45 : star (4 / 5 : ℂ) = 4 / 5 := by
-    rw [Complex.star_def, map_div₀]; norm_num
   ext e e'
   fin_cases e <;> fin_cases e' <;>
-    simp [diagGram, overlappingBlockDiag, Fin.sum_univ_two, overlappingBlockOverlap, h35, h45]
+    simp [diagGram, overlappingBlockDiag, Fin.sum_univ_two, overlappingBlockOverlap, map_ofNat]
   all_goals norm_num
 
 private lemma overlap_nonneg (q : ℕ) : 0 ≤ overlappingBlockOverlap q := by
@@ -207,7 +203,7 @@ theorem isUnit_det_overlappingBlockSqrt {q : ℕ} (hq : q ≠ 0) :
 /-- The support projector of the `q`-site blocked tensor is `J Jᴴ`, for `q ≥ 1`. -/
 theorem polarSupport_overlappingBlockTensor {q : ℕ} (hq : q ≠ 0) :
     polarSupport (physicalMatrix (blockTensor overlappingBlockTensor q)) =
-      diagPairEmbedding (Fin 2) * 1 * (diagPairEmbedding (Fin 2))ᴴ :=
+      diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) * (diagPairEmbedding (Fin 2))ᴴ :=
   polarSupport_physicalMatrix_blockTensor_diagonal overlappingBlockDiag q
     (posSemidef_overlappingBlockSqrt q) (overlappingBlockSqrt_mul_self q) isHermitian_one
     (Matrix.one_mul 1) (Matrix.one_mul _) (R := (overlappingBlockSqrt q)⁻¹)
@@ -234,18 +230,13 @@ theorem nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ} (hq : q ≠ 0)
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       overlappingBlockSqrt]
     simp [invSqrtTwo]
-    have h2 : Real.sqrt (2 * (1 + overlappingBlockOverlap q ^ M)) =
-        Real.sqrt 2 * Real.sqrt (1 + overlappingBlockOverlap q ^ M) :=
-      Real.sqrt_mul (by norm_num) _
     have hs2 : Real.sqrt 2 ≠ 0 := by positivity
     have hs : Real.sqrt (1 + overlappingBlockOverlap q ^ M) ≠ 0 := by
       have := overlap_nonneg q; positivity
-    rw [h2]
-    push_cast
     have hsq : ((Real.sqrt 2 : ℝ) : ℂ) * (Real.sqrt 2 : ℝ) = 2 := by
       rw [← Complex.ofReal_mul, Real.mul_self_sqrt (by norm_num)]; norm_num
     field_simp
-    linear_combination (↑(overlappingBlockU q) ^ M + ↑(overlappingBlockV q) ^ M) * hsq
+    linear_combination (-1) * (↑(overlappingBlockU q) ^ M + ↑(overlappingBlockV q) ^ M) * hsq
   · rw [polarSupport_overlappingBlockTensor hq, ghzAmplitude_overlappingBlock]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two]
     simp [zero_pow hM, invSqrtTwo_mul_self]
@@ -295,8 +286,9 @@ theorem le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ
   have huM : u ^ M ≤ u ^ 3 := pow_le_pow_of_le_one hu0 hu1 hM
   have hvM : v ^ M ≤ v ^ 2 := pow_le_pow_of_le_one hv0 hv1 (by omega)
   have hden : 1 ≤ Real.sqrt (1 + s ^ M) := by
-    rw [show (1 : ℝ) = Real.sqrt 1 from Real.sqrt_one.symm]
-    exact Real.sqrt_le_sqrt (by have := pow_nonneg hs0 M; linarith)
+    have := pow_nonneg hs0 M
+    calc (1 : ℝ) = Real.sqrt 1 := Real.sqrt_one.symm
+      _ ≤ _ := Real.sqrt_le_sqrt (by linarith)
   have hnum : 0 ≤ u ^ M + v ^ M := by positivity
   have hdiv : |(u ^ M + v ^ M) / Real.sqrt (1 + s ^ M)| ≤ u ^ M + v ^ M := by
     rw [abs_of_nonneg (by positivity)]
@@ -329,7 +321,7 @@ theorem not_approximationError_le_overlappingBlockTensor {lam₂ : ℂ} {γ : �
     (by norm_num) C (1 / 16) (by norm_num)).and (Filter.eventually_ge_atTop 3)).exists
   refine ⟨q, hq, ?_⟩
   rw [hxq]
-  have hlow := le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor (M := q)
+  have hlow := le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor (q := q) (M := q)
     (by omega) hq
   linarith
 

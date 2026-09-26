@@ -91,7 +91,8 @@ def repeatedBlockCoord : Fin 2 → Fin 3 := ![0, 2]
 theorem bntWeight_repeatedBlockWeight (N : ℕ) :
     bntWeight repeatedBlockWeight N = ![2, 1] := by
   funext j
-  fin_cases j <;> simp [bntWeight, repeatedBlockWeight, repeatedBlockMult] <;> norm_num
+  fin_cases j <;>
+    simp [bntWeight, repeatedBlockWeight] <;> norm_cast
 
 /-- The normalized weights `α^{(N)} = (2, 1)/√5`. -/
 theorem ghzAmplitude_repeatedBlock (N : ℕ) :
@@ -162,7 +163,7 @@ theorem polarSupport_repeatedBlockTensor {q : ℕ} (hq : q ≠ 0) :
     ext e e'
     fin_cases e <;> fin_cases e' <;>
       simp [repeatedBlockProj, repeatedBlockSqrt, mul_apply, Fin.sum_univ_three,
-        invSqrtTwo_mul_self, two_inv_add_two_inv]
+        invSqrtTwo_mul_self]
   all_goals ring
 
 /-- **The overlap for a repeated block** (arXiv:2307.01696, eq. (S7)). For the tensor
@@ -193,6 +194,14 @@ theorem nonNormalApproxOverlap_repeatedBlockTensor {q M : ℕ} (hq : q ≠ 0) (h
     have hs : Real.sqrt (4 * (2⁻¹ : ℝ) ^ M + 1) ≠ 0 := by positivity
     rw [hX]
     push_cast
+    rw [← inv_pow (2 : ℝ) M]
+    have hT : ((Real.sqrt (4 * (2⁻¹ : ℝ) ^ M + 1) : ℝ) : ℂ) ≠ 0 := by exact_mod_cast hs
+    have h5' : ((Real.sqrt 5 : ℝ) : ℂ) ≠ 0 := by exact_mod_cast h5
+    have h2' : ((Real.sqrt 2 : ℝ) : ℂ) ^ M ≠ 0 :=
+      pow_ne_zero _ (by exact_mod_cast (by positivity : Real.sqrt 2 ≠ 0))
+    generalize ((Real.sqrt (4 * (2⁻¹ : ℝ) ^ M + 1) : ℝ) : ℂ) = T at hT ⊢
+    generalize ((Real.sqrt 5 : ℝ) : ℂ) = F at h5' ⊢
+    generalize ((Real.sqrt 2 : ℝ) : ℂ) ^ M = W at h2' ⊢
     field_simp
     ring
   · rw [polarSupport_repeatedBlockTensor hq, ghzAmplitude_repeatedBlock]
@@ -224,7 +233,9 @@ theorem tendsto_repeatedBlockOverlap :
   have hden := tendsto_const_nhds (x := Real.sqrt 5) |>.mul
     ((Real.continuous_sqrt.tendsto _).comp ((h2.const_mul 4).add_const 1))
   have := hnum.div hden (by positivity)
-  simpa [repeatedBlockOverlap, Function.comp_def] using this
+  rw [show (4 * 0 + 1 : ℝ) / (Real.sqrt 5 * Real.sqrt (4 * 0 + 1)) = 1 / Real.sqrt 5 by
+    norm_num] at this
+  exact this
 
 /-- **The overlap tends to `1/√5`** as the number of blocks grows, for every block length
 `q ≥ 1`: the approximating state of arXiv:2307.01696, eq. (S7) does not approximate the
@@ -259,7 +270,7 @@ theorem not_approximationError_le_repeatedBlockTensor {lam₂ : ℂ} (h0 : 0 < �
             (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)))‖ := by
   set r := Real.exp (-γ / correlationLength lam₂)
   have hξ := correlationLength_pos h0 h1
-  have hr1 : r < 1 := Real.exp_lt_one.mpr (div_neg_of_neg_of_pos (by linarith) hξ)
+  have hr1 : r < 1 := Real.exp_lt_one_iff.mpr (div_neg_of_neg_of_pos (by linarith) hξ)
   have hxq : ∀ M : ℕ, Real.exp (-γ * M / correlationLength lam₂) = r ^ M := fun M => by
     rw [← Real.exp_nat_mul]; congr 1; ring
   have h5 : 1 / Real.sqrt 5 < 1 / 2 := by

@@ -25,7 +25,8 @@ For such tensors the blocked tensor is diagonal too, with diagonal entries
 `J : |e⟩ ↦ |e e⟩`, with `C` the matrix of the diagonal entries. The polar factors are then
 computed from any positive square root `Q` of the Gram matrix `Cᴴ C`:
 `P = J Q Jᴴ` and `Π = J E Jᴴ` for the projector `E` onto the range of `Q`
-(`polarPos_physicalMatrix_blockTensor_diagonal`, `polarSupport_physicalMatrix_blockTensor_diagonal`).
+(`polarPos_physicalMatrix_blockTensor_diagonal`,
+`polarSupport_physicalMatrix_blockTensor_diagonal`).
 The overlap of the approximating state with the target reduces to entries of `P` and `Π`
 (`nonNormalApproxOverlap_diagonal`).
 
@@ -106,7 +107,7 @@ theorem diagPairEmbedding_mul_apply {ρ : Type*} (X : Matrix κ ρ ℂ) (p : κ 
     simp [diagPairEmbedding, Ne.symm he]
   · simp
 
-theorem mul_conjTranspose_diagPairEmbedding_apply {ρ : Type*} [Fintype ρ]
+theorem mul_conjTranspose_diagPairEmbedding_apply {ρ : Type*}
     (X : Matrix ρ κ ℂ) (r : ρ) (p : κ × κ) :
     (X * (diagPairEmbedding κ)ᴴ) r p = if p.1 = p.2 then X r p.1 else 0 := by
   rw [mul_apply, Finset.sum_eq_single p.1]
@@ -452,10 +453,10 @@ theorem nonNormalApproxOverlap_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ
 
 /-! ### One-dimensional blocks -/
 
-/-- A one-dimensional tensor in the gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp` has the
-identity as transfer map, so `1` is its only eigenvalue. Its correlation length, formed from a
-bound `λ₂` on the eigenvalues other than `1` (`ξ_jj = -1/ln|λ₂^{(j)}|`, eq. (S10)), is therefore not constrained: every
-`λ₂` bounds them. -/
+/-- A one-dimensional tensor in the gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp`
+has the identity as transfer map, so `1` is its only eigenvalue. Its correlation length, formed
+from a bound `λ₂` on the eigenvalues other than `1` (`ξ_jj = -1/ln|λ₂^{(j)}|`, eq. (S10)), is
+therefore not constrained: every `λ₂` bounds them. -/
 theorem eq_one_of_hasEigenvalue_transferMap_of_dim_one (A : MPSTensor d 1)
     (hA : ∑ i, star (A i 0 0) * A i 0 0 = 1) {μ : ℂ}
     (h : Module.End.HasEigenvalue (Kraus.transferMap A) μ) : μ = 1 := by
