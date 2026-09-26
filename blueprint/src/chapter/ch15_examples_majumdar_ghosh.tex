@@ -493,29 +493,136 @@ level $0$ and the normalized singlet as pair amplitude.
         -\tfrac{3N}{8}\psi=-\tfrac{3N}{8}\psi$.
 \end{proof}
 
-% The lower bound $H_N\ge-3N/8$, which would make these eigenvectors ground
-% states, and the dimension count below are not yet formalized.
 Because the Majumdar--Ghosh tensor is non-normal
-(Theorem~\ref{thm:majumdar_ghosh_not_normal}) with a two-periodic bond grading,
-the expected two-fold dimer degeneracy of its periodic ground space is stated
-in the following target theorem.
+(Theorem~\ref{thm:majumdar_ghosh_not_normal}), the intersection property of
+Theorem~\ref{thm:ground_space_intersection} does not apply to it. The bond
+grading $G=\diag(1,-1,-1)$, which satisfies $GA^i=-A^iG$, takes the place of
+normality in the following two lemmas.
+
+\begin{lemma}[Graded injectivity of the boundary map]%
+    \label{lem:majumdar_ghosh_graded_injectivity}
+    \lean{MPSTensor.majumdarGhosh_exists_parity_rep,
+        MPSTensor.majumdarGhosh_eq_zero_of_groundSpaceMap_eq_zero}
+    \leanok
+    \uses{def:majumdar_ghosh_tensor, def:ground_space_parent,
+        thm:majumdar_ghosh_left_canonical}
+    Every vector of $\mathcal G_{K}(A)$ equals $\Gamma_{K}(X)$ for a matrix $X$
+    with $GX=(-1)^{K}XG$. For $K\ge3$, a matrix $X$ with $GX=(-1)^{K}XG$ and
+    $\Gamma_{K}(X)=0$ is zero.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $G^2=1$ and $GA^i=-A^iG$, the identity
+    $\Gamma_{K}(GXG)=(-1)^{K}\Gamma_{K}(X)$ holds, so $X$ may be replaced by
+    $\tfrac12\bigl(X+(-1)^{K}GXG\bigr)$. For $K=3$ the matrix $X$ is supported on
+    the entries $(0,1)$, $(0,2)$, $(1,0)$, $(2,0)$, and the coordinates of
+    $\Gamma_{3}(X)$ at $001$, $100$, $011$, $110$ are $-\tfrac12X_{02}$,
+    $\tfrac1{\sqrt2}X_{10}$, $-\tfrac1{\sqrt2}X_{20}$ and $-\tfrac12X_{01}$. For the
+    step from $K$ to $K+1$, fixing the last site to $a$ gives
+    $\Gamma_{K}(A^aX)=0$, where $A^aX$ has parity $(-1)^{K}$; hence $A^aX=0$ for
+    both $a$, and $X=\sum_a(A^a)^\dagger A^aX=0$ by
+    Theorem~\ref{thm:majumdar_ghosh_left_canonical}.
+\end{proof}
+
+\begin{lemma}[Intersection property of the Majumdar--Ghosh tensor]%
+    \label{lem:majumdar_ghosh_intersection}
+    \lean{MPSTensor.majumdarGhosh_groundSpace_intersection,
+        MPSTensor.majumdarGhosh_chainGroundSpace_le_groundSpace}
+    \leanok
+    \uses{lem:majumdar_ghosh_graded_injectivity,
+        thm:majumdar_ghosh_local_ground_space, def:chain_ground_space}
+    For $M\ge3$,
+    $(\mathcal G_{M}(A)\otimes\C^2)\cap(\C^2\otimes\mathcal G_{M}(A))
+        =\mathcal G_{M+1}(A)$. Consequently, for $N\ge3$ every vector of
+    $\mathcal G_{N,3}(A)$ lies in $\mathcal G_{N}(A)$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $\psi$ lie in the intersection. By
+    Lemma~\ref{lem:majumdar_ghosh_graded_injectivity}, its restriction with
+    first letter $i$ is $\Gamma_{M}(Y_i)$ and its restriction with last letter
+    $j$ is $\Gamma_{M}(Z_j)$, with $Y_i$ and $Z_j$ of parity $(-1)^{M}$. Comparing
+    on the middle $M-1$ sites gives
+    $\Gamma_{M-1}(A^jY_i)=\Gamma_{M-1}(Z_jA^i)$, and both matrices have parity
+    $(-1)^{M-1}$. For $M\ge4$ the lemma gives $A^jY_i=Z_jA^i$; with
+    $X=\sum_j(A^j)^\dagger Z_j$ the left-canonical equation gives $Y_i=XA^i$,
+    hence $\psi=\Gamma_{M+1}(X)$. For $M=3$, the
+    conditions~(\ref{eq:mg_spin_half_conditions}) on the four three-site
+    restrictions with a fixed first or last letter give $\psi=\Gamma_{4}(X)$ for
+    the matrix $X$ with $X_{00}=-2\psi_{0110}$, $X_{11}=-2\psi_{1100}$,
+    $X_{12}=2\psi_{0100}$, $X_{21}=2\psi_{1011}$, $X_{22}=-2\psi_{0011}$ and all
+    other entries zero, as a check of the sixteen coordinates shows. The second
+    statement follows by enlarging a window of three sites one site at a time.
+\end{proof}
 
 \begin{theorem}[Two-fold dimer degeneracy of the Majumdar--Ghosh ground space]%
     \label{thm:majumdar_ghosh_ground_space}
-    \notready
+    \lean{MPSTensor.majumdarGhosh_chainGroundSpace_eq_span,
+        MPSTensor.majumdarGhosh_ker_parentHamiltonian_eq_span,
+        MPSTensor.majumdarGhosh_pairCovering_linearIndependent,
+        MPSTensor.majumdarGhosh_finrank_chainGroundSpace}
+    \leanok
     \uses{def:majumdar_ghosh_tensor, thm:majumdar_ghosh_not_normal, def:ground_space_parent,
-        thm:majumdar_ghosh_coverings_chain_ground_space}
+        thm:majumdar_ghosh_coverings_chain_ground_space, lem:majumdar_ghosh_intersection,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     On an even periodic chain of length $N = 2m\ge4$, let
     $H_{N,\mathrm{MG}}^{(3)}$ be the range-three parent Hamiltonian of the
     Majumdar--Ghosh tensor, the periodic sum of translates of the local
-    projector with kernel $\mathcal G_3(A_{\mathrm{MG}})$. Then
-    $H_{N,\mathrm{MG}}^{(3)}$ has a two-dimensional ground space, spanned by
-    the two nearest-neighbour singlet coverings
-    $(1,2)(3,4)\cdots(N-1,N)$ and $(2,3)(4,5)\cdots(N,1)$.
-    This two-fold degeneracy reflects the spontaneous breaking of the one-site
-    translation symmetry of the spin-$\tfrac12$ chain
-    $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1} +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$
-    of \cite{Cirac2021Matrix}.
+    projector with kernel $\mathcal G_{3}(A_{\mathrm{MG}})$. Then
+    $H_{N,\mathrm{MG}}^{(3)}$ has a two-dimensional ground space
+    $\mathcal G_{N,3}(A_{\mathrm{MG}})$, spanned by the two nearest-neighbour
+    singlet coverings $(1,2)(3,4)\cdots(N-1,N)$ and $(2,3)(4,5)\cdots(N,1)$.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    The two coverings lie in $\mathcal G_{N,3}(A)$ by
+    Theorem~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}. Conversely,
+    let $\psi\in\mathcal G_{N,3}(A)$. By
+    Lemma~\ref{lem:majumdar_ghosh_intersection}, $\psi=\Gamma_{N}(X)$ and its
+    translate by one site is $\Gamma_{N}(Y)$, with $X$ and $Y$ commuting with
+    $G$. Comparing the two cuts on the remaining $N-1$ sites gives
+    $\Gamma_{N-1}(XA^a)=\Gamma_{N-1}(A^aY)$, so $XA^a=A^aY$ by
+    Lemma~\ref{lem:majumdar_ghosh_graded_injectivity}. The entries of these two
+    equations force $X=\diag(x,y,y)=\tfrac{x+y}2\,1+\tfrac{x-y}2\,G$, and
+    $\Gamma_{N}(1)=P^{\mathrm{even}}_s+P^{\mathrm{odd}}_s$,
+    $\Gamma_{N}(G)=P^{\mathrm{even}}_s-P^{\mathrm{odd}}_s$ as in the proof of
+    Theorem~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}. The two
+    coverings are linearly independent because $\Gamma_{N}$ is injective on the
+    matrices commuting with $G$. The kernel of $H_{N,\mathrm{MG}}^{(3)}$ is
+    $\mathcal G_{N,3}(A)$ by
+    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space}.
+\end{proof}
+
+\begin{theorem}[No dimer ground state on odd rings]%
+    \label{thm:majumdar_ghosh_ground_space_odd}
+    \lean{MPSTensor.majumdarGhosh_chainGroundSpace_eq_bot_of_odd}
+    \leanok
+    \uses{lem:majumdar_ghosh_intersection, lem:majumdar_ghosh_graded_injectivity}
+    On an odd periodic chain of length $N\ge5$, the space
+    $\mathcal G_{N,3}(A_{\mathrm{MG}})$ is zero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    As in the proof of Theorem~\ref{thm:majumdar_ghosh_ground_space}, a vector
+    $\Gamma_{N}(X)$ of $\mathcal G_{N,3}(A)$ and its translates by one and two
+    sites give $XA^a=A^aY$ and $YA^a=A^aZ$, now with $X,Y,Z$ anticommuting with
+    $G$. The entries of these equations force $X=0$.
+\end{proof}
+
+\begin{remark}\label{rem:majumdar_ghosh_review_hamiltonian}
+    By Theorem~\ref{thm:majumdar_ghosh_hamiltonian_eigen}, every vector of
+    $\mathcal G_{N,3}(A)$ is an eigenvector of the spin-$\tfrac12$ chain
+    $H=\sum \boldsymbol{S}_i\cdot\boldsymbol{S}_{i+1}
+        +\tfrac12\sum\boldsymbol{S}_i\cdot\boldsymbol{S}_{i+2}$
+    of \cite{Cirac2021Matrix} with eigenvalue $-\tfrac{3N}{8}$. If
+    $-\tfrac{3N}{8}$ is the smallest eigenvalue of $H$, then the two-fold
+    degeneracy of Theorem~\ref{thm:majumdar_ghosh_ground_space} reflects the
+    spontaneous breaking of the one-site translation symmetry of this chain;
+    that lower bound is not formalized here.
+\end{remark}
 
 %% ===================================================================
