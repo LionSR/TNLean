@@ -109,16 +109,20 @@ the pair of the first block spread over both copies is not formalized.
 
 The block form (\ref{eq:mswc24_block_form}) also fails when every multiplicity is
 one, as soon as the $q$-site states of distinct blocks are not orthogonal
-\cite{gap:mswc24_block_form_mixed_overlap}. Part~(ii) of the lemma therefore has
-no formalized version, and restricting to multiplicity one does not give one.
+\cite{gap:mswc24_block_form_mixed_overlap}. Restricting to multiplicity one
+therefore does not give a version of part~(ii) of the lemma; restricting also to
+blocks whose $q$-site states are orthogonal does.
 
 \section{Elimination}
 A correct statement for repeated blocks must replace $\sum_j\beta_j\ket{\Omega_j}$
 by the fixed point of the actual positive part, whose restriction to the copies of
 block $j$ has rank one in the copy index, and carry the weights through $V$. It
 must also account for the overlaps of distinct blocks recorded in
-\cite{gap:mswc24_block_form_mixed_overlap}. The first step is a corrected form of
-(\ref{eq:mswc24_block_form}) for blocks whose $q$-site states are orthogonal.
+\cite{gap:mswc24_block_form_mixed_overlap}. For multiplicity one, the corrected form of
+(\ref{eq:mswc24_block_form}) for blocks whose $q$-site states are orthogonal and
+the resulting error bound, with no condition $q=o(N)$, are formalized; see
+\cite{gap:mswc24_block_form_mixed_overlap}. For $m_j\geq2$ no corrected
+construction is formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -123,25 +123,20 @@ theorem mpvOverlap_fixedPointTensor_self {σ : Matrix (Fin D) (Fin D) ℂ} (hσ 
   rfl
 
 open scoped Matrix.Norms.L2Operator in
-/-- **Overlap of the positive part with the fixed point.** Let `A` be normal in the gauge
-`∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` (arXiv:2307.01696, eq. (5)), let `λ₂`
-bound the moduli of the eigenvalues of `E_A` other than `1`, with correlation length `ξ`, and let
-`0 < γ < 1/2`. Then there is `C > 0` such that for all `q` and all `M ≥ 1`, with `N = qM` and
-`y = (N/q) e^{-γ q/ξ} = M e^{-γ q/ξ}`,
-`|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| ≤ C y e^{C y}`, where `P_q` is the positive part of the `q`-site
-blocked tensor and `P_∞` the fixed-point tensor.
+/-- **Overlap of the positive part with the fixed point, as a complex number.** In the setting of
+`exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le`, the overlap itself, not only its modulus,
+is close to `1`: `|⟨φ_M(P_∞)|φ_M(P_q)⟩ - 1| ≤ C y e^{C y}` with `y = M e^{-γ q/ξ}`.
 
 arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", eqs.
-`final_eq` to `finished` (the estimate (S29)), quoted as arXiv:2307.01696, eq. (S9). The source
-concludes `O(ε_q)` from `ε_q + ε_q² e^{ε_q}(1 + O(ε_q/M))`, which is the present bound in the
-regime where `ε_q` stays bounded. -/
-theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
+`final_eq` to `finished`: the telescoping estimate bounds `Tr τ_{AB}^M - Tr τ_{BB}^M`, which is
+this difference. -/
+theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
+      ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have : NeZero D := ⟨by rintro rfl; simp at htr⟩
@@ -195,12 +190,8 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
       mpvOverlap_fixedPointTensor_self hσ.posSemidef htr]
   have hy : 0 ≤ c * (K₃ * K₁ * x ^ q) := by positivity
   have hgeom := one_add_pow_sub_one_le_mul_exp hy M
-  calc |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖|
-      = |‖(1 : ℂ)‖ - ‖mpvOverlap (polarPosTensor (blockTensor A q))
-          (fixedPointTensor σ) M‖| := by rw [norm_one]
-    _ ≤ ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ := by
-        rw [norm_sub_rev]; exact abs_norm_sub_norm_le _ _
-    _ ≤ K₄ * ‖T ^ M - Tinf ^ M‖ := by rw [hover]; exact htrace _
+  calc ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖
+      ≤ K₄ * ‖T ^ M - Tinf ^ M‖ := by rw [hover]; exact htrace _
     _ ≤ K₄ * (c * ((1 + c * (K₃ * K₁ * x ^ q)) ^ M - 1)) := by gcongr
     _ ≤ K₄ * (c * (M * (c * (K₃ * K₁ * x ^ q)) *
           Real.exp (M * (c * (K₃ * K₁ * x ^ q))))) := by gcongr
@@ -210,6 +201,37 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
         have hKC : K ≤ K₄ * c * K + K + 1 := by nlinarith [mul_nonneg (mul_nonneg hK₄ hc) hK]
         have hKC' : K₄ * c * K ≤ K₄ * c * K + K + 1 := by linarith
         gcongr
+
+/-- **Overlap of the positive part with the fixed point.** Let `A` be normal in the gauge
+`∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` (arXiv:2307.01696, eq. (5)), let `λ₂`
+bound the moduli of the eigenvalues of `E_A` other than `1`, with correlation length `ξ`, and let
+`0 < γ < 1/2`. Then there is `C > 0` such that for all `q` and all `M ≥ 1`, with `N = qM` and
+`y = (N/q) e^{-γ q/ξ} = M e^{-γ q/ξ}`,
+`|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| ≤ C y e^{C y}`, where `P_q` is the positive part of the `q`-site
+blocked tensor and `P_∞` the fixed-point tensor.
+
+arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", eqs.
+`final_eq` to `finished` (the estimate (S29)), quoted as arXiv:2307.01696, eq. (S9). The source
+concludes `O(ε_q)` from `ε_q + ε_q² e^{ε_q}(1 + O(ε_q/M))`, which is the present bound in the
+regime where `ε_q` stays bounded. -/
+theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le (A : MPSTensor d D)
+    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
+    (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
+      |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
+        C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
+          Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
+  obtain ⟨C, hC, h⟩ :=
+    exists_norm_mpvOverlap_polarPosTensor_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
+  refine ⟨C, hC, fun q M _ => ?_⟩
+  calc |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖|
+      = |‖(1 : ℂ)‖ - ‖mpvOverlap (polarPosTensor (blockTensor A q))
+          (fixedPointTensor σ) M‖| := by rw [norm_one]
+    _ ≤ ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ := by
+        rw [norm_sub_rev]; exact abs_norm_sub_norm_le _ _
+    _ ≤ _ := h q M
 
 /-! ### The normalization `c_N` -/
 

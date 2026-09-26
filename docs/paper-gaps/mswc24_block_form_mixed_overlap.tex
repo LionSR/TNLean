@@ -106,13 +106,33 @@ positive square root of $B^\dagger B$.
 
 \section{Elimination}
 Two statements would repair part~(ii) for multiplicity one. The first adds the
-hypothesis that the $q$-site states of distinct blocks are orthogonal, under which
+hypothesis that the $q$-site states of distinct blocks are orthogonal,
+$\sum_{i_1,\dots,i_q}\overline{(A_j^{i_1}\cdots A_j^{i_q})_{ab}}\,
+(A_{j'}^{i_1}\cdots A_{j'}^{i_q})_{a'b'}=0$ for $j\neq j'$. Under it
 (\ref{eq:mswc24_mixed_block_form}) holds with $\lvert\mu_j\rvert^q$ in place of
-$\mu_j^q$ and the source's proof goes through. The second keeps the source's
-hypotheses and adds to the rate a term controlled by the mixed transfer matrices,
-of the form $(N/q)\,\tau^{2q}$ suggested by the counterexample; it needs a
-perturbation bound for the square root of $B^\dagger B$ around its block-diagonal
-part. Neither is formalized.
+$\mu_j^q$: writing the blocked map as $B=\sum_j\mu_j^qB_jK_j^\dagger$ with the
+isometries $K_j$ that place the bond pairs of block $j$, the polar decomposition of
+$B$ is $V=\sum_jV_jK_j^\dagger$, $P=\sum_j\mu_j^qK_jP_jK_j^\dagger$ for $\mu_j>0$.
+The states of distinct blocks, before and after the replacement by the fixed
+points, are then exactly orthogonal, the term $O(e^{-N/\xi_{\mathrm{off\text{-}diag}}})$
+vanishes, and part~(ii) reduces to part~(i) for each block, with no condition
+$q=o(N)$. For multiplicity one the phase of $\mu_j$ can be absorbed into $A_j$,
+which stays normal with the same transfer map, so $\mu_j>0$ is no loss. This
+repair is formalized.\footnote{Formal declarations:
+    \leanid{Matrix.polarIso_sum_of_orthogonal} in
+    \doclink{TNLean/MPS/Preparation/OrthogonalSumPolar};
+    \leanid{MPSTensor.nonNormalApproxVector_blockSum} in
+    \doclink{TNLean/MPS/Preparation/OrthogonalBlockSum};
+    \leanid{MPSTensor.exists_approximationError_le_blockSum} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_blockSum} in
+    \doclink{TNLean/MPS/Preparation/OrthogonalBlockError}.}
+The orthogonality holds for instance when distinct blocks use disjoint sets of
+physical indices.
+
+The second keeps the source's hypotheses and adds to the rate a term controlled
+by the mixed transfer matrices, of the form $(N/q)\,\tau^{2q}$ suggested by the
+counterexample; it needs a perturbation bound for the square root of $B^\dagger B$
+around its block-diagonal part. It is not formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}
