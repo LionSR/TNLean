@@ -10,7 +10,8 @@
 %% condition. The virtual-level theory (fusion and action tensors,
 %% gauge, associator, obstruction) is Chapter ch:mpo_algebras.
 %% Lean modules: TNLean/MPS/Symmetry/MPOSymmetry/{Defs,NIMRep,Character,
-%%   Examples}.lean (Sections sec:mposym_fusion and sec:mposym_symmetric).
+%%   FusionRing,SymmetricBoundary,Examples}.lean (Sections sec:mposym_fusion
+%%   and sec:mposym_symmetric).
 %% Planned Lean module for the Perron--Frobenius dimension:
 %%   TNLean/MPS/Symmetry/MPOSymmetry/Dimension.lean.
 %% **Scope restriction (periodic boundary):** Garre-Rubio, Lootens and
@@ -792,28 +793,152 @@ relation between word traces has nonnegative integer coefficients.
     Theorem~\ref{thm:mpoalg_no_symmetric_normal}.
 \end{example}
 
-\begin{remark}[Symmetric superpositions of several normal states]%
-    \label{rem:mposym_pf_symmetric_state}
-    \uses{thm:mpo_symmetric_nimrep, ex:mpo_symmetry_fibonacci,
-        def:mposym_pf_dimension}
-    The obstruction of Corollary~\ref{cor:mpo_symmetric_no_go} concerns a
-    single normal tensor. A superposition of the periodic vectors of several
-    normal tensors can still be an eigenvector of every operator. If positive
-    numbers $v_x$ satisfy $\sum_xv_xM_{a,x}^y=r_av_y$ for all $a$ and $y$,
-    with the coefficients $M_{a,x}^y$ of
-    Theorem~\ref{thm:mpo_symmetric_nimrep}, then
-    $\ket{\psi^{(N)}}=\sum_xv_x\ket{V^{(N)}(A_x)}$ satisfies
-    $O_a^{(N)}\ket{\psi^{(N)}}=r_a\ket{\psi^{(N)}}$; Garre-Rubio, Lootens
-    and Molnár show that such a $v$ exists when the algebra is that of a
-    fusion category \cite[Section~5]{GarreRubio2023MPOSym}. For the Fibonacci
-    family of Example~\ref{ex:mpo_symmetry_fibonacci}, $M_\tau=N_\tau$ and
+The obstruction of Corollary~\ref{cor:mpo_symmetric_no_go} concerns a
+single normal tensor. A superposition of the periodic vectors of several
+normal tensors can still be an eigenvector of every operator. When the
+algebra is that of a fusion category, such a superposition with positive
+weights exists for every module \cite[Section~5]{GarreRubio2023MPOSym}; it
+is the boundary state compatible with a two-dimensional bulk carrying the
+operators as virtual symmetries. The fusion category enters only through its
+fusion ring.
+
+\begin{definition}[Fusion ring]%
+    \label{def:mposym_fusion_ring}
+    \lean{MPOTensor.IsFusionRing}
+    \leanok
+    \uses{def:fusion_unit_invertible}
+    Structure constants $N_{ab}^c\in\N$ on a finite label set $I$ form a
+    \emph{fusion ring} with unit $e$ and duality $a\mapsto a^*$ if they are
+    associative,
+    $\sum_xN_{ab}^xN_{xc}^f=\sum_xN_{bc}^xN_{ax}^f$ for all $a,b,c,f$, the
+    label $e$ is a unit in the sense of
+    Definition~\ref{def:fusion_unit_invertible}, the duality is an
+    involution, $N_{ab}^e=\delta_{b,a^*}$, and
+    $N_{b^*a^*}^{c^*}=N_{ab}^c$. These are the identity element and dual
+    elements of the fusion category of a physical symmetry
+    \cite[Section~5]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 1236.
+\end{definition}
+
+\begin{theorem}[Positive regular element of a fusion ring]%
+    \label{thm:mposym_fusion_ring_regular}
+    \lean{MPOTensor.IsFusionRing.exists_pos_mul,
+        MPOTensor.IsFusionRing.exists_pos_regular,
+        MPOTensor.IsFusionRing.perronFrobeniusDim_pos,
+        Matrix.exists_eq_smul_of_pos_of_mulVec_eq}
+    \leanok
+    \uses{def:mposym_fusion_ring, thm:mposym_pf_eigenvector,
+        lem:mposym_pf_dimension_positive}
+    For a fusion ring there are positive numbers $r_b$ with
+    $\sum_br_bN_{ab}^c=d_a\,r_c$ for all labels $a$ and $c$, where $d_a$ is
+    the Perron--Frobenius dimension of $a$. Moreover $d_a>0$ for every $a$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The coefficient of $c$ in $(b\times b^*)\times c$ is at least
+    $N_{bb^*}^eN_{ec}^c=1$, and by associativity it equals the coefficient
+    of $c$ in $b\times(b^*\times c)$; so for all $b,c$ some label $a$ has
+    $N_{ba}^c>0$. Hence the matrix $P_{bc}=\sum_aN_{ba}^c$ of right
+    multiplication by the sum of all labels has positive entries. By
+    Theorem~\ref{thm:mposym_pf_eigenvector} applied to the transpose of $P$,
+    there is a nonzero row vector $r\geq0$ with $rP=\rho r$, and positivity of
+    $P$ forces every $r_c>0$. An eigenvector of a positive matrix with
+    positive entries spans its eigenspace: if $wP=\rho w$ and $t=\min_c
+        w_c/r_c$, then $w-tr$ is a nonnegative eigenvector with a vanishing entry,
+    and positivity of $P$ forces $w=tr$. Left multiplication by $a$, the
+    matrix $N_a$, commutes with $P$ by associativity, so $rN_a$ is again an
+    eigenvector of $P$ for $\rho$ and $rN_a=t_ar$. By
+    Lemma~\ref{lem:mposym_pf_dimension_positive}, $t_a=d_a$. Finally
+    $d_ar_a=\sum_br_bN_{ab}^a\geq r_eN_{ae}^a=r_e>0$.
+\end{proof}
+
+\begin{theorem}[A positive common eigenvector of a nonnegative integer representation]%
+    \label{thm:mposym_nimrep_pos_eigenvector}
+    \lean{MPOTensor.IsNIMRep.exists_pos_left_eigenvector,
+        MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim}
+    \leanok
+    \uses{thm:mposym_fusion_ring_regular, def:fusion_character_nimrep}
+    Let $N$ be a fusion ring with unit $e$ and let $M_{a,x}^y$ be a
+    nonnegative integer representation of it on a finite set $K$ with
+    $M_{e,x}^y=\delta_{xy}$. Then there are positive numbers $v_x$ with
+    \begin{align}
+        \sum_xv_xM_{a,x}^y & =d_a\,v_y
+        \label{eq:mposym_nimrep_eigenvector}
+    \end{align}
+    for all labels $a$ and all $y\in K$. If $K$ is nonempty, $d_a$ is the
+    spectral radius of the matrix $M_a$. No indecomposability of the
+    representation and no commutativity of the fusion ring is needed.
+    % Source anchor: arXiv:2203.12563, lines 1801--1803.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $r$ be as in Theorem~\ref{thm:mposym_fusion_ring_regular} and
+    $S=\sum_br_bM_b$. By (\ref{eq:mpo_nimrep}),
+    $M_bM_a=\sum_cN_{ab}^cM_c$, so
+    $SM_a=\sum_c\left(\sum_br_bN_{ab}^c\right)M_c=d_aS$. The column sums
+    $v_y=\sum_xS_{xy}$ therefore satisfy (\ref{eq:mposym_nimrep_eigenvector}),
+    and $v_y\geq r_eM_{e,y}^y=r_e>0$. A positive left eigenvector of the
+    nonnegative matrix $M_a$ has the spectral radius as its eigenvalue, by
+    the argument of Lemma~\ref{lem:mposym_pf_dimension_positive}.
+\end{proof}
+
+\begin{theorem}[Positive symmetric boundary state]%
+    \label{thm:mposym_symmetric_boundary_state}
+    \lean{MPOTensor.IsMPOSymmetricFamily.mpo_mulVec_sum_eq_smul,
+        MPOTensor.exists_pos_symmetric_boundary_state}
+    \leanok
+    \uses{thm:mposym_nimrep_pos_eigenvector, thm:mpo_symmetric_nimrep}
+    Let $(A_x)_{x\in K}$, with $K$ nonempty, be normal tensors of positive bond dimension whose
+    periodic vectors are linearly independent at some length $N_0\geq1$,
+    symmetric under a fusion algebra whose structure constants form a fusion
+    ring with unit $e$, and suppose $M_{e,x}^y=\delta_{xy}$. Then there are
+    positive numbers $v_x$ such that for every label $a$ and every
+    $N\geq1$,
+    \begin{align}
+        O_a^{(N)}\ket{\psi^{(N)}} & =d_a\ket{\psi^{(N)}},         &
+        \ket{\psi^{(N)}}          & =\sum_xv_x\ket{V^{(N)}(A_x)},
+        \notag
+    \end{align}
+    with $d_a>0$, and $\ket{\psi^{(N_0)}}\neq0$. This is the symmetric boundary state of
+    \cite[Section~5]{GarreRubio2023MPOSym}, whose eigenvalue $r_a$ is the
+    spectral radius of $M_a$.
+    % Source anchor: arXiv:2203.12563, lines 1795--1805 (symboundary).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:mpo_symmetric_nimrep} the coefficients $M_{a,x}^y$
+    form a nonnegative integer representation. Take $v$ from
+    Theorem~\ref{thm:mposym_nimrep_pos_eigenvector}. Then
+    $O_a^{(N)}\ket{\psi^{(N)}}=\sum_xv_x\sum_yM_{a,x}^y\ket{V^{(N)}(A_y)}
+        =\sum_y\left(\sum_xv_xM_{a,x}^y\right)\ket{V^{(N)}(A_y)}
+        =d_a\ket{\psi^{(N)}}$. Since the periodic vectors are linearly independent at length $N_0$ and $v\neq0$, $\ket{\psi^{(N_0)}}\neq0$.
+\end{proof}
+
+\begin{example}[The Fibonacci boundary state]%
+    \label{ex:mposym_fibonacci_boundary_state}
+    \lean{FibonacciCompression.isFusionRing_fibNim,
+        FibonacciCompression.fibDim_left_eigenvector,
+        FibonacciCompression.fibBoundaryState,
+        FibonacciCompression.mpo_fibBlock_mulVec_boundary,
+        FibonacciCompression.mpo_fibTau_mulVec_boundary,
+        FibonacciCompression.mpo_fibOne_mulVec_boundary}
+    \leanok
+    \uses{thm:mposym_symmetric_boundary_state, ex:mpo_symmetry_fibonacci,
+        ex:mposym_fibonacci_dimension}
+    The Fibonacci structure constants form a fusion ring with unit $1$ and
+    both labels self-dual. For the family of
+    Example~\ref{ex:mpo_symmetry_fibonacci}, $M_\tau=N_\tau$ and
     $v=(1,\varphi)$, so
-    $\ket{V^{(N)}(A_1)}+\varphi\ket{V^{(N)}(A_\tau)}$ is an eigenvector of
-    $O_\tau^{(N)}$ with eigenvalue $d_\tau=\varphi$, which is not an integer.
-    % Source anchor: arXiv:2203.12563, lines 1795--1805 (common positive
-    %   eigenvector of the M_a, eigenvalue r_a, and r_a = d_a when
+    $\ket{\psi^{(N)}}=\ket{V^{(N)}(A_1)}+\varphi\ket{V^{(N)}(A_\tau)}$
+    satisfies $O_1^{(N)}\ket{\psi^{(N)}}=\ket{\psi^{(N)}}$ and
+    $O_\tau^{(N)}\ket{\psi^{(N)}}=\varphi\ket{\psi^{(N)}}$ for every
+    $N\geq1$. The eigenvalue $d_\tau=\varphi$ is not an integer.
+    % Source anchor: arXiv:2203.12563, lines 1795--1805 (r_a = d_a when
     %   M_a = N_a) and line 1993 (the Fibonacci action).
-\end{remark}
+\end{example}
 
 %% ---------------------------------------------------------
 \section{The zipper condition}%
