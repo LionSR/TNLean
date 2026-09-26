@@ -616,13 +616,16 @@ or conjugate comparison tensor, a tensor product, or a composition. Assuming
 the presentation there is not the presentation on $\mathcal U$; it is the
 assertion that the presentation survives those operations. For blocking the
 source asserts exactly that, writing that the blocked tensor is again normal
-and in canonical form II \cite[line~356]{Cirac2017MPU}; for the comparison
-tensors, products, and compositions it is the content of \ghissue{6139}. In
-neither case is a preservation statement available, so all twelve keep their
-restriction.
+and in canonical form II \cite[line~356]{Cirac2017MPU}. Positive blocking now
+preserves the bundled canonical-form-II presentation, including the same
+ambient fixed matrix:
+\leanid{MPOTensor.IsMPUCanonicalFormII.blockTensor}. Its use in the
+derived-tensor entries has not yet been consolidated. For the comparison
+tensors, products, and compositions, preservation remains the subject of
+\ghissue{6139}; their restrictions remain necessary.
 
-The census behind that unavailability is the following. Sixteen formal
-declarations mention the bundled presentation: the structure itself, thirteen
+The census before the positive-blocking construction was the following.
+Sixteen formal declarations mentioned the bundled presentation: the structure itself, thirteen
 that consume it, and two that construct one. The thirteen consumers conclude,
 about the same tensor, that its retained blocks fill the ambient bond space,
 that its bond space is nonempty, that its physical space is nonempty, that its
@@ -632,11 +635,13 @@ the two stabilized transfer identities, the normalized diagonal power, and the
 four source-factor isometry and rank statements. The two constructions produce
 a presentation from canonical data for a tensor equal to a normalized
 flattening, and from an arbitrary matrix product unitary by dimension
-reduction. Not one of the sixteen carries a presentation on $\mathcal U$ to a
+reduction. None of those sixteen carried a presentation on $\mathcal U$ to a
 presentation on a physical block, an adjoint, a transpose, a conjugate, a
 tensor product, or a composition, which is what the twelve entries would need;
 for the composition entry the transport has to run through a reduced
-representative, as the last part of this subsection shows.
+representative, as the last part of this subsection shows. The new
+positive-blocking construction supplies exactly the first of those transports;
+it does not transfer the source cuts or factors back to $\mathcal U$.
 
 As the development stands today, the three candidates cannot be removed while
 the twelve stand, and what blocks them is a citation obstruction rather than a
@@ -738,7 +743,9 @@ prerequisite for the other.
     \item Preservation of the bundled presentation along each operation the
           twelve use: positive physical blocking, physical adjunction,
           transposition, complex conjugation, independent tensor products,
-          and composition. A preservation statement must deliver all four
+          and composition. Positive blocking is now proved by
+          \leanid{MPOTensor.IsMPUCanonicalFormII.blockTensor}; the other
+          operations remain open. A preservation statement must deliver all four
           clauses of the presentation for the derived tensor: unitarity of
           its periodic operator family, literal canonical-form-II data for
           its normalized flattening, full support of those data, and a
@@ -749,12 +756,18 @@ prerequisite for the other.
           go through a reduced representative instead.
 \end{itemize}
 
-The second item is not uniformly distant. For blocking, physical adjunction,
-and independent tensor products all four clauses are separately available and
-only the assembled statement is missing. Blocking preserves unitarity,
-transports canonical-form-II data to the blocked normalized flattening,
-preserves full support, and iterates the transfer map, so the same ambient
-matrix stays fixed. Physical adjunction preserves unitarity, transports the
+The second item is not uniformly distant. The four clauses have been assembled
+for positive blocking: unitarity, canonical-form-II data for the blocked
+normalized flattening, full support, and preservation of the recorded
+positive diagonal fixed matrix. In particular, whenever the blocked tensor is
+simple, its source-$v$ gate is isometric for that same matrix by
+\leanid{MPOTensor.IsMPUCanonicalFormII.sourceV_blockTensor_isIsometry}; a
+simple block occurs at a positive length at most $D^4$ by
+\leanid{MPOTensor.IsMPUCanonicalFormII.exists_sourceV_blockTensor_isIsometry}.
+Neither result transports source-cut factors back to the unblocked tensor.
+For physical adjunction and independent tensor products all four clauses are
+separately available, but the assembled preservation statement remains
+missing. Physical adjunction preserves unitarity, transports the
 data together with their full support, and conjugates the transfer map
 entrywise. Independent tensor products preserve unitarity, carry product
 canonical-form-II data whose full support follows from full support of the two
@@ -823,7 +836,10 @@ Until the first item exists, deleting any of the three candidates moves a
 hypothesis boundary out of sight without removing it, so all sixteen pointwise
 entries remain. Once it exists, the three candidates merge and thirteen remain:
 the generic supplied-pair step, which is kept deliberately, and the twelve
-derived-tensor entries, each waiting on its own operation in the second item.
+derived-tensor entries. Their positive-blocking case now has the required
+preservation theorem, but its downstream entries have not yet been
+consolidated; the other derived operations still require their respective
+preservation or reduction arguments.
 
 \section{Verdict}
 
