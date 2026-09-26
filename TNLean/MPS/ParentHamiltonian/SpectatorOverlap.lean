@@ -27,7 +27,7 @@ private theorem norm_inner_le_of_fibers (x y : PiLp 2 E) {ε : ℝ} (hε : 0 ≤
     mul_le_mul_of_nonneg_left
       (Real.sum_mul_le_sqrt_mul_sqrt Finset.univ (fun i ↦ ‖x i‖) (fun i ↦ ‖y i‖)) hε
 
-variable {α β γ : Type*} [Fintype α] [Fintype β] [Fintype γ]
+variable {α β γ : Type*} [Finite α] [Fintype β] [Fintype γ]
 
 private theorem norm_inner_le_of_reindexed_fibers
     (e : α × β ≃ γ) (x y : EuclideanSpace ℂ γ) {ε : ℝ} (hε : 0 ≤ ε)
@@ -36,6 +36,7 @@ private theorem norm_inner_le_of_reindexed_fibers
       ε * ‖(WithLp.toLp 2 (fun j ↦ x (e (i, j))) : EuclideanSpace ℂ β)‖ *
         ‖(WithLp.toLp 2 (fun j ↦ y (e (i, j))) : EuclideanSpace ℂ β)‖) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
+  let := Fintype.ofFinite α
   let F := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (e.symm.trans (Equiv.sigmaEquivProd α β).symm)).trans
       (LinearIsometryEquiv.piLpCurry ℂ 2 (fun (_ : α) (_ : β) ↦ ℂ))
