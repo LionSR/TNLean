@@ -5741,13 +5741,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{thm:mpu_cfii_equal_periodic_virtual_unitary,
+        thm:mpu_virtual_sandwich_source_ranks,
         lem:mpu_common_simple_blocking_finite,
         prop:mpu_admissible_index_well_defined}
     Equality of the periodic operators gives a unitary virtual similarity,
     which preserves both source-cut ranks. Choose a common positive simple
     blocking length $k$ for $U$ and $V$. The periodic
-    operators of the $k$-site blocks agree. Their source-cut ranks therefore
-    agree, and the two logarithmic differences defining the indices coincide.
+    operators of the $k$-site blocks agree, so the ranks
+    $r_k$ and $\ell_k$ of these blocks satisfy
+    $r_k(U)=r_k(V)$ and $\ell_k(U)=\ell_k(V)$. Hence
+    \begin{align}
+        \operatorname{ind}(U)
+         & =\frac12\bigl(\log_2 r_k(U)-\log_2\ell_k(U)\bigr)
+        =\frac12\bigl(\log_2 r_k(V)-\log_2\ell_k(V)\bigr)
+        =\operatorname{ind}(V).
+    \end{align}
 \end{proof}
 
 \begin{definition}[Index through a reduced canonical representative]
