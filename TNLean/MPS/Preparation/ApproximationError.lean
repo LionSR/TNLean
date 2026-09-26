@@ -70,6 +70,11 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 
+/-- A square matrix of trace one has a nonempty index: `Tr σ = 1` forces `D ≠ 0`. -/
+theorem Matrix.neZero_of_trace_eq_one {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ}
+    (h : σ.trace = 1) : NeZero D :=
+  ⟨by rintro rfl; simp at h⟩
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -139,7 +144,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
       ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
-  have : NeZero D := ⟨by rintro rfl; simp at htr⟩
+  have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set Ψ := mixedTransferMatrixLeft (fixedPointTensor σ)
   set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
@@ -279,7 +284,7 @@ theorem exists_abs_norm_mpvState_sq_sub_one_le (A : MPSTensor d D) (hN : Kraus.I
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ N : ℕ,
       |‖mpvState A N‖ ^ 2 - 1| ≤ K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ N := by
-  have : NeZero D := ⟨by rintro rfl; simp at htr⟩
+  have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K₀, hK₀, hT⟩ := exists_norm_transferMatrix_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
   have htrace : ∀ G, ‖Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ G‖ ≤ ‖trL‖ * ‖G‖ := trL.le_opNorm
@@ -304,7 +309,7 @@ theorem exists_norm_mpvState_sq_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) :
     ∃ B : ℝ, ∀ N : ℕ, ‖mpvState A N‖ ^ 2 ≤ B := by
-  have : NeZero D := ⟨by rintro rfl; simp at htr⟩
+  have := Matrix.neZero_of_trace_eq_one htr
   have hNT := isNormalTensor_of_isNormal_leftCanonical A hN hA
   have hCh := Kraus.isChannel_mapLM A hA
   obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
@@ -363,7 +368,7 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
       |1 - ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M‖| ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
-  have : NeZero D := ⟨by rintro rfl; simp at htr⟩
+  have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨C, hC, h⟩ :=
     exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le A hN hA hσ htr hfix hlam hγ0 hγ
   obtain ⟨B, hB⟩ := exists_norm_mpvState_sq_le A hN hA hσ htr hfix

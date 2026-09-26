@@ -187,7 +187,11 @@ theorem nonNormalApproxOverlap_repeatedBlockTensor {q M : ℕ} (hq : q ≠ 0) (h
   · rw [polarPos_repeatedBlockTensor hq, ghzAmplitude_repeatedBlock]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       Fin.sum_univ_three, repeatedBlockCoord, repeatedBlockSqrt]
-    simp [zero_pow hM, invSqrtTwo]
+    simp only [Nat.succ_eq_add_one, Nat.reduceAdd, one_div, Fin.isValue, cons_val_zero,
+      star_div₀, star_ofNat, RCLike.star_def, conj_ofReal, invSqrtTwo, of_apply, cons_val',
+      cons_val_fin_one, inv_pow, cons_val_one, cons_val, zero_pow hM, mul_zero, add_zero,
+      star_inv₀, one_pow, mul_one, zero_add, ofReal_div, ofReal_add, ofReal_mul, ofReal_ofNat,
+      ofReal_inv, ofReal_pow, ofReal_one]
     have h5 : Real.sqrt 5 ≠ 0 := by positivity
     have hX : Real.sqrt X = Real.sqrt (4 * (2⁻¹ : ℝ) ^ M + 1) / Real.sqrt 5 := by
       rw [Real.sqrt_div' _ (by norm_num : (0 : ℝ) ≤ 5)]
@@ -207,12 +211,16 @@ theorem nonNormalApproxOverlap_repeatedBlockTensor {q M : ℕ} (hq : q ≠ 0) (h
   · rw [polarSupport_repeatedBlockTensor hq, ghzAmplitude_repeatedBlock]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       repeatedBlockCoord, repeatedBlockProj]
-    simp [zero_pow hM, X]
-    have h5 : ((Real.sqrt 5 : ℝ) : ℂ) * (Real.sqrt 5 : ℝ) = 5 := by
-      rw [← Complex.ofReal_mul, Real.mul_self_sqrt (by norm_num)]; norm_num
+    simp only [inv_pow, ofReal_div, ofReal_add, ofReal_mul, ofReal_ofNat, ofReal_inv,
+      ofReal_pow, ofReal_one, Nat.succ_eq_add_one, Nat.reduceAdd, one_div, Fin.isValue,
+      cons_val_zero, star_div₀, star_ofNat, RCLike.star_def, conj_ofReal, of_apply, cons_val',
+      cons_val_fin_one, cons_val_one, cons_val, zero_pow hM, mul_zero, add_zero, star_inv₀,
+      one_pow, mul_one, zero_add, X]
+    have h5 : ((Real.sqrt 5 : ℝ) : ℂ) ^ 2 = 5 := by
+      exact_mod_cast Complex.ofReal_sqrt_sq 5 (by norm_num)
     field_simp
     ring_nf
-    rw [show ((Real.sqrt 5 : ℝ) : ℂ) ^ 2 = 5 by rw [sq, h5]]
+    rw [h5]
     ring
   · rw [diagGram_repeatedBlockDiag hq]
     simp [Fin.sum_univ_three, zero_pow hM]

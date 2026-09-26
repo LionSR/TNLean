@@ -159,13 +159,6 @@ theorem sum_star_mpv_approximatingTensor_mul_mpv (A : MPSTensor d D) {q : ℕ}
   simp only [mpvOverlap, mpv_fixedPointTensor]
   exact Finset.sum_congr rfl fun τ _ => mul_comm _ _
 
-/-- The periodic state on `N = qM` sites, read in blocks, is the periodic state of the blocked
-tensor. -/
-theorem mpv_blockedConfigEquiv (A : MPSTensor d D) (q M : ℕ)
-    (τ : Fin M → Fin (blockPhysDim d q)) :
-    mpv A (blockedConfigEquiv d M q τ) = mpv (blockTensor A q) τ := by
-  simp only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor]
-
 /-- The squared norm of the periodic state on `N = qM` sites, as a sum over blocked
 configurations. -/
 theorem sum_star_mpv_blockedConfigEquiv (A : MPSTensor d D) (q M : ℕ) :
@@ -198,13 +191,7 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
           mpvOverlap (polarPosTensor (blockTensor (Aj j) q)) (fixedPointTensor (σ j)) M‖ /
         (Real.sqrt (∑ j, μ j ^ (2 * (M * q))) *
           Real.sqrt (∑ j, μ j ^ (2 * (M * q)) * ‖mpvState (Aj j) (M * q)‖ ^ 2)) := by
-  have : ∀ j, NeZero (Dj j) := fun j => ⟨by
-    intro h
-    have := htr j
-    revert this
-    rw [Matrix.trace]
-    have hE : IsEmpty (Fin (Dj j)) := by rw [h]; infer_instance
-    simp [Finset.univ_eq_empty]⟩
+  have : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
   set N := M * q
   have hN : N ≠ 0 := Nat.mul_ne_zero (NeZero.ne M) hq
   set β : Fin b → ℂ := fun j => (μ j : ℂ) ^ N
@@ -269,69 +256,33 @@ theorem norm_nonNormalApproxOverlap_blockSum (hι : ∀ j, Function.Injective (�
       nonNormalApproxVector A q M (ghzAmplitude β)
         (fun j => embedPair (ι j) (fixedPointPair (σ j))) τ = 1 := by
     simp only [hS]
-    rw [sum_star_sum_mul_sum (fun j τ => ghzAmplitude β j * s j τ)
-      (fun j τ => ghzAmplitude β j * s j τ)]
-    rw [← ghzAmplitude_norm_sq hβ0]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Finset.sum_eq_single j]
-    · calc _ = star (ghzAmplitude β j) * ghzAmplitude β j * ∑ τ, star (s j τ) * s j τ := by
-            rw [Finset.mul_sum]
-            exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = _ := by rw [hss, ite_eq_left rfl, mul_one]
-    · intro j' _ hj'
-      calc _ = star (ghzAmplitude β j) * ghzAmplitude β j' * ∑ τ, star (s j τ) * s j' τ := by
-            rw [Finset.mul_sum]
-            exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = 0 := by rw [hss, ite_eq_right (Ne.symm hj'), mul_zero]
-    · simp
+    rw [sum_star_sum_mul_sum_of_orthogonal _ _ (fun _ => 1) s s hss]
+    simpa only [mul_one] using ghzAmplitude_norm_sq hβ0
   have hY : ((‖mpvState A N‖ ^ 2 : ℝ) : ℂ) =
       ∑ j, ((μ j ^ (2 * N) * ‖mpvState (Aj j) N‖ ^ 2 : ℝ) : ℂ) := by
     rw [← sum_star_mpv_blockedConfigEquiv]
     simp only [hT]
-    rw [sum_star_sum_mul_sum (fun j τ => β j * t j τ) (fun j τ => β j * t j τ)]
+    rw [sum_star_sum_mul_sum_of_orthogonal _ _ _ t t htt]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Finset.sum_eq_single j]
-    · calc _ = star (β j) * β j * ∑ τ, star (t j τ) * t j τ := by
-            rw [Finset.mul_sum]
-            exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = _ := by
-            rw [htt, ite_eq_left rfl, ← hβn, Complex.ofReal_mul, Complex.ofReal_pow,
-              ← Complex.normSq_eq_norm_sq, Complex.normSq_eq_conj_mul_self]
-            rfl
-    · intro j' _ hj'
-      calc _ = star (β j) * β j' * ∑ τ, star (t j τ) * t j' τ := by
-            rw [Finset.mul_sum]
-            exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = 0 := by rw [htt, ite_eq_right (Ne.symm hj'), mul_zero]
-    · simp
+    rw [← hβn, Complex.ofReal_mul, Complex.ofReal_pow, ← Complex.normSq_eq_norm_sq,
+      Complex.normSq_eq_conj_mul_self]
+    rfl
   have hZ : ∑ τ, star (nonNormalApproxVector A q M (ghzAmplitude β)
       (fun j => embedPair (ι j) (fixedPointPair (σ j))) τ) *
       mpv A (blockedConfigEquiv d M q τ) =
       (r : ℂ)⁻¹ * ∑ j, ((μ j ^ (2 * N) : ℝ) : ℂ) *
         mpvOverlap (polarPosTensor (blockTensor (Aj j) q)) (fixedPointTensor (σ j)) M := by
     simp only [hS, hT]
-    rw [sum_star_sum_mul_sum (fun j τ => ghzAmplitude β j * s j τ) (fun j τ => β j * t j τ),
-      Finset.mul_sum]
+    rw [sum_star_sum_mul_sum_of_orthogonal _ _ _ s t hst, Finset.mul_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [Finset.sum_eq_single j]
-    · calc _ = star (ghzAmplitude β j) * β j * ∑ τ, star (s j τ) * t j τ := by
-            rw [Finset.mul_sum]
-            exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = _ := by
-            have hsβ : star (β j) * β j = ((μ j ^ (2 * N) : ℝ) : ℂ) := by
-              rw [← hβn, Complex.star_def, Complex.conj_mul']
-              push_cast
-              ring
-            have hr' : star ((Real.sqrt (∑ l, ‖β l‖ ^ 2) : ℝ) : ℂ) = (r : ℂ) := by
-              simp [r]
-            rw [hst, ite_eq_left rfl, ghzAmplitude, star_div₀, hr', div_mul_eq_mul_div, hsβ]
-            ring
-    · intro j' _ hj'
-      calc _ = star (ghzAmplitude β j) * β j' * ∑ τ, star (s j τ) * t j' τ := by
-            rw [Finset.mul_sum]
-            exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
-        _ = 0 := by rw [hst, ite_eq_right (Ne.symm hj'), mul_zero]
-    · simp
+    have hsβ : star (β j) * β j = ((μ j ^ (2 * N) : ℝ) : ℂ) := by
+      rw [← hβn, Complex.star_def, Complex.conj_mul']
+      push_cast
+      ring
+    have hr' : star ((Real.sqrt (∑ l, ‖β l‖ ^ 2) : ℝ) : ℂ) = (r : ℂ) := by
+      simp [r]
+    rw [ghzAmplitude, star_div₀, hr', div_mul_eq_mul_div, hsβ]
+    ring
   -- Assemble.
   have hXr : Real.sqrt (∑ τ, ‖nonNormalApproxVector A q M (ghzAmplitude β)
       (fun j => embedPair (ι j) (fixedPointPair (σ j))) τ‖ ^ 2) = 1 := by

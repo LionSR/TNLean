@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Preparation.DiagonalPolar
 import TNLean.MPS.Preparation.OrthogonalSumPolar
 
 /-!
@@ -24,6 +25,13 @@ are orthogonal, `B_jᴴ B_{j'} = 0` for the blocked tensors `B_j` of the blocks.
   normal case (`nonNormalApproxVector_blockSum`).
 * The target is `|φ_N(A)⟩ = ∑ⱼ μⱼ^N |φ_N(A_j)⟩` (`mpv_blockSum`).
 * The states of distinct blocks entering these sums are orthogonal (`mpvOverlap_eq_zero`).
+
+The blocks are placed along arbitrary injective coordinate maps `ι_j` with disjoint ranges,
+rather than through the fixed flattening `finSigmaFinEquiv` of
+`MPSTensor.toTensorFromBlocks` and `MPSTensor.blockInclusion`, because the pairs of the
+approximating state are placed the same way (`MPSTensor.embedPair`, along
+`MPSTensor.SectorDecomposition.copyCoord` for a canonical form); the flattened direct sum is the
+case `ι_j a = finSigmaFinEquiv ⟨j, a⟩`.
 
 **Scope restriction (multiplicity one, orthogonal blocks):** the source's eq. (S5) is used only
 for `m_j = 1` and under the orthogonality of the `q`-site states of distinct blocks, which the
@@ -194,15 +202,6 @@ theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι
   by_cases h1 : x = ι j a <;> by_cases h2 : y = ι j c <;> simp [h1, h2, Kraus.blockTensor]
 
 /-! ### The approximating state -/
-
-/-- The tensor power of a product is the product of the tensor powers. -/
-theorem tensorPower_mul {ι₁ ι₂ ι₃ : Type*} [Fintype ι₂] (M : ℕ) (X : Matrix ι₁ ι₂ ℂ)
-    (Y : Matrix ι₂ ι₃ ℂ) :
-    tensorPower M X * tensorPower M Y = tensorPower M (X * Y) := by
-  ext s t
-  simp only [mul_apply, tensorPower, of_apply]
-  rw [Fintype.prod_sum]
-  exact Finset.sum_congr rfl fun τ _ => (Finset.prod_mul_distrib).symm
 
 /-- An embedded pair is supported on the image of the embedding: it vanishes when either leg
 lies outside the range of `ι`. -/

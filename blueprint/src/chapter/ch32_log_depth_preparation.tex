@@ -357,13 +357,17 @@ injective.
     \label{thm:ldp_polar_uniqueness}
     \lean{Matrix.polarPos_eq_of_eq_mul, Matrix.polarSupport_eq_of_eq_mul,
         Matrix.polarIso_eq_of_eq_mul,
-        Matrix.mul_eq_self_of_conjTranspose_mul_self_eq}
+        Matrix.mul_eq_self_of_conjTranspose_mul_self_eq,
+        Matrix.polarPos_eq_of_mul_self_eq, Matrix.polarSupport_eq_of_range_eq}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldpolar_support}
     Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
     projector $E$ onto the range of $Q$. Then $Q=(M^\dagger M)^{1/2}$, $E$ is the
     support projector of $M$, and $W$ is the partial isometry of the polar
-    decomposition of $M$. This is the step needed to identify the layers of
+    decomposition of $M$. In particular, every positive semidefinite $Q$ with
+    $Q^2=M^\dagger M$ is the positive part of $M$, and every orthogonal projector
+    with the range of that positive part is the support projector. This is the
+    step needed to identify the layers of
     \cite[eq.~(16)]{Malz2024Preparation} with the isometry of the blocked
     tensor, which the source asserts (``to the same effect'') without proof.
 \end{theorem}
@@ -456,7 +460,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \begin{lemma}[Overlap of the positive part with the fixed point]
     \label{lem:ldp_positive_part_overlap}
     \lean{MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul,
-        MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le}
+        MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le,
+        MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
         lem:ldp_positive_part_converges, def:correlation_length}
@@ -474,7 +479,9 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$ equals $(N/q)\,e^{-\gamma q/\xi}$
     when $q\ge1$. Explicitly, there is $C>0$ with
     $\bigl\lvert1-\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\rvert\bigr\rvert
-        \le Cy\,e^{Cy}$ for all $q\ge0$ and $M\ge1$.
+        \le Cy\,e^{Cy}$ for all $q\ge0$ and $M\ge1$. The same bound holds for the
+    overlap itself:
+    $\bigl\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle-1\bigr\rvert\le Cy\,e^{Cy}$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -502,7 +509,9 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     with $c\ge\max(1,\lVert\tau_\infty\rVert)$, induction on $M$ gives
     $\lVert\tau_q^M-\tau_\infty^M\rVert\le c\bigl((1+c\delta)^M-1\bigr)
         \le c\,Mc\delta\,e^{Mc\delta}$.
-    This proves the explicit bound. When $y\le1$ it is at most $Ce^{C}y$.
+    Since $\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle-1=\Tr\tau_q^M-\Tr\tau_\infty^M$,
+    this bounds the overlap itself, and hence also its modulus, which proves the
+    explicit bounds. When $y\le1$ it is at most $Ce^{C}y$.
     When $y>1$, the overlap is at most
     $\lVert\phi_M(P_q)\rVert=\lVert\phi_N(A)\rVert$, and these norms are
     bounded because $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ converges to $1$.
@@ -1419,7 +1428,10 @@ of $A$ along $w$.
     \end{align}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation}. As printed it is
     false: it fails both for a block of multiplicity two
-    (Theorem~\ref{thm:ldp_approximation_error_repeated_block}) and for two
+    (Theorem~\ref{thm:ldp_approximation_error_repeated_block}, with the pair of
+    that block on one of its copies; the source does not say where the pair
+    sits, and the same computation, recorded in the gap note but not
+    formalized, gives the failure for every placement) and for two
     blocks of multiplicity one whose states on $q$ sites are not orthogonal
     (Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks})
     \cite{gap:mswc24_multiplicity_fixed_point,gap:mswc24_block_form_mixed_overlap}.
@@ -1475,7 +1487,7 @@ of $A$ along $w$.
 
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_ghz_form}
+    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
     For a tensor of diagonal matrices the blocked map factors as $B=CJ^\dagger$,
     where $J\colon\ket e\mapsto\ket{e\,e}$ and the column $e$ of $C$ is the state
     of the diagonal coordinate $e$ on $q$ sites; here these are $\ket{0\cdots0}$
@@ -1532,7 +1544,7 @@ of $A$ along $w$.
 
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_ghz_form}
+    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
     As in the proof of Theorem~\ref{thm:ldp_approximation_error_repeated_block},
     the Gram matrix of the blocked map on the diagonal coordinates is
     $G=\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)$, whose positive

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.DiagonalPolar
+import TNLean.MPS.Preparation.PolarUniqueness
 
 /-!
 # The polar decomposition of an orthogonal sum
@@ -15,18 +15,19 @@ structure of `A`" (eq. (S5)). This file proves the matrix statement behind that 
 the hypothesis that makes it true: if `B = ∑ⱼ cⱼ Bⱼ Kⱼᴴ` with `cⱼ > 0`, isometries `Kⱼ` with
 orthogonal ranges, and `Bⱼᴴ Bⱼ' = 0` for `j ≠ j'`, then
 `V = ∑ⱼ Vⱼ Kⱼᴴ` and `P = ∑ⱼ cⱼ Kⱼ Pⱼ Kⱼᴴ`, where `Bⱼ = Vⱼ Pⱼ` are the polar decompositions of
-the summands (`Matrix.polarIso_sum_of_orthogonal`, `Matrix.polarPos_sum_of_orthogonal`).
+the summands (the two conjuncts of `Matrix.polarIso_sum_of_orthogonal`).
 Without `Bⱼᴴ Bⱼ' = 0` the conclusion fails
 (`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`).
 
 ## Main declarations
 
-* `Matrix.exists_polarIso_eq_mul` — the partial isometry is `V = M R` for some `R`.
-* `Matrix.conjTranspose_polarIso_mul_eq_zero`,
-  `Matrix.conjTranspose_polarIso_mul_polarIso_eq_zero` — orthogonality `Mᴴ M' = 0` passes to
-  the partial isometries.
-* `Matrix.polarIso_sum_of_orthogonal`, `Matrix.polarPos_sum_of_orthogonal` — the polar
-  decomposition of an orthogonal sum.
+* `Matrix.sum_mul_sum_of_mul_eq_zero` — a product of sums without cross terms.
+* `Matrix.polarIso_sum_of_orthogonal` — the polar decomposition of an orthogonal sum: its
+  partial isometry and, as the second conjunct, its positive part.
+
+The facts `V = M R` and that orthogonality `Mᴴ M' = 0` passes to the partial isometries
+(`Matrix.exists_polarIso_eq_mul`, `Matrix.conjTranspose_polarIso_mul_polarIso_eq_zero`) are in
+`TNLean.MPS.Preparation.PolarUniqueness`.
 
 ## References
 
@@ -41,53 +42,6 @@ open Matrix
 namespace Matrix
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
-
-omit [Fintype κ] [DecidableEq κ] in
-/-- If the range of `X` lies in the range of `Y`, then `X = Y R` for some `R`. -/
-theorem exists_mul_eq_of_range_le {ρ ρ' : Type*} [Fintype ρ] [Fintype ρ']
-    {X : Matrix κ ρ' ℂ} {Y : Matrix κ ρ ℂ}
-    (h : LinearMap.range X.mulVecLin ≤ LinearMap.range Y.mulVecLin) :
-    ∃ R : Matrix ρ ρ' ℂ, Y * R = X := by
-  classical
-  choose u hu using fun c : ρ' => h ⟨Pi.single c 1, rfl⟩
-  refine ⟨of fun a c => u c a, ?_⟩
-  ext a c
-  have h1 := congrFun (hu c) a
-  simp only [mulVecLin_apply, mulVec, dotProduct] at h1
-  rw [mul_apply]
-  simpa [Pi.single_apply] using h1
-
-/-- The positive part has a right factor onto the support projector: `P R = Π` for some `R`. -/
-theorem exists_polarPos_mul_eq_polarSupport (M : Matrix ι κ ℂ) :
-    ∃ R : Matrix κ κ ℂ, polarPos M * R = polarSupport M :=
-  exists_mul_eq_of_range_le (range_polarSupport M).le
-
-/-- The partial isometry of the polar decomposition factors through the matrix: `V = M R` for
-some `R` (arXiv:2307.01696, Supplemental Material, the polar decomposition `B = V P` with
-`V†V = Π`). -/
-theorem exists_polarIso_eq_mul (M : Matrix ι κ ℂ) : ∃ R : Matrix κ κ ℂ, polarIso M = M * R := by
-  obtain ⟨R, hR⟩ := exists_polarPos_mul_eq_polarSupport M
-  refine ⟨R, ?_⟩
-  have hV : polarIso M * polarSupport M = polarIso M :=
-    mul_eq_self_of_conjTranspose_mul_self_eq (conjTranspose_polarIso_mul_polarIso M)
-      (isHermitian_polarSupport M) (polarSupport_mul_polarSupport M)
-  rw [← hV, ← hR, ← Matrix.mul_assoc, polarIso_mul_polarPos]
-
-variable {κ' : Type*} [Fintype κ'] [DecidableEq κ']
-
-omit [Fintype κ'] [DecidableEq κ'] in
-/-- If `Mᴴ M' = 0`, then `Vᴴ M' = 0` for the partial isometry `V` of `M`. -/
-theorem conjTranspose_polarIso_mul_eq_zero {M : Matrix ι κ ℂ} {M' : Matrix ι κ' ℂ}
-    (h : Mᴴ * M' = 0) : (polarIso M)ᴴ * M' = 0 := by
-  obtain ⟨R, hR⟩ := exists_polarIso_eq_mul M
-  rw [hR, conjTranspose_mul, Matrix.mul_assoc, h, Matrix.mul_zero]
-
-/-- If `Mᴴ M' = 0`, the partial isometries of `M` and `M'` have orthogonal ranges:
-`Vᴴ V' = 0`. -/
-theorem conjTranspose_polarIso_mul_polarIso_eq_zero {M : Matrix ι κ ℂ} {M' : Matrix ι κ' ℂ}
-    (h : Mᴴ * M' = 0) : (polarIso M)ᴴ * polarIso M' = 0 := by
-  obtain ⟨R', hR'⟩ := exists_polarIso_eq_mul M'
-  rw [hR', ← Matrix.mul_assoc, conjTranspose_polarIso_mul_eq_zero h, Matrix.zero_mul]
 
 omit [Fintype ι] [Fintype κ] [DecidableEq κ] in
 /-- A product of two finite sums whose cross terms vanish is the sum of the diagonal

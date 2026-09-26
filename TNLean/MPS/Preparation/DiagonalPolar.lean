@@ -32,9 +32,7 @@ The overlap of the approximating state with the target reduces to entries of `P`
 
 ## Main declarations
 
-* `Matrix.conjTranspose_polarIso_mul_self` — `V† B = P`.
-* `Matrix.polarPos_eq_of_mul_self_eq`, `Matrix.polarSupport_eq_of_range_eq` — the positive part
-  and the support projector are determined by a positive square root of `Bᴴ B` and by its range.
+* `Matrix.diagPairEmbedding` — the isometry `J : |e⟩ ↦ |e e⟩`.
 * `MPSTensor.basisPair`, `MPSTensor.embedPair_fixedPointPair_one` — the pair of a
   one-dimensional block.
 * `MPSTensor.nonNormalApproxOverlap` — the overlap `⟨φ̃_N|φ_N⟩` of the approximating state of
@@ -54,44 +52,6 @@ open Matrix
 namespace Matrix
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
-
-/-- The partial isometry of the polar decomposition pulls a matrix back to its positive part:
-`V† M = P`. This is `V†V = Π` and `Π P = P` (arXiv:2307.01696, Supplemental Material, "Proof of
-Lemma 1 and extension to non-normal tensors") applied to `M = V P`. -/
-theorem conjTranspose_polarIso_mul_self (M : Matrix ι κ ℂ) :
-    (polarIso M)ᴴ * M = polarPos M := by
-  calc (polarIso M)ᴴ * M = (polarIso M)ᴴ * (polarIso M * polarPos M) := by
-        rw [polarIso_mul_polarPos]
-    _ = polarPos M := by
-        rw [← Matrix.mul_assoc, conjTranspose_polarIso_mul_polarIso, polarSupport_mul_polarPos]
-
-/-- The positive part of the polar decomposition is the positive semidefinite square root of
-`Mᴴ M`: any positive semidefinite `Q` with `Q Q = Mᴴ M` is `polarPos M`. -/
-theorem polarPos_eq_of_mul_self_eq {M : Matrix ι κ ℂ} {Q : Matrix κ κ ℂ} (hQ : Q.PosSemidef)
-    (h : Q * Q = Mᴴ * M) : polarPos M = Q := by
-  rw [polarPos, ← h]
-  exact CFC.sqrt_mul_self Q (nonneg_iff_posSemidef.mpr hQ)
-
-omit [Fintype ι] [DecidableEq κ] in
-/-- Two square matrices with `E Q = Q` and `Q R = E` have the same range. -/
-theorem range_mulVecLin_eq_of_mul_eq {E Q R : Matrix κ κ ℂ} (h₁ : E * Q = Q) (h₂ : Q * R = E) :
-    LinearMap.range E.mulVecLin = LinearMap.range Q.mulVecLin := by
-  apply le_antisymm
-  · rintro _ ⟨v, rfl⟩
-    exact ⟨R *ᵥ v, by simp [mulVec_mulVec, h₂]⟩
-  · rintro _ ⟨v, rfl⟩
-    exact ⟨Q *ᵥ v, by simp [mulVec_mulVec, h₁]⟩
-
-/-- The support projector of the polar decomposition is the orthogonal projector onto the range
-of the positive part: any Hermitian idempotent `E` with that range is `polarSupport M`. -/
-theorem polarSupport_eq_of_range_eq {M : Matrix ι κ ℂ} {E : Matrix κ κ ℂ} (hE : E.IsHermitian)
-    (hEE : E * E = E)
-    (hran : LinearMap.range E.mulVecLin = LinearMap.range (polarPos M).mulVecLin) :
-    polarSupport M = E := by
-  refine TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq _ _
-    (isHermitian_polarSupport M) (polarSupport_mul_polarSupport M) hE hEE ?_
-  simp only [Matrix.toLin'_apply']
-  rw [range_polarSupport, hran]
 
 /-- The isometry `J : ℂ^κ → ℂ^κ ⊗ ℂ^κ`, `|e⟩ ↦ |e e⟩`, onto the diagonal pairs. -/
 def diagPairEmbedding (κ : Type*) [DecidableEq κ] : Matrix (κ × κ) κ ℂ :=
@@ -236,16 +196,21 @@ theorem polarSupport_physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D �
     exact range_mulVecLin_eq_of_mul_eq (R := J * R * Jᴴ) (by rw [hsand, hEQ])
       (by rw [hsand, hQR])
 
+/-- The periodic state on `N = qM` sites, read in blocks, is the periodic state of the blocked
+tensor. -/
+theorem mpv_blockedConfigEquiv (A : MPSTensor d D) (q M : ℕ)
+    (τ : Fin M → Fin (blockPhysDim d q)) :
+    mpv A (blockedConfigEquiv d M q τ) = mpv (blockTensor A q) τ := by
+  simp only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor]
+
 /-- The periodic state of the diagonal tensor on `N = qM` sites, read through the regrouping of
 sites into `M` blocks: `φ_N(A)(τ) = ∑_e ∏ₖ b_e(τ_k)`. -/
 theorem mpv_blockedConfigEquiv_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ)
     (τ : Fin M → Fin (blockPhysDim d q)) :
     mpv (fun i => diagonal (a i)) (blockedConfigEquiv d M q τ) =
       ∑ e, ∏ k, blockDiagEntry a q (τ k) e := by
-  have h : mpv (fun i => diagonal (a i)) (blockedConfigEquiv d M q τ) =
-      mpv (blockTensor (fun i => diagonal (a i)) q) τ := by
-    simp only [mpv, coeff, ofFn_blockedConfigEquiv, evalWord_blockTensor]
-  rw [h, mpv, coeff, funext (blockTensor_diagonal a q), evalWord_diagonal, trace_diagonal]
+  rw [mpv_blockedConfigEquiv, mpv, coeff, funext (blockTensor_diagonal a q), evalWord_diagonal,
+    trace_diagonal]
   simp [List.map_ofFn, List.prod_ofFn, Function.comp_def]
 
 /-! ### Products over the blocked sites -/
@@ -357,6 +322,31 @@ theorem sum_star_sum_mul_sum {τs ι κ : Type*} [Fintype τs] [Fintype ι] [Fin
     _ = ∑ i, ∑ τ, ∑ k, star (F i τ) * G k τ := Finset.sum_comm
     _ = _ := Finset.sum_congr rfl fun i _ => Finset.sum_comm
 
+/-- Scalars factor out of an inner product of sequences:
+`∑_τ conj(a F(τ)) (b G(τ)) = conj(a) b ∑_τ conj(F(τ)) G(τ)`. -/
+theorem sum_star_mul_mul_mul {τs : Type*} [Fintype τs] (a b : ℂ) (F G : τs → ℂ) :
+    ∑ τ, star (a * F τ) * (b * G τ) = star a * b * ∑ τ, star (F τ) * G τ := by
+  rw [Finset.mul_sum]
+  exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
+
+/-- A scalar factors out of the left argument of an inner product of sequences:
+`∑_τ conj(a F(τ)) G(τ) = conj(a) ∑_τ conj(F(τ)) G(τ)`. -/
+theorem sum_star_mul_mul {τs : Type*} [Fintype τs] (a : ℂ) (F G : τs → ℂ) :
+    ∑ τ, star (a * F τ) * G τ = star a * ∑ τ, star (F τ) * G τ := by
+  simpa using sum_star_mul_mul_mul a 1 F G
+
+/-- The inner product of two combinations `∑ⱼ aⱼ Fⱼ` and `∑ⱼ bⱼ Gⱼ` of sequences with
+`⟨Fⱼ, Gⱼ'⟩ = δⱼⱼ' cⱼ` is `∑ⱼ conj(aⱼ) bⱼ cⱼ`. -/
+theorem sum_star_sum_mul_sum_of_orthogonal {τs β : Type*} [Fintype τs] [Fintype β]
+    [DecidableEq β] (a b c : β → ℂ) (F G : β → τs → ℂ)
+    (h : ∀ j j', ∑ τ, star (F j τ) * G j' τ = if j = j' then c j else 0) :
+    ∑ τ, star (∑ j, a j * F j τ) * ∑ j, b j * G j τ = ∑ j, star (a j) * b j * c j := by
+  rw [sum_star_sum_mul_sum (fun j τ => a j * F j τ) (fun j τ => b j * G j τ)]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [Finset.sum_eq_single j (fun j' _ hj' => by
+      rw [sum_star_mul_mul_mul, h, ite_eq_right (Ne.symm hj'), mul_zero])
+    (fun hj => absurd (Finset.mem_univ j) hj), sum_star_mul_mul_mul, h, ite_eq_left rfl]
+
 /-- The squared norm of the target on `N = qM` sites, for a diagonal tensor:
 `‖φ_N(A)‖² = ∑_{e,e'} G_{e e'}^M` with `G` the Gram matrix `diagGram a q`. -/
 theorem ofReal_norm_mpvState_sq_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ) :
@@ -387,14 +377,9 @@ theorem sum_star_nonNormalApproxVector_basisPair (A : MPSTensor d D) (q M : ℕ)
     (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))
     (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))]
   refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun j' _ => ?_
-  calc _ = star (α j) * α j' * ∑ τ : Fin M → Fin (blockPhysDim d q),
-        star (∏ k, V (τ k) (c j, c j)) * ∏ k, V (τ k) (c j', c j') := by
-        rw [Finset.mul_sum]
-        exact Finset.sum_congr rfl fun _ _ => by rw [star_mul']; ring
-    _ = _ := by
-        rw [sum_star_prod_mul_prod (fun w => V w (c j, c j)) (fun w => V w (c j', c j')),
-          ← conjTranspose_polarIso_mul_polarIso, mul_apply]
-        rfl
+  rw [sum_star_mul_mul_mul, sum_star_prod_mul_prod (fun w => V w (c j, c j))
+    (fun w => V w (c j', c j')), ← conjTranspose_polarIso_mul_polarIso, mul_apply]
+  rfl
 
 /-- The unnormalized overlap of the approximating state for basis pairs with the target of a
 diagonal tensor: `∑ⱼ ∑_e conj(αⱼ) P_{(c_j c_j),(e e)}^M`. -/
@@ -415,14 +400,9 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
     (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))
     (fun (e : Fin D) (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, B (τ k) (e, e))]
   refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun e _ => ?_
-  calc _ = star (α j) * ∑ τ : Fin M → Fin (blockPhysDim d q),
-        star (∏ k, V (τ k) (c j, c j)) * ∏ k, B (τ k) (e, e) := by
-        rw [Finset.mul_sum]
-        exact Finset.sum_congr rfl fun _ _ => by rw [star_mul']; ring
-    _ = _ := by
-        rw [sum_star_prod_mul_prod (fun w => V w (c j, c j)) (fun w => B w (e, e)),
-          ← conjTranspose_polarIso_mul_self, mul_apply]
-        rfl
+  rw [sum_star_mul_mul, sum_star_prod_mul_prod (fun w => V w (c j, c j))
+    (fun w => B w (e, e)), ← conjTranspose_polarIso_mul_self, mul_apply]
+  rfl
 
 /-- **The overlap for a diagonal tensor and basis pairs.** For `Aⁱ = diag(aⁱ)` and the pairs
 `|c_j c_j⟩`, with `V`, `P`, `Π` the polar data of the `q`-site blocked tensor,

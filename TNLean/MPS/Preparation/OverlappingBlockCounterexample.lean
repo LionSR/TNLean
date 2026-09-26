@@ -179,7 +179,8 @@ theorem overlappingBlockSqrt_mul_self (q : ℕ) :
     exact_mod_cast two_mul_overlappingBlockU_mul_overlappingBlockV q
   ext e e'
   fin_cases e <;> fin_cases e' <;>
-    simp [overlappingBlockSqrt, mul_apply, Fin.sum_univ_two] <;>
+    simp only [overlappingBlockSqrt, Fin.zero_eta, Fin.isValue, Fin.mk_one, mul_apply, of_apply,
+      cons_val', cons_val_fin_one, cons_val_zero, cons_val_one, Fin.sum_univ_two] <;>
     first | linear_combination h1 | linear_combination h2
 
 /-- For `q ≥ 1` the square root is invertible: its determinant is `u² - v² = √(1 - s²) > 0`. -/
@@ -229,12 +230,15 @@ theorem nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ} (hq : q ≠ 0)
       ghzAmplitude_overlappingBlock]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       overlappingBlockSqrt]
-    simp [invSqrtTwo]
+    simp only [Real.sqrt_one, ofReal_one, inv_one, Nat.ofNat_nonneg, Real.sqrt_mul, ofReal_mul,
+      _root_.mul_inv_rev, one_mul, Nat.succ_eq_add_one, Nat.reduceAdd, invSqrtTwo, Fin.isValue,
+      cons_val_zero, star_inv₀, RCLike.star_def, conj_ofReal, of_apply, cons_val', cons_val_fin_one,
+      cons_val_one, ofReal_div, ofReal_add, ofReal_pow]
     have hs2 : Real.sqrt 2 ≠ 0 := by positivity
     have hs : Real.sqrt (1 + overlappingBlockOverlap q ^ M) ≠ 0 := by
       have := overlap_nonneg q; positivity
-    have hsq : ((Real.sqrt 2 : ℝ) : ℂ) * (Real.sqrt 2 : ℝ) = 2 := by
-      rw [← Complex.ofReal_mul, Real.mul_self_sqrt (by norm_num)]; norm_num
+    have hsq : ((Real.sqrt 2 : ℝ) : ℂ) ^ 2 = 2 := by
+      exact_mod_cast Complex.ofReal_sqrt_sq 2 (by norm_num)
     field_simp
     linear_combination (-1) * (↑(overlappingBlockU q) ^ M + ↑(overlappingBlockV q) ^ M) * hsq
   · rw [polarSupport_overlappingBlockTensor hq, ghzAmplitude_overlappingBlock]
