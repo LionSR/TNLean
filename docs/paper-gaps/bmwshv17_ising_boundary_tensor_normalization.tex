@@ -8,11 +8,11 @@
 
 \title{Ising String-Net Operators: the Normalization of the $\sigma$ Tensor}
 \author{}
-\date{2026-09-24}
+\date{2026-09-24, updated 2026-09-27}
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The source statement}
 
@@ -62,23 +62,57 @@ the latter is equivalent to
 \end{align}
 Both forms are proved.
 
-The omission of the factors $v_ev_f$ is a different matter. Whether it
-leaves the periodic operators unchanged, for instance because it is a
-diagonal change of bond basis, is not shown, and the identification of the
-formal letters with the $G$-symbol tensors of the source figure is recorded
-only in the verification data
-\path{Notes/OpenProblemsTN/checks/asym_ising_action_data.md}. The
-algebra~(\ref{eq:bmwshv17_ising_fusion_algebra}) is therefore proved for
-the $v$-free tensors, not for the source tensors themselves.
+The omission of the factors $v_ev_f$ does not change the periodic
+operators; this is proved in the next section. The identification of the
+formal letters with the $F$-symbols was first recorded in the verification
+data \path{Notes/OpenProblemsTN/checks/asym_ising_action_data.md}; it is now
+a formal statement.
+
+\section{Relation to the source's tensor}
+
+The source's operator tensor (the Fibonacci figure, reused for Ising) is the
+crossing of the operator line $f$ with a vertical edge line $e$, with corner
+plaquettes $b$ (upper left), $a$ (upper right), $c$ (lower left) and $d$
+(lower right), and entry $G^{abc}_{def}\sqrt{v_av_bv_cv_d}$.%
+\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1044--1050 and
+    1262--1266, figure file \path{StringNetMPO_RHS.pdf}.}
+On the fusion-tree labels of the formal tensors the upper label is
+$(b,e,a)$, the lower label is $(c,e,d)$, and the bond letters are the
+admissible pairs $(b,c)$ and $(a,d)$ of plaquettes above and below the
+operator line. With the $F$-symbols and selection rule
+$\delta_{abe}\delta_{cde}\delta_{adf}\delta_{bcf}$ of the source, the letters
+of $A_1$, $A_\psi$ and $A_\sigma=(\sqrt2)^{-1}\widehat A_\sigma$ are the
+$F$-symbols $F^{fce}_{abd}$, and the Ising $G$-symbols have the tetrahedral
+symmetry $G^{abc}_{def}=G^{fce}_{abd}$. Hence the nonzero entries of the
+source's tensor are those of the formal block multiplied by
+$\sqrt{v_av_bv_cv_d}/(v_bv_d)=g(a,d)/g(b,c)$, with $g(u,l)=(v_u/v_l)^{1/2}$,
+and the diagonal bond matrix $g$ conjugates every letter of the source's
+tensor into the letter of $A_1$, $A_\psi$ or $A_\sigma$:
+\begin{align}
+    g\,S_f^{kh}\,g^{-1} = A_f^{kh}.
+    \label{eq:bmwshv17_ising_gsymbol_conj}
+\end{align}
+The similarity cancels in the trace, so the periodic operators of the
+source's tensors equal $O_N(A_1)$, $O_N(A_\psi)$ and
+$O_N(A_\sigma)=2^{-N/2}O_N(\widehat A_\sigma)$ at every length, and the
+algebra~(\ref{eq:bmwshv17_ising_fusion_algebra}) holds for the source's
+tensors themselves.\footnote{Results:
+    \leanid{IsingTwist.isingGSymbol_tetrahedral},
+    \leanid{IsingTwist.isingStringNetTensor_conj},
+    \leanid{IsingTwist.mpo_isingStringNetTensor},
+    \leanid{IsingTwist.mpo_isingStringNetTensor_sigma},
+    \leanid{IsingTwist.isMPOFusionAlgebra_isingStringNetTensor}.}
 
 \section{Formal boundary}
 
 The closed-path kernels of $O_1$ and $O_\psi$, the eight products with at
 most one factor $\sigma$, and both forms of
 (\ref{eq:bmwshv17_ising_scaled_rule}) are proved at every positive length
-for the $v$-free tensors. Elimination: define the $G$-symbol tensors of the
-source and prove that they are related to the formal tensors by a bond
-similarity, so that the periodic operators coincide.
+for the $v$-free tensors, and transfer to the source's $G$-symbol tensors
+by~(\ref{eq:bmwshv17_ising_gsymbol_conj}). What remains is the choice of
+storing $\widehat A_\sigma=\sqrt2A_\sigma$ so that every entry lies in
+$\mathbb Z[\sqrt2]$, a per-site scalar recorded above; nothing is open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

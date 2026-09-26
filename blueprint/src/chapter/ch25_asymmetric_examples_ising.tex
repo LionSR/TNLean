@@ -400,8 +400,9 @@ the source prints only the fusion rules themselves. The theorems below
 prove the corresponding operator identities for the tensors of
 Definition~\ref{def:asymex_ising_tensors}. These tensors use the F-symbols
 directly, without the square roots of quantum dimensions that the source
-divides them by; whether this choice changes the periodic operators is
-left open in~\cite{gap:bmwshv17_ising_boundary_tensor_normalization}. The
+divides them by; by Theorem~\ref{thm:asymex_ising_gsymbol_similarity} this
+choice does not change the periodic
+operators~\cite{gap:bmwshv17_ising_boundary_tensor_normalization}. The
 same abstract algebra is realized by the topological defects of the
 Ising lattice model~\cite{Aasen2016Topological}.
 
@@ -507,9 +508,9 @@ product tensor.
     Definition~\ref{def:asymex_ising_tensors}, of the fusion rules
     $1\times\sigma=\sigma\times1=\sigma$ and
     $\psi\times\sigma=\sigma\times\psi=\sigma$
-    of~\cite[Appendix~D.2]{Bultinck2017Anyons}; whether omitting the
-    normalization factors of the source changes these operators is left
-    open in~\cite{gap:bmwshv17_ising_boundary_tensor_normalization}.
+    of~\cite[Appendix~D.2]{Bultinck2017Anyons}; by
+    Theorem~\ref{thm:asymex_ising_gsymbol_similarity} they hold for the
+    source's tensors as well.
 \end{corollary}
 
 \begin{proof}
@@ -562,6 +563,87 @@ product tensor.
     scaling law, which gives~(\ref{eq:asymex_ising_sigma_square_scaled}).
     Dividing by the square of the factor
     in~(\ref{eq:asymex_ising_sigma_scale}) gives~(\ref{eq:asymex_ising_sigma_square}).
+\end{proof}
+
+\subsubsection{The source's tensors built from the G-symbols}
+
+\begin{definition}[The Ising string-net tensors of the source]
+    \label{def:asymex_ising_gsymbol_tensor}
+    \lean{IsingTwist.isingLoopFactor, IsingTwist.isingFSymbolZ,
+        IsingTwist.isingFSymbol, IsingTwist.isingGSymbol,
+        IsingTwist.isingBondLetter, IsingTwist.isingStringNetTensor}
+    \leanok
+    \uses{def:asymex_ising_tensors, def:mpo_tensor}
+    Write $v_a=\sqrt{d_a}$ for the Ising labels, so $v_1=v_\psi=1$ and
+    $v_\sigma=2^{1/4}$, and let $F^{abc}_{def}$ be the $F$-symbols
+    of~\cite[Appendix~D.2]{Bultinck2017Anyons}, nonzero only when
+    $N_{ab}^e$, $N_{cd}^e$, $N_{ad}^f$ and $N_{bc}^f$ are positive, with the
+    values $\pm1/\sqrt2$ on $F^{\sigma\sigma\sigma}_{\sigma ef}$, $-1$ on
+    $F^{\psi\sigma\psi}_{\sigma\sigma\sigma}$ and
+    $F^{\sigma\psi\sigma}_{\psi\sigma\sigma}$, and $1$ otherwise. The
+    $G$-symbols are $G^{abc}_{def}=v_e^{-1}v_f^{-1}F^{abc}_{def}$. For a
+    label $f$, the ordered bases of $P_f$ in
+    Definition~\ref{def:asymex_ising_tensors} are read as pairs $(u,l)$ of
+    plaquette labels above and below the operator line. The operator tensor
+    of~\cite[Section~6.2 and Appendix~D.1]{Bultinck2017Anyons} is the
+    crossing of the operator line $f$ with an edge line $e$, with the
+    plaquettes $b$ upper left, $a$ upper right, $c$ lower left and $d$
+    lower right. On the fusion-tree labels $k=(b,e,a)$ and $h=(c,e',d)$ its
+    entries are
+    \begin{align}
+        \bigl(S_f^{kh}\bigr)_{p,q}
+         & =\delta_{ee'}\,\delta_{p,(b,c)}\,\delta_{q,(a,d)}\,
+        G^{abc}_{def}\sqrt{v_av_bv_cv_d}.
+        \label{eq:asymex_ising_gsymbol_tensor}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The source's tensors are bond-similar to the formal tensors]
+    \label{thm:asymex_ising_gsymbol_similarity}
+    % Principal declaration: IsingTwist.mpo_isingStringNetTensor.
+    \lean{IsingTwist.mpo_isingStringNetTensor,
+        IsingTwist.isingGSymbol_tetrahedral,
+        IsingTwist.isingBlock_apply_eq_fSymbol,
+        IsingTwist.isingStringNetGauge,
+        IsingTwist.isingStringNetGauge_ne_zero,
+        IsingTwist.isingStringNetTensor_conj,
+        IsingTwist.isMPOFusionAlgebra_isingStringNetTensor,
+        IsingTwist.mpo_isingStringNetTensor_sigma}
+    \leanok
+    \uses{def:asymex_ising_gsymbol_tensor, ex:mpo_symmetry_ising,
+        def:mpo_fusion_algebra}
+    The $G$-symbols satisfy $G^{abc}_{def}=G^{fce}_{abd}$, and the tensors
+    $A_1$, $A_\psi$ and $A_\sigma$ are $F$-symbol tensors:
+    $(A_f^{kh})_{p,q}=\delta_{ee'}\delta_{p,(b,c)}\delta_{q,(a,d)}F^{fce}_{abd}$.
+    Let $g_f$ be the diagonal matrix on $P_f$ with
+    $g_f(u,l)=(v_u/v_l)^{1/2}$. Then
+    \begin{align}
+        g_f\,S_f^{kh}\,g_f^{-1} & =A_f^{kh}
+        \label{eq:asymex_ising_gsymbol_conj}
+    \end{align}
+    for $f=1,\psi,\sigma$ and all labels $k,h$. Consequently
+    $O_N(S_f)=O_N(A_f)$ at every length, in particular
+    $O_N(S_\sigma)=2^{-N/2}O_N(\widehat A_\sigma)$, and the operators
+    $O_N(S_1)$, $O_N(S_\psi)$, $O_N(S_\sigma)$ satisfy the Ising fusion rules
+    at every positive length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_zsqrt2_ring, lem:asymex_ising_fusion_similarity,
+        thm:mpdo_mpo_scalar_scaling}
+    Write $v_a=t^{n_a}$ with $t=2^{1/4}$, $n_1=n_\psi=0$ and $n_\sigma=1$.
+    Multiplied by $\sqrt2\,t^{n_b+n_d+n_e+n_f}$, the symmetry of the
+    $G$-symbols becomes an identity between entries of $\Z[\sqrt2]$ and
+    powers of $t^2=\sqrt2$, checked in exact arithmetic over all labels; so
+    is the $F$-symbol form of the three tensors. By the symmetry,
+    $G^{abc}_{def}=v_b^{-1}v_d^{-1}F^{fce}_{abd}$, so the nonzero entries of
+    $S_f^{kh}$ are those of $A_f^{kh}$ multiplied by
+    $\sqrt{v_av_bv_cv_d}/(v_bv_d)=g_f(a,d)/g_f(b,c)$, which
+    is~(\ref{eq:asymex_ising_gsymbol_conj}). The similarity cancels in the
+    trace defining the periodic operator, so the operators agree, the
+    relation to $\widehat A_\sigma$ is the scaling law, and the fusion rules
+    are those of Example~\ref{ex:mpo_symmetry_ising}.
 \end{proof}
 
 \subsection{One-site injectivity by exact arithmetic}%
