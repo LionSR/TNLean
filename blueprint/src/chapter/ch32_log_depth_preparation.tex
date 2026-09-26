@@ -356,12 +356,17 @@ of $A$ along $w$.
 
 \begin{lemma}[Exponentially decaying correlations]
     \label{lem:ldp_decaying_correlations}
+    \lean{MPSTensor.exists_decayingCorrelations,
+        MPSTensor.mpvConnectedCorrelator, MPSTensor.mpvExpectation,
+        MPSTensor.chainWindowOperator}
+    \leanok
     \uses{def:normal, def:correlation_length}
-    Let $A$ be normal with correlation length $\xi>0$, let $L\ge1$ be a length
-    such that the products of $L$ matrices of $A$ span $\MN{D}$ (one may take
-    $L=1$ when $A$ is injective), and let $\ket{\phi_N}$ be the normalized
-    vectors (\ref{eq:ldp_ti_mps}). For operators $X,Y$ on $(\C^d)^{\otimes L}$
-    let $X_1$ act on the sites $1,\dots,L$, let $Y_s$ act on the sites
+    Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), with
+    correlation length $\xi>0$, let $L\ge1$ be a length such that the products
+    of $L$ matrices of $A$ span $\MN{D}$ (one may take $L=1$ when $A$ is
+    injective), and let $\ket{\phi_N}$ be the normalized vectors
+    (\ref{eq:ldp_ti_mps}). For operators $X,Y$ on $(\C^d)^{\otimes L}$ let
+    $X_1$ act on the sites $1,\dots,L$, let $Y_s$ act on the sites
     $s,\dots,s+L-1$, and put
     \begin{align}
         G_N(X,Y;s)
@@ -370,26 +375,29 @@ of $A$ along $w$.
         \label{eq:ldp_connected_correlator}
     \end{align}
     There are Hermitian operators $\mathcal O,\mathcal O'$ on
-    $(\C^d)^{\otimes L}$ of norm one, a constant $c>0$, an integer $K\ge1$ and
-    an integer $s_0\ge L+2$ such that for every $s\ge s_0$ some
-    $s'\in\{s,s+1,\dots,s+K-1\}$ satisfies, for every $N\ge3s'$,
+    $(\C^d)^{\otimes L}$ of norm one, a constant $c>0$, an integer
+    $K\in\{1,2\}$ and an integer $s_0\ge L+2$ such that for every $s\ge s_0$
+    some $s'\in\{s,s+1,\dots,s+K-1\}$ satisfies, for every $N\ge3s'$,
     \begin{align}
         \bigl\lvert G_N(\mathcal O,\mathcal O';s')\bigr\rvert
          & \ge c\,e^{-(s'-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
-    One may take $K$ to be the number of distinct eigenvalues of $\E_A$ of
-    modulus $\lvert\lambda_2\rvert$. For injective $A$ and $L=1$ this is the
-    correlation estimate of \cite[Lemma~2]{Malz2024Preparation}, with the
-    separation $s$ ranging over windows of $K$ consecutive values.
+    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. For
+    injective $A$ and $L=1$ this is the correlation estimate of
+    \cite[Lemma~2]{Malz2024Preparation}, with the separation $s$ ranging over
+    windows of $K$ consecutive values.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{def:transfer_map, lem:ldp_observable_transfer_surjective,
-        lem:ldp_limit_correlator_eigenvalue, lem:ldp_vandermonde_window}
+        lem:ldp_limit_correlator_eigenvalue, lem:ldp_vandermonde_window,
+        thm:wielandt_proposition_three}
     With the inserted transfer maps $\E_X$ defined before
-    Lemma~\ref{lem:ldp_observable_transfer_surjective},
-    $\E_{\Id}=\E_A^{\,L}$. Expanding the traces in
-    (\ref{eq:ldp_ti_mps}) gives, for $L<s$ and $s+L-1\le N$,
+    Lemma~\ref{lem:ldp_observable_transfer_surjective}, $\E_{\Id}=\E_A^{\,L}$,
+    and the map of a tensor product of operators on consecutive blocks is the
+    composition of their maps. Expanding the traces in (\ref{eq:ldp_ti_mps})
+    gives, for $L<s$ and $s+L-1\le N$,
     \begin{align}
         \bra{\phi_N(A)}X_1Y_s\ket{\phi_N(A)}
          & =\operatorname{tr}\bigl(\E_X\,\E_A^{\,s-L-1}\,\E_Y\,
@@ -397,55 +405,51 @@ of $A$ along $w$.
         \notag
     \end{align}
     the trace of a linear map on $\MN{D}$. Let $P(Z)=\Tr(Z)\,\rho$. In the
-    gauge (\ref{eq:ldp_normal_gauge}), $\E_A^{\,n}=P+(\E_A-P)^n$ for $n\ge1$,
-    and $\E_A-P$ has spectral radius $\lvert\lambda_2\rvert$. Fix $r$ with
-    $\lvert\lambda_2\rvert<r<1$ and $r^2<\lvert\lambda_2\rvert$; then
-    $\lVert(\E_A-P)^n\rVert\le C_rr^n$. Replacing the last power
+    gauge (\ref{eq:ldp_normal_gauge}), $\E_A^{\,n}=P+(\E_A-P)^n$ for $n\ge1$.
+    An eigenvalue $\nu\neq0$ of $\E_A-P$ is an eigenvalue of $\E_A$ with a
+    traceless eigenvector, so $\nu\neq1$ because $\E_A$ is strongly
+    irreducible (Theorem~\ref{thm:wielandt_proposition_three}), and hence
+    $\lvert\nu\rvert\le\lvert\lambda_2\rvert$. Fix $r$ with
+    $\lvert\lambda_2\rvert<r<1$ and $r^2<\lvert\lambda_2\rvert$; Gelfand's
+    formula gives $\lVert(\E_A-P)^n\rVert\le C_rr^n$. Replacing the last power
     $\E_A^{\,N-s-L+1}$ by $P$, and likewise in the normalization
     $\operatorname{tr}\E_A^{\,N}$ and in the one-point functions, changes
     $G_N(X,Y;s)$ by at most $C_{X,Y}\,r^{N-s-L+1}$, which is at most
-    $C'_{X,Y}\,r^{2s}$ when $N\ge3s$. The remaining term is
+    $C_{X,Y}\,r^{2(s-L-1)}$ when $N\ge3s$. The remaining term is
     \begin{align}
         G_\infty(X,Y;s)
-         & =\Tr\Bigl(\E_X\bigl((\E_A-P)^{s-L-1}\bigl(\E_Y(\rho)\bigr)\bigr)\Bigr),
+         & =\Tr\Bigl(\E_X\bigl((\E_A-P)^{s-L-1}\bigl(\E_Y(\rho)\bigr)\bigr)\Bigr).
         \label{eq:ldp_limit_correlator}
     \end{align}
-    which is bilinear in $(X,Y)$.
 
-    The matrices $A^w\otimes\overline{A^{w'}}$ with $w,w'$ of length $L$ span
-    $\MN{D}\otimes\MN{D}$, so every linear map on $\MN{D}$ is of the form
-    $\E_X$. Since $\xi>0$, $\lambda_2\neq0$. Let $R$ be an eigenvector,
-    $\E_A(R)=\lambda_2R$; then $\Tr R=0$ because $\E_A$ is trace preserving,
-    so $P(R)=0$. Choose $Y$ with $\E_Y(\rho)=R$ and $X$ with
-    $\Tr\E_X(Z)=\Tr(M^\dagger Z)$ for all $Z$, where $\Tr(M^\dagger R)=1$.
-    Then $G_\infty(X,Y;s)=\lambda_2^{\,s-L-1}$.
+    Let $R\neq0$ satisfy $\E_A(R)=\lambda_2R$. Since $\xi>0$,
+    $\lambda_2\neq0$, and trace preservation gives $\Tr R=0$, so
+    $(\E_A-P)^tR=\lambda_2^{\,t}R$; since $\E_A(Z^\dagger)=\E_A(Z)^\dagger$,
+    also $(\E_A-P)^tR^\dagger=\bar\lambda_2^{\,t}R^\dagger$. If $\lambda_2$ is
+    real, one of $R+R^\dagger$ and $i(R-R^\dagger)$ is a nonzero Hermitian
+    eigenvector $H$; put $v=H$ and $\ell(Z)=\Tr(HZ)/\Tr(H^2)$, so that
+    $\ell((\E_A-P)^tv)=\lambda_2^{\,t}$. If $\lambda_2$ is not real, $R$ and
+    $R^\dagger$ are eigenvectors for distinct eigenvalues; take a linear
+    functional $f$ with $f(R)=1$ and $f(R^\dagger)=0$, put $v=R+R^\dagger$ and
+    $\ell(Z)=f(Z)+\overline{f(Z^\dagger)}$, so that
+    $\ell((\E_A-P)^tv)=\lambda_2^{\,t}+\bar\lambda_2^{\,t}$. In both cases
+    $v$ is Hermitian, $\ell(Z^\dagger)=\overline{\ell(Z)}$, and
+    $\ell((\E_A-P)^tv)=\lvert\lambda_2\rvert^t\sum_{j=1}^Ka_j\mu_j^t$ with
+    $K\le2$, distinct $\mu_j$ of modulus one and $a\neq0$.
 
-    Let $\lambda_2=\lambda^{(1)},\dots,\lambda^{(K)}$ be the distinct
-    eigenvalues of $\E_A$ of modulus $\lvert\lambda_2\rvert$, put
-    $\mu_j=\lambda^{(j)}/\lvert\lambda_2\rvert$, and fix $\delta>0$ with all
-    other eigenvalues of $\E_A-P$ of modulus less than
-    $\lvert\lambda_2\rvert-\delta$. The Jordan decomposition of $\E_A-P$ gives,
-    for Hermitian $X',Y'$ and $t=s-L-1$,
-    \begin{align}
-        G_\infty(X',Y';s)
-         & =\lvert\lambda_2\rvert^t\sum_{j=1}^Kp_j(t)\,\mu_j^t
-        +O\bigl((\lvert\lambda_2\rvert-\delta)^t\bigr),
-        \label{eq:ldp_peripheral_expansion}
-    \end{align}
-    with polynomials $p_j$ depending bilinearly on $(X',Y')$; the polynomials
-    are constants when the eigenvalues of modulus $\lvert\lambda_2\rvert$ are
-    semisimple. Write $X=X^{(1)}+iX^{(2)}$ and $Y=Y^{(1)}+iY^{(2)}$ with
-    Hermitian parts. If all four pairs $(X^{(a)},Y^{(b)})$ had vanishing
-    polynomials $p_j$, bilinearity would give
-    $G_\infty(X,Y;s)=O((\lvert\lambda_2\rvert-\delta)^t)$, which is false. Take
-    $\mathcal O,\mathcal O'$ to be a pair $X^{(a)},Y^{(b)}$ with some
-    $p_j\neq0$, scaled to norm one. Let $m$ be the largest degree of the
-    $p_j$ and $a_j$ the coefficient of $t^m$ in $p_j$, so
-    $a=(a_1,\dots,a_K)\neq0$.
+    The maps $Z\mapsto\Tr(Z)\,v$ and $Z\mapsto\ell(Z)\,\rho$ preserve
+    Hermitian matrices. By Lemma~\ref{lem:ldp_observable_transfer_surjective}
+    they are $\E_Y$ and $\E_X$ for some $X,Y$, and since
+    $\E_{X^\dagger}(Z)=\E_X(Z^\dagger)^\dagger$ the Hermitian parts of $X$ and
+    $Y$ have the same maps. Then
+    $G_\infty(X,Y;s)=\lvert\lambda_2\rvert^t\sum_ja_j\mu_j^t$ with $t=s-L-1$,
+    and $X,Y\neq0$ because this sum does not vanish identically. Take
+    $\mathcal O,\mathcal O'$ to be $X,Y$ scaled to norm one; this multiplies
+    $a$ by a positive constant.
 
     The Vandermonde matrix $W=(\mu_j^{\,u})_{0\le u<K,\,1\le j\le K}$ is
-    invertible because the $\mu_j$ are distinct. For every $t$ the vector
-    with entries $\sum_ja_j\mu_j^{\,t+u}$, $0\le u<K$, is $W$ applied to
+    invertible because the $\mu_j$ are distinct. For every $t$ the vector with
+    entries $\sum_ja_j\mu_j^{\,t+u}$, $0\le u<K$, is $W$ applied to
     $(a_j\mu_j^t)_j$, whose maximum norm equals that of $a$ because
     $\lvert\mu_j\rvert=1$. Hence some $u\in\{0,\dots,K-1\}$ satisfies
     \begin{align}
@@ -456,36 +460,32 @@ of $A$ along $w$.
          & =\frac{\max_j\lvert a_j\rvert}{\lVert W^{-1}\rVert_\infty}>0,
         \label{eq:ldp_vandermonde_window}
     \end{align}
-    so a nonzero exponential sum of this kind cannot be small at $K$
-    consecutive integers. At $t'=t+u$, (\ref{eq:ldp_peripheral_expansion})
-    gives
-    $\lvert G_\infty(\mathcal O,\mathcal O';s+u)\rvert\ge
-        \lvert\lambda_2\rvert^{t'}\bigl(t'^mc_0-O(t'^{m-1})\bigr)
-        -O\bigl((\lvert\lambda_2\rvert-\delta)^{t'}\bigr)
-        \ge\tfrac{c_0}{2}\lvert\lambda_2\rvert^{t'}$
-    once $s$ is large. With $s'=s+u$, $N\ge3s'$ and $r^2<\lvert\lambda_2\rvert$,
-    the finite-size correction $O(r^{2s'})$ is at most
-    $\tfrac{c_0}{4}\lvert\lambda_2\rvert^{t'}$ after enlarging $s_0$. Finally
+    so $\lvert G_\infty(\mathcal O,\mathcal O';s+u)\rvert\ge
+        c_0\lvert\lambda_2\rvert^{t'}$ with $t'=t+u$. With $s'=s+u$ and
+    $N\ge3s'$ the finite-size correction is at most
+    $C\,r^{2t'}=C\,(r^2/\lvert\lambda_2\rvert)^{t'}\lvert\lambda_2\rvert^{t'}$,
+    which is at most $\tfrac{c_0}{2}\lvert\lambda_2\rvert^{t'}$ after
+    enlarging $s_0$, since $r^2<\lvert\lambda_2\rvert$. Finally
     $\lvert\lambda_2\rvert^{t'}=e^{-(s'-L-1)/\xi}\ge e^{-(s'-1)/\xi}$, which
-    gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/4$.
+    gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/2$.
 \end{proof}
 %% The source's Lemma 2 (lm:2, References/2307.01696/main.tex) asserts, for
 %% injective A with xi > 0, observables O_1, O'_s of norm one such that for
 %% every integer s > 1 and sufficiently large N the one-point functions
 %% vanish exactly (auxform1) and the correlator itself satisfies the real
 %% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). Neither the bound
-%% at every s > 1 nor the exact vanishing is justified in general. The correlator of Hermitian observables is real, and its
-%% leading part is an exponential sum over the eigenvalues of modulus
-%% |lambda_2|, which come in complex-conjugate pairs; such a sum, a cosine
-%% for a single conjugate pair, can vanish at individual s. The statement
-%% above therefore asserts the bound in every window of K consecutive
-%% separations, which the Vandermonde argument proves, and it uses the
-%% connected correlator, since the one-point functions need not vanish at
-%% finite N. It is stated for normal A with observables on L sites so that
-%% Theorem thm:ldp_depth_lower_bound applies at every N; for injective A and
-%% L = 1 it is the source's setting. No diagonalizability is assumed: Jordan
-%% blocks at modulus |lambda_2| only add polynomial factors, which the
-%% argument absorbs.
+%% at every s > 1 nor the exact vanishing is justified in general. The
+%% correlator of Hermitian observables is real; for a complex lambda_2 the
+%% source's choice pairs R_2 with its adjoint, the eigenvector for
+%% conj(lambda_2), and the leading part is a multiple of
+%% |lambda_2|^t cos(t theta + phi), which can vanish at individual s. The
+%% statement above therefore asserts the bound in every window of K <= 2
+%% consecutive separations, which the Vandermonde argument proves, and it
+%% uses the connected correlator, since the one-point functions need not
+%% vanish at finite N. It is stated for normal A with observables on L sites
+%% so that Theorem thm:ldp_depth_lower_bound applies at every N; for
+%% injective A and L = 1 it is the source's setting. The gauge
+%% (eq:ldp_normal_gauge) is the normalization in which xi is defined.
 
 \begin{theorem}[No preparation in depth $o(\log N)$]
     \label{thm:ldp_depth_lower_bound}
