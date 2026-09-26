@@ -4734,6 +4734,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     $\delta\lVert Xz\rVert\lVert u\rVert$.
     Since $XP=X$, it follows that $\lVert X-P\rVert\leq\delta\lVert X\rVert$.
     Combine this with $\lVert X\rVert\leq\lVert X-P\rVert+1$ and $\delta<1$.
+    For the second bound, use $\lVert P\rVert\leq1$ and the first bound:
+    \begin{align}
+        \lVert X\rVert & \leq\lVert X-P\rVert+\lVert P\rVert
+        \leq\frac{\delta}{1-\delta}+1 \notag                 \\
+                       & =\frac{1}{1-\delta}. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Off-diagonal products of projectors]
@@ -4766,6 +4772,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:ph_joint_projector_comparison}
     \lean{Submodule.norm_iSup_starProjection_sub_comp_le_of_overlapMatrix}
     \leanok
+    \uses{thm:ph_off_diagonal_projectors}
     Under the hypotheses of Theorem~\ref{thm:ph_off_diagonal_projectors},
     assume $\beta<1/2$. Let $W_i\subseteq U_i$, and let $R_i$ be the
     orthogonal projector onto $W_i$.

@@ -32,11 +32,14 @@ verifications to decidable identities between integer matrices.
 ## Main definitions
 
 * `MPSTensor.stackedInt`: the integer letters of a stacked product over the pair alphabet.
-* `MPSTensor.oneSlot`, `MPSTensor.oneSlotMem`: the singleton slot set and its element.
 * `MPSTensor.MultiBlockCompression.ofConjMatrix`, `MPSTensor.MultiBlockCompression.ofConjInt`,
   `MPSTensor.MultiBlockCompression.ofEq`: the datum of a conjugate tensor.
 * `MPSTensor.MultiBlockCompression.ofScalarFlagFour`: the datum of a four-dimensional tensor
   with a one-dimensional target and three zero slots.
+
+Both shapes are instances of the ring-generic `MPSTensor.MultiBlockCompression.ofRing`: the
+conjugate datum along the identity of `ℂ`, the integer data along `Int.castRingHom ℂ`. The slot
+set `MPSTensor.oneSlot` lives with that constructor in `ExplicitGauge.lean`.
 
 ## Main results
 
@@ -83,17 +86,6 @@ theorem toMPSTensor_mulTensor_complexOfInt (M : Fin d → Fin d → Matrix (Fin 
 
 end Stacked
 
-/-! ### The single slot -/
-
-/-- The slot set of a one-slot compression datum. -/
-abbrev oneSlot : Finset Unit := {()}
-
-/-- The single slot as an element of the slot subtype. -/
-abbrev oneSlotMem : {s // s ∈ oneSlot} := ⟨(), Finset.mem_singleton_self ()⟩
-
-theorem eq_oneSlotMem (s : {s // s ∈ oneSlot}) : s = oneSlotMem :=
-  Subtype.ext (Subsingleton.elim _ _)
-
 /-! ### Conjugate tensors -/
 
 /-- The labelling of the bond coordinates by the graded block space of a one-slot datum with no
@@ -130,16 +122,10 @@ variable {D : ℕ} {B C : MPSTensor d D}
 single target `C` with `z = 0` (P5 note, Theorem 7.7(i)–(iii)). -/
 noncomputable def ofConjMatrix (G Ginv : Matrix (Fin D) (Fin D) ℂ) (hG : G * Ginv = 1)
     (hG' : Ginv * G = 1) (h : ∀ i, G * B i * Ginv = C i) :
-    MultiBlockCompression B oneSlot (fun _ : Unit => C) where
-  z := 0
-  ord := oneSlotOrdZero
-  gauge := gaugeOfMatrix (oneSlotTau D) G Ginv hG hG'
-  triangular _ _ _ hxy := absurd hxy (lt_irrefl _)
-  matched i s := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, h i]
-    rfl
-  unmatched _ t := t.elim0
+    MultiBlockCompression B oneSlot (fun _ : Unit => C) :=
+  ofRing (RingHom.id ℂ) oneSlotOrdZero (oneSlotTau D) (gaugeOfMatrix (oneSlotTau D) G Ginv hG hG')
+    C (fun i => by rw [conjMatrix_gaugeOfMatrix, h i]; rfl) (fun _ => C) (fun _ _ => rfl)
+    (fun _ _ _ hxy => absurd hxy (lt_irrefl _)) (fun _ _ _ _ => rfl) fun _ t => t.elim0
 
 /-- The integer form of `ofConjMatrix`: all matrices are entrywise coercions of integer
 matrices, and the conjugation identity is an identity between integer matrices. -/
@@ -176,8 +162,7 @@ theorem right_ofConjMatrix : (ofConjMatrix G Ginv hG hG' h).right oneSlotMem = G
 coordinates. -/
 theorem remainder_ofConjMatrix : (ofConjMatrix G Ginv hG hG' h).remainder = 0 := by
   funext i
-  rw [remainder, Finset.sum_eq_single_of_mem oneSlotMem (Finset.mem_univ oneSlotMem)
-    fun b _ hb => absurd (eq_oneSlotMem b) hb, left_ofConjMatrix, right_ofConjMatrix]
+  rw [remainder_oneSlot _ oneSlotMem, left_ofConjMatrix, right_ofConjMatrix]
   change B i - Ginv * C i * G = 0
   rw [← h i, Matrix.mul_assoc, Matrix.mul_assoc, hG', Matrix.mul_one, ← Matrix.mul_assoc, hG',
     Matrix.one_mul, sub_self]
@@ -268,32 +253,20 @@ noncomputable def ofScalarFlagFour (BInt : Fin d → Matrix (Fin 4) (Fin 4) ℤ)
       (scalarFlagTau ⟨Sum.inl oneSlotMem, 0⟩) = cInt i 0 0)
     (hzero : ∀ (i : Fin d) (t : Fin 3),
       conjInt i (scalarFlagTau ⟨Sum.inr t, 0⟩) (scalarFlagTau ⟨Sum.inr t, 0⟩) = 0) :
-    MultiBlockCompression B oneSlot (fun _ : Unit => c) where
-  z := 3
-  ord := scalarFlagOrd
-  gauge := gaugeOfMatrix scalarFlagTau (complexOfInt G) (complexOfInt Ginv)
-    (complexOfRing_mul_eq_one _ hG) (complexOfRing_mul_eq_one _ hG')
-  triangular i x y hxy := by
-    rw [conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hB, ← complexOfInt_mul,
-      ← complexOfInt_mul, hconj, complexOfInt_apply, Int.cast_eq_zero]
-    exact htri i x y hxy
-  matched i s := by
-    obtain rfl : s = oneSlotMem := eq_oneSlotMem s
-    ext p q
-    obtain rfl : p = 0 := Subsingleton.elim p 0
-    obtain rfl : q = 0 := Subsingleton.elim q 0
-    rw [Matrix.blockDiag'_apply, conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hB,
-      ← complexOfInt_mul, ← complexOfInt_mul, hconj, hc, complexOfInt_apply, complexOfInt_apply,
-      Int.cast_inj]
-    exact htarget i
-  unmatched i t := by
-    ext p q
-    obtain rfl : p = 0 := Subsingleton.elim p 0
-    obtain rfl : q = 0 := Subsingleton.elim q 0
-    rw [Matrix.blockDiag'_apply, conjMatrix_gaugeOfMatrix, Matrix.submatrix_apply, hB,
-      ← complexOfInt_mul, ← complexOfInt_mul, hconj, Matrix.zero_apply, complexOfInt_apply,
-      Int.cast_eq_zero]
-    exact hzero i t
+    MultiBlockCompression B oneSlot (fun _ : Unit => c) :=
+  ofRing (Int.castRingHom ℂ) scalarFlagOrd scalarFlagTau
+    (gaugeOfRingMatrix _ scalarFlagTau G Ginv hG hG') conjInt
+    (fun i => by rw [conjMatrix_gaugeOfRingMatrix _ scalarFlagTau hG hG' (hB i), hconj])
+    (fun _ => cInt) (fun _ => hc) htri
+    (fun i s p q => by
+      obtain rfl : s = oneSlotMem := eq_oneSlotMem s
+      obtain rfl : p = 0 := Subsingleton.elim p 0
+      obtain rfl : q = 0 := Subsingleton.elim q 0
+      exact htarget i)
+    fun i t p q => by
+      obtain rfl : p = 0 := Subsingleton.elim p 0
+      obtain rfl : q = 0 := Subsingleton.elim q 0
+      exact hzero i t
 
 variable (BInt : Fin d → Matrix (Fin 4) (Fin 4) ℤ) (cInt : Fin d → Matrix (Fin 1) (Fin 1) ℤ)
   (hB : ∀ i, B i = complexOfInt (BInt i)) (hc : ∀ i, c i = complexOfInt (cInt i))
