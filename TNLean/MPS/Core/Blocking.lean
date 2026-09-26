@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
+import TNLean.MPS.Core.PhysicalRotation
 import QICLean.Kraus.Blocking
 
 import Mathlib.Data.Fintype.BigOperators
@@ -196,6 +197,21 @@ lemma blockKron_mul_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ)
     (hP : P * Pᴴ = 1) :
     blockKron L P * (blockKron L P)ᴴ = 1 := by
   rw [blockKron_conjTranspose, ← blockKron_mul, hP, blockKron_one]
+
+/-- **Blocking commutes with physical maps**: blocking `W · C` over `L` sites gives
+`W^{⊗L}` applied to `C` blocked over `L` sites.
+
+arXiv:2307.01696, eq. (16): the layer `(V⁽ʲ⁾)^{⊗2^{k-j}}` acts sitewise on the regrouped
+block. -/
+theorem blockTensor_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (C : MPSTensor n D)
+    (L : ℕ) :
+    blockTensor (rotatePhysical W C) L =
+      rotatePhysical (blockKron L W) (blockTensor C L) := by
+  classical
+  funext I
+  change Kraus.evalWord (rotatePhysical W C) (List.ofFn (decodeBlock m L I)) = _
+  rw [evalWord_rotatePhysical_ofFn, rotatePhysical_apply]
+  exact (Fintype.sum_equiv (decodeBlockEquiv n L) _ _ fun J => rfl).symm
 
 end KroneckerLift
 

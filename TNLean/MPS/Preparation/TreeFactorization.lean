@@ -34,8 +34,8 @@ the block of `2^{k+1}` sites.
 
 * `MPSTensor.blockKron` (from `TNLean.MPS.Core.Blocking`) — the Kronecker power `W^{⊗L}` of a
   rectangular physical map, acting on length-`L` blocks.
-* `MPSTensor.blockTensor_rotatePhysical` — blocking commutes with physical maps:
-  `(W · C)` blocked `L` times is `W^{⊗L}` applied to `C` blocked `L` times.
+* `MPSTensor.blockTensor_rotatePhysical` (from `TNLean.MPS.Core.Blocking`) — blocking commutes
+  with physical maps: `(W · C)` blocked `L` times is `W^{⊗L}` applied to `C` blocked `L` times.
 * `MPSTensor.treeTensor`, `MPSTensor.treePosTensor`, `MPSTensor.treeIsoMatrix` — the chain
   `Tⱼ`, the last positive part `P_{k+1}`, and the product of the layers.
 * `MPSTensor.blockTensor_eq_rotatePhysical_treeIsoMatrix`,
@@ -56,23 +56,6 @@ open scoped Matrix ComplexOrder
 namespace MPSTensor
 
 variable {n m D : ℕ}
-
-/-! ### Blocking commutes with physical maps -/
-
-/-- **Blocking commutes with physical maps**: blocking `W · C` over `L` sites gives
-`W^{⊗L}` applied to `C` blocked over `L` sites.
-
-arXiv:2307.01696, eq. (16): the layer `(V⁽ʲ⁾)^{⊗2^{k-j}}` acts sitewise on the regrouped
-block. -/
-theorem blockTensor_rotatePhysical (W : Matrix (Fin m) (Fin n) ℂ) (C : MPSTensor n D)
-    (L : ℕ) :
-    blockTensor (rotatePhysical W C) L =
-      rotatePhysical (blockKron L W) (blockTensor C L) := by
-  classical
-  funext I
-  change Kraus.evalWord (rotatePhysical W C) (List.ofFn (decodeBlock m L I)) = _
-  rw [evalWord_rotatePhysical_ofFn, rotatePhysical_apply]
-  exact (Fintype.sum_equiv (decodeBlockEquiv n L) _ _ fun J => rfl).symm
 
 /-! ### Regrouping a block of `2^{k+2}` sites into pairs -/
 

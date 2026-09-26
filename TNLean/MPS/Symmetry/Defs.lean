@@ -143,27 +143,13 @@ lemma evalWord_twistedTensor_ofFn
 
 /-- Twisting by `blockKronAction` agrees with blocking the twisted tensor:
 `twistedTensor (blockTensor A L) (blockKronAction L U) g = blockTensor
-(twistedTensor A U g) L`. -/
+(twistedTensor A U g) L`.  This is the case `W = U g` of `blockTensor_rotatePhysical`, since
+`twistedTensor A U g` is the physical rotation of `A` by `U g`. -/
 lemma twistedTensor_blockTensor_comm
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) (L : ℕ) :
     twistedTensor (blockTensor A L) (blockKronAction L U) g =
-      blockTensor (twistedTensor A U g) L := by
-  classical
-  funext I
-  rw [twistedTensor]
-  simp only [blockKronAction_apply, blockKron, Kraus.blockTensor,
-    Kraus.wordOfBlock]
-  have hEval :
-      Kraus.evalWord (twistedTensor A U g) (List.ofFn (decodeBlock d L I)) =
-        ∑ v : Fin L → Fin d,
-          (∏ k : Fin L, (U g) (decodeBlock d L I k) (v k)) •
-            Kraus.evalWord A (List.ofFn v) :=
-    evalWord_twistedTensor_ofFn A U g (decodeBlock d L I)
-  rw [hEval]
-  -- Reindex the sum over words by the blocked index.
-  rw [← (decodeBlockEquiv d L).sum_comp]
-  refine Finset.sum_congr rfl (fun J _ => ?_)
-  simp [Kraus.decodeBlockEquiv_apply]
+      blockTensor (twistedTensor A U g) L :=
+  (blockTensor_rotatePhysical (U g) A L).symm
 
 /-- On-site symmetry transfers to the blocked tensor under the Kronecker-power
 action: if `A` is on-site symmetric under `U`, then `blockTensor A L` is on-site
