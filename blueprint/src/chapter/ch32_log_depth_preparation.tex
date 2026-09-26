@@ -1082,7 +1082,8 @@ of $A$ along $w$.
 \end{theorem}
 \begin{proof}
     \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
-        thm:wielandt_proposition_three}
+        thm:wielandt_proposition_three, lem:ldp_window_averages,
+        thm:ldp_depth_lower_bound_gauge}
     We may assume that $A$ is in the gauge (\ref{eq:ldp_normal_gauge}). Since
     $A$ is normal, $\E_A$ is strongly irreducible
     (Theorem~\ref{thm:wielandt_proposition_three}), so its spectral radius
@@ -1189,8 +1190,103 @@ of $A$ along $w$.
 %% comment after Theorem thm:ldp_decaying_correlations), so the proof above
 %% replaces the product-fidelity step by the concentration of averages of
 %% n ~ N/s' translated observables. This concentration argument is not in
-%% the source; it must be re-derived line by line when this theorem is
-%% formalized, and until then the theorem carries no formalization tag.
+%% the source. It is formalized for a tensor in the gauge
+%% (eq:ldp_normal_gauge) in Theorem thm:ldp_depth_lower_bound_gauge; the
+%% reduction to the gauge in the first paragraph is not formalized, so this
+%% entry carries no formalization tag.
+
+\begin{lemma}[Averages over separated windows]
+    \label{lem:ldp_window_averages}
+    \lean{MPSTensor.exists_norm_mpvCovariance_le,
+        MPSTensor.exists_norm_sub_inner_smul_sq_le_mpv,
+        MPSTensor.mpvExpectation_chainWindowOperator_eq,
+        MPSTensor.mpvExpectation_chainWindowOperator_mul_eq,
+        MPSTensor.norm_toContinuousLinearMap_physicalObservableTransfer_le,
+        MPSPreparation.norm_sub_inner_smul_sq_le,
+        MPSPreparation.norm_sub_inner_smul_sq_le_of_isPreparedInDepth,
+        MPSPreparation.isSeparatedBy_window}
+    \leanok
+    \uses{lem:ldp_two_window_trace, lem:ldp_finite_size_correction,
+        lem:ldp_light_cone_correlations}
+    Let $A$ be in the gauge (\ref{eq:ldp_normal_gauge}), with the products of
+    $L$ matrices spanning $\MN{D}$, and let $\lvert\lambda_2\rvert<r<1$ and
+    $M\ge0$. For an operator $X$ on $(\C^d)^{\otimes w}$ let $X^{(k)}$ act on
+    the sites $k\Delta+1,\dots,k\Delta+w$ of the ring of $N$ sites, for
+    $0\le k<n$ with $n\Delta\le N$, and let $Z=\sum_kc_kX^{(k)}$ with real
+    $\lvert c_k\rvert\le\gamma$.
+    \begin{enumerate}
+        \item Expectations in $\ket{\phi_N}$ of operators on one window, or on
+              two windows at a fixed distance, do not depend on the position of
+              the windows.
+        \item In the gauge (\ref{eq:ldp_normal_gauge}),
+              $\lVert\E_X\rVert\le D^3\lVert X\rVert$ whatever the number of
+              sites $X$ acts on.
+        \item There is $C$ such that for $\lVert X\rVert,\lVert Y\rVert\le M$
+              on windows of $w$ sites separated by $g\ge1$ and $g'\ge1$ sites
+              around the ring, the connected correlation in $\ket{\phi_N}$ is at
+              most $C(r^g+r^{g'})$.
+        \item There is $C'$ such that for Hermitian $X$ with
+              $\lVert X\rVert\le M$ and $w<\Delta$,
+              $\lVert(Z-\langle Z\rangle_{\phi_N})\phi_N\rVert^2\le
+                  3n\gamma^2C'$.
+        \item If $\ket{\psi}$ is a unit vector prepared in depth $T$ and
+              $w+2T\le\Delta$, then
+              $\lVert(Z-\langle Z\rangle_\psi)\psi\rVert^2\le
+                  6n\gamma^2\lVert X\rVert^2$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Part (1) is the trace formula of Lemma~\ref{lem:ldp_two_window_trace} at
+    an arbitrary offset: the exponent of $\E_A$ closing the ring changes by
+    the offset and the trace absorbs it. For (2), the entry of $\E_X$ applied
+    to a matrix unit is $\bra{p}X\ket{q}$ for vectors $p,q$ of entries of
+    products of matrices of $A$, and $\sum_i(A^i)^\dagger A^i=\Id$ makes their
+    norms at most one. Part (3) substitutes $\E_A^{\,k}=P+(\E_A-P)^k$ into
+    the trace formulas, as in Lemma~\ref{lem:ldp_finite_size_correction}. For
+    (4) and (5), $\lVert(Z-\langle Z\rangle)\chi\rVert^2$ is the double sum
+    of $c_kc_l$ times the connected correlations of $X^{(k)}$ and $X^{(l)}$;
+    in $\ket{\phi_N}$ these are bounded by (3) with $g\ge l-k$ and
+    $g'\ge n-l+k$, and in $\ket{\psi}$ they vanish for $k\ne l$ by
+    Lemma~\ref{lem:ldp_light_cone_correlations}, since the windows are more
+    than $2T$ sites apart on both sides.
+\end{proof}
+
+\begin{theorem}[No preparation in depth $o(\log N)$, gauge form]
+    \label{thm:ldp_depth_lower_bound_gauge}
+    \lean{MPSTensor.eventually_one_half_lt_infidelity_of_isLittleO_log,
+        MPSTensor.exists_depth_lower_bound}
+    \leanok
+    \uses{def:ldp_local_circuit, def:correlation_length}
+    Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), let $L\ge1$
+    be a length such that the products of $L$ matrices of $A$ span $\MN{D}$,
+    and let $\lambda_2\neq1$ be an eigenvalue of $\E_A$ of largest modulus
+    among those different from $1$, with $\xi=-1/\log\lvert\lambda_2\rvert>0$.
+    \begin{enumerate}
+        \item There are $B,C,b>0$ such that for every $T\ge0$ and
+              $N\ge B(T+1)$, if a unit vector $\ket{\psi}$ prepared in depth $T$
+              satisfies $\lvert\braket{\phi_N}{\psi}\rvert\ge1/2$, then
+              $N\le C(T+1)\,e^{b(T+1)}$.
+        \item If $\ket{\psi_N}$ are unit vectors prepared in depth $T_N$ with
+              $T_N=o(\log N)$, then $\varepsilon(\phi_N,\psi_N)>1/2$ for all
+              sufficiently large $N$.
+    \end{enumerate}
+    Part (2) is Theorem~\ref{thm:ldp_depth_lower_bound} for a tensor in the
+    gauge (\ref{eq:ldp_normal_gauge}); the restriction is recorded
+    in~\cite{gap:mswc24_depth_lower_bound_gauge}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
+        lem:ldp_window_averages, lem:ldp_light_cone_correlations}
+    Part (1) is the second to last paragraphs of the proof of
+    Theorem~\ref{thm:ldp_depth_lower_bound}, with $s'\le s_0+2T+L+2$,
+    $\Delta\le(s_0+2L+4)(T+1)$ and $n\ge N/(2\Delta)$, which turn
+    (\ref{eq:ldp_depth_contradiction}) into $N\le C(T+1)e^{b(T+1)}$. For (2),
+    $T_N\le\log N/(2(b+1))$ for large $N$ gives
+    $C(T_N+1)e^{b(T_N+1)}\le Ce^{b+1}\sqrt N<N$ and $B(T_N+1)\le N$, so
+    $\lvert\braket{\phi_N}{\psi_N}\rvert<1/2$ by (1).
+\end{proof}
 
 \section{Tensors that are not normal}
 

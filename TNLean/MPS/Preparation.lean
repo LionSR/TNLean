@@ -10,10 +10,12 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
+import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
 import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
+import TNLean.MPS.Preparation.DepthLowerBound
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalCircuit
@@ -32,3 +34,4 @@ import TNLean.MPS.Preparation.VarianceOfAverages
 import TNLean.MPS.Preparation.WindowClustering
 import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Preparation.WindowOperatorSupport
+import TNLean.MPS.Preparation.WindowSeparation
