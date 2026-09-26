@@ -46,12 +46,13 @@ theorem IsMPUCanonicalFormII.compositionRanks_of_isReduction
     (hred : MPSTensor.IsReduction (mulTensor U V).toMPSTensor R.toMPSTensor A B) :
     r[MPOTensor.blockTensor R 4] = d ^ 2 * r[U] * r[V] ∧
       ℓ[MPOTensor.blockTensor R 4] = d ^ 2 * ℓ[U] * ℓ[V] := by
-  have hBounds := sourceRanks_blockTensor_le_of_isReduction hred 4
   apply eq_and_eq_of_pos_of_le_of_mul_le_mul
     (hR.sourceRanks_blockTensor_pos (by decide) hSR).1
     (hR.sourceRanks_blockTensor_pos (by decide) hSR).2
-    (hBounds.1.trans (rightRank_blockTensor_mulTensor_four_le U V))
-    (hBounds.2.trans (leftRank_blockTensor_mulTensor_four_le U V))
+    ((rightRank_blockTensor_le_of_isReduction hred 4).trans
+      (rightRank_blockTensor_mulTensor_four_le U V))
+    ((leftRank_blockTensor_le_of_isReduction hred 4).trans
+      (leftRank_blockTensor_mulTensor_four_le U V))
   rw [hR.rightRank_mul_leftRank_blockTensor (by decide) hSR]
   have hprod : d ^ 2 * r[U] * r[V] * (d ^ 2 * ℓ[U] * ℓ[V]) =
       d ^ 4 * (r[U] * ℓ[U]) * (r[V] * ℓ[V]) := by ring
