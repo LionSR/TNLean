@@ -1,0 +1,126 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The L-Symbol Relation Imposed by Time Reversal}
+\author{}
+\date{2026-09-26}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed statement}
+
+Ref.~\cite{GarreRubio2023MPOSym}, subsection ``Interplay between MPO and
+time reversal symmetry'' (lines 865--958 of the source), considers a matrix
+product state with blocks $x$ that is symmetric under a group matrix product
+operator symmetry $(O_g)_{g\in G}$ and under an antiunitary time reversal
+$\mathcal T=v^{\otimes n}\mathcal K$ commuting with every $O_g$. Write
+$V_{g,x}$ for the action tensor mapping block $x$ to block $g\cdot x$ and
+$L^x_{g,h}$ for the L-symbols defined by
+\begin{equation}
+  V_{g,h\cdot x}V_{h,x}=L^x_{g,h}\,W_{g,h}V_{gh,x},
+  \label{eq:f1}
+\end{equation}
+the equation \texttt{F1group} of the source, written schematically with the
+fusion tensor $W_{g,h}$. Comparing the local actions of $\mathcal TO_g$ and
+$O_g\mathcal T$, the source finds nonzero scalars $\gamma_{g,x}$ with
+$S_{g\cdot x}^{-1}V_{g,x}S_x=\gamma_{g,x}V_{g,x}^*$, and from them the
+display at lines 935--952,
+\begin{equation}
+  \gamma_{h,x}\gamma_{g,h\cdot x}\,(V_{g,h\cdot x}V_{h,x})^*
+  =L^x_{g,h}\,\gamma_{gh,x}\,(W_{g,h}V_{gh,x})^*.
+  \label{eq:display}
+\end{equation}
+Equation \texttt{TRSF1group} at line 954 then states
+\begin{equation}
+  |L^x_{g,h}|^2=\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}},
+  \label{eq:printed}
+\end{equation}
+and the text concludes that the L-symbols squared are trivial because they
+can be written as a gauge transformation.
+
+\section{The printed relation fails}
+
+Rescaling the action tensors $V_{g,x}\mapsto c_{g,x}V_{g,x}$ multiplies
+$L^x_{g,h}$ by $c_{g,h\cdot x}c_{h,x}/c_{gh,x}$ and $\gamma_{g,x}$ by the
+unimodular number $c_{g,x}/\overline{c_{g,x}}$. The left side of
+(\ref{eq:printed}) changes by a positive factor that can take any value,
+while the right side changes by a unimodular factor, so (\ref{eq:printed})
+cannot hold in every gauge.
+
+An explicit instance with an on-site symmetry, where $W_{g,h}$ is trivial
+and there is one block, is the following. Let $G=\mathbb Z_2\times\mathbb
+Z_2=\{e,a,b,ab\}$ and let $A$ be the real matrix product state tensor with
+components $\mathbb 1,X,iY,Z$, where $X,Y,Z$ are the Pauli matrices. It is
+invariant under $\mathcal T=\mathcal K$ with $S=\mathbb 1$, and under the
+real diagonal on-site symmetry $u_g$ whose virtual action is conjugation by
+the action tensors
+\[
+  V_e=\mathbb 1,\qquad V_a=X,\qquad V_b=Z,\qquad V_{ab}=Y .
+\]
+Since $V_e,V_a,V_b$ are real and $Y^*=-Y$, the scalars $\gamma$ are
+$\gamma_e=\gamma_a=\gamma_b=1$ and $\gamma_{ab}=-1$. From $XZ=-iY$ one has
+$L_{a,b}=-i$. Then $|L_{a,b}|^2=1$, while
+$\gamma_{ab}/(\gamma_b\gamma_a)=-1$. The numerical check with
+$V_b=e^{i\theta}Z$ gives $|L_{a,b}|^2=1$ against the ratio
+$-e^{-2i\theta}$.
+
+\section{The corrected statement}
+
+Taking the complex conjugate of (\ref{eq:f1}) gives
+$(V_{g,h\cdot x}V_{h,x})^*=\overline{L^x_{g,h}}\,(W_{g,h}V_{gh,x})^*$.
+Substituting into (\ref{eq:display}) and cancelling the nonzero tensor
+$(W_{g,h}V_{gh,x})^*$ yields
+\begin{equation}
+  \frac{\overline{L^x_{g,h}}}{L^x_{g,h}}
+  =\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}} .
+  \label{eq:corrected}
+\end{equation}
+In the example, $\overline{L_{a,b}}/L_{a,b}=i/(-i)=-1$, in agreement with
+(\ref{eq:corrected}). Since $\overline L/L=(|L|/L)^2$, the relation
+(\ref{eq:corrected}) says that the square of the phase $L/|L|$ is a gauge
+transformation of the trivial L-symbol; this is the correct reading of the
+statement that the L-symbols squared are trivial. The modulus $|L|$ is not
+constrained. The printed (\ref{eq:printed}) replaces the ratio
+$\overline L/L$ by $\overline LL$.
+
+For a general matrix product operator symmetry the fusion tensors also pick
+up time-reversal phases $\beta_{g,h}$, as at lines 873--889 of the source,
+and the gauge-covariant form of (\ref{eq:corrected}) is that
+$\overline L$ equals the joint gauge transform of $L$ by $(\beta,\gamma)$,
+jointly with $\overline\omega$ equal to the gauge transform of $\omega$ by
+$\beta$. Under these two relations a single joint gauge makes both $\omega$
+and $L$ real, by taking unimodular square roots of the phases of $\beta$ and
+$\gamma$.
+
+\section{Formalized statement}
+
+The formalization proves, at the level of scalars, the cancellation step
+from (\ref{eq:display}) and the conjugate of (\ref{eq:f1}) to
+(\ref{eq:corrected}); the statement that the squared phase of $L$ is the
+gauge ratio; the reality of the anomaly under lines 873--891; and the joint
+reality of $\omega$ and $L$.\footnote{Formal declarations:
+\leanid{TNLean.Algebra.LSymbol.star\_apply\_eq\_gauge\_one\_apply},
+\leanid{TNLean.Algebra.LSymbol.phase\_sq\_eq\_of\_gauge\_eq\_star},
+\leanid{TNLean.Algebra.ScalarThreeCochain.exists\_cohomologousTo\_star\_eq\_self}
+and \leanid{TNLean.Algebra.LSymbol.exists\_gauge\_star\_eq\_self} in
+\doclink{TNLean/Algebra/ScalarThreeCocycleTimeReversal}.}
+The antiunitary symmetry itself, and the derivation of $\gamma$ and $\beta$
+from $\mathcal T$ commuting with $O_g$, are not formalized.
+
+\textbf{Verdict: resolved local correction.} The printed
+\texttt{TRSF1group} is false; the source's own preceding display gives
+(\ref{eq:corrected}), which is the relation used in the formalization, and
+the source's conclusion that the L-symbols squared are trivial holds in
+that corrected form.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -6701,6 +6701,156 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     follow.
 \end{proof}
 
+\begin{lemma}[Unimodular square roots of phases]
+    \label{lem:mpug_phase_root}
+    \lean{TNLean.Algebra.phaseRoot,
+        TNLean.Algebra.modulusUnit,
+        TNLean.Algebra.star_phaseRoot,
+        TNLean.Algebra.phaseRoot_mul_phaseRoot_mul_modulusUnit,
+        TNLean.Algebra.star_eq_self_of_star_eq_ofReal_mul}
+    \leanok
+    For $u\in\C^\times$ put $s_u=e^{i\arg(u)/2}$. Then
+    $\overline{s_u}=s_u^{-1}$ and $u=s_u^2\,|u|$. If $w\in\C^\times$ and
+    $\overline w=p\,w$ for a positive real number $p$, then $p=1$ and $w$ is
+    real.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first two claims are $\overline{e^{i\theta}}=e^{-i\theta}$ and the
+    polar form $u=|u|e^{i\arg u}$. For the third, taking absolute values in
+    $\overline w=p\,w$ gives $p=1$.
+\end{proof}
+
+\begin{theorem}[Time reversal makes the anomaly real]
+    \label{thm:mpug_time_reversal_real_anomaly}
+    \lean{TNLean.Algebra.ScalarThreeCochain.coboundary_mul,
+        TNLean.Algebra.ScalarThreeCochain.star_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.coboundary_modulusUnit_pos,
+        TNLean.Algebra.ScalarThreeCochain.star_fusionGauge_phaseRoot,
+        TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_star_eq_self}
+    \leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        lem:mpug_phase_root}
+    Let $\omega$ be a scalar $3$-cochain and $\beta$ a scalar $2$-cochain with
+    $\beta\mathbin{\triangleright}\omega=\overline\omega$. Then
+    $s\mathbin{\triangleright}\omega$ is real-valued, where
+    $s(g,h)=s_{\beta(g,h)}$ is the unimodular square root of the phase of
+    $\beta(g,h)$ from Lemma~\ref{lem:mpug_phase_root}. Consequently, a
+    scalar $3$-cochain cohomologous to its complex conjugate is cohomologous
+    to a real-valued one. This is the conclusion
+    of~\cite[Section~4.3]{GarreRubio2023MPOSym} that, when time reversal
+    commutes with a group matrix product operator symmetry, the three-cocycle
+    can be gauge transformed to a real number; no finiteness of $G$ is
+    needed.
+    % Source anchor: arXiv:2203.12563, lines 873--891.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge, lem:mpug_phase_root}
+    The coboundary is multiplicative in $\beta$ and commutes with complex
+    conjugation. Write $\beta=s^2N$ with $N(g,h)=|\beta(g,h)|$. Since
+    $\overline s=s^{-1}$,
+    \begin{align}
+        \overline{s\mathbin{\triangleright}\omega}
+         & =s^{-1}\mathbin{\triangleright}\overline\omega
+        =s^{-1}\mathbin{\triangleright}(s^2N\mathbin{\triangleright}\omega)
+        =N\mathbin{\triangleright}(s\mathbin{\triangleright}\omega).
+    \end{align}
+    The values of $dN$ are positive real numbers, so
+    Lemma~\ref{lem:mpug_phase_root} gives $dN=1$ and
+    $\overline{s\mathbin{\triangleright}\omega}
+        =s\mathbin{\triangleright}\omega$. If
+    $\omega=\beta\mathbin{\triangleright}\overline\omega$, conjugating gives
+    $\overline\beta\mathbin{\triangleright}\omega=\overline\omega$, and the
+    first part applies.
+\end{proof}
+
+\begin{theorem}[Time reversal makes the anomaly and the L-symbols jointly real]
+    \label{thm:mpug_time_reversal_real_l_symbols}
+    \lean{TNLean.Algebra.LSymbol.star_gauge,
+        TNLean.Algebra.LSymbol.gauge_modulusUnit_pos,
+        TNLean.Algebra.LSymbol.star_gauge_phaseRoot,
+        TNLean.Algebra.LSymbol.exists_gauge_star_eq_self}
+    \leanok
+    \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, lem:mpug_phase_root}
+    Let $\omega$ be a scalar $3$-cochain, $L$ an $L$-symbol, $\beta$ a
+    scalar $2$-cochain and $\gamma$ an action-tensor scalar gauge with
+    $\beta\mathbin{\triangleright}\omega=\overline\omega$ and
+    $(\beta,\gamma)\mathbin{\triangleright}L=\overline L$. Let $s$ and $t$ be
+    the unimodular square roots of the phases of $\beta$ and $\gamma$. Then
+    $s\mathbin{\triangleright}\omega$ and
+    $(s,t)\mathbin{\triangleright}L$ are both real-valued. This result is not stated
+    in~\cite[Section~4.3]{GarreRubio2023MPOSym}.
+    The source derives $\beta\mathbin{\triangleright}\omega=\overline\omega$
+    and, with the fusion-tensor phase omitted,
+    $(1,\gamma)\mathbin{\triangleright}L=\overline L$; the hypothesis here,
+    with the same $\beta$ in both relations, is the gauge-consistent pair
+    and is assumed rather than derived from time reversal.
+    % Source anchor: arXiv:2203.12563, lines 873--891 and 935--957.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge, thm:mpug_l_gauge_composition,
+        thm:mpug_time_reversal_real_anomaly, lem:mpug_phase_root}
+    The claim for $\omega$ is Theorem~\ref{thm:mpug_time_reversal_real_anomaly}.
+    For $L$, write $\beta=s^2N$ and $\gamma=t^2M$ with
+    $N_{g,h}=|\beta_{g,h}|$ and $M^x_g=|\gamma^x_g|$. As in that proof,
+    $\overline{(s,t)\mathbin{\triangleright}L}
+        =(N,M)\mathbin{\triangleright}((s,t)\mathbin{\triangleright}L)$, whose
+    prefactor
+    $M^x_{gh}N_{g,h}/(M^{h x}_gM^x_h)$ is a positive real number, hence
+    equal to one by Lemma~\ref{lem:mpug_phase_root}.
+\end{proof}
+
+\begin{theorem}[The L-symbol relation imposed by time reversal]
+    \label{thm:mpug_time_reversal_l_symbol_relation}
+    \lean{TNLean.Algebra.LSymbol.star_apply_eq_gauge_one_apply,
+        TNLean.Algebra.LSymbol.phase_sq_eq_of_gauge_eq_star}
+    \leanok
+    \uses{def:mpug_l_gauge}
+    Let $T\neq0$ and $P$ be vectors in a complex vector space and let
+    $L^x_{g,h}$ and $\gamma$ be as in Definition~\ref{def:mpug_l_gauge}.
+    If $P=\overline{L^x_{g,h}}\,T$ and
+    $\gamma^x_h\gamma^{h x}_gP=L^x_{g,h}\gamma^x_{gh}T$, then
+    \begin{align}
+        \frac{\overline{L^x_{g,h}}}{L^x_{g,h}}
+         & =\frac{\gamma^x_{gh}}{\gamma^x_h\gamma^{h x}_g}.
+        \label{eq:mpug_time_reversal_l_symbol}
+    \end{align}
+    More generally, if $(\beta,\gamma)\mathbin{\triangleright}L=\overline L$,
+    then for all $x$, $g$ and $h$,
+    \begin{align}
+        \left(\frac{L^x_{g,h}}{|L^x_{g,h}|}\right)^2
+         & =\frac{\gamma^{h x}_g\gamma^x_h}{\gamma^x_{gh}\beta_{g,h}}.
+    \end{align}
+    In~\cite[Section~4.3]{GarreRubio2023MPOSym}, $T$ and $P$ are the
+    complex conjugates of the two composite reductions compared by the
+    $L$-symbol, the first hypothesis is the conjugate of the defining
+    relation of $L$, and the second is the display derived from time
+    reversal. The source prints the consequence as
+    $|L^x_{g,h}|^2=\gamma^x_{gh}/(\gamma^x_h\gamma^{h x}_g)$; that form fails
+    for an on-site $\mathbb Z_2\times\mathbb Z_2$ symmetry, and
+    (\ref{eq:mpug_time_reversal_l_symbol}) is the local correction recorded
+    in~\cite{gap:glm23_time_reversal_l_symbol}. The second display is the
+    corrected sense in which the $L$-symbols squared are gauge
+    transformations: the square of the phase of $L$ is, while its modulus is
+    unconstrained.
+    % Source anchor: arXiv:2203.12563, lines 935--957 (TRSF1group at
+    %   line 954).
+    % Local fix: docs/paper-gaps/glm23_time_reversal_l_symbol.tex.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_l_gauge}
+    Substituting the first hypothesis into the second gives
+    $\gamma^x_h\gamma^{h x}_g\overline{L^x_{g,h}}\,T
+        =L^x_{g,h}\gamma^x_{gh}T$, and $T\neq0$ gives
+    (\ref{eq:mpug_time_reversal_l_symbol}). For the second claim,
+    $\overline L=cL$ with
+    $c=\gamma^x_{gh}\beta_{g,h}/(\gamma^{h x}_g\gamma^x_h)$, so
+    $|L|^2=\overline LL=cL^2$ and $(L/|L|)^2=c^{-1}$.
+\end{proof}
+
 \begin{theorem}[A block fixed by a subgroup trivializes the restricted three-cocycle]
     \label{thm:mpug_fixed_block_trivializes}
     \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
