@@ -835,21 +835,70 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     \end{tenkz}
 \end{center}
 
+\begin{lemma}[The sectors are rescaled flag sectors]
+    \label{lem:asymex_dimer_flag_sector}
+    \lean{P6Compression.dimerM_eq_smul_flagMPO}
+    \leanok
+    \uses{def:asymex_dimer, def:mpdo_twisted_dimer_flag_sectors}
+    For each $f\in\{0,1\}$, the sector $M_f$
+    of~(\ref{eq:asymex_dimer_letters}) equals $\frac58\widehat M_f$, where
+    $\widehat M_f$ is the rescaled flag sector of the twisted quantum dimer
+    of Definition~\ref{def:mpdo_twisted_dimer_flag_sectors}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Both tensors are supported on the bond pairs with a common label
+    $k=k'$, where both matrices are the unit $E_{pp'}\otimes E_{qq'}$ times
+    a scalar. The scalars agree, $\frac12C_k(p,p')\tau_k(f)=\frac58$ times
+    the coefficient of $\widehat M_f$, as checked over the two sectors and
+    the eight values of $(p,p',k)$.
+\end{proof}
+
 \begin{theorem}[Normality of the sectors]
     \label{thm:asymex_dimer_normal}
     \lean{P6Compression.dimerTarget_isNormal}
     \leanok
     \uses{def:asymex_dimer, def:normal}
-    Each sector is normal at blocking length one in the sense of
-    Definition~\ref{def:normal}: its thirty-two nonzero letters are
-    scaled matrix units covering every position of $\MN{4}$.
+    Each sector $M_f$ is normal at blocking length one in the sense of
+    Definition~\ref{def:normal}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:asymex_normal_units}
-    The sixteen letters with common label $k=0$ realize all matrix
-    positions with nonzero integer factors independent of $f$.
-    Apply Theorem~\ref{thm:asymex_normal_units}.
+    \uses{lem:asymex_dimer_flag_sector, thm:normality_rescaling_invariance,
+        thm:mpdo_twisted_dimer_vertical_cf}
+    By Lemma~\ref{lem:asymex_dimer_flag_sector}, $M_f=\frac58\widehat M_f$.
+    The rescaled flag sector $\widehat M_f$ is normal by
+    Theorem~\ref{thm:mpdo_twisted_dimer_vertical_cf}, and normality is
+    invariant under the nonzero rescaling by $\frac58$
+    (Theorem~\ref{thm:normality_rescaling_invariance}).
+\end{proof}
+
+\begin{lemma}[Sign rule of the stacked product]
+    \label{lem:asymex_dimer_sign_rule}
+    \lean{P6Compression.dimerStackedInt_eq_add,
+        P6Compression.dimerBlockInt_eq_add}
+    \leanok
+    \uses{def:asymex_dimer}
+    Write $\widetilde M_f=16M_f$ for the integer sector tensor and
+    \begin{align}
+        \widetilde B_{f,f'}^{ab}
+         & =\sum_c\widetilde M_f^{ac}\otimes\widetilde M_{f'}^{cb}
+        =256\,B_{f,f'}^{ab}
+        \notag
+    \end{align}
+    for the integer stacked product. For all sectors $f,f'$,
+    $\widetilde B_{f,f'}=\widetilde B_{0,f+f'}$, and the two integer target
+    tensors $\widetilde M_{f+f'}$ and $\widetilde M_{f+f'+1}$ of the pair
+    $(f,f')$ are those of the pair $(0,f+f')$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The factor $\widetilde M_f^{ac}\otimes\widetilde M_{f'}^{cb}$ vanishes
+    unless the three indices $a,c,b$ carry a common label $k$. On a common
+    label
+    the signs multiply, $\tau_k(f)\tau_k(f')=\tau_k(0)\tau_k(f+f')$, which is
+    checked over the two values of $k$ and the four pairs of sectors. The
+    target tensors depend on $(f,f')$ only through $f+f'$.
 \end{proof}
 
 \begin{theorem}[Split compression of the dimer fusion]
@@ -877,16 +926,20 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
-    A stacked letter vanishes unless its outer auxiliary indices have
-    the same label $k$. For a matching pair, the intermediate sum runs
-    over the four auxiliary indices with that label.
+    \uses{lem:asymex_dimer_sign_rule, thm:asymex_stacked_pair,
+        prop:asym_projector_weighted_sum}
     Twice the integer stacked letter decomposes in the adapted basis
     with coefficients $7,1$, the integer form
     of~(\ref{eq:asymex_dimer_split}), giving the hypotheses of
-    Theorem~\ref{thm:asymex_stacked_pair}. This identity is checked over
-    the sixty-four letters, for each of the four pairs of sectors;
-    the scalar identity uses $7/16,1/16$.
+    Theorem~\ref{thm:asymex_stacked_pair}. By
+    Lemma~\ref{lem:asymex_dimer_sign_rule}, the identity for the pair
+    $(f,f')$ is the identity for the pair $(0,f+f')$, so it suffices to
+    treat the pairs $(0,0)$ and $(0,1)$. For each of these, a stacked
+    letter vanishes on both sides unless its outer auxiliary indices have
+    the same label $k$; for a matching label, the intermediate sum runs
+    over the four auxiliary indices with that label, and the identity is
+    checked over the sixty-four letters. The scalar identity uses
+    $7/16,1/16$.
     Proposition~\ref{prop:asym_projector_weighted_sum} then gives the
     compression maps, vanishing remainder, and both intertwiners.
 \end{proof}
