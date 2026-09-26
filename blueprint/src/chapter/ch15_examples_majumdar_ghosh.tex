@@ -638,8 +638,8 @@ normality in the following two theorems.
     $X_{01}=X_{02}=0$, and $X=0$.
 \end{proof}
 
-\begin{lemma}[The three-site term as a projector]%
-    \label{lem:majumdar_ghosh_term_projector}
+\begin{theorem}[The three-site term as a projector]%
+    \label{thm:majumdar_ghosh_term_projector}
     \lean{MPSTensor.majumdarGhoshTerm_apply,
         MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction}
     \leanok
@@ -649,7 +649,7 @@ normality in the following two theorems.
     $\tfrac43\bigl(h+\tfrac38\bigr)=\tfrac13(P_{01}+P_{12}+P_{02})$ is the
     orthogonal projector onto $\mathcal G_{3}(A)^{\perp}$, the three-site parent
     interaction of the Majumdar--Ghosh tensor.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -669,7 +669,7 @@ normality in the following two theorems.
 \begin{remark}\label{rem:majumdar_ghosh_term_total_spin}
     On three spin-$\tfrac12$ sites the symmetric subspace is the subspace of total
     spin $\tfrac32$, so the projector of
-    Lemma~\ref{lem:majumdar_ghosh_term_projector} is the projector $P^{3/2}$ onto
+    Theorem~\ref{thm:majumdar_ghosh_term_projector} is the projector $P^{3/2}$ onto
     total spin $\tfrac32$. This identification is not formalized.
 \end{remark}
 
@@ -685,7 +685,7 @@ normality in the following two theorems.
         MPSTensor.majumdarGhoshHamiltonian_hasEigenvalue}
     \leanok
     \uses{def:majumdar_ghosh_hamiltonian, def:parent_hamiltonian,
-        lem:majumdar_ghosh_term_projector, lem:transported_es_positive,
+        thm:majumdar_ghosh_term_projector, lem:transported_es_positive,
         thm:majumdar_ghosh_ground_space, thm:spin_exchange_swap}
     For $N\ge3$, the Hamiltonian~(\ref{eq:mg_hamiltonian}) satisfies
     \begin{equation}
@@ -704,16 +704,20 @@ normality in the following two theorems.
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:spin_exchange_swap}, $H_{N}+\tfrac{3N}{8}$ is a quarter of
-    the sum over the windows $i,i+1,i+2$ of the three transpositions within the
-    window, since each nearest-neighbour transposition occurs in two windows and
-    each next-nearest-neighbour one in one. By
-    Lemma~\ref{lem:majumdar_ghosh_term_projector}, the parent interaction on the
-    window starting at $i$ is a third of the same sum of three transpositions,
-    which gives~(\ref{eq:mg_hamiltonian_projectors}). The parent Hamiltonian is
-    positive by Lemma~\ref{lem:transported_es_positive}, so pairing an
-    eigenvector of $H_{N}$ with eigenvalue $\mu$ against itself shows
-    $\mu+\tfrac{3N}{8}\ge0$. The eigenspace for $-\tfrac{3N}{8}$ is the kernel of
+    Each nearest-neighbour transposition occurs in two windows $i,i+1,i+2$ and
+    each next-nearest-neighbour one in one, so
+    Theorem~\ref{thm:spin_exchange_swap} gives
+    $H_{N}=\tfrac14\sum_{i}\bigl(P_{i,i+1}+P_{i+1,i+2}+P_{i,i+2}\bigr)
+        -\tfrac{3N}{8}$.
+    By Theorem~\ref{thm:majumdar_ghosh_term_projector},
+    $H_{N,\mathrm{MG}}^{(3)}
+        =\tfrac13\sum_{i}\bigl(P_{i,i+1}+P_{i+1,i+2}+P_{i,i+2}\bigr)$.
+    Comparing the two sums gives~(\ref{eq:mg_hamiltonian_projectors}). The parent
+    Hamiltonian is positive by Lemma~\ref{lem:transported_es_positive}, so a
+    nonzero $v$ with $H_{N}v=\mu v$ satisfies
+    $0\le\langle v,(H_{N}+\tfrac{3N}{8})v\rangle
+        =(\mu+\tfrac{3N}{8})\lVert v\rVert^{2}$,
+    and hence $\mu+\tfrac{3N}{8}\ge0$. The eigenspace for $-\tfrac{3N}{8}$ is the kernel of
     the right side of~(\ref{eq:mg_hamiltonian_projectors}), which is the span of
     the two coverings by Theorem~\ref{thm:majumdar_ghosh_ground_space}. The
     coverings are nonzero, so $-\tfrac{3N}{8}$ is an eigenvalue.
