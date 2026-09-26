@@ -3609,7 +3609,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:primitive_whole_increment_defect_decay}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le}
     \leanok
-    Let $A$ be a normalized primitive tensor with a positive-definite fixed matrix.
+    Let $A$ be a normalized primitive tensor with nonzero bond dimension and a
+    positive-definite fixed point.
     For every $\varepsilon>0$, all sufficiently large $L$ and every $K\geq0$, $Q>0$ satisfy
     \begin{align}
         \left\lVert P_{\mathcal H_K\otimes G_{L+Q}(A)}
@@ -4965,9 +4966,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le_of_inequivalent}
     \leanok
     Let $(A_i)_{i\in I}$ be a finite family of normalized primitive tensors
-    with positive bond dimensions and positive definite invariant densities.
-    Suppose no two distinct members are related by a gauge transformation
-    and a phase. Use the interval projectors of
+    with positive bond dimensions and positive-definite fixed points.
+    Suppose that, if the bond dimensions of two distinct members agree, they
+    are not related by a gauge transformation and a phase. Use the interval projectors of
     Theorem~\ref{thm:ph_block_interval_projectors}.
     For every $\eta>0$, all sufficiently large $L$, and every $K\geq0$
     and $Q>0$,
