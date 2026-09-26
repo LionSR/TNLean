@@ -11,13 +11,13 @@ import TNLean.MPS.ParentHamiltonian.PrimitiveBlockWordSpan
 # The printed open-chain threshold for primitive blocks
 
 For at least two inequivalent primitive blocks with a common injective length
-$L_0>0$, the simultaneous word span is full from length
-$3(r-1)(L_0+1)$ onwards. Thus the open-chain kernel identity holds at every
-interaction range at least $3(r-1)(L_0+1)+1$.
+\(L_0>0\), the simultaneous word span is full from length
+\(3(r-1)(L_0+1)\) onwards. Thus the open-chain kernel identity holds at every
+interaction range at least \(3(r-1)(L_0+1)+1\).
 
 This retains the threshold of PGVWC07, arXiv:quant-ph/0608197, Theorem 12
 (label `2blocks.2`), lines 1424--1454, using the simultaneous-span estimate
-of Lemma 10, lines 1346--1408. No larger injective length is chosen.
+of the direct-sum lemma (label `lem:direct-sum`), lines 1346--1408. No larger injective length is chosen.
 -/
 
 open scoped ComplexOrder
