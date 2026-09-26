@@ -728,8 +728,10 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   restrict only the tensor their source-labelled counterpart already places
   under the convention and have no Lean restriction left; the other 12
   restrict a physical block, a physical-adjoint, transposed, or conjugate
-  comparison tensor, a tensor product, or a composition, for which no
-  preservation statement of the predicate exists. The 3 are cited by 11
+  comparison tensor, a tensor product, or a composition. Physical adjunction
+  and independent tensor products now preserve the predicate, but the
+  corresponding downstream entries have not been consolidated; the other
+  derived-tensor obligations remain distinct. The 3 are cited by 11
   retained nodes (7 pointwise plus the path nodes
   `prop:mpu_admissible_continuity_index`, `thm:mpu_admissible_index`,
   `cor:mpu_admissible_continuous_standard_form`, and
@@ -765,22 +767,19 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   dissolves the citation obstruction, but it constructs no datum for a
   derived tensor and so leaves all 12 restricted. The 3 candidates therefore
   merge as soon as the converse lands, with the 12 still standing; the second
-  unblocker is not needed for them. Preservation of
-  `IsMPUCanonicalFormII` under positive physical blocking (asserted at source
-  line 356), physical adjunction, transposition, conjugation, tensor
-  products, and composition is what reaches the 12; each such statement must
-  produce all four clauses (`isMPU`, `cfii`, `fullSupport_eq`, and the
-  positive diagonal trace-one `ρ` with `ρ_fixed`) for the derived tensor. For
-  blocking, physical adjunction, and tensor products every clause is
+  unblocker is not needed for them. The derived-tensor restrictions require
+  preservation of `IsMPUCanonicalFormII` under the relevant operations or,
+  for composition, passage to a reduced representative. Each preservation
+  statement must produce all four clauses (`isMPU`, `cfii`,
+  `fullSupport_eq`, and the positive diagonal trace-one `ρ` with `ρ_fixed`)
+  for the derived tensor. The assembled constructors
+  `IsMPUCanonicalFormII.physicalAdjointTensor` and
+  `IsMPUCanonicalFormII.tensorProduct` now cover physical adjunction and
+  independent products, respectively. For blocking the four clauses are
   separately available (`IsMPU.blockTensor`, `blockTensorCFIIData`,
-  `hasFullSupport_blockTensor`, `transferMap_blockTensor`;
-  `IsMPU.physicalAdjointTensor`, `physicalAdjointNormalizedFlattening`,
-  `hasFullSupport_physicalAdjointNormalizedFlattening`,
-  `transferMap_mapStar`; `IsMPU.tensorProduct`, `tensorProductCFIIData`,
-  `hasFullSupport_tensorProductCFIIData`,
-  `transferMap_tensorProduct_kronecker`) and only the assembled statement is
-  missing; transposition and conjugation exist only as the composite. For
-  composition only `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
+  `hasFullSupport_blockTensor`, `transferMap_blockTensor`); transposition and
+  conjugation exist only as the composite. For composition only
+  `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
   canonical-form-II construction for `mulTensor` and no transfer-map identity
   for it, only the entrywise `normalizedFlattening_mulTensor_apply`. Supplying
   those two would not settle that case, because no preservation statement can
