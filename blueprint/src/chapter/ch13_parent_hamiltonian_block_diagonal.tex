@@ -900,7 +900,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_primitive_blocks_sharp_open_kernel}
     \lean{MPSTensor.ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound}
     \leanok
-    Let $d>0$, $r\ge2$, and $B=\bigoplus_{j=1}^r\mu_jA^j$, with all
+    Let $d>0$, $r\ge2$, and $B=\bigoplus_{j=0}^{r-1}\mu_jA^j$, with all
     coefficients nonzero. Suppose that the blocks have positive bond
     dimensions, are trace-preserving and primitive with positive definite
     invariant matrices, and are pairwise inequivalent under conjugation
@@ -918,11 +918,13 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_tp_word_span_propagation,
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
+        thm:ph_tp_word_span_propagation,
         thm:ph_tp_block_open_ground_space}
     The simultaneous-span estimate of
-    \cite[Lemma~10]{PerezGarcia2007Matrix} gives the full product matrix
-    algebra at length $3(r-1)(L_0+1)$. Trace-preserving propagation keeps
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, the direct-sum
+    lemma of \cite[lines~1346--1408]{PerezGarcia2007Matrix}, gives the full
+    product matrix algebra at length $3(r-1)(L_0+1)$. Trace-preserving propagation keeps
     the span full at every larger length. The block intersection theorem
     therefore gives the kernel identity at the stated interaction range.
 \end{proof}
