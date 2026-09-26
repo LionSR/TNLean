@@ -4271,6 +4271,135 @@ space of $(MN)P$.
     Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
 \end{proof}
 
+\subsection{Reductions through action tensors}
+
+\begin{definition}[The action tensor]
+    \label{def:mpug_action_tensor}
+    \lean{MPOTensor.actTensor}
+    \leanok
+    \uses{def:mpo_tensor, def:mps_tensor}
+    For a matrix product operator tensor $T$ of bond dimension $D_1$ and a
+    matrix product state tensor $B$ of bond dimension $D_2$, the action
+    tensor $T\cdot B$ has bond dimension $D_1D_2$ and letters
+    \begin{align}
+        (T\cdot B)^i
+         & =\sum_jT^{ij}\otimes B^j.
+        \label{eq:mpug_action_tensor}
+    \end{align}
+    It is the tensor whose local decomposition onto an image block gives the
+    action tensors of the periodic-boundary case of
+    \cite[``Periodic boundary condition case'']{GarreRubio2023MPOSym}.
+\end{definition}
+
+\begin{theorem}[The action tensor generates the acted state]
+    \label{thm:mpug_action_tensor_periodic}
+    \lean{MPOTensor.evalWord_actTensor, MPOTensor.mpv_actTensor,
+        MPOTensor.mpo_mulVec_mpv}
+    \leanok
+    \uses{def:mpug_action_tensor, def:mpo_family, def:mpv_state}
+    For every word $\sigma$ of length $N$,
+    \begin{align}
+        (T\cdot B)^{\sigma}
+         & =\sum_{\tau}T^{\sigma\tau}\otimes B^{\tau},
+        \label{eq:mpug_action_tensor_word}
+    \end{align}
+    the sum running over words $\tau$ of length $N$. Consequently
+    $\ket{V^{(N)}(T\cdot B)}=\rho^{(N)}(T)\ket{V^{(N)}(B)}$ for every $N$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induction on $N$: the empty word gives $\mathbf 1\otimes\mathbf 1$, and
+    one more letter multiplies both sides by $(T\cdot B)^i$, since
+    $(T^{\sigma\tau}\otimes B^{\tau})(T^{ij}\otimes B^j)
+        =T^{\sigma\tau}T^{ij}\otimes B^{\tau}B^j$. Taking traces and using
+    $\tr(X\otimes Y)=\tr X\,\tr Y$ gives
+    $V^{(N)}(T\cdot B)_\sigma
+        =\sum_\tau\tr(T^{\sigma\tau})\tr(B^\tau)
+        =(\rho^{(N)}(T)V^{(N)}(B))_\sigma$.
+\end{proof}
+
+\begin{lemma}[Reductions through action tensors]
+    \label{thm:mpug_action_tensor_reductions}
+    \lean{MPSTensor.IsReduction.actTensor_idKron,
+        MPSTensor.IsReduction.actTensor_kronId,
+        MPOTensor.actTensor_mulTensor,
+        MPOTensor.actTensor_mulTensor_mul_assocMatrix,
+        MPOTensor.assocInvMatrix_mul_actTensor_mulTensor,
+        MPSTensor.IsReduction.actTensor_assoc_left,
+        MPSTensor.IsReduction.actTensor_assoc_right,
+        MPOTensor.actTensor_mul_kronId_of_intertwine,
+        MPSTensor.IsDressedProportional.actTensor_idKron,
+        MPSTensor.IsDressedProportional.actTensor_kronId}
+    \leanok
+    \uses{def:mpug_action_tensor, def:mpdo_operator_product,
+        def:mpdo_operator_product_associator, def:mpo_to_mps,
+        def:mps_rectangular_reduction}
+    If $(V,W)$ reduces $B$ onto $A$, then
+    $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $T\cdot B$ onto
+    $T\cdot A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
+    of $Y$, then $(V\otimes\mathbf 1,W\otimes\mathbf 1)$ reduces $X\cdot B$
+    onto $Y\cdot B$. The letters satisfy
+    $((MN)\cdot A)^i\,\mathsf a=\mathsf a\,(M\cdot(N\cdot A))^i$, so a
+    reduction $(V,W)$ of $M\cdot(N\cdot A)$ onto $Z$ gives the reduction
+    $(V\mathsf a^{-1},\mathsf aW)$ of $(MN)\cdot A$ onto $Z$, and a reduction
+    $(V,W)$ of $(MN)\cdot A$ onto $Z$ gives the reduction
+    $(V\mathsf a,\mathsf a^{-1}W)$ of $M\cdot(N\cdot A)$ onto $Z$, as in
+    Lemma~\ref{thm:mpug_reduction_composition}. If $P$ intertwines the
+    letters of two operator tensors, $X'^{ij}P=PX^{ij}$ for all $i,j$, then
+    $(X'\cdot B)^i\,(P\otimes\mathbf 1)=(P\otimes\mathbf 1)\,(X\cdot B)^i$.
+    Finally, a relation
+    $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all long words lifts to
+    $(\mathbf 1\otimes V)(T\cdot B)^{\mathbf w}
+        =z\,(\mathbf 1\otimes V')(T\cdot B)^{\mathbf w}$, and the analogous
+    relation for the doubled-index tensor of $X$ lifts through
+    $V\otimes\mathbf 1$ to $X\cdot B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_action_tensor_periodic, thm:mpug_reduction_composition}
+    By Theorem~\ref{thm:mpug_action_tensor_periodic}, every word of
+    $T\cdot B$ is the sum~(\ref{eq:mpug_action_tensor_word}) of Kronecker
+    products of a word of $T$ and a word of $B$ of the same length. A
+    boundary of the form $\mathbf 1\otimes V$ passes through the first
+    factor of each summand:
+    \begin{align}
+        (\mathbf 1\otimes V)\,(T\cdot B)^{\sigma}\,(\mathbf 1\otimes W)
+         & =\sum_\tau T^{\sigma\tau}\otimes VB^{\tau}W
+        =\sum_\tau T^{\sigma\tau}\otimes A^{\tau}
+        =(T\cdot A)^{\sigma},
+        \notag
+    \end{align}
+    which is the reduction of the state. For the operator, the word
+    $X^{\sigma\tau}$ is the word of the doubled-index tensor of $X$ on the
+    pair configuration $(\sigma,\tau)$, so
+    $(V\otimes\mathbf 1)(X\cdot B)^\sigma(W\otimes\mathbf 1)
+        =\sum_\tau VX^{\sigma\tau}W\otimes B^\tau
+        =(Y\cdot B)^\sigma$. For a dressed proportionality, if
+    $VB^{\tau}=z\,V'B^{\tau}$ for all words $\tau$ of length at least $N_0$,
+    then for every word $\sigma$ of such a length
+    \begin{align}
+        (\mathbf 1\otimes V)\,(T\cdot B)^{\sigma}
+         & =\sum_\tau T^{\sigma\tau}\otimes VB^{\tau}
+        =z\sum_\tau T^{\sigma\tau}\otimes V'B^{\tau}
+        =z\,(\mathbf 1\otimes V')\,(T\cdot B)^{\sigma},
+        \notag
+    \end{align}
+    because every $\tau$ in the sum has the length of $\sigma$; the same
+    substitution on the pair words of $X$ gives the lift through
+    $V\otimes\mathbf 1$. For the intertwiner,
+    $(X'^{ij}\otimes B^j)(P\otimes\mathbf 1)=X'^{ij}P\otimes B^j
+        =PX^{ij}\otimes B^j=(P\otimes\mathbf 1)(X^{ij}\otimes B^j)$.
+    The letter identity is the reassociation of Kronecker products:
+    \begin{align}
+        ((MN)\cdot A)^i
+         & =\sum_{j,k}(M^{ij}\otimes N^{jk})\otimes A^k
+        =\mathsf a\,\Bigl(\sum_{j,k}M^{ij}\otimes(N^{jk}\otimes A^k)\Bigr)
+        \,\mathsf a^{-1}
+        =\mathsf a\,(M\cdot(N\cdot A))^i\,\mathsf a^{-1}.
+        \notag
+    \end{align}
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]
