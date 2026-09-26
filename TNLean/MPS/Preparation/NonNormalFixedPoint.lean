@@ -33,16 +33,19 @@ blocks, embedded in the full bond space.
 local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` as a hypothesis. The source asserts it for the
 pairs of the blocks of eq. (S2) after eq. (S7), citing the canonical-form theory, and this
 file does not derive it. Documented in
-`docs/paper-gaps/mswc24_ghz_form_local_orthogonality.tex`. Elimination: show that the
-embedded pairs of distinct blocks have disjoint supports and unit norm.
-`inner_pair_eq_zero_of_disjoint` records the off-diagonal half: pair vectors supported on
-disjoint sets of virtual indices are orthogonal.
+`docs/paper-gaps/mswc24_ghz_form_local_orthogonality.tex`. The hypothesis is proved in
+`TNLean.MPS.Preparation.NonNormalCanonicalForm` for fixed-point pairs placed on one copy of
+each block of a canonical form, an identification the source does not make; the source's
+pairs, the fixed points of the positive parts of the blocked tensor, are not formalized.
+`inner_pair_eq_zero_of_disjoint` records the off-diagonal half: pair vectors
+supported on disjoint sets of virtual indices are orthogonal.
 
 The definitions `nonNormalFixedPointState` and
 `nonNormalApproxState` take the pairs `ω_j` and the coefficients `αⱼ` as parameters. Nothing
 here ties `ω_j` to the fixed-point pair of the `j`-th block of a basis of normal tensors,
 `αⱼ` to `ghzAmplitude (bntWeight μ N)`, or the number of blocked sites `M` to `N = qM`;
-these are the intended instances of arXiv:2307.01696, eqs. (19) and (S7).
+these are the intended instances of arXiv:2307.01696, eqs. (19) and (S7), one version of
+which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
 
 ## Main declarations
 
@@ -253,11 +256,11 @@ noncomputable def nonNormalApproxState {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
 
 /-- A sufficient condition for the off-diagonal part of local orthogonality: pair vectors
 whose right legs are supported on disjoint sets of virtual indices are orthogonal,
-`⟨ω|ω'⟩ = 0`. The embedded pairs of distinct blocks of eq. (S2) would be supported this
-way. This lemma gives neither the normalization `⟨ω_j|ω_j⟩ = 1` nor a derivation of the
-local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` that arXiv:2307.01696 asserts after eq. (S7),
-citing the canonical-form theory; connecting the pairs of the blocks of eq. (S2) to its
-hypotheses is left open. -/
+`⟨ω|ω'⟩ = 0`. The embedded pairs of distinct blocks of eq. (S2) are supported this
+way. This lemma gives the off-diagonal half of the local orthogonality
+`⟨ω_j|ω_{j'}⟩ = δ_{jj'}` that arXiv:2307.01696 asserts after eq. (S7); the full statement
+for the pairs of the blocks of eq. (S2) is
+`MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair`. -/
 theorem inner_pair_eq_zero_of_disjoint {ω ω' : Fin D × Fin D → ℂ} {S S' : Finset (Fin D)}
     (hS : Disjoint S S') (hω : ∀ p, p.1 ∉ S → ω p = 0) (hω' : ∀ p, p.1 ∉ S' → ω' p = 0) :
     ∑ p, star (ω p) * ω' p = 0 := by

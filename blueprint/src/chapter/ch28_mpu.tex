@@ -5577,10 +5577,57 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_{\mathcal V} & =(x\otimes y)u_{\mathcal U},
     \end{align}
     while the two canonical-form-II tensors are related on their virtual leg by
-    $z$ and on their source legs by $x$ and $y$. This is the unrestricted
-    statement of the source's Fundamental Theorem of MPU.
+    $z$ and on their source legs by $x$ and $y$. This records the source's
+    unblocked all-length wording. Its converse has the odd-length parity
+    obstruction of Theorem~\ref{thm:mpu_standard_form_parity_obstruction};
+    the blocked-family interpretation is distinguished in
+    \cite{gap:mpu_standard_form_parity_gap}.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
+
+\begin{theorem}[Parity obstruction to an unblocked standard-form converse]
+    \label{thm:mpu_standard_form_parity_obstruction}
+    \lean{MPOTensor.exists_simple_blockTwo_eq_mpo_three_ne}
+    \leanok
+    \uses{def:mpu_simple, def:mpdo_physical_blocking, def:mpo_family}
+    There are simple matrix product unitaries $\mathcal U,\mathcal V$ of
+    physical dimension two and bond dimension one whose two-site blocked
+    tensors agree, but whose periodic operators differ at length three:
+    \begin{align}
+        \mathcal U_2 & =\mathcal V_2, & U^{(3)} & \ne V^{(3)}.
+    \end{align}
+    This is the parity obstruction to reading the converse of
+    \cite[Theorem~FundamentalMPU, lines~624--648]{Cirac2017MPU} as an
+    assertion about the original tensors at every length. Definition~SF of
+    that source concerns the two-site blocks; the explicit source factors
+    and local unitary relations for this example are recorded in
+    \cite{gap:mpu_standard_form_parity_gap}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_simple, def:mpo_family, def:mpo_stacked_layers,
+        thm:mpdo_block_tensor_scalar_scaling,
+        thm:mpdo_mpo_scalar_scaling}
+    Let $\mathcal U^{ij}=\delta_{ij}$ on its one-dimensional bond space and
+    set $\mathcal V^{ij}=-\mathcal U^{ij}$. Their double-layer letters are
+    both $\delta_{ij}$, so the simplicity contractions hold with unit
+    boundary vectors. Two-site blocking removes the pair of minus signs,
+    whereas closing a chain of length three leaves one minus sign:
+    \begin{align}
+        \mathcal V_2 & =\mathcal U_2, &
+        U^{(3)}      & =I_8,          & V^{(3)} & =-I_8.
+    \end{align}
+\end{proof}
+
+\begin{remark}
+    The source-labelled Fundamental Theorem above remains unformalized.
+    The source's displayed standard forms concern
+    $\mathcal U_2,\mathcal V_2$; their local relations can control the blocked
+    families, but do not distinguish the original families at odd lengths.
+    The explicit local-gauge calculation and the possible corrected scopes
+    are given in \cite{gap:mpu_standard_form_parity_gap}. No odd-length
+    premise has been inserted into the source-labelled statement.
+\end{remark}
 
 \begin{theorem}[Rank of a Kronecker product]
     \label{thm:mpu_kronecker_rank}
@@ -6934,6 +6981,91 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     each source-cut formula in
     Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
 \end{proof}
+
+\begin{theorem}[Source factors under a unitary virtual conjugation]
+    \label{thm:mpu_source_factors_virtual_unitary_gauge}
+    \lean{MPOTensor.source_factors_virtual_unitary_sandwich,
+        MPOTensor.source_rank_virtual_unitary_sandwich,
+        MPOTensor.transported_source_factor_premises_at_selected_ranks,
+        MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
+        def:mpu_virtual_sandwich, def:mpu_weighted_source_factors,
+        thm:mpu_virtual_sandwich_source_ranks}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$ on the virtual space.
+    Their recorded positive matrices need not be related. Write
+    $X_a(\mathcal U),Y_a(\mathcal U)$ and
+    $X_a(\mathcal V),Y_a(\mathcal V)$ for their selected source factors,
+    $a=1,2$. After identifying the equal source ranks, there are unitaries
+    $W_1$ and $W_2$ on the respective source-rank spaces such that
+    \begin{align}
+        X_1(\mathcal V)
+         & =(I_d\otimes(z^\dagger)^T)X_1(\mathcal U)W_1,
+         & Y_1(\mathcal V)
+         & =W_1^\dagger Y_1(\mathcal U)(z^T\otimes I_d),       \\
+        X_2(\mathcal V)
+         & =(z\otimes I_d)X_2(\mathcal U)W_2,
+         & Y_2(\mathcal V)
+         & =W_2^\dagger Y_2(\mathcal U)(I_d\otimes z^\dagger).
+    \end{align}
+    This is the forward factor
+    comparison associated with the diagrams in
+    \cite[lines~624--648]{Cirac2017MPU}; it does not assert
+    a converse from the local relations to equality at every chain length.
+    The scalar-free step is the isometric specialization of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}.
+    % Source: paper_v2.tex 624--648 and II_RelationStandard1/2.png;
+    % raw cut/rank transport at lines 786--812.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_virtual_sandwich_source_cuts,
+        thm:mpu_virtual_sandwich_source_ranks,
+        thm:mpu_source_factorizations,
+        thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_right_inverses, ThmFund1,
+        cor:mpug_normalized_source_decomposition_gauges}
+    The two cut identities of
+    Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}, applied to the
+    selected factorizations of Theorem~\ref{thm:mpu_source_factorizations},
+    give transported factorizations with the four exterior matrices
+    displayed in the statement. The right exterior matrices are unitary, so
+    the transported right factors retain the right inverses of
+    Theorem~\ref{thm:mpu_source_factor_right_inverses}. The left exterior
+    matrix of the second cut is unitary, so its transported left factor
+    remains an isometry. The contraction defining $u$ is unchanged: its
+    interior virtual product is $z^\dagger z=I_D$. Rank preservation,
+    Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks}, identifies the
+    transported factors with the selected source-rank spaces. Simplicity and
+    the source-gate equivalence of Theorem~\ref{ThmFund1} give unitarity of
+    both $u$ contractions. The selected factors have left inverses from their
+    weighted first-cut and ordinary second-cut normalizations in
+    Theorem~\ref{thm:mpu_source_factor_normalizations}. The normalized
+    source-decomposition comparison of
+    Corollary~\ref{cor:mpug_normalized_source_decomposition_gauges} now
+    gives the two unitary changes $W_1,W_2$ and the four displayed
+    equalities.
+\end{proof}
+
+\begin{remark}
+    In the setting of
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}, write
+    $u_{\mathcal U},u_{\mathcal V}$ for the source gates of
+    Definition~\ref{def:mpu_source_uv} built from the selected factors.
+    Substituting the two $Y_a(\mathcal V)$ identities into that contraction,
+    the interior virtual product is $\sum_\beta(z^\dagger)_{\beta'\beta}
+        z_{\beta\beta''}=(z^\dagger z)_{\beta'\beta''}=\delta_{\beta'\beta''}$,
+    so
+    \begin{align}
+        u_{\mathcal V} & =(W_2^\dagger\otimes W_1^\dagger)u_{\mathcal U}.
+    \end{align}
+    Thus the unitaries $x=W_2^\dagger$ and $y=W_1^\dagger$ realize the local
+    relation $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ of
+    Theorem~\ref{FundamentalMPU}. This identification of the gauges is a
+    consequence of the displayed factor identities and is not asserted by
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}.
+\end{remark}
 
 \begin{definition}[Ambient support-inverse extension]
     \label{def:mpu_ambient_support_inverse_extension}

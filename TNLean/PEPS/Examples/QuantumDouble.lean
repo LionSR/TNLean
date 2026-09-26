@@ -44,8 +44,9 @@ The toric code is the instance `G = ℤ₂`.
 **Local fix (normalization and representation):** colours are shifted by right
 multiplication, `h ↦ h g`, which leaves the differences `h h'⁻¹` unchanged for non-abelian `G`
 as well; on each leg this is the right-regular representation, unitarily equivalent to the
-left-regular one of arXiv:1001.3807, line 1697, through `h ↦ h⁻¹`. Neither source normalizes
-the tensor, so `G`-isometry holds with the factor `|G|` (see `TNLean.PEPS.IsGIsometric`).
+left-regular one of arXiv:1001.3807, lines 1699–1700, through `h ↦ h⁻¹`. Neither source
+normalizes the tensor, so `G`-isometry holds with the factor `|G|` (see
+`TNLean.PEPS.IsGIsometric`).
 Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 **Scope restriction (single tensor):** the review's statements about the whole network are

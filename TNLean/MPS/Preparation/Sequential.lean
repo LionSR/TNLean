@@ -57,9 +57,10 @@ The scalar only matters at `N = 0`, where the open-boundary coefficient is the
 empty product `1`; states are rays, and the source's "(up to normalization)"
 (lines 1540--1541) is this freedom.
 
-The deterministic transition scheme (scheme 3, `d = 2`, a fixed interaction) and
-the theorem on sequential generation without ancilla (lines 1580--1616) are not
-formalized here.
+The deterministic transition scheme (scheme 3, `d = 2`, a fixed interaction) is
+in `TNLean.MPS.Preparation.SequentialTransition`, and the theorem on sequential
+generation without ancilla (lines 1580--1616) is in
+`TNLean.MPS.Preparation.SequentialNoAncilla`.
 
 ## References
 
