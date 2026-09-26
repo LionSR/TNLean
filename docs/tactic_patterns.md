@@ -2109,6 +2109,62 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Adjoint reversal of an orthogonal-projector error — candidate
+- **Pattern:** replace the norm of a projector product minus a self-adjoint
+  projector by the norm of its adjoint, reverse the product, and reverse the
+  sign of the difference.
+- **Occurrences:** `norm_projector_defect_adjoint` in
+  `TNLean/MPS/ParentHamiltonian/BlockIntervalDefectDecay.lean` and
+  `norm_projection_difference` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/WholeIncrementSpectatorTransport.lean`.
+- **Count:** two occurrences across two files. The second also removes a
+  nested projection using subspace containment. If another use appears,
+  separate the common adjoint identity into a submodule helper theorem.
+
+### Kernel projection under a right-spectator fibrewise conjugacy — candidate
+- **Pattern:** from `U.conj G = rightFiberwiseMap H`, conclude
+  `U.conj (ker G).starProjection = rightFiberwiseMap (ker H).starProjection`
+  by combining `ker_starProjection_conj_linearIsometryEquiv` with
+  `ContinuousLinearMap.ker_starProjection_rightFiberwiseMap`:
+
+  ```lean
+  have hproj := ker_starProjection_conj_linearIsometryEquiv U G _ hHamiltonian
+  rw [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap] at hproj
+  change _ = _ at hproj
+  ```
+- **Seen:** four occurrences across two files:
+  `openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
+  in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and the
+  fourth, already parametrized, local `hproj` (lines 40–51) in
+  `norm_suffixGroundProjection_comp_prefixDifference_le_active` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`, used
+  there for both the prefix and the suffix projections.
+- **Abstraction (proposed):** a top-level theorem
+  `ker_starProjection_conj_of_rightFiberwiseMap` in `SpectatorTransport.lean`
+  with the parametrized statement of the local `hproj`:
+
+  ```lean
+  theorem ker_starProjection_conj_of_rightFiberwiseMap
+      (G : EuclideanSpace ℂ (Cfg d (n + r)) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d (n + r)))
+      (H : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n))
+      (hc : (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.conj G =
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.toContinuousLinearMap H)).toLinearMap) :
+      (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.conj
+          (LinearMap.ker G).starProjection.toLinearMap =
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.ker H).starProjection).toLinearMap
+  ```
+
+  The local `hproj` then becomes this theorem, and the three
+  `SpectatorTransport.lean` proofs replace their
+  `have hproj … rw … change … at hproj` blocks by one application.
+- **Notes:** meets the rule of three. Promotion needs a verified Lean build,
+  so it is deferred to a follow-up change with build access.
+
+
 ### Spectator ranges of block sums — factored
 - **Pattern:** identify a spectator boundary map as a coordinate map composed
   with the pointwise extension of the local boundary map, then distribute its
