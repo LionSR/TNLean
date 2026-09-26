@@ -5530,39 +5530,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     to identify their product with $PEQ$, leaving both factors intact.
 \end{proof}
 
-\begin{definition}[Admissible standard form]
-    \label{def:mpu_admissible_standard_form}
-    \notready
-    \discussion{6019}
-    % **Scope restriction (supplied reduced full-support fixed-pair data):**
-    % this standard form uses source unitaries constructed from a chosen
-    % reduced full-support datum with its positive diagonal weight and
-    % stabilized fixed pair. The passage from this supplied datum to the
-    % source's standing convention remains open; see
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    % Retained under #7660 with the supplied-fixed-pair equivalence theorem.
-    % Redirecting its downstream uses to SF requires the stabilization
-    % converse and normalization tracked by #7758; the bundled convention
-    % alone does not justify that change of hypotheses. Keep the twelve
-    % derived-tensor restrictions and the pathwise data separate. See
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_simple_tensor_equivalence, def:mpu_source_uv, def:mpu_reduced_full_support_source_datum}
-    Let $\mathcal U$ be a simple tensor equipped with a reduced full-support
-    source datum. The admissible standard form of the two-site blocking
-    $\mathcal U_2$ is the depth-two form determined by the source unitaries
-    \begin{align}
-        u & \colon\mathbb C^d\otimes\mathbb C^d
-        \longrightarrow\mathbb C^\ell\otimes\mathbb C^r, \\
-        v & \colon\mathbb C^r\otimes\mathbb C^\ell
-        \longrightarrow\mathbb C^d\otimes\mathbb C^d.
-    \end{align}
-    On four consecutive blocked legs its unitary is
-    \begin{align}
-        U & =v_{23}v_{41}u_{12}u_{34}.
-    \end{align}
-    % Source lines: paper_v2.tex 603--622.
-\end{definition}
-
 \begin{theorem}[Left-canonical normalization of a canonical MPU]
     \label{thm:mpu_cfii_left_canonical}
     \lean{MPOTensor.IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening}
