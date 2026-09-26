@@ -37,34 +37,31 @@ Source: arXiv:1703.09188, Theorem `IndexTh` (ii), lines 824--845. -/
 theorem IsMPUCanonicalFormII.index_tensorProduct
     (hU : IsMPUCanonicalFormII U) (hV : IsMPUCanonicalFormII V) :
     (hU.tensorProduct hV).index = hU.index + hV.index := by
-  obtain ⟨p, hp, _, hSp, _⟩ := hU.exists_sourceV_blockTensor_isIsometry
-  obtain ⟨⟨q, hq, _, hSq, _⟩, ⟨t, ht, _, hSt, _⟩⟩ :=
-    And.intro hV.exists_sourceV_blockTensor_isIsometry
-      (hU.tensorProduct hV).exists_sourceV_blockTensor_isIsometry
-  have hcommon : 0 < p + q + t ∧
-      IsMPUSimple (MPOTensor.blockTensor U (p + q + t)) ∧
-      IsMPUSimple (MPOTensor.blockTensor V (p + q + t)) ∧
-      IsMPUSimple (MPOTensor.blockTensor (MPOTensor.tensorProduct U V) (p + q + t)) :=
-    ⟨by omega,
-      hU.isMPU.blockTensor_isMPUSimple_of_le hp (by omega) hSp,
-      hV.isMPU.blockTensor_isMPUSimple_of_le hq (by omega) hSq,
-      (hU.tensorProduct hV).isMPU.blockTensor_isMPUSimple_of_le ht (by omega) hSt⟩
-  exact let hu := hU.sourceRanks_blockTensor_pos hcommon.1 hcommon.2.1
-    let hv := hV.sourceRanks_blockTensor_pos hcommon.1 hcommon.2.2.1
-    let hw := (hU.tensorProduct hV).sourceRanks_blockTensor_pos hcommon.1 hcommon.2.2.2
+  let : NeZero d := hU.neZero_phys
+  let : NeZero D := hU.neZero_bond
+  let : NeZero e := hV.neZero_phys
+  let : NeZero E := hV.neZero_bond
+  let : NeZero (d * e) := ⟨mul_ne_zero (NeZero.ne d) (NeZero.ne e)⟩
+  let : NeZero (D * E) := ⟨mul_ne_zero (NeZero.ne D) (NeZero.ne E)⟩
+  obtain ⟨k, hk, hSU, hSV, hSW⟩ :=
+    hU.isMPU.exists_common_blockTensor_isMPUSimple_three hV.isMPU
+      (hU.tensorProduct hV).isMPU
+  exact let hu := hU.sourceRanks_blockTensor_pos hk hSU
+    let hv := hV.sourceRanks_blockTensor_pos hk hSV
+    let hw := (hU.tensorProduct hV).sourceRanks_blockTensor_pos hk hSW
     ((hU.tensorProduct hV).sourceIndexValue_eq_index
-      hcommon.1 hcommon.2.2.2 hw.1 hw.2).symm.trans
+      hk hSW hw.1 hw.2).symm.trans
       ((sourceIndexValue_eq_add_of_common_rank_product
-        (MPOTensor.blockTensor U (p + q + t)) (MPOTensor.blockTensor V (p + q + t))
-        (MPOTensor.blockTensor (MPOTensor.tensorProduct U V) (p + q + t))
+        (MPOTensor.blockTensor U k) (MPOTensor.blockTensor V k)
+        (MPOTensor.blockTensor (MPOTensor.tensorProduct U V) k)
         1 Nat.one_pos hu.1 hu.2 hv.1 hv.2 hw.1 hw.2
         (by simp only [blockTensor_tensorProduct, rightRank_reindexPhysical,
           rightRank_tensorProduct, one_mul])
         (by simp only [blockTensor_tensorProduct, leftRank_reindexPhysical,
           leftRank_tensorProduct, one_mul])).trans
         (congrArg₂ (· + ·)
-          (hU.sourceIndexValue_eq_index hcommon.1 hcommon.2.1 hu.1 hu.2)
-          (hV.sourceIndexValue_eq_index hcommon.1 hcommon.2.2.1 hv.1 hv.2)))
+          (hU.sourceIndexValue_eq_index hk hSU hu.1 hu.2)
+          (hV.sourceIndexValue_eq_index hk hSV hv.1 hv.2)))
 
 /-- Adding a finite identity factor does not change the index.
 Source: arXiv:1703.09188, `def:equivalent-tensors`, lines 706--720, and
