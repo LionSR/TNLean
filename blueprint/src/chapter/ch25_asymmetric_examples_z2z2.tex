@@ -487,8 +487,7 @@ ring of $L$ sites.
         Z2Z2Condensation.kleinFamily,
         Z2Z2Condensation.kleinFamily_isNormalRepresentation}
     \leanok
-    \uses{thm:asymex_z2z2_group_cocycle, thm:asymex_z2z2_normal,
-        thm:asymex_group_cocycle_klein, lem:asymex_z2z2_diagonal_dressing,
+    \uses{def:asymex_z2z2_tensors, def:asymex_group_cocycle_klein,
         def:mpug_anomaly_three_cochain}
     For $g\in\Z_2\times\Z_2$ let $M'_g$ be the tensor $M_g$ of
     Definition~\ref{def:asymex_z2z2_tensors} with the letter of input label
@@ -501,6 +500,8 @@ ring of $L$ sites.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_z2z2_group_cocycle, thm:asymex_z2z2_normal,
+        thm:asymex_group_cocycle_klein, lem:asymex_z2z2_diagonal_dressing}
     By Lemma~\ref{lem:asymex_z2z2_diagonal_dressing} the periodic operator
     of $M'_g$ is $U_{g,L}Z_{2,L}^{\,g_1}$, which is $U^{\omega}_{g,L}$ by
     \eqref{eq:asymex_z2z2_group_cocycle} and $Z_{2,L}^2=\Id$. The
