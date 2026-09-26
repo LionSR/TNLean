@@ -208,9 +208,8 @@ theorem exists_flagData {S : Finset ι} {D : ι → ℕ} (C : ∀ s, MPSTensor d
   -- nontrivial module: choose a maximal invariant subspace
   have : Nontrivial M := Module.nontrivial_of_finrank_pos (hn ▸ hpos)
   have : IsNoetherian (WordAlgebra d) M := isNoetherian_of_tower ℂ inferInstance
-  have hcoat : IsCoatomic (Submodule (WordAlgebra d) M) :=
-    isCoatomic_of_orderTop_gt_wellFounded wellFounded_gt
-  obtain ⟨K, hK, -⟩ := (hcoat.eq_top_or_exists_le_coatom ⊥).resolve_left bot_ne_top
+  obtain ⟨K, hK, -⟩ :=
+    (eq_top_or_exists_le_coatom (⊥ : Submodule (WordAlgebra d) M)).resolve_left bot_ne_top
   have : IsSimpleModule (WordAlgebra d) (M ⧸ K) := (isSimpleModule_iff_isCoatom).2 hK
   have : FiniteDimensional ℂ K :=
     Module.Finite.of_injective (K.subtype.restrictScalars ℂ) K.subtype_injective

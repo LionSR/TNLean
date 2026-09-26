@@ -186,7 +186,7 @@ theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
     intro i _
     simp only [Nat.cast_smul_eq_nsmul]
     apply nsmul_le_nsmul_left
-    · exact (LinearMap.nonneg_iff_isPositive _).mpr (localTermES_isPositive A L i.1)
+    · exact LinearMap.nonneg_iff_isPositive.mpr (localTermES_isPositive A L i.1)
     · exact hwindows_card i
 
 /-- If the open-chain Hamiltonian annihilates a vector, then every individual

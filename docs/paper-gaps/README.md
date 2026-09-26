@@ -669,3 +669,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   eq. (S7): for `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` the error is at least
   `(9/25)^q/16` for `M ≥ 3`, which the printed rate `(N/q) e^{-γq/ξ_diag}` does
   not control since the one-dimensional blocks leave `ξ_diag` unconstrained.
+- `mswc24_decaying_correlations_windowed_connected.tex` records that the
+  correlation estimate of Lemma 2 of the Supplemental Material is proved with
+  the bound in every window of `K ≤ 2` consecutive separations and for the
+  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
+  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
+  need not vanish at finite `N`; the corrected form suffices for Theorem 1.

@@ -1032,6 +1032,30 @@ closing a chain of $N$ copies of $\mathcal U$.
     on $k'-k$ proves the claim.
 \end{proof}
 
+\begin{lemma}[Common simple blocking for two or three MPU tensors]
+    \label{lem:mpu_common_simple_blocking_finite}
+    \lean{MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple,
+        MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple_three}
+    \leanok
+    \uses{def:mpu, def:mpu_simple, def:mpdo_physical_blocking}
+    Let $\mathcal U_1,\mathcal U_2$ be MPU tensors with positive physical and
+    bond dimensions, which may differ between the tensors. There is a length
+    $k>0$ for which both direct length-$k$ blockings are simple. The same
+    conclusion holds for three such tensors $\mathcal U_1,\mathcal U_2,
+        \mathcal U_3$, with one common length $k$.
+    This is a finite-family consequence of
+    \cite[Proposition~III.3]{Cirac2017MPU}, not an additional hypothesis on
+    the tensors.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_bounded_simple_blocking, thm:mpu_all_later_simple_blockings}
+    Choose a positive simple blocking length for each tensor. Their sum is
+    positive and exceeds every chosen length, so simplicity at every later
+    blocking gives the conclusion. For three tensors, first choose a common
+    length for two and add a simple blocking length for the third.
+\end{proof}
+
 \begin{theorem}[Common simple blocking along a continuous MPU path]
     \label{thm:mpu_common_pow_four_simple_blocking}
     \lean{MPOTensor.IsMPU.blockTensor_pow_four_isMPUSimple,
@@ -5798,28 +5822,34 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 681--688.
 \end{definition}
 
-\begin{definition}[Admissible index]
+\begin{definition}[Index of a canonical-form-II tensor]
     \label{def:mpu_admissible_index}
-    \notready
-    \discussion{6014}
-    % **Scope restriction (admissible simple block):** the index is defined only
-    % from a simple block carrying its own reduced full-support source datum.
+    \lean{MPOTensor.IsMPUCanonicalFormII.index,
+        MPOTensor.IsMPUCanonicalFormII.index_eq_logb_rightRank_div,
+        MPOTensor.IsMPUCanonicalFormII.index_eq_neg_logb_leftRank_div}
+    \leanok
+    % **Scope restriction (canonical-form-II representative):** this index is
+    % defined for a tensor already in canonical form II, not yet for every MPU.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, thm:mpu_bounded_simple_blocking, thm:mpu_right_rank_bound, thm:mpu_left_rank_bound, def:mpu_reduced_full_support_source_datum}
-    Let $k$ be a blocking length for which $\mathcal U_k$ is simple and is
-    equipped with a reduced full-support source datum, and let $r$ and $\ell$
-    be its right and left source-cut ranks. Define
+    \uses{def:mpu_canonical_form_ii, def:mpu_specified_source_index_value}
+    Let $\mathcal U$ be an MPU in canonical form II. Choose any positive
+    blocking length $k$ for which $\mathcal U_k$ is simple, and let $r_k$ and
+    $\ell_k$ be its right and left source-cut ranks. Such a blocking exists,
+    and both ranks are positive. Define
     \begin{align}
         \operatorname{ind}(\mathcal U)
-         & =\frac12(\log_2 r-\log_2\ell).
+         & =\frac12(\log_2 r_k-\log_2\ell_k).
     \end{align}
-    Since $r\ell=d^{2k}$, this is equivalently
+    Since $r_k\ell_k=d^{2k}$, one also has
     \begin{align}
         \operatorname{ind}(\mathcal U)
-         & =\log_2\frac{r}{d^k}
-        =-\log_2\frac{\ell}{d^k}.
+         & =\log_2\frac{r_k}{d^k}
+        =-\log_2\frac{\ell_k}{d^k}.
     \end{align}
-    % Source lines: paper_v2.tex 681--688.
+    This is the canonical-form-II representative case of
+    \cite[Definition~IV.1]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 681--688. The unrestricted source definition
+    % remains at def:index above.
 \end{definition}
 
 \begin{proposition}[Well-definedness of the index]
@@ -5839,24 +5869,87 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 690--704.
 \end{proposition}
 
-\begin{proposition}[Well-definedness of the admissible index]
+\begin{theorem}[Well-definedness on a canonical-form-II representative]
     \label{prop:mpu_admissible_index_well_defined}
-    \notready
-    \discussion{6014}
-    % **Scope restriction (admissible simple blocks):** independence is proved
-    % only between simple blocks carrying their own reduced full-support source
-    % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_index, ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, thm:mpu_source_cut_rank_blocking, thm:mpu_all_later_simple_blockings, def:mpu_reduced_full_support_source_datum}
-    The admissible index is independent of the chosen admissible simple
-    blocking. More precisely, if $k\geq k_0$, both $\mathcal U_{k_0}$ and
-    $\mathcal U_k$ are simple, and each is equipped with a reduced full-support
-    source datum, then
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_eq_logb_of_isMPUSimple_blockTensor,
+        MPOTensor.IsMPUCanonicalFormII.sourceIndexValue_blockTensor_eq,
+        MPOTensor.IsMPUCanonicalFormII.sourceIndexValue_eq_index,
+        MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor,
+        MPOTensor.IsMPUCanonicalFormII.sourceRanks_blockTensor_pos,
+        MPOTensor.IsMPUCanonicalFormII.index_eq,
+        MPOTensor.IsMPUCanonicalFormII.index_blockTensor}
+    \leanok
+    % **Scope restriction (canonical-form-II representative):** this proves
+    % blocking and presentation independence for one such tensor, not equality
+    % across arbitrary representatives of the same MPU. Documented in
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii}
+    Let $\mathcal U$ be an MPU in canonical form II. If $k_0$ and $k$ are
+    positive blocking lengths for which $\mathcal U_{k_0}$ and $\mathcal U_k$
+    are simple, then both blocks give the same index. When $k\geq k_0$, their
+    ranks satisfy
     \begin{align}
         r_k    & =d^{k-k_0}r_{k_0},    &
         \ell_k & =d^{k-k_0}\ell_{k_0}.
     \end{align}
-    % Source lines: paper_v2.tex 690--704.
-\end{proposition}
+    The value is unchanged by positive physical blocking or by choosing a
+    different canonical-form-II presentation of the same tensor. This is the
+    canonical-form-II representative case of
+    \cite[Proposition~IV.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 690--704. The unrestricted source proposition
+    % remains at index-well-defined above.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_positive_blocking, ThmFund1,
+        thm:mpu_source_cut_rank_blocking_saturation,
+        thm:mpu_specified_source_index_blocking_invariance,
+        lem:mpu_iterated_physical_blocking}
+    Each simple block retains canonical form II. The source-gate criterion
+    gives $r_j\ell_j=d^{2j}$ at $j=k_0,k$, and therefore both ranks are
+    positive. The source-rank blocking bounds, together with these two
+    products, force the displayed equalities when $k\geq k_0$; the common
+    factor $d^{k-k_0}$ cancels from the logarithmic difference. The same
+    calculation compares either block with the one used to define the index.
+    A further physical block is the corresponding direct block after the
+    canonical reindexing, so its index is unchanged. Two canonical-form-II
+    presentations of the same tensor are compared at a common simple block.
+\end{proof}
+
+\begin{theorem}[Index under physical adjunction in canonical form II]
+    \label{thm:mpu_cfii_index_physical_adjoint}
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_physicalAdjointTensor}
+    \leanok
+    \uses{def:mpu_admissible_index, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPU in canonical form II. Its physical adjoint is
+    again in canonical form II, and
+    \begin{align}
+        \operatorname{ind}(\mathcal U^\sharp)
+         & =-\operatorname{ind}(\mathcal U).
+    \end{align}
+    This is the canonical-form-II representative case of the index-sign
+    statement in the time-reversal discussion of
+    \cite{Cirac2017MPU}. It does not assert that $\mathcal U$ and
+    $\mathcal U^\sharp$ generate the same MPU.
+    % Source: paper_v2.tex 1196--1207.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_physical_adjoint_source_ranks,
+        thm:mpu_double_layer_blocking, ThmFund1,
+        def:mpu_admissible_index}
+    Choose a positive simple block $\mathcal U_k$. Physical adjunction
+    exchanges its two source-cut ranks, so the rank-product criterion makes
+    $(\mathcal U_k)^\sharp$ simple as well. At this block the right-rank
+    formula for $\mathcal U^\sharp$ is the negative of the left-rank formula
+    for $\mathcal U$:
+    \begin{align}
+        \log_2\frac{r((\mathcal U_k)^\sharp)}{d^k}
+         & =\log_2\frac{\ell(\mathcal U_k)}{d^k}
+        =-\operatorname{ind}(\mathcal U).
+    \end{align}
+    Both values are independent of the positive simple block chosen.
+\end{proof}
 
 \begin{lemma}[Tensor-product additivity]
     \label{lem:mpu_index_tensor}
@@ -5894,6 +5987,61 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--833.
 \end{lemma}
+
+\begin{lemma}[Source ranks under rectangular reduction]
+    \label{lem:mpu_rectangular_reduction_source_ranks}
+    \lean{MPOTensor.sourceCutM₁_rectangularSandwich,
+        MPOTensor.sourceCutM₂_rectangularSandwich,
+        MPOTensor.rightRank_rectangularSandwich_le,
+        MPOTensor.leftRank_rectangularSandwich_le,
+        MPOTensor.eq_rectangularSandwich_of_isReduction,
+        MPOTensor.rightRank_le_of_isReduction,
+        MPOTensor.leftRank_le_of_isReduction,
+        MPOTensor.isReduction_blockTensor,
+        MPOTensor.rightRank_blockTensor_le_of_isReduction,
+        MPOTensor.leftRank_blockTensor_le_of_isReduction}
+    \leanok
+    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
+        def:mpu_right_rank, def:mpu_left_rank, def:mps_rectangular_reduction,
+        def:mpdo_physical_blocking}
+    Let $\mathcal U$ be a matrix product operator tensor of physical
+    dimension $d$ and bond dimension $D$. For arbitrary matrices
+    $A\in\mathbb C^{E\times D}$ and $B\in\mathbb C^{D\times E}$, put
+    $\mathcal V^{ij}=A\mathcal U^{ij}B$. Then
+    \begin{align}
+        M_1(\mathcal V)
+                         & =(I_d\otimes B^{\mathsf T})M_1(\mathcal U)
+        (A^{\mathsf T}\otimes I_d),                                      \\
+        M_2(\mathcal V)
+                         & =(A\otimes I_d)M_2(\mathcal U)(I_d\otimes B), \\
+        r[\mathcal V]    & \leq r[\mathcal U],                           \\
+        \ell[\mathcal V] & \leq\ell[\mathcal U].
+    \end{align}
+    In particular, a rectangular reduction cannot increase either source
+    rank. No equality of ranks is asserted, and no unitarity, simplicity,
+    or canonical-form assumption is needed.
+    If $\mathcal V$ is a rectangular reduction of $\mathcal U$, then for
+    every common blocking length $L$,
+    \begin{align}
+        r[\mathcal V_L]    & \leq r[\mathcal U_L],   \\
+        \ell[\mathcal V_L] & \leq\ell[\mathcal U_L].
+    \end{align}
+    These identities follow directly from the source cuts of
+    \cite[Section~III, definition of $r,\ell$]{Cirac2017MPU} and permit
+    upper bounds for composition to pass to a reduced representative.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the matrix products entrywise in the two source cuts.
+    The first cut places the right virtual coordinate on its row side,
+    which accounts for the two transposes. The second cut keeps the
+    ordinary order of the virtual coordinates. Multiplication on either
+    side cannot increase matrix rank, proving both inequalities.
+    For a rectangular reduction, its single-letter word identity gives
+    $\mathcal V^{ij}=A\mathcal U^{ij}B$.
+    Its all-word identity gives the same relation for the blocked tensors,
+    with the same matrices $A,B$, so the inequalities apply at every length.
+\end{proof}
 
 \begin{lemma}[Four-site composition source-rank bounds]
     \label{lem:mpu_four_site_composition_source_rank_bounds}
@@ -7064,8 +7212,62 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     relation $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ of
     Theorem~\ref{FundamentalMPU}. This identification of the gauges is a
     consequence of the displayed factor identities and is not asserted by
-    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}.
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}. It is
+    stated, together with the corresponding relation for $v$, in
+    Theorem~\ref{thm:mpu_source_gates_virtual_unitary_gauge}.
 \end{remark}
+
+\begin{theorem}[Source gates under a unitary virtual conjugation]
+    \label{thm:mpu_source_gates_virtual_unitary_gauge}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_selected_source_gate_unitary_gauges}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
+        def:mpu_virtual_sandwich, def:mpu_source_uv,
+        thm:mpu_virtual_sandwich_source_ranks}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$. Let
+    $e_r:r[\mathcal U]\simeq r[\mathcal V]$ and
+    $e_\ell:\ell[\mathcal U]\simeq\ell[\mathcal V]$ be the source-rank
+    bijections. Reindex the source gates of $\mathcal U$ by
+    \begin{align}
+        \widetilde u_{(\ell,r),(p,q)}
+         & =u_{\mathcal U,(e_\ell^{-1}\ell,e_r^{-1}r),(p,q)},
+         & \widetilde v_{(p,q),(r,\ell)}
+         & =v_{\mathcal U,(p,q),(e_r^{-1}r,e_\ell^{-1}\ell)}.
+    \end{align}
+    There are unitaries $x$ on $\ell[\mathcal V]$ and $y$ on
+    $r[\mathcal V]$ such that
+    \begin{align}
+        u_{\mathcal V} & =(x\otimes y)\widetilde u,                 &
+        v_{\mathcal V} & =\widetilde v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    The first equality is the forward $u$ relation of
+    \cite[Equation~(SFuu)]{Cirac2017MPU}. The source's
+    \cite[Equation~(SFvv)]{Cirac2017MPU} displays two relations between the
+    open half-factors involving $z$; the second equality follows by
+    contracting those half-factors. No converse for the original periodic
+    operators at odd length is asserted.
+    % Source: paper_v2.tex 624--648; II_RelationStandard1/2.png.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_source_factors_virtual_unitary_gauge}
+    Use the four selected-factor identities of
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}. Their
+    source-rank changes are $x=W_2^\dagger$ and $y=W_1^\dagger$. The
+    two source-gate contractions have entries
+    \begin{align}
+        u_{(\ell,r),(p,q)}
+         & =\sum_\beta (Y_2)_{\ell,(p,\beta)}(Y_1)_{r,(\beta,q)},    \\
+        v_{(p,q),(r,\ell)}
+         & =\sum_\alpha (X_1)_{(p,\alpha),r}(X_2)_{(\alpha,q),\ell}.
+    \end{align}
+    In the first contraction, the two virtual matrices cancel as
+    $z^\dagger z=I_D$, leaving $(x\otimes y)\widetilde u$. In the second,
+    the first-cut transpose and second-cut left action likewise contract
+    to $z^\dagger z=I_D$, leaving
+    $\widetilde v(y^\dagger\otimes x^\dagger)$.
+\end{proof}
 
 \begin{definition}[Ambient support-inverse extension]
     \label{def:mpu_ambient_support_inverse_extension}
@@ -9370,6 +9572,39 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     ranks multiply under the independent tensor product, so each of
     $U_1,U_2,U_3$ has equal right and left rank $d^2$. Their logarithmic
     differences therefore vanish.
+\end{proof}
+
+\begin{theorem}[Index of the bond-one identity tensor]
+    \label{thm:mpu_identity_index}
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_identityMPUTensor,
+        MPOTensor.identityMPUTensorCanonicalFormII,
+        MPOTensor.identityMPUTensor_index,
+        MPOTensor.rightRank_identityMPUTensor,
+        MPOTensor.leftRank_identityMPUTensor}
+    \leanok
+    \uses{def:mpu_admissible_index, def:mpu_shift_tensors}
+    Let $d>0$. The bond-one tensor generating the identity operator has a
+    canonical-form-II presentation with fixed matrix $\rho=1$. For every
+    canonical-form-II presentation of this tensor,
+    \begin{align}
+        \operatorname{ind}(\Id) & =0.
+    \end{align}
+    This follows from the index definition of
+    \cite[Definition~IV.1]{Cirac2017MPU}; it is distinct from the source's
+    later examples of three two-spin tensors with vanishing index.
+    % Source: paper_v2.tex 681--704. The three examples are at 2037--2041.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_stabilization_converse, ThmFund1,
+        def:mpu_admissible_index, def:mpu_physical_reindexing}
+    In bond dimension one the normalized transfer matrix is the identity;
+    the positive fixed matrix $\rho=1$ therefore gives a canonical-form-II
+    presentation. Both source ranks of the identity tensor equal $d$, so the
+    source-gate criterion makes it simple. Blocking once only relabels the
+    physical alphabet. The defining logarithmic difference for any
+    canonical-form-II presentation is consequently
+    $\frac12(\log_2d-\log_2d)=0$.
 \end{proof}
 
 \begin{theorem}[Source ranks and index values of the shifts at every blocking]

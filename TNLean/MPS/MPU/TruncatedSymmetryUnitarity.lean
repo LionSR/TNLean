@@ -62,7 +62,7 @@ theorem IsMPUCanonicalFormII.truncatedSymmetry_isUnitaryBetween
   let S := sourceFactors U hU.ρ hU.ρ_posDef
   change (S.truncatedSymmetry N).IsUnitaryBetween
   have hu : (SourceFactors.sourceU U S).IsUnitaryBetween :=
-    (hU.isMPUSimple_tfae.out 0 2).mp hsimple
+    (hU.isMPUSimple_tfae.out 1 3).mp hsimple
   have hL : (SourceFactors.sourceWL U S).IsUnitaryBetween :=
     (hU.sourceWL_sourceWR_isUnitaryBetween hsimple).1
   induction N with
