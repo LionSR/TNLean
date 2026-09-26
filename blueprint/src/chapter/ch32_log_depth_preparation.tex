@@ -211,9 +211,10 @@ injective.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the polar decomposition]
-    \label{lem:ldp_polar_uniqueness}
+    \label{thm:ldp_polar_uniqueness}
     \lean{Matrix.polarPos_eq_of_eq_mul, Matrix.polarSupport_eq_of_eq_mul,
-        Matrix.polarIso_eq_of_eq_mul}
+        Matrix.polarIso_eq_of_eq_mul,
+        Matrix.mul_eq_self_of_conjTranspose_mul_self_eq}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldpolar_support}
     Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
@@ -246,8 +247,7 @@ injective.
         MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
         MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, lem:ldpolar_physical_matrix_rotate,
-        lem:physical_rotation_state, lem:ldp_polar_uniqueness}
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_polar_uniqueness}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
     decomposition of the two-site blocked map of $T_{j-1}$, with
     $V^{(j)\dagger}V^{(j)}=\Pi_j$ the support projector of $P_j$, and let $T_j$
@@ -275,7 +275,8 @@ injective.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:physical_rotation_mul}
+    \uses{lem:physical_rotation_mul, lem:ldpolar_physical_matrix_rotate,
+        lem:physical_rotation_state}
     Blocking commutes with maps on the physical leg: blocking $WC$ over $m$
     sites gives $W^{\otimes m}$ applied to $C$ blocked over $m$ sites. Blocking
     $2^{k}$ sites is blocking $2^{k-1}$ pairs of the two-site blocked tensor,
@@ -288,7 +289,7 @@ injective.
     $\Pi_j$ fixes the tensor of $P_j$; so $\Pi_j^{\otimes2^{k-j}}$ fixes the
     product of the later layers, and the product of all layers is a partial
     isometry with initial projector the support projector of $P_k$.
-    Theorem~\ref{lem:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
+    Theorem~\ref{thm:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
     with $P_q$.
 \end{proof}
 

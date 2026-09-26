@@ -51,7 +51,7 @@ the block of `2^{k+1}` sites.
 * arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eq. (16) and the paragraph containing it.
 -/
 
-open scoped Matrix BigOperators ComplexOrder
+open scoped Matrix ComplexOrder
 
 namespace MPSTensor
 
