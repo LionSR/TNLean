@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
+import TNLean.Algebra.FinOrderedProduct
 import TNLean.Algebra.FinSumPermutation
 import TNLean.MPS.Chain.VaryingBondOBC
 import Mathlib.Analysis.InnerProductSpace.PiL2
@@ -78,9 +79,8 @@ variable {d D : ℕ}
 companion of `MPSChainTensor.eval_succ`. -/
 theorem eval_succ' {n : ℕ} (Q : MPSChainTensor d D (n + 1)) (τ : Fin (n + 1) → Fin d) :
     eval Q τ = eval (fun p => Q p.castSucc) (fun p => τ p.castSucc) *
-      Q (Fin.last n) (τ (Fin.last n)) := by
-  simp only [eval, Fin.prod_eq_prod_map_finRange, ← List.ofFn_eq_map, List.ofFn_succ',
-    List.prod_concat]
+      Q (Fin.last n) (τ (Fin.last n)) :=
+  Fin.prod_succ' _
 
 end MPSChainTensor
 

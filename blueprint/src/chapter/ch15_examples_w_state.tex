@@ -414,10 +414,7 @@ illustrates this remark by closing the same tensor with a trace.
     \label{thm:w_state_prime_bound}
     \lean{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime}
     \leanok
-    \uses{thm:w_state_canonical_bound, thm:pgvwc07_positive_length_witness,
-        thm:pgvwc07_periodic_state_vector_decomposition, def:mpv_phase_class_data,
-        lem:periodic_period_le_sq, lem:pgvwc07_block_irreducible,
-        lem:periodic_scale_of_irreducible, thm:wielandt_general, def:w_indicator}
+    \uses{def:w_indicator}
     Let $A$ be any translation-invariant tensor of bond dimension $D$ and let $N$
     be prime. If the periodic vector of $A$ on $N$ sites is $c\ket{W_N}$ with
     $c\neq0$, then
@@ -446,9 +443,21 @@ illustrates this remark by closing the same tensor with a trace.
     does not divide $N$, and the block state vanishes by
     Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition}. If $m_j=1$ the
     block is primitive, and the general quantum Wielandt bound of
-    Theorem~\ref{thm:wielandt_general} gives condition C1 at $L_0=(D^2+1)^2$. Grouping the blocks whose states agree up to a phase power
-    leaves representatives no two of which are related by a gauge transformation
-    and a phase, with some coefficients $c_j$. Dropping the classes with $c_j=0$ or
+    Theorem~\ref{thm:wielandt_general} gives condition C1 at $L_0=(D^2+1)^2$. Group the blocks into the phase classes of
+    Definition~\ref{def:mpv_phase_class_data}: the $q$-th member $A^{(j,q)}$ of
+    class $j$ satisfies
+    $\ket{\phi_{A^{(j,q)}}}=\xi_{j,q}^N\ket{\phi_{A^{(j,0)}}}$, with $A^{(j,0)}$
+    the class representative. Then
+    \begin{align}
+        \sum_k\lambda_k^N\ket{\phi_{A^k}}
+         & =\sum_jc_j\ket{\phi_{A^{(j,0)}}},
+         &
+        c_j
+         & =\sum_q\lambda_{j,q}^N\,\xi_{j,q}^N,
+        \label{eq:w_state_phase_regrouping}
+    \end{align}
+    and no two representatives are related by a gauge transformation and a
+    phase. Dropping the classes with $c_j=0$ or
     period other than one leaves at most $D$ blocks. The generalized first item of
     Theorem~\ref{thm:w_state_canonical_bound} then gives~(\ref{eq:w_state_prime_bound}).
 \end{proof}
