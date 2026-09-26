@@ -2109,6 +2109,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Wielandt block-injectivity length below the uniform square bound — candidate
+- **Pattern:**
+  ```lean
+  calc (dim k ^ 2 - Kraus.krausRank K + 1) * dim k ^ 2
+      ≤ (D ^ 2 + 1) * D ^ 2 := Nat.mul_le_mul (by omega) hd
+    _ ≤ (D ^ 2 + 1) ^ 2 := by nlinarith
+  ```
+- **Seen:** 2 occurrences (`TNLean/MPS/Examples/WStateCanonicalBound.lean:376`,
+  `TNLean/MPS/Examples/WStatePrimeLengthBound.lean:149`).
+- **Abstraction:** proposed lemma bounding the Wielandt length
+  `(m ^ 2 - r + 1) * m ^ 2 ≤ (D ^ 2 + 1) ^ 2` for `m ≤ D`, stated over `ℕ`.
+- **Notes:** promote at a third occurrence, for example a reduction at composite length.
+
 ### Decomposing membership in a finite sum of subspaces — candidate
 - **Pattern:** obtain vectors in the individual subspaces from membership in
   their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then

@@ -255,7 +255,8 @@ illustrates this remark by closing the same tensor with a trace.
 
 \begin{lemma}[Simultaneous product span of distinct blocks]%
     \label{lem:pgvwc07_block_tuple_span}
-    \lean{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge,
+        MPSTensor.wordTupleSpanTop_of_ge_of_isNBlkInjective}
     \leanok
     \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
         def:blocks_not_gauge_phase_equiv}
@@ -265,6 +266,12 @@ illustrates this remark by closing the same tensor with a trace.
     common $L_0>0$, no two related by a gauge transformation and a phase. For every
     $n\geq\max(L_0,3(b-1)(L_0+1))$ the tuples $(A^1_{w},\ldots,A^b_{w})$ over words
     $w$ of length $n$ span $\bigoplus_{j}\MN{D_j}$.
+    The same holds for any family of blocks $A^1,\ldots,A^b$, not assumed to come
+    from a canonical form, provided each block satisfies
+    $\sum_iA^j_i(A^j_i)^\dagger=\Id$, its dual map
+    $X\mapsto\sum_i(A^j_i)^\dagger XA^j_i$ has a positive definite fixed point, and
+    no orthogonal projection other than $0$ and $\Id$ is invariant under every
+    $A^j_i$.
 \end{lemma}
 
 \begin{proof}
@@ -365,7 +372,6 @@ illustrates this remark by closing the same tensor with a trace.
     \label{lem:pgvwc07_block_irreducible}
     \lean{MPSTensor.isIrreducibleFamily_of_unital_of_dualFixedPoint}
     \leanok
-    \uses{def:pgvwc07_ti_canonical_representation}
     Let $\sum_iA_iA_i^\dagger=\Id$, let the dual map
     $X\mapsto\sum_iA_i^\dagger XA_i$ have a positive definite fixed point, and let
     every fixed point of $X\mapsto\sum_iA_iXA_i^\dagger$ be a multiple of the
@@ -444,7 +450,7 @@ illustrates this remark by closing the same tensor with a trace.
     leaves representatives no two of which are related by a gauge transformation
     and a phase, with some coefficients $c_j$. Dropping the classes with $c_j=0$ or
     period other than one leaves at most $D$ blocks. The generalized first item of
-    Theorem~\ref{thm:w_state_canonical_bound} then gives~\eqref{eq:w_state_prime_bound}.
+    Theorem~\ref{thm:w_state_canonical_bound} then gives~(\ref{eq:w_state_prime_bound}).
 \end{proof}
 
 \begin{remark}[Growth of the translation-invariant bond dimension]%
