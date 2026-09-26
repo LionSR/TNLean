@@ -1254,8 +1254,8 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `ofGolden`, `ofEisenstein`, `ofConjMatrix`, `ofScalarFlagFour`,
   the Kramers–Wannier data `kwSquare_compression`, `plusCompression`,
   `kwGHZCompression`, `czxPlusIdentity_compression`, the Ising data
-  `isingCompression` and `sectorCompression`, and the seven Fibonacci data
-  (2026-09-25).
+  `isingCompression` and `sectorCompression`, the seven Fibonacci data,
+  `parityGraded_compression` and `czxSquare_compression` (2026-09-25).
 - **Abstraction:** `MPSTensor.MultiBlockCompression.ofRing` (any gauge whose
   conjugation of every letter is the image of a matrix `K i` over `R`,
   relabelled along `τ`; a scaled gauge such as the Kramers–Wannier `G/2`
@@ -1269,10 +1269,10 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** `remainder_ofRing` takes the proof arguments of the datum
   implicitly; elaborating it against a named datum leaves them unassigned
   (proof irrelevance closes the unification without assigning them), so unfold
-  the named datum first. Deferred sites: `ParityGraded.parityGraded_compression`,
-  `CZXCompression.czxSquare_compression` (a copy of `ofScalarFlagFour` with the
-  target moved) and `GHZSectors`, all touched by an open pull request, and the
-  single-slot sets `singleSlot`/`theSlot` of the `ℤ₃` fusion examples.
+  the named datum first. `ParityGraded.parityGraded_compression` and
+  `CZXCompression.czxSquare_compression` are migrated too. Deferred: the
+  single-slot sets `singleSlot`/`theSlot` of the `ℤ₃` fusion examples and
+  `squareSlots` of `CZXSquare`.
 
 ### normality from a golden matrix-unit table — promoted
 - **Pattern:** a tensor over `ℤ[σ]` is shown normal by deciding, for every
