@@ -224,10 +224,14 @@ injective.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:physical_rotation_mul}
     Blocking commutes with maps on the physical leg: blocking $WC$ over $m$
     sites gives $W^{\otimes m}$ applied to $C$ blocked over $m$ sites. Blocking
     $2^{k}$ sites is blocking $2^{k-1}$ pairs of the two-site blocked tensor,
-    so induction on $k$ gives (\ref{eq:ldp_tree_factorization}).
+    and the outer layer composes with the maps of the inner tree by
+    $\Lambda(\Lambda'A)=(\Lambda\Lambda')A$
+    (Lemma~\ref{lem:physical_rotation_mul}), so induction on $k$ gives
+    (\ref{eq:ldp_tree_factorization}).
     The range of the two-site blocked map of $T_{j}$ lies in
     $\operatorname{ran}P_{j}\otimes\operatorname{ran}P_{j}$, because
     $\Pi_j$ fixes the tensor of $P_j$; so $\Pi_j^{\otimes2^{k-j}}$ fixes the
