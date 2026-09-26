@@ -3609,6 +3609,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:primitive_whole_increment_defect_decay}
     \lean{MPSTensor.IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le}
     \leanok
+    \uses{def:primitive_mps, def:reassociated_tail_boundary_map,
+        def:spectator_boundary_maps_es, def:ground_space_es}
     Let $A$ be a normalized primitive tensor with nonzero bond dimension and a
     positive-definite fixed point.
     For every $\varepsilon>0$, all sufficiently large $L$ and every $K\geq0$, $Q>0$ satisfy
@@ -4929,6 +4931,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:ph_block_interval_defect_decay}
     \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le}
     \leanok
+    \uses{thm:ph_block_interval_projectors}
     Let $(A_i)_{i\in I}$ be a finite family of tensors, and use the interval
     spaces and projectors of Theorem~\ref{thm:ph_block_interval_projectors}.
     Suppose that, for each $\varepsilon>0$ and all sufficiently large $L$,
@@ -4953,8 +4956,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     $\beta<1/2$ and the last quantity is less than $\eta/(r+1)$.
     For all sufficiently large $L$, the overlap bound holds with
     $B=\varepsilon C$, and every individual projector error is at most
-    $\eta/(r+1)$. Taking adjoints equates the two orders of each individual
-    projector error. The interval comparison therefore gives
+    $\eta/(r+1)$. Since $P_i$, $Q_i$, and $R_i$ are self-adjoint,
+    $(R_i-P_iQ_i)^*=R_i-Q_iP_i$, and hence
+    \begin{align}
+        \lVert R_i-P_iQ_i\rVert & =\lVert Q_iP_i-R_i\rVert.
+    \end{align}
+    The interval comparison therefore gives
     \begin{align}
         \lVert R-PQ\rVert
          & \leq\frac{\eta}{r+1}+r\frac{\eta}{r+1}=\eta.
@@ -4965,6 +4972,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:ph_primitive_block_interval_defect_decay}
     \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le_of_inequivalent}
     \leanok
+    \uses{thm:ph_block_interval_projectors, def:primitive_mps}
     Let $(A_i)_{i\in I}$ be a finite family of normalized primitive tensors
     with positive bond dimensions and positive-definite fixed points.
     Suppose that, if the bond dimensions of two distinct members agree, they
@@ -5773,6 +5781,8 @@ tensors.
     \label{def:grouped_open_ground_projections}
     \lean{MPSTensor.groupedNestedGroundProjectionsES,MPSTensor.groupedIntervalGroundProjectionES}
     \leanok
+    \uses{def:fixed-volume-prefix-ground-projections,
+        def:open_suffix_parent_hamiltonian_es}
     Fix $p\geq1$, $M\geq2$, and an open chain of length $N=pM$.
     For $0\leq n\leq M$, let $G_n$ be the ground projection of the range-$2p$ parent
     Hamiltonian on $[0,pn)$, extended by the identity on the remaining
@@ -5791,7 +5801,7 @@ tensors.
     \begin{align}
         [E_m,Q_n] & =0.
     \end{align}
-    Moreover, $E_0=0$ and $Q_1E_1=0$.
+    In addition, $E_0=0$ and $Q_1E_1=0$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -5806,6 +5816,27 @@ tensors.
     The prefixes of lengths zero and $p$ contain no interaction, so
     $G_0=G_1=I$. At the next step $Q_1=G_2$, giving
     $Q_1E_1=G_2(I-G_2)=0$.
+\end{proof}
+
+\begin{theorem}[The first two grouped differences need no estimate]
+    \label{thm:grouped_c3_from_second_index}
+    \lean{MPSTensor.grouped_martingaleDifference_norm_le_of_two_le}
+    \leanok
+    \uses{def:grouped_open_ground_projections}
+    Let $p\geq1$, let $N\geq2p$, and let $M\geq0$. Define $G_n$, $Q_n$, and
+    $E_n=G_n-G_{n+1}$ on the $N$-site chain by the formulas of
+    Definition~\ref{def:grouped_open_ground_projections}. Let $\epsilon\geq0$
+    and suppose that $\|Q_nE_n\|\leq\epsilon$ for $2\leq n<M$. Then
+    $\|Q_nE_n\|\leq\epsilon$ for $0\leq n<M$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:grouped_open_ground_projection_locality}
+    By Lemma~\ref{lem:grouped_open_ground_projection_locality},
+    \begin{align}
+        Q_0E_0 & =0, & Q_1E_1 & =0,
+    \end{align}
+    so both norms are $0\leq\epsilon$.
 \end{proof}
 
 \begin{theorem}[Grouped open-chain coercivity]
@@ -5826,7 +5857,9 @@ tensors.
     \uses{lem:grouped_open_ground_projection_locality,
         thm:nachtergaele_c1_c3_full_range_norm_gap,
         thm:grouped_open_parent_c1, thm:grouped_open_suffix_c2,
-        lem:open_parent_hamiltonian_es_positive}
+        lem:open_parent_hamiltonian_es_positive,
+        thm:fixed-volume-c3-boundary-indices,
+        thm:fixed-volume-c3-projector-conjugacy}
     Apply the full-range martingale estimate to the grouped filtration,
     with window width one. Each local window Hamiltonian is the projection
     $I-Q_n$, so Theorem~\ref{thm:grouped_open_suffix_c2} gives condition C2
@@ -5955,7 +5988,9 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:ph_prefix_kernel_free_right_sites,
-        thm:ph_reassociated_suffix_kernel}
+        thm:ph_reassociated_suffix_kernel,
+        thm:fixed-volume-c3-projector-conjugacy, thm:range_ground_space_map_es,
+        thm:reassociated_tail_boundary_factorization}
     The whole-chain boundary space lies in the suffix boundary space,
     so $TF=F$. Thus $T(P-F)=TP-F$. Taking adjoints, using that orthogonal
     projections are self-adjoint, and reversing the sign gives the identity.
@@ -6007,18 +6042,32 @@ tensors.
     \leanok
     \uses{thm:open-hamiltonian-right-spectator-conjugacy,
         lem:right-spectator-kernel-projection, lem:right-spectator-extension}
-    Splitting the configuration into its active and spectator coordinates
+    Let $\Phi$ be the isometry $\ell^2([d]^{n+r})\to\ell^2([d]^n\times[d]^r)$
+    splitting a configuration into its active and spectator coordinates, and
+    write $T^{\oplus[d]^r}$ for the fiberwise extension of an operator $T$
+    on $n$ sites. By
+    Theorem~\ref{thm:open-hamiltonian-right-spectator-conjugacy}, $\Phi$
     conjugates each of the three Hamiltonians to its fiberwise extension.
-    Kernel projections commute with this conjugation and with fiberwise
-    extension. Composition and subtraction also commute with fiberwise
-    extension. Conjugation preserves the operator norm, and
-    fiberwise extension does not increase it.
+    Lemma~\ref{lem:right-spectator-kernel-projection} transfers this to
+    their kernel projections: for $a\in\{p,n\}$,
+    \begin{align}
+        \Phi P^{(n+r)}_a\Phi^{-1} & =\bigl(P^{(n)}_a\bigr)^{\oplus[d]^r}, &
+        \Phi Q^{(n+r)}\Phi^{-1}   & =\bigl(Q^{(n)}\bigr)^{\oplus[d]^r}.
+    \end{align}
+    Since fiberwise extension respects composition and subtraction
+    (Lemma~\ref{lem:right-spectator-extension}),
+    \begin{align}
+        \Phi\,Q^{(n+r)}\bigl(P^{(n+r)}_p-P^{(n+r)}_n\bigr)\Phi^{-1}
+         & =\Bigl(Q^{(n)}\bigl(P^{(n)}_p-P^{(n)}_n\bigr)\Bigr)^{\oplus[d]^r}.
+    \end{align}
+    Conjugation by $\Phi$ preserves the operator norm, and
+    $\lVert T^{\oplus[d]^r}\rVert\leq\lVert T\rVert$ by
+    Lemma~\ref{lem:right-spectator-extension}.
 \end{proof}
 
 \begin{theorem}[Grouped C3 from a three-interval estimate]
     \label{thm:grouped_c3_from_projector_defect}
-    \lean{MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect,
-        MPSTensor.grouped_martingaleDifference_norm_le_of_two_le}
+    \lean{MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect}
     \leanok
     Let $p\geq1$. Suppose that the range-$2p$ open parent
     Hamiltonian of a tensor has its boundary-condition space as kernel
@@ -6042,12 +6091,14 @@ tensors.
 \begin{proof}
     \leanok
     \uses{lem:grouped_open_ground_projection_locality,
+        thm:grouped_c3_from_second_index,
         thm:ph_active_grouped_projector_error,thm:grouped_spectator_norm}
-    The products at indices zero and one vanish. For $n\geq2$,
-    put $K=p(n-1)$. The active interval has length $p(n+1)$,
-    and its preceding prefix has length $pn$. The kernel hypothesis
-    and the active projector identity give the desired bound on this
-    interval. Adjoining the remaining $pM-p(n+1)$ sites does not
+    The products at indices zero and one vanish, so by
+    Theorem~\ref{thm:grouped_c3_from_second_index} it suffices to treat
+    $n\geq2$. For such $n$, put $K=p(n-1)$. The active interval has
+    length $p(n+1)$, and its preceding prefix has length $pn$. The kernel
+    hypothesis and the active projector identity give the desired bound on
+    this interval. Adjoining the remaining $pM-p(n+1)$ sites does not
     increase the operator norm.
 \end{proof}
 
