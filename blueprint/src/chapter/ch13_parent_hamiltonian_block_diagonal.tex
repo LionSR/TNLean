@@ -829,13 +829,18 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     weights, the original and normalized block sums have exactly the same
     periodic parent Hamiltonians at every interaction range and chain length.
 \end{lemma}
-\begin{proof}\leanok
-    Normalize each tensor by a nonzero scalar and an invertible virtual
-    conjugation. These operations preserve injectivity at each fixed word
-    length, preserve all local ground spaces, and preserve inequivalence.
-    The ground space of a weighted block sum is the sum of the block ground
-    spaces. Hence every local parent projection, and therefore every periodic
-    parent Hamiltonian, is unchanged.
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge,
+        thm:ph_block_replacement_parent_equality}
+    By Theorem~\ref{thm:normalized_primitive_gauge}, normalize each tensor by
+    a nonzero scalar and an invertible virtual conjugation. These operations
+    preserve injectivity at each fixed word length, preserve all local
+    ground spaces, and preserve inequivalence. By
+    Theorem~\ref{thm:ph_block_replacement_parent_equality}, equal block
+    ground spaces give equal ground spaces of the weighted block sums, hence
+    every local parent projection, and therefore every periodic parent
+    Hamiltonian, is unchanged.
 \end{proof}
 
 \begin{theorem}[Propagation of simultaneous spans in trace-preserving form]
