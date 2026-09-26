@@ -7699,8 +7699,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:mpug_three_cocycle,
         def:mpug_fusion_gauge, def:mpug_trivial_gauge_class, def:is_cocycle,
-        thm:mpug_stabilizer_transition, thm:mpug_stabilizer_cocycle_l_symbol,
-        thm:mpug_fixed_block_trivializes}
+        thm:mpug_stabilizer_transition, thm:mpug_stabilizer_cocycle_l_symbol}
     Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
     $H=\operatorname{Stab}_G(x_0)$, and representatives $k_x$ as in
     Theorem~\ref{thm:mpug_stabilizer_transition}. Let $\omega$ be a scalar
@@ -7766,6 +7765,10 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.StabilizerRepresentatives.solutionSetoid,
         TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses,
         TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses_mk,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAction,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAction_mk,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAction_mk_mk_mul,
+        TNLean.Algebra.StabilizerRepresentatives.existsUnique_solutionAction_eq,
         TNLean.Algebra.LSymbol.ActionGaugeEquiv,
         TNLean.Algebra.LSymbol.actionGaugeEquiv_equivalence,
         TNLean.Algebra.LSymbol.IsCompatible.mul_inv_one,
@@ -7802,8 +7805,13 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
               class of $L_0L[\psi]$ is a bijection from $H^2(H,\C^\times)$
               onto the action-gauge classes of $L$-symbols compatible with
               $\omega$.
+        \item The rule $[\psi]\cdot[L]=[L\,L[\psi]]$ is a well-defined
+              action of $H^2(H,\C^\times)$ on these classes: acting by
+              $\psi_2$ and then by $\psi_1$ is acting by $\psi_1\psi_2$, and
+              for any two classes exactly one cohomology class carries the
+              first to the second.
     \end{enumerate}
-    The last item is the torsor statement of \cite{GarreRubio2023MPOSym}
+    The last two items are the torsor statement of \cite{GarreRubio2023MPOSym}
     for fixed $(G,\omega,H)$, with the fusion gauge held fixed as in the
     source.
     % Source anchor: arXiv:2203.12563, REsubmission.tex lines 749--761.
@@ -7829,6 +7837,11 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     freeness statement to (\ref{eq:mpug_induced_cohomology_iff}). The second
     item is the third with $L_0$ the formula at $\psi=1$, which is
     compatible by Theorem~\ref{thm:mpug_stabilizer_reconstruction}.
+    For the last item, cohomologous cocycles give induced $L$-symbols
+    related by an action gauge, so the rule is well defined; the induced
+    $L$-symbol of a pointwise product is the pointwise product of the induced
+    $L$-symbols; and with base point $L$ the action is the bijection of the
+    third item.
 \end{proof}
 
 \begin{definition}[Generalized coboundary and cocycle]

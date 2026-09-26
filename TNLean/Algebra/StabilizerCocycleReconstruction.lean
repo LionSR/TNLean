@@ -39,6 +39,8 @@ equivalence relation.
 * `LSymbol.ActionGaugeEquiv`: equality up to an action-tensor gauge.
 * `StabilizerRepresentatives.reconstructedLSymbol`: the L-symbol of Equation (20).
 * `StabilizerRepresentatives.solutionSetoid`: action-gauge classes of compatible L-symbols.
+* `StabilizerRepresentatives.solutionAction`: the action of `H²(H, ℂˣ)` on solution classes by
+  multiplication with induced L-symbols.
 * `StabilizerRepresentatives.h2EquivSolutionClasses`: the bijection `H²(H, ℂˣ) ≃` solution
   classes determined by a base solution.
 
@@ -56,9 +58,16 @@ equivalence relation.
 * `StabilizerRepresentatives.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol` and
   `StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff`: transitivity and freeness
   of the `H²(H, ℂˣ)` action on solution classes, packaged as the bijection
-  `StabilizerRepresentatives.h2EquivSolutionClasses`.
+  `StabilizerRepresentatives.h2EquivSolutionClasses`; the torsor laws of `solutionAction` are
+  `solutionAction_mk_mk_mul` (compatibility with the product of cocycles) and
+  `existsUnique_solutionAction_eq` (free and transitive).
 
 No finiteness, normalization, or tensor assumption is used.
+
+## References
+
+* arXiv:2203.12563, Section 4.2, `Papers/2203.12563/REsubmission.tex` lines 740--761.
+* `docs/paper-gaps/glm23_eq20_fusion_gauge.tex`.
 -/
 
 namespace TNLean.Algebra
@@ -471,6 +480,77 @@ theorem h2EquivSolutionClasses_mk (K : StabilizerRepresentatives G X x₀)
         ((K.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol hL₀ _).2
           ⟨ψ.1, ψ.2, fun _ _ ↦ 1, (LSymbol.gauge_one _).symm⟩)⟩ :=
   rfl
+
+/-- The action of a stabilizer cohomology class on action-gauge classes of solutions:
+`[ψ] · [L] = [L · L[ψ]]`, where `L[ψ]` is the induced L-symbol. This is the action of
+`𝒢 = H²(H, ℂˣ)` in arXiv:2203.12563, `REsubmission.tex` line 761. -/
+def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G} :
+    H2 (MulAction.stabilizer G x₀) → Quotient (solutionSetoid (X := X) ω) →
+      Quotient (solutionSetoid (X := X) ω) :=
+  Quotient.map₂ (sa := ScalarCocycle.IsCocycle.instSetoid) (sb := solutionSetoid ω)
+    (sc := solutionSetoid ω)
+    (fun ψ L ↦ ⟨L.1 * K.inducedLSymbol ψ.1, by
+      have h := L.2.mul (K.inducedLSymbol_isCompatible ψ.2)
+      rwa [show (fun _ _ _ ↦ (1 : Units ℂ)) = (1 : ScalarThreeCochain G) from rfl,
+        mul_one] at h⟩)
+    (by
+      rintro ψ₁ ψ₂ hψ L₁ L₂ ⟨γ₁, hγ₁⟩
+      obtain ⟨γ₂, hγ₂⟩ :=
+        (K.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq ψ₁.1 ψ₂.1).1 hψ
+      refine ⟨γ₁ * γ₂, ?_⟩
+      change L₁.1 * K.inducedLSymbol ψ₁.1 = _
+      rw [hγ₁, hγ₂]
+      funext x g h
+      simp only [LSymbol.gauge, Pi.mul_apply, mul_one]
+      apply Units.ext
+      push_cast
+      field_simp)
+
+/-- The action on representatives: `[ψ] · [L] = [L · L[ψ]]`. -/
+theorem solutionAction_mk (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G}
+    (ψ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle})
+    (L : {L : LSymbol G X // LSymbol.IsCompatible L ω}) :
+    K.solutionAction (Quotient.mk _ ψ) (Quotient.mk (solutionSetoid ω) L) =
+      Quotient.mk (solutionSetoid ω) ⟨L.1 * K.inducedLSymbol ψ.1, by
+        have h := L.2.mul (K.inducedLSymbol_isCompatible ψ.2)
+        rwa [show (fun _ _ _ ↦ (1 : Units ℂ)) = (1 : ScalarThreeCochain G) from rfl,
+          mul_one] at h⟩ :=
+  rfl
+
+/-- **Action law.** Acting by `[ψ₂]` and then by `[ψ₁]` is acting by the class of the pointwise
+product `ψ₁ψ₂`, which is the product in `H²(H, ℂˣ)`. -/
+theorem solutionAction_mk_mk_mul (K : StabilizerRepresentatives G X x₀)
+    {ω : ScalarThreeCochain G}
+    (ψ₁ ψ₂ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle})
+    (hψ : (ψ₁.1 * ψ₂.1).IsCocycle) (c : Quotient (solutionSetoid (X := X) ω)) :
+    K.solutionAction (Quotient.mk _ ψ₁) (K.solutionAction (Quotient.mk _ ψ₂) c) =
+      K.solutionAction (Quotient.mk _ ⟨ψ₁.1 * ψ₂.1, hψ⟩) c := by
+  induction c using Quotient.ind with
+  | _ L =>
+    simp only [solutionAction_mk]
+    congr 2
+    funext x g h
+    simp only [inducedLSymbol, Pi.mul_apply]
+    ac_rfl
+
+/-- **The torsor property.** The action of `H²(H, ℂˣ)` on action-gauge classes of L-symbols
+compatible with `ω` is free and transitive: for any two classes there is exactly one
+cohomology class carrying the first to the second.
+
+Source: arXiv:2203.12563, `REsubmission.tex` line 761, "the solutions of `L|_H` are a
+`𝒢`-torsor" with `𝒢 = H²(H, ℂˣ)`, for action-tensor gauge classes with the fusion gauge fixed. -/
+theorem existsUnique_solutionAction_eq (K : StabilizerRepresentatives G X x₀)
+    {ω : ScalarThreeCochain G} (c₁ c₂ : Quotient (solutionSetoid (X := X) ω)) :
+    ∃! a : H2 (MulAction.stabilizer G x₀), K.solutionAction a c₁ = c₂ := by
+  induction c₁ using Quotient.ind with
+  | _ L₀ =>
+  have hmap : ∀ a, K.solutionAction a (Quotient.mk _ L₀) = K.h2EquivSolutionClasses L₀.2 a := by
+    intro a
+    induction a using Quotient.ind with
+    | _ ψ =>
+      rw [solutionAction_mk, h2EquivSolutionClasses_mk]
+  simp only [hmap]
+  exact (K.h2EquivSolutionClasses L₀.2).bijective.existsUnique c₂
 
 end StabilizerRepresentatives
 
