@@ -27,8 +27,8 @@ periodic chain of \(N\ge3\) sites this gives
 \(H\) is real and at least \(-\tfrac{3N}8\), and the eigenspace for
 \(-\tfrac{3N}8\) is the kernel of the parent Hamiltonian. On an even ring of
 \(N\ge4\) sites this eigenspace is the span of the two singlet coverings, which
-makes them ground states of \(H\) with ground energy \(-\tfrac{3N}8\). On an odd ring of \(N\ge5\) sites the value
-\(-\tfrac{3N}8\) is not an eigenvalue.
+makes them ground states of \(H\) with ground energy \(-\tfrac{3N}8\). On an odd
+ring of \(N\ge5\) sites the value \(-\tfrac{3N}8\) is not an eigenvalue.
 
 The same projector is the projector \(P^{3/2}\) onto total spin \(\tfrac32\)
 of three spins, so the identity reads
