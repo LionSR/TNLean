@@ -211,8 +211,7 @@ theorem mulTensor_kronId {X : MPOTensor d D₂}
       (kronId V D₃) (kronId W D₃) := by
   rw [MPSTensor.IsReduction.iff_forall_evalWord]
   intro w
-  obtain ⟨L, u, rfl⟩ : ∃ L, ∃ u : Fin L → Fin (d * d), w = List.ofFn u :=
-    ⟨_, _, (List.ofFn_get w).symm⟩
+  obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_toMPSTensor_mulTensor_ofFn, evalWord_toMPSTensor_mulTensor_ofFn,
     kronId, kronId, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
     Matrix.mul_sum, Matrix.sum_mul]
@@ -235,8 +234,7 @@ theorem mulTensor_idKron {X : MPOTensor d D₂}
       (idKron D₃ V) (idKron D₃ W) := by
   rw [MPSTensor.IsReduction.iff_forall_evalWord]
   intro w
-  obtain ⟨L, u, rfl⟩ : ∃ L, ∃ u : Fin L → Fin (d * d), w = List.ofFn u :=
-    ⟨_, _, (List.ofFn_get w).symm⟩
+  obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_toMPSTensor_mulTensor_ofFn, evalWord_toMPSTensor_mulTensor_ofFn,
     idKron, idKron, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
     Matrix.mul_sum, Matrix.sum_mul]
@@ -543,8 +541,7 @@ theorem _root_.MPSTensor.IsDressedProportional.mulTensor_kronId {M : MPOTensor d
       (kronId Y D₂) z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
-  obtain ⟨L, u, rfl⟩ : ∃ L, ∃ u : Fin L → Fin (d * d), w = List.ofFn u :=
-    ⟨_, _, (List.ofFn_get w).symm⟩
+  obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
   rw [kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn,
     kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn]
@@ -563,8 +560,7 @@ theorem _root_.MPSTensor.IsDressedProportional.mulTensor_idKron {M : MPOTensor d
       (idKron D₂ Y) z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
-  obtain ⟨L, u, rfl⟩ : ∃ L, ∃ u : Fin L → Fin (d * d), w = List.ofFn u :=
-    ⟨_, _, (List.ofFn_get w).symm⟩
+  obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
   rw [idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn,
     idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn]

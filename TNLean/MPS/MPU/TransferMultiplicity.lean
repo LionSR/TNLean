@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.ShiftedTracePowerSpectrum
 import QICLean.Channel.TransferMatrix
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
+import TNLean.MPS.CanonicalForm.RetainedBlockReconstruction
 import TNLean.MPS.SharedInfra.Scaling
 import Mathlib.LinearAlgebra.Eigenspace.Zero
 
@@ -46,23 +47,21 @@ namespace CPSVCanonicalFormData
 /-- The inclusion of a retained canonical block into the ambient bond space. -/
 noncomputable def ambientBlockInclusion (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     Matrix (Fin D) (Fin (data.dim k)) ℂ :=
-  data.ambient_coisometryᴴ * blockInclusion data.dim k
+  data.toRetainedBlockReconstructionData.ambientBlockInclusion k
 
 /-- A retained block inclusion into the ambient bond space is an isometry. -/
 theorem ambientBlockInclusion_conjTranspose_mul_self
     (data : CPSVCanonicalFormData A) (k : Fin data.r) :
     (data.ambientBlockInclusion k)ᴴ * data.ambientBlockInclusion k = 1 := by
-  rw [ambientBlockInclusion, Matrix.conjTranspose_mul]
-  simp only [Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc data.ambient_coisometry data.ambient_coisometryᴴ,
-    data.coisometric, Matrix.one_mul, blockInclusion_conjTranspose_mul_self]
+  exact data.toRetainedBlockReconstructionData.ambientBlockInclusion_conjTranspose_mul_self k
 
 /-- Ambient inclusions of distinct retained blocks have orthogonal ranges. -/
 private theorem ambientBlockInclusion_conjTranspose_mul_eq_zero
     (data : CPSVCanonicalFormData A) {k l : Fin data.r} (hkl : k ≠ l) :
     (data.ambientBlockInclusion k)ᴴ * data.ambientBlockInclusion l = 0 := by
-  rw [ambientBlockInclusion, ambientBlockInclusion, Matrix.conjTranspose_mul]
-  simp only [Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+  simp only [ambientBlockInclusion,
+    RetainedBlockReconstructionData.ambientBlockInclusion, Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc data.ambient_coisometry data.ambient_coisometryᴴ,
     data.coisometric, Matrix.one_mul,
     blockInclusion_conjTranspose_mul_eq_zero data.dim hkl]
@@ -73,10 +72,7 @@ theorem mul_ambientBlockInclusion
     (data : CPSVCanonicalFormData A) (k : Fin data.r) (i : Fin d) :
     A i * data.ambientBlockInclusion k =
       data.ambientBlockInclusion k * (data.weights k • data.blocks k i) := by
-  rw [data.reconstruct i, ambientBlockInclusion]
-  simp only [Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc data.ambient_coisometry data.ambient_coisometryᴴ,
-    data.coisometric, Matrix.one_mul, toTensorFromBlocks_mul_blockInclusion]
+  exact data.toRetainedBlockReconstructionData.mul_ambientBlockInclusion k i
 
 /-- Compressing a matrix supported in one ambient block corner recovers that matrix. -/
 private theorem ambientBlockCompression_self
