@@ -440,7 +440,10 @@ Thus Equation~(20) constructs a chosen scalar $L$-symbol representative from
 a chosen representative of $\omega$, a chosen trivialization and cocycle
 representative, a basepoint, and coset representatives.  It is not a canonical
 formula on cohomology classes, and it does not construct action tensors or an
-MPU realization.
+MPU realization.  The formula is compatible exactly as printed only in a
+fusion gauge in which $\omega$ is one on $H\times H\times H$; for a general
+$\omega$ with $\omega|_H=d\beta$ it can fail, and the correction is recorded
+in \cite{gap:glm23_eq20_fusion_gauge}.
 
 For fixed $(G,\omega,H)$, Ref.~\cite[source line~761]{GarreRubio2023MPOSym}
 states that gauge classes of solutions form a torsor for
@@ -552,10 +555,12 @@ The existing library separates the following layers.
           Its coefficient type is \leanid{Units}\,$\mathbb C$; despite prose in
           some module comments using $U(1)$, the implemented coefficient
           group matches the $\mathbb C^\times$ notation of the cited papers.
-          No present theorem packages the restriction to a stabilizer, a
-          chosen trivializer of $\omega|_H$, the torsor of solutions, or the
-          representative reconstruction
-          (\ref{eq:fbc25_action_audit_l_reconstruction}).
+          The representative reconstruction
+          (\ref{eq:fbc25_action_audit_l_reconstruction}) in a fusion gauge
+          trivial on the stabilizer, the classification of scalar solutions
+          up to action-tensor gauge, and the torsor of solution classes are
+          formalized in
+          \doclink{TNLean/Algebra/StabilizerCocycleReconstruction}.
 
     \item The on-site, single-block specialization is already represented by
           \leanid{MPSTensor.IsOnSiteSymmetric} and

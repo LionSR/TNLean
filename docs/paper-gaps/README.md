@@ -629,6 +629,11 @@ For the group matrix product operators of arXiv:2203.12563:
   $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
+- `glm23_eq20_fusion_gauge.tex` records that the stabilizer reconstruction
+  formula, Equation (20), is compatible exactly as printed only in a fusion
+  gauge in which the three-cocycle is one on the stabilizer, gives a
+  $\mathbb Z_3$ example where it fails for a nonconstant trivializer, and
+  states the torsor of solutions for action-tensor gauge classes.
 
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
