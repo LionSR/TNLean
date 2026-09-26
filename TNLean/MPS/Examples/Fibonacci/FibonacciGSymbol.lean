@@ -25,7 +25,7 @@ Review: arXiv:2011.12127, Appendix A, "The MPO for the Fibonacci model"
 (`Papers/2011.12127/TN-Review-main.tex` lines 2613–2625): the operator tensor (figure file
 `fig3_mpo.pdf`, plaquettes `A` upper left, `B` upper right, `C` lower left, `D` lower right,
 vertical line `α`, operator line `a`) has entry `(1/√(d_A d_D)) (F^{aCα}_B)^{D}_{A}`; lines 1309
-and 1342 state the fusion rules `O_a O_b = ∑_c N_{ab}^c O_c` for the operators of this tensor.
+and 1341 state the fusion rules `O_a O_b = ∑_c N_{ab}^c O_c` for the operators of this tensor.
 
 **Formalized here.** The source's tensor over the physical letters (plaquette, edge label), and
 the review's tensor at the edge label `τ`, both over `ℂ` with the factors `v_a = d_a^{1/2}`.
@@ -45,9 +45,9 @@ elimination plan, in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenanc
 
 **Local fix (review normalization):** read literally in the orthonormal basis of plaquette
 configurations, the review's prefactor `1/√(d_A d_D)` gives operators that contradict the fusion
-rules the review states for them (`TN-Review-main.tex` lines 1309, 1342); the fusion rules hold
+rules the review states for them (`TN-Review-main.tex` lines 1309, 1341); the fusion rules hold
 for `O_a Δ`, that is, in the `Δ`-weighted inner product. The review's printed selection rule for
-the F-symbols (line 2622) is garbled, and the F-symbols used are those of the source,
+the F-symbols (line 2623) is garbled, and the F-symbols used are those of the source,
 `fibFSymbolGolden`. Documented in
 `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
@@ -302,13 +302,13 @@ theorem isMPOFusionAlgebra_fibStringNetEdgeTau :
 
 /-! ### The review's prefactor -/
 
-/-- Source: arXiv:2011.12127, `TN-Review-main.tex` lines 2613–2618 (figure file `fig3_mpo.pdf`),
-with `𝒞 = ℳ = 𝒟` the Fibonacci category (lines 2619–2625) and the vertical label `α = τ`. The
+/-- Source: arXiv:2011.12127, `TN-Review-main.tex` lines 2613–2621 (figure file `fig3_mpo.pdf`),
+with `𝒞 = ℳ = 𝒟` the Fibonacci category (lines 2621–2625) and the vertical label `α = τ`. The
 review's operator tensor of the block `a = f`: at the outgoing plaquette `A = x'`, the incoming
 plaquette `C = x`, the left bond letter `p` and the right bond letter `q = (B, D)`, its entry is
 `(1/√(d_A d_D)) (F^{aCα}_B)^{D}_{A}` when `p = (A, C)`, and zero otherwise. The F-symbols are
 the source's `fibFSymbolGolden`, with the selection rule `δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` of
-`AnyonsPEPS.tex` lines 1245–1257, in place of the rule printed at `TN-Review-main.tex` line 2622
+`AnyonsPEPS.tex` lines 1245–1257, in place of the rule printed at `TN-Review-main.tex` line 2623
 (the Local fix of the module header). -/
 def fibReviewTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
   Matrix.of fun p q =>
@@ -351,7 +351,7 @@ theorem fibReviewTensor_conj (f x' x : Fin 2) :
   · simp
 
 /-- Project result: the periodic operator of the review's tensor (arXiv:2011.12127,
-`TN-Review-main.tex` lines 2613–2618) at edge label `τ` is the congruence
+`TN-Review-main.tex` lines 2613–2621) at edge label `τ` is the congruence
 `Δ^{-1/2} O_f Δ^{-1/2}` of the operator of the F-symbol block, with
 `Δ^{-1/2} = diag ∏_k d_{x_k}^{-1/2}`. -/
 theorem mpo_fibReviewTensor (f : Fin 2) (L : ℕ) :
@@ -369,7 +369,7 @@ private theorem mpo_one_apply {D : ℕ} (M : MPOTensor 2 D) (σ τ : Fin 1 → F
   simp [mpoMatrixEntry]
 
 /-- Project result: the review's prefactored operators (arXiv:2011.12127, `TN-Review-main.tex`
-lines 2613–2618), read as operators in the orthonormal basis of plaquette configurations, do
+lines 2613–2621), read as operators in the orthonormal basis of plaquette configurations, do
 not satisfy the Fibonacci fusion rules. At one site the unit operator is
 `Δ^{-1/2} O_1 Δ^{-1/2} = diag(0, 1/φ)`, whose square has the entry `1/φ² ≠ 1/φ`. -/
 theorem not_isMPOFusionAlgebra_fibReviewTensor :
