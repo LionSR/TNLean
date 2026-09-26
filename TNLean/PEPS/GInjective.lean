@@ -27,13 +27,14 @@ condition is proved equivalent for finite `G` (`isGInjective_iff_exists_leftInve
 `IsGIsometric ρ T` asks in addition that `T` preserve inner products of invariant vectors up
 to one positive scalar.
 
-Conventions (docstring remarks, not gaps). The source assumes `U_g` semi-regular (containing
-every irreducible representation, lines 1010–1013) for `G`-injectivity, and the left-regular
-representation for `G`-isometry; here both predicates take the representation as a
-parameter, and each instance states which representation it uses. The source's quantum-double
-tensor `K` (lines 2906–2911), which it calls `G`-isometric, is not normalized, and neither is
-the review's (line 2465); `IsGIsometric` therefore allows a positive factor `c` in
-`⟪T x, T y⟫ = c ⟪x, y⟫`, which the normalization `T / √c` removes.
+**Local fix (normalization and representation):** the source assumes `U_g` semi-regular
+(containing every irreducible representation, lines 1010–1013) for `G`-injectivity and the
+left-regular representation for `G`-isometry; here both predicates take the representation as
+a parameter, and each instance states which representation it uses. The source's
+quantum-double tensor `K` (lines 2906–2911), which it calls `G`-isometric, is not normalized,
+and neither is the review's (line 2465); `IsGIsometric` therefore allows a positive factor `c`
+in `⟪T x, T y⟫ = c ⟪x, y⟫`, which the normalization `T / √c` removes. Documented in
+`docs/paper-gaps/scp10_quantum_double_g_isometry.tex`.
 
 ## Main definitions
 
@@ -46,6 +47,11 @@ the review's (line 2465); `IsGIsometric` therefore allows a positive factor `c` 
 ## Main results
 
 * `TNLean.PEPS.isGInjective_iff_exists_leftInverse`: the source's left-inverse formulation.
+* `TNLean.PEPS.isGInjective_trivial_iff`: for the trivial representation, `G`-injectivity is
+  injectivity.
+* `TNLean.PEPS.siteMap_injective_iff`: the map of a site tensor is injective exactly when its
+  physical vectors, indexed by virtual configurations, are linearly independent, the
+  vertex-wise condition of `TNLean.PEPS.IsVertexInjective`.
 
 ## References
 
@@ -110,6 +116,16 @@ theorem isGInjective_iff_exists_leftInverse [Fintype G] [Invertible (Fintype.car
     rw [LinearMap.comp_apply, hTx, map_zero, ρ.averageMap_id x hx] at h
     exact h.symm
 
+/-- Bridge: for the trivial representation `G`-injectivity is injectivity of `𝒫(A)`, the
+injectivity of a PEPS tensor (arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex`
+lines 501–507). -/
+theorem isGInjective_trivial_iff (T : W →ₗ[ℂ] P) :
+    IsGInjective (Representation.trivial ℂ G W) T ↔ Function.Injective T := by
+  rw [injective_iff_map_eq_zero]
+  constructor
+  · exact fun h x hx => h.injOn_invariants x (fun _ => rfl) hx
+  · exact fun h => ⟨fun _ => rfl, fun x _ hx => h x hx⟩
+
 end GInjective
 
 section GIsometric
@@ -143,6 +159,14 @@ theorem siteMap_apply {V Phys : Type*} [Fintype V] (a : V → V → V → V → 
     (x : (V × V × V × V) → ℂ) (i : Phys) :
     siteMap a x i = ∑ c : V × V × V × V, a c.1 c.2.1 c.2.2.1 c.2.2.2 i * x c := by
   simp [siteMap, Matrix.mulVec, dotProduct]
+
+/-- Bridge: the map `𝒫(A)` of a site tensor is injective exactly when the physical vectors
+`i ↦ a t r b l i`, indexed by the virtual configurations `(t, r, b, l)`, are linearly
+independent. This is the vertex-wise condition of `TNLean.PEPS.IsVertexInjective`. -/
+theorem siteMap_injective_iff {V Phys : Type*} [Fintype V] (a : V → V → V → V → Phys → ℂ) :
+    Function.Injective (siteMap a) ↔
+      LinearIndependent ℂ fun c : V × V × V × V => a c.1 c.2.1 c.2.2.1 c.2.2.2 :=
+  Matrix.mulVec_injective_iff
 
 end PEPS
 end TNLean

@@ -261,7 +261,9 @@ from the virtual to the physical system
     \lean{TNLean.PEPS.IsGInjective, TNLean.PEPS.IsGIsometric,
         TNLean.PEPS.siteMap, TNLean.PEPS.siteMap_apply,
         TNLean.PEPS.apply_averageMap_of_forall_comp_eq,
-        TNLean.PEPS.isGInjective_iff_exists_leftInverse}
+        TNLean.PEPS.isGInjective_iff_exists_leftInverse,
+        TNLean.PEPS.isGInjective_trivial_iff,
+        TNLean.PEPS.siteMap_injective_iff}
     \leanok
     Let $g\mapsto U_g$ be a representation of a finite group $G$ on the
     virtual system of a tensor $A$, and let $\Pi_U$ be the projector onto the
@@ -275,12 +277,18 @@ from the virtual to the physical system
     isometry, $\langle\mathcal{P}(A)x,\mathcal{P}(A)y\rangle
         =c\,\langle x,y\rangle$ for invariant $x,y$ and one constant $c>0$
     \cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+    For the trivial representation, $G$-injectivity is injectivity of
+    $\mathcal{P}(A)$, that is, linear independence of the physical vectors
+    $A^{\bullet}_{\alpha\beta\gamma\delta}$ indexed by the virtual
+    configurations.
 \end{definition}
 
 The source requires $U_g$ to contain every irreducible representation for
-$G$-injectivity and to be the regular representation for $G$-isometry;
-each instance below uses a regular representation. The source's tensors
-are not normalized, and the constant $c$ absorbs the normalization.
+$G$-injectivity and to be the left-regular representation for
+$G$-isometry; here the representation is a parameter, and each instance
+below uses a regular representation. The source's tensors are not
+normalized, and the constant $c$ absorbs the normalization
+\cite{gap:scp10_quantum_double_g_isometry}.
 
 \begin{definition}[Dual quantum-double tensor]%
     \label{def:peps_quantum_double_dual}
@@ -299,7 +307,9 @@ are not normalized, and the constant $c$ absorbs the normalization.
     and quantum double models'']{Cirac2021Matrix}. The group acts on the
     virtual system by shifting all four colors,
     $(U_gx)(h_1,h_2,h_3,h_4)=x(h_1g,h_2g,h_3g,h_4g)$, the right-regular
-    representation on each leg.
+    representation on each leg, which the relabeling $h\mapsto h^{-1}$
+    turns into the left-regular one
+    \cite{gap:scp10_quantum_double_g_isometry}.
 \end{definition}
 
 \begin{theorem}[The dual tensor is $G$-isometric]%
@@ -340,8 +350,9 @@ are not normalized, and the constant $c$ absorbs the normalization.
 
 The review adds that the equal-weight superposition of plaquette colorings
 is the equal-weight superposition of the configurations obeying Gauss' law.
-On a torus the differences of plaquette colorings exhaust only the Gauss-law
-configurations of trivial holonomy, and this statement is not formalized.
+This statement about the contracted network is not formalized; on a torus
+the differences of plaquette colorings are the Gauss-law configurations of
+trivial holonomy \cite{gap:scp10_quantum_double_g_isometry}.
 
 \begin{definition}[Primal quantum-double tensor]%
     \label{def:peps_quantum_double_primal}
@@ -359,16 +370,22 @@ configurations of trivial holonomy, and this statement is not formalized.
     \label{thm:peps_quantum_double_primal_fusion}
     \lean{TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_one,
         TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_map_mul_eq_one,
+        TNLean.PEPS.quantumDoublePrimalTensor_smul_map_mul,
         TNLean.PEPS.character_mul_quantumDoublePrimalTensor}
     \leanok
     \uses{def:peps_quantum_double_primal}
     On the support of the primal tensor the virtual labels satisfy
     $t\,r\,b^{-1}l^{-1}=1$. Hence $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=1$ for
-    every representation $\pi$ of $G$, and the tensor is invariant under the
-    virtual action of every one-dimensional representation $\chi$, by $\chi$
-    on the top and right legs and by $\chi^{-1}$ on the down and left legs
+    every representation $\pi$ of $G$, in particular every irreducible one,
+    so that each entry of the tensor times the operator
+    $\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}$, acting by $\pi$ on the top and
+    right legs and by $\pi^{-1}$ on the down and left legs, equals the same
+    entry times the identity. For a one-dimensional representation $\chi$
+    the tensor is invariant under this virtual action
     \cite[Appendix~A, ``The Toric Code and quantum double
-    models'']{Cirac2021Matrix}.
+    models'']{Cirac2021Matrix}. This is a statement about one tensor; the
+    resulting symmetry of the contracted network is not formalized
+    \cite{gap:scp10_quantum_double_g_isometry}.
 \end{theorem}
 
 \begin{proof}\leanok

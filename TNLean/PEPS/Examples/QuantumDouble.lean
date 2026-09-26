@@ -35,21 +35,26 @@ affect the physical state" (line 2465).
 **Formalized here.** For every finite group `G`:
 * the dual tensor is invariant under shifting all four colors by the same group element and
   is `G`-injective and `G`-isometric (with factor `|G|`) for this regular representation;
-* the virtual labels of the primal tensor satisfy `t r b⁻¹ l⁻¹ = 1` on its support, so every
-  representation of `G` evaluated on the four labels fuses to the identity, and the tensor is
-  invariant under the virtual action of every one-dimensional representation.
+* the virtual labels of the primal tensor satisfy `t r b⁻¹ l⁻¹ = 1` on its support, so for
+  every representation `π` of `G`, in particular every irreducible one, the primal tensor
+  absorbs the virtual operator `π(t) π(r) π(b)⁻¹ π(l)⁻¹` acting on its four legs; for a
+  one-dimensional representation this is a scalar invariance of the tensor.
 The toric code is the instance `G = ℤ₂`.
 
-Conventions (docstring remarks, not gaps). Colours are shifted by right multiplication,
-`h ↦ h g`, which leaves the differences `h h'⁻¹` unchanged for non-abelian `G` as well; on
-each leg this is the right-regular representation, unitarily equivalent to the left-regular
-one of arXiv:1001.3807, line 1697, through `h ↦ h⁻¹`. Neither source normalizes the tensor,
-so `G`-isometry holds with the factor `|G|` (see `TNLean.PEPS.IsGIsometric`).
+**Local fix (normalization and representation):** colours are shifted by right
+multiplication, `h ↦ h g`, which leaves the differences `h h'⁻¹` unchanged for non-abelian `G`
+as well; on each leg this is the right-regular representation, unitarily equivalent to the
+left-regular one of arXiv:1001.3807, line 1697, through `h ↦ h⁻¹`. Neither source normalizes
+the tensor, so `G`-isometry holds with the factor `|G|` (see `TNLean.PEPS.IsGIsometric`).
+Documented in `docs/paper-gaps/scp10_quantum_double_g_isometry.tex`.
 
-The review's sentence that the equal-weight superposition of plaquette colorings is the
-equal-weight superposition of Gauss-law configurations (lines 2460–2461) is not restated:
-on a torus the differences of plaquette colorings are only the Gauss-law configurations of
-trivial holonomy.
+**Scope restriction (single tensor):** the review's statements about the whole network are
+not formalized: the virtual symmetry of the primal PEPS under every irreducible representation
+is proved as an identity of one tensor, not as a matrix product operator symmetry of the
+contracted lattice, and the identification of the equal-weight superposition of plaquette
+colorings with that of the Gauss-law configurations (lines 2460–2461) is not stated; on a
+torus the differences of plaquette colorings are the Gauss-law configurations of trivial
+holonomy. Documented in `docs/paper-gaps/scp10_quantum_double_g_isometry.tex`.
 
 ## Main definitions
 
@@ -66,6 +71,7 @@ trivial holonomy.
   `TNLean.PEPS.isGIsometric_toricCodeDualTensor`.
 * `TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_one`,
   `TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_map_mul_eq_one`,
+  `TNLean.PEPS.quantumDoublePrimalTensor_smul_map_mul`,
   `TNLean.PEPS.character_mul_quantumDoublePrimalTensor`.
 
 ## References
@@ -303,6 +309,21 @@ theorem quantumDoublePrimalTensor_ne_zero_map_mul_eq_one {M : Type*} [Monoid M]
     (h : quantumDoublePrimalTensor G t r b l g ≠ 0) :
     π t * π r * π b⁻¹ * π l⁻¹ = 1 := by
   rw [← map_mul, ← map_mul, ← map_mul, quantumDoublePrimalTensor_ne_zero_mul_eq_one h, map_one]
+
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2465, for one
+tensor. For every representation `π` of `G` by elements of a `ℂ`-algebra `M`, such as the
+matrices of an irreducible representation, the primal tensor absorbs the virtual operator
+`π(t) π(r) π(b)⁻¹ π(l)⁻¹` that acts by `π` on the top and right legs and by `π⁻¹` on the down
+and left legs: each entry times this operator equals the same entry times the identity of `M`.
+The matrix product operator symmetry of the contracted lattice is not stated (see the scope
+restriction in the module docstring). -/
+theorem quantumDoublePrimalTensor_smul_map_mul {M : Type*} [Ring M] [Algebra ℂ M]
+    (π : G →* M) (t r b l : G) (g : G × G × G × G) :
+    quantumDoublePrimalTensor G t r b l g • (π t * π r * π b⁻¹ * π l⁻¹) =
+      quantumDoublePrimalTensor G t r b l g • (1 : M) := by
+  by_cases h : quantumDoublePrimalTensor G t r b l g = 0
+  · simp [h]
+  · rw [quantumDoublePrimalTensor_ne_zero_map_mul_eq_one π h]
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2465: the primal
 tensor is invariant under the virtual action of every one-dimensional representation `χ`,
