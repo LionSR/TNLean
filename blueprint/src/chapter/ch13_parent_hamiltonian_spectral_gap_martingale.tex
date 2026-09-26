@@ -3573,6 +3573,30 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     pseudoinverse identity controls $S_{K+l+1}C^\dagger$.
 \end{proof}
 
+\begin{theorem}[Uniform decay of the individual-block projector error]
+    \label{thm:primitive_whole_increment_defect_decay}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le}
+    \leanok
+    Let $A$ be a normalized primitive tensor with a positive-definite fixed matrix.
+    For every $\varepsilon>0$, all sufficiently large $L$ and every $K\geq0$, $Q>0$ satisfy
+    \begin{align}
+        \left\lVert P_{\mathcal H_K\otimes G_{L+Q}(A)}
+        P_{G_{K+L}(A)\otimes\mathcal H_Q}-P_{G_{K+L+Q}(A)}\right\rVert
+         & \leq\varepsilon
+    \end{align}
+    This is the uniform decay of the individual-block
+    errors used in \cite[Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_fnw_projector_defect_geometric}
+    The geometric FNW estimate bounds the norm by
+    $c\lambda^L(1+c\lambda^L)/(1-c\lambda^L)$ once $L$ exceeds the
+    injectivity length and $c\lambda^L<1$. Since $0<\lambda<1$, this coefficient
+    tends to zero. Neither the coefficient nor the lower bound on $L$ depends
+    on $K$ or $Q$.
+\end{proof}
+
 \begin{theorem}[Uniform whole-increment defect at the coefficient $7/16$]
     \label{thm:uniform_whole_increment_defect_seven_sixteenths}
     \lean{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
@@ -3594,13 +3618,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_fnw_projector_defect_geometric, thm:wordspan_blk_inj_succ}
-    The geometric estimate already supplies a positive injective length.
-    Choose $p$ above it and large enough that
-    $c\lambda^p<1$ and $c\lambda^p(1+c\lambda^p)/(1-c\lambda^p)<7/16$; the
-    rational coefficient tends to zero because $\lambda<1$.  Block injectivity
-    propagates to $p$, and the geometric whole-increment estimate applies with
-    $r=K$, $m=p$, and $\ell=p$ for every prefix length $K$.
+    \uses{thm:primitive_whole_increment_defect_decay, thm:normal_from_primitive_posdef,
+        thm:wordspan_blk_inj_succ}
+    Primitivity supplies a positive injective length. Choose $p$ above it
+    and large enough for the uniform decay estimate with tolerance $7/16$.
+    Block injectivity propagates to $p$. Set the suffix length equal to $p$
+    in that estimate, leaving the prefix length unrestricted.
 \end{proof}
 
 \begin{theorem}[Three-block whole-increment defect at the coefficient $7/16$]
@@ -4982,6 +5005,71 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     The extended-boundary overlap estimate supplies all three bounds for
     $U_i\times U_j$, $V_i\times V_j$, and $U_i\times V_j$ with the same
     matrix $B$. Apply the joint-projector comparison.
+\end{proof}
+
+\begin{theorem}[Uniform decay of the joint projector error]
+    \label{thm:ph_block_interval_defect_decay}
+    \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le}
+    \leanok
+    Let $(A_i)_{i\in I}$ be a finite family of tensors, and use the interval
+    spaces and projectors of Theorem~\ref{thm:ph_block_interval_projectors}.
+    Suppose that, for each $\varepsilon>0$ and all sufficiently large $L$,
+    the following two bounds hold. For distinct $i,j$, $x\in G_L(A_i)$,
+    and $y\in G_L(A_j)$,
+    $|\langle x,y\rangle|\leq\varepsilon\lVert x\rVert\lVert y\rVert$.
+    For every $i$, $K\geq0$, and $Q>0$,
+    $\lVert Q_iP_i-R_i\rVert\leq\varepsilon$.
+    Then, for every $\eta>0$, all sufficiently large $L$, and every
+    $K\geq0$ and $Q>0$,
+    \begin{align}
+        \lVert R-PQ\rVert & \leq\eta.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_block_interval_projectors}
+    Put $r=|I|$ and let $C$ have zero diagonal and all off-diagonal entries
+    equal to one. As $\varepsilon\downarrow0$, the quantities
+    $\beta=\lVert\varepsilon C\rVert$, $\delta=\beta/(1-\beta)$, and
+    $4\delta/(1-\delta)^2$ tend to zero. Choose $\varepsilon>0$ so that
+    $\beta<1/2$ and the last quantity is less than $\eta/(r+1)$.
+    For all sufficiently large $L$, the overlap bound holds with
+    $B=\varepsilon C$, and every individual projector error is at most
+    $\eta/(r+1)$. Taking adjoints equates the two orders of each individual
+    projector error. The interval comparison therefore gives
+    \begin{align}
+        \lVert R-PQ\rVert
+         & \leq\frac{\eta}{r+1}+r\frac{\eta}{r+1}=\eta.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Uniform projector error decay for primitive blocks]
+    \label{thm:ph_primitive_block_interval_defect_decay}
+    \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le_of_inequivalent}
+    \leanok
+    Let $(A_i)_{i\in I}$ be a finite family of normalized primitive tensors
+    with positive bond dimensions and positive definite invariant densities.
+    Suppose no two distinct members are related by a gauge transformation
+    and a phase. Use the interval projectors of
+    Theorem~\ref{thm:ph_block_interval_projectors}.
+    For every $\eta>0$, all sufficiently large $L$, and every $K\geq0$
+    and $Q>0$,
+    \begin{align}
+        \lVert R-PQ\rVert & \leq\eta.
+    \end{align}
+    This is the uniform decay consequence of
+    \cite[Lemma~6.1(ii)]{Nachtergaele1996Spectral} for a positive right
+    outer interval.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_block_interval_defect_decay,
+        thm:inequivalent_block_ground_space_overlap_decay,
+        thm:primitive_whole_increment_defect_decay}
+    Inequivalence gives decay of the overlaps between distinct blocks.
+    Primitivity gives uniform decay of each individual projector error.
+    Since the family is finite, the thresholds can be chosen simultaneously
+    for all blocks and all pairs. Apply the joint projector error estimate.
 \end{proof}
 
 \section{The normalized primitive gauge of a normal tensor}
