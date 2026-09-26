@@ -210,6 +210,62 @@ complement of $t\in\{0,1\}^N$ and $q(s)=\sum_is_is_{i+1}$.
     $(-1)^{q(u)+\sum_iu_i}$ after reindexing the second factor.
 \end{proof}
 
+\subsubsection{Hamiltonians symmetric under the decorated CZX operator}
+
+Write $X_j$ and $Z_j$ for the Pauli operators on qubit $j$ of a periodic
+chain of $N\geq2$ qubits, with sites taken modulo $N$, and
+$K_j=Z_{j-1}X_jZ_{j+1}$. The source records the Hamiltonian
+$H_{\mathrm R}(\mu)=\sum_iCZ_{i,i+2}X_{i+1}-\mu\sum_iZ_iZ_{i+1}$ of Roose
+et al.\ as invariant under the operator
+$U=\prod_iCZ_{i,i+1}Z_i\prod_iX_i$ of
+Theorem~\ref{thm:asymex_group_cocycle_z2}~\cite{GarreRubio2023MPOSym}, and
+the review states that the cluster Hamiltonian in a critical transverse field
+commutes with the same operator~\cite{Cirac2021Matrix}. For the cluster Ising
+Hamiltonian $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ the operator $U$
+exchanges the two terms.
+
+\begin{theorem}[Invariance under the decorated CZX operator]%
+    \label{thm:asymex_group_cocycle_z2_hamiltonians}
+    \lean{MPOTensor.GroupCocycle.czxDecorated_mul_pauliXAt,
+        MPOTensor.GroupCocycle.czxDecorated_mul_clusterTerm,
+        MPOTensor.GroupCocycle.czxDecorated_mul_rooseHamiltonian,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_eq_smul,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_neg_one,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_one}
+    \leanok
+    \uses{thm:asymex_group_cocycle_z2}
+    On a periodic chain of $N\geq2$ qubits,
+    \begin{align}
+        UX_jU^\dagger & =-K_j, & UK_jU^\dagger & =-X_j,
+        \notag
+    \end{align}
+    and $U$ commutes with $H_{\mathrm R}(\mu)$ for every $\mu$. Consequently
+    $UH(\lambda)U^\dagger=\lambda\sum_jK_j+\sum_jX_j$, which equals
+    $-\lambda H(\lambda^{-1})$ for $\lambda\neq0$. In particular $U$ commutes
+    with $H(-1)=-\sum_jK_j+\sum_jX_j$, while $UH(1)U^\dagger=-H(1)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    All operators are monomial in the computational basis. On the input
+    configuration $t$, the operator $U$ flips every bit and multiplies by
+    $(-1)^{q(\bar t)+\sum_i\bar t_i}$. Flipping bit $j$ of $t$ changes
+    $q(\bar t)$ by $\bar t_{j-1}+\bar t_{j+1}$ and $\sum_i\bar t_i$ by one,
+    modulo two. Since $X_j$, $K_j$ and $CZ_{i,i+2}X_{i+1}$ flip one bit and
+    $U$ flips all bits, the two products in each relation have the same
+    permutation, and the phases agree by this parity count together with
+    $(-1)^{\bar a+\bar b}=(-1)^{a+b}$ and
+    $(-1)^{\bar a\bar b}=-(-1)^{a+b+ab}$ for bits $a,b$. The operators
+    $Z_iZ_{i+1}$ are diagonal with a phase invariant under flipping all bits.
+    Summing the relations over the sites and using $UU^\dagger=\Id$ gives
+    the statements about the Hamiltonians.
+\end{proof}
+
+The review prints no formula for the cluster Hamiltonian in a critical field,
+so the sign of the field is not fixed by the source. With the sign convention
+of $H(\lambda)$, the symmetric point is $\lambda=-1$.
+
 \subsection{The cyclic groups}
 
 For $n\geq1$ and $j\in\N$, Garre-Rubio and
