@@ -365,7 +365,7 @@ theorem FusionData.isTrivialGaugeClass_omega_of_closed_fusion
         entrySum_one, hc]
       simp [v]
     have hR : entrySum (fd.rightV g h k) = v g (h * k) * v h k := by
-      rw [FusionData.rightV, entrySum_mul, entrySum_mul, entrySum_mul, castMat,
+      rw [FusionData.rightV, entrySum_mul, entrySum_mul, entrySum_mul, castMat, castIndex,
         entrySum_toMatrix, idKron, entrySum_submatrix, entrySum_kronecker, entrySum_one,
         mulTensorAssocInvMatrix, entrySum_toMatrix]
       simp [v, hc]
