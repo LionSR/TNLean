@@ -2109,6 +2109,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Positive local terms with prescribed kernels
+
+For two finite families of positive operators with equal kernels term by
+term, rewrite each kernel of a sum with
+`WeightedPositiveKernel.ker_sum_eq_iInf`, then substitute the pointwise kernel
+equalities. This proves equality of the two total kernels without comparing
+the operators in order.
+
+Occurrences: `BlockGroundSpaceAtInjectivityLength.lean` and
+`CanonicalBlockGroundSpaceAtInjectivityLength.lean`. Both use the existing
+QICLean kernel-of-sum theorem. A further occurrence would justify a direct
+kernel-equality corollary there; no new tactic is needed.
+
 ### Scalar-valued norms and equal ambient lengths
 
 When a linear map acts on a Hilbert space indexed by an arithmetic expression,
