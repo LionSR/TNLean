@@ -15,9 +15,9 @@ projection preserves every nonzero remainder eigenvalue as a nonunit
 transfer eigenvalue. Thus this prescription implies the weighted
 spectral-radius hypothesis of the FNW geometric estimate.
 
-The prefactor remains existential and may depend on the chosen rate. No
-identification with the constant \(c=k^2\) in the source's projector bound is made;
-that separate question is recorded in
+**Scope restriction (FNW prefactor):** the prefactor remains existential and
+may depend on the chosen rate. No identification with the constant \(c=k^2\) in
+the source's projector bound is made; that separate question is recorded in
 `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 -/
 
