@@ -149,3 +149,78 @@ of the virtual projective representation.
     that separates SPT phases is the cohomology class of the virtual
     representation cocycle (Theorem~\ref{thm:spt_classification}).
 \end{remark}
+
+\subsection{Degeneracy of the entanglement spectrum}
+\label{sec:spt_entanglement_spectrum}
+
+For an injective tensor in canonical form, the positive fixed point of the
+transfer map is the half-chain reduced density matrix, whose spectrum is the
+entanglement spectrum.  A symmetry forces this fixed point to commute with the
+virtual gauges, and a non-commuting projective representation then forces every
+eigenvalue to be degenerate \cite[Section~III.A]{Cirac2021Matrix}.  Here the
+canonical form is $\E_A(\Id)=\Id$ and the fixed point is that of the adjoint
+map $\E_A^\dagger$; the reflected normalization, in which the fixed point of
+$\E_A$ itself is used, describes the same spectrum.
+
+\begin{lemma}[Anticommuting invertible operators force even dimension]
+    \label{lem:even_finrank_of_anticommute}
+    \lean{Module.End.even_finrank_of_anticommute, Matrix.even_finrank_eigenspace_of_anticommute}
+    \leanok
+    Let $f,g$ be invertible operators on a finite-dimensional complex vector
+    space $V$ with $fg=-gf$.  Then $\dim V$ is even.  Consequently, if a matrix
+    $\Lambda$ commutes with two anticommuting invertible matrices $X$ and $Y$,
+    every eigenspace of $\Lambda$ has even dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    Taking determinants in $fg=-gf$ gives
+    $\det f\det g=(-1)^{\dim V}\det g\det f$ with $\det f\det g\neq0$, so
+    $(-1)^{\dim V}=1$.  For the second statement, $X$ and $Y$ map each eigenspace
+    of $\Lambda$ into itself, and their restrictions are invertible and
+    anticommute.
+\end{proof}
+
+\begin{theorem}[Virtual gauges fix the boundary state]
+    \label{thm:virtual_gauge_fixes_boundary_state}
+    \lean{MPSTensor.exists_unitary_gauge_of_symmetry, MPSTensor.commute_boundaryState_of_symmetry}
+    \leanok
+    \uses{def:injective, lem:gauge_phase_unique, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
+    Let $A$ be injective with $\E_A(\Id)=\Id$, let $\Lambda$ be a positive
+    definite matrix with $\E_A^\dagger(\Lambda)=\Lambda$, and let $u$ be a
+    unitary with
+    $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ for all $i$, where $X\in\GL_{D}(\C)$
+    and $\zeta\neq0$.  Then $X=c\,W$ for a nonzero scalar $c$ and a unitary $W$
+    with $W\Lambda W^\dagger=\Lambda$.  In particular $X\Lambda=\Lambda X$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
+    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase}, applied to the
+    physical unitary $u^\dagger$, gives a unitary $V$ and a phase $\mu$ with
+    $\sum_j (u^\dagger)_{ij}A^j=\mu\,VA^iV^\dagger$, and
+    Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives
+    $V^\dagger\Lambda V=\Lambda$ after normalizing the trace of $\Lambda$.
+    Undoing the physical mixing yields $A^i=\mu\zeta\,(VX)A^i(VX)^{-1}$, so
+    Lemma~\ref{lem:gauge_phase_unique} makes $VX$ a nonzero scalar.  Hence $X$
+    is a multiple of $W=V^\dagger$.
+\end{proof}
+
+\begin{theorem}[Even degeneracy of the entanglement spectrum]
+    \label{thm:spt_entanglement_spectrum_even}
+    \lean{MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges}
+    \leanok
+    \uses{thm:virtual_gauge_fixes_boundary_state, lem:even_finrank_of_anticommute}
+    In the setting of Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, let
+    $u,v$ be unitaries with virtual gauges $X,Y$, that is,
+    $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ and
+    $\sum_j v_{ij}A^j=\eta\,YA^iY^{-1}$ with $\zeta,\eta\neq0$.  If $XY=-YX$,
+    then every eigenspace of $\Lambda$ has even dimension: every eigenvalue of
+    the entanglement spectrum is degenerate \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_gauge_fixes_boundary_state, lem:even_finrank_of_anticommute}
+    Both gauges commute with $\Lambda$ by
+    Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
+    Lemma~\ref{lem:even_finrank_of_anticommute}.
+\end{proof}

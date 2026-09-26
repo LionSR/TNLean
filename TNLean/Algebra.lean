@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
+import TNLean.Algebra.AnticommutingEvenDimension
 import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
