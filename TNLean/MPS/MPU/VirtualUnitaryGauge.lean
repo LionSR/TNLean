@@ -24,6 +24,12 @@ chains of lengths two and three are nonzero and equal. Full support reduces
 canonical form II to one ambient-dimensional block, whose weight has unit
 modulus. Its left-canonical normalization then makes the virtual gauge
 unitary.
+
+**Scope restriction (supplied full-support canonical form II):** The two public
+conclusions concern representatives with a supplied full-support presentation,
+not arbitrary ambient MPU tensors. The restriction and the separate
+representative-reduction obligation are recorded in
+`docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
