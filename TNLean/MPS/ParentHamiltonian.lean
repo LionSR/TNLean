@@ -69,6 +69,7 @@ import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.FNWAggregateOrthogonality
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryEstimate
+import TNLean.MPS.ParentHamiltonian.FNWDimensionConstant
 import TNLean.MPS.ParentHamiltonian.FNWEventualPrefactor
 import TNLean.MPS.ParentHamiltonian.FNWGeometricDefect
 import TNLean.MPS.ParentHamiltonian.FNWLimitMap

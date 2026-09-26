@@ -1834,18 +1834,14 @@ and
 therefore establish the prescribed-rate estimate without a diagonalizability
 assumption.
 
-Also unmatched is the source's assertion that the prefactor may be
-taken equal to $k^2$, where $k$ is the dimension of the auxiliary space of the
-pure state. The formal prefactor is the existential rate-dependent constant
-$C_\lambda$ of Lemma~5.2. No general quantitative theorem in the inspected
-primary sources establishes $C_\lambda=k^2$ for an arbitrary faithful
-stationary density and every prescribed $\lambda$, and no theorem identifies
-that minimal $k$ with the bond dimension $D$ used here. Accordingly, no
-inverse or finite Gram matrix, pseudoinverse, periodic coercivity, comparison
-of unequal kernels, replacement by a cyclic tensor, dimension prefactor,
-identity $a_-(m)=1-a(m)$, identification $k=D$, or claim $C_\lambda=k^2$ is
-used, and the $D^{3/2}$ reshuffle factor no longer appears in any coefficient
-on the route to condition C3.
+The dimension-only prefactor requires a correction when the decay rate is
+prescribed. Section~\ref{sec:fnw-dimension-prefactor-obstruction} gives an
+explicit physical counterexample to taking $c=k^2$ at every admissible rate
+from the fixed intersection threshold. The geometric estimate used here
+retains the rate-dependent constant $C_\lambda$ of Lemma~5.2. Alternatively,
+any prescribed positive prefactor is valid after an additional onset depending
+on the state, rate, and prefactor. Neither conclusion requires a
+$D^{3/2}$ reshuffle factor, a finite Gram inverse, or periodic coercivity.
 
 \subsection{Open-to-periodic finite-range conclusion}
 
@@ -1940,9 +1936,86 @@ finite-range coefficient is the TNLean derivation in
 \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}.  It is not
 attributed to those papers or to Nachtergaele's martingale theorem.
 
+\section{A counterexample at a prescribed rate}
+\label{sec:fnw-dimension-prefactor-obstruction}
+
+The simultaneous assertions that $c=k^2$ and that every prescribed admissible
+rate may be used in Ref.~\cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}
+require a qualification on the overlap threshold. The following calculation concerns the physical projections themselves.
+The full statement, including injectivity, primitivity, a faithful trace-one
+stationary density, and the admissible rate, is formalized by
+\leanid{MPSTensor.FNWDimensionConstant.exists_dimensionFour_counterexample}.
+
+Let $e=(1,1,1,1)^{\mathsf T}$ and put
+\begin{align}
+ u&=(1,1,-1,-1)^{\mathsf T},&
+ v&=(1,-1,1,-1)^{\mathsf T},&
+ w&=(1,-1,-1,1)^{\mathsf T},\\
+ P&=\frac{ee^{\mathsf T}}4+
+       \frac{uv^{\mathsf T}+vw^{\mathsf T}}{16}.
+\end{align}
+These four vectors are orthogonal and have squared norm $4$. The entries of
+$P$ belong to $\{1/8,1/4,3/8\}$, and its row and column sums are one. Thus
+\begin{align}
+ P^2=\frac{ee^{\mathsf T}}4+\frac{uw^{\mathsf T}}{64},\qquad
+ P^3=\frac{ee^{\mathsf T}}4,\qquad Pu=0,\qquad w^{\mathsf T}P=0.
+\end{align}
+Define $A_{ij}=\sqrt{P_{ij}}E_{ij}$ on a physical alphabet of ordered pairs.
+This tensor has physical dimension $16$ and bond dimension $4$. Its letters
+span the full matrix algebra, and both $\sum_{ij}A_{ij}A_{ij}^*$ and
+$\sum_{ij}A_{ij}^*A_{ij}$ equal the identity. Its stationary density is $I/4$.
+The Schrödinger transfer map kills off-diagonal entries and acts by $P$ on
+diagonal entries; its trace adjoint is the observable transfer map, which
+acts by $P^{\mathsf T}$ on diagonal entries. Both third powers equal
+$X\mapsto\operatorname{tr}(X)I/4$. Both maps are therefore primitive,
+and all their nonunit eigenvalues are zero.
+One-site injectivity gives $m_0=1$, so the source's intersection threshold
+can be taken to be $\ell_0=m_0+1=2$.
+
+Fix endpoints $a,d\in\{0,1,2,3\}$. Using the physical basis of consistent
+four-edge paths, define
+\begin{align}
+ x&=2\sum_{b,c,e}u_b\sqrt{P_{ab}P_{bc}P_{ce}P_{ed}}
+       |ab,bc,ce,ed\rangle,\\
+ y&=2\sum_{b,c,e}w_e\sqrt{P_{ab}P_{bc}P_{ce}P_{ed}}
+       |ab,bc,ce,ed\rangle.
+\end{align}
+Then $x$ belongs to the range of $I\otimes G_{[1,3]}$, and $y$ belongs to
+the range of $G_{[0,2]}\otimes I$. Both vectors have norm one, since
+$u_b^2=w_e^2=1$ and $(P^4)_{ad}=1/4$. The four-site ground vector with
+endpoints $a,d$ has the same path coefficients without the factor $2u_b$.
+Its inner product with $x$ vanishes by $Pu=0$ and $(P^3)_{bd}=1/4$.
+Ground vectors with other endpoints have disjoint supports, so
+$x\perp\mathcal G_{[0,3]}$. Finally,
+\begin{align}
+ \langle y,x\rangle
+ =4\sum_{b,e}P_{ab}u_b(P^2)_{be}w_eP_{ed}=\frac1{16}.
+\end{align}
+Indeed, the constant term in $P^2$ contributes zero and its rank-one term
+contributes $4/64$. Taking this matrix coefficient between unit vectors gives
+\begin{align}
+ \left\|(G_{[0,2]}\otimes I)(I\otimes G_{[1,3]})-G_{[0,3]}\right\|
+ \geq\frac1{16}.
+\end{align}
+For the admissible rate $\lambda=1/1000$, $c=16$, and overlap $m=2$,
+\begin{align}
+ c\lambda^m=\frac1{62500}<1,\qquad
+ \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}
+ =\frac{62501}{62500\cdot62499}<\frac1{16}.
+\end{align}
+Thus the dimension-only prefactor cannot hold for every prescribed rate
+starting at the fixed intersection threshold. The auxiliary dimension here
+is minimal: the one-site density matrix is diagonal with strictly positive
+entries $P_{ij}/4$, hence has rank $16$. Any pure GVBS/MPS representation of
+auxiliary dimension $k'$ has one-site support rank at most $(k')^2$.
+Thus $k'\geq4$.
+This leaves intact the eventual estimate, the bound with a rate-dependent
+prefactor, and the possibility of choosing a suitable rate after fixing
+the dimension-only prefactor.
+
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The exact whole-increment algebra, the
+\textbf{Verdict: scope restriction and a corrected prefactor.} The exact whole-increment algebra, the
 prefix-uniform geometric C3$'$-type estimate, the three-block coefficient
 $7/16$, and the resulting cyclic range-two gap $1/8$ are proved for a suitable
 blocked tensor. Before blocking, lengths are measured in sites of the input
@@ -1956,10 +2029,11 @@ gap theorems now runs through that estimate and its geometric form
 $c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$; the earlier inverse-Gram
 reconstruction and its unidentified constant have been deleted. The eigenvalue-rate condition is now formalized: every positive
 $\lambda$ strictly above the moduli of the nonunit transfer eigenvalues
-satisfies the weighted remainder spectral-radius condition. The remaining
-restriction is the prefactor. The formal $c$ is the existential
-rate-dependent constant of Lemma~5.2; the dimension-only value $k^2$ in the
-source projector estimate is not asserted from the injectivity threshold.
+satisfies the weighted remainder spectral-radius condition. The prefactor
+requires a correction: the dimension-only value $k^2$ cannot be used at
+every prescribed admissible rate from the fixed intersection threshold, as
+Section~\ref{sec:fnw-dimension-prefactor-obstruction} demonstrates. The formal
+$c$ is the rate-dependent constant of Lemma~5.2.
 
 A corrected eventual statement permits any prescribed $c>0$. Choose a rate
 $\mu$ strictly between the remainder spectral radius and $\lambda$. The bound

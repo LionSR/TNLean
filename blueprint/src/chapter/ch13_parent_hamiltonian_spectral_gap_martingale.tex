@@ -6291,3 +6291,311 @@ tensors.
     of the fixed-overlap FNW projector estimate, uniformly in the two exterior
     lengths.
 \end{proof}
+
+\subsection{The dimension-only prefactor at a prescribed rate}
+
+\begin{definition}[Weighted matrix-unit path vectors]
+    \label{def:weighted-matrix-unit-path-vectors}
+    \lean{MPSTensor.FNWDimensionConstant.matrixUnitTensor,MPSTensor.FNWDimensionConstant.pathConfig,MPSTensor.FNWDimensionConstant.pathVector}
+    \leanok
+    Let $t=(t_{ij})$ and $z=(z_{ij})$ be real matrices indexed by a finite
+    set of $k$ vertices. Set $A^{ij}=t_{ij}E_{ij}$. For endpoints $a,f$,
+    define the four-site vector
+    \begin{align}
+        v_{a,f}(z)
+         & =\sum_{b,c,e}z_{be}t_{ab}t_{bc}t_{ce}t_{ef}
+        |ab,bc,ce,ef\rangle. \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Path contractions]
+    \label{thm:weighted-matrix-unit-path-contractions}
+    \lean{MPSTensor.FNWDimensionConstant.pathConfig_eq_iff,MPSTensor.FNWDimensionConstant.inner_pathVector,MPSTensor.FNWDimensionConstant.groundSpaceMap_pathConfig,MPSTensor.FNWDimensionConstant.inner_pathVector_groundSpaceMap,MPSTensor.FNWDimensionConstant.pathVector_first_mark_apply,MPSTensor.FNWDimensionConstant.pathVector_last_mark_apply}
+    \leanok
+    Writing $T_{abcef}=t_{ab}t_{bc}t_{ce}t_{ef}$, one has
+    \begin{align}
+        \langle v_{a,f}(z),v_{a,f}(z')\rangle
+         & =\sum_{b,c,e}z_{be}z'_{be}T_{abcef}^{2}, \notag \\
+        \langle v_{a,f}(z),\Gamma_4(X)\rangle
+         & =X_{fa}\sum_{b,c,e}z_{be}T_{abcef}^{2}. \notag
+    \end{align}
+    A factor depending on $b$ acts on the first physical site, and a
+    factor depending on $e$ acts on the last physical site.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:weighted-matrix-unit-path-vectors}
+    Distinct vertex paths give distinct physical basis vectors. Their
+    inner products therefore vanish. The product of four consecutive
+    matrix units is the matrix unit joining the two endpoints, which
+    gives the second identity after taking the boundary trace.
+\end{proof}
+
+\begin{theorem}[Spectator multipliers preserve interval spaces]
+    \label{thm:spectator-multiplier-interval-space}
+    \lean{MPSTensor.marked_groundSpaceMap_mem_tailBoundaryRange,MPSTensor.marked_groundSpaceMap_mem_leftBoundaryRange}
+    \leanok
+    Multiplying an open-boundary vector by a function of the sites
+    outside a prefix or tail interval preserves membership in that interval's
+    ground space tensored with the spectator space.
+\end{theorem}
+\begin{proof}\leanok
+    Factor the matrix product at the boundary of the interval. The
+    multiplier is absorbed into the boundary matrix indexed by the
+    spectator configuration.
+\end{proof}
+
+\begin{theorem}[Matrix-unit boundary vectors]
+    \label{thm:matrix-unit-path-ground-space}
+    \lean{MPSTensor.FNWDimensionConstant.pathVector_one_eq_groundSpaceMap}
+    \leanok
+    Let $t$ be a real matrix indexed by a finite set, and let the physical
+    letters be ordered pairs of indices. Set $A_{ij}=t_{ij}E_{ij}$.
+    For fixed initial and terminal indices $a,f$, define
+    \begin{align}
+        v_{a,f}
+         & = \sum_{b,c,e} t_{ab}t_{bc}t_{ce}t_{ef}
+        \lvert(a,b),(b,c),(c,e),(e,f)\rangle.
+    \end{align}
+    Then $v_{a,f}=\Gamma_4(E_{fa})$, where
+    $\Gamma_4(X)$ has coordinates $\operatorname{tr}(A_{i_0}A_{i_1}A_{i_2}A_{i_3}X)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:weighted-matrix-unit-path-vectors}
+    The product of four matrix units is zero unless consecutive edges join.
+    For a path from $a$ to $f$, multiplication by $E_{fa}$ and taking the trace
+    leaves precisely the product of its four edge weights. Summing over the
+    three internal vertices gives the assertion.
+\end{proof}
+
+\begin{theorem}[Normalization and orthogonality of marked paths]
+    \label{thm:fnw-path-vector-norm-orthogonal}
+    \lean{MPSTensor.FNWDimensionConstant.norm_pathVector_eq_one}
+    \lean{MPSTensor.FNWDimensionConstant.pathVector_mem_groundSpaceES_orthogonal}
+    \leanok
+    For a real weighted matrix-unit tensor, fix external vertices $a,f$ and
+    write $p_{bce}=t_{ab}t_{bc}t_{ce}t_{ef}$. The path vector with mark $z_{be}$
+    has norm one if $\sum_{b,c,e}z_{be}^2p_{bce}^2=1$. It is orthogonal to
+    the full four-site ground space if $\sum_{b,c,e}z_{be}p_{bce}^2=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:weighted-matrix-unit-path-contractions}
+    Expand its self-inner product and its inner product with an arbitrary
+    boundary vector. The latter equals the indicated scalar sum multiplied
+    by the boundary matrix entry at $(f,a)$.
+\end{proof}
+
+\begin{theorem}[A matrix coefficient bound for a projection defect]
+    \label{thm:fnw-projection-witness-bound}
+    \lean{Submodule.norm_inner_le_norm_projection_defect}
+    \lean{Submodule.norm_inner_le_norm_projection_defect_reverse}
+    \leanok
+    Let $U,V,W$ be subspaces of a complex Hilbert space with orthogonal
+    projections $P_U,P_V,P_W$. If $x\in V\cap W^\perp$ and $y\in U$ have
+    norm one, then
+    \begin{align}
+        |\langle y,x\rangle|\leq\|P_UP_V-P_W\|
+        =\|P_VP_U-P_W\|.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Since $P_Vx=x$, $P_Wx=0$ and $P_Uy=y$, the inner product on the left
+    equals $\langle y,(P_UP_V-P_W)x\rangle$. Apply Cauchy--Schwarz and the
+    operator norm bound. The two operator norms agree by taking adjoints.
+\end{proof}
+
+\begin{theorem}[The dimension-four coefficient at overlap two]
+    \label{thm:fnw-dimension-four-coefficient}
+    \lean{MPSTensor.FNWDimensionConstant.dimensionFour_coefficient_lt}
+    \leanok
+    For $c=16$, $\lambda=1/1000$, and $m=2$, one has $c\lambda^m<1$ and
+    \begin{align}
+        \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}<\frac1{16}.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Here $c\lambda^m=1/62500$, and the displayed rational coefficient equals
+    $62501/(62500\cdot62499)$.
+\end{proof}
+
+\begin{theorem}[A positive Markov matrix with a nilpotent remainder]
+    \label{thm:fnw_dimension_markov_matrix}
+    \lean{MPSTensor.FNWDimensionConstant.markovMatrix_pos, MPSTensor.FNWDimensionConstant.markovMatrix_sum_identities, MPSTensor.FNWDimensionConstant.markovMatrix_pow_two, MPSTensor.FNWDimensionConstant.markovMatrix_pow_three, MPSTensor.FNWDimensionConstant.remainderMatrix_nilpotent}
+    \leanok
+    Let $e=(1,1,1,1)^{\mathsf T}$ and let
+    $u=(1,1,-1,-1)^{\mathsf T}$, $v=(1,-1,1,-1)^{\mathsf T}$,
+    $w=(1,-1,-1,1)^{\mathsf T}$. Put $Q=ee^{\mathsf T}/4$ and
+    $P=Q+(uv^{\mathsf T}+vw^{\mathsf T})/16$.
+    Then $P$ is strictly positive and doubly stochastic, and
+    \begin{align}
+        P^2     & =Q+uw^{\mathsf T}/64, & P^3            & =Q,   \\
+        Pu      & =0,                   & w^{\mathsf T}P & =0,   \\
+        (P-Q)^3 & =0,                   & (P-Q)^2        & \ne0.
+    \end{align}
+    This is an explicit construction for examining the prescribed-rate coefficient
+    in \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The four displayed sign vectors are pairwise orthogonal and have squared norm
+    four. Multiplication gives the identities. Each entry of $P$ belongs to
+    $\{1/8,1/4,3/8\}$; its row and column sums are one.
+\end{proof}
+
+\begin{theorem}[Scalar path sums]
+    \label{thm:fnw_dimension_markov_path_sums}
+    \lean{MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardU_sum, MPSTensor.FNWDimensionConstant.realMarkovMatrix_path_hadamardUW_sum, MPSTensor.FNWDimensionConstant.markovAmplitude_sq, MPSTensor.FNWDimensionConstant.markovAmplitude_pos}
+    \leanok
+    For the matrix $P$ above and every pair of endpoints $a,f$, set
+    $p_{abcef}=P_{ab}P_{bc}P_{ce}P_{ef}$. Then
+    \begin{align}
+        \sum_{b,c,e}p_{abcef}        & =\frac14,    &
+        \sum_{b,c,e}u_b p_{abcef}    & =0,          &
+        \sum_{b,c,e}u_bw_e p_{abcef} & =\frac1{64}.
+    \end{align}
+    Moreover $t_{ij}=\sqrt{P_{ij}}$ is strictly positive and $t_{ij}^2=P_{ij}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_dimension_markov_matrix}
+    Apply the identities for $P^2$ and $P^3$, and use $u_b^2=w_e^2=1$.
+    The assertions concerning square roots follow from positivity.
+\end{proof}
+
+\begin{theorem}[A dimension-four physical projection defect]
+    \label{thm:fnw-dimension-four-physical-defect}
+    \lean{MPSTensor.FNWDimensionConstant.dimensionFour_projection_defect_lower}
+    \leanok
+    For the transition matrix $P$ and weighted matrix-unit tensor
+    $A^{ij}=\sqrt{P_{ij}}E_{ij}$ defined above, let $G_I$ denote the
+    orthogonal projection onto the ground space on the interval $I$,
+    extended by the identity on the remaining sites. Then
+    \begin{align}
+        \left\|G_{[1,3]}G_{[0,2]}-G_{[0,3]}\right\|
+        \geq \frac1{16}. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:weighted-matrix-unit-path-contractions,thm:matrix-unit-path-ground-space,thm:spectator-multiplier-interval-space,thm:fnw-path-vector-norm-orthogonal,thm:fnw-projection-witness-bound,thm:fnw_dimension_markov_path_sums}
+    Fix external vertices $a,f$ and write
+    $T_{abcef}=\sqrt{P_{ab}P_{bc}P_{ce}P_{ef}}$. Consider
+    \begin{align}
+        x & =2\sum_{b,c,e}u_bT_{abcef}|ab,bc,ce,ef\rangle,\notag \\
+        y & =2\sum_{b,c,e}w_eT_{abcef}|ab,bc,ce,ef\rangle.\notag
+    \end{align}
+    The mark $u_b$ acts on the first physical site, so $x$ belongs to
+    the range of $G_{[1,3]}$. Similarly, $y$ belongs to the range of
+    $G_{[0,2]}$. The path contraction identities give
+    $\|x\|=\|y\|=1$, $x\perp\operatorname{range}G_{[0,3]}$, and
+    $\langle y,x\rangle=1/16$. Thus the matrix coefficient of
+    $G_{[0,2]}G_{[1,3]}-G_{[0,3]}$ between $y$ and $x$ is $1/16$.
+    Taking the adjoint gives the asserted order of the two projections.
+\end{proof}
+
+\begin{theorem}[Weighted matrix-unit normalization]
+    \label{thm:weighted-matrix-unit-normalization}
+    \lean{MPSTensor.FNWDimensionConstant.matrixUnitTensor_isInjective,MPSTensor.FNWDimensionConstant.matrixUnitTensor_isTP}
+    \leanok
+    Let $A_{ij}=t_{ij}E_{ij}$, where $t$ is a real matrix.
+    If every entry of $t$ is nonzero, then the letters of $A$ span the full
+    matrix algebra. If the squared entries in every column sum to one, then
+    \begin{align}
+        \sum_{i,j} A_{ij}^*A_{ij}=I.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    When $t_{ij}\ne0$, the matrix unit $E_{ij}$ is a scalar multiple of
+    $A_{ij}$. The normalization follows from
+    $A_{ij}^*A_{ij}=t_{ij}^2E_{jj}$ and the column-sum assumption.
+\end{proof}
+
+\begin{theorem}[Transfer map of a weighted matrix-unit tensor]
+    \label{thm:fnw_dimension_matrix_unit_transfer}
+    \lean{MPSTensor.FNWDimensionConstant.transferMap_matrixUnitTensor}
+    \leanok
+    Let $t=(t_{ij})$ be a real matrix and define physical letters
+    $A_{ij}=t_{ij}E_{ij}$. The associated transfer map satisfies
+    \begin{align}
+        \mathcal E_A(X)
+         & =\operatorname{diag}\left(\sum_j t_{ij}^2X_{jj}\right)_i.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Multiply the matrix units in $\sum_{i,j}A_{ij}XA_{ij}^{\dagger}$.
+    Only the diagonal entries of $X$ contribute.
+\end{proof}
+
+\begin{theorem}[The positive Markov matrix-unit channel]
+    \label{thm:fnw_dimension_markov_channel}
+    \lean{MPSTensor.FNWDimensionConstant.markovTensor_isInjective, MPSTensor.FNWDimensionConstant.markovTensor_isTP, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_one, MPSTensor.FNWDimensionConstant.markovTensor_transferMap_cube}
+    \leanok
+    For the four-dimensional matrix $P$ above, let
+    $A_{ij}=\sqrt{P_{ij}}E_{ij}$. Then $A$ is injective at length one, its transfer
+    map $\mathcal E_A$ is unital and trace preserving, and every matrix $X$ satisfies
+    \begin{align}
+        \mathcal E_A^3(X) & =\frac{\operatorname{tr}(X)}4 I.
+    \end{align}
+    These are the channel properties of the explicit construction used to examine
+    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:fnw_dimension_markov_matrix, thm:fnw_dimension_matrix_unit_transfer, thm:weighted-matrix-unit-normalization}
+    The positive coefficients ensure that the physical letters span all matrix
+    units. Column stochasticity gives trace preservation, and row stochasticity
+    gives unitality. On diagonal matrices the transfer map acts by $P$, while it
+    annihilates off-diagonal matrix units. Therefore $P^3=ee^{\mathsf T}/4$ gives
+    the asserted formula.
+\end{proof}
+
+\begin{theorem}[A faithful primitive fixed point]
+    \label{thm:fnw-dimension-markov-primitive}
+    \lean{MPSTensor.FNWDimensionConstant.markovDensity_posDef,MPSTensor.FNWDimensionConstant.markovDensity_trace,MPSTensor.FNWDimensionConstant.markovDensity_fixed,MPSTensor.FNWDimensionConstant.markovTensor_isPrimitiveMPS,MPSTensor.FNWDimensionConstant.markovTensor_fnwTransfer_eigenvalue_eq_zero}
+    \leanok
+    For the weighted matrix-unit tensor of the Markov example, the matrix
+    $\rho=I/4$ is positive definite, has trace one, and is stationary. The tensor
+    has a complementary transfer spectral gap at $\rho$. Every nonunit
+    eigenvalue of its FNW observable transfer map is zero.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:weighted-matrix-unit-normalization,thm:fnw_dimension_markov_channel}
+    The row sums of the Markov matrix give stationarity of $I/4$.
+    For a nonunit eigenvalue $\nu$ of the trace-preserving transfer map,
+    trace preservation forces an associated eigenvector $X$ to have trace zero.
+    The depolarizing third iterate then gives $\nu^3X=0$, and hence $\nu=0$.
+    The bilinear trace adjoint has the same eigenvalues, giving the assertion
+    for the FNW observable transfer map. One-site injectivity gives
+    irreducibility. Together with the unique peripheral eigenvalue and the
+    faithful stationary density, this implies the complementary spectral gap.
+\end{proof}
+
+\begin{theorem}[Failure of the dimension-only coefficient at a prescribed rate]
+    \label{thm:fnw-dimension-only-counterexample}
+    \lean{MPSTensor.FNWDimensionConstant.dimensionFour_projection_defect_exceeds_coefficient,MPSTensor.FNWDimensionConstant.exists_dimensionFour_counterexample}
+    \leanok
+    There exists an injective matrix-product tensor of physical dimension
+    $16$ and auxiliary dimension $4$ with a faithful primitive stationary
+    density matrix of trace one such that every eigenvalue other than $1$
+    of its observable transfer map has modulus smaller than
+    $\lambda=1/1000$. Nevertheless, at overlap length $m=2$,
+    \begin{align}
+        16\lambda^2 & <1,\notag                                                \\
+        \left\|G_{[1,3]}G_{[0,2]}-G_{[0,3]}\right\|
+                    & >\frac{16\lambda^2(1+16\lambda^2)}{1-16\lambda^2}.\notag
+    \end{align}
+    Thus the dimension-only coefficient and the prescribed-rate assertion
+    following Nachtergaele's bound cannot hold simultaneously at this fixed
+    overlap length; see \cite{gap:cpgsv21_martingale_overlap}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fnw-dimension-four-physical-defect,thm:fnw-dimension-four-coefficient,thm:fnw-dimension-markov-primitive}
+    Take the weighted matrix-unit tensor associated with the transition
+    matrix above and the stationary density $I/4$. Its transfer map becomes
+    completely depolarizing after three steps, so every nonunit eigenvalue
+    of the observable transfer map is zero. The rate $1/1000$ is therefore
+    admissible. The physical projection defect is at least $1/16$, whereas
+    the proposed coefficient is strictly smaller than $1/16$.
+\end{proof}
