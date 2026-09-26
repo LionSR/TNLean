@@ -183,19 +183,19 @@ theorem chainGroundSpace_le_groundSpace_of_isNBlkInjective
     (show (⟨s, by omega⟩ : Fin N).val + (L₀ + 1) ≤ N from hs)]
   exact hψred ⟨s, by omega⟩ τ
 
-/-- A change of cut by \(L₀\) sites on a ring of length \(L₀+1\)
-intertwines the two open-boundary matrices with every one-site tensor matrix.
+/-- A change of cut by \(L₀\) sites on a ring of length \(L₀+1\) relates the
+two open-boundary matrices on the remaining \(L₀\) sites: if translating
+\(\Gamma_{L₀+1}(X)\) by \(L₀\) sites gives \(\Gamma_{L₀+1}(Y)\), then
+\(\Gamma_{L₀}(XA^a)=\Gamma_{L₀}(A^aY)\) for every letter \(a\). No injectivity
+is assumed.
 
-This is the full-ring closure-property comparison in arXiv:2011.12127,
-Section IV.C, lines 2078--2079. -/
-theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
-    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
-    (_hL₀ : 0 < L₀) (X Y : Matrix (Fin D) (Fin D) ℂ)
+This is the change-of-cut comparison in arXiv:2011.12127, Section IV.C,
+lines 2078--2079. -/
+theorem groundSpaceMap_mul_eq_of_cyclicTranslate_groundSpaceMap_eq
+    {A : MPSTensor d D} {L₀ : ℕ} (X Y : Matrix (Fin D) (Fin D) ℂ)
     (hEq : cyclicTranslateState (⟨L₀, by omega⟩ : Fin (L₀ + 1))
-        (groundSpaceMap A (L₀ + 1) X) = groundSpaceMap A (L₀ + 1) Y) :
-    ∀ a : Fin d, X * A a = A a * Y := by
-  intro a
-  apply groundSpaceMap_injective_of_isNBlkInjective hInj
+        (groundSpaceMap A (L₀ + 1) X) = groundSpaceMap A (L₀ + 1) Y) (a : Fin d) :
+    groundSpaceMap A L₀ (X * A a) = groundSpaceMap A L₀ (A a * Y) := by
   ext β
   simp only [groundSpaceMap_apply]
   let α : Fin 1 → Fin d := fun _ ↦ a
@@ -221,6 +221,20 @@ theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
       exact Matrix.trace_mul_comm _ _
     _ = Matrix.trace (Kraus.evalWord A (List.ofFn β) * (A a * Y)) := by
       simpa [α, Matrix.mul_assoc] using hcoeff
+
+/-- A change of cut by \(L₀\) sites on a ring of length \(L₀+1\)
+intertwines the two open-boundary matrices with every one-site tensor matrix.
+
+This is the full-ring closure-property comparison in arXiv:2011.12127,
+Section IV.C, lines 2078--2079. -/
+theorem full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq
+    {A : MPSTensor d D} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀)
+    (_hL₀ : 0 < L₀) (X Y : Matrix (Fin D) (Fin D) ℂ)
+    (hEq : cyclicTranslateState (⟨L₀, by omega⟩ : Fin (L₀ + 1))
+        (groundSpaceMap A (L₀ + 1) X) = groundSpaceMap A (L₀ + 1) Y) :
+    ∀ a : Fin d, X * A a = A a * Y := fun a ↦
+  groundSpaceMap_injective_of_isNBlkInjective hInj
+    (groundSpaceMap_mul_eq_of_cyclicTranslate_groundSpaceMap_eq X Y hEq a)
 
 /-- On the full minimal ring, the open-boundary matrix of every
 chain-ground-space vector commutes with every one-site tensor.

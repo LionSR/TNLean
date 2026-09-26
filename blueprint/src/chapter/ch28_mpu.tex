@@ -5589,12 +5589,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Auxiliary source-index identities]
     \label{thm:mpu_specified_source_index_identities}
-    \lean{MPOTensor.sourceIndexValue_eq_of_common_rank_scale,
+    \lean{MPOTensor.sourceIndexValue_eq_zero_of_rightRank_eq_leftRank,
+        MPOTensor.sourceIndexValue_eq_of_common_rank_scale,
         MPOTensor.sourceIndexValue_eq_add_of_common_rank_product,
         MPOTensor.sourceIndexValue_eq_logb_rightRank_div,
         MPOTensor.sourceIndexValue_eq_neg_logb_leftRank_div}
     \leanok
     \uses{def:mpu_specified_source_index_value, def:mpu_right_rank, def:mpu_left_rank}
+    A specified tensor with equal positive source ranks
+    $r_{\mathcal U}=\ell_{\mathcal U}$ has
+    $\operatorname{ind}_{\mathrm{src}}(\mathcal U)=0$.
     Let $\mathcal U$ and $\mathcal V$ be specified tensors. Suppose that their
     source ranks obey
     \begin{align}
@@ -5631,7 +5635,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:mpu_specified_source_index_value}
-    Expand the definition. For common scaling, apply
+    Expand the definition. Equal ranks give a vanishing difference of
+    logarithms. For common scaling, apply
     $\log_2(cx)=\log_2c+\log_2x$ to both ranks and cancel the two copies of
     $\log_2c$. For the three-tensor identity, apply the product formula twice
     to each rank and cancel the common term. For the equivalent formulas,
@@ -9171,6 +9176,102 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     ranks multiply under the independent tensor product, so each of
     $U_1,U_2,U_3$ has equal right and left rank $d^2$. Their logarithmic
     differences therefore vanish.
+\end{proof}
+
+\begin{theorem}[Source ranks and index values of the shifts at every blocking]
+    \label{thm:mpu_shift_blocked_source_index_values}
+    \lean{MPOTensor.evalWord_rightShiftTensor_ofFn,
+        MPOTensor.blockTensor_rightShiftTensor_apply,
+        MPOTensor.sourceCutM₁_blockTensor_rightShiftTensor,
+        MPOTensor.sourceCutM₂_blockTensor_rightShiftTensor,
+        MPOTensor.rightRank_blockTensor_rightShiftTensor,
+        MPOTensor.leftRank_blockTensor_rightShiftTensor,
+        MPOTensor.rightRank_mul_leftRank_blockTensor_rightShiftTensor,
+        MPOTensor.sourceIndexValue_blockTensor_rightShiftTensor,
+        MPOTensor.blockTensor_leftShiftTensor,
+        MPOTensor.rightRank_blockTensor_leftShiftTensor,
+        MPOTensor.leftRank_blockTensor_leftShiftTensor,
+        MPOTensor.sourceIndexValue_blockTensor_leftShiftTensor,
+        MPOTensor.sourceRanks_blockTensor_shiftExampleU₂,
+        MPOTensor.sourceRanks_blockTensor_shiftExampleU₃,
+        MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₂,
+        MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₃,
+        MPOTensor.rightShiftTensor_isMPUSimple,
+        MPOTensor.leftShiftTensor_isMPUSimple,
+        MPOTensor.blockTensor_rightShiftTensor_isMPUSimple,
+        MPOTensor.blockTensor_leftShiftTensor_isMPUSimple,
+        MPOTensor.rightRank_blockTensor_rightShiftTensor_ne_leftRank,
+        MPOTensor.sourceIndexValue_blockTensor_rightShiftTensor_ne_zero}
+    \leanok
+    \uses{def:mpu_simple, thm:mpu_bounded_simple_blocking,
+        def:mpu_specified_source_index_value,
+        thm:mpu_specified_source_index_identities,
+        thm:mpu_physical_adjoint_source_ranks,
+        thm:mpu_tensor_product_source_ranks, thm:mpu_source_ranks_physical_reindexing,
+        threeMPU, thm:mpu_block_tensor_product}
+    Assume $d>0$ and let $k\ge0$. The right-shift tensor $T$ and the
+    left-shift tensor $T^\sharp$ are simple, and so are their blockings
+    $T_{k+1}$ and $T^\sharp_{k+1}$ over $k+1$ sites. The blocked letters are
+    \begin{align}
+        T_{k+1}^{\sigma\tau}
+        =\Bigl(\prod_{m<k}\delta_{\tau_m,\sigma_{m+1}}\Bigr)\,
+        |\sigma_0)(\tau_k|,
+    \end{align}
+    and the source ranks are
+    \begin{align}
+        (r,\ell)(T_{k+1})        & =(d^{k+2},d^{k}), &
+        (r,\ell)(T^\sharp_{k+1}) & =(d^{k},d^{k+2}).
+    \end{align}
+    Both source ranks of the blockings of $U_2$ and $U_3$ equal $d^{2k+2}$.
+    Consequently
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(T_{k+1})        & =\log_2 d,  &
+        \operatorname{ind}_{\mathrm{src}}(T^\sharp_{k+1}) & =-\log_2 d,
+    \end{align}
+    and the blockings of $U_2$ and $U_3$ have value zero. If $d>1$, then
+    $r(T_{k+1})\ne\ell(T_{k+1})$ and
+    $\operatorname{ind}_{\mathrm{src}}(T_{k+1})\ne0$.
+
+    For $T$ and $T^\sharp$ every blocking is simple, so the choice of blocking
+    in Definition~\ref{def:index} does not affect their values. Simplicity of
+    the blockings of $U_2$ and $U_3$ is not asserted, so their zero values are
+    values of the source-index expression only. None of the values is asserted
+    for an arbitrary tensor generating the same operators; that step needs the
+    canonical form of the shift and its uniqueness. Unequal ranks do not by
+    themselves exclude a circuit: after blocking, every matrix product unitary,
+    the shift included, is a depth-two circuit of nearest-neighbour unitaries
+    in its standard form. The statement that the shift is not a finite-depth
+    circuit of local gates needs parts (ii)--(iv) of Theorem~\ref{IndexTh}
+    together with index zero for one layer of nearest-neighbour gates, and is
+    not asserted here.
+    % Scope restriction (specified tensors): documented in
+    % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex.
+    % Source: paper_v2.tex lines 605--622, 681--704, 1980--2001, 2037--2041, 2308;
+    % review TN-Review-main.tex lines 2607--2611.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_simple, thm:mpu_bounded_simple_blocking,
+        thm:mpu_physical_adjoint_source_ranks,
+        thm:mpu_tensor_product_source_ranks,
+        thm:mpu_source_ranks_physical_reindexing,
+        thm:mpu_specified_source_index_identities, thm:mpu_block_tensor_product, thm:mpu_double_layer_blocking}
+    With $\Phi=\sum_j|jj)$, the double-layer letters of $T$ are
+    $|\Phi)(ik|$, so the boundary vectors $|00)$ and $\Phi$ satisfy both
+    simplicity identities; for $T^\sharp$ the letters are $|ik)(\Phi|$ and the
+    boundary vectors are exchanged. Simplicity survives blocking. A product
+    of matrix units $|\sigma_m)(\tau_m|$ is $|\sigma_0)(\tau_k|$ when adjacent
+    indices match and zero otherwise, which gives the blocked letters. The
+    first source cut of $T_{k+1}$ sends the row $(\sigma,\beta)$ to the single
+    column $(\sigma_0,\ \sigma_1\cdots\sigma_k\beta)$; this is a bijection, so
+    the cut is a permutation matrix of rank $d^{k+2}$. The second source cut
+    factors through the $d^k$ middle words $\sigma_1\cdots\sigma_k$, and its
+    rows $(0,0y)$ and columns $(y0,0)$ form an identity minor of size $d^k$.
+    Physical adjunction exchanges the two ranks, and ranks multiply under
+    tensor products and are unchanged by physical reindexing. Substituting
+    into the source-index expression gives
+    $\frac12\bigl((k+2)-k\bigr)\log_2 d=\log_2 d$ and the remaining values.
+    For $d>1$ the powers $d^{k+2}$ and $d^k$ differ.
 \end{proof}
 
 \begin{definition}[Supplied source factors for the three shift MPUs]
