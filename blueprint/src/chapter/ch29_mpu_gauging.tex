@@ -6512,11 +6512,16 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \begin{theorem}[Anomaly three-cochains of restrictions]
     \label{thm:mpug_family_restriction_omega}
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.comap,
+        MPOTensor.GroupFamily.castMat_comap,
+        MPOTensor.GroupFamily.ext_of_heq,
+        MPOTensor.GroupFamily.FusionData.comap_leftV,
+        MPOTensor.GroupFamily.FusionData.comap_rightV,
         MPOTensor.GroupFamily.FusionData.omega_comap,
-        MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map}
+        MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map,
+        MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq}
     \leanok
-    \uses{def:mpug_family_restriction, thm:mpug_anomaly_three_cochain_spec,
-        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_cyclic_invariant_gauge}
+    \uses{def:mpug_family_restriction, def:mpug_cochain_restriction,
+        def:mpug_cyclic_invariant}
     The restriction of a family satisfying the hypotheses of
     Definition~\ref{def:mpug_anomaly_three_cochain} along $f\colon H\to G$
     satisfies them for $H$, and the anomaly three-cochain of the restricted
