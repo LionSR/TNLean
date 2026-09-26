@@ -55,12 +55,6 @@ theorem z3Gen_pow_three : z3Gen ^ 3 = 1 := by decide
 
 /-! ### The identity tensor -/
 
-/-- The bond-one identity tensor of `Z3AnomalousTensor` is `MPOTensor.idTensor 3`. -/
-theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 3 := by
-  funext i j
-  unfold identityTensor identityEis MPOTensor.idTensor
-  split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
-
 theorem mulTensor_identityTensor_left (M : MPOTensor 3 2) :
     mulTensor identityTensor M = (M : MPOTensor 3 (1 * 2)) := by
   rw [identityTensor_eq_idTensor, mulTensor_idTensor_left]
@@ -177,27 +171,27 @@ private theorem assocInv_two_one_two :
 
 private theorem mulTensor_uTensor_uTensor :
     mulTensor uTensor uTensor =
-      fun i j ↦ complexOfEisenstein (mulEisensteinTensor uEis uEis i j) :=
-  funext₂ fun i j ↦ mulTensor_complexOfEisenstein uEis uEis i j
+      fun i j ↦ complexOfEisenstein (mulTensorR uEis uEis i j) :=
+  funext₂ fun i j ↦ mulTensor_complexOfRing _ uEis uEis i j
 
 private theorem mulTensor_uTensor_uDagTensor :
     mulTensor uTensor uDagTensor =
-      fun i j ↦ complexOfEisenstein (mulEisensteinTensor uEis uDagEis i j) :=
-  funext₂ fun i j ↦ mulTensor_complexOfEisenstein uEis uDagEis i j
+      fun i j ↦ complexOfEisenstein (mulTensorR uEis uDagEis i j) :=
+  funext₂ fun i j ↦ mulTensor_complexOfRing _ uEis uDagEis i j
 
 private theorem tripleUUU_eq (a : Fin 9) :
     (family.tripleTensor z3Gen z3Gen z3Gen).toMPSTensor a =
       complexOfEisenstein (tripleUUUTable a) := by
   change (mulTensor (mulTensor uTensor uTensor) uTensor).toMPSTensor a = _
   rw [mulTensor_uTensor_uTensor, ← tripleUUUEis_eq_table]
-  exact mulTensor_complexOfEisenstein _ uEis _ _
+  exact mulTensor_complexOfRing _ _ uEis _ _
 
 private theorem tripleUDU_eq (a : Fin 9) :
     (family.tripleTensor z3Gen (z3Gen * z3Gen) z3Gen).toMPSTensor a =
       complexOfEisenstein (tripleUDUTable a) := by
   change (mulTensor (mulTensor uTensor uDagTensor) uTensor).toMPSTensor a = _
   rw [mulTensor_uTensor_uDagTensor, ← tripleUDUEis_eq_table]
-  exact mulTensor_complexOfEisenstein _ uEis _ _
+  exact mulTensor_complexOfRing _ _ uEis _ _
 
 theorem z3FusionData_leftV_gen_gen_gen :
     z3FusionData.leftV z3Gen z3Gen z3Gen = complexOfEisenstein leftUUUEis := by
