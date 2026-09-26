@@ -88,35 +88,6 @@ theorem CarriesMPV.mulTensor {D₁ D₂ D₃ D₄ D₅ : ℕ} {M : MPOTensor d D
   intro L hL
   rw [mpo_mulTensor, ← Matrix.mulVec_mulVec, hN L hL, hM L hL]
 
-/-! ### Identification of blocks along equal points -/
-
-omit [Group G] [MulAction G X] in
-/-- The permutation matrix identifying the bond spaces of the blocks at two equal points. -/
-noncomputable def castBlock (D : X → ℕ) {y y' : X} (e : y = y') :
-    Matrix (Fin (D y')) (Fin (D y)) ℂ :=
-  (finCongr (congrArg D e.symm)).toPEquiv.toMatrix
-
-omit [Group G] [MulAction G X] in
-@[simp] theorem castBlock_rfl (y : X) : castBlock D (rfl : y = y) = 1 := by
-  simp [castBlock]
-
-omit [Group G] [MulAction G X] in
-@[simp] theorem castBlock_mul_castBlock {y y' y'' : X} (e₁ : y = y') (e₂ : y' = y'')
-    {n : ℕ} (Z : Matrix (Fin (D y)) (Fin n) ℂ) :
-    castBlock D e₂ * (castBlock D e₁ * Z) = castBlock D (e₁.trans e₂) * Z := by
-  subst e₁ e₂
-  simp
-
-omit [Group G] [MulAction G X] in
-/-- A reduction onto the block at `y` is a reduction onto the block at any `y' = y`, after
-identifying the bond spaces. -/
-theorem isReduction_castBlock {n : ℕ} {B : MPSTensor d n} {y y' : X}
-    {V : Matrix (Fin (D y)) (Fin n) ℂ} {W : Matrix (Fin n) (Fin (D y)) ℂ}
-    (h : MPSTensor.IsReduction B (A y) V W) (e : y = y') :
-    MPSTensor.IsReduction B (A y') (castBlock D e * V) (W * castBlock D e.symm) := by
-  subst e
-  simpa using h
-
 /-! ### The identity operator acts trivially -/
 
 omit [Group G] [MulAction G X] in
@@ -206,7 +177,7 @@ fusion tensor of `(g, h)`, the action tensor of `gh`, and the identification
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913. -/
 noncomputable def fuseV (g h : G) (x : X) :
     Matrix (Fin (D (g • h • x))) (Fin (F.bondDim g * F.bondDim h * D x)) ℂ :=
-  castBlock D (mul_smul g h x) * (ad.V (g * h) x * kronId (fd.V g h) (D x))
+  castIndex D (mul_smul g h x) * (ad.V (g * h) x * kronId (fd.V g h) (D x))
 
 theorem exists_isReduction_actV (g h : G) (x : X) : ∃ W, MPSTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (A (g • h • x)) (ad.actV g h x) W :=
@@ -216,7 +187,7 @@ theorem exists_isReduction_actV (g h : G) (x : X) : ∃ W, MPSTensor.IsReduction
 theorem exists_isReduction_fuseV (g h : G) (x : X) : ∃ W, MPSTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (A (g • h • x))
       (ad.fuseV fd g h x) W :=
-  ⟨_, isReduction_castBlock
+  ⟨_, isReduction_castIndex
     (((fd.isReduction g h).actTensor_kronId (A x)).trans (ad.isReduction (g * h) x))
     (mul_smul g h x)⟩
 
@@ -257,20 +228,20 @@ section Triple
 variable (g h k : G) (x : X)
 
 /-- Moving an identification of target blocks out of the operator layer of an action tensor:
-`V_{g,y'} (1 ⊗ castBlock e Y) = castBlock (g • e) V_{g,y} (1 ⊗ Y)` for `e : y = y'`. -/
-private theorem V_mul_idKron_castBlock (g : G) {y y' : X} (e : y = y') {n : ℕ}
+`V_{g,y'} (1 ⊗ castIndex e Y) = castIndex (g • e) V_{g,y} (1 ⊗ Y)` for `e : y = y'`. -/
+private theorem V_mul_idKron_castIndex (g : G) {y y' : X} (e : y = y') {n : ℕ}
     (Y : Matrix (Fin (D y)) (Fin n) ℂ) :
-    ad.V g y' * idKron (F.bondDim g) (castBlock D e * Y) =
-      castBlock D (congrArg (g • ·) e) * (ad.V g y * idKron (F.bondDim g) Y) := by
+    ad.V g y' * idKron (F.bondDim g) (castIndex D e * Y) =
+      castIndex D (congrArg (g • ·) e) * (ad.V g y * idKron (F.bondDim g) Y) := by
   subst e
   simp
 
 /-- Moving a bond identification of the operator factor out of the action tensor of an
-element: `V_{b,y} (castMat e Y ⊗ 1) = castBlock (e • y) V_{a,y} (Y ⊗ 1)` for `e : a = b`. -/
+element: `V_{b,y} (castMat e Y ⊗ 1) = castIndex (e • y) V_{a,y} (Y ⊗ 1)` for `e : a = b`. -/
 private theorem V_mul_kronId_castMat {a b : G} (e : a = b) (y : X) {n : ℕ}
     (Y : Matrix (Fin (F.bondDim a)) (Fin n) ℂ) :
     ad.V b y * kronId (F.castMat e * Y) (D y) =
-      castBlock D (congrArg (· • y) e) * (ad.V a y * kronId Y (D y)) := by
+      castIndex D (congrArg (· • y) e) * (ad.V a y * kronId Y (D y)) := by
   subst e
   simp
 
@@ -292,11 +263,11 @@ private theorem fuseV_inner_eq :
     ad.V g (h • k • x) * idKron (F.bondDim g) (ad.fuseV fd h k x) *
         (mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h * F.bondDim k) (D x) *
           kronId (mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) (D x)) =
-      castBlock D (congrArg (g • ·) (mul_smul h k x)) *
+      castIndex D (congrArg (g • ·) (mul_smul h k x)) *
         (ad.actV g (h * k) x * kronId (idKron (F.bondDim g) (fd.V h k) *
           mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) (D x)) := by
   simp only [fuseV]
-  rw [V_mul_idKron_castBlock]
+  rw [V_mul_idKron_castIndex]
   simp only [actV, ← idKron_mul, ← kronId_mul, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (idKron _ (kronId _ _)), ← assocInv_mul_kronId_idKron,
     Matrix.mul_assoc]
@@ -306,7 +277,7 @@ with the fusion of `g` with `h` on the triple. -/
 private theorem fuseV_mul_reduce_k :
     ad.fuseV fd g h (k • x) * (idKron (F.bondDim g * F.bondDim h) (ad.V k x) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) (D x)) =
-      castBlock D (mul_smul g h (k • x)) *
+      castIndex D (mul_smul g h (k • x)) *
         (ad.actV (g * h) k x * kronId (kronId (fd.V g h) (F.bondDim k)) (D x)) := by
   simp only [actV, fuseV, Matrix.mul_assoc, kronId_mul_idKron_assoc]
   rw [← assocInv_mul_kronId_kronId]
@@ -315,7 +286,7 @@ private theorem fuseV_mul_reduce_k :
 followed by the action of `ghk`. -/
 private theorem fuseV_mul_left :
     ad.fuseV fd (g * h) k x * kronId (kronId (fd.V g h) (F.bondDim k)) (D x) =
-      castBlock D (mul_smul (g * h) k x) *
+      castIndex D (mul_smul (g * h) k x) *
         (ad.V (g * h * k) x * kronId (fd.leftV g h k) (D x)) := by
   simp only [fuseV, FusionData.leftV, Matrix.mul_assoc, kronId_mul]
 
@@ -324,10 +295,10 @@ associator, followed by the action of `ghk`. -/
 private theorem fuseV_mul_right :
     ad.fuseV fd g (h * k) x * kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) (D x) =
-      castBlock D ((congrArg (· • x) (mul_assoc g h k)).trans (mul_smul g (h * k) x)) *
+      castIndex D ((congrArg (· • x) (mul_assoc g h k)).trans (mul_smul g (h * k) x)) *
         (ad.V (g * h * k) x * kronId (fd.rightV g h k) (D x)) := by
   simp only [fuseV, FusionData.rightV, Matrix.mul_assoc, kronId_mul]
-  rw [V_mul_kronId_castMat, castBlock_mul_castBlock]
+  rw [V_mul_kronId_castMat, castIndex_mul_castIndex_assoc]
 
 end Triple
 
@@ -373,10 +344,10 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
     hR (hSame3C g h (k • x) rfl)
   have H4 := ((isDressedProportional_lSymbol (fd := fd) (ad := ad) hA hperm x (g * h) k).pullback
     hS (hSame3C (g * h) k x (by simp only [mul_smul]))).mul_left
-      (castBlock D (mul_smul g h (k • x)))
+      (castIndex D (mul_smul g h (k • x)))
   have H2 := ((isDressedProportional_lSymbol (fd := fd) (ad := ad) hA hperm x g (h * k)).pullback
     hK (hSame3C g (h * k) x (by simp only [mul_smul]))).mul_left
-      (castBlock D (congrArg (g • ·) (mul_smul h k x)))
+      (castIndex D (congrArg (g • ·) (mul_smul h k x)))
   have H1 := (((isDressedProportional_lSymbol (fd := fd) (ad := ad) hA hperm x h k).actTensor_idKron
       (F.tensor g)).mul_left (ad.V g (h • k • x))).of_intertwine
       (mulTensorAssocMatrix_mul_invMatrix _ _ _) (mulTensorAssocInvMatrix_mul_matrix _ _ _)
@@ -391,20 +362,20 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
         mulTensor_mul_assocMatrix (F.tensor g) (F.tensor h) (F.tensor k) i l)
   have H5 := (((fd.isAssociator_omega hF g h k).actTensor_kronId (A x)).mul_left
     (ad.V (g * h * k) x)).mul_left
-      (castBlock D ((mul_smul (g * h) k x).trans (mul_smul g h (k • x))))
+      (castIndex D ((mul_smul (g * h) k x).trans (mul_smul g h (k • x))))
   -- the canonical boundaries
   have H1'' : MPSTensor.IsDressedProportional B3
       (ad.actV g h (k • x) * (idKron (F.bondDim g * F.bondDim h) (ad.V k x) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) (D x)))
-      (castBlock D (congrArg (g • ·) (mul_smul h k x)) *
+      (castIndex D (congrArg (g • ·) (mul_smul h k x)) *
         (ad.actV g (h * k) x * kronId (idKron (F.bondDim g) (fd.V h k) *
           mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) (D x)))
       (ad.lSymbol fd x h k) := by
     rw [actV_mul_reduce_k, ← fuseV_inner_eq]
     simpa only [Matrix.mul_assoc] using H1'
-  rw [fuseV_mul_right, castBlock_mul_castBlock] at H2
+  rw [fuseV_mul_right, castIndex_mul_castIndex_assoc] at H2
   rw [fuseV_mul_reduce_k] at H3
-  rw [fuseV_mul_left, castBlock_mul_castBlock] at H4
+  rw [fuseV_mul_left, castIndex_mul_castIndex_assoc] at H4
   have hleft := H1''.trans H2
   have hright := (H3.trans H4).trans H5
   have hne : ∀ N : ℕ, ∃ w : List (Fin d), N ≤ w.length ∧
