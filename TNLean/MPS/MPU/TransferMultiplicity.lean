@@ -304,16 +304,12 @@ theorem r_eq_one_of_shifted_transfer_trace
     by_contra hempty
     have hr0 : data.r = 0 := by omega
     have hsum : (∑ k : Fin data.r, data.dim k) = 0 := by
-      have : IsEmpty (Fin data.r) := by
-        rw [hr0]
-        infer_instance
+      have : IsEmpty (Fin data.r) := Fin.isEmpty_iff.mpr hr0
       exact Fintype.sum_empty _
     have hAzero : A = 0 := by
       funext i
       rw [data.reconstruct i]
-      have : IsEmpty (Fin (∑ k : Fin data.r, data.dim k)) := by
-        rw [hsum]
-        infer_instance
+      have : IsEmpty (Fin (∑ k : Fin data.r, data.dim k)) := Fin.isEmpty_iff.mpr hsum
       ext x y
       simp [Matrix.mul_apply]
     have htwo := htrace 2 (by omega)

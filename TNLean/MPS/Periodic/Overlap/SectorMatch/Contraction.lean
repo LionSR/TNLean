@@ -703,7 +703,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     rw [inv_mul_cancel₀ (hφ_ne v)]
     have hnormSq := Complex.normSq_eq_conj_mul_self (z := φ v)
     rw [Complex.normSq_eq_norm_sq, hφ_norm v, one_pow] at hnormSq
-    convert hnormSq.symm using 1 <;> norm_num [Complex.star_def]
+    convert hnormSq.symm using 1; norm_num [Complex.star_def]
   let V : Fin m → MatrixAlg D := fun v => φ v • U' (v - q')
   have hV_corner : ∀ v, V v = P (v - q') * V v * Q v := by
     intro v
