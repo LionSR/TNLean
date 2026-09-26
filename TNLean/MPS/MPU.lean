@@ -55,6 +55,7 @@ import TNLean.MPS.MPU.ReducedToHatTransport
 import TNLean.MPS.MPU.ReductionCommonBlocking
 import TNLean.MPS.MPU.RepresentativeIndex
 import TNLean.MPS.MPU.RepresentativeIndexOperations
+import TNLean.MPS.MPU.RepresentativeIndexTensorProduct
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
@@ -85,6 +86,7 @@ import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm
+import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
