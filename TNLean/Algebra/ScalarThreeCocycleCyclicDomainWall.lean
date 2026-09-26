@@ -35,7 +35,8 @@ modulo `n` lie in distinct classes, as line 2040 asserts. Residues are represent
   `ω_j` is `ζ^{j a ⌊m a / n⌋}`.
 * `TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp_sum`: the printed
   formula of line 2042.
-* `TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle`: the closed form.
+* `TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle`,
+  `TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp`: the closed form.
 * `TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_three`,
   `TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_four`: the printed tables.
 * `TNLean.Algebra.ScalarThreeCochain.not_cohomologousTo_cyclicCocycle`: distinct classes.
@@ -189,6 +190,20 @@ theorem domainWallPhase_cyclicCocycle (j : ℕ) (a : Multiplicative (ZMod n)) :
         ((Multiplicative.toAdd a).val / n.gcd (Multiplicative.toAdd a).val)))⁻¹ := by
   rw [domainWallPhase_eq_inv_cyclicInvariant, Units.val_inv_eq_inv_val,
     cyclicInvariant_cyclicCocycle, orderOf_mul_val, Nat.mul_div_cancel_left _ (NeZero.pos n)]
+
+/-- Project result: **the closed form as an exponential**,
+`∏_{k=1}^{o(a)} ω_j⁻¹(a, a^k, a) = exp(−2πi j a² / (n gcd(n, a)))`. -/
+theorem domainWallPhase_cyclicCocycle_eq_exp (j : ℕ) (a : Multiplicative (ZMod n)) :
+    (domainWallPhase (cyclicCocycle n j) a : ℂ) =
+      Complex.exp (-(2 * Real.pi * Complex.I * j * ((Multiplicative.toAdd a).val : ℂ) ^ 2 /
+        ((n : ℂ) * (n.gcd (Multiplicative.toAdd a).val : ℕ)))) := by
+  have hn : (n : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne n)
+  have hg : ((n.gcd (Multiplicative.toAdd a).val : ℕ) : ℂ) ≠ 0 :=
+    Nat.cast_ne_zero.mpr (Nat.gcd_pos_of_pos_left _ (NeZero.pos n)).ne'
+  rw [domainWallPhase_cyclicCocycle, rootOfUnity, ← Complex.exp_nat_mul, ← Complex.exp_neg]
+  congr 1
+  rw [Nat.cast_mul, Nat.cast_mul, Nat.cast_div (Nat.gcd_dvd_right _ _) hg]
+  field_simp
 
 omit [NeZero n] in
 /-- `(ζ^k)⁻¹ = ζ^l` whenever `ζ^n = 1` and `n ∣ k + l`. -/
