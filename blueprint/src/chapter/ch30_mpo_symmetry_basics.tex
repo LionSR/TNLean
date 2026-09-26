@@ -549,9 +549,10 @@ relation between word traces has nonnegative integer coefficients.
         =c_{y_0}\,\tr(E_{jj}^k)=c_{y_0}.
         \label{eq:mpoalg_trace_integral_powers}
     \end{align}
-    Since $\tr(Q^k) = \sum_i \lambda_i^k = c_{y_0}$ for all $k\geq1$, the
-    nonzero eigenvalues satisfy $\lambda_i=1$, so
-    $c_{y_0}=\operatorname{rank}(Q)\in\N$, extending the power-sum argument of
+    Let $\lambda_i$ be the nonzero eigenvalues of $Q$, counted with algebraic
+    multiplicity. Since $\tr(Q^k) = \sum_i \lambda_i^k = c_{y_0}$ for all
+    $k\geq1$, every $\lambda_i$ equals $1$, so $c_{y_0}$ is their total
+    algebraic multiplicity and lies in $\N$. This extends the power-sum argument of
     Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} to multiple blocks.
 \end{proof}
 
