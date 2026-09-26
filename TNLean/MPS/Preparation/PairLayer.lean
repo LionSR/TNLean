@@ -46,7 +46,7 @@ theorem blockSite_eq_iff {k k' : Fin M} {j j' : Fin q} :
   rw [blockSite, blockSite, finProdFinEquiv.apply_eq_iff_eq, Prod.mk.injEq]
 
 theorem exists_blockSite (i : Fin (M * q)) : ∃ k j, blockSite M q k j = i :=
-  ⟨(finProdFinEquiv.symm i).1, (finProdFinEquiv.symm i).2, by simp [blockSite]⟩
+  ⟨(finProdFinEquiv.symm i).1, (finProdFinEquiv.symm i).2, finProdFinEquiv.apply_symm_apply i⟩
 
 theorem disjoint_range_blockSite {k k' : Fin M} (h : k ≠ k') :
     Disjoint (Set.range (blockSite M q k)) (Set.range (blockSite M q k')) := by
@@ -91,20 +91,31 @@ theorem pairSite_injective (hq : r₁ + r₁ ≤ q) (k : Fin M) :
     Function.Injective (pairSite M q r₁ (by omega) k) := by
   intro i i' h
   simp only [pairSite] at h
-  split_ifs at h with h1 h2 h2 <;> rw [blockSite_eq_iff] at h
-  · exact Fin.ext (by have := congrArg Fin.val h.2; simp at this; omega)
-  · have := congrArg Fin.val h.2; simp at this; omega
-  · have := congrArg Fin.val h.2; simp at this; omega
-  · exact Fin.ext (by have := congrArg Fin.val h.2; simp at this; omega)
+  split_ifs at h with h1 h2 h2 <;> obtain ⟨-, h⟩ := blockSite_eq_iff.mp h <;>
+    have h' := congrArg Fin.val h <;> dsimp only at h'
+  · exact Fin.ext (by omega)
+  · have := i'.isLt; omega
+  · have := i.isLt; omega
+  · exact Fin.ext (by omega)
 
 theorem pairSite_eq_blockSite_iff (hq : r₁ + r₁ ≤ q) (k j : Fin M) (i : Fin (r₁ + r₁))
     (p : Fin q) : pairSite M q r₁ (by omega) k i = blockSite M q j p ↔
       (i.val < r₁ ∧ k = j ∧ p.val = q - r₁ + i.val) ∨
         (r₁ ≤ i.val ∧ finRotate M k = j ∧ p.val = i.val - r₁) := by
-  simp only [pairSite]
+  unfold pairSite
   split_ifs with h
-  · rw [blockSite_eq_iff, Fin.ext_iff]; simp only [Fin.val_mk]; omega
-  · rw [blockSite_eq_iff, Fin.ext_iff]; simp only [Fin.val_mk]; omega
+  · rw [blockSite_eq_iff]
+    constructor
+    · rintro ⟨hkj, hp⟩; exact Or.inl ⟨h, hkj, (congrArg Fin.val hp).symm⟩
+    · rintro (⟨_, hkj, hp⟩ | ⟨h', _, _⟩)
+      · exact ⟨hkj, Fin.ext hp.symm⟩
+      · omega
+  · rw [blockSite_eq_iff]
+    constructor
+    · rintro ⟨hkj, hp⟩; exact Or.inr ⟨by omega, hkj, (congrArg Fin.val hp).symm⟩
+    · rintro (⟨h', _, _⟩ | ⟨_, hkj, hp⟩)
+      · omega
+      · exact ⟨hkj, Fin.ext hp.symm⟩
 
 theorem disjoint_range_pairSite (hq : r₁ + r₁ ≤ q) {k k' : Fin M} (h : k ≠ k') :
     Disjoint (Set.range (pairSite M q r₁ (by omega) k))
@@ -112,7 +123,7 @@ theorem disjoint_range_pairSite (hq : r₁ + r₁ ≤ q) {k k' : Fin M} (h : k �
   rw [Set.disjoint_left]
   rintro _ ⟨i, rfl⟩ ⟨i', hi'⟩
   obtain ⟨j, p, hjp⟩ := exists_blockSite (M := M) (q := q) (pairSite M q r₁ (by omega) k i)
-  have h1 := (pairSite_eq_blockSite_iff hq k j i p).mp hjp
+  have h1 := (pairSite_eq_blockSite_iff hq k j i p).mp hjp.symm
   have h2 := (pairSite_eq_blockSite_iff hq k' j i' p).mp (hi'.trans hjp.symm)
   rcases h1 with ⟨_, rfl, hp⟩ | ⟨_, hk, hp⟩ <;> rcases h2 with ⟨_, hk', hp'⟩ | ⟨_, hk', hp'⟩
   · exact h hk'.symm
@@ -147,8 +158,8 @@ theorem pairSite_succ [NeZero (M * q)] (hq : r₁ + r₁ ≤ q) (hr : 1 ≤ r₁
       rw [blockSite_val, hrot, Fin.val_add, Fin.val_one', blockSite_val]
       simp only
       have hM : M * q = q * k.val + q := by
-        have : M = k.val + 1 := by omega
-        rw [this]; ring
+        have h' : M * q = (k.val + 1) * q := congrArg (· * q) (by omega : M = k.val + 1)
+        rw [h']; ring
       rw [Nat.add_mod_mod, hM]
       have : q - r₁ + i.val + q * k.val + 1 = q * k.val + q := by omega
       rw [this, Nat.mod_self]
@@ -171,18 +182,18 @@ theorem exists_pairUnitary (hd : 0 < d) {dig : Fin D → Cfg d r₁} (hdig : Fun
   classical
   have hs : Function.Injective (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) :=
     fun p p' h => Prod.ext (twoCfg_injective hdig h).1 (twoCfg_injective hdig h).2
-  let V : Matrix (Cfg d (r₁ + r₁)) Unit ℂ := fun u _ =>
+  let V : Matrix (Cfg d (r₁ + r₁)) Unit ℂ := Matrix.of fun u _ =>
     Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) ω 0 u
   have hV : V.IsIsometry := by
     ext ⟨⟩ ⟨⟩
     rw [mul_apply, one_apply_eq]
-    simp only [conjTranspose_apply, V]
+    simp only [conjTranspose_apply, V, of_apply]
     rw [sum_extend_zero hs ω (fun u a => star a * Function.extend
       (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) ω 0 u) (by simp)]
     simp only [hs.extend_apply]
     exact hω
   let emb : Unit ↪ Cfg d (r₁ + r₁) := ⟨fun _ => fun _ => ⟨0, hd⟩, fun _ _ _ => rfl⟩
   obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
-  exact ⟨W, hW, fun u => hWV u ()⟩
+  exact ⟨W, hW, fun u => (hWV u ()).trans (of_apply _ _ _)⟩
 
 end MPSPreparation

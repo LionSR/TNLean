@@ -29,7 +29,7 @@ approximating state is defined for `N` a multiple of `q`.
 -/
 
 open Matrix MPSTensor
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace MPSPreparation
 
@@ -73,7 +73,7 @@ theorem siteCfg_comp_pairSite (hd : 0 < d) (hq : 3 * r₁ ≤ q) (dig : Fin D �
   simp only [Function.comp_apply, pairSite, twoCfg]
   split_ifs with h
   · rw [siteCfg_blockSite, blockInputCfg, dite_eq_right (by simp; omega), dite_eq_left (by simp)]
-    congr 1; ext; simp; omega
+    congr 1; ext; simp
   · rw [siteCfg_blockSite, blockInputCfg, dite_eq_left (by simp; omega)]
 
 theorem blockSite_mem_pairSite (hq : 3 * r₁ ≤ q) (j : Fin M) (p : Fin q) :
@@ -87,7 +87,7 @@ theorem blockSite_mem_pairSite (hq : 3 * r₁ ≤ q) (j : Fin M) (p : Fin q) :
   · rintro (hp | hp)
     · refine ⟨(finRotate M).symm j, ⟨r₁ + p.val, by omega⟩, ?_⟩
       rw [pairSite_eq_blockSite_iff (by omega)]
-      exact Or.inr ⟨by simp, by simp, by simp⟩
+      exact Or.inr ⟨by simp, (finRotate M).apply_symm_apply j, by simp⟩
     · refine ⟨j, ⟨p.val - (q - r₁), by omega⟩, ?_⟩
       rw [pairSite_eq_blockSite_iff (by omega)]
       exact Or.inl ⟨by simp; omega, rfl, by simp; omega⟩
@@ -116,7 +116,7 @@ theorem eq_siteCfg (hd : 0 < d) (hq : 3 * r₁ ≤ q) (dig : Fin D → Cfg d r�
     have hs : pairSite M q r₁ (by omega) ((finRotate M).symm j) ⟨r₁ + p.val, by omega⟩ =
         blockSite M q j p := by
       rw [pairSite_eq_blockSite_iff (by omega)]
-      exact Or.inr ⟨by simp, by simp, by simp⟩
+      exact Or.inr ⟨by simp, (finRotate M).apply_symm_apply j, by simp⟩
     have := congrFun (hP ((finRotate M).symm j)) ⟨r₁ + p.val, by omega⟩
     rw [Function.comp_apply, hs, twoCfg, dite_eq_right (by simp)] at this
     rw [this]; congr 1; ext; simp
@@ -158,8 +158,10 @@ theorem embeddedPairState_blockedConfigEquiv_symm (hd : 0 < d) (hq : 3 * r₁ �
   by_cases hy : ∃ c, y = siteCfg hd M q dig c
   · obtain ⟨c, rfl⟩ := hy
     rw [ite_eq_left fun i hi => siteCfg_of_not_mem_pairSite hd hq dig c hi]
-    simp_rw [siteCfg_comp_pairSite hd hq dig c]
-    simp only [hs.extend_apply]
+    have hext : ∀ a b, Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2)
+        (fixedPointPair σ) 0 (twoCfg dig a b) = fixedPointPair σ (a, b) :=
+      fun a b => hs.extend_apply _ _ (a, b)
+    simp_rw [siteCfg_comp_pairSite hd hq dig c, hext]
     rw [siteCfg, Equiv.symm_apply_apply, embeddedPairState, Finset.sum_eq_single c]
     · rw [ite_eq_left rfl]; rfl
     · intro c' _ hc'
@@ -175,13 +177,14 @@ theorem embeddedPairState_blockedConfigEquiv_symm (hd : 0 < d) (hq : 3 * r₁ �
     split_ifs with h0
     · symm
       by_contra hne
-      have hall : ∀ k, ∃ p, y ∘ pairSite M q r₁ (by omega) k = twoCfg dig p.1 p.2 := by
+      have hall : ∀ k, ∃ p : Fin D × Fin D, y ∘ pairSite M q r₁ (by omega) k = twoCfg dig p.1 p.2 := by
         intro k
         by_contra hk
-        push_neg at hk
+        simp only [not_exists] at hk
         apply hne
         refine Finset.prod_eq_zero (Finset.mem_univ k) ?_
-        rw [Function.extend_apply' _ _ _ fun ⟨p, hp⟩ => hk p hp.symm, Pi.zero_apply]
+        rw [Function.extend_apply' _ _ _ fun h => by
+          obtain ⟨p, hp⟩ := h; exact hk p hp.symm, Pi.zero_apply]
       choose P hP using hall
       exact hy ⟨_, eq_siteCfg hd hq dig h0 P hP⟩
     · rfl
@@ -192,19 +195,31 @@ section Layers
 
 variable [NeZero (M * q)]
 
+theorem pairwise_commute_blockSite (U : Matrix (Cfg d q) (Cfg d q) ℂ) :
+    ((Finset.univ : Finset (Fin M)) : Set (Fin M)).Pairwise
+      (Function.onFun Commute fun k => embedOp (blockSite M q k) U) :=
+  fun k _ k' _ h => commute_embedOp_of_disjoint (blockSite_injective k) (blockSite_injective k')
+    (disjoint_range_blockSite h) U U
+
+theorem pairwise_commute_pairSite (hq : r₁ + r₁ ≤ q)
+    (W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) :
+    ((Finset.univ : Finset (Fin M)) : Set (Fin M)).Pairwise
+      (Function.onFun Commute fun k => embedOp (pairSite M q r₁ (by omega) k) W) :=
+  fun k _ k' _ h => commute_embedOp_of_disjoint (pairSite_injective hq k)
+    (pairSite_injective hq k') (disjoint_range_pairSite hq h) W W
+
 /-- The unitary `U` applied on every block, `U^{⊗M}`. -/
 noncomputable def blockLayerOp (U : Matrix (Cfg d q) (Cfg d q) ℂ) :
     Matrix (Cfg d (M * q)) (Cfg d (M * q)) ℂ :=
-  Finset.univ.noncommProd (fun k : Fin M => embedOp (blockSite M q k) U) fun k _ k' _ h =>
-    commute_embedOp_of_disjoint (blockSite_injective k) (blockSite_injective k')
-      (disjoint_range_blockSite h) U U
+  Finset.univ.noncommProd (fun k : Fin M => embedOp (blockSite M q k) U)
+    (pairwise_commute_blockSite U)
 
 /-- The unitary `W` applied on every pair window. -/
-noncomputable def pairLayerOp (hq : r₁ + r₁ ≤ q) (W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) :
+noncomputable def pairLayerOp (hq : r₁ + r₁ ≤ q)
+    (W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) :
     Matrix (Cfg d (M * q)) (Cfg d (M * q)) ℂ :=
   Finset.univ.noncommProd (fun k : Fin M => embedOp (pairSite M q r₁ (by omega) k) W)
-    fun k _ k' _ h => commute_embedOp_of_disjoint (pairSite_injective hq k)
-      (pairSite_injective hq k') (disjoint_range_pairSite hq h) W W
+    (pairwise_commute_pairSite hq W)
 
 theorem blockLayerOp_apply (U : Matrix (Cfg d q) (Cfg d q) ℂ) (x y : Cfg d (M * q)) :
     blockLayerOp (M := M) U x y = ∏ k, U (x ∘ blockSite M q k) (y ∘ blockSite M q k) := by
@@ -290,8 +305,8 @@ theorem mul_self_le_pow_of_isInjective (A : MPSTensor d D) {q : ℕ}
     (h : Kraus.IsInjective (blockTensor A q)) : D * D ≤ d ^ q := by
   have h1 := finrank_range_le_card (R := ℂ) (blockTensor A q)
   rw [Set.finrank, h, finrank_top, Module.finrank_matrix, Fintype.card_fin, Fintype.card_fin,
-    Fintype.card_fin, blockPhysDim_eq_pow] at h1
-  exact h1
+    Module.finrank_self, mul_one] at h1
+  simpa [blockPhysDim_eq_pow] using h1
 
 /-- **The approximating state is prepared in depth `O(q)`.** For a tensor `A` and
 `σ ≥ 0` with `Tr σ = 1` there is `C`, depending only on `A` through `d` and `D`, such that for
@@ -311,10 +326,10 @@ theorem exists_isPreparedInDepth_approximatingMPVState (A : MPSTensor d D)
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · -- no bond: the state vanishes
-    refine ⟨0, fun q _ _ M _ => ⟨1, ⟨[], rfl, rfl⟩, fun _ _ => 0, funext fun s => ?_⟩⟩
+    refine ⟨0, fun q _ _ M _ => ⟨1, ⟨[], by simp, rfl⟩, fun _ _ => 0, funext fun s => ?_⟩⟩
     have hN : Nonempty (Fin (M * q)) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne _)⟩⟩
-    simp [approximatingMPVState, productVector, mulVec, dotProduct, Matrix.trace,
-      Finset.prod_const_zero]
+    have h0 : (0 : ℂ) ^ (M * q) = 0 := zero_pow (NeZero.ne _)
+    simp [approximatingMPVState, productVector, mulVec, dotProduct, Matrix.trace, h0]
   by_cases hDd : D ≤ d ^ D
   swap
   · refine ⟨0, fun q hq hinj M _ => absurd (mul_self_le_pow_of_isInjective A hinj) ?_⟩
@@ -337,7 +352,7 @@ theorem exists_isPreparedInDepth_approximatingMPVState (A : MPSTensor d D)
     (by rw [fixedPointPair_norm_sq hσ, htr])
   obtain ⟨Kw, hKw⟩ := exists_isPairProduct (n := D + D) hd (by omega)
   refine ⟨Cb + Kw, fun q hq hinj M _ => ?_⟩
-  haveI : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
+  have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
   have hq0 : 0 < q := by omega
   obtain ⟨b, Q, hb0, hbq, -, hrow, -, hiso, hVQ⟩ :=
     exists_isometric_chain_polarIsoMatrix A hq0 hinj
@@ -356,131 +371,5 @@ theorem exists_isPreparedInDepth_approximatingMPVState (A : MPSTensor d D)
     nlinarith
   · rw [hraw]
     exact approximatingMPVStateRaw_eq_mulVec hd (by omega) hdig A σ hU hW s
-
-/-! ### The circuit -/
-
-/-- The all-`|0⟩` configuration. -/
-def zeroCfg (hd : 0 < d) (N : ℕ) : Cfg d N := fun _ => ⟨0, hd⟩
-
-/-- The single-site vector `|0⟩`. -/
-def zeroVec (hd : 0 < d) : Fin d → ℂ := fun a => if a = ⟨0, hd⟩ then 1 else 0
-
-theorem productVector_zeroVec (hd : 0 < d) {N : ℕ} (y : Cfg d N) :
-    productVector (fun _ : Fin N => zeroVec hd) y = if y = zeroCfg hd N then 1 else 0 := by
-  classical
-  simp only [productVector, zeroVec]
-  rw [Finset.prod_boole]
-  congr 1
-  exact propext ⟨fun h => funext fun i => h i (Finset.mem_univ i),
-    fun h i _ => congrFun h i⟩
-
-theorem mulVec_productVector_zeroVec (hd : 0 < d) {N : ℕ} (X : Matrix (Cfg d N) (Cfg d N) ℂ)
-    (y : Cfg d N) : (X *ᵥ productVector (fun _ : Fin N => zeroVec hd)) y = X y (zeroCfg hd N) := by
-  classical
-  simp only [mulVec, dotProduct, productVector_zeroVec, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-
-/-- An injective encoding of `Fin D` in the configurations of `r₁` sites when `D ≤ d^{r₁}`. -/
-def digits {r₁ : ℕ} (h : D ≤ d ^ r₁) : Fin D → Cfg d r₁ :=
-  fun x => finFunctionFinEquiv.symm (Fin.castLE h x)
-
-theorem digits_injective {r₁ : ℕ} (h : D ≤ d ^ r₁) : Function.Injective (digits (d := d) h) :=
-  fun _ _ hxy => Fin.castLE_injective h (finFunctionFinEquiv.symm.injective hxy)
-
-/-- **The approximating state is prepared in depth `O(q)`.** Let `d ≥ 2` and `D ≥ 1`. There are
-`C` and `q₀`, depending only on `d` and `D`, such that for every tensor `A`, every `σ ≥ 0` with
-`Tr σ = 1`, every block length `q ≥ q₀` with injective `q`-site blocked tensor, and every
-number of blocks `M ≥ 1`, the approximating state `|φ'_N⟩ = |φ_M(V P_∞)⟩` on `N = M q` sites is
-prepared from a product state by a local circuit of depth at most `C q`.
-
-arXiv:2307.01696, eqs. (10)–(12), paragraph "The sequential-RG circuit" and Fig. 1: a layer
-of unitaries on the pair windows prepares `⊗ₖ |ω⟩_{R_k L_{k+1}} |0⟩_{C_k}` in constant depth,
-and the block unitaries `U` with `U |l, 0, r⟩ = V |l, r⟩`, each a staircase of the isometries
-of eq. (14) with SWAP gates, are applied to all blocks in parallel in depth `O(q)`. This is the
-depth count behind eq. (1); the choice `q = O(log(N/ε))` is not made here. -/
-theorem exists_isPreparedInDepth_approximatingMPVState (hd : 2 ≤ d) (hD : 0 < D) :
-    ∃ C q₀ : ℕ, ∀ (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
-      σ.trace = 1 → ∀ (q M : ℕ) [NeZero M] [NeZero (M * q)], q₀ ≤ q →
-      Kraus.IsInjective (blockTensor A q) →
-      IsPreparedInDepth (C * q) fun s => approximatingMPVState A σ q M s := by
-  classical
-  have hd0 : 0 < d := by omega
-  set r₁ := D with hr₁
-  have hpow : D ≤ d ^ r₁ := (Nat.lt_pow_self (by omega : 1 < d)).le
-  set dig : Fin D → Cfg d r₁ := digits hpow
-  have hdig : Function.Injective dig := digits_injective hpow
-  obtain ⟨Cb, hCb⟩ := exists_blockUnitary hd0 (r₁ := r₁) (by omega) hdig hD
-  obtain ⟨KP, hKP⟩ := exists_isPairProduct (d := d) (n := r₁ + r₁) hd0 (by omega)
-  refine ⟨KP + Cb, 3 * r₁, fun A σ hσ htr q M _ _ hq hB => ?_⟩
-  have hq0 : 0 < q := by omega
-  -- the block unitary
-  obtain ⟨b, Q, hb0, hbq, -, hrow, -, hiso, hQV⟩ := exists_isometric_chain_polarIsoMatrix A hq0 hB
-  obtain ⟨Ub, hUbK, hUbQ⟩ := hCb q hq b Q hb0 hbq hrow hiso
-  -- the pair unitary
-  have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by
-    rw [fixedPointPair_norm_sq hσ, htr]
-  obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd0 hdig (fixedPointPair σ) hω
-  -- the two layers
-  have hqr : r₁ + r₁ ≤ q := by omega
-  let ep : Fin M → Fin (r₁ + r₁) → Fin (M * q) := fun k => pairSite M q r₁ (by omega) k
-  have hep : ∀ k, Function.Injective (ep k) := fun k => pairSite_injective hqr k
-  have hepd : (Finset.univ : Finset (Fin M)).toSet.PairwiseDisjoint fun k => Set.range (ep k) :=
-    fun k _ k' _ hkk' => disjoint_range_pairSite hqr hkk'
-  have hPc : (Finset.univ : Finset (Fin M)).toSet.Pairwise
-      (Function.onFun Commute fun k => embedOp (ep k) W) := fun k _ k' _ hkk' =>
-    commute_embedOp_of_disjoint (hep k) (hep k') (disjoint_range_pairSite hqr hkk') W W
-  let eb : Fin M → Fin q → Fin (M * q) := fun k => blockSite M q k
-  have heb : ∀ k, Function.Injective (eb k) := fun k => blockSite_injective k
-  have hebd : (Finset.univ : Finset (Fin M)).toSet.PairwiseDisjoint fun k => Set.range (eb k) :=
-    fun k _ k' _ hkk' => disjoint_range_blockSite hkk'
-  have hBc : (Finset.univ : Finset (Fin M)).toSet.Pairwise
-      (Function.onFun Commute fun k => embedOp (eb k) Ub) := fun k _ k' _ hkk' =>
-    commute_embedOp_of_disjoint (heb k) (heb k') (disjoint_range_blockSite hkk') Ub Ub
-  set P := (Finset.univ : Finset (Fin M)).noncommProd (fun k => embedOp (ep k) W) hPc with hP
-  set Bl := (Finset.univ : Finset (Fin M)).noncommProd (fun k => embedOp (eb k) Ub) hBc with hBl
-  -- depth
-  have hPcirc : IsCircuitOn Set.univ KP P := by
-    refine (IsCircuitOn.finset_noncommProd Finset.univ (fun k => Set.range (ep k)) hepd _
-      (fun k _ => ?_) hPc).mono_set (Set.subset_univ _)
-    exact (hKP W hWu).isCircuitOn (hep k) fun i i' h => pairSite_succ hqr (by omega) k i i' h
-  have hBcirc : IsCircuitOn Set.univ (Cb * q) Bl := by
-    refine (IsCircuitOn.finset_noncommProd Finset.univ (fun k => Set.range (eb k)) hebd _
-      (fun k _ => ?_) hBc).mono_set (Set.subset_univ _)
-    exact hUbK.isCircuitOn (heb k) fun j j' h => blockSite_succ k j j' h
-  have hcirc : IsCircuitOn Set.univ ((KP + Cb) * q) (Bl * P) :=
-    (hPcirc.mul hBcirc).mono (by nlinarith)
-  refine ⟨Bl * P, hcirc.isLocalCircuitOfDepth, fun _ => zeroVec hd0, ?_⟩
-  -- the state
-  have hraw := (inner_approximatingMPVState_mpvState A hB hσ htr M).1
-  funext s
-  simp only [hraw, approximatingMPVStateRaw_apply]
-  set ι := blockPlacement hd0 q dig
-  let U' : Matrix (Fin (blockPhysDim d q)) (Fin (blockPhysDim d q)) ℂ :=
-    fun i j => Ub (decodeBlockEquiv d q i) (decodeBlockEquiv d q j)
-  have hU' : ∀ i p, U' i (ι p) = polarIsoMatrix (blockTensor A q) i (finProdFinEquiv p) := by
-    intro i p
-    simp only [U', ι, blockPlacement, Equiv.apply_symm_apply]
-    rw [hUbQ, ← hQV, Equiv.symm_apply_apply]
-  rw [mpv_approximatingTensor_eq_sum_embeddedPairState _ σ ι U' hU', ← Matrix.mulVec_mulVec,
-    mulVec, dotProduct, ← (blockedConfigEquiv d M q).sum_comp]
-  refine Finset.sum_congr rfl fun t _ => ?_
-  congr 1
-  · rw [hBl, noncommProd_embedOp_apply eb heb (fun _ => Ub) Finset.univ hebd hBc,
-      ite_eq_left fun i hi => absurd hi (by
-        obtain ⟨k, j, rfl⟩ := exists_blockSite (M := M) (q := q) i
-        exact fun h => h k (Finset.mem_univ k) j rfl)]
-    refine Finset.prod_congr rfl fun k _ => ?_
-    simp only [U', eb]
-    rw [decodeBlockEquiv_blockedConfigEquiv_symm, decodeBlockEquiv_blockedConfigEquiv_symm,
-      Equiv.symm_apply_apply]
-  · rw [mulVec_productVector_zeroVec, hP,
-      noncommProd_embedOp_apply ep hep (fun _ => W) Finset.univ hepd hPc,
-      embeddedPairState_blockedConfigEquiv_symm hd0 hq hdig σ, Equiv.apply_symm_apply]
-    simp only [zeroCfg, Finset.mem_univ, true_implies, ep]
-    split_ifs with h1 h2 h2
-    · exact Finset.prod_congr rfl fun k _ => by rw [hW]; rfl
-    · exact absurd (fun i hi => (h1 i hi).symm) h2
-    · exact absurd (fun i hi => (h2 i hi).symm) h1
-    · rfl
 
 end MPSPreparation
