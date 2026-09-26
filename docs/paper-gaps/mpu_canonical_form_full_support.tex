@@ -894,6 +894,33 @@ changes of auxiliary coordinates to identify its two cut ranks with those of
 the reduced canonical tensor. The required continuity and rank comparison
 cannot be inferred from an arbitrary pointwise choice of reductions.
 
+This special case is a second scoped counterpart of
+\texttt{prop:continuity-index}, beside
+\texttt{prop:mpu\_admissible\_continuity\_index}. The two hypothesis sets are
+not comparable. The canonical-form-II path requires each tensor of the path to
+be in canonical form II and works at the fixed blocking length $D^4$, but asks for no
+continuity of the fixed pair $\rho$, the stabilization exponent, or any other
+source datum. The admissible proposition allows the path to leave canonical
+form, but requires a common blocking length $m$ at which every blocked tensor
+is simple and carries a reduced full-support source datum varying continuously
+along the path. A canonical-form-II path is not known to carry such a
+continuously varying datum, because the fixed point $\rho(x)$ is chosen
+pointwise and its diagonality in ambient coordinates is not preserved. An
+admissible path need not be in canonical form II. Neither theorem therefore
+discharges the other, and \texttt{prop:mpu\_admissible\_continuity\_index}
+keeps its label and its dependence on \ghissue{6140}.
+
+The argument does show which part of the admissible datum the rank conclusion
+uses. The rank lower semicontinuity and connectedness step needs only
+continuity of the actual blocked tensors and a fixed positive rank product
+$r\ell=d^{2m}$ at every point. For an admissible path this product follows
+pointwise from simplicity and the source datum at that point, by the admissible
+simple-tensor equivalence theorem. The continuity of the source data along the
+path is not used. Once that equivalence theorem is formalized, the admissible
+proposition should be proved by the same argument, and its path hypothesis may
+be weakened to a pointwise one. The unrestricted proposition still needs the
+comparison of reduced representatives described above.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The normal-tensor proposition,
@@ -932,7 +959,10 @@ tensor. That transport remains in \ghissue{7012}, and the unrestricted
 representative remains in \ghissue{7127}. Downstream standard-form, index,
 continuity, and symmetry results also lack existence or preservation theorems
 for reduced source data under products, transformed comparison tensors, and
-continuous paths.
+continuous paths. For the continuity proposition alone, a path already in
+canonical form II at every point has constant source ranks and constant index
+without any continuity of source data; paths that leave canonical form remain
+open, through the admissible and unrestricted entries.
 Chapter~28 records these requirements as explicit admissibility hypotheses
 rather than consequences of the MPU predicate. They come off in two stages,
 neither singly nor all at once. The converse of the stabilization theorem is

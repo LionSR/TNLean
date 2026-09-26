@@ -7202,7 +7202,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \ell[\mathcal U(x)_{D^4}] & =\ell[\mathcal U(y)_{D^4}].
     \end{align}
     This is the canonical-form-II path case of
-    \cite[Proposition~IV.5]{Cirac2017MPU}.
+    \cite[Proposition~IV.5]{Cirac2017MPU}. Its hypotheses are not comparable
+    with those of Proposition~\ref{prop:mpu_admissible_continuity_index}: here
+    each tensor of the path is in canonical form II, but no continuously
+    varying source data are assumed; there the path may leave canonical form,
+    but continuously varying source data at a common blocking length are
+    assumed.
     % Source lines: paper_v2.tex 739--818.
 \end{theorem}
 
@@ -7235,9 +7240,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{thm:mpu_cfii_path_source_ranks,
         prop:mpu_admissible_index_well_defined}
-    Every $D^4$-site block is simple, so the index is half the difference
-    between the base-two logarithms of its two source ranks. Both ranks are
-    independent of $x$ by Theorem~\ref{thm:mpu_cfii_path_source_ranks}.
+    Every $D^4$-site block is simple, so for every $x\in[0,1]$,
+    \begin{align}
+        \operatorname{ind}(\mathcal U(x))
+         & =\frac12\bigl(\log_2 r[\mathcal U(x)_{D^4}]
+        -\log_2\ell[\mathcal U(x)_{D^4}]\bigr).
+    \end{align}
+    Both ranks on the right-hand side are independent of $x$ by
+    Theorem~\ref{thm:mpu_cfii_path_source_ranks}.
 \end{proof}
 
 \begin{theorem}[Index Theorem]
