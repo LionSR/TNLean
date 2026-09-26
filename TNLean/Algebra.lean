@@ -76,6 +76,7 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
+import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition
