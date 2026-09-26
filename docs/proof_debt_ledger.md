@@ -955,51 +955,26 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   retired.
 
 ## D15. The MPU canonical-form endpoint predicate omits nonzero weights and full support  —  api-design, impact 2/10, effort 2/10
-- **Status**: open
-- **Evidence**: `MPUCanonicalForm.lean` (78 lines) defines
-  `IsMPUCanonicalBlock`, `MPUCanonicalFormData`, and `IsMPUCanonicalForm`,
-  the paper's canonical form CF (`Papers/1703.09188/paper_v2.tex` lines
-  259--262: irreducible blocks with transfer spectral radius one, periodic
-  blocks allowed, gauge free). Its sole consumer is the "in CF" endpoint
-  clause of `StrictlyEquivalent` in `Equivalence.lean`, which transcribes
-  `def:strictly-equivalent-tensors` (lines 708--714: endpoints "in CF", the
-  path "not necessarily in CF"). `MPUCanonicalFormData` repeats every field
-  of `CPSVCanonicalFormData` (`TNLean/MPS/CanonicalForm/Definitions.lean`)
-  except the block predicate (irreducible with spectral radius one, against
-  normal) and the `weights_ne_zero` local fix, and no lemma relates the two;
-  `prop:normal-tensor` (lines 344--355), which says that an MPU tensor in CF
-  has one block and that block is normal, is not stated for this predicate.
-  The missing nonzero-weight field is logically prior: for $d=1$ and $D=2$,
-  the tensor with sole matrix $\operatorname{diag}(1,0)$ is an MPU and has a
-  current-form witness with two one-dimensional canonical blocks weighted by
-  $1$ and $0$. Nonzero weights alone do not exclude the same tensor: it also
-  has a one-block, weight-one witness embedded in the first coordinate, with a
-  nontrivial ambient zero complement.
-- **Remediation**: keep the clause. CF is gauge free while canonical form II
-  (lines 271--281) fixes the gauge, so two MPU tensors in CF outside that
-  gauge are strictly equivalent under the paper's definition; replacing the
-  clause by the D13 convention predicate would add a hypothesis the source
-  does not carry (the first limit of the `CLAUDE.md` convention rule: the
-  paper writes "in CF" here and distinguishes CF, CFII, and SF throughout).
-  First add `weights_ne_zero` and require $\sum_k D_k=D$ (equivalently, full
-  support) in `MPUCanonicalFormData`, and update the source-labelled
-  `def:mpu_canonical_form` blueprint statement before retaining its `\leanok`.
-  Then prove `prop:normal-tensor` for `IsMPUCanonicalForm` on MPU tensors (one normal block), using transfer
-  multiplicity only after the zero-weight witness is excluded. Finally extract
-  a common retained-block reconstruction base with separate support-policy
-  wrappers. Literal `CPSVCanonicalFormData` keeps $\sum_k D_k\leq D$ and its
-  optional ambient complement; the MPU endpoint wrapper requires nonzero
-  weights and $\sum_k D_k=D$. Parametrizing only the block predicate would
-  conflate these two source policies.
-- **First PR**: add `weights_ne_zero` and full support to
-  `MPUCanonicalFormData`, update any direct witnesses, and add an inline
-  `**Local fix (nonzero canonical weights and full support):**` marker in
-  `MPUCanonicalForm.lean`. The marker must cite both
-  `mpu_canonical_form_full_support.tex` for the ambient zero complement and the
-  dedicated one-page paper-gap note titled "Nonzero weights in MPU canonical
-  form" created in the same PR for the zero-coefficient convention. Update the
-  `def:mpu_canonical_form` blueprint statement in the same PR. No one-block
-  theorem or consumer changes yet.
+- **Status**: resolved by the canonical-normality proof (2026-09-26).
+- **Repair**: `MPUCanonicalFormData` now requires nonzero weights and
+  $\sum_k D_k=D$. Its defining marker cites
+  `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex` and
+  `docs/paper-gaps/mpu_canonical_form_full_support.tex`. The literal CPSV
+  canonical form retains its optional zero complement; both structures share
+  only the weighted retained-block reconstruction data, not their block or
+  support conditions. The separate `PGVWC07CanonicalFormData` remains outside
+  this common base because it uses a different reconstruction and real weights.
+- **Proof**: `MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm`
+  takes canonical form of the original tensor, as required by the CF endpoint
+  clause of `StrictlyEquivalent`. Nonzero scalar transport supplies canonical
+  form of its normalized flattening. Each weighted irreducible block has a
+  positive Perron--Frobenius eigenvalue, and its isometric inclusion transports
+  that eigenvalue to the ambient transfer map. The MPU shifted-trace identity
+  makes every nonzero ambient eigenvalue equal to one. The weighted blocks are
+  therefore normal; CPSV transfer multiplicity gives one block, and full
+  support identifies it with the entire ambient bond space. This proves the
+  normality assertion of arXiv:1703.09188, Proposition `prop:normal-tensor`,
+  without an extra normality or one-block hypothesis.
 
 ## D16. Ring-homomorphism transport of exact-arithmetic example tensors written four times  —  duplication, impact 7/10, effort 5/10
 - **Status**: open ([#7846](https://github.com/LionSR/TNLean/issues/7846); 2026-09-19 architectural survey)
