@@ -3,9 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.LinearAlgebra.Matrix.Adjugate
 import Mathlib.LinearAlgebra.Trace
-import Mathlib.LinearAlgebra.UnitaryGroup
+import TNLean.Algebra.SingletMatrix
 import TNLean.PEPS.TorusSiteTensor
 
 /-!
@@ -32,11 +31,18 @@ right, down, left and the physical index the four-qubit label `s : Fin 4 → Fin
   $k=\alpha+\beta+(1-\gamma)+(1-\delta)$;
 * the physical span of the tensor is the five-dimensional symmetric subspace;
 * $SU(2)$ covariance: $U^{\otimes 4}A=A(U\otimes U\otimes\bar U\otimes\bar U)$ for every
-  `U` in `SU(2)`, where $U^{\otimes4}$ restricted to the symmetric subspace is the spin-2
-  action; for a general $2\times2$ matrix the two lower legs carry $(\operatorname{adj}U)^T$;
+  `U` in `SU(2)`; for a general $2\times2$ matrix the two lower legs carry
+  $(\operatorname{adj}U)^T$;
 * on a torus of width and height at least three, the PEPS is
   $\bigotimes_v\Pi_{\mathrm{sym}}$ applied to a singlet $\lvert01\rangle-\lvert10\rangle$ on
   every edge.
+
+**Physical space.** The physical index is the four-qubit label, so the tensor takes values
+in $(\mathbb C^2)^{\otimes 4}\cong\mathbb C^{16}$, the codomain of $\Pi_{\mathrm{sym}}$ in
+the printed formula. Its physical span is the five-dimensional symmetric subspace, the
+spin-2 space of the source, embedded isometrically in $\mathbb C^{16}$; a tensor with
+physical dimension five, obtained by composing with an isometry from the symmetric subspace
+onto $\mathbb C^5$, is not defined here.
 
 The parent Hamiltonian, the uniqueness of the ground state, the honeycomb lattice, and the
 identification of $U^{\otimes 4}$ on the symmetric subspace with the standard spin-2
@@ -48,7 +54,6 @@ stated for a torus of width and height at least three sites. Documented in
 
 ## Main definitions
 
-* `TNLean.PEPS.akltSingletY`: the singlet matrix `Y`.
 * `TNLean.PEPS.legKronecker`: the Kronecker product of four `2 × 2` matrices on the legs.
 * `TNLean.PEPS.legPermMatrix`, `TNLean.PEPS.symProjector`: the leg permutations and the
   projector $\Pi_{\mathrm{sym}}$ onto the symmetric subspace.
@@ -80,10 +85,6 @@ namespace PEPS
 
 /-! ### Operators on four spin-1/2 legs -/
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2434.
-The singlet matrix $Y=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$. -/
-def akltSingletY : Matrix (Fin 2) (Fin 2) ℂ := !![0, -1; 1, 0]
-
 /-- The Kronecker product $M_0\otimes M_1\otimes M_2\otimes M_3$ of four `2 × 2` matrices,
 acting on the four-qubit labels `Fin 4 → Fin 2`. -/
 def legKronecker (M : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ) :
@@ -112,7 +113,7 @@ theorem legKronecker_transpose (M : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ) :
 def legPermMatrix (π : Equiv.Perm (Fin 4)) : Matrix (Fin 4 → Fin 2) (Fin 4 → Fin 2) ℂ :=
   Matrix.of fun i j => if i = j ∘ π then 1 else 0
 
-theorem comp_perm_eq_iff (π : Equiv.Perm (Fin 4)) (i j : Fin 4 → Fin 2) :
+private theorem comp_perm_eq_iff (π : Equiv.Perm (Fin 4)) (i j : Fin 4 → Fin 2) :
     i = j ∘ π ↔ j = i ∘ π.symm := by
   constructor
   · rintro rfl
@@ -167,7 +168,7 @@ subspace of four spin-1/2. -/
 noncomputable def symProjector : Matrix (Fin 4 → Fin 2) (Fin 4 → Fin 2) ℂ :=
   (1 / 24 : ℂ) • ∑ π : Equiv.Perm (Fin 4), legPermMatrix π
 
-theorem card_perm_fin_four : Fintype.card (Equiv.Perm (Fin 4)) = 24 := by
+private theorem card_perm_fin_four : Fintype.card (Equiv.Perm (Fin 4)) = 24 := by
   rw [Fintype.card_perm, Fintype.card_fin]
   rfl
 
@@ -279,7 +280,7 @@ theorem finrank_range_symProjector :
 The matrix $\mathbb 1\otimes\mathbb 1\otimes Y\otimes Y$ on the four virtual legs, ordered
 top, right, down, left. -/
 def akltLegs : Matrix (Fin 4 → Fin 2) (Fin 4 → Fin 2) ℂ :=
-  legKronecker ![1, 1, akltSingletY, akltSingletY]
+  legKronecker ![1, 1, singletY, singletY]
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2434–2436.
 The AKLT tensor $A=\Pi_{\mathrm{sym}}(\mathbb 1\otimes\mathbb 1\otimes Y\otimes Y)$, with
@@ -302,10 +303,6 @@ The AKLT tensor at every site of the `width × height` torus. -/
 noncomputable def akltPEPS : Tensor (torusGraph width height) 16 :=
   torusSiteTensor akltSiteTensor
 
-theorem akltSingletY_apply (a b : Fin 2) :
-    akltSingletY a b = if a = 1 - b then (-1) ^ b.val else 0 := by
-  fin_cases a <;> fin_cases b <;> simp [akltSingletY]
-
 theorem akltLegs_apply (j v : Fin 4 → Fin 2) :
     akltLegs j v = if j = ![v 0, v 1, 1 - v 2, 1 - v 3] then
       (-1) ^ ((v 2).val + (v 3).val) else 0 := by
@@ -314,7 +311,7 @@ theorem akltLegs_apply (j v : Fin 4 → Fin 2) :
     simp [funext_iff, Fin.forall_fin_succ]
   simp only [akltLegs, legKronecker, of_apply, Fin.prod_univ_four, Matrix.cons_val_zero,
     Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
-    Matrix.tail_cons, one_apply, akltSingletY_apply]
+    Matrix.tail_cons, one_apply, singletY_apply]
   by_cases h : j 0 = v 0 ∧ j 1 = v 1 ∧ j 2 = 1 - v 2 ∧ j 3 = 1 - v 3
   · obtain ⟨h0, h1, h2, h3⟩ := h
     rw [ite_eq_left (hj.mpr ⟨h0, h1, h2, h3⟩), ite_eq_left h0, ite_eq_left h1, ite_eq_left h2,
@@ -355,8 +352,7 @@ theorem akltLegs_mul_transpose : akltLegs * akltLegsᵀ = 1 := by
   rw [akltLegs, legKronecker_transpose, legKronecker_mul, ← legKronecker_one]
   congr 1
   funext k
-  fin_cases k <;> ext a b <;> fin_cases a <;> fin_cases b <;>
-    simp [akltSingletY, vecMul, dotProduct, Fin.sum_univ_two]
+  fin_cases k <;> simp [singletY_mul_transpose]
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2432–2436.
 The physical span of the AKLT tensor, the span of the vectors $s\mapsto
@@ -379,12 +375,6 @@ theorem span_akltSiteTensorFun :
 
 /-! ### `SU(2)` covariance -/
 
-theorem mul_akltSingletY (U : Matrix (Fin 2) (Fin 2) ℂ) :
-    U * akltSingletY = akltSingletY * (adjugate U)ᵀ := by
-  rw [adjugate_fin_two]
-  ext a b
-  fin_cases a <;> fin_cases b <;> simp [akltSingletY, mul_apply, Fin.sum_univ_two]
-
 /-- Project result: for every `2 × 2` matrix `U`,
 $U^{\otimes4}A=A(U\otimes U\otimes V\otimes V)$ with $V=(\operatorname{adj}U)^T$, as
 matrices from the virtual to the physical labels; `Y^{-1} U Y = V` moves `U` through the
@@ -397,21 +387,14 @@ theorem akltSiteTensor_covariant (U : Matrix (Fin 2) (Fin 2) ℂ) :
     legKronecker_mul, legKronecker_mul]
   congr 2
   funext k
-  fin_cases k <;> simp [mul_akltSingletY]
-
-theorem adjugate_eq_star_of_mem_specialUnitaryGroup {U : Matrix (Fin 2) (Fin 2) ℂ}
-    (hU : U ∈ Matrix.specialUnitaryGroup (Fin 2) ℂ) : adjugate U = star U := by
-  rw [mem_specialUnitaryGroup_iff] at hU
-  have h1 : star U * U = 1 := (mem_unitaryGroup_iff'.mp hU.1)
-  calc adjugate U = (star U * U) * adjugate U := by rw [h1, one_mul]
-    _ = star U := by rw [mul_assoc, mul_adjugate, hU.2, one_smul, mul_one]
+  fin_cases k <;> simp [mul_singletY]
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2432–2436.
 `SU(2)` covariance of the AKLT tensor: for `U ∈ SU(2)`,
-$U^{\otimes4}A=A(U\otimes U\otimes\bar U\otimes\bar U)$. The physical action is the spin-2
-action, $U^{\otimes 4}$ restricted to the symmetric subspace (the range of `A`), and the
-virtual action is `U` on the top and right legs and its entrywise conjugate on the down and
-left legs, which carry the singlets. -/
+$U^{\otimes4}A=A(U\otimes U\otimes\bar U\otimes\bar U)$: the physical action is
+$U^{\otimes 4}$, which preserves the range of `A`, and the virtual action is `U` on the top
+and right legs and its entrywise conjugate on the down and left legs, which carry the
+singlets. -/
 theorem akltSiteTensor_su2_covariant {U : Matrix (Fin 2) (Fin 2) ℂ}
     (hU : U ∈ Matrix.specialUnitaryGroup (Fin 2) ℂ) :
     legKronecker (fun _ => U) * (symProjector * akltLegs) =
@@ -424,7 +407,7 @@ theorem akltSiteTensor_su2_covariant {U : Matrix (Fin 2) (Fin 2) ℂ}
 theorem akltLegs_vec (j : Fin 4 → Fin 2) (a b c d : Fin 2) :
     akltLegs j ![a, b, c, d] =
       (1 : Matrix (Fin 2) (Fin 2) ℂ) (j 0) a * (1 : Matrix (Fin 2) (Fin 2) ℂ) (j 1) b *
-        (akltSingletY (j 2) c * akltSingletY (j 3) d) := by
+        (singletY (j 2) c * singletY (j 3) d) := by
   simp only [akltLegs, legKronecker, of_apply, Fin.prod_univ_four, Matrix.cons_val_zero,
     Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons,
     Matrix.tail_cons]
@@ -446,8 +429,8 @@ theorem stateCoeff_akltPEPS (σ : TorusVertex width height → Fin 16) :
     stateCoeff (akltPEPS width height) σ =
       ∑ τ : TorusVertex width height → Fin 4 → Fin 2,
         (∏ v, symProjector (finFunctionFinEquiv.symm (σ v)) (τ v)) *
-          ∏ v, (akltSingletY (τ (v.1 + 1, v.2) 3) (τ v 1) *
-            akltSingletY (τ (v.1, v.2 + 1) 2) (τ v 0)) := by
+          ∏ v, (singletY (τ (v.1 + 1, v.2) 3) (τ v 1) *
+            singletY (τ (v.1, v.2 + 1) 2) (τ v 0)) := by
   rw [akltPEPS, stateCoeff_torusSiteTensor]
   simp only [akltSiteTensor, akltSiteTensorFun, mul_apply, Fintype.prod_sum]
   calc _ = ∑ τ : TorusVertex width height → Fin 4 → Fin 2,
@@ -464,16 +447,8 @@ theorem stateCoeff_akltPEPS (σ : TorusVertex width height → Fin 16) :
         · simp only [one_apply_eq, one_mul, Finset.prod_mul_distrib]
           rw [mul_comm]
           congr 1
-          · exact (Fintype.prod_equiv (Equiv.addRight ((1, 0) : TorusVertex width height)) _ _
-              fun u => by
-                simp only [Equiv.coe_addRight,
-                  show u + (1, 0) = (u.1 + 1, u.2) from Prod.ext rfl (add_zero _),
-                  add_sub_cancel_right]).symm
-          · exact (Fintype.prod_equiv (Equiv.addRight ((0, 1) : TorusVertex width height)) _ _
-              fun u => by
-                simp only [Equiv.coe_addRight,
-                  show u + (0, 1) = (u.1, u.2 + 1) from Prod.ext (add_zero _) rfl,
-                  add_sub_cancel_right]).symm
+          · exact prod_torus_sub_fst fun a b => singletY (τ a 3) (τ b 1)
+          · exact prod_torus_sub_snd fun a b => singletY (τ a 2) (τ b 0)
         · intro vb hvb
           obtain ⟨v, hv⟩ := Function.ne_iff.mp hvb
           exact Finset.prod_eq_zero (Finset.mem_univ v)

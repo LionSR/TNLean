@@ -31,12 +31,15 @@ Review: arXiv:2011.12127, Appendix A, "The RVB state".
 
 The entries are integers; the tensors are defined over `ℤ` and cast to `ℂ`.
 
-The bond matrix of the `D = 3` bond is `Y ⊕ 1`, the singlet `Y` on the spin states `0, 1`
-and `1` on the vacuum `2`, so that the bond state is $\lvert01)-\lvert10)+\lvert22)$.
-The review prints only the `2 × 2` matrix `Y` (line 2446); its extension by `0` on the
-vacuum would make every tensor entry vanish, since a singlet leg could then never carry
-the vacuum and no configuration would have three vacuum legs. The general `±Y` orientation
-choices on other lattices and the spin-liquid properties of the state are not formalized.
+The general `±Y` orientation choices on other lattices and the spin-liquid properties of
+the state are not formalized.
+
+**Local fix (singlet on the vacuum):** the review prints the `2 × 2` singlet matrix `Y`
+(line 2446) on a bond of dimension three; extended by `0` on the vacuum `2` it makes every
+tensor entry vanish, since a singlet leg could then never carry the vacuum. The bond matrix
+here is `Y ⊕ 1`, `Y` on the spin states `0, 1` and `1` on the vacuum, so that the bond state
+is $\lvert01)-\lvert10)+\lvert22)$. Documented in
+`docs/paper-gaps/rmp_peps_rvb_bond_vacuum.tex`.
 
 **Scope restriction (torus size):** the covering formula is stated for a torus of width and
 height at least three sites. Documented in
@@ -228,16 +231,10 @@ theorem stateCoeff_rvbPEPS (σ : TorusVertex width height → Fin 2) :
     simp only [hsite, Finset.prod_mul_distrib]
     rw [mul_comm]
     congr 1
-    · exact (Fintype.prod_equiv (Equiv.addRight ((1, 0) : TorusVertex width height)) _ _
-        fun u => by
-          simp only [Equiv.coe_addRight,
-            show u + (1, 0) = (u.1 + 1, u.2) from Prod.ext rfl (add_zero _),
-            add_sub_cancel_right]).symm
-    · exact (Fintype.prod_equiv (Equiv.addRight ((0, 1) : TorusVertex width height)) _ _
-        fun u => by
-          simp only [Equiv.coe_addRight,
-            show u + (0, 1) = (u.1, u.2 + 1) from Prod.ext (add_zero _) rfl,
-            add_sub_cancel_right]).symm
+    · exact prod_torus_sub_fst fun a b =>
+        if c.1.1 b then (rvbSingletY (σ a).castSucc (σ b).castSucc : ℂ) else 1
+    · exact prod_torus_sub_snd fun a b =>
+        if c.1.2 b then (rvbSingletY (σ a).castSucc (σ b).castSucc : ℂ) else 1
   symm
   refine Finset.sum_bij_ne_zero (fun c _ _ => rvbCoveringBonds σ c.1) (fun _ _ _ =>
     Finset.mem_univ _) ?_ ?_ ?_

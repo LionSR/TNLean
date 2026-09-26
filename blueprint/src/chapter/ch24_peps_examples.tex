@@ -78,7 +78,7 @@ $v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
 On a torus of width two the right and left neighbours of a site coincide and
 the two edges joining them are one edge of the lattice graph, so the four
 legs of a site are not four distinct bonds. The contraction formula, and the
-cluster and CZX statements below, therefore require $w,h\ge 3$; the
+cluster, CZX, AKLT and RVB statements below, therefore require $w,h\ge 3$; the
 source constructions are local and apply to every torus
 \cite{gap:rmp_peps_examples_small_torus}.
 
@@ -250,7 +250,7 @@ The two-dimensional AKLT state places singlets on the edges of the lattice and
 projects the four spin-$\tfrac12$ at each site onto their symmetric subspace
 \cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}. Label the basis of
 four spin-$\tfrac12$ by $s=(s_0,s_1,s_2,s_3)\in\{0,1\}^4$, write $|s|$ for the
-number of entries equal to $1$, and let $P_\pi$ be the permutation of the four
+number of entries equal to $1$, and let $P_{\pi}$ be the permutation of the four
 factors by $\pi\in S_4$.
 
 \begin{definition}[Symmetric projector on four spin-$\tfrac12$]%
@@ -259,15 +259,15 @@ factors by $\pi\in S_4$.
         TNLean.PEPS.symProjector}
     \leanok
     The projector onto the symmetric subspace of $(\C^2)^{\otimes 4}$ is
-    $\Pi_{\mathrm{sym}}=\frac{1}{24}\sum_{\pi\in S_4}P_\pi$.
+    $\Pi_{\mathrm{sym}}=\frac{1}{24}\sum_{\pi\in S_4}P_{\pi}$.
 \end{definition}
 
 \begin{lemma}[The symmetric subspace has dimension five]%
     \label{lem:peps_aklt_sym_projector}
     \lean{TNLean.PEPS.legKronecker_mul, TNLean.PEPS.legKronecker_one,
-        TNLean.PEPS.legKronecker_transpose, TNLean.PEPS.comp_perm_eq_iff,
+        TNLean.PEPS.legKronecker_transpose,
         TNLean.PEPS.legPermMatrix_mul, TNLean.PEPS.legPermMatrix_conjTranspose,
-        TNLean.PEPS.legPermMatrix_mul_legKronecker, TNLean.PEPS.card_perm_fin_four,
+        TNLean.PEPS.legPermMatrix_mul_legKronecker,
         TNLean.PEPS.symProjector_mul_self, TNLean.PEPS.symProjector_conjTranspose,
         TNLean.PEPS.symProjector_mul_legKronecker, TNLean.PEPS.legWeight,
         TNLean.PEPS.card_perm_comp_eq, TNLean.PEPS.symProjector_apply,
@@ -282,9 +282,9 @@ factors by $\pi\in S_4$.
 \end{lemma}
 
 \begin{proof}\leanok
-    $P_\pi P_\rho=P_{\rho\pi}$ and $P_\pi^\dagger=P_{\pi^{-1}}$, so the average
+    $P_{\pi}P_{\rho}=P_{\rho\pi}$ and $P_{\pi}^{\dagger}=P_{\pi^{-1}}$, so the average
     over $S_4$ is a Hermitian idempotent, and
-    $P_\pi U^{\otimes 4}=U^{\otimes 4}P_\pi$ by reordering the tensor
+    $P_{\pi} U^{\otimes 4}=U^{\otimes 4}P_{\pi}$ by reordering the tensor
     factors. The number of $\pi$ with
     $s=t\circ\pi$ is $24/\binom{4}{|t|}$ when $|s|=|t|$ and $0$ otherwise, by
     a finite check. The dimension of the range of an idempotent is its trace,
@@ -293,11 +293,12 @@ factors by $\pi\in S_4$.
 
 \begin{definition}[AKLT tensor]%
     \label{def:peps_aklt_tensor}
-    \lean{TNLean.PEPS.akltSingletY, TNLean.PEPS.akltLegs,
+    \lean{TNLean.PEPS.akltLegs,
         TNLean.PEPS.akltSiteTensorFun, TNLean.PEPS.akltSiteTensor,
         TNLean.PEPS.akltPEPS}
     \leanok
-    \uses{def:peps_aklt_sym_projector, def:peps_torus_site_tensor}
+    \uses{def:peps_aklt_sym_projector, def:peps_torus_site_tensor,
+        def:aklt_tensor_review}
     With the singlet matrix
     $Y=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$, the AKLT
     tensor on the square lattice is
@@ -309,7 +310,8 @@ factors by $\pi\in S_4$.
 
 \begin{lemma}[Entries and physical span of the AKLT tensor]%
     \label{lem:peps_aklt_entries}
-    \lean{TNLean.PEPS.akltSingletY_apply, TNLean.PEPS.akltLegs_apply,
+    \lean{Matrix.singletY_apply, Matrix.singletY_mul_transpose,
+        TNLean.PEPS.akltLegs_apply,
         TNLean.PEPS.legWeight_vec, TNLean.PEPS.akltSiteTensorFun_apply,
         TNLean.PEPS.akltLegs_mul_transpose, TNLean.PEPS.span_akltSiteTensorFun}
     \leanok
@@ -337,8 +339,8 @@ factors by $\pi\in S_4$.
 
 \begin{theorem}[$SU(2)$ covariance of the AKLT tensor]%
     \label{thm:peps_aklt_su2}
-    \lean{TNLean.PEPS.mul_akltSingletY, TNLean.PEPS.akltSiteTensor_covariant,
-        TNLean.PEPS.adjugate_eq_star_of_mem_specialUnitaryGroup,
+    \lean{Matrix.mul_singletY, TNLean.PEPS.akltSiteTensor_covariant,
+        Matrix.adjugate_eq_star_of_mem_specialUnitaryGroup,
         TNLean.PEPS.akltSiteTensor_su2_covariant}
     \leanok
     \uses{def:peps_aklt_tensor, lem:peps_aklt_sym_projector}
@@ -348,9 +350,7 @@ factors by $\pi\in S_4$.
         U^{\otimes 4}A=A\,(U\otimes U\otimes\bar U\otimes\bar U).
         \notag
     \end{align}
-    The physical action is the spin-$2$ representation, the restriction of
-    $U^{\otimes 4}$ to the range of $\Pi_{\mathrm{sym}}$. For an arbitrary
-    $2\times 2$ matrix $U$ the same identity holds with $\bar U$ replaced by
+    For an arbitrary $2\times 2$ matrix $U$ the same identity holds with $\bar U$ replaced by
     $(\operatorname{adj}U)^{T}$.
 \end{theorem}
 
@@ -392,7 +392,15 @@ factors by $\pi\in S_4$.
     the product by one site gives the formula.
 \end{proof}
 
-The parent Hamiltonian of the AKLT state, the uniqueness of its ground state,
+The physical index of the tensor above is the label of four spin-$\tfrac12$,
+so the tensor takes values in $(\C^2)^{\otimes 4}$, of dimension $16$, the
+codomain of $\Pi_{\mathrm{sym}}$ in the source formula. Its physical span is
+the five-dimensional symmetric subspace, the spin-$2$ space of the source,
+embedded isometrically in $(\C^2)^{\otimes 4}$; on this subspace the physical
+action $U^{\otimes 4}$ of the covariance theorem is the spin-$2$
+representation. A tensor of physical dimension five, obtained by composing
+with an isometry from the symmetric subspace onto $\C^5$, is not defined, and
+the parent Hamiltonian of the AKLT state, the uniqueness of its ground state,
 the honeycomb lattice, and the identification of $U^{\otimes 4}$ on the
 symmetric subspace with the standard spin-$2$ matrices are not formalized.
 
@@ -413,7 +421,8 @@ $A=P(\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y)$
 dimension three the matrix $Y$ acts on the spin states $0,1$ and is extended by
 $1$ on the vacuum state $2$, so that the bond state is
 $\ket{01}-\ket{10}+\ket{22}$. The extension by $0$ would make every entry of
-$A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state.
+$A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state
+\cite{gap:rmp_peps_rvb_bond_vacuum}.
 
 \begin{definition}[RVB tensor]%
     \label{def:peps_rvb_tensor}
