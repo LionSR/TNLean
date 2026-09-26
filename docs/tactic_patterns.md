@@ -2118,6 +2118,24 @@ abstracted — record why, so it is not re-proposed).
   `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
   separate refactor rather than folded into the action-tensor PR.
 
+### classical choice of a nonzero proportionality scalar — candidate
+- **Pattern:**
+  ```lean
+  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+- **Seen:** three occurrences across two files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
+- **Abstraction:** a definition
+  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
+  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
+  and `lSymbol` then specialize it.
+- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
+  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
+  is left to a separate refactor.
+
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the
   three-stage `simp only` with `mulTensorAssocEquiv`, `Equiv.prodAssoc_apply`,
@@ -2134,6 +2152,27 @@ abstracted — record why, so it is not re-proposed).
 
 Seeded from `scripts/tactic_pattern_scan.py` (2026-07-18 scan; re-run for
 current counts and full location lists).
+
+### ambient left-canonical normalization from a unique full-support MPU block — candidate
+- **Pattern:** from the shifted transfer-trace identity, obtain the sole
+  canonical-form-II block and its unit-modulus weight; use full support to make
+  the block inclusion unitary, then transport the block's left-canonical sum
+  through the intertwining relation to the ambient tensor.
+- **Seen:** two occurrences across two files (2026-09-26): the local
+  `hweightedLeft`/`hAleft` argument in
+  `TNLean/MPS/MPU/TransferStabilization.lean` and
+  `IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening` in
+  `TNLean/MPS/MPU/VirtualUnitaryGauge.lean`.
+- **Abstraction:** the new public theorem
+  `IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening` is reusable for
+  full-support canonical-form-II data. A later refactor can replace the local
+  argument in `TransferStabilization.lean` once its supplied CFII data are
+  presented in that theorem's type.
+- **Notes:** the existing transfer-stabilization theorem requires `1 < D`, so
+  it cannot establish ambient left canonicity for the general positive-bond
+  case. The virtual-gauge proof uses no such extra dimension hypothesis. Two
+  occurrences do not yet meet the three-occurrence promotion threshold for a
+  further generic block-inclusion abstraction.
 
 ### integer-matrix verification of an explicit compression datum — promoted
 - **Pattern:** define every matrix of a worked example as the entrywise

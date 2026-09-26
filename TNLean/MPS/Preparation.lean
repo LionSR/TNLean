@@ -9,3 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Preparation
 
 import TNLean.MPS.Preparation.FixedPointPairs
+import TNLean.MPS.Preparation.IsometricChain
+import TNLean.MPS.Preparation.Sequential

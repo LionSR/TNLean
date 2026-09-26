@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Symmetry.MPOSymmetry
 
+import TNLean.MPS.Symmetry.MPOSymmetry.AnomalyObstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
