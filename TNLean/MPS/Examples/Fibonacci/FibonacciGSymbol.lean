@@ -155,8 +155,12 @@ def fibBondLetter : (f : Fin 2) → Fin (fibBlockDim f) → Fin 2 × Fin 2
   | 0 => ![(0, 0), (1, 1)]
   | 1 => fibLetter
 
-/-- The physical letters of the source's tensor: pairs (plaquette, edge label) in the order
-`(1, 1)`, `(1, τ)`, `(τ, 1)`, `(τ, τ)`. -/
+/-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 1262–1266 (eq. `StringnetMPO`, figure
+`StringNetMPO_RHS.pdf`) and line 1040: each physical leg of the string-net operator tensor carries
+the label of the plaquette it bounds and the label of the edge the operator line crosses, both in
+`{1, τ}`; reading a physical letter as this pair follows the figure. The ordering
+`(1, 1)`, `(1, τ)`, `(τ, 1)`, `(τ, τ)` of the pairs on `Fin 4` is a convention of this
+development. -/
 def fibSiteLetter : Fin 4 → Fin 2 × Fin 2 := ![(0, 0), (0, 1), (1, 0), (1, 1)]
 
 /-- The physical letter with plaquette `x` and edge label `τ`. -/

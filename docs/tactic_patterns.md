@@ -446,27 +446,6 @@ abstracted — record why, so it is not re-proposed).
   `-150` lines). The shift uses only `mpo_apply_eq_sum_cyclic`, because its surviving
   configuration is the input configuration and exists only when the output is its rotation.
 
-### diagonal bond similarity with nowhere-zero entries — promoted
-- **Pattern:**
-  ```lean
-  have hGH : Matrix.diagonal g * Matrix.diagonal g⁻¹ = 1 := by
-    rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    congr 1
-    funext p
-    exact mul_inv_cancel₀ (hg p)
-  have hHG : Matrix.diagonal g⁻¹ * Matrix.diagonal g = 1 := by
-    ...
-  exact MPOTensor.mpo_eq_of_conj hGH hHG hconj L
-  ```
-- **Seen:** three occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
-  (`mpo_fibStringNetEdgeTau`, `mpo_fibReviewTensor`, and the configuration-space variant in
-  `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review before merge.
-- **Abstraction:** `Matrix.diagonal_mul_diagonal_inv`, `Matrix.diagonal_inv_mul_diagonal` and
-  `MPOTensor.mpo_eq_of_diagonal_conj` in `TNLean/MPS/MPDO/BondSimilarity.lean`.
-- **Notes:** `mpo_eq_of_diagonal_conj g hg hconj L` takes a nowhere-zero `g` and the letterwise
-  identity `diag g * M i j * diag g⁻¹ = N i j`; the two `Matrix` lemmas cover diagonal
-  inverses on any index type, such as the configuration space of a fusion-rule transfer.
-
 ### SAL nonvanishing of the physical-trace transfer — promoted
 - **Pattern:** contradict the positive-length trace clause in `IsSAL` at one
   site by rewriting the periodic trace as the trace of the vertical loop and
@@ -2236,6 +2215,28 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
+
+### diagonal bond similarity with nowhere-zero entries — candidate
+- **Pattern:**
+  ```lean
+  have hGH : Matrix.diagonal g * Matrix.diagonal g⁻¹ = 1 := by
+    rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
+    congr 1
+    funext p
+    exact mul_inv_cancel₀ (hg p)
+  have hHG : Matrix.diagonal g⁻¹ * Matrix.diagonal g = 1 := by
+    ...
+  exact MPOTensor.mpo_eq_of_conj hGH hHG hconj L
+  ```
+- **Seen:** three occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
+  (`mpo_fibStringNetEdgeTau`, `mpo_fibReviewTensor`, and the configuration-space variant in
+  `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review before merge.
+- **Status:** three occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
+- **Abstraction (available):** `Matrix.diagonal_mul_diagonal_inv`, `Matrix.diagonal_inv_mul_diagonal` and
+  `MPOTensor.mpo_eq_of_diagonal_conj` in `TNLean/MPS/MPDO/BondSimilarity.lean`.
+- **Notes:** `mpo_eq_of_diagonal_conj g hg hconj L` takes a nowhere-zero `g` and the letterwise
+  identity `diag g * M i j * diag g⁻¹ = N i j`; the two `Matrix` lemmas cover diagonal
+  inverses on any index type, such as the configuration space of a fusion-rule transfer.
 
 ### virtual-leg cancellation in source-gate contractions — candidate
 - **Pattern:** express the two transported source factors as matrices on the
