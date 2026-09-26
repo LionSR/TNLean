@@ -791,6 +791,7 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \begin{proof}
     \leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_cyclic_invariant_gauge}
     Both fusion trees intertwine two letters with the target:
     $X R^{a}R^{b}=\widehat T^{a}XR^{b}$ for $X=\hat V\otimes\Id$ and
     $X=\Id\otimes\hat V$ and all letters $a,b$, and on a single letter
@@ -835,7 +836,10 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_czx_decorated_operator}
+    \uses{thm:asymex_czx_decorated_operator,
+        thm:asymex_czx_decorated_anomaly_class,
+        thm:mpug_involution_anomaly_ratio,
+        thm:mpug_permuted_block_l_compatibility}
     For $c\in\{0,1\}$ the spin flip of the constant configuration $c^N$ is
     $(1-c)^N$, and $q((1-c)^N)+|(1-c)^N|=N(1-c)^2+N(1-c)=2N(1-c)$. By
     Theorem~\ref{thm:asymex_czx_decorated_operator},
