@@ -183,32 +183,175 @@ injective.
 
 \section{Exact factorizations of the isometry}
 
-\begin{theorem}[Sequential factorization]
-    \label{thm:ldp_sequential_factorization}
-    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_left_canonical}
-    Suppose $\mathcal B_q$ is injective and let $V$ be as in
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
-    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and isometries
-    $W_k\colon\C^{D'_k}\to\C^d\otimes\C^{D'_{k+1}}$ for $k=1,\dots,q$, such that
+\begin{theorem}[Successive decompositions with a matrix remainder]
+    \label{thm:ldp_sweep_matrix_remainder}
+    \lean{MPSPreparation.exists_isometric_chain_mul,
+        MPSPreparation.sum_star_mulVec_dotProduct_of_isIsometryOn,
+        MPSPreparation.sum_star_eval_mulVec_dotProduct}
+    \leanok
+    \uses{def:seqanc_isometry_on, def:seqanc_support}
+    Let $a\le D$, let $R_{-1}\in\MN{D}$ be row-supported below $a$, and let
+    $P_0,\dots,P_{n-1}$ be families of $D\times D$ matrices. Then there are
+    $b_0=a$ and $b_1,\dots,b_n\le D$, families $Q_0,\dots,Q_{n-1}$ such that
+    $Q_p^i$ is row-supported below $b_p$, vanishes on the columns
+    $\beta\ge b_{p+1}$, and $Q_p$ is isometric on its first $b_{p+1}$ columns,
+    and a matrix $R$ row-supported below $b_n$, such that for every
+    configuration $\sigma$
     \begin{align}
-        V
-         & =\bigl(\Id_{d}^{\otimes(q-1)}\otimes W_q\bigr)\cdots
-        \bigl(\Id_d\otimes W_2\bigr)W_1,
-        \label{eq:ldp_sequential_factorization}
+        R_{-1}\,P^\sigma
+         & =Q^\sigma\,R.
+        \label{eq:ldp_sweep_matrix_remainder}
     \end{align}
-    where $\C^{D'_1}$ is identified with $\C^D\otimes\C^D$ and the $k$-th
-    tensor factor $\C^d$ is the $k$-th site of the block. This is
-    \cite[eqs.~(13)--(15)]{Malz2024Preparation}.
+    Moreover $b_{p+1}\le c$ whenever every $P_p^i$ vanishes on the columns
+    $\gamma\ge c$. If $Q$ is isometric on its first $b$ columns and $v,w$ are
+    supported below $b$, then
+    $\sum_i\langle Q^iv,Q^iw\rangle=\langle v,w\rangle$. Consequently, if
+    $Q_p^i$ is row-supported below $b_p$, $Q_p$ is isometric on its first
+    $b_{p+1}$ columns, and $v,w$ are supported below $b_n$, then
+    \begin{align}
+        \sum_\sigma\langle Q^\sigma v,Q^\sigma w\rangle
+         & =\langle v,w\rangle.
+        \label{eq:ldp_sweep_inner_product}
+    \end{align}
 \end{theorem}
 \begin{proof}
-    $V=\mathcal B_qP^{-1}$ is an open-boundary matrix product map with bond
-    dimension at most $D^2$: the site matrices are $A^i\otimes\Id_D$, which carry
-    the right virtual index along the block, and $P^{-1}$ is absorbed into the
-    first site. Make the site maps $W_q,\dots,W_2$ isometric by the successive
-    decompositions of Theorem~\ref{thm:seqanc_left_canonical}. Then
-    $V^\dagger V=W_1^\dagger W_1$, so $W_1$ is an isometry because $V$ is
-    \cite[eq.~(15)]{Malz2024Preparation}.
+    \leanok
+    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
+    By induction on $n$. For $n=0$ take $R=R_{-1}$. Otherwise apply
+    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
+    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
+    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$:
+    \begin{align}
+        R_{-1}P_0^{\sigma_0}P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
+         & =Q_0^{\sigma_0}R_0P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
+        =Q_0^{\sigma_0}Q_1^{\sigma_1}\cdots Q_{n-1}^{\sigma_{n-1}}R.
+        \notag
+    \end{align}
+    For one site, expand
+    \begin{align}
+        \sum_i\langle Q^iv,Q^iw\rangle
+         & =\sum_{\beta,\beta'<b}\overline{v_\beta}w_{\beta'}
+        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}
+        =\sum_{\beta<b}\overline{v_\beta}w_\beta
+        \notag
+    \end{align}
+    by the isometry condition. For the chain, write
+    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
+    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
+    vectors $Q'^{\sigma'}v$ and $Q'^{\sigma'}w$ are supported below $b_1$ by
+    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity for
+    $Q_0$ and the induction hypothesis for $Q'$ give
+    \begin{align}
+        \sum_{\sigma_0,\sigma'}
+        \langle Q_0^{\sigma_0}Q'^{\sigma'}v,Q_0^{\sigma_0}Q'^{\sigma'}w\rangle
+         & =\sum_{\sigma'}\langle Q'^{\sigma'}v,Q'^{\sigma'}w\rangle
+        =\langle v,w\rangle.
+        \notag
+    \end{align}
 \end{proof}
+
+\begin{theorem}[Sequential factorization of a matrix product isometry]
+    \label{thm:ldp_sequential_factorization_general}
+    \lean{MPSPreparation.exists_isometric_chain_of_eq_mul}
+    \leanok
+    Let $A$ have bond dimension $D$, let $G$ be a $D^2\times D^2$ matrix, and
+    let $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$, $q\ge1$, be an isometry
+    with matrix elements
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}\,
+        G_{(\alpha,\beta),x}$.
+    Then there are integers $b_0=1$, $b_q=D^2$ and $b_p\le D^2$, and families
+    of $b_{p-1}\times b_p$ matrices $X_p^i$, $p=1,\dots,q$, with
+    $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$ for every $p$, such that
+    $\bra{i_1\cdots i_q}V\ket{x}=(X_1^{i_1}X_2^{i_2}\cdots X_q^{i_q})_{1x}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    The matrix elements of $V$ are
+    $\bigl(j^{\mathsf T}(\Id_D\otimes A^{i_1})\cdots(\Id_D\otimes A^{i_q})G\bigr)_x$
+    with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder} to the row matrix of $j$ and the
+    sites $\Id_D\otimes A^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
+    remainder $C=RG$ with $V=Q\,C$ in the sense of
+    (\ref{eq:ldp_sweep_matrix_remainder}). By
+    (\ref{eq:ldp_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
+    isometry because $V$ is. Absorb $C$ into the last site, $X_q^i=Q_q^iC$ and
+    $X_p=Q_p$ for $p<q$; the last site is again isometric,
+    $\sum_i C^\dagger(Q_q^i)^\dagger Q_q^iC=C^\dagger C=\Id$.
+\end{proof}
+
+\begin{theorem}[Sequential factorization]
+    \label{thm:ldp_sequential_factorization}
+    \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition}
+    Suppose $\mathcal B_q$ is injective, $q\ge1$, and let $V$ be as in
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
+    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and matrices
+    $W_k^i\in\C^{D'_{k+1}\times D'_k}$ for $k=1,\dots,q$ and $i=1,\dots,d$, with
+    \begin{align}
+        \sum_{i=1}^d\bigl(W_k^i\bigr)^\dagger W_k^i
+         & =\Id_{D'_k}
+        \quad\text{and}\quad
+        \bra{i_1\cdots i_q}V\ket{x}
+        =\bigl(W_q^{i_1}W_{q-1}^{i_2}\cdots W_1^{i_q}\bigr)_{1x}
+        \label{eq:ldp_sequential_factorization}
+    \end{align}
+    for every $k$, every configuration $i_1\cdots i_q$ and every $x$, where $\C^{D'_1}$ is
+    identified with $\C^D\otimes\C^D$. This is the matrix product form of
+    \cite[eqs.~(13)--(15)]{Malz2024Preparation}, where the isometry carrying the
+    input is written $\widetilde C=V_1$. The block length $q\ge1$ is implicit
+    in the source, which draws at least one site; the empty block $q=0$ is
+    excluded, see~\cite{gap:mswc24_sequential_factorization_positive_block_length}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_tensor_injective,
+        thm:ldp_sequential_factorization_general}
+    Since $\mathcal B_q$ is injective, $P$ is positive definite and
+    $V=\mathcal B_qP^{-1}$, so
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$.
+    This is an open-boundary matrix product map with bond dimension at most
+    $D^2$: the site matrices are $\Id_D\otimes A^i$ (the source writes
+    $A^i\otimes\Id_D$; the order of the two bond factors only permutes the
+    bond index), the two bond factors are
+    joined at the left end, and $P^{-1}$ is absorbed into the right end
+    \cite[eq.~(13)]{Malz2024Preparation}. Theorem~\ref{thm:ldp_sequential_factorization_general}
+    with $G=P^{-1}$ makes every site isometric by successive decompositions
+    from the left \cite[eq.~(14)]{Malz2024Preparation}; the remainder at the
+    input end is an isometry because $V$ is
+    \cite[eq.~(15)]{Malz2024Preparation}. The sites of that theorem are
+    numbered from the output end and those here from the input end, so its
+    $p$-th site is the site $q+1-p$ here, $X_p^i=W_{q+1-p}^i$ for
+    $p=1,\dots,q$, which turns $(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ into
+    $(W_q^{i_1}\cdots W_1^{i_q})_{1x}$ and $b_p$ into $D'_{q+1-p}$.
+\end{proof}
+
+\begin{remark}[Sequential factorization as a composition of isometries]
+    \label{rem:ldp_sequential_factorization_composition}
+    \uses{thm:ldp_sequential_factorization}
+    The source states Theorem~\ref{thm:ldp_sequential_factorization} as an
+    ordered composition. With the matrices of
+    (\ref{eq:ldp_sequential_factorization}), let
+    $W_k\colon\C^{D'_k}\to\C^{D'_{k+1}}\otimes\C^d$ be the map with
+    $\bra{\alpha,i}W_k\ket{\beta}=(W_k^i)_{\alpha\beta}$. The first identity in
+    (\ref{eq:ldp_sequential_factorization}) says that $W_k$ is an isometry,
+    $W_k^\dagger W_k=\sum_i(W_k^i)^\dagger W_k^i=\Id_{D'_k}$. Expanding the
+    composition in the product basis, with the tensor factor $\C^d$ of $W_k$
+    placed at the site $q+1-k$ of the block and $\C^{D'_{q+1}}=\C$, the second
+    identity becomes
+    \begin{align}
+        V
+         & =\bigl(W_q\otimes\Id_{d}^{\otimes(q-1)}\bigr)\cdots
+        \bigl(W_2\otimes\Id_d\bigr)W_1,
+        \label{eq:ldp_sequential_factorization_composition}
+    \end{align}
+    which is \cite[eqs.~(13)--(15)]{Malz2024Preparation} as printed. This
+    operator form is not formalized; the formal statement is the matrix product
+    form (\ref{eq:ldp_sequential_factorization}).
+\end{remark}
 
 \begin{theorem}[Uniqueness of the polar decomposition]
     \label{thm:ldp_polar_uniqueness}
