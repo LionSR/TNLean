@@ -1254,7 +1254,10 @@ involve no boundary.
   `MPOTensor.GroupFamily.IsNormalRepresentation.nonempty_fusionData`, and
   `MPOTensor.GroupFamily.IsNormalRepresentation.isMPOFusionAlgebra`.
 - **Caveat:** weaker than the source's injectivity, and it carries neither
-  unitarity, simplicity, nor the identity law $U_e=\mathbb 1$; the anomaly
+  unitarity, simplicity, nor the identity law $U_e=\mathbb 1$. The lemma at
+  `REsubmission.tex` line 1211 lists $U_e=\mathbb 1$, but the fusion-tensor
+  statement it rests on (line 1001) assumes only $U_gU_h=U_{gh}$ and
+  injectivity, and line 1216 allows $U_e$ to be a projector. The anomaly
   three-cocycle is defined under this hypothesis alone.
 
 ### `MPOTensor.GroupFamily.FusionData`

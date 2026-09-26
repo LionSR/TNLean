@@ -146,7 +146,10 @@ whose lemma on fusion tensors asks for an injective, not necessarily unitary,
 representation.  Normality of the tensors is weaker than injectivity and is the
 hypothesis under which the fusion tensors exist, see
 `MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors`.  Neither
-unitarity nor the identity law `U_e = 1` is required. -/
+unitarity nor the identity law `U_e = 1` is required: the lemma at line 1211 lists `U_e = 1`
+among its hypotheses, but the fusion-tensor statement it quotes from Molnár et al. assumes only
+`U_g U_h = U_{gh}` and injectivity (line 1001), and line 1216 remarks that `U_e = 1` can be
+weakened to `U_e` a projector. -/
 structure IsNormalRepresentation (F : GroupFamily G d) : Prop where
   /-- Every doubled-index tensor `T_g` is normal. This is weaker than the injectivity of
   arXiv:2203.12563, `REsubmission.tex` line 1211, which it replaces. -/
