@@ -7,6 +7,7 @@ import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Data.ZMod.Defs
 import Mathlib.Tactic.Group
 import TNLean.PEPS.GInjective
+import TNLean.PEPS.TorusVirtualString
 
 /-!
 # Quantum double models: the primal and dual PEPS tensors
@@ -38,7 +39,10 @@ affect the physical state" (line 2465).
 * the virtual labels of the primal tensor satisfy `t r b⁻¹ l⁻¹ = 1` on its support, so for
   every representation `π` of `G`, in particular every irreducible one, the primal tensor
   absorbs the virtual operator `π(t) π(r) π(b)⁻¹ π(l)⁻¹` acting on its four legs; for a
-  one-dimensional representation this is a scalar invariance of the tensor.
+  one-dimensional representation this is a scalar invariance of the tensor;
+* placed at every site of the torus, the primal tensor has this symmetry as a network: the
+  virtual string that multiplies `π(g)` for each bond with label `g` it crosses can be pulled
+  through every rectangle of sites of the contracted network.
 The toric code is the instance `G = ℤ₂`.
 
 **Local fix (normalization and representation):** colours are shifted by right
@@ -49,13 +53,11 @@ normalizes the tensor, so `G`-isometry holds with the factor `|G|` (see
 `TNLean.PEPS.IsGIsometric`).
 Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
-**Scope restriction (single tensor):** the review's statements about the whole network are
-not formalized: the virtual symmetry of the primal PEPS under every irreducible representation
-is proved as an identity of one tensor, not as a matrix product operator symmetry of the
-contracted lattice, and the identification of the equal-weight superposition of plaquette
-colorings with that of the Gauss-law configurations (lines 2460–2461) is not stated; on a
-torus the differences of plaquette colorings are the Gauss-law configurations of trivial
-holonomy. Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+**Scope restriction (Gauss-law superposition):** the identification of the equal-weight
+superposition of plaquette colorings with that of the Gauss-law configurations
+(lines 2460–2461) is not stated; on a torus the differences of plaquette colorings are the
+Gauss-law configurations of trivial holonomy. Documented in
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 ## Main definitions
 
@@ -64,6 +66,8 @@ holonomy. Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`
 * `TNLean.PEPS.colorShiftRep`: the simultaneous shift of the four colors.
 * `TNLean.PEPS.quantumDoublePrimalLabels`, `TNLean.PEPS.quantumDoublePrimalTensor`: the
   primal tensor of the review.
+* `TNLean.PEPS.quantumDoublePrimalSiteTensor`, `TNLean.PEPS.quantumDoublePrimalPEPS`: the
+  primal tensor at every site of the torus.
 
 ## Main results
 
@@ -73,7 +77,10 @@ holonomy. Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`
 * `TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_one`,
   `TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_map_mul_eq_one`,
   `TNLean.PEPS.quantumDoublePrimalTensor_smul_map_mul`,
-  `TNLean.PEPS.character_mul_quantumDoublePrimalTensor`.
+  `TNLean.PEPS.character_mul_quantumDoublePrimalTensor`,
+  `TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_mul`.
+* `TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq`: the virtual
+  symmetry of the contracted primal network.
 
 ## References
 
@@ -316,8 +323,8 @@ tensor. For every representation `π` of `G` by elements of a `ℂ`-algebra `M`,
 matrices of an irreducible representation, the primal tensor absorbs the virtual operator
 `π(t) π(r) π(b)⁻¹ π(l)⁻¹` that acts by `π` on the top and right legs and by `π⁻¹` on the down
 and left legs: each entry times this operator equals the same entry times the identity of `M`.
-The matrix product operator symmetry of the contracted lattice is not stated (see the scope
-restriction in the module docstring). -/
+The symmetry of the contracted network is
+`sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq`. -/
 theorem quantumDoublePrimalTensor_smul_map_mul {M : Type*} [Ring M] [Algebra ℂ M]
     (π : G →* M) (t r b l : G) (g : G × G × G × G) :
     quantumDoublePrimalTensor G t r b l g • (π t * π r * π b⁻¹ * π l⁻¹) =
@@ -337,6 +344,71 @@ theorem character_mul_quantumDoublePrimalTensor (χ : G →* ℂˣ) (t r b l : G
   · rw [h, mul_zero]
   · rw [← map_inv, ← map_inv, quantumDoublePrimalTensor_ne_zero_map_mul_eq_one χ h,
       Units.val_one, one_mul]
+
+/-- On the support of the primal tensor the paths through the top and right legs and through
+the left and down legs carry the same group element, `t r = l b`. -/
+theorem quantumDoublePrimalTensor_ne_zero_mul_eq_mul {t r b l : G} {g : G × G × G × G}
+    (h : quantumDoublePrimalTensor G t r b l g ≠ 0) : t * r = l * b := by
+  have h1 := quantumDoublePrimalTensor_ne_zero_mul_eq_one h
+  calc t * r = t * r * b⁻¹ * l⁻¹ * (l * b) := by group
+    _ = l * b := by rw [h1, one_mul]
+
+/-! ### The primal tensor on the torus -/
+
+variable (G) [Fintype G]
+
+/-- The primal tensor with its virtual labels and its four edge spins enumerated,
+`G ≃ Fin |G|` and `G⁴ ≃ Fin |G|⁴`, so that it can be placed on the torus. -/
+noncomputable def quantumDoublePrimalSiteTensor (t r b l : Fin (Fintype.card G))
+    (s : Fin (Fintype.card (G × G × G × G))) : ℂ :=
+  quantumDoublePrimalTensor G ((Fintype.equivFin G).symm t) ((Fintype.equivFin G).symm r)
+    ((Fintype.equivFin G).symm b) ((Fintype.equivFin G).symm l)
+    ((Fintype.equivFin (G × G × G × G)).symm s)
+
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2451–2457. The
+primal quantum-double PEPS: the primal tensor at every site of the `width × height` torus. -/
+noncomputable def quantumDoublePrimalPEPS (width height : ℕ) [NeZero width] [NeZero height]
+    [Fact (1 < width)] [Fact (1 < height)] :
+    Tensor (torusGraph width height) (Fintype.card (G × G × G × G)) :=
+  torusSiteTensor (quantumDoublePrimalSiteTensor G)
+
+variable {G}
+
+/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2465, for the
+contracted network. For every representation `π` of `G` by elements of a `ℂ`-algebra `M`,
+such as the matrices of an irreducible representation, consider the virtual string that
+multiplies `π(g)` for each bond with label `g` it crosses. In the contracted primal PEPS on the
+torus this string can be pulled through every rectangle of sites: inserted along the left and
+bottom sides of the rectangle it gives the same network as inserted along its top and right
+sides. Around one site the two paths are `π(l) π(b)` and `π(t) π(r)`, so the closed string
+around a site is `π(t) π(r) π(b)⁻¹ π(l)⁻¹`, with `π` on the top and right legs and `π⁻¹` on
+the down and left legs.
+
+arXiv:1001.3807 does not treat the primal tensor; its string deformation,
+`Papers/1001.3807/paper_v3.tex` lines 1624–1648, concerns strings of `U_g` on the `G`-injective
+(dual) tensor, and the review's bimodule remark (line 2467) assigns the group-labelled string
+operators to the dual tensor and the representation-labelled ones to the primal tensor.
+
+The statement holds on every torus of width and height at least two. On a torus of width or
+height two the left and right (or down and top) legs of a site are one edge of the lattice
+graph, so the source's network, with four distinct bonds at each site, is the case of width and
+height at least three (`docs/paper-gaps/rmp_peps_examples_small_torus.tex`); no hypothesis is
+needed for the pulling-through identity itself. -/
+theorem sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq {M : Type*} [Semiring M]
+    [Module ℂ M] (π : G →* M) {width height : ℕ} [NeZero width] [NeZero height]
+    [Fact (1 < width)] [Fact (1 < height)]
+    (σ : TorusVertex width height → Fin (Fintype.card (G × G × G × G)))
+    (v₀ : TorusVertex width height) (m n : ℕ) :
+    ∑ η : VirtualConfig (quantumDoublePrimalPEPS G width height),
+        (∏ v, (quantumDoublePrimalPEPS G width height).component v (fun ie => η ie.1) (σ v)) •
+          torusWestSouthString (fun α => π ((Fintype.equivFin G).symm α)) η v₀ m n =
+      ∑ η : VirtualConfig (quantumDoublePrimalPEPS G width height),
+        (∏ v, (quantumDoublePrimalPEPS G width height).component v (fun ie => η ie.1) (σ v)) •
+          torusNorthEastString (fun α => π ((Fintype.equivFin G).symm α)) η v₀ m n :=
+  sum_smul_torusWestSouthString_eq (quantumDoublePrimalSiteTensor G) _
+    (fun _ _ _ _ _ h => by
+      rw [← map_mul π, ← map_mul π]
+      exact congrArg π (quantumDoublePrimalTensor_ne_zero_mul_eq_mul h)) σ v₀ m n
 
 end Primal
 
