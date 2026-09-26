@@ -513,15 +513,61 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
 
-The correlation estimate below rests on four ingredients, which are proved
-first. For an operator $X$ on $(\C^d)^{\otimes L}$ write $\E_X$ for the map
+The correlation estimate below rests on the following lemmas, which are
+proved first. For an operator $X$ on $(\C^d)^{\otimes L}$ write $\E_X$ for the map
 $Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$ on $\MN{D}$, where
 $w,w'$ run over words of length $L$ and $A^w$ is the product of the matrices
 of $A$ along $w$.
 
+\begin{lemma}[Inserted transfer maps of products and adjoints]
+    \label{lem:ldp_observable_transfer_products}
+    \lean{MPSTensor.physicalObservableTransfer_apply, MPSTensor.appendObservable,
+        MPSTensor.appendObservable_apply, MPSTensor.appendObservable_append,
+        MPSTensor.appendObservable_mul, MPSTensor.appendObservable_one_one,
+        MPSTensor.physicalObservableTransfer_appendObservable,
+        MPSTensor.physicalObservableTransfer_one,
+        MPSTensor.physicalObservableTransfer_conjTranspose,
+        MPSTensor.inner_mpvState_toEuclideanLin}
+    \leanok
+    \uses{def:transfer_map}
+    For operators $X,X'$ on $(\C^d)^{\otimes L_1}$ and $Y,Y'$ on
+    $(\C^d)^{\otimes L_2}$, with $X\otimes Y$ acting on $L_1+L_2$ consecutive
+    sites,
+    \begin{align}
+        (X\otimes Y)(X'\otimes Y')
+         & =XX'\otimes YY',
+         &
+        \E_{X\otimes Y}
+         & =\E_X\,\E_Y,
+        \notag                       \\
+        \E_{\Id}
+         & =\E_A^{\,L},
+         &
+        \E_{X^\dagger}(Z)
+         & =\E_X(Z^\dagger)^\dagger.
+        \notag
+    \end{align}
+    For an operator $O$ on $(\C^d)^{\otimes N}$ and the unnormalized vector
+    $\ket{\phi_N(A)}$ of (\ref{eq:ldp_ti_mps}),
+    $\bra{\phi_N(A)}O\ket{\phi_N(A)}=\operatorname{tr}\E_O$, the trace of a
+    linear map on $\MN{D}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A word of length $L_1+L_2$ is the concatenation $ww'$ of words of lengths
+    $L_1$ and $L_2$, with $A^{ww'}=A^wA^{w'}$ and
+    $\bra{ww'}X\otimes Y\ket{vv'}=\bra{w}X\ket{v}\bra{w'}Y\ket{v'}$; summing
+    gives $\E_{X\otimes Y}=\E_X\E_Y$, and $\E_{\Id}=\E_A^{\,L}$ follows by
+    induction on $L$. The adjoint formula is the conjugate of the defining sum.
+    Writing $\braket{w}{\phi_N(A)}=\Tr A^w$ and expanding
+    $\sum_{w,w'}\overline{\Tr A^{w'}}\bra{w'}O\ket{w}\Tr A^w$ in matrix units
+    gives the trace of $\E_O$.
+\end{proof}
+
 \begin{lemma}[Every map is an inserted transfer map]
     \label{lem:ldp_observable_transfer_surjective}
-    \lean{MPSTensor.exists_physicalObservableTransfer_eq}
+    \lean{MPSTensor.exists_physicalObservableTransfer_eq,
+        MPSTensor.exists_isHermitian_physicalObservableTransfer_eq}
     \leanok
     \uses{def:transfer_map}
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$. Then every
@@ -530,19 +576,62 @@ of $A$ along $w$.
     ``we can always choose $\mathcal O$ (and $\mathcal O'$), such that the
     corresponding transfer matrix $E_{\mathcal O}=\ket{A}\bra{B}$ for
     arbitrary $A,B$ (up to a normalization constant)'' in the proof of
-    \cite[Lemma~2]{Malz2024Preparation}.
+    \cite[Lemma~2]{Malz2024Preparation}. If moreover
+    $\Phi(Z^\dagger)=\Phi(Z)^\dagger$ for every $Z$, then $X$ can be chosen
+    Hermitian.
 \end{lemma}
 \begin{proof}
     \leanok
     Choose coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$. The operator
     with matrix elements $\bra{w'}X\ket{w}=c^{ab}_w\overline{c^{ce}_{w'}}$ gives
     $\E_X(Z)=e_{ab}Ze_{ec}=Z_{be}\,e_{ac}$. These maps span all linear maps on
-    $\MN{D}$, and $X\mapsto\E_X$ is linear.
+    $\MN{D}$, and $X\mapsto\E_X$ is linear. If $\Phi$ preserves adjoints and
+    $\E_X=\Phi$, then by
+    Lemma~\ref{lem:ldp_observable_transfer_products} also
+    $\E_{X^\dagger}=\Phi$, so the Hermitian part $(X+X^\dagger)/2$ has the
+    same map.
+\end{proof}
+
+\begin{lemma}[Two windows on the ring]
+    \label{lem:ldp_two_window_trace}
+    \lean{MPSTensor.chainWindowOperator_apply,
+        MPSTensor.chainWindowOperator_add_left,
+        MPSTensor.chainWindowOperator_add_right,
+        MPSTensor.chainWindowOperator_self, MPSTensor.chainWindowOperator_one,
+        MPSTensor.chainWindowOperator_zero_eq_appendObservable,
+        MPSTensor.chainWindowOperator_add_eq_appendObservable,
+        MPSTensor.inner_mpvState_chainWindowOperator_mul,
+        MPSTensor.inner_mpvState_chainWindowOperator_mul_eq_physicalTwoPointExpectation,
+        MPSTensor.mpvExpectation_eq_div}
+    \leanok
+    \uses{lem:ldp_observable_transfer_products}
+    Let $X,Y$ be operators on $(\C^d)^{\otimes L}$ with $L\ge1$, let
+    $m,n\ge0$ and $N=2L+m+n$, and let $X_1$ act on the sites $1,\dots,L$ and
+    $Y_{L+m+1}$ on the sites $L+m+1,\dots,2L+m$ of a ring of $N$ sites. Then
+    \begin{align}
+        \bra{\phi_N(A)}X_1Y_{L+m+1}\ket{\phi_N(A)}
+         & =\operatorname{tr}\bigl(\E_X\,\E_A^{\,m}\,\E_Y\,\E_A^{\,n}\bigr).
+        \notag
+    \end{align}
+    The expectation in the normalized vector $\ket{\phi_N}$ is
+    $\bra{\phi_N(A)}O\ket{\phi_N(A)}/\braket{\phi_N(A)}{\phi_N(A)}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    An operator on a window that does not wrap around the ring is the tensor
+    product of the identity on the sites before it, the operator on the window,
+    and the identity on the sites after it. Hence $X_1Y_{L+m+1}$ is
+    $X\otimes\Id\otimes Y\otimes\Id$ over the blocks of lengths $L,m,L,n$, and
+    Lemma~\ref{lem:ldp_observable_transfer_products} gives the trace formula.
 \end{proof}
 
 \begin{lemma}[The limit correlator at an eigenvector]
     \label{lem:ldp_limit_correlator_eigenvalue}
-    \lean{MPSTensor.limitCorrelator, MPSTensor.exists_limitCorrelator_eq_pow}
+    \lean{MPSTensor.limitCorrelator, MPSTensor.exists_limitCorrelator_eq_pow,
+        MPSTensor.limitCorrelator_smul_smul, MPSTensor.limitCorrelator_zero_left,
+        MPSTensor.limitCorrelator_zero_right,
+        MPSTensor.trace_eq_zero_of_transferMap_eq_smul,
+        MPSTensor.compl_pow_apply_of_transferMap_eq_smul}
     \leanok
     \uses{def:transfer_map}
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
@@ -556,7 +645,7 @@ of $A$ along $w$.
     \end{align}
     When $\rho$ is the fixed point of the gauge (\ref{eq:ldp_normal_gauge}),
     the left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
-    $t=s-L-1$. This is the choice of observables in the proof of
+    $t=s-L-1$; it is bilinear in $(X,Y)$. This is the choice of observables in the proof of
     \cite[Lemma~2]{Malz2024Preparation}, without the source's requirement that
     the one-point functions vanish.
 \end{lemma}
@@ -608,6 +697,92 @@ of $A$ along $w$.
     Cauchy--Schwarz inequality to both terms.
 \end{proof}
 
+\begin{lemma}[Hermitian observables for the second eigenvalue]
+    \label{lem:ldp_hermitian_observables}
+    \lean{MPSTensor.exists_hermitian_vector_functional_compl_pow,
+        MPSTensor.exists_normalized_observables_limitCorrelator}
+    \leanok
+    \uses{lem:ldp_limit_correlator_eigenvalue,
+        lem:ldp_observable_transfer_surjective}
+    Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
+    $\sum_i(A^i)^\dagger A^i=\Id$, let $\rho$ be Hermitian with $\Tr\rho=1$,
+    put $P(Z)=\Tr(Z)\,\rho$, and let $\lambda\neq0,1$ be an eigenvalue of
+    $\E_A$. Then there are Hermitian operators $\mathcal O,\mathcal O'$ on
+    $(\C^d)^{\otimes L}$ of norm one, an integer $K\in\{1,2\}$ with $K=1$ when
+    $\lambda$ is real, distinct complex numbers $\mu_1,\dots,\mu_K$ of modulus
+    one and a nonzero $a\in\C^K$ such that for every $t\ge0$
+    \begin{align}
+        \Tr\Bigl(\E_{\mathcal O}\bigl((\E_A-P)^t
+        \bigl(\E_{\mathcal O'}(\rho)\bigr)\bigr)\Bigr)
+         & =\lvert\lambda\rvert^t\sum_{j=1}^Ka_j\mu_j^{\,t}.
+        \notag
+    \end{align}
+    This replaces the choice of observables in the proof of
+    \cite[Lemma~2]{Malz2024Preparation} by one with Hermitian observables: for
+    non-real $\lambda$ the eigenvector is not Hermitian, and a Hermitian
+    observable pairs it with its adjoint, an eigenvector for $\bar\lambda$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    This is the second and third paragraph of the proof of
+    Theorem~\ref{thm:ldp_decaying_correlations}: a Hermitian vector $v$ and a
+    functional $\ell$ with $\ell(Z^\dagger)=\overline{\ell(Z)}$ are built from
+    an eigenvector $R$ and its adjoint, the maps $Z\mapsto\Tr(Z)\,v$ and
+    $Z\mapsto\ell(Z)\,\rho$ are realized by Hermitian observables through
+    Lemma~\ref{lem:ldp_observable_transfer_surjective}, and scaling to norm one
+    multiplies $a$ by a positive constant.
+\end{proof}
+
+\begin{lemma}[Finite-size corrections]
+    \label{lem:ldp_finite_size_correction}
+    \lean{MPSTensor.exists_compl_pow_bound,
+        MPSTensor.mpvConnectedCorrelator_eq_of_compl,
+        Complex.norm_div_sub_div_mul_div_sub_le,
+        Matrix.norm_linearMap_trace_le_mul_norm,
+        MPSTensor.exp_neg_div_correlationLength_le_norm_pow}
+    \leanok
+    \uses{lem:ldp_two_window_trace, thm:wielandt_proposition_three,
+        def:correlation_length}
+    Let $A$ be in the gauge (\ref{eq:ldp_normal_gauge}), with the products of
+    $L\ge1$ matrices spanning $\MN{D}$, let $P(Z)=\Tr(Z)\,\rho$, and let
+    $\lambda_2$ be an eigenvalue of $\E_A$ of largest modulus among those
+    different from $1$.
+    \begin{enumerate}
+        \item For every $r>\lvert\lambda_2\rvert$ there is $C_r>0$ with
+              $\lVert(\E_A-P)^n\rVert\le C_rr^n$ for all $n\ge0$.
+        \item For $t,n\ge1$ and $N=2L+t+n$, the connected correlator
+              $G_N(X,Y;L+t+1)$ of (\ref{eq:ldp_connected_correlator}) equals
+              $(\alpha\beta+G_\infty+\delta_{XY})/(1+\delta)
+                  -(\alpha+\delta_X)(\beta+\delta_Y)/(1+\delta)^2$, where
+              $\alpha=\Tr\E_X(\rho)$, $\beta=\Tr\E_Y(\rho)$, $G_\infty$ is the
+              limit correlator (\ref{eq:ldp_limit_correlator}) at
+              separation $t$, and $\delta,\delta_X,\delta_Y,\delta_{XY}$ are
+              traces of linear maps containing $(\E_A-P)^n$, $(\E_A-P)^N$ or a
+              power of $\E_A-P$ of exponent at least $n$.
+        \item If $\lvert z-1\rvert$, $\lvert n_{XY}-(ab+g)\rvert$,
+              $\lvert n_X-a\rvert$ and $\lvert n_Y-b\rvert$ are at most
+              $\varepsilon\le\tfrac12$ and $\lvert a\rvert,\lvert b\rvert,
+                  \lvert g\rvert\le M$, then
+              $\lvert n_{XY}/z-(n_X/z)(n_Y/z)-g\rvert\le4(M+2)^2\varepsilon$.
+        \item The trace of a linear map on $\MN{D}$ is bounded by a constant
+              depending only on $D$ times its operator norm, and
+              $e^{-(s-1)/\xi}\le\lvert\lambda_2\rvert^t$ whenever $t+1\le s$ and
+              $0<\lvert\lambda_2\rvert<1$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    A nonzero eigenvalue of $\E_A-P$ is an eigenvalue of $\E_A$ with a traceless
+    eigenvector, hence different from $1$ by strong irreducibility
+    (Theorem~\ref{thm:wielandt_proposition_three}), so the spectral radius of
+    $\E_A-P$ is at most $\lvert\lambda_2\rvert$ and Gelfand's formula gives
+    (1). Part (2) substitutes $\E_A^{\,k}=P+(\E_A-P)^k$ for $k\ge1$ into the
+    trace formula of Lemma~\ref{lem:ldp_two_window_trace} and into the
+    one-point functions and the normalization. Part (3) is elementary
+    algebra with $\lvert1/z\rvert\le2$, and part (4) expands the trace in
+    matrix units and uses $\xi=-1/\log\lvert\lambda_2\rvert$.
+\end{proof}
+
 \begin{theorem}[Exponentially decaying correlations]
     \label{thm:ldp_decaying_correlations}
     \lean{MPSTensor.exists_decayingCorrelations,
@@ -645,7 +820,9 @@ of $A$ along $w$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:transfer_map, lem:ldp_observable_transfer_surjective,
+    \uses{def:transfer_map, lem:ldp_observable_transfer_products,
+        lem:ldp_observable_transfer_surjective, lem:ldp_two_window_trace,
+        lem:ldp_hermitian_observables, lem:ldp_finite_size_correction,
         lem:ldp_vandermonde_window, thm:wielandt_proposition_three}
     With the inserted transfer maps $\E_X$ defined before
     Lemma~\ref{lem:ldp_observable_transfer_surjective}, and for operators
