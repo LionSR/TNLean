@@ -6114,12 +6114,12 @@ tensors.
     \lean{MPSTensor.exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS,
         MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS}
     \leanok
-    Let $A_1,\ldots,A_r$ be normalized primitive tensors with
+    Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
     common physical dimension $d\geq1$, positive bond dimensions,
     and positive-definite invariant matrices. Assume that no two blocks
     are related by a virtual similarity and a phase. Let
     $\mu_j\ne0$ for every $j$, and set
-    $B=\bigoplus_{j=1}^{r}\mu_jA_j$.
+    $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$.
     For every prescribed lower bound $R_*$, there exist
     $R\geq\max\{1,R_*\}$, $\gamma>0$, and $N_0$ such that
     the periodic range-$R$ parent Hamiltonian satisfies
@@ -6346,7 +6346,7 @@ tensors.
     \label{thm:primitive-block-parent-gap-three-block-bound}
     \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS_of_threeBlock_bound}
     \leanok
-    Let $B=\bigoplus_{j=1}^r\mu_j A_j$, where $r\geq2$, all coefficients
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_j A_j$, where $r\geq2$, all coefficients
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
     inequivalent under similarity and phase. Assume positive physical and bond
     dimensions, positive definite recorded invariant densities, and a common
@@ -6416,7 +6416,7 @@ tensors.
     \label{thm:primitive-block-parent-uniform-gap-three-block-bound}
     \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
     \leanok
-    Let $B=\bigoplus_{0\leq j<r}\mu_j A_j$, where $r\geq2$, all coefficients
+    Let $B=\bigoplus_{j=0}^{r-1}\mu_j A_j$, where $r\geq2$, all coefficients
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
     inequivalent under similarity and phase. Assume positive physical and bond
     dimensions, positive definite recorded invariant densities, and a common

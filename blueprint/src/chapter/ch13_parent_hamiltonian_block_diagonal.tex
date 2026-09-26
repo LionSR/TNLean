@@ -829,7 +829,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     injective at a common positive word length $L_0$, and that its members
     are pairwise inequivalent under virtual conjugation and nonzero scalar
     multiplication. Then each tensor admits a normalized primitive
-    representative which remains injective at length $L_0$.
+    representative, with positive definite invariant matrix, which remains
+    injective at length $L_0$.
     The representatives remain pairwise inequivalent. For any nonzero
     weights, the original and normalized block sums have exactly the same
     periodic parent Hamiltonians at every interaction range and chain length.
@@ -916,7 +917,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     eventual periodic gap.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:ph_primitive_representatives_parent_equality, thm:primitive_block_sum_parent_gap_threshold}
+    \uses{thm:ph_primitive_representatives_parent_equality,
+        thm:primitive_block_sum_parent_gap,
+        thm:primitive_block_sum_parent_gap_threshold}
     Replace each block by a normalized primitive representative. This preserves
     inequivalence and leaves every parent Hamiltonian unchanged. The uniform
     gap theorem for primitive block sums therefore applies with the same
