@@ -666,12 +666,38 @@ normality in the following two theorems.
     kernel.
 \end{proof}
 
-\begin{remark}\label{rem:majumdar_ghosh_term_total_spin}
-    On three spin-$\tfrac12$ sites the symmetric subspace is the subspace of total
-    spin $\tfrac32$, so the projector of
-    Theorem~\ref{thm:majumdar_ghosh_term_projector} is the projector $P^{3/2}$ onto
-    total spin $\tfrac32$. This identification is not formalized.
-\end{remark}
+\begin{theorem}[The three-site term and total spin]%
+    \label{thm:majumdar_ghosh_term_total_spin}
+    \lean{MPSTensor.spinSite, MPSTensor.totalSpin, MPSTensor.totalSpinSq,
+        MPSTensor.totalSpinSq_eq,
+        MPSTensor.totalSpinSq_three_eq_majumdarGhoshTerm,
+        MPSTensor.totalSpinSq_three_eq_parentInteraction,
+        MPSTensor.majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace,
+        MPSTensor.majumdarGhosh_parentInteraction_eq_spinThreeHalves_starProjection}
+    \leanok
+    \uses{thm:majumdar_ghosh_term_projector, thm:spin_exchange_swap,
+        thm:majumdar_ghosh_local_ground_space}
+    On three spin-$\tfrac12$ sites let $S^\alpha=S^\alpha_1+S^\alpha_2+S^\alpha_3$
+    and $\mathbf S^{2}=\sum_\alpha(S^\alpha)^{2}$. Then
+    $\mathbf S^{2}=\tfrac94+4h=\tfrac34+3Q$ with
+    $Q=\tfrac43\bigl(h+\tfrac38\bigr)$ the projector of
+    Theorem~\ref{thm:majumdar_ghosh_term_projector}. Hence $\mathcal G_{3}(A)$ is
+    the eigenspace of $\mathbf S^{2}$ for $\tfrac34$, the subspace of total spin
+    $\tfrac12$, and $Q$ is the orthogonal projector $P^{3/2}$ onto the eigenspace of
+    $\mathbf S^{2}$ for $\tfrac{15}4$, the subspace of total spin $\tfrac32$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding the squares, $\mathbf S^{2}=\sum_{j,k}\mathbf S_j\cdot\mathbf S_k$,
+    where $\sum_\alpha(S^\alpha)^{2}=\tfrac34$ on each site and
+    $\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14$ for $j\neq k$ by
+    Theorem~\ref{thm:spin_exchange_swap}. On three sites this gives
+    $\mathbf S^{2}=\tfrac94-\tfrac32+(P_{01}+P_{12}+P_{02})=\tfrac34+3Q$. Since
+    $Q$ is an orthogonal projector, $\mathbf S^{2}v=\tfrac34v$ exactly when $Qv=0$,
+    and $\mathbf S^{2}v=\tfrac{15}4v$ exactly when $Qv=v$; the kernel of $Q$ is
+    $\mathcal G_{3}(A)$ and its range is $\mathcal G_{3}(A)^{\perp}$.
+\end{proof}
 
 \begin{theorem}[Ground space of the Majumdar--Ghosh Hamiltonian]%
     \label{thm:majumdar_ghosh_review_hamiltonian}

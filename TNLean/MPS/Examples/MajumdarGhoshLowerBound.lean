@@ -33,7 +33,7 @@ makes them ground states of \(H\) with ground energy \(-\tfrac{3N}8\). On an odd
 The same projector is the projector \(P^{3/2}\) onto total spin \(\tfrac32\)
 of three spins, so the identity reads
 \(H+\tfrac{3N}8=\tfrac34\sum_iP^{3/2}_{i,i+1,i+2}\); the identification with total
-spin is not formalized here.
+spin is proved in `TNLean.MPS.Examples.MajumdarGhoshTotalSpin`.
 
 ## Main results
 * `MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction` :
