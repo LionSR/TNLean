@@ -232,7 +232,7 @@ noncomputable def nonNormalApproxVector {d : ℕ} (A : MPSTensor d D) (q M : ℕ
   Matrix.tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ
     nonNormalFixedPointState α ω
 
-/-- The approximating state `|φ̃_N⟩ = V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` of arXiv:2307.01696,
+/-- The approximating state `|\tilde{φ}_N⟩ = V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` of arXiv:2307.01696,
 Supplemental Material, eq. (S7) and the text following it, with `α = αⱼ^{(N)}` and `N = qM`.
 When the denominator vanishes the source leaves the state undefined; here the value is then
 the zero vector. -/
