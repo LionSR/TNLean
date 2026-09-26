@@ -81,45 +81,39 @@ open EisensteinInt MPSTensor
 
 /-! ### The flag shape of a two-dimensional target -/
 
-/-- The single slot of a fusion block. -/
-abbrev singleSlot : Finset Unit := Finset.univ
-
-/-- The single slot as an element of the slot subtype. -/
-abbrev theSlot : {s // s ∈ singleSlot} := ⟨(), Finset.mem_univ ()⟩
-
 /-- The bond dimension of a two-dimensional target. -/
 abbrev pairDim : Unit → ℕ := fun _ => 2
 
 /-- The block ordering of the blocks with a two-dimensional target: a zero slot, the target, a
 zero slot (data file §2.1 and §2.4). -/
-def pairOrd : BlockIndex singleSlot 2 ≃ Fin 3 where
+def pairOrd : BlockIndex oneSlot 2 ≃ Fin 3 where
   toFun
     | Sum.inl _ => 1
     | Sum.inr t => ![0, 2] t
   invFun
     | 0 => Sum.inr 0
-    | 1 => Sum.inl theSlot
+    | 1 => Sum.inl oneSlotMem
     | 2 => Sum.inr 1
   left_inv := by decide
   right_inv := by decide
 
 /-- The bond coordinate attached to a graded coordinate of a block with a two-dimensional
 target. -/
-def pairCoordNat (x : BlockSpace pairDim singleSlot 2) : ℕ :=
+def pairCoordNat (x : BlockSpace pairDim oneSlot 2) : ℕ :=
   Sum.elim (fun _ => 1) ![0, 3] x.1 + (x.2 : ℕ)
 
-theorem pairCoordNat_lt (x : BlockSpace pairDim singleSlot 2) : pairCoordNat x < 4 := by
+theorem pairCoordNat_lt (x : BlockSpace pairDim oneSlot 2) : pairCoordNat x < 4 := by
   revert x
   decide
 
 /-- The labelling of the four bond coordinates of a block with a two-dimensional target by the
 graded block space. -/
-def pairCoord : BlockSpace pairDim singleSlot 2 ≃ Fin 4 where
+def pairCoord : BlockSpace pairDim oneSlot 2 ≃ Fin 4 where
   toFun x := ⟨pairCoordNat x, pairCoordNat_lt x⟩
   invFun
     | 0 => ⟨Sum.inr 0, ⟨0, by decide⟩⟩
-    | 1 => ⟨Sum.inl theSlot, ⟨0, by decide⟩⟩
-    | 2 => ⟨Sum.inl theSlot, ⟨1, by decide⟩⟩
+    | 1 => ⟨Sum.inl oneSlotMem, ⟨0, by decide⟩⟩
+    | 2 => ⟨Sum.inl oneSlotMem, ⟨1, by decide⟩⟩
     | 3 => ⟨Sum.inr 1, ⟨0, by decide⟩⟩
   left_inv := by decide
   right_inv := by decide
@@ -188,7 +182,7 @@ theorem uuTarget_eq (s : Unit) (a : Fin 9) :
     uuTarget s a = complexOfEisenstein (uDagEisMPS a) :=
   uDagMPS_eq a
 
-private theorem uu_triangular (i : Fin 9) (x y : BlockSpace pairDim singleSlot 2)
+private theorem uu_triangular (i : Fin 9) (x y : BlockSpace pairDim oneSlot 2)
     (h : pairOrd y.1 < pairOrd x.1) :
     (uuGaugeEis * uuStackEis i * uuGaugeInvEis) (pairCoord x) (pairCoord y) = 0 := by
   rw [uu_conj_eq]
@@ -197,7 +191,7 @@ private theorem uu_triangular (i : Fin 9) (x y : BlockSpace pairDim singleSlot 2
 
 private theorem uu_matched (i : Fin 9) :
     (Matrix.of fun p q : Fin 2 =>
-      uuConjEis i (pairCoord ⟨Sum.inl theSlot, p⟩) (pairCoord ⟨Sum.inl theSlot, q⟩)) =
+      uuConjEis i (pairCoord ⟨Sum.inl oneSlotMem, p⟩) (pairCoord ⟨Sum.inl oneSlotMem, q⟩)) =
       uDagEisMPS i := by
   revert i
   decide +kernel
@@ -211,7 +205,7 @@ private theorem uu_unmatched (i : Fin 9) (t : Fin 2) :
 /-- **The multi-block asymmetric compression datum of the block `U ⊗ U → U†`** (P5 note, Theorem
 7.7, clauses (i)–(iii); data file §2.1): the stacked tensor of `U ⊗ U` compresses onto `U†` with `2`
 zero slots. -/
-def uu_compression : MultiBlockCompression uuStack singleSlot uuTarget :=
+def uu_compression : MultiBlockCompression uuStack oneSlot uuTarget :=
   MultiBlockCompression.ofEisenstein uuStackEis uuStack_eq (fun _ => uDagEisMPS)
     uuTarget_eq 2 pairOrd pairCoord uuGaugeEis uuGaugeInvEis uuGauge_mul_inv uuGaugeInv_mul
     uu_triangular
@@ -229,18 +223,18 @@ theorem uu_trace_evalWord (w : List (Fin 9)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord uuStack w) =
       Matrix.trace (Kraus.evalWord uDagMPS w) := by
   have h := uu_compression.trace_evalWord_eq_sum w hw
-  rwa [Fintype.sum_unique] at h
+  rwa [Finset.sum_singleton] at h
 
 /-- **Biorthogonal compression of `U ⊗ U → U†`** (P5 note, Theorem 7.7(iv)–(v)). -/
 theorem uu_isReduction :
-    IsReduction uuStack uDagMPS (uu_compression.left theSlot)
-      (uu_compression.right theSlot) :=
-  uu_compression.isReduction theSlot
+    IsReduction uuStack uDagMPS (uu_compression.left oneSlotMem)
+      (uu_compression.right oneSlotMem) :=
+  uu_compression.isReduction oneSlotMem
 
 /-- The compression pair of `U ⊗ U → U†` is the recorded one (data file §2.1): `V` is the column
 block of the inverse gauge carrying the target and `W` the row block of the gauge. -/
 theorem uu_right_eq :
-    uu_compression.right theSlot =
+    uu_compression.right oneSlotMem =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩;
            ⟨0, 0⟩, ⟨0, -1⟩;
            ⟨0, 0⟩, ⟨1, 1⟩;
@@ -251,7 +245,7 @@ theorem uu_right_eq :
   decide +kernel
 
 theorem uu_left_eq :
-    uu_compression.left theSlot =
+    uu_compression.left oneSlotMem =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, 0⟩;
            ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩, ⟨0, 0⟩] := by
   rw [uu_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ uuGauge_mul_inv)
@@ -260,7 +254,7 @@ theorem uu_left_eq :
   decide +kernel
 
 /-- **The dimension count of `U ⊗ U → U†`**: `4 = 2 + 2` (P5 note, Theorem 7.7(vii)). -/
-theorem uu_dim_eq : (4 : ℕ) = ∑ s ∈ singleSlot, pairDim s + 2 :=
+theorem uu_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, pairDim s + 2 :=
   uu_compression.dim_eq
 
 /-- The remainder letters `R^i = B^i - V C^i W` of the block `U ⊗ U → U†` (data file §2.1). -/
@@ -289,7 +283,7 @@ def uuRemainderEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
 
 theorem uu_remainder_eq (i : Fin 9) :
     uu_compression.remainder i = complexOfEisenstein (uuRemainderEis i) := by
-  rw [MultiBlockCompression.remainder_oneSlot _ theSlot, uu_left_eq, uu_right_eq, uuStack_eq,
+  rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, uu_left_eq, uu_right_eq, uuStack_eq,
     uuTarget_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
   congr 1
   revert i
@@ -458,7 +452,7 @@ theorem ddTarget_eq (s : Unit) (a : Fin 9) :
     ddTarget s a = complexOfEisenstein (uEisMPS a) :=
   uMPS_eq a
 
-private theorem dd_triangular (i : Fin 9) (x y : BlockSpace pairDim singleSlot 2)
+private theorem dd_triangular (i : Fin 9) (x y : BlockSpace pairDim oneSlot 2)
     (h : pairOrd y.1 < pairOrd x.1) :
     (ddGaugeEis * ddStackEis i * ddGaugeInvEis) (pairCoord x) (pairCoord y) = 0 := by
   rw [dd_conj_eq]
@@ -467,7 +461,7 @@ private theorem dd_triangular (i : Fin 9) (x y : BlockSpace pairDim singleSlot 2
 
 private theorem dd_matched (i : Fin 9) :
     (Matrix.of fun p q : Fin 2 =>
-      ddConjEis i (pairCoord ⟨Sum.inl theSlot, p⟩) (pairCoord ⟨Sum.inl theSlot, q⟩)) =
+      ddConjEis i (pairCoord ⟨Sum.inl oneSlotMem, p⟩) (pairCoord ⟨Sum.inl oneSlotMem, q⟩)) =
       uEisMPS i := by
   revert i
   decide +kernel
@@ -481,7 +475,7 @@ private theorem dd_unmatched (i : Fin 9) (t : Fin 2) :
 /-- **The multi-block asymmetric compression datum of the block `U† ⊗ U† → U`** (P5 note, Theorem
 7.7, clauses (i)–(iii); data file §2.4): the stacked tensor of `U† ⊗ U†` compresses onto `U` with
 `2` zero slots. -/
-def dd_compression : MultiBlockCompression ddStack singleSlot ddTarget :=
+def dd_compression : MultiBlockCompression ddStack oneSlot ddTarget :=
   MultiBlockCompression.ofEisenstein ddStackEis ddStack_eq (fun _ => uEisMPS)
     ddTarget_eq 2 pairOrd pairCoord ddGaugeEis ddGaugeInvEis ddGauge_mul_inv ddGaugeInv_mul
     dd_triangular
@@ -499,18 +493,18 @@ theorem dd_trace_evalWord (w : List (Fin 9)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord ddStack w) =
       Matrix.trace (Kraus.evalWord uMPS w) := by
   have h := dd_compression.trace_evalWord_eq_sum w hw
-  rwa [Fintype.sum_unique] at h
+  rwa [Finset.sum_singleton] at h
 
 /-- **Biorthogonal compression of `U† ⊗ U† → U`** (P5 note, Theorem 7.7(iv)–(v)). -/
 theorem dd_isReduction :
-    IsReduction ddStack uMPS (dd_compression.left theSlot)
-      (dd_compression.right theSlot) :=
-  dd_compression.isReduction theSlot
+    IsReduction ddStack uMPS (dd_compression.left oneSlotMem)
+      (dd_compression.right oneSlotMem) :=
+  dd_compression.isReduction oneSlotMem
 
 /-- The compression pair of `U† ⊗ U† → U` is the recorded one (data file §2.4): `V` is the column
 block of the inverse gauge carrying the target and `W` the row block of the gauge. -/
 theorem dd_right_eq :
-    dd_compression.right theSlot =
+    dd_compression.right oneSlotMem =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩;
            ⟨0, 0⟩, ⟨-1, 0⟩;
            ⟨0, 0⟩, ⟨0, -1⟩;
@@ -521,7 +515,7 @@ theorem dd_right_eq :
   decide +kernel
 
 theorem dd_left_eq :
-    dd_compression.left theSlot =
+    dd_compression.left oneSlotMem =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩;
            ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 1⟩, ⟨0, 0⟩] := by
   rw [dd_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ ddGauge_mul_inv)
@@ -530,7 +524,7 @@ theorem dd_left_eq :
   decide +kernel
 
 /-- **The dimension count of `U† ⊗ U† → U`**: `4 = 2 + 2` (P5 note, Theorem 7.7(vii)). -/
-theorem dd_dim_eq : (4 : ℕ) = ∑ s ∈ singleSlot, pairDim s + 2 :=
+theorem dd_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, pairDim s + 2 :=
   dd_compression.dim_eq
 
 /-- The remainder letters `R^i = B^i - V C^i W` of the block `U† ⊗ U† → U` (data file §2.4). -/
@@ -559,7 +553,7 @@ def ddRemainderEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt
 
 theorem dd_remainder_eq (i : Fin 9) :
     dd_compression.remainder i = complexOfEisenstein (ddRemainderEis i) := by
-  rw [MultiBlockCompression.remainder_oneSlot _ theSlot, dd_left_eq, dd_right_eq, ddStack_eq,
+  rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, dd_left_eq, dd_right_eq, ddStack_eq,
     ddTarget_eq, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_sub]
   congr 1
   revert i

@@ -1025,9 +1025,9 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `CZXSquare`, `ParityGraded` and Fibonacci data are migrated; the scaled
   Kramers--Wannier gauges enter through their own conjugation lemmas. The normality certificates share
   `isNormal_of_complexOfRing_single` and
-  `isNormal_of_complexOfRing_letter_eq_smul_single`. Remaining: the `ℤ₃`
-  single-slot sets and the complex-literal `GHZSectors` and `RepeatedBlock`
-  data.
+  `isNormal_of_complexOfRing_letter_eq_smul_single`. The `ℤ₃` fusion examples
+  and `CZXSquare` share the single slot `MPSTensor.oneSlot`. Remaining: the
+  complex-literal `GHZSectors` and `RepeatedBlock` data.
 
 ## D17. Three MPDO carriers restate the twelve vertical-decomposition fields instead of extending one  —  duplication, impact 5/10, effort 4/10
 - **Status**: open ([#7847](https://github.com/LionSR/TNLean/issues/7847); 2026-09-19 architectural survey)
