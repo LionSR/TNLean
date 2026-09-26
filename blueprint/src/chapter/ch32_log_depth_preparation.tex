@@ -655,8 +655,8 @@ $1/\gamma$ in the block length here
 \end{lemma}
 \begin{proof}
     \leanok
-    Dividing by an $n$-th root of the determinant, which is a single-site phase,
-    reduces to determinant one. Column-by-column Givens elimination writes such
+    Dividing by a root of the determinant of order $d^n$, a global phase and
+    hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
     a unitary as a product of two-level operators, each a real rotation or a
     diagonal phase on the span of two basis vectors. A two-level operator
     between configurations differing at several sites is conjugated, by a
@@ -664,7 +664,7 @@ $1/\gamma$ in the block length here
     site fewer. Between configurations differing at one site it is a
     single-site operation controlled by the other sites. Every rotation and
     every phase of determinant one is a group commutator $g_1g_2g_1^\dagger
-    g_2^\dagger$, and a controlled commutator is a product of two operations
+        g_2^\dagger$, and a controlled commutator is a product of two operations
     with one control fewer and two operations on two sites; induction removes
     the controls. An operation on two distant sites is conjugated to
     neighbouring sites by SWAP gates.
@@ -677,20 +677,24 @@ $1/\gamma$ in the block length here
         thm:ldp_sequential_factorization,
         lem:ldp_bounded_unitary_two_site_gates}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
+        MPSPreparation.approximatingMPVStateRaw_eq_mulVec,
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
         MPSPreparation.IsCircuitOn.finset_noncommProd}
     \leanok
-    Let $d\ge2$ and $D\ge1$. There are $C$ and $q_0$, depending only on $d$
-    and $D$, such that the following holds. Let $A$ be a tensor, let
-    $\sigma\ge0$ with $\Tr\sigma=1$, let $q\ge q_0$ be a block length for
-    which the $q$-site blocked tensor is injective, and let $M\ge1$. Then the
-    approximating state of Definition~\ref{def:ldp_approximating_state} on
-    $N=Mq$ sites is prepared in depth at most $Cq$.
+    Let $A$ be a tensor and let $\sigma\ge0$ with $\Tr\sigma=1$. There is
+    $C$, depending only on $d$ and $D$, such that the following holds. Let
+    $q\ge3D$ be a block length for which the $q$-site blocked tensor is
+    injective, and let $M\ge1$. Then the approximating state of
+    Definition~\ref{def:ldp_approximating_state} on $N=Mq$ sites is prepared
+    in depth at most $Cq$. This is the depth count behind
+    \cite[eq.~(1)]{Malz2024Preparation}; it does not choose $q$ in terms of
+    $N$ and $\varepsilon$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Encode the two bond indices of a block in its first and last $D$ sites,
-    and write $\ket{l,0,r}$ for the block with $l$ on the first $D$ sites, $r$
+    Injectivity of the blocked tensor gives $D^2\le d^q$, hence $D\le d^D$,
+    so each bond index can be encoded in $D$ sites. Encode the two bond indices
+    of a block in its first and last $D$ sites, and write $\ket{l,0,r}$ for the block with $l$ on the first $D$ sites, $r$
     on the last $D$ sites, and $\ket0$ elsewhere. A first layer of unitaries,
     one on the last $D$ sites of each block and the first $D$ sites of the
     next, sends $\ket{0\cdots0}$ to
@@ -702,9 +706,10 @@ $1/\gamma$ in the block length here
     gates move the first $D$ sites next to the last ones in $O(q)$ gates.
     By Theorem~\ref{thm:ldp_sequential_factorization}, $V$ is the ordered
     product of $q$ isometries, each from the bond space into the bond space
-    and one site; each is extended to a unitary on the bond register and one
-    fresh site, and the register moves one site to the left at each step, so
-    the staircase consists of $q$ unitaries on $2D+1$ sites
+    and one site; each is extended to a unitary on the bond register of $2D$
+    sites and one fresh site, and the register moves one site to the left at
+    each step, so the staircase consists of $q-2D$ unitaries on $2D+1$ sites
+    followed by one unitary on the first $2D$ sites
     \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
     of them has bounded depth by
     Lemma~\ref{lem:ldp_bounded_unitary_two_site_gates}, and circuits on
