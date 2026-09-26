@@ -6,11 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Filter
-
-namespace MPSTensor
-
 /-!
 # Common-sector transport after canonical-form blocking
 
@@ -31,6 +26,11 @@ canonical-form reduction has produced common cyclic-sector families.
 
 matrix product states, canonical form, common sectors
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
+
+namespace MPSTensor
 
 /-- **Unconditional common primitive irreducible block decompositions.**
 

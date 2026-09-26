@@ -134,29 +134,34 @@ acts on the blocked physical index `Fin (blockPhysDim d L)` by the entrywise
 product of `P` over the `L` decoded sites.  This is the operator that makes
 blocking commute with physical twisting. -/
 
-/-- The Kronecker-power lift of a physical-index operator `P` through length-`L`
-blocking: `(blockKron P) I J = ∏ k, P (decode I k) (decode J k)`. -/
-noncomputable def blockKron (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Fin (blockPhysDim d L)) (Fin (blockPhysDim d L)) ℂ :=
-  fun I J => ∏ k : Fin L, P (decodeBlock d L I k) (decodeBlock d L J k)
+section KroneckerLift
+
+variable {m n p : ℕ}
+
+/-- The Kronecker-power lift of a physical-index map `P : ℂⁿ → ℂᵐ` through length-`L`
+blocking: `(blockKron P) I J = ∏ k, P (decode I k) (decode J k)`.  The map may be
+rectangular, as for the layers `(V⁽ʲ⁾)^{⊗2^{k-j}}` of arXiv:2307.01696, eq. (16). -/
+noncomputable def blockKron (L : ℕ) (P : Matrix (Fin m) (Fin n) ℂ) :
+    Matrix (Fin (blockPhysDim m L)) (Fin (blockPhysDim n L)) ℂ :=
+  fun I J => ∏ k : Fin L, P (decodeBlock m L I k) (decodeBlock n L J k)
 
 /-- The Kronecker lift is multiplicative: `blockKron L (P * Q) = blockKron L P *
 blockKron L Q`.  Summing over the intermediate blocked index is summing over
 length-`L` words, and the product distributes site by site. -/
-lemma blockKron_mul (L : ℕ) (P Q : Matrix (Fin d) (Fin d) ℂ) :
+lemma blockKron_mul (L : ℕ) (P : Matrix (Fin m) (Fin n) ℂ) (Q : Matrix (Fin n) (Fin p) ℂ) :
     blockKron L (P * Q) = blockKron L P * blockKron L Q := by
   classical
   ext I J
   simp only [blockKron, Matrix.mul_apply]
   -- Sum over the intermediate blocked index = sum over words.
-  rw [← Equiv.sum_comp (decodeBlockEquiv d L).symm
-    (fun K => (∏ k : Fin L, P (decodeBlock d L I k) (decodeBlock d L K k)) *
-      ∏ k : Fin L, Q (decodeBlock d L K k) (decodeBlock d L J k))]
+  rw [← Equiv.sum_comp (decodeBlockEquiv n L).symm
+    (fun K => (∏ k : Fin L, P (decodeBlock m L I k) (decodeBlock n L K k)) *
+      ∏ k : Fin L, Q (decodeBlock n L K k) (decodeBlock p L J k))]
   simp only [decodeBlock_decodeBlockEquiv_symm]
   -- Distribute the product over the sum of words.
-  rw [Finset.prod_univ_sum (t := fun _ : Fin L => (Finset.univ : Finset (Fin d)))
-    (f := fun (k : Fin L) (a : Fin d) =>
-      P (decodeBlock d L I k) a * Q a (decodeBlock d L J k)),
+  rw [Finset.prod_univ_sum (t := fun _ : Fin L => (Finset.univ : Finset (Fin n)))
+    (f := fun (k : Fin L) (a : Fin n) =>
+      P (decodeBlock m L I k) a * Q a (decodeBlock p L J k)),
     Fintype.piFinset_univ]
   refine Finset.sum_congr rfl (fun w _ => ?_)
   rw [Finset.prod_mul_distrib]
@@ -180,7 +185,7 @@ lemma blockKron_one (L : ℕ) :
 
 /-- The Kronecker lift commutes with the conjugate transpose:
 `(blockKron L P)ᴴ = blockKron L (Pᴴ)`. -/
-lemma blockKron_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ) :
+lemma blockKron_conjTranspose (L : ℕ) (P : Matrix (Fin m) (Fin n) ℂ) :
     (blockKron L P)ᴴ = blockKron L Pᴴ := by
   ext I J
   simp only [Matrix.conjTranspose_apply, blockKron, star_prod]
@@ -191,6 +196,8 @@ lemma blockKron_mul_conjTranspose (L : ℕ) (P : Matrix (Fin d) (Fin d) ℂ)
     (hP : P * Pᴴ = 1) :
     blockKron L P * (blockKron L P)ᴴ = 1 := by
   rw [blockKron_conjTranspose, ← blockKron_mul, hP, blockKron_one]
+
+end KroneckerLift
 
 /-- Blocked configurations of length `N` are equivalent to ordinary configurations of length
 `N * L`.

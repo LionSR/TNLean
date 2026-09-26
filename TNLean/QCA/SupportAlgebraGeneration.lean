@@ -133,7 +133,7 @@ theorem range_localObservable_union (d : ℕ) [NeZero d] {Λ Γ : Finset ℤ}
     refine StarSubalgebra.mem_map.mpr
       ⟨localInclusion (d := d) Finset.subset_union_left (CStarMatrix.ofMatrix A), ?_, ?_⟩
     · rw [hV, StarSubalgebra.mem_comap, localObservable_localInclusion]
-      exact SetLike.le_def.mp le_sup_left ⟨CStarMatrix.ofMatrix A, rfl⟩
+      exact IsConcreteLE.le_iff.mp le_sup_left ⟨CStarMatrix.ofMatrix A, rfl⟩
     · exact bipartiteLocalAlgebraEquiv_localInclusion_left hΛΓ (CStarMatrix.ofMatrix A)
   have hright : (⊤ : StarSubalgebra ℂ (Matrix (Config d Γ) (Config d Γ) ℂ)).map
       (Matrix.rightKroneckerEmbed (m := Config d Λ)) ≤
@@ -144,7 +144,7 @@ theorem range_localObservable_union (d : ℕ) [NeZero d] {Λ Γ : Finset ℤ}
     refine StarSubalgebra.mem_map.mpr
       ⟨localInclusion (d := d) Finset.subset_union_right (CStarMatrix.ofMatrix B), ?_, ?_⟩
     · rw [hV, StarSubalgebra.mem_comap, localObservable_localInclusion]
-      exact SetLike.le_def.mp le_sup_right ⟨CStarMatrix.ofMatrix B, rfl⟩
+      exact IsConcreteLE.le_iff.mp le_sup_right ⟨CStarMatrix.ofMatrix B, rfl⟩
     · exact bipartiteLocalAlgebraEquiv_localInclusion_right hΛΓ (CStarMatrix.ofMatrix B)
   have hea : bipartiteLocalAlgebraEquiv hΛΓ a ∈
       (⊤ : StarSubalgebra ℂ (Matrix (Config d Λ) (Config d Λ) ℂ)).map
