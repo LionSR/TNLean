@@ -132,8 +132,10 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     \emph{anomaly}. An injective matrix product operator representation with
     $U_e=\Id$ whose fusion tensors reduce every stacked tensor $T_gT_h$
     exactly to $T_{gh}$ is on-site, and then its three-cocycle is trivial
-    \cite[Section~4]{GarreRubio2023MPOSym}. Hence a nontrivial
-    class forbids an on-site form. It also forbids an invariant normal matrix
+    (Theorem~\ref{thm:mposym_closed_fusion_onsite}). Hence, for such a
+    representation, a nontrivial class forbids closed fusion. In the examples
+    of Chapter~\ref{ch:asymmetric_examples} with a nontrivial class, the
+    stacked tensor reduces onto $T_{gh}$ up to a nilpotent remainder. It also forbids an invariant normal matrix
     product state (Theorem~\ref{thm:mpoalg_no_symmetric_normal}). The sources
     argue further that a symmetric local Hamiltonian then cannot have a
     normal matrix product state as its unique ground state, and that such
@@ -144,9 +146,58 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     %   representation with closed fusion is on-site), 2064--2070 (the
     %   cocycle construction and the Z_2 example); arXiv:2011.12127,
     %   Papers/2011.12127/TN-Review-main.tex, lines 1397--1419.
-    % Lean: the on-site lemma of lines 1211--1216 is not formalized; planned
-    %   name MPOTensor.GroupFamily.isOnSite_of_closed_fusion.
 \end{remark}
+
+\begin{theorem}[Closed fusion forces an on-site representation]%
+    \label{thm:mposym_closed_fusion_onsite}
+    \lean{MPOTensor.GroupFamily.IsOnSite,
+        MPOTensor.GroupFamily.FusionData.IsClosed,
+        MPOTensor.bondDim_le_one_of_mpo_eq_one,
+        MPOTensor.eq_ite_one_of_mpo_eq_one,
+        MPOTensor.bondDim_le_one_of_mulTensor_eq_ite,
+        MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion,
+        MPOTensor.GroupFamily.isOnSite_of_closed_fusion,
+        MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_of_closed_fusion}
+    \leanok
+    \uses{def:injective, def:mpo_to_mps, def:mpdo_operator_product,
+        def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Let $\{T_g\}_{g\in G}$ be matrix product operator tensors of a group $G$
+    whose doubled-index tensors are injective, with $U_gU_h=U_{gh}$ and
+    $U_e=\Id$ on every nonempty chain, and let $(F^<_{g,h},F^>_{g,h})$ be
+    fusion tensors reducing $T_gT_h$ onto $T_{gh}$. Suppose the fusion is
+    closed, $(T_gT_h)^{ij}=F^>_{g,h}\,T_{gh}^{ij}\,F^<_{g,h}$ for all $g,h$
+    and all physical indices $i,j$. Then every $T_g$ has bond dimension one,
+    the representation is on-site, $U_g=u_g^{\otimes N}$ with
+    $(u_g)_{ij}=T_g^{ij}$, and the anomaly three-cocycle $\omega$ of the
+    fusion tensors is a coboundary. The on-site conclusion does not use the
+    product law.
+    % Source anchor: arXiv:2203.12563, Papers/2203.12563/REsubmission.tex,
+    %   lines 1211--1213 (Lemma and proof), 641--656 (closed fusion,
+    %   eq. fusiontensorG), 658 and 842 (on-site operators).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    The tensor $T_e$ is injective with $\tr T_e^{ij}=\delta_{ij}$ and
+    $\tr(T_e^{ij}T_e^{kl})=\delta_{ij}\delta_{kl}$, so
+    $\tr(XY)=\tr X\,\tr Y$ on the whole matrix algebra; testing on two
+    off-diagonal matrix units shows that $T_e$ has bond dimension one and
+    $T_e^{ij}=\delta_{ij}$. Closed fusion then gives
+    $(T_gT_{g^{-1}})^{ij}=\delta_{ij}P$ and
+    $(T_{g^{-1}}T_g)^{ij}=\delta_{ij}Q$ with
+    $\tr P=\tr(F^<_{g,g^{-1}}F^>_{g,g^{-1}})\neq0$. Decomposing the triple
+    product $T_gT_{g^{-1}}T_g$ in the two ways gives
+    $P\otimes T_g^{ij}=T_g^{ij}\otimes Q$, hence $P\otimes X=X\otimes Q$ for
+    every matrix $X$ by injectivity. If $T_g$ had bond dimension at least
+    two, testing on $X=E_{cc}$ with $c\neq a$ would kill every diagonal
+    entry of $P$ in the block $a$, and $\tr P$ would vanish. With every bond
+    dimension one, the periodic operator is the product of the one-site
+    entries, and the fusion tensors are nonzero scalars $v(g,h)$. The two
+    fusion trees are then proportional with ratio
+    $v(gh,k)v(g,h)/(v(g,hk)v(h,k))$, which is $\omega(g,h,k)$ by
+    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}; this is the
+    coboundary of $v^{-1}$.
+\end{proof}
 
 %% ---------------------------------------------------------
 \section{Fusion algebras of matrix product operators}%

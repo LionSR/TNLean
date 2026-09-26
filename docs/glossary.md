@@ -1157,6 +1157,41 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
   definitions agree by unfolding.
 
+### `MPOTensor.GroupFamily.IsOnSite`
+
+- **Declaration:** `MPOTensor.GroupFamily.IsOnSite F : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`.
+- **Meaning:** there are one-site matrices $u_g$ with
+  $O_N(T_g)=u_g^{\otimes N}$, entrywise
+  $\langle\sigma|O_N(T_g)|\tau\rangle=\prod_n (u_g)_{\sigma_n\tau_n}$, for
+  every chain length $N\geq1$; nothing is asserted at $N=0$.
+- **Source:** arXiv:2203.12563, lines 658 and 842 ($O_g=(u_g)^{\otimes n}$).
+- **Sanctioned bridge:** `MPOTensor.GroupFamily.isOnSite_of_closed_fusion`
+  derives it from injectivity, $U_e=\Id$ and closed fusion, through
+  `MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`.
+- **Caveat:** the matrices $u_g$ are not required to form a representation;
+  for a representation, $u_gu_h=u_{gh}$ follows from the operator law at
+  $N=1$.
+
+### `MPOTensor.GroupFamily.FusionData.IsClosed`
+
+- **Declaration:** `MPOTensor.GroupFamily.FusionData.IsClosed fd : Prop`, for
+  a choice of fusion tensors `fd : FusionData F`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`.
+- **Meaning:** closed fusion: the stacked tensor decomposes exactly, letter by
+  letter, $(T_gT_h)^{ij}=F^>_{g,h}\,T_{gh}^{ij}\,F^<_{g,h}$ for all $g,h$ and
+  all physical indices, with no remainder. Together with
+  $F^<_{g,h}F^>_{g,h}=\mathbf 1$, carried by `FusionData`, this is the zipper
+  case of the reduction.
+- **Source:** arXiv:2203.12563, equation `fusiontensorG`, lines 641--656, with
+  the fusion tensors of `fusiontensorG2`, lines 1002--1026.
+- **Sanctioned bridge:** `FusionData.IsClosed.mulTensor_apply` restates it in
+  the two physical indices of the operator tensors.
+- **Caveat:** for an injective representation with $U_e=\Id$ it forces bond
+  dimension one (`MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`), so
+  the anomalous examples (CZX, $\mathbb Z_3$, $\mathbb Z_2\times\mathbb Z_2$)
+  satisfy only the reduction with a nilpotent remainder, never this predicate.
+
 ## Symmetries of matrix product density operators
 
 ### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
