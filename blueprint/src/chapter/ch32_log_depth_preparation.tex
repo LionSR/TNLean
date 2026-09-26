@@ -291,7 +291,7 @@ of $A$ along $w$.
     \label{lem:ldp_limit_correlator_eigenvalue}
     \lean{MPSTensor.limitCorrelator, MPSTensor.exists_limitCorrelator_eq_pow}
     \leanok
-    \uses{lem:ldp_observable_transfer_surjective}
+    \uses{def:transfer_map}
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
     $\sum_i(A^i)^\dagger A^i=\Id$, let $\Tr\rho=1$, put $P(Z)=\Tr(Z)\,\rho$,
     and let $R\neq0$ satisfy $\E_A(R)=\lambda R$ with $\lambda\neq1$. Then there
@@ -309,6 +309,7 @@ of $A$ along $w$.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:ldp_observable_transfer_surjective}
     Trace preservation gives $\lambda\Tr R=\Tr R$, so $\Tr R=0$, $P(R)=0$, and
     $(\E_A-P)^tR=\lambda^tR$. By
     Lemma~\ref{lem:ldp_observable_transfer_surjective} take
@@ -469,7 +470,8 @@ of $A$ along $w$.
     $\lvert\lambda_2\rvert^{t'}=e^{-(s'-L-1)/\xi}\ge e^{-(s'-1)/\xi}$, which
     gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/4$.
 \end{proof}
-%% The source's Lemma 2 (lm:2, References/2307.01696/main.tex) asserts, for
+%% The source's Lemma 2 (label lm:2 in the arXiv:2307.01696 LaTeX source,
+%% Supplemental Material, section Proof of Theorem 1) asserts, for
 %% injective A with xi > 0, observables O_1, O'_s of norm one such that for
 %% every integer s > 1 and sufficiently large N the one-point functions
 %% vanish exactly (auxform1) and the correlator itself satisfies the real
@@ -580,9 +582,19 @@ of $A$ along $w$.
 %% the products of L matrices span M_D, so the argument runs at every N and
 %% not only at multiples of a blocking length. The window of K separations
 %% in the lemma moves the separation s' by at most K - 1 sites, which is
-%% absorbed into s' = o(log N); only constants change. The concentration
-%% argument above is a reconstruction, since the source proof could not be
-%% checked locally.
+%% absorbed into s' = o(log N); only constants change. The source proof
+%% (arXiv:2307.01696, Supplemental Material, proof of Theorem 1) takes a
+%% different route: it replaces phi_N by the blocked approximation of
+%% Lemma 1 at block length q ~ log N, traces out alternate blocks so that
+%% both states become products of k ~ N/(4q) factors, bounds the fidelity
+%% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
+%% single separation s = 2T + 1, using the exact vanishing of the
+%% one-point functions. Both of those inputs are unavailable here (see the
+%% comment after Lemma lem:ldp_decaying_correlations), so the proof above
+%% replaces the product-fidelity step by the concentration of averages of
+%% n ~ N/s' translated observables. This concentration argument is not in
+%% the source; it must be re-derived line by line when this theorem is
+%% formalized, and until then the theorem carries no formalization tag.
 
 \section{Tensors that are not normal}
 

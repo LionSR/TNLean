@@ -54,7 +54,7 @@ This is the step "Since the tensor `A` is injective, we can always choose `O`
 arbitrary `A, B` (up to a normalization constant)" in arXiv:2307.01696,
 Supplemental Material, proof of Lemma 2, stated for every linear map and for
 the blocked length `L` at which a normal tensor becomes injective. -/
-theorem exists_physicalObservableTransfer_eq {A : MPSTensor d D} {L : ℕ}
+lemma exists_physicalObservableTransfer_eq {A : MPSTensor d D} {L : ℕ}
     (hL : Kraus.IsNBlkInjective A L)
     (Φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) :
     ∃ O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
@@ -128,13 +128,13 @@ and `⟨L_1|E_O|R_2⟩⟨L_2|E_{O'}|R_1⟩ = 1`, here with `E_{O'} = |R⟩⟨1|`
 `E_O` a rank-one map with trace functional dual to `R`. The source's condition
 `⟨L_i|E_O|R_i⟩ = 0`, which makes the one-point functions vanish, is not part of
 this statement. The observables need not be Hermitian. -/
-theorem exists_limitCorrelator_eq_pow {A : MPSTensor d D} {L : ℕ}
+lemma exists_limitCorrelator_eq_pow {A : MPSTensor d D} {L : ℕ}
     (hL : Kraus.IsNBlkInjective A L) (hA : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : Matrix.trace ρ = 1)
     {R : Matrix (Fin D) (Fin D) ℂ} {lam : ℂ} (hR : R ≠ 0)
     (hRlam : Kraus.transferMap A R = lam • R) (hlam : lam ≠ 1) :
     ∃ X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
-      ∀ t : ℕ, limitCorrelator A ρ (by rw [hρ]; exact one_ne_zero) L X Y t = lam ^ t := by
+      ∀ (htr : Matrix.trace ρ ≠ 0) (t : ℕ), limitCorrelator A ρ htr L X Y t = lam ^ t := by
   classical
   have htr : Matrix.trace ρ ≠ 0 := by rw [hρ]; exact one_ne_zero
   have hP : ∀ Z, fixedPointProj ρ htr Z = Matrix.trace Z • ρ := fun Z ↦ by
@@ -163,7 +163,7 @@ theorem exists_limitCorrelator_eq_pow {A : MPSTensor d D} {L : ℕ}
   obtain ⟨X, hX⟩ := exists_physicalObservableTransfer_eq hL (LinearMap.smulRight φ ρ)
   obtain ⟨Y, hY⟩ := exists_physicalObservableTransfer_eq hL
     (LinearMap.smulRight (Matrix.traceLinearMap (Fin D) ℂ ℂ) R)
-  refine ⟨X, Y, fun t ↦ ?_⟩
+  refine ⟨X, Y, fun _ t ↦ ?_⟩
   simp only [limitCorrelator, hX, hY, Matrix.traceLinearMap_apply, hρ, one_smul, hpow,
     LinearMap.smulRight_apply, map_smul, Matrix.trace_smul, smul_eq_mul]
   simp [φ, hij]
