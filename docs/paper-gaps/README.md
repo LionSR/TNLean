@@ -53,6 +53,16 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
+  `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
+  as a parameter and allow a positive factor in the isometry, because the
+  printed quantum-double tensor is not normalized (factor `|G|`); that the
+  quantum-double instance uses the right-regular representation, equivalent
+  to the printed left-regular one; and that the review's statements about the
+  contracted network (the primal tensor's symmetry under every irreducible
+  representation, and the coloring superposition, which on a torus covers only
+  the Gauss-law configurations of trivial holonomy) are formalized only for
+  one tensor or not at all.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
