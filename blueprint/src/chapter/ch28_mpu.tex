@@ -7107,6 +7107,62 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 733--818.
 \end{proposition}
 
+\begin{theorem}[Source ranks along a canonical-form-II path]
+    \label{thm:mpu_cfii_path_source_ranks}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceRanks_blockTensor_pow_four_const,
+        MPOTensor.sourceRanks_blockTensor_const_of_fixed_product}
+    \leanok
+    % **Scope restriction (canonical-form-II path):** Proposition IV.5 permits
+    % arbitrary MPU paths and uses ranks of reduced representatives. Here each
+    % path tensor itself has canonical-form-II data. See
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    \uses{def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    Let $[0,1]\ni x\mapsto\mathcal U(x)$ be a continuous path of tensors of
+    fixed physical dimension $d$ and bond dimension $D$. Suppose that each
+    $\mathcal U(x)$ is in canonical form II. Then for all $x,y\in[0,1]$,
+    \begin{align}
+        r[\mathcal U(x)_{D^4}]    & =r[\mathcal U(y)_{D^4}],    &
+        \ell[\mathcal U(x)_{D^4}] & =\ell[\mathcal U(y)_{D^4}].
+    \end{align}
+    This is the canonical-form-II path case of
+    \cite[Proposition~IV.5]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 739--818.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_common_pow_four_simple_blocking,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_rank_lower_semicontinuous,
+        thm:mpu_fixed_product_preconnected}
+    Blocking is continuous, and the two source cuts are coordinate
+    rearrangements of the blocked tensor. Thus their ranks are lower
+    semicontinuous functions of $x$. The common block of length $D^4$ is
+    simple at every point. Its ranks obey
+    \begin{align}
+        r[\mathcal U(x)_{D^4}]\ell[\mathcal U(x)_{D^4}]
+         & =d^{2D^4}>0.
+    \end{align}
+    Lower semicontinuity and this fixed positive product make both ranks
+    constant on the connected interval.
+\end{proof}
+
+\begin{theorem}[Index along a canonical-form-II path]
+    \label{thm:mpu_cfii_path_index}
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_const_of_continuous}
+    \leanok
+    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii}
+    Under the hypotheses of Theorem~\ref{thm:mpu_cfii_path_source_ranks},
+    the index of $\mathcal U(x)$ is independent of $x\in[0,1]$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_cfii_path_source_ranks,
+        prop:mpu_admissible_index_well_defined}
+    Every $D^4$-site block is simple, so the index is half the difference
+    between the base-two logarithms of its two source ranks. Both ranks are
+    independent of $x$ by Theorem~\ref{thm:mpu_cfii_path_source_ranks}.
+\end{proof}
+
 \begin{theorem}[Index Theorem]
     \label{IndexTh}
     \notready

@@ -869,6 +869,31 @@ theorems, but the downstream entries have not yet been consolidated. Separate
 conjugation and transposition comparisons, symmetry transforms, and
 composition retain distinct preservation or reduction obligations.
 
+\section{Continuous paths of canonical representatives}
+
+Proposition~IV.5 of Ref.~\cite{Cirac2017MPU} begins with a continuous path
+$x\mapsto\mathcal W(x)$ of arbitrary MPU tensors. It does not require the
+path to remain in canonical form; indeed, the bond dimension of a reduced
+canonical representative can vary along the path. Its conclusion concerns
+the source ranks of those representatives.
+% Source: paper_v2.tex 733--818.
+
+For a path of fixed physical and bond dimensions whose members are already
+in canonical form II, the common block of length $D^4$ is simple. The two
+source cuts of this blocked path vary continuously, their ranks are lower
+semicontinuous, and their product is the fixed positive number $d^{2D^4}$.
+Thus both ranks and the index are constant on the interval. This proves a
+special case, not Proposition~IV.5 with its stated hypotheses.
+
+Pointwise existence of reduced representatives and invariance of the index
+under a change of representative do not establish the unrestricted result.
+The remaining step is to construct, at least locally along the path, a
+continuous rank-preserving comparison tensor for the reduced representatives.
+The source uses the weighted tensor $L(x)\mathcal W(x)R(x)$ and invertible
+changes of auxiliary coordinates to identify its two cut ranks with those of
+the reduced canonical tensor. The required continuity and rank comparison
+cannot be inferred from an arbitrary pointwise choice of reductions.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The normal-tensor proposition,
