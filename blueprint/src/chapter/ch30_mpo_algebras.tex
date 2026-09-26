@@ -2,12 +2,12 @@
 %% Chapter: Matrix Product Operator Algebras
 %% Symmetry theory of matrix product operator algebras built on the
 %% multi-block asymmetric compression theorem of Chapter ch:asymmetric_ft:
-%% fusion algebras and their actions, fusion and action tensors, their gauge
-%% freedom, associators and F-symbols, cohomological obstructions, and the
-%% relation to weak Hopf algebras, dualities, and density operators.
+%% fusion and action tensors, their gauge freedom, associators and
+%% F-symbols, cohomological obstructions, and the relation to weak Hopf
+%% algebras, dualities, and density operators. Fusion algebras, symmetric
+%% families, and their integrality are in Chapter ch:mpo_symmetry_basics
+%% (ch30_mpo_symmetry_basics.tex).
 %% Planned Lean modules:
-%%   TNLean/MPS/Symmetry/MPOSymmetry/{Defs,NIMRep,Character,Examples}.lean
-%%     (formalized; Section sec:mpoalg_symmetry),
 %%   TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
 %%   TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean.
 %% =========================================================
@@ -18,12 +18,16 @@
 A matrix product operator algebra is a finite family of matrix product
 operators whose periodic operators multiply according to length-independent
 fusion rules with nonnegative integer coefficients
-\cite{Bultinck2017Anyons,GarreRubio2023MPOSym,Molnar2022MPOAlgebrasI}. This
-chapter develops its symmetry theory along the lines of the on-site theory of
-Chapter~\ref{ch:symmetry}: a symmetry is defined, it is transferred to the
-virtual level, the virtual data are shown to be unique up to an explicit gauge
-freedom, the gauge-invariant class is extracted, and a nontrivial class is
-shown to obstruct symmetric states. The transfer to the virtual level rests on
+\cite{Bultinck2017Anyons,GarreRubio2023MPOSym,Molnar2022MPOAlgebrasI}.
+Chapter~\ref{ch:mpo_symmetry_basics} introduces these algebras and their
+non-invertible examples, defines symmetric matrix product states, and proves
+the integrality of their action coefficients. This chapter develops the
+virtual-level theory along the lines of the on-site theory of
+Chapter~\ref{ch:symmetry}: the symmetry of
+Chapter~\ref{ch:mpo_symmetry_basics} is transferred to the virtual level,
+the virtual data are shown to be unique up to an explicit gauge freedom, the
+gauge-invariant class is extracted, and a nontrivial class is shown to
+obstruct symmetric states. The transfer to the virtual level rests on
 the multi-block asymmetric compression theorem
 (Theorem~\ref{thm:asym_multiblock}). The stacked tensor of a product of two
 matrix product operators, or of an operator acting on a state, need not be
@@ -43,278 +47,6 @@ $(T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j$. A reduction of a tensor $B$ onto a
 tensor $C$ is a pair of maps $(V,W)$ with $VW=\Id$ and $VB^wW=C^w$ for every
 word $w$ (Definition~\ref{def:mps_rectangular_reduction}); we call $V$ the
 compression and $W$ the embedding.
-
-%% ---------------------------------------------------------
-\section{Matrix product operator symmetries}%
-\label{sec:mpoalg_symmetry}
-
-% Source anchor: arXiv:2203.12563, Papers/2203.12563/REsubmission.tex,
-%   lines 321--362 (algebras and fusion rules), 429--460 and 567--568
-%   (symmetric states and the periodic-boundary action), 564--565 (the
-%   multiplicity relation), 660 (unit and inverses).
-% **Scope restriction (periodic boundary):** the source defines symmetry by
-%   invariance of the arbitrary-boundary subspace (lines 431--434); this
-%   section uses only its periodic-boundary consequence (lines 567--568).
-%   Documented in docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex.
-An invertible on-site symmetry acts on a matrix product state through a group
-representation on the physical index. A matrix product operator symmetry is
-given instead by a finite family of operators whose periodic operators
-multiply according to fusion rules~\cite{GarreRubio2023MPOSym}. The source
-defines the symmetry by invariance of the states with arbitrary boundary
-conditions; the statements below use only its consequence for periodic
-boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
-\cite{gap:glm23_mpo_symmetric_mps_scope}.
-
-\begin{definition}[Matrix product operator fusion algebra]%
-    \label{def:mpo_fusion_algebra}
-    \lean{MPOTensor.IsMPOFusionAlgebra}
-    \leanok
-    \uses{def:mpo_tensor, def:mpo_family}
-    A finite family $(T_a)_{a\in I}$ of matrix product operator tensors with
-    structure constants $N_{ab}^c\in\N$ is a \emph{fusion algebra} if, for
-    all $a,b\in I$ and $N\geq1$,
-    \begin{align}
-        O_a^{(N)}O_b^{(N)}
-         & =\sum_{c\in I}N_{ab}^c\,O_c^{(N)}.
-        \label{eq:mpo_fusion_algebra}
-    \end{align}
-    This is the fusion rule of \cite[Section~2]{GarreRubio2023MPOSym} and
-    \cite{Bultinck2017Anyons}.
-    % Source anchor: arXiv:2203.12563, lines 361--362.
-\end{definition}
-
-\begin{definition}[Unit and invertible labels]%
-    \label{def:fusion_unit_invertible}
-    \lean{MPOTensor.IsFusionUnit,
-        MPOTensor.IsInvertibleLabel}
-    \leanok
-    \uses{def:mpo_fusion_algebra}
-    A label $e$ is a \emph{unit} of the structure constants if
-    $N_{eb}^c=N_{be}^c=\delta_{bc}$ for all $b,c$. A label $a$ is
-    \emph{invertible} with respect to $e$ if there is a label $b$ with
-    $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for all $c$. The operator $O_e^{(N)}$ need
-    not be the identity; outside the on-site case it is a projector
-    \cite[Section~4]{GarreRubio2023MPOSym}.
-    % Source anchor: arXiv:2203.12563, line 660.
-\end{definition}
-
-\begin{definition}[Symmetric family of matrix product states]%
-    \label{def:mpo_symmetric_family}
-    \lean{MPOTensor.IsMPOSymmetricFamily,
-        MPOTensor.IsMPOSymmetric}
-    \leanok
-    \uses{def:mpo_fusion_algebra, def:mps_tensor}
-    A finite family $(A_x)_{x\in K}$ of matrix product state tensors is
-    \emph{symmetric} under $(T_a)_{a\in I}$ with coefficients
-    $M_{a,x}^y\in\C$ if, for all $a$, $x$ and $N\geq1$,
-    \begin{align}
-        O_a^{(N)}\ket{V^{(N)}(A_x)}
-         & =\sum_{y\in K}M_{a,x}^y\ket{V^{(N)}(A_y)}.
-        \label{eq:mpo_symmetric_family}
-    \end{align}
-    A single tensor $A$ is symmetric with eigenvalues $c_a$ if
-    $O_a^{(N)}\ket{V^{(N)}(A)}=c_a\ket{V^{(N)}(A)}$ for all $a$ and $N\geq1$.
-    The coefficients do not depend on $N$.
-    % Source anchor: arXiv:2203.12563, lines 567--568 (restated at line 1801).
-\end{definition}
-
-\begin{definition}[Fusion character and nonnegative integer representation]%
-    \label{def:fusion_character_nimrep}
-    \lean{MPOTensor.IsFusionCharacter,
-        MPOTensor.IsNIMRep}
-    \leanok
-    \uses{def:fusion_unit_invertible}
-    A \emph{fusion character} with unit $e$ is a function $m$ on labels with
-    $m_e=1$ and $m_am_b=\sum_cN_{ab}^cm_c$. A \emph{nonnegative integer
-        representation} on a finite set $K$ is a family of matrices
-    $M_{a,x}^y\in\N$ with
-    \begin{align}
-        \sum_cN_{ab}^cM_{c,x}^y
-         & =\sum_{z\in K}M_{b,x}^zM_{a,z}^y.
-        \label{eq:mpo_nimrep}
-    \end{align}
-    % Source anchor: arXiv:2203.12563, lines 564--565 (the relation for the
-    %   multiplicities); the fusion character is not used by the source.
-\end{definition}
-
-\begin{theorem}[Integrality of multi-block word-trace relations]%
-    \label{thm:mpoalg_multiblock_trace_integral}
-    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
-    \leanok
-    \uses{def:asym_word_module, def:normal}
-    Let $(A_y)_{y\in K}$ be normal tensors of positive bond dimension with
-    pairwise non-isomorphic word modules, let $B$ be a tensor on the same
-    physical alphabet, and let $c_y\in\C$ satisfy
-    $\tr(B^w)=\sum_yc_y\tr(A_y^w)$ for every nonempty word $w$. Then every
-    $c_y$ is a nonnegative integer.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:asym_word_module}
-    The word modules of the $A_y$ are simple and pairwise non-isomorphic, so
-    by density the words of one positive length $\ell$ act on
-    $\bigoplus_y\C^{D_y}$ as the full block-diagonal algebra. Fix $y_0$ and an
-    index $j$; there are coefficients $x_u$, over words $u$ of length $\ell$,
-    with
-    \begin{align}
-        \sum_ux_uA_{y_0}^u & =E_{jj},            &
-        \sum_ux_uA_y^u     & =0\quad(y\neq y_0).
-        \label{eq:mpoalg_trace_integral_unit}
-    \end{align}
-    Define $Q=\sum_ux_uB^u$. Expanding powers and applying the trace
-    relation to the concatenated nonempty words gives, for every $k\geq1$,
-    \begin{align}
-        \tr(Q^k)
-         & =\sum_yc_y\,\tr\left(\left(\sum_ux_uA_y^u\right)^k\right)
-        =c_{y_0}\,\tr(E_{jj}^k)=c_{y_0}.
-        \label{eq:mpoalg_trace_integral_powers}
-    \end{align}
-    A constant trace of all positive powers of a fixed finite-dimensional
-    matrix is a nonnegative integer: the power sums of its nonzero
-    eigenvalues, counted with algebraic multiplicity, are constant only when
-    every nonzero eigenvalue is one, and the constant is their total
-    multiplicity. This is the argument of
-    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} with several blocks.
-\end{proof}
-
-\begin{theorem}[The action coefficients form a nonnegative integer representation]%
-    \label{thm:mpo_symmetric_nimrep}
-    \lean{MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily,
-        MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily,
-        MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily}
-    \leanok
-    \uses{def:mpo_symmetric_family, def:fusion_character_nimrep, def:normal}
-    Let $(A_x)_{x\in K}$ be normal tensors of positive bond dimension whose
-    periodic vectors are linearly independent at some length $N_0\geq1$,
-    symmetric under a fusion algebra with coefficients $M_{a,x}^y$. Then
-    every $M_{a,x}^y$ is a nonnegative integer and (\ref{eq:mpo_nimrep})
-    holds. This is the integrality and associativity of the action
-    multiplicities in \cite[Section~3]{GarreRubio2023MPOSym}.
-    % Source anchor: arXiv:2203.12563, line 460 and lines 564--565.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mpoalg_multiblock_trace_integral}
-    Fix $a$ and $x$. The word traces of $T_a\cdot A_x$ are
-    $\sum_yM_{a,x}^y\tr(A_y^w)$ on nonempty words $w$. The word modules of
-    the $A_y$ are simple and pairwise non-isomorphic, since isomorphic word
-    modules have equal periodic vectors. An element of the augmentation ideal
-    of the word algebra acts on the block $y_0$ as a matrix unit and
-    annihilates the other blocks; its powers have constant trace
-    $M_{a,x}^{y_0}$ on $T_a\cdot A_x$, so $M_{a,x}^{y_0}$ is a nonnegative
-    integer (Theorem~\ref{thm:mpoalg_multiblock_trace_integral}). Applying
-    (\ref{eq:mpo_fusion_algebra}) and (\ref{eq:mpo_symmetric_family}) twice
-    to $O_a^{(N_0)}O_b^{(N_0)}\ket{V^{(N_0)}(A_x)}$ and comparing
-    coefficients of the independent vectors gives (\ref{eq:mpo_nimrep}).
-\end{proof}
-
-\begin{theorem}[A single symmetric normal tensor gives a fusion character]%
-    \label{thm:mpo_symmetric_character}
-    \lean{MPOTensor.exists_isFusionCharacter_of_isMPOSymmetric}
-    \leanok
-    \uses{def:mpo_symmetric_family, def:fusion_character_nimrep}
-    If a normal tensor of positive bond dimension is symmetric under a fusion
-    algebra with eigenvalues $c_a$ and $c_e=1$, then $c_a\in\N$ for every $a$
-    and $a\mapsto c_a$ is a fusion character.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:asymex_fib_anomaly_integral_action}
-    Each $c_a$ is a nonnegative integer by
-    Theorem~\ref{thm:asymex_fib_anomaly_integral_action}. Applying
-    (\ref{eq:mpo_fusion_algebra}) to the nonzero periodic vector at an
-    injective length gives $c_ac_b=\sum_cN_{ab}^cc_c$.
-\end{proof}
-
-\begin{corollary}[Rank-one obstruction]%
-    \label{cor:mpo_symmetric_no_go}
-    \lean{MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter}
-    \leanok
-    \uses{thm:mpo_symmetric_character}
-    If the structure constants admit no fusion character with values in
-    $\N$, no normal tensor of positive bond dimension is symmetric with
-    $c_e=1$. This obstruction sees only the fusion ring; the cohomological
-    obstruction of Theorem~\ref{thm:mpoalg_no_symmetric_normal}, which also
-    excludes group-like algebras with a nontrivial three-cocycle, is a
-    different statement.
-\end{corollary}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mpo_symmetric_character}
-    Theorem~\ref{thm:mpo_symmetric_character} produces a fusion character
-    with values in $\N$ from any such tensor.
-\end{proof}
-
-\begin{theorem}[Invertible labels]%
-    \label{thm:mpo_invertible_labels}
-    \lean{MPOTensor.IsFusionCharacter.eq_one_of_isInvertibleLabel,
-        MPOTensor.mpo_mulVec_eq_of_isInvertibleLabel,
-        MPOTensor.IsNIMRep.exists_eq_one_of_isInvertibleLabel,
-        MPOTensor.IsNIMRep.exists_equiv_of_isInvertibleLabel,
-        MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel}
-    \leanok
-    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetric_character,
-        def:fusion_unit_invertible}
-    A fusion character with values in $\N$ is $1$ on every invertible label,
-    so an invertible label fixes the periodic vectors of a single symmetric
-    normal tensor with $c_e=1$. For a family as in
-    Theorem~\ref{thm:mpo_symmetric_nimrep} on which $O_e^{(N)}$ fixes every
-    periodic vector, each invertible label $g$ permutes the blocks: there is a
-    bijection $x\mapsto g\cdot x$ of the block labels with
-    $O_g^{(N)}\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{g\cdot x})}$ for all
-    $N\geq1$. This is the permutation action of
-    \cite[Section~4]{GarreRubio2023MPOSym}.
-    % Source anchor: arXiv:2203.12563, line 683.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetric_character}
-    From $m_am_b=m_e=1$ in $\N$ one gets $m_a=1$. For the family, the
-    multiplicity matrices satisfy $M_aM_b=M_bM_a=M_e=\Id$ with nonnegative
-    integer entries, so each row of $M_a$ is a standard basis vector, and the
-    two relations make the resulting map of blocks a bijection.
-\end{proof}
-
-\begin{example}[Fibonacci]%
-    \label{ex:mpo_symmetry_fibonacci}
-    \lean{FibonacciCompression.isMPOFusionAlgebra_fibBlock,
-        FibonacciCompression.isFusionUnit_fibFusion,
-        FibonacciCompression.isMPOSymmetricFamily_fibNimTargets,
-        FibonacciCompression.isNIMRep_fibFusion,
-        FibonacciCompression.not_isFusionCharacter_fibFusion}
-    \leanok
-    \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
-        thm:asymex_fib_anomaly_nim_rep, thm:asymex_fib_anomaly_no_go}
-    The Fibonacci operators of Section~\ref{sec:asymex_fibonacci} form a
-    fusion algebra with unit $1$ and $\tau\times\tau=1+\tau$; the two normal
-    states with $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$ form
-    a symmetric family whose action is the regular representation
-    \cite[Section~6]{GarreRubio2023MPOSym}. Since $m^2=1+m$ has no solution
-    in $\N$, no single normal tensor $A$ satisfies
-    $O_1^{(N)}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ and
-    $O_\tau^{(N)}\ket{V^{(N)}(A)}=c\ket{V^{(N)}(A)}$ for all $N\geq1$
-    (Theorem~\ref{thm:asymex_fib_anomaly_no_go}).
-    % Source anchor: arXiv:2203.12563, line 1993; arXiv:1511.08090, App. D.1.
-\end{example}
-
-\begin{example}[Anomalous cyclic group of order three]%
-    \label{ex:mpo_symmetry_z3}
-    \lean{Z3Anomalous.isMPOFusionAlgebra_z3Block,
-        Z3Anomalous.isInvertibleLabel_z3Fusion}
-    \leanok
-    \uses{def:fusion_unit_invertible}
-    The operators $1,U,U^\dagger$ of
-    Section~\ref{sec:asymex_z3anomalous} form a group-like fusion algebra in
-    which every label is invertible. The fusion ring does not see the
-    nontrivial three-cocycle of this representation; the obstruction to
-    invariant normal states comes from
-    Theorem~\ref{thm:mpoalg_no_symmetric_normal}.
-\end{example}
 
 %% ---------------------------------------------------------
 \section{Fusion tensors and action tensors}%
