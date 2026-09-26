@@ -26,6 +26,8 @@ import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
+import TNLean.Algebra.ExpectationOverlap
+import TNLean.Algebra.ExponentialSumWindow
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinSumPermutation
@@ -51,6 +53,7 @@ import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
+import TNLean.Algebra.MatrixTensorPower
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
@@ -74,6 +77,7 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
+import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition
