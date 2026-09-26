@@ -48,7 +48,7 @@ theorem noncommProd_embedOp_apply {ι : Type*} [DecidableEq ι] (e : ι → Fin 
       implies_true, forall_const, Finset.prod_empty, one_apply]
     by_cases h : x = y
     · simp [h]
-    · rw [if_neg h, if_neg fun h' => h (funext h')]
+    · rw [ite_eq_right h, ite_eq_right fun h' => h (funext h')]
   | insert a s ha ih =>
     intro hdisj hcomm x y
     rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha, mul_apply]
@@ -60,13 +60,16 @@ theorem noncommProd_embedOp_apply {ι : Type*} [DecidableEq ι] (e : ι → Fin 
     simp_rw [ih hdisj' (hcomm.mono (by simp))]
     set z₀ : Cfg d n := Function.extend (e a) (y ∘ e a) x with hz₀
     rw [Finset.sum_eq_single z₀]
-    · rw [embedOp_apply, if_pos (fun i hi => by
-        rw [hz₀, Function.extend_apply' _ _ _ fun ⟨j, hj⟩ => hi j hj]),
+    · have hag : AgreeOff (e a) x z₀ := fun i hi => by
+        rw [hz₀, Function.extend_apply' _ _ _ fun ⟨j, hj⟩ => hi j hj]
+      rw [embedOp_apply, ite_eq_left hag,
         show z₀ ∘ e a = y ∘ e a from Function.extend_comp (he a) _ _]
       have hz₀s : ∀ k ∈ s, z₀ ∘ e k = x ∘ e k := fun k hk => funext fun j => by
         simp only [Function.comp_apply, hz₀]
         rw [Function.extend_apply' _ _ _ fun ⟨j', hj'⟩ => hsa k hk j j' hj'.symm]
-      rw [Finset.prod_congr rfl fun k hk => by rw [hz₀s k hk], Finset.prod_insert ha]
+      have hprod : ∏ k ∈ s, X k (z₀ ∘ e k) (y ∘ e k) = ∏ k ∈ s, X k (x ∘ e k) (y ∘ e k) :=
+        Finset.prod_congr rfl fun k hk => by rw [hz₀s k hk]
+      rw [hprod, Finset.prod_insert ha]
       have hcond : (∀ i, (∀ k ∈ s, ∀ j, e k j ≠ i) → z₀ i = y i) ↔
           ∀ i, (∀ k ∈ insert a s, ∀ j, e k j ≠ i) → x i = y i := by
         constructor
@@ -84,8 +87,8 @@ theorem noncommProd_embedOp_apply {ι : Type*} [DecidableEq ι] (e : ι → Fin 
             · exact fun hj => hia ⟨j, hj⟩
             · exact hi k hk j
       by_cases h : ∀ i, (∀ k ∈ insert a s, ∀ j, e k j ≠ i) → x i = y i
-      · rw [if_pos (hcond.mpr h), if_pos h]
-      · rw [if_neg (fun h' => h (hcond.mp h')), if_neg h, mul_zero]
+      · rw [ite_eq_left (hcond.mpr h), ite_eq_left h]
+      · rw [ite_eq_right (fun h' => h (hcond.mp h')), ite_eq_right h, mul_zero]
     · intro z _ hz
       rw [embedOp_apply]
       by_cases h1 : AgreeOff (e a) x z
@@ -99,8 +102,8 @@ theorem noncommProd_embedOp_apply {ι : Type*} [DecidableEq ι] (e : ι → Fin 
             exact h2 _ fun k hk j' => hsa k hk j' j
           · rw [hz₀, Function.extend_apply' _ _ _ hia]
             exact (h1 i fun j hj => hia ⟨j, hj⟩).symm
-        · rw [if_neg h2, mul_zero]
-      · rw [if_neg h1, zero_mul]
+        · rw [ite_eq_right h2, mul_zero]
+      · rw [ite_eq_right h1, zero_mul]
     · simp
 
 end MPSPreparation

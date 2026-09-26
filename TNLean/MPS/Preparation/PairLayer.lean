@@ -77,7 +77,7 @@ theorem finRotate_val (k : Fin M) :
   rw [coe_finRotate]
   by_cases h : k = Fin.last M'
   · subst h; simp
-  · rw [if_neg h, if_neg (fun h' => h (Fin.ext (by simp; omega)))]
+  · rw [ite_eq_right h, ite_eq_right (fun h' => h (Fin.ext (by simp; omega)))]
 
 /-- The `2 r₁` sites of the pair window between the blocks `k` and `k + 1` (cyclically): the
 last `r₁` sites of block `k` followed by the first `r₁` sites of block `k + 1`. -/
@@ -125,16 +125,16 @@ theorem pairSite_succ [NeZero (M * q)] (hq : r₁ + r₁ ≤ q) (hr : 1 ≤ r₁
     pairSite M q r₁ (by omega) k i' = pairSite M q r₁ (by omega) k i + 1 := by
   simp only [pairSite]
   by_cases h1 : i'.val < r₁
-  · rw [dif_pos h1, dif_pos (by omega)]
+  · rw [dite_eq_left h1, dite_eq_left (by omega)]
     exact blockSite_succ k _ _ (by simp; omega)
   by_cases h2 : i.val < r₁
-  · rw [dif_neg h1, dif_pos h2]
+  · rw [dite_eq_right h1, dite_eq_left h2]
     -- crossing from block `k` to block `k + 1`
     have hk := k.isLt
     ext
     have hrot := finRotate_val k
     by_cases hkM : k.val + 1 < M
-    · rw [if_neg (by omega)] at hrot
+    · rw [ite_eq_right (by omega)] at hrot
       have hlt : (blockSite M q k ⟨q - r₁ + i.val, by omega⟩).val + 1 < M * q := by
         simp only [blockSite_val]
         have : q * k.val + q + q ≤ M * q := by nlinarith
@@ -143,7 +143,7 @@ theorem pairSite_succ [NeZero (M * q)] (hq : r₁ + r₁ ≤ q) (hr : 1 ≤ r₁
       simp only
       rw [Nat.mul_add]
       omega
-    · rw [if_pos (by omega)] at hrot
+    · rw [ite_eq_left (by omega)] at hrot
       rw [blockSite_val, hrot, Fin.val_add, Fin.val_one', blockSite_val]
       simp only
       have hM : M * q = q * k.val + q := by
@@ -153,7 +153,7 @@ theorem pairSite_succ [NeZero (M * q)] (hq : r₁ + r₁ ≤ q) (hr : 1 ≤ r₁
       have : q - r₁ + i.val + q * k.val + 1 = q * k.val + q := by omega
       rw [this, Nat.mod_self]
       omega
-  · rw [dif_neg h1, dif_neg h2]
+  · rw [dite_eq_right h1, dite_eq_right h2]
     exact blockSite_succ _ _ _ (by simp; omega)
 
 /-! ### The entangled pairs from the all-zero state -/

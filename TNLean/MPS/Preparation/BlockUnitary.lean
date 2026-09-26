@@ -90,24 +90,24 @@ neighbouring sites. -/
 theorem isPairProduct_permOp_swap {n : ℕ} (i i' : Fin n) :
     IsPairProduct d n (2 * n) (permOp (Equiv.swap i i')) := by
   by_cases h : i = i'
-  · rw [h, Equiv.swap_self, Equiv.refl_eq_one, permOp_one]
+  · rw [h, Equiv.swap_self, ← Equiv.Perm.one_def, permOp_one]
     exact IsPairProduct.one _
   · rw [permOp_swap_eq_embedOp h]
     exact isPairProduct_embedOp_pairSites h (permOp_mem_unitary _)
 
 /-- The permutation exchanging the sites `i` and `a + i` for every `i < j`. -/
 def routePerm (n a : ℕ) : ℕ → Equiv.Perm (Fin n)
-  | 0 => 1
+  | 0 => (1 : Equiv.Perm (Fin n))
   | j + 1 => routePerm n a j *
-      if h : a + j < n then Equiv.swap ⟨j, by omega⟩ ⟨a + j, h⟩ else 1
+      if h : a + j < n then Equiv.swap ⟨j, by omega⟩ ⟨a + j, h⟩ else (1 : Equiv.Perm (Fin n))
 
 theorem routePerm_apply {n a : ℕ} :
     ∀ j, j ≤ a → a + j ≤ n → ∀ p : Fin n, (routePerm n a j p).val =
       if p.val < j then a + p.val else if a ≤ p.val ∧ p.val < a + j then p.val - a else p.val
   | 0, _, _, p => by simp [routePerm]
   | j + 1, hja, hjn, p => by
-    have ih := routePerm_apply j (by omega) (by omega)
-    rw [routePerm, dif_pos (by omega), Equiv.Perm.coe_mul, Function.comp_apply]
+    have ih := routePerm_apply (n := n) (a := a) j (by omega) (by omega)
+    rw [routePerm, dite_eq_left (show a + j < n by omega), Equiv.Perm.coe_mul, Function.comp_apply]
     by_cases hp1 : p.val = j
     · have : p = ⟨j, by omega⟩ := Fin.ext hp1
       rw [this, Equiv.swap_apply_left, ih]
@@ -143,17 +143,17 @@ theorem inputCfg_comp_routePerm (hd : 0 < d) {r₁ q : ℕ} (hq : 3 * r₁ ≤ q
   simp only [Function.comp_apply, inputCfg, blockInputCfg, twoCfg]
   set t := routePerm q (q - (r₁ + r₁)) r₁ p with ht
   by_cases h1 : p.val < r₁
-  · rw [if_pos h1] at hτ
-    rw [dif_pos (by omega), dif_pos (by omega), dif_pos h1]
+  · rw [ite_eq_left h1] at hτ
+    rw [dite_eq_left (by omega), dite_eq_left (by omega), dite_eq_left h1]
     congr 1; ext; simp; omega
   by_cases h2 : q - (r₁ + r₁) ≤ p.val ∧ p.val < q - (r₁ + r₁) + r₁
-  · rw [if_neg h1, if_pos h2] at hτ
-    rw [dif_neg (by omega), dif_neg h1, dif_neg (by omega)]
-  · rw [if_neg h1, if_neg h2] at hτ
+  · rw [ite_eq_right h1, ite_eq_left h2] at hτ
+    rw [dite_eq_right (by omega), dite_eq_right h1, dite_eq_right (by omega)]
+  · rw [ite_eq_right h1, ite_eq_right h2] at hτ
     by_cases h3 : q - r₁ ≤ p.val
-    · rw [dif_pos (by omega), dif_neg (by omega), dif_neg h1, dif_pos h3]
+    · rw [dite_eq_left (by omega), dite_eq_right (by omega), dite_eq_right h1, dite_eq_left h3]
       congr 1; ext; simp; omega
-    · rw [dif_neg (by omega), dif_neg h1, dif_neg h3]
+    · rw [dite_eq_right (by omega), dite_eq_right h1, dite_eq_right h3]
 
 /-! ### The block unitary -/
 
@@ -184,24 +184,30 @@ theorem exists_blockUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁) {dig 
     hencinj
   refine ⟨K₀ + K₁ + 2 * r₁, fun q hq b Q hb0 hbq hrow hiso => ?_⟩
   obtain ⟨U, hU, hUQ⟩ := hK q (by omega) b Q hb0 hrow hiso
-  set τ := routePerm q (q - (r₁ + r₁)) r₁
+  have hτpp := isPairProduct_permOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
+  have hin := inputCfg_comp_routePerm hd hq dig
+  generalize routePerm q (q - (r₁ + r₁)) r₁ = τ at hτpp hin
   refine ⟨U * permOp τ, ?_, fun l r σ => ?_⟩
-  · refine (hU.mul (isPairProduct_permOp_routePerm q _ r₁)).mono ?_
+  · refine (hU.mul hτpp).mono ?_
     have h1 : (q - (r₁ + r₁)) * K₁ ≤ q * K₁ := Nat.mul_le_mul_right _ (by omega)
     have h2 : K₀ ≤ q * K₀ := Nat.le_mul_of_pos_left _ (by omega)
-    nlinarith
-  · have hin := inputCfg_comp_routePerm hd hq dig l r
+    have h3 : r₁ * (2 * q) = q * (2 * r₁) := by ring
+    calc K₀ + (q - (r₁ + r₁)) * K₁ + r₁ * (2 * q) ≤ q * K₀ + q * K₁ + q * (2 * r₁) :=
+          Nat.add_le_add (Nat.add_le_add h2 h1) (le_of_eq h3)
+      _ = (K₀ + K₁ + 2 * r₁) * q := by ring
+  · have hin := hin l r
     rw [mul_apply, Finset.sum_eq_single (inputCfg hd q (twoCfg dig l r))]
-    · rw [permOp, of_apply, if_pos hin.symm, mul_one, show twoCfg dig l r =
-        enc (finProdFinEquiv (l, r)) by simp [henc]]
+    · rw [permOp, of_apply, ite_eq_left hin.symm, mul_one, show twoCfg dig l r =
+        enc (finProdFinEquiv (l, r)) by simp only [henc, Equiv.symm_apply_apply]]
       exact hUQ _ (by rw [hbq]; exact (finProdFinEquiv (l, r)).isLt) σ
     · intro z _ hz
-      rw [permOp, of_apply, if_neg, mul_zero]
+      rw [permOp, of_apply, ite_eq_right, mul_zero]
       intro h
       apply hz
       funext p
       have := congrFun (h.symm.trans hin.symm) (τ.symm p)
-      simpa using this
+      simp only [Function.comp_apply, Equiv.apply_symm_apply] at this
+      exact this
     · simp
 
 end MPSPreparation

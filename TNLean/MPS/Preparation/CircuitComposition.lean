@@ -87,13 +87,13 @@ def union (L₁ L₂ : Layer d N) {R₁ R₂ : Set (Fin N)} (h₁ : L₁.IsIn R�
   gate := fun k => if k ∈ L₁.bonds then L₁.gate k else L₂.gate k
   gate_mem_unitary := fun k hk => by
     by_cases h : k ∈ L₁.bonds
-    · rw [if_pos h]; exact L₁.gate_mem_unitary k h
-    · rw [if_neg h]
+    · rw [ite_eq_left h]; exact L₁.gate_mem_unitary k h
+    · rw [ite_eq_right h]
       exact L₂.gate_mem_unitary k ((Finset.mem_union.mp hk).resolve_left h)
   gate_mem_supportedOperators := fun k hk => by
     by_cases h : k ∈ L₁.bonds
-    · rw [if_pos h]; exact L₁.gate_mem_supportedOperators k h
-    · rw [if_neg h]
+    · rw [ite_eq_left h]; exact L₁.gate_mem_supportedOperators k h
+    · rw [ite_eq_right h]
       exact L₂.gate_mem_supportedOperators k ((Finset.mem_union.mp hk).resolve_left h)
   pairwiseDisjoint := by
     intro k hk l hl hkl
@@ -121,14 +121,17 @@ theorem disjoint_bonds {L₁ L₂ : Layer d N} {R₁ R₂ : Set (Fin N)} (h₁ :
 theorem union_op {L₁ L₂ : Layer d N} {R₁ R₂ : Set (Fin N)} (h₁ : L₁.IsIn R₁)
     (h₂ : L₂.IsIn R₂) (hR : Disjoint R₁ R₂) : (union L₁ L₂ h₁ h₂ hR).op = L₁.op * L₂.op := by
   have hdisj := disjoint_bonds h₁ h₂ hR
-  unfold op partialOp
-  rw [show (union L₁ L₂ h₁ h₂ hR).bonds = L₁.bonds ∪ L₂.bonds from rfl,
-    Finset.noncommProd_union_of_disjoint hdisj]
-  congr 1
-  · exact Finset.noncommProd_congr rfl (fun k hk => by simp [union, hk]) _
-  · refine Finset.noncommProd_congr rfl (fun k hk => ?_) _
-    have : k ∉ L₁.bonds := Finset.disjoint_right.mp hdisj hk
-    simp [union, this]
+  have hc : ((L₁.bonds ∪ L₂.bonds : Finset (Fin N)) : Set (Fin N)).Pairwise
+      (Function.onFun Commute (union L₁ L₂ h₁ h₂ hR).gate) :=
+    (union L₁ L₂ h₁ h₂ hR).gate_commute _ subset_rfl
+  calc (union L₁ L₂ h₁ h₂ hR).op
+      = (L₁.bonds ∪ L₂.bonds).noncommProd (union L₁ L₂ h₁ h₂ hR).gate hc := rfl
+    _ = _ := Finset.noncommProd_union_of_disjoint hdisj _ hc
+    _ = L₁.op * L₂.op := by
+      congr 1
+      · exact Finset.noncommProd_congr rfl (fun k hk => by simp [union, hk]) _
+      · exact Finset.noncommProd_congr rfl
+          (fun k hk => by simp [union, Finset.disjoint_right.mp hdisj hk]) _
 
 end Layer
 
@@ -219,7 +222,9 @@ private theorem zip_union :
       rcases List.mem_cons.mp hL with rfl | hL
       · exact Layer.union_isIn hL₁ hL₂ hR
       · exact hMs L hL
-    · rw [circuitOp, ← hMeq, Layer.union_op, circuitOp, circuitOp]
+    · show circuitOp Ls₁ * L₁.op * (circuitOp Ls₂ * L₂.op) =
+        circuitOp Ms * (Layer.union L₁ L₂ hL₁ hL₂ hR).op
+      rw [← hMeq, Layer.union_op]
       have hc : Commute (circuitOp Ls₂) L₁.op :=
         commute_of_mem_supportedOperators hR.symm (circuitOp_mem_supportedOperators Ls₂ h₂')
           (Layer.op_mem_supportedOperators hL₁)
@@ -268,7 +273,7 @@ whose gates act inside the range of `e`. -/
 theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Function.Injective e)
     (hsucc : ∀ i j : Fin m, j.val = i.val + 1 → e j = e i + 1)
     {X : Matrix (Cfg d m) (Cfg d m) ℂ} (hX : IsPairProduct d m K X) :
-    IsCircuitOn (Set.range e) K (embedOp e X) := by
+    IsCircuitOn (Set.range e) K (MPSPreparation.embedOp e X) := by
   obtain ⟨l, hl, hg, rfl⟩ := hX
   refine IsCircuitOn.mono ?_ hl
   clear hl
@@ -276,7 +281,7 @@ theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Functi
   | nil => simpa using IsCircuitOn.one (d := d) (Set.range e) 0
   | cons Z l ih =>
     obtain ⟨hZu, p, p', hp, hZ⟩ := hg Z List.mem_cons_self
-    have hZ' : embedOp e Z ∈ supportedOperators d (bond (e p)) := by
+    have hZ' : MPSPreparation.embedOp e Z ∈ supportedOperators d (bond (e p)) := by
       have := embedOp_mem_supportedOperators_image he hZ
       rwa [Set.image_pair, hsucc p p' hp] at this
     have h1 := IsCircuitOn.single (embedOp_mem_unitary he hZu) hZ'
@@ -285,7 +290,7 @@ theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Functi
         · exact ⟨p, rfl⟩
         · exact ⟨p', (hsucc p p' hp)⟩)
     have h2 := ih fun Z' hZ' => hg Z' (List.mem_cons_of_mem _ hZ')
-    rw [List.prod_cons, ← embedOp_mul he, List.length_cons, Nat.add_comm]
+    rw [List.prod_cons, ← embedOp_mul he, List.length_cons]
     exact h2.mul h1
 
 end MPSPreparation

@@ -82,8 +82,8 @@ theorem mul_embedOp_apply {m n : ℕ} {e : Fin m → Fin n} (he : Function.Injec
   refine Finset.sum_congr rfl fun z _ => ?_
   rw [embedOp_apply]
   by_cases h : AgreeOff e y z
-  · rw [if_pos h.symm, if_pos h, ← eq_extend_of_agreeOff he h]
-  · rw [if_neg fun h' => h h'.symm, if_neg h, mul_zero]
+  · rw [ite_eq_left h.symm, ite_eq_left h, ← eq_extend_of_agreeOff he h]
+  · rw [ite_eq_right fun h' => h h'.symm, ite_eq_right h, mul_zero]
 
 /-! ### One step of the staircase -/
 
@@ -107,21 +107,27 @@ theorem exists_step_unitary (hd : 0 < d) {r D' : ℕ} {enc : Fin D' → Cfg d r}
       simpa [hs, Fin.snoc_castSucc] using this
     rw [henc h2, h1]
   let κ := {x : Fin D' // x.val < b}
-  let V : Matrix (Cfg d (r + 1)) κ ℂ := fun u x => Function.extend s (fun p => Q p.2 p.1 x.1) 0 u
+  let V : Matrix (Cfg d (r + 1)) κ ℂ :=
+    Matrix.of fun u x => Function.extend s (fun p => Q p.2 p.1 x.1) 0 u
   have hV : V.IsIsometry := by
     ext x x'
     rw [mul_apply, one_apply]
-    simp only [conjTranspose_apply, V]
+    simp only [conjTranspose_apply, V, of_apply]
     rw [sum_extend_zero hsi (fun p => Q p.2 p.1 x.1)
       (fun u a => star a * Function.extend s (fun p => Q p.2 p.1 x'.1) 0 u) (by simp)]
     simp only [hsi.extend_apply]
-    rw [Fintype.sum_prod_type, Finset.sum_comm, hQ x.1 x'.1 x.2 x'.2, Subtype.ext_iff]
+    rw [Fintype.sum_prod_type, Finset.sum_comm, hQ x.1 x'.1 x.2 x'.2]
+    split_ifs with h1 h2 h2
+    · rfl
+    · exact absurd (Subtype.ext h1) h2
+    · exact absurd (congrArg Subtype.val h2) h1
+    · rfl
   let emb : κ ↪ Cfg d (r + 1) :=
     ⟨fun x => Fin.cons ⟨0, hd⟩ (enc x.1), fun x x' h => Subtype.ext (henc (by
       have := congrArg Fin.tail h
       simpa using this))⟩
   obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
-  exact ⟨W, hW, fun x hx u => hWV u ⟨x, hx⟩⟩
+  exact ⟨W, hW, fun x hx u => (hWV u ⟨x, hx⟩).trans (of_apply _ _ _)⟩
 
 /-! ### The staircase -/
 
@@ -150,43 +156,46 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
   | base =>
     intro b Q hb0 hrow hiso
     let κ := {x : Fin D' // x.val < b (Fin.last r)}
-    let V : Matrix (Cfg d r) κ ℂ := fun σ x => eval Q σ ⟨0, hD'⟩ x.1
+    let V : Matrix (Cfg d r) κ ℂ := Matrix.of fun σ x => eval Q σ ⟨0, hD'⟩ x.1
     have hV : V.IsIsometry := by
       ext x x'
+      have hsx : ∀ y : κ, IsSupportedBelow (b (Fin.last r)) (Pi.single y.1 (1 : ℂ)) :=
+        fun y β hβ => by
+          rw [Pi.single_apply, ite_eq_right]; rintro rfl; exact absurd y.2 (by omega)
       have h := sum_star_eval_mulVec_dotProduct b Q hrow hiso (Pi.single x.1 1)
-        (Pi.single x'.1 1)
-        (fun β hβ => by rw [Pi.single_apply, if_neg]; rintro rfl; exact absurd x.2 (by omega))
-        (fun β hβ => by rw [Pi.single_apply, if_neg]; rintro rfl; exact absurd x'.2 (by omega))
-      have hsupp : ∀ σ (v : Fin D' → ℂ), IsSupportedBelow (b (Fin.last r)) v →
-          ∀ β : Fin D', β ≠ ⟨0, hD'⟩ → (eval Q σ *ᵥ v) β = 0 := fun σ v hv β hβ =>
-        isSupportedBelow_eval_mulVec b Q hrow v hv σ β (by
-          rw [hb0]; exact Nat.one_le_iff_ne_zero.mpr fun h => hβ (Fin.ext h))
+        (Pi.single x'.1 1) (hsx x) (hsx x')
       have hs : ∀ σ, star (eval Q σ *ᵥ Pi.single x.1 1) ⬝ᵥ (eval Q σ *ᵥ Pi.single x'.1 1) =
           star (V σ x) * V σ x' := fun σ => by
         rw [dotProduct, Finset.sum_eq_single ⟨0, hD'⟩]
         · simp [V, mulVec_single_one]
         · intro β _ hβ
-          rw [hsupp σ _ (fun β hβ => by
-            rw [Pi.single_apply, if_neg]; rintro rfl; exact absurd x'.2 (by omega)) β hβ,
-            mul_zero]
+          rw [isSupportedBelow_eval_mulVec b Q hrow _ (hsx x') σ β (by
+            rw [hb0]; exact Nat.one_le_iff_ne_zero.mpr fun h => hβ (Fin.ext h)), mul_zero]
         · simp
       simp only [hs] at h
+      have hr : star (Pi.single x.1 (1 : ℂ)) ⬝ᵥ Pi.single x'.1 1 = if x = x' then 1 else 0 := by
+        rw [dotProduct, Finset.sum_eq_single x.1]
+        · by_cases hxx : x = x'
+          · subst hxx; simp
+          · have : x.1 ≠ x'.1 := fun h => hxx (Subtype.ext h)
+            simp [Pi.single_apply, this, hxx]
+        · intro β _ hβ; simp [Pi.single_apply, hβ]
+        · simp
       rw [mul_apply, one_apply]
       simp only [conjTranspose_apply]
-      rw [h, dotProduct]
-      simp only [Pi.star_apply, Pi.single_apply, star_ite, star_one, star_zero, ite_mul,
-        one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ite_true, Subtype.ext_iff]
-      split_ifs <;> simp_all
+      rw [h, hr]
     let emb : κ ↪ Cfg d r := ⟨fun x => inputCfg hd r (enc x.1), fun x x' h => Subtype.ext
       (henc (by simpa [inputCfg_self] using h))⟩
     obtain ⟨U, hU, hUV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
-    exact ⟨U, by simpa using hK₀ U hU, fun x hx σ => hUV σ ⟨x, hx⟩⟩
+    exact ⟨U, by simpa using hK₀ U hU, fun x hx σ => (hUV σ ⟨x, hx⟩).trans (of_apply _ _ _)⟩
   | succ n hn ih =>
     intro b Q hb0 hrow hiso
     -- the chain without its last site
     obtain ⟨U', hU', hU'Q⟩ := ih (fun k => b k.castSucc) (fun p => Q p.castSucc) hb0
       (fun p i => hrow p.castSucc i) (fun p => by
-        simpa [Fin.succ_castSucc] using hiso p.castSucc)
+        have h := hiso p.castSucc
+        rw [Fin.succ_castSucc] at h
+        exact h)
     -- the unitary of the last step
     obtain ⟨W, hWu, hW⟩ := exists_step_unitary hd henc (hiso (Fin.last n))
     set win : Fin (r + 1) → Fin (n + 1) := fun j => ⟨n - r + j.val, by omega⟩ with hwin
@@ -204,11 +213,16 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
       have hyw : y ∘ win = Fin.cons ⟨0, hd⟩ (enc x) := by
         funext j
         refine Fin.cases ?_ (fun k => ?_) j
-        · simp only [Function.comp_apply, hy, inputCfg, hwin, Fin.cons_zero, Fin.val_zero]
-          rw [dif_neg (by omega)]
-        · simp only [Function.comp_apply, hy, inputCfg, hwin, Fin.cons_succ, Fin.val_succ]
-          rw [dif_pos (by omega)]
-          congr 1; ext; simp; omega
+        · rw [Fin.cons_zero, Function.comp_apply, hy]
+          unfold inputCfg
+          split_ifs with h
+          · exfalso; simp [hwin] at h; omega
+          · rfl
+        · rw [Fin.cons_succ, Function.comp_apply, hy]
+          unfold inputCfg
+          split_ifs with h
+          · congr 1; ext; simp [hwin]; omega
+          · exfalso; simp [hwin] at h; omega
       rw [mul_embedOp_apply hwini, hyw]
       simp_rw [hW x hx]
       rw [sum_extend_zero (fun p q h => by
@@ -235,12 +249,12 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
           by_cases hk : n - r ≤ k.val
           · have hkw : k.castSucc = win (⟨k.val - (n - r), by omega⟩ : Fin r).castSucc := by
               ext; simp [hwin]; omega
-            rw [hkw, hwini.extend_apply, Fin.snoc_castSucc, inputCfg, dif_pos hk]
+            rw [hkw, hwini.extend_apply, Fin.snoc_castSucc, inputCfg, dite_eq_left hk]
           · rw [Function.extend_apply' _ _ _ (by
               rintro ⟨j, hj⟩
               have := congrArg Fin.val hj
-              simp [hwin] at this; omega), hy, inputCfg, inputCfg, dif_neg (by simp; omega),
-              dif_neg hk]
+              simp [hwin] at this; omega), hy, inputCfg, inputCfg, dite_eq_right (by simp; omega),
+              dite_eq_right hk]
         have hag : AgreeOff Fin.castSucc σ z ↔ σ (Fin.last n) = i := by
           rw [← hzl]
           constructor
@@ -252,15 +266,15 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
             rw [this]; exact h
         rw [embedOp_apply, hzc]
         by_cases h : σ (Fin.last n) = i
-        · rw [if_pos (hag.mpr h), if_pos h]
-        · rw [if_neg (fun h' => h (hag.mp h')), if_neg h]
+        · rw [ite_eq_left (hag.mpr h), ite_eq_left h]
+        · rw [ite_eq_right (fun h' => h (hag.mp h')), ite_eq_right h]
       simp only [hext, ite_mul, zero_mul]
       rw [Fintype.sum_prod_type]
       simp only [Finset.sum_ite_eq, Finset.mem_univ, ite_true]
       rw [eval_succ', mul_apply]
       refine Finset.sum_congr rfl fun α _ => ?_
       by_cases hα : α.val < b (Fin.last n).castSucc
-      · rw [hU'Q α (by simpa using hα)]
+      · rw [hU'Q α (by simpa using hα)]; rfl
       · rw [hrow (Fin.last n) (σ (Fin.last n)) α x (by omega), mul_zero, mul_zero]
 
 end MPSPreparation

@@ -72,9 +72,9 @@ theorem siteCfg_comp_pairSite (hd : 0 < d) (hq : 3 * r₁ ≤ q) (dig : Fin D �
   funext i
   simp only [Function.comp_apply, pairSite, twoCfg]
   split_ifs with h
-  · rw [siteCfg_blockSite, blockInputCfg, dif_neg (by simp; omega), dif_pos (by simp)]
+  · rw [siteCfg_blockSite, blockInputCfg, dite_eq_right (by simp; omega), dite_eq_left (by simp)]
     congr 1; ext; simp; omega
-  · rw [siteCfg_blockSite, blockInputCfg, dif_pos (by simp; omega)]
+  · rw [siteCfg_blockSite, blockInputCfg, dite_eq_left (by simp; omega)]
 
 theorem blockSite_mem_pairSite (hq : 3 * r₁ ≤ q) (j : Fin M) (p : Fin q) :
     (∃ k i, pairSite M q r₁ (by omega) k i = blockSite M q j p) ↔
@@ -99,7 +99,7 @@ theorem siteCfg_of_not_mem_pairSite (hd : 0 < d) (hq : 3 * r₁ ≤ q) (dig : Fi
   have hp : ¬(p.val < r₁ ∨ q - r₁ ≤ p.val) := fun h => by
     obtain ⟨k, i', h'⟩ := (blockSite_mem_pairSite hq j p).mpr h
     exact hi k i' h'
-  rw [siteCfg_blockSite, blockInputCfg, dif_neg (by omega), dif_neg (by omega)]
+  rw [siteCfg_blockSite, blockInputCfg, dite_eq_right (by omega), dite_eq_right (by omega)]
 
 /-- A configuration with `|0⟩` off the pair windows and the pair `(r_k, l_{k+1})` on the window
 `k` is the configuration whose block `k` carries `|l_k, 0 ⋯ 0, r_k⟩`. -/
@@ -112,23 +112,23 @@ theorem eq_siteCfg (hd : 0 < d) (hq : 3 * r₁ ≤ q) (dig : Fin D → Cfg d r�
   obtain ⟨j, p, rfl⟩ := exists_blockSite (M := M) (q := q) i
   rw [siteCfg_blockSite, blockInputCfg]
   by_cases hp1 : p.val < r₁
-  · rw [dif_pos hp1]
+  · rw [dite_eq_left hp1]
     have hs : pairSite M q r₁ (by omega) ((finRotate M).symm j) ⟨r₁ + p.val, by omega⟩ =
         blockSite M q j p := by
       rw [pairSite_eq_blockSite_iff (by omega)]
       exact Or.inr ⟨by simp, by simp, by simp⟩
     have := congrFun (hP ((finRotate M).symm j)) ⟨r₁ + p.val, by omega⟩
-    rw [Function.comp_apply, hs, twoCfg, dif_neg (by simp)] at this
+    rw [Function.comp_apply, hs, twoCfg, dite_eq_right (by simp)] at this
     rw [this]; congr 1; ext; simp
   by_cases hp2 : q - r₁ ≤ p.val
-  · rw [dif_neg hp1, dif_pos hp2]
+  · rw [dite_eq_right hp1, dite_eq_left hp2]
     have hs : pairSite M q r₁ (by omega) j ⟨p.val - (q - r₁), by omega⟩ = blockSite M q j p := by
       rw [pairSite_eq_blockSite_iff (by omega)]
       exact Or.inl ⟨by simp; omega, rfl, by simp; omega⟩
     have := congrFun (hP j) ⟨p.val - (q - r₁), by omega⟩
-    rw [Function.comp_apply, hs, twoCfg, dif_pos (by simp; omega)] at this
+    rw [Function.comp_apply, hs, twoCfg, dite_eq_left (by simp; omega)] at this
     exact this
-  · rw [dif_neg hp1, dif_neg hp2]
+  · rw [dite_eq_right hp1, dite_eq_right hp2]
     refine h0 _ fun k i' h => ?_
     exact absurd ((blockSite_mem_pairSite hq j p).mp ⟨k, i', h⟩) (by omega)
 
@@ -157,19 +157,19 @@ theorem embeddedPairState_blockedConfigEquiv_symm (hd : 0 < d) (hq : 3 * r₁ �
   have hι := blockPlacement_injective hd hq hdig
   by_cases hy : ∃ c, y = siteCfg hd M q dig c
   · obtain ⟨c, rfl⟩ := hy
-    rw [if_pos fun i hi => siteCfg_of_not_mem_pairSite hd hq dig c hi]
+    rw [ite_eq_left fun i hi => siteCfg_of_not_mem_pairSite hd hq dig c hi]
     simp_rw [siteCfg_comp_pairSite hd hq dig c]
     simp only [hs.extend_apply]
     rw [siteCfg, Equiv.symm_apply_apply, embeddedPairState, Finset.sum_eq_single c]
-    · rw [if_pos rfl]; rfl
+    · rw [ite_eq_left rfl]; rfl
     · intro c' _ hc'
-      rw [if_neg]
+      rw [ite_eq_right]
       intro h
       exact hc' (funext fun k => hι (congrFun h k))
     · simp
   · have hL : embeddedPairState (blockPlacement hd q dig) σ
         ((blockedConfigEquiv d M q).symm y) = 0 := by
-      refine Finset.sum_eq_zero fun c _ => if_neg fun h => hy ⟨c, ?_⟩
+      refine Finset.sum_eq_zero fun c _ => ite_eq_right fun h => hy ⟨c, ?_⟩
       rw [siteCfg, h, Equiv.apply_symm_apply]
     rw [hL]
     split_ifs with h0
@@ -209,7 +209,7 @@ noncomputable def pairLayerOp (hq : r₁ + r₁ ≤ q) (W : Matrix (Cfg d (r₁ 
 theorem blockLayerOp_apply (U : Matrix (Cfg d q) (Cfg d q) ℂ) (x y : Cfg d (M * q)) :
     blockLayerOp (M := M) U x y = ∏ k, U (x ∘ blockSite M q k) (y ∘ blockSite M q k) := by
   rw [blockLayerOp, noncommProd_embedOp_apply _ (fun k => blockSite_injective k) _ _
-    (fun k _ k' _ h => disjoint_range_blockSite h), if_pos]
+    (fun k _ k' _ h => disjoint_range_blockSite h), ite_eq_left]
   intro i hi
   obtain ⟨k, j, rfl⟩ := exists_blockSite (M := M) (q := q) i
   exact absurd rfl (hi k (Finset.mem_univ k) j)
@@ -466,7 +466,7 @@ theorem exists_isPreparedInDepth_approximatingMPVState (hd : 2 ≤ d) (hD : 0 < 
   refine Finset.sum_congr rfl fun t _ => ?_
   congr 1
   · rw [hBl, noncommProd_embedOp_apply eb heb (fun _ => Ub) Finset.univ hebd hBc,
-      if_pos fun i hi => absurd hi (by
+      ite_eq_left fun i hi => absurd hi (by
         obtain ⟨k, j, rfl⟩ := exists_blockSite (M := M) (q := q) i
         exact fun h => h k (Finset.mem_univ k) j rfl)]
     refine Finset.prod_congr rfl fun k _ => ?_

@@ -217,7 +217,7 @@ theorem exists_isPairProduct (hd : 0 < d) (hn : 2 ≤ n) :
     simpa using this
   have hXeq : X = (μ • (1 : Matrix (Cfg d n) (Cfg d n) ℂ)) * X' := by
     rw [hX', smul_mul_assoc, Matrix.one_mul, smul_smul, mul_inv_cancel₀ hμ0, one_smul]
-  rw [hXeq, ← hlX]
+  rw [hXeq, hlX]
   refine ((isPairProduct_smul_one hd hn hμn).mul hprod).mono ?_
   have : l.length * K₂ ≤ 3 * m * m * K₂ := Nat.mul_le_mul_right _ hl
   omega

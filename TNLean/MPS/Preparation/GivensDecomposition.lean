@@ -145,12 +145,12 @@ theorem det_twoLevel {a b : ι} (hab : a ≠ b) (g : Matrix (Fin 2) (Fin 2) ℂ)
       · fin_cases j <;> simp [twoLevelIdx, Ne.symm hab]
     · simp only [submatrix_apply, fromBlocks_apply₁₂, e, e₂, Equiv.trans_apply,
         Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Equiv.coe_fn_mk,
-        Equiv.sumCompl_apply_inl, Equiv.sumCompl_apply_inr, Equiv.refl_apply, zero_apply]
+        Equiv.sumCompl_apply_inl, Equiv.sumCompl_apply_inr, Equiv.refl_apply, Matrix.zero_apply]
       rw [twoLevel_apply_of_not_mem_right g _ y.2, ite_eq_right]
       intro h; exact y.2 (h ▸ (by fin_cases i <;> simp [p]))
     · simp only [submatrix_apply, fromBlocks_apply₂₁, e, e₂, Equiv.trans_apply,
         Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Equiv.coe_fn_mk,
-        Equiv.sumCompl_apply_inl, Equiv.sumCompl_apply_inr, Equiv.refl_apply, zero_apply]
+        Equiv.sumCompl_apply_inl, Equiv.sumCompl_apply_inr, Equiv.refl_apply, Matrix.zero_apply]
       rw [twoLevel_apply_of_not_mem_left g x.2, ite_eq_right]
       intro h; exact x.2 (h ▸ (by fin_cases j <;> simp [p]))
     · simp only [submatrix_apply, fromBlocks_apply₂₂, e, Equiv.trans_apply,
@@ -168,8 +168,8 @@ theorem IsSpecialTwo.det_eq_one {g : Matrix (Fin 2) (Fin 2) ℂ} (hg : IsSpecial
       empty_val', cons_val_fin_one, head_fin_const]
     have h := Complex.sq_norm z
     rw [hz, one_pow, Complex.normSq_apply] at h
-    rw [mul_neg, sub_neg_eq_add, ← Complex.ofReal_mul, ← Complex.ofReal_mul, ← Complex.ofReal_add,
-      ← h, Complex.ofReal_one]
+    rw [neg_mul, sub_neg_eq_add]
+    exact_mod_cast h.symm
   · rw [det_fin_two]
     simp only [diagTwo, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons,
       empty_val', cons_val_fin_one, head_fin_const, mul_zero, sub_zero]
@@ -223,8 +223,7 @@ theorem exists_twoLevel_elim (x y : ℂ) :
     rw [Complex.norm_def, Complex.normSq_apply, Real.sqrt_eq_one]
     simp only [z]
     field_simp
-    rw [Real.sq_sqrt (by positivity)]
-    ring
+    exact (Real.sq_sqrt (by positivity)).symm
   refine ⟨[rotTwo z, diagTwo ν], by simp, ?_, ?_⟩
   · simp only [List.mem_cons, List.mem_singleton, forall_eq_or_imp, forall_eq, List.not_mem_nil,
       IsEmpty.forall_iff, implies_true, and_true]
@@ -234,10 +233,9 @@ theorem exists_twoLevel_elim (x y : ℂ) :
     simp only [List.prod_cons, List.prod_nil, mul_one, rotTwo, diagTwo, mul_apply,
       Fin.sum_univ_two, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, empty_val',
       cons_val_fin_one, head_fin_const, mul_zero, zero_mul, add_zero, zero_add, z]
-    rw [hx', hy']
-    calc ((-‖y‖ / r : ℝ) : ℂ) * ν * (‖x‖ * p) + ((‖x‖ / r : ℝ) : ℂ) * star ν * (‖y‖ * q)
-        = ((‖x‖ * ‖y‖ / r : ℝ) : ℂ) * (star ν * q - ν * p) := by push_cast; ring
-      _ = 0 := by rw [hω, sub_self, mul_zero]
+    push_cast
+    linear_combination (-(‖y‖ : ℂ) / r * ν) * hx' + ((‖x‖ : ℂ) / r * star ν) * hy' +
+      ((‖x‖ : ℂ) * ‖y‖ / r) * hω
 
 /-! ### Column elimination -/
 
@@ -276,7 +274,7 @@ theorem exists_isTwoLevelWord_elim (a : ι) (X : Matrix ι ι ℂ) :
   induction R using Finset.induction_on with
   | empty =>
     intro _
-    refine ⟨1, IsTwoLevelWord.one _, fun x y _ => one_apply x y, by simp⟩
+    refine ⟨1, IsTwoLevelWord.one _, fun x y _ => Matrix.one_apply, by simp⟩
   | insert b R hbR ih =>
     intro ha
     have hab : a ≠ b := fun h => ha (h ▸ Finset.mem_insert_self a R)
@@ -296,11 +294,11 @@ theorem exists_isTwoLevelWord_elim (a : ι) (X : Matrix ι ι ℂ) :
     · intro c hc
       rw [Matrix.mul_assoc, twoLevel_mul_apply hab]
       rcases Finset.mem_insert.mp hc with rfl | hc
-      · rw [if_neg (Ne.symm hab), if_pos rfl]
+      · rw [ite_eq_right (Ne.symm hab), ite_eq_left rfl]
         exact hel
       · have hca : c ≠ a := fun h => haR (h ▸ hc)
         have hcb : c ≠ b := fun h => hbR (h ▸ hc)
-        rw [if_neg hca, if_neg hcb]
+        rw [ite_eq_right hca, ite_eq_right hcb]
         exact hWX c hc
 
 theorem mem_unitary_iff_conjTranspose {X : Matrix ι ι ℂ} :
@@ -332,7 +330,7 @@ theorem isTwoLevelWord_of_fixesOutside :
       intro c hca
       by_cases hc : c ∈ T
       · exact hWX c hc
-      · rw [hYfix c a (Or.inl (by simp [hca, hc])), if_neg hca]
+      · rw [hYfix c a (Or.inl (by simp [hca, hc])), ite_eq_right hca]
     set lam := Y a a with hlam
     have hYu' := mem_unitary_iff_conjTranspose.mp hYu
     have hlam1 : star lam * lam = 1 := by
@@ -346,12 +344,9 @@ theorem isTwoLevelWord_of_fixesOutside :
       have h := congrFun (congrFun hYu'.1 a) c
       rw [mul_apply, one_apply_ne (Ne.symm hca), Finset.sum_eq_single a] at h
       · simp only [conjTranspose_apply] at h
-        have : star lam * (star lam * lam) * Y a c = 0 := by
-          rw [mul_assoc, ← hlam, h, mul_zero]
-        rwa [hlam1, mul_one, mul_eq_zero, star_eq_zero, or_iff_right] at this
-        intro h0
-        rw [h0, star_zero, zero_mul] at hlam1
-        exact zero_ne_one hlam1
+        have hl0 : star lam ≠ 0 := fun h0 => by
+          rw [h0, zero_mul] at hlam1; exact zero_ne_one hlam1
+        exact (mul_eq_zero.mp h).resolve_left hl0
       · intro k _ hka; simp [conjTranspose_apply, hcol k hka]
       · simp
     have hlamn : ‖lam‖ = 1 := by
@@ -371,15 +366,15 @@ theorem isTwoLevelWord_of_fixesOutside :
           · subst hxy
             by_cases hxa : x = a
             · subst hxa; simp [hlam]
-            · rw [hYfix x x (Or.inl (by simp [hxa])), if_pos rfl, if_pos rfl, if_neg hxa]
-          · rw [if_neg hxy]
+            · rw [hYfix x x (Or.inl (by simp [hxa])), ite_eq_left rfl, ite_eq_left rfl, ite_eq_right hxa]
+          · rw [ite_eq_right hxy]
             by_cases hxa : x = a
             · subst hxa; exact hrow y (Ne.symm hxy)
-            · rw [hYfix x y (Or.inl (by simp [hxa])), if_neg hxy]
+            · rw [hYfix x y (Or.inl (by simp [hxa])), ite_eq_right hxy]
         have hl : lam = 1 := by
           rw [← hYdet, hdiag, det_diagonal, Finset.prod_eq_single a]
           · simp
-          · intro x _ hxa; rw [if_neg hxa]
+          · intro x _ hxa; rw [ite_eq_right hxa]
           · simp
         rw [hdiag, hl]
         simp
@@ -400,33 +395,34 @@ theorem isTwoLevelWord_of_fixesOutside :
           empty_val', cons_val_fin_one, head_fin_const, zero_mul, add_zero, zero_add]
         by_cases hxa : x = a
         · subst hxa
-          rw [if_pos rfl]
+          rw [ite_eq_left rfl]
           by_cases hya : y = x
-          · subst hya; rw [if_pos rfl, ← hlam, mul_comm]; exact hlam1
-          · rw [hrow y hya, mul_zero, if_neg (Ne.symm hya)]
-        · rw [if_neg hxa]
+          · subst hya; rw [ite_eq_left rfl, ← hlam]; exact hlam1
+          · rw [hrow y hya, mul_zero, ite_eq_right (Ne.symm hya)]
+        · rw [ite_eq_right hxa]
           by_cases hxb : x = b
           · subst hxb
-            rw [if_pos rfl]
+            rw [ite_eq_left rfl]
             by_cases hya : y = a
-            · subst hya; rw [hcol x hxa, mul_zero, if_neg hxa]
+            · subst hya; rw [hcol x hxa, mul_zero, ite_eq_right hxa]
             · rcases hxy with hx | hy
               · exact absurd hb hx
-              · rw [hYfix x y (Or.inr (by simp [hya, hy])), if_neg (fun h => hy (h ▸ hb))]
+              · rw [hYfix x y (Or.inr (by simp [hya, hy])), ite_eq_right (by rintro rfl; contradiction)]
                 simp
-          · rw [if_neg hxb]
+          · rw [ite_eq_right hxb]
             rcases hxy with hx | hy
             · exact hYfix x y (Or.inl (by simp [hxa, hx]))
             · by_cases hya : y = a
-              · subst hya; rw [hcol x hxa, if_neg hxa]
+              · subst hya; rw [hcol x hxa, ite_eq_right hxa]
               · exact hYfix x y (Or.inr (by simp [hya, hy]))
       have hZw := ih Z hZu hZdet hZfix
       have hYZ : Y = twoLevel a b (diagTwo lam) * Z := by
         have hGG : twoLevel a b (diagTwo lam) * G = 1 := by
           rw [hG, twoLevel_mul hab]
           have : diagTwo lam * diagTwo (star lam) = 1 := by
+            have h' : lam * star lam = 1 := by rw [mul_comm]; exact hlam1
             ext i j; fin_cases i <;> fin_cases j <;>
-              simp [diagTwo, mul_apply, Fin.sum_univ_two, ← hlam, hlam1, mul_comm lam]
+              simp [diagTwo, mul_apply, Fin.sum_univ_two] <;> first | exact h' | exact hlam1
           rw [this, twoLevel_one]
         rw [hZ, ← Matrix.mul_assoc, hGG, Matrix.one_mul]
       rw [hXW, hYZ, ← Matrix.mul_assoc, Finset.card_insert_of_notMem haT]
