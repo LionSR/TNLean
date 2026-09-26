@@ -7,7 +7,7 @@ import QICLean.Algebra.BlockPermutation
 import QICLean.Algebra.SkolemNoether
 
 import Mathlib.RingTheory.SimpleRing.Matrix
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Dimension.Constructions
 import Mathlib.LinearAlgebra.Matrix.Reindex
 

@@ -24,6 +24,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### common positive simple blocking of two or three MPUs — promoted
+- **Pattern:** choose a positive simple blocking for each MPU, add the chosen
+  lengths, and use persistence of simplicity at every later direct blocking.
+- **Seen:** three occurrences across three developments (2026-09-26):
+  `IsMPUCanonicalFormII.index_eq_of_mpo_eq` in `RepresentativeIndex.lean`
+  (two tensors), `IsMPUCanonicalFormII.index_tensorProduct` in
+  `TensorProductIndex.lean` (three tensors), and
+  `IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor` in
+  `CompositionIndex.lean` (three tensors).
+- **Abstraction:** `MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple`
+  and `MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple_three` in
+  `TNLean/MPS/MPU/SimpleBlocking.lean`.
+- **Notes:** the two- and three-tensor forms allow different physical and bond
+  dimensions without an indexed-family abstraction. All three known call
+  sites are refactored on their respective dependent branches: representative
+  index at `008464fc4`, tensor-product index at `86217104a`, and composition
+  index at `4a9bbc2f5`. No fourth copy is introduced.
+
 ### every list is a `List.ofFn` — promoted
 - **Pattern:**
   ```lean
@@ -1307,9 +1325,9 @@ abstracted — record why, so it is not re-proposed).
   implicitly; elaborating it against a named datum leaves them unassigned
   (proof irrelevance closes the unification without assigning them), so unfold
   the named datum first. `ParityGraded.parityGraded_compression` and
-  `CZXCompression.czxSquare_compression` are migrated too. Deferred: the
-  single-slot sets `singleSlot`/`theSlot` of the `ℤ₃` fusion examples and
-  `squareSlots` of `CZXSquare`.
+  `CZXCompression.czxSquare_compression` are migrated too, and the `ℤ₃` fusion
+  examples and `CZXSquare` use `MPSTensor.oneSlot`/`MPSTensor.oneSlotMem` for
+  their single slot.
 
 ### normality from a golden matrix-unit table — promoted
 - **Pattern:** a tensor over `ℤ[σ]` is shown normal by deciding, for every
@@ -2129,6 +2147,25 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
+
+### virtual-leg cancellation in source-gate contractions — candidate
+- **Pattern:** express the two transported source factors as matrices on the
+  contracted virtual coordinate and reduce their product with
+  $z^\dagger z=I$. The entrywise Kronecker expansion then identifies the
+  original source-gate contraction.
+- **Seen:** three occurrences across two files (2026-09-26):
+  `transported_source_u_contraction` in
+  `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and
+  `rawU_virtual_cancel` and `rawV_virtual_cancel` in
+  `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
+- **Abstraction (proposed):** a matrix lemma for cancelling a unitary at one
+  finite contracted coordinate, with the Kronecker entry expansions left to
+  the two source-gate specializations.
+- **Notes:** The first occurrence belongs to the separately reviewed
+  source-factor transport module. The new theorem keeps its two gate
+  identities together rather than reorganizing that module in this PR;
+  promotion should refactor all three sites when those dependent branches
+  are consolidated.
 
 ### Wielandt block-injectivity length below the uniform square bound — candidate
 - **Pattern:**

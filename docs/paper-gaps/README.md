@@ -668,3 +668,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
   tends to `1/√5` for every blocking length.
+- `mswc24_decaying_correlations_windowed_connected.tex` records that the
+  correlation estimate of Lemma 2 of the Supplemental Material is proved with
+  the bound in every window of `K ≤ 2` consecutive separations and for the
+  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
+  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
+  need not vanish at finite `N`; the corrected form suffices for Theorem 1.

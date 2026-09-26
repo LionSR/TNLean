@@ -295,9 +295,16 @@ theorem records the result currently justified by the formal interfaces. It
 requires source data at every blocking length where Theorem~III.8 of
 Ref.~\cite{Cirac2017MPU} is used. A blocking length is admissible only if the
 actual blocked tensor is simple and carries its own source datum.
-Well-definedness compares two admissible simple blockings. Tensor-product
-additivity requires one common blocking length at which both factors and their
-tensor product are simple and have source data.
+For a tensor already in canonical form II, the two index entries now use
+\leanid{MPOTensor.IsMPUCanonicalFormII.index}. Positive blocking preserves
+that presentation, and simplicity gives $r_k\ell_k=d^{2k}$. Thus index
+well-definedness no longer requires separately supplied source data at each
+simple block. The value is independent of the positive simple blocking and
+of the recorded canonical-form-II presentation of the same tensor; it is
+preserved by positive blocking and changes sign under physical adjunction.
+This does not identify indices across a change of ambient bond dimension.
+Tensor-product additivity still requires one common blocking length at which
+both factors and their tensor product are simple and have source data.
 
 The published composition proof first uses $\mathcal U_k$,
 $\mathcal U'_k$, and $\mathcal W_k$, then places $\mathcal U_{2k}$ and
@@ -307,9 +314,10 @@ requires separate source data for all six exact blocked tensors. It does not
 use later-block transport. The supplied-fixed-pair source-$u$
 contraction and the complete source-$v$ network are the steps through which
 \texttt{lemuisometry} and \texttt{ThmFund1} are proved for a tensor in
-canonical form II. Neither establishes the downstream standard-form and index
-source statements, which require source data at every blocking length they
-use.
+canonical form II. Together with preservation under positive blocking, they
+establish the index of a canonical-form-II representative described above.
+The remaining composition and comparison statements still require source
+data for each transformed tensor to which the source theorem is applied.
 % Source lines: paper_v2.tex 824--865.
 
 The same separation between source statements and scoped statements extends
