@@ -684,19 +684,25 @@ spin-liquid properties of the RVB state are not formalized.
 
 Let $q\ge 1$, let $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$ be a
 nearest-neighbour interaction and $\beta\in\mathbb{R}$ an inverse temperature.
-On the torus a configuration $\sigma$ has energy
-\begin{align}
-    H(\sigma)=\sum_{v}\bigl(h(\sigma_{v},\sigma_{v-(1,0)})
-    +h(\sigma_{v},\sigma_{v-(0,1)})\bigr),
-    \notag
-\end{align}
-each nearest-neighbour bond counted once. For symmetric $h$ this is the sum
-of $h$ over unordered bonds.
+
+\begin{definition}[Classical energy]%
+    \label{def:peps_classical_energy}
+    \lean{TNLean.PEPS.classicalEnergy}
+    \leanok
+    On the torus a configuration $\sigma$ has energy
+    \begin{align}
+        H(\sigma)=\sum_{v}\bigl(h(\sigma_{v},\sigma_{v-(1,0)})
+        +h(\sigma_{v},\sigma_{v-(0,1)})\bigr),
+        \notag
+    \end{align}
+    each nearest-neighbour bond counted once. For symmetric $h$ this is the
+    sum of $h$ over unordered bonds.
+\end{definition}
 
 \begin{definition}[Classical-model tensor]%
     \label{def:peps_classical_tensor}
     \lean{TNLean.PEPS.classicalBondMatrix, TNLean.PEPS.classicalSiteTensor,
-        TNLean.PEPS.classicalPEPS, TNLean.PEPS.classicalEnergy}
+        TNLean.PEPS.classicalPEPS}
     \leanok
     \uses{def:peps_torus_site_tensor}
     Let $M=\sum_{i,j}e^{-\beta h(i,j)/2}|i)(j|$. The classical-model tensor is
@@ -717,7 +723,8 @@ of $h$ over unordered bonds.
         TNLean.PEPS.conj_mul_stateCoeff_classicalPEPS,
         TNLean.PEPS.normSq_stateCoeff_classicalPEPS}
     \leanok
-    \uses{def:peps_classical_tensor, def:peps_stateCoeff}
+    \uses{def:peps_classical_tensor, def:peps_classical_energy,
+        def:peps_stateCoeff}
     On a torus of width and height at least three the classical-model PEPS
     has coefficient
     $\Coeff(\sigma)=e^{-\beta H(\sigma)/2}$, so
@@ -744,7 +751,8 @@ of $h$ is used.
     \label{thm:peps_classical_expectation}
     \lean{TNLean.PEPS.expectation_classicalPEPS}
     \leanok
-    \uses{thm:peps_classical_coeff}
+    \uses{def:peps_classical_tensor, def:peps_classical_energy,
+        def:peps_stateCoeff}
     Let the torus have width and height at least three and let
     $O=\sum_{\sigma}O(\sigma)\ket{\sigma}\bra{\sigma}$ be a diagonal observable.
     For the classical-model PEPS state
@@ -762,6 +770,7 @@ of $h$ is used.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_classical_coeff}
     Replace $\overline{\Coeff(\sigma)}\Coeff(\sigma)$ by
     $e^{-\beta H(\sigma)}$ in both sums, by
     Theorem~\ref{thm:peps_classical_coeff}.
