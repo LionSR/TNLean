@@ -89,7 +89,7 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
     % Existing Lean special cases:
     %   MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum
     %   (Theorem thm:asym_mpo_product) and
-    %   MPOTensor.GroupFamily.IsRepresentation.exists_fusionTensors
+    %   MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors
     %   (Corollary cor:asym_fusion_tensors_group).
     \uses{def:mpoalg_fusion_tensors, thm:asym_mpo_product,
         cor:asym_fusion_action_multiplicity, thm:asym_multiplicity_reductions}
@@ -114,7 +114,7 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
 For a group-like algebra, with labels in a group $G$ and
 $N_{gh}^k=\delta_{k,gh}$, the fusion tensors reduce to one pair
 $(V_{g,h},W_{g,h})$ for each pair of group elements; for representations by
-matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
+normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 
 \begin{definition}[Action tensors]%
     \label{def:mpoalg_action_tensors}

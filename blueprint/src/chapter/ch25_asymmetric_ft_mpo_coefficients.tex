@@ -105,15 +105,17 @@ identities between periodic operators.
 \begin{corollary}[Fusion tensors of periodic matrix product operator
         representations]
     \label{cor:asym_fusion_tensors_group}
-    \lean{MPOTensor.GroupFamily.IsRepresentation.exists_fusionTensors}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors}
     \leanok
-    \uses{cor:asym_single_block, def:mpug_group_representation}
-    Let $\{U_g\}_{g\in G}$ be a group representation by simple injective
-    matrix product unitaries in the sense of
-    Definition~\ref{def:mpug_group_representation}: every tensor $T_g$ is
-    injective and simple, every $U_g$ is unitary on periodic chains of
-    every positive length, $U_e=\id$, and $U_gU_h=U_{gh}$ on every such
-    chain. Then for all $g,h\in G$
+    \uses{cor:asym_single_block, def:mpo_to_mps, def:normal,
+        def:mpdo_operator_product}
+    Let $\{U_g\}_{g\in G}$ be a matrix product operator representation of
+    a group $G$, not necessarily unitary, by tensors $T_g$ of positive bond
+    dimension whose doubled-index tensors are normal, with $U_gU_h=U_{gh}$
+    on periodic chains of every positive length. Injective tensors are
+    normal, so this covers the injective representations of
+    \cite{GarreRubio2023MPOSym}; neither unitarity, simplicity, nor
+    $U_e=\id$ is needed. Then for all $g,h\in G$
     there are fusion tensors $V$ and $W$ with $WV=\id$ and
     $W\,(T_gT_h)^{i_1j_1}\cdots(T_gT_h)^{i_Nj_N}\,V
         =T_{gh}^{i_1j_1}\cdots T_{gh}^{i_Nj_N}$
