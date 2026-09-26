@@ -108,8 +108,10 @@ noncomputable def isingPsi : MPOTensor 10 3 := fun h h' => complexOfZsqrt2 (isin
 arXiv:1511.08090, Appendix D.2 (`References/1511.08090/AnyonsPEPS.tex` lines 1305–1323), without
 the factors `v_e v_f` of the `G`-symbols of lines 1257–1260, and the `σ` tensor is in addition
 multiplied by `√2` so that its entries lie in `ℤ[√2]`. The operator statements are proved for
-these `v`-free tensors; whether omitting the factors `v` changes the periodic operators is not
-shown. Documented in `docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`. -/
+these `v`-free tensors; omitting the factors `v` does not change the periodic operators, since
+the source's tensors are bond-similar to these (`IsingTwist.mpo_isingStringNetTensor` in
+`IsingGSymbol`). Documented in `docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
+-/
 noncomputable def isingSigma : MPOTensor 10 4 :=
   fun h h' => complexOfZsqrt2 (isingSigmaZ h h')
 
