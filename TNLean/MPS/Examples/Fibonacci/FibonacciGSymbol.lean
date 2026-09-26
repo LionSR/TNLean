@@ -33,9 +33,10 @@ For the source's tensor at edge label `τ` on every site, a diagonal bond simila
 `h(x', x) = (v_{x'}/v_x)^{1/2}` carries every letter to the F-symbol blocks `fibOne`, `fibTau`, so
 the periodic operators are equal at every length and the fusion rules of
 `isMPOFusionAlgebra_fibBlock` are the source's fusion rules on that sector. For the review's
-prefactor the periodic operator is the congruence `W^{-1/2} O_a W^{-1/2}`,
-`W = diag ∏_k d_{x_k}`, of the F-symbol operator; it fails the fusion rules already at one site,
-while the operator `O_a W = W^{-1/2} O_a W^{1/2}` satisfies them.
+prefactor the periodic operator is the congruence `O_a^{rev} = W^{-1/2} O_a W^{-1/2}`,
+`W = diag ∏_k d_{x_k}`, of the F-symbol operator `O_a`; it fails the fusion rules already at one
+site, while the composed operator `O_a^{rev} W = W^{-1/2} O_a W^{1/2}`, a similarity transform of
+`O_a`, satisfies them.
 
 **Scope restriction (edge labels τ):** the operator identities for the source's tensor are
 stated on the configurations whose vertical edge labels are all `τ`. The source's tensor also
@@ -46,7 +47,8 @@ elimination plan, in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenanc
 **Local fix (review normalization):** read literally in the orthonormal basis of plaquette
 configurations, the review's prefactor `1/√(d_A d_D)` gives operators that contradict the fusion
 rules the review states for them (`TN-Review-main.tex` lines 1309, 1341); the fusion rules hold
-for `O_a W`, that is, in the `W`-weighted inner product. The review's printed selection rule for
+for the composed operators `O_a^{rev} W = W^{-1/2} O_a W^{1/2}`, which are similar to `O_a`.
+The review's printed selection rule for
 the F-symbols (line 2623) is garbled, and the F-symbols used are those of the source,
 `fibFSymbolGolden`. Documented in
 `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
@@ -79,7 +81,7 @@ the pair of plaquettes above and below the operator line, restricted to the admi
 * `FibonacciCompression.mpo_fibReviewTensor`: the review's operator is `W^{-1/2} O_a W^{-1/2}`.
 * `FibonacciCompression.not_isMPOFusionAlgebra_fibReviewTensor`: the review's operators do not
   satisfy the fusion rules.
-* `FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor`: the operators `O_a W` do.
+* `FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor`: the operators `O_a^{rev} W` do.
 
 ## References
 
