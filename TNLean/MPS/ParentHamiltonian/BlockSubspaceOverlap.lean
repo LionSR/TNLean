@@ -218,5 +218,4 @@ theorem sum_offDiagonal_norm_inner_le_of_overlapMatrix
       field_simp
       rw [Real.sq_sqrt (sub_pos.mpr hB).le]
 
-
 end Submodule
