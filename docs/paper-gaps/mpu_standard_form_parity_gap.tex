@@ -43,9 +43,41 @@ adjunction. Thus the source's first simplicity contraction holds with
 $a=b=(1)$, and its second, rank-one insertion identity is automatic in the
 one-dimensional bond space. Both tensors are therefore simple. Their
 normalized transfer matrices are the one-by-one identity; they have full bond
-support and carry the canonical-form-II weight $\rho=(1)$. Neither tensor is
-zero, and both
-source cuts have rank two. In the natural physical coordinates,
+support and carry the canonical-form-II weight $\rho=(1)$.
+
+We recall the source objects of Section~III of Ref.~\cite{Cirac2017MPU}, with
+the leg orientation fixed in Ref.~\cite{gap:mpu_source_cut_orientation}. Write
+$\mathcal U^i_{j,\alpha,\beta}$ for the entry of $\mathcal U^{ij}$ with left and
+right auxiliary indices $\alpha,\beta$. The two \emph{source cuts} of
+$\mathcal U$ are the flattenings
+\begin{align}
+    M_1(\mathcal U)_{(i,\beta),(\alpha,j)}
+     & =\mathcal U^i_{j,\alpha,\beta}, &
+    M_2(\mathcal U)_{(\alpha,i),(j,\beta)}
+     & =\mathcal U^i_{j,\alpha,\beta}.
+    \label{eq:mpu_standard_form_parity_cuts}
+\end{align}
+If $M_1$ has rank $k_1$ and $M_2$ has rank $k_2$, the source chooses compact
+factorizations and right inverses
+\begin{align}
+    M_1           & =X_1Y_1,          &
+    M_2           & =X_2Y_2,          &
+    Y_1Z_1        & =I_{k_1},         &
+    Y_2Z_2        & =I_{k_2},
+    \label{eq:mpu_standard_form_parity_factors}
+\end{align}
+normalized by $X_1^\dagger(I_d\otimes\rho)X_1=I_{k_1}$ and $X_2^\dagger X_2=I_{k_2}$.
+The gates are the contractions
+\begin{align}
+    u_{(l,r),(i_1,i_2)}
+     & =\sum_\beta(Y_2)_{l,(i_1,\beta)}(Y_1)_{r,(\beta,i_2)}, &
+    v_{(j_1,j_2),(r,l)}
+     & =\sum_\alpha(X_1)_{(j_1,\alpha),r}(X_2)_{(\alpha,j_2),l}.
+    \label{eq:mpu_standard_form_parity_gate_formulas}
+\end{align}
+Tildes denote the same objects for $\mathcal V$.
+
+Neither tensor is zero, and both source cuts have rank two. In the natural physical coordinates,
 \begin{align}
     M_1(\mathcal U) & =M_2(\mathcal U)=I_2,  &
     M_1(\mathcal V) & =M_2(\mathcal V)=-I_2.
@@ -69,8 +101,9 @@ The source gates computed from these factors have, for both tensors, the entries
 \end{align}
 Thus both gates are identity matrices in their displayed domain and codomain
 orderings; in particular both are unitary. The two minus signs on the $X$
-factors cancel in $v$. The printed local equations
-hold with $x=y=-I_2$ and $z=1$: the product $x\otimes y$ acts trivially on
+factors cancel in $v$. The printed local equations, in which $x,y,z$ are the
+unitaries whose existence the Fundamental Theorem asserts, hold with
+$x=y=-I_2$ and $z=1$: the product $x\otimes y$ acts trivially on
 $u$, and the two minus signs on the open half-legs cancel in the shifted gate
 $v$ of Equation~(SFvv). Equivalently, the two-site blocked tensors agree
 letter by letter,
