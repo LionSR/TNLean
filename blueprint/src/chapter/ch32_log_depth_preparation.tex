@@ -248,6 +248,9 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 
 \begin{lemma}[Overlap of the positive part with the fixed point]
     \label{lem:ldp_positive_part_overlap}
+    \lean{MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul,
+        MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le}
+    \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_state,
         def:correlation_length}
     Let $A$ be normal with correlation length $\xi$ and let $0<\gamma<1/2$.
@@ -258,31 +261,101 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
         \label{eq:ldp_positive_part_overlap}
     \end{align}
     This is \cite[Supplemental Material, eq.~(S29)]{Piroli2021LOCC}, quoted as
-    \cite[eq.~(S9)]{Malz2024Preparation}.
+    \cite[eq.~(S9)]{Malz2024Preparation}. The constant depends only on $A$,
+    $\rho$ and $\gamma$, and the bound holds for every $q\ge0$ and every
+    $M\ge1$. Explicitly, with $y=(N/q)\,e^{-\gamma q/\xi}$ there is $C>0$ with
+    $\bigl\lvert1-\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\rvert\bigr\rvert
+        \le Cy\,e^{Cy}$ for all such $q$ and $M$. Only
+    $\lvert\mu\rvert\le\lvert\lambda_2\rvert$ for the eigenvalues $\mu\ne1$ of
+    $\E_A$ is used.
 \end{lemma}
+\begin{proof}
+    \leanok
+    Write $\E_\infty(X)=\Tr(X)\rho$ and $r=e^{-2\gamma/\xi}$, so that
+    $r=\lvert\lambda_2\rvert^{2\gamma}>\lvert\lambda_2\rvert$ when
+    $0<\lvert\lambda_2\rvert<1$, because $2\gamma<1$. The eigenvalues of
+    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
+    $1$, so the spectral radius of $\E_A-\E_\infty$ is less than $r$, and
+    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives
+    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Kr^n\lVert X\rVert$. By the
+    rearrangement in the proof of
+    Lemma~\ref{lem:ldp_positive_part_converges},
+    $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$, and since
+    $\lVert\sqrt X-\sqrt Y\rVert\le\lVert X-Y\rVert^{1/2}$ for $X,Y\ge0$,
+    $\lVert P_q-P_\infty\rVert\le K_2e^{-\gamma q/\xi}$.
+
+    Let $\tau_q$ and $\tau_\infty$ be the transfer matrices of the mixed
+    transfer maps of $P_q$ and of $P_\infty$ against $P_\infty$. Then
+    $\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle=\Tr\tau_q^M$,
+    $1=\Tr\tau_\infty^M$, $\tau_\infty^2=\tau_\infty$, and
+    $\delta=\lVert\tau_q-\tau_\infty\rVert\le K_3e^{-\gamma q/\xi}$, since
+    $\tau_q-\tau_\infty$ depends linearly on $P_q-P_\infty$. Writing
+    $\tau_q^M-\tau_\infty^M=\sum_{k<M}\tau_q^k(\tau_q-\tau_\infty)\tau_\infty^{M-1-k}$
+    and bounding $\lVert\tau_q^k\rVert\le c+\lVert\tau_q^k-\tau_\infty^k\rVert$
+    with $c\ge\max(1,\lVert\tau_\infty\rVert)$, induction on $M$ gives
+    $\lVert\tau_q^M-\tau_\infty^M\rVert\le c\bigl((1+c\delta)^M-1\bigr)
+        \le c\,Mc\delta\,e^{Mc\delta}$.
+    This proves the explicit bound. When $y\le1$ it is at most $Ce^{C}y$.
+    When $y>1$, the overlap is at most
+    $\lVert\phi_M(P_q)\rVert=\lVert\phi_N(A)\rVert$, and these norms are
+    bounded because $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ converges to $1$.
+\end{proof}
 
 \begin{theorem}[Approximation error, normal case]
     \label{thm:ldp_approximation_error_normal}
+    \lean{MPSTensor.exists_approximationError_le_mul,
+        MPSTensor.exists_approximationError_le, MPSTensor.normalizedMPVState,
+        MPSTensor.approximatingMPVState}
+    \leanok
     \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state,
         def:correlation_length}
     Let $A$ be normal with correlation length $\xi$, let $\ket{\phi_N}$ be the
     normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1/2$. For
-    $N=qM$ with $q\to\infty$ and $q=o(N)$,
+    $N=qM$,
     \begin{align}
         \varepsilon(\widetilde\phi_N,\phi_N)
          & =O\!\left(\frac Nq\,e^{-\gamma q/\xi}\right).
         \label{eq:ldp_approximation_error_normal}
     \end{align}
-    In particular $q=\lceil\xi(1+\eta)\ln N/\gamma\rceil$ gives
-    $e^{-\gamma q/\xi}\le N^{-(1+\eta)}$ and hence
-    $\varepsilon=O(N^{-\eta})$ for every $\eta>0$. This is
-    \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}.
+    This is \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}. The constant
+    depends only on $A$, $\rho$ and $\gamma$, and the bound holds for every
+    $q\ge0$ and every $M\ge1$. Explicitly, with $y=(N/q)\,e^{-\gamma q/\xi}$
+    there is $C>0$ with $\varepsilon(\widetilde\phi_N,\phi_N)\le Cy\,e^{Cy}$.
 \end{theorem}
-%% The source states Lemma 1'(i) without q = o(N); its proof uses q = o(N) to
-%% absorb the O(exp(-N/xi)) normalization term. The statement above carries
-%% the hypothesis the proof uses. The block length is scaled by 1/gamma
-%% because the estimate is only available for gamma < 1/2, so the endpoint
-%% choice q = 2 xi (1 + eta) ln N does not follow from it.
+\begin{proof}
+    \leanok
+    Write $c_N=\lVert\phi_N(A)\rVert$. For $q$ at least the injectivity length
+    of $A$, the blocked tensor is injective, $V$ is an isometry, and
+    $\ket{\widetilde\phi_N}=V^{\otimes M}\ket{\phi_M(P_\infty)}$ is
+    normalized. Since $\ket{\phi_N(A)}=V^{\otimes M}\ket{\phi_M(P_q)}$ by
+    Theorem~\ref{thm:ldpolar_blocked_state}, this gives
+    $c_N\braket{\widetilde\phi_N}{\phi_N}
+        =\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle$. The triangle inequality
+    \begin{align}
+        \varepsilon
+         & \le\bigl\lvert1-c_N\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert\bigr\rvert
+        +\lvert c_N-1\rvert\,\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
+        \notag
+    \end{align}
+    bounds the first term by Lemma~\ref{lem:ldp_positive_part_overlap}. For the
+    second, $\lvert c_N-1\rvert\le\lvert c_N^2-1\rvert
+        =\lvert\Tr\E_A^{\,N}-1\rvert\le Ke^{-2\gamma N/\xi}$, and
+    $e^{-2\gamma N/\xi}\le e^{-\gamma q/\xi}$ because $N\ge q$. The finitely
+    many smaller $q$, and the case $y>1$, are covered by
+    $\varepsilon\le1$.
+\end{proof}
+%% The source's proof of Lemma 1'(i) drops the normalization term
+%% |c_N - 1| = O(exp(-N/xi)) using q = o(N). Since N >= q, that term is at most
+%% a constant times exp(-gamma q/xi) <= (N/q) exp(-gamma q/xi), so the
+%% statement above carries no condition relating q and N, as in the source's
+%% statement.
+
+In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/\gamma\rceil$
+gives $e^{-\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
+for every $\eta>0$ \cite[after Lemma~1]{Malz2024Preparation}.
+%% The block length is scaled by 1/gamma because the estimate is only available
+%% for gamma < 1/2, so the endpoint choice q = 2 xi (1 + eta) ln N does not
+%% follow from it.
 
 \section{Depth of the preparation}
 
