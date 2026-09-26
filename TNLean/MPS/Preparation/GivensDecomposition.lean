@@ -1,0 +1,242 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.Preparation.ControlledGateProducts
+
+/-!
+# Decomposition of a unitary into two-level rotations and phases
+
+Every unitary `X` on `ℂ^ι` with `det X = 1` is a product of at most `f (card ι)` two-level
+operators `twoLevel a b g` with `g` a real rotation `rotTwo z` or a phase `diagTwo ν`
+(`MPSPreparation.isTwoLevelWord_of_det_eq_one`). The proof is the column-by-column
+elimination of Givens: the column of `X` at `a` is rotated onto `|a⟩` by two-level operators on
+the pairs `{a, b}`, after which `X` acts on the orthogonal complement of `|a⟩`.
+
+This is the first step of writing a unitary on a constant number of sites as a product of
+two-site gates, the statement "can be further expressed with a low-depth circuit of local
+gates" of arXiv:2307.01696 (caption of Fig. 1).
+-/
+
+open Matrix
+open scoped BigOperators ComplexConjugate
+
+namespace MPSPreparation
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+/-! ### Words of two-level operators -/
+
+/-- `X` is a product of at most `K` two-level rotations and phases on pairs of distinct basis
+vectors. -/
+def IsTwoLevelWord (K : ℕ) (X : Matrix ι ι ℂ) : Prop :=
+  ∃ l : List (ι × ι × Matrix (Fin 2) (Fin 2) ℂ), l.length ≤ K ∧
+    (∀ p ∈ l, p.1 ≠ p.2.1 ∧ IsSpecialTwo p.2.2) ∧
+    X = (l.map fun p => twoLevel p.1 p.2.1 p.2.2).prod
+
+namespace IsTwoLevelWord
+
+theorem one (K : ℕ) : IsTwoLevelWord K (1 : Matrix ι ι ℂ) :=
+  ⟨[], by simp, by simp, by simp⟩
+
+theorem mono {K K' : ℕ} (h : K ≤ K') {X : Matrix ι ι ℂ} (hX : IsTwoLevelWord K X) :
+    IsTwoLevelWord K' X := by
+  obtain ⟨l, hl, hg, rfl⟩ := hX
+  exact ⟨l, hl.trans h, hg, rfl⟩
+
+theorem mul {K K' : ℕ} {X Y : Matrix ι ι ℂ} (hX : IsTwoLevelWord K X)
+    (hY : IsTwoLevelWord K' Y) : IsTwoLevelWord (K + K') (X * Y) := by
+  obtain ⟨l, hl, hg, rfl⟩ := hX
+  obtain ⟨l', hl', hg', rfl⟩ := hY
+  refine ⟨l ++ l', by simp; omega, fun p hp => ?_, by simp⟩
+  rcases List.mem_append.mp hp with h | h
+  · exact hg p h
+  · exact hg' p h
+
+theorem single {a b : ι} (hab : a ≠ b) {g : Matrix (Fin 2) (Fin 2) ℂ} (hg : IsSpecialTwo g) :
+    IsTwoLevelWord 1 (twoLevel a b g) :=
+  ⟨[(a, b, g)], by simp, by simpa using ⟨hab, hg⟩, by simp⟩
+
+theorem conjTranspose {K : ℕ} {X : Matrix ι ι ℂ} (hX : IsTwoLevelWord K X) :
+    IsTwoLevelWord K Xᴴ := by
+  obtain ⟨l, hl, hg, rfl⟩ := hX
+  refine ⟨(l.map fun p => (p.1, p.2.1, p.2.2ᴴ)).reverse, by simpa using hl, fun p hp => ?_, ?_⟩
+  · simp only [List.mem_reverse, List.mem_map] at hp
+    obtain ⟨p', hp', rfl⟩ := hp
+    exact ⟨(hg p' hp').1, (hg p' hp').2.conjTranspose⟩
+  · clear hl hg
+    induction l with
+    | nil => simp
+    | cons p l ih =>
+      simp only [List.map_cons, List.prod_cons, conjTranspose_mul, List.reverse_cons,
+        List.map_append, List.prod_append, ih, List.map_nil, List.prod_nil, mul_one,
+        twoLevel_conjTranspose, List.prod_cons]
+
+theorem mem_unitary {K : ℕ} {X : Matrix ι ι ℂ} (hX : IsTwoLevelWord K X) :
+    X ∈ unitary (Matrix ι ι ℂ) := by
+  obtain ⟨l, -, hg, rfl⟩ := hX
+  induction l with
+  | nil => exact Submonoid.one_mem _
+  | cons p l ih =>
+    rw [List.map_cons, List.prod_cons]
+    exact Submonoid.mul_mem _ (twoLevel_mem_unitary (hg p (by simp)).1
+      (hg p (by simp)).2.mem_unitary) (ih fun q hq => hg q (by simp [hq]))
+
+end IsTwoLevelWord
+
+/-! ### Operators fixing the basis vectors outside a set -/
+
+/-- `X` acts as the identity on the basis vectors outside `T` and maps the span of `T` to
+itself. -/
+def FixesOutside (T : Finset ι) (X : Matrix ι ι ℂ) : Prop :=
+  ∀ x y, (x ∉ T ∨ y ∉ T) → X x y = if x = y then 1 else 0
+
+theorem FixesOutside.mono {T T' : Finset ι} (h : T ⊆ T') {X : Matrix ι ι ℂ}
+    (hX : FixesOutside T X) : FixesOutside T' X := fun x y hxy =>
+  hX x y (hxy.imp (fun hx hx' => hx (h hx')) fun hy hy' => hy (h hy'))
+
+theorem FixesOutside.mul {T : Finset ι} {X Y : Matrix ι ι ℂ} (hX : FixesOutside T X)
+    (hY : FixesOutside T Y) : FixesOutside T (X * Y) := by
+  intro x y hxy
+  rw [mul_apply]
+  rcases hxy with hx | hy
+  · simp_rw [hX x _ (Or.inl hx)]
+    simp only [ite_mul, one_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
+    exact hY x y (Or.inl hx)
+  · simp_rw [hY _ y (Or.inr hy)]
+    simp only [mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+    exact hX x y (Or.inr hy)
+
+theorem fixesOutside_twoLevel (a b : ι) (g : Matrix (Fin 2) (Fin 2) ℂ) :
+    FixesOutside {a, b} (twoLevel a b g) := by
+  rintro x y (hx | hy)
+  · exact twoLevel_apply_of_not_mem_left g (by simpa using hx) y
+  · exact twoLevel_apply_of_not_mem_right g x (by simpa using hy)
+
+theorem fixesOutside_empty {X : Matrix ι ι ℂ} (hX : FixesOutside ∅ X) : X = 1 := by
+  ext x y; rw [hX x y (Or.inl (Finset.notMem_empty x)), one_apply]
+
+/-! ### Determinants -/
+
+/-- The two-level operator has the determinant of its `2 × 2` block. -/
+theorem det_twoLevel {a b : ι} (hab : a ≠ b) (g : Matrix (Fin 2) (Fin 2) ℂ) :
+    (twoLevel a b g).det = g.det := by
+  let p : ι → Prop := fun x => x = a ∨ x = b
+  let e₂ : Fin 2 ≃ {x // p x} :=
+    { toFun := fun i => ⟨![a, b] i, by fin_cases i <;> simp [p]⟩
+      invFun := fun x => twoLevelIdx a x.1
+      left_inv := fun i => by fin_cases i <;> simp [twoLevelIdx, Ne.symm hab]
+      right_inv := fun x => by
+        obtain ⟨x, rfl | rfl⟩ := x
+        · simp [twoLevelIdx]
+        · simp [twoLevelIdx, Ne.symm hab] }
+  let e : Fin 2 ⊕ {x // ¬p x} ≃ ι := (Equiv.sumCongr e₂ (Equiv.refl _)).trans (Equiv.sumCompl p)
+  have h : (twoLevel a b g).submatrix e e = fromBlocks g 0 0 1 := by
+    ext (i | x) (j | y)
+    · simp only [submatrix_apply, fromBlocks_apply₁₁, e, e₂, Equiv.trans_apply,
+        Equiv.sumCongr_apply, Sum.map_inl, Equiv.coe_fn_mk, Equiv.sumCompl_apply_inl, twoLevel,
+        of_apply]
+      have hi : p (![a, b] i) := by fin_cases i <;> simp [p]
+      have hj : p (![a, b] j) := by fin_cases j <;> simp [p]
+      rw [ite_eq_left ⟨hi, hj⟩]
+      congr 1
+      · fin_cases i <;> simp [twoLevelIdx, Ne.symm hab]
+      · fin_cases j <;> simp [twoLevelIdx, Ne.symm hab]
+    · simp only [submatrix_apply, fromBlocks_apply₁₂, e, e₂, Equiv.trans_apply,
+        Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Equiv.coe_fn_mk,
+        Equiv.sumCompl_apply_inl, Equiv.sumCompl_apply_inr, Equiv.refl_apply, zero_apply]
+      rw [twoLevel_apply_of_not_mem_right g _ y.2, ite_eq_right]
+      intro h; exact y.2 (h ▸ (by fin_cases i <;> simp [p]))
+    · simp only [submatrix_apply, fromBlocks_apply₂₁, e, e₂, Equiv.trans_apply,
+        Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Equiv.coe_fn_mk,
+        Equiv.sumCompl_apply_inl, Equiv.sumCompl_apply_inr, Equiv.refl_apply, zero_apply]
+      rw [twoLevel_apply_of_not_mem_left g x.2, ite_eq_right]
+      intro h; exact x.2 (h ▸ (by fin_cases j <;> simp [p]))
+    · simp only [submatrix_apply, fromBlocks_apply₂₂, e, Equiv.trans_apply,
+        Equiv.sumCongr_apply, Sum.map_inr, Equiv.sumCompl_apply_inr, Equiv.refl_apply,
+        one_apply]
+      rw [twoLevel_apply_of_not_mem_left g x.2]
+      simp [Subtype.ext_iff]
+  rw [← det_submatrix_equiv_self e, h, det_fromBlocks_zero₂₁, det_one, mul_one]
+
+theorem IsSpecialTwo.det_eq_one {g : Matrix (Fin 2) (Fin 2) ℂ} (hg : IsSpecialTwo g) :
+    g.det = 1 := by
+  rcases hg with ⟨z, hz, rfl⟩ | ⟨ν, hν, rfl⟩
+  · rw [det_fin_two]
+    simp only [rotTwo, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons,
+      empty_val', cons_val_fin_one, head_fin_const]
+    have h := Complex.sq_norm z
+    rw [hz, one_pow, Complex.normSq_apply] at h
+    rw [mul_neg, sub_neg_eq_add, ← Complex.ofReal_mul, ← Complex.ofReal_mul, ← Complex.ofReal_add,
+      ← h, Complex.ofReal_one]
+  · rw [det_fin_two]
+    simp only [diagTwo, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons,
+      empty_val', cons_val_fin_one, head_fin_const, mul_zero, sub_zero]
+    rw [Complex.star_def, Complex.mul_conj', hν]; simp
+
+theorem IsTwoLevelWord.det_eq_one {K : ℕ} {X : Matrix ι ι ℂ} (hX : IsTwoLevelWord K X) :
+    X.det = 1 := by
+  obtain ⟨l, -, hg, rfl⟩ := hX
+  induction l with
+  | nil => simp
+  | cons p l ih =>
+    rw [List.map_cons, List.prod_cons, det_mul, det_twoLevel (hg p (by simp)).1,
+      (hg p (by simp)).2.det_eq_one, one_mul]
+    exact ih fun q hq => hg q (by simp [hq])
+
+/-! ### Eliminating one entry -/
+
+theorem quarterTwo_eq_rotTwo : quarterTwo = rotTwo (-Complex.I) := by
+  ext i j; fin_cases i <;> fin_cases j <;> simp [quarterTwo, rotTwo]
+
+/-- For every pair `(x, y)` there is a product `g` of at most two rotations and phases with
+`(g (x, y))₁ = 0`. -/
+theorem exists_twoLevel_elim (x y : ℂ) :
+    ∃ l : List (Matrix (Fin 2) (Fin 2) ℂ), l.length ≤ 2 ∧ (∀ g ∈ l, IsSpecialTwo g) ∧
+      l.prod 1 0 * x + l.prod 1 1 * y = 0 := by
+  by_cases hy : y = 0
+  · exact ⟨[], by simp, by simp, by simp [hy]⟩
+  by_cases hx : x = 0
+  · refine ⟨[quarterTwo], by simp, ?_, by simp [quarterTwo, hx]⟩
+    simp only [List.mem_singleton, forall_eq]
+    exact Or.inl ⟨-Complex.I, by simp, quarterTwo_eq_rotTwo⟩
+  -- `x = |x| p`, `y = |y| q` with `|p| = |q| = 1`; choose `ν² = p̄ q`.
+  have hxn : (‖x‖ : ℂ) ≠ 0 := by simpa using hx
+  have hyn : (‖y‖ : ℂ) ≠ 0 := by simpa using hy
+  set p := x / ‖x‖
+  set q := y / ‖y‖
+  have hp : ‖p‖ = 1 := by simp [p, norm_div, hx]
+  have hq : ‖q‖ = 1 := by simp [q, norm_div, hy]
+  have hpc : conj p * p = 1 := by rw [Complex.conj_mul', hp]; simp
+  obtain ⟨ν, hν, hνν⟩ := exists_sq_eq_of_norm_eq_one (z := conj p * q) (by simp [hp, hq])
+  have hνc : star ν * ν = 1 := by rw [Complex.star_def, Complex.conj_mul', hν]; simp
+  have hq' : q = ν * ν * p := by
+    rw [hνν, mul_comm (conj p), mul_assoc, hpc, mul_one]
+  have hω : star ν * q = ν * p := by
+    rw [hq', ← mul_assoc, ← mul_assoc, hνc, one_mul]
+  -- the rotation with `cos = |x| / r`, `sin = -|y| / r`.
+  set r := Real.sqrt (‖x‖ ^ 2 + ‖y‖ ^ 2)
+  have hr : 0 < r := Real.sqrt_pos.mpr (by positivity)
+  let z : ℂ := ⟨‖x‖ / r, -‖y‖ / r⟩
+  have hz : ‖z‖ = 1 := by
+    rw [Complex.norm_def, Complex.normSq_apply, Real.sqrt_eq_one]
+    simp only [z]
+    field_simp
+    rw [Real.sq_sqrt (by positivity)]
+    ring
+  refine ⟨[rotTwo z, diagTwo ν], by simp, ?_, ?_⟩
+  · simp only [List.mem_cons, List.mem_singleton, forall_eq_or_imp, forall_eq, List.not_mem_nil,
+      IsEmpty.forall_iff, implies_true, and_true]
+    exact ⟨Or.inl ⟨z, hz, rfl⟩, Or.inr ⟨ν, hν, rfl⟩⟩
+  · have hx' : x = ‖x‖ * p := by simp only [p]; field_simp
+    have hy' : y = ‖y‖ * q := by simp only [q]; field_simp
+    simp only [List.prod_cons, List.prod_nil, mul_one, rotTwo, diagTwo, mul_apply,
+      Fin.sum_univ_two, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, empty_val',
+      cons_val_fin_one, head_fin_const, mul_zero, zero_mul, add_zero, zero_add, z]
+    rw [hx', hy']
+    calc ((-‖y‖ / r : ℝ) : ℂ) * ν * (‖x‖ * p) + ((‖x‖ / r : ℝ) : ℂ) * star ν * (‖y‖ * q)
+        = ((‖x‖ * ‖y‖ / r : ℝ) : ℂ) * (star ν * q - ν * p) := by push_cast; ring
+      _ = 0 := by rw [hω, sub_self, mul_zero]
+
+end MPSPreparation
