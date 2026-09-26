@@ -575,9 +575,23 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \leanok
     \uses{thm:ph_tp_block_intersection,
         lem:open_chain_iteration_subspace_sequence,
-        thm:block_sum_local_ground_space}
-    Zero energy for a sum of positive local projectors is equivalent to
-    satisfying every contiguous length-$L$ constraint. The block intersection
+        thm:block_sum_local_ground_space, def:open_parent_hamiltonian_es,
+        thm:open_parent_hamiltonian_zero_local_terms}
+    By Definition~\ref{def:open_parent_hamiltonian_es}, the Hamiltonian is a
+    sum of orthogonal projectors,
+    \begin{align}
+        H^{\mathrm{open}}_{B,L,N}=\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(B,L),
+        \qquad h_{i,\mathrm{ES}}(B,L)\ge0.
+        \notag
+    \end{align}
+    Hence, by Theorem~\ref{thm:open_parent_hamiltonian_zero_local_terms},
+    \begin{align}
+        \ker H^{\mathrm{open}}_{B,L,N}
+        =\bigcap_{i\in I_{L,N}}\ker h_{i,\mathrm{ES}}(B,L),
+        \notag
+    \end{align}
+    so a zero-energy vector satisfies every contiguous length-$L$
+    constraint. The block intersection
     identity of Theorem~\ref{thm:ph_tp_block_intersection} extends these
     constraints one site at a time
     (Lemma~\ref{lem:open_chain_iteration_subspace_sequence}), giving
@@ -647,15 +661,15 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         \end{cases}
         \notag
     \end{align}
-    Then for every $L\ge s+p$ the tuples $(A^{0,w},\ldots,A^{r-1,w})$, with
-    $|w|=L$, span $\prod_j\MN{D_j}$.
+    Then there is $L_0$ such that, for every $L\ge L_0$, the tuples
+    $(A^{0,w},\ldots,A^{r-1,w})$, with $|w|=L$, span $\prod_j\MN{D_j}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:wordspan_blk_inj_succ,
         lem:product_word_span_from_bnt_block_separation}
-    Let $L\ge s+p$. Since $L-s\ge p$, every $A^j$ is block injective at length
-    $L-s$ by Theorem~\ref{thm:wordspan_blk_inj_succ}. Lemma
+    Take $L_0=s+p$ and let $L\ge L_0$. Since $L-s\ge p$, every $A^j$ is
+    block injective at length $L-s$ by Theorem~\ref{thm:wordspan_blk_inj_succ}. Lemma
     \ref{lem:product_word_span_from_bnt_block_separation} with the selectors
     of length $s$ gives the full product span at length $(L-s)+s=L$.
 \end{proof}
@@ -748,11 +762,17 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     Normalize each block independently by
     Theorem~\ref{thm:normalized_primitive_gauge}. The resulting nonzero
     rescaling and virtual gauge leave its local ground spaces unchanged.
-    If two normalized blocks were equivalent, composing the gauges and
-    dividing by the nonzero normalization factors would give an equivalence
-    between the corresponding original blocks
-    (Lemma~\ref{lem:gauge_phase_equiv_transport_left_right}), contrary to the
-    hypothesis.
+    Thus $B^{i,a}=\zeta_iX_iA^{i,a}X_i^{-1}$ for every physical index $a$,
+    with $\zeta_i\ne0$ and $X_i$ invertible. If $D_i=D_j$ and
+    $B^{i,a}=\zeta YB^{j,a}Y^{-1}$ for every $a$, with $\zeta\ne0$ and $Y$
+    invertible, then composing the gauges gives
+    \begin{align}
+        A^{i,a}=\frac{\zeta\zeta_j}{\zeta_i}\,
+        \bigl(X_i^{-1}YX_j\bigr)A^{j,a}\bigl(X_i^{-1}YX_j\bigr)^{-1}
+        \notag
+    \end{align}
+    for every $a$ (Lemma~\ref{lem:gauge_phase_equiv_transport_left_right}),
+    contrary to the hypothesis.
 \end{proof}
 
 \begin{theorem}[Blockwise replacement preserves parent Hamiltonians]
