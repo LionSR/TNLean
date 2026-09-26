@@ -29,7 +29,7 @@ gives the explicit interaction condition
 where the blocks satisfy condition C1 at the common positive length $L_0$.
 The local source is \texttt{MPSarchive.tex}, lines~1424--1458.
 
-Let $A^1,\ldots,A^r$ have positive bond dimensions and be pairwise
+Let $A^0,\ldots,A^{r-1}$ have positive bond dimensions and be pairwise
 inequivalent under virtual conjugation and nonzero scalar multiplication.
 For nonzero coefficients $\mu_j$, write $B=\bigoplus_j\mu_j A^j$ and let
 $H_{R,N}$ be its canonical periodic parent Hamiltonian.
@@ -83,6 +83,45 @@ uniform eventual bound gives one positive constant for every $N$. The
 comparison uses every cyclic
 initial site and imposes no divisibility restriction on the chain length.
 It never identifies the open-chain kernel with the periodic kernel.
+
+\section{The simultaneous-injectivity range}
+
+Suppose instead that a positive integer $S$ is supplied for which the length-$S$
+word tuples of the blocks span the full product matrix algebra. This is the
+simultaneous block-injectivity condition in Ref.~\cite[Section~IV.C]{Cirac2021Matrix},
+local source lines~2114--2129. Then the uniform gap holds at every range
+\begin{align}
+    R\geq S+1.
+    \label{eq:block_range_simultaneous_injectivity}
+\end{align}
+The number of blocks need not be at least two, and no normalization or separate
+inequivalence assumption is imposed on the original blocks.
+
+Indeed, projecting the simultaneous span onto any component proves injectivity
+of that block at length $S$, so each periodic vector $V^{(S)}(A^i)$ is
+nonzero. The simultaneous span also makes the local ground spaces $G_S(A^i)$
+independent, and this separates distinct blocks. Suppose that $i\neq j$ and
+$A^i_a=\zeta XA^j_aX^{-1}$ for every physical index $a$, with $\zeta\neq0$ and
+$X$ invertible. Then
+\begin{align}
+    V^{(S)}(A^i)=\zeta^SV^{(S)}(A^j)\in G_S(A^i)\cap G_S(A^j)=\{0\},
+    \label{eq:block_range_separation}
+\end{align}
+contradicting $V^{(S)}(A^i)\neq0$. Independent
+primitive normalization preserves the supplied length $S$, simultaneous
+spanning, and all local ground spaces. In the normalized family, simultaneous
+spanning propagates to every larger length. The open-chain intersection theorem
+therefore gives $\ker K_{R,W}=G_W(B)$ for every $W\geq R$ as soon as (\ref{eq:block_range_simultaneous_injectivity}) holds.
+Choose a gapped range $W\geq2R$ and apply the two-sided comparison above.
+The finite minimum over the remaining chain lengths again gives one positive
+gap for every $N$.
+
+For an original canonical tensor with repeated multiplicity copies, the local
+ground spaces equal those of its chosen normal representatives at every
+positive length. Hence the canonical parent interactions, and then every
+periodic parent Hamiltonian, agree exactly. The same uniform gap transfers to
+the original tensor. The representatives may be chosen once, before specifying
+$S$ or $R$.
 
 \section{Recovering the printed threshold}
 

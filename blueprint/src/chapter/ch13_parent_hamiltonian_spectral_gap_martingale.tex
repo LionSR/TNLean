@@ -6921,3 +6921,169 @@ tensors.
     admissible. The physical projection defect is at least $1/16$, whereas
     the proposed coefficient is strictly smaller than $1/16$.
 \end{proof}
+
+\begin{theorem}[Block injectivity from a simultaneous word span]
+    \label{thm:block_injective_of_word_tuple_span}
+    \lean{MPSTensor.isNBlkInjective_of_wordTupleSpanTop}
+    \leanok
+    \uses{def:blockwise_product_word_span, def:l_blk_injective}
+    Let $A^0,\ldots,A^{r-1}$ be tensors with bond dimensions
+    $D_0,\ldots,D_{r-1}$, and let $L\in\mathbb N$. Suppose that their
+    simultaneous word evaluations at length $L$ span
+    $\prod_{k=0}^{r-1}\MN{D_k}$. Then every $A^j$ is $L$-block injective.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $M\in\MN{D_j}$ and let $X$ be the tuple with $X_j=M$ and $X_k=0$ for
+    $k\neq j$. By hypothesis,
+    \begin{align}
+        X=\sum_{|\omega|=L}c_\omega(A^{0,\omega},\ldots,A^{r-1,\omega})\notag
+    \end{align}
+    for some coefficients $c_\omega$. Its $j$-th component is
+    $M=\sum_{|\omega|=L}c_\omega A^{j,\omega}$, so the length-$L$ words of
+    $A^j$ span $\MN{D_j}$.
+\end{proof}
+
+\begin{theorem}[Separation from simultaneous injectivity]
+    \label{thm:block-word-span-separation}
+    \lean{MPSTensor.not_gaugePhaseEquiv_of_wordTupleSpanTop}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ be tensors with positive bond dimensions. Suppose that
+    their simultaneous word evaluations at length $S$ span the product of their
+    matrix algebras. Then no two distinct blocks are gauge-phase equivalent.
+    This is a consequence of the simultaneous block-injectivity condition in
+    \cite[Section IV.C]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:product_span_block_image_direct_sum, thm:ground_space_map_injective_blk,
+        thm:gauge_phase_mpv_scaling, lem:mpv_mem_ground_space,
+        lem:mpv_eq_ground_space_map_one, thm:block_injective_of_word_tuple_span}
+    The local ground spaces of the blocks at length $S$ are independent. Each
+    block is $S$-block injective by
+    Theorem~\ref{thm:block_injective_of_word_tuple_span}, so each boundary
+    map at that length is injective, and its value at the identity matrix,
+    the periodic matrix product vector $V^{(S)}(A^i)=\Gamma^{A^i}_S(\Id)$, is
+    nonzero. Suppose that $i\neq j$ and $A^{i,a}=\zeta XA^{j,a}X^{-1}$ for every
+    physical index $a$. Then
+    \begin{align}
+        V^{(S)}(A^i)=\zeta^SV^{(S)}(A^j)\in G_S(A^i)\cap G_S(A^j)=\{0\},\notag
+    \end{align}
+    so $\Gamma^{A^i}_S(\Id)=0$, contradicting injectivity of the boundary map.
+\end{proof}
+
+\begin{theorem}[A uniform gap at the simultaneous injectivity range]
+    \label{thm:block-parent-uniform-gap-simultaneous-injectivity}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
+    Suppose their word tuples of a supplied positive length $S$ span the full
+    product matrix algebra. Let $B=\bigoplus_{j=0}^{r-1}\mu_jA^j$, where every
+    $\mu_j$ is nonzero. For each interaction range $R\geq S+1$, there is a
+    constant $\gamma_R>0$ such that
+    \begin{align}
+        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
+    \end{align}
+    for every chain length $N\in\mathbb N$ and every
+    $v\perp\ker H_{R,N}$, where $H_{R,N}$ is the canonical periodic parent
+    Hamiltonian of $B$.
+    This is the block-injective gap assertion of
+    \cite[Section~IV.C]{Cirac2021Matrix} at the simultaneous injectivity range.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:block_word_span_primitive_normalization, thm:block-word-span-separation,
+        thm:primitive_block_sum_parent_gap,
+        thm:parent-gap-fixed-range-transfer, thm:parent_hamiltonian_eventual_gap,
+        thm:ph_tp_word_span_propagation, thm:ph_tp_block_open_ground_space,
+        thm:ph_block_replacement_parent_equality}
+    Normalize the blocks while retaining simultaneous injectivity at $S$ and
+    all local ground spaces. Simultaneous injectivity forces distinct blocks
+    to be inequivalent. The grouped martingale estimate and finite-range
+    periodic comparison provide a gapped interaction range $W\geq2R$.
+    Let $B'$ be the weighted sum of the normalized blocks. Trace preservation
+    propagates simultaneous injectivity from $S$ to every larger length, so,
+    since $R\geq S+1$, the open-chain ground-space theorem gives
+    \begin{align}
+        \ker H^{\mathrm{open}}_{W,R}(B')=G_W^{\mathrm{ES}}(B').\notag
+    \end{align}
+    Two-sided comparison of the
+    periodic range-$R$ and range-$W$ Hamiltonians therefore transfers the gap
+    to $R$. Taking a minimum with the finitely many remaining finite-volume
+    gaps makes the bound uniform over every $N$. Finally, normalization left
+    the original parent Hamiltonians unchanged.
+\end{proof}
+
+\begin{theorem}[Canonical parent Hamiltonians and normal representatives]
+    \label{thm:canonical-parent-hamiltonian-representatives}
+    \lean{MPSTensor.CPSVCanonicalFormData.parentHamiltonianES_eq_representatives}
+    \leanok
+    Let $A$ be a tensor in canonical form, with distinct normal
+    representatives $B_0,\ldots,B_{g-1}$, and set $B=\bigoplus_j B_j$.
+    For every positive interaction range $R$ and every chain length $N$,
+    the canonical periodic parent Hamiltonians satisfy
+    \begin{align}
+        H_{R,N}(A)=H_{R,N}(B).\notag
+    \end{align}
+    This equality includes the multiplicity copies and the ambient
+    reconstruction of the original tensor.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ph_canonical_representative_local_spaces,
+        thm:block_sum_local_ground_space}
+    For every positive length $R$, the local spaces satisfy
+    \begin{align}
+        G_R(A)=\bigvee_jG_R(B_j)=G_R(B).\notag
+    \end{align}
+    Their orthogonal complementary projections therefore agree. Translating
+    and summing those projections gives the same Hamiltonian.
+\end{proof}
+
+\begin{theorem}[Canonical gap for every canonical decomposition]
+    \label{thm:canonical-decomposition-gap-simultaneous-injectivity}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a tensor in canonical form with positive physical dimension.
+    Fix any canonical decomposition of
+    $A$, and let $B_0,\ldots,B_{g-1}$ be its distinct normal representatives.
+    Let $S$ be a positive integer such that the simultaneous length-$S$ word
+    tuples of $B_0,\ldots,B_{g-1}$ span the product of the block matrix
+    algebras. Then, for every $R\geq S+1$, there exists $\gamma>0$ such that,
+    for every chain length $N$ and every vector $v\perp\ker H_{R,N}(A)$,
+    \begin{align}
+        \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:canonical-parent-hamiltonian-representatives,thm:block-parent-uniform-gap-simultaneous-injectivity}
+    Set $B=\bigoplus_jB_j$. Its blocks satisfy the hypotheses of the uniform
+    gap at the simultaneous injectivity range, so $H_{R,N}(B)$ has a positive
+    uniform gap. Since $H_{R,N}(A)=H_{R,N}(B)$ for every $N$, the same
+    constant works for $A$, without changing the range or the chain length.
+\end{proof}
+
+\begin{theorem}[Canonical gap at a supplied simultaneous injectivity length]
+    \label{thm:canonical-gap-simultaneous-injectivity}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a tensor in canonical form with positive physical dimension.
+    One may choose a basis of normal
+    tensors $B_0,\ldots,B_{g-1}$ such that the following holds for every positive
+    integer $S$: if the simultaneous length-$S$ word tuples span the product
+    of the block matrix algebras, then, for every $R\geq S+1$, there exists
+    $\gamma>0$ such that, for every chain length $N$ and every vector
+    $v\perp\ker H_{R,N}(A)$,
+    \begin{align}
+        \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
+    \end{align}
+    The representatives are chosen once, before $S$ and $R$.
+    This includes canonical forms with repeated blocks, as in
+    \cite[Section~IV.C]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:canonical-decomposition-gap-simultaneous-injectivity}
+    Fix one canonical decomposition of $A$ and take its distinct normal
+    representatives, which form a basis of normal tensors for $A$. The
+    preceding theorem applies to this fixed choice for every $S$ and every
+    $R\geq S+1$.
+\end{proof}

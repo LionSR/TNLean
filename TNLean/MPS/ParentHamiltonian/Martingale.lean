@@ -12,8 +12,10 @@ import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.AdjacentLocalTerms
 import TNLean.MPS.ParentHamiltonian.Martingale.AnalyticBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockDiagonalGap
+import TNLean.MPS.ParentHamiltonian.Martingale.BlockGapAtSimultaneousInjectivity
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockedGap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
+import TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapAtSimultaneousInjectivity
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.DifferenceProjections
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
