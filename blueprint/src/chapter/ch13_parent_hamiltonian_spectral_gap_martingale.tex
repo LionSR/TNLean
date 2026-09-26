@@ -4528,7 +4528,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     and let $\Gamma_A(n)$ and $\Gamma_B(n)$ be their boundary maps with
     Hilbert--Schmidt norms on the boundary matrix spaces. Define
     $\mathcal E_{BA}(X)=\sum_i B^iX(A^i)^*$ on
-    $M_{D_B,D_A}(\mathbb C)$. For matrix units $E_{ab}$ and $E_{ce}$,
+    $M_{D_B\times D_A}(\C)$. For matrix units $E_{ab}$ and $E_{ce}$,
     \begin{align}
         \langle\Gamma_A(n)E_{ab},\Gamma_B(n)E_{ce}\rangle
          & =\bigl[\mathcal E_{BA}^n(E_{ca})\bigr]_{eb}.
@@ -4614,12 +4614,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     transfer maps have spectral radius less than one, and that
     $\operatorname{spr}(\mathcal E_{BA})<1$.
     For every $\varepsilon>0$, there is $n_0$ such that for every
-    $n\geq n_0$, $x\in\mathcal G_n(A)$, and $y\in\mathcal G_n(B)$,
+    $n\geq n_0$, $x\in\mathcal G_n^{\mathrm{ES}}(A)$, and $y\in\mathcal G_n^{\mathrm{ES}}(B)$,
     \begin{align}
         |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
     \end{align}
-    This is the identity-observable conclusion obtained from the
-    spectral-radius estimate in the proof of the lemma \textup{disjoint}
+    This is the bound on inner products of ground-space vectors obtained
+    from the spectral-radius estimate in the proof of the lemma \textup{disjoint}
     in \cite{Nachtergaele1996Spectral}.
 \end{theorem}
 
@@ -4627,12 +4627,26 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
         thm:primitive_ground_space_gram_inverse_tendsto}
-    The self-Gram operators converge to invertible limits determined by
-    $\rho$ and $\sigma$. Their inverses therefore converge and are bounded
-    for all sufficiently large $n$. By
-    Theorem~\ref{thm:mixed_boundary_gram_decay}, the middle factor in
-    Theorem~\ref{thm:ground_space_overlap_mixed_gram} tends to zero.
-    The resulting coefficient is eventually less than $\varepsilon$,
+    By Theorem~\ref{thm:primitive_ground_space_gram_inverse_tendsto}, the
+    self-Gram operators $G_A(n)$ and $G_B(n)$ converge to invertible limits
+    $G_A(\infty)$ and $G_B(\infty)$ determined by $\rho$ and $\sigma$, and
+    their inverses converge to $G_A(\infty)^{-1}$ and $G_B(\infty)^{-1}$.
+    Since the limits are invertible, so are $G_A(n)$ and $G_B(n)$, and hence
+    $\Gamma_A(n)$ and $\Gamma_B(n)$ are injective, for all
+    sufficiently large $n$. By Theorem~\ref{thm:mixed_boundary_gram_decay},
+    the coefficient in Theorem~\ref{thm:ground_space_overlap_mixed_gram}
+    satisfies
+    \begin{align}
+        c(n)
+         & =\sqrt{\lVert G_A(n)^{-1}\rVert}\,
+        \lVert\Gamma_A(n)^*\Gamma_B(n)\rVert\,
+        \sqrt{\lVert G_B(n)^{-1}\rVert}
+        \longrightarrow
+        \sqrt{\lVert G_A(\infty)^{-1}\rVert}\cdot0\cdot
+        \sqrt{\lVert G_B(\infty)^{-1}\rVert}=0.
+    \end{align}
+    Choose $n_0$ with $c(n)\leq\varepsilon$ for $n\geq n_0$; then
+    Theorem~\ref{thm:ground_space_overlap_mixed_gram} gives the bound,
     uniformly in $x$ and $y$.
 \end{proof}
 
@@ -4646,7 +4660,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     fixed matrices and complementary transfer spectral radii less than one.
     Suppose that, if their bond dimensions agree, they are not gauge-phase
     equivalent. Then, for every $\varepsilon>0$ and all sufficiently large $n$,
-    every $x\in\mathcal G_n(A)$ and $y\in\mathcal G_n(B)$ satisfy
+    every $x\in\mathcal G_n^{\mathrm{ES}}(A)$ and $y\in\mathcal G_n^{\mathrm{ES}}(B)$ satisfy
     \begin{align}
         |\langle x,y\rangle| & \leq\varepsilon\lVert x\rVert\lVert y\rVert.
     \end{align}
