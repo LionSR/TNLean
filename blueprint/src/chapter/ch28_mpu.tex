@@ -4512,6 +4512,45 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     which is (\ref{eq:mpu_ambient_cfii_double_layer}).
 \end{proof}
 
+\begin{theorem}[Canonical form from a positive stabilized transfer factor]
+    \label{thm:mpu_canonical_form_ii_stabilization_converse}
+    \lean{MPOTensor.IsMPU.exists_canonicalFormII_of_supplied_transfer_power}
+    \leanok
+    \uses{def:mpu, def:mpu_canonical_form_ii, thm:mpu_normalized_transfer_trace}
+    Let $\mathcal U$ be an MPU with physical dimension $d>0$, and let $E$
+    be the transfer matrix of its normalized flattening. Suppose that
+    $\rho\in\MN{D}$ is positive definite and diagonal and that, for some
+    integer $K\geq0$,
+    \begin{align}
+        E^K & =\lvert\rho)(\Phi\rvert,
+        & (\Phi\rvert X) & =\tr(X).
+    \end{align}
+    Then $\tr(\rho)=1$, and $\mathcal U$ is in canonical form II in its
+    original bond coordinates, with ambient right fixed matrix $\rho$.
+    This is the converse to the stabilized form of
+    \cite[Proposition~III.1]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_normalized_transfer_nonzero_spectrum, thm:mpu_normalized_transfer_fin_one}
+    Write $t=\tr(\rho)$ and $P=\lvert\rho)(\Phi\rvert$. Then
+    $P^2=tP$ and $\tr(P)=t$. If $K\geq2$, the normalized transfer trace at
+    length $K$ gives $t=1$. If $K=1$, lengths two and three give
+    $t^2=t^3=1$, hence $t=1$. If $K=0$, then $P=\Id_{D^2}$; its rank is at
+    most one, so $D=1$. In that dimension the normalized transfer matrix is
+    the identity, and the first power also equals $P$.
+
+    Thus there is a positive integer $J$ with $E^J=P$ and $t=1$. Since
+    $E$ commutes with $P$ and $\tr(E^{J+1})=1$, the rank-one identity gives
+    $PEP=\tr(EP)P=P$, hence $EP=PE=P$. Therefore $\rho$ is fixed by the
+    transfer map and its trace functional is fixed by the adjoint map, so
+    the normalized flattening is left-canonical. Every fixed matrix $X$
+    satisfies $X=E^JX=\tr(X)\rho$. Positivity of $\rho$ and this uniqueness
+    imply irreducibility. The normalized transfer traces also give spectral
+    radius one and primitivity. Taking the normalized flattening itself as
+    the sole normal block gives the asserted canonical-form-II presentation.
+\end{proof}
+
 \section{Standard form, index, and symmetry classification}
 
 \begin{definition}[Reduced full-support source datum]
