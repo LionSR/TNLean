@@ -286,15 +286,16 @@ The unrestricted source Fundamental Theorem of MPU remains under
 canonical-form-II presentation recording each supplied fixed matrix.
 The unrestricted source Index Theorem remains under
 \texttt{IndexTh}. It depends on the source index, source well-definedness,
-unrestricted tensor-product and composition additivity, source continuity, and
+the unrestricted source-cut formulations of tensor-product and composition
+additivity, source continuity, and
 source equivalence.
 
-The common-block reduced-data versions of the two additivity statements have
-distinct admissible labels and feed only the Admissible Index Theorem. This
-theorem records the result currently justified by the formal interfaces. It
-requires source data at every blocking length where Theorem~III.8 of
-Ref.~\cite{Cirac2017MPU} is used. A blocking length is admissible only if the
-actual blocked tensor is simple and carries its own source datum.
+The earlier admissible Index Theorem still records operation-specific source
+data for its other conclusions. Its independent-product clause remains
+restricted. The composition-additivity entry, however, now states the proved
+representative-index theorem with no six-block source-data hypotheses. A
+blocking length is admissible for statements naming source factors only if
+the actual blocked tensor is simple and carries its own source datum.
 For a tensor already in canonical form II, the two index entries now use
 \leanid{MPOTensor.IsMPUCanonicalFormII.index}. Positive blocking preserves
 that presentation, and simplicity gives $r_k\ell_k=d^{2k}$. Thus index
@@ -315,21 +316,37 @@ chosen reduction and of the ambient bond dimension
 rectangular reduction preserves the two source-cut ranks of the unreduced
 tensor itself, or identify this representative definition with the printed
 unrestricted source-cut formula without further argument.
-Tensor-product additivity still requires one common blocking length at which
-both factors and their tensor product are simple and have source data.
+For the representative index, composition additivity now holds for arbitrary
+positive-dimensional MPUs (\leanid{MPOTensor.IsMPU.index_mulTensor}). The
+canonical-form-II proof chooses a common simple blocking rather than assuming
+one; this public theorem does not identify the raw source cuts of an unreduced
+tensor with those of its representative. Independent tensor-product
+additivity is a separate development and is not part of this composition
+argument.
 
 The published composition proof first uses $\mathcal U_k$,
 $\mathcal U'_k$, and $\mathcal W_k$, then places $\mathcal U_{2k}$ and
 $\mathcal U'_{2k}$ in standard form and computes the ranks of
-$\mathcal W_{4k}$ \cite{Cirac2017MPU}. The admissible theorem therefore
-requires separate source data for all six exact blocked tensors. It does not
-use later-block transport. The supplied-fixed-pair source-$u$
+$\mathcal W_{4k}$ \cite{Cirac2017MPU}. The earlier admissible formulation
+supplied source data for all six exact blocked tensors. The composition entry
+has now been replaced by the representative-index theorem, whose proof does
+not use those six assumptions. It reduces the product tensor to a
+canonical-form-II representative with the same positive-length periodic
+operators (\leanid{MPOTensor.exists_isReduction_of_mpo_eq_cfii}). Rectangular
+reduction only decreases the two source ranks. At a common simple blocking,
+the four-site composition upper bounds and the exact rank product of the
+reduced representative force both bounds to be equalities
+(\leanid{MPOTensor.IsMPUCanonicalFormII.compositionRanks_of_isReduction}).
+This proves canonical-representative composition additivity
+(\leanid{MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}),
+which descends to the public representative index.
+The supplied-fixed-pair source-$u$
 contraction and the complete source-$v$ network are the steps through which
 \texttt{lemuisometry} and \texttt{ThmFund1} are proved for a tensor in
 canonical form II. Together with preservation under positive blocking, they
 establish the index of a canonical-form-II representative described above.
-The remaining composition and comparison statements still require source
-data for each transformed tensor to which the source theorem is applied.
+Statements that name selected source factors or raw source cuts of a
+transformed tensor retain their separate construction obligations.
 % Source lines: paper_v2.tex 824--865.
 
 The same separation between source statements and scoped statements extends
@@ -566,7 +583,9 @@ now supplies a full-support canonical-form-II tensor generating the same
 positive-length periodic operators. It does not identify the source data of the
 original tensor with those of the reduced representative. It also does not
 prove preservation of source data under tensor products, composition,
-conjugation, adjoint, transposition, or continuous variation.
+conjugation, adjoint, transposition, or continuous variation. The public
+representative index nevertheless satisfies composition additivity, whose
+proof does not require such preservation.
 
 Consequently, the remaining admissible Chapter~28 statements retain their
 explicitly supplied tensors, comparison tensors, and paths. Parallel
@@ -644,7 +663,9 @@ and independent tensor products preserve the bundled presentation by
 \leanid{MPOTensor.IsMPUCanonicalFormII.tensorProduct}, respectively. Their
 downstream derived-tensor entries have not yet been consolidated. Separate
 conjugation and transposition comparisons, symmetry transforms, and
-composition retain distinct obligations under \ghissue{6139}.
+composition source-factor statements retain distinct obligations under
+\ghissue{6139}. Representative-index composition additivity is treated by
+rectangular reduction and rank saturation instead.
 
 Before the supplied-pair converse and the preservation constructors, the
 recorded census contained sixteen declarations mentioning the bundled
@@ -814,13 +835,13 @@ compact-SVD factors across tensors. Transposition and conjugation are
 transported only through their composite, physical adjunction; neither half
 is transported on its own.
 
-Composition is the far case, and it differs from the other five in kind and
-not only in distance. Unitarity of a composition is available, but the only
-recorded statement about its normalized flattening is the entrywise
-physical-contraction formula: no canonical-form-II data are constructed for a
-composition tensor, and no transfer-map identity for one is recorded. Supplying
-those two results would still not settle the case, because for a composition
-the presentation can fail outright.
+Composition differs from the other derived-tensor operations. Unitarity of a
+composition is available, but canonical-form-II data need not exist on the
+whole product bond space. The representative-index additivity theorem avoids
+such a preservation claim: it reduces the composition tensor and compares
+source ranks by inequalities, then uses the exact simple-tensor rank product
+to force saturation. This does not identify selected source factors or raw
+source cuts before and after reduction.
 
 A composition keeps the whole product bond space $D_1D_2$, and that space can
 be too large for the full-support clause. Take the right shift on $d\geq 2$
@@ -855,27 +876,32 @@ This is the enlargement phenomenon of the opening section met again: the
 composite is a nonminimal ambient representative of the operator family it
 generates, and the presentation is a property of the representative and not of
 the operators. The composition case therefore does not ask for a preservation
-statement about the product tensor. It asks for the reduced representative
-\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative} applied to the
-product, together with an identification of the source cuts and ranks of
-\texttt{lem:mpu\_admissible\_index\_composition} across that reduction, which
-is exactly what the reduced-representative theorem does not supply. The source
-takes the same route implicitly: its index-additivity argument blocks the
-composite until it is simple \cite[lines~837--841]{Cirac2017MPU}, which for a
-composite of this shape is unreachable in the product bond space, so the
-tensor it blocks is already a reduced representative. Until that reduction and
-that transport exist,
-\texttt{lem:mpu\_admissible\_index\_composition} keeps its six per-block
-restrictions even if every other preservation statement is proved, and the
-work it needs is larger than the two stages described above.
+statement about the product tensor. The public index theorem applies
+\leanid{MPOTensor.IsMPU.exists_reduced_cfii_representative} to the product.
+Equality of positive-length periodic operators supplies a rectangular
+reduction from the product to that representative
+(\leanid{MPOTensor.exists_isReduction_of_mpo_eq_cfii}). The inequalities
+\leanid{MPOTensor.sourceRanks_blockTensor_le_of_isReduction} carry the
+four-site composition bounds to the representative. Because its simple
+four-site block has the maximal possible rank product, both bounds are
+saturated (\leanid{MPOTensor.IsMPUCanonicalFormII.compositionRanks_of_isReduction}).
+This proves the representative-index additivity without identifying raw
+source cuts across reduction. The printed composition argument blocks its
+composite until it is simple \cite[lines~837--841]{Cirac2017MPU}; for a
+nonminimal product presentation such as the example above, blocking alone
+cannot supply that simple tensor, and a reduction is required. The old
+six-block assumptions are not hypotheses of the proved composition entry.
+They still appear in the unconsolidated admissible Index Theorem, but the
+composition step no longer needs them.
 
 The first item and the three-label consolidation are complete. Thirteen
 pointwise entries remain: the generic supplied-pair step, which is kept
 deliberately, and the twelve derived-tensor entries. Their positive-blocking,
 physical-adjoint, and independent-product cases now have bundled preservation
 theorems, but the downstream entries have not yet been consolidated. Separate
-conjugation and transposition comparisons, symmetry transforms, and
-composition retain distinct preservation or reduction obligations.
+conjugation and transposition comparisons, symmetry transforms, and claims
+about selected factors of a composition retain distinct construction
+obligations; representative-index composition additivity does not.
 The twenty-three pathwise entries retain their continuous-source-data hypotheses.
 
 \section{Verdict}
@@ -913,20 +939,21 @@ representative the reduction produces a new tensor of possibly smaller bond
 dimension, and no theorem identifies the compact-SVD cuts, ranks, or selected
 source factors of that representative with those of the original ambient
 tensor. That transport remains in \ghissue{7012}, and the unrestricted
-representative remains in \ghissue{7127}. Downstream standard-form, index,
-continuity, and symmetry results also lack existence or preservation theorems
-for reduced source data under products, transformed comparison tensors, and
-continuous paths.
+representative remains in \ghissue{7127}. Downstream standard-form, the
+unreduced source-cut index formula, continuity, and symmetry results also lack
+existence or preservation theorems for selected source data under products,
+transformed comparison tensors, and continuous paths. The representative
+index and its composition additivity do not depend on those transports.
 Chapter~28 records these requirements as explicit admissibility hypotheses
 rather than consequences of the MPU predicate. They come off in two stages,
 neither singly nor all at once. The converse of the stabilization theorem is
 proved, and the three same-tensor duplicates have been consolidated with
-their formerly obstructing citations. Preservation along
-each derived-tensor operation releases the twelve whose restriction is on a
-physical block, a comparison tensor, a tensor product, or a composition, the
-last of these by way of a reduced representative rather than a preservation
-statement. The elimination plan above records both stages and what each one
-needs.
+their formerly obstructing citations. Preservation along each remaining
+derived-tensor operation releases the restrictions on a physical block, a
+comparison tensor, or a tensor product. Composition additivity of the
+representative index instead uses a reduced representative, rectangular rank
+inequalities, and rank saturation. The elimination plan above records the
+separate tasks.
 
 The full-support irreducibility implication is formalized by
 \leanid{MPSTensor.CPSVCanonicalFormData.isIrreducibleTensor_of_r_eq_one_of_fullSupport}.
