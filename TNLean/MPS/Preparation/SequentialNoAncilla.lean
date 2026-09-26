@@ -43,8 +43,10 @@ after `U^{[k]}` is `|χ_k⟩ ⊗ |0⟩^{⊗(N-k-1)}`, where `χ_k` is a vector o
 ## Main results
 
 * `MPSPreparation.noAncillaState_eq_eval` — the identification
-  `A^{[k]}_{i,αβ} = ⟨i, β| U^{[k]} |α, 0⟩` of the proof in the source
-  (lines 1597--1603), as an ordered matrix product.
+  of the site matrices with `⟨i, β| U^{[k]} |α, 0⟩` in the proof in the source
+  (lines 1597--1603), as an ordered matrix product. The source writes these
+  entries `A^{[k]}_{i,α,β}`; in the ket-position product used here they are the
+  entries `(β, α)` of `MPSPreparation.pairStep`.
 * `MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff` and
   `MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff` — Theorem
   "Sequential generation without ancilla" (lines 1587--1593): the generated
@@ -111,8 +113,9 @@ def pairStep (U : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) : Fin d → Matr
   fun i β α => U (i, β) (α, 0)
 
 /-- The generated state is an ordered matrix product with site matrices
-`A^{[k]}_{i,α,β} = ⟨i, β| U^{[k]} |α, 0⟩`, arXiv:quant-ph/0608197,
-lines 1597--1603. The source makes this identification for `k < N - 1` and obtains
+`A^{[k]}_{i,βα} = ⟨i, β| U^{[k]} |α, 0⟩` (`MPSPreparation.pairStep`),
+arXiv:quant-ph/0608197, lines 1597--1603, where the source writes the same entry
+as `A^{[k]}_{i,α,β}`, with the received index `α` first. The source makes this identification for `k < N - 1` and obtains
 the matrices of the last two sites from a singular value decomposition of
 `U^{[N-1]}`; here all operations are treated uniformly, the first site of the ket
 (position `0`) is read off from the output vector, and the input at the other
