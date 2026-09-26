@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BlockDiagonalProjectorDecay
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicGapFromDivisibleOpen
-import TNLean.MPS.ParentHamiltonian.Martingale.GroupedC3
+import TNLean.MPS.ParentHamiltonian.Martingale.GroupedProjectorEstimate
 
 /-!
 # A uniform gap for parent Hamiltonians of primitive block sums

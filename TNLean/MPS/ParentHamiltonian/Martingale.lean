@@ -24,9 +24,9 @@ import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedRangeGapTransfer
 import TNLean.MPS.ParentHamiltonian.Martingale.Gap
-import TNLean.MPS.ParentHamiltonian.Martingale.GroupedC3
 import TNLean.MPS.ParentHamiltonian.Martingale.GroupedOpenGap
 import TNLean.MPS.ParentHamiltonian.Martingale.GroupedProjections
+import TNLean.MPS.ParentHamiltonian.Martingale.GroupedProjectorEstimate
 import TNLean.MPS.ParentHamiltonian.Martingale.GroupedSpectatorNorm
 import TNLean.MPS.ParentHamiltonian.Martingale.GroupedWindowBounds
 import TNLean.MPS.ParentHamiltonian.Martingale.MovingWindowCount
