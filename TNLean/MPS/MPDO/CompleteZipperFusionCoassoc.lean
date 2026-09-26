@@ -81,19 +81,19 @@ noncomputable def coproductRight (Y : Fus.PairSpace) (a b c : Λ) :
 private theorem sum_kronecker {ι l m n q : Type*} (s : Finset ι) (A : ι → Matrix l m ℂ)
     (B : Matrix n q ℂ) : (∑ i ∈ s, A i) ⊗ₖ B = ∑ i ∈ s, A i ⊗ₖ B := by
   ext x y
-  simp [kronecker_apply, Matrix.sum_apply, Finset.sum_mul]
+  simp [Matrix.sum_apply, Finset.sum_mul]
 
 private theorem kronecker_sum {ι l m n q : Type*} (s : Finset ι) (A : Matrix l m ℂ)
     (B : ι → Matrix n q ℂ) : A ⊗ₖ (∑ i ∈ s, B i) = ∑ i ∈ s, A ⊗ₖ B i := by
   ext x y
-  simp [kronecker_apply, Matrix.sum_apply, Finset.mul_sum]
+  simp [Matrix.sum_apply, Finset.mul_sum]
 
 private theorem kronecker_one_conj {l m n : Type*} [Fintype m] [Fintype n] [DecidableEq n]
     (V : Matrix l m ℂ) (A : Matrix m m ℂ) (W : Matrix m l ℂ) (B : Matrix n n ℂ) :
     (V ⊗ₖ (1 : Matrix n n ℂ)) * (A ⊗ₖ B) * (W ⊗ₖ (1 : Matrix n n ℂ)) = (V * A * W) ⊗ₖ B := by
   rw [← mul_kronecker_mul, ← mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one]
 
-private theorem one_kronecker_conj {l m n : Type*} [Fintype m] [Fintype n] [DecidableEq l]
+private theorem one_kronecker_conj {l m n : Type*} [Fintype l] [Fintype m] [DecidableEq l]
     (A : Matrix l l ℂ) (V : Matrix n m ℂ) (B : Matrix m m ℂ) (W : Matrix m n ℂ) :
     ((1 : Matrix l l ℂ) ⊗ₖ V) * (A ⊗ₖ B) * ((1 : Matrix l l ℂ) ⊗ₖ W) = A ⊗ₖ (V * B * W) := by
   rw [← mul_kronecker_mul, ← mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one]
@@ -106,16 +106,24 @@ private theorem sum_fusion_conj_letter (a b : Λ) (i k : Fin p) :
   rw [← Fus.coproduct_letter i k a b, Fus.coproduct_apply_eq_sum]
   rfl
 
+omit [DecidableEq Λ] in
+private theorem sum_sum_sum_comm {β : Type*} [AddCommMonoid β] {κ : Λ → Type*}
+    [∀ e, Fintype (κ e)] (F : ∀ e, κ e → Fin p → β) :
+    ∑ e, ∑ μ, ∑ j, F e μ j = ∑ j, ∑ e, ∑ μ, F e μ j :=
+  calc _ = ∑ e, ∑ j, ∑ μ, F e μ j := Finset.sum_congr rfl fun _ _ => Finset.sum_comm
+    _ = _ := Finset.sum_comm
+
 /-- $(\Delta\otimes\mathrm{id})\Delta(T^{il})$ is the letter of the triple product. -/
 theorem coproductLeft_coproduct_letter (i l : Fin p) (a b c : Λ) :
     Fus.coproductLeft (Fus.coproduct (Fus.letter i l)) a b c =
       Fus.tripleProductLetter a b c i l := by
   simp only [coproductLeft, coproduct_letter, Matrix.mul_sum, Matrix.sum_mul,
     kronecker_one_conj]
-  rw [tripleProductLetter, Finset.sum_comm]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [Finset.sum_comm]
+  rw [sum_sum_sum_comm]
   simp only [← sum_kronecker, Fus.sum_fusion_conj_letter]
+  rw [tripleProductLetter]
+  simp only [sum_kronecker]
+  exact Finset.sum_comm
 
 /-- $(\mathrm{id}\otimes\Delta)\Delta(T^{il})$ is the letter of the triple product. -/
 theorem coproductRight_coproduct_letter (i l : Fin p) (a b c : Λ) :
@@ -123,11 +131,10 @@ theorem coproductRight_coproduct_letter (i l : Fin p) (a b c : Λ) :
       Fus.tripleProductLetter a b c i l := by
   simp only [coproductRight, coproduct_letter, Matrix.mul_sum, Matrix.sum_mul,
     one_kronecker_conj]
-  rw [tripleProductLetter]
-  simp only [Finset.sum_comm (γ := Fin p), ← kronecker_sum, Fus.sum_fusion_conj_letter,
-    ← sum_kronecker]
+  rw [sum_sum_sum_comm]
+  simp only [← kronecker_sum, Fus.sum_fusion_conj_letter]
   ext ⟨⟨xa, xb⟩, xc⟩ ⟨⟨ya, yb⟩, yc⟩
-  simp [Matrix.sum_apply, kronecker_apply, Finset.mul_sum, mul_assoc]
+  simp [tripleProductLetter, Matrix.sum_apply, Finset.mul_sum, mul_assoc]
 
 theorem coproductLeft_add (Y Y' : Fus.PairSpace) (a b c : Λ) :
     Fus.coproductLeft (Y + Y') a b c = Fus.coproductLeft Y a b c + Fus.coproductLeft Y' a b c := by
