@@ -228,9 +228,9 @@ theorem exists_compl_pow_bound [NeZero D] {A : MPSTensor d D} {L : ℕ} (hL1 : 1
       have hmem : (1 : ℂ) ∈ spectrum ℂ (Φ T) := by
         rw [AlgEquiv.spectrum_eq]
         exact hν.mem_spectrum
-      have hle : ((‖(1 : ℂ)‖₊ : ℝ≥0) : ℝ≥0∞) ≤ spectralRadius ℂ (Φ T) := by
-        rw [spectralRadius_eq_of_unital]
-        exact le_iSup₂ (f := fun z (_ : z ∈ spectrum ℂ (Φ T)) ↦ ((‖z‖₊ : ℝ≥0) : ℝ≥0∞)) 1 hmem
+      have hle : ((‖(1 : ℂ)‖₊ : ℝ≥0) : ℝ≥0∞) ≤ spectralRadius ℂ (Φ T) :=
+        le_iSup₂ (f := fun z (_ : z ∈ quasispectrum ℂ (Φ T)) ↦ ((‖z‖₊ : ℝ≥0) : ℝ≥0∞)) 1
+          (spectrum_subset_quasispectrum ℂ (Φ T) hmem)
       rw [nnnorm_one, ENNReal.coe_one] at hle
       exact absurd (lt_of_le_of_lt hle hgap) (lt_irrefl 1)
     exact hmax ν hEν hν1
