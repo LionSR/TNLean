@@ -7074,13 +7074,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_selected_source_gate_unitary_gauges}
     \leanok
     \uses{def:mpu_simple, def:mpu_canonical_form_ii,
-        def:mpu_source_uv,
+        def:mpu_virtual_sandwich, def:mpu_source_uv,
         thm:mpu_virtual_sandwich_source_ranks}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
     with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$. Let
-    $e_r:r[\mathcal U]\to r[\mathcal V]$ and
-    $e_\ell:\ell[\mathcal U]\to\ell[\mathcal V]$ be the source-rank
-    identifications. Reindex the source gates of $\mathcal U$ by
+    $e_r:r[\mathcal U]\simeq r[\mathcal V]$ and
+    $e_\ell:\ell[\mathcal U]\simeq\ell[\mathcal V]$ be the source-rank
+    bijections. Reindex the source gates of $\mathcal U$ by
     \begin{align}
         \widetilde u_{(\ell,r),(p,q)}
          & =u_{\mathcal U,(e_\ell^{-1}\ell,e_r^{-1}r),(p,q)},
