@@ -74,7 +74,7 @@ theorem fibAllTau_entry (i : Fin 2) (l r : Fin 1) :
 
 /-- Project result: blueprint `lem:asymex_fib_amplitudes`. **The product state is `|1, …, 1⟩`**: the
 amplitude of the all-`τ` tensor at `x` is `1` on the all-`τ` configuration and `0` elsewhere. -/
-theorem mpvState_fibAllTau :
+lemma mpvState_fibAllTau :
     mpvState fibAllTau N = EuclideanSpace.single (fun _ : Fin N ↦ (1 : Fin 2)) 1 := by
   ext x
   rw [mpvState_apply, PiLp.single_apply,
@@ -83,7 +83,7 @@ theorem mpvState_fibAllTau :
   simp [funext_iff]
 
 /-- Project result: blueprint `lem:asymex_fib_amplitudes`. The product state has norm one. -/
-theorem norm_mpvState_fibAllTau : ‖mpvState fibAllTau N‖ = 1 := by
+lemma norm_mpvState_fibAllTau : ‖mpvState fibAllTau N‖ = 1 := by
   rw [mpvState_fibAllTau, PiLp.norm_single, norm_one]
 
 /-! ### The chain state -/
@@ -133,7 +133,7 @@ theorem fibChainWeight_eq (a b : Fin 2) :
 
 /-- Project result: blueprint `lem:asymex_fib_amplitudes`, equation `eq:asymex_fib_chain_amplitude`.
 **The chain amplitudes**: `V^{(N)}(C)_x = p_N(x) σ^{n_0(x)} (-σ²)^{n_{11}(x)}`. -/
-theorem mpv_fibChain (x : Fin N → Fin 2) :
+lemma mpv_fibChain (x : Fin N → Fin 2) :
     mpv fibChain x = (fibAdmissibility x : ℂ) * goldenSigmaComplex ^ fibZeroCount x *
       (-goldenSigmaComplex ^ 2) ^ fibPairOneCount x := by
   simp only [mpv_fibChain_eq_prod, fibChainWeight_eq, Finset.prod_mul_distrib, fibAdmissibility,
@@ -150,7 +150,7 @@ theorem mpv_fibChain_eq_ofReal (x : Fin N → Fin 2) :
 
 /-- Project result: blueprint `lem:asymex_fib_amplitudes`, equation `eq:asymex_fib_chain_norm`.
 **The squared chain norm**: `‖V^{(N)}(C)‖² = ∑_x p_N(x) σ^{2 n_0(x) + 4 n_{11}(x)}`. -/
-theorem norm_mpvState_fibChain_sq :
+lemma norm_mpvState_fibChain_sq :
     ‖mpvState fibChain N‖ ^ 2 = ∑ x : Fin N → Fin 2,
       (fibAdmissibility x : ℝ) *
         goldenSigmaReal ^ (2 * fibZeroCount x + 4 * fibPairOneCount x) := by
@@ -163,7 +163,7 @@ theorem norm_mpvState_fibChain_sq :
 
 /-- Project result: blueprint `lem:asymex_fib_amplitudes`. **The chain norm is positive**: the
 all-`τ` amplitude is `(-σ²)^N ≠ 0`. -/
-theorem norm_mpvState_fibChain_pos : 0 < ‖mpvState fibChain N‖ := by
+lemma norm_mpvState_fibChain_pos : 0 < ‖mpvState fibChain N‖ := by
   have hσ : goldenSigmaComplex ≠ 0 := by
     intro h
     have h2 := goldenSigmaReal_sq

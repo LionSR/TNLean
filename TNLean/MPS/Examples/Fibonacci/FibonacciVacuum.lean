@@ -80,7 +80,7 @@ theorem fibAdmissibility_eq (x : Fin N → Fin 2) :
 
 /-- A configuration is admissible, `p_N(x) = 1`, exactly when it has no cyclic neighbouring pair
 `00`. -/
-theorem fibAdmissibility_eq_one_iff (x : Fin N → Fin 2) :
+lemma fibAdmissibility_eq_one_iff (x : Fin N → Fin 2) :
     fibAdmissibility x = 1 ↔ ∀ v, ¬(x v = 0 ∧ x (v + 1) = 0) := by
   rw [fibAdmissibility_eq]
   split_ifs with h <;> simpa using h
@@ -104,7 +104,7 @@ theorem fibOne_apply (i j l r : Fin 2) :
 /-- Project result: blueprint `lem:asymex_fib_vacuum`,
 equation `eq:asymex_fib_vacuum_kernel`. **The kernel of the vacuum operator**:
 `⟨y|P_N|x⟩ = δ_{yx} p_N(x)`. -/
-theorem mpo_fibOne_apply (y x : Fin N → Fin 2) :
+lemma mpo_fibOne_apply (y x : Fin N → Fin 2) :
     MPOTensor.mpo fibOne N y x = if y = x then (fibAdmissibility x : ℂ) else 0 := by
   rw [MPOTensor.mpo_apply_of_forced_left_bond (π := id) (β := fun _ j ↦ j)
     (φ := fun _ j r ↦ (fibAdjacency j r : ℂ)) fun i j l r ↦ fibOne_apply i j l r]
@@ -143,7 +143,7 @@ theorem mpo_fibOne_mulVec_eq_self {w : (Fin N → Fin 2) → ℂ}
 
 /-- Project result: blueprint `lem:asymex_fib_vacuum`.
 **The vacuum operator is an orthogonal projection**: `P_N² = P_N = P_N†`. -/
-theorem mpo_fibOne_isStarProjection : IsStarProjection (MPOTensor.mpo fibOne N) := by
+lemma mpo_fibOne_isStarProjection : IsStarProjection (MPOTensor.mpo fibOne N) := by
   rw [isStarProjection_iff', mpo_fibOne_eq_diagonal]
   refine ⟨?_, ?_⟩
   · rw [Matrix.diagonal_mul_diagonal]
@@ -158,7 +158,7 @@ theorem mpo_fibOne_isStarProjection : IsStarProjection (MPOTensor.mpo fibOne N) 
 /-- Project result: blueprint `lem:asymex_fib_vacuum`, equation
 `eq:asymex_fib_vacuum_range`. **The range of the vacuum operator** is the span of the admissible
 basis vectors, `ran P_N = span_ℂ {|x⟩ : p_N(x) = 1}`. -/
-theorem range_mpo_fibOne :
+lemma range_mpo_fibOne :
     LinearMap.range (Matrix.toLin' (MPOTensor.mpo fibOne N)) =
       Submodule.span ℂ
         ((fun x ↦ Pi.single x 1) '' {x : Fin N → Fin 2 | fibAdmissibility x = 1}) := by
@@ -184,7 +184,7 @@ theorem range_mpo_fibOne :
 /-- Project result: blueprint `lem:asymex_fib_vacuum`, equation
 `eq:asymex_fib_vacuum_null`. **The kernel of the vacuum operator** is the span of the
 inadmissible basis vectors, `ker P_N = span_ℂ {|x⟩ : p_N(x) = 0}`. -/
-theorem ker_mpo_fibOne :
+lemma ker_mpo_fibOne :
     LinearMap.ker (Matrix.toLin' (MPOTensor.mpo fibOne N)) =
       Submodule.span ℂ
         ((fun x ↦ Pi.single x 1) '' {x : Fin N → Fin 2 | fibAdmissibility x = 0}) := by
@@ -202,7 +202,7 @@ theorem ker_mpo_fibOne :
 
 /-- Project result: blueprint `lem:asymex_fib_vacuum`. **The vacuum
 operator is not the identity**: the all-trivial configuration lies in its kernel. -/
-theorem mpo_fibOne_ne_one : MPOTensor.mpo fibOne N ≠ 1 := by
+lemma mpo_fibOne_ne_one : MPOTensor.mpo fibOne N ≠ 1 := by
   intro h
   have := congrFun (congrFun h (fun _ ↦ 0)) (fun _ ↦ 0)
   rw [mpo_fibOne_apply] at this

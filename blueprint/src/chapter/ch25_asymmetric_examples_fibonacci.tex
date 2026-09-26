@@ -365,12 +365,14 @@ At $N=1$, the condition excludes the single label $0$.
 
 \begin{lemma}[Vacuum projection and its kernel]
     \label{lem:asymex_fib_vacuum}
-    \lean{FibonacciCompression.fibAdmissibility,
-        FibonacciCompression.mpo_fibOne_apply,
+    \lean{FibonacciCompression.mpo_fibOne_apply,
         FibonacciCompression.mpo_fibOne_isStarProjection,
         FibonacciCompression.range_mpo_fibOne,
         FibonacciCompression.ker_mpo_fibOne,
-        FibonacciCompression.mpo_fibOne_ne_one}
+        FibonacciCompression.mpo_fibOne_ne_one,
+        FibonacciCompression.fibAdjacency,
+        FibonacciCompression.fibAdmissibility,
+        FibonacciCompression.fibAdmissibility_eq_one_iff}
     \leanok
     \uses{def:asymex_fib, def:mpo_family}
     For $N\geq1$, the vacuum operator $P_N=O_N(B_1)$ has matrix elements
