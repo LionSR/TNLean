@@ -8,7 +8,7 @@
 \date{2026-09-26}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{scope-restriction}{open}
 
 \section{What the sources print}
 Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
@@ -28,6 +28,7 @@ The quantum-double tensor
 \begin{align}
     K=\sum_{p,q,r,s\in G}\ket{pq^{-1},qr^{-1},rs^{-1},sp^{-1}}\otimes
     \ket{p,q}\bra{r,s}
+    \label{eq:rmp_peps_qd_tensor}
 \end{align}
 is then called $G$-isometric.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 2904--2911.}
@@ -46,6 +47,7 @@ arises from exactly $|G|$ colorings, those related by one global shift
 $h_i\mapsto h_ig$. For vectors $x,y$ invariant under the shift,
 \begin{align}
     \langle Kx,Ky\rangle=|G|\,\langle x,y\rangle .
+    \label{eq:rmp_peps_qd_isometry}
 \end{align}
 So $K$ restricted to the invariant subspace is $\sqrt{|G|}$ times a
 unitary onto its range, and $K/\sqrt{|G|}$ satisfies the printed
@@ -87,7 +89,11 @@ one tensor.
         \path{Papers/2011.12127/TN-Review-main.tex}, line 2452.}
 \end{enumerate}
 
-\section{Elimination plan}
+\section{Verdict and elimination plan}
+The note is a scope restriction: the review's statements about the
+contracted network are formalized only for one tensor or not at all. The
+normalization and the representation are local corrections within that
+restriction.
 The normalization and the choice of regular representation are
 conventions and need no further work. For the scope restrictions, place
 the quantum-double tensors on the torus, prove the pulling-through

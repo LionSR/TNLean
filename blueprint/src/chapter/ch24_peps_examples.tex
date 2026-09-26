@@ -244,7 +244,6 @@ of matrix product unitaries is constructed in
 Theorems~\ref{thm:mpug_anomaly_three_cocycle}
 and~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
 
-<<<<<<< HEAD
 \subsection{The toric code and quantum double models}
 
 Let $G$ be a finite group. The quantum double model of $G$
@@ -260,29 +259,60 @@ from the virtual to the physical system
 \begin{definition}[$G$-injective and $G$-isometric tensors]%
     \label{def:peps_g_injective}
     \lean{TNLean.PEPS.IsGInjective, TNLean.PEPS.IsGIsometric,
-        TNLean.PEPS.siteMap, TNLean.PEPS.siteMap_apply,
-        TNLean.PEPS.apply_averageMap_of_forall_comp_eq,
-        TNLean.PEPS.isGInjective_iff_exists_leftInverse,
-        TNLean.PEPS.isGInjective_trivial_iff,
-        TNLean.PEPS.siteMap_injective_iff}
+        TNLean.PEPS.siteMap, TNLean.PEPS.siteMap_apply}
     \leanok
     Let $g\mapsto U_g$ be a representation of a finite group $G$ on the
     virtual system of a tensor $A$, and let $\Pi_U$ be the projector onto the
     $U_g$-invariant subspace. The tensor is $G$-injective if
     $\mathcal{P}(A)U_g=\mathcal{P}(A)$ for every $g$ and $\mathcal{P}(A)$ is
-    injective on the invariant subspace; equivalently, $\mathcal{P}(A)$ is
-    invariant and has a left inverse $L$ with $L\,\mathcal{P}(A)=\Pi_U$
+    injective on the invariant subspace
     \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
     It is $G$-isometric if moreover
     $\mathcal{P}(A)$ restricted to the invariant subspace is a multiple of an
     isometry, $\langle\mathcal{P}(A)x,\mathcal{P}(A)y\rangle
         =c\,\langle x,y\rangle$ for invariant $x,y$ and one constant $c>0$
     \cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Left-inverse form of $G$-injectivity]%
+    \label{thm:peps_g_injective_left_inverse}
+    \lean{TNLean.PEPS.apply_averageMap_of_forall_comp_eq,
+        TNLean.PEPS.isGInjective_iff_exists_leftInverse}
+    \leanok
+    \uses{def:peps_g_injective}
+    A tensor is $G$-injective if and only if
+    $\mathcal{P}(A)U_g=\mathcal{P}(A)$ for every $g$ and $\mathcal{P}(A)$ has a
+    left inverse $L$ with $L\,\mathcal{P}(A)=\Pi_U$
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    An invariant map satisfies $\mathcal{P}(A)\Pi_U=\mathcal{P}(A)$, since
+    $\Pi_U$ is the average of the $U_g$. If $\mathcal{P}(A)$ is injective on
+    the invariant subspace, choose a linear map $L$ into the invariant
+    subspace with $L\,\mathcal{P}(A)x=x$ for invariant $x$; then
+    $L\,\mathcal{P}(A)=L\,\mathcal{P}(A)\Pi_U=\Pi_U$. Conversely, if
+    $L\,\mathcal{P}(A)=\Pi_U$ and $\mathcal{P}(A)x=0$ for an invariant $x$, then
+    $x=\Pi_Ux=L\,\mathcal{P}(A)x=0$.
+\end{proof}
+
+\begin{theorem}[$G$-injectivity for the trivial representation]%
+    \label{thm:peps_g_injective_trivial}
+    \lean{TNLean.PEPS.isGInjective_trivial_iff,
+        TNLean.PEPS.siteMap_injective_iff}
+    \leanok
+    \uses{def:peps_g_injective}
     For the trivial representation, $G$-injectivity is injectivity of
     $\mathcal{P}(A)$, that is, linear independence of the physical vectors
     $A^{\bullet}_{\alpha\beta\gamma\delta}$ indexed by the virtual
     configurations.
-\end{definition}
+\end{theorem}
+
+\begin{proof}\leanok
+    Every vector is invariant under the trivial representation, and
+    $\mathcal{P}(A)$ is the linear map whose columns are the vectors
+    $A^{\bullet}_{\alpha\beta\gamma\delta}$.
+\end{proof}
 
 The source requires $U_g$ to contain every irreducible representation for
 $G$-injectivity and to be the left-regular representation for
@@ -394,7 +424,6 @@ trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
         =g_1g_3g_3^{-1}g_4^{-1}g_4g_1^{-1}=1$.
 \end{proof}
 
-=======
 \subsection{The AKLT state}
 
 The two-dimensional AKLT state places singlets on the edges of the lattice and
@@ -643,30 +672,12 @@ $A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state
 The general orientation choices $\pm Y$ on other lattices and the
 spin-liquid properties of the RVB state are not formalized.
 
->>>>>>> origin/main
 \subsection{Examples not formalized}
 
 The remaining two-dimensional examples of
 \cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} are recorded
 here without formal statements.
 \begin{itemize}
-<<<<<<< HEAD
-    \item The two-dimensional AKLT state places singlets on the edges of the
-          lattice and projects onto the symmetric subspace at each site; on the
-          square lattice the tensor is $\Pi_{\mathrm{sym}}(\mathbb{1}\otimes
-              \mathbb{1}\otimes Y\otimes Y)$ with $Y$ the singlet matrix.
-    \item The nearest-neighbour resonating valence bond state is the
-          superposition of all nearest-neighbour singlet coverings, a PEPS of bond
-          dimension three built from a projector onto configurations with exactly
-          one non-vacuum leg together with singlet matrices on the edges.
-=======
-    \item The toric code and, more generally, the quantum double of a finite
-          group $G$ have two PEPS representations: a primal one enforcing Gauss'
-          law on the virtual indices at the vertices, and a dual one with group
-          variables on the plaquettes, which is $G$-injective, in fact
-          $G$-isometric, for the regular representation. Neither tensor is given in
-          the source by explicit entries, and $G$-injectivity is not formalized.
->>>>>>> origin/main
     \item String-net models give PEPS tensors built from the $F$-symbols of a
           bimodule category.
     \item A classical model with nearest-neighbour interactions at inverse
