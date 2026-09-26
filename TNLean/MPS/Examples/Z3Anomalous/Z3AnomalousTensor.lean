@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Rings.EisensteinCertificates
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.OperatorFromWordTrace
 
 /-!
@@ -293,33 +294,14 @@ theorem ddStack_eq (a : Fin 9) : ddStack a = complexOfEisenstein (ddStackEis a) 
 
 /-! ### The identity operator -/
 
-/-- The two-word evaluation of the identity tensor is the one-by-one identity when the two
-configurations agree and zero otherwise. -/
-theorem evalWord_identityTensor {L : ℕ} (σ τ : Fin L → Fin 3) :
-    MPOTensor.evalWord identityTensor (List.ofFn σ) (List.ofFn τ) = if σ = τ then 1 else 0 := by
-  induction L with
-  | zero => simp [Subsingleton.elim σ τ]
-  | succ n ih =>
-    rw [List.ofFn_succ, List.ofFn_succ, MPOTensor.evalWord_cons, ih]
-    have h1 : identityTensor (σ 0) (τ 0) = if σ 0 = τ 0 then 1 else 0 := by
-      simp only [identityTensor, identityEis]
-      split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
-    rw [h1]
-    by_cases h0 : σ 0 = τ 0
-    · by_cases hs : (fun i : Fin n => σ i.succ) = fun i : Fin n => τ i.succ
-      · have hστ : σ = τ := by
-          funext i
-          exact Fin.cases h0 (fun i => congrFun hs i) i
-        simp [hστ]
-      · have hστ : σ ≠ τ := fun h => hs (by rw [h])
-        simp [h0, hs, hστ]
-    · have hστ : σ ≠ τ := fun h => h0 (by rw [h])
-      simp [h0, hστ]
+/-- Bridge: the identity tensor is the general identity tensor `MPOTensor.idTensor`. -/
+theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 3 := by
+  funext i j
+  simp only [identityTensor, identityEis, MPOTensor.idTensor]
+  split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
 
 /-- **The periodic operator of the identity tensor is the identity** at every length. -/
 theorem mpo_identityTensor (L : ℕ) : MPOTensor.mpo identityTensor L = 1 := by
-  ext σ τ
-  rw [MPOTensor.mpo_apply, MPOTensor.mpoMatrixEntry, evalWord_identityTensor, Matrix.one_apply]
-  split_ifs <;> simp
+  rw [identityTensor_eq_idTensor, MPOTensor.mpo_idTensor]
 
 end Z3Anomalous
