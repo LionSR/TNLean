@@ -405,6 +405,27 @@ normalizations.
   `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Never cite either
   bridge as unconditional.
 
+#### `TNLean.PEPS.IsTorusDimerCovering`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusDimerCovering (right up : TorusVertex width height → Bool) : Prop`.
+- **Defined in:** `TNLean/PEPS/Examples/RVB.lean`.
+- **Meaning:** the edges marked by `right` (the edge from `v` to its right
+  neighbour) and `up` (the edge from `v` to its upper neighbour) form a
+  nearest-neighbour dimer covering of the torus: every site lies on exactly one
+  marked edge among its top, right, down and left edges.
+- **Source:** arXiv:2011.12127, Appendix A, "The RVB state",
+  `Papers/2011.12127/TN-Review-main.tex:2440-2448` ("all ways of covering the
+  lattice with nearest neighbor singlets").
+- **Sanctioned bridges:** `TNLean.PEPS.stateCoeff_rvbPEPS`, which writes the
+  RVB PEPS as the sum over dimer coverings of the product of singlets on the
+  covered edges.
+- **Caveat:** the bridge is stated for tori of width and height at least three.
+  At width or height two the right and left edges of a site coincide in the
+  simple torus graph, so the predicate no longer counts the source's
+  multigraph coverings; recorded in
+  `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
@@ -998,6 +1019,23 @@ The following notions use different transfer objects and are not interchangeable
   input of `MPOTensor.GroupFamily.nonempty_actionData`.
 - **Caveat:** no equivalence with `IsMPOSymmetric` at `c = 1` is stated as a
   theorem; the two definitions agree by unfolding.
+
+### `MPOTensor.GroupFamily.CarriesMPV`
+
+- **Declaration:** `MPOTensor.GroupFamily.CarriesMPV T B B' : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`.
+- **Meaning:** the periodic operator $O_N(T)$ carries the periodic vector
+  $\ket{V^{(N)}(B)}$ to $\ket{V^{(N)}(B')}$ for every chain length $N\geq1$;
+  nothing is asserted at $N=0$. The two tensors may have different bond
+  dimensions.
+- **Source:** arXiv:2203.12563, line 1064, the relation
+  $U_g\ket{\psi_{A_x}}=\ket{\psi_{A_y}}$ for blocks permuted by the group.
+- **Sanctioned bridges:** `FixesMPV T A` is the case $B=B'=A$, by unfolding.
+  `CarriesMPV.sameMPV₂Pos_actTensor` turns it into positive-length vector
+  equality of the action tensor with $B'$, the input of
+  `MPOTensor.GroupFamily.nonempty_blockActionData`.
+- **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
+  definitions agree by unfolding.
 
 ## Symmetries of matrix product density operators
 

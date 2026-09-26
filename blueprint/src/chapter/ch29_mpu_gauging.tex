@@ -4584,6 +4584,164 @@ space of $(MN)P$.
     single block gives $\omega=dL$.
 \end{proof}
 
+\subsection{Blocks permuted by the group}
+
+Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain}, and
+let $G$ act on a set $\mathsf X$. Consider normal matrix product state tensors
+$A_x$, $x\in\mathsf X$, of positive bond dimensions, possibly different for
+different $x$, with $O_g\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{gx})}$ for every
+$g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
+
+\begin{definition}[L-symbols of permuted blocks]
+    \label{def:mpug_permuted_block_l_symbol}
+    \lean{MPOTensor.GroupFamily.CarriesMPV,
+        MPOTensor.GroupFamily.castIndex,
+        MPOTensor.GroupFamily.BlockActionData,
+        MPOTensor.GroupFamily.BlockActionData.actV,
+        MPOTensor.GroupFamily.BlockActionData.fuseV,
+        MPOTensor.GroupFamily.BlockActionData.lSymbol}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols,
+        def:mpug_single_block_l_symbol}
+    Action tensors for the family $(A_x)$ are, for every $g$ and $x$, a
+    reduction $(V_{g,x},W_{g,x})$ of $O_g\cdot A_x$ onto $A_{gx}$. The stacked
+    action $B=(O_gO_h)\cdot A_x$ then reduces onto $A_{g(hx)}=A_{(gh)x}$ along
+    two trees, with left boundaries
+    \begin{align}
+        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &  &
+        V_{gh,x}(F^<_{g,h}\otimes\mathbf 1),
+        \notag
+    \end{align}
+    and $L^x_{g,h}$ is a nonzero scalar relating them against all long
+    words of $B$, or $1$ if there is none, as in
+    Definition~\ref{def:mpug_single_block_l_symbol}.
+\end{definition}
+
+\begin{theorem}[Characterization of the L-symbols of permuted blocks]
+    \label{thm:mpug_permuted_block_l_symbol_spec}
+    \lean{MPOTensor.GroupFamily.nonempty_blockActionData,
+        MPOTensor.GroupFamily.BlockActionData.isDressedProportional_lSymbol,
+        MPOTensor.GroupFamily.actTensor_idTensor_apply,
+        MPOTensor.GroupFamily.isReduction_actTensor_idTensor}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol}
+    Action tensors for the family $(A_x)$ of
+    Definition~\ref{def:mpug_permuted_block_l_symbol} exist; for the bond-one
+    identity tensor they are the identification of the bond spaces. For
+    every choice of them, $L^x_{g,h}$ relates the two left boundaries against
+    all long words of $(O_gO_h)\cdot A_x$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
+        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    As in Theorem~\ref{thm:mpug_single_block_l_symbol_spec}: existence is
+    Corollary~\ref{cor:asym_action_tensors} applied to $O_g\cdot A_x$ and
+    $A_{gx}$, which generate the same vectors. By
+    Lemmas~\ref{thm:mpug_action_tensor_reductions}
+    and~\ref{thm:mpug_reduction_composition} both boundaries are left
+    boundaries of reductions of $(O_gO_h)\cdot A_x$ onto the normal tensor
+    $A_{(gh)x}$, so Lemma~\ref{thm:mpug_dressed_proportionality} gives a
+    nonzero scalar relating them against long words.
+\end{proof}
+
+\begin{theorem}[Compatibility for permuted blocks]
+    \label{thm:mpug_permuted_block_l_compatibility}
+    \lean{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol,
+        MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_dressed_proportionality, thm:mpug_fixed_block_trivializes}
+    For all $x\in\mathsf X$ and $g,h,k\in G$,
+    \begin{align}
+        L^x_{g,hk}L^x_{h,k}
+         & =\omega(g,h,k)\,L^{kx}_{g,h}L^x_{gh,k},
+    \end{align}
+    which is (\ref{eq:mpug_l_compatibility}). Consequently the restriction
+    of $\omega$ to any subgroup fixing one block has trivial gauge class
+    \cite[lines~740--745]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec,
+        thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_fixed_block_trivializes}
+    Write
+    \begin{align}
+        \alpha^x_{g,h}  & =V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &
+        \varphi^x_{g,h} & =V_{gh,x}(F^<_{g,h}\otimes\mathbf 1)
+        \notag
+    \end{align}
+    for the two left boundaries of Definition~\ref{def:mpug_permuted_block_l_symbol},
+    so that $\alpha^x_{g,h}=L^x_{g,h}\varphi^x_{g,h}$ against long words of
+    $(O_gO_h)\cdot A_x$ by Theorem~\ref{thm:mpug_permuted_block_l_symbol_spec}.
+    The block labels $h(kx)$ and $(hk)x$ are equal, and so are $g(h(kx))$ and
+    $(ghk)x$, and the bond spaces of blocks with equal labels are identified,
+    so that $V_{g,h(kx)}=V_{g,(hk)x}$. With this identification, the
+    naturality and
+    pentagon identities of $\mathsf a$ give, for $B=((O_gO_h)O_k)\cdot A_x$
+    and the fusion trees $V^L$, $V^R$ of $(g,h,k)$, the five identities
+    \begin{align}
+        \alpha^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}
+         & =V_{g,(hk)x}(\mathbf 1\otimes\alpha^x_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1),
+        \label{eq:mpug_permuted_l_compat_first_boundary}                \\
+        V_{g,(hk)x}(\mathbf 1\otimes\varphi^x_{h,k})\,\mathsf a^{-1}
+        (\mathsf a^{-1}\otimes\mathbf 1)
+         & =\alpha^x_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr),
+        \notag                                                          \\
+        \varphi^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}
+         & =\alpha^x_{gh,k}
+        \bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr),
+        \notag                                                          \\
+        \varphi^x_{gh,k}\bigl((F^<_{g,h}\otimes\mathbf 1)\otimes\mathbf 1\bigr)
+         & =V_{ghk,x}(V^L\otimes\mathbf 1),
+        \notag                                                          \\
+        \varphi^x_{g,hk}
+        \bigl((\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1}\otimes\mathbf 1\bigr)
+         & =V_{ghk,x}(V^R\otimes\mathbf 1).
+        \notag
+    \end{align}
+    The first factor $\alpha^{kx}_{g,h}$ acts on the block $kx$ reached by
+    $O_k$, which is why $L^{kx}_{g,h}$ appears. Replacing, as in the proof of
+    Theorem~\ref{thm:mpug_single_block_l_compatibility}, $\alpha^{kx}_{g,h}$,
+    $\alpha^x_{gh,k}$ and $V^L$ along one route, and
+    (\ref{eq:mpug_permuted_l_compat_first_boundary}), $\alpha^x_{h,k}$ and
+    $\alpha^x_{g,hk}$ along the other, gives for all long words
+    \begin{align}
+        \alpha^{kx}_{g,h}(\mathbf 1\otimes V_{k,x})\,\mathsf a^{-1}B^{\mathbf w}
+         & =L^{kx}_{g,h}L^x_{gh,k}\,\omega(g,h,k)\,
+        V_{ghk,x}(V^R\otimes\mathbf 1)B^{\mathbf w}
+        \notag                                                                \\
+         & =L^x_{h,k}L^x_{g,hk}\,V_{ghk,x}(V^R\otimes\mathbf 1)B^{\mathbf w}.
+        \notag
+    \end{align}
+    The boundary $V_{ghk,x}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
+    the normal tensor $A_{(ghk)x}$, so it is nonzero against arbitrarily long
+    words, and the two scalars agree. The second statement is
+    Theorem~\ref{thm:mpug_fixed_block_trivializes}.
+\end{proof}
+
+\begin{theorem}[The anomaly at an involution]
+    \label{thm:mpug_involution_anomaly_ratio}
+    \lean{TNLean.Algebra.LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    If $L$ is compatible with $\omega$ and $g^2=e$, then for every
+    $x\in\mathsf X$
+    \begin{align}
+        \omega(g,g,g)
+         & =\frac{L^x_{g,g}L^x_{g,e}}{L^{gx}_{g,g}L^x_{e,g}}.
+    \end{align}
+    This is the formula of \cite[line~5121]{FrancoRubio2025MPUGauging}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put $h=k=g$ in (\ref{eq:mpug_l_compatibility}) and use $gg=e$.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]
