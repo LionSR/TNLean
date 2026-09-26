@@ -217,7 +217,7 @@ isometries, each acting on one site and the bond to its left.
 
 arXiv:2307.01696, eqs. (13)–(15): `V = V_q ⋯ V_1` with isometries
 `V_i : ℂ^{D'_i} → ℂ^{d D'_{i+1}}`, `D'_i ≤ D²`, `D'_{q+1} = 1`, where the last factor
-`C̃ = V_1`, carrying the input `ℂ^{D²}`, is an isometry by eq. (15). In the notation
+`C-tilde = V_1`, carrying the input `ℂ^{D²}`, is an isometry by eq. (15). In the notation
 here `Q_p = V_{q-p}` and `b_p = D'_{q+1-p}`. The block length `q ≥ 1` is implicit in
 the source, which draws at least one site. -/
 theorem exists_isometric_chain_polarIsoMatrix (A : MPSTensor d D) {q : ℕ} (hq : 0 < q)
