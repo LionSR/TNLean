@@ -122,8 +122,7 @@ private lemma refinement_weight_fiber_sum (k : Fin 4) :
   rw [Fintype.sum_prod_type, rightPairing_mul_leftPairing]
   fin_cases k <;>
     norm_num [pairLabel, Fin.sum_univ_four, Matrix.cons_val_two,
-      Matrix.cons_val_three] <;>
-    split_ifs <;> norm_num at * <;> simp_all [Fin.ext_iff]
+      Matrix.cons_val_three]
 
 private lemma refinementKraus_resolution :
     ∑ p, (refinementKraus p)ᴴ * refinementKraus p =

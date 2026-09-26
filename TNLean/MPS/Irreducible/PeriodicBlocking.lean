@@ -5,14 +5,14 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.CornerCompression
 
-open scoped BigOperators
-
 /-!
 # Periodic-sector blocking constructions
 
 This module defines the concrete orbit-sum projection builder (`∑ l, T^[l](Q)`)
 used by periodic-sector arguments.
 -/
+
+open scoped BigOperators
 
 namespace MPSTensor
 

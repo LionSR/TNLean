@@ -232,6 +232,22 @@ abstracted — record why, so it is not re-proposed).
   under every torus translation.  Both the tensor-level and state-level
   wrappers now supply their respective translated-edge equality theorem.
 
+### torus shift of a product over sites — promoted
+- **Pattern:** reindex a product over torus sites by `Equiv.addRight (1, 0)`
+  (or `(0, 1)`), rewrite `u + (1, 0)` as `(u.1 + 1, u.2)` and cancel with
+  `add_sub_cancel_right`, turning factors on the left (or down) leg of each
+  site into factors on the right (or up) leg of its neighbour.
+- **Seen:** six occurrences across three files before promotion (2026-09-26):
+  `TNLean/PEPS/Examples/Cluster.lean` (`stateCoeff_clusterPEPS`),
+  `TNLean/PEPS/Examples/AKLT.lean` (`stateCoeff_akltPEPS`), and
+  `TNLean/PEPS/Examples/RVB.lean` (`stateCoeff_rvbPEPS`), one horizontal and
+  one vertical shift each.
+- **Abstraction:** `TNLean.PEPS.prod_torus_sub_fst` and
+  `TNLean.PEPS.prod_torus_sub_snd` in `TNLean/PEPS/TorusSiteTensor.lean`.
+- **Notes:** pass the two-site factor `f` explicitly, since the product
+  `∏ v, f v (v.1 - 1, v.2)` is not a higher-order pattern; a symmetric factor
+  written in the other order needs one `Finset.prod_congr` with `mul_comm`.
+
 ### permutation-matrix unitarity — promoted
 - **Pattern:** unfold unitary-group membership, rewrite the conjugate transpose
   of a permutation matrix as the inverse permutation matrix, and reduce their
@@ -1246,19 +1262,51 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean`, the three
   unit laws of `Examples/Fibonacci/FibonacciUnit.lean`, and the three action tensors of
   `Examples/Fibonacci/FibonacciAction.lean`.
-- **Abstraction:** `MPSTensor.goldenGauge`, `MPSTensor.conjMatrix_goldenGauge`,
-  `MPSTensor.MultiBlockCompression.ofGolden` and
-  `MPSTensor.MultiBlockCompression.remainder_eq_zero_of_goldenGauge` in
-  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`,
-  with `MPSTensor.unitOrd` and `MPSTensor.unitCoord` for the block ordering
-  and bond coordinates of a datum with one target placed before the zero
-  slots.
-- **Notes:** each example now supplies only its matrices and five decided
+- **Abstraction:** `MPSTensor.MultiBlockCompression.ofGolden` in
+  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`, since 2026-09-25 an
+  instance of the ring-generic `MPSTensor.MultiBlockCompression.ofRing` of
+  `TNLean/MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean` (see the entry
+  on the ring-generic compression datum), with `MPSTensor.unitOrd` and
+  `MPSTensor.unitCoord` for the block ordering and bond coordinates of a datum
+  with one target placed before the zero slots.
+- **Notes:** each example now supplies only its matrices and four decided
   identities; the matched clause is stated with the target indices quantified
   before the letter (`revert i; revert p q; decide +kernel`), since with the
   letter first the instance search for the decidability of the clause fails on
   the first-order unification of the target family against a matrix. The
-  `τ ⊗ τ` datum lost its three field proofs and its remainder proof.
+  triangular clause is read off the off-diagonal one by
+  `MultiBlockCompression.triangular_of_offDiag`, and the remainder by
+  `MultiBlockCompression.remainder_ofRing` after unfolding the datum.
+
+### ring-generic compression datum — promoted
+- **Pattern:** a worked example of the multi-block compression theorem
+  hand-builds `MultiBlockCompression` field by field: a gauge, its conjugation
+  lemma, and the triangular, matched and unmatched clauses each transported
+  from a decided identity over `ℤ`, `ℤ√2`, `ℤ[σ]` or `ℤ[ω]` along the entrywise
+  embedding; the remainder is then reproved from block diagonality or by
+  expanding the single-slot sum `Finset.sum_eq_single_of_mem`.
+- **Seen:** `ofGolden`, `ofEisenstein`, `ofConjMatrix`, `ofScalarFlagFour`,
+  the Kramers–Wannier data `kwSquare_compression`, `plusCompression`,
+  `kwGHZCompression`, `czxPlusIdentity_compression`, the Ising data
+  `isingCompression` and `sectorCompression`, the seven Fibonacci data,
+  `parityGraded_compression` and `czxSquare_compression` (2026-09-25).
+- **Abstraction:** `MPSTensor.MultiBlockCompression.ofRing` (any gauge whose
+  conjugation of every letter is the image of a matrix `K i` over `R`,
+  relabelled along `τ`; a scaled gauge such as the Kramers–Wannier `G/2`
+  enters through its own conjugation lemma), `ofRingBlockDiagonal` (the
+  conjugated letters are the image of one block-diagonal matrix),
+  `remainder_ofRing`, `remainder_ofRingBlockDiagonal`,
+  `remainder_eq_zero_of_offDiag`, `remainder_oneSlot`, `triangular_of_offDiag`,
+  `MPSTensor.gaugeOfRingMatrix` and `MPSTensor.conjMatrix_gaugeOfRingMatrix` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean`, together with
+  the single-slot set `MPSTensor.oneSlot`.
+- **Notes:** `remainder_ofRing` takes the proof arguments of the datum
+  implicitly; elaborating it against a named datum leaves them unassigned
+  (proof irrelevance closes the unification without assigning them), so unfold
+  the named datum first. `ParityGraded.parityGraded_compression` and
+  `CZXCompression.czxSquare_compression` are migrated too, and the `ℤ₃` fusion
+  examples and `CZXSquare` use `MPSTensor.oneSlot`/`MPSTensor.oneSlotMem` for
+  their single slot.
 
 ### normality from a golden matrix-unit table — promoted
 - **Pattern:** a tensor over `ℤ[σ]` is shown normal by deciding, for every
@@ -1268,11 +1316,14 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** four occurrences (2026-09-17): the two blocks of
   `TNLean/MPS/Examples/Fibonacci/Fibonacci.lean` and the two
   normal states of `Examples/Fibonacci/FibonacciAction.lean`.
-- **Abstraction:** `MPSTensor.isNormal_of_golden_single` in
-  `TNLean/MPS/Examples/Rings/GoldenCompression.lean`, now the instance at one
-  of `MPSTensor.isNormal_of_complexOfRing_smul_single`, and
-  the golden analogue of `P6Compression.isNormal_of_single_eq_smul` for words
-  of positive length rather than single letters.
+- **Abstraction:** `MPSTensor.isNormal_of_complexOfRing_single` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/RingEmbedding.lean`, the unscaled
+  instance of `MPSTensor.isNormal_of_complexOfRing_smul_single`, applied along
+  `goldenToComplex` (the golden-specific wrapper was removed on 2026-09-25).
+  The single-letter certificates `P6Compression.isNormal_of_single_eq_smul`
+  and `MPSTensor.isNormal_of_single_eq_smul_zsqrt2` are instances of
+  `MPSTensor.isNormal_of_complexOfRing_letter_eq_smul_single`, which keeps the
+  complex prefactor.
 - **Notes:** the words are given as functions `Fin ℓ → Fin d` so that the
   length is fixed by the type; the two former proofs of the Fibonacci blocks
   became one-line applications, for a net loss of about forty lines.
@@ -1304,6 +1355,95 @@ abstracted — record why, so it is not re-proposed).
   than generalizing a term occurring inside the goal, and it decides with
   the kernel evaluator, needed here because plain `decide` elaboration is
   slow on the sixteen-entry tables.
+
+### no sitewise intertwiner from a certificate over an exact ring — promoted
+- **Pattern:** show that `X = 0` whenever `B i * X = X * C i` for all letters
+  (or `Y * B i = C i * Y`, or the bond-one vector forms `B i *ᵥ v = C i 0 0 • v`
+  and `u ᵥ* B i = C i 0 0 • u`) by expanding the entrywise equations and
+  eliminating the unknowns by hand:
+
+  ```lean
+  have h₀ := congrFun (congrFun (hX 0) p) q
+  have h₁ := congrFun (congrFun (hX 1) p) q
+  simp [Matrix.mul_apply, Fin.sum_univ_succ, ...] at h₀ h₁ ...
+  linear_combination ... * h₀ + ... * h₁ + ...
+  ```
+
+- **Seen:** six hand-written eliminations across three files before promotion
+  (2026-09-25, #8092): `ParityGraded.parNeg_right_intertwiner_eq_zero` and
+  `parNeg_left_intertwiner_eq_zero` in
+  `TNLean/MPS/Examples/MultiBlock/ParityGraded.lean` (about 110 lines),
+  `MPSTensor.ghzC0_right_intertwiner_eq_zero` and
+  `ghzC0_left_intertwiner_eq_zero` in
+  `TNLean/MPS/Examples/MultiBlock/GHZSectors.lean`, and
+  `CZXCompression.czxSquare_right_intertwiner_eq_zero` and
+  `czxSquare_left_intertwiner_eq_zero` in
+  `TNLean/MPS/Examples/CZX/CZXSquare.lean`.
+- **Abstraction:** `MPSTensor.right_intertwiner_eq_zero_of_ringCertificate`,
+  `MPSTensor.left_intertwiner_eq_zero_of_ringCertificate`,
+  `MPSTensor.mulVec_eq_zero_of_ringCertificate` and
+  `MPSTensor.vecMul_eq_zero_of_ringCertificate` in
+  `TNLean/MPS/FundamentalTheorem/Reduction/AssemblyLemmas.lean`, wrapping
+  `right_intertwiner_eq_zero_of_certificate` and
+  `left_intertwiner_eq_zero_of_certificate`.
+- **Notes:** the letters are given as images `complexOfRing f (BR i)` of
+  matrices over a ring `R` with `f : R →+* ℂ` (usually `Int.castRingHom ℂ`),
+  and the certificate is a matrix `N` over `R` with
+  `N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1` and `f c ≠ 0`, where
+  `rows` selects a full-rank set of the sitewise equations; the identity `hN`
+  is closed by `decide` over `R`. The right forms
+  (`right_intertwiner_eq_zero_of_ringCertificate`,
+  `mulVec_eq_zero_of_ringCertificate`) take a certificate of
+  `sitewiseEqMatrix BR CR`; the left forms
+  (`left_intertwiner_eq_zero_of_ringCertificate`,
+  `vecMul_eq_zero_of_ringCertificate`) take one of the transposed letters.
+  Compute `N` offline by exact rational
+  inversion of the selected equations and clear denominators into `c`. All six
+  call sites use the wrappers; the helper evaluation lemmas they needed were
+  deleted.
+
+### Ising fusion rule from a signed-permutation gauge — promoted
+- **Pattern:** a fusion rule `O_L(X) O_L(Y) = O_L(T)` of the Ising
+  fusion-tree tensors, proved by applying
+  `MPSTensor.mpo_mul_eq_of_zsqrt2_conj` to an orthogonal gauge `G` over `ℤ√2`,
+  reducing the letter identity to the sectors of the middle label with
+  `isingConj_of_rho_eq`, and expanding the stacked letters as short sums with
+  `mul_mulTensorR_mul_transpose_eq_list`.
+- **Seen:** eight copies of this proof body across three files before
+  promotion (2026-09-25, #8092): four in
+  `TNLean/MPS/Examples/Ising/IsingFusionAlgebraOnePsi.lean`, two in
+  `IsingFusionAlgebraOneSigma.lean`, two in `IsingFusionAlgebraPsiSigma.lean`.
+- **Abstraction:** `IsingTwist.isingFusion_of_signedPerm` in
+  `TNLean/MPS/Examples/Ising/IsingFusionAlgebra.lean`.
+- **Notes:** the caller supplies the scaled-matrix-unit form of each letter
+  (`*_eq_smul_single`), a duplicate-free list `next h` containing every right
+  label `h'` at which the first factor's coefficient `a h h'` may be nonzero
+  (any such superset of the support works; labels outside it must have
+  `a h h' = 0`), the vanishing of the letters across the middle
+  label, the gauge `G` with `G * Gᵀ = 1` and `Gᵀ * G = 1`, and the sector
+  identity `hdiag`; the last three are `decide +kernel` checks over `ℤ√2`.
+  The lemma is specific to the ten fusion-tree labels of the Ising category;
+  a fusion rule of other tensors related by a bond similarity uses
+  `mpo_mul_eq_of_zsqrt2_conj` directly.
+
+### normality from a table of two-letter words — promoted
+- **Pattern:** prove `IsNormal A` for a small complex tensor by showing that
+  every matrix unit `E_ij` is a combination of two words of length two, via a
+  chain of private product lemmas `A i * A j = ...` and matrix-unit
+  identities, and then concluding with a span argument.
+- **Seen:** four call sites across two directories (2026-09-25):
+  `CZXDecoratedTensor.lean`, `CZXReviewTensor.lean` and `CZXTensor.lean` in
+  `TNLean/MPS/Examples/CZX/`, and `ParityGraded.parA_isNormal` in
+  `TNLean/MPS/Examples/MultiBlock/ParityGraded.lean` (which dropped eight
+  private product and matrix-unit lemmas in #8092).
+- **Abstraction:** `MPSTensor.isNormal_of_single_eq_two_words` in
+  `TNLean/MPS/Core/NormalityFromTwoWords.lean`.
+- **Notes:** the caller supplies, for each pair `(i, j)`, letters `a, b, c, e`
+  and scalars `u, v` with
+  `Matrix.single i j 1 = u • (A a * A b) + v • (A c * A e)`, typically by
+  `fin_cases` on `(i, j)` or through one table decided over the integers and
+  transported by `complexOfRing`. When more words or another length are
+  needed, use `MPSTensor.isNormal_of_complexOfRing_single` instead.
 
 ## Completed refactors
 
@@ -2075,6 +2215,38 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
+
+### virtual-leg cancellation in source-gate contractions — candidate
+- **Pattern:** express the two transported source factors as matrices on the
+  contracted virtual coordinate and reduce their product with
+  $z^\dagger z=I$. The entrywise Kronecker expansion then identifies the
+  original source-gate contraction.
+- **Seen:** three occurrences across two files (2026-09-26):
+  `transported_source_u_contraction` in
+  `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and
+  `rawU_virtual_cancel` and `rawV_virtual_cancel` in
+  `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
+- **Abstraction (proposed):** a matrix lemma for cancelling a unitary at one
+  finite contracted coordinate, with the Kronecker entry expansions left to
+  the two source-gate specializations.
+- **Notes:** The first occurrence belongs to the separately reviewed
+  source-factor transport module. The new theorem keeps its two gate
+  identities together rather than reorganizing that module in this PR;
+  promotion should refactor all three sites when those dependent branches
+  are consolidated.
+
+### Wielandt block-injectivity length below the uniform square bound — candidate
+- **Pattern:**
+  ```lean
+  calc (dim k ^ 2 - Kraus.krausRank K + 1) * dim k ^ 2
+      ≤ (D ^ 2 + 1) * D ^ 2 := Nat.mul_le_mul (by omega) hd
+    _ ≤ (D ^ 2 + 1) ^ 2 := by nlinarith
+  ```
+- **Seen:** 2 occurrences (`TNLean/MPS/Examples/WStateCanonicalBound.lean:376`,
+  `TNLean/MPS/Examples/WStatePrimeLengthBound.lean:149`).
+- **Abstraction:** proposed lemma bounding the Wielandt length
+  `(m ^ 2 - r + 1) * m ^ 2 ≤ (D ^ 2 + 1) ^ 2` for `m ≤ D`, stated over `ℕ`.
+- **Notes:** promote at a third occurrence, for example a reduction at composite length.
 
 ### Decomposing membership in a finite sum of subspaces — candidate
 - **Pattern:** obtain vectors in the individual subspaces from membership in

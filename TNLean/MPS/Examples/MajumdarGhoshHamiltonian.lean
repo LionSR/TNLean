@@ -33,7 +33,7 @@ Review: arXiv:2011.12127, Appendix A, "The Majumdar-Ghosh model".
   \(H\) with eigenvalue \(-\tfrac{3N}8\).
 
 The lower bound \(H\ge-\tfrac{3N}8\), which makes these eigenvectors ground
-states, is not formalized here.
+states, is proved in `TNLean.MPS.Examples.MajumdarGhoshLowerBound`.
 
 ## Main definitions
 * `MPSTensor.majumdarGhoshTerm` : the three-site term \(h\)
@@ -43,7 +43,8 @@ states, is not formalized here.
 * `MPSTensor.majumdarGhosh_groundSpace_three_eq_eigenspace`
 * `MPSTensor.majumdarGhosh_pairCoveringEven_mem_chainGroundSpace`,
   `MPSTensor.majumdarGhosh_pairCoveringOdd_mem_chainGroundSpace`
-* `MPSTensor.majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace`
+* `MPSTensor.majumdarGhoshHamiltonian_apply`,
+  `MPSTensor.majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace`
 * `MPSTensor.majumdarGhoshHamiltonian_pairCoveringEven`,
   `MPSTensor.majumdarGhoshHamiltonian_pairCoveringOdd`,
   `MPSTensor.majumdarGhoshHamiltonian_mpv`
@@ -141,17 +142,16 @@ translates and each next-nearest-neighbour bond in one. -/
 def majumdarGhoshTerm : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3 :=
   (1 / 2 : ℂ) • (spinExchange 0 1 + spinExchange 1 2 + spinExchange 0 2)
 
-private lemma vec3_comp_swap01 (a b c : Fin 2) :
-    (![a, b, c] : Fin 3 → Fin 2) ∘ Equiv.swap 0 1 = ![b, a, c] := by
-  ext x; fin_cases x <;> rfl
-
-private lemma vec3_comp_swap12 (a b c : Fin 2) :
-    (![a, b, c] : Fin 3 → Fin 2) ∘ Equiv.swap 1 2 = ![a, c, b] := by
-  ext x; fin_cases x <;> rfl
-
-private lemma vec3_comp_swap02 (a b c : Fin 2) :
-    (![a, b, c] : Fin 3 → Fin 2) ∘ Equiv.swap 0 2 = ![c, b, a] := by
-  ext x; fin_cases x <;> rfl
+/-- The three-site term acts as a quarter of the sum of the three transpositions of
+the sites, minus \(\tfrac38\). -/
+lemma majumdarGhoshTerm_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
+    majumdarGhoshTerm v σ = (1 / 4) * (v (σ ∘ Equiv.swap 0 1) +
+      v (σ ∘ Equiv.swap 1 2) + v (σ ∘ Equiv.swap 0 2)) - (3 / 8) * v σ := by
+  simp only [majumdarGhoshTerm, LinearMap.smul_apply, LinearMap.add_apply, Pi.smul_apply,
+    Pi.add_apply, smul_eq_mul]
+  rw [spinExchange_apply (by decide), spinExchange_apply (by decide),
+    spinExchange_apply (by decide)]
+  ring
 
 /-- A three-site vector is a \(-\tfrac38\) eigenvector of the three-site term exactly
 when its three transposition images sum to zero, that is, when it has no
@@ -160,22 +160,14 @@ private lemma majumdarGhoshTerm_eigen_iff (v : NSiteSpace 2 3) :
     majumdarGhoshTerm v = (-3 / 8 : ℂ) • v ↔
       ∀ σ : Cfg 2 3, v (σ ∘ Equiv.swap 0 1) + v (σ ∘ Equiv.swap 1 2) +
         v (σ ∘ Equiv.swap 0 2) = 0 := by
-  have happ : ∀ σ, majumdarGhoshTerm v σ = (1 / 4) * (v (σ ∘ Equiv.swap 0 1) +
-      v (σ ∘ Equiv.swap 1 2) + v (σ ∘ Equiv.swap 0 2)) - (3 / 8) * v σ := by
-    intro σ
-    simp only [majumdarGhoshTerm, LinearMap.smul_apply, LinearMap.add_apply, Pi.smul_apply,
-      Pi.add_apply, smul_eq_mul]
-    rw [spinExchange_apply (by decide), spinExchange_apply (by decide),
-      spinExchange_apply (by decide)]
-    ring
   constructor
   · intro h σ
     have := congrFun h σ
-    rw [happ, Pi.smul_apply, smul_eq_mul] at this
+    rw [majumdarGhoshTerm_apply, Pi.smul_apply, smul_eq_mul] at this
     linear_combination 4 * this
   · intro h
     ext σ
-    rw [happ, h σ, Pi.smul_apply, smul_eq_mul]
+    rw [majumdarGhoshTerm_apply, h σ, Pi.smul_apply, smul_eq_mul]
     ring
 
 /-- The four linear conditions cutting out the spin-\(\tfrac12\) subspace of three
@@ -193,7 +185,8 @@ lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace 2 3) :
     have h111 := h ![1, 1, 1]
     have h001 := h ![0, 0, 1]
     have h011 := h ![0, 1, 1]
-    simp only [vec3_comp_swap01, vec3_comp_swap12, vec3_comp_swap02] at h000 h111 h001 h011
+    simp only [Matrix.vec3_comp_swap_zero_one, Matrix.vec3_comp_swap_one_two,
+      Matrix.vec3_comp_swap_zero_two] at h000 h111 h001 h011
     refine ⟨?_, ?_, ?_, ?_⟩
     · linear_combination h000 / 3
     · linear_combination h111 / 3
@@ -201,7 +194,8 @@ lemma majumdarGhoshTerm_eigen_iff_coords (v : NSiteSpace 2 3) :
     · linear_combination h011
   · rintro ⟨h000, h111, h1, h2⟩ σ
     rw [Matrix.eq_vecCons_fin_three σ]
-    simp only [vec3_comp_swap01, vec3_comp_swap12, vec3_comp_swap02]
+    simp only [Matrix.vec3_comp_swap_zero_one, Matrix.vec3_comp_swap_one_two,
+      Matrix.vec3_comp_swap_zero_two]
     generalize σ 0 = a, σ 1 = b, σ 2 = c
     fin_cases a <;> fin_cases b <;> fin_cases c <;> simp only [Fin.zero_eta, Fin.mk_one]
     · rw [h000]; ring
@@ -294,7 +288,7 @@ private lemma cyclicForwardSite_one_bijective {N : ℕ} :
 
 /-- Filling a window with a transposed copy of its own content transposes the two
 corresponding sites of the chain configuration. -/
-private lemma cyclicCfg_extractWindow_comp_swap {N : ℕ} (hN : 0 < N) (hN3 : 3 ≤ N)
+lemma cyclicCfg_extractWindow_comp_swap {N : ℕ} (hN : 0 < N) (hN3 : 3 ≤ N)
     (i : Fin N) (σ : Cfg 2 N) (a b : Fin 3) :
     cyclicCfg hN 3 i (extractWindow 3 i σ ∘ Equiv.swap a b) σ =
       σ ∘ Equiv.swap (cyclicForwardSite i a.val) (cyclicForwardSite i b.val) := by
@@ -319,13 +313,16 @@ private lemma window_swap_sum_eq_zero {N : ℕ} (hN3 : 3 ≤ N) {ψ : NSiteSpace
   simp only [cyclicRestrictₗ_apply, cyclicCfg_extractWindow_comp_swap hN hN3] at this
   simpa using this
 
-/-- Project result: on a periodic chain of \(N\ge3\) sites, every vector of the
-periodic three-site chain ground space of `majumdarGhoshTensor` is an eigenvector
-of the Majumdar-Ghosh Hamiltonian with eigenvalue \(-\tfrac{3N}8\). -/
-theorem majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace {N : ℕ} (hN3 : 3 ≤ N)
-    {ψ : NSiteSpace 2 N} (hψ : ψ ∈ chainGroundSpace majumdarGhoshTensor 3 N) :
-    majumdarGhoshHamiltonian N ψ = (-(3 * N / 8) : ℂ) • ψ := by
-  ext σ
+/-- On a periodic chain of \(N\ge3\) sites, the Majumdar-Ghosh Hamiltonian is a
+quarter of the sum, over the windows of three consecutive sites, of the three
+transpositions within the window, minus \(\tfrac{3N}8\). Each nearest-neighbour
+transposition occurs in two windows and each next-nearest-neighbour one in one. -/
+theorem majumdarGhoshHamiltonian_apply {N : ℕ} (hN3 : 3 ≤ N) (ψ : NSiteSpace 2 N)
+    (σ : Cfg 2 N) :
+    majumdarGhoshHamiltonian N ψ σ =
+      (1 / 4) * ∑ i : Fin N, (ψ (σ ∘ Equiv.swap i (cyclicForwardSite i 1)) +
+        ψ (σ ∘ Equiv.swap (cyclicForwardSite i 1) (cyclicForwardSite i 2)) +
+          ψ (σ ∘ Equiv.swap i (cyclicForwardSite i 2))) - (3 * N / 8) * ψ σ := by
   have h1 : ∀ i : Fin N, i ≠ cyclicForwardSite i 1 := fun i => by
     simpa using cyclicForwardSite_ne i (r := 0) (r' := 1) (by omega) (by omega) (by omega)
   have h2 : ∀ i : Fin N, i ≠ cyclicForwardSite i 2 := fun i => by
@@ -336,14 +333,24 @@ theorem majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace {N : ℕ} (hN3 : 
     have := cyclicForwardSite_one_bijective.sum_comp
       (fun k : Fin N => ψ (σ ∘ Equiv.swap k (cyclicForwardSite k 1)))
     simpa [cyclicForwardSite_forwardSite] using this
-  have hsum := Finset.sum_eq_zero (s := Finset.univ) fun i (_ : i ∈ Finset.univ) =>
-    window_swap_sum_eq_zero hN3 hψ i σ
-  rw [Finset.sum_add_distrib, Finset.sum_add_distrib, hshift] at hsum
+  rw [Finset.sum_add_distrib, Finset.sum_add_distrib, hshift]
   simp only [majumdarGhoshHamiltonian, LinearMap.add_apply, LinearMap.smul_apply,
     LinearMap.sum_apply, Finset.sum_apply, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
   simp only [spinExchange_apply (h1 _), spinExchange_apply (h2 _), Finset.sum_sub_distrib,
     ← Finset.mul_sum, Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-  linear_combination (1 / 4 : ℂ) * hsum
+  ring
+
+/-- Project result: on a periodic chain of \(N\ge3\) sites, every vector of the
+periodic three-site chain ground space of `majumdarGhoshTensor` is an eigenvector
+of the Majumdar-Ghosh Hamiltonian with eigenvalue \(-\tfrac{3N}8\). -/
+theorem majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace {N : ℕ} (hN3 : 3 ≤ N)
+    {ψ : NSiteSpace 2 N} (hψ : ψ ∈ chainGroundSpace majumdarGhoshTensor 3 N) :
+    majumdarGhoshHamiltonian N ψ = (-(3 * N / 8) : ℂ) • ψ := by
+  ext σ
+  rw [majumdarGhoshHamiltonian_apply hN3,
+    Finset.sum_eq_zero fun i _ => window_swap_sum_eq_zero hN3 hψ i σ, Pi.smul_apply,
+    smul_eq_mul]
+  ring
 
 /-- Project result: on an even periodic chain of \(N\ge4\) sites, the covering
 \((1,2)(3,4)\cdots(N-1,N)\) by singlets is an eigenvector of the Majumdar-Ghosh

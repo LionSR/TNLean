@@ -19,7 +19,7 @@ first.
 
 - **elan**, the Lean version manager. Once it is installed, running any Lean
   command inside the repository installs the toolchain pinned in
-  `lean-toolchain` (`leanprover/lean4:v4.34.0-rc1`) automatically — you do not
+  `lean-toolchain` (`leanprover/lean4:v4.35.0-rc3`) automatically — you do not
   need to install Lean yourself or match a version by hand.
 - **VS Code** with the Lean 4 extension. This is what the project is
   developed with; it gives you the interactive goal view, hover information,
