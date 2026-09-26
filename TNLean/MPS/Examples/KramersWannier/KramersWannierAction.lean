@@ -187,25 +187,33 @@ theorem plusConjMatrix (i : Fin 2) :
     conjMatrix plusGauge (kwPlus i) = (complexOfInt (plusConjInt i)).submatrix plusTau plusTau := by
   rw [plusGauge, conjMatrix_gaugeOfMatrix, plusConj_eq]
 
+/-- The integer targets of part (a): the weighted sectors `2 A_0`, `2 A_1`, with
+`A_s^{s'} = δ_{s',s}`. -/
+def plusTargetInt (s : Fin 2) (i : Fin 2) : Matrix (Fin 1) (Fin 1) ℤ :=
+  !![if i = s then 2 else 0]
+
+theorem plusTarget_eq (s : Fin 2) (i : Fin 2) :
+    plusTarget s i = complexOfInt (plusTargetInt s i) := by
+  ext p q
+  fin_cases s <;> fin_cases i <;> simp [plusTarget, plusTargetInt, ghz0, ghz1, complexOfInt]
+
+private theorem plusConjInt_offDiag (i : Fin 2) (x y : BlockSpace PlusD PlusS 0)
+    (h : x.1 ≠ y.1) : plusConjInt i (plusTau x) (plusTau y) = 0 := by
+  revert i x y
+  decide
+
+private theorem plusConjInt_matched (i s : Fin 2) (p q : Fin 1) :
+    plusConjInt i (plusTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
+      (plusTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) = plusTargetInt s i p q := by
+  revert i
+  fin_cases s <;> revert p q <;> decide
+
 /-- **The multi-block asymmetric compression datum of part (a).** -/
-def plusCompression : MultiBlockCompression kwPlus PlusS plusTarget where
-  z := 0
-  ord := plusOrd
-  gauge := plusGauge
-  triangular i x y hxy := by
-    rw [plusConjMatrix, Matrix.submatrix_apply]
-    fin_cases i <;> fin_cases x <;> fin_cases y <;>
-      first
-        | exact absurd hxy (by decide)
-        | simp [plusTau, plusOrd, plusConjInt, complexOfInt]
-  matched i s := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, plusConjMatrix, Matrix.submatrix_apply]
-    fin_cases p; fin_cases q
-    obtain ⟨s, hs⟩ := s
-    fin_cases i <;> fin_cases s <;>
-      simp [plusTau, plusOrd, plusConjInt, plusTarget, ghz0, ghz1, complexOfInt]
-  unmatched _ t := t.elim0
+def plusCompression : MultiBlockCompression kwPlus PlusS plusTarget :=
+  MultiBlockCompression.ofRing (Int.castRingHom ℂ) plusOrd plusTau plusGauge plusConjInt
+    plusConjMatrix plusTargetInt plusTarget_eq
+    (fun i => MultiBlockCompression.triangular_of_offDiag (plusConjInt_offDiag i))
+    (fun i s p q => plusConjInt_matched i s.1 p q) fun _ t => t.elim0
 
 /-- **The word-trace identity of part (a)** (data file §2.1). -/
 theorem kwPlus_trace_evalWord_eq_sum (w : List (Fin 2)) (hw : w ≠ []) :
@@ -224,26 +232,10 @@ theorem plus_isReduction (s : {s // s ∈ PlusS}) :
 theorem plus_dim_eq : (2 : ℕ) = ∑ s ∈ PlusS, PlusD s + 0 :=
   plusCompression.dim_eq
 
-/-- Off the diagonal, the conjugated matrix of part (a) vanishes entrywise: `plusConjInt` is a
-diagonal `2 × 2` matrix. -/
-private theorem plusConjInt_offDiag (i a b : Fin 2) (h : a ≠ b) : plusConjInt i a b = 0 := by
-  fin_cases a <;> fin_cases b <;> fin_cases i <;> simp_all [plusConjInt]
-
 /-- **The residual of part (a) vanishes**: the extension splits (data file §2.1). -/
 theorem plus_remainder_eq_zero (i : Fin 2) : plusCompression.remainder i = 0 := by
-  refine conjMatrix_injective plusCompression.gauge ?_
-  rw [conjMatrix_zero, MultiBlockCompression.conjMatrix_remainder]
-  change conjMatrix plusGauge (kwPlus i) -
-      Matrix.blockDiagonal' (conjMatrix plusGauge (kwPlus i)).blockDiag' = 0
-  ext x y
-  simp only [Matrix.sub_apply, Matrix.zero_apply]
-  by_cases hxy : plusTau x = plusTau y
-  · obtain rfl : x = y := plusTau.injective hxy
-    rw [Matrix.blockDiagonal'_apply_eq, Matrix.blockDiag'_apply, sub_self]
-  · rw [Matrix.blockDiagonal'_apply_ne _ _ _ (fun h => hxy (congrArg plusOrd h)), sub_zero]
-    rw [plusConjMatrix, Matrix.submatrix_apply, complexOfInt_apply,
-      plusConjInt_offDiag i (plusTau x) (plusTau y) hxy]
-    norm_num
+  unfold plusCompression
+  exact MultiBlockCompression.remainder_ofRing plusConjInt_offDiag i
 
 /-- The explicit compression witnesses of part (a) for the all-zero sector, in the closed form
 of `MultiBlockCompression.left_gaugeOfMatrix`/`right_gaugeOfMatrix`. -/
@@ -394,26 +386,11 @@ private theorem kwGHZ_unmatched_int (i : Fin 2) (t : Fin 2) (p q : Fin 1) :
   decide
 
 /-- **The multi-block asymmetric compression datum of part (b).** -/
-def kwGHZCompression : MultiBlockCompression kwGHZ KWGHZS kwGHZTarget where
-  z := 2
-  ord := kwGHZOrd
-  gauge := kwGHZGauge
-  triangular i x y h := by
-    rw [conjMatrix_kwGHZGauge, Matrix.submatrix_apply, kwGHZ_eq, complexOfInt_apply,
-      Int.cast_eq_zero]
-    exact kwGHZ_triangular_int i x y h
-  matched i s := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, conjMatrix_kwGHZGauge, Matrix.submatrix_apply, kwGHZ_eq,
-      complexOfInt_apply]
-    simp only [kwGHZTarget, plusTensor_eq]
-    rw [complexOfInt_apply, Int.cast_inj]
-    exact kwGHZ_matched_int i s p q
-  unmatched i t := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, conjMatrix_kwGHZGauge, Matrix.submatrix_apply, kwGHZ_eq,
-      complexOfInt_apply, Matrix.zero_apply, Int.cast_eq_zero]
-    exact kwGHZ_unmatched_int i t p q
+def kwGHZCompression : MultiBlockCompression kwGHZ KWGHZS kwGHZTarget :=
+  MultiBlockCompression.ofRing (Int.castRingHom ℂ) kwGHZOrd kwGHZTau kwGHZGauge kwGHZInt
+    (fun i => by rw [conjMatrix_kwGHZGauge, kwGHZ_eq]) (fun _ => plusIntTensor)
+    (fun _ i => congrFun plusTensor_eq i) kwGHZ_triangular_int kwGHZ_matched_int
+    kwGHZ_unmatched_int
 
 /-- Every word evaluation of the constant product-state tensor is the identity, since every
 letter's matrix is `1`. -/

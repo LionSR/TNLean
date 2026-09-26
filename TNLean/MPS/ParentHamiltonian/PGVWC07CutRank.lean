@@ -30,7 +30,8 @@ the functions of the first piece obtained by fixing the second piece lie in a su
   family gives block injectivity at the same length.
 * `MPSTensor.wordTupleSpanTop_of_le_one` — a family of at most one block spans simultaneously
   wherever its block is injective.
-* `MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge` — the simultaneous product span
+* `MPSTensor.wordTupleSpanTop_of_ge_of_isNBlkInjective`,
+  `MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge` — the simultaneous product span
   of the blocks beyond the direct-sum length.
 * `MPSTensor.sum_sq_dim_le_finrank_of_forall_mem` — the cut-rank lower bound
   \(\sum_j D_j^2\le\dim V\).
@@ -98,43 +99,59 @@ theorem wordTupleSpanTop_of_le_one {r : ℕ} {dim : Fin r → ℕ}
     rw [Fin.fin_one_eq_zero k, ← hc, Finset.sum_apply]
     rfl
 
-namespace PGVWC07CanonicalFormData
-
-variable {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
-
 /-- Source: arXiv:quant-ph/0608197, direct-sum lemma (lines 1346–1349) together with
 condition C1 in each block (lines 1314–1323), as used in the proof of the W-state corollary
-(lines 2193–2222). For a canonical form with condition C1 at length \(L_0\) in each block
-and pairwise distinct blocks, the tuples of block words of any length
-\(n\ge\max(L_0,3(b-1)(L_0+1))\) span the product of the block matrix algebras.
+(lines 2193–2222). For a family of blocks satisfying conditions 1–3 of the canonical form
+(unital, with a positive definite fixed point of the dual map, irreducible), with condition
+C1 at length \(L_0\) in each block and pairwise distinct blocks, the tuples of block words of
+any length \(n\ge\max(L_0,3(b-1)(L_0+1))\) span the product of the block matrix algebras.
 
 **Stricter hypothesis.** The source assumes, without loss of generality, only that the block
 states \(|\phi_{A^j}\rangle\) are pairwise different (lines 1329–1330). The hypothesis
 `BlocksNotGaugePhaseEquiv` used here, the one the direct-sum lemma is formalized with, is
 stronger: two equal blocks with different weights, or two blocks related by a gauge and a
-phase \(\omega\) with \(\omega^N\ne1\), give different states but violate it. The source's
-reduction to pairwise different states does not supply it, and removing it is not
-formalized; see `docs/paper-gaps/rmp_w_state_ti_bound.tex`. The length \(L_0\) in the
+phase \(\omega\) with \(\omega^N\ne1\), give different states but violate it. At prime
+length it is discharged: `lt_of_mpv_eq_smul_wIndicator_of_prime` groups the blocks by
+`mpvPhaseClassData`, whose representatives satisfy it. It remains a hypothesis of the
+conditional bounds; see `docs/paper-gaps/rmp_w_state_ti_bound.tex`. The length \(L_0\) in the
 threshold covers a single block, where the direct-sum lemma is vacuous and the source length
 \(3(b-1)(L_0+1)\) is zero. -/
+theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) (hdim : ∀ k, 0 < dim k)
+    (hUnital : ∀ k, ∑ i, A k i * (A k i)ᴴ = 1)
+    (hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
+      Kraus.transferMap (d := d) (D := dim k) (fun a => (A k a)ᴴ) Λ = Λ)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
+    {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (A k) L₀)
+    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) A)
+    {n : ℕ} (hn : max L₀ (3 * (r - 1) * (L₀ + 1)) ≤ n) :
+    WordTupleSpanTop A n := by
+  have : ∀ k, NeZero (dim k) := fun k => ⟨(hdim k).ne'⟩
+  rcases le_or_gt r 1 with hr | hr
+  · exact wordTupleSpanTop_of_ge_of_unital _
+      (wordTupleSpanTop_of_le_one _ hr hC1) hUnital (le_of_max_le_left hn)
+  · choose Λ hΛ hΛfix using hDual
+    refine wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
+      A hr (HasIrreducibleBlocks.ofForall hIrr) hDistinct Λ hΛ hΛfix hC1 hL₀ hUnital ?_
+    calc (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
+        = 3 * (r - 1) * (L₀ + 1) := by ring
+      _ ≤ n := le_of_max_le_right hn
+
+namespace PGVWC07CanonicalFormData
+
+variable {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
+
+/-- Source: arXiv:quant-ph/0608197, direct-sum lemma (lines 1346–1349) together with
+condition C1 in each block (lines 1314–1323), for the blocks of a canonical form; the
+specialization of `wordTupleSpanTop_of_ge_of_isNBlkInjective`, whose docstring records the
+stricter distinctness hypothesis. -/
 theorem wordTupleSpanTop_of_ge {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
     (hDistinct : BlocksNotGaugePhaseEquiv (d := d) h.blocks)
     {n : ℕ} (hn : max L₀ (3 * (h.r - 1) * (L₀ + 1)) ≤ n) :
-    WordTupleSpanTop h.blocks n := by
-  have : ∀ k, NeZero (h.dim k) := fun k => ⟨(h.dim_pos k).ne'⟩
-  rcases le_or_gt h.r 1 with hr | hr
-  · exact wordTupleSpanTop_of_ge_of_unital _
-      (wordTupleSpanTop_of_le_one _ hr hC1) h.unital (le_of_max_le_left hn)
-  · choose Λ hΛ _ hΛfix using h.dual_fixedPoint
-    refine wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPoint
-      h.blocks hr (HasIrreducibleBlocks.ofForall h.isIrreducibleFamily_blocks)
-      hDistinct Λ hΛ (fun j => ?_) hC1 hL₀ h.unital ?_
-    · rw [Kraus.transferMap_apply]
-      simpa only [Matrix.conjTranspose_conjTranspose] using hΛfix j
-    · calc (h.r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))
-          = 3 * (h.r - 1) * (L₀ + 1) := by ring
-        _ ≤ n := le_of_max_le_right hn
+    WordTupleSpanTop h.blocks n :=
+  wordTupleSpanTop_of_ge_of_isNBlkInjective h.blocks h.dim_pos h.unital
+    h.dualFixedPoint_transferMap h.isIrreducibleFamily_blocks hL₀ hC1 hDistinct hn
 
 end PGVWC07CanonicalFormData
 
