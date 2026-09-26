@@ -47,7 +47,10 @@ raw cut transport of Proposition IV.5 (lines 786–812) and the normalized form
 of FBC25, arXiv:2502.20257, Lemma `lem:deco` (lines 1052–1066). The recorded weights
 of the two tensors remain independent. In the source diagrams
 `II_RelationStandard1.png` and `II_RelationStandard2.png`, the gauges are
-oriented as $x=W_2^\dagger$ and $y=W_1^\dagger$. -/
+oriented as $x=W_2^\dagger$ and $y=W_1^\dagger$. This orientation is a
+consequence of the factor identities above, obtained by substituting them into
+the source-gate contraction and using $z^\dagger z=I_D$; it is not asserted by
+this theorem. -/
 theorem IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges
     {d D : ℕ} {U : MPOTensor d D}
     (hU : IsMPUCanonicalFormII U) (hSimpleU : IsMPUSimple U)
