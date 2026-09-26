@@ -1,0 +1,238 @@
+\section{The fixed-point pair state of a normal tensor}
+\label{sec:mps_rfp_fixed_point_pairs}
+
+In the log-depth preparation of matrix product states
+\cite{Malz2024Preparation}, a normal tensor is brought into the gauge
+$\E_A=\ketbra{\rho}{\Id}+R$, where the identity is the left fixed point of
+the transfer map, $\rho>0$ with $\tr\rho=1$ is the right fixed point, and
+$R$ has spectral radius less than one. The positive factor of the blocked
+tensor is replaced by a fixed-point tensor $P_\infty$ with transfer map
+$\ketbra{\rho}{\Id}$, whose periodic state is a product of nearest-neighbour
+entangled pairs. In the convention $\E_A(X)=\sum_iA^iX(A^i)^\dagger$ of
+Definition~\ref{def:transfer_map}, the gauge reads: $A$ is left-canonical
+and $\E_A(\sigma)=\sigma$ for a positive definite $\sigma$ of unit trace.
+The source does not fix a vectorization; its $\rho$ is $\sigma^T$ for row
+stacking and $\sigma$ for column stacking.
+
+\begin{definition}[The fixed-point tensor]
+    \label{def:prep_fixed_point_tensor}
+    \lean{MPSTensor.fixedPointTensor}
+    \lean{MPSTensor.fixedPointTensor_finProdFinEquiv}
+    \leanok
+    \uses{def:mps_tensor}
+    Let $\sigma\in\MN{D}$. The \emph{fixed-point tensor} $P_\infty$ of
+    $\sigma$ has physical space $\C^D\otimes\C^D$ and bond dimension $D$;
+    its matrix at the physical pair $(l,r)$ is
+    \begin{align}
+        P_\infty^{(l,r)}
+         & =\sqrt{\sigma}\,\ketbra{l}{r}.
+        \notag
+    \end{align}
+    This is the tensor $P_\infty$ of \cite{Malz2024Preparation}.
+\end{definition}
+
+\begin{theorem}[Positivity of the fixed-point tensor]
+    \label{thm:prep_fixed_point_tensor_psd}
+    \lean{MPSTensor.fixedPointTensor_reshape_eq}
+    \lean{MPSTensor.posSemidef_fixedPointTensor_reshape}
+    \leanok
+    \uses{def:prep_fixed_point_tensor}
+    Read as the matrix from the virtual pair $(\alpha,\beta)$ to the
+    physical pair $(l,r)$, the fixed-point tensor $P_\infty$ of any
+    $\sigma\in\MN{D}$ is $(\sqrt{\sigma})^T\otimes\Id$. It is positive
+    semidefinite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The entry at $((l,r),(\alpha,\beta))$ is
+    $(\sqrt\sigma\,\ketbra{l}{r})_{\alpha\beta}=(\sqrt\sigma)_{\alpha l}\,\delta_{\beta r}$,
+    the entry of $(\sqrt\sigma)^T\otimes\Id$. The transpose of the
+    positive semidefinite matrix $\sqrt\sigma$ is positive semidefinite,
+    and so is its Kronecker product with $\Id$.
+\end{proof}
+
+\begin{definition}[The entangled pair and the pair product state]
+    \label{def:prep_pair_product_state}
+    \lean{MPSTensor.fixedPointPair}
+    \lean{MPSTensor.pairProductState}
+    \leanok
+    Let $\sigma\in\MN{D}$. The \emph{entangled pair} $\omega$ on
+    $R\otimes L=\C^D\otimes\C^D$ has coefficient
+    $\omega_{(r,l)}=(\sqrt\sigma)_{rl}$. For a vector
+    $\omega\in\C^D\otimes\C^D$ and a ring of $N$ sites, where site $k$
+    carries the physical pair $c_k=(l_k,r_k)$, the \emph{pair product
+        state} is
+    \begin{align}
+        \Omega(c)
+         & =\prod_{k=0}^{N-1}\omega_{(r_k,\,l_{k+1})},
+        \label{eq:prep_pair_product}
+    \end{align}
+    with indices of sites taken modulo $N$. With the row-stacking
+    reading $\rho=\sigma^T$, $\omega$ is the pair
+    $(\Id\otimes\sqrt\rho)\sum_i\ket{ii}$ of \cite{Malz2024Preparation},
+    and $\Omega$ is its state $\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
+\end{definition}
+
+\begin{theorem}[The transfer map of the fixed-point tensor]
+    \label{thm:prep_transfer_fixed_point_tensor}
+    \lean{MPSTensor.transferMap_fixedPointTensor_apply}
+    \lean{MPSTensor.transferMap_fixedPointTensor}
+    \leanok
+    \uses{def:prep_fixed_point_tensor, def:transfer_map}
+    Let $\sigma$ be positive semidefinite. Then
+    $\E_{P_\infty}(X)=\tr(X)\,\sigma$ for every $X\in\MN{D}$. If moreover
+    $\tr\sigma=1$, then $\E_{P_\infty}$ is the projection
+    $X\mapsto\tr(X)\,\sigma$ onto the fixed point $\sigma$, the map
+    $\ketbra{\rho}{\Id}$ of \cite{Malz2024Preparation}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $S=\sqrt\sigma$, so $S^\dagger=S$ and $S^2=\sigma$. Since
+    $\ketbra{l}{r}X\ketbra{r}{l}=X_{rr}\ketbra{l}{l}$,
+    \begin{align}
+        \E_{P_\infty}(X)
+         & =\sum_{l,r}X_{rr}\,S\ketbra{l}{l}S
+        =\tr(X)\,S\Big(\sum_l\ketbra{l}{l}\Big)S
+        =\tr(X)\,\sigma.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The periodic state of the fixed-point tensor]
+    \label{thm:prep_mpv_fixed_point_tensor}
+    \lean{MPSTensor.mpv_fixedPointTensor}
+    \leanok
+    \uses{def:prep_fixed_point_tensor, def:prep_pair_product_state, def:mpv}
+    Let $\sigma\in\MN{D}$ and $N\ge1$. For every configuration $c$ of the
+    physical pairs $c_k=(l_k,r_k)$ on $N$ sites,
+    $V^{(N)}(P_\infty)_c=\Omega(c)$, where $\Omega$ is the pair product
+    state~(\ref{eq:prep_pair_product}) of the entangled pair of $\sigma$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand the trace of the product
+    $\prod_k\sqrt\sigma\,\ketbra{l_k}{r_k}$ as a sum over cyclic index
+    paths $(t_k)_k$, one index per bond. The entry
+    $(\sqrt\sigma\,\ketbra{l_k}{r_k})_{t_k t_{k+1}}$ vanishes unless
+    $t_{k+1}=r_k$, so only the path $t_{k+1}=r_k$ survives, and its
+    product is $\prod_k(\sqrt\sigma)_{r_{k-1}l_k}$. Reindexing the product
+    along the cyclic shift of the sites gives~(\ref{eq:prep_pair_product}).
+\end{proof}
+
+\begin{theorem}[The fixed-point tensor is a renormalization fixed point]
+    \label{thm:prep_fixed_point_tensor_rfp}
+    \lean{MPSTensor.isTransferIdempotent_fixedPointTensor}
+    \lean{MPSTensor.hasPhysicalBlockingIsometry_fixedPointTensor}
+    \leanok
+    \uses{def:prep_fixed_point_tensor, def:mps_transfer_idempotence,
+        def:physical_blocking_isometry}
+    Let $\sigma$ be positive semidefinite with $\tr\sigma=1$. Then
+    $\E_{P_\infty}^2=\E_{P_\infty}$, and $P_\infty$ has a physical blocking
+    isometry.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:prep_transfer_fixed_point_tensor,
+        thm:physical_blocking_isometry_iff_transfer_idempotence}
+    By Theorem~\ref{thm:prep_transfer_fixed_point_tensor},
+    $\E_{P_\infty}$ is the projection $X\mapsto\tr(X)\,\sigma$, which is
+    idempotent because $\tr\sigma=1$. The physical blocking isometry
+    follows from
+    Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
+\end{proof}
+
+\begin{theorem}[Normalization of the entangled pair]
+    \label{thm:prep_pair_norm}
+    \lean{MPSTensor.fixedPointPair_norm_sq}
+    \leanok
+    \uses{def:prep_pair_product_state}
+    Let $\sigma$ be positive semidefinite, with entangled pair $\omega$.
+    Then $\braket{\omega}{\omega}=\tr\sigma$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    With $S=\sqrt\sigma$,
+    $\braket{\omega}{\omega}=\sum_{r,l}\overline{S_{rl}}S_{rl}=\tr(S^\dagger S)=\tr\sigma$.
+\end{proof}
+
+\begin{definition}[Regrouping of a ring into its bonds]
+    \label{def:prep_bond_regrouping}
+    \lean{MPSTensor.bondRegrouping}
+    \leanok
+    The \emph{bond regrouping} is the bijection of configurations on a ring of
+    $N$ sites sending $c=(l_k,r_k)_k$ to $(r_k,l_{k+1})_k$, with indices
+    modulo $N$. Its inverse sends $(p_k)_k=(p_k^1,p_k^2)_k$ to
+    $(p_{k-1}^2,p_k^1)_k$.
+\end{definition}
+
+\begin{theorem}[Normalization of the pair product state]
+    \label{thm:prep_pair_product_norm}
+    \lean{MPSTensor.pairProductState_norm_sq}
+    \lean{MPSTensor.pairProductState_fixedPointPair_norm_sq}
+    \leanok
+    \uses{def:prep_pair_product_state}
+    For every $\omega\in\C^D\otimes\C^D$ and $N\ge0$, the pair product
+    state~(\ref{eq:prep_pair_product}) satisfies
+    $\braket{\Omega}{\Omega}=\braket{\omega}{\omega}^N$. If $\omega$ is the
+    entangled pair of a positive semidefinite $\sigma$ with $\tr\sigma=1$,
+    then $\braket{\Omega}{\Omega}=1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:prep_bond_regrouping, thm:prep_pair_norm}
+    Expanding $\braket{\omega}{\omega}^N$ as a sum over bond configurations
+    $(p_k)_k$ of $\prod_k\overline{\omega_{p_k}}\omega_{p_k}$ and
+    reindexing along the bond regrouping of
+    Definition~\ref{def:prep_bond_regrouping} gives
+    $\sum_c\overline{\Omega(c)}\Omega(c)$. The second statement follows
+    from Theorem~\ref{thm:prep_pair_norm}.
+\end{proof}
+
+\begin{theorem}[Convergence of the blocked transfer map from a spectral gap]
+    \label{thm:prep_blocked_transfer_limit_gap}
+    \lean{MPSTensor.tendsto_transferMap_blockTensor_of_spectralRadius_lt_one}
+    \leanok
+    \uses{def:prep_fixed_point_tensor, def:blocked_tensor,
+        def:left_canonical_tensor}
+    Let $A$ be left-canonical, let $\sigma$ be positive semidefinite with
+    $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$, and suppose that
+    $\E_A-\E_{P_\infty}$ has spectral radius less than one. Then
+    $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$, for every
+    $X\in\MN{D}$. This is the limit $\E_B=\E_A^q\to\E_{P_\infty}$ of
+    \cite{Malz2024Preparation}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:prep_transfer_fixed_point_tensor}
+    Write $P=\E_{P_\infty}$, the projection $X\mapsto\tr(X)\,\sigma$ by
+    Theorem~\ref{thm:prep_transfer_fixed_point_tensor}. The powers of an
+    operator of spectral radius less than one tend to zero, so
+    $(\E_A-P)^q(X)\to0$. Since $\E_A$ is trace preserving and fixes
+    $\sigma$, $\E_A^q=P+(\E_A-P)^q$ for $q\ge1$, and
+    $\E_{A^{[q]}}=\E_A^q$ by expanding the Kraus sum of the blocked tensor.
+\end{proof}
+
+\begin{theorem}[Convergence of the blocked transfer map of a normal tensor]
+    \label{thm:prep_blocked_transfer_limit_normal}
+    \lean{MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive}
+    \leanok
+    \uses{def:prep_fixed_point_tensor, def:blocked_tensor,
+        def:left_canonical_tensor, def:irreducible_tensor}
+    Let $A$ be irreducible and left-canonical, with $1$ the only eigenvalue
+    of $\E_A$ of modulus one, and let $\sigma$ be positive definite with
+    $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$. Then
+    $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$, for every
+    $X\in\MN{D}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:prep_blocked_transfer_limit_gap,
+        thm:prep_transfer_fixed_point_tensor}
+    The transfer map of a left-canonical tensor is a channel, and it is
+    irreducible because $A$ is. By the complementary transfer-map gap for
+    primitive maps~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
+    $\E_A$ minus the projection $X\mapsto\tr(X)\,\sigma$ has spectral radius
+    less than one. That projection is $\E_{P_\infty}$ by
+    Theorem~\ref{thm:prep_transfer_fixed_point_tensor}, and
+    Theorem~\ref{thm:prep_blocked_transfer_limit_gap} applies.
+\end{proof}
