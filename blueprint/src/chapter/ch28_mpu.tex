@@ -6106,6 +6106,47 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Theorem~\ref{thm:mpu_identity_index}, giving the last assertion.
 \end{proof}
 
+\begin{theorem}[Tensor-product additivity of the representative index]
+    \label{thm:mpu_representative_index_tensor_product}
+    \lean{MPOTensor.IsMPU.index_tensorProduct,
+        MPOTensor.IsMPU.index_identityMPUTensor,
+        MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}
+    \leanok
+    \uses{def:mpu_reduced_representative_index,
+        def:mpu_independent_tensor_product, def:mpu_shift_tensors}
+    Let $U$ and $V$ be positive-dimensional MPU tensors, possibly with
+    different physical and bond dimensions. Their independent tensor product
+    satisfies
+    \begin{align}
+        \operatorname{ind}(U\boxtimes V)
+         & =\operatorname{ind}(U)+\operatorname{ind}(V).
+    \end{align}
+    The bond-one identity tensor $\Id_n$ has index zero for every $n>0$;
+    hence $\operatorname{ind}(U\boxtimes\Id_n)=\operatorname{ind}(U)$.
+    This is the reduced-representative form of the tensoring assertion in
+    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mpu_reduced_representative_index_invariance,
+        lem:mpu_admissible_index_tensor, thm:mpu_identity_index,
+        thm:mpu_finite_tensor_product}
+    Choose reduced canonical-form-II representatives $U_{\mathrm{red}}$ and
+    $V_{\mathrm{red}}$. The periodic operator of their independent tensor
+    product is the reindexed Kronecker product of their periodic operators,
+    so it agrees at every positive length with that of $U\boxtimes V$.
+    Representative independence and canonical tensor-product additivity give
+    \begin{align}
+        \operatorname{ind}(U\boxtimes V)
+         & =\operatorname{ind}(U_{\mathrm{red}}\boxtimes V_{\mathrm{red}}) \\
+         & =\operatorname{ind}(U_{\mathrm{red}})
+        +\operatorname{ind}(V_{\mathrm{red}}).
+    \end{align}
+    The identity tensor itself is a canonical representative of index zero,
+    and the ancilla assertion follows from additivity.
+\end{proof}
+
 \begin{lemma}[Four-site composition source-rank bounds]
     \label{lem:mpu_four_site_composition_source_rank_bounds}
     \lean{MPOTensor.rightRank_blockTensor_mulTensor_four_le,
