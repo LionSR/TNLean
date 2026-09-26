@@ -75,7 +75,7 @@ private theorem evalWord_reductionResidual_trans_append_singleton (w : List (Fin
         Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w * W₁ *
           reductionResidual B A V₂ W₂ x * V₁ := by
   rw [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one,
-    reductionResidual_trans_apply]
+    reductionResidual_trans_apply C B A]
   simp only [Matrix.mul_add, Matrix.mul_assoc]
 
 /-- **Compressing a composite residual word.** For a composite reduction, the first
@@ -139,12 +139,13 @@ private theorem evalWord_reductionResidual_mul_trans_mul_eq_zero (h₁ : IsReduc
       have hstep := ih (p ++ [x]) (by simp at hp ⊢; omega)
       rw [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil,
         Matrix.mul_one] at hstep
-      have hG := (h₁.mul_evalWord_reductionResidual_trans_mul (A := A) (V₂ := V₂)
-        (W₂ := W₂) w).1
+      have hG : V₁ * Kraus.evalWord R w * W₁ = Kraus.evalWord M w :=
+        (h₁.mul_evalWord_reductionResidual_trans_mul (A := A) (V₂ := V₂) (W₂ := W₂) w).1
       have key : Kraus.evalWord N p * Kraus.evalWord R (x :: w) * W₁ =
           Kraus.evalWord N p * N x * Kraus.evalWord R w * W₁ +
             Kraus.evalWord N p * W₁ * (M x * (V₁ * Kraus.evalWord R w * W₁)) := by
-        rw [Kraus.evalWord_cons, reductionResidual_trans_apply]
+        rw [Kraus.evalWord_cons, show R x = N x + W₁ * M x * V₁ from
+          reductionResidual_trans_apply C B A V₁ W₁ V₂ W₂ x]
         simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
       rw [key, hstep, hG, zero_add, ← Kraus.evalWord_cons]
       by_cases hp₁ : N₁ ≤ p.length
@@ -180,9 +181,9 @@ private theorem evalWord_reductionResidual_trans_mul_eq_zero (h₁ : IsReduction
       by_cases hq₁ : N₁ ≤ q.length
       · rw [evalWord_reductionResidual_eq_zero_of_bound_le_length hN₁ q hq₁]
         simp
-      · have hY := evalWord_reductionResidual_mul_trans_mul_eq_zero h₁ hN₁ hN₂ w []
-          (by simp at hq ⊢; omega)
-        rw [Kraus.evalWord_nil, Matrix.one_mul] at hY
+      · have hY : Y * W₁ = 0 := by
+          simpa [Y] using evalWord_reductionResidual_mul_trans_mul_eq_zero h₁ hN₁ hN₂ w []
+            (by simp at hq ⊢; omega)
         rw [hY]
         simp
 
@@ -290,8 +291,8 @@ theorem isReductionResidualNilpotencyBound_mulTensor_kronId {X : MPOTensor d D�
     funext ij
     simp only [MPSTensor.reductionResidual, toMPSTensor, mulTensor_apply, kronId,
       Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, residualTensor, sub_kronecker', Finset.sum_sub_distrib,
-      Matrix.submatrix_sub]
+      Matrix.one_mul, Matrix.mul_one, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
+    rfl
   intro w hw
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [hres, evalWord_toMPSTensor_mulTensor_ofFn]
@@ -319,8 +320,8 @@ theorem isReductionResidualNilpotencyBound_mulTensor_idKron {X : MPOTensor d D�
     funext ij
     simp only [MPSTensor.reductionResidual, toMPSTensor, mulTensor_apply, idKron,
       Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, residualTensor, kronecker_sub', Finset.sum_sub_distrib,
-      Matrix.submatrix_sub]
+      Matrix.one_mul, Matrix.mul_one, residualTensor, kronecker_sub', Finset.sum_sub_distrib]
+    rfl
   intro w hw
   obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w
   rw [hres, evalWord_toMPSTensor_mulTensor_ofFn]
@@ -383,8 +384,8 @@ theorem isReductionResidualNilpotencyBound_actTensor_idKron (T : MPOTensor d D�
     funext i
     simp only [MPSTensor.reductionResidual, actTensor_apply, idKron,
       Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, kronecker_sub', Finset.sum_sub_distrib,
-      Matrix.submatrix_sub]
+      Matrix.one_mul, Matrix.mul_one, kronecker_sub', Finset.sum_sub_distrib]
+    rfl
   intro w hw
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [hres, evalWord_actTensor]
@@ -410,8 +411,8 @@ theorem isReductionResidualNilpotencyBound_actTensor_kronId {X : MPOTensor d D�
     funext i
     simp only [MPSTensor.reductionResidual, actTensor_apply, kronId,
       Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
-      Matrix.one_mul, Matrix.mul_one, residualTensor, sub_kronecker', Finset.sum_sub_distrib,
-      Matrix.submatrix_sub]
+      Matrix.one_mul, Matrix.mul_one, residualTensor, sub_kronecker', Finset.sum_sub_distrib]
+    rfl
   intro w hw
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [hres, evalWord_actTensor]
