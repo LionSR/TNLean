@@ -497,12 +497,23 @@ ring of $L$ sites.
 
 \begin{lemma}[Orthogonal projection on even rings and idempotence on odd rings]%
     \label{lem:asymex_z2z2_defect_adjoint}
+    \lean{Z2Z2Condensation.mpo_condensationTensor_conjTranspose,
+        Z2Z2Condensation.mpo_xyTensor_ne_zero,
+        Z2Z2Condensation.isStarProjection_quarter_condensation_of_even,
+        Z2Z2Condensation.isIdempotentElem_half_condensation_of_odd,
+        Z2Z2Condensation.conjTranspose_sub_mpo_condensationTensor_of_odd,
+        Z2Z2Condensation.not_isSelfAdjoint_half_condensation_of_odd}
+    \leanok
+    \uses{def:asymex_z2z2_defect, thm:asymex_z2z2_physical,
+        thm:asymex_z2z2_defect_sq}
     On every positive even ring, $A_L/4$ is an orthogonal projector.
     On every odd ring, $A_L/2$ is an idempotent that is not
     self-adjoint.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_z2z2_physical, thm:asymex_z2z2_defect_sq}
     Equation~(\ref{eq:asymex_z2z2_inverse}) gives
     \begin{align}
         A_L^\dagger
