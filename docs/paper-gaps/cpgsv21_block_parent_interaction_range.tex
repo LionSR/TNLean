@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Interaction Range in the Block-Injective Parent-Hamiltonian Gap}
+\author{}
+\date{2026-09-26}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The range condition}
+
+The gap theorem in Ref.~\cite[Section~IV.C, Gaps]{Cirac2021Matrix},
+local source lines~2183--2187, asserts a uniform positive gap for MPS
+parent Hamiltonians, including those of block-injective tensors.
+For at least two canonical blocks, Ref.~\cite[Theorem~12]{PerezGarcia2007MPSReps}
+gives the explicit interaction condition
+\begin{align}
+    R\geq 3(r-1)(L_0+1)+1,
+    \label{eq:block_range_source_bound}
+\end{align}
+where the blocks satisfy condition C1 at the common positive length $L_0$.
+The local source is \texttt{MPSarchive.tex}, lines~1424--1458.
+
+Let $A^1,\ldots,A^r$ have positive bond dimensions and be pairwise
+inequivalent under virtual conjugation and nonzero scalar multiplication.
+For nonzero coefficients $\mu_j$, write $B=\bigoplus_j\mu_j A^j$ and let
+$H_{R,N}$ be its canonical periodic parent Hamiltonian.
+The overlap argument initially constructs a gapped range $R=2p$ after
+choosing $p$ sufficiently large. This alone would not prove a gap at every
+prescribed range satisfying (\ref{eq:block_range_source_bound}).
+The comparison below removes this restriction, as developed under
+\href{https://github.com/LionSR/TNLean/issues/7676}{issue \#7676}.
+
+\section{Comparison of two interaction ranges}
+
+Fix $R>0$, and choose $W\geq 2R$ such that the open range-$R$ Hamiltonian
+$K_{R,W}$ has kernel $G_W(B)$ and the periodic range-$W$ Hamiltonians
+have a uniform gap $\gamma_W>0$ for all sufficiently large volumes.
+Set $h_W=I-P_{G_W(B)}$. Finite dimensionality and positivity give constants
+$\kappa,C>0$ such that
+\begin{align}
+    \kappa h_W\leq K_{R,W}\leq C h_W.
+    \label{eq:block_range_local_comparison}
+\end{align}
+The lower bound follows from injectivity of $K_{R,W}$ on its kernel
+complement. For the upper bound one may take
+$C=\lVert K_{R,W}\rVert+1$.
+
+Embed (\ref{eq:block_range_local_comparison}) at every cyclic initial site
+of a sufficiently long periodic chain. Each range-$R$ term appears
+exactly $m=W-R+1$ times. Thus
+\begin{align}
+    \kappa H_{W,N}\leq mH_{R,N}\leq C H_{W,N}.
+    \label{eq:block_range_periodic_comparison}
+\end{align}
+Both periodic operators have the same kernel: the quadratic form of a
+positive operator vanishes precisely on its kernel, and the two inequalities
+give the two inclusions. The range-$W$ gap therefore implies
+\begin{align}
+    \frac{\kappa\gamma_W}{m}\lVert v\rVert
+    \leq\lVert H_{R,N}v\rVert
+    \qquad(v\perp\ker H_{R,N}).
+\end{align}
+All constants are independent of $N$. To include the finitely many excluded
+lengths, restrict each corresponding Hamiltonian to its kernel complement.
+This restriction is injective and finite-dimensional, so it has a positive
+norm lower bound. Taking the minimum of these finitely many bounds and the
+uniform eventual bound gives one positive constant for every $N$. The
+comparison uses every cyclic
+initial site and imposes no divisibility restriction on the chain length.
+It never identifies the open-chain kernel with the periodic kernel.
+
+\section{Recovering the printed threshold}
+
+The simultaneous word tuples span the full product matrix algebra at length
+$3(r-1)(L_0+1)$. Trace-preserving normalization propagates this span to every
+larger length: represent $M_j(A^j_a)^\dagger$ by word tuples, append $A^j_a$,
+and sum over $a$, using $\sum_a(A^j_a)^\dagger A^j_a=I$.
+The intersection property then identifies the open range-$R$ kernel with
+$G_W(B)$ for every $W\geq R$ whenever (\ref{eq:block_range_source_bound}) holds.
+The overlap construction supplies a gapped $W$ above any prescribed bound,
+so the preceding comparison applies to every such $R$.
+
+Finally, independent primitive normalization of the blocks preserves
+injectivity at the specified length $L_0$, pairwise inequivalence, and all
+local ground spaces. It therefore preserves every parent Hamiltonian exactly.
+No larger C1 length is substituted during this step. The formalized conclusion
+is consequently a uniform periodic gap over every chain length at each range in
+(\ref{eq:block_range_source_bound}), with no normalization hypothesis on the
+original blocks. The earlier chosen-range restriction is resolved.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
