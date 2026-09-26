@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.MPS.Core.ReductionComposition
+import TNLean.MPS.Core.ReductionResidualComposition
 import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
 
 /-!
@@ -124,6 +125,17 @@ theorem isReduction_castIndex {ι : Type*} {f : ι → ℕ} {d' n : ℕ}
     MPSTensor.IsReduction B (A b) (castIndex f e * V) (W * castIndex f e.symm) := by
   subst e
   simpa using h
+
+/-- Identifying the bond spaces of equal members of a family of tensors preserves a residual
+nilpotency bound (arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines 3147--3152). -/
+theorem isReductionResidualNilpotencyBound_castIndex {ι : Type*} {f : ι → ℕ} {d' n : ℕ}
+    {A : (i : ι) → MPSTensor d' (f i)} {B : MPSTensor d' n} {a b : ι}
+    {V : Matrix (Fin (f a)) (Fin n) ℂ} {W : Matrix (Fin n) (Fin (f a)) ℂ} {K : ℕ}
+    (hK : MPSTensor.IsReductionResidualNilpotencyBound B (A a) V W K) (e : a = b) :
+    MPSTensor.IsReductionResidualNilpotencyBound B (A b) (castIndex f e * V)
+      (W * castIndex f e.symm) K := by
+  subst e
+  simpa using hK
 
 /-- The permutation matrix identifying the bond spaces of the tensors indexed by
 two equal group elements, such as `g * (h * k)` and `g * h * k`. -/
@@ -252,6 +264,43 @@ theorem isReduction_right (g h k : G) :
       (F.tensor (g * h * k)).toMPSTensor (fd.rightV g h k) (fd.rightW g h k) :=
   isReduction_castMat ((((fd.isReduction h k).mulTensor_idKron (F.tensor g)).trans
     (fd.isReduction g (h * k))).mulTensor_assoc_left) (mul_assoc g h k).symm
+
+/-- **Nilpotent remainder of the first fusion tree.** If the remainder of every fusion tensor
+has vanishing words of length `K`, then so does the remainder of the fusion tree fusing `g`
+with `h` first, at length `3 K`.
+
+Source: arXiv:2203.12563, lines 1026--1060 (nilpotent off-diagonal tails of the stacked
+product and the associator on long words); the fusion trees are those of arXiv:2502.20257,
+display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
+theorem isReductionResidualNilpotencyBound_left {K : ℕ}
+    (hK : ∀ g h, MPSTensor.IsReductionResidualNilpotencyBound
+      (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
+      (fd.V g h) (fd.W g h) K) (g h k : G) :
+    MPSTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
+      (F.tensor (g * h * k)).toMPSTensor (fd.leftV g h k) (fd.leftW g h k) (3 * K) := by
+  have hb := MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans
+    ((fd.isReduction g h).mulTensor_kronId (F.tensor k))
+    (isReductionResidualNilpotencyBound_mulTensor_kronId (F.tensor k) (hK g h)) (hK (g * h) k)
+  rwa [show 2 * K + K = 3 * K by ring] at hb
+
+/-- **Nilpotent remainder of the second fusion tree.** If the remainder of every fusion tensor
+has vanishing words of length `K`, then so does the remainder of the fusion tree fusing `h`
+with `k` first, at length `3 K`.
+
+Source: arXiv:2203.12563, lines 1026--1060; the fusion trees are those of arXiv:2502.20257,
+display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
+theorem isReductionResidualNilpotencyBound_right {K : ℕ}
+    (hK : ∀ g h, MPSTensor.IsReductionResidualNilpotencyBound
+      (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
+      (fd.V g h) (fd.W g h) K) (g h k : G) :
+    MPSTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
+      (F.tensor (g * h * k)).toMPSTensor (fd.rightV g h k) (fd.rightW g h k) (3 * K) := by
+  have hb := MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans
+    ((fd.isReduction h k).mulTensor_idKron (F.tensor g))
+    (isReductionResidualNilpotencyBound_mulTensor_idKron (F.tensor g) (hK h k)) (hK g (h * k))
+  rw [show 2 * K + K = 3 * K by ring] at hb
+  exact isReductionResidualNilpotencyBound_castIndex (A := fun x ↦ (F.tensor x).toMPSTensor)
+    (isReductionResidualNilpotencyBound_mulTensor_assoc_left hb) (mul_assoc g h k).symm
 
 /-- The characterization of the value `ω(g,h,k)`: the two fusion trees of the
 triple product satisfy `V^L T^w = z V^R T^w` for all long words `w`.
