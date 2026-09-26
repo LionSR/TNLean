@@ -1032,6 +1032,30 @@ closing a chain of $N$ copies of $\mathcal U$.
     on $k'-k$ proves the claim.
 \end{proof}
 
+\begin{lemma}[Common simple blocking for two or three MPU tensors]
+    \label{lem:mpu_common_simple_blocking_finite}
+    \lean{MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple,
+        MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple_three}
+    \leanok
+    \uses{def:mpu, def:mpu_simple, def:mpdo_physical_blocking}
+    Let $\mathcal U_1,\mathcal U_2$ be MPU tensors with positive physical and
+    bond dimensions, which may differ between the tensors. There is a length
+    $k>0$ for which both direct length-$k$ blockings are simple. The same
+    conclusion holds for three such tensors $\mathcal U_1,\mathcal U_2,
+        \mathcal U_3$, with one common length $k$.
+    This is a finite-family consequence of
+    \cite[Proposition~III.3]{Cirac2017MPU}, not an additional hypothesis on
+    the tensors.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_bounded_simple_blocking, thm:mpu_all_later_simple_blockings}
+    Choose a positive simple blocking length for each tensor. Their sum is
+    positive and exceeds every chosen length, so simplicity at every later
+    blocking gives the conclusion. For three tensors, first choose a common
+    length for two and add a simple blocking length for the third.
+\end{proof}
+
 \begin{theorem}[Common simple blocking along a continuous MPU path]
     \label{thm:mpu_common_pow_four_simple_blocking}
     \lean{MPOTensor.IsMPU.blockTensor_pow_four_isMPUSimple,
@@ -5864,10 +5888,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{thm:mpu_cfii_equal_periodic_virtual_unitary,
+        lem:mpu_common_simple_blocking_finite,
         prop:mpu_admissible_index_well_defined}
     Equality of the periodic operators gives a unitary virtual similarity,
-    which preserves both source-cut ranks. Choose positive simple blocking
-    lengths for $U$ and $V$, and enlarge both to their sum $k$. The periodic
+    which preserves both source-cut ranks. Choose a common positive simple
+    blocking length $k$ for $U$ and $V$. The periodic
     operators of the $k$-site blocks agree. Their source-cut ranks therefore
     agree, and the two logarithmic differences defining the indices coincide.
 \end{proof}
