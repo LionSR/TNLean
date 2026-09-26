@@ -6183,24 +6183,24 @@ tensors.
 \end{proof}
 
 \begin{theorem}[Gap uniform in every chain length]
-\label{thm:primitive-block-parent-uniform-gap-three-block-bound}
-\lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
-\leanok
-Let $B=\bigoplus_{0\leq j<r}\mu_j A_j$, where $r\geq2$, all coefficients
-are nonzero, and the normalized primitive tensors $A_j$ are pairwise
-inequivalent under similarity and phase. Assume positive physical and bond
-dimensions, positive definite recorded invariant densities, and a common
-block-injectivity length $L_0\geq1$. For every
-$R\geq3(r-1)(L_0+1)+1$, there exists $\gamma_R>0$ such that, for every
-$N\in\mathbb N$ and every $v\perp\ker H_{R,N}(B)$,
-\begin{align}
- \gamma_R\|v\|\leq\|H_{R,N}(B)v\|.
-\end{align}
+    \label{thm:primitive-block-parent-uniform-gap-three-block-bound}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
+    \leanok
+    Let $B=\bigoplus_{0\leq j<r}\mu_j A_j$, where $r\geq2$, all coefficients
+    are nonzero, and the normalized primitive tensors $A_j$ are pairwise
+    inequivalent under similarity and phase. Assume positive physical and bond
+    dimensions, positive definite recorded invariant densities, and a common
+    block-injectivity length $L_0\geq1$. For every
+    $R\geq3(r-1)(L_0+1)+1$, there exists $\gamma_R>0$ such that, for every
+    $N\in\mathbb N$ and every $v\perp\ker H_{R,N}(B)$,
+    \begin{align}
+        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|.
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-\uses{thm:primitive-block-parent-gap-three-block-bound,thm:parent_hamiltonian_eventual_gap}
-The eventual uniform gap leaves only finitely many chain lengths untreated.
-At each such length the Hamiltonian, restricted to its kernel complement,
-has a positive lower norm bound. Taking the minimum of these bounds and the
-eventual uniform constant proves the assertion.
+    \uses{thm:primitive-block-parent-gap-three-block-bound,thm:parent_hamiltonian_eventual_gap}
+    The eventual uniform gap leaves only finitely many chain lengths untreated.
+    At each such length the Hamiltonian, restricted to its kernel complement,
+    has a positive lower norm bound. Taking the minimum of these bounds and the
+    eventual uniform constant proves the assertion.
 \end{proof}
