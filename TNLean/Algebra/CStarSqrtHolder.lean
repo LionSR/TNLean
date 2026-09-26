@@ -40,7 +40,7 @@ theorem CFC.sqrt_sub_sqrt_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrd
   set c := algebraMap ℝ A (Real.sqrt ε)
   have h₁ : a ≤ b + algebraMap ℝ A ε :=
     sub_le_iff_le_add'.1
-      (IsSelfAdjoint.le_algebraMap_norm_self _ (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
+      (IsSelfAdjoint.le_algebraMap_norm_self (a - b) (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
   have hS : 0 ≤ S := CFC.sqrt_nonneg b
   have hcS : c * S = Real.sqrt ε • S := (Algebra.smul_def _ _).symm
   have hSc : S * c = Real.sqrt ε • S := by rw [← Algebra.commutes, hcS]

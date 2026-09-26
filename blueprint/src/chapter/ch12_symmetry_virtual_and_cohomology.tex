@@ -99,7 +99,7 @@ gauge transformations form a projective representation on the bond space.
     \label{lem:twisted_tensor_block_comm}
     \lean{MPSTensor.twistedTensor_blockTensor_comm}
     \leanok
-    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor, lem:eval_word_twisted_tensor}
+    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor}
     For every $g\in G$ and $L\ge0$,
     \begin{align}
         \widetilde{(A^{[L]})}^{\,U^{[L]}}_g
@@ -109,11 +109,11 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok
-    Decode a blocked physical index as a word of length $L$ and use the word
-    expansion from Lemma~\ref{lem:eval_word_twisted_tensor}.  Reindexing the
-    sum over words by the blocked index gives exactly the Kronecker-product
-    matrix coefficients on the left of
-    (\ref{eq:symmetry_twist_block_comm}).
+    \uses{thm:block_tensor_rotate_physical}
+    The twisted tensor $\widetilde A_g$ is the physical rotation of $A$ by
+    $U(g)$, and $U^{[L]}(g)=U(g)^{\otimes L}$.  Hence
+    (\ref{eq:symmetry_twist_block_comm}) is the case $W=U(g)$, $C=A$ of
+    Theorem~\ref{thm:block_tensor_rotate_physical}.
 \end{proof}
 
 \begin{theorem}[MPV-family symmetry is preserved by blocking]
