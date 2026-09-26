@@ -2,9 +2,15 @@
 \label{sec:block_diagonal_boundary_closing}
 
 For a block-diagonal tensor $B=\bigoplus_{j=1}^g\mu_jA_j$ with $\mu_j\ne0$,
-explicit block-diagonal boundary identities yield component membership
+simultaneous injectivity at length $S>0$ gives the periodic ground-space
+identity at every $S+1\leq L\leq N$, including the minimal ring
+$N=S+1$; see Theorem~\ref{thm:ph_block_ground_space_at_simultaneous_injectivity}.
+The earlier separation argument starts from individual block injectivity
+and uses a larger interaction range. Its explicit boundary identities yield
+component membership
 $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$, establishing the
-periodic boundary step of \cite[Theorem~IV.16]{Cirac2021Matrix}.
+periodic boundary step at that larger range. The simultaneous-span argument
+gives the bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly.
 
 \begin{lemma}[Normalized BNT representatives give the large-length block intersection]
     \label{lem:bnt_direct_sum_unital_block_intersection_ge}
@@ -966,4 +972,64 @@ boundary matrices coincide.
     Finally, the kernel of a sum of positive operators is the intersection
     of their kernels, so replacing the local projectors by positive terms
     with the same local kernels preserves the ground space.
+\end{proof}
+
+\begin{theorem}[Local spaces of canonical representatives]
+    \label{thm:ph_canonical_representative_local_spaces}
+    \lean{MPSTensor.CPSVCanonicalFormData.groundSpace_eq_iSup_representatives}
+    \leanok
+    Let $A$ be in canonical form, and let $B^0,\ldots,B^{g-1}$ be its distinct
+    normal representatives. Repeated copies and their nonzero coefficients
+    do not change the positive-length local spaces: for every $L>0$,
+    \begin{align}
+        G_L(A)=\sum_{j=0}^{g-1} G_L(B^j).
+        \notag
+    \end{align}
+    This is the local-space consequence of the canonical decomposition in
+    \cite{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:coisometric_reconstruction_local_space, lem:block_sum_local_ground_space,
+        thm:local_ground_space_gauge_invariance, thm:local_ground_space_rescaling}
+    The coisometric reconstruction preserves the local space on every
+    positive-length interval. The local space of the resulting direct sum
+    is the sum of its block spaces. Each repeated copy differs from its
+    representative by a virtual similarity and a nonzero scalar, both of
+    which preserve the local space. Taking the sum once over each distinct
+    representative therefore gives the same space.
+\end{proof}
+
+\begin{theorem}[Canonical ground spaces at a simultaneous injectivity length]
+    \label{thm:ph_canonical_block_closure}
+    \lean{MPSTensor.CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTupleSpanTop,
+        MPSTensor.CPSVCanonicalFormData.ker_sum_eq_of_wordTupleSpanTop,
+        MPSTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a canonical MPS tensor with positive physical dimension,
+    including arbitrary multiplicities of its distinct normal blocks
+    $B^0,\ldots,B^{g-1}$. Suppose that their simultaneous words of length
+    $S>0$ span the product matrix algebra. For every $S+1\leq L\leq N$,
+    every periodic parent Hamiltonian with positive interactions and the
+    prescribed length-$L$ local kernels satisfies
+    \begin{align}
+        \ker H_{A,L,N}=\operatorname{span}\{V_N(B^j):0\leq j<g\}.
+        \notag
+    \end{align}
+    The conclusion includes the minimal ring $N=L=S+1$ and the canonical
+    orthogonal-projection interaction. This is the block-injective closure
+    conclusion of \cite[Section~IV.C]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_canonical_representative_local_spaces,
+        thm:ph_block_ground_space_at_simultaneous_injectivity}
+    Replace the original canonical tensor by the direct sum containing
+    one copy of each normal representative. Their local spaces, hence
+    their periodic local constraints, coincide. Apply the simultaneous
+    block-injectivity closure theorem at the same supplied length $S$.
+    Finally, the kernel of a finite sum of positive operators is the
+    intersection of their kernels. Thus replacing each orthogonal
+    projection by any positive interaction with the same kernel leaves
+    the periodic ground space unchanged.
 \end{proof}
