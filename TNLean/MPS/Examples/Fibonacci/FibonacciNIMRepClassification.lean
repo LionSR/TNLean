@@ -125,9 +125,9 @@ theorem exists_equiv_of_isNIMRep_fibNim_of_card_eq_two (hκ : Fintype.card κ = 
 /-- **A symmetric family of at most two normal blocks is the regular representation**
 (arXiv:2203.12563, lines 1991–1993, for at most two blocks). Let `(A_x)` be normal tensors of
 positive bond dimension whose periodic vectors are linearly independent at one positive length,
-symmetric under the Fibonacci algebra with the unit acting trivially. If there are at most two
-blocks, there are exactly two, and after labelling them by `1` and `τ` the multiplicities are
-`M_a = N_a`: `τ · x_1 = x_τ`, `τ · x_τ = x_1 + x_τ`. -/
+symmetric under the Fibonacci algebra with the unit acting trivially. If the family is nonempty
+and has at most two blocks, it has exactly two, and after labelling them by `1` and `τ` the
+multiplicities are `M_a = N_a`: `τ · x_1 = x_τ`, `τ · x_τ = x_1 + x_τ`. -/
 theorem exists_equiv_of_isMPOSymmetricFamily_fibBlock [Nonempty κ] {D : κ → ℕ}
     {A : ∀ x, MPSTensor 2 (D x)} {M : Fin 2 → κ → κ → ℂ}
     (hsym : IsMPOSymmetricFamily fibBlock A M)
