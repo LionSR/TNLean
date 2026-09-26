@@ -47,11 +47,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   height two has a single edge between neighbouring sites, so their state
   formulas are stated for tori of width and height at least three; the GHZ
   example holds on every torus.
-- `rmp_peps_czx_bond_orientation.tex` records that the printed CZX tensor,
-  contracted with equal labels at the two ends of each bond, gives GHZ states
-  on diagonal loops rather than the plaquette state, and that the plaquette
-  state follows when each bond identifies the pair `(a, b)` at one end with
-  `(b, a)` at the other.
+- `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
+  printed CZX tensor, contracted with equal labels at the two ends of each
+  bond, gives GHZ states on diagonal loops rather than the plaquette state,
+  and that the plaquette state follows when each bond identifies the pair
+  `(a, b)` at one end with `(b, a)` at the other.
 
 For the MPU index of arXiv:1703.09188:
 
