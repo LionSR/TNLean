@@ -85,6 +85,7 @@ import TNLean.MPS.ParentHamiltonian.MixedBoundaryGram
 import TNLean.MPS.ParentHamiltonian.MixedGram
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.NormalBlockPrimitiveGauges
+import TNLean.MPS.ParentHamiltonian.PGVWC07CutRank
 import TNLean.MPS.ParentHamiltonian.PGVWCCDEIdentities
 import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
