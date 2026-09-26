@@ -498,9 +498,9 @@ Because the Majumdar--Ghosh tensor is non-normal
 (Theorem~\ref{thm:majumdar_ghosh_not_normal}), the intersection property of
 Theorem~\ref{thm:ground_space_intersection} does not apply to it. The bond
 grading $G=\diag(1,-1,-1)$, which satisfies $GA^i=-A^iG$, takes the place of
-normality in the following two lemmas.
+normality in the following two theorems.
 
-\begin{lemma}[Graded injectivity of the boundary map]%
+\begin{theorem}[Graded injectivity of the boundary map]%
     \label{lem:majumdar_ghosh_graded_injectivity}
     \lean{MPSTensor.majumdarGhosh_exists_parity_rep,
         MPSTensor.majumdarGhosh_eq_zero_of_groundSpaceMap_eq_zero}
@@ -510,7 +510,7 @@ normality in the following two lemmas.
     Every vector of $\mathcal G_{K}(A)$ equals $\Gamma_{K}(X)$ for a matrix $X$
     with $GX=(-1)^{K}XG$. For $K\ge3$, a matrix $X$ with $GX=(-1)^{K}XG$ and
     $\Gamma_{K}(X)=0$ is zero.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -526,7 +526,7 @@ normality in the following two lemmas.
     Theorem~\ref{thm:majumdar_ghosh_left_canonical}.
 \end{proof}
 
-\begin{lemma}[Intersection property of the Majumdar--Ghosh tensor]%
+\begin{theorem}[Intersection property of the Majumdar--Ghosh tensor]%
     \label{lem:majumdar_ghosh_intersection}
     \lean{MPSTensor.majumdarGhosh_groundSpace_intersection,
         MPSTensor.majumdarGhosh_chainGroundSpace_le_groundSpace}
@@ -537,19 +537,24 @@ normality in the following two lemmas.
     $(\mathcal G_{M}(A)\otimes\C^2)\cap(\C^2\otimes\mathcal G_{M}(A))
         =\mathcal G_{M+1}(A)$. Consequently, for $N\ge3$ every vector of
     $\mathcal G_{N,3}(A)$ lies in $\mathcal G_{N}(A)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:ground_space_restriction_overlap, thm:ground_space_grow_back}
     Let $\psi$ lie in the intersection. By
-    Lemma~\ref{lem:majumdar_ghosh_graded_injectivity}, its restriction with
+    Theorem~\ref{lem:majumdar_ghosh_graded_injectivity}, its restriction with
     first letter $i$ is $\Gamma_{M}(Y_i)$ and its restriction with last letter
     $j$ is $\Gamma_{M}(Z_j)$, with $Y_i$ and $Z_j$ of parity $(-1)^{M}$. Comparing
     on the middle $M-1$ sites gives
-    $\Gamma_{M-1}(A^jY_i)=\Gamma_{M-1}(Z_jA^i)$, and both matrices have parity
-    $(-1)^{M-1}$. For $M\ge4$ the lemma gives $A^jY_i=Z_jA^i$; with
-    $X=\sum_j(A^j)^\dagger Z_j$ the left-canonical equation gives $Y_i=XA^i$,
-    hence $\psi=\Gamma_{M+1}(X)$. For $M=3$, the
+    $\Gamma_{M-1}(A^jY_i)=\Gamma_{M-1}(Z_jA^i)$
+    (Theorem~\ref{thm:ground_space_restriction_overlap}), and both matrices have parity
+    $(-1)^{M-1}$. For $M\ge4$ the second statement of
+    Theorem~\ref{lem:majumdar_ghosh_graded_injectivity} gives $A^jY_i=Z_jA^i$; with
+    $X=\sum_j(A^j)^\dagger Z_j$ the left-canonical equation
+    $\sum_j(A^j)^\dagger A^j=1$ and
+    Theorem~\ref{thm:ground_space_grow_back} give $Y_i=XA^i$, hence
+    $\psi=\Gamma_{M+1}(X)$. For $M=3$, the
     conditions~(\ref{eq:mg_spin_half_conditions}) on the four three-site
     restrictions with a fixed first or last letter give $\psi=\Gamma_{4}(X)$ for
     the matrix $X$ with $X_{00}=-2\psi_{0110}$, $X_{11}=-2\psi_{1100}$,
@@ -580,14 +585,19 @@ normality in the following two lemmas.
 
 \begin{proof}
     \leanok
+    \uses{lem:parent_cyclic_translate_preserves_chain_space,
+        thm:full_ring_boundary_change_of_cut}
     The two coverings lie in $\mathcal G_{N,3}(A)$ by
     Theorem~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}. Conversely,
     let $\psi\in\mathcal G_{N,3}(A)$. By
-    Lemma~\ref{lem:majumdar_ghosh_intersection}, $\psi=\Gamma_{N}(X)$ and its
-    translate by one site is $\Gamma_{N}(Y)$, with $X$ and $Y$ commuting with
-    $G$. Comparing the two cuts on the remaining $N-1$ sites gives
+    Theorem~\ref{lem:majumdar_ghosh_intersection}, $\psi=\Gamma_{N}(X)$ and its
+    translate by one site, which lies in $\mathcal G_{N,3}(A)$ by
+    Lemma~\ref{lem:parent_cyclic_translate_preserves_chain_space}, is
+    $\Gamma_{N}(Y)$, with $X$ and $Y$ commuting with $G$. Comparing the two
+    cuts on the remaining $N-1$ sites
+    (Theorem~\ref{thm:full_ring_boundary_change_of_cut}) gives
     $\Gamma_{N-1}(XA^a)=\Gamma_{N-1}(A^aY)$, so $XA^a=A^aY$ by
-    Lemma~\ref{lem:majumdar_ghosh_graded_injectivity}. The entries of these two
+    Theorem~\ref{lem:majumdar_ghosh_graded_injectivity}. The entries of these two
     equations force $X=\diag(x,y,y)=\tfrac{x+y}2\,1+\tfrac{x-y}2\,G$, and
     $\Gamma_{N}(1)=P^{\mathrm{even}}_s+P^{\mathrm{odd}}_s$,
     $\Gamma_{N}(G)=P^{\mathrm{even}}_s-P^{\mathrm{odd}}_s$ as in the proof of
@@ -609,10 +619,23 @@ normality in the following two lemmas.
 
 \begin{proof}
     \leanok
+    \uses{lem:parent_cyclic_translate_preserves_chain_space,
+        thm:full_ring_boundary_change_of_cut}
     As in the proof of Theorem~\ref{thm:majumdar_ghosh_ground_space}, a vector
     $\Gamma_{N}(X)$ of $\mathcal G_{N,3}(A)$ and its translates by one and two
     sites give $XA^a=A^aY$ and $YA^a=A^aZ$, now with $X,Y,Z$ anticommuting with
-    $G$. The entries of these equations force $X=0$.
+    $G$, so that $X_{00}=X_{11}=X_{12}=X_{21}=X_{22}=0$. The entries of
+    $XA^a=A^aY$ give
+    \begin{align}
+        X_{10} & =X_{20}=0,
+               &
+        Y_{10} & =\tfrac1{\sqrt2}X_{02},
+               &
+        Y_{20} & =-\tfrac1{\sqrt2}X_{01},
+        \notag
+    \end{align}
+    and the same entries of $YA^a=A^aZ$ give $Y_{10}=Y_{20}=0$. Hence
+    $X_{01}=X_{02}=0$, and $X=0$.
 \end{proof}
 
 \begin{remark}\label{rem:majumdar_ghosh_review_hamiltonian}
@@ -623,8 +646,8 @@ normality in the following two lemmas.
     of \cite{Cirac2021Matrix} with eigenvalue $-\tfrac{3N}{8}$. If
     $-\tfrac{3N}{8}$ is the smallest eigenvalue of $H$, then the two-fold
     degeneracy of Theorem~\ref{thm:majumdar_ghosh_ground_space} reflects the
-    spontaneous breaking of the one-site translation symmetry of this chain;
-    that lower bound is not formalized here.
+    spontaneous breaking of the one-site translation symmetry of this chain.
+    % The lower bound H >= -3N/8 is not formalized here; tracked in #8117.
 \end{remark}
 
 %% ===================================================================
