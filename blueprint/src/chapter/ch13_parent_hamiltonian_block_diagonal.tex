@@ -498,3 +498,150 @@ boundary-cut comparison of
 Lemma~\ref{lem:block_diagonal_boundary_component_pgvwc_comparison_injective}
 concerns the separate assertion
 $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
+
+\begin{theorem}[Boundary compatibility in the trace-preserving normalization]
+    \label{thm:ph_tp_boundary_compatibility}
+    \lean{MPSTensor.boundary_matrix_eq_of_compatibility_of_tracePreserving}
+    \leanok
+    Suppose that $\sum_b (A^b)^\dagger A^b=\Id$ and that
+    $A^b C_a=D_b A^a$ for every pair of physical letters $a,b$.
+    Then $C_a=EA^a$, where $E=\sum_b(A^b)^\dagger D_b$.
+    This is the trace-preserving form of the boundary calculation in
+    \cite[Theorem~12]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Multiplication on the left by $(A^b)^\dagger$ and summation over $b$
+    gives $C_a=\sum_b(A^b)^\dagger D_b A^a=EA^a$.
+\end{proof}
+
+\begin{theorem}[Block intersections in the trace-preserving normalization]
+    \label{thm:ph_tp_block_intersection}
+    \lean{MPSTensor.mem_iSup_groundSpace_of_iSup_restrictions_of_tracePreserving,
+        MPSTensor.iSup_groundSpace_eq_restriction_intersection_of_tracePreserving}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ satisfy
+    $\sum_a(A^{j,a})^\dagger A^{j,a}=\Id$ for each $j$.
+    Suppose that the tuples $(A^{0,w},\ldots,A^{r-1,w})$, with $|w|=n$,
+    span $\prod_j\MN{D_j}$. Writing $S_m=\sum_jG_m(A^j)$, one has
+    \begin{align}
+        (S_{n+1}\otimes\C^d)\cap(\C^d\otimes S_{n+1})=S_{n+2}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:pgvwc07_trace_decompositions_from_block_restrictions,
+        lem:blockwise_boundary_compatibility_from_traces,
+        thm:ph_tp_boundary_compatibility,
+        lem:left_boundary_summands_mem_block_ground_spaces}
+    The two restrictions provide boundary matrices $C_a^j,D_b^j$.
+    The simultaneous word span gives $A^{j,b}C_a^j=D_b^j A^{j,a}$.
+    Set $E_j=\sum_b(A^{j,b})^\dagger D_b^j$. Then $C_a^j=E_jA^{j,a}$,
+    so each boundary summand lies in $G_{n+2}(A^j)$.
+    The reverse inclusion follows by restricting a boundary-condition vector
+    at its first or last physical letter.
+\end{proof}
+
+\begin{theorem}[Open-chain ground space of trace-preserving blocks]
+    \label{thm:ph_tp_block_open_ground_space}
+    \lean{MPSTensor.contiguous_mem_groundSpace_toTensorFromBlocks,
+        MPSTensor.ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES}
+    \leanok
+    Let $d>0$, and let $B=\bigoplus_j\mu_j A^j$, where every $\mu_j$ is nonzero
+    and $\sum_a(A^{j,a})^\dagger A^{j,a}=\Id$ for every $j$.
+    Suppose that the simultaneous word tuples span the full product matrix
+    algebra at every length $n\ge L_0$. For $L_0+1\le L\le N$, the
+    open-chain parent Hamiltonian with interaction range $L$ satisfies
+    \begin{align}
+        \ker H^{\mathrm{open}}_{B,L,N}=G_N(B)=\sum_jG_N(A^j).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_tp_block_intersection,
+        lem:open_chain_iteration_subspace_sequence,
+        lem:block_sum_local_ground_space}
+    Zero energy for a sum of positive local projectors is equivalent to
+    satisfying every contiguous length-$L$ constraint. The block intersection
+    identity extends these constraints one site at a time, giving membership
+    in $G_N(B)$. Conversely, every boundary-condition vector satisfies each
+    local constraint. Nonzero block weights identify $G_N(B)$ with the sum
+    of the block spaces.
+\end{proof}
+
+\begin{theorem}[Eventual simultaneous word span of primitive blocks]
+    \label{thm:ph_primitive_blocks_word_span}
+    \lean{MPSTensor.exists_eventually_wordTupleSpanTop_of_isPrimitiveMPS}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ be trace-preserving primitive tensors with
+    positive bond dimensions and positive definite invariant matrices.
+    Suppose that no two distinct blocks are related by conjugation and a
+    nonzero complex scalar. Then there is $L_0$ such that, for every $L\ge L_0$,
+    the tuples $(A^{0,w},\ldots,A^{r-1,w})$, with $|w|=L$, span
+    $\prod_j\MN{D_j}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normal_from_primitive_posdef,
+        thm:common_exact_block_injectivity_normal_left_canonical,
+        lem:direct_sum_two_block_dimension_step,
+        lem:block_separating_equations_from_pairwise_separation}
+    Primitivity gives normality, hence a common positive injective length $p$.
+    Injectivity persists at every length at least $p$.
+    The three-block separation argument at length $3(p+1)$ gives a word
+    polynomial selecting one block against any other. Multiplying these
+    polynomials gives selectors of a common length $s$ for the whole family.
+    For $L\ge s+p$, prepend an arbitrary matrix-valued word polynomial of
+    length $L-s$ to each selector. The resulting tuples span each factor of
+    the product algebra separately.
+\end{proof}
+
+\begin{theorem}[Uniform open-chain kernel threshold for primitive blocks]
+    \label{thm:ph_primitive_blocks_open_kernel}
+    \lean{MPSTensor.exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS}
+    \leanok
+    Let $d>0$ and $B=\bigoplus_j\mu_jA^j$, with nonzero coefficients $\mu_j$.
+    Suppose that the blocks have positive bond dimensions, are trace-preserving
+    and primitive with positive definite invariant matrices, and are pairwise
+    inequivalent under conjugation and a nonzero scalar.
+    There is $L_0>0$ such that for every $L_0\le L\le N$,
+    \begin{align}
+        \ker H^{\mathrm{open}}_{B,L,N}=G_N(B).
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_primitive_blocks_word_span,
+        thm:ph_tp_block_open_ground_space}
+    Choose $L_0$ one larger than the eventual simultaneous word-span
+    threshold and apply the open-chain intersection theorem.
+\end{proof}
+
+\begin{theorem}[Primitive representatives of inequivalent normal blocks]
+    \label{thm:normal_blocks_primitive_representatives}
+    \lean{MPSTensor.exists_isPrimitiveMPS_family_of_isNormal}
+    \leanok
+    \uses{def:normal, def:primitive_mps, def:ground_space_parent,
+        def:gauge_phase_equiv}
+    Let $(A^i)_{i\in I}$ be normal tensors with positive bond dimensions.
+    Suppose that no two distinct blocks are related by a virtual gauge
+    and a nonzero complex scalar. Then there are tensors $(B^i)_{i\in I}$
+    of the same respective bond dimensions and positive definite matrices
+    $\rho_i$ such that each $B^i$ is primitive and trace preserving,
+    $\rho_i$ is its invariant matrix, and $G_L(A^i)=G_L(B^i)$ for every
+    $i$ and every length $L$. The tensors $B^i$ remain pairwise inequivalent
+    under a virtual gauge and a nonzero scalar.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge,
+        lem:gauge_phase_equiv_transport_left_right}
+    Normalize each block independently. The resulting nonzero rescaling
+    and virtual gauge leave its local ground spaces unchanged.
+    If two normalized blocks were equivalent, composing the gauges and
+    dividing by the nonzero normalization factors would give an equivalence
+    between the corresponding original blocks, contrary to the hypothesis.
+\end{proof}
