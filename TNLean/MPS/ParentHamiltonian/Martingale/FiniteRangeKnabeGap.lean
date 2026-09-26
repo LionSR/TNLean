@@ -19,6 +19,8 @@ finite-range Knabe inequality.  The resulting periodic gap is
 For a primitive MPS, the open-chain martingale estimate provides
 \(\gamma = (1 - \varepsilon_l\sqrt{l + 1})^2\) at range \(R = l + 1\).  Choosing \(m\) so that
 \(l^2 < m\gamma\) gives a positive periodic gap uniformly for \(N \geq 2m\).
+Taking a minimum with the positive bounds at the finitely many shorter lengths
+extends any such estimate to all lengths.
 
 ## References
 
@@ -36,6 +38,41 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-- At a fixed length, the restriction of the parent Hamiltonian to the
+orthogonal complement of its kernel has a positive lower norm bound. -/
+theorem parentHamiltonianES_exists_gap (A : MPSTensor d D) (R N : ℕ) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
+      δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
+  let H := parentHamiltonianES A R N
+  have hi : Function.Injective (H.domRestrict (LinearMap.ker H)ᗮ) :=
+    LinearMap.injective_domRestrict_iff.mpr (Submodule.orthogonal_disjoint _).symm
+  obtain ⟨K, hK, hbound⟩ := (H.domRestrict (LinearMap.ker H)ᗮ).exists_antilipschitzWith
+    (LinearMap.ker_eq_bot.mpr hi)
+  refine ⟨(K : ℝ)⁻¹, inv_pos.mpr (by exact_mod_cast hK), ?_⟩
+  intro v hv
+  exact (inv_mul_le_iff₀ (show 0 < (K : ℝ) by exact_mod_cast hK)).mpr
+    (ZeroHomClass.bound_of_antilipschitz _ hbound ⟨v, hv⟩)
+
+/-- A periodic parent-Hamiltonian gap for all sufficiently large lengths extends
+to all lengths by taking the minimum with finitely many positive bounds. -/
+theorem parentHamiltonianES_gap_of_eventual_gap (A : MPSTensor d D) (R M : ℕ)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hGap : ∀ N : ℕ, M ≤ N → ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
+      δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖) :
+    ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ,
+      ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
+  induction M generalizing δ with
+  | zero => exact ⟨δ, hδ, fun N ↦ hGap N (Nat.zero_le N)⟩
+  | succ M ih =>
+    obtain ⟨η, hη, hM⟩ := parentHamiltonianES_exists_gap A R M
+    apply ih (lt_min hδ hη)
+    intro N hN v hv
+    rcases eq_or_lt_of_le hN with rfl | hN
+    · exact (mul_le_mul_of_nonneg_right (min_le_right δ η) (norm_nonneg v)).trans (hM v hv)
+    · exact (mul_le_mul_of_nonneg_right (min_le_left δ η) (norm_nonneg v)).trans
+        (hGap N hN v hv)
 
 /-- A uniform norm gap for the open Hamiltonian on the active sites of a
 Knabe window gives the finite-range periodic parent-Hamiltonian gap.
