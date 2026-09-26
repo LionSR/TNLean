@@ -26,11 +26,17 @@ of eq. (19). Because the pairs are locally orthogonal, `⟨ω_j|ω_{j'}⟩ = δ_
 
 This file states these objects for an arbitrary finite family of pair vectors
 `ω_j ∈ ℂ^D ⊗ ℂ^D`; the intended instance is `ω_j = fixedPointPair σ_j` for the normal
-blocks, embedded in the full bond space. Local orthogonality is taken as a hypothesis;
-the source asserts it after eq. (S7), citing the canonical-form theory, and this file does
-not derive it from eq. (S2). `inner_pair_eq_zero_of_disjoint` records one sufficient
-condition for its off-diagonal part: pair vectors supported on disjoint sets of virtual
-indices are orthogonal.
+blocks, embedded in the full bond space.
+
+**Scope restriction (local orthogonality as a hypothesis):** `isIsometry_pairIsometry`,
+`nonNormalFixedPointState_norm_sq_eq_sum` and `nonNormalFixedPointState_norm_sq` take the
+local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` as a hypothesis. The source asserts it for the
+pairs of the blocks of eq. (S2) after eq. (S7), citing the canonical-form theory, and this
+file does not derive it. Documented in
+`docs/paper-gaps/mswc24_ghz_form_local_orthogonality.tex`. Elimination: show that the
+embedded pairs of distinct blocks have disjoint supports and unit norm.
+`inner_pair_eq_zero_of_disjoint` records the off-diagonal half: pair vectors supported on
+disjoint sets of virtual indices are orthogonal.
 
 The definitions `nonNormalFixedPointState` and
 `nonNormalApproxState` take the pairs `ω_j` and the coefficients `αⱼ` as parameters. Nothing
@@ -64,8 +70,8 @@ these are the intended instances of arXiv:2307.01696, eqs. (19) and (S7).
   arXiv:2307.01696, eqs. (19), (S2), (S4), (S7).
 -/
 
-open scoped BigOperators Matrix ComplexOrder
-open Matrix Finset
+open scoped BigOperators Matrix
+open Matrix
 
 namespace MPSTensor
 

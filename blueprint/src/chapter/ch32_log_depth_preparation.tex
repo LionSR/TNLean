@@ -562,7 +562,10 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     $(\beta_1,\dots,\beta_b)\neq0$, then $\braket{\Omega'}{\Omega'}=1$.
     This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}. The same
     holds for the state of Definition~\ref{def:ldp_pair_family_fixed_point} with
-    $\alpha=\alpha^{(N)}$ for any orthonormal pairs $\omega_j$.
+    $\alpha=\alpha^{(N)}$ for any orthonormal pairs $\omega_j$. The source asserts
+    the orthogonality of its pairs after \cite[eq.~(S7)]{Malz2024Preparation},
+    citing the canonical form; here it is a hypothesis
+    \cite{gap:mswc24_ghz_form_local_orthogonality}.
 \end{theorem}
 
 \begin{proof}
@@ -581,6 +584,32 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     over the bonds,
     $\braket{\Omega_j}{\Omega_{j'}}=\braket{\omega_j}{\omega_{j'}}^M=\delta_{jj'}$, so
     $\braket{\Omega'}{\Omega'}=\sum_j\lvert\alpha^{(N)}_j\rvert^2=1$.
+\end{proof}
+
+\begin{theorem}[Pairs with disjoint supports are orthogonal]
+    \label{thm:ldp_pair_disjoint_orthogonal}
+    \lean{MPSTensor.inner_pair_eq_zero_of_disjoint}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point}
+    Let $S,S'\subseteq\{1,\dots,D\}$ be disjoint, and let
+    $\omega,\omega'\in\C^D\otimes\C^D$ satisfy $\omega_{(a,c)}=0$ for $a\notin S$
+    and $\omega'_{(a,c)}=0$ for $a\notin S'$. Then
+    $\braket{\omega}{\omega'}=0$. The embedded pairs of distinct blocks in
+    Definition~\ref{def:ldp_non_normal_fixed_point} are supported in this way, so
+    this gives the off-diagonal half of the orthogonality
+    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$; the unit norms and the
+    identification of the supports are not supplied here
+    \cite{gap:mswc24_ghz_form_local_orthogonality}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every term of the sum vanishes: if $a\in S$ then $a\notin S'$ and
+    $\omega'_{(a,c)}=0$, and otherwise $\omega_{(a,c)}=0$, so
+    \begin{align*}
+        \braket{\omega}{\omega'}
+        =\sum_{(a,c)}\overline{\omega_{(a,c)}}\,\omega'_{(a,c)}=0.
+    \end{align*}
 \end{proof}
 
 \begin{theorem}[Approximation error, general case]

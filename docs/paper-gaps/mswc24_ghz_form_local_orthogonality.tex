@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{GHZ Form of the Fixed-Point State: Local Orthogonality as a Hypothesis}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
+    \otimes A_j^i$ be a basis of normal tensors, let $\ket{\omega_j}$ be the
+fixed-point pair of the normal block $A_j$, embedded in the bond space
+$\C^D\otimes\C^D$ of $A$, and put
+\begin{align}
+    \ket{\Omega'}
+     & =\sum_{j=1}^b\alpha_j\bigotimes_{k=1}^{M}\ket{\omega_j}_{R_kL_{k+1}}.
+    \label{eq:mswc24_fixed_point_state}
+\end{align}
+After eq.~(S7) of~\cite{Malz2024Preparation} the pairs are asserted to be
+locally orthogonal,
+\begin{align}
+    \braket{\omega_j}{\omega_{j'}} & =\delta_{jj'},
+    \label{eq:mswc24_local_orthogonality}
+\end{align}
+with a reference to the canonical-form theory of matrix product density
+operators. The paragraph after eq.~(19) then concludes that
+$W\colon\ket{j}\mapsto\ket{\omega_j}$ is an isometry and that
+$\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ with
+$\ket{\chi_M}=\sum_j\alpha_j\ket{j}^{\otimes M}$. In the source,
+(\ref{eq:mswc24_local_orthogonality}) is a property of these particular pairs,
+not a hypothesis.
+
+\section{The restriction adopted}
+The formal statements are made for an arbitrary family
+$\omega_1,\dots,\omega_b\in\C^D\otimes\C^D$ and arbitrary coefficients
+$\alpha$.\footnote{Formal declarations:
+    \leanid{MPSTensor.isIsometry_pairIsometry},
+    \leanid{MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState}
+    and \leanid{MPSTensor.nonNormalFixedPointState_norm_sq} in
+    \doclink{TNLean/MPS/Preparation/NonNormalFixedPoint}.}
+The identity $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ holds for every such
+family, since
+$W^{\otimes M}\ket{j}^{\otimes M}=\bigotimes_k\ket{\omega_j}$. The isometry of
+$W$ and the normalization $\braket{\Omega'}{\Omega'}=1$ take
+(\ref{eq:mswc24_local_orthogonality}) as a hypothesis. For the pairs of the
+source they are therefore proved only once
+(\ref{eq:mswc24_local_orthogonality}) is supplied.
+
+One half of the hypothesis is available: if the components $\omega_{(a,c)}$ vanish
+for $a\notin S$ and the components $\omega'_{(a,c)}$ vanish for $a\notin S'$,
+where $S$ and $S'$ are disjoint sets of virtual indices, then $\braket{\omega}{\omega'}=0$.\footnote{Formal declaration:
+    \leanid{MPSTensor.inner_pair_eq_zero_of_disjoint} in the same module.}
+The embedded pairs of distinct blocks are supported in this way.
+
+\section{Elimination}
+Define the embedded pair of the $j$-th block in the bond space of $A$, show
+that its right leg is supported on the virtual indices of that block, so that
+distinct blocks give orthogonal pairs by the disjoint-support lemma, and show
+$\braket{\omega_j}{\omega_j}=1$ from the normalization of the fixed-point pair
+of a normal tensor in the gauge used by the source. The hypothesis
+(\ref{eq:mswc24_local_orthogonality}) then holds for the source's pairs, and
+the three statements above specialize to the source's claim without it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
