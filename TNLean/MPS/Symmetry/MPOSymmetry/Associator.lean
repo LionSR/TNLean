@@ -14,7 +14,8 @@ Let `g ↦ O_g` be a group-indexed family of matrix product operator tensors wit
 normal doubled-index tensors, positive bond dimensions, and the exact operator
 law `O_g O_h = O_{gh}` on every nonempty chain.  A choice of fusion tensors
 (`MPOTensor.GroupFamily.FusionData`) is a reduction `(V_{g,h}, W_{g,h})` of the
-stacked product of `O_g` and `O_h` onto `O_{gh}` for every pair.
+stacked product of `O_g` and `O_h` onto `O_{gh}` for every pair; such a choice
+exists under the hypothesis `MPOTensor.GroupFamily.IsNormalRepresentation`.
 
 For three elements the triple product reduces onto `O_{ghk}` along the two
 fusion trees
@@ -31,8 +32,6 @@ arXiv:2502.20257, `main.tex` lines 1506--1535, with `F^> = W` and `F^< = V`.
 
 ## Main definitions
 
-* `MPOTensor.GroupFamily.IsNormalRepresentation`: normal tensors with the exact
-  positive-length operator law.
 * `MPOTensor.GroupFamily.FusionData`: a choice of fusion tensors.
 * `MPOTensor.GroupFamily.FusionData.IsAssociator`: the left-dressed
   characterization of the value `ω(g,h,k)`.
@@ -60,39 +59,11 @@ namespace MPOTensor
 
 variable {d : ℕ}
 
-/-- Equal periodic operators at every positive length give equal positive-length
-matrix product vectors of the doubled-index tensors.
-
-Source: arXiv:1606.00608, Section 4.1 (the operator family `O_N` and its matrix
-entries). -/
-theorem sameMPV₂Pos_toMPSTensor_of_mpo_eq {D₁ D₂ : ℕ} {M : MPOTensor d D₁}
-    {M' : MPOTensor d D₂} (h : ∀ N, 0 < N → mpo M N = mpo M' N) :
-    MPSTensor.SameMPV₂Pos M.toMPSTensor M'.toMPSTensor := by
-  intro N hN ρ
-  rw [mpv_toMPSTensor, mpv_toMPSTensor, h N hN]
-
 namespace GroupFamily
 
 universe u
 
 variable {G : Type u} [Group G]
-
-/-- A group-indexed family of matrix product operator tensors represents the
-group with normal tensors when every doubled-index tensor is normal and the
-periodic operators multiply exactly as the group on every nonempty chain.
-
-Source: arXiv:2502.20257, lines 1403--1407 (the representation law); normality
-of the tensors is the hypothesis under which the fusion tensors exist, see
-`MPOTensor.GroupFamily.IsNormalRepresentation.nonempty_fusionData`. -/
-structure IsNormalRepresentation (F : GroupFamily G d) : Prop where
-  isNormal : ∀ g, Kraus.IsNormal (F.tensor g).toMPSTensor
-  operator_mul : ∀ g h N, 0 < N →
-    mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
-
-/-- An exact representation by simple injective tensors has normal tensors. -/
-theorem IsRepresentation.isNormalRepresentation {F : GroupFamily G d}
-    (hF : F.IsRepresentation) : F.IsNormalRepresentation :=
-  ⟨fun g ↦ (hF.isInjective g).isNormal, hF.operator_mul⟩
 
 variable {F : GroupFamily G d}
 
@@ -176,23 +147,11 @@ structure FusionData (F : GroupFamily G d) where
 
 namespace IsNormalRepresentation
 
-/-- Stacking the tensors of `g` and `h` gives the positive-length matrix product
-vectors of the tensor of `g * h`.
-
-Source: arXiv:2502.20257, lines 1403--1407. -/
-theorem sameMPV₂Pos_mulTensor (hF : F.IsNormalRepresentation) (g h : G) :
-    MPSTensor.SameMPV₂Pos (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-      (F.tensor (g * h)).toMPSTensor :=
-  sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
-    rw [mpo_mulTensor, hF.operator_mul g h N hN]
-
 /-- **Existence of fusion tensors** (arXiv:2502.20257, `eq:fusion_2`, citing the
 single-block reduction theorem of Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2,
 Proposition 20). -/
 theorem nonempty_fusionData (hF : F.IsNormalRepresentation) : Nonempty (FusionData F) := by
-  choose V W hVW using fun g h : G ↦
-    MPSTensor.exists_isReduction_and_nilpotent_of_isNormal (F.tensor (g * h)).toMPSTensor
-      (hF.isNormal _) (F.bondDim_pos _) _ (hF.sameMPV₂Pos_mulTensor g h)
+  choose V W hVW using hF.exists_fusionTensors
   exact ⟨⟨V, W, fun g h ↦ (hVW g h).1⟩⟩
 
 end IsNormalRepresentation

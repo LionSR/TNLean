@@ -19,10 +19,11 @@ physical indices is read as one letter.  This file records three consequences.
   weights, compresses onto every weighted block
   (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.7, Theorem 7.12,
   `cor:p5-mpo-product`).
-* An MPO group representation `U_g U_h = U_{gh}` by injective tensors has fusion tensors that
-  decompose the product of two tensors at every length, with a nilpotent off-diagonal
-  remainder (Garre-Rubio--Lootens--Molnár, arXiv:2203.12563, equation `fusiontensorG2`; the
-  original statement is Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Proposition 20).
+* An MPO group representation `U_g U_h = U_{gh}` by normal tensors, not necessarily unitary,
+  has fusion tensors that decompose the product of two tensors at every length, with a
+  nilpotent off-diagonal remainder (Garre-Rubio--Lootens--Molnár, arXiv:2203.12563,
+  equation `fusiontensorG2` and the lemma at line 1211; the original statement
+  is Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Proposition 20).
 * A matrix product state whose periodic vector is carried by an MPO to the periodic vector of
   a normal tensor has action tensors that decompose the action at every length
   (arXiv:2203.12563, equation `mpoMPSsten`).
@@ -34,12 +35,14 @@ non-invertible case in which the acted state decomposes over several blocks.
 
 * `MPOTensor.mpv_toMPSTensor`: the periodic vector of the doubled-index view is the matrix
   entry of the periodic operator.
+* `MPOTensor.GroupFamily.IsNormalRepresentation`: a group-indexed family of MPO tensors with
+  normal doubled-index tensors and the exact positive-length operator law.
 * `MPOTensor.left_mul_evalWord_mul_right_smul`: the compression identity
   `W B^{i₁j₁} ⋯ B^{i_Nj_N} V = λ^N M^{i₁j₁} ⋯ M^{i_Nj_N}`, the note's
   `eq:p5-mpo-product-compression`.
 * `MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum`: Theorem 7.12 itself.
-* `MPOTensor.GroupFamily.IsRepresentation.exists_fusionTensors`: the fusion tensors of an MPO
-  group representation, with the sharpened nilpotency length.
+* `MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors`: the fusion tensors of
+  an MPO group representation by normal tensors, with the sharpened nilpotency length.
 * `MPOTensor.exists_isReduction_actTensor_of_isNormal`: the action tensors of a single target
   block.
 * `MPOTensor.exists_multiBlockCompression_actTensor_of_isNormal`: the action tensors of a
@@ -64,6 +67,17 @@ theorem mpv_toMPSTensor {D : ℕ} (M : MPOTensor d D) {N : ℕ} (ρ : Fin N → 
       mpo M N (fun k => (ρ k).divNat) (fun k => (ρ k).modNat) := by
   simp only [MPSTensor.mpv, MPSTensor.coeff, mpo_apply, mpoMatrixEntry]
   rw [evalWord_toMPSTensor_ofFn]
+
+/-- Equal periodic operators at every positive length give equal positive-length
+matrix product vectors of the doubled-index tensors.
+
+Source: arXiv:1606.00608, Section 4.1 (the operator family `O_N` and its matrix
+entries). -/
+theorem sameMPV₂Pos_toMPSTensor_of_mpo_eq {D₁ D₂ : ℕ} {M : MPOTensor d D₁}
+    {M' : MPOTensor d D₂} (h : ∀ N, 0 < N → mpo M N = mpo M' N) :
+    MPSTensor.SameMPV₂Pos M.toMPSTensor M'.toMPSTensor := by
+  intro N hN ρ
+  rw [mpv_toMPSTensor, mpv_toMPSTensor, h N hN]
 
 /-! ### Compression of a product of matrix product operators -/
 
@@ -122,12 +136,49 @@ universe u
 
 variable {G : Type u} [Group G]
 
+/-- A group-indexed family of matrix product operator tensors represents the
+group with normal tensors when every doubled-index tensor is normal and the
+periodic operators multiply exactly as the group on every nonempty chain.
+
+Source: arXiv:2502.20257, lines 1403--1407 (the representation law), and
+Garre-Rubio--Lootens--Molnár, arXiv:2203.12563, `REsubmission.tex` line 1211,
+whose lemma on fusion tensors asks for an injective, not necessarily unitary,
+representation.  Normality of the tensors is weaker than injectivity and is the
+hypothesis under which the fusion tensors exist, see
+`MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors`.  Neither
+unitarity nor the identity law `U_e = 1` is required. -/
+structure IsNormalRepresentation (F : GroupFamily G d) : Prop where
+  isNormal : ∀ g, Kraus.IsNormal (F.tensor g).toMPSTensor
+  operator_mul : ∀ g h N, 0 < N →
+    mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
+
+/-- An exact representation by simple injective tensors has normal tensors. -/
+theorem IsRepresentation.isNormalRepresentation {F : GroupFamily G d}
+    (hF : F.IsRepresentation) : F.IsNormalRepresentation :=
+  ⟨fun g ↦ (hF.isInjective g).isNormal, hF.operator_mul⟩
+
+/-- Stacking the tensors of `g` and `h` gives the positive-length matrix product
+vectors of the tensor of `g * h`.
+
+Source: arXiv:2502.20257, lines 1403--1407. -/
+theorem IsNormalRepresentation.sameMPV₂Pos_mulTensor {F : GroupFamily G d}
+    (hF : F.IsNormalRepresentation) (g h : G) :
+    MPSTensor.SameMPV₂Pos (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+      (F.tensor (g * h)).toMPSTensor :=
+  sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
+    rw [mpo_mulTensor, hF.operator_mul g h N hN]
+
 /-- **Fusion tensors of an MPO group representation** (Garre-Rubio--Lootens--Molnár,
-arXiv:2203.12563, equation `fusiontensorG2`, lines 1002--1026). For an exact positive-length
-representation by injective tensors, the stacked product of the tensors of `g` and `h` reduces
+arXiv:2203.12563, equation `fusiontensorG2`, lines 1002--1026, and the lemma at line 1211).
+For a representation `U_g U_h = U_{gh}` on every nonempty chain by tensors whose
+doubled-index tensors are normal, the stacked product of the tensors of `g` and `h` reduces
 onto the tensor of `g * h`: there are maps `V` and `W` that intertwine the pair word of the
 product with the pair word of the tensor of `g * h` at every length, and the remainder after
 the matched sector is removed is nilpotent.
+
+The lemma at line 1211 assumes an injective, not necessarily unitary, representation with
+`U_e = 1`.  Injectivity implies normality, and neither unitarity, simplicity, nor the identity
+law is used, so this statement carries no hypothesis absent from the source.
 
 The empty pair word gives `V W = 1`, the biorthogonality relations of the fusion tensors that
 the paper obtains at `n = 0`.  The nilpotency length is the sharpened bound of the single-block
@@ -142,8 +193,8 @@ instance just outside this hypothesis: the CZX-type matrix product operator squa
 `(-1)^L` times the identity rather than to the identity, so it is covered by the weighted
 theorem `MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum` with weight `-1`
 instead. -/
-theorem IsRepresentation.exists_fusionTensors (F : GroupFamily G d)
-    (hF : F.IsRepresentation) (g h : G) :
+theorem IsNormalRepresentation.exists_fusionTensors {F : GroupFamily G d}
+    (hF : F.IsNormalRepresentation) (g h : G) :
     ∃ (V : Matrix (Fin (F.bondDim (g * h))) (Fin (F.bondDim g * F.bondDim h)) ℂ)
       (W : Matrix (Fin (F.bondDim g * F.bondDim h)) (Fin (F.bondDim (g * h))) ℂ),
       MPSTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
@@ -153,9 +204,8 @@ theorem IsRepresentation.exists_fusionTensors (F : GroupFamily G d)
             Kraus.evalWord (fun i => (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor i -
               W * (F.tensor (g * h)).toMPSTensor i * V) w = 0 :=
   MPSTensor.exists_isReduction_and_nilpotent_of_isNormal
-    (F.tensor (g * h)).toMPSTensor (hF.isInjective (g * h)).isNormal
-    (F.bondDim_pos (g * h)) (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-    (hF.sameMPV₂Pos_mulTensor F g h).symm
+    (F.tensor (g * h)).toMPSTensor (hF.isNormal (g * h)) (F.bondDim_pos (g * h))
+    (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (hF.sameMPV₂Pos_mulTensor g h)
 
 end GroupFamily
 
