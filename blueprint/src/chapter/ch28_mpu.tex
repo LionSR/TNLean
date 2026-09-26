@@ -5227,7 +5227,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Bounded block with an open source standard form]
     \label{thm:mpu_bounded_source_open_standard_form}
-    \lean{MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_blockTensor}
+    \lean{MPOTensor.twoSiteDirectBlockEquiv,
+        MPOTensor.reindexPhysical_blockTwo_blockTensor_two_mul,
+        MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_blockTensor}
     \leanok
     \uses{def:mpu_source_open_two_site_standard_form}
     Let $\mathcal U$ have a reduced full-support canonical-form-II
