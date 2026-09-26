@@ -303,7 +303,19 @@ well-definedness no longer requires separately supplied source data at each
 simple block. The value is independent of the positive simple blocking and
 of the recorded canonical-form-II presentation of the same tensor; it is
 preserved by positive blocking and changes sign under physical adjunction.
-This does not identify indices across a change of ambient bond dimension.
+The representative index is now defined for every positive-dimensional MPU
+through a reduced canonical-form-II presentation. The unitary virtual-gauge
+theorem identifies the right and left source-cut ranks of canonical-form-II
+presentations with equal periodic families, even across initially different
+ambient bond dimensions. A common positive simple blocking then identifies
+their indices. Consequently the representative index is independent of the
+chosen reduction and of the ambient bond dimension
+(\leanid{MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_of_mpo_eq},
+\leanid{MPOTensor.IsMPUCanonicalFormII.index_eq_of_mpo_eq},
+\leanid{MPOTensor.IsMPU.index_eq_of_mpo_eq}). This does not assert that
+rectangular reduction preserves the two source-cut ranks of the unreduced
+tensor itself, or identify this representative definition with the printed
+unrestricted source-cut formula without further argument.
 Tensor-product additivity still requires one common blocking length at which
 both factors and their tensor product are simple and have source data.
 
