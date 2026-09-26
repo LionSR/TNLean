@@ -14,7 +14,7 @@ import QICLean.Channel.QuantumWielandt
 "An open problem", subsection "W state", Corollary and proof,
 `Papers/quant-ph_0608197/MPSarchive.tex` lines 2182–2225: if `W_N` is the periodic vector of
 `D × D` matrices then, assuming Conjecture 2 (condition C1 by blocks with `L₀ = O(D²)`),
-`D ⪰ O(N^{1/3})`. The proof cuts the chain into two pieces, each of at least
+`D = Ω(N^{1/3})`. The proof cuts the chain into two pieces, each of at least
 `3(b-1)(L₀+1)` sites, shows that the reduced state of one piece has rank at least
 `∑_j D_j²`, uses that this rank is `2` for `W_N`, and excludes two blocks of size `1 × 1`;
 hence `N/2 ≤ 3(b-1)(L₀+1)`.
@@ -27,7 +27,7 @@ tensor in the translation-invariant canonical form of PGVWC07 whose blocks satis
 C1 at a common length `L₀`, and for every nonzero multiple of `W_N`; with the threshold
 `max(L₀, 3(b-1)(L₀+1))` described below. When the first matrix `A^j_0` of every block is
 invertible, the source's `L₀ = D²` (lines 2115–2118, through Wolf's Theorem 6.9(2)) turns this
-into `N < 2 max(D²+1, 3(D-1)(D²+2))`, the source's `D ⪰ O(N^{1/3})` for such blocks. For
+into `N < 2 max(D²+1, 3(D-1)(D²+2))`, the source's `D = Ω(N^{1/3})` for such blocks. For
 primitive blocks, Wolf's general quantum Wielandt bound gives the weaker
 `N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`.
 Along the way: the reduced state of `W_N` across any cut has rank at most `2`, and a sum of at
@@ -42,7 +42,7 @@ invertible (the source's proposition), not in general, nor is `O(D² log D)`. Th
 form, condition C1, and pairwise distinctness of the blocks are hypotheses. Distinctness is
 taken in the form used by the direct-sum lemma, no two blocks related by a gauge and a phase,
 which is stricter than the source's pairwise different block states (lines 1329–1330).
-Consequently neither the unconditional `D ⪰ O(N^{1/3})` nor `D³ log D = Ω(N)` is formalized.
+Consequently neither the unconditional `D = Ω(N^{1/3})` nor `D³ log D = Ω(N)` is formalized.
 Documented in `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
 
 **Local fix (single-block threshold):** for one block the printed inequality
@@ -310,7 +310,7 @@ other than `1`. If the periodic vector of `A` on `N` sites is `c W_N`, `c ≠ 0`
 channel, which the Wielandt bound also needs, follows from the canonical form
 (`PGVWC07CanonicalFormData.isIrreducibleMap_mapLM_blocks_conjTranspose`).
 
-This is weaker than the source's `D ⪰ O(N^{1/3})` and the review's `D³ log D = Ω(N)`, which
+This is weaker than the source's `D = Ω(N^{1/3})` and the review's `D³ log D = Ω(N)`, which
 use `L₀ = O(D²)` and `L₀ = O(D² log D)`; primitivity of the blocks is a hypothesis (the source
 removes peripheral eigenvalues by blocking, lines 2092–2096). -/
 theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive {D : ℕ}
@@ -339,7 +339,7 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive {D 
   refine (h.lt_of_mpv_eq_smul_wIndicator (by positivity) hC1 hDistinct hc hW).trans_le ?_
   gcongr
 
-/-- Project result: the source's `D ⪰ O(N^{1/3})` when the first matrix of every block is
+/-- Project result: the source's `D = Ω(N^{1/3})` when the first matrix of every block is
 invertible. The source proves that condition C1 then holds at `L₀ = D²`
 (arXiv:quant-ph/0608197, Proposition in Appendix "An open problem", lines 2115–2118); the
 formal counterpart used here is Wolf, Theorem 6.9(2): for a trace-preserving family with
