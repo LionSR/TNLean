@@ -87,7 +87,7 @@ theorem star_mpo_czxTensor_of_even (hN : Even N) :
 
 /-- **Source-aligned:** `lem:asymex_plus_parity`, even case. For even `N > 0`, the operator
 `O_N / 2 = (I_N + U_N) / 2` is an orthogonal projector. -/
-theorem isStarProjection_half_one_add_mpo_czxTensor (hN : Even N) :
+lemma isStarProjection_half_one_add_mpo_czxTensor (hN : Even N) :
     IsStarProjection ((2 : ℂ)⁻¹ • (1 + MPOTensor.mpo czxTensor N)) := by
   set U := MPOTensor.mpo czxTensor N
   have hUU : U * U = 1 := mpo_czxTensor_mul_self_of_even hN
@@ -109,7 +109,7 @@ theorem mpo_czxTensor_mul_self_of_odd (hN : Odd N) :
 
 /-- **Source-aligned:** `lem:asymex_plus_parity`, odd case, right inverse. For odd `N > 0`,
 `O_N (I_N - U_N) / 2 = I_N`. -/
-theorem one_add_mpo_czxTensor_mul_half_one_sub (hN : Odd N) :
+lemma one_add_mpo_czxTensor_mul_half_one_sub (hN : Odd N) :
     (1 + MPOTensor.mpo czxTensor N) * ((2 : ℂ)⁻¹ • (1 - MPOTensor.mpo czxTensor N)) = 1 := by
   rw [mul_smul_comm, add_mul, mul_sub, mul_sub, mpo_czxTensor_mul_self_of_odd hN, one_mul,
     mul_one, one_mul, show (1 : Matrix _ _ ℂ) - MPOTensor.mpo czxTensor N +
@@ -118,7 +118,7 @@ theorem one_add_mpo_czxTensor_mul_half_one_sub (hN : Odd N) :
 
 /-- **Source-aligned:** `lem:asymex_plus_parity`, odd case, left inverse. For odd `N > 0`,
 `(I_N - U_N) / 2 · O_N = I_N`. -/
-theorem half_one_sub_mul_one_add_mpo_czxTensor (hN : Odd N) :
+lemma half_one_sub_mul_one_add_mpo_czxTensor (hN : Odd N) :
     ((2 : ℂ)⁻¹ • (1 - MPOTensor.mpo czxTensor N)) * (1 + MPOTensor.mpo czxTensor N) = 1 := by
   rw [smul_mul_assoc, sub_mul, mul_add, mul_add, mpo_czxTensor_mul_self_of_odd hN, one_mul,
     mul_one, one_mul, show (1 : Matrix _ _ ℂ) + MPOTensor.mpo czxTensor N -
@@ -127,7 +127,7 @@ theorem half_one_sub_mul_one_add_mpo_czxTensor (hN : Odd N) :
 
 /-- **Source-aligned:** `lem:asymex_plus_parity`, odd case. For odd `N > 0`, the operator
 `O_N = I_N + U_N` is invertible, with inverse `(I_N - U_N) / 2`. -/
-theorem inv_one_add_mpo_czxTensor (hN : Odd N) :
+lemma inv_one_add_mpo_czxTensor (hN : Odd N) :
     (1 + MPOTensor.mpo czxTensor N)⁻¹ = (2 : ℂ)⁻¹ • (1 - MPOTensor.mpo czxTensor N) :=
   Matrix.inv_eq_right_inv (one_add_mpo_czxTensor_mul_half_one_sub hN)
 
