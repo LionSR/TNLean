@@ -126,8 +126,9 @@ These are Equations~(2.4)--(2.5) of
 Ref.~\cite{Nachtergaele1996Spectral}; Theorem~3 of the same reference gives
 the corresponding gap lower bounds. Section~6 verifies C3$'$ for GVBS/MPS
 Hamiltonians using projection estimates inherited from
-Ref.~\cite{Fannes1992Finitely}. The formal development instead proves a
-sufficient range-two estimate after physical blocking. The source lower
+Ref.~\cite{Fannes1992Finitely}. The formal C3 threshold now uses this
+weighted projection estimate. A sufficient range-two estimate after physical
+blocking is also available. The source lower
 boundary constant and the conclusions of FNW Lemma~5.3 are identified by
 \leanid{MPSTensor.fnwLowerBoundaryConstant} and
 \leanid{MPSTensor.fnwLowerBoundaryConstant_mono}. Block injectivity at
@@ -138,7 +139,10 @@ The weighted spectator families and aggregates prove the linear contribution
 $a(m)/a_-(m)$ in Equation~(6.5), the separate quadratic contribution
 $a(m)^2/a_-(m)$, and their unfactored sum. The common-subspace projector
 geometry then gives the exact coefficient $a(m)(1+a(m))/a_-(m)$ in
-Lemma~6.2. Its later prescribed-rate identification remains separate.
+Lemma~6.2. The transfer-eigenvalue prescription also supplies the rate in
+its geometric form. The dimension-only prefactor at a prescribed rate requires
+the correction in Section~\ref{sec:fnw-dimension-prefactor-obstruction}; the
+valid eventual replacement is stated in Section~\ref{sec:fnw-prefactor-verdict}.
 
 \subsection{Lower-endpoint scope in Theorem 2.1(i)}
 
@@ -627,13 +631,15 @@ Equation~(\ref{eq:cpgsv21_martingale_overlap_special_norm_compression}) is one
 possible specialization. The finite-row comparison only requires a compression
 constant below $1/(2(L-1))$ in the chosen blocking convention.
 
-\section{What remains to compare}
+\section{Constants and blocking conventions}
 
 The source and formal arguments agree qualitatively: both expand the
 frustration-free Hamiltonian, use positivity for non-overlapping terms, assign
 row-sum coefficients to overlapping terms, and control those terms through
-principal-angle geometry. The unresolved comparison concerns constants and
-blocking conventions.
+principal-angle geometry. The comparison must distinguish the chosen
+finite cyclic blocking convention from the weighted FNW estimate used by the
+open-chain C3 threshold. The latter is proved with a rate-dependent prefactor;
+the fixed dimension-only prefactor is addressed separately below.
 
 The source-matching formal theorem assumes
 \begin{align}
@@ -659,8 +665,10 @@ not immediately imply
 (\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}) for every
 $L$.
 
-The source prefactor $k^2$ remains unmatched. This
-comparison is unnecessary for the proved range-two blocked theorem: the exact
+The source prefactor $k^2$ cannot hold at every prescribed admissible rate
+from the fixed intersection threshold, as shown in
+Section~\ref{sec:fnw-dimension-prefactor-obstruction}. That assertion is
+unnecessary for the proved range-two blocked theorem: the exact
 three-site identification gives $7/16$, and cyclic transport covers every
 overlap. The theorem
 \leanid{Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
@@ -671,11 +679,10 @@ removing their common intersection, gives
      & \geq-\eta(h_i+h_j)
     \label{eq:cpgsv21_martingale_overlap_friedrichs_anticommutator}
 \end{align}
-for the complementary excitation projections. The remaining question is
-the cited estimates recover the source prefactor in the present
-normalization and blocking conventions. Existence of a
-finite-dimensional principal-angle decomposition alone does not provide the
-required uniform numerical bound.
+for the complementary excitation projections. The weighted FNW estimate
+supplies the uniform numerical bound with a rate-dependent constant. A
+finite-dimensional principal-angle decomposition alone supplies no such
+uniform estimate; the additional decay input is essential.
 
 The all-vector condition
 (\ref{eq:cpgsv21_martingale_overlap_eta_norm_compression}) remains a stronger
@@ -815,10 +822,12 @@ not the only usable martingale coefficient.
 
 The statement of Ref.~\cite{Cirac2021Matrix} is not challenged. The formal
 development proves a sufficient explicit estimate for a range-two parent
-Hamiltonian after blocking. Recovering the source prefactor $k^2$ is a
-separate comparison.
+Hamiltonian after blocking. The separate claim that the prefactor may be
+$k^2$ at every prescribed admissible rate is refuted in
+Section~\ref{sec:fnw-dimension-prefactor-obstruction}. The weighted estimate
+with a rate-dependent prefactor and its eventual replacement remain valid.
 
-\section{Inverse-Gram reduction and the remaining prefactor comparison}
+\section{Inverse-Gram identities and the weighted FNW estimate}
 
 For $n\geq1$, define
 \begin{align}
@@ -1075,27 +1084,33 @@ $\operatorname{ran}\Gamma_L^{\mathrm{ES}}$. It is not
 \leanid{fixedPointProj}, which acts on the virtual matrix space.
 
 To state the source estimate, let $l\in\mathbb N$ be the overlap length. Let
-$0\leq\lambda<1$ satisfy $|\mu|<\lambda$ for every non-unit eigenvalue $\mu$
-of the relevant transfer operator, and let $c\geq0$ be its prefactor.
+$0<\lambda<1$ satisfy $|\mu|<\lambda$ for every nonunit eigenvalue $\mu$
+of the observable transfer operator, and let $c>0$ be its prefactor.
 Nachtergaele states that one may take $c=k^2$, where $k$ is the Hilbert-space
 dimension of the minimal FNW auxiliary representation
-\cite[Section~6]{Nachtergaele1996Spectral}. The inspected FNW theorem trail
-does not yet recover this value for every faithful stationary density and every
-prescribed $\lambda$, nor does it identify the minimal dimension $k$ with the
-chosen bond dimension $D$ of an arbitrary tensor representation. The formal
-target therefore retains the prefactor $c$ until those comparisons are proved.
-Choose $l$ such that
+\cite[Section~6]{Nachtergaele1996Spectral}. Here $k^2$ is the square of that
+dimension. The physical counterexample in
+Section~\ref{sec:fnw-dimension-prefactor-obstruction} shows that this value
+cannot be combined with every prescribed admissible rate at the fixed
+intersection threshold. The proved geometric estimate instead uses a
+rate-dependent $c=C_\lambda>0$, supplied by the weighted transfer estimate.
+The source's eigenvalue prescription is sufficient for that estimate, without
+a diagonalizability assumption. Choose $l$ beyond an injective length and such that
 \begin{align}
     c\lambda^l
      & <1.
     \label{eq:cpgsv21_martingale_overlap_source_transfer_smallness}
 \end{align}
-These are parameters of the quoted FNW estimate, not estimates derived by the
-formal development.
+The weighted FNW projector theorem proves the quoted rational expression
+under these conditions. Any prescribed positive $c$, including $k^2$, also
+works after the additional onset described in
+Section~\ref{sec:fnw-prefactor-verdict}; this does not give the original fixed
+threshold.
 
-The source-specific comparison of the exact inverse-Gram range projectors on
-overlapping physical windows remains open. The following prerequisites and
-partial results are complete.
+The inverse-Gram identities remain valid descriptions of the physical range
+projectors. The quantitative C3 estimate uses the weighted FNW argument rather
+than an inverse-Gram reconstruction. The following results record both these
+identities and the current weighted route.
 
 \begin{itemize}
     \item The exact Choi reshuffling is
@@ -2014,6 +2029,7 @@ prefactor, and the possibility of choosing a suitable rate after fixing
 the dimension-only prefactor.
 
 \section{Verdict}
+\label{sec:fnw-prefactor-verdict}
 
 \textbf{Verdict: scope restriction and a corrected prefactor.} The exact whole-increment algebra, the
 prefix-uniform geometric C3$'$-type estimate, the three-block coefficient
