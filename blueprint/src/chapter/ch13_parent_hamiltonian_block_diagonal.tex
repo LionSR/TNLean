@@ -816,12 +816,13 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq,
         MPSTensor.parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq}
     \leanok
+    \uses{def:parent_hamiltonian_es}
     Let $A^j$ and $B^j$ have the same respective bond dimensions, and let
     all coefficients $\mu_j,\nu_j$ be nonzero. If $G_L(A^j)=G_L(B^j)$ for
     every $j$, then the assembled tensors $A=\bigoplus_j\mu_jA^j$ and
     $B=\bigoplus_j\nu_jB^j$ satisfy $G_L(A)=G_L(B)$.
     Their canonical periodic parent Hamiltonians of range $L$ coincide at
-    every volume: $H_{A,L,N}=H_{B,L,N}$.
+    every volume: $H^{\mathrm{ES}}_{N,L}(A)=H^{\mathrm{ES}}_{N,L}(B)$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -835,12 +836,13 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_primitive_representatives_parent_equality}
     \lean{MPSTensor.exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_isNormal}
     \leanok
+    \uses{def:parent_hamiltonian_es}
     Let $A=\bigoplus_j\mu_jA^j$ have nonzero coefficients and normal blocks
     of positive bond dimensions. Suppose that no two distinct blocks are
     related by conjugation and a nonzero scalar.
     There are normalized primitive blocks $B^j$, with positive definite
     invariant matrices, which remain pairwise inequivalent and satisfy
-    $H_{A,L,N}=H_{B,L,N}$ for every $L,N$, where
+    $H^{\mathrm{ES}}_{N,L}(A)=H^{\mathrm{ES}}_{N,L}(B)$ for every $L,N$, where
     $B=\bigoplus_j\mu_jB^j$.
 \end{theorem}
 \begin{proof}
@@ -914,7 +916,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         \notag
     \end{align}
     the open-chain parent Hamiltonian satisfies
-    $\ker H^{\mathrm{open}}_{B,R,N}=G_N(B)$.
+    $\ker H^{\mathrm{open}}_{N,R}(B)=G_N(B)$.
     This is the interaction threshold of
     \cite[Theorem~12]{PerezGarcia2007Matrix} in trace-preserving coordinates.
 \end{theorem}

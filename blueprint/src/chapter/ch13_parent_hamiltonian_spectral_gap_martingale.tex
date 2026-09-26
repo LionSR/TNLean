@@ -6184,8 +6184,10 @@ tensors.
     \label{lem:parent-finite-interval-comparison}
     \lean{MPSTensor.exists_pos_parentInteractionES_openParentHamiltonianES_comparison}
     \leanok
+    \uses{def:open_parent_hamiltonian_es}
     Let $A$ be an MPS tensor, and let $R,W$ be interaction and interval lengths.
-    Suppose that the kernel of the open parent Hamiltonian $K_{R,W}$ is
+    Write $K_{R,W}=H^{\mathrm{open}}_{W,R}(A)$ for the open parent Hamiltonian
+    of interaction length $R$ on $W$ sites, and suppose that its kernel is
     $\mathcal G_W(A)$. Writing $h_W$ for the orthogonal projection onto
     $\mathcal G_W(A)^\perp$, there are positive constants $\kappa,C$ such that
     \begin{align}
