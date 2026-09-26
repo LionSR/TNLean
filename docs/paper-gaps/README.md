@@ -593,3 +593,11 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
   $\sigma_y$ and the scalar $-1$, so the states differ only by the global sign
   $(-1)^N$; the printed Pauli form holds exactly with the phase of $\ket{+}$
   conjugated. These identities are formally verified.
+
+For the log-depth preparation of matrix product states in arXiv:2307.01696:
+
+- `mswc24_sequential_factorization_positive_block_length.tex` records that the
+  sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
+  is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
+  restriction could be traded for the positive bond dimension the source assumes.
