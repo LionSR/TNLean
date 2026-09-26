@@ -36,5 +36,6 @@ import TNLean.MPS.CanonicalForm.QuadraticReconstruction
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.CanonicalForm.RetainedBlockReconstruction
 import TNLean.MPS.CanonicalForm.SectorComparison
+import TNLean.MPS.CanonicalForm.SingleBlock
 import TNLean.MPS.CanonicalForm.TensorProduct
 import TNLean.MPS.CanonicalForm.TranslationInvariantUniqueness

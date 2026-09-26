@@ -54,6 +54,7 @@
 
 \begin{definition}[CPSV canonical form II]\label{def:cpsv_cfii}
     \lean{MPSTensor.CPSVCanonicalFormIIData}
+    \lean{MPSTensor.CPSVCanonicalFormIIData.ofNormalLeftCanonical}
     \lean{MPSTensor.IsCPSVCanonicalFormII}
     \leanok
     \uses{def:cpsv_canonical_form, def:nt_cpsv, def:block_diagonal_tensor}
@@ -82,6 +83,9 @@
     where $\Lambda_k$ is diagonal and positive definite. The two displayed
     equations are the only additional blockwise conditions; no ordering,
     injectivity, gauges, or basis-of-normal-tensors assumptions are included.
+    In particular, a normal left-canonical tensor of positive bond dimension
+    with a positive definite diagonal fixed matrix has a one-block
+    presentation with weight one and no omitted bond coordinates.
     The line-246 convention
     (\ref{eq:cpsv_weight_normalization}) remains a separate condition on the
     underlying canonical-form data.
