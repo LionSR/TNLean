@@ -53,6 +53,16 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
+  `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
+  as a parameter and allow a positive factor in the isometry, because the
+  printed quantum-double tensor is not normalized (factor `|G|`); that the
+  quantum-double instance uses the right-regular representation, equivalent
+  to the printed left-regular one; and that the review's statements about the
+  contracted network (the primal tensor's symmetry under every irreducible
+  representation, and the coloring superposition, which on a torus covers only
+  the Gauss-law configurations of trivial holonomy) are formalized only for
+  one tensor or not at all.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -595,6 +605,13 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
   leaves open whether omitting the factors `v` changes the periodic operators.
 
+For the domain walls of anomalous symmetries in arXiv:2405.00439:
+
+- `gs24_czx_action_left_vectors.tex` records that the left action vectors
+  printed for the two CZX product states do not give reductions, the
+  corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
+  $L_0/L_1=-1=\omega$ is unchanged.
+
 For the group matrix product operators of arXiv:2203.12563:
 
 - `glm23_pbc_group_mpo_single_shift.tex` records that the periodic display
@@ -614,6 +631,11 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
 
 For the log-depth preparation of matrix product states in arXiv:2307.01696:
 
+- `mswc24_sequential_factorization_positive_block_length.tex` records that the
+  sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
+  is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
+  restriction could be traded for the positive bond dimension the source assumes.
 - `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
   fixed-point state of a basis of normal tensors, eq. (19), is stated for an
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no

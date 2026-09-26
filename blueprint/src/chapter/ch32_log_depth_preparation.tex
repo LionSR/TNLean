@@ -81,83 +81,277 @@ injective.
 
 \begin{lemma}[Convergence of the positive part]
     \label{lem:ldp_positive_part_converges}
-    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor}
+    \lean{MPSTensor.tendsto_polarPosTensor_blockTensor_of_isNormal,
+        MPSTensor.tendsto_polarPosTensor_of_tendsto_transferMap,
+        MPSTensor.tendsto_polarPos_physicalMatrix_of_tendsto_transferMap}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor,
+        thm:prep_fixed_point_tensor_psd, thm:prep_transfer_fixed_point_tensor,
+        thm:prep_blocked_transfer_limit_normal}
     Let $P_q=(\mathcal B_q^\dagger\mathcal B_q)^{1/2}$. Then $P_q\to P_\infty$ as
     $q\to\infty$, where $P_\infty$ is read as the map
-    $\ket{\alpha,\beta}\mapsto\sum_\gamma(\sqrt\rho)_{\alpha\gamma}\ket{\gamma,\beta}$.
+    $\ket{\alpha,\beta}\mapsto\sum_\gamma(\sqrt\rho)_{\alpha\gamma}\ket{\gamma,\beta}$,
+    that is, $P_\infty=(\sqrt\rho)^{\mathsf T}\otimes\Id$.
     This is the limit in \cite[eq.~(8)]{Malz2024Preparation}.
+    More generally, for any tensors $B_q$ whose transfer maps satisfy
+    $\E_{B_q}(X)\to\Tr(X)\,\rho$ for every $X$, with $\rho\ge0$, the positive
+    parts of the physical matrices of $B_q$ converge to
+    $(\sqrt\rho)^{\mathsf T}\otimes\Id$, and the corresponding tensors
+    converge to $P_\infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The matrix of $\mathcal B_q^\dagger\mathcal B_q$ is a rearrangement of
-    $\E_A^{\,q}$, which converges to $X\mapsto\Tr(X)\rho$; the rearrangement of
-    the limit is $\rho^{\mathsf T}\otimes\Id$, and the square root is continuous
-    on positive semidefinite matrices.
+    $\E_A^{\,q}$:
+    $(\mathcal B_q^\dagger\mathcal B_q)_{(\alpha,\beta),(\alpha',\beta')}
+        =\E_A^{\,q}(\ketbra{\beta'}{\beta})_{\alpha'\alpha}$.
+    By normality and the gauge~(\ref{eq:ldp_normal_gauge}),
+    $\E_A^{\,q}(X)\to\Tr(X)\rho$, so the rearranged matrices converge to
+    $\rho^{\mathsf T}\otimes\Id$. The square root of
+    $\rho^{\mathsf T}\otimes\Id$ is $(\sqrt\rho)^{\mathsf T}\otimes\Id$,
+    since the latter is positive semidefinite and squares to the former, and
+    the square root is continuous on positive semidefinite matrices.
 \end{proof}
 
 \begin{definition}[Approximating state]
     \label{def:ldp_approximating_state}
-    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor}
+    \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
+        MPSTensor.mpv_approximatingTensor_norm_sq}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor,
+        thm:prep_mpv_fixed_point_tensor, lem:mpv_rotate_physical,
+        thm:ldpolar_tensor_injective, thm:prep_pair_product_norm}
     With $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition} and $N=qM$, the
     \emph{approximating state} is
     $\ket{\widetilde\phi_N}=\ket{\phi_M(VP_\infty)}/\lVert\phi_M(VP_\infty)\rVert$.
     By Lemma~\ref{lem:mpv_rotate_physical} and
-    Theorem~\ref{thm:prep_mpv_fixed_point_tensor},
+    Theorem~\ref{thm:prep_mpv_fixed_point_tensor}, for $M\ge1$,
     $\ket{\phi_M(VP_\infty)}=V^{\otimes M}\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
+    When $\mathcal B_q$ is injective, $V$ is an isometry and
+    $\lVert\phi_M(VP_\infty)\rVert=1$, so no normalization is needed.
     This is \cite[eqs.~(9) and~(10)]{Malz2024Preparation}.
 \end{definition}
 
 \begin{lemma}[A unitary implementing the isometry]
     \label{lem:ldp_unitary_implementing_isometry}
-    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_unitary_extension}
-    Let $d\ge2$, put $r=\lceil\log_dD\rceil$, and suppose $q\ge2r$ and
-    $\mathcal B_q$ is injective. Write
-    $(\C^d)^{\otimes q}=L\otimes C\otimes R$, where $L$ and $R$ are the first
-    and the last $r$ sites of the block and $C$ is the remaining $q-2r$ sites,
-    embed $\C^D$ into $L$ and into $R$ as the span of the first $D$
-    computational basis vectors, and let $\ket{0}_C=\ket{0}^{\otimes(q-2r)}$.
-    Then there is a unitary $U$ on $(\C^d)^{\otimes q}$ with
-    $U\bigl(\ket{\gamma}_L\ket{0}_C\ket{\delta}_R\bigr)=V\ket{\gamma,\delta}$
-    for all $\gamma,\delta$, and
+    \lean{Matrix.exists_mem_unitaryGroup_apply_embedding_eq,
+        MPSTensor.embeddedPairState,
+        MPSTensor.mpv_approximatingTensor_eq_sum_embeddedPairState,
+        MPSTensor.exists_unitary_mpv_approximatingTensor}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_tensor_injective,
+        def:ldp_approximating_state, def:prep_pair_product_state}
+    Suppose $\mathcal B_q$ is injective, and let $\iota$ be an injective map
+    from the pairs $(\gamma,\delta)$ with $0\le\gamma,\delta<D$ to the
+    computational basis of $(\C^d)^{\otimes q}$. Then there is a unitary $U$
+    on $(\C^d)^{\otimes q}$ with $U\ket{\iota(\gamma,\delta)}=V\ket{\gamma,\delta}$
+    for all $\gamma,\delta$, and for every $M\ge1$
     \begin{align}
         \ket{\widetilde\phi_N}
          & =\Bigl(\bigotimes_{k=1}^M U_k\Bigr)
-        \bigotimes_{k=1}^M\bigl(\ket{\omega}_{R_kL_{k+1}}\ket{0}_{C_k}\bigr).
+        \sum_{c}\Omega(c)\bigotimes_{k=1}^M\ket{\iota(c_k)},
         \label{eq:ldp_unitary_preparation}
     \end{align}
+    where $c$ runs over the configurations $c_k=(l_k,r_k)$ and $\Omega$ is the
+    pair product state~(\ref{eq:prep_pair_product}). The source takes $D=d$,
+    so that $L$ and $R$ below are single sites and the remaining $\ell$ central
+    sites carry $\ket{0}$; the padding of the legs for general $D$ is this
+    chapter's extension. With $d\ge2$, $r=\lceil\log_dD\rceil$, $q\ge2r$, and $(\C^d)^{\otimes q}=L\otimes C\otimes R$,
+    where $L$ and $R$ are the first and the last $r$ sites of the block and
+    $C$ is the remaining $q-2r$ sites; $\C^D$ is embedded into $L$ and into
+    $R$ as the span of the first $D$ computational basis vectors, and
+    $\iota(\gamma,\delta)=\ket{\gamma}_L\ket{0}_C\ket{\delta}_R$ with
+    $\ket{0}_C=\ket{0}^{\otimes(q-2r)}$. The right-hand side
+    of~(\ref{eq:ldp_unitary_preparation}) is then
+    $\bigl(\bigotimes_kU_k\bigr)\bigotimes_k\bigl(\ket{\omega}_{R_kL_{k+1}}\ket{0}_{C_k}\bigr)$.
     This is \cite[eqs.~(10) and~(11)]{Malz2024Preparation}.
 \end{lemma}
+\begin{proof}
+    \leanok
+    Since $V$ is an isometry, its columns $V\ket{\gamma,\delta}$ are
+    orthonormal. Place them at the positions $\iota(\gamma,\delta)$ and extend
+    them to an orthonormal basis of $(\C^d)^{\otimes q}$; the matrix with these
+    columns is the unitary $U$. Expanding
+    $\bigl(\bigotimes_kU_k\bigr)\sum_c\Omega(c)\bigotimes_k\ket{\iota(c_k)}$
+    gives $\sum_c\Omega(c)\bigotimes_kV\ket{c_k}
+        =V^{\otimes M}\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$, which is
+    $\ket{\widetilde\phi_N}$ by Definition~\ref{def:ldp_approximating_state}.
+\end{proof}
 %% The source draws the circuit with D = d, where L and R are
 %% single sites. For general D the legs are padded to r = ceil(log_d D)
 %% sites each; the pair state then acts on 2r neighbouring sites.
 
 \section{Exact factorizations of the isometry}
 
-\begin{theorem}[Sequential factorization]
-    \label{thm:ldp_sequential_factorization}
-    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_left_canonical}
-    Suppose $\mathcal B_q$ is injective and let $V$ be as in
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
-    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and isometries
-    $W_k\colon\C^{D'_k}\to\C^d\otimes\C^{D'_{k+1}}$ for $k=1,\dots,q$, such that
+\begin{theorem}[Successive decompositions with a matrix remainder]
+    \label{thm:ldp_sweep_matrix_remainder}
+    \lean{MPSPreparation.exists_isometric_chain_mul,
+        MPSPreparation.sum_star_mulVec_dotProduct_of_isIsometryOn,
+        MPSPreparation.sum_star_eval_mulVec_dotProduct}
+    \leanok
+    \uses{def:seqanc_isometry_on, def:seqanc_support}
+    Let $a\le D$, let $R_{-1}\in\MN{D}$ be row-supported below $a$, and let
+    $P_0,\dots,P_{n-1}$ be families of $D\times D$ matrices. Then there are
+    $b_0=a$ and $b_1,\dots,b_n\le D$, families $Q_0,\dots,Q_{n-1}$ such that
+    $Q_p^i$ is row-supported below $b_p$, vanishes on the columns
+    $\beta\ge b_{p+1}$, and $Q_p$ is isometric on its first $b_{p+1}$ columns,
+    and a matrix $R$ row-supported below $b_n$, such that for every
+    configuration $\sigma$
     \begin{align}
-        V
-         & =\bigl(\Id_{d}^{\otimes(q-1)}\otimes W_q\bigr)\cdots
-        \bigl(\Id_d\otimes W_2\bigr)W_1,
-        \label{eq:ldp_sequential_factorization}
+        R_{-1}\,P^\sigma
+         & =Q^\sigma\,R.
+        \label{eq:ldp_sweep_matrix_remainder}
     \end{align}
-    where $\C^{D'_1}$ is identified with $\C^D\otimes\C^D$ and the $k$-th
-    tensor factor $\C^d$ is the $k$-th site of the block. This is
-    \cite[eqs.~(13)--(15)]{Malz2024Preparation}.
+    Moreover $b_{p+1}\le c$ whenever every $P_p^i$ vanishes on the columns
+    $\gamma\ge c$. If $Q$ is isometric on its first $b$ columns and $v,w$ are
+    supported below $b$, then
+    $\sum_i\langle Q^iv,Q^iw\rangle=\langle v,w\rangle$. Consequently, if
+    $Q_p^i$ is row-supported below $b_p$, $Q_p$ is isometric on its first
+    $b_{p+1}$ columns, and $v,w$ are supported below $b_n$, then
+    \begin{align}
+        \sum_\sigma\langle Q^\sigma v,Q^\sigma w\rangle
+         & =\langle v,w\rangle.
+        \label{eq:ldp_sweep_inner_product}
+    \end{align}
 \end{theorem}
 \begin{proof}
-    $V=\mathcal B_qP^{-1}$ is an open-boundary matrix product map with bond
-    dimension at most $D^2$: the site matrices are $A^i\otimes\Id_D$, which carry
-    the right virtual index along the block, and $P^{-1}$ is absorbed into the
-    first site. Make the site maps $W_q,\dots,W_2$ isometric by the successive
-    decompositions of Theorem~\ref{thm:seqanc_left_canonical}. Then
-    $V^\dagger V=W_1^\dagger W_1$, so $W_1$ is an isometry because $V$ is
-    \cite[eq.~(15)]{Malz2024Preparation}.
+    \leanok
+    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
+    By induction on $n$. For $n=0$ take $R=R_{-1}$. Otherwise apply
+    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
+    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
+    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$:
+    \begin{align}
+        R_{-1}P_0^{\sigma_0}P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
+         & =Q_0^{\sigma_0}R_0P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
+        =Q_0^{\sigma_0}Q_1^{\sigma_1}\cdots Q_{n-1}^{\sigma_{n-1}}R.
+        \notag
+    \end{align}
+    For one site, expand
+    \begin{align}
+        \sum_i\langle Q^iv,Q^iw\rangle
+         & =\sum_{\beta,\beta'<b}\overline{v_\beta}w_{\beta'}
+        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}
+        =\sum_{\beta<b}\overline{v_\beta}w_\beta
+        \notag
+    \end{align}
+    by the isometry condition. For the chain, write
+    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
+    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
+    vectors $Q'^{\sigma'}v$ and $Q'^{\sigma'}w$ are supported below $b_1$ by
+    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity for
+    $Q_0$ and the induction hypothesis for $Q'$ give
+    \begin{align}
+        \sum_{\sigma_0,\sigma'}
+        \langle Q_0^{\sigma_0}Q'^{\sigma'}v,Q_0^{\sigma_0}Q'^{\sigma'}w\rangle
+         & =\sum_{\sigma'}\langle Q'^{\sigma'}v,Q'^{\sigma'}w\rangle
+        =\langle v,w\rangle.
+        \notag
+    \end{align}
 \end{proof}
+
+\begin{theorem}[Sequential factorization of a matrix product isometry]
+    \label{thm:ldp_sequential_factorization_general}
+    \lean{MPSPreparation.exists_isometric_chain_of_eq_mul}
+    \leanok
+    Let $A$ have bond dimension $D$, let $G$ be a $D^2\times D^2$ matrix, and
+    let $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$, $q\ge1$, be an isometry
+    with matrix elements
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}\,
+        G_{(\alpha,\beta),x}$.
+    Then there are integers $b_0=1$, $b_q=D^2$ and $b_p\le D^2$, and families
+    of $b_{p-1}\times b_p$ matrices $X_p^i$, $p=1,\dots,q$, with
+    $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$ for every $p$, such that
+    $\bra{i_1\cdots i_q}V\ket{x}=(X_1^{i_1}X_2^{i_2}\cdots X_q^{i_q})_{1x}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    The matrix elements of $V$ are
+    $\bigl(j^{\mathsf T}(\Id_D\otimes A^{i_1})\cdots(\Id_D\otimes A^{i_q})G\bigr)_x$
+    with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder} to the row matrix of $j$ and the
+    sites $\Id_D\otimes A^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
+    remainder $C=RG$ with $V=Q\,C$ in the sense of
+    (\ref{eq:ldp_sweep_matrix_remainder}). By
+    (\ref{eq:ldp_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
+    isometry because $V$ is. Absorb $C$ into the last site, $X_q^i=Q_q^iC$ and
+    $X_p=Q_p$ for $p<q$; the last site is again isometric,
+    $\sum_i C^\dagger(Q_q^i)^\dagger Q_q^iC=C^\dagger C=\Id$.
+\end{proof}
+
+\begin{theorem}[Sequential factorization]
+    \label{thm:ldp_sequential_factorization}
+    \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition}
+    Suppose $\mathcal B_q$ is injective, $q\ge1$, and let $V$ be as in
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
+    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and matrices
+    $W_k^i\in\C^{D'_{k+1}\times D'_k}$ for $k=1,\dots,q$ and $i=1,\dots,d$, with
+    \begin{align}
+        \sum_{i=1}^d\bigl(W_k^i\bigr)^\dagger W_k^i
+         & =\Id_{D'_k}
+        \quad\text{and}\quad
+        \bra{i_1\cdots i_q}V\ket{x}
+        =\bigl(W_q^{i_1}W_{q-1}^{i_2}\cdots W_1^{i_q}\bigr)_{1x}
+        \label{eq:ldp_sequential_factorization}
+    \end{align}
+    for every $k$, every configuration $i_1\cdots i_q$ and every $x$, where $\C^{D'_1}$ is
+    identified with $\C^D\otimes\C^D$. This is the matrix product form of
+    \cite[eqs.~(13)--(15)]{Malz2024Preparation}, where the isometry carrying the
+    input is written $\widetilde C=V_1$. The block length $q\ge1$ is implicit
+    in the source, which draws at least one site; the empty block $q=0$ is
+    excluded, see~\cite{gap:mswc24_sequential_factorization_positive_block_length}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_tensor_injective,
+        thm:ldp_sequential_factorization_general}
+    Since $\mathcal B_q$ is injective, $P$ is positive definite and
+    $V=\mathcal B_qP^{-1}$, so
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$.
+    This is an open-boundary matrix product map with bond dimension at most
+    $D^2$: the site matrices are $\Id_D\otimes A^i$ (the source writes
+    $A^i\otimes\Id_D$; the order of the two bond factors only permutes the
+    bond index), the two bond factors are
+    joined at the left end, and $P^{-1}$ is absorbed into the right end
+    \cite[eq.~(13)]{Malz2024Preparation}. Theorem~\ref{thm:ldp_sequential_factorization_general}
+    with $G=P^{-1}$ makes every site isometric by successive decompositions
+    from the left \cite[eq.~(14)]{Malz2024Preparation}; the remainder at the
+    input end is an isometry because $V$ is
+    \cite[eq.~(15)]{Malz2024Preparation}. The sites of that theorem are
+    numbered from the output end and those here from the input end, so its
+    $p$-th site is the site $q+1-p$ here, $X_p^i=W_{q+1-p}^i$ for
+    $p=1,\dots,q$, which turns $(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ into
+    $(W_q^{i_1}\cdots W_1^{i_q})_{1x}$ and $b_p$ into $D'_{q+1-p}$.
+\end{proof}
+
+\begin{remark}[Sequential factorization as a composition of isometries]
+    \label{rem:ldp_sequential_factorization_composition}
+    \uses{thm:ldp_sequential_factorization}
+    The source states Theorem~\ref{thm:ldp_sequential_factorization} as an
+    ordered composition. With the matrices of
+    (\ref{eq:ldp_sequential_factorization}), let
+    $W_k\colon\C^{D'_k}\to\C^{D'_{k+1}}\otimes\C^d$ be the map with
+    $\bra{\alpha,i}W_k\ket{\beta}=(W_k^i)_{\alpha\beta}$. The first identity in
+    (\ref{eq:ldp_sequential_factorization}) says that $W_k$ is an isometry,
+    $W_k^\dagger W_k=\sum_i(W_k^i)^\dagger W_k^i=\Id_{D'_k}$. Expanding the
+    composition in the product basis, with the tensor factor $\C^d$ of $W_k$
+    placed at the site $q+1-k$ of the block and $\C^{D'_{q+1}}=\C$, the second
+    identity becomes
+    \begin{align}
+        V
+         & =\bigl(W_q\otimes\Id_{d}^{\otimes(q-1)}\bigr)\cdots
+        \bigl(W_2\otimes\Id_d\bigr)W_1,
+        \label{eq:ldp_sequential_factorization_composition}
+    \end{align}
+    which is \cite[eqs.~(13)--(15)]{Malz2024Preparation} as printed. This
+    operator form is not formalized; the formal statement is the matrix product
+    form (\ref{eq:ldp_sequential_factorization}).
+\end{remark}
 
 \begin{theorem}[Tree factorization]
     \label{thm:ldp_tree_factorization}
