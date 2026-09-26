@@ -337,8 +337,9 @@ source's tensor built from the $G$-symbols.
     $(u,l)$ of labels with $N_{ul}^f>0$: the letters $(1,1)$, $(\tau,\tau)$
     for $f=1$ and $(1,\tau)$, $(\tau,1)$, $(\tau,\tau)$ for $f=\tau$. A
     physical letter of the source's tensor is a pair $(x,e)$ of a plaquette
-    label and an edge label. The operator tensor of~\cite[Section~6.2 and
-    Appendix~D.1]{Bultinck2017Anyons} is drawn as the crossing of the
+    label and an edge label. The operator tensor
+    of~\cite[Section~6.2 and Appendix~D.1]{Bultinck2017Anyons} is drawn as the
+    crossing of the
     operator line $f$ with an edge line $e$, with the plaquettes $b$ upper
     left, $q'$ upper right, $c$ lower left and $q''$ lower right; its
     entries are
@@ -355,9 +356,11 @@ source's tensor built from the $G$-symbols.
     \begin{align}
         \bigl(R_f^{x'x}\bigr)_{p,(q',q'')}
          & =\delta_{p,(x',x)}\,\frac{1}{\sqrt{d_{x'}d_{q''}}}\,
-        [F^{f x\tau}_{q'}]_{x'}^{q''}.
+        [F^{f x\tau}_{q'}]_{x'}^{q''},
         \label{eq:asymex_fib_review_tensor}
     \end{align}
+    with the $F$-symbols of Definition~\ref{def:asymex_fib_fsymbols} and their
+    selection rule, in place of the selection rule printed in the review.
     On configurations $x\in\{1,\tau\}^N$ let
     $\Delta=\operatorname{diag}\prod_k d_{x_k}$, and let $\widetilde R_f$ be
     the tensor with letters $d_x R_f^{x'x}$.
@@ -378,8 +381,9 @@ source's tensor built from the $G$-symbols.
     \uses{def:asymex_fib_gsymbol_tensor, thm:asymex_fib_tau_fsymbol,
         thm:asymex_fib_anomaly_fusion_algebra, def:mpo_fusion_algebra}
     The $G$-symbols satisfy $G^{abc}_{def}=G^{fce}_{abd}$, and both blocks
-    are $F$-symbol tensors: $(B_f^{x'x})_{p,(q',q'')}=\delta_{p,(x',x)}
-    [F^{fx\tau}_{q'}]_{x'}^{q''}$ for $f=1,\tau$. Let $h$ be the diagonal
+    are $F$-symbol tensors:
+    $(B_f^{x'x})_{p,(q',q'')}=\delta_{p,(x',x)}[F^{fx\tau}_{q'}]_{x'}^{q''}$
+    for $f=1,\tau$. Let $h$ be the diagonal
     matrix on the bond letters with $h(u,l)=(v_u/v_l)^{1/2}$. Then
     \begin{align}
         h\,S_f^{x'x}\,h^{-1} & =B_f^{x'x}
@@ -448,6 +452,15 @@ source's tensor built from the $G$-symbols.
     combinations are carried along and the fusion rules of
     Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} transfer.
 \end{proof}
+
+The review states the fusion rules $O_aO_b=\sum_cN_{ab}^cO_c$ for the operators
+of this tensor~\cite[Section~3]{Cirac2021Matrix}, in the passage on
+critical spin systems and their matrix product operator symmetries. By
+Theorem~\ref{thm:asymex_fib_review_congruence} that statement fails for the
+prefactored tensor read in the orthonormal basis of plaquette configurations,
+and holds after composing with $\Delta$. This correction, together with the
+substituted selection rule, is recorded
+in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 
 \begin{theorem}[Normality of the two Fibonacci blocks]
     \label{thm:asymex_fib_normal}

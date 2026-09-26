@@ -8,7 +8,7 @@
 \date{2026-09-24}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{local-correction}{open}
 
 \section{What the source prints}
 Appendix D.1.1 of \cite{Bultinck2017Anyons} gives the categorical data of the
@@ -107,11 +107,29 @@ rules.\footnote{Results:
     \leanid{FibonacciCompression.fibStringNetEdgeTau_conj},
     \leanid{FibonacciCompression.mpo_fibStringNetTensor_edgeTau},
     \leanid{FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau}.}
-The operator statements are restricted to edge label $\tau$: when an edge
-carries the label $1$ the two plaquettes on either side of it coincide, and the
-fusion rules of the source's tensor on the full alphabet of four letters per
-site (plaquette and edge label) were checked numerically for one to four sites
-but are not proved.
+
+\paragraph{Scope restriction (edge label $\tau$).}
+The operator statements for the source's tensor are restricted to edge label
+$\tau$. The source's fusion statement concerns the full alphabet of four
+letters per site (plaquette and edge label), and on that alphabet it is not
+proved. This is the only open part of the note. When an edge carries the label
+$1$, admissibility of $G^{abc}_{d1f}$ forces $a=b$ and $c=d$, so the two
+plaquettes on either side of the edge coincide and the right bond letter
+equals the left one. Moreover $G^{bbc}_{c1f}v_bv_c=1$ whenever
+$N_{bc}^f>0$. Hence the letter of $S_f$ at $\bigl((b,1),(c,1)\bigr)$ is the
+matrix unit $E_{pp}$ with $p=(b,c)$ when $(b,c)$ is a bond letter of the block
+$f$, and zero otherwise. The similarity $h$ leaves these letters unchanged.
+
+\emph{Elimination plan.} (i)~Extend $B_1$ and $B_\tau$ to the four-letter
+alphabet, with the edge-$\tau$ letters (\ref{eq:fib_block}) and the edge-$1$
+letters $E_{pp}$, and prove (\ref{eq:fib_conj}) on the full alphabet.
+(ii)~Reuse the four compression data of the products $B_a\otimes B_b$ with the
+same gauges on the sixteen-letter pair alphabet. The conjugated edge-$1$
+letters are to be shown block upper triangular, with the edge-$1$ letters of
+the target blocks on the diagonal, so that the trace identity of the
+compression, and with it the fusion rules, extends with a nilpotent remainder.
+(iii)~Remove the restriction from the fusion theorem. The work is tracked in
+issue \#8217 of the formalization repository.
 
 The review \cite{Cirac2021Matrix} writes the operator tensor with plaquettes
 $A$ (upper left), $B$ (upper right), $C$ (lower left), $D$ (lower right), and
@@ -132,13 +150,32 @@ configurations, these operators do not satisfy the fusion rules: at one site
 $O_1^{\mathrm{rev}}=\operatorname{diag}(0,1/\phi)$, whose square has the entry
 $1/\phi^2\neq1/\phi$. The operators
 $O_f^{\mathrm{rev}}\Delta=\Delta^{-1/2}O_f\Delta^{1/2}$ are similar to $O_f$
-and do satisfy them, so the review's normalization gives the fusion algebra
-with respect to the $\Delta$-weighted inner product.\footnote{Results:
+and do satisfy them.\footnote{Results:
     \leanid{FibonacciCompression.mpo_fibReviewTensor},
     \leanid{FibonacciCompression.not_isMPOFusionAlgebra_fibReviewTensor},
     \leanid{FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor}.}
-The review makes no fusion statement for its prefactored tensor at this
-passage, so this is a remark on normalization, not an error in the review.
+
+\paragraph{Local fix (review normalization).}
+The review states the fusion rules $O_aO_b=\sum_cN_{ab}^cO_c$ for the operators
+built from the tensor ${}^2\!F$, and identifies ${}^2\!F$ with the operator
+tensor.\footnote{Review traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1309 and 1342.}
+The Fibonacci appendix attaches the prefactor $1/\sqrt{d_Ad_D}$ to that
+tensor. Read literally in the orthonormal basis of plaquette configurations,
+the resulting operators (\ref{eq:fib_review}) contradict the review's own fusion
+statement, as shown above. The review is therefore internally inconsistent at
+this point. Either the prefactor is a normalization slip, or the review's
+operators stand for the operators $O_f^{\mathrm{rev}}\Delta$, composed with the
+weight $\Delta$ on plaquette configurations. The formalization records both readings: the literal one fails the fusion rules,
+and the weighted one satisfies them.
+
+The review also prints the selection rule for $(F^{abc}_d)^f_e$ as
+``$N_{ab}^c>0$, $N_{cd}^e>0$, $N_{ad}^f>0$, $N_{bc^f}>0$''.\footnote{Review
+    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, line 2622.}
+This rule is garbled: the first two conditions do not match the index
+placement of $(F^{abc}_d)^f_e$, and the last one is misprinted. The formalized review tensor uses instead the source's F-symbols
+(\ref{eq:fib_f}), with the selection rule
+$\delta_{abe}\delta_{cde}\delta_{adf}\delta_{bcf}$.
 
 \section{The empty chain}
 The source asks for $P_L^2=P_L$ at every length; the exclusion of the empty

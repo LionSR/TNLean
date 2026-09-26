@@ -19,6 +19,8 @@ the matrix elements of the periodic operator are read off from the cyclic chaini
 
 * `MPOTensor.evalWord_eq_mul_mul_of_conj`: a bond similarity transports word evaluations.
 * `MPOTensor.mpo_eq_of_conj`: a letterwise bond similarity preserves periodic operators.
+* `MPOTensor.mpo_eq_of_diagonal_conj`: the same for a diagonal bond similarity with nowhere-zero
+  entries.
 * `MPOTensor.mpo_apply_comp`: restricting the physical alphabet along a map restricts the
   periodic operators.
 * `MPOTensor.mpo_zero_of_pos`: the zero tensor has the zero periodic operator at positive length.
@@ -27,6 +29,26 @@ the matrix elements of the periodic operator are read off from the cyclic chaini
 -/
 
 open scoped Matrix
+
+namespace Matrix
+
+variable {n K : Type*} [Fintype n] [DecidableEq n] [Field K]
+
+/-- A diagonal matrix with nowhere-zero entries times the diagonal matrix of the entrywise
+inverses is the identity. -/
+theorem diagonal_mul_diagonal_inv {v : n → K} (hv : ∀ i, v i ≠ 0) :
+    diagonal v * diagonal v⁻¹ = 1 := by
+  rw [diagonal_mul_diagonal, ← diagonal_one]
+  exact congrArg diagonal (funext fun i => mul_inv_cancel₀ (hv i))
+
+/-- The diagonal matrix of the entrywise inverses of nowhere-zero entries times the original
+diagonal matrix is the identity. -/
+theorem diagonal_inv_mul_diagonal {v : n → K} (hv : ∀ i, v i ≠ 0) :
+    diagonal v⁻¹ * diagonal v = 1 := by
+  rw [diagonal_mul_diagonal, ← diagonal_one]
+  exact congrArg diagonal (funext fun i => inv_mul_cancel₀ (hv i))
+
+end Matrix
 
 namespace MPOTensor
 
@@ -58,6 +80,14 @@ theorem mpo_eq_of_conj {M : MPOTensor d D} {N : MPOTensor d D'}
   simp only [mpo_apply, mpoMatrixEntry]
   rw [evalWord_eq_mul_mul_of_conj hGH hHG hconj, Matrix.trace_mul_comm, ← Matrix.mul_assoc,
     hGH, Matrix.one_mul]
+
+/-- Tensors related letter by letter by a diagonal bond similarity `diag g`, with `g` nowhere
+zero, have the same periodic operators. -/
+theorem mpo_eq_of_diagonal_conj {M N : MPOTensor d D} (g : Fin D → ℂ) (hg : ∀ p, g p ≠ 0)
+    (hconj : ∀ i j, Matrix.diagonal g * M i j * Matrix.diagonal g⁻¹ = N i j) (L : ℕ) :
+    mpo M L = mpo N L :=
+  mpo_eq_of_conj (Matrix.diagonal_mul_diagonal_inv hg) (Matrix.diagonal_inv_mul_diagonal hg)
+    hconj L
 
 /-- Restricting both physical legs of a tensor along a map `g` of alphabets restricts its
 periodic operators: the entry of `mpo M L` at `(g ∘ σ, g ∘ τ)` is the entry at `(σ, τ)` of the

@@ -24,7 +24,8 @@ the blocks `B_1`, `B_τ` have bond dimensions `2` and `3` and satisfy the Fibona
 Review: arXiv:2011.12127, Appendix A, "The MPO for the Fibonacci model"
 (`Papers/2011.12127/TN-Review-main.tex` lines 2613–2625): the operator tensor (figure file
 `fig3_mpo.pdf`, plaquettes `A` upper left, `B` upper right, `C` lower left, `D` lower right,
-vertical line `α`, operator line `a`) has entry `(1/√(d_A d_D)) (F^{aCα}_B)^{D}_{A}`.
+vertical line `α`, operator line `a`) has entry `(1/√(d_A d_D)) (F^{aCα}_B)^{D}_{A}`; lines 1309
+and 1342 state the fusion rules `O_a O_b = ∑_c N_{ab}^c O_c` for the operators of this tensor.
 
 **Formalized here.** The source's tensor over the physical letters (plaquette, edge label), and
 the review's tensor at the edge label `τ`, both over `ℂ` with the factors `v_a = d_a^{1/2}`.
@@ -36,11 +37,19 @@ prefactor the periodic operator is the congruence `Δ^{-1/2} O_a Δ^{-1/2}`,
 `Δ = diag ∏_k d_{x_k}`, of the F-symbol operator; it fails the fusion rules already at one site,
 while the operator `O_a Δ = Δ^{-1/2} O_a Δ^{1/2}` satisfies them.
 
-**Scope restriction (edge labels τ):** the operator identities are stated on the configurations
-whose vertical edge labels are all `τ`; the source's tensor also has edge label `1`, where the
-two plaquettes on each side of the edge coincide, and the fusion rules on the full alphabet of
-four letters per site are checked numerically for one to four sites but are not proved here.
-Documented in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+**Scope restriction (edge labels τ):** the operator identities for the source's tensor are
+stated on the configurations whose vertical edge labels are all `τ`. The source's tensor also
+has edge label `1`, where the two plaquettes on each side of the edge coincide, and its fusion
+rules on the full alphabet of four letters per site are not proved here. Documented, with the
+elimination plan, in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+
+**Local fix (review normalization):** read literally in the orthonormal basis of plaquette
+configurations, the review's prefactor `1/√(d_A d_D)` gives operators that contradict the fusion
+rules the review states for them (`TN-Review-main.tex` lines 1309, 1342); the fusion rules hold
+for `O_a Δ`, that is, in the `Δ`-weighted inner product. The review's printed selection rule for
+the F-symbols (line 2622) is garbled, and the F-symbols used are those of the source,
+`fibFSymbolGolden`. Documented in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 The physical legs of the drawn tensor are double lines carrying the plaquette labels on both
 sides of the vertical line. On a periodic chain the upper-right plaquette `a` of a site is the
@@ -99,8 +108,11 @@ def fibLoopFactor (a : Fin 2) : ℝ := Real.sqrt (fibDim a)
 /-- The square root `v_a^{1/2} = d_a^{1/4}` of the closed-loop factor. -/
 def fibLoopFactorSqrt (a : Fin 2) : ℝ := Real.sqrt (fibLoopFactor a)
 
+theorem fibLoopFactor_pos (a : Fin 2) : 0 < fibLoopFactor a :=
+  Real.sqrt_pos.2 (fibDim_pos a)
+
 theorem fibLoopFactorSqrt_pos (a : Fin 2) : 0 < fibLoopFactorSqrt a :=
-  Real.sqrt_pos.2 (Real.sqrt_pos.2 (fibDim_pos a))
+  Real.sqrt_pos.2 (fibLoopFactor_pos a)
 
 theorem fibLoopFactor_eq_sq (a : Fin 2) : fibLoopFactor a = fibLoopFactorSqrt a ^ 2 :=
   (Real.sq_sqrt (Real.sqrt_nonneg _)).symm
@@ -266,20 +278,8 @@ theorem fibStringNetEdgeTau_conj (f x' x : Fin 2) :
 (arXiv:1511.08090, `AnyonsPEPS.tex` lines 1262–1268) equal those of the F-symbol blocks
 `fibBlock`, at every length, by `MPOTensor.mpo_eq_of_conj`. -/
 theorem mpo_fibStringNetEdgeTau (f : Fin 2) (L : ℕ) :
-    mpo (fibStringNetEdgeTau f) L = mpo (fibBlock f) L := by
-  have hGH :
-      Matrix.diagonal (fibStringNetGauge f) * Matrix.diagonal (fibStringNetGauge f)⁻¹ = 1 := by
-    rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    congr 1
-    funext p
-    exact mul_inv_cancel₀ (fibStringNetGauge_ne_zero f p)
-  have hHG :
-      Matrix.diagonal (fibStringNetGauge f)⁻¹ * Matrix.diagonal (fibStringNetGauge f) = 1 := by
-    rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    congr 1
-    funext p
-    exact inv_mul_cancel₀ (fibStringNetGauge_ne_zero f p)
-  exact mpo_eq_of_conj hGH hHG (fibStringNetEdgeTau_conj f) L
+    mpo (fibStringNetEdgeTau f) L = mpo (fibBlock f) L :=
+  mpo_eq_of_diagonal_conj _ (fibStringNetGauge_ne_zero f) (fibStringNetEdgeTau_conj f) L
 
 /-- Bridge: the periodic operator of the source's tensor on the four letters (plaquette, edge
 label), restricted to the configurations with every edge label `τ`, is the periodic operator of
@@ -306,7 +306,10 @@ theorem isMPOFusionAlgebra_fibStringNetEdgeTau :
 with `𝒞 = ℳ = 𝒟` the Fibonacci category (lines 2619–2625) and the vertical label `α = τ`. The
 review's operator tensor of the block `a = f`: at the outgoing plaquette `A = x'`, the incoming
 plaquette `C = x`, the left bond letter `p` and the right bond letter `q = (B, D)`, its entry is
-`(1/√(d_A d_D)) (F^{aCα}_B)^{D}_{A}` when `p = (A, C)`, and zero otherwise. -/
+`(1/√(d_A d_D)) (F^{aCα}_B)^{D}_{A}` when `p = (A, C)`, and zero otherwise. The F-symbols are
+the source's `fibFSymbolGolden`, with the selection rule `δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` of
+`AnyonsPEPS.tex` lines 1245–1257, in place of the rule printed at `TN-Review-main.tex` line 2622
+(the Local fix of the module header). -/
 def fibReviewTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
   Matrix.of fun p q =>
     if fibBondLetter f p = (x', x) then
@@ -314,23 +317,21 @@ def fibReviewTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
         goldenToComplex (fibFSymbolGolden f x 1 (fibBondLetter f q).1 x' (fibBondLetter f q).2)
     else 0
 
-/-- The factor `d_a^{-1/2}`. -/
-def fibDimInvSqrt (a : Fin 2) : ℂ := (((Real.sqrt (fibDim a))⁻¹ : ℝ) : ℂ)
-
-theorem fibDimInvSqrt_ne_zero (a : Fin 2) : fibDimInvSqrt a ≠ 0 :=
-  Complex.ofReal_ne_zero.2 (inv_pos.2 (Real.sqrt_pos.2 (fibDim_pos a))).ne'
+theorem fibLoopFactor_complex_inv_ne_zero (a : Fin 2) : (fibLoopFactor a : ℂ)⁻¹ ≠ 0 :=
+  inv_ne_zero (Complex.ofReal_ne_zero.2 (fibLoopFactor_pos a).ne')
 
 /-- The diagonal matrix `Δ^{-1/2} = diag ∏_k d_{x_k}^{-1/2}` on the configurations of `L`
 plaquettes. -/
 def fibReviewWeight (L : ℕ) : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ :=
-  Matrix.diagonal fun σ => ∏ k, fibDimInvSqrt (σ k)
+  Matrix.diagonal fun σ => ∏ k, (fibLoopFactor (σ k) : ℂ)⁻¹
 
 /-- The bond gauge `g(u, l) = d_l^{-1/2}` that turns the review's prefactor into a letterwise
 scalar. -/
 theorem fibReviewTensor_conj (f x' x : Fin 2) :
-    Matrix.diagonal (fun p => fibDimInvSqrt (fibBondLetter f p).2) * fibReviewTensor f x' x *
-        Matrix.diagonal (fun p => fibDimInvSqrt (fibBondLetter f p).2)⁻¹ =
-      (fibDimInvSqrt x' * fibDimInvSqrt x) • fibBlock f x' x := by
+    Matrix.diagonal (fun p => (fibLoopFactor (fibBondLetter f p).2 : ℂ)⁻¹) *
+        fibReviewTensor f x' x *
+        Matrix.diagonal (fun p => (fibLoopFactor (fibBondLetter f p).2 : ℂ)⁻¹)⁻¹ =
+      ((fibLoopFactor x' : ℂ)⁻¹ * (fibLoopFactor x : ℂ)⁻¹) • fibBlock f x' x := by
   ext p q
   rw [Matrix.mul_diagonal, Matrix.diagonal_mul, Matrix.smul_apply, fibBlock_apply_eq_fSymbol]
   simp only [fibReviewTensor, Matrix.of_apply, Pi.inv_apply]
@@ -344,7 +345,7 @@ theorem fibReviewTensor_conj (f x' x : Fin 2) :
     have c3 : ((Real.sqrt (fibDim (fibBondLetter f q).2) : ℝ) : ℂ) ≠ 0 :=
       Complex.ofReal_ne_zero.2 h3.ne'
     rw [Real.sqrt_mul (fibDim_pos x').le]
-    simp only [fibDimInvSqrt, smul_eq_mul]
+    simp only [fibLoopFactor, smul_eq_mul]
     push_cast
     field_simp
   · simp
@@ -355,19 +356,8 @@ theorem fibReviewTensor_conj (f x' x : Fin 2) :
 `Δ^{-1/2} = diag ∏_k d_{x_k}^{-1/2}`. -/
 theorem mpo_fibReviewTensor (f : Fin 2) (L : ℕ) :
     mpo (fibReviewTensor f) L = fibReviewWeight L * mpo (fibBlock f) L * fibReviewWeight L := by
-  set g : Fin (fibBlockDim f) → ℂ := fun p => fibDimInvSqrt (fibBondLetter f p).2
-  have hg : ∀ p, g p ≠ 0 := fun p => fibDimInvSqrt_ne_zero _
-  have hGH : Matrix.diagonal g * Matrix.diagonal g⁻¹ = 1 := by
-    rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    congr 1
-    funext p
-    exact mul_inv_cancel₀ (hg p)
-  have hHG : Matrix.diagonal g⁻¹ * Matrix.diagonal g = 1 := by
-    rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    congr 1
-    funext p
-    exact inv_mul_cancel₀ (hg p)
-  rw [mpo_eq_of_conj hGH hHG (fibReviewTensor_conj f) L]
+  rw [mpo_eq_of_diagonal_conj _ (fun _ => fibLoopFactor_complex_inv_ne_zero _)
+    (fibReviewTensor_conj f) L]
   ext σ τ
   rw [mpo_letterwise_smul, fibReviewWeight, Matrix.mul_diagonal, Matrix.diagonal_mul,
     Finset.prod_mul_distrib]
@@ -397,11 +387,12 @@ theorem not_isMPOFusionAlgebra_fibReviewTensor :
     simp only [Fin.prod_univ_one]
     generalize σ 0 = a
     generalize ρ 0 = b
-    change fibDimInvSqrt a * Matrix.trace (fibOne a b) * fibDimInvSqrt b = _
-    have hd0 : fibDimInvSqrt 0 = 1 := by simp [fibDimInvSqrt, fibDim]
-    have hd1 : fibDimInvSqrt 1 * fibDimInvSqrt 1 = ((Real.goldenRatio : ℝ) : ℂ)⁻¹ := by
-      simp only [fibDimInvSqrt, Complex.ofReal_inv]
-      exact Complex.ofReal_sqrt_inv_mul_self Real.goldenRatio hphi.le
+    change (fibLoopFactor a : ℂ)⁻¹ * Matrix.trace (fibOne a b) * (fibLoopFactor b : ℂ)⁻¹ = _
+    have hd0 : (fibLoopFactor 0 : ℂ)⁻¹ = 1 := by simp [fibLoopFactor, fibDim]
+    have hd1 : (fibLoopFactor 1 : ℂ)⁻¹ * (fibLoopFactor 1 : ℂ)⁻¹ =
+        ((Real.goldenRatio : ℝ) : ℂ)⁻¹ := by
+      simpa [fibLoopFactor, fibDim] using
+        Complex.ofReal_sqrt_inv_mul_self (fibDim 1) (fibDim_pos 1).le
     fin_cases a <;> fin_cases b <;> simp [fibOne, fibOneGolden, Matrix.trace_fin_two, hd0, hd1]
   have h00 := congrFun (congrFun (h 0 0 1 one_pos) τ₀) τ₀
   rw [Matrix.mul_apply, Fintype.sum_eq_single τ₀ (fun ρ hρ => by
@@ -429,34 +420,28 @@ the F-symbol block. -/
 theorem isMPOFusionAlgebra_fibReviewWeightedTensor :
     IsMPOFusionAlgebra fibReviewWeightedTensor fibNim := by
   refine isMPOFusionAlgebra_fibBlock.of_mpo_eq_mul_mul fibReviewWeight
-    (fun L => Matrix.diagonal fun σ => ∏ k, (fibDimInvSqrt (σ k))⁻¹) (fun L _ => ?_)
+    (fun L => Matrix.diagonal (fun σ : Fin L → Fin 2 => ∏ k, (fibLoopFactor (σ k) : ℂ)⁻¹)⁻¹)
+    (fun L _ => Matrix.diagonal_inv_mul_diagonal fun σ =>
+      Finset.prod_ne_zero_iff.2 fun k _ => fibLoopFactor_complex_inv_ne_zero _)
     (fun a L _ => ?_)
-  · rw [fibReviewWeight, Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    congr 1
-    funext σ
-    rw [← Finset.prod_mul_distrib]
-    exact Finset.prod_eq_one fun k _ => inv_mul_cancel₀ (fibDimInvSqrt_ne_zero _)
-  · ext σ τ
-    have hd : ∀ x : Fin 2, ((fibDim x : ℝ) : ℂ) * fibDimInvSqrt x = (fibDimInvSqrt x)⁻¹ := by
-      intro x
-      have h1 := Real.sqrt_pos.2 (fibDim_pos x)
-      have h1' : ((Real.sqrt (fibDim x) : ℝ) : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 h1.ne'
-      have h3 : ((fibDim x : ℝ) : ℂ) = ((Real.sqrt (fibDim x) : ℝ) : ℂ) ^ 2 :=
-        (Complex.ofReal_sqrt_sq _ (fibDim_pos x).le).symm
-      simp only [fibDimInvSqrt]
-      rw [h3]
-      push_cast
-      field_simp
-    have hmpo := congrFun (congrFun (mpo_fibReviewTensor a L) σ) τ
-    rw [show fibReviewWeightedTensor a = fun i j =>
-        (fun _ x => ((fibDim x : ℝ) : ℂ)) i j • fibReviewTensor a i j from rfl,
-      mpo_letterwise_smul, hmpo]
-    simp only [fibReviewWeight, Matrix.mul_diagonal, Matrix.diagonal_mul]
-    have hprod : (∏ k, ((fibDim (τ k) : ℝ) : ℂ)) * ∏ k, fibDimInvSqrt (τ k) =
-        ∏ k, (fibDimInvSqrt (τ k))⁻¹ := by
-      rw [← Finset.prod_mul_distrib]
-      simp only [hd]
-    rw [← hprod]
-    ring
+  ext σ τ
+  have hd : ∀ x : Fin 2,
+      ((fibDim x : ℝ) : ℂ) * (fibLoopFactor x : ℂ)⁻¹ = ((fibLoopFactor x : ℂ)⁻¹)⁻¹ := by
+    intro x
+    have h1 : (fibLoopFactor x : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 (fibLoopFactor_pos x).ne'
+    rw [inv_inv, ← Complex.ofReal_sqrt_sq _ (fibDim_pos x).le]
+    change (fibLoopFactor x : ℂ) ^ 2 * _ = _
+    field_simp
+  have hmpo := congrFun (congrFun (mpo_fibReviewTensor a L) σ) τ
+  rw [show fibReviewWeightedTensor a = fun i j =>
+      (fun _ x => ((fibDim x : ℝ) : ℂ)) i j • fibReviewTensor a i j from rfl,
+    mpo_letterwise_smul, hmpo]
+  simp only [fibReviewWeight, Matrix.mul_diagonal, Matrix.diagonal_mul, Pi.inv_apply]
+  have hprod : (∏ k, ((fibDim (τ k) : ℝ) : ℂ)) * ∏ k, (fibLoopFactor (τ k) : ℂ)⁻¹ =
+      (∏ k, (fibLoopFactor (τ k) : ℂ)⁻¹)⁻¹ := by
+    rw [← Finset.prod_mul_distrib, ← Finset.prod_inv_distrib]
+    exact Finset.prod_congr rfl fun k _ => hd (τ k)
+  rw [← hprod]
+  ring
 
 end FibonacciCompression
