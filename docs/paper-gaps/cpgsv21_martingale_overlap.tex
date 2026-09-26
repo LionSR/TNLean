@@ -15,7 +15,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{false-source}{open}
 
 \section{The source assertion}
 
@@ -1963,17 +1963,17 @@ stationary density, and the admissible rate, is formalized by
 
 Let $e=(1,1,1,1)^{\mathsf T}$ and put
 \begin{align}
- u&=(1,1,-1,-1)^{\mathsf T},&
- v&=(1,-1,1,-1)^{\mathsf T},&
- w&=(1,-1,-1,1)^{\mathsf T},\\
- P&=\frac{ee^{\mathsf T}}4+
-       \frac{uv^{\mathsf T}+vw^{\mathsf T}}{16}.
+    u & =(1,1,-1,-1)^{\mathsf T}, &
+    v & =(1,-1,1,-1)^{\mathsf T}, &
+    w & =(1,-1,-1,1)^{\mathsf T},   \\
+    P & =\frac{ee^{\mathsf T}}4+
+    \frac{uv^{\mathsf T}+vw^{\mathsf T}}{16}.
 \end{align}
 These four vectors are orthogonal and have squared norm $4$. The entries of
 $P$ belong to $\{1/8,1/4,3/8\}$, and its row and column sums are one. Thus
 \begin{align}
- P^2=\frac{ee^{\mathsf T}}4+\frac{uw^{\mathsf T}}{64},\qquad
- P^3=\frac{ee^{\mathsf T}}4,\qquad Pu=0,\qquad w^{\mathsf T}P=0.
+    P^2=\frac{ee^{\mathsf T}}4+\frac{uw^{\mathsf T}}{64},\qquad
+    P^3=\frac{ee^{\mathsf T}}4,\qquad Pu=0,\qquad w^{\mathsf T}P=0.
 \end{align}
 Define $A_{ij}=\sqrt{P_{ij}}E_{ij}$ on a physical alphabet of ordered pairs.
 This tensor has physical dimension $16$ and bond dimension $4$. Its letters
@@ -1990,10 +1990,10 @@ can be taken to be $\ell_0=m_0+1=2$.
 Fix endpoints $a,d\in\{0,1,2,3\}$. Using the physical basis of consistent
 four-edge paths, define
 \begin{align}
- x&=2\sum_{b,c,e}u_b\sqrt{P_{ab}P_{bc}P_{ce}P_{ed}}
-       |ab,bc,ce,ed\rangle,\\
- y&=2\sum_{b,c,e}w_e\sqrt{P_{ab}P_{bc}P_{ce}P_{ed}}
-       |ab,bc,ce,ed\rangle.
+    x & =2\sum_{b,c,e}u_b\sqrt{P_{ab}P_{bc}P_{ce}P_{ed}}
+    |ab,bc,ce,ed\rangle,                                 \\
+    y & =2\sum_{b,c,e}w_e\sqrt{P_{ab}P_{bc}P_{ce}P_{ed}}
+    |ab,bc,ce,ed\rangle.
 \end{align}
 Then $x$ belongs to the range of $I\otimes G_{[1,3]}$, and $y$ belongs to
 the range of $G_{[0,2]}\otimes I$. Both vectors have norm one, since
@@ -2003,20 +2003,20 @@ Its inner product with $x$ vanishes by $Pu=0$ and $(P^3)_{bd}=1/4$.
 Ground vectors with other endpoints have disjoint supports, so
 $x\perp\mathcal G_{[0,3]}$. Finally,
 \begin{align}
- \langle y,x\rangle
- =4\sum_{b,e}P_{ab}u_b(P^2)_{be}w_eP_{ed}=\frac1{16}.
+    \langle y,x\rangle
+    =4\sum_{b,e}P_{ab}u_b(P^2)_{be}w_eP_{ed}=\frac1{16}.
 \end{align}
 Indeed, the constant term in $P^2$ contributes zero and its rank-one term
 contributes $4/64$. Taking this matrix coefficient between unit vectors gives
 \begin{align}
- \left\|(G_{[0,2]}\otimes I)(I\otimes G_{[1,3]})-G_{[0,3]}\right\|
- \geq\frac1{16}.
+    \left\|(G_{[0,2]}\otimes I)(I\otimes G_{[1,3]})-G_{[0,3]}\right\|
+    \geq\frac1{16}.
 \end{align}
 For the admissible rate $\lambda=1/1000$, $c=16$, and overlap $m=2$,
 \begin{align}
- c\lambda^m=\frac1{62500}<1,\qquad
- \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}
- =\frac{62501}{62500\cdot62499}<\frac1{16}.
+    c\lambda^m=\frac1{62500}<1,\qquad
+    \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}
+    =\frac{62501}{62500\cdot62499}<\frac1{16}.
 \end{align}
 Thus the dimension-only prefactor cannot hold for every prescribed rate
 starting at the fixed intersection threshold. The auxiliary dimension here
@@ -2031,7 +2031,17 @@ the dimension-only prefactor.
 \section{Verdict}
 \label{sec:fnw-prefactor-verdict}
 
-\textbf{Verdict: scope restriction and a corrected prefactor.} The exact whole-increment algebra, the
+\textbf{Verdict: false as printed for the dimension-only prefactor, with
+    scope restrictions elsewhere.} The classification of this note is
+\path{false-source}: the tensor of
+Section~\ref{sec:fnw-dimension-prefactor-obstruction} is injective and
+primitive, has a faithful trace-one stationary density and minimal auxiliary
+dimension $k=4$, and admits the rate $\lambda=1/1000$ above every nonunit
+transfer eigenvalue modulus; it therefore satisfies the hypotheses under which
+the source asserts the projector estimate with $c=k^2$ from the intersection
+threshold $\ell_0=2$, and it violates that estimate. The remaining deviations
+recorded below are scope restrictions of the formal theorems and do not
+concern the truth of the printed assertions. The exact whole-increment algebra, the
 prefix-uniform geometric C3$'$-type estimate, the three-block coefficient
 $7/16$, and the resulting cyclic range-two gap $1/8$ are proved for a suitable
 blocked tensor. Before blocking, lengths are measured in sites of the input
@@ -2064,9 +2074,10 @@ formal statements are
 and
 \leanid{MPSTensor.IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor}.
 The onset depends on the state, rate, and prefactor. For no value of $c$,
-including $c=k^2$, is this onset shown to equal the injectivity threshold, so
-the printed assertion, with prefactor $k^2$ from that threshold, remains
-unformalized.
+including $c=k^2$, is this onset shown to equal the injectivity threshold. The
+printed assertion, with prefactor $k^2$ at every admissible rate from that
+threshold, is refuted by
+Section~\ref{sec:fnw-dimension-prefactor-obstruction}.
 
 An earlier blocked-to-original comparison derived the bound
 $\operatorname{gap}(H_{Np,2p}(A))\geq1/8$ for $N\geq4$, on periodic lengths
