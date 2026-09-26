@@ -27,17 +27,17 @@ gives the coefficient \(a(m)(1+a(m))/a_-(m)\); equation (5.9) gives \(1-a(m)\le
 a_-(m)\); and Lemma 5.2 with equations (5.9)--(5.10) gives \(a(m)\le c\lambda^m\) for
 every prescribed rate above the rho-weighted spectral radius of the transfer remainder.
 
-**Scope restriction (FNW rate and prefactor):** two clauses of the source display are
-narrower here than in print, and both are recorded in
-`docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
+**Scope restriction (FNW prefactor):** one clause of the source display is narrower
+here than in print, recorded in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
-The rate: the source prescribes that \(\lambda\) may be any number with
-\(\lambda_i<\lambda<1\) for every eigenvalue \(\lambda_i\ne 1\) of the transfer operator.
-What is proved below holds instead for any rate strictly above the rho-weighted spectral
-radius of the transfer remainder. The two conditions are known to describe the same rates
-only once that radius is identified with the largest modulus among the nonunit transfer
-eigenvalues, and that identification is not formalized: the available eigenvalue result
-bounds each eigenvalue of the remainder below one without characterizing its spectrum.
+The rate is phrased differently but is not narrower. The source prescribes that
+\(\lambda\) may be any number with \(\lambda_i<\lambda<1\) for every eigenvalue
+\(\lambda_i\ne 1\) of the transfer operator. The theorems below assume instead that the
+rate lies strictly above the rho-weighted spectral radius of the transfer remainder.
+The source prescription implies this hypothesis, because every nonzero eigenvalue of the
+remainder is a nonunit transfer eigenvalue; that implication is
+`MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues`
+in `TNLean.MPS.ParentHamiltonian.FNWTransferEigenvalueRate`.
 
 The prefactor: the source states that \(c\) may be taken equal to \(k^2\), the dimension
 of the auxiliary space. The prefactor produced here is the existential rate-dependent one

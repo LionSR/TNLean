@@ -6442,3 +6442,99 @@ tensors.
     has a positive lower norm bound. Taking the minimum of these bounds and the
     eventual uniform constant proves the assertion.
 \end{proof}
+
+\begin{theorem}[Nonzero eigenvalues of the transfer remainder]
+    \label{thm:fnw-transfer-eigenvalue-from-remainder}
+    \lean{MPSTensor.IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
+    Let $A$ be primitive with nonzero bond dimension and fixed point $\rho$.
+    Write $E=E_{\mathrm{FNW},A}$ for its observable transfer map and
+    $P=E_\infty^\rho$ for its stationary projection. Every nonzero
+    eigenvalue of $E-P$ is an eigenvalue of $E$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fnw_limit_map_projection,thm:fnw_limit_absorbs_transfer}
+    The identities $PE=P$ and $P^2=P$ imply $P(E-P)=0$. If
+    $(E-P)X=\nu X$ with $X\neq0$ and $\nu\neq0$, applying $P$ gives
+    $PX=0$, hence $EX=\nu X$.
+\end{proof}
+
+\begin{theorem}[FNW decay rates from transfer eigenvalues]
+    \label{thm:fnw-transfer-eigenvalue-rate}
+    \lean{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
+    \lean{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map,
+        def:fnw_weighted_remainder_data, def:fnw_mixing_quantity}
+    Let $A$ be primitive with nonzero bond dimension and positive-definite
+    stationary density $\rho$. Suppose $\lambda>0$ and every eigenvalue
+    $\nu\neq1$ of its observable transfer map satisfies $|\nu|<\lambda$.
+    Then the spectral radius of the transfer remainder in the $\rho$-weighted
+    norm is less than $\lambda$. If $\tr\rho=1$, there is a constant
+    $C_\lambda>0$ such that, for every integer $n\geq1$,
+    \begin{align}
+        a(n)\leq C_\lambda\lambda^n.
+    \end{align}
+    This establishes the eigenvalue prescription following
+    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}. % The dimension-only constant in the source projector estimate remains separate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fnw-transfer-eigenvalue-from-remainder,thm:fnw_remainder_eigenvalue_gap,thm:fnw_mixing_quantity_geometric}
+    A nonzero remainder eigenvalue is a transfer eigenvalue, and primitivity
+    excludes the eigenvalue $1$. The zero eigenvalue also has modulus less than
+    $\lambda$. In finite dimension these strict eigenvalue bounds give a strict
+    spectral-radius bound, to which the prescribed-rate mixing estimate applies.
+\end{proof}
+
+\begin{theorem}[Prescribed FNW prefactors after an overlap threshold]
+    \label{thm:fnw-eventual-prescribed-prefactor}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_mixing_quantity}
+    Let $A$ be primitive with nonzero bond dimension and a positive-definite
+    trace-one stationary density $\rho$. Suppose $\lambda>0$ exceeds the modulus
+    of every nonunit transfer eigenvalue. For every $c>0$, there is an integer
+    $M$ such that, for every $n\geq M$,
+    \begin{align}
+        a(n)\leq c\lambda^n.
+    \end{align}
+    The onset $M$ may depend on the state, rate, and prescribed prefactor.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fnw-transfer-eigenvalue-rate,thm:fnw_mixing_quantity_geometric}
+    Choose an intermediate rate $\mu$ strictly between the remainder spectral
+    radius and $\lambda$. The mixing estimate gives $a(n)\leq C_\mu\mu^n$.
+    Since $(\mu/\lambda)^n$ tends to zero, eventually
+    $C_\mu(\mu/\lambda)^n\leq c$.
+\end{proof}
+
+\begin{theorem}[Eventual projector bound with a prescribed prefactor]
+    \label{thm:fnw-eventual-projector-prescribed-prefactor}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor}
+    \leanok
+    \uses{def:primitive_mps, def:fnw_transfer_map,
+        def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
+        def:ground_space_es}
+    Under the preceding hypotheses, suppose additionally that $\lambda<1$.
+    For every $c>0$, there exists an onset $M$ such that, for every overlap
+    $m\geq M$, every prefix length $r\geq0$, and every suffix length $\ell\geq1$,
+    we have $c\lambda^m<1$ and
+    \begin{align}
+        \left\|P^{\mathrm{tail}}_{r;m,\ell}P^{\mathrm{left}}_{r+m;\ell}
+        -G_{r+m+\ell}\right\|
+        \leq \frac{c\lambda^m(1+c\lambda^m)}{1-c\lambda^m}.
+    \end{align}
+    The onset depends on the state, rate, and prefactor; it is not asserted to
+    be the injectivity threshold. This is the version of
+    \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral} with the additional
+    onset stated explicitly~\cite{gap:cpgsv21_martingale_overlap}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fnw-eventual-prescribed-prefactor,thm:fnw_projector_defect_geometric,
+        thm:normal_from_primitive_posdef}
+    Increase the onset until the overlap exceeds an injectivity length and
+    $c\lambda^m<1$. The preceding mixing estimate then satisfies the hypotheses
+    of the fixed-overlap FNW projector estimate, uniformly in the two exterior
+    lengths.
+\end{proof}
