@@ -971,11 +971,17 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_block_cyclic_boundary_closure}
     \lean{MPSTensor.mem_bntMPSVectorSpan_of_cyclic_openBoundary}
     \leanok
+    \uses{def:parent_cyclic_translate_state, def:ground_space_map}
     Let $N\geq2$. Suppose that the simultaneous words of length $N-1$
     in the tensors $A^j$ span the product of their matrix algebras.
-    If a vector $\psi$ admits a representation as a sum of block boundary
-    vectors at every cyclic cut, then $\psi$ belongs to the span of the
-    periodic MPS vectors of the blocks.
+    Let $\psi$ be a vector such that, for every cyclic cut
+    $i\in\mathbb Z/N\mathbb Z$, there are boundary matrices $X_i^j$ with
+    \begin{align}
+        T_i\psi=\sum_j\Gamma_N^{A^j}(X_i^j).
+        \notag
+    \end{align}
+    Then $\psi$ belongs to the span of the periodic MPS vectors of the
+    blocks.
     This is the block-diagonal cyclic closure argument in
     \cite[Section~IV.C]{Cirac2021Matrix}.
 \end{theorem}
@@ -984,8 +990,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{lem:block_boundary_intertwiner_from_global_cut,
         thm:cyclic-boundary-intertwining,
         thm:ground_space_map_mpv_of_long_word_commutes}
-    Choose boundary matrices $X_i^j$ at each cyclic cut $i$.
-    Comparing adjacent cuts against all complementary words of length $N-1$
+    Choose the boundary matrices $X_i^j$ of the hypothesis at each cyclic
+    cut $i$. Comparing adjacent cuts against all complementary words of length $N-1$
     gives $X_i^j A^{j,a}=A^{j,a}X_{i-1}^j$.
     Iterating this identity once around the ring yields
     \begin{align}
@@ -1123,7 +1129,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     normal representatives. Repeated copies and their nonzero coefficients
     do not change the positive-length local spaces: for every $L>0$,
     \begin{align}
-        G_L(A)=\sum_{j=0}^{g-1} G_L(B^j).
+        G_L(A)=\bigvee_{j=0}^{g-1}G_L(B^j).
         \notag
     \end{align}
     This is the local-space consequence of the canonical decomposition in
