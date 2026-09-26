@@ -8,6 +8,12 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Preparation
 
+import TNLean.MPS.Preparation.ApproximatingState
+import TNLean.MPS.Preparation.BlockedPolar
+import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
+import TNLean.MPS.Preparation.LocalCircuit
+import TNLean.MPS.Preparation.MatrixPolar
+import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.Sequential

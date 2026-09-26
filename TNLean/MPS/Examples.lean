@@ -35,6 +35,7 @@ import TNLean.MPS.Examples.MajumdarGhosh
 import TNLean.MPS.Examples.MajumdarGhoshDimer
 import TNLean.MPS.Examples.MajumdarGhoshGroundSpace
 import TNLean.MPS.Examples.MajumdarGhoshHamiltonian
+import TNLean.MPS.Examples.MajumdarGhoshLowerBound
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
@@ -43,6 +44,7 @@ import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStateCanonicalBound
 import TNLean.MPS.Examples.WStatePeriodic
+import TNLean.MPS.Examples.WStatePrimeLengthBound
 import TNLean.MPS.Examples.Z3Anomalous
 import TNLean.MPS.Examples.ZMod2
 import TNLean.MPS.Examples.ZeroCorrelationExamples
