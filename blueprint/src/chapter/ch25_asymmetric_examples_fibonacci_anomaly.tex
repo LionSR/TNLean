@@ -13,12 +13,13 @@ homomorphism to $\Z$: the two possible images of $\tau$ over $\C$,
 $\varphi=(1+\sqrt5)/2$ and $-1/\varphi$, are both irrational. This
 arithmetic fact is the form in which the anomaly of the Fibonacci
 fusion rules~\cite[Section~III.A.6]{Cirac2021Matrix} enters the
-argument below. For a matrix
-product operator symmetry, the multiplicities with which the normal
-blocks of an invariant state reappear under the symmetry operators form
-a representation of the fusion rules by matrices with nonnegative
-integer entries, and no injective matrix product state is invariant
-under an anomalous symmetry~\cite{GarreRubio2023MPOSym}. In the
+argument below. The general notions used here, fusion algebras with a
+unit, symmetric families of matrix product states, and their
+nonnegative integer representations, are those of
+Chapter~\ref{ch:mpo_symmetry_basics}; the multiplicities with which the
+normal blocks of an invariant state reappear under the symmetry
+operators form such a representation
+(Theorem~\ref{thm:mpo_symmetric_nimrep}). In the
 Fibonacci case the same source exhibits an invariant pair of states
 carrying the regular action: two blocks $x_1,x_\tau$ with
 $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$.
@@ -37,7 +38,8 @@ The no-go proved below concerns a single word-normal tensor of positive
 bond dimension whose periodic vectors are fixed by $O_1$ and carry one
 length-independent scalar action of $O_\tau$ at every positive length.
 The scalar must be a nonnegative integer satisfying $m^2=m+1$, and no
-such integer exists. This is a specialization of the statement
+such integer exists. This is the Fibonacci case of
+Corollary~\ref{cor:mpo_symmetric_no_go}, a specialization of the statement
 of~\cite{GarreRubio2023MPOSym} to one normal tensor with a
 length-independent scalar action; the source does not give the proof
 for this tensor. The specialization does not classify families with
@@ -61,11 +63,12 @@ discussed in the same source.
     \end{align}
     represents multiplication by $\tau$ in the basis $1,\tau$ of the
     fusion ring. Together with $N_1=\Id_2$, it gives the regular
-    representation by matrices with nonnegative integer entries.
-    For $a,b,c\in\{1,\tau\}$, let $N_{ab}^c$ be the $(b,c)$ entry of
-    $N_a$. The corresponding matrix product operator tensors are the
-    admissibility block $B_1$ and the block $B_\tau$ of
-    Definition~\ref{def:asymex_fib}.
+    representation by matrices with nonnegative integer entries. The
+    structure constants are $N_{ab}^c=(N_a)_{bc}$ for
+    $a,b,c\in\{1,\tau\}$, so that $N_1$ and $N_\tau$ are the fusion
+    matrices of Definition~\ref{def:mposym_pf_dimension}. The corresponding
+    matrix product operator tensors are the admissibility block $B_1$ and
+    the block $B_\tau$ of Definition~\ref{def:asymex_fib}.
 \end{definition}
 
 \begin{theorem}[The Fibonacci relation for the fusion matrix]%
@@ -84,7 +87,7 @@ discussed in the same source.
 
 \begin{theorem}[The fusion ring on the periodic operators]%
     \label{thm:asymex_fib_anomaly_fusion_algebra}
-    \lean{FibonacciCompression.fibonacci_fusion_algebra}
+    \lean{FibonacciCompression.isMPOFusionAlgebra_fibBlock}
     \leanok
     \uses{def:asymex_fib_anomaly_nim}
     For every pair of labels $a,b\in\{1,\tau\}$ and every positive system
@@ -164,7 +167,7 @@ matrices.
 
 \begin{theorem}[The regular representation on a pair of normal states]%
     \label{thm:asymex_fib_anomaly_nim_rep}
-    \lean{FibonacciCompression.fibonacci_nim_rep,
+    \lean{FibonacciCompression.isMPOSymmetricFamily_fibNimTargets,
         FibonacciCompression.mpo_fibOne_mulVec_chain}
     \leanok
     \uses{def:asymex_fib_anomaly_nim, cor:asym_action_tensors}
@@ -302,69 +305,9 @@ physical alphabet. As noted after
 Theorem~\ref{thm:asymex_fib_state_action}, the identities do not
 extend to length zero.
 
-The no-go rests on an integrality principle: a scalar relating the
-word traces of two tensors, one of them word-normal, at every nonempty
-word is forced to be a nonnegative integer.
-
-\begin{theorem}[Word-trace relations against a normal tensor are integral]%
-    \label{thm:asymex_fib_anomaly_trace_integral}
-    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
-    \leanok
-    \uses{def:normal}
-    Let $B$ be a matrix product state tensor and $A$ a word-normal tensor
-    of positive bond dimension, over the same alphabet. If a scalar
-    $c\in\C$ satisfies $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word
-    $w$, then $c$ is a nonnegative integer.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Normality expresses a diagonal matrix unit as
-    $E_{jj}=\sum_ux_uA^u$, where all words $u$ have the same positive
-    length $\ell$. Define $Q=\sum_ux_uB^u$. Expanding powers and applying
-    the trace hypothesis to the concatenated words gives, for every
-    $k\geq1$,
-    \begin{align}
-        \tr(Q^k)
-         & =c\,\tr\left(\left(\sum_ux_uA^u\right)^k\right)
-        =c\,\tr(E_{jj}^k)=c.
-    \end{align}
-    A constant trace of all positive powers of a fixed finite-dimensional
-    matrix is a nonnegative integer. Indeed, the power sums of its
-    nonzero eigenvalues, counted with algebraic multiplicity, are
-    constant only when every nonzero eigenvalue is one. The constant
-    is their total multiplicity.
-\end{proof}
-
-\begin{theorem}[Rank-one actions on a normal tensor are integral]%
-    \label{thm:asymex_fib_anomaly_integral_action}
-    \lean{MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul}
-    \leanok
-    \uses{thm:asymex_fib_anomaly_trace_integral, cor:asym_action_tensors}
-    Let $T$ be a matrix product operator tensor and $A$ a word-normal
-    matrix product state tensor of positive bond dimension, with the
-    same physical alphabet. Suppose there is a single scalar $c\in\C$
-    such that, for every $N\geq1$,
-    \begin{align}
-        O_N(T)\ket{V^{(N)}(A)}
-         & =c\ket{V^{(N)}(A)}.
-        \label{eq:asymex_fib_anomaly_scalar_action}
-    \end{align}
-    Then $c$ is a nonnegative integer.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    Corollary~\ref{cor:asym_action_tensors} identifies the periodic
-    vector of $T\cdot A$ with $O_N(T)\ket{V^{(N)}(A)}$.
-    Taking components in~(\ref{eq:asymex_fib_anomaly_scalar_action}) gives,
-    for every nonempty word $w$,
-    \begin{align}
-        \tr((T\cdot A)^w) & =c\,\tr(A^w).
-        \notag
-    \end{align}
-    Apply Theorem~\ref{thm:asymex_fib_anomaly_trace_integral}.
-\end{proof}
+The no-go rests on the integrality of a length-independent scalar action
+on a normal tensor, Theorem~\ref{thm:asymex_fib_anomaly_integral_action}
+of Chapter~\ref{ch:mpo_symmetry_basics}.
 
 \begin{theorem}[A nonzero length-independent eigenvalue is impossible]%
     \label{thm:asymex_fib_anomaly_eigenvalue_zero}
@@ -380,33 +323,31 @@ word is forced to be a nonnegative integer.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_fib_anomaly_fusion_algebra,
-        thm:asymex_fib_anomaly_integral_action}
-    By Theorem~\ref{thm:asymex_fib_anomaly_integral_action},
-    $c=m$ for some $m\in\N$. Suppose $m\neq0$. Choose a positive
-    injectivity length $\ell$ of $A$ and set $N=\ell+1$.
-    Normality ensures $\Psi_A(N)\neq0$.
-    Suppress $N$ in the notation. The unit law of
+    \uses{thm:asymex_fib_anomaly_fusion_algebra, thm:mpo_symmetric_character,
+        ex:mpo_symmetry_fibonacci}
+    Suppose $c\neq0$ and suppress $N\geq1$ in the notation. The unit law
+    $O_1O_\tau=O_\tau$ of
     Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} gives
     \begin{align}
-        mO_1\Psi_A
-         & =O_1O_\tau\Psi_A=O_\tau\Psi_A=m\Psi_A.
+        c\,O_1\Psi_A
+         & =O_1O_\tau\Psi_A=O_\tau\Psi_A=c\Psi_A.
     \end{align}
-    Cancelling $m$ yields $O_1\Psi_A=\Psi_A$. Applying the fusion rule
-    at this same length gives
+    Cancelling $c$ yields $O_1\Psi_A=\Psi_A$ for every $N\geq1$. Hence $A$
+    is symmetric under the Fibonacci fusion algebra with eigenvalues
+    $(c_1,c_\tau)=(1,c)$, and
+    Theorem~\ref{thm:mpo_symmetric_character} makes $c\in\N$ with
     \begin{align}
-        m^2\Psi_A
-         & =O_\tau^2\Psi_A=(O_1+O_\tau)\Psi_A=(1+m)\Psi_A.
+        c^2 & =c_\tau c_\tau=c_1+c_\tau=1+c.
     \end{align}
-    Since $\Psi_A\neq0$, it follows that $m^2=m+1$, which no
-    nonnegative integer satisfies. Therefore $m=0$.
+    No nonnegative integer satisfies this equation
+    (Example~\ref{ex:mpo_symmetry_fibonacci}), so $c=0$.
 \end{proof}
 
 \begin{theorem}[No normal matrix product state is Fibonacci symmetric]%
     \label{thm:asymex_fib_anomaly_no_go}
     \lean{FibonacciCompression.not_exists_normal_fibonacci_symmetric}
     \leanok
-    \uses{thm:asymex_fib_anomaly_eigenvalue_zero, thm:asymex_fib_fusion}
+    \uses{def:asymex_fib, def:normal}
     There is no positive bond dimension $D$, word-normal tensor $A$ of
     physical dimension two and bond dimension $D$, and single scalar
     $c\in\C$, such that for every $N\geq1$,
@@ -433,17 +374,20 @@ word is forced to be a nonnegative integer.
 
 \begin{proof}
     \leanok
+    \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
+        ex:mpo_symmetry_fibonacci}
     Suppose $A$ and $c$ satisfy
-    Eq.~\ref{eq:asymex_fib_anomaly_symmetry}.
-    Theorem~\ref{thm:asymex_fib_anomaly_eigenvalue_zero} gives $c=0$.
-    Choose an injectivity length $\ell>0$ and set $N=\ell+1$, so that
-    $\Psi_A(N)\neq0$. At this length, the fusion rule gives
+    Eq.~\ref{eq:asymex_fib_anomaly_symmetry}. Then $A$ is symmetric under
+    the Fibonacci fusion algebra of
+    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} with eigenvalues
+    $(c_1,c_\tau)=(1,c)$. A fusion character $m$ with values in $\N$ would
+    satisfy $m_1=1$ and
     \begin{align}
-        0
-         & =O_\tau(N)^2\Psi_A(N) \nonumber         \\
-         & =(O_1(N)+O_\tau(N))\Psi_A(N)=\Psi_A(N),
+        m_\tau^2 & =m_1+m_\tau=1+m_\tau,
     \end{align}
-    a contradiction.
+    which no nonnegative integer does
+    (Example~\ref{ex:mpo_symmetry_fibonacci}).
+    Corollary~\ref{cor:mpo_symmetric_no_go} therefore excludes $A$.
 \end{proof}
 
 The scalar hypothesis concerns the raw periodic vectors of one fixed

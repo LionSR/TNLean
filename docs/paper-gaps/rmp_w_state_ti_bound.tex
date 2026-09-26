@@ -10,7 +10,7 @@
 \title{Deferred Result: The Translation-Invariant Bond-Dimension Lower Bound
 for the W State}
 \author{}
-\date{2026-06-17}
+\date{2026-06-17, revised 2026-09-26}
 
 \begin{document}
 \maketitle
@@ -29,7 +29,7 @@ For $N\geq 1$, define the unnormalized $N$-site W state by
     \label{eq:rmp_w_state_ti_bound_w_state}
 \end{align}
 The review presents $\ket{W_N}$ as an open-boundary matrix product state with
-bond dimension $D=2$ \cite[lines~2358--2360]{Cirac2021Matrix}. Its
+bond dimension $D=2$ \cite[lines~2352--2361]{Cirac2021Matrix}. Its
 site-independent matrices are
 \begin{align}
     A^0
@@ -70,48 +70,179 @@ Consequently, for every $\delta>0$,
     \label{eq:rmp_w_state_ti_bound_polynomial_consequence}
 \end{align}
 
-\section{Why the lower bound is deferred}
+\section{Source proof}
 
 The review does not prove
-(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) directly. It obtains the
-bound by combining two external inputs.
+(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) directly. It combines
+the corollary on the W state in Ref.~\cite[lines~2182--2225]{PerezGarcia2007MPSReps}
+with the quantum Wielandt inequality \cite{Sanz2010Quantum} and its refinement
+attributed there to Micha\l{}ek and Shitov \cite[line~2362]{Cirac2021Matrix}.
 
+The corollary of Ref.~\cite{PerezGarcia2007MPSReps} states: if $\ket{W_N}$ is
+the periodic vector of $D\times D$ matrices, and Conjecture~2 of that paper
+holds, then $D\succeq O(N^{1/3})$. Conjecture~2
+\cite[lines~2109--2111]{PerezGarcia2007MPSReps} asserts that condition C1
+(the words of length $L_0$ span the full matrix algebra) holds in every block
+of the canonical form with $L_0=O(D^2)$. The proof runs as follows.
 \begin{enumerate}
-    \item The matrix product state representation theory of
-    Ref.~\cite{PerezGarcia2007MPSReps} controls when a prescribed finite-size
-    state admits a translation-invariant representation at a given bond
-    dimension.
+    \item Let the canonical form have $b$ pairwise different blocks of sizes
+    $D_1,\ldots,D_b$ and weights $\lambda_j$, so that
+    $\ket{W_N}=\sum_j\lambda_j^N\sum_\sigma
+    \tr(A^j_{\sigma_1}\cdots A^j_{\sigma_N})\ket{\sigma}$.
+    Assume $N/2\geq 3(b-1)(L_0+1)$.
 
-    \item The quantum Wielandt inequality bounds the blocking length at which
-    products of a primitive tensor span the full matrix algebra
-    \cite{Sanz2010Quantum}. The review uses the sharp $D^2$-scaling form and
-    the subsequent sharpening attributed there to Micha\l{}ek and Shitov to
-    obtain the refined $D^3\log D$ estimate
-    \cite{Cirac2021Matrix}.
+    \item Cut the chain into two pieces of lengths $R,R'$, each at least
+    $3(b-1)(L_0+1)$. By the direct-sum lemma
+    \cite[lines~1346--1349]{PerezGarcia2007MPSReps} and condition C1 in each
+    block, the reduced state of the first piece has rank at least
+    $\sum_jD_j^2$.
+
+    \item The reduced state of $\ket{W_N}$ across any cut has rank $2$.
+    Hence $\sum_jD_j^2\leq 2$, so there are at most two blocks, each of size
+    $1\times1$.
+
+    \item The source calls it trivial that this is impossible. Therefore
+    $N/2\leq 3(b-1)(L_0+1)$.
+
+    \item With $L_0=O(D^2)$ and $b\leq D$ the bound $D\succeq O(N^{1/3})$
+    follows.
 \end{enumerate}
+The review replaces Conjecture~2 by the Wielandt bound $L_0=O(D^2\log D)$ of
+Micha\l{}ek and Shitov, which gives
+(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}).
 
-The conclusion is asymptotic in the number of sites. It bounds the growth of
-the optimal translation-invariant bond dimension rather than proving a single
-finite-size identity. A formal proof would require the following developments.
+\section{Formalized conditional core}
 
+Steps~1--4 are formalized for a tensor in the translation-invariant canonical
+form whose blocks satisfy condition C1 at a common length $L_0>0$ and are
+pairwise distinct in the sense used by the direct-sum lemma: no two blocks of
+equal size are related by a gauge transformation and a phase. This
+distinctness is stricter than the source's assumption that the block states
+$\ket{\phi_{A^j}}$ are pairwise different
+\cite[lines~1329--1330]{PerezGarcia2007MPSReps}: two equal blocks with
+different weights, or two blocks related by a gauge transformation and a
+phase $\omega$ with $\omega^N\neq1$, give different states. Step~5 is
+formalized when the first matrix of every block is invertible. The formal
+results are the following.
 \begin{itemize}
-    \item State and prove the translation-invariant representability criterion
-    from Ref.~\cite{PerezGarcia2007MPSReps} for a prescribed finite-size state.
+    \item The amplitudes of a canonical form are the weighted sums of the block
+    amplitudes (step~1).\footnote{Formal declarations:
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.trace_evalWord_eq_sum} and
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.mpv_eq_sum}.}
 
-    \item Formalize the quantitative quantum Wielandt inequality, including the
-    explicit $D^2$ scaling and the refinement needed for
-    (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}). These estimates go
-    beyond the qualitative primitivity and span-growth results currently
-    available in the \path{TNLean/Wielandt} development.
+    \item For every length $n\geq\max(L_0,3(b-1)(L_0+1))$ the tuples of block
+    words of length $n$ span the product of the block matrix algebras. The
+    three canonical conditions make every block irreducible.\footnote{Formal
+    declarations:
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge},
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.isIrreducibleFamily_blocks}, and
+    \leanid{MPSTensor.wordTupleSpanTop_of_le_one}.}
 
-    \item Combine these results with the rank and dimension argument specific
-    to the single-excitation symmetric state to derive
-    (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and
-    (\ref{eq:rmp_w_state_ti_bound_polynomial_consequence}).
+    \item The rank inequality of step~2: if the functions of the first piece
+    obtained by fixing a configuration of the second piece lie in a subspace
+    $V$, then $\sum_jD_j^2\leq\dim V$.\footnote{Formal declaration:
+    \leanid{MPSTensor.sum_sq_dim_le_finrank_of_forall_mem}.}
+
+    \item The cut rank of $\ket{W_N}$ is at most $2$ (step~3): the amplitude
+    of a concatenation $\sigma\tau$ is
+    $u_1(\sigma)u_0(\tau)+u_0(\sigma)u_1(\tau)$, where $u_m$ indicates
+    configurations with $m$ excitations.\footnote{Formal declarations:
+    \leanid{MPSTensor.wIndicator_append},
+    \leanid{MPSTensor.wIndicator_append_mem_span}, and
+    \leanid{MPSTensor.finrank_span_wIndicator_append_le_two}.}
+
+    \item The step called trivial (step~4). Let $x_k,y_k$ be the weighted
+    one-site amplitudes of at most two $1\times1$ blocks, so that the
+    amplitude of $1^m0^{N-m}$ is $g_m=\sum_ky_k^mx_k^{N-m}$. If
+    $g_1=c\neq0$ and $g_2=g_3=0$, the identity
+    $x_1x_2g_3-(x_1y_2+x_2y_1)g_2+y_1y_2g_1=0$ gives $y_1y_2=0$. Then
+    $g_1$ and $g_2$ reduce to the terms of the remaining block $k$, and $c\,y_k=y_k^2x_k^{N-1}=x_kg_2=0$, so $y_k=0$ and
+    $g_1=0$, a contradiction.
+    This needs $N\geq3$ for two blocks and $N\geq2$ for one
+    block.\footnote{Formal declaration:
+    \leanid{MPSTensor.not_sum_pow_mul_pow_eq}.}
+
+    \item The conclusion:\footnote{Formal declaration:
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator}.}
+    if the periodic vector on $N$ sites is $c\ket{W_N}$ with $c\neq0$, then
+    \begin{align}
+        N
+            &<
+            2\max\bigl(L_0,\,3(b-1)(L_0+1)\bigr).
+        \label{eq:rmp_w_state_ti_bound_conditional}
+    \end{align}
+
+    \item Step~5 when every $A^j_0$ is invertible. The source proves that
+    condition C1 then holds at $L_0=D^2$
+    \cite[lines~2115--2118]{PerezGarcia2007MPSReps}. The formal counterpart
+    is Wolf's bound $D_j^2-k+1$ for a family with an invertible
+    letter \cite{Wolf2012Quantum}, which gives C1 at $L_0=D^2+1$ from C1 at
+    any positive length. With $b\leq D$,
+    (\ref{eq:rmp_w_state_ti_bound_conditional}) becomes
+    $N<2\max\bigl(D^2+1,\,3(D-1)(D^2+2)\bigr)$, that is,
+    $D=\Omega(N^{1/3})$.\footnote{Formal declaration:
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit}.}
+
+    \item An explicit bound in $D$ for primitive blocks, weaker than the
+    source's. If the adjoint
+    channel $X\mapsto\sum_iA^{j\dagger}_iXA^j_i$ of every block is primitive,
+    Wolf's general Wielandt bound $L_0\leq(D_j^2-k+1)D_j^2\leq(D^2+1)^2$
+    \cite{Sanz2010Quantum,Wolf2012Quantum} and $b\leq D$ turn
+    (\ref{eq:rmp_w_state_ti_bound_conditional}) into
+    $N<2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr)$, that is,
+    $D=\Omega(N^{1/5})$.\footnote{Formal declaration:
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive}.}
 \end{itemize}
 
-Each item is a substantial independent development. Their combination lies
-well beyond the open-boundary identification proved in the example file.
+\section{Local fix: the single-block threshold}
+
+For $b=1$ the printed inequality $N/2\leq 3(b-1)(L_0+1)$ reads $N\leq0$. It
+fails for $\ket{W_1}=\ket{1}$, the periodic vector of the single $1\times1$
+block $A^0=0$, $A^1=1$ with weight $1$. This block satisfies the canonical
+conditions and condition C1 at $L_0=1$. The proof itself needs both pieces to
+contain at least $L_0$ sites, since condition C1 is applied to each piece;
+for $b=1$ the direct-sum length $3(b-1)(L_0+1)$ is zero. The formal bound
+(\ref{eq:rmp_w_state_ti_bound_conditional}) therefore uses the threshold
+$\max(L_0,3(b-1)(L_0+1))$. For $b\geq2$ this equals the printed
+$3(b-1)(L_0+1)$.
+
+The step called trivial is false without a lower bound on $N$:
+\begin{align}
+    \ket{W_2}
+        &=
+        \tfrac12\bigl((\ket0+\ket1)^{\otimes2}-(\ket0-\ket1)^{\otimes2}\bigr)
+    \label{eq:rmp_w_state_ti_bound_w_two}
+\end{align}
+is a sum of two translation-invariant product states, that is, of two distinct
+$1\times1$ blocks. This does not affect the corollary: two blocks force
+$N\geq 2\cdot3(L_0+1)\geq12$ in its range, where the argument above applies.
+
+\section{What remains open}
+
+The bound (\ref{eq:rmp_w_state_ti_bound_conditional}) is conditional. Three
+inputs are missing for
+(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and for the source's
+$D\succeq O(N^{1/3})$.
+\begin{itemize}
+    \item A reduction of an arbitrary $D\times D$ tensor whose periodic vector
+    at one length $N$ is $\ket{W_N}$ to a canonical form whose blocks satisfy
+    condition C1 at a controlled length. The source obtains this from
+    Conjecture~2 and neglects peripheral eigenvalues of modulus one, which it
+    removes by blocking or by taking $N$ prime
+    \cite[lines~2090--2097]{PerezGarcia2007MPSReps}.
+
+    \item The explicit Wielandt index $L_0=O(D^2)$ (Conjecture~2) or
+    $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov) for blocks without an
+    invertible matrix. Wolf's general bound $(D^2-k+1)D^2$ is formalized,
+    which yields $D=\Omega(N^{1/5})$ for primitive blocks; the bound $D^2$
+    is formalized only when every $A^j_0$ is invertible.
+
+    \item The reduction to blocks that are pairwise distinct in the sense of
+    the direct-sum lemma. The source assumes without loss of generality only
+    that the block states are pairwise different
+    \cite[lines~1329--1330]{PerezGarcia2007MPSReps}; the stricter
+    distinctness used here is a hypothesis of the formal bound.
+\end{itemize}
 
 \section{Formalized open-boundary representation}
 
@@ -139,6 +270,30 @@ declarations:
 \leanid{MPSTensor.openState}, and
 \leanid{MPSTensor.wTensor_openState_eq_wIndicator}.}
 
+\section{Formalized periodic statements}
+
+Two weaker periodic statements are proved. First, closing the printed tensor
+with a trace gives $\operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})=2$ on
+the vacuum and $0$ on every configuration with an excitation, so the printed
+tensor is not a periodic representation of $\ket{W_N}$ for $N\geq1$. Second,
+let $B$ have bond dimension $D$ and satisfy
+$\operatorname{tr}(B^{\sigma_1}\cdots B^{\sigma_k})=\ket{W_k}(\sigma)$ for
+$1\leq k\leq D$. The vacuum amplitudes give
+$\operatorname{tr}((B^0)^k)=0$ for these $k$, so the Newton--Girard identities
+and the Cayley--Hamilton theorem give $(B^0)^D=0$. The configuration
+$\ket{10\cdots0}$ then has amplitude $0$ at every length $N>D$, so $B$
+represents no $\ket{W_N}$ with $N>D$. In particular no single tensor
+represents $\ket{W_N}$ for all $N\geq1$, and for $D=1$ no tensor represents
+$\ket{W_N}$ at any single length $N\geq2$.\footnote{Formal declarations:
+\leanid{MPSTensor.mpv_wTensor},
+\leanid{MPSTensor.not_isPeriodicWState_of_bondDim_one},
+\leanid{MPSTensor.not_isPeriodicWState_of_lt}, and
+\leanid{MPSTensor.not_forall_isPeriodicWState}.}
+These statements constrain one tensor across several lengths. The source bound
+(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) constrains the bond
+dimension at a single length $N$; its formalized conditional core is described
+above.
+
 Neither
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) nor
 (\ref{eq:rmp_w_state_ti_bound_polynomial_consequence}) has been formalized.
@@ -147,12 +302,17 @@ The development does not assert either bound as an established formal result.
 \section{Verdict}
 
 This note records a deferred result, not a gap in a claimed formalization. The
-open-boundary representation with $D=2$ is fully proved. The
-translation-invariant lower bound remains an unformalized source statement
-whose proof requires the representation theory of
-Ref.~\cite{PerezGarcia2007MPSReps}, a quantitative quantum Wielandt inequality
-\cite{Sanz2010Quantum}, and the W-state-specific asymptotic dimension argument.
-It should be addressed after that quantitative machinery becomes available.
+open-boundary representation with $D=2$ is fully proved. The core of the
+source proof is formalized as the conditional bound
+(\ref{eq:rmp_w_state_ti_bound_conditional}), with the single-block threshold
+corrected. When every $A^j_0$ is invertible it gives the source's
+$D=\Omega(N^{1/3})$, and with primitive blocks it gives
+$D=\Omega(N^{1/5})$. The review's bound
+(\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and the source's
+unconditional $D\succeq O(N^{1/3})$ remain unformalized: they need a
+reduction of an arbitrary tensor to a canonical form with condition C1 at a
+fixed length and pairwise distinct blocks, and the explicit $O(D^2)$ or
+$O(D^2\log D)$ Wielandt index.
 
 \bibliographystyle{alpha}
 \bibliography{references}

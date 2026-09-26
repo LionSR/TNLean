@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPDO
 
 import TNLean.MPS.MPDO.ActionTensor
+import TNLean.MPS.MPDO.ActionTensorReduction
 import TNLean.MPS.MPDO.ActiveSectorInverseMapProvenance
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample
@@ -17,6 +18,7 @@ import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
+import TNLean.MPS.MPDO.AreaLawScaling
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalPhysicalMaps
@@ -67,6 +69,7 @@ import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
+import TNLean.MPS.MPDO.BondOneOperator
 import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
 import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
@@ -91,6 +94,7 @@ import TNLean.MPS.MPDO.CPSVExample412FourCycleEntropy
 import TNLean.MPS.MPDO.CPSVExample412Literal
 import TNLean.MPS.MPDO.CPSVExample412NormalizedGSNNCH
 import TNLean.MPS.MPDO.CPSVExample412NormalizedRFP
+import TNLean.MPS.MPDO.CPSVExample412NormalizedSummary
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
@@ -133,8 +137,10 @@ import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CompleteZipperFusion
+import TNLean.MPS.MPDO.CompleteZipperFusionBlocked
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
+import TNLean.MPS.MPDO.CompleteZipperFusionGauge
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 import TNLean.MPS.MPDO.CompleteZipperFusionOfCompression
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
@@ -185,6 +191,7 @@ import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence

@@ -9,13 +9,14 @@
 \label{sec:asymex_z3anomalous}
 
 A finite group acting on a spin chain by matrix product operators may be
-anomalous: the obstruction to gauging it is a three-cocycle, and for a
+anomalous (Remark~\ref{rem:mposym_group_cocycle}): the obstruction to
+gauging it is a three-cocycle, and for a
 cyclic group Garre-Rubio and Schuch~\cite{GarreRubioSchuch2024DomainWall}
 give the cocycle in closed form together with the interchange statistics
 of the domain walls it governs. That source prints no local tensor: the
 phase-decorated shift defined below is a construction of this development
-motivated by their cocycle formula for $\Z_3$, and no identification of
-its anomaly class is made here. The general construction of a matrix
+motivated by their cocycle formula for $\Z_3$; its anomaly class is
+computed in Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}. The general construction of a matrix
 product operator representation from a finite group is given in Garre-Rubio,
 Lootens and Molnár~\cite{GarreRubio2023MPOSym}, and matrix product operator
 symmetries are reviewed in~\cite[Section~III.A.6]{Cirac2021Matrix}. The sum of the
@@ -561,6 +562,55 @@ the two families is established here.
     \leanok
     This is Theorem~\ref{thm:asymex_group_cocycle_cyclic} with $n=3$ and
     $j=1$.
+\end{proof}
+
+\begin{theorem}[The anomaly class of the family]
+    \label{thm:asymex_z3anomalous_anomaly_class}
+    \lean{Z3Anomalous.family_isNormalRepresentation, Z3Anomalous.z3FusionData,
+        Z3Anomalous.z3FusionData_isAssociator_gen_gen_gen,
+        Z3Anomalous.z3FusionData_isAssociator_gen_sq_gen,
+        Z3Anomalous.z3FusionData_omega_gen_one_gen,
+        Z3Anomalous.z3FusionData_omega_gen_gen_gen,
+        Z3Anomalous.z3FusionData_omega_gen_sq_gen,
+        Z3Anomalous.cyclicInvariant_omega_z3,
+        Z3Anomalous.not_isTrivialGaugeClass_omega_z3}
+    \leanok
+    \uses{thm:asymex_z3anomalous_family, thm:asymex_z3anomalous_normal,
+        thm:asymex_z3anomalous_uu_compression,
+        thm:asymex_z3anomalous_ud_compression,
+        thm:mpug_anomaly_three_cochain_spec, thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_cyclic_invariant_gauge}
+    The tensors $T_0=\delta$, $T_1=M$, $T_2=M^\dagger$ are normal and
+    represent $\Z_3$ exactly on nonempty chains. Choose the fusion tensors
+    to be the identity whenever a factor is $T_0$, and the compressions of
+    Theorems~\ref{thm:asymex_z3anomalous_uu_compression}
+    and~\ref{thm:asymex_z3anomalous_ud_compression} otherwise. Write
+    $\Z_3=\{e,g,g^2\}$ multiplicatively, with $g^3=e$, so that $M$
+    represents $g$.
+    Then the two fusion trees of $(g,g,g)$ differ by the factor $\omega^2$
+    and those of $(g,g^2,g)$ and $(g,e,g)$ agree, against every nonempty
+    word, so that
+    \begin{align}
+        \omega_{\mathrm{an}}(g,e,g)\,\omega_{\mathrm{an}}(g,g,g)\,
+        \omega_{\mathrm{an}}(g,g^2,g)
+         & =\omega^2,
+        \notag
+    \end{align}
+    where $\omega_{\mathrm{an}}$ is the anomaly three-cochain. The same
+    product equals $\omega^2$ for every choice of fusion tensors, and the
+    anomaly three-cocycle is not cohomologous to the constant cochain one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each of the two fusion trees $X$ of $(g,g,g)$ and of $(g,g^2,g)$
+    satisfies $XR^aR^b=T^aXR^b$ for all letters $a,b$, with $R$ the triple
+    product and $T$ the target tensor, and on single letters the trees
+    differ by $\omega^2$, respectively agree. These are identities over
+    $\Z[\omega]$ checked letter by letter, and induction on the word gives
+    the dressed identities. For $(g,e,g)$ both trees are the fusion tensor
+    of $M\otimes M$. The product is invariant under the fusion-tensor gauge
+    action because $g^3=e$, and $\omega^2\neq1$.
 \end{proof}
 
 \subsection{The condensation defect}%

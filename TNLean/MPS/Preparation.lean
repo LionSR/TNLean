@@ -9,4 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Preparation
 
 import TNLean.MPS.Preparation.BlockedPolar
+import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.MatrixPolar

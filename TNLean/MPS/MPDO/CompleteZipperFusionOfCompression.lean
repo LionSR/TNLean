@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 
 /-!
@@ -29,9 +30,17 @@ associativity analysis (lines 193--200 and 247).  The star-closed case supplies 
 * `MPOTensor.CompleteZipperFusionFamily.ofCompression`: the complete zipper fusion family whose
   fusion tensors and left inverses are the pairs of split multi-block compressions of the
   pairwise products.
+* `MPOTensor.CompleteZipperFusionFamily.ofStar`: the complete zipper fusion family in the
+  star-closed case, built from the split compressions of
+  `exists_pairCompression_remainder_eq_zero_of_star`.
 
 ## Main statements
 
+* `MPOTensor.CompleteZipperFusionFamily.exists_pairCompression_remainder_eq_zero_of_star`: under
+  the fusion rules on word traces and the star closure of the product tensor, the product `O_a O_b`
+  has a multi-block compression with vanishing remainder.
+* `MPOTensor.CompleteZipperFusionFamily.exists_ofStar_fusionTensor_eq`: the fusion tensors of
+  `ofStar` are the compression maps of split compressions of the pairwise products.
 * `MPOTensor.CompleteZipperFusionFamily.ofCompression_fusionTensor`,
   `MPOTensor.CompleteZipperFusionFamily.ofCompression_fusionTensorLeftInverse`: the fusion
   tensors of this family are the compression pairs.
@@ -172,8 +181,10 @@ simultaneous left inverse are the remaining data of that source at lines 156--16
 **Local fix (arXiv:1511.08090, line 269):** the source derives the simultaneous left inverse
 `K` from injectivity of each block, which does not suffice when there are several blocks: two
 injective, non-equivalent blocks at physical dimension two can have no simultaneous left
-inverse.  `K` is therefore an input, recording joint linear independence of the blocks at one
-site.  Documented in `docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`. -/
+inverse.  `K` is therefore an input here, recording joint linear independence of the blocks at
+one site.  After a common positive blocking it is derived for normal blocks that are pairwise
+inequivalent up to a nonzero scalar (`ofCompressionBlocked`).  Documented in
+`docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`. -/
 noncomputable def ofCompression (hD : ∀ a, 0 < D a)
     (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0)
@@ -223,6 +234,66 @@ theorem ofCompression_fusionTensorLeftInverse (hD : ∀ a, 0 < D a)
     (a b c : Λ) (μ : Fin (N a b c)) (z : Fin (D c)) (x : Fin (D a) × Fin (D b)) :
     (ofCompression hD hT P hP K hK).fusionTensorLeftInverse a b c μ z x =
       (P a b).left (pairSlot c μ) z (finProdFinEquiv x) := rfl
+
+/-- **Split compressions of the pairwise products in the star-closed case.** If the word traces
+of the product `O_a O_b` are the sums of the word traces of `N_{ab}^c` copies of each `O_c`, and
+the letters of the product tensor lie, with their conjugate transposes, in the algebra they
+generate, then the product has a multi-block compression with vanishing remainder
+(`MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star`). -/
+theorem exists_pairCompression_remainder_eq_zero_of_star (hD : ∀ a, 0 < D a)
+    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor) (a b : Λ)
+    (htr : ∀ w : List (Fin (p * p)), w ≠ [] →
+      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)).toMPSTensor w) =
+        ∑ s : (c : Λ) × Fin (N a b c), Matrix.trace (Kraus.evalWord (T s.1).toMPSTensor w))
+    (hstar : ∀ i, ((mulTensor (T a) (T b)).toMPSTensor i)ᴴ ∈
+      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor)) :
+    ∃ P : PairCompression T N a b, P.remainder = 0 :=
+  MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
+    (D := fun s : (c : Λ) × Fin (N a b c) => D s.1) Finset.univ
+    (fun s : (c : Λ) × Fin (N a b c) => (T s.1).toMPSTensor)
+    (fun s _ => (hT s.1).isNormal) (fun s _ => hD s.1) _ htr hstar
+
+/-- **Complete zipper fusion family in the star-closed case.** Under the fusion rules on word
+traces and the star closure of every product tensor, the split compressions of
+`exists_pairCompression_remainder_eq_zero_of_star` give a complete zipper fusion family.
+
+Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 156--200 (fusion rules and fusion tensors);
+arXiv:2203.12563, `REsubmission.tex`, lines 361--362 (the fusion rules). The star closure is the
+sufficient condition for a vanishing remainder in
+`Notes/OpenProblemsTN/strategies/final_resolution/p5_local_zipper_hypotheses.tex`,
+`thm:p5-local-adjoint-closure`; the simultaneous left inverse `K` remains an input, as in
+`ofCompression`. -/
+noncomputable def ofStar (hD : ∀ a, 0 < D a)
+    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor)
+    (htr : ∀ a b, ∀ w : List (Fin (p * p)), w ≠ [] →
+      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)).toMPSTensor w) =
+        ∑ s : (c : Λ) × Fin (N a b c), Matrix.trace (Kraus.evalWord (T s.1).toMPSTensor w))
+    (hstar : ∀ a b, ∀ i, ((mulTensor (T a) (T b)).toMPSTensor i)ᴴ ∈
+      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor))
+    (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ)
+    (hK : ∀ (c d : Λ) (x y : Fin (D c)) (x' y' : Fin (D d)),
+      (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d i k x' y') =
+        if h : c = d then
+          if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
+        else 0) :
+    CompleteZipperFusionFamily Λ p :=
+  ofCompression hD hT
+    (fun a b => (exists_pairCompression_remainder_eq_zero_of_star hD hT a b
+      (htr a b) (hstar a b)).choose)
+    (fun a b => (exists_pairCompression_remainder_eq_zero_of_star hD hT a b
+      (htr a b) (hstar a b)).choose_spec) K hK
+
+/-- The fusion tensors of `ofStar` are the compression maps of split compressions of the
+pairwise products. -/
+theorem exists_ofStar_fusionTensor_eq (hD : ∀ a, 0 < D a)
+    (hT : ∀ a, Kraus.IsInjective (T a).toMPSTensor) (htr) (hstar)
+    (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ) (hK) (a b : Λ) :
+    ∃ P : PairCompression T N a b, P.remainder = 0 ∧
+      ∀ (c : Λ) (μ : Fin (N a b c)) (x : Fin (D a) × Fin (D b)) (z : Fin (D c)),
+        (ofStar hD hT htr hstar K hK).fusionTensor a b c μ x z =
+          P.right (pairSlot c μ) (finProdFinEquiv x) z :=
+  ⟨_, (exists_pairCompression_remainder_eq_zero_of_star hD hT a b (htr a b)
+    (hstar a b)).choose_spec, fun _ _ _ _ => rfl⟩
 
 end Compression
 

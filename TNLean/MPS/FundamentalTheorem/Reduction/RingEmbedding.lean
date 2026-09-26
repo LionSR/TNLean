@@ -3,7 +3,9 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import QICLean.Kraus.Injectivity
 import TNLean.Algebra.ComplexOfRing
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.ActionTensor
 import TNLean.MPS.MPDO.OperatorProduct
 
@@ -14,15 +16,17 @@ import TNLean.MPS.MPDO.OperatorProduct
 examples, and no paper states it.
 
 **Formalized here.** The worked examples of compression data are given by matrices over a
-commutative ring with decidable equality, and their bond-space products and actions are decided
-in that ring before being transported to the complex matrices by an entrywise ring
-homomorphism. This file records the bond-space product and the bond-space action over an
-arbitrary commutative ring, in the bond order of `finProdFinEquiv` that `MPOTensor.mulTensor`
-and `MPOTensor.actTensor` use, together with their compatibility with the entrywise image of
-`MPSTensor.complexOfRing`.
+commutative ring with decidable equality, and their word evaluations, bond-space products and
+actions are decided in that ring before being transported to the complex matrices by an
+entrywise ring homomorphism. This file records word evaluation, the bond-space product and the
+bond-space action over an arbitrary commutative ring, the last two in the bond order of
+`finProdFinEquiv` that `MPOTensor.mulTensor` and `MPOTensor.actTensor` use, together with their
+compatibility with the entrywise image of `MPSTensor.complexOfRing`, and the normality
+certificate that every worked example over such a ring reads off a decided table of words.
 
 ## Main definitions
 
+* `MPSTensor.evalWordR`: word evaluation of a tensor over a commutative ring.
 * `MPSTensor.mulTensorR`: the bond-space product of two matrix product operator tensors over a
   commutative ring.
 * `MPSTensor.actTensorR`: the bond-space action of a matrix product operator tensor over a
@@ -30,18 +34,80 @@ and `MPOTensor.actTensor` use, together with their compatibility with the entryw
 
 ## Main results
 
+* `MPSTensor.evalWord_complexOfRing`: word evaluation commutes with the entrywise image.
 * `MPSTensor.mulTensor_complexOfRing`, `MPSTensor.actTensor_complexOfRing`: the bond-space
   product and action commute with the entrywise image.
 * `MPSTensor.mulTensor_smul_complexOfRing`: the bond-space product of two entrywise images each
   rescaled by one complex scalar is the square of that scalar times the entrywise image of the
   bond-space product.
+* `MPSTensor.isNBlkInjective_of_complexOfRing_smul_single`,
+  `MPSTensor.isNormal_of_complexOfRing_smul_single`: block injectivity and normality from a
+  decided table expressing every matrix unit, scaled by one element with nonzero image, as a
+  combination of words of one length.
 -/
 
 open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {R : Type*} [CommRing R] (f : R →+* ℂ) {d D₁ D₂ : ℕ}
+variable {R : Type*} [CommRing R] (f : R →+* ℂ) {d D D₁ D₂ : ℕ}
+
+/-! ### Word evaluation -/
+
+/-- Word evaluation of a tensor over a commutative ring, `A^{i₁} ⋯ A^{iₙ}`, matching
+`Kraus.evalWord`. -/
+def evalWordR (A : Fin d → Matrix (Fin D) (Fin D) R) :
+    List (Fin d) → Matrix (Fin D) (Fin D) R
+  | [] => 1
+  | i :: w => A i * evalWordR A w
+
+/-- Word evaluation commutes with the entrywise image. -/
+theorem evalWord_complexOfRing (A : Fin d → Matrix (Fin D) (Fin D) R) (w : List (Fin d)) :
+    Kraus.evalWord (fun i => complexOfRing f (A i)) w = complexOfRing f (evalWordR A w) := by
+  induction w with
+  | nil => rw [Kraus.evalWord, evalWordR, complexOfRing_one]
+  | cons i w ih => rw [Kraus.evalWord, evalWordR, ih, complexOfRing_mul]
+
+/-- **Block injectivity from a decided table of scaled matrix units.** If for every matrix unit
+`E_{ij}` finitely many words of one length `N` of a tensor over `R` combine, with coefficients in
+`R`, to `c • E_{ij}` for one `c` whose image is nonzero, then the words of length `N` of the
+complex tensor span the full matrix algebra. -/
+theorem isNBlkInjective_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = complexOfRing f (AR a)) {N : ℕ}
+    {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+    (coeff : Fin D → Fin D → κ → R) {c : R} (hc : f c ≠ 0)
+    (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
+      c • Matrix.single i j 1) :
+    Kraus.IsNBlkInjective A N := by
+  rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
+  set T := Submodule.span ℂ
+    (Set.range fun w : Fin N → Fin d => Kraus.evalWord A (List.ofFn w)) with hT
+  have hA' : A = fun a => complexOfRing f (AR a) := funext hA
+  refine T.eq_top_of_forall_single_mem fun i j => ?_
+  have h1 := congrArg (complexOfRing f) (h i j)
+  rw [complexOfRing_sum, complexOfRing_smul, complexOfRing_single] at h1
+  have hmem : ∑ k, complexOfRing f
+      (coeff i j k • evalWordR AR (List.ofFn (word i j k))) ∈ T := by
+    refine Submodule.sum_mem _ fun k _ => ?_
+    rw [complexOfRing_smul, ← evalWord_complexOfRing, ← hA']
+    exact T.smul_mem _ (Submodule.subset_span ⟨word i j k, rfl⟩)
+  rw [h1] at hmem
+  have h2 := T.smul_mem (f c)⁻¹ hmem
+  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h2
+
+/-- **Normality from a decided table of scaled matrix units**: the certificate of
+`isNBlkInjective_of_complexOfRing_smul_single` at a positive length `N` shows that the complex
+tensor is normal at blocking length `N`. -/
+theorem isNormal_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = complexOfRing f (AR a)) {N : ℕ}
+    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+    (coeff : Fin D → Fin D → κ → R) {c : R} (hc : f c ≠ 0)
+    (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
+      c • Matrix.single i j 1) :
+    Kraus.IsNormal A :=
+  ⟨N, hN, isNBlkInjective_of_complexOfRing_smul_single f AR hA word coeff hc h⟩
+
+/-! ### Bond-space products and actions -/
 
 /-- The bond-space product of two tensors over a commutative ring,
 `(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`, matching
