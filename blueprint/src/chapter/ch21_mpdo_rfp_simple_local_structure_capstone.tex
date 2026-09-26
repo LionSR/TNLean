@@ -2551,7 +2551,8 @@ This is the calculation in
         MPOTensor.isSAL_smul_ofReal_iff}
     \leanok
     \uses{def:block_entropy, def:mutual_info_chain, def:is_sal, thm:mpdo_normalized_mpo_scaling_invariance}
-    Let $c$ be a nonzero complex number and let $L\le N$. Then
+    Let $M$ be an MPO tensor, let $c$ be a nonzero complex number, and let
+    $L\le N$ be natural numbers. Then
     \begin{align}
         \rho_L^{(N)}(cM) & =\rho_L^{(N)}(M).
         \notag
@@ -2566,13 +2567,16 @@ This is the calculation in
     if $M$ does.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_normalized_mpo_scaling_invariance}
+    \uses{thm:mpdo_normalized_mpo_scaling_invariance, thm:mpdo_mpo_scalar_scaling, thm:mpdo_positive_rescaling_iff}
     By Theorem~\ref{thm:mpdo_normalized_mpo_scaling_invariance}, the
     normalized operator $\sigma^{(N)}(cM)$ equals $\sigma^{(N)}(M)$, so their
     partial traces agree; the block entropies and mutual informations are
-    functions of these reduced states. For $r>0$, the operators
-    $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$ are positive semidefinite exactly when
-    those of $M$ are, and their traces vanish exactly when those of $M$ do.
+    functions of these reduced states. For $r>0$,
+    Theorem~\ref{thm:mpdo_positive_rescaling_iff} shows that $rM$ generates
+    positive semidefinite operators exactly when $M$ does, and
+    Theorem~\ref{thm:mpdo_mpo_scalar_scaling} gives
+    $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$, so the traces of the two operators
+    vanish together.
     The mutual-information clause of Definition~\ref{def:is_sal} transfers by
     the displayed identity.
 \end{proof}
@@ -2600,11 +2604,15 @@ This is the calculation in
         gap:cpsv16_unit_weight_rfp_scale_tension}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:mpdo_area_law_scaling_invariance, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
+    \uses{lem:mpdo_area_law_scaling_invariance, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:rfp_via_ts_physical_trace_idempotent, thm:cpsv_example412_normalized_not_gsnnch}
     Lemma~\ref{lem:mpdo_area_law_scaling_invariance} with $r=\frac12$
     transfers saturation from the printed tensor
-    (Theorem~\ref{thm:cpsv_example412_literal_sal}) to $\widehat M$. The channel equations imply that the physical-trace transfer
-    is idempotent. The commuting-form obstruction is the preceding theorem.
+    (Theorem~\ref{thm:cpsv_example412_literal_sal}) to $\widehat M$. By
+    Theorem~\ref{thm:rfp_via_ts_physical_trace_idempotent}, the channel
+    equations of Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps} imply
+    that the physical-trace transfer is idempotent. The commuting-form
+    obstruction is
+    Theorem~\ref{thm:cpsv_example412_normalized_not_gsnnch}.
 \end{proof}
 
 % CPSV16 Theorem 4.9 and Appendix C.2, lines 1381--1403, 1441--1450, and 1647--1782.
