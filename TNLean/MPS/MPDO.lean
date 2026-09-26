@@ -191,6 +191,7 @@ import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence

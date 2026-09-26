@@ -399,10 +399,17 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPDO/CZXTensor.lean`, and `mpo_rightShiftTensor_apply` in
   `TNLean/MPS/MPU/Examples/Shift.lean`.
 - **Abstraction:** `MPOTensor.mpo_apply_eq_sum_cyclic` and
-  `MPOTensor.mpo_apply_eq_prod_of_forced_bond` in `TNLean/MPS/MPDO/OperatorCyclicSum.lean`.
-- **Notes:** the caller supplies the surviving bond configuration `g₀` and, for every other
-  configuration, one site with a vanishing entry. The first six call sites use the
-  forced-bond lemma. The shift uses only `mpo_apply_eq_sum_cyclic`, because its surviving
+  `MPOTensor.mpo_apply_eq_prod_of_forced_bond` in `TNLean/MPS/MPDO/OperatorCyclicSum.lean`;
+  for monomial tensors, `MPOTensor.mpo_apply_of_forced_right_bond` and
+  `MPOTensor.mpo_apply_of_forced_left_bond` in the same file.
+- **Notes:** the caller of `mpo_apply_eq_prod_of_forced_bond` supplies the surviving bond
+  configuration `g₀` and, for every other configuration, one site with a vanishing entry. When
+  the entry has the form `if i = π j ∧ r = β i j then φ i j l else 0` (or `l = β i j` with
+  phase `φ i j r`), the forced-bond lemmas take the tensor's `_apply` lemma as their only
+  hypothesis and return `if s = π ∘ t then ∏ n, ... else 0`; the caller only rewrites its phase
+  exponent as a sum. The six monomial call sites above and `mpo_tensor_apply` in
+  `TNLean/MPS/MPU/GroupCocycleMPO.lean` use these, each in two to five lines (net about
+  `-150` lines). The shift uses only `mpo_apply_eq_sum_cyclic`, because its surviving
   configuration is the input configuration and exists only when the output is its rotation.
 
 ### SAL nonvanishing of the physical-trace transfer — promoted
