@@ -138,20 +138,97 @@ theorem _root_.Matrix.norm_toEuclideanCLM_mul_le {n : Type*} [Fintype n] [Decida
   rw [map_mul]
   exact norm_mul_le _ _
 
+/-! ### Translation invariance -/
+
+/-- The numerator of the expectation of an operator `X` on the window `a, …, a + L - 1` of a
+chain of `N` sites is `tr(E_X E_A^{N-L})`, independent of `a` (arXiv:2307.01696, Supplemental
+Material, proof of Lemma 2, trace expansion). -/
+theorem inner_mpvState_chainWindowOperator_eq_trace (A : MPSTensor d D) {L N a : ℕ}
+    (hL : 0 < L) (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    ⟪mpvState A N, Matrix.toEuclideanLin (chainWindowOperator N a X) (mpvState A N)⟫_ℂ =
+      LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
+        (physicalObservableTransfer A L X * Kraus.transferMap A ^ (N - L)) := by
+  obtain ⟨n, rfl⟩ : ∃ n, N = a + (L + n) := ⟨N - a - L, by omega⟩
+  rw [inner_mpvState_chainWindowOperator_offset A hL a n X]
+  congr 3
+  omega
+
+/-- The numerator of the two-window expectation, with `X` on the window starting at `a` and
+`Y` on the window starting at `a + L + m`, is `tr(E_X E_A^m E_Y E_A^{N-2L-m})`, independent of
+`a` (arXiv:2307.01696, Supplemental Material, proof of Lemma 2, trace expansion). -/
+theorem inner_mpvState_chainWindowOperator_mul_eq_trace (A : MPSTensor d D) {L N a m : ℕ}
+    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    ⟪mpvState A N, Matrix.toEuclideanLin
+        (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) (mpvState A N)⟫_ℂ =
+      LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
+        (physicalObservableTransfer A L X * Kraus.transferMap A ^ m *
+          physicalObservableTransfer A L Y * Kraus.transferMap A ^ (N - (L + m + L))) := by
+  obtain ⟨n, rfl⟩ : ∃ n, N = a + (L + m + L + n) := ⟨N - a - (L + m + L), by omega⟩
+  rw [inner_mpvState_chainWindowOperator_mul_offset A hL a m n X Y]
+  congr 3
+  omega
+
+/-- **Translation invariance of one-window expectations** (arXiv:2307.01696, eq. (TI-MPS2):
+the vectors `φ_N` are translation invariant). -/
+theorem mpvExpectation_chainWindowOperator_eq (A : MPSTensor d D) {L N a : ℕ} (hL : 0 < L)
+    (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    mpvExpectation A N (chainWindowOperator N a X) =
+      mpvExpectation A N (chainWindowOperator N 0 X) := by
+  rw [mpvExpectation_eq_div, mpvExpectation_eq_div,
+    inner_mpvState_chainWindowOperator_eq_trace A hL haL,
+    inner_mpvState_chainWindowOperator_eq_trace A hL (by omega)]
+
+/-- **Translation invariance of two-window expectations** (arXiv:2307.01696, eq. (TI-MPS2)). -/
+theorem mpvExpectation_chainWindowOperator_mul_eq (A : MPSTensor d D) {L N a m : ℕ}
+    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) =
+      mpvExpectation A N (chainWindowOperator N 0 X * chainWindowOperator N (L + m) Y) := by
+  have h0 := inner_mpvState_chainWindowOperator_mul_eq_trace A hL (a := 0) (m := m) (N := N)
+    (by omega) X Y
+  rw [zero_add] at h0
+  rw [mpvExpectation_eq_div, mpvExpectation_eq_div,
+    inner_mpvState_chainWindowOperator_mul_eq_trace A hL haL, h0]
+
+/-- The connected correlation of two window operators is invariant under translating both
+windows (arXiv:2307.01696, eq. (TI-MPS2)). -/
+theorem mpvCovariance_eq_mpvConnectedCorrelator (A : MPSTensor d D) {L N a m : ℕ}
+    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) -
+        mpvExpectation A N (chainWindowOperator N a X) *
+          mpvExpectation A N (chainWindowOperator N (a + (L + m)) Y) =
+      mpvConnectedCorrelator A N 0 (L + m) X Y := by
+  rw [mpvConnectedCorrelator, mpvExpectation_chainWindowOperator_mul_eq A hL haL,
+    mpvExpectation_chainWindowOperator_eq A hL (a := a) (by omega),
+    mpvExpectation_chainWindowOperator_eq A hL (a := a + (L + m)) (by omega),
+    mpvExpectation_chainWindowOperator_eq A hL (a := L + m) (by omega)]
+
 /-! ### The clustering estimate -/
 
-private theorem mul4_le {a b c e a' b' c' e' : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hc : 0 ≤ c)
-    (he : 0 ≤ e) (haa : a ≤ a') (hbb : b ≤ b') (hcc : c ≤ c') (hee : e ≤ e') :
-    a * b * c * e ≤ a' * b' * c' * e' := by
-  have ha' := ha.trans haa
-  have hb' := hb.trans hbb
-  have hc' := hc.trans hcc
-  gcongr
+/-- A connected correlation of operators of norm at most `M` is at most `2M²`. -/
+theorem norm_mpvCovariance_le (A : MPSTensor d D) {N : ℕ} {O O' : Matrix (Cfg d N) (Cfg d N) ℂ}
+    {M : ℝ} (hO : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O‖ ≤ M)
+    (hO' : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O'‖ ≤ M) :
+    ‖mpvExpectation A N (O * O') - mpvExpectation A N O * mpvExpectation A N O'‖ ≤
+      2 * M ^ 2 := by
+  have hM : 0 ≤ M := (norm_nonneg _).trans hO
+  have h1 := (norm_mpvExpectation_le A N (O * O')).trans
+    ((Matrix.norm_toEuclideanCLM_mul_le _ _).trans (mul_le_mul hO hO' (norm_nonneg _) hM))
+  have h2 := (norm_mpvExpectation_le A N O).trans hO
+  have h3 := (norm_mpvExpectation_le A N O').trans hO'
+  calc _ ≤ ‖mpvExpectation A N (O * O')‖ +
+        ‖mpvExpectation A N O‖ * ‖mpvExpectation A N O'‖ := by
+        rw [← norm_mul]; exact norm_sub_le _ _
+    _ ≤ M * M + M * M := add_le_add h1 (mul_le_mul h2 h3 (norm_nonneg _) hM)
+    _ = 2 * M ^ 2 := by ring
 
-private theorem mul2_le {a b a' b' : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (haa : a ≤ a') (hbb : b ≤ b') :
-    a * b ≤ a' * b' := by
-  have ha' := ha.trans haa
-  gcongr
+/-- The operator norm of a product of maps is at most the product of bounds on the factors. -/
+private theorem norm_toContinuousLinearMap_mul_le
+    (F₁ F₂ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) {b₁ b₂ : ℝ}
+    (h₁ : ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F₁‖ ≤ b₁)
+    (h₂ : ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F₂‖ ≤ b₂) :
+    ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) (F₁ * F₂)‖ ≤ b₁ * b₂ := by
+  rw [map_mul]
+  exact (norm_mul_le _ _).trans (mul_le_mul h₁ h₂ (norm_nonneg _) ((norm_nonneg _).trans h₁))
 
 /-- **Clustering of block observables.** For a normal tensor in the gauge
 `eq:ldp_normal_gauge` and a rate `r` above `|λ₂|`, there is `C` such that for operators
@@ -185,17 +262,13 @@ theorem exists_norm_mpvCovariance_le [NeZero D] {A : MPSTensor d D} {L₀ : ℕ}
   set E := Kraus.transferMap A with hE_def
   set P := fixedPointProj ρ htr with hP_def
   set Q := E - P with hQ_def
-  let Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
+  set Φ : (Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) ≃ₐ[ℂ]
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) :=
-    Module.End.toContinuousLinearMap _
+    Module.End.toContinuousLinearMap _ with hΦ_def
   set κ : ℝ := ∑ p : Fin D, ∑ q : Fin D, ‖Matrix.single p q (1 : ℂ)‖ with hκ_def
   have hκ : 0 ≤ κ := by positivity
   have htrb : ∀ F, ‖LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) F‖ ≤ κ * ‖Φ F‖ :=
     Matrix.norm_linearMap_trace_le_mul_norm
-  set KX : ℝ := (D : ℝ) ^ 3 * M with hKX_def
-  have hKX : 0 ≤ KX := by positivity
-  set pP : ℝ := ‖Φ P‖ with hpP_def
-  have hpP : 0 ≤ pP := norm_nonneg _
   have hTP : IsTracePreservingMap E := Kraus.isTracePreservingMap_mapLM_of_isTP A hA
   have hEk : ∀ k, 1 ≤ k → E ^ k = P + Q ^ k := fun k hk ↦
     pow_eq_fixedPointProj_add_compl_pow E htr hTP hρfix hk
@@ -210,223 +283,159 @@ theorem exists_norm_mpvCovariance_le [NeZero D] {A : MPSTensor d D} {L₀ : ℕ}
       rw [Module.End.mul_apply, hPform, map_smul, LinearMap.smulRight_apply,
         Matrix.traceLinearMap_apply]
     rw [hFP, LinearMap.trace_smulRight, Matrix.traceLinearMap_apply]
-  have hP1 : LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) P = 1 := fixedPointProj_trace ρ htr
-  /- The single constant `K` dominating every error term. -/
-  set B : ℝ := KX + CQ + pP + 1 with hB_def
-  have hB1 : 1 ≤ B := by linarith
-  have hKXB : KX ≤ B := by linarith
-  have hCQB : CQ ≤ B := by linarith
-  have hpPB : pP ≤ B := by linarith
+  /- One constant `B ≥ 1` bounding every factor and `K` bounding every trace. -/
+  set B : ℝ := (D : ℝ) ^ 3 * M + CQ + ‖Φ P‖ + 1 with hB_def
+  have hB1 : 1 ≤ B := by
+    have : 0 ≤ (D : ℝ) ^ 3 * M := by positivity
+    linarith [norm_nonneg (Φ P)]
   have hB0 : 0 ≤ B := by linarith
   set K : ℝ := κ * B ^ 4 + 1 with hK_def
-  have hK1 : 1 ≤ K := by
-    have : 0 ≤ κ * B ^ 4 := by positivity
-    linarith
-  have hκB : ∀ t : ℝ, t ≤ B ^ 4 → κ * t ≤ K := fun t ht ↦ by
-    have := mul_le_mul_of_nonneg_left ht hκ
-    linarith
-  have hB2 : B ^ 2 ≤ B ^ 4 := pow_le_pow_right₀ hB1 (by norm_num)
-  have hB1' : B ≤ B ^ 4 := by simpa using pow_le_pow_right₀ hB1 (show 1 ≤ 4 by norm_num)
-  have hΦ4 : ∀ F₁ F₂ F₃ F₄ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
-      ‖LinearMap.trace ℂ _ (F₁ * F₂ * F₃ * F₄)‖ ≤
-        κ * (‖Φ F₁‖ * ‖Φ F₂‖ * ‖Φ F₃‖ * ‖Φ F₄‖) := by
-    intro F₁ F₂ F₃ F₄
-    refine (htrb _).trans (mul_le_mul_of_nonneg_left ?_ hκ)
-    rw [map_mul, map_mul, map_mul]
-    calc ‖Φ F₁ * Φ F₂ * Φ F₃ * Φ F₄‖ ≤ ‖Φ F₁ * Φ F₂ * Φ F₃‖ * ‖Φ F₄‖ := norm_mul_le _ _
-      _ ≤ (‖Φ F₁ * Φ F₂‖ * ‖Φ F₃‖) * ‖Φ F₄‖ :=
-          mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)
-      _ ≤ (‖Φ F₁‖ * ‖Φ F₂‖ * ‖Φ F₃‖) * ‖Φ F₄‖ :=
-          mul_le_mul_of_nonneg_right
-            (mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _)) (norm_nonneg _)
-  have hΦ2 : ∀ F₁ F₂ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
-      ‖LinearMap.trace ℂ _ (F₁ * F₂)‖ ≤ κ * (‖Φ F₁‖ * ‖Φ F₂‖) := by
-    intro F₁ F₂
-    refine (htrb _).trans (mul_le_mul_of_nonneg_left ?_ hκ)
-    rw [map_mul]
-    exact norm_mul_le _ _
-  refine ⟨(12 * (K + 2) ^ 2 + 12 * M ^ 2 + 1) * K, by positivity, ?_⟩
-  intro w hw X Y hX hY a g h N hN hg hh
-  subst hN
-  have hEX : ‖Φ (physicalObservableTransfer A w X)‖ ≤ KX :=
-    (norm_toContinuousLinearMap_physicalObservableTransfer_le hA w X).trans
-      (mul_le_mul_of_nonneg_left hX (by positivity))
-  have hEY : ‖Φ (physicalObservableTransfer A w Y)‖ ≤ KX :=
-    (norm_toContinuousLinearMap_physicalObservableTransfer_le hA w Y).trans
-      (mul_le_mul_of_nonneg_left hY (by positivity))
-  have hQk : ∀ k, ‖Φ (Q ^ k)‖ ≤ CQ * r ^ k := hQ
-  have hQk' : ∀ k, ‖Φ (Q ^ k)‖ ≤ B := fun k ↦ (hQk k).trans
-    ((mul_le_of_le_one_right hCQ.le (pow_le_one₀ hr0 hr1)).trans hCQB)
-  have hpow : ∀ {i j : ℕ}, j ≤ i → r ^ i ≤ r ^ j := fun hij ↦ pow_le_pow_of_le_one hr0 hr1 hij
-  have hrle : ∀ k, r ^ k ≤ 1 := fun k ↦ pow_le_one₀ hr0 hr1
+  have hK0 : 0 ≤ K := by positivity
   have hrk0 : ∀ k, 0 ≤ r ^ k := fun k ↦ pow_nonneg hr0 k
-  set EX := physicalObservableTransfer A w X with hEX_def
-  set EY := physicalObservableTransfer A w Y with hEY_def
-  have hEXB : ‖Φ EX‖ ≤ B := hEX.trans hKXB
-  have hEYB : ‖Φ EY‖ ≤ B := hEY.trans hKXB
-  have hPB : ‖Φ P‖ ≤ B := hpPB
-  /- The one-point values and their bounds. -/
-  set x : ℂ := Matrix.trace (EX ρ) with hx_def
-  set y : ℂ := Matrix.trace (EY ρ) with hy_def
-  have hxb : ‖x‖ ≤ K := by
-    rw [hx_def, ← htrFP EX]
-    refine (hΦ2 _ _).trans (hκB _ ?_)
-    calc ‖Φ EX‖ * ‖Φ P‖ ≤ B * B := mul_le_mul hEXB hPB (norm_nonneg _) hB0
-      _ = B ^ 2 := by ring
-      _ ≤ B ^ 4 := hB2
-  have hyb : ‖y‖ ≤ K := by
-    rw [hy_def, ← htrFP EY]
-    refine (hΦ2 _ _).trans (hκB _ ?_)
-    calc ‖Φ EY‖ * ‖Φ P‖ ≤ B * B := mul_le_mul hEYB hPB (norm_nonneg _) hB0
-      _ = B ^ 2 := by ring
-      _ ≤ B ^ 4 := hB2
-  /- The numerators as traces. -/
-  set N := a + (w + g + w + h) with hN_def
+  have hrle : ∀ k, r ^ k ≤ 1 := fun k ↦ pow_le_one₀ hr0 hr1
+  have hQk : ∀ k, ‖Φ (Q ^ k)‖ ≤ B * r ^ k := fun k ↦
+    (hQ k).trans (mul_le_mul_of_nonneg_right (by linarith [norm_nonneg (Φ P),
+      (by positivity : 0 ≤ (D : ℝ) ^ 3 * M)]) (hrk0 k))
+  have hPB : ‖Φ P‖ ≤ B := by linarith [(by positivity : 0 ≤ (D : ℝ) ^ 3 * M)]
+  have hEkB : ∀ k, 1 ≤ k → ‖Φ (E ^ k)‖ ≤ B := by
+    intro k hk
+    rw [hEk k hk, map_add]
+    refine (norm_add_le _ _).trans ?_
+    have h1 : ‖Φ (Q ^ k)‖ ≤ CQ := (hQ k).trans (mul_le_of_le_one_right hCQ.le (hrle k))
+    have h2 : 0 ≤ (D : ℝ) ^ 3 * M := by positivity
+    linarith
+  /- A bound `κ b₁ b₂ b₃ (B r^k) ≤ K r^k` for products of four bounded factors. -/
+  have hK4 : ∀ {b₁ b₂ b₃ : ℝ} (k : ℕ), 0 ≤ b₁ → 0 ≤ b₂ → 0 ≤ b₃ → b₁ ≤ B → b₂ ≤ B → b₃ ≤ B →
+      κ * (b₁ * b₂ * b₃ * (B * r ^ k)) ≤ K * r ^ k := by
+    intro b₁ b₂ b₃ k h₁ h₂ h₃ h₁' h₂' h₃'
+    have hb : b₁ * b₂ * b₃ * (B * r ^ k) ≤ B ^ 4 * r ^ k := by
+      have : b₁ * b₂ * b₃ ≤ B * B * B := by gcongr
+      calc b₁ * b₂ * b₃ * (B * r ^ k) ≤ B * B * B * (B * r ^ k) := by gcongr
+        _ = B ^ 4 * r ^ k := by ring
+    calc κ * (b₁ * b₂ * b₃ * (B * r ^ k)) ≤ κ * (B ^ 4 * r ^ k) :=
+          mul_le_mul_of_nonneg_left hb hκ
+      _ ≤ K * r ^ k := by rw [hK_def, add_mul, one_mul, mul_assoc]; linarith [hrk0 k]
+  clear_value K B κ Q P E
+  refine ⟨(4 * (K + 2) ^ 2 + 1) * K + 4 * M ^ 2 * K + 1, by positivity, ?_⟩
+  intro w hw X Y hX hY a g h N hN hg hh
   set h' := h + a with hh'_def
-  have eZ : ⟪mpvState A N, mpvState A N⟫_ℂ = 1 + LinearMap.trace ℂ _ (Q ^ N) := by
-    rw [inner_mpvState_self_eq_trace, hEk N (by omega), map_add, hP1]
-  have eX : ⟪mpvState A N, Matrix.toEuclideanLin (chainWindowOperator N a X) (mpvState A N)⟫_ℂ =
-      x + LinearMap.trace ℂ _ (EX * Q ^ ((g + w + h) + a)) := by
-    have e := inner_mpvState_chainWindowOperator_offset A hw a (g + w + h) X
-    rw [show a + (w + (g + w + h)) = N by omega] at e
-    rw [e, hEk _ (by omega), mul_add, map_add, htrFP]
-  have eY : ⟪mpvState A N,
-      Matrix.toEuclideanLin (chainWindowOperator N (a + (w + g)) Y) (mpvState A N)⟫_ℂ =
-      y + LinearMap.trace ℂ _ (EY * Q ^ (h + (a + (w + g)))) := by
-    have e := inner_mpvState_chainWindowOperator_offset A hw (a + (w + g)) h Y
-    rw [show a + (w + g) + (w + h) = N by omega] at e
-    rw [e, hEk _ (by omega), mul_add, map_add, htrFP]
-  have eXY : ⟪mpvState A N, Matrix.toEuclideanLin
-      (chainWindowOperator N a X * chainWindowOperator N (a + (w + g)) Y) (mpvState A N)⟫_ℂ =
-      x * y + (LinearMap.trace ℂ _ (EX * P * EY * Q ^ h') +
-        LinearMap.trace ℂ _ (EX * Q ^ g * EY * P) +
-        LinearMap.trace ℂ _ (EX * Q ^ g * EY * Q ^ h')) := by
-    rw [inner_mpvState_chainWindowOperator_mul_offset A hw a g h X Y, hEk g hg, hEk h' hh]
-    have hxy : LinearMap.trace ℂ _ (EX * P * EY * P) = x * y := by
-      rw [htrFP, Module.End.mul_apply, Module.End.mul_apply, hPform, map_smul,
-        Matrix.trace_smul, smul_eq_mul, mul_comm]
-    simp only [mul_add, add_mul, map_add, hxy]
-    ring
-  /- The error bounds. -/
+  rw [mpvCovariance_eq_mpvConnectedCorrelator A hw (by omega)]
+  obtain rfl : N = w + g + w + h' := by omega
   set ε : ℝ := K * (r ^ g + r ^ h') with hε_def
-  have hε0 : 0 ≤ ε := by positivity
+  have hS : 0 ≤ r ^ g + r ^ h' := add_nonneg (hrk0 _) (hrk0 _)
+  have hε0 : 0 ≤ ε := mul_nonneg hK0 hS
+  clear_value ε
+  by_cases hsmall : ε ≤ 1 / 2
+  swap
+  · /- Large `ε`: the trivial bound `2M²`. -/
+    push Not at hsmall
+    have hwX := (norm_toEuclideanCLM_chainWindowOperator_le (N := w + g + w + h') (a := 0)
+      (by omega) (by omega) X).trans hX
+    have hwY := (norm_toEuclideanCLM_chainWindowOperator_le (N := w + g + w + h')
+      (a := w + g) (by omega) (by omega) Y).trans hY
+    refine (norm_mpvCovariance_le A hwX hwY).trans ?_
+    have h4 : 2 * M ^ 2 ≤ 4 * M ^ 2 * ε := by
+      have := mul_le_mul_of_nonneg_left hsmall.le (by positivity : (0 : ℝ) ≤ 4 * M ^ 2)
+      linarith
+    have h5 : 4 * M ^ 2 * ε = (4 * M ^ 2 * K) * (r ^ g + r ^ h') := by rw [hε_def]; ring
+    have h6 : (4 * M ^ 2 * K) * (r ^ g + r ^ h') ≤
+        ((4 * (K + 2) ^ 2 + 1) * K + 4 * M ^ 2 * K + 1) * (r ^ g + r ^ h') := by
+      gcongr
+      have : 0 ≤ (4 * (K + 2) ^ 2 + 1) * K := by positivity
+      linarith
+    linarith
+  /- Small `ε`: compare with the limit correlator. -/
+  obtain ⟨EX, hEX_def⟩ : ∃ F, F = physicalObservableTransfer A w X := ⟨_, rfl⟩
+  obtain ⟨EY, hEY_def⟩ : ∃ F, F = physicalObservableTransfer A w Y := ⟨_, rfl⟩
+  have hDB : (D : ℝ) ^ 3 * M ≤ B := by linarith [norm_nonneg (Φ P)]
+  have hEX : ‖Φ EX‖ ≤ B := by
+    rw [hEX_def]
+    exact (norm_toContinuousLinearMap_physicalObservableTransfer_le hA w X).trans
+      ((mul_le_mul_of_nonneg_left hX (by positivity)).trans hDB)
+  have hEY : ‖Φ EY‖ ≤ B := by
+    rw [hEY_def]
+    exact (norm_toContinuousLinearMap_physicalObservableTransfer_le hA w Y).trans
+      ((mul_le_mul_of_nonneg_left hY (by positivity)).trans hDB)
+  have hB24 : B * B ≤ B ^ 4 := by
+    rw [← sq]; exact pow_le_pow_right₀ hB1 (by norm_num)
+  have hB4 : B ≤ B ^ 4 := by
+    simpa using pow_le_pow_right₀ hB1 (show 1 ≤ 4 by norm_num)
+  /- Every trace is bounded by `K r^k` once its map is bounded by `B⁴ r^k`. -/
+  have htrK : ∀ (F : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ) (k : ℕ),
+      ‖Φ F‖ ≤ B ^ 4 * r ^ k → ‖LinearMap.trace ℂ _ F‖ ≤ K * r ^ k := by
+    intro F k hF
+    refine (htrb F).trans ?_
+    calc κ * ‖Φ F‖ ≤ κ * (B ^ 4 * r ^ k) := mul_le_mul_of_nonneg_left hF hκ
+      _ ≤ K * r ^ k := by rw [hK_def, add_mul, one_mul, ← mul_assoc]; linarith [hrk0 k]
+  have hmul := @norm_toContinuousLinearMap_mul_le D
+  have hpow : ∀ {i j : ℕ}, j ≤ i → r ^ i ≤ r ^ j := fun hij ↦ pow_le_pow_of_le_one hr0 hr1 hij
   have hrg : r ^ g ≤ r ^ g + r ^ h' := le_add_of_nonneg_right (hrk0 _)
   have hrh : r ^ h' ≤ r ^ g + r ^ h' := le_add_of_nonneg_left (hrk0 _)
-  have herr : ∀ (t : ℝ) (k : ℕ), t ≤ κ * B ^ 4 * r ^ k → r ^ k ≤ r ^ g + r ^ h' → t ≤ ε :=
-    fun t k ht hk ↦ by
-      refine ht.trans ?_
-      rw [hε_def]
-      have h1 : κ * B ^ 4 ≤ K := by linarith
-      exact mul_le_mul h1 hk (hrk0 _) (by linarith)
-  have hZerr : ‖(1 + LinearMap.trace ℂ _ (Q ^ N)) - 1‖ ≤ ε := by
-    rw [add_sub_cancel_left]
-    refine herr _ N ((htrb _).trans ?_) ((hpow (by omega)).trans hrh)
-    calc κ * ‖Φ (Q ^ N)‖ ≤ κ * (B ^ 4 * r ^ N) := by
-          refine mul_le_mul_of_nonneg_left ((hQk N).trans ?_) hκ
-          exact mul_le_mul_of_nonneg_right (hCQB.trans hB1') (hrk0 _)
-      _ = κ * B ^ 4 * r ^ N := by ring
-  have hXerr : ‖(x + LinearMap.trace ℂ _ (EX * Q ^ ((g + w + h) + a))) - x‖ ≤ ε := by
-    rw [add_sub_cancel_left]
-    refine herr _ ((g + w + h) + a) ((hΦ2 _ _).trans ?_) ((hpow (by omega)).trans hrh)
-    calc κ * (‖Φ EX‖ * ‖Φ (Q ^ ((g + w + h) + a))‖)
-        ≤ κ * (B * (B * r ^ ((g + w + h) + a))) :=
-          mul_le_mul_of_nonneg_left (mul2_le (norm_nonneg _) (norm_nonneg _) hEXB
-            ((hQk _).trans (mul_le_mul_of_nonneg_right hCQB (hrk0 _)))) hκ
-      _ ≤ κ * (B ^ 4 * r ^ ((g + w + h) + a)) := by
-          refine mul_le_mul_of_nonneg_left ?_ hκ
-          calc B * (B * r ^ ((g + w + h) + a)) = B ^ 2 * r ^ ((g + w + h) + a) := by ring
-            _ ≤ B ^ 4 * r ^ ((g + w + h) + a) := mul_le_mul_of_nonneg_right hB2 (hrk0 _)
-      _ = κ * B ^ 4 * r ^ ((g + w + h) + a) := by ring
-  have hYerr : ‖(y + LinearMap.trace ℂ _ (EY * Q ^ (h + (a + (w + g))))) - y‖ ≤ ε := by
-    rw [add_sub_cancel_left]
-    refine herr _ (h + (a + (w + g))) ((hΦ2 _ _).trans ?_) ((hpow (by omega)).trans hrh)
-    calc κ * (‖Φ EY‖ * ‖Φ (Q ^ (h + (a + (w + g))))‖)
-        ≤ κ * (B * (B * r ^ (h + (a + (w + g))))) :=
-          mul_le_mul_of_nonneg_left (mul2_le (norm_nonneg _) (norm_nonneg _) hEYB
-            ((hQk _).trans (mul_le_mul_of_nonneg_right hCQB (hrk0 _)))) hκ
-      _ ≤ κ * (B ^ 4 * r ^ (h + (a + (w + g)))) := by
-          refine mul_le_mul_of_nonneg_left ?_ hκ
-          calc B * (B * r ^ (h + (a + (w + g)))) = B ^ 2 * r ^ (h + (a + (w + g))) := by ring
-            _ ≤ B ^ 4 * r ^ (h + (a + (w + g))) := mul_le_mul_of_nonneg_right hB2 (hrk0 _)
-      _ = κ * B ^ 4 * r ^ (h + (a + (w + g))) := by ring
-  have hXYerr : ‖(x * y + (LinearMap.trace ℂ _ (EX * P * EY * Q ^ h') +
-        LinearMap.trace ℂ _ (EX * Q ^ g * EY * P) +
-        LinearMap.trace ℂ _ (EX * Q ^ g * EY * Q ^ h'))) - (x * y + 0)‖ ≤ 3 * ε := by
-    rw [add_zero, add_sub_cancel_left]
-    have e1 : ‖LinearMap.trace ℂ _ (EX * P * EY * Q ^ h')‖ ≤ ε := by
-      refine herr _ h' ((hΦ4 _ _ _ _).trans ?_) hrh
-      calc κ * (‖Φ EX‖ * ‖Φ P‖ * ‖Φ EY‖ * ‖Φ (Q ^ h')‖) ≤ κ * (B * B * B * (B * r ^ h')) :=
-            mul_le_mul_of_nonneg_left (mul4_le (norm_nonneg _) (norm_nonneg _) (norm_nonneg _)
-              (norm_nonneg _) hEXB hPB hEYB
-              ((hQk _).trans (mul_le_mul_of_nonneg_right hCQB (hrk0 _)))) hκ
-        _ = κ * B ^ 4 * r ^ h' := by ring
-    have e2 : ‖LinearMap.trace ℂ _ (EX * Q ^ g * EY * P)‖ ≤ ε := by
-      refine herr _ g ((hΦ4 _ _ _ _).trans ?_) hrg
-      calc κ * (‖Φ EX‖ * ‖Φ (Q ^ g)‖ * ‖Φ EY‖ * ‖Φ P‖) ≤ κ * (B * (B * r ^ g) * B * B) :=
-            mul_le_mul_of_nonneg_left (mul4_le (norm_nonneg _) (norm_nonneg _) (norm_nonneg _)
-              (norm_nonneg _) hEXB ((hQk _).trans (mul_le_mul_of_nonneg_right hCQB (hrk0 _)))
-              hEYB hPB) hκ
-        _ = κ * B ^ 4 * r ^ g := by ring
-    have e3 : ‖LinearMap.trace ℂ _ (EX * Q ^ g * EY * Q ^ h')‖ ≤ ε := by
-      refine herr _ g ((hΦ4 _ _ _ _).trans ?_) hrg
-      calc κ * (‖Φ EX‖ * ‖Φ (Q ^ g)‖ * ‖Φ EY‖ * ‖Φ (Q ^ h')‖) ≤
-            κ * (B * (B * r ^ g) * B * B) :=
-            mul_le_mul_of_nonneg_left (mul4_le (norm_nonneg _) (norm_nonneg _) (norm_nonneg _)
-              (norm_nonneg _) hEXB ((hQk _).trans (mul_le_mul_of_nonneg_right hCQB (hrk0 _)))
-              hEYB (hQk' _)) hκ
-        _ = κ * B ^ 4 * r ^ g := by ring
-    calc _ ≤ ‖LinearMap.trace ℂ _ (EX * P * EY * Q ^ h') +
-          LinearMap.trace ℂ _ (EX * Q ^ g * EY * P)‖ +
-          ‖LinearMap.trace ℂ _ (EX * Q ^ g * EY * Q ^ h')‖ := norm_add_le _ _
-      _ ≤ ε + ε + ε := add_le_add ((norm_add_le _ _).trans (add_le_add e1 e2)) e3
-      _ = 3 * ε := by ring
-  /- The covariance through the normalized expectations. -/
-  have hcov : mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (w + g)) Y) -
-      mpvExpectation A N (chainWindowOperator N a X) *
-        mpvExpectation A N (chainWindowOperator N (a + (w + g)) Y) =
-      (x * y + (LinearMap.trace ℂ _ (EX * P * EY * Q ^ h') +
-          LinearMap.trace ℂ _ (EX * Q ^ g * EY * P) +
-          LinearMap.trace ℂ _ (EX * Q ^ g * EY * Q ^ h'))) / (1 + LinearMap.trace ℂ _ (Q ^ N)) -
-        (x + LinearMap.trace ℂ _ (EX * Q ^ ((g + w + h) + a))) /
-            (1 + LinearMap.trace ℂ _ (Q ^ N)) *
-          ((y + LinearMap.trace ℂ _ (EY * Q ^ (h + (a + (w + g))))) /
-            (1 + LinearMap.trace ℂ _ (Q ^ N))) - 0 := by
-    rw [sub_zero, mpvExpectation_eq_div, mpvExpectation_eq_div, mpvExpectation_eq_div, eXY, eX,
-      eY, eZ]
-  have hS : 0 ≤ r ^ g + r ^ h' := add_nonneg (hrk0 _) (hrk0 _)
-  have hK0 : 0 ≤ K := by linarith
-  by_cases hsmall : 3 * ε ≤ 1 / 2
-  · rw [hcov]
-    refine (Complex.norm_div_sub_div_mul_div_sub_le (M := K) (by positivity) hsmall hK0
-      (hZerr.trans (by linarith)) hXYerr (hXerr.trans (by linarith))
-      (hYerr.trans (by linarith)) hxb hyb (by rw [norm_zero]; exact hK0)).trans ?_
-    rw [hε_def]
-    calc 4 * (K + 2) ^ 2 * (3 * (K * (r ^ g + r ^ h'))) =
-          12 * (K + 2) ^ 2 * K * (r ^ g + r ^ h') := by ring
-      _ ≤ (12 * (K + 2) ^ 2 + 12 * M ^ 2 + 1) * K * (r ^ g + r ^ h') := by
-          gcongr
-          nlinarith [sq_nonneg M]
-  · push Not at hsmall
-    have hwX : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (chainWindowOperator N a X)‖ ≤ M :=
-      (norm_toEuclideanCLM_chainWindowOperator_le (by omega) (by omega) X).trans hX
-    have hwY : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-        (chainWindowOperator N (a + (w + g)) Y)‖ ≤ M :=
-      (norm_toEuclideanCLM_chainWindowOperator_le (by omega) (by omega) Y).trans hY
-    have hXY' : ‖mpvExpectation A N
-        (chainWindowOperator N a X * chainWindowOperator N (a + (w + g)) Y)‖ ≤ M * M :=
-      (norm_mpvExpectation_le A N _).trans ((Matrix.norm_toEuclideanCLM_mul_le _ _).trans
-        (mul_le_mul hwX hwY (norm_nonneg _) hM))
-    have hX' := (norm_mpvExpectation_le A N (chainWindowOperator N a X)).trans hwX
-    have hY' := (norm_mpvExpectation_le A N (chainWindowOperator N (a + (w + g)) Y)).trans hwY
-    calc _ ≤ ‖mpvExpectation A N
-            (chainWindowOperator N a X * chainWindowOperator N (a + (w + g)) Y)‖ +
-          ‖mpvExpectation A N (chainWindowOperator N a X)‖ *
-            ‖mpvExpectation A N (chainWindowOperator N (a + (w + g)) Y)‖ := by
-          refine (norm_sub_le _ _).trans ?_
-          rw [norm_mul]
-      _ ≤ M * M + M * M := add_le_add hXY' (mul_le_mul hX' hY' (norm_nonneg _) hM)
-      _ ≤ 12 * M ^ 2 * ε := by nlinarith [sq_nonneg M]
-      _ = 12 * M ^ 2 * K * (r ^ g + r ^ h') := by rw [hε_def]; ring
-      _ ≤ (12 * (K + 2) ^ 2 + 12 * M ^ 2 + 1) * K * (r ^ g + r ^ h') := by
-          gcongr
-          nlinarith [sq_nonneg (K + 2)]
+  have hεK : ∀ k, K * r ^ k ≤ K * r ^ h' → K * r ^ k ≤ ε := fun k hk ↦
+    hk.trans ((mul_le_mul_of_nonneg_left hrh hK0).trans_eq hε_def.symm)
+  /- The terms. -/
+  have ha0 : ‖Matrix.trace (EX ρ)‖ ≤ K := by
+    rw [← htrFP]
+    have := htrK _ 0 ((hmul EX P hEX hPB).trans (by rw [pow_zero, mul_one]; exact hB24))
+    simpa using this
+  have hb0 : ‖Matrix.trace (EY ρ)‖ ≤ K := by
+    rw [← htrFP]
+    have := htrK _ 0 ((hmul EY P hEY hPB).trans (by rw [pow_zero, mul_one]; exact hB24))
+    simpa using this
+  have hgl : ‖limitCorrelator A ρ htr w X Y g‖ ≤ K * r ^ g := by
+    have e : limitCorrelator A ρ htr w X Y g = LinearMap.trace ℂ _ (EX * Q ^ g * EY * P) := by
+      rw [htrFP, hEX_def, hEY_def, hQ_def, hE_def, hP_def]; rfl
+    rw [e]
+    refine htrK _ g ((hmul _ _ (hmul _ _ (hmul _ _ hEX (hQk g)) hEY) hPB).trans ?_)
+    calc B * (B * r ^ g) * B * B = B ^ 4 * r ^ g := by ring
+      _ ≤ B ^ 4 * r ^ g := le_rfl
+  have hδ : ‖LinearMap.trace ℂ _ (Q ^ (w + g + w + h'))‖ ≤ ε := by
+    refine hεK (w + g + w + h') (mul_le_mul_of_nonneg_left (hpow (by omega)) hK0) |>.trans' ?_
+    refine htrK _ _ ((hQk _).trans ?_)
+    exact mul_le_mul_of_nonneg_right hB4 (hrk0 _)
+  have hδX : ‖LinearMap.trace ℂ _ (EX * Q ^ (g + (w + h')))‖ ≤ ε := by
+    refine hεK (g + (w + h')) (mul_le_mul_of_nonneg_left (hpow (by omega)) hK0) |>.trans' ?_
+    refine htrK _ _ ((hmul _ _ hEX (hQk _)).trans ?_)
+    rw [← mul_assoc]
+    exact mul_le_mul_of_nonneg_right hB24 (hrk0 _)
+  have hδY : ‖LinearMap.trace ℂ _ (EY * Q ^ (h' + (w + g)))‖ ≤ ε := by
+    refine hεK (h' + (w + g)) (mul_le_mul_of_nonneg_left (hpow (by omega)) hK0) |>.trans' ?_
+    refine htrK _ _ ((hmul _ _ hEY (hQk _)).trans ?_)
+    rw [← mul_assoc]
+    exact mul_le_mul_of_nonneg_right hB24 (hrk0 _)
+  have hδXY : ‖LinearMap.trace ℂ _ (EX * E ^ g * EY * Q ^ h')‖ ≤ ε := by
+    refine hεK _ le_rfl |>.trans' ?_
+    refine htrK _ _ ((hmul _ _ (hmul _ _ (hmul _ _ hEX (hEkB g hg)) hEY) (hQk h')).trans ?_)
+    calc B * B * B * (B * r ^ h') = B ^ 4 * r ^ h' := by ring
+      _ ≤ B ^ 4 * r ^ h' := le_rfl
+  have hG := mpvConnectedCorrelator_eq_of_compl hw hA (by rw [← hE_def]; exact hρfix) hρtr htr
+    X Y hg hh
+  rw [← hE_def, ← hP_def, ← hQ_def, ← hEX_def, ← hEY_def] at hG
+  rw [hG]
+  have hgK : ‖limitCorrelator A ρ htr w X Y g‖ ≤ K :=
+    hgl.trans (mul_le_of_le_one_right hK0 (hrle g))
+  have hmain := Complex.norm_div_sub_div_mul_div_sub_le (M := K) hε0 hsmall hK0
+    (by rw [add_sub_cancel_left]; exact hδ)
+    (by rw [add_sub_cancel_left]; exact hδXY)
+    (by rw [add_sub_cancel_left]; exact hδX)
+    (by rw [add_sub_cancel_left]; exact hδY) ha0 hb0 hgK
+  have htri := norm_le_norm_sub_add
+    ((Matrix.trace (EX ρ) * Matrix.trace (EY ρ) + limitCorrelator A ρ htr w X Y g +
+        LinearMap.trace ℂ _ (EX * E ^ g * EY * Q ^ h')) /
+        (1 + LinearMap.trace ℂ _ (Q ^ (w + g + w + h'))) -
+      (Matrix.trace (EX ρ) + LinearMap.trace ℂ _ (EX * Q ^ (g + (w + h')))) /
+        (1 + LinearMap.trace ℂ _ (Q ^ (w + g + w + h'))) *
+      ((Matrix.trace (EY ρ) + LinearMap.trace ℂ _ (EY * Q ^ (h' + (w + g)))) /
+        (1 + LinearMap.trace ℂ _ (Q ^ (w + g + w + h')))))
+    (limitCorrelator A ρ htr w X Y g)
+  refine htri.trans ?_
+  have hsum : ‖limitCorrelator A ρ htr w X Y g‖ ≤ K * (r ^ g + r ^ h') :=
+    hgl.trans (mul_le_mul_of_nonneg_left hrg hK0)
+  calc _ ≤ 4 * (K + 2) ^ 2 * ε + K * (r ^ g + r ^ h') := add_le_add hmain hsum
+    _ = ((4 * (K + 2) ^ 2 + 1) * K) * (r ^ g + r ^ h') := by rw [hε_def]; ring
+    _ ≤ ((4 * (K + 2) ^ 2 + 1) * K + 4 * M ^ 2 * K + 1) * (r ^ g + r ^ h') := by
+        gcongr
+        have : 0 ≤ 4 * M ^ 2 * K := by positivity
+        linarith
+
+end MPSTensor

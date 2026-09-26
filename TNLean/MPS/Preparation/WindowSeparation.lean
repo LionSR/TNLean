@@ -69,10 +69,10 @@ theorem isSeparatedBy_window {a w b w' s : ℕ} (hab : a + w + s ≤ b)
   rw [Fin.val_add, Fin.val_intCast] at hv
   have hz : (y.val : ℤ) = ((x.val : ℤ) + m % N) % N := by
     rw [hv, Int.natCast_emod, Nat.cast_add, Int.toNat_of_nonneg h0]
-  have e1 := Int.emod_add_ediv ((x.val : ℤ) + m % N) N
-  have e2 := Int.emod_add_ediv m N
+  have e1 := Int.emod_add_mul_ediv ((x.val : ℤ) + m % N) N
+  have e2 := Int.emod_add_mul_ediv m N
   have hdvd : (N : ℤ) ∣ (y.val : ℤ) - x.val - m :=
-    ⟨-(((x.val : ℤ) + m % N) / N) - m / N, by rw [hz]; linear_combination e1 - e2⟩
+    ⟨-(((x.val : ℤ) + m % N) / N) - m / N, by rw [hz]; linear_combination e1 + e2⟩
   obtain ⟨hxa, hxw⟩ := hx
   obtain ⟨hyb, hyw⟩ := hy
   obtain ⟨hm1, hm2⟩ := abs_le.mp hm
@@ -88,9 +88,18 @@ end Ring
 theorem inner_toLp_toEuclideanLin (ψ : Cfg d N → ℂ) (A : Matrix (Cfg d N) (Cfg d N) ℂ) :
     ⟪(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N)),
         Matrix.toEuclideanLin A (WithLp.toLp 2 ψ)⟫_ℂ = expect ψ A := by
-  simp only [PiLp.inner_apply, Matrix.toEuclideanLin_toLp, PiLp.toLp_apply, RCLike.inner_apply,
-    expect, dotProduct, Pi.star_apply, RCLike.star_def]
+  simp only [Matrix.toLpLin_apply, PiLp.inner_apply, RCLike.inner_apply, expect, dotProduct, Pi.star_apply, RCLike.star_def]
   exact Finset.sum_congr rfl fun _ _ ↦ mul_comm _ _
+
+/-- A vector with `star ψ ⬝ᵥ ψ = 1` is a unit vector of `EuclideanSpace`. -/
+theorem norm_toLp_eq_one {ψ : Cfg d N → ℂ} (hψ1 : star ψ ⬝ᵥ ψ = 1) :
+    ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ = 1 := by
+  have h := inner_toLp_toEuclideanLin ψ 1
+  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply] at h
+  rw [expect_one, hψ1, inner_self_eq_norm_sq_to_K] at h
+  have h' : ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ ^ 2 = 1 :=
+    Complex.ofReal_injective (by push_cast; exact h)
+  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 h'
 
 /-- For a unit vector `χ` and an operator `F`, `‖⟪χ, F χ⟫‖ ≤ ‖F‖`. -/
 theorem norm_inner_apply_le {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
@@ -162,14 +171,7 @@ theorem norm_sub_inner_smul_sq_le_of_isPreparedInDepth {T w Δ n : ℕ} (hw : 0 
       γ ^ 2 * (3 * n * (2 * M ^ 2)) := by
   classical
   set χ : EuclideanSpace ℂ (Cfg d N) := WithLp.toLp 2 ψ
-  have hχ : ‖χ‖ = 1 := by
-    have h : ⟪χ, χ⟫_ℂ = 1 := by
-      have := inner_toLp_toEuclideanLin ψ 1
-      rw [expect_one, hψ1] at this
-      simpa [Matrix.toEuclideanLin, Matrix.toLpLin_one] using this
-    rw [inner_self_eq_norm_sq_to_K] at h
-    have h' : ‖χ‖ ^ 2 = 1 := by exact_mod_cast h
-    exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 h'
+  have hχ : ‖χ‖ = 1 := norm_toLp_eq_one hψ1
   have hΔ : w ≤ Δ := by omega
   have hwin := fun k : Fin n ↦ window_lt_and_le (N := N) hw hΔ hn k.isLt
   set Xk : Fin n → Matrix (Cfg d N) (Cfg d N) ℂ := fun k ↦ chainWindowOperator N (k.val * Δ) X
@@ -192,7 +194,7 @@ theorem norm_sub_inner_smul_sq_le_of_isPreparedInDepth {T w Δ n : ℕ} (hw : 0 
         (chainWindowOperator_mem_supportedOperators_window (hwin k).1 (hwin k).2 X)
         (chainWindowOperator_mem_supportedOperators_window (hwin l).1 (hwin l).2 X)
       have hne : l.val - k.val ≠ 0 := by have := Fin.lt_def.mp hkl; omega
-      simp only [f, hne, if_false]
+      simp only [f, hne, ite_false]
       rw [← toEuclideanLin_mul_apply, inner_toLp_toEuclideanLin, inner_toLp_toEuclideanLin,
         inner_toLp_toEuclideanLin, hfac, sub_self, norm_zero])
   refine hmain.trans ?_

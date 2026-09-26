@@ -21,13 +21,10 @@ Theorem 1).
 
 ## Main results
 
-* `MPSTensor.mpvExpectation_chainWindowOperator_eq`,
-  `MPSTensor.mpvExpectation_chainWindowOperator_mul_eq`: translation invariance of one- and
-  two-window expectations.
 * `MPSTensor.exists_norm_sub_inner_smul_sq_le_mpv`: the variance bound in `φ_N`.
 -/
 
-open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator
+open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator ComplexOrder
 
 namespace MPSTensor
 
@@ -39,53 +36,6 @@ theorem norm_inv_smul_mpvState {A : MPSTensor d D} {N : ℕ} (h : mpvState A N �
     ‖((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N‖ = 1 := by
   rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
     inv_mul_cancel₀ (norm_ne_zero_iff.mpr h)]
-
-/-- The numerator of the expectation of an operator `X` on the window `a, …, a + L - 1` of a
-chain of `N` sites is `tr(E_X E_A^{N-L})`, independent of `a` (arXiv:2307.01696, Supplemental
-Material, proof of Lemma 2, trace expansion). -/
-theorem inner_mpvState_chainWindowOperator_eq_trace (A : MPSTensor d D) {L N a : ℕ}
-    (hL : 0 < L) (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    ⟪mpvState A N, Matrix.toEuclideanLin (chainWindowOperator N a X) (mpvState A N)⟫_ℂ =
-      LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
-        (physicalObservableTransfer A L X * Kraus.transferMap A ^ (N - L)) := by
-  obtain ⟨n, rfl⟩ : ∃ n, N = a + (L + n) := ⟨N - a - L, by omega⟩
-  rw [inner_mpvState_chainWindowOperator_offset A hL a n X]
-  congr 3
-  omega
-
-/-- The numerator of the two-window expectation, with `X` on the window starting at `a` and
-`Y` on the window starting at `a + L + m`, is `tr(E_X E_A^m E_Y E_A^{N-2L-m})`, independent of
-`a` (arXiv:2307.01696, Supplemental Material, proof of Lemma 2, trace expansion). -/
-theorem inner_mpvState_chainWindowOperator_mul_eq_trace (A : MPSTensor d D) {L N a m : ℕ}
-    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    ⟪mpvState A N, Matrix.toEuclideanLin
-        (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) (mpvState A N)⟫_ℂ =
-      LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
-        (physicalObservableTransfer A L X * Kraus.transferMap A ^ m *
-          physicalObservableTransfer A L Y * Kraus.transferMap A ^ (N - (L + m + L))) := by
-  obtain ⟨n, rfl⟩ : ∃ n, N = a + (L + m + L + n) := ⟨N - a - (L + m + L), by omega⟩
-  rw [inner_mpvState_chainWindowOperator_mul_offset A hL a m n X Y]
-  congr 3
-  omega
-
-/-- **Translation invariance of one-window expectations** (arXiv:2307.01696, eq. (TI-MPS2):
-the vectors `φ_N` are translation invariant). -/
-theorem mpvExpectation_chainWindowOperator_eq (A : MPSTensor d D) {L N a : ℕ} (hL : 0 < L)
-    (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    mpvExpectation A N (chainWindowOperator N a X) =
-      mpvExpectation A N (chainWindowOperator N 0 X) := by
-  rw [mpvExpectation_eq_div, mpvExpectation_eq_div,
-    inner_mpvState_chainWindowOperator_eq_trace A hL haL,
-    inner_mpvState_chainWindowOperator_eq_trace A hL (by omega)]
-
-/-- **Translation invariance of two-window expectations** (arXiv:2307.01696, eq. (TI-MPS2)). -/
-theorem mpvExpectation_chainWindowOperator_mul_eq (A : MPSTensor d D) {L N a m : ℕ}
-    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) =
-      mpvExpectation A N (chainWindowOperator N 0 X * chainWindowOperator N (L + m) Y) := by
-  rw [mpvExpectation_eq_div, mpvExpectation_eq_div,
-    inner_mpvState_chainWindowOperator_mul_eq_trace A hL haL,
-    ← zero_add (L + m), inner_mpvState_chainWindowOperator_mul_eq_trace A hL (by omega)]
 
 /-- A geometric sum with ratio `0 ≤ r < 1` is at most `1 / (1 - r)`. -/
 theorem sum_range_pow_le {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) (n : ℕ) :
@@ -153,7 +103,7 @@ theorem exists_norm_sub_inner_smul_sq_le_mpv [NeZero D] {A : MPSTensor d D} {L�
       (chainWindowOperator_isHermitian (hwin k).1 (hwin k).2 hX)) hχ c hc f hf
     (fun k ↦ by
       refine (MPSPreparation.norm_inner_sq_sub_le (Xk k) (hnorm k) hχ).trans ?_
-      simp only [f, if_true, Nat.sub_zero]
+      simp only [f, ite_true, Nat.sub_zero]
       have : 0 ≤ C * (r ^ 0 + r ^ n) := by positivity
       linarith)
     (fun k l hkl ↦ by
@@ -201,18 +151,20 @@ theorem exists_norm_sub_inner_smul_sq_le_mpv [NeZero D] {A : MPSTensor d D} {L�
       have e1 : r ^ g ≤ r ^ j := pow_le_pow_of_le_one hr0 hr1.le hg'
       have e2 : r ^ (h + p) ≤ r ^ (n - j) := pow_le_pow_of_le_one hr0 hr1.le hh'
       have hj0 : j ≠ 0 := by omega
-      simp only [f, hj0, if_false, zero_add]
+      simp only [f, hj0, ite_false, zero_add]
       gcongr)
   refine hmain.trans ?_
   gcongr
   have hsplit : ∑ j ∈ Finset.range n, f j =
       ∑ j ∈ Finset.range n, (if j = 0 then 2 * M ^ 2 else 0) +
         C * (∑ j ∈ Finset.range n, r ^ j + ∑ j ∈ Finset.range n, r ^ (n - j)) := by
-    simp only [f, Finset.sum_add_distrib, Finset.mul_sum]
+    simp only [f, Finset.sum_add_distrib, ← Finset.mul_sum]
   rw [hsplit]
   have h1 : ∑ j ∈ Finset.range n, (if j = 0 then 2 * M ^ 2 else 0) ≤ 2 * M ^ 2 := by
     rw [Finset.sum_ite_eq' (Finset.range n) 0]
-    split_ifs <;> positivity
+    split_ifs
+    · exact le_rfl
+    · positivity
   have h2 := sum_range_pow_le hr0 hr1 n
   have h3 := sum_range_pow_sub_le hr0 hr1 n
   have : C * (∑ j ∈ Finset.range n, r ^ j + ∑ j ∈ Finset.range n, r ^ (n - j)) ≤
