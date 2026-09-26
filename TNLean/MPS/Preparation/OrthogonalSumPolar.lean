@@ -19,6 +19,10 @@ the summands (the two conjuncts of `Matrix.polarIso_sum_of_orthogonal`).
 Without `Bⱼᴴ Bⱼ' = 0` the conclusion fails
 (`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`).
 
+**Scope restriction (orthogonal summands):** eq. (S5) is proved only for summands with
+`Bⱼᴴ Bⱼ' = 0` for `j ≠ j'`, a hypothesis the source does not state and without which the
+block form fails. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+
 ## Main declarations
 
 * `Matrix.sum_mul_sum_of_mul_eq_zero` — a product of sums without cross terms.
