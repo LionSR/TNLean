@@ -54,6 +54,31 @@ absorption as consequences of blocking an arbitrary MPU tensor.
 
 \section{The formal scope issue}
 
+The transfer normalization must be distinguished from the missing existence
+argument. If $d_W>0$ is the physical dimension of $W$, the paper uses
+\begin{align}
+    \widehat E_W(X) &= d_W^{-1}\sum_{i,j}W^{ij}X(W^{ij})^\dagger,
+    \label{eq:mpu_fixed_pair_normalized_transfer}
+\end{align}
+as specified in its definition of the transfer operator
+\cite[lines~336--340]{Cirac2017MPU}. Thus the fixed-pair equation derived
+in the source is $\widehat E_W(X)=\tr(LX)R$. The corresponding
+unnormalized map is $E_W(X)=d_W\tr(LX)R$.
+
+Let $T$ be the reduced projection associated to the support projections of
+$L$ and $R$. Normalized compression preserves the same pair:
+\begin{align}
+    \widehat E_{TWT}(X) &=\tr\!\bigl((TLT)X\bigr)\,TRT.
+    \label{eq:mpu_fixed_pair_normalized_compression}
+\end{align}
+This identity is formalized independently of the construction of $L$ and
+$R$.\footnote{Formal declaration:
+\leanid{MPOTensor.transferMap_normalizedFlattening_reducedProjection}.}
+The distinction between $E_W$ and $\widehat E_W$ is a normalization
+convention, not an additional hypothesis on the MPU. The unnormalized
+compression theorem remains a valid conditional matrix identity, but its
+fixed-pair hypothesis is not the paper's normalized fixed-pair equation.
+
 The formal reduced-representative calculation starts after this source
 derivation. It assumes the fixed pair and its consequences explicitly rather
 than deriving them. In letterwise notation, it assumes
@@ -117,10 +142,13 @@ an orthogonal projection and assumes the letterwise absorptions in
 Eqs.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_letterwise_right_absorption}
 and
 \ref{eq:mpu_reduced_representative_supplied_fixed_pair_letterwise_left_absorption}.
-The declaration
+The unnormalized declaration
 \leanid{MPOTensor.transferMap_virtualSandwich_reducedProjection} assumes the
-rank-one transfer formula in
+rank-one transfer formula for $E_W$ in
 Eq.~\ref{eq:mpu_reduced_representative_supplied_fixed_pair_assumed_transfer}.
+The normalized declaration instead assumes
+$\widehat E_W(X)=\tr(LX)R$ and proves
+(\ref{eq:mpu_fixed_pair_normalized_compression}).
 
 The declarations
 \leanid{MPOTensor.trace_compressed_fixed_pair_reducedProjection} and
