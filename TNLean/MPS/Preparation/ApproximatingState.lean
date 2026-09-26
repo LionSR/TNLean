@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
+import QICLean.Analysis.CfcConjugation
+import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.FixedPointPairs
@@ -32,9 +34,7 @@ This file proves these three steps.
 * `MPSTensor.approximatingTensor` — the tensor `B̃ = V P_∞` of eq. (9).
 * `MPSTensor.mpv_approximatingTensor` — its periodic state is `V^{⊗M}` applied to the product of
   the pairs `ω` (eq. (10)).
-* `MPSTensor.sum_normSq_mpv_approximatingTensor` — for injective `B` that state is normalized.
-* `Matrix.exists_mem_unitaryGroup_apply_embedding_eq` — an isometry `V : ℂ^κ → ℂ^ι` extends to a
-  unitary on `ℂ^ι` along any injective placement of the basis of `ℂ^κ` (eq. (11)).
+* `MPSTensor.mpv_approximatingTensor_norm_sq` — for injective `B` that state is normalized.
 * `MPSTensor.exists_unitary_mpv_approximatingTensor` — the periodic state of `B̃` is
   `(⊗ₖ Uₖ) ⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})` (eqs. (10) and (11)).
 
@@ -48,49 +48,6 @@ open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Filter Topology
 
 namespace Matrix
-
-/-- **Unitary implementing an isometry.** An isometry `V : ℂ^κ → ℂ^ι` and an injective placement
-`e : κ ↪ ι` of the basis vectors of `ℂ^κ` among those of `ℂ^ι` give a unitary `U` on `ℂ^ι` with
-`U |e k⟩ = V |k⟩` for every `k`.
-
-arXiv:2307.01696, eq. (11): the unitary `U` on the `q` sites of a block implements the isometry
-`V` on inputs whose central sites are in `|0⟩`; the placement `e` is `|γ, δ⟩ ↦ |γ⟩_L |0⟩_C |δ⟩_R`
-there. -/
-theorem exists_mem_unitaryGroup_apply_embedding_eq {ι κ : Type*} [Fintype ι] [DecidableEq ι]
-    [DecidableEq κ] {V : Matrix ι κ ℂ} (hV : V.IsIsometry) (e : κ ↪ ι) :
-    ∃ U ∈ Matrix.unitaryGroup ι ℂ, ∀ i k, U i (e k) = V i k := by
-  classical
-  let E := EuclideanSpace ℂ ι
-  let col : κ → E := fun k => WithLp.toLp 2 (fun i => V i k)
-  let v : ι → E := Function.extend e col 0
-  have hv_e : ∀ k, v (e k) = col k := fun k => e.injective.extend_apply col 0 k
-  have key : ∀ k k', inner ℂ (col k) (col k') = if k = k' then 1 else 0 := fun k k' => by
-    have h := congrFun (congrFun hV k) k'
-    rw [Matrix.mul_apply, Matrix.one_apply] at h
-    rw [← h, PiLp.inner_apply]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    simp [col, RCLike.inner_apply, Matrix.conjTranspose_apply, mul_comm]
-  have hv : Orthonormal ℂ ((Set.range e).domRestrict v) := by
-    rw [orthonormal_iff_ite]
-    rintro ⟨x, hx⟩ ⟨y, hy⟩
-    obtain ⟨k, rfl⟩ := hx
-    obtain ⟨k', rfl⟩ := hy
-    simp only [Set.domRestrict_apply, hv_e, key]
-    simp [Subtype.ext_iff]
-  obtain ⟨bb, hbb⟩ := hv.exists_orthonormalBasis_extension_of_card_eq
-    (by simp [E, finrank_euclideanSpace])
-  refine ⟨Matrix.of fun x y => (bb y : E) x, ?_, ?_⟩
-  · rw [Matrix.mem_unitaryGroup_iff']
-    ext y z
-    have h := (orthonormal_iff_ite.mp bb.orthonormal) y z
-    rw [PiLp.inner_apply] at h
-    simp only [Matrix.mul_apply, Matrix.star_apply, Matrix.of_apply, Matrix.one_apply]
-    rw [← h]
-    refine Finset.sum_congr rfl fun x _ => ?_
-    simp [RCLike.inner_apply, mul_comm]
-  · intro i k
-    have := hbb (e k) ⟨k, rfl⟩
-    simp [this, hv_e, col]
 
 /-- An isometry `W : ℂ^κ → ℂ^n` applied on every site preserves the squared norm of a vector on
 `M` sites: `‖W^{⊗M} ψ‖² = ‖ψ‖²`. -/
@@ -176,22 +133,6 @@ theorem tendsto_gram_physicalMatrix_of_tendsto_transferMap {nq : ℕ → ℕ}
   rw [hval]
   exact h
 
-/-- The positive square root of `σᵀ ⊗ 1` is `(√σ)ᵀ ⊗ 1`. -/
-theorem cfcSqrt_transpose_kronecker_one {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) :
-    CFC.sqrt (σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
-      (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
-  have hS : (CFC.sqrt σ).PosSemidef := Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg σ)
-  have h1 : (0 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) ≤ σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) :=
-    ((Matrix.posSemidef_transpose_iff.2 hσ).kronecker Matrix.PosSemidef.one).nonneg
-  have h2 : (0 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) ≤
-      (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) :=
-    ((Matrix.posSemidef_transpose_iff.2 hS).kronecker Matrix.PosSemidef.one).nonneg
-  have h3 : (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) *
-      ((CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) = σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by
-    rw [← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul, CFC.sqrt_mul_sqrt_self σ hσ.nonneg,
-      Matrix.mul_one]
-  exact (CFC.sqrt_eq_iff _ _ h1 h2).2 h3
-
 /-- If the transfer maps of a family of tensors converge to `X ↦ Tr(X) σ`, the positive factors
 `P = (Bᴴ B)^{1/2}` of their polar decompositions converge to `(√σ)ᵀ ⊗ 1`, the map
 `|α, β⟩ ↦ ∑_γ (√σ)_{αγ} |γ, β⟩`.
@@ -202,7 +143,8 @@ theorem tendsto_polarPos_physicalMatrix_of_tendsto_transferMap {nq : ℕ → ℕ
     (hlim : ∀ X, Tendsto (fun q => Kraus.transferMap (B q) X) atTop (𝓝 (X.trace • σ))) :
     Tendsto (fun q => Matrix.polarPos (physicalMatrix (B q))) atTop
       (𝓝 ((CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) := by
-  rw [← cfcSqrt_transpose_kronecker_one hσ]
+  rw [← hσ.sqrt_transpose, ← CFC.sqrt_one (A := Matrix (Fin D) (Fin D) ℂ),
+    ← (Matrix.posSemidef_transpose_iff.2 hσ).sqrt_kronecker Matrix.PosSemidef.one]
   have hmem : σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) ∈ {a | 0 ≤ a} :=
     ((Matrix.posSemidef_transpose_iff.2 hσ).kronecker Matrix.PosSemidef.one).nonneg
   have hsqrt : ContinuousOn (CFC.sqrt : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ → _)
@@ -266,7 +208,7 @@ noncomputable def approximatingTensor (B : MPSTensor n D) (σ : Matrix (Fin D) (
     MPSTensor n D :=
   rotatePhysical (polarIsoMatrix B) (fixedPointTensor σ)
 
-/-- **The approximating state.** The periodic state of `B̃ = V P_∞` on `M ≥ 1` sites is
+/-- **The approximating state.** The periodic state of `B̃ = V P_∞` on `M ≥ 1` blocks is
 `V^{⊗M}` applied to the product `⊗ₖ |ω⟩_{R_k L_{k+1}}` of the pairs of eq. (12).
 
 arXiv:2307.01696, eqs. (9) and (10). -/
@@ -282,7 +224,7 @@ theorem mpv_approximatingTensor (B : MPSTensor n D) (σ : Matrix (Fin D) (Fin D)
 normalized, so it is the approximating state `|φ̃_N⟩` itself.
 
 arXiv:2307.01696, eq. (10): `|φ̃_N⟩` is `V^{⊗M}` applied to the normalized state `|Ω⟩`. -/
-theorem sum_normSq_mpv_approximatingTensor {B : MPSTensor n D}
+theorem mpv_approximatingTensor_norm_sq {B : MPSTensor n D}
     (hB : Kraus.IsInjective B) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) {M : ℕ} [NeZero M] :
     ∑ s : Fin M → Fin n,
@@ -297,8 +239,8 @@ theorem sum_normSq_mpv_approximatingTensor {B : MPSTensor n D}
 
 /-- The input state `⊗ₖ (|ω⟩_{R_k L_{k+1}} |0⟩_{C_k})` of the preparation, on `M` blocks each
 with physical space `ℂ^n`. The placement `ι` sends the pair `(l, r)` of left and right
-indices of a block to a basis vector of `ℂ^n`; in the source it is
-`(l, r) ↦ |l⟩_L |0⟩_C |r⟩_R`.
+indices of a block to a basis vector of `ℂ^n`; in the source, where `D = d` so that `L` and `R`
+are single sites, it is `(l, r) ↦ |l⟩_L |0⟩_C |r⟩_R`.
 
 arXiv:2307.01696, eq. (10). -/
 noncomputable def embeddedPairState (ι : Fin D × Fin D → Fin n) (σ : Matrix (Fin D) (Fin D) ℂ)

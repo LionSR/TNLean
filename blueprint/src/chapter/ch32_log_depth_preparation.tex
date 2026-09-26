@@ -116,11 +116,11 @@ injective.
 \begin{definition}[Approximating state]
     \label{def:ldp_approximating_state}
     \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
-        MPSTensor.sum_normSq_mpv_approximatingTensor}
+        MPSTensor.mpv_approximatingTensor_norm_sq}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor,
-        thm:prep_mpv_fixed_point_tensor, thm:ldpolar_tensor_injective,
-        thm:prep_pair_product_norm}
+        thm:prep_mpv_fixed_point_tensor, lem:mpv_rotate_physical,
+        thm:ldpolar_tensor_injective, thm:prep_pair_product_norm}
     With $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition} and $N=qM$, the
     \emph{approximating state} is
     $\ket{\widetilde\phi_N}=\ket{\phi_M(VP_\infty)}/\lVert\phi_M(VP_\infty)\rVert$.
@@ -153,8 +153,10 @@ injective.
         \label{eq:ldp_unitary_preparation}
     \end{align}
     where $c$ runs over the configurations $c_k=(l_k,r_k)$ and $\Omega$ is the
-    pair product state~(\ref{eq:prep_pair_product}). In the source, $d\ge2$,
-    $r=\lceil\log_dD\rceil$, $q\ge2r$, and $(\C^d)^{\otimes q}=L\otimes C\otimes R$,
+    pair product state~(\ref{eq:prep_pair_product}). The source takes $D=d$,
+    so that $L$ and $R$ below are single sites and the remaining $\ell$ central
+    sites carry $\ket{0}$; the padding of the legs for general $D$ is this
+    chapter's extension. With $d\ge2$, $r=\lceil\log_dD\rceil$, $q\ge2r$, and $(\C^d)^{\otimes q}=L\otimes C\otimes R$,
     where $L$ and $R$ are the first and the last $r$ sites of the block and
     $C$ is the remaining $q-2r$ sites; $\C^D$ is embedded into $L$ and into
     $R$ as the span of the first $D$ computational basis vectors, and
