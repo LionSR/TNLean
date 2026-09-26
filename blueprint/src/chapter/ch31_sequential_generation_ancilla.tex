@@ -708,7 +708,9 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     Let $N\ge 2$. Starting from $\ket{0}^{\otimes N}$, an operation $U^{[k]}$
     acts on sites $k$ and $k+1$, for $k=1,\dots,N-1$ in turn. The scheme is
     deterministic if every $U^{[k]}$ is unitary and probabilistic if the
-    operations are arbitrary \cite[Section~5.2]{PerezGarcia2007Matrix}. Before
+    operations are arbitrary \cite[Section~5.2]{PerezGarcia2007Matrix}. Here
+    sites carry the source's labels $1,\dots,N$; source site $j$ is ket
+    position $N-j$ in the labelling of this chapter. Before
     $U^{[k]}$ acts, sites $k+1,\dots,N$ are still in $\ket{0}$, and site $k$
     is not touched afterwards, so the chain state after $U^{[k]}$ is
     $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$ with
@@ -729,25 +731,29 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     normalization), are exactly the states with an open-boundary
     representation of bond dimension at most $d$, normalized in the
     deterministic case. This is \cite[Section~5, Theorem ``Sequential
-        generation without ancilla'']{PerezGarcia2007Matrix}.
+        generation without ancilla'']{PerezGarcia2007Matrix}, which prints no
+    bound on $N$; the scheme presupposes two sites, and the literal
+    one-site reading fails \cite{gap:pgvwc07_sequential_no_ancilla_two_sites}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_sweep, thm:seqanc_sweep_obc, thm:seqanc_norm,
+    \uses{thm:seqanc_sweep, thm:seqanc_assemble, thm:seqanc_coeff_corner,
+        thm:seqanc_norm,
         thm:seqanc_block_congr, thm:seqanc_unitary_extension}
     With $A^{[k]}_{i,\beta\alpha}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$ the
     recursion for $\chi_k$ gives
     $\psi(\sigma)=\bigl(A^{[N-1]}_{\sigma_1}\cdots
         A^{[1]}_{\sigma_{N-1}}\ket{0}\bigr)_{\sigma_0}$ in ket positions, an
-    open-boundary representation with bond dimension at most $d$ after
-    Theorem~\ref{thm:seqanc_sweep_obc}. For unitary operations each
+    open-boundary representation with bond dimension at most $d$ by
+    Theorems~\ref{thm:seqanc_sweep} and~\ref{thm:seqanc_assemble}. For unitary operations each
     $A^{[k]}$ satisfies $\sum_iA_i^\dagger A_i=\Id$, so the state is
     normalized by Theorem~\ref{thm:seqanc_norm}.
 
     Conversely, write an open-boundary state as
     $\psi(\sigma)=\bigl(R\,P_1^{\sigma_1}\cdots P_{N-1}^{\sigma_{N-1}}
         \ket{0}\bigr)_{\sigma_0}$ with $R_{j\gamma}$ the entries of the first
-    site, and run the successive decompositions of
+    site (Theorem~\ref{thm:seqanc_coeff_corner}), and run the successive
+    decompositions of
     Theorem~\ref{thm:seqanc_sweep} starting from $R$: this gives
     $\psi(\sigma)=\bigl(Q_1^{\sigma_1}\cdots Q_{N-1}^{\sigma_{N-1}}
         r'\bigr)_{\sigma_0}$ with every $Q_p$ isometric on its bond block, and
