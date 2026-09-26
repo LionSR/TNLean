@@ -48,6 +48,8 @@ tensor.
   injectivity.
 * `isNormalTensor_of_isNormal_leftCanonical`: an algebraically normal
   left-canonical tensor is a spectrally normalized normal tensor.
+* `isNormalTensor_of_isIrreducibleFamily_leftCanonical`: an irreducible left-canonical tensor
+  whose transfer map has `1` as its only unit-modulus eigenvalue is a normal tensor.
 * `MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor`: exact MPV
   phase equivalence between normal tensors is realized by an invertible gauge.
 * `IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv`: distinct members of
@@ -343,6 +345,23 @@ theorem isNormalTensor_of_isNormal_leftCanonical [NeZero D]
     isNormalTensor_invSqrt_smul_of_unique_peripheral A hIrr ρ 1 hρ (by norm_num)
       (by simpa using hρfix) huniq
   simpa using hScaled
+
+/-- A left-canonical tensor whose letters have no nontrivial common invariant subspace and whose
+transfer map has `1` as its only eigenvalue of modulus one is a normal tensor.
+
+This is the definition of normality after arXiv:2307.01696, eq. `eq:transfer_matrix`, in the
+left-canonical gauge. The spectral-radius-one field of `IsNormalTensor` is automatic there:
+the transfer map of a left-canonical tensor is a channel, so its spectral radius is one
+(Wolf Proposition 6.1). -/
+theorem isNormalTensor_of_isIrreducibleFamily_leftCanonical [NeZero D]
+    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A)
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A))
+    (hLeft : IsLeftCanonical A) : IsNormalTensor A where
+  no_invariant_proj := hIrr
+  spectral_radius_one :=
+    have hC := Kraus.isChannel_mapLM A hLeft
+    hC.pos.spectralRadius_eq_one_of_tracePreserving hC.tp
+  primitive_transfer := hPrim
 
 /-- A normal tensor has a nonzero letter.
 
