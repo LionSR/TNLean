@@ -148,6 +148,14 @@ theorem norm_toContinuousLinearMap_physicalObservableTransfer_le {A : MPSTensor 
   have hZ : Z = ∑ c : Fin D, ∑ e : Fin D, Z c e • Matrix.single c e (1 : ℂ) := by
     conv_lhs => rw [Matrix.matrix_eq_sum_single Z]
     simp only [Matrix.smul_single, smul_eq_mul, mul_one]
+  have hentry : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D), ‖M p q‖ ≤ ‖M‖ := by
+    intro M p q
+    rw [← coe_nnnorm, ← coe_nnnorm, NNReal.coe_le_coe, Matrix.linfty_opNNNorm_def]
+    calc ‖M p q‖₊ ≤ ∑ j, ‖M p j‖₊ :=
+          Finset.single_le_sum (f := fun j ↦ ‖M p j‖₊) (fun _ _ ↦ bot_le)
+            (Finset.mem_univ q)
+      _ ≤ Finset.univ.sup fun i ↦ ∑ j, ‖M i j‖₊ :=
+          Finset.le_sup (f := fun i ↦ ∑ j, ‖M i j‖₊) (Finset.mem_univ p)
   have hent : ∀ b a, ‖physicalObservableTransfer A m X Z b a‖ ≤ (D : ℝ) ^ 2 * x * ‖Z‖ := by
     intro b a
     conv_lhs => rw [hZ]
@@ -159,7 +167,7 @@ theorem norm_toContinuousLinearMap_physicalObservableTransfer_le {A : MPSTensor 
           rw [map_sum, Matrix.sum_apply]
           refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun e _ ↦ ?_)
           rw [map_smul, Matrix.smul_apply, smul_eq_mul, norm_mul]
-          exact mul_le_mul (Matrix.norm_apply_le_linfty_opNorm Z c e)
+          exact mul_le_mul (hentry Z c e)
             (norm_physicalObservableTransfer_single_apply_le hA m X a b c e) (norm_nonneg _)
             (norm_nonneg _)
       _ = (D : ℝ) ^ 2 * x * ‖Z‖ := by simp; ring
