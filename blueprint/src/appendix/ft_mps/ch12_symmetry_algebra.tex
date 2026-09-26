@@ -127,12 +127,13 @@ The same bookkeeping applies to a general matrix acting on the physical index.
 
 \begin{definition}[Physical-index rotation]%
     \label{def:rotate_physical}
-    \lean{MPSTensor.rotatePhysical}
+    \lean{MPSTensor.rotatePhysical, MPSTensor.rotatePhysical_apply}
     \leanok
     \uses{def:mps_tensor}
-    Given a matrix $M \in \MN{d}$ and an MPS tensor~$A$,
-    the \emph{physical-index rotation} is the tensor
-    $(A_M)^i := \sum_j M_{ij}\, A^j$.
+    Given a matrix $M \in \C^{m\times d}$ and an MPS tensor~$A$ with
+    physical dimension~$d$, the \emph{physical-index rotation} is the tensor
+    with physical dimension~$m$ given by
+    $(A_M)^i := \sum_j M_{ij}\, A^j$ for $i=0,\ldots,m-1$.
     When the matrix is a unitary $u$, the rotation is written $A_u$.
 \end{definition}
 
@@ -141,8 +142,9 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     \lean{MPSTensor.mpv_rotatePhysical}
     \leanok
     \uses{def:rotate_physical, def:mpv}
-    For a length-$N$ physical configuration
-    $s=(s_0,\ldots,s_{N-1})$, physical rotation satisfies
+    For $M\in\C^{m\times d}$ and a length-$N$ physical configuration
+    $s=(s_0,\ldots,s_{N-1})\in\{0,\ldots,m-1\}^N$, physical rotation
+    satisfies
     \begin{align}
         \tr((A_M)^{s_0}\cdots(A_M)^{s_{N-1}})
          & =
