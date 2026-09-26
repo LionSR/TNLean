@@ -821,21 +821,21 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{proof}
 
 \begin{theorem}[Cyclic propagation of boundary intertwiners]
-\label{thm:cyclic-boundary-intertwining}
-\lean{MPSTensor.boundary_commutes_evalWord_of_cyclic_intertwining}
-\leanok
-Let $N\geq1$, let $s\in\mathbb Z/N\mathbb Z$, and suppose matrices $Y_i$
-satisfy $Y_iA^a=A^aY_{s+i}$ for every $i$ and physical label $a$.
-Then, for every word $w$ of length $N$ and every $i$,
-\begin{align}
- Y_iA^w=A^wY_i.
-\end{align}
+    \label{thm:cyclic-boundary-intertwining}
+    \lean{MPSTensor.boundary_commutes_evalWord_of_cyclic_intertwining}
+    \leanok
+    Let $N\geq1$, let $s\in\mathbb Z/N\mathbb Z$, and suppose matrices $Y_i$
+    satisfy $Y_iA^a=A^aY_{s+i}$ for every $i$ and physical label $a$.
+    Then, for every word $w$ of length $N$ and every $i$,
+    \begin{align}
+        Y_iA^w=A^wY_i.
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-\uses{thm:cyclic_window_boundary_matrix_transport}
-Propagating the intertwining identity through the word gives
-$Y_iA^w=A^wY_{Ns+i}$. Since $Ns=0$ in the cyclic index group, the two
-boundary matrices coincide.
+    \uses{thm:cyclic_window_boundary_matrix_transport}
+    Propagating the intertwining identity through the word gives
+    $Y_iA^w=A^wY_{Ns+i}$. Since $Ns=0$ in the cyclic index group, the two
+    boundary matrices coincide.
 \end{proof}
 
 \begin{theorem}[Cyclic closure of block boundary matrices]
