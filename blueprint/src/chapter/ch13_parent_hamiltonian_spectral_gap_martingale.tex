@@ -7087,3 +7087,176 @@ tensors.
     preceding theorem applies to this fixed choice for every $S$ and every
     $R\geq S+1$.
 \end{proof}
+
+\begin{theorem}[Comparison of positive parent interactions]
+    \label{thm:parent-interaction-comparison}
+    \lean{MPSTensor.IsParentInteraction.exists_pos_comparison}
+    \leanok
+    Let $h$ be a positive interaction on $R$ sites whose kernel is the local
+    MPS space $G_R(A)$, in the sense of
+    \cite[Section IV.C]{Cirac2021Matrix}. Write $h_R=I-P_{G_R(A)}$ for the
+    canonical parent projection. There are constants $\kappa,C>0$ such that
+    \begin{align}
+        \kappa h_R\leq h\leq Ch_R.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:positive-kernel-projection-comparison}
+    Apply the finite-dimensional comparison with the projection onto the
+    orthogonal complement of the kernel of $h$. This projection is $h_R$.
+\end{proof}
+
+\begin{definition}[Periodic sum of a fixed interaction]
+    \label{def:periodic-fixed-interaction}
+    \lean{MPSTensor.periodicLocalInteractionES,MPSTensor.periodicInteractionHamiltonianES}
+    \leanok
+    Let $h$ act on the physical space of $R$ consecutive sites. For
+    $R\leq N$, let $U_i$ be the unitary which places the cyclic interval
+    of length $R$ starting at $i$ first and the remaining sites second.
+    Define
+    \begin{align}
+        h_i    & =U_i^*(h\otimes I)U_i,      &
+        H_N(h) & =\sum_{i=0}^{N-1}h_i.\notag
+    \end{align}
+    When $R>N$, set each translated interaction, and hence their sum, to
+    zero. This agrees with the convention for the canonical parent Hamiltonian.
+\end{definition}
+
+\begin{theorem}[Order and positivity of periodic interaction sums]
+    \label{thm:periodic-fixed-interaction-order}
+    \lean{MPSTensor.periodicLocalInteractionES_mono,
+        MPSTensor.periodicLocalInteractionES_smul,
+        MPSTensor.periodicInteractionHamiltonianES_zero,
+        MPSTensor.periodicInteractionHamiltonianES_mono,
+        MPSTensor.periodicInteractionHamiltonianES_smul,
+        MPSTensor.periodicInteractionHamiltonianES_isPositive}
+    \leanok
+    Cyclic extension and its periodic sum preserve operator inequalities
+    and commute with scalar multiplication. In particular, for every
+    volume $N$,
+    \begin{align}
+        h\leq k & \quad\Longrightarrow\quad H_N(h)\leq H_N(k),\notag                      \\
+        H_N(ch) & =cH_N(h),                                          & H_N(0) & =0,\notag \\
+        h\geq0  & \quad\Longrightarrow\quad H_N(h)\geq0.\notag
+    \end{align}
+    The scalar identity holds for every complex number $c$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:periodic-fixed-interaction,thm:ph_spectator_operator_order}
+    Extension by the identity preserves order and scalar multiplication,
+    as does unitary conjugation. Summing over the cyclic positions preserves
+    these relations. Positivity is the comparison with zero.
+\end{proof}
+
+\begin{theorem}[Canonical parent projections give the canonical Hamiltonian]
+    \label{thm:periodic-fixed-interaction-canonical}
+    \lean{MPSTensor.periodicLocalInteractionES_parentInteractionES,
+        MPSTensor.periodicInteractionHamiltonianES_parentInteractionES}
+    \leanok
+    For a tensor $A$ and a positive interaction range $R$, the periodic
+    sum of the canonical parent projection $h_R=I-P_{G_R(A)}$ is exactly the
+    canonical parent Hamiltonian, at every volume:
+    \begin{align}
+        H_N(h_R)=H_{R,N}(A).\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:periodic-fixed-interaction,thm:cyclic_active_block_local_conjugacy,lem:full-interval-parent-interaction}
+    In cyclic active-interval coordinates, each translated canonical term
+    is the full-interval parent projection extended by the identity on the
+    spectator sites. Conjugating back identifies the terms individually.
+    When $R>N$, both definitions give zero.
+\end{proof}
+
+\begin{theorem}[Uniform comparison of periodic parent Hamiltonians]
+    \label{thm:positive-parent-interaction-periodic-comparison}
+    \lean{MPSTensor.IsParentInteraction.exists_pos_periodic_comparison}
+    \leanok
+    Let $R>0$ and let $h$ be a fixed positive operator with kernel
+    $G_R(A)$, and let $H_{R,N}(A)$ be the canonical periodic parent
+    Hamiltonian. There are $\kappa,C>0$, independent of $N$, such that
+    \begin{align}
+        \kappa H_{R,N}(A)\leq H_N(h)\leq C H_{R,N}(A).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:parent-interaction-comparison,thm:periodic-fixed-interaction-order,thm:periodic-fixed-interaction-canonical}
+    Extend the two local operator inequalities by the identity, conjugate by the
+    cyclic coordinate identifications, and sum over all translated intervals.
+\end{proof}
+
+\begin{theorem}[Uniform gap for a fixed positive parent interaction]
+    \label{thm:positive-parent-interaction-uniform-gap}
+    \lean{MPSTensor.IsParentInteraction.exists_uniform_gap_of_canonical_gap}
+    \leanok
+    Let $A$ be a matrix product tensor and let $R>0$. Suppose that the periodic
+    Hamiltonians formed from the orthogonal projection onto $G_R(A)^\perp$
+    have a positive gap uniformly in the chain length. Let $h$ be a fixed positive
+    operator on $R$ sites with kernel $G_R(A)$, and let $H_N(h)$ be the sum
+    of its cyclic translates. Then there is $\delta>0$ such that, for every chain
+    length $N$ and every $v\perp\ker H_N(h)$,
+    \begin{align}
+        \delta\lVert v\rVert\leq\lVert H_N(h)v\rVert.
+    \end{align}
+    For $N<R$ both periodic Hamiltonians are defined to be zero.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:positive-parent-interaction-periodic-comparison,lem:positive-comparison-kernel-gap}
+    Finite-dimensional positivity gives constants $\kappa,C>0$ such that
+    $\kappa h_R\leq h\leq C h_R$, where $h_R=I-P_{G_R(A)}$ is the canonical
+    parent projection.
+    Cyclic extension and summation give the same inequalities for the periodic
+    Hamiltonians, with constants independent of $N$. The two inequalities imply
+    equality of the kernels. Restriction to their common orthogonal complement
+    therefore transfers a canonical gap $\gamma$ to the gap $\kappa\gamma$.
+    This is the projector reduction of \cite[Section~IV.C]{Cirac2021Matrix}.
+\end{proof}
+
+\begin{theorem}[Positive parent interactions for every canonical decomposition]
+    \label{thm:canonical-decomposition-positive-parent-gap-simultaneous-injectivity}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a tensor in canonical form with positive physical dimension.
+    Fix any canonical decomposition of $A$, and let $B_0,\ldots,B_{g-1}$ be
+    its distinct normal representatives.
+    Suppose that $S>0$ and the tuples of length-$S$ words span the direct sum of
+    the matrix algebras of these representatives. For every $R\geq S+1$ and
+    every fixed positive operator $h$ on $R$ sites with kernel $G_R(A)$,
+    there is $\gamma>0$ such that, for every $N$ and every $v\perp\ker H_N(h)$,
+    \begin{align}
+        \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:canonical-decomposition-gap-simultaneous-injectivity,thm:positive-parent-interaction-uniform-gap}
+    Apply the canonical projector gap of
+    Theorem~\ref{thm:canonical-decomposition-gap-simultaneous-injectivity} at
+    range $R$, then the comparison theorem for the fixed interaction $h$. The
+    constants depend on $h$ but not on $N$.
+\end{proof}
+
+\begin{theorem}[Positive parent interactions at the simultaneous injectivity range]
+    \label{thm:canonical-positive-parent-gap-simultaneous-injectivity}
+    \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupleSpanTop}
+    \leanok
+    Let $A$ be a tensor in canonical form with positive physical dimension.
+    One may choose a basis of normal tensors $B_0,\ldots,B_{g-1}$ such that
+    the following holds. Suppose that $S>0$ and the tuples of length-$S$ words
+    span the direct sum of the matrix algebras of these representatives. For
+    every $R\geq S+1$ and every fixed positive operator $h$ on $R$ sites with
+    kernel $G_R(A)$, there is $\gamma>0$ such that, for every $N$ and every
+    $v\perp\ker H_N(h)$,
+    \begin{align}
+        \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
+    \end{align}
+    The representatives are chosen once, independently of $S$, $R$, and $h$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:canonical-gap-simultaneous-injectivity,thm:positive-parent-interaction-uniform-gap}
+    Apply the canonical projector gap at range $R$, then the comparison theorem
+    for the fixed interaction $h$. The constants depend on $h$ but not on $N$.
+\end{proof}

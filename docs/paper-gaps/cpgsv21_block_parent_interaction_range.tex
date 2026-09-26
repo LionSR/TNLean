@@ -123,6 +123,36 @@ periodic parent Hamiltonian, agree exactly. The same uniform gap transfers to
 the original tensor. The representatives may be chosen once, before specifying
 $S$ or $R$.
 
+\section{General positive parent interactions}
+
+The definition in Ref.~\cite[Section~IV.C]{Cirac2021Matrix}, local source
+lines~1996--1999, permits any fixed positive local operator $h$ with
+$\ker h=G_R(A)$. Let $h_R=I-P_{G_R(A)}$ be the orthogonal projection onto
+$G_R(A)^\perp$. Finite dimensionality gives constants $\kappa,C>0$ such that
+\begin{align}
+    \kappa h_R\leq h\leq Ch_R.
+    \label{eq:block_range_interaction_local_comparison}
+\end{align}
+If $h=0$, then $h_R=0$ and any positive constants suffice. Otherwise one may
+use the least and greatest positive eigenvalues of $h$.
+
+Tensoring with the identity, conjugating by cyclic translations, and summing
+over initial sites preserve (\ref{eq:block_range_interaction_local_comparison}).
+Thus, with the same constants for every chain length $N\geq R$,
+\begin{align}
+    \kappa H_{R,N}(A)\leq H_N(h)\leq C H_{R,N}(A).
+    \label{eq:block_range_interaction_periodic_comparison}
+\end{align}
+The two Hamiltonians have the same kernel. A uniform gap $\gamma$ for the
+canonical projection Hamiltonian therefore gives a uniform gap
+$\kappa\gamma$ for $H_N(h)$. This is the projection reduction stated in the
+review at local source lines~2170--2172. In particular, it preserves the
+interaction range $R\geq S+1$ established above.
+
+The interaction $h$ is fixed before varying $N$. Equality of local kernels
+alone would not suffice for an arbitrary volume-dependent choice: replacing
+$h$ by $h/N$ preserves each kernel but need not preserve a positive uniform gap.
+
 \section{Recovering the printed threshold}
 
 The simultaneous word tuples span the full product matrix algebra at length
