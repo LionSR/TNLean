@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Preparation
 
+import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialNoAncilla
