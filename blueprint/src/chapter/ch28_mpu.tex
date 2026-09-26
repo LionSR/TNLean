@@ -6732,6 +6732,65 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
 \end{proof}
 
+\begin{theorem}[Source factors under a unitary virtual conjugation]
+    \label{thm:mpu_source_factors_virtual_unitary_gauge}
+    \lean{MPOTensor.source_factors_virtual_unitary_sandwich,
+        MPOTensor.source_rank_virtual_unitary_sandwich,
+        MPOTensor.transported_source_factor_premises_at_selected_ranks,
+        MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
+        def:mpu_weighted_source_factors,
+        thm:mpu_virtual_sandwich_source_ranks}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$ on the virtual space.
+    Their recorded positive matrices need not be related. Write
+    $X_a(\mathcal U),Y_a(\mathcal U)$ and
+    $X_a(\mathcal V),Y_a(\mathcal V)$ for their selected source factors,
+    $a=1,2$. After identifying the equal source ranks, there are unitaries
+    $W_1$ and $W_2$ on the respective source-rank spaces such that
+    \begin{align}
+        X_1(\mathcal V)
+         & =(I_d\otimes(z^\dagger)^T)X_1(\mathcal U)W_1,
+         & Y_1(\mathcal V)
+         & =W_1^\dagger Y_1(\mathcal U)(z^T\otimes I_d),       \\
+        X_2(\mathcal V)
+         & =(z\otimes I_d)X_2(\mathcal U)W_2,
+         & Y_2(\mathcal V)
+         & =W_2^\dagger Y_2(\mathcal U)(I_d\otimes z^\dagger).
+    \end{align}
+    Equivalently, the source-diagram gauges have the orientation
+    $x=W_2^\dagger$ and $y=W_1^\dagger$. This is the forward factor
+    comparison associated with the diagrams in
+    \cite[Fundamental Theorem of MPU]{Cirac2017MPU}; it does not assert
+    a converse from the local relations to equality at every chain length.
+    The scalar-free step is the isometric specialization of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}.
+    % Source: paper_v2.tex 624--648 and II_RelationStandard1/2.png;
+    % raw cut/rank transport at lines 786--812.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_virtual_sandwich_source_cuts,
+        thm:mpu_virtual_sandwich_source_ranks,
+        thm:mpu_source_factorizations,
+        thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_right_inverses, ThmFund1,
+        cor:mpug_normalized_source_decomposition_gauges}
+    The two cut identities give transported factorizations with the four
+    exterior matrices displayed in the statement. The right exterior
+    matrices are unitary, so the transported right factors retain right
+    inverses. The left exterior matrix of the second cut is unitary, so its
+    transported left factor remains an isometry. The contraction defining
+    $u$ is unchanged: its interior virtual product is $z^\dagger z=I_D$.
+    Rank preservation identifies the transported factors with the selected
+    source-rank spaces. Simplicity and the source-gate equivalence give
+    unitarity of both $u$ contractions. The selected factors have left
+    inverses from their weighted first-cut and ordinary second-cut
+    normalizations. The normalized source-decomposition comparison now gives
+    the two unitary changes $W_1,W_2$ and the four displayed equalities.
+\end{proof}
+
 \begin{definition}[Ambient support-inverse extension]
     \label{def:mpu_ambient_support_inverse_extension}
     \lean{Matrix.PosSemidef.supportInvExtension,
