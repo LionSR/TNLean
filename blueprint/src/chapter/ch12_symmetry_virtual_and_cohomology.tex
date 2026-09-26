@@ -109,13 +109,11 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:ldp_tree_factorization}
-    The twisted tensor $\widetilde A_g$ is obtained from $A$ by the physical
-    map $U_g$, and $U^{[L]}_g$ is the $L$-fold Kronecker power of $U_g$.
-    Blocking commutes with physical maps: blocking $W\cdot C$ over $L$ sites
-    gives $W^{\otimes L}$ applied to $C^{[L]}$, as in
-    Theorem~\ref{thm:ldp_tree_factorization}.  The case $W=U_g$, $C=A$ is
-    (\ref{eq:symmetry_twist_block_comm}).
+    \uses{lem:block_tensor_rotate_physical}
+    The twisted tensor $\widetilde A_g$ is the physical rotation of $A$ by
+    $U(g)$, and $U^{[L]}(g)=U(g)^{\otimes L}$.  Hence
+    (\ref{eq:symmetry_twist_block_comm}) is the case $W=U(g)$, $C=A$ of
+    Lemma~\ref{lem:block_tensor_rotate_physical}.
 \end{proof}
 
 \begin{theorem}[MPV-family symmetry is preserved by blocking]

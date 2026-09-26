@@ -122,25 +122,6 @@ noncomputable def blockKronAction (L : ℕ)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
     blockKronAction L U g = blockKron L (U g) := rfl
 
-/-- Word evaluation of a twisted tensor expands over the intermediate word: for a
-length-`L` index function `b`,
-`Kraus.evalWord (twistedTensor A U g) (List.ofFn b) =
-  ∑ v, (∏ k, (U g) (b k) (v k)) • Kraus.evalWord A (List.ofFn v)`. -/
-lemma evalWord_twistedTensor_ofFn
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
-    ∀ {L : ℕ} (b : Fin L → Fin d),
-      Kraus.evalWord (twistedTensor A U g) (List.ofFn b) =
-        ∑ v : Fin L → Fin d,
-          (∏ k : Fin L, (U g) (b k) (v k)) • Kraus.evalWord A (List.ofFn v) := by
-  classical
-  intro L b
-  rw [evalWord_ofFn_eq_prod]
-  simp_rw [twistedTensor]
-  rw [List.prod_ofFn_sum]
-  apply Finset.sum_congr rfl
-  intro v _
-  rw [List.prod_ofFn_smul, evalWord_ofFn_eq_prod]
-
 /-- Twisting by `blockKronAction` agrees with blocking the twisted tensor:
 `twistedTensor (blockTensor A L) (blockKronAction L U) g = blockTensor
 (twistedTensor A U g) L`.  This is the case `W = U g` of `blockTensor_rotatePhysical`, since
