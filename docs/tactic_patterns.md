@@ -2058,6 +2058,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Decomposing membership in a finite sum of subspaces — candidate
+- **Pattern:** obtain vectors in the individual subspaces from membership in
+  their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
+  apply a norm or inner-product estimate to their sum.
+- **Occurrences:** two proofs in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`.
+- **Status:** the existing Mathlib theorem supplies the decomposition. No
+  additional abstraction is needed for these two uses in one file.
+
 ### carrying a boundary through one Kronecker factor of a letter sum — candidate
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
   `finProdFinEquiv` submatrix with `Matrix.submatrix_mul_equiv` (twice), distribute with
@@ -2077,6 +2086,24 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** past the rule of three. Promotion rewrites the three call sites in
   `ReductionComposition.lean` and `OperatorProduct.lean` as well, so it is left to a
   separate refactor rather than folded into the action-tensor PR.
+
+### classical choice of a nonzero proportionality scalar — candidate
+- **Pattern:**
+  ```lean
+  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  ```
+- **Seen:** three occurrences across two files: `FusionData.omega` (through
+  `IsAssociator`) and `FusionData.relativeScalar`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`), and `ActionData.lSymbol`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`).
+- **Abstraction:** a definition
+  `MPSTensor.IsDressedProportional.chooseScalar B X Y : Units ℂ` with the lemma that it
+  satisfies the relation whenever some nonzero scalar does; `omega`, `relativeScalar`
+  and `lSymbol` then specialize it.
+- **Notes:** at the rule of three. Promotion changes the definitions of `omega` and
+  `relativeScalar` on `main` and the lemmas that unfold them, so it needs a Lean build and
+  is left to a separate refactor.
 
 ### reassociating a triple Kronecker sum by `mulTensorAssocEquiv` — candidate
 - **Pattern:** four `finProdFinEquiv.surjective` peels on the row and column indices, the
