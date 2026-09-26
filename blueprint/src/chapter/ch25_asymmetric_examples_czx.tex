@@ -1160,11 +1160,18 @@ The identity coefficient is two on even rings and zero on odd rings.
 
 \begin{lemma}[Projectors on even rings and inverses on odd rings]
     \label{lem:asymex_plus_parity}
+    \lean{CZXCompression.isStarProjection_half_one_add_mpo_czxTensor,
+        CZXCompression.one_add_mpo_czxTensor_mul_half_one_sub,
+        CZXCompression.half_one_sub_mul_one_add_mpo_czxTensor,
+        CZXCompression.inv_one_add_mpo_czxTensor}
+    \leanok
     For even $N>0$, $O_N/2$ is an orthogonal projector. For odd $N>0$,
     $O_N$ is invertible, with inverse $(I_N-U_N)/2$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_unitarity, thm:asymex_czx_square_operator}
     For even $N$, unitarity and~(\ref{eq:asymex_plus_unitary}) give
     $U_N^\dagger=U_N$ and $U_N^2=I_N$. Consequently,
     \begin{align}
