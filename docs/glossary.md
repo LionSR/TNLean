@@ -405,6 +405,43 @@ normalizations.
   `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Never cite either
   bridge as unconditional.
 
+#### `TNLean.PEPS.IsGInjective`
+
+- **Declaration:**
+  `TNLean.PEPS.IsGInjective (ρ : Representation ℂ G W) (T : W →ₗ[ℂ] P) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** the virtual-to-physical map `T = 𝒫(A)` is invariant under `ρ`
+  and injective on the `ρ`-invariant subspace.
+- **Source:** arXiv:1001.3807, Definition `def:2d-Ug-inj`,
+  `Papers/1001.3807/paper_v3.tex:1278-1296`.
+- **Sanctioned bridges:** `TNLean.PEPS.isGInjective_iff_exists_leftInverse`
+  (the source's left inverse with `L 𝒫(A) = Π_U`, for finite `G`),
+  `TNLean.PEPS.isGInjective_trivial_iff` (trivial `ρ`: injectivity of `T`), and
+  `TNLean.PEPS.siteMap_injective_iff` (injectivity of the map of a four-leg
+  site tensor is linear independence of its physical vectors, the vertex-wise
+  condition of `IsVertexInjective`).
+- **Caveat / paper gap:** the source requires `ρ` semi-regular; here `ρ` is a
+  parameter and each instance names its representation. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. No bridge yet
+  connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
+  `torusSiteTensor`.
+
+#### `TNLean.PEPS.IsGIsometric`
+
+- **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
+  (T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)) : Prop`.
+- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Meaning:** `IsGInjective ρ T` and `⟪T x, T y⟫ = c ⟪x, y⟫` for invariant
+  `x, y` and one constant `c > 0`.
+- **Source:** arXiv:1001.3807, Definition `def:iso:isopeps`,
+  `Papers/1001.3807/paper_v3.tex:1692-1697`.
+- **Caveat / paper gap:** the source asks for the left-regular representation
+  and for `𝒫(A)` to be unitary between its domain and range, that is `c = 1`;
+  the factor `c` absorbs the missing normalization of the source's
+  quantum-double tensor (`c = |G|`), and the rescaling `T / √c` gives the
+  printed notion. Recorded in
+  `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
