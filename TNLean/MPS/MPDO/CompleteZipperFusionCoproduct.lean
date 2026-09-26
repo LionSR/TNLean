@@ -107,7 +107,7 @@ theorem directSum_smul (a b : Λ) (r : ℂ) (X : Fus.BoundarySpace) :
 
 theorem directSum_mul (a b : Λ) (X Y : Fus.BoundarySpace) :
     Fus.directSum a b (X * Y) = Fus.directSum a b X * Fus.directSum a b Y := by
-  rw [directSum, directSum, directSum, blockDiagonal'_mul]
+  rw [directSum, directSum, directSum, ← blockDiagonal'_mul]
   congr 1
   funext c
   rw [← mul_kronecker_mul, Matrix.one_mul, Pi.mul_apply]
@@ -145,8 +145,7 @@ private theorem fusionSynthesis_mul_directSum_apply (X : Fus.BoundarySpace) (a b
     (Fus.fusionSynthesis a b * Fus.directSum a b X) x ⟨c, ν, w⟩ =
       ∑ z, Fus.fusionSynthesis a b x ⟨c, ν, z⟩ * X c z w := by
   rw [Matrix.mul_apply, Fintype.sum_sigma, Finset.sum_eq_single c]
-  · simp [directSum, blockDiagonal'_apply_eq, kronecker_apply, Fintype.sum_prod_type,
-      one_apply]
+  · simp [directSum, blockDiagonal'_apply_eq, Fintype.sum_prod_type, one_apply]
   · intro c' _ hc'
     exact Finset.sum_eq_zero fun s _ => by
       rw [directSum, blockDiagonal'_apply_ne _ _ _ hc', mul_zero]
@@ -162,8 +161,9 @@ theorem coproduct_apply_eq_sum (X : Fus.BoundarySpace) (a b : Λ) :
       ∑ c, ∑ μ, Fus.fusionTensor a b c μ * X c * Fus.fusionTensorLeftInverse a b c μ := by
   ext x y
   rw [coproduct_apply, Matrix.mul_apply, Fintype.sum_sigma]
-  simp only [fusionSynthesis_mul_directSum_apply, Fintype.sum_prod_type, Matrix.sum_apply,
-    Matrix.mul_apply, fusionTensor, fusionTensorLeftInverse]
+  simp only [Fintype.sum_prod_type]
+  simp only [fusionSynthesis_mul_directSum_apply]
+  simp only [Matrix.sum_apply, Matrix.mul_apply, fusionTensor, fusionTensorLeftInverse]
 
 /-- **Letter formula.**  The coproduct of a letter is the letter of the stacked tensor,
 $\Delta(T^{ik})_{ab}=\sum_jT_a^{ij}\otimes T_b^{jk}$.
@@ -175,13 +175,12 @@ theorem coproduct_letter (i k : Fin p) (a b : Λ) :
     Fus.coproduct (Fus.letter i k) a b = ∑ j, Fus.tensor a i j ⊗ₖ Fus.tensor b j k :=
   (Fus.pairLetter_eq_synthesis_mul_directSum_mul_analysis a b i k).symm
 
-private theorem sum_smul_letter_eq (c : Λ) (x y : Fin (Fus.bondDim c)) :
-    (∑ i, ∑ k, Fus.blockLeftInverse ⟨c, x, y⟩ (i, k) • Fus.letter i k) =
-      fun d x' y' =>
-        if h : c = d then
-          if _ : h ▸ x = x' then if _ : h ▸ y = y' then (1 : ℂ) else 0 else 0
-        else 0 := by
-  funext d x' y'
+private theorem sum_smul_letter_apply (c : Λ) (x y : Fin (Fus.bondDim c)) (d : Λ)
+    (x' y' : Fin (Fus.bondDim d)) :
+    (∑ i, ∑ k, Fus.blockLeftInverse ⟨c, x, y⟩ (i, k) • Fus.letter i k) d x' y' =
+      if h : c = d then
+        if _ : h ▸ x = x' then if _ : h ▸ y = y' then (1 : ℂ) else 0 else 0
+      else 0 := by
   rw [← Fus.blockLeftInverse_apply c d x y x' y']
   simp [Finset.sum_apply, Matrix.sum_apply, letter]
 
@@ -194,12 +193,20 @@ theorem span_letter_eq_top :
     Submodule.span ℂ (Set.range fun ik : Fin p × Fin p => Fus.letter ik.1 ik.2) = ⊤ := by
   classical
   refine eq_top_iff.2 fun Z _ => ?_
-  have hZ : Z = ∑ c, ∑ x, ∑ y, Z c x y •
-      ∑ i, ∑ k, Fus.blockLeftInverse ⟨c, x, y⟩ (i, k) • Fus.letter i k := by
-    simp_rw [Fus.sum_smul_letter_eq]
+  obtain ⟨E, hEdef⟩ : ∃ E : ∀ c : Λ, Fin (Fus.bondDim c) → Fin (Fus.bondDim c) →
+      Fus.BoundarySpace,
+      E = fun c x y => ∑ i, ∑ k, Fus.blockLeftInverse ⟨c, x, y⟩ (i, k) • Fus.letter i k :=
+    ⟨_, rfl⟩
+  have hE : ∀ c x y d x' y', E c x y d x' y' =
+      if h : c = d then
+        if _ : h ▸ x = x' then if _ : h ▸ y = y' then (1 : ℂ) else 0 else 0
+      else 0 := by
+    subst hEdef
+    exact Fus.sum_smul_letter_apply
+  have hZ : Z = ∑ c, ∑ x, ∑ y, Z c x y • E c x y := by
     funext d x' y'
     simp only [Finset.sum_apply, Pi.smul_apply, Matrix.sum_apply, Matrix.smul_apply,
-      smul_eq_mul]
+      smul_eq_mul, hE]
     rw [Finset.sum_eq_single d]
     · simp
     · intro c _ hc
@@ -208,7 +215,7 @@ theorem span_letter_eq_top :
       exact absurd (Finset.mem_univ d) h
   rw [hZ]
   refine Submodule.sum_mem _ fun c _ => Submodule.sum_mem _ fun x _ =>
-    Submodule.sum_mem _ fun y _ => Submodule.smul_mem _ _ <|
+    Submodule.sum_mem _ fun y _ => Submodule.smul_mem _ _ <| hEdef ▸
       Submodule.sum_mem _ fun i _ => Submodule.sum_mem _ fun k _ =>
         Submodule.smul_mem _ _ <| Submodule.subset_span ⟨(i, k), rfl⟩
 
