@@ -1,0 +1,356 @@
+%% ==================================================
+%% Chapter: Polar decomposition of a blocked tensor
+%% Source: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eq. eq:B,
+%% paragraph "Approximation through the fixed-point state" (eq. eq:B_TM,
+%% eq. eq:key_approximation), and Supplemental Material, "Proof of Lemma 1
+%% and extension to non-normal tensors".
+%% ==================================================
+
+\chapter{Polar Decomposition of a Blocked Tensor}\label{ch:ldpolar}
+
+The log-depth preparation of matrix product states by Malz, Styliaris, Wei
+and Cirac (arXiv:2307.01696) starts from the exact identity $B=VP$ for the
+tensor $B$ of $q$ blocked sites, read as a map from the virtual pair space
+$\C^{D^2}$ to the physical space. This chapter records the polar
+decomposition of a rectangular complex matrix, the resulting factorization of
+a tensor into a positive part $P$ with physical dimension $D^2$ and a partial
+isometry $V$ on the physical leg, the transfer identity $\E_B=\E_P$, and the
+identity between the periodic state of $A$ on $qM$ sites and $V^{\otimes M}$
+applied to the periodic state of $P$ on $M$ sites. All states are
+unnormalized; approximation statements are not treated here.
+
+\section{Polar decomposition of a matrix}
+
+\begin{definition}[Polar factors of a matrix]
+    \label{def:ldpolar_matrix}
+    \lean{Matrix.polarPos, Matrix.polarSupport, Matrix.polarIso}
+    \leanok
+    Let $M\in\C^{m\times k}$. The \emph{positive part} is
+    $P=(M^\dagger M)^{1/2}$, the \emph{support projector} is
+    $\Pi=\chi(M^\dagger M)$ with $\chi(0)=0$ and $\chi(x)=1$ for $x\ne 0$,
+    and the \emph{partial isometry} is $V=M\,g(M^\dagger M)$ with
+    $g(x)=x^{-1/2}$ for $x>0$ and $g(0)=0$; the functions $\chi$ and $g$ are
+    applied to the positive semidefinite matrix $M^\dagger M$ by the
+    functional calculus.
+    This is the decomposition $B=VP$ of arXiv:2307.01696, paragraph
+    ``Approximation through the fixed-point state'' and Supplemental
+    Material, ``Proof of Lemma~1 and extension to non-normal tensors''.
+\end{definition}
+
+\begin{theorem}[Positive part]
+    \label{thm:ldpolar_pos}
+    \lean{Matrix.posSemidef_polarPos, Matrix.polarPos_mul_polarPos}
+    \leanok
+    \uses{def:ldpolar_matrix}
+    The positive part is positive semidefinite and $P^2=M^\dagger M$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Properties of the positive square root.
+\end{proof}
+
+\begin{theorem}[Support projector]
+    \label{thm:ldpolar_support}
+    \lean{Matrix.isHermitian_polarSupport, Matrix.polarSupport_mul_polarSupport,
+        Matrix.polarSupport_mul_polarPos, Matrix.mul_polarSupport,
+        Matrix.range_polarSupport}
+    \leanok
+    \uses{def:ldpolar_matrix}
+    The support projector is Hermitian and idempotent, and
+    $\Pi P=P$ and $M\Pi=M$. The ranges of $\Pi$ and $P$ coincide, so $\Pi$
+    is the orthogonal projector onto the range of $P$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The first three identities are the pointwise identities $\chi=\bar\chi$,
+    $\chi^2=\chi$ and $\chi(x)\sqrt x=\sqrt x$ under the functional
+    calculus. The identity $x\chi(x)=x$ gives $M^\dagger M(\Pi-\Id)=0$,
+    hence $M(\Pi-\Id)=0$. For the ranges, $\Pi=P\,g(M^\dagger M)$, because
+    $\sqrt x\,g(x)=\chi(x)$ on the nonnegative spectrum, and $P=\Pi P$.
+\end{proof}
+
+\begin{theorem}[Polar decomposition]
+    \label{thm:ldpolar_decomposition}
+    \lean{Matrix.polarIso_mul_polarPos, Matrix.conjTranspose_polarIso_mul_polarIso}
+    \leanok
+    \uses{def:ldpolar_matrix}
+    Every complex matrix satisfies $M=VP$ and $V^\dagger V=\Pi$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_support}
+    $VP=M\,g(M^\dagger M)P=M\Pi=M$ by Theorem~\ref{thm:ldpolar_support}.
+    Since $g(M^\dagger M)$ is Hermitian,
+    $V^\dagger V=g(M^\dagger M)\,M^\dagger M\,g(M^\dagger M)$, which is the
+    functional calculus of $x\,g(x)^2=\chi(x)$ on the nonnegative spectrum.
+\end{proof}
+
+\begin{theorem}[Polar decomposition of an injective matrix]
+    \label{thm:ldpolar_injective}
+    \lean{Matrix.polarSupport_eq_one_of_injective,
+        Matrix.isIsometry_polarIso_of_injective,
+        Matrix.posDef_polarPos_of_injective}
+    \leanok
+    \uses{def:ldpolar_matrix}
+    If $M$ is injective, then $\Pi=\Id$, $V^\dagger V=\Id$, and $P$ is
+    positive definite.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_pos}
+    For injective $M$ the matrix $M^\dagger M$ is positive definite, so
+    $\chi=1$ on its spectrum. Then $V^\dagger V=\Pi=\Id$ by
+    Theorem~\ref{thm:ldpolar_decomposition}, and $P$ is invertible since
+    $P^2=M^\dagger M$ is.
+\end{proof}
+
+\begin{theorem}[Existence of the polar decomposition]
+    \label{thm:ldpolar_exists}
+    \lean{Matrix.exists_polar_decomposition}
+    \leanok
+    Every $M\in\C^{m\times k}$ factors as $M=VP$ with $P\in\MN{k}$ positive
+    semidefinite and $V^\dagger V=\Pi$, where $\Pi$ is a Hermitian
+    idempotent whose range is the range of $P$. This is the decomposition
+    in arXiv:2307.01696, Supplemental Material, ``Proof of Lemma~1 and
+    extension to non-normal tensors''.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_pos, thm:ldpolar_support, thm:ldpolar_decomposition}
+    Take the polar factors of Definition~\ref{def:ldpolar_matrix}.
+\end{proof}
+
+\section{A tensor as a map on the virtual pair space}
+
+\begin{definition}[Physical matrix of a tensor]
+    \label{def:ldpolar_physical_matrix}
+    \lean{MPSTensor.physicalMatrix, MPSTensor.ofPhysicalMatrix}
+    \leanok
+    \uses{def:mps_tensor}
+    The \emph{physical matrix} of a tensor $B=\{B^i\}_{i=0}^{n-1}$ with
+    $B^i\in\MN{D}$ is the matrix $\widehat B\in\C^{n\times D^2}$ with entries
+    $\widehat B_{i,(\alpha,\beta)}=B^i_{\alpha\beta}$, the matrix of $B$ as a
+    map from the virtual pair space $\C^{D^2}$ to the physical space
+    $\C^n$. Conversely, every $R\in\C^{n\times D^2}$ is the physical matrix
+    of the tensor $B^i_{\alpha\beta}=R_{i,(\alpha,\beta)}$.
+\end{definition}
+
+\begin{lemma}[A tensor is its physical matrix]
+    \label{lem:ldpolar_physical_matrix_bij}
+    \lean{MPSTensor.ofPhysicalMatrix_physicalMatrix,
+        MPSTensor.physicalMatrix_ofPhysicalMatrix,
+        MPSTensor.physicalMatrix_injective}
+    \leanok
+    \uses{def:ldpolar_physical_matrix}
+    The two constructions of Definition~\ref{def:ldpolar_physical_matrix}
+    are mutually inverse; in particular a tensor is determined by its
+    physical matrix.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Both composites are the identity entrywise.
+\end{proof}
+
+\begin{theorem}[Injective tensors have injective physical matrices]
+    \label{thm:ldpolar_injective_physical}
+    \lean{MPSTensor.injective_physicalMatrix_mulVec_of_isInjective}
+    \leanok
+    \uses{def:ldpolar_physical_matrix, def:injective}
+    If $B$ is injective, then $\widehat B\colon\C^{D^2}\to\C^n$ is
+    injective.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $\widehat Bx=0$ and consider the linear functional
+    $\varphi(Y)=\sum_{\alpha,\beta}Y_{\alpha\beta}x_{\alpha\beta}$ on
+    $\MN{D}$. It vanishes on every $B^i$, hence on their span $\MN{D}$, and
+    evaluating it on the matrix units gives $x=0$. arXiv:2307.01696 assumes
+    injectivity of $B$ in a footnote to ``Approximation through the
+    fixed-point state''; this step is the standard consequence needed for
+    $V^\dagger V=\Id$.
+\end{proof}
+
+\begin{lemma}[Physical matrix of a rotated tensor]
+    \label{lem:ldpolar_physical_matrix_rotate}
+    \lean{MPSTensor.physicalMatrix_rotatePhysical}
+    \leanok
+    \uses{def:ldpolar_physical_matrix, def:rotate_physical}
+    For $W\in\C^{m\times n}$, the physical matrix of $B_W$ is
+    $W\widehat B$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Both sides have $(i,(\alpha,\beta))$ entry
+    $\sum_jW_{ij}B^j_{\alpha\beta}$.
+\end{proof}
+
+\begin{theorem}[Transfer map of a rotated tensor]
+    \label{thm:ldpolar_transfer_rotate}
+    \lean{MPSTensor.transferMap_rotatePhysical_apply,
+        MPSTensor.transferMap_rotatePhysical_eq}
+    \leanok
+    \uses{def:rotate_physical, def:transfer_map}
+    For $W\in\C^{m\times n}$ and every $X\in\MN{D}$,
+    \begin{align}
+        \E_{B_W}(X)
+         & =\sum_{l=0}^{n-1}(B_{W^\dagger W})^l\,X\,(B^l)^\dagger.
+        \notag
+    \end{align}
+    Consequently, if $B_{W^\dagger W}=B$, then $\E_{B_W}=\E_B$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Expand $(B_W)^i=\sum_jW_{ij}B^j$ in
+    $\sum_i(B_W)^iX((B_W)^i)^\dagger$ and collect
+    $\sum_i\overline{W_{il}}W_{ij}=(W^\dagger W)_{lj}$. The case
+    $W^\dagger W=\Id$ is the unitary freedom of Kraus representations; the
+    weaker hypothesis $B_{W^\dagger W}=B$ covers partial isometries.
+\end{proof}
+
+\section{Polar factors of a tensor}
+
+\begin{definition}[Polar factors of a tensor]
+    \label{def:ldpolar_tensor}
+    \lean{MPSTensor.virtualPairEquiv, MPSTensor.polarPosMatrix,
+        MPSTensor.polarPosTensor, MPSTensor.polarIsoMatrix,
+        MPSTensor.polarSupportMatrix}
+    \leanok
+    \uses{def:ldpolar_physical_matrix, def:ldpolar_matrix}
+    Identify $\{0,\dots,D^2-1\}$ with the pairs $(\alpha,\beta)$ of virtual
+    indices, and let $V$, $P$ and $\Pi$ be the polar factors of
+    $\widehat B$, read as matrices indexed by $\{0,\dots,D^2-1\}$ on the
+    virtual side. The \emph{positive-part tensor} of $B$ has physical
+    dimension $D^2$ and bond dimension $D$, with
+    $(P^k)_{\alpha\beta}=P_{k,(\alpha,\beta)}$; its matrices are the rows of
+    $P$. The \emph{isometric factor} is $V\in\C^{n\times D^2}$. This is the
+    tensor $P$ of arXiv:2307.01696, eqs.~(eq:key\_approximation)
+    and~(eq:phi\_pos).
+\end{definition}
+
+\begin{lemma}[Physical matrix of the positive-part tensor]
+    \label{lem:ldpolar_pos_tensor_matrix}
+    \lean{MPSTensor.physicalMatrix_polarPosTensor}
+    \leanok
+    \uses{def:ldpolar_tensor}
+    The physical matrix of the positive-part tensor is $P$, with its rows
+    indexed by $\{0,\dots,D^2-1\}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By definition.
+\end{proof}
+
+\begin{theorem}[Polar decomposition of a tensor]
+    \label{thm:ldpolar_tensor_decomposition}
+    \lean{MPSTensor.rotatePhysical_polarIsoMatrix_polarPosTensor,
+        MPSTensor.conjTranspose_polarIsoMatrix_mul_polarIsoMatrix,
+        MPSTensor.posSemidef_polarPosMatrix,
+        MPSTensor.isHermitian_polarSupportMatrix,
+        MPSTensor.polarSupportMatrix_mul_self,
+        MPSTensor.rotatePhysical_polarSupportMatrix}
+    \leanok
+    \uses{def:ldpolar_tensor, def:rotate_physical}
+    For every tensor $B$, the positive-part tensor $P$ and the isometric
+    factor $V$ satisfy $B^i=\sum_kV_{ik}P^k$ for every $i$, that is,
+    $B=P_V$, with $V^\dagger V=\Pi$, the matrix $P$ positive
+    semidefinite, $\Pi$ a Hermitian idempotent, and
+    $\sum_l\Pi_{kl}P^l=P^k$ for every $k$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldpolar_physical_matrix_bij, lem:ldpolar_physical_matrix_rotate,
+        lem:ldpolar_pos_tensor_matrix, thm:ldpolar_pos, thm:ldpolar_support,
+        thm:ldpolar_decomposition}
+    By Lemma~\ref{lem:ldpolar_physical_matrix_rotate}, the physical matrix
+    of $P_V$ is $VP=\widehat B$ by Theorem~\ref{thm:ldpolar_decomposition},
+    and a tensor is determined by its physical matrix. The remaining
+    identities are Theorems~\ref{thm:ldpolar_pos},
+    \ref{thm:ldpolar_support} and~\ref{thm:ldpolar_decomposition},
+    reindexed along the identification of $\{0,\dots,D^2-1\}$ with the
+    virtual pairs; the last one is $\Pi P=P$ read through
+    Lemma~\ref{lem:ldpolar_physical_matrix_rotate}.
+\end{proof}
+
+\begin{theorem}[Transfer map of the positive part]
+    \label{thm:ldpolar_transfer}
+    \lean{MPSTensor.transferMap_polarPosTensor}
+    \leanok
+    \uses{def:ldpolar_tensor, def:transfer_map}
+    For every tensor $B$ with positive-part tensor $P$, $\E_P=\E_B$. This is
+    the first equality of arXiv:2307.01696, eq.~(eq:B\_TM), which is stated
+    there for injective $B$; the argument of the Supplemental Material, from
+    $V^\dagger V=\Pi$ and $\Pi P=P$, gives it for every tensor.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_transfer_rotate}
+    Write $B=P_V$ by Theorem~\ref{thm:ldpolar_tensor_decomposition}. Since
+    $V^\dagger V=\Pi$ and $P_\Pi=P$, Theorem~\ref{thm:ldpolar_transfer_rotate}
+    gives $\E_{P_V}=\E_P$.
+\end{proof}
+
+\begin{theorem}[Polar factors of an injective tensor]
+    \label{thm:ldpolar_tensor_injective}
+    \lean{MPSTensor.isIsometry_polarIsoMatrix_of_isInjective,
+        MPSTensor.posDef_polarPosMatrix_of_isInjective}
+    \leanok
+    \uses{def:ldpolar_tensor, def:injective}
+    If $B$ is injective, then $V^\dagger V=\Id_{D^2}$ and $P$ is positive
+    definite, as in arXiv:2307.01696, paragraph ``Approximation through the
+    fixed-point state''.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_injective_physical, thm:ldpolar_injective,
+        thm:ldpolar_tensor_decomposition}
+    By Theorem~\ref{thm:ldpolar_injective_physical}, $\widehat B$ is
+    injective; apply Theorem~\ref{thm:ldpolar_injective} and reindex.
+\end{proof}
+
+\begin{theorem}[Transfer map of the positive part of a blocked tensor]
+    \label{thm:ldpolar_blocked_transfer}
+    \lean{MPSTensor.transferMap_polarPosTensor_blockTensor}
+    \leanok
+    \uses{def:ldpolar_tensor, def:blocked_tensor, def:transfer_map}
+    Let $A$ be a tensor and $P$ the positive-part tensor of the blocked
+    tensor $A^{[q]}$. Then $\E_P=\E_A^q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_transfer, lem:blocked_irreducibility_direct_support}
+    $\E_P=\E_{A^{[q]}}$ by Theorem~\ref{thm:ldpolar_transfer}, and
+    $\E_{A^{[q]}}=\E_A^q$ by
+    Lemma~\ref{lem:blocked_irreducibility_direct_support}, as noted after
+    arXiv:2307.01696, eq.~(eq:B).
+\end{proof}
+
+\begin{theorem}[Isometric form of the blocked periodic state]
+    \label{thm:ldpolar_blocked_state}
+    \lean{MPSTensor.mpv_blockedConfigEquiv_eq_sum_polar}
+    \leanok
+    \uses{def:ldpolar_tensor, def:blocked_tensor, def:mpv}
+    Let $A$ be a tensor, let $V$ and $P$ be the polar factors of the blocked
+    tensor $A^{[q]}$, and let $M\ge 0$. For every configuration
+    $\sigma=(\sigma_0,\dots,\sigma_{M-1})$ of $M$ blocked sites, with
+    $\widetilde\sigma$ the corresponding configuration of $qM$ sites,
+    \begin{align}
+        V^{(qM)}(A)_{\widetilde\sigma}
+         & =\sum_{\tau\in\{0,\dots,D^2-1\}^M}
+        \Big(\prod_{j=0}^{M-1}V_{\sigma_j\tau_j}\Big)\,V^{(M)}(P)_\tau,
+        \notag
+    \end{align}
+    that is, $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$. This is
+    $\ket{\varphi_N}=(\bigotimes_iV_i)\ket{\varphi_{\mathrm{pos}}}$ of
+    arXiv:2307.01696, Supplemental Material, ``Proof of Lemma~1 and
+    extension to non-normal tensors'', before normalization.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:mpv_rotate_physical, thm:ldpolar_tensor_decomposition,
+        lem:eval_word_block}
+    By Lemma~\ref{lem:mpv_rotate_physical}, the right-hand side is
+    $V^{(M)}(P_V)_\sigma$, and $P_V=A^{[q]}$ by
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. Finally
+    $V^{(M)}(A^{[q]})_\sigma=V^{(qM)}(A)_{\widetilde\sigma}$ by
+    Lemma~\ref{lem:eval_word_block}.
+\end{proof}
