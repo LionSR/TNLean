@@ -115,7 +115,7 @@ theorem gauge_unique_up_to_scalar_of_sameMPV {A B : MPSTensor d D}
 
 /-- **Gauge-phase uniqueness for injective tensors.**
 Source: arXiv:2011.12127, §III.A, eq. `eq:XAX=B`
-(`Papers/2011.12127/TN-Review-main.tex` lines 1085–1087): for a normal tensor,
+(`Papers/2011.12127/TN-Review-main.tex` lines 1085–1086): for a normal tensor,
 `X⁻¹ Aⁱ X = e^{iχ} Y⁻¹ Aⁱ Y` for all `i` forces `e^{iχ} = 1` and `X ∝ Y`.
 
 The source writes the proportionality constant as a phase `e^{iφ}`, which it is

@@ -12,7 +12,7 @@ import TNLean.MPS.Symmetry.EntanglementSpectrum
 
 **Source.** Cirac, Pérez-García, Schuch, Verstraete (arXiv:2011.12127), §III.A,
 paragraph "Entanglement spectrum and edge modes",
-`Papers/2011.12127/TN-Review-main.tex` lines 1171–1172: a non-trivial SPT phase has
+`Papers/2011.12127/TN-Review-main.tex` line 1171: a non-trivial SPT phase has
 an entanglement spectrum in which every eigenvalue is degenerate, because the
 projective virtual representation has no one-dimensional invariant subspace.
 Review: arXiv:2011.12127, Appendix A, "The AKLT state" and "The cluster state".
@@ -51,7 +51,7 @@ private lemma eq_one_smul_conj_of_intertwine {T A : Matrix (Fin D) (Fin D) ℂ}
 
 /-- **Doubly degenerate entanglement spectrum of the AKLT state.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
-line 1172).  Every eigenspace of every positive definite fixed point of the
+line 1171).  Every eigenspace of every positive definite fixed point of the
 adjoint transfer map of the blocked AKLT tensor has even dimension. -/
 theorem akltBlocked_even_finrank_eigenspace {Λ : Matrix (Fin 2) (Fin 2) ℂ}
     (hΛpos : Λ.PosDef) (hΛfix : Kraus.transferMap (fun i => (akltBlocked i)ᴴ) Λ = Λ)
@@ -71,7 +71,7 @@ theorem akltBlocked_even_finrank_eigenspace {Λ : Matrix (Fin 2) (Fin 2) ℂ}
 
 /-- **Doubly degenerate entanglement spectrum of the cluster state.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
-line 1172).  Every eigenspace of every positive definite fixed point of the
+line 1171).  Every eigenspace of every positive definite fixed point of the
 adjoint transfer map of the blocked cluster tensor has even dimension. -/
 theorem clusterBlocked_even_finrank_eigenspace {Λ : Matrix (Fin 2) (Fin 2) ℂ}
     (hΛpos : Λ.PosDef) (hΛfix : Kraus.transferMap (fun i => (clusterBlocked i)ᴴ) Λ = Λ)
