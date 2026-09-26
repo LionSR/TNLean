@@ -1,0 +1,115 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The unblocked parity reading of the Fundamental Theorem of matrix product unitaries}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+This verdict concerns the printed converse when its $U^{(N)}=V^{(N)}$
+conclusion is read for the original, unblocked tensors. It does not classify
+the corresponding blocked-family statement as false.
+
+\section{The printed assertion}
+
+Definition~SF of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete defines the
+standard form of the \emph{two-site block} $\mathcal U_2$ of a simple tensor
+$\mathcal U$ \cite[lines~619--622]{Cirac2017MPU}. The ensuing diagram displays
+$\mathcal U_2$ and $\mathcal V_2$. Nevertheless, the Fundamental Theorem of
+MPU states that its local unitary relations, Equations~(SFuu) and~(SFvv),
+are equivalent to $U^{(N)}=V^{(N)}$ for every $N$
+\cite[lines~624--648]{Cirac2017MPU}. Read literally as an assertion about
+the original, unblocked tensors, the converse from those local relations to
+equality at odd lengths does not hold. The preceding diagram does, however,
+support a coherent reading about the blocked tensors; this note does not
+refute that blocked interpretation.
+
+\section{A full-rank counterexample}
+
+Take physical dimension $d=2$ and bond dimension $D=1$. With $i,j\in
+    \{0,1\}$, define two one-site tensors by
+\begin{align}
+    \mathcal U^{ij}_{00} & =\delta_{ij},  &
+    \mathcal V^{ij}_{00} & =-\delta_{ij}.
+    \label{eq:mpu_standard_form_parity_letters}
+\end{align}
+Both have unitary periodic families. Their double-layer letters are the
+one-by-one scalars $\delta_{ij}$: the two signs cancel under physical
+adjunction. Thus the source's first simplicity contraction holds with
+$a=b=(1)$, and its second, rank-one insertion identity is automatic in the
+one-dimensional bond space. Both tensors are therefore simple. Their
+normalized transfer matrices are the one-by-one identity; they have full bond
+support and carry the canonical-form-II weight $\rho=(1)$. Neither tensor is
+zero, and both
+source cuts have rank two. In the natural physical coordinates,
+\begin{align}
+    M_1(\mathcal U) & =M_2(\mathcal U)=I_2,  &
+    M_1(\mathcal V) & =M_2(\mathcal V)=-I_2.
+\end{align}
+Choose compact rank-two factorizations
+\begin{align}
+    X_1=X_2=Y_1=Y_2               & =I_2
+                                  &        & \text{for }\mathcal U, \\
+    \widetilde X_1=\widetilde X_2 & =-I_2, &
+    \widetilde Y_1=\widetilde Y_2 & =I_2
+                                  &        & \text{for }\mathcal V.
+\end{align}
+All singular values are one. The corresponding right inverses can be chosen as
+$Z_1=Z_2=\widetilde Z_1=\widetilde Z_2=I_2$; the first weighted and second
+ordinary $X$-normalizations both reduce to $I_2$ because $\rho=(1)$.
+The source gates computed from these factors have, for both tensors, the entries
+\begin{align}
+    u_{(l,r),(p,q)} & =\delta_{lp}\delta_{rq}, &
+    v_{(p,q),(r,l)} & =\delta_{pr}\delta_{ql}.
+    \label{eq:mpu_standard_form_parity_gates}
+\end{align}
+Thus both gates are identity matrices in their displayed domain and codomain
+orderings; in particular both are unitary. The two minus signs on the $X$
+factors cancel in $v$. The printed local equations
+hold with $x=y=-I_2$ and $z=1$: the product $x\otimes y$ acts trivially on
+$u$, and the two minus signs on the open half-legs cancel in the shifted gate
+$v$ of Equation~(SFvv). Equivalently, the two-site blocked tensors agree
+letter by letter,
+\begin{align}
+    \mathcal V_2^{(i_1,i_2),(j_1,j_2)}
+     & =(-\mathcal U^{i_1j_1})(-\mathcal U^{i_2j_2})
+    =\mathcal U_2^{(i_1,i_2),(j_1,j_2)}.
+\end{align}
+
+On a periodic chain of length $N$, however,
+\begin{align}
+    V^{(N)} & =(-1)^N I_{2^N}, & U^{(N)} & =I_{2^N}.
+    \label{eq:mpu_standard_form_parity_closed}
+\end{align}
+The families agree at every even length and disagree at every odd length;
+for example, $V^{(3)}=-I_8\ne I_8=U^{(3)}$.
+
+\section{Correct scope}
+
+The local equations compare standard forms of $\mathcal U_2$ and
+$\mathcal V_2$. Their converse can assert equality of the blocked periodic
+families, equivalently $U^{(2N)}=V^{(2N)}$ for positive $N$, but cannot by
+itself assert equality of the original families at every length. The forward
+implication from equality of the original families to the local relations is
+not affected. A converse about the original families needs an additional
+condition detecting odd lengths; it is a corrected theorem, not the printed
+source assertion. In particular, adding such a condition to a formal theorem
+must not be presented as a proof of the unqualified source-labelled
+equivalence. The virtual-unitary-gauge theorem obtained from equality at all
+lengths $N>1$ concerns only the forward direction and remains valid.
+
+The existing identities \leanid{MPOTensor.blockTensor_smul},
+\leanid{MPOTensor.mpo_smul}, and \leanid{MPOTensor.mpo_idTensor} give a short
+formal route to the two-site and periodic equalities in this example. The
+formal parity witness records simplicity, equality of the two-site blocks,
+and inequality at length three. The explicit factors and local $x,y,z$
+relations above are the additional mathematical check of the printed local
+antecedent; they are not asserted by block equality alone.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -5630,8 +5630,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_{\mathcal V} & =(x\otimes y)u_{\mathcal U},
     \end{align}
     while the two canonical-form-II tensors are related on their virtual leg by
-    $z$ and on their source legs by $x$ and $y$. This is the unrestricted
-    statement of the source's Fundamental Theorem of MPU.
+    $z$ and on their source legs by $x$ and $y$. This records the source's
+    unblocked all-length wording. Its converse has the odd-length parity
+    obstruction of Theorem~\ref{thm:mpu_standard_form_parity_obstruction};
+    the blocked-family interpretation is distinguished in
+    \cite{gap:mpu_standard_form_parity_gap}.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
 
@@ -5670,8 +5673,52 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_{\mathcal V} & =(x\otimes y)u_{\mathcal U},
     \end{align}
     while the two canonical-form-II tensors are related on their virtual leg by
-    $z$ and on their source legs by $x$ and $y$.
+    $z$ and on their source legs by $x$ and $y$. The same unblocked converse
+    requires the parity qualification of
+    \cite{gap:mpu_standard_form_parity_gap}.
 \end{theorem}
+
+\begin{theorem}[Parity obstruction to an unblocked standard-form converse]
+    \label{thm:mpu_standard_form_parity_obstruction}
+    \lean{MPOTensor.exists_simple_blockTwo_eq_mpo_three_ne}
+    \leanok
+    \uses{def:mpu_simple, lem:mpu_blocking}
+    There are simple matrix product unitaries $\mathcal U,\mathcal V$ of
+    physical dimension two and bond dimension one whose two-site blocked
+    tensors agree, but whose periodic operators differ at length three:
+    \begin{align}
+        \mathcal U_2 & =\mathcal V_2, & U^{(3)} & \ne V^{(3)}.
+    \end{align}
+    This is the parity obstruction to reading the converse of
+    \cite[Theorem~FundamentalMPU, lines~624--648]{Cirac2017MPU} as an
+    assertion about the original tensors at every length. Definition~SF of
+    that source concerns the two-site blocks; the explicit source factors
+    and local unitary relations for this example are recorded in
+    \cite{gap:mpu_standard_form_parity_gap}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_simple, lem:mpu_blocking}
+    Let $\mathcal U^{ij}=\delta_{ij}$ on its one-dimensional bond space and
+    set $\mathcal V^{ij}=-\mathcal U^{ij}$. Their double-layer letters are
+    both $\delta_{ij}$, so the simplicity contractions hold with unit
+    boundary vectors. Two-site blocking removes the pair of minus signs,
+    whereas closing a chain of length three leaves one minus sign:
+    \begin{align}
+        \mathcal V_2 & =\mathcal U_2, &
+        U^{(3)}      & =I_8,          & V^{(3)} & =-I_8.
+    \end{align}
+\end{proof}
+
+\begin{remark}
+    The source-labelled Fundamental Theorem above and its admissible variant
+    remain unformalized. The source's displayed standard forms concern
+    $\mathcal U_2,\mathcal V_2$; their local relations can control the blocked
+    families, but do not distinguish the original families at odd lengths.
+    The explicit local-gauge calculation and the possible corrected scopes
+    are given in \cite{gap:mpu_standard_form_parity_gap}. No odd-length
+    premise has been inserted into either source-labelled statement.
+\end{remark}
 
 \begin{theorem}[Rank of a Kronecker product]
     \label{thm:mpu_kronecker_rank}
