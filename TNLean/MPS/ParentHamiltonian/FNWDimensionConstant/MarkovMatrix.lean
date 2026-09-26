@@ -63,10 +63,11 @@ theorem markovMatrix_pow_two :
 
 /-- The transition matrix reaches the uniform matrix after three steps. -/
 theorem markovMatrix_pow_three : markovMatrix ^ 3 = uniformMatrix := by
+  rw [show (3 : ℕ) = 2 + 1 from rfl, pow_succ, markovMatrix_pow_two]
   ext i j
   fin_cases i <;> fin_cases j <;>
-    norm_num [pow_succ, Matrix.mul_apply, Fin.sum_univ_succ, markovMatrix, uniformMatrix,
-      hadamardU, hadamardV, hadamardW]
+    norm_num [pow_succ, Matrix.mul_apply, Fin.sum_univ_succ, markovMatrix, squareMatrix,
+      uniformMatrix, hadamardU, hadamardV, hadamardW]
 
 /-- Every transition probability is strictly positive. -/
 theorem markovMatrix_pos : ∀ i j, 0 < markovMatrix i j := by
@@ -132,16 +133,16 @@ theorem realHadamardW_sq (i : Fin 4) : realHadamardW i ^ 2 = 1 := by
 theorem realMarkovMatrix_pow_two (i j : Fin 4) :
     (realMarkovMatrix ^ 2 : Matrix (Fin 4) (Fin 4) ℝ) i j =
       1 / 4 + realHadamardU i * realHadamardW j / 64 := by
-  fin_cases i <;> fin_cases j <;>
-    norm_num [pow_succ, Matrix.mul_apply, Fin.sum_univ_succ, realMarkovMatrix,
-      realHadamardU, realHadamardW, markovMatrix, hadamardU, hadamardV, hadamardW]
+  change (((Rat.castHom ℝ).mapMatrix markovMatrix) ^ 2) i j = _
+  rw [← map_pow, markovMatrix_pow_two]
+  simp [squareMatrix, realHadamardU, realHadamardW]
 
 /-- The real three-step transition probabilities are uniform. -/
 theorem realMarkovMatrix_pow_three (i j : Fin 4) :
     (realMarkovMatrix ^ 3 : Matrix (Fin 4) (Fin 4) ℝ) i j = 1 / 4 := by
-  fin_cases i <;> fin_cases j <;>
-    norm_num [pow_succ, Matrix.mul_apply, Fin.sum_univ_succ, realMarkovMatrix,
-      markovMatrix, hadamardU, hadamardV, hadamardW]
+  change (((Rat.castHom ℝ).mapMatrix markovMatrix) ^ 3) i j = _
+  rw [← map_pow, markovMatrix_pow_three]
+  norm_num [uniformMatrix]
 
 private theorem markovMatrix_path_sums :
     (∀ a f, ∑ b, ∑ c, ∑ e, markovMatrix a b * markovMatrix b c *
@@ -194,6 +195,14 @@ def remainderMatrix : Matrix (Fin 4) (Fin 4) ℚ := markovMatrix - uniformMatrix
 
 /-- The nonconstant remainder has nilpotency index exactly three. -/
 theorem remainderMatrix_nilpotent : remainderMatrix ^ 3 = 0 ∧ remainderMatrix ^ 2 ≠ 0 := by
-  decide +kernel
+  constructor
+  · ext i j
+    fin_cases i <;> fin_cases j <;>
+      norm_num [pow_succ, Matrix.mul_apply, Fin.sum_univ_succ, remainderMatrix,
+        markovMatrix, uniformMatrix, hadamardU, hadamardV, hadamardW]
+  · intro h
+    have hentry := congrArg (fun M : Matrix (Fin 4) (Fin 4) ℚ ↦ M 0 0) h
+    norm_num [pow_succ, Matrix.mul_apply, Fin.sum_univ_succ, remainderMatrix,
+      markovMatrix, uniformMatrix, hadamardU, hadamardV, hadamardW] at hentry
 
 end MPSTensor.FNWDimensionConstant
