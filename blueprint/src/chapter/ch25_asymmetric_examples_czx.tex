@@ -835,8 +835,17 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \begin{proof}
     \leanok
-    The operator is the spin flip with a sign that is $+1$ on constant
-    configurations. The action tensors are checked letter by letter. The
+    \uses{thm:asymex_czx_decorated_operator}
+    For $c\in\{0,1\}$ the spin flip of the constant configuration $c^N$ is
+    $(1-c)^N$, and $q((1-c)^N)+|(1-c)^N|=N(1-c)^2+N(1-c)=2N(1-c)$. By
+    Theorem~\ref{thm:asymex_czx_decorated_operator},
+    \begin{align}
+        O_N(\widehat T)\,|c\rangle^{\otimes N}
+         & =(-1)^{2N(1-c)}\,|1-c\rangle^{\otimes N}
+        =|1-c\rangle^{\otimes N}.
+        \notag
+    \end{align}
+    The action tensors are checked letter by letter. The
     ratio formula is Theorem~\ref{thm:mpug_involution_anomaly_ratio} for the
     compatible L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility},
     and its value is $\omega(s,s,s)=-1$.
