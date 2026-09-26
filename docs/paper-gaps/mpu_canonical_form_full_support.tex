@@ -265,16 +265,14 @@ under the original labels \texttt{SF}, \texttt{def:index},
 records a restriction: it is the reusable supplied-fixed-pair step, stated for
 an arbitrary positive diagonal weight and an arbitrary stabilization exponent,
 through which \texttt{lemuisometry} is proved. The remaining restricted
-full-support statements have the distinct labels
-\texttt{thm:mpu\_admissible\_simple\_tensor\_equivalence},
-\texttt{def:mpu\_admissible\_standard\_form},
+full-support statements include the distinct labels
 \texttt{def:mpu\_admissible\_index},
 \texttt{prop:mpu\_admissible\_index\_well\_defined},
 \texttt{lem:mpu\_admissible\_index\_tensor}, and
 \texttt{lem:mpu\_admissible\_index\_composition}.
 
-Chapter~28 contains thirty-nine labelled \texttt{mpu\_admissible} entries.
-Thirty-eight are restricted forms of results or definitions in
+Chapter~28 now contains thirty-six labelled \texttt{mpu\_admissible} entries.
+Thirty-five are restricted forms of results or definitions in
 Ref.~\cite{Cirac2017MPU}; each has a direct citation or an exact source-line
 locator. The remaining entry,
 \texttt{def:mpu\_admissible\_equivalence\_datum}, is an auxiliary hypothesis
@@ -283,9 +281,10 @@ conditions but does not attribute the datum itself to the paper.
 
 The unrestricted source Fundamental Theorem of MPU remains under
 \texttt{FundamentalMPU} and depends only on the source standard form
-\texttt{SF}. The separate Admissible Fundamental Theorem depends on the
-admissible standard form and the admissible simple-tensor equivalence theorem.
-Similarly, the unrestricted source Index Theorem remains under
+\texttt{SF}. The former admissible duplicates of these statements and of
+\texttt{ThmFund1} have been removed: the same-tensor converse supplies a
+canonical-form-II presentation recording each supplied fixed matrix.
+The unrestricted source Index Theorem remains under
 \texttt{IndexTh}. It depends on the source index, source well-definedness,
 unrestricted tensor-product and composition additivity, source continuity, and
 source equivalence.
@@ -557,11 +556,11 @@ original tensor with those of the reduced representative. It also does not
 prove preservation of source data under tensor products, composition,
 conjugation, adjoint, transposition, or continuous variation.
 
-Consequently, the admissible Chapter~28 statements remain restricted to the
+Consequently, the remaining admissible Chapter~28 statements retain their
 explicitly supplied tensors, comparison tensors, and paths. Parallel
-source-labelled statements retain the hypotheses of Ref.~\cite{Cirac2017MPU}
-and remain unformalized. No restricted statement is presented under a source
-label.
+source-labelled statements retain the hypotheses of Ref.~\cite{Cirac2017MPU};
+those not yet proved remain unformalized. No restricted statement is presented
+under a source label.
 
 \section{Elimination plan}
 
@@ -585,24 +584,23 @@ admissible continuity, symmetry-equivalence, phase-classification, swap, and
 MPS-comparison nodes.
 
 The twenty-nine source/scoped pairs in the continuity and symmetry subtree are
-merged only after the relevant branches close. Until then, every source label
-remains an unrestricted unformalized statement, and every reduced-source or
-path-dependent statement remains under its \texttt{mpu\_admissible} label.
+merged only after the relevant branches close. Until then, the unproved source
+labels remain unrestricted statements, and the corresponding reduced-source or
+path-dependent statements remain under their \texttt{mpu\_admissible} labels.
 The supplied-fixed-pair contraction does not by itself construct the source
 data required to remove these restrictions.
 
 \subsection*{The pointwise family is one connected group}
 
-Now that the bundled presentation carries the stabilized pair, the pointwise
-family splits three ways rather than two, and the split explains why its
-entries cannot be removed one at a time.
-
-Of the thirty-nine \texttt{mpu\_admissible} entries of Chapter~28, twenty-three
-are \texttt{def:mpu\_admissible\_equivalence\_datum} together with the entries
+The supplied fixed-pair converse separates restrictions on the same tensor
+from those on derived tensors and continuous paths. Of the original thirty-nine
+\path{mpu_admissible} entries of Chapter~28, twenty-three are
+\path{def:mpu_admissible_equivalence_datum} together with the entries
 whose dependencies cite it. These carry continuously varying path data and
-belong to \ghissue{6140}. The remaining sixteen are pointwise.
+belong to \ghissue{6140}. The original sixteen pointwise entries are now
+thirteen after the three same-tensor duplicates were removed.
 
-One of the sixteen,
+One of the thirteen,
 \texttt{lem:mpu\_admissible\_source\_u\_isometry}, is not a duplicate. It is
 the generic step, stated for an arbitrary positive diagonal weight $\rho$ and
 an arbitrary exponent $K$ with $E^{K}=\lvert\rho)(\Phi\rvert$, and its formal
@@ -610,15 +608,16 @@ statements still carry both inputs. The source-labelled Lemma~III.7 entry is
 proved from it together with the stabilized power of the bundled presentation,
 so it remains as the reusable step.
 
-Three of the sixteen ---
-\texttt{thm:mpu\_admissible\_simple\_tensor\_equivalence},
-\texttt{def:mpu\_admissible\_standard\_form}, and
-\texttt{thm:mpu\_admissible\_fundamental} --- restrict only the tensors that
+The three removed entries ---
+\path{thm:mpu_admissible_simple_tensor_equivalence},
+\path{def:mpu_admissible_standard_form}, and
+\path{thm:mpu_admissible_fundamental} --- restricted only the tensors that
 their source-labelled counterparts already place under the standing
-convention, and no formal statement carries their restriction any more. They
-are the only merge candidates.
+convention. The converse supplies a presentation on the same tensor with
+exactly the fixed matrix used to construct its source operators. Their
+retained dependents now cite the converse and the source-labelled statements.
 
-The other twelve restrict a tensor other than the one the source entry is
+The remaining twelve restrict a tensor other than the one the source entry is
 about: an exact physical block $\mathcal U_k$, a physical-adjoint, transposed,
 or conjugate comparison tensor, a tensor product, or a composition. Assuming
 the presentation there is not the presentation on $\mathcal U$; it is the
@@ -656,18 +655,16 @@ constructs a presentation on the tensor carrying the supplied fixed pair.
 None of these constructions identifies the source cuts or chosen source
 factors of a derived tensor with those of $\mathcal U$.
 
-The three candidate entries have not yet been consolidated with their
-source-labelled counterparts under \ghissue{7660}. The former citation
-obstruction is now discharged mathematically, though blueprint consolidation
-remains. Eleven retained
-entries cite them: seven pointwise entries, and the four path entries
+The three same-tensor entries have been consolidated with their source-labelled
+counterparts under \ghissue{7660}. Eleven retained entries had cited them:
+seven pointwise entries, and the four path entries
 \path{prop:mpu_admissible_continuity_index},
 \path{thm:mpu_admissible_index},
 \path{cor:mpu_admissible_continuous_standard_form}, and
 \path{lem:mpu_admissible_symmetry_path_criterion}. The tensors of all
-eleven carry a supplied fixed pair. Redirecting their
-dependencies onto the convention-hypothesis entries previously risked
-strengthening these statements without saying so. The implication
+eleven carry a supplied fixed pair. Their statements retain those pairs and
+all operation-specific and pathwise hypotheses. The redirected dependencies
+use the implication
 \begin{align}
     \text{unitary periodic family},\ E^{J}=\lvert\rho)(\Phi\rvert
      & \implies\text{canonical form II}
@@ -675,14 +672,15 @@ strengthening these statements without saying so. The implication
 \end{align}
 is now recorded by
 \leanid{MPOTensor.IsMPU.exists_canonicalFormII_of_supplied_transfer_power}.
-It concerns the original tensor, without introducing a parallel definition of
-canonical form.
+The resulting presentation is on the same tensor and records the supplied
+$\rho$ itself, so the source operators formed from $\rho$ are unchanged. This
+does not introduce a parallel definition of canonical form.
 
 There are two independent mathematical stages. The first, concerning the four
-entries whose restricted tensor is $\mathcal U$ itself, is proved below and
-removes the citation obstruction; its use to merge the three candidates is
-the remaining consolidation in \ghissue{7660}. The second concerns the twelve
-entries whose restricted tensor is derived from $\mathcal U$. Positive
+original entries whose restricted tensor is $\mathcal U$ itself, is proved
+below. Its generic source-$u$ lemma is retained, and the three duplicate
+entries have been removed. The second concerns the twelve entries whose
+restricted tensor is derived from $\mathcal U$. Positive
 blocking, physical adjunction, and independent tensor products now preserve
 the presentation, but their downstream uses have not been consolidated; the
 other operations remain open.
@@ -751,11 +749,10 @@ other operations remain open.
           tensor carrying the datum is the tensor the standing convention
           already governs: the four entries
           \texttt{lem:mpu\_admissible\_source\_u\_isometry} and the three
-          candidates. It also dissolves the citation obstruction above, since
-          the eleven citing entries then obtain the presentation from their
-          own supplied pair instead of through a bridge entry, so the three
-          candidates can be deleted upon consolidation and the second item is not
-          needed for them. For the twelve
+          former candidates. It dissolves the citation obstruction above:
+          the eleven retained entries obtain the presentation from their own
+          supplied pair, with the same $\rho$, and the three duplicates are
+          removed. The second item is not needed for them. For the twelve
           it rewrites the restriction without weakening it, because the
           tensor carrying the datum is a derived one and the converse
           alone constructs no datum for a derived tensor. Positive blocking,
@@ -860,14 +857,14 @@ that transport exist,
 restrictions even if every other preservation statement is proved, and the
 work it needs is larger than the two stages described above.
 
-The first item is now proved, but the three candidate labels have not yet been
-merged under \ghissue{7660}. After that consolidation, thirteen pointwise
-entries remain: the generic supplied-pair step, which is kept deliberately,
-and the twelve derived-tensor entries. Their positive-blocking,
+The first item and the three-label consolidation are complete. Thirteen
+pointwise entries remain: the generic supplied-pair step, which is kept
+deliberately, and the twelve derived-tensor entries. Their positive-blocking,
 physical-adjoint, and independent-product cases now have bundled preservation
 theorems, but the downstream entries have not yet been consolidated. Separate
 conjugation and transposition comparisons, symmetry transforms, and
 composition retain distinct preservation or reduction obligations.
+The twenty-three pathwise entries retain their continuous-source-data hypotheses.
 
 \section{Verdict}
 
@@ -911,9 +908,8 @@ continuous paths.
 Chapter~28 records these requirements as explicit admissibility hypotheses
 rather than consequences of the MPU predicate. They come off in two stages,
 neither singly nor all at once. The converse of the stabilization theorem is
-proved and permits consolidation of the three entries that already carry no
-formal restriction, together with the formerly obstructing citations.
-Preservation along
+proved, and the three same-tensor duplicates have been consolidated with
+their formerly obstructing citations. Preservation along
 each derived-tensor operation releases the twelve whose restriction is on a
 physical block, a comparison tensor, a tensor product, or a composition, the
 last of these by way of a reduced representative rather than a preservation
