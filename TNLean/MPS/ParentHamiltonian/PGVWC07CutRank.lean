@@ -110,9 +110,10 @@ any length \(n\ge\max(L_0,3(b-1)(L_0+1))\) span the product of the block matrix 
 states \(|\phi_{A^j}\rangle\) are pairwise different (lines 1329–1330). The hypothesis
 `BlocksNotGaugePhaseEquiv` used here, the one the direct-sum lemma is formalized with, is
 stronger: two equal blocks with different weights, or two blocks related by a gauge and a
-phase \(\omega\) with \(\omega^N\ne1\), give different states but violate it. The source's
-reduction to pairwise different states does not supply it, and removing it is not
-formalized; see `docs/paper-gaps/rmp_w_state_ti_bound.tex`. The length \(L_0\) in the
+phase \(\omega\) with \(\omega^N\ne1\), give different states but violate it. At prime
+length it is discharged: `lt_of_mpv_eq_smul_wIndicator_of_prime` groups the blocks by
+`mpvPhaseClassData`, whose representatives satisfy it. It remains a hypothesis of the
+conditional bounds; see `docs/paper-gaps/rmp_w_state_ti_bound.tex`. The length \(L_0\) in the
 threshold covers a single block, where the direct-sum lemma is vacuous and the source length
 \(3(b-1)(L_0+1)\) is zero. -/
 theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ}

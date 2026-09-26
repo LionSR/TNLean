@@ -200,10 +200,13 @@ private theorem trace_pow_mul_pow_of_subsingleton {n : Type*} [Fintype n] [Decid
     | succ k ih => rw [pow_succ, hmul, ih, pow_succ]
   rw [Matrix.trace, Fintype.sum_subsingleton _ i, Matrix.diag_apply, hmul, hpow, hpow]
 
-/-- Source: arXiv:quant-ph/0608197, Corollary in the subsection "W state" and its proof,
-`Papers/quant-ph_0608197/MPSarchive.tex` lines 2196–2225, in the conditional form the proof
-establishes, "Therefore `N/2 ≤ 3(b-1)(L₀+1)`", for a weighted sum of block states
-(lines 1320–1326) with arbitrary nonzero coefficients.
+/-- Project result, extending the source proof: arXiv:quant-ph/0608197, Corollary in the
+subsection "W state" and its proof, `Papers/quant-ph_0608197/MPSarchive.tex`
+lines 2196–2225, in the conditional form the proof establishes, "Therefore
+`N/2 ≤ 3(b-1)(L₀+1)`". The source argues for the canonical-form weights `λ_j^N`
+(lines 1320–1327); the statement here allows arbitrary nonzero coefficients `c_j`, a
+project generalization of the same argument, used by the prime-length reduction after
+regrouping blocks.
 
 Let `A^1, …, A^b` be blocks of positive size satisfying conditions 1–3 of the canonical form
 (unital, with a positive definite fixed point of the dual map, irreducible) and condition C1 at

@@ -18,7 +18,7 @@ import TNLean.MPS.Periodic.StateVectorDecomposition
 "An open problem", `Papers/quant-ph_0608197/MPSarchive.tex` lines 2090–2097: condition C2 in
 each block of the canonical form implies condition C1 for a sufficiently large `L₀`, and the
 peripheral eigenvalues of modulus one other than `1` "can be avoided by grouping the spins
-into blocks or simply considering `N` prime" (Theorem 5, lines 849–856). The canonical form
+into blocks or simply considering `N` prime" (Theorem 5, lines 849–858). The canonical form
 is a sum of weighted block states with pairwise different blocks (lines 1314–1330), and the
 W-state corollary (lines 2182–2225) bounds `N` by `2 · 3(b-1)(L₀+1)`.
 Review: arXiv:2011.12127, Appendix A, "The W state", `Papers/2011.12127/TN-Review-main.tex`
@@ -26,8 +26,8 @@ line 2362.
 
 **Formalized here.** The source's reduction at prime length, for an arbitrary `D × D`
 tensor: bring the tensor to the translation-invariant canonical form with unital blocks;
-at a prime length `N > D²` every block with a peripheral eigenvalue other than `1` has
-period dividing no length below `N`, hence contributes zero; the remaining blocks are
+at a prime length `N > D²` every block with a peripheral eigenvalue other than `1` has a
+period `1 < m ≤ D² < N`, which does not divide the prime `N`, hence contributes zero; the remaining blocks are
 primitive and satisfy condition C1 at `L₀ = (D²+1)²` by Wolf's general quantum Wielandt
 bound; grouping blocks whose states agree up to a phase power gives pairwise distinct blocks.
 The single-length bound of the corollary then gives, for every prime `N` and every tensor
@@ -43,8 +43,6 @@ formalized. Documented in `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
 
 ## Main results
 
-* `MPSTensor.BlocksNotGaugePhaseEquiv.comp` — separation of a block family passes to a
-  subfamily.
 * `MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime` — for prime `N`, an arbitrary tensor
   with periodic vector `c W_N` satisfies `N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`.
 
@@ -60,13 +58,6 @@ formalized. Documented in `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
 open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
-
-/-- Separation of a block family passes to the subfamily along an injective reindexing. -/
-theorem BlocksNotGaugePhaseEquiv.comp {d r s : ℕ} {dim : Fin r → ℕ}
-    {A : (k : Fin r) → MPSTensor d (dim k)} (hA : BlocksNotGaugePhaseEquiv (d := d) A)
-    {f : Fin s → Fin r} (hf : Function.Injective f) :
-    BlocksNotGaugePhaseEquiv (d := d) (fun j => A (f j)) :=
-  fun j k hjk h => hA (f j) (f k) (hf.ne hjk) h
 
 /-- Project result: the W-state bound at prime length for an arbitrary tensor.
 
@@ -84,7 +75,8 @@ periodic vector of `A` on `N` sites is `c W_N` with `c ≠ 0`, then
 The proof: for `N ≤ D²` the bound is immediate. Otherwise take the canonical form with unital
 blocks `A^j` and weights `λ_j`. Each block is irreducible and, rescaled and gauged, periodic
 with some period `m_j ≤ D_j² < N`. If `m_j ≠ 1` then `m_j` does not divide the prime `N` and
-the block state vanishes at length `N` (Theorem 5). If `m_j = 1` the block is primitive and
+the block state vanishes at length `N` (Theorem 5, lines 849–858: "If p is no factor,
+then ψ=0"). If `m_j = 1` the block is primitive and
 satisfies condition C1 at `(D²+1)²`. Grouping the blocks whose states agree up to a phase
 power gives representatives no two of which are related by a gauge and a phase, with
 coefficients `γ_j`; dropping those with `γ_j = 0` or period other than `1` leaves at most `D`
