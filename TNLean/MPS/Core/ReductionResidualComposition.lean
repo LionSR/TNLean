@@ -101,7 +101,7 @@ theorem mul_evalWord_reductionResidual_trans_mul (h₁ : IsReduction C B V₁ W�
       set Y := Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w
       set N := reductionResidual C B V₁ W₁
       set M := reductionResidual B A V₂ W₂
-      rw [evalWord_reductionResidual_trans_append_singleton]
+      rw [evalWord_reductionResidual_trans_append_singleton (B := B)]
       constructor
       · have hx := ih₂ [x] (List.cons_ne_nil _ _)
         simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one] at hx
@@ -173,7 +173,7 @@ private theorem evalWord_reductionResidual_trans_mul_eq_zero (h₁ : IsReduction
       set Y := Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w
       have hxq := ih (x :: q) (by simp at hq ⊢; omega)
       rw [Kraus.evalWord_cons] at hxq
-      rw [evalWord_reductionResidual_trans_append_singleton]
+      rw [evalWord_reductionResidual_trans_append_singleton (B := B)]
       have key : (Y * N x + Y * W₁ * M x * V₁) * Kraus.evalWord N q =
           Y * (N x * Kraus.evalWord N q) + (Y * W₁) * M x * (V₁ * Kraus.evalWord N q) := by
         simp only [Matrix.add_mul, Matrix.mul_assoc]
