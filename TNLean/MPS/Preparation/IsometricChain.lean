@@ -27,7 +27,7 @@ products along a chain are `MPSChainTensor.eval`.
 
 ## Main results
 
-* `MPSPreparation.exists_isometryOn_mul` — one step of the recipe: a stacked
+* `MPSPreparation.exists_isIsometryOn_mul` — one step of the recipe: a stacked
   site matrix factors as an isometry on its first `b ≤ D` columns times a
   remainder supported on the first `b` rows.
 * `MPSPreparation.exists_isometric_chain` — the whole sweep: an arbitrary open
@@ -126,7 +126,7 @@ outside the `a × b` block), and `R` vanishing beyond row `b`.
 The source obtains the isometry from a singular value decomposition; here it is
 an orthonormal basis of the column space of the stacked matrix, which gives the
 same factorization. -/
-theorem exists_isometryOn_mul (a : ℕ) (Y : Fin d → Matrix (Fin D) (Fin D) ℂ)
+theorem exists_isIsometryOn_mul (a : ℕ) (Y : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (hY : ∀ i, IsRowSupportedBelow a (Y i)) :
     ∃ (b : ℕ) (Q : Fin d → Matrix (Fin D) (Fin D) ℂ) (R : Matrix (Fin D) (Fin D) ℂ),
       b ≤ D ∧ (∀ c, (∀ i α γ, c ≤ γ.val → Y i α γ = 0) → b ≤ c) ∧
@@ -246,7 +246,7 @@ theorem exists_isometric_chain : ∀ (n a : ℕ), a ≤ D →
     simp
   | n + 1, a, ha, Rm, hRm, P, r => by
     obtain ⟨b₁, Q₀, R, hb₁, hb₁c, hQ₀row, hQ₀col, hQ₀iso, hR, hfac⟩ :=
-      exists_isometryOn_mul a (fun i => Rm * P 0 i) fun i => hRm.mul _
+      exists_isIsometryOn_mul a (fun i => Rm * P 0 i) fun i => hRm.mul _
     obtain ⟨b', Q', r', hb'0, hb'D, hb'c, hQ'row, hQ'col, hQ'iso, hr', hprod⟩ :=
       exists_isometric_chain n b₁ hb₁ R hR (fun p => P p.succ) r
     refine ⟨Fin.cons a b', Fin.cons Q₀ Q', r', rfl, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
@@ -326,7 +326,7 @@ theorem eval_mulVec_congr : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
 
 /-- One isometric step preserves the squared norm of a vector supported on the
 isometric block. -/
-theorem sum_normSq_mulVec_of_isometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
+theorem sum_normSq_mulVec_of_isIsometryOn {b : ℕ} {Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (hQ : IsIsometryOn b Q) {v : Fin D → ℂ} (hv : IsSupportedBelow b v) :
     ∑ i, star (Q i *ᵥ v) ⬝ᵥ (Q i *ᵥ v) = star v ⬝ᵥ v := by
   classical
@@ -388,7 +388,7 @@ theorem sum_normSq_eval_mulVec : ∀ {n : ℕ} (b : Fin (n + 1) → ℕ)
         (eval (fun p => Q p.succ) τ *ᵥ v) :=
       isSupportedBelow_eval_mulVec (fun k => b k.succ) _
         (fun p i => by rw [Fin.succ_castSucc]; exact hrow p.succ i) v (by simpa using hv) τ
-    exact sum_normSq_mulVec_of_isometryOn (hiso 0) hsupp
+    exact sum_normSq_mulVec_of_isIsometryOn (hiso 0) hsupp
 
 /-- An isometry on the first `b` bond levels extends to a unitary on
 ancilla ⊗ site, `ℂ^D ⊗ ℂ^d`, whose columns `|β, 0⟩` with `β < b` are the given
@@ -658,7 +658,7 @@ theorem exists_of_isometric_chain {n : ℕ} (b : Fin (n + 2) → ℕ) (hbD : ∀
     obtain rfl : β' = ⟨0, hD⟩ := Fin.ext (Nat.lt_one_iff.mp hβ')
     simp only [Q', ite_eq_left rfl]
     simp only [mul_colMat_apply _ _ _ (⟨0, hD⟩ : Fin D) rfl]
-    have h := sum_normSq_mulVec_of_isometryOn (hiso (Fin.last n))
+    have h := sum_normSq_mulVec_of_isIsometryOn (hiso (Fin.last n))
       (v := r') (by rw [Fin.succ_last]; exact hr')
     rw [hnorm] at h
     simpa [dotProduct] using h
