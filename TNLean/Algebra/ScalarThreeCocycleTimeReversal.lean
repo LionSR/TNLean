@@ -19,7 +19,7 @@ The source derives two scalar relations from time-reversal symmetry. For the
 anomaly three-cocycle, lines 873--891 give `ω = ω* · (dβ)⁻¹` for a
 fusion-tensor phase `β`, so that `ω` is cohomologous to its complex conjugate.
 For the L-symbols, lines 935--952 give a relation between the conjugated
-action tensors that yields `L̄ = (1, γ) ▷ L` for an action-tensor phase `γ`.
+action tensors that yields `L* = (1, γ) ▷ L` for an action-tensor phase `γ`.
 
 ## Main results
 
@@ -30,7 +30,7 @@ action tensors that yields `L̄ = (1, γ) ▷ L` for an action-tensor phase `γ`
   joint scalar gauge, one joint scalar gauge makes both `ω` and `L` real.
   This conditional statement goes beyond the source.
 * `LSymbol.star_apply_eq_gauge_one_apply`: the scalar step of lines 935--954,
-  giving `L̄ˣ_{g,h} / Lˣ_{g,h} = γ_{gh,x} / (γ_{h,x} γ_{g,h·x})`.
+  giving `L*ˣ_{g,h} / Lˣ_{g,h} = γ_{gh,x} / (γ_{h,x} γ_{g,h·x})`.
 * `LSymbol.phase_sq_eq_of_gauge_eq_star`: under that relation the square of
   the phase `L / |L|` is an action-tensor gauge ratio.
 
@@ -248,8 +248,8 @@ joint scalar gauge by `(β, γ)`, then a single joint scalar gauge makes both
 real.
 
 This is not a statement of arXiv:2203.12563. The source derives
-`β ▷ ω = ω̄` at lines 873--891 and, with the fusion-tensor phase omitted,
-`(1, γ) ▷ L = L̄` at lines 935--954; the hypotheses here, with the same `β`
+`β ▷ ω = ω*` at lines 873--891 and, with the fusion-tensor phase omitted,
+`(1, γ) ▷ L = L*` at lines 935--954; the hypotheses here, with the same `β`
 in both relations, are assumed rather than derived from a time-reversal
 operator. Compatibility of `L` with `ω` is not needed. -/
 theorem exists_gauge_star_eq_self {β : ScalarCocycle G} {γ : ActionTensorGauge G X}
@@ -264,10 +264,10 @@ theorem exists_gauge_star_eq_self {β : ScalarCocycle G} {γ : ActionTensorGauge
 /-- **Corrected L-symbol relation under time reversal.** Let `T` be a nonzero
 vector, the complex conjugate of the fused action tensor `W_{g,h} V_{gh,x}`,
 and let `P` be the complex conjugate of the composite `V_{g,h·x} V_{h,x}`, so
-that the conjugate of `F1group` reads `P = L̄ˣ_{g,h} T`. If the time-reversal
+that the conjugate of `F1group` reads `P = L*ˣ_{g,h} T`. If the time-reversal
 display `γ_{h,x} γ_{g,h·x} P = Lˣ_{g,h} γ_{gh,x} T` holds, then
 
-`L̄ˣ_{g,h} = γ_{gh,x} / (γ_{h,x} γ_{g,h·x}) · Lˣ_{g,h}`,
+`L*ˣ_{g,h} = γ_{gh,x} / (γ_{h,x} γ_{g,h·x}) · Lˣ_{g,h}`,
 
 that is, the conjugate of `L` is the joint gauge of `L` by `(1, γ)`.
 
@@ -276,7 +276,7 @@ This is the scalar step of arXiv:2203.12563, lines 935--954.
 **Local fix (conjugate ratio in `TRSF1group`):** The source prints the
 consequence, `TRSF1group` at line 954, as
 `|Lˣ_{g,h}|² = γ_{gh,x} / (γ_{h,x} γ_{g,h·x})`. Its own display at lines
-935--952 together with the conjugate of `F1group` gives the ratio `L̄ / L`
+935--952 together with the conjugate of `F1group` gives the ratio `L* / L`
 in place of `|L|²`, and the printed form fails for an on-site
 `ℤ₂ × ℤ₂` symmetry. This declaration and
 `LSymbol.phase_sq_eq_of_gauge_eq_star` use the corrected ratio. See
