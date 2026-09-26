@@ -5202,6 +5202,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 603--622.
 \end{definition}
 
+\begin{definition}[Two-site standard form with supplied gates]
+    \label{def:mpu_supplied_two_site_standard_form}
+    \lean{MPOTensor.TwoSiteStandardFormData}
+    \leanok
+    Let $d,D,\ell,r$ be positive integers and let
+    $W$ be a two-site tensor of physical dimension $d^2$ and bond dimension
+    $D$. A standard form with supplied gates consists of unitary maps
+    \begin{align}
+        u & \colon \mathbb C^d\otimes\mathbb C^d
+        \longrightarrow \mathbb C^\ell\otimes\mathbb C^r, \\
+        v & \colon \mathbb C^r\otimes\mathbb C^\ell
+        \longrightarrow \mathbb C^d\otimes\mathbb C^d,
+    \end{align}
+    and half factors $X_1,X_2$ such that
+    \begin{align}
+        v^{(i_1,i_2)}_{s,l}
+         & =\sum_{\beta=0}^{D-1}
+        (X_1)_{(i_1,\beta),s}(X_2)_{(\beta,i_2),l}, \\
+        W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}
+         & =\sum_{l=0}^{\ell-1}\sum_{s=0}^{r-1}
+        (X_2)_{(\alpha,i_1),l}\,
+        u_{(l,s),(j_1,j_2)}\,
+        (X_1)_{(i_2,\gamma),s}.
+    \end{align}
+    This is the open contraction underlying
+    \cite[Definition~III.9]{Cirac2017MPU}. No unitary periodic operator is
+    assumed for $W$.
+    % Source: paper_v2.tex lines 532--543 and 603--617. The generic open
+    % equation is unreflected; the alternative closed reflection is specific
+    % to the source tensor and is not a condition on supplied gates.
+\end{definition}
+
 \begin{definition}[Admissible standard form]
     \label{def:mpu_admissible_standard_form}
     \notready
@@ -5234,6 +5266,80 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 603--622.
 \end{definition}
+
+\begin{definition}[Open standard form from source cuts]
+    \label{def:mpu_source_open_two_site_standard_form}
+    \lean{MPOTensor.IsMPUCanonicalFormII.twoSiteStandardFormData}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form, ThmFund1,
+        def:mpu_source_uv}
+    Let $\mathcal U$ be simple and have a reduced full-support
+    canonical-form-II presentation with positive diagonal fixed matrix $\rho$.
+    The two-site tensor $\mathcal U_2$ has the supplied standard form with
+    the source gates $u,v$ and the source half factors $X_1,X_2$. In
+    particular,
+    \begin{align}
+        (\mathcal U_2)^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}
+         & =\sum_{l,s}(X_2)_{(\alpha,i_1),l}
+        u_{(l,s),(j_1,j_2)}(X_1)_{(i_2,\gamma),s},                  \\
+        v^{(i_1,i_2)}_{s,l}
+         & =\sum_{\beta}(X_1)_{(i_1,\beta),s}(X_2)_{(\beta,i_2),l}.
+    \end{align}
+    The full-support restriction is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+    % Source: paper_v2.tex equations uuvv and StandardForm, lines 532--543
+    % and 603--622. This is only the open construction, not the closed
+    % four-site equality in Definition SF.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{ThmFund1, thm:mpu_source_u_open_two_site,
+        thm:mpu_canonical_form_ii_positive_dimensions}
+    The source-cut factorization gives the open contraction of
+    $\mathcal U_2$ through $X_2,u,X_1$, while the definition of $v$ gives
+    its $X_1,X_2$ contraction. The simple-tensor equivalence makes both
+    source gates unitary. Its rank identity $r\ell=d^2$ also makes the two
+    intermediate dimensions positive.
+\end{proof}
+
+\begin{theorem}[Bounded block with an open source standard form]
+    \label{thm:mpu_bounded_source_open_standard_form}
+    \lean{MPOTensor.twoSiteDirectBlockEquiv,
+        MPOTensor.reindexPhysical_blockTwo_blockTensor_two_mul,
+        MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_blockTensor}
+    \leanok
+    \uses{def:mpu_source_open_two_site_standard_form}
+    Let $\mathcal U$ have a reduced full-support canonical-form-II
+    presentation. There is an integer $k$ with $0<k\leq D^4$ such that
+    $\mathcal U^{[k]}$ is simple and its two-site block has the open source
+    standard form of Definition~\ref{def:mpu_source_open_two_site_standard_form}.
+    If $\eta_{d,k}$ identifies a word of length $2k$ with two consecutive
+    words of length $k$, the corresponding physical relabeling satisfies
+    \begin{align}
+        \operatorname{reindex}_{\eta_{d,k}}
+        \bigl((\mathcal U^{[k]})_2\bigr)
+         & =\mathcal U^{[2k]}.
+    \end{align}
+    The source cuts and both gates are formed on the same tensor
+    $\mathcal U^{[k]}$, using the fixed matrix of the given presentation.
+    % Source: paper_v2.tex lines 378--427 and 603--622.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_open_two_site_standard_form,
+        thm:mpu_bounded_simple_blocking,
+        thm:mpu_canonical_form_ii_positive_blocking,
+        thm:mpu_canonical_form_ii_positive_dimensions,
+        thm:mpdo_block_two_as_positive_blocking,
+        lem:mpu_iterated_physical_blocking}
+    Choose the positive simple blocking length bounded by $D^4$.
+    Canonical form II persists under this positive blocking, with the same
+    fixed matrix, so the preceding construction applies to
+    $\mathcal U^{[k]}$. Two-site blocking is direct blocking by $2k$ after
+    the displayed relabeling: first identify the ordinary two-site block
+    with length-two blocking, then group the direct word into consecutive
+    length-$k$ subwords and use $k\cdot2=2k$.
+\end{proof}
 
 \begin{theorem}[Fundamental Theorem of MPU]
     \label{FundamentalMPU}
