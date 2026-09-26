@@ -161,10 +161,10 @@ def fibUnitAllTauGolden : Fin 2 → Matrix (Fin 2) (Fin 2) GoldenInt
 
 theorem fibUnitAllTau_eq (i : Fin 2) :
     fibUnitAllTau i = complexOfGolden (fibUnitAllTauGolden i) := by
-  have h : fibUnitAllTau i = complexOfGolden (actGoldenTensor fibOneGolden fibAllTauGolden i) :=
-    actTensor_complexOfGolden fibOneGolden fibAllTauGolden i
+  have h : fibUnitAllTau i = complexOfGolden (actTensorR fibOneGolden fibAllTauGolden i) :=
+    actTensor_complexOfRing _ fibOneGolden fibAllTauGolden i
   have hgolden : ∀ j : Fin 2,
-      actGoldenTensor fibOneGolden fibAllTauGolden j = fibUnitAllTauGolden j := by
+      actTensorR fibOneGolden fibAllTauGolden j = fibUnitAllTauGolden j := by
     decide +kernel
   rw [h, hgolden]
 
@@ -274,10 +274,10 @@ def fibActAllTauGolden : Fin 2 → Matrix (Fin 3) (Fin 3) GoldenInt
        ⟨1, 0, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, -1, 0⟩]
 
 theorem fibActAllTau_eq (i : Fin 2) : fibActAllTau i = complexOfGolden (fibActAllTauGolden i) := by
-  have h : fibActAllTau i = complexOfGolden (actGoldenTensor fibTauGolden fibAllTauGolden i) :=
-    actTensor_complexOfGolden fibTauGolden fibAllTauGolden i
+  have h : fibActAllTau i = complexOfGolden (actTensorR fibTauGolden fibAllTauGolden i) :=
+    actTensor_complexOfRing _ fibTauGolden fibAllTauGolden i
   have hgolden : ∀ j : Fin 2,
-      actGoldenTensor fibTauGolden fibAllTauGolden j = fibActAllTauGolden j := by
+      actTensorR fibTauGolden fibAllTauGolden j = fibActAllTauGolden j := by
     decide +kernel
   rw [h, hgolden]
 
@@ -399,10 +399,10 @@ def fibActChainGolden : Fin 2 → Matrix (Fin 6) (Fin 6) GoldenInt
        ⟨1, 0, 0, 0⟩, ⟨0, 0, -1, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, 0, -1⟩, ⟨0, 0, -1, 0⟩, ⟨1, 0, -1, 0⟩]
 
 theorem fibActChain_eq (i : Fin 2) : fibActChain i = complexOfGolden (fibActChainGolden i) := by
-  have h : fibActChain i = complexOfGolden (actGoldenTensor fibTauGolden fibChainGolden i) :=
-    actTensor_complexOfGolden fibTauGolden fibChainGolden i
+  have h : fibActChain i = complexOfGolden (actTensorR fibTauGolden fibChainGolden i) :=
+    actTensor_complexOfRing _ fibTauGolden fibChainGolden i
   have hgolden : ∀ j : Fin 2,
-      actGoldenTensor fibTauGolden fibChainGolden j = fibActChainGolden j := by
+      actTensorR fibTauGolden fibChainGolden j = fibActChainGolden j := by
     decide +kernel
   rw [h, hgolden]
 

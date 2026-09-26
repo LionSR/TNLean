@@ -84,4 +84,5 @@ import TNLean.MPS.MPU.TransferStabilizationConverse
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth
 import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TwoSiteStandardForm
+import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.VirtualSandwich
