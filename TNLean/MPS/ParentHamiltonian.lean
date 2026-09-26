@@ -38,6 +38,7 @@ import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockSumIntervalSpaces
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanNormalization
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanPropagation
+import TNLean.MPS.ParentHamiltonian.BlockWordSpanSeparation
 import TNLean.MPS.ParentHamiltonian.BlockedGroundSpaceTransport
 import TNLean.MPS.ParentHamiltonian.BoundaryBlockMatEq
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
