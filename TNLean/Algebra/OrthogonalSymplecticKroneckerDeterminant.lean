@@ -20,6 +20,10 @@ These are the determinant identities used in arXiv:1703.09188, lines
 1464--1477. The symplectic assertion here concerns the standard symplectic
 form; identifying it with the source's interleaved form is a separate change
 of coordinates.
+
+## References
+
+* arXiv:1703.09188, lines 1464--1477.
 -/
 
 open scoped Kronecker
