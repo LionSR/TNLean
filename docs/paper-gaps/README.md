@@ -595,6 +595,13 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
   leaves open whether omitting the factors `v` changes the periodic operators.
 
+For the domain walls of anomalous symmetries in arXiv:2405.00439:
+
+- `gs24_czx_action_left_vectors.tex` records that the left action vectors
+  printed for the two CZX product states do not give reductions, the
+  corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
+  $L_0/L_1=-1=\omega$ is unchanged.
+
 For the group matrix product operators of arXiv:2203.12563:
 
 - `glm23_pbc_group_mpo_single_shift.tex` records that the periodic display
