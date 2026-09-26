@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Analysis.Complex.Basic
-import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
