@@ -108,8 +108,9 @@ theorem inner_mpvState_self_eq_trace (A : MPSTensor d D) (N : ℕ) :
 
 /-! ### Bounds on normalized expectations -/
 
-/-- The normalized expectation of an operator is at most its operator norm (arXiv:2307.01696,
-Supplemental Material, proof of Theorem 1, observables of norm one). -/
+/-- The normalized expectation of an operator is at most its operator norm. This bounds the
+one-point values `e = ⟨𝒪_1⟩_φ` in the chapter's proof of `thm:ldp_depth_lower_bound` (the
+chapter's version of arXiv:2307.01696, Supplemental Material, proof of Theorem 1). -/
 theorem norm_mpvExpectation_le (A : MPSTensor d D) (N : ℕ)
     (O : Matrix (Cfg d N) (Cfg d N) ℂ) :
     ‖mpvExpectation A N O‖ ≤ ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O‖ := by

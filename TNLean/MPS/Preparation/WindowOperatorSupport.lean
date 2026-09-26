@@ -103,8 +103,8 @@ noncomputable def chainWindowStarAlgHom (L N a : ℕ) (ha : a < N) (haL : a + L 
 
 /-- Placing an operator on a window does not increase its operator norm, since a
 `*`-homomorphism of C⋆-algebras is contractive. This bounds the norms of the translated
-observables in the chapter's proof of `thm:ldp_depth_lower_bound` (arXiv:2307.01696,
-Supplemental Material, proof of Theorem 1, "observables of norm one"). -/
+observables in the chapter's proof of `thm:ldp_depth_lower_bound` ("These have norm at most
+`2`"; the chapter's version of arXiv:2307.01696, Supplemental Material, proof of Theorem 1). -/
 theorem norm_toEuclideanCLM_chainWindowOperator_le {L N a : ℕ} (ha : a < N)
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (chainWindowOperator N a X)‖ ≤
