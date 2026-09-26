@@ -1124,9 +1124,12 @@ The following notions use different transfer objects and are not interchangeable
 ## Fusion symmetries of matrix product operators
 
 The periodic-boundary layer of non-invertible matrix product operator symmetry.
-Every predicate in this section evaluates the source's arbitrary-boundary
-invariance only with identity boundaries; that restriction is recorded in
-`docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
+The operator-level predicates `IsMPOFusionAlgebra`, `IsMPOSymmetricFamily`,
+`IsMPOSymmetric` and `GroupFamily.IsNormalRepresentation` impose their
+identities only with identity boundaries; for the symmetric-state predicates that
+restriction is recorded in `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
+The remaining entries are conditions on structure constants or on words and
+involve no boundary.
 
 ### `MPOTensor.IsMPOFusionAlgebra`
 

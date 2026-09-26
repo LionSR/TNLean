@@ -148,11 +148,19 @@ hypothesis under which the fusion tensors exist, see
 `MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors`.  Neither
 unitarity nor the identity law `U_e = 1` is required. -/
 structure IsNormalRepresentation (F : GroupFamily G d) : Prop where
+  /-- Every doubled-index tensor `T_g` is normal. This is weaker than the injectivity of
+  arXiv:2203.12563, `REsubmission.tex` line 1211, which it replaces. -/
   isNormal : ∀ g, Kraus.IsNormal (F.tensor g).toMPSTensor
+  /-- The representation law `U_g U_h = U_{gh}` on every nonempty periodic chain
+  (arXiv:2203.12563, line 1211; arXiv:2502.20257, lines 1403--1407). -/
   operator_mul : ∀ g h N, 0 < N →
     mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N
 
-/-- An exact representation by simple injective tensors has normal tensors. -/
+/-- An exact representation by simple injective tensors has normal tensors: injective tensors
+are normal, and the representation law is shared.
+
+Source: arXiv:2203.12563, line 1211 (the injective representations the fusion-tensor lemma
+covers); arXiv:2502.20257, lines 1403--1407 (the representation law). -/
 theorem IsRepresentation.isNormalRepresentation {F : GroupFamily G d}
     (hF : F.IsRepresentation) : F.IsNormalRepresentation :=
   ⟨fun g ↦ (hF.isInjective g).isNormal, hF.operator_mul⟩
