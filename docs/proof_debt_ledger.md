@@ -1051,6 +1051,31 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 - **First PR**: the whole change in one pull request, root build over the
   ≈44 importers, checkdecls.
 
+## D18. Orthogonal-projector uniqueness from equal ranges re-proved in the polar-uniqueness module  —  duplication, impact 2/10, effort 1/10
+- **Status**: open (raised in the review of [#8108](https://github.com/LionSR/TNLean/pull/8108))
+- **Evidence**: `Matrix.eq_of_range_eq_of_isHermitian_idempotent`
+  (`TNLean/MPS/Preparation/PolarUniqueness.lean:80-89`) proves that two
+  Hermitian idempotent complex matrices with equal ranges are equal, through
+  `Matrix.mul_eq_self_of_range_le` and a conjugate-transpose `calc`. QICLean
+  already proves the same statement as
+  `TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq`
+  (`QICLean/Channel/TripartiteDecorrelation.lean:678-696`), with the same
+  hypotheses and conclusion; the only difference is the range presentation,
+  `LinearMap.range (Matrix.toLin' S)` there against
+  `LinearMap.range S.mulVecLin` here, bridged by Mathlib's
+  `Matrix.toLin'_apply'`. TNLean already calls the QICLean lemma at
+  `TNLean/MPS/ParentHamiltonian/TripartiteDecorrelation.lean:87`. The local
+  lemma has one consumer, `PolarUniqueness.lean:123`
+  (`Matrix.polarSupport_eq_of_eq_mul`).
+- **Remediation**: delete `Matrix.eq_of_range_eq_of_isHermitian_idempotent`,
+  and at its call site apply
+  `TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq` after
+  rewriting the range hypothesis with `Matrix.toLin'_apply'`.
+  `Matrix.mul_eq_self_of_range_le` stays, since `PolarUniqueness.lean:113`
+  also uses it. Net about −10 lines.
+- **First PR**: the whole change in one pull request, with a locked build of
+  `TNLean.MPS.Preparation.PolarUniqueness` and its importers.
+
 ## Honorable mentions (ranks 11-12)
 
 - **D11 (plumbing tax)** — 486 `finCongr`/`Fin.cast` sites in 91 files;
