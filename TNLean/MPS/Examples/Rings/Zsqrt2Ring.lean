@@ -122,14 +122,9 @@ theorem isNormal_of_single_eq_smul_zsqrt2 {A : MPSTensor d D}
     (AZ : Fin d → Matrix (Fin D) (Fin D) (ℤ√2)) (hA : ∀ a, A a = complexOfZsqrt2 (AZ a))
     (ℓ : Fin D → Fin D → Fin d) (w : Fin D → Fin D → ℤ√2) (hw : ∀ x y, w x y ≠ 0)
     (h : ∀ x y, AZ (ℓ x y) = w x y • Matrix.single x y 1) :
-    Kraus.IsNormal A := by
-  refine Kraus.IsInjective.isNormal
-    (Submodule.eq_top_of_forall_single_mem _ fun x y => ?_)
-  have hAl : A (ℓ x y) = zsqrt2ToComplex (w x y) • Matrix.single x y (1 : ℂ) := by
-    rw [hA, h x y, complexOfZsqrt2_smul, complexOfZsqrt2_single]
-  have hne : zsqrt2ToComplex (w x y) ≠ 0 := zsqrt2ToComplex_ne_zero (hw x y)
-  have hmul := Submodule.smul_mem (Submodule.span ℂ (Set.range A))
-    (zsqrt2ToComplex (w x y))⁻¹ (Submodule.subset_span (Set.mem_range_self (ℓ x y)))
-  rwa [hAl, smul_smul, inv_mul_cancel₀ hne, one_smul] at hmul
+    Kraus.IsNormal A :=
+  isNormal_of_complexOfRing_letter_eq_smul_single zsqrt2ToComplex AZ one_ne_zero
+    (fun a => (hA a).trans (one_smul _ _).symm) ℓ w
+    (fun x y => zsqrt2ToComplex_ne_zero (hw x y)) h
 
 end MPSTensor

@@ -148,7 +148,6 @@ lemma gramDressing_gauge_ne_one :
   norm_num [gauge_val, gaugeMatrix, tensor,
     Matrix.mul_apply, Matrix.vecMul, dotProduct, Fin.sum_univ_two,
     Matrix.conjTranspose_apply, map_ofNat] at h201
-  simp at h201
 
 @[simp]
 private lemma tensor_zero : tensor 0 = 1 := by

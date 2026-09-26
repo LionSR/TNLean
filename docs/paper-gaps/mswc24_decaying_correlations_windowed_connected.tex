@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Decaying Correlations: Windows of Separations and the Connected Correlator}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{What the source states}
+Let $A$ be an injective tensor with transfer map $\mathcal E_A$, in the gauge
+$\sum_i A^{i\dagger}A^i=\mathbb 1$, $\mathcal E_A(\rho)=\rho$, $\rho>0$,
+$\operatorname{Tr}\rho=1$. Let $\lambda_2$ be an eigenvalue of $\mathcal E_A$
+of largest modulus other than $1$, with correlation length
+$\xi=-1/\log\lvert\lambda_2\rvert>0$, and let $\ket{\phi_N}$ be the normalized
+translation-invariant matrix product state on $N$ sites. Lemma~2 of the
+Supplemental Material of~\cite{Malz2024Preparation} asserts observables
+$\mathcal O,\mathcal O'$ of norm one such that for every integer $s>1$ and all
+sufficiently large $N$
+\begin{align}
+    \bra{\phi_N}\mathcal O_1\ket{\phi_N}
+     & =\bra{\phi_N}\mathcal O'_s\ket{\phi_N}=0,
+    \label{eq:mswc24_decaying_correlations_one_point}   \\
+    \bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}
+     & \ge c\,e^{-(s-1)/\xi},
+    \label{eq:mswc24_decaying_correlations_printed_bound}
+\end{align}
+with $c>0$ independent of $s$ and $N$.\footnote{Source traceability: label
+    \path{lm:2} of the arXiv LaTeX source, section ``Proof of Theorem~1'' of
+    the Supplemental Material; the two displays are labelled \path{auxform1}
+    and \path{auxform2} there. No copy of this source is kept in
+    \path{Papers/}.}
+
+\section{Why the printed form is corrected}
+Put $P(Z)=\operatorname{Tr}(Z)\,\rho$ and $t=s-L-1$, where the observables act
+on $L$ sites ($L=1$ in the source). For Hermitian observables the limit of the
+correlator as $N\to\infty$ is
+\begin{align}
+    G_\infty(\mathcal O,\mathcal O';s)
+     & =\operatorname{Tr}\Bigl(\mathcal E_{\mathcal O}
+    \bigl((\mathcal E_A-P)^{t}\bigl(\mathcal E_{\mathcal O'}(\rho)\bigr)\bigr)\Bigr),
+    \label{eq:mswc24_decaying_correlations_limit}
+\end{align}
+which is real. When $\lambda_2$ is not real, $\bar\lambda_2$ is also an
+eigenvalue of $\mathcal E_A$, and the source pairs an eigenvector for
+$\lambda_2$ with its adjoint. Writing $\lambda_2=\lvert\lambda_2\rvert e^{i\theta}$,
+the leading part of (\ref{eq:mswc24_decaying_correlations_limit}) is then
+\begin{align}
+    \lvert\lambda_2\rvert^{t}\bigl(a\,e^{it\theta}+\bar a\,e^{-it\theta}\bigr)
+     & =2\lvert a\rvert\,\lvert\lambda_2\rvert^{t}\cos(t\theta+\varphi),
+    \label{eq:mswc24_decaying_correlations_cosine}
+\end{align}
+with $a=\lvert a\rvert e^{i\varphi}$. The cosine vanishes, or comes arbitrarily
+close to zero, at individual $t$, so a bound
+(\ref{eq:mswc24_decaying_correlations_printed_bound}) with one constant $c$ at
+every separation $s$ is not supplied by the source's argument. The source's
+proof also gives no reason for the exact vanishing
+(\ref{eq:mswc24_decaying_correlations_one_point}) at finite $N$: the one-point
+functions converge to their limits only up to an error exponentially small in
+$N$.
+
+\section{The corrected statement}
+Let $A$ be normal, with products of $L\ge1$ matrices spanning the matrix
+algebra, in the same gauge, and put
+\begin{align}
+    G_N(X,Y;s)
+     & =\bra{\phi_N}X_1Y_s\ket{\phi_N}
+    -\bra{\phi_N}X_1\ket{\phi_N}\bra{\phi_N}Y_s\ket{\phi_N}.
+    \label{eq:mswc24_decaying_correlations_connected}
+\end{align}
+There are Hermitian $\mathcal O,\mathcal O'$ of norm one, $c>0$,
+$K\in\{1,2\}$ with $K=1$ when $\lambda_2$ is real, and $s_0\ge L+2$ such that
+every $s\ge s_0$ has some $s'\in\{s,\dots,s+K-1\}$ with
+\begin{align}
+    \bigl\lvert G_N(\mathcal O,\mathcal O';s')\bigr\rvert
+     & \ge c\,e^{-(s'-1)/\xi}
+     &
+     & \text{for all } N\ge3s'.
+    \label{eq:mswc24_decaying_correlations_corrected}
+\end{align}
+The window of $K$ consecutive separations removes the zeros of
+(\ref{eq:mswc24_decaying_correlations_cosine}): the Vandermonde matrix of the
+distinct unimodular numbers $e^{\pm i\theta}$ is invertible, so of any two
+consecutive values of $a\,e^{it\theta}+\bar a\,e^{-it\theta}$ one has modulus
+at least a fixed $c_0>0$. The connected correlator replaces the exact
+vanishing (\ref{eq:mswc24_decaying_correlations_one_point}). For injective $A$
+and $L=1$ the hypotheses are those of the source.\footnote{Formal declaration:
+    \leanid{MPSTensor.exists_decayingCorrelations} in
+    \doclink{TNLean/MPS/Preparation/DecayingCorrelationBound}.}
+
+\section{Verdict}
+The correction is local. Its proof is the source's spectral argument together
+with the Vandermonde bound, and it suffices for the source's Theorem~1: that
+proof needs one separation $s'$ of order $T_N+L$ for each $N$, and moving $s'$
+by at most $K-1\le1$ sites preserves $s'=o(\log N)$ and $N\ge3s'$. The
+remaining deviation in the proof of Theorem~1, which uses the connected
+correlator in place of (\ref{eq:mswc24_decaying_correlations_one_point}), is
+recorded in the comment after that theorem in the blueprint and is not part
+of this note.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

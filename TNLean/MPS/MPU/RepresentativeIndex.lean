@@ -32,6 +32,11 @@ is not asserted. See `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 * CPSV17, arXiv:1703.09188, Definition `def:index` and Proposition
   `index-well-defined` (lines 681–704), and the canonical-form discussion
   (lines 257–294, 319–356).
+* CPSV17, Theorem `FundamentalMPU` (Fundamental Theorem of MPU, lines
+  624–652), for the unitary virtual gauge between canonical-form-II
+  representatives with equal periodic operators.
+* CPSV17, Proposition IV.5 (lines 786–812), for invariance of the source-cut
+  ranks under an invertible virtual sandwich.
 -/
 open scoped Matrix
 
@@ -39,8 +44,11 @@ namespace MPOTensor
 
 /-- Canonical-form-II tensors with equal periodic operators at every length
 greater than one have equal right and left source-cut ranks, even when their
-bond dimensions differ. The comparison uses the literal unitary virtual gauge.
-CPSV17, lines 257–294 and 681–704. -/
+bond dimensions differ. The comparison uses the literal unitary virtual
+gauge of CPSV17, Theorem `FundamentalMPU` (lines 624–652), and the
+source-rank invariance under a virtual sandwich of CPSV17, Proposition IV.5
+(lines 786–812). The notation `r`, `ℓ` is CPSV17, Definition `defnrl`
+(line 475). -/
 theorem IsMPUCanonicalFormII.sourceRanks_eq_of_mpo_eq
     {d D₁ D₂ : ℕ} {U : MPOTensor d D₁} {V : MPOTensor d D₂}
     (hU : IsMPUCanonicalFormII U) (hV : IsMPUCanonicalFormII V)
