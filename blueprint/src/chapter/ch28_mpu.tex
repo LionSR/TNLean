@@ -6126,7 +6126,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}
     \leanok
     \uses{def:mpu_reduced_representative_index,
-        def:mpu_independent_tensor_product, threeMPU}
+        def:mpu_independent_tensor_product, thm:mpu_tensor_product, threeMPU}
     Let $U$ and $V$ be positive-dimensional MPU tensors, possibly with
     different physical and bond dimensions. Their independent tensor product
     satisfies
@@ -7587,7 +7587,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (admissible tensors and operations):** every simple
     % block and standard form used below carries reduced full-support source
     % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_index_well_defined, thm:mpu_admissible_index_tensor, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
+    \uses{prop:mpu_admissible_index_well_defined, thm:mpu_admissible_index_tensor, thm:mpu_representative_index_tensor_product, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
     Assume the following operation-specific admissibility hypotheses. Every pair
     of simple blockings compared for blocking independence carries reduced
     full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
