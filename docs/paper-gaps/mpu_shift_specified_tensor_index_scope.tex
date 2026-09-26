@@ -69,6 +69,7 @@ For the right and left shifts the choice of blocking is no longer a
 restriction. For every $k\ge0$, the right shift blocked over $k+1$ sites is
 simple and has source ranks
 \begin{align}
+    \label{eq:mpu_shift_specified_tensor_index_scope_blocked_ranks}
     (r,\ell)=(d^{k+2},d^{k}),
 \end{align}
 the left shift has the reversed pair, and the blocked tensors for $U_2$ and
@@ -86,7 +87,7 @@ generating the same operators, which needs the canonical form of the shift and
 its uniqueness.
 
 The review states that the shift cannot be approximated by a short-range time
-evolution (arXiv:2011.12127, lines 2607--2611, citing the source). Unequal
+evolution~\cite{Cirac2021Matrix}, citing the source. Unequal
 source ranks alone do not give this: after blocking, every MPU, the shift
 included, is a depth-two circuit of nearest-neighbour unitaries in its standard
 form (Definition SF, lines 605--622, and the appendix, line 2308). The

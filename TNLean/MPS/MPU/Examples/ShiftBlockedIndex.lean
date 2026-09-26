@@ -421,8 +421,8 @@ private theorem shiftBasis_dotProduct_shiftPhi (i k : Fin d) :
   simp [shiftBasis, shiftPhi]
 
 private theorem shiftPhi_dotProduct_shiftBasis (i k : Fin d) :
-    shiftPhi d ⬝ᵥ shiftBasis d i k = if i = k then 1 else 0 := by
-  simp [shiftBasis, shiftPhi]
+    shiftPhi d ⬝ᵥ shiftBasis d i k = if i = k then 1 else 0 :=
+  (dotProduct_comm _ _).trans (shiftBasis_dotProduct_shiftPhi i k)
 
 /-- The right-shift tensor is simple. Its double-layer letters are
 $W^{ik}=|\Phi)(ik|$ with $\Phi=\sum_j|jj)$, so the boundary vectors
