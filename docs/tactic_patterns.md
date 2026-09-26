@@ -2166,12 +2166,30 @@ currently one occurrence, so no general declaration is warranted.
   `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
   and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
   in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and the
-  local `hproj` in the norm-contraction theorem of
-  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`.
+  fourth, already parametrized, local `hproj` (lines 40–51) in
+  `norm_suffixGroundProjection_comp_prefixDifference_le_active` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`, used
+  there for both the prefix and the suffix projections.
 - **Abstraction (proposed):** a top-level theorem
   `ker_starProjection_conj_of_rightFiberwiseMap` in `SpectatorTransport.lean`
-  with the parametrized statement of the local `hproj`; refactor the four call
-  sites to use it.
+  with the parametrized statement of the local `hproj`:
+
+  ```lean
+  theorem ker_starProjection_conj_of_rightFiberwiseMap
+      (G : EuclideanSpace ℂ (Cfg d (n + r)) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d (n + r)))
+      (H : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n))
+      (hc : (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.conj G =
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.toContinuousLinearMap H)).toLinearMap) :
+      (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.conj
+          (LinearMap.ker G).starProjection.toLinearMap =
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+          (LinearMap.ker H).starProjection).toLinearMap
+  ```
+
+  The local `hproj` then becomes this theorem, and the three
+  `SpectatorTransport.lean` proofs replace their
+  `have hproj … rw … change … at hproj` blocks by one application.
 - **Notes:** meets the rule of three. Promotion needs a verified Lean build,
   so it is deferred to a follow-up change with build access.
 
@@ -2205,12 +2223,20 @@ currently one occurrence, so no general declaration is warranted.
 - **Pattern:** expand the inner product over fixed spectator configurations,
   apply the pointwise overlap bound, and finish with finite Cauchy–Schwarz.
 - **Occurrences:** the two nested restrictions to a middle interval in
-  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`.
+  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the hand-written
+  calculation in `norm_inner_overlap_sub_inner_aggregates_le` in
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean` (lines 47–92),
+  which runs the same chain `norm_sum_le`, `Finset.sum_le_sum`,
+  `Finset.mul_sum`, `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator
+  configurations.
 - **Status:** private lemmas express the finite orthogonal-sum estimate and
   its transport along a configuration equivalence. The three boundary-range
   cases use the same middle-interval theorem. The previously private
   three-interval evaluation of the right boundary map is shared with
   `FNWProjectorDefect.lean` through `SpectatorBoundaryCoordinates.lean`.
+  With the occurrence in `FNWOverlapEstimate.lean` the pattern meets the rule
+  of three; promotion means making the finite orthogonal-sum estimate public
+  and rewriting that calculation through it, which needs a Lean build.
 
 ### Lower Gram bounds and off-diagonal pairings — locally factored
 - **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
