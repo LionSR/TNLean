@@ -22,7 +22,7 @@ The chain is stored as in `TNLean.MPS.Preparation.IsometricChain`: square
 `Q_p(i)` vanishes outside the upper-left `b_p × b_{p+1}` block and the site map
 `|β⟩ ↦ ∑_{α,i} Q_p(i)_{αβ} |α⟩|i⟩` is isometric on the first `b_{p+1}` levels. The
 factorization reads `⟨σ| V |x⟩ = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0x}`, with `b₀ = 1` (the
-output end), `b_q = D²` (the input), and every bond at most `D²`. In the notation
+output end), `b_q = D²` (the input), and `b₁, …, b_q ≤ D²`. In the notation
 of the source, `Q_p` is the isometry `V_{q-p}` of eq. (14) and `b_p = D'_{q+1-p}`.
 
 ## Main results
@@ -31,7 +31,7 @@ of the source, `Q_p` is the isometry `V_{q-p}` of eq. (14) and `b_p = D'_{q+1-p}
   isometry of the form `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₁} ⋯ A^{σ_q})_{αβ} G_{(α,β),x}`.
 * `MPSPreparation.exists_isometric_chain_polarIsoMatrix` — the isometric factor of
   the polar decomposition of an injective blocked tensor factors into `q`
-  isometries with bonds at most `D²`, arXiv:2307.01696, eqs. (13)–(15).
+  isometries with bonds `b₁, …, b_q` at most `D²`, arXiv:2307.01696, eqs. (13)–(15).
 
 ## References
 
@@ -104,7 +104,7 @@ private theorem star_dotProduct_of_isSupportedBelow_one {D' : ℕ} (hD : 0 < D')
 /-- **Sequential factorization of an isometry given by a matrix product.** Let `V`
 be an isometry from `ℂ^{D²}` to `(ℂ^d)^{⊗(n+1)}` whose matrix elements are
 `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₀} ⋯ A^{σ_n})_{αβ} G_{(α,β),x}`. Then there are bond
-dimensions `b₀ = 1`, `b_{n+1} = D²`, all at most `D²`, and site matrices `Q_p`
+dimensions `b₀ = 1`, `b_{n+1} = D²` and `b₁, …, b_{n+1} ≤ D²`, and site matrices `Q_p`
 vanishing outside the `b_p × b_{p+1}` block and isometric on it, with
 `⟨σ|V|x⟩ = (Q₀(σ₀) ⋯ Q_n(σ_n))_{0x}`.
 
@@ -208,7 +208,7 @@ theorem exists_isometric_chain_of_eq_mul (A : Fin d → Matrix (Fin D) (Fin D) �
 injective blocked tensor. Let `A` be a tensor with bond dimension `D`, let `q ≥ 1`,
 and suppose the `q`-site blocked tensor `B` is injective, so that its polar
 decomposition `B = V P` has an isometry `V : ℂ^{D²} → (ℂ^d)^{⊗q}`. Then there are
-bond dimensions `b₀ = 1`, `b_q = D²`, and `b_p ≤ D²`, and site matrices `Q_p`,
+bond dimensions `b₀ = 1`, `b_q = D²`, and `b₁, …, b_q ≤ D²`, and site matrices `Q_p`,
 vanishing outside the `b_p × b_{p+1}` block, whose site maps
 `ℂ^{b_{p+1}} → ℂ^{b_p} ⊗ ℂ^d` are isometries, such that
 `⟨σ₁ ⋯ σ_q| V |x⟩ = (Q₀(σ₁) ⋯ Q_{q-1}(σ_q))_{0x}` for every configuration and every
