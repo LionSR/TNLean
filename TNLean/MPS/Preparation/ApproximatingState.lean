@@ -197,8 +197,7 @@ theorem tendsto_polarPosTensor_blockTensor_of_isNormal (A : MPSTensor d D)
   have hNT := isNormalTensor_of_isNormal_leftCanonical A hN hA
   refine tendsto_polarPosTensor_of_tendsto_transferMap (fun q => blockTensor A q)
     hσ.posSemidef fun X => ?_
-  have h := tendsto_transferMap_blockTensor_of_isPrimitive A hNT.no_invariant_proj
-    hNT.primitive_transfer hA hσ htr hfix X
+  have h := tendsto_transferMap_blockTensor_of_isPrimitive A hNT hA hσ htr hfix X
   rwa [transferMap_fixedPointTensor_apply hσ.posSemidef] at h
 
 /-! ### The approximating tensor and its periodic state -/

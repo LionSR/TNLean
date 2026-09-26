@@ -9,6 +9,7 @@ import QICLean.Channel.Peripheral.IrreducibleChannel
 import QICLean.Channel.Primitive
 import QICLean.Kraus.InvariantProjection
 import TNLean.Algebra.MatrixCyclicPathSum
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Core.CyclicTrace
@@ -387,14 +388,13 @@ of eq. `eq:B_TM`. Normality is the source's definition after
 eq. `eq:transfer_matrix`: the letters have no nontrivial common invariant
 subspace, and `1` is the only eigenvalue of `E_A` of modulus one.
 
-The hypotheses `hIrr` and `hPrim` are the fields `no_invariant_proj` and
-`primitive_transfer` of `MPSTensor.IsNormalTensor`, so a normal tensor `hN : IsNormalTensor A`
-supplies them as `hN.no_invariant_proj` and `hN.primitive_transfer`. The remaining field
-`spectral_radius_one` is not assumed: it follows from the left-canonical gauge `hA` together
-with the nonzero fixed point `σ`, since then `E_A` is a channel with a nonzero fixed point. -/
+Normality is taken as `MPSTensor.IsNormalTensor`; the proof uses its fields
+`no_invariant_proj` and `primitive_transfer`. Its remaining field `spectral_radius_one` adds
+nothing to the source's hypotheses here: in the left-canonical gauge `hA` the transfer map is a
+channel, so a caller holding only the source's two conditions obtains `IsNormalTensor A` from
+`MPSTensor.isNormalTensor_of_isIrreducibleFamily_leftCanonical`. -/
 theorem tendsto_transferMap_blockTensor_of_isPrimitive
-    (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A)
-    (hPrim : IsPrimitive (Kraus.transferMap A)) (hA : IsLeftCanonical A)
+    (A : MPSTensor d D) (hN : IsNormalTensor A) (hA : IsLeftCanonical A)
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) (X : Matrix (Fin D) (Fin D) ℂ) :
     Tendsto (fun q : ℕ => Kraus.transferMap (blockTensor A q) X) atTop
@@ -403,7 +403,8 @@ theorem tendsto_transferMap_blockTensor_of_isPrimitive
   obtain ⟨htr', hgap⟩ :=
     spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
       (Kraus.transferMap A) (Kraus.isChannel_mapLM A hA)
-      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr) hPrim σ hσ.posSemidef
+      (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hN.no_invariant_proj)
+      hN.primitive_transfer σ hσ.posSemidef
       (by rintro rfl; simp at htr) hfix
   refine tendsto_transferMap_blockTensor_of_spectralRadius_lt_one A hA hσ.posSemidef htr hfix
     ?_ X
