@@ -17,9 +17,9 @@ bound
 \]
 
 stated at lines 1180--1194 and again for the best overlap constant \(A^\alpha_m\) at
-lines 2401--2412, display `boundAm`. The prescription there is that \(\lambda\) may be
-any number with \(\lambda_i<\lambda<1\) for every eigenvalue \(\lambda_i\ne 1\) of the
-transfer operator.
+lines 2401--2412, display `boundAm`. The prescribed rate satisfies \(0<\lambda<1\)
+and exceeds the modulus of every eigenvalue other than one of the observable transfer
+operator.
 
 This module composes the three already-proved ingredients into that display. Fannes--
 Nachtergaele--Werner, *Communications in Mathematical Physics* 144 (1992), Lemma 6.2
@@ -27,21 +27,20 @@ gives the coefficient \(a(m)(1+a(m))/a_-(m)\); equation (5.9) gives \(1-a(m)\le
 a_-(m)\); and Lemma 5.2 with equations (5.9)--(5.10) gives \(a(m)\le c\lambda^m\) for
 every prescribed rate above the rho-weighted spectral radius of the transfer remainder.
 
-**Scope restriction (FNW rate and prefactor):** two clauses of the source display are
-narrower here than in print, and both are recorded in
-`docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
+The source's eigenvalue prescription is established in
+`FNWTransferEigenvalueRate`: every positive rate above the moduli of the nonunit
+observable-transfer eigenvalues also exceeds the weighted remainder spectral radius.
+Thus the fixed-length theorem below applies at every such prescribed rate once its
+mixing-quantity hypothesis is supplied.
 
-The rate: the source prescribes that \(\lambda\) may be any number with
-\(\lambda_i<\lambda<1\) for every eigenvalue \(\lambda_i\ne 1\) of the transfer operator.
-What is proved below holds instead for any rate strictly above the rho-weighted spectral
-radius of the transfer remainder. The two conditions are known to describe the same rates
-only once that radius is identified with the largest modulus among the nonunit transfer
-eigenvalues, and that identification is not formalized: the available eigenvalue result
-bounds each eigenvalue of the remainder below one without characterizing its spectrum.
-
-The prefactor: the source states that \(c\) may be taken equal to \(k^2\), the dimension
-of the auxiliary space. The prefactor produced here is the existential rate-dependent one
-supplied by Lemma 5.2; no dimension-only value is asserted.
+**Local fix (dimension-only prefactor):** the simultaneous assertions following
+Nachtergaele's `boundAm` that one may take \(c=k^2\), the square of the auxiliary
+dimension, and prescribe any admissible rate are false from the fixed intersection
+threshold. `FNWDimensionConstant.Counterexample` gives a physical counterexample.
+The geometric estimate below uses the positive rate-dependent prefactor supplied by
+FNW Lemma 5.2. `FNWEventualPrefactor` also proves the estimate with any prescribed
+positive prefactor after an additional onset depending on the state, rate, and prefactor.
+This correction is documented in `docs/paper-gaps/cpgsv21_martingale_overlap.tex`.
 
 ## Main results
 

@@ -2319,21 +2319,21 @@ best overlap constant $A^\alpha_m$ in
 FNW coefficient $a(m)(1+a(m))/a_-(m)$, the lower-boundary inequality
 $1-a(m)\leq a_-(m)$, and the prescribed-rate estimate $a(m)\leq c\lambda^m$.
 
-\textbf{Scope restriction (FNW overlap bound rate and prefactor):}
-Two features of the source's display are not reproduced, and the statements
-below are phrased so as not to assert them.  The first is the rate condition:
-the source prescribes that $\lambda$ may be any number with
-$\lambda_i<\lambda<1$ for every eigenvalue $\lambda_i\neq1$ of the transfer
-operator.  What is proved here instead admits any $\lambda$ strictly between
-the weighted spectral radius of the transfer remainder and one.  The two
-conditions would describe the same rates if the spectral radius were known to
-equal the largest modulus among the nonunit transfer eigenvalues.  That is not
-established here: what is available is the bound that every eigenvalue of the
-remainder has modulus below one, which is not a description of its spectrum.
-The theorems below therefore use the spectral-radius condition alone.  The
-second is the prefactor: the source asserts it may be taken equal to $k^2$, the
-dimension of the auxiliary space, whereas the constant produced below is the
-existential rate-dependent one.  Documented in
+The source's rate condition is now established by
+Theorem~\ref{thm:fnw-transfer-eigenvalue-rate}: every positive rate exceeding
+the moduli of the nonunit observable-transfer eigenvalues also exceeds the
+weighted spectral radius of the transfer remainder. In particular, the
+geometric estimate is available for every source-admissible rate
+$0<\lambda<1$, with a positive rate-dependent prefactor.
+
+\textbf{Local fix (dimension-only prefactor):}
+The source's simultaneous assertions that $c=k^2$, the square of the auxiliary
+dimension, and that every admissible rate may be prescribed require a correction
+at the fixed intersection threshold. Theorem~\ref{thm:fnw-dimension-only-counterexample}
+gives a physical counterexample. The valid replacement retains the
+rate-dependent prefactor, or permits any prescribed positive prefactor after
+an additional onset depending on the state, rate, and prefactor, as proved in
+Theorem~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
 \cite{gap:cpgsv21_martingale_overlap}.
 
 \begin{theorem}[Geometric FNW projector defect at a fixed length]
