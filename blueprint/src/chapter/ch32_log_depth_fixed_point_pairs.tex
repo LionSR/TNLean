@@ -220,9 +220,11 @@ stacking and $\sigma$ for column stacking.
     \lean{MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive}
     \leanok
     \uses{def:prep_fixed_point_tensor, def:blocked_tensor,
-        def:left_canonical_tensor, def:irreducible_tensor}
-    Let $A$ be irreducible and left-canonical, with $1$ the only eigenvalue
-    of $\E_A$ of modulus one, and let $\sigma$ be positive definite with
+        def:left_canonical_tensor, def:nt_cpsv}
+    Let $A$ be a left-canonical normal tensor in the sense of
+    Definition~\ref{def:nt_cpsv}: irreducible, with $1$ the only eigenvalue
+    of $\E_A$ of modulus one (for a left-canonical tensor the spectral radius
+    of $\E_A$ is automatically one). Let $\sigma$ be positive definite with
     $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$. Then
     $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$, for every
     $X\in\MN{D}$.
