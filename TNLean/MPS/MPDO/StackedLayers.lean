@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.PeriodicExclusion
 
 /-!
@@ -35,8 +36,6 @@ decomposition in `TNLean/MPS/MPDO/CyclicProjector.lean`.
 
 ## Main definitions
 
-* `idTensor`: the trivial-bond MPO tensor generating the identity operator;
-  the empty vertical stack.
 * `layerMul`: the vertical composition of two MPO layers.
 * `stackedTensor`: the $p$-fold vertical stack of an MPO tensor.
 * `PeriodicVectorYieldsCyclicProjector`: the hypothesis that a nontrivial
@@ -67,32 +66,7 @@ namespace MPOTensor
 
 variable {d D D' : ℕ}
 
-/-! ### The identity tensor and the layer product -/
-
-/-- The MPO tensor with trivial bond whose letters are $\delta_{ij}$.  It
-generates the identity operator at every system size (`mpo_idTensor`) and
-serves as the empty vertical stack in `stackedTensor`. -/
-noncomputable def idTensor (d : ℕ) : MPOTensor d 1 :=
-  fun i j => if i = j then 1 else 0
-
-/-- The identity tensor generates the identity operator at every system
-size. -/
-theorem mpo_idTensor (d N : ℕ) : mpo (idTensor d) N = 1 := by
-  refine Matrix.ext fun σ τ => ?_
-  simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.one_apply]
-  by_cases h : σ = τ
-  · subst h
-    rw [ite_eq_left rfl, List.prod_eq_one, Matrix.trace_one, Fintype.card_fin,
-      Nat.cast_one]
-    intro X hX
-    obtain ⟨l, rfl⟩ := List.mem_ofFn.mp hX
-    simp [idTensor]
-  · rw [ite_eq_right h]
-    obtain ⟨l, hl⟩ : ∃ l, σ l ≠ τ l := Function.ne_iff.mp h
-    have hzero : (0 : Matrix (Fin 1) (Fin 1) ℂ) ∈
-        List.ofFn fun l => idTensor d (σ l) (τ l) :=
-      List.mem_ofFn.mpr ⟨l, by simp [idTensor, hl]⟩
-    rw [List.prod_eq_zero hzero, Matrix.trace_zero]
+/-! ### The layer product -/
 
 /-- The **vertical composition of two MPO layers**: stacking a layer of
 $M$ on top of a layer of $M'$ and contracting the shared physical index gives

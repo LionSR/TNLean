@@ -174,33 +174,39 @@ private theorem hasBlockSelectorWords_of_family_gaugeEquiv
         rw [hoff j hjk]
         simp
 
-/-- A basis of normal tensors has one common positive word length at which the
-labelled word evaluations span the full product matrix algebra.
+/-- Pairwise non-equivalent normal tensors have one common positive word length at
+which their labelled word evaluations span the full direct sum of matrix algebras.
 
-The BNT hypothesis supplies positive bond dimensions and excludes
-gauge-phase-equivalent duplicate representatives.  Perron gauges put all
-representatives in left-canonical form, after which the block-injectivity
-argument gives simultaneous selectors.  The gauges are then removed and the
-resulting injectivity and selectors give the simultaneous product-algebra
-span at one positive word length.
+Let \(B_1,\ldots,B_g\) be normal tensors of positive bond dimension, in the spectral sense
+of arXiv:1606.00608, lines 233--235, no two of which
+are gauge equivalent up to a nonzero scalar.  Then there is \(L>0\) such that the
+tuples \((B_1^w,\ldots,B_g^w)\), for the words \(w\) of length \(L\), span
+\(\bigoplus_j M_{D_j}\).  Perron gauges put all tensors in left-canonical form,
+after which the block-injectivity argument gives simultaneous selectors.  The gauges
+are then removed and the resulting injectivity and selectors give the simultaneous
+span.
 
-Source: arXiv:1606.00608, BNT definition at lines 271--274 and block
-injectivity at lines 317--345. -/
-theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
-    {g : ℕ} {dim : Fin g → ℕ}
-    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
-    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
+The scalar in the non-equivalence hypothesis cannot be dropped: the tensors \(A\)
+and \(-A\) are not gauge equivalent in general, yet their words of each length are
+equal or opposite, so the tuples never span the direct sum.
+
+Source: arXiv:1606.00608, block injectivity of a basis of normal tensors at lines
+317--345; the argument uses only normality and pairwise non-equivalence up to a
+scalar of the tensors. -/
+theorem exists_positive_wordTupleSpanTop_of_isNormal
+    {g : ℕ} {dim : Fin g → ℕ} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hNormal : ∀ j, IsNormalTensor (B j)) (hdimPos : ∀ j, 0 < dim j)
+    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) B) :
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
   classical
-  have hdimPos := hBNT.blocks_dim_pos
   let : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
   choose σ _hσ _hσfix hTP hGauge hPrim hIrr using
-    fun j => (hBNT.blocks_normal j).exists_tpGauge
+    fun j => (hNormal j).exists_tpGauge
   let prepared : (j : Fin g) → MPSTensor d (dim j) :=
     fun j => Kraus.tpGauge (B j) (σ j)
   have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
     intro j k hjk hdim hGPE
-    apply hBNT.blocks_not_gaugePhaseEquiv j k hjk hdim
+    apply hDistinct j k hjk hdim
     exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
       (hGauge j) (by simpa [prepared] using hGPE) (hGauge k)
   have hPreparedNormal : ∀ j, Kraus.IsNormal (prepared j) := by
@@ -244,6 +250,23 @@ theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
     wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
       B hOriginalAtP hSelectors
   exact ⟨p + selectorLength, Nat.add_pos_left hp selectorLength, hSpan⟩
+
+/-- A basis of normal tensors has one common positive word length at which the
+labelled word evaluations span the full product matrix algebra.
+
+The BNT hypothesis supplies positive bond dimensions and excludes
+gauge-phase-equivalent duplicate representatives, the hypotheses of
+`exists_positive_wordTupleSpanTop_of_isNormal`.
+
+Source: arXiv:1606.00608, BNT definition at lines 271--274 and block
+injectivity at lines 317--345. -/
+theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop
+    {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
+    ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L :=
+  exists_positive_wordTupleSpanTop_of_isNormal hBNT.blocks_normal hBNT.blocks_dim_pos
+    hBNT.blocks_not_gaugePhaseEquiv
 
 /-- A simultaneous product-algebra word span makes each component block injective
 at the same length. -/
