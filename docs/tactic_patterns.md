@@ -1398,8 +1398,10 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `IsingTwist.isingFusion_of_signedPerm` in
   `TNLean/MPS/Examples/Ising/IsingFusionAlgebra.lean`.
 - **Notes:** the caller supplies the scaled-matrix-unit form of each letter
-  (`*_eq_smul_single`), the list `next h` of right labels with a nonzero
-  letter of the first factor, the vanishing of the letters across the middle
+  (`*_eq_smul_single`), a duplicate-free list `next h` containing every right
+  label `h'` at which the first factor's coefficient `a h h'` may be nonzero
+  (any such superset of the support works; labels outside it must have
+  `a h h' = 0`), the vanishing of the letters across the middle
   label, the gauge `G` with `G * Gᵀ = 1` and `Gᵀ * G = 1`, and the sector
   identity `hdiag`; the last three are `decide +kernel` checks over `ℤ√2`.
   The lemma is specific to the ten fusion-tree labels of the Ising category;
