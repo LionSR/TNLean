@@ -112,7 +112,9 @@ theorem exists_mem_spectrum_spectralRadius_eq [Nonempty ι] (A : Matrix ι ι �
       spectralRadius ℂ A = ENNReal.ofReal ‖μ‖ := by
   obtain ⟨μ, hμ, hmax⟩ := Set.exists_max_image (spectrum ℂ A) (‖·‖) A.finite_spectrum
     (spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ A)
-  refine ⟨μ, hμ, hmax, le_antisymm (iSup₂_le fun ν hν => ?_) (le_iSup₂_of_le μ hμ ?_)⟩
+  refine ⟨μ, hμ, hmax, ?_⟩
+  rw [spectralRadius_eq_of_unital]
+  refine le_antisymm (iSup₂_le fun ν hν => ?_) (le_iSup₂_of_le μ hμ ?_)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
     exact ENNReal.ofReal_le_ofReal (hmax ν hν)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
@@ -314,6 +316,7 @@ theorem spectralRadius_map_ofReal_eq_of_pos_vecMul_eq [Nonempty ι] {M : Matrix 
     have := norm_le_of_mem_spectrum_of_pos_vecMul_eq hM hδ h hr
     rw [Complex.norm_real, Real.norm_eq_abs] at this
     exact (abs_nonneg r).trans this
+  rw [spectralRadius_eq_of_unital]
   refine le_antisymm (iSup₂_le fun μ hμ => ?_) (le_iSup₂_of_le (r : ℂ) hr ?_)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
     exact ENNReal.ofReal_le_ofReal (norm_le_of_mem_spectrum_of_pos_vecMul_eq hM hδ h hμ)
