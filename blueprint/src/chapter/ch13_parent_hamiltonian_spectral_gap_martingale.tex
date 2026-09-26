@@ -5005,6 +5005,112 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     for all blocks and all pairs. Apply the joint projector error estimate.
 \end{proof}
 
+\begin{theorem}[Interval spaces of a block-diagonal tensor]
+    \label{thm:ph_block_sum_interval_spaces}
+    \lean{MPSTensor.range_leftBoundaryMapES_toTensorFromBlocks_eq_iSup,
+        MPSTensor.range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup,
+        MPSTensor.range_reassocTailBoundaryMapES_toTensorFromBlocks_eq_iSup}
+    \leanok
+    \uses{def:whole_increment_physical_reassociation}
+    Let $B=\bigoplus_{j=1}^r\mu_jA_j$ with $\mu_j\ne0$ for every $j$.
+    For every $K,L\geq0$, the extended interval spaces satisfy
+    \begin{align}
+        G_K(B)\otimes\mathcal H_L
+         & =\sum_{j=1}^r\bigl(G_K(A_j)\otimes\mathcal H_L\bigr),  \\
+        \mathcal H_K\otimes G_L(B)
+         & =\sum_{j=1}^r\bigl(\mathcal H_K\otimes G_L(A_j)\bigr).
+    \end{align}
+    For every $K,L,Q\geq0$, with the reassociation $\mathscr A_{K,L,Q}$ of
+    Definition~\ref{def:whole_increment_physical_reassociation}, the
+    right interval space of length $L+Q$ satisfies
+    \begin{align}
+        \mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(B)\bigr)
+         & =\sum_{j=1}^r
+        \mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(A_j)\bigr).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:block_sum_local_ground_space,
+        def:whole_increment_physical_reassociation}
+    Let $\Omega_L$ be the set of physical words of length $L$. For subspaces
+    $S_1,\dots,S_r$ of a vector space, the finite coordinate identity
+    \begin{align}
+        \prod_{\tau\in\Omega_L}\Bigl(\sum_{j=1}^rS_j\Bigr)
+         & =\sum_{j=1}^r\prod_{\tau\in\Omega_L}S_j
+    \end{align}
+    holds: the right side is contained in the left, and a family
+    $(\psi_\tau)_\tau$ with $\psi_\tau=\sum_j\psi_{\tau,j}$ and
+    $\psi_{\tau,j}\in S_j$ is the sum over $j$ of the families
+    $(\psi_{\tau,j})_\tau$.
+    Let $T_{K,L}$ be the coordinate isomorphism sending
+    $(\psi_\tau)_{\tau\in\Omega_L}$ to the vector with coefficient
+    $\psi_\tau(\sigma)$ at $(\sigma,\tau)\in\Omega_K\times\Omega_L$. Then
+    $G_K(C)\otimes\mathcal H_L=T_{K,L}\prod_{\tau\in\Omega_L}G_K(C)$ for every
+    tensor $C$. The local identity $G_K(B)=\sum_jG_K(A_j)$ and the finite
+    coordinate identity give
+    \begin{align}
+        G_K(B)\otimes\mathcal H_L
+         & =T_{K,L}\prod_{\tau\in\Omega_L}\Bigl(\sum_{j=1}^rG_K(A_j)\Bigr)
+        =\sum_{j=1}^rT_{K,L}\prod_{\tau\in\Omega_L}G_K(A_j)
+        =\sum_{j=1}^r\bigl(G_K(A_j)\otimes\mathcal H_L\bigr),
+    \end{align}
+    since linear maps preserve sums of subspaces. The same argument, with
+    the free sites on the left and coordinates indexed by $\Omega_K$, gives
+    the second identity. Applying the linear map $\mathscr A_{K,L,Q}$ to the
+    second identity at lengths $K$ and $L+Q$ gives the third.
+\end{proof}
+
+\begin{theorem}[Projector error decay for a block-diagonal tensor]
+    \label{thm:ph_block_diagonal_projector_decay}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_projector_defect_le}
+    \leanok
+    \uses{def:primitive_mps}
+    Let $B=\bigoplus_{j=1}^r\mu_jA_j$, where every $\mu_j$ is nonzero
+    and the $A_j$ are pairwise gauge-phase inequivalent normalized primitive
+    tensors with positive bond dimensions and positive-definite fixed
+    points. Write $P_I(B)$ for the orthogonal projector onto the ground
+    space on the interval $I$, extended by the identity on the remaining
+    sites. For every $\eta>0$, all sufficiently large $L$, and every
+    $K\geq0$ and $Q>0$,
+    \begin{align}
+        \bigl\lVert P_{[1,K+L+Q]}(B)
+        -P_{[1,K+L]}(B)P_{[K+1,K+L+Q]}(B)\bigr\rVert
+         & \leq\eta.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_primitive_block_interval_defect_decay,
+        thm:ph_block_interval_projectors,
+        thm:block_sum_local_ground_space, thm:ph_block_sum_interval_spaces}
+    For each block put
+    \begin{align}
+        U_j & =G_{K+L}(A_j)\otimes\mathcal H_Q,                                &
+        V_j & =\mathscr A_{K,L,Q}\bigl(\mathcal H_K\otimes G_{L+Q}(A_j)\bigr), &
+        W_j & =G_{K+L+Q}(A_j),
+    \end{align}
+    and let $P,S,R$ be the orthogonal projectors onto $\sum_jU_j$,
+    $\sum_jV_j$, and $\sum_jW_j$. These are the projectors written $P,Q,R$
+    in Theorem~\ref{thm:ph_block_interval_projectors}; the middle one is
+    renamed here because $Q$ denotes a length. The local identity at
+    length $K+L+Q$, the first identity of
+    Theorem~\ref{thm:ph_block_sum_interval_spaces} at lengths $K+L$ and $Q$,
+    and its reassociated identity at lengths $K,L,Q$ give
+    \begin{align}
+        P_{[1,K+L+Q]}(B)   & =P_{G_{K+L+Q}(B)}
+        =P_{\sum_jW_j}=R,                                               \\
+        P_{[1,K+L]}(B)     & =P_{G_{K+L}(B)\otimes\mathcal H_Q}
+        =P_{\sum_jU_j}=P,                                               \\
+        P_{[K+1,K+L+Q]}(B) & =P_{\mathscr A_{K,L,Q}(\mathcal H_K\otimes
+                G_{L+Q}(B))}=P_{\sum_jV_j}=S.
+    \end{align}
+    Hence the left side of the asserted bound is $\lVert R-PS\rVert$, and
+    Theorem~\ref{thm:ph_primitive_block_interval_defect_decay} with the
+    prescribed $\eta$ bounds it by $\eta$ for all sufficiently large $L$,
+    every $K\geq0$, and every $Q>0$.
+\end{proof}
+
 \section{Overlaps of distinct block ground spaces}
 
 \begin{theorem}[Mixed boundary Gram identity]
