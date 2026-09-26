@@ -3633,6 +3633,46 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     and physical relabeling to obtain the MPO statement.
 \end{proof}
 
+\begin{theorem}[Canonical form II under independent tensor products]
+    \label{thm:mpu_canonical_form_ii_tensor_product}
+    \lean{MPOTensor.IsMPUCanonicalFormII.tensorProduct}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_independent_tensor_product}
+    Let $\mathcal U$ and $\mathcal V$ be MPUs in canonical form II,
+    with recorded ambient right fixed matrices $\rho_U$ and $\rho_V$. Their
+    independent tensor product is in canonical form II in the product bond
+    coordinates. Its recorded matrix is
+    \begin{align}
+        \rho_{U\boxtimes V}
+         & =\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}
+        (\rho_U\otimes\rho_V).
+    \end{align}
+    In particular, the product presentation has full support. This is the
+    canonical-form-II consequence of the independent-product construction
+    used in \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; the full-support convention
+    is recorded in \cite{gap:mpu_canonical_form_full_support}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_tensor_product_cfii_data, thm:mpu_tensor_product,
+        thm:mpu_normalized_flattening_tensor_product,
+        thm:cpsv_physical_reindexing}
+    Tensor the chosen canonical blocks and their diagonal positive fixed
+    matrices, then apply the doubled physical-coordinate relabeling. The
+    retained dimensions multiply and their sum is the product bond dimension.
+    Independent tensor products preserve the MPU property. The product of the
+    two ambient fixed matrices is positive definite, diagonal, and of trace
+    one. In the product bond coordinates, the transfer identity gives
+    \begin{align}
+        \mathcal E_{\widetilde{\mathcal U\boxtimes\mathcal V}}(\rho_{U\boxtimes V})
+         & =\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}
+        \bigl(\mathcal E_{\widetilde{\mathcal U}}(\rho_U)
+        \otimes\mathcal E_{\widetilde{\mathcal V}}(\rho_V)\bigr)            \\
+         & =\operatorname{reind}_{\pi_{D,E},\pi_{D,E}}(\rho_U\otimes\rho_V)
+        =\rho_{U\boxtimes V}.
+    \end{align}
+\end{proof}
+
 \begin{lemma}[Normalized flattening of a composition tensor]
     \label{lem:mpu_normalized_flattening_composition}
     \lean{MPOTensor.normalizedFlattening_mulTensor_apply}
@@ -5234,6 +5274,118 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % to the source tensor and is not a condition on supplied gates.
 \end{definition}
 
+\begin{definition}[The two layers of a supplied standard form]
+    \label{def:mpu_two_site_circuit_layers}
+    \lean{MPOTensor.twoSiteUnshiftedLayer,
+        MPOTensor.twoSiteShiftedLayer,
+        MPOTensor.twoSiteShiftedPairEquiv,
+        MPOTensor.twoSitePairConfigEquiv}
+    \leanok
+    Let $N>0$. Write each physical output and input label as an ordered pair
+    $i_x=(i_{x,1},i_{x,2})$ and $j_x=(j_{x,1},j_{x,2})$, and each intermediate
+    label as $h_x=(h_{x,1},h_{x,2})\in\{0,\ldots,\ell-1\}\times
+        \{0,\ldots,r-1\}$. Indices $x$ are taken modulo $N$. Define the
+    unshifted and shifted layer matrices by
+    \begin{align}
+        (C_{u,N})_{h,j}
+         & =\prod_{x\in\mathbb Z/N\mathbb Z}
+        u_{(h_{x,1},h_{x,2}),(j_{x,1},j_{x,2})}, \\
+        (C_{v,N})_{i,h}
+         & =\prod_{x\in\mathbb Z/N\mathbb Z}
+        v_{(i_{x,2},i_{x+1,1}),(h_{x,2},h_{x+1,1})}.
+    \end{align}
+    The cyclic relabeling of pairs is
+    $h\mapsto\bigl((h_{x,2},h_{x+1,1})\bigr)_x$, with inverse
+    $q\mapsto\bigl((q_{x-1,2},q_{x,1})\bigr)_x$. The alphabet of the
+    two-site tensor is identified with ordered pairs $(i_{x,1},i_{x,2})$.
+    This is the ordering in
+    \cite[Equation~\texttt{StandardForm}]{Cirac2017MPU}.
+\end{definition}
+
+\begin{theorem}[Unitarity of the two circuit layers]
+    \label{thm:mpu_two_site_circuit_layers_unitary}
+    \lean{MPOTensor.twoSiteUnshiftedLayer_isUnitaryBetween,
+        MPOTensor.twoSiteShiftedLayer_isUnitaryBetween}
+    \leanok
+    \uses{def:mpu_two_site_circuit_layers}
+    If the supplied gates $u$ and $v$ are unitary between their stated
+    coordinate spaces, then for every $N>0$ both $C_{u,N}$ and $C_{v,N}$
+    are unitary between their corresponding configuration spaces.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_two_site_circuit_layers}
+    The two Gram matrices of the product of a rectangular gate factor
+    sitewise: for example,
+    \begin{align}
+        (C_{u,N}^{\dagger}C_{u,N})_{j,j'}
+         & =\prod_{x\in\mathbb Z/N\mathbb Z}
+        (u^{\dagger}u)_{j_x,j'_x}=\delta_{j,j'}.
+    \end{align}
+    The reverse Gram identity is analogous. The shifted layer is the
+    product of $v$ on relabeled configurations, and the cyclic relabeling
+    preserves both Gram identities.
+\end{proof}
+
+\begin{theorem}[Periodic circuit of a supplied two-site standard form]
+    \label{thm:mpu_supplied_two_site_periodic_circuit}
+    \lean{MPOTensor.TwoSiteStandardFormData.mpo_apply_eq_shifted_mul_unshifted,
+        MPOTensor.TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form,
+        def:mpu_two_site_circuit_layers}
+    Let $W$ have supplied two-site standard-form data $(u,v,X_1,X_2)$.
+    For every $N>0$ and pair configurations $i,j$,
+    \begin{align}
+        U^{(N)}(W)_{i,j}
+         & =\sum_h\prod_{x\in\mathbb Z/N\mathbb Z}
+        v_{(i_{x,2},i_{x+1,1}),(h_{x,2},h_{x+1,1})}
+        \prod_{x\in\mathbb Z/N\mathbb Z}
+        u_{(h_{x,1},h_{x,2}),(j_{x,1},j_{x,2})}
+        =(C_{v,N}C_{u,N})_{i,j}.
+    \end{align}
+    Thus, after the stated identification of pair configurations with the
+    two-site alphabet, $U^{(N)}(W)=C_{v,N}C_{u,N}$. This includes $N=1$.
+    The formula is the positive-length closed contraction of the supplied
+    open form in \cite[Equations~\texttt{uuvv} and
+        \texttt{StandardForm}]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_supplied_two_site_standard_form,
+        def:mpu_two_site_circuit_layers}
+    Expand the periodic trace as a sum over closed bond configurations.
+    Insert the supplied $X_2$--$u$--$X_1$ expression at each site. For
+    each $x$, the bond label between sites $x$ and $x+1$ contracts
+    $(X_1)_{(i_{x,2},\beta),h_{x,2}}$ with
+    $(X_2)_{(\beta,i_{x+1,1}),h_{x+1,1}}$; their sum is precisely
+    $v_{(i_{x,2},i_{x+1,1}),(h_{x,2},h_{x+1,1})}$. The remaining factors
+    form $C_{u,N}$, giving the displayed matrix product in its stated order.
+\end{proof}
+
+\begin{theorem}[Positive-length unitarity of the supplied standard form]
+    \label{thm:mpu_supplied_two_site_periodic_unitary}
+    \lean{MPOTensor.TwoSiteStandardFormData.mpo_mem_unitaryGroup,
+        MPOTensor.TwoSiteStandardFormData.isMPU}
+    \leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        thm:mpu_two_site_circuit_layers_unitary}
+    If $W$ has supplied two-site standard-form data, then
+    \begin{align}
+        U^{(N)}(W)^{\dagger}U^{(N)}(W)
+         & =U^{(N)}(W)U^{(N)}(W)^{\dagger}=\Id
+    \end{align}
+    for every $N>0$. In particular, $W$ is an MPU under the source's
+    $N>1$ length convention.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        thm:mpu_two_site_circuit_layers_unitary}
+    The periodic operator is the product $C_{v,N}C_{u,N}$ of two unitary
+    layers, and the physical-pair identification preserves unitarity.
+\end{proof}
+
 \begin{definition}[Admissible standard form]
     \label{def:mpu_admissible_standard_form}
     \notready
@@ -5266,6 +5418,83 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 603--622.
 \end{definition}
+
+\begin{theorem}[Left-canonical normalization of a canonical MPU]
+    \label{thm:mpu_cfii_left_canonical}
+    \lean{MPOTensor.IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_normalized_flattening}
+    Let $\mathcal U$ be a matrix product unitary in full-support canonical
+    form II, with bond dimension $D$ and physical dimension $d$. Its normalized
+    flattening $A^{ij}=d^{-1/2}U^{ij}$ is left-canonical:
+    \begin{align}
+        \sum_{i,j=0}^{d-1} A^{ij\dagger}A^{ij} & =\Id_D.
+    \end{align}
+    This is the ambient normalization implicit in
+    \cite[lines 269--281 and 344--356]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry}
+    The normalized transfer traces satisfy $\tr(E^N)=1$ for $N>1$. Hence the
+    canonical form has one retained block $B$, with coefficient $\mu$
+    satisfying $|\mu|^2=1$. Let $W$ be its inclusion into the ambient bond
+    space. Full support gives $W^\dagger W=\Id$ and $WW^\dagger=\Id$, while
+    the reconstruction gives $A^{ij}W=W(\mu B^{ij})$. Therefore
+    \begin{align}
+        \sum_{i,j}A^{ij\dagger}A^{ij}
+         & =W\left(\sum_{i,j}(\mu B^{ij})^\dagger(\mu B^{ij})\right)W^\dagger
+        =WW^\dagger=\Id_D.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Virtual unitary gauge from equal periodic operators]
+    \label{thm:mpu_cfii_equal_periodic_virtual_unitary}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_gauge_of_mpo_eq}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu}
+    Let $\mathcal U$ and $\mathcal V$ be matrix product unitaries on the same
+    physical space, each in full-support canonical form II, with bond
+    dimensions $D_{\mathcal U}$ and $D_{\mathcal V}$. Suppose that their
+    periodic operators agree at every length $N>1$:
+    \begin{align}
+        U^{(N)} & =V^{(N)}.
+    \end{align}
+    Then $D_{\mathcal U}=D_{\mathcal V}$, and, after identifying their bond
+    spaces by this equality, there is a unitary
+    $z\in\mathrm U(D_{\mathcal V})$ such that, for every $i,j$,
+    \begin{align}
+        V^{ij} & =zU^{ij}z^\dagger.
+    \end{align}
+    This is the virtual-bond implication underlying the local relation in
+    \cite[Equations (SFuu) and (SFvv), lines 624--652]{Cirac2017MPU}. The
+    full-support convention is recorded in
+    \cite{gap:mpu_canonical_form_full_support}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_normal, thm:normal_proportional_mpv_geometric_phase, thm:cpsv_normal_mpv_phase_gauge, thm:mpu_cfii_left_canonical, lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    Write $A_{\mathcal U}^{ij}=d^{-1/2}U^{ij}$ and
+    $A_{\mathcal V}^{ij}=d^{-1/2}V^{ij}$. Both are normal tensors. Equality
+    of periodic operators for $N>1$ makes their matrix product vectors
+    equal at these lengths. The normal-tensor phase alternative gives a unit
+    scalar $a$ such that
+    \begin{align}
+        V^{(N)}(A_{\mathcal U})_\sigma
+         & =a^N V^{(N)}(A_{\mathcal V})_\sigma
+    \end{align}
+    at every positive length. At $N=2,3$ the normalized states are nonzero,
+    so the given equality yields $a^2=a^3=1$, hence $a=1$. Gauge recovery for
+    normal tensors now gives equal bond dimensions and an invertible $X$ and
+    nonzero scalar $\zeta$ satisfying
+    $A_{\mathcal V}^{ij}=\zeta XA_{\mathcal U}^{ij}X^{-1}$. Applying this
+    relation to lengths two and three, where the common states are nonzero,
+    gives $\zeta^2=\zeta^3=1$, so $\zeta=1$.
+    Theorem~\ref{thm:mpu_cfii_left_canonical} makes both tensors
+    left-canonical, so the irreducible unitary-gauge theorem replaces $X$
+    by a unitary $z$. Cancelling the common factor $d^{-1/2}$ gives the
+    asserted relation for $U^{ij}$ and $V^{ij}$.
+\end{proof}
 
 \begin{definition}[Open standard form from source cuts]
     \label{def:mpu_source_open_two_site_standard_form}
@@ -5300,6 +5529,46 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     its $X_1,X_2$ contraction. The simple-tensor equivalence makes both
     source gates unitary. Its rank identity $r\ell=d^2$ also makes the two
     intermediate dimensions positive.
+\end{proof}
+
+\begin{theorem}[Source circuit on the original even chain]
+    \label{thm:mpu_source_even_periodic_circuit}
+    \lean{MPOTensor.twoSiteChainConfigEquiv,
+        MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_source_circuit}
+    \leanok
+    \uses{def:mpu_source_open_two_site_standard_form,
+        def:mpu_two_site_circuit_layers}
+    Let $\mathcal U$ be simple and have a reduced full-support
+    canonical-form-II presentation with positive diagonal fixed matrix $\rho$.
+    Let $u$ and $v$ be its source gates. For $N>0$, flatten each pair
+    configuration by the bijection $\Phi_N$ given by
+    \begin{align}
+        (\Phi_N i)_{2x}   & =i_{x,1}, &
+        (\Phi_N i)_{2x+1} & =i_{x,2}.
+    \end{align}
+    Then the original chain of $2N$ sites satisfies
+    \begin{align}
+        U^{(2N)}(\mathcal U)_{\Phi_N i,\Phi_N j}
+         & =(C_{v,N}C_{u,N})_{i,j}.
+    \end{align}
+    In particular, numbering four original sites from $1$ to $4$ gives
+    \begin{align}
+        U^{(4)}(\mathcal U) & =v_{23}v_{41}u_{12}u_{34}.
+    \end{align}
+    % This is the supplied-CFII corollary of the source equation, not the
+    % unrestricted representative theorem in Definition SF. See
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex and issue 7127.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_source_open_two_site_standard_form,
+        thm:mpu_supplied_two_site_periodic_circuit,
+        thm:mpdo_block_two_as_positive_blocking,
+        thm:mpdo_closed_chain_physical_blocking}
+    Apply the supplied circuit identity to the two-site block of $\mathcal U$.
+    The two physical-blocking identities identify its length-$N$ periodic
+    operator with $U^{(2N)}(\mathcal U)$ under $\Phi_N$. For $N=2$, the two
+    shifted pairs are $(2,3)$ and $(4,1)$.
 \end{proof}
 
 \begin{theorem}[Bounded block with an open source standard form]
