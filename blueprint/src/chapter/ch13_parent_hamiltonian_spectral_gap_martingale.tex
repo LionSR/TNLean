@@ -6210,7 +6210,7 @@ tensors.
     \lean{MPSTensor.IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
-    Let $A$ be primitive with positive bond dimension, let $E$ be its observable
+    Let $A$ be primitive with nonzero bond dimension, let $E$ be its observable
     transfer map, and let $P$ be its stationary projection. Every nonzero
     eigenvalue of $E-P$ is an eigenvalue of $E$.
 \end{theorem}
@@ -6228,7 +6228,7 @@ tensors.
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map,
         def:fnw_weighted_remainder_data, def:fnw_mixing_quantity}
-    Let $A$ be primitive with positive bond dimension and positive-definite
+    Let $A$ be primitive with nonzero bond dimension and positive-definite
     stationary density $\rho$. Suppose $\lambda>0$ and every eigenvalue
     $\nu\neq1$ of its observable transfer map satisfies $|\nu|<\lambda$.
     Then the spectral radius of the transfer remainder in the $\rho$-weighted
@@ -6253,7 +6253,7 @@ tensors.
     \lean{MPSTensor.IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_mixing_quantity}
-    Let $A$ be primitive with positive bond dimension and a positive-definite
+    Let $A$ be primitive with nonzero bond dimension and a positive-definite
     trace-one stationary density $\rho$. Suppose $\lambda>0$ exceeds the modulus
     of every nonunit transfer eigenvalue. For every $c>0$, there is an integer
     $M$ such that, for every $n\geq M$,
