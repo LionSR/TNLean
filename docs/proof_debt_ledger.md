@@ -736,7 +736,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   retained nodes (7 pointwise plus the path nodes
   `prop:mpu_admissible_continuity_index`, `thm:mpu_admissible_index`,
   `cor:mpu_admissible_continuous_standard_form`, and
-  `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry only a
+  `lem:mpu_admissible_symmetry_path_criterion`) whose tensors carry a
   supplied fixed pair, so deleting them singly would strengthen those 11
   statements silently. The first of two independent stages is now proved;
   derived-tensor preservation and reduction form the second stage. The converse
@@ -766,8 +766,8 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   (`lem:mpu_admissible_source_u_isometry` and the 3 candidates), and it
   dissolves the citation obstruction, but it constructs no datum for a
   derived tensor and so leaves all 12 restricted. The three candidates may
-  therefore merge under #7660 without waiting for the second stage; they have
-  not yet been removed on this branch. The derived-tensor restrictions require
+  therefore merge without waiting for the second stage; this consolidation
+  remains pending under #7660. The derived-tensor restrictions require
   preservation of `IsMPUCanonicalFormII` under the relevant operations or,
   for composition, passage to a reduced representative. Each preservation
   statement must produce all four clauses (`isMPU`, `cfii`,
