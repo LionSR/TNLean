@@ -237,22 +237,18 @@ injective.
     \uses{thm:ldpolar_tensor_decomposition}
     Suppose $\mathcal B_q$ is injective, $q\ge1$, and let $V$ be as in
     Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
-    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and isometries
-    $W_k\colon\C^{D'_k}\to\C^{D'_{k+1}}\otimes\C^d$ for $k=1,\dots,q$, such that
+    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and matrices
+    $W_k^i\in\C^{D'_{k+1}\times D'_k}$ for $k=1,\dots,q$ and $i=1,\dots,d$, with
     \begin{align}
-        V
-         & =\bigl(W_q\otimes\Id_{d}^{\otimes(q-1)}\bigr)\cdots
-        \bigl(W_2\otimes\Id_d\bigr)W_1,
+        \sum_{i=1}^d\bigl(W_k^i\bigr)^\dagger W_k^i
+         & =\Id_{D'_k}
+        \quad\text{and}\quad
+        \bra{i_1\cdots i_q}V\ket{x}
+        =\bigl(W_q^{i_1}W_{q-1}^{i_2}\cdots W_1^{i_q}\bigr)_{1x}
         \label{eq:ldp_sequential_factorization}
     \end{align}
-    where $\C^{D'_1}$ is identified with $\C^D\otimes\C^D$, $\C^{D'_{q+1}}=\C$,
-    and the tensor factor $\C^d$ of $W_k$ is the site $q+1-k$ of the block.
-    In matrix product form, with
-    $(W_k^i)_{\alpha\beta}=\bra{\alpha,i}W_k\ket{\beta}$, the matrix elements
-    are
-    $\bra{i_1\cdots i_q}V\ket{x}
-        =(W_q^{i_1}W_{q-1}^{i_2}\cdots W_1^{i_q})_{1x}$ with
-    $\sum_i(W_k^i)^\dagger W_k^i=\Id_{D'_k}$. This is
+    for every $k$, every configuration $i_1\cdots i_q$ and every $x$, where $\C^{D'_1}$ is
+    identified with $\C^D\otimes\C^D$. This is the matrix product form of
     \cite[eqs.~(13)--(15)]{Malz2024Preparation}, where the isometry carrying the
     input is written $\widetilde C=V_1$. The block length $q\ge1$ is implicit
     in the source, which draws at least one site; the empty block $q=0$ is
@@ -281,8 +277,30 @@ injective.
     $p=1,\dots,q$, which turns $(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ into
     $(W_q^{i_1}\cdots W_1^{i_q})_{1x}$ and $b_p$ into $D'_{q+1-p}$.
 \end{proof}
-%% The ordered composition and the matrix product form are the same
-%% statement; the formalization states the matrix product form.
+
+\begin{remark}[Sequential factorization as a composition of isometries]
+    \label{rem:ldp_sequential_factorization_composition}
+    \uses{thm:ldp_sequential_factorization}
+    The source states Theorem~\ref{thm:ldp_sequential_factorization} as an
+    ordered composition. With the matrices of
+    (\ref{eq:ldp_sequential_factorization}), let
+    $W_k\colon\C^{D'_k}\to\C^{D'_{k+1}}\otimes\C^d$ be the map with
+    $\bra{\alpha,i}W_k\ket{\beta}=(W_k^i)_{\alpha\beta}$. The first identity in
+    (\ref{eq:ldp_sequential_factorization}) says that $W_k$ is an isometry,
+    $W_k^\dagger W_k=\sum_i(W_k^i)^\dagger W_k^i=\Id_{D'_k}$. Expanding the
+    composition in the product basis, with the tensor factor $\C^d$ of $W_k$
+    placed at the site $q+1-k$ of the block and $\C^{D'_{q+1}}=\C$, the second
+    identity becomes
+    \begin{align}
+        V
+         & =\bigl(W_q\otimes\Id_{d}^{\otimes(q-1)}\bigr)\cdots
+        \bigl(W_2\otimes\Id_d\bigr)W_1,
+        \label{eq:ldp_sequential_factorization_composition}
+    \end{align}
+    which is \cite[eqs.~(13)--(15)]{Malz2024Preparation} as printed. This
+    operator form is not formalized; the formal statement is the matrix product
+    form (\ref{eq:ldp_sequential_factorization}).
+\end{remark}
 
 \begin{theorem}[Tree factorization]
     \label{thm:ldp_tree_factorization}
