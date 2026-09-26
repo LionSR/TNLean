@@ -418,10 +418,10 @@ injective.
 \begin{proof}
     \leanok
     \uses{lem:physical_rotation_mul, lem:ldpolar_physical_matrix_rotate,
-        lem:physical_rotation_state, lem:block_tensor_rotate_physical}
+        lem:physical_rotation_state, thm:block_tensor_rotate_physical}
     Blocking commutes with maps on the physical leg: blocking $C_W$ over $m$
     sites gives the tensor $C$ blocked over $m$ sites, rotated by
-    $W^{\otimes m}$ (Lemma~\ref{lem:block_tensor_rotate_physical}). Blocking
+    $W^{\otimes m}$ (Theorem~\ref{thm:block_tensor_rotate_physical}). Blocking
     $2^{k}$ sites is blocking $2^{k-1}$ pairs of the two-site blocked tensor,
     and the outer layer composes with the maps of the inner tree by
     $(A_{W'})_W=A_{WW'}$

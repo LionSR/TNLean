@@ -162,8 +162,8 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     (\ref{eq:symmetry_mpv_rotation}).
 \end{proof}
 
-\begin{lemma}[Blocking commutes with physical maps]
-    \label{lem:block_tensor_rotate_physical}
+\begin{theorem}[Blocking commutes with physical maps]
+    \label{thm:block_tensor_rotate_physical}
     \lean{MPSTensor.blockTensor_rotatePhysical}
     \leanok
     \uses{def:rotate_physical, def:blocked_tensor}
@@ -174,13 +174,13 @@ The same bookkeeping applies to a general matrix acting on the physical index.
         (C_W)^{[L]} & =\bigl(C^{[L]}\bigr)_{W^{\otimes L}}.
         \label{eq:app_block_tensor_rotate_physical}
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Decode a blocked physical index as a word $b$ of length~$L$.  Substituting
     $(C_W)^{b_k}=\sum_{v_k}W_{b_kv_k}C^{v_k}$ into the ordered product and
-    distributing gives one summand $\bigl(\prod_kW_{b_kv_k}\bigr)
-    C^{v_0}\cdots C^{v_{L-1}}$ for each word~$v$.  Reindexing the sum over
+    distributing gives, for each word~$v$, the summand
+    $(\prod_kW_{b_kv_k})\,C^{v_0}\cdots C^{v_{L-1}}$.  Reindexing the sum over
     words by the blocked index gives the right-hand side of
     (\ref{eq:app_block_tensor_rotate_physical}), whose coefficients are the
     entries of $W^{\otimes L}$.
