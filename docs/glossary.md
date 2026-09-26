@@ -1099,6 +1099,82 @@ The following notions use different transfer objects and are not interchangeable
   predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
   `OBCChainTensor.ofSupported`.
 
+## Local circuits of two-site gates
+
+### `MPSPreparation.IsNeighbourGate` and `MPSPreparation.IsPairProduct`
+
+- **Declarations:**
+  `MPSPreparation.IsNeighbourGate (Z : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`
+  and
+  `MPSPreparation.IsPairProduct (d n K : ℕ) (X : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/PairProduct.lean`.
+- **Meaning:** `IsNeighbourGate Z` says that `Z` is unitary and acts on two
+  neighbouring sites `{p, p + 1}` of the open chain of `n` sites.
+  `IsPairProduct d n K X` says that `X` is a product of at most `K` such gates.
+- **Source:** Malz--Styliaris--Wei--Cirac, arXiv:2307.01696, main text before
+  Theorem 1 (local circuits of two-site gates) and the caption of Fig. 1
+  (unitaries with constant support "can be further expressed with a low-depth
+  circuit of local gates").
+- **Sanctioned bridges:** `MPSPreparation.exists_isPairProduct` (for `0 < d`
+  and `2 ≤ n`, one bound `K` covers every unitary on `n` sites), and
+  `MPSPreparation.IsPairProduct.isCircuitOn`, which places such a product on
+  consecutive sites of the ring as a local circuit of depth `K`.
+- **Caveat:** the chain is open; the ring structure enters only through the
+  placement map of `IsPairProduct.isCircuitOn`.
+
+### `MPSPreparation.IsCircuitOn`
+
+- **Declaration:**
+  `MPSPreparation.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/CircuitComposition.lean`.
+- **Meaning:** `U` is the operator of a list of exactly `T` layers of the ring,
+  each of whose gates acts inside the set of sites `R`.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
+  quantum circuits"), restricted to gates inside `R` as in the parallel
+  application of block unitaries in the paragraph "The sequential-RG circuit".
+- **Sanctioned bridges:** `MPSPreparation.IsCircuitOn.isLocalCircuitOfDepth`
+  forgets the support; `IsCircuitOn.mul` composes in series (depths add), and
+  `IsCircuitOn.par` runs two circuits of the same depth on disjoint sets of
+  sites in parallel.
+- **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
+  with empty layers.
+
+### `MPSPreparation.IsSpecialTwo`, `MPSPreparation.IsTwoLevelWord`, and `MPSPreparation.FixesOutside`
+
+- **Declarations:**
+  `MPSPreparation.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
+  `MPSPreparation.IsTwoLevelWord (K : ℕ) (X : Matrix ι ι ℂ) : Prop`, and
+  `MPSPreparation.FixesOutside (T : Finset ι) (X : Matrix ι ι ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/ControlledGateProducts.lean`
+  (`IsSpecialTwo`) and `TNLean/MPS/Preparation/GivensDecomposition.lean`.
+- **Meaning:** `IsSpecialTwo g` says that `g` is a real rotation `rotTwo z` or
+  a diagonal phase `diagTwo ν` with `‖z‖ = ‖ν‖ = 1`. `IsTwoLevelWord K X` says
+  that `X` is a product of at most `K` two-level operators `twoLevel a b g` with
+  `a ≠ b` and `IsSpecialTwo g`. `FixesOutside T X` says that every entry of
+  `X` in a row or column outside `T` is that of the identity, so `X` fixes the
+  basis vectors outside `T` and preserves the span of `T`.
+- **Source:** no separate source notion; these are the intermediate steps of
+  the Givens elimination behind the caption of Fig. 1 of arXiv:2307.01696.
+- **Sanctioned bridges:** `MPSPreparation.isTwoLevelWord_of_det_eq_one` (every
+  unitary of determinant one is a two-level word of bounded length) and
+  `MPSPreparation.isTwoLevelWord_of_fixesOutside`.
+- **Caveat:** these predicates are proof-internal vocabulary for
+  `exists_isPairProduct`; statements about circuits should use
+  `IsPairProduct` or `IsCircuitOn`.
+
+### `MPSPreparation.AgreeOff`
+
+- **Declaration:**
+  `MPSPreparation.AgreeOff (e : Fin m → Fin n) (x y : Cfg d n) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SiteEmbedding.lean`.
+- **Meaning:** the configurations `x` and `y` of the `n`-site chain agree at
+  every site outside the range of `e`.
+- **Source:** no separate source notion; it describes the entries of the
+  placement `MPSPreparation.embedOp e X` of an operator on `m` sites.
+- **Sanctioned bridges:** `MPSPreparation.sum_agreeOff` and
+  `MPSPreparation.eq_extend_of_agreeOff` (for injective `e`).
+- **Caveat:** proof-internal vocabulary for the site embedding.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`

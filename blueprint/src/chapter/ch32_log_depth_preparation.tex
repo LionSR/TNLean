@@ -638,8 +638,8 @@ $1/\gamma$ in the block length here
     disjoint sets.
 \end{proof}
 
-\begin{lemma}[Unitaries on a bounded number of sites]
-    \label{lem:ldp_bounded_unitary_two_site_gates}
+\begin{theorem}[Unitaries on a bounded number of sites]
+    \label{thm:ldp_bounded_unitary_two_site_gates}
     \uses{def:ldp_local_circuit}
     \lean{MPSPreparation.exists_isPairProduct,
         MPSPreparation.isTwoLevelWord_of_det_eq_one,
@@ -652,7 +652,7 @@ $1/\gamma$ in the block length here
     that the unitaries with constant support ``can be further expressed with
     a low-depth circuit of local gates''
     \cite[caption of Fig.~1]{Malz2024Preparation}.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Dividing by a root of the determinant of order $d^n$, a global phase and
@@ -675,7 +675,7 @@ $1/\gamma$ in the block length here
     \uses{def:ldp_local_circuit, def:ldp_approximating_state,
         lem:ldp_unitary_implementing_isometry,
         thm:ldp_sequential_factorization,
-        lem:ldp_bounded_unitary_two_site_gates}
+        thm:ldp_bounded_unitary_two_site_gates}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
         MPSPreparation.approximatingMPVStateRaw_eq_mulVec,
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
@@ -702,7 +702,7 @@ $1/\gamma$ in the block length here
     next, sends $\ket{0\cdots0}$ to
     $\bigotimes_k\ket\omega_{R_kL_{k+1}}\ket0_{C_k}$
     \cite[eq.~(12)]{Malz2024Preparation}; by
-    Lemma~\ref{lem:ldp_bounded_unitary_two_site_gates} it has constant depth.
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} it has constant depth.
     On each block, in parallel, a unitary $U$ with $U\ket{l,0,r}=V\ket{l,r}$
     is applied, as in Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
     gates move the first $D$ sites next to the last ones in $O(q)$ gates.
@@ -714,7 +714,7 @@ $1/\gamma$ in the block length here
     followed by one unitary on the first $2D$ sites
     \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
     of them has bounded depth by
-    Lemma~\ref{lem:ldp_bounded_unitary_two_site_gates}, and circuits on
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, and circuits on
     disjoint blocks run in the same layers.
 \end{proof}
 
