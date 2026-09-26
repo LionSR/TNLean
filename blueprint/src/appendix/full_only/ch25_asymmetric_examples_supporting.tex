@@ -7,37 +7,19 @@
 \chapter{Physics Examples of the Multi-Block Compression Theorem: Supporting Results}%
 \label{ch:asymmetric_examples_supporting}
 
-This appendix supports Chapter~\ref{ch:asymmetric_examples}. It collects the
-explicit gauges and the integer arithmetic behind the compression theorems of
-the examples there that are treated in explicit bond coordinates, the adapted
-bases and scaled matrix units behind the normality certificates and behind the
-compression of the Bell-bond fixed points, and a sign-weighted pair of blocks
-constructed in this development to test the sharpness of the compression
-theorem.
+The compression theorems of Chapter~\ref{ch:asymmetric_examples} rely on
+several explicit coordinate constructions: explicit gauge transformations and
+integer arithmetic certificates, adapted bases and scaled matrix units for
+normality certificates, and a sign-weighted pair testing the sharpness of the
+remainder bound.
 
 \section{Explicit gauges and exact arithmetic}%
 \label{sec:asymex_explicit_gauge}
 
-This section supplies the change of bond coordinates and the integer
-certificates used by the compression theorems of the examples in
-Chapter~\ref{ch:asymmetric_examples} that are treated in explicit bond
-coordinates: the symmetry and fusion operators, the elementary states, and
-the sign-weighted pair of Section~\ref{sec:asymex_parity}.
-Theorem~\ref{thm:asymex_czx_compression} and
-Theorem~\ref{thm:asymex_ising_compression}, for the CZX operator and the
-Ising fusion operators of the review~\cite{Cirac2021Matrix}, invoke it
-directly; the Bell-bond fixed points rest on
-Section~\ref{sec:asymex_rfp_basis} instead.
 The compression datum of Theorem~\ref{thm:asym_multiblock}
 carries its change of bond coordinates as an invertible map onto a graded
-coordinate space, one summand per slot. In each worked example that map is
-an explicit invertible matrix together with an explicit labelling of the
-bond coordinates by slots and positions inside slots.
-Theorem~\ref{thm:asymex_explicit_gauge} reads the compression pairs of a
-slot off that matrix, Theorem~\ref{thm:asymex_one_slot} treats the
-recurring one-slot shape, and Theorem~\ref{thm:asymex_int_certificates}
-turns integer identities into certificates of normality and of vanishing
-sitewise intertwiners.
+coordinate space, one summand per slot. For explicit bond coordinates, this
+map is given by an invertible matrix and a labelling of coordinates by slots.
 
 \begin{definition}[Explicit gauge and entrywise integer coercion]
     \label{def:asymex_explicit_gauge}
@@ -228,28 +210,14 @@ and the following lemma shows that it preserves every nonempty word.
 \section{Adapted bases and scaled matrix units}%
 \label{sec:asymex_rfp_basis}
 
-This section supplies two tools. Theorem~\ref{thm:asymex_normal_units}
-certifies normality of a tensor whose letters contain a scaled copy of
-every matrix unit; it is invoked in the CZX and Ising sections of
-Chapter~\ref{ch:asymmetric_examples} and in the fixed-point section
-there. Theorem~\ref{thm:asymex_stacked_pair} converts an integer matrix
-identity, written in an adapted basis of the inner bond, into the weighted
-direct-sum hypothesis of Proposition~\ref{prop:asym_projector_weighted_sum};
-it is the form in which the vertical components of the renormalization
-fixed points of Chapter~\ref{ch:asymmetric_examples} enter the compression
-theorem.
-
-The stacked bond spaces of those vertical components are tensor squares.
+The stacked bond spaces of vertical components are tensor squares.
 Reordering the four bond bits separates the two middle bits, which form
-the inner bond, from the two outer bits, and the intermediate
+the inner bond, from the two outer bits; the intermediate
 physical-index sum acts on the inner bond. The Bell vectors together with
 the two remaining coordinate vectors form the adapted basis used
 throughout. Each weighted copy of a target contributes its weight raised
 to the number of sites $N$, and weights are summed when they multiply the
-same target; this is the power-sum mechanism of
-Theorem~\ref{thm:asym_unblocked_coefficients}. The results below
-establish tensor decompositions and periodic trace identities, not a
-classification of length-dependent renormalization fixed points.
+same target as in Theorem~\ref{thm:asym_unblocked_coefficients}.
 
 \begin{definition}[The idempotents of an adapted basis]
     \label{def:asymex_basis_proj}
@@ -344,18 +312,7 @@ classification of length-dependent renormalization fixed points.
 \section{A sign-weighted pair with a non-split extension}%
 \label{sec:asymex_parity}
 
-The tensors of this section are a construction of this development with
-no literature source: a bond-dimension-two tensor $A$, the sign-weighted
-pair of targets $(A,-A)$, and a bond-dimension-five source that carries
-both targets together with a one-dimensional zero slot, in coordinates
-where no direct-sum structure is visible. The construction tests three
-features of Theorem~\ref{thm:asym_multiblock} on explicit data: the
-remainder bound is attained
-(Theorem~\ref{thm:asymex_parity_compression}), the periodic trace
-identity acts as a length filter
-(Theorem~\ref{thm:asymex_parity_trace}), and a word-level compression
-need not come from sitewise intertwiners
-(Theorem~\ref{thm:asymex_parity_no_intertwiner}).
+The sign-weighted pair $(A,-A)$ of bond dimension two and a bond-dimension-five source $B$ carrying both targets together with a one-dimensional zero slot illustrate the sharpness of Theorem~\ref{thm:asym_multiblock}: the remainder bound is attained (Theorem~\ref{thm:asymex_parity_compression}), the periodic trace identity acts as a length filter (Theorem~\ref{thm:asymex_parity_trace}), and a word-level compression need not arise from sitewise intertwiners (Theorem~\ref{thm:asymex_parity_no_intertwiner}).
 
 Consider a two-state physical site with basis $\{\ket{0},\ket{1}\}$.
 Define the bond-two MPS tensor by

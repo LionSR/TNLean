@@ -18,20 +18,14 @@
 A matrix product operator algebra is a finite family of matrix product
 operators whose periodic operators multiply according to length-independent
 fusion rules with nonnegative integer coefficients
-\cite{Bultinck2017Anyons,GarreRubio2023MPOSym,Molnar2022MPOAlgebrasI}. This
-chapter develops its symmetry theory along the lines of the on-site theory of
-Chapter~\ref{ch:symmetry}: a symmetry is defined, it is transferred to the
-virtual level, the virtual data are shown to be unique up to an explicit gauge
-freedom, the gauge-invariant class is extracted, and a nontrivial class is
-shown to obstruct symmetric states. The transfer to the virtual level rests on
-the multi-block asymmetric compression theorem
-(Theorem~\ref{thm:asym_multiblock}). The stacked tensor of a product of two
-matrix product operators, or of an operator acting on a state, need not be
-in canonical form and in general admits no sitewise intertwiner with the
-tensors of the fusion products (Remark~\ref{rem:asym_zipper}), so the
-Fundamental Theorem for tensors in canonical form does not apply to it in
-general; the asymmetric theorem, which requires equality of periodic traces
-only, does.
+\cite{Bultinck2017Anyons,GarreRubio2023MPOSym,Molnar2022MPOAlgebrasI}.
+Transfer of the symmetry to the virtual level rests on the multi-block
+asymmetric compression theorem (Theorem~\ref{thm:asym_multiblock}): the stacked
+tensor of a product of two matrix product operators, or of an operator acting
+on a state, need not be in canonical form and in general admits no sitewise
+intertwiner with the tensors of the fusion products
+(Remark~\ref{rem:asym_zipper}), so the asymmetric theorem applies where the
+canonical-form Fundamental Theorem does not.
 
 Throughout, $T_a$ denotes a matrix product operator tensor of bond dimension
 $\chi_a$, $O_a^{(N)}$ its periodic operator on $N$ sites, and
@@ -41,8 +35,8 @@ $(T_aT_b)^{ij}=\sum_mT_a^{im}\otimes T_b^{mj}$ of bond dimension
 $\chi_a\chi_b$, and $T_a\cdot A$ denotes the tensor
 $(T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j$. A reduction of a tensor $B$ onto a
 tensor $C$ is a pair of maps $(V,W)$ with $VW=\Id$ and $VB^wW=C^w$ for every
-word $w$ (Definition~\ref{def:mps_rectangular_reduction}); we call $V$ the
-compression and $W$ the embedding.
+word $w$ (Definition~\ref{def:mps_rectangular_reduction}), with compression $V$
+and embedding $W$.
 
 %% ---------------------------------------------------------
 \section{Matrix product operator symmetries}%
@@ -56,13 +50,11 @@ compression and $W$ the embedding.
 %   invariance of the arbitrary-boundary subspace (lines 431--434); this
 %   section uses only its periodic-boundary consequence (lines 567--568).
 %   Documented in docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex.
-An invertible on-site symmetry acts on a matrix product state through a group
-representation on the physical index. A matrix product operator symmetry is
-given instead by a finite family of operators whose periodic operators
-multiply according to fusion rules~\cite{GarreRubio2023MPOSym}. The source
-defines the symmetry by invariance of the states with arbitrary boundary
-conditions; the statements below use only its consequence for periodic
-boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
+A matrix product operator symmetry is given by a finite family of operators
+whose periodic operators multiply according to fusion
+rules~\cite{GarreRubio2023MPOSym}. Under periodic boundary conditions, the
+symmetry acts on periodic matrix product states as an invariant
+subspace~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \cite{gap:glm23_mpo_symmetric_mps_scope}.
 
 \begin{definition}[Matrix product operator fusion algebra]%
@@ -236,10 +228,9 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     \uses{thm:mpo_symmetric_character}
     If the structure constants admit no fusion character with values in
     $\N$, no normal tensor of positive bond dimension is symmetric with
-    $c_e=1$. This obstruction sees only the fusion ring; the cohomological
-    obstruction of Theorem~\ref{thm:mpoalg_no_symmetric_normal}, which also
-    excludes group-like algebras with a nontrivial three-cocycle, is a
-    different statement.
+    $c_e=1$. This obstruction depends only on the fusion ring;
+    Theorem~\ref{thm:mpoalg_no_symmetric_normal} gives the cohomological
+    obstruction for group-like algebras with a nontrivial three-cocycle.
 \end{corollary}
 
 \begin{proof}
@@ -320,11 +311,8 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \section{Fusion tensors and action tensors}%
 \label{sec:mpoalg_virtual}
 
-The fusion rule (\ref{eq:mpo_fusion_algebra}) is a statement about periodic
-operators. Its local form is a decomposition of the stacked tensor $T_aT_b$
-into copies of the blocks $T_c$, and that decomposition exists because the
-two sides of (\ref{eq:mpo_fusion_algebra}) have equal periodic traces on the
-pair alphabet.
+Equality of periodic traces in the fusion rule (\ref{eq:mpo_fusion_algebra})
+decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
 
 \begin{definition}[Fusion tensors]%
     \label{def:mpoalg_fusion_tensors}
@@ -376,10 +364,8 @@ pair alphabet.
     \uses{def:mpoalg_fusion_tensors, thm:asym_mpo_product}
     Every pair $(a,b)$ of labels of a fusion algebra of normal tensors of
     positive bond dimension admits a family of fusion tensors. This is the
-    existence statement of \cite[Appendix~A]{GarreRubio2023MPOSym}, which the
-    source proves under its closedness condition; here only the fusion rule
-    (\ref{eq:mpo_fusion_algebra}) at periodic boundary conditions is
-    assumed.
+    existence of fusion tensors in \cite[Appendix~A]{GarreRubio2023MPOSym},
+    here under the periodic fusion rule (\ref{eq:mpo_fusion_algebra}).
     % Source anchor: arXiv:2203.12563, line 361 and Appendix A (lines
     %   2305--2455).
 \end{theorem}
@@ -445,11 +431,9 @@ matrix product unitaries this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 \section{Gauge freedom of fusion and action tensors}%
 \label{sec:mpoalg_gauge}
 
-Uniqueness of fusion tensors holds in two settings: when the stacked product
-reduces onto a single normal block, up to one scalar after dressing with long
-words, and under the zipper condition, where the remainder vanishes, up to
-the multiplicity gauge. Outside these settings uniqueness fails
-(Remark~\ref{rem:mpoalg_nonunique}).
+Fusion tensors are unique up to a dressed scalar when the stacked product
+reduces onto a single normal block, and up to the multiplicity gauge under the
+zipper condition (Remark~\ref{rem:mpoalg_nonunique}).
 
 \begin{corollary}[Uniqueness of a single-target reduction]%
     \label{cor:mpoalg_single_target_uniqueness}
@@ -478,8 +462,8 @@ the multiplicity gauge. Outside these settings uniqueness fails
     of a group-like algebra, where $T_gT_h$ reduces onto the single block
     $T_{gh}$, to the composite reductions of
     Lemma~\ref{lem:mpoalg_composite_reduction}, and to the action tensors of
-    an invertible label on a permuted block. It does not apply to one slot
-    of a reduction onto several blocks, whose residual is not nilpotent.
+    an invertible label on a permuted block. It does not apply to a single slot
+    of a reduction onto multiple blocks.
     % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3156--3162
     %   (Theorem 22); arXiv:2203.12563, lines 1028--1060.
     % Existing Lean: MPSTensor.IsReduction.exists_boundary_dressed_proportional
@@ -520,10 +504,9 @@ the multiplicity gauge. Outside these settings uniqueness fails
     $\widetilde V_{ab}^{c,\mu}=\sum_\nu(Y_{ab}^c)_{\mu\nu}V_{ab}^{c,\nu}$ and
     $\widetilde W_{ab}^{c,\mu}=\sum_\nu W_{ab}^{c,\nu}
         \bigl((Y_{ab}^c)^{-1}\bigr)_{\nu\mu}$ on the support of the
-    decomposition, so the ambiguity is
-    $\bigoplus_c\GL_{N_{ab}^c}(\C)$ and no dressing by words is needed. This
-    is the uniqueness of fusion tensors under the zipper condition in
-    \cite{Bultinck2017Anyons}, and the basis change of
+    decomposition, so the ambiguity is $\bigoplus_c\GL_{N_{ab}^c}(\C)$ with
+    no word dressing. This is the uniqueness of fusion tensors under the zipper
+    condition in \cite{Bultinck2017Anyons}, and the basis change of
     \cite[Section~4]{Molnar2022MPOAlgebrasI}.
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200;
     %   arXiv:2204.05940, mpo.tex line 1725;
@@ -601,10 +584,10 @@ the multiplicity gauge. Outside these settings uniqueness fails
     $\widetilde V_\mu B^{\mathbf w}=V_\mu B^{\mathbf w}-ZV_\nu B^{\mathbf w}$
     on every long word, which is not a combination of the
     $V_\kappa B^{\mathbf w}$ with scalar coefficients unless $Z$ is scalar.
-    This happens whether $\nu$ is a second copy of the same block or a
-    different block. The zipper condition of \cite{Bultinck2017Anyons}, which
-    makes the remainder vanish, excludes both constructions and restores
-    uniqueness up to the multiplicity gauge
+    This holds whether $\nu$ is a duplicate copy of the same block or a
+    distinct block. The zipper condition of \cite{Bultinck2017Anyons}, with
+    vanishing remainder, rules out both ambiguities and restores uniqueness up
+    to the multiplicity gauge
     (Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}).
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200.
 \end{remark}
@@ -788,13 +771,11 @@ with the corresponding composite embeddings.
     equation is
     (\ref{eq:mpoalg_pentagon_group}).
 
-    Without the zipper condition the fusion tensors of
-    Theorem~\ref{thm:mpoalg_fusion_tensors_exist} carry a nilpotent remainder,
-    and Remark~\ref{rem:mpoalg_nonunique} shows that with several targets
-    they are not determined up to the multiplicity gauge, even after dressing
-    with long words. No $F$-move with multiplicity is stated here in that
-    setting; for group-like algebras the single-target uniqueness gives
-    (\ref{eq:mpoalg_associator}).
+    Without the zipper condition, the fusion tensors of
+    Theorem~\ref{thm:mpoalg_fusion_tensors_exist} carry a nilpotent remainder
+    and are not uniquely determined across multiple targets
+    (Remark~\ref{rem:mpoalg_nonunique}); for group-like algebras,
+    single-target uniqueness yields (\ref{eq:mpoalg_associator}).
     % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200 (zipper
     %   condition), 247--251 (F-move), 279--283 (pentagon);
     %   arXiv:2203.12563, lines 392--424.
@@ -928,8 +909,7 @@ with the corresponding composite embeddings.
     These are exact identities, and they are fusion tensors in the sense of
     Definition~\ref{def:mpoalg_fusion_tensors} with zero remainder;
     coassociativity of $\Delta$ is the associativity used in
-    Remark~\ref{rem:mpoalg_f_symbols}. Only this part of the dictionary
-    between weak Hopf algebras and matrix product operators is in scope here.
+    Remark~\ref{rem:mpoalg_f_symbols}.
     % Source anchor: arXiv:2204.05940, mpo.tex lines 1640--1660 (fusion
     %   tensors from the coproduct) and 1725--1892 (basis change, F-symbols,
     %   pentagon).
