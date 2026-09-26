@@ -8,7 +8,7 @@
 \date{2026-09-24}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{scope-restriction}{open}
 
 \section{What the source prints}
 Appendix D.1.1 of \cite{Bultinck2017Anyons} gives the categorical data of the
@@ -141,15 +141,15 @@ $1/\sqrt{d_{x'}d_D}$, with $D$ the lower-right plaquette. The bond gauge $g(u,l)
 into the letterwise scalar $(d_{x'}d_x)^{-1/2}$, and the periodic operator is
 the congruence
 \begin{align}
-    O_f^{\mathrm{rev}} & =\Delta^{-1/2}\,O_f\,\Delta^{-1/2},
-    \qquad \Delta=\operatorname{diag}\prod_k d_{x_k},
+    O_f^{\mathrm{rev}} & =W^{-1/2}\,O_f\,W^{-1/2},
+    \qquad W=\operatorname{diag}\prod_k d_{x_k},
     \label{eq:fib_review}
 \end{align}
 not a similarity of $O_f$. Read in the orthonormal basis of plaquette
 configurations, these operators do not satisfy the fusion rules: at one site
 $O_1^{\mathrm{rev}}=\operatorname{diag}(0,1/\phi)$, whose square has the entry
 $1/\phi^2\neq1/\phi$. The operators
-$O_f^{\mathrm{rev}}\Delta=\Delta^{-1/2}O_f\Delta^{1/2}$ are similar to $O_f$
+$O_f^{\mathrm{rev}}W=W^{-1/2}O_fW^{1/2}$ are similar to $O_f$
 and do satisfy them.\footnote{Results:
     \leanid{FibonacciCompression.mpo_fibReviewTensor},
     \leanid{FibonacciCompression.not_isMPOFusionAlgebra_fibReviewTensor},
@@ -165,15 +165,15 @@ tensor. Read literally in the orthonormal basis of plaquette configurations,
 the resulting operators (\ref{eq:fib_review}) contradict the review's own fusion
 statement, as shown above. The review is therefore internally inconsistent at
 this point. Either the prefactor is a normalization slip, or the review's
-operators stand for the operators $O_f^{\mathrm{rev}}\Delta$, composed with the
-weight $\Delta$ on plaquette configurations. The formalization records both readings: the literal one fails the fusion rules,
+operators stand for the operators $O_f^{\mathrm{rev}}W$, composed with the
+weight $W$ on plaquette configurations. The formalization records both readings: the literal one fails the fusion rules,
 and the weighted one satisfies them.
 
 The review also prints the selection rule for $(F^{abc}_d)^f_e$ as
 ``$N_{ab}^c>0$, $N_{cd}^e>0$, $N_{ad}^f>0$, $N_{bc^f}>0$''.\footnote{Review
     traceability: \path{Papers/2011.12127/TN-Review-main.tex}, line 2623.}
-This rule is garbled: the first two conditions do not match the index
-placement of $(F^{abc}_d)^f_e$, and the last one is misprinted. The formalized review tensor uses instead the source's F-symbols
+This rule is garbled: the first condition names the label $c$ where the
+fusion channel $e$ belongs, and the last one is misprinted. The formalized review tensor uses instead the source's F-symbols
 (\ref{eq:fib_f}), with the selection rule
 $\delta_{abe}\delta_{cde}\delta_{adf}\delta_{bcf}$.
 

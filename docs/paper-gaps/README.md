@@ -19,7 +19,7 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   label `τ` a diagonal bond similarity relates the source's G-symbol tensor to
   these blocks (so the periodic operators and fusion rules agree there), and
   that the review's prefactor `1/√(d_A d_D)` gives the congruence
-  `Δ^{-1/2} O Δ^{-1/2}`, which contradicts the review's own fusion statement in
+  `W^{-1/2} O W^{-1/2}`, which contradicts the review's own fusion statement in
   the orthonormal basis (a Local fix, together with the review's garbled
   F-symbol selection rule). The fusion rules of the source's tensor on edge
   label `1` remain open, with an elimination plan (issue #8217).

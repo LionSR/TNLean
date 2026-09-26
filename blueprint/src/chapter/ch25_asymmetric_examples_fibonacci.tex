@@ -369,7 +369,8 @@ source's tensor built from the $G$-symbols.
     with the $F$-symbols of Definition~\ref{def:asymex_fib_fsymbols} and their
     selection rule, in place of the selection rule printed in the review.
     On configurations $x\in\{1,\tau\}^N$ let
-    $\Delta=\operatorname{diag}\prod_k d_{x_k}$, and let $\widetilde R_f$ be
+    $W=\operatorname{diag}\prod_k d_{x_k}$, with square roots
+    $W^{\pm1/2}=\operatorname{diag}\prod_k d_{x_k}^{\pm1/2}$, and let $\widetilde R_f$ be
     the tensor with letters $d_x R_f^{x'x}$.
 \end{definition}
 
@@ -409,7 +410,7 @@ source's tensor built from the $G$-symbols.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_golden_ring}
+    \uses{thm:asymex_golden_ring, thm:asymex_fib_anomaly_fusion_algebra}
     The symmetry of the $G$-symbols and the $F$-symbol form of $B_1$ are
     finite computations in $\Z[\sigma]$. By the symmetry,
     $G^{q'x'x}_{q''\tau f}=v_{x'}^{-1}v_{q''}^{-1}[F^{fx\tau}_{q'}]_{x'}^{q''}$,
@@ -436,25 +437,26 @@ source's tensor built from the $G$-symbols.
     For both labels $f$ and every length $N$, the periodic operator of the
     tensor (\ref{eq:asymex_fib_review_tensor}) is the congruence
     \begin{align}
-        O_N(R_f) & =\Delta^{-1/2}\,O_N(B_f)\,\Delta^{-1/2}.
+        O_N(R_f) & =W^{-1/2}\,O_N(B_f)\,W^{-1/2}.
         \label{eq:asymex_fib_review_congruence}
     \end{align}
     These operators do not satisfy the Fibonacci fusion rules: at $N=1$,
     $O_N(R_1)=\operatorname{diag}(0,1/\varphi)$, whose square has the entry
     $1/\varphi^2\neq1/\varphi$. The operators
-    $O_N(\widetilde R_f)=O_N(R_f)\Delta=\Delta^{-1/2}O_N(B_f)\Delta^{1/2}$
+    $O_N(\widetilde R_f)=O_N(R_f)W=W^{-1/2}O_N(B_f)W^{1/2}$
     satisfy them at every positive length.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_fib_anomaly_fusion_algebra}
     The diagonal bond matrix $g(u,l)=d_l^{-1/2}$ carries $R_f^{x'x}$ to
     $(d_{x'}d_x)^{-1/2}B_f^{x'x}$, a multiple of each letter by its own
     scalar. The periodic operator of such a tensor is the operator of $B_f$
     with its entry at $(x,y)$ multiplied by $\prod_k(d_{x_k}d_{y_k})^{-1/2}$,
     which is (\ref{eq:asymex_fib_review_congruence}). At $N=1$,
     $O_N(B_1)=\operatorname{diag}(0,1)$ gives the stated entry. Finally,
-    $O_N(\widetilde R_f)=\Delta^{-1/2}O_N(B_f)\Delta^{1/2}$ is similar to
+    $O_N(\widetilde R_f)=W^{-1/2}O_N(B_f)W^{1/2}$ is similar to
     $O_N(B_f)$ by one matrix for all labels, so products and linear
     combinations are carried along and the fusion rules of
     Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} transfer.
@@ -465,7 +467,7 @@ of this tensor~\cite[Section~3]{Cirac2021Matrix}, in the passage on
 critical spin systems and their matrix product operator symmetries. By
 Theorem~\ref{thm:asymex_fib_review_congruence} that statement fails for the
 prefactored tensor read in the orthonormal basis of plaquette configurations,
-and holds after composing with $\Delta$. This correction, together with the
+and holds after composing with $W$. This correction, together with the
 substituted selection rule, is recorded
 in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 

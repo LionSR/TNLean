@@ -33,9 +33,9 @@ For the source's tensor at edge label `τ` on every site, a diagonal bond simila
 `h(x', x) = (v_{x'}/v_x)^{1/2}` carries every letter to the F-symbol blocks `fibOne`, `fibTau`, so
 the periodic operators are equal at every length and the fusion rules of
 `isMPOFusionAlgebra_fibBlock` are the source's fusion rules on that sector. For the review's
-prefactor the periodic operator is the congruence `Δ^{-1/2} O_a Δ^{-1/2}`,
-`Δ = diag ∏_k d_{x_k}`, of the F-symbol operator; it fails the fusion rules already at one site,
-while the operator `O_a Δ = Δ^{-1/2} O_a Δ^{1/2}` satisfies them.
+prefactor the periodic operator is the congruence `W^{-1/2} O_a W^{-1/2}`,
+`W = diag ∏_k d_{x_k}`, of the F-symbol operator; it fails the fusion rules already at one site,
+while the operator `O_a W = W^{-1/2} O_a W^{1/2}` satisfies them.
 
 **Scope restriction (edge labels τ):** the operator identities for the source's tensor are
 stated on the configurations whose vertical edge labels are all `τ`. The source's tensor also
@@ -46,7 +46,7 @@ elimination plan, in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenanc
 **Local fix (review normalization):** read literally in the orthonormal basis of plaquette
 configurations, the review's prefactor `1/√(d_A d_D)` gives operators that contradict the fusion
 rules the review states for them (`TN-Review-main.tex` lines 1309, 1341); the fusion rules hold
-for `O_a Δ`, that is, in the `Δ`-weighted inner product. The review's printed selection rule for
+for `O_a W`, that is, in the `W`-weighted inner product. The review's printed selection rule for
 the F-symbols (line 2623) is garbled, and the F-symbols used are those of the source,
 `fibFSymbolGolden`. Documented in
 `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
@@ -76,10 +76,10 @@ the pair of plaquettes above and below the operator line, restricted to the admi
   operators are those of the F-symbol blocks.
 * `FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau`: the source's blocks at edge label
   `τ` form a fusion algebra with the Fibonacci fusion rules.
-* `FibonacciCompression.mpo_fibReviewTensor`: the review's operator is `Δ^{-1/2} O_a Δ^{-1/2}`.
+* `FibonacciCompression.mpo_fibReviewTensor`: the review's operator is `W^{-1/2} O_a W^{-1/2}`.
 * `FibonacciCompression.not_isMPOFusionAlgebra_fibReviewTensor`: the review's operators do not
   satisfy the fusion rules.
-* `FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor`: the operators `O_a Δ` do.
+* `FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor`: the operators `O_a W` do.
 
 ## References
 
@@ -320,7 +320,7 @@ def fibReviewTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
 theorem fibLoopFactor_complex_inv_ne_zero (a : Fin 2) : (fibLoopFactor a : ℂ)⁻¹ ≠ 0 :=
   inv_ne_zero (Complex.ofReal_ne_zero.2 (fibLoopFactor_pos a).ne')
 
-/-- The diagonal matrix `Δ^{-1/2} = diag ∏_k d_{x_k}^{-1/2}` on the configurations of `L`
+/-- The diagonal matrix `W^{-1/2} = diag ∏_k d_{x_k}^{-1/2}` on the configurations of `L`
 plaquettes. -/
 def fibReviewWeight (L : ℕ) : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ :=
   Matrix.diagonal fun σ => ∏ k, (fibLoopFactor (σ k) : ℂ)⁻¹
@@ -352,8 +352,8 @@ theorem fibReviewTensor_conj (f x' x : Fin 2) :
 
 /-- Project result: the periodic operator of the review's tensor (arXiv:2011.12127,
 `TN-Review-main.tex` lines 2613–2621) at edge label `τ` is the congruence
-`Δ^{-1/2} O_f Δ^{-1/2}` of the operator of the F-symbol block, with
-`Δ^{-1/2} = diag ∏_k d_{x_k}^{-1/2}`. -/
+`W^{-1/2} O_f W^{-1/2}` of the operator of the F-symbol block, with
+`W^{-1/2} = diag ∏_k d_{x_k}^{-1/2}`. -/
 theorem mpo_fibReviewTensor (f : Fin 2) (L : ℕ) :
     mpo (fibReviewTensor f) L = fibReviewWeight L * mpo (fibBlock f) L * fibReviewWeight L := by
   rw [mpo_eq_of_diagonal_conj _ (fun _ => fibLoopFactor_complex_inv_ne_zero _)
@@ -371,7 +371,7 @@ private theorem mpo_one_apply {D : ℕ} (M : MPOTensor 2 D) (σ τ : Fin 1 → F
 /-- Project result: the review's prefactored operators (arXiv:2011.12127, `TN-Review-main.tex`
 lines 2613–2621), read as operators in the orthonormal basis of plaquette configurations, do
 not satisfy the Fibonacci fusion rules. At one site the unit operator is
-`Δ^{-1/2} O_1 Δ^{-1/2} = diag(0, 1/φ)`, whose square has the entry `1/φ² ≠ 1/φ`. -/
+`W^{-1/2} O_1 W^{-1/2} = diag(0, 1/φ)`, whose square has the entry `1/φ² ≠ 1/φ`. -/
 theorem not_isMPOFusionAlgebra_fibReviewTensor :
     ¬ IsMPOFusionAlgebra fibReviewTensor fibNim := by
   intro h
@@ -410,12 +410,12 @@ theorem not_isMPOFusionAlgebra_fibReviewTensor :
   exact hne1 (by linear_combination -h00)
 
 /-- The review's tensor with the letterwise factor `d_x` of the incoming plaquette, whose
-periodic operator is `O_f^{rev} Δ`. -/
+periodic operator is `O_f^{rev} W`. -/
 def fibReviewWeightedTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
   ((fibDim x : ℝ) : ℂ) • fibReviewTensor f x' x
 
 /-- Project result: the review's operators become a Fibonacci fusion algebra after multiplying
-by `Δ` on the right, `O_f^{rev} Δ = Δ^{-1/2} O_f Δ^{1/2}`, which is similar to the operator of
+by `W` on the right, `O_f^{rev} W = W^{-1/2} O_f W^{1/2}`, which is similar to the operator of
 the F-symbol block. -/
 theorem isMPOFusionAlgebra_fibReviewWeightedTensor :
     IsMPOFusionAlgebra fibReviewWeightedTensor fibNim := by
