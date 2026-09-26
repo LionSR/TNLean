@@ -504,7 +504,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   note records the finite-row cyclic-window
   reduction and the remaining overlapping-window anticommutator comparison;
   the local norm-compression statements are sufficient stronger substitutes
-  tracked by issue #952.
+  tracked by issue #952. The note is classified as a false source claim
+  because an injective primitive tensor of bond dimension four violates the
+  printed projector estimate with the dimension-only prefactor $k^2$ at a
+  prescribed admissible rate from the intersection threshold.
 - `cpsv16_nncph_ground_state_scope.tex` records the separation between the
   zero-energy ground-vector predicate and the source ground-space spanning
   predicates for CPSV16 Theorem 3.10(iii). The finite Beigi sector graph and
