@@ -103,7 +103,8 @@ theorem fibAllTau_apply : fibAllTau 0 = 0 ∧ fibAllTau 1 = 1 :=
 /-- **The all-`τ` product state is normal**: its single nonzero letter is the identity of the
 one-by-one matrix algebra (data file §4.1). -/
 theorem fibAllTau_isNormal : Kraus.IsNormal fibAllTau :=
-  isNormal_of_golden_single fibAllTauGolden fibAllTau_eq Nat.one_pos (κ := Unit)
+  isNormal_of_complexOfRing_single goldenToComplex fibAllTauGolden fibAllTau_eq
+    Nat.one_pos (κ := Unit)
     (fun _ _ _ => ![1]) (fun _ _ _ => 1) (by decide +kernel)
 
 /-- The golden matrices of the bond-two tensor `C` generating `O_τ |τ ⋯ τ⟩`:
@@ -141,7 +142,8 @@ def fibChainUnitCoeff : Fin 2 → Fin 2 → Fin 4 → GoldenInt
 /-- **The tensor `C` is normal**: its length-three words span the full two-by-two matrix
 algebra (data file §4.1). -/
 theorem fibChain_isNormal : Kraus.IsNormal fibChain :=
-  isNormal_of_golden_single fibChainGolden fibChain_eq (by norm_num : 0 < 3)
+  isNormal_of_complexOfRing_single goldenToComplex fibChainGolden fibChain_eq
+    (by norm_num : 0 < 3)
     (fun _ _ k => fibChainWord k) fibChainUnitCoeff (by decide +kernel)
 
 /-! ### The unit acting on the all-`τ` state -/
@@ -201,16 +203,9 @@ theorem fibUnitAllTau_mul_gaugeInv (i : Fin 2) :
   revert i
   decide +kernel
 
-private theorem fibUnitAllTau_triangular (i : Fin 2)
-    (x y : BlockSpace (fun _ : Unit => 1) unitSlots 1)
-    (h : unitOrd 1 y.1 < unitOrd 1 x.1) :
-    fibUnitAllTauConjGolden i (unitCoord 1 1 x) (unitCoord 1 1 y) = 0 := by
-  revert i x y
-  decide +kernel
-
 private theorem fibUnitAllTau_matched (i : Fin 2) (p q : Fin 1) :
-    fibUnitAllTauConjGolden i (unitCoord 1 1 ⟨Sum.inl unitSlot, p⟩)
-      (unitCoord 1 1 ⟨Sum.inl unitSlot, q⟩) = fibAllTauGolden i p q := by
+    fibUnitAllTauConjGolden i (unitCoord 1 1 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 1 1 ⟨Sum.inl oneSlotMem, q⟩) = fibAllTauGolden i p q := by
   revert i
   revert p q
   decide +kernel
@@ -222,7 +217,7 @@ private theorem fibUnitAllTau_unmatched (i : Fin 2) (t : Fin 1) (p q : Fin 1) :
   decide +kernel
 
 private theorem fibUnitAllTau_offDiagonal (i : Fin 2)
-    (x y : BlockSpace (fun _ : Unit => 1) unitSlots 1) (h : x.1 ≠ y.1) :
+    (x y : BlockSpace (fun _ : Unit => 1) oneSlot 1) (h : x.1 ≠ y.1) :
     fibUnitAllTauConjGolden i (unitCoord 1 1 x) (unitCoord 1 1 y) = 0 := by
   revert i x y
   decide +kernel
@@ -232,20 +227,20 @@ applied to an action tensor as in arXiv:2203.12563, equation `fusiontensors2`, l
 data file §4.2): the action tensor compresses onto the single block `fibAllTau` with `z = 1`
 zero slot. -/
 def fibUnitAllTau_compression :
-    MultiBlockCompression fibUnitAllTau unitSlots (fun _ : Unit => fibAllTau) :=
+    MultiBlockCompression fibUnitAllTau oneSlot (fun _ : Unit => fibAllTau) :=
   MultiBlockCompression.ofGolden 1 (unitOrd 1) (unitCoord 1 1) fibUnitAllTauGolden
     fibUnitAllTau_eq (fun _ => fibAllTauGolden) (fun _ a => fibAllTau_eq a)
     fibUnitAllTauGaugeGolden fibUnitAllTauGaugeInvGolden fibUnitAllTauGauge_mul_inv
     fibUnitAllTauGaugeInv_mul fibUnitAllTauConjGolden fibUnitAllTau_mul_gaugeInv
-    fibUnitAllTau_triangular
+    (fun i => MultiBlockCompression.triangular_of_offDiag (fibUnitAllTau_offDiagonal i))
     (fun i s _ p q => by cases s; exact fibUnitAllTau_matched i p q) fibUnitAllTau_unmatched
 
 /-- **The remainder of the compression of `fibOne · fibAllTau` vanishes**: the extension splits
 (data file §4.2). -/
-theorem fibUnitAllTau_remainder_eq_zero (i : Fin 2) : fibUnitAllTau_compression.remainder i = 0 :=
-  fibUnitAllTau_compression.remainder_eq_zero_of_goldenGauge (hG := fibUnitAllTauGauge_mul_inv)
-    (hG' := fibUnitAllTauGaugeInv_mul) rfl fibUnitAllTau_eq fibUnitAllTau_mul_gaugeInv
-    fibUnitAllTau_offDiagonal i
+theorem fibUnitAllTau_remainder_eq_zero (i : Fin 2) :
+    fibUnitAllTau_compression.remainder i = 0 := by
+  unfold fibUnitAllTau_compression
+  exact MultiBlockCompression.remainder_ofRing fibUnitAllTau_offDiagonal i
 
 /-- **The unit fixes the all-`τ` state**, `O_1 ψ_A = ψ_A`, at every positive system size (data
 file §4.2). -/
@@ -254,7 +249,7 @@ theorem mpo_fibOne_mulVec_allTau (L : ℕ) (hL : 0 < L) :
       fun σ : Fin L → Fin 2 => mpv fibAllTau σ := by
   have h := MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression fibUnitAllTau_compression
     L hL
-  simpa only [Fintype.sum_unique] using h
+  simpa only [Finset.sum_singleton] using h
 
 /-! ### The `τ` family acting on the all-`τ` state -/
 
@@ -320,16 +315,9 @@ theorem fibActAllTau_mul_gaugeInv (i : Fin 2) :
   revert i
   decide +kernel
 
-private theorem fibActAllTau_triangular (i : Fin 2)
-    (x y : BlockSpace (fun _ : Unit => 2) unitSlots 1)
-    (h : unitOrd 1 y.1 < unitOrd 1 x.1) :
-    fibActAllTauConjGolden i (unitCoord 2 1 x) (unitCoord 2 1 y) = 0 := by
-  revert i x y
-  decide +kernel
-
 private theorem fibActAllTau_matched (i : Fin 2) (p q : Fin 2) :
-    fibActAllTauConjGolden i (unitCoord 2 1 ⟨Sum.inl unitSlot, p⟩)
-      (unitCoord 2 1 ⟨Sum.inl unitSlot, q⟩) = fibChainGolden i p q := by
+    fibActAllTauConjGolden i (unitCoord 2 1 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 2 1 ⟨Sum.inl oneSlotMem, q⟩) = fibChainGolden i p q := by
   revert i
   revert p q
   decide +kernel
@@ -341,7 +329,7 @@ private theorem fibActAllTau_unmatched (i : Fin 2) (t : Fin 1) (p q : Fin 1) :
   decide +kernel
 
 private theorem fibActAllTau_offDiagonal (i : Fin 2)
-    (x y : BlockSpace (fun _ : Unit => 2) unitSlots 1) (h : x.1 ≠ y.1) :
+    (x y : BlockSpace (fun _ : Unit => 2) oneSlot 1) (h : x.1 ≠ y.1) :
     fibActAllTauConjGolden i (unitCoord 2 1 x) (unitCoord 2 1 y) = 0 := by
   revert i x y
   decide +kernel
@@ -351,20 +339,19 @@ applied to an action tensor as in arXiv:2203.12563, equation `fusiontensors2`, l
 data file §4.3): the action tensor compresses onto the single block `fibChain` with `z = 1`
 zero slot. -/
 def fibActAllTau_compression :
-    MultiBlockCompression fibActAllTau unitSlots (fun _ : Unit => fibChain) :=
+    MultiBlockCompression fibActAllTau oneSlot (fun _ : Unit => fibChain) :=
   MultiBlockCompression.ofGolden 1 (unitOrd 1) (unitCoord 2 1) fibActAllTauGolden
     fibActAllTau_eq (fun _ => fibChainGolden) (fun _ a => fibChain_eq a)
     fibActAllTauGaugeGolden fibActAllTauGaugeInvGolden fibActAllTauGauge_mul_inv
     fibActAllTauGaugeInv_mul fibActAllTauConjGolden fibActAllTau_mul_gaugeInv
-    fibActAllTau_triangular
+    (fun i => MultiBlockCompression.triangular_of_offDiag (fibActAllTau_offDiagonal i))
     (fun i s _ p q => by cases s; exact fibActAllTau_matched i p q) fibActAllTau_unmatched
 
 /-- **The remainder of the compression of `fibTau · fibAllTau` vanishes**: the extension splits
 (data file §4.3). -/
-theorem fibActAllTau_remainder_eq_zero (i : Fin 2) : fibActAllTau_compression.remainder i = 0 :=
-  fibActAllTau_compression.remainder_eq_zero_of_goldenGauge (hG := fibActAllTauGauge_mul_inv)
-    (hG' := fibActAllTauGaugeInv_mul) rfl fibActAllTau_eq fibActAllTau_mul_gaugeInv
-    fibActAllTau_offDiagonal i
+theorem fibActAllTau_remainder_eq_zero (i : Fin 2) : fibActAllTau_compression.remainder i = 0 := by
+  unfold fibActAllTau_compression
+  exact MultiBlockCompression.remainder_ofRing fibActAllTau_offDiagonal i
 
 /-- **The `τ` family carries the all-`τ` state to the state of `C`**, `O_τ ψ_A = ψ_C`, at every
 positive system size (data file §4.3). -/
@@ -373,7 +360,7 @@ theorem mpo_fibTau_mulVec_allTau (L : ℕ) (hL : 0 < L) :
       fun σ : Fin L → Fin 2 => mpv fibChain σ := by
   have h := MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression fibActAllTau_compression
     L hL
-  simpa only [Fintype.sum_unique] using h
+  simpa only [Finset.sum_singleton] using h
 
 /-! ### The `τ` family acting on the state of `C` -/
 
@@ -519,12 +506,6 @@ theorem fibActChain_mul_gaugeInv (i : Fin 2) :
   revert i
   decide +kernel
 
-private theorem fibActChain_triangular (i : Fin 2) (x y : BlockSpace fibNimDim fibNimSlots 3)
-    (h : fibNimOrd y.1 < fibNimOrd x.1) :
-    fibActChainConjGolden i (fibNimCoord x) (fibNimCoord y) = 0 := by
-  revert i x y
-  decide +kernel
-
 private theorem fibActChain_matched (i : Fin 2) (s : Fin 2) (p q : Fin (fibNimDim s)) :
     fibActChainConjGolden i (fibNimCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
       (fibNimCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) = fibNimTargetsGolden s i p q := by
@@ -549,15 +530,15 @@ def fibActChain_compression : MultiBlockCompression fibActChain fibNimSlots fibN
   MultiBlockCompression.ofGolden 3 fibNimOrd fibNimCoord fibActChainGolden fibActChain_eq
     fibNimTargetsGolden fibNimTargets_eq fibActChainGaugeGolden fibActChainGaugeInvGolden
     fibActChainGauge_mul_inv fibActChainGaugeInv_mul fibActChainConjGolden
-    fibActChain_mul_gaugeInv fibActChain_triangular
+    fibActChain_mul_gaugeInv
+    (fun i => MultiBlockCompression.triangular_of_offDiag (fibActChain_offDiagonal i))
     (fun i s _ p q => fibActChain_matched i s p q) fibActChain_unmatched
 
 /-- **The remainder of the compression of `τ · C` vanishes**: the extension splits (data file
 §4.4). -/
-theorem fibActChain_remainder_eq_zero (i : Fin 2) : fibActChain_compression.remainder i = 0 :=
-  fibActChain_compression.remainder_eq_zero_of_goldenGauge (hG := fibActChainGauge_mul_inv)
-    (hG' := fibActChainGaugeInv_mul) rfl fibActChain_eq fibActChain_mul_gaugeInv
-    fibActChain_offDiagonal i
+theorem fibActChain_remainder_eq_zero (i : Fin 2) : fibActChain_compression.remainder i = 0 := by
+  unfold fibActChain_compression
+  exact MultiBlockCompression.remainder_ofRing fibActChain_offDiagonal i
 
 /-- **The `τ` family carries the state of `C` to the sum of the two states**,
 `O_τ ψ_C = ψ_A + ψ_C`, at every positive system size (data file §4.4). -/

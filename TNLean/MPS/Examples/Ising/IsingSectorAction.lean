@@ -237,38 +237,20 @@ theorem sectorAction_conjMatrix (h : Fin 10) :
 Theorem 7.7(i)–(iii); data file §2, checks 2c–2e): four weighted bond-one product states and six
 zero slots. -/
 noncomputable def sectorCompression :
-    MultiBlockCompression sectorAction sectorSlots sectorTargets where
-  z := 6
-  ord := sectorOrd
-  gauge := sectorGauge
-  triangular h x y hlt := by
-    have h' : sectorOrd y.1 < sectorOrd x.1 := hlt
-    have hxy : x.1 ≠ y.1 := fun e => by rw [e] at h'; exact lt_irrefl _ h'
-    rw [sectorAction_conjMatrix, complexOfZsqrt2_apply, Matrix.blockDiagonal'_apply_ne _ _ _ hxy,
-      map_zero]
-  matched h s := by
-    rw [sectorAction_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [sectorBlockZ, sectorTargets, productState, zsqrt2ToComplex_sectorWeightsZ]
-  unmatched h t := by
-    rw [sectorAction_conjMatrix, complexOfZsqrt2, complexOfRing, Matrix.blockDiag'_map,
-      Matrix.blockDiag'_blockDiagonal']
-    ext p q
-    simp [sectorBlockZ]
+    MultiBlockCompression sectorAction sectorSlots sectorTargets :=
+  MultiBlockCompression.ofRingBlockDiagonal zsqrt2ToComplex sectorOrd sectorTau sectorGauge
+    sectorBlockZ sectorAction_conjMatrix
+    (fun s h => sectorWeightsZ s • productStateZ (sectorLabel s) h)
+    (fun s h => by
+      ext p q
+      simp [sectorTargets, productState, zsqrt2ToComplex_sectorWeightsZ])
+    (fun _ _ => rfl) fun _ _ => rfl
 
 /-- **The remainder of the weighted Verlinde action vanishes** (P5 note, Theorem 7.7(vi); data
 file §2, check 2f): the action tensor is diagonal in the block coordinates. -/
 theorem sectorAction_remainder : sectorCompression.remainder = 0 := by
-  funext h
-  have hc : conjMatrix sectorGauge (sectorCompression.remainder h) =
-      conjMatrix sectorGauge (sectorAction h) -
-        Matrix.blockDiagonal' (conjMatrix sectorGauge (sectorAction h)).blockDiag' :=
-    sectorCompression.conjMatrix_remainder h
-  refine conjMatrix_injective sectorGauge ?_
-  rw [hc, Pi.zero_apply, conjMatrix_zero, sub_eq_zero, sectorAction_conjMatrix,
-    complexOfZsqrt2, complexOfRing,
-    Matrix.blockDiagonal'_map _ _ (map_zero _), Matrix.blockDiag'_blockDiagonal']
+  unfold sectorCompression
+  exact funext MultiBlockCompression.remainder_ofRingBlockDiagonal
 
 /-! ### Consequences -/
 
