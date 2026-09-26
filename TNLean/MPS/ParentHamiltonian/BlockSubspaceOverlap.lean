@@ -36,6 +36,8 @@ private theorem overlapMatrix_bilinear_le (B : Matrix ι ι ℝ)
   simpa [Matrix.inner_toEuclideanCLM, Matrix.mulVec, dotProduct, Finset.mul_sum,
     Matrix.l2_opNorm_toEuclideanCLM, mul_assoc, mul_left_comm] using h
 
+/-- The quadratic form of a real matrix is bounded by its operator norm:
+\(\sum_{i,j}B_{ij}w_iw_j\leq\|B\|\,\|w\|^2\), by Cauchy--Schwarz. -/
 private theorem overlapMatrix_quadratic_le (B : Matrix ι ι ℝ) (w : EuclideanSpace ℝ ι) :
     ∑ i, ∑ j, B i j * w i * w j ≤ ‖B‖ * ‖w‖ ^ 2 := by
   simpa only [pow_two, mul_assoc] using overlapMatrix_bilinear_le B w w
@@ -86,6 +88,10 @@ private theorem norm_norms_le_of_lower_bound (v : ι → E) {b : ℝ} (hb : b < 
       (norm_nonneg _)).mp hSq)
 
 omit [DecidableEq ι] in
+/-- The final Cauchy--Schwarz step of Nachtergaele, arXiv:cond-mat/9410110,
+Lemma 9: overlap bounds \(a_i\) with each summand and the lower Gram estimate
+\((1-b)\sum_i\|v_i\|^2\leq\|\sum_i v_i\|^2\) give the bound
+\(\|a\|/\sqrt{1-b}\) on the overlap of \(x\) with \(\sum_i v_i\). -/
 private theorem norm_inner_sum_le_of_lower_bound (x : E) (v : ι → E)
     (a : EuclideanSpace ℝ ι) {b : ℝ} (hb : b < 1)
     (hLower : (1 - b) * (∑ i, ‖v i‖ ^ 2) ≤ ‖∑ i, v i‖ ^ 2)
@@ -127,6 +133,9 @@ theorem norm_inner_le_iSup_of_overlapMatrix (U : Submodule ℂ E)
     (fun i ↦ hCross i x hx _ (v i).property)
 
 omit [DecidableEq ι] in
+/-- The lower Gram estimate for uniform pairwise overlaps at most \(\varepsilon\)
+among \(m\) vectors: \((1-\varepsilon(m-1))\sum_i\|v_i\|^2\leq\|\sum_i v_i\|^2\),
+by Cauchy--Schwarz \((\sum_i\|v_i\|)^2\leq m\sum_i\|v_i\|^2\). -/
 private theorem norm_sum_sq_ge_of_uniform_overlap (v : ι → E) {ε : ℝ}
     (hε : 0 ≤ ε)
     (hpair : ∀ i j, i ≠ j → ‖⟪v i, v j⟫_ℂ‖ ≤ ε * ‖v i‖ * ‖v j‖) :
@@ -208,6 +217,5 @@ theorem sum_offDiagonal_norm_inner_le_of_overlapMatrix
     _ = _ := by
       field_simp
       rw [Real.sq_sqrt (sub_pos.mpr hB).le]
-
 
 end Submodule

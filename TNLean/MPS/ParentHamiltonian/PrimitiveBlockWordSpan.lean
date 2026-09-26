@@ -15,7 +15,8 @@ similarity and phase, has full simultaneous word span at every sufficiently
 large length. Individual normality gives a common injective length; the
 three-block separation argument supplies a fixed family of block selectors.
 This is the block-separation input to PGVWC07, arXiv:quant-ph/0608197,
-Lemma 10 and Theorem 12, lines 1346--1452.
+the direct-sum lemma (lines 1346--1408) and Theorem 12 (lines
+1424--1456).
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -27,7 +28,7 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
 /-- Pairwise inequivalent normalized primitive blocks span their full product
 matrix algebra at all sufficiently large word lengths. This is the eventual
 form of the direct-sum separation argument in PGVWC07,
-arXiv:quant-ph/0608197, Lemma 10, lines 1346--1408. -/
+arXiv:quant-ph/0608197, the direct-sum lemma, lines 1346--1408. -/
 theorem exists_eventually_wordTupleSpanTop_of_isPrimitiveMPS
     (A : (j : Fin r) → MPSTensor d (dim j))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)

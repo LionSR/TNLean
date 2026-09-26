@@ -1,0 +1,822 @@
+%% =========================================================
+%% Chapter: Matrix Product Operator Symmetries and Non-Invertible
+%% Symmetries.
+%% The basic notions of symmetries given by matrix product operators:
+%% on-site and matrix product unitary group symmetries, group operators
+%% built from a three-cocycle and their anomaly, fusion algebras and
+%% their Perron--Frobenius dimensions, non-invertible symmetries
+%% (Fibonacci, Ising, Kramers--Wannier), symmetric matrix product states
+%% with their nonnegative integer representations, and the zipper
+%% condition. The virtual-level theory (fusion and action tensors,
+%% gauge, associator, obstruction) is Chapter ch:mpo_algebras.
+%% Lean modules: TNLean/MPS/Symmetry/MPOSymmetry/{Defs,NIMRep,Character,
+%%   Examples}.lean (Sections sec:mposym_fusion and sec:mposym_symmetric).
+%% Planned Lean module for the Perron--Frobenius dimension:
+%%   TNLean/MPS/Symmetry/MPOSymmetry/Dimension.lean.
+%% **Scope restriction (periodic boundary):** Garre-Rubio, Lootens and
+%%   Molnar (arXiv:2203.12563) define the algebra by closedness under
+%%   arbitrary boundary conditions (Papers/2203.12563/REsubmission.tex,
+%%   lines 328--331) and symmetry by invariance of the arbitrary-boundary
+%%   subspace (lines 431--434); Sections sec:mposym_fusion and
+%%   sec:mposym_symmetric use only the periodic-boundary consequences
+%%   (lines 361--362 and 567--568). Documented in
+%%   docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex.
+%% =========================================================
+
+\chapter{Matrix Product Operator Symmetries and Non-Invertible Symmetries}%
+\label{ch:mpo_symmetry_basics}
+
+A symmetry of a spin chain is usually a group acting site by site. Two
+generalizations appear in one-dimensional lattice models. The symmetry
+operators may be matrix product operators rather than tensor products of
+one-site unitaries, and they may multiply according to fusion rules
+$O_aO_b=\sum_cN_{ab}^cO_c$ rather than a group law, so that some of them
+have no inverse
+\cite{Bultinck2017Anyons,GarreRubio2023MPOSym,Cirac2021Matrix}. This
+chapter introduces both generalizations for a reader who knows matrix
+product states. Section~\ref{sec:mposym_invertible} treats invertible
+symmetries: on-site actions, groups represented by matrix product unitaries,
+and group operators built from a three-cocycle, whose cohomology class
+obstructs an on-site form. Section~\ref{sec:mposym_fusion} defines fusion
+algebras of matrix product operators and their Perron--Frobenius dimensions,
+and Section~\ref{sec:mposym_noninvertible} presents the non-invertible
+examples: Fibonacci, Ising, and Kramers--Wannier duality.
+Section~\ref{sec:mposym_symmetric} derives the integrality consequences for
+symmetric matrix product states, and Section~\ref{sec:mposym_zipper} states
+the local zipper condition. The virtual-level theory, with fusion and action
+tensors, their gauge freedom, the associator, and the cohomological
+obstruction, is Chapter~\ref{ch:mpo_algebras}.
+
+Throughout, $T_a$ denotes a matrix product operator tensor
+(Definition~\ref{def:mpo_tensor}) of bond dimension $\chi_a$, and
+$O_a^{(N)}$ its periodic operator on $N$ sites
+(Definition~\ref{def:mpo_family}),
+\begin{align}
+    O_a^{(N)}
+     & =\sum_{i_1,\ldots,i_N}\sum_{j_1,\ldots,j_N}
+    \tr(T_a^{i_1j_1}\cdots T_a^{i_Nj_N})
+    \ket{i_1,\ldots,i_N}\bra{j_1,\ldots,j_N},
+    \label{eq:mposym_periodic_operator}
+\end{align}
+where the first physical index is the output. We write $\ket{V^{(N)}(A)}$ for
+the periodic vector of a matrix product state tensor $A$. For two operator
+tensors, $T_aT_b$ denotes the stacked tensor
+$(T_aT_b)^{ij}=\sum_mT_a^{im}\otimes T_b^{mj}$ of bond dimension
+$\chi_a\chi_b$, whose periodic operator is $O_a^{(N)}O_b^{(N)}$, and
+$T_a\cdot A$ denotes the matrix product state tensor
+$(T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j$, whose periodic vector is
+$O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
+
+%% ---------------------------------------------------------
+\section{Invertible symmetries}%
+\label{sec:mposym_invertible}
+
+\begin{remark}[On-site symmetries]%
+    \label{rem:mposym_onsite}
+    \uses{def:on_site_symmetric, thm:virtual_symmetry_eq,
+        cor:virtual_rep_cocycle, def:mpo_family}
+    A representation $u\colon G\to\GL_d(\C)$ acts on a chain of $N$ sites by
+    $u_g^{\otimes N}$. This is the periodic operator of the bond-dimension-one
+    tensor $T_g^{ij}=u(g)_{ij}$, so on-site symmetries are the matrix product
+    operator symmetries of bond dimension one
+    \cite[Section~4]{GarreRubio2023MPOSym}. Invariance of a matrix product
+    state under them is Definition~\ref{def:on_site_symmetric}. For a normal
+    tensor the physical action is carried to the bond by
+    Theorem~\ref{thm:virtual_symmetry_eq}, and the bond operators form a
+    projective representation whose class in $H^2(G,\C^\times)$ is the
+    invariant of Corollary~\ref{cor:virtual_rep_cocycle}.
+    % Source anchor: arXiv:2203.12563, Papers/2203.12563/REsubmission.tex,
+    %   lines 658 (on-site operators as bond-dimension-one blocks) and
+    %   840--856 (reduction to the second-cohomology classification).
+\end{remark}
+
+\begin{remark}[Groups represented by matrix product unitaries]%
+    \label{rem:mposym_mpu_groups}
+    \uses{def:mpu, def:mpug_positive_mpu, def:mpug_group_representation}
+    A symmetry need not act site by site to be local. A matrix product
+    unitary (Definition~\ref{def:mpu}) is a matrix product operator whose
+    periodic operator is unitary at every length $N>1$. A finite group is
+    represented by simple injective matrix product unitaries when every
+    $U_g$ is injective, simple and unitary on every nonempty chain
+    (Definition~\ref{def:mpug_positive_mpu}), and
+    $U_g^{(N)}U_h^{(N)}=U_{gh}^{(N)}$ and $U_e^{(N)}=\Id$ at every length
+    (Definition~\ref{def:mpug_group_representation}). The bond dimensions of
+    $U_gU_h$ and $U_{gh}$ need not agree, so the product law holds for the
+    periodic operators and not for the local tensors; comparing the stacked
+    tensor $U_gU_h$ with $U_{gh}$ produces fusion tensors whose associativity
+    defines a scalar three-cocycle
+    (Section~\ref{sec:mpug_scalar_gauge}).
+    % Source anchor: arXiv:2502.20257 (FrancoRubio2025MPUGauging),
+    %   subsection "MPU group representations", as cited in
+    %   def:mpug_group_representation; arXiv:2203.12563, lines 1026--1030.
+\end{remark}
+
+\begin{remark}[Group operators from a three-cocycle and the anomaly]%
+    \label{rem:mposym_group_cocycle}
+    \uses{def:mpug_three_cocycle, def:asymex_group_cocycle_tensor,
+        thm:asymex_group_cocycle_mul, thm:asymex_group_cocycle_z2,
+        thm:mpoalg_no_symmetric_normal}
+    Every normalized three-cocycle $\omega$ of a finite group $G$
+    (Definition~\ref{def:mpug_three_cocycle}) gives matrix product operators
+    $U_g$ on the chain with site space $\C[G]$: a left shift by $g$ on every
+    site, decorated by a diagonal two-site phase gate built from $\omega$
+    (Definition~\ref{def:asymex_group_cocycle_tensor}). They satisfy
+    $U_gU_h=U_{gh}$ at every length
+    (Theorem~\ref{thm:asymex_group_cocycle_mul}). For the group of order two
+    and its nontrivial cocycle, $U_s=\prod_iCZ_{i,i+1}Z_i\prod_iX_i$
+    (Theorem~\ref{thm:asymex_group_cocycle_z2}), which is not a tensor
+    product of one-site unitaries.
+
+    The class of the associator in $H^3(G,\C^\times)$ is the
+    \emph{anomaly}. An injective matrix product operator representation with
+    $U_e=\Id$ whose fusion tensors reduce every stacked tensor $T_gT_h$
+    exactly to $T_{gh}$ is on-site, and then its three-cocycle is trivial
+    \cite[Section~4]{GarreRubio2023MPOSym}. Hence a nontrivial
+    class forbids an on-site form. It also forbids an invariant normal matrix
+    product state (Theorem~\ref{thm:mpoalg_no_symmetric_normal}). The sources
+    argue further that a symmetric local Hamiltonian then cannot have a
+    normal matrix product state as its unique ground state, and that such
+    Hamiltonians are critical or symmetry breaking
+    \cite{ChenLiuWen2011CZX,GarreRubio2023MPOSym,Cirac2021Matrix}.
+    % Source anchor: arXiv:2203.12563, lines 677--681 (three-cocycle and
+    %   H^3), 738 (no injective invariant state), 1211--1216 (injective
+    %   representation with closed fusion is on-site), 2064--2070 (the
+    %   cocycle construction and the Z_2 example); arXiv:2011.12127,
+    %   Papers/2011.12127/TN-Review-main.tex, lines 1397--1419.
+    % Lean: the on-site lemma of lines 1211--1216 is not formalized; planned
+    %   name MPOTensor.GroupFamily.isOnSite_of_closed_fusion.
+\end{remark}
+
+%% ---------------------------------------------------------
+\section{Fusion algebras of matrix product operators}%
+\label{sec:mposym_fusion}
+
+An invertible on-site symmetry acts on a matrix product state through a group
+representation on the physical index. A matrix product operator symmetry is
+given instead by a finite family of operators whose periodic operators
+multiply according to fusion rules~\cite{GarreRubio2023MPOSym}. The source
+defines the symmetry by invariance of the states with arbitrary boundary
+conditions; the statements below use only its consequence for periodic
+boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
+\cite{gap:glm23_mpo_symmetric_mps_scope}.
+
+\begin{definition}[Matrix product operator fusion algebra]%
+    \label{def:mpo_fusion_algebra}
+    \lean{MPOTensor.IsMPOFusionAlgebra}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_family}
+    A finite family $(T_a)_{a\in I}$ of matrix product operator tensors with
+    structure constants $N_{ab}^c\in\N$ is a \emph{fusion algebra} if, for
+    all $a,b\in I$ and $N\geq1$,
+    \begin{align}
+        O_a^{(N)}O_b^{(N)}
+         & =\sum_{c\in I}N_{ab}^c\,O_c^{(N)}.
+        \label{eq:mpo_fusion_algebra}
+    \end{align}
+    This is the fusion rule of \cite[Section~2]{GarreRubio2023MPOSym} and
+    \cite{Bultinck2017Anyons}.
+    % Source anchor: arXiv:2203.12563, lines 361--362.
+\end{definition}
+
+\begin{definition}[Unit and invertible labels]%
+    \label{def:fusion_unit_invertible}
+    \lean{MPOTensor.IsFusionUnit,
+        MPOTensor.IsInvertibleLabel}
+    \leanok
+    \uses{def:mpo_fusion_algebra}
+    A label $e$ is a \emph{unit} of the structure constants if
+    $N_{eb}^c=N_{be}^c=\delta_{bc}$ for all $b,c$. A label $a$ is
+    \emph{invertible} with respect to $e$ if there is a label $b$ with
+    $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for all $c$. The operator $O_e^{(N)}$ need
+    not be the identity; outside the on-site case it is a projector
+    \cite[Section~4]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 660.
+\end{definition}
+
+\begin{definition}[Fusion matrices and Perron--Frobenius dimension]%
+    \label{def:mposym_pf_dimension}
+    \lean{MPOTensor.fusionMatrix, MPOTensor.perronFrobeniusDim}
+    \leanok
+    \uses{def:mpo_fusion_algebra}
+    Let $N_{ab}^c\in\N$ be structure constants on a finite label set $I$. The
+    \emph{fusion matrix} of a label $a$ is the nonnegative integer matrix
+    $N_a$ with entries $(N_a)_{bc}=N_{ab}^c$ for $b,c\in I$. The
+    \emph{Perron--Frobenius dimension} of $a$ is the spectral radius
+    $d_a=\rho(N_a)$.
+    % Source anchor: arXiv:2204.05940, References/2204.05940/source/mpo.tex,
+    %   line 6068 (N_a with (N_a)_b^c = N_{ab}^c, and d_a its spectral
+    %   radius, the Perron--Frobenius dimension); arXiv:2203.12563,
+    %   Papers/2203.12563/REsubmission.tex, line 1805 (r_a = d_a).
+\end{definition}
+
+\begin{theorem}[A nonnegative eigenvector for the Perron--Frobenius dimension]%
+    \label{thm:mposym_pf_eigenvector}
+    \lean{MPOTensor.exists_nonneg_eigenvector_perronFrobeniusDim,
+        MPOTensor.perronFrobeniusDim_mem_spectrum,
+        Matrix.exists_nonneg_mulVec_eq_spectralRadius_smul}
+    \leanok
+    \uses{def:mposym_pf_dimension}
+    For every label $a$, the Perron--Frobenius dimension $d_a$ is an
+    eigenvalue of $N_a$, and there is a column vector $v\neq0$ with
+    nonnegative entries such that $N_av=d_av$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    This is the Perron--Frobenius theorem for nonnegative matrices; we prove
+    it for any square matrix $M$ with nonnegative real entries, and write
+    $\rho=\rho(M)$. Choose a complex eigenvalue $\mu$ with $|\mu|=\rho$ and
+    an eigenvector $u\neq0$, and let $|u|$ be the vector of moduli
+    $|u_i|$. The triangle inequality gives $M|u|\geq\rho\,|u|$ entrywise.
+    Hence the set $K$ of vectors $x$ with nonnegative entries,
+    $\sum_ix_i=1$ and $Mx\geq\rho x$ entrywise is nonempty; it is compact
+    and convex. For $x\in K$ the vector $(M+1)x$ is nonnegative with
+    positive entry sum, and the map
+    $x\mapsto(M+1)x/\sum_i((M+1)x)_i$ sends $K$ into itself, because
+    $M(M+1)x-\rho(M+1)x=(M+1)(Mx-\rho x)$ and $M+1$ has nonnegative
+    entries. The map is continuous on $K$. By
+    Brouwer's fixed-point theorem it has a fixed point $x$, so $Mx=sx$ for
+    some real $s$, and $x\neq0$ is nonnegative. From $x\in K$ we get
+    $s\geq\rho$, and $s$ is an eigenvalue of $M$, so $s\leq\rho$. Thus
+    $Mx=\rho x$ and $\rho$ is an eigenvalue. Applied to $M=N_a$ this gives
+    the statement.
+\end{proof}
+
+\begin{lemma}[A positive left eigenvector gives the Perron--Frobenius dimension]%
+    \label{lem:mposym_pf_dimension_positive}
+    \lean{MPOTensor.perronFrobeniusDim_eq_of_pos_left_eigenvector,
+        MPOTensor.perronFrobeniusDim_eq_of_dimension_relation}
+    \leanok
+    \uses{def:mposym_pf_dimension}
+    Let $a$ be a label, $\lambda\in\R$, and let $(\delta_b)_{b\in I}$ be real
+    numbers with $\delta_b>0$ for all $b$ and
+    $\sum_b\delta_bN_{ab}^c=\lambda\,\delta_c$ for all $c$. Then $\lambda$ is
+    the Perron--Frobenius dimension $d_a$. In particular, if positive numbers
+    $\delta_b$ satisfy
+    \begin{align}
+        \sum_b N_{ab}^c\,\delta_b & =\delta_a\,\delta_c
+        \label{eq:mposym_dimension_relation}
+    \end{align}
+    for all $a$ and $c$, then $\delta_a=d_a$ for every label $a$.
+    % Source anchor: arXiv:2204.05940, mpo.tex line 6068 ("d_b defines a
+    %   positive eigenvector for the matrix N_a ... the corresponding
+    %   eigenvalue, d_a, is the spectral radius of N_a").
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $\delta$ for the row vector with entries $\delta_b$, so that
+    $\delta N_a=\lambda\delta$. Since $\delta\neq0$, the matrix
+    $\lambda-N_a$ has a nonzero left null vector, so its determinant
+    vanishes and $\lambda$ is an eigenvalue of $N_a$. Let $\mu$ be any
+    complex eigenvalue of $N_a$ with eigenvector $v\neq0$, and let $|v|$ be
+    the vector of moduli $|v_b|$. The triangle inequality gives
+    $|\mu|\,|v|\leq N_a|v|$ entrywise, and pairing with $\delta$ gives
+    $|\mu|\,\delta|v|\leq\delta N_a|v|=\lambda\,\delta|v|$. Here
+    $\delta|v|>0$ because every $\delta_b$ is positive and $v\neq0$, so
+    $|\mu|\leq\lambda$. Thus $\lambda$ is an eigenvalue of largest modulus,
+    and it is nonnegative, so $\lambda=\rho(N_a)=d_a$. The second statement
+    is the first with $\lambda=\delta_a$.
+\end{proof}
+
+For matrix product operator representations of a weak Hopf algebra whose
+unit corresponds to a single irreducible representation, the positive
+dimensions attached to the labels satisfy
+(\ref{eq:mposym_dimension_relation})
+\cite[Section~5]{Molnar2022MPOAlgebrasI}, so by
+Lemma~\ref{lem:mposym_pf_dimension_positive} they are the Perron--Frobenius
+dimensions. For the Fibonacci and Ising rules below they are the quantum
+dimensions of the corresponding fusion categories.
+% Source anchor: arXiv:2204.05940, mpo.tex line 6068.
+
+%% ---------------------------------------------------------
+\section{Non-invertible symmetries}%
+\label{sec:mposym_noninvertible}
+
+A label without an inverse in the sense of
+Definition~\ref{def:fusion_unit_invertible} gives an operator that has no
+inverse within the fusion algebra. In the examples below such operators have
+a nonzero kernel, so they are not invertible on the chain at all; they are
+the lattice form of the non-invertible symmetries of Ising and anyon chains
+\cite{Aasen2016Topological,Bultinck2017Anyons,Cirac2021Matrix}.
+
+\begin{remark}[The unit is a projector]%
+    \label{rem:mposym_unit_projector}
+    \uses{def:fusion_unit_invertible, lem:asymex_fib_vacuum,
+        thm:asymex_ising_path_operators}
+    If $e$ is a unit of a fusion algebra, then $N_{ee}^c=\delta_{ec}$ gives
+    $\bigl(O_e^{(N)}\bigr)^2=O_e^{(N)}$ and $O_e^{(N)}O_a^{(N)}=O_a^{(N)}
+        O_e^{(N)}=O_a^{(N)}$ for every $a$. Thus $O_e^{(N)}$ is an idempotent
+    and the algebra acts on its range; it is the identity only in special
+    cases such as on-site symmetries
+    \cite[Section~4]{GarreRubio2023MPOSym}. For the Fibonacci operators the
+    unit is the orthogonal projection onto the admissible configurations
+    (Lemma~\ref{lem:asymex_fib_vacuum}), and for the Ising operators it is
+    the orthogonal projection onto the closed fusion paths
+    (Theorem~\ref{thm:asymex_ising_path_operators}).
+    % Source anchor: arXiv:2203.12563, line 660 (O_e is in general a
+    %   projector rather than the identity).
+\end{remark}
+
+\begin{example}[Fibonacci fusion rule and the golden ratio]%
+    \label{ex:mposym_fibonacci_dimension}
+    \lean{FibonacciCompression.fusionMatrix_fibNim_tau,
+        FibonacciCompression.charpoly_fusionMatrix_fibNim_tau,
+        FibonacciCompression.spectrum_fusionMatrix_fibNim_tau,
+        FibonacciCompression.fibNim_dimension_relation,
+        FibonacciCompression.perronFrobeniusDim_fibNim_tau,
+        FibonacciCompression.perronFrobeniusDim_fibNim_one,
+        FibonacciCompression.not_isInvertibleLabel_fibNim_tau}
+    \leanok
+    \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
+        def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
+        def:asymex_fib_fsymbols}
+    The Fibonacci labels are $1$ and $\tau$, with unit $1$ and
+    $\tau\times\tau=1+\tau$. Its fusion matrix $N_\tau$ in the order
+    $(1,\tau)$ is (\ref{eq:asymex_fib_anomaly_matrix}),
+    with characteristic polynomial $\lambda^2-\lambda-1$ and eigenvalues
+    $\varphi=(1+\sqrt5)/2$ and $-\varphi^{-1}$. Hence
+    $d_\tau=\varphi$, the golden ratio, and $d_1=1$; the row vector
+    $(1,\varphi)$ satisfies (\ref{eq:mposym_dimension_relation}). The label
+    $\tau$ is not invertible: $\tau\times b$ contains $1$ only for
+    $b=\tau$, and $\tau\times\tau$ also contains $\tau$. The operators of
+    Section~\ref{sec:asymex_fibonacci} realize this rule at every length
+    (Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra}), and the quantum
+    dimensions entering their F-symbols are those of
+    Definition~\ref{def:asymex_fib_fsymbols}
+    \cite[Appendix~D.1]{Bultinck2017Anyons}.
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex, lines 1240--1244
+    %   (fusion rules, d_1 = 1, d_tau = phi).
+\end{example}
+
+\begin{example}[Ising fusion rule]%
+    \label{ex:mposym_ising_dimension}
+    \lean{IsingTwist.fusionMatrix_isingFusion_psi,
+        IsingTwist.fusionMatrix_isingFusion_sigma,
+        IsingTwist.charpoly_fusionMatrix_isingFusion_sigma,
+        IsingTwist.spectrum_fusionMatrix_isingFusion_sigma,
+        IsingTwist.isingFusion_dimension_relation,
+        IsingTwist.perronFrobeniusDim_isingFusion_sigma,
+        IsingTwist.perronFrobeniusDim_isingFusion_psi,
+        IsingTwist.perronFrobeniusDim_isingFusion_one,
+        IsingTwist.isInvertibleLabel_isingFusion_psi,
+        IsingTwist.not_isInvertibleLabel_isingFusion_sigma,
+        IsingTwist.mpo_isingBlock_sigma_mul_sub}
+    \leanok
+    \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
+        thm:asymex_ising_sigma_fusion, thm:asymex_ising_sigma_square,
+        ex:mpo_symmetry_ising}
+    The Ising labels are $1$, $\psi$ and $\sigma$, with unit $1$ and the
+    fusion rules of Section~\ref{sec:asymex_ising_tensors}, of which the only
+    non-invertible one is $\sigma\times\sigma=1+\psi$. In the order
+    $(1,\psi,\sigma)$ the fusion matrices are
+    \begin{align}
+        N_\psi   & =\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}, &
+        N_\sigma & =\begin{pmatrix}0&0&1\\0&0&1\\1&1&0\end{pmatrix}.
+        \label{eq:mposym_ising_matrices}
+    \end{align}
+    The label $\psi$ is invertible and $N_\psi$ is a permutation matrix, so
+    $d_\psi=1$. The eigenvalues of $N_\sigma$ are $0$ and $\pm\sqrt2$, so
+    $d_\sigma=\sqrt2$, and $(1,1,\sqrt2)$ satisfies
+    (\ref{eq:mposym_dimension_relation}). The operators of
+    Section~\ref{sec:asymex_ising_tensors} realize these rules at every length
+    (Theorems~\ref{thm:asymex_ising_sigma_fusion}
+    and~\ref{thm:asymex_ising_sigma_square}). The relation
+    $O_\sigma O_\psi=O_\sigma$ gives $O_\sigma(O_1-O_\psi)=0$, so $O_\sigma$
+    annihilates the range of $O_1-O_\psi$.
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex, lines 1306--1312
+    %   (fusion rules and d_sigma = sqrt 2); arXiv:1601.07185,
+    %   References/1601.07185/source/Ising-Defects.tex, lines 1051--1055.
+\end{example}
+
+\begin{remark}[Kramers--Wannier duality]%
+    \label{rem:mposym_kramers_wannier}
+    \uses{def:asymex_kw, cor:asymex_kw_square, lem:asymex_kw_sectors,
+        rem:mpoalg_kramers_wannier}
+    The Kramers--Wannier duality of the transverse-field Ising chain is a
+    matrix product operator of bond dimension two
+    (Definition~\ref{def:asymex_kw}). With the normalization
+    $\mathcal D_N=2^{-N/2}K_N$ of Section~\ref{sec:asymex_kw}, its square is
+    $\mathcal D_N^2=(\Id+\eta)T$, where $\eta$ is the global spin flip and $T$
+    the one-site translation (Corollary~\ref{cor:asymex_kw_square} and
+    (\ref{eq:asymex_kw_normalized_square})), and its kernel is the odd sector
+    of $\eta$ (Lemma~\ref{lem:asymex_kw_sectors}). Aasen, Mong and Fendley
+    keep the dual lattice distinct from the original one and obtain the Ising
+    fusion rule $\mathcal D_\sigma^2=1+\mathcal D_\psi$, with the spin flip
+    as $\mathcal D_\psi$ \cite{Aasen2016Topological}. On one periodic chain,
+    identifying the two lattices produces the translation $T$, so the duality
+    operator is not a member of a fusion algebra of operators on one chain.
+    It is an intertwiner between the Ising chain and its dual
+    \cite{Lootens2023Dualities}, as discussed in
+    Remark~\ref{rem:mpoalg_kramers_wannier}.
+    % Source anchor: arXiv:1601.07185, Ising-Defects.tex, lines 567 (duality
+    %   commutes with the transfer matrix but is not invertible) and
+    %   1040--1055 (D_sigma^4 = 2 D_sigma^2 and the fusion algebra);
+    %   arXiv:2112.09091, References/2112.09091/source/_Examples.tex,
+    %   lines 55--63 (the duality as a matrix product operator intertwiner);
+    %   arXiv:2011.12127, TN-Review-main.tex, line 1397.
+\end{remark}
+
+%% ---------------------------------------------------------
+\section{Symmetric matrix product states}%
+\label{sec:mposym_symmetric}
+
+A matrix product state is symmetric when each operator of the algebra maps
+its periodic vectors into their span with length-independent coefficients.
+For a single normal tensor the coefficients are eigenvalues; for several
+normal tensors they form matrices. The results of this section show that
+these coefficients are nonnegative integers compatible with the fusion rules,
+which already excludes symmetric normal states for the Fibonacci rule. The
+integrality rests on a property of normal tensors: a length-independent
+relation between word traces has nonnegative integer coefficients.
+
+\begin{definition}[Symmetric family of matrix product states]%
+    \label{def:mpo_symmetric_family}
+    \lean{MPOTensor.IsMPOSymmetricFamily,
+        MPOTensor.IsMPOSymmetric}
+    \leanok
+    \uses{def:mpo_fusion_algebra, def:mps_tensor}
+    A finite family $(A_x)_{x\in K}$ of matrix product state tensors is
+    \emph{symmetric} under $(T_a)_{a\in I}$ with coefficients
+    $M_{a,x}^y\in\C$ if, for all $a$, $x$ and $N\geq1$,
+    \begin{align}
+        O_a^{(N)}\ket{V^{(N)}(A_x)}
+         & =\sum_{y\in K}M_{a,x}^y\ket{V^{(N)}(A_y)}.
+        \label{eq:mpo_symmetric_family}
+    \end{align}
+    A single tensor $A$ is symmetric with eigenvalues $c_a$ if
+    $O_a^{(N)}\ket{V^{(N)}(A)}=c_a\ket{V^{(N)}(A)}$ for all $a$ and $N\geq1$.
+    The coefficients do not depend on $N$.
+    % Source anchor: arXiv:2203.12563, lines 567--568 (restated at line 1801).
+\end{definition}
+
+\begin{definition}[Fusion character and nonnegative integer representation]%
+    \label{def:fusion_character_nimrep}
+    \lean{MPOTensor.IsFusionCharacter,
+        MPOTensor.IsNIMRep}
+    \leanok
+    \uses{def:fusion_unit_invertible}
+    A \emph{fusion character} with unit $e$ is a function $m$ on labels with
+    $m_e=1$ and $m_am_b=\sum_cN_{ab}^cm_c$. A \emph{nonnegative integer
+        representation} on a finite set $K$ is a family of matrices
+    $M_{a,x}^y\in\N$ with
+    \begin{align}
+        \sum_cN_{ab}^cM_{c,x}^y
+         & =\sum_{z\in K}M_{b,x}^zM_{a,z}^y.
+        \label{eq:mpo_nimrep}
+    \end{align}
+    % Source anchor: arXiv:2203.12563, lines 564--565 (the relation for the
+    %   multiplicities); the fusion character is not used by the source.
+\end{definition}
+
+\begin{theorem}[Word-trace relations against a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_trace_integral}
+    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
+    \leanok
+    \uses{def:normal}
+    Let $B$ be a matrix product state tensor and $A$ a word-normal tensor
+    of positive bond dimension, over the same alphabet. If a scalar
+    $c\in\C$ satisfies $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word
+    $w$, then $c$ is a nonnegative integer.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Normality expresses a diagonal matrix unit as
+    $E_{jj}=\sum_ux_uA^u$, where all words $u$ have the same positive
+    length $\ell$. Define $Q=\sum_ux_uB^u$. Expanding powers and applying
+    the trace hypothesis to the concatenated words gives, for every
+    $k\geq1$,
+    \begin{align}
+        \tr(Q^k)
+         & =c\,\tr\left(\left(\sum_ux_uA^u\right)^k\right)
+        =c\,\tr(E_{jj}^k)=c.
+    \end{align}
+    A constant trace of all positive powers of a fixed finite-dimensional
+    matrix is a nonnegative integer. Indeed, the power sums of its
+    nonzero eigenvalues, counted with algebraic multiplicity, are
+    constant only when every nonzero eigenvalue is one. The constant
+    is their total multiplicity.
+\end{proof}
+
+\begin{theorem}[Rank-one actions on a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_integral_action}
+    \lean{MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul}
+    \leanok
+    \uses{thm:asymex_fib_anomaly_trace_integral, cor:asym_action_tensors}
+    Let $T$ be a matrix product operator tensor and $A$ a word-normal
+    matrix product state tensor of positive bond dimension, with the
+    same physical alphabet. Suppose there is a single scalar $c\in\C$
+    such that, for every $N\geq1$,
+    \begin{align}
+        O_N(T)\ket{V^{(N)}(A)}
+         & =c\ket{V^{(N)}(A)}.
+        \label{eq:asymex_fib_anomaly_scalar_action}
+    \end{align}
+    Then $c$ is a nonnegative integer.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Corollary~\ref{cor:asym_action_tensors} identifies the periodic
+    vector of $T\cdot A$ with $O_N(T)\ket{V^{(N)}(A)}$.
+    Taking components in~(\ref{eq:asymex_fib_anomaly_scalar_action}) gives,
+    for every nonempty word $w$,
+    \begin{align}
+        \tr((T\cdot A)^w) & =c\,\tr(A^w).
+        \notag
+    \end{align}
+    Apply Theorem~\ref{thm:asymex_fib_anomaly_trace_integral}.
+\end{proof}
+
+\begin{theorem}[Integrality of multi-block word-trace relations]%
+    \label{thm:mpoalg_multiblock_trace_integral}
+    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
+    \leanok
+    \uses{def:asym_word_module, def:normal}
+    Let $(A_y)_{y\in K}$ be normal tensors of positive bond dimension with
+    pairwise non-isomorphic word modules, let $B$ be a tensor on the same
+    physical alphabet, and let $c_y\in\C$ satisfy
+    $\tr(B^w)=\sum_yc_y\tr(A_y^w)$ for every nonempty word $w$. Then every
+    $c_y$ is a nonnegative integer.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:asym_word_module}
+    The word modules of the $A_y$ are simple and pairwise non-isomorphic, so
+    by density the words of one positive length $\ell$ act on
+    $\bigoplus_y\C^{D_y}$ as the full block-diagonal algebra. Fix $y_0$ and an
+    index $j$; there are coefficients $x_u$, over words $u$ of length $\ell$,
+    with
+    \begin{align}
+        \sum_ux_uA_{y_0}^u & =E_{jj},            &
+        \sum_ux_uA_y^u     & =0\quad(y\neq y_0).
+        \label{eq:mpoalg_trace_integral_unit}
+    \end{align}
+    Define $Q=\sum_ux_uB^u$. Expanding powers and applying the trace
+    relation to the concatenated nonempty words gives, for every $k\geq1$,
+    \begin{align}
+        \tr(Q^k)
+         & =\sum_yc_y\,\tr\left(\left(\sum_ux_uA_y^u\right)^k\right)
+        =c_{y_0}\,\tr(E_{jj}^k)=c_{y_0}.
+        \label{eq:mpoalg_trace_integral_powers}
+    \end{align}
+    A constant trace of all positive powers of a fixed finite-dimensional
+    matrix is a nonnegative integer: the power sums of its nonzero
+    eigenvalues, counted with algebraic multiplicity, are constant only when
+    every nonzero eigenvalue is one, and the constant is their total
+    multiplicity. This is the argument of
+    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} with several blocks.
+\end{proof}
+
+\begin{theorem}[The action coefficients form a nonnegative integer representation]%
+    \label{thm:mpo_symmetric_nimrep}
+    \lean{MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily,
+        MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily,
+        MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily}
+    \leanok
+    \uses{def:mpo_symmetric_family, def:fusion_character_nimrep, def:normal}
+    Let $(A_x)_{x\in K}$ be normal tensors of positive bond dimension whose
+    periodic vectors are linearly independent at some length $N_0\geq1$,
+    symmetric under a fusion algebra with coefficients $M_{a,x}^y$. Then
+    every $M_{a,x}^y$ is a nonnegative integer and (\ref{eq:mpo_nimrep})
+    holds. This is the integrality and associativity of the action
+    multiplicities in \cite[Section~3]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 460 and lines 564--565.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpoalg_multiblock_trace_integral}
+    Fix $a$ and $x$. The word traces of $T_a\cdot A_x$ are
+    $\sum_yM_{a,x}^y\tr(A_y^w)$ on nonempty words $w$. The word modules of
+    the $A_y$ are simple and pairwise non-isomorphic, since isomorphic word
+    modules have equal periodic vectors. An element of the augmentation ideal
+    of the word algebra acts on the block $y_0$ as a matrix unit and
+    annihilates the other blocks; its powers have constant trace
+    $M_{a,x}^{y_0}$ on $T_a\cdot A_x$, so $M_{a,x}^{y_0}$ is a nonnegative
+    integer (Theorem~\ref{thm:mpoalg_multiblock_trace_integral}). Applying
+    (\ref{eq:mpo_fusion_algebra}) and (\ref{eq:mpo_symmetric_family}) twice
+    to $O_a^{(N_0)}O_b^{(N_0)}\ket{V^{(N_0)}(A_x)}$ and comparing
+    coefficients of the independent vectors gives (\ref{eq:mpo_nimrep}).
+\end{proof}
+
+\begin{theorem}[A single symmetric normal tensor gives a fusion character]%
+    \label{thm:mpo_symmetric_character}
+    \lean{MPOTensor.exists_isFusionCharacter_of_isMPOSymmetric}
+    \leanok
+    \uses{def:mpo_symmetric_family, def:fusion_character_nimrep}
+    If a normal tensor of positive bond dimension is symmetric under a fusion
+    algebra with eigenvalues $c_a$ and $c_e=1$, then $c_a\in\N$ for every $a$
+    and $a\mapsto c_a$ is a fusion character.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_fib_anomaly_integral_action}
+    Each $c_a$ is a nonnegative integer by
+    Theorem~\ref{thm:asymex_fib_anomaly_integral_action}. Applying
+    (\ref{eq:mpo_fusion_algebra}) to the nonzero periodic vector at an
+    injective length gives $c_ac_b=\sum_cN_{ab}^cc_c$.
+\end{proof}
+
+\begin{corollary}[Rank-one obstruction]%
+    \label{cor:mpo_symmetric_no_go}
+    \lean{MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter}
+    \leanok
+    \uses{thm:mpo_symmetric_character}
+    If the structure constants admit no fusion character with values in
+    $\N$, no normal tensor of positive bond dimension is symmetric with
+    $c_e=1$. This obstruction sees only the fusion ring; the cohomological
+    obstruction of Theorem~\ref{thm:mpoalg_no_symmetric_normal}, which also
+    excludes group-like algebras with a nontrivial three-cocycle, is a
+    different statement.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_symmetric_character}
+    Theorem~\ref{thm:mpo_symmetric_character} produces a fusion character
+    with values in $\N$ from any such tensor.
+\end{proof}
+
+\begin{theorem}[Invertible labels]%
+    \label{thm:mpo_invertible_labels}
+    \lean{MPOTensor.IsFusionCharacter.eq_one_of_isInvertibleLabel,
+        MPOTensor.mpo_mulVec_eq_of_isInvertibleLabel,
+        MPOTensor.IsNIMRep.exists_eq_one_of_isInvertibleLabel,
+        MPOTensor.IsNIMRep.exists_equiv_of_isInvertibleLabel,
+        MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel}
+    \leanok
+    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetric_character,
+        def:fusion_unit_invertible}
+    A fusion character with values in $\N$ is $1$ on every invertible label,
+    so an invertible label fixes the periodic vectors of a single symmetric
+    normal tensor with $c_e=1$. For a family as in
+    Theorem~\ref{thm:mpo_symmetric_nimrep} on which $O_e^{(N)}$ fixes every
+    periodic vector, each invertible label $g$ permutes the blocks: there is a
+    bijection $x\mapsto g\cdot x$ of the block labels with
+    $O_g^{(N)}\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{g\cdot x})}$ for all
+    $N\geq1$. This is the permutation action of
+    \cite[Section~4]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 683.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetric_character}
+    From $m_am_b=m_e=1$ in $\N$ one gets $m_a=1$. For the family, the
+    multiplicity matrices satisfy $M_aM_b=M_bM_a=M_e=\Id$ with nonnegative
+    integer entries, so each row of $M_a$ is a standard basis vector, and the
+    two relations make the resulting map of blocks a bijection.
+\end{proof}
+
+\begin{example}[Fibonacci]%
+    \label{ex:mpo_symmetry_fibonacci}
+    \lean{FibonacciCompression.isFusionUnit_fibNim,
+        FibonacciCompression.isNIMRep_fibNim,
+        FibonacciCompression.not_isFusionCharacter_fibNim}
+    \leanok
+    \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
+        thm:asymex_fib_anomaly_nim_rep}
+    The Fibonacci operators of Section~\ref{sec:asymex_fibonacci} form a
+    fusion algebra with unit $1$ and $\tau\times\tau=1+\tau$; the two normal
+    states with $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$ form
+    a symmetric family whose action is the regular representation
+    \cite[Section~6]{GarreRubio2023MPOSym}. Since $m^2=1+m$ has no solution
+    in $\N$, no single normal tensor $A$ satisfies
+    $O_1^{(N)}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ and
+    $O_\tau^{(N)}\ket{V^{(N)}(A)}=c\ket{V^{(N)}(A)}$ for all $N\geq1$
+    (Theorem~\ref{thm:asymex_fib_anomaly_no_go}).
+    % Source anchor: arXiv:2203.12563, line 1993; arXiv:1511.08090, App. D.1.
+\end{example}
+
+\begin{definition}[The Ising fusion algebra data]%
+    \label{def:mpo_symmetry_ising_data}
+    \lean{IsingTwist.isingDim, IsingTwist.isingBlock, IsingTwist.isingFusion}
+    \leanok
+    \uses{def:asymex_ising_tensors}
+    Index the three simple objects of the Ising category by $0$, $1$ and
+    $2$, corresponding respectively to $1$, $\psi$ and $\sigma$. The blocks
+    are the matrix product operator tensors $A_1$, $A_\psi$ and
+    $\tfrac1{\sqrt2}A_\sigma$ of Definition~\ref{def:asymex_ising_tensors},
+    of bond dimensions $3$, $3$ and $4$; the factor $\tfrac1{\sqrt2}$ undoes
+    the scaling of $A_\sigma$ there. The structure constants $N_{ab}^c$ are
+    those of the Ising fusion ring: $N_{1b}^c=N_{b1}^c=\delta_{bc}$,
+    $\psi\times\psi=1$, $\psi\times\sigma=\sigma\times\psi=\sigma$ and
+    $\sigma\times\sigma=1+\psi$, that is, $N_{ab}^c=1$ exactly for these
+    products and $N_{ab}^c=0$ otherwise \cite{Bultinck2017Anyons}.
+    % Source anchor: arXiv:1511.08090, lines 1308--1312 and 1323.
+\end{definition}
+
+\begin{example}[Ising]%
+    \label{ex:mpo_symmetry_ising}
+    \lean{IsingTwist.isMPOFusionAlgebra_ising,
+        IsingTwist.isFusionUnit_isingFusion,
+        IsingTwist.not_isFusionCharacter_isingFusion,
+        IsingTwist.not_isMPOSymmetric_ising}
+    \leanok
+    \uses{def:mpo_symmetry_ising_data, cor:mpo_symmetric_no_go,
+        thm:asymex_ising_path_operators, cor:asymex_ising_sigma_fusion_unscaled,
+        thm:asymex_ising_sigma_square}
+    The blocks of Definition~\ref{def:mpo_symmetry_ising_data} form a fusion
+    algebra with unit $1$ and these structure constants
+    \cite{Bultinck2017Anyons}. A fusion character
+    in $\N$ would satisfy $m_\psi^2=1$, hence $m_\psi=1$, and then
+    $m_\sigma^2=1+m_\psi=2$, which has no solution in $\N$. So no normal
+    tensor of positive bond dimension is symmetric under the Ising algebra
+    with the unit acting trivially.
+    % Source anchor: arXiv:1511.08090, lines 1308--1312 and 1323.
+\end{example}
+
+\begin{example}[Anomalous cyclic group of order three]%
+    \label{ex:mpo_symmetry_z3}
+    \lean{Z3Anomalous.isMPOFusionAlgebra_z3Block,
+        Z3Anomalous.isInvertibleLabel_z3Fusion}
+    \leanok
+    \uses{def:fusion_unit_invertible}
+    The operators $1,U,U^\dagger$ of
+    Section~\ref{sec:asymex_z3anomalous} form a group-like fusion algebra in
+    which every label is invertible. The fusion ring does not see the
+    nontrivial three-cocycle of this representation; the obstruction to
+    invariant normal states comes from
+    Theorem~\ref{thm:mpoalg_no_symmetric_normal}.
+\end{example}
+
+\begin{remark}[Symmetric superpositions of several normal states]%
+    \label{rem:mposym_pf_symmetric_state}
+    \uses{thm:mpo_symmetric_nimrep, ex:mpo_symmetry_fibonacci,
+        def:mposym_pf_dimension}
+    The obstruction of Corollary~\ref{cor:mpo_symmetric_no_go} concerns a
+    single normal tensor. A superposition of the periodic vectors of several
+    normal tensors can still be an eigenvector of every operator. If positive
+    numbers $v_x$ satisfy $\sum_xv_xM_{a,x}^y=r_av_y$ for all $a$ and $y$,
+    with the coefficients $M_{a,x}^y$ of
+    Theorem~\ref{thm:mpo_symmetric_nimrep}, then
+    $\ket{\psi^{(N)}}=\sum_xv_x\ket{V^{(N)}(A_x)}$ satisfies
+    $O_a^{(N)}\ket{\psi^{(N)}}=r_a\ket{\psi^{(N)}}$; Garre-Rubio, Lootens
+    and Molnár show that such a $v$ exists when the algebra is that of a
+    fusion category \cite[Section~5]{GarreRubio2023MPOSym}. For the Fibonacci
+    family of Example~\ref{ex:mpo_symmetry_fibonacci}, $M_\tau=N_\tau$ and
+    $v=(1,\varphi)$, so
+    $\ket{V^{(N)}(A_1)}+\varphi\ket{V^{(N)}(A_\tau)}$ is an eigenvector of
+    $O_\tau^{(N)}$ with eigenvalue $d_\tau=\varphi$, which is not an integer.
+    % Source anchor: arXiv:2203.12563, lines 1795--1805 (common positive
+    %   eigenvector of the M_a, eigenvalue r_a, and r_a = d_a when
+    %   M_a = N_a) and line 1993 (the Fibonacci action).
+\end{remark}
+
+%% ---------------------------------------------------------
+\section{The zipper condition}%
+\label{sec:mposym_zipper}
+
+\begin{remark}[Zipper and pulling-through conditions]%
+    \label{rem:mposym_zipper}
+    \uses{def:mpdo_complete_zipper_fusion_family, rem:asym_zipper,
+        def:mpoalg_fusion_tensors, def:mpoalg_action_tensors,
+        thm:mpoalg_zipper_fusion_uniqueness}
+    The fusion rule (\ref{eq:mpo_fusion_algebra}) is an identity of periodic
+    operators. Its local form, the \emph{zipper condition}, asks for maps
+    $X_{ab,\mu}^c\colon\C^{\chi_c}\to\C^{\chi_a}\otimes\C^{\chi_b}$ and left
+    inverses $X_{ab,\mu}^{c+}$, for $\mu=1,\ldots,N_{ab}^c$, with
+    $X_{ab,\nu}^{d+}X_{ab,\mu}^c=\delta_{cd}\delta_{\mu\nu}\Id_{\chi_c}$ and
+    \begin{align}
+        (T_aT_b)^{ik}X_{ab,\mu}^c    & =X_{ab,\mu}^c\,T_c^{ik},
+        \notag                                                    \\
+        X_{ab,\mu}^{c+}(T_aT_b)^{ik} & =T_c^{ik}\,X_{ab,\mu}^{c+}
+        \label{eq:mposym_zipper}
+    \end{align}
+    for all physical indices $i,k$ \cite{Bultinck2017Anyons}. A fusion
+    tensor can then be slid through the product of two operators one site at
+    a time. If in addition the product is reconstructed on the span of the zipper
+    maps, $(T_aT_b)^{ik}=\sum_{c,\mu}X_{ab,\mu}^cT_c^{ik}X_{ab,\mu}^{c+}$,
+    as required in Definition~\ref{def:mpdo_complete_zipper_fusion_family},
+    then closing the chain gives (\ref{eq:mpo_fusion_algebra}) at every
+    length. Its pictorial form, in which an operator is pulled through
+    a region of a two-dimensional tensor network, is the
+    \emph{pulling-through} condition of topologically ordered projected
+    entangled pair states \cite{Bultinck2017Anyons,Cirac2021Matrix}. The
+    zipper identities appear as (\ref{eq:rfp_zipper_synthesis}) and
+    (\ref{eq:rfp_zipper_analysis}) in
+    Definition~\ref{def:mpdo_complete_zipper_fusion_family}.
+
+    The converse fails: equality of periodic operators does not imply a
+    sitewise intertwiner (Remark~\ref{rem:asym_zipper}), and the group
+    operators of the nontrivial three-cocycle of the group of order two
+    satisfy only one of the two identities
+    \cite[Section~6]{GarreRubio2023MPOSym}. Chapter~\ref{ch:mpo_algebras}
+    therefore obtains fusion and action tensors from equality of periodic
+    traces through reductions
+    (Definitions~\ref{def:mpoalg_fusion_tensors}
+    and~\ref{def:mpoalg_action_tensors}), and shows that fusion tensors
+    with vanishing remainder, the situation of the zipper condition, are
+    unique up to invertible multiplicity matrices
+    (Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}).
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex, lines 159--170
+    %   (fusion tensors and left inverses), 194--200 (the zipper condition),
+    %   407--419 (pulling through); arXiv:2011.12127, TN-Review-main.tex,
+    %   lines 1311--1330 (zipper and pulling-through equations);
+    %   arXiv:2203.12563, lines 2224--2243 (left zipper only for the Z_2
+    %   group operator of the nontrivial cocycle).
+\end{remark}

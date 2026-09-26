@@ -26,6 +26,8 @@ import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
+import TNLean.Algebra.ExpectationOverlap
+import TNLean.Algebra.ExponentialSumWindow
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinSumPermutation
@@ -44,6 +46,7 @@ import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
+import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
@@ -51,13 +54,16 @@ import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
+import TNLean.Algebra.MatrixTensorPower
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
+import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.OperatorSchmidt
+import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
@@ -72,6 +78,7 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.SemisimpleTracePowers
+import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerTransition
@@ -79,6 +86,7 @@ import TNLean.Algebra.StarClosedSemisimple
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SwapKronecker
 import TNLean.Algebra.SwapMatrix
+import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TwistedRegularRepresentation

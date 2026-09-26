@@ -12,8 +12,8 @@ import TNLean.Spectral.TransferOperatorGapNT
 
 Mixed-transfer decay and the invertibility of the limiting boundary Gram
 operators give a uniform bound on inner products of ground-space vectors.
-This is the identity-observable step of Nachtergaele,
-arXiv:cond-mat/9410110, proof of Lemma `disjoint`, equations `C1C2` and `limP12`.
+This follows Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma `disjoint`,
+equations `C1C2` and `limP12`.
 -/
 
 open scoped Matrix InnerProductSpace ComplexOrder

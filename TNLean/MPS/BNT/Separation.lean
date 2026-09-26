@@ -28,6 +28,13 @@ abbrev BlocksNotGaugePhaseEquiv {r : ℕ} {dim : Fin r → ℕ}
     ∀ h : dim j = dim k,
       ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)
 
+/-- Separation of a block family passes to the subfamily along an injective reindexing. -/
+theorem BlocksNotGaugePhaseEquiv.comp {r s : ℕ} {dim : Fin r → ℕ}
+    {A : (k : Fin r) → MPSTensor d (dim k)} (hA : BlocksNotGaugePhaseEquiv (d := d) A)
+    {f : Fin s → Fin r} (hf : Function.Injective f) :
+    BlocksNotGaugePhaseEquiv (d := d) (fun j => A (f j)) :=
+  fun j k hjk h => hA (f j) (f k) (hf.ne hjk) h
+
 /-- Block-permutation gauge-phase matching between two block families.
 
 Source: arXiv:1606.00608, Theorem `thm1`, statement lines 1167--1170 and proof

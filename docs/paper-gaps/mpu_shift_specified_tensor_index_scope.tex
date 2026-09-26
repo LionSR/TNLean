@@ -65,6 +65,43 @@ These calculations verify the numerical expression and its signs. They do not
 yet identify those values with the public blocking-independent MPU index
 asserted by the source.
 
+For the right and left shifts the choice of blocking is no longer a
+restriction. For every $k\ge0$, the right shift blocked over $k+1$ sites is
+simple and has source ranks
+\begin{align}
+    \label{eq:mpu_shift_specified_tensor_index_scope_blocked_ranks}
+    (r,\ell)=(d^{k+2},d^{k}),
+\end{align}
+the left shift has the reversed pair, and the blocked tensors for $U_2$ and
+$U_3$ have $r=\ell=d^{2k+2}$. The declarations
+\leanid{MPOTensor.sourceIndexValue_blockTensor_rightShiftTensor},
+\leanid{MPOTensor.sourceIndexValue_blockTensor_leftShiftTensor},
+\leanid{MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₂}, and
+\leanid{MPOTensor.sourceIndexValue_blockTensor_shiftExampleU₃} give the values
+$\log_2 d$, $-\log_2 d$, $0$, and $0$ at every such blocking. The left shift
+blocked over $k+1$ sites is also simple. The tensor product of two simple
+tensors is simple (\leanid{MPOTensor.IsMPUSimple.tensorProduct}; this is the
+step behind ``The case of tensoring is trivial'' in the proof of Theorem
+IndexTh (ii), line 837), so $U_2$, $U_3$ and all their blockings over
+$k+1$ sites are simple as well
+(\leanid{MPOTensor.blockTensor_shiftExampleU₂_isMPUSimple},
+\leanid{MPOTensor.blockTensor_shiftExampleU₃_isMPUSimple}). All four values are
+therefore values at simple blockings.
+What remains is the step from these displayed tensors to an arbitrary tensor
+generating the same operators, which needs the canonical form of the shift and
+its uniqueness.
+
+The review states that the shift cannot be approximated by a short-range time
+evolution~\cite{Cirac2021Matrix}, citing the source. Unequal
+source ranks alone do not give this: after blocking, every MPU, the shift
+included, is a depth-two circuit of nearest-neighbour unitaries in its standard
+form (Definition SF, lines 605--622, and the appendix, line 2308). The
+statement that the shift is not a finite-depth circuit of local gates needs
+three further results, none of which is formalized: additivity of the index
+under composition, Theorem IndexTh (ii), lines 824--847; index zero for a
+single layer of nearest-neighbour gates; and the robustness and equivalence
+parts (iii)--(iv) of the same theorem.
+
 \section{Elimination plan}
 
 The public index construction is tracked by \ghissue{7011}. It must choose a

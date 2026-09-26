@@ -30,6 +30,9 @@ every prescribed rate above the rho-weighted spectral radius of the transfer rem
 The source's eigenvalue prescription is established in
 `FNWTransferEigenvalueRate`: every positive rate above the moduli of the nonunit
 observable-transfer eigenvalues also exceeds the weighted remainder spectral radius.
+This follows because every nonzero eigenvalue of the remainder is a nonunit transfer
+eigenvalue; the precise implication is
+`MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues`.
 Thus the fixed-length theorem below applies at every such prescribed rate once its
 mixing-quantity hypothesis is supplied.
 
