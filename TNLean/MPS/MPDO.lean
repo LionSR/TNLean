@@ -18,6 +18,7 @@ import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
+import TNLean.MPS.MPDO.AreaLawScaling
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalPhysicalMaps
@@ -93,6 +94,7 @@ import TNLean.MPS.MPDO.CPSVExample412FourCycleEntropy
 import TNLean.MPS.MPDO.CPSVExample412Literal
 import TNLean.MPS.MPDO.CPSVExample412NormalizedGSNNCH
 import TNLean.MPS.MPDO.CPSVExample412NormalizedRFP
+import TNLean.MPS.MPDO.CPSVExample412NormalizedSummary
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
