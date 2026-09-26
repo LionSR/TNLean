@@ -81,51 +81,102 @@ injective.
 
 \begin{lemma}[Convergence of the positive part]
     \label{lem:ldp_positive_part_converges}
-    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor}
+    \lean{MPSTensor.tendsto_polarPosTensor_blockTensor_of_isNormal,
+        MPSTensor.tendsto_polarPosTensor_of_tendsto_transferMap,
+        MPSTensor.tendsto_polarPos_physicalMatrix_of_tendsto_transferMap}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor,
+        thm:prep_fixed_point_tensor_psd, thm:prep_transfer_fixed_point_tensor,
+        thm:prep_blocked_transfer_limit_normal}
     Let $P_q=(\mathcal B_q^\dagger\mathcal B_q)^{1/2}$. Then $P_q\to P_\infty$ as
     $q\to\infty$, where $P_\infty$ is read as the map
-    $\ket{\alpha,\beta}\mapsto\sum_\gamma(\sqrt\rho)_{\alpha\gamma}\ket{\gamma,\beta}$.
+    $\ket{\alpha,\beta}\mapsto\sum_\gamma(\sqrt\rho)_{\alpha\gamma}\ket{\gamma,\beta}$,
+    that is, $P_\infty=(\sqrt\rho)^{\mathsf T}\otimes\Id$.
     This is the limit in \cite[eq.~(8)]{Malz2024Preparation}.
+    More generally, for any tensors $B_q$ whose transfer maps satisfy
+    $\E_{B_q}(X)\to\Tr(X)\,\rho$ for every $X$, with $\rho\ge0$, the positive
+    parts of the physical matrices of $B_q$ converge to
+    $(\sqrt\rho)^{\mathsf T}\otimes\Id$, and the corresponding tensors
+    converge to $P_\infty$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The matrix of $\mathcal B_q^\dagger\mathcal B_q$ is a rearrangement of
-    $\E_A^{\,q}$, which converges to $X\mapsto\Tr(X)\rho$; the rearrangement of
-    the limit is $\rho^{\mathsf T}\otimes\Id$, and the square root is continuous
-    on positive semidefinite matrices.
+    $\E_A^{\,q}$:
+    $(\mathcal B_q^\dagger\mathcal B_q)_{(\alpha,\beta),(\alpha',\beta')}
+        =\E_A^{\,q}(\ketbra{\beta'}{\beta})_{\alpha'\alpha}$.
+    By normality and the gauge~(\ref{eq:ldp_normal_gauge}),
+    $\E_A^{\,q}(X)\to\Tr(X)\rho$, so the rearranged matrices converge to
+    $\rho^{\mathsf T}\otimes\Id$. The square root of
+    $\rho^{\mathsf T}\otimes\Id$ is $(\sqrt\rho)^{\mathsf T}\otimes\Id$,
+    since the latter is positive semidefinite and squares to the former, and
+    the square root is continuous on positive semidefinite matrices.
 \end{proof}
 
 \begin{definition}[Approximating state]
     \label{def:ldp_approximating_state}
-    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor}
+    \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
+        MPSTensor.mpv_approximatingTensor_norm_sq}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, def:prep_fixed_point_tensor,
+        thm:prep_mpv_fixed_point_tensor, lem:mpv_rotate_physical,
+        thm:ldpolar_tensor_injective, thm:prep_pair_product_norm}
     With $V$ from Theorem~\ref{thm:ldpolar_tensor_decomposition} and $N=qM$, the
     \emph{approximating state} is
     $\ket{\widetilde\phi_N}=\ket{\phi_M(VP_\infty)}/\lVert\phi_M(VP_\infty)\rVert$.
     By Lemma~\ref{lem:mpv_rotate_physical} and
-    Theorem~\ref{thm:prep_mpv_fixed_point_tensor},
+    Theorem~\ref{thm:prep_mpv_fixed_point_tensor}, for $M\ge1$,
     $\ket{\phi_M(VP_\infty)}=V^{\otimes M}\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
+    When $\mathcal B_q$ is injective, $V$ is an isometry and
+    $\lVert\phi_M(VP_\infty)\rVert=1$, so no normalization is needed.
     This is \cite[eqs.~(9) and~(10)]{Malz2024Preparation}.
 \end{definition}
 
 \begin{lemma}[A unitary implementing the isometry]
     \label{lem:ldp_unitary_implementing_isometry}
-    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_unitary_extension}
-    Let $d\ge2$, put $r=\lceil\log_dD\rceil$, and suppose $q\ge2r$ and
-    $\mathcal B_q$ is injective. Write
-    $(\C^d)^{\otimes q}=L\otimes C\otimes R$, where $L$ and $R$ are the first
-    and the last $r$ sites of the block and $C$ is the remaining $q-2r$ sites,
-    embed $\C^D$ into $L$ and into $R$ as the span of the first $D$
-    computational basis vectors, and let $\ket{0}_C=\ket{0}^{\otimes(q-2r)}$.
-    Then there is a unitary $U$ on $(\C^d)^{\otimes q}$ with
-    $U\bigl(\ket{\gamma}_L\ket{0}_C\ket{\delta}_R\bigr)=V\ket{\gamma,\delta}$
-    for all $\gamma,\delta$, and
+    \lean{Matrix.exists_mem_unitaryGroup_apply_embedding_eq,
+        MPSTensor.embeddedPairState,
+        MPSTensor.mpv_approximatingTensor_eq_sum_embeddedPairState,
+        MPSTensor.exists_unitary_mpv_approximatingTensor}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_tensor_injective,
+        def:ldp_approximating_state, def:prep_pair_product_state}
+    Suppose $\mathcal B_q$ is injective, and let $\iota$ be an injective map
+    from the pairs $(\gamma,\delta)$ with $0\le\gamma,\delta<D$ to the
+    computational basis of $(\C^d)^{\otimes q}$. Then there is a unitary $U$
+    on $(\C^d)^{\otimes q}$ with $U\ket{\iota(\gamma,\delta)}=V\ket{\gamma,\delta}$
+    for all $\gamma,\delta$, and for every $M\ge1$
     \begin{align}
         \ket{\widetilde\phi_N}
          & =\Bigl(\bigotimes_{k=1}^M U_k\Bigr)
-        \bigotimes_{k=1}^M\bigl(\ket{\omega}_{R_kL_{k+1}}\ket{0}_{C_k}\bigr).
+        \sum_{c}\Omega(c)\bigotimes_{k=1}^M\ket{\iota(c_k)},
         \label{eq:ldp_unitary_preparation}
     \end{align}
+    where $c$ runs over the configurations $c_k=(l_k,r_k)$ and $\Omega$ is the
+    pair product state~(\ref{eq:prep_pair_product}). The source takes $D=d$,
+    so that $L$ and $R$ below are single sites and the remaining $\ell$ central
+    sites carry $\ket{0}$; the padding of the legs for general $D$ is this
+    chapter's extension. With $d\ge2$, $r=\lceil\log_dD\rceil$, $q\ge2r$, and $(\C^d)^{\otimes q}=L\otimes C\otimes R$,
+    where $L$ and $R$ are the first and the last $r$ sites of the block and
+    $C$ is the remaining $q-2r$ sites; $\C^D$ is embedded into $L$ and into
+    $R$ as the span of the first $D$ computational basis vectors, and
+    $\iota(\gamma,\delta)=\ket{\gamma}_L\ket{0}_C\ket{\delta}_R$ with
+    $\ket{0}_C=\ket{0}^{\otimes(q-2r)}$. The right-hand side
+    of~(\ref{eq:ldp_unitary_preparation}) is then
+    $\bigl(\bigotimes_kU_k\bigr)\bigotimes_k\bigl(\ket{\omega}_{R_kL_{k+1}}\ket{0}_{C_k}\bigr)$.
     This is \cite[eqs.~(10) and~(11)]{Malz2024Preparation}.
 \end{lemma}
+\begin{proof}
+    \leanok
+    Since $V$ is an isometry, its columns $V\ket{\gamma,\delta}$ are
+    orthonormal. Place them at the positions $\iota(\gamma,\delta)$ and extend
+    them to an orthonormal basis of $(\C^d)^{\otimes q}$; the matrix with these
+    columns is the unitary $U$. Expanding
+    $\bigl(\bigotimes_kU_k\bigr)\sum_c\Omega(c)\bigotimes_k\ket{\iota(c_k)}$
+    gives $\sum_c\Omega(c)\bigotimes_kV\ket{c_k}
+        =V^{\otimes M}\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$, which is
+    $\ket{\widetilde\phi_N}$ by Definition~\ref{def:ldp_approximating_state}.
+\end{proof}
 %% The source draws the circuit with D = d, where L and R are
 %% single sites. For general D the legs are padded to r = ceil(log_d D)
 %% sites each; the pair state then acts on 2r neighbouring sites.

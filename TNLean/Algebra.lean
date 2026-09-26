@@ -46,6 +46,7 @@ import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
+import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.ListOfFn
