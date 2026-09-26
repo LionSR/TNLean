@@ -1,0 +1,94 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Anomaly Class of the Two-Qubit $\mathbb{Z}_2\times\mathbb{Z}_2$
+Tensors: Detector Values}
+\author{}
+\date{2026-09-26}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The target statement}
+
+Ref.~\cite{GarreRubio2023MPOSym}, subsection ``MPO algebras representing
+$\mathbb{Z}_2\times\mathbb{Z}_2$'', states that
+$H^3(\mathbb{Z}_2\times\mathbb{Z}_2,U(1))\cong\mathbb{Z}_2^3$ and lists
+representatives of the classes. Its mixed type-II representative takes the
+value $-1$ on the triples $(g_1g_2^i,g_1^jg_2,g_1^kg_2)$ with
+$i,j,k\in\{0,1\}$ and $1$ elsewhere, where $g_1,g_2$ are the two generators.
+Equivalently, $\omega(a,b,c)=(-1)^{a_1b_2c_2}$ in the coordinates
+$a=(a_1,a_2)$. The source says that the values
+$\omega_g=\omega(g,g,g)$ in a normalized gauge, at the three elements of
+order two, distinguish the classes. Its table assigns
+$(\omega_a,\omega_b,\omega_{ab})=(+1,+1,-1)$ to the type-II class. The
+periodic-boundary construction of the same reference represents a finite
+group exactly by matrix product operators built from a three-cocycle. The
+anomaly three-cocycle of an exact representation by normal tensors is
+defined from its fusion tensors in Ref.~\cite{FrancoRubio2025MPUGauging}, in
+the display preceding the three-cocycle equation. Its cohomology class does
+not depend on the choice of fusion tensors. Neither source prints the
+two-qubit tensors used here.
+
+\section{The formalized statement}
+
+The two-qubit tensors $M_e,M_x,M_y,M_{xy}$ of the condensation-defect
+example are a construction of this development. Their periodic operators
+satisfy $U_gU_h=\lambda(g,h)^LU_{gh}$ on a ring of $L$ sites, with
+$\lambda(g,h)=(-1)^{g_1h_2}$, so they form only a projective family. They
+equal the operators of the construction for the type-II cocycle followed by
+the on-site operator $Z_2^{g_1}$, the Pauli $Z$ on the second qubit of each
+site. Multiplying the letter of $M_g$ with input label $i$ by $(-1)^{g_1i_2}$
+removes this factor. The resulting tensors $M'_g$ have the bond dimensions
+of $M_g$, and their periodic operators are exactly those of the
+construction, so they form an exact representation of
+$\mathbb{Z}_2\times\mathbb{Z}_2$. Their doubled-index tensors are normal,
+since the letters differ from those of $M_g$ by signs.
+
+For this exact representation the formalization proves, for every choice of
+fusion tensors and every $g$, that
+$\omega(g,e,g)\,\omega(g,g,g)$ equals the same product for
+$(-1)^{a_1b_2c_2}$: it is $+1$ at $(1,0)$ and $(0,1)$ and $-1$ at $(1,1)$.
+This product is invariant under the gauge action of the fusion tensors
+because $g^2=e$, and in a normalized gauge it is $\omega(g,g,g)$. So these
+are the values $(+1,+1,-1)$ of the table. In particular the anomaly class of
+the full group is nontrivial.\footnote{Formal declarations:
+\leanid{Z2Z2Condensation.kleinFamily\_isNormalRepresentation} in
+\doclink{TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Exact},
+and \leanid{Z2Z2Condensation.cyclicInvariant\_omega\_kleinFamily} and
+\leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_kleinFamily} in
+\doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.}
+The values are computed on the three subgroups of order two, by restricting
+the family and its fusion tensors along the three embeddings of
+$\mathbb{Z}_2$. The undressed projective family is given no anomaly class,
+and the sources give it none.
+
+\section{Missing piece and elimination plan}
+
+The formalization identifies the three detector values with those of the
+type-II cocycle. It does not identify the classes. The missing step is the
+algebraic statement of the source that the detector values separate the
+eight classes of $H^3(\mathbb{Z}_2\times\mathbb{Z}_2,\mathbb{C}^\times)$:
+two three-cocycles of $\mathbb{Z}_2\times\mathbb{Z}_2$ with the same values
+of $\omega(g,e,g)\,\omega(g,g,g)$ at the three elements of order two are
+cohomologous. With that lemma, the formalized equality of detector values
+gives that the anomaly three-cocycle is cohomologous to
+$(-1)^{a_1b_2c_2}$ for every choice of fusion tensors. The lemma needs a
+normalization of three-cocycles by coboundaries and square roots in
+$\mathbb{C}^\times$. It is independent of the tensors.
+
+\textbf{Verdict: open scope restriction.} The formalized results are correct
+for the full group. They state the detector values of the table for the
+exact dressed representation, and the equality of classes awaits the
+separation lemma.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
