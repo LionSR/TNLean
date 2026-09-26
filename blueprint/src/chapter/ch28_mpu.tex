@@ -11817,6 +11817,94 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     and columns of $U^{(N)}$.
 \end{definition}
 
+\begin{definition}[Residual words on an anchored interval]
+    \label{def:mpu_anchored_residual_configurations}
+    \lean{SpinChain.nextBlockPrefix,
+        SpinChain.anchoredResidualConfig,
+        SpinChain.anchoredResidualConfigEquiv,
+        SpinChain.anchoredResidualConfigEquiv_apply}
+    \leanok
+    \uses{def:mpu_finite_chain_realization, def:mpdo_physical_blocking}
+    Fix a positive block length $L$ and an integer anchor $a$. The number
+    of sites from $a$ to the next globally aligned block boundary is
+    $q(a,L)=(-a)\bmod L$. If an interval of length $N$ has the decomposition
+    $N=p+mL+s$, its configuration may be specified by a prefix word of
+    length $p$, a word of $m$ blocked letters, and a suffix word of length
+    $s$. Their ordered concatenation defines a configuration on
+    $I_{a,N}$, including when $m=0$. This concatenation is a bijection
+    from triples of such words to configurations on the interval.
+\end{definition}
+
+\begin{theorem}[Decomposition of an arbitrary anchored interval]
+    \label{thm:mpu_anchored_residual_decomposition}
+    \lean{SpinChain.nextBlockPrefix_lt,
+        SpinChain.nextBlockPrefix_aligned,
+        SpinChain.exists_anchored_interval_decomposition,
+        SpinChain.finiteChainConfigEquiv_apply_site,
+        SpinChain.finiteChainRegion_sort,
+        SpinChain.finiteChainSiteEquiv_val,
+        SpinChain.anchoredResidualConfig_apply_site,
+        SpinChain.middle_index_lt,
+        SpinChain.aligned_middle_site_coord}
+    \leanok
+    \uses{def:mpu_anchored_residual_configurations,
+        def:mpu_finite_chain_realization}
+    For every $a\in\mathbb Z$, $N\in\mathbb N$, and $L>0$, there are
+    $p,m,s\in\mathbb N$ such that
+    \begin{align}
+        p,s & <L, & N & =p+mL+s.
+    \end{align}
+    If $m>0$, then $a+p$ is divisible by $L$; the site at residue $r$ of
+    the $t$th complete middle block has integer coordinate
+    $a+p+tL+r$. If $N<q(a,L)$, then $p=N$ and $m=s=0$. The anchored
+    configuration reads the prefix, middle blocks, and suffix in exactly
+    this increasing site order.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_anchored_residual_configurations,
+        def:mpu_finite_chain_realization}
+    Set $p=\min(N,q(a,L))$ and divide $N-p$ by $L$, taking its quotient as
+    $m$ and its remainder as $s$. Euclidean division gives $s<L$ and the
+    length identity. If $m>0$, then $p=q(a,L)$ and $a+p$ is aligned.
+    The order-preserving site identification sends position $k$ to $a+k$;
+    applying it at $k=p+tL+r$ gives the middle-block coordinate. When
+    $N<q(a,L)$, one has $p=N$ and both other lengths vanish.
+\end{proof}
+
+\begin{theorem}[Finite-chain MPO entries with residual sites]
+    \label{thm:mpu_anchored_residual_mpo_entry}
+    \lean{SpinChain.finiteChainMPOMatrix_apply_config,
+        SpinChain.finiteChainMPOMatrix_apply_anchoredResidualConfig,
+        SpinChain.finiteChainMPOMatrix_anchoredResidualTrace,
+        SpinChain.anchoredResidualWordTrace,
+        SpinChain.finiteChainMPOMatrix_anchoredResidualConfigEquiv}
+    \leanok
+    \uses{def:mpu_anchored_residual_configurations,
+        def:mpu_finite_chain_realization, def:mpo_eval_word}
+    Let $U$ be any MPO tensor and let $N=p+mL+s$. For two anchored
+    configurations with residual prefix words $i^-,j^-$, blocked middle
+    words $\sigma,\tau$, and residual suffix words $i^+,j^+$, the entry
+    of the finite-chain matrix is
+    \begin{align}
+        (U_a^{(N)})_{i^-\widehat\sigma i^+,\,
+                j^-\widehat\tau j^+}
+         & =\operatorname{tr}\!\left(
+        U^{i^-,j^-}(U^{[L]})^{\sigma,\tau}U^{i^+,j^+}\right).
+    \end{align}
+    This holds at every integer anchor and for arbitrary $L,p,m,s$,
+    including an empty middle word. Neither unitarity nor divisibility
+    of $N$ by $L$ is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_physical_blocking_residuals,
+        def:mpu_finite_chain_realization}
+    Undo the increasing reindexing of the finite-chain MPO matrix. The
+    resulting periodic MPO entry is the trace of the prefix, blocked
+    middle, and suffix products by residual-site blocking.
+\end{proof}
+
 \begin{definition}[Finite-chain MPU conjugation]
     \label{def:mpu_finite_chain_conjugation}
     \lean{SpinChain.finiteChainMPUUnitary,
@@ -11839,6 +11927,49 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     Simultaneous reindexing preserves both unitarity equations for $U^{(N)}$.
     Conjugation by the resulting unitary preserves multiplication, the unit,
     complex scalars, and the adjoint.
+\end{proof}
+
+\begin{theorem}[Conjugation coefficients in residual-word coordinates]
+    \label{thm:mpu_anchored_residual_conjugation_entry}
+    \lean{SpinChain.finiteChainConjugation_localInclusion_apply_entry,
+        SpinChain.finiteChainConjugation_localInclusion_anchoredResidualTrace}
+    \leanok
+    \uses{def:mpu_anchored_residual_configurations,
+        thm:mpu_anchored_residual_mpo_entry,
+        def:mpu_finite_chain_conjugation, def:qca_local_inclusion}
+    Let $U$ be an MPU, $N=p+mL+s>1$, and $A\in\mathcal A_\Lambda$
+    for $\Lambda\subseteq I_{a,N}$. Write $\widehat x$ for the anchored
+    configuration represented by a triple $x=(x^-,x^0,x^+)$ of residual
+    prefix, complete-block, and residual suffix words, and put
+    \begin{align}
+        T(x,y) & =\operatorname{tr}\!\left(
+        U^{x^-,y^-}(U^{[L]})^{x^0,y^0}U^{x^+,y^+}\right).
+    \end{align}
+    For all such triples $x,y$, the matrix coefficient of finite-chain
+    conjugation is
+    \begin{align}
+        \bigl(U_a^{(N)}\iota_{\Lambda,I_{a,N}}(A)
+        U_a^{(N)\dagger}\bigr)_{\widehat x,\widehat y}
+         & =\sum_{z,w} T(x,z)A_{\widehat z|_\Lambda,\widehat w|_\Lambda}
+        \notag                                                           \\
+         & \qquad\cdot
+        \delta_{\widehat z|_{I_{a,N}\setminus\Lambda},
+            \widehat w|_{I_{a,N}\setminus\Lambda}}
+        \overline{T(y,w)}.
+    \end{align}
+    Both MPO factors retain their residual prefix and suffix products.
+    This finite-chain identity does not assert independence of the
+    interval or support of the conjugated observable.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_anchored_residual_mpo_entry,
+        def:mpu_finite_chain_conjugation, def:qca_local_inclusion}
+    Expand conjugation as a double sum over intermediate configurations.
+    The local inclusion contributes the matrix entry of $A$ on $\Lambda$
+    and the equality condition on its complement. Reindex both sums by
+    the residual-word bijection and apply the finite-chain residual-trace
+    identity to each MPO coefficient.
 \end{proof}
 
 \begin{definition}[Finite-chain term on a local observable]
