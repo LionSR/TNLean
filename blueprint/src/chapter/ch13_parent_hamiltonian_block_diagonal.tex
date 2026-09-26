@@ -1030,9 +1030,13 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     matrix algebra. There are normalized primitive representatives
     $B^0,\ldots,B^{r-1}$, with positive definite fixed points, whose word tuples
     still span the full product algebra at length $S$.
-    Each component ground space is unchanged at every length. The spans of
-    the periodic component vectors are likewise unchanged at every chain
-    length. For any nonzero weights $\mu_j$, the periodic parent Hamiltonians
+    For every $0\leq j<r$, every length $L$, and every chain length $N$,
+    \begin{align}
+        G_L(A^j) & =G_L(B^j),\notag                                      \\
+        \operatorname{span}\{V^{(N)}(A^k):0\leq k<r\}
+                 & =\operatorname{span}\{V^{(N)}(B^k):0\leq k<r\}.\notag
+    \end{align}
+    For any nonzero weights $\mu_j$, the periodic parent Hamiltonians
     of $\bigoplus_j\mu_j A^j$ and $\bigoplus_j\mu_j B^j$ are equal at every
     interaction range and chain length.
 \end{theorem}
@@ -1041,12 +1045,17 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         thm:normalized_primitive_gauge, thm:block_sum_local_ground_space}
     Projection of the simultaneous span onto each matrix summand proves
     injectivity of every block at length $S$. Each block is therefore normal
-    and admits a primitive representative obtained by a nonzero rescaling
-    and an invertible virtual conjugation. Both operations preserve the
-    simultaneous word span at the specified length. They preserve every
-    component ground space and multiply each periodic component vector by
-    a nonzero scalar. Taking sums of the component ground spaces proves
-    equality of the assembled parent Hamiltonians.
+    and admits a primitive representative obtained by a rescaling by some
+    $\zeta_j\neq0$ and an invertible virtual conjugation. Both operations
+    preserve the simultaneous word span at the specified length. They
+    preserve every component ground space, and the periodic component
+    vectors satisfy
+    \begin{align}
+        V^{(N)}(B^j) & =\zeta_j^{\,N}\,V^{(N)}(A^j).\notag
+    \end{align}
+    Since $\zeta_j^{\,N}\neq0$, the two spans agree. Taking sums of the
+    component ground spaces proves equality of the assembled parent
+    Hamiltonians.
 \end{proof}
 
 \begin{theorem}[Periodic ground space at simultaneous block injectivity]
