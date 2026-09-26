@@ -1,0 +1,128 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Unbroken Subgroup Is the Stabilizer of a Block}
+\author{}
+\date{2026-09-27}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+Let a finite group $G$ act by matrix product unitaries with three-cocycle
+$\omega$ on the set $\mathcal I$ of blocks $x$ of a symmetry-broken ground space,
+and assume, as both sources do, that the action on $\mathcal I$ is transitive.
+The two sources define the unbroken subgroup $H$ differently, and only one of
+the definitions supports the classification of phases by pairs $(H,\alpha)$
+with $\alpha\in\mathcal H^2(H,U(1))$.
+
+\section{The two definitions}
+
+Garre-Rubio and Schuch define $H$ as the set of $h\in G$ with $h\cdot x=x$ for
+every $x\in\mathcal I$, and state that the ground-state degeneracy is
+$|G/H|$~\cite{GarreRubioSchuch2024DomainWall}.\footnote{Source traceability:
+\path{Papers/2405.00439/MPU-DW.tex}, line 1880 and lines 2013--2036.} This
+is the kernel
+\begin{align}
+    K=\bigcap_{x\in\mathcal I}\operatorname{Stab}(x)
+    \label{eq:gs24_kernel}
+\end{align}
+of the action on blocks. Garre-Rubio, Lootens and Moln\'ar, whose
+classification the first paper reviews, define $H$ as the subgroup of elements
+that do not permute one chosen block $x_0$, that is, the stabilizer
+$\operatorname{Stab}(x_0)$, and state that the number of blocks is
+$|G/H|$~\cite{GarreRubio2023MPOSym}.\footnote{Source traceability:
+\path{Papers/2203.12563/REsubmission.tex}, lines 734--761; the stabilizer is
+defined at line 736, the two-cocycle $\psi_{x_0}$ at lines 748--749, and the
+reconstruction of the L-symbols from $(H,\psi)$ at lines 755--760.}
+
+For a transitive action $\operatorname{Stab}(g\cdot x_0)=g\operatorname{Stab}(x_0)g^{-1}$,
+so $K$ is the normal core of $\operatorname{Stab}(x_0)$, the largest normal
+subgroup of $G$ contained in it. The two definitions agree exactly when
+$\operatorname{Stab}(x_0)$ is normal in $G$. This holds for every abelian $G$,
+and therefore for every example printed in either source.
+
+\section{Which definition the classification needs}
+
+The classification needs the stabilizer, for three reasons.
+
+\begin{enumerate}
+    \item \emph{Counting blocks.} By the orbit--stabilizer theorem
+          $|\mathcal I|=|G/\operatorname{Stab}(x_0)|$, while
+          $|G/K|\geq|\mathcal I|$ with equality only when the stabilizer is
+          normal. The degeneracy $|G/H|$ asserted at line 1880 of the first
+          source holds for the stabilizer.
+    \item \emph{Trivializing the cocycle.} The coupled pentagon equation
+          $L^x_{h,k}L^x_{g,hk}=\omega(g,h,k)L^{k\cdot x}_{g,h}L^x_{gh,k}$,
+          restricted to $g,h,k$ in a subgroup fixing the single block $x$,
+          is the statement that $\omega$ restricted to that subgroup is a
+          coboundary with potential $L^x$. Fixing one block suffices, so the
+          argument gives the stronger conclusion for the larger subgroup
+          $\operatorname{Stab}(x_0)\supseteq K$.
+    \item \emph{Reconstruction.} The two-cocycle $\psi_{x_0}$ is defined on
+          the stabilizer, and the L-symbols are rebuilt from $(H,\psi)$
+          through a choice of coset representatives $k_y$ with
+          $y=k_y\cdot x_0$ and the unique factorization $gk_x=k_yh$ with
+          $h\in H$. This factorization is the coset decomposition of $G$ by
+          $\operatorname{Stab}(x_0)$; with $K$ in its place the
+          representatives do not correspond to blocks. The pairs $(H,\psi)$,
+          with $H$ determined up to conjugacy, are the data classifying the
+          indecomposable module categories of $\mathrm{Vec}_G^\omega$.
+\end{enumerate}
+
+The domain-wall discussion of the first source also uses the stabilizer
+reading for normal $H$: when $\operatorname{Stab}(x_0)$ is normal, every
+block has the same stabilizer, so $g\notin H$ implies $g\cdot x\neq x$ for
+every block $x$, as assumed at line 2013 of that source.
+
+\section{A non-normal example}
+
+Let $G=S_3$ act on $\mathcal I=\{1,2,3\}$ by permutations, realized by the
+on-site permutation representation of $S_3$ on $\mathbb C^3$ acting on the
+three product states $|x\rangle^{\otimes N}$; the three-cocycle is trivial.
+The action is transitive, and
+\begin{align}
+    \operatorname{Stab}(3) & =\{e,(12)\}, &
+    K                      & =\{e\}.
+    \label{eq:gs24_s3_subgroups}
+\end{align}
+The stabilizer has order two and is not normal, since
+$(13)(12)(13)=(23)\notin\operatorname{Stab}(3)$. The stabilizer reading
+gives three blocks, $|S_3/\operatorname{Stab}(3)|=3$, which is correct; the
+kernel reading gives $|S_3/K|=6$. The transposition $(12)\notin K$ fixes the
+block $3$, so a group element outside the kernel may still act on some block
+as an unbroken symmetry.
+
+\section{The formal statement}
+
+The formal theorem that a subgroup fixing a block trivializes the
+restricted three-cocycle takes an arbitrary homomorphism $f:H\to G$ and one
+block $x$ with $f(a)\cdot x=x$ for all $a\in H$, that is, the stabilizer
+reading.\footnote{Formal declaration:
+\leanid{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
+in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks}.} It applies in
+particular to the kernel, which fixes every block.
+
+\textbf{Verdict: resolved local correction.} In the classification of
+arXiv:2405.00439, the unbroken subgroup $H$ is read as the stabilizer of one
+block, as in arXiv:2203.12563; the printed definition as the kernel of the
+action agrees with it whenever the stabilizer is normal, in particular for
+every abelian group.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
