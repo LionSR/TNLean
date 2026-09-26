@@ -573,7 +573,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     algebra at every length $n\ge L_0$. For $L_0+1\le L\le N$, the
     open-chain parent Hamiltonian with interaction range $L$ satisfies
     \begin{align}
-        \ker H^{\mathrm{open}}_{B,L,N}=G_N(B)=\sum_jG_N(A^j).
+        \ker H^{\mathrm{open}}_{N,L}(B)=G_N(B)=\sum_jG_N(A^j).
         \notag
     \end{align}
 \end{theorem}
@@ -590,14 +590,14 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     By Definition~\ref{def:open_parent_hamiltonian_es}, the Hamiltonian is a
     sum of orthogonal projectors,
     \begin{align}
-        H^{\mathrm{open}}_{B,L,N} & =\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(B,L),
-        \notag                                                                  \\
-        h_{i,\mathrm{ES}}(B,L)    & \ge0.
+        H^{\mathrm{open}}_{N,L}(B) & =\sum_{i\in I_{L,N}}h_{i,\mathrm{ES}}(B,L),
+        \notag                                                                   \\
+        h_{i,\mathrm{ES}}(B,L)     & \ge0.
         \notag
     \end{align}
     Hence, by Theorem~\ref{thm:open_parent_hamiltonian_zero_local_terms},
     \begin{align}
-        \ker H^{\mathrm{open}}_{B,L,N}
+        \ker H^{\mathrm{open}}_{N,L}(B)
         =\bigcap_{i\in I_{L,N}}\ker h_{i,\mathrm{ES}}(B,L),
         \notag
     \end{align}
@@ -609,7 +609,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     constraints one site at a time
     (Lemma~\ref{lem:open_chain_iteration_subspace_sequence}), giving
     membership in $G_N(B)$. Conversely,
-    $G_N(B)\subseteq\ker H^{\mathrm{open}}_{B,L,N}$ by
+    $G_N(B)\subseteq\ker H^{\mathrm{open}}_{N,L}(B)$ by
     Theorem~\ref{thm:open_ground_space_le_hamiltonian_kernel}. Nonzero
     block weights identify $G_N(B)$ with the sum of the block spaces
     (Theorem~\ref{thm:block_sum_local_ground_space}).
@@ -692,6 +692,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_primitive_blocks_word_span}
     \lean{MPSTensor.exists_eventually_wordTupleSpanTop_of_isPrimitiveMPS}
     \leanok
+    \uses{def:primitive_mps, def:gauge_phase_equiv}
     Let $A^0,\ldots,A^{r-1}$ be trace-preserving primitive tensors with
     positive bond dimensions and positive definite invariant matrices.
     Suppose that no two distinct blocks are related by conjugation and a
@@ -739,13 +740,14 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_primitive_blocks_open_kernel}
     \lean{MPSTensor.exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS}
     \leanok
+    \uses{def:primitive_mps, def:gauge_phase_equiv}
     Let $d>0$ and $B=\bigoplus_j\mu_jA^j$, with nonzero coefficients $\mu_j$.
     Suppose that the blocks have positive bond dimensions, are trace-preserving
     and primitive with positive definite invariant matrices, and are pairwise
     inequivalent under conjugation and a nonzero scalar.
     There is $L_0>0$ such that for every $L_0\le L\le N$,
     \begin{align}
-        \ker H^{\mathrm{open}}_{B,L,N}=G_N(B).
+        \ker H^{\mathrm{open}}_{N,L}(B)=G_N(B).
         \notag
     \end{align}
 \end{theorem}
@@ -906,7 +908,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_primitive_blocks_sharp_open_kernel}
     \lean{MPSTensor.ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound}
     \leanok
-    Let $d>0$, $r\ge2$, and $B=\bigoplus_{j=1}^r\mu_jA^j$, with all
+    Let $d>0$, $r\ge2$, and $B=\bigoplus_{j=0}^{r-1}\mu_jA^j$, with all
     coefficients nonzero. Suppose that the blocks have positive bond
     dimensions, are trace-preserving and primitive with positive definite
     invariant matrices, and are pairwise inequivalent under conjugation
@@ -924,11 +926,13 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_tp_word_span_propagation,
+    \uses{lem:bnt_direct_sum_block_separation_word_span,
+        thm:ph_tp_word_span_propagation,
         thm:ph_tp_block_open_ground_space}
     The simultaneous-span estimate of
-    \cite[Lemma~10]{PerezGarcia2007Matrix} gives the full product matrix
-    algebra at length $3(r-1)(L_0+1)$. Trace-preserving propagation keeps
+    Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, the direct-sum
+    lemma of \cite[lines~1346--1408]{PerezGarcia2007Matrix}, gives the full
+    product matrix algebra at length $3(r-1)(L_0+1)$. Trace-preserving propagation keeps
     the span full at every larger length. The block intersection theorem
     therefore gives the kernel identity at the stated interaction range.
 \end{proof}
