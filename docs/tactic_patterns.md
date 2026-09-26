@@ -24,6 +24,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### common positive simple blocking of two or three MPUs — promoted
+- **Pattern:** choose a positive simple blocking for each MPU, add the chosen
+  lengths, and use persistence of simplicity at every later direct blocking.
+- **Seen:** three occurrences across three developments (2026-09-26):
+  `IsMPUCanonicalFormII.index_eq_of_mpo_eq` in `RepresentativeIndex.lean`
+  (two tensors), `IsMPUCanonicalFormII.index_tensorProduct` in
+  `TensorProductIndex.lean` (three tensors), and
+  `IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor` in
+  `CompositionIndex.lean` (three tensors).
+- **Abstraction:** `MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple`
+  and `MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple_three` in
+  `TNLean/MPS/MPU/SimpleBlocking.lean`.
+- **Notes:** the two- and three-tensor forms allow different physical and bond
+  dimensions without an indexed-family abstraction. All three known call
+  sites are refactored on their respective dependent branches: representative
+  index at `008464fc4`, tensor-product index at `86217104a`, and composition
+  index at `4a9bbc2f5`. No fourth copy is introduced.
+
 ### every list is a `List.ofFn` — promoted
 - **Pattern:**
   ```lean
@@ -2057,22 +2075,6 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
-
-### common positive simple blocking of two or three MPUs — candidate for refactor
-- **Pattern:** choose a positive simple blocking for each MPU, add the chosen
-  lengths, and use persistence of simplicity at every later direct blocking.
-- **Seen:** three occurrences across three developments (2026-09-26):
-  `IsMPUCanonicalFormII.index_eq_of_mpo_eq` in `RepresentativeIndex.lean`
-  (two tensors), `IsMPUCanonicalFormII.index_tensorProduct` in
-  `TensorProductIndex.lean` (three tensors), and the composition-index proof
-  in progress (three tensors).
-- **Abstraction:** `MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple`
-  and `MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple_three` in
-  `TNLean/MPS/MPU/SimpleBlocking.lean`.
-- **Notes:** the two- and three-tensor forms allow different physical and bond
-  dimensions without an indexed-family abstraction. Once the dependent
-  developments import the helper, replace all three repeated arguments and
-  move this entry to Promoted.
 
 ### Decomposing membership in a finite sum of subspaces — candidate
 - **Pattern:** obtain vectors in the individual subspaces from membership in
