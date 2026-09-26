@@ -731,7 +731,9 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   under the convention and have now been removed; the other 12
   restrict a physical block, a physical-adjoint, transposed, or conjugate
   comparison tensor, a tensor product, or a composition, whose preservation
-  or reduction arguments are separate. The 3 had been cited by
+  or reduction arguments are separate. Positive blocking, physical adjunction,
+  and independent tensor products now preserve the predicate, but their
+  downstream entries have not been consolidated. The 3 had been cited by
   11 retained nodes (7 pointwise plus the path nodes
   `prop:mpu_admissible_continuity_index`, `thm:mpu_admissible_index`,
   `cor:mpu_admissible_continuous_standard_form`, and
@@ -769,14 +771,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   under the relevant operation or transport through a reduced representative.
   In a preservation theorem, all four clauses (`isMPU`, `cfii`,
   `fullSupport_eq`, and the positive diagonal trace-one `ρ` with `ρ_fixed`)
-  must hold for the derived tensor. Physical adjunction already has such a
-  constructor; blocking and tensor products have the component results
-  (`IsMPU.blockTensor`, `blockTensorCFIIData`,
-  `hasFullSupport_blockTensor`, `transferMap_blockTensor`;
-  `IsMPU.tensorProduct`, `tensorProductCFIIData`,
-  `hasFullSupport_tensorProductCFIIData`,
-  `transferMap_tensorProduct_kronecker`) and only the assembled statement is
-  missing; transposition and conjugation exist only as the composite. For
+  must hold for the derived tensor. The constructors
+  `IsMPUCanonicalFormII.blockTensor`,
+  `IsMPUCanonicalFormII.physicalAdjointTensor`, and
+  `IsMPUCanonicalFormII.tensorProduct` now cover positive blocking, physical
+  adjunction, and independent products. Transposition and conjugation exist
+  only as the composite. For
   composition only `IsMPU.mulTensor` is available: `TNLean/MPS/MPU/` has no
   canonical-form-II construction for `mulTensor` and no transfer-map identity
   for it, only the entrywise `normalizedFlattening_mulTensor_apply`. Supplying
@@ -974,7 +974,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   without an extra normality or one-block hypothesis.
 
 ## D16. Ring-homomorphism transport of exact-arithmetic example tensors written four times  —  duplication, impact 7/10, effort 5/10
-- **Status**: open ([#7846](https://github.com/LionSR/TNLean/issues/7846); 2026-09-19 architectural survey)
+- **Status**: mostly resolved (golden and Eisenstein heads converted); open ([#7846](https://github.com/LionSR/TNLean/issues/7846); 2026-09-19 architectural survey)
 - **Evidence**: `MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean`, `MPS/Examples/Rings/{Zsqrt2Ring,GoldenRing,EisensteinRing}.lean`
   each define `complexOfR X := X.map f` for a ring homomorphism `f : R →+* ℂ`
   and re-prove the same 8–14-lemma ladder (`_mul`, `_one`, `_zero`, `_add`,
@@ -1002,6 +1002,17 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   rename their ≈90 call sites, redirect `thm:asymex_explicit_gauge` and
   `thm:asymex_zsqrt2_ring`, root build, checkdecls; golden and Eisenstein after
   #7838 and #7833 land.
+- **Progress (2026-09-25, PR #8098, Lean −71 lines)**: the integer and `ℤ√2` heads were
+  converted earlier; the golden and Eisenstein heads are now same-name `abbrev`s of
+  `complexOfRing`, with word evaluation, the gauge-inverse identity
+  `complexOfRing_mul_eq_one` and the scaled matrix-unit normality certificate
+  generic in `Reduction/RingEmbedding.lean` and `Algebra/ComplexOfRing.lean`.
+  The per-ring word evaluation, bond product and action of the Eisenstein ring
+  and the golden action are deleted in favour of `evalWordR`, `mulTensorR`
+  and `actTensorR`. Remaining: the three compression constructors
+  (`ofGolden`, `ofEisenstein`, `ofConjInt`), excluded above as distinct
+  designs, and the Kramers--Wannier call sites. Audit:
+  `docs/audits/2026-09-25_ring_embedding_transport_second_slice.md`.
 
 ## D17. Three MPDO carriers restate the twelve vertical-decomposition fields instead of extending one  —  duplication, impact 5/10, effort 4/10
 - **Status**: open ([#7847](https://github.com/LionSR/TNLean/issues/7847); 2026-09-19 architectural survey)
