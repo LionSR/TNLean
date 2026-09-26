@@ -60,14 +60,11 @@ theorem IsMPUCanonicalFormII.index_eq_of_mpo_eq
     (hU : IsMPUCanonicalFormII U) (hV : IsMPUCanonicalFormII V)
     (hEq : ∀ N : ℕ, 1 < N → mpo U N = mpo V N) :
     hU.index = hV.index := by
-  obtain ⟨p, hp, _, hSU, _⟩ := hU.exists_sourceV_blockTensor_isIsometry
-  obtain ⟨q, hq, _, hSV, _⟩ := hV.exists_sourceV_blockTensor_isIsometry
-  let k := p + q
-  have hk : 0 < k := by dsimp [k]; omega
-  have hSU' : IsMPUSimple (MPOTensor.blockTensor U k) :=
-    hU.isMPU.blockTensor_isMPUSimple_of_le hp (by dsimp [k]; omega) hSU
-  have hSV' : IsMPUSimple (MPOTensor.blockTensor V k) :=
-    hV.isMPU.blockTensor_isMPUSimple_of_le hq (by dsimp [k]; omega) hSV
+  let : NeZero d := hU.neZero_phys
+  let : NeZero D₁ := hU.neZero_bond
+  let : NeZero D₂ := hV.neZero_bond
+  obtain ⟨k, hk, hSU', hSV'⟩ :=
+    hU.isMPU.exists_common_blockTensor_isMPUSimple hV.isMPU
   have hEqBlock : ∀ N : ℕ, 1 < N →
       mpo (MPOTensor.blockTensor U k) N =
         mpo (MPOTensor.blockTensor V k) N := by
