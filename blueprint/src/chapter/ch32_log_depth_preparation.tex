@@ -638,11 +638,83 @@ $1/\gamma$ in the block length here
     disjoint sets.
 \end{proof}
 
+\begin{lemma}[Unitaries on a bounded number of sites]
+    \label{lem:ldp_bounded_unitary_two_site_gates}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPairProduct,
+        MPSPreparation.isTwoLevelWord_of_det_eq_one,
+        MPSPreparation.exists_isPairProduct_ctrlOp,
+        MPSPreparation.isPairProduct_embedOp_pairSites}
+    \leanok
+    For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
+    $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
+    two neighbouring sites of the open chain of $n$ sites. This is the step
+    that the unitaries with constant support ``can be further expressed with
+    a low-depth circuit of local gates''
+    \cite[caption of Fig.~1]{Malz2024Preparation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Dividing by an $n$-th root of the determinant, which is a single-site phase,
+    reduces to determinant one. Column-by-column Givens elimination writes such
+    a unitary as a product of two-level operators, each a real rotation or a
+    diagonal phase on the span of two basis vectors. A two-level operator
+    between configurations differing at several sites is conjugated, by a
+    two-level quarter turn, to one between configurations differing at one
+    site fewer. Between configurations differing at one site it is a
+    single-site operation controlled by the other sites. Every rotation and
+    every phase of determinant one is a group commutator $g_1g_2g_1^\dagger
+    g_2^\dagger$, and a controlled commutator is a product of two operations
+    with one control fewer and two operations on two sites; induction removes
+    the controls. An operation on two distant sites is conjugated to
+    neighbouring sites by SWAP gates.
+\end{proof}
+
+\begin{theorem}[The approximating state in depth $O(q)$]
+    \label{thm:ldp_approximating_state_depth}
+    \uses{def:ldp_local_circuit, def:ldp_approximating_state,
+        lem:ldp_unitary_implementing_isometry,
+        thm:ldp_sequential_factorization,
+        lem:ldp_bounded_unitary_two_site_gates}
+    \lean{MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
+        MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
+        MPSPreparation.IsCircuitOn.finset_noncommProd}
+    \leanok
+    Let $d\ge2$ and $D\ge1$. There are $C$ and $q_0$, depending only on $d$
+    and $D$, such that the following holds. Let $A$ be a tensor, let
+    $\sigma\ge0$ with $\Tr\sigma=1$, let $q\ge q_0$ be a block length for
+    which the $q$-site blocked tensor is injective, and let $M\ge1$. Then the
+    approximating state of Definition~\ref{def:ldp_approximating_state} on
+    $N=Mq$ sites is prepared in depth at most $Cq$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Encode the two bond indices of a block in its first and last $D$ sites,
+    and write $\ket{l,0,r}$ for the block with $l$ on the first $D$ sites, $r$
+    on the last $D$ sites, and $\ket0$ elsewhere. A first layer of unitaries,
+    one on the last $D$ sites of each block and the first $D$ sites of the
+    next, sends $\ket{0\cdots0}$ to
+    $\bigotimes_k\ket\omega_{R_kL_{k+1}}\ket0_{C_k}$
+    \cite[eq.~(12)]{Malz2024Preparation}; by
+    Lemma~\ref{lem:ldp_bounded_unitary_two_site_gates} it has constant depth.
+    On each block, in parallel, a unitary $U$ with $U\ket{l,0,r}=V\ket{l,r}$
+    is applied, as in Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
+    gates move the first $D$ sites next to the last ones in $O(q)$ gates.
+    By Theorem~\ref{thm:ldp_sequential_factorization}, $V$ is the ordered
+    product of $q$ isometries, each from the bond space into the bond space
+    and one site; each is extended to a unitary on the bond register and one
+    fresh site, and the register moves one site to the left at each step, so
+    the staircase consists of $q$ unitaries on $2D+1$ sites
+    \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
+    of them has bounded depth by
+    Lemma~\ref{lem:ldp_bounded_unitary_two_site_gates}, and circuits on
+    disjoint blocks run in the same layers.
+\end{proof}
+
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
-    \uses{def:ldp_local_circuit, lem:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization, thm:ldp_tree_factorization,
-        thm:ldp_approximation_error_normal}
+    \uses{def:ldp_local_circuit, thm:ldp_approximating_state_depth,
+        thm:ldp_tree_factorization, thm:ldp_approximation_error_normal}
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
     for every $N\ge2$ and $0<\varepsilon\le1$, a state $\ket{\psi_N}$ with
     $\varepsilon(\psi_N,\phi_N)\le\varepsilon$ is prepared in depth at most

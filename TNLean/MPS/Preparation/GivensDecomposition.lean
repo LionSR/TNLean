@@ -239,4 +239,205 @@ theorem exists_twoLevel_elim (x y : ℂ) :
         = ((‖x‖ * ‖y‖ / r : ℝ) : ℂ) * (star ν * q - ν * p) := by push_cast; ring
       _ = 0 := by rw [hω, sub_self, mul_zero]
 
+/-! ### Column elimination -/
+
+/-- The rows of `twoLevel a b g * Y`. -/
+theorem twoLevel_mul_apply {a b : ι} (hab : a ≠ b) (g : Matrix (Fin 2) (Fin 2) ℂ)
+    (Y : Matrix ι ι ℂ) (x y : ι) :
+    (twoLevel a b g * Y) x y =
+      if x = a then g 0 0 * Y a y + g 0 1 * Y b y
+      else if x = b then g 1 0 * Y a y + g 1 1 * Y b y else Y x y := by
+  have h := twoLevel_mulVec_apply hab g (fun i => Y i y) x
+  rw [← h]
+  rfl
+
+theorem twoLevel_list_prod {a b : ι} (hab : a ≠ b) (l : List (Matrix (Fin 2) (Fin 2) ℂ)) :
+    twoLevel a b l.prod = (l.map (twoLevel a b)).prod := by
+  induction l with
+  | nil => simp
+  | cons g l ih => rw [List.prod_cons, ← twoLevel_mul hab, ih, List.map_cons, List.prod_cons]
+
+theorem isTwoLevelWord_twoLevel_list_prod {a b : ι} (hab : a ≠ b)
+    (l : List (Matrix (Fin 2) (Fin 2) ℂ)) (hl : ∀ g ∈ l, IsSpecialTwo g) :
+    IsTwoLevelWord l.length (twoLevel a b l.prod) := by
+  refine ⟨l.map fun g => (a, b, g), by simp, fun p hp => ?_, ?_⟩
+  · obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hp
+    exact ⟨hab, hl g hg⟩
+  · rw [twoLevel_list_prod hab, List.map_map]
+    rfl
+
+/-- **Eliminating a column below its diagonal entry.** For a basis vector `a` and a set `R`
+of other basis vectors there is a product `W` of at most `2 |R|` two-level rotations and
+phases on the pairs `{a, b}`, `b ∈ R`, with `(W X)_{c a} = 0` for every `c ∈ R`. -/
+theorem exists_isTwoLevelWord_elim (a : ι) (X : Matrix ι ι ℂ) :
+    ∀ R : Finset ι, a ∉ R → ∃ W : Matrix ι ι ℂ, IsTwoLevelWord (2 * R.card) W ∧
+      FixesOutside (insert a R) W ∧ ∀ c ∈ R, (W * X) c a = 0 := by
+  intro R
+  induction R using Finset.induction_on with
+  | empty =>
+    intro _
+    refine ⟨1, IsTwoLevelWord.one _, fun x y _ => one_apply x y, by simp⟩
+  | insert b R hbR ih =>
+    intro ha
+    have hab : a ≠ b := fun h => ha (h ▸ Finset.mem_insert_self a R)
+    have haR : a ∉ R := fun h => ha (Finset.mem_insert_of_mem h)
+    obtain ⟨W, hW, hWfix, hWX⟩ := ih haR
+    obtain ⟨l, hl, hlg, hel⟩ := exists_twoLevel_elim ((W * X) a a) ((W * X) b a)
+    refine ⟨twoLevel a b l.prod * W, ?_, ?_, ?_⟩
+    · rw [Finset.card_insert_of_notMem hbR]
+      exact ((isTwoLevelWord_twoLevel_list_prod hab l hlg).mul hW).mono (by omega)
+    · refine FixesOutside.mul ((fixesOutside_twoLevel a b _).mono ?_) (hWfix.mono ?_)
+      · intro x hx
+        simp only [Finset.mem_insert, Finset.mem_singleton] at hx
+        rcases hx with rfl | rfl <;> simp
+      · intro x hx
+        simp only [Finset.mem_insert] at hx ⊢
+        tauto
+    · intro c hc
+      rw [Matrix.mul_assoc, twoLevel_mul_apply hab]
+      rcases Finset.mem_insert.mp hc with rfl | hc
+      · rw [if_neg (Ne.symm hab), if_pos rfl]
+        exact hel
+      · have hca : c ≠ a := fun h => haR (h ▸ hc)
+        have hcb : c ≠ b := fun h => hbR (h ▸ hc)
+        rw [if_neg hca, if_neg hcb]
+        exact hWX c hc
+
+theorem mem_unitary_iff_conjTranspose {X : Matrix ι ι ℂ} :
+    X ∈ unitary (Matrix ι ι ℂ) ↔ Xᴴ * X = 1 ∧ X * Xᴴ = 1 := by
+  rw [Unitary.mem_iff]; rfl
+
+/-- **Givens decomposition.** A unitary `X` with `det X = 1` acting as the identity outside a
+set `T` of basis vectors is a product of at most `3 |T|²` two-level rotations and phases on
+pairs of elements of `T`. -/
+theorem isTwoLevelWord_of_fixesOutside :
+    ∀ T : Finset ι, ∀ X : Matrix ι ι ℂ, X ∈ unitary (Matrix ι ι ℂ) → X.det = 1 →
+      FixesOutside T X → IsTwoLevelWord (3 * T.card * T.card) X := by
+  intro T
+  induction T using Finset.induction_on with
+  | empty =>
+    intro X _ _ hX
+    rw [fixesOutside_empty hX]
+    exact IsTwoLevelWord.one _
+  | insert a T haT ih =>
+    intro X hXu hXdet hXfix
+    obtain ⟨W, hW, hWfix, hWX⟩ := exists_isTwoLevelWord_elim a X T haT
+    set Y := W * X with hY
+    have hWu := hW.mem_unitary
+    have hYu : Y ∈ unitary (Matrix ι ι ℂ) := Submonoid.mul_mem _ hWu hXu
+    have hYdet : Y.det = 1 := by rw [hY, det_mul, hW.det_eq_one, hXdet, one_mul]
+    have hYfix : FixesOutside (insert a T) Y := hWfix.mul hXfix
+    -- the column `a` of `Y` is `λ |a⟩`
+    have hcol : ∀ c, c ≠ a → Y c a = 0 := by
+      intro c hca
+      by_cases hc : c ∈ T
+      · exact hWX c hc
+      · rw [hYfix c a (Or.inl (by simp [hca, hc])), if_neg hca]
+    set lam := Y a a with hlam
+    have hYu' := mem_unitary_iff_conjTranspose.mp hYu
+    have hlam1 : star lam * lam = 1 := by
+      have h := congrFun (congrFun hYu'.1 a) a
+      rw [mul_apply, one_apply_eq, Finset.sum_eq_single a] at h
+      · simpa [conjTranspose_apply] using h
+      · intro c _ hca; simp [conjTranspose_apply, hcol c hca]
+      · simp
+    have hrow : ∀ c, c ≠ a → Y a c = 0 := by
+      intro c hca
+      have h := congrFun (congrFun hYu'.1 a) c
+      rw [mul_apply, one_apply_ne (Ne.symm hca), Finset.sum_eq_single a] at h
+      · simp only [conjTranspose_apply] at h
+        have : star lam * (star lam * lam) * Y a c = 0 := by
+          rw [mul_assoc, ← hlam, h, mul_zero]
+        rwa [hlam1, mul_one, mul_eq_zero, star_eq_zero, or_iff_right] at this
+        intro h0
+        rw [h0, star_zero, zero_mul] at hlam1
+        exact zero_ne_one hlam1
+      · intro k _ hka; simp [conjTranspose_apply, hcol k hka]
+      · simp
+    have hlamn : ‖lam‖ = 1 := by
+      have h : (‖lam‖ : ℂ) ^ 2 = 1 := by
+        rw [← Complex.conj_mul', ← hlam1]; rfl
+      exact_mod_cast (pow_eq_one_iff_of_nonneg (norm_nonneg lam) two_ne_zero).mp
+        (by exact_mod_cast h)
+    have hXW : X = Wᴴ * Y := by
+      rw [hY, ← Matrix.mul_assoc, (mem_unitary_iff_conjTranspose.mp hWu).1, Matrix.one_mul]
+    rcases T.eq_empty_or_nonempty with rfl | ⟨b, hb⟩
+    · -- `Y` is the identity
+      have hY1 : Y = 1 := by
+        have hdiag : Y = diagonal fun x => if x = a then lam else 1 := by
+          ext x y
+          rw [diagonal_apply]
+          by_cases hxy : x = y
+          · subst hxy
+            by_cases hxa : x = a
+            · subst hxa; simp [hlam]
+            · rw [hYfix x x (Or.inl (by simp [hxa])), if_pos rfl, if_pos rfl, if_neg hxa]
+          · rw [if_neg hxy]
+            by_cases hxa : x = a
+            · subst hxa; exact hrow y (Ne.symm hxy)
+            · rw [hYfix x y (Or.inl (by simp [hxa])), if_neg hxy]
+        have hl : lam = 1 := by
+          rw [← hYdet, hdiag, det_diagonal, Finset.prod_eq_single a]
+          · simp
+          · intro x _ hxa; rw [if_neg hxa]
+          · simp
+        rw [hdiag, hl]
+        simp
+      rw [hXW, hY1, Matrix.mul_one]
+      exact hW.conjTranspose.mono (by simp)
+    · have hab : a ≠ b := fun h => haT (h ▸ hb)
+      set G := twoLevel a b (diagTwo (star lam)) with hG
+      have hGspec : IsSpecialTwo (diagTwo (star lam)) := Or.inr ⟨star lam, by simpa using hlamn, rfl⟩
+      have hGu : G ∈ unitary (Matrix ι ι ℂ) := twoLevel_mem_unitary hab hGspec.mem_unitary
+      set Z := G * Y with hZ
+      have hZu : Z ∈ unitary (Matrix ι ι ℂ) := Submonoid.mul_mem _ hGu hYu
+      have hZdet : Z.det = 1 := by
+        rw [hZ, det_mul, det_twoLevel hab, hGspec.det_eq_one, hYdet, one_mul]
+      have hZfix : FixesOutside T Z := by
+        intro x y hxy
+        rw [hZ, twoLevel_mul_apply hab]
+        simp only [diagTwo, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons,
+          empty_val', cons_val_fin_one, head_fin_const, zero_mul, add_zero, zero_add]
+        by_cases hxa : x = a
+        · subst hxa
+          rw [if_pos rfl]
+          by_cases hya : y = x
+          · subst hya; rw [if_pos rfl, ← hlam, mul_comm]; exact hlam1
+          · rw [hrow y hya, mul_zero, if_neg (Ne.symm hya)]
+        · rw [if_neg hxa]
+          by_cases hxb : x = b
+          · subst hxb
+            rw [if_pos rfl]
+            by_cases hya : y = a
+            · subst hya; rw [hcol x hxa, mul_zero, if_neg hxa]
+            · rcases hxy with hx | hy
+              · exact absurd hb hx
+              · rw [hYfix x y (Or.inr (by simp [hya, hy])), if_neg (fun h => hy (h ▸ hb))]
+                simp
+          · rw [if_neg hxb]
+            rcases hxy with hx | hy
+            · exact hYfix x y (Or.inl (by simp [hxa, hx]))
+            · by_cases hya : y = a
+              · subst hya; rw [hcol x hxa, if_neg hxa]
+              · exact hYfix x y (Or.inr (by simp [hya, hy]))
+      have hZw := ih Z hZu hZdet hZfix
+      have hYZ : Y = twoLevel a b (diagTwo lam) * Z := by
+        have hGG : twoLevel a b (diagTwo lam) * G = 1 := by
+          rw [hG, twoLevel_mul hab]
+          have : diagTwo lam * diagTwo (star lam) = 1 := by
+            ext i j; fin_cases i <;> fin_cases j <;>
+              simp [diagTwo, mul_apply, Fin.sum_univ_two, ← hlam, hlam1, mul_comm lam]
+          rw [this, twoLevel_one]
+        rw [hZ, ← Matrix.mul_assoc, hGG, Matrix.one_mul]
+      rw [hXW, hYZ, ← Matrix.mul_assoc, Finset.card_insert_of_notMem haT]
+      have hlamspec : IsSpecialTwo (diagTwo lam) := Or.inr ⟨lam, hlamn, rfl⟩
+      refine ((hW.conjTranspose.mul (IsTwoLevelWord.single hab hlamspec)).mul hZw).mono ?_
+      nlinarith
+
+/-- **Givens decomposition of a special unitary.** Every unitary `X` on `ℂ^ι` with
+`det X = 1` is a product of at most `3 (card ι)²` two-level rotations and phases. -/
+theorem isTwoLevelWord_of_det_eq_one {X : Matrix ι ι ℂ} (hX : X ∈ unitary (Matrix ι ι ℂ))
+    (hdet : X.det = 1) : IsTwoLevelWord (3 * Fintype.card ι * Fintype.card ι) X :=
+  isTwoLevelWord_of_fixesOutside Finset.univ X hX hdet fun x y h => by simp at h
+
 end MPSPreparation
