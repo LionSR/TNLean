@@ -2109,6 +2109,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Scalar-valued norms and equal ambient lengths
+
+When a linear map acts on a Hilbert space indexed by an arithmetic expression,
+rewriting an equality of lengths inside the map can introduce dependent casts.
+First express the entire operator norm as a scalar-valued function of the
+ambient length and interval endpoints. A `change` then exposes ordinary natural
+number arguments, and `rw` transports the scalar expression without transporting
+the underlying Hilbert space explicitly.
+
+Example: `GroupedProjectorEstimate.lean`, in
+`grouped_martingaleDifference_norm_le_of_projector_defect`, uses
+`F N a b : ℝ` for the norm of a suffix projection composed with a difference of
+prefix projections. This permits the active-volume identity and spectator bound
+to be combined using ordinary arithmetic equalities. Candidate helper pattern;
+currently one occurrence, so no general declaration is warranted.
+
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
   projector by the norm of its adjoint, reverse the product, and reverse the
