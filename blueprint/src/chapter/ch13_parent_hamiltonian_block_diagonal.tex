@@ -887,7 +887,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \begin{proof}
     \leanok
     \uses{thm:ph_block_cyclic_boundary_closure,thm:ph_tp_word_span_propagation,
-        thm:ph_tp_block_open_ground_space}
+        thm:ph_tp_block_open_ground_space, lem:bnt_span_le_parent_hamiltonian_kernel}
     Trace-preserving normalization propagates simultaneous injectivity to
     every length at least $S$, in particular to $N-1$. The open-chain
     intersection property expresses each periodic ground vector as a sum
@@ -951,11 +951,13 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     For every interaction range and chain length satisfying
     \begin{align}
         S+1\leq L\leq N,
+        \notag
     \end{align}
     the periodic local constraints have ground space
     \begin{align}
-        \mathcal G^{\mathrm{per}}_{L,N}(B)
+        G_L^{(N)}(B)
         =\operatorname{span}\{V^{(N)}(A^j):0\leq j<r\}.
+        \notag
     \end{align}
     This is the kernel of the canonical parent Hamiltonian. It is also the
     kernel of the sum of any positive terms whose cyclic local kernels agree
@@ -965,7 +967,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     at the interaction range specified by the preceding intersection argument.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:block_word_span_primitive_normalization, thm:ph_block_periodic_closure_tp}
+    \uses{thm:block_word_span_primitive_normalization, thm:ph_block_periodic_closure_tp,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     Normalize the blocks while retaining simultaneous injectivity at length
     $S$. The parent Hamiltonians and the span of the periodic component
     vectors are unchanged. Apply the trace-preserving block closure theorem.
@@ -1023,7 +1026,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \begin{proof}
     \leanok
     \uses{thm:ph_canonical_representative_local_spaces,
-        thm:ph_block_ground_space_at_simultaneous_injectivity}
+        thm:ph_block_ground_space_at_simultaneous_injectivity,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        lem:block_sum_local_ground_space}
     Replace the original canonical tensor by the direct sum containing
     one copy of each normal representative. Their local spaces, hence
     their periodic local constraints, coincide. Apply the simultaneous
