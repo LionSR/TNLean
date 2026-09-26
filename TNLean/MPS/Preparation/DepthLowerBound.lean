@@ -3,10 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ExpectationOverlap
 import TNLean.MPS.Preparation.ApproximationError
-import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.DecayingCorrelationBound
+import TNLean.MPS.Preparation.DepthLowerBoundCore
 
 /-!
 # No preparation of a normal matrix product state in depth `o(log N)`
@@ -42,60 +41,12 @@ to this gauge. That reduction is not formalized here, so the chapter entry
 `thm:ldp_depth_lower_bound_gauge`.
 -/
 
-open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator
+open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator ComplexOrder
 open Filter Asymptotics
 
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-! ### Linearity and reality of normalized expectations -/
-
-theorem mpvExpectation_sub (A : MPSTensor d D) (N : ℕ) (O O' : Matrix (Cfg d N) (Cfg d N) ℂ) :
-    mpvExpectation A N (O - O') = mpvExpectation A N O - mpvExpectation A N O' := by
-  simp only [mpvExpectation, map_sub, LinearMap.sub_apply, inner_sub_right]
-
-theorem mpvExpectation_add (A : MPSTensor d D) (N : ℕ) (O O' : Matrix (Cfg d N) (Cfg d N) ℂ) :
-    mpvExpectation A N (O + O') = mpvExpectation A N O + mpvExpectation A N O' := by
-  simp only [mpvExpectation, map_add, LinearMap.add_apply, inner_add_right]
-
-theorem mpvExpectation_smul (A : MPSTensor d D) (N : ℕ) (c : ℂ)
-    (O : Matrix (Cfg d N) (Cfg d N) ℂ) :
-    mpvExpectation A N (c • O) = c * mpvExpectation A N O := by
-  simp only [mpvExpectation, map_smul, LinearMap.smul_apply, inner_smul_right]
-
-/-- The normalized expectation of the identity is `1` when `φ_N(A) ≠ 0`. -/
-theorem mpvExpectation_one (A : MPSTensor d D) {N : ℕ} (h : mpvState A N ≠ 0) :
-    mpvExpectation A N 1 = 1 := by
-  have hχ := norm_inv_smul_mpvState h
-  simp only [mpvExpectation, Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply]
-  rw [inner_self_eq_norm_sq_to_K, hχ]
-  norm_num
-
-/-- For a symmetric operator `S`, the expectation `⟪χ, S χ⟫` is real. -/
-theorem _root_.LinearMap.IsSymmetric.star_inner_self {E : Type*} [NormedAddCommGroup E]
-    [InnerProductSpace ℂ E] {S : E →ₗ[ℂ] E} (hS : S.IsSymmetric) (χ : E) :
-    star ⟪χ, S χ⟫_ℂ = ⟪χ, S χ⟫_ℂ := by
-  change starRingEnd ℂ _ = _
-  rw [← hS χ χ]
-  exact hS.conj_inner_sym χ χ
-
-/-- A Hermitian matrix minus a real multiple of the identity is Hermitian. -/
-theorem _root_.Matrix.IsHermitian.sub_smul_one {n : Type*} [Fintype n] [DecidableEq n]
-    {X : Matrix n n ℂ} (hX : X.IsHermitian) {e : ℂ} (he : star e = e) :
-    (X - e • (1 : Matrix n n ℂ)).IsHermitian := by
-  rw [Matrix.IsHermitian, Matrix.conjTranspose_sub, Matrix.conjTranspose_smul,
-    Matrix.conjTranspose_one, hX.eq, he]
-
-/-- Subtracting `e` times the identity changes the operator norm by at most `‖e‖`. -/
-theorem _root_.Matrix.norm_toEuclideanCLM_sub_smul_one_le {n : Type*} [Fintype n]
-    [DecidableEq n] (X : Matrix n n ℂ) (e : ℂ) :
-    ‖Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (X - e • 1)‖ ≤
-      ‖Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) X‖ + ‖e‖ := by
-  rw [map_sub, map_smul, map_one]
-  refine (norm_sub_le _ _).trans (add_le_add le_rfl ?_)
-  rw [norm_smul]
-  exact mul_le_of_le_one_right (norm_nonneg _) ContinuousLinearMap.norm_id_le
 
 /-! ### The quantitative bound -/
 
@@ -142,13 +93,8 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
   set ξ := correlationLength lam₂ with hξ_def
   obtain ⟨O, O', hOh, hO'h, hOn, hO'n, c, hc, K, hK1, hK2, -, s₀, hs₀, hdec⟩ :=
     exists_decayingCorrelations hL1 hL hA hρ hρfix hρtr hlam₂ hlam₂1 hmax hξ
-  set r : ℝ := (‖lam₂‖ + 1) / 2 with hr_def
-  have hr : ‖lam₂‖ < r := by rw [hr_def]; linarith
-  have hr1 : r < 1 := by rw [hr_def]; linarith
-  obtain ⟨C', hC'0, hvarφ⟩ := exists_norm_sub_inner_smul_sq_le_mpv hL1 hL hA hρ hρfix hρtr hmax
-    hr hr1 (M := 4) (by norm_num)
-  set S : ℝ := Real.sqrt (3 * C') + Real.sqrt 96 with hS_def
-  have hS0 : 0 ≤ S := by positivity
+  obtain ⟨S, hS0, hS⟩ := exists_norm_sub_inner_smul_add_le_div_sqrt hL1 hL hA hρ hρfix hρtr
+    hmax hlt1
   set Bn : ℕ := s₀ + 2 * L + 4 with hBn_def
   set β : ℕ := s₀ + L + 2 with hβ_def
   refine ⟨3 * Bn, 72 * S ^ 2 * Bn / c ^ 2 + 1, 2 * β / ξ + 1, by positivity, by positivity, ?_⟩
@@ -161,17 +107,6 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     norm_num at hover
   have hφeq : normalizedMPVState A N = ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N := rfl
   rw [hφeq] at hover
-  set φ : MPVSpace d N := ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N with hφ_def
-  have hφ : ‖φ‖ = 1 := norm_inv_smul_mpvState hne
-  set χ : EuclideanSpace ℂ (Cfg d N) := WithLp.toLp 2 ψ with hχ_def
-  have hχ : ‖χ‖ = 1 := by
-    have h : ⟪χ, χ⟫_ℂ = 1 := by
-      have := MPSPreparation.inner_toLp_toEuclideanLin ψ 1
-      rw [MPSPreparation.expect_one, hψ1] at this
-      simpa [Matrix.toEuclideanLin, Matrix.toLpLin_one] using this
-    rw [inner_self_eq_norm_sq_to_K] at h
-    have h' : ‖χ‖ ^ 2 = 1 := by exact_mod_cast h
-    exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 h'
   /- The separation `s'` and the spacing `Δ`. -/
   obtain ⟨s', hss', hs'K, hdecN⟩ := hdec (max s₀ (2 * T + L + 1)) (le_max_left _ _)
   have hs'1 : 2 * T + L + 1 ≤ s' := (le_max_right _ _).trans hss'
@@ -179,9 +114,8 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     have := max_le_iff.mpr ⟨Nat.le_add_right s₀ (2 * T + L + 1),
       (by omega : 2 * T + L + 1 ≤ s₀ + (2 * T + L + 1))⟩
     omega
-  set Δ : ℕ := s' + L + 2 * T with hΔ_def
+  obtain ⟨Δ, hΔ⟩ : ∃ Δ, Δ = s' + L + 2 * T := ⟨_, rfl⟩
   have hΔB : Δ ≤ Bn * (T + 1) := by
-    have : s₀ + 2 * L + 4 ≤ (s₀ + 2 * L + 4) * (T + 1) := Nat.le_mul_of_pos_right _ (by omega)
     have h4 : (s₀ + 2 * L + 4) * (T + 1) = (s₀ + 2 * L) * (T + 1) + 4 * T + 4 := by ring
     have h5 : s₀ + 2 * L ≤ (s₀ + 2 * L) * (T + 1) := Nat.le_mul_of_pos_right _ (by omega)
     rw [hBn_def]
@@ -195,257 +129,27 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     have := Nat.mul_le_mul_left 3 hΔB
     rw [← Nat.mul_assoc] at this
     omega
-  set n : ℕ := N / Δ with hn_def
   have hΔpos : 0 < Δ := by omega
-  have hnΔ : n * Δ ≤ N := Nat.div_mul_le_self N Δ
-  have hn3 : 3 ≤ n := (Nat.le_div_iff_mul_le hΔpos).mpr (by omega)
-  have hNlt : N < n * Δ + Δ := Nat.lt_div_mul_add hΔpos
+  obtain ⟨n, hn_def⟩ : ∃ n, n = N / Δ := ⟨_, rfl⟩
+  have hnΔ : n * Δ ≤ N := hn_def ▸ Nat.div_mul_le_self N Δ
+  have hn3 : 3 ≤ n := hn_def ▸ (Nat.le_div_iff_mul_le hΔpos).mpr (by omega)
+  have hNlt : N < n * Δ + Δ := hn_def ▸ Nat.lt_div_mul_add hΔpos
   have hN2 : N ≤ 2 * (n * Δ) := by
     have : Δ ≤ n * Δ := Nat.le_mul_of_pos_left Δ (by omega)
     omega
-  have hL0 : 0 < L := by omega
   have hn0 : (0 : ℝ) < n := by exact_mod_cast (by omega : 0 < n)
-  /- The centred observables. -/
-  set e : ℂ := mpvExpectation A N (chainWindowOperator N 0 O) with he_def
-  set e' : ℂ := mpvExpectation A N (chainWindowOperator N (s' - 1) O') with he'_def
-  have hsym : ∀ {Q : Matrix (Cfg d N) (Cfg d N) ℂ}, Q.IsHermitian →
-      star (mpvExpectation A N Q) = mpvExpectation A N Q := fun hQ ↦
-    (Matrix.isSymmetric_toEuclideanLin_iff.mpr hQ).star_inner_self _
-  have he : star e = e := hsym (chainWindowOperator_isHermitian (by omega) (by omega) hOh)
-  have he' : star e' = e' := hsym (chainWindowOperator_isHermitian (by omega) (by omega) hO'h)
-  have heN : ‖e‖ ≤ 1 := (norm_mpvExpectation_le A N _).trans
-    ((norm_toEuclideanCLM_chainWindowOperator_le (by omega) (by omega) O).trans hOn.le)
-  have he'N : ‖e'‖ ≤ 1 := (norm_mpvExpectation_le A N _).trans
-    ((norm_toEuclideanCLM_chainWindowOperator_le (by omega) (by omega) O').trans hO'n.le)
-  set X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ := O - e • 1 with hX_def
-  set Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ := O' - e' • 1 with hY_def
-  have hX : X.IsHermitian := hOh.sub_smul_one he
-  have hY : Y.IsHermitian := hO'h.sub_smul_one he'
-  have hXn : ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) X‖ ≤ 2 :=
-    (Matrix.norm_toEuclideanCLM_sub_smul_one_le O e).trans (by rw [hOn]; linarith)
-  have hYn : ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) Y‖ ≤ 2 :=
-    (Matrix.norm_toEuclideanCLM_sub_smul_one_le O' e').trans (by rw [hO'n]; linarith)
-  /- The pair operator on `w = s' - 1 + L` sites. -/
-  set w : ℕ := s' - 1 + L with hw_def
-  set W : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ :=
-    chainWindowOperator w 0 X * chainWindowOperator w (s' - 1) Y with hW_def
-  have hcomm : Commute (chainWindowOperator w 0 X) (chainWindowOperator w (s' - 1) Y) := by
-    refine MPSPreparation.commute_of_mem_supportedOperators ?_
-      (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) X)
-      (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) Y)
-    rw [Set.disjoint_left]
-    rintro k ⟨-, hk⟩ ⟨hk', -⟩
-    omega
-  have hW : W.IsHermitian := by
-    rw [Matrix.IsHermitian, hW_def, Matrix.conjTranspose_mul,
-      (chainWindowOperator_isHermitian (by omega) (by omega) hY).eq,
-      (chainWindowOperator_isHermitian (by omega) (by omega) hX).eq]
-    exact hcomm.eq.symm
-  have hWn : ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) W‖ ≤ 4 := by
-    rw [hW_def]
-    refine (Matrix.norm_toEuclideanCLM_mul_le _ _).trans ?_
-    have h1 := (norm_toEuclideanCLM_chainWindowOperator_le (N := w) (a := 0) (by omega)
-      (by omega) X).trans hXn
-    have h2 := (norm_toEuclideanCLM_chainWindowOperator_le (N := w) (a := s' - 1) (by omega)
-      (by omega) Y).trans hYn
-    calc _ ≤ 2 * 2 := mul_le_mul h1 h2 (norm_nonneg _) (by norm_num)
-      _ = 4 := by norm_num
-  /- The block operators. -/
-  have hwinL := fun k : Fin n ↦ MPSPreparation.window_lt_and_le (N := N) (w := L) hL0
-    (by omega) hnΔ k.isLt
-  have hwinW := fun k : Fin n ↦ MPSPreparation.window_lt_and_le (N := N) (w := w) (by omega)
-    (by omega) hnΔ k.isLt
-  have hPQ : ∀ k : Fin n, chainWindowOperator N (k.val * Δ) W =
-      chainWindowOperator N (k.val * Δ) X * chainWindowOperator N (k.val * Δ + (s' - 1)) Y := by
-    intro k
-    rw [hW_def, chainWindowOperator_mul (hwinW k).1 (hwinW k).2,
-      chainWindowOperator_chainWindowOperator (hwinW k).1 (hwinW k).2 (by omega) (by omega),
-      chainWindowOperator_chainWindowOperator (hwinW k).1 (hwinW k).2 (by omega) (by omega),
-      add_zero]
-  have hQwin : ∀ k : Fin n, k.val * Δ + (s' - 1) < N ∧ k.val * Δ + (s' - 1) + L ≤ N := by
-    intro k
-    have := hwinW k
-    omega
-  /- One-window expectations in `φ` are translation invariant. -/
-  have hPφ : ∀ k : Fin n, mpvExpectation A N (chainWindowOperator N (k.val * Δ) O) = e :=
-    fun k ↦ mpvExpectation_chainWindowOperator_eq A hL0 (hwinL k).2 O
-  have hQφ : ∀ k : Fin n,
-      mpvExpectation A N (chainWindowOperator N (k.val * Δ + (s' - 1)) O') = e' := by
-    intro k
-    rw [he'_def, mpvExpectation_chainWindowOperator_eq A hL0 (hQwin k).2 O',
-      mpvExpectation_chainWindowOperator_eq A hL0 (a := s' - 1) (by omega) O']
-  /- The expectations in `ψ`. -/
-  set x : Fin n → ℂ := fun k ↦
-    ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) χ⟫_ℂ with hx_def
-  have hxim : ∀ k, (x k).im = 0 := fun k ↦
-    (Matrix.isSymmetric_toEuclideanLin_iff.mpr
-      (chainWindowOperator_isHermitian (hwinL k).1 (hwinL k).2 hX)).im_inner_self_apply χ
-  set ε : Fin n → ℝ := fun k ↦ if 0 ≤ (x k).re then 1 else -1 with hε_def
-  have hεx : ∀ k, (ε k : ℂ) * x k = (‖x k‖ : ℂ) := by
-    intro k
-    have hx : x k = ((x k).re : ℂ) := Complex.ext (by simp) (by simp [hxim k])
-    have hn : ‖x k‖ = |(x k).re| := by rw [hx, Complex.norm_real, Real.norm_eq_abs]; simp
-    rw [hn]
-    simp only [hε_def]
-    split_ifs with h
-    · rw [abs_of_nonneg h, hx]; simp
-    · rw [abs_of_neg (not_le.mp h)]
-      conv_lhs => rw [hx]
-      push_cast
-      ring
-  set c1 : Fin n → ℝ := fun k ↦ ε k / n with hc1_def
-  have hc1 : ∀ k, |c1 k| ≤ 1 / n := by
-    intro k
-    simp only [hc1_def, hε_def, abs_div, Nat.abs_cast]
-    split_ifs <;> simp
-  set u : ℝ := 1 / Real.sqrt n with hu_def
-  have hu0 : 0 ≤ u := by positivity
-  have hσ : ∀ {v a : ℝ}, 0 ≤ v → 0 ≤ a → v ^ 2 ≤ (1 / n) ^ 2 * (3 * n * a) →
-      v ≤ Real.sqrt (3 * a) * u := by
-    intro v a hv ha h
-    have e1 : (1 / (n : ℝ)) ^ 2 * (3 * n * a) = (Real.sqrt (3 * a) * u) ^ 2 := by
-      rw [hu_def, mul_pow, div_pow, Real.sq_sqrt (by positivity), Real.sq_sqrt hn0.le]
-      field_simp
-    rw [e1] at h
-    exact (pow_le_pow_iff_left₀ hv (by positivity) two_ne_zero).mp h
-  /- The first average. -/
-  set Z₁ := ∑ k : Fin n, (c1 k : ℂ) •
-    Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) with hZ₁_def
-  have hZ₁sym : Z₁.IsSymmetric := LinearMap.isSymmetric_sum _ fun k _ ↦
-    (Matrix.isSymmetric_toEuclideanLin_iff.mpr
-      (chainWindowOperator_isHermitian (hwinL k).1 (hwinL k).2 hX)).smul (Complex.conj_ofReal _)
-  have hZ₁φ : ⟪φ, Z₁ φ⟫_ℂ = 0 := by
-    simp only [hZ₁_def, LinearMap.coeFn_sum, Finset.sum_apply, LinearMap.smul_apply, inner_sum,
-      inner_smul_right]
-    refine Finset.sum_eq_zero fun k _ ↦ ?_
-    have h0 : ⟪φ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) φ⟫_ℂ =
-        mpvExpectation A N (chainWindowOperator N (k.val * Δ) X) := rfl
-    rw [h0, hX_def, chainWindowOperator_sub_smul_one (hwinL k).1 (hwinL k).2, mpvExpectation_sub,
-      mpvExpectation_smul, mpvExpectation_one A hne, hPφ k, mul_one, sub_self, mul_zero]
-  have hZ₁χ : ⟪χ, Z₁ χ⟫_ℂ = (((∑ k, ‖x k‖) / n : ℝ) : ℂ) := by
-    simp only [hZ₁_def, LinearMap.coeFn_sum, Finset.sum_apply, LinearMap.smul_apply, inner_sum,
-      inner_smul_right]
-    push_cast
-    rw [Finset.sum_div]
-    refine Finset.sum_congr rfl fun k _ ↦ ?_
-    rw [hc1_def]
-    push_cast
-    rw [div_mul_eq_mul_div, hεx]
-  have hvφ1 := hvarφ L Δ n N hL0 (by omega) hnΔ hne X hX (hXn.trans (by norm_num)) c1 (1 / n) hc1
-  have hvχ1 := MPSPreparation.norm_sub_inner_smul_sq_le_of_isPreparedInDepth hL0 (by omega) hnΔ
-    hψ hψ1 hX (hXn.trans (by norm_num : (2 : ℝ) ≤ 4)) c1 hc1
-  rw [← hφ_def, ← hZ₁_def] at hvφ1
-  rw [← hχ_def, ← hZ₁_def] at hvχ1
-  have hσφ1 := hσ (norm_nonneg _) hC'0 hvφ1
-  have hσχ1 := hσ (norm_nonneg _) (by norm_num : (0 : ℝ) ≤ 2 * 4 ^ 2) hvχ1
-  have hov1 := hZ₁sym.norm_inner_mul_norm_sub_le hφ hχ
-  rw [hZ₁φ, hZ₁χ, zero_sub, norm_neg, Complex.norm_real, Real.norm_eq_abs,
-    abs_of_nonneg (by positivity)] at hov1
-  set a : ℝ := (∑ k, ‖x k‖) / n with ha_def
-  have ha0 : 0 ≤ a := by positivity
-  have h96 : Real.sqrt (3 * (2 * 4 ^ 2)) = Real.sqrt 96 := by norm_num
-  rw [h96] at hσχ1
-  have hSu : Real.sqrt (3 * C') * u + Real.sqrt 96 * u = S * u := by rw [hS_def]; ring
-  have ha : a ≤ 2 * (S * u) := by
-    have h1 : 1 / 2 * a ≤ ‖⟪φ, χ⟫_ℂ‖ * a := mul_le_mul_of_nonneg_right hover ha0
-    linarith
-  /- The second average. -/
-  set Z₂ := ∑ k : Fin n, (((1 : ℝ) / n : ℝ) : ℂ) •
-    Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W) with hZ₂_def
-  have hZ₂sym : Z₂.IsSymmetric := LinearMap.isSymmetric_sum _ fun k _ ↦
-    (Matrix.isSymmetric_toEuclideanLin_iff.mpr
-      (chainWindowOperator_isHermitian (hwinW k).1 (hwinW k).2 hW)).smul (Complex.conj_ofReal _)
-  set G : ℂ := mpvConnectedCorrelator A N 0 (s' - 1) O O' with hG_def
-  have hpair : ∀ k : Fin n, mpvExpectation A N (chainWindowOperator N (k.val * Δ) W) = G := by
-    intro k
-    have hmul := mpvExpectation_chainWindowOperator_mul_eq A hL0 (a := k.val * Δ)
-      (m := s' - 1 - L) (by have := hQwin k; omega) O O'
-    rw [show L + (s' - 1 - L) = s' - 1 by omega] at hmul
-    have hexp : (chainWindowOperator N (k.val * Δ) O - e • 1) *
-        (chainWindowOperator N (k.val * Δ + (s' - 1)) O' - e' • 1) =
-        chainWindowOperator N (k.val * Δ) O * chainWindowOperator N (k.val * Δ + (s' - 1)) O' -
-          e' • chainWindowOperator N (k.val * Δ) O -
-          e • chainWindowOperator N (k.val * Δ + (s' - 1)) O' + (e * e') • 1 := by
-      simp only [sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, one_mul, mul_one, smul_smul]
-      rw [mul_comm e' e]
-      abel
-    rw [hPQ k, hX_def, hY_def, chainWindowOperator_sub_smul_one (hwinL k).1 (hwinL k).2,
-      chainWindowOperator_sub_smul_one (hQwin k).1 (hQwin k).2, hexp, mpvExpectation_add,
-      mpvExpectation_sub, mpvExpectation_sub, mpvExpectation_smul, mpvExpectation_smul,
-      mpvExpectation_smul, mpvExpectation_one A hne, hmul, hPφ k, hQφ k, hG_def,
-      mpvConnectedCorrelator]
-    ring
-  have hZ₂φ : ⟪φ, Z₂ φ⟫_ℂ = G := by
-    simp only [hZ₂_def, LinearMap.coeFn_sum, Finset.sum_apply, LinearMap.smul_apply, inner_sum,
-      inner_smul_right]
-    have h0 : ∀ k : Fin n, ⟪φ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W) φ⟫_ℂ =
-        G := fun k ↦ hpair k
-    simp only [h0, Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-    push_cast
-    field_simp
-  have hZ₂χ : ‖⟪χ, Z₂ χ⟫_ℂ‖ ≤ 2 * a := by
-    simp only [hZ₂_def, LinearMap.coeFn_sum, Finset.sum_apply, LinearMap.smul_apply, inner_sum,
-      inner_smul_right]
-    have hfac : ∀ k : Fin n,
-        ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W) χ⟫_ℂ =
-          x k * ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ + (s' - 1)) Y) χ⟫_ℂ := by
-      intro k
-      have hsep : MPSPreparation.IsSeparatedBy (MPSPreparation.window N (k.val * Δ) L)
-          (MPSPreparation.window N (k.val * Δ + (s' - 1)) L) (2 * T) :=
-        MPSPreparation.isSeparatedBy_window (by omega) (by have := hwinW k; omega)
-      have h := MPSPreparation.expect_mul_eq_of_isPreparedInDepth hψ hψ1 hsep
-        (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (hwinL k).1
-          (hwinL k).2 X)
-        (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (hQwin k).1
-          (hQwin k).2 Y)
-      rw [hPQ k, hχ_def, MPSPreparation.inner_toLp_toEuclideanLin,
-        MPSPreparation.inner_toLp_toEuclideanLin, h, hx_def]
-      simp only [MPSPreparation.inner_toLp_toEuclideanLin]
-    have hy : ∀ k : Fin n,
-        ‖⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ + (s' - 1)) Y) χ⟫_ℂ‖ ≤ 2 :=
-      fun k ↦ (MPSPreparation.norm_inner_apply_le _ hχ).trans
-        ((norm_toEuclideanCLM_chainWindowOperator_le (hQwin k).1 (hQwin k).2 Y).trans hYn)
-    calc ‖∑ k : Fin n, ((((1 : ℝ) / n : ℝ) : ℂ)) *
-          ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W) χ⟫_ℂ‖
-        ≤ ∑ k : Fin n, 1 / n * (‖x k‖ * 2) := by
-          refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun k _ ↦ ?_)
-          rw [norm_mul, hfac k, norm_mul, Complex.norm_real, Real.norm_eq_abs,
-            abs_of_nonneg (by positivity)]
-          gcongr
-          exact hy k
-      _ = 2 * a := by
-          rw [ha_def, ← Finset.mul_sum, ← Finset.sum_mul]
-          ring
-  have hvφ2 := hvarφ w Δ n N (by omega) (by omega) hnΔ hne W hW hWn (fun _ ↦ 1 / n) (1 / n)
-    (fun _ ↦ le_of_eq (abs_of_nonneg (by positivity)))
-  have hvχ2 := MPSPreparation.norm_sub_inner_smul_sq_le_of_isPreparedInDepth (w := w)
-    (by omega) (by omega) hnΔ hψ hψ1 hW hWn (fun _ ↦ 1 / n)
-    (fun _ ↦ le_of_eq (abs_of_nonneg (by positivity)))
-  rw [← hφ_def, ← hZ₂_def] at hvφ2
-  rw [← hχ_def, ← hZ₂_def] at hvχ2
-  have hσφ2 := hσ (norm_nonneg _) hC'0 hvφ2
-  have hσχ2 := hσ (norm_nonneg _) (by norm_num : (0 : ℝ) ≤ 2 * 4 ^ 2) hvχ2
-  rw [h96] at hσχ2
-  have hov2 := hZ₂sym.norm_inner_mul_norm_sub_le hφ hχ
-  rw [hZ₂φ] at hov2
-  have hG : ‖G‖ ≤ 6 * (S * u) := by
-    have h1 : 1 / 2 * ‖G - ⟪χ, Z₂ χ⟫_ℂ‖ ≤ ‖⟪φ, χ⟫_ℂ‖ * ‖G - ⟪χ, Z₂ χ⟫_ℂ‖ :=
-      mul_le_mul_of_nonneg_right hover (norm_nonneg _)
-    have h2 : ‖G‖ ≤ ‖G - ⟪χ, Z₂ χ⟫_ℂ‖ + ‖⟪χ, Z₂ χ⟫_ℂ‖ := norm_le_norm_sub_add _ _
-    linarith
-  /- The lower bound on the correlator. -/
+  /- The two bounds on the correlator. -/
+  have hG := norm_mpvConnectedCorrelator_le_of_overlap hS hψ hψ1 hne hOh hO'h hOn hO'n
+    (by omega) hs'1 (by omega) hover
+  rw [← hΔ, ← hn_def] at hG
   have hlow := hdecN N (by omega)
-  rw [← hG_def] at hlow
   set E : ℝ := Real.exp (-((s' : ℝ) - 1) / ξ) with hE_def
   have hE0 : 0 < E := Real.exp_pos _
-  have hcE : c * E ≤ 6 * (S * u) := hlow.trans hG
+  have hcE : c * E ≤ 6 * (S / Real.sqrt n) := hlow.trans hG
   have hsq : (c * E) ^ 2 ≤ 36 * S ^ 2 / n := by
     have h := pow_le_pow_left₀ (by positivity) hcE 2
-    have hu2 : u ^ 2 = 1 / n := by
-      rw [hu_def, div_pow, Real.sq_sqrt hn0.le, one_pow]
-    calc (c * E) ^ 2 ≤ (6 * (S * u)) ^ 2 := h
-      _ = 36 * S ^ 2 * u ^ 2 := by ring
-      _ = 36 * S ^ 2 / n := by rw [hu2]; ring
+    calc (c * E) ^ 2 ≤ (6 * (S / Real.sqrt n)) ^ 2 := h
+      _ = 36 * S ^ 2 / n := by rw [mul_pow, div_pow, Real.sq_sqrt hn0.le]; ring
   have hN2' : (N : ℝ) ≤ 2 * n * Δ := by exact_mod_cast (by linarith [hN2] : N ≤ 2 * n * Δ)
   have hkey : (N : ℝ) * (c * E) ^ 2 ≤ 72 * S ^ 2 * Δ := by
     calc (N : ℝ) * (c * E) ^ 2 ≤ (2 * n * Δ) * (36 * S ^ 2 / n) :=
@@ -534,7 +238,10 @@ theorem eventually_one_half_lt_infidelity_of_isLittleO_log {A : MPSTensor d D} {
   have hT1 : ((T N : ℝ) + 1) * Real.exp (b * ((T N : ℝ) + 1)) ≤
       Real.exp ((b + 1) * ((T N : ℝ) + 1)) := by
     have h := Real.add_one_le_exp ((T N : ℝ) + 1)
-    rw [add_mul, one_mul, Real.exp_add, mul_comm (Real.exp _)]
+    have e : Real.exp ((b + 1) * ((T N : ℝ) + 1)) =
+        Real.exp ((T N : ℝ) + 1) * Real.exp (b * ((T N : ℝ) + 1)) := by
+      rw [← Real.exp_add]; ring_nf
+    rw [e]
     exact mul_le_mul_of_nonneg_right (by linarith) (Real.exp_pos _).le
   have hE : Real.exp ((b + 1) * ((T N : ℝ) + 1)) ≤ Real.exp (b + 1) * Real.sqrt N := by
     rw [← hsqrt, ← Real.exp_add]
@@ -564,7 +271,8 @@ theorem eventually_one_half_lt_infidelity_of_isLittleO_log {A : MPSTensor d D} {
   have h2 : C * ((T N : ℝ) + 1) * Real.exp (b * ((T N : ℝ) + 1)) < N := by
     calc C * ((T N : ℝ) + 1) * Real.exp (b * ((T N : ℝ) + 1))
         = C * (((T N : ℝ) + 1) * Real.exp (b * ((T N : ℝ) + 1))) := by ring
-      _ ≤ C * (Real.exp (b + 1) * Real.sqrt N) := by gcongr; exact hT1.trans hE
+      _ ≤ C * (Real.exp (b + 1) * Real.sqrt N) :=
+          mul_le_mul_of_nonneg_left (hT1.trans hE) hC.le
       _ ≤ Kc * Real.sqrt N := by
           rw [hKc_def]
           have : C ≤ max C B + 1 := by linarith [le_max_left C (B : ℝ)]

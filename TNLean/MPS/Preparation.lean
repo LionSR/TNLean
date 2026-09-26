@@ -16,6 +16,7 @@ import TNLean.MPS.Preparation.CorrelatorFiniteSize
 import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.DepthLowerBound
+import TNLean.MPS.Preparation.DepthLowerBoundCore
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalCircuit
