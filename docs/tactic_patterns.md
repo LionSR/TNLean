@@ -1304,9 +1304,9 @@ abstracted — record why, so it is not re-proposed).
   implicitly; elaborating it against a named datum leaves them unassigned
   (proof irrelevance closes the unification without assigning them), so unfold
   the named datum first. `ParityGraded.parityGraded_compression` and
-  `CZXCompression.czxSquare_compression` are migrated too. Deferred: the
-  single-slot sets `singleSlot`/`theSlot` of the `ℤ₃` fusion examples and
-  `squareSlots` of `CZXSquare`.
+  `CZXCompression.czxSquare_compression` are migrated too, and the `ℤ₃` fusion
+  examples and `CZXSquare` use `MPSTensor.oneSlot`/`MPSTensor.oneSlotMem` for
+  their single slot.
 
 ### normality from a golden matrix-unit table — promoted
 - **Pattern:** a tensor over `ℤ[σ]` is shown normal by deciding, for every
