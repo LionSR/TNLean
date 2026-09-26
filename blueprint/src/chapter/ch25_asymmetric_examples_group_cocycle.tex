@@ -283,6 +283,91 @@ labelling the cohomology classes.
     and~\ref{thm:asymex_group_cocycle_unitary}.
 \end{proof}
 
+Garre-Rubio and Schuch~\cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}
+show that interchanging the domain walls created by a symmetry-breaking
+element $g$ of order $o(g)$ multiplies the state by the phase
+$\prod_{k=1}^{o(g)}\omega^{-1}(g,g^k,g)$. Since $g^{o(g)}=e$ this phase is
+the inverse of the cyclic invariant $I_{g,o(g)}(\omega)$ of
+Definition~\ref{def:mpug_cyclic_invariant}, so it depends only on the
+class of $\omega$.
+
+\begin{definition}[The domain-wall phase]
+    \label{def:asymex_group_cocycle_domain_wall_phase}
+    \lean{TNLean.Algebra.ScalarThreeCochain.domainWallPhase,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.domainWallPhase_eq}
+    \leanok
+    \uses{def:mpug_cyclic_invariant, thm:mpug_cyclic_invariant_gauge}
+    For a scalar three-cochain $\omega$ of a group $G$ and $g\in G$ of order
+    $o(g)$, set
+    \begin{align}
+        P_g(\omega) & =\prod_{k=1}^{o(g)}\omega(g,g^k,g)^{-1}
+        =I_{g,o(g)}(\omega)^{-1}.
+        \notag
+    \end{align}
+    Cohomologous three-cochains have the same phase $P_g$.
+\end{definition}
+
+\begin{theorem}[Domain-wall phases of the cyclic cocycles]
+    \label{thm:asymex_group_cocycle_cyclic_domain_wall}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_cyclicCocycle,
+        TNLean.Algebra.ScalarThreeCochain.val_toAdd_pow,
+        TNLean.Algebra.ScalarThreeCochain.sum_carry,
+        TNLean.Algebra.ScalarThreeCochain.orderOf_eq_div_gcd,
+        TNLean.Algebra.ScalarThreeCochain.orderOf_mul_val,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_cyclicCocycle_one,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp_sum,
+        TNLean.Algebra.ScalarThreeCochain.sum_carry_orderOf,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_three,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_four,
+        TNLean.Algebra.ScalarThreeCochain.not_cohomologousTo_cyclicCocycle}
+    \leanok
+    \uses{def:asymex_group_cocycle_domain_wall_phase,
+        thm:asymex_group_cocycle_cyclic}
+    Let $n\geq1$, $j\in\N$ and $a\in\{0,\ldots,n-1\}$, with order
+    $o(a)=n/\gcd(n,a)$ in $\Z_n$. For every $m\in\N$,
+    $I_{a,m}(\omega_j)=\zeta^{ja\lfloor ma/n\rfloor}$. The domain-wall phase is
+    \begin{align}
+        P_a(\omega_j)
+         & =\exp\Bigl\{-\frac{2\pi\mathrm{i}\,j}{n^2}\,a
+        \sum_{k=0}^{o(a)-1}\bigl([ka]+a-[ka+a]\bigr)\Bigr\}
+        =\exp\Bigl\{-\frac{2\pi\mathrm{i}\,j\,a^2}{n\gcd(n,a)}\Bigr\},
+        \notag
+    \end{align}
+    the carry sum being equal to $o(a)\,a$. For $n=3$ the phases are
+    $e^{-2\pi\mathrm{i}/3}$ for $j=1$ and $e^{2\pi\mathrm{i}/3}$ for $j=2$, at
+    both $a=1$ and $a=2$. For $n=4$ they are
+    \begin{align}
+        \begin{array}{c|ccc}
+            & a=1 & a=2 & a=3 \\\hline
+            j=1 & -\mathrm{i} & -1 & -\mathrm{i} \\
+            j=2 & -1 & 1 & -1 \\
+            j=3 & \mathrm{i} & -1 & \mathrm{i}
+        \end{array}
+        \notag
+    \end{align}
+    Both tables agree with those printed
+    in~\cite[Section~IV.D]{GarreRubioSchuch2024DomainWall}. If $n>1$ and
+    $j\not\equiv j'\pmod n$, then $\omega_j$ and $\omega_{j'}$ are not
+    cohomologous.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:asymex_group_cocycle_cyclic},
+    $\omega_j(a,[ka],a)=\zeta^{ja\lfloor([ka]+a)/n\rfloor}$. Writing
+    $[ka]+a=[(k+1)a]+n\lfloor([ka]+a)/n\rfloor$ and summing over $k<m$, the
+    carries add up to $\lfloor ma/n\rfloor$, which gives $I_{a,m}(\omega_j)$.
+    At $m=o(a)$ one has $o(a)\,a=n\,(a/\gcd(n,a))$, which gives the carry sum
+    and the closed form. The tables follow by reducing the exponent modulo
+    $n$, with $\zeta=\mathrm{i}$ for $n=4$. At the generator $a=1$ and $m=n$
+    the cyclic invariant of $\omega_j$ is $\zeta^j$, and $\zeta$ is a
+    primitive $n$-th root of unity, so the gauge invariance of
+    Theorem~\ref{thm:mpug_cyclic_invariant_gauge} separates the classes.
+\end{proof}
+
 \subsection{The group \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2}}
 
 For $\Z_2\times\Z_2$ the construction is applied to the mixed three-cocycle

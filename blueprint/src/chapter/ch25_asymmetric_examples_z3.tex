@@ -611,6 +611,36 @@ the two families is established here.
     action because $g^3=e$, and $\omega^2\neq1$.
 \end{proof}
 
+\begin{corollary}[The domain-wall phase of the family]
+    \label{cor:asymex_z3anomalous_domain_wall}
+    \lean{Z3Anomalous.eisensteinOmega_eq_rootOfUnity,
+        Z3Anomalous.orderOf_z3Gen,
+        Z3Anomalous.cyclicInvariant_omega_z3_eq_cyclicCocycle_two,
+        Z3Anomalous.not_cohomologousTo_cyclicCocycle_omega_z3,
+        Z3Anomalous.domainWallPhase_omega_z3}
+    \leanok
+    \uses{thm:asymex_z3anomalous_anomaly_class,
+        thm:asymex_group_cocycle_cyclic_domain_wall}
+    For every choice of fusion tensors, the anomaly three-cochain
+    $\omega_{\mathrm{an}}$ of the family has, at the generator $g$, the same
+    cyclic invariant as the cocycle $\omega_2$ of
+    Definition~\ref{def:asymex_group_cocycle_cyclic} for $n=3$, and it is not
+    cohomologous to $\omega_j$ for $j\not\equiv2\pmod3$. Its domain-wall phase
+    is $P_g(\omega_{\mathrm{an}})=e^{2\pi\mathrm{i}/3}$, the entry $j=2$,
+    $a=1$ of the table of
+    Theorem~\ref{thm:asymex_group_cocycle_cyclic_domain_wall}.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    The primitive cube root $\omega$ equals $e^{2\pi\mathrm{i}/3}=\zeta$, so
+    the invariant $\omega^2$ of
+    Theorem~\ref{thm:asymex_z3anomalous_anomaly_class} is $\zeta^2$, the
+    cyclic invariant of $\omega_2$ at $g$. The classes $\omega_j$ are
+    separated by this invariant, and $P_g=I_{g,3}^{-1}=\zeta^{-2}=\zeta$
+    because $g$ has order three.
+\end{proof}
+
 \subsection{The condensation defect}%
 \label{sec:asymex_z3anomalous_defect}
 
