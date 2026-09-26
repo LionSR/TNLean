@@ -11,9 +11,8 @@ import Mathlib.GroupTheory.OrderOfElement
 
 A boundary matrix which intertwines adjacent cyclic cuts commutes with every
 word extending once around the cycle. This is the algebraic propagation step
-of the periodic closure argument in the proof of the theorem "Uniqueness with
-TI and PBC" (label uniqueGS) of PGVWC07, arXiv:quant-ph/0608197,
-lines 1272--1289. The proof of Theorem 12 invokes the same argument for
+of the periodic closure argument in the proof of Theorem 10 ("Uniqueness
+with TI and PBC") of PGVWC07, arXiv:quant-ph/0608197, lines 1272--1289. The proof of Theorem 12 invokes the same argument for
 several blocks (lines 1454--1455).
 -/
 
