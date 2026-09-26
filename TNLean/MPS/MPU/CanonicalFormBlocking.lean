@@ -15,8 +15,10 @@ Consequently the source gate of a simple blocked tensor is an isometry for
 exactly the weight recorded by the original presentation. The source cuts and
 their factors are computed on the blocked tensor.
 
-Source: arXiv:1703.09188, canonical form II, lines 269--281; blocking,
-lines 297--305; Theorem `ThmFund1`, lines 577--588.
+## References
+
+* arXiv:1703.09188, canonical form II, lines 269--281; blocking,
+  lines 297--305; Theorem `ThmFund1`, lines 577--588.
 -/
 
 open scoped Matrix
