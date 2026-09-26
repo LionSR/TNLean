@@ -74,31 +74,6 @@ private theorem physicalObservableTransfer_apply
     LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
   simp only [Matrix.mul_assoc]
 
-/-- Inserted transfer maps preserve finite linear combinations of physical
-observables. -/
-private theorem physicalObservableTransfer_sum_smul
-    {ι : Type*} [Fintype ι] (A : MPSTensor d D) (L : ℕ)
-    (q : ι → ℂ)
-    (O : ι → Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    physicalObservableTransfer A L (∑ i, q i • O i) =
-      ∑ i, q i • physicalObservableTransfer A L (O i) := by
-  classical
-  apply LinearMap.ext
-  intro X
-  rw [physicalObservableTransfer_apply]
-  simp only [Matrix.sum_apply, Matrix.smul_apply, LinearMap.sum_apply,
-    LinearMap.smul_apply, smul_eq_mul, Finset.sum_smul]
-  conv_lhs =>
-    rw [Finset.sum_comm]
-    enter [2, σ]
-    rw [Finset.sum_comm]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro i _
-  rw [physicalObservableTransfer_apply]
-  conv_rhs => rw [Finset.sum_comm]
-  simp [Finset.smul_sum, smul_smul]
-
 /-- A word of a direct-sum tensor is the direct sum of the corresponding block
 words. -/
 private theorem evalWord_directSumTensor
@@ -264,8 +239,9 @@ theorem WordTupleSpanTop.exists_physicalObservableTransfer_directSum_sectorSuppo
   choose O hO using hUnit
   refine ⟨∑ z, q z • O z, ?_⟩
   intro X
-  rw [physicalObservableTransfer_sum_smul]
-  simp only [LinearMap.sum_apply, LinearMap.smul_apply]
+  rw [← physicalObservableTransferₗ_apply, map_sum]
+  simp only [map_smul, physicalObservableTransferₗ_apply, LinearMap.sum_apply,
+    LinearMap.smul_apply]
   apply Finset.sum_congr rfl
   intro z _
   rw [hO z X]

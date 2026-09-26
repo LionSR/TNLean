@@ -255,24 +255,10 @@ private theorem parB_unmatched_int (i : Fin 2) (t : Fin 1) (p q : Fin 1) :
 
 /-- **The multi-block asymmetric compression datum of Example PAR** (construction note, Theorem 7.7,
 clauses (i)–(iii), §4). -/
-def parityGraded_compression : MultiBlockCompression parB parSlots parTargets where
-  z := 1
-  ord := parOrd
-  gauge := parGauge
-  triangular i x y h := by
-    rw [parB_conjMatrix, Matrix.submatrix_apply, complexOfInt_apply, Int.cast_eq_zero]
-    exact parB_triangular_int i x y h
-  matched i s := by
-    obtain ⟨s, hs⟩ := s
-    ext p q
-    rw [Matrix.blockDiag'_apply, parB_conjMatrix, Matrix.submatrix_apply, complexOfInt_apply,
-      parTargets_eq, complexOfInt_apply, Int.cast_inj]
-    exact parB_matched_int i s p q
-  unmatched i t := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, parB_conjMatrix, Matrix.submatrix_apply, complexOfInt_apply,
-      Matrix.zero_apply, Int.cast_eq_zero]
-    exact parB_unmatched_int i t p q
+def parityGraded_compression : MultiBlockCompression parB parSlots parTargets :=
+  MultiBlockCompression.ofRing (Int.castRingHom ℂ) parOrd parTau parGauge parConjInt
+    parB_conjMatrix parTargetsInt parTargets_eq parB_triangular_int
+    (fun i s p q => parB_matched_int i s.1 p q) parB_unmatched_int
 
 /-! ### Consequences -/
 

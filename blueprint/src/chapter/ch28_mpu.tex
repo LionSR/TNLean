@@ -2266,6 +2266,62 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \operatorname{rank}(B)$.
 \end{proof}
 
+\begin{lemma}[Double layer of an independent tensor product]
+    \label{lem:mpu_double_layer_tensor_product}
+    \lean{MPOTensor.doubleLayerTensorProductShuffle,
+        MPOTensor.doubleLayerTensorProductShuffle_apply,
+        MPOTensor.doubleLayerTensor_tensorProduct}
+    \leanok
+    \uses{def:mpu_double_layer, def:mpu_independent_tensor_product}
+    Let $W_{\mathcal U}$ and $W_{\mathcal V}$ be the double layers of
+    $\mathcal U$ and $\mathcal V$. Identify the double-layer bond space of
+    $\mathcal U\boxtimes\mathcal V$ with the tensor product of the two
+    double-layer bond spaces by
+    $((\alpha,\gamma),(\alpha',\gamma'))\mapsto((\alpha,\alpha'),(\gamma,\gamma'))$.
+    Under this identification,
+    \begin{align}
+        W_{\mathcal U\boxtimes\mathcal V}^{(i,k)(j,\ell)}
+         & =W_{\mathcal U}^{ij}\otimes W_{\mathcal V}^{k\ell}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpu_double_layer, def:mpu_independent_tensor_product}
+    The contracted physical index of the product runs over pairs $(m,n)$, and
+    each summand factors as a product of an entry of
+    $\sum_m(\mathcal U^{mi})^{*}\otimes\mathcal U^{mj}$ and an entry of
+    $\sum_n(\mathcal V^{nk})^{*}\otimes\mathcal V^{n\ell}$.
+\end{proof}
+
+\begin{theorem}[Independent tensor products preserve simplicity]
+    \label{thm:mpu_simple_tensor_product}
+    \lean{MPOTensor.IsMPUSimple.tensorProduct}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_independent_tensor_product}
+    If $\mathcal U$ and $\mathcal V$ are simple, then
+    $\mathcal U\boxtimes\mathcal V$ is simple. If $a,b$ are witnesses for
+    $\mathcal U$ and $a',b'$ are witnesses for $\mathcal V$, then
+    $a\otimes a'$ and $b\otimes b'$ are witnesses for the product. This is
+    the step behind the sentence ``The case of tensoring is trivial'' in the
+    proof of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 363--374 and 837.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_double_layer_tensor_product, def:mpu_simple}
+    By Lemma~\ref{lem:mpu_double_layer_tensor_product}, and since
+    $|b\otimes b')(a\otimes a'|=|b)(a|\otimes|b')(a'|$,
+    \begin{align}
+        (a\otimes a'|W_{\mathcal U}^{ij}\otimes W_{\mathcal V}^{k\ell}
+        |b\otimes b')
+         & =(a|W_{\mathcal U}^{ij}|b)\,(a'|W_{\mathcal V}^{k\ell}|b')
+        =\delta_{ij}\delta_{k\ell}.
+    \end{align}
+    The rule $(A\otimes B)(C\otimes D)=AC\otimes BD$ reduces
+    (\ref{eq:mpu_simple2}) for the product to the same identity for each
+    factor.
+\end{proof}
+
 \begin{theorem}[One-site blocking bounds for the source-cut ranks]
     \label{thm:mpu_source_cut_rank_blocking_succ}
     \lean{MPOTensor.rightRank_blockTensor_succ_le,
@@ -5545,10 +5601,57 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_{\mathcal V} & =(x\otimes y)u_{\mathcal U},
     \end{align}
     while the two canonical-form-II tensors are related on their virtual leg by
-    $z$ and on their source legs by $x$ and $y$. This is the unrestricted
-    statement of the source's Fundamental Theorem of MPU.
+    $z$ and on their source legs by $x$ and $y$. This records the source's
+    unblocked all-length wording. Its converse has the odd-length parity
+    obstruction of Theorem~\ref{thm:mpu_standard_form_parity_obstruction};
+    the blocked-family interpretation is distinguished in
+    \cite{gap:mpu_standard_form_parity_gap}.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
+
+\begin{theorem}[Parity obstruction to an unblocked standard-form converse]
+    \label{thm:mpu_standard_form_parity_obstruction}
+    \lean{MPOTensor.exists_simple_blockTwo_eq_mpo_three_ne}
+    \leanok
+    \uses{def:mpu_simple, def:mpdo_physical_blocking, def:mpo_family}
+    There are simple matrix product unitaries $\mathcal U,\mathcal V$ of
+    physical dimension two and bond dimension one whose two-site blocked
+    tensors agree, but whose periodic operators differ at length three:
+    \begin{align}
+        \mathcal U_2 & =\mathcal V_2, & U^{(3)} & \ne V^{(3)}.
+    \end{align}
+    This is the parity obstruction to reading the converse of
+    \cite[Theorem~FundamentalMPU, lines~624--648]{Cirac2017MPU} as an
+    assertion about the original tensors at every length. Definition~SF of
+    that source concerns the two-site blocks; the explicit source factors
+    and local unitary relations for this example are recorded in
+    \cite{gap:mpu_standard_form_parity_gap}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_simple, def:mpo_family, def:mpo_stacked_layers,
+        thm:mpdo_block_tensor_scalar_scaling,
+        thm:mpdo_mpo_scalar_scaling}
+    Let $\mathcal U^{ij}=\delta_{ij}$ on its one-dimensional bond space and
+    set $\mathcal V^{ij}=-\mathcal U^{ij}$. Their double-layer letters are
+    both $\delta_{ij}$, so the simplicity contractions hold with unit
+    boundary vectors. Two-site blocking removes the pair of minus signs,
+    whereas closing a chain of length three leaves one minus sign:
+    \begin{align}
+        \mathcal V_2 & =\mathcal U_2, &
+        U^{(3)}      & =I_8,          & V^{(3)} & =-I_8.
+    \end{align}
+\end{proof}
+
+\begin{remark}
+    The source-labelled Fundamental Theorem above remains unformalized.
+    The source's displayed standard forms concern
+    $\mathcal U_2,\mathcal V_2$; their local relations can control the blocked
+    families, but do not distinguish the original families at odd lengths.
+    The explicit local-gauge calculation and the possible corrected scopes
+    are given in \cite{gap:mpu_standard_form_parity_gap}. No odd-length
+    premise has been inserted into the source-labelled statement.
+\end{remark}
 
 \begin{theorem}[Rank of a Kronecker product]
     \label{thm:mpu_kronecker_rank}
@@ -5636,6 +5739,31 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     to each rank and cancel the common term. For the equivalent formulas,
     apply the same product identity to $r_{\mathcal U}\ell_{\mathcal U}=d^2$
     and use $\log_2(x/y)=\log_2x-\log_2y$.
+\end{proof}
+
+\begin{theorem}[Source-index value of an independent tensor product]
+    \label{thm:mpu_source_index_value_tensor_product}
+    \lean{MPOTensor.sourceIndexValue_tensorProduct}
+    \leanok
+    \uses{def:mpu_specified_source_index_value, thm:mpu_tensor_product_source_ranks}
+    If $\mathcal U$ and $\mathcal V$ have positive right and left source
+    ranks, then
+    \begin{align}
+        \operatorname{ind}_{\mathrm{src}}(\mathcal U\boxtimes\mathcal V)
+         & =\operatorname{ind}_{\mathrm{src}}(\mathcal U)
+        +\operatorname{ind}_{\mathrm{src}}(\mathcal V).
+    \end{align}
+    This is the specified-tensor form of the tensoring case of
+    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; it makes no choice of a simple
+    blocking.
+    % Scope restriction (specified tensors): documented in
+    % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex.
+    % Source lines: paper_v2.tex 837.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_tensor_product_source_ranks, thm:mpu_specified_source_index_identities}
+    Both source ranks are multiplicative, so the logarithms add.
 \end{proof}
 
 \begin{theorem}[Conditional blocking invariance of the specified source-index value]
@@ -6946,6 +7074,91 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     each source-cut formula in
     Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}.
 \end{proof}
+
+\begin{theorem}[Source factors under a unitary virtual conjugation]
+    \label{thm:mpu_source_factors_virtual_unitary_gauge}
+    \lean{MPOTensor.source_factors_virtual_unitary_sandwich,
+        MPOTensor.source_rank_virtual_unitary_sandwich,
+        MPOTensor.transported_source_factor_premises_at_selected_ranks,
+        MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges}
+    \leanok
+    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
+        def:mpu_virtual_sandwich, def:mpu_weighted_source_factors,
+        thm:mpu_virtual_sandwich_source_ranks}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
+    with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$ on the virtual space.
+    Their recorded positive matrices need not be related. Write
+    $X_a(\mathcal U),Y_a(\mathcal U)$ and
+    $X_a(\mathcal V),Y_a(\mathcal V)$ for their selected source factors,
+    $a=1,2$. After identifying the equal source ranks, there are unitaries
+    $W_1$ and $W_2$ on the respective source-rank spaces such that
+    \begin{align}
+        X_1(\mathcal V)
+         & =(I_d\otimes(z^\dagger)^T)X_1(\mathcal U)W_1,
+         & Y_1(\mathcal V)
+         & =W_1^\dagger Y_1(\mathcal U)(z^T\otimes I_d),       \\
+        X_2(\mathcal V)
+         & =(z\otimes I_d)X_2(\mathcal U)W_2,
+         & Y_2(\mathcal V)
+         & =W_2^\dagger Y_2(\mathcal U)(I_d\otimes z^\dagger).
+    \end{align}
+    This is the forward factor
+    comparison associated with the diagrams in
+    \cite[lines~624--648]{Cirac2017MPU}; it does not assert
+    a converse from the local relations to equality at every chain length.
+    The scalar-free step is the isometric specialization of
+    \cite[lines~1052--1066]{FrancoRubio2025MPUGauging}.
+    % Source: paper_v2.tex 624--648 and II_RelationStandard1/2.png;
+    % raw cut/rank transport at lines 786--812.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_virtual_sandwich_source_cuts,
+        thm:mpu_virtual_sandwich_source_ranks,
+        thm:mpu_source_factorizations,
+        thm:mpu_source_factor_normalizations,
+        thm:mpu_source_factor_right_inverses, ThmFund1,
+        cor:mpug_normalized_source_decomposition_gauges}
+    The two cut identities of
+    Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}, applied to the
+    selected factorizations of Theorem~\ref{thm:mpu_source_factorizations},
+    give transported factorizations with the four exterior matrices
+    displayed in the statement. The right exterior matrices are unitary, so
+    the transported right factors retain the right inverses of
+    Theorem~\ref{thm:mpu_source_factor_right_inverses}. The left exterior
+    matrix of the second cut is unitary, so its transported left factor
+    remains an isometry. The contraction defining $u$ is unchanged: its
+    interior virtual product is $z^\dagger z=I_D$. Rank preservation,
+    Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks}, identifies the
+    transported factors with the selected source-rank spaces. Simplicity and
+    the source-gate equivalence of Theorem~\ref{ThmFund1} give unitarity of
+    both $u$ contractions. The selected factors have left inverses from their
+    weighted first-cut and ordinary second-cut normalizations in
+    Theorem~\ref{thm:mpu_source_factor_normalizations}. The normalized
+    source-decomposition comparison of
+    Corollary~\ref{cor:mpug_normalized_source_decomposition_gauges} now
+    gives the two unitary changes $W_1,W_2$ and the four displayed
+    equalities.
+\end{proof}
+
+\begin{remark}
+    In the setting of
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}, write
+    $u_{\mathcal U},u_{\mathcal V}$ for the source gates of
+    Definition~\ref{def:mpu_source_uv} built from the selected factors.
+    Substituting the two $Y_a(\mathcal V)$ identities into that contraction,
+    the interior virtual product is $\sum_\beta(z^\dagger)_{\beta'\beta}
+        z_{\beta\beta''}=(z^\dagger z)_{\beta'\beta''}=\delta_{\beta'\beta''}$,
+    so
+    \begin{align}
+        u_{\mathcal V} & =(W_2^\dagger\otimes W_1^\dagger)u_{\mathcal U}.
+    \end{align}
+    Thus the unitaries $x=W_2^\dagger$ and $y=W_1^\dagger$ realize the local
+    relation $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$ of
+    Theorem~\ref{FundamentalMPU}. This identification of the gauges is a
+    consequence of the displayed factor identities and is not asserted by
+    Theorem~\ref{thm:mpu_source_factors_virtual_unitary_gauge}.
+\end{remark}
 
 \begin{definition}[Ambient support-inverse extension]
     \label{def:mpu_ambient_support_inverse_extension}
@@ -9307,6 +9520,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.leftShiftTensor_isMPUSimple,
         MPOTensor.blockTensor_rightShiftTensor_isMPUSimple,
         MPOTensor.blockTensor_leftShiftTensor_isMPUSimple,
+        MPOTensor.identityMPUTensor_isMPUSimple,
+        MPOTensor.shiftExampleU₁_isMPUSimple,
+        MPOTensor.shiftExampleU₂_isMPUSimple,
+        MPOTensor.shiftExampleU₃_isMPUSimple,
+        MPOTensor.blockTensor_shiftExampleU₂_isMPUSimple,
+        MPOTensor.blockTensor_shiftExampleU₃_isMPUSimple,
         MPOTensor.rightRank_blockTensor_rightShiftTensor_ne_leftRank,
         MPOTensor.sourceIndexValue_blockTensor_rightShiftTensor_ne_zero}
     \leanok
@@ -9315,7 +9534,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_specified_source_index_identities,
         thm:mpu_physical_adjoint_source_ranks,
         thm:mpu_tensor_product_source_ranks, thm:mpu_source_ranks_physical_reindexing,
-        threeMPU, thm:mpu_block_tensor_product}
+        threeMPU, thm:mpu_block_tensor_product, thm:mpu_simple_tensor_product}
     Assume $d>0$ and let $k\ge0$. The right-shift tensor $T$ and the
     left-shift tensor $T^\sharp$ are simple, and so are their blockings
     $T_{k+1}$ and $T^\sharp_{k+1}$ over $k+1$ sites. The blocked letters are
@@ -9339,10 +9558,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $r(T_{k+1})\ne\ell(T_{k+1})$ and
     $\operatorname{ind}_{\mathrm{src}}(T_{k+1})\ne0$.
 
-    For $T$ and $T^\sharp$ every blocking is simple, so the choice of blocking
-    in Definition~\ref{def:index} does not affect their values. Simplicity of
-    the blockings of $U_2$ and $U_3$ is not asserted, so their zero values are
-    values of the source-index expression only. None of the values is asserted
+    The tensors $U_1$, $U_2$, and $U_3$ are simple, and so are the blockings
+    of $U_2$ and $U_3$ over $k+1$ sites, because independent tensor products
+    of simple tensors are simple. Thus all four values are taken at simple
+    blockings, which is the simplicity requirement of Definition~\ref{def:index};
+    its canonical-form hypothesis is not established for these tensors. None of the values is asserted
     for an arbitrary tensor generating the same operators; that step needs the
     canonical form of the shift and its uniqueness. Unequal ranks do not by
     themselves exclude a circuit: after blocking, every matrix product unitary,
@@ -9362,11 +9582,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_physical_adjoint_source_ranks,
         thm:mpu_tensor_product_source_ranks,
         thm:mpu_source_ranks_physical_reindexing,
-        thm:mpu_specified_source_index_identities, thm:mpu_block_tensor_product, thm:mpu_double_layer_blocking}
+        thm:mpu_specified_source_index_identities, thm:mpu_block_tensor_product, thm:mpu_double_layer_blocking,
+        thm:mpu_simple_tensor_product}
     With $\Phi=\sum_j|jj)$, the double-layer letters of $T$ are
     $|\Phi)(ik|$, so the boundary vectors $|00)$ and $\Phi$ satisfy both
     simplicity identities; for $T^\sharp$ the letters are $|ik)(\Phi|$ and the
-    boundary vectors are exchanged. Simplicity survives blocking. A product
+    boundary vectors are exchanged. The identity tensor has bond dimension
+    one and double-layer letters $\delta_{ij}$, so $a=b=1$ are boundary
+    vectors. Simplicity survives independent tensor products and blocking,
+    which gives simplicity of $U_1$, $U_2$, $U_3$ and of the blockings of
+    $U_2$ and $U_3$. A product
     of matrix units $|\sigma_m)(\tau_m|$ is $|\sigma_0)(\tau_k|$ when adjacent
     indices match and zero otherwise, which gives the blocked letters. The
     first source cut of $T_{k+1}$ sends the row $(\sigma,\beta)$ to the single

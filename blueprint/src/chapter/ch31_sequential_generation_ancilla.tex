@@ -13,9 +13,8 @@ and an ancilla $\C^D$ interacts with the sites one after another. This chapter
 records the probabilistic and deterministic schemes of
 \cite[Section~5.1]{PerezGarcia2007Matrix} and the characterization of the states
 they produce by open-boundary matrix product representations of bond dimension
-at most $D$. The last two sections state the deterministic transition scheme
-for $d=2$ and sequential generation without an ancilla, which are not yet
-formalized.
+at most $D$. The last two sections treat the deterministic transition scheme
+for $d=2$ and sequential generation without an ancilla.
 
 Sites are labelled $k=0,\dots,N-1$ in the order of the tensor factors of the
 ket, and a configuration is $\sigma=(\sigma_0,\dots,\sigma_{N-1})$. The source
@@ -237,13 +236,15 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
-    By induction on $n$. For $n=0$ take $r'=R_{-1}r$. Otherwise apply
-    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
-    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
-    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$. This is the
-    construction by successive singular value decompositions of Schön,
-    Solano, Verstraete, Cirac and Wolf, on which the proof in
+    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder} gives the bonds $b_p$, the
+    families $Q_p$ and a matrix $R$ row-supported below $b_n$ with
+    $R_{-1}P^\sigma=Q^\sigma R$ for every $\sigma$. Put $r'=Rr$, which is
+    supported below $b_n$ by Theorem~\ref{thm:seqanc_support_propagation}; then
+    $R_{-1}P^\sigma r=Q^\sigma Rr=Q^\sigma r'$. The induction behind
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder} is the construction by
+    successive singular value decompositions of Schön, Solano, Verstraete,
+    Cirac and Wolf, on which the proof in
     \cite[Section~5.1]{PerezGarcia2007Matrix} is based.
 \end{proof}
 
@@ -261,16 +262,11 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_support_propagation}
-    Expand $\sum_i\|Q^iv\|^2=\sum_{\beta,\beta'<b}\overline{v_\beta}v_{\beta'}
-        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}$ and use the
-    isometry condition. For the chain, write
-    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
-    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
-    vector $w=Q'^{\sigma'}v$ is supported below $b_1$ by
-    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity
-    for $Q_0$ gives $\sum_{\sigma_0}\|Q_0^{\sigma_0}w\|^2=\|w\|^2$, and the
-    induction hypothesis for $Q'$ gives $\sum_{\sigma'}\|Q'^{\sigma'}v\|^2=\|v\|^2$.
+    \uses{thm:ldp_sweep_matrix_remainder}
+    Take $w=v$ in the inner-product identities of
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder}: $\sum_i\langle Q^iv,Q^iv\rangle
+        =\langle v,v\rangle$ for one site, and
+    (\ref{eq:ldp_sweep_inner_product}) with $w=v$ for the chain.
 \end{proof}
 
 \begin{theorem}[Changing sites outside the used block]
@@ -631,10 +627,14 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 
 \begin{definition}[Deterministic transition scheme]
     \label{def:seqanc_transition}
+    \lean{MPSPreparation.IsTransitionInteraction,
+        MPSPreparation.transitionStep, MPSPreparation.IsTransitionGenerated}
+    \leanok
     \uses{def:seqanc_deterministic}
-    Let $d=2$ and let the ancilla be $\C^D\otimes\C^2$. In every step an
-    arbitrary unitary acts on the ancilla, followed by the fixed interaction
-    of the ancilla with the current site
+    Let $d=2$ and let the ancilla be $\C^D\otimes\C^2$, started in a unit
+    vector $\ket{\varphi_I}$. In every step an
+    arbitrary unitary $W^{[k]}$ acts on the ancilla, followed by the fixed
+    interaction $T$ of the ancilla with the current site
     \begin{align}
         \ket{\varphi}\ket{1}\ket{0}
          & \mapsto\ket{\varphi}\ket{0}\ket{1},
@@ -643,12 +643,50 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
          & \mapsto\ket{\varphi}\ket{0}\ket{0},
         \label{eq:seqanc_transition}
     \end{align}
-    and the ancilla decouples after the last step. This is the third scheme
-    of \cite[Section~5.1]{PerezGarcia2007Matrix}.
+    and the ancilla decouples after the last step, that is, the final joint
+    state is $\ket{\varphi_F}\otimes\ket{\psi}$ for a unit vector
+    $\ket{\varphi_F}\in\C^D\otimes\C^2$. This is the third scheme
+    of \cite[Section~5.1]{PerezGarcia2007Matrix}. The step with ancilla
+    unitary $W$ leaving the site in $\ket{i}$ is the matrix $S_i(W)$ on
+    $\C^D\otimes\C^2$ with entries
+    \begin{equation}
+        S_i(W)_{x,y}=\delta_{x_2,0}\,W_{(x_1,i),y}.
+        \label{eq:seqanc_transition_step}
+    \end{equation}
 \end{definition}
+
+\begin{theorem}[A transition step on a site in $\ket{0}$]
+    \label{thm:seqanc_transition_step}
+    \lean{MPSPreparation.transitionStep_eq_of_isTransitionInteraction}
+    \leanok
+    \uses{def:seqanc_transition}
+    Let $T$ be an interaction on $\C^D\otimes\C^2\otimes\C^2$ satisfying
+    \eqref{eq:seqanc_transition}, and let $W$ be a matrix on $\C^D\otimes\C^2$.
+    Then for all $x,y$ and $i$,
+    \begin{equation*}
+        \bra{x,i}T(W\otimes\Id)\ket{y,0}=S_i(W)_{x,y}.
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $z=(z_1,z_2)$, the relations \eqref{eq:seqanc_transition} applied to
+    $\ket{\varphi}=\ket{z_1}$ give $T\ket{z_1,z_2,0}=\ket{z_1,0,z_2}$, so
+    \begin{equation*}
+        \bra{x,i}T\ket{z,0}=\delta_{x_2,0}\,\delta_{x_1,z_1}\,\delta_{i,z_2}.
+    \end{equation*}
+    Since $(W\otimes\Id)_{(z,j),(y,0)}=\delta_{j,0}\,W_{z,y}$,
+    \begin{equation*}
+        \bra{x,i}T(W\otimes\Id)\ket{y,0}
+        =\sum_z\bra{x,i}T\ket{z,0}\,W_{z,y}
+        =\delta_{x_2,0}\,W_{(x_1,i),y}
+        =S_i(W)_{x,y}.
+    \end{equation*}
+\end{proof}
 
 \begin{theorem}[Transition schemes generate the open-boundary states]
     \label{thm:seqanc_transition}
+    \lean{MPSPreparation.isTransitionGenerated_iff}
+    \leanok
     \uses{def:seqanc_transition, def:seqanc_obc_rep}
     Let $d=2$. A vector $\psi$ is generated by a deterministic transition
     scheme with ancilla $\C^D\otimes\C^2$ if and only if
@@ -657,33 +695,112 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     the transition part of \cite[Section~5, Theorem ``Sequential generation
         with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_deterministic, thm:seqanc_unitary_extension,
+        thm:seqanc_step_isometry, thm:seqanc_norm}
+    By Theorem~\ref{thm:seqanc_deterministic} it suffices to show that the
+    transition scheme and the deterministic scheme with ancilla $\C^D$
+    generate the same vectors. A step of the transition scheme factors as
+    $E R_i$, where $E\ket{\varphi}=\ket{\varphi}\ket{0}$ and
+    $(R_i)_{\alpha,y}=W_{(\alpha,i),y}$, and $R_iE$ is the operation
+    $\bra{\alpha,i}W\ket{\beta,0}$ of the unitary $W$ on ancilla $\otimes$
+    site. Given a deterministic scheme with unitaries $U^{[k]}$, take
+    $W^{[k]}=U^{[k]}$ and the initial and final ancilla states
+    $E\ket{\varphi_I}$ and $E\ket{\varphi_F}$; the ancilla components are then
+    $E$ applied to those of the deterministic scheme. This is the use of the
+    fixed interaction in the work on which
+    \cite[Section~5.1]{PerezGarcia2007Matrix} is based.
+
+    Conversely, after the first step the tag qubit is $\ket{0}$, so the
+    ancilla component at $\sigma$ is $E$ applied to the product of the
+    matrices $R_iE$ acting on $v_i=R_i\ket{\varphi_I}$, where $R_i$ comes from
+    the first ancilla unitary. Since $\sum_i\|v_i\|^2=\|\varphi_I\|^2=1$, the
+    vectors $v_i$ are the first column of a unitary on $\C^D\otimes\C^2$ by
+    Theorem~\ref{thm:seqanc_unitary_extension}, and the scheme becomes a
+    deterministic scheme with ancilla $\C^D$ started in $\ket{0}$. The final
+    state is $\psi(\sigma)$ times the tag-zero part of $\varphi_F$. The total
+    squared norm is $1$ by Theorem~\ref{thm:seqanc_norm}, so some
+    $\psi(\sigma)$ is nonzero, the tag-one part of $\varphi_F$ vanishes, and the
+    tag-zero part is normalized.
+\end{proof}
 
 \section{Sequential generation without an ancilla}
 
 \begin{definition}[Sequential scheme without an ancilla]
     \label{def:seqanc_no_ancilla}
-    Starting from $\ket{0}^{\otimes N}$, an operation $U^{[k]}$ acts on sites
-    $k$ and $k+1$, for $k=1,\dots,N-1$ in turn. The scheme is deterministic if
-    every $U^{[k]}$ is unitary and probabilistic if the operations are
-    arbitrary \cite[Section~5.2]{PerezGarcia2007Matrix}.
+    \lean{MPSPreparation.noAncillaState,
+        MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla,
+        MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla}
+    \leanok
+    Let $d\ge 1$ and $N\ge 2$. Starting from $\ket{0}^{\otimes N}$, an operation $U^{[k]}$
+    acts on sites $k$ and $k+1$, for $k=1,\dots,N-1$ in turn. The scheme is
+    deterministic if every $U^{[k]}$ is unitary and probabilistic if the
+    operations are arbitrary \cite[Section~5.2]{PerezGarcia2007Matrix}. Here
+    sites carry the source's labels $1,\dots,N$; source site $j$ is ket
+    position $N-j$ in the labelling of this chapter. After
+    $U^{[k]}$ the scheme is described by the vector $\chi_k$ on the first
+    $k+1$ sites, defined by $\chi_1=U^{[1]}\ket{0,0}$ and
+    \begin{equation*}
+        \chi_k(\dots,i,\beta)=\sum_\alpha\bra{i,\beta}U^{[k]}\ket{\alpha,0}
+        \chi_{k-1}(\dots,\alpha),
+    \end{equation*}
+    and the generated state is $\chi_{N-1}$.
 \end{definition}
+
+\begin{remark}
+    The recursion describes the chain state: before $U^{[k]}$ acts, sites
+    $k+1,\dots,N$ are still in $\ket{0}$, and site $k$ is not touched
+    afterwards, so the state of the whole chain after $U^{[k]}$ is
+    $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$. Here the scheme is
+    defined by the recursion, and this identification with the action of the
+    two-site operations on the whole chain is not proved.
+\end{remark}
 
 \begin{theorem}[Sequential generation without an ancilla]
     \label{thm:seqanc_no_ancilla}
+    \lean{MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff,
+        MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff,
+        MPSPreparation.noAncillaState_eq_eval}
+    \leanok
     \uses{def:seqanc_no_ancilla, def:seqanc_obc_rep}
-    The states generated by sequential schemes without an ancilla, either
-    deterministically or probabilistically (the latter up to normalization),
-    are exactly the states with an open-boundary representation of bond
-    dimension at most $d$. This is \cite[Section~5, Theorem ``Sequential
-        generation without ancilla'']{PerezGarcia2007Matrix}.
+    Let $d\ge 1$ and $N\ge 2$. The states generated by sequential schemes without an
+    ancilla, either deterministically or probabilistically (the latter up to
+    normalization), are exactly the states with an open-boundary
+    representation of bond dimension at most $d$, normalized in the
+    deterministic case. This is \cite[Section~5, Theorem ``Sequential
+        generation without ancilla'']{PerezGarcia2007Matrix}, which prints no
+    bound on $N$; the scheme presupposes two sites, and the literal
+    one-site reading fails \cite{gap:pgvwc07_sequential_no_ancilla_two_sites}.
 \end{theorem}
 \begin{proof}
-    \uses{thm:seqanc_deterministic, thm:seqanc_probabilistic}
-    For $k<N-1$ the matrices
-    $A^{[k]}_{i,\alpha,\beta}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$ are the site
-    matrices, with $\alpha=0$ at $k=1$; a singular value decomposition of
-    $\bra{i,j}U^{[N-1]}\ket{\alpha,0}$ in the grouping $i\mid\alpha,j$ gives the
-    last two sites. Conversely, run the deterministic scheme of
-    Theorem~\ref{thm:seqanc_deterministic} using site $k+1$ as the ancilla of
-    the $k$-th step, followed by a swap of sites $k+1$ and $k+2$.
+    \leanok
+    \uses{thm:seqanc_sweep, thm:seqanc_assemble, thm:seqanc_coeff_corner,
+        thm:seqanc_norm,
+        thm:seqanc_block_congr, thm:seqanc_unitary_extension}
+    With $A^{[k]}_{i,\beta\alpha}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$ the
+    recursion for $\chi_k$ gives
+    $\psi(\sigma)=\bigl(A^{[N-1]}_{\sigma_1}\cdots
+        A^{[1]}_{\sigma_{N-1}}\ket{0}\bigr)_{\sigma_0}$ in ket positions, an
+    open-boundary representation with bond dimension at most $d$ by
+    Theorems~\ref{thm:seqanc_sweep} and~\ref{thm:seqanc_assemble}. For unitary operations each
+    $A^{[k]}$ satisfies $\sum_iA_i^\dagger A_i=\Id$, so the state is
+    normalized by Theorem~\ref{thm:seqanc_norm}.
+
+    Conversely, write an open-boundary state as
+    $\psi(\sigma)=\bigl(R\,P_1^{\sigma_1}\cdots P_{N-1}^{\sigma_{N-1}}
+        \ket{0}\bigr)_{\sigma_0}$ with $R_{j\gamma}$ the entries of the first
+    site (Theorem~\ref{thm:seqanc_coeff_corner}), and run the successive
+    decompositions of
+    Theorem~\ref{thm:seqanc_sweep} starting from $R$: this gives
+    $\psi(\sigma)=\bigl(Q_1^{\sigma_1}\cdots Q_{N-1}^{\sigma_{N-1}}
+        r'\bigr)_{\sigma_0}$ with every $Q_p$ isometric on its bond block, and
+    $\|r'\|=1$ when $\psi$ is normalized. Take $U^{[1]}$ with
+    $\bra{i,\beta}U^{[1]}\ket{0,0}=(Q_{N-1}^ir')_\beta$ and, for $k\ge 2$,
+    $U^{[k]}$ with $\bra{i,\beta}U^{[k]}\ket{\alpha,0}=(Q_{N-k}^i)_{\beta\alpha}$
+    on the used columns; in the deterministic case these are unitary
+    extensions by Theorem~\ref{thm:seqanc_unitary_extension}, and
+    Theorem~\ref{thm:seqanc_block_congr} identifies the generated state. The
+    source argues instead by running the scheme with an ancilla on site $k+1$
+    followed by swaps of neighboring sites.
 \end{proof}
