@@ -34,6 +34,11 @@ at line 761. The library gauge `LSymbol.gauge` is the reciprocal of the source's
 (line 718); with trivial fusion gauge this only replaces `γ` by `γ⁻¹` and defines the same
 equivalence relation.
 
+The torsor laws are stated without a group structure on `H2`, which is a bare quotient here:
+the product law of `solutionAction` is stated on cocycle representatives, and the law that the
+trivial class acts trivially is not stated. What is proved is that `solutionAction` is well
+defined, compatible with pointwise products of representatives, and free and transitive.
+
 ## Main definitions
 
 * `LSymbol.ActionGaugeEquiv`: equality up to an action-tensor gauge.

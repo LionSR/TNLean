@@ -7806,16 +7806,22 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
               onto the action-gauge classes of $L$-symbols compatible with
               $\omega$.
         \item Sending the class of $\psi$ and the class of $L$ to the
-              class of $L\,L[\psi]$ is a well-defined action of
-              $H^2(H,\C^\times)$ on these classes: acting by
-              $\psi_2$ and then by $\psi_1$ is acting by $\psi_1\psi_2$, and
-              for any two classes exactly one cohomology class carries the
-              first to the second.
+              class of $L\,L[\psi]$ is a well-defined map from
+              $H^2(H,\C^\times)$ times these classes to these classes:
+              applying it with $\psi_2$ and then with $\psi_1$ is applying
+              it with the pointwise product $\psi_1\psi_2$, and for any two
+              classes exactly one cohomology class carries the first to the
+              second.
     \end{enumerate}
-    The last two items are the torsor statement of \cite{GarreRubio2023MPOSym}
-    for fixed $(G,\omega,H)$, with the fusion gauge held fixed as in the
-    source.
+    The last two items give the free and transitive part of the torsor
+    statement of \cite{GarreRubio2023MPOSym} for fixed $(G,\omega,H)$, with
+    the fusion gauge held fixed as in the source.
     % Source anchor: arXiv:2203.12563, REsubmission.tex lines 749--761.
+    % The fourth item is stated as a map rather than a group action: the
+    % group structure of H^2(H, C^x) and the identity law of the action
+    % (the trivial class acts trivially) are not formalized, and the product
+    % law is stated on cocycle representatives. The source's torsor
+    % statement is formalized here only in this form.
 \end{theorem}
 
 \begin{proof}\leanok
