@@ -81,7 +81,8 @@ theorem exists_norm_sub_inner_smul_sq_le_mpv [NeZero D] {A : MPSTensor d D} {L�
                 (((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N)‖ ^ 2 ≤
             γ ^ 2 * (3 * n * C') := by
   classical
-  obtain ⟨C, hC, hclus⟩ := exists_norm_mpvCovariance_le hL1 hL hA hρ hρfix hρtr hmax hr hr1.le hM
+  obtain ⟨C, hC, hclus⟩ :=
+    exists_norm_mpvExpectation_mul_sub_mul_le hL1 hL hA hρ hρfix hρtr hmax hr hr1.le hM
   have hr0 : 0 ≤ r := (norm_nonneg _).trans hr.le
   refine ⟨2 * M ^ 2 + C * (2 * (1 / (1 - r))), ?_, ?_⟩
   · have : 0 < 1 - r := by linarith

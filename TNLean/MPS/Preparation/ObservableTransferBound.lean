@@ -113,15 +113,6 @@ theorem norm_physicalObservableTransfer_single_apply_le {A : MPSTensor d D}
         exact mul_le_mul_of_nonneg_left (norm_toLp_evalWord_apply_le hA m b c) (norm_nonneg _)
     _ = ‖Matrix.toEuclideanCLM (n := Fin m → Fin d) (𝕜 := ℂ) X‖ := by ring
 
-/-- Entries of a matrix are bounded by its `ℓ^∞` operator norm. -/
-theorem _root_.Matrix.norm_apply_le_linfty_opNorm (M : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D) :
-    ‖M p q‖ ≤ ‖M‖ := by
-  rw [← coe_nnnorm, ← coe_nnnorm, NNReal.coe_le_coe, Matrix.linfty_opNNNorm_def]
-  calc ‖M p q‖₊ ≤ ∑ j, ‖M p j‖₊ :=
-        Finset.single_le_sum (f := fun j ↦ ‖M p j‖₊) (fun _ _ ↦ bot_le) (Finset.mem_univ q)
-    _ ≤ Finset.univ.sup fun i ↦ ∑ j, ‖M i j‖₊ :=
-        Finset.le_sup (f := fun i ↦ ∑ j, ‖M i j‖₊) (Finset.mem_univ p)
-
 /-- The `ℓ^∞` operator norm of a matrix is at most `D` times a bound on its entries. -/
 theorem _root_.Matrix.linfty_opNorm_le_of_forall_norm_apply_le {M : Matrix (Fin D) (Fin D) ℂ}
     {B : ℝ} (hB : 0 ≤ B) (h : ∀ p q, ‖M p q‖ ≤ B) : ‖M‖ ≤ D * B := by

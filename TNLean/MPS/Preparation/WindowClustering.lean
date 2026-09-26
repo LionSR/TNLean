@@ -27,7 +27,7 @@ source's proof of Theorem 1 uses instead the approximation of `φ_N` by a produc
 * `inner_mpvState_chainWindowOperator_offset`,
   `inner_mpvState_chainWindowOperator_mul_offset`: the trace formulas for windows at an
   arbitrary offset, which make `φ_N` translation invariant on windows.
-* `exists_norm_mpvCovariance_le`: the clustering estimate.
+* `exists_norm_mpvExpectation_mul_sub_mul_le`: the clustering estimate.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator ComplexOrder
@@ -192,7 +192,7 @@ theorem mpvExpectation_chainWindowOperator_mul_eq (A : MPSTensor d D) {L N a m :
 
 /-- The connected correlation of two window operators is invariant under translating both
 windows (arXiv:2307.01696, eq. (TI-MPS2)). -/
-theorem mpvCovariance_eq_mpvConnectedCorrelator (A : MPSTensor d D) {L N a m : ℕ}
+theorem mpvExpectation_mul_sub_mul_eq_mpvConnectedCorrelator (A : MPSTensor d D) {L N a m : ℕ}
     (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) -
         mpvExpectation A N (chainWindowOperator N a X) *
@@ -206,8 +206,9 @@ theorem mpvCovariance_eq_mpvConnectedCorrelator (A : MPSTensor d D) {L N a m : �
 /-! ### The clustering estimate -/
 
 /-- A connected correlation of operators of norm at most `M` is at most `2M²`. -/
-theorem norm_mpvCovariance_le (A : MPSTensor d D) {N : ℕ} {O O' : Matrix (Cfg d N) (Cfg d N) ℂ}
-    {M : ℝ} (hO : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O‖ ≤ M)
+theorem norm_mpvExpectation_mul_sub_mul_le (A : MPSTensor d D) {N : ℕ}
+    {O O' : Matrix (Cfg d N) (Cfg d N) ℂ} {M : ℝ}
+    (hO : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O‖ ≤ M)
     (hO' : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) O'‖ ≤ M) :
     ‖mpvExpectation A N (O * O') - mpvExpectation A N O * mpvExpectation A N O'‖ ≤
       2 * M ^ 2 := by
@@ -241,8 +242,8 @@ This is the estimate "the connected correlation in `φ_N` of two operators of no
 `4` on intervals separated by `g` and `g'` sites around the ring is at most
 `C(r^g + r^{g'})`" of the chapter's proof of `thm:ldp_depth_lower_bound` (the chapter's
 version of arXiv:2307.01696, Theorem 1). -/
-theorem exists_norm_mpvCovariance_le [NeZero D] {A : MPSTensor d D} {L₀ : ℕ} (hL1 : 1 ≤ L₀)
-    (hL : Kraus.IsNBlkInjective A L₀) (hA : ∑ i, (A i)ᴴ * A i = 1)
+theorem exists_norm_mpvExpectation_mul_sub_mul_le [NeZero D] {A : MPSTensor d D} {L₀ : ℕ}
+    (hL1 : 1 ≤ L₀) (hL : Kraus.IsNBlkInjective A L₀) (hA : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρfix : Kraus.transferMap A ρ = ρ)
     (hρtr : Matrix.trace ρ = 1) {lam₂ : ℂ}
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
@@ -320,7 +321,7 @@ theorem exists_norm_mpvCovariance_le [NeZero D] {A : MPSTensor d D} {L₀ : ℕ}
   refine ⟨(4 * (K + 2) ^ 2 + 1) * K + 4 * M ^ 2 * K + 1, by positivity, ?_⟩
   intro w hw X Y hX hY a g h N hN hg hh
   set h' := h + a with hh'_def
-  rw [mpvCovariance_eq_mpvConnectedCorrelator A hw (by omega)]
+  rw [mpvExpectation_mul_sub_mul_eq_mpvConnectedCorrelator A hw (by omega)]
   obtain rfl : N = w + g + w + h' := by omega
   set ε : ℝ := K * (r ^ g + r ^ h') with hε_def
   have hS : 0 ≤ r ^ g + r ^ h' := add_nonneg (hrk0 _) (hrk0 _)
@@ -334,7 +335,7 @@ theorem exists_norm_mpvCovariance_le [NeZero D] {A : MPSTensor d D} {L₀ : ℕ}
       (by omega) (by omega) X).trans hX
     have hwY := (norm_toEuclideanCLM_chainWindowOperator_le (N := w + g + w + h')
       (a := w + g) (by omega) (by omega) Y).trans hY
-    refine (norm_mpvCovariance_le A hwX hwY).trans ?_
+    refine (norm_mpvExpectation_mul_sub_mul_le A hwX hwY).trans ?_
     have h4 : 2 * M ^ 2 ≤ 4 * M ^ 2 * ε := by
       have := mul_le_mul_of_nonneg_left hsmall.le (by positivity : (0 : ℝ) ≤ 4 * M ^ 2)
       linarith

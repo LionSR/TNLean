@@ -52,7 +52,7 @@ open Fin.CommRing
 variable [NeZero N]
 
 /-- **Separated windows.** The windows `a, …, a + w - 1` and `b, …, b + w' - 1` of the ring
-of `N` sites are at ring distance larger than `s` when there are more than `s` sites between
+of `N` sites are at ring distance larger than `s` when there are at least `s` sites between
 them on both sides: `a + w + s ≤ b` and `b + w' + s ≤ a + N`.
 
 This is the separation of the translated observables in the chapter's proof of

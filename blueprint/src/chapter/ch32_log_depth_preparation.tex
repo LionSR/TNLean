@@ -1197,7 +1197,7 @@ of $A$ along $w$.
 
 \begin{lemma}[Averages over separated windows]
     \label{lem:ldp_window_averages}
-    \lean{MPSTensor.exists_norm_mpvCovariance_le,
+    \lean{MPSTensor.exists_norm_mpvExpectation_mul_sub_mul_le,
         MPSTensor.exists_norm_sub_inner_smul_sq_le_mpv,
         MPSTensor.mpvExpectation_chainWindowOperator_eq,
         MPSTensor.mpvExpectation_chainWindowOperator_mul_eq,
@@ -1217,8 +1217,9 @@ of $A$ along $w$.
     $\lvert c_k\rvert\le\gamma$.
     \begin{enumerate}
         \item Expectations in $\ket{\phi_N}$ of operators on one window, or on
-              two windows at a fixed distance, do not depend on the position of
-              the windows.
+              two windows of the same length at a fixed distance, do not depend
+              on the position of the windows, as long as the windows lie in the
+              sites $1,\dots,N$ without wrapping around the ring.
         \item In the gauge (\ref{eq:ldp_normal_gauge}),
               $\lVert\E_X\rVert\le D^3\lVert X\rVert$ whatever the number of
               sites $X$ acts on.
@@ -1249,8 +1250,8 @@ of $A$ along $w$.
     of $c_kc_l$ times the connected correlations of $X^{(k)}$ and $X^{(l)}$;
     in $\ket{\phi_N}$ these are bounded by (3) with $g\ge l-k$ and
     $g'\ge n-l+k$, and in $\ket{\psi}$ they vanish for $k\ne l$ by
-    Lemma~\ref{lem:ldp_light_cone_correlations}, since the windows are more
-    than $2T$ sites apart on both sides.
+    Lemma~\ref{lem:ldp_light_cone_correlations}, since the windows are at
+    least $2T$ sites apart on both sides.
 \end{proof}
 
 \begin{theorem}[No preparation in depth $o(\log N)$, gauge form]
@@ -1267,7 +1268,7 @@ of $A$ along $w$.
     and let $\lambda_2\neq1$ be an eigenvalue of $\E_A$ of largest modulus
     among those different from $1$, with $\xi=-1/\log\lvert\lambda_2\rvert>0$.
     \begin{enumerate}
-        \item There are $B,C,b>0$ such that for every $T\ge0$ and
+        \item There are $B\ge0$ and $C,b>0$ such that for every $T\ge0$ and
               $N\ge B(T+1)$, if a unit vector $\ket{\psi}$ prepared in depth $T$
               satisfies $\lvert\braket{\phi_N}{\psi}\rvert\ge1/2$, then
               $N\le C(T+1)\,e^{b(T+1)}$.
@@ -1283,8 +1284,8 @@ of $A$ along $w$.
     \leanok
     \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
         lem:ldp_window_averages, lem:ldp_light_cone_correlations}
-    Part (1) is the second to last paragraphs of the proof of
-    Theorem~\ref{thm:ldp_depth_lower_bound}, with $s'\le s_0+2T+L+2$,
+    Part (1) is the argument of the proof of
+    Theorem~\ref{thm:ldp_depth_lower_bound} from its second paragraph on, with $s'\le s_0+2T+L+2$,
     $\Delta\le(s_0+2L+4)(T+1)$ and $n\ge N/(2\Delta)$, which turn
     (\ref{eq:ldp_depth_contradiction}) into $N\le C(T+1)e^{b(T+1)}$. For (2),
     $T_N\le\log N/(2(b+1))$ for large $N$ gives

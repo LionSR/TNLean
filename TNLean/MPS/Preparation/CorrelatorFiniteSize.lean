@@ -143,6 +143,15 @@ theorem exp_neg_div_correlationLength_le_norm_pow {lam : ℂ} (hpos : 0 < ‖lam
   have hts' : (t : ℝ) + 1 ≤ s := by exact_mod_cast hts
   nlinarith
 
+/-- Entries of a matrix are bounded by its `ℓ^∞` operator norm. -/
+theorem _root_.Matrix.norm_apply_le_linfty_opNorm (M : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D) :
+    ‖M p q‖ ≤ ‖M‖ := by
+  rw [← coe_nnnorm, ← coe_nnnorm, NNReal.coe_le_coe, Matrix.linfty_opNNNorm_def]
+  calc ‖M p q‖₊ ≤ ∑ j, ‖M p j‖₊ :=
+        Finset.single_le_sum (f := fun j ↦ ‖M p j‖₊) (fun _ _ ↦ bot_le) (Finset.mem_univ q)
+    _ ≤ Finset.univ.sup fun i ↦ ∑ j, ‖M i j‖₊ :=
+        Finset.le_sup (f := fun i ↦ ∑ j, ‖M i j‖₊) (Finset.mem_univ p)
+
 /-- The trace of a linear map on `D × D` matrices is bounded by a constant times the
 operator norm of the map, for the `ℓ^∞` operator norm on matrices. This controls the
 traces of the finite-size corrections in arXiv:2307.01696, Supplemental Material,
@@ -153,19 +162,11 @@ theorem _root_.Matrix.norm_linearMap_trace_le_mul_norm
       (∑ p : Fin D, ∑ q : Fin D, ‖Matrix.single p q (1 : ℂ)‖) *
         ‖Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F‖ := by
   classical
-  have hentry : ∀ (M : Matrix (Fin D) (Fin D) ℂ) (p q : Fin D), ‖M p q‖ ≤ ‖M‖ := by
-    intro M p q
-    rw [← coe_nnnorm, ← coe_nnnorm, NNReal.coe_le_coe, Matrix.linfty_opNNNorm_def]
-    calc ‖M p q‖₊ ≤ ∑ j, ‖M p j‖₊ :=
-          Finset.single_le_sum (f := fun j ↦ ‖M p j‖₊) (fun _ _ ↦ bot_le)
-            (Finset.mem_univ q)
-      _ ≤ Finset.univ.sup fun i ↦ ∑ j, ‖M i j‖₊ :=
-          Finset.le_sup (f := fun i ↦ ∑ j, ‖M i j‖₊) (Finset.mem_univ p)
   rw [Matrix.linearMap_trace_eq_sum_apply_single, Finset.sum_mul]
   refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun p _ ↦ ?_)
   rw [Finset.sum_mul]
   refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun q _ ↦ ?_)
-  refine (hentry _ p q).trans ?_
+  refine (Matrix.norm_apply_le_linfty_opNorm _ p q).trans ?_
   rw [mul_comm]
   exact (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ) F).le_opNorm
     (Matrix.single p q 1)

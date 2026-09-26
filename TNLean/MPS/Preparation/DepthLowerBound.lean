@@ -36,9 +36,10 @@ The chapter instead takes the separation `s'` from the windowed correlation esti
 `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of arXiv:2307.01696, eq. (5), with a
 blocking length `L` at which `A` is injective and a subleading eigenvalue `λ₂` of `E_A`. The
 source's Theorem 1 is stated for every normal tensor; its proof, and the chapter's, first pass
-to this gauge. That reduction is not formalized here, so the chapter entry
-`thm:ldp_depth_lower_bound` is tagged against the separate gauge-form entry
-`thm:ldp_depth_lower_bound_gauge`.
+to this gauge. That reduction is not formalized here, so the Lean results are tagged against the
+separate gauge-form entry `thm:ldp_depth_lower_bound_gauge`, and the source entry
+`thm:ldp_depth_lower_bound` stays untagged. Documented in
+`docs/paper-gaps/mswc24_depth_lower_bound_gauge.tex`.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator ComplexOrder
@@ -49,22 +50,6 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-! ### The quantitative bound -/
-
-private theorem lt_one_of_correlationLength_pos {lam₂ : ℂ} (hξ : 0 < correlationLength lam₂) :
-    0 < ‖lam₂‖ ∧ ‖lam₂‖ < 1 := by
-  have hlog : Real.log ‖lam₂‖ < 0 := by
-    by_contra h
-    push Not at h
-    have : correlationLength lam₂ ≤ 0 := by
-      unfold correlationLength
-      exact div_nonpos_iff.mpr (Or.inr ⟨by norm_num, h⟩)
-    linarith
-  have hpos : 0 < ‖lam₂‖ := by
-    rcases (norm_nonneg lam₂).lt_or_eq with h | h
-    · exact h
-    · rw [← h, Real.log_zero] at hlog
-      exact absurd hlog (lt_irrefl 0)
-  exact ⟨hpos, (Real.log_neg_iff hpos).mp hlog⟩
 
 /-- **Depth lower bound, quantitative form.** Let `A` be normal in the gauge
 `eq:ldp_normal_gauge` (arXiv:2307.01696, eq. (5)), with the products of `L` matrices spanning
@@ -89,7 +74,7 @@ theorem exists_depth_lower_bound {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
           (N : ℝ) ≤ C * (T + 1) * Real.exp (b * (T + 1)) := by
   classical
   have : NeZero D := ⟨by rintro rfl; simp [Matrix.trace] at hρtr⟩
-  obtain ⟨hpos, hlt1⟩ := lt_one_of_correlationLength_pos hξ
+  obtain ⟨hpos, hlt1⟩ := norm_pos_and_lt_one_of_correlationLength_pos hξ
   set ξ := correlationLength lam₂ with hξ_def
   obtain ⟨O, O', hOh, hO'h, hOn, hO'n, c, hc, K, hK1, hK2, -, s₀, hs₀, hdec⟩ :=
     exists_decayingCorrelations hL1 hL hA hρ hρfix hρtr hlam₂ hlam₂1 hmax hξ
