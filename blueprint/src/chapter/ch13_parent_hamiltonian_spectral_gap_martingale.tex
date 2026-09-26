@@ -5072,6 +5072,60 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     for all blocks and all pairs. Apply the joint projector error estimate.
 \end{proof}
 
+\begin{theorem}[Interval spaces of a block-diagonal tensor]
+    \label{thm:ph_block_sum_interval_spaces}
+    \lean{MPSTensor.range_leftBoundaryMapES_toTensorFromBlocks_eq_iSup,
+        MPSTensor.range_tailBoundaryMapES_toTensorFromBlocks_eq_iSup,
+        MPSTensor.range_reassocTailBoundaryMapES_toTensorFromBlocks_eq_iSup}
+    \leanok
+    Let $B=\bigoplus_{j=1}^r\mu_jA_j$ with $\mu_j\ne0$ for every $j$.
+    For every $K,L\geq0$, the extended interval spaces satisfy
+    \begin{align}
+        G_K(B)\otimes\mathcal H_L
+         & =\sum_{j=1}^r\bigl(G_K(A_j)\otimes\mathcal H_L\bigr),  \\
+        \mathcal H_K\otimes G_L(B)
+         & =\sum_{j=1}^r\bigl(\mathcal H_K\otimes G_L(A_j)\bigr).
+    \end{align}
+    These identities also hold under the natural reassociation of three
+    consecutive intervals of lengths $K,L,Q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:block_sum_local_ground_space}
+    The local identity is $G_L(B)=\sum_jG_L(A_j)$.
+    Expand a vector on the free sites in their finite coordinate basis.
+    Interchanging the sum over the coordinates with the sum over the blocks
+    gives both assertions. The linear isometry reassociating three
+    consecutive intervals preserves sums of subspaces.
+\end{proof}
+
+\begin{theorem}[Projector error decay for a block-diagonal tensor]
+    \label{thm:ph_block_diagonal_projector_decay}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_projector_defect_le}
+    \leanok
+    Let $B=\bigoplus_{j=1}^r\mu_jA_j$, where every $\mu_j$ is nonzero
+    and the $A_j$ are pairwise gauge-phase inequivalent normalized primitive
+    tensors with positive bond dimensions and positive definite invariant
+    densities. Write $P_I(B)$ for the orthogonal projector onto the ground
+    space on the interval $I$, extended by the identity on the remaining
+    sites. For every $\eta>0$, all sufficiently large $L$, and every
+    $K\geq0$ and $Q>0$,
+    \begin{align}
+        \bigl\lVert P_{[1,K+L+Q]}(B)
+        -P_{[1,K+L]}(B)P_{[K+1,K+L+Q]}(B)\bigr\rVert
+         & \leq\eta.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_primitive_block_interval_defect_decay,
+        lem:block_sum_local_ground_space, thm:ph_block_sum_interval_spaces}
+    The three ground spaces of $B$ are the sums of the corresponding block
+    ground spaces. Their orthogonal projectors are therefore precisely the
+    three joint projectors in the primitive-block decay estimate. Apply
+    that estimate with the prescribed $\eta$.
+\end{proof}
+
 \section{The normalized primitive gauge of a normal tensor}
 
 A normal tensor need not be trace-preserving or have spectral radius one.

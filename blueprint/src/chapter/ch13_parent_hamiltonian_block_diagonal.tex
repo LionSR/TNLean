@@ -180,15 +180,16 @@ periodic boundary step of \cite[Theorem~IV.16]{Cirac2021Matrix}.
     Hence $\Gamma_L^{A_j}(X)\in G_L(B)$.
 \end{proof}
 
-\begin{lemma}[Local ground space of a block-diagonal tensor]
+\begin{theorem}[Local ground space of a block-diagonal tensor]
     \label{lem:block_sum_local_ground_space}
-    \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup}
+    \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup,
+        MPSTensor.groundSpaceES_toTensorFromBlocks_eq_iSup}
     \leanok
     \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum, lem:local_ground_space_block_le_assembled}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$. Then, for every length $L$,
     $G_L(B)=\bigvee_{j=1}^gG_L(A_j)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok

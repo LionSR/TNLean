@@ -1978,6 +1978,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Spectator ranges of block sums — factored
+- **Pattern:** identify a spectator boundary map as a coordinate map composed
+  with the pointwise extension of the local boundary map, then distribute its
+  range over a sum of local ground spaces.
+- **Seen:** the left and tail boundary ranges in
+  `TNLean/MPS/ParentHamiltonian/BlockSumIntervalSpaces.lean`.
+- **Abstraction:** the private `pi_univ_iSup_const` lemma follows from Mathlib's
+  `Submodule.iSup_map_single`, `Submodule.map_iSup`, and `iSup_comm`.
+  Both range calculations use `LinearMap.range_compLeft`; the Hilbert-space
+  statements follow by mapping the same submodule identities.
+- **Notes:** two occurrences in one file. No new tactic or general simp set is
+  needed; promote the submodule lemma only if another file needs it.
+
+
 ### Uniform decay of whole-increment block errors — factored
 - **Pattern:** combine the geometric FNW estimate with the vanishing rational
   coefficient, then choose a common overlap length independently of the two
