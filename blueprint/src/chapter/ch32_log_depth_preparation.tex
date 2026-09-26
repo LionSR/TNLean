@@ -319,6 +319,101 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
 
+The correlation estimate below rests on four ingredients, which are proved
+first. For an operator $X$ on $(\C^d)^{\otimes L}$ write $\E_X$ for the map
+$Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$ on $\MN{D}$, where
+$w,w'$ run over words of length $L$ and $A^w$ is the product of the matrices
+of $A$ along $w$.
+
+\begin{lemma}[Every map is an inserted transfer map]
+    \label{lem:ldp_observable_transfer_surjective}
+    \lean{MPSTensor.exists_physicalObservableTransfer_eq}
+    \leanok
+    \uses{def:transfer_map}
+    Suppose the products of $L$ matrices of $A$ span $\MN{D}$. Then every
+    linear map $\Phi$ on $\MN{D}$ equals $\E_X$ for some operator $X$ on
+    $(\C^d)^{\otimes L}$. For $L=1$ and injective $A$ this is the step
+    ``we can always choose $\mathcal O$ (and $\mathcal O'$), such that the
+    corresponding transfer matrix $E_{\mathcal O}=\ket{A}\bra{B}$ for
+    arbitrary $A,B$ (up to a normalization constant)'' in the proof of
+    \cite[Lemma~2]{Malz2024Preparation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$. The operator
+    with matrix elements $\bra{w'}X\ket{w}=c^{ab}_w\overline{c^{ce}_{w'}}$ gives
+    $\E_X(Z)=e_{ab}Ze_{ec}=Z_{be}\,e_{ac}$. These maps span all linear maps on
+    $\MN{D}$, and $X\mapsto\E_X$ is linear.
+\end{proof}
+
+\begin{lemma}[The limit correlator at an eigenvector]
+    \label{lem:ldp_limit_correlator_eigenvalue}
+    \lean{MPSTensor.limitCorrelator, MPSTensor.exists_limitCorrelator_eq_pow}
+    \leanok
+    \uses{def:transfer_map}
+    Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
+    $\sum_i(A^i)^\dagger A^i=\Id$, let $\Tr\rho=1$, put $P(Z)=\Tr(Z)\,\rho$,
+    and let $R\neq0$ satisfy $\E_A(R)=\lambda R$ with $\lambda\neq1$. Then there
+    are operators $X,Y$ on $(\C^d)^{\otimes L}$ such that for every $t\ge0$
+    \begin{align}
+        \Tr\Bigl(\E_X\bigl((\E_A-P)^t\bigl(\E_Y(\rho)\bigr)\bigr)\Bigr)
+         & =\lambda^t.
+        \notag
+    \end{align}
+    When $\rho$ is the fixed point of the gauge (\ref{eq:ldp_normal_gauge}),
+    the left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
+    $t=s-L-1$. This is the choice of observables in the proof of
+    \cite[Lemma~2]{Malz2024Preparation}, without the source's requirement that
+    the one-point functions vanish.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_observable_transfer_surjective}
+    Trace preservation gives $\lambda\Tr R=\Tr R$, so $\Tr R=0$, $P(R)=0$, and
+    $(\E_A-P)^tR=\lambda^tR$. By
+    Lemma~\ref{lem:ldp_observable_transfer_surjective} take
+    $\E_Y(Z)=\Tr(Z)\,R$ and $\E_X(Z)=(Z_{ij}/R_{ij})\,\rho$ for an entry
+    $R_{ij}\neq0$.
+\end{proof}
+
+\begin{lemma}[Exponential sums on windows]
+    \label{lem:ldp_vandermonde_window}
+    \lean{Complex.exists_window_le_norm_sum_mul_pow}
+    \leanok
+    Let $\mu_1,\dots,\mu_K$ be distinct complex numbers of modulus one and
+    $a\in\C^K$ nonzero. There is $c_0>0$ such that for every integer $t\ge0$
+    some $u\in\{0,\dots,K-1\}$ satisfies
+    $\bigl\lvert\sum_{j=1}^Ka_j\mu_j^{\,t+u}\bigr\rvert\ge c_0$. This gives
+    the lower bound of (\ref{eq:ldp_vandermonde_window}) for some positive
+    constant $c_0$, not necessarily the explicit constant displayed there.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The Vandermonde map $v\mapsto(\sum_jv_j\mu_j^{\,u})_{0\le u<K}$ is
+    injective, so it is bounded below on $\C^K$. The vector
+    $(a_j\mu_j^t)_j$ has the maximum norm of $a$.
+\end{proof}
+
+\begin{lemma}[Expectations in overlapping states]
+    \label{lem:ldp_expectation_overlap}
+    \lean{LinearMap.IsSymmetric.norm_inner_mul_norm_sub_le}
+    \leanok
+    For a Hermitian operator $Z$ and unit vectors $\phi,\psi$, with
+    $\sigma_\chi(Z)=\lVert(Z-\langle Z\rangle_\chi)\chi\rVert$, the inequality
+    (\ref{eq:ldp_expectation_overlap}) holds:
+    $\lvert\braket{\phi}{\psi}\rvert\,
+        \lvert\langle Z\rangle_\phi-\langle Z\rangle_\psi\rvert
+        \le\sigma_\phi(Z)+\sigma_\psi(Z)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $\langle Z\rangle_\phi$ is real,
+    $(\langle Z\rangle_\phi-\langle Z\rangle_\psi)\braket{\phi}{\psi}
+        =\bra{\phi}(Z-\langle Z\rangle_\psi)\ket{\psi}
+        -\bra{\phi}(Z-\langle Z\rangle_\phi)\ket{\psi}$; apply the
+    Cauchy--Schwarz inequality to both terms.
+\end{proof}
+
 \begin{lemma}[Exponentially decaying correlations]
     \label{lem:ldp_decaying_correlations}
     \uses{def:normal, def:correlation_length}
@@ -349,11 +444,11 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     separation $s$ ranging over windows of $K$ consecutive values.
 \end{lemma}
 \begin{proof}
-    \uses{def:transfer_map}
-    For an operator $X$ on $(\C^d)^{\otimes L}$ let $\E_X$ be the map
-    $Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$ on $\MN{D}$,
-    where $w,w'$ run over words of length $L$ and $A^w$ is the product of the
-    matrices along $w$; thus $\E_{\Id}=\E_A^{\,L}$. Expanding the traces in
+    \uses{def:transfer_map, lem:ldp_observable_transfer_surjective,
+        lem:ldp_limit_correlator_eigenvalue, lem:ldp_vandermonde_window}
+    With the inserted transfer maps $\E_X$ defined before
+    Lemma~\ref{lem:ldp_observable_transfer_surjective},
+    $\E_{\Id}=\E_A^{\,L}$. Expanding the traces in
     (\ref{eq:ldp_ti_mps}) gives, for $L<s$ and $s+L-1\le N$,
     \begin{align}
         \bra{\phi_N(A)}X_1Y_s\ket{\phi_N(A)}
@@ -434,10 +529,13 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     $\lvert\lambda_2\rvert^{t'}=e^{-(s'-L-1)/\xi}\ge e^{-(s'-1)/\xi}$, which
     gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/4$.
 \end{proof}
-%% The source's Lemma 2 (lm:2) is not available locally and could not be
-%% checked. An earlier version of this entry asserted the bound for every
-%% s > 1, with one-point functions vanishing exactly. Neither is justified
-%% in general. The correlator of Hermitian observables is real, and its
+%% The source's Lemma 2 (label lm:2 in the arXiv:2307.01696 LaTeX source,
+%% Supplemental Material, section Proof of Theorem 1) asserts, for
+%% injective A with xi > 0, observables O_1, O'_s of norm one such that for
+%% every integer s > 1 and sufficiently large N the one-point functions
+%% vanish exactly (auxform1) and the correlator itself satisfies the real
+%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). Neither the bound
+%% at every s > 1 nor the exact vanishing is justified in general. The correlator of Hermitian observables is real, and its
 %% leading part is an exponential sum over the eigenvalues of modulus
 %% |lambda_2|, which come in complex-conjugate pairs; such a sum, a cosine
 %% for a single conjugate pair, can vanish at individual s. The statement
@@ -460,7 +558,7 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
     \cite[Theorem~1]{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
-    \uses{lem:ldp_decaying_correlations}
+    \uses{lem:ldp_decaying_correlations, lem:ldp_expectation_overlap}
     Take $L,\mathcal O,\mathcal O',c,K,s_0$ from
     Lemma~\ref{lem:ldp_decaying_correlations}, and suppose
     $\varepsilon(\phi_N,\psi_N)\le1/2$, that is
@@ -543,9 +641,19 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 %% the products of L matrices span M_D, so the argument runs at every N and
 %% not only at multiples of a blocking length. The window of K separations
 %% in the lemma moves the separation s' by at most K - 1 sites, which is
-%% absorbed into s' = o(log N); only constants change. The concentration
-%% argument above is a reconstruction, since the source proof could not be
-%% checked locally.
+%% absorbed into s' = o(log N); only constants change. The source proof
+%% (arXiv:2307.01696, Supplemental Material, proof of Theorem 1) takes a
+%% different route: it replaces phi_N by the blocked approximation of
+%% Lemma 1 at block length q ~ log N, traces out alternate blocks so that
+%% both states become products of k ~ N/(4q) factors, bounds the fidelity
+%% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
+%% single separation s = 2T + 1, using the exact vanishing of the
+%% one-point functions. Both of those inputs are unavailable here (see the
+%% comment after Lemma lem:ldp_decaying_correlations), so the proof above
+%% replaces the product-fidelity step by the concentration of averages of
+%% n ~ N/s' translated observables. This concentration argument is not in
+%% the source; it must be re-derived line by line when this theorem is
+%% formalized, and until then the theorem carries no formalization tag.
 
 \section{Tensors that are not normal}
 
