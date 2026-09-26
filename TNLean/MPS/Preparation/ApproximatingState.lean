@@ -49,12 +49,16 @@ open Filter Topology
 
 namespace Matrix
 
-/-- An isometry `W : ℂ^κ → ℂ^n` applied on every site preserves the squared norm of a vector on
-`M` sites: `‖W^{⊗M} ψ‖² = ‖ψ‖²`. -/
-theorem IsIsometry.sum_star_mul_self_tensorPower {n κ : Type*} [Fintype n] [Fintype κ]
-    [DecidableEq κ] {W : Matrix n κ ℂ} (hW : W.IsIsometry) {M : ℕ} (ψ : (Fin M → κ) → ℂ) :
-    ∑ s : Fin M → n, star (∑ τ, (∏ j, W (s j) (τ j)) * ψ τ) * ∑ τ, (∏ j, W (s j) (τ j)) * ψ τ =
-      ∑ τ, star (ψ τ) * ψ τ := by
+/-- An isometry `W : ℂ^κ → ℂ^n` applied on every site preserves inner products of vectors on
+`M` sites: `⟨W^{⊗M} ψ, W^{⊗M} φ⟩ = ⟨ψ, φ⟩`; in particular `‖W^{⊗M} ψ‖² = ‖ψ‖²`.
+
+arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries
+`V^{⊗N/q}` do not change norms or overlaps. -/
+theorem IsIsometry.sum_star_mul_tensorPower {n κ : Type*} [Fintype n] [Fintype κ]
+    [DecidableEq κ] {W : Matrix n κ ℂ} (hW : W.IsIsometry) {M : ℕ}
+    (ψ φ : (Fin M → κ) → ℂ) :
+    ∑ s : Fin M → n, star (∑ τ, (∏ j, W (s j) (τ j)) * ψ τ) * ∑ τ, (∏ j, W (s j) (τ j)) * φ τ =
+      ∑ τ, star (ψ τ) * φ τ := by
   classical
   have hcol : ∀ a b : κ, ∑ i, star (W i a) * W i b = if a = b then 1 else 0 := fun a b => by
     have h := congrFun (congrFun hW a) b
@@ -71,9 +75,9 @@ theorem IsIsometry.sum_star_mul_self_tensorPower {n κ : Type*} [Fintype n] [Fin
       rw [ite_eq_right_iff.2 fun h' => absurd h' h]
       exact Finset.prod_eq_zero (Finset.mem_univ j) (ite_eq_right_iff.2 fun h' => absurd h' hj)
   calc ∑ s : Fin M → n, star (∑ τ, (∏ j, W (s j) (τ j)) * ψ τ) *
-        ∑ τ, (∏ j, W (s j) (τ j)) * ψ τ
+        ∑ τ, (∏ j, W (s j) (τ j)) * φ τ
       = ∑ s : Fin M → n, ∑ τ, ∑ τ', (∏ j, (star (W (s j) (τ j)) * W (s j) (τ' j))) *
-          (star (ψ τ) * ψ τ') := by
+          (star (ψ τ) * φ τ') := by
         refine Finset.sum_congr rfl fun s _ => ?_
         simp only [star_sum, star_mul, star_prod, Finset.sum_mul, Finset.mul_sum]
         rw [Finset.sum_comm]
@@ -81,11 +85,11 @@ theorem IsIsometry.sum_star_mul_self_tensorPower {n κ : Type*} [Fintype n] [Fin
         rw [Finset.prod_mul_distrib]
         ring
     _ = ∑ τ, ∑ τ', (∑ s : Fin M → n, ∏ j, (star (W (s j) (τ j)) * W (s j) (τ' j))) *
-          (star (ψ τ) * ψ τ') := by
+          (star (ψ τ) * φ τ') := by
         simp only [Finset.sum_mul]
         rw [Finset.sum_comm]
         exact Finset.sum_congr rfl fun τ _ => Finset.sum_comm
-    _ = ∑ τ, star (ψ τ) * ψ τ := by
+    _ = ∑ τ, star (ψ τ) * φ τ := by
         simp only [hprod, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ,
           ite_true]
 
@@ -230,7 +234,7 @@ theorem mpv_approximatingTensor_norm_sq {B : MPSTensor n D}
     ∑ s : Fin M → Fin n,
       star (mpv (approximatingTensor B σ) s) * mpv (approximatingTensor B σ) s = 1 := by
   simp_rw [mpv_approximatingTensor]
-  rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_self_tensorPower]
+  rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_tensorPower]
   rw [← pairProductState_fixedPointPair_norm_sq (N := M) hσ htr]
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _
     fun _ => rfl
