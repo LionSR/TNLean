@@ -21,7 +21,8 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical
   dimension two, and names joint one-site independence as the missing
-  hypothesis, with blocking as the elimination route.
+  hypothesis, and records its elimination after blocking for normal blocks
+  that are pairwise inequivalent up to a nonzero scalar.
 
 - `bmwshv17_fibonacci_projector_positive_length.tex` records that the source
   asks for the projector identity `P_L^2 = P_L` at every length `L`, that at
@@ -39,6 +40,19 @@ For the Kitaev chain of arXiv:2011.12127, Appendix A:
   complementary parity supports, bosonic reducibility and non-normality, and
   the decomposition into two injective bond-dimension-one states), and
   that the fermionic injectivity claim awaits graded tensor networks.
+
+For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
+
+- `rmp_peps_examples_small_torus.tex` records that the cluster and CZX
+  tensors are placed on the simple torus graph, on which a torus of width or
+  height two has a single edge between neighbouring sites, so their state
+  formulas are stated for tori of width and height at least three; the GHZ
+  example holds on every torus.
+- `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
+  printed CZX tensor, contracted with equal labels at the two ends of each
+  bond, gives GHZ states on diagonal loops rather than the plaquette state,
+  and that the plaquette state follows when each bond identifies the pair
+  `(a, b)` at one end with `(b, a)` at the other.
 
 For the MPU index of arXiv:1703.09188:
 
@@ -550,6 +564,14 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   formalizes the single-block obstruction only in its fusion-ring form, not
   the cohomological form of the source.
 
+For the strong and weak symmetries of matrix product density operators in
+arXiv:2504.16985:
+
+- `sun25_mpdo_symmetry_boundary_scope.tex` records that the family predicates
+  are stated for the periodic operators, the identity boundary of the source's
+  boundary-weighted density operators, while the single-length results hold
+  for arbitrary matrices.
+
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
 - `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
@@ -579,3 +601,13 @@ For the group matrix product operators of arXiv:2203.12563:
   $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
+
+For the AKLT example of arXiv:2011.12127, Appendix A:
+
+- `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis
+  $\ket{+}=i(\ket{-1}+\ket{+1})/\sqrt2$, $\ket{-}$, $\ket{0}$ the AKLT tensor
+  becomes $(\sigma_x,-\sigma_y,\sigma_z)/\sqrt2$, not the printed
+  $(\sigma_x,\sigma_y,\sigma_z)/\sqrt2$. The two agree up to the virtual gauge
+  $\sigma_y$ and the scalar $-1$, so the states differ only by the global sign
+  $(-1)^N$; the printed Pauli form holds exactly with the phase of $\ket{+}$
+  conjugated. These identities are formally verified.

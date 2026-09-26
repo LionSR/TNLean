@@ -631,8 +631,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \begin{definition}[Deterministic transition scheme]
     \label{def:seqanc_transition}
     \lean{MPSPreparation.IsTransitionInteraction,
-        MPSPreparation.transitionStep, MPSPreparation.IsTransitionGenerated,
-        MPSPreparation.transitionStep_eq_of_isTransitionInteraction}
+        MPSPreparation.transitionStep, MPSPreparation.IsTransitionGenerated}
     \leanok
     \uses{def:seqanc_deterministic}
     Let $d=2$ and let the ancilla be $\C^D\otimes\C^2$. In every step an
@@ -647,13 +646,42 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
         \label{eq:seqanc_transition}
     \end{align}
     and the ancilla decouples after the last step. This is the third scheme
-    of \cite[Section~5.1]{PerezGarcia2007Matrix}. Since every site starts in
-    $\ket{0}$, only the action of $T$ on site inputs $\ket{0}$ enters, and a
-    step leaving the site in $\ket{i}$ acts on the ancilla by the matrix with
-    entries
-    $\bra{x,i}T(W^{[k]}\otimes\Id)\ket{y,0}
-        =\delta_{x_2,0}\,W^{[k]}_{(x_1,i),y}$.
+    of \cite[Section~5.1]{PerezGarcia2007Matrix}. The step with ancilla
+    unitary $W$ leaving the site in $\ket{i}$ is the matrix $S_i(W)$ on
+    $\C^D\otimes\C^2$ with entries
+    \begin{equation}
+        S_i(W)_{x,y}=\delta_{x_2,0}\,W_{(x_1,i),y}.
+        \label{eq:seqanc_transition_step}
+    \end{equation}
 \end{definition}
+
+\begin{theorem}[A transition step on a site in $\ket{0}$]
+    \label{thm:seqanc_transition_step}
+    \lean{MPSPreparation.transitionStep_eq_of_isTransitionInteraction}
+    \leanok
+    \uses{def:seqanc_transition}
+    Let $T$ be an interaction on $\C^D\otimes\C^2\otimes\C^2$ satisfying
+    \eqref{eq:seqanc_transition}, and let $W$ be a matrix on $\C^D\otimes\C^2$.
+    Then for all $x,y$ and $i$,
+    \begin{equation*}
+        \bra{x,i}T(W\otimes\Id)\ket{y,0}=S_i(W)_{x,y}.
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $z=(z_1,z_2)$, the relations \eqref{eq:seqanc_transition} applied to
+    $\ket{\varphi}=\ket{z_1}$ give $T\ket{z_1,z_2,0}=\ket{z_1,0,z_2}$, so
+    \begin{equation*}
+        \bra{x,i}T\ket{z,0}=\delta_{x_2,0}\,\delta_{x_1,z_1}\,\delta_{i,z_2}.
+    \end{equation*}
+    Since $(W\otimes\Id)_{(z,j),(y,0)}=\delta_{j,0}\,W_{z,y}$,
+    \begin{equation*}
+        \bra{x,i}T(W\otimes\Id)\ket{y,0}
+        =\sum_z\bra{x,i}T\ket{z,0}\,W_{z,y}
+        =\delta_{x_2,0}\,W_{(x_1,i),y}
+        =S_i(W)_{x,y}.
+    \end{equation*}
+\end{proof}
 
 \begin{theorem}[Transition schemes generate the open-boundary states]
     \label{thm:seqanc_transition}
@@ -710,14 +738,24 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     deterministic if every $U^{[k]}$ is unitary and probabilistic if the
     operations are arbitrary \cite[Section~5.2]{PerezGarcia2007Matrix}. Here
     sites carry the source's labels $1,\dots,N$; source site $j$ is ket
-    position $N-j$ in the labelling of this chapter. Before
-    $U^{[k]}$ acts, sites $k+1,\dots,N$ are still in $\ket{0}$, and site $k$
-    is not touched afterwards, so the chain state after $U^{[k]}$ is
-    $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$ with
-    $\chi_1=U^{[1]}\ket{0,0}$ and
-    $\chi_k(\dots,i,\beta)=\sum_\alpha\bra{i,\beta}U^{[k]}\ket{\alpha,0}
-        \chi_{k-1}(\dots,\alpha)$.
+    position $N-j$ in the labelling of this chapter. After
+    $U^{[k]}$ the scheme is described by the vector $\chi_k$ on the first
+    $k+1$ sites, defined by $\chi_1=U^{[1]}\ket{0,0}$ and
+    \begin{equation*}
+        \chi_k(\dots,i,\beta)=\sum_\alpha\bra{i,\beta}U^{[k]}\ket{\alpha,0}
+        \chi_{k-1}(\dots,\alpha),
+    \end{equation*}
+    and the generated state is $\chi_{N-1}$.
 \end{definition}
+
+\begin{remark}
+    The recursion describes the chain state: before $U^{[k]}$ acts, sites
+    $k+1,\dots,N$ are still in $\ket{0}$, and site $k$ is not touched
+    afterwards, so the state of the whole chain after $U^{[k]}$ is
+    $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$. Here the scheme is
+    defined by the recursion, and this identification with the action of the
+    two-site operations on the whole chain is not proved.
+\end{remark}
 
 \begin{theorem}[Sequential generation without an ancilla]
     \label{thm:seqanc_no_ancilla}
