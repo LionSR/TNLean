@@ -4634,7 +4634,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
     \leanok
     \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
-        thm:primitive_ground_space_gram_inverse_tendsto}
+        thm:primitive_ground_space_gram_inverse_tendsto,
+        thm:primitive_ground_space_gram_eventual_inverse_bound}
     Let $A$ and $B$ be trace-preserving tensors with positive-definite
     fixed matrices $\rho$ and $\sigma$. Suppose their complementary
     transfer maps have spectral radius less than one, and that
@@ -4652,7 +4653,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
-        thm:primitive_ground_space_gram_inverse_tendsto}
+        thm:primitive_ground_space_gram_inverse_tendsto,
+        thm:primitive_ground_space_gram_eventual_inverse_bound}
     The self-Gram operators converge to invertible limits determined by
     $\rho$ and $\sigma$. Their inverses therefore converge and are bounded
     for all sufficiently large $n$. By
@@ -4667,7 +4669,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
     \leanok
     \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
-        thm:transfer_operator_gap_rect_irr_tp}
+        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
     Let $A$ and $B$ be trace-preserving tensors with positive-definite
     fixed matrices and complementary transfer spectral radii less than one.
     Suppose that, if their bond dimensions agree, they are not gauge-phase
@@ -4683,7 +4685,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
-        thm:transfer_operator_gap_rect_irr_tp}
+        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
     The positive-definite fixed matrices and complementary gaps imply
     irreducibility. For equal bond dimensions, inequivalence gives a strict
     mixed-transfer spectral gap. For unequal bond dimensions, a peripheral
