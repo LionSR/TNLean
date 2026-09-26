@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Examples.ShiftIndex
 import TNLean.MPS.MPU.SimpleBlocking
+import TNLean.MPS.MPU.SimpleTensorProduct
 
 /-!
 # Shift MPUs: source ranks and index values at every blocking
@@ -25,11 +26,10 @@ citing arXiv:1703.09188.
 blocked over $k+1$ sites are computed exactly: the right shift has
 $(r,\ell)=(d^{k+2},d^k)$, the left shift $(d^k,d^{k+2})$, and $U_2$, $U_3$ have
 $r=\ell=d^{2k+2}$, giving the values $\log_2 d$, $-\log_2 d$, $0$, $0$ at every
-blocking. The right and left shifts and all their blockings are simple, so for
-these two tensors the values hold at every simple blocking, as Definition IV.1
-requires. Simplicity of the blockings of $U_2$ and $U_3$ is not proved here, so
-their zero values are values of the source-index expression at those blockings,
-not yet the index of Definition IV.1. For $d>1$ the right and left ranks of every
+blocking. The right and left shifts and all their blockings are simple. Since
+tensor products of simple tensors are simple, so are $U_1$, $U_2$, $U_3$ and all
+blockings of $U_2$ and $U_3$. All four values are therefore values at simple
+blockings, as Definition IV.1 requires. For $d>1$ the right and left ranks of every
 blocked shift differ, so its index value is nonzero.
 
 The review sentence itself is not formalized. The unequal ranks are no
@@ -62,6 +62,10 @@ and the uniqueness of that form. Documented in
 * `rightShiftTensor_isMPUSimple`, `leftShiftTensor_isMPUSimple`,
   `blockTensor_rightShiftTensor_isMPUSimple`,
   `blockTensor_leftShiftTensor_isMPUSimple`: simplicity at every blocking.
+* `identityMPUTensor_isMPUSimple`, `shiftExampleU₁_isMPUSimple`,
+  `shiftExampleU₂_isMPUSimple`, `shiftExampleU₃_isMPUSimple`,
+  `blockTensor_shiftExampleU₂_isMPUSimple`, `blockTensor_shiftExampleU₃_isMPUSimple`:
+  simplicity of $U_1$, and of $U_2$ and $U_3$ at every blocking.
 * `rightRank_blockTensor_rightShiftTensor_ne_leftRank`,
   `sourceIndexValue_blockTensor_rightShiftTensor_ne_zero`: for $d>1$ the ranks
   differ and the index value is nonzero.
@@ -499,6 +503,70 @@ tensors ${\cal U}_k$ of Definition IV.1, lines 681--686. -/
 theorem blockTensor_leftShiftTensor_isMPUSimple (d : ℕ) [NeZero d] (k : ℕ) :
     IsMPUSimple (blockTensor (leftShiftTensor d) (k + 1)) :=
   (leftShiftTensor_isMPUSimple d).blockTensor (k + 1) k.succ_pos
+
+/-! ### Simplicity of $U_1$, $U_2$, and $U_3$ -/
+
+/-- The identity tensor with bond dimension one is simple: its double-layer
+letters are $W^{ij}=\delta_{ij}$, and $a=b=1$ are boundary vectors.
+
+Source: arXiv:1703.09188, Definition III.2, lines 363--374, for the tensor of
+$I^{\otimes N}$ in the definition of $U_1$, lines 1990--1993. -/
+theorem identityMPUTensor_isMPUSimple (d : ℕ) : IsMPUSimple (identityMPUTensor d) := by
+  have hR : Matrix.vecMulVec (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) =
+      1 := by
+    ext x y
+    rw [Subsingleton.elim (α := Fin 1) x y]
+    simp [Matrix.vecMulVec_apply]
+  refine ⟨fun _ ↦ 1, fun _ ↦ 1, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
+  · simp only [dotProduct, Matrix.mulVec, doubleLayerTensor_apply, identityMPUTensor,
+      Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
+      physicalAdjointTensor_apply, idTensor]
+    by_cases h : i = j
+    · subst h
+      simp [Matrix.ite_apply, eq_comm]
+    · simp [Matrix.ite_apply, h, eq_comm]
+  · rw [hR, Matrix.mul_one]
+
+/-- $U_1=I\otimes I$ is simple.
+
+Source: arXiv:1703.09188, Definition III.2, lines 363--374, for $U_1$ at
+lines 1990--1993. -/
+theorem shiftExampleU₁_isMPUSimple (d : ℕ) : IsMPUSimple (shiftExampleU₁ d) :=
+  (identityMPUTensor_isMPUSimple d).tensorProduct (identityMPUTensor_isMPUSimple d)
+
+/-- $U_2=T^\dagger\otimes T$ is simple, as a tensor product of two simple
+tensors.
+
+Source: arXiv:1703.09188, Definition III.2, lines 363--374, for $U_2$ at
+lines 1990--1993; the tensoring step of Theorem `IndexTh` (ii), lines 835--836. -/
+theorem shiftExampleU₂_isMPUSimple (d : ℕ) [NeZero d] : IsMPUSimple (shiftExampleU₂ d) :=
+  (leftShiftTensor_isMPUSimple d).tensorProduct (rightShiftTensor_isMPUSimple d)
+
+/-- $U_3=T\otimes T^\dagger$ is simple, as a tensor product of two simple
+tensors.
+
+Source: arXiv:1703.09188, Definition III.2, lines 363--374, for $U_3$ at
+lines 1990--1993; the tensoring step of Theorem `IndexTh` (ii), lines 835--836. -/
+theorem shiftExampleU₃_isMPUSimple (d : ℕ) [NeZero d] : IsMPUSimple (shiftExampleU₃ d) :=
+  (rightShiftTensor_isMPUSimple d).tensorProduct (leftShiftTensor_isMPUSimple d)
+
+/-- Every nontrivial blocking of $U_2$ is simple, so
+`sourceIndexValue_blockTensor_shiftExampleU₂` gives values at simple blockings.
+
+Source: arXiv:1703.09188, Definition III.2, lines 363--374, and the blocked
+tensors ${\cal U}_k$ of Definition IV.1, lines 681--686. -/
+theorem blockTensor_shiftExampleU₂_isMPUSimple (d : ℕ) [NeZero d] (k : ℕ) :
+    IsMPUSimple (blockTensor (shiftExampleU₂ d) (k + 1)) :=
+  (shiftExampleU₂_isMPUSimple d).blockTensor (k + 1) k.succ_pos
+
+/-- Every nontrivial blocking of $U_3$ is simple, so
+`sourceIndexValue_blockTensor_shiftExampleU₃` gives values at simple blockings.
+
+Source: arXiv:1703.09188, Definition III.2, lines 363--374, and the blocked
+tensors ${\cal U}_k$ of Definition IV.1, lines 681--686. -/
+theorem blockTensor_shiftExampleU₃_isMPUSimple (d : ℕ) [NeZero d] (k : ℕ) :
+    IsMPUSimple (blockTensor (shiftExampleU₃ d) (k + 1)) :=
+  (shiftExampleU₃_isMPUSimple d).blockTensor (k + 1) k.succ_pos
 
 /-! ### Rank obstruction -/
 
