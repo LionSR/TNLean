@@ -32,8 +32,7 @@ The relation to the review's Hamiltonian \(H\) is only through
 `majumdarGhoshHamiltonian_apply_of_mem_chainGroundSpace`: every vector of
 \(\mathcal G_{N,3}\) is an eigenvector of \(H\) with eigenvalue
 \(-\tfrac{3N}8\). The lower bound \(H\ge-\tfrac{3N}8\), which would identify
-\(\mathcal G_{N,3}\) with the ground space of \(H\), is not formalized; it is
-tracked in https://github.com/LionSR/TNLean/issues/8117.
+\(\mathcal G_{N,3}\) with the ground space of \(H\), is not formalized.
 
 ## Proof outline
 
