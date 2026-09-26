@@ -24,6 +24,7 @@ import TNLean.MPS.ParentHamiltonian.BlockDiagonalOneSiteSpan
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceOverlap
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionBoundaryDecomposition
 import TNLean.MPS.ParentHamiltonian.BlockIntersectionProperty
+import TNLean.MPS.ParentHamiltonian.BlockIntervalProjectors
 import TNLean.MPS.ParentHamiltonian.BlockProjectorSum
 import TNLean.MPS.ParentHamiltonian.BlockStrip
 import TNLean.MPS.ParentHamiltonian.BlockSubspaceOverlap
@@ -88,7 +89,9 @@ import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
 import TNLean.MPS.ParentHamiltonian.ProjectorCancellation
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundary
+import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
+import TNLean.MPS.ParentHamiltonian.SpectatorOverlap
 import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
 import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
