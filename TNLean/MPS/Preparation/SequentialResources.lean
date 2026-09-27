@@ -19,7 +19,7 @@ running the recipe once from each end.
 
 ## Site order
 
-The source writes the state as `⟨φ_F| Ṽ_{[n]} ⋯ Ṽ_{[1]} |φ_I⟩` and starts the
+The source writes the state as `⟨φ_F| V~_{[n]} ⋯ V~_{[1]} |φ_I⟩` (tilde over `V`) and starts the
 decompositions at the `φ_F` end, with the `2 × 2` matrix `V'_{[n]}`. An
 `OBCChainTensor` is read from site `0` to site `N - 1`, and
 `OBCChainTensor.exists_isometric_coeff_eq` starts its sweep at site `0`, so site
