@@ -18,6 +18,7 @@ open scoped BigOperators InnerProductSpace
 
 variable {ι : Type*} [Fintype ι] {E : ι → Type*}
   [∀ i, NormedAddCommGroup (E i)] [∀ i, InnerProductSpace ℂ (E i)]
+
 private theorem norm_inner_le_of_fibers (x y : PiLp 2 E) {ε : ℝ} (hε : 0 ≤ ε)
     (h : ∀ i, ‖⟪x i, y i⟫_ℂ‖ ≤ ε * ‖x i‖ * ‖y i‖) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
