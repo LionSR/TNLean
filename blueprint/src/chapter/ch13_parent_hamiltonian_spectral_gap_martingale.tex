@@ -5005,6 +5005,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \section{Overlap bounds with spectator sites}
 
+Throughout this section, local ground spaces are subspaces of
+the Hilbert spaces of configurations, so $G_L(A)$ stands for
+$G_L^{\mathrm{ES}}(A)=\iota_L(G_L(A))$ of
+Definition~\ref{def:ground_space_es}.
+
 \begin{theorem}[Overlap from restrictions to a common interval]
     \label{thm:ph_middle_interval_overlap}
     \lean{MPSTensor.norm_inner_le_of_middle_groundSpaceES}
@@ -5176,10 +5181,26 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \uses{thm:ph_block_interval_defect_decay,
         thm:inequivalent_block_ground_space_overlap_decay,
         thm:primitive_whole_increment_defect_decay}
-    Inequivalence gives decay of the overlaps between distinct blocks.
-    Primitivity gives uniform decay of each individual projector error.
-    Since the family is finite, the thresholds can be chosen simultaneously
-    for all blocks and all pairs. Apply the joint projector error estimate.
+    Inequivalence of distinct blocks gives, for every $\varepsilon>0$, a
+    length $L_1$ such that for all $L\ge L_1$, all distinct $i,j$, and all
+    $x\in G_L(A_i)$, $y\in G_L(A_j)$,
+    \begin{align}
+        |\langle x,y\rangle|
+         & \le\varepsilon\lVert x\rVert\lVert y\rVert.
+        \notag
+    \end{align}
+    Primitivity gives, for every $\varepsilon>0$, a length $L_2$ such that
+    for all $L\ge L_2$, every block $i$, and every $K\ge0$ and $Q>0$,
+    \begin{align}
+        \lVert Q_iP_i-R_i\rVert & \le\varepsilon.
+        \notag
+    \end{align}
+    The family is finite, so both bounds hold at the common threshold
+    \begin{align}
+        L & \ge L_1\vee L_2.
+        \notag
+    \end{align}
+    Apply Theorem~\ref{thm:ph_block_interval_defect_decay}.
 \end{proof}
 
 \begin{theorem}[Interval spaces of a block-diagonal tensor]
