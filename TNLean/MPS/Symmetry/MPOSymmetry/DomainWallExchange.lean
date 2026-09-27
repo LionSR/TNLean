@@ -27,6 +27,11 @@ This file formalizes the tensor-level content of these statements:
   `IsDomainWallAction.smul_target`), so that for an involution the two phases can be made
   equal to any square root of their product (`IsDomainWallAction.exists_eq_of_mul_self`).
 
+**Local fix (nondegenerate domain walls, blocked local action):** the results of this module,
+`smul_source`, `smul_target`, `exists_eq_of_mul_self` and `pair`, are stated for
+`IsDomainWallAction`, whose walls and phase are nonzero and whose local relation holds against
+regions longer than a buffer; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+
 The truncated string operators `O^{[i,j]}` of `eq:DWophys`, with the endpoint tensors of
 `eq:defEndT` built from left inverses, and the operator identities `eq:z2int` and `signphysop`
 themselves, are not constructed here.

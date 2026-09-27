@@ -1192,6 +1192,26 @@ The following notions use different transfer objects and are not interchangeable
   the anomalous examples (CZX, $\mathbb Z_3$, $\mathbb Z_2\times\mathbb Z_2$)
   satisfy only the reduction with a nilpotent remainder, never this predicate.
 
+## Domain walls of permuted blocks
+
+### `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction`
+
+- **Declaration:** `ad.IsDomainWallAction g hx hy e e' c : Prop` for action tensors
+  `ad : BlockActionData F A`, a group element `g`, a domain wall `e` between the blocks `x` and
+  `y`, a domain wall `e'` between `x' = g • x` and `y' = g • y`, and a scalar `c`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWall.lean`.
+- **Meaning:** `e ≠ 0`, `e' ≠ 0`, `c ≠ 0`, and the action tensors of `g`, applied to `O_g`
+  acting on `A_x^u e^i A_y^v`, give `c A_{x'}^u e'^i A_{y'}^v` for all words `u`, `v` longer
+  than a fixed buffer.
+- **Source boundary:** arXiv:2405.00439, `eq:localcdef` and `eq:localcdefG`; the source draws
+  the relation with one site on each side of the wall at the renormalization fixed point and
+  does not state the nonzero conditions. Both conventions are recorded in
+  `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+- **Sanctioned bridges:** `IsDomainWallAction.physAct_eq` (configuration-indexed form),
+  `IsDomainWallAction.mul` (composition, with L-symbols), `IsDomainWallAction.phase_eq`
+  (uniqueness of the phase), `IsDomainWallAction.pair` (a string over a pair of walls),
+  `IsDomainWallAction.mpo_mulVec_twoWallMPV` (the periodic state with two walls).
+
 ## Symmetries of matrix product density operators
 
 ### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
