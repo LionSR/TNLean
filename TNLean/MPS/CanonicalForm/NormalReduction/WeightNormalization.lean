@@ -137,9 +137,7 @@ theorem PGVWC07PositiveLengthWitness.block_count_pos_of_exists_ne_zero_mpv
   have hr0 : W.r = 0 := Nat.eq_zero_of_not_pos hnot
   have hblock :
       mpv (toTensorFromBlocks (d := d) (μ := W.weights) W.blocks) σ = 0 := by
-    have : IsEmpty (Fin W.r) := by
-      rw [hr0]
-      infer_instance
+    have : IsEmpty (Fin W.r) := Fin.isEmpty_iff.mpr hr0
     rw [mpv_toTensorFromBlocks_eq_sum]
     simp
   have hAeq : mpv A σ = 0 := by
