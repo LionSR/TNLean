@@ -7887,11 +7887,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \label{eq:mpu_factor_free_contraction}
     \end{align}
     If $E(\mathcal W)$ denotes the normalized physical diagonal of the
-    physical-adjoint double layer of $\mathcal W$, let
-    $s(q(a,c))=q(c,a)$ and define
+    physical-adjoint double layer of $\mathcal W$, let $E'(\mathcal W)$ be
+    the matrix obtained by exchanging the two entries of its column pair,
+    $E'(\mathcal W)_{p,q(c,a)}=E(\mathcal W)_{p,q(a,c)}$, and define
     \begin{align}
         \widehat{\mathcal W}_{\mathrm{ff}}
-         & =C\bigl(\mathcal W,E(\mathcal W)_{\cdot,s(\cdot)}\bigr),
+         & =C\bigl(\mathcal W,E'(\mathcal W)\bigr),
         \label{eq:mpu_factor_free_sandwich}
         \\
         (\widehat W_{\mathrm{ff}}^{ij})_{ab}
@@ -7966,8 +7967,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     (\ref{eq:mpu_factor_free_sandwich}) proves continuity of the factor-free
     sandwich. For the trace-factor identity, column vectorization gives
     $E(\mathcal W)=\operatorname{vec}(R)\operatorname{vec}(L^{\mathsf T})^T$.
-    Reversing its column pair therefore gives
-    $\operatorname{vec}(R)\operatorname{vec}(L)^T$, and
+    Therefore $E'(\mathcal W)=\operatorname{vec}(R)\operatorname{vec}(L)^T$,
+    and
     (\ref{eq:mpu_factor_free_rank_one}) yields
     $\widehat W_{\mathrm{ff}}^{ij}=LW^{ij}R$. Applied pointwise, this equality
     proves the asserted continuity without any regularity of the factors.
