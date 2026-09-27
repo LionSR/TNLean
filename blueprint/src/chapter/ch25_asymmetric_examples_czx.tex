@@ -518,7 +518,7 @@ sign $(-1)^N$~\cite{gap:mpu_czx_tensor_normalization}.
     \uses{lem:asymex_absorbing_compression}
     Both nonzero letters annihilate $(1,1)^{\mathsf T}$, which spans the
     range of $\Id-Q$; this gives $b^{ij}Q=b^{ij}$, and multiplying on the
-    left by $Q$ gives the second identity.
+    left by $Q$ gives $Qb^{ij}=Qb^{ij}Q$.
     Identity~(\ref{eq:asymex_czx_review_canonical}) is a direct
     computation. Let $W_2=\tfrac12(1,-1)$ and $V_2=(1,-1)^{\mathsf T}$.
     Then $V_2W_2=Q$ and $W_2b^{ij}V_2=-\delta_{ij}$, and
@@ -736,11 +736,10 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
     index pairs $a,b$,
     \begin{align}
         \hat VS^wV & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)\Id_1,
-        \notag
-    \end{align}
-    \begin{align}
+        \label{eq:asymex_czx_v_contract}
+        \\
         S^aS^wS^b & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)S^aV\hat VS^b.
-        \notag
+        \label{eq:asymex_czx_s_contract}
     \end{align}
     In particular $\hat VV=1$ and $S^aS^b=S^aV\hat VS^b$.
 \end{theorem}
@@ -748,14 +747,14 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
 \begin{proof}
     \leanok
     The identities $S^aS^b=S^aV\hat VS^b$ and
-    $\hat VS^{(s,t)}V=\delta_{st}$ are finite integer computations. The
-    first displayed identity follows by induction on $k$: inserting
-    $V\hat V$ between the first two letters splits off the factor
-    $\hat VS^{(s_1,t_1)}V$. The second follows by the same induction,
-    contracting one intermediate letter at a time.
+    $\hat VS^{(s,t)}V=\delta_{st}$ are finite integer computations.
+    Identity~(\ref{eq:asymex_czx_v_contract}) follows by induction on $k$:
+    inserting $V\hat V$ between the first two letters splits off the factor
+    $\hat VS^{(s_1,t_1)}V$. Identity~(\ref{eq:asymex_czx_s_contract}) follows by
+    the same induction, contracting one intermediate letter at a time.
 \end{proof}
 
-The source states the second identity with at least one intermediate site;
+The source states~(\ref{eq:asymex_czx_s_contract}) with at least one intermediate site;
 the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \begin{theorem}[The associator sign of the decorated tensor]
