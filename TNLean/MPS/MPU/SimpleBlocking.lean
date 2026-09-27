@@ -814,6 +814,41 @@ theorem IsMPU.blockTensor_pow_four_isMPUSimple
   obtain ⟨k, hk, hkD, hsimple⟩ := hU.exists_blockTensor_isMPUSimple
   exact hU.blockTensor_isMPUSimple_of_le hk hkD hsimple
 
+/-- Two MPUs, possibly with different physical and bond dimensions, have a
+common positive direct blocking at which both are simple. This combines the
+bounded simple blocking of arXiv:1703.09188, Proposition III.3(ii), with its
+all-later-blockings corollary (lines 442--446). -/
+theorem IsMPU.exists_common_blockTensor_isMPUSimple
+    [NeZero d] [NeZero D] [NeZero e] [NeZero E]
+    {U : MPOTensor d D} {V : MPOTensor e E} (hU : IsMPU U) (hV : IsMPU V) :
+    ∃ k : ℕ, 0 < k ∧
+      IsMPUSimple (MPOTensor.blockTensor U k) ∧
+      IsMPUSimple (MPOTensor.blockTensor V k) := by
+  obtain ⟨p, hp, _, hUp⟩ := hU.exists_blockTensor_isMPUSimple
+  obtain ⟨q, hq, _, hVq⟩ := hV.exists_blockTensor_isMPUSimple
+  refine ⟨p + q, by omega, ?_, ?_⟩
+  · exact hU.blockTensor_isMPUSimple_of_le hp (by omega) hUp
+  · exact hV.blockTensor_isMPUSimple_of_le hq (by omega) hVq
+
+/-- Three MPUs, possibly with different physical and bond dimensions, have a
+common positive direct blocking at which all three are simple. This is the
+finite three-tensor consequence of arXiv:1703.09188, Proposition III.3(ii)
+and its all-later-blockings corollary (lines 442--446). -/
+theorem IsMPU.exists_common_blockTensor_isMPUSimple_three
+    [NeZero d] [NeZero D] [NeZero e] [NeZero E] [NeZero f] [NeZero F]
+    {U : MPOTensor d D} {V : MPOTensor e E} {W : MPOTensor f F}
+    (hU : IsMPU U) (hV : IsMPU V) (hW : IsMPU W) :
+    ∃ k : ℕ, 0 < k ∧
+      IsMPUSimple (MPOTensor.blockTensor U k) ∧
+      IsMPUSimple (MPOTensor.blockTensor V k) ∧
+      IsMPUSimple (MPOTensor.blockTensor W k) := by
+  obtain ⟨p, hp, hUp, hVp⟩ := hU.exists_common_blockTensor_isMPUSimple hV
+  obtain ⟨q, hq, _, hWq⟩ := hW.exists_blockTensor_isMPUSimple
+  refine ⟨p + q, by omega, ?_, ?_, ?_⟩
+  · exact hU.blockTensor_isMPUSimple_of_le hp (by omega) hUp
+  · exact hV.blockTensor_isMPUSimple_of_le hp (by omega) hVp
+  · exact hW.blockTensor_isMPUSimple_of_le hq (by omega) hWq
+
 end BlockingConstruction
 
 end MPOTensor

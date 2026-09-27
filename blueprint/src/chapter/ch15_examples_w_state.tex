@@ -302,6 +302,41 @@ illustrates this remark by closing the same tensor with a trace.
     lies in $V$, because the word tuples at length $R'$ span as well.
 \end{proof}
 
+\begin{theorem}[At most two product states]\label{thm:w_state_two_product_states}
+    \lean{MPSTensor.not_sum_pow_mul_pow_eq}
+    \leanok
+    \uses{def:w_indicator}
+    Let $r\leq2$, let $x_0,\ldots,x_{r-1}$ and $y_0,\ldots,y_{r-1}$ be complex
+    numbers, and let $c\neq0$. Suppose $N\geq2$, and $N\geq3$ when $r=2$. Then
+    the equalities
+    \begin{align}
+        \sum_{k=0}^{r-1}y_k^{m}x_k^{N-m} & =
+        \begin{cases}
+            c & m=1,   \\
+            0 & m=2,3,
+        \end{cases}
+        \label{eq:w_state_two_product_amplitudes}
+    \end{align}
+    for all $1\leq m\leq\min(3,N)$ cannot all hold. In particular a sum of at most
+    two translation-invariant product states, with one-site amplitudes $x_k$
+    and $y_k$ for the letters $0$ and $1$, is not a nonzero multiple of
+    $\ket{W_N}$: its amplitude on the configuration $1^m0^{N-m}$ is the left-hand
+    side of (\ref{eq:w_state_two_product_amplitudes}). This supplies the step that
+    \cite[lines~2208--2210]{PerezGarcia2007Matrix} calls trivial, after the
+    rank count has reduced the canonical form to at most two blocks of size one
+    by one.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $r=0$ the case $m=1$ gives $c=0$. For $r=1$, combining the cases $m=1$
+    and $m=2$ gives $c\,y_0=0$, so $y_0=0$ and again $c=0$. For $r=2$ both
+    sequences $m\mapsto y_k^mx_k^{N-m}$ are annihilated by the recurrence with
+    characteristic polynomial $(x_0S-y_0)(x_1S-y_1)$; applied to the cases
+    $m=1,2,3$ it gives $c\,y_0y_1=0$. Hence one of the $y_k$ vanishes, and the
+    remaining single product state is excluded as for $r=1$.
+\end{proof}
+
 \begin{theorem}[Single-length bound under a canonical form with condition C1]%
     \label{thm:w_state_canonical_bound}
     \lean{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator,
@@ -340,13 +375,19 @@ illustrates this remark by closing the same tensor with a trace.
 \begin{proof}
     \leanok
     \uses{lem:w_state_cut_rank, lem:pgvwc07_block_tuple_span,
-        lem:pgvwc07_cut_rank_lower_bound, thm:wielandt_general}
+        lem:pgvwc07_cut_rank_lower_bound, thm:w_state_two_product_states,
+        thm:wielandt_general}
     Cut the chain into two pieces of at least
     $n_0=\max(L_0,3(b-1)(L_0+1))$ sites. By Lemmas~\ref{lem:pgvwc07_block_tuple_span}
     and~\ref{lem:pgvwc07_cut_rank_lower_bound}, the reduced state of the first
     piece has rank at least $\sum_j D_j^2$,
     while Lemma~\ref{lem:w_state_cut_rank} bounds it by two. Hence there are at
-    most two blocks, each of size one by one. A sum of at most two
+    most two blocks, each of size one by one, with scalar letters $A^j_0=x_j$ and
+    $A^j_1=y_j$, so that the amplitude of $1^m0^{N-m}$ is
+    $\sum_jc_j\,y_j^mx_j^{N-m}$. Choosing $z_j$ with $z_j^N=c_j$ absorbs each
+    coefficient into the one-site amplitudes,
+    $c_j\,y_j^mx_j^{N-m}=(z_jy_j)^m(z_jx_j)^{N-m}$.
+    By Theorem~\ref{thm:w_state_two_product_states}, a sum of at most two
     translation-invariant product states is not a nonzero multiple of
     $\ket{W_N}$ for $N\geq3$, a contradiction when $N\geq2n_0$. For the second
     item, an invertible letter gives condition C1 at $L_0=D^2+1$ by the fixed-length Wielandt theorem; for the third, the general quantum Wielandt bound gives
@@ -414,10 +455,7 @@ illustrates this remark by closing the same tensor with a trace.
     \label{thm:w_state_prime_bound}
     \lean{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime}
     \leanok
-    \uses{thm:w_state_canonical_bound, thm:pgvwc07_positive_length_witness,
-        thm:pgvwc07_periodic_state_vector_decomposition, def:mpv_phase_class_data,
-        lem:periodic_period_le_sq, lem:pgvwc07_block_irreducible,
-        lem:periodic_scale_of_irreducible, thm:wielandt_general, def:w_indicator}
+    \uses{def:w_indicator}
     Let $A$ be any translation-invariant tensor of bond dimension $D$ and let $N$
     be prime. If the periodic vector of $A$ on $N$ sites is $c\ket{W_N}$ with
     $c\neq0$, then
@@ -446,9 +484,21 @@ illustrates this remark by closing the same tensor with a trace.
     does not divide $N$, and the block state vanishes by
     Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition}. If $m_j=1$ the
     block is primitive, and the general quantum Wielandt bound of
-    Theorem~\ref{thm:wielandt_general} gives condition C1 at $L_0=(D^2+1)^2$. Grouping the blocks whose states agree up to a phase power
-    leaves representatives no two of which are related by a gauge transformation
-    and a phase, with some coefficients $c_j$. Dropping the classes with $c_j=0$ or
+    Theorem~\ref{thm:wielandt_general} gives condition C1 at $L_0=(D^2+1)^2$. Group the blocks into the phase classes of
+    Definition~\ref{def:mpv_phase_class_data}: the $q$-th member $A^{(j,q)}$ of
+    class $j$ satisfies
+    $\ket{\phi_{A^{(j,q)}}}=\xi_{j,q}^N\ket{\phi_{A^{(j,0)}}}$, with $A^{(j,0)}$
+    the class representative. Then
+    \begin{align}
+        \sum_k\lambda_k^N\ket{\phi_{A^k}}
+         & =\sum_jc_j\ket{\phi_{A^{(j,0)}}},
+         &
+        c_j
+         & =\sum_q\lambda_{j,q}^N\,\xi_{j,q}^N,
+        \label{eq:w_state_phase_regrouping}
+    \end{align}
+    and no two representatives are related by a gauge transformation and a
+    phase. Dropping the classes with $c_j=0$ or
     period other than one leaves at most $D$ blocks. The generalized first item of
     Theorem~\ref{thm:w_state_canonical_bound} then gives~(\ref{eq:w_state_prime_bound}).
 \end{proof}
