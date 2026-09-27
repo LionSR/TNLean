@@ -18,11 +18,11 @@ state with bond dimension two and a twist at the boundary
 where $\otimes_g$ is the graded tensor product; the state has odd fermion
 parity~\cite[Section~II.B.4]{Cirac2021Matrix}.
 
-\paragraph{Scope.} Graded tensor networks are not formalized. The results below
-concern the ordinary contraction of the matrices, which gives the coefficients
-of~\eqref{eq:kitaev_chain_state} in the ordered graded product basis; the
-graded contraction rules and the graded notion of injectivity are outside
-their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
+\paragraph{Scope.} The results below concern the ordinary contraction of the
+matrices, which gives the coefficients of~(\ref{eq:kitaev_chain_state}) in the
+ordered graded product basis; the graded contraction rules and the graded
+notion of injectivity are outside the scope of these
+results~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
 
 \begin{definition}[Kitaev-chain tensor and twist]\label{def:kitaev_tensor}
     \lean{MPSTensor.kitaevTensor, MPSTensor.kitaevTwist}
@@ -46,7 +46,7 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
     \uses{def:kitaev_tensor, def:eval_word}
     For a word $w=(i_1,\ldots,i_N)$ the twisted periodic amplitude is
     $\tr(YA^{i_1}\cdots A^{i_N})$, the coefficient of $w$
-    in~\eqref{eq:kitaev_chain_state}.
+    in~(\ref{eq:kitaev_chain_state}).
 \end{definition}
 
 \begin{lemma}[The twist squares to minus the identity]\label{lem:kitaev_twist_sq}
@@ -115,15 +115,15 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
         MPSTensor.kitaevTensor_coeff_mul_kitaevTwistedCoeff}
     \leanok
     \uses{thm:kitaev_amplitudes}
-    By~\eqref{eq:kitaev_amplitudes_twisted}, $\tr(YA^w)\neq0 \iff k\equiv 1\pmod 2$,
-    matching the odd fermion parity of~\eqref{eq:kitaev_chain_state};
-    by~\eqref{eq:kitaev_amplitudes_untwisted}, $\tr(A^w)\neq0 \iff k\equiv 0\pmod 2$.
+    By~(\ref{eq:kitaev_amplitudes_twisted}), $\tr(YA^w)\neq0 \iff k\equiv 1\pmod 2$,
+    matching the odd fermion parity of~(\ref{eq:kitaev_chain_state});
+    by~(\ref{eq:kitaev_amplitudes_untwisted}), $\tr(A^w)\neq0 \iff k\equiv 0\pmod 2$.
     Consequently, $\tr(YA^w)\tr(A^w)=0$ for every word $w$.
 \end{corollary}
 
 \begin{proof}
     \leanok
-    Read off from the closed forms.
+    Immediate from~(\ref{eq:kitaev_amplitudes_untwisted}) and~(\ref{eq:kitaev_amplitudes_twisted}).
 \end{proof}
 
 \begin{lemma}[Open-boundary closures]\label{lem:kitaev_open_boundary}
@@ -165,7 +165,7 @@ their scope~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
     \leanok
     The line spanned by $(1,i)$ is invariant under $A^0=\mathbb 1$ and under
     $A^1=Y$. The linear functional $M\mapsto M_{00}-M_{11}$ vanishes on every
-    product by~\eqref{eq:kitaev_open_closures} (Lemma~\ref{lem:kitaev_open_boundary}), while
+    product by~(\ref{eq:kitaev_open_closures}), while
     the matrix unit $E_{00}=\ketbra{0}{0}$ satisfies
     $(E_{00})_{00}-(E_{00})_{11}=1\neq0$, so
     $\operatorname{span}\{A^w : |w|=N\} \subsetneq \MN{2}$ for every $N$.
