@@ -20,9 +20,10 @@ not that of `ω₀` or `ω₁`; so it is not cohomologous to `ω₀` or `ω₁`.
 generator is `exp(2πi/3)`, the `n = 3`, `j = 2`, `a = 1` entry of the printed table. Since the
 cyclic invariant at the generator determines the class of a three-cocycle of `ℤ₃`
 (`TNLean.Algebra.ScalarThreeCocycleCyclicClass`), the cochain is cohomologous to `ω₂`, and the
-anomaly class of the family in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`. The orientation of the anomaly three-cochain is that of
-`TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass`, whose L-symbols satisfy the coupled pentagon
-equation `coupledpent` of the source (line 1876) with `ω` on the same side.
+anomaly class of the family in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`. The orientation of the
+anomaly three-cochain is that of `TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass`, whose
+L-symbols satisfy the coupled pentagon equation `coupledpent` of the source (line 1876) with `ω`
+on the same side.
 
 ## Main results
 
