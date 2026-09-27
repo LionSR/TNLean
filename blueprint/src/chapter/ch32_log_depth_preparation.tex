@@ -1198,9 +1198,13 @@ $A$ along $w$.
         MPSTensor.eventually_one_half_lt_infidelity_of_isNormalTensor}
     \leanok
     \uses{def:ldp_local_circuit, def:correlation_length}
-    Let $A$ be normal with correlation length $\xi>0$, let $\ket{\phi_N}$ be the
-    normalized vectors (\ref{eq:ldp_ti_mps}), and let $\ket{\psi_N}$ be prepared
-    in depth $T_N$ with $T_N=o(\log N)$. Then there is $N_0$ such that
+    Let $A$ be normal with correlation length $\xi>0$. Here
+    $\xi=-1/\log\lvert\lambda_2/\lambda_1\rvert$, where $\lambda_1$ is an
+    eigenvalue of $\E_A$ of largest modulus and $\lambda_2$ is an eigenvalue of
+    largest modulus among those different from $\lambda_1$; in the normalization
+    $\lambda_1=1$ this is Definition~\ref{def:correlation_length}. Let
+    $\ket{\phi_N}$ be the normalized vectors (\ref{eq:ldp_ti_mps}), and let
+    $\ket{\psi_N}$ be prepared in depth $T_N$ with $T_N=o(\log N)$. Then there is $N_0$ such that
     $\varepsilon(\phi_N,\psi_N)>1/2$ for all $N>N_0$. This is
     \cite[Theorem~1]{Malz2024Preparation}.
 \end{theorem}
