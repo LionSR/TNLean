@@ -34,7 +34,7 @@ assembled tensor with a displayed tensor, coordinate by coordinate.
 ## Main declarations
 
 * `MPSTensor.isNormalTensor_of_dim_one`, `MPSTensor.isLeftCanonical_of_dim_one`,
-  `MPSTensor.exists_posDef_isDiag_transferMap_eq_of_dim_one`,
+  `MPSTensor.posDef_isDiag_transferMap_one_of_dim_one`,
   `MPSTensor.tendsto_mpvOverlap_self_of_dim_one` — the clauses of eq. (S2) for a normalized
   one-dimensional block, whose transfer map is the identity
   (`MPSTensor.transferMap_eq_id_of_dim_one`).
@@ -43,6 +43,8 @@ assembled tensor with a displayed tensor, coordinate by coordinate.
   distinct blocks of a basis of normal tensors.
 * `MPSTensor.SectorDecomposition.toTensor_copyCoord_of_ne` — the assembled tensor is block
   diagonal in the coordinates of the copies.
+* `MPSTensor.SectorDecomposition.sigma_eq_of_copyCoord_eq` — distinct copies occupy distinct
+  bond coordinates.
 * `MPSTensor.embedPair_symm_comp` — relabelling the bond coordinates of an embedded pair.
 
 ## References
@@ -82,10 +84,11 @@ theorem isLeftCanonical_of_dim_one (A : MPSTensor d 1)
 /-- The identity is a diagonal positive-definite fixed point of the transfer map of a
 one-dimensional tensor in the gauge `∑ᵢ |aᵢ|² = 1`: the second condition of canonical form II
 invoked in arXiv:2307.01696, eq. (S2). -/
-theorem exists_posDef_isDiag_transferMap_eq_of_dim_one (A : MPSTensor d 1)
+theorem posDef_isDiag_transferMap_one_of_dim_one (A : MPSTensor d 1)
     (hA : ∑ i, star (A i 0 0) * A i 0 0 = 1) :
-    ∃ Λ : Matrix (Fin 1) (Fin 1) ℂ, Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap A Λ = Λ :=
-  ⟨1, PosDef.one, isDiag_one, by rw [transferMap_eq_id_of_dim_one A hA, LinearMap.id_apply]⟩
+    (1 : Matrix (Fin 1) (Fin 1) ℂ).PosDef ∧ (1 : Matrix (Fin 1) (Fin 1) ℂ).IsDiag ∧
+      Kraus.transferMap A 1 = 1 :=
+  ⟨PosDef.one, isDiag_one, by rw [transferMap_eq_id_of_dim_one A hA, LinearMap.id_apply]⟩
 
 /-- The normalized self-overlap of a one-dimensional tensor in the gauge `∑ᵢ |aᵢ|² = 1` tends to
 one, the normalization of the blocks of arXiv:2307.01696, eq. (S2). -/

@@ -485,21 +485,21 @@ theorem embeddedFixedPointPair_overlappingBlockSector (j : Fin 2) (p : Fin 2 × 
 every multiplicity one.** The tensor `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` is, after
 ordering its bond coordinates, the canonical form `⊕ⱼ μ_{j,1} A_j` of eq. (S2) of a basis of two
 normal blocks in canonical form II, with weights `μ_{j,1} = 1` (`IsBNTCanonicalForm`,
-normality, the diagonal positive-definite fixed point), whose states "produce orthogonal vectors
-in the thermodynamic limit" (arXiv:2307.01696, line 973). The transfer maps of the blocks have no
-eigenvalue other than `1`, so every `λ₂` bounds their subleading eigenvalues. When
-`e^{-γ/ξ_diag} < 9/25`, for the approximating state of eq. (S7), built from the coefficients
-`βⱼ = ∑ₖ μ_{j,k}^N` and the fixed-point pairs of the blocks, and for every constant `C`, there
-is `q ≥ 3` such that, with `M = q` and `N = q²` (so `q = o(N)` along this sequence) and
-`y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds `C y e^{C y}`. -/
+normality, and the diagonal positive-definite fixed point `1` of each block), whose states
+"produce orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696, line 973). The
+transfer maps of the blocks have no eigenvalue other than `1`, so every `λ₂` bounds their
+subleading eigenvalues. When `e^{-γ/ξ_diag} < 9/25`, for the approximating state of eq. (S7),
+built from the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` and the pairs of that same fixed point `1`, and
+for every constant `C`, there is `q ≥ 3` such that, with `M = q` and `N = q²` (so `q = o(N)`
+along this sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds `C y e^{C y}`. -/
 theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
     IsBNTCanonicalForm overlappingBlockSector ∧
       (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
         mpvOverlap (overlappingBlockSector.basis j) (overlappingBlockSector.basis k) N)
           atTop (𝓝 0)) ∧
       (∀ j, IsNormalTensor (overlappingBlockSector.basis j)) ∧
-      (∀ j, ∃ Λ : Matrix (Fin 1) (Fin 1) ℂ,
-        Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap (overlappingBlockSector.basis j) Λ = Λ) ∧
+      (∀ j, (1 : Matrix (Fin 1) (Fin 1) ℂ).PosDef ∧ (1 : Matrix (Fin 1) (Fin 1) ℂ).IsDiag ∧
+        Kraus.transferMap (overlappingBlockSector.basis j) 1 = 1) ∧
       (∀ i, reindex overlappingBlockEquiv overlappingBlockEquiv
         (overlappingBlockSector.toTensor i) = overlappingBlockTensor i) ∧
       (∀ j (lam₂ μ : ℂ),
@@ -518,7 +518,7 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
   refine ⟨isBNTCanonicalForm_overlappingBlockSector,
     fun _ _ hjk => isBNTCanonicalForm_overlappingBlockSector.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (overlappingBlockBasis_norm j),
-    fun j => exists_posDef_isDiag_transferMap_eq_of_dim_one _ (overlappingBlockBasis_norm j),
+    fun j => posDef_isDiag_transferMap_one_of_dim_one _ (overlappingBlockBasis_norm j),
     reindex_toTensor_overlappingBlockSector,
     norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis, fun hr C => ?_⟩
   simp only [embeddedFixedPointPair_overlappingBlockSector, coeff_overlappingBlockSector]

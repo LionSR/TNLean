@@ -453,20 +453,21 @@ theorem embeddedFixedPointPair_repeatedBlockSector (j : Fin 2) (p : Fin 3 × Fin
 The tensor `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` is, after ordering its bond coordinates,
 the canonical form `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j` of eq. (S2) of a basis of two normal
 blocks in canonical form II, with weights `|μ_{j,k}| ≤ 1`, one of modulus one
-(`IsBNTCanonicalForm`, normality, the diagonal positive-definite fixed point), whose states "produce
-orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696, line 973). The transfer maps
-of the blocks have no eigenvalue other than `1`, so every `λ₂` with `0 < |λ₂| < 1` bounds their
-subleading eigenvalues. For the approximating state of eq. (S7), built from the coefficients
-`βⱼ = ∑ₖ μ_{j,k}^N` and the fixed-point pairs of the blocks, and for every `γ > 0` and every
-constant `C`, there is `M ≥ 1` such that, with `q = M` and `N = M²` (so `q = o(N)` along this
-sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds `C y e^{C y}`. -/
+(`IsBNTCanonicalForm`, normality, and the diagonal positive-definite fixed point `1` of each
+block), whose states "produce orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696,
+line 973). The transfer maps of the blocks have no eigenvalue other than `1`, so every `λ₂` with
+`0 < |λ₂| < 1` bounds their subleading eigenvalues. For the approximating state of eq. (S7),
+built from the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` and the pairs of that same fixed point `1`, and
+for every `γ > 0` and every constant `C`, there is `M ≥ 1` such that, with `q = M` and `N = M²`
+(so `q = o(N)` along this sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds
+`C y e^{C y}`. -/
 theorem isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock :
     IsBNTCanonicalForm repeatedBlockSector ∧
       (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
         mpvOverlap (repeatedBlockSector.basis j) (repeatedBlockSector.basis k) N) atTop (𝓝 0)) ∧
       (∀ j, IsNormalTensor (repeatedBlockSector.basis j)) ∧
-      (∀ j, ∃ Λ : Matrix (Fin 1) (Fin 1) ℂ,
-        Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap (repeatedBlockSector.basis j) Λ = Λ) ∧
+      (∀ j, (1 : Matrix (Fin 1) (Fin 1) ℂ).PosDef ∧ (1 : Matrix (Fin 1) (Fin 1) ℂ).IsDiag ∧
+        Kraus.transferMap (repeatedBlockSector.basis j) 1 = 1) ∧
       (∀ i, reindex repeatedBlockEquiv repeatedBlockEquiv (repeatedBlockSector.toTensor i) =
         repeatedBlockTensor i) ∧
       (∀ j (lam₂ μ : ℂ),
@@ -485,7 +486,7 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock :
   refine ⟨isBNTCanonicalForm_repeatedBlockSector,
     fun _ _ hjk => isBNTCanonicalForm_repeatedBlockSector.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (repeatedBlockBasis_norm j),
-    fun j => exists_posDef_isDiag_transferMap_eq_of_dim_one _ (repeatedBlockBasis_norm j),
+    fun j => posDef_isDiag_transferMap_one_of_dim_one _ (repeatedBlockBasis_norm j),
     reindex_toTensor_repeatedBlockSector,
     norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis, fun h0 h1 γ hγ C => ?_⟩
   simp only [embeddedFixedPointPair_repeatedBlockSector, coeff_repeatedBlockSector]
