@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.GeneralizeDecide
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Instance
 import TNLean.MPS.MPDO.DiagonalDressing
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
@@ -123,9 +124,7 @@ theorem kleinTensor_isNormal (g : Multiplicative (ZMod 2 × ZMod 2)) :
 dimension one for `e, y` and two for `x, xy`. -/
 def kleinFamily : GroupFamily (Multiplicative (ZMod 2 × ZMod 2)) 4 where
   bondDim g := bondDim (kleinEquiv g)
-  bondDim_pos g := by
-    generalize kleinEquiv g = a
-    fin_cases a <;> decide
+  bondDim_pos g := by generalize_decide kleinEquiv g
   tensor := kleinTensor
 
 /-- **The dressed tensors are an exact representation of `ℤ₂ × ℤ₂` by normal tensors**: every
