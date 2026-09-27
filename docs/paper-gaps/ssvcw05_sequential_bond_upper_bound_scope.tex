@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{Bond Dimensions of the Successive Decompositions: Upper Bounds Only}
+\author{}
+\date{2026-09-27}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source range}
+
+After the successive singular value decompositions that write a state as
+$\ket{\tilde\psi}=V'_{[n]}\cdots V'_{[1]}\ket{\varphi_I}$,
+Ref.~\cite[lines~200--202 of the source]{Schoen2005Sequential} states:
+``Simple rank considerations show that $V'_{[n-k]}$ has dimension
+$2\min[D,2^k]\times\min[D,2^{k+1}]$.'' Ref.~\cite[Section~5.1,
+lines~1574--1577]{PerezGarcia2007Matrix} adds that this proof ``also provides
+a \emph{recipe} for the generation of any given state (with minimal
+resources).''
+
+\section{What is formalized}
+
+For local dimension $d$, the formalization proves the upper bounds: the
+isometric open-boundary representation produced by the decompositions has
+bond dimension at most $\min(D,d^k)$ at the bond after $k$ sites counted
+from the end where the decompositions start, and, after running the
+decompositions once from each end, at most $\min(D_k,d^k,d^{N-k})$, where
+$D_k\le D$ is the bond dimension of the given representation at that cut.
+Read as a statement that isometries of the printed size suffice, the first
+quoted sentence is formalized with the source's hypotheses.
+
+\section{Restriction}
+
+Two stronger readings are not formalized. First, the first quoted sentence
+can be read as asserting that the dimension is exactly
+$2\min[D,2^k]\times\min[D,2^{k+1}]$. Second, the phrase ``with minimal
+resources'' asserts that each bond dimension of the produced representation
+equals the Schmidt rank of the state across the corresponding cut, the least
+bond dimension of any open-boundary representation there. Neither equality
+is proved.
+
+\section{Elimination plan}
+
+Prove that, when the decompositions keep only the nonzero singular values,
+the bond dimension at each cut equals the rank of the coefficient matrix
+across that cut, and that this rank bounds every open-boundary bond
+dimension at the cut from below.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
