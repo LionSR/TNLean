@@ -32,6 +32,7 @@ convention, and the groups are written multiplicatively.
   `TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_isNormalized`,
   `TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_norm`: `ω_j` is a normalized
   unit-modulus cocycle.
+* `TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_inv`: `ω_j⁻¹ = ω_{(n−1) j}`.
 * `TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isCocycle`,
   `TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isNormalized`,
   `TNLean.Algebra.ScalarThreeCochain.kleinCocycle_norm`: the same for `(−1)^{a₁ b₂ c₂}`.
@@ -63,7 +64,8 @@ def rootOfUnity (n : ℕ) : ℂ := Complex.exp (2 * Real.pi * Complex.I / n)
 theorem rootOfUnity_pow (n : ℕ) [NeZero n] : rootOfUnity n ^ n = 1 :=
   (Complex.isPrimitiveRoot_exp n (NeZero.ne n)).pow_eq_one
 
-private theorem pow_eq_pow_of_modEq {n A B : ℕ} {ζ : ℂ} (h : ζ ^ n = 1)
+/-- Powers of an `n`-th root of unity depend only on the exponent modulo `n`. -/
+theorem pow_eq_pow_of_modEq {n A B : ℕ} {ζ : ℂ} (h : ζ ^ n = 1)
     (hAB : A ≡ B [MOD n]) : ζ ^ A = ζ ^ B := by
   rw [pow_eq_pow_mod A h, pow_eq_pow_mod B h, hAB]
 
@@ -136,6 +138,29 @@ theorem cyclicCocycle_norm (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod 
     ‖(cyclicCocycle n j a b c : ℂ)‖ = 1 := by
   rw [cyclicCocycle_val, norm_pow,
     Complex.norm_eq_one_of_pow_eq_one (rootOfUnity_pow n) (NeZero.ne n), one_pow]
+
+/-- Project result: **the inverse of `ω_j` is `ω_{(n−1) j}`**, pointwise: `ω_j(a,b,c)` is the
+power `ζ^{j a ⌊(b + c)/n⌋}` of `ζ = exp(2πi/n)`, and `ζ^n = 1`. The cocycles are those of
+arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040. -/
+theorem cyclicCocycle_inv (n j : ℕ) [NeZero n] :
+    (cyclicCocycle n j)⁻¹ = cyclicCocycle n ((n - 1) * j) := by
+  funext a b c
+  apply Units.ext
+  rw [Pi.inv_apply, Pi.inv_apply, Pi.inv_apply, Units.val_inv_eq_inv_val, cyclicCocycle_val,
+    cyclicCocycle_val, eq_comm]
+  refine eq_inv_of_mul_eq_one_left ?_
+  rw [← pow_add]
+  have hn := NeZero.pos n
+  rw [show (n - 1) * j * (Multiplicative.toAdd a).val *
+        (((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val) / n) +
+      j * (Multiplicative.toAdd a).val *
+        (((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val) / n) =
+      n * (j * (Multiplicative.toAdd a).val *
+        (((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val) / n)) by
+    obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_lt hn
+    simp only [zero_add, Nat.add_sub_cancel]
+    ring,
+    pow_mul, rootOfUnity_pow, one_pow]
 
 /-! ### The Klein four-group `ℤ₂ × ℤ₂` -/
 
