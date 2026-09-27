@@ -7155,8 +7155,17 @@ tensors.
 \begin{proof}
     \leanok
     \uses{thm:parent-interaction-comparison,thm:periodic-fixed-interaction-order,thm:periodic-fixed-interaction-canonical}
-    Extend the two local operator inequalities by the identity, conjugate by the
-    cyclic coordinate identifications, and sum over all translated intervals.
+    Theorem~\ref{thm:parent-interaction-comparison} gives $\kappa,C>0$ with
+    $\kappa h_R\leq h\leq Ch_R$. Each translated term $h_i$ is $h$ extended by
+    the identity and conjugated by the unitary $U_i$, so these inequalities
+    hold term by term, $\kappa(h_R)_i\leq h_i\leq C(h_R)_i$. Summing over the
+    cyclic translates and using the monotonicity and homogeneity of the
+    periodic sum from Theorem~\ref{thm:periodic-fixed-interaction-order} gives
+    \begin{align}
+        \kappa H_N(h_R)\leq H_N(h)\leq CH_N(h_R).\notag
+    \end{align}
+    Theorem~\ref{thm:periodic-fixed-interaction-canonical} identifies
+    $H_N(h_R)$ with $H_{R,N}(A)$.
 \end{proof}
 
 \begin{theorem}[Uniform gap for a fixed positive parent interaction]
@@ -7194,8 +7203,8 @@ tensors.
     Let $A$ be a tensor in canonical form with positive physical dimension.
     Fix any canonical decomposition of $A$, and let $B_0,\ldots,B_{g-1}$ be
     its distinct normal representatives.
-    Suppose that $S>0$ and the tuples of length-$S$ words span the direct sum of
-    the matrix algebras of these representatives. For every $R\geq S+1$ and
+    Suppose that $S>0$ and the tuples of length-$S$ words span the product of
+    the block matrix algebras. For every $R\geq S+1$ and
     every fixed positive operator $h$ on $R$ sites with kernel $G_R(A)$,
     there is $\gamma>0$ such that, for every $N$ and every $v\perp\ker H_N(h)$,
     \begin{align}
@@ -7218,7 +7227,7 @@ tensors.
     Let $A$ be a tensor in canonical form with positive physical dimension.
     One may choose a basis of normal tensors $B_0,\ldots,B_{g-1}$ such that
     the following holds. Suppose that $S>0$ and the tuples of length-$S$ words
-    span the direct sum of the matrix algebras of these representatives. For
+    span the product of the block matrix algebras. For
     every $R\geq S+1$ and every fixed positive operator $h$ on $R$ sites with
     kernel $G_R(A)$, there is $\gamma>0$ such that, for every $N$ and every
     $v\perp\ker H_N(h)$,
