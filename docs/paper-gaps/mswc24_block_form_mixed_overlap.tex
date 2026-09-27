@@ -110,6 +110,21 @@ along $q=M$ are formalized.\footnote{Formal declarations:
 positive part and the support projector are computed from the uniqueness of the
 positive square root of $B^\dagger B$.
 
+The hypotheses of part~(ii) of the lemma are also formalized for this tensor.
+After ordering its bond coordinates it is the direct sum
+$\bigoplus_j\mu_{j,1}A_j$ of (S2) for a basis of normal tensors: both blocks are
+normal, left-canonical with the diagonal positive-definite fixed point $1$ (canonical
+form~II), have self-overlap one, give linearly independent states for every $N\geq1$,
+and are not related by a gauge transformation and a phase; both weights equal one.
+One theorem collects these facts, the identification of the pairs and of the
+weights $\beta_j$ with those of the canonical form, and the failure of the printed
+bound.\footnote{Formal declarations:
+    \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock},
+    \leanid{MPSTensor.isBNTCanonicalForm_overlappingBlockSector},
+    \leanid{MPSTensor.reindex_toTensor_overlappingBlockSector} and
+    \leanid{MPSTensor.embeddedFixedPointPair_overlappingBlockSector} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.}
+
 \section{Elimination}
 Two statements would repair part~(ii) for multiplicity one. The first adds the
 hypothesis that the $q$-site states of distinct blocks are orthogonal,

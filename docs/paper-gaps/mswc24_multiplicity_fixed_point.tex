@@ -133,6 +133,21 @@ The positive part and the support projector of the blocked tensor are computed
 from the uniqueness of the positive square root of $B^\dagger B$. The computation
 above for an arbitrary placement of the pair of the first block is not formalized.
 
+The hypotheses of part~(ii) of the lemma are formalized for this tensor. After
+ordering its bond coordinates it is the direct sum (S2) of the copies of a basis
+of normal tensors: both blocks are normal, left-canonical with the diagonal
+positive-definite fixed point $1$ (canonical form~II), have self-overlap one, give
+linearly independent states for every $N\geq1$, and are not related by a gauge
+transformation and a phase; every weight equals one. One theorem collects these
+facts, the identification of the pairs (each on the first copy of its block) and of
+the weights $\beta_j$ with those of the canonical form, and the failure of the
+printed bound.\footnote{Formal declarations:
+    \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock},
+    \leanid{MPSTensor.isBNTCanonicalForm_repeatedBlockSector},
+    \leanid{MPSTensor.reindex_toTensor_repeatedBlockSector} and
+    \leanid{MPSTensor.embeddedFixedPointPair_repeatedBlockSector} in
+    \doclink{TNLean/MPS/Preparation/RepeatedBlockCounterexample}.}
+
 The block form (\ref{eq:mswc24_block_form}) also fails when every multiplicity is
 one, as soon as the $q$-site states of distinct blocks are not orthogonal
 \cite{gap:mswc24_block_form_mixed_overlap}. Restricting to multiplicity one

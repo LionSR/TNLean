@@ -21,6 +21,7 @@ import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
+import TNLean.MPS.Preparation.OneDimensionalBlocks
 import TNLean.MPS.Preparation.OrthogonalBlockError
 import TNLean.MPS.Preparation.OrthogonalBlockSum
 import TNLean.MPS.Preparation.OrthogonalSumPolar
