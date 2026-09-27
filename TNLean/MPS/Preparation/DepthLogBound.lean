@@ -70,9 +70,7 @@ $q = O (\log (N / \epsilon))$", combined with the depth `T = O(q)` of the paragr
 "The sequential-RG circuit". The vector `|ψ⟩` is the approximating state `|φ'_N⟩` of eq. (10)
 for a gauge-equivalent rescaling of `A` in the gauge of eq. (5). The bond dimension is positive,
 as it is for the source's normal tensors, whose transfer matrix has the leading eigenvalue `1`.
-
-**Scope restriction (block length dividing the chain length):** `q ∣ N`, as in the source's
-eq. (10); see `docs/paper-gaps/mswc24_depth_upper_bound_divisible_length.tex`. -/
+The block length divides `N`, the scope restriction recorded in the module docstring. -/
 theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     ∃ C : ℕ, ∀ A : MPSTensor d D, Kraus.IsNormal A →
       ∃ a b : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
@@ -175,10 +173,8 @@ vector `|ψ⟩` with `1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared from a product sta
 
 arXiv:2307.01696, eq. (1) (`T=O(\log (N/\eps))`) and the sentence after Lemma 1 ("it follows
 that $q = O (\log (N / \epsilon))$"); the depth is `C q` with `C` depending only on `d` and `D`
-(`exists_isPreparedInDepth_approximationError_le`).
-
-**Scope restriction (block length dividing the chain length):** `q ∣ N`, as in the source's
-eq. (10); see `docs/paper-gaps/mswc24_depth_upper_bound_divisible_length.tex`. -/
+(`exists_isPreparedInDepth_approximationError_le`). The block length divides `N`, the scope
+restriction recorded in the module docstring. -/
 theorem exists_isPreparedInDepth_le_log {D : ℕ} [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
     ∃ a b c : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →

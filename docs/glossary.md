@@ -1167,6 +1167,23 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the chain is open; the ring structure enters only through the
   placement map of `IsPairProduct.isCircuitOn`.
 
+### `MPSPreparation.Layer.IsIn`
+
+- **Declaration:**
+  `MPSPreparation.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/CircuitComposition.lean`.
+- **Meaning:** every gate of the layer `L` acts on a bond `{k, k+1}` contained
+  in the set of sites `R`.
+- **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit", where
+  the block unitaries act in parallel on disjoint blocks of sites; the source
+  has no separate name for this support condition.
+- **Sanctioned bridges:** `Layer.IsIn.mono` enlarges `R`;
+  `Layer.op_mem_supportedOperators` places the layer operator among the
+  operators supported on `R`; `Layer.union` and `Layer.union_op` merge layers
+  acting in disjoint sets; `Layer.empty_isIn` covers the empty layer.
+- **Caveat:** the condition is on the bonds of the layer, not on its operator;
+  it is the per-layer ingredient of `IsCircuitOn`.
+
 ### `MPSPreparation.IsCircuitOn`
 
 - **Declaration:**
