@@ -53,6 +53,12 @@ theorem smul_monomial [MulZeroClass R] (σ : Equiv.Perm ι) (φ : ι → R) (c :
   ext t s
   by_cases h : t = σ s <;> simp [monomial_apply, h]
 
+/-- The negative of a monomial matrix is monomial with negated phases. -/
+theorem neg_monomial [NegZeroClass R] (σ : Equiv.Perm ι) (φ : ι → R) :
+    -monomial σ φ = monomial σ (-φ) := by
+  ext t s
+  by_cases h : t = σ s <;> simp [monomial_apply, h]
+
 /-- The identity is the monomial matrix of the identity permutation with all
 phases equal to one. -/
 theorem monomial_one [MulZeroOneClass R] :
