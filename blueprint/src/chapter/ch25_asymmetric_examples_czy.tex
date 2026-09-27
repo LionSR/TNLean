@@ -59,11 +59,18 @@ of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
 
 \begin{proof}
     \leanok
-    The entry $(A_1^{ij})_{\alpha\beta}$ vanishes unless $i=1-j$ and
-    $\alpha=i$, and then equals $(-1)^{i(1-\beta)}$. The incoming bond at
-    every site is therefore forced to equal the output bit, and the
-    cyclic trace has the single surviving bond configuration
-    $\alpha_n=s_n$.
+    The periodic operator is the cyclic trace
+    \begin{align}
+        U_N(s,t) & =\sum_{\alpha\in\{0,1\}^N}\prod_{n=0}^{N-1}
+        (A_1^{s_nt_n})_{\alpha_n\alpha_{n+1}},
+        \notag
+    \end{align}
+    with $\alpha_N=\alpha_0$. The entry $(A_1^{ij})_{\alpha\beta}$ vanishes
+    unless $i=1-j$ and $\alpha=i$, and then equals $(-1)^{i(1-\beta)}$. The
+    incoming bond at every site is therefore forced to equal the output bit,
+    so a product is nonzero only if $s=\bar t$ and $\alpha_n=s_n$ for every
+    $n$. The sum then has the single surviving term
+    $\prod_n(-1)^{s_n(1-s_{n+1})}$, which is~(\ref{eq:asymex_czy_kernel}).
 \end{proof}
 
 \begin{theorem}[Compression of the stacked square onto the identity]
@@ -90,6 +97,7 @@ of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_explicit_gauge}
     With bond coordinates ordered as in the Kronecker product,
     $\widetilde A_0^{00}=e_1u^{\mathsf T}$ and
     $\widetilde A_0^{11}=e_2v^{\mathsf T}$ with $u=(-1,1,-1,1)$ and
@@ -227,6 +235,7 @@ of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_explicit_gauge}
     The matrices $A_0^{00}$ and $A_0^{11}$ are upper triangular with
     diagonal $(0,1,0)$, and the mixed matrices vanish, so the diagonal is
     $(0,\delta^{ij},0)$. The operator identity follows as in
