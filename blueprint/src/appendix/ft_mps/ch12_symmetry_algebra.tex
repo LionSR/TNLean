@@ -54,11 +54,11 @@ reordering basis states rather than by a general linear map. % The statements of
     \end{tenkzequation}
 \end{definition}
 
-\begin{lemma}[Identity permutation twist]\label{lem:perm_twisted_one}
+\begin{lemma}[Identity twist]\label{lem:perm_twisted_one}
     \lean{MPSTensor.TwistedTensor_one}
     \leanok
     \uses{def:perm_twisted_tensor}
-    For a permutation action $\sigma$, $(A^{\sigma_1})^i = A^i$ for all~$i$.
+    For an action $\sigma$, $(A^{\sigma_1})^i = A^i$ for all~$i$.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:perm_twisted_tensor}
@@ -68,16 +68,16 @@ reordering basis states rather than by a general linear map. % The statements of
 \noindent\emph{Composition order.}
 The linear-combination twist (Lemma~\ref{lem:twisted_tensor_mul}) composes as
 $\widetilde{(\widetilde{A}_h)}_g = \widetilde{A}_{gh}$, applying $h$ first
-then~$g$. The permutation twist below uses the same left-action convention
+then~$g$. The action twist below uses the same left-action convention
 $\sigma(gh) = \sigma(g) \circ \sigma(h)$, so
 $(A^{\sigma_g})^{\sigma_h} = A^{\sigma_{gh}}$; the inner permutation
 $\sigma(h)$ acts first on the index.
 
-\begin{lemma}[Composition of permutation twists]\label{lem:perm_twisted_mul}
+\begin{lemma}[Composition of action twists]\label{lem:perm_twisted_mul}
     \lean{MPSTensor.TwistedTensor_mul}
     \leanok
     \uses{def:perm_twisted_tensor}
-    For a permutation action $\sigma$ and all $g, h \in G$,
+    For an action $\sigma$ and all $g, h \in G$,
     \begin{align}
         A^{\sigma_{gh}} & = (A^{\sigma_g})^{\sigma_h}.
         \label{eq:symmetry_perm_composition}
