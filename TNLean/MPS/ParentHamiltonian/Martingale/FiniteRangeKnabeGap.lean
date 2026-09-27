@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
+import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
 
 /-!
