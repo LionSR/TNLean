@@ -20,16 +20,16 @@
     a matrix indexed by the blocked two-site index. Then
     \begin{align}
         Z_T(V_1(X))
-         & =\mathcal R^{-1}\!\left[T\!\left(U_1^\dagger B_1(X)U_1\right)\right]
-        =\mathcal R^{-1}\!\left[T\!\left(\mathcal M^{(1)}(X)\right)\right]
-        =\mathcal R^{-1}\!\left[\mathcal M^{(2)}(X)\right]
-        =U_2^\dagger B_2(X)U_2.
-        \notag
+         & =\mathcal R^{-1}\!\left[T\!\left(U_1^\dagger B_1(X)U_1\right)\right] \notag \\
+         & =\mathcal R^{-1}\!\left[T\!\left(\mathcal M^{(1)}(X)\right)\right] \notag \\
+         & =\mathcal R^{-1}\!\left[\mathcal M^{(2)}(X)\right] \notag \\
+         & =U_2^\dagger B_2(X)U_2,
+        \label{eq:zt_v1_reduction}
     \end{align}
-    Here the first equality is the normalized embedding, the second and last
-    are the two reconstruction identities, and the middle equality is the
-    refinement identity. The equality before the last is precisely the
-    blocked-index relabelling theorem. Therefore
+    where $V_1(X) = U_1^\dagger B_1(X) U_1$ is the normalized embedding,
+    $U_1^\dagger B_1(X) U_1 = \mathcal M^{(1)}(X)$ and
+    $\mathcal R^{-1}[\mathcal M^{(2)}(X)] = U_2^\dagger B_2(X) U_2$ are the two reconstruction identities,
+    and $T(\mathcal M^{(1)}(X)) = \mathcal M^{(2)}(X)$ is the refinement identity. Therefore
     \begin{align}
         U_2^\dagger U_2Z_T(V_1(X))
          & =U_2^\dagger(U_2U_2^\dagger)B_2(X)U_2
@@ -60,15 +60,16 @@
     matrix indexed by two one-site indices. Then
     \begin{align}
         Z_S(V_2(X))
-         & =S\!\left(\mathcal R\!\left[U_2^\dagger B_2(X)U_2\right]\right)
-        =S\!\left(\mathcal M^{(2)}(X)\right)
-        =\mathcal M^{(1)}(X)
-        =U_1^\dagger B_1(X)U_1.
-        \notag
+         & =S\!\left(\mathcal R\!\left[U_2^\dagger B_2(X)U_2\right]\right) \notag \\
+         & =S\!\left(\mathcal M^{(2)}(X)\right) \notag \\
+         & =\mathcal M^{(1)}(X) \notag \\
+         & =U_1^\dagger B_1(X)U_1,
+        \label{eq:zs_v2_reduction}
     \end{align}
-    Here the first equality is the normalized embedding, the next equality is
-    the blocked-index relabelling theorem, the middle equality is the
-    coarse-graining identity, and the last is the one-site reconstruction.
+    where $V_2(X) = U_2^\dagger B_2(X) U_2$ is the normalized embedding,
+    $\mathcal R[U_2^\dagger B_2(X) U_2] = \mathcal M^{(2)}(X)$ is the blocked-index relabelling identity,
+    $S(\mathcal M^{(2)}(X)) = \mathcal M^{(1)}(X)$ is the coarse-graining identity,
+    and $\mathcal M^{(1)}(X) = U_1^\dagger B_1(X) U_1$ is the one-site reconstruction.
     Therefore
     \begin{align}
         U_1^\dagger U_1Z_S(V_2(X))
