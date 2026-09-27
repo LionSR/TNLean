@@ -904,6 +904,153 @@ $M$, $N$, $U_g$ sit on a bond.
     $\sigma(N)$ commutes with $U_{h^{-1}}$.
 \end{proof}
 
+The two properties give the parent Hamiltonian of a $G$-injective tensor, as
+the intersection and closure properties of injective tensors give Theorem 3.5
+of the source \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}. For a
+tensor $A$ and a ring of $N$ sites, write $\mathcal G_{N,L}(A)$ for the space
+of Definition~\ref{def:chain_ground_space}, the common kernel of the parent
+interactions on all windows of $L$ consecutive sites of the ring, and write
+$\ket{\mathcal M(A|K)}=\sum_{\sigma}\tr[A^{\sigma_1}\cdots A^{\sigma_N}K]
+    \ket{\sigma}$ for the matrix product state with closure $K$. The source's
+two-site interaction is $L=2$. In the rest of this subsection $A$ is
+$G$-injective for the representation $U$.
+
+\begin{lemma}[The open chain of a $G$-injective tensor]%
+    \label{lem:peps_mps_g_injective_open_chain}
+    \lean{MPSTensor.mem_groundSpace_add_two_of_isGInjective,
+        MPSTensor.chainGroundSpace_le_groundSpace_of_isGInjective}
+    \leanok
+    \uses{thm:peps_mps_g_injective_intersection,
+        cor:peps_mps_g_injective_blocking, def:chain_ground_space}
+    Let $K\ge1$. A vector on $K+2$ sites whose restrictions to the first and to
+    the last $K+1$ sites lie in
+    $\{\sum_{\sigma}\tr[A^{\sigma_1}\cdots A^{\sigma_{K+1}}X]\ket{\sigma}\mid X\}$
+    lies in the corresponding space on $K+2$ sites. Consequently, if
+    $2\le L\le N$, every vector of $\mathcal G_{N,L}(A)$ has the form
+    $\sum_{\sigma}\tr[A^{\sigma_1}\cdots A^{\sigma_N}X]\ket{\sigma}$
+    \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Fixing the last letter $k$ writes the vector as $\tr[A^iB^wM^k]$ and fixing
+    the first letter $i$ as $\tr[N^iB^wA^k]$, where $B$ is the tensor of $K$
+    blocked sites, which is $G$-injective by
+    Corollary~\ref{cor:peps_mps_g_injective_blocking}. The intersection
+    property gives the form $\tr[A^iB^wA^kX]$. Iterating along the
+    non-wrapping windows of the ring gives the second claim, as in the proof of
+    Theorem 3.5 of the source.
+\end{proof}
+
+\begin{theorem}[Parent Hamiltonians of $G$-injective tensors]%
+    \label{thm:peps_mps_g_injective_parent_hamiltonian}
+    \lean{MPSTensor.groundSpaceMap_mem_span_closure_of_isGInjective,
+        MPSTensor.groundSpaceMap_rep_mem_chainGroundSpace,
+        MPSTensor.chainGroundSpace_eq_span_closure_of_isGInjective}
+    \leanok
+    \uses{lem:peps_mps_g_injective_open_chain,
+        thm:peps_mps_g_injective_closure}
+    If $2\le L\le N$, then
+    \begin{align*}
+        \mathcal G_{N,L}(A)=\spn_{\C}\bigl\{\ket{\mathcal M(A|U_g)}\ \big|\
+        g\in G\bigr\}.
+    \end{align*}
+    In particular, for the two-site interaction on a ring of $N\ge2$ sites
+    the frustration-free ground space of the parent Hamiltonian is spanned by
+    the states $\ket{\mathcal M(A|U_g)}$
+    \cite[Theorem~4.11]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each $U_g$ commutes with every $A^i$, so it can be moved to any bond, and
+    every window of $\ket{\mathcal M(A|U_g)}$ lies in the local ground space.
+    Conversely, by Lemma~\ref{lem:peps_mps_g_injective_open_chain} a vector
+    of $\mathcal G_{N,L}(A)$ is $\tr[A^{\sigma_1}\cdots A^{\sigma_N}X]$, and
+    its translate by one site is $\tr[A^{\sigma_1}\cdots A^{\sigma_N}Y]$. Hence
+    $\tr[A^aB^wX]=\tr[A^aYB^w]$, where $B$ is the tensor of the last $N-1$
+    blocked sites. The closure property, applied to $A$ and $B$, writes the
+    vector as a combination of the states $\ket{\mathcal M(A|U_g)}$.
+\end{proof}
+
+\begin{lemma}[Twirled representation operators]%
+    \label{lem:peps_twirled_representation}
+    \lean{Representation.rep_mul_charProjector,
+        Representation.apply_conj_of_mem_irreducibleCharacters,
+        Representation.sum_rep_conj_apply_of_mem,
+        Representation.averageMap_linHom_rep,
+        Representation.linearIndependent_charProjector,
+        Representation.linearIndependent_of_isSemiRegular,
+        Representation.linearIndependent_averageMap_conjClasses}
+    \leanok
+    \uses{thm:peps_isotypic_projectors, thm:peps_group_averaging,
+        thm:peps_semiregular_trace}
+    The isotypic projectors $P_i$ commute with every $U_g$, are linearly
+    independent, and
+    \begin{align*}
+        \sigma(U_g)=\frac{1}{|G|}\sum_hU_{hgh^{-1}}
+        =\sum_{i=1}^{r}\frac{\chi_i(g)}{\chi_i(1)}\,P_i .
+    \end{align*}
+    If $U$ is semi-regular, then the operators $U_g$ are linearly independent,
+    and so are the twirls $\sigma(U_g)$ of one representative $g$ of each
+    conjugacy class \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    On an irreducible subrepresentation with character $\chi_i$ the operator
+    $\sum_hU_{hgh^{-1}}$ commutes with the representation, so by Schur's lemma
+    it is a scalar, and its trace $|G|\chi_i(g)$ fixes the scalar as
+    $|G|\chi_i(g)/\chi_i(1)$; the projector $P_i$ acts there as the identity
+    and every other projector as zero. Evaluating $\sum_i\mu_iP_i$ on a nonzero
+    vector of such a subrepresentation gives $\mu_i$ times the vector. For
+    semi-regular $U$, the functional $X\mapsto\tr[U_{g^{-1}}X\Delta]$ takes the
+    value $\delta_{g,h}$ on $U_h$ by
+    Theorem~\ref{thm:peps_semiregular_trace}; on $\sigma(U_k)$ it is
+    $\frac{1}{|G|}$ times the number of $h$ with $hkh^{-1}=g$, which vanishes
+    unless $k$ is conjugate to $g$ and is positive for $k=g$.
+\end{proof}
+
+\begin{theorem}[Structure of the ground space of a $G$-injective tensor]%
+    \label{thm:peps_mps_g_injective_ground_space_structure}
+    \lean{MPSTensor.groundSpaceMap_toMatrix'_averageMap,
+        MPSTensor.chainGroundSpace_eq_span_charProjector_of_isGInjective,
+        MPSTensor.linearIndependent_groundSpaceMap_charProjector_of_isGInjective,
+        MPSTensor.finrank_chainGroundSpace_of_isGInjective,
+        MPSTensor.chainGroundSpace_eq_span_conjClasses_of_isGInjective,
+        MPSTensor.linearIndependent_groundSpaceMap_conjClasses_of_isSemiRegular,
+        MPSTensor.finrank_chainGroundSpace_of_isSemiRegular,
+        MPSTensor.card_irreducibleCharacterFinset_of_isSemiRegular}
+    \leanok
+    \uses{thm:peps_mps_g_injective_parent_hamiltonian,
+        lem:peps_twirled_representation, def:peps_semiregular}
+    Let $2\le L\le N$, and let $\chi_1,\dots,\chi_I$ be the distinct
+    characters of the irreducible representations occurring in $U$, with
+    isotypic projectors $P_i$. The states $\ket{\mathcal M(A|P_i)}$ are
+    linearly independent and span $\mathcal G_{N,L}(A)$, so this space has
+    dimension $I$. If $U$ is semi-regular, then $I$ is the number of conjugacy
+    classes of $G$, and for any choice of one representative $g$ of each
+    conjugacy class the states $\ket{\mathcal M(A|U_g)}$ are linearly
+    independent and span $\mathcal G_{N,L}(A)$
+    \cite[Theorem~4.12]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $A$ is invariant, $\ket{\mathcal M(A|K)}=\ket{\mathcal M(A|\sigma(K))}$
+    for every closure $K$; in particular the closures of one conjugacy class
+    give the same state. By Lemma~\ref{lem:peps_twirled_representation} each
+    $\ket{\mathcal M(A|U_g)}$ is a combination of the states
+    $\ket{\mathcal M(A|P_i)}$, and conversely each $P_i$ is a combination of
+    the $U_g$, so Theorem~\ref{thm:peps_mps_g_injective_parent_hamiltonian}
+    gives the spanning claims. The tensor of $N$ blocked sites is
+    $G$-injective, so $K\mapsto\ket{\mathcal M(A|K)}$ is injective on the
+    operators commuting with every $U_g$. These contain the projectors $P_i$
+    and the twirls $\sigma(U_g)$, and
+    Lemma~\ref{lem:peps_twirled_representation} gives the linear independence
+    of both families. Computing the dimension of $\mathcal G_{2,2}(A)$ in the
+    two ways gives $I$ equal to the number of conjugacy classes. The source
+    instead quotes that the numbers of conjugacy classes and of irreducible
+    representations agree, and passes from the $U_g$ to the $P_i$ through the
+    completeness of the characters in the class functions.
+\end{proof}
+
 The source asks for a tensor that is $G$-isometric with respect to the
 left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its

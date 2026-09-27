@@ -44,6 +44,7 @@ import TNLean.PEPS.FundamentalTheorem.Uniqueness
 import TNLean.PEPS.GInjective
 import TNLean.PEPS.GInjectiveMPS
 import TNLean.PEPS.GInjectiveMPSIntersection
+import TNLean.PEPS.GInjectiveMPSParentHamiltonian
 import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InjectiveRegion
