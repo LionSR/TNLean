@@ -14,14 +14,14 @@ import TNLean.MPS.Symmetry.TimeReversalIndex
 state "can be protected by multiple distinct physical symmetries: on-site `SO(3)`
 …, on-site `Z₂ × Z₂` …, time-reversal, or reflection symmetry.  In all these cases,
 the AKLT MPS tensor transforms projectively."  The time-reversal and reflection
-indices are the signs `X X̄ = ±1` of lines 1116–1120.
+indices are the signs `X X* = ±1` of lines 1116–1120.
 Review: arXiv:2011.12127, Appendix A, "The AKLT state".
 
 **Formalized here.** In the basis `(m = 0, m = +1, m = -1)` of `akltTensor`,
 time reversal acts as complex conjugation composed with the spin-`1` rotation
 `e^{iπ S_y}`, the matrix `akltSpinRotationY`.  The AKLT tensor satisfies
 `conj(∑ⱼ (e^{iπ S_y})ᵢⱼ Aʲ) = X† Aⁱ X` and `(Aⁱ)ᵀ = -X† Aⁱ X` with
-`X = iσ_y`, and `X X̄ = -1`.  Every unitary gauge of either symmetry has the same
+`X = iσ_y`, and `X X* = -1`.  Every unitary gauge of either symmetry has the same
 index `-1`, so both indices are non-trivial.
 
 The cohomology counts of lines 1161–1162 are not formalized here.
@@ -76,7 +76,7 @@ def akltAntisymmetricGauge : Matrix.unitaryGroup (Fin 2) ℂ :=
 @[simp] lemma akltAntisymmetricGauge_val :
     (akltAntisymmetricGauge : Matrix (Fin 2) (Fin 2) ℂ) = !![0, 1; -1, 0] := rfl
 
-/-- The gauge `iσ_y` satisfies `X X̄ = -1`. -/
+/-- The gauge `iσ_y` satisfies `X X* = -1`. -/
 theorem akltAntisymmetricGauge_mul_map_star :
     (akltAntisymmetricGauge : Matrix (Fin 2) (Fin 2) ℂ) *
       (akltAntisymmetricGauge : Matrix (Fin 2) (Fin 2) ℂ).map (starRingEnd ℂ) = -1 := by
@@ -108,7 +108,7 @@ theorem akltTensor_reflection (i : Fin 3) :
 /-- **The AKLT time-reversal index is `-1`.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
 lines 1117 and 1159).  For every unitary gauge `X` and scalar `ζ` implementing time
-reversal, `conj(∑ⱼ (e^{iπ S_y})ᵢⱼ Aʲ) = ζ X† Aⁱ X`, the index is `X X̄ = -1`. -/
+reversal, `conj(∑ⱼ (e^{iπ S_y})ᵢⱼ Aʲ) = ζ X† Aⁱ X`, the index is `X X* = -1`. -/
 theorem aklt_timeReversal_index_eq_neg_one (X : Matrix.unitaryGroup (Fin 2) ℂ) {ζ : ℂ}
     (h : ∀ i, (∑ j : Fin 3, akltSpinRotationY i j • akltTensor j).map (starRingEnd ℂ) =
       ζ • ((X : Matrix (Fin 2) (Fin 2) ℂ)ᴴ * akltTensor i * X)) :
@@ -131,7 +131,7 @@ theorem aklt_timeReversal_index_eq_neg_one (X : Matrix.unitaryGroup (Fin 2) ℂ)
 /-- **The AKLT reflection index is `-1`.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
 lines 1120 and 1159).  For every unitary gauge `X` and scalar `ζ` with
-`(Aⁱ)ᵀ = ζ X† Aⁱ X`, the index is `X X̄ = -1`. -/
+`(Aⁱ)ᵀ = ζ X† Aⁱ X`, the index is `X X* = -1`. -/
 theorem aklt_reflection_index_eq_neg_one (X : Matrix.unitaryGroup (Fin 2) ℂ) {ζ : ℂ}
     (h : ∀ i, (akltTensor i)ᵀ = ζ • ((X : Matrix (Fin 2) (Fin 2) ℂ)ᴴ * akltTensor i * X)) :
     (X : Matrix (Fin 2) (Fin 2) ℂ) * (X : Matrix (Fin 2) (Fin 2) ℂ).map (starRingEnd ℂ) = -1 := by
