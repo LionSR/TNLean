@@ -42,6 +42,7 @@ import TNLean.PEPS.FundamentalTheorem.LocalGaugeExtraction
 import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
 import TNLean.PEPS.GInjective
+import TNLean.PEPS.GInjectiveMPS
 import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InjectiveRegion
