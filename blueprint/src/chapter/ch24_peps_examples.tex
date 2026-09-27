@@ -696,7 +696,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
         TNLean.PEPS.mpsSiteMap_comp_linHom_eq_iff,
         TNLean.PEPS.isGInjective_mpsSiteMap_iff}
     \leanok
-    \uses{def:peps_mps_g_injective, thm:peps_group_averaging}
+    \uses{def:peps_mps_g_injective}
     A matrix product tensor $A$ is $G$-injective if and only if
     \begin{enumerate}
         \item $U_gA^iU_g^{-1}=A^i$ for all $i$ and $g$, and
@@ -710,6 +710,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_group_averaging}
     Since $\tr[A^iU_gXU_g^{-1}]=\tr[U_g^{-1}A^iU_gX]$, invariance of
     $\mathcal{P}(A)$ under conjugation by $U_g$ says that $U_g^{-1}A^iU_g$
     and $A^i$ have the same trace pairing with every operator $X$; pairing
@@ -728,8 +729,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
         TNLean.PEPS.concatLeftInverse_comp_mpsSiteMap,
         TNLean.PEPS.IsGInjective.mpsSiteMap_concatTensor}
     \leanok
-    \uses{thm:peps_mps_g_injective_source_form,
-        thm:peps_g_injective_left_inverse, thm:peps_delta_expansion}
+    \uses{def:peps_mps_g_injective, def:peps_delta_operator}
     Let $A$ and $B$ be $G$-injective matrix product tensors for the same
     representation, with left inverses $L_A$ and $L_B$ satisfying
     $L_A\mathcal{P}(A)=L_B\mathcal{P}(B)=\sigma$. Then $C^{ij}=A^iB^j$ is
@@ -742,6 +742,8 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_mps_g_injective_source_form,
+        thm:peps_g_injective_left_inverse, thm:peps_delta_expansion}
     Invariance of $C$ follows from
     $U_gA^iB^jU_g^{-1}=(U_gA^iU_g^{-1})(U_gB^jU_g^{-1})$. For the left
     inverse, first $\sum_i\tr[A^iY]\,L_A\ket{i}=\sigma(Y)$ for every $Y$.
@@ -773,12 +775,13 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
         MPSTensor.toLin'_evalWord,
         MPSTensor.isGInjective_mpsSiteMap_blockTensor}
     \leanok
-    \uses{thm:peps_mps_g_injective_concatenation}
+    \uses{def:peps_mps_g_injective}
     If $A$ is $G$-injective, then the tensor obtained by blocking $L\ge1$
     sites, $(i_1,\dots,i_L)\mapsto A^{i_1}\cdots A^{i_L}$, is $G$-injective.
 \end{corollary}
 
 \begin{proof}\leanok
+    \uses{thm:peps_mps_g_injective_concatenation}
     Induction on $L$: the blocked tensor on $L+1$ sites is the concatenation
     of $A$ with the blocked tensor on $L$ sites, up to relabelling the
     physical index, and relabelling preserves $G$-injectivity.

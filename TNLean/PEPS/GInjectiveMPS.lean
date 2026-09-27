@@ -202,7 +202,7 @@ attribute [local instance] Representation.invertibleFintypeCardComplex
 (equation `eq:noninj:linv`). The left inverse `C⁻¹` of `𝒫(C)` for `C^{ij} = A^i B^j`, built from
 left inverses `L_A`, `L_B` of `𝒫(A)`, `𝒫(B)` by joining them through `Δ`:
 `C⁻¹ |ij⟩ = |G| L_B|j⟩ Δ L_A|i⟩`. The factor `|G|` is the normalization the source omits in
-diagrams (line 919). -/
+diagrams (line 936). -/
 noncomputable def concatLeftInverse (ρ : Representation ℂ G V)
     (LA : (ι → ℂ) →ₗ[ℂ] Module.End ℂ V) (LB : (κ → ℂ) →ₗ[ℂ] Module.End ℂ V) :
     (ι × κ → ℂ) →ₗ[ℂ] Module.End ℂ V :=
