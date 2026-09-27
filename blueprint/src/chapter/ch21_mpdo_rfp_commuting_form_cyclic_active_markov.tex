@@ -1024,7 +1024,7 @@
     \begin{align}
         \sum_{r\in C}\tr(\eta_{q,r})\tr(\eta_{r,h})
          & =(T_C^2)_{q,h}.
-        \notag
+        \label{eq:mpdo_cyclic_tc_sq_entry}
     \end{align}
     More generally, if $B_{q,h}(X)$ denotes the outer boundary operator in
     the three-site closure, then
@@ -1032,7 +1032,7 @@
         \sum_{r\in C}\tr_{\mathrm{mid}}
         (B_{q,h}(X)\otimes\eta_{q,r}\otimes\eta_{r,h})
          & =(T_C^2)_{q,h}B_{q,h}(X).
-        \notag
+        \label{eq:mpdo_cyclic_tc_sq_boundary_closure}
     \end{align}
     Here $\tr_{\mathrm{mid}}$ traces both neighboring factors.
 
@@ -1044,13 +1044,13 @@
         \lambda^{-1}\tr(\eta_{q,r})
         \lambda^{-1}\tr(\eta_{r,h})
          & =(\widehat T_C^2)_{q,h}.
-        \notag
+        \label{eq:mpdo_cyclic_tc_sq_normalized}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     Positivity makes each $\tr(\eta_{a,b})$ real. Expanding matrix
-    multiplication gives
+    multiplication gives (\ref{eq:mpdo_cyclic_tc_sq_entry}):
     \begin{align}
         (T_C^2)_{q,h}
          & =\sum_{r\in C}(T_C)_{q,r}(T_C)_{r,h}
@@ -1059,8 +1059,8 @@
     \end{align}
     The partial trace of the fixed-sector three-site closure is
     $\tr(\eta_{q,r})\tr(\eta_{r,h})B_{q,h}(X)$.
-    Summing over $r\in C$ proves the second identity. Multiplying each of the
-    two trace factors by $\lambda^{-1}$ gives the normalized identity.
+    Summing over $r\in C$ proves (\ref{eq:mpdo_cyclic_tc_sq_boundary_closure}). Multiplying each of the
+    two trace factors by $\lambda^{-1}$ gives (\ref{eq:mpdo_cyclic_tc_sq_normalized}).
 \end{proof}
 
 \begin{theorem}[Fourth-region blocks from an explicit factorization]
