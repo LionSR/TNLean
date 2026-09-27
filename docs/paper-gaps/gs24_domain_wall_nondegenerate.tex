@@ -42,9 +42,9 @@ phase is allowed for a nonzero wall. Neither is intended: the tensors model
 excitations, and the scalars are called phases and phase factors (lines 712,
 1656 and 1894). The formalization requires the walls to be nonzero and the
 phases to be nonzero wherever a scalar identity between phases is derived; for
-the families of domain walls of Section~IV both conditions are fields of the
+the families of domain walls of Section~IV both conditions are part of the
 definition.\footnote{Formal declarations:
-\leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily},
+\leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq},
 \leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one}.}
 Without a nonzero wall no phase is determined, so the literal reading has no
 content to formalize.
