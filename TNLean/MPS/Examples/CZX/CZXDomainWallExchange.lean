@@ -17,7 +17,8 @@ and a symmetry string passing over a pair of domain walls acquires `ω` (`signph
 
 **Formalized here.** With the action tensors of `CZXCompression.czxBlockActionData`, the walls
 `e_{AB} = |0⟩` and `e_{BA} = i|1⟩` are exchanged by the generator with `c_{AB} = c_{BA} = i`, and
-the local action of the generator on an open chain containing the pair `e_{AB}`, `e_{BA}` is
+the local action of the generator on an open chain containing the pair of walls
+`e_{AB} = |0⟩`, `e_{BA} = -|1⟩` of `CZXCompression.czxWallAB` and `CZXCompression.czxWallBA` is
 `-1`. These are the tensor identities behind the semionic statistics of the source; the
 truncated string operators and their exchange relation are not constructed.
 
@@ -25,6 +26,12 @@ truncated string operators and their exchange relation are not constructed.
 `CZXCompression.czxBlockActionData`, whose left action vectors `⟨1|` and `-⟨0|` replace the vector
 `⟨+̂|` printed at lines 1272 and 1300; this affects `czx_isDomainWallAction_semion` and
 `czx_domainWall_pair`. Documented in `docs/paper-gaps/gs24_czx_action_left_vectors.tex`.
+
+**Local fix (nondegenerate domain walls, blocked local action):** `czx_isDomainWallAction_semion`
+and `czx_domainWall_pair` are stated for `IsDomainWallAction` and its consequence
+`IsDomainWallAction.pair`, whose walls and phase are nonzero and whose local relation holds
+against regions longer than a buffer; documented in
+`docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
 
 ## Main results
 
