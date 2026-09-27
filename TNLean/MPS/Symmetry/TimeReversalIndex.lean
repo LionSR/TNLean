@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.MPS.Core.Blocking
+import TNLean.MPS.SharedInfra.CoisometryGauge
 import TNLean.MPS.Symmetry.GaugeUniqueness
 
 /-!
@@ -57,10 +58,6 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-! ### The involution index `X X̄ = ±1` -/
-
-/-- A unitary matrix as an element of the general linear group. -/
-private def unitaryGL (X : Matrix.unitaryGroup (Fin D) ℂ) : GL (Fin D) ℂ :=
-  ⟨X, star X, Matrix.mem_unitaryGroup_iff.mp X.2, Matrix.mem_unitaryGroup_iff'.mp X.2⟩
 
 /-- Core of the index lemmas: if applying a symmetry twice returns
 `Aⁱ = c (X X̄)† Aⁱ (X X̄)` for a unitary `X` and a normal tensor `A`, then
