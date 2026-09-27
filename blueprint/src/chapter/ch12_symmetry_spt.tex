@@ -264,3 +264,154 @@ $\E_A$ itself is used, describes the same spectrum.
     Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
     Lemma~\ref{lem:even_finrank_of_anticommute}.
 \end{proof}
+
+\subsection{Time reversal, reflection, and symmetry obstructions}
+\label{sec:spt_time_reversal_reflection}
+
+Time reversal acts on an MPS tensor by $A^i\mapsto\sum_j P_{ij}\bar A^j$, with
+$\bar A$ the entrywise conjugate and $P$ its on-site part, and reflection acts by
+transposition $A^i\mapsto(A^i)^{T}$.  Applying either symmetry twice returns the
+tensor up to the gauge $X\bar X$, which Lemma~\ref{lem:gauge_phase_unique_normal}
+forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
+
+\begin{lemma}[Involution index from a doubled symmetry]
+    \label{lem:involution_index_of_twice}
+    \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_twice, MPSTensor.mul_map_star_eq_of_eq_smul, MPSTensor.mul_map_star_eq_of_gauges}
+    \leanok
+    Let $A$ be normal with $D\ge1$ and let $X$ be unitary.  If
+    $A^i=c\,(X\bar X)^\dagger A^i(X\bar X)$ for all $i$, then $X\bar X=\pm\Id$.
+    If two unitaries $X,X'$ satisfy
+    $\zeta X^\dagger A^iX=\zeta'X'^\dagger A^iX'$ for all $i$ with $\zeta\neq0$, then
+    $X\bar X=X'\bar X'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique_normal}
+    By Lemma~\ref{lem:gauge_phase_unique_normal} the unitary $X\bar X$ is a scalar
+    $\sigma$, and $\sigma=\pm1$ because $X\bar X=\sigma$ implies
+    $\bar X X=\sigma$ and $\sigma=\bar\sigma$ with $|\sigma|=1$.  In the second
+    statement $X=u\,X'$ with $|u|=1$, so $X\bar X=|u|^2X'\bar X'$.
+\end{proof}
+
+\begin{theorem}[Time-reversal index]
+    \label{thm:time_reversal_index}
+    \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge, MPSTensor.mul_map_star_eq_of_timeReversal_gauges}
+    \leanok
+    Let $A$ be normal with $D\ge1$, let $P$ satisfy $P\bar P=\Id$, and let $X$ be
+    unitary with $\sum_jP_{ij}\bar A^j=\zeta\,X^\dagger A^iX$ for all $i$.  Then
+    $X\bar X=\pm\Id$, and the sign is the same for every unitary $X$ with this
+    property \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:involution_index_of_twice}
+    Conjugating the relation and substituting it into itself gives
+    $A^i=|\zeta|^2(X\bar X)^\dagger A^i(X\bar X)$, because the doubled on-site
+    action is $P\bar P=\Id$.  Apply Lemma~\ref{lem:involution_index_of_twice}; the
+    phase $\zeta$ is nonzero because $A$ has a nonzero letter.
+\end{proof}
+
+\begin{theorem}[Reflection index]
+    \label{thm:reflection_index}
+    \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_reflection_gauge, MPSTensor.mul_map_star_eq_of_reflection_gauges}
+    \leanok
+    Let $A$ be normal with $D\ge1$ and let $X$ be unitary with
+    $(A^i)^{T}=\zeta\,X^\dagger A^iX$ for all $i$.  Then $X\bar X=\pm\Id$, and the
+    sign is the same for every unitary $X$ with this property
+    \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:involution_index_of_twice}
+    Transposing the relation and substituting it into itself gives
+    $A^i=\zeta^2(X\bar X)^\dagger A^i(X\bar X)$, since
+    $X^{T}X^\dagger=(X\bar X)^\dagger$ and $(X^\dagger)^{T}=\bar X$.  Apply
+    Lemma~\ref{lem:involution_index_of_twice}.
+\end{proof}
+
+\begin{theorem}[Kramers obstruction]
+    \label{thm:kramers_obstruction}
+    \lean{MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one, MPSTensor.pauliY_mul_map_star, MPSTensor.not_wignerTimeReversal_gauge}
+    \leanok
+    Let $P$ satisfy $P\bar P=-\Id$, as $\sigma_y$ does.  No normal tensor with
+    $D\ge1$ admits $X\in\GL_{D}(\C)$ and $\zeta\in\C$ with
+    $\sum_jP_{ij}\bar A^j=\zeta\,X^{-1}A^iX$ for all $i$.  In particular no normal
+    spin-$\tfrac12$ tensor carries the Wigner time reversal
+    $A^i\mapsto\sum_j(\sigma_y)_{ij}\bar A^j$ in this form
+    \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique_normal}
+    Applying the relation twice gives
+    $-A^i=|\zeta|^2(X\bar X)^{-1}A^i(X\bar X)$.  By
+    Lemma~\ref{lem:gauge_phase_unique_normal}, $-|\zeta|^2=1$, which is impossible.
+\end{proof}
+
+\begin{theorem}[Kramers obstruction for injective tensors]
+    \label{thm:kramers_obstruction_phase}
+    \lean{MPSTensor.not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective}
+    \leanok
+    \uses{thm:kramers_obstruction, thm:ft_single_phase}
+    No injective spin-$\tfrac12$ tensor with $D\ge1$ is invariant up to a phase
+    under the Wigner time reversal: it is not the case that for every $N\ge1$ the
+    matrix product vector of $\tilde A^i=\sum_j(\sigma_y)_{ij}\bar A^j$ is
+    $c_N\ket{\psi_N(A)}$ with $|c_N|=1$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:ft_single_phase}, $\tilde A^i=\lambda\,XA^iX^{-1}$ for an
+    invertible $X$ and a phase $\lambda$, which Theorem~\ref{thm:kramers_obstruction}
+    excludes.
+\end{proof}
+
+\begin{theorem}[Anticommuting physical symmetries are obstructed]
+    \label{thm:anticommuting_physical_obstruction}
+    \lean{MPSTensor.not_anticommuting_gauges_of_isNormal}
+    \leanok
+    Let $P,Q$ be physical matrices with $PQ=-QP$.  No normal tensor with $D\ge1$
+    satisfies $\sum_jP_{ij}A^j=\zeta\,XA^iX^{-1}$ and
+    $\sum_jQ_{ij}A^j=\eta\,YA^iY^{-1}$ for all $i$, with $X,Y\in\GL_{D}(\C)$ and
+    $\zeta,\eta\neq0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique_normal}
+    Composing the two twists in both orders gives
+    $\eta\zeta\,(YX)A^i(YX)^{-1}=-\zeta\eta\,(XY)A^i(XY)^{-1}$, so
+    Lemma~\ref{lem:gauge_phase_unique_normal} would give $-1=1$.
+\end{proof}
+
+\begin{theorem}[No normal spin-$\tfrac12$ tensor is $\mathrm{SU}(2)$ symmetric]
+    \label{thm:spin_half_su2_obstruction}
+    \lean{MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal, MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal, MPSTensor.mpv_twistedTensor, MPSTensor.mpv_twistedTensor_eq_of_mul_eq, MPSTensor.blockKron_smul}
+    \leanok
+    \uses{def:on_site_symmetric}
+    No normal tensor $A$ on a spin-$\tfrac12$ site with $D\ge1$ is invariant up to
+    phases under the defining representation of $\mathrm{SU}(2)$: it is not the
+    case that for every $g$ and every $N$ the vector $U(g)^{\otimes N}\ket{\psi_N(A)}$
+    is a multiple of $\ket{\psi_N(A)}$ \cite[Section~III.A]{Cirac2021Matrix}.  In
+    particular $A$ has no MPV-family invariance under $\mathrm{SU}(2)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted, thm:anticommuting_physical_obstruction}
+    Fix a length $N$.  If $\ket{\psi_N(A)}=0$, every twist leaves it
+    unchanged.  Otherwise write
+    $U(g)^{\otimes N}\ket{\psi_N(A)}=c_N(g)\ket{\psi_N(A)}$; then
+    $c_N(gh)=c_N(g)c_N(h)$, so $c_N$ is trivial on commutators.  Thus at every
+    length $N$ each commutator leaves $\ket{\psi_N(A)}$ unchanged.  Both $i\sigma_x$ and
+    $i\sigma_z$ are commutators in $\mathrm{SU}(2)$:
+    $i\sigma_x=(i\sigma_z)b_1(i\sigma_z)^{-1}b_1^{-1}$ and
+    $i\sigma_z=(i\sigma_x)b_2(i\sigma_x)^{-1}b_2^{-1}$ with
+    $b_1=\tfrac12\begin{pmatrix}1-i&1-i\\-1-i&1+i\end{pmatrix}$ and
+    $b_2=\tfrac12\begin{pmatrix}1-i&1+i\\-1+i&1+i\end{pmatrix}$.  So the
+    tensor has MPV-family invariance under these two elements.
+    Block to an odd length $L$ at which the tensor is injective.  The blocked tensor
+    is symmetric under the $L$-fold Kronecker powers, and the powers of
+    $i\sigma_x$ and $i\sigma_z$ anticommute because $L$ is odd.  The fundamental
+    theorem supplies virtual gauges for both, which
+    Theorem~\ref{thm:anticommuting_physical_obstruction} rules out.  The source
+    argues instead through the alternation of integer and half-integer virtual
+    spins.
+\end{proof}
