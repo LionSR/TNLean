@@ -47,6 +47,7 @@ and without which the block form fails. Documented in
 
 ## Main declarations
 
+* `MPSTensor.CopyWeights` — the weights `μ_{j,k}`, some nonzero in every block.
 * `MPSTensor.repeatedBlockSum` — the direct sum `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j`.
 * `MPSTensor.mpv_repeatedBlockSum` — its state is `∑ⱼ βⱼ |φ_N(A_j)⟩`.
 * `MPSTensor.copyNorm`, `MPSTensor.copyIsometry` — `cⱼ` and `L_j`.
@@ -72,11 +73,28 @@ namespace MPSTensor
 
 variable {d D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ}
 
+/-- The weights `μ_{j,k}` of the copies of the blocks in the decomposition
+`Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` of arXiv:2307.01696, Supplemental Material,
+eq. (S2), with some nonzero weight in every block.
+
+**Local fix (blocks that occur):** eq. (S2) lists the normal tensors that occur in `A`; a block
+without copies, or with all weights zero, contributes nothing to `A`, and the condition is part of
+the data rather than a hypothesis of each statement. Documented in
+`docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`. -/
+structure CopyWeights (b : ℕ) (m : Fin b → ℕ) where
+  /-- The weight `μ_{j,k}` of the copy `k` of block `j`. -/
+  weight : (j : Fin b) → Fin (m j) → ℂ
+  /-- Every block has some nonzero weight. -/
+  weight_ne_zero : ∀ j, weight j ≠ 0
+
+instance : CoeFun (CopyWeights b m) fun _ => (j : Fin b) → Fin (m j) → ℂ :=
+  ⟨CopyWeights.weight⟩
+
 /-- The direct sum `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` of arXiv:2307.01696,
 Supplemental Material, eq. (S2): the copy `k` of block `j` is placed on the bond coordinates
 `ι_{j,k}` with the weight `μ_{j,k}`. -/
 def repeatedBlockSum (Aj : (j : Fin b) → MPSTensor d (Dj j))
-    (ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D) (μ : (j : Fin b) → Fin (m j) → ℂ) :
+    (ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D) (μ : CopyWeights b m) :
     MPSTensor d D :=
   fun i => ∑ j, ∑ k, μ j k • (coordEmbedding (ι j k) * Aj j i * (coordEmbedding (ι j k))ᴴ)
 
@@ -87,7 +105,7 @@ local notation "flat" => Equiv.symm (finSigmaFinEquiv (m := b) (n := m))
 
 /-- The direct sum with multiplicities is the direct sum of all copies, each of multiplicity
 one. -/
-theorem repeatedBlockSum_eq_blockSum (μ : (j : Fin b) → Fin (m j) → ℂ) :
+theorem repeatedBlockSum_eq_blockSum (μ : CopyWeights b m) :
     repeatedBlockSum Aj ι μ =
       blockSum (Dj := fun p => Dj (flat p).1) (fun p => Aj (flat p).1)
         (fun p => ι (flat p).1 (flat p).2) (fun p => μ (flat p).1 (flat p).2) := by
@@ -106,7 +124,7 @@ theorem flat_disjoint_coord
 `βⱼ = ∑ₖ μ_{j,k}^N`: arXiv:2307.01696, Supplemental Material, eqs. (S3) and (S4). -/
 theorem mpv_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    (μ : (j : Fin b) → Fin (m j) → ℂ) {N : ℕ} (hN : N ≠ 0) (s : Fin N → Fin d) :
+    (μ : CopyWeights b m) {N : ℕ} (hN : N ≠ 0) (s : Fin N → Fin d) :
     mpv (repeatedBlockSum Aj ι μ) s = ∑ j, bntWeight μ N j * mpv (Aj j) s := by
   rw [repeatedBlockSum_eq_blockSum,
     mpv_blockSum (fun p => hι _ _) (flat_disjoint_coord hdisj) _ hN,
@@ -117,7 +135,7 @@ theorem mpv_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
 `B = ∑ⱼ ∑ₖ μ_{j,k}^q B_j K_{j,k}ᴴ`. -/
 theorem physicalMatrix_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    (μ : (j : Fin b) → Fin (m j) → ℂ) {q : ℕ} (hq : q ≠ 0) :
+    (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0) :
     physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) =
       ∑ j, ∑ k, μ j k ^ q •
         (physicalMatrix (blockTensor (Aj j) q) * (pairEmbedding (ι j k))ᴴ) := by
@@ -209,13 +227,14 @@ with some nonzero weight: `B = ∑ⱼ cⱼ B_j L_jᴴ`. -/
 theorem physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    {μ : (j : Fin b) → Fin (m j) → ℂ} (hμ : ∀ j, μ j ≠ 0) {q : ℕ} (hq : q ≠ 0) :
+    {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0) :
     physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) =
       ∑ j, (copyNorm μ q j : ℂ) •
         (physicalMatrix (blockTensor (Aj j) q) * (copyIsometry ι μ q j)ᴴ) := by
   rw [physicalMatrix_blockTensor_repeatedBlockSum hι hdisj μ hq]
   refine Finset.sum_congr rfl fun j _ => ?_
-  have hc0 : (copyNorm μ q j : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 (copyNorm_pos (hμ j) q).ne'
+  have hc0 : (copyNorm μ q j : ℂ) ≠ 0 :=
+    Complex.ofReal_ne_zero.2 (copyNorm_pos (μ.weight_ne_zero j) q).ne'
   rw [conjTranspose_copyIsometry, Matrix.mul_sum, Finset.smul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
   rw [Matrix.mul_smul, smul_smul, mul_div_cancel₀ _ hc0]
@@ -228,14 +247,14 @@ theorem physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry
 Supplemental Material, eq. (S5), for blocks with multiplicities. -/
 theorem polarIso_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    {μ : (j : Fin b) → Fin (m j) → ℂ} (hμ : ∀ j, μ j ≠ 0) {q : ℕ} (hq : q ≠ 0)
+    {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0)
     (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
       physicalMatrix (blockTensor (Aj j') q) = 0) :
     polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) =
       ∑ j, polarIso (physicalMatrix (blockTensor (Aj j) q)) * (copyIsometry ι μ q j)ᴴ := by
-  rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hμ hq]
-  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (hμ j) q)
-    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (hμ j) q)
+  rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
+  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_ne_zero j) q)
+    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_ne_zero j) q)
     (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).1
 
 /-- **The positive part of the blocked direct sum.** In the setting of
@@ -245,15 +264,15 @@ of rank one in the copy index, where arXiv:2307.01696, Supplemental Material, eq
 `diag(μ_{j,1}^q, …, μ_{j,m_j}^q) ⊗ P_j`. -/
 theorem polarPos_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    {μ : (j : Fin b) → Fin (m j) → ℂ} (hμ : ∀ j, μ j ≠ 0) {q : ℕ} (hq : q ≠ 0)
+    {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0)
     (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
       physicalMatrix (blockTensor (Aj j') q) = 0) :
     polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) =
       ∑ j, (copyNorm μ q j : ℂ) • (copyIsometry ι μ q j *
         polarPos (physicalMatrix (blockTensor (Aj j) q)) * (copyIsometry ι μ q j)ᴴ) := by
-  rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hμ hq]
-  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (hμ j) q)
-    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (hμ j) q)
+  rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
+  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_ne_zero j) q)
+    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_ne_zero j) q)
     (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).2
 
 /-! ### The corrected approximating state -/
@@ -286,18 +305,19 @@ the blocks (arXiv:2307.01696, eqs. (9), (10) and Supplemental Material, eq. (S7)
 the module docstring). -/
 theorem copyApproxVector_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    {μ : (j : Fin b) → Fin (m j) → ℂ} (hμ : ∀ j, μ j ≠ 0) {q : ℕ} (hq : q ≠ 0)
+    {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0)
     (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
       physicalMatrix (blockTensor (Aj j') q) = 0)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) (M : ℕ) [NeZero M] (α : Fin b → ℂ)
     (τ : Fin M → Fin (blockPhysDim d q)) :
     copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ τ =
       ∑ j, α j * mpv (approximatingTensor (blockTensor (Aj j) q) (σ j)) τ := by
-  have hV := polarIso_blockTensor_repeatedBlockSum hι hdisj hμ hq horth
+  have hV := polarIso_blockTensor_repeatedBlockSum (μ := μ) hι hdisj hq horth
   have hVL : ∀ j, polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) *
       copyIsometry ι μ q j = polarIso (physicalMatrix (blockTensor (Aj j) q)) := fun j => by
     rw [hV, Matrix.sum_mul, Finset.sum_eq_single j]
-    · rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_self hι hdisj (hμ j), Matrix.mul_one]
+    · rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_ne_zero j),
+        Matrix.mul_one]
     · intro j' _ hj'
       rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_eq_zero hdisj μ q hj',
         Matrix.mul_zero]

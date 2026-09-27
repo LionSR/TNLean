@@ -491,25 +491,20 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   have hxL : 0 < (x ^ L)⁻¹ := by positivity
   have hC₁C : C₁ ≤ C := by linarith
   refine ⟨C, by positivity, fun q M _ => ?_⟩
-  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
-    rw [← Real.exp_nat_mul]; congr 1; ring
+  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q :=
+    Real.exp_neg_mul_div_eq_pow _ _ q
   rw [hxq]
-  set u := (M : ℝ) * x ^ q
   have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  have hu : 0 ≤ u := by positivity
-  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   set φt := approximatingMPVState A σ q M
   set φ := normalizedMPVState A (M * q)
   have hε1 : 1 - ‖⟪φt, φ⟫_ℂ‖ ≤ 1 := by linarith [norm_nonneg ⟪φt, φ⟫_ℂ]
-  -- When `C u ≥ 1` the bound is trivial.
-  have htriv : 1 ≤ C * u → 1 - ‖⟪φt, φ⟫_ℂ‖ ≤ C * u * Real.exp (C * u) := fun h =>
-    hε1.trans (h.trans (le_mul_of_one_le_right (by positivity) hexp))
-  by_cases hbig : 1 ≤ C * u
-  · exact htriv hbig
-  rw [not_le] at hbig
-  obtain ⟨hx1, hLq⟩ := lt_one_and_forall_le_of_mul_mul_pow_lt_one (L := fun _ : Unit => L) hx
-    (by simp only [Finset.univ_unique, Finset.sum_singleton, C]; linarith) hM hbig
+  refine le_mul_mul_exp_of_forall_le (L := fun _ : Unit => L) hx
+    (by simp only [Finset.univ_unique, Finset.sum_singleton, C]; linarith) hM hε1
+    fun hx1 hLq _ => ?_
   replace hLq := hLq ()
+  set u := (M : ℝ) * x ^ q
+  have hu : 0 ≤ u := by positivity
+  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   have hB : Kraus.IsInjective (blockTensor A q) :=
     (isNBlkInjective_iff_blockTensor_isInjective A q).1 (isNBlkInjective_of_le hLpos hL hLq)
   obtain ⟨-, hz⟩ := inner_approximatingMPVState_mpvState A hB hσ.posSemidef htr M

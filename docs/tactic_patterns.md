@@ -33,7 +33,9 @@ abstracted — record why, so it is not re-proposed).
   `exists_approximationError_le_blockSum` in `OrthogonalBlockError.lean`, and
   `exists_approximationError_le_repeatedBlockSum` in `RepeatedBlockError.lean`,
   all under `TNLean/MPS/Preparation/`.
-- **Abstraction:** `lt_one_and_forall_le_of_mul_mul_pow_lt_one` in
+- **Abstraction:** `le_mul_mul_exp_of_forall_le` (the whole case split, built
+  on `lt_one_and_forall_le_of_mul_mul_pow_lt_one`) and
+  `Real.exp_neg_mul_div_eq_pow` (the rewrite `e^{-γ q/ξ} = (e^{-γ/ξ})^q`), in
   `TNLean/MPS/Preparation/InjectivityCutoff.lean`; the single-length site
   instantiates the index type with `Unit`.
 - **Notes:** all three call sites are refactored. The block-by-block bound

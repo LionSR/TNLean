@@ -140,7 +140,7 @@ some nonzero weight whose blocked tensors are injective: with `pⱼ = |βⱼ|²`
 `|⟨φ~_N|φ_N⟩| = |∑ⱼ pⱼ zⱼ| / ((∑ⱼ pⱼ)^{1/2} (∑ⱼ pⱼ cⱼ)^{1/2})`, whenever `β ≠ 0`. -/
 theorem norm_copyApproxOverlap_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    {μ : (j : Fin b) → Fin (m j) → ℂ} (hμ : ∀ j, μ j ≠ 0)
+    {μ : CopyWeights b m}
     {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1) {q : ℕ} (hq : q ≠ 0)
     (hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q))
@@ -164,7 +164,7 @@ theorem norm_copyApproxOverlap_repeatedBlockSum (hι : ∀ j k, Function.Injecti
     fun j τ => mpv (Aj j) (blockedConfigEquiv d M q τ)
   have hS : ∀ τ, copyApproxVector A q M (ghzAmplitude β) (copyIsometry ι μ q) σ τ =
       ∑ j, ghzAmplitude β j * s j τ := fun τ =>
-    copyApproxVector_repeatedBlockSum hι hdisj hμ hq horth σ M _ τ
+    copyApproxVector_repeatedBlockSum hι hdisj hq horth σ M _ τ
   have hT : ∀ τ, mpv A (blockedConfigEquiv d M q τ) = ∑ j, β j * t j τ := fun τ =>
     mpv_repeatedBlockSum hι hdisj μ hN _
   -- Cross terms vanish.
@@ -229,7 +229,7 @@ error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the corrected approximating state
 theorem exists_approximationError_le_repeatedBlockSum [NeZero b]
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    {μ : (j : Fin b) → Fin (m j) → ℂ} (hμ : ∀ j, μ j ≠ 0)
+    {μ : CopyWeights b m}
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
     {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
     (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
@@ -261,26 +261,22 @@ theorem exists_approximationError_le_repeatedBlockSum [NeZero b]
   have hS₃ : 0 ≤ S₃ := Finset.sum_nonneg fun j _ => by positivity
   set C := 2 * (S₁ + S₂) + S₃ + 1
   refine ⟨C, by positivity, fun q M _ horth hβ => ?_⟩
-  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
-    rw [← Real.exp_nat_mul]; congr 1; ring
+  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q :=
+    Real.exp_neg_mul_div_eq_pow _ _ q
   rw [hxq]
-  set u := (M : ℝ) * x ^ q
   have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  have hu : 0 ≤ u := by positivity
-  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   set ov := copyApproxOverlap (repeatedBlockSum Aj ι μ) q M
     (ghzAmplitude (bntWeight μ (M * q))) (copyIsometry ι μ q) σ
-  have hε1 : 1 - ‖ov‖ ≤ 1 := by linarith [norm_nonneg ov]
-  by_cases hbig : 1 ≤ C * u
-  · exact hε1.trans (hbig.trans (le_mul_of_one_le_right (by positivity) hexp))
-  rw [not_le] at hbig
-  obtain ⟨hx1, hLq⟩ := lt_one_and_forall_le_of_mul_mul_pow_lt_one hx
-    (show 1 + S₃ ≤ C by linarith) hM hbig
+  refine le_mul_mul_exp_of_forall_le hx (show 1 + S₃ ≤ C by linarith) hM
+    (by linarith [norm_nonneg ov]) fun hx1 hLq _ => ?_
+  set u := (M : ℝ) * x ^ q
+  have hu : 0 ≤ u := by positivity
+  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   have hq : q ≠ 0 := fun h => by have := hLq 0; have := hLpos 0; omega
   have hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q) := fun j =>
     (isNBlkInjective_iff_blockTensor_isInjective (Aj j) q).1
       (isNBlkInjective_of_le (hLpos j) (hL j) (hLq j))
-  have hnorm := norm_copyApproxOverlap_repeatedBlockSum hι hdisj hμ
+  have hnorm := norm_copyApproxOverlap_repeatedBlockSum hι hdisj
     (fun j => (hσ j).posSemidef) htr hq hB horth M hβ
   change ‖ov‖ = _ at hnorm
   have hp : 0 < ∑ j, ‖bntWeight μ (M * q) j‖ ^ 2 := by
@@ -338,7 +334,7 @@ zero. -/
 theorem exists_approximationError_le_mul_repeatedBlockSum [NeZero b]
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    {μ : (j : Fin b) → Fin (m j) → ℂ} (hμ : ∀ j, μ j ≠ 0)
+    {μ : CopyWeights b m}
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
     {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
     (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
@@ -352,7 +348,7 @@ theorem exists_approximationError_le_mul_repeatedBlockSum [NeZero b]
       1 - ‖copyApproxOverlap (repeatedBlockSum Aj ι μ) q M
           (ghzAmplitude (bntWeight μ (M * q))) (copyIsometry ι μ q) σ‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
-  obtain ⟨C, hC, h⟩ := exists_approximationError_le_repeatedBlockSum hι hdisj hμ hN hA hσ htr
+  obtain ⟨C, hC, h⟩ := exists_approximationError_le_repeatedBlockSum (μ := μ) hι hdisj hN hA hσ htr
     hfix hlam hγ0 hγ
   refine ⟨C * Real.exp C + 1, by positivity, fun q M _ horth hβ => ?_⟩
   refine le_mul_of_le_mul_exp_of_le hC.le zero_le_one (by positivity) (h q M horth hβ) ?_

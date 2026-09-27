@@ -352,21 +352,17 @@ theorem exists_approximationError_le_blockSum [NeZero b] (hι : ∀ j, Function.
   have hS₃ : 0 ≤ S₃ := Finset.sum_nonneg fun j _ => by positivity
   set C := 2 * (S₁ + S₂) + S₃ + 1
   refine ⟨C, by positivity, fun q M _ horth => ?_⟩
-  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
-    rw [← Real.exp_nat_mul]; congr 1; ring
+  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q :=
+    Real.exp_neg_mul_div_eq_pow _ _ q
   rw [hxq]
-  set u := (M : ℝ) * x ^ q
   have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  have hu : 0 ≤ u := by positivity
-  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   set ov := nonNormalApproxOverlap (blockSum Aj ι fun j => (μ j : ℂ)) q M
     (ghzAmplitude fun j => (μ j : ℂ) ^ (M * q)) (fun j => embedPair (ι j) (fixedPointPair (σ j)))
-  have hε1 : 1 - ‖ov‖ ≤ 1 := by linarith [norm_nonneg ov]
-  by_cases hbig : 1 ≤ C * u
-  · exact hε1.trans (hbig.trans (le_mul_of_one_le_right (by positivity) hexp))
-  rw [not_le] at hbig
-  obtain ⟨hx1, hLq⟩ := lt_one_and_forall_le_of_mul_mul_pow_lt_one hx
-    (show 1 + S₃ ≤ C by linarith) hM hbig
+  refine le_mul_mul_exp_of_forall_le hx (show 1 + S₃ ≤ C by linarith) hM
+    (by linarith [norm_nonneg ov]) fun hx1 hLq _ => ?_
+  set u := (M : ℝ) * x ^ q
+  have hu : 0 ≤ u := by positivity
+  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   have hq : q ≠ 0 := fun h => by have := hLq 0; have := hLpos 0; omega
   have hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q) := fun j =>
     (isNBlkInjective_iff_blockTensor_isInjective (Aj j) q).1
