@@ -258,7 +258,7 @@ part `P_q = (B_q† B_q)^{1/2}` of the `q`-site blocked tensor satisfies
 `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`, with `P_∞ = (√σ)ᵀ ⊗ 1`.
 
 arXiv:2103.13367, eq. `eq:intermediate` and the sentence after it: `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞`
-for `X, Y > 0`, applied to `Ã = √(A†A)` and `B̃ = √(B†B)`. -/
+for `X, Y > 0`, applied to `A' = √(A†A)` and `B' = √(B†B)`. -/
 theorem exists_norm_polarPos_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
