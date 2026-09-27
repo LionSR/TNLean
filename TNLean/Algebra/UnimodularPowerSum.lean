@@ -11,8 +11,8 @@ import TNLean.Algebra.TailPowerSumUniqueness
 
 If a finite family of nonzero complex numbers `μ₁, …, μₙ` has power sums
 `s_L = ∑ₖ μₖ^L` of modulus one at every positive exponent `L`, then the family has exactly one
-member, and that member is a phase. Indeed `|s_L|² = ∑_{k,l} (μₖ μ̄ₗ)^L`, so the multiset
-`{μₖ μ̄ₗ}` of `n²` nonzero numbers has the power sums of `{1}` at every positive exponent; by
+member, and that member is a phase. Indeed `|s_L|² = ∑_{k,l} (μₖ conj μₗ)^L`, so the multiset
+`{μₖ conj μₗ}` of `n²` nonzero numbers has the power sums of `{1}` at every positive exponent; by
 uniqueness of power sums on a tail (`Multiset.eq_of_notMem_zero_of_forall_sum_map_pow_eq`) the
 two multisets agree, and `n² = 1`.
 
