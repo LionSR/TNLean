@@ -79,10 +79,12 @@ import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
 import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
+import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.ScalarThreeCocycleTimeReversal
 import TNLean.Algebra.SemisimpleTracePowers
