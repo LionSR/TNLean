@@ -97,7 +97,7 @@ theorem comp_smulRight_dual [Module ℂ V] (M : Module.End ℂ V) (f : Module.Du
   LinearMap.ext fun w => by simp
 
 omit [Module ℂ V] in
-/-- Two operators with the same Hilbert–Schmidt pairings `tr[M X] = tr[N X]` against every `X`
+/-- Two operators with the same trace pairings `tr[M X] = tr[N X]` against every `X`
 are equal. -/
 theorem eq_of_forall_trace_mul_eq [Module ℂ V] [FiniteDimensional ℂ V]
     {M N : Module.End ℂ V}
