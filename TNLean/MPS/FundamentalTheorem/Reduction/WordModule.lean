@@ -67,18 +67,18 @@ lemma asModuleEquiv_ofWord_smul (B : MPSTensor d D) (w : List (Fin d)) (v : B.Wo
     Matrix.toLin'_apply]
 
 /-- The action of the word algebra on `ℂ^D` is conjugate to matrix-vector multiplication. -/
-lemma actAlgHom_wordModule_ofWord (B : MPSTensor d D) (w : List (Fin d)) :
-    actAlgHom B.WordModule (ofWord w) =
+lemma lsmul_wordModule_ofWord (B : MPSTensor d D) (w : List (Fin d)) :
+    Algebra.lsmul ℂ ℂ B.WordModule (ofWord w : WordAlgebra d) =
       B.wordRep.asModuleEquiv.symm.conj (Matrix.toLin' (Kraus.evalWord B w)) := by
   ext v
-  rw [LinearEquiv.conj_apply, LinearMap.comp_apply, LinearMap.comp_apply, actAlgHom_apply,
+  rw [LinearEquiv.conj_apply, LinearMap.comp_apply, LinearMap.comp_apply, Algebra.lsmul_apply,
     LinearEquiv.coe_coe, LinearEquiv.coe_coe, LinearEquiv.symm_symm, LinearEquiv.eq_symm_apply,
     asModuleEquiv_ofWord_smul, Matrix.toLin'_apply]
 
 /-- The word traces of the module are the periodic coefficients `tr (B^w)`. -/
 lemma traceWord_wordModule (B : MPSTensor d D) (w : List (Fin d)) :
     traceWord B.WordModule w = Matrix.trace (Kraus.evalWord B w) := by
-  rw [traceWord_def, actAlgHom_wordModule_ofWord, LinearMap.trace_conj',
+  rw [traceWord_def, lsmul_wordModule_ofWord, LinearMap.trace_conj',
     LinearMap.trace_eq_matrix_trace ℂ (Pi.basisFun ℂ (Fin D)), LinearMap.toMatrix_eq_toMatrix',
     LinearMap.toMatrix'_toLin']
 

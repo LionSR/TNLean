@@ -12,6 +12,8 @@ import TNLean.MPS.Examples.CZX.CZXAnomaly
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Examples.CZX.CZXDecoratedFusion
 import TNLean.MPS.Examples.CZX.CZXDecoratedTensor
+import TNLean.MPS.Examples.CZX.CZXDomainWallExchange
+import TNLean.MPS.Examples.CZX.CZXDomainWalls
 import TNLean.MPS.Examples.CZX.CZXNoInvariant
 import TNLean.MPS.Examples.CZX.CZXPlusIdentity
 import TNLean.MPS.Examples.CZX.CZXPlusParity
@@ -20,3 +22,4 @@ import TNLean.MPS.Examples.CZX.CZXReviewTensor
 import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.Examples.CZX.CZXTensor
 import TNLean.MPS.Examples.CZX.CZXUnitary
+import TNLean.MPS.Examples.CZX.ClusterIsingSymmetry

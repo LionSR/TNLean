@@ -5,9 +5,7 @@
 
 \begin{definition}[Finite-group unitary average]
     \label{def:mpug_finite_group_unitary_average}
-    \lean{TNLean.Algebra.finiteGroupUnitaryAverage,
-        TNLean.Algebra.unitaryMatrixRepresentation}
-    \leanok
+    \mathlibok % Mathlib: Representation.averageMap, whose matrix is P_rho.
     \discussion{7458}
     Let $G$ be a finite group and let $\rho\colon G\to\mathrm U(n)$ be a
     unitary representation. Define
@@ -21,8 +19,8 @@
 
 \begin{theorem}[Finite-group unitary average is an orthogonal projection]
     \label{thm:mpug_finite_group_unitary_average_projection}
-    \lean{TNLean.Algebra.isStarProjection_finiteGroupUnitaryAverage,
-        TNLean.Algebra.isOrthogonalProjection_finiteGroupUnitaryAverage}
+    \lean{TNLean.Algebra.isStarProjection_inv_card_smul_sum,
+        TNLean.Algebra.isOrthogonalProjection_inv_card_smul_sum}
     \leanok
     \discussion{7458}
     \uses{def:mpug_finite_group_unitary_average}
@@ -169,6 +167,21 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
         \tn[skin=mpo, size=l, ports={90:physical:$i_N$, 270:physical:$j_N$}]{\mathcal U_{gh}}
     \end{tenkz}
 \end{center}
+
+\begin{definition}[The operator representation on one chain]
+    \label{def:mpug_operator_representation}
+    \lean{MPOTensor.GroupFamily.operatorRepresentation,
+        MPOTensor.GroupFamily.operatorRepresentation_coe}
+    \leanok
+    \uses{def:mpug_positive_mpu}
+    Let $\{\mathcal U_g\}_{g\in G}$ be a dependent-bond family in which every
+    $\mathcal U_g$ is a matrix product unitary on nonempty chains, and which
+    satisfies~(\ref{eq:mpug_rep_identity})
+    and~(\ref{eq:mpug_rep_multiplication}) for all $N\geq1$. For a fixed
+    $N\geq1$, the map $g\mapsto U_g^{(N)}$ is then a unitary representation
+    of $G$ on $(\C^d)^{\otimes N}$. Injectivity and simplicity of the
+    tensors are not required.
+\end{definition}
 
 \begin{theorem}[Group fusion rules]
     \label{thm:mpug_group_fusion_rules}
@@ -4557,6 +4570,38 @@ space of $(MN)P$.
     Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
 \end{proof}
 
+\begin{definition}[The anomaly class]
+    \label{def:mpug_anomaly_class}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_h3_group_cohomology}
+    Let the doubled-index tensors be normal. The anomaly class in
+    $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of the anomaly
+    three-cocycle $\omega$, for any choice of fusion tensors.
+\end{definition}
+
+\begin{corollary}[The anomaly class is independent of the fusion tensors]
+    \label{cor:mpug_anomaly_class}
+    \lean{MPOTensor.GroupFamily.FusionData.anomalyClass_omega_eq,
+        MPOTensor.GroupFamily.FusionData.anomalyClass_omega,
+        MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff}
+    \leanok
+    \uses{def:mpug_anomaly_class, thm:mpug_anomaly_three_cocycle,
+        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_h3_group_cohomology}
+    The class $[\omega]\in H^3(G,\C^\times_{\mathrm{triv}})$ of the anomaly
+    three-cocycle is the same for every choice of fusion tensors. It vanishes
+    exactly when $\omega$ has trivial gauge class.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_h3_group_cohomology}
+    Two choices of fusion tensors give cohomologous three-cocycles by
+    Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}, hence equal classes
+    by (\ref{eq:mpug_h3_cohomologous}). The second statement is
+    (\ref{eq:mpug_h3_trivial}).
+\end{proof}
+
 \subsection{Reductions through action tensors}
 
 \begin{definition}[The action tensor]
@@ -5085,6 +5130,340 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
 
 \begin{proof}\leanok
     Put $h=k=g$ in (\ref{eq:mpug_l_compatibility}) and use $gg=e$.
+\end{proof}
+
+\begin{theorem}[The involution ratio from the self-pair and identity L-symbols]
+    \label{thm:mpug_involution_anomaly_identity_ratio}
+    \lean{TNLean.Algebra.LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    If $L$ is compatible with $\omega$ and $g^2=e$, then for every
+    $x\in\mathsf X$
+    \begin{align}
+        \frac{L^x_{g,g}L^x_{e,e}}{L^{gx}_{g,g}L^{gx}_{e,e}}
+         & =\omega(g,g,g)\,\omega(g,e,g).
+        \notag
+    \end{align}
+    For L-symbols and cocycles that are trivial when an argument is the
+    identity, this is $L^x_{g,g}/L^{gx}_{g,g}=\omega(g,g,g)$, the relation
+    $L_A/L_B=\omega$ of \cite[Section~III.C]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_involution_anomaly_ratio}
+    Compatibility at $(g,e,g)$ gives $L^x_{e,g}=\omega(g,e,g)L^{gx}_{g,e}$,
+    and at $(g,e,e)$ it gives $L^z_{e,e}=\omega(g,e,e)L^z_{g,e}$ for $z=x$ and
+    $z=gx$. Substituting into the formula of
+    Theorem~\ref{thm:mpug_involution_anomaly_ratio} gives the claim.
+\end{proof}
+
+\subsection{Domain walls between permuted blocks}
+
+Keep the setting of the previous subsection. A domain wall between the
+blocks $x$ and $y$ is a family $e=(e^i)_{i}$ of $D_x\times D_y$ matrices,
+placed between a region of $A_x$ and a region of $A_y$
+\cite[Section~III.B]{GarreRubioSchuch2024DomainWall}. For an operator tensor
+$T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
+
+\begin{definition}[Local action on domain walls]
+    \label{def:mpug_domain_wall_action}
+    \lean{MPOTensor.actRect,
+        MPOTensor.physAct,
+        MPOTensor.wallChain,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol}
+    Let $e$ be a domain wall between $x$ and $y$, and $e'$ a domain wall
+    between $gx$ and $gy$. The element $g$ carries $e$ to $e'$ with phase $c$
+    if $e\neq0$, $e'\neq0$, $c\neq0$, and there is $N$ such that
+    \begin{align}
+        V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}\,(O_g\cdot e)^i\,
+        (O_g\cdot A_y)^{\mathbf v}\,W_{g,y}
+         & =c\,A_{gx}^{\mathbf u}\,{e'}^{i}\,A_{gy}^{\mathbf v}
+        \notag
+    \end{align}
+    for every letter $i$ and all words $\mathbf u,\mathbf v$ of length at
+    least $N$. This is the local relation of
+    \cite[Section~III.B]{GarreRubioSchuch2024DomainWall}, drawn there at the
+    renormalization fixed point with one site on each side of the wall; the
+    words $\mathbf u,\mathbf v$ are the blocked sites of the discussion away
+    from the fixed point \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{definition}
+
+\begin{theorem}[Fractionalization of the symmetry on domain walls]
+    \label{thm:mpug_domain_wall_pentagon}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.phase_eq,
+        MPOTensor.GroupFamily.BlockActionData.actW,
+        MPOTensor.GroupFamily.BlockActionData.fuseW,
+        MPOTensor.GroupFamily.BlockActionData.exists_evalWord_mul_actW_eq,
+        MPOTensor.physAct_mulTensor,
+        MPOTensor.physAct_kronId,
+        MPOTensor.physAct_wallChain,
+        MPOTensor.exists_evalWord_mul_mul_evalWord_ne_zero}
+    \leanok
+    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol}
+    Suppose $h$ carries the domain wall $e_1$ between $x$ and $y$ to $e_2$
+    with phase $B^h_{x,y}$ and $g$ carries $e_2$ to $e_3$ with phase
+    $B^g_{hx,hy}$. Then $gh$ carries $e_1$ to $e_3$ with phase
+    $(L^y_{g,h}/L^x_{g,h})\,B^g_{hx,hy}B^h_{x,y}$. Consequently, if $gh$
+    carries $e_1$ to $e_3$ with phase $B^{gh}_{x,y}$, then
+    \begin{align}
+        B^g_{hx,hy}\,B^h_{x,y}
+         & =\frac{L^x_{g,h}}{L^y_{g,h}}\,B^{gh}_{x,y}.
+        \notag
+    \end{align}
+    This is \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec, thm:mpug_dressed_proportionality}
+    Act with $O_g$ on the local relation of $h$, which holds for every
+    configuration of a chain with long regions: the boundary matrices
+    $V_{h,x}$, $W_{h,y}$ pass through as $\mathbf 1\otimes V_{h,x}$ and
+    $\mathbf 1\otimes W_{h,y}$, and the action of $O_g$ on the action of
+    $O_h$ is the action of $O_gO_h$ up to the bond associator. The local
+    relation of $g$ then gives
+    \begin{align}
+        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}\,
+        (O_gO_h\cdot\mathsf C)\,\mathsf a\,(\mathbf 1\otimes W_{h,y})\,W_{g,hy}
+         & =B^g_{hx,hy}B^h_{x,y}\,\mathsf C_3
+        \notag
+    \end{align}
+    for the chain $\mathsf C=A_x^{\mathbf u}e_1^iA_y^{\mathbf v}$ and the chain
+    $\mathsf C_3$ with $e_3$. Against long words the left boundary equals
+    $L^x_{g,h}$ times the left boundary through the fusion tensor
+    $F^<_{g,h}$; by the two-sided comparison of reductions onto a normal
+    tensor, the right boundary equals $(L^y_{g,h})^{-1}$ times the right
+    boundary through $F^>_{g,h}$. The fusion tensors reduce
+    $O_gO_h\cdot\mathsf C$ to $O_{gh}\cdot\mathsf C$, which gives the local
+    action of $gh$ with the stated phase. Since $A_{ghx}$ and $A_{ghy}$ are
+    normal and $e_3\neq0$, some chain $\mathsf C_3$ with long regions is
+    nonzero, so the phase of a local action is unique, and the two phases of
+    $gh$ agree.
+\end{proof}
+
+\begin{theorem}[The symmetry on states with two domain walls]
+    \label{thm:mpug_domain_wall_state}
+    \lean{MPOTensor.twoWallChain,
+        MPOTensor.twoWallMPV,
+        MPOTensor.mpo_mulVec_trace,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    Let $\ket{\psi(x\text{-}y\text{-}x)}$ be the periodic state with an $A_x$
+    region, a domain wall $e$ between $x$ and $y$, an $A_y$ region, a domain
+    wall $f$ between $y$ and $x$, and a second $A_x$ region. If $g$ carries
+    $e$ to $e'$ with phase $c$ and $f$ to $f'$ with phase $c'$, then
+    \begin{align}
+        O_g\ket{\psi(x\text{-}y\text{-}x)}
+         & =c\,c'\,\ket{\psi(gx\text{-}gy\text{-}gx)}
+        \notag
+    \end{align}
+    whenever the first $A_x$ region and the $A_y$ region are long enough.
+    For $\Z_2$ this is $U\ket{\psi(A\text{-}B\text{-}A)}
+        =c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}$
+    \cite[Section~III.B]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_exterior_buffer}
+    The coefficient of $O_g\ket{\psi}$ is the trace of the acted chain. In
+    each of the two acted regions insert the reduced block
+    $W_{g,z}A_{gz}^{\mathbf c}V_{g,z}$, which leaves long words unchanged by
+    the residual nilpotency of a reduction \cite{Molnar2018SemiInjective}. By
+    cyclicity of the
+    trace the chain splits into the two local relations, with phases $c$ and
+    $c'$, and the remaining trace is the coefficient of
+    $\ket{\psi(gx\text{-}gy\text{-}gx)}$.
+\end{proof}
+
+\begin{theorem}[A symmetry string over a pair of domain walls]
+    \label{thm:mpug_domain_wall_pair}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.pair}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    If $g$ carries the domain wall $e$ between $x$ and $y$ to $e'$ with phase
+    $c$, and the domain wall $f$ between $y$ and $z$ to $f'$ with phase $c'$,
+    then for all words $\mathbf u,\mathbf v,\mathbf w$ longer than a fixed
+    buffer
+    \begin{align}
+        V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}(O_g\cdot e)^i
+        (O_g\cdot A_y)^{\mathbf v}(O_g\cdot f)^j(O_g\cdot A_z)^{\mathbf w}\,
+        W_{g,z}
+         & =c\,c'\,A_{gx}^{\mathbf u}{e'}^{i}A_{gy}^{\mathbf v}{f'}^{j}
+        A_{gz}^{\mathbf w}.
+        \notag
+    \end{align}
+    This is the phase acquired by a symmetry string passing over a pair of
+    domain walls, the tensor-level content of the comparison of two
+    overlapping strings in \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_exterior_buffer}
+    Split the middle word as $\mathbf p\mathbf c\mathbf q$ with long outer
+    parts and insert the reduced block $W_{g,y}A_{gy}^{\mathbf c}V_{g,y}$,
+    which leaves the word unchanged by the residual nilpotency of a
+    reduction \cite{Molnar2018SemiInjective}. The two resulting factors are
+    the local relations of $e$ and $f$.
+\end{proof}
+
+\begin{theorem}[Rescaling domain walls]
+    \label{thm:mpug_domain_wall_rescaling}
+    \lean{MPOTensor.actRect_smul,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_source,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_target,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.exists_eq_of_mul_self}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    If $g$ carries $e$ to $e'$ with phase $c$ and $a\neq0$, then it carries $a\,e$
+    to $e'$ with phase $ac$, and $e$ to $a\,e'$ with phase $c/a$. In
+    particular, if an involution $g$ exchanges $e_{AB}$ and $e_{BA}$ with
+    phases $c_{AB}$ and $c_{BA}$, then for every $s$ with
+    $s^2=c_{AB}c_{BA}$ the walls $e_{AB}$ and $(c_{AB}/s)\,e_{BA}$ are
+    exchanged with both phases equal to $s$, as in
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The rectangular action is linear in the domain wall; for the last claim
+    rescale $e_{BA}$ by $c_{AB}/s$.
+\end{proof}
+
+\begin{definition}[A family of domain walls permuted by the group]
+    \label{def:mpug_domain_wall_family}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_target}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    A family of domain walls permuted by the group is a nonzero domain wall
+    $e_{yz}$ between $y$ and $z$ for every ordered pair of blocks, together
+    with nonzero phases $B^g_{y,z}$ such that every $g$ carries $e_{yz}$ to
+    $e_{gy,gz}$ with phase $B^g_{y,z}$
+    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}. The walls and phases
+    are nonzero by convention \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{definition}
+
+\begin{theorem}[The interchange phase of a family of domain walls]
+    \label{thm:mpug_domain_wall_interchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_prod_lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_domainWallPhase,
+        TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant,
+        TNLean.Algebra.LSymbol.prod_Ico_div_eq_inv_cyclicInvariant}
+    \leanok
+    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol,
+        def:mpug_anomaly_three_cochain}
+    For a family of domain walls permuted by the group, every $g$ with
+    $g^n=e$ and every block $x$,
+    \begin{align}
+        \prod_{k=0}^{n-1}B^g_{g^k(gx),\,g^kx}
+         & =\prod_{k=0}^{n-1}\frac{L^{gx}_{g,g^k}}{L^x_{g,g^k}}
+        =\Bigl(\prod_{k=0}^{n-1}\omega(g,g^k,g)\Bigr)^{-1}.
+        \notag
+    \end{align}
+    This is \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}; the
+    interchange phase depends only on the anomaly. The middle product
+    includes the factor $k=0$, $L^{gx}_{g,e}/L^x_{g,e}$, which is one for
+    normalized L-symbols; the source's middle product runs over
+    $1\leq k<n$, and for normalized L-symbols that product is again
+    $\bigl(\prod_{k=0}^{n-1}\omega(g,g^k,g)\bigr)^{-1}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    Write $\beta_k=B^{g^k}_{gx,x}$. By
+    Theorem~\ref{thm:mpug_domain_wall_pentagon} for $(g,g^k)$,
+    $B^g_{g^k(gx),g^kx}\,\beta_k=(L^{gx}_{g,g^k}/L^x_{g,g^k})\,\beta_{k+1}$.
+    Multiplying over $k<n$ and using $\beta_n=\beta_0$ gives the first
+    equality. Compatibility at $(g,g^k,g)$ gives
+    $L^{gx}_{g,g^k}/L^x_{g,g^k}=\omega(g,g^k,g)^{-1}
+        (L^x_{g,g^{k+1}}/L^x_{g,g^k})(L^x_{g^{k+1},g}/L^x_{g^k,g})^{-1}$,
+    and both quotients telescope to one over $k<n$.
+\end{proof}
+
+\begin{theorem}[The stabilizer of two blocks acts projectively]
+    \label{thm:mpug_domain_wall_projective}
+    \lean{TNLean.Algebra.LSymbol.ratioCocycle,
+        TNLean.Algebra.LSymbol.ratioCocycle_isCocycle,
+        TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed_self}
+    \leanok
+    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol}
+    Let $H_{y,z}$ be the subgroup of elements fixing the blocks $y$ and $z$.
+    For $a,b\in H_{y,z}$,
+    \begin{align}
+        B^a_{y,z}B^b_{y,z}
+         & =\alpha(a,b)\,B^{ab}_{y,z},
+         &
+        \alpha(a,b)
+         & =\frac{L^y_{a,b}}{L^z_{a,b}},
+        \notag
+    \end{align}
+    and $\alpha$ is a two-cocycle on $H_{y,z}$; for $y=z$ the phases form a
+    linear representation. The source states this for the subgroup fixing
+    every block \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}, which is
+    contained in $H_{y,z}$; see \cite{gap:gs24_unbroken_subgroup_stabilizer}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    The first identity is Theorem~\ref{thm:mpug_domain_wall_pentagon} with
+    $by=y$ and $bz=z$. Dividing the compatibility relations at $y$ and at $z$
+    for $(a,b,c)$ with $c\in H_{y,z}$ cancels $\omega(a,b,c)$ and gives the
+    two-cocycle equation.
+\end{proof}
+
+\begin{theorem}[Domain walls of an involution detect the anomaly]
+    \label{thm:mpug_domain_wall_involution}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_mul_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV_eq_omega,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_elem}
+    \leanok
+    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol,
+        def:mpug_anomaly_three_cochain}
+    Let $g^2=e$ exchange the blocks $x$ and $y$, let $g$ carry the domain wall
+    $e_{AB}$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}$ and
+    $e_{BA}$ to $e_{AB}$ with phase $c_{BA}$. Then
+    \begin{align}
+        c_{AB}\,c_{BA}
+         & =\frac{L^x_{g,g}L^x_{e,e}}{L^y_{g,g}L^y_{e,e}}
+        =\omega(g,g,g)\,\omega(g,e,g),
+        \notag
+    \end{align}
+    so $c_{AB}c_{BA}$ does not depend on the action tensors, the fusion
+    tensors or the domain walls, and
+    $U\ket{\psi(A\text{-}B\text{-}A)}=\omega(g,g,g)\,\omega(g,e,g)
+        \ket{\psi(B\text{-}A\text{-}B)}$. When the tensors of the identity are
+    trivial, as in the source, $L_{e,e}=1$ and $\omega(g,e,g)=1$, and this is
+    $c_{AB}c_{BA}=L_A/L_B=\omega$
+    \cite[Section~III.C]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_domain_wall_state,
+        thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_involution_anomaly_identity_ratio}
+    Applying $g$ twice, Theorem~\ref{thm:mpug_domain_wall_pentagon} shows that
+    $g^2=e$ carries $e_{AB}$ to itself with phase
+    $b=(L^y_{g,g}/L^x_{g,g})\,c_{BA}c_{AB}\neq0$. The same theorem for $(e,e)$
+    gives $b^2=(L^x_{e,e}/L^y_{e,e})\,b$, so $b=L^x_{e,e}/L^y_{e,e}$, which is
+    the first equality. The second equality is
+    Theorem~\ref{thm:mpug_involution_anomaly_identity_ratio} for the compatible
+    L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility}. Its
+    right-hand side involves only the fusion tensors, and it is invariant
+    under their gauge action, so the product is independent of all choices.
+    Finally, by Theorem~\ref{thm:mpug_domain_wall_state},
+    $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}
+        =\omega(g,g,g)\,\omega(g,e,g)\ket{\psi(B\text{-}A\text{-}B)}$.
 \end{proof}
 
 \subsection{Normalization of the first source factor}
@@ -6757,6 +7136,95 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     the constant cochain $1$.
 \end{definition}
 
+\begin{definition}[Scalar three-cocycles in degree-three group cohomology]
+    \label{def:mpug_h3_group_cohomology}
+    \lean{TNLean.Algebra.scalarRepresentationEquiv,
+        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain,
+        TNLean.Algebra.ScalarCocycle.ofInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.ofInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.toCocycles,
+        TNLean.Algebra.ScalarThreeCochain.ofCocycles,
+        TNLean.Algebra.ScalarThreeCochain.cocyclesEquiv,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_h2_group_cohomology_comparison}
+    Give $\C^\times$ the trivial $G$-action and write it additively, as in
+    Definition~\ref{def:mpug_h2_group_cohomology_comparison}. A scalar
+    $n$-cochain for $n=2,3$ is then an inhomogeneous $n$-cochain
+    $G^n\to\C^\times$ of this representation, and conversely. Under this
+    identification a scalar $3$-cocycle is an inhomogeneous $3$-cocycle, and
+    every inhomogeneous $3$-cocycle arises this way. The class of a scalar
+    $3$-cocycle $\omega$ is its image
+    \begin{align}
+        [\omega] & \in H^3\bigl(G,\C^\times_{\mathrm{triv}}\bigr)
+        \label{eq:mpug_h3_class}
+    \end{align}
+    in the degree-three cohomology of the inhomogeneous cochain complex.
+\end{definition}
+
+\begin{theorem}[Fusion-gauge classes are degree-three cohomology classes]
+    \label{thm:mpug_h3_group_cohomology}
+    \lean{TNLean.Algebra.groupCohomology_π_eq_zero_iff,
+        TNLean.Algebra.scalarRepresentationEquiv_ofMul_eq_zero_iff,
+        TNLean.Algebra.scalarH2Representation_ρ_apply,
+        TNLean.Algebra.ScalarThreeCochain.d_toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.isCocycle_iff_d_eq_zero,
+        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain_apply,
+        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.fusionGauge_eq_iff,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_exists_d_eq,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq,
+        TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass_surjective}
+    \leanok
+    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    With the trivial action, the differentials of the inhomogeneous cochain
+    complex in degrees two and three are, multiplicatively,
+    \begin{align}
+        (d\beta)(g,h,k)
+         & =\frac{\beta(h,k)\beta(g,hk)}{\beta(gh,k)\beta(g,h)},
+        \label{eq:mpug_h3_d2}                                    \\
+        (d\omega)(g,h,k,l)
+         & =\frac{\omega(h,k,l)\omega(g,hk,l)\omega(g,h,k)}
+        {\omega(gh,k,l)\omega(g,h,kl)}.
+        \label{eq:mpug_h3_d3}
+    \end{align}
+    Hence (\ref{eq:mpug_h3_d2}) is the three-coboundary
+    (\ref{eq:mpug_coboundary}), and $d\omega=1$ is the three-cocycle equation
+    (\ref{eq:mpug_three_cocycle}). For scalar $3$-cocycles $\omega$ and
+    $\eta$,
+    \begin{align}
+        \omega\text{ and }\eta\text{ are cohomologous}
+         & \iff [\omega]=[\eta],
+        \label{eq:mpug_h3_cohomologous} \\
+        \omega\text{ has trivial gauge class}
+         & \iff [\omega]=0,
+        \label{eq:mpug_h3_trivial}
+    \end{align}
+    and every class in $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of a
+    scalar $3$-cocycle. No normalization of the cochains is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    In degree $n$ the inhomogeneous differential of a cochain $f$ with
+    trivial action is the alternating sum of $f$ at the $n+2$ faces
+    obtained by dropping the first argument, multiplying two adjacent
+    arguments, or dropping the last argument. For $n=2,3$ this is
+    (\ref{eq:mpug_h3_d2}) and (\ref{eq:mpug_h3_d3}) written multiplicatively.
+    A cocycle has zero class exactly when it lies in the image of the
+    preceding differential, since the cohomology is the cokernel of that
+    differential into the cocycles. By (\ref{eq:mpug_gauge_action}),
+    $\beta\mathbin{\triangleright}\eta=\omega$ holds exactly when
+    $d\beta=\omega\eta^{-1}$, whose additive form is the difference of the
+    two cochains. This gives (\ref{eq:mpug_h3_cohomologous}), and taking
+    $\eta=1$ gives (\ref{eq:mpug_h3_trivial}). Surjectivity holds because
+    every inhomogeneous $3$-cocycle is a scalar $3$-cocycle.
+\end{proof}
+
 \begin{definition}[Cyclic invariant of a scalar three-cochain]
     \label{def:mpug_cyclic_invariant}
     \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant}
@@ -6922,6 +7390,41 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     Theorem~\ref{thm:mpug_cyclic_invariant_gauge} makes their cyclic
     invariants at $a$ equal. Finally $I_{a,n}(f^*\omega)=I_{f(a),n}(\omega)$
     because $f(a^k)=f(a)^k$.
+\end{proof}
+
+\begin{theorem}[Values of the anomaly three-cochain from finitely many identities]%
+    \label{thm:mpug_omega_integer_certificate}
+    \lean{MPSTensor.isDressedProportional_complexOfInt,
+        MPSTensor.isDressedProportional_complexOfInt_of_mem,
+        MPOTensor.GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV,
+        MPOTensor.GroupFamily.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.omega_ofBondOne}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain}
+    Let $T$ be a tensor with integer letters, $A$ a family of integer
+    matrices, $L$ and $R$ integer matrices, and $z\in\{1,-1\}$. Suppose
+    that $LT^aT^b=A^aLT^b$ for all letters $a,b$ and that $LT^a=zRT^a$ for
+    every letter $a$. Then $LT^{\mathbf w}=zRT^{\mathbf w}$ for every nonempty
+    word $\mathbf w$. It suffices to check these identities on a list of pairs
+    $(T^a,A^a)$ that contains the pair of every letter. In particular, for the
+    anomaly three-cochain of Definition~\ref{def:mpug_anomaly_three_cochain}:
+    if the two fusion trees of a triple coincide, then $\omega$ is one at
+    that triple; and a family of bond-one tensors whose stacked products
+    $O_gO_h$ equal $O_{gh}$ has, with all fusion tensors equal to one, the
+    constant three-cochain one.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Since $z^2=1$, the identity $LT^a=zRT^a$ gives $RT^a=zLT^a$, and hence
+    $RT^aT^b=zA^aLT^b=A^aRT^b$. Induction on the word gives the dressed
+    identity, and the entrywise image in $\C$ preserves all products. When
+    the two fusion trees coincide, the scalar $1$ satisfies the dressed
+    identity, so Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    $\omega=1$. For bond dimension one, both fusion trees are products of
+    one-by-one identity matrices and identifications of one-dimensional
+    spaces, so they coincide.
 \end{proof}
 
 \begin{definition}[L-symbols and compatibility]
@@ -9398,15 +9901,18 @@ three defect domains and maps, which the displayed matrices do not supply.
         Matrix.monomial_mul_monomial,
         Matrix.conjTranspose_monomial,
         Matrix.smul_monomial,
+        Matrix.neg_monomial,
         Matrix.monomial_one,
         Matrix.reindex_monomial,
-        Matrix.monomial_mem_unitaryGroup}
+        Matrix.monomial_mem_unitaryGroup,
+        Matrix.trace_monomial,
+        Matrix.trace_monomial_eq_zero}
     \leanok
     \uses{def:mpug_monomial_matrix}
     A vector $v\in\C^S$ is fixed by $M(\sigma,\varphi)$ if and only if
     $v_{\sigma(s)}=\varphi(s)v_s$ for every $s\in S$. Products, adjoints,
-    scalar multiples, and simultaneous relabellings of monomial matrices are
-    monomial:
+    scalar multiples, negatives, and simultaneous relabellings of monomial
+    matrices are monomial:
     \begin{align}
         M(\sigma,\varphi)M(\tau,\psi)
          & =M\bigl(\sigma\tau,\ s\mapsto\varphi(\tau(s))\psi(s)\bigr),
@@ -9416,7 +9922,9 @@ three defect domains and maps, which the displayed matrices do not supply.
         \label{eq:mpug_monomial_adjoint}
     \end{align}
     The identity is $M(\id,1)$, and $M(\sigma,\varphi)$ is unitary when
-    $|\varphi(s)|=1$ for every $s$.
+    $|\varphi(s)|=1$ for every $s$. The trace is
+    $\tr M(\sigma,\varphi)=\sum_{s:\,\sigma(s)=s}\varphi(s)$, which vanishes
+    when $\sigma$ has no fixed point.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -9430,6 +9938,8 @@ three defect domains and maps, which the displayed matrices do not supply.
     relabelling conjugates the permutation. For unitarity,
     (\ref{eq:mpug_monomial_mul}) and (\ref{eq:mpug_monomial_adjoint}) give
     $M(\sigma,\varphi)^\dagger M(\sigma,\varphi)=M(\id,|\varphi|^2)=\Id$.
+    The diagonal entry at $s$ is $\varphi(s)$ if $\sigma(s)=s$ and zero
+    otherwise, which gives the trace.
 \end{proof}
 
 \begin{theorem}[Flat phases on the hypercube have a potential]

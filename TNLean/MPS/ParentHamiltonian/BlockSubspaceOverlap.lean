@@ -24,6 +24,13 @@ open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
 
 namespace Submodule
 
+/-- A vector in the sum of a finite family of submodules is a sum of one vector
+from each member of the family. -/
+theorem exists_sum_eq_of_mem_iSup {R M ι : Type*} [Semiring R] [AddCommMonoid M]
+    [Module R M] [Fintype ι] (V : ι → Submodule R M) {u : M} (hu : u ∈ ⨆ i, V i) :
+    ∃ v : ∀ i, V i, ∑ i, (v i : M) = u :=
+  (mem_iSup_finset_iff_exists_sum (s := Finset.univ) V u).mp (by simpa using hu)
+
 variable {E ι : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [Fintype ι] [DecidableEq ι]
 
@@ -125,8 +132,7 @@ theorem norm_inner_le_iSup_of_overlapMatrix (U : Submodule ℂ E)
       ‖⟪x, v⟫_ℂ‖ ≤ a i * ‖x‖ * ‖v‖)
     {x y : E} (hx : x ∈ U) (hy : y ∈ ⨆ i, V i) :
     ‖⟪x, y⟫_ℂ‖ ≤ ‖a‖ / Real.sqrt (1 - ‖B‖) * ‖x‖ * ‖y‖ := by
-  obtain ⟨v, rfl⟩ := (mem_iSup_finset_iff_exists_sum (s := Finset.univ) V y).mp
-    (by simpa using hy)
+  obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hy
   exact norm_inner_sum_le_of_lower_bound x (fun i ↦ (v i : E)) a hB
     (norm_sum_sq_ge_of_overlapMatrix _ B hdiag
       (fun i j hij ↦ hpair i j hij _ (v i).property _ (v j).property))
@@ -179,8 +185,7 @@ theorem iSup_overlap_bound_of_uniform (U : Submodule ℂ E)
     simp [a, EuclideanSpace.norm_eq, Real.norm_eq_abs, abs_of_nonneg hε,
       Real.sqrt_mul (Nat.cast_nonneg (Fintype.card ι)), Real.sqrt_sq hε, mul_comm]
   intro x hx y hy
-  obtain ⟨v, rfl⟩ := (mem_iSup_finset_iff_exists_sum (s := Finset.univ) V y).mp
-    (by simpa using hy)
+  obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hy
   simpa only [ha] using norm_inner_sum_le_of_lower_bound x (fun i ↦ (v i : E)) a hβ
     (norm_sum_sq_ge_of_uniform_overlap _ hε
       (fun i j hij ↦ hpair i j hij _ (v i).property _ (v j).property))

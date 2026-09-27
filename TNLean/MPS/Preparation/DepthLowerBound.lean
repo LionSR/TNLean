@@ -21,9 +21,14 @@ for a normal tensor in the gauge of its eq. (5).
 The proof is the chapter's proof of `thm:ldp_depth_lower_bound`, not the source's. The source
 (Supplemental Material, "Proof of Theorem 1") replaces `φ_N` by the blocked approximation of its
 Lemma 1, bounds a fidelity of product states, and applies its Lemma 2 at the single separation
-`s = 2T + 1` together with the exact vanishing of one-point functions; neither of the last two
-holds in general (see `docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex`).
-The chapter instead takes the separation `s'` from the windowed correlation estimate
+`s = 2T + 1` together with the exact vanishing of one-point functions. That vanishing is exact
+for the source's non-Hermitian observables, and the source's route is correct once the real
+inequality of Lemma 2 is read in modulus, the factor `1/2` is restored in the trace-distance
+step, `s = 2T + 1` is replaced by a separation larger than `2T`, and the lemma is applied on
+blocks where `A` spans the matrix algebra (see
+`docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex`). The formal correlation
+estimate is stated for Hermitian observables, so the chapter does not follow that route: it
+takes the separation `s'` from the windowed correlation estimate
 `exists_decayingCorrelations`, places the centred observables on `n ≈ N/Δ` windows spaced
 `Δ = s' + L + 2T` apart, and compares the averages `Z₁ = (1/n) ∑ ±𝒪^{(k)}` and
 `Z₂ = (1/n) ∑ 𝒪^{(k)} 𝒪'^{(k)}` in `φ_N` and `ψ` through the expectation-overlap inequality
@@ -34,11 +39,11 @@ The chapter instead takes the separation `s'` from the windowed correlation esti
 
 **Scope restriction (gauge):** the tensor is assumed to be in the gauge
 `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of arXiv:2307.01696, eq. (5), with a
-blocking length `L` at which `A` is injective and a subleading eigenvalue `λ₂` of `E_A`. The
-source's Theorem 1 is stated for every normal tensor; its proof, and the chapter's, first pass
-to this gauge. That reduction is not formalized here, so the Lean results are tagged against the
-separate gauge-form entry `thm:ldp_depth_lower_bound_gauge`, and the source entry
-`thm:ldp_depth_lower_bound` stays untagged. Documented in
+blocking length `L` at which `A` is injective and a subleading eigenvalue `λ₂` of `E_A`, so the
+results here are tagged against the gauge-form entry `thm:ldp_depth_lower_bound_gauge`. The
+source's Theorem 1 is stated for every normal tensor; the reduction to this gauge is proved in
+`TNLean/MPS/Preparation/NormalGauge.lean`, and the source statement in
+`TNLean/MPS/Preparation/DepthLowerBoundNormal.lean`. Documented, as resolved, in
 `docs/paper-gaps/mswc24_depth_lower_bound_gauge.tex`.
 -/
 

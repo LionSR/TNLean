@@ -189,6 +189,33 @@ theorem eq_div_of_isCompatible_of_mul_self_eq_one
   rw [mul_comm (L x g g), h]
   simp only [mul_assoc]
 
+/-- **The anomaly at an involution from the self-pair and identity L-symbols.** If `L` is
+compatible with `ω` and `g * g = 1`, then
+`Lˣ_{g,g} Lˣ_{1,1} / (L^{g • x}_{g,g} L^{g • x}_{1,1}) = ω(g,g,g) ω(g,1,g)`.
+For L-symbols and cochains that are trivial when an argument is the identity this is
+`Lˣ_{g,g} / L^{g • x}_{g,g} = ω(g,g,g)`, the relation `L_A / L_B = ω` of arXiv:2405.00439,
+`eq:Lsignrel`, `Papers/2405.00439/MPU-DW.tex` lines 895--1017; the product
+`ω(g,g,g) ω(g,1,g)` is invariant under fusion gauges. -/
+theorem div_eq_mul_of_isCompatible_of_mul_self_eq_one
+    {L : LSymbol G X} {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) {g : G}
+    (hg : g * g = 1) :
+    L x g g * L x 1 1 / (L (g • x) g g * L (g • x) 1 1) = ω g g g * ω g 1 g := by
+  have h1 := hL x g 1 g
+  have h2 := hL x g 1 1
+  have h3 := hL (g • x) g 1 1
+  simp only [one_mul, mul_one, one_smul] at h1 h2 h3
+  rw [eq_div_of_isCompatible_of_mul_self_eq_one hL x hg]
+  have e2 : L x 1 1 = ω g 1 1 * L x g 1 := mul_left_cancel (a := L x g 1) (by
+    rw [h2]; ac_rfl)
+  have e3 : L (g • x) 1 1 = ω g 1 1 * L (g • x) g 1 := mul_left_cancel (a := L (g • x) g 1) (by
+    rw [h3]; ac_rfl)
+  have e1 : L x 1 g = ω g 1 g * L (g • x) g 1 := mul_left_cancel (a := L x g g) (by
+    rw [h1]; ac_rfl)
+  rw [e1, e2, e3]
+  apply Units.ext
+  simp only [Units.val_mul, Units.val_div_eq_div_val]
+  field_simp
+
 end LSymbol
 
 end TNLean.Algebra
