@@ -37,24 +37,22 @@ theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
         (((LinearMap.ker (openSuffixParentHamiltonianES A R l n n)).starProjection.toLinearMap).comp
           (openPrefixGroundProjectionES A R n p - openPrefixGroundProjectionES A R n n))‖ := by
   let U := rightSpectatorConfigLinearIsometryEquiv d n r
-  have hproj
-      (G : EuclideanSpace ℂ (Cfg d (n + r)) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d (n + r)))
-      (H : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n))
-      (hc : U.toLinearEquiv.conj G =
+  have hP (q : ℕ) (hq : q ≤ n) :
+      U.toLinearEquiv.conj
+          (LinearMap.ker (openPrefixParentHamiltonianES A R (n + r) q)).starProjection.toLinearMap =
         (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.toContinuousLinearMap H)).toLinearMap) :
-      U.toLinearEquiv.conj (LinearMap.ker G).starProjection.toLinearMap =
+          (LinearMap.ker (openPrefixParentHamiltonianES A R n q)).starProjection).toLinearMap :=
+    ker_starProjection_conj_of_rightFiberwiseMap _ _
+      (openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+        A (r := r) hR hq)
+  have hQ :
+      U.toLinearEquiv.conj (LinearMap.ker
+          (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap =
         (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.ker H).starProjection).toLinearMap := by
-    simpa only [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap,
-      LinearMap.coe_toContinuousLinearMap, LinearEquiv.conj_apply, LinearMap.comp_assoc] using!
-      ker_starProjection_conj_linearIsometryEquiv U G _ hc
-  have hP (q : ℕ) (hq : q ≤ n) := hproj _ _
-    (openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-      A (r := r) hR hq)
-  have hQ := hproj _ _
-    (openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-      A (l := l) (n := n) (r := r) hR le_rfl)
+          (LinearMap.ker (openSuffixParentHamiltonianES A R l n n)).starProjection).toLinearMap :=
+    ker_starProjection_conj_of_rightFiberwiseMap _ _
+      (openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
+        A (l := l) (n := n) (r := r) hR le_rfl)
   have hprod : U.toLinearEquiv.conj
       (((LinearMap.ker
         (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap).comp
