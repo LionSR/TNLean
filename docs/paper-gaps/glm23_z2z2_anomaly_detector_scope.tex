@@ -111,63 +111,6 @@ for the full group. They state the detector values of the table for the
 exact dressed representation, and the equality of classes awaits the
 separation lemma.
 
-\section{Replaced declarations}
-
-The formalization previously covered only the diagonal subgroup $\{e,xy\}$,
-with the rescaled family $e\mapsto M_e$, $xy\mapsto iM_{xy}$. Those
-declarations, set in typewriter type below, are removed without
-compatibility aliases. Their replacements
-are as follows.
-\begin{itemize}
-    \item \texttt{Z2Z2Condensation.diagFamily} and
-    \texttt{Z2Z2Condensation.diagFamily\_isNormalRepresentation}: the family
-    restricted to the diagonal is \leanid{Z2Z2Condensation.pairFamily} applied
-    to \leanid{Z2Z2Condensation.kxyTensor}, equal to the restriction of
-    \leanid{Z2Z2Condensation.kleinFamily} along
-    \leanid{Z2Z2Condensation.xyHom} by
-    \leanid{Z2Z2Condensation.comap\_xyHom}; its normality and exactness are
-    \leanid{Z2Z2Condensation.pairFamily\_kxy\_isNormalRepresentation}.
-    \item \texttt{Z2Z2Condensation.diagFusionData}:
-    \leanid{Z2Z2Condensation.xyFusionData}.
-    \item \texttt{Z2Z2Condensation.diagFusionData\_isAssociator\_gen\_gen\_gen}
-    and \texttt{Z2Z2Condensation.diagFusionData\_omega\_gen\_gen\_gen}:
-    \leanid{Z2Z2Condensation.xyFusionData\_isAssociator\_gen\_gen\_gen}.
-    \item \texttt{Z2Z2Condensation.diagFusionData\_omega\_gen\_one\_gen}:
-    \leanid{Z2Z2Condensation.pairFusionData\_omega\_gen\_one\_gen}.
-    \item \texttt{Z2Z2Condensation.cyclicInvariant\_diagFusionData} and
-    \texttt{Z2Z2Condensation.cyclicInvariant\_omega\_diag}:
-    \leanid{Z2Z2Condensation.cyclicInvariant\_omega\_kleinFamily\_xy}.
-    \item \texttt{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_diag}:
-    \leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_kleinFamily}.
-    \item \texttt{Z2Z2Condensation.diagBondDim},
-    \texttt{Z2Z2Condensation.diagLabelTensor},
-    \texttt{Z2Z2Condensation.diagLabelV},
-    \texttt{Z2Z2Condensation.diagLabelW}:
-    \leanid{Z2Z2Condensation.pairBondDim},
-    \leanid{Z2Z2Condensation.pairLabelTensor},
-    \leanid{Z2Z2Condensation.pairLabelV},
-    \leanid{Z2Z2Condensation.pairLabelW}.
-    \item \texttt{Z2Z2Condensation.diagGen} and
-    \texttt{Z2Z2Condensation.diagGen\_pow\_two}:
-    \leanid{Z2Z2Condensation.z2Gen} and
-    \leanid{Z2Z2Condensation.z2Gen\_pow\_two}.
-    \item \texttt{Z2Z2Condensation.diagCubeInt},
-    \texttt{Z2Z2Condensation.diagCube},
-    \texttt{Z2Z2Condensation.tripleTensor\_gen\_toMPSTensor},
-    \texttt{Z2Z2Condensation.diagLeftTreeInt},
-    \texttt{Z2Z2Condensation.diagRightTreeInt},
-    \texttt{Z2Z2Condensation.diagFusionData\_leftV\_gen\_gen\_gen},
-    \texttt{Z2Z2Condensation.diagFusionData\_rightV\_gen\_gen\_gen},
-    \texttt{Z2Z2Condensation.diag\_leftTree\_evalWord},
-    \texttt{Z2Z2Condensation.diag\_leftTree\_evalWord\_smul}: the cube
-    table \leanid{Z2Z2Condensation.kxyCubeInt}, the generic trees
-    \leanid{Z2Z2Condensation.pairFusionData\_leftV\_gen\_gen\_gen} and
-    \leanid{Z2Z2Condensation.pairFusionData\_rightV\_gen\_gen\_gen}, and the
-    integer certificate
-    \leanid{MPSTensor.isDressedProportional\_complexOfInt\_of\_mem}.
-    \item \leanid{Z2Z2Condensation.columnInt} is kept.
-\end{itemize}
-
 \bibliographystyle{alpha}
 \bibliography{references}
 
