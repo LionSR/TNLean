@@ -40,12 +40,12 @@ length.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isPreparedInDepth_le_log} in
     \doclink{TNLean/MPS/Preparation/DepthLogBound}.}
 There is $C$, depending only on $d$ and $D$, such that for every normal tensor
-$A$ with $D\geq1$ there are $a>0$ and $b>0$, depending only on $A$, with the
+$A$ with $D\geq1$ there are $a>0$ and $b\geq1$, depending only on $A$, with the
 following property. For $0<\varepsilon\leq1$ and every $q$ dividing $N$ with
 $q\geq a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
 $\varepsilon(\psi,\phi_N)\leq\varepsilon$ is prepared in depth at most $Cq$. If
 moreover $N\geq2$ and $q\leq2(a\log(N/\varepsilon)+b)$, for instance
-$q=\lceil a\log(N/\varepsilon)+b\rceil$, the depth is at most
+$q=\lceil a\log(N/\varepsilon)+b\rceil$ when it divides $N$, the depth is at most
 $c\log(N/\varepsilon)$ with $c$ depending only on $A$. This is
 (\ref{eq:mswc24_depth_log}) for those pairs $(N,\varepsilon)$ for which such a
 $q$ divides $N$. For other chain lengths, such as prime $N$ larger than the
@@ -65,7 +65,11 @@ $q\leq q'<2q$. Three steps generalize.
     \item The circuit applies the block unitary of length $q'$ to the last block;
           its depth is $O(q')=O(q)$.
 \end{enumerate}
-With these, (\ref{eq:mswc24_depth_log}) holds for every $N\geq2$.
+With these, (\ref{eq:mswc24_depth_log}) holds for every $N\geq2$ with
+$N\geq q$, where $q=\lceil a\log(N/\varepsilon)+b\rceil$. Chains shorter
+than this block length are not covered by the three steps and need a separate
+argument, as in the source, which takes $N$ with ``a large number of
+blocks''.
 
 \bibliographystyle{alpha}
 \bibliography{references}

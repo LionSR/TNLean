@@ -17,12 +17,13 @@ $q = O (\log (N / \epsilon))$"). This is the content of eq. (1) of the source,
 `T = O(log(N/ε))`, for chains whose length is a multiple of the block length.
 
 * `MPSPreparation.exists_isPreparedInDepth_approximationError_le`: there is `C`, depending only
-  on `d` and `D`, such that for every normal tensor `A` there are `a, b`, depending only on `A`,
-  such that on `N` sites, for every block length `q` dividing `N` with `q ≥ a log(N/ε) + b`, a
-  unit vector with error at most `ε` against `|φ_N⟩` is prepared in depth `C q`.
+  on `d` and `D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending
+  only on `A`, such that on `N` sites, for every block length `q` dividing `N` with
+  `q ≥ a log(N/ε) + b`, a unit vector with error at most `ε` against `|φ_N⟩` is prepared in
+  depth `C q`.
 * `MPSPreparation.exists_isPreparedInDepth_le_log`: with `q` moreover at most
-  `2 (a log(N/ε) + b)`, for example `q = ⌈a log(N/ε) + b⌉`, the depth is at most `c log(N/ε)`
-  with `c` depending only on `A`.
+  `2 (a log(N/ε) + b)`, for example `q = ⌈a log(N/ε) + b⌉` when it divides `N`, the depth is at
+  most `c log(N/ε)` with `c` depending only on `A`.
 
 **Scope restriction (block length dividing the chain length):** the approximating state of the
 source, eq. (10), `⊗_{i=1}^{N/q} U_i`, has `N/q` blocks of `q` sites, and both theorems here ask
@@ -42,14 +43,6 @@ namespace MPSPreparation
 
 variable {d N : ℕ}
 
-/-- Depth is monotone: a circuit of depth `T` is padded by layers without gates. -/
-theorem IsPreparedInDepth.mono [NeZero N] {T T' : ℕ} {ψ : Cfg d N → ℂ}
-    (h : IsPreparedInDepth T ψ) (hT : T ≤ T') : IsPreparedInDepth T' ψ := by
-  obtain ⟨U, ⟨Ls, hl, rfl⟩, v, rfl⟩ := h
-  have hc : IsCircuitOn (d := d) Set.univ T (circuitOp Ls) :=
-    ⟨Ls, hl, fun _ _ _ _ => Set.subset_univ _, rfl⟩
-  exact ⟨_, (hc.mono hT).isLocalCircuitOfDepth, v, rfl⟩
-
 /-- Rescaling the periodic vector by `ζ^N ≠ 0` changes the normalized state `|φ_N⟩` by a phase,
 so the error `1 - |⟨ψ|φ_N⟩|` is unchanged. -/
 theorem norm_inner_normalizedMPVState_of_mpv_eq {D D' : ℕ} {A : MPSTensor d D}
@@ -66,25 +59,9 @@ theorem norm_inner_normalizedMPVState_of_mpv_eq {D D' : ℕ} {A : MPSTensor d D}
   · simp [h0]
   · field_simp
 
-/-- The approximating state is a unit vector when the blocked tensor is injective. -/
-theorem norm_approximatingMPVState {D : ℕ} (A : MPSTensor d D) {q : ℕ}
-    (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
-    (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
-    ‖approximatingMPVState A σ q M‖ = 1 := by
-  have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (approximatingMPVStateRaw A σ q M)).symm
-  rw [PiLp.inner_apply, ← (blockedConfigEquiv d M q).sum_comp] at h
-  simp only [RCLike.inner_apply, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply] at h
-  have hraw : ‖approximatingMPVStateRaw A σ q M‖ = 1 := by
-    refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
-      (Complex.ofReal_injective ?_)
-    push_cast
-    exact h.trans ((Finset.sum_congr rfl fun _ _ => mul_comm _ _).trans
-      (mpv_approximatingTensor_norm_sq hB hσ htr))
-  rw [(inner_approximatingMPVState_mpvState A hB hσ htr M).1, hraw]
-
 /-- **Error `ε` in depth `O(q)` with `q ∝ log(N/ε)`.** There is `C`, depending only on `d` and
-`D`, such that for every normal tensor `A` there are `a > 0` and `b`, depending only on `A`, with
-the following property. For `0 < ε ≤ 1` and every block length `q` dividing `N ≥ 1` with
+`D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending only on `A`,
+with the following property. For `0 < ε ≤ 1` and every block length `q` dividing `N ≥ 1` with
 `q ≥ a log(N/ε) + b`, some unit vector `|ψ⟩` on `N` sites with
 `ε(ψ, φ_N) = 1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared from a product state in depth at most `C q`.
 
@@ -98,7 +75,7 @@ as it is for the source's normal tensors, whose transfer matrix has the leading 
 eq. (10); see `docs/paper-gaps/mswc24_depth_upper_bound_divisible_length.tex`. -/
 theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     ∃ C : ℕ, ∀ A : MPSTensor d D, Kraus.IsNormal A →
-      ∃ a b : ℝ, 0 < a ∧ 0 < b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
+      ∃ a b : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
         ∀ (N q : ℕ) [NeZero N], q ∣ N → a * Real.log (N / ε) + b ≤ q →
           ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧ IsPreparedInDepth (C * q) (fun s => ψ s) ∧
             1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
@@ -142,7 +119,8 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     rw [mul_div_right_comm, neg_div_correlationLength, hnorm, hr]
     ring
   obtain ⟨L, hLpos, hL⟩ := hNB
-  refine ⟨1 / r, max (Real.log K) 0 / r + L + 3 * D + 1, by positivity, by positivity,
+  refine ⟨1 / r, max (Real.log K) 0 / r + L + 3 * D + 1, by positivity,
+    le_add_of_nonneg_left (by positivity),
     fun ε hε hε1 N q _ hqN hq => ?_⟩
   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne N)
   have hlog0 : 0 ≤ Real.log (N / ε) :=
@@ -188,11 +166,12 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     _ = ε := Real.exp_log hε
 
 /-- **Preparation in depth `O(log(N/ε))`**, arXiv:2307.01696, eq. (1), for block lengths
-dividing the chain length. For every normal tensor `A` there are `a > 0`, `b` and `c`, depending
-only on `A`, with the following property. For `N ≥ 2`, `0 < ε ≤ 1`, and a block length `q`
-dividing `N` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, for example
-`q = ⌈a log(N/ε) + b⌉`, some unit vector `|ψ⟩` with `1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared from a
-product state in depth at most `c log(N/ε)`.
+dividing the chain length. For every normal tensor `A` there are `a > 0`, `b ≥ 1` and `c`,
+depending only on `A`, with the following property. For `N ≥ 2`, `0 < ε ≤ 1`, and a block length
+`q` dividing `N` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, for example
+`q = ⌈a log(N/ε) + b⌉` when it divides `N` (the upper bound holds because `b ≥ 1`), some unit
+vector `|ψ⟩` with `1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared from a product state in depth at most
+`c log(N/ε)`.
 
 arXiv:2307.01696, eq. (1) (`T=O(\log (N/\eps))`) and the sentence after Lemma 1 ("it follows
 that $q = O (\log (N / \epsilon))$"); the depth is `C q` with `C` depending only on `d` and `D`
@@ -202,7 +181,7 @@ that $q = O (\log (N / \epsilon))$"); the depth is `C q` with `C` depending only
 eq. (10); see `docs/paper-gaps/mswc24_depth_upper_bound_divisible_length.tex`. -/
 theorem exists_isPreparedInDepth_le_log {D : ℕ} [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
-    ∃ a b c : ℝ, 0 < a ∧ 0 < b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
+    ∃ a b c : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N q : ℕ) [NeZero N], 2 ≤ N → q ∣ N → a * Real.log (N / ε) + b ≤ q →
         (q : ℝ) ≤ 2 * (a * Real.log (N / ε) + b) →
           ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
@@ -219,7 +198,7 @@ theorem exists_isPreparedInDepth_le_log {D : ℕ} [NeZero D] (A : MPSTensor d D)
     exact this.trans (le_div_self (by positivity) hε hε1)
   have hbl : b ≤ b / Real.log 2 * Real.log (N / ε) := by
     rw [div_mul_eq_mul_div, le_div_iff₀ hl2]
-    exact mul_le_mul_of_nonneg_left hl hb.le
+    exact mul_le_mul_of_nonneg_left hl (zero_le_one.trans hb)
   push_cast
   calc (C : ℝ) * q ≤ C * (2 * (a * Real.log (N / ε) + b)) :=
         mul_le_mul_of_nonneg_left hq2 (Nat.cast_nonneg _)
