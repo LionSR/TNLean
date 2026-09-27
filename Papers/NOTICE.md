@@ -48,6 +48,7 @@ source of that version and opening the named file.
 | [arXiv:2204.02407v3](https://arxiv.org/abs/2204.02407v3) | Higher Gauging and Non-invertible Condensation Defects | Konstantinos Roumpedakis, Sahand Seifnashri, Shu-Heng Shao | `References/2204.02407/source/condensation_draft.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
 | [arXiv:2307.02534v3](https://arxiv.org/abs/2307.02534v3) | Majorana chain and Ising model -- (non-invertible) translations, anomalies, and emanant symmetries | Nathan Seiberg, Shu-Heng Shao | `References/2307.02534/source/Majoranadraft.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
 | [arXiv:2504.16985v3](https://arxiv.org/abs/2504.16985v3) | Anomalous matrix product operator symmetries and 1D mixed-state phases | Xiao-Qi Sun | `References/2504.16985/main.tex` | Link only; [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| [arXiv:2509.03600v1](https://arxiv.org/abs/2509.03600v1) | Trading Mathematical for Physical Simplicity: Bialgebraic Structures in Matrix Product Operator Symmetries | Yuhan Liu, Andras Molnar, Xiao-Qi Sun, Frank Verstraete, Kohtaro Kato, Laurens Lootens | `References/2509.03600/main.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
 
 ## Other paper sources in this directory
 
