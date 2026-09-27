@@ -8281,8 +8281,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_base,
         TNLean.Algebra.StabilizerRepresentatives.gauge_reconstructedLSymbol_isCompatible,
         TNLean.Algebra.ScalarThreeCochain.exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap,
-        TNLean.Algebra.LSymbol.IsCompatible.mul,
-        TNLean.Algebra.LSymbol.IsCompatible.inv}
+        TNLean.Algebra.LSymbol.IsCompatible.mul}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:mpug_three_cocycle,
         def:mpug_fusion_gauge, def:mpug_trivial_gauge_class, def:is_cocycle,
@@ -8360,6 +8359,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.StabilizerRepresentatives.existsUnique_solutionAction_eq,
         TNLean.Algebra.LSymbol.ActionGaugeEquiv,
         TNLean.Algebra.LSymbol.actionGaugeEquiv_equivalence,
+        TNLean.Algebra.LSymbol.IsCompatible.inv,
         TNLean.Algebra.LSymbol.IsCompatible.mul_inv_one,
         TNLean.Algebra.LSymbol.IsCompatible.gauge_one,
         TNLean.Algebra.LSymbol.IsCompatible.isCocycle_restrict,
@@ -8427,13 +8427,17 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     item is the third with $L_0$ the formula at $\psi=1$, which is
     compatible by Theorem~\ref{thm:mpug_stabilizer_reconstruction}.
     For the last item, cocycles modulo cohomology form the second group
-    cohomology of $H$ with coefficients in $\C^\times$, and the sum of two
-    classes is the class of the pointwise product; cohomologous cocycles
-    give induced $L$-symbols related by an action gauge, so the rule is well
-    defined; the induced
-    $L$-symbol of a pointwise product is the pointwise product of the induced
-    $L$-symbols; and with base point $L$ the action is the bijection of the
-    third item.
+    cohomology of $H$ with coefficients in $\C^\times$, and
+    \begin{align}
+        [\psi_1]+[\psi_2] & =[\psi_1\psi_2],
+        \notag                                     \\
+        L[\psi_1\psi_2]   & =L[\psi_1]\,L[\psi_2].
+        \notag
+    \end{align}
+    Cohomologous cocycles give induced $L$-symbols related by an action
+    gauge, so the rule is well defined, and by the two identities acting by
+    $[\psi_1]+[\psi_2]$ is acting by $[\psi_2]$ and then by $[\psi_1]$. With
+    base point $L$ the action is the bijection of the third item.
 \end{proof}
 
 \begin{definition}[Generalized coboundary and cocycle]
