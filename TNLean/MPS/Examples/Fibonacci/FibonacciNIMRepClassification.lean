@@ -19,8 +19,8 @@ representation of the fusion ring (lines 564–565).
 unit acts as the identity, on one or two blocks: there is none on one block, and on two blocks
 the representation is the regular one, `M_a = N_a` after labelling the blocks by `1` and `τ`.
 Together with the integrality theorem `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily`, a
-symmetric family of at most two normal blocks with the unit acting trivially has exactly two
-blocks, transforming as in line 1993.
+nonempty symmetric family of at most two normal blocks with the unit acting trivially has exactly
+two blocks, transforming as in line 1993.
 
 **Scope restriction (at most two blocks):** the source's uniqueness claim covers invariant
 subspaces with any number of blocks; only one and two blocks are classified here. Documented in
@@ -33,9 +33,9 @@ subspaces with any number of blocks; only one and two blocks are classified here
 * `FibonacciCompression.not_isNIMRep_fibNim_of_card_eq_one`: no representation on one block.
 * `FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two`: on two blocks, the
   regular representation up to relabelling.
-* `FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock`: a symmetric family of
-  at most two normal blocks with the unit acting trivially has two blocks transforming as the
-  regular representation.
+* `FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock`: a nonempty symmetric
+  family of at most two normal blocks with the unit acting trivially has two blocks transforming
+  as the regular representation.
 
 ## References
 - [arXiv:2203.12563](https://arxiv.org/abs/2203.12563) -- J. Garre-Rubio, L. Lootens,
