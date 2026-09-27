@@ -72,6 +72,38 @@ any nonzero complex scalar, not only a unit-modulus phase.
     the same entries with the same multiplicities. Empty weight
     multisets are allowed.
 \end{theorem}
+
+\begin{center}
+    % Formula: the component of (\ref{eq:asym_unblocked_expansion}) at
+    % the configuration (i_1,\ldots,i_N):
+    % \tr(B^{i_1}\cdots B^{i_N})=\sum_\gamma(\sum_k\mu_{\gamma k}^N)
+    % \tr(M_\gamma^{i_1}\cdots M_\gamma^{i_N}).
+    % Source: Theorem~\ref{thm:asym_unblocked_coefficients}.
+    % Ink-to-index map: the left ring is the periodic chain of $B$, the
+    % right ring the periodic chain of $M_\gamma$; the site in column $n$
+    % carries the physical letter $i_n$.
+    % Contraction set: every horizontal virtual bond, closed by the
+    % periodic trace; the physical legs remain open. The sum over
+    % $\gamma$ and the power-sum coefficient are scalars, not
+    % contraction edges.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the schematic on each side.
+    \tenkzkernel
+    \begin{tenkz}[rows={ket}, cols=4, physical=up, boundary=periodic]
+        \tn[label pos=s, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=s, ports={90:physical:$i_2$}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=s, ports={90:physical:$i_N$}]{B}
+    \end{tenkz}
+    \quad $=\;\displaystyle\sum_{\gamma\in\Gamma}
+        \Bigl(\sum_{k=0}^{n_\gamma-1}\mu_{\gamma k}^{N}\Bigr)$ \quad
+    \begin{tenkz}[rows={ket}, cols=4, physical=up, boundary=periodic]
+        \tn[label pos=s, ports={90:physical:$i_1$}]{M_\gamma} &
+        \tn[label pos=s, ports={90:physical:$i_2$}]{M_\gamma} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=s, ports={90:physical:$i_N$}]{M_\gamma}
+    \end{tenkz}
+\end{center}
 \begin{proof}
     \leanok
     \uses{thm:irred_decomp,thm:periodic_overlap_dichotomy,
@@ -158,6 +190,61 @@ any nonzero complex scalar, not only a unit-modulus phase.
     This uses the structure-coefficient notation of
     Ref.~\cite[Section~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
+
+\begin{center}
+    % Formula: (\ref{eq:asym_operator_expansion}),
+    % O_L(M_\alpha)O_L(M_\beta)
+    % =\sum_\gamma\tr(\chi_{\alpha,\beta,\gamma}^L)O_L(M_\gamma).
+    % Source: Theorem~\ref{thm:asym_operator_coefficients}; the closed
+    % fusion identity of \cite[Section~4.5]{Cirac2016MPDO_arXiv}, drawn
+    % as in Figure~\ref{fig:mpdo_fusion_trace_power}.
+    % Ink-to-index map: on the left, the upper row is $M_\alpha$ with
+    % output legs $i_1,\ldots,i_L$ and the lower row is $M_\beta$ with
+    % input legs $j_1,\ldots,j_L$; the vertical pairleg at each site is
+    % the summed middle physical index. On the right, the upper loop of
+    % boxes labelled $\chi$ is $\tr(\chi_{\alpha,\beta,\gamma}^{L})$ and
+    % the lower loop is $O_L(M_\gamma)$.
+    % Contraction set: on the left, the pairlegs at every displayed site
+    % and the horizontal virtual bonds of each row, both rows closed by
+    % the periodic trace; on the right, the virtual bonds of each loop.
+    % The two loops share no index, so their juxtaposition is the
+    % product of a scalar and an operator; the sum over $\gamma$ is a
+    % sum of pictures, not a contraction edge. The left panel authors
+    % its bonds and leaves the ellipsis column bare, since the frame
+    % would otherwise mint a pairleg stub between the two ellipses.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) for the schematic on each side.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, west=trace, east=trace, bonds=none]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M_\alpha} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{M_\alpha} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical}]{M_\alpha} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M_\beta} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{M_\beta} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{M_\beta}
+        \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+        \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+        \tnwire{(1,1)}{(2,1)} \tnwire{(1,2)}{(2,2)} \tnwire{(1,4)}{(2,4)}
+    \end{tenkz}
+    \quad $=\;\displaystyle\sum_{\gamma\in\Gamma}$ \quad
+    \begin{tabular}[c]{@{}c@{}}
+        {\begin{tenkz}[cols=4, west=trace, east=trace]
+             \tn[skin=box]{\chi} & \tn[skin=box]{\chi} & \tn[skin=dots]{} &
+             \tn[skin=box]{\chi}
+         \end{tenkz}} \\
+        {\begin{tenkz}[cols=4, west=trace, east=trace]
+             \tn[skin=mpo,
+                 ports={90:physical:$i_1$, 270:physical:$j_1$}]{M_\gamma} &
+             \tn[skin=mpo,
+                 ports={90:physical:$i_2$, 270:physical:$j_2$}]{M_\gamma} &
+             \tn[skin=dots]{} &
+             \tn[skin=mpo,
+                 ports={90:physical:$i_L$, 270:physical:$j_L$}]{M_\gamma}
+         \end{tenkz}}
+    \end{tabular}
+\end{center}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_operator_product_mpo,thm:asym_unblocked_coefficients}

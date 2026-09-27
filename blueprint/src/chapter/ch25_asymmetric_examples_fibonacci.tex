@@ -405,10 +405,9 @@ source's tensor built from the $G$-symbols.
     of $S_1$ and $S_\tau$ equal those of $B_1$ and $B_\tau$ at every length,
     and they satisfy the Fibonacci fusion rules $O_1^2=O_1$,
     $O_1O_\tau=O_\tau O_1=O_\tau$ and $O_\tau^2=O_1+O_\tau$ at every positive
-    length. This is the fusion statement of~\cite[Appendix~D.1]{Bultinck2017Anyons}
-    restricted to edge label $\tau$; the statement on the full alphabet, with
-    edge labels $1$ and $\tau$, is not formalized
-    here~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+    length. This establishes the fusion statement
+    of~\cite[Appendix~D.1]{Bultinck2017Anyons} restricted to edge label $\tau$;
+    see~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 \end{theorem}
 
 \begin{proof}
@@ -465,14 +464,13 @@ source's tensor built from the $G$-symbols.
     Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} transfer.
 \end{proof}
 
-The review states the fusion rules $O_aO_b=\sum_cN_{ab}^cO_c$ for the operators
-of this tensor~\cite[Section~3]{Cirac2021Matrix}, in the passage on
-critical spin systems and their matrix product operator symmetries. By
-Theorem~\ref{thm:asymex_fib_review_congruence} that statement fails for the
-prefactored tensor read in the orthonormal basis of plaquette configurations,
-and holds after composing with $W$. This correction, together with the
-substituted selection rule, is recorded
-in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+While the review states $O_aO_b=\sum_cN_{ab}^cO_c$ for the prefactored
+review tensor $R_f$~\cite[Section~3]{Cirac2021Matrix}, that operator already
+contains the prefactor $1/\sqrt{d_{x'}d_{q''}}$ and fails the fusion rules
+in the orthonormal plaquette basis.
+Theorem~\ref{thm:asymex_fib_review_congruence} shows that the fusion rules
+hold after composing it with $W$;
+see~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 
 \begin{theorem}[Normality of the two Fibonacci blocks]
     \label{thm:asymex_fib_normal}
@@ -514,12 +512,21 @@ and, for a cyclic word $x\in\{0,1\}^N$, set
     p_N(x) & =\prod_{v=0}^{N-1}K_{x_vx_{v+1}}.
     \label{eq:asymex_fib_admissibility}
 \end{align}
-A word is admissible if $p_N(x)=1$, equivalently if it has no cyclic
-neighboring pair $00$. This includes the last-to-first pair.
-At $N=1$, the condition excludes the single label $0$.
+A cyclic word $x$ is admissible if $p_N(x)=1$, equivalently if it contains no
+cyclic neighboring pair $00$.
 
 \begin{lemma}[Vacuum projection and its kernel]
     \label{lem:asymex_fib_vacuum}
+    \lean{FibonacciCompression.mpo_fibOne_apply,
+        FibonacciCompression.mpo_fibOne_isStarProjection,
+        FibonacciCompression.range_mpo_fibOne,
+        FibonacciCompression.ker_mpo_fibOne,
+        FibonacciCompression.mpo_fibOne_ne_one,
+        FibonacciCompression.fibAdjacency,
+        FibonacciCompression.fibAdmissibility,
+        FibonacciCompression.fibAdmissibility_eq_one_iff}
+    \leanok
+    \uses{def:asymex_fib, def:mpo_family}
     For $N\geq1$, the vacuum operator $P_N=O_N(B_1)$ has matrix elements
     \begin{align}
         \bra{y}P_N\ket{x} & =\delta_{yx}p_N(x).
@@ -539,6 +546,7 @@ At $N=1$, the condition excludes the single label $0$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The vacuum letters satisfy
     $(B_1^{yx})_{ab}=\delta_{yx}\delta_{ax}K_{xb}$.
     Expanding the periodic trace over bond labels
@@ -552,9 +560,8 @@ At $N=1$, the condition excludes the single label $0$.
     Only $g=x$ contributes. Since $p_N(x)\in\{0,1\}$,
     the operator is diagonal with real idempotent entries.
     This proves the projection, range, and kernel statements.
-    The nonzero vector $\ket{0,\ldots,0}$ lies in its kernel,
-    so it is not the ambient identity. At one site,
-    $P_1=\diag(0,1)$.
+    Since $\ket{0,\ldots,0}\in\ker P_N$, $P_N\neq\Id_{\mc H_N}$,
+    with $P_1=\diag(0,1)$ at one site.
 \end{proof}
 
 \begin{theorem}[Vacuum unit laws]
@@ -634,9 +641,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
         =\frac{O_N(B_1)+\varphi\,O_N(B_\tau)}{1+\varphi^2},
         \label{eq:asymex_fib_projector}
     \end{align}
-    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons}:
-    Section~3.1 derives the boundary matrices $\Delta_a=w_a\Id$ of the
-    blocks, and Section~3.2 writes the projector as $\sum_aw_aO_N(B_a)$.
+    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[The weight relation]
@@ -743,6 +748,13 @@ These vectors are not normalized unless this is stated explicitly.
 
 \begin{lemma}[Amplitudes and norms]
     \label{lem:asymex_fib_amplitudes}
+    \lean{FibonacciCompression.mpvState_fibAllTau,
+        FibonacciCompression.norm_mpvState_fibAllTau,
+        FibonacciCompression.mpv_fibChain,
+        FibonacciCompression.norm_mpvState_fibChain_sq,
+        FibonacciCompression.norm_mpvState_fibChain_pos}
+    \leanok
+    \uses{def:asymex_fib_states}
     Let $N\geq1$. The product tensor gives
     $\ket{V^{(N)}(A)}=\ket{1,\ldots,1}$, of norm one.
     For a word $x$, let $n_0(x)$ count its zeros and let $n_{11}(x)$
@@ -763,6 +775,9 @@ These vectors are not normalized unless this is stated explicitly.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_fib_state_action, thm:asymex_fib_unit,
+        thm:asymex_fib_anomaly_nim_rep}
     The bond-one trace is $\prod_v\delta_{x_v1}$.
     For the chain, put
     $H=\begin{pmatrix}0&\sigma\\1&-\sigma^2\end{pmatrix}$.
@@ -776,8 +791,12 @@ These vectors are not normalized unless this is stated explicitly.
     zero is followed by a one, giving $n_0(x)$ factors of $\sigma$.
     Each pair $10$ contributes $1$, and each pair $11$ contributes
     $-\sigma^2$. This proves~(\ref{eq:asymex_fib_chain_amplitude}).
-    Both vectors have admissible support, so
-    Lemma~\ref{lem:asymex_fib_vacuum} shows that $P_N$ fixes them.
+    The operator $P_N=O_N(B_1)$ fixes the product vector by
+    Theorem~\ref{thm:asymex_fib_state_action}. The chain vector is
+    $O_N(B_\tau)\ket{V^{(N)}(A)}$ by the same theorem, and the unit law
+    $O_N(B_1)O_N(B_\tau)=O_N(B_\tau)$ of
+    Theorem~\ref{thm:asymex_fib_unit} shows that $P_N$ fixes it
+    (Theorem~\ref{thm:asymex_fib_anomaly_nim_rep}).
     Summing squared amplitudes proves~(\ref{eq:asymex_fib_chain_norm}).
     The all-one amplitude is $(-\sigma^2)^N\neq0$.
 \end{proof}
