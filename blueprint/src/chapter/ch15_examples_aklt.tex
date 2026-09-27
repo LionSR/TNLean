@@ -319,6 +319,25 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
     $\Z_2 \times \Z_2$ action is unitary: $P_g P_g^\dagger = \Id$.
 \end{theorem}
 
+\begin{theorem}[Doubly degenerate entanglement spectrum of the AKLT state]
+    \label{thm:aklt_entanglement_spectrum_even}
+    \lean{MPSTensor.akltBlocked_even_finrank_eigenspace, MPSTensor.akltTensor_twist_intertwine, MPSTensor.akltProjRep_generators_anticomm, MPSTensor.akltBlocked_transferMap_one, MPSTensor.akltBlockedZ2Z2Action_unitary}
+    \leanok
+    \uses{def:aklt_blocked}
+    Let $\Lambda$ be a positive definite fixed point of the adjoint transfer map
+    of the length-$2$ blocked AKLT tensor.  Every eigenspace of $\Lambda$ has
+    even dimension.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:spt_entanglement_spectrum_even, thm:aklt_blocked_injective, lem:twisted_tensor_block_gauge}
+    The blocked tensor is injective and satisfies $\E(\Id)=\Id$.  The two
+    generators of $\Z_2\times\Z_2$ act by unitary Kronecker squares with virtual
+    gauges $i\sigma_y$ and $\sigma_z$, which carry over from the single site by
+    Lemma~\ref{lem:twisted_tensor_block_gauge} and anticommute.  Apply
+    Theorem~\ref{thm:spt_entanglement_spectrum_even}.
+\end{proof}
+
 \begin{theorem}[The AKLT state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:aklt_string_order}
     \lean{MPSTensor.aklt_hasStringOrder}
     \leanok
@@ -346,22 +365,18 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
         \E_{A^{[2]}}(\Id)
          & = \sum_{i_1,i_2}
         A^{i_1}A^{i_2}(A^{i_2})^\dagger(A^{i_1})^\dagger
-        = \Id.
-        \notag
-    \end{align}
-    Moreover, $\Lambda = \tfrac{1}{2}\Id$ is a fixed point of the adjoint
-    transfer map:
-    \begin{align}
+        = \Id,
+        \label{eq:aklt_blocked_unital} \\
         \E_{A^{[2]}}^\dagger(\Lambda)
          & = \sum_{i_1,i_2}
         (A^{i_2})^\dagger(A^{i_1})^\dagger
         \Lambda A^{i_1}A^{i_2}
         = \Lambda.
-        \notag
+        \label{eq:aklt_blocked_adjoint_fixed}
     \end{align}
-    The first identity sums the right-canonical relation
+    Identity~(\ref{eq:aklt_blocked_unital}) sums the right-canonical relation
     $\sum_i A^i(A^i)^\dagger = \Id$ over the inner letter and then the outer;
-    the second sums the left-canonical relation
+    (\ref{eq:aklt_blocked_adjoint_fixed}) sums the left-canonical relation
     $\sum_i (A^i)^\dagger A^i = \Id$ over the outer letter and then the inner,
     using $\Lambda = \tfrac{1}{2}\Id$. Applying
     Theorem~\ref{thm:has_string_order_of_symmetric_injective} yields string

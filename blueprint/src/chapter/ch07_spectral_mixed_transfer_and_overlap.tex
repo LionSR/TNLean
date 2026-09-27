@@ -269,25 +269,25 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     \begin{align}
         X(B^i)^\dagger
          & =\mu(A^i)^\dagger X,
-         &
+        \label{eq:spectral_rect_intertwining_adj} \\
         A^iX
          & =\mu XB^i,
-        \label{eq:spectral_rect_intertwining}
+        \label{eq:spectral_rect_intertwining_fwd}
     \end{align}
     then $D_1=D_2$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:injective}
-    The first relation in (\ref{eq:spectral_rect_intertwining}) shows that
+    Relation~(\ref{eq:spectral_rect_intertwining_adj}) shows that
     $\ker(X)$ is invariant under every $(B^i)^\dagger$: if $Xv=0$, then
     $X(B^i)^\dagger v=\mu(A^i)^\dagger Xv=0$. Since the $\{B^i\}$ span the
     full matrix algebra, so do the $\{(B^i)^\dagger\}$ (conjugate
     transposition is a conjugate-linear bijection and therefore preserves
     complex linear spans), so
     $\ker(X)$ is invariant under every matrix; injectivity of the resulting
-    map forces $\ker(X)=0$, giving $D_2\leq D_1$. Taking adjoints of the
-    second relation gives $X^\dagger(A^i)^\dagger=\overline\mu(B^i)^\dagger
+    map forces $\ker(X)=0$, giving $D_2\leq D_1$. Taking adjoints of
+    (\ref{eq:spectral_rect_intertwining_fwd}) gives $X^\dagger(A^i)^\dagger=\overline\mu(B^i)^\dagger
         X^\dagger$, so the same argument applied to $X^\dagger$ shows
     $\ker(X^\dagger)$ is invariant under every $(A^i)^\dagger$ and hence
     trivial, giving $D_1\leq D_2$.

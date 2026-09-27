@@ -16,6 +16,7 @@ import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CompositionFlattening
+import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.DaggerInverse
 import TNLean.MPS.MPU.DaggerInverseGauge
@@ -25,6 +26,7 @@ import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupCocycleMPO
+import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
@@ -46,6 +48,7 @@ import TNLean.MPS.MPU.InverseCompatibleTruncation
 import TNLean.MPS.MPU.InverseCompatibleWordAdjoint
 import TNLean.MPS.MPU.InverseCompatibleWordUnitarity
 import TNLean.MPS.MPU.KetLeftMul
+import TNLean.MPS.MPU.LengthDependentPhase
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness

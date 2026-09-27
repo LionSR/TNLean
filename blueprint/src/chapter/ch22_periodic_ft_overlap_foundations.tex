@@ -94,16 +94,13 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The two left-canonical equations give
+    Left-canonicity of $cA$ gives
     \begin{align}
-        \sum_i (A^i)^\dagger A^i    & =\Id,
-        \notag                              \\
-        \sum_i (cA^i)^\dagger(cA^i) & =\Id.
-        \notag
+        \Id & = \sum_i (cA^i)^\dagger(cA^i) = |c|^2 \sum_i (A^i)^\dagger A^i = |c|^2\Id,
     \end{align}
-    Substituting the first equation into the second gives
-    $(\bar c c)\Id=\Id$. Since the bond dimension is positive, comparison of
-    any diagonal entry gives $\bar c c=1$, hence $|c|=1$.
+    where the last equality uses left-canonicity of $A$. Since the bond
+    dimension is positive, comparison of any diagonal entry gives $|c|^2=1$,
+    hence $|c|=1$.
 \end{proof}
 
 \begin{theorem}[Left-canonical sector scalar normalization]
