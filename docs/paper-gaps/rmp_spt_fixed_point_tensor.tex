@@ -18,8 +18,8 @@ $G$. The physical space is $\mathbb C^G\otimes\mathbb C^G$ with basis
 $\ket{a,b}$, the bond space is $\mathbb C^G$, and the source prints
 \begin{align}
     A^{ab}_{xy} & =e^{i\alpha(a x)\omega(a,x)+i\beta(b)\phi(b)}\,\delta_{y,ax},
-    &
-    (X_g)_{xy} & =e^{i\alpha(x)\omega(x,g)}\,\delta_{y,xg}.
+                &
+    (X_g)_{xy}  & =e^{i\alpha(x)\omega(x,g)}\,\delta_{y,xg}.
     \label{eq:rmp_spt_fixed_point_printed}
 \end{align}
 It states that the relation
@@ -37,7 +37,7 @@ $X_g$ is a twisted right-regular matrix. A direct computation gives
 \begin{align}
     (L_aX_g)_{xz}
      & =\omega(a,x)\,\omega(ax,g)\,\delta_{z,axg},
-    &
+     &
     (X_gL_a)_{xz}
      & =\omega(x,g)\,\omega(a,xg)\,\delta_{z,axg},
     \label{eq:rmp_spt_fixed_point_commutation}
@@ -62,7 +62,7 @@ $\rho$ be a projective representation of $G$ on $\mathbb C^D$ with factor system
 $\omega$, and let $\phi$ be a character. Put $W_g=\rho(g^{-1})$ and
 \begin{align}
     A^{(a,b)} & =D^{-1/2}\ket{a}\bra{b},
-    &
+              &
     U(g)      & =\phi(g)\,W_g^{T}\otimes W_g^{-1}.
     \label{eq:rmp_spt_fixed_point_formalized}
 \end{align}
@@ -79,7 +79,19 @@ unitary on the physical space.
 
 \section{Formal boundary}
 Only the on-site case is formalized: the actions $\alpha$ and $\beta$ of time
-reversal and reflection on the cocycles are not. The formal construction is
+reversal and reflection on the cocycles are not. The source starts from a
+2-cocycle $\omega$ alone, whereas the formal construction takes a projective
+representation $\rho$ with factor system $\omega$ as input. For finite $G$ such
+a representation exists for every 2-cocycle: the twisted regular representation
+\begin{align}
+    \rho(g)\ket{x} & =\omega(g,x)\ket{gx}
+    \label{eq:rmp_spt_fixed_point_twisted_regular}
+\end{align}
+on $\mathbb C^G$ satisfies $\rho(g)\rho(h)=\omega(g,h)\rho(gh)$ by the 2-cocycle
+equation. This existence step is not formalized, so the source's construction
+from a cocycle alone is covered only once such a $\rho$ is supplied.
+Elimination: define (\ref{eq:rmp_spt_fixed_point_twisted_regular}) for a finite
+group and derive the fixed point from $\omega$ and $\phi$. The formal construction is
 \leanid{MPSTensor.sptFixedPointTensor} with the action
 \leanid{MPSTensor.sptFixedPointAction}; the cluster comparison is
 \leanid{MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor}.
