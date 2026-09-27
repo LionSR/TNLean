@@ -7,7 +7,7 @@ import TNLean.MPS.Examples.CZX.CZXDomainWalls
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallExchange
 
 /-!
-# CZX: semionic domain walls
+# CZX: equal domain-wall phases and a string over a pair of walls
 
 **Source.** Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section III.F,
 `Papers/2405.00439/MPU-DW.tex` lines 1660--1672: for the CZX symmetry the double exchange of
@@ -18,7 +18,13 @@ and a symmetry string passing over a pair of domain walls acquires `ω` (`signph
 **Formalized here.** With the action tensors of `CZXCompression.czxBlockActionData`, the walls
 `e_{AB} = |0⟩` and `e_{BA} = i|1⟩` are exchanged by the generator with `c_{AB} = c_{BA} = i`, and
 the local action of the generator on an open chain containing the pair `e_{AB}`, `e_{BA}` is
-`-1`. The truncated string operators of the source are not constructed.
+`-1`. These are the tensor identities behind the semionic statistics of the source; the
+truncated string operators and their exchange relation are not constructed.
+
+**Local fix (printed left action vectors):** the explicit walls use the action tensors of
+`CZXCompression.czxBlockActionData`, whose left action vectors `⟨1|` and `-⟨0|` replace the vector
+`⟨+̂|` printed at lines 1272 and 1300; this affects `czx_isDomainWallAction_semion` and
+`czx_domainWall_pair`. Documented in `docs/paper-gaps/gs24_czx_action_left_vectors.tex`.
 
 ## Main results
 
@@ -42,7 +48,7 @@ namespace CZXCompression
 def czxWallBASemion : Fin 2 → Matrix (Fin 1) (Fin 1) ℂ :=
   fun i ↦ (1 / Complex.I) • czxWallBA i
 
-/-- **Semionic domain walls of CZX** (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line
+/-- **Equal domain-wall phases for CZX** (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line
 1664: "we can choose `c_{AB} = c_{BA} = i`"): the generator carries `e_{AB} = |0⟩` to
 `e_{BA} = i|1⟩` and back, both with phase `i`. -/
 theorem czx_isDomainWallAction_semion :

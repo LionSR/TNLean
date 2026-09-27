@@ -945,21 +945,23 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     Theorem~\ref{thm:mpug_domain_wall_state}.
 \end{proof}
 
-\begin{theorem}[Semionic domain walls]
+\begin{theorem}[Equal domain-wall phases and a string over a pair of walls]
     \label{thm:asymex_czx_semionic_domain_walls}
     \lean{CZXCompression.czxWallBASemion,
         CZXCompression.czx_isDomainWallAction_semion,
         CZXCompression.czx_domainWall_pair}
     \leanok
-    \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_pair,
-        thm:mpug_domain_wall_rescaling}
+    \uses{thm:asymex_czx_domain_walls, def:mpug_domain_wall_action}
     With the action tensors of
-    Theorem~\ref{thm:asymex_czx_product_state_l_symbols}, the walls
+    Theorem~\ref{thm:asymex_czx_product_state_l_symbols} (with the corrected
+    left action vectors \cite{gap:gs24_czx_action_left_vectors}), the walls
     $e_{AB}=|0\rangle$ and $e_{BA}=i|1\rangle$ are exchanged by the generator
-    with $c_{AB}=c_{BA}=i$, and the generator acts on an open chain containing
-    the pair $|0\rangle$, $-|1\rangle$ with long regions by the phase $-1$: the
-    domain walls of the CZX symmetry are semionic
-    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+    with $c_{AB}=c_{BA}=i$, and the local action of the generator on an open
+    chain containing the pair $|0\rangle$, $-|1\rangle$ with long regions is
+    the phase $-1$. These are the tensor identities behind the semionic
+    exchange statistics of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall};
+    the truncated string operators and their exchange relation are not
+    formalized here.
 \end{theorem}
 
 \begin{proof}

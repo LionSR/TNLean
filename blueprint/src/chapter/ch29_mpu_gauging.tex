@@ -4913,6 +4913,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_exterior_buffer}
     Split the middle word as $\mathbf p\mathbf c\mathbf q$ with long outer
     parts and insert the reduced block $W_{g,y}A_{gy}^{\mathbf c}V_{g,y}$,
     which leaves the word unchanged by the residual nilpotency of a
