@@ -4302,22 +4302,32 @@ space of $(MN)P$.
     Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
 \end{proof}
 
-\begin{corollary}[The anomaly class]
+\begin{definition}[The anomaly class]
+    \label{def:mpug_anomaly_class}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_h3_group_cohomology}
+    Let the doubled-index tensors be normal. The anomaly class in
+    $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of the anomaly
+    three-cocycle $\omega$, for any choice of fusion tensors.
+\end{definition}
+
+\begin{corollary}[The anomaly class is independent of the fusion tensors]
     \label{cor:mpug_anomaly_class}
     \lean{MPOTensor.GroupFamily.FusionData.anomalyClass_omega_eq,
-        MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass,
         MPOTensor.GroupFamily.FusionData.anomalyClass_omega,
         MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff}
     \leanok
-    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_anomaly_three_cocycle_gauge,
-        thm:mpug_h3_group_cohomology}
+    \uses{def:mpug_anomaly_class, thm:mpug_anomaly_three_cocycle,
+        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_h3_group_cohomology}
     The class $[\omega]\in H^3(G,\C^\times_{\mathrm{triv}})$ of the anomaly
     three-cocycle is the same for every choice of fusion tensors. It vanishes
     exactly when $\omega$ has trivial gauge class.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_h3_group_cohomology}
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_h3_group_cohomology}
     Two choices of fusion tensors give cohomologous three-cocycles by
     Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}, hence equal classes
     by (\ref{eq:mpug_h3_cohomologous}). The second statement is
