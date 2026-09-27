@@ -63,6 +63,30 @@
          & =Z_\gamma M_\gamma^i Z_\gamma^{-1}.
         \notag
     \end{align}
+    In the vertical direction the gauge acts on the virtual legs of the
+    matched normal tensor:
+    \begin{center}
+        % Formula: A_{\sigma(\gamma)}^i = Z_\gamma M_\gamma^i Z_\gamma^{-1},
+        % the exact invertible conjugacy of CPSV16 Appendix C.4,
+        % lines 2053--2057.
+        % Ink-to-index map: the upper leg carries the physical index i of the
+        % vertical tensor; the west and east wires carry the free virtual
+        % indices of A_{\sigma(\gamma)}^i, of dimension d_\gamma.
+        % Contraction set: on the right exactly the two bonds Z--M and
+        % M--Z^{-1} are summed.
+        % Boundary signature (both sides): virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$i$}]{A_{\sigma(\gamma)}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{Z_\gamma} &
+            \tn[label pos=s, ports={90:physical:$i$}]{M_\gamma} &
+            \tn[skin=ring]{Z_\gamma^{-1}}
+        \end{tenkz}
+    \end{center}
     Thus the matched normal tensors have no residual scalar phase. This is the
     exact invertible conjugacy in
     \cite[Appendix~C.4, lines~2053--2057]{Cirac2016MPDO_arXiv}.
@@ -158,6 +182,32 @@
          & =c_\gamma Z_\gamma M_\gamma^vZ_\gamma^{-1}.
         \label{eq:mpdo_bnt_exact_sector_gauge_blocked_corner}
     \end{align}
+    \begin{center}
+        % Formula: V_\gamma^\dagger \widetilde{M^{(2)}}^v V_\gamma
+        % = c_\gamma Z_\gamma M_\gamma^v Z_\gamma^{-1}, equation
+        % (eq:mpdo_bnt_exact_sector_gauge_blocked_corner).
+        % Ink-to-index map: the upper leg is the vertical letter v; on the
+        % left the inner wires are the blocked physical space of M^{(2)}
+        % (the virtual space of its vertical tensor), and the outer wires are
+        % the sector bond space of dimension d_\gamma, reached through the
+        % isometry V_\gamma and its adjoint.
+        % Contraction set: the two bonds V^\dagger--M and M--V on the left,
+        % Z--M and M--Z^{-1} on the right; c_\gamma is a scalar prefactor.
+        % Boundary signature (both sides): virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{V_\gamma^\dagger} &
+            \tn[label pos=s, ports={90:physical:$v$}]{\widetilde{M^{(2)}}} &
+            \tn[skin=ring]{V_\gamma}
+        \end{tenkz}
+        $ = c_\gamma$
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{Z_\gamma} &
+            \tn[label pos=s, ports={90:physical:$v$}]{M_\gamma} &
+            \tn[skin=ring]{Z_\gamma^{-1}}
+        \end{tenkz}
+    \end{center}
     If, in addition, $M$ generates matrix product density operators, then for
     every pair of open bond indices and every pair of two-site tail words, the
     marked-chain coefficient of
@@ -307,6 +357,31 @@
         (Z_\gamma^\dagger Z_\gamma)^{-1}.
         \label{eq:mpdo_bnt_identity_oblique_opposite}
     \end{align}
+    The first identity replaces the isometry on one side by the oblique
+    pair $(L_\gamma,R_\gamma)$:
+    \begin{center}
+        % Formula: L_\gamma^\dagger \widetilde{M^{(2)}}^v R_\gamma
+        % = c_\gamma M_\gamma^v, equation
+        % (eq:mpdo_bnt_identity_oblique_compression).
+        % Ink-to-index map: the upper leg is the vertical letter v; the inner
+        % wires on the left are the blocked physical space of M^{(2)}, and
+        % the outer wires are the sector bond space of dimension d_\gamma.
+        % Contraction set: the two bonds L^\dagger--M and M--R on the left;
+        % the right side is the single tensor M_\gamma^v with scalar
+        % prefactor c_\gamma.
+        % Boundary signature (both sides): virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{L_\gamma^\dagger} &
+            \tn[label pos=s, ports={90:physical:$v$}]{\widetilde{M^{(2)}}} &
+            \tn[skin=ring]{R_\gamma}
+        \end{tenkz}
+        $ = c_\gamma$
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$v$}]{M_\gamma}
+        \end{tenkz}
+    \end{center}
     Write $\mc{R}(M_\gamma)^{rs}$ for the horizontal slice
     $v\mapsto(M_\gamma^v)_{rs}$. For open bond indices $r,s$ and blocked
     physical indices $i,j$, define
@@ -443,6 +518,27 @@
          & =M_\gamma^v.
         \label{eq:mpdo_bnt_mixed_prefix_gram_identity}
     \end{align}
+    \begin{center}
+        % Formula: (Z_\gamma^\dagger Z_\gamma) M_\gamma^v
+        % (Z_\gamma^\dagger Z_\gamma)^{-1} = M_\gamma^v, equation
+        % (eq:mpdo_bnt_mixed_prefix_gram_identity).
+        % Ink-to-index map: the upper leg is the vertical letter v; the west
+        % and east wires carry the free virtual indices of M_\gamma^v.
+        % Contraction set: on the left exactly the two bonds between the
+        % Gram matrix, M_\gamma, and the inverse Gram matrix are summed.
+        % Boundary signature (both sides): virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{Z_\gamma^\dagger Z_\gamma} &
+            \tn[label pos=s, ports={90:physical:$v$}]{M_\gamma} &
+            \tn[skin=ring]{(Z_\gamma^\dagger Z_\gamma)^{-1}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$v$}]{M_\gamma}
+        \end{tenkz}
+    \end{center}
     Consequently there is a real number $\omega_\gamma>0$ such that
     \begin{align}
         Z_\gamma^\dagger Z_\gamma

@@ -10,12 +10,15 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.AKLTCorrelation
+import TNLean.MPS.Examples.AKLTOpenBoundary
 import TNLean.MPS.Examples.AKLTParentHamiltonian
+import TNLean.MPS.Examples.AKLTPolynomialHamiltonian
 import TNLean.MPS.Examples.AKLTReview
 import TNLean.MPS.Examples.AKLTRotation
 import TNLean.MPS.Examples.AKLTStringOrder
 import TNLean.MPS.Examples.AnomalousCondensation
 import TNLean.MPS.Examples.CZX
+import TNLean.MPS.Examples.CZY
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.ClusterParentHamiltonian
 import TNLean.MPS.Examples.ClusterReview
@@ -25,6 +28,7 @@ import TNLean.MPS.Examples.Fibonacci
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.GHZCluster
 import TNLean.MPS.Examples.GHZClusterAction
+import TNLean.MPS.Examples.GHZGInjective
 import TNLean.MPS.Examples.GHZParentHamiltonian
 import TNLean.MPS.Examples.GHZQudit
 import TNLean.MPS.Examples.Ising
@@ -36,11 +40,15 @@ import TNLean.MPS.Examples.MajumdarGhoshDimer
 import TNLean.MPS.Examples.MajumdarGhoshGroundSpace
 import TNLean.MPS.Examples.MajumdarGhoshHamiltonian
 import TNLean.MPS.Examples.MajumdarGhoshLowerBound
+import TNLean.MPS.Examples.MajumdarGhoshTotalSpin
 import TNLean.MPS.Examples.MultiBlock
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
+import TNLean.MPS.Examples.SPTEntanglementSpectrum
 import TNLean.MPS.Examples.SpinHalf
+import TNLean.MPS.Examples.SpinOne
+import TNLean.MPS.Examples.SpinOperator
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStateCanonicalBound
 import TNLean.MPS.Examples.WStatePeriodic

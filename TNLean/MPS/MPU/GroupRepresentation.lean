@@ -21,6 +21,8 @@ operators act on nonempty chains.
 * `MPOTensor.GroupFamily.IsRepresentation`: an exact positive-length operator
   representation whose tensors are simple and injective.
 * `MPOTensor.GroupFamily.block`: simultaneous positive physical blocking.
+* `MPOTensor.GroupFamily.operatorRepresentation`: the operators on one chain of positive
+  length as a unitary matrix representation, from the operator laws.
 
 ## Main results
 
@@ -283,6 +285,29 @@ theorem IsRawRepresentation.block_common_then_block
     (L : ℕ) (hL : 0 < L) :
     ((F.block F.commonSimpleLength).block L).IsRepresentation :=
   (hF.block_common F).block (F.block F.commonSimpleLength) L hL
+
+/-- The operators of a group family on a chain of positive length `N`, as a unitary matrix
+representation, given unitarity, the identity law and the multiplication law at positive
+lengths. These are the operator laws of arXiv:2502.20257, lines 1403--1407, without the
+injectivity clause of `IsRawRepresentation`. -/
+noncomputable def operatorRepresentation [Group G] (F : GroupFamily G d)
+    (hU : ∀ g, IsMPUPos (F.tensor g)) (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
+    (hmul : ∀ g h N, 0 < N →
+      mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N)
+    (N : ℕ) (hN : 0 < N) : G →* Matrix.unitaryGroup (Fin N → Fin d) ℂ where
+  toFun g := ⟨mpo (F.tensor g) N, hU g N hN⟩
+  map_one' := Subtype.ext (hone N hN)
+  map_mul' g h := Subtype.ext (hmul g h N hN).symm
+
+@[simp]
+theorem operatorRepresentation_coe [Group G] (F : GroupFamily G d)
+    (hU : ∀ g, IsMPUPos (F.tensor g)) (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
+    (hmul : ∀ g h N, 0 < N →
+      mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N)
+    (N : ℕ) (hN : 0 < N) (g : G) :
+    (F.operatorRepresentation hU hone hmul N hN g : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) =
+      mpo (F.tensor g) N :=
+  rfl
 
 end GroupFamily
 

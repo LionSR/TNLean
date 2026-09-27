@@ -90,7 +90,7 @@ noncomputable def IsMPUCanonicalFormII.twoSiteStandardFormData
       (sourceU U hU.ρ hU.ρ_posDef) (sourceV U hU.ρ hU.ρ_posDef) := by
   letI : NeZero d := hU.neZero_phys
   letI : NeZero D := hU.neZero_bond
-  have hprod : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 0 1).mp hsimple
+  have hprod : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
   have hrl : 0 < r[U] * ℓ[U] := by
     rw [hprod]
     exact Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
@@ -102,8 +102,8 @@ noncomputable def IsMPUCanonicalFormII.twoSiteStandardFormData
     bond_pos := NeZero.pos D
     left_pos := Nat.pos_of_mul_pos_left hrl
     right_pos := Nat.pos_of_mul_pos_right hrl
-    u_unitary := (hU.isMPUSimple_tfae.out 0 2).mp hsimple
-    v_unitary := (hU.isMPUSimple_tfae.out 0 3).mp hsimple
+    u_unitary := (hU.isMPUSimple_tfae.out 1 3).mp hsimple
+    v_unitary := (hU.isMPUSimple_tfae.out 1 4).mp hsimple
     v_apply := by
       intro i₁ i₂ s t
       rfl
