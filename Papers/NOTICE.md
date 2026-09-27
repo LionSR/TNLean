@@ -29,6 +29,26 @@ posting or the journal publication.
 The link-only sources are not redistributed by TNLean. Their source coordinates
 refer to the named file in the linked exact arXiv version.
 
+## Sources used by the matrix product operator examples
+
+These sources are not vendored. Lean docstrings, paper-gap notes, and blueprint
+comments cite them by file and line range as `References/<arXiv ID>/...`. The
+`References/` directory is a local, non-distributed mirror of the arXiv source
+of the exact version linked below; it is excluded from the repository by
+`.gitignore`. A reader reproduces a cited line range by downloading the arXiv
+source of that version and opening the named file.
+
+| Exact source | Title | Authors | Mirrored file | Availability and license |
+|---|---|---|---|---|
+| [arXiv:1106.4752v2](https://arxiv.org/abs/1106.4752v2) | 2D symmetry protected topological orders and their protected gapless edge excitations | Xie Chen, Zheng-Xin Liu, Xiao-Gang Wen | `References/1106.4752/source/dDSPTmodel.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:1511.08090v2](https://arxiv.org/abs/1511.08090v2) | Anyons and matrix product operator algebras | Nick Bultinck, Michael Mariën, Dominic J. Williamson, Mehmet B. Şahinoğlu, Jutho Haegeman, Frank Verstraete | `References/1511.08090/AnyonsPEPS.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:1601.07185v1](https://arxiv.org/abs/1601.07185v1) | Topological Defects on the Lattice I: The Ising model | David Aasen, Roger S. K. Mong, Paul Fendley | `References/1601.07185/source/Ising-Defects.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:2008.11187v3](https://arxiv.org/abs/2008.11187v3) | Matrix product operator symmetries and intertwiners in string-nets with domain walls | Laurens Lootens, Jürgen Fuchs, Jutho Haegeman, Christoph Schweigert, Frank Verstraete | `References/2008.11187/source/bigpentagon.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:2112.09091v4](https://arxiv.org/abs/2112.09091v4) | Dualities in one-dimensional quantum lattice models: symmetric Hamiltonians and matrix product operator intertwiners | Laurens Lootens, Clement Delcamp, Gerardo Ortiz, Frank Verstraete | `References/2112.09091/source/_Examples.tex`, `References/2112.09091/source/_Hamiltonian.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:2204.02407v3](https://arxiv.org/abs/2204.02407v3) | Higher Gauging and Non-invertible Condensation Defects | Konstantinos Roumpedakis, Sahand Seifnashri, Shu-Heng Shao | `References/2204.02407/source/condensation_draft.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:2307.02534v3](https://arxiv.org/abs/2307.02534v3) | Majorana chain and Ising model -- (non-invertible) translations, anomalies, and emanant symmetries | Nathan Seiberg, Shu-Heng Shao | `References/2307.02534/source/Majoranadraft.tex` | Link only; [arXiv non-exclusive distribution license 1.0](https://arxiv.org/licenses/nonexclusive-distrib/1.0/) |
+| [arXiv:2504.16985v3](https://arxiv.org/abs/2504.16985v3) | Anomalous matrix product operator symmetries and 1D mixed-state phases | Xiao-Qi Sun | `References/2504.16985/main.tex` | Link only; [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+
 ## Other paper sources in this directory
 
 | arXiv ID | Title | Authors | arXiv license |
