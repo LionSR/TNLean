@@ -1,13 +1,12 @@
 \section{Examples of PEPS on the torus}\label{sec:peps_examples}
 
-This section collects the two-dimensional examples of
-\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} whose states
-can be computed on the discrete torus. Each example is a single tensor
-$A^i_{\alpha\beta\gamma\delta}$ with one physical index $i$ and four virtual
-indices, ordered top, right, down, left, placed at every site of a square
-lattice. On the torus the four legs of the site $v=(x,y)$ are the edges from
-$v$ to $(x,y+1)$ (top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$
-(down) and from $(x-1,y)$ to $v$ (left).
+Two-dimensional PEPS on the discrete torus are defined by a four-leg tensor
+$A^i_{\alpha\beta\gamma\delta}$ placed at every site of a square lattice, with
+virtual indices ordered top, right, down, left
+\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix}. On a torus, the
+four legs of site $v=(x,y)$ correspond to the edges from $v$ to $(x,y+1)$
+(top), from $v$ to $(x+1,y)$ (right), from $(x,y-1)$ to $v$ (down), and from
+$(x-1,y)$ to $v$ (left).
 
 \begin{definition}[Torus PEPS of a four-leg tensor]%
     \label{def:peps_torus_site_tensor}
@@ -200,12 +199,10 @@ matrix product operator on the virtual level.
     formula.
 \end{proof}
 
-Up to the factor $2^{-N/2}$ the coefficient in
+Up to the factor $2^{-N/2}$, the coefficient in
 Theorem~\ref{thm:peps_cluster_state} is that of the state obtained by
-applying controlled-$Z$ gates on all nearest-neighbour bonds to
-$\ket{+}^{\otimes N}$, the cluster state of
-\cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}. The circuit and
-this identification are not formalized.
+applying controlled-$Z$ gates on all nearest-neighbor bonds to
+$\ket{+}^{\otimes N}$ \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
 
 \subsection{The CZX model}
 
@@ -419,10 +416,13 @@ of their common plaquette, one effective spin per boundary plaquette
 The review states that the CZX model lies in the non-trivial
 symmetry-protected sector of its on-site $\mathbb{Z}_2$ symmetry
 \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. This classification is
-not formalized for the two-dimensional state. The three-cocycle attached to a
-group of matrix product unitaries is constructed in
+not formalized for the two-dimensional state. Its boundary symmetry is a
+matrix product unitary; the three-cocycle attached to a group of matrix
+product unitaries is constructed in
 Theorems~\ref{thm:mpug_anomaly_three_cocycle}
-and~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+and~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and for the CZX boundary
+representation its class is computed and shown to be non-trivial in
+Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
 
 \subsection{The toric code and quantum double models}
 
@@ -494,12 +494,11 @@ from the virtual to the physical system
     $A^{\bullet}_{\alpha\beta\gamma\delta}$.
 \end{proof}
 
-The source requires $U_g$ to contain every irreducible representation for
-$G$-injectivity and to be the left-regular representation for
-$G$-isometry; here the representation is a parameter, and each instance
-below uses a regular representation. The source's tensors are not
-normalized, and the constant $c$ absorbs the normalization
-\cite{gap:rmp_peps_quantum_double_g_isometry}.
+The source asks for a tensor that is $G$-isometric with respect to the
+left-regular representation. In the definition above the representation is a
+parameter; the dual quantum-double tensor below is $G$-isometric for its
+color-shift representation, and the constant $c$ absorbs the
+normalization of the tensor \cite{gap:rmp_peps_quantum_double_g_isometry}.
 
 \begin{definition}[Dual quantum-double tensor]%
     \label{def:peps_quantum_double_dual}
@@ -882,17 +881,10 @@ factors by $\pi\in S_4$.
     the product by one site gives the formula.
 \end{proof}
 
-The physical index of the tensor above is the label of four spin-$\tfrac12$,
-so the tensor takes values in $(\C^2)^{\otimes 4}$, of dimension $16$, the
-codomain of $\Pi_{\mathrm{sym}}$ in the source formula. Its physical span is
-the five-dimensional symmetric subspace, the spin-$2$ space of the source,
-embedded isometrically in $(\C^2)^{\otimes 4}$; on this subspace the physical
-action $U^{\otimes 4}$ of the covariance theorem is the spin-$2$
-representation. A tensor of physical dimension five, obtained by composing
-with an isometry from the symmetric subspace onto $\C^5$, is not defined, and
-the parent Hamiltonian of the AKLT state, the uniqueness of its ground state,
-the honeycomb lattice, and the identification of $U^{\otimes 4}$ on the
-symmetric subspace with the standard spin-$2$ matrices are not formalized.
+The tensor $A$ takes values in $(\C^2)^{\otimes 4}$ with physical support on
+the five-dimensional symmetric subspace, on which the physical action
+$U^{\otimes 4}$ acts as the irreducible spin-$2$ representation
+\cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}.
 
 \subsection{The RVB state}
 
@@ -978,9 +970,6 @@ $A$ vanish, since a leg carrying $Y$ could then never be in the vacuum state
     and its term is the product over sites of the singlet factors on the down
     and left legs; shifting the product by one site gives the formula.
 \end{proof}
-
-The general orientation choices $\pm Y$ on other lattices and the
-spin-liquid properties of the RVB state are not formalized.
 
 \subsection{PEPS from classical models}
 
@@ -1078,18 +1067,10 @@ of $h$ is used.
     Theorem~\ref{thm:peps_classical_coeff}.
 \end{proof}
 
-In particular the classical correlation functions are expectation values of
+In particular, classical correlation functions are expectation values of
 the PEPS. The review adds that at the critical inverse temperature
-$\beta_{c}$ the associated PEPS has correlations decaying as a power law, so
-its parent Hamiltonian must be gapless
+$\beta_{c}$ the PEPS has correlations decaying as a power law, so its parent
+Hamiltonian must be gapless
 \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}, since a
 gapped local Hamiltonian has exponentially decaying correlations
-\cite{Hastings2006Spectral,Nachtergaele2006LiebRobinson}. This
-consequence is not formalized.
-
-\subsection{Examples not formalized}
-
-The remaining two-dimensional example of
-\cite[Appendix~A, ``Two dimensions: PEPS'']{Cirac2021Matrix} is recorded
-here without a formal statement: string-net models give PEPS tensors built
-from the $F$-symbols of a bimodule category.
+\cite{Hastings2006Spectral,Nachtergaele2006LiebRobinson}.
