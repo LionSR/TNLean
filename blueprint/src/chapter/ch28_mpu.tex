@@ -2794,7 +2794,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \tn[at=(2,2), name=y, skin=box, label pos=w,
             ports={0:virtual:$\beta$, 270:physical:$j$, 135:virtual}]{Y_2}
         \tnwire[name=wl]{x.315}{y.135}
-        \tnmark[form=label, label pos=ne]{midway x and y}{$\ell$}
+        \tnmark[form=label, label pos=ne]{midway x and y}{$l$}
     \end{tenkz}
 \end{center}
 
@@ -2972,10 +2972,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     % (Y_1)_{r,(\beta,i_2)} (left pair) and
     % v_{(j_1,j_2),(r,l)}=\sum_\alpha(X_1)_{(j_1,\alpha),r}(X_2)_{(\alpha,j_2),l}
     % (right pair), the two displayed equations of this definition.
-    % Ink-to-index map: in u, the upper legs are the source indices \ell and r
+    % Ink-to-index map: in u, the upper legs are the source indices l and r
     % and the lower legs are the physical inputs i_1,i_2; in v, the upper legs
     % are the physical outputs j_1,j_2 and the lower legs are the source indices
-    % r and \ell.  The horizontal bond is the summed auxiliary index \beta in u
+    % r and l.  The horizontal bond is the summed auxiliary index \beta in u
     % and \alpha in v.
     % Contraction set: the one horizontal bond in each right-hand panel.
     % Boundary signature: (virtual-west=0 | virtual-east=0 | up=2 | down=2) on
@@ -2983,11 +2983,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \tenkzkernel
     \begin{tenkz}[cols=2, bonds=none]
         \tn[at=(1,1), skin=mpo, wide=2, size=l,
-            ports={90@1:virtual:$\ell$, 90@2:virtual:$r$, 270@1:physical:$i_1$, 270@2:physical:$i_2$}]{u}
+            ports={90@1:virtual:$l$, 90@2:virtual:$r$, 270@1:physical:$i_1$, 270@2:physical:$i_2$}]{u}
     \end{tenkz}
     \quad $=$ \quad
     \begin{tenkz}[cols=2, bonds=none]
-        \tn[at=(1,1), name=y2, ports={90:virtual:$\ell$, 270:physical:$i_1$, 0:virtual}]{Y_2}
+        \tn[at=(1,1), name=y2, ports={90:virtual:$l$, 270:physical:$i_1$, 0:virtual}]{Y_2}
         \tn[at=(1,2), name=y1, ports={180:virtual, 90:virtual:$r$, 270:physical:$i_2$}]{Y_1}
         \tnwire[name=wb]{y2.0}{y1.180}
         \tnmark[form=label, label pos=n]{on wb 0.5}{$\beta$}
@@ -2995,12 +2995,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \qquad\qquad
     \begin{tenkz}[cols=2, bonds=none]
         \tn[at=(1,1), skin=mpo, wide=2, size=l,
-            ports={90@1:physical:$j_1$, 90@2:physical:$j_2$, 270@1:virtual:$r$, 270@2:virtual:$\ell$}]{v}
+            ports={90@1:physical:$j_1$, 90@2:physical:$j_2$, 270@1:virtual:$r$, 270@2:virtual:$l$}]{v}
     \end{tenkz}
     \quad $=$ \quad
     \begin{tenkz}[cols=2, bonds=none]
         \tn[at=(1,1), name=x1, ports={90:physical:$j_1$, 270:virtual:$r$, 0:virtual}]{X_1}
-        \tn[at=(1,2), name=x2, ports={180:virtual, 90:physical:$j_2$, 270:virtual:$\ell$}]{X_2}
+        \tn[at=(1,2), name=x2, ports={180:virtual, 90:physical:$j_2$, 270:virtual:$l$}]{X_2}
         \tnwire[name=wa]{x1.0}{x2.180}
         \tnmark[form=label, label pos=n]{on wa 0.5}{$\alpha$}
     \end{tenkz}
@@ -5563,7 +5563,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
             ports={90@1:virtual, 90@2:virtual, 270@1:physical:$j_1$, 270@2:physical:$j_2$}]{u}
         \tnwire[name=wl]{x2.270}{u.90@1}
         \tnwire[name=ws]{x1.270}{u.90@2}
-        \tnmark[form=label, label pos=w]{on wl 0.5}{$\ell$}
+        \tnmark[form=label, label pos=w]{on wl 0.5}{$l$}
         \tnmark[form=label, label pos=e]{on ws 0.5}{$s$}
     \end{tenkz}
 \end{center}
