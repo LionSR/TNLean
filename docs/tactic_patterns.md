@@ -1445,6 +1445,29 @@ abstracted — record why, so it is not re-proposed).
   transported by `complexOfRing`. When more words or another length are
   needed, use `MPSTensor.isNormal_of_complexOfRing_single` instead.
 
+### inner product of combinations of orthogonal sequences — promoted
+- **Pattern:**
+  ```lean
+  rw [sum_star_sum_mul_sum (fun j τ => a j * F j τ) (fun j τ => b j * G j τ)]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [Finset.sum_eq_single j]
+  · calc _ = star (a j) * b j * ∑ τ, star (F j τ) * G j τ := by
+          rw [Finset.mul_sum]
+          exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
+      _ = _ := ...
+  ```
+- **Seen:** eight occurrences across two files (2026-09-26): six in
+  `TNLean/MPS/Preparation/OrthogonalBlockError.lean` (the norm, target-norm and
+  overlap sums of `norm_nonNormalApproxOverlap_blockSum`, diagonal and cross terms)
+  and two in `TNLean/MPS/Preparation/DiagonalPolar.lean`.
+- **Abstraction:** `MPSTensor.sum_star_mul_mul_mul`, `MPSTensor.sum_star_mul_mul`
+  (scalars out of `∑_τ conj(a F τ) (b G τ)`), and
+  `MPSTensor.sum_star_sum_mul_sum_of_orthogonal` (the whole inner product
+  `∑ⱼ conj(aⱼ) bⱼ cⱼ` from `⟨Fⱼ, Gⱼ'⟩ = δⱼⱼ' cⱼ`) in
+  `TNLean/MPS/Preparation/DiagonalPolar.lean`.
+- **Notes:** all eight call sites are refactored; the three sums of
+  `norm_nonNormalApproxOverlap_blockSum` each became two lines.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`
@@ -2244,6 +2267,28 @@ abstracted — record why, so it is not re-proposed).
   expansions in `BlockProjectorSum.lean` likewise share private lemmas
   for removing the diagonal and bounding the remaining finite sum.
   No new tactic is needed.
+
+### diagonal bond similarity with nowhere-zero entries — candidate
+- **Pattern:**
+  ```lean
+  have hGH : Matrix.diagonal g * Matrix.diagonal g⁻¹ = 1 := by
+    rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
+    congr 1
+    funext p
+    exact mul_inv_cancel₀ (hg p)
+  have hHG : Matrix.diagonal g⁻¹ * Matrix.diagonal g = 1 := by
+    ...
+  exact MPOTensor.mpo_eq_of_conj hGH hHG hconj L
+  ```
+- **Seen:** three occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
+  (`mpo_fibStringNetEdgeTau`, `mpo_fibReviewTensor`, and the configuration-space variant in
+  `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review before merge.
+- **Status:** three occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
+- **Abstraction (available):** `Matrix.diagonal_mul_diagonal_inv`, `Matrix.diagonal_inv_mul_diagonal` and
+  `MPOTensor.mpo_eq_of_diagonal_conj` in `TNLean/MPS/MPDO/BondSimilarity.lean`.
+- **Notes:** `mpo_eq_of_diagonal_conj g hg hconj L` takes a nowhere-zero `g` and the letterwise
+  identity `diag g * M i j * diag g⁻¹ = N i j`; the two `Matrix` lemmas cover diagonal
+  inverses on any index type, such as the configuration space of a fusion-rule transfer.
 
 ### virtual-leg cancellation in source-gate contractions — candidate
 - **Pattern:** express the two transported source factors as matrices on the
