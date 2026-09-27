@@ -375,7 +375,7 @@ level $0$ and the normalized singlet as pair amplitude.
 \end{definition}
 
 \begin{theorem}[Exchange as a transposition]\label{thm:spin_exchange_swap}
-    \lean{MPSTensor.spinExchange_apply, MPSTensor.spinHalfOperator_sum}
+    \lean{MPSTensor.spinExchange_spinHalfOperator_apply, MPSTensor.spinHalfOperator_sum}
     \leanok
     \uses{def:majumdar_ghosh_hamiltonian}
     For distinct sites $j\neq k$,
@@ -668,8 +668,9 @@ normality in the following two theorems.
 
 \begin{theorem}[The three-site term and total spin]%
     \label{thm:majumdar_ghosh_term_total_spin}
-    \lean{MPSTensor.spinSite, MPSTensor.totalSpin, MPSTensor.totalSpinSq,
-        MPSTensor.totalSpinSq_eq,
+    \lean{MPSTensor.siteOperator, MPSTensor.totalSpin, MPSTensor.totalSpinSq,
+        MPSTensor.sum_siteOperator_comp_of_ne, MPSTensor.sum_siteOperator_comp_self,
+        MPSTensor.totalSpinSq_eq, MPSTensor.spinHalfOperator_sum_mul_self,
         MPSTensor.totalSpinSq_three_eq_majumdarGhoshTerm,
         MPSTensor.totalSpinSq_three_eq_parentInteraction,
         MPSTensor.majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace,

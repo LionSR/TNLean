@@ -44,6 +44,7 @@ import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
 import TNLean.MPS.Examples.SpinHalf
 import TNLean.MPS.Examples.SpinOne
+import TNLean.MPS.Examples.SpinOperator
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStateCanonicalBound
 import TNLean.MPS.Examples.WStatePeriodic

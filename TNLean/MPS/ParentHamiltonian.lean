@@ -86,6 +86,7 @@ import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
 import TNLean.MPS.ParentHamiltonian.ProjectorCancellation
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
+import TNLean.MPS.ParentHamiltonian.ShiftedParentHamiltonian
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundary
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 import TNLean.MPS.ParentHamiltonian.SuffixWindow

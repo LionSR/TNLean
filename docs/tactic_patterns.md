@@ -3162,10 +3162,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   linear endomorphism `Q` of `NSiteSpace d n` that is symmetric for the coefficient
   pairing, idempotent, and has kernel `groundSpace A n`, and concluding
   `Q = parentInteraction A n`.
-- **Notes:** two occurrences in two files, below the rule of three. The same examples
-  also repeat the chain-level transport (local term at a cyclic window, sum over bonds,
-  positivity and eigenvalue bound from `parentHamiltonianES_isPositive`); a third spin
-  Hamiltonian would justify promoting both.
+- **Notes:** two occurrences in two files, below the rule of three. The chain-level
+  consequences that both examples also need (positivity of \(H+c\), the eigenvalue bound
+  \(\mu\ge-c\), and the ground eigenspace as the parent kernel, from
+  \(H+c=s\,H_{\mathrm{parent}}\)) are already shared lemmas in
+  `TNLean/MPS/ParentHamiltonian/ShiftedParentHamiltonian.lean`, and the exchange
+  interaction is the operator-family-generic `MPSTensor.spinExchange` of
+  `TNLean/MPS/Examples/SpinOperator.lean`.
 
 ## Rejected
 
