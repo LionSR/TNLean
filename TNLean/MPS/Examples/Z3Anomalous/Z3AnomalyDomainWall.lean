@@ -53,6 +53,7 @@ theorem eisensteinOmega_eq_rootOfUnity :
   push_cast
   ring
 
+/-- The generator `z3Gen` of `ℤ₃` has order `3`. -/
 theorem orderOf_z3Gen : orderOf z3Gen = 3 :=
   orderOf_eq_prime z3Gen_pow_three (by decide)
 
