@@ -269,7 +269,9 @@ theorem isTwoLevelWord_twoLevel_list_prod {a b : ι} (hab : a ≠ b)
 
 /-- **Eliminating a column below its diagonal entry.** For a basis vector `a` and a set `R`
 of other basis vectors there is a product `W` of at most `2 |R|` two-level rotations and
-phases on the pairs `{a, b}`, `b ∈ R`, with `(W X)_{c a} = 0` for every `c ∈ R`. -/
+phases, acting as the identity outside `R ∪ {a}`, with `(W X)_{c a} = 0` for every `c ∈ R`.
+The construction uses factors on the pairs `{a, b}`, `b ∈ R`; the statement records only
+their number. -/
 theorem exists_isTwoLevelWord_elim (a : ι) (X : Matrix ι ι ℂ) :
     ∀ R : Finset ι, a ∉ R → ∃ W : Matrix ι ι ℂ, IsTwoLevelWord (2 * R.card) W ∧
       FixesOutside (insert a R) W ∧ ∀ c ∈ R, (W * X) c a = 0 := by
@@ -305,8 +307,9 @@ theorem exists_isTwoLevelWord_elim (a : ι) (X : Matrix ι ι ℂ) :
         exact hWX c hc
 
 /-- **Givens decomposition.** A unitary `X` with `det X = 1` acting as the identity outside a
-set `T` of basis vectors is a product of at most `3 |T|²` two-level rotations and phases on
-pairs of elements of `T`. -/
+set `T` of basis vectors is a product of at most `3 |T|²` two-level rotations and phases.
+The construction uses factors on pairs of elements of `T`; the statement records only their
+number. -/
 theorem isTwoLevelWord_of_fixesOutside :
     ∀ T : Finset ι, ∀ X : Matrix ι ι ℂ, X ∈ unitary (Matrix ι ι ℂ) → X.det = 1 →
       FixesOutside T X → IsTwoLevelWord (3 * T.card * T.card) X := by

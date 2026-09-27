@@ -17,10 +17,14 @@ Fig. 1) the right leg `R_k` of block `k` (its last `r₁` sites) and the left le
 the next block (its first `r₁` sites) carry the entangled pair `|ω⟩`; these `2 r₁` sites form
 the pair window `MPSPreparation.pairSite k`, which wraps around the ring for the last block.
 
-This file proves that the product of the pairs, with all other sites in `|0⟩`, is prepared from
-the all-`|0⟩` state by one unitary on each window (`MPSPreparation.pairLayer_mulVec`), and that
-these windows are placed as consecutive, pairwise disjoint sites of the ring, so the unitaries
-form a circuit of constant depth.
+This file places these windows as consecutive, pairwise disjoint sites of the ring
+(`MPSPreparation.pairSite_injective`, `MPSPreparation.disjoint_range_pairSite`,
+`MPSPreparation.pairSite_succ`) and gives a unitary on one window that sends `|0⋯0⟩` to the
+pair (`MPSPreparation.exists_pairUnitary`). The layer of these unitaries and the identification
+of its action on the all-`|0⟩` state with the product of the pairs, with all other sites in
+`|0⟩`, are `MPSPreparation.pairLayerOp` and
+`MPSPreparation.embeddedPairState_blockedConfigEquiv_symm` in
+`TNLean.MPS.Preparation.DepthUpperBound`; the unitaries form a circuit of constant depth.
 -/
 
 open Matrix MPSTensor

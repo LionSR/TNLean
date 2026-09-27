@@ -14,8 +14,10 @@ circuits whose gates all act inside a set of sites `R` (`MPSPreparation.IsCircui
 proves the two ways of composing them used in the preparation of arXiv:2307.01696:
 
 * in series, depths add (`MPSPreparation.IsCircuitOn.mul`);
-* in parallel, circuits acting inside pairwise disjoint sets of sites run in the same layers,
-  so the depth is the largest of the depths (`MPSPreparation.IsCircuitOn.finset_noncommProd`).
+* in parallel, circuits of the same depth `T` acting inside pairwise disjoint sets of sites
+  run in the same layers, so their product has depth `T`
+  (`MPSPreparation.IsCircuitOn.finset_noncommProd`); circuits of different depths are first
+  padded to the largest depth with `MPSPreparation.IsCircuitOn.mono`.
 
 A product of `K` gates on neighbouring sites of a block of consecutive sites is a circuit of
 depth `K` inside that block (`MPSPreparation.IsPairProduct.isCircuitOn`). These are the steps
