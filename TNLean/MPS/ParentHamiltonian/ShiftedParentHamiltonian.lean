@@ -34,9 +34,8 @@ variable {d D : ℕ} {A : MPSTensor d D} {L N : ℕ} {H : NSiteSpace d N →ₗ[
 \(\ell^2\) space of coefficient vectors, is positive. -/
 theorem isPositive_conj_of_add_eq_smul_parentHamiltonian
     (h : H + c • LinearMap.id = s • parentHamiltonian A L N) (hs : 0 ≤ s) :
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
-      (H + c • LinearMap.id) ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap).IsPositive
-    := by
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ (H + c • LinearMap.id) ∘ₗ
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap).IsPositive := by
   have h' : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
       (H + c • LinearMap.id) ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
       s • parentHamiltonianES A L N := by
