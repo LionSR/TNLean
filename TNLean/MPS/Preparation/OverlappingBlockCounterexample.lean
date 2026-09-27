@@ -495,7 +495,8 @@ is `q ≥ 3` such that, with `M = q` and `N = q²` (so `q = o(N)` along this seq
 theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
     IsBNTCanonicalForm overlappingBlockSector ∧
       (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
-        mpvOverlap (overlappingBlockSector.basis j) (overlappingBlockSector.basis k) N) atTop (𝓝 0)) ∧
+        mpvOverlap (overlappingBlockSector.basis j) (overlappingBlockSector.basis k) N)
+          atTop (𝓝 0)) ∧
       (∀ j, IsNormalTensor (overlappingBlockSector.basis j)) ∧
       (∀ j, ∃ Λ : Matrix (Fin 1) (Fin 1) ℂ,
         Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap (overlappingBlockSector.basis j) Λ = Λ) ∧
