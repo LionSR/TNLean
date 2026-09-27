@@ -31,7 +31,7 @@ instance. Tracker: #8315.
 ### Toolchain and Mathlib upgrades
 
 Every Lean/Mathlib bump ships a dated replacement audit,
-`docs/audits/<date>_mathlib_<version>_replacement_audit.md`, covering the Mathlib
+`docs/audits/<YYYY-MM-DD>_mathlib_<version>_replacement_audit.md`, covering the Mathlib
 range from the old pin to the new one. Besides local lemmas that new Mathlib
 declarations replace, each audit rechecks Mathlib's coverage of the areas in
 the previous subsection:
