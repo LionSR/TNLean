@@ -841,7 +841,7 @@ fusion ring.
     of $c$ in $b\times(b^*\times c)$; so for all $b,c$ some label $a$ has
     $N_{ba}^c>0$. Hence the matrix $P_{bc}=\sum_aN_{ba}^c$ of right
     multiplication by the sum of all labels has positive entries. By
-    Theorem~\ref{thm:mposym_pf_eigenvector} applied to the transpose of $P$,
+    the Perron--Frobenius argument of Theorem~\ref{thm:mposym_pf_eigenvector}, which applies to every nonnegative square matrix, used for the transpose of $P$,
     there is a nonzero row vector $r\geq0$ with $rP=\rho r$, and positivity of
     $P$ forces every $r_c>0$. An eigenvector of a positive matrix with
     positive entries spans its eigenspace: if $wP=\rho w$ and $t=\min_c
@@ -931,7 +931,8 @@ fusion ring.
         FibonacciCompression.mpo_fibOne_mulVec_boundary}
     \leanok
     \uses{def:mposym_fusion_ring, thm:mposym_symmetric_boundary_state,
-        thm:asymex_fib_anomaly_nim_rep, ex:mposym_fibonacci_dimension}
+        thm:asymex_fib_anomaly_nim_rep, ex:mpo_symmetry_fibonacci,
+        ex:mposym_fibonacci_dimension}
     The Fibonacci structure constants form a fusion ring with unit $1$ and
     both labels self-dual. For the family of
     Example~\ref{ex:mpo_symmetry_fibonacci}, $M_\tau=N_\tau$ and

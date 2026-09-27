@@ -51,7 +51,11 @@ Source: arXiv:2203.12563, line 1236: the fusion ring of the fusion category of a
 with its identity element and duality. The structure constants `N_{ab}^c` are associative,
 `(a × b) × c = a × (b × c)`; the label `e` is a two-sided unit; the duality `a ↦ a*` is an
 involution with `N_{ab}^e = δ_{b,a*}` (the unit occurs once in `a × a*` and in no other product
-of two labels) and reverses products, `N_{b*a*}^{c*} = N_{ab}^c`. -/
+of two labels) and reverses products, `N_{b*a*}^{c*} = N_{ab}^c`.
+
+The fields `dual_dual` and `dual_anti` record the source's fusion-category data (line 1236); no
+theorem of this file uses them. The positivity results below need only associativity, the unit
+and `apply_unit`. -/
 structure IsFusionRing (N : ι → ι → ι → ℕ) (e : ι) (dual : ι → ι) : Prop where
   /-- Associativity `(a × b) × c = a × (b × c)` on the structure constants. -/
   assoc : ∀ a b c f, ∑ x, N a b x * N x c f = ∑ x, N b c x * N a x f
