@@ -278,11 +278,15 @@ the pair $(a,b)$ at one end of a bond with $(b,a)$ at the other
     conditions.
 \end{proof}
 
-The CZX model exhibits an on-site $\mathbb{Z}_2$ symmetry with a non-trivial
-symmetry-protected order \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix};
-the boundary symmetry forms a matrix product unitary whose associated
-three-cocycle is given in Theorems~\ref{thm:mpug_anomaly_three_cocycle}
-and~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+The review states that the CZX model lies in the non-trivial
+symmetry-protected sector of its on-site $\mathbb{Z}_2$ symmetry
+\cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. Its boundary symmetry
+is a matrix product unitary; the three-cocycle attached to a group of matrix
+product unitaries is constructed in
+Theorems~\ref{thm:mpug_anomaly_three_cocycle}
+and~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and for the CZX boundary
+representation its class is computed and shown to be non-trivial in
+Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
 
 \subsection{The toric code and quantum double models}
 
@@ -354,9 +358,11 @@ from the virtual to the physical system
     $A^{\bullet}_{\alpha\beta\gamma\delta}$.
 \end{proof}
 
-The regular representation satisfies the $G$-isometry condition; the
-normalization constant $c$ accounts for tensor normalization
-\cite{gap:rmp_peps_quantum_double_g_isometry}.
+The source asks for a tensor that is $G$-isometric with respect to the
+left-regular representation. In the definition above the representation is a
+parameter; the dual quantum-double tensor below is $G$-isometric for its
+color-shift representation, and the constant $c$ absorbs the
+normalization of the tensor \cite{gap:rmp_peps_quantum_double_g_isometry}.
 
 \begin{definition}[Dual quantum-double tensor]%
     \label{def:peps_quantum_double_dual}
@@ -925,6 +931,9 @@ of $h$ is used.
 \end{proof}
 
 In particular, classical correlation functions are expectation values of
-the PEPS. At the critical inverse temperature $\beta_{c}$, the PEPS exhibits
-power-law correlations and a gapless parent Hamiltonian
-\cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}.
+the PEPS. The review adds that at the critical inverse temperature
+$\beta_{c}$ the PEPS has correlations decaying as a power law, so its parent
+Hamiltonian must be gapless
+\cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}, since a
+gapped local Hamiltonian has exponentially decaying correlations
+\cite{Hastings2006Spectral,Nachtergaele2006LiebRobinson}.
