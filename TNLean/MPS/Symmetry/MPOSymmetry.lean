@@ -15,6 +15,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
+import TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion

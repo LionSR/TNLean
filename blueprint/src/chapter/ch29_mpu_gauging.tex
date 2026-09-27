@@ -4742,6 +4742,191 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
     Put $h=k=g$ in (\ref{eq:mpug_l_compatibility}) and use $gg=e$.
 \end{proof}
 
+\begin{theorem}[The involution ratio from the self-pair and identity L-symbols]
+    \label{thm:mpug_involution_anomaly_identity_ratio}
+    \lean{TNLean.Algebra.LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one}
+    \leanok
+    \uses{def:mpug_l_symbols, thm:mpug_involution_anomaly_ratio}
+    If $L$ is compatible with $\omega$ and $g^2=e$, then for every
+    $x\in\mathsf X$
+    \begin{align}
+        \frac{L^x_{g,g}L^x_{e,e}}{L^{gx}_{g,g}L^{gx}_{e,e}}
+         & =\omega(g,g,g)\,\omega(g,e,g).
+        \notag
+    \end{align}
+    For L-symbols and cocycles that are trivial when an argument is the
+    identity, this is $L^x_{g,g}/L^{gx}_{g,g}=\omega(g,g,g)$, the relation
+    $L_A/L_B=\omega$ of \cite[Section~III.C]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_involution_anomaly_ratio}
+    Compatibility at $(g,e,g)$ gives $L^x_{e,g}=\omega(g,e,g)L^{gx}_{g,e}$,
+    and at $(g,e,e)$ it gives $L^z_{e,e}=\omega(g,e,e)L^z_{g,e}$ for $z=x$ and
+    $z=gx$. Substituting into the formula of
+    Theorem~\ref{thm:mpug_involution_anomaly_ratio} gives the claim.
+\end{proof}
+
+\subsection{Domain walls between permuted blocks}
+
+Keep the setting of the previous subsection. A domain wall between the
+blocks $x$ and $y$ is a family $e=(e^i)_{i}$ of $D_x\times D_y$ matrices,
+placed between a region of $A_x$ and a region of $A_y$
+\cite[Section~III.B]{GarreRubioSchuch2024DomainWall}. For an operator tensor
+$T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
+
+\begin{definition}[Local action on domain walls]
+    \label{def:mpug_domain_wall_action}
+    \lean{MPOTensor.actRect,
+        MPOTensor.physAct,
+        MPOTensor.wallChain,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction}
+    \leanok
+    \uses{def:mpug_permuted_block_l_symbol}
+    Let $e$ be a domain wall between $x$ and $y$, and $e'$ a domain wall
+    between $gx$ and $gy$. The element $g$ carries $e$ to $e'$ with phase $c$
+    if there is $N$ such that
+    \begin{align}
+        V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}\,(O_g\cdot e)^i\,
+        (O_g\cdot A_y)^{\mathbf v}\,W_{g,y}
+         & =c\,A_{gx}^{\mathbf u}\,{e'}^{i}\,A_{gy}^{\mathbf v}
+        \notag
+    \end{align}
+    for every letter $i$ and all words $\mathbf u,\mathbf v$ of length at
+    least $N$. This is the local relation of
+    \cite[Section~III.B]{GarreRubioSchuch2024DomainWall}, drawn there at the
+    renormalization fixed point with one site on each side of the wall; the
+    words $\mathbf u,\mathbf v$ are the blocked sites of the discussion away
+    from the fixed point.
+\end{definition}
+
+\begin{theorem}[Fractionalization of the symmetry on domain walls]
+    \label{thm:mpug_domain_wall_pentagon}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq,
+        MPOTensor.GroupFamily.BlockActionData.actW,
+        MPOTensor.GroupFamily.BlockActionData.fuseW,
+        MPOTensor.GroupFamily.BlockActionData.exists_evalWord_mul_actW_eq,
+        MPOTensor.physAct_mulTensor,
+        MPOTensor.physAct_kronId,
+        MPOTensor.physAct_wallChain,
+        MPOTensor.exists_evalWord_mul_mul_evalWord_ne_zero}
+    \leanok
+    \uses{def:mpug_domain_wall_action, thm:mpug_permuted_block_l_symbol_spec}
+    Suppose $h$ carries the domain wall $e_1$ between $x$ and $y$ to $e_2$
+    with phase $B^h_{x,y}$, $g$ carries $e_2$ to $e_3$ with phase
+    $B^g_{hx,hy}$, and $gh$ carries $e_1$ to $e_3$ with phase
+    $B^{gh}_{x,y}$. If $e_3\neq0$, then
+    \begin{align}
+        B^g_{hx,hy}\,B^h_{x,y}
+         & =\frac{L^x_{g,h}}{L^y_{g,h}}\,B^{gh}_{x,y}.
+        \notag
+    \end{align}
+    This is \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_permuted_block_l_symbol_spec, thm:mpug_dressed_proportionality}
+    Act with $O_g$ on the local relation of $h$, which holds for every
+    configuration of a chain with long regions: the boundary matrices
+    $V_{h,x}$, $W_{h,y}$ pass through as $\mathbf 1\otimes V_{h,x}$ and
+    $\mathbf 1\otimes W_{h,y}$, and the action of $O_g$ on the action of
+    $O_h$ is the action of $O_gO_h$ up to the bond associator. The local
+    relation of $g$ then gives
+    \begin{align}
+        V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}\,
+        (O_gO_h\cdot\mathsf C)\,\mathsf a\,(\mathbf 1\otimes W_{h,y})\,W_{g,hy}
+         & =B^g_{hx,hy}B^h_{x,y}\,\mathsf C_3
+        \notag
+    \end{align}
+    for the chain $\mathsf C=A_x^{\mathbf u}e_1^iA_y^{\mathbf v}$ and the chain
+    $\mathsf C_3$ with $e_3$. Against long words the left boundary equals
+    $L^x_{g,h}$ times the left boundary through the fusion tensor
+    $F^<_{g,h}$; by the two-sided comparison of reductions onto a normal
+    tensor, the right boundary equals $(L^y_{g,h})^{-1}$ times the right
+    boundary through $F^>_{g,h}$. The fusion tensors reduce
+    $O_gO_h\cdot\mathsf C$ to $O_{gh}\cdot\mathsf C$, and the local relation
+    of $gh$ gives $B^{gh}_{x,y}\mathsf C_3$. Since $A_{ghx}$ and $A_{ghy}$ are
+    normal and $e_3\neq0$, some chain $\mathsf C_3$ with long regions is
+    nonzero, and the two scalars agree.
+\end{proof}
+
+\begin{theorem}[The symmetry on states with two domain walls]
+    \label{thm:mpug_domain_wall_state}
+    \lean{MPOTensor.twoWallChain,
+        MPOTensor.twoWallMPV,
+        MPOTensor.mpo_mulVec_trace,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    Let $\ket{\psi(x\text{-}y\text{-}x)}$ be the periodic state with an $A_x$
+    region, a domain wall $e$ between $x$ and $y$, an $A_y$ region, a domain
+    wall $f$ between $y$ and $x$, and a second $A_x$ region. If $g$ carries
+    $e$ to $e'$ with phase $c$ and $f$ to $f'$ with phase $c'$, then
+    \begin{align}
+        O_g\ket{\psi(x\text{-}y\text{-}x)}
+         & =c\,c'\,\ket{\psi(gx\text{-}gy\text{-}gx)}
+        \notag
+    \end{align}
+    whenever the first $A_x$ region and the $A_y$ region are long enough.
+    For $\Z_2$ this is $U\ket{\psi(A\text{-}B\text{-}A)}
+    =c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}$
+    \cite[Section~III.B]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The coefficient of $O_g\ket{\psi}$ is the trace of the acted chain. In
+    each of the two acted regions insert the reduced block
+    $W_{g,z}A_{gz}^{\mathbf c}V_{g,z}$, which leaves long words unchanged by
+    the residual nilpotency of a reduction \cite{Molnar2018SemiInjective}. By
+    cyclicity of the
+    trace the chain splits into the two local relations, with phases $c$ and
+    $c'$, and the remaining trace is the coefficient of
+    $\ket{\psi(gx\text{-}gy\text{-}gx)}$.
+\end{proof}
+
+\begin{theorem}[Domain walls of an involution detect the anomaly]
+    \label{thm:mpug_domain_wall_involution}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_mul_of_mul_self_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV_eq_omega,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_elem}
+    \leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_domain_wall_state,
+        thm:mpug_permuted_block_l_compatibility,
+        thm:mpug_involution_anomaly_identity_ratio}
+    Let $g^2=e$ exchange the blocks $x$ and $y$, let $g$ carry the domain wall
+    $e_{AB}$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}$ and $e_{BA}$ to
+    $e_{AB}$ with phase $c_{BA}$, let $e_{AB}\neq0$, and let the identity
+    element carry $e_{AB}$ to itself with a nonzero phase. Then
+    \begin{align}
+        c_{AB}\,c_{BA}
+         & =\frac{L^x_{g,g}L^x_{e,e}}{L^y_{g,g}L^y_{e,e}}
+        =\omega(g,g,g)\,\omega(g,e,g),
+        \notag
+    \end{align}
+    so $c_{AB}c_{BA}$ does not depend on the action tensors, the fusion
+    tensors or the domain walls, and
+    $U\ket{\psi(A\text{-}B\text{-}A)}=\omega(g,g,g)\,\omega(g,e,g)
+    \ket{\psi(B\text{-}A\text{-}B)}$. When the tensors of the identity are
+    trivial, as in the source, the phase of the identity is one and this is
+    $c_{AB}c_{BA}=L_A/L_B=\omega$
+    \cite[Section~III.C]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon,
+        thm:mpug_involution_anomaly_identity_ratio}
+    Theorem~\ref{thm:mpug_domain_wall_pentagon} for $(e,e)$ gives
+    $b^2=(L^x_{e,e}/L^y_{e,e})\,b$ for the phase $b\neq0$ of the identity, so
+    $b=L^x_{e,e}/L^y_{e,e}$; for $(g,g)$ it gives
+    $c_{BA}c_{AB}=(L^x_{g,g}/L^y_{g,g})\,b$. The second equality is
+    Theorem~\ref{thm:mpug_involution_anomaly_identity_ratio} for the compatible
+    L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility}. Its
+    right-hand side involves only the fusion tensors, and it is invariant
+    under their gauge action, so the product is independent of all choices.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]

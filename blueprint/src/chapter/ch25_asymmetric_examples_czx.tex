@@ -895,6 +895,53 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     and its value is $\omega(s,s,s)=-1$.
 \end{proof}
 
+\begin{theorem}[Domain walls between the two product states]
+    \label{thm:asymex_czx_domain_walls}
+    \lean{CZXCompression.czx_domainWall_mul_eq_neg_one,
+        CZXCompression.czxWallAB,
+        CZXCompression.czxWallBA,
+        CZXCompression.czx_isDomainWallAction_ab,
+        CZXCompression.czx_isDomainWallAction_ba,
+        CZXCompression.czx_isDomainWallAction_one,
+        CZXCompression.czx_mpo_mulVec_twoWallMPV}
+    \leanok
+    \uses{thm:asymex_czx_product_state_l_symbols,
+        thm:mpug_domain_wall_involution, thm:mpug_domain_wall_state}
+    For every choice of action tensors on the product states
+    $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N}$, and every pair of
+    domain walls $e_{AB}\neq0$ and $e_{BA}$ exchanged by the generator with
+    phases $c_{AB}$ and $c_{BA}$, on which the identity acts by a nonzero
+    phase,
+    \begin{align}
+        c_{AB}\,c_{BA} & =-1,
+        \notag
+    \end{align}
+    the anomaly of the decorated CZX symmetry seen on its domain walls
+    \cite[Section~III]{GarreRubioSchuch2024DomainWall}. For the action tensors
+    of Theorem~\ref{thm:asymex_czx_product_state_l_symbols}, the walls
+    $e_{AB}=|0\rangle$ and $e_{BA}=-|1\rangle$ are exchanged with
+    $c_{AB}=1$ and $c_{BA}=-1$, and
+    $U\ket{\psi(0\text{-}1\text{-}0)}=-\ket{\psi(1\text{-}0\text{-}1)}$ on
+    every chain with long enough regions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_decorated_anomaly_class,
+        thm:mpug_domain_wall_involution, thm:mpug_domain_wall_state}
+    By Theorem~\ref{thm:mpug_domain_wall_involution} with the fusion tensors
+    of Theorem~\ref{thm:asymex_czx_decorated_anomaly_class},
+    $c_{AB}c_{BA}=\omega(s,s,s)\,\omega(s,e,s)=-1$. For the explicit walls,
+    the action vectors $\langle1|$ of $|0\rangle^{\otimes N}$ and
+    $-|\hat+\rangle$ of $|1\rangle^{\otimes N}$ intertwine the letters of
+    the acted states with those of the exchanged states, and the wall letter
+    gives $c_{AB}=1$. On the other wall the right action vector $|\hat+\rangle$
+    of $|0\rangle^{\otimes N}$ is carried by one acted letter to
+    $-|0\rangle+|1\rangle$, which is again intertwined; with at least one site
+    on the right of the wall this gives $c_{BA}=-1$. The last statement is
+    Theorem~\ref{thm:mpug_domain_wall_state}.
+\end{proof}
+
 \begin{corollary}[No invariant normal state]
     \label{cor:asymex_czx_decorated_no_invariant}
     \lean{CZXCompression.not_exists_normal_fixesMPV_czxDecoratedTensor}
