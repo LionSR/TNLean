@@ -117,7 +117,9 @@ normal, left-canonical with the diagonal positive-definite fixed point $1$ (cano
 form~II), have self-overlap one, give linearly independent states for every $N\geq1$,
 are not related by a gauge transformation and a phase, and give states that become
 orthogonal as $N\to\infty$; both weights equal one.
-One theorem collects these facts, the identification of the pairs and of the
+One theorem collects these facts, with canonical form~II stated as the existence of a diagonal
+positive-definite fixed point of each block, while the approximating state in its
+conclusion is built from the fixed point $1$; it also collects the identification of the pairs and of the
 weights $\beta_j$ with those of the canonical form, and the failure of the printed
 bound.\footnote{Formal declarations:
     \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock},
@@ -130,7 +132,7 @@ bound.\footnote{Formal declarations:
 Two statements would repair part~(ii) for multiplicity one. The first adds the
 hypothesis that the $q$-site states of distinct blocks are orthogonal,
 $\sum_{i_1,\dots,i_q}\overline{(A_j^{i_1}\cdots A_j^{i_q})_{ab}}\,
-(A_{j'}^{i_1}\cdots A_{j'}^{i_q})_{a'b'}=0$ for $j\neq j'$. Under it
+    (A_{j'}^{i_1}\cdots A_{j'}^{i_q})_{a'b'}=0$ for $j\neq j'$. Under it
 (\ref{eq:mswc24_mixed_block_form}) holds with $\lvert\mu_j\rvert^q$ in place of
 $\mu_j^q$: writing the blocked map as $B=\sum_j\mu_j^qB_jK_j^\dagger$ with the
 isometries $K_j$ that place the bond pairs of block $j$, the polar decomposition of
