@@ -43,8 +43,10 @@ the previous subsection:
   dimensions;
 - fusion (based) rings and NIM-reps.
 
-Every local layer that Mathlib has since covered is then migrated in the bump PR
-or in an immediate follow-up, by deleting the local definition as above.
+Every local layer that Mathlib has since covered is then migrated by deleting
+the local definition as above, either in the bump PR or in a follow-up PR. The
+audit lists each layer it defers, with an issue linked to tracker #8315, and
+every deferred migration lands before the next bump PR is opened.
 
 ## Proof integrity (PROOF_INTEGRITY)
 
