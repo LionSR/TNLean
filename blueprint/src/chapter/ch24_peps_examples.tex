@@ -669,6 +669,124 @@ finite-dimensional complex space.
         =\delta_{g,h}$.
 \end{proof}
 
+A matrix product tensor is a family of operators $A^i$ on a bond space
+carrying the representation $U$. Its virtual system is the space of
+operators $X$ on the bond space, on which $G$ acts by conjugation
+$X\mapsto U_gXU_g^{-1}$, and identifying the virtual vector
+$\sum x_{\alpha\beta}\ket{\alpha,\beta}$ with the operator
+$X=\sum x_{\alpha\beta}\ket{\beta}\bra{\alpha}$ gives
+$\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
+\cite[Section~``MPS and PEPS'']{Schuch2010PEPS}.
+
+\begin{definition}[$G$-injective matrix product tensor]%
+    \label{def:peps_mps_g_injective}
+    \lean{TNLean.PEPS.mpsSiteMap, TNLean.PEPS.mpsSiteMap_apply}
+    \leanok
+    \uses{def:peps_g_injective}
+    A matrix product tensor $A$ is $G$-injective if the map
+    $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$ is $G$-injective for the
+    conjugation action of $U$ on the operators on the bond space.
+\end{definition}
+
+\begin{theorem}[$G$-injective matrix product tensors]%
+    \label{thm:peps_mps_g_injective_source_form}
+    \lean{TNLean.PEPS.mpsSiteMap_comp_linHom,
+        TNLean.PEPS.comp_smulRight_dual,
+        TNLean.PEPS.eq_of_forall_trace_mul_eq,
+        TNLean.PEPS.mpsSiteMap_comp_linHom_eq_iff,
+        TNLean.PEPS.isGInjective_mpsSiteMap_iff}
+    \leanok
+    \uses{def:peps_mps_g_injective}
+    A matrix product tensor $A$ is $G$-injective if and only if
+    \begin{enumerate}
+        \item $U_gA^iU_g^{-1}=A^i$ for all $i$ and $g$, and
+        \item $\mathcal{P}(A)$ has a left inverse on the commutant
+              $\mathcal{S}=\{X\mid [X,U_g]=0\}$: there is a linear map $L$
+              with $L\,\mathcal{P}(A)X=X$ for every $X\in\mathcal{S}$.
+    \end{enumerate}
+    For a unitary representation $U_g^{-1}=U_g^\dagger$, and this is the
+    source's definition
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_group_averaging}
+    Since $\tr[A^iU_gXU_g^{-1}]=\tr[U_g^{-1}A^iU_gX]$, invariance of
+    $\mathcal{P}(A)$ under conjugation by $U_g$ says that $U_g^{-1}A^iU_g$
+    and $A^i$ have the same trace pairing with every operator $X$; pairing
+    with the rank-one operators $\ket{v}\bra{f}$ shows that they are equal.
+    The operators fixed by conjugation are the commutant, and a linear map
+    is injective on a subspace if and only if it has a left inverse there.
+\end{proof}
+
+\begin{theorem}[Stability under concatenation]%
+    \label{thm:peps_mps_g_injective_concatenation}
+    \lean{TNLean.PEPS.concatTensor, TNLean.PEPS.concatTensor_apply,
+        TNLean.PEPS.concatLeftInverse,
+        TNLean.PEPS.apply_mpsSiteMap,
+        TNLean.PEPS.averageMap_linHom_apply_mul,
+        TNLean.PEPS.sum_leftInverse_mul_mul,
+        TNLean.PEPS.concatLeftInverse_comp_mpsSiteMap,
+        TNLean.PEPS.IsGInjective.mpsSiteMap_concatTensor}
+    \leanok
+    \uses{def:peps_mps_g_injective, def:peps_delta_operator}
+    Let $A$ and $B$ be $G$-injective matrix product tensors for the same
+    representation, with left inverses $L_A$ and $L_B$ satisfying
+    $L_A\mathcal{P}(A)=L_B\mathcal{P}(B)=\sigma$. Then $C^{ij}=A^iB^j$ is
+    $G$-injective, and the map
+    \begin{align*}
+        L_C\ket{i,j}=|G|\,\big(L_B\ket{j}\big)\,\Delta\,\big(L_A\ket{i}\big)
+    \end{align*}
+    satisfies $L_C\mathcal{P}(C)=\sigma$
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_mps_g_injective_source_form,
+        thm:peps_g_injective_left_inverse, thm:peps_delta_expansion}
+    Invariance of $C$ follows from
+    $U_gA^iB^jU_g^{-1}=(U_gA^iU_g^{-1})(U_gB^jU_g^{-1})$. For the left
+    inverse, first $\sum_i\tr[A^iY]\,L_A\ket{i}=\sigma(Y)$ for every $Y$.
+    Second, for every operator $M$,
+    \begin{align*}
+        \sum_j\big(L_B\ket{j}\big)\,M\,B^j
+        =\frac{1}{|G|}\sum_h\tr[U_{h^{-1}}M]\,U_h ;
+    \end{align*}
+    writing $M$ in a basis $\{b_k\}$ with coordinate functionals $b^*_k$,
+    the left-hand side applied to $w$ is
+    $\sum_k\sigma\big(\ket{w}\bra{b^*_k}\big)Mb_k$, which is the right-hand
+    side applied to $w$. Taking $Y=B^jX$ in the first identity and
+    $M=\Delta U_g$ in the second,
+    \begin{align*}
+        L_C\mathcal{P}(C)X
+        =|G|\sum_j\big(L_B\ket{j}\big)\,\Delta\,\sigma(B^jX)
+        =\sum_g\Big(\sum_j\big(L_B\ket{j}\big)\,\Delta U_g\,B^j\Big)XU_g^{-1}
+        =\frac{1}{|G|}\sum_gU_gXU_g^{-1},
+    \end{align*}
+    the last step by the expansion
+    $\sum_h\tr[U_{h^{-1}}\Delta U_g]U_h=U_g$.
+\end{proof}
+
+\begin{corollary}[Blocking a $G$-injective tensor]%
+    \label{cor:peps_mps_g_injective_blocking}
+    \lean{TNLean.PEPS.IsGInjective.mpsSiteMap_reindex,
+        TNLean.PEPS.wordTensor,
+        TNLean.PEPS.IsGInjective.mpsSiteMap_wordTensor,
+        MPSTensor.toLin'_evalWord,
+        MPSTensor.isGInjective_mpsSiteMap_blockTensor}
+    \leanok
+    \uses{def:peps_mps_g_injective, def:blocked_tensor}
+    If $A$ is $G$-injective, then the tensor obtained by blocking $L\ge1$
+    sites, $(i_1,\dots,i_L)\mapsto A^{i_1}\cdots A^{i_L}$, is $G$-injective.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:peps_mps_g_injective_concatenation}
+    Induction on $L$: the blocked tensor on $L+1$ sites is the concatenation
+    of $A$ with the blocked tensor on $L$ sites, up to relabelling the
+    physical index, and relabelling preserves $G$-injectivity.
+\end{proof}
+
 The source asks for a tensor that is $G$-isometric with respect to the
 left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its
