@@ -36,7 +36,7 @@ equation `coupledpent` of the source (line 1876) with `ω` on the same side.
 
 noncomputable section
 
-open TNLean.Algebra MPOTensor
+open TNLean.Algebra
 
 namespace Z3Anomalous
 
@@ -53,6 +53,7 @@ theorem eisensteinOmega_eq_rootOfUnity :
   push_cast
   ring
 
+/-- The generator `z3Gen` of `ℤ₃` has order three. -/
 theorem orderOf_z3Gen : orderOf z3Gen = 3 :=
   orderOf_eq_prime z3Gen_pow_three (by decide)
 

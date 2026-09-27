@@ -48,8 +48,6 @@ modulo `n` lie in distinct classes, as line 2040 asserts. Residues are represent
 
 noncomputable section
 
-open Complex
-
 namespace TNLean.Algebra.ScalarThreeCochain
 
 /-! ### The domain-wall phase of a three-cochain -/
@@ -220,6 +218,7 @@ private theorem exp_neg_two_pi_div_three :
   congr 1
   ring
 
+/-- The primitive cube root `exp(2πi/3) = ζ₃`. -/
 private theorem exp_two_pi_div_three :
     Complex.exp ((2 * Real.pi / 3) * Complex.I) = rootOfUnity 3 ^ 1 := by
   rw [pow_one, rootOfUnity]
