@@ -428,7 +428,11 @@ theorem fibBlockFull_edgeTau_edgeOne (f x' x : Fin 2) :
   | 1 => exact (congrArg complexOfGolden (fibEdgeGraded_edgeTau_edgeOne _ _ x' x)).trans (h0 _)
 
 /-- At edge label `1` the G-symbol forces the right bond letter to equal the left one:
-`G^{abc}_{d1f} = δ_{(a,d),(b,c)} / (v_b v_c)` when `(b, c)` is a bond letter of the block `f`. -/
+`G^{abc}_{d1f} = δ_{(a,d),(b,c)} / (v_b v_c)` when `(b, c)` is a bond letter of the block `f`.
+
+Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 1245–1260. At `e = 1` the selection rule
+`δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` of lines 1245–1257 forces `a = b` and `c = d`, and the
+G-symbol of eq. `eq:Gsymbol` (lines 1257–1260) then takes the displayed value. -/
 theorem fibGSymbolGolden_edgeOne :
     ∀ (f : Fin 2) (p q : Fin (fibBlockDim f)) (b c : Fin 2), fibBondLetter f p = (b, c) →
       fibGSymbolGolden (fibBondLetter f q).1 b c (fibBondLetter f q).2 0 f =
