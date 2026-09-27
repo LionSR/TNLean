@@ -33,7 +33,7 @@ Beside it stands the representation `cocycleFamily` produced by the general cons
 arXiv:2203.12563 from the cocycle `ω_1` of line 2040, of bond dimension three. Both are exact
 representations of `ℤ₃`. The anomaly class of `{1, U, U†}` is computed in `Z3AnomalyClass`,
 and `Z3AnomalousCocycleBridge` shows that the two families are conjugate by one diagonal
-unitary built from on-site and two-site gates; no purely on-site gauge relates them.
+unitary built from on-site and two-site gates; no purely on-site diagonal gauge relates them.
 
 ## Main definitions
 

@@ -96,11 +96,8 @@ private theorem rootOfUnity_three : rootOfUnity (2 + 1) = eisensteinOmega := by
   rw [eisensteinOmega_eq_exp, rootOfUnity]
   norm_num
 
-private theorem eisensteinOmega_pow_eq_pow_of_mod {A B : ℕ} (h : A % 3 = B % 3) :
-    eisensteinOmega ^ A = eisensteinOmega ^ B := by
-  have h3 : eisensteinOmega ^ 3 = 1 := by
-    simpa using congrArg eisensteinToComplex EisensteinInt.omega_pow_three
-  rw [pow_eq_pow_mod A h3, pow_eq_pow_mod B h3, h]
+private theorem eisensteinOmega_pow_three : eisensteinOmega ^ 3 = 1 := by
+  simpa using congrArg eisensteinToComplex EisensteinInt.omega_pow_three
 
 /-- The bondwise identity behind the conjugation: the phase of `U` on the pair `(a, b)` times
 the gauge before the shift equals the gauge after the shift times the cocycle phase. -/
@@ -130,7 +127,8 @@ theorem mpo_uTensor_mul_cocycleGauge :
   · rw [ite_eq_left h, ite_eq_left (hs.1 h)]
     subst h
     rw [hg, rootOfUnity_three, Finset.prod_pow_eq_pow_sum, ← pow_add, ← pow_add]
-    apply eisensteinOmega_pow_eq_pow_of_mod
+    apply pow_eq_pow_of_modEq eisensteinOmega_pow_three
+    unfold Nat.ModEq
     rw [phaseExponent, gaugeExponent, gaugeExponent, ← Finset.sum_add_distrib,
       ← Finset.sum_add_distrib, Finset.sum_nat_mod]
     conv_rhs => rw [Finset.sum_nat_mod]

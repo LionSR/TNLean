@@ -63,7 +63,8 @@ def rootOfUnity (n : ℕ) : ℂ := Complex.exp (2 * Real.pi * Complex.I / n)
 theorem rootOfUnity_pow (n : ℕ) [NeZero n] : rootOfUnity n ^ n = 1 :=
   (Complex.isPrimitiveRoot_exp n (NeZero.ne n)).pow_eq_one
 
-private theorem pow_eq_pow_of_modEq {n A B : ℕ} {ζ : ℂ} (h : ζ ^ n = 1)
+/-- Powers of an `n`-th root of unity depend only on the exponent modulo `n`. -/
+theorem pow_eq_pow_of_modEq {n A B : ℕ} {ζ : ℂ} (h : ζ ^ n = 1)
     (hAB : A ≡ B [MOD n]) : ζ ^ A = ζ ^ B := by
   rw [pow_eq_pow_mod A h, pow_eq_pow_mod B h, hAB]
 
