@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionTensors
 
@@ -65,6 +66,8 @@ agreement of the cyclic invariants is checked directly.
 * `Z3Anomalous.cocycleFusionData_omega`: the construction for `ω_1` carries `ω_2`.
 * `Z3Anomalous.cyclicInvariant_cocycleFusionData`: the two families have the same cyclic
   invariant `ω₃²`.
+* `Z3Anomalous.domainWallPhase_cocycleFusionData`: the domain-wall phase of the construction is
+  the `j = 2` entry of the printed `ℤ₃` table.
 * `Z3Anomalous.cocycleFamily_not_isNormalRepresentation`: the construction is not a
   representation with normal tensors.
 
@@ -261,6 +264,16 @@ theorem cyclicInvariant_cocycleFusionData (fd : family.FusionData) :
   rw [hinv]
   refine (eq_inv_of_mul_eq_one_left (Units.ext ?_)).symm
   simpa using cyclicInvariant_omega_z3_mul_cyclicCocycle_one fd
+
+/-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2013–2021 and 2046–2054:
+**the domain-wall phase of the construction for `ω_1` at the generator is `exp(2πi/3)`**, the
+`j = 2`, `a = 1` entry of the printed `n = 3` table, with the fusion tensors of arXiv:2203.12563,
+`ftexam`. It is the phase of `{1, U, U†}` for every choice of its fusion tensors. -/
+theorem domainWallPhase_cocycleFusionData :
+    (domainWallPhase cocycleFusionData.omega z3Gen : ℂ) =
+      Complex.exp ((2 * Real.pi / 3) * Complex.I) := by
+  rw [cocycleFusionData_omega]
+  exact domainWallPhase_cyclicCocycle_three.2.2.1
 
 /-- **The construction for `ω_1` is not a representation with normal tensors**: its identity
 member has bond dimension three and is not normal (`GroupCocycle.not_isNormal_tensor_one`).
