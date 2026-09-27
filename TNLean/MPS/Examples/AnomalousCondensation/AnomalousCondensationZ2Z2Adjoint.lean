@@ -48,7 +48,7 @@ open MPSTensor MPOTensor
 /-- **The adjoint of the condensation defect**:
 `A_L^† = 1 + U_{x,L} + U_{y,L} + (-1)^L U_{xy,L}`. The identity, `U_x` and `U_y` are
 self-adjoint, while `U_{xy,L}^† = (-1)^L U_{xy,L}`. -/
-theorem mpo_condensationTensor_conjTranspose (L : ℕ) (hL : 0 < L) :
+lemma mpo_condensationTensor_conjTranspose (L : ℕ) (hL : 0 < L) :
     (mpo condensationTensor L)ᴴ =
       1 + mpo xTensor L + mpo yTensor L + (-1 : ℂ) ^ L • mpo xyTensor L := by
   have : NeZero L := ⟨hL.ne'⟩
@@ -69,7 +69,7 @@ theorem mpo_condensationTensor_conjTranspose (L : ℕ) (hL : 0 < L) :
   simp only [Matrix.conjTranspose_add, he, hx, hy, hxy]
 
 /-- The diagonal group operator `U_{xy,L}` is nonzero on every positive ring, being unitary. -/
-theorem mpo_xyTensor_ne_zero (L : ℕ) (hL : 0 < L) : mpo xyTensor L ≠ 0 := by
+lemma mpo_xyTensor_ne_zero (L : ℕ) (hL : 0 < L) : mpo xyTensor L ≠ 0 := by
   have : NeZero L := ⟨hL.ne'⟩
   intro h
   have hu := Matrix.mem_unitaryGroup_iff.mp (mpo_symTensor_mem_unitaryGroup (N := L) 3)
@@ -80,7 +80,7 @@ theorem mpo_xyTensor_ne_zero (L : ℕ) (hL : 0 < L) : mpo xyTensor L ≠ 0 := by
 /-- **On every positive even ring `A_L / 4` is an orthogonal projector**: it is idempotent
 (`condensation_quarter_sq_eq_self_iff_even`) and self-adjoint, since the adjoint formula
 returns `A_L` when `(-1)^L = 1`. -/
-theorem isStarProjection_quarter_condensation_of_even {L : ℕ} (hL : 0 < L) (he : Even L) :
+lemma isStarProjection_quarter_condensation_of_even {L : ℕ} (hL : 0 < L) (he : Even L) :
     IsStarProjection ((4 : ℂ)⁻¹ • mpo condensationTensor L) := by
   refine ⟨?_, ?_⟩
   · rw [IsIdempotentElem, ← sq]
@@ -97,7 +97,7 @@ theorem isStarProjection_quarter_condensation_of_even {L : ℕ} (hL : 0 < L) (he
 
 /-- **On every odd ring `A_L / 2` is idempotent**: the square identity
 `A_L² = (3 + (-1)^L) A_L` reads `A_L² = 2 A_L` for odd `L`. -/
-theorem isIdempotentElem_half_condensation_of_odd {L : ℕ} (ho : Odd L) :
+lemma isIdempotentElem_half_condensation_of_odd {L : ℕ} (ho : Odd L) :
     IsIdempotentElem ((2 : ℂ)⁻¹ • mpo condensationTensor L) := by
   rw [IsIdempotentElem, ← sq, smul_pow, mpo_condensationTensor_sq L ho.pos, ho.neg_one_pow,
     smul_smul]
@@ -105,7 +105,7 @@ theorem isIdempotentElem_half_condensation_of_odd {L : ℕ} (ho : Odd L) :
   norm_num
 
 /-- **On every odd ring `A_L^† - A_L = -2 U_{xy,L}`.** -/
-theorem conjTranspose_sub_mpo_condensationTensor_of_odd {L : ℕ} (ho : Odd L) :
+lemma conjTranspose_sub_mpo_condensationTensor_of_odd {L : ℕ} (ho : Odd L) :
     (mpo condensationTensor L)ᴴ - mpo condensationTensor L = (-2 : ℂ) • mpo xyTensor L := by
   rw [mpo_condensationTensor_conjTranspose L ho.pos, ho.neg_one_pow, mpo_condensationTensor,
     show mpo eTensor L = mpo (symTensor 0) L from rfl]
@@ -115,7 +115,7 @@ theorem conjTranspose_sub_mpo_condensationTensor_of_odd {L : ℕ} (ho : Odd L) :
 
 /-- **On every odd ring `A_L / 2` is not self-adjoint**, because
 `A_L^† - A_L = -2 U_{xy,L}` is nonzero. -/
-theorem not_isSelfAdjoint_half_condensation_of_odd {L : ℕ} (ho : Odd L) :
+lemma not_isSelfAdjoint_half_condensation_of_odd {L : ℕ} (ho : Odd L) :
     ¬ IsSelfAdjoint ((2 : ℂ)⁻¹ • mpo condensationTensor L) := by
   intro h
   rw [IsSelfAdjoint, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_smul] at h
