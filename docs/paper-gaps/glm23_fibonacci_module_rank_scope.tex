@@ -25,18 +25,27 @@ representation of the fusion ring,
     \label{eq:glm23_fib_nimrep}
 \end{align}
 and the unit acts on the blocks as the identity. For the Fibonacci ring,
-(\ref{eq:glm23_fib_nimrep}) at $a=b=\tau$ reads $M_\tau^2=\mathbb 1+M_\tau$ for
-the matrix $M_\tau$ with entries $M_{\tau,x}^y$. The claim is stated for
+(\ref{eq:glm23_fib_nimrep}) at $a=b=\tau$ reads
+\begin{align}
+    M_\tau^2 & =\mathbb 1+M_\tau
+    \label{eq:glm23_fib_tau_square}
+\end{align}
+for the matrix $M_\tau$ with entries $M_{\tau,x}^y$. The claim is stated for
 invariant subspaces with any number of blocks.
 
 \section{What is formalized}
 The nonnegative integer representations with the unit acting as the identity
 are classified on one and on two blocks. On one block, $m^2=1+m$ has no
 solution in $\mathbb N$. On two blocks, the entrywise equations of
-$M_\tau^2=\mathbb 1+M_\tau$ force the diagonal entries to be $0$ or $1$ with
-sum $1$ and both off-diagonal entries to be $1$, so $M_\tau$ is
-$\begin{pmatrix}0&1\\1&1\end{pmatrix}$ or its relabelling
-$\begin{pmatrix}1&1\\1&0\end{pmatrix}$: the regular representation. Combined
+(\ref{eq:glm23_fib_tau_square}) force the diagonal entries to be $0$ or $1$ with
+sum $1$ and both off-diagonal entries to be $1$, so
+\begin{align}
+    M_\tau & =\begin{pmatrix}0&1\\1&1\end{pmatrix}
+    \quad\text{or}\quad
+    M_\tau=\begin{pmatrix}1&1\\1&0\end{pmatrix},
+    \label{eq:glm23_fib_regular}
+\end{align}
+the regular representation and its relabelling. Combined
 with integrality of the multiplicities of normal blocks, a symmetric family of
 at most two normal blocks with the unit acting trivially has exactly two
 blocks, transforming as in the source.\footnote{Results:
@@ -61,12 +70,24 @@ $M^2=\mathbb 1+M$ is, after a permutation of the blocks, a direct sum of
 copies of $\begin{pmatrix}0&1\\1&1\end{pmatrix}$. Order the strongly connected
 classes of the support of $M$ so that $M$ is block upper triangular. Each
 diagonal block $F$ is irreducible with $F^2=\mathbb 1+F$, so its eigenvalues
-are $\varphi$, simple by the Perron--Frobenius theorem, and $-\varphi^{-1}$;
-the trace $\varphi-(k-1)\varphi^{-1}$ of a block of size $k$ is an integer
-only for $k=2$. An off-diagonal block $X$ between classes with diagonal
-blocks $F$ and $F'$ satisfies $FX+XF'-X\leq0$ entrywise, and pairing with
-positive Perron--Frobenius eigenvectors $uF=\varphi u$, $F'w=\varphi w$ gives
-$\sqrt5\,uXw\leq0$, hence $X=0$.
+are $\varphi$, simple by the Perron--Frobenius theorem, and $-\varphi^{-1}$.
+Since $\varphi^{-1}=\varphi-1$, the trace of a block of size $k$ is
+\begin{align}
+    \operatorname{tr}F & =\varphi-(k-1)\varphi^{-1}=(2-k)\varphi+k-1,
+    \label{eq:glm23_fib_block_trace}
+\end{align}
+an integer only for $k=2$. An off-diagonal block $X$ between classes with
+diagonal blocks $F$ and $F'$ is the corresponding block of $\mathbb 1+M$, and
+the corresponding block of $M^2$ is $FX+XF'$ plus a nonnegative remainder.
+Pairing with positive Perron--Frobenius eigenvectors $uF=\varphi u$,
+$F'w=\varphi w$ gives
+\begin{align}
+    FX+XF'-X                           & \leq0\quad\text{entrywise},
+    \label{eq:glm23_fib_offdiagonal_block}                           \\
+    u\,(FX+XF'-X)\,w=(2\varphi-1)\,uXw & =\sqrt5\,uXw\leq0,
+    \label{eq:glm23_fib_offdiagonal}
+\end{align}
+and since $X\geq0$ and $u$, $w$ are positive, $X=0$.
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
