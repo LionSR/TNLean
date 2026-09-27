@@ -2483,10 +2483,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_kernel_ground_space, thm:ground_space_map_injective_blk,
+    \uses{thm:open_parent_hamiltonian_kernel_ground_space, lem:direct_sum_two_block_dimension_step,
         thm:wordspan_blk_inj_succ}
-    Block injectivity at length $L$ makes $\Gamma_{L}$ injective, so
-    $\dim G_{L}(A)=\dim\MN{D}=D^{2}$, and the canonical $\ell^{2}$
+    By Lemma~\ref{lem:direct_sum_two_block_dimension_step},
+    $\dim G_{L}(A)=D^{2}$, and the canonical $\ell^{2}$
     identification is a linear isomorphism. Block injectivity at length
     $L_{0}$ persists to every length $N\geq L_{0}$, and
     Theorem~\ref{thm:open_parent_hamiltonian_kernel_ground_space} identifies
