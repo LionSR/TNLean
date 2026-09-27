@@ -436,7 +436,9 @@ theorem fibGSymbolGolden_edgeOne :
   fin_cases f <;> decide
 
 /-- Bridge: on edge label `1` the diagonal bond similarity `h` leaves the letters of the source's
-tensor unchanged, and they are the diagonal matrix units of `fibBlockFull`:
+tensor (arXiv:1511.08090, `AnyonsPEPS.tex` lines 1262–1266, eq. `StringnetMPO`) unchanged, and
+they are the diagonal matrix units of `fibBlockFull`: by the selection rule
+`δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` and the G-symbols of lines 1245–1260 at `e = 1`,
 `G^{bbc}_{c1f} v_b v_c = 1` whenever `(b, c)` is a bond letter of the block `f`. -/
 theorem fibStringNetTensor_edgeOne_conj (f b c : Fin 2) :
     Matrix.diagonal (fibStringNetGauge f) *
