@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
@@ -43,16 +44,8 @@ variable {d D : ℕ}
 orthogonal complement of its kernel has a positive lower norm bound. -/
 theorem parentHamiltonianES_exists_gap (A : MPSTensor d D) (R N : ℕ) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
-      δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
-  let H := parentHamiltonianES A R N
-  have hi : Function.Injective (H.domRestrict (LinearMap.ker H)ᗮ) :=
-    LinearMap.injective_domRestrict_iff.mpr (Submodule.orthogonal_disjoint _).symm
-  obtain ⟨K, hK, hbound⟩ := (H.domRestrict (LinearMap.ker H)ᗮ).exists_antilipschitzWith
-    (LinearMap.ker_eq_bot.mpr hi)
-  refine ⟨(K : ℝ)⁻¹, inv_pos.mpr (by exact_mod_cast hK), ?_⟩
-  intro v hv
-  exact (inv_mul_le_iff₀ (show 0 < (K : ℝ) by exact_mod_cast hK)).mpr
-    (ZeroHomClass.bound_of_antilipschitz _ hbound ⟨v, hv⟩)
+      δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ :=
+  (parentHamiltonianES A R N).exists_pos_mul_norm_le_of_mem_orthogonal_ker
 
 /-- A periodic parent-Hamiltonian gap for all sufficiently large lengths extends
 to all lengths by taking the minimum with finitely many positive bounds. -/
@@ -62,17 +55,10 @@ theorem parentHamiltonianES_gap_of_eventual_gap (A : MPSTensor d D) (R M : ℕ)
       δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ,
       ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
-        γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
-  induction M generalizing δ with
-  | zero => exact ⟨δ, hδ, fun N ↦ hGap N (Nat.zero_le N)⟩
-  | succ M ih =>
-    obtain ⟨η, hη, hM⟩ := parentHamiltonianES_exists_gap A R M
-    apply ih (lt_min hδ hη)
-    intro N hN v hv
-    rcases eq_or_lt_of_le hN with rfl | hN
-    · exact (mul_le_mul_of_nonneg_right (min_le_right δ η) (norm_nonneg v)).trans (hM v hv)
-    · exact (mul_le_mul_of_nonneg_right (min_le_left δ η) (norm_nonneg v)).trans
-        (hGap N hN v hv)
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ :=
+  Nat.exists_pos_forall_of_eventually
+    (fun _ _ _ hγδ h v hv ↦ (mul_le_mul_of_nonneg_right hγδ (norm_nonneg v)).trans (h v hv))
+    (parentHamiltonianES_exists_gap A R) hδ hGap
 
 /-- A uniform norm gap for the open Hamiltonian on the active sites of a
 Knabe window gives the finite-range periodic parent-Hamiltonian gap.
