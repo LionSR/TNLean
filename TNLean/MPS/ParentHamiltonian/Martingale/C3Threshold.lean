@@ -118,6 +118,27 @@ private theorem tendsto_fnw_coefficient
   rw [zero_div] at h
   exact h
 
+/-- The individual-block error in Nachtergaele,
+arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
+uniformly in the prefix length and in every positive suffix length. -/
+theorem IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
+      ‖(reassocTailBoundaryMapES A K L Q).range.starProjection ∘L
+            (leftBoundaryMapES A (K + L) Q).range.starProjection -
+          (groundSpaceES A (K + L + Q)).starProjection‖ ≤ ε := by
+  obtain ⟨c, lam, L₀, hc, hlam, hlam_one, hL₀, hInj, hDefect⟩ :=
+    hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ
+  have hsmall : Tendsto (fun n : ℕ ↦ c * lam ^ n) atTop (𝓝 0) := by
+    simpa using tendsto_const_nhds.mul
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hlam.le hlam_one)
+  filter_upwards [eventually_ge_atTop L₀,
+    (tendsto_order.1 hsmall).2 1 zero_lt_one,
+    (tendsto_order.1 (tendsto_fnw_coefficient (c := c) hlam.le hlam_one)).2 ε hε]
+    with L hL hsmallL hcoef K Q hQ
+  exact (hDefect L hL hsmallL K Q hQ).trans hcoef.le
+
 /-- There is a positive block-injective length \(p\), measured in sites of the
 input tensor, such that the whole-increment projector defect with overlap and
 suffix lengths \(L=Q=p\) is at most \(7/16\) for every prefix length \(K\),
@@ -135,26 +156,13 @@ theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
           ‖(reassocTailBoundaryMapES A K p p).range.starProjection ∘L
                 (leftBoundaryMapES A (K + p) p).range.starProjection -
               (groundSpaceES A (K + p + p)).starProjection‖ ≤ 7 / 16 := by
-  obtain ⟨c, lam, L, hc, hlam, hlam_lt_one, hLpos, hLinj, hDefect⟩ :=
-    hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ
-  have hlam_pow : Tendsto (fun n : ℕ => lam ^ n) atTop (𝓝 0) :=
-    tendsto_pow_atTop_nhds_zero_of_lt_one hlam.le hlam_lt_one
-  have hsmall_lim : Tendsto (fun n : ℕ => c * lam ^ n) atTop (𝓝 0) := by
-    simpa using tendsto_const_nhds.mul hlam_pow
-  have hcoefficient_lim := tendsto_fnw_coefficient (c := c) hlam.le hlam_lt_one
-  have hsmall : ∀ᶠ n : ℕ in atTop, c * lam ^ n < 1 :=
-    (tendsto_order.1 hsmall_lim).2 1 zero_lt_one
-  have hcoefficient : ∀ᶠ n : ℕ in atTop,
-      c * lam ^ n * (1 + c * lam ^ n) / (1 - c * lam ^ n) < 7 / 16 :=
-    (tendsto_order.1 hcoefficient_lim).2 (7 / 16) (by norm_num)
-  have hlarge : ∀ᶠ n : ℕ in atTop, max 1 L ≤ n := eventually_ge_atTop _
-  obtain ⟨p, hp_large, hp_small, hp_coefficient⟩ :=
-    (hlarge.and (hsmall.and hcoefficient)).exists
-  have hp : 0 < p := lt_of_lt_of_le (by omega) hp_large
-  have hLle : L ≤ p := le_trans (le_max_right 1 L) hp_large
-  have hInj : Kraus.IsNBlkInjective A p := isNBlkInjective_of_le hLpos hLinj hLle
-  refine ⟨p, hp, hInj, fun K ↦ ?_⟩
-  exact (hDefect p hLle hp_small K p hp).trans hp_coefficient.le
+  obtain ⟨L, hLpos, hLinj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  obtain ⟨p, hp, hDefect⟩ :=
+    ((eventually_ge_atTop (max 1 L)).and
+      (hP.eventually_wholeIncrement_groundProjection_defect_le hρ
+        (ε := 7 / 16) (by norm_num))).exists
+  exact ⟨p, by omega, isNBlkInjective_of_le hLpos hLinj (by omega),
+    fun K ↦ hDefect K p (by omega)⟩
 
 /-- At the length \(p\) chosen uniformly above, taking the prefix length
 \(K=p\) gives three consecutive blocks of \(p\) original sites and projector

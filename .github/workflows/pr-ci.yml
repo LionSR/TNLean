@@ -23,6 +23,8 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'docbuild/**'
+      - 'scripts/check_docbuild_manifest.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -95,6 +97,8 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'docbuild/**'
+      - 'scripts/check_docbuild_manifest.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -192,6 +196,8 @@ jobs:
               - 'scripts/check_oversized_lean_files.py'
               - 'scripts/lean_import_syntax.py'
               - 'scripts/test_lean_file_policies.py'
+              - 'docbuild/**'
+              - 'scripts/check_docbuild_manifest.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/lake_build_locked.sh'
@@ -472,6 +478,11 @@ jobs:
           bash -n scripts/lake_build_locked.sh
           bash -n scripts/seed_lake_build.sh
           bash -n scripts/test_seed_lake_build.sh
+
+      # docbuild/ shares the root package directory, so its manifest must pin
+      # the same revisions or the weekly API docs build checks out stale ones.
+      - name: Check docbuild manifest against the root manifest
+        run: python3 scripts/check_docbuild_manifest.py --root .
 
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.
