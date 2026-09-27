@@ -8,9 +8,9 @@ import TNLean.MPS.Defs
 /-!
 # Permutation twists of matrix product state tensors
 
-A group acting on the physical index set by permutations, that is, a `MulAction G (Fin d)`,
-twists a tensor by relabelling its physical index. The twist by a product is the composite of
-the twists, and the twist by the identity is trivial.
+A monoid acting on the physical index set, that is, a `MulAction G (Fin d)`, twists a tensor by
+relabelling its physical index; when `G` is a group, each element acts by a permutation. The
+twist by a product is the composite of the twists, and the twist by the identity is trivial.
 -/
 
 open scoped Matrix
@@ -19,9 +19,9 @@ namespace MPSTensor
 
 variable {G : Type*} [Monoid G] {d D : ℕ} [MulAction G (Fin d)]
 
-/-- Tensor twisted by the physical permutation action at group element `g`.
+/-- Tensor twisted by the physical action at the element `g`.
 
-This is the index-permutation twist `A^{σ_g}` defined by `(TwistedTensor A g) i = A (g • i)`. -/
+This is the index twist `A^{σ_g}` defined by `(TwistedTensor A g) i = A (g • i)`. -/
 def TwistedTensor (A : MPSTensor d D) (g : G) : MPSTensor d D :=
   fun i => A (g • i)
 
@@ -34,7 +34,7 @@ def TwistedTensor (A : MPSTensor d D) (g : G) : MPSTensor d D :=
   funext i
   simp [TwistedTensor]
 
-/-- Composition law for permutation twists: twisting by `g * h` equals twisting by `g` then
+/-- Composition law for twists: twisting by `g * h` equals twisting by `g` then
 by `h`. -/
 lemma TwistedTensor_mul (A : MPSTensor d D) (g h : G) :
     TwistedTensor A (g * h) = TwistedTensor (TwistedTensor A g) h := by
