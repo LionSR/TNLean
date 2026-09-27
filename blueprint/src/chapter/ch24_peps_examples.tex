@@ -1094,7 +1094,8 @@ $\mathcal{P}$ from the virtual to the physical system.
         TNLean.PEPS.linkPairing_linkVector,
         TNLean.PEPS.linkPairing_deltaOperator_map}
     \leanok
-    \uses{thm:peps_semiregular_trace}
+    \uses{def:peps_delta_operator, def:peps_semiregular,
+        thm:peps_semiregular_trace}
     The vector $\omega$ is invariant under $\tau^*(g)\otimes\tau(g)$ for every
     $g$. For an operator $M$ on $E$, the pairing $f\otimes e\mapsto f(Me)$
     sends $\omega$ to $\tr M$ and $(\tau^*(g)\otimes\tau(h))\,\omega$ to
@@ -1125,7 +1126,8 @@ $\mathcal{P}$ from the virtual to the physical system.
         TNLean.PEPS.linkContractionLeftInverse_comp,
         TNLean.PEPS.IsGInjective.linkContraction}
     \leanok
-    \uses{def:peps_g_injective, thm:peps_g_injective_left_inverse,
+    \uses{def:peps_g_injective, def:peps_delta_operator,
+        def:peps_semiregular, thm:peps_g_injective_left_inverse,
         lem:peps_link_contraction, thm:peps_semiregular_tensor_product}
     Let $A$ be a tensor with virtual system $W_A\otimes E^*$ and group action
     $\sigma_A\otimes\tau^*$, where $E^*$ is its right leg and $W_A$ collects
@@ -1181,7 +1183,8 @@ $\mathcal{P}$ from the virtual to the physical system.
         TNLean.PEPS.legContractionLeftInverse_comp,
         TNLean.PEPS.IsGInjective.legContraction}
     \leanok
-    \uses{def:peps_g_injective, thm:peps_g_injective_left_inverse,
+    \uses{def:peps_g_injective, def:peps_delta_operator,
+        def:peps_semiregular, thm:peps_g_injective_left_inverse,
         lem:peps_link_contraction}
     Let a tensor have virtual system $W\otimes E^*\otimes E$ with group action
     $\sigma\otimes\tau^*\otimes\tau$, as for the up leg of $A$ and the down leg
