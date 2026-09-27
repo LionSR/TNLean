@@ -10,7 +10,7 @@
 \label{sec:asymex_z2z2}
 
 The operators $U_{g,L}$ on a periodic chain of $L$ two-qubit sites are
-defined by~\eqref{eq:asymex_z2z2_action}. The construction targets the mixed
+defined by~(\ref{eq:asymex_z2z2_action}). The construction targets the mixed
 three-cocycle of type II whose exponent $(-1)^{a_1b_2c_2}$ couples the first
 factor of the group to the second, motivated by anomalous
 $\Z_2\times\Z_2$ symmetry-protected topological phases~\cite{ChenGuWen2011}.
@@ -448,6 +448,43 @@ ring of $L$ sites.
     of~(\ref{eq:asymex_z2z2_action}).
 \end{proof}
 
+\begin{theorem}[An exact normal representation by dressed tensors]%
+    \label{thm:asymex_z2z2_exact}
+    \lean{Z2Z2Condensation.secondZSign,
+        Z2Z2Condensation.secondZSign_ne_zero,
+        Z2Z2Condensation.diagonal_prod_secondZSign,
+        Z2Z2Condensation.secondZDressing_mul_self,
+        Z2Z2Condensation.kleinTensor,
+        Z2Z2Condensation.mpo_kleinTensor,
+        Z2Z2Condensation.kleinTensor_isNormal,
+        Z2Z2Condensation.kleinFamily,
+        Z2Z2Condensation.kleinFamily_isNormalRepresentation}
+    \leanok
+    \uses{def:asymex_z2z2_tensors, def:asymex_group_cocycle_klein,
+        def:mpug_anomaly_three_cochain}
+    For $g\in\Z_2\times\Z_2$ let $M'_g$ be the tensor $M_g$ of
+    Definition~\ref{def:asymex_z2z2_tensors} with the letter of input label
+    $i$ multiplied by $(-1)^{g_1i_2}$. It has the bond dimension of $M_g$,
+    its doubled-index tensor is normal, and its periodic operator on every
+    ring of $L>0$ sites is $U^{\omega}_{g,L}$. In particular the tensors
+    $M'_g$ form an exact representation of $\Z_2\times\Z_2$ by normal
+    tensors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_z2z2_group_cocycle, thm:asymex_z2z2_normal,
+        thm:asymex_group_cocycle_klein, thm:mpo_diagonal_dressing}
+    By Theorem~\ref{thm:mpo_diagonal_dressing} the periodic operator
+    of $M'_g$ is $U_{g,L}Z_{2,L}^{\,g_1}$, which is $U^{\omega}_{g,L}$ by
+    (\ref{eq:asymex_z2z2_group_cocycle}) and $Z_{2,L}^2=\Id$. The
+    operators $U^{\omega}_{g,L}$ multiply as the group by
+    Theorem~\ref{thm:asymex_group_cocycle_klein}. The letters of $M'_g$
+    are those of the normal tensor $M_g$ of
+    Theorem~\ref{thm:asymex_z2z2_normal} multiplied by signs, so
+    Theorem~\ref{thm:mpo_diagonal_dressing} gives normality.
+\end{proof}
+
 \begin{theorem}[The condensation defect squares to a length-dependent
         multiple of itself]%
     \label{thm:asymex_z2z2_defect_sq}
@@ -497,12 +534,22 @@ ring of $L$ sites.
 
 \begin{lemma}[Orthogonal projection on even rings and idempotence on odd rings]%
     \label{lem:asymex_z2z2_defect_adjoint}
+    \lean{Z2Z2Condensation.mpo_condensationTensor_conjTranspose,
+        Z2Z2Condensation.mpo_xyTensor_ne_zero,
+        Z2Z2Condensation.isStarProjection_quarter_condensation_of_even,
+        Z2Z2Condensation.isIdempotentElem_half_condensation_of_odd,
+        Z2Z2Condensation.conjTranspose_sub_mpo_condensationTensor_of_odd,
+        Z2Z2Condensation.not_isSelfAdjoint_half_condensation_of_odd}
+    \leanok
+    \uses{def:asymex_z2z2_defect}
     On every positive even ring, $A_L/4$ is an orthogonal projector.
     On every odd ring, $A_L/2$ is an idempotent that is not
     self-adjoint.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_z2z2_physical, thm:asymex_z2z2_defect_sq}
     Equation~(\ref{eq:asymex_z2z2_inverse}) gives
     \begin{align}
         A_L^\dagger
@@ -688,9 +735,7 @@ bond directions.
     Its compression pair is
     \begin{align}
         W & =(0,0,0,1),
-        \notag
-    \end{align}
-    \begin{align}
+        \notag                        \\
         V & =(1,-1,-1,1)^{\mathsf T},
         \notag
     \end{align}
