@@ -665,9 +665,13 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
   tends to `1/√5` for every blocking length.
-- `mswc24_decaying_correlations_windowed_connected.tex` records that the
-  correlation estimate of Lemma 2 of the Supplemental Material is proved with
-  the bound in every window of `K ≤ 2` consecutive separations and for the
-  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
-  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
-  need not vanish at finite `N`; the corrected form suffices for Theorem 1.
+- `mswc24_decaying_correlations_windowed_connected.tex` records that Lemma 2
+  of the Supplemental Material holds in modulus for the source's non-Hermitian
+  observables, whose one-point functions vanish exactly at every `N`, but that
+  its printed real inequality fails for complex `λ₂` and its Hermitian reading
+  fails in general, since the limit correlator of Hermitian observables is a
+  multiple of `|λ₂|^t cos(tθ + φ)`. The formal Hermitian statement asserts the
+  bound in every window of `K ≤ 2` consecutive separations. The note also lists
+  the remaining repairs to the proof of Theorem 1 (normal versus injective,
+  Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
+  constant `ξ/4`, which is implicit in the source's final inequality.
