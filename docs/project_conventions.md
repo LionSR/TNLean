@@ -39,7 +39,7 @@ the previous subsection and of matrix-algebra semisimplicity:
   projective representations, twisted group algebras, and the comparison of
   circle-valued with complex-unit coefficients;
 - weak and pre-bialgebras, and C\*-structures on Hopf algebras;
-- pivotal, spherical, fusion and module categories, and Frobenius–Perron
+- rigid, pivotal, spherical, fusion and module categories, and Frobenius–Perron
   dimensions;
 - fusion (based) rings and NIM-reps;
 - semisimplicity of star-closed matrix algebras, which
