@@ -73,12 +73,15 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     With the notation of Lemma~\ref{lem:ldp_repeated_block_polar}, fixed points
     $\rho_j$ of the blocks, and $\ket{\Omega_j}$ the product of the pairs of
     $\rho_j$ over $M$ sites in the bond space of block $j$, the corrected
-    approximating state on $N=qM$ sites is
+    approximating state on $N=qM$ sites with coefficients $\alpha_j$ is
     \begin{align*}
         \ket{\widetilde\phi_N}\propto V^{\otimes M}\sum_j\alpha_j
-        L_j^{\otimes M}\ket{\Omega_j},\qquad
-        \alpha_j=\frac{\beta_j}{\bigl(\sum_l\lvert\beta_l\rvert^2\bigr)^{1/2}}.
+        L_j^{\otimes M}\ket{\Omega_j}.
     \end{align*}
+    When the weights $\beta_j$ of Lemma~\ref{lem:ldp_repeated_block_polar} are
+    not all zero, the source's coefficients are
+    $\alpha_j=\beta_j/\bigl(\sum_l\lvert\beta_l\rvert^2\bigr)^{1/2}$; if all
+    $\beta_j$ vanish these coefficients are undefined.
     It is obtained from the corrected block form of
     Lemma~\ref{lem:ldp_repeated_block_polar} by replacing each $P_j$ by its
     fixed point, as \cite[eq.~(S7)]{Malz2024Preparation} does with the printed
