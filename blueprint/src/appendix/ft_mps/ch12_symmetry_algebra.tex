@@ -13,20 +13,18 @@ permutation of the physical index; it is useful for symmetries that act by
 reordering basis states rather than by a general linear map. % The statements of this section are auxiliary constructions not
 % directly sourced from~\cite{PerezGarcia2008StringOrder}.
 
-\begin{definition}[Permutation symmetry datum]\label{def:on_site_symmetry_perm}
-    \lean{MPSTensor.OnSiteSymmetry}
-    \leanok
-    An \emph{on-site symmetry datum} for a group $G$ on a physical
-    space of dimension $d$ consists of a matrix-valued map
-    $u : G \to \MN{d}$ and a physical-index action
-    $\sigma : G \to \mathrm{End}(\{0,\ldots,d{-}1\})$.
+\begin{definition}[Permutation action on the physical index]\label{def:on_site_symmetry_perm}
+    \mathlibok % Mathlib: MulAction.
+    A \emph{permutation action} of a group $G$ on the physical index set
+    $I$ is a map $\sigma : G \to \mathrm{End}(I)$ with $\sigma(1) = \id$ and
+    $\sigma(gh) = \sigma(g) \circ \sigma(h)$ for all $g, h \in G$.
 \end{definition}
 
 \begin{definition}[Permutation-twisted tensor]\label{def:perm_twisted_tensor}
     \lean{MPSTensor.TwistedTensor}
     \leanok
     \uses{def:on_site_symmetry_perm, def:mps_tensor}
-    Given an on-site symmetry datum $(u, \sigma)$, the
+    Given a permutation action $\sigma$ of $G$ on $I$, the
     \emph{permutation-twisted tensor} at group element $g$ is
     \begin{align}
         (A^{\sigma_g})^i & := A^{\sigma(g)(i)}.
@@ -58,7 +56,7 @@ reordering basis states rather than by a general linear map. % The statements of
     \lean{MPSTensor.TwistedTensor_one}
     \leanok
     \uses{def:perm_twisted_tensor}
-    If $\sigma(1) = \id$, then $(A^{\sigma_1})^i = A^i$ for all~$i$.
+    For a permutation action $\sigma$, $(A^{\sigma_1})^i = A^i$ for all~$i$.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:perm_twisted_tensor}
@@ -77,8 +75,7 @@ $\sigma(h)$ acts first on the index.
     \lean{MPSTensor.TwistedTensor_mul}
     \leanok
     \uses{def:perm_twisted_tensor}
-    If $\sigma(gh) = \sigma(g) \circ \sigma(h)$ for all $g, h \in G$,
-    then
+    For a permutation action $\sigma$ and all $g, h \in G$,
     \begin{align}
         A^{\sigma_{gh}} & = (A^{\sigma_g})^{\sigma_h}.
         \label{eq:symmetry_perm_composition}

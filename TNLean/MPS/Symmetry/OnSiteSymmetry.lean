@@ -6,49 +6,39 @@ Authors: TNLean contributors
 import TNLean.MPS.Defs
 
 /-!
-# On-site symmetries of matrix product states
+# Permutation twists of matrix product state tensors
 
-This file defines on-site symmetry data and the corresponding physical-index twist of an MPS
-tensor.
+A group acting on the physical index set by permutations, that is, a `MulAction G (Fin d)`,
+twists a tensor by relabelling its physical index. The twist by a product is the composite of
+the twists, and the twist by the identity is trivial.
 -/
 
 open scoped Matrix
 
 namespace MPSTensor
 
-variable {G : Type*} [Group G] {d D : ℕ}
+variable {G : Type*} [Monoid G] {d D : ℕ} [MulAction G (Fin d)]
 
-/-- On-site symmetry data on the physical index:
-`u` is a matrix-valued map on the group and `σ` is the physical-index action. -/
-structure OnSiteSymmetry (G : Type*) [Group G] (d : ℕ) where
-  u : G → Matrix (Fin d) (Fin d) ℂ
-  σ : G → Fin d → Fin d
+/-- Tensor twisted by the physical permutation action at group element `g`.
 
-/-- Tensor twisted by the physical permutation action `σ` at group element `g`.
+This is the index-permutation twist `A^{σ_g}` defined by `(TwistedTensor A g) i = A (g • i)`. -/
+def TwistedTensor (A : MPSTensor d D) (g : G) : MPSTensor d D :=
+  fun i => A (g • i)
 
-This is the index-permutation twist `A^{σ_g}` defined by
-`(TwistedTensor S A g) i = A (S.σ g i)`. -/
-def TwistedTensor (S : OnSiteSymmetry G d) (A : MPSTensor d D) (g : G) : MPSTensor d D :=
-  fun i => A (S.σ g i)
+@[simp] lemma TwistedTensor_apply (A : MPSTensor d D) (g : G) (i : Fin d) :
+    TwistedTensor A g i = A (g • i) := rfl
 
-@[simp] lemma TwistedTensor_apply (S : OnSiteSymmetry G d)
-    (A : MPSTensor d D) (g : G) (i : Fin d) :
-    TwistedTensor S A g i = A (S.σ g i) := rfl
-
-/-- Twisting by the identity is trivial when `σ 1 = id`. -/
-@[simp] lemma TwistedTensor_one (S : OnSiteSymmetry G d)
-    (hσ1 : S.σ 1 = id) (A : MPSTensor d D) :
-    TwistedTensor S A 1 = A := by
+/-- Twisting by the identity is trivial. -/
+@[simp] lemma TwistedTensor_one (A : MPSTensor d D) :
+    TwistedTensor A (1 : G) = A := by
   funext i
-  simp [TwistedTensor, hσ1]
+  simp [TwistedTensor]
 
-/-- Composition law for permutation twists:
-if `σ (g * h) = σ g ∘ σ h`, then twisting by `g*h` equals twisting by `g` then `h`. -/
-lemma TwistedTensor_mul (S : OnSiteSymmetry G d)
-    (hσmul : ∀ g h : G, S.σ (g * h) = S.σ g ∘ S.σ h)
-    (A : MPSTensor d D) (g h : G) :
-    TwistedTensor S A (g * h) = TwistedTensor S (TwistedTensor S A g) h := by
+/-- Composition law for permutation twists: twisting by `g * h` equals twisting by `g` then
+by `h`. -/
+lemma TwistedTensor_mul (A : MPSTensor d D) (g h : G) :
+    TwistedTensor A (g * h) = TwistedTensor (TwistedTensor A g) h := by
   funext i
-  simp [TwistedTensor, hσmul, Function.comp]
+  simp [TwistedTensor, mul_smul]
 
 end MPSTensor
