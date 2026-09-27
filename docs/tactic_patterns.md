@@ -24,6 +24,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### kernel projection under a right-spectator fiberwise conjugacy — promoted
+- **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
+  conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
+  `ker_starProjection_conj_linearIsometryEquiv` with
+  `ContinuousLinearMap.ker_starProjection_rightFiberwiseMap` and a `change`.
+- **Seen:** five occurrences across two files:
+  `openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
+  in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and
+  both `hP` and `hQ` in
+  `norm_suffixGroundProjection_comp_prefixDifference_le_active` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`.
+- **Abstraction:** `MPSTensor.ker_starProjection_conj_of_rightFiberwiseMap` in
+  `SpectatorTransport.lean`, stated in the composition form of the Hamiltonian
+  conjugacy lemmas; each call site is one application. The grouped estimate
+  ascribes the `LinearEquiv.conj` form, which is definitionally equal.
+
 ### common positive simple blocking of two or three MPUs — promoted
 - **Pattern:** choose a positive simple blocking for each MPU, add the chosen
   lengths, and use persistence of simplicity at every later direct blocking.
@@ -2238,6 +2256,18 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Candidates
+
+### Adjoint reversal of an orthogonal-projector error — candidate
+- **Pattern:** replace the norm of a projector product minus a self-adjoint
+  projector by the norm of its adjoint, reverse the product, and reverse the
+  sign of the difference.
+- **Occurrences:** `norm_projector_defect_adjoint` in
+  `TNLean/MPS/ParentHamiltonian/BlockIntervalDefectDecay.lean` and
+  `norm_projection_difference` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/WholeIncrementSpectatorTransport.lean`.
+- **Count:** two occurrences across two files. The second also removes a
+  nested projection using subspace containment. If another use appears,
+  separate the common adjoint identity into a submodule helper theorem.
 
 ### Spectator ranges of block sums — factored
 - **Pattern:** identify a spectator boundary map as a coordinate map composed
