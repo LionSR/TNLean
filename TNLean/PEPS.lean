@@ -103,6 +103,7 @@ import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGaugeUniqueness
 import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusLatticeGraph
+import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleReferenceData

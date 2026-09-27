@@ -364,6 +364,118 @@ parameter; the dual quantum-double tensor below is $G$-isometric for its
 color-shift representation, and the constant $c$ absorbs the
 normalization of the tensor \cite{gap:rmp_peps_quantum_double_g_isometry}.
 
+The invariance of a $G$-injective tensor lets a string of $U_g$'s on the
+virtual bonds be deformed across the sites of a network
+\cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}. To
+state this on the torus, orient the horizontal edges to the right and the
+vertical edges downwards, as in the source, and let the bonds carry
+operators.
+
+\begin{definition}[Torus network with operators on the bonds]%
+    \label{def:peps_torus_bond_network}
+    \lean{TNLean.PEPS.torusBondNetwork, TNLean.PEPS.torusLegKernel,
+        TNLean.PEPS.torusLegKernel_apply, TNLean.PEPS.torusLegKernel_mul,
+        TNLean.PEPS.torusLegMatrix, TNLean.PEPS.torusLegRep,
+        TNLean.PEPS.torusLegRep_apply, TNLean.PEPS.torusDress}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    Let every site $v$ of the torus carry a tensor $A_v$ with four virtual
+    indices, ordered top, right, down, left, and let every bond carry a
+    $D\times D$ matrix $O$: $O^{\mathrm h}_v$ on the horizontal bond from $v$
+    to $v+(1,0)$ and $O^{\mathrm v}_v$ on the vertical bond from $v+(0,1)$ to
+    $v$. Split every bond into its two ends, and give a labelling of the ends
+    the weight $O_{ij}$ on each bond whose head reads $i$ and whose tail
+    reads $j$. The network is the sum over all labellings of the ends of the
+    product of these weights and of the entries of the site tensors, each
+    reading the ends of its four legs. For a representation $g\mapsto U_g$ on
+    one bond, $U_g$ acts on the virtual system of a site by $U_g$ on the
+    incoming legs (top and left) and $U_g^{-1}$ on the outgoing legs (right
+    and down), each along the orientation of its edge
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[Diagonal operators on the bonds]%
+    \label{lem:peps_torus_bond_network_diagonal}
+    \lean{TNLean.PEPS.torusBondNetwork_diagonal,
+        TNLean.PEPS.torusBondNetwork_one,
+        TNLean.PEPS.stateCoeff_torusSiteTensor_eq_torusBondNetwork}
+    \leanok
+    \uses{def:peps_torus_bond_network, lem:peps_torus_site_tensor_contraction}
+    If every bond carries a diagonal matrix, the network is the sum over one
+    index per bond of the product of the diagonal entries and of the site
+    tensors. In particular, with the identity on every bond it is the
+    contraction of the site tensors, and for $w,h\ge3$ and $A_v=a^{\sigma(v)}$
+    it is the coefficient of the torus PEPS of $a$ at $\sigma$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The weight of a labelling vanishes unless the two ends of every bond
+    carry the same index, and the labellings with equal ends correspond to
+    the assignments of one index per bond.
+\end{proof}
+
+\begin{lemma}[Moving bond operators into the site tensors]%
+    \label{lem:peps_torus_bond_network_gauge}
+    \lean{TNLean.PEPS.torusBondNetwork_gauge}
+    \leanok
+    \uses{def:peps_torus_bond_network}
+    Let $P_v$ and $Q_v$ be matrices at every site. Replacing the matrix $O$
+    of every bond by $P_{\text{head}}\,O\,Q_{\text{tail}}$ gives the same
+    network as keeping $O$ and replacing every site tensor $A_v$ by the
+    tensor that has absorbed $P_v$ into its incoming legs and $Q_v$ into its
+    outgoing legs.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand each product $P\,O\,Q$ into its entries. The resulting sum runs
+    over the labellings of the bond ends and over new intermediate indices;
+    exchanging the roles of the two families, the intermediate indices
+    become the labelling of the bond ends and the old labels become the
+    summation indices of the absorbed matrices at the sites. The factors
+    $P_{v+(1,0)}$ and $Q_{v+(0,1)}$ are reindexed by a unit shift of the
+    torus.
+\end{proof}
+
+\begin{theorem}[Deformation of a string of $U_g$'s]%
+    \label{thm:peps_torus_operator_string_deformation}
+    \lean{TNLean.PEPS.vecMul_torusLegMatrix_of_comp_eq,
+        TNLean.PEPS.torusWestSouthOperatorString,
+        TNLean.PEPS.torusNorthEastOperatorString,
+        TNLean.PEPS.torusBondNetwork_westSouthOperatorString_eq,
+        TNLean.PEPS.IsGInjective.torusBondNetwork_westSouthOperatorString_eq}
+    \leanok
+    \uses{def:peps_g_injective, lem:peps_torus_bond_network_gauge}
+    Let $a$ be a four-leg tensor with $\mathcal{P}(a)U_g=\mathcal{P}(a)$ for
+    every $g$, the invariance clause of $G$-injectivity for the action of
+    Definition~\ref{def:peps_torus_bond_network}. Fix a rectangle of $m<w$
+    columns and $n<h$ rows of sites. A string of $U_g$'s carries $U_g$ on
+    the vertical bonds, which it crosses going right, and $U_g^{-1}$ on the
+    horizontal bonds, which it crosses going down. In the torus network of
+    $a$, the string along the left and bottom sides of the rectangle and the
+    string along its top and right sides give the same network
+    \cite[Section~``Two dimensions: $G$-injective PEPS'', eq.~(2d:move-strings)
+        and Lemma~``Deformations of the string'']{Schuch2010PEPS}. Only the
+    invariance is used: the source assumes that $U_g$ contains every
+    irreducible representation, and its argument, like this one, does not
+    use it.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\Phi_v=g^{-1}$ on the sites of the rectangle and $\Phi_v=1$
+    elsewhere, and apply Lemma~\ref{lem:peps_torus_bond_network_gauge} with
+    $P_v=U_{\Phi_v}$ and $Q_v=U_{\Phi_v}^{-1}$ to the second string. A bond
+    with both ends inside or both outside the rectangle carries the identity
+    in both strings and keeps it. A
+    bond entering the rectangle across its top side is multiplied by
+    $U_g^{-1}$ at its head, which cancels the $U_g$ of the second string; a
+    bond leaving it across its right side is multiplied by $U_g$ at its
+    tail, which cancels its $U_g^{-1}$. A bond entering across the left side
+    acquires $U_g^{-1}$ and a bond leaving across the bottom side acquires
+    $U_g$, which is the first string. By the invariance every site tensor
+    absorbs $U_{\Phi_v}$ on its incoming and $U_{\Phi_v}^{-1}$ on its
+    outgoing legs unchanged.
+\end{proof}
+
 \begin{definition}[Dual quantum-double tensor]%
     \label{def:peps_quantum_double_dual}
     \lean{TNLean.PEPS.colorDiag, TNLean.PEPS.colorDiag_one,
@@ -420,6 +532,32 @@ normalization of the tensor \cite{gap:rmp_peps_quantum_double_g_isometry}.
     $\langle\mathcal{P}x,\mathcal{P}y\rangle
         =\sum_h\overline{(\mathcal{P}x)(\text{differences of }h)}\,y(h)
         =|G|\langle x,y\rangle$.
+\end{proof}
+
+\begin{corollary}[Strings of $R_g$'s on the dual quantum-double network]%
+    \label{cor:peps_quantum_double_dual_string_deformation}
+    \lean{TNLean.PEPS.rightRegularMatrix,
+        TNLean.PEPS.colorShiftRep_eq_torusLegRep,
+        TNLean.PEPS.torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq}
+    \leanok
+    \uses{thm:peps_quantum_double_dual_g_isometric,
+        thm:peps_torus_operator_string_deformation}
+    Let $R_g$ be the permutation matrix of $h\mapsto hg$. The color shift of
+    the dual tensor is the action of $R_g$ on the incoming and $R_g^{-1}$ on
+    the outgoing legs. Hence, in the torus network of the dual tensor with
+    colors in $G$ on the bonds, a string of $R_g$'s along the left and bottom
+    sides of a rectangle of $m<w$ columns and $n<h$ rows of sites gives the
+    same network as the string along its top and right sides
+    \cite[Section~``Two dimensions: $G$-injective PEPS'',
+        eq.~(2d:move-strings)]{Schuch2010PEPS}.
+\end{corollary}
+
+\begin{proof}\leanok
+    On the incoming legs $R_g$ sends $x$ to $h\mapsto x(hg)$, and on the
+    outgoing legs $R_g^{-1}$ acting along the edge does the same, so the
+    action on the four legs is the color shift. The dual tensor is invariant
+    under it by Theorem~\ref{thm:peps_quantum_double_dual_g_isometric}, and
+    Theorem~\ref{thm:peps_torus_operator_string_deformation} applies.
 \end{proof}
 
 Placed at every site of the torus, the dual tensor gives a network whose
