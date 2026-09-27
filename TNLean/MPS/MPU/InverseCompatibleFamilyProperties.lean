@@ -41,8 +41,8 @@ the discharged premise occurs in arXiv:2502.20257, line 5344. -/
 private theorem adjoint_simple_of_canonical_simple {d D : ℕ} {U : MPOTensor d D}
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U) :
     IsMPUSimple (physicalAdjointTensor U) := by
-  have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 0 1).mp hsimple
-  apply (hU.physicalAdjointTensor.isMPUSimple_tfae.out 0 1).mpr
+  have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
+  apply (hU.physicalAdjointTensor.isMPUSimple_tfae.out 1 2).mpr
   rw [rightRank_physicalAdjointTensor, leftRank_physicalAdjointTensor, mul_comm]
   exact hrank
 

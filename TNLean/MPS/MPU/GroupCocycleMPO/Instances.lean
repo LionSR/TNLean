@@ -90,7 +90,8 @@ theorem wGate_cyclicTwo :
   rw [wGate]
   congr 1
   funext kl
-  simpa using cyclicTwo_site (bitEquiv kl.1) (bitEquiv kl.2)
+  have h := cyclicTwo_site (bitEquiv kl.1) (bitEquiv kl.2)
+  rwa [Equiv.symm_apply_apply, Equiv.symm_apply_apply] at h
 
 /-- The operator `∏ CZ_{i,i+1} Z_i ∏ X_i` on a periodic chain of `N` qubits: all spins are
 flipped by `CZXCompression.spinFlip`, then each controlled-`Z` and each `Z` contributes its
@@ -129,7 +130,8 @@ theorem mpo_tensor_cyclicTwo (N : ℕ) [NeZero N] :
     decide
   rw [mpo_tensor_apply, czxDecorated, Matrix.monomial_apply, hshift]
   split_ifs with hs
-  · simp only [CZXCompression.czExponent, CZXCompression.spinFlip_apply, cyclicTwo_site,
+  · refine (Finset.prod_congr rfl fun i _ ↦ cyclicTwo_site (t i) (t (i + 1))).trans ?_
+    simp only [CZXCompression.czExponent, CZXCompression.spinFlip_apply,
       site_rev, Finset.prod_mul_distrib, pow_add, Finset.prod_pow_eq_pow_sum]
   · rfl
 
@@ -195,7 +197,10 @@ theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ}
   rw [mpo_tensor_apply]
   congr 1
   simp only [kleinCocycle, Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one, toAdd_mul,
-    toAdd_inv, neg_add_eq_sub, Prod.snd_sub]
+    toAdd_inv, Prod.snd_add, Prod.snd_neg]
+  refine Finset.prod_congr rfl fun i _ ↦ ?_
+  congr 3
+  exact neg_add_eq_sub _ _
 
 /-- Project result: the four operator laws for the `ℤ₂ × ℤ₂` instance. -/
 theorem klein_operator_laws :

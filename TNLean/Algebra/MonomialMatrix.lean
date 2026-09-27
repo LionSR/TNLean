@@ -19,8 +19,9 @@ vector at `s` to `φ s` times the basis vector at `σ s`:
 Such matrices describe operators of the form
 $T\ket{s}=\varphi(s)\ket{\sigma(s)}$; a vector `v` is fixed by `T` exactly
 when `v (σ s) = φ s * v s` for every `s`. Products, adjoints, reindexings, and
-scalar multiples of monomial matrices are again monomial, and a monomial
-matrix with unimodular phases is unitary.
+scalar multiples of monomial matrices are again monomial, a monomial
+matrix with unimodular phases is unitary, and a monomial matrix whose
+permutation has no fixed point has trace zero.
 -/
 
 namespace Matrix
@@ -49,6 +50,12 @@ theorem monomial_apply_of_ne [Zero R] (σ : Equiv.Perm ι) (φ : ι → R) {t s 
 /-- Scalar multiples of monomial matrices are monomial. -/
 theorem smul_monomial [MulZeroClass R] (σ : Equiv.Perm ι) (φ : ι → R) (c : R) :
     c • monomial σ φ = monomial σ (c • φ) := by
+  ext t s
+  by_cases h : t = σ s <;> simp [monomial_apply, h]
+
+/-- The negative of a monomial matrix is monomial with negated phases. -/
+theorem neg_monomial [NegZeroClass R] (σ : Equiv.Perm ι) (φ : ι → R) :
+    -monomial σ φ = monomial σ (-φ) := by
   ext t s
   by_cases h : t = σ s <;> simp [monomial_apply, h]
 
@@ -148,5 +155,18 @@ theorem monomial_mem_unitaryGroup [CommRing R] [StarRing R] (σ : Equiv.Perm ι)
   rw [hσ]
   simp only [Equiv.symm_apply_apply, h]
   exact monomial_one
+
+/-- The trace of a monomial matrix is the sum of the phases at the fixed points of its
+permutation. -/
+theorem trace_monomial [AddCommMonoid R] (σ : Equiv.Perm ι) (φ : ι → R) :
+    trace (monomial σ φ) = ∑ s, if σ s = s then φ s else 0 := by
+  simp only [trace, diag, monomial_apply, eq_comm]
+
+/-- A monomial matrix whose permutation has no fixed point has trace zero. -/
+theorem trace_monomial_eq_zero [AddCommMonoid R] (σ : Equiv.Perm ι) (φ : ι → R)
+    (hσ : ∀ s, σ s ≠ s) :
+    trace (monomial σ φ) = 0 := by
+  rw [trace_monomial]
+  exact Finset.sum_eq_zero fun s _ ↦ by simp [hσ s]
 
 end Matrix

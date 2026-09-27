@@ -15,8 +15,15 @@ For the Fibonacci string-net example of arXiv:1511.08090:
 
 - `bmwshv17_fibonacci_block_entries_provenance.tex` records that the source
   prints the Fibonacci F-symbols but no numeric entries of the two operator
-  blocks, the placement of the F-symbols used for the blocks, and that the
-  checked fusion rules and projector identity concern the bare F-symbols.
+  blocks, the placement of the F-symbols used for the blocks, that on edge
+  label `τ` a diagonal bond similarity relates the source's G-symbol tensor to
+  these blocks, that at edge label `1` the same similarity fixes the source's
+  letters, which are diagonal matrix units, so the source's blocks satisfy the
+  Fibonacci fusion rules on the full alphabet (the former scope restriction to
+  edge label `τ` is resolved), and that the review's prefactor `1/√(d_A d_D)` gives the congruence
+  `W^{-1/2} O W^{-1/2}`, which contradicts the review's own fusion statement in
+  the orthonormal basis (a Local fix, together with the review's garbled
+  F-symbol selection rule).
 - `bmwshv17_joint_block_left_inverse.tex` records that the simultaneous left
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical
@@ -53,16 +60,22 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_czx_boundary_chain.tex` records that the virtual action of the
+  on-site CZX symmetry is identified with the CZX matrix product unitary on a
+  closed chain of legs subject to the plaquette constraint, and that the
+  support of the contraction of a region of the torus on that chain is not
+  formalized.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the
   printed quantum-double tensor is not normalized (factor `|G|`); that the
   quantum-double instance uses the right-regular representation, equivalent
   to the printed left-regular one; and that the review's statements about the
-  contracted network (the primal tensor's symmetry under every irreducible
-  representation, and the coloring superposition, which on a torus covers only
-  the Gauss-law configurations of trivial holonomy) are formalized only for
-  one tensor or not at all.
+  contracted network are formalized on the torus: the primal tensor's
+  symmetry under every irreducible representation as a pulling-through
+  identity, and the coloring superposition as the equal-weight superposition
+  of the Gauss-law configurations of trivial holonomy, the only sector the
+  dual network reaches on a torus.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -72,13 +85,16 @@ For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
-  tensors and physical Z gates of the 2025 diagram. The shared-tensor
-  correspondence remains open under #7738. The note also records that the
+  tensors and physical Z gates of the 2025 diagram. The corrected
+  Z-decorated tensor is formalized with its all-length unitarity, which
+  resolves the note. The note also records that the
   bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
   the normalized tensor, while the matrices printed there are its unnormalized
   rescaling, for which the claims of that passage hold, and that the printed
   matrices give the gate order opposite to the verbal description, a global
-  sign `(-1)^N`.
+  sign `(-1)^N`, and that the review's main text calls the one-dimensional
+  block of the square the identity where the appendix obtains `(-1)^N I`, a
+  difference by the same sign that a rescaling of the tensor by `i` removes.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
@@ -512,6 +528,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   with constants uniform in the volume and violates the printed bound. The
   note also shows that the vanishing of the martingale differences below the
   threshold is the minimal repair, and that repaired theorem is formalized.
+- `cpgsv21_block_parent_interaction_range.tex` records that the overlap
+  argument for block-injective parent Hamiltonians first constructs a gapped
+  range chosen by the argument, and the two-range comparison that transfers
+  the gap to every range allowed by the printed interaction condition.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison, including the lower-endpoint mismatch in the printed proof of
   Nachtergaele's Theorem 2.1(i), whose resolution is in the note above. The
@@ -521,7 +541,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   note records the finite-row cyclic-window
   reduction and the remaining overlapping-window anticommutator comparison;
   the local norm-compression statements are sufficient stronger substitutes
-  tracked by issue #952.
+  tracked by issue #952. The note is classified as a false source claim
+  because an injective primitive tensor of bond dimension four violates the
+  printed projector estimate with the dimension-only prefactor $k^2$ at a
+  prescribed admissible rate from the intersection threshold.
 - `cpsv16_nncph_ground_state_scope.tex` records the separation between the
   zero-energy ground-vector predicate and the source ground-space spanning
   predicates for CPSV16 Theorem 3.10(iii). The finite Beigi sector graph and
@@ -578,6 +601,14 @@ note.
 
 For the matrix product operator symmetries of arXiv:2203.12563:
 
+- `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
+  `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
+  trivial action of `ψ` is forced by the source's identification of that phase
+  with part of `𝓜_TY`.
+- `glm23_reps3_su24_module_list.tex` records that completeness of the listed
+  `Rep(S₃)` and `su(2)₄` phases is formalized only on one block, with a
+  two-block representation of `Rep(S₃)` showing that the representation
+  identity alone does not determine the list.
 - `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
   algebras, symmetric families, and nonnegative integer representations uses
   only the periodic-boundary form of the source's arbitrary-boundary
@@ -614,7 +645,9 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   tensors omit the factors `v_e v_f` of the `G`-symbols and store the `σ`
   tensor multiplied by `√2`, so that all entries lie in `ℤ[√2]`; states the
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
-  leaves open whether omitting the factors `v` changes the periodic operators.
+  shows that the source's G-symbol tensors are related to the formal tensors by
+  the diagonal bond similarity `g(u, l) = (v_u / v_l)^{1/2}`, so omitting the
+  factors `v` leaves the periodic operators and the fusion algebra unchanged.
 
 For the domain walls of anomalous symmetries in arXiv:2405.00439:
 
@@ -622,6 +655,18 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   printed for the two CZX product states do not give reductions, the
   corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
   $L_0/L_1=-1=\omega$ is unchanged.
+- `gs24_domain_wall_nondegenerate.tex` records the conventions that domain
+  walls and their phases are nonzero and that the local action of the
+  symmetry on a domain wall holds against blocked regions of the two ground
+  states.
+- `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
+  the unbroken subgroup `H` of the classification of the L-symbols by `H`
+  and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
+  trivialization of `ω|_H` is chosen) is the stabilizer of one block, as in
+  arXiv:2203.12563, not the kernel of the action on blocks printed in
+  arXiv:2405.00439; the two agree exactly when the stabilizer is normal, in
+  particular for abelian groups, and `S_3` acting on three blocks separates
+  them.
 
 For the group matrix product operators of arXiv:2203.12563:
 
@@ -629,6 +674,12 @@ For the group matrix product operators of arXiv:2203.12563:
   $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
+- `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
+  $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
+  $Z$ on the second qubit, form an exact normal representation whose
+  anomaly three-cocycle has the detector values $(+1,+1,-1)$ of the type-II
+  row of the table, and that the separation of the eight classes by these
+  values is not formalized.
 
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
@@ -662,3 +713,25 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
   tends to `1/√5` for every blocking length.
+- `mswc24_block_form_mixed_overlap.tex` records that the block form of the
+  positive part in eq. (S5) also fails when every multiplicity is one, because
+  `B†B` couples distinct blocks through the overlaps of their `q`-site states,
+  and that part (ii) of the approximation-error lemma fails for the state of
+  eq. (S7): for `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` the error is at least
+  `(9/25)^q/16` for `M ≥ 3`, which the printed rate `(N/q) e^{-γq/ξ_diag}` does
+  not control since the one-dimensional blocks leave `ξ_diag` unconstrained.
+  Under the added hypothesis that the `q`-site states of distinct blocks are
+  orthogonal, the block form holds for multiplicity one and part (ii) is proved
+  with no condition `q = o(N)`.
+- `mswc24_decaying_correlations_windowed_connected.tex` records that the
+  correlation estimate of Lemma 2 of the Supplemental Material is proved with
+  the bound in every window of `K ≤ 2` consecutive separations and for the
+  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
+  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
+  need not vanish at finite `N`; the corrected form suffices for Theorem 1.
+- `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
+  in depth `o(log N)`) was first formalized for a normal tensor in the gauge
+  `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
+  quantitative form `N ≤ C(T+1)e^{b(T+1)}`; resolved: the reduction of a normal
+  tensor to this gauge, with which both proofs begin, is now formalized, and
+  the theorem holds for every normal tensor.

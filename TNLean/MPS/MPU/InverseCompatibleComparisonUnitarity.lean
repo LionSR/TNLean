@@ -68,9 +68,9 @@ theorem inverseCompatibleComparisonK_isUnitaryBetween
     Matrix.scalar_mul_star_eq_one_of_mul_map_star_eq_smul_one T T σ hσ
   have hphase' : star σ * σ = 1 := by rw [mul_comm, hphase]
   have hu : (sourceU U hU.ρ hU.ρ_posDef).IsUnitaryBetween :=
-    (hU.isMPUSimple_tfae.out 0 2).mp hsimple
+    (hU.isMPUSimple_tfae.out 1 3).mp hsimple
   have hv : (sourceV U hU.ρ hU.ρ_posDef).IsUnitaryBetween :=
-    (hU.isMPUSimple_tfae.out 0 3).mp hsimple
+    (hU.isMPUSimple_tfae.out 1 4).mp hsimple
   let K := inverseCompatibleComparisonK U T hU.ρ hU.ρ_posDef
   have hgate := sourceU_eq_smul_inverseCompatibleComparisonK_kronecker_sourceV_adjoint
     U T hT hU.ρ hU.ρ_posDef σ hσ
