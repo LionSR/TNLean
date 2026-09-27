@@ -354,16 +354,16 @@ order~\cite{PerezGarcia2008StringOrder,Schuch2011Phases,Cirac2021Matrix}.
 
 \begin{theorem}[Doubly degenerate entanglement spectrum of the AKLT state]
     \label{thm:aklt_entanglement_spectrum_even}
-    \lean{MPSTensor.akltBlocked_even_finrank_eigenspace}
+    \lean{MPSTensor.akltBlocked_even_finrank_eigenspace, MPSTensor.akltTensor_twist_intertwine, MPSTensor.akltProjRep_generators_anticomm, MPSTensor.akltBlocked_transferMap_one, MPSTensor.akltBlockedZ2Z2Action_unitary}
     \leanok
-    \uses{thm:spt_entanglement_spectrum_even, thm:aklt_blocked_injective, thm:aklt_gauge_anticomm, lem:twisted_tensor_block_gauge}
+    \uses{thm:spt_entanglement_spectrum_even, thm:aklt_blocked_injective, thm:aklt_z2z2_symmetric, lem:twisted_tensor_block_gauge}
     Let $\Lambda$ be a positive definite fixed point of the adjoint transfer map
     of the length-$2$ blocked AKLT tensor.  Every eigenspace of $\Lambda$ has
     even dimension.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:spt_entanglement_spectrum_even, thm:aklt_blocked_injective, thm:aklt_gauge_anticomm, lem:twisted_tensor_block_gauge}
+    \uses{thm:spt_entanglement_spectrum_even, thm:aklt_blocked_injective, thm:aklt_z2z2_symmetric, lem:twisted_tensor_block_gauge}
     The blocked tensor is injective and satisfies $\E(\Id)=\Id$.  The two
     generators of $\Z_2\times\Z_2$ act by unitary Kronecker squares with virtual
     gauges $i\sigma_y$ and $\sigma_z$, which carry over from the single site by

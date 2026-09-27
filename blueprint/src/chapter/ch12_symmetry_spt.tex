@@ -205,7 +205,46 @@ $\E_A$ itself is used, describes the same spectrum.
     is a multiple of $W=V^\dagger$.
 \end{proof}
 
-\begin{theorem}[Even degeneracy of the entanglement spectrum]
+\begin{lemma}[No one-dimensional eigenspace for a commutant of a non-trivial projective representation]
+    \label{lem:projective_commutant_eigenspace}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute}
+    \leanok
+    \uses{def:projective_rep, def:scalar_cocycle}
+    Let $\rho$ be a projective representation of $G$ on $\C^D$ whose factor system
+    $\omega$ is not cohomologous to the trivial one, and let $\Lambda$ commute with
+    every $\rho(g)$.  Then no eigenspace of $\Lambda$ is one-dimensional.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each $\rho(g)$ maps every eigenspace of $\Lambda$ into itself.  If an
+    eigenspace were spanned by one vector $v$, then $\rho(g)v=c_gv$ with
+    $c_g\neq0$, and $\rho(g)\rho(h)=\omega(g,h)\rho(gh)$ applied to $v$ gives
+    $\omega(g,h)=c_gc_hc_{gh}^{-1}$, a coboundary.
+\end{proof}
+
+\begin{theorem}[Degeneracy of the entanglement spectrum]
+    \label{thm:spt_entanglement_spectrum_degenerate}
+    \lean{MPSTensor.finrank_eigenspace_ne_one_of_isNontrivialClass}
+    \leanok
+    \uses{thm:virtual_gauge_fixes_boundary_state, lem:projective_commutant_eigenspace, thm:virtual_rep_injective}
+    Let $A$ be injective with $\E_A(\Id)=\Id$, let $\Lambda$ be a positive
+    definite matrix with $\E_A^\dagger(\Lambda)=\Lambda$, and let $U$ be a unitary
+    representation of $G$ under which $A$ is symmetric with virtual projective
+    representation $\rho$, that is,
+    $\sum_jU(g)_{ij}A^j=\rho(g^{-1})A^i\rho(g^{-1})^{-1}$.  If the factor system of
+    $\rho$ has a non-trivial class, no eigenspace of $\Lambda$ is one-dimensional:
+    every eigenvalue of the entanglement spectrum is degenerate
+    \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_gauge_fixes_boundary_state, lem:projective_commutant_eigenspace}
+    Every $\rho(g)$ is the virtual gauge of $U(g^{-1})$ and commutes with $\Lambda$
+    by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
+    Lemma~\ref{lem:projective_commutant_eigenspace}.
+\end{proof}
+
+\begin{theorem}[Even degeneracy for anticommuting gauges]
     \label{thm:spt_entanglement_spectrum_even}
     \lean{MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges}
     \leanok
@@ -214,8 +253,9 @@ $\E_A$ itself is used, describes the same spectrum.
     $u,v$ be unitaries with virtual gauges $X,Y$, that is,
     $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ and
     $\sum_j v_{ij}A^j=\eta\,YA^iY^{-1}$ with $\zeta,\eta\neq0$.  If $XY=-YX$,
-    then every eigenspace of $\Lambda$ has even dimension: every eigenvalue of
-    the entanglement spectrum is degenerate \cite[Section~III.A]{Cirac2021Matrix}.
+    then every eigenspace of $\Lambda$ has even dimension.  This sharpens
+    Theorem~\ref{thm:spt_entanglement_spectrum_degenerate} when the projective
+    representation contains an anticommuting pair.
 \end{theorem}
 
 \begin{proof}\leanok

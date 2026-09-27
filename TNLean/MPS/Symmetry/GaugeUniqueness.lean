@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Chain.OneSidedInverse
 import QICLean.Algebra.ScalarCommutant
+import TNLean.MPS.Core.Blocking
 
 /-!
 # Gauge uniqueness for injective MPS tensors
@@ -14,7 +15,10 @@ If two invertible gauges `X` and `Y` both map an injective tensor `A` to the sam
 `B`, then `Y` is a nonzero scalar multiple of `X`.
 
 This is the scalar-commutant input needed to make the symmetry gauge
-well-defined up to phase.
+well-defined up to phase.  The gauge-phase form, eq. `eq:XAX=B` of
+arXiv:2011.12127 (`Papers/2011.12127/TN-Review-main.tex` lines 1085–1086), is proved
+for injective tensors (`gauge_phase_unique`) and for normal tensors
+(`gauge_phase_unique_of_isNormal`).
 -/
 
 open scoped Matrix
@@ -122,7 +126,9 @@ The source writes the proportionality constant as a phase `e^{iφ}`, which it is
 when `X` and `Y` are unitary; for general invertible gauges the constant is a
 nonzero scalar.  The proof: `Z = Y X⁻¹` satisfies `Z Aⁱ = c Aⁱ Z`, which extends
 by linearity to every matrix; the identity matrix gives `c = 1`, and then `Z`
-commutes with the whole matrix algebra, so it is a scalar. -/
+commutes with the whole matrix algebra, so it is a scalar.  The statement for
+tensors that are normal, with injectivity only after blocking, is
+`gauge_phase_unique_of_isNormal` below. -/
 theorem gauge_phase_unique [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     {X Y : GL (Fin D) ℂ} {c : ℂ}
     (h : ∀ i, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X =
@@ -176,5 +182,103 @@ theorem gauge_phase_unique [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsInjectiv
           Matrix.one_mul]
   rw [hY, smul_smul]
   simp [ha0]
+
+/-! ### Gauge-phase uniqueness for normal tensors -/
+
+/-- A letterwise gauge-phase relation propagates to words, with the phase raised
+to the word length. -/
+theorem evalWord_gauge_phase {A : MPSTensor d D} {X Y : GL (Fin D) ℂ} {c : ℂ}
+    (h : ∀ i, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X =
+      c • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * Y)) :
+    ∀ w : List (Fin d),
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w * X =
+        c ^ w.length •
+          (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w * Y)
+  | [] => by simp [Kraus.evalWord]
+  | i :: w => by
+      have hw := evalWord_gauge_phase h w
+      have hsplit : ∀ Z : GL (Fin D) ℂ,
+          ((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * (A i * Kraus.evalWord A w) * Z =
+            (((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * Z) *
+              (((Z⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord A w * Z) := by
+        intro Z
+        simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
+      simp only [Kraus.evalWord, List.length_cons]
+      rw [hsplit, hsplit, h i, hw, Matrix.smul_mul, Matrix.mul_smul, smul_smul, pow_succ,
+        mul_comm c]
+
+/-- A normal tensor of positive bond dimension has a nonzero letter: otherwise every
+word of positive length vanishes and no word space is the full matrix algebra. -/
+theorem exists_apply_ne_zero_of_isNormal [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) : ∃ i, A i ≠ 0 := by
+  classical
+  by_contra hcon
+  push Not at hcon
+  obtain ⟨N, hNpos, hN⟩ := hA
+  have hB : Kraus.IsInjective (blockTensor A N) :=
+    (isNBlkInjective_iff_blockTensor_isInjective A N).1 hN
+  have hBzero : ∀ I, blockTensor A N I = 0 := by
+    intro I
+    have hlen := Kraus.length_wordOfBlock d N I
+    change Kraus.evalWord A (Kraus.wordOfBlock d N I) = 0
+    cases hw : Kraus.wordOfBlock d N I with
+    | nil => rw [hw] at hlen; simp at hlen; omega
+    | cons i w => simp [Kraus.evalWord, hcon i]
+  have htop := hB.span_eq_top
+  have hbot : Submodule.span ℂ (Set.range (blockTensor A N)) = ⊥ :=
+    (Submodule.span_eq_bot).2 (fun x ⟨I, hI⟩ => hI ▸ hBzero I)
+  rw [hbot] at htop
+  have : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ (⊥ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) :=
+    htop ▸ Submodule.mem_top
+  exact one_ne_zero ((Submodule.mem_bot ℂ).1 this)
+
+/-- **Gauge-phase uniqueness for normal tensors.**
+Source: arXiv:2011.12127, §III.A, eq. `eq:XAX=B`
+(`Papers/2011.12127/TN-Review-main.tex` lines 1085–1086): for a normal tensor,
+`X⁻¹ Aⁱ X = e^{iχ} Y⁻¹ Aⁱ Y` for all `i` forces `e^{iχ} = 1` and `X ∝ Y`.
+
+Blocking to an injective length gives `X ∝ Y` from `gauge_phase_unique`; the
+single-letter relation then reads `Y⁻¹ Aⁱ Y = c Y⁻¹ Aⁱ Y`, and some letter is
+nonzero, so `c = 1`. -/
+theorem gauge_phase_unique_of_isNormal [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) {X Y : GL (Fin D) ℂ} {c : ℂ}
+    (h : ∀ i, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X =
+      c • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * Y)) :
+    c = 1 ∧ ∃ u : Units ℂ,
+      (X : Matrix (Fin D) (Fin D) ℂ) = (u : ℂ) • (Y : Matrix (Fin D) (Fin D) ℂ) := by
+  classical
+  obtain ⟨N, hNpos, hN⟩ := hA
+  have hB : Kraus.IsInjective (blockTensor A N) :=
+    (isNBlkInjective_iff_blockTensor_isInjective A N).1 hN
+  have hBrel : ∀ I, ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * blockTensor A N I * X =
+      c ^ N • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * blockTensor A N I * Y) := by
+    intro I
+    have := evalWord_gauge_phase h (Kraus.wordOfBlock d N I)
+    rwa [Kraus.length_wordOfBlock] at this
+  obtain ⟨-, u, hu⟩ := gauge_phase_unique hB hBrel
+  refine ⟨?_, u, hu⟩
+  -- With `X = u Y`, the letter relation reads `Y⁻¹ Aⁱ Y = c Y⁻¹ Aⁱ Y`.
+  have hXinv : ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      ((u⁻¹ : Units ℂ) : ℂ) • ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    have h1 : (((u⁻¹ : Units ℂ) : ℂ) • ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
+        (X : Matrix (Fin D) (Fin D) ℂ) = 1 := by
+      rw [hu, Matrix.smul_mul, Matrix.mul_smul, smul_smul, Units.inv_mul, one_smul,
+        Units.inv_mul]
+    calc ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+        = ((((u⁻¹ : Units ℂ) : ℂ) • ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
+            (X : Matrix (Fin D) (Fin D) ℂ)) * ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ) := by
+          rw [h1, Matrix.one_mul]
+      _ = _ := by rw [Matrix.mul_assoc, Units.mul_inv, Matrix.mul_one]
+  obtain ⟨i, hi0⟩ := exists_apply_ne_zero_of_isNormal ⟨N, hNpos, hN⟩
+  have hi := h i
+  rw [hXinv, hu, Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul, smul_smul,
+    Units.mul_inv, one_smul] at hi
+  by_contra hc
+  have h1 : ((1 - c) • (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * Y)) = 0 := by
+    rw [sub_smul, one_smul, ← hi, sub_self]
+  have h2 := (smul_eq_zero.mp h1).resolve_left (sub_ne_zero.mpr (Ne.symm hc))
+  have h3 := congrArg (fun M => (Y : Matrix (Fin D) (Fin D) ℂ) * M *
+    ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) h2
+  exact hi0 (by simpa [Matrix.mul_assoc] using h3)
 
 end MPSTensor

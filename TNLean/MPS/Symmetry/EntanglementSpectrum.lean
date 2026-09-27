@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.AnticommutingEvenDimension
+import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.StringOrderAux
@@ -22,8 +23,11 @@ degenerate.
 **Formalized here.** For an injective tensor normalized by `E(1) = 1` with
 positive definite fixed point `Λ` of the adjoint transfer map, every virtual
 gauge `X` of a unitary on-site symmetry, `∑ⱼ uᵢⱼ Aʲ = ζ X Aⁱ X⁻¹`, is a nonzero
-multiple of a unitary `W` with `W Λ W† = Λ`, so `X` commutes with `Λ`.  If two
-such gauges anticommute, every eigenspace of `Λ` has even dimension.
+multiple of a unitary `W` with `W Λ W† = Λ`, so `X` commutes with `Λ`.  If the
+virtual projective representation of a unitary on-site symmetry group has a
+non-trivial cohomology class, no eigenspace of `Λ` is one-dimensional: every
+eigenvalue is degenerate.  If two gauges anticommute, every eigenspace of `Λ`
+even has even dimension.
 
 The source writes the canonical form with the fixed point of `ρ ↦ ∑ Aⁱ ρ Aⁱ†`;
 this development uses the mirror normalization `∑ Aⁱ Aⁱ† = 1` with `Λ` the
@@ -38,6 +42,8 @@ every eigenspace is the degeneracy the source asserts.
 * `MPSTensor.exists_unitary_gauge_of_symmetry` : every virtual gauge of a unitary
   on-site symmetry is a nonzero multiple of a unitary fixing `Λ`
 * `MPSTensor.commute_boundaryState_of_symmetry` : every such gauge commutes with `Λ`
+* `MPSTensor.finrank_eigenspace_ne_one_of_isNontrivialClass` : a virtual projective
+  representation with non-trivial class leaves no one-dimensional eigenspace of `Λ`
 * `MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges` : two anticommuting
   gauges force every eigenspace of `Λ` to have even dimension
 * `MPSTensor.twistedTensor_blockTensor_eq_gauge` : a virtual gauge of an on-site
@@ -171,6 +177,36 @@ theorem commute_boundaryState_of_symmetry
       _ = Λ * W := by rw [hWΛ]
   rw [hc]
   exact (Commute.smul_right hcomm.symm c)
+
+/-- **Degeneracy of the entanglement spectrum.**
+Source: arXiv:2011.12127, §III.A, paragraph "Entanglement spectrum and edge
+modes" (`Papers/2011.12127/TN-Review-main.tex` line 1171): for an injective MPS in
+canonical form with on-site symmetry whose virtual projective representation is
+non-trivial, every eigenvalue of the fixed point `ρ` has degenerate multiplicity.
+
+Here `A` is injective with `E(1) = 1`, `Λ` is a positive definite fixed point of the
+adjoint transfer map, `U` is a unitary on-site representation, and `ρ` is a virtual
+projective representation of the symmetry, `∑ⱼ U(g)ᵢⱼ Aʲ = ρ(g⁻¹) Aⁱ ρ(g⁻¹)⁻¹`, as
+produced by `virtual_rep_of_symmetric_injective`.  If the factor system of `ρ` has a
+non-trivial class, no eigenspace of `Λ` is one-dimensional. -/
+theorem finrank_eigenspace_ne_one_of_isNontrivialClass {G : Type*} [Group G]
+    {A : MPSTensor d D} (hA : Kraus.IsInjective A)
+    (hNorm : Kraus.transferMap A 1 = 1)
+    {Λ : Matrix (Fin D) (Fin D) ℂ} (hΛpos : Λ.PosDef)
+    (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} (hU : ∀ g, U g * (U g)ᴴ = 1)
+    {ω : TNLean.Algebra.ScalarCocycle G}
+    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
+    (hρ : ∀ g i, twistedTensor A U g i =
+      (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+    (hω : TNLean.Algebra.ScalarCocycle.IsNontrivialClass ω) (μ : ℂ) :
+    Module.finrank ℂ (Module.End.eigenspace (Matrix.toLin' Λ) μ) ≠ 1 := by
+  refine ρ.finrank_eigenspace_ne_one_of_commute hω (fun h => ?_) μ
+  refine commute_boundaryState_of_symmetry hA hNorm hΛpos hΛfix (hU h⁻¹) one_ne_zero
+    (fun i => ?_)
+  rw [one_smul]
+  simpa [twistedTensor] using hρ h⁻¹ i
 
 /-- **Even degeneracy of the entanglement spectrum.**
 Source: arXiv:2011.12127, §III.A, paragraph "Entanglement spectrum and edge
