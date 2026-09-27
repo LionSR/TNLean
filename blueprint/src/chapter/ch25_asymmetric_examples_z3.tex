@@ -669,6 +669,7 @@ pair blocks, each compressing onto one group tensor.
         Z3Anomalous.defectProjector, Z3Anomalous.defectProjector_eq,
         Z3Anomalous.operatorRepresentation,
         Z3Anomalous.defectProjector_eq_finiteGroupUnitaryAverage,
+        Z3Anomalous.mpo_uTensor_mul_defectProjector,
         Z3Anomalous.defectProjector_mulVec_eq_self_iff,
         Z3Anomalous.range_defectProjector_mulVecLin,
         Z3Anomalous.defectProjector_mulVec_single,
@@ -692,13 +693,15 @@ pair blocks, each compressing onto one group tensor.
     \uses{thm:asymex_z3anomalous_defect_sum, thm:asymex_z3_physical_kernels,
         lem:asymex_z3_physical_cube, thm:asymex_z3anomalous_group_law,
         thm:mpug_finite_group_unitary_average_projection,
-        thm:asymex_z3anomalous_defect_square, thm:asymex_z3anomalous_family}
+        thm:asymex_z3anomalous_defect_square, thm:asymex_z3anomalous_family,
+        def:mpug_operator_representation}
     Theorem~\ref{thm:asymex_z3anomalous_defect_sum} and
     Lemma~\ref{lem:asymex_z3_physical_cube} give
     $P_L=(\Id+U_L+U_L^2)/3$, and
     Theorem~\ref{thm:asymex_z3_physical_kernels} gives its basis action.
     By the operator laws of Theorem~\ref{thm:asymex_z3anomalous_family}, the
-    operators $\Id,U_L,U_L^\dagger$ form a unitary representation of $\Z_3$, and
+    operators $\Id,U_L,U_L^\dagger$ form a unitary representation of $\Z_3$
+    (Definition~\ref{def:mpug_operator_representation}), and
     $P_L$ is its normalized group average. By
     Theorem~\ref{thm:mpug_finite_group_unitary_average_projection},
     $P_L$ is an orthogonal projector.
@@ -706,8 +709,12 @@ pair blocks, each compressing onto one group tensor.
     $P_L\psi=\psi$ whenever $U_L\psi=\psi$; these identify its range.
     The identity $O_L(A)^2=3O_L(A)$ is $P_L^2=P_L$ multiplied by nine,
     and is also Theorem~\ref{thm:asymex_z3anomalous_defect_square}.
-    Neither $X$ nor $X^{-1}$ fixes a configuration when $L>0$.
-    Thus $\tr U_L=\tr U_L^\dagger=0$, and
+    The diagonal entries of the kernels in
+    Theorem~\ref{thm:asymex_z3_physical_kernels} are
+    $U_L(t,t)=\delta_{t,Xt}\,\omega^{F(t)}$ and
+    $U_L^\dagger(t,t)=\delta_{t,X^{-1}t}\,\omega^{-F(X^{-1}t)}$.
+    When $L>0$, $Xt\neq t$ and $X^{-1}t\neq t$ for every configuration $t$, so
+    $\tr U_L=\sum_tU_L(t,t)=0$ and likewise $\tr U_L^\dagger=0$. Hence
     $\rank P_L=\tr P_L=3^L/3$.
 \end{proof}
 
