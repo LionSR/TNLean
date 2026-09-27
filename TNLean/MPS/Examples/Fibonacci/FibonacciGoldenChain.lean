@@ -17,7 +17,11 @@ the three-site term `(H_i)_{x_i}^{x'_i} = −(F^{x_{i+1}}_{x_{i−1} τ τ})^1_{
 (F^{x_{i+1}}_{x_{i−1} τ τ})^1_{x'_i}` (lines 148–153), which is `diag(−1, 0, 0)` on
 `|1τ1⟩, |1ττ⟩, |ττ1⟩` and `−[[φ^{−2}, φ^{−3/2}], [φ^{−3/2}, φ^{−1}]]` between two `τ`
 neighbours (lines 154–175); lines 510–516: the topological symmetry `Y` with
-`⟨x'|Y|x⟩ = ∏_i (F^{x'_{i+1}}_{τ x_i τ})^{x'_i}_{x_{i+1}}` on the periodic chain.
+`⟨x'|Y|x⟩ = ∏_i (F^{x'_{i+1}}_{τ x_i τ})^{x'_i}_{x_{i+1}}` on the periodic chain. These formulas
+are quoted in Feiguin's notation `F^d_{abc}`; in the notation `[F^{abc}_d]_e^f` of
+`fibFSymbolGolden` the three-site term is `−[F^{x_{i−1} τ τ}_{x_{i+1}}]_{x_i}^1
+[F^{x_{i−1} τ τ}_{x_{i+1}}]_{x'_i}^1` and the factor of `Y` is
+`[F^{τ x_i τ}_{x'_{i+1}}]_{x'_i}^{x_{i+1}}`.
 Review: arXiv:2011.12127, Section 4 "MPO symmetries" and Appendix A, "The MPO for the Fibonacci
 model", `Papers/2011.12127/TN-Review-main.tex` lines 1388–1393 and 2613–2627: the anyonic spin
 chains built from the pulling-through tensors commute with the whole matrix product operator
@@ -110,7 +114,8 @@ def goldenChainHamiltonian (N : ℕ) [NeZero N] : Matrix (Fin N → Fin 2) (Fin 
 /-! ### The two blocks as nearest-neighbour kernels -/
 
 /-- Source: arXiv:cond-mat/0612341, `fibonacci.tex` lines 512–516. The factor
-`(F^{x'_{i+1}}_{τ x_i τ})^{x'_i}_{x_{i+1}}` of Feiguin's topological symmetry `Y` at the outputs
+`[F^{τ x_i τ}_{x'_{i+1}}]_{x'_i}^{x_{i+1}}` (Feiguin's `(F^{x'_{i+1}}_{τ x_i τ})^{x'_i}_{x_{i+1}}`)
+of Feiguin's topological symmetry `Y` at the outputs
 `x'_i = a'`, `x'_{i+1} = b'` and the inputs `x_i = a`, `x_{i+1} = b`. -/
 def fibYGolden (a' b' a b : Fin 2) : GoldenInt := fibFSymbolGolden 1 a 1 b' a' b
 
@@ -167,8 +172,8 @@ private theorem prod_eq_prod_of_bad {N : ℕ} [NeZero N] {L R : Fin N → ℂ} (
 
 /-- **The periodic operator of the `τ` block is Feiguin's topological symmetry.** Bridge: at
 every positive length, `O_N(B_τ)` is the nearest-neighbour product kernel with the factors
-`(F^{x'_{i+1}}_{τ x_i τ})^{x'_i}_{x_{i+1}}` of arXiv:cond-mat/0612341, `fibonacci.tex`
-lines 512–516. -/
+`[F^{τ x_i τ}_{x'_{i+1}}]_{x'_i}^{x_{i+1}}` of arXiv:cond-mat/0612341, `fibonacci.tex`
+lines 512–516, written there as `(F^{x'_{i+1}}_{τ x_i τ})^{x'_i}_{x_{i+1}}`. -/
 theorem mpo_fibTau_eq_neighbourKernel (N : ℕ) [NeZero N] :
     mpo fibTau N = neighbourKernel (fun a' b' a b ↦ goldenToComplex (fibYGolden a' b' a b)) N := by
   ext s t

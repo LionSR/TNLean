@@ -725,11 +725,7 @@ trivial fusion channel, with the amplitudes
     \left(F^{x_{i-1}\tau\tau}_{x_{i+1}}\right)_{x_i}^{1},
     \label{eq:asymex_fib_golden_term}
 \end{align}
-where $p_i$ changes only the label $x_i$. It is the projector onto
-$\ket{1\tau1}$ between two trivial neighbours, it vanishes between a trivial
-and a $\tau$ neighbour, and between two $\tau$ neighbours it is
-$\begin{pmatrix}\varphi^{-2}   & \varphi^{-3/2} \\
-               \varphi^{-3/2} & \varphi^{-1}\end{pmatrix}$ in the basis $1,\tau$ of~$x_i$.
+where $p_i$ changes only the label $x_i$.
 The Hamiltonian is $H_N=-\sum_ip_i$. The review states that such anyonic
 chains commute with the whole algebra of periodic
 operators~\cite{Cirac2021Matrix}.
@@ -739,8 +735,6 @@ operators~\cite{Cirac2021Matrix}.
     \lean{FibonacciCompression.goldenChainTermGolden,
         FibonacciCompression.goldenChainTerm,
         FibonacciCompression.goldenChainHamiltonian,
-        FibonacciCompression.goldenChainTermGolden_tau_tau,
-        FibonacciCompression.goldenChainTermGolden_of_ne_tau_tau,
         FibonacciCompression.fibYGolden,
         FibonacciCompression.fibOneKernelGolden}
     \leanok
@@ -751,6 +745,32 @@ operators~\cite{Cirac2021Matrix}.
     vacuum factor is $\delta_{x_n'x_n}\delta_{x_{n+1}'x_{n+1}}$ unless
     $x_n=x_{n+1}=1$, where it vanishes.
 \end{definition}
+
+\begin{theorem}[Values of the golden-chain projector]%
+    \label{thm:asymex_fib_golden_term_values}
+    \lean{FibonacciCompression.goldenChainTermGolden_tau_tau,
+        FibonacciCompression.goldenChainTermGolden_of_ne_tau_tau}
+    \leanok
+    \uses{def:asymex_fib_golden_chain}
+    The local term $p_i$ is the projector onto $\ket{1\tau1}$ between two
+    trivial neighbours, it vanishes between a trivial and a $\tau$ neighbour,
+    and between two $\tau$ neighbours it is
+    \begin{align}
+        \begin{pmatrix}
+            \varphi^{-2}   & \varphi^{-3/2} \\
+            \varphi^{-3/2} & \varphi^{-1}
+        \end{pmatrix}
+        \notag
+    \end{align}
+    in the basis $1,\tau$ of~$x_i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_fib_fsymbol_values}
+    The entries are products of two F-symbols and are checked entrywise in
+    $\Z[\sigma]$, where $\varphi^{-1}=\sigma^2$.
+\end{proof}
 
 \begin{theorem}[Site operators and nearest-neighbour kernels]%
     \label{thm:mpo_site_operator_neighbour_kernel}
@@ -771,11 +791,22 @@ operators~\cite{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    Both entries of $p_iK$ and $Kp_i$ at $(s,t)$ are sums over the label
-    at site $i$ of an intermediate configuration that agrees with $s$ or
-    $t$ elsewhere. The factors of $K$ on the bonds away from site $i$ are
-    the same in every term, and the remaining sums are the two sides of
-    the three-site identity.
+    Write $R(s,t)=\prod_{n\neq i-1,i}f(s_n,s_{n+1},t_n,t_{n+1})$ for the
+    factors of $K$ away from the two bonds at site $i$; it does not depend
+    on $s_i$ or $t_i$. Summing over the label $y$ at site $i$ of the
+    intermediate configuration,
+    \begin{align}
+        \bra{s}p_iK\ket{t}
+         & =R(s,t)\sum_yh(s_{i-1},s_{i+1},s_i,y)
+        f(s_{i-1},y,t_{i-1},t_i)f(y,s_{i+1},t_i,t_{i+1}),
+        \notag                                   \\
+        \bra{s}Kp_i\ket{t}
+         & =R(s,t)\sum_yf(s_{i-1},s_i,t_{i-1},y)
+        f(s_i,s_{i+1},y,t_{i+1})h(t_{i-1},t_{i+1},y,t_i).
+        \notag
+    \end{align}
+    The hypothesis with $(a',b',c')=(s_{i-1},s_i,s_{i+1})$ and
+    $(a,b,c)=(t_{i-1},t_i,t_{i+1})$ equates the two sums.
 \end{proof}
 
 \begin{theorem}[The golden chain commutes with the Fibonacci operators]%
@@ -791,12 +822,15 @@ operators~\cite{Cirac2021Matrix}.
     \leanok
     \uses{def:asymex_fib, def:asymex_fib_golden_chain, def:asymex_fib_projector}
     For every $N\geq2$, the golden chain $H_N$ commutes with $O_N(B_\tau)$,
-    with $O_N(B_1)$ and with the projector $\Pi_N$.
+    with $O_N(B_1)$ and with the projector $\Pi_N$, and, for each label $f$,
+    with the periodic operator of the operator tensor $S_f$ restricted to
+    configurations with edge label $\tau$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:mpo_site_operator_neighbour_kernel}
+    \uses{thm:mpo_site_operator_neighbour_kernel,
+        thm:asymex_fib_gsymbol_similarity}
     In the $\tau$ block the bond index at site $n$ is determined by the
     pair $(x_n',x_n)$, so the only closed bond configuration that survives
     gives
@@ -812,7 +846,10 @@ operators~\cite{Cirac2021Matrix}.
     checked on the sixty-four choices of the six outer and inner labels in
     exact golden arithmetic. The same identity holds for the kernel of
     $O_N(B_1)$. Summing over $i$ gives the first two statements, and the
-    third follows since $\Pi_N=w_1O_N(B_1)+w_\tau O_N(B_\tau)$.
+    third follows since $\Pi_N=w_1O_N(B_1)+w_\tau O_N(B_\tau)$. On edge label
+    $\tau$ the periodic operator of $S_f$ equals $O_N(B_f)$ by
+    Theorem~\ref{thm:asymex_fib_gsymbol_similarity}, which gives the last
+    statement.
 \end{proof}
 
 \subsection{Two periodic states and the Fibonacci action}
