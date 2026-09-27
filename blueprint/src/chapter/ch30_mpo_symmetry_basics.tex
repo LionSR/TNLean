@@ -200,10 +200,12 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
         MPOTensor.bondDim_le_one_of_mulTensor_eq_ite,
         MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion,
         MPOTensor.GroupFamily.isOnSite_of_closed_fusion,
-        MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_of_closed_fusion}
+        MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_of_closed_fusion,
+        MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion}
     \leanok
     \uses{def:injective, def:mpo_to_mps, def:mpdo_operator_product,
-        def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+        def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec,
+        def:mpug_anomaly_class}
     Let $\{T_g\}_{g\in G}$ be matrix product operator tensors of a group $G$
     whose doubled-index tensors are injective, with $U_gU_h=U_{gh}$ and
     $U_e=\Id$ on every nonempty chain, and let $(F^<_{g,h},F^>_{g,h})$ be
@@ -212,8 +214,8 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     and all physical indices $i,j$. Then every $T_g$ has bond dimension one,
     the representation is on-site, $U_g=u_g^{\otimes N}$ with
     $(u_g)_{ij}=T_g^{ij}$, and the anomaly three-cocycle $\omega$ of the
-    fusion tensors is a coboundary. The on-site conclusion does not use the
-    product law.
+    fusion tensors is a coboundary, so its class in $H^{3}(G,\C^{\times})$
+    vanishes. The on-site conclusion does not use the product law.
     % Source anchor: arXiv:2203.12563, Papers/2203.12563/REsubmission.tex,
     %   lines 1211--1213 (Lemma and proof), 641--656 (closed fusion,
     %   eq. fusiontensorG), 658 and 842 (on-site operators).
