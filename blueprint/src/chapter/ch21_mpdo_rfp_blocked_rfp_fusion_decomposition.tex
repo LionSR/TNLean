@@ -58,21 +58,19 @@
     $\mu_\alpha$ and $\nu_\beta$ be the positive diagonal multiplicity
     matrices in the one-site and two-site vertical canonical forms, and set
     $m_\alpha=\tr(\mu_\alpha)$ and $n_\beta=\tr(\nu_\beta)$.
-    For every horizontal bond matrix $X$ and every sector $\alpha$,
+    For every horizontal bond matrix $X$, every sector $\alpha$, and every
+    tensor letter $a$,
     \begin{align}
         A^{(2)}_{\sigma(\alpha)}(X)
          & =\frac{m_\alpha}{n_{\sigma(\alpha)}}
         V_\alpha
-        \iota_\alpha(A^{(1)}_\alpha(X))V_\alpha^*.
-        \notag
-    \end{align}
-    Consequently, for every tensor letter $a$,
-    \begin{align}
+        \iota_\alpha(A^{(1)}_\alpha(X))V_\alpha^*,
+        \label{eq:mpdo_vertical_coeff_comp_matrix} \\
         A^{(2)}_{\sigma(\alpha),a}
          & =\frac{m_\alpha}{n_{\sigma(\alpha)}}
         V_\alpha\,\iota_\alpha
         (A^{(1)}_{\alpha,a})V_\alpha^*.
-        \notag
+        \label{eq:mpdo_vertical_coeff_comp_letter}
     \end{align}
     This is the coefficient identity in
     \cite[Appendix~C.4, lines~2001--2008]{Cirac2016MPDO_arXiv}. It compares
@@ -91,8 +89,10 @@
         \notag
     \end{align}
     Positivity of $\nu_{\sigma(\alpha)}$ makes
-    $n_{\sigma(\alpha)}$ nonzero, so division gives the first identity.
-    Taking $X$ to be a matrix unit gives the tensor-letter identity.
+    $n_{\sigma(\alpha)}$ nonzero, so division gives
+    (\ref{eq:mpdo_vertical_coeff_comp_matrix}).
+    Taking $X$ to be a matrix unit gives
+    (\ref{eq:mpdo_vertical_coeff_comp_letter}).
 \end{proof}
 
 \begin{theorem}[Simultaneous representations of the blocked vertical operator]
@@ -118,14 +118,14 @@
         \left(\frac{m_\alpha}{n_{\sigma(\alpha)}}\right)^L
         \tr\!\left(\nu_{\sigma(\alpha)}^L\right)
         O_L\!\left(A^{(1)}_\alpha\right),
-        \notag                  \\
+        \label{eq:mpdo_blocked_vertical_op_reparam} \\
         O_L(B)
          & =\sum_{\alpha,\beta}
         \tr(\mu_\alpha^L)
         \tr(\mu_\beta^L)
         O_L\!\left(A^{(1)}_\alpha\right)
         O_L\!\left(A^{(1)}_\beta\right).
-        \notag
+        \label{eq:mpdo_blocked_vertical_op_product}
     \end{align}
     These are the two representations in
     \cite[Appendix~C.4, lines~2011--2018]{Cirac2016MPDO_arXiv}.
@@ -146,10 +146,10 @@
     multiplies every letter of $A^{(1)}_\alpha$ by
     $m_\alpha/n_{\sigma(\alpha)}$. Along a chain of length $L$ this scalar
     therefore occurs to the power $L$; unitary conjugation and the bond-index
-    identification leave the closing trace unchanged. This proves the first
-    formula.
+    identification leave the closing trace unchanged. This proves
+    (\ref{eq:mpdo_blocked_vertical_op_reparam}).
 
-    For the second formula, the vertical reading of a two-site block is the
+    For (\ref{eq:mpdo_blocked_vertical_op_product}), the vertical reading of a two-site block is the
     product tensor of two copies of the one-site vertical reading. Closed
     chains turn this tensor product into multiplication of operators. Expand
     each copy by the one-site vertical canonical form,

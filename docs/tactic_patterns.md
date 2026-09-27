@@ -24,6 +24,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### kernel projection under a right-spectator fiberwise conjugacy — promoted
+- **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
+  conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
+  `ker_starProjection_conj_linearIsometryEquiv` with
+  `ContinuousLinearMap.ker_starProjection_rightFiberwiseMap` and a `change`.
+- **Seen:** five occurrences across two files:
+  `openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
+  in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and
+  both `hP` and `hQ` in
+  `norm_suffixGroundProjection_comp_prefixDifference_le_active` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`.
+- **Abstraction:** `MPSTensor.ker_starProjection_conj_of_rightFiberwiseMap` in
+  `SpectatorTransport.lean`, stated in the composition form of the Hamiltonian
+  conjugacy lemmas; each call site is one application. The grouped estimate
+  ascribes the `LinearEquiv.conj` form, which is definitionally equal.
+
 ### common positive simple blocking of two or three MPUs — promoted
 - **Pattern:** choose a positive simple blocking for each MPU, add the chosen
   lengths, and use persistence of simplicity at every later direct blocking.
@@ -2239,6 +2257,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Adjoint reversal of an orthogonal-projector error — candidate
+- **Pattern:** replace the norm of a projector product minus a self-adjoint
+  projector by the norm of its adjoint, reverse the product, and reverse the
+  sign of the difference.
+- **Occurrences:** `norm_projector_defect_adjoint` in
+  `TNLean/MPS/ParentHamiltonian/BlockIntervalDefectDecay.lean` and
+  `norm_projection_difference` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/WholeIncrementSpectatorTransport.lean`.
+- **Count:** two occurrences across two files. The second also removes a
+  nested projection using subspace containment. If another use appears,
+  separate the common adjoint identity into a submodule helper theorem.
+
 ### Spectator ranges of block sums — factored
 - **Pattern:** identify a spectator boundary map as a coordinate map composed
   with the pointwise extension of the local boundary map, then distribute its
@@ -2305,10 +2335,11 @@ abstracted — record why, so it is not re-proposed).
     ...
   exact MPOTensor.mpo_eq_of_conj hGH hHG hconj L
   ```
-- **Seen:** three occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
-  (`mpo_fibStringNetEdgeTau`, `mpo_fibReviewTensor`, and the configuration-space variant in
-  `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review before merge.
-- **Status:** three occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
+- **Seen:** four occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
+  (`mpo_fibStringNetEdgeTau`, `mpo_fibStringNetTensor`, `mpo_fibReviewTensor`, and the
+  configuration-space variant in `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review
+  before merge; the first three already call `mpo_eq_of_diagonal_conj`.
+- **Status:** four occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
 - **Abstraction (available):** `Matrix.diagonal_mul_diagonal_inv`, `Matrix.diagonal_inv_mul_diagonal` and
   `MPOTensor.mpo_eq_of_diagonal_conj` in `TNLean/MPS/MPDO/BondSimilarity.lean`.
 - **Notes:** `mpo_eq_of_diagonal_conj g hg hconj L` takes a nowhere-zero `g` and the letterwise
