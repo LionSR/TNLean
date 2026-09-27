@@ -1388,11 +1388,14 @@ $A$ along $w$.
          & \ge c\,e^{-(s'-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
-    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. For
-    injective $A$ and $L=1$ this is the correlation estimate of
+    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. This is a
+    Hermitian variant of the correlation estimate of
     \cite[Lemma~2]{Malz2024Preparation}, with the separation $s$ ranging over
-    windows of $K$ consecutive values; the correction of the source's
-    statement is recorded in~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
+    windows of $K$ consecutive values and the connected correlator. The
+    source's own observables cannot be Hermitian when $\lambda_2$ is not real;
+    for them the bound holds in modulus at every separation, while the printed
+    real inequality fails when $\lambda_2$ is not real or is
+    negative~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1488,16 +1491,40 @@ $A$ along $w$.
 %% injective A with xi > 0, observables O_1, O'_s of norm one such that for
 %% every integer s > 1 and sufficiently large N the one-point functions
 %% vanish exactly (auxform1) and the correlator itself satisfies the real
-%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). Neither the bound
-%% at every s > 1 nor the exact vanishing is justified in general. The
-%% correlator of Hermitian observables is real; for a complex lambda_2 the
-%% source's choice pairs R_2 with its adjoint, the eigenvector for
-%% conj(lambda_2), and the leading part is a multiple of
-%% |lambda_2|^t cos(t theta + phi), which can vanish at individual s. The
-%% statement above therefore asserts the bound in every window of K <= 2
-%% consecutive separations, which the Vandermonde argument proves, and it
-%% uses the connected correlator, since the one-point functions need not
-%% vanish at finite N. It is stated for normal A with observables on L sites
+%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). The source's proof
+%% chooses non-Hermitian observables with E_O = |rho><l_2| and
+%% E_O' = |R_2><Tr|, with l_2 a left eigenvector and R_2 an ordinary
+%% eigenvector normalized by l_2(R_2) = 1. That expansion assumes the
+%% transfer map is diagonalizable. The repair for a nontrivial Jordan block
+%% keeps l_2 a left eigenvector and takes R_2 in the generalized eigenspace
+%% with the same normalization. Since l_2(rho) = 0 and Tr R_2 = 0, the one-point
+%% functions vanish exactly at every N >= s (algebraically, not asymptotically),
+%% and the two-point function is exactly lambda_2^{s-2} / Tr E^N, so the
+%% modulus form |<O_1 O'_s>| >= c e^{-(s-1)/xi} holds at every s >= 2. What
+%% fails is the printed real inequality. For complex lambda_2 the correlator
+%% is complex, and its real part is negative for infinitely many s. It also
+%% fails when lambda_2 is real and negative: the correlator has the sign of
+%% lambda_2^{s-2} and is negative at every odd s. The qubit Pauli tensor with
+%% weights q_0 = 1/16 and q_1 = q_2 = q_3 = 5/16 has every nontrivial transfer
+%% eigenvalue equal to -1/4. A
+%% Hermitian reading also fails: for Hermitian observables the
+%% limit correlator is real with leading part a multiple of
+%% |lambda_2|^t cos(t theta + phi), which falls below any c |lambda_2|^{s-1}
+%% infinitely often when theta/pi is irrational. For the injective tensor
+%% A^0 = 1/2, A^1 = diag(1, e^{i psi})/2, A^2 = sigma_x/2, A^3 = sigma_y/2
+%% at gate angle psi = pi/2, so arg(lambda_2) = pi/4. The Hermitian parts of
+%% the source's observables give a
+%% correlator vanishing exactly at s = 4, 8, 12, ... for every N >= s. The
+%% statement above uses Hermitian observables, as the proof of Theorem
+%% thm:ldp_depth_lower_bound needs, and therefore asserts the bound in every
+%% window of K <= 2 consecutive separations, which the Vandermonde argument
+%% proves; the connected correlator makes it independent of the one-point
+%% functions. Remaining issues in the source's proof: Lemma 2 is stated for
+%% injective A but applied to normal A on unblocked sites; diagonalizability
+%% of the transfer map (Jordan blocks) is never addressed; a factor 1/2 is
+%% missing in the trace-distance step; and s = 2T + 1 needs a sharp light
+%% cone. See docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex.
+%% It is stated for normal A with observables on L sites
 %% so that Theorem thm:ldp_depth_lower_bound applies at every N; for
 %% injective A and L = 1 it is the source's setting. The gauge
 %% (eq:ldp_normal_gauge) is the one the source's proof uses ("in the main text
@@ -1615,6 +1642,21 @@ $A$ along $w$.
     right side is $N^{-1/2+o(1)}$, so (\ref{eq:ldp_depth_contradiction}) fails
     for all $N$ larger than some $N_0$ determined by $A$ and the sequence
     $(T_N)$. For those $N$, $\varepsilon(\phi_N,\psi_N)>1/2$.
+
+    The argument is quantitative. With the overlap bound $1/2$ replaced by
+    $\eta\in(0,1]$, the constants $C_2$ and $C_3$ grow at most like
+    $\eta^{-1}$. Since $s'\le2T+C$, and the bound below is trivial when
+    $T\ge\xi\ln N/4$, (\ref{eq:ldp_depth_contradiction}) shows that
+    $\lvert\braket{\phi_N}{\psi_N}\rvert\ge\eta$ requires
+    \begin{align}
+        T
+         & \ge\frac\xi4\bigl(\ln N-\ln\ln N\bigr)-\xi\ln\frac1\eta-C_A,
+        \label{eq:ldp_depth_constant}
+    \end{align}
+    with $C_A$ depending only on $A$. The same constant $\xi/4$ in front of
+    $\ln N$ is implicit in the final inequality of the proof in
+    \cite{Malz2024Preparation}, which compares $N/\ln N$ with a multiple of
+    $e^{4T/\xi}$.
 \end{proof}
 %% The source proof applies Lemma 2, stated for injective A, to a normal A.
 %% Here the lemma is stated for normal A with observables on L sites, where
@@ -1628,17 +1670,26 @@ $A$ along $w$.
 %% both states become products of k ~ N/(4q) factors, bounds the fidelity
 %% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
 %% single separation s = 2T + 1, using the exact vanishing of the
-%% one-point functions. Both of those inputs are unavailable here (see the
-%% comment after Theorem thm:ldp_decaying_correlations), so the proof above
-%% replaces the product-fidelity step by the concentration of averages of
-%% n ~ N/s' translated observables. This concentration argument is not in
-%% the source. It is formalized for a tensor in the gauge
-%% (eq:ldp_normal_gauge) in Theorem thm:ldp_depth_lower_bound_gauge, and the
-%% reduction to the gauge in the first paragraph is Lemma
-%% lem:ldp_normal_gauge_reduction. The formal statement is given twice: for a
-%% tensor normal in the source's sense (irreducible, with the unique largest
-%% eigenvalue 1 of E_A), and for a tensor some blocking of which is injective,
-%% with the correlation length computed from lambda_2/lambda_1.
+%% one-point functions. That vanishing is exact for the source's
+%% non-Hermitian observables, and the source's route is correct once the
+%% real inequality of Lemma 2 is read in modulus, the factor 1/2 is restored
+%% in the trace-distance step, s = 2T + 1 is replaced by a separation larger
+%% than 2T, and the lemma is applied on blocks where normal A spans the
+%% matrix algebra (see the comment after Theorem
+%% thm:ldp_decaying_correlations). The lemma above is stated for Hermitian
+%% observables, so the proof above replaces the product-fidelity step by the
+%% concentration of averages of n ~ N/s' translated observables. Its
+%% constants give the depth bound T >= (xi/4)(ln N - ln ln N) - xi ln(1/eta)
+%% - C_A for overlap eta, recorded after the proof; the same xi/4 is
+%% implicit in the source's final inequality N/ln N > C e^{4T/xi}. This
+%% concentration argument is not in the source. It is formalized for a
+%% tensor in the gauge (eq:ldp_normal_gauge) in Theorem
+%% thm:ldp_depth_lower_bound_gauge, and the reduction to the gauge in the
+%% first paragraph is Lemma lem:ldp_normal_gauge_reduction. The formal
+%% statement is given twice: for a tensor normal in the source's sense
+%% (irreducible, with the unique largest eigenvalue 1 of E_A), and for a
+%% tensor some blocking of which is injective, with the correlation length
+%% computed from lambda_2/lambda_1.
 
 \begin{lemma}[Averages over separated windows]
     \label{lem:ldp_window_averages}
@@ -2028,23 +2079,31 @@ $A$ along $w$.
 
 % **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for a
 % block of multiplicity two; docs/paper-gaps/mswc24_multiplicity_fixed_point.tex.
-% No completion tag on this entry or its proof: the linked declarations
-% compute the overlap and the error for the displayed tensor, but that its
-% blocks are normal and that the tensor is their canonical form (S2) are not
-% formalized, so the refutation of Lemma 1'(ii) on its stated domain is not
-% yet certified.
+% The first linked declaration certifies that the displayed tensor is, after
+% ordering its bond coordinates, the canonical form (S2) of a basis of normal
+% tensors in canonical form II with the weight normalization of the source,
+% so the refutation holds on the domain on which Lemma 1'(ii) is stated.
 \begin{theorem}[The approximating state for a repeated block]
     \label{thm:ldp_approximation_error_repeated_block}
-    \lean{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor,
+    \lean{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock,
+        MPSTensor.isBNTCanonicalForm_repeatedBlockSector,
+        MPSTensor.reindex_toTensor_repeatedBlockSector,
+        MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor,
         MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor,
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis,
         MPSTensor.not_approximationError_le_repeatedBlockTensor}
+    \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
-        def:correlation_length}
+        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
+        def:cpsv_cfii}
     Let $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$,
     the canonical form with the normal block $A_1=(1,0)$ of multiplicity two and
     weights $(1,1)$ and the normal block $A_2=(0,1)$ of multiplicity one, so that
-    $\beta=(2,1)$ and $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$. Place
+    $\beta=(2,1)$ and $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$.
+    The blocks are normal and in canonical form~II, they form a basis of normal
+    tensors whose states become orthogonal as $N\to\infty$, and the weights satisfy $\lvert\mu_{j,k}\rvert\leq1$ with one of
+    modulus one, so $A$ satisfies every hypothesis of
+    \cite[Lemma~1$'$(ii)]{Malz2024Preparation}. Place
     the pair of the first block on its first copy. For every $q\geq1$ and
     $M\geq1$ the approximating state of
     Definition~\ref{def:ldp_non_normal_fixed_point} satisfies
@@ -2065,7 +2124,25 @@ $A$ along $w$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    Each block is one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, so its
+    transfer map is the identity. It is therefore irreducible and normal, and
+    left-canonical with the diagonal positive-definite fixed point $1$, which is
+    the canonical-form~II condition; the pairs below are built from this same
+    fixed point. Its self-overlap is one. The
+    states $\ket{0\cdots0}$ and $\ket{1\cdots1}$ of the blocks are linearly
+    independent for $N\geq1$, and the blocks are not related by a gauge
+    transformation and a phase, since $A_1^1=0\neq A_2^1$. With the bond
+    coordinates ordered as the two copies of $A_1$ followed by the copy of
+    $A_2$, and the weights $(1,1)$ and $1$, the direct sum of the copies is $A$:
+    for $i=0,1$,
+    \begin{align}
+        A^i & =A_1^i\oplus A_1^i\oplus A_2^i
+        =\operatorname{diag}\bigl(A_1^i,A_1^i,A_2^i\bigr).
+        \label{eq:ldp_repeated_block_assembly}
+    \end{align}
+
     For a tensor of diagonal matrices the blocked map factors as $B=CJ^\dagger$,
     where $J\colon\ket e\mapsto\ket{e\,e}$ and the column $e$ of $C$ is the state
     of the diagonal coordinate $e$ on $q$ sites; here these are $\ket{0\cdots0}$
@@ -2088,20 +2165,28 @@ $A$ along $w$.
 
 % **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for two
 % blocks of multiplicity one; docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
-% No completion tag on this entry or its proof, for the same reason as for
-% thm:ldp_approximation_error_repeated_block: the normality of the blocks
-% and the canonical form (S2) of the displayed tensor are not formalized.
+% As for thm:ldp_approximation_error_repeated_block, the first linked
+% declaration certifies the hypotheses of Lemma 1'(ii) for the displayed tensor.
 \begin{theorem}[The approximating state for overlapping blocks]
     \label{thm:ldp_approximation_error_overlapping_blocks}
-    \lean{MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
+    \lean{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock,
+        MPSTensor.isBNTCanonicalForm_overlappingBlockSector,
+        MPSTensor.reindex_toTensor_overlappingBlockSector,
+        MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
         MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor,
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis,
         MPSTensor.not_approximationError_le_overlappingBlockTensor}
+    \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
-        def:correlation_length}
+        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
+        def:cpsv_cfii}
     Let $A^0=\operatorname{diag}(1,3/5)$ and $A^1=\operatorname{diag}(0,4/5)$,
     the canonical form with the normal blocks $A_1=(1,0)$ and $A_2=(3/5,4/5)$, each
-    of multiplicity one and weight one, so that $\beta=(1,1)$. Put $s=(3/5)^q$,
+    of multiplicity one and weight one, so that $\beta=(1,1)$. The blocks are
+    normal and in canonical form~II and form a basis of normal tensors whose
+    states become orthogonal as $N\to\infty$, so $A$
+    satisfies every hypothesis of \cite[Lemma~1$'$(ii)]{Malz2024Preparation}.
+    Put $s=(3/5)^q$,
     the overlap of the states of the two blocks on $q$ sites,
     $u=\bigl(\sqrt{1+s}+\sqrt{1-s}\bigr)/2$ and
     $v=\bigl(\sqrt{1+s}-\sqrt{1-s}\bigr)/2$. For every $q\geq1$ and $M\geq1$ the
@@ -2123,7 +2208,14 @@ $A$ along $w$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    The hypotheses are checked as in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_repeated_block}: both blocks are
+    one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, their states
+    $\ket{0\cdots0}$ and $(\tfrac35\ket0+\tfrac45\ket1)^{\otimes N}$ are
+    linearly independent for $N\geq1$, and $A_1^1=0\neq A_2^1$.
+
     As in the proof of Theorem~\ref{thm:ldp_approximation_error_repeated_block},
     the Gram matrix of the blocked map on the diagonal coordinates is
     $G=\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)$, whose positive

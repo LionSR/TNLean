@@ -25,9 +25,14 @@ on `Fin d`, so that the nonempty words are a basis.
 * `WordAlgebra.ofWord w`: the basis element of the word `w : List (Fin d)`.
 * `WordAlgebra.aug`: the augmentation, the algebra map sending every generator to `0`; its kernel
   is the two-sided ideal `F₊` of polynomials without constant term.
-* `WordAlgebra.actAlgHom M`: the action of the word algebra on a module `M` by `ℂ`-linear
-  endomorphisms, and the trace character `WordAlgebra.traceChar M` together with the word
-  traces `WordAlgebra.traceWord M w`.
+* `WordAlgebra.traceChar M`: the trace character of a module `M`, the trace of Mathlib's
+  action `Algebra.lsmul ℂ ℂ M` of the word algebra by `ℂ`-linear endomorphisms, together
+  with the word traces `WordAlgebra.traceWord M w`.
+
+The type is Mathlib's `MonoidAlgebra` of the free monoid rather than `FreeAlgebra ℂ (Fin d)`
+(the two are identified by `FreeAlgebra.equivMonoidAlgebraFreeMonoid`): the word module of a
+tensor is Mathlib's `Representation.asModule` of its free-monoid representation, which is a
+module over exactly this monoid algebra, and the words are literally its basis.
 
 ## Main results
 
@@ -126,23 +131,19 @@ section Module
 variable (M : Type*) [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
   [IsScalarTower ℂ (WordAlgebra d) M]
 
-/-- The action of the word algebra on `M` by `ℂ`-linear endomorphisms. -/
-noncomputable def actAlgHom : WordAlgebra d →ₐ[ℂ] Module.End ℂ M := Algebra.lsmul ℂ ℂ M
-
-@[simp] lemma actAlgHom_apply (p : WordAlgebra d) (m : M) : actAlgHom M p m = p • m := rfl
-
-/-- The trace character `p ↦ tr (ρ_M p)` of the module `M`. -/
+/-- The trace character `p ↦ tr (ρ_M p)` of the module `M`, where `ρ_M = Algebra.lsmul ℂ ℂ M`
+is the action of the word algebra by `ℂ`-linear endomorphisms. -/
 noncomputable def traceChar : WordAlgebra d →ₗ[ℂ] ℂ :=
-  (LinearMap.trace ℂ M).comp (actAlgHom M).toLinearMap
+  (LinearMap.trace ℂ M).comp (Algebra.lsmul ℂ ℂ M).toLinearMap
 
 lemma traceChar_apply (p : WordAlgebra d) :
-    traceChar M p = LinearMap.trace ℂ M (actAlgHom M p) := rfl
+    traceChar M p = LinearMap.trace ℂ M (Algebra.lsmul ℂ ℂ M p) := rfl
 
 /-- The trace of the action of the word `w`. -/
 noncomputable def traceWord (w : List (Fin d)) : ℂ := traceChar M (ofWord w)
 
 lemma traceWord_def (w : List (Fin d)) :
-    traceWord M w = LinearMap.trace ℂ M (actAlgHom M (ofWord w)) := rfl
+    traceWord M w = LinearMap.trace ℂ M (Algebra.lsmul ℂ ℂ M (ofWord w : WordAlgebra d)) := rfl
 
 variable {M}
 
@@ -157,10 +158,11 @@ lemma traceChar_eq_of_traceWord_eq {χ : WordAlgebra d →ₗ[ℂ] ℂ}
 /-- If every generator acts as zero on `M`, the word algebra acts through the augmentation. -/
 lemma smul_eq_aug_smul (h0 : ∀ (i : Fin d) (m : M), (ofWord [i] : WordAlgebra d) • m = 0)
     (p : WordAlgebra d) (m : M) : p • m = aug p • m := by
-  have key : actAlgHom (d := d) M = (Algebra.ofId ℂ (Module.End ℂ M)).comp aug := by
+  have key : (Algebra.lsmul ℂ ℂ M : WordAlgebra d →ₐ[ℂ] Module.End ℂ M) =
+      (Algebra.ofId ℂ (Module.End ℂ M)).comp aug := by
     refine MonoidAlgebra.algHom_ext ?_ (Subsingleton.elim _ _)
     intro g
-    change actAlgHom M (ofWord (FreeMonoid.toList g)) =
+    change Algebra.lsmul ℂ ℂ M (ofWord (FreeMonoid.toList g) : WordAlgebra d) =
       (Algebra.ofId ℂ (Module.End ℂ M)) (aug (ofWord (FreeMonoid.toList g)))
     rw [aug_ofWord]
     generalize FreeMonoid.toList g = w
@@ -169,7 +171,7 @@ lemma smul_eq_aug_smul (h0 : ∀ (i : Fin d) (m : M), (ofWord [i] : WordAlgebra 
     | cons i w =>
       simp only [reduceCtorEq, ite_false, map_zero]
       ext m
-      rw [ofWord_cons, map_mul, Module.End.mul_apply, actAlgHom_apply, actAlgHom_apply, h0]
+      rw [ofWord_cons, map_mul, Module.End.mul_apply, Algebra.lsmul_apply, Algebra.lsmul_apply, h0]
       simp
   have := congrArg (fun f : WordAlgebra d →ₐ[ℂ] Module.End ℂ M => f p m) key
   simpa [Algebra.ofId_apply] using this

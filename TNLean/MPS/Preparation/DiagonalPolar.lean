@@ -433,6 +433,21 @@ theorem nonNormalApproxOverlap_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ
 
 /-! ### One-dimensional blocks -/
 
+/-- A one-dimensional tensor in the gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq.
+`eq:Ek_decomp`, has the identity as transfer map. -/
+theorem transferMap_eq_id_of_dim_one (A : MPSTensor d 1)
+    (hA : ∑ i, star (A i 0 0) * A i 0 0 = 1) : Kraus.transferMap A = LinearMap.id := by
+  refine LinearMap.ext fun X => ?_
+  have hi : ∀ i, (A i * X * (A i)ᴴ) 0 0 = star (A i 0 0) * A i 0 0 * X 0 0 := fun i => by
+    simp [Matrix.mul_apply, conjTranspose_apply]; ring
+  rw [Kraus.transferMap_apply]
+  ext a c
+  obtain rfl : a = 0 := Subsingleton.elim _ _
+  obtain rfl : c = 0 := Subsingleton.elim _ _
+  rw [Matrix.sum_apply]
+  simp_rw [hi]
+  rw [← Finset.sum_mul, hA, one_mul, LinearMap.id_apply]
+
 /-- A one-dimensional tensor in the gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp`
 has the identity as transfer map, so `1` is its only eigenvalue. Its correlation length, formed
 from a bound `λ₂` on the eigenvalues other than `1` (`ξ_jj = -1/ln|λ₂^{(j)}|`, eq. (S10)), is
@@ -440,20 +455,9 @@ therefore not constrained: every `λ₂` bounds them. -/
 theorem eq_one_of_hasEigenvalue_transferMap_of_dim_one (A : MPSTensor d 1)
     (hA : ∑ i, star (A i 0 0) * A i 0 0 = 1) {μ : ℂ}
     (h : Module.End.HasEigenvalue (Kraus.transferMap A) μ) : μ = 1 := by
-  have hid : ∀ X, Kraus.transferMap A X = X := by
-    intro X
-    have hi : ∀ i, (A i * X * (A i)ᴴ) 0 0 = star (A i 0 0) * A i 0 0 * X 0 0 := fun i => by
-      simp [Matrix.mul_apply, conjTranspose_apply]; ring
-    rw [Kraus.transferMap_apply]
-    ext a c
-    obtain rfl : a = 0 := Subsingleton.elim _ _
-    obtain rfl : c = 0 := Subsingleton.elim _ _
-    rw [Matrix.sum_apply]
-    simp_rw [hi]
-    rw [← Finset.sum_mul, hA, one_mul]
   obtain ⟨v, hv⟩ := h.exists_hasEigenvector
   have heq := hv.apply_eq_smul
-  rw [hid] at heq
+  rw [transferMap_eq_id_of_dim_one A hA, LinearMap.id_apply] at heq
   have h1 : (1 - μ) • v = 0 := by rw [sub_smul, one_smul, ← heq, sub_self]
   rcases smul_eq_zero.mp h1 with h1 | h1
   · exact (sub_eq_zero.mp h1).symm

@@ -5,9 +5,7 @@
 
 \begin{definition}[Finite-group unitary average]
     \label{def:mpug_finite_group_unitary_average}
-    \lean{TNLean.Algebra.finiteGroupUnitaryAverage,
-        TNLean.Algebra.unitaryMatrixRepresentation}
-    \leanok
+    \mathlibok % Mathlib: Representation.averageMap, whose matrix is P_rho.
     \discussion{7458}
     Let $G$ be a finite group and let $\rho\colon G\to\mathrm U(n)$ be a
     unitary representation. Define
@@ -21,8 +19,8 @@
 
 \begin{theorem}[Finite-group unitary average is an orthogonal projection]
     \label{thm:mpug_finite_group_unitary_average_projection}
-    \lean{TNLean.Algebra.isStarProjection_finiteGroupUnitaryAverage,
-        TNLean.Algebra.isOrthogonalProjection_finiteGroupUnitaryAverage}
+    \lean{TNLean.Algebra.isStarProjection_inv_card_smul_sum,
+        TNLean.Algebra.isOrthogonalProjection_inv_card_smul_sum}
     \leanok
     \discussion{7458}
     \uses{def:mpug_finite_group_unitary_average}
@@ -7392,6 +7390,41 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     Theorem~\ref{thm:mpug_cyclic_invariant_gauge} makes their cyclic
     invariants at $a$ equal. Finally $I_{a,n}(f^*\omega)=I_{f(a),n}(\omega)$
     because $f(a^k)=f(a)^k$.
+\end{proof}
+
+\begin{theorem}[Values of the anomaly three-cochain from finitely many identities]%
+    \label{thm:mpug_omega_integer_certificate}
+    \lean{MPSTensor.isDressedProportional_complexOfInt,
+        MPSTensor.isDressedProportional_complexOfInt_of_mem,
+        MPOTensor.GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV,
+        MPOTensor.GroupFamily.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.ofBondOne,
+        MPOTensor.GroupFamily.FusionData.omega_ofBondOne}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain}
+    Let $T$ be a tensor with integer letters, $A$ a family of integer
+    matrices, $L$ and $R$ integer matrices, and $z\in\{1,-1\}$. Suppose
+    that $LT^aT^b=A^aLT^b$ for all letters $a,b$ and that $LT^a=zRT^a$ for
+    every letter $a$. Then $LT^{\mathbf w}=zRT^{\mathbf w}$ for every nonempty
+    word $\mathbf w$. It suffices to check these identities on a list of pairs
+    $(T^a,A^a)$ that contains the pair of every letter. In particular, for the
+    anomaly three-cochain of Definition~\ref{def:mpug_anomaly_three_cochain}:
+    if the two fusion trees of a triple coincide, then $\omega$ is one at
+    that triple; and a family of bond-one tensors whose stacked products
+    $O_gO_h$ equal $O_{gh}$ has, with all fusion tensors equal to one, the
+    constant three-cochain one.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Since $z^2=1$, the identity $LT^a=zRT^a$ gives $RT^a=zLT^a$, and hence
+    $RT^aT^b=zA^aLT^b=A^aRT^b$. Induction on the word gives the dressed
+    identity, and the entrywise image in $\C$ preserves all products. When
+    the two fusion trees coincide, the scalar $1$ satisfies the dressed
+    identity, so Theorem~\ref{thm:mpug_anomaly_three_cochain_spec} gives
+    $\omega=1$. For bond dimension one, both fusion trees are products of
+    one-by-one identity matrices and identifications of one-dimensional
+    spaces, so they coincide.
 \end{proof}
 
 \begin{definition}[L-symbols and compatibility]
