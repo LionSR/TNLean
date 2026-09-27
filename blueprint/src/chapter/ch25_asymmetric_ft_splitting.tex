@@ -121,10 +121,10 @@ When the remainder vanishes, the compression maps are determined by the blocks
 up to a change of basis of each multiplicity space. Throughout, the blocks are
 indexed by labels $c$ with multiplicities $N_c$, and a split compression of $B$
 consists of compressions $V_{c,\mu}$ and embeddings $W_{c,\mu}$, for
-$1\leq\mu\leq N_c$, with
+$0\leq\mu<N_c$, with
 \begin{align}
-    V_{c,\mu}W_{c',\nu} & =\delta_{cc'}\delta_{\mu\nu}\id,                 &
-    B^i                 & =\sum_c\sum_{\mu=1}^{N_c}W_{c,\mu}C_c^iV_{c,\mu}
+    V_{c,\mu}W_{c',\nu} & =\delta_{cc'}\delta_{\mu\nu}\id,                   &
+    B^i                 & =\sum_c\sum_{\mu=0}^{N_c-1}W_{c,\mu}C_c^iV_{c,\mu}
     \label{eq:asym_zipper_decomposition}
 \end{align}
 for every physical index $i$. This is the zipper condition of
@@ -134,25 +134,43 @@ so zero diagonal blocks are allowed. In this subsection the compression is
 written on the left and denoted $V$, as for rectangular reductions, so the
 roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_tensors_star}.
 
+\begin{definition}[Gauge-related tensors]
+    \label{def:asym_gauge_related}
+    \lean{MPSTensor.IsGaugeRelated}
+    \leanok
+    \uses{def:mps_tensor}
+    Tensors $A$ and $A'$ of bond dimensions $D$ and $D'$ are
+    \emph{gauge related} if there are matrices $X\in\C^{D\times D'}$ and
+    $Y\in\C^{D'\times D}$ with $XY=\id$, $YX=\id$ and $A^iX=XA'^i$ for every
+    physical index $i$, so that $A'^i=YA^iX$. The two inverse relations force
+    $D=D'$, and then $A'$ is gauge equivalent to $A$ in the sense of
+    Definition~\ref{def:gauge_equiv}, with gauge matrix $Y=X^{-1}$.
+\end{definition}
+
 \begin{lemma}[Intertwiners of normal tensors]
     \label{lem:asym_normal_intertwiner}
     \lean{MPSTensor.eq_zero_or_isGaugeRelated_of_intertwines}
     \leanok
-    \uses{def:normal}
+    \uses{def:normal, def:asym_gauge_related}
     Let $A$ and $A'$ be normal tensors of bond dimensions $D$ and $D'$, and
     let $X\in\C^{D\times D'}$ satisfy $A^iX=XA'^i$ for every physical index
-    $i$. Then $X=0$, or $D=D'$ and $X$ is invertible, so that
-    $A'^i=X^{-1}A^iX$ for every $i$.
+    $i$. Then $X=0$, or $A$ and $A'$ are gauge related in the sense of
+    Definition~\ref{def:asym_gauge_related}.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The kernel of $X$ is invariant under every word of $A'$. At a length where
-    the words of $A'$ span the full matrix algebra, a nonzero vector in the
-    kernel is carried to every vector, so $X=0$. Symmetrically, the left kernel
-    of $X$ is invariant under right multiplication by the words of $A$. If
-    $X\neq0$, both kernels vanish, so $D'\leq D$ and $D\leq D'$, and $X$ is
-    invertible.
+    Induction on the length of a word $w$ gives $A^wX=XA'^w$. If $Xv=0$, then
+    $X(A'^wv)=A^w(Xv)=0$ for every word $w$. At a length where the words of
+    $A'$ span the full matrix algebra, this gives $X(Mv)=0$ for every matrix
+    $M$, and a nonzero $v$ makes $Mv$ an arbitrary vector, so $X=0$.
+    Symmetrically, if $X^{\mathsf T}u=0$, then
+    $X^{\mathsf T}(A^w)^{\mathsf T}u=(XA'^w)^{\mathsf T}u
+        =(A'^w)^{\mathsf T}X^{\mathsf T}u=0$ for every word $w$, and the words
+    of $A$ at a spanning length give $X=0$ unless $u=0$. If $X\neq0$, both
+    $X$ and $X^{\mathsf T}$ are injective, so $D'\leq D$ and $D\leq D'$. Then $X$ is
+    invertible, and the pair $(X,X^{-1})$ witnesses that $A$ and $A'$ are
+    gauge related.
 \end{proof}
 
 \begin{theorem}[Uniqueness of split compressions up to multiplicity gauge]
@@ -162,9 +180,10 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
         MPSTensor.ZipperDecomposition.multiplicityGauge_mul_multiplicityGauge,
         MPSTensor.ZipperDecomposition.exists_unique_multiplicityGauge}
     \leanok
-    \uses{lem:asym_normal_intertwiner}
+    \uses{def:normal, def:asym_gauge_related}
     Let the blocks $C_c$ be normal of positive bond dimension and pairwise
-    not related by a gauge transformation, and let $(V,W)$ and
+    not gauge related in the sense of Definition~\ref{def:asym_gauge_related},
+    and let $(V,W)$ and
     $(\widetilde V,\widetilde W)$ be two split compressions of $B$ as in
     (\ref{eq:asym_zipper_decomposition}) with the same blocks and
     multiplicities. Then $\widetilde V_{c,\mu}W_{e,\nu}=0$ for $e\neq c$, and
@@ -218,7 +237,7 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
     \uses{thm:asym_zipper_uniqueness}
     Let $T_a$, $T_b$ and $T_c$ be matrix product operator tensors, with the
     $T_c$ normal as tensors on the pair alphabet, of positive bond dimension,
-    and pairwise not related by a gauge transformation. Two families of fusion
+    and pairwise not gauge related. Two families of fusion
     tensors that split the stacked product $T_aT_b$ over the blocks $T_c$
     with multiplicities $N_{ab}^c$, as in
     (\ref{eq:asym_zipper_decomposition}), differ by a unique
@@ -241,8 +260,8 @@ roles of the letters are exchanged relative to Corollary~\ref{cor:asym_fusion_te
     \leanok
     \uses{thm:asym_zipper_uniqueness}
     Let $T_a$ be a matrix product operator tensor, $A_x$ a tensor, and $A_y$
-    normal tensors of positive bond dimension that are pairwise not related by
-    a gauge transformation. Two families of action tensors that split
+    normal tensors of positive bond dimension that are pairwise not gauge
+    related. Two families of action tensors that split
     $T_a\cdot A_x$ over the blocks $A_y$ with multiplicities $M_{a,x}^y$, as in
     (\ref{eq:asym_zipper_decomposition}), differ by a unique
     $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$ in the sense of
