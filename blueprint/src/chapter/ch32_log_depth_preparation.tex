@@ -728,6 +728,141 @@ of a local circuit that may add product ancillas and discard them
     conclude.
 \end{proof}
 
+Ancillas are attached and discarded site by site, so the operations that
+change the local dimension act on single sites.
+
+\begin{definition}[Onsite channel]
+    \label{def:ldp_onsite_channel}
+    \uses{def:ldp_local_channel_circuit}
+    \lean{MPSPreparation.rectKronecker, MPSPreparation.OnsiteChannel,
+        MPSPreparation.OnsiteChannel.map, MPSPreparation.OnsiteChannel.dual,
+        MPSPreparation.OnsiteChannel.map_isKrausCPTP,
+        MPSPreparation.OnsiteChannel.map_finKronecker,
+        MPSPreparation.OnsiteChannel.trace_map_mul,
+        MPSPreparation.OnsiteChannel.id, MPSPreparation.OnsiteChannel.attach,
+        MPSPreparation.OnsiteChannel.attachZero,
+        MPSPreparation.OnsiteChannel.attach_siteMap_apply,
+        MPSPreparation.OnsiteChannel.discard,
+        MPSPreparation.OnsiteChannel.discard_siteMap_apply,
+        MPSPreparation.OnsiteChannel.discard_siteMap_attach_siteMap}
+    \leanok
+    An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
+    $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
+    $\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. It is the channel
+    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on the ring, with
+    $K_J=\bigotimes_iK_{iJ(i)}$ for every choice $J$ of one index per site;
+    its dual is $A\mapsto\sum_JK_J^\dagger AK_J$. It is trace preserving and
+    completely positive, and it maps $\bigotimes_i\sigma_i$ to
+    $\bigotimes_i\Phi_i(\sigma_i)$ with
+    $\Phi_i(\sigma)=\sum_jK_{ij}\sigma K_{ij}^\dagger$. Attaching an ancilla
+    of dimension $a$ in the state $\tau=\sum_kw_kw_k^\dagger$ with
+    $\sum_k\|w_k\|^2=1$ is the onsite channel $X\mapsto X\otimes\tau$ from
+    dimension $d$ to dimension $da$, and discarding it is the onsite channel
+    given by the partial trace over the second factor of $\C^d\otimes\C^a$.
+    Discarding an attached ancilla gives back the original operator. Ancillas
+    attached to each site and local operations on a site and its ancillas
+    are the free operations of \cite{Piroli2021LOCC}.
+\end{definition}
+
+\begin{lemma}[Onsite channels do not spread supports]
+    \label{lem:ldp_onsite_channel_locality}
+    \uses{def:ldp_onsite_channel}
+    \lean{MPSPreparation.OnsiteChannel.dual_mem_supportedOperators,
+        MPSPreparation.OnsiteChannel.dual_mul,
+        MPSPreparation.OnsiteChannel.dual_finKronecker}
+    \leanok
+    Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
+    $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
+    disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$, and
+    $\Phi_i^\dagger(\mathbb 1)=\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. Hence
+    the identity factors off $X$ are kept. For products with disjoint
+    supports, one of $m_i$, $m'_i$ is the identity at each site, so
+    $\Phi_i^\dagger(m_im'_i)=\Phi_i^\dagger(m_i)\Phi_i^\dagger(m'_i)$.
+    Linearity concludes.
+\end{proof}
+
+\begin{definition}[Local channel conversion]
+    \label{def:ldp_local_channel_conversion}
+    \uses{def:ldp_local_channel_circuit, def:ldp_onsite_channel}
+    \lean{MPSPreparation.IsLocalChannelProtocol,
+        MPSPreparation.IsLocalChannelConversion,
+        MPSPreparation.IsLocalChannelProtocol.isKrausCPTP,
+        MPSPreparation.IsLocalChannelProtocol.channelCircuitMap_comp,
+        MPSPreparation.isLocalChannelConversion_circuit,
+        MPSPreparation.IsChannelPreparedInDepth.exists_isLocalChannelConversion,
+        MPSPreparation.IsLocalChannelConversion.refl,
+        MPSPreparation.IsLocalChannelConversion.mono,
+        MPSPreparation.IsLocalChannelConversion.exists_isKrausCPTP,
+        MPSPreparation.IsLocalChannelConversion.density}
+    \leanok
+    A \emph{local channel protocol of depth $T$} is a composition
+    $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
+    onsite channels $\Phi_t$, which may change the local dimension, and
+    channel layers $L_t$. A density matrix $\rho$ is
+    \emph{converted in depth $T$} into a density matrix $\sigma$, possibly of
+    another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
+    protocol $\Psi$ of depth at most $T$. This is the channel form of the circuits
+    $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC}, with
+    ancillas attached to each site, local operations between the layers and
+    the ancillas traced out at the end, without measurements. A local channel
+    protocol is trace preserving and completely positive. Attaching ancillas,
+    running a local channel circuit of depth $T$ and discarding is a local
+    channel protocol of depth $T$, every density matrix is converted into
+    itself in depth $0$, and a density matrix prepared in depth $T$ by local
+    channels is converted in depth $T$ from a product density.
+\end{definition}
+
+\begin{lemma}[Composition of conversions]
+    \label{lem:ldp_local_channel_conversion_trans}
+    \uses{def:ldp_local_channel_conversion}
+    \lean{MPSPreparation.IsLocalChannelConversion.trans,
+        MPSPreparation.IsLocalChannelProtocol.comp}
+    \leanok
+    If $\rho$ is converted in depth $T_1$ into $\sigma$ and $\sigma$ is
+    converted in depth $T_2$ into $\tau$, then $\rho$ is converted in depth
+    $T_1+T_2$ into $\tau$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The composition $\Psi_2\circ\Psi_1$ of local channel protocols of depths
+    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$: the last
+    onsite channel of $\Psi_1$ and the first onsite channel of $\Psi_2$
+    compose to one onsite channel between the two groups of layers.
+\end{proof}
+
+\begin{lemma}[No connected correlations after a conversion]
+    \label{lem:ldp_local_channel_conversion_correlations}
+    \uses{def:ldp_local_channel_conversion, lem:ldp_onsite_channel_locality,
+        lem:ldp_channel_light_cone_correlations}
+    \lean{MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion,
+        MPSPreparation.IsLocalChannelProtocol.exists_dual}
+    \leanok
+    Let $\sigma$ be converted in depth $T$ from a product
+    $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
+    $Z'$ act on sets of sites at distance larger than $2T$. Then
+    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$. For pure states prepared
+    from a product state by local unitary circuits this is the necessary
+    condition for preparation by quantum circuits of \cite{Piroli2021LOCC}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the protocol, a local channel protocol $\Psi$ of depth
+    $T$ has a dual $\Psi^\dagger$ with
+    $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
+    on $X$ to operators acting on the sites within distance $T$ of $X$ and is
+    multiplicative on operators acting on sets whose neighbourhoods of radius
+    $T$ are disjoint. For an onsite channel this is
+    Lemma~\ref{lem:ldp_onsite_channel_locality}; a channel layer adds one to
+    the radius as in the proof of
+    Lemma~\ref{lem:ldp_channel_light_cone_correlations}, and an onsite
+    channel keeps it. The factorization in the product state then concludes
+    as in that lemma.
+\end{proof}
+
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
     \uses{def:ldp_local_circuit, lem:ldp_unitary_implementing_isometry,
