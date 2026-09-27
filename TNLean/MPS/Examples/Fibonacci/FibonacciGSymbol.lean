@@ -381,38 +381,49 @@ theorem fibBlockFull_edgeTau (f x' x : Fin 2) :
   · exact congrArg complexOfGolden (fibEdgeGraded_edgeTau _ _ x' x)
   · exact congrArg complexOfGolden (fibEdgeGraded_edgeTau _ _ x' x)
 
+/-- The entries of the edge-label-`1` letter `fibEdgeOneGolden`. -/
+theorem goldenToComplex_fibEdgeOneGolden {D : ℕ} (bond : Fin D → Fin 2 × Fin 2) (x' x : Fin 2)
+    (p q : Fin D) :
+    goldenToComplex (fibEdgeOneGolden bond x' x p q) =
+      if p = q ∧ bond p = (x', x) then 1 else 0 := by
+  rw [fibEdgeOneGolden, Matrix.diagonal_apply]
+  by_cases hpq : p = q
+  · subst hpq
+    by_cases hb : bond p = (x', x) <;> simp [hb]
+  · simp [hpq]
+
 /-- The entries of the extended blocks at edge label `1`. -/
 theorem fibBlockFull_edgeOne_apply (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) :
     fibBlockFull f (fibEdgeOneLetter x') (fibEdgeOneLetter x) p q =
       if p = q ∧ fibBondLetter f p = (x', x) then 1 else 0 := by
-  have h : ∀ {D : ℕ} (bond : Fin D → Fin 2 × Fin 2) (p q : Fin D),
-      goldenToComplex (fibEdgeOneGolden bond x' x p q) =
-        if p = q ∧ bond p = (x', x) then 1 else 0 := by
-    intro D bond p q
-    rw [fibEdgeOneGolden, Matrix.diagonal_apply]
-    split_ifs <;> simp_all
-  fin_cases f
-  · exact (congrArg (fun M => goldenToComplex (M p q)) (fibEdgeGraded_edgeOne _ _ x' x)).trans
-      (h _ p q)
-  · exact (congrArg (fun M => goldenToComplex (M p q)) (fibEdgeGraded_edgeOne _ _ x' x)).trans
-      (h _ p q)
+  match f, p, q with
+  | 0, p, q =>
+    change goldenToComplex (fibOneFullGolden (fibEdgeOneLetter x') (fibEdgeOneLetter x) p q) = _
+    rw [fibOneFullGolden, fibEdgeGraded_edgeOne]
+    exact goldenToComplex_fibEdgeOneGolden _ x' x p q
+  | 1, p, q =>
+    change goldenToComplex (fibTauFullGolden (fibEdgeOneLetter x') (fibEdgeOneLetter x) p q) = _
+    rw [fibTauFullGolden, fibEdgeGraded_edgeOne]
+    exact goldenToComplex_fibEdgeOneGolden _ x' x p q
 
 /-- The extended blocks vanish when the edge label changes. -/
 theorem fibBlockFull_edgeOne_edgeTau (f x' x : Fin 2) :
     fibBlockFull f (fibEdgeOneLetter x') (fibEdgeTauLetter x) = 0 := by
-  fin_cases f
-  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeOne_edgeTau _ _ x' x)).trans
-      (map_zero _)
-  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeOne_edgeTau _ _ x' x)).trans
-      (map_zero _)
+  have h0 : ∀ D : ℕ, complexOfGolden (0 : Matrix (Fin D) (Fin D) GoldenInt) = 0 := fun _ => by
+    ext
+    exact map_zero goldenToComplex
+  match f with
+  | 0 => exact (congrArg complexOfGolden (fibEdgeGraded_edgeOne_edgeTau _ _ x' x)).trans (h0 _)
+  | 1 => exact (congrArg complexOfGolden (fibEdgeGraded_edgeOne_edgeTau _ _ x' x)).trans (h0 _)
 
 theorem fibBlockFull_edgeTau_edgeOne (f x' x : Fin 2) :
     fibBlockFull f (fibEdgeTauLetter x') (fibEdgeOneLetter x) = 0 := by
-  fin_cases f
-  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeTau_edgeOne _ _ x' x)).trans
-      (map_zero _)
-  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeTau_edgeOne _ _ x' x)).trans
-      (map_zero _)
+  have h0 : ∀ D : ℕ, complexOfGolden (0 : Matrix (Fin D) (Fin D) GoldenInt) = 0 := fun _ => by
+    ext
+    exact map_zero goldenToComplex
+  match f with
+  | 0 => exact (congrArg complexOfGolden (fibEdgeGraded_edgeTau_edgeOne _ _ x' x)).trans (h0 _)
+  | 1 => exact (congrArg complexOfGolden (fibEdgeGraded_edgeTau_edgeOne _ _ x' x)).trans (h0 _)
 
 /-- At edge label `1` the G-symbol forces the right bond letter to equal the left one:
 `G^{abc}_{d1f} = δ_{(a,d),(b,c)} / (v_b v_c)` when `(b, c)` is a bond letter of the block `f`. -/
@@ -436,10 +447,10 @@ theorem fibStringNetTensor_edgeOne_conj (f b c : Fin 2) :
   simp only [fibStringNetTensor, Matrix.of_apply, fibSiteLetter_fibEdgeOneLetter, true_and,
     Pi.inv_apply]
   by_cases hp : fibBondLetter f p = (b, c)
-  · rw [if_pos hp, fibGSymbol, fibGSymbolGolden_edgeOne f p q b c hp]
+  · rw [ite_eq_left hp, fibGSymbol, fibGSymbolGolden_edgeOne f p q b c hp]
     by_cases hq : q = p
     · subst hq
-      rw [if_pos rfl, if_pos ⟨rfl, hp⟩, map_mul, goldenToComplex_fibQuantumDimInvSqrt,
+      rw [ite_eq_left rfl, ite_eq_left ⟨rfl, hp⟩, map_mul, goldenToComplex_fibQuantumDimInvSqrt,
         goldenToComplex_fibQuantumDimInvSqrt, hp, sqrt_fibLoopFactor_mul, fibLoopFactor_eq_sq,
         fibLoopFactor_eq_sq]
       have h1 := (fibLoopFactorSqrt_pos b).ne'
@@ -447,9 +458,10 @@ theorem fibStringNetTensor_edgeOne_conj (f b c : Fin 2) :
       have hg := fibStringNetGauge_ne_zero f q
       push_cast
       field_simp
-    · rw [if_neg hq, if_neg fun h => hq h.1.symm, map_zero]
+      exact div_self (mul_ne_zero (Complex.ofReal_ne_zero.2 h1) (Complex.ofReal_ne_zero.2 h2))
+    · rw [ite_eq_right hq, ite_eq_right fun h => hq h.1.symm, map_zero]
       simp
-  · rw [if_neg hp, if_neg fun h => hp h.2]
+  · rw [ite_eq_right hp, ite_eq_right fun h => hp h.2]
     simp
 
 /-- Bridge: the diagonal bond similarity `h(u, l) = (v_u/v_l)^{1/2}` carries every letter of the
@@ -521,48 +533,144 @@ def fibTauTauEdgeOneConjGolden : Fin 2 → Fin 2 → Matrix (Fin 9) (Fin 9) Gold
   | 0, 1 => Matrix.single 2 2 1 + Matrix.single 2 7 ⟨0, 0, 0, 1⟩ + Matrix.single 2 8 ⟨-1, 0, 1, 0⟩
   | 1, 0 => Matrix.single 3 3 1 + Matrix.single 3 7 ⟨0, 0, -1, 0⟩
   | 1, 1 => Matrix.single 1 1 1 + Matrix.single 1 5 ⟨0, 0, 0, -1⟩ +
-      Matrix.single 1 6 ⟨0, 0, -1, 0⟩ + Matrix.single 4 4 1 + Matrix.single 4 5 ⟨0, 0, 0, 1⟩ + Matrix.single 4 6 ⟨0, 0, 1, 0⟩ +
+      Matrix.single 1 6 ⟨0, 0, -1, 0⟩ + Matrix.single 4 4 1 + Matrix.single 4 5 ⟨0, 0, 0, 1⟩ +
+      Matrix.single 4 6 ⟨0, 0, 1, 0⟩ +
       Matrix.single 4 8 1
 
-/-- The compression datum of `1 ⊗ 1` on the four physical letters: the gauge of
-`fibOneOne_compression`, with a nonzero nilpotent remainder at edge label `1`. -/
+/-- The stacked letters of `1 ⊗ 1` on the four physical letters over `ℤ[σ]`. -/
+def fibOneOneFullStackGolden (a : Fin (4 * 4)) : Matrix (Fin 4) (Fin 4) GoldenInt :=
+  mulGoldenTensor fibOneFullGolden fibOneFullGolden a.divNat a.modNat
+
+/-- The conjugated letters of `1 ⊗ 1` on the four physical letters. -/
+def fibOneOneFullConjGolden (a : Fin (4 * 4)) : Matrix (Fin 4) (Fin 4) GoldenInt :=
+  fibConjFull fibOneOneConjGolden fibOneOneEdgeOneConjGolden a.divNat a.modNat
+
+theorem fibOneOneFullStack_mul_gaugeInv (a : Fin (4 * 4)) :
+    fibOneOneFullStackGolden a * fibOneOneGaugeInvGolden =
+      fibOneOneGaugeInvGolden * fibOneOneFullConjGolden a := by
+  revert a
+  decide +kernel
+
+private theorem fibOneOneFull_triangular (a : Fin (4 * 4))
+    (x y : BlockSpace (fun _ : Unit => 2) oneSlot 2) (h : unitOrd 2 y.1 < unitOrd 2 x.1) :
+    fibOneOneFullConjGolden a (unitCoord 2 2 x) (unitCoord 2 2 y) = 0 := by
+  revert a x y
+  decide +kernel
+
+private theorem fibOneOneFull_matched (a : Fin (4 * 4)) (p q : Fin 2) :
+    fibOneOneFullConjGolden a (unitCoord 2 2 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 2 2 ⟨Sum.inl oneSlotMem, q⟩) = fibOneFullGolden a.divNat a.modNat p q := by
+  revert a
+  revert p q
+  decide +kernel
+
+private theorem fibOneOneFull_unmatched (a : Fin (4 * 4)) (t : Fin 2) (p q : Fin 1) :
+    fibOneOneFullConjGolden a (unitCoord 2 2 ⟨Sum.inr t, p⟩)
+      (unitCoord 2 2 ⟨Sum.inr t, q⟩) = 0 := by
+  revert a t p q
+  decide +kernel
+
+/-- The compression datum of `1 ⊗ 1` on the four physical letters: the gauge of the compression
+on edge label `τ`, with a nonzero nilpotent remainder at edge label `1`. -/
 def fibOneOneFull_compression :
     MultiBlockCompression (MPOTensor.mulTensor fibOneFull fibOneFull).toMPSTensor oneSlot
       (fun _ : Unit => fibOneFull.toMPSTensor) :=
-  MultiBlockCompression.ofGolden 2 (unitOrd 2) (unitCoord 2 2)
-    (fun a => mulGoldenTensor fibOneFullGolden fibOneFullGolden a.divNat a.modNat)
+  MultiBlockCompression.ofGolden 2 (unitOrd 2) (unitCoord 2 2) fibOneOneFullStackGolden
     (fun _ => mulTensor_complexOfGolden fibOneFullGolden fibOneFullGolden _ _)
     (fun _ a => fibOneFullGolden a.divNat a.modNat) (fun _ _ => rfl)
     fibOneOneGaugeGolden fibOneOneGaugeInvGolden fibOneOneGauge_mul_inv fibOneOneGaugeInv_mul
-    (fun a => fibConjFull fibOneOneConjGolden fibOneOneEdgeOneConjGolden a.divNat a.modNat)
-    (by decide +kernel) (by decide +kernel)
-    (fun a s _ p q => by cases s; revert a p q; decide +kernel) (by decide +kernel)
+    fibOneOneFullConjGolden fibOneOneFullStack_mul_gaugeInv fibOneOneFull_triangular
+    (fun a s _ p q => by cases s; exact fibOneOneFull_matched a p q) fibOneOneFull_unmatched
 
-/-- The compression datum of `1 ⊗ τ` on the four physical letters. -/
+/-- The stacked letters of `1 ⊗ τ` on the four physical letters over `ℤ[σ]`. -/
+def fibOneTauFullStackGolden (a : Fin (4 * 4)) : Matrix (Fin 6) (Fin 6) GoldenInt :=
+  mulGoldenTensor fibOneFullGolden fibTauFullGolden a.divNat a.modNat
+
+/-- The conjugated letters of `1 ⊗ τ` on the four physical letters. -/
+def fibOneTauFullConjGolden (a : Fin (4 * 4)) : Matrix (Fin 6) (Fin 6) GoldenInt :=
+  fibConjFull fibOneTauConjGolden fibOneTauEdgeOneConjGolden a.divNat a.modNat
+
+theorem fibOneTauFullStack_mul_gaugeInv (a : Fin (4 * 4)) :
+    fibOneTauFullStackGolden a * fibOneTauGaugeInvGolden =
+      fibOneTauGaugeInvGolden * fibOneTauFullConjGolden a := by
+  revert a
+  decide +kernel
+
+private theorem fibOneTauFull_triangular (a : Fin (4 * 4))
+    (x y : BlockSpace (fun _ : Unit => 3) oneSlot 3) (h : unitOrd 3 y.1 < unitOrd 3 x.1) :
+    fibOneTauFullConjGolden a (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
+  revert a x y
+  decide +kernel
+
+private theorem fibOneTauFull_matched (a : Fin (4 * 4)) (p q : Fin 3) :
+    fibOneTauFullConjGolden a (unitCoord 3 3 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauFullGolden a.divNat a.modNat p q := by
+  revert a
+  revert p q
+  decide +kernel
+
+private theorem fibOneTauFull_unmatched (a : Fin (4 * 4)) (t : Fin 3) (p q : Fin 1) :
+    fibOneTauFullConjGolden a (unitCoord 3 3 ⟨Sum.inr t, p⟩)
+      (unitCoord 3 3 ⟨Sum.inr t, q⟩) = 0 := by
+  revert a t p q
+  decide +kernel
+
+/-- The compression datum of `1 ⊗ τ` on the four physical letters: the gauge of the compression
+on edge label `τ`, with a nonzero nilpotent remainder at edge label `1`. -/
 def fibOneTauFull_compression :
     MultiBlockCompression (MPOTensor.mulTensor fibOneFull fibTauFull).toMPSTensor oneSlot
       (fun _ : Unit => fibTauFull.toMPSTensor) :=
-  MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3)
-    (fun a => mulGoldenTensor fibOneFullGolden fibTauFullGolden a.divNat a.modNat)
+  MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3) fibOneTauFullStackGolden
     (fun _ => mulTensor_complexOfGolden fibOneFullGolden fibTauFullGolden _ _)
     (fun _ a => fibTauFullGolden a.divNat a.modNat) (fun _ _ => rfl)
     fibOneTauGaugeGolden fibOneTauGaugeInvGolden fibOneTauGauge_mul_inv fibOneTauGaugeInv_mul
-    (fun a => fibConjFull fibOneTauConjGolden fibOneTauEdgeOneConjGolden a.divNat a.modNat)
-    (by decide +kernel) (by decide +kernel)
-    (fun a s _ p q => by cases s; revert a p q; decide +kernel) (by decide +kernel)
+    fibOneTauFullConjGolden fibOneTauFullStack_mul_gaugeInv fibOneTauFull_triangular
+    (fun a s _ p q => by cases s; exact fibOneTauFull_matched a p q) fibOneTauFull_unmatched
 
-/-- The compression datum of `τ ⊗ 1` on the four physical letters. -/
+/-- The stacked letters of `τ ⊗ 1` on the four physical letters over `ℤ[σ]`. -/
+def fibTauOneFullStackGolden (a : Fin (4 * 4)) : Matrix (Fin 6) (Fin 6) GoldenInt :=
+  mulGoldenTensor fibTauFullGolden fibOneFullGolden a.divNat a.modNat
+
+/-- The conjugated letters of `τ ⊗ 1` on the four physical letters. -/
+def fibTauOneFullConjGolden (a : Fin (4 * 4)) : Matrix (Fin 6) (Fin 6) GoldenInt :=
+  fibConjFull fibTauOneConjGolden fibTauOneEdgeOneConjGolden a.divNat a.modNat
+
+theorem fibTauOneFullStack_mul_gaugeInv (a : Fin (4 * 4)) :
+    fibTauOneFullStackGolden a * fibTauOneGaugeInvGolden =
+      fibTauOneGaugeInvGolden * fibTauOneFullConjGolden a := by
+  revert a
+  decide +kernel
+
+private theorem fibTauOneFull_triangular (a : Fin (4 * 4))
+    (x y : BlockSpace (fun _ : Unit => 3) oneSlot 3) (h : unitOrd 3 y.1 < unitOrd 3 x.1) :
+    fibTauOneFullConjGolden a (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
+  revert a x y
+  decide +kernel
+
+private theorem fibTauOneFull_matched (a : Fin (4 * 4)) (p q : Fin 3) :
+    fibTauOneFullConjGolden a (unitCoord 3 3 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauFullGolden a.divNat a.modNat p q := by
+  revert a
+  revert p q
+  decide +kernel
+
+private theorem fibTauOneFull_unmatched (a : Fin (4 * 4)) (t : Fin 3) (p q : Fin 1) :
+    fibTauOneFullConjGolden a (unitCoord 3 3 ⟨Sum.inr t, p⟩)
+      (unitCoord 3 3 ⟨Sum.inr t, q⟩) = 0 := by
+  revert a t p q
+  decide +kernel
+
+/-- The compression datum of `τ ⊗ 1` on the four physical letters: the gauge of the compression
+on edge label `τ`, with a nonzero nilpotent remainder at edge label `1`. -/
 def fibTauOneFull_compression :
     MultiBlockCompression (MPOTensor.mulTensor fibTauFull fibOneFull).toMPSTensor oneSlot
       (fun _ : Unit => fibTauFull.toMPSTensor) :=
-  MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3)
-    (fun a => mulGoldenTensor fibTauFullGolden fibOneFullGolden a.divNat a.modNat)
+  MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3) fibTauOneFullStackGolden
     (fun _ => mulTensor_complexOfGolden fibTauFullGolden fibOneFullGolden _ _)
     (fun _ a => fibTauFullGolden a.divNat a.modNat) (fun _ _ => rfl)
     fibTauOneGaugeGolden fibTauOneGaugeInvGolden fibTauOneGauge_mul_inv fibTauOneGaugeInv_mul
-    (fun a => fibConjFull fibTauOneConjGolden fibTauOneEdgeOneConjGolden a.divNat a.modNat)
-    (by decide +kernel) (by decide +kernel)
-    (fun a s _ p q => by cases s; revert a p q; decide +kernel) (by decide +kernel)
+    fibTauOneFullConjGolden fibTauOneFullStack_mul_gaugeInv fibTauOneFull_triangular
+    (fun a s _ p q => by cases s; exact fibTauOneFull_matched a p q) fibTauOneFull_unmatched
 
 /-- The golden letters of the extended blocks, indexed by the label. -/
 def fibBlockFullGolden : (s : Fin 2) → Fin 4 → Fin 4 →
@@ -570,19 +678,53 @@ def fibBlockFullGolden : (s : Fin 2) → Fin 4 → Fin 4 →
   | 0 => fibOneFullGolden
   | 1 => fibTauFullGolden
 
+theorem fibBlockFull_toMPSTensor_eq (s : Fin 2) (a : Fin (4 * 4)) :
+    (fibBlockFull s).toMPSTensor a = complexOfGolden (fibBlockFullGolden s a.divNat a.modNat) := by
+  fin_cases s <;> rfl
+
+/-- The stacked letters of `τ ⊗ τ` on the four physical letters over `ℤ[σ]`. -/
+def fibTauTauFullStackGolden (a : Fin (4 * 4)) : Matrix (Fin 9) (Fin 9) GoldenInt :=
+  mulGoldenTensor fibTauFullGolden fibTauFullGolden a.divNat a.modNat
+
+/-- The conjugated letters of `τ ⊗ τ` on the four physical letters. -/
+def fibTauTauFullConjGolden (a : Fin (4 * 4)) : Matrix (Fin 9) (Fin 9) GoldenInt :=
+  fibConjFull fibConjGolden fibTauTauEdgeOneConjGolden a.divNat a.modNat
+
+theorem fibTauTauFullStack_mul_gaugeInv (a : Fin (4 * 4)) :
+    fibTauTauFullStackGolden a * fibGaugeInvGolden =
+      fibGaugeInvGolden * fibTauTauFullConjGolden a := by
+  revert a
+  decide +kernel
+
+private theorem fibTauTauFull_triangular (a : Fin (4 * 4))
+    (x y : BlockSpace fibBlockDim fibSlots 4) (h : fibOrd y.1 < fibOrd x.1) :
+    fibTauTauFullConjGolden a (fibCoord x) (fibCoord y) = 0 := by
+  revert a x y
+  decide +kernel
+
+private theorem fibTauTauFull_matched (a : Fin (4 * 4)) (s : Fin 2)
+    (p q : Fin (fibBlockDim s)) :
+    fibTauTauFullConjGolden a (fibCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
+        (fibCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) =
+      fibBlockFullGolden s a.divNat a.modNat p q := by
+  revert a
+  fin_cases s <;> revert p q <;> decide +kernel
+
+private theorem fibTauTauFull_unmatched (a : Fin (4 * 4)) (t : Fin 4) (p q : Fin 1) :
+    fibTauTauFullConjGolden a (fibCoord ⟨Sum.inr t, p⟩) (fibCoord ⟨Sum.inr t, q⟩) = 0 := by
+  revert a t p q
+  decide +kernel
+
 /-- The compression datum of `τ ⊗ τ` on the four physical letters, onto both extended blocks. -/
 def fibTauTauFull_compression :
     MultiBlockCompression (MPOTensor.mulTensor fibTauFull fibTauFull).toMPSTensor fibSlots
       (fun s => (fibBlockFull s).toMPSTensor) :=
-  MultiBlockCompression.ofGolden 4 fibOrd fibCoord
-    (fun a => mulGoldenTensor fibTauFullGolden fibTauFullGolden a.divNat a.modNat)
+  MultiBlockCompression.ofGolden 4 fibOrd fibCoord fibTauTauFullStackGolden
     (fun _ => mulTensor_complexOfGolden fibTauFullGolden fibTauFullGolden _ _)
-    (fun s a => fibBlockFullGolden s a.divNat a.modNat)
-    (fun s _ => by fin_cases s <;> rfl)
-    fibGaugeGolden fibGaugeInvGolden fibGauge_mul_inv fibGaugeInv_mul
-    (fun a => fibConjFull fibConjGolden fibTauTauEdgeOneConjGolden a.divNat a.modNat)
-    (by decide +kernel) (by decide +kernel)
-    (fun a s _ p q => by fin_cases s <;> revert a p q <;> decide +kernel) (by decide +kernel)
+    (fun s a => fibBlockFullGolden s a.divNat a.modNat) fibBlockFull_toMPSTensor_eq
+    fibGaugeGolden fibGaugeInvGolden fibGauge_mul_inv fibGaugeInv_mul fibTauTauFullConjGolden
+    fibTauTauFullStack_mul_gaugeInv fibTauTauFull_triangular
+    (fun a s _ p q => fibTauTauFull_matched a s p q) fibTauTauFull_unmatched
 
 /-- **The Fibonacci fusion rules of the extended blocks.** On the four physical letters
 (plaquette, edge label), the periodic operators of the extended F-symbol blocks satisfy
@@ -591,24 +733,34 @@ theorem isMPOFusionAlgebra_fibBlockFull : IsMPOFusionAlgebra fibBlockFull fibNim
   intro a b L hL
   match a, b with
   | 0, 0 =>
+    simp only [fibBlockFull, fibNim, Fin.sum_univ_two, Matrix.one_apply, Fin.isValue,
+      Fin.zero_eq_one_iff, OfNat.ofNat_ne_one, ↓reduceIte, Nat.cast_one, Nat.cast_zero, one_smul,
+      zero_smul, add_zero]
     have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibOneFull)
       fibOneOneFull_compression L hL
-    rw [Finset.sum_singleton] at h
-    simpa [fibBlockFull, fibNim, Fin.sum_univ_two] using h
+    rwa [Finset.sum_singleton] at h
   | 0, 1 =>
+    simp only [fibBlockFull, fibNim, Fin.sum_univ_two, Matrix.one_apply, Fin.isValue,
+      Fin.one_eq_zero_iff, OfNat.ofNat_ne_one, ↓reduceIte, Nat.cast_one, Nat.cast_zero, one_smul,
+      zero_smul, zero_add]
     have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibTauFull)
       fibOneTauFull_compression L hL
-    rw [Finset.sum_singleton] at h
-    simpa [fibBlockFull, fibNim, Fin.sum_univ_two] using h
+    rwa [Finset.sum_singleton] at h
   | 1, 0 =>
+    simp only [fibBlockFull, fibNim, fibFusionMatrix, Fin.sum_univ_two, Fin.isValue,
+      Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
+      Nat.cast_one, Nat.cast_zero, one_smul, zero_smul, zero_add]
     have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibTauFull)
       fibTauOneFull_compression L hL
-    rw [Finset.sum_singleton] at h
-    simpa [fibBlockFull, fibNim, fibFusionMatrix, Fin.sum_univ_two] using h
+    rwa [Finset.sum_singleton] at h
   | 1, 1 =>
     have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fibBlockFull)
       fibTauTauFull_compression L hL
-    simpa [fibBlockFull, fibNim, fibFusionMatrix, Fin.sum_univ_two] using h
+    rw [show fibSlots = Finset.univ from rfl, Fin.sum_univ_two] at h
+    simp only [fibNim, fibFusionMatrix, Fin.sum_univ_two, Fin.isValue,
+      Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one,
+      Nat.cast_one, one_smul]
+    exact h
 
 /-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` line 1268: the blocks `B_1`, `B_τ` of the
 string-net operator tensor `G^{abc}_{def} √(v_a v_b v_c v_d)` satisfy the Fibonacci fusion rules,
