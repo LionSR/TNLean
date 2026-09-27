@@ -5372,7 +5372,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right}
     \leanok
     \uses{def:mpug_domain_wall_string, thm:mpug_domain_wall_state}
-    On the periodic chain of every length,
+    On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
     \begin{align}
         O^{[i,j]}\ket{\psi_A}
          & =\ket{\psi(A\text{-}B\text{-}A)},
@@ -5411,10 +5411,12 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
          & =c_{AB}c_{BA}\,O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}.
         \notag
     \end{align}
-    Since $(c_{AB}c_{BA})^2=1$, this is the relation
+    When $(c_{AB}c_{BA})^2=1$, this is equivalent to the relation
     $O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}=c_{AB}c_{BA}\,
         O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}$ of
-    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}. The buffer is the
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}; for a general
+    product of phases the relation proved here is that relation with
+    $c_{AB}c_{BA}$ replaced by its inverse. The buffer is the
     blocked form of the local action \cite{gap:gs24_domain_wall_nondegenerate}.
 \end{theorem}
 
