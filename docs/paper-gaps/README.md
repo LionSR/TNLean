@@ -17,12 +17,13 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   prints the Fibonacci F-symbols but no numeric entries of the two operator
   blocks, the placement of the F-symbols used for the blocks, that on edge
   label `τ` a diagonal bond similarity relates the source's G-symbol tensor to
-  these blocks (so the periodic operators and fusion rules agree there), and
-  that the review's prefactor `1/√(d_A d_D)` gives the congruence
+  these blocks, that at edge label `1` the same similarity fixes the source's
+  letters, which are diagonal matrix units, so the source's blocks satisfy the
+  Fibonacci fusion rules on the full alphabet (the former scope restriction to
+  edge label `τ` is resolved), and that the review's prefactor `1/√(d_A d_D)` gives the congruence
   `W^{-1/2} O W^{-1/2}`, which contradicts the review's own fusion statement in
   the orthonormal basis (a Local fix, together with the review's garbled
-  F-symbol selection rule). The fusion rules of the source's tensor on edge
-  label `1` remain open, with an elimination plan (issue #8217).
+  F-symbol selection rule).
 - `bmwshv17_joint_block_left_inverse.tex` records that the simultaneous left
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical
