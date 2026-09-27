@@ -36,6 +36,8 @@ sitewise intertwiner at all, so its virtual algebra cannot be star-closed.
 * `MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star`: the splitting criterion in
   terms of star closure of the virtual algebra.
 * `MPSTensor.exists_fusionTensors_of_star`: the sitewise intertwiners of a split compression.
+* `MPSTensor.MultiBlockCompression.remainder_ne_zero_of_forall_right_intertwiner_eq_zero`: a
+  slot without sitewise intertwiners forces a nonzero remainder in every compression.
 -/
 
 open scoped Matrix DirectSum
@@ -268,6 +270,22 @@ theorem exists_fusionTensors_of_star (S : Finset ι) (C : ∀ s, MPSTensor d (D 
   exact ⟨P.left, P.right, P.isReduction, fun i s => P.mul_right_eq_right_mul hP i s,
     fun i s => P.left_mul_eq_mul_left hP i s, fun _ _ h => P.left_mul_right_of_ne h⟩
 
+/-- **A compression without sitewise intertwiners does not split**. If a slot `s` of positive
+bond dimension admits no nonzero sitewise right intertwiner `B^i X = X C_s^i`, then the
+remainder of every multi-block compression of the source is nonzero: a vanishing remainder
+would make the compression pair of `s` such an intertwiner with `W_s V_s = 1`. -/
+theorem MultiBlockCompression.remainder_ne_zero_of_forall_right_intertwiner_eq_zero
+    {B : MPSTensor d DB} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+    (P : MultiBlockCompression B S C) (s : {s // s ∈ S}) (hD : 0 < D s.1)
+    (hno : ∀ X : Matrix (Fin DB) (Fin (D s.1)) ℂ, (∀ i, B i * X = X * C s.1 i) → X = 0) :
+    P.remainder ≠ 0 := by
+  intro hP
+  have hzero := hno (P.right s) fun i => P.mul_right_eq_right_mul hP i s
+  have hone : P.left s * P.right s = 1 := P.left_mul_right_self s
+  rw [hzero, Matrix.mul_zero] at hone
+  have : Nonempty (Fin (D s.1)) := ⟨⟨0, hD⟩⟩
+  exact zero_ne_one hone
+
 omit [DecidableEq ι] in
 /-- **The anomaly converse**. If one of the blocks admits no nonzero sitewise right intertwiner
 with the source, then the virtual algebra of the source is not closed under conjugate
@@ -286,11 +304,7 @@ theorem not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero 
   intro hstar
   obtain ⟨P, hP⟩ :=
     exists_multiBlockCompression_remainder_eq_zero_of_star S C hC hD B htr hstar
-  have hzero := hno (P.right s) fun i => P.mul_right_eq_right_mul hP i s
-  have hone : P.left s * P.right s = 1 := P.left_mul_right_self s
-  rw [hzero, Matrix.mul_zero] at hone
-  have : Nonempty (Fin (D s.1)) := ⟨⟨0, hD s.1 s.2⟩⟩
-  exact zero_ne_one hone
+  exact P.remainder_ne_zero_of_forall_right_intertwiner_eq_zero s (hD s.1 s.2) hno hP
 
 end Compression
 

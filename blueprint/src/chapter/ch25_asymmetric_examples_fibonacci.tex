@@ -209,7 +209,9 @@ as a diagram and prints no entries of $B_1$ or $B_\tau$; the placement of the $F
 here, without the closed-loop factors of the source and without the
 prefactor of the review, is recorded in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 Theorem~\ref{thm:asymex_fib_gsymbol_similarity} relates these blocks to the
-source's tensor built from the $G$-symbols.
+source's tensor built from the $G$-symbols, and
+Theorem~\ref{thm:asymex_fib_stringnet_fusion} carries their fusion rules to
+that tensor on both edge labels.
 
 \begin{definition}[Fibonacci fusion data of the review]
     \label{def:asymex_fib_fsymbols}
@@ -376,21 +378,19 @@ source's tensor built from the $G$-symbols.
 
 \begin{theorem}[The source's blocks on edge label $\tau$]
     \label{thm:asymex_fib_gsymbol_similarity}
-    % Principal declaration: FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau.
-    \lean{FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau,
+    % Principal declaration: FibonacciCompression.fibStringNetEdgeTau_conj.
+    \lean{FibonacciCompression.fibStringNetEdgeTau_conj,
         FibonacciCompression.fibGSymbolGolden_tetrahedral,
         FibonacciCompression.fibOneGolden_eq_fSymbol,
         FibonacciCompression.fibBlock_apply_eq_fSymbol,
         FibonacciCompression.fibStringNetGauge,
         FibonacciCompression.fibStringNetGauge_ne_zero,
-        FibonacciCompression.fibStringNetEdgeTau_conj,
         MPOTensor.mpo_eq_of_diagonal_conj,
         FibonacciCompression.mpo_fibStringNetEdgeTau,
         FibonacciCompression.mpo_fibStringNetTensor_edgeTau,
-        MPOTensor.mpo_apply_comp, MPOTensor.IsMPOFusionAlgebra.of_mpo_eq_mul_mul}
+        MPOTensor.mpo_apply_comp}
     \leanok
-    \uses{def:asymex_fib_gsymbol_tensor, thm:asymex_fib_tau_fsymbol,
-        thm:asymex_fib_anomaly_fusion_algebra, def:mpo_fusion_algebra}
+    \uses{def:asymex_fib_gsymbol_tensor, thm:asymex_fib_tau_fsymbol}
     The $G$-symbols satisfy $G^{abc}_{def}=G^{fce}_{abd}$, and both blocks
     are $F$-symbol tensors:
     $(B_f^{x'x})_{p,(q',q'')}=\delta_{p,(x',x)}[F^{fx\tau}_{q'}]_{x'}^{q''}$
@@ -402,18 +402,12 @@ source's tensor built from the $G$-symbols.
     \end{align}
     for both labels $f$ and all $x',x$. Consequently, on the
     configurations whose edge labels are all $\tau$, the periodic operators
-    of $S_1$ and $S_\tau$ equal those of $B_1$ and $B_\tau$ at every length,
-    and they satisfy the Fibonacci fusion rules $O_1^2=O_1$,
-    $O_1O_\tau=O_\tau O_1=O_\tau$ and $O_\tau^2=O_1+O_\tau$ at every positive
-    length. This is the fusion statement of~\cite[Appendix~D.1]{Bultinck2017Anyons}
-    restricted to edge label $\tau$; the statement on the full alphabet, with
-    edge labels $1$ and $\tau$, is not formalized
-    here~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+    of $S_1$ and $S_\tau$ equal those of $B_1$ and $B_\tau$ at every length.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_golden_ring, thm:asymex_fib_anomaly_fusion_algebra}
+    \uses{thm:asymex_golden_ring}
     The symmetry of the $G$-symbols and the $F$-symbol form of $B_1$ are
     finite computations in $\Z[\sigma]$. By the symmetry,
     $G^{q'x'x}_{q''\tau f}=v_{x'}^{-1}v_{q''}^{-1}[F^{fx\tau}_{q'}]_{x'}^{q''}$,
@@ -421,9 +415,85 @@ source's tensor built from the $G$-symbols.
     by
     $\sqrt{v_{q'}v_{x'}v_xv_{q''}}/(v_{x'}v_{q''})=h(q',q'')/h(x',x)$, which
     is (\ref{eq:asymex_fib_gsymbol_conj}). The similarity $h$ cancels in the
-    trace defining the periodic operator, so the operators agree, and the
-    fusion rules are those of
-    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra}.
+    trace defining the periodic operator, so the operators agree.
+\end{proof}
+
+\begin{theorem}[Fusion rules of the source's blocks on both edge labels]
+    \label{thm:asymex_fib_stringnet_fusion}
+    % Principal declaration: FibonacciCompression.isMPOFusionAlgebra_fibStringNetTensor.
+    \lean{FibonacciCompression.isMPOFusionAlgebra_fibStringNetTensor,
+        FibonacciCompression.fibEdgeOneLetter,
+        FibonacciCompression.exists_fibEdgeOneLetter_or_fibEdgeTauLetter,
+        FibonacciCompression.fibEdgeGraded, FibonacciCompression.fibEdgeOneGolden,
+        FibonacciCompression.fibOneFull, FibonacciCompression.fibTauFull,
+        FibonacciCompression.fibBlockFull,
+        FibonacciCompression.fibGSymbolGolden_edgeOne,
+        FibonacciCompression.fibStringNetTensor_edgeOne_conj,
+        FibonacciCompression.fibStringNetTensor_conj,
+        FibonacciCompression.mpo_fibStringNetTensor,
+        FibonacciCompression.fibConjFull, FibonacciCompression.fibConjFull_mul_eq,
+        FibonacciCompression.fibOneOneFull_compression,
+        FibonacciCompression.fibOneTauFull_compression,
+        FibonacciCompression.fibTauOneFull_compression,
+        FibonacciCompression.fibTauTauFull_compression,
+        FibonacciCompression.isMPOFusionAlgebra_fibBlockFull,
+        FibonacciCompression.fibSiteLetter_fibEdgeOneLetter,
+        FibonacciCompression.fibEdgeGraded_edgeTau,
+        FibonacciCompression.fibEdgeGraded_edgeOne,
+        FibonacciCompression.fibEdgeGraded_edgeOne_edgeTau,
+        FibonacciCompression.fibEdgeGraded_edgeTau_edgeOne,
+        FibonacciCompression.goldenToComplex_fibEdgeOneGolden,
+        FibonacciCompression.fibBlockFull_edgeTau,
+        FibonacciCompression.fibBlockFull_edgeOne_apply,
+        FibonacciCompression.fibBlockFull_edgeOne_edgeTau,
+        FibonacciCompression.fibBlockFull_edgeTau_edgeOne,
+        FibonacciCompression.fibBlockFull_toMPSTensor_eq,
+        FibonacciCompression.fibOneOneFullStack_mul_gaugeInv,
+        FibonacciCompression.fibOneTauFullStack_mul_gaugeInv,
+        FibonacciCompression.fibTauOneFullStack_mul_gaugeInv,
+        FibonacciCompression.fibTauTauFullStack_mul_gaugeInv,
+        FibonacciCompression.fibOneOneEdgeOneStackGolden,
+        FibonacciCompression.fibOneTauEdgeOneStackGolden,
+        FibonacciCompression.fibTauOneEdgeOneStackGolden,
+        FibonacciCompression.fibTauTauEdgeOneStackGolden,
+        FibonacciCompression.fibOneOneFullStack_eq, FibonacciCompression.fibOneTauFullStack_eq,
+        FibonacciCompression.fibTauOneFullStack_eq, FibonacciCompression.fibTauTauFullStack_eq,
+        MPOTensor.IsMPOFusionAlgebra.of_mpo_eq_mul_mul}
+    \leanok
+    \uses{thm:asymex_fib_gsymbol_similarity, thm:asymex_fib_anomaly_fusion_algebra,
+        def:mpo_fusion_algebra}
+    Extend $B_1$ and $B_\tau$ to the four physical letters (plaquette, edge
+    label) by keeping $B_f^{x'x}$ at edge label $\tau$, putting the diagonal
+    matrix unit $E_{pp}$ at the bond letter $p=(x',x)$ at edge label $1$
+    (zero when $(x',x)$ is not a bond letter of the block $f$), and zero when
+    the edge label changes. Then $h\,S_f^{ij}\,h^{-1}=B_f^{ij}$ for both labels
+    $f$ and all physical letters $i,j$, and the periodic operators of the
+    source's blocks $S_1$, $S_\tau$ on $(\C^4)^{\otimes N}$ satisfy the
+    Fibonacci fusion rules $O_1^2=O_1$, $O_1O_\tau=O_\tau O_1=O_\tau$ and
+    $O_\tau^2=O_1+O_\tau$ at every positive length. This is the fusion
+    statement of~\cite[Appendix~D.1]{Bultinck2017Anyons}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_golden_ring, thm:asymex_fib_anomaly_fusion_algebra}
+    At edge label $1$ the selection rule of $G^{abc}_{d1f}$ forces $a=b$ and
+    $c=d$, and $G^{bbc}_{c1f}v_bv_c=1$ whenever $(b,c)$ is a bond letter of
+    the block $f$. So the letter of $S_f$ at $\bigl((b,1),(c,1)\bigr)$ is the
+    diagonal matrix unit $E_{pp}$ at $p=(b,c)$, which the diagonal matrix $h$
+    leaves unchanged; together with
+    Theorem~\ref{thm:asymex_fib_gsymbol_similarity} this gives the similarity
+    on all letters, and the periodic operators of $S_f$ and of the extended
+    $B_f$ agree. For each product of two extended blocks, the gauge of the
+    corresponding compression of
+    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} makes every one of the
+    sixteen letters of the stacked tensor block upper triangular: at edge
+    label $\tau$ the conjugated letters are the block-diagonal ones already
+    recorded, and at edge label $1$ they carry the edge-$1$ letters of the
+    target blocks on the diagonal and further entries only in the columns of
+    the zero slots. These are finite computations in $\Z[\sigma]$. The trace
+    identity of a compression holds for a nonzero nilpotent remainder, which
+    gives the four fusion rules.
 \end{proof}
 
 \begin{theorem}[The prefactor of the review]
@@ -465,14 +535,13 @@ source's tensor built from the $G$-symbols.
     Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} transfer.
 \end{proof}
 
-The review states the fusion rules $O_aO_b=\sum_cN_{ab}^cO_c$ for the operators
-of this tensor~\cite[Section~3]{Cirac2021Matrix}, in the passage on
-critical spin systems and their matrix product operator symmetries. By
-Theorem~\ref{thm:asymex_fib_review_congruence} that statement fails for the
-prefactored tensor read in the orthonormal basis of plaquette configurations,
-and holds after composing with $W$. This correction, together with the
-substituted selection rule, is recorded
-in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+While the review states $O_aO_b=\sum_cN_{ab}^cO_c$ for the prefactored
+review tensor $R_f$~\cite[Section~3]{Cirac2021Matrix}, that operator already
+contains the prefactor $1/\sqrt{d_{x'}d_{q''}}$ and fails the fusion rules
+in the orthonormal plaquette basis.
+Theorem~\ref{thm:asymex_fib_review_congruence} shows that the fusion rules
+hold after composing it with $W$;
+see~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
 
 \begin{theorem}[Normality of the two Fibonacci blocks]
     \label{thm:asymex_fib_normal}
@@ -514,9 +583,8 @@ and, for a cyclic word $x\in\{0,1\}^N$, set
     p_N(x) & =\prod_{v=0}^{N-1}K_{x_vx_{v+1}}.
     \label{eq:asymex_fib_admissibility}
 \end{align}
-A word is admissible if $p_N(x)=1$, equivalently if it has no cyclic
-neighboring pair $00$. This includes the last-to-first pair.
-At $N=1$, the condition excludes the single label $0$.
+A cyclic word $x$ is admissible if $p_N(x)=1$, equivalently if it contains no
+cyclic neighboring pair $00$.
 
 \begin{lemma}[Vacuum projection and its kernel]
     \label{lem:asymex_fib_vacuum}
@@ -563,9 +631,8 @@ At $N=1$, the condition excludes the single label $0$.
     Only $g=x$ contributes. Since $p_N(x)\in\{0,1\}$,
     the operator is diagonal with real idempotent entries.
     This proves the projection, range, and kernel statements.
-    The nonzero vector $\ket{0,\ldots,0}$ lies in its kernel,
-    so it is not the ambient identity. At one site,
-    $P_1=\diag(0,1)$.
+    Since $\ket{0,\ldots,0}\in\ker P_N$, $P_N\neq\Id_{\mc H_N}$,
+    with $P_1=\diag(0,1)$ at one site.
 \end{proof}
 
 \begin{theorem}[Vacuum unit laws]
@@ -645,9 +712,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
         =\frac{O_N(B_1)+\varphi\,O_N(B_\tau)}{1+\varphi^2},
         \label{eq:asymex_fib_projector}
     \end{align}
-    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons}:
-    Section~3.1 derives the boundary matrices $\Delta_a=w_a\Id$ of the
-    blocks, and Section~3.2 writes the projector as $\sum_aw_aO_N(B_a)$.
+    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[The weight relation]
@@ -723,6 +788,146 @@ $1$, hence $\Pi_0^2\neq\Pi_0$;
 \cite[Section~3.2]{Bultinck2017Anyons} asks for idempotence at every
 length, and the empty chain is excluded as a degenerate reading;
 see~\cite{gap:bmwshv17_fibonacci_projector_positive_length}.
+
+\subsection{The golden chain}
+
+The golden chain of Feiguin et al.~\cite{Feiguin2007GoldenChain} acts on
+the labels $x_0,\ldots,x_{N-1}\in\{1,\tau\}$ of a periodic chain. Its
+three-site term projects the two anyons at links $i$ and $i+1$ onto their
+trivial fusion channel, with the amplitudes
+\begin{align}
+    (p_i)^{x_i'}_{x_i}
+     & =\left(F^{x_{i-1}\tau\tau}_{x_{i+1}}\right)_{x_i'}^{1}
+    \left(F^{x_{i-1}\tau\tau}_{x_{i+1}}\right)_{x_i}^{1},
+    \label{eq:asymex_fib_golden_term}
+\end{align}
+where $p_i$ changes only the label $x_i$.
+The Hamiltonian is $H_N=-\sum_ip_i$. The review states that such anyonic
+chains commute with the whole algebra of periodic
+operators~\cite{Cirac2021Matrix}.
+
+\begin{definition}[The golden chain]%
+    \label{def:asymex_fib_golden_chain}
+    \lean{FibonacciCompression.goldenChainTermGolden,
+        FibonacciCompression.goldenChainTerm,
+        FibonacciCompression.goldenChainHamiltonian,
+        FibonacciCompression.fibYGolden,
+        FibonacciCompression.fibOneKernelGolden}
+    \leanok
+    \uses{def:asymex_fib_fsymbols}
+    The golden chain is $H_N=-\sum_ip_i$ with the local terms
+    of~(\ref{eq:asymex_fib_golden_term}). The topological symmetry has the
+    factors $\left(F^{\tau x_n\tau}_{x_{n+1}'}\right)_{x_n'}^{x_{n+1}}$, and the
+    vacuum factor is $\delta_{x_n'x_n}\delta_{x_{n+1}'x_{n+1}}$ unless
+    $x_n=x_{n+1}=1$, where it vanishes.
+\end{definition}
+
+\begin{theorem}[Values of the golden-chain projector]%
+    \label{thm:asymex_fib_golden_term_values}
+    \lean{FibonacciCompression.goldenChainTermGolden_tau_tau,
+        FibonacciCompression.goldenChainTermGolden_of_ne_tau_tau}
+    \leanok
+    \uses{def:asymex_fib_golden_chain}
+    The local term $p_i$ is the projector onto $\ket{1\tau1}$ between two
+    trivial neighbours, it vanishes between a trivial and a $\tau$ neighbour,
+    and between two $\tau$ neighbours it is
+    \begin{align}
+        \begin{pmatrix}
+            \varphi^{-2}   & \varphi^{-3/2} \\
+            \varphi^{-3/2} & \varphi^{-1}
+        \end{pmatrix}
+        \notag
+    \end{align}
+    in the basis $1,\tau$ of~$x_i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_fib_fsymbol_values}
+    The entries are products of two F-symbols and are checked entrywise in
+    $\Z[\sigma]$, where $\varphi^{-1}=\sigma^2$.
+\end{proof}
+
+\begin{theorem}[Site operators and nearest-neighbour kernels]%
+    \label{thm:mpo_site_operator_neighbour_kernel}
+    \lean{MPOTensor.neighbourKernel, MPOTensor.siteOperator,
+        MPOTensor.sum_ite_agree, MPOTensor.siteOperator_mul_neighbourKernel}
+    \leanok
+    On a periodic chain of $N\geq2$ sites, let $K$ have the entries
+    $\bra{s}K\ket{t}=\prod_nf(s_n,s_{n+1},t_n,t_{n+1})$, and let $p_i$ change
+    only the state at site $i$, with amplitude $h(t_{i-1},t_{i+1},s_i,t_i)$.
+    If
+    \begin{align}
+        \sum_yh(a',c',b',y)f(a',y,a,b)f(y,c',b,c)
+         & =\sum_yf(a',b',a,y)f(b',c',y,c)h(a,c,y,b)
+        \notag
+    \end{align}
+    for all labels, then $p_iK=Kp_i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Write $R(s,t)=\prod_{n\neq i-1,i}f(s_n,s_{n+1},t_n,t_{n+1})$ for the
+    factors of $K$ away from the two bonds at site $i$; it does not depend
+    on $s_i$ or $t_i$. Summing over the label $y$ at site $i$ of the
+    intermediate configuration,
+    \begin{align}
+        \bra{s}p_iK\ket{t}
+         & =R(s,t)\sum_yh(s_{i-1},s_{i+1},s_i,y)
+        f(s_{i-1},y,t_{i-1},t_i)f(y,s_{i+1},t_i,t_{i+1}),
+        \notag                                   \\
+        \bra{s}Kp_i\ket{t}
+         & =R(s,t)\sum_yf(s_{i-1},s_i,t_{i-1},y)
+        f(s_i,s_{i+1},y,t_{i+1})h(t_{i-1},t_{i+1},y,t_i).
+        \notag
+    \end{align}
+    The hypothesis with $(a',b',c')=(s_{i-1},s_i,s_{i+1})$ and
+    $(a,b,c)=(t_{i-1},t_i,t_{i+1})$ equates the two sums.
+\end{proof}
+
+\begin{theorem}[The golden chain commutes with the Fibonacci operators]%
+    \label{thm:asymex_fib_golden_chain}
+    \lean{FibonacciCompression.mpo_fibTau_eq_neighbourKernel,
+        FibonacciCompression.goldenChainTerm_local_tau,
+        FibonacciCompression.mpo_fibOne_eq_neighbourKernel,
+        FibonacciCompression.goldenChainTerm_local_one,
+        FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibTau,
+        FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibOne,
+        FibonacciCompression.goldenChainHamiltonian_commute_fibProjector,
+        FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau}
+    \leanok
+    \uses{def:asymex_fib, def:asymex_fib_golden_chain, def:asymex_fib_projector,
+        def:asymex_fib_gsymbol_tensor}
+    For every $N\geq2$, the golden chain $H_N$ commutes with $O_N(B_\tau)$,
+    with $O_N(B_1)$ and with the projector $\Pi_N$, and, for each label $f$,
+    with the periodic operator of the operator tensor $S_f$ restricted to
+    configurations with edge label $\tau$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_site_operator_neighbour_kernel,
+        thm:asymex_fib_gsymbol_similarity}
+    In the $\tau$ block the bond index at site $n$ is determined by the
+    pair $(x_n',x_n)$, so the only closed bond configuration that survives
+    gives
+    $\bra{x'}O_N(B_\tau)\ket{x}=\prod_n
+        \left(F^{\tau x_n\tau}_{x_{n+1}'}\right)_{x_n'}^{x_{n+1}}$,
+    the topological symmetry of~\cite{Feiguin2007GoldenChain}; similarly
+    $O_N(B_1)$ is diagonal with entry $1$ exactly on the configurations
+    without two neighbouring trivial labels. In both cases the entry is a
+    product of factors $f(x_n',x_{n+1}',x_n,x_{n+1})$ around the ring. The
+    product $p_iO_N(B_\tau)$ and the product $O_N(B_\tau)p_i$ share the
+    factors away from the two bonds at site $i$, and the remaining sums
+    over the intermediate label at site $i$ agree by a three-site identity,
+    checked on the sixty-four choices of the six outer and inner labels in
+    exact golden arithmetic. The same identity holds for the kernel of
+    $O_N(B_1)$. Summing over $i$ gives the first two statements, and the
+    third follows since $\Pi_N=w_1O_N(B_1)+w_\tau O_N(B_\tau)$. On edge label
+    $\tau$ the periodic operator of $S_f$ equals $O_N(B_f)$ by
+    Theorem~\ref{thm:asymex_fib_gsymbol_similarity}, which gives the last
+    statement.
+\end{proof}
 
 \subsection{Two periodic states and the Fibonacci action}
 

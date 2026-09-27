@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.PositiveGapTransfer
+import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 
@@ -18,22 +19,6 @@ parent-Hamiltonian gap between admissible interaction ranges; see
 -/
 
 open scoped InnerProductSpace ComplexOrder
-
-/-- On a finite-dimensional inner product space, every linear operator has a
-positive lower norm bound on the orthogonal complement of its kernel. -/
-theorem LinearMap.exists_pos_norm_gap_on_orthogonal_ker
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [FiniteDimensional ℂ E] (H : E →ₗ[ℂ] E) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
-  have hker : (H.domRestrict (LinearMap.ker H)ᗮ).ker = ⊥ :=
-    LinearMap.ker_eq_bot.mpr
-      (LinearMap.injective_domRestrict_iff.mpr (LinearMap.ker H).orthogonal_disjoint.symm)
-  obtain ⟨K, hK, hBound⟩ :=
-    (H.domRestrict (LinearMap.ker H)ᗮ).exists_antilipschitzWith hker
-  refine ⟨(K : ℝ)⁻¹, inv_pos.mpr (NNReal.coe_pos.mpr hK), fun v hv ↦ ?_⟩
-  exact (inv_mul_le_iff₀ (NNReal.coe_pos.mpr hK)).mpr
-    (ZeroHomClass.bound_of_antilipschitz (H.domRestrict (LinearMap.ker H)ᗮ)
-      hBound ⟨v, hv⟩)
 
 private theorem inner_eq_inner_orthogonal_ker_projection
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
@@ -55,7 +40,7 @@ theorem exists_pos_smul_orthogonal_ker_projection_le
     [FiniteDimensional ℂ E] {H : E →ₗ[ℂ] E} (hH : H.IsPositive) :
     ∃ γ : ℝ, 0 < γ ∧
       (γ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap ≤ H := by
-  obtain ⟨γ, hγ, hGap⟩ := H.exists_pos_norm_gap_on_orthogonal_ker
+  obtain ⟨γ, hγ, hGap⟩ := H.exists_pos_mul_norm_le_of_mem_orthogonal_ker
   refine ⟨γ, hγ, hH.isSymmetric.sub
     ((LinearMap.ker H)ᗮ.starProjection_isSymmetric.smul (by simp)), ?_⟩
   intro v
