@@ -36,7 +36,7 @@ equation `coupledpent` of the source (line 1876) with `ω` on the same side.
 
 noncomputable section
 
-open TNLean.Algebra MPOTensor
+open TNLean.Algebra
 
 namespace Z3Anomalous
 
