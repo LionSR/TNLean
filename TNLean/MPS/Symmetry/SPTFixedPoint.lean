@@ -201,7 +201,9 @@ theorem sptFixedPointTensor_isNormal [NeZero D] : Kraus.IsNormal (sptFixedPointT
   sptFixedPointTensor_isInjective.isNormal
 
 /-- The entry `(a, b)` of a linear combination of the letters is `D^{-1/2}` times the
-coefficient of the letter `(a, b)`. -/
+coefficient of the letter `(a, b)`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), with the local fix of the
+module docstring. -/
 theorem sum_smul_sptFixedPointTensor_apply (c : Fin (D * D) → ℂ) (a b : Fin D) :
     (∑ j, c j • sptFixedPointTensor D j) a b = sptScale D * c (finProdFinEquiv (a, b)) := by
   classical
@@ -210,7 +212,9 @@ theorem sum_smul_sptFixedPointTensor_apply (c : Fin (D * D) → ℂ) (a b : Fin 
     ite_and, mul_comm]
 
 /-- **The letters are linearly independent**: for `D > 0` a linear combination of the
-letters determines its coefficients. -/
+letters determines its coefficients.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), with the local fix of the
+module docstring. -/
 theorem eq_of_sum_smul_sptFixedPointTensor_eq [NeZero D] {c c' : Fin (D * D) → ℂ}
     (h : ∑ j, c j • sptFixedPointTensor D j = ∑ j, c' j • sptFixedPointTensor D j) :
     c = c' := by
