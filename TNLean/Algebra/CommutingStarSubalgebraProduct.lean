@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Star.TensorProduct
 import Mathlib.Algebra.Star.Subalgebra
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Dimension.Constructions
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.LinearAlgebra.TensorProduct.Submodule
@@ -71,7 +71,6 @@ noncomputable def commutingMulMap [Nontrivial C] (A B : StarSubalgebra ℂ C)
         star (Algebra.TensorProduct.lift A.subtype.toAlgHom B.subtype.toAlgHom
           (fun a b ↦ hAB a b) x)
     induction x with
-    | zero => simp
     | tmul a b =>
         change ((star a : A) : C) * ((star b : B) : C) =
           star ((a : C) * (b : C))
@@ -107,7 +106,6 @@ theorem commutingMulMap_range (A B : StarSubalgebra ℂ C)
   apply le_antisymm
   · rintro _ ⟨x, rfl⟩
     induction x with
-    | zero => rw [map_zero]; exact (A ⊔ B).zero_mem
     | tmul a b =>
         change (a : C) * (b : C) ∈ A ⊔ B
         exact (A ⊔ B).mul_mem ((show A ≤ A ⊔ B from le_sup_left) a.2)
@@ -140,7 +138,6 @@ private noncomputable def tensorProductStarAlgEquiv
   StarAlgEquiv.ofAlgEquiv
     (Algebra.TensorProduct.congr eA.toAlgEquiv eB.toAlgEquiv) fun x ↦ by
       induction x with
-      | zero => simp
       | tmul a b =>
           simp only [TensorProduct.star_tmul, Algebra.TensorProduct.congr_apply,
             Algebra.TensorProduct.map_tmul]
@@ -174,10 +171,10 @@ theorem commutingMulMap_injective_of_equiv_matrix
     (eA : A ≃⋆ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (eB : B ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) :
     Function.Injective (commutingMulMap A B hAB) := by
-  let hSimple : IsSimpleRing (A ⊗[ℂ] B) :=
+  have hSimple : IsSimpleRing (A ⊗[ℂ] B) :=
     IsSimpleRing.of_ringEquiv
       (tensorProductFullMatrixStarAlgEquiv eA eB).symm.toRingEquiv inferInstance
-  exact @RingHom.injective _ _ _ hSimple _ _ (commutingMulMap A B hAB).toRingHom
+  exact RingHom.injective (R := A ⊗[ℂ] B) (S := Matrix n n ℂ) (commutingMulMap A B hAB)
 
 /-- The join of two commuting full matrix factors of sizes `p` and `q` is a full matrix algebra of
 size `p * q`. This is the unital single-block specialization of Schumacher--Werner Proposition

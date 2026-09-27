@@ -5,9 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorConstruction
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Filter
-
 /-!
 # Common-sector witnesses for the after-blocking reduction
 
@@ -34,6 +31,9 @@ to compare the resulting sector families.
 
 matrix product states, canonical form, common sectors, blocking
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
 
 namespace MPSTensor
 

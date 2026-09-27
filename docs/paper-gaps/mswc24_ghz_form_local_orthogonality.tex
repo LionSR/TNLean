@@ -56,14 +56,41 @@ where $S$ and $S'$ are disjoint sets of virtual indices, then $\braket{\omega}{\
     \leanid{MPSTensor.inner_pair_eq_zero_of_disjoint} in the same module.}
 The embedded pairs of distinct blocks are supported in this way.
 
+\section{A discharged instance}
+The hypothesis is discharged for one identification of the pairs, which the
+source does not make.\footnote{Formal declarations:
+    \leanid{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair},
+    \leanid{MPSTensor.SectorDecomposition.isIsometry_pairIsometry_embeddedFixedPointPair},
+    \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_tensorPower_mulVec_ghzState}
+    and \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq} in
+    \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
+The canonical form is taken as a sector decomposition, whose bond space is
+$\C^D$ with $D=\sum_jm_jD_j$ and whose blocks carry no normality or gauge
+condition. The pair of block $j$ is the fixed-point pair of a positive
+semidefinite, unit-trace matrix $\sigma_j$ on $\C^{D_j}$, a free parameter,
+placed on both legs on the bond coordinates of one chosen copy $k_j$ of that
+block. The coordinates of distinct blocks are distinct, so the right legs of
+the pairs of distinct blocks have disjoint supports and the pairs are
+orthogonal by the disjoint-support lemma; the coordinates of one copy are
+distinct, so $\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. For
+these pairs (\ref{eq:mswc24_local_orthogonality}) holds, and the isometry of
+$W$, the GHZ form and the normalization hold without the hypothesis.
+
+This orthogonality follows from the placement alone. It uses neither the
+normality of the blocks nor the basis-of-normal-tensors property, which is the
+reason the source gives. The source's pairs are the fixed points of the
+positive parts $P_j$ of the blocked tensor, and the block form of the positive
+part that would identify them with the pairs above is not formalized. When some
+block has multiplicity $m_j\ge2$ that block form fails and no product of pairs
+carrying the weights $\beta_j$ gives the approximating state
+\cite{gap:mswc24_multiplicity_fixed_point}.
+
 \section{Elimination}
-Define the embedded pair of the $j$-th block in the bond space of $A$, show
-that its right leg is supported on the virtual indices of that block, so that
-distinct blocks give orthogonal pairs by the disjoint-support lemma, and show
-$\braket{\omega_j}{\omega_j}=1$ from the normalization of the fixed-point pair
-of a normal tensor in the gauge used by the source. The hypothesis
-(\ref{eq:mswc24_local_orthogonality}) then holds for the source's pairs, and
-the three statements above specialize to the source's claim without it.
+Formalize the block form of the positive part of the blocked tensor for
+$m_j=1$, identify its fixed-point pairs with the embedded pairs above, and
+derive (\ref{eq:mswc24_local_orthogonality}) for them; the case $m_j\ge2$ is
+governed by the false-source record
+\cite{gap:mswc24_multiplicity_fixed_point}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

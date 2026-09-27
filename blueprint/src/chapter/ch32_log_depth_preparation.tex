@@ -183,40 +183,218 @@ injective.
 
 \section{Exact factorizations of the isometry}
 
-\begin{theorem}[Sequential factorization]
-    \label{thm:ldp_sequential_factorization}
-    \uses{thm:ldpolar_tensor_decomposition, thm:seqanc_left_canonical}
-    Suppose $\mathcal B_q$ is injective and let $V$ be as in
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
-    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and isometries
-    $W_k\colon\C^{D'_k}\to\C^d\otimes\C^{D'_{k+1}}$ for $k=1,\dots,q$, such that
+\begin{theorem}[Successive decompositions with a matrix remainder]
+    \label{thm:ldp_sweep_matrix_remainder}
+    \lean{MPSPreparation.exists_isometric_chain_mul,
+        MPSPreparation.sum_star_mulVec_dotProduct_of_isIsometryOn,
+        MPSPreparation.sum_star_eval_mulVec_dotProduct}
+    \leanok
+    \uses{def:seqanc_isometry_on, def:seqanc_support}
+    Let $a\le D$, let $R_{-1}\in\MN{D}$ be row-supported below $a$, and let
+    $P_0,\dots,P_{n-1}$ be families of $D\times D$ matrices. Then there are
+    $b_0=a$ and $b_1,\dots,b_n\le D$, families $Q_0,\dots,Q_{n-1}$ such that
+    $Q_p^i$ is row-supported below $b_p$, vanishes on the columns
+    $\beta\ge b_{p+1}$, and $Q_p$ is isometric on its first $b_{p+1}$ columns,
+    and a matrix $R$ row-supported below $b_n$, such that for every
+    configuration $\sigma$
     \begin{align}
-        V
-         & =\bigl(\Id_{d}^{\otimes(q-1)}\otimes W_q\bigr)\cdots
-        \bigl(\Id_d\otimes W_2\bigr)W_1,
-        \label{eq:ldp_sequential_factorization}
+        R_{-1}\,P^\sigma
+         & =Q^\sigma\,R.
+        \label{eq:ldp_sweep_matrix_remainder}
     \end{align}
-    where $\C^{D'_1}$ is identified with $\C^D\otimes\C^D$ and the $k$-th
-    tensor factor $\C^d$ is the $k$-th site of the block. This is
-    \cite[eqs.~(13)--(15)]{Malz2024Preparation}.
+    Moreover $b_{p+1}\le c$ whenever every $P_p^i$ vanishes on the columns
+    $\gamma\ge c$. If $Q$ is isometric on its first $b$ columns and $v,w$ are
+    supported below $b$, then
+    $\sum_i\langle Q^iv,Q^iw\rangle=\langle v,w\rangle$. Consequently, if
+    $Q_p^i$ is row-supported below $b_p$, $Q_p$ is isometric on its first
+    $b_{p+1}$ columns, and $v,w$ are supported below $b_n$, then
+    \begin{align}
+        \sum_\sigma\langle Q^\sigma v,Q^\sigma w\rangle
+         & =\langle v,w\rangle.
+        \label{eq:ldp_sweep_inner_product}
+    \end{align}
 \end{theorem}
 \begin{proof}
-    $V=\mathcal B_qP^{-1}$ is an open-boundary matrix product map with bond
-    dimension at most $D^2$: the site matrices are $A^i\otimes\Id_D$, which carry
-    the right virtual index along the block, and $P^{-1}$ is absorbed into the
-    first site. Make the site maps $W_q,\dots,W_2$ isometric by the successive
-    decompositions of Theorem~\ref{thm:seqanc_left_canonical}. Then
-    $V^\dagger V=W_1^\dagger W_1$, so $W_1$ is an isometry because $V$ is
-    \cite[eq.~(15)]{Malz2024Preparation}.
+    \leanok
+    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
+    By induction on $n$. For $n=0$ take $R=R_{-1}$. Otherwise apply
+    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
+    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
+    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$:
+    \begin{align}
+        R_{-1}P_0^{\sigma_0}P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
+         & =Q_0^{\sigma_0}R_0P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
+        =Q_0^{\sigma_0}Q_1^{\sigma_1}\cdots Q_{n-1}^{\sigma_{n-1}}R.
+        \notag
+    \end{align}
+    For one site, expand
+    \begin{align}
+        \sum_i\langle Q^iv,Q^iw\rangle
+         & =\sum_{\beta,\beta'<b}\overline{v_\beta}w_{\beta'}
+        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}
+        =\sum_{\beta<b}\overline{v_\beta}w_\beta
+        \notag
+    \end{align}
+    by the isometry condition. For the chain, write
+    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
+    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
+    vectors $Q'^{\sigma'}v$ and $Q'^{\sigma'}w$ are supported below $b_1$ by
+    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity for
+    $Q_0$ and the induction hypothesis for $Q'$ give
+    \begin{align}
+        \sum_{\sigma_0,\sigma'}
+        \langle Q_0^{\sigma_0}Q'^{\sigma'}v,Q_0^{\sigma_0}Q'^{\sigma'}w\rangle
+         & =\sum_{\sigma'}\langle Q'^{\sigma'}v,Q'^{\sigma'}w\rangle
+        =\langle v,w\rangle.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Sequential factorization of a matrix product isometry]
+    \label{thm:ldp_sequential_factorization_general}
+    \lean{MPSPreparation.exists_isometric_chain_of_eq_mul}
+    \leanok
+    Let $A$ have bond dimension $D$, let $G$ be a $D^2\times D^2$ matrix, and
+    let $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$, $q\ge1$, be an isometry
+    with matrix elements
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}\,
+        G_{(\alpha,\beta),x}$.
+    Then there are integers $b_0=1$, $b_q=D^2$ and $b_p\le D^2$, and families
+    of $b_{p-1}\times b_p$ matrices $X_p^i$, $p=1,\dots,q$, with
+    $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$ for every $p$, such that
+    $\bra{i_1\cdots i_q}V\ket{x}=(X_1^{i_1}X_2^{i_2}\cdots X_q^{i_q})_{1x}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    The matrix elements of $V$ are
+    $\bigl(j^{\mathsf T}(\Id_D\otimes A^{i_1})\cdots(\Id_D\otimes A^{i_q})G\bigr)_x$
+    with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
+    Theorem~\ref{thm:ldp_sweep_matrix_remainder} to the row matrix of $j$ and the
+    sites $\Id_D\otimes A^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
+    remainder $C=RG$ with $V=Q\,C$ in the sense of
+    (\ref{eq:ldp_sweep_matrix_remainder}). By
+    (\ref{eq:ldp_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
+    isometry because $V$ is. Absorb $C$ into the last site, $X_q^i=Q_q^iC$ and
+    $X_p=Q_p$ for $p<q$; the last site is again isometric,
+    $\sum_i C^\dagger(Q_q^i)^\dagger Q_q^iC=C^\dagger C=\Id$.
+\end{proof}
+
+\begin{theorem}[Sequential factorization]
+    \label{thm:ldp_sequential_factorization}
+    \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition}
+    Suppose $\mathcal B_q$ is injective, $q\ge1$, and let $V$ be as in
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
+    $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and matrices
+    $W_k^i\in\C^{D'_{k+1}\times D'_k}$ for $k=1,\dots,q$ and $i=1,\dots,d$, with
+    \begin{align}
+        \sum_{i=1}^d\bigl(W_k^i\bigr)^\dagger W_k^i
+         & =\Id_{D'_k}
+        \quad\text{and}\quad
+        \bra{i_1\cdots i_q}V\ket{x}
+        =\bigl(W_q^{i_1}W_{q-1}^{i_2}\cdots W_1^{i_q}\bigr)_{1x}
+        \label{eq:ldp_sequential_factorization}
+    \end{align}
+    for every $k$, every configuration $i_1\cdots i_q$ and every $x$, where $\C^{D'_1}$ is
+    identified with $\C^D\otimes\C^D$. This is the matrix product form of
+    \cite[eqs.~(13)--(15)]{Malz2024Preparation}, where the isometry carrying the
+    input is written $\widetilde C=V_1$. The block length $q\ge1$ is implicit
+    in the source, which draws at least one site; the empty block $q=0$ is
+    excluded, see~\cite{gap:mswc24_sequential_factorization_positive_block_length}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_tensor_injective,
+        thm:ldp_sequential_factorization_general}
+    Since $\mathcal B_q$ is injective, $P$ is positive definite and
+    $V=\mathcal B_qP^{-1}$, so
+    $\bra{i_1\cdots i_q}V\ket{x}
+        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$.
+    This is an open-boundary matrix product map with bond dimension at most
+    $D^2$: the site matrices are $\Id_D\otimes A^i$ (the source writes
+    $A^i\otimes\Id_D$; the order of the two bond factors only permutes the
+    bond index), the two bond factors are
+    joined at the left end, and $P^{-1}$ is absorbed into the right end
+    \cite[eq.~(13)]{Malz2024Preparation}. Theorem~\ref{thm:ldp_sequential_factorization_general}
+    with $G=P^{-1}$ makes every site isometric by successive decompositions
+    from the left \cite[eq.~(14)]{Malz2024Preparation}; the remainder at the
+    input end is an isometry because $V$ is
+    \cite[eq.~(15)]{Malz2024Preparation}. The sites of that theorem are
+    numbered from the output end and those here from the input end, so its
+    $p$-th site is the site $q+1-p$ here, $X_p^i=W_{q+1-p}^i$ for
+    $p=1,\dots,q$, which turns $(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ into
+    $(W_q^{i_1}\cdots W_1^{i_q})_{1x}$ and $b_p$ into $D'_{q+1-p}$.
+\end{proof}
+
+\begin{remark}[Sequential factorization as a composition of isometries]
+    \label{rem:ldp_sequential_factorization_composition}
+    \uses{thm:ldp_sequential_factorization}
+    The source states Theorem~\ref{thm:ldp_sequential_factorization} as an
+    ordered composition. With the matrices of
+    (\ref{eq:ldp_sequential_factorization}), let
+    $W_k\colon\C^{D'_k}\to\C^{D'_{k+1}}\otimes\C^d$ be the map with
+    $\bra{\alpha,i}W_k\ket{\beta}=(W_k^i)_{\alpha\beta}$. The first identity in
+    (\ref{eq:ldp_sequential_factorization}) says that $W_k$ is an isometry,
+    $W_k^\dagger W_k=\sum_i(W_k^i)^\dagger W_k^i=\Id_{D'_k}$. Expanding the
+    composition in the product basis, with the tensor factor $\C^d$ of $W_k$
+    placed at the site $q+1-k$ of the block and $\C^{D'_{q+1}}=\C$, the second
+    identity becomes
+    \begin{align}
+        V
+         & =\bigl(W_q\otimes\Id_{d}^{\otimes(q-1)}\bigr)\cdots
+        \bigl(W_2\otimes\Id_d\bigr)W_1,
+        \label{eq:ldp_sequential_factorization_composition}
+    \end{align}
+    which is \cite[eqs.~(13)--(15)]{Malz2024Preparation} as printed. This
+    operator form is not formalized; the formal statement is the matrix product
+    form (\ref{eq:ldp_sequential_factorization}).
+\end{remark}
+
+\begin{theorem}[Uniqueness of the polar decomposition]
+    \label{thm:ldp_polar_uniqueness}
+    \lean{Matrix.polarPos_eq_of_eq_mul, Matrix.polarSupport_eq_of_eq_mul,
+        Matrix.polarIso_eq_of_eq_mul,
+        Matrix.mul_eq_self_of_conjTranspose_mul_self_eq}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldpolar_support}
+    Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
+    projector $E$ onto the range of $Q$. Then $Q=(M^\dagger M)^{1/2}$, $E$ is the
+    support projector of $M$, and $W$ is the partial isometry of the polar
+    decomposition of $M$. This is the step needed to identify the layers of
+    \cite[eq.~(16)]{Malz2024Preparation} with the isometry of the blocked
+    tensor, which the source asserts (``to the same effect'') without proof.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $EQ=Q$ and $WE=W$, $M^\dagger M=QE\,Q=Q^2$, so $Q$ is the positive
+    square root of $M^\dagger M$. Two orthogonal projectors with the same range
+    coincide, which identifies $E$. Finally $(V-W)Q=M-M=0$ for the partial
+    isometry $V$ of $M$, and both $V$ and $W$ are fixed by $E$, whose range lies
+    in the range of $Q$; hence $V=W$.
 \end{proof}
 
 \begin{theorem}[Tree factorization]
     \label{thm:ldp_tree_factorization}
-    \uses{thm:ldpolar_tensor_decomposition, lem:mpv_rotate_physical}
+    \lean{MPSTensor.treeTensor, MPSTensor.treePosTensor,
+        MPSTensor.treeIsoMatrix, MPSTensor.blockKron,
+        MPSTensor.blockTensor_pairRegroupEquiv,
+        MPSTensor.blockKron_polarSupportMatrix_mul_physicalMatrix_blockTensor,
+        MPSTensor.blockTensor_eq_rotatePhysical_treeIsoMatrix,
+        MPSTensor.physicalMatrix_blockTensor_eq_treeIsoMatrix_mul,
+        MPSTensor.conjTranspose_blockKron_polarIsoMatrix_mul_self,
+        MPSTensor.conjTranspose_treeIsoMatrix_mul_self,
+        MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
+        MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor}
+    \leanok
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_polar_uniqueness}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
-    decomposition of the two-site blocked map of $T_{j-1}$, and let $T_j$ be the
-    tensor of $P_j$ (Definition~\ref{def:ldpolar_tensor}). Then for
-    $q=2^k$,
+    decomposition of the two-site blocked map of $T_{j-1}$, with
+    $V^{(j)\dagger}V^{(j)}=\Pi_j$ the support projector of $P_j$, and let $T_j$
+    be the tensor of $P_j$ (Definition~\ref{def:ldpolar_tensor}). Then for
+    $q=2^k$ with $k\ge1$,
     \begin{align}
         \mathcal B_q
          & =\Bigl(V^{(1)}\Bigr)^{\otimes2^{k-1}}
@@ -224,16 +402,38 @@ injective.
         \label{eq:ldp_tree_factorization}
     \end{align}
     Here $V^{(1)}$ maps $\C^{D^2}$ to $(\C^d)^{\otimes2}$ and each $V^{(j)}$ with
-    $j\ge2$ maps $\C^{D^2}$ to $\C^{D^2}\otimes\C^{D^2}$. The product of the
+    $j\ge2$ maps $\C^{D^2}$ to $\C^{D^2}\otimes\C^{D^2}$; the Kronecker powers
+    act on the regrouping of the $q$ sites into $2^{k-1}$ neighbouring pairs,
+    then pairs of pairs, and so on. Each layer
+    $\bigl(V^{(j)}\bigr)^{\otimes m}$ is a partial isometry with initial
+    projector $\Pi_j^{\otimes m}$. The product of the
     layers is a partial isometry with initial space the range of $P_k$, so by
-    uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. This is
-    \cite[eq.~(16)]{Malz2024Preparation}.
+    uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. The
+    factorization (\ref{eq:ldp_tree_factorization}) is
+    \cite[eq.~(16)]{Malz2024Preparation}, where the tree is said to act ``to the
+    same effect'' as blocking directly; the identification with the polar
+    decomposition of the blocked map is left implicit there and is supplied
+    here.
 \end{theorem}
 \begin{proof}
-    Induction on $k$ using Lemma~\ref{lem:mpv_rotate_physical} for
-    open products. The range of the two-site blocked map of $T_{j-1}$ lies in
-    $\operatorname{ran}P_{j-1}\otimes\operatorname{ran}P_{j-1}$, so each layer
-    is applied inside the initial space of the next.
+    \leanok
+    \uses{lem:physical_rotation_mul, lem:ldpolar_physical_matrix_rotate,
+        lem:physical_rotation_state, thm:block_tensor_rotate_physical}
+    Blocking commutes with maps on the physical leg: blocking $C_W$ over $m$
+    sites gives the tensor $C$ blocked over $m$ sites, rotated by
+    $W^{\otimes m}$ (Theorem~\ref{thm:block_tensor_rotate_physical}). Blocking
+    $2^{k}$ sites is blocking $2^{k-1}$ pairs of the two-site blocked tensor,
+    and the outer layer composes with the maps of the inner tree by
+    $(A_{W'})_W=A_{WW'}$
+    (Lemma~\ref{lem:physical_rotation_mul}), so induction on $k$ gives
+    (\ref{eq:ldp_tree_factorization}).
+    The range of the two-site blocked map of $T_{j}$ lies in
+    $\operatorname{ran}P_{j}\otimes\operatorname{ran}P_{j}$, because
+    $\Pi_j$ fixes the tensor of $P_j$; so $\Pi_j^{\otimes2^{k-j}}$ fixes the
+    product of the later layers, and the product of all layers is a partial
+    isometry with initial projector the support projector of $P_k$.
+    Theorem~\ref{thm:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
+    with $P_q$.
 \end{proof}
 
 \section{Approximation error}
@@ -245,12 +445,22 @@ largest modulus other than the Perron eigenvalue $1$. By the remark after
 $\xi=-1/\log\lvert\lambda_2\rvert$ of Definition~\ref{def:correlation_length}
 at this $\lambda_2$. It is finite, it is positive exactly when
 $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
+As in the previous section, $A$ is in the gauge~(\ref{eq:ldp_normal_gauge})
+throughout this section. The estimates below use $\lambda_2$ only through the
+bound $\lvert\mu\rvert\le\lvert\lambda_2\rvert$ for the eigenvalues $\mu\ne1$
+of $\E_A$. When $\lambda_2=0$, so that $\xi=0$, they are applied with any
+$\lambda_2'$ satisfying $0<\lvert\lambda_2'\rvert<1$ in place of $\lambda_2$,
+and $\xi$ is read as the correlation length at $\lambda_2'$.
 
 \begin{lemma}[Overlap of the positive part with the fixed point]
     \label{lem:ldp_positive_part_overlap}
-    \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_state,
-        def:correlation_length}
-    Let $A$ be normal with correlation length $\xi$ and let $0<\gamma<1/2$.
+    \lean{MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul,
+        MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le}
+    \leanok
+    \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
+        lem:ldp_positive_part_converges, def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
+    length $\xi$, and let $0<\gamma<1/2$.
     Then, for $N=qM$,
     \begin{align}
         \Bigl\lvert1-\bigl\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\bigr\rvert\Bigr\rvert
@@ -258,31 +468,105 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
         \label{eq:ldp_positive_part_overlap}
     \end{align}
     This is \cite[Supplemental Material, eq.~(S29)]{Piroli2021LOCC}, quoted as
-    \cite[eq.~(S9)]{Malz2024Preparation}.
+    \cite[eq.~(S9)]{Malz2024Preparation}. The constant depends only on $A$,
+    $\rho$ and $\gamma$, and the bound reads $\le Cy$ for all $q\ge0$ and
+    $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$ equals $(N/q)\,e^{-\gamma q/\xi}$
+    when $q\ge1$. Explicitly, there is $C>0$ with
+    $\bigl\lvert1-\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\rvert\bigr\rvert
+        \le Cy\,e^{Cy}$ for all $q\ge0$ and $M\ge1$.
 \end{lemma}
+\begin{proof}
+    \leanok
+    Write $\E_\infty(X)=\Tr(X)\rho$ and $r=e^{-2\gamma/\xi}$, so that
+    $r=\lvert\lambda_2\rvert^{2\gamma}>\lvert\lambda_2\rvert$ when
+    $0<\lvert\lambda_2\rvert<1$, because $2\gamma<1$. The eigenvalues of
+    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
+    $1$, so the spectral radius of $\E_A-\E_\infty$ is less than $r$, and
+    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives
+    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Kr^n\lVert X\rVert$. By the
+    rearrangement in the proof of
+    Lemma~\ref{lem:ldp_positive_part_converges},
+    $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$, and since
+    $\lVert\sqrt X-\sqrt Y\rVert\le\lVert X-Y\rVert^{1/2}$ for $X,Y\ge0$,
+    $\lVert P_q-P_\infty\rVert\le K_2e^{-\gamma q/\xi}$.
+
+    Let $\tau_q$ and $\tau_\infty$ be the transfer matrices of the mixed
+    transfer maps of $P_q$ and of $P_\infty$ against $P_\infty$. Then
+    $\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle=\Tr\tau_q^M$,
+    $1=\Tr\tau_\infty^M$, $\tau_\infty^2=\tau_\infty$, and
+    $\delta=\lVert\tau_q-\tau_\infty\rVert\le K_3e^{-\gamma q/\xi}$, since
+    $\tau_q-\tau_\infty$ depends linearly on $P_q-P_\infty$. Writing
+    $\tau_q^M-\tau_\infty^M=\sum_{k<M}\tau_q^k(\tau_q-\tau_\infty)\tau_\infty^{M-1-k}$
+    and bounding $\lVert\tau_q^k\rVert\le c+\lVert\tau_q^k-\tau_\infty^k\rVert$
+    with $c\ge\max(1,\lVert\tau_\infty\rVert)$, induction on $M$ gives
+    $\lVert\tau_q^M-\tau_\infty^M\rVert\le c\bigl((1+c\delta)^M-1\bigr)
+        \le c\,Mc\delta\,e^{Mc\delta}$.
+    This proves the explicit bound. When $y\le1$ it is at most $Ce^{C}y$.
+    When $y>1$, the overlap is at most
+    $\lVert\phi_M(P_q)\rVert=\lVert\phi_N(A)\rVert$, and these norms are
+    bounded because $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ converges to $1$.
+\end{proof}
 
 \begin{theorem}[Approximation error, normal case]
     \label{thm:ldp_approximation_error_normal}
+    \lean{MPSTensor.exists_approximationError_le_mul,
+        MPSTensor.exists_approximationError_le, MPSTensor.normalizedMPVState,
+        MPSTensor.approximatingMPVState}
+    \leanok
     \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state,
+        thm:ldpolar_blocked_state, thm:ldpolar_tensor_injective,
         def:correlation_length}
-    Let $A$ be normal with correlation length $\xi$, let $\ket{\phi_N}$ be the
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
+    length $\xi$, let $\ket{\phi_N}$ be the
     normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1/2$. For
-    $N=qM$ with $q\to\infty$ and $q=o(N)$,
+    $N=qM$,
     \begin{align}
         \varepsilon(\widetilde\phi_N,\phi_N)
          & =O\!\left(\frac Nq\,e^{-\gamma q/\xi}\right).
         \label{eq:ldp_approximation_error_normal}
     \end{align}
-    In particular $q=\lceil\xi(1+\eta)\ln N/\gamma\rceil$ gives
-    $e^{-\gamma q/\xi}\le N^{-(1+\eta)}$ and hence
-    $\varepsilon=O(N^{-\eta})$ for every $\eta>0$. This is
-    \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}.
+    This is \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}. The constant
+    depends only on $A$, $\rho$ and $\gamma$, and the bound reads $\le Cy$ for
+    all $q\ge0$ and $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$ equals
+    $(N/q)\,e^{-\gamma q/\xi}$ when $q\ge1$. Explicitly, there is $C>0$ with
+    $\varepsilon(\widetilde\phi_N,\phi_N)\le Cy\,e^{Cy}$ for all $q\ge0$ and
+    $M\ge1$.
 \end{theorem}
-%% The source states Lemma 1'(i) without q = o(N); its proof uses q = o(N) to
-%% absorb the O(exp(-N/xi)) normalization term. The statement above carries
-%% the hypothesis the proof uses. The block length is scaled by 1/gamma
-%% because the estimate is only available for gamma < 1/2, so the endpoint
-%% choice q = 2 xi (1 + eta) ln N does not follow from it.
+\begin{proof}
+    \leanok
+    Write $c_N=\lVert\phi_N(A)\rVert$. For $q$ at least the injectivity length
+    of $A$, the blocked tensor is injective, $V$ is an isometry, and
+    $\ket{\widetilde\phi_N}=V^{\otimes M}\ket{\phi_M(P_\infty)}$ is
+    normalized. Since $\ket{\phi_N(A)}=V^{\otimes M}\ket{\phi_M(P_q)}$ by
+    Theorem~\ref{thm:ldpolar_blocked_state}, this gives
+    $c_N\braket{\widetilde\phi_N}{\phi_N}
+        =\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle$. The triangle inequality
+    \begin{align}
+        \varepsilon
+         & \le\bigl\lvert1-c_N\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert\bigr\rvert
+        +\lvert c_N-1\rvert\,\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
+        \notag
+    \end{align}
+    bounds the first term by Lemma~\ref{lem:ldp_positive_part_overlap}. For the
+    second, $\lvert c_N-1\rvert\le\lvert c_N^2-1\rvert
+        =\lvert\Tr\E_A^{\,N}-1\rvert\le Ke^{-2\gamma N/\xi}$, and
+    $e^{-2\gamma N/\xi}\le e^{-\gamma q/\xi}$ because $N\ge q$. The finitely
+    many smaller $q$, and the case $y>1$, are covered by
+    $\varepsilon\le1$.
+\end{proof}
+%% The source's proof of Lemma 1'(i) drops the normalization term
+%% |c_N - 1| = O(exp(-N/xi)) using q = o(N). Since N >= q, that term is at most
+%% a constant times exp(-gamma q/xi) <= (N/q) exp(-gamma q/xi), so the
+%% statement above carries no condition relating q and N, as in the source's
+%% statement.
+
+In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/\gamma\rceil$
+gives $e^{-\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
+for every $\eta>0$. The source takes
+$q=\lceil2\xi(1+\eta)\ln N\rceil$, which corresponds to the endpoint
+$\gamma=1/2$ that the estimate above does not cover; hence the factor
+$1/\gamma$ in the block length here
+(compare \cite[after Lemma~1]{Malz2024Preparation}).
 
 \section{Depth of the preparation}
 
@@ -370,15 +654,61 @@ $\lambda_2\neq0$, and $\lvert\lambda_2\rvert=e^{-1/\xi}$ in that case.
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
 
-The correlation estimate below rests on four ingredients, which are proved
-first. For an operator $X$ on $(\C^d)^{\otimes L}$ write $\E_X$ for the map
+The correlation estimate below rests on the following lemmas, which are
+proved first. For an operator $X$ on $(\C^d)^{\otimes L}$ write $\E_X$ for the map
 $Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$ on $\MN{D}$, where
 $w,w'$ run over words of length $L$ and $A^w$ is the product of the matrices
 of $A$ along $w$.
 
+\begin{lemma}[Inserted transfer maps of products and adjoints]
+    \label{lem:ldp_observable_transfer_products}
+    \lean{MPSTensor.physicalObservableTransfer_apply, MPSTensor.appendObservable,
+        MPSTensor.appendObservable_apply, MPSTensor.appendObservable_append,
+        MPSTensor.appendObservable_mul, MPSTensor.appendObservable_one_one,
+        MPSTensor.physicalObservableTransfer_appendObservable,
+        MPSTensor.physicalObservableTransfer_one,
+        MPSTensor.physicalObservableTransfer_conjTranspose,
+        MPSTensor.inner_mpvState_toEuclideanLin}
+    \leanok
+    \uses{def:transfer_map}
+    For operators $X,X'$ on $(\C^d)^{\otimes L_1}$ and $Y,Y'$ on
+    $(\C^d)^{\otimes L_2}$, with $X\otimes Y$ acting on $L_1+L_2$ consecutive
+    sites,
+    \begin{align}
+        (X\otimes Y)(X'\otimes Y')
+         & =XX'\otimes YY',
+         &
+        \E_{X\otimes Y}
+         & =\E_X\,\E_Y,
+        \notag                       \\
+        \E_{\Id}
+         & =\E_A^{\,L},
+         &
+        \E_{X^\dagger}(Z)
+         & =\E_X(Z^\dagger)^\dagger.
+        \notag
+    \end{align}
+    For an operator $O$ on $(\C^d)^{\otimes N}$ and the unnormalized vector
+    $\ket{\phi_N(A)}$ of (\ref{eq:ldp_ti_mps}),
+    $\bra{\phi_N(A)}O\ket{\phi_N(A)}=\operatorname{tr}\E_O$, the trace of a
+    linear map on $\MN{D}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A word of length $L_1+L_2$ is the concatenation $ww'$ of words of lengths
+    $L_1$ and $L_2$, with $A^{ww'}=A^wA^{w'}$ and
+    $\bra{ww'}X\otimes Y\ket{vv'}=\bra{w}X\ket{v}\bra{w'}Y\ket{v'}$; summing
+    gives $\E_{X\otimes Y}=\E_X\E_Y$, and $\E_{\Id}=\E_A^{\,L}$ follows by
+    induction on $L$. The adjoint formula is the conjugate of the defining sum.
+    Writing $\braket{w}{\phi_N(A)}=\Tr A^w$ and expanding
+    $\sum_{w,w'}\overline{\Tr A^{w'}}\bra{w'}O\ket{w}\Tr A^w$ in matrix units
+    gives the trace of $\E_O$.
+\end{proof}
+
 \begin{lemma}[Every map is an inserted transfer map]
     \label{lem:ldp_observable_transfer_surjective}
-    \lean{MPSTensor.exists_physicalObservableTransfer_eq}
+    \lean{MPSTensor.exists_physicalObservableTransfer_eq,
+        MPSTensor.exists_isHermitian_physicalObservableTransfer_eq}
     \leanok
     \uses{def:transfer_map}
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$. Then every
@@ -387,19 +717,62 @@ of $A$ along $w$.
     ``we can always choose $\mathcal O$ (and $\mathcal O'$), such that the
     corresponding transfer matrix $E_{\mathcal O}=\ket{A}\bra{B}$ for
     arbitrary $A,B$ (up to a normalization constant)'' in the proof of
-    \cite[Lemma~2]{Malz2024Preparation}.
+    \cite[Lemma~2]{Malz2024Preparation}. If moreover
+    $\Phi(Z^\dagger)=\Phi(Z)^\dagger$ for every $Z$, then $X$ can be chosen
+    Hermitian.
 \end{lemma}
 \begin{proof}
     \leanok
     Choose coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$. The operator
     with matrix elements $\bra{w'}X\ket{w}=c^{ab}_w\overline{c^{ce}_{w'}}$ gives
     $\E_X(Z)=e_{ab}Ze_{ec}=Z_{be}\,e_{ac}$. These maps span all linear maps on
-    $\MN{D}$, and $X\mapsto\E_X$ is linear.
+    $\MN{D}$, and $X\mapsto\E_X$ is linear. If $\Phi$ preserves adjoints and
+    $\E_X=\Phi$, then by
+    Lemma~\ref{lem:ldp_observable_transfer_products} also
+    $\E_{X^\dagger}=\Phi$, so the Hermitian part $(X+X^\dagger)/2$ has the
+    same map.
+\end{proof}
+
+\begin{lemma}[Two windows on the ring]
+    \label{lem:ldp_two_window_trace}
+    \lean{MPSTensor.chainWindowOperator_apply,
+        MPSTensor.chainWindowOperator_add_left,
+        MPSTensor.chainWindowOperator_add_right,
+        MPSTensor.chainWindowOperator_self, MPSTensor.chainWindowOperator_one,
+        MPSTensor.chainWindowOperator_zero_eq_appendObservable,
+        MPSTensor.chainWindowOperator_add_eq_appendObservable,
+        MPSTensor.inner_mpvState_chainWindowOperator_mul,
+        MPSTensor.inner_mpvState_chainWindowOperator_mul_eq_physicalTwoPointExpectation,
+        MPSTensor.mpvExpectation_eq_div}
+    \leanok
+    \uses{lem:ldp_observable_transfer_products}
+    Let $X,Y$ be operators on $(\C^d)^{\otimes L}$ with $L\ge1$, let
+    $m,n\ge0$ and $N=2L+m+n$, and let $X_1$ act on the sites $1,\dots,L$ and
+    $Y_{L+m+1}$ on the sites $L+m+1,\dots,2L+m$ of a ring of $N$ sites. Then
+    \begin{align}
+        \bra{\phi_N(A)}X_1Y_{L+m+1}\ket{\phi_N(A)}
+         & =\operatorname{tr}\bigl(\E_X\,\E_A^{\,m}\,\E_Y\,\E_A^{\,n}\bigr).
+        \notag
+    \end{align}
+    The expectation in the normalized vector $\ket{\phi_N}$ is
+    $\bra{\phi_N(A)}O\ket{\phi_N(A)}/\braket{\phi_N(A)}{\phi_N(A)}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    An operator on a window that does not wrap around the ring is the tensor
+    product of the identity on the sites before it, the operator on the window,
+    and the identity on the sites after it. Hence $X_1Y_{L+m+1}$ is
+    $X\otimes\Id\otimes Y\otimes\Id$ over the blocks of lengths $L,m,L,n$, and
+    Lemma~\ref{lem:ldp_observable_transfer_products} gives the trace formula.
 \end{proof}
 
 \begin{lemma}[The limit correlator at an eigenvector]
     \label{lem:ldp_limit_correlator_eigenvalue}
-    \lean{MPSTensor.limitCorrelator, MPSTensor.exists_limitCorrelator_eq_pow}
+    \lean{MPSTensor.limitCorrelator, MPSTensor.exists_limitCorrelator_eq_pow,
+        MPSTensor.limitCorrelator_smul_smul, MPSTensor.limitCorrelator_zero_left,
+        MPSTensor.limitCorrelator_zero_right,
+        MPSTensor.trace_eq_zero_of_transferMap_eq_smul,
+        MPSTensor.compl_pow_apply_of_transferMap_eq_smul}
     \leanok
     \uses{def:transfer_map}
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
@@ -413,7 +786,7 @@ of $A$ along $w$.
     \end{align}
     When $\rho$ is the fixed point of the gauge (\ref{eq:ldp_normal_gauge}),
     the left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
-    $t=s-L-1$. This is the choice of observables in the proof of
+    $t=s-L-1$; it is bilinear in $(X,Y)$. This is the choice of observables in the proof of
     \cite[Lemma~2]{Malz2024Preparation}, without the source's requirement that
     the one-point functions vanish.
 \end{lemma}
@@ -465,14 +838,105 @@ of $A$ along $w$.
     Cauchy--Schwarz inequality to both terms.
 \end{proof}
 
-\begin{lemma}[Exponentially decaying correlations]
-    \label{lem:ldp_decaying_correlations}
+\begin{lemma}[Hermitian observables for the second eigenvalue]
+    \label{lem:ldp_hermitian_observables}
+    \lean{MPSTensor.exists_hermitian_vector_functional_compl_pow,
+        MPSTensor.exists_normalized_observables_limitCorrelator}
+    \leanok
+    \uses{lem:ldp_limit_correlator_eigenvalue,
+        lem:ldp_observable_transfer_surjective}
+    Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
+    $\sum_i(A^i)^\dagger A^i=\Id$, let $\rho$ be Hermitian with $\Tr\rho=1$,
+    put $P(Z)=\Tr(Z)\,\rho$, and let $\lambda\neq0,1$ be an eigenvalue of
+    $\E_A$. Then there are Hermitian operators $\mathcal O,\mathcal O'$ on
+    $(\C^d)^{\otimes L}$ of norm one, an integer $K\in\{1,2\}$ with $K=1$ when
+    $\lambda$ is real, distinct complex numbers $\mu_1,\dots,\mu_K$ of modulus
+    one and a nonzero $a\in\C^K$ such that for every $t\ge0$
+    \begin{align}
+        \Tr\Bigl(\E_{\mathcal O}\bigl((\E_A-P)^t
+        \bigl(\E_{\mathcal O'}(\rho)\bigr)\bigr)\Bigr)
+         & =\lvert\lambda\rvert^t\sum_{j=1}^Ka_j\mu_j^{\,t}.
+        \notag
+    \end{align}
+    This replaces the choice of observables in the proof of
+    \cite[Lemma~2]{Malz2024Preparation} by one with Hermitian observables: for
+    non-real $\lambda$ the eigenvector is not Hermitian, and a Hermitian
+    observable pairs it with its adjoint, an eigenvector for $\bar\lambda$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    This is the second and third paragraph of the proof of
+    Theorem~\ref{thm:ldp_decaying_correlations}: a Hermitian vector $v$ and a
+    functional $\ell$ with $\ell(Z^\dagger)=\overline{\ell(Z)}$ are built from
+    an eigenvector $R$ and its adjoint, the maps $Z\mapsto\Tr(Z)\,v$ and
+    $Z\mapsto\ell(Z)\,\rho$ are realized by Hermitian observables through
+    Lemma~\ref{lem:ldp_observable_transfer_surjective}, and scaling to norm one
+    multiplies $a$ by a positive constant.
+\end{proof}
+
+\begin{lemma}[Finite-size corrections]
+    \label{lem:ldp_finite_size_correction}
+    \lean{MPSTensor.exists_compl_pow_bound,
+        MPSTensor.mpvConnectedCorrelator_eq_of_compl,
+        Complex.norm_div_sub_div_mul_div_sub_le,
+        Matrix.norm_linearMap_trace_le_mul_norm,
+        MPSTensor.exp_neg_div_correlationLength_le_norm_pow}
+    \leanok
+    \uses{lem:ldp_two_window_trace, thm:wielandt_proposition_three,
+        def:correlation_length}
+    Let $A$ be in the gauge (\ref{eq:ldp_normal_gauge}), with the products of
+    $L\ge1$ matrices spanning $\MN{D}$, let $P(Z)=\Tr(Z)\,\rho$, and let
+    $\lambda_2$ be an eigenvalue of $\E_A$ of largest modulus among those
+    different from $1$.
+    \begin{enumerate}
+        \item For every $r>\lvert\lambda_2\rvert$ there is $C_r>0$ with
+              $\lVert(\E_A-P)^n\rVert\le C_rr^n$ for all $n\ge0$.
+        \item For $t,n\ge1$ and $N=2L+t+n$, the connected correlator
+              $G_N(X,Y;L+t+1)$ of (\ref{eq:ldp_connected_correlator}) equals
+              $(\alpha\beta+G_\infty+\delta_{XY})/(1+\delta)
+                  -(\alpha+\delta_X)(\beta+\delta_Y)/(1+\delta)^2$, where
+              $\alpha=\Tr\E_X(\rho)$, $\beta=\Tr\E_Y(\rho)$, $G_\infty$ is the
+              limit correlator (\ref{eq:ldp_limit_correlator}) at
+              separation $t$, and $\delta,\delta_X,\delta_Y,\delta_{XY}$ are
+              traces of linear maps containing $(\E_A-P)^n$, $(\E_A-P)^N$ or a
+              power of $\E_A-P$ of exponent at least $n$.
+        \item If $\lvert z-1\rvert$, $\lvert n_{XY}-(ab+g)\rvert$,
+              $\lvert n_X-a\rvert$ and $\lvert n_Y-b\rvert$ are at most
+              $\varepsilon\le\tfrac12$ and $\lvert a\rvert,\lvert b\rvert,
+                  \lvert g\rvert\le M$, then
+              $\lvert n_{XY}/z-(n_X/z)(n_Y/z)-g\rvert\le4(M+2)^2\varepsilon$.
+        \item The trace of a linear map on $\MN{D}$ is bounded by a constant
+              depending only on $D$ times its operator norm, and
+              $e^{-(s-1)/\xi}\le\lvert\lambda_2\rvert^t$ whenever $t+1\le s$ and
+              $0<\lvert\lambda_2\rvert<1$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    A nonzero eigenvalue of $\E_A-P$ is an eigenvalue of $\E_A$ with a traceless
+    eigenvector, hence different from $1$ by strong irreducibility
+    (Theorem~\ref{thm:wielandt_proposition_three}), so the spectral radius of
+    $\E_A-P$ is at most $\lvert\lambda_2\rvert$ and Gelfand's formula gives
+    (1). Part (2) substitutes $\E_A^{\,k}=P+(\E_A-P)^k$ for $k\ge1$ into the
+    trace formula of Lemma~\ref{lem:ldp_two_window_trace} and into the
+    one-point functions and the normalization. Part (3) is elementary
+    algebra with $\lvert1/z\rvert\le2$, and part (4) expands the trace in
+    matrix units and uses $\xi=-1/\log\lvert\lambda_2\rvert$.
+\end{proof}
+
+\begin{theorem}[Exponentially decaying correlations]
+    \label{thm:ldp_decaying_correlations}
+    \lean{MPSTensor.exists_decayingCorrelations,
+        MPSTensor.mpvConnectedCorrelator, MPSTensor.mpvExpectation,
+        MPSTensor.chainWindowOperator}
+    \leanok
     \uses{def:normal, def:correlation_length}
-    Let $A$ be normal with correlation length $\xi>0$, let $L\ge1$ be a length
-    such that the products of $L$ matrices of $A$ span $\MN{D}$ (one may take
-    $L=1$ when $A$ is injective), and let $\ket{\phi_N}$ be the normalized
-    vectors (\ref{eq:ldp_ti_mps}). For operators $X,Y$ on $(\C^d)^{\otimes L}$
-    let $X_1$ act on the sites $1,\dots,L$, let $Y_s$ act on the sites
+    Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), with
+    correlation length $\xi>0$, let $L\ge1$ be a length such that the products
+    of $L$ matrices of $A$ span $\MN{D}$ (one may take $L=1$ when $A$ is
+    injective), and let $\ket{\phi_N}$ be the normalized vectors
+    (\ref{eq:ldp_ti_mps}). For operators $X,Y$ on $(\C^d)^{\otimes L}$ let
+    $X_1$ act on the sites $1,\dots,L$, let $Y_s$ act on the sites
     $s,\dots,s+L-1$, and put
     \begin{align}
         G_N(X,Y;s)
@@ -481,26 +945,38 @@ of $A$ along $w$.
         \label{eq:ldp_connected_correlator}
     \end{align}
     There are Hermitian operators $\mathcal O,\mathcal O'$ on
-    $(\C^d)^{\otimes L}$ of norm one, a constant $c>0$, an integer $K\ge1$ and
-    an integer $s_0\ge L+2$ such that for every $s\ge s_0$ some
-    $s'\in\{s,s+1,\dots,s+K-1\}$ satisfies, for every $N\ge3s'$,
+    $(\C^d)^{\otimes L}$ of norm one, a constant $c>0$, an integer
+    $K\in\{1,2\}$ and an integer $s_0\ge L+2$ such that for every $s\ge s_0$
+    some $s'\in\{s,s+1,\dots,s+K-1\}$ satisfies, for every $N\ge3s'$,
     \begin{align}
         \bigl\lvert G_N(\mathcal O,\mathcal O';s')\bigr\rvert
          & \ge c\,e^{-(s'-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
-    One may take $K$ to be the number of distinct eigenvalues of $\E_A$ of
-    modulus $\lvert\lambda_2\rvert$. For injective $A$ and $L=1$ this is the
-    correlation estimate of \cite[Lemma~2]{Malz2024Preparation}, with the
-    separation $s$ ranging over windows of $K$ consecutive values.
-\end{lemma}
+    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. For
+    injective $A$ and $L=1$ this is the correlation estimate of
+    \cite[Lemma~2]{Malz2024Preparation}, with the separation $s$ ranging over
+    windows of $K$ consecutive values; the correction of the source's
+    statement is recorded in~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
+\end{theorem}
 \begin{proof}
-    \uses{def:transfer_map, lem:ldp_observable_transfer_surjective,
-        lem:ldp_limit_correlator_eigenvalue, lem:ldp_vandermonde_window}
+    \leanok
+    \uses{def:transfer_map, lem:ldp_observable_transfer_products,
+        lem:ldp_observable_transfer_surjective, lem:ldp_two_window_trace,
+        lem:ldp_hermitian_observables, lem:ldp_finite_size_correction,
+        lem:ldp_vandermonde_window, thm:wielandt_proposition_three}
     With the inserted transfer maps $\E_X$ defined before
-    Lemma~\ref{lem:ldp_observable_transfer_surjective},
-    $\E_{\Id}=\E_A^{\,L}$. Expanding the traces in
-    (\ref{eq:ldp_ti_mps}) gives, for $L<s$ and $s+L-1\le N$,
+    Lemma~\ref{lem:ldp_observable_transfer_surjective}, and for operators
+    $X,Y$ on consecutive blocks,
+    \begin{align}
+        \E_{\Id} & =\E_A^{\,L},
+                 &
+        \E_{X\otimes Y}
+                 & =\E_X\,\E_Y.
+        \notag
+    \end{align}
+    Expanding the traces in (\ref{eq:ldp_ti_mps})
+    gives, for $L<s$ and $s+L-1\le N$,
     \begin{align}
         \bra{\phi_N(A)}X_1Y_s\ket{\phi_N(A)}
          & =\operatorname{tr}\bigl(\E_X\,\E_A^{\,s-L-1}\,\E_Y\,
@@ -508,55 +984,51 @@ of $A$ along $w$.
         \notag
     \end{align}
     the trace of a linear map on $\MN{D}$. Let $P(Z)=\Tr(Z)\,\rho$. In the
-    gauge (\ref{eq:ldp_normal_gauge}), $\E_A^{\,n}=P+(\E_A-P)^n$ for $n\ge1$,
-    and $\E_A-P$ has spectral radius $\lvert\lambda_2\rvert$. Fix $r$ with
-    $\lvert\lambda_2\rvert<r<1$ and $r^2<\lvert\lambda_2\rvert$; then
-    $\lVert(\E_A-P)^n\rVert\le C_rr^n$. Replacing the last power
+    gauge (\ref{eq:ldp_normal_gauge}), $\E_A^{\,n}=P+(\E_A-P)^n$ for $n\ge1$.
+    An eigenvalue $\nu\neq0$ of $\E_A-P$ is an eigenvalue of $\E_A$ with a
+    traceless eigenvector, so $\nu\neq1$ because $\E_A$ is strongly
+    irreducible (Theorem~\ref{thm:wielandt_proposition_three}), and hence
+    $\lvert\nu\rvert\le\lvert\lambda_2\rvert$. Fix $r$ with
+    $\lvert\lambda_2\rvert<r<1$ and $r^2<\lvert\lambda_2\rvert$; Gelfand's
+    formula gives $\lVert(\E_A-P)^n\rVert\le C_rr^n$. Replacing the last power
     $\E_A^{\,N-s-L+1}$ by $P$, and likewise in the normalization
     $\operatorname{tr}\E_A^{\,N}$ and in the one-point functions, changes
     $G_N(X,Y;s)$ by at most $C_{X,Y}\,r^{N-s-L+1}$, which is at most
-    $C'_{X,Y}\,r^{2s}$ when $N\ge3s$. The remaining term is
+    $C_{X,Y}\,r^{2(s-L-1)}$ when $N\ge3s$. The remaining term is
     \begin{align}
         G_\infty(X,Y;s)
-         & =\Tr\Bigl(\E_X\bigl((\E_A-P)^{s-L-1}\bigl(\E_Y(\rho)\bigr)\bigr)\Bigr),
+         & =\Tr\Bigl(\E_X\bigl((\E_A-P)^{s-L-1}\bigl(\E_Y(\rho)\bigr)\bigr)\Bigr).
         \label{eq:ldp_limit_correlator}
     \end{align}
-    which is bilinear in $(X,Y)$.
 
-    The matrices $A^w\otimes\overline{A^{w'}}$ with $w,w'$ of length $L$ span
-    $\MN{D}\otimes\MN{D}$, so every linear map on $\MN{D}$ is of the form
-    $\E_X$. Since $\xi>0$, $\lambda_2\neq0$. Let $R$ be an eigenvector,
-    $\E_A(R)=\lambda_2R$; then $\Tr R=0$ because $\E_A$ is trace preserving,
-    so $P(R)=0$. Choose $Y$ with $\E_Y(\rho)=R$ and $X$ with
-    $\Tr\E_X(Z)=\Tr(M^\dagger Z)$ for all $Z$, where $\Tr(M^\dagger R)=1$.
-    Then $G_\infty(X,Y;s)=\lambda_2^{\,s-L-1}$.
+    Let $R\neq0$ satisfy $\E_A(R)=\lambda_2R$. Since $\xi>0$,
+    $\lambda_2\neq0$, and trace preservation gives $\Tr R=0$, so
+    $(\E_A-P)^tR=\lambda_2^{\,t}R$; since $\E_A(Z^\dagger)=\E_A(Z)^\dagger$,
+    also $(\E_A-P)^tR^\dagger=\bar\lambda_2^{\,t}R^\dagger$. If $\lambda_2$ is
+    real, one of $R+R^\dagger$ and $i(R-R^\dagger)$ is a nonzero Hermitian
+    eigenvector $H$; put $v=H$ and $\ell(Z)=\Tr(HZ)/\Tr(H^2)$, so that
+    $\ell((\E_A-P)^tv)=\lambda_2^{\,t}$. If $\lambda_2$ is not real, $R$ and
+    $R^\dagger$ are eigenvectors for distinct eigenvalues; take a linear
+    functional $f$ with $f(R)=1$ and $f(R^\dagger)=0$, put $v=R+R^\dagger$ and
+    $\ell(Z)=f(Z)+\overline{f(Z^\dagger)}$, so that
+    $\ell((\E_A-P)^tv)=\lambda_2^{\,t}+\bar\lambda_2^{\,t}$. In both cases
+    $v$ is Hermitian, $\ell(Z^\dagger)=\overline{\ell(Z)}$, and
+    $\ell((\E_A-P)^tv)=\lvert\lambda_2\rvert^t\sum_{j=1}^Ka_j\mu_j^t$ with
+    $K\le2$, distinct $\mu_j$ of modulus one and $a\neq0$.
 
-    Let $\lambda_2=\lambda^{(1)},\dots,\lambda^{(K)}$ be the distinct
-    eigenvalues of $\E_A$ of modulus $\lvert\lambda_2\rvert$, put
-    $\mu_j=\lambda^{(j)}/\lvert\lambda_2\rvert$, and fix $\delta>0$ with all
-    other eigenvalues of $\E_A-P$ of modulus less than
-    $\lvert\lambda_2\rvert-\delta$. The Jordan decomposition of $\E_A-P$ gives,
-    for Hermitian $X',Y'$ and $t=s-L-1$,
-    \begin{align}
-        G_\infty(X',Y';s)
-         & =\lvert\lambda_2\rvert^t\sum_{j=1}^Kp_j(t)\,\mu_j^t
-        +O\bigl((\lvert\lambda_2\rvert-\delta)^t\bigr),
-        \label{eq:ldp_peripheral_expansion}
-    \end{align}
-    with polynomials $p_j$ depending bilinearly on $(X',Y')$; the polynomials
-    are constants when the eigenvalues of modulus $\lvert\lambda_2\rvert$ are
-    semisimple. Write $X=X^{(1)}+iX^{(2)}$ and $Y=Y^{(1)}+iY^{(2)}$ with
-    Hermitian parts. If all four pairs $(X^{(a)},Y^{(b)})$ had vanishing
-    polynomials $p_j$, bilinearity would give
-    $G_\infty(X,Y;s)=O((\lvert\lambda_2\rvert-\delta)^t)$, which is false. Take
-    $\mathcal O,\mathcal O'$ to be a pair $X^{(a)},Y^{(b)}$ with some
-    $p_j\neq0$, scaled to norm one. Let $m$ be the largest degree of the
-    $p_j$ and $a_j$ the coefficient of $t^m$ in $p_j$, so
-    $a=(a_1,\dots,a_K)\neq0$.
+    The maps $Z\mapsto\Tr(Z)\,v$ and $Z\mapsto\ell(Z)\,\rho$ preserve
+    Hermitian matrices. By Lemma~\ref{lem:ldp_observable_transfer_surjective}
+    they are $\E_Y$ and $\E_X$ for some $X,Y$, and since
+    $\E_{X^\dagger}(Z)=\E_X(Z^\dagger)^\dagger$ the Hermitian parts of $X$ and
+    $Y$ have the same maps. Then
+    $G_\infty(X,Y;s)=\lvert\lambda_2\rvert^t\sum_ja_j\mu_j^t$ with $t=s-L-1$,
+    and $X,Y\neq0$ because this sum does not vanish identically. Take
+    $\mathcal O,\mathcal O'$ to be $X,Y$ scaled to norm one; this multiplies
+    $a$ by a positive constant.
 
     The Vandermonde matrix $W=(\mu_j^{\,u})_{0\le u<K,\,1\le j\le K}$ is
-    invertible because the $\mu_j$ are distinct. For every $t$ the vector
-    with entries $\sum_ja_j\mu_j^{\,t+u}$, $0\le u<K$, is $W$ applied to
+    invertible because the $\mu_j$ are distinct. For every $t$ the vector with
+    entries $\sum_ja_j\mu_j^{\,t+u}$, $0\le u<K$, is $W$ applied to
     $(a_j\mu_j^t)_j$, whose maximum norm equals that of $a$ because
     $\lvert\mu_j\rvert=1$. Hence some $u\in\{0,\dots,K-1\}$ satisfies
     \begin{align}
@@ -567,18 +1039,14 @@ of $A$ along $w$.
          & =\frac{\max_j\lvert a_j\rvert}{\lVert W^{-1}\rVert_\infty}>0,
         \label{eq:ldp_vandermonde_window}
     \end{align}
-    so a nonzero exponential sum of this kind cannot be small at $K$
-    consecutive integers. At $t'=t+u$, (\ref{eq:ldp_peripheral_expansion})
-    gives
-    $\lvert G_\infty(\mathcal O,\mathcal O';s+u)\rvert\ge
-        \lvert\lambda_2\rvert^{t'}\bigl(t'^mc_0-O(t'^{m-1})\bigr)
-        -O\bigl((\lvert\lambda_2\rvert-\delta)^{t'}\bigr)
-        \ge\tfrac{c_0}{2}\lvert\lambda_2\rvert^{t'}$
-    once $s$ is large. With $s'=s+u$, $N\ge3s'$ and $r^2<\lvert\lambda_2\rvert$,
-    the finite-size correction $O(r^{2s'})$ is at most
-    $\tfrac{c_0}{4}\lvert\lambda_2\rvert^{t'}$ after enlarging $s_0$. Finally
+    so $\lvert G_\infty(\mathcal O,\mathcal O';s+u)\rvert\ge
+        c_0\lvert\lambda_2\rvert^{t'}$ with $t'=t+u$. With $s'=s+u$ and
+    $N\ge3s'$ the finite-size correction is at most
+    $C\,r^{2t'}=C\,(r^2/\lvert\lambda_2\rvert)^{t'}\lvert\lambda_2\rvert^{t'}$,
+    which is at most $\tfrac{c_0}{2}\lvert\lambda_2\rvert^{t'}$ after
+    enlarging $s_0$, since $r^2<\lvert\lambda_2\rvert$. Finally
     $\lvert\lambda_2\rvert^{t'}=e^{-(s'-L-1)/\xi}\ge e^{-(s'-1)/\xi}$, which
-    gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/4$.
+    gives (\ref{eq:ldp_decaying_correlations}) with $c=c_0/2$.
 \end{proof}
 %% The source's Lemma 2 (label lm:2 in the arXiv:2307.01696 LaTeX source,
 %% Supplemental Material, section Proof of Theorem 1) asserts, for
@@ -586,18 +1054,21 @@ of $A$ along $w$.
 %% every integer s > 1 and sufficiently large N the one-point functions
 %% vanish exactly (auxform1) and the correlator itself satisfies the real
 %% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). Neither the bound
-%% at every s > 1 nor the exact vanishing is justified in general. The correlator of Hermitian observables is real, and its
-%% leading part is an exponential sum over the eigenvalues of modulus
-%% |lambda_2|, which come in complex-conjugate pairs; such a sum, a cosine
-%% for a single conjugate pair, can vanish at individual s. The statement
-%% above therefore asserts the bound in every window of K consecutive
-%% separations, which the Vandermonde argument proves, and it uses the
-%% connected correlator, since the one-point functions need not vanish at
-%% finite N. It is stated for normal A with observables on L sites so that
-%% Theorem thm:ldp_depth_lower_bound applies at every N; for injective A and
-%% L = 1 it is the source's setting. No diagonalizability is assumed: Jordan
-%% blocks at modulus |lambda_2| only add polynomial factors, which the
-%% argument absorbs.
+%% at every s > 1 nor the exact vanishing is justified in general. The
+%% correlator of Hermitian observables is real; for a complex lambda_2 the
+%% source's choice pairs R_2 with its adjoint, the eigenvector for
+%% conj(lambda_2), and the leading part is a multiple of
+%% |lambda_2|^t cos(t theta + phi), which can vanish at individual s. The
+%% statement above therefore asserts the bound in every window of K <= 2
+%% consecutive separations, which the Vandermonde argument proves, and it
+%% uses the connected correlator, since the one-point functions need not
+%% vanish at finite N. It is stated for normal A with observables on L sites
+%% so that Theorem thm:ldp_depth_lower_bound applies at every N; for
+%% injective A and L = 1 it is the source's setting. The gauge
+%% (eq:ldp_normal_gauge) is the one the source's proof uses ("in the main text
+%% we use the gauge in which R_1 = rho and L_1 = 1"); every normal tensor
+%% reaches it without changing phi_N/|phi_N| or xi, as in the proof of
+%% Theorem thm:ldp_depth_lower_bound.
 
 \begin{theorem}[No preparation in depth $o(\log N)$]
     \label{thm:ldp_depth_lower_bound}
@@ -609,9 +1080,23 @@ of $A$ along $w$.
     \cite[Theorem~1]{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
-    \uses{lem:ldp_decaying_correlations, lem:ldp_expectation_overlap}
+    \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
+        thm:wielandt_proposition_three}
+    We may assume that $A$ is in the gauge (\ref{eq:ldp_normal_gauge}). Since
+    $A$ is normal, $\E_A$ is strongly irreducible
+    (Theorem~\ref{thm:wielandt_proposition_three}), so its spectral radius
+    $\lambda_1$ is a positive eigenvalue whose right eigenvector $\rho$ and
+    whose eigenvector $\sigma$ for the dual map are positive definite. Replacing
+    $A^i$ by $\lambda_1^{-1/2}\sigma^{1/2}A^i\sigma^{-1/2}$ gives
+    (\ref{eq:ldp_normal_gauge}), with fixed point $\sigma^{1/2}\rho\sigma^{1/2}$
+    scaled to unit trace. The scaling multiplies
+    $\ket{\phi_N}$ by a positive constant and the conjugation leaves every trace
+    in (\ref{eq:ldp_ti_mps}) unchanged, so $\phi_N/\lVert\phi_N\rVert$ is
+    unchanged; the eigenvalues of $\E_A$ are divided by $\lambda_1$, which is
+    the normalization $\lambda_1=1$ in which $\xi$ is computed.
+
     Take $L,\mathcal O,\mathcal O',c,K,s_0$ from
-    Lemma~\ref{lem:ldp_decaying_correlations}, and suppose
+    Theorem~\ref{thm:ldp_decaying_correlations}, and suppose
     $\varepsilon(\phi_N,\psi_N)\le1/2$, that is
     $\lvert\braket{\phi_N}{\psi_N}\rvert\ge1/2$. Write $T=T_N$ and
     $\ket{\psi_N}=U\ket{\pi}$ with $U$ a local circuit of depth $T$ and
@@ -627,7 +1112,7 @@ of $A$ along $w$.
     $k=1,\dots,n$. With $e=\bra{\phi_N}\mathcal O_1\ket{\phi_N}$ and
     $e'=\bra{\phi_N}\mathcal O'_1\ket{\phi_N}$ let $\mathcal O^{(k)}$ be
     $\mathcal O-e$ on the sites $b_k,\dots,b_k+L-1$ and $\mathcal O'^{(k)}$ be
-    $\mathcal O'-e'$ on the sites $b_k+s',\dots,b_k+s'+L-1$. These have norm at
+    $\mathcal O'-e'$ on the sites $b_k+s'-1,\dots,b_k+s'+L-2$. These have norm at
     most $2$, zero expectation in $\ket{\phi_N}$ by translation invariance,
     and $\bra{\phi_N}\mathcal O^{(k)}\mathcal O'^{(k)}\ket{\phi_N}
         =G_N(\mathcal O,\mathcal O';s')$. Since $s'\ge2T+L+1$ and
@@ -647,13 +1132,13 @@ of $A$ along $w$.
         =\bra{\phi}(Z-\langle Z\rangle_\psi)\ket{\psi}
         -\bra{\phi}(Z-\langle Z\rangle_\phi)\ket{\psi}$. Secondly, the
     decomposition $\E_A^{\,n}=P+(\E_A-P)^n$ from the proof of
-    Lemma~\ref{lem:ldp_decaying_correlations}, together with the fact that in
+    Theorem~\ref{thm:ldp_decaying_correlations}, together with the fact that in
     the gauge (\ref{eq:ldp_normal_gauge}) the maps $\E_Z$ have norm bounded by
     a multiple of $\lVert Z\rVert$ independent of the size of the support,
     shows that the connected correlation in $\ket{\phi_N}$ of two operators of
     norm at most $4$ on intervals separated by $g$ and $g'$ sites around the
     ring is at most $C(r^g+r^{g'})$, with $C$ and $r<1$ depending only on $A$.
-    Consecutive intervals $[b_k,b_k+s'+L-1]$ are separated by at least $2T$
+    Consecutive intervals $[b_k,b_k+s'+L-2]$ are separated by at least $2T$
     sites, and intervals $j$ apart by at least $(j-1)\Delta$, so every
     average of $n$ of these operators, or of their pair products, has
     variance at most $C_1/n$ in $\ket{\phi_N}$.
@@ -700,7 +1185,7 @@ of $A$ along $w$.
 %% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
 %% single separation s = 2T + 1, using the exact vanishing of the
 %% one-point functions. Both of those inputs are unavailable here (see the
-%% comment after Lemma lem:ldp_decaying_correlations), so the proof above
+%% comment after Theorem thm:ldp_decaying_correlations), so the proof above
 %% replaces the product-fidelity step by the concentration of averages of
 %% n ~ N/s' translated observables. This concentration argument is not in
 %% the source; it must be re-derived line by line when this theorem is
@@ -710,8 +1195,8 @@ of $A$ along $w$.
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
-    \uses{def:bnt, def:prep_fixed_point_tensor, thm:ldpolar_tensor_decomposition,
-        def:correlation_length}
+    \uses{def:bnt, def:sector_weight_data, def:prep_fixed_point_tensor,
+        thm:ldpolar_tensor_decomposition, def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
         \otimes A_j^i$ with normal $A_j$, each in the gauge
     (\ref{eq:ldp_normal_gauge}), forming a basis of normal tensors, and put
@@ -735,6 +1220,49 @@ of $A$ along $w$.
     nonzero.
     This is \cite[eqs.~(19) and~(S7)]{Malz2024Preparation}, with the
     canonical form of \cite{Cirac2017MPDO_AnnPhys}.
+
+    When some block has multiplicity $m_j\geq2$, the source's construction
+    fails: no product of pairs carrying the weights $\beta_j$ gives, after
+    $V^{\otimes M}$, an approximation of $\ket{\phi_N}$. For
+    $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$ the
+    overlap with $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$ tends to
+    $1/\sqrt5$ as $M\to\infty$, for every $q$
+    \cite{gap:mswc24_multiplicity_fixed_point}.
+\end{definition}
+
+\begin{definition}[Fixed-point state of a sector decomposition]
+    \label{def:ldp_sector_fixed_point_state}
+    \lean{MPSTensor.SectorDecomposition.copyCoord,
+        MPSTensor.SectorDecomposition.embeddedFixedPointPair,
+        MPSTensor.SectorDecomposition.canonicalFixedPointState,
+        MPSTensor.embedPair}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:sector_weight_data,
+        def:prep_pair_product_state}
+    Let $A$ be given by a sector decomposition with blocks $A_1,\dots,A_b$ of
+    bond dimensions $D_j$, multiplicities $m_j$ and coefficients $\mu_{j,k}$,
+    whose flattened direct sum $\bigoplus_{(j,k)}\mu_{j,k}A_j$ is the tensor of
+    Definition~\ref{def:ldp_non_normal_fixed_point} up to the order of the
+    bond coordinates, so the bond space of $A$ is $\C^D$ with
+    $D=\sum_jm_jD_j$. The blocks carry no normality, basis-of-normal-tensors
+    or gauge condition. For each $j$ let $\sigma_j$ be any matrix on
+    $\C^{D_j}$ and choose a copy $k_j\in\{1,\dots,m_j\}$. The pair of block
+    $j$ is $\sum_{r,l}(\sqrt{\sigma_j})_{rl}\ket{r}\ket{l}$ placed, on both
+    legs, on the bond coordinates of copy $k_j$, which gives
+    $\ket{\omega_j}\in\C^D\otimes\C^D$. With $\beta_j$ and $\alpha^{(N)}_j$ as
+    in Definition~\ref{def:ldp_non_normal_fixed_point}, the fixed-point state
+    $\ket{\Omega'}$ is formed from these pairs by
+    (\ref{eq:ldp_non_normal_fixed_point}).
+
+    Apart from the missing conditions on the blocks, this construction differs
+    from Definition~\ref{def:ldp_non_normal_fixed_point} in three ways. The source
+    takes $\sigma_j$ to be the unit-trace right fixed point of $\E_{A_j}$ in
+    the gauge (\ref{eq:ldp_normal_gauge}), whereas here $\sigma_j$ is a free
+    parameter. The source calls the pairs vectors of
+    $\C^{D^2}=\C^D\otimes\C^D$ without saying where the pair of block $j$ sits
+    when $m_j>1$, whereas here the copy $k_j$ is chosen explicitly. The
+    approximating state is not defined here; it is defined only for a family
+    of arbitrary pairs (Definition~\ref{def:ldp_pair_family_fixed_point}).
 \end{definition}
 
 \begin{definition}[Fixed-point state of a family of pairs]
@@ -764,32 +1292,79 @@ of $A$ along $w$.
     imposed here.
 \end{definition}
 
-\begin{theorem}[GHZ form of the fixed-point state]
-    \label{thm:ldp_ghz_form}
-    \lean{MPSTensor.isIsometry_pairIsometry, Matrix.IsIsometry.tensorPower,
-        MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
-        MPSTensor.nonNormalFixedPointState_norm_sq}
+\begin{theorem}[Local orthogonality of the pairs]
+    \label{thm:ldp_local_orthogonality}
+    \lean{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair,
+        MPSTensor.inner_embedPair_self, MPSTensor.inner_embedPair_eq_zero_of_disjoint,
+        MPSTensor.SectorDecomposition.copyCoord_injective,
+        MPSTensor.SectorDecomposition.copyCoord_ne_of_ne,
+        MPSTensor.SectorDecomposition.toTensor_copyCoord,
+        MPSTensor.pairProductState_embedPair,
+        MPSTensor.mpv_toTensorFromBlocks_fixedPointTensor}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point}
-    With $W$, $X^{\otimes M}$ and $\chi_M$ as in
-    Definition~\ref{def:ldp_pair_family_fixed_point}, formed with
-    $\alpha=\alpha^{(N)}$, if $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, then
-    $W$ and $W^{\otimes M}$ are isometries and
-    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$, up to the
-    regrouping of the legs $R_kL_{k+1}$. If moreover $M\geq1$ and
-    $(\beta_1,\dots,\beta_b)\neq0$, then $\braket{\Omega'}{\Omega'}=1$.
-    This is the preparation of \cite[eq.~(19)]{Malz2024Preparation}. The same
-    holds for the state of Definition~\ref{def:ldp_pair_family_fixed_point} with
-    $\alpha=\alpha^{(N)}$ for any orthonormal pairs $\omega_j$. The source asserts
-    the orthogonality of its pairs after \cite[eq.~(S7)]{Malz2024Preparation},
-    citing the canonical form; here it is a hypothesis
+    \uses{def:ldp_sector_fixed_point_state}
+    In Definition~\ref{def:ldp_sector_fixed_point_state}, let each $\sigma_j$ be
+    positive semidefinite with $\operatorname{Tr}\sigma_j=1$. For every choice
+    of the copies $k_j$ the embedded pairs satisfy
+    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$. The chosen coordinates of
+    block $j$ carry the block $\mu_{j,k_j}A_j$ of $A$, and embedding the pair
+    embeds its product state. Moreover, for $M\geq1$, in the bond space
+    $\C^{D_j}\otimes\C^{D_j}$ of block $j$ alone, the tensor
+    $\bigoplus_k\mu_{j,k}^qP_{j,\infty}$ generates on $M$ sites the state
+    $\bigl(\sum_k\mu_{j,k}^{qM}\bigr)\ket{\Omega_j}=\beta_j\ket{\Omega_j}$ with
+    $N=qM$ and $\ket{\Omega_j}$ formed from the unembedded pair. The
+    orthogonality is asserted after \cite[eq.~(S7)]{Malz2024Preparation},
+    where the reason given is that the blocks form a basis of normal tensors;
+    here it follows from the placement of the pairs alone, and the
+    identification of these pairs with the fixed points of the positive parts
+    of the blocked tensor is not formalized
     \cite{gap:mswc24_ghz_form_local_orthogonality}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:prep_pair_product_norm}
-    The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$, and the
+    \uses{thm:ldp_pair_disjoint_orthogonal, thm:prep_pair_norm,
+        thm:prep_mpv_fixed_point_tensor, thm:mpv_decomposition}
+    Copies of distinct blocks occupy distinct bond coordinates, so the right
+    legs of $\omega_j$ and $\omega_{j'}$ with $j\neq j'$ are supported on
+    disjoint sets and the pairs are orthogonal by
+    Theorem~\ref{thm:ldp_pair_disjoint_orthogonal}. The coordinates of one
+    copy are distinct, so embedding preserves overlaps and
+    $\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. The direct sum
+    generates the sum of the states of its blocks with the $M$-th powers of the
+    weights, and $P_{j,\infty}$ generates $\ket{\Omega_j}$.
+\end{proof}
+
+\begin{theorem}[GHZ form of the fixed-point state]
+    \label{thm:ldp_ghz_form}
+    \lean{MPSTensor.isIsometry_pairIsometry, Matrix.IsIsometry.tensorPower,
+        MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState,
+        MPSTensor.nonNormalFixedPointState_norm_sq,
+        MPSTensor.SectorDecomposition.isIsometry_pairIsometry_embeddedFixedPointPair,
+        MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_tensorPower_mulVec_ghzState,
+        MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq}
+    \leanok
+    \uses{def:ldp_sector_fixed_point_state, def:ldp_pair_family_fixed_point,
+        thm:ldp_local_orthogonality}
+    With $W$, $X^{\otimes M}$ and $\chi_M$ as in
+    Definition~\ref{def:ldp_pair_family_fixed_point}, formed with
+    $\alpha=\alpha^{(N)}$ and the pairs of
+    Definition~\ref{def:ldp_sector_fixed_point_state}, where each $\sigma_j$ is
+    positive semidefinite of unit trace, $W$ and $W^{\otimes M}$ are isometries
+    and $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$, up to the regrouping of the
+    legs $R_kL_{k+1}$. If moreover $M\geq1$ and $(\beta_1,\dots,\beta_b)\neq0$,
+    then $\braket{\Omega'}{\Omega'}=1$. This is the preparation of
+    \cite[eq.~(19)]{Malz2024Preparation}. The same holds for the state of
+    Definition~\ref{def:ldp_pair_family_fixed_point} with $\alpha=\alpha^{(N)}$
+    for any orthonormal pairs $\omega_j$; the identity
+    $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ holds for any pairs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:prep_pair_product_norm, thm:ldp_local_orthogonality}
+    The pairs of Definition~\ref{def:ldp_sector_fixed_point_state} are
+    orthonormal by Theorem~\ref{thm:ldp_local_orthogonality}. The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$, and the
     entries of $(W^{\otimes M})^\dagger W^{\otimes M}$ factor over the sites,
     \begin{align*}
         \bigl((W^{\otimes M})^\dagger W^{\otimes M}\bigr)_{s,t}
@@ -808,16 +1383,15 @@ of $A$ along $w$.
     \label{thm:ldp_pair_disjoint_orthogonal}
     \lean{MPSTensor.inner_pair_eq_zero_of_disjoint}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point}
+    \uses{def:ldp_sector_fixed_point_state}
     Let $S,S'\subseteq\{0,\dots,D-1\}$ be disjoint, and let
     $\omega,\omega'\in\C^D\otimes\C^D$ satisfy $\omega_{(a,c)}=0$ for $a\notin S$
     and $\omega'_{(a,c)}=0$ for $a\notin S'$. Then
     $\braket{\omega}{\omega'}=0$. The embedded pairs of distinct blocks in
-    Definition~\ref{def:ldp_non_normal_fixed_point} are supported in this way, so
+    Definition~\ref{def:ldp_sector_fixed_point_state} are supported in this way, so
     this gives the off-diagonal half of the orthogonality
-    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$; the unit norms and the
-    identification of the supports are not supplied here
-    \cite{gap:mswc24_ghz_form_local_orthogonality}.
+    $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$, which
+    Theorem~\ref{thm:ldp_local_orthogonality} completes.
 \end{theorem}
 
 \begin{proof}

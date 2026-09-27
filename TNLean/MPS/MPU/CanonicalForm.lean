@@ -150,8 +150,7 @@ theorem isIrreducibleTensor_of_dim_eq
   have hkval : k.val = 0 := by
     let z : Fin data.r := ⟨0, Nat.zero_lt_of_lt k.isLt⟩
     exact congrArg Fin.val (huniq z).symm
-  let : IsEmpty (Fin k) := ⟨fun x =>
-    (Nat.not_lt_zero x.val (by simpa [hkval] using x.isLt)).elim⟩
+  let : IsEmpty (Fin k) := Fin.isEmpty_iff.mpr hkval
   let eTotal : Fin (∑ j : Fin data.r, data.dim j) ≃ Fin D := finCongr hsum
   let eBlock : Fin (data.dim k) ≃ Fin D := finCongr hDim
   let U : Matrix (Fin D) (Fin D) ℂ :=

@@ -59,6 +59,14 @@ noncomputable def physicalObservableTransfer (A : MPSTensor d D) (L : ℕ)
     O τ σ • ((LinearMap.mulLeft ℂ (Kraus.evalWord A (List.ofFn σ))).comp
       (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn τ))ᴴ))
 
+/-- The inserted transfer map in coordinates,
+`E_O(Z) = ∑_{σ,τ} O_{τσ} A^σ Z (A^τ)†` (arXiv:1606.00608, lines 490--496). -/
+theorem physicalObservableTransfer_apply (A : MPSTensor d D) (L : ℕ)
+    (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (Z : Matrix (Fin D) (Fin D) ℂ) :
+    physicalObservableTransfer A L O Z = ∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
+      O τ σ • (Kraus.evalWord A (List.ofFn σ) * Z * (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
+  simp [physicalObservableTransfer, Matrix.mul_assoc]
+
 /-- The inserted transfer map `O ↦ E_O` as a linear map in the observable.
 
 This is the linearity of the observable-to-transfer assignment in the

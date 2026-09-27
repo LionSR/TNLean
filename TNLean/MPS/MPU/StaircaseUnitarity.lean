@@ -150,10 +150,10 @@ theorem IsMPUCanonicalFormII.sourceWL_sourceWR_isUnitaryBetween
   let L := SourceFactors.sourceWL U S
   let R := SourceFactors.sourceWR U S
   have hu : (SourceFactors.sourceU U S).IsUnitaryBetween :=
-    (hU.isMPUSimple_tfae.out 0 2).mp hsimple
+    (hU.isMPUSimple_tfae.out 1 3).mp hsimple
   have hv : (SourceFactors.sourceV U S).IsUnitaryBetween :=
-    (hU.isMPUSimple_tfae.out 0 3).mp hsimple
-  have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 0 1).mp hsimple
+    (hU.isMPUSimple_tfae.out 1 4).mp hsimple
+  have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
   have := hU.neZero_phys
   have hrl : 0 < r[U] * ℓ[U] := by
     rw [hrank]
