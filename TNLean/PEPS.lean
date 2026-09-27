@@ -103,6 +103,7 @@ import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGaugeUniqueness
 import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusLatticeGraph
+import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleRegion
@@ -112,6 +113,7 @@ import TNLean.PEPS.TorusStateTranslationInvariant
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusUnconditionalFundamentalTheorem
+import TNLean.PEPS.TorusVirtualString
 import TNLean.PEPS.TorusWindowBondLocal
 import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusWindowBondUniform

@@ -110,6 +110,27 @@ closing a chain of $N$ copies of $\mathcal U$.
     condition in \cite[Section~III, equation~(10)]{Cirac2017MPU}.
 \end{definition}
 
+\begin{center}
+    % Formula: U^{(N)}_{\sigma,\tau}=\tr(\mathcal U^{\sigma_1\tau_1}\cdots
+    % \mathcal U^{\sigma_N\tau_N}), the periodic operator whose unitarity for
+    % every N>1 is the condition of this definition
+    % (\cite[Section~III, equation~(10)]{Cirac2017MPU}).
+    % Ink-to-index map: one row of N copies of the tensor; the upper legs carry
+    % the output indices \sigma_1,\ldots,\sigma_N and the lower legs the input
+    % indices \tau_1,\ldots,\tau_N.
+    % Contraction set: every horizontal virtual bond, including the return bond
+    % closing the ring.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N); the dots cell abbreviates the omitted sites.
+    \tenkzkernel
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{\mathcal U} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{\mathcal U} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{\mathcal U}
+    \end{tenkz}
+\end{center}
+
 \begin{lemma}[First matrix product unitarity equation]
     \label{lem:mpu_mul_adjoint}
     \lean{MPOTensor.IsMPU.mpo_mul_conjTranspose_mpo}
@@ -156,6 +177,34 @@ closing a chain of $N$ copies of $\mathcal U$.
     concatenation tensor $\mathcal W$ in the proof of
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
 \end{theorem}
+
+\begin{center}
+    % Formula: the closed chain of the concatenation tensor,
+    % \sum_{\rho}U^{(N)}_{\sigma,\rho}V^{(N)}_{\rho,\tau}
+    % =\bigl(U^{(N)}V^{(N)}\bigr)_{\sigma,\tau}.
+    % Ink-to-index map: the upper row is \mathcal U with output legs \sigma_x,
+    % the lower row is \mathcal V with input legs \tau_x; each vertical leg
+    % contracts the input index of \mathcal U with the output index of
+    % \mathcal V at one site.
+    % Contraction set: the vertical legs and both periodic rows of virtual bonds.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N); the right-hand side is mathematics.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$\sigma_1$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$\sigma_2$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$\sigma_N$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$\tau_1$, 180:virtual, 0:virtual}]{\mathcal V}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$\tau_2$, 180:virtual, 0:virtual}]{\mathcal V}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$\tau_N$, 180:virtual, 0:virtual}]{\mathcal V}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=\bigl(U^{(N)}V^{(N)}\bigr)_{\sigma,\tau}$
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpu, thm:mpdo_operator_product_mpo}
@@ -208,6 +257,29 @@ closing a chain of $N$ copies of $\mathcal U$.
     \texttt{II\_Simple2.png} of \cite{Cirac2017MPU}.
 \end{definition}
 
+\begin{center}
+    % Formula: \mathcal W^{ik}=\sum_j(\mathcal U^\sharp)^{ij}\otimes\mathcal U^{jk},
+    % the displayed equation of this definition; compare the barred upper layer
+    % of Figures II_Simple1 and II_Simple2 of \cite{Cirac2017MPU}.
+    % Ink-to-index map: the upper box is \mathcal U^\sharp with open upper leg i,
+    % the lower box is \mathcal U with open lower leg k; the vertical leg between
+    % them is the summed index j.  On the right, the two west and the two east
+    % virtual legs of \mathcal W are the two factors of the doubled bond space.
+    % Contraction set: the vertical leg j only.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 | physical-up=1 |
+    % physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$k$}]{\mathcal U}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[cols=1, west=open, east=open]
+        \tn[skin=mpo, wires=2,
+            ports={90:physical:$i$, 270:physical:$k$, 180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\mathcal W}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Closed double layer]
     \label{thm:mpu_closed_double_layer}
     \lean{MPOTensor.mpo_doubleLayerTensor}
@@ -218,6 +290,42 @@ closing a chain of $N$ copies of $\mathcal U$.
         W^{(N)} & =\bigl(U^{(N)}\bigr)^\dagger U^{(N)}.
     \end{align}
 \end{theorem}
+
+\begin{center}
+    % Formula: W^{(N)}=\bigl(U^{(N)}\bigr)^\dagger U^{(N)}, drawn as the closed
+    % double layer; the upper row closes to (\mathcal U^\sharp)^{(N)}, which is
+    % \bigl(U^{(N)}\bigr)^\dagger by the physical-adjoint identities below.
+    % Ink-to-index map: the upper row is \mathcal U^\sharp with open upper legs
+    % \sigma_x, the lower row is \mathcal U with open lower legs \tau_x; each
+    % vertical leg is the summed middle physical index of the operator product.
+    % On the right, each \mathcal W carries the doubled bond.
+    % Contraction set: the vertical legs, the horizontal bonds of both rows and
+    % their return bonds on the left; the doubled horizontal bonds and one
+    % return bond on the right.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$\sigma_1$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U^\sharp}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$\sigma_2$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U^\sharp}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$\sigma_N$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U^\sharp}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$\tau_1$, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$\tau_2$, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$\tau_N$, 180:virtual, 0:virtual}]{\mathcal U}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{\mathcal W} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{\mathcal W} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{\mathcal W}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpdo_physical_adjoint, thm:mpdo_operator_product_mpo}
@@ -300,6 +408,52 @@ closing a chain of $N$ copies of $\mathcal U$.
     diagrams in \cite[Definition~III.2]{Cirac2017MPU}.
 \end{definition}
 
+\begin{center}
+    % Formula: first row (simple1), (a|W^{ij}|b)=\delta_{ij}; second row
+    % (simple2), W^{ij}W^{k\ell}=W^{ij}|b)(a|W^{k\ell}.  These are the two
+    % diagrams of \cite[Definition~III.2]{Cirac2017MPU}.
+    % Ink-to-index map: each column is one double-layer letter W, the upper box
+    % \mathcal U^\sharp with upper leg i or k and the lower box \mathcal U with
+    % lower leg j or \ell.  The labelled west cup is the vector a and the
+    % labelled east cup is the vector b of the doubled bond space.
+    % Contraction set: in simple1, the vertical middle leg and both cups; the
+    % right-hand side is the bare physical wire \delta_{ij}.  In simple2, the
+    % vertical legs and, on the left, the doubled bond between the two letters;
+    % on the right that bond is replaced by the rank-one insertion |b)(a|.
+    % Boundary signature: simple1 (virtual=0 | physical-up=1 | physical-down=1);
+    % simple2 (virtual-west=2 | virtual-east=2 | physical-up=2 |
+    % physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, bonds=none, west={cup=$a$}, east={cup=$b$}]
+        \tn[at=(1,1), name=us, skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical:$i$, 270:physical}]{\mathcal U^\sharp}
+        \tn[at=(2,1), name=u, skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical:$j$}]{\mathcal U}
+        \tnwire{us.270}{u.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[skin=none, ports={90:physical:$i$, 270:physical:$j$}]{}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={op,op}, cols=2, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{\mathcal U^\sharp} &
+        \tn[skin=mpo, ports={90:physical:$k$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{\mathcal U} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$\ell$}]{\mathcal U}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east={cup=$b$}]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{\mathcal U}
+    \end{tenkz}
+    \;
+    \begin{tenkz}[rows={op,op}, cols=1, west={cup=$a$}, east=open]
+        \tn[skin=mpo, ports={90:physical:$k$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$\ell$}]{\mathcal U}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Sequential contraction of a simple double layer]
     \label{thm:mpu_simple_closed_identity}
     \lean{MPOTensor.IsMPUSimple.mpo_doubleLayerTensor_eq_one}
@@ -310,6 +464,33 @@ closing a chain of $N$ copies of $\mathcal U$.
         W^{(N)} & =\Id.
     \end{align}
 \end{theorem}
+
+\begin{center}
+    % Formula: W^{(N)}=\Id, the closed double layer equals the identity on N
+    % sites.
+    % Ink-to-index map: each \mathcal W is one double-layer letter with output
+    % leg \sigma_x and input leg \tau_x; its horizontal bond is the doubled bond.
+    % On the right, the x-th straight wire is the Kronecker delta
+    % \delta_{\sigma_x,\tau_x}.
+    % Contraction set: the doubled horizontal bonds and the return bond on the
+    % left; nothing on the right.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{\mathcal W} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{\mathcal W} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{\mathcal W}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+        \tn[skin=none, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{} &
+        \tn[skin=none, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{} &
+        \tn[skin=dots]{} &
+        \tn[skin=none, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpu_simple}
@@ -352,15 +533,18 @@ closing a chain of $N$ copies of $\mathcal U$.
     For every blocking length $L$, physical adjunction commutes with blocking,
     and consequently
     \begin{align}
+        (\mathcal U^\dagger)^{[L]}   & =(\mathcal U^{[L]})^\dagger,
+        \label{eq:mpu_physical_adj_block}                             \\
         \mathcal W(\mathcal U^{[L]}) & =\mathcal W(\mathcal U)^{[L]}.
+        \label{eq:mpu_double_layer_block}
     \end{align}
     The virtual order is unchanged on both sides.
 \end{theorem}
 
 \begin{proof}\leanok
-    Physical adjunction conjugates each matrix entry without reversing the
-    virtual word.  The first identity follows entrywise.  The second follows
-    because physical blocking commutes with the local operator product.
+    Identity~(\ref{eq:mpu_physical_adj_block}) holds entrywise since physical adjunction
+    conjugates each matrix entry without reversing the virtual word; (\ref{eq:mpu_double_layer_block})
+    follows because physical blocking commutes with the local operator product.
 \end{proof}
 
 \begin{theorem}[Blocked double-layer diagonal is a transfer power]
@@ -513,8 +697,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     Let $\mathcal U$ be an MPU with physical dimension $d>0$.  Every closed
     product of positive length that contains at least one residual coefficient
     has zero trace.  In particular, this includes a single residual
-    coefficient.  This is the mixed-trace assertion preceding equation
-    \texttt{ESE=0} in
+    coefficient.  This corresponds to the mixed-trace property in
     \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
 \end{theorem}
 
@@ -890,11 +1073,13 @@ closing a chain of $N$ copies of $\mathcal U$.
     further block with letters $W_1,\ldots,W_L$ and
     $R=|\rho)(\Phi|$, repeated insertion gives
     \begin{align}
-        W_1\cdots W_L & =W_1R W_2R\cdots R W_L,          \\
+        W_1\cdots W_L & =W_1R W_2R\cdots R W_L,
+        \notag                                           \\
         (\Phi|W_1\cdots W_L|\rho)
                       & =\prod_{q=1}^{L}(\Phi|W_q|\rho).
+        \label{eq:mpu_second_block_prod}
     \end{align}
-    The second identity multiplies the sitewise Kronecker deltas.
+    Evaluating each factor in~(\ref{eq:mpu_second_block_prod}) multiplies the sitewise Kronecker deltas.
 \end{proof}
 
 \begin{theorem}[Matching contractions at the direct stabilized block]
@@ -962,7 +1147,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         U^{(K+2)}_{\eta,(q,\tau)}
          & =\delta_{p,q}.
     \end{align}
-    The global contraction is the input-first equation
+    The global contraction is the input-first unitarity
     $(U^{(K+2)})^\dagger U^{(K+2)}=\Id$.  This is the input-oriented tail
     contraction supporting the network calculation in
     \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
@@ -1755,10 +1940,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \widetilde{\mathcal U^\sharp}^{\,(i,j)}
          & =\frac{1}{\sqrt d}\,(\mathcal U^\sharp)^{(i,j)}
         =\frac{1}{\sqrt d}\,\overline{\mathcal U^{(j,i)}}
-        =\overline{\widetilde{\mathcal U}^{\,(j,i)}}.
+        =\overline{\widetilde{\mathcal U}^{\,(j,i)}},
     \end{align}
-    The first equality is the normalized flattening, the second is physical
-    adjunction, and the third uses the reality of $d^{-1/2}$.
+    where the intermediate steps follow by definition of normalized flattening, physical
+    adjunction, and the reality of $d^{-1/2}$.
 \end{proof}
 
 \begin{definition}[Canonical-form-II data under physical adjunction]
@@ -2580,6 +2765,43 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \cite[Section~III]{Cirac2017MPU}.
 \end{theorem}
 
+\begin{center}
+    % Formula: M_1=X_1Y_1 and M_2=X_2Y_2, read entrywise as
+    % \mathcal U^i_{j,\alpha,\beta}=\sum_r(X_1)_{(i,\beta),r}(Y_1)_{r,(\alpha,j)}
+    % =\sum_l(X_2)_{(\alpha,i),l}(Y_2)_{l,(j,\beta)}; compare the source figure
+    % SVDforms2 of \cite[Section~III]{Cirac2017MPU}.
+    % Ink-to-index map: \mathcal U has upper leg i, lower leg j, left bond
+    % \alpha, right bond \beta.  The first cut groups (i,\beta) into X_1 and
+    % (\alpha,j) into Y_1, joined by the diagonal index of range r; the second
+    % groups (\alpha,i) into X_2 and (j,\beta) into Y_2, joined by the diagonal
+    % index of range \ell.
+    % Contraction set: the diagonal index in each factorization.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=1) in all three panels.
+    \tenkzkernel
+    \begin{tenkz}[cols=1, bonds=none]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$, 180:virtual:$\alpha$, 0:virtual:$\beta$}]{\mathcal U}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,2), name=x, skin=box, label pos=w,
+            ports={90:physical:$i$, 0:virtual:$\beta$, 225:virtual}]{X_1}
+        \tn[at=(2,1), name=y, skin=box, label pos=e,
+            ports={180:virtual:$\alpha$, 270:physical:$j$, 45:virtual}]{Y_1}
+        \tnwire[name=wr]{y.45}{x.225}
+        \tnmark[form=label, label pos=nw]{midway x and y}{$r$}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=x, skin=box, label pos=e,
+            ports={90:physical:$i$, 180:virtual:$\alpha$, 315:virtual}]{X_2}
+        \tn[at=(2,2), name=y, skin=box, label pos=w,
+            ports={0:virtual:$\beta$, 270:physical:$j$, 135:virtual}]{Y_2}
+        \tnwire[name=wl]{x.315}{y.135}
+        \tnmark[form=label, label pos=ne]{midway x and y}{$l$}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
@@ -2748,6 +2970,45 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     These are the literal triangle contractions in
     \cite[Section~III, equations~\texttt{uuvv}--\texttt{vdagger}]{Cirac2017MPU}.
 \end{definition}
+
+\begin{center}
+    % Formula: u_{(l,r),(i_1,i_2)}=\sum_\beta(Y_2)_{l,(i_1,\beta)}
+    % (Y_1)_{r,(\beta,i_2)} (left pair) and
+    % v_{(j_1,j_2),(r,l)}=\sum_\alpha(X_1)_{(j_1,\alpha),r}(X_2)_{(\alpha,j_2),l}
+    % (right pair), the two displayed equations of this definition.
+    % Ink-to-index map: in u, the upper legs are the source indices l and r
+    % and the lower legs are the physical inputs i_1,i_2; in v, the upper legs
+    % are the physical outputs j_1,j_2 and the lower legs are the source indices
+    % r and l.  The horizontal bond is the summed auxiliary index \beta in u
+    % and \alpha in v.
+    % Contraction set: the one horizontal bond in each right-hand panel.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | up=2 | down=2) on
+    % both sides of each equation.
+    \tenkzkernel
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), skin=mpo, wide=2, size=l,
+            ports={90@1:virtual:$l$, 90@2:virtual:$r$, 270@1:physical:$i_1$, 270@2:physical:$i_2$}]{u}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), name=y2, ports={90:virtual:$l$, 270:physical:$i_1$, 0:virtual}]{Y_2}
+        \tn[at=(1,2), name=y1, ports={180:virtual, 90:virtual:$r$, 270:physical:$i_2$}]{Y_1}
+        \tnwire[name=wb]{y2.0}{y1.180}
+        \tnmark[form=label, label pos=n]{on wb 0.5}{$\beta$}
+    \end{tenkz}
+    \qquad\qquad
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), skin=mpo, wide=2, size=l,
+            ports={90@1:physical:$j_1$, 90@2:physical:$j_2$, 270@1:virtual:$r$, 270@2:virtual:$l$}]{v}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), name=x1, ports={90:physical:$j_1$, 270:virtual:$r$, 0:virtual}]{X_1}
+        \tn[at=(1,2), name=x2, ports={180:virtual, 90:physical:$j_2$, 270:virtual:$l$}]{X_2}
+        \tnwire[name=wa]{x1.0}{x2.180}
+        \tnmark[form=label, label pos=n]{on wa 0.5}{$\alpha$}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Paper-gate two-site factorization]
     \label{thm:mpu_source_gates_two_site_factorization}
@@ -3069,9 +3330,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    Conjugate the first equality by $Z^\dagger$ on the left and $Z$ on the
-    right. Since $Z^\dagger Y^\dagger=(YZ)^\dagger=\Id$, both outer factors
-    cancel. The reverse implication follows by substituting $G=\Id$.
+    Multiplying $Y^\dagger GY=Y^\dagger Y$ by $Z^\dagger$ on the left and $Z$ on the right,
+    and using $YZ=\Id$, gives
+    \begin{align}
+        G & = (YZ)^\dagger G (YZ) = Z^\dagger (Y^\dagger GY) Z = Z^\dagger (Y^\dagger Y) Z = (YZ)^\dagger (YZ) = \Id.
+    \end{align}
+    The converse is immediate.
 \end{proof}
 
 \begin{theorem}[Cancellation of the source-$v$ dressing]
@@ -3885,10 +4149,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     left-canonical identity under both operations. For each retained block,
     Lemma~\ref{lem:blocked_irreducibility_direct_support} gives
     \begin{align}
-        \E_{A_k^{[L]}} & =\E_{A_k}^{L},
-                       & \E_{A_k}^{L}(\Lambda_k) & =\Lambda_k.
+        \E_{A_k^{[L]}}          & =\E_{A_k}^{L},
+        \notag                                   \\
+        \E_{A_k}^{L}(\Lambda_k) & =\Lambda_k,
+        \label{eq:mpu_cfii_trans_fixed}
     \end{align}
-    The second identity follows by iterating
+    where~(\ref{eq:mpu_cfii_trans_fixed}) follows by iterating
     $\E_{A_k}(\Lambda_k)=\Lambda_k$. Thus the same positive definite diagonal
     matrix is fixed after blocking. A physical bijection leaves the transfer
     map unchanged. The
@@ -3942,7 +4208,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \overline{V^{(N)}(cA)_\sigma}
          & =(c\overline c)^N
         \sum_\sigma V^{(N)}(A)_\sigma
-        \overline{V^{(N)}(A)_\sigma}.
+        \overline{V^{(N)}(A)_\sigma},
+        \label{eq:mpu_self_overlap_scaled}
     \end{align}
     Consequently, if $d>0$ and $U$ is an MPO tensor of physical dimension
     $d$, then
@@ -3952,14 +4219,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =d^{-N}
         \sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
         \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}.
+        \label{eq:mpu_self_overlap_normalized}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:eval_word_smul}
-    Each length-$N$ coefficient is multiplied by $c^N$.  Multiplication by
-    its complex conjugate gives the first identity.  Taking
-    $c=1/\sqrt d$ gives the second.
+    Each length-$N$ coefficient satisfies $V^{(N)}(cA)_\sigma = c^N V^{(N)}(A)_\sigma$, yielding~(\ref{eq:mpu_self_overlap_scaled}) upon multiplying by its complex conjugate; setting $c=1/\sqrt d$ gives~(\ref{eq:mpu_self_overlap_normalized}).
 \end{proof}
 
 \begin{theorem}[Normalized MPU transfer trace]
@@ -3985,15 +4251,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \tr(E^N)
          & =\sum_\sigma V^{(N)}(\widetilde U)_\sigma
-        \overline{V^{(N)}(\widetilde U)_\sigma}                \\
+        \overline{V^{(N)}(\widetilde U)_\sigma}                \notag                                \\
          & =d^{-N}\sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
-        \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}            \\
-         & =d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)   \\
-         & =d^{-N}\tr(\Id)                                     \\
-         & =d^{-N}d^N                                          \\
-         & =1.
+        \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}            \notag                                \\
+         & =d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)   \notag                                \\
+         & =d^{-N}\tr(\Id)                                     \label{eq:mpu_overlap_unitarity_eval} \\
+         & =d^{-N}d^N                                          \notag                                \\
+         & =1.                                                 \notag
     \end{align}
-    Here the fourth equality uses $N>1$, so that the MPU equation applies.
+    Here~(\ref{eq:mpu_overlap_unitarity_eval}) uses $N>1$, so that the MPU equation applies.
 \end{proof}
 
 \section{Block transfer multiplicity}
@@ -4885,12 +5151,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
          & =\operatorname{tr}\!\left(W^{p_1q_1}W^{p_2q_2}E^K\right).
+        \label{eq:mpu_source_u_trace}
     \end{align}
     If $\rho$ is diagonal, the same quantity is
     \begin{align}
-        d^{-K}\sum_{\tau,\eta}
+        \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+         & = d^{-K}\sum_{\tau,\eta}
         \overline{U^{(K+2)}_{\eta,(p,\tau)}}
         U^{(K+2)}_{\eta,(q,\tau)}.
+        \label{eq:mpu_source_u_tail_sum}
     \end{align}
     Thus only the $K$-site interior is blocked; the two endpoint letters remain
     one-site tensors. The $p$ entries are conjugated and the $q$ entries are
@@ -4906,9 +5175,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Symmetry changes the inserted vector
     $\lvert\rho^{\mathsf T})$ to $\lvert\rho)$ in
     Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace}. Substitute the
-    fixed pair and cycle the first endpoint letter to obtain the displayed
-    trace. The normalized input-tail identity expands that trace into the
-    second displayed sum.
+    fixed pair and cycle the first endpoint letter to obtain~(\ref{eq:mpu_source_u_trace}). The normalized input-tail identity Theorem~\ref{thm:mpu_normalized_input_tail_closed_trace} expands that trace into~(\ref{eq:mpu_source_u_tail_sum}).
 \end{proof}
 
 \begin{theorem}[Complete source-$u$ network contraction]
@@ -5278,6 +5545,39 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % to the source tensor and is not a condition on supplied gates.
 \end{definition}
 
+\begin{center}
+    % Formula: W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}=\sum_{l,s}
+    % (X_2)_{(\alpha,i_1),l}\,u_{(l,s),(j_1,j_2)}\,(X_1)_{(i_2,\gamma),s}, the
+    % second displayed equation of this definition; compare the source figure
+    % StandardForm of \cite{Cirac2017MPU}.
+    % Ink-to-index map: W is the two-site tensor with outputs i_1,i_2, inputs
+    % j_1,j_2 and bonds \alpha,\gamma.  On the right, X_2 carries \alpha and
+    % i_1, X_1 carries i_2 and \gamma, and the gate u takes the inputs j_1,j_2
+    % to the source indices l and s.
+    % Contraction set: the two vertical source indices l and s.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=2 |
+    % physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), skin=box, wide=2,
+            ports={90@1:physical:$i_1$, 90@2:physical:$i_2$, 270@1:physical:$j_1$, 270@2:physical:$j_2$,
+                    180:virtual:$\alpha$, 0:virtual:$\gamma$}]{W}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=x2, skin=box, label pos=n,
+            ports={180:virtual:$\alpha$, 90:physical:$i_1$, 270:virtual}]{X_2}
+        \tn[at=(1,2), name=x1, skin=box,
+            ports={90:physical:$i_2$, 0:virtual:$\gamma$, 270:virtual}]{X_1}
+        \tn[at=(2,1), name=u, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical:$j_1$, 270@2:physical:$j_2$}]{u}
+        \tnwire[name=wl]{x2.270}{u.90@1}
+        \tnwire[name=ws]{x1.270}{u.90@2}
+        \tnmark[form=label, label pos=w]{on wl 0.5}{$l$}
+        \tnmark[form=label, label pos=e]{on ws 0.5}{$s$}
+    \end{tenkz}
+\end{center}
+
 \begin{definition}[The two layers of a supplied standard form]
     \label{def:mpu_two_site_circuit_layers}
     \lean{MPOTensor.twoSiteUnshiftedLayer,
@@ -5419,6 +5719,50 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     arbitrary matrices may therefore be inserted at the two ends before
     taking the trace.
 \end{theorem}
+
+\begin{center}
+    % Formula: the case n=3 of W^{i_0,j_0}W^{i_1,j_1}W^{i_2,j_2}
+    % =L(i_0)u(j_0)v(i_0,i_1)u(j_1)v(i_1,i_2)u(j_2)R(i_2).
+    % Ink-to-index map: the three boxes W on the left are consecutive two-site
+    % letters, upper legs the outputs i_{x,1},i_{x,2} and lower legs the inputs
+    % j_{x,1},j_{x,2}.  On the right, the lower layer carries the three gates
+    % u(j_x); the upper layer carries L(i_0) on the output i_{0,1}, the two
+    % gates v(i_{x-1},i_x) on the outputs i_{x-1,2},i_{x,1}, and R(i_2) on the
+    % output i_{2,2}.
+    % Contraction set: on the left, the two virtual bonds between letters; on
+    % the right, the six vertical source indices between the two layers.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=6 |
+    % physical-down=6) on both sides; the two virtual ends stay free, as stated.
+    \tenkzkernel
+    \begin{tenkz}[cols=6, bonds=none]
+        \tn[at=(1,1), name=w0, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:physical, 270@2:physical, 180:virtual, 0:virtual}]{W}
+        \tn[at=(1,3), name=w1, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:physical, 270@2:physical, 180:virtual, 0:virtual}]{W}
+        \tn[at=(1,5), name=w2, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:physical, 270@2:physical, 180:virtual, 0:virtual}]{W}
+        \tnwire{open w}{w0.180} \tnwire{w0.0}{w1.180} \tnwire{w1.0}{w2.180} \tnwire{w2.0}{open e}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none]
+        \tn[at=(1,1), name=L, skin=box, ports={180:virtual, 90:physical, 270:virtual}]{L}
+        \tn[at=(1,2), name=v1, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:virtual, 270@2:virtual}]{v}
+        \tn[at=(1,4), name=v2, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:virtual, 270@2:virtual}]{v}
+        \tn[at=(1,6), name=R, skin=box, ports={0:virtual, 90:physical, 270:virtual}]{R}
+        \tn[at=(2,1), name=u0, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical, 270@2:physical}]{u}
+        \tn[at=(2,3), name=u1, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical, 270@2:physical}]{u}
+        \tn[at=(2,5), name=u2, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical, 270@2:physical}]{u}
+        \tnwire{open w}{L.180} \tnwire{R.0}{open e}
+        \tnwire{L.270}{u0.90@1} \tnwire{v1.270@1}{u0.90@2}
+        \tnwire{v1.270@2}{u1.90@1} \tnwire{v2.270@1}{u1.90@2}
+        \tnwire{v2.270@2}{u2.90@1} \tnwire{R.270}{u2.90@2}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpu_supplied_two_site_standard_form}
@@ -5723,7 +6067,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         lem:mpu_iterated_physical_blocking}
     Choose the positive simple blocking length bounded by $D^4$.
     Canonical form II persists under this positive blocking, with the same
-    fixed matrix, so the preceding construction applies to
+    fixed matrix, so Definition~\ref{def:mpu_source_open_two_site_standard_form} applies to
     $\mathcal U^{[k]}$. Two-site blocking is direct blocking by $2k$ after
     the displayed relabeling: first identify the ordinary two-site block
     with length-two blocking, then group the direct word into consecutive
@@ -5825,8 +6169,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Then the original-chain coefficient matrix $F^U$ satisfies
     \begin{align}
-        F^U(a,b;j) & = F_{P,Q}(a,b;j), \\
+        F^U(a,b;j) & = F_{P,Q}(a,b;j),
+        \label{eq:mpu_orig_coeff_pq}   \\
         F^U A      & = B(A)F^U.
+        \label{eq:mpu_orig_coeff_intertwiner}
     \end{align}
     Both equalities are finite-chain identities with every exterior
     physical label fixed; the virtual boundary is not discarded.
@@ -5839,10 +6185,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The residual-word identity first leaves both original-site products
     in the trace. Two word concatenations split the relabeled middle
     product into the left complete-block word, the three window letters,
-    and the right complete-block word. This gives the first equality
-    entrywise, with $P$ and $Q$ the displayed end products. Apply the
-    arbitrary-virtual-end three-block identity to these two matrices to
-    obtain the second equality.
+    and the right complete-block word, yielding~(\ref{eq:mpu_orig_coeff_pq})
+    entrywise with $P$ and $Q$ the displayed end products. Applying the
+    arbitrary-virtual-end three-block identity to these two matrices yields~(\ref{eq:mpu_orig_coeff_intertwiner}).
 \end{proof}
 
 \begin{lemma}[Three-block locality with original-site residuals]
@@ -6209,6 +6554,38 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     indices agree by Theorem~\ref{thm:mpu_cfii_index_periodic_comparison}.
 \end{proof}
 
+\begin{theorem}[Blocking and adjunction of the representative index]
+    \label{thm:mpu_representative_index_blocking_adjoint}
+    \lean{MPOTensor.IsMPU.index_blockTensor,
+        MPOTensor.IsMPU.index_physicalAdjointTensor}
+    \leanok
+    \uses{def:mpu_reduced_representative_index,
+        def:mpdo_physical_blocking, def:mpdo_physical_adjoint}
+    Let $U$ be a positive-dimensional MPU tensor. For every positive integer
+    $p$, physical blocking preserves its representative index, while
+    physical adjunction reverses its sign:
+    \begin{align}
+        \operatorname{ind}(U_p)       & =\operatorname{ind}(U),  \\
+        \operatorname{ind}(U^\dagger) & =-\operatorname{ind}(U).
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mpu_reduced_representative_index_invariance,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_cfii_index_physical_adjoint}
+    Choose a reduced canonical-form-II representative $U_{\mathrm{red}}$.
+    Blocking and adjunction preserve equality of the positive-length
+    periodic operators. The respective canonical-form-II index identities
+    give
+    $\operatorname{ind}((U_{\mathrm{red}})_p)
+        =\operatorname{ind}(U_{\mathrm{red}})$ and
+    $\operatorname{ind}(U_{\mathrm{red}}^\dagger)
+        =-\operatorname{ind}(U_{\mathrm{red}})$.
+    Representative independence then gives both displayed identities.
+\end{proof}
+
 \begin{proposition}[Well-definedness of the index]
     \label{index-well-defined}
     \notready
@@ -6323,27 +6700,102 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 824--833.
 \end{lemma}
 
-\begin{lemma}[Admissible tensor-product additivity]
-    \label{lem:mpu_admissible_index_tensor}
-    \notready
-    \discussion{6015}
-    % **Scope restriction (common admissible block):** all three indices are
-    % computed from actual simple blocks carrying their own source data.
+\begin{theorem}[Tensor-product additivity in canonical form II]
+    \label{thm:mpu_admissible_index_tensor}
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_tensorProduct,
+        MPOTensor.IsMPUCanonicalFormII.index_tensorProduct_identityMPUTensor}
+    \leanok
+    % **Scope restriction (canonical representatives):** the two factors are
+    % already in canonical form II. No comparison with an arbitrary unreduced
+    % representative is claimed.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_index, prop:mpu_admissible_index_well_defined, thm:mpu_tensor_product_source_ranks, def:mpu_reduced_full_support_source_datum}
-    Suppose there is one positive blocking length $k$ such that
-    $\mathcal U_k$, $\mathcal V_k$, and
-    $(\mathcal U\otimes\mathcal V)_k$ are simple and each carries its own
-    reduced full-support source datum. Define all three indices from these
-    blocks. Then
+    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii,
+        def:mpu_independent_tensor_product, threeMPU}
+    Let $\mathcal U$ and $\mathcal V$ be MPUs in canonical form II. Their
+    independent tensor product is again in canonical form II, and
     \begin{align}
-        \operatorname{ind}(\mathcal U\otimes\mathcal V)
+        \operatorname{ind}(\mathcal U\boxtimes\mathcal V)
          & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
     \end{align}
-    This is the common-block reduced-source version of
+    In particular, if $n>0$ and $\Id_n$ is the bond-one tensor generating
+    the identity on a physical space of dimension $n$, then
+    \begin{align}
+        \operatorname{ind}(\mathcal U\boxtimes\Id_n)
+         & =\operatorname{ind}(\mathcal U).
+    \end{align}
+    This is the canonical-form-II representative case of the tensoring claim in
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--833.
-\end{lemma}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_tensor_product,
+        lem:mpu_common_simple_blocking_finite,
+        thm:mpu_block_tensor_product,
+        thm:mpu_tensor_product_source_ranks,
+        thm:mpu_specified_source_index_identities,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_identity_index}
+    Choose a common positive simple blocking length $k$ for $\mathcal U$,
+    $\mathcal V$, and their tensor product. Blocking commutes with the independent tensor product
+    up to a physical relabeling, so their source ranks satisfy
+    \begin{align}
+        r((\mathcal U\boxtimes\mathcal V)_k)
+         & =r(\mathcal U_k)r(\mathcal V_k),       \\
+        \ell((\mathcal U\boxtimes\mathcal V)_k)
+         & =\ell(\mathcal U_k)\ell(\mathcal V_k).
+    \end{align}
+    Taking the half-difference of the base-two logarithms gives additivity;
+    independence of $k$ identifies these values with the three indices.
+    The bond-one identity has index zero by
+    Theorem~\ref{thm:mpu_identity_index}, giving the last assertion.
+\end{proof}
+
+\begin{theorem}[Tensor-product additivity of the representative index]
+    \label{thm:mpu_representative_index_tensor_product}
+    \lean{MPOTensor.IsMPU.index_tensorProduct,
+        MPOTensor.IsMPU.index_identityMPUTensor,
+        MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}
+    \leanok
+    \uses{def:mpu_reduced_representative_index,
+        def:mpu_independent_tensor_product, thm:mpu_tensor_product, threeMPU}
+    Let $U$ and $V$ be positive-dimensional MPU tensors, possibly with
+    different physical and bond dimensions. Their independent tensor product
+    satisfies
+    \begin{align}
+        \operatorname{ind}(U\boxtimes V)
+         & =\operatorname{ind}(U)+\operatorname{ind}(V).
+    \end{align}
+    The bond-one identity tensor $\Id_n$ has index zero for every $n>0$;
+    hence $\operatorname{ind}(U\boxtimes\Id_n)=\operatorname{ind}(U)$.
+    This is the reduced-representative form of the tensoring assertion in
+    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_admissible_index_tensor, thm:mpu_identity_index,
+        thm:mpu_finite_tensor_product}
+    Choose reduced canonical-form-II representatives $U_{\mathrm{red}}$ and
+    $V_{\mathrm{red}}$. By Theorem~\ref{thm:mpu_finite_tensor_product},
+    for every $N>0$,
+    \begin{align}
+        (U_{\mathrm{red}}\boxtimes V_{\mathrm{red}})^{(N)}
+         & \cong U_{\mathrm{red}}^{(N)}\otimes V_{\mathrm{red}}^{(N)}
+        = U^{(N)}\otimes V^{(N)}
+        \cong (U\boxtimes V)^{(N)}.
+    \end{align}
+    Representative independence and canonical tensor-product additivity give
+    \begin{align}
+        \operatorname{ind}(U\boxtimes V)
+         & =\operatorname{ind}(U_{\mathrm{red}}\boxtimes V_{\mathrm{red}}) \\
+         & =\operatorname{ind}(U_{\mathrm{red}})
+        +\operatorname{ind}(V_{\mathrm{red}}).
+    \end{align}
+    The identity tensor itself is a canonical representative of index zero,
+    and the ancilla assertion follows from additivity.
+\end{proof}
 
 \begin{lemma}[Source ranks under rectangular reduction]
     \label{lem:mpu_rectangular_reduction_source_ranks}
@@ -6490,32 +6942,110 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 833--845.
 \end{lemma}
 
-\begin{lemma}[Admissible composition additivity]
-    \label{lem:mpu_admissible_index_composition}
-    \notready
-    \discussion{6016}
-    % **Scope restriction (six admissible blocks):** every actual block used in
-    % the source rank computation carries its own source datum. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_admissible_index, prop:mpu_admissible_index_well_defined, thm:mpu_source_cut_rank_blocking, lem:mpu_four_site_composition_source_rank_bounds, def:mpu_reduced_full_support_source_datum}
-    Suppose there is a positive integer $k$ such that
-    $\mathcal U_k$, $\mathcal U'_k$, and the composition tensor
-    $\mathcal W_k$ are simple and each carries its own reduced full-support
-    source datum. Suppose in addition that $\mathcal U_{2k}$,
-    $\mathcal U'_{2k}$, and $\mathcal W_{4k}$ are simple and each carries its
-    own reduced full-support source datum. Define the three indices initially
-    from $\mathcal U_k$, $\mathcal U'_k$, and $\mathcal W_k$; the supplied data
-    at $2k$ and $4k$ make the later comparison admissible. If $\mathcal W$
-    generates the composition of the MPUs generated by $\mathcal U$ and
-    $\mathcal U'$, then
+\begin{theorem}[Reduction to a canonical representative]
+    \label{thm:mpu_canonical_representative_reduction}
+    \lean{MPOTensor.exists_isReduction_of_mpo_eq_cfii}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mps_rectangular_reduction,
+        def:mpo_family}
+    Let $\mathcal U$ and $\mathcal V$ have the same physical dimension and
+    bond dimensions $D$ and $E$, respectively. Suppose $\mathcal V$ is in
+    canonical form II and their periodic operators agree at every positive
+    length. Then there are matrices $A\in\mathbb C^{E\times D}$ and
+    $B\in\mathbb C^{D\times E}$ such that, for every word $w$ in the paired
+    physical alphabet,
     \begin{align}
-        \operatorname{ind}(\mathcal W)
-         & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal U').
+        A\mathcal U^w B & =\mathcal V^w.
     \end{align}
-    This is the six-block reduced-source version of
-    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 833--845.
-\end{lemma}
+    The empty word is included, so $AB=I_E$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mps_equality_reduction_exists, def:mpu_canonical_form_ii,
+        thm:mpu_canonical_form_ii_normal}
+    The normalized flattening of $\mathcal V$ is normal. Multiplication by
+    the nonzero scalar $\sqrt d$ preserves normality, so its unnormalized
+    flattening is normal as well. Equality of the periodic operators gives
+    equality of all positive-length word traces. The equality-case
+    rectangular reduction theorem now supplies $A$ and $B$.
+\end{proof}
+
+\begin{theorem}[Saturation of the composition rank bounds]
+    \label{thm:mpu_composition_rank_saturation}
+    \lean{MPOTensor.IsMPUCanonicalFormII.compositionRanks_of_isReduction}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mps_rectangular_reduction,
+        def:mpu_right_rank, def:mpu_left_rank}
+    Let $\mathcal U,\mathcal V,\mathcal R$ be canonical-form-II tensors of
+    physical dimension $d$. Suppose $\mathcal U$ and $\mathcal V$ are simple,
+    $\mathcal R_4$ is simple, and $\mathcal R$ is a rectangular reduction of
+    $\mathcal U\mathbin{\cdot}\mathcal V$. Then
+    \begin{align}
+        r[\mathcal R_4]    & =d^2r[\mathcal U]r[\mathcal V],       \\
+        \ell[\mathcal R_4] & =d^2\ell[\mathcal U]\ell[\mathcal V].
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_rectangular_reduction_source_ranks,
+        lem:mpu_four_site_composition_source_rank_bounds,
+        prop:mpu_admissible_index_well_defined, ThmFund1}
+    Rectangular reduction and the four-site composition bounds give the
+    corresponding upper bounds. Simplicity gives
+    \begin{align}
+        r[\mathcal U]\ell[\mathcal U]
+                                          & =r[\mathcal V]\ell[\mathcal V]=d^2, \\
+        r[\mathcal R_4]\ell[\mathcal R_4] & =d^8.
+    \end{align}
+    The product of the two upper bounds is therefore $d^8$. Since both ranks
+    of $\mathcal R_4$ are positive, neither inequality can be strict.
+\end{proof}
+
+\begin{theorem}[Composition additivity of the representative index]
+    \label{thm:mpu_admissible_index_composition}
+    \lean{MPOTensor.IsMPU.index_mulTensor,
+        MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}
+    \leanok
+    \uses{def:mpu_reduced_representative_index, def:mpdo_operator_product,
+        def:mpo_family}
+    Let $\mathcal U$ and $\mathcal V$ be MPUs with a common positive physical
+    dimension and positive bond dimensions. For the index defined through a reduced canonical-form-II
+    representative,
+    \begin{align}
+        \operatorname{ind}(\mathcal U\mathbin{\cdot}\mathcal V)
+         & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
+    \end{align}
+    In particular, if $\mathcal U,\mathcal V,\mathcal R$ are in canonical form
+    II and the positive-length periodic operators of $\mathcal R$ equal the
+    products of those of $\mathcal U$ and $\mathcal V$, then their canonical
+    indices satisfy the same identity. The argument is the rank-saturation
+    proof of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    % The unreduced source-cut formula in def:index is not asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_reduced_cfii_representative,
+        thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_canonical_representative_reduction,
+        lem:mpu_common_simple_blocking_finite,
+        thm:mpu_composition_rank_saturation,
+        thm:mpu_specified_source_index_identities,
+        prop:mpu_admissible_index_well_defined}
+    Choose reduced canonical representatives for the two factors and their
+    composition. Their positive-length periodic operators still satisfy the
+    composition identity. Theorem~\ref{thm:mpu_canonical_representative_reduction} gives a rectangular
+    reduction from the product tensor to its representative $\mathcal R$.
+    Choose a common positive blocking length $k$ at which the three
+    representatives are simple, and put $d_k=d^k$. The rectangular reduction
+    persists under blocking. Rank saturation gives
+    \begin{align}
+        r[\mathcal R_{4k}]    & =d_k^2r[\mathcal U_k]r[\mathcal V_k],       \\
+        \ell[\mathcal R_{4k}] & =d_k^2\ell[\mathcal U_k]\ell[\mathcal V_k].
+    \end{align}
+    Subtracting the logarithms cancels $d_k^2$ and adds the two indices.
+    Independence of positive blocking and of the chosen canonical
+    representatives gives the asserted identity.
+\end{proof}
 
 \begin{definition}[Strict equivalence]
     \label{def:strictly-equivalent-tensors}
@@ -7223,12 +7753,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \ell[\widehat W] & =\ell[X\widehat W(ZY)]=\ell[\widetilde W],
         \notag
     \end{align}
-    the first equality in each line being the invariance identity with
-    invertible $X$ and $ZY$, and the second rewriting $X\widehat W(ZY)$
-    through
-    (\ref{eq:mpu_reduced_hat_chain_pwqy})--(\ref{eq:mpu_reduced_hat_chain_reduced})
-    and (\ref{eq:mpu_reduced_hat_chain_tilde}) to $\widetilde W$, which gives
-    (\ref{eq:mpu_reduced_hat_right_rank}) and
+    by invertibility of $X$ and $ZY$ together with the relation $X\widehat W(ZY)=\widetilde W$
+    from~(\ref{eq:mpu_reduced_hat_chain_pwqy})--(\ref{eq:mpu_reduced_hat_chain_tilde}), yielding~(\ref{eq:mpu_reduced_hat_right_rank}) and
     (\ref{eq:mpu_reduced_hat_left_rank}). For positive semidefinite $L$ and
     $R$, their ambient support-inverse extensions supply $X$ and $Z$; the
     invertible right-factor identity for $\widetilde P Q$ supplies $Y$.
@@ -7439,11 +7965,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         M_1(\widehat{\mathcal U})
          & =(I_d\otimes B^{\mathsf T})M_1(\mathcal U)
-        (A^{\mathsf T}\otimes I_d),                      \\
+        (A^{\mathsf T}\otimes I_d),
+        \label{eq:mpu_raw_source_cut_one}                \\
         M_2(\widehat{\mathcal U})
          & =(A\otimes I_d)M_2(\mathcal U)(I_d\otimes B).
+        \notag
     \end{align}
-    The transposes in the first identity result from the corrected orientation
+    The transposes in~(\ref{eq:mpu_raw_source_cut_one}) result from the corrected orientation
     of $M_1$; no complex conjugation occurs.
     % Source lines: paper_v2.tex 786--804.
 \end{theorem}
@@ -7595,14 +8123,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     There are unitaries $x$ on $\ell[\mathcal V]$ and $y$ on
     $r[\mathcal V]$ such that
     \begin{align}
-        u_{\mathcal V} & =(x\otimes y)\widetilde u,                 &
+        u_{\mathcal V} & =(x\otimes y)\widetilde u,
+        \label{eq:mpu_uv_rel_u}                                     \\
         v_{\mathcal V} & =\widetilde v(y^\dagger\otimes x^\dagger).
+        \label{eq:mpu_uv_rel_v}
     \end{align}
-    The first equality is the forward $u$ relation of
+    Relation~(\ref{eq:mpu_uv_rel_u}) is the forward $u$ relation of
     \cite[Equation~(SFuu)]{Cirac2017MPU}. The source's
     \cite[Equation~(SFvv)]{Cirac2017MPU} displays two relations between the
-    open half-factors involving $z$; the second equality follows by
-    contracting those half-factors. No converse for the original periodic
+    open half-factors involving $z$; contraction of those half-factors yields~(\ref{eq:mpu_uv_rel_v}). No converse for the original periodic
     operators at odd length is asserted.
     % Source: paper_v2.tex 624--648; II_RelationStandard1/2.png.
 \end{theorem}
@@ -7740,6 +8269,73 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 733--818.
 \end{proposition}
 
+\begin{theorem}[Source ranks along a canonical-form-II path]
+    \label{thm:mpu_cfii_path_source_ranks}
+    \lean{MPOTensor.IsMPUCanonicalFormII.sourceRanks_blockTensor_pow_four_const,
+        MPOTensor.sourceRanks_blockTensor_const_of_fixed_product}
+    \leanok
+    % **Scope restriction (canonical-form-II path):** Proposition IV.5 permits
+    % arbitrary MPU paths and uses ranks of reduced representatives. Here each
+    % path tensor itself has canonical-form-II data. See
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    \uses{def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    Let $[0,1]\ni x\mapsto\mathcal U(x)$ be a continuous path of tensors of
+    fixed physical dimension $d$ and bond dimension $D$. Suppose that each
+    $\mathcal U(x)$ is in canonical form II. Then for all $x,y\in[0,1]$,
+    \begin{align}
+        r[\mathcal U(x)_{D^4}]    & =r[\mathcal U(y)_{D^4}],    &
+        \ell[\mathcal U(x)_{D^4}] & =\ell[\mathcal U(y)_{D^4}].
+    \end{align}
+    This is the canonical-form-II path case of
+    \cite[Proposition~IV.5]{Cirac2017MPU}. Its hypotheses are not comparable
+    with those of Proposition~\ref{prop:mpu_admissible_continuity_index}: here
+    each tensor of the path is in canonical form II, but no continuously
+    varying source data are assumed; there the path may leave canonical form,
+    but continuously varying source data at a common blocking length are
+    assumed.
+    % Source lines: paper_v2.tex 739--818.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_common_pow_four_simple_blocking,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_rank_lower_semicontinuous,
+        thm:mpu_fixed_product_preconnected}
+    Blocking is continuous, and the two source cuts are coordinate
+    rearrangements of the blocked tensor. Thus their ranks are lower
+    semicontinuous functions of $x$. The common block of length $D^4$ is
+    simple at every point. Its ranks obey
+    \begin{align}
+        r[\mathcal U(x)_{D^4}]\ell[\mathcal U(x)_{D^4}]
+         & =d^{2D^4}>0.
+    \end{align}
+    Lower semicontinuity and this fixed positive product make both ranks
+    constant on the connected interval.
+\end{proof}
+
+\begin{theorem}[Index along a canonical-form-II path]
+    \label{thm:mpu_cfii_path_index}
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_const_of_continuous}
+    \leanok
+    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii,
+        thm:mpu_cfii_path_source_ranks}
+    Under the hypotheses of Theorem~\ref{thm:mpu_cfii_path_source_ranks},
+    the index of $\mathcal U(x)$ is independent of $x\in[0,1]$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_cfii_path_source_ranks,
+        prop:mpu_admissible_index_well_defined}
+    Every $D^4$-site block is simple, so for every $x\in[0,1]$,
+    \begin{align}
+        \operatorname{ind}(\mathcal U(x))
+         & =\frac12\bigl(\log_2 r[\mathcal U(x)_{D^4}]
+        -\log_2\ell[\mathcal U(x)_{D^4}]\bigr).
+    \end{align}
+    Both ranks on the right-hand side are independent of $x$ by
+    Theorem~\ref{thm:mpu_cfii_path_source_ranks}.
+\end{proof}
+
 \begin{theorem}[Index Theorem]
     \label{IndexTh}
     \notready
@@ -7767,12 +8363,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % **Scope restriction (admissible tensors and operations):** every simple
     % block and standard form used below carries reduced full-support source
     % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_index_well_defined, lem:mpu_admissible_index_tensor, lem:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
+    \uses{prop:mpu_admissible_index_well_defined, thm:mpu_admissible_index_tensor, thm:mpu_representative_index_tensor_product, thm:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
     Assume the following operation-specific admissibility hypotheses. Every pair
     of simple blockings compared for blocking independence carries reduced
-    full-support source data. For a tensor product $\mathcal U\otimes\mathcal V$,
-    there is one positive length $k$ such that $\mathcal U_k$, $\mathcal V_k$,
-    and $(\mathcal U\otimes\mathcal V)_k$ are simple and carry their own data.
+    full-support source data. Tensor products need no hypothesis, by
+    Theorem~\ref{thm:mpu_representative_index_tensor_product}.
     For a composition tensor $\mathcal W$ of $\mathcal U$ and $\mathcal U'$, there
     is one positive length $k$ such that
     \begin{align}
@@ -7855,11 +8450,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
     A Kronecker product equal to the identity has reciprocal scalar factors, so
     $\overline xx=e^{i\phi}\Id$ and $\overline yy=e^{-i\phi}\Id$. Since $x$ is
-    unitary, $x^T$ is a left inverse of $\overline x$; multiplying the first
-    relation by $x^T$ on the left gives $x=e^{i\phi}x^T$, and the same argument
-    gives $y=e^{-i\phi}y^T$. Reading the first relation as a relation for the
-    unitary $\overline x$ against its own entrywise conjugate gives
-    $\Id=xx^\dagger=e^{2i\phi}\Id$, so $e^{i\phi}=\pm1$ and
+    unitary, $x^T\overline x=\Id$; multiplying $\overline xx=e^{i\phi}\Id$ on the left by $x^T$ gives $x=e^{i\phi}x^T$, and similarly
+    $y=e^{-i\phi}y^T$. Transposing $x=e^{i\phi}x^T$ gives $x^T=e^{i\phi}x$, hence
+    $x=e^{2i\phi}x$; since $x$ is invertible, $e^{2i\phi}=1$, so $e^{i\phi}=\pm1$ and
     $e^{-i\phi}=e^{i\phi}$. The two matrices therefore carry one transpose sign.
 \end{proof}
 
@@ -8924,8 +9517,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     For matrices $A,B\in\mathbb C^{n\times n}$ and the exchange matrix
     $\mathbb S$ on $\mathbb C^n\otimes\mathbb C^n$,
     \begin{align}
-        \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S, &
+        \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S,
+        \label{eq:matrix_swap_kron_left}                \\
         (A\otimes B)\mathbb S & =\mathbb S(B\otimes A).
+        \label{eq:matrix_swap_kron_right}
     \end{align}
     The equivalent two-sided exchange identity is stated in
     \cite[lines~1316--1319]{Cirac2017MPU}; the gauge-invariance argument at
@@ -8935,14 +9530,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     In product coordinates the exchange matrix has entries
-    $\mathbb S_{(i,j),(k,l)}=\delta_{i,l}\delta_{j,k}$, so both sides of the
-    first identity have entry
+    $\mathbb S_{(i,j),(k,l)}=\delta_{i,l}\delta_{j,k}$, so both sides of~(\ref{eq:matrix_swap_kron_left}) have entry
     \begin{align}
         \left[\mathbb S(A\otimes B)\right]_{(i_1,i_2),(j_1,j_2)}
          & =A_{i_2,j_1}B_{i_1,j_2}
         =\left[(B\otimes A)\mathbb S\right]_{(i_1,i_2),(j_1,j_2)}.
     \end{align}
-    The second identity is the first with the two factors exchanged.
+    Swapping factors $A$ and $B$ gives~(\ref{eq:matrix_swap_kron_right}).
 \end{proof}
 
 \begin{theorem}[Exchange contraction of a scaled unitary Kronecker product]
@@ -11439,16 +12033,16 @@ see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
     star-subalgebra commuting with all left coefficients of $\mathcal A_2$.
     Passing to the generated star-subalgebra yields
     \begin{align}
-        LR          & =RL,        &
+        LR          & =RL,
+        \label{eq:qca_overlapping_support_first_closure} \\
         L^\dagger R & =RL^\dagger
-        \label{eq:qca_overlapping_support_first_closure}
+        \notag
     \end{align}
     for every $R\in\operatorname{Spp}_{\mathrm R}(\mathcal A_1)$ and every
     left coefficient $L$ of $\mathcal A_2$.
 
     Since $\operatorname{Spp}_{\mathrm R}(\mathcal A_1)$ is closed under
-    adjoints, applying the first equality in
-    (\ref{eq:qca_overlapping_support_first_closure}) to $R^\dagger$ shows that
+    adjoints, applying~(\ref{eq:qca_overlapping_support_first_closure}) to $R^\dagger$ shows that
     each left coefficient commutes with both $R$ and $R^\dagger$.  Passing to
     the star-subalgebra generated by the left coefficients gives
     (\ref{eq:qca_overlapping_support_conclusion}).
@@ -11970,6 +12564,82 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     and the equality condition on its complement. Reindex both sums by
     the residual-word bijection and apply the finite-chain residual-trace
     identity to each MPO coefficient.
+\end{proof}
+
+\begin{definition}[Three-block coordinates on an anchored finite chain]
+    \label{def:mpu_anchored_three_block_coordinates}
+    \lean{MPOTensor.threeBlockOutputEquiv,
+        MPOTensor.threeBlockOutputEquiv_apply,
+        MPOTensor.threeBlockInputEquiv,
+        MPOTensor.threeBlockInputEquiv_apply,
+        MPOTensor.threeBlockOutputConfigEquiv,
+        MPOTensor.threeBlockOutputConfigEquiv_apply,
+        MPOTensor.threeBlockInputConfigEquiv,
+        MPOTensor.threeBlockInputConfigEquiv_apply,
+        MPOTensor.threeBlockFiniteChainMatrix}
+    \leanok
+    \uses{def:mpu_anchored_residual_configurations,
+        def:mpu_finite_chain_realization,
+        def:mpu_two_site_open_three_block}
+    Fix $k,p,s\geq0$ and an integer anchor $a$. On the interval of length
+    $N=p+3(2k)+s$, distinguish three consecutive complete blocks of
+    length $2k$ between an arbitrary prefix and suffix. Let $H=d^k$.
+    On the output side, the four neighboring half-blocks form a factor
+    $X$ of dimension $H^4$; the prefix, suffix, and two exposed outer
+    half-blocks form the exterior factor $E_{\mathrm{out}}$. On the input
+    side, the central complete block forms a factor $J$ of dimension
+    $H^2$; the prefix, suffix, and the two outer complete blocks form
+    $E_{\mathrm{in}}$. Ordered concatenation gives bijections from
+    $E_{\mathrm{out}}\times X$ and $E_{\mathrm{in}}\times J$ to the
+    respective configuration bases of the same finite interval. Write
+    $M_{a;p,k,s}$ for the finite-chain MPO matrix in these two bases.
+\end{definition}
+
+\begin{theorem}[Anchored three-block operator identity]
+    \label{thm:mpu_anchored_three_block_operator}
+    \lean{MPOTensor.threeBlockFiniteChainMatrix_slice,
+        Matrix.intertwiner_of_slices,
+        MPOTensor.threeBlockFiniteChainMatrix_intertwiner,
+        MPOTensor.threeBlockFiniteChainMatrix_conjugation}
+    \leanok
+    \uses{def:mpu_anchored_three_block_coordinates,
+        thm:mpu_original_site_three_block_window_entry,
+        lem:mpu_two_site_open_three_block_locality,
+        thm:mpu_anchored_residual_mpo_entry,
+        def:mpu_finite_chain_conjugation}
+    Suppose the two-site blocking of $U$ at length $k$ is supplied with
+    standard-form factors $u,v$. For every observable $A$ on the central
+    input block, let $B(A)$ be the corresponding observable on the two
+    neighboring output links. Then
+    \begin{align}
+        M_{a;p,k,s}(I_{E_{\mathrm{in}}}\otimes A)
+         & =(I_{E_{\mathrm{out}}}\otimes B(A))M_{a;p,k,s}.
+        \label{eq:mpu_finite_chain_intertwiner}
+    \end{align}
+    This identity holds for arbitrary original-site prefix and suffix
+    words; $U$ need not be an MPU. If $U$ is an MPU and $N>1$, then
+    \begin{align}
+        M_{a;p,k,s}(I_{E_{\mathrm{in}}}\otimes A)M_{a;p,k,s}^{\dagger}
+         & =I_{E_{\mathrm{out}}}\otimes B(A).
+        \label{eq:mpu_finite_chain_conjugation}
+    \end{align}
+    Thus the conjugated operator is the identity on every exterior
+    output coordinate. This statement assumes the displayed supplied
+    standard form and does not yet identify the right-hand side with
+    a site-indexed local inclusion or prove independence of the
+    enclosing interval.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_original_site_three_block_window_entry,
+        lem:mpu_two_site_open_three_block_locality,
+        def:mpu_anchored_three_block_coordinates,
+        def:mpu_finite_chain_conjugation}
+    Fixing all exterior input and output coordinates makes a slice of
+    $M_{a;p,k,s}$ equal to the original-site three-block window.
+    The open-word identity intertwines each slice with the same $B(A)$.
+    Summing over exterior coordinates yields~(\ref{eq:mpu_finite_chain_intertwiner}).
+    When $U$ is an MPU, $M_{a;p,k,s}$ is unitary; postmultiplying~(\ref{eq:mpu_finite_chain_intertwiner}) by $M_{a;p,k,s}^\dagger$ yields~(\ref{eq:mpu_finite_chain_conjugation}).
 \end{proof}
 
 \begin{definition}[Finite-chain term on a local observable]
@@ -12531,9 +13201,13 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     in some finite region, so
     \begin{align}
         j(\mathcal A_{\mathrm{loc}})
-         & =\bigcup_{\Lambda\Subset\mathbb Z}j_\Lambda(\mathcal A_\Lambda).
+         & =\bigcup_{\Lambda\Subset\mathbb Z}j_\Lambda(\mathcal A_\Lambda),
     \end{align}
-    Taking closures proves the second equality.
+    and taking closures yields
+    \begin{align}
+        \overline{\bigcup_{\Lambda\Subset\mathbb Z} j_\Lambda(\mathcal A_\Lambda)}
+         & = \overline{j(\mathcal A_{\mathrm{loc}})} = \mathcal A.
+    \end{align}
 \end{proof}
 
 Lattice translation acts covariantly on the quasi-local algebra in the setting
@@ -12588,9 +13262,11 @@ of \cite[lines~2292--2306]{Cirac2017MPU}.
     of the quasi-local algebra.  On the dense algebraic-local subalgebra and on
     finite-region observables it satisfies
     \begin{align}
-        \tau_a(j(A)) & =j(\tau_a(A)),                               \\
+        \tau_a(j(A)) & =j(\tau_a(A)),
+        \label{eq:qca_trans_dense}                                  \\
         \tau_a(j_\Lambda(A_\Lambda))
                      & =j_{\Lambda+a}(\tau_{a,\Lambda}(A_\Lambda)).
+        \label{eq:qca_trans_finite}
     \end{align}
 \end{definition}
 
@@ -12598,12 +13274,9 @@ of \cite[lines~2292--2306]{Cirac2017MPU}.
     \uses{def:completion_star_alg_equiv, def:qca_algebraic_local_translation, def:qca_quasi_local_algebra, def:qca_quasi_local_observable, lem:qca_algebraic_local_translation_action, lem:qca_algebraic_local_translation_isometry}
     Algebraic-local translation and its inverse translation by $-a$ are
     operator-norm isometries, hence continuous.  Extend this equivalence to the
-    norm completion.  The extension identity gives
-    \begin{align}
-        \tau_a(j(A)) & =j(\tau_a(A)).
-    \end{align}
-    Substituting $A=\iota_\Lambda(A_\Lambda)$ and using the finite-region
-    translation formula gives the second identity.
+    norm completion to obtain~(\ref{eq:qca_trans_dense}).
+    Substituting $A=\iota_\Lambda(A_\Lambda)$ and applying the finite-region
+    translation formula yields~(\ref{eq:qca_trans_finite}).
 \end{proof}
 
 \begin{lemma}[Quasi-local translation action laws]
@@ -13703,21 +14376,25 @@ This is the forward propagation condition of
     and on the two dense algebraic-local subalgebras,
     \begin{align}
         \overline{\mathcal B}_L\bigl(j^{(d^L)}(A)\bigr)
-         & =j^{(d)}\bigl(\mathcal B_L(A)\bigr),        \\
+         & =j^{(d)}\bigl(\mathcal B_L(A)\bigr),
+        \label{eq:qca_blocking_dense_fwd}              \\
         \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}(C)\bigr)
          & =j^{(d^L)}\bigl(\mathcal B_L^{-1}(C)\bigr).
+        \label{eq:qca_blocking_dense_rev}
     \end{align}
     For $A\in\mathcal A^{(d^L)}_\Lambda$ and
     $C\in\mathcal A^{(d)}_\Delta$, these identities become
     \begin{align}
         \overline{\mathcal B}_L\bigl(j^{(d^L)}_\Lambda(A)\bigr)
          & =j^{(d)}_{\widehat\Lambda_L}
-        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),        \\
+        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),
+        \label{eq:qca_blocking_fin_fwd}               \\
         \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}_\Delta(C)\bigr)
          & =j^{(d^L)}_{\operatorname{Hull}_L(\Delta)}
         \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
         \bigl(\iota_{\Delta,
                     \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
+        \label{eq:qca_blocking_fin_rev}
     \end{align}
     If $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, the inverse formula reduces
     exactly to
@@ -13725,24 +14402,24 @@ This is the forward propagation condition of
         \overline{\mathcal B}_L^{-1}
         \bigl(j^{(d)}_{\widehat\Lambda_L}(C)\bigr)
          & =j^{(d^L)}_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
+        \label{eq:qca_blocking_fin_exact}
     \end{align}
     Finally, for all quasi-local observables $X$ and $Y$ on the blocked chain,
     \begin{align}
-        \lVert\overline{\mathcal B}_L(X)\rVert & =\lVert X\rVert,   \\
+        \lVert\overline{\mathcal B}_L(X)\rVert & =\lVert X\rVert,
+        \label{eq:qca_blocking_norm}                                \\
         \lVert\overline{\mathcal B}_L(X)-
         \overline{\mathcal B}_L(Y)\rVert       & =\lVert X-Y\rVert.
+        \label{eq:qca_blocking_dist}
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:completion_star_alg_equiv, def:qca_quasi_local_observable, lem:qca_algebraic_blocking_formulas, lem:qca_block_hull_properties}
-    The first identity is the defining completion map, and the two dense
-    formulas are its canonical-image formulas for the algebraic equivalence and
-    its inverse.  Composing them with the finite-region canonical maps gives the
-    two finite formulas.  The exact expanded-region formula uses
-    $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.  A star-algebra
-    equivalence of C-star algebras preserves the norm; applying this to $X-Y$
-    gives distance preservation.
+    Equalities~(\ref{eq:qca_blocking_dense_fwd}) and~(\ref{eq:qca_blocking_dense_rev}) are the defining continuous extensions of the algebraic equivalence and its inverse.
+    Composing them with the finite-region canonical maps gives~(\ref{eq:qca_blocking_fin_fwd}) and~(\ref{eq:qca_blocking_fin_rev}).
+    The exact formula~(\ref{eq:qca_blocking_fin_exact}) uses $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.
+    Because a star-algebra equivalence of C-star algebras preserves the norm, (\ref{eq:qca_blocking_norm}) holds, and applying it to $X-Y$ gives~(\ref{eq:qca_blocking_dist}).
 \end{proof}
 
 \begin{lemma}[Support transport under site blocking]
@@ -15067,8 +15744,7 @@ adjacent-pair ordering convention of \cite{Gross2012IndexTheory}.
     $((i,t),(j,u))$ equals $X((i,r),(j,s))$ when $t=u$ and vanishes
     otherwise.  On the right, the summand indexed by $t$ contributes
     $X((i,r),(j,s))$ exactly when both second coordinates equal $t$, so the
-    sum over $t$ reproduces the same entry.  The second identity follows by
-    exchanging the roles of the two factors.
+    sum over $t$ reproduces the same entry.  Exchanging the roles of the two factors yields~(\ref{eq:qca_right_coefficient_compression}).
 \end{proof}
 
 \begin{lemma}[Quasi-local form of the coefficient compressions]

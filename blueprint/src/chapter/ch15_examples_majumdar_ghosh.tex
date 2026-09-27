@@ -375,7 +375,7 @@ level $0$ and the normalized singlet as pair amplitude.
 \end{definition}
 
 \begin{theorem}[Exchange as a transposition]\label{thm:spin_exchange_swap}
-    \lean{MPSTensor.spinExchange_apply, MPSTensor.spinHalfOperator_sum}
+    \lean{MPSTensor.spinExchange_spinHalfOperator_apply, MPSTensor.spinHalfOperator_sum}
     \leanok
     \uses{def:majumdar_ghosh_hamiltonian}
     For distinct sites $j\neq k$,
@@ -668,8 +668,9 @@ normality in the following two theorems.
 
 \begin{theorem}[The three-site term and total spin]%
     \label{thm:majumdar_ghosh_term_total_spin}
-    \lean{MPSTensor.spinSite, MPSTensor.totalSpin, MPSTensor.totalSpinSq,
-        MPSTensor.totalSpinSq_eq,
+    \lean{MPSTensor.siteOperator, MPSTensor.totalSpin, MPSTensor.totalSpinSq,
+        MPSTensor.sum_siteOperator_comp_of_ne, MPSTensor.sum_siteOperator_comp_self,
+        MPSTensor.totalSpinSq_eq, MPSTensor.spinHalfOperator_sum_mul_self,
         MPSTensor.totalSpinSq_three_eq_majumdarGhoshTerm,
         MPSTensor.totalSpinSq_three_eq_parentInteraction,
         MPSTensor.majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace,
@@ -714,10 +715,10 @@ normality in the following two theorems.
         thm:majumdar_ghosh_term_projector, lem:transported_es_positive,
         thm:majumdar_ghosh_ground_space, thm:spin_exchange_swap}
     For $N\ge3$, the Hamiltonian~(\ref{eq:mg_hamiltonian}) satisfies
-    \begin{equation}
+    \begin{align}
         H_{N}+\tfrac{3N}{8}=\tfrac34H_{N,\mathrm{MG}}^{(3)},
         \label{eq:mg_hamiltonian_projectors}
-    \end{equation}
+    \end{align}
     so $H_{N}\ge-\tfrac{3N}{8}$, and the eigenspace of $H_{N}$ for
     $-\tfrac{3N}{8}$ is the kernel of $H_{N,\mathrm{MG}}^{(3)}$. For even
     $N\ge4$, $-\tfrac{3N}{8}$ is the smallest eigenvalue of $H_{N}$, and its

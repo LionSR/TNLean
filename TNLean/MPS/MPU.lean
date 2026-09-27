@@ -10,11 +10,13 @@ Authors: TNLean contributors
 
 import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.AnchoredResidualCoordinates
+import TNLean.MPS.MPU.AnchoredThreeBlockOperator
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BlockingRanks
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CompositionFlattening
+import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.DaggerInverse
 import TNLean.MPS.MPU.DaggerInverseGauge
@@ -24,10 +26,12 @@ import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupCocycleMPO
+import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
 import TNLean.MPS.MPU.Index
+import TNLean.MPS.MPU.IndexContinuity
 import TNLean.MPS.MPU.InverseCompatibleComparisonUnitarity
 import TNLean.MPS.MPU.InverseCompatibleCutComparison
 import TNLean.MPS.MPU.InverseCompatibleFamilyProperties
@@ -44,6 +48,7 @@ import TNLean.MPS.MPU.InverseCompatibleTruncation
 import TNLean.MPS.MPU.InverseCompatibleWordAdjoint
 import TNLean.MPS.MPU.InverseCompatibleWordUnitarity
 import TNLean.MPS.MPU.KetLeftMul
+import TNLean.MPS.MPU.LengthDependentPhase
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
@@ -55,6 +60,8 @@ import TNLean.MPS.MPU.ReducedRepresentative
 import TNLean.MPS.MPU.ReducedToHatTransport
 import TNLean.MPS.MPU.ReductionCommonBlocking
 import TNLean.MPS.MPU.RepresentativeIndex
+import TNLean.MPS.MPU.RepresentativeIndexOperations
+import TNLean.MPS.MPU.RepresentativeIndexTensorProduct
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
@@ -85,6 +92,7 @@ import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm
+import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
