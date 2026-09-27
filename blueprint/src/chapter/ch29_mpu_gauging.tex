@@ -4884,6 +4884,58 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $\ket{\psi(gx\text{-}gy\text{-}gx)}$.
 \end{proof}
 
+\begin{theorem}[A symmetry string over a pair of domain walls]
+    \label{thm:mpug_domain_wall_pair}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.pair}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    If $g$ carries the domain wall $e$ between $x$ and $y$ to $e'$ with phase
+    $c$, and the domain wall $f$ between $y$ and $z$ to $f'$ with phase $c'$,
+    then for all words $\mathbf u,\mathbf v,\mathbf w$ longer than a fixed
+    buffer
+    \begin{align}
+        V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}(O_g\cdot e)^i
+        (O_g\cdot A_y)^{\mathbf v}(O_g\cdot f)^j(O_g\cdot A_z)^{\mathbf w}\,
+        W_{g,z}
+         & =c\,c'\,A_{gx}^{\mathbf u}{e'}^{i}A_{gy}^{\mathbf v}{f'}^{j}
+        A_{gz}^{\mathbf w}.
+        \notag
+    \end{align}
+    This is the phase acquired by a symmetry string passing over a pair of
+    domain walls, the tensor-level content of the comparison of two
+    overlapping strings in \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Split the middle word as $\mathbf p\mathbf c\mathbf q$ with long outer
+    parts and insert the reduced block $W_{g,y}A_{gy}^{\mathbf c}V_{g,y}$,
+    which leaves the word unchanged by the residual nilpotency of a
+    reduction \cite{Molnar2018SemiInjective}. The two resulting factors are
+    the local relations of $e$ and $f$.
+\end{proof}
+
+\begin{theorem}[Rescaling domain walls]
+    \label{thm:mpug_domain_wall_rescaling}
+    \lean{MPOTensor.actRect_smul,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_source,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_target,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.exists_eq_of_mul_self}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    If $g$ carries $e$ to $e'$ with phase $c$, then it carries $a\,e$ to $e'$
+    with phase $ac$, and $e$ to $a\,e'$ with phase $c/a$ for $a\neq0$. In
+    particular, if an involution $g$ exchanges $e_{AB}$ and $e_{BA}$ with
+    phases $c_{AB}\neq0$ and $c_{BA}$, then for every $s\neq0$ with
+    $s^2=c_{AB}c_{BA}$ the walls $e_{AB}$ and $(c_{AB}/s)\,e_{BA}$ are
+    exchanged with both phases equal to $s$, as in
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The rectangular action is linear in the domain wall; for the last claim
+    rescale $e_{BA}$ by $c_{AB}/s$.
+\end{proof}
+
 \begin{theorem}[Domain walls of an involution detect the anomaly]
     \label{thm:mpug_domain_wall_involution}
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one,

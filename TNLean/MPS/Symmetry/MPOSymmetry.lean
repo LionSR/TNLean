@@ -17,6 +17,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ClosedFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
+import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallExchange
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion

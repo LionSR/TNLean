@@ -947,6 +947,33 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     Theorem~\ref{thm:mpug_domain_wall_state}.
 \end{proof}
 
+\begin{theorem}[Semionic domain walls]
+    \label{thm:asymex_czx_semionic_domain_walls}
+    \lean{CZXCompression.czxWallBASemion,
+        CZXCompression.czx_isDomainWallAction_semion,
+        CZXCompression.czx_domainWall_pair}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_pair,
+        thm:mpug_domain_wall_rescaling}
+    With the action tensors of
+    Theorem~\ref{thm:asymex_czx_product_state_l_symbols}, the walls
+    $e_{AB}=|0\rangle$ and $e_{BA}=i|1\rangle$ are exchanged by the generator
+    with $c_{AB}=c_{BA}=i$, and the generator acts on an open chain containing
+    the pair $|0\rangle$, $-|1\rangle$ with long regions by the phase $-1$: the
+    domain walls of the CZX symmetry are semionic
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_pair,
+        thm:mpug_domain_wall_rescaling}
+    Rescale the wall $-|1\rangle$ of Theorem~\ref{thm:asymex_czx_domain_walls}
+    by $1/i$, using Theorem~\ref{thm:mpug_domain_wall_rescaling} with $s=i$;
+    the second statement is Theorem~\ref{thm:mpug_domain_wall_pair} with
+    $c_{AB}c_{BA}=-1$.
+\end{proof}
+
 \begin{corollary}[No invariant normal state]
     \label{cor:asymex_czx_decorated_no_invariant}
     \lean{CZXCompression.not_exists_normal_fixesMPV_czxDecoratedTensor}
