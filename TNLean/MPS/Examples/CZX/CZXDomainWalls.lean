@@ -134,7 +134,7 @@ theorem czx_isDomainWallAction_ab :
       simp [actRect, czxWallAB, czxWallBA, czxDecoratedTensor_apply, Matrix.mul_apply,
         Fin.sum_univ_succ, Matrix.kroneckerMap_apply, Matrix.submatrix_apply, Matrix.vecMul,
         dotProduct, finProdFinEquiv, Fin.divNat, Fin.modNat, Fin.rev, Fin.fin_one_eq_zero]
-  refine ⟨czxWallBA_ne_zero, one_ne_zero, 0, fun u v i _ _ ↦ ?_⟩
+  refine ⟨czxWallAB_ne_zero, czxWallBA_ne_zero, one_ne_zero, 0, fun u v i _ _ ↦ ?_⟩
   rw [castIndex_czxBlockDim, castIndex_czxBlockDim, one_smul, Matrix.one_mul, Matrix.mul_one]
   have hL := Kraus.evalWord_intertwine _ _ _ hV u
   have hR := Kraus.evalWord_intertwine _ _ _ hW v
@@ -199,7 +199,7 @@ theorem czx_isDomainWallAction_ba :
       simp [actRect, czxWallAB, czxWallBA, czxDecoratedTensor_apply, Matrix.mul_apply,
         Fin.sum_univ_succ, Matrix.kroneckerMap_apply, Matrix.submatrix_apply, Matrix.vecMul,
         dotProduct, finProdFinEquiv, Fin.divNat, Fin.modNat, Fin.rev, Fin.fin_one_eq_zero]
-  refine ⟨czxWallAB_ne_zero, by norm_num, 1, fun u v i _ hv ↦ ?_⟩
+  refine ⟨czxWallBA_ne_zero, czxWallAB_ne_zero, by norm_num, 1, fun u v i _ hv ↦ ?_⟩
   rw [castIndex_czxBlockDim, castIndex_czxBlockDim, Matrix.one_mul, Matrix.mul_one]
   have hL := Kraus.evalWord_intertwine _ _ _ hV u
   have hR := evalWord_mul_W_gen_zero v (List.ne_nil_of_length_pos hv)

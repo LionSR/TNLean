@@ -60,7 +60,7 @@ argument is the identity, this is `ω(g,g,g)`.
 The blocks are normal rather than injective, and the phases are not assumed unimodular.
 
 **Local fix (nondegenerate domain walls, blocked local action):** the local action
-`IsDomainWallAction` requires the image domain wall and the phase to be nonzero (the source's walls
+`IsDomainWallAction` requires both domain walls and the phase to be nonzero (the source's walls
 are excitations and `c_{AB}`, `c_{BA}` are phase factors, lines 712 and 1656), and it holds
 against regions longer than a buffer rather than at one site of the fixed point; documented in
 `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
@@ -487,14 +487,16 @@ variable (ad) in
 for all words `u`, `v` longer than a fixed buffer. The target blocks are identified with
 `g • x` and `g • y` along the given equations.
 
-The source draws this identity at the renormalization fixed point with one site on each side
-of the wall (lines 774--832); the buffer here plays the role of the blocked sites of line
-1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and `B^g_{x,y}` of
-`eq:localcdefG` for a general group. The image wall and the phase are nonzero, the convention
-of the module docstring. -/
+The source draws this identity with one site on each side of the wall (lines 774--832), in the
+setting of the renormalization fixed point (lines 1351 and 1358); the buffer here plays the
+role of the blocked sites of line 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and `B^g_{x,y}` of
+`eq:localcdefG` for a general group. Both walls and the phase are nonzero, the convention of
+the module docstring. -/
 structure IsDomainWallAction (g : G) {x y x' y' : X} (hx : g • x = x') (hy : g • y = y')
     (e : Fin d → Matrix (Fin (D x)) (Fin (D y)) ℂ)
     (e' : Fin d → Matrix (Fin (D x')) (Fin (D y')) ℂ) (c : ℂ) : Prop where
+  /-- The carried domain wall is nonzero. -/
+  source_ne_zero : e ≠ 0
   /-- The image domain wall is nonzero. -/
   target_ne_zero : e' ≠ 0
   /-- The phase is nonzero. -/
@@ -568,7 +570,7 @@ theorem mul (hA : ∀ x, Kraus.IsNormal (A x))
     rcases Nat.eq_zero_or_pos (D (g • h • y)) with h0 | h0
     · exact absurd (Matrix.ext fun _ b ↦ absurd b.2 (by omega)) hi
     · exact h0
-  refine ⟨h₂.target_ne_zero,
+  refine ⟨h₁.source_ne_zero, h₂.target_ne_zero,
     mul_ne_zero (mul_ne_zero (Units.ne_zero _) h₂.phase_ne_zero) h₁.phase_ne_zero, ?_⟩
   obtain ⟨N₁, H₁⟩ := h₁.physAct_eq
   obtain ⟨N₂, H₂⟩ := h₂.physAct_eq
