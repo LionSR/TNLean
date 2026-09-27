@@ -41,11 +41,9 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_
         (toTensorFromBlocks (d := d) (μ := μ) A) R N))ᗮ,
       γ * ‖v‖ ≤ ‖parentHamiltonianES
         (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
-  obtain ⟨γ, hγ, hGap⟩ :=
-    exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS_of_threeBlock_bound
-      μ A hμ ρ hP hρ hDistinct hL₀ hBlk hr hR
-  obtain ⟨M, hM⟩ := hGap.exists_forall_of_atTop
-  exact parentHamiltonianES_gap_of_eventual_gap
-    (toTensorFromBlocks (d := d) (μ := μ) A) R M hγ hM
+  exact exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_ker_openParentHamiltonianES_eq
+    μ A hμ ρ hP hρ hDistinct (by omega) fun _ hW ↦
+      ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound
+        μ A hμ ρ hP hρ hDistinct hL₀ hBlk hr hR hW
 
 end MPSTensor

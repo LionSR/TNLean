@@ -24,7 +24,22 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ} [NeZero d]
+variable {d D : ℕ}
+
+/-- At every positive length, the local ground space of a canonical tensor,
+including its repeated block copies and ambient reconstruction, is that of the
+unweighted block sum of its distinct normal representatives. Source: CPSV16,
+arXiv:1606.00608, equations `II_CF1` and `decBSV`. -/
+theorem CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives
+    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {L : ℕ} (hL : 0 < L) :
+    groundSpace A L = groundSpace
+      (toTensorFromBlocks (d := d) (fun _ ↦ 1)
+        (fun j ↦ data.blocks (data.representativeIndex j))) L :=
+  (data.groundSpace_eq_iSup_representatives data.bntRefinement hL).trans
+    (groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1)
+      (fun j ↦ data.blocks (data.representativeIndex j)) (by simp) L).symm
+
+variable [NeZero d]
 
 /-- The original canonical tensor, including all repeated block copies, has
 the periodic ground space of its distinct normal representatives. The
@@ -42,9 +57,8 @@ theorem CPSVCanonicalFormData.ker_parentHamiltonian_eq_of_wordTupleSpanTop
   let : ∀ j, NeZero (data.dim (data.representativeIndex j)) :=
     fun j ↦ ⟨(data.dim_pos (data.representativeIndex j)).ne'⟩
   have hGS : groundSpace A L =
-      groundSpace (toTensorFromBlocks (d := d) (fun _ ↦ 1) B) L := by
-    exact (data.groundSpace_eq_iSup_representatives data.bntRefinement (by omega)).trans
-      (groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) B (by simp) L).symm
+      groundSpace (toTensorFromBlocks (d := d) (fun _ ↦ 1) B) L :=
+    data.groundSpace_eq_toTensorFromBlocks_representatives (by omega)
   rw [ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hLN,
     chainGroundSpace_eq_of_groundSpace_eq hGS]
   exact chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop

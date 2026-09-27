@@ -38,6 +38,7 @@ import TNLean.MPS.ParentHamiltonian.BlockSumGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockSumIntervalSpaces
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanNormalization
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanPropagation
+import TNLean.MPS.ParentHamiltonian.BlockWordSpanSeparation
 import TNLean.MPS.ParentHamiltonian.BlockedGroundSpaceTransport
 import TNLean.MPS.ParentHamiltonian.BoundaryBlockMatEq
 import TNLean.MPS.ParentHamiltonian.BoundaryClosing
@@ -70,6 +71,7 @@ import TNLean.MPS.ParentHamiltonian.ExtendRight
 import TNLean.MPS.ParentHamiltonian.FNWAggregateOrthogonality
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryEstimate
+import TNLean.MPS.ParentHamiltonian.FNWDimensionConstant
 import TNLean.MPS.ParentHamiltonian.FNWEventualPrefactor
 import TNLean.MPS.ParentHamiltonian.FNWGeometricDefect
 import TNLean.MPS.ParentHamiltonian.FNWLimitMap
@@ -98,6 +100,7 @@ import TNLean.MPS.ParentHamiltonian.NormalBlockC1Normalization
 import TNLean.MPS.ParentHamiltonian.NormalBlockPrimitiveGauges
 import TNLean.MPS.ParentHamiltonian.PGVWC07CutRank
 import TNLean.MPS.ParentHamiltonian.PGVWCCDEIdentities
+import TNLean.MPS.ParentHamiltonian.ParentInteractionComparison
 import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
