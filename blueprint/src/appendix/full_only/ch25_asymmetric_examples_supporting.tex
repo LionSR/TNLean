@@ -131,7 +131,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
 \begin{theorem}[Stacked products of block-diagonal tensors]%
     \label{thm:asymex_mul_block_diagonal}
     \lean{MPOTensor.sigmaProdFinEquiv, MPOTensor.mulBond,
-        MPOTensor.mulTensor_blockDiagonal', MPOTensor.directSum_complexOfRing}
+        MPOTensor.mulTensor_blockDiagonal'}
     \leanok
     \uses{def:mpdo_operator_product}
     Let $M$ and $N$ be matrix product operator tensors whose letters are,
@@ -151,6 +151,23 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     unless both row coordinates lie in the same block as the corresponding
     column coordinates, and it then equals the corresponding entry of
     $M_k^{ij}\otimes N_l^{jk}$. Summing over $j$ gives the claim.
+\end{proof}
+
+\begin{lemma}[Direct sums over a subring of the complex numbers]%
+    \label{lem:asymex_direct_sum_ring}
+    \lean{MPOTensor.directSum_complexOfRing}
+    \leanok
+    \uses{def:asymex_explicit_gauge}
+    Let $f\colon R\to\C$ be a ring homomorphism and let $M$ and $N$ be
+    matrix product operator tensors with entries in $R$. The direct sum of
+    the entrywise images of $M$ and $N$ under $f$ is the entrywise image of
+    the direct sum of $M$ and $N$ formed over $R$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both sides are block diagonal with the images of $M^{ij}$ and $N^{ij}$
+    on the diagonal, and $f(0)=0$ off the diagonal blocks.
 \end{proof}
 
 \begin{theorem}[Direct sums of one-slot compression data]%

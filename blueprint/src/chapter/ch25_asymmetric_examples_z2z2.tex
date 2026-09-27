@@ -847,7 +847,7 @@ the full stacked tensor.
     \leanok
     \uses{thm:asymex_z2z2_assembled, thm:asymex_z2z2_split,
         thm:asymex_z2z2_nonsplit, thm:asymex_direct_sum_compression,
-        thm:asymex_mul_block_diagonal}
+        thm:asymex_mul_block_diagonal, lem:asymex_direct_sum_ring}
     The letters of $B=N\cdot N$ are block diagonal over the sixteen pairs
     $(g,h)$, with the stacked tensor $M_g\cdot M_h$ as the block of $(g,h)$.
     The direct sum of the sixteen pair-block compressions is a compression
@@ -860,6 +860,9 @@ the full stacked tensor.
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_mul_block_diagonal, thm:asymex_direct_sum_compression,
+        lem:asymex_direct_sum_ring, thm:asymex_z2z2_split,
+        thm:asymex_z2z2_nonsplit}
     The defect tensor $N$ is block diagonal over the four group elements,
     so Theorem~\ref{thm:asymex_mul_block_diagonal} makes $B$ block diagonal
     over the pairs. By Theorem~\ref{thm:asymex_direct_sum_compression}, the
