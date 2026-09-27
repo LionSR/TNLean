@@ -34,9 +34,11 @@ on-site gate `w(a, b) = α(a)` this is a sum of single-site terms, whereas the b
 as it would have to be for the exponents to agree on every chain. This remark is not
 formalized.
 
-Conjugation by the finite-depth circuit `V_N` preserves the anomaly class, so the class of the
-construction for `ω_1` is the class computed for `{1, U, U†}` in `Z3AnomalyClass`; that
-invariance is not formalized here.
+The operators are related by `O_N(T_g) = V_N U^{ω_1}_g V_N†`, with `V_N` the product of commuting
+diagonal gates `diag(1, 1, ω)` and two-site gates `C`. Assigning the class computed for
+`{1, U, U†}` in `Z3AnomalyClass` to the construction for `ω_1` needs fusion tensors transported
+by this conjugation and the invariance of the class under that transport; neither is formalized
+here.
 
 ## Main definitions
 

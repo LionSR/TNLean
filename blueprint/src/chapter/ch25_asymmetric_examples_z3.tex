@@ -620,10 +620,15 @@ by $\sum_k\bigl(w(t_k+1,t_{k+1}+1)-w(t_k,t_{k+1})\bigr)$. For an on-site
 gate $w(a,b)=\alpha(a)$ this is a sum of single-site terms, whereas the
 difference $[a\neq0]\,b-[a<b]$ of the two bond exponents is not, modulo
 three, the sum of a function of $a$ and a function of $b$, which it would
-have to be for the exponents to agree on every chain. Conjugation by the finite-depth circuit $V_N$ preserves
-the anomaly class, so the construction for $\omega_1$ carries the class of
-Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}; that invariance is not
-proved here.
+have to be for the exponents to agree on every chain. What relates the two
+families is the identity $O_N(T_g)=V_N\,U^{\omega_1}_g\,V_N^\dagger$ of
+Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}, with
+$V_N=D^{\otimes N}\prod_kC_{k,k+1}$ a product of commuting diagonal gates.
+The class of Theorem~\ref{thm:asymex_z3anomalous_anomaly_class} is computed from fusion
+tensors of the family $\{T_g\}$. Assigning it to the construction for
+$\omega_1$ needs fusion tensors for the operators $U^{\omega_1}_g$ obtained
+from those of $\{T_g\}$ by this conjugation, together with the invariance of
+the class under that transport; neither is proved here.
 
 \begin{theorem}[The anomaly class of the family]
     \label{thm:asymex_z3anomalous_anomaly_class}
@@ -700,8 +705,8 @@ Both~\cite{GarreRubioSchuch2024DomainWall} and the three-cochain used here defin
 the anomaly by the same move between the two fusion trees of $(g,h,k)$. The
 construction for $\omega_1$ is conjugate to the family by the circuit $V_N$
 of Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}, so, granting the
-invariance of the class under such conjugation, it realizes the class
-$j=2$ of $\omega_2=\omega_1^{-1}$ in this orientation, not the class of
+invariance of the class under that conjugation (which is not proved here), it
+realizes the class $j=2$ of $\omega_2=\omega_1^{-1}$ in this orientation, not the class of
 $\omega_1$.
 
 \subsection{The condensation defect}%
