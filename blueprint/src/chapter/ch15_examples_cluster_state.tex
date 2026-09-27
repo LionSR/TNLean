@@ -295,16 +295,16 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
 
 \begin{theorem}[Doubly degenerate entanglement spectrum of the cluster state]
     \label{thm:cluster_entanglement_spectrum_even}
-    \lean{MPSTensor.clusterBlocked_even_finrank_eigenspace}
+    \lean{MPSTensor.clusterBlocked_even_finrank_eigenspace, MPSTensor.clusterBlocked_twist_intertwine, MPSTensor.clusterBlocked_transferMap_one, MPSTensor.clusterZ2Z2Action_unitary}
     \leanok
-    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_normal, thm:cluster_gauge_anticomm, thm:cluster_string_order}
+    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_normal, thm:cluster_gauge_anticomm}
     Let $\Lambda$ be a positive definite fixed point of the adjoint transfer map
     of the length-$2$ blocked cluster-state tensor.  Every eigenspace of
     $\Lambda$ has even dimension.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_normal, thm:cluster_gauge_anticomm, thm:cluster_string_order}
+    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_normal, thm:cluster_gauge_anticomm}
     The blocked tensor is injective and satisfies $\E(\Id)=\Id$; the two
     generators of $\Z_2\times\Z_2$ act by unitary permutation matrices with
     anticommuting virtual gauges $\sigma_z$ and $\sigma_x$.  Apply
