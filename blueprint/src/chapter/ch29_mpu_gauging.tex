@@ -6552,8 +6552,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     because $f(a^k)=f(a)^k$.
 \end{proof}
 
-\begin{lemma}[Values of the anomaly three-cochain from finitely many identities]%
-    \label{lem:mpug_omega_integer_certificate}
+\begin{theorem}[Values of the anomaly three-cochain from finitely many identities]%
+    \label{thm:mpug_omega_integer_certificate}
     \lean{MPSTensor.isDressedProportional_complexOfInt,
         MPSTensor.isDressedProportional_complexOfInt_of_mem,
         MPOTensor.GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV,
@@ -6573,7 +6573,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     that triple; and a family of bond-one tensors whose stacked products
     $O_gO_h$ equal $O_{gh}$ has, with all fusion tensors equal to one, the
     constant three-cochain one.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
