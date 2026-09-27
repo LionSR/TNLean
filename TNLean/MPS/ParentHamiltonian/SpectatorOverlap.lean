@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 
 /-!
@@ -18,14 +19,13 @@ open scoped BigOperators InnerProductSpace
 
 variable {ι : Type*} [Fintype ι] {E : ι → Type*}
   [∀ i, NormedAddCommGroup (E i)] [∀ i, InnerProductSpace ℂ (E i)]
+
 private theorem norm_inner_le_of_fibers (x y : PiLp 2 E) {ε : ℝ} (hε : 0 ≤ ε)
     (h : ∀ i, ‖⟪x i, y i⟫_ℂ‖ ≤ ε * ‖x i‖ * ‖y i‖) :
     ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
-  rw [PiLp.inner_apply]
-  refine (norm_sum_le _ _).trans ((Finset.sum_le_sum fun i _ ↦ h i).trans ?_)
-  simpa only [mul_assoc, ← Finset.mul_sum, PiLp.norm_eq_of_L2] using
-    mul_le_mul_of_nonneg_left
-      (Real.sum_mul_le_sqrt_mul_sqrt Finset.univ (fun i ↦ ‖x i‖) (fun i ↦ ‖y i‖)) hε
+  rw [PiLp.inner_apply, PiLp.norm_eq_of_L2, PiLp.norm_eq_of_L2, mul_assoc]
+  exact Finset.norm_sum_le_mul_sqrt_mul_sqrt _ _ (fun i ↦ ‖x i‖) (fun i ↦ ‖y i‖) hε
+    fun i _ ↦ h i
 
 variable {α β γ : Type*} [Finite α] [Fintype β] [Fintype γ]
 

@@ -14,9 +14,9 @@ import Mathlib.Tactic.Positivity
 
 In a normed ring, if `E` is idempotent and `X` is `δ`-close to `E`, then
 `‖X^M - E^M‖ ≤ c((1 + cδ)^M - 1)`, where `c` bounds `‖E‖` and `‖1‖`. This is the iteration of
-arXiv:2103.13367, Supplemental Material, eqs. `final_eq` to `finished`. The file also records the
-elementary real bounds that turn `(1 + y)^M - 1` into `M y e^{M y}` and a bound of the form
-`C y e^{C y}` into a linear bound.
+arXiv:2103.13367, Supplemental Material, eqs. `eq:final_eq` to `eq:finished`. The file also
+records the elementary real bounds that turn `(1 + y)^M - 1` into `M y e^{M y}` and a bound of
+the form `C y e^{C y}` into a linear bound.
 
 ## Main declarations
 
@@ -28,7 +28,7 @@ elementary real bounds that turn `(1 + y)^M - 1` into `M y e^{M y}` and a bound 
 
 /-- The telescoping identity `X^n - E^n = ∑_{k<n} X^k (X - E) E^{n-1-k}` in a ring.
 
-arXiv:2103.13367, eq. `final_eq` (second line). -/
+arXiv:2103.13367, eq. `eq:final_eq` (second line). -/
 theorem pow_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X E : R) (n : ℕ) :
     X ^ n - E ^ n = ∑ k ∈ Finset.range n, X ^ k * (X - E) * E ^ (n - 1 - k) := by
   induction n with
@@ -48,8 +48,8 @@ theorem pow_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X E : R) (n : ℕ) 
 with `‖E‖ ≤ c` and `‖1‖ ≤ c`, and let `‖X - E‖ ≤ δ`. Then
 `‖X^M - E^M‖ ≤ c ((1 + cδ)^M - 1)`.
 
-This is the iteration of arXiv:2103.13367, eqs. `final_eq`, `inequality`, `almost_done`, and
-`finished`: `E^k = E` for `k ≥ 1` bounds every factor `E^k` by `c`, and
+This is the iteration of arXiv:2103.13367, eqs. `eq:final_eq`, `eq:inequality`,
+`eq:almost_done`, and `eq:finished`: `E^k = E` for `k ≥ 1` bounds every factor `E^k` by `c`, and
 `‖X^k‖ ≤ c + ‖X^k - E^k‖` feeds the bound back into the telescoping sum. -/
 theorem norm_pow_sub_pow_le_of_isIdempotentElem {R : Type*} [NormedRing R] {E X : R}
     (hE : IsIdempotentElem E) {c δ : ℝ} (hEc : ‖E‖ ≤ c) (h1c : ‖(1 : R)‖ ≤ c)
@@ -91,7 +91,7 @@ theorem norm_pow_sub_pow_le_of_isIdempotentElem {R : Type*} [NormedRing R] {E X 
             (norm_nonneg _) (mul_nonneg ((norm_nonneg _).trans hXk) hδ0)
 
 /-- `(1 + y)^M - 1 ≤ M y e^{M y}` for `y ≥ 0`: the last step of arXiv:2103.13367, eq.
-`finished`, `ε_q + ε_q² (1 + ε_q/M)^{M-2} = ε_q + ε_q² e^{ε_q} (1 + O(ε_q/M))`. -/
+`eq:finished`, `ε_q + ε_q² (1 + ε_q/M)^{M-2} = ε_q + ε_q² e^{ε_q} (1 + O(ε_q/M))`. -/
 theorem one_add_pow_sub_one_le_mul_exp {y : ℝ} (hy : 0 ≤ y) (M : ℕ) :
     (1 + y) ^ M - 1 ≤ M * y * Real.exp (M * y) := by
   have ht : 0 ≤ (M : ℝ) * y := mul_nonneg M.cast_nonneg hy

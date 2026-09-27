@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.FiniteLength
+import TNLean.MPS.FundamentalTheorem.InjectivePhase
 import TNLean.MPS.FundamentalTheorem.Multi
 import TNLean.MPS.FundamentalTheorem.PositiveLinearExtension
 import TNLean.MPS.FundamentalTheorem.ProductAlgebra
