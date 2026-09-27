@@ -277,17 +277,17 @@ Documented in \cite{gap:cpgsv21_physical_deformation_general_graph}.
          & =\sum_{\sigma'}\sum_{\omega}
         \Big(\prod_{r=0}^{L-1}\Lambda_{\sigma_r\omega_{i+r}}\Big)
         [\sigma'=\tau_W]\,c_\tau(\omega)\,\phi(\omega)
-        \notag                                                                     \\
+        \label{eq:cyclic_restrict_tensor_pow_swap_sum}                             \\
          & =\sum_{\omega}\Big(\prod_{r=0}^{L-1}\Lambda_{\sigma_r\omega_{i+r}}\Big)
         c_\tau(\omega)\,\phi(\omega),
         \label{eq:cyclic_restrict_tensor_pow_right}
     \end{align}
-    where the first equality reindexes the double sum by the involution
+    where (\ref{eq:cyclic_restrict_tensor_pow_swap_sum}) reindexes the double sum by the involution
     \begin{align}
         (\sigma',\omega) & \longmapsto\big(\omega_W,\ \omega[\sigma']\big)
         \label{eq:cyclic_restrict_tensor_pow_swap}
     \end{align}
-    on pairs of a window word and a configuration, and the second collapses the sum
+    on pairs of a window word and a configuration, and (\ref{eq:cyclic_restrict_tensor_pow_right}) collapses the sum
     over $\sigma'$ to the single term $\sigma'=\tau_W$. The right sides of
     (\ref{eq:cyclic_restrict_tensor_pow_left}) and
     (\ref{eq:cyclic_restrict_tensor_pow_right}) agree term by term with

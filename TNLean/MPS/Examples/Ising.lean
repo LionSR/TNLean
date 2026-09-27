@@ -14,12 +14,14 @@ import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOnePsi
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOneSigma
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraPsiSigma
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraSigma
+import TNLean.MPS.Examples.Ising.IsingGSymbol
 import TNLean.MPS.Examples.Ising.IsingGauge
 import TNLean.MPS.Examples.Ising.IsingLetterSectorOne
 import TNLean.MPS.Examples.Ising.IsingLetterSectorPsi
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaAbelian
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaSigma
 import TNLean.MPS.Examples.Ising.IsingSectorAction
+import TNLean.MPS.Examples.Ising.IsingSigmaProduct
 import TNLean.MPS.Examples.Ising.IsingTensors
 import TNLean.MPS.Examples.Ising.IsingWeightedTwist
 import TNLean.MPS.Examples.Ising.Zsqrt2OperatorFusion
