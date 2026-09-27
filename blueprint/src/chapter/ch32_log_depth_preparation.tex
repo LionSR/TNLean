@@ -1286,11 +1286,14 @@ $A$ along $w$.
          & \ge c\,e^{-(s'-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
-    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. For
-    injective $A$ and $L=1$ this is the correlation estimate of
+    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. This is a
+    Hermitian variant of the correlation estimate of
     \cite[Lemma~2]{Malz2024Preparation}, with the separation $s$ ranging over
-    windows of $K$ consecutive values; the correction of the source's
-    statement is recorded in~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
+    windows of $K$ consecutive values and the connected correlator. The
+    source's own observables cannot be Hermitian when $\lambda_2$ is not real;
+    for them the bound holds in modulus at every separation, while the printed
+    real inequality fails when $\lambda_2$ is not real or is
+    negative~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1386,16 +1389,40 @@ $A$ along $w$.
 %% injective A with xi > 0, observables O_1, O'_s of norm one such that for
 %% every integer s > 1 and sufficiently large N the one-point functions
 %% vanish exactly (auxform1) and the correlator itself satisfies the real
-%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). Neither the bound
-%% at every s > 1 nor the exact vanishing is justified in general. The
-%% correlator of Hermitian observables is real; for a complex lambda_2 the
-%% source's choice pairs R_2 with its adjoint, the eigenvector for
-%% conj(lambda_2), and the leading part is a multiple of
-%% |lambda_2|^t cos(t theta + phi), which can vanish at individual s. The
-%% statement above therefore asserts the bound in every window of K <= 2
-%% consecutive separations, which the Vandermonde argument proves, and it
-%% uses the connected correlator, since the one-point functions need not
-%% vanish at finite N. It is stated for normal A with observables on L sites
+%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). The source's proof
+%% chooses non-Hermitian observables with E_O = |rho><l_2| and
+%% E_O' = |R_2><Tr|, with l_2 a left eigenvector and R_2 an ordinary
+%% eigenvector normalized by l_2(R_2) = 1. That expansion assumes the
+%% transfer map is diagonalizable. The repair for a nontrivial Jordan block
+%% keeps l_2 a left eigenvector and takes R_2 in the generalized eigenspace
+%% with the same normalization. Since l_2(rho) = 0 and Tr R_2 = 0, the one-point
+%% functions vanish exactly at every N >= s (algebraically, not asymptotically),
+%% and the two-point function is exactly lambda_2^{s-2} / Tr E^N, so the
+%% modulus form |<O_1 O'_s>| >= c e^{-(s-1)/xi} holds at every s >= 2. What
+%% fails is the printed real inequality. For complex lambda_2 the correlator
+%% is complex, and its real part is negative for infinitely many s. It also
+%% fails when lambda_2 is real and negative: the correlator has the sign of
+%% lambda_2^{s-2} and is negative at every odd s. The qubit Pauli tensor with
+%% weights q_0 = 1/16 and q_1 = q_2 = q_3 = 5/16 has every nontrivial transfer
+%% eigenvalue equal to -1/4. A
+%% Hermitian reading also fails: for Hermitian observables the
+%% limit correlator is real with leading part a multiple of
+%% |lambda_2|^t cos(t theta + phi), which falls below any c |lambda_2|^{s-1}
+%% infinitely often when theta/pi is irrational. For the injective tensor
+%% A^0 = 1/2, A^1 = diag(1, e^{i psi})/2, A^2 = sigma_x/2, A^3 = sigma_y/2
+%% at gate angle psi = pi/2, so arg(lambda_2) = pi/4. The Hermitian parts of
+%% the source's observables give a
+%% correlator vanishing exactly at s = 4, 8, 12, ... for every N >= s. The
+%% statement above uses Hermitian observables, as the proof of Theorem
+%% thm:ldp_depth_lower_bound needs, and therefore asserts the bound in every
+%% window of K <= 2 consecutive separations, which the Vandermonde argument
+%% proves; the connected correlator makes it independent of the one-point
+%% functions. Remaining issues in the source's proof: Lemma 2 is stated for
+%% injective A but applied to normal A on unblocked sites; diagonalizability
+%% of the transfer map (Jordan blocks) is never addressed; a factor 1/2 is
+%% missing in the trace-distance step; and s = 2T + 1 needs a sharp light
+%% cone. See docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex.
+%% It is stated for normal A with observables on L sites
 %% so that Theorem thm:ldp_depth_lower_bound applies at every N; for
 %% injective A and L = 1 it is the source's setting. The gauge
 %% (eq:ldp_normal_gauge) is the one the source's proof uses ("in the main text
@@ -1513,6 +1540,21 @@ $A$ along $w$.
     right side is $N^{-1/2+o(1)}$, so (\ref{eq:ldp_depth_contradiction}) fails
     for all $N$ larger than some $N_0$ determined by $A$ and the sequence
     $(T_N)$. For those $N$, $\varepsilon(\phi_N,\psi_N)>1/2$.
+
+    The argument is quantitative. With the overlap bound $1/2$ replaced by
+    $\eta\in(0,1]$, the constants $C_2$ and $C_3$ grow at most like
+    $\eta^{-1}$. Since $s'\le2T+C$, and the bound below is trivial when
+    $T\ge\xi\ln N/4$, (\ref{eq:ldp_depth_contradiction}) shows that
+    $\lvert\braket{\phi_N}{\psi_N}\rvert\ge\eta$ requires
+    \begin{align}
+        T
+         & \ge\frac\xi4\bigl(\ln N-\ln\ln N\bigr)-\xi\ln\frac1\eta-C_A,
+        \label{eq:ldp_depth_constant}
+    \end{align}
+    with $C_A$ depending only on $A$. The same constant $\xi/4$ in front of
+    $\ln N$ is implicit in the final inequality of the proof in
+    \cite{Malz2024Preparation}, which compares $N/\ln N$ with a multiple of
+    $e^{4T/\xi}$.
 \end{proof}
 %% The source proof applies Lemma 2, stated for injective A, to a normal A.
 %% Here the lemma is stated for normal A with observables on L sites, where
@@ -1526,17 +1568,26 @@ $A$ along $w$.
 %% both states become products of k ~ N/(4q) factors, bounds the fidelity
 %% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
 %% single separation s = 2T + 1, using the exact vanishing of the
-%% one-point functions. Both of those inputs are unavailable here (see the
-%% comment after Theorem thm:ldp_decaying_correlations), so the proof above
-%% replaces the product-fidelity step by the concentration of averages of
-%% n ~ N/s' translated observables. This concentration argument is not in
-%% the source. It is formalized for a tensor in the gauge
-%% (eq:ldp_normal_gauge) in Theorem thm:ldp_depth_lower_bound_gauge, and the
-%% reduction to the gauge in the first paragraph is Lemma
-%% lem:ldp_normal_gauge_reduction. The formal statement is given twice: for a
-%% tensor normal in the source's sense (irreducible, with the unique largest
-%% eigenvalue 1 of E_A), and for a tensor some blocking of which is injective,
-%% with the correlation length computed from lambda_2/lambda_1.
+%% one-point functions. That vanishing is exact for the source's
+%% non-Hermitian observables, and the source's route is correct once the
+%% real inequality of Lemma 2 is read in modulus, the factor 1/2 is restored
+%% in the trace-distance step, s = 2T + 1 is replaced by a separation larger
+%% than 2T, and the lemma is applied on blocks where normal A spans the
+%% matrix algebra (see the comment after Theorem
+%% thm:ldp_decaying_correlations). The lemma above is stated for Hermitian
+%% observables, so the proof above replaces the product-fidelity step by the
+%% concentration of averages of n ~ N/s' translated observables. Its
+%% constants give the depth bound T >= (xi/4)(ln N - ln ln N) - xi ln(1/eta)
+%% - C_A for overlap eta, recorded after the proof; the same xi/4 is
+%% implicit in the source's final inequality N/ln N > C e^{4T/xi}. This
+%% concentration argument is not in the source. It is formalized for a
+%% tensor in the gauge (eq:ldp_normal_gauge) in Theorem
+%% thm:ldp_depth_lower_bound_gauge, and the reduction to the gauge in the
+%% first paragraph is Lemma lem:ldp_normal_gauge_reduction. The formal
+%% statement is given twice: for a tensor normal in the source's sense
+%% (irreducible, with the unique largest eigenvalue 1 of E_A), and for a
+%% tensor some blocking of which is injective, with the correlation length
+%% computed from lambda_2/lambda_1.
 
 \begin{lemma}[Averages over separated windows]
     \label{lem:ldp_window_averages}
