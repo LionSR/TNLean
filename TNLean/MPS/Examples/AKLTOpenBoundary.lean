@@ -33,8 +33,8 @@ on growing windows.
 
 **Formalized here.** For every \(N \ge 2\), the kernel of the open-chain
 two-site AKLT parent Hamiltonian on \(N\) sites is the open-boundary MPS space
-\(\{σ ↦ ⟨l|A^σ|r⟩\}\), spanned by the open-boundary states with boundary vectors
-\((⟨l|, |r⟩) ∈ ℂ^2 × ℂ^2\), and it is four-dimensional. The three-site open
+\(\{σ ↦ (l|A^σ|r)\}\), spanned by the open-boundary states with boundary vectors
+\(((l|, |r)) ∈ ℂ^2 × ℂ^2\), and it is four-dimensional. The three-site open
 parent Hamiltonian has the same four-dimensional kernel for \(N \ge 3\).
 
 These statements concern the projector parent Hamiltonian of the AKLT tensor.
@@ -73,8 +73,6 @@ sites and is not formalized here.
 - [arXiv:quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197) -- Pérez-García,
   Verstraete, Wolf, Cirac, *Matrix product state representations*
 -/
-
-open scoped Matrix
 
 namespace MPSTensor
 
@@ -127,10 +125,11 @@ theorem aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES {N : ℕ} (hN : 2 
   le_antisymm (aklt_ker_openParentHamiltonianES_two_le_groundSpaceES hN)
     (groundSpaceES_le_ker_openParentHamiltonianES akltTensor 2 N)
 
-/-- Source: arXiv:2011.12127, line 1174: **fourfold open-boundary degeneracy of
-the AKLT chain**, for the open-chain two-site projector parent Hamiltonian of
-the AKLT tensor. For \(N \ge 2\), this Hamiltonian has a four-dimensional
-kernel. -/
+/-- For \(N \ge 2\), the open-chain two-site projector parent Hamiltonian of
+the AKLT tensor has a four-dimensional kernel. The fourfold count in
+arXiv:2011.12127, line 1174, concerns the AKLT model. The polynomial
+Hamiltonian of that passage is not identified with this projector, so this
+count is not that statement. -/
 theorem aklt_finrank_ker_openParentHamiltonianES_two {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES akltTensor 2 N)) = 4 := by
   rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN,
@@ -140,8 +139,8 @@ theorem aklt_finrank_ker_openParentHamiltonianES_two {N : ℕ} (hN : 2 ≤ N) :
 
 /-- Source: arXiv:2011.12127, line 1174 ("we can define boundary vectors on both
 sides"). For \(N \ge 2\), the kernel of the open-chain two-site AKLT parent
-Hamiltonian is spanned by the open-boundary states \(σ ↦ ⟨l|A^σ|r⟩\), with
-boundary vectors \((⟨l|, |r⟩)\) ranging over \(ℂ^2 × ℂ^2\). -/
+Hamiltonian is spanned by the open-boundary states \(σ ↦ (l|A^σ|r)\), with
+boundary vectors \(((l|, |r))\) ranging over \(ℂ^2 × ℂ^2\). -/
 theorem aklt_ker_openParentHamiltonianES_two_eq_span_openState {N : ℕ} (hN : 2 ≤ N) :
     LinearMap.ker (openParentHamiltonianES akltTensor 2 N) =
       Submodule.span ℂ (Set.range fun p : (Fin 2 → ℂ) × (Fin 2 → ℂ) =>

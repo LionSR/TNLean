@@ -57,10 +57,10 @@ noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (NSiteSpace d L) :=
   (groundSpaceMap A L).range
 
-/-- A rank-one boundary matrix \(|r⟩⟨l|\) produces the open-boundary state with
-boundary vectors \(⟨l|\) and \(|r⟩\):
+/-- A rank-one boundary matrix \(|r)(l|\) produces the open-boundary state with
+boundary vectors \((l|\) and \(|r)\):
 \[
-  Γ_L(|r⟩⟨l|)(σ) = ⟨l|A^σ|r⟩.
+  Γ_L(|r)(l|)(σ) = (l|A^σ|r).
 \] -/
 lemma groundSpaceMap_vecMulVec (A : MPSTensor d D) (L : ℕ) (l r : Fin D → ℂ) :
     groundSpaceMap A L (Matrix.vecMulVec r l) = openState l r A L := by
@@ -69,7 +69,7 @@ lemma groundSpaceMap_vecMulVec (A : MPSTensor d D) (L : ℕ) (l r : Fin D → �
   rw [groundSpaceMap_apply, Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm]
 
 /-- Bridge: the local ground space is spanned by the open-boundary states
-\(σ ↦ ⟨l|A^σ|r⟩\), with the boundary vectors \(⟨l|\) and \(|r⟩\) ranging over
+\(σ ↦ (l|A^σ|r)\), with the boundary vectors \((l|\) and \(|r)\) ranging over
 \(ℂ^D × ℂ^D\).
 
 This is the boundary-vector description of the open-boundary ground space in
