@@ -141,7 +141,9 @@ theorem clusterZ2Z2Action_mul_clusterSPTUnitary (g : Multiplicative (ZMod 2 × Z
 
 /-- **The cluster fixed point is a non-trivial SPT phase.** Every virtual projective
 representation of the fixed-point tensor built from `clusterProjRep` has a
-non-trivial class. -/
+non-trivial class.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` line 1157), for the on-site `Z₂ × Z₂` symmetry,
+with the local fix of the module docstring. -/
 theorem isNontrivialClass_of_clusterSPTFixedPoint
     {ω' : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2))}
     (ρ' : ProjectiveRepresentation (D := 2) ω')

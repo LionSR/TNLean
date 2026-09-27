@@ -218,11 +218,16 @@ section Symmetry
 
 variable {G : Type*} [Group G] {ω : ScalarCocycle G}
 
-/-- The virtual gauge `W_g = ρ(g⁻¹)` of the physical symmetry `g`. -/
+/-- The virtual gauge `W_g = ρ(g⁻¹)` of the physical symmetry `g`.  Source:
+arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` lines 1152–1155), the
+gauge matrices `X_g` of the fixed-point construction. -/
 abbrev sptGauge (ρ : ProjectiveRepresentation (D := D) ω) (g : G) : GL (Fin D) ℂ :=
   ρ.X g⁻¹
 
-/-- The operator `W_gᵀ ⊗ W_g⁻¹` on `ℂ^D ⊗ ℂ^D`. -/
+/-- The operator `W_gᵀ ⊗ W_g⁻¹` on `ℂ^D ⊗ ℂ^D`, the factor of the physical action
+`U(g) = φ(g) (W_gᵀ ⊗ W_g⁻¹)`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), with the local fix of the
+module docstring. -/
 def sptKron (W : GL (Fin D) ℂ) : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   (W : Matrix (Fin D) (Fin D) ℂ)ᵀ ⊗ₖ ((W⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
 
