@@ -285,7 +285,7 @@ gauge transformations form a projective representation on the bond space.
 \end{proof}
 
 \begin{lemma}[Gauge-phase uniqueness for normal tensors]\label{lem:gauge_phase_unique_normal}
-    \lean{MPSTensor.gauge_phase_unique_of_isNormal, MPSTensor.evalWord_gauge_phase, MPSTensor.exists_apply_ne_zero_of_isNormal}
+    \lean{MPSTensor.gauge_phase_unique_of_isNormal, MPSTensor.evalWord_gauge_phase}
     \leanok
     \uses{def:normal, lem:gauge_phase_unique}
     Let $A$ be a normal tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$
@@ -294,7 +294,7 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:gauge_phase_unique}
+    \uses{lem:gauge_phase_unique, thm:normal_tensor_nonzero_matrix}
     The relation propagates to words of length $N$ with the scalar $c^N$.  For an
     injective blocking length $N$, Lemma~\ref{lem:gauge_phase_unique} applied to
     the blocked tensor gives $X=u\,Y$.  Substituting back,
