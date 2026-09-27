@@ -60,6 +60,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_czx_boundary_chain.tex` records that the virtual action of the
+  on-site CZX symmetry is identified with the CZX matrix product unitary on a
+  closed chain of legs subject to the plaquette constraint, and that the
+  support of the contraction of a region of the torus on that chain is not
+  formalized.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the
@@ -648,6 +653,14 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   printed for the two CZX product states do not give reductions, the
   corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
   $L_0/L_1=-1=\omega$ is unchanged.
+- `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
+  the unbroken subgroup `H` of the classification of the L-symbols by `H`
+  and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
+  trivialization of `ω|_H` is chosen) is the stabilizer of one block, as in
+  arXiv:2203.12563, not the kernel of the action on blocks printed in
+  arXiv:2405.00439; the two agree exactly when the stabilizer is normal, in
+  particular for abelian groups, and `S_3` acting on three blocks separates
+  them.
 
 For the group matrix product operators of arXiv:2203.12563:
 
@@ -705,7 +718,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
   need not vanish at finite `N`; the corrected form suffices for Theorem 1.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
-  in depth `o(log N)`) is formalized for a normal tensor in the gauge
+  in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
-  quantitative form `N ≤ C(T+1)e^{b(T+1)}`; the reduction of a normal tensor to
-  this gauge, with which both proofs begin, is not formalized.
+  quantitative form `N ≤ C(T+1)e^{b(T+1)}`; resolved: the reduction of a normal
+  tensor to this gauge, with which both proofs begin, is now formalized, and
+  the theorem holds for every normal tensor.
