@@ -96,11 +96,16 @@ theorem groupCohomology_π_eq_zero_iff {k G : Type u} [CommRing k] [Group G]
 
 variable {G : Type} [Group G]
 
-/-- The underlying additive group of the trivial representation on `ℂˣ` is
-`Additive ℂˣ`. -/
+/-- The underlying additive group of the trivial representation on `ℂˣ`
+(notation for `Units ℂ`) is `Additive ℂˣ`. -/
 def scalarRepresentationEquiv (G : Type) [Group G] :
     Additive (Units ℂ) ≃+ scalarH2Representation G :=
   (@Rep.toAdditive G (Units ℂ) _ _ (ScalarCocycle.trivialMulDistribMulAction (G := G))).symm
+
+/-- The group acts trivially on the scalar representation. -/
+theorem scalarH2Representation_ρ_apply (a : G) (x : scalarH2Representation G) :
+    (scalarH2Representation G).ρ a x = x :=
+  rfl
 
 @[simp]
 theorem scalarRepresentationEquiv_ofMul_eq_zero_iff (z : Units ℂ) :
@@ -173,10 +178,8 @@ theorem d_toInhomogeneousCochain (ω : ScalarThreeCochain G) (g : Fin 4 → G) :
       scalarRepresentationEquiv G (Additive.ofMul
         (ω (g 1) (g 2) (g 3) / ω (g 0 * g 1) (g 2) (g 3) * ω (g 0) (g 1 * g 2) (g 3) /
           ω (g 0) (g 1) (g 2 * g 3) * ω (g 0) (g 1) (g 2))) := by
-  have hρ : ∀ (a : G) (x : scalarH2Representation G),
-      (scalarH2Representation G).ρ a x = x := fun _ _ ↦ rfl
   apply (scalarRepresentationEquiv G).symm.injective
-  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_four, hρ]
+  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_four, scalarH2Representation_ρ_apply]
   simp only [toInhomogeneousCochain, Fin.contractNth, map_add, AddEquiv.symm_apply_apply]
   simp [ofMul_div, ofMul_mul]
   abel_nf
@@ -218,10 +221,8 @@ theorem d_toInhomogeneousCochain_apply (β : ScalarCocycle G) (g : Fin 3 → G) 
     inhomogeneousCochains.d (scalarH2Representation G) 2 (toInhomogeneousCochain β) g =
       scalarRepresentationEquiv G (Additive.ofMul
         (β (g 1) (g 2) / β (g 0 * g 1) (g 2) * β (g 0) (g 1 * g 2) / β (g 0) (g 1))) := by
-  have hρ : ∀ (a : G) (x : scalarH2Representation G),
-      (scalarH2Representation G).ρ a x = x := fun _ _ ↦ rfl
   apply (scalarRepresentationEquiv G).symm.injective
-  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three, hρ]
+  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three, scalarH2Representation_ρ_apply]
   simp only [toInhomogeneousCochain, Fin.contractNth, map_add, AddEquiv.symm_apply_apply]
   simp [ofMul_div, ofMul_mul]
   abel_nf

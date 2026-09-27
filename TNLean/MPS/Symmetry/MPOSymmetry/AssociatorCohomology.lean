@@ -66,7 +66,7 @@ namespace FusionData
 /-- Every choice of fusion tensors represents the anomaly class. -/
 theorem anomalyClass_omega (hF : F.IsNormalRepresentation) (fd : FusionData F) :
     ScalarThreeCochain.anomalyClass ⟨fd.omega, isCocycle_omega hF⟩ = hF.anomalyClass :=
-  anomalyClass_omega_eq hF _ fd
+  anomalyClass_omega_eq hF hF.nonempty_fusionData.some fd
 
 /-- The anomaly class vanishes exactly when the anomaly three-cocycle of some,
 equivalently every, choice of fusion tensors has trivial gauge class. -/
