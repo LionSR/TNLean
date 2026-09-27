@@ -75,6 +75,7 @@ import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalSquareUnconditionalFundamentalTheorem
+import TNLean.PEPS.OnSiteOperator
 import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples
 import TNLean.PEPS.RegionBlock
@@ -103,6 +104,7 @@ import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGaugeUniqueness
 import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusLatticeGraph
+import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleReferenceData
