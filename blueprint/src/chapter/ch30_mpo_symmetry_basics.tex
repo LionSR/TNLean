@@ -860,14 +860,16 @@ relation between word traces has nonnegative integer coefficients.
     \lean{MPOTensor.su24TY_repS3ToSU24_castSucc,
         MPOTensor.su24TY_repS3ToSU24_last,
         MPOTensor.su24TY_repS3ToSU24_mix,
-        MPOTensor.su24Fusion_repS3ToSU24_half}
+        MPOTensor.su24Fusion_repS3ToSU24_half,
+        MPOTensor.su24Fusion_repS3ToSU24_half_mix}
     \leanok
     \uses{thm:mposym_su24_reps3_nimreps}
     Under the identification of $\mathrm{Rep}(S_3)$ with the integer labels of
     $su(2)_4$, the integer labels do not mix the blocks $\{x,y,z\}$ and
     $\{s\}$ of $\mathcal M_{TY}$; they act on $\{x,y,z\}$ as in the $\Z_3$
-    phase and on $\{s\}$ as in the $\Z_1$ phase. They act on the blocks
-    $\tfrac12,\tfrac32$ of the first $su(2)_4$ phase as in the $\Z_2$ phase
+    phase and on $\{s\}$ as in the $\Z_1$ phase. They do not mix the blocks
+    $\tfrac12,\tfrac32$ of the first $su(2)_4$ phase with the other blocks,
+    and act on them as in the $\Z_2$ phase
     \cite[Section~6]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 1927, 1940, 1957 and 1972.
 \end{theorem}

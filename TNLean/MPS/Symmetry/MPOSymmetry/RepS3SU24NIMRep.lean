@@ -52,7 +52,8 @@ Documented in `docs/paper-gaps/glm23_reps3_su24_module_list.tex`.
 * `MPOTensor.not_isNIMRep_repS3Z3Printed`: the printed `ℤ₃` action does not.
 * `MPOTensor.su24Fusion_repS3ToSU24`: `Rep(S₃)` is the fusion subring of integer labels.
 * `MPOTensor.su24TY_repS3ToSU24_castSucc`, `MPOTensor.su24TY_repS3ToSU24_last`,
-  `MPOTensor.su24Fusion_repS3ToSU24_half`: the `ℤ₃`, `ℤ₁` and `ℤ₂` phases as restrictions.
+  `MPOTensor.su24Fusion_repS3ToSU24_half`, `MPOTensor.su24Fusion_repS3ToSU24_half_mix`: the `ℤ₃`,
+  `ℤ₁` and `ℤ₂` phases as restrictions.
 * `MPOTensor.isFusionCharacter_repS3Fusion_iff`, `MPOTensor.not_isFusionCharacter_su24Fusion`:
   the actions on one block.
 
@@ -222,6 +223,13 @@ in the `ℤ₂` phase, with `x, y = 1/2, 3/2`. -/
 theorem su24Fusion_repS3ToSU24_half (a : Fin 3) (u v : Fin 2) :
     su24Fusion (repS3ToSU24 a) (![1, 3] u) (![1, 3] v) = repS3Z2 a u v := by
   fin_cases a <;> fin_cases u <;> fin_cases v <;> rfl
+
+/-- The integer labels of `su(2)₄` do not mix the half-integer labels `{1/2, 3/2}` with the
+integer labels `{0, 1, 2}` in the regular phase (arXiv:2203.12563, line 1957): the coefficient
+of an integer label in the action of an integer label on a half-integer label vanishes. -/
+theorem su24Fusion_repS3ToSU24_half_mix (a : Fin 3) (u : Fin 2) (b : Fin 3) :
+    su24Fusion (repS3ToSU24 a) (![1, 3] u) (repS3ToSU24 b) = 0 := by
+  fin_cases a <;> fin_cases u <;> fin_cases b <;> rfl
 
 /-! ### Actions on one block -/
 
