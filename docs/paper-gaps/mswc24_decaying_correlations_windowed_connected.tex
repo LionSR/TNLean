@@ -37,13 +37,10 @@ with $c>0$ independent of $s$ and $N$.\footnote{Source traceability: label
 \section{What holds and what fails}
 \paragraph{The source's observables.}
 Let $\ell_2\neq0$ be a linear functional with
-$\ell_2\circ\mathcal E_A=\lambda_2\ell_2$, and let $R_2$ be a generalized
-eigenvector for $\lambda_2$, that is, $(\mathcal E_A-\lambda_2)^kR_2=0$ for some
-$k$, with $\ell_2(R_2)=1$. Such a pair exists for every eigenvalue; when
-$\lambda_2$ is semisimple $R_2$ is an eigenvector, while for a single nontrivial Jordan
-block every left eigenvector vanishes on every eigenvector, so a generalized
-eigenvector is needed. The proof of Lemma~2 chooses, by injectivity, observables
-whose one-site maps are the rank-one maps
+$\ell_2\circ\mathcal E_A=\lambda_2\ell_2$. The proof of Lemma~2 expands the
+transfer powers in ordinary eigenvectors, and therefore assumes that
+$\mathcal E_A$ is diagonalizable. Under that assumption it chooses, by
+injectivity, observables whose one-site maps are the rank-one maps
 \begin{align}
     \mathcal E_{\mathcal O}(Z)
      & =\ell_2(Z)\,\rho,
@@ -52,7 +49,11 @@ whose one-site maps are the rank-one maps
      & =\operatorname{Tr}(Z)\,R_2,
     \label{eq:mswc24_decaying_correlations_source_choice}
 \end{align}
-rescaled to norm one. Since $\ell_2$ is a left eigenvector for $\lambda_2$
+with $R_2$ an eigenvector for $\lambda_2$ normalized so that $\ell_2(R_2)=1$,
+rescaled to norm one. If $\lambda_2$ has a nontrivial Jordan block, every left
+eigenvector vanishes on every eigenvector. The repair recorded below keeps
+$\ell_2$ a left eigenvector and takes $R_2$ in the generalized eigenspace with
+$\ell_2(R_2)=1$. Since $\ell_2$ is a left eigenvector for $\lambda_2$
 and $\rho$ an eigenvector for $1\neq\lambda_2$, $\ell_2(\rho)=0$; since
 trace preservation makes $\operatorname{Tr}$ a left eigenvector for $1$, it
 vanishes on the generalized eigenspace of $\lambda_2$, so
