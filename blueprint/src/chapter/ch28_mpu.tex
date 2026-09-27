@@ -7671,8 +7671,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpu_simple}
     Let $W$ have bond dimension $D$, and let
-    $A\in\mathbb C^{E\times D}$ and $C\in\mathbb C^{D\times E}$ satisfy
-    $CA=I_D$. The tensor with letters $AW^{ij}C$ is simple if and only if
+    $A\in\mathbb C^{E\times D}$ and $B\in\mathbb C^{D\times E}$ satisfy
+    $BA=I_D$. The tensor with letters $AW^{ij}B$ is simple if and only if
     $W$ is simple. In particular, if $V^\dagger V=I_k$ and $VV^\dagger=T$,
     simplicity of $(TW^{ij}T)$ implies simplicity of $(V^\dagger W^{ij}V)$.
 \end{theorem}
@@ -7680,13 +7680,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{def:mpu_simple}
     Put $\mathcal A=\overline A\otimes A$ and
-    $\mathcal C=\overline C\otimes C$, in the doubled bond coordinates.
+    $\mathcal B=\overline B\otimes B$, in the doubled bond coordinates.
     The double-layer letters $F^{ij}$ of $W$ transform to
-    $\mathcal A F^{ij}\mathcal C$, and $\mathcal C\mathcal A=I$.
+    $\mathcal A F^{ij}\mathcal B$, and $\mathcal B\mathcal A=I$.
     If $(a|,|b)$ are simplicity witnesses for $W$, then
-    $(a|\mathcal C,\mathcal A|b)$ are witnesses for the included tensor.
+    $(a|\mathcal B,\mathcal A|b)$ are witnesses for the included tensor.
     Conversely, witnesses $(a|,|b)$ for the included tensor give
-    $(a|\mathcal A,\mathcal C|b)$ for $W$. Substitution in
+    $(a|\mathcal A,\mathcal B|b)$ for $W$. Substitution in
     (\ref{eq:mpu_simple1}) and (\ref{eq:mpu_simple2}) proves both claims.
     For the assertion about support coordinates, use
     $V(V^\dagger W^{ij}V)V^\dagger=TW^{ij}T$.
@@ -7725,7 +7725,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =(HF^{ij}H)(HEH)(HF^{k\ell}H).
     \end{align}
     These are the double-layer letters of the compressed tensor, and
-    $HEH=(H|\rho))((\Phi|H)$ supplies its two simplicity witnesses.
+    $HEH=|H\rho)(\Phi H|$ supplies its two simplicity witnesses.
     Support compression preserves the periodic operators, so the compressed
     tensor still generates an MPU. Its two-letter insertion identity then
     implies the first simplicity contraction with the same witnesses.

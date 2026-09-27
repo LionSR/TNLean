@@ -50,13 +50,23 @@ private theorem doubleLayer_rectangularSandwich {d D E : ℕ}
   simp only [Matrix.map_mul, Matrix.mul_kronecker_mul, Matrix.mul_sum, Matrix.sum_mul]
   rfl
 
+/-- Doubling preserves rectangular matrix multiplication. -/
+private theorem doubledBondMap_mul {D E F : ℕ}
+    (A : Matrix (Fin F) (Fin E) ℂ) (B : Matrix (Fin E) (Fin D) ℂ) :
+    doubledBondMap (A * B) = doubledBondMap A * doubledBondMap B := by
+  simp only [doubledBondMap, Matrix.map_mul, Matrix.mul_kronecker_mul,
+    Matrix.submatrix_mul_equiv]
+
+/-- Doubling preserves the identity matrix. -/
+private theorem doubledBondMap_one (D : ℕ) :
+    doubledBondMap (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
+  simp [doubledBondMap]
+
 /-- A left inverse remains a left inverse on the doubled bond space. -/
 private theorem doubledBondMap_mul_eq_one {D E : ℕ}
     (A : Matrix (Fin E) (Fin D) ℂ) (B : Matrix (Fin D) (Fin E) ℂ)
     (hBA : B * A = 1) : doubledBondMap B * doubledBondMap A = 1 := by
-  simp only [doubledBondMap, Matrix.submatrix_mul_equiv,
-    ← Matrix.mul_kronecker_mul, ← Matrix.map_mul, hBA]
-  simp
+  rw [← doubledBondMap_mul, hBA, doubledBondMap_one]
 
 /-- A split inclusion of the doubled letters preserves the two simplicity identities.
 Source: CPSV17, Definition III.2 and Proposition IV.5, lines 363–374 and 797–804. -/
@@ -118,18 +128,6 @@ theorem isMPUSimple_of_rectangularSandwich {d D E : ℕ}
     (doubledBondMap A) (doubledBondMap B)
     (doubledBondMap_mul_eq_one A B hBA)
     (doubleLayer_rectangularSandwich W A B)
-
-/-- Doubling preserves rectangular matrix multiplication. -/
-private theorem doubledBondMap_mul {D E F : ℕ}
-    (A : Matrix (Fin F) (Fin E) ℂ) (B : Matrix (Fin E) (Fin D) ℂ) :
-    doubledBondMap (A * B) = doubledBondMap A * doubledBondMap B := by
-  simp only [doubledBondMap, Matrix.map_mul, Matrix.mul_kronecker_mul,
-    Matrix.submatrix_mul_equiv]
-
-/-- Doubling preserves the identity matrix. -/
-private theorem doubledBondMap_one (D : ℕ) :
-    doubledBondMap (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-  simp [doubledBondMap]
 
 /-- An intermediate projection can be removed between matrices with the
 specified right and left supports. -/
@@ -273,7 +271,6 @@ theorem isMPUSimple_supportCoordinates {d D k : ℕ}
     IsMPUSimple (fun i j ↦ Vᴴ * W i j * V) :=
   isMPUSimple_of_rectangularSandwich (fun i j ↦ Vᴴ * W i j * V) V Vᴴ hV
     (by simpa only [← hRange, Matrix.mul_assoc] using hW)
-
 
 /-- Support compression of a simple MPU with rank-one normalized transfer
 matrix is simple. The compressed tensor is an MPU because support compression
