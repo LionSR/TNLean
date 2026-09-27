@@ -83,7 +83,7 @@ def repeatedBlockSum (Aj : (j : Fin b) → MPSTensor d (Dj j))
 variable {Aj : (j : Fin b) → MPSTensor d (Dj j)} {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
 
 /-- The copies of all blocks, listed along `finSigmaFinEquiv`. -/
-local notation "flat" => (finSigmaFinEquiv (m := b) (n := m)).symm
+local notation "flat" => Equiv.symm (finSigmaFinEquiv (m := b) (n := m))
 
 /-- The direct sum with multiplicities is the direct sum of all copies, each of multiplicity
 one. -/
@@ -100,7 +100,7 @@ theorem repeatedBlockSum_eq_blockSum (μ : (j : Fin b) → Fin (m j) → ℂ) :
 theorem flat_disjoint_coord
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a') :
     ∀ p p', p ≠ p' → ∀ a a', ι (flat p).1 (flat p).2 a ≠ ι (flat p').1 (flat p').2 a' :=
-  fun p p' h => hdisj (flat p) (flat p') (flat.injective.ne h)
+  fun p p' h => hdisj (flat p) (flat p') ((Equiv.injective flat).ne h)
 
 /-- The periodic state of the direct sum on `N ≥ 1` sites is `∑ⱼ βⱼ |φ_N(A_j)⟩` with
 `βⱼ = ∑ₖ μ_{j,k}^N`: arXiv:2307.01696, Supplemental Material, eqs. (S3) and (S4). -/
@@ -150,18 +150,18 @@ theorem copyNorm_sq (μ : (j : Fin b) → Fin (m j) → ℂ) (q : ℕ) (j : Fin 
 theorem copyNorm_pos {μ : (j : Fin b) → Fin (m j) → ℂ} {j : Fin b} (hμ : μ j ≠ 0) (q : ℕ) :
     0 < copyNorm μ q j := by
   obtain ⟨k, hk⟩ := Function.ne_iff.1 hμ
-  refine Real.sqrt_pos.2 (lt_of_lt_of_le (pow_pos (norm_pos_iff.2 hk) _) ?_)
+  refine Real.sqrt_pos.2 (lt_of_lt_of_le (pow_pos (norm_pos_iff.2 hk) (2 * q)) ?_)
   exact Finset.single_le_sum (f := fun k => ‖μ j k‖ ^ (2 * q)) (fun _ _ => by positivity)
     (Finset.mem_univ k)
 
 theorem conjTranspose_copyIsometry (μ : (j : Fin b) → Fin (m j) → ℂ) (q : ℕ) (j : Fin b) :
     (copyIsometry ι μ q j)ᴴ = ∑ k, (μ j k ^ q / (copyNorm μ q j : ℂ)) •
       (pairEmbedding (ι j k))ᴴ := by
-  simp only [copyIsometry, conjTranspose_sum, conjTranspose_smul, star_div₀, star_star,
-    Complex.star_def, Complex.conj_ofReal]
+  simp only [copyIsometry, conjTranspose_sum, conjTranspose_smul, star_div₀, Complex.star_def,
+    Complex.conj_conj, Complex.conj_ofReal]
 
 /-- `K_{j,k}ᴴ K_{j',k'}` is `1` for the same copy and `0` for distinct copies. -/
-theorem conjTranspose_pairEmbedding_mul_copy (hι : ∀ j k, Function.Injective (ι j k))
+theorem conjTranspose_pairEmbedding_mul_copy
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     {j j' : Fin b} (k : Fin (m j)) (k' : Fin (m j')) (h : (⟨j, k⟩ : (j : Fin b) × Fin (m j)) ≠
       ⟨j', k'⟩) : (pairEmbedding (ι j k))ᴴ * pairEmbedding (ι j' k') = 0 :=
@@ -182,19 +182,18 @@ theorem conjTranspose_copyIsometry_mul_self (hι : ∀ j k, Function.Injective (
     · rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul,
         conjTranspose_pairEmbedding_mul_self (hι j k)]
       congr 1
-      rw [div_mul_div_comm, ← Complex.ofReal_pow, ← Complex.ofReal_mul, ← sq,
-        mul_comm (μ j k ^ q), ← Complex.normSq_eq_conj_mul_self.symm.trans rfl]
+      rw [Complex.star_def, div_mul_div_comm, Complex.mul_conj', norm_pow]
       push_cast
-      rw [Complex.star_def, ← map_pow, Complex.conj_mul', norm_pow, ← pow_mul, mul_comm q 2]
+      ring
     · intro k' _ hk'
-      rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, conjTranspose_pairEmbedding_mul_copy hι
+      rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, conjTranspose_pairEmbedding_mul_copy
         hdisj k k' (fun h => hk' (eq_of_heq (Sigma.mk.inj h).2).symm), smul_zero]
     · simp
   simp_rw [hterm, ← Finset.sum_smul, ← Complex.ofReal_sum, ← Finset.sum_div, ← copyNorm_sq,
     div_self (pow_pos hc 2).ne', Complex.ofReal_one, one_smul]
 
 /-- The isometries of distinct blocks have orthogonal ranges, `L_jᴴ L_{j'} = 0`. -/
-theorem conjTranspose_copyIsometry_mul_eq_zero (hι : ∀ j k, Function.Injective (ι j k))
+theorem conjTranspose_copyIsometry_mul_eq_zero
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     (μ : (j : Fin b) → Fin (m j) → ℂ) (q : ℕ) {j j' : Fin b} (h : j ≠ j') :
     (copyIsometry ι μ q j)ᴴ * copyIsometry ι μ q j' = 0 := by
@@ -202,7 +201,7 @@ theorem conjTranspose_copyIsometry_mul_eq_zero (hι : ∀ j k, Function.Injectiv
   refine Finset.sum_eq_zero fun k _ => ?_
   rw [Matrix.mul_sum]
   refine Finset.sum_eq_zero fun k' _ => ?_
-  rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, conjTranspose_pairEmbedding_mul_copy hι hdisj
+  rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, conjTranspose_pairEmbedding_mul_copy hdisj
     k k' (fun h' => h (Sigma.mk.inj h').1), smul_zero]
 
 /-- The physical matrix of the `q`-site blocked tensor of the direct sum, for `q ≥ 1` and blocks
@@ -237,7 +236,7 @@ theorem polarIso_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective
   rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hμ hq]
   exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (hμ j) q)
     (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (hμ j) q)
-    (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hι hdisj μ q h)).1
+    (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).1
 
 /-- **The positive part of the blocked direct sum.** In the setting of
 `polarIso_blockTensor_repeatedBlockSum`, the positive part is `P = ∑ⱼ cⱼ L_j P_j L_jᴴ`. On the
@@ -255,7 +254,7 @@ theorem polarPos_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective
   rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hμ hq]
   exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (hμ j) q)
     (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (hμ j) q)
-    (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hι hdisj μ q h)).2
+    (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).2
 
 /-! ### The corrected approximating state -/
 
@@ -300,7 +299,7 @@ theorem copyApproxVector_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι
     rw [hV, Matrix.sum_mul, Finset.sum_eq_single j]
     · rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_self hι hdisj (hμ j), Matrix.mul_one]
     · intro j' _ hj'
-      rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_eq_zero hι hdisj μ q hj',
+      rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_eq_zero hdisj μ q hj',
         Matrix.mul_zero]
     · simp
   rw [copyApproxVector, copyFixedPointState, mulVec_sum, Finset.sum_apply]

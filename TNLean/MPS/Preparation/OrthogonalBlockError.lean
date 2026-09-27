@@ -365,25 +365,8 @@ theorem exists_approximationError_le_blockSum [NeZero b] (hι : ∀ j, Function.
   by_cases hbig : 1 ≤ C * u
   · exact hε1.trans (hbig.trans (le_mul_of_one_le_right (by positivity) hexp))
   rw [not_le] at hbig
-  have hx1 : x < 1 := by
-    by_contra h
-    rw [not_lt] at h
-    have : 1 ≤ u := one_le_mul_of_one_le_of_one_le hM (one_le_pow₀ h)
-    have : 1 ≤ C := by linarith
-    nlinarith
-  have hLq : ∀ j, L j ≤ q := fun j => by
-    by_contra h
-    rw [not_le] at h
-    have hxLq : x ^ L j ≤ x ^ q := pow_le_pow_of_le_one hx.le hx1.le h.le
-    have h1 : x ^ L j ≤ u := hxLq.trans (le_mul_of_one_le_left (by positivity) hM)
-    have h2 : 1 ≤ (x ^ L j)⁻¹ * u := by
-      rw [← inv_mul_cancel₀ (by positivity : x ^ L j ≠ 0)]
-      exact mul_le_mul_of_nonneg_left h1 (by positivity)
-    have h3 : (x ^ L j)⁻¹ ≤ S₃ :=
-      Finset.single_le_sum (f := fun j => (x ^ L j)⁻¹) (fun j _ => by positivity)
-        (Finset.mem_univ j)
-    have h4 : (x ^ L j)⁻¹ * u ≤ C * u := mul_le_mul_of_nonneg_right (by linarith) hu
-    linarith
+  obtain ⟨hx1, hLq⟩ := lt_one_and_forall_le_of_mul_mul_pow_lt_one hx
+    (show 1 + S₃ ≤ C by linarith) hM hbig
   have hq : q ≠ 0 := fun h => by have := hLq 0; have := hLpos 0; omega
   have hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q) := fun j =>
     (isNBlkInjective_iff_blockTensor_isInjective (Aj j) q).1

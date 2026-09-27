@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.NormedRingTelescoping
+import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
@@ -506,24 +507,9 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   by_cases hbig : 1 ≤ C * u
   · exact htriv hbig
   rw [not_le] at hbig
-  have hx1 : x < 1 := by
-    by_contra h
-    rw [not_lt] at h
-    have : 1 ≤ u := one_le_mul_of_one_le_of_one_le hM (one_le_pow₀ h)
-    have : 1 ≤ C := by linarith
-    nlinarith
-  have hLq : L ≤ q := by
-    by_contra h
-    rw [not_le] at h
-    have hxLq : x ^ L ≤ x ^ q := pow_le_pow_of_le_one hx.le hx1.le h.le
-    have : x ^ L ≤ u := hxLq.trans (le_mul_of_one_le_left (by positivity) hM)
-    have : 1 ≤ (x ^ L)⁻¹ * u := by
-      rw [← inv_mul_cancel₀ (by positivity : x ^ L ≠ 0)]
-      exact mul_le_mul_of_nonneg_left this (by positivity)
-    have : (x ^ L)⁻¹ * u ≤ C * u := by
-      refine mul_le_mul_of_nonneg_right ?_ hu
-      linarith
-    linarith
+  obtain ⟨hx1, hLq⟩ := lt_one_and_forall_le_of_mul_mul_pow_lt_one (L := fun _ : Unit => L) hx
+    (by simp only [Finset.univ_unique, Finset.sum_singleton, C]; linarith) hM hbig
+  replace hLq := hLq ()
   have hB : Kraus.IsInjective (blockTensor A q) :=
     (isNBlkInjective_iff_blockTensor_isInjective A q).1 (isNBlkInjective_of_le hLpos hL hLq)
   obtain ⟨-, hz⟩ := inner_approximatingMPVState_mpvState A hB hσ.posSemidef htr M
