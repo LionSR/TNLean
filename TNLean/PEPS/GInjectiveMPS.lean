@@ -184,6 +184,19 @@ theorem concatTensor_apply (A : ι → Module.End ℂ V) (B : κ → Module.End 
     concatTensor A B p = A p.1 * B p.2 :=
   rfl
 
+/-- The concatenation of two invariant tensors is invariant:
+`U_g A^i B^j U_g⁻¹ = (U_g A^i U_g⁻¹)(U_g B^j U_g⁻¹) = A^i B^j`. -/
+theorem concatTensor_conj_eq {ρ : Representation ℂ G V} {A : ι → Module.End ℂ V}
+    {B : κ → Module.End ℂ V} (hA : ∀ g i, ρ g * A i * ρ g⁻¹ = A i)
+    (hB : ∀ g j, ρ g * B j * ρ g⁻¹ = B j) (g : G) (p : ι × κ) :
+    ρ g * concatTensor A B p * ρ g⁻¹ = concatTensor A B p := by
+  calc ρ g * (A p.1 * B p.2) * ρ g⁻¹
+      = (ρ g * A p.1 * ρ g⁻¹) * (ρ g * B p.2 * ρ g⁻¹) := by
+        have hinv : ρ g⁻¹ * ρ g = 1 := by rw [← map_mul, inv_mul_cancel, map_one]
+        simp only [mul_assoc]
+        rw [← mul_assoc (ρ g⁻¹) (ρ g), hinv, one_mul]
+    _ = A p.1 * B p.2 := by rw [hA, hB]
+
 /-- The tensor of words of length `n`: `w ↦ A^{w_0} A^{w_1} ⋯ A^{w_{n-1}}`, the tensor obtained
 by blocking `n` sites. -/
 def wordTensor (A : ι → Module.End ℂ V) (n : ℕ) : (Fin n → ι) → Module.End ℂ V :=
@@ -338,13 +351,7 @@ theorem IsGInjective.mpsSiteMap_concatTensor {ρ : Representation ℂ G V}
   refine (isGInjective_iff_exists_leftInverse _ _).2
     ⟨?_, _, concatLeftInverse_comp_mpsSiteMap ρ hLA hLB⟩
   rw [mpsSiteMap_comp_linHom_eq_iff]
-  intro g p
-  calc ρ g * (A p.1 * B p.2) * ρ g⁻¹
-      = (ρ g * A p.1 * ρ g⁻¹) * (ρ g * B p.2 * ρ g⁻¹) := by
-        have hinv : ρ g⁻¹ * ρ g = 1 := by rw [← map_mul, inv_mul_cancel, map_one]
-        simp only [mul_assoc]
-        rw [← mul_assoc (ρ g⁻¹) (ρ g), hinv, one_mul]
-    _ = A p.1 * B p.2 := by rw [hAi, hBi]
+  exact concatTensor_conj_eq hAi hBi
 
 omit [Finite κ] in
 /-- Source: arXiv:1001.3807, Lemma 4.7, `Papers/1001.3807/paper_v3.tex` lines 1036–1063,
