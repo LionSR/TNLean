@@ -232,7 +232,7 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
         MPOTensor.GroupCocycle.spinFlip_mul_flipAt, MPOTensor.GroupCocycle.pauliXAt,
         MPOTensor.GroupCocycle.clusterTerm, MPOTensor.GroupCocycle.czXTerm,
         MPOTensor.GroupCocycle.zzTerm, MPOTensor.GroupCocycle.clusterIsingHamiltonian,
-        MPOTensor.GroupCocycle.rooseHamiltonian, Matrix.neg_monomial}
+        MPOTensor.GroupCocycle.rooseHamiltonian}
     \leanok
     The operators $X_j$, $K_j$, $CZ_{i,i+2}X_{i+1}$ and $Z_iZ_{i+1}$ are
     monomial in the computational basis: the first three flip one bit, with
@@ -265,8 +265,7 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
     On a periodic chain of $N\geq2$ qubits the following hold.
     \begin{enumerate}
         \item $O_ZX_jO_Z^\dagger=K_j$ and $O_ZK_jO_Z^\dagger=X_j$, so
-              $O_ZH(\lambda)O_Z^\dagger=-\sum_jX_j-\lambda\sum_jK_j$, which is
-              $\lambda H(\lambda^{-1})$ for $\lambda\neq0$, and
+              $O_ZH(\lambda)O_Z^\dagger=-\sum_jX_j-\lambda\sum_jK_j$, and
               $O_Z$ commutes with $H(1)$.
         \item $UX_jU^\dagger=-K_j$ and $UK_jU^\dagger=-X_j$, so
               $UH(\lambda)U^\dagger=\lambda\sum_jK_j+\sum_jX_j$, which is
@@ -296,6 +295,10 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
     Summing the relations over the sites and using unitarity gives the
     statements about the Hamiltonians.
 \end{proof}
+
+For $\lambda\neq0$ the conjugate in item~1 is
+$-\sum_jX_j-\lambda\sum_jK_j=\lambda H(\lambda^{-1})$, so $O_Z$ exchanges
+$H(\lambda)$ with a multiple of $H(\lambda^{-1})$.
 
 The review prints no formula for the cluster Hamiltonian in a critical field.
 The factors $Z_i$ of $U$ reverse the sign of the transverse field at the

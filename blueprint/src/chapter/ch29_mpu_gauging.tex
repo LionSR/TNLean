@@ -8643,6 +8643,7 @@ three defect domains and maps, which the displayed matrices do not supply.
         Matrix.monomial_mul_monomial,
         Matrix.conjTranspose_monomial,
         Matrix.smul_monomial,
+        Matrix.neg_monomial,
         Matrix.monomial_one,
         Matrix.reindex_monomial,
         Matrix.monomial_mem_unitaryGroup}
@@ -8650,8 +8651,8 @@ three defect domains and maps, which the displayed matrices do not supply.
     \uses{def:mpug_monomial_matrix}
     A vector $v\in\C^S$ is fixed by $M(\sigma,\varphi)$ if and only if
     $v_{\sigma(s)}=\varphi(s)v_s$ for every $s\in S$. Products, adjoints,
-    scalar multiples, and simultaneous relabellings of monomial matrices are
-    monomial:
+    scalar multiples, negatives, and simultaneous relabellings of monomial
+    matrices are monomial:
     \begin{align}
         M(\sigma,\varphi)M(\tau,\psi)
          & =M\bigl(\sigma\tau,\ s\mapsto\varphi(\tau(s))\psi(s)\bigr),
