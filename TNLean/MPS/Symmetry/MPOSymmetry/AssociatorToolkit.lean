@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.IdentityTensor
@@ -30,7 +31,13 @@ the phase-decorated shift representation of `ℤ₃`.
   together with a one-letter relation, give the dressed identity of the anomaly
   three-cochain on every nonempty word
   (`MPSTensor.IsDressedProportional.of_forall_mul_mul`). For explicit tensors
-  these finitely many identities can be checked by `decide`.
+  these finitely many identities can be checked by `decide`, over `ℤ` for integer
+  tensors (`MPSTensor.isDressedProportional_complexOfInt`,
+  `MPSTensor.isDressedProportional_complexOfInt_of_mem`).
+* Coinciding fusion trees give the value one
+  (`MPOTensor.GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV`); in particular
+  a family of bond-one tensors with one-by-one identity fusion tensors has trivial
+  three-cochain (`MPOTensor.GroupFamily.FusionData.omega_ofBondOne`).
 
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535, for the dressed identity defining the three-cochain.
@@ -182,6 +189,15 @@ theorem forall_zmod_two {P : Multiplicative (ZMod 2) → Prop}
   fin_cases x
   exacts [h0, h1]
 
+/-- A statement about every element of `ℤ₂ × ℤ₂`, written multiplicatively, follows from its
+four instances. -/
+theorem forall_zmod_two_prod {P : Multiplicative (ZMod 2 × ZMod 2) → Prop}
+    (h00 : P (ofAdd (0, 0))) (h01 : P (ofAdd (0, 1))) (h10 : P (ofAdd (1, 0)))
+    (h11 : P (ofAdd (1, 1))) : ∀ x, P x := by
+  intro x
+  fin_cases x
+  exacts [h00, h01, h10, h11]
+
 /-- A statement about every element of `ℤ₃`, written multiplicatively, follows from its
 three instances. -/
 theorem forall_zmod_three {P : Multiplicative (ZMod 3) → Prop}
@@ -265,3 +281,108 @@ theorem mulTensor_idTensor_right (M : MPOTensor d D) :
     ite_true]
 
 end MPOTensor
+
+/-! ### Integer certificates of dressed identities -/
+
+namespace MPSTensor
+
+variable {d D m : ℕ}
+
+/-- **Dressed identities from integer identities.** Let `T`, `A`, `L` and `R` be integer
+matrices, let `z = ±1`, and suppose that `L` intertwines two letters of `T` with `A`,
+`L T^a T^b = A^a L T^b`, and that `L T^a = z R T^a` on every letter. Then the images in `ℂ`
+satisfy the dressed identity `L T^w = z R T^w` on every nonempty word. The intertwining identity
+for `R` follows from those for `L` since `z² = 1`, so only the identities for `L` are checked.
+For explicit tensors these are finitely many identities decided over `ℤ`.
+
+Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535, for
+the dressed identity defining the anomaly three-cochain. -/
+theorem isDressedProportional_complexOfInt {T : Fin d → Matrix (Fin D) (Fin D) ℤ}
+    {A : Fin d → Matrix (Fin m) (Fin m) ℤ} {L R : Matrix (Fin m) (Fin D) ℤ} {z : ℤ}
+    (hz : z * z = 1) (hL : ∀ a b, L * T a * T b = A a * L * T b)
+    (h1 : ∀ a, L * T a = z • (R * T a)) :
+    IsDressedProportional (fun a ↦ complexOfInt (T a)) (complexOfInt L) (complexOfInt R) z := by
+  have hR1 : ∀ a, R * T a = z • (L * T a) := fun a ↦ by rw [h1, smul_smul, hz, one_smul]
+  have hR : ∀ a b, R * T a * T b = A a * R * T b := fun a b ↦ by
+    rw [hR1 a, Matrix.smul_mul, hL, Matrix.mul_assoc (A a) L, ← Matrix.mul_smul, ← hR1 b,
+      ← Matrix.mul_assoc]
+  refine IsDressedProportional.of_forall_mul_mul (A := fun a ↦ complexOfInt (A a)) ?_ ?_ ?_
+  · intro a b
+    simp only [← complexOfInt_mul, hL]
+  · intro a b
+    simp only [← complexOfInt_mul, hR]
+  · intro a
+    rw [← complexOfInt_mul, ← complexOfInt_mul, h1, complexOfInt_zsmul]
+
+/-- `isDressedProportional_complexOfInt` from identities over a finite list of letter pairs: if
+every letter of `T` comes with its letter of `A` from a list `S`, the identities need only be
+checked for the members of `S`. For explicit tensors with few distinct letters this reduces the
+number of decided identities. -/
+theorem isDressedProportional_complexOfInt_of_mem {T : Fin d → Matrix (Fin D) (Fin D) ℤ}
+    {A : Fin d → Matrix (Fin m) (Fin m) ℤ} {L R : Matrix (Fin m) (Fin D) ℤ} {z : ℤ}
+    (S : List (Matrix (Fin D) (Fin D) ℤ × Matrix (Fin m) (Fin m) ℤ))
+    (hS : ∀ a, (T a, A a) ∈ S) (hz : z * z = 1)
+    (hL : ∀ p ∈ S, ∀ q ∈ S, L * p.1 * q.1 = p.2 * L * q.1)
+    (h1 : ∀ p ∈ S, L * p.1 = z • (R * p.1)) :
+    IsDressedProportional (fun a ↦ complexOfInt (T a)) (complexOfInt L) (complexOfInt R) z :=
+  isDressedProportional_complexOfInt hz (fun a b ↦ hL _ (hS a) _ (hS b)) fun a ↦ h1 _ (hS a)
+
+end MPSTensor
+
+namespace MPOTensor.GroupFamily
+
+variable {G : Type*} [Group G] {d : ℕ}
+
+/-! ### Trivial values of the anomaly three-cochain -/
+
+/-- If the two fusion trees of a triple coincide, the anomaly three-cochain is one there.
+
+Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
+theorem FusionData.omega_eq_one_of_leftV_eq_rightV {F : GroupFamily G d} {fd : F.FusionData}
+    (hF : F.IsNormalRepresentation) {g h k : G} (hLR : fd.leftV g h k = fd.rightV g h k) :
+    fd.omega g h k = 1 := by
+  have h1 : fd.IsAssociator g h k 1 := by
+    unfold FusionData.IsAssociator
+    rw [hLR]
+    exact MPSTensor.IsDressedProportional.refl _ _
+  exact Units.ext (by rw [← FusionData.eq_omega_of_isAssociator hF h1, Units.val_one])
+
+/-- The family of bond-one tensors `g ↦ T g`. -/
+abbrev ofBondOne (T : G → MPOTensor d 1) : GroupFamily G d where
+  bondDim _ := 1
+  bondDim_pos _ := one_pos
+  tensor := T
+
+/-- **Fusion tensors of a bond-one family**: all fusion tensors are the one-by-one identity
+when the stacked product of `T g` and `T h` is the tensor `T (g * h)`. -/
+def FusionData.ofBondOne (T : G → MPOTensor d 1)
+    (hT : ∀ g h, (mulTensor (T g) (T h)).toMPSTensor = (T (g * h)).toMPSTensor) :
+    (ofBondOne T).FusionData where
+  V _ _ := (1 : Matrix (Fin 1) (Fin 1) ℂ)
+  W _ _ := (1 : Matrix (Fin 1) (Fin 1) ℂ)
+  isReduction g h := MPSTensor.isReduction_one_one_of_eq (hT g h)
+
+/-- **The anomaly three-cochain of the bond-one fusion tensors is trivial**: all fusion trees
+are the one-by-one identity.
+
+Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
+theorem FusionData.omega_ofBondOne {T : G → MPOTensor d 1}
+    {hT : ∀ g h, (mulTensor (T g) (T h)).toMPSTensor = (T (g * h)).toMPSTensor}
+    (hF : (GroupFamily.ofBondOne T).IsNormalRepresentation) :
+    (FusionData.ofBondOne T hT).omega = 1 := by
+  funext g h k
+  refine omega_eq_one_of_leftV_eq_rightV hF ?_
+  have hc : (GroupFamily.ofBondOne T).castMat (mul_assoc g h k).symm =
+      (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
+    rw [castMat_eq_finCongr]
+    exact finCongr_toMatrix_eq_one _
+  have ha : mulTensorAssocInvMatrix 1 1 1 = (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
+    rw [mulTensorAssocInvMatrix_eq_finCongr]
+    exact finCongr_toMatrix_eq_one _
+  rw [FusionData.rightV, hc]
+  change (1 : Matrix (Fin 1) (Fin 1) ℂ) * kronId 1 1 =
+    1 * ((1 : Matrix (Fin 1) (Fin 1) ℂ) * idKron 1 1 * mulTensorAssocInvMatrix 1 1 1)
+  rw [kronId_one, idKron_one, ha]
+  simp
+
+end MPOTensor.GroupFamily

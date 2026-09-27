@@ -87,7 +87,7 @@ theorem exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul {DB : ℕ} {D : κ →
   set u : WordAlgebra d := p * e with hu
   have hu0 : aug u = 0 := aug_mul_right hp e
   -- `u` kills every other block
-  have hzero : ∀ y, y ≠ y₀ → actAlgHom (A y).WordModule u = 0 := by
+  have hzero : ∀ y, y ≠ y₀ → Algebra.lsmul ℂ ℂ (A y).WordModule u = 0 := by
     intro y hy
     ext v
     simp [hu, hpS y (Finset.mem_erase.2 ⟨hy, Finset.mem_univ y⟩)]
@@ -97,20 +97,20 @@ theorem exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul {DB : ℕ} {D : κ →
       (A y₀).wordRep.asModuleEquiv (u • v) = E *ᵥ (A y₀).wordRep.asModuleEquiv v := by
     intro v
     rw [hu, mul_smul, hpQ, he, asModuleEquiv_sum_smul, hx]
-  have hone : actAlgHom (A y₀).WordModule u =
+  have hone : Algebra.lsmul ℂ ℂ (A y₀).WordModule u =
       (A y₀).wordRep.asModuleEquiv.symm.conj (Matrix.toLin' E) := by
     ext v
-    rw [LinearEquiv.conj_apply, LinearMap.comp_apply, LinearMap.comp_apply, actAlgHom_apply,
+    rw [LinearEquiv.conj_apply, LinearMap.comp_apply, LinearMap.comp_apply, Algebra.lsmul_apply,
       LinearEquiv.coe_coe, LinearEquiv.coe_coe, LinearEquiv.symm_symm, LinearEquiv.eq_symm_apply,
       hact, Matrix.toLin'_apply]
-  have hff : actAlgHom (A y₀).WordModule u * actAlgHom (A y₀).WordModule u =
-      actAlgHom (A y₀).WordModule u := by
+  have hff : Algebra.lsmul ℂ ℂ (A y₀).WordModule u * Algebra.lsmul ℂ ℂ (A y₀).WordModule u =
+      Algebra.lsmul ℂ ℂ (A y₀).WordModule u := by
     ext v
     apply (A y₀).wordRep.asModuleEquiv.injective
-    rw [Module.End.mul_apply, actAlgHom_apply, actAlgHom_apply, hact, hact, Matrix.mulVec_mulVec,
-      hE, Matrix.single_mul_single_same, mul_one]
+    rw [Module.End.mul_apply, Algebra.lsmul_apply, Algebra.lsmul_apply, hact, hact,
+      Matrix.mulVec_mulVec, hE, Matrix.single_mul_single_same, mul_one]
   have hpowf : ∀ j : ℕ,
-      actAlgHom (A y₀).WordModule u ^ (j + 1) = actAlgHom (A y₀).WordModule u := by
+      Algebra.lsmul ℂ ℂ (A y₀).WordModule u ^ (j + 1) = Algebra.lsmul ℂ ℂ (A y₀).WordModule u := by
     intro j
     induction j with
     | zero => rw [pow_one]
@@ -141,7 +141,7 @@ theorem exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul {DB : ℕ} {D : κ →
   -- constant trace powers on `B`
   let b := Module.finBasis ℂ B.WordModule
   refine Matrix.exists_nat_eq_of_forall_trace_pow_eq
-    (LinearMap.toMatrix b b (actAlgHom B.WordModule u)) (c y₀) fun k hk => ?_
+    (LinearMap.toMatrix b b (Algebra.lsmul ℂ ℂ B.WordModule u)) (c y₀) fun k hk => ?_
   rw [LinearMap.toMatrix_pow, ← LinearMap.trace_eq_matrix_trace, ← map_pow, ← traceChar_apply,
     hchar k hk]
   simp only [hblock k hk, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ,
