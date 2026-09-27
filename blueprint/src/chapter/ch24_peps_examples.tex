@@ -351,7 +351,14 @@ $U_{CZX}\ket{ijkl}=(-1)^{ij+jk+kl+li}\ket{\bar\imath\bar\jmath\bar k\bar l}$.
     \uses{def:peps_czx_on_site, def:peps_czx_leg_operator}
     Applying $U_{CZX}$ to the physical index of the CZX tensor equals applying
     $V$ to each of its four virtual legs
-    \cite[Section~III.B, ``Non-injective PEPS: SPT phases'']{Cirac2021Matrix}.
+    \cite[Section~III.B, ``Non-injective PEPS: SPT phases'']{Cirac2021Matrix}:
+    writing $A^s_{trbl}$ for the entry of the CZX tensor with physical index $s$
+    and top, right, bottom and left legs $t,r,b,l$,
+    \begin{align}
+        \sum_s(U_{CZX})_{s's}\,A^s_{trbl}
+         & =\sum_{t',r',b',l'}A^{s'}_{t'r'b'l'}\,V_{t't}V_{r'r}V_{b'b}V_{l'l}.
+        \label{eq:peps_czx_pull_through}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -362,22 +369,34 @@ $U_{CZX}\ket{ijkl}=(-1)^{ij+jk+kl+li}\ket{\bar\imath\bar\jmath\bar k\bar l}$.
 
 On the boundary of a region, neighbouring boundary legs carry the same qubit
 of their common plaquette, one effective spin per boundary plaquette
-\cite{ChenLiuWen2011CZX}. A closed chain of $N$ legs carrying the pairs
-$(c_m,c_{m+1})$, indices modulo $N$, defines an isometry $\iota$ from $N$
-effective spins into the legs.
+\cite{ChenLiuWen2011CZX}.
+
+\begin{definition}[Boundary legs of the CZX tensor network]%
+    \label{def:peps_czx_boundary_embedding}
+    \lean{TNLean.PEPS.czxBoundaryLegs, TNLean.PEPS.czxBoundaryEmbedding}
+    \leanok
+    \uses{def:peps_czx_tensor}
+    For $N>0$ and effective spins $c\in\{0,1\}^N$, the closed chain of $N$
+    boundary legs carrying $c$ has the pair $(c_m,c_{m+1})$ on leg $m$, indices
+    modulo $N$. The map $\iota$ from $N$ effective spins into the legs is
+    \begin{align}
+        \iota\ket{c} & =\ket{(c_0,c_1),(c_1,c_2),\dots,(c_{N-1},c_0)}.
+        \label{eq:peps_czx_boundary_embedding}
+    \end{align}
+\end{definition}
 
 \begin{theorem}[The boundary action is the CZX matrix product unitary]%
     \label{thm:peps_czx_boundary_mpu}
-    \lean{TNLean.PEPS.czxBoundaryLegs, TNLean.PEPS.czxBoundaryLegs_injective,
-        TNLean.PEPS.czxBoundaryEmbedding,
+    \lean{TNLean.PEPS.czxBoundaryLegs_injective,
         TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_self,
         TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding,
         TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_onSiteOperator_mul,
         TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review}
     \leanok
-    \uses{def:peps_czx_leg_operator, thm:asymex_czx_kernel,
-        def:asymex_czx_review_tensor}
-    For every $N>0$, $V^{\otimes N}\iota=\iota\,U_N$ and
+    \uses{def:peps_czx_leg_operator, def:peps_czx_boundary_embedding,
+        thm:asymex_czx_kernel, def:asymex_czx_review_tensor}
+    For every $N>0$, the chain of boundary legs determines $c$, so $\iota$ is an
+    isometry, $\iota^\dagger\iota=\Id$. It satisfies $V^{\otimes N}\iota=\iota\,U_N$ and
     $\iota^\dagger V^{\otimes N}\iota=U_N$, where
     $U_N\ket{c}=(-1)^{\sum_mc_mc_{m+1}}\ket{\bar c}$ is the CZX matrix product
     unitary of Theorem~\ref{thm:asymex_czx_kernel}; in terms of the
