@@ -113,13 +113,13 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \tenkzkernel
     \begin{tenkz}[rows={wire}, cols=1, bonds=none]
         \tn[skin=box, ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
-            90:physical:$i$}]{A}
+                    90:physical:$i$}]{A}
     \end{tenkz}
     \quad $=$ \quad
     \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, align=1]
         \tn[at=(1,1), skin=box, wide=2, name=U,
             ports={90@1:virtual:$\alpha$, 90@2:physical:$i$,
-                270@1:virtual:$\beta$, 270@2:physical}]{U}
+                    270@1:virtual:$\beta$, 270@2:physical}]{U}
         \tn[at=(2,2), skin=dot, name=z, label pos=e,
             ports={90:physical}]{\ket{0}}
         \tnwire{z.90}{U.270@2}
@@ -168,7 +168,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
             ports={315:virtual, 135:virtual}]{}
         \tn[skin=box, at=(4,4), name=an,
             ports={90:physical:$\sigma_{N-1}$, 315:virtual,
-                135:virtual}]{A_{N-1}}
+                    135:virtual}]{A_{N-1}}
         \tn[skin=dot, at=(5,5), name=phi, label pos=e,
             ports={135:virtual}]{\ket{\varphi_I}}
         \tnwire{phi.135}{an.315}
@@ -888,13 +888,13 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
         \tn[at=(1,3), skin=box, wide=2, name=u3,
             ports={90@1:physical:$i_3$, 90@2:physical:$i_4$,
-                270@1:physical, 270@2:physical}]{U^{[3]}}
+                    270@1:physical, 270@2:physical}]{U^{[3]}}
         \tn[at=(2,2), skin=box, wide=2, name=u2,
             ports={90@1:physical:$i_2$, 90@2:physical,
-                270@1:physical, 270@2:physical}]{U^{[2]}}
+                    270@1:physical, 270@2:physical}]{U^{[2]}}
         \tn[at=(3,1), skin=box, wide=2, name=u1,
             ports={90@1:physical:$i_1$, 90@2:physical,
-                270@1:physical, 270@2:physical}]{U^{[1]}}
+                    270@1:physical, 270@2:physical}]{U^{[1]}}
         \tn[at=(4,1), skin=dot, name=z1, label pos=s, ports={90:physical}]{\ket{0}}
         \tn[at=(4,2), skin=dot, name=z2, label pos=s, ports={90:physical}]{\ket{0}}
         \tn[at=(4,3), skin=dot, name=z3, label pos=s, ports={90:physical}]{\ket{0}}
