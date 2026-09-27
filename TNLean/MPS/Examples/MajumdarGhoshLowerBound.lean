@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MajumdarGhoshGroundSpace
-import TNLean.MPS.ParentHamiltonian.CoefficientPairing
-import TNLean.MPS.ParentHamiltonian.Martingale.Transport
+import TNLean.MPS.ParentHamiltonian.ShiftedParentHamiltonian
 
 /-!
 # Majumdar-Ghosh: the ground space of the review's Hamiltonian
@@ -188,49 +187,18 @@ positive, that is, \(H\ge-\tfrac{3N}8\) as operators. -/
 theorem majumdarGhoshHamiltonian_add_isPositive {N : ℕ} (hN3 : 3 ≤ N) :
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).symm.toLinearMap ∘ₗ
       (majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id) ∘ₗ
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).toLinearMap).IsPositive := by
-  have h : (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).symm.toLinearMap ∘ₗ
-      (majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id) ∘ₗ
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).toLinearMap =
-      (3 / 4 : ℂ) • parentHamiltonianES majumdarGhoshTensor 3 N := by
-    rw [majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3]
-    ext v
-    simp [parentHamiltonianES]
-  rw [h]
-  exact (parentHamiltonianES_isPositive majumdarGhoshTensor 3 N).smul_of_nonneg
-    (by norm_num [Complex.le_def])
-
-/-- The eigenvalue equation of the review's Hamiltonian, rewritten through the
-parent Hamiltonian. -/
-private lemma majumdarGhoshHamiltonian_apply_eq_smul_iff {N : ℕ} (hN3 : 3 ≤ N) (μ : ℂ)
-    (v : NSiteSpace 2 N) :
-    majumdarGhoshHamiltonian N v = μ • v ↔
-      parentHamiltonian majumdarGhoshTensor 3 N v = ((4 / 3) * (μ + 3 * N / 8)) • v := by
-  have h := LinearMap.congr_fun (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) v
-  simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply] at h
-  constructor
-  · intro hv
-    rw [hv, ← add_smul] at h
-    rw [mul_smul, h, smul_smul]
-    norm_num
-  · intro hv
-    rw [hv, smul_smul, show (3 / 4 : ℂ) * (4 / 3 * (μ + 3 * N / 8)) = μ + 3 * N / 8 by ring,
-      add_smul] at h
-    exact add_right_cancel h
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 N)).toLinearMap).IsPositive :=
+  isPositive_conj_of_add_eq_smul_parentHamiltonian
+    (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) (by norm_num [Complex.le_def])
 
 /-- Project result: on a periodic chain of \(N\ge3\) sites, every eigenvalue \(\mu\)
 of the review's Hamiltonian \(H\) is real with \(\mu\ge-\tfrac{3N}8\). -/
 theorem majumdarGhoshHamiltonian_eigenvalue_ge {N : ℕ} (hN3 : 3 ≤ N) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (majumdarGhoshHamiltonian N) μ) :
     μ.im = 0 ∧ -(3 * N / 8 : ℝ) ≤ μ.re := by
-  obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
-  have hshift : Module.End.HasEigenvalue
-      (majumdarGhoshHamiltonian N + (3 * N / 8 : ℂ) • LinearMap.id) (μ + 3 * N / 8) :=
-    Module.End.hasEigenvalue_of_hasEigenvector (x := v) ⟨Module.End.mem_eigenspace_iff.2 (by
-      simp [Module.End.mem_eigenspace_iff.1 hv.1, add_smul]), hv.2⟩
-  have h := Complex.le_def.1 (nonneg_of_hasEigenvalue_of_isPositive_conj
-    (majumdarGhoshHamiltonian_add_isPositive hN3) hshift)
-  simp only [Complex.zero_re, Complex.zero_im, Complex.add_re, Complex.add_im] at h
+  have h := Complex.le_def.1 (neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian
+    (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) (by norm_num [Complex.le_def]) hμ)
+  simp only [Complex.neg_re, Complex.neg_im] at h
   norm_num at h
   exact ⟨by linarith [h.2], by linarith [h.1]⟩
 
@@ -239,11 +207,9 @@ Hamiltonian for \(-\tfrac{3N}8\) is the kernel of the range-three parent
 Hamiltonian of `majumdarGhoshTensor`. -/
 theorem majumdarGhoshHamiltonian_eigenspace_eq_ker {N : ℕ} (hN3 : 3 ≤ N) :
     Module.End.eigenspace (majumdarGhoshHamiltonian N) (-(3 * N / 8) : ℂ) =
-      LinearMap.ker (parentHamiltonian majumdarGhoshTensor 3 N) := by
-  ext v
-  rw [Module.End.mem_eigenspace_iff, majumdarGhoshHamiltonian_apply_eq_smul_iff hN3,
-    LinearMap.mem_ker]
-  norm_num
+      LinearMap.ker (parentHamiltonian majumdarGhoshTensor 3 N) :=
+  eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian
+    (majumdarGhoshHamiltonian_add_eq_parentHamiltonian hN3) (by norm_num)
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2397–2401.
 On an even ring of \(N\ge4\) sites, the eigenspace of the review's Hamiltonian

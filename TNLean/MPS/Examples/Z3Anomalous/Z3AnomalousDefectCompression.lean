@@ -3,7 +3,9 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.MPS.Examples.MultiBlock.OneSlotGauge
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefect
+import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockDirectSum
 
 /-!
 # Anomalous `ℤ/3` example: compression of the stacked square of the condensation defect
@@ -17,7 +19,7 @@ class `j = 1` for `n = 3`, a fact checked only in the verification script and no
 Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), subsubsection "Periodic boundary condition
 case", `Papers/2203.12563/REsubmission.tex` lines 2202–2224, construct periodic matrix product
 operator representations of a finite group with a `3`-cocycle and print the `ℤ/2` instance
-`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2222); the phase-decorated shift used here is a `ℤ/3` operator of
+`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2224); the phase-decorated shift used here is a `ℤ/3` operator of
 the same kind, not the operator of that construction.
 
 The name *condensation defect* follows Roumpedakis, Seifnashri and Shao (arXiv:2204.02407),
@@ -36,19 +38,18 @@ exact, the defect satisfies `A² = 3A` at every positive length: its structure c
 constant, every weight equal to one, in contrast with the length-dependent coefficients of the
 non-anomalous clock symmetry of the data file (§3) and of the `ℤ/2` Example E. The stacked
 square compresses onto nine slots, three copies each of `δ`, `U` and `U†`, with `z = 10` zero
-slots. The gauge is the direct sum of the identity on the five pairs involving the identity
-summand and of the four block gauges of the fusion files, and the dimension count reads
-`25 = 15 + 10`.
-
-The gauge and the conjugated letters are identified with reindexed block-diagonal matrices, so
-the only decided identities of size twenty-five are the clauses of the compression theorem,
-each of which evaluates a single explicit small block.
+slots. The datum is the direct sum (`MultiBlockCompression.directSum`) of the nine pair-block
+data: the identity gauge with no zero slot on the five pairs involving the identity summand, and
+the four block data of the fusion files; the dimension count reads `25 = 15 + 10`. Its remainder
+is the direct sum of the pair remainders, so it is nilpotent of order exactly three, the order
+of the four nontrivial fusion blocks, instead of the generic bound `|S| + z = 19` of the
+compression theorem.
 
 ## Main definitions
 
 * `Z3Anomalous.pairTarget`: the target of the pair `(g, h)`, the summand `U_{g+h}`.
-* `Z3Anomalous.squareGaugeEis`, `Z3Anomalous.squareCoord`, `Z3Anomalous.squareOrd`: the gauge
-  of the square, the labelling of its bond coordinates by the block space, and the flag order.
+* `Z3Anomalous.pairStackMPS`, `Z3Anomalous.pairCompression`: the nine pair blocks of the square
+  and their compression data.
 * `Z3Anomalous.defectSquare_compression`: the multi-block compression datum of the square.
 
 ## Main results
@@ -58,8 +59,10 @@ each of which evaluates a single explicit small block.
 * `Z3Anomalous.defectSquare_isReduction`, `Z3Anomalous.defectSquare_left_mul_right_of_ne`: the
   nine biorthogonal compression pairs.
 * `Z3Anomalous.defectSquare_dim_eq`: the dimension count `25 = 15 + 10`.
-* `Z3Anomalous.defectSquare_evalWord_remainder_eq_zero`: the remainder is nilpotent of length
-  nineteen.
+* `Z3Anomalous.defectSquare_eq_blockDiagonal`: the square is block diagonal over the nine pairs.
+* `Z3Anomalous.defectSquare_evalWord_remainder_eq_zero`,
+  `Z3Anomalous.defectSquare_remainder_mul_ne_zero`: the remainder is nilpotent of order exactly
+  three.
 
 ## References
 
@@ -87,82 +90,7 @@ namespace Z3Anomalous
 
 open EisensteinInt MPSTensor
 
-/-! ### The gauge -/
-
-/-- The gauge of each pair block: the block gauges of the four nontrivial fusions, and the
-identity on the five pairs involving the identity summand (data file §2.5). -/
-def pairGaugeEis :
-    (ab : Fin 3 × Fin 3) → Matrix (Fin (pairBlockDim ab)) (Fin (pairBlockDim ab)) EisensteinInt
-  | (1, 1) => uuGaugeEis
-  | (1, 2) => udGaugeEis
-  | (2, 1) => duGaugeEis
-  | (2, 2) => ddGaugeEis
-  | _ => 1
-
-/-- The inverse gauge of each pair block. -/
-def pairGaugeInvEis :
-    (ab : Fin 3 × Fin 3) → Matrix (Fin (pairBlockDim ab)) (Fin (pairBlockDim ab)) EisensteinInt
-  | (1, 1) => uuGaugeInvEis
-  | (1, 2) => udGaugeInvEis
-  | (2, 1) => duGaugeInvEis
-  | (2, 2) => ddGaugeInvEis
-  | _ => 1
-
-theorem pairGauge_mul_inv : ∀ ab, pairGaugeEis ab * pairGaugeInvEis ab = 1 := by decide +kernel
-
-theorem pairGaugeInv_mul : ∀ ab, pairGaugeInvEis ab * pairGaugeEis ab = 1 := by decide +kernel
-
-/-- The gauge of the square: the direct sum of the pair gauges in the bond coordinates of the
-square (data file §2.5). -/
-def squareGaugeEis : Matrix (Fin 25) (Fin 25) EisensteinInt :=
-  (Matrix.blockDiagonal' pairGaugeEis).submatrix squareBond.symm squareBond.symm
-
-/-- The inverse gauge of the square. -/
-def squareGaugeInvEis : Matrix (Fin 25) (Fin 25) EisensteinInt :=
-  (Matrix.blockDiagonal' pairGaugeInvEis).submatrix squareBond.symm squareBond.symm
-
-theorem squareGauge_mul_inv : squareGaugeEis * squareGaugeInvEis = 1 := by
-  rw [squareGaugeEis, squareGaugeInvEis, Matrix.submatrix_mul_equiv, ← Matrix.blockDiagonal'_mul,
-    show (fun ab => pairGaugeEis ab * pairGaugeInvEis ab) = 1 from funext pairGauge_mul_inv,
-    Matrix.blockDiagonal'_one, Matrix.submatrix_one_equiv]
-
-theorem squareGaugeInv_mul : squareGaugeInvEis * squareGaugeEis = 1 := by
-  rw [squareGaugeEis, squareGaugeInvEis, Matrix.submatrix_mul_equiv, ← Matrix.blockDiagonal'_mul,
-    show (fun ab => pairGaugeInvEis ab * pairGaugeEis ab) = 1 from funext pairGaugeInv_mul,
-    Matrix.blockDiagonal'_one, Matrix.submatrix_one_equiv]
-
-/-- The letters of a pair block in its block coordinates. -/
-def pairConjEis (ab : Fin 3 × Fin 3) (i : Fin 9) :
-    Matrix (Fin (pairBlockDim ab)) (Fin (pairBlockDim ab)) EisensteinInt :=
-  pairGaugeEis ab * pairStackEis ab i * pairGaugeInvEis ab
-
-/-- The recorded letters of each pair block in its block coordinates: the conjugated letters of
-the four nontrivial fusions, and the stacked products themselves on the five pairs involving the
-identity summand. -/
-def pairConjTable (ab : Fin 3 × Fin 3) (i : Fin 9) :
-    Matrix (Fin (pairBlockDim ab)) (Fin (pairBlockDim ab)) EisensteinInt :=
-  match ab with
-  | (1, 1) => uuConjEis i
-  | (1, 2) => udConjEis i
-  | (2, 1) => duConjEis i
-  | (2, 2) => ddConjEis i
-  | ab => pairStackEis ab i
-
-theorem pairConjEis_eq : ∀ ab i, pairConjEis ab i = pairConjTable ab i := by decide +kernel
-
-/-- **The conjugated letters of the square are block diagonal**, with the conjugated letters of
-the pair blocks on the diagonal. -/
-theorem square_conj (i : Fin 9) :
-    squareGaugeEis * defectSquareEis i * squareGaugeInvEis =
-      (Matrix.blockDiagonal' fun ab => pairConjTable ab i).submatrix squareBond.symm
-        squareBond.symm := by
-  rw [defectSquareEis_eq, squareGaugeEis, squareGaugeInvEis, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
-  congr 2
-  funext ab
-  exact pairConjEis_eq ab i
-
-/-! ### The slots, the targets and the block coordinates -/
+/-! ### The slots and the targets -/
 
 /-- The bond dimension of the target of the pair `(g, h)`: that of the summand `U_{g+h}`. -/
 abbrev pairTargetDim (ab : Fin 3 × Fin 3) : ℕ := summandDim (ab.1 + ab.2)
@@ -183,155 +111,132 @@ theorem pairTarget_eq (ab : Fin 3 × Fin 3) (i : Fin 9) :
 /-- The slots of the square: all nine pairs of summands. -/
 abbrev squareSlots : Finset (Fin 3 × Fin 3) := Finset.univ
 
-/-- The position in the flag of the target block of each pair (data file §2.5, flag order). -/
-def pairOrdTable : Fin 3 × Fin 3 → Fin 19
-  | (0, 0) => 0
-  | (0, 1) => 1
-  | (0, 2) => 2
-  | (1, 0) => 3
-  | (1, 1) => 5
-  | (1, 2) => 9
-  | (2, 0) => 11
-  | (2, 1) => 14
-  | (2, 2) => 17
+/-! ### The pair blocks and their compression data -/
 
-/-- The block ordering of the square: the nine target blocks and the ten zero slots in the flag
-order of the data file (§2.5), pair by pair. -/
-def squareOrd : BlockIndex squareSlots 10 ≃ Fin 19 where
-  toFun := Sum.elim (fun s => pairOrdTable s.1) ![4, 6, 7, 8, 10, 12, 13, 15, 16, 18]
-  invFun :=
-    ![Sum.inl ⟨(0, 0), Finset.mem_univ _⟩,
-      Sum.inl ⟨(0, 1), Finset.mem_univ _⟩,
-      Sum.inl ⟨(0, 2), Finset.mem_univ _⟩,
-      Sum.inl ⟨(1, 0), Finset.mem_univ _⟩,
-      Sum.inr 0,
-      Sum.inl ⟨(1, 1), Finset.mem_univ _⟩,
-      Sum.inr 1,
-      Sum.inr 2,
-      Sum.inr 3,
-      Sum.inl ⟨(1, 2), Finset.mem_univ _⟩,
-      Sum.inr 4,
-      Sum.inl ⟨(2, 0), Finset.mem_univ _⟩,
-      Sum.inr 5,
-      Sum.inr 6,
-      Sum.inl ⟨(2, 1), Finset.mem_univ _⟩,
-      Sum.inr 7,
-      Sum.inr 8,
-      Sum.inl ⟨(2, 2), Finset.mem_univ _⟩,
-      Sum.inr 9]
-  left_inv := by decide +kernel
-  right_inv := by decide +kernel
+/-- The stacked product `U_g ⊗ U_h` of two summands: the stacked tensors of the four nontrivial
+fusions, and the stacked products with the identity summand on the other five pairs. -/
+def pairStackMPS : (ab : Fin 3 × Fin 3) → MPSTensor 9 (pairBlockDim ab)
+  | (0, 0) => fun a => complexOfEisenstein (pairStackEis (0, 0) a)
+  | (0, 1) => fun a => complexOfEisenstein (pairStackEis (0, 1) a)
+  | (0, 2) => fun a => complexOfEisenstein (pairStackEis (0, 2) a)
+  | (1, 0) => fun a => complexOfEisenstein (pairStackEis (1, 0) a)
+  | (1, 1) => uuStack
+  | (1, 2) => udStack
+  | (2, 0) => fun a => complexOfEisenstein (pairStackEis (2, 0) a)
+  | (2, 1) => duStack
+  | (2, 2) => ddStack
 
-/-- The first column of the target inside the adapted basis of each pair block: the target of a
-nontrivial fusion sits after one or two zero columns (data file §2.1–§2.4). -/
-def targetOffset : Fin 3 × Fin 3 → ℕ
-  | (1, 1) => 1
-  | (1, 2) => 2
-  | (2, 1) => 2
-  | (2, 2) => 1
-  | _ => 0
+theorem pairStackMPS_eq (ab : Fin 3 × Fin 3) (a : Fin 9) :
+    pairStackMPS ab a = complexOfEisenstein (pairStackEis ab a) := by
+  obtain ⟨g, h⟩ := ab
+  fin_cases g <;> fin_cases h
+  exacts [rfl, rfl, rfl, rfl, uuStack_eq a, udStack_eq a, rfl, duStack_eq a, ddStack_eq a]
 
-theorem targetOffset_add_lt (s : Fin 3 × Fin 3) (p : Fin (pairTargetDim s)) :
-    targetOffset s + (p : ℕ) < pairBlockDim s := by
-  revert s p
-  decide
+/-- **The stacked square is block diagonal over the nine pairs of summands**, the `(g, h)`
+block being the stacked product `U_g ⊗ U_h` (data file §2.5). -/
+theorem defectSquare_eq_blockDiagonal (a : Fin 9) :
+    defectSquare a =
+      (Matrix.blockDiagonal' fun ab => pairStackMPS ab a).submatrix squareBond.symm
+        squareBond.symm := by
+  rw [defectSquare_eq, defectSquareEis_eq, complexOfEisenstein_submatrix,
+    complexOfEisenstein_blockDiagonal']
+  congr 2
+  funext ab
+  exact (pairStackMPS_eq ab a).symm
 
-/-- The coordinate of each zero slot inside the adapted basis of its pair block (data file
-§2.5). -/
-def zeroSlotSigma : Fin 10 → Σ ab : Fin 3 × Fin 3, Fin (pairBlockDim ab)
-  | 0 => ⟨(1, 1), ⟨0, by decide⟩⟩
-  | 1 => ⟨(1, 1), ⟨3, by decide⟩⟩
-  | 2 => ⟨(1, 2), ⟨0, by decide⟩⟩
-  | 3 => ⟨(1, 2), ⟨1, by decide⟩⟩
-  | 4 => ⟨(1, 2), ⟨3, by decide⟩⟩
-  | 5 => ⟨(2, 1), ⟨0, by decide⟩⟩
-  | 6 => ⟨(2, 1), ⟨1, by decide⟩⟩
-  | 7 => ⟨(2, 1), ⟨3, by decide⟩⟩
-  | 8 => ⟨(2, 2), ⟨0, by decide⟩⟩
-  | 9 => ⟨(2, 2), ⟨3, by decide⟩⟩
+/-! On the five pairs involving the identity summand, the stacked product is the target itself
+under the natural bond identification (data file §2.5). -/
 
-/-- The coordinate in the adapted basis of a pair block attached to a graded coordinate of the
-square. -/
-def blockSigma :
-    BlockSpace pairTargetDim squareSlots 10 → Σ ab : Fin 3 × Fin 3, Fin (pairBlockDim ab)
-  | ⟨Sum.inl s, p⟩ => ⟨s.1, ⟨targetOffset s.1 + p, targetOffset_add_lt s.1 p⟩⟩
-  | ⟨Sum.inr t, _⟩ => zeroSlotSigma t
+private theorem stack00_eq (a : Fin 9) :
+    (pairStackEis (0, 0) a : Matrix (Fin 1) (Fin 1) EisensteinInt) = identityEisMPS a := by
+  refine Matrix.ext fun i j => ?_
+  fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-/-- The graded coordinate of the square attached to each bond coordinate. -/
-def blockOfBond : Fin 25 → BlockSpace pairTargetDim squareSlots 10 :=
-  ![⟨Sum.inl ⟨(0, 0), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(0, 1), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(0, 1), Finset.mem_univ _⟩, ⟨1, by decide⟩⟩,
-    ⟨Sum.inl ⟨(0, 2), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(0, 2), Finset.mem_univ _⟩, ⟨1, by decide⟩⟩,
-    ⟨Sum.inl ⟨(1, 0), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 0, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(1, 1), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 2, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 3, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(1, 0), Finset.mem_univ _⟩, ⟨1, by decide⟩⟩,
-    ⟨Sum.inl ⟨(1, 1), Finset.mem_univ _⟩, ⟨1, by decide⟩⟩,
-    ⟨Sum.inr 1, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(1, 2), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 4, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(2, 0), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 5, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 6, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 8, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(2, 2), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(2, 0), Finset.mem_univ _⟩, ⟨1, by decide⟩⟩,
-    ⟨Sum.inl ⟨(2, 1), Finset.mem_univ _⟩, ⟨0, by decide⟩⟩,
-    ⟨Sum.inr 7, ⟨0, by decide⟩⟩,
-    ⟨Sum.inl ⟨(2, 2), Finset.mem_univ _⟩, ⟨1, by decide⟩⟩,
-    ⟨Sum.inr 9, ⟨0, by decide⟩⟩]
+private theorem pairStack00_eq (a : Fin 9) : pairStackMPS (0, 0) a = pairTarget (0, 0) a :=
+  (congrArg complexOfEisenstein (stack00_eq a)).trans (identityMPS_eq a).symm
 
-/-- The labelling of the twenty-five bond coordinates of the square by the graded block space:
-a graded coordinate is sent to its coordinate in the adapted basis of its pair block, then to
-the bond coordinate of the square. -/
-def squareCoord : BlockSpace pairTargetDim squareSlots 10 ≃ Fin 25 where
-  toFun x := squareBond (blockSigma x)
-  invFun := blockOfBond
-  left_inv := by decide +kernel
-  right_inv := by decide +kernel
+private theorem stack01_eq (a : Fin 9) :
+    (pairStackEis (0, 1) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uEisMPS a := by
+  refine Matrix.ext fun i j => ?_
+  fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-/-! ### The compression datum -/
+private theorem pairStack01_eq (a : Fin 9) : pairStackMPS (0, 1) a = pairTarget (0, 1) a :=
+  (congrArg complexOfEisenstein (stack01_eq a)).trans (uMPS_eq a).symm
 
-private theorem square_triangular (i : Fin 9) (x y : BlockSpace pairTargetDim squareSlots 10)
-    (h : squareOrd y.1 < squareOrd x.1) :
-    (squareGaugeEis * defectSquareEis i * squareGaugeInvEis) (squareCoord x) (squareCoord y) =
-      0 := by
-  rw [square_conj]
-  revert i x y h
-  decide +kernel
+private theorem stack02_eq (a : Fin 9) :
+    (pairStackEis (0, 2) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uDagEisMPS a := by
+  refine Matrix.ext fun i j => ?_
+  fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-private theorem square_matched (i : Fin 9) (s : Fin 3 × Fin 3) :
-    (Matrix.of fun p q : Fin (pairTargetDim s) =>
-      (Matrix.blockDiagonal' fun ab => pairConjTable ab i).submatrix squareBond.symm
-        squareBond.symm (squareCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
-        (squareCoord ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩)) = pairTargetEis s i := by
-  revert i s
-  decide +kernel
+private theorem pairStack02_eq (a : Fin 9) : pairStackMPS (0, 2) a = pairTarget (0, 2) a :=
+  (congrArg complexOfEisenstein (stack02_eq a)).trans (uDagMPS_eq a).symm
 
-private theorem square_unmatched (i : Fin 9) (t : Fin 10) :
-    (Matrix.of fun p q : Fin 1 =>
-      (Matrix.blockDiagonal' fun ab => pairConjTable ab i).submatrix squareBond.symm
-        squareBond.symm (squareCoord ⟨Sum.inr t, p⟩) (squareCoord ⟨Sum.inr t, q⟩)) = 0 := by
-  revert i t
-  decide +kernel
+private theorem stack10_eq (a : Fin 9) :
+    (pairStackEis (1, 0) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uEisMPS a := by
+  refine Matrix.ext fun i j => ?_
+  fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
+
+private theorem pairStack10_eq (a : Fin 9) : pairStackMPS (1, 0) a = pairTarget (1, 0) a :=
+  (congrArg complexOfEisenstein (stack10_eq a)).trans (uMPS_eq a).symm
+
+private theorem stack20_eq (a : Fin 9) :
+    (pairStackEis (2, 0) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uDagEisMPS a := by
+  refine Matrix.ext fun i j => ?_
+  fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
+
+private theorem pairStack20_eq (a : Fin 9) : pairStackMPS (2, 0) a = pairTarget (2, 0) a :=
+  (congrArg complexOfEisenstein (stack20_eq a)).trans (uDagMPS_eq a).symm
+
+/-- The compression datum of each pair block: the data of the four nontrivial fusions
+(`Z3AnomalousFusion.lean`, `Z3AnomalousInverseFusion.lean`), and, on the five pairs involving the
+identity summand, the identity gauge with no zero slot, the pair block being equal to its target
+(data file §2.5). -/
+def pairCompression :
+    (ab : Fin 3 × Fin 3) → MultiBlockCompression (pairStackMPS ab) oneSlot
+      (fun _ : Unit => pairTarget ab)
+  | (0, 0) => MultiBlockCompression.ofEq pairStack00_eq
+  | (0, 1) => MultiBlockCompression.ofEq pairStack01_eq
+  | (0, 2) => MultiBlockCompression.ofEq pairStack02_eq
+  | (1, 0) => MultiBlockCompression.ofEq pairStack10_eq
+  | (1, 1) => uu_compression
+  | (1, 2) => ud_compression
+  | (2, 0) => MultiBlockCompression.ofEq pairStack20_eq
+  | (2, 1) => du_compression
+  | (2, 2) => dd_compression
+
+/-- **Every word of length at least three vanishes in the remainder of each pair block**: the
+four nontrivial fusions have remainders nilpotent of order three, and the five pairs involving
+the identity summand have zero remainder. -/
+theorem pairCompression_evalWord_remainder_eq_zero (ab : Fin 3 × Fin 3) (w : List (Fin 9))
+    (hw : 3 ≤ w.length) : Kraus.evalWord (pairCompression ab).remainder w = 0 := by
+  have htriv : ∀ ab, (pairCompression ab).remainder = 0 →
+      Kraus.evalWord (pairCompression ab).remainder w = 0 := by
+    intro ab h
+    obtain ⟨a, w, rfl⟩ : ∃ a w', w = a :: w' := w.exists_cons_of_length_pos (by omega)
+    rw [h]
+    simp [Kraus.evalWord]
+  obtain ⟨g, h⟩ := ab
+  fin_cases g <;> fin_cases h
+  · exact htriv _ (MultiBlockCompression.remainder_ofEq pairStack00_eq)
+  · exact htriv _ (MultiBlockCompression.remainder_ofEq pairStack01_eq)
+  · exact htriv _ (MultiBlockCompression.remainder_ofEq pairStack02_eq)
+  · exact htriv _ (MultiBlockCompression.remainder_ofEq pairStack10_eq)
+  · exact uu_evalWord_remainder_eq_zero w hw
+  · exact ud_evalWord_remainder_eq_zero w hw
+  · exact htriv _ (MultiBlockCompression.remainder_ofEq pairStack20_eq)
+  · exact du_evalWord_remainder_eq_zero w hw
+  · exact dd_evalWord_remainder_eq_zero w hw
 
 /-- **The multi-block asymmetric compression datum of the stacked square of the defect** (P5
 note, Theorem 7.7, clauses (i)–(iii); data file §2.5): `A ⊗ A` compresses onto the nine targets
-`U_{g+h}`, `(g, h) ∈ ℤ/3 × ℤ/3`, with ten zero slots. -/
+`U_{g+h}`, `(g, h) ∈ ℤ/3 × ℤ/3`. It is the direct sum of the nine pair-block data, transported
+along the block-diagonal form of the square. -/
 def defectSquare_compression : MultiBlockCompression defectSquare squareSlots pairTarget :=
-  MultiBlockCompression.ofEisenstein defectSquareEis defectSquare_eq pairTargetEis pairTarget_eq
-    10 squareOrd squareCoord squareGaugeEis squareGaugeInvEis squareGauge_mul_inv
-    squareGaugeInv_mul square_triangular
-    (fun i s p q => by
-      rw [square_conj]
-      exact congrFun (congrFun (square_matched i s.1) p) q)
-    (fun i t p q => by
-      rw [square_conj]
-      exact congrFun (congrFun (square_unmatched i t) p) q)
+  MultiBlockCompression.directSum pairCompression squareBond defectSquare_eq_blockDiagonal
+
+/-- The assembled datum has ten zero slots: two in each of the blocks `U ⊗ U` and `U† ⊗ U†`,
+three in each of the blocks `U ⊗ U†` and `U† ⊗ U`, and none elsewhere (data file §2.5). -/
+theorem defectSquare_compression_z : defectSquare_compression.z = 10 := rfl
 
 /-! ### Consequences -/
 
@@ -394,14 +299,29 @@ theorem sum_pairTargetDim : ∑ s ∈ squareSlots, pairTargetDim s = 15 := by de
 
 /-- **The dimension count** `25 = 15 + 10` (P5 note, Theorem 7.7(vii)). -/
 theorem defectSquare_dim_eq : (25 : ℕ) = ∑ s ∈ squareSlots, pairTargetDim s + 10 :=
-  defectSquare_compression.dim_eq
+  defectSquare_compression_z ▸ defectSquare_compression.dim_eq
 
-/-- **Nilpotency of the remainder** (P5 note, Theorem 7.7(vi)): a product of nineteen remainder
-matrices vanishes. -/
-theorem defectSquare_evalWord_remainder_eq_zero (w : List (Fin 9)) (hw : 19 ≤ w.length) :
-    Kraus.evalWord defectSquare_compression.remainder w = 0 := by
-  refine defectSquare_compression.evalWord_remainder_eq_zero w ?_
-  change (9 : ℕ) + 10 ≤ w.length
-  omega
+/-- **Nilpotency of the remainder, of order three** (P5 note, Theorem 7.7(vi); data file
+§2.5): every word of length at least three vanishes in the remainder, sharpening the generic
+bound `|S| + z = 9 + 10 = 19` of clause (vi). The remainder is the direct sum of the remainders
+of the nine pair blocks, each of which vanishes on words of length three. -/
+theorem defectSquare_evalWord_remainder_eq_zero (w : List (Fin 9)) (hw : 3 ≤ w.length) :
+    Kraus.evalWord defectSquare_compression.remainder w = 0 :=
+  MultiBlockCompression.evalWord_remainder_directSum_eq_zero _ _ _ w fun ab =>
+    pairCompression_evalWord_remainder_eq_zero ab w hw
+
+/-- **The nilpotency order three is exact** (data file §2.5): the product of the remainder
+letters `1` and `5` does not vanish, because it does not vanish in the block `U ⊗ U`. -/
+theorem defectSquare_remainder_mul_ne_zero :
+    defectSquare_compression.remainder 1 * defectSquare_compression.remainder 5 ≠ 0 := by
+  have h := MultiBlockCompression.evalWord_remainder_directSum_ne_zero pairCompression squareBond
+    defectSquare_eq_blockDiagonal [1, 5] (1, 1) (by
+      change uu_compression.remainder 1 *
+        (uu_compression.remainder 5 * (1 : Matrix (Fin 4) (Fin 4) ℂ)) ≠ 0
+      rw [Matrix.mul_one]
+      exact uu_remainder_mul_ne_zero)
+  change defectSquare_compression.remainder 1 *
+    (defectSquare_compression.remainder 5 * (1 : Matrix (Fin 25) (Fin 25) ℂ)) ≠ 0 at h
+  rwa [Matrix.mul_one] at h
 
 end Z3Anomalous

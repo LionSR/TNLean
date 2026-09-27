@@ -17,7 +17,7 @@ class `j = 1` for `n = 3`, a fact checked only in the verification script and no
 Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), subsubsection "Periodic boundary condition
 case", `Papers/2203.12563/REsubmission.tex` lines 2202–2224, construct periodic matrix product
 operator representations of a finite group with a `3`-cocycle and print the `ℤ/2` instance
-`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2222); the phase-decorated shift used here is a `ℤ/3` operator of
+`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2224); the phase-decorated shift used here is a `ℤ/3` operator of
 the same kind, not the operator of that construction.
 
 The name *condensation defect* follows Roumpedakis, Seifnashri and Shao (arXiv:2204.02407),

@@ -29,6 +29,32 @@ bounding the nilpotency length of the residual algebra.
     \cite[proof of Proposition~20, lines~3817--3838]{Molnar2018SemiInjective}.
 \end{definition}
 
+\begin{center}
+    % Formula: K(\widetilde B,C)_{(x,a),(y,a')}
+    % =\sum_i\widetilde B^i_{xy}C^i_{a'a}, the entries of
+    % K(\widetilde B,C)=\sum_i\widetilde B^i\otimes(C^i)^T.
+    % Source: Definition~\ref{def:mps_reduction_cross_matrix}; the
+    % picture of \cite[proof of Proposition~20, lines~3817--3838]
+    % {Molnar2018SemiInjective}, there with the rows interchanged.
+    % Ink-to-index map: the upper node is $\widetilde B^i$ with west leg
+    % $x$ and east leg $y$; the lower node is $C^i$ with west leg $a$ and
+    % east leg $a'$, so the lower row carries the transpose $(C^i)^T$.
+    % Contraction set: the single vertical physical leg $i$ joining the
+    % two nodes; the four virtual legs remain open, the west pair being
+    % the row index $(x,a)$ and the east pair the column index $(y,a')$.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 |
+    % physical-up=0 | physical-down=0).
+    \tenkzkernel
+    \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+        \tn[label pos=n]{\widetilde B} \\
+        \tn[label pos=s]{C}
+        \tnmark[form=label, label pos=90]{on open-west-1 0.1}{$x$}
+        \tnmark[form=label, label pos=90]{on open-east-1 0.9}{$y$}
+        \tnmark[form=label, label pos=270]{on open-west-2 0.1}{$a$}
+        \tnmark[form=label, label pos=270]{on open-east-2 0.9}{$a'$}
+    \end{tenkz}
+\end{center}
+
 \begin{lemma}[Coefficient dual and reversed-word power formulas]
     \label{lem:mps_reduction_cross_matrix_power}
     \lean{MPSTensor.coefficientDualInverse_sum_entry,
@@ -354,6 +380,36 @@ bounding the nilpotency length of the residual algebra.
     \cite{gap:mgsc18_reduction_proportionality_scalar}.
 \end{theorem}
 
+\begin{center}
+    % Formula: VB^{i_1}\cdots B^{i_n}W=c^nA^{i_1}\cdots A^{i_n}, the word
+    % relation (\ref{eq:mps_proportional_reduction_word_relation}) for the
+    % word w=i_1\cdots i_n of length n=|w|.
+    % Source: Theorem~\ref{thm:mps_proportional_reduction_exists}.
+    % Ink-to-index map: the rings are $V$ (left) and $W$ (right); the
+    % interior nodes are copies of $B$ on the left and of $A$ on the
+    % right, carrying the letters $i_1,\ldots,i_n$.
+    % Contraction set: every horizontal virtual bond between consecutive
+    % copies of $B$ and between each end copy and its adjacent ring; the
+    % physical legs and the two outer virtual legs (the $D_A$-dimensional
+    % indices) remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=5, west=open, east=open]
+        \tn[skin=ring]{V} &
+        \tn[label pos=s, ports={90:physical:$i_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$i_n$}]{B} &
+        \tn[skin=ring]{W}
+    \end{tenkz}
+    \quad $=\;c^{n}$ \quad
+    \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$i_1$}]{A} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$i_n$}]{A}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}
     \leanok
     \uses{lem:eval_word_smul, thm:mps_equality_reduction_exists,
@@ -410,6 +466,34 @@ bounding the nilpotency length of the residual algebra.
     This is the residual algebra of Proposition~21 in
     \cite{Molnar2018SemiInjective}.
 \end{definition}
+
+\begin{center}
+    % Formula: B^i=WA^iV+N^i, the residual letter
+    % (\ref{eq:mps_reduction_residual_letter}) solved for B^i.
+    % Source: Definition~\ref{def:mps_reduction_residual_algebra}.
+    % Ink-to-index map: the rings are $W$ (left) and $V$ (right) of the
+    % reduction; the square nodes are $B$, $A$, and the residual $N$,
+    % each carrying the letter $i$.
+    % Contraction set: in the middle term, the two virtual bonds joining
+    % $A$ to the rings; in every term the physical leg $i$ and the two
+    % outer $D_B$-dimensional virtual legs remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=0) for each term.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$i$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+        \tn[skin=ring]{W} &
+        \tn[label pos=s, ports={90:physical:$i$}]{A} &
+        \tn[skin=ring]{V}
+    \end{tenkz}
+    \quad $+$ \quad
+    \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$i$}]{N}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Residual letters belong to the residual algebra]
     \label{thm:mps_reduction_residual_mem_algebra}
@@ -859,6 +943,52 @@ bounding the nilpotency length of the residual algebra.
     residual buffer.
 \end{theorem}
 
+\begin{center}
+    % Formula: B^{\mathbf p}WA^{\mathbf c}VB^{\mathbf q}
+    % =B^{\mathbf p\mathbf c\mathbf q}
+    % (\ref{eq:mps_reduction_exterior_buffer}), with
+    % \mathbf p=p_1\cdots p_m, \mathbf c=c_1\cdots c_k (k\geq1), and
+    % \mathbf q=q_1\cdots q_r.
+    % Source: Theorem~\ref{thm:mps_reduction_exterior_buffer}; the
+    % exterior fusion equation of
+    % \cite[lines~1409--1498]{FrancoRubio2025MPUGauging}.
+    % Ink-to-index map: the rings are $W$ and $V$ of the reduction; the
+    % square nodes are copies of $B$ (exterior words, and every site on
+    % the right) and of $A$ (central word), labelled by their letters.
+    % Contraction set: every horizontal virtual bond between adjacent
+    % nodes and rings; all physical legs and the two outer
+    % $D_B$-dimensional virtual legs remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=6 | physical-down=0) on both sides of the schematic.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=11, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$p_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$p_m$}]{B} &
+        \tn[skin=ring]{W} &
+        \tn[label pos=s, ports={90:physical:$c_1$}]{A} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$c_k$}]{A} &
+        \tn[skin=ring]{V} &
+        \tn[label pos=s, ports={90:physical:$q_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$q_r$}]{B}
+    \end{tenkz}
+    \\[2ex]
+    $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=9, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$p_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$p_m$}]{B} &
+        \tn[label pos=s, ports={90:physical:$c_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$c_k$}]{B} &
+        \tn[label pos=s, ports={90:physical:$q_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$q_r$}]{B}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}
     \leanok
     \uses{thm:mps_rectangular_reduction_identities,
@@ -1031,6 +1161,53 @@ bounding the nilpotency length of the residual algebra.
     Following \cite[Theorem~22]{Molnar2018SemiInjective}, these boundary-dressed
     identities hold for $|\mathbf a|>2N_0$.
 \end{theorem}
+
+\begin{center}
+    % Formula: VB^{\mathbf a}=\lambda\widetilde VB^{\mathbf a}
+    % (\ref{eq:mps_reduction_boundary_dressed_left}) and
+    % B^{\mathbf a}W=\lambda^{-1}B^{\mathbf a}\widetilde W
+    % (\ref{eq:mps_reduction_boundary_dressed_right}), for the word
+    % \mathbf a=a_1\cdots a_n with n>2N_0.
+    % Source: Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
+    % Ink-to-index map: the rings are the boundary maps $V$, $\widetilde V$
+    % (first row) and $W$, $\widetilde W$ (second row), drawn with a
+    % narrow tilde so that the label fits the ring; the square nodes are
+    % copies of $B$ carrying the letters $a_1,\ldots,a_n$.
+    % Contraction set: every horizontal virtual bond between consecutive
+    % copies of $B$ and between the end copy and the ring; the physical
+    % legs, the $D_A$-dimensional leg of the ring, and the
+    % $D_B$-dimensional leg at the far end of the chain remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=0) for each term of the schematic.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=4, west=open, east=open]
+        \tn[skin=ring]{V} &
+        \tn[label pos=s, ports={90:physical:$a_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$a_n$}]{B}
+    \end{tenkz}
+    \quad $=\;\lambda$ \quad
+    \begin{tenkz}[rows={wire}, cols=4, west=open, east=open]
+        \tn[skin=ring]{\tilde V} &
+        \tn[label pos=s, ports={90:physical:$a_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$a_n$}]{B}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={wire}, cols=4, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$a_n$}]{B} &
+        \tn[skin=ring]{W}
+    \end{tenkz}
+    \quad $=\;\lambda^{-1}$ \quad
+    \begin{tenkz}[rows={wire}, cols=4, west=open, east=open]
+        \tn[label pos=s, ports={90:physical:$a_1$}]{B} &
+        \tn[skin=dots]{} &
+        \tn[label pos=s, ports={90:physical:$a_n$}]{B} &
+        \tn[skin=ring]{\tilde W}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}
     \leanok

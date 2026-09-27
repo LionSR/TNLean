@@ -57,10 +57,8 @@ Definition~\ref{def:asymex_czx_tensors} on the input bits.
     $\delta_{a,b}$ is the Kronecker delta, $\oplus$ denotes addition
     modulo two, and
     \begin{align}
-        T_0 & =\begin{pmatrix}1&0\\1&0\end{pmatrix}.
-        \notag
-    \end{align}
-    \begin{align}
+        T_0 & =\begin{pmatrix}1&0\\1&0\end{pmatrix},
+        \notag                                        \\
         T_1 & =\begin{pmatrix}0&1\\0&-1\end{pmatrix}.
         \notag
     \end{align}
@@ -520,7 +518,7 @@ sign $(-1)^N$~\cite{gap:mpu_czx_tensor_normalization}.
     \uses{lem:asymex_absorbing_compression}
     Both nonzero letters annihilate $(1,1)^{\mathsf T}$, which spans the
     range of $\Id-Q$; this gives $b^{ij}Q=b^{ij}$, and multiplying on the
-    left by $Q$ gives the second identity.
+    left by $Q$ gives $Qb^{ij}=Qb^{ij}Q$.
     Identity~(\ref{eq:asymex_czx_review_canonical}) is a direct
     computation. Let $W_2=\tfrac12(1,-1)$ and $V_2=(1,-1)^{\mathsf T}$.
     Then $V_2W_2=Q$ and $W_2b^{ij}V_2=-\delta_{ij}$, and
@@ -561,6 +559,11 @@ globally means $O(A)^2=(-1)^N\Id$: the stacked product generates the
 square of the generated operators, so the statement agrees with
 Theorem~\ref{thm:asymex_czx_review_square}, reached here through the two
 reduction steps instead of the explicit kernel.
+The main text of the review instead describes the one-dimensional block
+of the square as the identity operator. The block $(-1)\delta_{ij}$
+generates $(-1)^N\Id$, which is the identity for even $N$; rescaling the
+tensor by a scalar $c$ with $c^2=-1$ turns the block into $\delta_{ij}$ at
+every length~\cite{gap:mpu_czx_tensor_normalization}.
 
 \subsection{The decorated representative}%
 \label{sec:asymex_czx_decorated}
@@ -733,11 +736,10 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
     index pairs $a,b$,
     \begin{align}
         \hat VS^wV & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)\Id_1,
-        \notag
-    \end{align}
-    \begin{align}
-        S^aS^wS^b & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)S^aV\hat VS^b.
-        \notag
+        \label{eq:asymex_czx_v_contract}
+        \\
+        S^aS^wS^b  & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)S^aV\hat VS^b.
+        \label{eq:asymex_czx_s_contract}
     \end{align}
     In particular $\hat VV=1$ and $S^aS^b=S^aV\hat VS^b$.
 \end{theorem}
@@ -745,14 +747,14 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
 \begin{proof}
     \leanok
     The identities $S^aS^b=S^aV\hat VS^b$ and
-    $\hat VS^{(s,t)}V=\delta_{st}$ are finite integer computations. The
-    first displayed identity follows by induction on $k$: inserting
-    $V\hat V$ between the first two letters splits off the factor
-    $\hat VS^{(s_1,t_1)}V$. The second follows by the same induction,
-    contracting one intermediate letter at a time.
+    $\hat VS^{(s,t)}V=\delta_{st}$ are finite integer computations.
+    Identity~(\ref{eq:asymex_czx_v_contract}) follows by induction on $k$:
+    inserting $V\hat V$ between the first two letters splits off the factor
+    $\hat VS^{(s_1,t_1)}V$. Identity~(\ref{eq:asymex_czx_s_contract}) follows by
+    the same induction, contracting one intermediate letter at a time.
 \end{proof}
 
-The source states the second identity with at least one intermediate site;
+The source states~(\ref{eq:asymex_czx_s_contract}) with at least one intermediate site;
 the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \begin{theorem}[The associator sign of the decorated tensor]
@@ -917,7 +919,7 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \subsection{Asymmetric compression of the square}
 
-By~\eqref{eq:asymex_czx_square_operator}, the periodic operator satisfies
+By~(\ref{eq:asymex_czx_square_operator}), the periodic operator satisfies
 $O_N(B)=U_N^2=(-1)^N\Id$, and $\tr(B^w)=(-1)^{|w|}\tr(\delta^w)$ for all
 nonempty words $w$. This periodic comparison with the bond-one identity tensor with weight $-1$
 lies beyond the unit-weight setting. The sitewise theory
@@ -1160,11 +1162,18 @@ The identity coefficient is two on even rings and zero on odd rings.
 
 \begin{lemma}[Projectors on even rings and inverses on odd rings]
     \label{lem:asymex_plus_parity}
+    \lean{CZXCompression.isStarProjection_half_one_add_mpo_czxTensor,
+        CZXCompression.one_add_mpo_czxTensor_mul_half_one_sub,
+        CZXCompression.half_one_sub_mul_one_add_mpo_czxTensor,
+        CZXCompression.inv_one_add_mpo_czxTensor}
+    \leanok
     For even $N>0$, $O_N/2$ is an orthogonal projector. For odd $N>0$,
     $O_N$ is invertible, with inverse $(I_N-U_N)/2$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_unitarity, thm:asymex_czx_square_operator}
     For even $N$, unitarity and~(\ref{eq:asymex_plus_unitary}) give
     $U_N^\dagger=U_N$ and $U_N^2=I_N$. Consequently,
     \begin{align}
@@ -1192,7 +1201,8 @@ for positive lengths.
 \begin{definition}[The non-simple family and its square]
     \label{def:asymex_czx_plus}
     \lean{CZXCompression.plusTensor, CZXCompression.czxPlusIdentity,
-        CZXCompression.plusBlockDim, CZXCompression.plusTargets}
+        CZXCompression.plusBlockDim, CZXCompression.plusTargets,
+        CZXCompression.plusTensor_eq_directSum, CZXCompression.mpo_plusTensor}
     \leanok
     \uses{def:asymex_czx_tensors, def:mpdo_operator_product}
     The generating tensor is $N^{ij}=\delta^{ij}\oplus M^{ij}$ of bond
