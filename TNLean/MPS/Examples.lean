@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.AKLT
 import TNLean.MPS.Examples.AKLTCorrelation
 import TNLean.MPS.Examples.AKLTParentHamiltonian
+import TNLean.MPS.Examples.AKLTPolynomialHamiltonian
 import TNLean.MPS.Examples.AKLTReview
 import TNLean.MPS.Examples.AKLTRotation
 import TNLean.MPS.Examples.AKLTStringOrder
@@ -43,6 +44,8 @@ import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.RFP
 import TNLean.MPS.Examples.Rings
 import TNLean.MPS.Examples.SpinHalf
+import TNLean.MPS.Examples.SpinOne
+import TNLean.MPS.Examples.SpinOperator
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStateCanonicalBound
 import TNLean.MPS.Examples.WStatePeriodic

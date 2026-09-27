@@ -3256,6 +3256,29 @@ spectral split → block extraction → MPV calculation → strict bounds
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
   that rebuild is large enough to deserve its own change.
 
+### parent interaction from an explicit symmetric idempotent — candidate
+- **Pattern:** identify a spin-chain local term, shifted and rescaled, with
+  `parentInteraction A n`: prove a coordinate formula by `fin_cases` over the window,
+  deduce from it that the operator is symmetric for the \(\ell^2\) pairing and idempotent
+  (both by `ring` on the coordinates), match its kernel with `groundSpace A n` through the
+  explicit constraint characterization, and close with
+  `Submodule.eq_starProjection_of_mem_orthogonal` and `inner_withLpLinearEquiv_symm`.
+- **Seen:** `MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction`
+  (`TNLean/MPS/Examples/MajumdarGhoshLowerBound.lean`) and
+  `MPSTensor.akltBondTerm_shift_eq_parentInteraction`
+  (`TNLean/MPS/Examples/AKLTPolynomialHamiltonian.lean`) (recorded 2026-09-27).
+- **Abstraction (proposed):** a lemma `parentInteraction_eq_of_symm_idem_ker` taking a
+  linear endomorphism `Q` of `NSiteSpace d n` that is symmetric for the coefficient
+  pairing, idempotent, and has kernel `groundSpace A n`, and concluding
+  `Q = parentInteraction A n`.
+- **Notes:** two occurrences in two files, below the rule of three. The chain-level
+  consequences that both examples also need (positivity of \(H+c\), the eigenvalue bound
+  \(\mu\ge-c\), and the ground eigenspace as the parent kernel, from
+  \(H+c=s\,H_{\mathrm{parent}}\)) are already shared lemmas in
+  `TNLean/MPS/ParentHamiltonian/ShiftedParentHamiltonian.lean`, and the exchange
+  interaction is the operator-family-generic `MPSTensor.spinExchange` of
+  `TNLean/MPS/Examples/SpinOperator.lean`.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
