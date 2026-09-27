@@ -90,21 +90,22 @@ theorem parentHamiltonianES_comparison_of_local_open_comparison
         (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A
           (R := m + R - 1) (by omega : m + R - 1 ≤ N)
           ((ZMod.finEquiv N).symm s) ⟨0, hW⟩ (by simp))
+    have hmono {G H : EuclideanSpace ℂ (Cfg d (m + R - 1)) →ₗ[ℂ]
+        EuclideanSpace ℂ (Cfg d (m + R - 1))} (h : G ≤ H) :
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
+          (LinearMap.toContinuousLinearMap G)).toLinearMap ≤
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
+          (LinearMap.toContinuousLinearMap H)).toLinearMap :=
+      ContinuousLinearMap.rightFiberwiseMap_mono h
     refine ⟨(U.conj_le_conj_iff _ _).mp ?_, (U.conj_le_conj_iff _ _).mp ?_⟩
-    · simpa only [map_smul, hLong, hShort, ContinuousLinearMap.rightFiberwiseMap_smul,
-        ContinuousLinearMap.toLinearMap_smul] using!
-        (ContinuousLinearMap.rightFiberwiseMap_mono (S := Cfg d (N - (m + R - 1)))
-          (G := LinearMap.toContinuousLinearMap
-            ((κ : ℂ) • parentInteractionES A (m + R - 1)))
-          (H := LinearMap.toContinuousLinearMap (openParentHamiltonianES A R (m + R - 1)))
-          hLower)
-    · simpa only [map_smul, hLong, hShort, ContinuousLinearMap.rightFiberwiseMap_smul,
-        ContinuousLinearMap.toLinearMap_smul] using!
-        (ContinuousLinearMap.rightFiberwiseMap_mono (S := Cfg d (N - (m + R - 1)))
-          (G := LinearMap.toContinuousLinearMap (openParentHamiltonianES A R (m + R - 1)))
-          (H := LinearMap.toContinuousLinearMap
-            ((C : ℂ) • parentInteractionES A (m + R - 1)))
-          hUpper)
+    · have h := hmono hLower
+      rw [map_smul, ContinuousLinearMap.rightFiberwiseMap_smul,
+        ContinuousLinearMap.toLinearMap_smul] at h
+      rwa [map_smul, hLong, hShort]
+    · have h := hmono hUpper
+      rw [map_smul, ContinuousLinearMap.rightFiberwiseMap_smul,
+        ContinuousLinearMap.toLinearMap_smul] at h
+      rwa [map_smul, hLong, hShort]
   constructor
   · simpa only [← Finset.smul_sum, sum_cyclicWindowSum_eq,
       sum_zmodLocalTermES_eq_parentHamiltonianES, Nat.cast_smul_eq_nsmul] using
