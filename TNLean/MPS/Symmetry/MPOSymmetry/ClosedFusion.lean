@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Symmetry.MPOSymmetry.Associator
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.MPDO.BondOneOperator
 
 /-!
@@ -38,6 +38,8 @@ three-cocycle is the coboundary of `v⁻¹`.
 * `MPOTensor.GroupFamily.isOnSite_of_closed_fusion`: the representation is on-site.
 * `MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_of_closed_fusion`: the
   three-cocycle has trivial class.
+* `MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion`: the anomaly class in
+  `H³(G, ℂˣ)` vanishes.
 
 ## References
 
@@ -384,6 +386,22 @@ theorem FusionData.isTrivialGaugeClass_omega_of_closed_fusion
     hω]
   have := hv g h; have := hv (g * h) k; have := hv g (h * k); have := hv h k
   field_simp
+
+/-- **Closed fusion forces a vanishing anomaly class.** For an injective matrix product
+operator representation of a group with `U_g U_h = U_{gh}`, `U_e = 1`, and closed fusion, the
+anomaly class in the degree-three group cohomology `H³(G, ℂˣ)` of the trivial representation
+vanishes. The group lives in `Type`, as Mathlib's group cohomology requires.
+
+Source: arXiv:2203.12563, Lemma, `Papers/2203.12563/REsubmission.tex` lines 1211--1213
+("In particular, the MPO representation is characterized by a trivial `3`-cocycle"). -/
+theorem anomalyClass_eq_zero_of_closed_fusion {G : Type} [Group G] {F : GroupFamily G d}
+    (hF : F.IsNormalRepresentation)
+    (hinj : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor)
+    (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
+    {fd : FusionData F} (hfd : fd.IsClosed) :
+    hF.anomalyClass = 0 :=
+  (FusionData.isTrivialGaugeClass_omega_iff hF fd).1
+    (FusionData.isTrivialGaugeClass_omega_of_closed_fusion hinj hone hF.operator_mul hfd)
 
 end GroupFamily
 
