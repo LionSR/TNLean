@@ -816,10 +816,7 @@ $1/\gamma$ in the block length here
 
 \begin{theorem}[The approximating state in depth $O(q)$]
     \label{thm:ldp_approximating_state_depth}
-    \uses{def:ldp_local_circuit, def:ldp_approximating_state,
-        lem:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization,
-        thm:ldp_bounded_unitary_two_site_gates}
+    \uses{def:ldp_local_circuit, def:ldp_approximating_state}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
         MPSPreparation.approximatingMPVStateRaw_eq_mulVec,
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
@@ -836,6 +833,9 @@ $1/\gamma$ in the block length here
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:ldp_unitary_implementing_isometry,
+        thm:ldp_sequential_factorization,
+        thm:ldp_bounded_unitary_two_site_gates}
     The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
     $D\ge1$, injectivity of the blocked tensor gives $D^2\le d^q$, which
     forces $d=D=1$. In either case $D\le d^D$, so each bond index can be
