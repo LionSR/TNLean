@@ -801,8 +801,10 @@ change the local dimension act on single sites.
     \leanok
     A \emph{local channel protocol of depth $T$} is a composition
     $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
-    onsite channels $\Phi_t$, which may change the local dimension, and
-    channel layers $L_t$. A density matrix $\rho$ is
+    channel layers $L_t$ and maps $\Phi_t$, each a composition of finitely
+    many onsite channels, which may change the local dimension; $\Phi_0$
+    contains at least one onsite channel, and $\Phi_t$ for $t\ge1$ may be
+    the identity. A density matrix $\rho$ is
     \emph{converted in depth $T$} into a density matrix $\sigma$, possibly of
     another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
     protocol $\Psi$ of depth at most $T$. This is the channel form of the circuits
@@ -829,9 +831,12 @@ change the local dimension act on single sites.
 \begin{proof}
     \leanok
     The composition $\Psi_2\circ\Psi_1$ of local channel protocols of depths
-    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$: the last
-    onsite channel of $\Psi_1$ and the first onsite channel of $\Psi_2$
-    compose to one onsite channel between the two groups of layers.
+    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$. Write
+    $\Psi_2$ as the sequence of its onsite channels and channel layers, and
+    apply them after $\Psi_1$ one at a time: the first onsite channel of
+    $\Psi_2$ becomes a further onsite channel in the last group $\Phi_{T_1}$
+    of $\Psi_1$, each onsite channel keeps the depth, and each of the $T_2$
+    channel layers raises it by one.
 \end{proof}
 
 \begin{lemma}[No connected correlations after a conversion]
