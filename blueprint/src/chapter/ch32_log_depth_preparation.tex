@@ -1308,7 +1308,9 @@ of $A$ along $w$.
         MPSTensor.normalizedMPVState_eq_of_gaugeEquiv,
         MPSTensor.norm_inner_normalizedMPVState_smul}
     \leanok
-    \uses{def:normal, thm:wielandt_proposition_three}
+    \uses{def:normal, thm:cpsv_normal_tp_gauge,
+        thm:normalized_normal_strongly_irreducible,
+        thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal}
     Let the products of some fixed number of matrices of $A$ span $\MN{D}$, and
     let $\lambda_1$ be an eigenvalue of $\E_A$ of largest modulus. Then
     $\lambda_1\ne0$, and there are $\zeta\ne0$, an invertible $X$ and $L\ge1$
@@ -1331,15 +1333,17 @@ of $A$ along $w$.
     unchanged. Since $A$ is normal, $\E_A$ is irreducible, so it has a
     positive eigenvector for its spectral radius $r>0$ and a positive
     eigenvector $\sigma$ of its dual; with $\zeta=r^{-1/2}$ and
-    $X=\sigma^{1/2}$, the tensor $B$ satisfies $\sum_i(B^i)^\dagger B^i=\Id$.
-    By Theorem~\ref{thm:wielandt_proposition_three}, $\E_B$ has a fixed point
+    $X=\sigma^{1/2}$, the tensor $B$ satisfies $\sum_i(B^i)^\dagger B^i=\Id$
+    (Theorem~\ref{thm:cpsv_normal_tp_gauge}). By
+    Theorem~\ref{thm:normalized_normal_strongly_irreducible}, $\E_B$ has a fixed point
     $\rho>0$, which we scale to unit trace, and $1$ is its only eigenvalue of
     modulus one. All eigenvalues of the trace-preserving map $\E_B$ have
     modulus at most one, and $\lvert\zeta\rvert^2\lambda_1$ is one of largest
     modulus, so $\lvert\zeta\rvert^2\lambda_1=1$. When $A$ is irreducible and
     $1$ is the unique eigenvalue of $\E_A$ of largest modulus, $r=1$, so
     $\zeta=1$; primitivity of $\E_A$ passes to $\E_B$, and some blocking of $B$
-    is injective by Theorem~\ref{thm:wielandt_proposition_three}.
+    is injective by Theorems~\ref{thm:cpsv_normal_eventually_injective}
+    and~\ref{thm:gauge_invariance_normal}.
 \end{proof}
 
 \section{Tensors that are not normal}

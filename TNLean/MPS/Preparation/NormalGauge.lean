@@ -41,45 +41,24 @@ variable {d D : ℕ}
 
 /-! ### Eigenvalues of the transfer map under gauges and rescalings -/
 
-/-- A gauge `Bⁱ = X Aⁱ X⁻¹` maps an eigenvector `Y` of `E_A` to the eigenvector `X Y X†` of `E_B`
-with the same eigenvalue.
+/-- Gauge-equivalent tensors have transfer maps with the same eigenvalues: a gauge
+`Bⁱ = X Aⁱ X⁻¹` conjugates `E_A` into `E_B` by the invertible map `Y ↦ X Y X†`.
 
 This is the invariance of the spectrum of `E_A` under the gauge transformation of
 arXiv:2307.01696, the sentence before eq. (5) ("After a gauge transformation"). -/
-theorem hasEigenvalue_transferMap_of_gaugeEquiv {A B : MPSTensor d D} (h : GaugeEquiv A B)
-    {μ : ℂ} (hμ : Module.End.HasEigenvalue (Kraus.transferMap A) μ) :
-    Module.End.HasEigenvalue (Kraus.transferMap B) μ := by
-  obtain ⟨X, hX⟩ := h
-  obtain ⟨Y, hY⟩ := hμ.exists_hasEigenvector
-  have hYeq : Kraus.transferMap A Y = μ • Y := Module.End.mem_eigenspace_iff.mp hY.1
-  set Xm : Matrix (Fin D) (Fin D) ℂ := (X : Matrix (Fin D) (Fin D) ℂ)
-  set Xi : Matrix (Fin D) (Fin D) ℂ := ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-  have hXiX : Xi * Xm = 1 := by
-    simp only [Xi, Xm, ← Units.val_mul, inv_mul_cancel, Units.val_one]
-  have hXHi : Xmᴴ * Xiᴴ = 1 := by
-    rw [← Matrix.conjTranspose_mul, hXiX, Matrix.conjTranspose_one]
-  refine hasEigenvalue_of_eigenvector_eq _ μ (Xm * Y * Xmᴴ) ?_ ?_
-  · have hB : ∀ i, B i = Xm * A i * Xi := fun i => by rw [hX i]
-    have key : Kraus.transferMap B (Xm * Y * Xmᴴ) = Xm * Kraus.transferMap A Y * Xmᴴ := by
-      simp only [Kraus.transferMap_apply, hB, Finset.mul_sum, Finset.sum_mul]
-      refine Finset.sum_congr rfl fun i _ => ?_
-      simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
-      rw [← Matrix.mul_assoc Xi Xm, hXiX, Matrix.one_mul, ← Matrix.mul_assoc Xmᴴ Xiᴴ, hXHi,
-        Matrix.one_mul]
-    rw [key, hYeq, Matrix.mul_smul, Matrix.smul_mul]
-  · intro h0
-    apply hY.2
-    have : Xi * (Xm * Y * Xmᴴ) * Xiᴴ = Y := by
-      rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hXiX, Matrix.one_mul, Matrix.mul_assoc, hXHi,
-        Matrix.mul_one]
-    rw [← this, h0, Matrix.mul_zero, Matrix.zero_mul]
-
-/-- Gauge-equivalent tensors have transfer maps with the same eigenvalues. -/
 theorem hasEigenvalue_transferMap_iff_of_gaugeEquiv {A B : MPSTensor d D} (h : GaugeEquiv A B)
     (μ : ℂ) :
     Module.End.HasEigenvalue (Kraus.transferMap A) μ ↔
-      Module.End.HasEigenvalue (Kraus.transferMap B) μ :=
-  ⟨hasEigenvalue_transferMap_of_gaugeEquiv h, hasEigenvalue_transferMap_of_gaugeEquiv h.symm⟩
+      Module.End.HasEigenvalue (Kraus.transferMap B) μ := by
+  obtain ⟨C, hC, hMap⟩ := h.transferMap_eq_similarityMap
+  have hconj : Kraus.transferMap B =
+      (Matrix.congruenceLinearEquiv C hC).symm.conj (Kraus.transferMap A) := by
+    rw [hMap]
+    apply LinearMap.ext
+    intro X
+    ext i j
+    simp [similarityMap, LinearEquiv.conj_apply, Matrix.mul_assoc, Finset.mul_sum, Finset.sum_mul]
+  rw [hconj, Module.End.hasEigenvalue_conj_iff]
 
 /-- Rescaling the tensor by `ζ` multiplies its transfer map by `|ζ|²`. -/
 theorem transferMap_smul_eq_norm_sq_smul (ζ : ℂ) (A : MPSTensor d D) :
@@ -88,21 +67,6 @@ theorem transferMap_smul_eq_norm_sq_smul (ζ : ℂ) (A : MPSTensor d D) :
   intro Y
   rw [LinearMap.smul_apply, Complex.ofReal_pow, ← Complex.mul_conj']
   exact transferMap_smul ζ A Y
-
-/-- The eigenvalues of `c • f` are `c` times those of `f`, for `c ≠ 0`. -/
-theorem _root_.Module.End.hasEigenvalue_smul_iff {V : Type*} [AddCommGroup V] [Module ℂ V]
-    (f : V →ₗ[ℂ] V) {c : ℂ} (hc : c ≠ 0) (μ : ℂ) :
-    Module.End.HasEigenvalue (c • f) (c * μ) ↔ Module.End.HasEigenvalue f μ := by
-  have step : ∀ (g : V →ₗ[ℂ] V) (a ν : ℂ), Module.End.HasEigenvalue g ν →
-      Module.End.HasEigenvalue (a • g) (a * ν) := by
-    intro g a ν hν
-    obtain ⟨x, hx⟩ := hν.exists_hasEigenvector
-    refine hasEigenvalue_of_eigenvector_eq _ _ x ?_ hx.2
-    rw [LinearMap.smul_apply, Module.End.mem_eigenspace_iff.mp hx.1, smul_smul]
-  refine ⟨fun h => ?_, step f c μ⟩
-  have := step _ c⁻¹ _ h
-  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul, ← mul_assoc, inv_mul_cancel₀ hc,
-    one_mul] at this
 
 /-! ### Normalized periodic vectors under gauges and rescalings -/
 
@@ -188,7 +152,9 @@ theorem exists_normalGauge_of_isNormal {A : MPSTensor d D} (hA : Kraus.IsNormal 
   have heig : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ ↔
       Module.End.HasEigenvalue (Kraus.transferMap B') (c * μ) := fun μ => by
     rw [← hasEigenvalue_transferMap_iff_of_gaugeEquiv hGB, transferMap_smul_eq_norm_sq_smul,
-      Module.End.hasEigenvalue_smul_iff _ hc]
+      Module.End.hasEigenvalue_iff_mem_spectrum, Module.End.hasEigenvalue_iff_mem_spectrum,
+      ← spectrum.smul_mem_smul_iff (r := Units.mk0 c hc)]
+    rfl
   /- `c λ₁` is an eigenvalue of `E_{B'}` of largest modulus; since `1` is an eigenvalue of
   `E_{B'}` and all have modulus at most one, `c λ₁ = 1` by primitivity. -/
   have hNB' : IsNormalTensor B' := hNB.of_gaugeEquiv hG'.symm
