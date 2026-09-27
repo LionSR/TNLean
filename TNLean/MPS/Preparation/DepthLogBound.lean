@@ -58,10 +58,10 @@ theorem norm_inner_normalizedMPVState_of_mpv_eq {D D' : ℕ} {A : MPSTensor d D}
     ‖⟪ψ, normalizedMPVState B N⟫_ℂ‖ = ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ := by
   have hv : mpvState B N = ζ ^ N • mpvState A N := by
     ext σ
-    simp [mpvState_apply, h]
+    rw [PiLp.smul_apply, mpvState_apply, mpvState_apply, smul_eq_mul, h]
   have hz : ‖ζ ^ N‖ ≠ 0 := norm_ne_zero_iff.2 (pow_ne_zero _ hζ)
   simp only [normalizedMPVState, hv, norm_smul, inner_smul_right, norm_mul, norm_inv,
-    Complex.norm_real, Real.norm_eq_abs, abs_mul, abs_norm]
+    Complex.norm_real, Real.norm_eq_abs, abs_norm]
   rcases eq_or_ne ‖mpvState A N‖ 0 with h0 | h0
   · simp [h0]
   · field_simp
@@ -78,8 +78,8 @@ theorem norm_approximatingMPVState {D : ℕ} (A : MPSTensor d D) {q : ℕ}
     refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
       (Complex.ofReal_injective ?_)
     push_cast
-    rw [← h]
-    simpa only [mul_comm] using mpv_approximatingTensor_norm_sq hB hσ htr (M := M)
+    rw [h, ← mpv_approximatingTensor_norm_sq hB hσ htr (M := M)]
+    exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
   rw [(inner_approximatingMPVState_mpvState A hB hσ htr M).1, hraw]
 
 /-- **Error `ε` in depth `O(q)` with `q ∝ log(N/ε)`.** There is `C`, depending only on `d` and
@@ -225,7 +225,10 @@ theorem exists_isPreparedInDepth_le_log {D : ℕ} [NeZero D] (A : MPSTensor d D)
         mul_le_mul_of_nonneg_left hq2 (Nat.cast_nonneg _)
     _ ≤ C * ((2 * a + 2 * b / Real.log 2) * Real.log (N / ε)) := by
         refine mul_le_mul_of_nonneg_left ?_ (Nat.cast_nonneg _)
-        nlinarith
+        have e : (2 * a + 2 * b / Real.log 2) * Real.log (N / ε) =
+            2 * (a * Real.log (N / ε)) + 2 * (b / Real.log 2 * Real.log (N / ε)) := by ring
+        rw [e]
+        linarith
     _ = _ := by ring
 
 end MPSPreparation
