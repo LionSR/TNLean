@@ -56,7 +56,8 @@
     Suppose now that $V^\dagger V=\Id$. Then
     \begin{align}
         W^\dagger W               & =\Id,
-                                  & \E_{A_V}                                                      & =\E_A,
+        \label{eq:mpdo_embedding_w_isometry}                                                                                      \\
+        \E_{A_V}                  & =\E_A,
         \label{eq:mpdo_embedding_transfer}                                                                                        \\
         A_V\text{ is injective}
                                   & \Longleftrightarrow A\text{ is injective},
@@ -88,9 +89,9 @@
 \begin{proof}
     \leanok
     The $(\sigma,\rho)$ entry of $W^\dagger W$ factors into the product of
-    the corresponding ket and bra entries of $V^\dagger V$, which gives the
-    first identity in (\ref{eq:mpdo_embedding_transfer}).  Isometric mixing of
-    a Kraus family therefore gives the second identity.  Conversely, each
+    the corresponding ket and bra entries of $V^\dagger V$, which gives
+    (\ref{eq:mpdo_embedding_w_isometry}).  Isometric mixing of
+    a Kraus family then yields (\ref{eq:mpdo_embedding_transfer}).  Conversely, each
     original matrix is recovered from the mixed family by
     $A^\sigma=\sum_\tau\overline{W_{\tau,\sigma}}A_V^\tau$; this proves the
     injectivity equivalence.  The transfer-map identity and the equivalence

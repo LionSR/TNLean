@@ -29,13 +29,17 @@ taken over `ℂ` (Mathlib's `spectralRadius`):
   (`fixedPoint_of_compact_convex` of QICLean) is an eigenvector of `M` whose eigenvalue is at
   least `ρ` and at most `ρ`;
 * a positive left eigenvector `δ M = r δ` forces `ρ(M) = r`, by pairing `δ` with the entrywise
-  moduli of an arbitrary complex eigenvector.
+  moduli of an arbitrary complex eigenvector;
+* for a matrix with strictly positive entries, a positive eigenvector spans the real eigenspace
+  of its eigenvalue.
 
 ## Main results
 
 * `Matrix.exists_nonneg_mulVec_eq_spectralRadius_smul`: the weak Perron–Frobenius theorem.
 * `Matrix.spectralRadius_map_ofReal_eq_of_pos_vecMul_eq`: the spectral radius equals the
   eigenvalue of a positive left eigenvector.
+* `Matrix.exists_eq_smul_of_pos_of_mulVec_eq`: uniqueness of the positive eigenvector of a
+  positive matrix.
 -/
 
 open scoped Matrix ENNReal NNReal
@@ -256,6 +260,51 @@ theorem exists_nonneg_mulVec_eq_spectralRadius_smul [Nonempty ι] {M : Matrix ι
     rw [hMeig, Pi.smul_apply, smul_eq_mul] at h1
     exact le_of_mul_le_mul_right h1 hi
   exact ⟨x, hx0, hx.1, by rw [hMeig, le_antisymm hle hge]⟩
+
+omit [DecidableEq ι] in
+/-- **Uniqueness of the positive eigenvector of a positive matrix.** If a real matrix `M` with
+strictly positive entries has an eigenvector `u` with positive entries for the eigenvalue `ρ`,
+then every real eigenvector `w` for `ρ` is a multiple of `u`. With `t = min_i w_i / u_i`, the
+vector `w - t u` is a nonnegative eigenvector with a vanishing entry; positivity of `M` forces it
+to vanish. -/
+theorem exists_eq_smul_of_pos_of_mulVec_eq {M : Matrix ι ι ℝ} (hM : ∀ i j, 0 < M i j)
+    {u w : ι → ℝ} (hu : ∀ i, 0 < u i) {ρ : ℝ} (hMu : M *ᵥ u = ρ • u) (hMw : M *ᵥ w = ρ • w) :
+    ∃ t : ℝ, w = t • u := by
+  cases isEmpty_or_nonempty ι with
+  | inl _ => exact ⟨0, Subsingleton.elim _ _⟩
+  | inr _ =>
+    obtain ⟨i₀, -, hi₀⟩ := Finset.exists_min_image Finset.univ (fun i => w i / u i)
+      Finset.univ_nonempty
+    set t := w i₀ / u i₀
+    set z := w - t • u with hz
+    have hz0 : ∀ j, 0 ≤ z j := by
+      intro j
+      have h := hi₀ j (Finset.mem_univ _)
+      rw [div_le_div_iff₀ (hu i₀) (hu j)] at h
+      have : t * u j ≤ w j := by
+        rw [show t = w i₀ / u i₀ from rfl, div_mul_eq_mul_div, div_le_iff₀ (hu i₀)]
+        linarith
+      simp only [hz, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+      linarith
+    have hzi₀ : z i₀ = 0 := by
+      simp only [hz, Pi.sub_apply, Pi.smul_apply, smul_eq_mul, t]
+      rw [div_mul_cancel₀ _ (hu i₀).ne']
+      ring
+    have hMz : M *ᵥ z = ρ • z := by
+      rw [hz, Matrix.mulVec_sub, Matrix.mulVec_smul, hMw, hMu, smul_sub, smul_comm]
+    have hsum : ∑ j, M i₀ j * z j = 0 := by
+      have := congrFun hMz i₀
+      simp only [Pi.smul_apply, smul_eq_mul, hzi₀, mul_zero] at this
+      exact this
+    have hzero : ∀ j, z j = 0 := by
+      intro j
+      have h := (Finset.sum_eq_zero_iff_of_nonneg fun k _ =>
+        mul_nonneg (hM i₀ k).le (hz0 k)).1 hsum j (Finset.mem_univ _)
+      exact (mul_eq_zero.1 h).resolve_left (hM i₀ j).ne'
+    refine ⟨t, funext fun j => ?_⟩
+    have := hzero j
+    simp only [hz, Pi.sub_apply, Pi.smul_apply, smul_eq_mul] at this ⊢
+    linarith
 
 /-- Every complex eigenvalue `μ` of a nonnegative real matrix `M` with a positive left
 eigenvector `δ ᵥ* M = r • δ` satisfies `‖μ‖ ≤ r`: pairing `δ` with the entrywise moduli of an

@@ -10,6 +10,8 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.MPOSymmetry.AnomalyObstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
@@ -17,10 +19,14 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ClosedFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
+import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
+import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRep
+import TNLean.MPS.Symmetry.MPOSymmetry.Similarity
+import TNLean.MPS.Symmetry.MPOSymmetry.SymmetricBoundary
 import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness
