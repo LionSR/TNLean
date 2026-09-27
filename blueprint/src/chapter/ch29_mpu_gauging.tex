@@ -4785,7 +4785,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \uses{def:mpug_permuted_block_l_symbol}
     Let $e$ be a domain wall between $x$ and $y$, and $e'$ a domain wall
     between $gx$ and $gy$. The element $g$ carries $e$ to $e'$ with phase $c$
-    if $e'\neq0$, $c\neq0$, and there is $N$ such that
+    if $e\neq0$, $e'\neq0$, $c\neq0$, and there is $N$ such that
     \begin{align}
         V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}\,(O_g\cdot e)^i\,
         (O_g\cdot A_y)^{\mathbf v}\,W_{g,y}
@@ -5069,6 +5069,9 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility}. Its
     right-hand side involves only the fusion tensors, and it is invariant
     under their gauge action, so the product is independent of all choices.
+    Finally, by Theorem~\ref{thm:mpug_domain_wall_state},
+    $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}
+        =\omega(g,g,g)\,\omega(g,e,g)\ket{\psi(B\text{-}A\text{-}B)}$.
 \end{proof}
 
 \subsection{Normalization of the first source factor}

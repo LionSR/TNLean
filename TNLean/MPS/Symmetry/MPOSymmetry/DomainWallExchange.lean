@@ -80,7 +80,12 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 826--832 (the cho
 theorem smul_source (h : ad.IsDomainWallAction g hx hy e e' c) {a : ℂ} (ha : a ≠ 0) :
     ad.IsDomainWallAction g hx hy (fun i ↦ a • e i) e' (a * c) := by
   obtain ⟨N, hN⟩ := h.eq
-  refine ⟨h.target_ne_zero, mul_ne_zero ha h.phase_ne_zero, N, fun u v i hu hv ↦ ?_⟩
+  have he : (fun i ↦ a • e i) ≠ 0 := by
+    intro h0
+    refine h.source_ne_zero (funext fun i ↦ ?_)
+    have := congrFun h0 i
+    simpa [ha] using this
+  refine ⟨he, h.target_ne_zero, mul_ne_zero ha h.phase_ne_zero, N, fun u v i hu hv ↦ ?_⟩
   rw [actRect_smul, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul,
     Matrix.mul_smul, Matrix.smul_mul, hN u v i hu hv, smul_smul]
 
@@ -96,7 +101,7 @@ theorem smul_target (h : ad.IsDomainWallAction g hx hy e e' c) {a : ℂ} (ha : a
     refine h.target_ne_zero (funext fun i ↦ ?_)
     have := congrFun h0 i
     simpa [ha] using this
-  refine ⟨he', div_ne_zero h.phase_ne_zero ha, N, fun u v i hu hv ↦ ?_⟩
+  refine ⟨h.source_ne_zero, he', div_ne_zero h.phase_ne_zero ha, N, fun u v i hu hv ↦ ?_⟩
   rw [hN u v i hu hv, Matrix.mul_smul, Matrix.smul_mul, smul_smul, div_mul_cancel₀ _ ha]
 
 /-- **The phases of an involution can be made equal** (arXiv:2405.00439,
