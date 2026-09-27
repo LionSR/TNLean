@@ -558,6 +558,61 @@ $1$, hence $\Pi_0^2\neq\Pi_0$;
 length, and the empty chain is excluded as a degenerate reading;
 see~\cite{gap:bmwshv17_fibonacci_projector_positive_length}.
 
+\subsection{The golden chain}
+
+The golden chain of Feiguin et al.~\cite{Feiguin2007GoldenChain} acts on
+the labels $x_0,\ldots,x_{N-1}\in\{1,\tau\}$ of a periodic chain. Its
+three-site term projects the two anyons at links $i$ and $i+1$ onto their
+trivial fusion channel, with the amplitudes
+\begin{align}
+    (p_i)^{x_i'}_{x_i}
+     & =\left(F^{x_{i-1}\tau\tau}_{x_{i+1}}\right)_{x_i'}^{1}
+    \left(F^{x_{i-1}\tau\tau}_{x_{i+1}}\right)_{x_i}^{1},
+    \label{eq:asymex_fib_golden_term}
+\end{align}
+where $p_i$ changes only the label $x_i$. It is the projector onto
+$\ket{1\tau1}$ between two trivial neighbours, it vanishes between a trivial
+and a $\tau$ neighbour, and between two $\tau$ neighbours it is
+$\begin{pmatrix}\varphi^{-2}&\varphi^{-3/2}\\
+\varphi^{-3/2}&\varphi^{-1}\end{pmatrix}$ in the basis $1,\tau$ of~$x_i$.
+The Hamiltonian is $H_N=-\sum_ip_i$. The review states that such anyonic
+chains commute with the whole algebra of periodic
+operators~\cite{Cirac2021Matrix}.
+
+\begin{theorem}[The golden chain commutes with the Fibonacci operators]%
+    \label{thm:asymex_fib_golden_chain}
+    \lean{FibonacciCompression.goldenChainTermGolden_tau_tau,
+        FibonacciCompression.mpo_fibTau_eq_neighbourKernel,
+        FibonacciCompression.goldenChainTerm_local_tau,
+        FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibTau,
+        FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibOne,
+        FibonacciCompression.goldenChainHamiltonian_commute_fibProjector}
+    \leanok
+    \uses{def:asymex_fib, def:asymex_fib_fsymbols, def:asymex_fib_projector}
+    For every $N\geq2$, the golden chain $H_N$ commutes with $O_N(B_\tau)$,
+    with $O_N(B_1)$ and with the projector $\Pi_N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    In the $\tau$ block the bond index at site $n$ is determined by the
+    pair $(x_n',x_n)$, so the only closed bond configuration that survives
+    gives
+    $\bra{x'}O_N(B_\tau)\ket{x}=\prod_n
+    \left(F^{\tau x_n\tau}_{x_{n+1}'}\right)_{x_n'}^{x_{n+1}}$,
+    the topological symmetry of~\cite{Feiguin2007GoldenChain}; similarly
+    $O_N(B_1)$ is diagonal with entry $1$ exactly on the configurations
+    without two neighbouring trivial labels. In both cases the entry is a
+    product of factors $f(x_n',x_{n+1}',x_n,x_{n+1})$ around the ring. The
+    product $p_iO_N(B_\tau)$ and the product $O_N(B_\tau)p_i$ share the
+    factors away from the two bonds at site $i$, and the remaining sums
+    over the intermediate label at site $i$ agree by a three-site identity,
+    checked on the sixty-four choices of the six outer and inner labels in
+    exact golden arithmetic. The same identity holds for the kernel of
+    $O_N(B_1)$. Summing over $i$ gives the first two statements, and the
+    third follows since $\Pi_N=w_1O_N(B_1)+w_\tau O_N(B_\tau)$.
+\end{proof}
+
 \subsection{Two periodic states and the Fibonacci action}
 
 For an MPS tensor $D$, write
