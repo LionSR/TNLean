@@ -1212,6 +1212,20 @@ The following notions use different transfer objects and are not interchangeable
   (uniqueness of the phase), `IsDomainWallAction.pair` (a string over a pair of walls),
   `IsDomainWallAction.mpo_mulVec_twoWallMPV` (the periodic state with two walls).
 
+### `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily`
+
+- **Declaration:** `ad.IsDomainWallFamily e B : Prop` for domain walls
+  `e : (y z : X) → Fin d → Matrix (Fin (D y)) (Fin (D z)) ℂ` and phases `B : G → X → X → ℂ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallFamily.lean`.
+- **Meaning:** every `g` carries `e_{yz}` to `e_{gy,gz}` with phase `B^g_{y,z}`, in the sense of
+  `IsDomainWallAction`; in particular all walls and phases are nonzero.
+- **Source boundary:** arXiv:2405.00439, line 1894 and `eq:localcdefG`, with the conventions of
+  `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+- **Sanctioned bridges:** `IsDomainWallFamily.mul_eq` (`PentLB`),
+  `IsDomainWallFamily.prod_eq_inv_cyclicInvariant` (`Intequiv`),
+  `IsDomainWallFamily.mul_eq_of_fixed` (projective action of Mathlib's `fixingSubgroup` of the two
+  blocks).
+
 ## Symmetries of matrix product density operators
 
 ### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
