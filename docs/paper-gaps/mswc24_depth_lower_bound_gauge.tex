@@ -8,7 +8,7 @@
 \date{2026-09-26}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 Let $\ket{\phi_N}$ be the normalized translation-invariant matrix product
@@ -33,7 +33,7 @@ transformation $\mathcal E_A=\ket{\rho}\bra{\mathbb 1}+R$, that is,
 \end{align}
 
 \section{What is formalized}
-The formalized statement assumes (\ref{eq:mswc24_depth_lower_bound_gauge}),
+The gauge-form statement assumes (\ref{eq:mswc24_depth_lower_bound_gauge}),
 a length $L\ge1$ at which the products of $L$ matrices of $A$ span the full
 matrix algebra, and an eigenvalue $\lambda_2\ne1$ of $\mathcal E_A$ whose
 modulus bounds those of all other eigenvalues different from $1$, with
@@ -46,19 +46,38 @@ depth $T$ and $N\ge B(T+1)$ forces $N\le C(T+1)e^{b(T+1)}$.\footnote{Formal
     and \leanid{MPSTensor.exists_depth_lower_bound} in
     \doclink{TNLean/MPS/Preparation/DepthLowerBound}.}
 
-The restriction is the gauge (\ref{eq:mswc24_depth_lower_bound_gauge}). Both
+The restriction was the gauge (\ref{eq:mswc24_depth_lower_bound_gauge}). Both
 the source's proof and the chapter's proof begin by passing to it: a normal
 tensor becomes $\lambda_1^{-1/2}\sigma^{1/2}A^i\sigma^{-1/2}$ with $\sigma$ the
 positive fixed point of the dual transfer map, which multiplies
-$\ket{\phi_N(A)}$ by a positive constant and leaves the normalized vector and
-the correlation length unchanged. That reduction is not formalized.
+$\ket{\phi_N(A)}$ by a nonzero constant and leaves the normalized vector and
+the correlation length unchanged.
 
-\section{Elimination plan}
-Formalize the reduction to the gauge for a normal tensor: existence of the
-positive fixed points of $\mathcal E_A$ and its dual, invariance of the
-normalized vectors $\ket{\phi_N}$ under the rescaled conjugation, and
-invariance of the spectrum of $\mathcal E_A$ up to the factor $\lambda_1$.
-Then derive the source's Theorem~1 for every normal tensor from the gauge form.
+\section{Resolution}
+The reduction to the gauge is now formalized, and the source's Theorem~1 is
+proved without the gauge hypothesis.\footnote{Formal declarations:
+    \leanid{MPSTensor.IsNormalTensor.exists_normalGauge},
+    \leanid{MPSTensor.exists_normalGauge_of_isNormal},
+    \leanid{MPSTensor.eventually_one_half_lt_infidelity_of_isNormalTensor} and
+    \leanid{MPSTensor.eventually_one_half_lt_infidelity_of_isNormal} in
+    \doclink{TNLean/MPS/Preparation/NormalGauge} and
+    \doclink{TNLean/MPS/Preparation/DepthLowerBoundNormal}.}
+For a normal tensor in the source's sense (irreducible, with $\mathcal E_A$
+having the unique largest eigenvalue $\lambda_1=1$), a gauge transformation
+alone reaches (\ref{eq:mswc24_depth_lower_bound_gauge}); it leaves every trace
+$\operatorname{Tr}(A^{i_1}\cdots A^{i_N})$ and every eigenvalue of
+$\mathcal E_A$ unchanged, and some blocking of the gauged tensor is injective.
+For a tensor some blocking of which is injective, with no normalization of the
+leading eigenvalue $\lambda_1$ of $\mathcal E_A$, a rescaling by
+$\zeta\ne0$ followed by a gauge transformation reaches
+(\ref{eq:mswc24_depth_lower_bound_gauge}); it multiplies $\ket{\phi_N(A)}$ by
+$\zeta^N$, so $\lvert\braket{\phi_N}{\psi}\rvert$ is unchanged for the
+normalized vectors, and it divides every eigenvalue of $\mathcal E_A$ by
+$\lambda_1$, so the correlation length $-1/\ln\lvert\lambda_2/\lambda_1\rvert$
+is the one of the gauged tensor. The equality $\lvert\zeta\rvert^2\lambda_1=1$
+follows because $\lvert\zeta\rvert^2\lambda_1$ is an eigenvalue of largest
+modulus of a trace-preserving primitive transfer map with fixed point $\rho>0$.
+Both statements are then the gauge form applied to the gauged tensor.
 
 \section{Proof route}
 The formal proof follows the chapter's argument rather than the source's. The

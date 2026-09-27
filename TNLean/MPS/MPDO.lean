@@ -163,6 +163,7 @@ import TNLean.MPS.MPDO.CyclicEdgeWeightTensor
 import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.DiagonalCutRank
+import TNLean.MPS.MPDO.DiagonalDressing
 import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.DirectSum
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
@@ -336,6 +337,7 @@ import TNLean.MPS.MPDO.SimpleLocalInverseMaps
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleScaling
 import TNLean.MPS.MPDO.SimpleTensor
+import TNLean.MPS.MPDO.SiteOperatorKernel
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.SitewisePhysicalRecovery
 import TNLean.MPS.MPDO.SourceBNTBlocking
