@@ -77,7 +77,7 @@ the number $Np$ of original sites.
          & =\bigvee_{j=1}^{g}G_L\!\left(A_j^{[p]}\right).
         \label{eq:cpsv_blocked_representative_local_space}
     \end{align}
-    The first equality is a derived trace identity for an exact coisometric
+    Identity~(\ref{eq:coisometric_reconstruction_local_space}) is a derived trace identity for an exact coisometric
     reconstruction. It is not the literal direct-sum canonical-form equation
     of CPSV16.
 \end{lemma}
@@ -93,9 +93,9 @@ the number $Np$ of original sites.
         \notag                        \\
         \Gamma_L^C(Y)
          & =\Gamma_L^A(U^\dagger YU),
-        \notag
+        \label{eq:gamma_lc_from_u_adj}
     \end{align}
-    where the second equality uses $UU^\dagger=I_n$. This proves
+    where (\ref{eq:gamma_lc_from_u_adj}) uses $UU^\dagger=I_n$. This proves
     (\ref{eq:coisometric_reconstruction_local_space}). For literal
     canonical-form data, apply this equality to the retained direct sum.
     Theorem~\ref{thm:block_sum_local_ground_space} gives the sum over all
@@ -140,7 +140,7 @@ the number $Np$ of original sites.
     \begin{align}
         \mathcal G_{N,2}(B)
          & =\bigvee_{j=1}^{g}\mathcal G_{N,2}(A_j),
-        \notag                                                   \\
+        \label{eq:block_diagonal_chain_space_join}               \\
         \ker H_2^{(N)}(B)
          & =\spn\left\{\ket{V^{(N)}(A_j)}:1\leq j\leq g\right\}.
         \label{eq:block_diagonal_one_site_span_parent_spanning}
@@ -155,7 +155,7 @@ the number $Np$ of original sites.
     coefficients $c_i$ satisfying $\sum_i c_iA_j^i=I_{D_j}$ for every $j$.
     In the restriction-intersection argument of the proof of
     \cite[Theorem~12]{PerezGarcia2007Matrix}, these coefficients replace the
-    right-canonical identity and yield the first equality. This conditional
+    right-canonical identity and yield (\ref{eq:block_diagonal_chain_space_join}). This conditional
     variant and its relation to the source proof are documented in
     \cite{gap:pgvwc07_common_identity_coefficients}. The same span makes every
     $A_j$ injective, so
