@@ -295,9 +295,11 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     \leanok
     \uses{def:ldpolar_tensor, def:transfer_map}
     For every tensor $B$ with positive-part tensor $P$, $\E_P=\E_B$. This is
-    \cite[eq.~(8)]{Malz2024Preparation}, which is stated
-    there for injective $B$; the argument of the Supplemental Material, from
-    $V^\dagger V=\Pi$ and $\Pi P=P$, gives it for every tensor.
+    the first equality of \cite[eq.~(8)]{Malz2024Preparation}, which is stated
+    there for injective $B$. The Supplemental Material uses the polar
+    decomposition of an arbitrary blocked tensor, with $V^\dagger V=\Pi$; the
+    identities $V^\dagger V=\Pi$ and $\Pi P=P$ give the equality for every
+    tensor.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -334,10 +336,10 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_transfer, lem:blocked_irreducibility_direct_support}
+    \uses{thm:ldpolar_transfer, thm:blocked_transfer_map}
     $\E_P=\E_{A^{[q]}}$ by Theorem~\ref{thm:ldpolar_transfer}, and
     $\E_{A^{[q]}}=\E_A^q$ by
-    Lemma~\ref{lem:blocked_irreducibility_direct_support}
+    Theorem~\ref{thm:blocked_transfer_map}
     \cite[eq.~(6)]{Malz2024Preparation}.
 \end{proof}
 
@@ -356,8 +358,14 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
         \Big(\prod_{j=0}^{M-1}V_{\sigma_j\tau_j}\Big)\,V^{(M)}(P)_\tau,
         \notag
     \end{align}
-    that is, $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$
-    \cite[Supplemental Material]{Malz2024Preparation}.
+    that is, $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$. Before
+    normalization, this writes the state as $V^{\otimes M}$ applied to the
+    state $\ket{\phi_{\mathrm{pos}}}$ of the positive parts of
+    \cite[eq.~(18)]{Malz2024Preparation}. It is the identity
+    $\ket{\phi_N}=\frac{1}{c_N}\bigl(\bigotimes_{i=1}^{N/q}V_i\bigr)
+        \sum_j\beta_j\ket{v_{\mathrm{pos},j}}$ of
+    \cite[Supplemental Material]{Malz2024Preparation} with the positive part
+    kept whole rather than split into its normal blocks.
 \end{theorem}
 \begin{proof}
     \leanok
