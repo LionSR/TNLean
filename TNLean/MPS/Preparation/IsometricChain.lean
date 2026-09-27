@@ -290,7 +290,7 @@ outside the `b_p × b_{p+1}` block and isometric on it, together with a right
 vector `r'` supported on the first `b_n` levels, such that
 `Rm P₀(τ₀) ⋯ P_{n-1}(τ_{n-1}) r = Q₀(τ₀) ⋯ Q_{n-1}(τ_{n-1}) r'` for every
 configuration `τ`. The last remainder `r'` is the source's
-`|φ_I⟩ = M_{[1]} |φ'_I⟩`.
+`|φ_I⟩ = M_{[1]} |φ̃_I⟩`.
 
 Each new bond is at most the number of columns of the corresponding original
 site matrix that are not identically zero: if every `P_p(i)` vanishes on the
@@ -796,7 +796,7 @@ bond dimensions are at most those of the given chain, bond by bond, and in which
 every site satisfies `∑_i A_i^† A_i = 1`.
 
 This is the successive-decomposition construction of arXiv:quant-ph/0501096,
-eq. `induction`, with the last remainder `M_{[1]} |φ'_I⟩` of norm one, as in the
+eq. `induction`, with the last remainder `M_{[1]} |φ̃_I⟩` of norm one, as in the
 deterministic part of arXiv:quant-ph/0608197, Theorem `Thm:seqwith`
 (lines 1569--1578). -/
 theorem exists_isometric_coeff_eq_of_norm {n : ℕ} (B : OBCChainTensor d D (n + 1))

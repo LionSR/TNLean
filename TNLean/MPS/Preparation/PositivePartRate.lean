@@ -17,11 +17,11 @@ Let `A` be a normal tensor in the gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = 
 first two steps of the approximation estimate of Piroli, Styliaris, and Cirac (arXiv:2103.13367,
 Supplemental Material, "Proof of Theorem MPS_classification"):
 
-1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-2γ n/ξ} ‖X‖` (compare eq. `difference`,
+1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-2γ n/ξ} ‖X‖` (compare eq. `eq:difference`,
    `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix); the rate
    `e^{-2γ/ξ} = |λ₂|^{2γ}` exceeds the spectral radius of `E_A - |σ⟩⟨1|` because `2γ < 1`.
 2. **Positive parts.** The positive part `P_q` of the polar decomposition of the `q`-site blocked
-   tensor satisfies `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}` (eq. `intermediate`), from the rearrangement
+   tensor satisfies `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}` (eq. `eq:intermediate`), from the rearrangement
    `P_q² - P_∞² ≅ E_A^q - |σ⟩⟨1|` and `‖√a - √b‖ ≤ √‖a - b‖` (`CFC.norm_sqrt_sub_sqrt_le` in
    `TNLean.Algebra.CStarSqrtHolder`).
 
@@ -36,7 +36,7 @@ The rate `e^{-γ q/ξ}` of step 2 feeds the telescoping estimate in
 ## References
 
 * arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification" (eqs.
-  `difference` and `intermediate`).
+  `eq:difference` and `eq:intermediate`).
 * arXiv:2307.01696, eqs. (5) and (8), and eq. (S9) for the range `0 < γ < 1/2`.
 -/
 
@@ -67,7 +67,7 @@ theorem neg_div_correlationLength (γ : ℝ) (lam₂ : ℂ) :
 `a ≤ |λ₂|`. This is where `γ < 1/2` enters: `|λ₂|^{2γ} > |λ₂|` for `|λ₂| < 1`.
 
 arXiv:2307.01696, eq. (S9) (`0 < γ < 1/2`), and arXiv:2103.13367, the choice `β < α/2` after
-eq. `finished`. -/
+eq. `eq:finished`. -/
 theorem lt_exp_neg_div_correlationLength_sq {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2)
     {lam₂ : ℂ} {a : ℝ} (ha1 : a < 1) (ha : a ≤ ‖lam₂‖) :
     a < Real.exp (-γ / correlationLength lam₂) ^ 2 := by
@@ -87,7 +87,7 @@ theorem lt_exp_neg_div_correlationLength_sq {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ
 /-- The eigenvalues of `E_A - |σ⟩⟨1|` for a normal tensor: each has modulus `< 1` and at most
 `|λ₂|` when `λ₂` bounds the moduli of the eigenvalues of `E_A` other than `1`.
 
-arXiv:2103.13367, the decomposition `τ_AA = τ_BB + R` before eq. `difference`: `R` carries the
+arXiv:2103.13367, the decomposition `τ_AA = τ_BB + R` before eq. `eq:difference`: `R` carries the
 Jordan blocks of the subleading eigenvalues. -/
 theorem norm_le_of_hasEigenvalue_transferMap_sub_fixedPointProj [NeZero D] (A : MPSTensor d D)
     (hN : IsNormalTensor A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
@@ -126,7 +126,7 @@ open scoped Matrix.Norms.L2Operator in
 correlation length `ξ`, and let `0 < γ < 1/2`. Then there is `C > 0` with
 `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-2γ n/ξ} ‖X‖` for all `n` and `X`.
 
-arXiv:2103.13367, eq. `difference`: `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked
+arXiv:2103.13367, eq. `eq:difference`: `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked
 transfer matrix, where `R = τ_AA - τ_BB` is the remainder of the `q`-blocked transfer matrix. Here
 the unblocked `E_A^n` is bounded directly, and the polynomial prefactor `Λ` is absorbed into the
 rate `e^{-2γ/ξ} > |λ₂|`. -/
@@ -226,7 +226,7 @@ open scoped Matrix.Norms.L2Operator in
 `B_q† B_q = P_q²` of the `q`-site blocked tensor is `e^{-2γ q/ξ}`-close to
 `σᵀ ⊗ 1 = P_∞²`.
 
-arXiv:2103.13367, eq. `difference` (`τ_AA = τ_BB + R`, read with the lower lines as input). -/
+arXiv:2103.13367, eq. `eq:difference` (`τ_AA = τ_BB + R`, read with the lower lines as input). -/
 theorem exists_norm_gram_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
@@ -257,7 +257,8 @@ open scoped Matrix.Norms.L2Operator in
 part `P_q = (B_q† B_q)^{1/2}` of the `q`-site blocked tensor satisfies
 `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`, with `P_∞ = (√σ)ᵀ ⊗ 1`.
 
-arXiv:2103.13367, eq. `intermediate`: `‖A' - B'‖_∞ ≤ √‖(A')†A' - (B')†B'‖`. -/
+arXiv:2103.13367, eq. `eq:intermediate` and the sentence after it: `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞`
+for `X, Y > 0`, applied to `Ã = √(A†A)` and `B̃ = √(B†B)`. -/
 theorem exists_norm_polarPos_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
