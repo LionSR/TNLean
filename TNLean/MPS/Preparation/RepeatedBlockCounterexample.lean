@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.Preparation.OneDimensionalBlocks
 
 /-!
@@ -378,6 +379,8 @@ noncomputable def repeatedBlockCopyCoord : Fin 3 → Fin repeatedBlockSector.tot
     repeatedBlockSector.copyCoord 0 ⟨1, by decide⟩ ⟨0, Nat.one_pos⟩,
     repeatedBlockSector.copyCoord 1 ⟨0, by decide⟩ ⟨0, Nat.one_pos⟩]
 
+/-- The canonical form has bond dimension three, the sum `∑ⱼ m_j D_j` of the bond dimensions of
+the copies of the blocks in arXiv:2307.01696, eq. (S2). -/
 theorem totalDim_repeatedBlockSector : repeatedBlockSector.totalDim = 3 := by
   have h : repeatedBlockSector.totalCopies = 3 := by
     simp [SectorDecomposition.totalCopies, SectorDecomposition.copies, repeatedBlockMult,
@@ -385,6 +388,8 @@ theorem totalDim_repeatedBlockSector : repeatedBlockSector.totalDim = 3 := by
   simp only [SectorDecomposition.totalDim, SectorDecomposition.flatDim, Finset.sum_const,
     Finset.card_univ, Fintype.card_fin, smul_eq_mul, mul_one, h]
 
+/-- The bond coordinates of the copies of the blocks exhaust the bond coordinates of the
+canonical form of arXiv:2307.01696, eq. (S2), each exactly once. -/
 theorem bijective_repeatedBlockCopyCoord : Function.Bijective repeatedBlockCopyCoord := by
   refine (Fintype.bijective_iff_injective_and_card _).2 ⟨fun x y hxy => ?_, by
     simp [totalDim_repeatedBlockSector]⟩
@@ -402,6 +407,8 @@ is `repeatedBlockTensor`: a permutation of the bond basis, which is a gauge tran
 noncomputable def repeatedBlockEquiv : Fin repeatedBlockSector.totalDim ≃ Fin 3 :=
   (Equiv.ofBijective _ bijective_repeatedBlockCopyCoord).symm
 
+/-- The ordering of the bond coordinates of the canonical form of arXiv:2307.01696, eq. (S2),
+sends the coordinate `x` to the bond coordinate of the `x`-th copy. -/
 theorem repeatedBlockEquiv_symm_apply (x : Fin 3) :
     repeatedBlockEquiv.symm x = repeatedBlockCopyCoord x :=
   rfl
@@ -446,7 +453,8 @@ theorem embeddedFixedPointPair_repeatedBlockSector (j : Fin 2) (p : Fin 3 × Fin
 The tensor `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` is, after ordering its bond coordinates,
 the canonical form `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j` of eq. (S2) of a basis of two normal
 blocks in canonical form II, with weights `|μ_{j,k}| ≤ 1`, one of modulus one
-(`IsBNTCanonicalForm`, normality, the diagonal positive-definite fixed point). The transfer maps
+(`IsBNTCanonicalForm`, normality, the diagonal positive-definite fixed point), whose states "produce
+orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696, line 973). The transfer maps
 of the blocks have no eigenvalue other than `1`, so every `λ₂` with `0 < |λ₂| < 1` bounds their
 subleading eigenvalues. For the approximating state of eq. (S7), built from the coefficients
 `βⱼ = ∑ₖ μ_{j,k}^N` and the fixed-point pairs of the blocks, and for every `γ > 0` and every
@@ -454,6 +462,8 @@ constant `C`, there is `M ≥ 1` such that, with `q = M` and `N = M²` (so `q = 
 sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds `C y e^{C y}`. -/
 theorem isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock :
     IsBNTCanonicalForm repeatedBlockSector ∧
+      (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
+        mpvOverlap (repeatedBlockSector.basis j) (repeatedBlockSector.basis k) N) atTop (𝓝 0)) ∧
       (∀ j, IsNormalTensor (repeatedBlockSector.basis j)) ∧
       (∀ j, ∃ Λ : Matrix (Fin 1) (Fin 1) ℂ,
         Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap (repeatedBlockSector.basis j) Λ = Λ) ∧
@@ -473,6 +483,7 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock :
                 (fun j => ⟨0, repeatedBlockSector.copies_pos j⟩) j
                 (repeatedBlockEquiv.symm p.1, repeatedBlockEquiv.symm p.2))‖ := by
   refine ⟨isBNTCanonicalForm_repeatedBlockSector,
+    fun _ _ hjk => isBNTCanonicalForm_repeatedBlockSector.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (repeatedBlockBasis_norm j),
     fun j => exists_posDef_isDiag_transferMap_eq_of_dim_one _ (repeatedBlockBasis_norm j),
     reindex_toTensor_repeatedBlockSector,

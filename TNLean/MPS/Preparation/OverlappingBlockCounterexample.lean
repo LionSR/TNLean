@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.Preparation.OneDimensionalBlocks
 
 /-!
@@ -412,6 +413,8 @@ noncomputable def overlappingBlockCopyCoord : Fin 2 → Fin overlappingBlockSect
   ![overlappingBlockSector.copyCoord 0 ⟨0, by decide⟩ ⟨0, Nat.one_pos⟩,
     overlappingBlockSector.copyCoord 1 ⟨0, by decide⟩ ⟨0, Nat.one_pos⟩]
 
+/-- The canonical form has bond dimension two, the sum `∑ⱼ m_j D_j` of the bond dimensions of
+the copies of the blocks in arXiv:2307.01696, eq. (S2). -/
 theorem totalDim_overlappingBlockSector : overlappingBlockSector.totalDim = 2 := by
   have h : overlappingBlockSector.totalCopies = 2 := by
     simp [SectorDecomposition.totalCopies, SectorDecomposition.copies, overlappingBlockMult,
@@ -419,6 +422,8 @@ theorem totalDim_overlappingBlockSector : overlappingBlockSector.totalDim = 2 :=
   simp only [SectorDecomposition.totalDim, SectorDecomposition.flatDim, Finset.sum_const,
     Finset.card_univ, Fintype.card_fin, smul_eq_mul, mul_one, h]
 
+/-- The bond coordinates of the copies of the blocks exhaust the bond coordinates of the
+canonical form of arXiv:2307.01696, eq. (S2), each exactly once. -/
 theorem bijective_overlappingBlockCopyCoord : Function.Bijective overlappingBlockCopyCoord := by
   refine (Fintype.bijective_iff_injective_and_card _).2 ⟨fun x y hxy => ?_, by
     simp [totalDim_overlappingBlockSector]⟩
@@ -435,6 +440,8 @@ transformation. -/
 noncomputable def overlappingBlockEquiv : Fin overlappingBlockSector.totalDim ≃ Fin 2 :=
   (Equiv.ofBijective _ bijective_overlappingBlockCopyCoord).symm
 
+/-- The ordering of the bond coordinates of the canonical form of arXiv:2307.01696, eq. (S2),
+sends the coordinate `x` to the bond coordinate of the `x`-th copy. -/
 theorem overlappingBlockEquiv_symm_apply (x : Fin 2) :
     overlappingBlockEquiv.symm x = overlappingBlockCopyCoord x :=
   rfl
@@ -478,7 +485,8 @@ theorem embeddedFixedPointPair_overlappingBlockSector (j : Fin 2) (p : Fin 2 × 
 every multiplicity one.** The tensor `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` is, after
 ordering its bond coordinates, the canonical form `⊕ⱼ μ_{j,1} A_j` of eq. (S2) of a basis of two
 normal blocks in canonical form II, with weights `μ_{j,1} = 1` (`IsBNTCanonicalForm`,
-normality, the diagonal positive-definite fixed point). The transfer maps of the blocks have no
+normality, the diagonal positive-definite fixed point), whose states "produce orthogonal vectors
+in the thermodynamic limit" (arXiv:2307.01696, line 973). The transfer maps of the blocks have no
 eigenvalue other than `1`, so every `λ₂` bounds their subleading eigenvalues. When
 `e^{-γ/ξ_diag} < 9/25`, for the approximating state of eq. (S7), built from the coefficients
 `βⱼ = ∑ₖ μ_{j,k}^N` and the fixed-point pairs of the blocks, and for every constant `C`, there
@@ -486,6 +494,8 @@ is `q ≥ 3` such that, with `M = q` and `N = q²` (so `q = o(N)` along this seq
 `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds `C y e^{C y}`. -/
 theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
     IsBNTCanonicalForm overlappingBlockSector ∧
+      (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
+        mpvOverlap (overlappingBlockSector.basis j) (overlappingBlockSector.basis k) N) atTop (𝓝 0)) ∧
       (∀ j, IsNormalTensor (overlappingBlockSector.basis j)) ∧
       (∀ j, ∃ Λ : Matrix (Fin 1) (Fin 1) ℂ,
         Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap (overlappingBlockSector.basis j) Λ = Λ) ∧
@@ -505,6 +515,7 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
                 (fun j => ⟨0, overlappingBlockSector.copies_pos j⟩) j
                 (overlappingBlockEquiv.symm p.1, overlappingBlockEquiv.symm p.2))‖ := by
   refine ⟨isBNTCanonicalForm_overlappingBlockSector,
+    fun _ _ hjk => isBNTCanonicalForm_overlappingBlockSector.cross_overlap_basis_tendsto_zero hjk,
     fun j => isNormalTensor_of_dim_one _ (overlappingBlockBasis_norm j),
     fun j => exists_posDef_isDiag_transferMap_eq_of_dim_one _ (overlappingBlockBasis_norm j),
     reindex_toTensor_overlappingBlockSector,

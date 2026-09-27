@@ -3170,6 +3170,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
   that rebuild is large enough to deserve its own change.
 
+### canonical form of normalized one-dimensional blocks — candidate
+- **Pattern:** certify `IsBNTCanonicalForm` for a `SectorDecomposition` whose blocks are
+  normalized tensors of bond dimension one with unit weights: linear independence of the block
+  states from `mpv_of_dim_one` evaluated on constant words, `basis_distinct` by
+  `not_gaugePhaseEquiv_of_dim_one` after a `cast_eq`, then `totalDim_*`, bijectivity of the
+  copy coordinates by `sigma_eq_of_copyCoord_eq`, the ordering `(Equiv.ofBijective _ _).symm`,
+  and `reindex_toTensor_*` by `toTensor_copyCoord` / `toTensor_copyCoord_of_ne`.
+- **Seen:** 2 occurrences, `TNLean/MPS/Preparation/RepeatedBlockCounterexample.lean` and
+  `TNLean/MPS/Preparation/OverlappingBlockCounterexample.lean` (recorded 2026-09-27).
+- **Abstraction:** proposed lemma giving `IsBNTCanonicalForm` for a sector decomposition of
+  normalized one-dimensional blocks with unit weights whose letters are pairwise distinguished
+  by their zero patterns.
+- **Notes:** below the rule of three; the two copies differ only in the literals.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
