@@ -244,7 +244,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \begin{proof}\leanok
     \uses{def:mpug_group_representation, thm:mpdo_operator_product_mpo}
     Multiplicativity of the periodic operator under product-tensor contraction gives
-    $O_N(\mathcal U_g\star\mathcal U_h) = U_g^{(N)}U_h^{(N)}$, which equals $U_{gh}^{(N)}$ by~(\ref{eq:mpug_rep_multiplication}).
+    $O_N(\mathcal U_g\mathbin{\cdot}\mathcal U_h) = U_g^{(N)}U_h^{(N)}$, which equals $U_{gh}^{(N)}$ by~(\ref{eq:mpug_rep_multiplication}).
 \end{proof}
 
 \begin{theorem}[The physical adjoint represents the inverse]
@@ -3920,9 +3920,9 @@ Definition~\ref{def:mpug_group_representation}.
     $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
     \begin{align}
         W^{ij}W^{kl}       & =W^{ij}|\rho)(\Phi|W^{kl},
-        \label{eq:mpug_simple_canonical_split} \\
+        \label{eq:mpug_simple_canonical_split}          \\
         (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl},
-        \label{eq:mpug_simple_canonical_bdry_left} \\
+        \label{eq:mpug_simple_canonical_bdry_left}      \\
         W^{ij}W^{kl}|\rho) & =\delta_{kl}W^{ij}|\rho).
         \label{eq:mpug_simple_canonical_bdry_right}
     \end{align}

@@ -352,8 +352,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     For every blocking length $L$, physical adjunction commutes with blocking,
     and consequently
     \begin{align}
-        (\mathcal U^\dagger)^{[L]} & =(\mathcal U^{[L]})^\dagger,
-        \label{eq:mpu_physical_adj_block} \\
+        (\mathcal U^\dagger)^{[L]}   & =(\mathcal U^{[L]})^\dagger,
+        \label{eq:mpu_physical_adj_block}                             \\
         \mathcal W(\mathcal U^{[L]}) & =\mathcal W(\mathcal U)^{[L]}.
         \label{eq:mpu_double_layer_block}
     \end{align}
@@ -893,7 +893,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     $R=|\rho)(\Phi|$, repeated insertion gives
     \begin{align}
         W_1\cdots W_L & =W_1R W_2R\cdots R W_L,
-        \label{eq:mpu_second_block_insert} \\
+        \notag                                           \\
         (\Phi|W_1\cdots W_L|\rho)
                       & =\prod_{q=1}^{L}(\Phi|W_q|\rho).
         \label{eq:mpu_second_block_prod}
@@ -3073,7 +3073,8 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    Multiplying $Y^\dagger GY=Y^\dagger Y$ by $Z^\dagger$ on the left and $Z$ on the right gives
+    Multiplying $Y^\dagger GY=Y^\dagger Y$ by $Z^\dagger$ on the left and $Z$ on the right,
+    and using $YZ=\Id$, gives
     \begin{align}
         G & = (YZ)^\dagger G (YZ) = Z^\dagger (Y^\dagger GY) Z = Z^\dagger (Y^\dagger Y) Z = (YZ)^\dagger (YZ) = \Id.
     \end{align}
@@ -3891,8 +3892,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     left-canonical identity under both operations. For each retained block,
     Lemma~\ref{lem:blocked_irreducibility_direct_support} gives
     \begin{align}
-        \E_{A_k^{[L]}} & =\E_{A_k}^{L},
-        \label{eq:mpu_cfii_trans_pow} \\
+        \E_{A_k^{[L]}}          & =\E_{A_k}^{L},
+        \notag                                   \\
         \E_{A_k}^{L}(\Lambda_k) & =\Lambda_k,
         \label{eq:mpu_cfii_trans_fixed}
     \end{align}
@@ -3951,7 +3952,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =(c\overline c)^N
         \sum_\sigma V^{(N)}(A)_\sigma
         \overline{V^{(N)}(A)_\sigma},
-        \label{eq:mpu_self_overlap_scaled} \\
+        \label{eq:mpu_self_overlap_scaled}
+    \end{align}
+    Consequently, if $d>0$ and $U$ is an MPO tensor of physical dimension
+    $d$, then
+    \begin{align}
         \sum_\sigma V^{(N)}(\widetilde U)_\sigma
         \overline{V^{(N)}(\widetilde U)_\sigma}
          & =d^{-N}
@@ -3989,12 +3994,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \tr(E^N)
          & =\sum_\sigma V^{(N)}(\widetilde U)_\sigma
-        \overline{V^{(N)}(\widetilde U)_\sigma}                \notag \\
+        \overline{V^{(N)}(\widetilde U)_\sigma}                \notag                                \\
          & =d^{-N}\sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
-        \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}            \notag \\
-         & =d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)   \notag \\
+        \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}            \notag                                \\
+         & =d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)   \notag                                \\
          & =d^{-N}\tr(\Id)                                     \label{eq:mpu_overlap_unitarity_eval} \\
-         & =d^{-N}d^N                                          \notag \\
+         & =d^{-N}d^N                                          \notag                                \\
          & =1.                                                 \notag
     \end{align}
     Here~(\ref{eq:mpu_overlap_unitarity_eval}) uses $N>1$, so that the MPU equation applies.
@@ -5831,7 +5836,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Then the original-chain coefficient matrix $F^U$ satisfies
     \begin{align}
         F^U(a,b;j) & = F_{P,Q}(a,b;j),
-        \label{eq:mpu_orig_coeff_pq} \\
+        \label{eq:mpu_orig_coeff_pq}   \\
         F^U A      & = B(A)F^U.
         \label{eq:mpu_orig_coeff_intertwiner}
     \end{align}
@@ -7503,10 +7508,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         M_1(\widehat{\mathcal U})
          & =(I_d\otimes B^{\mathsf T})M_1(\mathcal U)
         (A^{\mathsf T}\otimes I_d),
-        \label{eq:mpu_raw_source_cut_one} \\
+        \label{eq:mpu_raw_source_cut_one}                \\
         M_2(\widehat{\mathcal U})
          & =(A\otimes I_d)M_2(\mathcal U)(I_d\otimes B).
-        \label{eq:mpu_raw_source_cut_two}
+        \notag
     \end{align}
     The transposes in~(\ref{eq:mpu_raw_source_cut_one}) result from the corrected orientation
     of $M_1$; no complex conjugation occurs.
@@ -7661,7 +7666,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $r[\mathcal V]$ such that
     \begin{align}
         u_{\mathcal V} & =(x\otimes y)\widetilde u,
-        \label{eq:mpu_uv_rel_u} \\
+        \label{eq:mpu_uv_rel_u}                                     \\
         v_{\mathcal V} & =\widetilde v(y^\dagger\otimes x^\dagger).
         \label{eq:mpu_uv_rel_v}
     \end{align}
@@ -7989,8 +7994,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     A Kronecker product equal to the identity has reciprocal scalar factors, so
     $\overline xx=e^{i\phi}\Id$ and $\overline yy=e^{-i\phi}\Id$. Since $x$ is
     unitary, $x^T\overline x=\Id$; multiplying $\overline xx=e^{i\phi}\Id$ on the left by $x^T$ gives $x=e^{i\phi}x^T$, and similarly
-    $y=e^{-i\phi}y^T$. Applying entrywise conjugation to $\overline x x=e^{i\phi}\Id$ yields
-    $\Id=xx^\dagger=e^{2i\phi}\Id$, so $e^{i\phi}=\pm1$ and
+    $y=e^{-i\phi}y^T$. Transposing $x=e^{i\phi}x^T$ gives $x^T=e^{i\phi}x$, hence
+    $x=e^{2i\phi}x$; since $x$ is invertible, $e^{2i\phi}=1$, so $e^{i\phi}=\pm1$ and
     $e^{-i\phi}=e^{i\phi}$. The two matrices therefore carry one transpose sign.
 \end{proof}
 
@@ -9056,7 +9061,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathbb S$ on $\mathbb C^n\otimes\mathbb C^n$,
     \begin{align}
         \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S,
-        \label{eq:matrix_swap_kron_left} \\
+        \label{eq:matrix_swap_kron_left}                \\
         (A\otimes B)\mathbb S & =\mathbb S(B\otimes A).
         \label{eq:matrix_swap_kron_right}
     \end{align}
@@ -11574,7 +11579,7 @@ see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
         LR          & =RL,
         \label{eq:qca_overlapping_support_first_closure} \\
         L^\dagger R & =RL^\dagger
-        \label{eq:qca_overlapping_support_second_closure}
+        \notag
     \end{align}
     for every $R\in\operatorname{Spp}_{\mathrm R}(\mathcal A_1)$ and every
     left coefficient $L$ of $\mathcal A_2$.
@@ -12741,7 +12746,11 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         j(\mathcal A_{\mathrm{loc}})
          & =\bigcup_{\Lambda\Subset\mathbb Z}j_\Lambda(\mathcal A_\Lambda),
     \end{align}
-    and taking closures yields $\overline{\bigcup_{\Lambda\Subset\mathbb Z} j_\Lambda(\mathcal A_\Lambda)} = \overline{j(\mathcal A_{\mathrm{loc}})} = \mathcal A$.
+    and taking closures yields
+    \begin{align}
+        \overline{\bigcup_{\Lambda\Subset\mathbb Z} j_\Lambda(\mathcal A_\Lambda)}
+         & = \overline{j(\mathcal A_{\mathrm{loc}})} = \mathcal A.
+    \end{align}
 \end{proof}
 
 Lattice translation acts covariantly on the quasi-local algebra in the setting
@@ -12797,7 +12806,7 @@ of \cite[lines~2292--2306]{Cirac2017MPU}.
     finite-region observables it satisfies
     \begin{align}
         \tau_a(j(A)) & =j(\tau_a(A)),
-        \label{eq:qca_trans_dense} \\
+        \label{eq:qca_trans_dense}                                  \\
         \tau_a(j_\Lambda(A_\Lambda))
                      & =j_{\Lambda+a}(\tau_{a,\Lambda}(A_\Lambda)).
         \label{eq:qca_trans_finite}
@@ -13911,7 +13920,7 @@ This is the forward propagation condition of
     \begin{align}
         \overline{\mathcal B}_L\bigl(j^{(d^L)}(A)\bigr)
          & =j^{(d)}\bigl(\mathcal B_L(A)\bigr),
-        \label{eq:qca_blocking_dense_fwd} \\
+        \label{eq:qca_blocking_dense_fwd}              \\
         \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}(C)\bigr)
          & =j^{(d^L)}\bigl(\mathcal B_L^{-1}(C)\bigr).
         \label{eq:qca_blocking_dense_rev}
@@ -13922,7 +13931,7 @@ This is the forward propagation condition of
         \overline{\mathcal B}_L\bigl(j^{(d^L)}_\Lambda(A)\bigr)
          & =j^{(d)}_{\widehat\Lambda_L}
         \bigl(\mathcal B_{L,\Lambda}(A)\bigr),
-        \label{eq:qca_blocking_fin_fwd} \\
+        \label{eq:qca_blocking_fin_fwd}               \\
         \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}_\Delta(C)\bigr)
          & =j^{(d^L)}_{\operatorname{Hull}_L(\Delta)}
         \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
@@ -13941,7 +13950,7 @@ This is the forward propagation condition of
     Finally, for all quasi-local observables $X$ and $Y$ on the blocked chain,
     \begin{align}
         \lVert\overline{\mathcal B}_L(X)\rVert & =\lVert X\rVert,
-        \label{eq:qca_blocking_norm} \\
+        \label{eq:qca_blocking_norm}                                \\
         \lVert\overline{\mathcal B}_L(X)-
         \overline{\mathcal B}_L(Y)\rVert       & =\lVert X-Y\rVert.
         \label{eq:qca_blocking_dist}
