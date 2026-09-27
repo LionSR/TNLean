@@ -332,16 +332,23 @@ $U_{CZX}\ket{ijkl}=(-1)^{ij+jk+kl+li}\ket{\bar\imath\bar\jmath\bar k\bar l}$.
     neighbouring plaquettes appears twice.
 \end{proof}
 
-A virtual leg carries two qubits $(a,b)$. Let
-$V=(X\otimes X)\,CZ$ act on a leg by $V\ket{ab}=(-1)^{ab}\ket{\bar a\bar b}$.
+\begin{definition}[CZX leg operator]%
+    \label{def:peps_czx_leg_operator}
+    \lean{TNLean.PEPS.czxLegFlip, TNLean.PEPS.czxLegFlip_czxBond,
+        TNLean.PEPS.czxLegPhase, TNLean.PEPS.czxLegPhase_czxBond,
+        TNLean.PEPS.czxLegOperator}
+    \leanok
+    \uses{def:peps_czx_tensor}
+    A virtual leg carries two qubits $(a,b)$. The operator
+    $V=(X\otimes X)\,CZ$ acts on a leg by
+    $V\ket{ab}=(-1)^{ab}\ket{\bar a\bar b}$.
+\end{definition}
 
 \begin{theorem}[Pulling the symmetry through a site]%
     \label{thm:peps_czx_pull_through}
-    \lean{TNLean.PEPS.czxLegFlip, TNLean.PEPS.czxLegFlip_czxBond,
-        TNLean.PEPS.czxLegPhase, TNLean.PEPS.czxLegPhase_czxBond,
-        TNLean.PEPS.czxLegOperator, TNLean.PEPS.czxOnSite_mul_czxSiteTensor}
+    \lean{TNLean.PEPS.czxOnSite_mul_czxSiteTensor}
     \leanok
-    \uses{def:peps_czx_on_site}
+    \uses{def:peps_czx_on_site, def:peps_czx_leg_operator}
     Applying $U_{CZX}$ to the physical index of the CZX tensor equals applying
     $V$ to each of its four virtual legs
     \cite[Section~III.B, ``Non-injective PEPS: SPT phases'']{Cirac2021Matrix}.
@@ -368,7 +375,8 @@ effective spins into the legs.
         TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_onSiteOperator_mul,
         TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review}
     \leanok
-    \uses{def:peps_czx_on_site, thm:asymex_czx_kernel}
+    \uses{def:peps_czx_leg_operator, thm:asymex_czx_kernel,
+        def:asymex_czx_review_tensor}
     For every $N>0$, $V^{\otimes N}\iota=\iota\,U_N$ and
     $\iota^\dagger V^{\otimes N}\iota=U_N$, where
     $U_N\ket{c}=(-1)^{\sum_mc_mc_{m+1}}\ket{\bar c}$ is the CZX matrix product
