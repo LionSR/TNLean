@@ -20,7 +20,8 @@ This file proves the bound for the corrected state `V^{⊗M} ∑ⱼ αⱼ L_j^{�
 `βⱼ = ∑ₖ μ_{j,k}^N` as in the source, for arbitrary multiplicities and complex weights, when the
 `q`-site states of distinct blocks are orthogonal: there is `C` such that `ε ≤ C y e^{C y}` with
 `y = (N/q) e^{-γ q/ξ}` for every block length `q` at which the blocks are orthogonal and every
-number of blocks `M ≥ 1` with `φ_N ≠ 0` (`exists_approximationError_le_repeatedBlockSum`); in
+number of blocks `M ≥ 1` with the weights `βⱼ` not all zero
+(`exists_approximationError_le_repeatedBlockSum`); in
 `O`-form, `ε ≤ C y` (`exists_approximationError_le_mul_repeatedBlockSum`). As for multiplicity
 one, no condition `q = o(N)` is needed.
 
@@ -220,7 +221,7 @@ block, let every block `A_j` be normal in the gauge `∑ᵢ (A_jⁱ)† A_jⁱ =
 every transfer map `E_{A_j}`, so that `ξ = -1/log|λ₂|` bounds the correlation lengths `ξ_jj`, and
 let `0 < γ < 1/2`. There is `C > 0` such that for every block length `q` at which the `q`-site
 states of distinct blocks are orthogonal, `B_jᴴ B_{j'} = 0`, and every number of blocks
-`M ≥ 1` with `N = qM` and `βⱼ = ∑ₖ μ_{j,k}^N` not all zero (eq. (S4); this is `φ_N ≠ 0`), the
+`M ≥ 1` with `N = qM` and `βⱼ = ∑ₖ μ_{j,k}^N` not all zero (eq. (S4)), the
 error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the corrected approximating state
 `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` satisfies `ε ≤ C y e^{C y}` with `y = (N/q) e^{-γ q/ξ}`. -/
 theorem exists_approximationError_le_repeatedBlockSum [NeZero b]
@@ -347,7 +348,8 @@ theorem exists_approximationError_le_repeatedBlockSum [NeZero b]
 (arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), for the corrected
 approximating state): in the setting of `exists_approximationError_le_repeatedBlockSum`, there is
 `C` with `ε ≤ C (N/q) e^{-γ q/ξ}` for every block length `q` at which the `q`-site states of
-distinct blocks are orthogonal and every number of blocks `M ≥ 1` with `φ_N ≠ 0`. -/
+distinct blocks are orthogonal and every number of blocks `M ≥ 1` with the weights `βⱼ` not all
+zero. -/
 theorem exists_approximationError_le_mul_repeatedBlockSum [NeZero b]
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')

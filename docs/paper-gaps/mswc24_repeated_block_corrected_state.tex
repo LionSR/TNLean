@@ -107,8 +107,9 @@ state (\ref{eq:mswc24_rc_source_state}) with each pair on one copy
 $k_j$ becomes correct after replacing $V$ by $V\sum_jL_jK_{j,k_j}^\dagger$.
 
 \section{The error bound}
-Assume $B_j^\dagger B_{j'}=0$ for $j\neq j'$ and $\beta\neq0$, which is
-$\phi_N\neq0$. The target is $\sum_j\beta_j\ket{v_j}$ and, by
+Assume $B_j^\dagger B_{j'}=0$ for $j\neq j'$ and $\beta\neq0$. This does not
+force $\phi_N\neq0$, since a normal block can have $\phi_N(A_j)=0$ at small $N$
+(for instance the Pauli matrices divided by $\sqrt3$ at $N=1$). The target is $\sum_j\beta_j\ket{v_j}$ and, by
 (\ref{eq:mswc24_rc_after_v}), the corrected state is $\sum_j\alpha_j\ket{s_j}$ with
 $\alpha_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$ and
 $\ket{s_j}=V_j^{\otimes M}\ket{\Omega_j}$. All cross overlaps vanish, as for
@@ -156,7 +157,7 @@ The corrected block form (\ref{eq:mswc24_rc_polar}), the identity
 $\varepsilon\leq Cy\,e^{Cy}$, together with its $O$-form $\varepsilon\leq Cy$, are
 formalized for arbitrary multiplicities and complex weights, for blocks with some
 nonzero weight whose $q$-site states are orthogonal, at every $q$ and $M\geq1$
-with $\phi_N\neq0$.\footnote{Formal declarations:
+with $\beta\neq0$.\footnote{Formal declarations:
     \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum},
     \leanid{MPSTensor.polarPos_blockTensor_repeatedBlockSum} and
     \leanid{MPSTensor.copyApproxVector_repeatedBlockSum} in
