@@ -42,8 +42,11 @@ dimer fixed point that the printed claims describe; documented in
 `docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`.
 
 **Scope restriction (supplied projective representation):** the source starts from a
-2-cocycle `ω` alone, while every result here takes a projective representation `ρ` with
-factor system `ω` as input. The existence of such a `ρ` for finite `G`, for instance the
+2-cocycle `ω` alone, while the symmetry results here (`sptFixedPointAction`,
+`twistedTensor_sptFixedPointTensor`, `sptFixedPointTensor_isOnSiteSymmetric`,
+`cohomologousTo_of_sptFixedPointTensor`, `exists_virtualRep_sptFixedPointTensor`) take a
+projective representation `ρ` with factor system `ω` as input; the transfer, injectivity
+and normality results do not involve `ρ`. The existence of such a `ρ` for finite `G`, for instance the
 twisted regular representation on `ℂ^G`, is not formalized; documented in
 `docs/paper-gaps/rmp_spt_fixed_point_supplied_representation.tex`.
 

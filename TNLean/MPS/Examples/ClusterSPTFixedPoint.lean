@@ -56,8 +56,9 @@ namespace MPSTensor
 
 open TNLean.Algebra
 
-/-- The physical unitary relating the blocked cluster tensor to the fixed-point
-tensor: its row `i` lists the entries of `√2 · A_cluster^i`. -/
+/-- Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1157).
+The physical unitary relating the blocked cluster tensor to the fixed-point tensor: its row
+`i` lists the entries of `√2 · A_cluster^i`. -/
 def clusterSPTUnitary : Matrix (Fin 4) (Fin (2 * 2)) ℂ := fun i j =>
   (Real.sqrt 2 : ℂ) * clusterBlocked i (sptPair j).1 (sptPair j).2
 
@@ -77,7 +78,8 @@ theorem clusterBlocked_eq_sum_sptFixedPointTensor (i : Fin 4) :
   rw [mul_comm (clusterBlocked i a b), ← mul_assoc, h2, one_mul, Matrix.smul_single,
     smul_eq_mul, mul_one]
 
-/-- **The physical relation is unitary.** -/
+/-- **The physical relation is unitary.** Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` line 1157). -/
 theorem clusterSPTUnitary_mul_conjTranspose :
     clusterSPTUnitary * clusterSPTUnitaryᴴ = 1 := by
   classical
@@ -99,7 +101,8 @@ theorem clusterSPTUnitary_mul_conjTranspose :
     simp [clusterBlocked_zero, clusterBlocked_one, clusterBlocked_two, clusterBlocked_three,
       Fin.sum_univ_two] <;> norm_num
 
-/-- **The unitary intertwines the two symmetries.** `clusterSPTUnitary` carries the
+/-- **The unitary intertwines the two symmetries.** Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` line 1157). `clusterSPTUnitary` carries the
 fixed-point action of `clusterProjRep` to the `Z₂ × Z₂` action of the blocked cluster
 state: `U_cluster(g) V = V U_fp(g)`.  Both tensors realize the symmetry `g` with the
 same virtual gauge `σ`-matrix, and the fixed-point letters are linearly independent. -/
