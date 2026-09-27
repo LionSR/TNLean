@@ -284,8 +284,24 @@ gauge transformations form a projective representation on the bond space.
     $\MN{D}$, so it is a nonzero scalar by Lemma~\ref{lem:center_scalar}.
 \end{proof}
 
+\begin{lemma}[Gauge phases on words]\label{lem:gauge_phase_words}
+    \lean{MPSTensor.evalWord_gauge_phase}
+    \leanok
+    If $X,Y\in\GL_{D}(\C)$ and $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$
+    for all $i$, then for every word $w$,
+    \begin{align}
+        X^{-1}A^wX & =c^{\lvert w\rvert}\,Y^{-1}A^wY.
+        \label{eq:gauge_phase_words}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    By induction on $w$: inserting $XX^{-1}$ and $YY^{-1}$ between the letters
+    gives $X^{-1}A^{iw}X=(X^{-1}A^iX)(X^{-1}A^wX)$, and likewise for $Y$.
+\end{proof}
+
 \begin{lemma}[Gauge-phase uniqueness for normal tensors]\label{lem:gauge_phase_unique_normal}
-    \lean{MPSTensor.gauge_phase_unique_of_isNormal, MPSTensor.evalWord_gauge_phase}
+    \lean{MPSTensor.gauge_phase_unique_of_isNormal}
     \leanok
     \uses{def:normal}
     Let $A$ be a normal tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$
@@ -294,8 +310,9 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:gauge_phase_unique, thm:normal_tensor_nonzero_matrix}
-    The relation propagates to words of length $N$ with the scalar $c^N$.  For an
+    \uses{lem:gauge_phase_words, lem:gauge_phase_unique, thm:normal_tensor_nonzero_matrix, lem:isNBlkInjective_iff_blockTensor_isInjective}
+    By Lemma~\ref{lem:gauge_phase_words} the relation propagates to words of
+    length $N$ with the scalar $c^N$.  For an
     injective blocking length $N$, Lemma~\ref{lem:gauge_phase_unique} applied to
     the blocked tensor gives $X=u\,Y$.  Substituting back,
     $(1-c)\,Y^{-1}A^iY=0$ for every $i$, and some $A^i$ is nonzero because the

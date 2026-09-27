@@ -156,8 +156,9 @@ of the virtual projective representation.
 For an injective tensor in canonical form, the positive fixed point of the
 transfer map is the half-chain reduced density matrix, whose spectrum is the
 entanglement spectrum.  A symmetry forces this fixed point to commute with the
-virtual gauges, and a non-commuting projective representation then forces every
-eigenvalue to be degenerate \cite[Section~III.A]{Cirac2021Matrix}.  Here the
+virtual gauges, and a projective representation whose factor system has a
+non-trivial class, and hence no one-dimensional invariant subspace, then forces
+every eigenvalue to be degenerate \cite[Section~III.A]{Cirac2021Matrix}.  Here the
 canonical form is $\E_A(\Id)=\Id$ and the fixed point is that of the adjoint
 map $\E_A^\dagger$; the reflected normalization, in which the fixed point of
 $\E_A$ itself is used, describes the same spectrum.
@@ -209,7 +210,7 @@ $\E_A$ itself is used, describes the same spectrum.
     \label{lem:projective_commutant_eigenspace}
     \lean{TNLean.Algebra.ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute}
     \leanok
-    \uses{def:projective_rep, def:scalar_cocycle}
+    \uses{def:projective_rep, def:scalar_cocycle, def:nontrivial_class}
     Let $\rho$ be a projective representation of $G$ on $\C^D$ whose factor system
     $\omega$ is not cohomologous to the trivial one, and let $\Lambda$ commute with
     every $\rho(g)$.  Then no eigenspace of $\Lambda$ is one-dimensional.
@@ -226,10 +227,11 @@ $\E_A$ itself is used, describes the same spectrum.
     \label{thm:spt_entanglement_spectrum_degenerate}
     \lean{MPSTensor.finrank_eigenspace_ne_one_of_isNontrivialClass}
     \leanok
+    \uses{def:injective, def:projective_rep, def:nontrivial_class}
     Let $A$ be injective with $\E_A(\Id)=\Id$, let $\Lambda$ be a positive
     definite matrix with $\E_A^\dagger(\Lambda)=\Lambda$, and let $U$ be a unitary
     representation of $G$ under which $A$ is symmetric with virtual projective
-    representation $\rho$ up to nonzero phases $\zeta(g)$, that is,
+    representation $\rho$ up to nonzero scalars $\zeta(g)$, that is,
     $\sum_jU(g)_{ij}A^j=\zeta(g)\,\rho(g^{-1})A^i\rho(g^{-1})^{-1}$.  If the factor system of
     $\rho$ has a non-trivial class, no eigenspace of $\Lambda$ is one-dimensional:
     every eigenvalue of the entanglement spectrum is degenerate
