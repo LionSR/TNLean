@@ -243,10 +243,8 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 
 \begin{proof}\leanok
     \uses{def:mpug_group_representation, thm:mpdo_operator_product_mpo}
-    The first equality in
-    (\ref{eq:mpug_product_tensor_positive_chain}) is multiplicativity of the
-    periodic operator under the product-tensor contraction. The second is
-    (\ref{eq:mpug_rep_multiplication}).
+    Multiplicativity of the periodic operator under product-tensor contraction gives
+    $O_N(\mathcal U_g\star\mathcal U_h) = U_g^{(N)}U_h^{(N)}$, which equals $U_{gh}^{(N)}$ by~(\ref{eq:mpug_rep_multiplication}).
 \end{proof}
 
 \begin{theorem}[The physical adjoint represents the inverse]
@@ -2410,9 +2408,10 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     Let $I$ be a nonempty finite set, let $T,S\in\operatorname{Mat}_I(\C)$ be
     unitary, and let $\sigma,\tau\in\C$. If
     \begin{align}
-        TS^* & =\sigma\mathbf 1, \\
+        TS^* & =\sigma\mathbf 1,
+        \label{eq:mpug_unitary_entrywise_rel_ts} \\
         ST^* & =\tau\mathbf 1,
-        \label{eq:mpug_unitary_entrywise_paired_relations}
+        \label{eq:mpug_unitary_entrywise_rel_st}
     \end{align}
     then
     \begin{align}
@@ -2426,11 +2425,11 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_unitary_entrywise_scalar_phase}
-    Multiplying the first relation by $T^{-1}$ on the left and by $T$ on the
-    right gives $S^*T=\sigma\mathbf 1$. Entrywise conjugation of the second
-    relation gives $S^*T=\overline\tau\,\mathbf 1$. A diagonal entry therefore
+    Multiplying~(\ref{eq:mpug_unitary_entrywise_rel_ts}) by $T^{-1}$ on the left and $T$ on the
+    right gives $S^*T=\sigma\mathbf 1$. Entrywise conjugation of~(\ref{eq:mpug_unitary_entrywise_rel_st})
+    gives $S^*T=\overline\tau\,\mathbf 1$. A diagonal entry therefore
     gives $\sigma=\overline\tau$. Applying
-    Theorem~\ref{thm:mpug_unitary_entrywise_scalar_phase} to the second relation
+    Theorem~\ref{thm:mpug_unitary_entrywise_scalar_phase} to~(\ref{eq:mpug_unitary_entrywise_rel_st})
     yields $\tau\overline\tau=1$, and hence $\sigma\tau=1$.
 \end{proof}
 
@@ -3101,7 +3100,6 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
          & =(MM^\dagger)\otimes(PP^\dagger)
         =I_A\otimes I_C=I_{A\times C}.
     \end{align}
-    The second identity is the first applied to $M^\dagger$ and $P^\dagger$.
 \end{proof}
 
 \begin{theorem}[Unitarity at every bulk length]
@@ -3921,10 +3919,12 @@ Definition~\ref{def:mpug_group_representation}.
     put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
     $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
     \begin{align}
-        W^{ij}W^{kl}       & =W^{ij}|\rho)(\Phi|W^{kl}, \\
-        (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl},  \\
+        W^{ij}W^{kl}       & =W^{ij}|\rho)(\Phi|W^{kl},
+        \label{eq:mpug_simple_canonical_split} \\
+        (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl},
+        \label{eq:mpug_simple_canonical_bdry_left} \\
         W^{ij}W^{kl}|\rho) & =\delta_{kl}W^{ij}|\rho).
-        \label{eq:mpug_simple_canonical_boundaries}
+        \label{eq:mpug_simple_canonical_bdry_right}
     \end{align}
     These are the boundary removals used in the six-tensor argument of
     \cite[lines~1164--1254]{FrancoRubio2025MPUGauging}.
@@ -3934,11 +3934,10 @@ Definition~\ref{def:mpug_group_representation}.
     \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
         thm:mpu_supplied_projector_simple2,
         thm:mpu_all_later_simple_blockings}
-    Align the simplicity witnesses with the canonical fixed pair using
-    the stabilized normalized transfer power. The resulting identities are
-    $W^{ij}W^{kl}=W^{ij}|\rho)(\Phi|W^{kl}$ and
-    $(\Phi|W^{ij}|\rho)=\delta_{ij}$. Contract the first identity on
-    the left with $(\Phi|$ or on the right with $|\rho)$.
+    Aligning the simplicity witnesses with the canonical fixed pair using
+    the stabilized normalized transfer power gives~(\ref{eq:mpug_simple_canonical_split}) and
+    $(\Phi|W^{ij}|\rho)=\delta_{ij}$. Contracting~(\ref{eq:mpug_simple_canonical_split}) on
+    the left with $(\Phi|$ yields~(\ref{eq:mpug_simple_canonical_bdry_left}); contracting on the right with $|\rho)$ yields~(\ref{eq:mpug_simple_canonical_bdry_right}).
 \end{proof}
 
 \begin{theorem}[Canonical boundary contractions for a simple physical adjoint]
@@ -4892,7 +4891,7 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
     \begin{align}
         Y_1Y_1^\dagger & =\frac{d}{d_r}I_{d_r}.
     \end{align}
-    This is the first identity of the source-factor normalization
+    This establishes the normalization $Y_1Y_1^\dagger = (d/d_r)I_{d_r}$ from the source-factor normalization
     proposition in \cite[lines~1064--1119]{FrancoRubio2025MPUGauging}.
     % Source: first identity of eq:MPUnice3. The other three constants
     % and the full prop:MPUsplus are not established by this entry.
@@ -4927,8 +4926,8 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
     \begin{align}
         M_1(s_\dagger) & =Y_2^\dagger(Y_2WY_2^\dagger)X_2^\dagger.
     \end{align}
-    This is the reflected factorization used for the second identity of
-    the normalization proposition in
+    This is the reflected factorization for $Y_2(I_d\otimes\rho)Y_2^\dagger$ in
+    the normalization proposition of
     \cite[lines~1064--1119 and 1398]{FrancoRubio2025MPUGauging}.
     No simplicity hypothesis is needed for this factorization.
 \end{theorem}
@@ -5001,8 +5000,7 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
     \begin{align}
         \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr) & =d.
     \end{align}
-    This is the physical-trace calculation used, by analogy with the
-    first identity, in \cite[line~1398]{FrancoRubio2025MPUGauging}.
+    This is the physical-trace calculation for $Y_2$ in \cite[line~1398]{FrancoRubio2025MPUGauging}.
     Simplicity of $\mathcal U^\dagger$ is not required.
 \end{theorem}
 
@@ -5034,7 +5032,7 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
     \begin{align}
         Y_2(I_d\otimes\rho)Y_2^\dagger & =\frac{d}{d_l}I_{d_l}.
     \end{align}
-    This is the second identity of the source-factor normalization
+    This establishes the normalization $Y_2(I_d\otimes\rho)Y_2^\dagger = (d/d_l)I_{d_l}$ from the source-factor normalization
     proposition in \cite[lines~1064--1119]{FrancoRubio2025MPUGauging}.
     % Source: second identity of eq:MPUnice3. Neither physical X
     % normalization nor the full prop:MPUsplus follows from this entry alone.
@@ -5382,7 +5380,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \uses{thm:mpug_source_decomposition_gauges}
     If $d=0$, all four equalities have an empty physical index and hold
     with identity gauges. If $d>0$, unitarity of $u$ gives $r\ell=d^2>0$,
-    so $\ell>0$. The preceding theorem gives
+    so $\ell>0$. Theorem~\ref{thm:mpug_source_decomposition_gauges} gives
     $\widetilde X_2=\delta X_2W_2$ with $\delta>0$. The two isometry
     identities and unitarity of $W_2$ imply
     $I_\ell=\delta^2I_\ell$. Since $\ell>0$, a diagonal entry gives
@@ -6079,6 +6077,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         \label{eq:mpug_universal_invariant_vector} \\
         \widetilde P_j(R)\ket{\Psi_{\mathrm{gauged}}}
          & =\ket{\Psi_{\mathrm{gauged}}}.
+        \label{eq:mpug_universal_invariant_proj}
     \end{align}
 \end{theorem}
 
@@ -6108,9 +6107,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     transport identity~(\ref{eq:mpug_completion_transport}) turns that vector
     into $\ket{\Psi_\alpha}$. Identifying the label configuration $\beta$ with
     $\alpha$ through the bijection $T_{j,g}$ is the reindexing of the sum
-    over gauge-label configurations in~(\ref{eq:mpug_gauged_vector}). Averaging
-    over $g$ and using~(\ref{eq:mpug_placed_gauss_projector_average}) gives the
-    second identity.
+    over gauge-label configurations in~(\ref{eq:mpug_gauged_vector}). Averaging~(\ref{eq:mpug_universal_invariant_vector})
+    over $g$ via~(\ref{eq:mpug_placed_gauss_projector_average}) yields~(\ref{eq:mpug_universal_invariant_proj}).
 \end{proof}
 
 \begin{definition}[Gauge-invariant subspace of a completion]
@@ -8997,7 +8995,7 @@ three defect domains and maps, which the displayed matrices do not supply.
          & =\operatorname{Mat}_2(\C).
     \end{align}
     Here $B^{2a+b,2c+d}=B^{ab,cd}$ for binary $a,b,c,d$.
-    This is the injectivity assertion preceding the tensor diagram in
+    This corresponds to the injectivity assertion in
     \cite[lines~4505--4547]{FrancoRubio2025MPUGauging}.
     % Source: eq:MPU_CZX. This proves only injectivity of the shared tensor;
     % it does not complete the GHZ, fusion, or action-data scope of #7354.

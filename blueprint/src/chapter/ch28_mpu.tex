@@ -352,15 +352,18 @@ closing a chain of $N$ copies of $\mathcal U$.
     For every blocking length $L$, physical adjunction commutes with blocking,
     and consequently
     \begin{align}
+        (\mathcal U^\dagger)^{[L]} & =(\mathcal U^{[L]})^\dagger,
+        \label{eq:mpu_physical_adj_block} \\
         \mathcal W(\mathcal U^{[L]}) & =\mathcal W(\mathcal U)^{[L]}.
+        \label{eq:mpu_double_layer_block}
     \end{align}
     The virtual order is unchanged on both sides.
 \end{theorem}
 
 \begin{proof}\leanok
-    Physical adjunction conjugates each matrix entry without reversing the
-    virtual word.  The first identity follows entrywise.  The second follows
-    because physical blocking commutes with the local operator product.
+    Identity~(\ref{eq:mpu_physical_adj_block}) holds entrywise since physical adjunction
+    conjugates each matrix entry without reversing the virtual word; (\ref{eq:mpu_double_layer_block})
+    follows because physical blocking commutes with the local operator product.
 \end{proof}
 
 \begin{theorem}[Blocked double-layer diagonal is a transfer power]
@@ -513,8 +516,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     Let $\mathcal U$ be an MPU with physical dimension $d>0$.  Every closed
     product of positive length that contains at least one residual coefficient
     has zero trace.  In particular, this includes a single residual
-    coefficient.  This is the mixed-trace assertion preceding equation
-    \texttt{ESE=0} in
+    coefficient.  This corresponds to the mixed-trace property in
     \cite[Proposition~III.3(ii)]{Cirac2017MPU}.
 \end{theorem}
 
@@ -890,11 +892,13 @@ closing a chain of $N$ copies of $\mathcal U$.
     further block with letters $W_1,\ldots,W_L$ and
     $R=|\rho)(\Phi|$, repeated insertion gives
     \begin{align}
-        W_1\cdots W_L & =W_1R W_2R\cdots R W_L,          \\
+        W_1\cdots W_L & =W_1R W_2R\cdots R W_L,
+        \label{eq:mpu_second_block_insert} \\
         (\Phi|W_1\cdots W_L|\rho)
                       & =\prod_{q=1}^{L}(\Phi|W_q|\rho).
+        \label{eq:mpu_second_block_prod}
     \end{align}
-    The second identity multiplies the sitewise Kronecker deltas.
+    Evaluating each factor in~(\ref{eq:mpu_second_block_prod}) multiplies the sitewise Kronecker deltas.
 \end{proof}
 
 \begin{theorem}[Matching contractions at the direct stabilized block]
@@ -962,7 +966,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         U^{(K+2)}_{\eta,(q,\tau)}
          & =\delta_{p,q}.
     \end{align}
-    The global contraction is the input-first equation
+    The global contraction is the input-first unitarity
     $(U^{(K+2)})^\dagger U^{(K+2)}=\Id$.  This is the input-oriented tail
     contraction supporting the network calculation in
     \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
@@ -1755,10 +1759,10 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \widetilde{\mathcal U^\sharp}^{\,(i,j)}
          & =\frac{1}{\sqrt d}\,(\mathcal U^\sharp)^{(i,j)}
         =\frac{1}{\sqrt d}\,\overline{\mathcal U^{(j,i)}}
-        =\overline{\widetilde{\mathcal U}^{\,(j,i)}}.
+        =\overline{\widetilde{\mathcal U}^{\,(j,i)}},
     \end{align}
-    The first equality is the normalized flattening, the second is physical
-    adjunction, and the third uses the reality of $d^{-1/2}$.
+    where the intermediate steps follow by definition of normalized flattening, physical
+    adjunction, and the reality of $d^{-1/2}$.
 \end{proof}
 
 \begin{definition}[Canonical-form-II data under physical adjunction]
@@ -3069,9 +3073,11 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    Conjugate the first equality by $Z^\dagger$ on the left and $Z$ on the
-    right. Since $Z^\dagger Y^\dagger=(YZ)^\dagger=\Id$, both outer factors
-    cancel. The reverse implication follows by substituting $G=\Id$.
+    Multiplying $Y^\dagger GY=Y^\dagger Y$ by $Z^\dagger$ on the left and $Z$ on the right gives
+    \begin{align}
+        G & = (YZ)^\dagger G (YZ) = Z^\dagger (Y^\dagger GY) Z = Z^\dagger (Y^\dagger Y) Z = (YZ)^\dagger (YZ) = \Id.
+    \end{align}
+    The converse is immediate.
 \end{proof}
 
 \begin{theorem}[Cancellation of the source-$v$ dressing]
@@ -3886,9 +3892,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Lemma~\ref{lem:blocked_irreducibility_direct_support} gives
     \begin{align}
         \E_{A_k^{[L]}} & =\E_{A_k}^{L},
-                       & \E_{A_k}^{L}(\Lambda_k) & =\Lambda_k.
+        \label{eq:mpu_cfii_trans_pow} \\
+        \E_{A_k}^{L}(\Lambda_k) & =\Lambda_k,
+        \label{eq:mpu_cfii_trans_fixed}
     \end{align}
-    The second identity follows by iterating
+    where~(\ref{eq:mpu_cfii_trans_fixed}) follows by iterating
     $\E_{A_k}(\Lambda_k)=\Lambda_k$. Thus the same positive definite diagonal
     matrix is fixed after blocking. A physical bijection leaves the transfer
     map unchanged. The
@@ -3942,24 +3950,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \overline{V^{(N)}(cA)_\sigma}
          & =(c\overline c)^N
         \sum_\sigma V^{(N)}(A)_\sigma
-        \overline{V^{(N)}(A)_\sigma}.
-    \end{align}
-    Consequently, if $d>0$ and $U$ is an MPO tensor of physical dimension
-    $d$, then
-    \begin{align}
+        \overline{V^{(N)}(A)_\sigma},
+        \label{eq:mpu_self_overlap_scaled} \\
         \sum_\sigma V^{(N)}(\widetilde U)_\sigma
         \overline{V^{(N)}(\widetilde U)_\sigma}
          & =d^{-N}
         \sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
         \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}.
+        \label{eq:mpu_self_overlap_normalized}
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:eval_word_smul}
-    Each length-$N$ coefficient is multiplied by $c^N$.  Multiplication by
-    its complex conjugate gives the first identity.  Taking
-    $c=1/\sqrt d$ gives the second.
+    Each length-$N$ coefficient satisfies $V^{(N)}(cA)_\sigma = c^N V^{(N)}(A)_\sigma$, yielding~(\ref{eq:mpu_self_overlap_scaled}) upon multiplying by its complex conjugate; setting $c=1/\sqrt d$ gives~(\ref{eq:mpu_self_overlap_normalized}).
 \end{proof}
 
 \begin{theorem}[Normalized MPU transfer trace]
@@ -4885,12 +4889,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
          & =\operatorname{tr}\!\left(W^{p_1q_1}W^{p_2q_2}E^K\right).
+        \label{eq:mpu_source_u_trace}
     \end{align}
     If $\rho$ is diagonal, the same quantity is
     \begin{align}
-        d^{-K}\sum_{\tau,\eta}
+        \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
+         & = d^{-K}\sum_{\tau,\eta}
         \overline{U^{(K+2)}_{\eta,(p,\tau)}}
         U^{(K+2)}_{\eta,(q,\tau)}.
+        \label{eq:mpu_source_u_tail_sum}
     \end{align}
     Thus only the $K$-site interior is blocked; the two endpoint letters remain
     one-site tensors. The $p$ entries are conjugated and the $q$ entries are
@@ -4906,9 +4913,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Symmetry changes the inserted vector
     $\lvert\rho^{\mathsf T})$ to $\lvert\rho)$ in
     Theorem~\ref{thm:mpu_source_u_transpose_fixed_pair_trace}. Substitute the
-    fixed pair and cycle the first endpoint letter to obtain the displayed
-    trace. The normalized input-tail identity expands that trace into the
-    second displayed sum.
+    fixed pair and cycle the first endpoint letter to obtain~(\ref{eq:mpu_source_u_trace}). The normalized input-tail identity Theorem~\ref{thm:mpu_normalized_input_tail_closed_trace} expands that trace into~(\ref{eq:mpu_source_u_tail_sum}).
 \end{proof}
 
 \begin{theorem}[Complete source-$u$ network contraction]
@@ -5723,7 +5728,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         lem:mpu_iterated_physical_blocking}
     Choose the positive simple blocking length bounded by $D^4$.
     Canonical form II persists under this positive blocking, with the same
-    fixed matrix, so the preceding construction applies to
+    fixed matrix, so Definition~\ref{def:mpu_source_open_two_site_standard_form} applies to
     $\mathcal U^{[k]}$. Two-site blocking is direct blocking by $2k$ after
     the displayed relabeling: first identify the ordinary two-site block
     with length-two blocking, then group the direct word into consecutive
@@ -5825,8 +5830,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Then the original-chain coefficient matrix $F^U$ satisfies
     \begin{align}
-        F^U(a,b;j) & = F_{P,Q}(a,b;j), \\
+        F^U(a,b;j) & = F_{P,Q}(a,b;j),
+        \label{eq:mpu_orig_coeff_pq} \\
         F^U A      & = B(A)F^U.
+        \label{eq:mpu_orig_coeff_intertwiner}
     \end{align}
     Both equalities are finite-chain identities with every exterior
     physical label fixed; the virtual boundary is not discarded.
@@ -5839,10 +5846,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The residual-word identity first leaves both original-site products
     in the trace. Two word concatenations split the relabeled middle
     product into the left complete-block word, the three window letters,
-    and the right complete-block word. This gives the first equality
-    entrywise, with $P$ and $Q$ the displayed end products. Apply the
-    arbitrary-virtual-end three-block identity to these two matrices to
-    obtain the second equality.
+    and the right complete-block word, yielding~(\ref{eq:mpu_orig_coeff_pq})
+    entrywise with $P$ and $Q$ the displayed end products. Applying the
+    arbitrary-virtual-end three-block identity to these two matrices yields~(\ref{eq:mpu_orig_coeff_intertwiner}).
 \end{proof}
 
 \begin{lemma}[Three-block locality with original-site residuals]
@@ -7284,12 +7290,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \ell[\widehat W] & =\ell[X\widehat W(ZY)]=\ell[\widetilde W],
         \notag
     \end{align}
-    the first equality in each line being the invariance identity with
-    invertible $X$ and $ZY$, and the second rewriting $X\widehat W(ZY)$
-    through
-    (\ref{eq:mpu_reduced_hat_chain_pwqy})--(\ref{eq:mpu_reduced_hat_chain_reduced})
-    and (\ref{eq:mpu_reduced_hat_chain_tilde}) to $\widetilde W$, which gives
-    (\ref{eq:mpu_reduced_hat_right_rank}) and
+    by invertibility of $X$ and $ZY$ together with the relation $X\widehat W(ZY)=\widetilde W$
+    from~(\ref{eq:mpu_reduced_hat_chain_pwqy})--(\ref{eq:mpu_reduced_hat_chain_tilde}), yielding~(\ref{eq:mpu_reduced_hat_right_rank}) and
     (\ref{eq:mpu_reduced_hat_left_rank}). For positive semidefinite $L$ and
     $R$, their ambient support-inverse extensions supply $X$ and $Z$; the
     invertible right-factor identity for $\widetilde P Q$ supplies $Y$.
@@ -7500,11 +7502,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         M_1(\widehat{\mathcal U})
          & =(I_d\otimes B^{\mathsf T})M_1(\mathcal U)
-        (A^{\mathsf T}\otimes I_d),                      \\
+        (A^{\mathsf T}\otimes I_d),
+        \label{eq:mpu_raw_source_cut_one} \\
         M_2(\widehat{\mathcal U})
          & =(A\otimes I_d)M_2(\mathcal U)(I_d\otimes B).
+        \label{eq:mpu_raw_source_cut_two}
     \end{align}
-    The transposes in the first identity result from the corrected orientation
+    The transposes in~(\ref{eq:mpu_raw_source_cut_one}) result from the corrected orientation
     of $M_1$; no complex conjugation occurs.
     % Source lines: paper_v2.tex 786--804.
 \end{theorem}
@@ -7656,14 +7660,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     There are unitaries $x$ on $\ell[\mathcal V]$ and $y$ on
     $r[\mathcal V]$ such that
     \begin{align}
-        u_{\mathcal V} & =(x\otimes y)\widetilde u,                 &
+        u_{\mathcal V} & =(x\otimes y)\widetilde u,
+        \label{eq:mpu_uv_rel_u} \\
         v_{\mathcal V} & =\widetilde v(y^\dagger\otimes x^\dagger).
+        \label{eq:mpu_uv_rel_v}
     \end{align}
-    The first equality is the forward $u$ relation of
+    Relation~(\ref{eq:mpu_uv_rel_u}) is the forward $u$ relation of
     \cite[Equation~(SFuu)]{Cirac2017MPU}. The source's
     \cite[Equation~(SFvv)]{Cirac2017MPU} displays two relations between the
-    open half-factors involving $z$; the second equality follows by
-    contracting those half-factors. No converse for the original periodic
+    open half-factors involving $z$; contraction of those half-factors yields~(\ref{eq:mpu_uv_rel_v}). No converse for the original periodic
     operators at odd length is asserted.
     % Source: paper_v2.tex 624--648; II_RelationStandard1/2.png.
 \end{theorem}
@@ -7983,10 +7988,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
     A Kronecker product equal to the identity has reciprocal scalar factors, so
     $\overline xx=e^{i\phi}\Id$ and $\overline yy=e^{-i\phi}\Id$. Since $x$ is
-    unitary, $x^T$ is a left inverse of $\overline x$; multiplying the first
-    relation by $x^T$ on the left gives $x=e^{i\phi}x^T$, and the same argument
-    gives $y=e^{-i\phi}y^T$. Reading the first relation as a relation for the
-    unitary $\overline x$ against its own entrywise conjugate gives
+    unitary, $x^T\overline x=\Id$; multiplying $\overline xx=e^{i\phi}\Id$ on the left by $x^T$ gives $x=e^{i\phi}x^T$, and similarly
+    $y=e^{-i\phi}y^T$. Applying entrywise conjugation to $\overline x x=e^{i\phi}\Id$ yields
     $\Id=xx^\dagger=e^{2i\phi}\Id$, so $e^{i\phi}=\pm1$ and
     $e^{-i\phi}=e^{i\phi}$. The two matrices therefore carry one transpose sign.
 \end{proof}
@@ -9052,8 +9055,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     For matrices $A,B\in\mathbb C^{n\times n}$ and the exchange matrix
     $\mathbb S$ on $\mathbb C^n\otimes\mathbb C^n$,
     \begin{align}
-        \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S, &
+        \mathbb S(A\otimes B) & =(B\otimes A)\mathbb S,
+        \label{eq:matrix_swap_kron_left} \\
         (A\otimes B)\mathbb S & =\mathbb S(B\otimes A).
+        \label{eq:matrix_swap_kron_right}
     \end{align}
     The equivalent two-sided exchange identity is stated in
     \cite[lines~1316--1319]{Cirac2017MPU}; the gauge-invariance argument at
@@ -9063,14 +9068,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     In product coordinates the exchange matrix has entries
-    $\mathbb S_{(i,j),(k,l)}=\delta_{i,l}\delta_{j,k}$, so both sides of the
-    first identity have entry
+    $\mathbb S_{(i,j),(k,l)}=\delta_{i,l}\delta_{j,k}$, so both sides of~(\ref{eq:matrix_swap_kron_left}) have entry
     \begin{align}
         \left[\mathbb S(A\otimes B)\right]_{(i_1,i_2),(j_1,j_2)}
          & =A_{i_2,j_1}B_{i_1,j_2}
         =\left[(B\otimes A)\mathbb S\right]_{(i_1,i_2),(j_1,j_2)}.
     \end{align}
-    The second identity is the first with the two factors exchanged.
+    Swapping factors $A$ and $B$ gives~(\ref{eq:matrix_swap_kron_right}).
 \end{proof}
 
 \begin{theorem}[Exchange contraction of a scaled unitary Kronecker product]
@@ -11567,16 +11571,16 @@ see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
     star-subalgebra commuting with all left coefficients of $\mathcal A_2$.
     Passing to the generated star-subalgebra yields
     \begin{align}
-        LR          & =RL,        &
+        LR          & =RL,
+        \label{eq:qca_overlapping_support_first_closure} \\
         L^\dagger R & =RL^\dagger
-        \label{eq:qca_overlapping_support_first_closure}
+        \label{eq:qca_overlapping_support_second_closure}
     \end{align}
     for every $R\in\operatorname{Spp}_{\mathrm R}(\mathcal A_1)$ and every
     left coefficient $L$ of $\mathcal A_2$.
 
     Since $\operatorname{Spp}_{\mathrm R}(\mathcal A_1)$ is closed under
-    adjoints, applying the first equality in
-    (\ref{eq:qca_overlapping_support_first_closure}) to $R^\dagger$ shows that
+    adjoints, applying~(\ref{eq:qca_overlapping_support_first_closure}) to $R^\dagger$ shows that
     each left coefficient commutes with both $R$ and $R^\dagger$.  Passing to
     the star-subalgebra generated by the left coefficients gives
     (\ref{eq:qca_overlapping_support_conclusion}).
@@ -12148,12 +12152,14 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \begin{align}
         M_{a;p,k,s}(I_{E_{\mathrm{in}}}\otimes A)
          & =(I_{E_{\mathrm{out}}}\otimes B(A))M_{a;p,k,s}.
+        \label{eq:mpu_finite_chain_intertwiner}
     \end{align}
     This identity holds for arbitrary original-site prefix and suffix
     words; $U$ need not be an MPU. If $U$ is an MPU and $N>1$, then
     \begin{align}
         M_{a;p,k,s}(I_{E_{\mathrm{in}}}\otimes A)M_{a;p,k,s}^{\dagger}
          & =I_{E_{\mathrm{out}}}\otimes B(A).
+        \label{eq:mpu_finite_chain_conjugation}
     \end{align}
     Thus the conjugated operator is the identity on every exterior
     output coordinate. This statement assumes the displayed supplied
@@ -12170,9 +12176,8 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     Fixing all exterior input and output coordinates makes a slice of
     $M_{a;p,k,s}$ equal to the original-site three-block window.
     The open-word identity intertwines each slice with the same $B(A)$.
-    Summing over exterior coordinates gives the operator identity.
-    When $U$ is an MPU, the finite-chain matrix is unitary; multiplying
-    the identity on the right by its adjoint proves the second equation.
+    Summing over exterior coordinates yields~(\ref{eq:mpu_finite_chain_intertwiner}).
+    When $U$ is an MPU, $M_{a;p,k,s}$ is unitary; postmultiplying~(\ref{eq:mpu_finite_chain_intertwiner}) by $M_{a;p,k,s}^\dagger$ yields~(\ref{eq:mpu_finite_chain_conjugation}).
 \end{proof}
 
 \begin{definition}[Finite-chain term on a local observable]
@@ -12734,9 +12739,9 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     in some finite region, so
     \begin{align}
         j(\mathcal A_{\mathrm{loc}})
-         & =\bigcup_{\Lambda\Subset\mathbb Z}j_\Lambda(\mathcal A_\Lambda).
+         & =\bigcup_{\Lambda\Subset\mathbb Z}j_\Lambda(\mathcal A_\Lambda),
     \end{align}
-    Taking closures proves the second equality.
+    and taking closures yields $\overline{\bigcup_{\Lambda\Subset\mathbb Z} j_\Lambda(\mathcal A_\Lambda)} = \overline{j(\mathcal A_{\mathrm{loc}})} = \mathcal A$.
 \end{proof}
 
 Lattice translation acts covariantly on the quasi-local algebra in the setting
@@ -12791,9 +12796,11 @@ of \cite[lines~2292--2306]{Cirac2017MPU}.
     of the quasi-local algebra.  On the dense algebraic-local subalgebra and on
     finite-region observables it satisfies
     \begin{align}
-        \tau_a(j(A)) & =j(\tau_a(A)),                               \\
+        \tau_a(j(A)) & =j(\tau_a(A)),
+        \label{eq:qca_trans_dense} \\
         \tau_a(j_\Lambda(A_\Lambda))
                      & =j_{\Lambda+a}(\tau_{a,\Lambda}(A_\Lambda)).
+        \label{eq:qca_trans_finite}
     \end{align}
 \end{definition}
 
@@ -12801,12 +12808,9 @@ of \cite[lines~2292--2306]{Cirac2017MPU}.
     \uses{def:completion_star_alg_equiv, def:qca_algebraic_local_translation, def:qca_quasi_local_algebra, def:qca_quasi_local_observable, lem:qca_algebraic_local_translation_action, lem:qca_algebraic_local_translation_isometry}
     Algebraic-local translation and its inverse translation by $-a$ are
     operator-norm isometries, hence continuous.  Extend this equivalence to the
-    norm completion.  The extension identity gives
-    \begin{align}
-        \tau_a(j(A)) & =j(\tau_a(A)).
-    \end{align}
-    Substituting $A=\iota_\Lambda(A_\Lambda)$ and using the finite-region
-    translation formula gives the second identity.
+    norm completion to obtain~(\ref{eq:qca_trans_dense}).
+    Substituting $A=\iota_\Lambda(A_\Lambda)$ and applying the finite-region
+    translation formula yields~(\ref{eq:qca_trans_finite}).
 \end{proof}
 
 \begin{lemma}[Quasi-local translation action laws]
@@ -13906,21 +13910,25 @@ This is the forward propagation condition of
     and on the two dense algebraic-local subalgebras,
     \begin{align}
         \overline{\mathcal B}_L\bigl(j^{(d^L)}(A)\bigr)
-         & =j^{(d)}\bigl(\mathcal B_L(A)\bigr),        \\
+         & =j^{(d)}\bigl(\mathcal B_L(A)\bigr),
+        \label{eq:qca_blocking_dense_fwd} \\
         \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}(C)\bigr)
          & =j^{(d^L)}\bigl(\mathcal B_L^{-1}(C)\bigr).
+        \label{eq:qca_blocking_dense_rev}
     \end{align}
     For $A\in\mathcal A^{(d^L)}_\Lambda$ and
     $C\in\mathcal A^{(d)}_\Delta$, these identities become
     \begin{align}
         \overline{\mathcal B}_L\bigl(j^{(d^L)}_\Lambda(A)\bigr)
          & =j^{(d)}_{\widehat\Lambda_L}
-        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),        \\
+        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),
+        \label{eq:qca_blocking_fin_fwd} \\
         \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}_\Delta(C)\bigr)
          & =j^{(d^L)}_{\operatorname{Hull}_L(\Delta)}
         \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
         \bigl(\iota_{\Delta,
                     \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
+        \label{eq:qca_blocking_fin_rev}
     \end{align}
     If $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, the inverse formula reduces
     exactly to
@@ -13928,24 +13936,24 @@ This is the forward propagation condition of
         \overline{\mathcal B}_L^{-1}
         \bigl(j^{(d)}_{\widehat\Lambda_L}(C)\bigr)
          & =j^{(d^L)}_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
+        \label{eq:qca_blocking_fin_exact}
     \end{align}
     Finally, for all quasi-local observables $X$ and $Y$ on the blocked chain,
     \begin{align}
-        \lVert\overline{\mathcal B}_L(X)\rVert & =\lVert X\rVert,   \\
+        \lVert\overline{\mathcal B}_L(X)\rVert & =\lVert X\rVert,
+        \label{eq:qca_blocking_norm} \\
         \lVert\overline{\mathcal B}_L(X)-
         \overline{\mathcal B}_L(Y)\rVert       & =\lVert X-Y\rVert.
+        \label{eq:qca_blocking_dist}
     \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:completion_star_alg_equiv, def:qca_quasi_local_observable, lem:qca_algebraic_blocking_formulas, lem:qca_block_hull_properties}
-    The first identity is the defining completion map, and the two dense
-    formulas are its canonical-image formulas for the algebraic equivalence and
-    its inverse.  Composing them with the finite-region canonical maps gives the
-    two finite formulas.  The exact expanded-region formula uses
-    $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.  A star-algebra
-    equivalence of C-star algebras preserves the norm; applying this to $X-Y$
-    gives distance preservation.
+    Equalities~(\ref{eq:qca_blocking_dense_fwd}) and~(\ref{eq:qca_blocking_dense_rev}) are the defining continuous extensions of the algebraic equivalence and its inverse.
+    Composing them with the finite-region canonical maps gives~(\ref{eq:qca_blocking_fin_fwd}) and~(\ref{eq:qca_blocking_fin_rev}).
+    The exact formula~(\ref{eq:qca_blocking_fin_exact}) uses $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.
+    Because a star-algebra equivalence of C-star algebras preserves the norm, (\ref{eq:qca_blocking_norm}) holds, and applying it to $X-Y$ gives~(\ref{eq:qca_blocking_dist}).
 \end{proof}
 
 \begin{lemma}[Support transport under site blocking]
@@ -15270,8 +15278,7 @@ adjacent-pair ordering convention of \cite{Gross2012IndexTheory}.
     $((i,t),(j,u))$ equals $X((i,r),(j,s))$ when $t=u$ and vanishes
     otherwise.  On the right, the summand indexed by $t$ contributes
     $X((i,r),(j,s))$ exactly when both second coordinates equal $t$, so the
-    sum over $t$ reproduces the same entry.  The second identity follows by
-    exchanging the roles of the two factors.
+    sum over $t$ reproduces the same entry.  Exchanging the roles of the two factors yields~(\ref{eq:qca_right_coefficient_compression}).
 \end{proof}
 
 \begin{lemma}[Quasi-local form of the coefficient compressions]
