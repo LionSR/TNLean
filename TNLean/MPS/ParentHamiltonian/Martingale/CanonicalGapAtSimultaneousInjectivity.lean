@@ -33,9 +33,11 @@ theorem CPSVCanonicalFormData.parentHamiltonianES_eq_representatives
     {R : ℕ} (hR : 0 < R) (N : ℕ) :
     parentHamiltonianES A R N = parentHamiltonianES
       (toTensorFromBlocks (d := d) (fun _ ↦ 1)
-        (fun j ↦ data.blocks (data.representativeIndex j))) R N :=
-  parentHamiltonianES_eq_of_groundSpace_eq
-    (data.groundSpace_eq_toTensorFromBlocks_representatives hR) N
+        (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
+  -- `parentHamiltonianES_eq_of_groundSpace_eq` needs equal bond dimensions; the
+  -- representative block sum has a different one, so the definitions are unfolded.
+  simp only [parentHamiltonianES, parentHamiltonian, localTerm, parentInteraction,
+    groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
 variable [NeZero d]
 
