@@ -723,12 +723,17 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   Under the added hypothesis that the `q`-site states of distinct blocks are
   orthogonal, the block form holds for multiplicity one and part (ii) is proved
   with no condition `q = o(N)`.
-- `mswc24_decaying_correlations_windowed_connected.tex` records that the
-  correlation estimate of Lemma 2 of the Supplemental Material is proved with
-  the bound in every window of `K ≤ 2` consecutive separations and for the
-  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
-  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
-  need not vanish at finite `N`; the corrected form suffices for Theorem 1.
+- `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
+  false-source note for Lemma 2 of the Supplemental Material. It records that
+  the lemma holds in modulus for the source's
+  observables, whose one-point functions vanish exactly at every `N ≥ s`, but that
+  its printed real inequality fails for nonreal and for negative `λ₂` and its Hermitian reading
+  fails in general, since the limit correlator of Hermitian observables is a
+  multiple of `|λ₂|^t cos(tθ + φ)`. The formal Hermitian statement asserts the
+  bound in every window of `K ≤ 2` consecutive separations. The note also lists
+  the remaining repairs to the proof of Theorem 1 (normal versus injective,
+  Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
+  constant `ξ/4`, which is implicit in the source's final inequality.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
   in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a

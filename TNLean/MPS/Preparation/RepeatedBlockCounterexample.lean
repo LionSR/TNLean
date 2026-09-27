@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
-import TNLean.MPS.Preparation.DiagonalPolar
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
+import TNLean.MPS.Preparation.OneDimensionalBlocks
 
 /-!
 # The approximating state fails for a block of multiplicity two
@@ -27,6 +28,12 @@ rank-one matrix `(1/√2) [[1, 1], [1, 1]]` rather than `diag(1, 1)` times a pos
 (`nonNormalApproxOverlap_repeatedBlockTensor`), which tends to `1/√5` as `M → ∞`
 (`tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor`) and does not depend on `q`.
 
+The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
+canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with weights
+`|μ_{j,k}| ≤ 1`, one of modulus one (`isBNTCanonicalForm_repeatedBlockSector`,
+`reindex_toTensor_repeatedBlockSector`), and the pairs and weights of the approximating state
+are those of this canonical form (`embeddedFixedPointPair_repeatedBlockSector`).
+
 Both blocks are one-dimensional, so their transfer maps are the identity and have no eigenvalue
 other than `1` (`hasEigenvalue_transferMap_repeatedBlock`): the hypothesis on the subleading
 eigenvalue that defines `ξ_diag` holds for every `λ₂`, and `e^{-γ/ξ_diag}` can be any number in
@@ -43,6 +50,11 @@ fails. Documented in `docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`.
 * `MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor` — the overlap, for all `q, M ≥ 1`.
 * `MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor` — it tends to `1/√5`.
 * `MPSTensor.not_approximationError_le_repeatedBlockTensor` — the bound of Lemma 1'(ii) fails.
+* `MPSTensor.repeatedBlockSector`, `MPSTensor.isBNTCanonicalForm_repeatedBlockSector`,
+  `MPSTensor.reindex_toTensor_repeatedBlockSector` — the tensor is, after ordering its bond
+  coordinates, the canonical form of eq. (S2) of a basis of normal tensors.
+* `MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock` — the tensor
+  satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
 
 ## References
 
@@ -69,14 +81,18 @@ abbrev repeatedBlockTensor : MPSTensor 2 3 := fun i => diagonal (repeatedBlockDi
 def repeatedBlockBasis (j : Fin 2) : MPSTensor 2 1 :=
   fun i => of fun _ _ => (![![1, 0], ![0, 1]] : Fin 2 → Fin 2 → ℂ) j i
 
+/-- The blocks are in the gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp`. -/
+theorem repeatedBlockBasis_norm (j : Fin 2) :
+    ∑ i, star (repeatedBlockBasis j i 0 0) * repeatedBlockBasis j i 0 0 = 1 := by
+  fin_cases j <;> simp [repeatedBlockBasis, Fin.sum_univ_two]
+
 /-- The transfer maps of the blocks have no eigenvalue other than `1`, so the hypothesis on the
 subleading eigenvalue that defines the correlation length `ξ_diag` of arXiv:2307.01696,
 Lemma 1'(ii), holds for every `λ₂`. -/
 theorem norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis (j : Fin 2) (lam₂ μ : ℂ)
     (h : Module.End.HasEigenvalue (Kraus.transferMap (repeatedBlockBasis j)) μ)
-    (hμ : μ ≠ 1) : ‖μ‖ ≤ ‖lam₂‖ := by
-  refine norm_le_of_hasEigenvalue_transferMap_of_dim_one _ ?_ lam₂ μ h hμ
-  fin_cases j <;> simp [repeatedBlockBasis, Fin.sum_univ_two]
+    (hμ : μ ≠ 1) : ‖μ‖ ≤ ‖lam₂‖ :=
+  norm_le_of_hasEigenvalue_transferMap_of_dim_one _ (repeatedBlockBasis_norm j) lam₂ μ h hμ
 
 /-- The multiplicities `m = (2, 1)` of the two blocks. -/
 def repeatedBlockMult : Fin 2 → ℕ := ![2, 1]
@@ -293,5 +309,187 @@ theorem not_approximationError_le_repeatedBlockTensor {lam₂ : ℂ} (h0 : 0 < �
     Real.norm_eq_abs, abs_of_nonneg (by positivity)]
   rw [one_pow, mul_one] at hlt
   exact hlt.trans (by change _ < 1 - repeatedBlockOverlap M; linarith)
+
+/-! ## The tensor satisfies the hypotheses of Lemma 1'(ii) -/
+
+/-- The canonical form of arXiv:2307.01696, eq. (S2), of `repeatedBlockTensor`: the basis of
+the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, with multiplicities
+`m = (2, 1)` and every weight `μ_{j,k} = 1`. -/
+abbrev repeatedBlockSector : SectorDecomposition 2 where
+  basisCount := 2
+  basisDim := fun _ => 1
+  basis := repeatedBlockBasis
+  sectors :=
+    { copies := repeatedBlockMult
+      copies_pos := fun j => by fin_cases j <;> simp [repeatedBlockMult]
+      weight := repeatedBlockWeight
+      weight_ne_zero := fun _ _ => one_ne_zero }
+
+/-- The coefficients `βⱼ = ∑ₖ μ_{j,k}^N` of the canonical form (arXiv:2307.01696, eq. (S4)). -/
+theorem coeff_repeatedBlockSector (N : ℕ) :
+    repeatedBlockSector.coeff N = bntWeight repeatedBlockWeight N :=
+  rfl
+
+/-- The states of the two blocks are linearly independent on every ring of `N ≥ 1` sites: they
+are `|0⋯0⟩` and `|1⋯1⟩`. This is the basis-of-normal-tensors property of arXiv:2307.01696,
+eq. (S2). -/
+theorem hasBNTSectorData_repeatedBlockSector : HasBNTSectorData repeatedBlockSector := by
+  refine ⟨0, fun N hN => ?_⟩
+  rw [Fintype.linearIndependent_iff]
+  intro g hg
+  have hval : ∀ i : Fin 2, ∑ j : Fin 2, g j * repeatedBlockBasis j i 0 0 ^ N = 0 := fun i => by
+    have := congrArg (fun v => v (fun _ : Fin N => i)) hg
+    simpa [-mpv_eq, mpv_of_dim_one, Fin.sum_univ_two] using this
+  have h0 : g 0 = 0 := by
+    simpa [Fin.sum_univ_two, repeatedBlockBasis, zero_pow hN.ne'] using hval 0
+  have h1 : g 1 = 0 := by
+    simpa [Fin.sum_univ_two, repeatedBlockBasis, zero_pow hN.ne'] using hval 1
+  intro j
+  fin_cases j
+  · exact h0
+  · exact h1
+
+/-- **The canonical form of `repeatedBlockTensor` is a basis of normal tensors**
+(arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
+self-overlap, their states are linearly independent, they are not related by a gauge
+transformation and a phase, every weight has `|μ_{j,k}| ≤ 1`, and one has `|μ_{j,k}| = 1`. -/
+theorem isBNTCanonicalForm_repeatedBlockSector : IsBNTCanonicalForm repeatedBlockSector where
+  basis_dim_pos := fun _ => Nat.one_pos
+  basis_irreducible := fun j => isIrreducibleTensor_of_bondDim_one (repeatedBlockBasis j)
+  basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (repeatedBlockBasis_norm j)
+  basis_normalized_self_overlap := fun j =>
+    tendsto_mpvOverlap_self_of_dim_one _ (repeatedBlockBasis_norm j)
+  bnt_data := hasBNTSectorData_repeatedBlockSector
+  basis_distinct := fun j k hjk h => by
+    have hc : cast (congr_arg (MPSTensor 2) h) (repeatedBlockSector.basis j) =
+        repeatedBlockBasis j :=
+      cast_eq _ _
+    rw [hc]
+    refine not_gaugePhaseEquiv_of_dim_one 1 ?_
+    fin_cases j <;> fin_cases k <;> simp_all [repeatedBlockBasis]
+  weight_norm_le_one := fun _ _ => by
+    change ‖(1 : ℂ)‖ ≤ 1
+    simp
+  weight_unit_exists := ⟨(0 : Fin 2), ⟨0, by decide⟩, by change ‖(1 : ℂ)‖ = 1; simp⟩
+
+/-- The bond coordinates of the three copies in the canonical form: the two copies of the first
+block, then the copy of the second. -/
+noncomputable def repeatedBlockCopyCoord : Fin 3 → Fin repeatedBlockSector.totalDim :=
+  ![repeatedBlockSector.copyCoord 0 ⟨0, by decide⟩ ⟨0, Nat.one_pos⟩,
+    repeatedBlockSector.copyCoord 0 ⟨1, by decide⟩ ⟨0, Nat.one_pos⟩,
+    repeatedBlockSector.copyCoord 1 ⟨0, by decide⟩ ⟨0, Nat.one_pos⟩]
+
+/-- The canonical form has bond dimension three, the sum `∑ⱼ m_j D_j` of the bond dimensions of
+the copies of the blocks in arXiv:2307.01696, eq. (S2). -/
+theorem totalDim_repeatedBlockSector : repeatedBlockSector.totalDim = 3 := by
+  have h : repeatedBlockSector.totalCopies = 3 := by
+    simp [SectorDecomposition.totalCopies, SectorDecomposition.copies, repeatedBlockMult,
+      Fin.sum_univ_two]
+  simp only [SectorDecomposition.totalDim, SectorDecomposition.flatDim, Finset.sum_const,
+    Finset.card_univ, Fintype.card_fin, smul_eq_mul, mul_one, h]
+
+/-- The bond coordinates of the copies of the blocks exhaust the bond coordinates of the
+canonical form of arXiv:2307.01696, eq. (S2), each exactly once. -/
+theorem bijective_repeatedBlockCopyCoord : Function.Bijective repeatedBlockCopyCoord := by
+  refine (Fintype.bijective_iff_injective_and_card _).2 ⟨fun x y hxy => ?_, by
+    simp [totalDim_repeatedBlockSector]⟩
+  fin_cases x <;> fin_cases y <;>
+    first
+    | rfl
+    | (exfalso
+       obtain ⟨h1, h2⟩ := Sigma.mk.inj_iff.1 (repeatedBlockSector.sigma_eq_of_copyCoord_eq hxy)
+       first
+       | exact absurd h1 (by decide)
+       | exact absurd (eq_of_heq h2) (by decide))
+
+/-- The ordering of the bond coordinates of the canonical form under which its assembled tensor
+is `repeatedBlockTensor`: a permutation of the bond basis, which is a gauge transformation. -/
+noncomputable def repeatedBlockEquiv : Fin repeatedBlockSector.totalDim ≃ Fin 3 :=
+  (Equiv.ofBijective _ bijective_repeatedBlockCopyCoord).symm
+
+/-- The ordering of the bond coordinates of the canonical form of arXiv:2307.01696, eq. (S2),
+sends the coordinate `x` to the bond coordinate of the `x`-th copy. -/
+theorem repeatedBlockEquiv_symm_apply (x : Fin 3) :
+    repeatedBlockEquiv.symm x = repeatedBlockCopyCoord x :=
+  rfl
+
+/-- **`repeatedBlockTensor` is the canonical form** `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j` of
+arXiv:2307.01696, eq. (S2), of `repeatedBlockSector`, after ordering the bond coordinates. -/
+theorem reindex_toTensor_repeatedBlockSector (i : Fin 2) :
+    reindex repeatedBlockEquiv repeatedBlockEquiv (repeatedBlockSector.toTensor i) =
+      repeatedBlockTensor i := by
+  ext x y
+  rw [reindex_apply, submatrix_apply, repeatedBlockEquiv_symm_apply,
+    repeatedBlockEquiv_symm_apply]
+  fin_cases x <;> fin_cases y <;>
+    simp only [repeatedBlockCopyCoord, Fin.zero_eta, Fin.mk_one, Fin.reduceFinMk, cons_val,
+      cons_val_zero, cons_val_one] <;>
+    first
+    | (rw [SectorDecomposition.toTensor_copyCoord]
+       fin_cases i <;> simp [SectorDecomposition.weight, repeatedBlockWeight, repeatedBlockBasis,
+         repeatedBlockDiag])
+    | (rw [SectorDecomposition.toTensor_copyCoord_of_ne _ _ (by simp)]
+       fin_cases i <;> simp)
+
+/-- The fixed-point pairs of the blocks of the canonical form, each placed on the first copy
+of its block (`SectorDecomposition.embeddedFixedPointPair`, with the fixed point `σ_j = 1` of
+the one-dimensional block), are the pairs placed on `repeatedBlockCoord`. -/
+theorem embeddedFixedPointPair_repeatedBlockSector (j : Fin 2) (p : Fin 3 × Fin 3) :
+    repeatedBlockSector.embeddedFixedPointPair (fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ))
+        (fun j => ⟨0, repeatedBlockSector.copies_pos j⟩) j
+        (repeatedBlockEquiv.symm p.1, repeatedBlockEquiv.symm p.2) =
+      embedPair (fun _ : Fin 1 => repeatedBlockCoord j)
+        (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)) p := by
+  have hc : repeatedBlockSector.copyCoord j ⟨0, repeatedBlockSector.copies_pos j⟩ =
+      fun _ : Fin 1 => repeatedBlockEquiv.symm (repeatedBlockCoord j) := by
+    funext a
+    obtain rfl : a = 0 := Subsingleton.elim _ _
+    rw [repeatedBlockEquiv_symm_apply]
+    fin_cases j <;> rfl
+  rw [SectorDecomposition.embeddedFixedPointPair, hc, embedPair_symm_comp]
+  simp
+
+/-- **Lemma 1'(ii) of arXiv:2307.01696 fails for a tensor satisfying all its hypotheses.**
+The tensor `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` is, after ordering its bond coordinates,
+the canonical form `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j` of eq. (S2) of a basis of two normal
+blocks in canonical form II, with weights `|μ_{j,k}| ≤ 1`, one of modulus one
+(`IsBNTCanonicalForm`, normality, and the diagonal positive-definite fixed point `1` of each
+block), whose states "produce orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696,
+line 973). The transfer maps of the blocks have no eigenvalue other than `1`, so every `λ₂` with
+`0 < |λ₂| < 1` bounds their subleading eigenvalues. For the approximating state of eq. (S7),
+built from the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` and the pairs of that same fixed point `1`, and
+for every `γ > 0` and every constant `C`, there is `M ≥ 1` such that, with `q = M` and `N = M²`
+(so `q = o(N)` along this sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds
+`C y e^{C y}`. -/
+theorem isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock :
+    IsBNTCanonicalForm repeatedBlockSector ∧
+      (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
+        mpvOverlap (repeatedBlockSector.basis j) (repeatedBlockSector.basis k) N) atTop (𝓝 0)) ∧
+      (∀ j, IsNormalTensor (repeatedBlockSector.basis j)) ∧
+      (∀ j, (1 : Matrix (Fin 1) (Fin 1) ℂ).PosDef ∧ (1 : Matrix (Fin 1) (Fin 1) ℂ).IsDiag ∧
+        Kraus.transferMap (repeatedBlockSector.basis j) 1 = 1) ∧
+      (∀ i, reindex repeatedBlockEquiv repeatedBlockEquiv (repeatedBlockSector.toTensor i) =
+        repeatedBlockTensor i) ∧
+      (∀ j (lam₂ μ : ℂ),
+        Module.End.HasEigenvalue (Kraus.transferMap (repeatedBlockSector.basis j)) μ →
+          μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖) ∧
+      ∀ {lam₂ : ℂ}, 0 < ‖lam₂‖ → ‖lam₂‖ < 1 → ∀ {γ : ℝ}, 0 < γ → ∀ C : ℝ,
+        ∃ M : ℕ, 1 ≤ M ∧
+          C * (M * Real.exp (-γ * M / correlationLength lam₂)) *
+              Real.exp (C * (M * Real.exp (-γ * M / correlationLength lam₂))) <
+            1 - ‖nonNormalApproxOverlap repeatedBlockTensor M M
+              (ghzAmplitude (repeatedBlockSector.coeff (M * M)))
+              (fun j p => repeatedBlockSector.embeddedFixedPointPair
+                (fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ))
+                (fun j => ⟨0, repeatedBlockSector.copies_pos j⟩) j
+                (repeatedBlockEquiv.symm p.1, repeatedBlockEquiv.symm p.2))‖ := by
+  refine ⟨isBNTCanonicalForm_repeatedBlockSector,
+    fun _ _ hjk => isBNTCanonicalForm_repeatedBlockSector.cross_overlap_basis_tendsto_zero hjk,
+    fun j => isNormalTensor_of_dim_one _ (repeatedBlockBasis_norm j),
+    fun j => posDef_isDiag_transferMap_one_of_dim_one _ (repeatedBlockBasis_norm j),
+    reindex_toTensor_repeatedBlockSector,
+    norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis, fun h0 h1 γ hγ C => ?_⟩
+  simp only [embeddedFixedPointPair_repeatedBlockSector, coeff_repeatedBlockSector]
+  exact not_approximationError_le_repeatedBlockTensor h0 h1 hγ C
 
 end MPSTensor

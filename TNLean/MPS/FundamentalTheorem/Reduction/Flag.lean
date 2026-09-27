@@ -48,7 +48,8 @@ variable {M N : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M
 /-- Word traces are invariant under isomorphism of word-algebra modules. -/
 lemma traceWord_congr (e : M ≃ₗ[WordAlgebra d] N) (w : List (Fin d)) :
     traceWord M w = traceWord N w := by
-  have : actAlgHom N (ofWord w) = (e.restrictScalars ℂ).conj (actAlgHom M (ofWord w)) := by
+  have : Algebra.lsmul ℂ ℂ N (ofWord w) =
+      (e.restrictScalars ℂ).conj (Algebra.lsmul ℂ ℂ M (ofWord w)) := by
     ext n
     simp [LinearEquiv.conj_apply, map_smul]
   rw [traceWord_def, traceWord_def, this, LinearMap.trace_conj']
@@ -56,8 +57,8 @@ lemma traceWord_congr (e : M ≃ₗ[WordAlgebra d] N) (w : List (Fin d)) :
 /-- Word traces of a product module add. -/
 lemma traceWord_prod [FiniteDimensional ℂ M] [FiniteDimensional ℂ N] (w : List (Fin d)) :
     traceWord (M × N) w = traceWord M w + traceWord N w := by
-  have : actAlgHom (M × N) (ofWord w) =
-      (actAlgHom M (ofWord w)).prodMap (actAlgHom N (ofWord w)) := by
+  have : Algebra.lsmul ℂ ℂ (M × N) (ofWord w) =
+      (Algebra.lsmul ℂ ℂ M (ofWord w)).prodMap (Algebra.lsmul ℂ ℂ N (ofWord w)) := by
     ext m <;> simp
   rw [traceWord_def, this, LinearMap.trace_prodMap', traceWord_def, traceWord_def]
 
@@ -72,10 +73,10 @@ variable {M : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
 plus the trace on `M ⧸ K`. -/
 lemma traceWord_eq_add_quotient (K : Submodule (WordAlgebra d) M) (w : List (Fin d)) :
     traceWord M w = traceWord K w + traceWord (M ⧸ K) w := by
-  have hf : ∀ x ∈ K.restrictScalars ℂ, actAlgHom M (ofWord w) x ∈ K.restrictScalars ℂ :=
+  have hf : ∀ x ∈ K.restrictScalars ℂ, Algebra.lsmul ℂ ℂ M (ofWord w) x ∈ K.restrictScalars ℂ :=
     fun x hx => K.smul_mem _ hx
   rw [traceWord_def, LinearMap.trace_eq_trace_restrict_add_trace_quotient (K.restrictScalars ℂ)
-    (actAlgHom M (ofWord w)) hf, traceWord_def, traceWord_def]
+    (Algebra.lsmul ℂ ℂ M (ofWord w)) hf, traceWord_def, traceWord_def]
   congr 1
 
 end Quotient
@@ -153,13 +154,13 @@ lemma finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero (S : Finset ι) {D : 
     isSimpleModule_wordModule_of_isNormal (C s₀) (hC s₀ hs₀) (hD s₀ hs₀)
   obtain ⟨u, hu, hu'⟩ := exists_aug_eq_zero_smul_eq_self (C s₀).WordModule
     (exists_ofWord_smul_ne_zero_of_isNormal (C s₀) (hC s₀ hs₀) (hD s₀ hs₀))
-  have hzero : ∀ k : ℕ, 0 < k → LinearMap.trace ℂ N ((actAlgHom N u) ^ k) = 0 := by
+  have hzero : ∀ k : ℕ, 0 < k → LinearMap.trace ℂ N ((Algebra.lsmul ℂ ℂ N u) ^ k) = 0 := by
     intro k hk
     have hχ : ∀ w : List (Fin d), w ≠ [] → traceWord N w = (0 : WordAlgebra d →ₗ[ℂ] ℂ) (ofWord w) :=
       fun w hw => by rw [hN, h w hw, LinearMap.zero_apply]
     rw [← map_pow, ← traceChar_apply, traceChar_eq_of_traceWord_eq hχ (aug_pow hu hk),
       LinearMap.zero_apply]
-  obtain ⟨n, hn⟩ := LinearMap.isNilpotent_of_forall_trace_pow_eq_zero (actAlgHom N u) hzero
+  obtain ⟨n, hn⟩ := LinearMap.isNilpotent_of_forall_trace_pow_eq_zero (Algebra.lsmul ℂ ℂ N u) hzero
   have hpow : ∀ x : N, (u ^ n) • x = 0 := by
     intro x
     have := LinearMap.congr_fun hn x
@@ -202,7 +203,7 @@ theorem exists_flagData {S : Finset ι} {D : ι → ℕ} (C : ∀ s, MPSTensor d
     have : Subsingleton M := Module.finrank_zero_iff.1 hn
     have hS : S = ∅ := by
       refine finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero S C hC hD fun w hw => ?_
-      rw [← htr w hw, traceWord_def, Subsingleton.elim (actAlgHom M (ofWord w)) 0, map_zero]
+      rw [← htr w hw, traceWord_def, Subsingleton.elim (Algebra.lsmul ℂ ℂ M (ofWord w)) 0, map_zero]
     subst hS
     exact ⟨FlagData.ofSubsingleton⟩
   -- nontrivial module: choose a maximal invariant subspace
@@ -238,10 +239,10 @@ theorem exists_flagData {S : Finset ι} {D : ι → ℕ} (C : ∀ s, MPSTensor d
     have hQw : ∀ w : List (Fin d), w ≠ [] → traceWord (M ⧸ K) w = 0 := by
       intro w hw
       obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
-      have : actAlgHom (M ⧸ K) (ofWord (i :: w)) = 0 := by
+      have : Algebra.lsmul ℂ ℂ (M ⧸ K) (ofWord (i :: w)) = 0 := by
         ext q
-        rw [ofWord_cons, map_mul, Module.End.mul_apply, actAlgHom_apply, actAlgHom_apply, hQ,
-          LinearMap.zero_apply]
+        rw [ofWord_cons, map_mul, Module.End.mul_apply, Algebra.lsmul_apply, Algebra.lsmul_apply,
+          hQ, LinearMap.zero_apply]
       rw [traceWord_def, this, map_zero]
     have htrK : ∀ w : List (Fin d), w ≠ [] →
         traceWord K w = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w) := by
