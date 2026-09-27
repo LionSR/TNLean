@@ -11,7 +11,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 
 For positive elements `a` and `b` of a C⋆-algebra, `‖√a - √b‖ ≤ √‖a - b‖`. This is the operator
 inequality `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for positive semidefinite matrices that arXiv:2103.13367,
-Supplemental Material, eq. `intermediate`, quotes from Bhatia.
+Supplemental Material, eq. `eq:intermediate`, quotes from Bhatia.
 
 ## Main declarations
 
@@ -65,7 +65,7 @@ theorem CFC.sqrt_sub_sqrt_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrd
 /-- **Square roots are `1/2`-Hölder**: for `a, b ≥ 0` in a C⋆-algebra,
 `‖√a - √b‖ ≤ √‖a - b‖`.
 
-arXiv:2103.13367, eq. `intermediate` (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for `X, Y ≥ 0`,
+arXiv:2103.13367, eq. `eq:intermediate` (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for `X, Y ≥ 0`,
 quoted there from Bhatia). -/
 theorem CFC.norm_sqrt_sub_sqrt_le {A : Type*} [CStarAlgebra A] [PartialOrder A]
     [StarOrderedRing A] {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :

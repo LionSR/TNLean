@@ -506,6 +506,10 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
+- `ssvcw05_sequential_bond_upper_bound_scope.tex` records that only the upper
+  bounds `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of
+  the successive decompositions are formalized, not the exact dimension or the
+  equality with the Schmidt rank implied by "minimal resources".
 - `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
   scheme without an ancilla presupposes two sites, since its first operation
   acts on sites 1 and 2, that the literal one-site reading of the theorem is

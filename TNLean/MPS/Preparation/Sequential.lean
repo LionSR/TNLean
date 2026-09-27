@@ -115,8 +115,8 @@ def jointState [NeZero d] (U : Fin N → Matrix (Fin D × Fin d) (Fin D × Fin d
 /-- Scheme 2 of arXiv:quant-ph/0608197 (deterministic schemes, lines 1553--1554):
 the interactions are unitaries `U^{[k]}` on ancilla ⊗ site, the ancilla starts
 in a normalized state `φ_I`, and after the last step the joint state factorizes
-as `|φ_F⟩ ⊗ |ψ⟩` with `φ_F` normalized ("the ancilla must decouple in the last
-step, without measurement"). The factorization is written componentwise in the
+as `|φ_F⟩ ⊗ |ψ⟩` with `φ_F` normalized ("the `D`-dimensional ancilla must decouple
+in the last step (without measurement)"). The factorization is written componentwise in the
 configuration: the ancilla component at `τ` is `ψ(τ) |φ_F⟩`. -/
 def IsDeterministicallyGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ (U : Fin N → Matrix (Fin D × Fin d) (Fin D × Fin d) ℂ) (φI φF : Fin D → ℂ),
