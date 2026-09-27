@@ -63,7 +63,11 @@ namespace Representation
 
 section Twirl
 
-variable {G : Type*} [Group G] [Fintype G] [Invertible (Fintype.card G : ℂ)]
+variable {G : Type*} [Group G] [Fintype G]
+
+/-- The order of a finite group is invertible in `ℂ`. -/
+noncomputable local instance invertibleFintypeCardComplex : Invertible (Fintype.card G : ℂ) :=
+  invertibleOfNonzero (Nat.cast_ne_zero.2 Fintype.card_pos.ne')
 
 section Algebraic
 
@@ -76,7 +80,7 @@ theorem averageMap_linHom_apply (X : V →ₗ[ℂ] V) :
     (linHom ρ ρ).averageMap X = ⅟(Fintype.card G : ℂ) • ∑ g, ρ g ∘ₗ X ∘ₗ ρ g⁻¹ := by
   simp [averageMap, GroupAlgebra.average, map_sum, linHom_apply]
 
-omit [Fintype G] [Invertible (Fintype.card G : ℂ)] in
+omit [Fintype G] in
 /-- The invariant operators of the conjugation representation are the operators commuting with
 every `ρ(g)`, the subspace `𝒮` of `Papers/1001.3807/paper_v3.tex` line 924
 (`eq:mpssym:symspace`). -/

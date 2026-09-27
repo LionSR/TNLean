@@ -447,6 +447,30 @@ normalizations.
   connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
   `torusSiteTensor`.
 
+#### `Representation.IsSemiRegular`
+
+- **Declaration:** `Representation.IsSemiRegular (ρ : Representation ℂ G V) : Prop`,
+  for `G : Type u`.
+- **Defined in:** `TNLean/Algebra/RepresentationDelta.lean`.
+- **Meaning:** every finite-dimensional irreducible complex representation of
+  `G` on a type in the universe of `G` admits a nonzero intertwining map into
+  `ρ`.
+- **Source:** arXiv:1001.3807, Definition 4.5,
+  `Papers/1001.3807/paper_v3.tex:1010-1013`.
+- **Sanctioned bridges:** `Representation.isSemiRegular_leftRegular` (the
+  left-regular representation is semi-regular) and
+  `Representation.irreducibleCharacters_eq_leftRegular_of_isSemiRegular` (a
+  semi-regular representation has the irreducible characters of the regular
+  representation), used in
+  `Representation.trace_inv_comp_comp_deltaOperator_of_isSemiRegular`
+  (Lemma 4.6).
+- **Caveat:** irreducible representations of a finite group are
+  finite-dimensional, so the restriction to finite-dimensional ones loses
+  nothing; the universe restriction suffices because every irreducible
+  representation is equivalent to one on a coordinate space. The trace
+  identities of Lemmas 4.4 and 4.6 are stated with `ρ(h⁻¹)` in place of the
+  source's `U_h†`; the two agree for unitary representations.
+
 #### `TNLean.PEPS.IsGIsometric`
 
 - **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
