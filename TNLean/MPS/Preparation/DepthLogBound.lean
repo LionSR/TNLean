@@ -78,8 +78,8 @@ theorem norm_approximatingMPVState {D : ℕ} (A : MPSTensor d D) {q : ℕ}
     refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
       (Complex.ofReal_injective ?_)
     push_cast
-    rw [h, ← mpv_approximatingTensor_norm_sq hB hσ htr (M := M)]
-    exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
+    exact h.trans ((Finset.sum_congr rfl fun _ _ => mul_comm _ _).trans
+      (mpv_approximatingTensor_norm_sq hB hσ htr))
   rw [(inner_approximatingMPVState_mpvState A hB hσ htr M).1, hraw]
 
 /-- **Error `ε` in depth `O(q)` with `q ∝ log(N/ε)`.** There is `C`, depending only on `d` and
