@@ -333,6 +333,7 @@ theorem mulTensor_eTensor_kxTensor :
     toMPSTensor_mulTensor_complexOfInt eIntTensor kxIntTensor a, eKx_int]
   rfl
 
+/-- Stacking the dressed tensor of `x` with `M_e` gives that tensor. -/
 theorem mulTensor_kxTensor_eTensor :
     (mulTensor kxTensor eTensor).toMPSTensor = kxTensor.toMPSTensor := by
   funext a
@@ -340,6 +341,7 @@ theorem mulTensor_kxTensor_eTensor :
     toMPSTensor_mulTensor_complexOfInt kxIntTensor eIntTensor a, kxE_int]
   rfl
 
+/-- Stacking `M_e` with the dressed tensor of `xy` gives that tensor. -/
 theorem mulTensor_eTensor_kxyTensor :
     (mulTensor eTensor kxyTensor).toMPSTensor = kxyTensor.toMPSTensor := by
   funext a
@@ -347,6 +349,7 @@ theorem mulTensor_eTensor_kxyTensor :
     toMPSTensor_mulTensor_complexOfInt eIntTensor kxyIntTensor a, eKxy_int]
   rfl
 
+/-- Stacking the dressed tensor of `xy` with `M_e` gives that tensor. -/
 theorem mulTensor_kxyTensor_eTensor :
     (mulTensor kxyTensor eTensor).toMPSTensor = kxyTensor.toMPSTensor := by
   funext a
@@ -391,15 +394,22 @@ def xyFusionData : (pairFamily kxyTensor).FusionData :=
   pairFusionData kxyTensor xyXyLeft xyXyRight mulTensor_eTensor_kxyTensor
     mulTensor_kxyTensor_eTensor kxy_isReduction
 
+/-- The restriction of the dressed family to `{e, x}` is the family `1 ↦ M_e`, `g ↦ M'_x`. -/
 theorem comap_xHom : kleinFamily.comap xHom = pairFamily kxTensor :=
   comap_eq_pairFamily xHom rfl rfl rfl (heq_of_eq kleinTensor_x)
 
+/-- The restriction of the dressed family to `{e, xy}` is the family `1 ↦ M_e`,
+`g ↦ M'_xy`. -/
 theorem comap_xyHom : kleinFamily.comap xyHom = pairFamily kxyTensor :=
   comap_eq_pairFamily xyHom rfl rfl rfl (heq_of_eq kleinTensor_xy)
 
+/-- The family `1 ↦ M_e`, `g ↦ M'_x` is an exact representation of `ℤ₂` by normal tensors,
+as a restriction of the dressed family. -/
 theorem pairFamily_kx_isNormalRepresentation : (pairFamily kxTensor).IsNormalRepresentation :=
   comap_xHom ▸ kleinFamily_isNormalRepresentation.comap xHom
 
+/-- The family `1 ↦ M_e`, `g ↦ M'_xy` is an exact representation of `ℤ₂` by normal tensors,
+as a restriction of the dressed family. -/
 theorem pairFamily_kxy_isNormalRepresentation :
     (pairFamily kxyTensor).IsNormalRepresentation :=
   comap_xyHom ▸ kleinFamily_isNormalRepresentation.comap xyHom
@@ -519,6 +529,8 @@ def yFusionData :
     · exact funext yEStacked_eq
     · exact funext yYStacked_eq
 
+/-- The restriction of the dressed family to `{e, y}` is the bond-one family `1 ↦ M_e`,
+`g ↦ M_y`. -/
 theorem comap_yHom :
     kleinFamily.comap yHom =
       GroupFamily.ofBondOne fun x : Multiplicative (ZMod 2) ↦ yLabelTensor x.toAdd := by
@@ -615,8 +627,10 @@ theorem cyclicInvariant_omega_kleinFamily (fd : kleinFamily.FusionData)
 /-- **The anomalous `ℤ₂ × ℤ₂` symmetry is anomalous**: for every choice of fusion tensors, the
 anomaly three-cocycle of the dressed family is not cohomologous to the trivial one.
 
-Source: arXiv:2502.20257, `eq:omegagauge` and the sentence following it; the class is the
-type-II class of arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1845--1872. -/
+Source: arXiv:2502.20257, `eq:omegagauge` and the sentence following it. The detector value
+`−1` at `xy` is that of the type-II class of arXiv:2203.12563,
+`Papers/2203.12563/REsubmission.tex` lines 1845--1872; equality with that class is not claimed,
+under the scope restriction of the module docstring. -/
 theorem not_isTrivialGaugeClass_omega_kleinFamily (fd : kleinFamily.FusionData) :
     ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
   refine ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one
