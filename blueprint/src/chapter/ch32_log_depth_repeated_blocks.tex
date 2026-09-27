@@ -116,21 +116,20 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \uses{def:ldp_repeated_block_state, lem:ldp_repeated_block_polar,
         thm:ldp_approximation_error_orthogonal_blocks,
         lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
-        lem:ldp_injectivity_cutoff, def:correlation_length}
+        thm:ldp_injectivity_cutoff, def:correlation_length}
     With the notation of Lemma~\ref{lem:ldp_repeated_block_polar}, let the
     blocks $A_j$ be normal in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, let $\lambda_2$ bound the moduli of the eigenvalues other
     than one of every transfer map $\E_{A_j}$, with correlation length $\xi$, and
-    let $0<\gamma<1/2$. There is $C>0$ such that for every block length $q$ at
-    which the $q$-site states of distinct blocks are orthogonal,
+    let $0<\gamma<1/2$. There are constants $C,C'>0$ such that for every block
+    length $q$ at which the $q$-site states of distinct blocks are orthogonal,
     $B_j^\dagger B_{j'}=0$ for $j\neq j'$, and every $M\geq1$ with $N=qM$ and
     $(\beta_1,\dots,\beta_b)\neq0$, the corrected approximating state of
     Definition~\ref{def:ldp_repeated_block_state} satisfies, with
     $y=(N/q)\,e^{-\gamma q/\xi}$,
     \begin{align*}
-        \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy
-        \qquad\text{and}\qquad
-        \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
+        \varepsilon(\widetilde\phi_N,\phi_N) & \leq C'y,        &
+        \varepsilon(\widetilde\phi_N,\phi_N) & \leq Cy\,e^{Cy}.
     \end{align*}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the corrected
     approximating state, with arbitrary multiplicities and complex weights,

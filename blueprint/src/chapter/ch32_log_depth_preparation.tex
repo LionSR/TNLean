@@ -638,8 +638,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     bounded because $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ converges to $1$.
 \end{proof}
 
-\begin{lemma}[Block lengths below the injectivity lengths]
-    \label{lem:ldp_injectivity_cutoff}
+\begin{theorem}[Block lengths below the injectivity lengths]
+    \label{thm:ldp_injectivity_cutoff}
     \lean{Real.exp_neg_mul_div_eq_pow,
         lt_one_and_forall_le_of_mul_mul_pow_lt_one, le_mul_mul_exp_of_forall_le}
     \leanok
@@ -648,7 +648,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     $y=Mx^q$. If $Cy<1$, then $x<1$ and $L_j\leq q$ for every $j$. Hence, if
     $\varepsilon\leq1$ and $\varepsilon\leq Cy\,e^{Cy}$ holds whenever $x<1$,
     $L_j\leq q$ for every $j$, and $Cy<1$, then $\varepsilon\leq Cy\,e^{Cy}$.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     If $x\geq1$, then $y\geq1$ and $Cy\geq1$. If $x<1$ and $L_j>q$, then
@@ -660,11 +660,12 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     \label{thm:ldp_approximation_error_normal}
     \lean{MPSTensor.exists_approximationError_le_mul,
         MPSTensor.exists_approximationError_le, MPSTensor.normalizedMPVState,
-        MPSTensor.approximatingMPVState}
+        MPSTensor.approximatingMPVState,
+        MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le}
     \leanok
     \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state,
         thm:ldpolar_blocked_state, thm:ldpolar_tensor_injective,
-        lem:ldp_injectivity_cutoff, def:correlation_length}
+        thm:ldp_injectivity_cutoff, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, let $\ket{\phi_N}$ be the
     normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1/2$. For
@@ -2098,11 +2099,12 @@ $A$ along $w$.
         MPSTensor.exists_approximationError_le_blockSum, MPSTensor.blockSum,
         MPSTensor.nonNormalApproxVector_blockSum,
         MPSTensor.norm_nonNormalApproxOverlap_blockSum,
-        MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum}
+        MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum,
+        MPSTensor.one_sub_norm_sum_div_le}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
         lem:ldp_orthogonal_sum_polar, lem:ldp_positive_part_overlap,
-        thm:ldp_approximation_error_normal, lem:ldp_injectivity_cutoff,
+        thm:ldp_approximation_error_normal, thm:ldp_injectivity_cutoff,
         def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ with $b\geq1$, weights $\mu_j>0$, and
     normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
