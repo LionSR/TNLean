@@ -34,14 +34,16 @@ Every Lean/Mathlib bump ships a dated replacement audit,
 `docs/audits/<YYYY-MM-DD>_mathlib_<version>_replacement_audit.md`, covering the Mathlib
 range from the old pin to the new one. Besides local lemmas that new Mathlib
 declarations replace, each audit rechecks Mathlib's coverage of the areas in
-the previous subsection:
+the previous subsection and of matrix-algebra semisimplicity:
 - group cohomology: a multiplicative degree-3 API, universe polymorphism,
   projective representations, twisted group algebras, and the comparison of
   circle-valued with complex-unit coefficients;
 - weak and pre-bialgebras, and C\*-structures on Hopf algebras;
 - pivotal, spherical, fusion and module categories, and Frobenius–Perron
   dimensions;
-- fusion (based) rings and NIM-reps.
+- fusion (based) rings and NIM-reps;
+- semisimplicity of star-closed matrix algebras, which
+  `TNLean/Algebra/StarClosedSemisimple.lean` proves locally.
 
 Every local layer that Mathlib has since covered is then migrated by deleting
 the local definition as above, either in the bump PR or in a follow-up PR. The
