@@ -79,6 +79,7 @@ import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.ScalarThreeCocycleCyclicClass
 import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
 import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant

@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
+import TNLean.Algebra.ScalarThreeCocycleCyclicClass
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass
 
 /-!
@@ -16,9 +17,10 @@ domain-wall phase `∏_{k=1}^{o(g)} ω⁻¹(g, g^k, g)` and its `n = 3` table.
 **Formalized here.** For every choice of fusion tensors of `Z3Anomalous.family`, the anomaly
 three-cochain has the cyclic invariant of the cocycle `ω₂` of line 2040 at the generator, and
 not that of `ω₀` or `ω₁`; so it is not cohomologous to `ω₀` or `ω₁`. Its domain-wall phase at the
-generator is `exp(2πi/3)`, the `n = 3`, `j = 2`, `a = 1` entry of the printed table. That the
-cochain is cohomologous to `ω₂` would need the classification of the three-cocycles of `ℤ₃`,
-which is not formalized. The orientation of the anomaly three-cochain is that of
+generator is `exp(2πi/3)`, the `n = 3`, `j = 2`, `a = 1` entry of the printed table. Since the
+cyclic invariant at the generator determines the class of a three-cocycle of `ℤ₃`
+(`TNLean.Algebra.ScalarThreeCocycleCyclicClass`), the cochain is cohomologous to `ω₂`, and the
+anomaly class of the family in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`. The orientation of the anomaly three-cochain is that of
 `TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass`, whose L-symbols satisfy the coupled pentagon
 equation `coupledpent` of the source (line 1876) with `ω` on the same side.
 
@@ -28,6 +30,8 @@ equation `coupledpent` of the source (line 1876) with `ω` on the same side.
 * `Z3Anomalous.cyclicInvariant_omega_z3_eq_cyclicCocycle_two`.
 * `Z3Anomalous.not_cohomologousTo_cyclicCocycle_omega_z3`.
 * `Z3Anomalous.domainWallPhase_omega_z3`.
+* `Z3Anomalous.cohomologousTo_cyclicCocycle_two_omega_z3`,
+  `Z3Anomalous.anomalyClass_family_eq_cyclicCocycle_two`: the class is that of `ω₂`.
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -95,5 +99,24 @@ theorem domainWallPhase_omega_z3 (fd : family.FusionData) :
     cyclicInvariant_omega_z3_eq_cyclicCocycle_two]
   change _ = ((ScalarThreeCochain.cyclicInvariant _ z3Gen (orderOf z3Gen))⁻¹ : ℂˣ).val
   rw [orderOf_z3Gen]
+
+/-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: **for every choice of
+fusion tensors, the anomaly three-cochain of `{1, U, U†}` is cohomologous to `ω₂`**. -/
+theorem cohomologousTo_cyclicCocycle_two_omega_z3 (fd : family.FusionData) :
+    ScalarThreeCochain.CohomologousTo fd.omega (ScalarThreeCochain.cyclicCocycle 3 2) :=
+  ScalarThreeCochain.cohomologousTo_of_cyclicInvariant_eq (by norm_num)
+    (MPOTensor.GroupFamily.FusionData.isCocycle_omega family_isNormalRepresentation)
+    (ScalarThreeCochain.cyclicCocycle_isCocycle 3 2)
+    (cyclicInvariant_omega_z3_eq_cyclicCocycle_two fd)
+
+/-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: **the anomaly class of
+`{1, U, U†}` in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`**. -/
+theorem anomalyClass_family_eq_cyclicCocycle_two :
+    family_isNormalRepresentation.anomalyClass =
+      ScalarThreeCochain.anomalyClass (ScalarThreeCochain.cyclicCocycleSubtype 3 2) := by
+  rw [← MPOTensor.GroupFamily.FusionData.anomalyClass_omega family_isNormalRepresentation
+    z3FusionData]
+  exact (ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq _ _).1
+    (cohomologousTo_cyclicCocycle_two_omega_z3 z3FusionData)
 
 end Z3Anomalous
