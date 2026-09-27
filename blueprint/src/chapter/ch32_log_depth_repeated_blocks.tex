@@ -36,8 +36,8 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \end{align*}
 \end{definition}
 
-\begin{lemma}[Positive part of a blocked tensor with multiplicities]
-    \label{lem:ldp_repeated_block_polar}
+\begin{theorem}[Positive part of a blocked tensor with multiplicities]
+    \label{thm:ldp_repeated_block_polar}
     \lean{MPSTensor.mpv_repeatedBlockSum,
         MPSTensor.physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry,
         MPSTensor.conjTranspose_copyIsometry_mul_self,
@@ -59,7 +59,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     the copy index, where \cite[eq.~(S5)]{Malz2024Preparation} prints
     $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$
     \cite{gap:mswc24_repeated_block_corrected_state}.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Listing all copies as blocks of multiplicity one, every word of length
@@ -80,9 +80,9 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
         MPSTensor.copyApproxOverlap}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_repeated_block_sum,
-        lem:ldp_repeated_block_polar}
+        thm:ldp_repeated_block_polar}
     With the notation of Definition~\ref{def:ldp_repeated_block_sum} and
-    Lemma~\ref{lem:ldp_repeated_block_polar}, fixed points
+    Theorem~\ref{thm:ldp_repeated_block_polar}, fixed points
     $\rho_j$ of the blocks, and $\ket{\Omega_j}$ the product of the pairs of
     $\rho_j$ over $M$ sites in the bond space of block $j$, the corrected
     approximating state on $N=qM$ sites with coefficients $\alpha_j$ is
@@ -90,12 +90,12 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
         \ket{\widetilde\phi_N}\propto V^{\otimes M}\sum_j\alpha_j
         L_j^{\otimes M}\ket{\Omega_j}.
     \end{align*}
-    When the weights $\beta_j$ of Lemma~\ref{lem:ldp_repeated_block_polar} are
+    When the weights $\beta_j$ of Theorem~\ref{thm:ldp_repeated_block_polar} are
     not all zero, the source's coefficients are
     $\alpha_j=\beta_j/\bigl(\sum_l\lvert\beta_l\rvert^2\bigr)^{1/2}$; if all
     $\beta_j$ vanish these coefficients are undefined.
     It is obtained from the corrected block form of
-    Lemma~\ref{lem:ldp_repeated_block_polar} by replacing each $P_j$ by its
+    Theorem~\ref{thm:ldp_repeated_block_polar} by replacing each $P_j$ by its
     fixed point, as \cite[eq.~(S7)]{Malz2024Preparation} does with the printed
     block form. The weights are those of the source. The isometry $L_j$ acts
     on the two legs of each site, so for a repeated block the state
@@ -113,11 +113,11 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
         MPSTensor.norm_copyApproxOverlap_repeatedBlockSum,
         MPSTensor.norm_overlap_of_orthogonal}
     \leanok
-    \uses{def:ldp_repeated_block_state, lem:ldp_repeated_block_polar,
+    \uses{def:ldp_repeated_block_state, thm:ldp_repeated_block_polar,
         thm:ldp_approximation_error_orthogonal_blocks,
         lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
         thm:ldp_injectivity_cutoff, def:correlation_length}
-    With the notation of Lemma~\ref{lem:ldp_repeated_block_polar}, let the
+    With the notation of Theorem~\ref{thm:ldp_repeated_block_polar}, let the
     blocks $A_j$ be normal in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, let $\lambda_2$ bound the moduli of the eigenvalues other
     than one of every transfer map $\E_{A_j}$, with correlation length $\xi$, and
@@ -139,7 +139,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
 \end{theorem}
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:ldp_repeated_block_polar}, $VL_j=V_j$, so
+    By Theorem~\ref{thm:ldp_repeated_block_polar}, $VL_j=V_j$, so
     $V^{\otimes M}\sum_j\alpha_jL_j^{\otimes M}\ket{\Omega_j}
         =\sum_j\alpha_j\ket{s_j}$ with $\ket{s_j}=\ket{\phi_M(V_jP_{j,\infty})}$,
     while $\ket{\phi_N(A)}=\sum_j\beta_j\ket{t_j}$ with
