@@ -2355,11 +2355,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Thus every compatible local term annihilates $v$.
 \end{proof}
 
-\begin{lemma}[Compatible zero energy restricts to each window]
-    \label{lem:open_parent_hamiltonian_window_ground_space}
+\begin{theorem}[Compatible zero energy restricts to each window]
+    \label{thm:open_parent_hamiltonian_window_ground_space}
     \lean{MPSTensor.cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, def:ground_space_parent}
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_parent,
+        rem:cyclic_window_operators}
     Let $L\le N$. If $H^{\mathrm{open}}_{N,L}(A)v=0$, then for every
     nonwrapping start $s$ with $s+L\le N$ and every complementary
     configuration $\tau$,
@@ -2369,7 +2370,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
     This is the frustration-free extraction in
     \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -2395,7 +2396,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    \uses{lem:open_parent_hamiltonian_window_ground_space, lem:mem_ground_space_es, rem:contiguous_window_operators, rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
+    \uses{thm:open_parent_hamiltonian_window_ground_space, lem:mem_ground_space_es, rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
     In the following display, $s$ ranges over all starts satisfying
     $s+L_0+1\leq N$, and $\tau$ ranges over all complementary configurations.
     The window restriction and the open-chain intersection theorem give
@@ -2437,7 +2438,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{lem:ground_space_span_open_states}
     \lean{MPSTensor.groundSpaceMap_vecMulVec, MPSTensor.groundSpace_eq_span_openState}
     \leanok
-    \uses{def:ground_space_parent, def:ground_space_map}
+    \uses{def:ground_space_parent, def:ground_space_map, def:open_state}
     For every tensor $A$ and every $L$, the local ground space $G_{L}(A)$ is
     spanned by the open-boundary states
     \begin{align}
