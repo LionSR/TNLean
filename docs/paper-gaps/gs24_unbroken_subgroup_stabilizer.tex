@@ -33,7 +33,8 @@ pentagon equation for the L-symbols by $H$ together with a point of a torsor
 for $\mathcal H^2(H,\mathbb C^\times)$, which becomes a class
 $\alpha\in\mathcal H^2(H,\mathbb C^\times)$ once a trivialization of
 $\omega|_H$ is chosen. For finite $H$ this group is isomorphic to
-$\mathcal H^2(H,U(1))$, the coefficient group of the first
+$\mathcal H^2(H,U(1))$~\cite{gap:fbc25_circle_complex_units_cohomology}, the
+coefficient group of the first
 source~\cite{GarreRubioSchuch2024DomainWall}. The
 classification of phases in the sources rests on this classification of
 L-symbols together with further hypotheses on the Hamiltonians and paths
@@ -45,7 +46,7 @@ are not discussed here.
 Garre-Rubio and Schuch define $H$ as the set of $h\in G$ with $h\cdot x=x$ for
 every $x\in\mathcal I$, and state that the ground-state degeneracy is
 $|G/H|$~\cite{GarreRubioSchuch2024DomainWall}.\footnote{Source traceability:
-\path{Papers/2405.00439/MPU-DW.tex}, line 1880 and lines 2013--2036.} This
+    \path{Papers/2405.00439/MPU-DW.tex}, line 1880 and lines 2013--2036.} This
 is the kernel
 \begin{align}
     K=\bigcap_{x\in\mathcal I}\operatorname{Stab}(x)
@@ -56,9 +57,9 @@ classification the first paper reviews, define $H$ as the subgroup of elements
 that do not permute one chosen block $x_0$, that is, the stabilizer
 $\operatorname{Stab}(x_0)$, and state that the number of blocks is
 $|G/H|$~\cite{GarreRubio2023MPOSym}.\footnote{Source traceability:
-\path{Papers/2203.12563/REsubmission.tex}, lines 734--761; the stabilizer is
-defined at line 736, the two-cocycle $\psi_{x_0}$ at lines 748--749, and the
-reconstruction of the L-symbols from $(H,\psi)$ at lines 755--760.}
+    \path{Papers/2203.12563/REsubmission.tex}, lines 734--761; the stabilizer is
+    defined at line 736, the two-cocycle $\psi_{x_0}$ at lines 748--749, and the
+    reconstruction of the L-symbols from $(H,\psi)$ at lines 755--760.}
 
 For a transitive action $\operatorname{Stab}(g\cdot x_0)=g\operatorname{Stab}(x_0)g^{-1}$,
 so $K$ is the normal core of $\operatorname{Stab}(x_0)$, the largest normal
@@ -69,8 +70,8 @@ source~\cite{GarreRubioSchuch2024DomainWall}. It
 fails for members of the general construction of the second source, which
 builds a symmetry-broken state for every subgroup $H\leq G$ trivializing
 $\omega$~\cite{GarreRubio2023MPOSym}.\footnote{Source traceability:
-\path{Papers/2203.12563/REsubmission.tex}, lines 1997--2005 and
-2098--2100.}
+    \path{Papers/2203.12563/REsubmission.tex}, lines 1997--2005 and
+    2098--2100.}
 
 \section{Which definition the classification needs}
 
@@ -84,7 +85,10 @@ The classification needs the stabilizer, for three reasons.
           source~\cite{GarreRubioSchuch2024DomainWall} holds for the
           stabilizer.
     \item \emph{Trivializing the cocycle.} The coupled pentagon equation
-          $L^x_{h,k}L^x_{g,hk}=\omega(g,h,k)L^{k\cdot x}_{g,h}L^x_{gh,k}$,
+          \begin{align}
+              L^x_{h,k}L^x_{g,hk} & =\omega(g,h,k)L^{k\cdot x}_{g,h}L^x_{gh,k},
+              \label{eq:gs24_unbroken_subgroup_coupled_pentagon}
+          \end{align}
           restricted to $g,h,k$ in a subgroup fixing the single block $x$,
           is the statement that $\omega$ restricted to that subgroup is a
           coboundary with potential $L^x$. Fixing one block suffices, so the
@@ -148,8 +152,8 @@ so does the example above, whose operator and block tensors have bond
 dimension one. Given these, the theorem takes an arbitrary homomorphism
 $f:H\to G$ and one block $x$ with $f(a)\cdot x=x$ for all $a\in H$, that is,
 the stabilizer reading.\footnote{Formal declaration:
-\leanid{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
-in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks}.} It applies in
+    \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks}.} It applies in
 particular to the kernel, which fixes every block.
 
 \textbf{Verdict: false as printed, resolved.} With the unbroken subgroup
