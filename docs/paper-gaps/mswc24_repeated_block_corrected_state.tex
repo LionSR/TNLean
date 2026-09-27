@@ -1,0 +1,176 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{A Corrected Approximating State for a Tensor with Repeated Blocks}
+\author{}
+\date{2026-09-27}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{What the source states}
+Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
+    \otimes A_j^i$ with normal $A_j$ \cite[eq.~(S2)]{Malz2024Preparation}, so that
+$\ket{\phi_N}\propto\sum_j\beta_j\ket{v_j}$ with
+$\beta_j=\sum_{k=1}^{m_j}\mu_{j,k}^N$ and $\ket{v_j}$ the periodic state of
+$A_j$ \cite[eqs.~(S3), (S4)]{Malz2024Preparation}. Block $q$ sites and write the
+polar decomposition of the blocked map as $B=VP$. The source asserts
+$P=\bigoplus_j\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$
+\cite[eq.~(S5)]{Malz2024Preparation}, replaces each $P_j$ by its fixed point,
+and approximates the state on $N=qM$ sites by
+\begin{align}
+    \ket{\widetilde\phi_N}\propto V^{\otimes M}\sum_{j=1}^b\beta_j\ket{\Omega_j},
+    \qquad \ket{\Omega_j}=\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}
+    \label{eq:mswc24_rc_source_state}
+\end{align}
+\cite[eq.~(S7)]{Malz2024Preparation}. When some $m_j\geq2$ the block form fails
+and no product of nearest-neighbour pairs with the weights $\beta_j$ gives an
+approximation \cite{gap:mswc24_multiplicity_fixed_point}. This note gives the
+corrected block form and the corrected approximating state, and shows that
+part~(ii) of the approximation-error lemma holds for it when the $q$-site states
+of distinct blocks are orthogonal.
+
+\section{The corrected block form}
+Let $E_{j,k}$ be the isometry placing the copy $k$ of block $j$ in the bond
+space, so that $A^i=\sum_{j,k}\mu_{j,k}E_{j,k}A_j^iE_{j,k}^\dagger$ with
+$E_{j,k}^\dagger E_{j',k'}=\delta_{jj'}\delta_{kk'}\mathbf 1$, and put
+$K_{j,k}=E_{j,k}\otimes E_{j,k}$. For $q\geq1$ every word of length $q$ is a
+direct sum, so the blocked map of $A$ is
+\begin{align}
+    B=\sum_{j,k}\mu_{j,k}^qB_jK_{j,k}^\dagger=\sum_jc_jB_jL_j^\dagger,
+    \qquad
+    c_j=\Bigl(\sum_k\lvert\mu_{j,k}\rvert^{2q}\Bigr)^{1/2},\qquad
+    L_j=\sum_k\frac{\overline{\mu_{j,k}^q}}{c_j}K_{j,k},
+    \label{eq:mswc24_rc_blocked}
+\end{align}
+with $B_j$ the blocked map of $A_j$, whenever some $\mu_{j,k}\neq0$. The maps
+$L_j$ are isometries with orthogonal ranges, $L_j^\dagger L_{j'}=\delta_{jj'}$,
+because $\sum_k\lvert\mu_{j,k}^q\rvert^2/c_j^2=1$. If the $q$-site states of
+distinct blocks are orthogonal, $B_j^\dagger B_{j'}=0$ for $j\neq j'$, the polar
+decomposition of an orthogonal sum \cite{gap:mswc24_block_form_mixed_overlap}
+gives
+\begin{align}
+    V=\sum_jV_jL_j^\dagger,\qquad P=\sum_jc_jL_jP_jL_j^\dagger,
+    \label{eq:mswc24_rc_polar}
+\end{align}
+with $B_j=V_jP_j$. On the copies of block $j$ the positive part is
+$c_j\,w_jw_j^\dagger\otimes P_j$ with the unit vector
+$w_{j,k}=\overline{\mu_{j,k}^q}/c_j$: it has rank one in the copy index, where
+the source prints $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)$. For
+$A^0=\operatorname{diag}(1,1,0)$, $A^1=\operatorname{diag}(0,0,1)$ this is the
+matrix $\tfrac1{\sqrt2}\bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)$
+found in \cite{gap:mswc24_multiplicity_fixed_point}.
+
+\section{The corrected approximating state}
+Read $X=c_jL_jYL_j^\dagger$ as a tensor with physical leg the output pair and
+virtual legs the input pair. Its entries are
+$X^{(k'a',k'b')}_{(ka),(kb)}=c_j\,w_{j,k'}\overline{w_{j,k}}\,Y^{a'b'}_{ab}$ and
+vanish off the copy-diagonal virtual pairs, so along a ring of $M$ sites the
+virtual copy index is constant and
+\begin{align*}
+    \ket{\phi_M(X)}=c_j^M\Bigl(\sum_k\overline{w_{j,k}}^{\,M}\Bigr)
+    L_j^{\otimes M}\ket{\phi_M(Y)}
+    =\beta_jL_j^{\otimes M}\ket{\phi_M(Y)},
+\end{align*}
+since $c_j^M\overline{w_{j,k}}^{\,M}=\mu_{j,k}^{qM}$. With $Y=P_j$ this gives the
+exact identity
+$\ket{\phi_N}\propto V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{v_{\mathrm{pos},j}}$,
+the corrected form of the display after eq.~(S5) of the source, and replacing
+$P_j$ by its fixed point gives the corrected approximating state
+\begin{align}
+    \ket{\widetilde\phi_N}\propto V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j},
+    \label{eq:mswc24_rc_state}
+\end{align}
+where $\ket{\Omega_j}$ is the product of the pairs $\omega_j$ of the fixed point of
+$A_j$ in the bond space of block $j$. The weights $\beta_j$ are those of the
+source; what changes is the fixed-point state: the isometry $L_j$ acts on the
+two legs $L_kR_k$ of each site, so for $m_j\geq2$ the state
+$L_j^{\otimes M}\ket{\Omega_j}$ carries the copy index on each site and is not a
+product of nearest-neighbour pairs of the full bond space. It is still obtained
+from a product of pairs by one on-site isometry per site. The states
+$L_j^{\otimes M}\ket{\Omega_j}$ are orthonormal, so the fixed-point state has norm
+$(\sum_j\lvert\beta_j\rvert^2)^{1/2}$ as in the source. For $m_j=1$ and
+$\mu_j>0$, $L_j=K_j$ and (\ref{eq:mswc24_rc_state}) is the source's state
+(\ref{eq:mswc24_rc_source_state}).
+
+Since $VL_j=V_j$ by (\ref{eq:mswc24_rc_polar}),
+\begin{align}
+    V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j}
+    =\sum_j\beta_jV_j^{\otimes M}\ket{\Omega_j},
+    \label{eq:mswc24_rc_after_v}
+\end{align}
+the combination, with the source's weights, of the approximating states of the
+normal case for the blocks. Equivalently, the source's
+state (\ref{eq:mswc24_rc_source_state}) with each pair on one copy
+$k_j$ becomes correct after replacing $V$ by $V\sum_jL_jK_{j,k_j}^\dagger$.
+
+\section{The error bound}
+Assume $B_j^\dagger B_{j'}=0$ for $j\neq j'$ and $\beta\neq0$, which is
+$\phi_N\neq0$. The target is $\sum_j\beta_j\ket{v_j}$ and, by
+(\ref{eq:mswc24_rc_after_v}), the corrected state is $\sum_j\alpha_j\ket{s_j}$ with
+$\alpha_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$ and
+$\ket{s_j}=V_j^{\otimes M}\ket{\Omega_j}$. All cross overlaps vanish, as for
+multiplicity one \cite{gap:mswc24_block_form_mixed_overlap}, so with
+$p_j=\lvert\beta_j\rvert^2$, $z_j=\braket{s_j}{v_j}$ and $c_j'=\braket{v_j}{v_j}$,
+\begin{align*}
+    \lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
+    =\frac{\bigl\lvert\sum_jp_jz_j\bigr\rvert}
+    {\bigl(\sum_jp_j\bigr)^{1/2}\bigl(\sum_jp_jc_j'\bigr)^{1/2}},
+\end{align*}
+and $\varepsilon\leq2\sum_j(\lvert z_j-1\rvert+\lvert c_j'-1\rvert)$. Part~(i) of the
+lemma for each block bounds this by $Cy\,e^{Cy}$ with
+$y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$, with no condition $q=o(N)$. The phases
+and the possible cancellations in $\beta_j$ enter only through the weights $p_j$.
+
+\section{Numerical check}
+A script evaluates both states directly from the singular value decomposition of
+$B$, for $N=qM$.
+\begin{itemize}
+    \item For $A^0=\operatorname{diag}(1,1,0)$, $A^1=\operatorname{diag}(0,0,1)$ the
+          corrected state has overlap $1.000000$ with $\phi_N$ for $q=1,2$ and
+          $M=1,2,3,4,6$, where the source's state with the pair on one copy gives
+          $0.988496$, $0.948683$, $0.881546$, $0.800000$, $0.650791$, and the pair
+          spread over both copies gives $1.000000$, $0.948683$, $0.800000$,
+          $0.650791$, $0.502136$.
+    \item For $d=4$, a block of bond dimension two on the physical indices
+          $\{0,1\}$ with transfer eigenvalues of moduli $1$, $0.2421$, $0.2421$,
+          $0.1929$ and copy weights $(1,0.8e^{0.7i})$, and a block of bond
+          dimension one on $\{2,3\}$ with weight $0.9$, the corrected state gives
+          $0.999321$, $0.999800$, $0.999644$ at $q=3$ and $M=1,2,3$, and
+          $0.997257$, $0.995544$, $0.993003$, $0.990941$ at $q=2$ and $M=2,3,4,5$,
+          where the source's state with the pair on one copy gives $0.997866$,
+          $0.994090$, $0.992242$ and $0.983644$, $0.966207$, $0.954168$,
+          $0.935826$. In every case the squared norm of the corrected fixed-point
+          state equals $\sum_j\lvert\beta_j\rvert^2$.
+    \item For the overlapping blocks $A_1=(1,0)$, $A_2=(3/5,4/5)$ of
+          \cite{gap:mswc24_block_form_mixed_overlap} the corrected state is the
+          source's state, and both give $0.857493$, $0.771528$, $0.713544$ at $q=1$
+          and $M=2,4,6$: the correction concerns multiplicities, not overlaps.
+\end{itemize}
+
+\section{What is formalized}
+The corrected block form (\ref{eq:mswc24_rc_polar}), the identity
+(\ref{eq:mswc24_rc_after_v}), the overlap formula and the bound
+$\varepsilon\leq Cy\,e^{Cy}$, together with its $O$-form $\varepsilon\leq Cy$, are
+formalized for arbitrary multiplicities and complex weights, for blocks with some
+nonzero weight whose $q$-site states are orthogonal, at every $q$ and $M\geq1$
+with $\phi_N\neq0$.\footnote{Formal declarations:
+    \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum},
+    \leanid{MPSTensor.polarPos_blockTensor_repeatedBlockSum} and
+    \leanid{MPSTensor.copyApproxVector_repeatedBlockSum} in
+    \doclink{TNLean/MPS/Preparation/RepeatedBlockSum};
+    \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum} in
+    \doclink{TNLean/MPS/Preparation/RepeatedBlockError}.} The orthogonality
+restriction is the one recorded in \cite{gap:mswc24_block_form_mixed_overlap},
+where for two overlapping blocks of multiplicity one the error is of order
+$(N/q)\tau^{2q}$, with $\tau$ the eigenvalue of their mixed transfer matrix, which
+the source's rate does not control; the construction here does not change that
+example. The norm of the fixed-point state is not formalized;
+the overlap normalizes the state after $V^{\otimes M}$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

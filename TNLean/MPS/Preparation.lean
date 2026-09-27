@@ -28,6 +28,8 @@ import TNLean.MPS.Preparation.OverlappingBlockCounterexample
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
+import TNLean.MPS.Preparation.RepeatedBlockError
+import TNLean.MPS.Preparation.RepeatedBlockSum
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
