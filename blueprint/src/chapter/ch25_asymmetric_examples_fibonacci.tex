@@ -533,8 +533,10 @@ cyclic neighboring pair $00$.
     Thus $P_N\ket{x}=p_N(x)\ket{x}$. It is the orthogonal projection
     onto the admissible subspace:
     \begin{align}
-        \ran P_N & =\spn_{\C}\{\ket{x}:p_N(x)=1\},
-        \label{eq:asymex_fib_vacuum_range}         \\
+        \ran P_N & =\spn_{\C}\{\ket{x}:p_N(x)=1\}.
+        \label{eq:asymex_fib_vacuum_range}
+    \end{align}
+    \begin{align}
         \ker P_N & =\spn_{\C}\{\ket{x}:p_N(x)=0\}.
         \label{eq:asymex_fib_vacuum_null}
     \end{align}
@@ -569,10 +571,14 @@ cyclic neighboring pair $00$.
     \uses{def:asymex_fib, def:mpo_family}
     For every $N\geq1$, the periodic operators satisfy
     \begin{align}
-        O_N(B_1)^2          & =O_N(B_1),
-        \label{eq:asymex_fib_unit_square}   \\
-        O_N(B_1)O_N(B_\tau) & =O_N(B_\tau),
-        \label{eq:asymex_fib_unit_left}     \\
+        O_N(B_1)^2 & =O_N(B_1).
+        \label{eq:asymex_fib_unit_square}
+    \end{align}
+    \begin{align}
+        O_N(B_1)O_N(B_\tau) & =O_N(B_\tau).
+        \label{eq:asymex_fib_unit_left}
+    \end{align}
+    \begin{align}
         O_N(B_\tau)O_N(B_1) & =O_N(B_\tau).
         \label{eq:asymex_fib_unit_right}
     \end{align}
@@ -586,10 +592,14 @@ cyclic neighboring pair $00$.
     matrices, and $\sim$ for simultaneous similarity of all letters.
     The three stacked products admit the decompositions
     \begin{align}
-        B_1B_1     & \sim B_1\oplus0_2,
-        \label{eq:asymex_fib_unit_blocks}         \\
-        B_1B_\tau  & \sim B_\tau\oplus0_3, \notag \\
-        B_\tau B_1 & \sim B_\tau\oplus0_3. \notag
+        B_1B_1 & \sim B_1\oplus0_2.
+        \label{eq:asymex_fib_unit_blocks}
+    \end{align}
+    \begin{align}
+        B_1B_\tau & \sim B_\tau\oplus0_3.
+    \end{align}
+    \begin{align}
+        B_\tau B_1 & \sim B_\tau\oplus0_3.
     \end{align}
     The changes of bond coordinates and their inverses have entries
     in $\Z[\sigma]$. The decompositions, of dimensions $4=2+2$ and
@@ -725,8 +735,10 @@ These vectors are not normalized unless this is stated explicitly.
     \end{align}
     The chain tensor $C$ has bond dimension two:
     \begin{align}
-        C^0 & =\begin{pmatrix}0&\sigma\\0&0\end{pmatrix},
-        \label{eq:asymex_fib_chain_zero}                     \\
+        C^0 & =\begin{pmatrix}0&\sigma\\0&0\end{pmatrix}.
+        \label{eq:asymex_fib_chain_zero}
+    \end{align}
+    \begin{align}
         C^1 & =\begin{pmatrix}0&0\\1&-\sigma^2\end{pmatrix}.
         \label{eq:asymex_fib_chain_one}
     \end{align}
