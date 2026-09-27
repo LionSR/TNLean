@@ -87,7 +87,7 @@ remaining eigenvalues have modulus strictly less than $1$.
     $q\to\infty$, where $P_\infty=(\sqrt\rho)^{\mathsf T}\otimes\Id$
     \cite[eq.~(8)]{Malz2024Preparation}.
     More generally, for any tensors $B_q$ whose transfer maps satisfy
-    $\E_{B_q}(X)\to\Tr(X)\,\rho$ for every $X$ with $\rho\ge0$, the positive
+    $\E_{B_q}(X)\to\Tr(X)\,\rho$ for every $X$, where $\rho\ge0$, the positive
     parts of the physical matrices of $B_q$ converge to
     $(\sqrt\rho)^{\mathsf T}\otimes\Id$, and the corresponding tensors
     converge to $P_\infty$.
@@ -146,7 +146,10 @@ remaining eigenvalues have modulus strictly less than $1$.
         \label{eq:ldp_unitary_preparation}
     \end{align}
     where $c$ runs over the configurations $c_k=(l_k,r_k)$ and $\Omega$ is the
-    pair product state~(\ref{eq:prep_pair_product}). For $d\ge2$,
+    pair product state~(\ref{eq:prep_pair_product}). The source takes $D=d$,
+    so that $L$ and $R$ below are single sites and the remaining central sites
+    carry $\ket{0}$; the padding of the legs for general $D$ is this chapter's
+    extension. For $d\ge2$,
     $r=\lceil\log_dD\rceil$, $q\ge2r$, and $(\C^d)^{\otimes q}=L\otimes C\otimes R$,
     where $L$ and $R$ are the first and last $r$ sites of the block and
     $C$ denotes the remaining $q-2r$ sites, embed $\C^D$ into $L$ and $R$
@@ -399,8 +402,11 @@ remaining eigenvalues have modulus strictly less than $1$.
     projector $\Pi_j^{\otimes m}$. The product of the
     layers is a partial isometry with initial space the range of $P_k$, so by
     uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. The
-    factorization (\ref{eq:ldp_tree_factorization}) coincides with
-    \cite[eq.~(16)]{Malz2024Preparation}.
+    factorization (\ref{eq:ldp_tree_factorization}) is
+    \cite[eq.~(16)]{Malz2024Preparation}, where the tree is said to act ``to the
+    same effect'' as blocking directly; the identification with the polar
+    decomposition of the blocked map is left implicit there and is supplied
+    here.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -771,7 +777,9 @@ $A$ along $w$.
     \end{align}
     When $\rho$ is the fixed point of the gauge (\ref{eq:ldp_normal_gauge}),
     the left side is the limit correlator (\ref{eq:ldp_limit_correlator}) at
-    $t=s-L-1$; it is bilinear in $(X,Y)$ \cite[Lemma~2]{Malz2024Preparation}.
+    $t=s-L-1$; it is bilinear in $(X,Y)$. This is the choice of observables in
+    the proof of \cite[Lemma~2]{Malz2024Preparation}, without the source's
+    requirement that the one-point functions vanish.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -841,9 +849,10 @@ $A$ along $w$.
          & =\lvert\lambda\rvert^t\sum_{j=1}^Ka_j\mu_j^{\,t}.
         \notag
     \end{align}
-    When $\lambda$ is non-real, the Hermitian observable pairs the
-    eigenvector with its adjoint corresponding to $\bar\lambda$
-    \cite[Lemma~2]{Malz2024Preparation}.
+    This replaces the choice of observables in the proof of
+    \cite[Lemma~2]{Malz2024Preparation} by one with Hermitian observables: for
+    non-real $\lambda$ the eigenvector is not Hermitian, and a Hermitian
+    observable pairs it with its adjoint, an eigenvector for $\bar\lambda$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -935,8 +944,11 @@ $A$ along $w$.
          & \ge c\,e^{-(s'-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
-    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise
-    \cite[Lemma~2]{Malz2024Preparation}; see~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
+    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. For
+    injective $A$ and $L=1$ this is the correlation estimate of
+    \cite[Lemma~2]{Malz2024Preparation}, with the separation $s$ ranging over
+    windows of $K$ consecutive values; the correction of the source's
+    statement is recorded in~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1280,9 +1292,12 @@ $A$ along $w$.
     $\bigoplus_k\mu_{j,k}^qP_{j,\infty}$ generates on $M$ sites the state
     $\bigl(\sum_k\mu_{j,k}^{qM}\bigr)\ket{\Omega_j}=\beta_j\ket{\Omega_j}$ with
     $N=qM$ and $\ket{\Omega_j}$ formed from the unembedded pair. The
-    orthogonality of embedded pairs across distinct blocks follows from the
-    disjoint placement of coordinates;
-    see~\cite{gap:mswc24_ghz_form_local_orthogonality}.
+    orthogonality is asserted after \cite[eq.~(S7)]{Malz2024Preparation},
+    where the reason given is that the blocks form a basis of normal tensors;
+    here it follows from the placement of the pairs alone. The identification
+    of these pairs with the fixed points of the positive parts of the blocked
+    tensor is not proved here and can fail when a block has multiplicity
+    greater than one \cite{gap:mswc24_ghz_form_local_orthogonality}.
 \end{theorem}
 
 \begin{proof}

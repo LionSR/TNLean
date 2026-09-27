@@ -12,9 +12,10 @@ The polar decomposition factorizes a rectangular matrix $M\in\C^{m\times k}$
 into a positive semidefinite matrix $P$ and a partial isometry $V$. For a
 tensor $B$ viewed as a linear map from virtual index pairs to physical
 configurations, this factorization yields a positive-part tensor $P$ and a
-physical isometric factor $V$ satisfying $\E_B=\E_P$ and relating periodic
-states by $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$
-\cite{Malz2024Preparation}.
+physical isometric factor $V$ satisfying $\E_B=\E_P$. When $B=A^{[q]}$ is the
+tensor of $q$ blocked sites of a tensor $A$, the periodic states satisfy
+$\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
+\cite{Malz2024Preparation}. All states are unnormalized.
 
 \subsection{Polar decomposition of a matrix}
 
@@ -267,8 +268,10 @@ states by $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$
     \lean{MPSTensor.transferMap_polarPosTensor}
     \leanok
     \uses{def:ldpolar_tensor, def:transfer_map}
-    For every tensor $B$ with positive-part tensor $P$, $\E_P=\E_B$
-    \cite[eq.~(8)]{Malz2024Preparation}.
+    For every tensor $B$ with positive-part tensor $P$, $\E_P=\E_B$. This is
+    the first equality of \cite[eq.~(8)]{Malz2024Preparation}, which is stated
+    there for injective $B$; the argument of the Supplemental Material, from
+    $V^\dagger V=\Pi$ and $\Pi P=P$, gives it for every tensor.
 \end{theorem}
 \begin{proof}
     \leanok

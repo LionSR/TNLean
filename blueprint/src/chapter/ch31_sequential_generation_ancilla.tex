@@ -46,7 +46,9 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     A vector $\psi\in(\C^d)^{\otimes N}$ is \emph{probabilistically generated
         with a $D$-dimensional ancilla} if it satisfies~(\ref{eq:seqanc_state})
     for some matrices $A_k^i\in\MN{D}$ and vectors
-    $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$.
+    $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$. The vector is the
+    unnormalized post-measurement vector, as in the source's ``up to
+    normalization''.
 \end{definition}
 
 \begin{definition}[Operations induced by unitaries]
@@ -485,7 +487,7 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     A nonzero vector $\psi$ is probabilistically generated with a
     $D$-dimensional ancilla if and only if $c\,\psi$ has an open-boundary
     representation with bond dimension at most $D$ for some $c\ne 0$~\cite[Section~5,
-    Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
+        Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -575,7 +577,7 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     $D$-dimensional ancilla if and only if $\sum_\sigma|\psi(\sigma)|^2=1$
     and $c\,\psi$ has an open-boundary representation with bond dimension at
     most $D$ for some $c\ne 0$~\cite[Section~5,
-    Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
+        Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -627,7 +629,7 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
         \label{eq:seqanc_transition}
     \end{align}
     and the ancilla decouples after the last step, that is, the final joint
-    and the final joint state is $\ket{\varphi_F}\otimes\ket{\psi}$ for a unit
+    state is $\ket{\varphi_F}\otimes\ket{\psi}$ for a unit
     vector $\ket{\varphi_F}\in\C^D\otimes\C^2$~\cite[Section~5.1]{PerezGarcia2007Matrix}.
     The step with ancilla unitary $W$ leaving the site in $\ket{i}$ is the matrix
     $S_i(W)$ on $\C^D\otimes\C^2$ with entries
@@ -674,7 +676,7 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     scheme with ancilla $\C^D\otimes\C^2$ if and only if
     $\sum_\sigma|\psi(\sigma)|^2=1$ and $c\,\psi$ has an open-boundary
     representation with bond dimension at most $D$ for some $c\ne 0$~\cite[Section~5,
-    Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
+        Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -745,7 +747,7 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     normalization), are exactly the states with an open-boundary
     representation of bond dimension at most $d$, normalized in the
     deterministic case~\cite[Section~5,
-    Theorem ``Sequential generation without ancilla'']{PerezGarcia2007Matrix}.
+        Theorem ``Sequential generation without ancilla'']{PerezGarcia2007Matrix}.
     The condition $N\ge 2$ is necessary because the two-site gates require at
     least two sites~\cite{gap:pgvwc07_sequential_no_ancilla_two_sites}.
 \end{theorem}
