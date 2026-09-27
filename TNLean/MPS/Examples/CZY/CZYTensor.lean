@@ -42,8 +42,8 @@ cyclic convention `CZ_{1,1} = Z` at `N = 1`; the gate product itself is not form
 ## References
 
 - [arXiv:2509.03600](https://arxiv.org/abs/2509.03600) -- Y. Liu, A. Molnár, X.-Q. Sun,
-  F. Verstraete, K. Kato, L. Lootens, *Trading Mathematical for Physical Simplicity: Bialgebraic Structures in
-  Matrix Product Operator Symmetries*
+  F. Verstraete, K. Kato, L. Lootens, *Trading Mathematical for Physical Simplicity:
+  Bialgebraic Structures in Matrix Product Operator Symmetries*
 -/
 
 noncomputable section
