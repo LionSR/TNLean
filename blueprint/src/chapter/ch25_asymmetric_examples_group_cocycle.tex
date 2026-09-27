@@ -226,6 +226,22 @@ $O_Z=\prod_iCZ_{i,i+1}\prod_iX_i$, without the factors
 $Z_i$~\cite{Cirac2021Matrix}. Let
 $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
 
+\begin{definition}[Pauli terms and the two Hamiltonians]%
+    \label{def:asymex_group_cocycle_z2_hamiltonians}
+    \lean{MPOTensor.GroupCocycle.flipAt, MPOTensor.GroupCocycle.flipAt_apply,
+        MPOTensor.GroupCocycle.spinFlip_mul_flipAt, MPOTensor.GroupCocycle.pauliXAt,
+        MPOTensor.GroupCocycle.clusterTerm, MPOTensor.GroupCocycle.czXTerm,
+        MPOTensor.GroupCocycle.zzTerm, MPOTensor.GroupCocycle.clusterIsingHamiltonian,
+        MPOTensor.GroupCocycle.rooseHamiltonian, Matrix.neg_monomial}
+    \leanok
+    The operators $X_j$, $K_j$, $CZ_{i,i+2}X_{i+1}$ and $Z_iZ_{i+1}$ are
+    monomial in the computational basis: the first three flip one bit, with
+    the phases $1$, $(-1)^{t_{j-1}+t_{j+1}}$ and $(-1)^{t_it_{i+2}}$ on the
+    input $t$, and the last is diagonal with the phase
+    $(-1)^{t_i+t_{i+1}}$. The Hamiltonians are $H(\lambda)$ and
+    $H_{\mathrm R}(\mu)$ above.
+\end{definition}
+
 \begin{theorem}[Hamiltonians invariant under the CZX operators]%
     \label{thm:asymex_group_cocycle_z2_hamiltonians}
     \lean{MPOTensor.GroupCocycle.mpo_czxTensor_mul_pauliXAt,
@@ -234,13 +250,18 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
         MPOTensor.GroupCocycle.mpo_czxTensor_conj_clusterIsingHamiltonian_one,
         MPOTensor.GroupCocycle.czxDecorated_mul_pauliXAt,
         MPOTensor.GroupCocycle.czxDecorated_mul_clusterTerm,
+        MPOTensor.GroupCocycle.czxDecorated_phase_flipAt,
+        MPOTensor.GroupCocycle.czxDecorated_mul_czXTerm,
+        MPOTensor.GroupCocycle.czxDecorated_mul_zzTerm,
         MPOTensor.GroupCocycle.czxDecorated_mul_rooseHamiltonian,
+        MPOTensor.GroupCocycle.czxDecorated_mul_clusterIsingHamiltonian,
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian,
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_eq_smul,
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_neg_one,
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_one}
     \leanok
-    \uses{thm:asymex_group_cocycle_z2, def:asymex_czx_tensors}
+    \uses{thm:asymex_group_cocycle_z2, def:asymex_czx_tensors,
+        def:asymex_group_cocycle_z2_hamiltonians}
     On a periodic chain of $N\geq2$ qubits the following hold.
     \begin{enumerate}
         \item $O_ZX_jO_Z^\dagger=K_j$ and $O_ZK_jO_Z^\dagger=X_j$, so
