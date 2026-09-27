@@ -4557,6 +4557,38 @@ space of $(MN)P$.
     Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
 \end{proof}
 
+\begin{definition}[The anomaly class]
+    \label{def:mpug_anomaly_class}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_h3_group_cohomology}
+    Let the doubled-index tensors be normal. The anomaly class in
+    $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of the anomaly
+    three-cocycle $\omega$, for any choice of fusion tensors.
+\end{definition}
+
+\begin{corollary}[The anomaly class is independent of the fusion tensors]
+    \label{cor:mpug_anomaly_class}
+    \lean{MPOTensor.GroupFamily.FusionData.anomalyClass_omega_eq,
+        MPOTensor.GroupFamily.FusionData.anomalyClass_omega,
+        MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff}
+    \leanok
+    \uses{def:mpug_anomaly_class, thm:mpug_anomaly_three_cocycle,
+        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_h3_group_cohomology}
+    The class $[\omega]\in H^3(G,\C^\times_{\mathrm{triv}})$ of the anomaly
+    three-cocycle is the same for every choice of fusion tensors. It vanishes
+    exactly when $\omega$ has trivial gauge class.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_h3_group_cohomology}
+    Two choices of fusion tensors give cohomologous three-cocycles by
+    Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}, hence equal classes
+    by (\ref{eq:mpug_h3_cohomologous}). The second statement is
+    (\ref{eq:mpug_h3_trivial}).
+\end{proof}
+
 \subsection{Reductions through action tensors}
 
 \begin{definition}[The action tensor]
@@ -6756,6 +6788,95 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     A scalar $3$-cochain has trivial gauge class when it is cohomologous to
     the constant cochain $1$.
 \end{definition}
+
+\begin{definition}[Scalar three-cocycles in degree-three group cohomology]
+    \label{def:mpug_h3_group_cohomology}
+    \lean{TNLean.Algebra.scalarRepresentationEquiv,
+        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain,
+        TNLean.Algebra.ScalarCocycle.ofInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.ofInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.toCocycles,
+        TNLean.Algebra.ScalarThreeCochain.ofCocycles,
+        TNLean.Algebra.ScalarThreeCochain.cocyclesEquiv,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_h2_group_cohomology_comparison}
+    Give $\C^\times$ the trivial $G$-action and write it additively, as in
+    Definition~\ref{def:mpug_h2_group_cohomology_comparison}. A scalar
+    $n$-cochain for $n=2,3$ is then an inhomogeneous $n$-cochain
+    $G^n\to\C^\times$ of this representation, and conversely. Under this
+    identification a scalar $3$-cocycle is an inhomogeneous $3$-cocycle, and
+    every inhomogeneous $3$-cocycle arises this way. The class of a scalar
+    $3$-cocycle $\omega$ is its image
+    \begin{align}
+        [\omega] & \in H^3\bigl(G,\C^\times_{\mathrm{triv}}\bigr)
+        \label{eq:mpug_h3_class}
+    \end{align}
+    in the degree-three cohomology of the inhomogeneous cochain complex.
+\end{definition}
+
+\begin{theorem}[Fusion-gauge classes are degree-three cohomology classes]
+    \label{thm:mpug_h3_group_cohomology}
+    \lean{TNLean.Algebra.groupCohomology_π_eq_zero_iff,
+        TNLean.Algebra.scalarRepresentationEquiv_ofMul_eq_zero_iff,
+        TNLean.Algebra.scalarH2Representation_ρ_apply,
+        TNLean.Algebra.ScalarThreeCochain.d_toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.isCocycle_iff_d_eq_zero,
+        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain_apply,
+        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.fusionGauge_eq_iff,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_exists_d_eq,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq,
+        TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass_surjective}
+    \leanok
+    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    With the trivial action, the differentials of the inhomogeneous cochain
+    complex in degrees two and three are, multiplicatively,
+    \begin{align}
+        (d\beta)(g,h,k)
+         & =\frac{\beta(h,k)\beta(g,hk)}{\beta(gh,k)\beta(g,h)},
+        \label{eq:mpug_h3_d2}                                    \\
+        (d\omega)(g,h,k,l)
+         & =\frac{\omega(h,k,l)\omega(g,hk,l)\omega(g,h,k)}
+        {\omega(gh,k,l)\omega(g,h,kl)}.
+        \label{eq:mpug_h3_d3}
+    \end{align}
+    Hence (\ref{eq:mpug_h3_d2}) is the three-coboundary
+    (\ref{eq:mpug_coboundary}), and $d\omega=1$ is the three-cocycle equation
+    (\ref{eq:mpug_three_cocycle}). For scalar $3$-cocycles $\omega$ and
+    $\eta$,
+    \begin{align}
+        \omega\text{ and }\eta\text{ are cohomologous}
+         & \iff [\omega]=[\eta],
+        \label{eq:mpug_h3_cohomologous} \\
+        \omega\text{ has trivial gauge class}
+         & \iff [\omega]=0,
+        \label{eq:mpug_h3_trivial}
+    \end{align}
+    and every class in $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of a
+    scalar $3$-cocycle. No normalization of the cochains is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    In degree $n$ the inhomogeneous differential of a cochain $f$ with
+    trivial action is the alternating sum of $f$ at the $n+2$ faces
+    obtained by dropping the first argument, multiplying two adjacent
+    arguments, or dropping the last argument. For $n=2,3$ this is
+    (\ref{eq:mpug_h3_d2}) and (\ref{eq:mpug_h3_d3}) written multiplicatively.
+    A cocycle has zero class exactly when it lies in the image of the
+    preceding differential, since the cohomology is the cokernel of that
+    differential into the cocycles. By (\ref{eq:mpug_gauge_action}),
+    $\beta\mathbin{\triangleright}\eta=\omega$ holds exactly when
+    $d\beta=\omega\eta^{-1}$, whose additive form is the difference of the
+    two cochains. This gives (\ref{eq:mpug_h3_cohomologous}), and taking
+    $\eta=1$ gives (\ref{eq:mpug_h3_trivial}). Surjectivity holds because
+    every inhomogeneous $3$-cocycle is a scalar $3$-cocycle.
+\end{proof}
 
 \begin{definition}[Cyclic invariant of a scalar three-cochain]
     \label{def:mpug_cyclic_invariant}
