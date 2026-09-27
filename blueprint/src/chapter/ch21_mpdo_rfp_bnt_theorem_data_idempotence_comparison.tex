@@ -221,7 +221,31 @@
         \notag
     \end{align}
     where $c^{\chi,(L)}_{\alpha,\beta,\gamma}$ denotes the trace of the
-    $L$th power of $\chi_{\alpha,\beta,\gamma}$. Every diagonal entry of
+    $L$th power of $\chi_{\alpha,\beta,\gamma}$. Drawn as a closed chain
+    of $L$ copies of $\chi_{\alpha,\beta,\gamma}$, the coefficient is
+    \begin{center}
+        % Formula: c^{(L)}_{\alpha,\beta,\gamma}
+        %     = \tr(\chi_{\alpha,\beta,\gamma}^{L}), the trace-power form of
+        % the structure coefficients in CPSV16 Theorem 4.14(ii)--(iii),
+        % lines 962--991.
+        % Ink-to-index map: each box is the matrix \chi_{\alpha,\beta,\gamma}
+        % acting on the multiplicity space of the product sector; the
+        % horizontal wires carry its diagonal index k.
+        % Contraction set: the L-1 bonds between consecutive boxes and the
+        % periodic return, which together form the trace of the L-fold
+        % product.  The elided boxes contract like the displayed ones.
+        % Boundary signature (both sides): virtual-west=0 | virtual-east=0 |
+        % physical-up=0 | physical-down=0.
+        $c^{(L)}_{\alpha,\beta,\gamma}={}$
+        \tenkzkernel
+        \begin{tenkz}[cols=4, west=trace, east=trace]
+            \tn[skin=box, label pos=90]{\chi_{\alpha,\beta,\gamma}} &
+            \tn[skin=box, label pos=90]{\chi_{\alpha,\beta,\gamma}} & \tn[skin=dots]{} &
+            \tn[skin=box, label pos=90]{\chi_{\alpha,\beta,\gamma}}
+            \tnmark[form=bracket]{(1,1) .. (1,4)}{$L\text{ factors}$}
+        \end{tenkz}
+    \end{center}
+    Every diagonal entry of
     every $\chi_{\alpha,\beta,\gamma}$ is strictly positive.
     Consequently, for every $L>0$, the product identity reads
     \begin{align}
