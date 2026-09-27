@@ -368,8 +368,7 @@ effective spins into the legs.
         TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_onSiteOperator_mul,
         TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review}
     \leanok
-    \uses{thm:peps_czx_pull_through, thm:asymex_czx_kernel,
-        thm:asymex_czx_review_kernel}
+    \uses{def:peps_czx_on_site, thm:asymex_czx_kernel}
     For every $N>0$, $V^{\otimes N}\iota=\iota\,U_N$ and
     $\iota^\dagger V^{\otimes N}\iota=U_N$, where
     $U_N\ket{c}=(-1)^{\sum_mc_mc_{m+1}}\ket{\bar c}$ is the CZX matrix product
@@ -383,6 +382,7 @@ effective spins into the legs.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:asymex_czx_kernel, thm:asymex_czx_review_kernel}
     $V^{\otimes N}$ maps the legs of $c$ to the legs of $\bar c$ with the sign
     $\prod_m(-1)^{c_mc_{m+1}}$, which is the kernel of
     Theorem~\ref{thm:asymex_czx_kernel}; the relation to $O(A)$ is

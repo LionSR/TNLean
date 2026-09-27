@@ -26,13 +26,20 @@ on-site `ℤ₂` symmetry, whose virtual action is the CZX matrix product unitar
 **Formalized here.**
 * The on-site operator `U_{CZX}` on the sixteen states of a site, a monomial matrix.
 * Invariance of the CZX PEPS on the torus under `U_{CZX}` at every site (widths and heights at
-  least three, the scope of `TNLean.PEPS.stateCoeff_czxPEPS`).
+  least three).
 * The pulling-through identity of one site tensor: `U_{CZX}` on the physical index equals the
   operator `V = (X ⊗ X) CZ` on each of the four virtual legs, a bond carrying two qubits.
 * The boundary identification: on a closed chain of `N` boundary legs whose neighbouring legs
   carry the same qubit of their common plaquette, `V^{⊗ N}` acts as the CZX matrix product
   unitary `X^{⊗ N} D_N` of `CZXCompression.czxTensor`, which is `(-1)^N` times the review's
   operator `O(A)` of `CZXCompression.reviewCZXTensor`.
+
+**Scope restriction (torus size):** the invariance of the PEPS
+(`onSiteOperator_czxOnSite_mulVec_stateCoeff_czxPEPS`) is stated for a torus of width and
+height at least three sites. On a torus of width two the two horizontal bonds between a pair of
+neighbouring sites are one edge of the simple lattice graph, so the four legs of a site are not
+four distinct bonds; the source's torus of `2N × 2M` qubits also allows `N, M ∈ {1, 2}`.
+Documented in `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 **Scope restriction (boundary chain):** the identification of the boundary action is stated
 for a closed chain of legs subject to the plaquette constraint that the PEPS imposes on the
@@ -187,7 +194,7 @@ variable [Fact (1 < width)] [Fact (1 < height)] [Fact (2 < width)] [Fact (2 < he
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2502–2516, and
 arXiv:1106.4752, `References/1106.4752/source/dDSPTmodel.tex` lines 310–312: the CZX PEPS is
 invariant under the on-site symmetry `U_{CZX}` applied at every site. Stated for width and
-height at least three (the scope of `TNLean.PEPS.stateCoeff_czxPEPS`). -/
+height at least three (the module's scope restriction on the torus size). -/
 theorem onSiteOperator_czxOnSite_mulVec_stateCoeff_czxPEPS :
     onSiteOperator czxOnSite *ᵥ stateCoeff (czxPEPS width height) =
       stateCoeff (czxPEPS width height) := by
