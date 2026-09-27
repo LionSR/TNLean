@@ -682,9 +682,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   orthogonal, the block form holds for multiplicity one and part (ii) is proved
   with no condition `q = o(N)`.
 - `mswc24_decaying_correlations_windowed_connected.tex` records that Lemma 2
-  of the Supplemental Material holds in modulus for the source's non-Hermitian
+  of the Supplemental Material holds in modulus for the source's
   observables, whose one-point functions vanish exactly at every `N ≥ s`, but that
-  its printed real inequality fails for complex `λ₂` and its Hermitian reading
+  its printed real inequality fails for nonreal and for negative `λ₂` and its Hermitian reading
   fails in general, since the limit correlator of Hermitian observables is a
   multiple of `|λ₂|^t cos(tθ + φ)`. The formal Hermitian statement asserts the
   bound in every window of `K ≤ 2` consecutive separations. The note also lists

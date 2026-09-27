@@ -362,9 +362,10 @@ with `O` on the sites `1, …, L` and `O'` on the sites `s', …, s'+L-1`.
 
 **Local fix (arXiv:2307.01696, Supplemental Material, Lemma 2):** the source
 asserts, for injective `A` and `L = 1`, the bound at every `s > 1` for large `N`,
-with vanishing one-point functions. The source's non-Hermitian observables give
-the bound in modulus at every separation, with one-point functions exactly zero;
-its printed real inequality fails for complex `λ₂`. This theorem is a separate
+with vanishing one-point functions. The source's observables, which cannot be
+Hermitian for nonreal `λ₂`, give the bound in modulus at every separation, with
+one-point functions exactly zero; its printed real inequality fails for nonreal
+and for negative `λ₂`. This theorem is a separate
 Hermitian variant, as the proof of Theorem 1 needs Hermitian observables: for
 complex `λ₂` their limit correlator is `|λ₂|^t (μ^t + conj(μ)^t)` up to scale,
 which can vanish at individual separations, so the statement takes the bound in

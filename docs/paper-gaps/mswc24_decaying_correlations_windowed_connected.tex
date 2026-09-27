@@ -90,6 +90,18 @@ for infinitely many $s$ since $\theta$ is not a multiple of $\pi$; it vanishes
 at some $s$ only for particular $\theta$, such as $\theta=\pi/2$, and never
 for $\theta=\pi/3$.
 
+The printed inequality also fails when $\lambda_2$ is real and negative. Then
+$\mathcal E_A$ preserves Hermitian matrices, so $R_2$ and $\ell_2$ may be
+taken Hermitian and the source's rank-one maps are realized by Hermitian
+observables, but the correlator (\ref{eq:mswc24_decaying_correlations_exact})
+has the sign of $\lambda_2^{\,s-2}$ and is negative at every odd $s$. For
+example, the qubit tensor with Kraus matrices $\sqrt{q_0}\,I$,
+$\sqrt{q_1}\,\sigma_x$, $\sqrt{q_2}\,\sigma_y$, $\sqrt{q_3}\,\sigma_z$,
+where $q_0=1/16$ and $q_1=q_2=q_3=5/16$, is injective, and every nontrivial
+eigenvalue of its transfer map equals $-1/4$. Non-Hermiticity of the source's
+pair is therefore forced only for nonreal $\lambda_2$, while the printed
+inequality fails for every nonreal and every negative $\lambda_2$.
+
 \paragraph{The Hermitian reading.}
 Reading $\mathcal O,\mathcal O'$ as Hermitian does not rescue the printed
 form. Put $P(Z)=\operatorname{Tr}(Z)\,\rho$ and $t=s-L-1$, where the
@@ -137,7 +149,7 @@ and is negative at $s=5,6,7$.
 
 \paragraph{The rest of the proof.}
 The source's Theorem~1 is true, and its proof goes through with the modulus
-form (\ref{eq:mswc24_decaying_correlations_modulus}) for the non-Hermitian
+form (\ref{eq:mswc24_decaying_correlations_modulus}) for the source's
 pair (\ref{eq:mswc24_decaying_correlations_source_choice}): the lower bound
 on the trace distance comes from the duality
 $\lvert\operatorname{Tr}((\rho_0-\sigma_1)\mathcal Q)\rvert
@@ -205,7 +217,7 @@ exactly. For injective $A$ and $L=1$ the hypotheses are those of the source.\foo
 
 \section{Verdict}
 The correction is local. The printed Lemma~2 is false as a real inequality
-when $\lambda_2$ is not real, and false for Hermitian observables in general,
+when $\lambda_2$ is not real or is negative, and false for Hermitian observables in general,
 but its modulus form (\ref{eq:mswc24_decaying_correlations_modulus}) holds
 for the source's own observables, and the source's Theorem~1 is true. The
 formal statement (\ref{eq:mswc24_decaying_correlations_corrected}) is the
