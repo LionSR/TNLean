@@ -339,9 +339,10 @@ theorem hasBNTSectorData_repeatedBlockSector : HasBNTSectorData repeatedBlockSec
   have hval : ∀ i : Fin 2, ∑ j : Fin 2, g j * repeatedBlockBasis j i 0 0 ^ N = 0 := fun i => by
     have := congrArg (fun v => v (fun _ : Fin N => i)) hg
     simpa [-mpv_eq, mpv_of_dim_one, Fin.sum_univ_two] using this
-  have h0 := hval 0
-  have h1 := hval 1
-  simp [Fin.sum_univ_two, repeatedBlockBasis, zero_pow hN.ne'] at h0 h1
+  have h0 : g 0 = 0 := by
+    simpa [Fin.sum_univ_two, repeatedBlockBasis, zero_pow hN.ne'] using hval 0
+  have h1 : g 1 = 0 := by
+    simpa [Fin.sum_univ_two, repeatedBlockBasis, zero_pow hN.ne'] using hval 1
   intro j
   fin_cases j
   · exact h0
