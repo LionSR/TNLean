@@ -666,16 +666,32 @@ $1/\gamma$ in the block length here
     Dividing by a root of the determinant of order $d^n$, a global phase and
     hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
     a unitary as a product of two-level operators, each a real rotation or a
-    diagonal phase on the span of two basis vectors. A two-level operator
-    between configurations differing at several sites is conjugated, by a
-    two-level quarter turn, to one between configurations differing at one
-    site fewer. Between configurations differing at one site it is a
-    single-site operation controlled by the other sites. Every rotation and
-    every phase of determinant one is a group commutator $g_1g_2g_1^\dagger
-        g_2^\dagger$, and a controlled commutator is a product of two operations
-    with one control fewer and two operations on two sites; induction removes
-    the controls. An operation on two distant sites is conjugated to
-    neighbouring sites by SWAP gates.
+    diagonal phase on the span of two basis vectors. Write $G_{ab}(g)$ for the
+    operator acting as the $2\times2$ matrix $g$ on the span of the basis vectors
+    $\ket a,\ket b$ and as the identity on their complement, and
+    $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ for the
+    quarter turn. For pairwise distinct $a,b,c$,
+    \begin{align}
+        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q),
+        \label{eq:ldp_two_level_quarter_turn}
+    \end{align}
+    and choosing $c$ to differ from $a$ at one site fewer than $b$ does reduces
+    a two-level operator between configurations differing at several sites to
+    one between configurations differing at one site fewer. Between configurations
+    differing at one site $t$ it is a single-site operation at $t$ controlled by
+    the other sites. Every rotation and every phase of determinant one is a group
+    commutator $g_1g_2g_1^\dagger g_2^\dagger$. Write $C_S(u)$ for the single-site
+    operation $u$ at $t$ controlled by the sites of $S$, with $t\notin S$; for
+    unitaries $v,w$ and a site $s\neq t$,
+    \begin{align}
+        C_{S\cup\{s\}}(vwv^\dagger w^\dagger)
+         & =C_S(v)\,C_{\{s\}}(w)\,C_S(v^\dagger)\,C_{\{s\}}(w^\dagger),
+        \label{eq:ldp_controlled_commutator}
+    \end{align}
+    so a controlled commutator is a product of two operations with one control
+    fewer and two operations on two sites; induction removes the controls. An
+    operation on two distant sites is conjugated to neighbouring sites by SWAP
+    gates.
 \end{proof}
 
 \begin{theorem}[The approximating state in depth $O(q)$]

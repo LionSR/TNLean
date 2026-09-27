@@ -322,8 +322,9 @@ product state.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the pairs are prepared in
 constant depth (eq. (12)), and each block unitary of eq. (11) is a sequential circuit of depth
-`O(q)` applied to all blocks in parallel. Each bond index is encoded in `D` sites, which gives
-`D ≤ d^D` whenever the blocked tensor is injective. -/
+`O(q)` applied to all blocks in parallel. Injectivity of the blocked tensor forces `D ≤ d^D`
+(`MPSPreparation.mul_self_le_pow_of_isInjective`), which lets each bond index be encoded in `D`
+sites. -/
 theorem exists_isPreparedInDepth_approximatingMPVState (d D : ℕ) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
       σ.trace = 1 → ∀ q, 3 * D ≤ q → Kraus.IsInjective (blockTensor A q) →
