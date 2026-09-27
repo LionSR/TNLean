@@ -127,13 +127,14 @@ with $a=\lvert a\rvert e^{i\varphi}$, and the remainder is smaller by a factor
 tending to zero in $t$. When $\theta/\pi$ is irrational the cosine comes
 arbitrarily close to zero for infinitely many $t$, so for every Hermitian pair
 and every $c>0$ the correlator falls below $c\,e^{-(s-1)/\xi}$ for infinitely
-many $s$. An explicit injective example has $d=4$, $D=2$,
+many $s$. An explicit injective example has $d=4$, $D=2$, and a gate
+angle $\psi$,
 \begin{align}
     A^0
      & =\tfrac12\one,
      &
     A^1
-     & =\tfrac12\operatorname{diag}(1,e^{i\theta}),
+     & =\tfrac12\operatorname{diag}(1,e^{i\psi}),
      &
     A^2
      & =\tfrac12\sigma_x,
@@ -143,7 +144,10 @@ many $s$. An explicit injective example has $d=4$, $D=2$,
     \label{eq:mswc24_decaying_correlations_example}
 \end{align}
 with $\sum_iA^{i\dagger}A^i=\one$ and transfer spectrum
-$\{1,(1+e^{i\theta})/4,(1+e^{-i\theta})/4,0\}$. At $\theta=\pi/2$ the
+$\{1,(1+e^{i\psi})/4,(1+e^{-i\psi})/4,0\}$. The phase $\theta=\arg(\lambda_2)$
+of (\ref{eq:mswc24_decaying_correlations_cosine}) is $\psi/2$. At
+$\psi=\pi/2$ one has $\theta=\pi/4$, so $t\theta$ is an odd multiple of
+$\pi/2$ at $t=2,6,10,\dots$, and the
 Hermitian parts of the source's observables
 (\ref{eq:mswc24_decaying_correlations_source_choice}) have one-point functions
 $0$ and a correlator that vanishes exactly at $s=4,8,12,\dots$ for every $N\ge s$
