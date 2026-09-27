@@ -645,7 +645,9 @@ theorem solutionAction_mul (K : StabilizerRepresentatives G X x₀) {ω : Scalar
   ac_rfl
 
 /-- The action of `H²(H, ℂˣ)` on action-gauge classes of L-symbols compatible with `ω`,
-`[ψ] • [L] = [L · L[ψ]]`. -/
+`[ψ] • [L] = [L · L[ψ]]`. It depends on the representatives `K`, which do not occur in the
+acted-on type, so it is not registered as a global instance; install it locally with
+`letI := K.solutionMulAction ω` for a chosen `K`. -/
 @[instance_reducible]
 def solutionMulAction (K : StabilizerRepresentatives G X x₀) (ω : ScalarThreeCochain G) :
     MulAction (H2 (MulAction.stabilizer G x₀)) (Quotient (solutionSetoid (X := X) ω)) where
