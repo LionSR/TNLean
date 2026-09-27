@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.MPS.ParentHamiltonian.FNWOverlapCoordinates
 
 /-!
@@ -44,52 +45,11 @@ theorem norm_inner_overlap_sub_inner_aggregates_le [NeZero D]
           ‖fnwRightMiddleBoundary A Ψ p‖ ^ 2)) := by
   weighted_matrix_norm_instances ρ hρ
   rw [inner_overlap_sub_inner_aggregates]
-  calc
-    ‖∑ p : Cfg d ℓ × Cfg d r,
-        (inner ℂ
-            (fnwBoundaryMapCLM ρ hρ A m (fnwLeftMiddleBoundary A Φ p))
-            (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
-          inner ℂ (fnwLeftMiddleBoundary A Φ p)
-            (fnwRightMiddleBoundary A Ψ p))‖
-        ≤ ∑ p : Cfg d ℓ × Cfg d r,
-          ‖inner ℂ
-              (fnwBoundaryMapCLM ρ hρ A m (fnwLeftMiddleBoundary A Φ p))
-              (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
-            inner ℂ (fnwLeftMiddleBoundary A Φ p)
-              (fnwRightMiddleBoundary A Ψ p)‖ := by
-          simpa using norm_sum_le (Finset.univ : Finset (Cfg d ℓ × Cfg d r))
-            (fun p =>
-              inner ℂ
-                  (fnwBoundaryMapCLM ρ hρ A m (fnwLeftMiddleBoundary A Φ p))
-                  (fnwBoundaryMapCLM ρ hρ A m (fnwRightMiddleBoundary A Ψ p)) -
-                inner ℂ (fnwLeftMiddleBoundary A Φ p)
-                  (fnwRightMiddleBoundary A Ψ p))
-    _ ≤ ∑ p : Cfg d ℓ × Cfg d r,
-        fnwMixingQuantity ρ hρ A htr m *
-          ‖fnwLeftMiddleBoundary A Φ p‖ * ‖fnwRightMiddleBoundary A Ψ p‖ :=
-      Finset.sum_le_sum fun p _ =>
-        norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity
-          ρ hρ htr A m (fnwLeftMiddleBoundary A Φ p)
-            (fnwRightMiddleBoundary A Ψ p)
-    _ = fnwMixingQuantity ρ hρ A htr m *
-        ∑ p : Cfg d ℓ × Cfg d r,
-          ‖fnwLeftMiddleBoundary A Φ p‖ * ‖fnwRightMiddleBoundary A Ψ p‖ := by
-      simpa only [mul_assoc] using
-        (Finset.mul_sum (s := (Finset.univ : Finset (Cfg d ℓ × Cfg d r)))
-          (f := fun p =>
-            ‖fnwLeftMiddleBoundary A Φ p‖ * ‖fnwRightMiddleBoundary A Ψ p‖)
-          (a := fnwMixingQuantity ρ hρ A htr m)).symm
-    _ ≤ fnwMixingQuantity ρ hρ A htr m *
-        (Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
-          ‖fnwLeftMiddleBoundary A Φ p‖ ^ 2) *
-        Real.sqrt (∑ p : Cfg d ℓ × Cfg d r,
-          ‖fnwRightMiddleBoundary A Ψ p‖ ^ 2)) := by
-      apply mul_le_mul_of_nonneg_left
-      · simpa using Real.sum_mul_le_sqrt_mul_sqrt
-          (Finset.univ : Finset (Cfg d ℓ × Cfg d r))
-          (fun p => ‖fnwLeftMiddleBoundary A Φ p‖)
-          (fun p => ‖fnwRightMiddleBoundary A Ψ p‖)
-      · exact mul_nonneg (fnwTraceInverseFactor_pos hρ).le (norm_nonneg _)
+  exact Finset.norm_sum_le_mul_sqrt_mul_sqrt _ _
+    (fun p ↦ ‖fnwLeftMiddleBoundary A Φ p‖) (fun p ↦ ‖fnwRightMiddleBoundary A Ψ p‖)
+    (mul_nonneg (fnwTraceInverseFactor_pos hρ).le (norm_nonneg _)) fun p _ ↦
+      norm_inner_fnwBoundaryMapCLM_sub_rhoWeighted_le_fnwMixingQuantity
+        ρ hρ htr A m (fnwLeftMiddleBoundary A Φ p) (fnwRightMiddleBoundary A Ψ p)
 
 /-- The squared norm of the left overlap vector is the sum of the squared
 boundary-map norms of its right-spectator family. -/

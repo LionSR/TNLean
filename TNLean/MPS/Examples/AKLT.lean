@@ -434,11 +434,11 @@ private lemma aklt_twisted_P1P2_eq (i : Fin 3) :
     simp [akltTensor, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one,
       Matrix.neg_apply, Matrix.add_apply, Matrix.zero_apply]
 
-private lemma aklt_gaugeEquiv_P1 :
-    GaugeEquiv akltTensor
-      (twistedTensor akltTensor akltZ2Z2Action
-        (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2))) := by
-  refine ⟨akltGaugeGL, fun i => ?_⟩
+private lemma aklt_twist_P1 (i : Fin 3) :
+    twistedTensor akltTensor akltZ2Z2Action
+        (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) i =
+      (akltGaugeGL : Matrix (Fin 2) (Fin 2) ℂ) * akltTensor i *
+        ((akltGaugeGL⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
   simp only [twistedTensor, akltZ2Z2Action_10, akltPhysP1, Fin.sum_univ_three]
   rw [akltGaugeGL_inv_val, akltGaugeGL_val, akltGaugeMat]
   fin_cases i <;>
@@ -446,21 +446,21 @@ private lemma aklt_gaugeEquiv_P1 :
     simp [akltTensor, Matrix.of_apply, Matrix.cons_val_zero, Matrix.cons_val_one,
       Matrix.mul_apply, Fin.sum_univ_two, Matrix.add_apply, Matrix.zero_apply])
 
-private lemma aklt_gaugeEquiv_P2 :
-    GaugeEquiv akltTensor
-      (twistedTensor akltTensor akltZ2Z2Action
-        (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2))) := by
-  refine ⟨akltGaugeZ, fun i => ?_⟩
+private lemma aklt_twist_P2 (i : Fin 3) :
+    twistedTensor akltTensor akltZ2Z2Action
+        (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) i =
+      (akltGaugeZ : Matrix (Fin 2) (Fin 2) ℂ) * akltTensor i *
+        ((akltGaugeZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
   rw [aklt_twisted_P2_eq, akltGaugeZ_inv_val, akltGaugeZ_val]
   fin_cases i <;>
     (ext a b; fin_cases a <;> fin_cases b <;>
     simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, Matrix.neg_apply])
 
-private lemma aklt_gaugeEquiv_P1P2 :
-    GaugeEquiv akltTensor
-      (twistedTensor akltTensor akltZ2Z2Action
-        (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2))) := by
-  refine ⟨akltGaugeYZ, fun i => ?_⟩
+private lemma aklt_twist_P1P2 (i : Fin 3) :
+    twistedTensor akltTensor akltZ2Z2Action
+        (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) i =
+      (akltGaugeYZ : Matrix (Fin 2) (Fin 2) ℂ) * akltTensor i *
+        ((akltGaugeYZ⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
   rw [aklt_twisted_P1P2_eq, akltGaugeYZ_inv_val, akltGaugeYZ_val]
   fin_cases i <;>
     (ext a b; fin_cases a <;> fin_cases b <;>
@@ -478,9 +478,9 @@ theorem aklt_isOnSiteSymmetric_Z2Z2 :
   intro g
   rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
-  · exact aklt_gaugeEquiv_P1.sameMPV
-  · exact aklt_gaugeEquiv_P2.sameMPV
-  · exact aklt_gaugeEquiv_P1P2.sameMPV
+  · exact GaugeEquiv.sameMPV ⟨akltGaugeGL, aklt_twist_P1⟩
+  · exact GaugeEquiv.sameMPV ⟨akltGaugeZ, aklt_twist_P2⟩
+  · exact GaugeEquiv.sameMPV ⟨akltGaugeYZ, aklt_twist_P1P2⟩
 
 /-- The `Z₂ × Z₂` on-site representation is unitary on every group element: the two
 generators act by real symmetric involutive matrices, so each group element equals
@@ -543,6 +543,36 @@ def akltProjRep : ProjectiveRepresentation (D := 2) akltOmega where
     simp only [akltRepX, Units.val_mul, hY, hZ]
     exact mul_of_anticommuting_neg_involution _ _
       akltGaugeMat_sq akltGaugeZ_sq aklt_gauge_anticomm' g h
+
+/-- The virtual action `akltProjRep` implements the on-site symmetry of the
+AKLT tensor: for every group element `g` and letter `i`,
+`(twist by g of A)ᵢ · V(g) = V(g) · Aᵢ`. -/
+theorem akltTensor_twist_intertwine (g : Multiplicative (ZMod 2 × ZMod 2)) (i : Fin 3) :
+    twistedTensor akltTensor akltZ2Z2Action g i *
+        (akltProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) =
+      (akltProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) * akltTensor i := by
+  have key (R : GL (Fin 2) ℂ) {T A : Matrix (Fin 2) (Fin 2) ℂ}
+      (h : T = (R : Matrix (Fin 2) (Fin 2) ℂ) * A * ((R⁻¹ : GL (Fin 2) ℂ) : Matrix _ _ ℂ)) :
+      T * R = R * A := by
+    rw [h, mul_assoc, Units.inv_mul, mul_one]
+  have hYZ : akltGaugeGL * akltGaugeZ = akltGaugeYZ := by
+    ext a b
+    simp only [Units.val_mul, akltGaugeGL_val, akltGaugeZ_val, akltGaugeYZ_val, akltGaugeMat]
+    fin_cases a <;> fin_cases b <;> simp [Matrix.mul_apply, Fin.sum_univ_two]
+  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  · simp [akltProjRep, akltRepX, twistedTensor_one]
+  · simpa [akltProjRep, akltRepX] using key _ (aklt_twist_P1 i)
+  · simpa [akltProjRep, akltRepX] using key _ (aklt_twist_P2 i)
+  · simpa [akltProjRep, akltRepX, hYZ] using key _ (aklt_twist_P1P2 i)
+
+/-- The virtual representatives of the two generators of `Z₂ × Z₂`, `iσy` and
+`σz`, anticommute. -/
+theorem akltProjRep_generators_anticomm :
+    (akltProjRep.X (Multiplicative.ofAdd (1, 0)) : Matrix (Fin 2) (Fin 2) ℂ) *
+        akltProjRep.X (Multiplicative.ofAdd (0, 1)) =
+      -((akltProjRep.X (Multiplicative.ofAdd (0, 1)) : Matrix (Fin 2) (Fin 2) ℂ) *
+        akltProjRep.X (Multiplicative.ofAdd (1, 0))) := by
+  simp [akltProjRep, akltRepX, akltGaugeMat]
 
 open TNLean.Algebra in
 /-- `akltOmega` is a genuine `2`-cocycle: it is the factor system of the

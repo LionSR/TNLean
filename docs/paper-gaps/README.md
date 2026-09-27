@@ -528,6 +528,10 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   with constants uniform in the volume and violates the printed bound. The
   note also shows that the vanishing of the martingale differences below the
   threshold is the minimal repair, and that repaired theorem is formalized.
+- `cpgsv21_block_parent_interaction_range.tex` records that the overlap
+  argument for block-injective parent Hamiltonians first constructs a gapped
+  range chosen by the argument, and the two-range comparison that transfers
+  the gap to every range allowed by the printed interaction condition.
 - `cpgsv21_martingale_overlap.tex` records the spectral-gap martingale
   comparison, including the lower-endpoint mismatch in the printed proof of
   Nachtergaele's Theorem 2.1(i), whose resolution is in the note above. The
@@ -648,6 +652,10 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   printed for the two CZX product states do not give reductions, the
   corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
   $L_0/L_1=-1=\omega$ is unchanged.
+- `gs24_domain_wall_nondegenerate.tex` records the conventions that domain
+  walls and their phases are nonzero and that the local action of the
+  symmetry on a domain wall holds against blocked regions of the two ground
+  states.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
