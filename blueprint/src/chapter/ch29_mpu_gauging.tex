@@ -5,9 +5,7 @@
 
 \begin{definition}[Finite-group unitary average]
     \label{def:mpug_finite_group_unitary_average}
-    \lean{TNLean.Algebra.finiteGroupUnitaryAverage,
-        TNLean.Algebra.unitaryMatrixRepresentation}
-    \leanok
+    \mathlibok % Mathlib: Representation.averageMap, whose matrix is P_rho.
     \discussion{7458}
     Let $G$ be a finite group and let $\rho\colon G\to\mathrm U(n)$ be a
     unitary representation. Define
@@ -21,8 +19,8 @@
 
 \begin{theorem}[Finite-group unitary average is an orthogonal projection]
     \label{thm:mpug_finite_group_unitary_average_projection}
-    \lean{TNLean.Algebra.isStarProjection_finiteGroupUnitaryAverage,
-        TNLean.Algebra.isOrthogonalProjection_finiteGroupUnitaryAverage}
+    \lean{TNLean.Algebra.isStarProjection_inv_card_smul_sum,
+        TNLean.Algebra.isOrthogonalProjection_inv_card_smul_sum}
     \leanok
     \discussion{7458}
     \uses{def:mpug_finite_group_unitary_average}

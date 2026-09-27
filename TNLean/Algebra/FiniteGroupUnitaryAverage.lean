@@ -9,10 +9,12 @@ import QICLean.Algebra.OrthogonalProjection
 /-!
 # Finite-group averages of unitary representations
 
-The normalized average of a finite-group unitary representation is the
-orthogonal projection onto its invariant subspace. This is the matrix-level
-averaging fact used for the local gauge constraints in arXiv:2502.20257,
-lines 457--461.
+The normalized average `|G|⁻¹ ∑_g ρ(g)` of a unitary representation
+`ρ : G →* Matrix.unitaryGroup ι ℂ` of a finite group is the orthogonal
+projection onto its invariant subspace. It is the matrix of Mathlib's
+`Representation.averageMap` of the associated linear representation. This is
+the matrix-level averaging fact used for the local gauge constraints in
+arXiv:2502.20257, lines 457--461.
 -/
 
 open scoped BigOperators Matrix
@@ -21,45 +23,30 @@ namespace TNLean.Algebra
 
 variable {G ι : Type*} {n : ℕ} [Group G] [Fintype G] [Fintype ι] [DecidableEq ι]
 
-/-- The matrix representation on column vectors associated with a unitary
-matrix representation. -/
-noncomputable def unitaryMatrixRepresentation
+/-- The normalized average `|G|⁻¹ ∑_g ρ(g)` of a finite-group unitary matrix
+representation is a star projection. This is the type-generic matrix form of
+the local gauge projection in arXiv:2502.20257, lines 457--461: idempotence is
+Mathlib's `Representation.isProj_averageMap`, and self-adjointness holds
+because `ρ(g)ᴴ = ρ(g⁻¹)`. -/
+theorem isStarProjection_inv_card_smul_sum
     (ρ : G →* Matrix.unitaryGroup ι ℂ) :
-    Representation ℂ G (ι → ℂ) :=
-  Matrix.toLinAlgEquiv'.toMonoidHom.comp
-    ((Matrix.unitaryGroup ι ℂ).subtype.comp ρ)
-
-/-- The normalized finite-group average
-$|G|^{-1}\sum_{g \in G}\rho(g)$ of a unitary matrix representation.
-
-This is the matrix-level form of the local gauge average in arXiv:2502.20257,
-lines 459--461. -/
-noncomputable def finiteGroupUnitaryAverage
-    (ρ : G →* Matrix.unitaryGroup ι ℂ) : Matrix ι ι ℂ :=
-  (Fintype.card G : ℂ)⁻¹ • ∑ g : G, (ρ g : Matrix ι ι ℂ)
-
-/-- The normalized average of a finite-group unitary matrix representation is
-a star projection. This is the type-generic matrix form of the local gauge
-projection in arXiv:2502.20257, lines 457--461. -/
-theorem isStarProjection_finiteGroupUnitaryAverage
-    (ρ : G →* Matrix.unitaryGroup ι ℂ) :
-    IsStarProjection (finiteGroupUnitaryAverage ρ) := by
+    IsStarProjection ((Fintype.card G : ℂ)⁻¹ • ∑ g : G, (ρ g : Matrix ι ι ℂ)) := by
   classical
   let _ : Invertible (Fintype.card G : ℂ) :=
     invertibleOfNonzero (Nat.cast_ne_zero.mpr Fintype.card_ne_zero)
-  let σ := unitaryMatrixRepresentation ρ
-  have havg :
-      LinearMap.toMatrixAlgEquiv' σ.averageMap = finiteGroupUnitaryAverage ρ := by
-    simp [σ, unitaryMatrixRepresentation, Representation.averageMap,
-      GroupAlgebra.average, finiteGroupUnitaryAverage]
+  let σ : Representation ℂ G (ι → ℂ) :=
+    Matrix.toLinAlgEquiv'.toMonoidHom.comp ((Matrix.unitaryGroup ι ℂ).subtype.comp ρ)
+  have havg : LinearMap.toMatrixAlgEquiv' σ.averageMap =
+      (Fintype.card G : ℂ)⁻¹ • ∑ g : G, (ρ g : Matrix ι ι ℂ) := by
+    simp [σ, Representation.averageMap, GroupAlgebra.average]
   rw [isStarProjection_iff']
   constructor
   · have hidem := (Representation.isProj_averageMap (ρ := σ)).isIdempotentElem.eq
     rw [← havg]
     simpa only [map_mul] using congr_arg LinearMap.toMatrixAlgEquiv' hidem
-  · change (finiteGroupUnitaryAverage ρ)ᴴ = finiteGroupUnitaryAverage ρ
-    simp only [finiteGroupUnitaryAverage, Matrix.conjTranspose_smul,
-      Matrix.conjTranspose_sum]
+  · change ((Fintype.card G : ℂ)⁻¹ • ∑ g : G, (ρ g : Matrix ι ι ℂ))ᴴ =
+      (Fintype.card G : ℂ)⁻¹ • ∑ g : G, (ρ g : Matrix ι ι ℂ)
+    simp only [Matrix.conjTranspose_smul, Matrix.conjTranspose_sum]
     congr 1
     · simp only [star_inv₀, star_natCast]
     · calc
@@ -72,12 +59,12 @@ theorem isStarProjection_finiteGroupUnitaryAverage
           simpa using Equiv.sum_comp (Equiv.inv G)
             (fun g : G ↦ (ρ g : Matrix ι ι ℂ))
 
-/-- The normalized average of a finite-group unitary matrix representation on
-`Fin n` is an orthogonal projection, as asserted for the local gauge operators
-in arXiv:2502.20257, lines 457--461. -/
-theorem isOrthogonalProjection_finiteGroupUnitaryAverage
+/-- The normalized average `|G|⁻¹ ∑_g ρ(g)` of a finite-group unitary matrix
+representation on `Fin n` is an orthogonal projection, as asserted for the
+local gauge operators in arXiv:2502.20257, lines 457--461. -/
+theorem isOrthogonalProjection_inv_card_smul_sum
     (ρ : G →* Matrix.unitaryGroup (Fin n) ℂ) :
-    IsOrthogonalProjection (finiteGroupUnitaryAverage ρ) :=
-  (isStarProjection_finiteGroupUnitaryAverage ρ).isOrthogonalProjection
+    IsOrthogonalProjection ((Fintype.card G : ℂ)⁻¹ • ∑ g : G, (ρ g : Matrix (Fin n) (Fin n) ℂ)) :=
+  (isStarProjection_inv_card_smul_sum ρ).isOrthogonalProjection
 
 end TNLean.Algebra
