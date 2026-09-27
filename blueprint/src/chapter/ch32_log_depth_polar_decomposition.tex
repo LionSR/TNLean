@@ -248,6 +248,32 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     semidefinite, $\Pi$ a Hermitian idempotent, and
     $\sum_l\Pi_{kl}P^l=P^k$ for every $k$.
 \end{theorem}
+
+\begin{center}
+    % Formula: B^i = sum_k V_{ik} P^k, that is, B = P_V.
+    % Source: MSWC24 eq. (8), B = VP, and its Supplemental Material.
+    % Ink-to-index map: the box B has virtual indices alpha (west), beta
+    % (east) and physical index i (up).  On the right, the box P is the
+    % positive-part tensor with the same virtual indices and physical
+    % index k in {0, ..., D^2-1}; the pill V is the isometric factor, a
+    % matrix from the index k to the physical index i.
+    % Contraction set: the vertical wire between V and P is k.
+    % Boundary signature: (alpha, beta, i open) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[skin=box, ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                    90:physical:$i$}]{B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, align=2]
+        \tn[at=(1,1), skin=pill, name=V,
+            ports={90:physical:$i$, 270:physical}]{V}
+        \tn[at=(2,1), skin=box, name=P,
+            ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                    90:physical}]{P}
+        \tnwire{V.270}{P.90}
+    \end{tenkz}
+\end{center}
 \begin{proof}
     \leanok
     \uses{lem:ldpolar_physical_matrix_bij, lem:ldpolar_physical_matrix_rotate,
