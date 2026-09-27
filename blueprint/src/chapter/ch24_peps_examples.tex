@@ -425,11 +425,104 @@ normalized, and the constant $c$ absorbs the normalization
         =|G|\langle x,y\rangle$.
 \end{proof}
 
-The review adds that the equal-weight superposition of plaquette colorings
-is the equal-weight superposition of the configurations obeying Gauss' law.
-This statement about the contracted network is not formalized; on a torus
-the differences of plaquette colorings are the Gauss-law configurations of
-trivial holonomy \cite{gap:rmp_peps_quantum_double_g_isometry}.
+Placed at every site of the torus, the dual tensor gives a network whose
+bonds carry colors in $G$ and whose physical spins are the differences of the
+colors of adjacent bonds; its state is the superposition over all color
+patterns \cite[Section~``Examples'', ``The double models'']{Schuch2010PEPS}.
+The review identifies it with the equal-weight superposition of the
+configurations obeying Gauss' law \cite[Appendix~A, ``The Toric Code and
+    quantum double models'']{Cirac2021Matrix}. On the torus not every such
+configuration is a difference of colorings: the transports of the spins
+around the two non-contractible cycles must be trivial.
+
+\begin{lemma}[Parallel sections of transports on the torus]%
+    \label{lem:peps_torus_parallel_section}
+    \lean{TNLean.PEPS.zmodTransport, TNLean.PEPS.zmodTransport_zero,
+        TNLean.PEPS.zmodTransport_succ,
+        TNLean.PEPS.apply_natCast_eq_zmodTransport_mul,
+        TNLean.PEPS.zmodTransport_self_eq_one_of_apply_add_one,
+        TNLean.PEPS.zmodTransport_val_add_one,
+        TNLean.PEPS.IsTorusParallelSection, TNLean.PEPS.IsTorusFlat,
+        TNLean.PEPS.IsTorusParallelSection.mul_right,
+        TNLean.PEPS.IsTorusParallelSection.isTorusFlat,
+        TNLean.PEPS.IsTorusParallelSection.zmodTransport_row,
+        TNLean.PEPS.IsTorusParallelSection.zmodTransport_column,
+        TNLean.PEPS.IsTorusFlat.zmodTransport_column_mul,
+        TNLean.PEPS.IsTorusParallelSection.eq_mul_right,
+        TNLean.PEPS.IsTorusFlat.zmodTransport_column_eq_one,
+        TNLean.PEPS.exists_isTorusParallelSection_iff,
+        TNLean.PEPS.card_isTorusParallelSection}
+    \leanok
+    \uses{lem:peps_torus_shift_const}
+    Let $G$ be a finite group and assign to every site $v$ of the torus two
+    elements $a_v,b_v\in G$. Call $f$ from the sites to $G$ a parallel section
+    if $f_{v+(1,0)}=a_vf_v$ and $f_{v+(0,1)}=b_vf_v$ for every $v$. Parallel
+    sections exist if and only if
+    $b_{v+(1,0)}a_v=a_{v+(0,1)}b_v$ for every $v$ and the ordered products
+    $a_{(w-1,0)}\cdots a_{(0,0)}$ and $b_{(0,h-1)}\cdots b_{(0,0)}$ are the
+    identity. If they exist, there are exactly $|G|$ of them, and any two
+    differ by right multiplication with one group element.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $f$ and $f'$ are parallel sections, $f_v^{-1}f'_v$ is invariant under
+    both unit shifts and hence constant, so $f'=fg$; conversely $fg$ is a
+    parallel section for every $g$. The two paths from $v$ to $v+(1,1)$ give
+    the flatness condition, and going once around a row or a column gives
+    the trivial products. Conversely, for flat $a,b$ with trivial products
+    set $f_{(x,y)}=b_{(x,y-1)}\cdots b_{(x,0)}\,a_{(x-1,0)}\cdots a_{(0,0)}$
+    for the representatives $0\le x<w$, $0\le y<h$. Flatness moves the
+    product up a column one column to the right, conjugated by the
+    horizontal transports at its ends, so the product around every column is
+    trivial; this and the trivial product around the bottom row give the
+    two transport rules also where the representatives wrap around.
+\end{proof}
+
+\begin{theorem}[The dual quantum-double network is the Gauss-law superposition]%
+    \label{thm:peps_quantum_double_dual_gauss_law}
+    \lean{TNLean.PEPS.quantumDoubleDualSiteTensor,
+        TNLean.PEPS.quantumDoubleDualPEPS,
+        TNLean.PEPS.quantumDoubleDualRowTransport,
+        TNLean.PEPS.quantumDoubleDualColumnTransport,
+        TNLean.PEPS.IsQuantumDoubleGaussLaw,
+        TNLean.PEPS.IsQuantumDoubleTrivialHolonomy,
+        TNLean.PEPS.isTorusFlat_quantumDoubleDualTransport_iff,
+        TNLean.PEPS.forall_eq_quantumDoubleDualSpins_iff,
+        TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS}
+    \leanok
+    \uses{def:peps_quantum_double_dual, lem:peps_torus_site_tensor_contraction,
+        lem:peps_torus_parallel_section}
+    Let $w,h\ge3$ and place the dual quantum-double tensor at every site of
+    the torus. Write $(s_1,s_2,s_3,s_4)$ for the top left, top right, bottom
+    right and bottom left spins of a site. A spin configuration obeys Gauss'
+    law if at every site $s_2s_1=s_3s_4$, and around the corner shared by
+    the sites $v$, $v+(1,0)$, $v+(1,1)$, $v+(0,1)$ the spins satisfy
+    $s_1(v+(1,0))\,s_2(v)=s_4(v+(1,1))\,s_3(v+(0,1))$, the local and the
+    plaquette terms of \cite[Section~``Examples'', ``The double
+        models'']{Schuch2010PEPS}. It has trivial holonomy if the ordered
+    products of $a_v=s_2(v)s_1(v)$ along the row $y=0$ and of
+    $b_v=s_4(v+(0,1))^{-1}s_1(v)$ along the column $x=0$ are the identity.
+    Then the coefficient of the contracted network is $|G|$ at every
+    configuration obeying Gauss' law with trivial holonomy, and $0$ at every
+    other configuration. So the state is the equal-weight superposition of
+    the Gauss-law configurations of trivial holonomy; those of nontrivial
+    holonomy do not occur on the torus
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_torus_site_tensor_contraction} the coefficient
+    counts the colorings of the horizontal and vertical bonds whose
+    differences are the given spins. Write such a coloring through the left
+    color $f_v$ and the top color $u_v$ of each site. The top left spin gives
+    $u_v=s_1(v)f_v$, the top right spin gives $f_{v+(1,0)}=a_vf_v$, the
+    bottom left spin of the site above gives $f_{v+(0,1)}=b_vf_v$, and the
+    bottom right spin is then equivalent to $s_2s_1=s_3s_4$ at $v$. So the
+    colorings are counted by the parallel sections of $a,b$ when the local
+    rule holds, and there are none otherwise. Using the local rule,
+    flatness of $a,b$ is the plaquette rule, and
+    Lemma~\ref{lem:peps_torus_parallel_section} counts the sections.
+\end{proof}
 
 \begin{definition}[Primal quantum-double tensor]%
     \label{def:peps_quantum_double_primal}
