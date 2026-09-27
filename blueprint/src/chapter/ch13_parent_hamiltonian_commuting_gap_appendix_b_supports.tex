@@ -447,11 +447,11 @@
          & =
         \sum_j G_2(B_j) =
         G_2\!\left(\bigoplus_j B_j\right),
-        \notag \\
+        \label{eq:residual_family_two_site_bond_range} \\
         \ran(P_{2,\mathrm{res}})
          & =
         \ran(I_{\mathrm{res}}),
-        \notag
+        \label{eq:residual_family_two_site_proj_range}
     \end{align}
     and
     $P_{2,\mathrm{res}} = 1-q_2\!\left(\bigoplus_j B_j\right)$.
@@ -464,12 +464,12 @@
 
 \begin{proof}
     \leanok
-    The first identity is the one-letter Gram identity on the disjoint union
+    The isometry relation $V^*V=1$ is the one-letter Gram identity on the disjoint union
     of the within-sector virtual pairs. In each sector, the bond insertion
     has range $G_2(B_j)$; allowing independent outer-boundary coefficients
     and summing over sectors therefore gives $\sum_jG_2(B_j)$. The local
-    ground space of a direct sum is this sum, which proves the two range
-    identities. Orthogonal projection onto that space is complementary to
+    ground space of a direct sum is this sum, which proves (\ref{eq:residual_family_two_site_bond_range}) and
+    (\ref{eq:residual_family_two_site_proj_range}). Orthogonal projection onto that space is complementary to
     its parent interaction. Finally, the residual-isometry form of the
     cross-block fixed-point structure supplies the simultaneous sector
     decompositions.

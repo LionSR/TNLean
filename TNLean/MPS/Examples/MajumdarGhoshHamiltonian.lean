@@ -140,7 +140,8 @@ Summed over the translates of a periodic chain of at least three sites it gives
 the review's Hamiltonian, since each nearest-neighbour bond occurs in two
 translates and each next-nearest-neighbour bond in one. -/
 def majumdarGhoshTerm : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3 :=
-  (1 / 2 : ℂ) • (spinExchange 0 1 + spinExchange 1 2 + spinExchange 0 2)
+  (1 / 2 : ℂ) • (spinExchange spinHalfOperator 0 1 + spinExchange spinHalfOperator 1 2 +
+    spinExchange spinHalfOperator 0 2)
 
 /-- The three-site term acts as a quarter of the sum of the three transpositions of
 the sites, minus \(\tfrac38\). -/
@@ -149,8 +150,9 @@ lemma majumdarGhoshTerm_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
       v (σ ∘ Equiv.swap 1 2) + v (σ ∘ Equiv.swap 0 2)) - (3 / 8) * v σ := by
   simp only [majumdarGhoshTerm, LinearMap.smul_apply, LinearMap.add_apply, Pi.smul_apply,
     Pi.add_apply, smul_eq_mul]
-  rw [spinExchange_apply (by decide), spinExchange_apply (by decide),
-    spinExchange_apply (by decide)]
+  rw [spinExchange_spinHalfOperator_apply (by decide),
+    spinExchange_spinHalfOperator_apply (by decide),
+    spinExchange_spinHalfOperator_apply (by decide)]
   ring
 
 /-- A three-site vector is a \(-\tfrac38\) eigenvector of the three-site term exactly
@@ -259,8 +261,8 @@ The Majumdar-Ghosh Hamiltonian
 \(H=\sum_i\mathbf S_i\cdot\mathbf S_{i+1}+\tfrac12\sum_i\mathbf S_i\cdot\mathbf S_{i+2}\)
 on a periodic chain of \(N\) spin-\(\tfrac12\) sites, indices modulo \(N\). -/
 def majumdarGhoshHamiltonian (N : ℕ) : NSiteSpace 2 N →ₗ[ℂ] NSiteSpace 2 N :=
-  ∑ i : Fin N, spinExchange i (cyclicForwardSite i 1) +
-    (1 / 2 : ℂ) • ∑ i : Fin N, spinExchange i (cyclicForwardSite i 2)
+  ∑ i : Fin N, spinExchange spinHalfOperator i (cyclicForwardSite i 1) +
+    (1 / 2 : ℂ) • ∑ i : Fin N, spinExchange spinHalfOperator i (cyclicForwardSite i 2)
 
 private lemma cyclicForwardSite_ne {N : ℕ} (i : Fin N) {r r' : ℕ} (hr : r < N) (hr' : r' < N)
     (hne : r ≠ r') : cyclicForwardSite i r ≠ cyclicForwardSite i r' := by
@@ -336,8 +338,9 @@ theorem majumdarGhoshHamiltonian_apply {N : ℕ} (hN3 : 3 ≤ N) (ψ : NSiteSpac
   rw [Finset.sum_add_distrib, Finset.sum_add_distrib, hshift]
   simp only [majumdarGhoshHamiltonian, LinearMap.add_apply, LinearMap.smul_apply,
     LinearMap.sum_apply, Finset.sum_apply, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
-  simp only [spinExchange_apply (h1 _), spinExchange_apply (h2 _), Finset.sum_sub_distrib,
-    ← Finset.mul_sum, Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+  simp only [spinExchange_spinHalfOperator_apply (h1 _),
+    spinExchange_spinHalfOperator_apply (h2 _), Finset.sum_sub_distrib, ← Finset.mul_sum,
+    Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
   ring
 
 /-- Project result: on a periodic chain of \(N\ge3\) sites, every vector of the
