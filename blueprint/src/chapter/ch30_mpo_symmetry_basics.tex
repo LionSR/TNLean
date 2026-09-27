@@ -753,7 +753,7 @@ relation between word traces has nonnegative integer coefficients.
     no such $M$ exists. If $K$ has two elements, then after labelling the
     blocks by $1$ and $\tau$ one has $M_a=N_a$ for both labels, that is
     $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$. Consequently a
-    symmetric family of at most two normal tensors as in
+    nonempty symmetric family of at most two normal tensors as in
     Theorem~\ref{thm:mpo_symmetric_nimrep}, on which the unit acts trivially,
     has exactly two blocks transforming in this way. The source states the
     uniqueness of this two-block family without a bound on the number of
@@ -763,6 +763,7 @@ relation between word traces has nonnegative integer coefficients.
 \end{theorem}
 
 \begin{proof}
+    \uses{def:asymex_fib_anomaly_nim, thm:mpo_symmetric_nimrep}
     \leanok
     Relation (\ref{eq:mpo_nimrep}) at $a=b=\tau$ with
     $\tau\times\tau=1+\tau$ gives $M_\tau^2=\Id+M_\tau$. On one block this is
