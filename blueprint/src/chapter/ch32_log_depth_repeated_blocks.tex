@@ -18,27 +18,37 @@ block form, the corrected approximating state, and the approximation error
 for it when the states of distinct blocks on $q$ sites are orthogonal
 \cite{gap:mswc24_repeated_block_corrected_state}.
 
+\begin{definition}[Direct sum with multiplicities]
+    \label{def:ldp_repeated_block_sum}
+    \lean{MPSTensor.CopyWeights, MPSTensor.repeatedBlockSum, MPSTensor.copyNorm,
+        MPSTensor.copyIsometry}
+    \leanok
+    Let $A_1,\dots,A_b$ be tensors, let the isometries $E_{j,k}$,
+    $1\leq k\leq m_j$, place the copy $k$ of block $j$ in the bond space, with
+    $E_{j,k}^\dagger E_{j',k'}=\delta_{jj'}\delta_{kk'}\mathbf 1$, and let
+    $\mu_{j,k}$ be weights such that every block has some nonzero weight. The
+    direct sum with multiplicities is
+    $A^i=\sum_{j,k}\mu_{j,k}E_{j,k}A_j^iE_{j,k}^\dagger$. For $q\geq1$ put
+    $K_{j,k}=E_{j,k}\otimes E_{j,k}$,
+    \begin{align*}
+        c_j=\Bigl(\sum_k\lvert\mu_{j,k}\rvert^{2q}\Bigr)^{1/2},\qquad
+        L_j=\sum_k\frac{\overline{\mu_{j,k}^q}}{c_j}K_{j,k}.
+    \end{align*}
+\end{definition}
+
 \begin{lemma}[Positive part of a blocked tensor with multiplicities]
     \label{lem:ldp_repeated_block_polar}
-    \lean{MPSTensor.repeatedBlockSum, MPSTensor.copyNorm,
-        MPSTensor.copyIsometry, MPSTensor.mpv_repeatedBlockSum,
+    \lean{MPSTensor.mpv_repeatedBlockSum,
         MPSTensor.physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry,
         MPSTensor.conjTranspose_copyIsometry_mul_self,
         MPSTensor.conjTranspose_copyIsometry_mul_eq_zero,
         MPSTensor.polarIso_blockTensor_repeatedBlockSum,
         MPSTensor.polarPos_blockTensor_repeatedBlockSum}
     \leanok
-    \uses{lem:ldp_orthogonal_sum_polar}
-    Let $A^i=\sum_{j,k}\mu_{j,k}E_{j,k}A_j^iE_{j,k}^\dagger$, where the
-    isometries $E_{j,k}$ place the copy $k$ of block $j$ in the bond space,
-    $E_{j,k}^\dagger E_{j',k'}=\delta_{jj'}\delta_{kk'}\mathbf 1$, and every block
-    has some nonzero weight. Its periodic state on $N\geq1$ sites is
-    $\sum_j\beta_j\ket{\phi_N(A_j)}$ with $\beta_j=\sum_k\mu_{j,k}^N$. Put
-    $K_{j,k}=E_{j,k}\otimes E_{j,k}$,
-    \begin{align*}
-        c_j=\Bigl(\sum_k\lvert\mu_{j,k}\rvert^{2q}\Bigr)^{1/2},\qquad
-        L_j=\sum_k\frac{\overline{\mu_{j,k}^q}}{c_j}K_{j,k}.
-    \end{align*}
+    \uses{def:ldp_repeated_block_sum, lem:ldp_orthogonal_sum_polar}
+    Let $A$ be the direct sum with multiplicities of
+    Definition~\ref{def:ldp_repeated_block_sum}. Its periodic state on $N\geq1$
+    sites is $\sum_j\beta_j\ket{\phi_N(A_j)}$ with $\beta_j=\sum_k\mu_{j,k}^N$.
     For $q\geq1$ the blocked map of $A$ is $B=\sum_jc_jB_jL_j^\dagger$, with
     $B_j$ the blocked map of $A_j$, and $L_j^\dagger L_{j'}=\delta_{jj'}\mathbf 1$.
     If $B_j^\dagger B_{j'}=0$ for $j\neq j'$, then, with $B_j=V_jP_j$,
@@ -69,8 +79,10 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \lean{MPSTensor.copyFixedPointState, MPSTensor.copyApproxVector,
         MPSTensor.copyApproxOverlap}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, lem:ldp_repeated_block_polar}
-    With the notation of Lemma~\ref{lem:ldp_repeated_block_polar}, fixed points
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_repeated_block_sum,
+        lem:ldp_repeated_block_polar}
+    With the notation of Definition~\ref{def:ldp_repeated_block_sum} and
+    Lemma~\ref{lem:ldp_repeated_block_polar}, fixed points
     $\rho_j$ of the blocks, and $\ket{\Omega_j}$ the product of the pairs of
     $\rho_j$ over $M$ sites in the bond space of block $j$, the corrected
     approximating state on $N=qM$ sites with coefficients $\alpha_j$ is
@@ -104,7 +116,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \uses{def:ldp_repeated_block_state, lem:ldp_repeated_block_polar,
         thm:ldp_approximation_error_orthogonal_blocks,
         lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
-        def:correlation_length}
+        lem:ldp_injectivity_cutoff, def:correlation_length}
     With the notation of Lemma~\ref{lem:ldp_repeated_block_polar}, let the
     blocks $A_j$ be normal in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, let $\lambda_2$ bound the moduli of the eigenvalues other

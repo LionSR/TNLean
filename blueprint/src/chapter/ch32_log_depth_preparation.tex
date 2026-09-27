@@ -638,6 +638,24 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     bounded because $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ converges to $1$.
 \end{proof}
 
+\begin{lemma}[Block lengths below the injectivity lengths]
+    \label{lem:ldp_injectivity_cutoff}
+    \lean{Real.exp_neg_mul_div_eq_pow,
+        lt_one_and_forall_le_of_mul_mul_pow_lt_one, le_mul_mul_exp_of_forall_le}
+    \leanok
+    Let $x=e^{-\gamma/\xi}>0$, so that $e^{-\gamma q/\xi}=x^q$. Let
+    $L_1,\dots,L_b$ be natural numbers, $C\geq1+\sum_jx^{-L_j}$, $M\geq1$, and
+    $y=Mx^q$. If $Cy<1$, then $x<1$ and $L_j\leq q$ for every $j$. Hence, if
+    $\varepsilon\leq1$ and $\varepsilon\leq Cy\,e^{Cy}$ holds whenever $x<1$,
+    $L_j\leq q$ for every $j$, and $Cy<1$, then $\varepsilon\leq Cy\,e^{Cy}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $x\geq1$, then $y\geq1$ and $Cy\geq1$. If $x<1$ and $L_j>q$, then
+    $x^{L_j}\leq x^q\leq y$, so $Cy\geq x^{-L_j}y\geq1$. When $Cy\geq1$ the
+    bound follows from $\varepsilon\leq1\leq Cy\leq Cy\,e^{Cy}$.
+\end{proof}
+
 \begin{theorem}[Approximation error, normal case]
     \label{thm:ldp_approximation_error_normal}
     \lean{MPSTensor.exists_approximationError_le_mul,
@@ -646,7 +664,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     \leanok
     \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state,
         thm:ldpolar_blocked_state, thm:ldpolar_tensor_injective,
-        def:correlation_length}
+        lem:ldp_injectivity_cutoff, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, let $\ket{\phi_N}$ be the
     normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1/2$. For
@@ -2084,7 +2102,8 @@ $A$ along $w$.
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
         lem:ldp_orthogonal_sum_polar, lem:ldp_positive_part_overlap,
-        thm:ldp_approximation_error_normal, def:correlation_length}
+        thm:ldp_approximation_error_normal, lem:ldp_injectivity_cutoff,
+        def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ with $b\geq1$, weights $\mu_j>0$, and
     normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, each placed on its own bond coordinates. Let $\lambda_2$
