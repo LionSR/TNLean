@@ -28,8 +28,9 @@ the entries of the `τ` block with the source's F-symbols is `Examples/Fibonacci
 numeric entries of `B_1`, `B_τ`; the `τ` block here places the bare F-symbol
 `[F^{τ x τ}_{x'_{j+1}}]_{x'_j}^{x_{j+1}}` at the physical letter `(x', x)` and the bond letters
 `(x'_j, x_j)`, `(x'_{j+1}, x_{j+1})`, without the source's closed-loop factors, and `B_1` is the
-admissibility projector of bond dimension two; documented in
-`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+admissibility projector of bond dimension two. On edge label `τ` the source's G-symbol tensor is
+carried to these blocks by a diagonal bond similarity (`Examples/FibonacciGSymbol.lean`); documented
+in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 **Local fix (positive length):** the source derives the fusion rules `O_a O_b = ∑_c N_{ab}^c O_c`
 from the projector identity required for all `L` (`References/1511.08090/AnyonsPEPS.tex`
