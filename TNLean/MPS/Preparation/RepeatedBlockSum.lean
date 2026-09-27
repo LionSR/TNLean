@@ -179,15 +179,16 @@ theorem conjTranspose_copyIsometry_mul_self (hι : ∀ j k, Function.Injective (
       ∑ k', (star (μ j k' ^ q) / (copyNorm μ q j : ℂ)) • pairEmbedding (ι j k') =
       ((‖μ j k‖ ^ (2 * q) / copyNorm μ q j ^ 2 : ℝ) : ℂ) • (1 : Matrix _ _ ℂ) := fun k => by
     rw [Matrix.mul_sum, Finset.sum_eq_single k]
-    · rw [smul_mul_smul_comm, conjTranspose_pairEmbedding_mul_self (hι j k)]
+    · rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+        conjTranspose_pairEmbedding_mul_self (hι j k)]
       congr 1
       rw [div_mul_div_comm, ← Complex.ofReal_pow, ← Complex.ofReal_mul, ← sq,
         mul_comm (μ j k ^ q), ← Complex.normSq_eq_conj_mul_self.symm.trans rfl]
       push_cast
       rw [Complex.star_def, ← map_pow, Complex.conj_mul', norm_pow, ← pow_mul, mul_comm q 2]
     · intro k' _ hk'
-      rw [smul_mul_smul_comm, conjTranspose_pairEmbedding_mul_copy hι hdisj k k'
-        (fun h => hk' (eq_of_heq (Sigma.mk.inj h).2).symm), smul_zero]
+      rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, conjTranspose_pairEmbedding_mul_copy hι
+        hdisj k k' (fun h => hk' (eq_of_heq (Sigma.mk.inj h).2).symm), smul_zero]
     · simp
   simp_rw [hterm, ← Finset.sum_smul, ← Complex.ofReal_sum, ← Finset.sum_div, ← copyNorm_sq,
     div_self (pow_pos hc 2).ne', Complex.ofReal_one, one_smul]
@@ -201,8 +202,8 @@ theorem conjTranspose_copyIsometry_mul_eq_zero (hι : ∀ j k, Function.Injectiv
   refine Finset.sum_eq_zero fun k _ => ?_
   rw [Matrix.mul_sum]
   refine Finset.sum_eq_zero fun k' _ => ?_
-  rw [smul_mul_smul_comm, conjTranspose_pairEmbedding_mul_copy hι hdisj k k'
-    (fun h' => h (Sigma.mk.inj h').1), smul_zero]
+  rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, conjTranspose_pairEmbedding_mul_copy hι hdisj
+    k k' (fun h' => h (Sigma.mk.inj h').1), smul_zero]
 
 /-- The physical matrix of the `q`-site blocked tensor of the direct sum, for `q ≥ 1` and blocks
 with some nonzero weight: `B = ∑ⱼ cⱼ B_j L_jᴴ`. -/
