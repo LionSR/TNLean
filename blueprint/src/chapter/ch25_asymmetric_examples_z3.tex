@@ -592,10 +592,7 @@ conjugate by one diagonal unitary built from on-site and two-site gates
          & =\sum_{k=0}^{N-1}\bigl([t_k=2]+[t_k=1][t_{k+1}=2]\bigr),
         \label{eq:asymex_z3anomalous_bridge_exponent}
     \end{align}
-    with $t_N=t_0$. Equivalently, $V_N=D^{\otimes N}\prod_kC_{k,k+1}$,
-    where $D=\operatorname{diag}(1,1,\omega)$ and the commuting two-site
-    gate $C$ multiplies $\ket{1,2}$ by $\omega$ and fixes the other basis
-    vectors. Let $U^{\omega_1}_g$ be the operators of the cocycle
+    with $t_N=t_0$. Let $U^{\omega_1}_g$ be the operators of the cocycle
     construction of Theorem~\ref{thm:asymex_z3anomalous_cocycle_family}.
     Then for every $g\in\Z_3$ and every $N>0$,
     \begin{align}
@@ -626,6 +623,10 @@ conjugate by one diagonal unitary built from on-site and two-site gates
     diagonal with entries of modulus one, hence unitary.
 \end{proof}
 
+Reading off the two terms of~(\ref{eq:asymex_z3anomalous_bridge_exponent}),
+$V_N=D^{\otimes N}\prod_kC_{k,k+1}$, where $D=\operatorname{diag}(1,1,\omega)$
+and the commuting two-site gate $C$ multiplies $\ket{1,2}$ by $\omega$ and fixes
+the other basis vectors, so $V_N$ is a circuit of depth two.
 No purely on-site diagonal gauge relates the two families. A diagonal
 unitary $\prod_k\omega^{w(t_k,t_{k+1})}$ changes the exponent of the shift
 by $\sum_k\bigl(w(t_k+1,t_{k+1}+1)-w(t_k,t_{k+1})\bigr)$. For an on-site
@@ -637,10 +638,11 @@ families is the identity $O_N(T_g)=V_N\,U^{\omega_1}_g\,V_N^\dagger$ of
 Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}, with
 $V_N=D^{\otimes N}\prod_kC_{k,k+1}$ a product of commuting diagonal gates.
 The class of Theorem~\ref{thm:asymex_z3anomalous_anomaly_class} is computed from fusion
-tensors of the family $\{T_g\}$. Assigning it to the construction for
-$\omega_1$ needs fusion tensors for the operators $U^{\omega_1}_g$ obtained
-from those of $\{T_g\}$ by this conjugation, together with the invariance of
-the class under that transport; neither is proved here.
+tensors of the family $\{T_g\}$. The construction for $\omega_1$ has fusion
+tensors of its own, and they give the same cyclic product
+(Theorem~\ref{thm:asymex_z3anomalous_cocycle_family_class}), as invariance of
+the class under the conjugation by $V_N$ would predict; that invariance is not
+proved here.
 
 \begin{theorem}[The anomaly class of the family]
     \label{thm:asymex_z3anomalous_anomaly_class}
@@ -694,7 +696,8 @@ the class under that transport; neither is proved here.
 \begin{theorem}[Orientation of the class]
     \label{thm:asymex_z3anomalous_class_orientation}
     \lean{Z3Anomalous.cyclicInvariant_cyclicCocycle_one,
-        Z3Anomalous.cyclicInvariant_omega_z3_mul_cyclicCocycle_one}
+        Z3Anomalous.cyclicInvariant_omega_z3_mul_cyclicCocycle_one,
+        eisensteinOmega_eq_exp}
     \leanok
     \uses{thm:asymex_z3anomalous_cocycle_family, thm:asymex_z3anomalous_anomaly_class}
     Let $g$ be the generator of $\Z_3$. The cocycle $\omega_1$
@@ -707,19 +710,58 @@ the class under that transport; neither is proved here.
 \begin{proof}
     \leanok
     \uses{thm:asymex_z3anomalous_anomaly_class}
-    Since $\omega_1(a,b,c)=\omega^{a\lfloor(b+c)/3\rfloor}$, only the factor
+    The cube root $\omega=(-1+i\sqrt3)/2$ is $e^{2\pi i/3}$, so
+    $\omega_1(a,b,c)=\omega^{a\lfloor(b+c)/3\rfloor}$ and only the factor
     $\omega_1(g,g^2,g)=\omega$ is nontrivial. The product for the family is
     $\omega^2$ by Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}, and
     $\omega^2\cdot\omega=1$.
 \end{proof}
 
-Both~\cite{GarreRubioSchuch2024DomainWall} and the three-cochain used here define
-the anomaly by the same move between the two fusion trees of $(g,h,k)$. The
-construction for $\omega_1$ is conjugate to the family by the circuit $V_N$
-of Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}, so, granting the
-invariance of the class under that conjugation (which is not proved here), it
-realizes the class $j=2$ of $\omega_2=\omega_1^{-1}$ in this orientation, not the class of
-$\omega_1$.
+Both~\cite{GarreRubioSchuch2024DomainWall} and~\cite{GarreRubio2023MPOSym}
+define the anomaly by the same move between the two fusion trees of $(g,h,k)$
+as the three-cochain used here. The construction of~\cite{GarreRubio2023MPOSym}
+from a cocycle $\omega$ carries $\omega^{-1}$, as that source states for its
+fusion tensors (Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle}). Built
+from $\omega_1$ it therefore realizes $\omega_2=\omega_1^{-1}$, the class of the
+family, and not $\omega_1$: the orientation is a property of the construction,
+not a discrepancy between the two definitions of the anomaly.
+
+\begin{theorem}[The construction for \texorpdfstring{$\omega_1$}{omega1} carries
+        \texorpdfstring{$\omega_2$}{omega2}]
+    \label{thm:asymex_z3anomalous_cocycle_family_class}
+    \lean{Z3Anomalous.cocycleFusionData, Z3Anomalous.cocycleFusionData_omega,
+        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_inv,
+        Z3Anomalous.cyclicInvariant_cocycleFusionData,
+        Z3Anomalous.domainWallPhase_cocycleFusionData,
+        Z3Anomalous.cocycleFamily_not_isNormalRepresentation}
+    \leanok
+    \uses{thm:asymex_group_cocycle_inverse_cocycle,
+        thm:asymex_group_cocycle_identity_not_normal,
+        thm:asymex_z3anomalous_cocycle_family,
+        thm:asymex_z3anomalous_class_orientation,
+        thm:asymex_group_cocycle_cyclic_domain_wall}
+    With the fusion tensors of
+    Definition~\ref{def:asymex_group_cocycle_fusion_tensors}, the anomaly
+    three-cochain of the construction for $\omega_1$ is $\omega_1^{-1}$,
+    which equals $\omega_2$ at every triple. Its cyclic product at the
+    generator is $\omega^2$, the product of the family for every choice of
+    fusion tensors, and its domain-wall phase at the generator is
+    $e^{2\pi i/3}$, the entry $j=2$, $a=1$ of the table
+    of~\cite{GarreRubioSchuch2024DomainWall}. The construction is not a
+    representation with normal tensors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The first claim is
+    Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle}, and
+    $\omega_j^{-1}=\omega_{(n-1)j}$ because $\omega_j$ is a power of the
+    primitive root $e^{2\pi i/n}$. The cyclic product of $\omega_1^{-1}$ is
+    the inverse of that of $\omega_1$, which is $\omega^2$ by
+    Theorem~\ref{thm:asymex_z3anomalous_class_orientation}. The domain-wall
+    phase is the table entry for $\omega_2$. The last claim is
+    Theorem~\ref{thm:asymex_group_cocycle_identity_not_normal}.
+\end{proof}
 
 \begin{corollary}[The domain-wall phase of the family]
     \label{cor:asymex_z3anomalous_domain_wall}
