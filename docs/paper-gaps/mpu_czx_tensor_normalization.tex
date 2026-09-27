@@ -6,10 +6,10 @@
 \importpaperaux{fbc25-}{2502.20257/main-tnlean}
 \title{CZX: Normalization and the Physical Z Gates}
 \author{}
-\date{2026-09-04}
+\date{2026-09-04; updated 2026-09-27}
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The 2017 contraction convention and its obstruction}
 Section II, ``Basics in Matrix Product Vectors'', of
@@ -90,9 +90,13 @@ The left-to-right pair $(a,b)$ is encoded as $2a+b$; successive pairs
 give the four-bit order used for two neighboring blocked sites.\footnote{The
     existing encodings are \leanid{MPOTensor.CZX.siteBits} and
     \leanid{MPOTensor.CZX.localBits}.}
-The formulas (\ref{eq:czx_repaired_block}) and
-(\ref{eq:czx_decorated_block}) are an informal source audit, not new
-public tensor definitions or a formal proof of their correspondence.
+The comparison (\ref{eq:czx_decorated_block}) is now checked in three
+steps: the shared tensor is the ordinary two-site block of the decorated
+one-site tensor, that one-site tensor is $(-1)^u$ times the unnormalized
+review tensor $A$, and the printed tensor is $2^{-1/2}A$.\footnote{Results:
+    \leanid{MPOTensor.CZX.tensor}, \leanid{MPOTensor.CZX.tensor_eq_blockTensor},
+    \leanid{CZXCompression.decoratedSiteTensor_eq_smul_reviewCZXTensor} and
+    \leanid{CZXCompression.printed2017Tensor_eq_smul_reviewCZXTensor}.}
 
 \section{Checked boundary and elimination plan}
 The checked witness is exactly the printed tensor
@@ -101,17 +105,25 @@ all-zero row formula and its failure to generate a matrix product
 unitary.\footnote{Witness: \leanid{MPOTensor.CZX.printed2017Tensor}.
     Results: \leanid{MPOTensor.CZX.printed2017Tensor_two_zero_row} and
     \leanid{MPOTensor.CZX.printed2017Tensor_not_isMPU}.}
-The all-length contraction (\ref{eq:czx_periodic_contraction}) and the
-comparison (\ref{eq:czx_decorated_block}) are mathematical derivations
-in this note, not additional checked correspondence theorems.
+The all-length contraction (\ref{eq:czx_periodic_contraction}) is a
+mathematical derivation in this note, not an additional checked theorem.
 
 The literal printed cross-paper tensor identity is false. The corrected
 target is the exact Z-decorated tensor
 (\ref{eq:czx_decorated_block}), with its all-length monomial formula and
-unitarity, using ordinary blocking and the stated bit ordering.\footnote{The
-    corrected target is tracked by \ghissue{7738} and its implementation
-    child \ghissue{7752}; this audit does not assert that implementation
-    is merged or that its correspondence theorem is available here.}
+unitarity, using ordinary blocking and the stated bit ordering. This
+target is formalized: its coordinates, its all-length monomial formula,
+and the unitarity of its periodic operator at every positive length are
+checked, which resolves the note.\footnote{Results:
+    \leanid{MPOTensor.CZX.tensor_apply}, \leanid{MPOTensor.CZX.mpo_tensor_apply},
+    \leanid{MPOTensor.CZX.mpo_tensor},
+    \leanid{MPOTensor.CZX.mpo_tensor_mem_unitaryGroup} and
+    \leanid{MPOTensor.CZX.tensor_isMPU}; the work was tracked by
+    \ghissue{7738} and \ghissue{7752}, both closed. The one-site
+    representative of \cite{GarreRubioSchuch2024DomainWall}, which is the
+    same one-site tensor with its two bonds exchanged, is formalized with its
+    operator, fusion and normality results through
+    \leanid{CZXCompression.czxDecoratedTensor_eq_transpose}.}
 Any connection to the 2017 gate pair
 $u=CZ(X\otimes X), v=CZ$, where $CZ=\operatorname{diag}(1,1,1,-1)$,
 of \cite{Cirac2017MPU} must explicitly specify the normalization and
@@ -174,6 +186,37 @@ choice; the formalization follows the printed matrices.\footnote{Source
     2586--2591; \path{References/1106.4752/source/dDSPTmodel.tex},
     line 287. Results: \leanid{CZXCompression.mpo_reviewCZXTensor_apply} and
     \leanid{CZXCompression.mpo_reviewCZXTensor_eq_smul}.}
+
+\section{The review's two statements on the square}
+The main text of \cite{Cirac2021Matrix}, in the discussion of
+two-dimensional symmetry-protected phases, writes the CZX symmetry as
+$O_Z=\bigotimes_i CZ_{i,i+1}\otimes\bigotimes_i X_i$ and states that the
+square of $O_Z$ ``has a 1-dimensional invariant subspace equal to
+$O_1=I$''.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, line 1472.}
+Appendix A carries the reduction out: after the projectors $P$ and $Q$
+the one-dimensional block is the bond-one tensor $B^{ij}=(-1)\delta_{ij}$,
+which ``globally means $O(A)^2=(-1)^NI$''.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2596--2601.}
+
+The two statements differ by the sign $(-1)^N$. The bond-one tensor
+$(-1)\delta_{ij}$ generates $(-1)^NI$, which is the identity operator
+$O_1$ exactly when $N$ is even. Both gate orders of $O_Z$ square to
+$(-1)^NI$, by the commutation relation of the previous section, so the
+discrepancy does not come from the ambiguous product in the main text.
+It is a normalization of the tensor: multiplying the CZX tensor by a
+scalar $c$ multiplies its square by $c^{2N}$, so with $c^2=-1$ (for
+instance $c=i$) the reduced block is $\delta_{ij}$ and the square is
+exactly $O_1=I$ at every length. The main-text sentence identifies the
+block with $O_1$ up to this length-dependent phase, the freedom usually
+allowed for matrix product operator representations of a group; read
+literally at odd $N$, with the tensor of Appendix A, it is false. This
+note classifies the discrepancy as a clarification, not a source error.
+The formalization follows the appendix: for the printed matrices the
+square is $(-1)^NI$ at every positive length.\footnote{Results:
+    \leanid{CZXCompression.reviewQ_conj_reviewBlock},
+    \leanid{CZXCompression.mpo_mulTensor_reviewCZXTensor} and
+    \leanid{CZXCompression.mpo_reviewCZXTensor_mul_self}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

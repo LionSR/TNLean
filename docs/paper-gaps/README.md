@@ -72,13 +72,16 @@ For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
-  tensors and physical Z gates of the 2025 diagram. The shared-tensor
-  correspondence remains open under #7738. The note also records that the
+  tensors and physical Z gates of the 2025 diagram. The corrected
+  Z-decorated tensor is formalized with its all-length unitarity, which
+  resolves the note. The note also records that the
   bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
   the normalized tensor, while the matrices printed there are its unnormalized
   rescaling, for which the claims of that passage hold, and that the printed
   matrices give the gate order opposite to the verbal description, a global
-  sign `(-1)^N`.
+  sign `(-1)^N`, and that the review's main text calls the one-dimensional
+  block of the square the identity where the appendix obtains `(-1)^N I`, a
+  difference by the same sign that a rescaling of the tensor by `i` removes.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
