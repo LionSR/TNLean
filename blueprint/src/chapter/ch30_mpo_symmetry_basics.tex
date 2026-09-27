@@ -67,6 +67,50 @@ $T_a\cdot A$ denotes the matrix product state tensor
 $(T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j$, whose periodic vector is
 $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 
+\begin{center}
+    % Formula: (\ref{eq:mposym_periodic_operator}), the matrix element
+    % \bra{i_1,\ldots,i_N}O_a^{(N)}\ket{j_1,\ldots,j_N}
+    % =\tr(T_a^{i_1j_1}\cdots T_a^{i_Nj_N}).
+    % Ink-to-index map: each box is one copy of T_a; its upper leg is the
+    % output index i_l and its lower leg the input index j_l; the elision
+    % cell stands for the omitted sites.
+    % Contraction set: the horizontal virtual bonds, closed by the periodic
+    % return, which is the trace.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3).
+    \tenkzkernel
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{T_a} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical:$j_N$}]{T_a}
+    \end{tenkz}
+\end{center}
+
+\begin{center}
+    % Formula: the stacked tensor (T_aT_b)^{ij}=\sum_mT_a^{im}\otimes T_b^{mj}
+    % (left) and the tensor (T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j (right),
+    % as defined in the paragraph above.
+    % Ink-to-index map: left, T_a above T_b with open physical legs i and j;
+    % right, T_a above the state tensor A (dot) with open physical leg i.
+    % Contraction set: the vertical leg between the two rows, the summed index
+    % m (left) or j (right). The two virtual legs on each side are the factors
+    % of the product bond space.
+    % Boundary signature: left (virtual-west=2 | virtual-east=2 |
+    % physical-up=1 | physical-down=1); right (virtual-west=2 |
+    % virtual-east=2 | physical-up=1 | physical-down=0).
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{T_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{T_b}
+    \end{tenkz}
+    \qquad\qquad
+    \begin{tenkz}[rows={op,ket}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$}]{T_a} \\
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A}
+    \end{tenkz}
+\end{center}
+
 %% ---------------------------------------------------------
 \section{Invertible symmetries}%
 \label{sec:mposym_invertible}
@@ -175,6 +219,38 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     %   eq. fusiontensorG), 658 and 842 (on-site operators).
 \end{theorem}
 
+\begin{center}
+    % Formula: the closed-fusion hypothesis
+    % (T_gT_h)^{ij}=F^>_{g,h}\,T_{gh}^{ij}\,F^<_{g,h} of this theorem.
+    % Ink-to-index map: left, T_g above T_h with output i and input j;
+    % right, the embedding F^>_{g,h} (two legs to the west, one leg to the
+    % east), the tensor T_{gh}, and the compression F^<_{g,h} (one leg to the
+    % west, two legs to the east).
+    % Contraction set: left, the vertical middle index; right, the two bonds
+    % of the bond space of T_{gh}.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 |
+    % physical-up=1 | physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{T_g} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{T_h}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fr, skin=pill]{F_{g,h}^{>}}
+        \tn[at=(1,2), name=T, skin=mpo, size=l,
+            ports={90:physical:$i$, 270:physical:$j$, 180:virtual, 0:virtual}]{T_{gh}}
+        \tn[at=(2,2), skin=none]{}
+        \tnfuse[at=(1,3), name=Fl, skin=pill]{F_{g,h}^{<}}
+        \tnwire{open w}{Fr.180@1}
+        \tnwire{open w}{Fr.180@2}
+        \tnwire{Fr.0}{T.180}
+        \tnwire{T.0}{Fl.180}
+        \tnwire{Fl.0@1}{open e}
+        \tnwire{Fl.0@2}{open e}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}\leanok
     \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
     The tensor $T_e$ is injective with $\tr T_e^{ij}=\delta_{ij}$ and
@@ -226,6 +302,38 @@ periodic boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     \cite{Bultinck2017Anyons}.
     % Source anchor: arXiv:2203.12563, lines 361--362.
 \end{definition}
+
+\begin{center}
+    % Formula: (\ref{eq:mpo_fusion_algebra}), written through the matrix
+    % elements \bra{i_1,\ldots,i_N}\,\cdot\,\ket{j_1,\ldots,j_N}.
+    % Ink-to-index map: left, the stacked tensor T_aT_b at every site, with
+    % output legs i_l on T_a and input legs j_l on T_b; right, T_c with the
+    % same open legs.
+    % Contraction set: left, the vertical legs between the rows (the summed
+    % middle indices, which compose O_a^{(N)} with O_b^{(N)}) and the virtual
+    % bonds of each row, each row closed periodically; right, the virtual
+    % bonds of T_c closed periodically.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{T_a} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical}]{T_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{T_b} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{T_b} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_N$}]{T_b}
+    \end{tenkz}
+    \quad $=\;\displaystyle\sum_{c\in I}N_{ab}^c$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{T_c} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{T_c} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical:$j_N$}]{T_c}
+    \end{tenkz}
+\end{center}
 
 \begin{definition}[Unit and invertible labels]%
     \label{def:fusion_unit_invertible}
@@ -498,6 +606,37 @@ relation between word traces has nonnegative integer coefficients.
     The coefficients do not depend on $N$.
     % Source anchor: arXiv:2203.12563, lines 567--568 (restated at line 1801).
 \end{definition}
+
+\begin{center}
+    % Formula: (\ref{eq:mpo_symmetric_family}), the component of both
+    % sides on \ket{i_1,\ldots,i_N}.
+    % Ink-to-index map: left, T_a above A_x at every site, the tensor
+    % T_a\cdot A_x; right, A_y. The open legs are the physical indices i_l.
+    % Contraction set: left, the vertical legs joining the input of T_a to
+    % the physical leg of A_x, and the virtual bonds of both rows, each row
+    % closed periodically; right, the virtual bonds of A_y closed
+    % periodically.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$}]{T_a} &
+        \tn[skin=mpo, ports={90:physical:$i_2$}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$}]{T_a} \\
+        \tn[label pos=nw, ports={180:virtual, 0:virtual}]{A_x} &
+        \tn[label pos=nw, ports={180:virtual, 0:virtual}]{A_x} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=nw, ports={180:virtual, 0:virtual}]{A_x}
+    \end{tenkz}
+    \quad $=\;\displaystyle\sum_{y\in K}M_{a,x}^y$ \quad
+    \begin{tenkz}[rows={ket}, cols=4, boundary=periodic]
+        \tn[label pos=nw, ports={90:physical:$i_1$}]{A_y} &
+        \tn[label pos=nw, ports={90:physical:$i_2$}]{A_y} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=nw, ports={90:physical:$i_N$}]{A_y}
+    \end{tenkz}
+\end{center}
 
 \begin{definition}[Fusion character and nonnegative integer representation]%
     \label{def:fusion_character_nimrep}
@@ -1020,9 +1159,62 @@ $N$-th power of one phase.
         X_{ab,\mu}^{c+}(T_aT_b)^{ik} & =T_c^{ik}\,X_{ab,\mu}^{c+}
         \label{eq:mposym_zipper}
     \end{align}
-    for all physical indices $i,k$ \cite{Bultinck2017Anyons}. A fusion
-    tensor can then be slid through the product of two operators one site at
-    a time. If in addition the product is reconstructed on the span of the zipper
+    for all physical indices $i,k$ \cite{Bultinck2017Anyons}.
+
+    \begin{center}
+        % Formula: (\ref{eq:mposym_zipper}); left pair
+        % (T_aT_b)^{ik}X_{ab,\mu}^c=X_{ab,\mu}^cT_c^{ik}, right pair
+        % X_{ab,\mu}^{c+}(T_aT_b)^{ik}=T_c^{ik}X_{ab,\mu}^{c+}.
+        % Ink-to-index map: T_a above T_b is the stacked tensor with physical
+        % legs i (output) and k (input); the tall box X_{ab,\mu}^c has its two
+        % product-bond legs on the west and its one bond leg of T_c on the east,
+        % and X_{ab,\mu}^{c+} the reverse.
+        % Contraction set: the vertical middle index of the stacked tensor and
+        % the bonds between the stacked tensor or T_c and the fusion map.
+        % Boundary signature: left pair (virtual-west=2 | virtual-east=1 |
+        % physical-up=1 | physical-down=1); right pair (virtual-west=1 |
+        % virtual-east=2 | physical-up=1 | physical-down=1); both sides of each
+        % pair agree.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op}, cols=2, west=open]
+            \tn[at=(1,1), skin=mpo, ports={90:physical:$i$, 270:physical}]{T_a}
+            \tn[at=(2,1), skin=mpo, ports={90:physical, 270:physical:$k$}]{T_b}
+            \tnfuse[at=(1,2), name=X, skin=pill]{X_{ab,\mu}^c}
+            \tnwire{X.0}{open e}
+        \end{tenkz}
+        \quad$=$\quad
+        \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+            \tnfuse[at=(1,1), name=X, skin=pill]{X_{ab,\mu}^c}
+            \tn[at=(1,2), skin=mpo, name=T,
+                ports={90:physical:$i$, 270:physical:$k$, 180:virtual, 0:virtual}]{T_c}
+            \tn[at=(2,2), skin=none]{}
+            \tnwire{open w}{X.180@1}
+            \tnwire{open w}{X.180@2}
+            \tnwire{X.0}{T.180}
+            \tnwire{T.0}{open e}
+        \end{tenkz}
+        \qquad\qquad
+        \begin{tenkz}[rows={op,op}, cols=2, east=open]
+            \tnfuse[at=(1,1), name=Y, skin=pill]{X_{ab,\mu}^{c+}}
+            \tn[at=(1,2), skin=mpo, ports={90:physical:$i$, 270:physical}]{T_a}
+            \tn[at=(2,2), skin=mpo, ports={90:physical, 270:physical:$k$}]{T_b}
+            \tnwire{open w}{Y.180}
+        \end{tenkz}
+        \quad$=$\quad
+        \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+            \tn[at=(1,1), skin=mpo, name=T,
+                ports={90:physical:$i$, 270:physical:$k$, 180:virtual, 0:virtual}]{T_c}
+            \tn[at=(2,1), skin=none]{}
+            \tnfuse[at=(1,2), name=Y, skin=pill]{X_{ab,\mu}^{c+}}
+            \tnwire{open w}{T.180}
+            \tnwire{T.0}{Y.180}
+            \tnwire{Y.0@1}{open e}
+            \tnwire{Y.0@2}{open e}
+        \end{tenkz}
+    \end{center}
+
+    A fusion tensor can then be slid through the product of two operators
+    one site at a time. If in addition the product is reconstructed on the span of the zipper
     maps, $(T_aT_b)^{ik}=\sum_{c,\mu}X_{ab,\mu}^cT_c^{ik}X_{ab,\mu}^{c+}$,
     as required in Definition~\ref{def:mpdo_complete_zipper_fusion_family},
     then closing the chain gives (\ref{eq:mpo_fusion_algebra}) at every

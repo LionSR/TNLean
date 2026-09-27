@@ -82,6 +82,41 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
     %   arXiv:1511.08090, AnyonsPEPS.tex lines 237--251.
 \end{definition}
 
+\begin{center}
+    % Formula: (\ref{eq:mpoalg_fusion_reduction}),
+    % V_{ab}^{c,\mu}(T_aT_b)^{\mathbf w}W_{ab}^{c,\mu}=T_c^{\mathbf w}, drawn
+    % for a word \mathbf w=(i_1,j_1)\cdots(i_n,j_n) in the pair alphabet.
+    % Ink-to-index map: the tall box on the west is the compression
+    % V_{ab}^{c,\mu}, with its one bond leg of T_c open to the west; the tall
+    % box on the east is the embedding W_{ab}^{c,\mu}, with its one bond leg
+    % of T_c open to the east. Between them each site is T_a above T_b, with
+    % open physical legs i_l and j_l; the elision cell stands for the omitted
+    % letters.
+    % Contraction set: the vertical middle index at each site, the virtual
+    % bonds of both rows, and the two product-bond legs of each fusion map.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=5]
+        \tnfuse[at=(1,1), name=V, skin=pill]{V_{ab}^{c,\mu}}
+        \tn[at=(1,2), skin=mpo, ports={90:physical:$i_1$, 270:physical}]{T_a}
+        \tn[at=(2,2), skin=mpo, ports={90:physical, 270:physical:$j_1$}]{T_b}
+        \tn[at=(1,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), skin=mpo, ports={90:physical:$i_n$, 270:physical}]{T_a}
+        \tn[at=(2,4), skin=mpo, ports={90:physical, 270:physical:$j_n$}]{T_b}
+        \tnfuse[at=(1,5), name=W, skin=pill]{W_{ab}^{c,\mu}}
+        \tnwire{open w}{V.180}
+        \tnwire{W.0}{open e}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={op}, cols=3, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{T_c} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_n$, 270:physical:$j_n$}]{T_c}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Existence of fusion tensors]%
     \label{thm:mpoalg_fusion_tensors_exist}
     % Formalized as cor:asym_fusion_action_multiplicity and
@@ -132,6 +167,39 @@ normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
     % Source anchor: arXiv:2203.12563, lines 459--490 (action tensors and
     %   orthogonality) and lines 1062--1091 (periodic-boundary form).
 \end{definition}
+
+\begin{center}
+    % Formula: V_{ax}^{y,i}(T_a\cdot A_x)^wW_{ax}^{y,i}=A_y^w, the reduction
+    % property of this definition, drawn for a word w=s_1\cdots s_n.
+    % Ink-to-index map: the tall boxes are the compression V_{ax}^{y,i}
+    % (west) and the embedding W_{ax}^{y,i} (east), each with one bond leg of
+    % A_y open to the outside; between them each site is T_a above A_x (dot),
+    % with open physical leg s_l.
+    % Contraction set: the vertical leg joining the input of T_a to the
+    % physical leg of A_x, the virtual bonds of both rows, and the two
+    % product-bond legs of each map.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=5]
+        \tnfuse[at=(1,1), name=V, skin=pill]{V_{ax}^{y,i}}
+        \tn[at=(1,2), skin=mpo, ports={90:physical:$s_1$}]{T_a}
+        \tn[at=(2,2), label pos=s, ports={180:virtual, 0:virtual}]{A_x}
+        \tn[at=(1,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), skin=mpo, ports={90:physical:$s_n$}]{T_a}
+        \tn[at=(2,4), label pos=s, ports={180:virtual, 0:virtual}]{A_x}
+        \tnfuse[at=(1,5), name=W, skin=pill]{W_{ax}^{y,i}}
+        \tnwire{open w}{V.180}
+        \tnwire{W.0}{open e}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={ket}, cols=3, west=open, east=open]
+        \tn[label pos=nw, ports={90:physical:$s_1$}]{A_y} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=nw, ports={90:physical:$s_n$}]{A_y}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Existence of action tensors]%
     \label{thm:mpoalg_action_tensors_exist}
@@ -239,6 +307,47 @@ zipper condition (Remark~\ref{rem:mpoalg_nonunique}).
     % The F-matrix side is thm:mpdo_complete_zipper_printed_fmove (ch21); the
     % F-matrix gauge statement is added by PR #7985.
 \end{theorem}
+
+\begin{center}
+    % Formula: (\ref{eq:mpoalg_zipper_decomposition}),
+    % (T_aT_b)^{\mathbf w}=\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{\mathbf w}V_{ab}^{c,\mu},
+    % drawn for a word \mathbf w=(i_1,j_1)\cdots(i_n,j_n).
+    % Ink-to-index map: left, T_a above T_b at every site with open physical
+    % legs i_l and j_l; right, the embedding W_{ab}^{c,\mu} (two legs open to
+    % the west), the word of T_c, and the compression V_{ab}^{c,\mu} (two legs
+    % open to the east).
+    % Contraction set: left, the vertical middle indices and the virtual
+    % bonds of both rows; right, the virtual bonds of T_c, including those
+    % joining it to the two fusion maps.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 |
+    % physical-up=2 | physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=3, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_n$, 270:physical}]{T_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{T_b} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_n$}]{T_b}
+    \end{tenkz}
+    \quad$=\;\displaystyle\sum_{c,\mu}$\quad
+    \begin{tenkz}[rows={op,op}, cols=5, bonds=none]
+        \tnfuse[at=(1,1), name=W, skin=pill]{W_{ab}^{c,\mu}}
+        \tn[at=(1,2), name=t1, skin=mpo,
+            ports={90:physical:$i_1$, 270:physical:$j_1$, 180:virtual, 0:virtual}]{T_c}
+        \tn[at=(1,3), name=td, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=tn, skin=mpo,
+            ports={90:physical:$i_n$, 270:physical:$j_n$, 180:virtual, 0:virtual}]{T_c}
+        \tnfuse[at=(1,5), name=V, skin=pill]{V_{ab}^{c,\mu}}
+        \tn[at=(2,2), skin=none]{} \tn[at=(2,3), skin=none]{} \tn[at=(2,4), skin=none]{}
+        \tnwire{open w}{W.180@1}
+        \tnwire{open w}{W.180@2}
+        \tnwire{W.0}{t1.180} \tnwire{t1.0}{td.180} \tnwire{td.0}{tn.180}
+        \tnwire{tn.0}{V.180}
+        \tnwire{V.0@1}{open e}
+        \tnwire{V.0@2}{open e}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}
     \uses{def:normal, thm:asym_zipper_uniqueness}
@@ -460,6 +569,81 @@ with the corresponding composite embeddings.
     % Source anchor: arXiv:2203.12563, lines 1028--1060 (periodic-boundary
     %   definition, words of length at least ell) and lines 664--676.
 \end{definition}
+
+\begin{center}
+    % Formula: (\ref{eq:mpoalg_associator}),
+    % V^{(gh)k}(T_gT_hT_k)^{\mathbf w}=\omega(g,h,k)\,V^{g(hk)}
+    % (T_gT_hT_k)^{\mathbf w}, with the composite compressions of
+    % (\ref{eq:mpoalg_composite_compressions}), drawn for a word
+    % \mathbf w=(i_1,j_1)\cdots(i_n,j_n).
+    % Ink-to-index map: each site is T_g above T_h above T_k, with output
+    % i_l on T_g and input j_l on T_k. Left, V_{g,h} fuses the bonds of T_g
+    % and T_h, and V_{gh,k} fuses the result with the bond of T_k; right,
+    % V_{h,k} fuses the bonds of T_h and T_k, and V_{g,hk} fuses the bond of
+    % T_g with the result. The long horizontal segments are single bonds
+    % passing a column without a tensor.
+    % Contraction set: the two vertical middle indices at each site, the
+    % virtual bonds of the three rows, and the bonds between the fusion maps.
+    % Boundary signature: (virtual-west=1 | virtual-east=3 |
+    % physical-up=2 | physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,op}, cols=5, bonds=none]
+        \tn[at=(1,1), name=O, skin=pill, wires=3,
+            ports={180@1:virtual, 0@1:virtual, 0@3:virtual}]{V_{gh,k}}
+        \tn[at=(1,2), name=I, skin=pill, wires=2,
+            ports={180@1:virtual, 0@1:virtual, 0@2:virtual}]{V_{g,h}}
+        \tn[at=(1,3), name=g1, skin=mpo, ports={90:physical:$i_1$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,3), name=h1, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,3), name=k1, skin=mpo, ports={90:physical, 270:physical:$j_1$, 180:virtual, 0:virtual}]{T_k}
+        \tn[at=(1,4), name=gd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=hd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(3,4), name=kd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,5), name=gn, skin=mpo, ports={90:physical:$i_n$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,5), name=hn, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,5), name=kn, skin=mpo, ports={90:physical, 270:physical:$j_n$, 180:virtual, 0:virtual}]{T_k}
+        \tnwire{open w}{O.180@1}
+        \tnwire{O.0@1}{I.180@1}
+        \tn[at=(3,2), name=J, skin=none, ports={180:virtual, 0:virtual}]{}
+        \tnwire{O.0@3}{J.180} \tnwire{J.0}{k1.180}
+        \tnwire{I.0@1}{g1.180}
+        \tnwire{I.0@2}{h1.180}
+        \tnwire{g1.270}{h1.90} \tnwire{h1.270}{k1.90}
+        \tnwire{gn.270}{hn.90} \tnwire{hn.270}{kn.90}
+        \tnwire{g1.0}{gd.180} \tnwire{gd.0}{gn.180}
+        \tnwire{h1.0}{hd.180} \tnwire{hd.0}{hn.180}
+        \tnwire{k1.0}{kd.180} \tnwire{kd.0}{kn.180}
+        \tnwire{gn.0}{open e} \tnwire{hn.0}{open e} \tnwire{kn.0}{open e}
+    \end{tenkz}
+    \quad$=\omega(g,h,k)$\quad
+    \begin{tenkz}[rows={op,op,op}, cols=5, bonds=none]
+        \tn[at=(1,1), name=O, skin=pill, wires=2,
+            ports={180@1:virtual, 0@1:virtual, 0@2:virtual}]{V_{g,hk}}
+        \tn[at=(3,1), skin=none]{}
+        \tn[at=(1,2), name=J, skin=none, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,2), name=I, skin=pill, wires=2,
+            ports={180@1:virtual, 0@1:virtual, 0@2:virtual}]{V_{h,k}}
+        \tn[at=(1,3), name=g1, skin=mpo, ports={90:physical:$i_1$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,3), name=h1, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,3), name=k1, skin=mpo, ports={90:physical, 270:physical:$j_1$, 180:virtual, 0:virtual}]{T_k}
+        \tn[at=(1,4), name=gd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=hd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(3,4), name=kd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,5), name=gn, skin=mpo, ports={90:physical:$i_n$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,5), name=hn, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,5), name=kn, skin=mpo, ports={90:physical, 270:physical:$j_n$, 180:virtual, 0:virtual}]{T_k}
+        \tnwire{open w}{O.180@1}
+        \tnwire{O.0@1}{J.180} \tnwire{J.0}{g1.180}
+        \tnwire{O.0@2}{I.180@1}
+        \tnwire{I.0@1}{h1.180}
+        \tnwire{I.0@2}{k1.180}
+        \tnwire{g1.270}{h1.90} \tnwire{h1.270}{k1.90}
+        \tnwire{gn.270}{hn.90} \tnwire{hn.270}{kn.90}
+        \tnwire{g1.0}{gd.180} \tnwire{gd.0}{gn.180}
+        \tnwire{h1.0}{hd.180} \tnwire{hd.0}{hn.180}
+        \tnwire{k1.0}{kd.180} \tnwire{kd.0}{kn.180}
+        \tnwire{gn.0}{open e} \tnwire{hn.0}{open e} \tnwire{kn.0}{open e}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[The associator is a three-cocycle]%
     \label{thm:mpoalg_associator_cocycle}
