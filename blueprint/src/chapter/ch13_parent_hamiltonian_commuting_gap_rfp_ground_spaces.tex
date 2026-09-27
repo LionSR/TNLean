@@ -326,17 +326,19 @@
     every chain length $N>2$ the MPS vector $V^{(N)}(A)$ satisfies the
     commutation and zero-energy equations for nearest-neighbor local terms:
     \begin{align}
-        h_i h_j        & =h_j h_i, \notag \\
-        h_i V^{(N)}(A) & =0. \notag
+        h_i h_j        & =h_j h_i,
+        \label{eq:nncph_terms_commute} \\
+        h_i V^{(N)}(A) & =0.
+        \label{eq:nncph_terms_annihilate}
     \end{align}
-    The zero-energy equation is the parent-Hamiltonian
+    The zero-energy equation (\ref{eq:nncph_terms_annihilate}) is the parent-Hamiltonian
     frustration-freeness statement.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:rfp_implies_nncph, lem:parent_hamiltonian_ff}
-    The first equation is Theorem~\ref{thm:rfp_implies_nncph}. The second is
+    Commutation (\ref{eq:nncph_terms_commute}) is Theorem~\ref{thm:rfp_implies_nncph}. Annihilation (\ref{eq:nncph_terms_annihilate}) is
     Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$.
 \end{proof}
 
@@ -395,9 +397,9 @@
     \begin{align}
         L_jR_j & =R_jL_j, \notag \\
         L_jR_k & =0=R_jL_k
-        \qquad (j\ne k), \notag
+        \label{eq:ph_rfp_projector_orthog_diff}
     \end{align}
-    where the latter identities follow from the shared one-site factor
+    for $j\ne k$, where (\ref{eq:ph_rfp_projector_orthog_diff}) follows from the shared one-site factor
     $E_j^*E_k=0$ for the canonical summand inclusions $E_j$. Summing over the
     sectors shows that the two adjacent placements of $Q$ commute.
 

@@ -210,6 +210,101 @@ complement of $t\in\{0,1\}^N$ and $q(s)=\sum_is_is_{i+1}$.
     $(-1)^{q(u)+\sum_iu_i}$ after reindexing the second factor.
 \end{proof}
 
+\subsubsection{Hamiltonians symmetric under the CZX operators}
+
+Write $X_j$ and $Z_j$ for the Pauli operators on qubit $j$ of a periodic
+chain of $N\geq2$ qubits, with sites taken modulo $N$, and
+$K_j=Z_{j-1}X_jZ_{j+1}$. The source records the Hamiltonian
+$H_{\mathrm R}(\mu)=\sum_iCZ_{i,i+2}X_{i+1}-\mu\sum_iZ_iZ_{i+1}$ of Roose
+et al.\ as invariant under the operator
+$U=\prod_iCZ_{i,i+1}Z_i\prod_iX_i$ of
+Theorem~\ref{thm:asymex_group_cocycle_z2}~\cite{GarreRubio2023MPOSym}. The
+review states that the cluster Hamiltonian in a critical transverse field
+commutes with the operator of the nontrivial three-cocycle, which it writes,
+as the virtual symmetry of the CZX state, as
+$O_Z=\prod_iCZ_{i,i+1}\prod_iX_i$, without the factors
+$Z_i$~\cite{Cirac2021Matrix}. Let
+$H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
+
+\begin{definition}[Pauli terms and the two Hamiltonians]%
+    \label{def:asymex_group_cocycle_z2_hamiltonians}
+    \lean{MPOTensor.GroupCocycle.flipAt, MPOTensor.GroupCocycle.flipAt_apply,
+        MPOTensor.GroupCocycle.spinFlip_mul_flipAt, MPOTensor.GroupCocycle.pauliXAt,
+        MPOTensor.GroupCocycle.clusterTerm, MPOTensor.GroupCocycle.czXTerm,
+        MPOTensor.GroupCocycle.zzTerm, MPOTensor.GroupCocycle.clusterIsingHamiltonian,
+        MPOTensor.GroupCocycle.rooseHamiltonian}
+    \leanok
+    The operators $X_j$, $K_j$, $CZ_{i,i+2}X_{i+1}$ and $Z_iZ_{i+1}$ are
+    monomial in the computational basis: the first three flip one bit, with
+    the phases $1$, $(-1)^{t_{j-1}+t_{j+1}}$ and $(-1)^{t_it_{i+2}}$ on the
+    input $t$, and the last is diagonal with the phase
+    $(-1)^{t_i+t_{i+1}}$. The Hamiltonians are $H(\lambda)$ and
+    $H_{\mathrm R}(\mu)$ above.
+\end{definition}
+
+\begin{theorem}[Hamiltonians invariant under the CZX operators]%
+    \label{thm:asymex_group_cocycle_z2_hamiltonians}
+    \lean{MPOTensor.GroupCocycle.mpo_czxTensor_mul_pauliXAt,
+        MPOTensor.GroupCocycle.mpo_czxTensor_mul_clusterTerm,
+        MPOTensor.GroupCocycle.mpo_czxTensor_conj_clusterIsingHamiltonian,
+        MPOTensor.GroupCocycle.mpo_czxTensor_conj_clusterIsingHamiltonian_one,
+        MPOTensor.GroupCocycle.czxDecorated_mul_pauliXAt,
+        MPOTensor.GroupCocycle.czxDecorated_mul_clusterTerm,
+        MPOTensor.GroupCocycle.czxDecorated_phase_flipAt,
+        MPOTensor.GroupCocycle.czxDecorated_mul_czXTerm,
+        MPOTensor.GroupCocycle.czxDecorated_mul_zzTerm,
+        MPOTensor.GroupCocycle.czxDecorated_mul_rooseHamiltonian,
+        MPOTensor.GroupCocycle.czxDecorated_mul_clusterIsingHamiltonian,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_eq_smul,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_neg_one,
+        MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_one}
+    \leanok
+    \uses{thm:asymex_group_cocycle_z2, def:asymex_czx_tensors,
+        def:asymex_group_cocycle_z2_hamiltonians}
+    On a periodic chain of $N\geq2$ qubits the following hold.
+    \begin{enumerate}
+        \item $O_ZX_jO_Z^\dagger=K_j$ and $O_ZK_jO_Z^\dagger=X_j$, so
+              $O_ZH(\lambda)O_Z^\dagger=-\sum_jX_j-\lambda\sum_jK_j$, and
+              $O_Z$ commutes with $H(1)$.
+        \item $UX_jU^\dagger=-K_j$ and $UK_jU^\dagger=-X_j$, so
+              $UH(\lambda)U^\dagger=\lambda\sum_jK_j+\sum_jX_j$, which is
+              $-\lambda H(\lambda^{-1})$ for $\lambda\neq0$. In particular $U$
+              commutes with $H(-1)$, while $UH(1)U^\dagger=-H(1)$.
+        \item $U$ commutes with $H_{\mathrm R}(\mu)$ for every $\mu$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_kernel, thm:asymex_czx_unitarity,
+        thm:mpug_monomial_matrix_laws}
+    All operators are monomial in the computational basis. The periodic
+    operator of the undecorated CZX tensor is $O_Z$ up to the global sign
+    $(-1)^N$ of its gate order~\cite{gap:mpu_czx_tensor_normalization},
+    which cancels in every conjugation. The operator
+    $O_Z$ flips every bit of the input $t$ and multiplies by $(-1)^{q(t)}$,
+    and $U$ multiplies instead by $(-1)^{q(\bar t)+\sum_i\bar t_i}$.
+    Flipping bit $j$ of $t$ changes $q(t)$ by $t_{j-1}+t_{j+1}$ and
+    $\sum_i\bar t_i$ by one, modulo two. Since $X_j$, $K_j$ and
+    $CZ_{i,i+2}X_{i+1}$ flip one bit and $O_Z$, $U$ flip all bits, the two
+    products in each relation have the same permutation, and the phases
+    agree by this parity count together with
+    $(-1)^{\bar a+\bar b}=(-1)^{a+b}$ and
+    $(-1)^{\bar a\bar b}=-(-1)^{a+b+ab}$ for bits $a,b$. The operators
+    $Z_iZ_{i+1}$ are diagonal with a phase invariant under flipping all bits.
+    Summing the relations over the sites and using unitarity gives the
+    statements about the Hamiltonians.
+\end{proof}
+
+For $\lambda\neq0$ the conjugate in item~1 is
+$-\sum_jX_j-\lambda\sum_jK_j=\lambda H(\lambda^{-1})$, so $O_Z$ exchanges
+$H(\lambda)$ with a multiple of $H(\lambda^{-1})$.
+
+The review prints no formula for the cluster Hamiltonian in a critical field.
+The factors $Z_i$ of $U$ reverse the sign of the transverse field at the
+symmetric point: $O_Z$ fixes $H(1)$ and $U$ fixes $H(-1)$.
+
 \subsection{The cyclic groups}
 
 For $n\geq1$ and $j\in\N$, Garre-Rubio and
@@ -281,6 +376,98 @@ labelling the cohomology classes.
     Theorems~\ref{thm:asymex_group_cocycle_mul},
     \ref{thm:asymex_group_cocycle_one}
     and~\ref{thm:asymex_group_cocycle_unitary}.
+\end{proof}
+
+Garre-Rubio and Schuch~\cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}
+show that interchanging the domain walls created by a symmetry-breaking
+element $g$ of order $o(g)$ multiplies the state by the phase
+$\prod_{k=1}^{o(g)}\omega^{-1}(g,g^k,g)$. Since $g^{o(g)}=e$ this phase is
+the inverse of the cyclic invariant $I_{g,o(g)}(\omega)$ of
+Definition~\ref{def:mpug_cyclic_invariant}, so it depends only on the
+class of $\omega$.
+
+\begin{definition}[The domain-wall phase]
+    \label{def:asymex_group_cocycle_domain_wall_phase}
+    \lean{TNLean.Algebra.ScalarThreeCochain.domainWallPhase,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant}
+    \leanok
+    \uses{def:mpug_cyclic_invariant}
+    For a scalar three-cochain $\omega$ of a group $G$ and $g\in G$ of order
+    $o(g)$, set
+    \begin{align}
+        P_g(\omega) & =\prod_{k=1}^{o(g)}\omega(g,g^k,g)^{-1}
+        =I_{g,o(g)}(\omega)^{-1}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Gauge invariance of the domain-wall phase]
+    \label{thm:asymex_group_cocycle_domain_wall_phase_gauge}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.domainWallPhase_eq}
+    \leanok
+    \uses{def:asymex_group_cocycle_domain_wall_phase}
+    Cohomologous three-cochains have the same phase $P_g$ for every $g\in G$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpug_cyclic_invariant_gauge}
+    Since $P_g(\omega)=I_{g,o(g)}(\omega)^{-1}$, this is the gauge invariance
+    of the cyclic invariant in
+    Theorem~\ref{thm:mpug_cyclic_invariant_gauge}.
+\end{proof}
+
+\begin{theorem}[Domain-wall phases of the cyclic cocycles]
+    \label{thm:asymex_group_cocycle_cyclic_domain_wall}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_cyclicCocycle,
+        TNLean.Algebra.ScalarThreeCochain.val_toAdd_pow,
+        TNLean.Algebra.ScalarThreeCochain.sum_carry,
+        TNLean.Algebra.ScalarThreeCochain.orderOf_eq_div_gcd,
+        TNLean.Algebra.ScalarThreeCochain.orderOf_mul_val,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_cyclicCocycle_one,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp_sum,
+        TNLean.Algebra.ScalarThreeCochain.sum_carry_orderOf,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_three,
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_four,
+        TNLean.Algebra.ScalarThreeCochain.not_cohomologousTo_cyclicCocycle}
+    \leanok
+    \uses{def:asymex_group_cocycle_domain_wall_phase,
+        thm:asymex_group_cocycle_cyclic}
+    Let $n\geq1$, $j\in\N$ and $a\in\{0,\ldots,n-1\}$, with order
+    $o(a)=n/\gcd(n,a)$ in $\Z_n$. For every $m\in\N$,
+    $I_{a,m}(\omega_j)=\zeta^{ja\lfloor ma/n\rfloor}$. The domain-wall phase is
+    \begin{align}
+        P_a(\omega_j)
+         & =\exp\Bigl\{-\frac{2\pi\mathrm{i}\,j}{n^2}\,a
+        \sum_{k=0}^{o(a)-1}\bigl([ka]+a-[ka+a]\bigr)\Bigr\}
+        =\exp\Bigl\{-\frac{2\pi\mathrm{i}\,j\,a^2}{n\gcd(n,a)}\Bigr\},
+        \notag
+    \end{align}
+    the carry sum being equal to $o(a)\,a$. For $n=3$ the phases are
+    $e^{-2\pi\mathrm{i}/3}$ for $j=1$ and $e^{2\pi\mathrm{i}/3}$ for $j=2$, at
+    both $a=1$ and $a=2$. For $n=4$ and $a=1,2,3$ they are
+    $-\mathrm{i},-1,-\mathrm{i}$ for $j=1$, then $-1,1,-1$ for $j=2$, and
+    $\mathrm{i},-1,\mathrm{i}$ for $j=3$. Both tables agree with those printed
+    in~\cite[Section~IV.D]{GarreRubioSchuch2024DomainWall}. If $n>1$ and
+    $j\not\equiv j'\pmod n$, then $\omega_j$ and $\omega_{j'}$ are not
+    cohomologous.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpug_cyclic_invariant_gauge, thm:asymex_group_cocycle_cyclic}
+    By Theorem~\ref{thm:asymex_group_cocycle_cyclic},
+    $\omega_j(a,[ka],a)=\zeta^{ja\lfloor([ka]+a)/n\rfloor}$. Writing
+    $[ka]+a=[(k+1)a]+n\lfloor([ka]+a)/n\rfloor$ and summing over $k<m$, the
+    carries add up to $\lfloor ma/n\rfloor$, which gives $I_{a,m}(\omega_j)$.
+    At $m=o(a)$ one has $o(a)\,a=n\,(a/\gcd(n,a))$, which gives the carry sum
+    and the closed form. The tables follow by reducing the exponent modulo
+    $n$, with $\zeta=\mathrm{i}$ for $n=4$. At the generator $a=1$ and $m=n$
+    the cyclic invariant of $\omega_j$ is $\zeta^j$, and $\zeta$ is a
+    primitive $n$-th root of unity, so the gauge invariance of
+    Theorem~\ref{thm:mpug_cyclic_invariant_gauge} separates the classes.
 \end{proof}
 
 \subsection{The group \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2}}
