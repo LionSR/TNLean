@@ -132,6 +132,22 @@ gauge transformations form a projective representation on the bond space.
     yields the defining equality for $A^{[L]}$.
 \end{proof}
 
+\begin{lemma}[Virtual gauges survive blocking]
+    \label{lem:twisted_tensor_block_gauge}
+    \lean{MPSTensor.twistedTensor_blockTensor_eq_gauge}
+    \leanok
+    If $R\in\GL_{D}(\C)$ satisfies $(\widetilde A_g)^i=R\,A^i\,R^{-1}$ for all
+    $i$, then $(\widetilde{(A^{[L]})}^{\,U^{[L]}}_g)^I=R\,(A^{[L]})^I\,R^{-1}$
+    for every blocked index $I$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:twisted_tensor_block_comm, lem:eval_word_gauge}
+    By (\ref{eq:symmetry_twist_block_comm}) the left side is a product of $L$
+    matrices $(\widetilde A_g)^{i_k}=R\,A^{i_k}R^{-1}$, and the inner factors
+    $R^{-1}R$ cancel.
+\end{proof}
+
 \begin{lemma}[Symmetric twists are gauge equivalent]%
     \label{lem:gauge_equiv_twisted}
     \lean{MPSTensor.gaugeEquiv_twistedTensor_of_injective}
@@ -249,6 +265,58 @@ gauge transformations form a projective representation on the bond space.
     This is exactly Lemma~\ref{lem:gauge_unique_up_to_scalar}; the extra MPV
     hypothesis specifies the setting in which the two gauges are usually
     produced.
+\end{proof}
+
+\begin{lemma}[Gauge-phase uniqueness]\label{lem:gauge_phase_unique}
+    \lean{MPSTensor.gauge_phase_unique}
+    \leanok
+    \uses{def:injective}
+    Let $A$ be an injective tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and
+    $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and
+    $X=u\,Y$ for some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:center_scalar}
+    The matrix $Z=YX^{-1}$ satisfies $ZA^i=c\,A^iZ$ for every $i$, hence
+    $ZM=c\,MZ$ for every matrix $M$ by linearity.  Taking $M=\Id$ gives
+    $(1-c)Z=0$, so $c=1$ because $Z$ is invertible.  Then $Z$ commutes with
+    $\MN{D}$, so it is a nonzero scalar by Lemma~\ref{lem:center_scalar}.
+\end{proof}
+
+\begin{lemma}[Gauge phases on words]\label{lem:gauge_phase_words}
+    \lean{MPSTensor.evalWord_gauge_phase}
+    \leanok
+    If $X,Y\in\GL_{D}(\C)$ and $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$
+    for all $i$, then for every word $w$,
+    \begin{align}
+        X^{-1}A^wX & =c^{\lvert w\rvert}\,Y^{-1}A^wY.
+        \label{eq:gauge_phase_words}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    By induction on $w$: inserting $XX^{-1}$ and $YY^{-1}$ between the letters
+    gives $X^{-1}A^{iw}X=(X^{-1}A^iX)(X^{-1}A^wX)$, and likewise for $Y$.
+\end{proof}
+
+\begin{lemma}[Gauge-phase uniqueness for normal tensors]\label{lem:gauge_phase_unique_normal}
+    \lean{MPSTensor.gauge_phase_unique_of_isNormal}
+    \leanok
+    \uses{def:normal}
+    Let $A$ be a normal tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$
+    satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and $X=u\,Y$ for
+    some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_words, lem:gauge_phase_unique, thm:normal_tensor_nonzero_matrix, lem:isNBlkInjective_iff_blockTensor_isInjective}
+    By Lemma~\ref{lem:gauge_phase_words} the relation propagates to words of
+    length $N$ with the scalar $c^N$.  For an
+    injective blocking length $N$, Lemma~\ref{lem:gauge_phase_unique} applied to
+    the blocked tensor gives $X=u\,Y$.  Substituting back,
+    $(1-c)\,Y^{-1}A^iY=0$ for every $i$, and some $A^i$ is nonzero because the
+    words of length $N$ span the full matrix algebra; hence $c=1$.
 \end{proof}
 
 \begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}
