@@ -1,18 +1,12 @@
 \section{The fixed-point pair state of a normal tensor}
 \label{sec:mps_rfp_fixed_point_pairs}
 
-In the log-depth preparation of matrix product states
-\cite{Malz2024Preparation}, a normal tensor is brought into the gauge
-$\E_A=\ketbra{\rho}{\Id}+R$, where the identity is the left fixed point of
-the transfer map, $\rho>0$ with $\tr\rho=1$ is the right fixed point, and
-$R$ has spectral radius less than one. The positive factor of the blocked
-tensor is replaced by a fixed-point tensor $P_\infty$ with transfer map
-$\ketbra{\rho}{\Id}$, whose periodic state is a product of nearest-neighbour
-entangled pairs. In the convention $\E_A(X)=\sum_iA^iX(A^i)^\dagger$ of
-Definition~\ref{def:transfer_map}, the gauge reads: $A$ is left-canonical
-and $\E_A(\sigma)=\sigma$ for a positive definite $\sigma$ of unit trace.
-The source does not fix a vectorization; its $\rho$ is $\sigma^T$ for row
-stacking and $\sigma$ for column stacking.
+For a normal tensor $A$ in left-canonical gauge with right fixed point
+$\sigma>0$, $\tr\sigma=1$, the transfer map decomposes as
+$\E_A=\E_{P_\infty}+R$, where $\E_{P_\infty}(X)=\tr(X)\,\sigma$ and $R$ has
+spectral radius strictly less than one \cite{Malz2024Preparation}. The
+fixed-point tensor $P_\infty$ has transfer map $\E_{P_\infty}$, and its
+periodic state factors into a product of nearest-neighbor entangled pairs.
 
 \begin{definition}[The fixed-point tensor]
     \label{def:prep_fixed_point_tensor}
@@ -67,10 +61,10 @@ stacking and $\sigma$ for column stacking.
          & =\prod_{k=0}^{N-1}\omega_{(r_k,\,l_{k+1})},
         \label{eq:prep_pair_product}
     \end{align}
-    with indices of sites taken modulo $N$. With the row-stacking
-    reading $\rho=\sigma^T$, $\omega$ is the pair
-    $(\Id\otimes\sqrt\rho)\sum_i\ket{ii}$ of \cite{Malz2024Preparation},
-    and $\Omega$ is its state $\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
+    with indices of sites taken modulo $N$. In terms of $\rho=\sigma^T$,
+    $\omega$ corresponds to $(\Id\otimes\sqrt\rho)\sum_i\ket{ii}$, with pair
+    product state $\Omega=\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$
+    \cite{Malz2024Preparation}.
 \end{definition}
 
 \begin{theorem}[The transfer map of the fixed-point tensor]
@@ -82,8 +76,8 @@ stacking and $\sigma$ for column stacking.
     Let $\sigma$ be positive semidefinite. Then
     $\E_{P_\infty}(X)=\tr(X)\,\sigma$ for every $X\in\MN{D}$. If moreover
     $\tr\sigma=1$, then $\E_{P_\infty}$ is the projection
-    $X\mapsto\tr(X)\,\sigma$ onto the fixed point $\sigma$, the map
-    $\ketbra{\rho}{\Id}$ of \cite{Malz2024Preparation}.
+    $X\mapsto\tr(X)\,\sigma$ onto the fixed point $\sigma$
+    \cite{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -201,8 +195,7 @@ stacking and $\sigma$ for column stacking.
     $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$, and suppose that
     $\E_A-\E_{P_\infty}$ has spectral radius less than one. Then
     $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$, for every
-    $X\in\MN{D}$. This is the limit $\E_B=\E_A^q\to\E_{P_\infty}$ of
-    \cite{Malz2024Preparation}.
+    $X\in\MN{D}$ \cite{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
     \leanok
