@@ -9,20 +9,14 @@
 \chapter{Sequential Generation of Matrix Product States}\label{ch:seqanc}
 
 A chain of $N$ sites with local dimension $d$ starts in $\ket{0}^{\otimes N}$,
-and an ancilla $\C^D$ interacts with the sites one after another. This chapter
-records the probabilistic and deterministic schemes of
-\cite[Section~5.1]{PerezGarcia2007Matrix} and the characterization of the states
-they produce by open-boundary matrix product representations of bond dimension
-at most $D$. The last two sections treat the deterministic transition scheme
-for $d=2$ and sequential generation without an ancilla.
+and an ancilla $\C^D$ interacts sequentially with the sites, producing
+open-boundary matrix product states of bond dimension at most
+$D$~\cite[Section~5.1]{PerezGarcia2007Matrix}.
 
-Sites are labelled $k=0,\dots,N-1$ in the order of the tensor factors of the
-ket, and a configuration is $\sigma=(\sigma_0,\dots,\sigma_{N-1})$. The source
-writes the generated state as $\sum\bra{\varphi_F}A^{[N]}_{i_N}\cdots
-    A^{[1]}_{i_1}\ket{\varphi_I}\ket{i_N\cdots i_1}$; in the present labelling
-the matrix $A_k$ at ket position $k$ is the source's $A^{[N-k]}$, the operation
-applied at step $N-k$. For square matrices $Q_0,\dots,Q_{n-1}$ indexed by the
-physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
+Sites are labelled $k=0,\dots,N-1$ in ket order, with configuration
+$\sigma=(\sigma_0,\dots,\sigma_{N-1})$ and $A_k$ the operation acting at site
+$k$. For square matrices $Q_0,\dots,Q_{n-1}$ indexed by the physical index,
+write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 
 \section{Sequential schemes}
 
@@ -31,18 +25,44 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \lean{MPSPreparation.seqAmplitude}
     \leanok
     Let $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$ and let
-    $A_k^i\in\MN{D}$ for $k=0,\dots,N-1$ and $i=0,\dots,d-1$. The state
-    produced by the operations
+    $A_k^i\in\MN{D}$ for $k=0,\dots,N-1$ and $i=0,\dots,d-1$. Following
+    \cite[Section~5.1]{PerezGarcia2007Matrix}, the state produced by the
+    operations
     $\sum_{i,\alpha,\beta}(A_k^i)_{\alpha\beta}\ketbra{\alpha,i}{\beta,0}$
-    followed by the projection of the ancilla onto $\ket{\varphi_F}$ is
+    followed by projecting the ancilla onto $\ket{\varphi_F}$ is
     \begin{align}
         \psi(\sigma)
          & =\bra{\varphi_F}A_0^{\sigma_0}A_1^{\sigma_1}\cdots
         A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}.
         \label{eq:seqanc_state}
     \end{align}
-    This is \cite[Section~5.1]{PerezGarcia2007Matrix}.
 \end{definition}
+
+\begin{center}
+    % Formula: psi(sigma) = <phi_F| A_0^{sigma_0} A_1^{sigma_1} ...
+    % A_{N-1}^{sigma_{N-1}} |phi_I>, equation (eq:seqanc_state).
+    % Source: PGVWC07 Section 5.1, the generated state in the ket
+    % labelling of this chapter.
+    % Ink-to-index map: each box is the matrix A_k with row index on its
+    % west face and column index on its east face; the up leg of A_k is
+    % the physical index sigma_k.  The west dot is the covector
+    % <phi_F|, the east dot is the vector |phi_I>.
+    % Contraction set: every horizontal wire is a summed ancilla index;
+    % the two boundary vectors close the chain at both ends.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0); the leg count is schematic
+    % under the ellipsis.
+    $\psi(\sigma)\;=\;$
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=6]
+        \tn[skin=dot, label pos=s, ports={0:virtual}]{\bra{\varphi_F}} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$\sigma_0$}]{A_0} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$\sigma_1$}]{A_1} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$\sigma_{N-1}$}]{A_{N-1}} &
+        \tn[skin=dot, label pos=s, ports={180:virtual}]{\ket{\varphi_I}}
+    \end{tenkz}
+\end{center}
 
 \begin{definition}[Probabilistic sequential scheme]
     \label{def:seqanc_probabilistic}
@@ -50,9 +70,9 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \leanok
     \uses{def:seqanc_state}
     A vector $\psi\in(\C^d)^{\otimes N}$ is \emph{probabilistically generated
-        with a $D$-dimensional ancilla} if it has the form
-    (\ref{eq:seqanc_state}) for some matrices $A_k^i\in\MN{D}$ and some
-    vectors $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$. The vector is the
+        with a $D$-dimensional ancilla} if it satisfies~(\ref{eq:seqanc_state})
+    for some matrices $A_k^i\in\MN{D}$ and vectors
+    $\ket{\varphi_I},\ket{\varphi_F}\in\C^D$. The vector is the
     unnormalized post-measurement vector, as in the source's ``up to
     normalization''.
 \end{definition}
@@ -66,11 +86,38 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     $(A^i)_{\alpha\beta}=\bra{\alpha,i}U\ket{\beta,0}$. For unitaries
     $U_0,\dots,U_{N-1}$, with $U_k$ applied at step $k+1$ and acting on site
     $N-1-k$, and an initial ancilla state $\ket{\varphi_I}$, the ancilla
-    component of the joint state at the configuration $\sigma$ is
+    component of the joint state at configuration $\sigma$ is
     $A_0^{\sigma_0}\cdots A_{N-1}^{\sigma_{N-1}}\ket{\varphi_I}\in\C^D$, where
-    $A_k$ is induced by $U_{N-1-k}$. This is
-    \cite[Section~5.1]{PerezGarcia2007Matrix}.
+    $A_k$ is induced by $U_{N-1-k}$~\cite[Section~5.1]{PerezGarcia2007Matrix}.
 \end{definition}
+
+\begin{center}
+    % Formula: (A^i)_{alpha beta} = <alpha, i| U |beta, 0>, the matrices
+    % induced by a unitary U on C^D (x) C^d acting on the site state |0>.
+    % Source: PGVWC07 Section 5.1.
+    % Ink-to-index map: on the left, the box A has row index alpha (west),
+    % column index beta (east) and physical index i (up).  On the right,
+    % the wide box U acts on ancilla (x) site: its upper legs are the
+    % output ancilla index alpha and the output site index i, its lower
+    % legs the input ancilla index beta and the input site index, which
+    % the dot |0> fixes.
+    % Contraction set: only the input site index, closed by |0>.
+    % Boundary signature: (alpha, beta, i open) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[skin=box, ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                    90:physical:$i$}]{A}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, align=1]
+        \tn[at=(1,1), skin=box, wide=2, name=U,
+            ports={90@1:virtual:$\alpha$, 90@2:physical:$i$,
+                    270@1:virtual:$\beta$, 270@2:physical}]{U}
+        \tn[at=(2,2), skin=dot, name=z, label pos=e,
+            ports={90:physical}]{\ket{0}}
+        \tnwire{z.90}{U.270@2}
+    \end{tenkz}
+\end{center}
 
 \begin{definition}[Deterministic sequential scheme]
     \label{def:seqanc_deterministic}
@@ -85,6 +132,44 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     final joint state is $\ket{\varphi_F}\otimes\ket{\psi}$ and the ancilla
     decouples in the last step without measurement.
 \end{definition}
+
+\begin{center}
+    % Formula: A_0^{sigma_0} A_1^{sigma_1} ... A_{N-1}^{sigma_{N-1}}
+    % |phi_I> = psi(sigma) |phi_F>, the ancilla component of the final
+    % joint state of a deterministic scheme at the configuration sigma.
+    % Source: PGVWC07 Section 5.1, deterministic scheme; the staircase is
+    % the sequential order of the operations.
+    % Ink-to-index map: each box is the operation A_k induced by the
+    % unitary applied at step N-k, drawn as in the preceding picture; its
+    % up leg is the site index sigma_k, its lower-right leg the incoming
+    % ancilla and its upper-left leg the outgoing ancilla.  The dot is the
+    % initial ancilla state |phi_I>.  The operation on site N-1 acts
+    % first, the one on site 0 last.
+    % Contraction set: the diagonal wires are the ancilla indices between
+    % consecutive steps.
+    % Boundary signature: one open ancilla leg (upper left) and the
+    % physical legs sigma_0, ..., sigma_{N-1}; the leg count is schematic
+    % under the ellipsis.
+    $\psi(\sigma)\,\ket{\varphi_F}\;=\;$
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+        \tn[skin=box, at=(1,1), name=a0,
+            ports={90:physical:$\sigma_0$, 315:virtual, 135:virtual}]{A_0}
+        \tn[skin=box, at=(2,2), name=a1,
+            ports={90:physical:$\sigma_1$, 315:virtual, 135:virtual}]{A_1}
+        \tn[skin=dots, at=(3,3), name=dd,
+            ports={315:virtual, 135:virtual}]{}
+        \tn[skin=box, at=(4,4), name=an,
+            ports={90:physical:$\sigma_{N-1}$, 315:virtual,
+                    135:virtual}]{A_{N-1}}
+        \tn[skin=dot, at=(5,5), name=phi, label pos=e,
+            ports={135:virtual}]{\ket{\varphi_I}}
+        \tnwire{phi.135}{an.315}
+        \tnwire{an.135}{dd.315}
+        \tnwire{dd.135}{a1.315}
+        \tnwire{a1.135}{a0.315}
+    \end{tenkz}
+\end{center}
 
 \begin{definition}[Open-boundary representation with bounded bond dimension]
     \label{def:seqanc_obc_rep}
@@ -206,12 +291,10 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \leanok
     Stack the matrices $Y^i$ into one matrix with rows indexed by
     $(\alpha,i)$, choose an orthonormal basis $q_0,\dots,q_{b-1}$ of its
-    column space, and let $Q^i$ have the columns $q_\beta$ for $\beta<b$ and
+    column space, and let $Q^i$ have columns $q_\beta$ for $\beta<b$ and
     zero columns otherwise. The coefficients of the columns of the stacked
     matrix in this basis form $R$. The column space is spanned by the at most
-    $c$ nonzero columns, so $b\le c$. This gives the same factorization as the
-    singular value decomposition used in the proof cited in
-    \cite[Section~5.1]{PerezGarcia2007Matrix}.
+    $c$ nonzero columns, so $b\le c$.
 \end{proof}
 
 \begin{theorem}[Successive decompositions]
@@ -239,13 +322,9 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
     Theorem~\ref{thm:ldp_sweep_matrix_remainder} gives the bonds $b_p$, the
     families $Q_p$ and a matrix $R$ row-supported below $b_n$ with
-    $R_{-1}P^\sigma=Q^\sigma R$ for every $\sigma$. Put $r'=Rr$, which is
-    supported below $b_n$ by Theorem~\ref{thm:seqanc_support_propagation}; then
-    $R_{-1}P^\sigma r=Q^\sigma Rr=Q^\sigma r'$. The induction behind
-    Theorem~\ref{thm:ldp_sweep_matrix_remainder} is the construction by
-    successive singular value decompositions of Schön, Solano, Verstraete,
-    Cirac and Wolf, on which the proof in
-    \cite[Section~5.1]{PerezGarcia2007Matrix} is based.
+    $R_{-1}P^\sigma=Q^\sigma R$ for every $\sigma$. Setting $r'=Rr$, which is
+    supported below $b_n$ by Theorem~\ref{thm:seqanc_support_propagation},
+    yields $R_{-1}P^\sigma r=Q^\sigma Rr=Q^\sigma r'$.
 \end{proof}
 
 \begin{theorem}[Isometric chains preserve the norm]
@@ -499,9 +578,8 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \uses{def:seqanc_probabilistic, def:seqanc_obc_rep}
     A nonzero vector $\psi$ is probabilistically generated with a
     $D$-dimensional ancilla if and only if $c\,\psi$ has an open-boundary
-    representation with bond dimension at most $D$ for some $c\ne 0$.
-    This is the probabilistic part of \cite[Section~5, Theorem ``Sequential
-        generation with ancilla'']{PerezGarcia2007Matrix}.
+    representation with bond dimension at most $D$ for some $c\ne 0$~\cite[Section~5,
+        Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -522,6 +600,34 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \leanok
     This is the $(\ket{\beta,0},\ket{\beta',0})$ entry of $U^\dagger U=\Id$.
 \end{proof}
+
+\begin{center}
+    % Formula: sum_i (A^i)^dagger A^i = Id_D, that is,
+    % sum_{i,alpha} conj(A^i_{alpha beta}) A^i_{alpha beta'} =
+    % delta_{beta beta'}.
+    % Source: PGVWC07 Section 5.1; the (|beta,0>, |beta',0>) entry of
+    % U^dagger U = Id.
+    % Ink-to-index map: the upper box is A (column index beta' east), the
+    % lower box its complex conjugate (column index beta east); the
+    % vertical wire is the physical index i and the west cup the row
+    % index alpha.
+    % Contraction set: i and alpha; beta and beta' remain open.
+    % Boundary signature: (virtual-east=2) on both sides; the right-hand
+    % side is the identity on the column index.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, west=cup]
+        \tn[at=(1,1), skin=box, name=ket,
+            ports={180:virtual, 0:virtual:$\beta'$, 270:physical}]{A}
+        \tn[at=(2,1), skin=box, name=bra,
+            ports={180:virtual, 0:virtual:$\beta$, 90:physical}]{\overline{A}}
+        \tnwire{ket.270}{bra.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, west=cup]
+        \tn[at=(1,1), skin=none, ports={180:virtual, 0:virtual:$\beta'$}]{}
+        \tn[at=(2,1), skin=none, ports={180:virtual, 0:virtual:$\beta$}]{}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Deterministically generated states are normalized]
     \label{thm:seqanc_deterministic_norm}
@@ -590,9 +696,8 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     Let $d\ge 1$. A vector $\psi$ is deterministically generated with a
     $D$-dimensional ancilla if and only if $\sum_\sigma|\psi(\sigma)|^2=1$
     and $c\,\psi$ has an open-boundary representation with bond dimension at
-    most $D$ for some $c\ne 0$. This is the deterministic part of
-    \cite[Section~5, Theorem ``Sequential generation with
-        ancilla'']{PerezGarcia2007Matrix}.
+    most $D$ for some $c\ne 0$~\cite[Section~5,
+        Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -644,15 +749,14 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
         \label{eq:seqanc_transition}
     \end{align}
     and the ancilla decouples after the last step, that is, the final joint
-    state is $\ket{\varphi_F}\otimes\ket{\psi}$ for a unit vector
-    $\ket{\varphi_F}\in\C^D\otimes\C^2$. This is the third scheme
-    of \cite[Section~5.1]{PerezGarcia2007Matrix}. The step with ancilla
-    unitary $W$ leaving the site in $\ket{i}$ is the matrix $S_i(W)$ on
-    $\C^D\otimes\C^2$ with entries
-    \begin{equation}
+    state is $\ket{\varphi_F}\otimes\ket{\psi}$ for a unit
+    vector $\ket{\varphi_F}\in\C^D\otimes\C^2$~\cite[Section~5.1]{PerezGarcia2007Matrix}.
+    The step with ancilla unitary $W$ leaving the site in $\ket{i}$ is the matrix
+    $S_i(W)$ on $\C^D\otimes\C^2$ with entries
+    \begin{align}
         S_i(W)_{x,y}=\delta_{x_2,0}\,W_{(x_1,i),y}.
         \label{eq:seqanc_transition_step}
-    \end{equation}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[A transition step on a site in $\ket{0}$]
@@ -661,26 +765,26 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \leanok
     \uses{def:seqanc_transition}
     Let $T$ be an interaction on $\C^D\otimes\C^2\otimes\C^2$ satisfying
-    \eqref{eq:seqanc_transition}, and let $W$ be a matrix on $\C^D\otimes\C^2$.
+    (\ref{eq:seqanc_transition}), and let $W$ be a matrix on $\C^D\otimes\C^2$.
     Then for all $x,y$ and $i$,
-    \begin{equation*}
+    \begin{align*}
         \bra{x,i}T(W\otimes\Id)\ket{y,0}=S_i(W)_{x,y}.
-    \end{equation*}
+    \end{align*}
 \end{theorem}
 \begin{proof}
     \leanok
-    For $z=(z_1,z_2)$, the relations \eqref{eq:seqanc_transition} applied to
+    For $z=(z_1,z_2)$, the relations (\ref{eq:seqanc_transition}) applied to
     $\ket{\varphi}=\ket{z_1}$ give $T\ket{z_1,z_2,0}=\ket{z_1,0,z_2}$, so
-    \begin{equation*}
+    \begin{align*}
         \bra{x,i}T\ket{z,0}=\delta_{x_2,0}\,\delta_{x_1,z_1}\,\delta_{i,z_2}.
-    \end{equation*}
+    \end{align*}
     Since $(W\otimes\Id)_{(z,j),(y,0)}=\delta_{j,0}\,W_{z,y}$,
-    \begin{equation*}
+    \begin{align*}
         \bra{x,i}T(W\otimes\Id)\ket{y,0}
         =\sum_z\bra{x,i}T\ket{z,0}\,W_{z,y}
         =\delta_{x_2,0}\,W_{(x_1,i),y}
         =S_i(W)_{x,y}.
-    \end{equation*}
+    \end{align*}
 \end{proof}
 
 \begin{theorem}[Transition schemes generate the open-boundary states]
@@ -691,9 +795,8 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     Let $d=2$. A vector $\psi$ is generated by a deterministic transition
     scheme with ancilla $\C^D\otimes\C^2$ if and only if
     $\sum_\sigma|\psi(\sigma)|^2=1$ and $c\,\psi$ has an open-boundary
-    representation with bond dimension at most $D$ for some $c\ne 0$. This is
-    the transition part of \cite[Section~5, Theorem ``Sequential generation
-        with ancilla'']{PerezGarcia2007Matrix}.
+    representation with bond dimension at most $D$ for some $c\ne 0$~\cite[Section~5,
+        Theorem ``Sequential generation with ancilla'']{PerezGarcia2007Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -708,9 +811,7 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     site. Given a deterministic scheme with unitaries $U^{[k]}$, take
     $W^{[k]}=U^{[k]}$ and the initial and final ancilla states
     $E\ket{\varphi_I}$ and $E\ket{\varphi_F}$; the ancilla components are then
-    $E$ applied to those of the deterministic scheme. This is the use of the
-    fixed interaction in the work on which
-    \cite[Section~5.1]{PerezGarcia2007Matrix} is based.
+    $E$ applied to those of the deterministic scheme.
 
     Conversely, after the first step the tag qubit is $\ket{0}$, so the
     ancilla component at $\sigma$ is $E$ applied to the product of the
@@ -741,20 +842,57 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     position $N-j$ in the labelling of this chapter. After
     $U^{[k]}$ the scheme is described by the vector $\chi_k$ on the first
     $k+1$ sites, defined by $\chi_1=U^{[1]}\ket{0,0}$ and
-    \begin{equation*}
+    \begin{align*}
         \chi_k(\dots,i,\beta)=\sum_\alpha\bra{i,\beta}U^{[k]}\ket{\alpha,0}
         \chi_{k-1}(\dots,\alpha),
-    \end{equation*}
+    \end{align*}
     and the generated state is $\chi_{N-1}$.
 \end{definition}
 
+\begin{center}
+    % Formula: chi_3 for N = 4, the state after U^{[1]}, U^{[2]}, U^{[3]}
+    % act in turn on source sites (1,2), (2,3), (3,4) of |0>^{(x) 4};
+    % chi_k(..., i, beta) = sum_alpha <i, beta| U^{[k]} |alpha, 0>
+    % chi_{k-1}(..., alpha).
+    % Source: PGVWC07 Section 5.2, sequential generation without an
+    % ancilla.
+    % Ink-to-index map: columns are the source sites 1, ..., 4 from left
+    % to right, and time runs upward.  Each wide box U^{[k]} has its two
+    % input legs below (site k, carrying alpha, and site k+1 in |0>) and
+    % its two output legs above (i on site k, beta on site k+1).  The
+    % dots are the initial states |0>; i_j is the final index of site j.
+    % Contraction set: each vertical wire between gates is the index beta
+    % of the recursion; the dots close the initial site indices.
+    % Boundary signature: (physical-up=4 | physical-down=0).
+    $\chi_3\;=\;$
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+        \tn[at=(1,3), skin=box, wide=2, name=u3,
+            ports={90@1:physical:$i_3$, 90@2:physical:$i_4$,
+                    270@1:physical, 270@2:physical}]{U^{[3]}}
+        \tn[at=(2,2), skin=box, wide=2, name=u2,
+            ports={90@1:physical:$i_2$, 90@2:physical,
+                    270@1:physical, 270@2:physical}]{U^{[2]}}
+        \tn[at=(3,1), skin=box, wide=2, name=u1,
+            ports={90@1:physical:$i_1$, 90@2:physical,
+                    270@1:physical, 270@2:physical}]{U^{[1]}}
+        \tn[at=(4,1), skin=dot, name=z1, label pos=s, ports={90:physical}]{\ket{0}}
+        \tn[at=(4,2), skin=dot, name=z2, label pos=s, ports={90:physical}]{\ket{0}}
+        \tn[at=(4,3), skin=dot, name=z3, label pos=s, ports={90:physical}]{\ket{0}}
+        \tn[at=(4,4), skin=dot, name=z4, label pos=s, ports={90:physical}]{\ket{0}}
+        \tnwire{z1.90}{u1.270@1}
+        \tnwire{z2.90}{u1.270@2}
+        \tnwire{u1.90@2}{u2.270@1}
+        \tnwire{z3.90}{u2.270@2}
+        \tnwire{u2.90@2}{u3.270@1}
+        \tnwire{z4.90}{u3.270@2}
+    \end{tenkz}
+\end{center}
+
 \begin{remark}
-    The recursion describes the chain state: before $U^{[k]}$ acts, sites
-    $k+1,\dots,N$ are still in $\ket{0}$, and site $k$ is not touched
-    afterwards, so the state of the whole chain after $U^{[k]}$ is
-    $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$. Here the scheme is
-    defined by the recursion, and this identification with the action of the
-    two-site operations on the whole chain is not proved.
+    Before $U^{[k]}$ acts, sites $k+1,\dots,N$ remain in $\ket{0}$, and site
+    $k$ is unchanged under subsequent operations, so the intermediate chain
+    state after $U^{[k]}$ is $\ket{\chi_k}\otimes\ket{0}^{\otimes(N-k-1)}$.
 \end{remark}
 
 \begin{theorem}[Sequential generation without an ancilla]
@@ -768,10 +906,10 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     ancilla, either deterministically or probabilistically (the latter up to
     normalization), are exactly the states with an open-boundary
     representation of bond dimension at most $d$, normalized in the
-    deterministic case. This is \cite[Section~5, Theorem ``Sequential
-        generation without ancilla'']{PerezGarcia2007Matrix}, which prints no
-    bound on $N$; the scheme presupposes two sites, and the literal
-    one-site reading fails \cite{gap:pgvwc07_sequential_no_ancilla_two_sites}.
+    deterministic case~\cite[Section~5,
+        Theorem ``Sequential generation without ancilla'']{PerezGarcia2007Matrix}.
+    The condition $N\ge 2$ is necessary because the two-site gates require at
+    least two sites~\cite{gap:pgvwc07_sequential_no_ancilla_two_sites}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -800,7 +938,5 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     $U^{[k]}$ with $\bra{i,\beta}U^{[k]}\ket{\alpha,0}=(Q_{N-k}^i)_{\beta\alpha}$
     on the used columns; in the deterministic case these are unitary
     extensions by Theorem~\ref{thm:seqanc_unitary_extension}, and
-    Theorem~\ref{thm:seqanc_block_congr} identifies the generated state. The
-    source argues instead by running the scheme with an ancilla on site $k+1$
-    followed by swaps of neighboring sites.
+    Theorem~\ref{thm:seqanc_block_congr} identifies the generated state.
 \end{proof}
