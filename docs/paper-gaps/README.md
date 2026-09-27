@@ -669,7 +669,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
   need not vanish at finite `N`; the corrected form suffices for Theorem 1.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
-  in depth `o(log N)`) is formalized for a normal tensor in the gauge
+  in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
-  quantitative form `N ≤ C(T+1)e^{b(T+1)}`; the reduction of a normal tensor to
-  this gauge, with which both proofs begin, is not formalized.
+  quantitative form `N ≤ C(T+1)e^{b(T+1)}`; resolved: the reduction of a normal
+  tensor to this gauge, with which both proofs begin, is now formalized, and
+  the theorem holds for every normal tensor.
