@@ -25,6 +25,7 @@ import TNLean.MPS.MPU.Examples
 import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupCocycleMPO
+import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
@@ -46,6 +47,7 @@ import TNLean.MPS.MPU.InverseCompatibleTruncation
 import TNLean.MPS.MPU.InverseCompatibleWordAdjoint
 import TNLean.MPS.MPU.InverseCompatibleWordUnitarity
 import TNLean.MPS.MPU.KetLeftMul
+import TNLean.MPS.MPU.LengthDependentPhase
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.NormalizedSourceDecompositionUniqueness
