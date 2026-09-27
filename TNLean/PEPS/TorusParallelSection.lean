@@ -19,6 +19,10 @@ exactly when the transports are flat, `b (v + (1, 0)) * a v = a (v + (0, 1)) * b
 elementary square, and have trivial holonomy around one row and one column, the two
 non-contractible cycles of the torus. Hence the number of parallel sections is `|G|` or `0`.
 
+For a nonabelian group `G` these are nonabelian `G`-valued cochains on the torus graph, which
+Mathlib's group cohomology (with coefficients in a representation) does not cover; the products
+are Mathlib's `List.prod`, and the counting is the free right action of `G` by multiplication.
+
 This is the combinatorial core of the statement that on the torus the differences of plaquette
 colorings of the dual quantum-double network are the Gauss-law configurations of trivial
 holonomy, arXiv:1001.3807, Section "Examples", "The double models",
@@ -27,7 +31,7 @@ holonomy, arXiv:1001.3807, Section "Examples", "The double models",
 
 ## Main definitions
 
-* `TNLean.PEPS.zmodTransport`: the ordered product `c (k - 1) ⋯ c 1 * c 0` along a cycle.
+* `TNLean.PEPS.zmodTransport`: the ordered list product `c (k - 1) ⋯ c 1 * c 0` along a cycle.
 * `TNLean.PEPS.IsTorusParallelSection`: a parallel section of transports on the torus.
 * `TNLean.PEPS.IsTorusFlat`: flatness of transports around every elementary square.
 
@@ -53,16 +57,16 @@ section Cycle
 variable {n : ℕ}
 
 /-- The transport along the first `k` steps of the cycle `ZMod n`, the ordered product
-`c (k - 1) ⋯ c 1 * c 0`, where `c x` is the transport from `x` to `x + 1`. The holonomy around
-the cycle is `zmodTransport c n`. -/
-def zmodTransport (c : ZMod n → G) : ℕ → G
-  | 0 => 1
-  | k + 1 => c k * zmodTransport c k
+`c (k - 1) ⋯ c 1 * c 0` of the list of steps, where `c x` is the transport from `x` to `x + 1`.
+The holonomy around the cycle is `zmodTransport c n`. -/
+def zmodTransport (c : ZMod n → G) (k : ℕ) : G :=
+  ((List.range k).map fun i : ℕ => c i).reverse.prod
 
 @[simp] theorem zmodTransport_zero (c : ZMod n → G) : zmodTransport c 0 = 1 := rfl
 
 theorem zmodTransport_succ (c : ZMod n → G) (k : ℕ) :
-    zmodTransport c (k + 1) = c k * zmodTransport c k := rfl
+    zmodTransport c (k + 1) = c k * zmodTransport c k := by
+  simp [zmodTransport, List.range_succ]
 
 /-- A function transported by `c` along the cycle is its value at `0` transported along the
 first `k` steps. -/
