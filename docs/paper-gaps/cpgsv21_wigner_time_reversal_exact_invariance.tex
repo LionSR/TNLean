@@ -1,0 +1,77 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Exact Invariance in the State-Level Kramers Obstruction}
+\author{}
+\date{2026-09-27}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source claim}
+
+Section~III.A of Ref.~\cite{Cirac2021Matrix} defines a symmetry of a
+translation-invariant matrix product state up to a global phase: a normal
+tensor $A$ is symmetric under a physical operation when the fundamental
+theorem gives a gauge $X$ and a phase $\phi$ relating the transformed tensor to
+$e^{i\phi}X^{\dagger}A^iX$.\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}, lines 1080--1090, and line 1116
+for time reversal.} For the Wigner time reversal
+$\ket{\psi}\mapsto\sigma_y^{\otimes N}\ket{\bar\psi}$ on spin
+$\tfrac12$, applying the relation twice gives $A^i=-A^i$ up to gauge, which
+contradicts the uniqueness of gauges and phases for normal tensors. The source
+concludes that the ground state of a system with this symmetry is not a normal
+or injective matrix product state.\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}, line 1117, and line 1218 for the
+comparison with Kramers' theorem.} The hypothesis is therefore that, for
+every chain length $N$, the time-reversed vector is
+$c_N\ket{\psi_N(A)}$ for a phase $c_N$ with $|c_N|=1$.
+
+\section{The formal statement}
+
+The gauge-level obstruction is formalized with the source's hypotheses: no
+normal tensor of positive bond dimension admits $X\in\mathrm{GL}_D(\mathbb C)$
+and $\zeta\in\mathbb C$ with $\sum_j(\sigma_y)_{ij}\bar A^j=\zeta X^{-1}A^iX$
+for all $i$.\footnote{Formal declaration:
+\leanid{MPSTensor.not_wignerTimeReversal_gauge}.} The state-level corollary for
+injective tensors assumes instead that the matrix product vectors of $A$ and
+of its time-reversed tensor are equal at every length, that is, $c_N=1$ for
+all $N$.\footnote{Formal declaration:
+\leanid{MPSTensor.not_sameMPV_wignerTimeReversal_of_isInjective}.} It
+therefore excludes only exact invariance, while the source excludes invariance
+up to a phase.
+
+\section{Elimination plan}
+
+State the corollary for phase-proportional families: for each $N$ a scalar
+$c_N$ with $\ket{\psi_N(\tilde A)}=c_N\ket{\psi_N(A)}$, where
+$\tilde A^i=\sum_j(\sigma_y)_{ij}\bar A^j$. The proportional form of the
+fundamental theorem for injective tensors turns this into a gauge relation
+$\tilde A^i=\zeta X^{-1}A^iX$ with $\zeta\neq0$, and the gauge-level
+obstruction concludes. The exact-invariance corollary is then the special
+case $c_N=1$. The same pattern already gives the phase version of the
+spin-$\tfrac12$ $\mathrm{SU}(2)$ obstruction.\footnote{Formal declaration:
+\leanid{MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal}.
+The plan is recorded on
+\href{https://github.com/LionSR/TNLean/pull/8284}{pull request \#8284}.}
+
+\textbf{Verdict: open scope restriction.} The state-level Kramers obstruction
+is formalized for exact invariance of the matrix product vectors; invariance
+up to a phase at every length, as in the source, remains to be formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

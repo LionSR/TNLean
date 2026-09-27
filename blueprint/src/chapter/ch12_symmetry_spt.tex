@@ -331,25 +331,53 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
 
 \begin{theorem}[Kramers obstruction]
     \label{thm:kramers_obstruction}
-    \lean{MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one, MPSTensor.pauliY_mul_map_star, MPSTensor.not_wignerTimeReversal_gauge, MPSTensor.not_sameMPV_wignerTimeReversal_of_isInjective}
+    \lean{MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one, MPSTensor.pauliY_mul_map_star, MPSTensor.not_wignerTimeReversal_gauge}
     \leanok
     Let $P$ satisfy $P\bar P=-\Id$, as $\sigma_y$ does.  No normal tensor with
     $D\ge1$ admits $X\in\GL_{D}(\C)$ and $\zeta\in\C$ with
     $\sum_jP_{ij}\bar A^j=\zeta\,X^{-1}A^iX$ for all $i$.  In particular no normal
     spin-$\tfrac12$ tensor carries the Wigner time reversal
-    $A^i\mapsto\sum_j(\sigma_y)_{ij}\bar A^j$ in this form, and no injective
-    spin-$\tfrac12$ tensor generates the same matrix product vectors as its Wigner
-    time reversal \cite[Section~III.A]{Cirac2021Matrix}.
+    $A^i\mapsto\sum_j(\sigma_y)_{ij}\bar A^j$ in this form
+    \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:gauge_phase_unique_normal, thm:ft_single}
+    \uses{lem:gauge_phase_unique_normal}
     Applying the relation twice gives
     $-A^i=|\zeta|^2(X\bar X)^{-1}A^i(X\bar X)$.  By
     Lemma~\ref{lem:gauge_phase_unique_normal}, $-|\zeta|^2=1$, which is impossible.
-    For an injective tensor, equality of the matrix product vectors gives the
-    relation with $\zeta=1$ by the fundamental theorem.
 \end{proof}
+
+\begin{theorem}[Kramers obstruction for injective tensors, exact invariance]
+    \label{thm:kramers_obstruction_exact_mpv}
+    \lean{MPSTensor.not_sameMPV_wignerTimeReversal_of_isInjective}
+    \leanok
+    \uses{thm:kramers_obstruction}
+    No injective spin-$\tfrac12$ tensor with $D\ge1$ generates, at every length,
+    the same matrix product vector as its Wigner time reversal
+    $A^i\mapsto\sum_j(\sigma_y)_{ij}\bar A^j$.  This is the source's
+    state-level statement restricted to exact invariance; invariance up to a
+    phase is Theorem~\ref{thm:kramers_obstruction_phase}
+    \cite{gap:cpgsv21_wigner_time_reversal_exact_invariance}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ft_single}
+    For an injective tensor, equality of the matrix product vectors gives the
+    relation of Theorem~\ref{thm:kramers_obstruction} with $\zeta=1$ by the
+    fundamental theorem.
+\end{proof}
+
+\begin{theorem}[Kramers obstruction for injective tensors]
+    \label{thm:kramers_obstruction_phase}
+    \uses{thm:kramers_obstruction, thm:ft_single}
+    No injective spin-$\tfrac12$ tensor with $D\ge1$ is invariant up to a phase
+    under the Wigner time reversal: it is not the case that for every $N$ the
+    vector $\sigma_y^{\otimes N}\ket{\overline{\psi_N(A)}}$ is a multiple of
+    $\ket{\psi_N(A)}$ \cite[Section~III.A]{Cirac2021Matrix}.  The case of
+    exact invariance is Theorem~\ref{thm:kramers_obstruction_exact_mpv}
+    \cite{gap:cpgsv21_wigner_time_reversal_exact_invariance}.
+\end{theorem}
 
 \begin{theorem}[Anticommuting physical symmetries are obstructed]
     \label{thm:anticommuting_physical_obstruction}

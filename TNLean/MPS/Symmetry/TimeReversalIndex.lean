@@ -34,6 +34,11 @@ so no normal tensor carries that symmetry.  Reflection acts by transposition,
 The source derives the gauge relations from the fundamental theorem for
 symmetric states; the index statements here start from the gauge relations.
 
+**Scope restriction (exact MPV equality):** `not_sameMPV_wignerTimeReversal_of_isInjective`
+excludes only exact equality of the matrix product vectors, while the source
+(line 1117) allows invariance up to a phase; documented in
+`docs/paper-gaps/cpgsv21_wigner_time_reversal_exact_invariance.tex`.
+
 ## Main results
 
 * `MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge`
