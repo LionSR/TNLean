@@ -22,11 +22,19 @@ anomaly. With the action tensors of `CZXCompression.czxBlockActionData`, the wal
 exchange of `e_{BA}` needs one site of buffer on the right of the wall: without it the
 right action vector `|+̂⟩` of the source (line 1273) gives the opposite sign.
 
+**Local fix (printed left action vectors):** the explicit walls use the action tensors of
+`CZXCompression.czxBlockActionData`, whose left action vectors `⟨1|` and `-⟨0|` replace the vector
+`⟨+̂|` printed at lines 1272 and 1300; this affects `czx_isDomainWallAction_ab`,
+`czx_isDomainWallAction_ba` and `czx_mpo_mulVec_twoWallMPV`, not `czx_domainWall_mul_eq_neg_one`,
+which holds for every choice of action tensors. Documented in
+`docs/paper-gaps/gs24_czx_action_left_vectors.tex`.
+
 ## Main results
 
 * `CZXCompression.czx_domainWall_mul_eq_neg_one`: `c_{AB} c_{BA} = -1` for every choice.
-* `CZXCompression.czx_isDomainWallAction_ab`, `CZXCompression.czx_isDomainWallAction_ba`,
-  `CZXCompression.czx_isDomainWallAction_one`: explicit domain walls.
+* `CZXCompression.czx_isDomainWallAction_ab`, `CZXCompression.czx_isDomainWallAction_ba`:
+  explicit domain walls.
+* `CZXCompression.czx_mpo_mulVec_twoWallMPV`: `U |ψ(0-1-0)⟩ = -|ψ(1-0-1)⟩`.
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -53,20 +61,16 @@ theorem czxGen_mul_self : czxGen * czxGen = 1 := by decide
 /-- **The CZX domain walls carry the anomaly** (arXiv:2405.00439, `eq:CC-LL`,
 `Papers/2405.00439/MPU-DW.tex` lines 1020--1121, for the CZX symmetry of lines 1123--1339):
 for every choice of action tensors on the two product states and every pair of domain walls
-exchanged by the generator, `c_{AB} c_{BA} = -1`. The identity acts on `e_{AB}` by a nonzero
-scalar; see
-`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one`. -/
+exchanged by the generator with nonzero phases, `c_{AB} c_{BA} = -1`. -/
 theorem czx_domainWall_mul_eq_neg_one (ad : BlockActionData czxFamily czxBlock)
     {eAB : Fin 2 → Matrix (Fin 1) (Fin 1) ℂ} {eBA : Fin 2 → Matrix (Fin 1) (Fin 1) ℂ}
-    {cAB cBA b : ℂ}
+    {cAB cBA : ℂ}
     (hAB : ad.IsDomainWallAction czxGen czxGen_smul_zero czxGen_smul_one eAB eBA cAB)
     (hBA : ad.IsDomainWallAction czxGen czxGen_smul_one czxGen_smul_zero eBA eAB cBA)
-    (h1 : ad.IsDomainWallAction 1 (one_smul _ (Multiplicative.ofAdd 0))
-      (one_smul _ (Multiplicative.ofAdd 1)) eAB eAB b) (hb : b ≠ 0)
-    (he : eAB ≠ 0) : cAB * cBA = -1 := by
+    (hcAB : cAB ≠ 0) (hcBA : cBA ≠ 0) (he : eAB ≠ 0) : cAB * cBA = -1 := by
   rw [BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one (fd := czxFusionData)
     czxFamily_isNormalRepresentation czxBlock_isNormal (fun _ ↦ Nat.one_pos) czx_carriesMPV
-    czxGen_mul_self hAB hBA h1 hb he, czxFusionData_omega_gen_gen_gen,
+    czxGen_mul_self hAB hBA hcAB hcBA he, czxFusionData_omega_gen_gen_gen,
     czxFusionData_omega_gen_one_gen]
   simp
 
@@ -207,100 +211,6 @@ theorem czx_isDomainWallAction_ba :
     _ = _ := by
       rw [hmid]
       simp
-
-private instance (x : Multiplicative (Fin 2)) :
-    Subsingleton (Fin (czxFamily.bondDim 1 * czxBlockDim x)) :=
-  Fin.subsingleton_one
-
-private instance : Subsingleton (Fin (czxFamily.bondDim 1 * 1)) := Fin.subsingleton_one
-
-private instance : Subsingleton (Fin (czxFamily.bondDim 1)) := Fin.subsingleton_one
-
-private theorem czxActV_zero_apply (s : Fin 2) (a : Fin 1) (b : Fin (czxLabelBondDim 0 * 1)) :
-    czxActV 0 s a b = 1 := by
-  fin_cases s <;> fin_cases a <;> fin_cases b <;> rfl
-
-private theorem czxActW_zero_apply (s : Fin 2) (a : Fin (czxLabelBondDim 0 * 1)) (b : Fin 1) :
-    czxActW 0 s a b = 1 := by
-  fin_cases s <;> fin_cases a <;> fin_cases b <;> rfl
-
-private theorem actTensor_one_apply (x : Multiplicative (Fin 2)) (j : Fin 2)
-    (a b : Fin (czxFamily.bondDim 1 * czxBlockDim x)) :
-    actTensor (czxFamily.tensor 1) (czxBlock x) j a b = czxBlock x j 0 0 := by
-  have h := actTensor_idTensor_apply (czxBlock x) j (Fin.cast (by rfl) a) (Fin.cast (by rfl) b)
-  refine h.trans ?_
-  congr 1 <;> exact Subsingleton.elim _ _
-
-private theorem actRect_one_apply (e : Fin 2 → Matrix (Fin 1) (Fin 1) ℂ) (i : Fin 2)
-    (a b : Fin (czxFamily.bondDim 1 * 1)) :
-    actRect (czxFamily.tensor 1) e i a b = e i 0 0 := by
-  revert a b
-  change ∀ a b : Fin (1 * 1), (∑ j : Fin 2, MPOTensor.idTensor 2 i j ⊗ₖ e j).submatrix
-    finProdFinEquiv.symm finProdFinEquiv.symm a b = e i 0 0
-  intro a b
-  rw [Matrix.submatrix_apply, Subsingleton.elim (finProdFinEquiv.symm a) (0, 0),
-    Subsingleton.elim (finProdFinEquiv.symm b) (0, 0)]
-  fin_cases i <;>
-    simp [MPOTensor.idTensor, Matrix.sum_apply, Fin.sum_univ_two, Matrix.kroneckerMap_apply]
-
-/-- The identity element acts trivially on `e_{AB}`.
-
-Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 861 (the identity merges
-trivially). -/
-theorem czx_isDomainWallAction_one :
-    czxBlockActionData.IsDomainWallAction 1 (one_smul _ x₀) (one_smul _ x₁) czxWallAB
-      czxWallAB 1 := by
-  have hV : ∀ (s : Fin 2) j, czxBlock (Multiplicative.ofAdd s) j *
-      czxBlockActionData.V 1 (Multiplicative.ofAdd s) = czxBlockActionData.V 1
-        (Multiplicative.ofAdd s) *
-          actTensor (czxFamily.tensor 1) (czxBlock (Multiplicative.ofAdd s)) j := by
-    intro s j
-    ext a b
-    simp only [Matrix.mul_apply]
-    rw [Fintype.sum_subsingleton _ 0, Fintype.sum_subsingleton _ b]
-    simp only [actTensor_one_apply]
-    have h1 : czxBlockActionData.V 1 (Multiplicative.ofAdd s) 0 b = 1 := czxActV_zero_apply s 0 b
-    have h2 : czxBlockActionData.V 1 (Multiplicative.ofAdd s) a b = 1 := czxActV_zero_apply s a b
-    rw [h1, h2, Subsingleton.elim a 0]
-    ring
-  have hW : ∀ (s : Fin 2) j,
-      actTensor (czxFamily.tensor 1) (czxBlock (Multiplicative.ofAdd s)) j *
-        czxBlockActionData.W 1 (Multiplicative.ofAdd s) =
-      czxBlockActionData.W 1 (Multiplicative.ofAdd s) * czxBlock (Multiplicative.ofAdd s) j := by
-    intro s j
-    ext a b
-    simp only [Matrix.mul_apply]
-    rw [Fintype.sum_subsingleton _ a, Fintype.sum_subsingleton _ 0]
-    simp only [actTensor_one_apply]
-    have h1 : czxBlockActionData.W 1 (Multiplicative.ofAdd s) a b = 1 := czxActW_zero_apply s a b
-    have h2 : czxBlockActionData.W 1 (Multiplicative.ofAdd s) a 0 = 1 := czxActW_zero_apply s a 0
-    rw [h1, h2, Subsingleton.elim b 0]
-    ring
-  have hmid : ∀ i, czxBlockActionData.V 1 x₀ * actRect (czxFamily.tensor 1) czxWallAB i *
-      czxBlockActionData.W 1 x₁ = czxWallAB i := by
-    intro i
-    ext a b
-    simp only [Matrix.mul_apply]
-    rw [Fintype.sum_subsingleton _ 0]
-    simp only [Fintype.sum_subsingleton _ (0 : Fin (czxFamily.bondDim 1 * 1)), actRect_one_apply]
-    have h1 : czxBlockActionData.V 1 x₀ a 0 = 1 := czxActV_zero_apply 0 a _
-    have h2 : czxBlockActionData.W 1 x₁ 0 b = 1 := czxActW_zero_apply 1 _ b
-    rw [h1, h2, Subsingleton.elim a 0, Subsingleton.elim b 0]
-    ring
-  refine ⟨0, fun u v i _ _ ↦ ?_⟩
-  rw [castIndex_czxBlockDim, castIndex_czxBlockDim, one_smul, Matrix.one_mul, Matrix.mul_one]
-  have hL := Kraus.evalWord_intertwine _ _ _ (hV 0) u
-  have hR := Kraus.evalWord_intertwine _ _ _ (hW 1) v
-  have key : czxBlockActionData.V 1 x₀ *
-      Kraus.evalWord (actTensor (czxFamily.tensor 1) (czxBlock x₀)) u *
-        actRect (czxFamily.tensor 1) czxWallAB i *
-          (Kraus.evalWord (actTensor (czxFamily.tensor 1) (czxBlock x₁)) v *
-            czxBlockActionData.W 1 x₁) =
-      Kraus.evalWord (czxBlock x₀) u * czxWallAB i * Kraus.evalWord (czxBlock x₁) v := by
-    rw [← hL, hR, ← hmid i]
-    simp only [Matrix.mul_assoc]
-  simpa only [Matrix.mul_assoc, one_smul] using key
-
 
 /-- **The CZX symmetry acts on two domain walls with the sign `-1`**: with the explicit walls,
 `U |ψ(0-1-0)⟩ = -|ψ(1-0-1)⟩` on every chain with long enough regions.
