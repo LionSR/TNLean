@@ -647,10 +647,7 @@ of a local circuit that may add product ancillas and discard them
     \lean{MPSPreparation.ChannelLayer, MPSPreparation.ChannelLayer.map,
         MPSPreparation.ChannelLayer.dual, MPSPreparation.channelCircuitMap,
         MPSPreparation.channelCircuitDual,
-        MPSPreparation.IsChannelPreparedInDepth,
-        MPSPreparation.channelCircuitMap_isKrausCPTP,
-        MPSPreparation.trace_channelCircuitMap_mul,
-        MPSPreparation.channelCircuitMap_map_toChannelLayer}
+        MPSPreparation.IsChannelPreparedInDepth}
     \leanok
     A \emph{channel on the pair} $\{k,k+1\}$ is a map
     $\rho\mapsto\sum_jK_j\rho K_j^\dagger$ on density matrices of the ring,
@@ -660,17 +657,40 @@ of a local circuit that may add product ancillas and discard them
     of channels on disjoint pairs, and a
     \emph{local channel circuit of depth $T$} is a composition
     $\Phi=\Phi_T\circ\dots\circ\Phi_1$ of $T$ channel layers.
-    Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$,
-    where each channel on a pair is replaced by
-    $A\mapsto\sum_jK_j^\dagger AK_j$, satisfies
-    $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$.
-    A local channel circuit is trace preserving and completely positive, and
-    a local circuit $U$ of depth $T$ is the local channel circuit
-    $\rho\mapsto U\rho U^\dagger$ with one operator per channel. A density
-    matrix is \emph{prepared in depth $T$ by local channels} if it equals
-    $\Phi(\bigotimes_i\sigma_i)$ for a local channel circuit $\Phi$ of depth
-    $T$ and density matrices $\sigma_i$ on single sites.
+    Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$
+    replaces each channel on a pair by $A\mapsto\sum_jK_j^\dagger AK_j$. A
+    density matrix is \emph{prepared in depth $T$ by local channels} if it
+    equals $\Phi(\bigotimes_i\sigma_i)$ for a local channel circuit $\Phi$ of
+    depth $T$ and density matrices $\sigma_i$ on single sites.
 \end{definition}
+
+\begin{lemma}[Duality and complete positivity of local channel circuits]
+    \label{lem:ldp_local_channel_circuit_properties}
+    \uses{def:ldp_local_channel_circuit, def:ldp_local_circuit}
+    \lean{MPSPreparation.channelCircuitMap_isKrausCPTP,
+        MPSPreparation.trace_channelCircuitMap_mul,
+        MPSPreparation.channelCircuitMap_map_toChannelLayer}
+    \leanok
+    Let $\Phi$ be a local channel circuit. Then
+    \begin{align}
+        \Tr(\Phi(\rho)A) & =\Tr(\rho\,\Phi^\dagger(A))
+        \label{eq:ldp_channel_circuit_duality}
+    \end{align}
+    for all operators $\rho$ and $A$ on the ring, and $\Phi$ is trace
+    preserving and completely positive. A local circuit $U$ of depth $T$ is
+    the local channel circuit $\rho\mapsto U\rho U^\dagger$ of depth $T$ with
+    one operator per channel.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For one channel on a pair,
+    $\Tr\bigl(\sum_jK_j\rho K_j^\dagger A\bigr)
+        =\Tr\bigl(\rho\sum_jK_j^\dagger AK_j\bigr)$ by cyclicity of the
+    trace, and $\sum_jK_j^\dagger K_j=\mathbb 1$ makes it trace preserving
+    and completely positive. Both properties pass to compositions, hence to
+    layers and circuits. A gate $G$ on a pair is the channel with the single
+    operator $G$.
+\end{proof}
 
 \begin{lemma}[Light cone of a local channel circuit]
     \label{lem:ldp_channel_light_cone}
@@ -695,7 +715,7 @@ of a local circuit that may add product ancillas and discard them
 
 \begin{lemma}[No connected correlations beyond the light cone of channels]
     \label{lem:ldp_channel_light_cone_correlations}
-    \uses{lem:ldp_channel_light_cone}
+    \uses{lem:ldp_channel_light_cone, lem:ldp_local_channel_circuit_properties}
     \lean{MPSPreparation.trace_mul_mul_eq_of_isChannelPreparedInDepth,
         MPSPreparation.channelCircuitDual_mul,
         MPSPreparation.ChannelLayer.dual_mul,
