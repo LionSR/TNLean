@@ -25,6 +25,7 @@ import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
+import TNLean.MPS.Preparation.SequentialResources
 import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.WindowCorrelator

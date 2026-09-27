@@ -452,6 +452,115 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     Theorem~\ref{thm:seqanc_assemble} makes the last site isometric as well.
 \end{proof}
 
+\section{Resources of the successive decompositions}
+
+After the successive decompositions, \cite{Schoen2005Sequential} state that
+``simple rank considerations'' bound the size of the isometries: for
+qubits, the isometry produced at the $k$-th decomposition, counted from the end
+at which the decompositions start, has dimension $2\min[D,2^k]\times
+    \min[D,2^{k+1}]$. According to \cite[Section~5.1]{PerezGarcia2007Matrix},
+the proof of the characterization by open-boundary representations also
+provides a recipe for the generation of any given state with minimal resources. In the present labelling the decompositions start at site $0$, and the
+bound concerns the bond $k$ between the sites $k-1$ and $k$.
+
+\begin{theorem}[Rank bound for one isometric site]
+    \label{thm:seqanc_rank_bound}
+    \lean{OBCChainTensor.le_mul_of_sum_conjTranspose_mul_eq_one,
+        OBCChainTensor.bondDim_succ_le_mul}
+    \leanok
+    \uses{def:varying_bond_obc_chain}
+    If $A^0,\dots,A^{d-1}$ are $a\times b$ matrices with
+    $\sum_i(A^i)^\dagger A^i=\Id_b$, then $b\le ad$. In particular, a site $p$
+    of a varying-bond open chain with $\sum_i(A_p^i)^\dagger A_p^i=\Id$
+    satisfies $D_{p+1}\le d\,D_p$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The $(ad)\times b$ matrix $S$ obtained by stacking the $A^i$ satisfies
+    $S^\dagger S=\Id_b$, so $b=\operatorname{rank}(S^\dagger S)
+        =\operatorname{rank}S\le ad$.
+\end{proof}
+
+\begin{theorem}[Bond growth from the start of the decompositions]
+    \label{thm:seqanc_bond_pow}
+    \lean{OBCChainTensor.bondDim_le_pow}
+    \leanok
+    \uses{def:varying_bond_obc_chain, thm:seqanc_rank_bound}
+    Let $d\ge 1$ and let $A$ be a varying-bond open chain of length $n+1$ with
+    $\sum_i(A_p^i)^\dagger A_p^i=\Id$ for every site $p<n$. Then
+    $D_k\le d^k$ for every $k\le n+1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_rank_bound}
+    Induction on $k$: $D_0=1$, $D_{p+1}\le d\,D_p$ for $p<n$ by
+    Theorem~\ref{thm:seqanc_rank_bound}, and $D_{n+1}=1\le d^{n+1}$.
+\end{proof}
+
+\begin{theorem}[Resources of the successive decompositions]
+    \label{thm:seqanc_resources}
+    \lean{OBCChainTensor.exists_isometric_coeff_eq_le_pow}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    Let $d\ge 1$. The chain $A'$ of Theorem~\ref{thm:seqanc_left_canonical}
+    can be chosen with $D'_k\le\min(D_k,d^k)$ for every $k$; in particular
+    $D'_k\le\min(D,d^k)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_left_canonical, thm:seqanc_bond_pow}
+    Theorem~\ref{thm:seqanc_bond_pow} applies to the chain of
+    Theorem~\ref{thm:seqanc_left_canonical}.
+\end{proof}
+
+\begin{definition}[Reversed open chain]
+    \label{def:seqanc_reverse}
+    \lean{OBCChainTensor.reverse}
+    \leanok
+    \uses{def:varying_bond_obc_chain}
+    The reverse of a varying-bond open chain $A$ of length $N$ has dimensions
+    $D_{N-k}$ and site matrices $(A_{N-1-p}^i)^T$.
+\end{definition}
+
+\begin{theorem}[Coefficients of the reversed chain]
+    \label{thm:seqanc_coeff_reverse}
+    \lean{OBCChainTensor.bondDim_reverse, OBCChainTensor.coeff_reverse}
+    \leanok
+    \uses{def:seqanc_reverse, def:varying_bond_obc_coeff}
+    The reverse of $A$ has coefficient
+    $\sigma\mapsto c_A(\sigma_{N-1},\dots,\sigma_0)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Relabel the virtual paths $k\mapsto N-k$ and the factors of the product
+    $p\mapsto N-1-p$.
+\end{proof}
+
+\begin{theorem}[Successive decompositions from both ends]
+    \label{thm:seqanc_resources_two_sided}
+    \lean{OBCChainTensor.exists_isometric_coeff_eq_le_min}
+    \leanok
+    \uses{def:varying_bond_obc_coeff}
+    Let $d\ge 1$ and let $A$ be a varying-bond open chain of length $N=n+1$.
+    There is a varying-bond open chain $A'$ with the same common bound,
+    $c_{A'}=c_A$, $\sum_i(A'^i_p)^\dagger A'^i_p=\Id$ for every site $p<n$, and
+    \begin{align}
+        D'_k & \le\min(D_k,d^k,d^{N-k})
+        \notag
+    \end{align}
+    for every $k\le N$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:seqanc_resources, thm:seqanc_coeff_reverse}
+    Apply Theorem~\ref{thm:seqanc_resources} to the reverse of $A$ and reverse
+    the result: by Theorem~\ref{thm:seqanc_coeff_reverse} this represents
+    $c_A$ with dimensions at most $\min(D_k,d^{N-k})$. Apply
+    Theorem~\ref{thm:seqanc_resources} once more. The bound $d^{N-k}$ is not
+    stated in the source, which bounds only the side at which the
+    decompositions start.
+\end{proof}
+
 \section{Sequential generation with an ancilla}
 
 \begin{theorem}[Generated states are open-boundary states]
