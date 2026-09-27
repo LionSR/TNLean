@@ -763,8 +763,10 @@ chain length is open, see
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:normalized_primitive_gauge}
     A gauge transformation and a rescaling bring $A$ into the
-    gauge~(\ref{eq:ldp_normal_gauge}); they multiply $\ket{\phi_N(A)}$ by a
+    gauge~(\ref{eq:ldp_normal_gauge}) by
+    Theorem~\ref{thm:normalized_primitive_gauge}; they multiply $\ket{\phi_N(A)}$ by a
     nonzero scalar, so the normalized state changes by a phase and the error
     is unchanged. Normality gives a bound $t<1$ on the moduli of the
     eigenvalues of $\E_A$ other than $1$, and

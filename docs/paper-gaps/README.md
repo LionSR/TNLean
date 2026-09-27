@@ -673,4 +673,5 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   `O(log(N/ε))`, eq. (1), is proved for chain lengths divisible by a block
   length `q` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, as in the `N/q`
   equal blocks of eq. (10), and that allowing a larger last block, as the proof
-  of the lower bound does, removes the restriction.
+  of the lower bound does, removes the restriction for chains with `N ≥ q`;
+  chains shorter than the block length need a separate argument.
