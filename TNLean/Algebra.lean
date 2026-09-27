@@ -67,6 +67,7 @@ import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OperatorSchmidt
+import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
@@ -80,7 +81,9 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwo
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
+import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
 import TNLean.Algebra.ScalarThreeCocycleInversion
+import TNLean.Algebra.ScalarThreeCocycleTimeReversal
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension
@@ -94,6 +97,7 @@ import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TwistedRegularRepresentation
+import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence

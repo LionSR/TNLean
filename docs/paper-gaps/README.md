@@ -65,10 +65,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   printed quantum-double tensor is not normalized (factor `|G|`); that the
   quantum-double instance uses the right-regular representation, equivalent
   to the printed left-regular one; and that the review's statements about the
-  contracted network (the primal tensor's symmetry under every irreducible
-  representation, and the coloring superposition, which on a torus covers only
-  the Gauss-law configurations of trivial holonomy) are formalized only for
-  one tensor or not at all.
+  contracted network are formalized on the torus: the primal tensor's
+  symmetry under every irreducible representation as a pulling-through
+  identity, and the coloring superposition as the equal-weight superposition
+  of the Gauss-law configurations of trivial holonomy, the only sector the
+  dual network reaches on a torus.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -587,6 +588,14 @@ note.
 
 For the matrix product operator symmetries of arXiv:2203.12563:
 
+- `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
+  `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
+  trivial action of `ψ` is forced by the source's identification of that phase
+  with part of `𝓜_TY`.
+- `glm23_reps3_su24_module_list.tex` records that completeness of the listed
+  `Rep(S₃)` and `su(2)₄` phases is formalized only on one block, with a
+  two-block representation of `Rep(S₃)` showing that the representation
+  identity alone does not determine the list.
 - `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
   algebras, symmetric families, and nonnegative integer representations uses
   only the periodic-boundary form of the source's arbitrary-boundary
