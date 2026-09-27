@@ -19,8 +19,9 @@ arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC", with ancilla
 each site, local operations between the layers, and "ancillas traced out at the end", but
 without measurements or classical communication.
 
-The two facts proved here are the ones that make local channel conversions an equivalence
-relation up to depth and give its basic obstruction:
+Local channel conversion is a directed relation: it is reflexive at depth `0` and transitive
+with additive depth, but it is not symmetric, since a channel need not be undone by another
+channel. The two facts proved here are its transitivity and its basic obstruction:
 
 * conversions compose, and the depths add (`IsLocalChannelConversion.trans`);
 * a density matrix obtained from a product density by a conversion of depth `T` has vanishing
