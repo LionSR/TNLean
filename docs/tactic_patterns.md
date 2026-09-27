@@ -2383,10 +2383,11 @@ currently one occurrence, so no general declaration is warranted.
     ...
   exact MPOTensor.mpo_eq_of_conj hGH hHG hconj L
   ```
-- **Seen:** three occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
-  (`mpo_fibStringNetEdgeTau`, `mpo_fibReviewTensor`, and the configuration-space variant in
-  `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review before merge.
-- **Status:** three occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
+- **Seen:** four occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
+  (`mpo_fibStringNetEdgeTau`, `mpo_fibStringNetTensor`, `mpo_fibReviewTensor`, and the
+  configuration-space variant in `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review
+  before merge; the first three already call `mpo_eq_of_diagonal_conj`.
+- **Status:** four occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
 - **Abstraction (available):** `Matrix.diagonal_mul_diagonal_inv`, `Matrix.diagonal_inv_mul_diagonal` and
   `MPOTensor.mpo_eq_of_diagonal_conj` in `TNLean/MPS/MPDO/BondSimilarity.lean`.
 - **Notes:** `mpo_eq_of_diagonal_conj g hg hconj L` takes a nowhere-zero `g` and the letterwise

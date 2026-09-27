@@ -410,13 +410,15 @@
     $T^{\oplus S}$, defined by applying $T$ independently at every $s\in S$,
     satisfies
     \begin{align}
-        (T^{\oplus S})(U^{\oplus S}) & =(TU)^{\oplus S}.
+        (T^{\oplus S})(U^{\oplus S}) & =(TU)^{\oplus S},
+        \notag
     \end{align}
-    It also satisfies
+    and
     \begin{align}
-        \lVert T^{\oplus S}\rVert & \leq\lVert T\rVert.
+        \lVert T^{\oplus S}\rVert & \leq\lVert T\rVert,
+        \label{eq:spectator_fiberwise_norm_le}
     \end{align}
-    If $S$ is nonempty, then the second relation is an equality.
+    with equality in (\ref{eq:spectator_fiberwise_norm_le}) whenever $S$ is nonempty.
 \end{lemma}
 
 \begin{proof}
@@ -575,19 +577,23 @@
     fixed $N$-site space are explicit:
     \begin{align}
         n<l & \Longrightarrow E_n=0.
+        \label{eq:martingale_diff_below_l}
     \end{align}
     At the remaining boundary index,
     \begin{align}
         Q_lE_l & =0.
+        \label{eq:martingale_diff_at_l_orthog}
     \end{align}
     At $n=l$, both $Q_l$ and $G_{l+1}^{(N)}$ are the kernel projection of the
     unique interaction on $[0,l+1)$.  Thus
     \begin{align}
         E_l & =\Id-G_{l+1}^{(N)}.
+        \notag
     \end{align}
     Hence
     \begin{align}
         Q_lE_l & =G_{l+1}^{(N)}(\Id-G_{l+1}^{(N)})=0.
+        \label{eq:martingale_diff_at_l_eval}
     \end{align}
 \end{theorem}
 
@@ -595,10 +601,10 @@
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections}
     If $n<l$, neither the $n$-site prefix nor the $(n+1)$-site prefix contains a full
-    length-$(l+1)$ interaction, so both ground projections are the identity.
+    length-$(l+1)$ interaction, so both ground projections are the identity, proving (\ref{eq:martingale_diff_below_l}).
     At $n=l$, the next prefix and the interval $[0,l+1)$ contain exactly the
-    same single interaction.  Idempotence of its kernel projection proves the
-    second identity.
+    same single interaction.  Idempotence of its kernel projection gives
+    (\ref{eq:martingale_diff_at_l_orthog}) via (\ref{eq:martingale_diff_at_l_eval}).
 \end{proof}
 
 \subsection{Spectator-indexed boundary maps}\label{subsec:spectator_boundary_maps}
@@ -4011,15 +4017,15 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Positivity of the inner product gives
     \begin{align}
         0
-         & \leq \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle, \\
-        \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle
+         & \leq \operatorname{Re}\langle(P-Q)v,(P-Q)v\rangle \notag \\
          & =\operatorname{Re}\langle Pv,v\rangle
         -\operatorname{Re}\langle Pv,Qv\rangle
         -\operatorname{Re}\langle Qv,Pv\rangle
-        +\operatorname{Re}\langle Qv,v\rangle.
+        +\operatorname{Re}\langle Qv,v\rangle,
+        \label{eq:projector_diff_inner_prod_expand}
     \end{align}
-    Symmetry and idempotence expand the left-hand side into the second line;
-    rearranging it proves the claim.
+    where the equality expands the inner product using symmetry and idempotence $P^\dagger=P=P^2$, $Q^\dagger=Q=Q^2$.
+    Rearranging (\ref{eq:projector_diff_inner_prod_expand}) proves the claim.
 \end{proof}
 
 \begin{lemma}[Norm gap implies the squared quadratic-form bound]
@@ -6223,7 +6229,7 @@ tensors.
 
 \begin{lemma}[Comparison with the kernel projection]
     \label{lem:positive-kernel-projection-comparison}
-    \lean{LinearMap.exists_pos_norm_gap_on_orthogonal_ker,
+    \lean{LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker,
         LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le,
         LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection}
     \leanok
