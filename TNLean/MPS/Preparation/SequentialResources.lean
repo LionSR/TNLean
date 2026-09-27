@@ -51,7 +51,7 @@ where the sweep starts: in the chain, bond `k` has dimension at most
   eq. `induction` and lines 200--203 of
   `References/quant-ph_0501096/PhotoMPS.tex`.
 * Pérez-García, Verstraete, Wolf, Cirac, *Matrix product state representations*,
-  arXiv:quant-ph/0608197, lines 1573--1577 of
+  arXiv:quant-ph/0608197, lines 1574--1578 of
   `Papers/quant-ph_0608197/MPSarchive.tex`: the proof of Theorem `Thm:seqwith`
   "also provides a \emph{recipe} for the generation of any given state (with
   minimal resources)".
