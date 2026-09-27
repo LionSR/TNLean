@@ -203,6 +203,25 @@ theorem localTermES_eq_zero_of_openParentHamiltonianES_eq_zero
     (fun i : NonwrappingStart L N => localTermES A L i.1)
     (fun i => localTermES_isSymmetricProjection A L i.1) hv i
 
+/-- A kernel vector of the open-chain Hamiltonian restricts into the local
+ground space on every nonwrapping length-`L` window.
+
+This is the frustration-free extraction of Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12), read in `NSiteSpace` coordinates. -/
+theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
+    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
+    {v : EuclideanSpace ℂ (Cfg d N)}
+    (hv : v ∈ LinearMap.ker (openParentHamiltonianES A L N))
+    (i : Fin N) (hi : i.val + L ≤ N) (τ : Fin N → Fin d) :
+    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v) ∈
+      groundSpace A L := by
+  have hlocal : localTermES A L i v = 0 :=
+    localTermES_eq_zero_of_openParentHamiltonianES_eq_zero A L N
+      (LinearMap.mem_ker.mp hv) ⟨i, hi⟩
+  have hrestrictES :=
+    cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN i hlocal τ
+  simpa [cyclicRestrictES] using (mem_groundSpaceES_iff A L _).1 hrestrictES
+
 /-- The open MPS boundary-condition space is contained in the kernel of the
 open-chain parent Hamiltonian.
 
@@ -246,21 +265,9 @@ theorem ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective
   rw [mem_groundSpaceES_iff]
   apply contiguous_mem_groundSpace_of_isNBlkInjective hInj hL₀ hL₀N
   intro s hs τ
-  let i : NonwrappingStart (L₀ + 1) N := ⟨⟨s, by omega⟩, hs⟩
-  have hopen : openParentHamiltonianES A (L₀ + 1) N v = 0 := by
-    rwa [LinearMap.mem_ker] at hv
-  have hlocal : localTermES A (L₀ + 1) i.1 v = 0 :=
-    localTermES_eq_zero_of_openParentHamiltonianES_eq_zero A (L₀ + 1) N hopen i
-  have hrestrictES := cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero
-    A hL₀N i.1 hlocal τ
-  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  let eL := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L₀ + 1))
-  have hrestrict :
-      cyclicRestrictₗ (Fin.pos i.1) (L₀ + 1) i.1 τ (eN v) ∈
-        groundSpace A (L₀ + 1) := by
-    simpa [cyclicRestrictES, eN, eL] using
-      (mem_groundSpaceES_iff A (L₀ + 1) _).1 hrestrictES
-  rwa [cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i.1) hL₀N i.2] at hrestrict
+  have hrestrict := cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
+    A hL₀N hv ⟨s, by omega⟩ hs τ
+  rwa [cyclicRestrictₗ_eq_contiguousRestrictₗ _ hL₀N hs] at hrestrict
 
 /-- For a block-injective tensor, the kernel of the canonical nonwrapping open
 parent Hamiltonian is exactly the open MPS boundary-condition space.
@@ -276,5 +283,48 @@ theorem ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
     (ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective
       hInj hL₀ hL₀N)
     (groundSpaceES_le_ker_openParentHamiltonianES A (L₀ + 1) N)
+
+/-! ### Dimension of the open-boundary ground space -/
+
+/-- Project result: for a tensor block-injective at length \(L₀ > 0\), the local
+ground space on \(N \ge L₀\) sites has dimension \(D^2\).
+
+This extends `groundSpace_finrank_eq` from injective tensors to block-injective
+ones, and `groundSpace_finrank_eq_of_isNBlkInjective` from the blocking length
+itself to every longer chain. -/
+theorem groundSpace_finrank_eq_of_isNBlkInjective_of_le {A : MPSTensor d D} {L₀ N : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hN : L₀ ≤ N) :
+    Module.finrank ℂ (groundSpace A N) = D ^ 2 := by
+  let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] groundSpace A N :=
+    LinearEquiv.ofInjective (groundSpaceMap A N)
+      (groundSpaceMap_injective_of_isNBlkInjective (isNBlkInjective_of_le hL₀ hInj hN))
+  rw [← LinearEquiv.finrank_eq e, Module.finrank_matrix]
+  simp [pow_two]
+
+/-- Project result: the canonical \(\ell^2\) realization of the local ground space
+has dimension \(D^2\) under block injectivity at length \(L₀ \le N\). -/
+theorem groundSpaceES_finrank_eq_of_isNBlkInjective_of_le {A : MPSTensor d D} {L₀ N : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hN : L₀ ≤ N) :
+    Module.finrank ℂ (groundSpaceES A N) = D ^ 2 := by
+  rw [groundSpaceES, LinearEquiv.finrank_map_eq]
+  exact groundSpace_finrank_eq_of_isNBlkInjective_of_le hInj hL₀ hN
+
+/-- Project result: **boundary degeneracy of the open-chain parent Hamiltonian.**
+For a tensor block-injective at length \(L₀ > 0\), the kernel of the
+length-\((L₀ + 1)\) open parent Hamiltonian on \(N \ge L₀ + 1\) sites has
+dimension exactly \(D^2\).
+
+arXiv:2011.12127, line 1174, states that the open-boundary ground-state
+degeneracy is at least the square of the dimension of the irreducible
+projective representation carried by the boundary vectors. That dimension is
+at most \(D\), and this theorem gives the exact count \(D^2\) for every
+block-injective tensor; it is a sharper statement than the source's lower
+bound, not the source statement itself. -/
+theorem finrank_ker_openParentHamiltonianES_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
+    Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N)) = D ^ 2 := by
+  rw [ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀N]
+  exact groundSpaceES_finrank_eq_of_isNBlkInjective_of_le hInj hL₀ (by omega)
 
 end MPSTensor

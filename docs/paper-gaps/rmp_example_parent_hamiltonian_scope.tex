@@ -325,12 +325,33 @@ identities.\footnote{Formal declarations:
 \leanid{MPSTensor.cluster_stabilizer_unique_gs} in
 \path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.}
 
+The fourfold open-boundary degeneracy of the AKLT chain is formalized for the
+open-chain two-site parent Hamiltonian, whose local projectors act only on
+nonwrapping windows. For $N\ge2$ its kernel is the open-boundary MPS space
+spanned by $\sigma\mapsto\langle l|A^\sigma|r\rangle$ with
+$(\langle l|,|r\rangle)\in\mathbb C^2\times\mathbb C^2$, and it is
+four-dimensional. The proof reuses the two-site intersection check
+(\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_intersection}) on every
+nonwrapping three-site window. For a general block-injective tensor the
+formal count is exactly $D^2$; this is sharper than the review's lower bound by
+the squared irreducible-representation dimension, which is at most
+$D^2$.\footnote{Formal declarations:
+\leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES},
+\leanid{MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two}, and
+\leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_boundaryVectors}
+in \path{TNLean/MPS/Examples/AKLTOpenBoundary.lean};
+\leanid{MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective} in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/OpenHamiltonian.lean}.} The
+statement that exactly one state of this four-dimensional space has total spin
+$0$ is not formalized: it needs the total-spin operator on $N$ spin-$1$ sites.
+
 Three items remain outside the formal development: the identification of the
 GHZ parent interaction with the ferromagnetic Ising interaction
 (\ref{eq:rmp_example_parent_hamiltonian_scope_ising_hamiltonian}) as an
 operator identity, the polynomial AKLT Hamiltonian
 (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) and its
-spin-$2$ projector form, and the open-boundary edge-mode degeneracy.
+spin-$2$ projector form, and the spin-$0$ count inside the open-boundary
+ground space.
 
 \section{Source-faithful order of work}
 
@@ -363,7 +384,8 @@ A source-faithful formalization of issue \#2315 should proceed as follows.
           locally sourced. Introduce the spin-$2$ projector formulation only
           after citing or proving its equivalence with the polynomial form.
           Treat the fourfold open-boundary degeneracy separately from the
-          periodic unique-ground-state theorem.
+          periodic unique-ground-state theorem; the degeneracy is done, and
+          the spin-$0$ count awaits a total-spin operator.
 \end{enumerate}
 
 \section{Verdict}
@@ -377,7 +399,8 @@ so is the cluster stabilizer for the reflected convention, including its
 periodic unique-ground-state statement. For the two matrices printed in the
 older review, the on-site equivalence, ground energy and periodic uniqueness
 are now proved for $N\ge3$. The GHZ Ising operator identity, the AKLT polynomial and
-spin-$2$ projector forms, and the open-boundary edge modes remain open.
+spin-$2$ projector forms, and the spin-$0$ sector of the open-boundary ground
+space remain open; the fourfold open-boundary degeneracy is formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}

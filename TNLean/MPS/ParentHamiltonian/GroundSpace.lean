@@ -56,6 +56,42 @@ noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (NSiteSpace d L) :=
   (groundSpaceMap A L).range
 
+/-- A rank-one boundary matrix \(|r⟩⟨l|\) produces the open-boundary MPS with
+boundary vectors \(⟨l|\) and \(|r⟩\):
+\[
+  Γ_L(|r⟩⟨l|)(σ) = ⟨l|A^σ|r⟩.
+\] -/
+lemma groundSpaceMap_vecMulVec (A : MPSTensor d D) (L : ℕ) (l r : Fin D → ℂ) :
+    groundSpaceMap A L (Matrix.vecMulVec r l) =
+      fun σ => l ⬝ᵥ (Kraus.evalWord A (List.ofFn σ) *ᵥ r) := by
+  funext σ
+  rw [groundSpaceMap_apply, Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm]
+
+/-- Bridge: the local ground space is spanned by the open-boundary MPS
+\(σ ↦ ⟨l|A^σ|r⟩\), with the boundary vectors \(⟨l|\) and \(|r⟩\) ranging over
+\(ℂ^D × ℂ^D\).
+
+This is the boundary-vector description of the open-boundary ground space in
+arXiv:2011.12127, line 1174 ("we can define boundary vectors on both sides").
+Every boundary matrix is a sum of matrix units, and each matrix unit is the
+rank-one matrix of two standard basis vectors. -/
+theorem groundSpace_eq_span_boundaryVectors (A : MPSTensor d D) (L : ℕ) :
+    groundSpace A L = Submodule.span ℂ (Set.range fun p : (Fin D → ℂ) × (Fin D → ℂ) =>
+      fun σ : Cfg d L => p.1 ⬝ᵥ (Kraus.evalWord A (List.ofFn σ) *ᵥ p.2)) := by
+  apply le_antisymm
+  · rintro _ ⟨X, rfl⟩
+    rw [Matrix.matrix_eq_sum_single X, map_sum]
+    refine Submodule.sum_mem _ fun i _ => ?_
+    rw [map_sum]
+    refine Submodule.sum_mem _ fun j _ => ?_
+    rw [show Matrix.single i j (X i j) = X i j • Matrix.single i j (1 : ℂ) by
+      rw [Matrix.smul_single, smul_eq_mul, mul_one]]
+    rw [map_smul, Matrix.single_eq_single_vecMulVec_single, groundSpaceMap_vecMulVec]
+    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨(Pi.single j 1, Pi.single i 1), rfl⟩)
+  · rw [Submodule.span_le]
+    rintro _ ⟨p, rfl⟩
+    exact ⟨Matrix.vecMulVec p.2 p.1, groundSpaceMap_vecMulVec A L p.1 p.2⟩
+
 lemma trace_gauge_boundary (X : GL (Fin D) ℂ) (E Y : Matrix (Fin D) (Fin D) ℂ) :
     Matrix.trace (((X : Matrix (Fin D) (Fin D) ℂ) * E *
         ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * Y) =

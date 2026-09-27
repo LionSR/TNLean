@@ -650,6 +650,47 @@ eigenspace.
     $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
 \end{proof}
 
+\begin{theorem}[Fourfold open-boundary degeneracy of the AKLT chain]
+    \label{thm:aklt_open_ground_space}
+    \lean{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two, MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_boundaryVectors, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_three}
+    \leanok
+    \uses{def:aklt_tensor, def:open_parent_hamiltonian_es, def:ground_space_es}
+    For $N\ge2$, the kernel of the open-chain two-site parent Hamiltonian of
+    the AKLT tensor is the open-boundary MPS space,
+    \begin{align}
+        \ker H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}})
+         & = G_{N}^{\mathrm{ES}}(A_{\mathrm{AKLT}})
+        = \spn_{\C}\bigl\{\sigma\mapsto
+        \langle l|A_{\mathrm{AKLT}}^{\sigma}|r\rangle :
+        (\langle l|,|r\rangle)\in\C^{2}\times\C^{2}\bigr\},
+        \notag
+    \end{align}
+    and it is four-dimensional \cite[lines~1171--1174]{Cirac2021Matrix}.
+    The three-site open-chain parent Hamiltonian has the same
+    four-dimensional kernel for $N\ge3$. The spin-$0$ statement of the same
+    passage is not part of this theorem; see
+    \cite{gap:rmp_example_parent_hamiltonian_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_ground_space_two, thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:open_ground_space_le_hamiltonian_kernel, thm:open_hamiltonian_kernel_le_ground_space, thm:normal_open_chain_range_reduction, lem:ground_space_span_boundary_vectors, thm:open_parent_hamiltonian_kernel_finrank}
+    For $N=2$ the Hamiltonian is the projector onto the orthogonal complement
+    of $\mathcal G_{2}(A_{\mathrm{AKLT}})$. For $N\ge3$, a kernel vector
+    satisfies every nonwrapping two-site constraint. Each nonwrapping
+    three-site window restricts on either side to a nonwrapping two-site
+    window, so Theorem~\ref{thm:aklt_ground_space_intersection_two} places
+    every three-site restriction in $\mathcal G_{3}(A_{\mathrm{AKLT}})$, as in
+    the hand check of \cite[line~2095]{Cirac2021Matrix}. The AKLT tensor is
+    injective after blocking $L_{0}=2$ sites
+    (Theorem~\ref{thm:aklt_normal}), and the open-chain intersection theorem
+    grows the three-site constraints to the whole chain. The reverse
+    inclusion holds for every tensor. The span description is
+    Lemma~\ref{lem:ground_space_span_boundary_vectors}, and
+    Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} with $D=2$ gives
+    dimension $D^{2}=4$.
+\end{proof}
+
 \begin{remark}[AKLT polynomial Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
     The displayed local spin-chain Hamiltonian of the AKLT state is
     \begin{align}
@@ -674,9 +715,10 @@ eigenspace.
         \notag
     \end{align}
     for two spin-$1$ particles. For open boundary conditions and $N\geq2$,
+    the ground space of $H_{\mathrm{AKLT},N}^{\mathrm{open}}$ is four-dimensional
+    (Theorem~\ref{thm:aklt_open_ground_space}), and exactly one of its
+    states lies in the spin-$0$ sector:
     \begin{align}
-        \dim\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
-         & = 4, \notag \\
         \dim\bigl(\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
         \cap\mathcal H_{S=0}
         \bigr)
@@ -685,7 +727,7 @@ eigenspace.
     \end{align}
     \cite[lines~1169--1174]{Cirac2021Matrix}; see
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
-    % Neither the polynomial form nor the open-boundary degeneracy is
-    % formalized; the periodic two-site uniqueness is
-    % thm:aklt_chain_ground_space_two.
+    % Neither the polynomial form nor the spin-0 count is formalized; the
+    % periodic two-site uniqueness is thm:aklt_chain_ground_space_two and the
+    % open-boundary fourfold degeneracy is thm:aklt_open_ground_space.
 \end{remark}

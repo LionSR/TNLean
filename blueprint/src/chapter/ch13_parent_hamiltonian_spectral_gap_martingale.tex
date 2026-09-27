@@ -2412,6 +2412,59 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Theorem~\ref{thm:open_hamiltonian_kernel_le_ground_space}.
 \end{proof}
 
+\begin{lemma}[Boundary-vector span of the local ground space]
+    \label{lem:ground_space_span_boundary_vectors}
+    \lean{MPSTensor.groundSpaceMap_vecMulVec, MPSTensor.groundSpace_eq_span_boundaryVectors}
+    \leanok
+    \uses{def:ground_space_parent, def:ground_space_map}
+    For every tensor $A$ and every $L$, the local ground space $G_{L}(A)$ is
+    spanned by the open-boundary vectors
+    \begin{align}
+        \sigma\longmapsto\langle l|A^{\sigma}|r\rangle,
+        \qquad (\langle l|,|r\rangle)\in\C^{D}\times\C^{D}.
+        \notag
+    \end{align}
+    These are the boundary vectors on both sides of
+    \cite[line~1174]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The rank-one boundary matrix $|r\rangle\langle l|$ gives
+    $\Gamma_{L}(|r\rangle\langle l|)(\sigma)=\tr(A^{\sigma}|r\rangle\langle l|)
+        =\langle l|A^{\sigma}|r\rangle$. Every boundary matrix is a linear
+    combination of matrix units, and each matrix unit is rank one.
+\end{proof}
+
+\begin{theorem}[Dimension of the open-chain ground space]
+    \label{thm:open_parent_hamiltonian_kernel_finrank}
+    \lean{MPSTensor.groundSpace_finrank_eq_of_isNBlkInjective_of_le, MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective_of_le, MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
+    Assume $L_{0}>0$. If $A$ is $L_{0}$-block-injective, then
+    $\dim G_{N}(A)=\dim G_{N}^{\mathrm{ES}}(A)=D^{2}$ for every $N\geq L_{0}$.
+    If moreover $D\geq1$ and $N\geq L_{0}+1$, then
+    \begin{align}
+        \dim\ker H^{\mathrm{open}}_{N,L_{0}+1}(A) & =D^{2}.
+        \notag
+    \end{align}
+    The review states that the open-boundary degeneracy is at least the
+    square of the dimension of the irreducible projective representation
+    carried by the boundary \cite[line~1174]{Cirac2021Matrix}. That dimension
+    is at most $D$, so the exact count $D^{2}$ is a sharper statement than the
+    printed lower bound.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_kernel_ground_space, thm:ground_space_map_injective_blk}
+    Block injectivity at length $L_{0}$ persists to every length $N\geq L_{0}$,
+    so $\Gamma_{N}$ is injective and $\dim G_{N}(A)=\dim\MN{D}=D^{2}$. The
+    canonical $\ell^{2}$ identification is a linear isomorphism, and
+    Theorem~\ref{thm:open_parent_hamiltonian_kernel_ground_space} identifies
+    the kernel with $G_{N}^{\mathrm{ES}}(A)$.
+\end{proof}
+
 % Source: References/cond-mat_9410110/main.tex, equation En, lines 1060--1073.
 \begin{definition}[Block-injective MPS realization of the open-chain martingale difference]
     \label{def:open_chain_martingale_difference_es}
