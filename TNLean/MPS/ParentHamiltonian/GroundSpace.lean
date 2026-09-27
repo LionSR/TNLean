@@ -63,8 +63,6 @@ boundary vectors \(⟨l|\) and \(|r⟩\):
   Γ_L(|r⟩⟨l|)(σ) = ⟨l|A^σ|r⟩.
 \] -/
 lemma groundSpaceMap_vecMulVec (A : MPSTensor d D) (L : ℕ) (l r : Fin D → ℂ) :
-    -- `Matrix.vecMulVec r l = |r⟩⟨l|`. The arguments stay `(l, r)` so that
-    -- `openState l r` is `⟨l|A^σ|r⟩`, the order of arXiv:2011.12127, line 1174.
     groundSpaceMap A L (Matrix.vecMulVec r l) = openState l r A L := by
   funext σ
   simp only [openState, openCoeff_def]
