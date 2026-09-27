@@ -31,7 +31,7 @@ two blocks adjacent to the wall contains it, and the statement here holds on tha
 stabilizer subgroup.
 
 **Local fix (nondegenerate domain walls, blocked local action):** the walls of a family are
-nonzero and their phases are nonzero, fields of `IsDomainWallFamily` (the source's walls are
+nonzero and their phases are nonzero, through the local action `IsDomainWallAction` (the walls are
 excitations and `B` are "phase factors", line 1894), and the local action holds against blocked
 regions; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
 
@@ -81,19 +81,23 @@ ordered pair of blocks, such that every group element `g` carries `e_{yz}` to `e
 nonzero phase `B^g_{y,z}` (`eq:localcdefG`; "the MPUs permute between the different domain
 walls", line 1894). The phase of the wall `e_{yz}` with left block `y` is written `B g y z`;
 the source writes it `B^g_{y,z}` in `PentLB` and `Intequiv`. -/
-structure IsDomainWallFamily (e : (y z : X) → Fin d → Matrix (Fin (D y)) (Fin (D z)) ℂ)
-    (B : G → X → X → ℂ) : Prop where
-  /-- Every group element carries `e_{yz}` to `e_{gy,gz}` with phase `B^g_{y,z}`. -/
-  action : ∀ g y z, ad.IsDomainWallAction g rfl rfl (e y z) (e (g • y) (g • z)) (B g y z)
-  /-- The domain walls are nonzero. -/
-  ne_zero : ∀ y z, e y z ≠ 0
-  /-- The phases are nonzero. -/
-  phase_ne_zero : ∀ g y z, B g y z ≠ 0
+def IsDomainWallFamily (e : (y z : X) → Fin d → Matrix (Fin (D y)) (Fin (D z)) ℂ)
+    (B : G → X → X → ℂ) : Prop :=
+  ∀ g y z, ad.IsDomainWallAction g rfl rfl (e y z) (e (g • y) (g • z)) (B g y z)
 
 namespace IsDomainWallFamily
 
 variable {ad} {e : (y z : X) → Fin d → Matrix (Fin (D y)) (Fin (D z)) ℂ} {B : G → X → X → ℂ}
   (fd : FusionData F)
+
+/-- The phases of a family of domain walls are nonzero. -/
+theorem phase_ne_zero (hB : ad.IsDomainWallFamily e B) (g : G) (y z : X) : B g y z ≠ 0 :=
+  (hB g y z).phase_ne_zero
+
+/-- The domain walls of a family are nonzero. -/
+theorem ne_zero (hB : ad.IsDomainWallFamily e B) (y z : X) : e y z ≠ 0 := by
+  have h := (hB 1 y z).target_ne_zero
+  rwa [one_smul, one_smul] at h
 
 /-- **Fractionalization of the symmetry on a family of domain walls** (arXiv:2405.00439,
 `PentLB`, `Papers/2405.00439/MPU-DW.tex` lines 1928--1933):
@@ -102,8 +106,8 @@ theorem mul_eq (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g h : G) (y z : X) :
     B g (h • y) (h • z) * B h y z =
       ((ad.lSymbol fd y g h / ad.lSymbol fd z g h : ℂˣ) : ℂ) * B (g * h) y z :=
-  IsDomainWallAction.mul_eq (fd := fd) hA hperm (hB.action h y z) (hB.action g (h • y) (h • z))
-    ((hB.action (g * h) y z).congr_target (mul_smul g h y) (mul_smul g h z)) (hB.ne_zero _ _)
+  IsDomainWallAction.mul_eq (fd := fd) hA hperm (hB h y z) (hB g (h • y) (h • z))
+    ((hB (g * h) y z).congr_target (mul_smul g h y) (mul_smul g h z))
 
 /-- **The interchange phase as a product of L-symbols** (arXiv:2405.00439, `Intequiv`, first
 equality, in the normalization-free form with the factor `k = 0`,
