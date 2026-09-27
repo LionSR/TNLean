@@ -1073,7 +1073,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \begin{proof}
     \leanok
     \uses{thm:ph_block_cyclic_boundary_closure,thm:ph_tp_word_span_propagation,
-        thm:ph_tp_block_open_ground_space, lem:bnt_span_le_parent_hamiltonian_kernel}
+        thm:ph_tp_block_open_ground_space, lem:bnt_span_le_parent_hamiltonian_kernel,
+        lem:parent_cyclic_translate_preserves_chain_space,
+        thm:parent_hamiltonian_kernel_le_chain_ground_space}
     Trace-preserving normalization propagates simultaneous injectivity to
     every length at least $S$, in particular to $N-1$. The open-chain
     intersection property expresses each periodic ground vector as a sum
@@ -1166,13 +1168,19 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_word_span_primitive_normalization, thm:ph_block_periodic_closure_tp,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        lem:local_term_es_average, thm:weighted_sum_kernel,
+        thm:parent_ground_space_es_kernel}
     Normalize the blocks while retaining simultaneous injectivity at length
     $S$. The parent Hamiltonians and the span of the periodic component
     vectors are unchanged. Apply the trace-preserving block closure theorem.
-    Finally, the kernel of a sum of positive operators is the intersection
-    of their kernels, so replacing the local projectors by positive terms
-    with the same local kernels preserves the ground space.
+    For positive operators $H_i$,
+    \begin{align}
+        \ker\Bigl(\sum_i H_i\Bigr) & =\bigcap_i\ker H_i.
+        \notag
+    \end{align}
+    Replacing the local projectors by positive terms with the same local
+    kernels therefore preserves the ground space.
 \end{proof}
 
 \begin{theorem}[Local spaces of canonical representatives]
@@ -1191,7 +1199,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:coisometric_reconstruction_local_space, lem:block_sum_local_ground_space,
+    \uses{lem:coisometric_reconstruction_local_space, thm:block_sum_local_ground_space,
         thm:local_ground_space_gauge_invariance, thm:local_ground_space_rescaling}
     The coisometric reconstruction preserves the local space on every
     positive-length interval. The local space of the resulting direct sum
@@ -1226,13 +1234,18 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:ph_canonical_representative_local_spaces,
         thm:ph_block_ground_space_at_simultaneous_injectivity,
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        lem:block_sum_local_ground_space}
+        thm:block_sum_local_ground_space,
+        lem:local_term_es_average, thm:weighted_sum_kernel,
+        thm:parent_ground_space_es_kernel}
     Replace the original canonical tensor by the direct sum containing
     one copy of each normal representative. Their local spaces, hence
     their periodic local constraints, coincide. Apply the simultaneous
     block-injectivity closure theorem at the same supplied length $S$.
-    Finally, the kernel of a finite sum of positive operators is the
-    intersection of their kernels. Thus replacing each orthogonal
-    projection by any positive interaction with the same kernel leaves
-    the periodic ground space unchanged.
+    For positive operators $H_i$,
+    \begin{align}
+        \ker\Bigl(\sum_i H_i\Bigr) & =\bigcap_i\ker H_i.
+        \notag
+    \end{align}
+    Replacing each orthogonal projection by any positive interaction with
+    the same kernel therefore leaves the periodic ground space unchanged.
 \end{proof}
