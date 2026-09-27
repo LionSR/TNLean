@@ -353,8 +353,10 @@ private theorem neg_one_pow_rev_add (a b : Fin 2) :
     (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ a.val * (-1) ^ b.val := by
   fin_cases a <;> fin_cases b <;> simp [Fin.rev]
 
-/-- **`O_Z X_j = Z_{j−1} X_j Z_{j+1} O_Z`** for the CZX operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` of
-arXiv:2011.12127, line 1472. Project result. -/
+/-- **`O_Z X_j = Z_{j−1} X_j Z_{j+1} O_Z`** for the periodic operator of the undecorated CZX
+tensor, `X^{⊗N} D_N`, which is the operator `O_Z = D_N X^{⊗N}` of arXiv:2011.12127, line 1472,
+up to the global sign `(−1)^N` (`docs/paper-gaps/mpu_czx_tensor_normalization.tex`); the relation
+holds for both. Project result. -/
 theorem mpo_czxTensor_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
     MPOTensor.mpo czxTensor N * pauliXAt j = clusterTerm j * MPOTensor.mpo czxTensor N := by
   rw [mpo_czxTensor, pauliXAt, clusterTerm, Matrix.monomial_mul_monomial,
@@ -365,7 +367,8 @@ theorem mpo_czxTensor_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
     neg_one_pow_rev_add]
   ring
 
-/-- **`O_Z Z_{j−1} X_j Z_{j+1} = X_j O_Z`.** Project result. -/
+/-- **`O_Z Z_{j−1} X_j Z_{j+1} = X_j O_Z`** for the periodic operator of the undecorated CZX
+tensor, and hence, up to the global sign `(−1)^N`, for the review's `O_Z`. Project result. -/
 theorem mpo_czxTensor_mul_clusterTerm (hN : 2 ≤ N) (j : Fin N) :
     MPOTensor.mpo czxTensor N * clusterTerm j = pauliXAt j * MPOTensor.mpo czxTensor N := by
   rw [mpo_czxTensor, pauliXAt, clusterTerm, Matrix.monomial_mul_monomial,
