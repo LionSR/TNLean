@@ -294,12 +294,16 @@ structure ChannelLayer (d N : ℕ) [NeZero N] where
 
 namespace ChannelLayer
 
-/-- The channel `ρ ↦ ∑ⱼ Kⱼ ρ Kⱼ†` on the pair `{k, k + 1}`. -/
+/-- The channel `ρ ↦ ∑ⱼ Kⱼ ρ Kⱼ†` on the pair `{k, k + 1}`.
+
+It is defined for every `k`, as `Layer.gate` is, but it is a channel on that pair only for
+`k ∈ L.bonds`, where the fields `kraus_mem_supportedOperators` and `sum_kraus` hold. -/
 noncomputable def gateMap (L : ChannelLayer d N) (k : Fin N) :
     Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
   rectangularKrausMap (L.kraus k)
 
-/-- The Heisenberg dual `A ↦ ∑ⱼ Kⱼ† A Kⱼ` of the channel on the pair `{k, k + 1}`. -/
+/-- The Heisenberg dual `A ↦ ∑ⱼ Kⱼ† A Kⱼ` of the channel on the pair `{k, k + 1}`, meaningful
+for `k ∈ L.bonds` as for `gateMap`. -/
 noncomputable def gateDual (L : ChannelLayer d N) (k : Fin N) :
     Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
   rectangularKrausMap fun j ↦ (L.kraus k j)ᴴ

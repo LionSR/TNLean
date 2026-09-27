@@ -654,11 +654,13 @@ of a local circuit that may add product ancillas and discard them
     \leanok
     A \emph{channel on the pair} $\{k,k+1\}$ is a map
     $\rho\mapsto\sum_jK_j\rho K_j^\dagger$ on density matrices of the ring,
-    where the operators $K_j$ act on $\{k,k+1\}$ and
+    where each $K_j$ is an operator on the whole ring acting trivially off
+    $\{k,k+1\}$ and
     $\sum_jK_j^\dagger K_j=\mathbb 1$. A \emph{channel layer} is a composition
-    of channels on disjoint pairs, and a \emph{local channel circuit of depth
-    $T$} is a composition $\Phi=\Phi_T\circ\dots\circ\Phi_1$ of $T$ channel
-    layers. Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$,
+    of channels on disjoint pairs, and a
+    \emph{local channel circuit of depth $T$} is a composition
+    $\Phi=\Phi_T\circ\dots\circ\Phi_1$ of $T$ channel layers.
+    Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$,
     where each channel on a pair is replaced by
     $A\mapsto\sum_jK_j^\dagger AK_j$, satisfies
     $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$.
