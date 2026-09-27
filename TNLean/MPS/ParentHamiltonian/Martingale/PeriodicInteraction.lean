@@ -110,9 +110,9 @@ theorem periodicInteractionHamiltonianES_isPositive
     {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
     (hh : h.IsPositive) (N : ℕ) :
     (periodicInteractionHamiltonianES h N).IsPositive := by
-  apply (LinearMap.nonneg_iff_isPositive _).mp
+  apply LinearMap.nonneg_iff_isPositive.mp
   simpa only [periodicInteractionHamiltonianES_zero] using
-    periodicInteractionHamiltonianES_mono ((LinearMap.nonneg_iff_isPositive h).mpr hh) N
+    periodicInteractionHamiltonianES_mono (LinearMap.nonneg_iff_isPositive.mpr hh) N
 
 /-- The periodic sum of the canonical parent projection is the canonical
 parent Hamiltonian at every volume. -/
