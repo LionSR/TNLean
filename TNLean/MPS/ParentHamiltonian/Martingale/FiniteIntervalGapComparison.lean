@@ -19,7 +19,9 @@ parent-Hamiltonian gap between admissible interaction ranges; see
 
 open scoped InnerProductSpace ComplexOrder
 
-private theorem exists_pos_norm_gap_on_orthogonal_ker
+/-- On a finite-dimensional inner product space, every linear operator has a
+positive lower norm bound on the orthogonal complement of its kernel. -/
+theorem LinearMap.exists_pos_norm_gap_on_orthogonal_ker
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [FiniteDimensional ℂ E] (H : E →ₗ[ℂ] E) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖ := by
@@ -53,7 +55,7 @@ theorem exists_pos_smul_orthogonal_ker_projection_le
     [FiniteDimensional ℂ E] {H : E →ₗ[ℂ] E} (hH : H.IsPositive) :
     ∃ γ : ℝ, 0 < γ ∧
       (γ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap ≤ H := by
-  obtain ⟨γ, hγ, hGap⟩ := exists_pos_norm_gap_on_orthogonal_ker H
+  obtain ⟨γ, hγ, hGap⟩ := H.exists_pos_norm_gap_on_orthogonal_ker
   refine ⟨γ, hγ, hH.isSymmetric.sub
     ((LinearMap.ker H)ᗮ.starProjection_isSymmetric.smul (by simp)), ?_⟩
   intro v

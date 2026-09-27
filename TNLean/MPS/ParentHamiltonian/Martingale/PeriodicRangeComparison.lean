@@ -71,7 +71,6 @@ theorem parentHamiltonianES_comparison_of_local_open_comparison
           (C : ℂ) • zmodLocalTermES A (m + R - 1) s := by
     let U := cyclicActiveBlockConfigLinearIsometryEquiv d (m + R - 1)
       (by omega) ((ZMod.finEquiv N).symm s)
-    let : T2Space (EuclideanSpace ℂ (Cfg d (m + R - 1))) := inferInstance
     have hShort : U.toLinearEquiv.conj
         (ProjectionGeometry.cyclicWindowSum (zmodLocalTermES A R) m s) =
         (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
