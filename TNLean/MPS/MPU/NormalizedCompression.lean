@@ -33,7 +33,7 @@ Its construction after blocking an arbitrary MPU is a separate step; see
   lines 747--783.
 -/
 
-open scoped Matrix ComplexOrder
+open scoped Matrix
 
 namespace MPOTensor
 
