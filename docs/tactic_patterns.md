@@ -3357,6 +3357,32 @@ spectral split → block extraction → MPV calculation → strict bounds
   interaction is the operator-family-generic `MPSTensor.spinExchange` of
   `TNLean/MPS/Examples/SpinOperator.lean`.
 
+### endpoint contraction through a physical pairing — candidate
+- **Pattern:** after `ext` and `simp only [leftAct, leftEndpoint, …]` (or the right-endpoint
+  analogue), move the physical sum inside the two virtual sums and regroup the product so
+  that the pairing `∑ c, Â c α β * C c γ δ` appears as a factor:
+
+  ```lean
+  simp only [Finset.sum_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun α _ ↦ ?_
+  rw [Finset.sum_comm]
+  exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
+  ```
+
+- **Seen:** 4 occurrences in one file, in `leftAct_leftEndpoint`,
+  `leftAct_leftEndpoint_eq_zero`, `rightAct_rightEndpoint` and
+  `rightAct_rightEndpoint_eq_zero`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/DomainWallString.lean`, lines 163, 186, 207 and 227;
+  reported by `scripts/tactic_pattern_scan.py`, recorded 2026-09-27).
+- **Abstraction (proposed):** a lemma rewriting
+  `∑ c, (∑ α, ∑ β, x α β * Â c α β) * y c` as `∑ α, ∑ β, x α β * ∑ c, Â c α β * y c`, or
+  one endpoint lemma parametrized by the value of the pairing, from which the four
+  endpoint theorems follow by `simp`.
+- **Notes:** all occurrences are in one file, below the rule of three (which asks for at
+  least two files). Promote when a second module contracts an endpoint tensor against a
+  physical pairing in the same way.
+
 ### canonical local space as the representative block sum — factored
 - **Pattern:** compose `CPSVCanonicalFormData.groundSpace_eq_iSup_representatives` with the
   symmetric form of `groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) B (by simp) L`.
