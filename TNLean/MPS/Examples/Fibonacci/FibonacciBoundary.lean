@@ -66,7 +66,11 @@ theorem fibDim_left_eigenvector (a y : Fin 2) :
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
 
 /-- The Fibonacci boundary state `ψ = ψ_A + φ ψ_C` at length `L`, the combination
-`∑_x v_x ψ_{A_x}` of arXiv:2203.12563, line 1803, with weights `v = (1, φ)`. -/
+`∑_x v_x ψ_{A_x}` of arXiv:2203.12563, line 1803, with weights `v = (1, φ)`.
+At length one it vanishes: both tensors have trace zero on the letter `1` of the trivial label,
+and the traces `1` and `-φ⁻¹` on the letter `τ` cancel against the weights. The eigenvector
+equations below are therefore informative only from length two on, where the two periodic
+vectors are independent. -/
 noncomputable def fibBoundaryState (L : ℕ) : (Fin L → Fin 2) → ℂ :=
   fun σ => ∑ x, (fibDim x : ℂ) * mpv (fibNimTargets x) σ
 
