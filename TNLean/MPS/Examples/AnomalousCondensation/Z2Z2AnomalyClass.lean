@@ -546,6 +546,7 @@ theorem comap_yHom :
 
 /-! ### The anomaly class of the full group -/
 
+/-- The cyclic invariant `ω(x,e,x) ω(x,x,x)` at `x = (1,0)` is `+1`. -/
 theorem cyclicInvariant_omega_kleinFamily_x (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
   have hF := pairFamily_kx_isNormalRepresentation
@@ -558,6 +559,7 @@ theorem cyclicInvariant_omega_kleinFamily_x (fd : kleinFamily.FusionData) :
   unfold xFusionData at h
   exact Units.ext (by simpa using h.symm)
 
+/-- The cyclic invariant `ω(xy,e,xy) ω(xy,xy,xy)` at `xy = (1,1)` is `−1`. -/
 theorem cyclicInvariant_omega_kleinFamily_xy (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 1)) 2 = -1 := by
   have hF := pairFamily_kxy_isNormalRepresentation
@@ -581,6 +583,7 @@ private theorem cyclicInvariant_omega_kleinFamily_yHom (fd : kleinFamily.FusionD
       kleinFamily_isNormalRepresentation comap_yHom yFusionData ha, h1]
   simp [ScalarThreeCochain.cyclicInvariant]
 
+/-- The cyclic invariant `ω(y,e,y) ω(y,y,y)` at `y = (0,1)` is `+1`. -/
 theorem cyclicInvariant_omega_kleinFamily_y (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (0, 1)) 2 = 1 :=
   cyclicInvariant_omega_kleinFamily_yHom fd z2Gen
