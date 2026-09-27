@@ -36,9 +36,9 @@ blocks sites, which here is the choice of the physical alphabet.
 
 The source prints `signphysop` as `O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB}c_{BA}
 O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`; the computation above gives the phase on the other side,
-`O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩ = c_{AB}c_{BA} O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩`, and the two agree
-because `(c_{AB} c_{BA})² = 1` (lines 837--839). The theorem below is stated in the second form,
-which holds without that relation.
+`O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩ = c_{AB}c_{BA} O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩`. The two agree
+when `(c_{AB} c_{BA})² = 1`, which the source derives from `U² = 1` (lines 837--839). The theorem
+below is stated in the second form, which holds without that relation.
 
 **Local fix (nondegenerate domain walls, blocked local action):** the exchange relation
 `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv` is stated for
@@ -525,8 +525,10 @@ whenever the three regions between the walls are longer than a fixed buffer. Bot
 multiples of the state with the four domain walls `e_{AB}`, `e_{BA}`, `e_{AB}`, `e_{BA}` at
 `i₂, i₁, j₁, j₂`: the outer string acting second passes over the walls of the inner one and
 acquires `c_{AB} c_{BA}` (`IsDomainWallAction.pair`), while the inner string acting second meets
-only the `B` region. The source prints the phase on the other side, which is the same relation
-since `(c_{AB} c_{BA})² = 1` (lines 837--839). -/
+only the `B` region. The source prints the phase on the other side. No hypothesis here forces
+`g * g = 1` or `(c_{AB} c_{BA})² = 1`, so in general this is the source relation with
+`c_{AB} c_{BA}` replaced by its inverse; the two agree exactly when `(c_{AB} c_{BA})² = 1`, as
+for the involutive symmetries of lines 837--839. -/
 theorem wallString_mul_wallString_mulVec_mpv
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y)) {cAB cBA : ℂ}
