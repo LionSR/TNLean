@@ -186,9 +186,10 @@ non-trivial, every eigenvalue of the fixed point `ρ` has degenerate multiplicit
 
 Here `A` is injective with `E(1) = 1`, `Λ` is a positive definite fixed point of the
 adjoint transfer map, `U` is a unitary on-site representation, and `ρ` is a virtual
-projective representation of the symmetry, `∑ⱼ U(g)ᵢⱼ Aʲ = ρ(g⁻¹) Aⁱ ρ(g⁻¹)⁻¹`, as
-produced by `virtual_rep_of_symmetric_injective`.  If the factor system of `ρ` has a
-non-trivial class, no eigenspace of `Λ` is one-dimensional. -/
+projective representation of the symmetry up to nonzero phases,
+`∑ⱼ U(g)ᵢⱼ Aʲ = ζ(g) ρ(g⁻¹) Aⁱ ρ(g⁻¹)⁻¹` (the source's `e^{iφ(g)}`; `ζ = 1` is the
+relation produced by `virtual_rep_of_symmetric_injective`).  If the factor system of
+`ρ` has a non-trivial class, no eigenspace of `Λ` is one-dimensional. -/
 theorem finrank_eigenspace_ne_one_of_isNontrivialClass {G : Type*} [Group G]
     {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     (hNorm : Kraus.transferMap A 1 = 1)
@@ -197,15 +198,15 @@ theorem finrank_eigenspace_ne_one_of_isNontrivialClass {G : Type*} [Group G]
     {U : G →* Matrix (Fin d) (Fin d) ℂ} (hU : ∀ g, U g * (U g)ᴴ = 1)
     {ω : TNLean.Algebra.ScalarCocycle G}
     (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
+    {ζ : G → ℂ} (hζ : ∀ g, ζ g ≠ 0)
     (hρ : ∀ g i, twistedTensor A U g i =
-      (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
-        (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+      ζ g • ((ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
     (hω : TNLean.Algebra.ScalarCocycle.IsNontrivialClass ω) (μ : ℂ) :
     Module.finrank ℂ (Module.End.eigenspace (Matrix.toLin' Λ) μ) ≠ 1 := by
   refine ρ.finrank_eigenspace_ne_one_of_commute hω (fun h => ?_) μ
-  refine commute_boundaryState_of_symmetry hA hNorm hΛpos hΛfix (hU h⁻¹) one_ne_zero
+  refine commute_boundaryState_of_symmetry hA hNorm hΛpos hΛfix (hU h⁻¹) (hζ h⁻¹)
     (fun i => ?_)
-  rw [one_smul]
   simpa [twistedTensor] using hρ h⁻¹ i
 
 /-- **Even degeneracy of the entanglement spectrum.**
