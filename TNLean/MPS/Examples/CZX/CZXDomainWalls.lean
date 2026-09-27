@@ -61,16 +61,16 @@ theorem czxGen_mul_self : czxGen * czxGen = 1 := by decide
 /-- **The CZX domain walls carry the anomaly** (arXiv:2405.00439, `eq:CC-LL`,
 `Papers/2405.00439/MPU-DW.tex` lines 1020--1121, for the CZX symmetry of lines 1123--1339):
 for every choice of action tensors on the two product states and every pair of domain walls
-exchanged by the generator with nonzero phases, `c_{AB} c_{BA} = -1`. -/
+exchanged by the generator, `c_{AB} c_{BA} = -1`. -/
 theorem czx_domainWall_mul_eq_neg_one (ad : BlockActionData czxFamily czxBlock)
     {eAB : Fin 2 → Matrix (Fin 1) (Fin 1) ℂ} {eBA : Fin 2 → Matrix (Fin 1) (Fin 1) ℂ}
     {cAB cBA : ℂ}
     (hAB : ad.IsDomainWallAction czxGen czxGen_smul_zero czxGen_smul_one eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction czxGen czxGen_smul_one czxGen_smul_zero eBA eAB cBA)
-    (hcAB : cAB ≠ 0) (hcBA : cBA ≠ 0) (he : eAB ≠ 0) : cAB * cBA = -1 := by
+    (hBA : ad.IsDomainWallAction czxGen czxGen_smul_one czxGen_smul_zero eBA eAB cBA) :
+    cAB * cBA = -1 := by
   rw [BlockActionData.IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one (fd := czxFusionData)
     czxFamily_isNormalRepresentation czxBlock_isNormal (fun _ ↦ Nat.one_pos) czx_carriesMPV
-    czxGen_mul_self hAB hBA hcAB hcBA he, czxFusionData_omega_gen_gen_gen,
+    czxGen_mul_self hAB hBA, czxFusionData_omega_gen_gen_gen,
     czxFusionData_omega_gen_one_gen]
   simp
 
@@ -86,6 +86,11 @@ theorem czxWallAB_ne_zero : czxWallAB ≠ 0 := by
   intro h
   have := congrFun (congrFun (congrFun h 0) 0) 0
   simp [czxWallAB] at this
+
+theorem czxWallBA_ne_zero : czxWallBA ≠ 0 := by
+  intro h
+  have := congrFun (congrFun (congrFun h 1) 0) 0
+  simp [czxWallBA] at this
 
 /-- Identifications of the bond spaces of the product states are trivial. -/
 theorem castIndex_czxBlockDim {a b : Multiplicative (Fin 2)} (e : a = b) :
@@ -129,7 +134,7 @@ theorem czx_isDomainWallAction_ab :
       simp [actRect, czxWallAB, czxWallBA, czxDecoratedTensor_apply, Matrix.mul_apply,
         Fin.sum_univ_succ, Matrix.kroneckerMap_apply, Matrix.submatrix_apply, Matrix.vecMul,
         dotProduct, finProdFinEquiv, Fin.divNat, Fin.modNat, Fin.rev, Fin.fin_one_eq_zero]
-  refine ⟨0, fun u v i _ _ ↦ ?_⟩
+  refine ⟨czxWallBA_ne_zero, one_ne_zero, 0, fun u v i _ _ ↦ ?_⟩
   rw [castIndex_czxBlockDim, castIndex_czxBlockDim, one_smul, Matrix.one_mul, Matrix.mul_one]
   have hL := Kraus.evalWord_intertwine _ _ _ hV u
   have hR := Kraus.evalWord_intertwine _ _ _ hW v
@@ -194,7 +199,7 @@ theorem czx_isDomainWallAction_ba :
       simp [actRect, czxWallAB, czxWallBA, czxDecoratedTensor_apply, Matrix.mul_apply,
         Fin.sum_univ_succ, Matrix.kroneckerMap_apply, Matrix.submatrix_apply, Matrix.vecMul,
         dotProduct, finProdFinEquiv, Fin.divNat, Fin.modNat, Fin.rev, Fin.fin_one_eq_zero]
-  refine ⟨1, fun u v i _ hv ↦ ?_⟩
+  refine ⟨czxWallAB_ne_zero, by norm_num, 1, fun u v i _ hv ↦ ?_⟩
   rw [castIndex_czxBlockDim, castIndex_czxBlockDim, Matrix.one_mul, Matrix.mul_one]
   have hL := Kraus.evalWord_intertwine _ _ _ hV u
   have hR := evalWord_mul_W_gen_zero v (List.ne_nil_of_length_pos hv)
