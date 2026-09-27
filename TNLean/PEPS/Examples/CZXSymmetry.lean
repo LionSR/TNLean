@@ -34,6 +34,18 @@ on-site `ℤ₂` symmetry, whose virtual action is the CZX matrix product unitar
   unitary `X^{⊗ N} D_N` of `CZXCompression.czxTensor`, which is `(-1)^N` times the review's
   operator `O(A)` of `CZXCompression.reviewCZXTensor`.
 
+**Local fix (CZX bond orientation):** the PEPS statements (`czxOnSite_mul_czxSiteTensor` on
+the printed site tensor, and the invariance of `czxPEPS`) use the review's tensor with each bond
+identifying the pair `(a, b)` at one end with `(b, a)` at the other; contracted with equal labels
+at both ends, the printed tensor gives GHZ states on diagonal loops, not the plaquette state.
+Documented in `docs/paper-gaps/rmp_peps_czx_bond_orientation.tex`.
+
+**Local fix (review CZX normalization):** the bridge
+`onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review` uses the review's tensor with
+the printed matrices `A^{01}`, `A^{10}` (lines 2588–2591); its bra-ket display at line 2585
+carries a factor `2^{-1/2}` per site and does not give a unitary. Documented in
+`docs/paper-gaps/mpu_czx_tensor_normalization.tex`.
+
 **Scope restriction (torus size):** the invariance of the PEPS
 (`onSiteOperator_czxOnSite_mulVec_stateCoeff_czxPEPS`) is stated for a torus of width and
 height at least three sites. On a torus of width two the two horizontal bonds between a pair of
