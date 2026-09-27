@@ -270,7 +270,7 @@ gauge transformations form a projective representation on the bond space.
 \begin{lemma}[Gauge-phase uniqueness]\label{lem:gauge_phase_unique}
     \lean{MPSTensor.gauge_phase_unique}
     \leanok
-    \uses{def:injective, lem:center_scalar}
+    \uses{def:injective}
     Let $A$ be an injective tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and
     $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and
     $X=u\,Y$ for some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
@@ -287,7 +287,7 @@ gauge transformations form a projective representation on the bond space.
 \begin{lemma}[Gauge-phase uniqueness for normal tensors]\label{lem:gauge_phase_unique_normal}
     \lean{MPSTensor.gauge_phase_unique_of_isNormal, MPSTensor.evalWord_gauge_phase}
     \leanok
-    \uses{def:normal, lem:gauge_phase_unique}
+    \uses{def:normal}
     Let $A$ be a normal tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$
     satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and $X=u\,Y$ for
     some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.

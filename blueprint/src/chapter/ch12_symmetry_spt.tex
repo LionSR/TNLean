@@ -184,7 +184,7 @@ $\E_A$ itself is used, describes the same spectrum.
     \label{thm:virtual_gauge_fixes_boundary_state}
     \lean{MPSTensor.exists_unitary_gauge_of_symmetry, MPSTensor.commute_boundaryState_of_symmetry}
     \leanok
-    \uses{def:injective, lem:gauge_phase_unique, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
+    \uses{def:injective}
     Let $A$ be injective with $\E_A(\Id)=\Id$, let $\Lambda$ be a positive
     definite matrix with $\E_A^\dagger(\Lambda)=\Lambda$, and let $u$ be a
     unitary with
@@ -247,7 +247,6 @@ $\E_A$ itself is used, describes the same spectrum.
     \label{thm:spt_entanglement_spectrum_even}
     \lean{MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges}
     \leanok
-    \uses{thm:virtual_gauge_fixes_boundary_state, lem:even_finrank_of_anticommute}
     In the setting of Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, let
     $u,v$ be unitaries with virtual gauges $X,Y$, that is,
     $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ and
