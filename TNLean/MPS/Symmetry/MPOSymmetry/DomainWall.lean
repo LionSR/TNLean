@@ -59,11 +59,11 @@ argument is the identity, this is `ω(g,g,g)`.
 
 The blocks are normal rather than injective, and the phases are not assumed unimodular.
 
-**Local fix (nondegenerate domain walls, blocked local action):** a domain wall is nonzero and
-its phases are nonzero where a phase identity is derived (the source's walls are excitations and
-`c_{AB}`, `c_{BA}` are phase factors, lines 712 and 1656), and the local action
-`IsDomainWallAction` holds against regions longer than a buffer rather than at one site of the
-fixed point; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+**Local fix (nondegenerate domain walls, blocked local action):** the local action
+`IsDomainWallAction` requires the image domain wall and the phase to be nonzero (the source's walls
+are excitations and `c_{AB}`, `c_{BA}` are phase factors, lines 712 and 1656), and it holds
+against regions longer than a buffer rather than at one site of the fixed point; documented in
+`docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
 
 The group family need not have the bond-one identity tensor of the source, so the
 identity element enters through its L-symbols `L_{1,1}` and through `ω(g,1,g)`, which are one in
@@ -490,11 +490,17 @@ for all words `u`, `v` longer than a fixed buffer. The target blocks are identif
 The source draws this identity at the renormalization fixed point with one site on each side
 of the wall (lines 774--832); the buffer here plays the role of the blocked sites of line
 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and `B^g_{x,y}` of
-`eq:localcdefG` for a general group. -/
-def IsDomainWallAction (g : G) {x y x' y' : X} (hx : g • x = x') (hy : g • y = y')
+`eq:localcdefG` for a general group. The image wall and the phase are nonzero, the convention
+of the module docstring. -/
+structure IsDomainWallAction (g : G) {x y x' y' : X} (hx : g • x = x') (hy : g • y = y')
     (e : Fin d → Matrix (Fin (D x)) (Fin (D y)) ℂ)
-    (e' : Fin d → Matrix (Fin (D x')) (Fin (D y')) ℂ) (c : ℂ) : Prop :=
-  ∃ N : ℕ, ∀ (u v : List (Fin d)) (i : Fin d), N ≤ u.length → N ≤ v.length →
+    (e' : Fin d → Matrix (Fin (D x')) (Fin (D y')) ℂ) (c : ℂ) : Prop where
+  /-- The image domain wall is nonzero. -/
+  target_ne_zero : e' ≠ 0
+  /-- The phase is nonzero. -/
+  phase_ne_zero : c ≠ 0
+  /-- The local relation against long regions. -/
+  eq : ∃ N : ℕ, ∀ (u v : List (Fin d)) (i : Fin d), N ≤ u.length → N ≤ v.length →
     castIndex D hx * (ad.V g x * (Kraus.evalWord (actTensor (F.tensor g) (A x)) u *
         actRect (F.tensor g) e i * Kraus.evalWord (actTensor (F.tensor g) (A y)) v) *
           ad.W g y) * castIndex D hy.symm =
@@ -511,7 +517,7 @@ theorem physAct_eq (hg : ad.IsDomainWallAction g hx hy e e' c) :
     ∃ N : ℕ, ∀ k l : ℕ, N ≤ k → N ≤ l → ∀ τ : Fin (k + 1 + l) → Fin d,
       castIndex D hx * (ad.V g x * physAct (F.tensor g) (wallChain (A x) e (A y)) τ *
           ad.W g y) * castIndex D hy.symm = c • wallChain (A x') e' (A y') τ := by
-  obtain ⟨N, hN⟩ := hg
+  obtain ⟨N, hN⟩ := hg.eq
   refine ⟨N, fun k l hk hl τ ↦ ?_⟩
   rw [eq_append_append τ, physAct_wallChain, wallChain_append]
   exact hN _ _ _ (by simpa using hk) (by simpa using hl)
@@ -522,15 +528,14 @@ theorem congr_elem (hg : ad.IsDomainWallAction g hx hy e e' c) {g' : G} (hgg' : 
   subst hgg'
   exact hg
 
-/-- **The phase of a local action is unique** for a nonzero target domain wall between normal
-blocks. -/
+/-- **The phase of a local action is unique** between normal blocks. -/
 theorem phase_eq (hA : ∀ x, Kraus.IsNormal (A x)) {c' : ℂ}
-    (h : ad.IsDomainWallAction g hx hy e e' c) (h' : ad.IsDomainWallAction g hx hy e e' c')
-    (he' : e' ≠ 0) : c = c' := by
-  obtain ⟨N, hN⟩ := h
-  obtain ⟨N', hN'⟩ := h'
+    (h : ad.IsDomainWallAction g hx hy e e' c) (h' : ad.IsDomainWallAction g hx hy e e' c') :
+    c = c' := by
+  obtain ⟨N, hN⟩ := h.eq
+  obtain ⟨N', hN'⟩ := h'.eq
   obtain ⟨k, l, σ, i, σ', hk, hl, hne⟩ := exists_evalWord_mul_mul_evalWord_ne_zero
-    (A x') e' (A y') (hA _) (hA _) he' (N + N')
+    (A x') e' (A y') (hA _) (hA _) h.target_ne_zero (N + N')
   have h₁ := hN (List.ofFn σ) (List.ofFn σ') i (by simp only [List.length_ofFn]; omega)
     (by simp only [List.length_ofFn]; omega)
   have h₂ := hN' (List.ofFn σ) (List.ofFn σ') i (by simp only [List.length_ofFn]; omega)
@@ -558,9 +563,13 @@ theorem mul (hA : ∀ x, Kraus.IsNormal (A x))
     ad.IsDomainWallAction (g * h) hx₃' hy₃' e₁ e₃
       (((ad.lSymbol fd y g h / ad.lSymbol fd x g h : ℂˣ) : ℂ) * b₂ * b₁) := by
   subst hx₂ hy₂ hx₃ hy₃
-  rcases Nat.eq_zero_or_pos (D (g • h • y)) with hD0 | hDy
-  · refine ⟨0, fun u v i _ _ ↦ Matrix.ext fun _ b ↦ absurd b.2 ?_⟩
-    simp [hD0]
+  have hDy : 0 < D (g • h • y) := by
+    obtain ⟨i, hi⟩ := Function.ne_iff.mp h₂.target_ne_zero
+    rcases Nat.eq_zero_or_pos (D (g • h • y)) with h0 | h0
+    · exact absurd (Matrix.ext fun _ b ↦ absurd b.2 (by omega)) hi
+    · exact h0
+  refine ⟨h₂.target_ne_zero,
+    mul_ne_zero (mul_ne_zero (Units.ne_zero _) h₂.phase_ne_zero) h₁.phase_ne_zero, ?_⟩
   obtain ⟨N₁, H₁⟩ := h₁.physAct_eq
   obtain ⟨N₂, H₂⟩ := h₂.physAct_eq
   obtain ⟨N₄, H₄⟩ := isDressedProportional_lSymbol (fd := fd) (ad := ad) hA hperm x g h
@@ -660,9 +669,9 @@ theorem mul_eq (hA : ∀ x, Kraus.IsNormal (A x))
     {e₃ : Fin d → Matrix (Fin (D x₃)) (Fin (D y₃)) ℂ} {b₁ b₂ b₃ : ℂ}
     (h₁ : ad.IsDomainWallAction h hx₂ hy₂ e₁ e₂ b₁)
     (h₂ : ad.IsDomainWallAction g hx₃ hy₃ e₂ e₃ b₂)
-    (h₃ : ad.IsDomainWallAction (g * h) hx₃' hy₃' e₁ e₃ b₃) (he₃ : e₃ ≠ 0) :
+    (h₃ : ad.IsDomainWallAction (g * h) hx₃' hy₃' e₁ e₃ b₃) :
     b₂ * b₁ = ((ad.lSymbol fd x g h / ad.lSymbol fd y g h : ℂˣ) : ℂ) * b₃ := by
-  have hc := (mul (fd := fd) hA hperm hx₃' hy₃' h₁ h₂).phase_eq hA h₃ he₃
+  have hc := (mul (fd := fd) hA hperm hx₃' hy₃' h₁ h₂).phase_eq hA h₃
   rw [← hc]
   have hLx := (ad.lSymbol fd x g h).ne_zero
   have hLy := (ad.lSymbol fd y g h).ne_zero
@@ -687,8 +696,8 @@ theorem mpo_mulVec_twoWallMPV (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A
       mpo (F.tensor g) (k + 1 + l + 1 + n) *ᵥ twoWallMPV (A x) e (A y) f =
         (c * c') • twoWallMPV (A x') e' (A y') f' := by
   subst hx hy
-  obtain ⟨N₁, H₁⟩ := he
-  obtain ⟨N₂, H₂⟩ := hf
+  obtain ⟨N₁, H₁⟩ := he.eq
+  obtain ⟨N₂, H₂⟩ := hf.eq
   have hBx := (ad.isReduction g x).bondDim_isReductionResidualNilpotencyBound
     ((hperm g x).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
   have hBy := (ad.isReduction g y).bondDim_isReductionResidualNilpotencyBound
@@ -771,20 +780,20 @@ variable {g : G} {x y : X} {hxy : g • x = y} {hyx : g • y = x}
 /-- **The domain-wall phases of an involution as a ratio of L-symbols** (arXiv:2405.00439,
 `eq:CC-LL`, first equality, `Papers/2405.00439/MPU-DW.tex` lines 1020--1121). Let `g` be an
 involution exchanging the blocks `x` and `y`, and let the domain walls `e_{AB}` from `x` to
-`y` and `e_{BA}` from `y` to `x` be exchanged by `g` with nonzero phases `c_{AB}`, `c_{BA}`
+`y` and `e_{BA}` from `y` to `x` be exchanged by `g` with phases `c_{AB}`, `c_{BA}`
 (`eq:localcdef`). Then
 `c_{AB} c_{BA} = Lˣ_{g,g} Lˣ_{1,1} / (L^y_{g,g} L^y_{1,1})`.
 
 The proof applies `g` twice, which gives the local action of `g² = 1` on `e_{AB}` with phase
 `b = (L^y_{g,g} / Lˣ_{g,g}) c_{BA} c_{AB}`
-(`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul`), as in the source's display before `eq:CC-LL`; composing the identity with itself then forces
-`b = Lˣ_{1,1} / L^y_{1,1}`. With the source's trivial identity tensor (line 861) the L-symbols of
-the identity are one and the conclusion is `c_{AB} c_{BA} = L_A / L_B`. -/
+(`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul`), as in the source's display
+before `eq:CC-LL`; composing the identity with itself then forces `b = Lˣ_{1,1} / L^y_{1,1}`.
+With the source's trivial identity tensor (line 861) the L-symbols of the identity are one and
+the conclusion is `c_{AB} c_{BA} = L_A / L_B`. -/
 theorem mul_eq_lSymbol_of_mul_self_eq_one (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (hg : g * g = 1)
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) (hcAB : cAB ≠ 0) (hcBA : cBA ≠ 0)
-    (he : eAB ≠ 0) :
+    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
     cAB * cBA = ((ad.lSymbol fd x g g * ad.lSymbol fd x 1 1 /
       (ad.lSymbol fd y g g * ad.lSymbol fd y 1 1) : ℂˣ) : ℂ) := by
   subst hxy
@@ -792,10 +801,10 @@ theorem mul_eq_lSymbol_of_mul_self_eq_one (hA : ∀ x, Kraus.IsNormal (A x))
   have h1 : ad.IsDomainWallAction 1 (one_smul G x) (one_smul G (g • x)) eAB eAB b :=
     (mul (fd := fd) hA hperm (by rw [hg, one_smul]) (by rw [hg, one_smul]) hAB hBA).congr_elem
       hg _ _
-  have hb : b ≠ 0 := mul_ne_zero (mul_ne_zero (Units.ne_zero _) hcBA) hcAB
+  have hb : b ≠ 0 := h1.phase_ne_zero
   have h11 : b * b = ((ad.lSymbol fd x 1 1 / ad.lSymbol fd (g • x) 1 1 : ℂˣ) : ℂ) * b :=
     mul_eq (fd := fd) hA hperm h1 h1 (h1.congr_elem (one_mul 1).symm (by rw [one_mul, one_smul])
-      (by rw [one_mul, one_smul])) he
+      (by rw [one_mul, one_smul]))
   have hb' : b = ((ad.lSymbol fd x 1 1 / ad.lSymbol fd (g • x) 1 1 : ℂˣ) : ℂ) :=
     mul_right_cancel₀ hb h11
   have hLx := (ad.lSymbol fd x g g).ne_zero
@@ -814,10 +823,9 @@ theorem mul_eq_omega_of_mul_self_eq_one (hF : F.IsNormalRepresentation)
     (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (hg : g * g = 1)
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) (hcAB : cAB ≠ 0) (hcBA : cBA ≠ 0)
-    (he : eAB ≠ 0) :
+    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
     cAB * cBA = ((fd.omega g g g * fd.omega g 1 g : ℂˣ) : ℂ) := by
-  rw [mul_eq_lSymbol_of_mul_self_eq_one (fd := fd) hA hperm hg hAB hBA hcAB hcBA he]
+  rw [mul_eq_lSymbol_of_mul_self_eq_one (fd := fd) hA hperm hg hAB hBA]
   subst hxy
   rw [LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one
     (isCompatible_lSymbol (fd := fd) (ad := ad) hF hA hD hperm) x hg]
@@ -829,15 +837,13 @@ theorem mpo_mulVec_twoWallMPV_eq_omega (hF : F.IsNormalRepresentation)
     (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (hg : g * g = 1)
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) (hcAB : cAB ≠ 0) (hcBA : cBA ≠ 0)
-    (he : eAB ≠ 0) :
+    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
     ∃ N : ℕ, ∀ k l n : ℕ, N ≤ k → N ≤ l →
       mpo (F.tensor g) (k + 1 + l + 1 + n) *ᵥ twoWallMPV (A x) eAB (A y) eBA =
         ((fd.omega g g g * fd.omega g 1 g : ℂˣ) : ℂ) • twoWallMPV (A y) eBA (A x) eAB := by
   obtain ⟨N, hN⟩ := mpo_mulVec_twoWallMPV hperm hAB hBA
   refine ⟨N, fun k l n hk hl ↦ ?_⟩
-  rw [hN k l n hk hl, mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB hBA hcAB
-    hcBA he]
+  rw [hN k l n hk hl, mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB hBA]
 
 /-- **Gauge invariance of `c_{AB} c_{BA}`** (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex`
 lines 833--838): the product of the two domain-wall phases of an involution does not depend on
@@ -846,17 +852,15 @@ theorem mul_eq_mul_of_mul_self_eq_one (hF : F.IsNormalRepresentation)
     (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (hg : g * g = 1)
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) (hcAB : cAB ≠ 0) (hcBA : cBA ≠ 0)
-    (he : eAB ≠ 0) {ad' : BlockActionData F A}
+    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) {ad' : BlockActionData F A}
     {eAB' : Fin d → Matrix (Fin (D x)) (Fin (D y)) ℂ}
     {eBA' : Fin d → Matrix (Fin (D y)) (Fin (D x)) ℂ} {cAB' cBA' : ℂ}
     (hAB' : ad'.IsDomainWallAction g hxy hyx eAB' eBA' cAB')
-    (hBA' : ad'.IsDomainWallAction g hyx hxy eBA' eAB' cBA') (hcAB' : cAB' ≠ 0)
-    (hcBA' : cBA' ≠ 0) (he' : eAB' ≠ 0) :
+    (hBA' : ad'.IsDomainWallAction g hyx hxy eBA' eAB' cBA') :
     cAB * cBA = cAB' * cBA' := by
   obtain ⟨fd⟩ := hF.nonempty_fusionData
-  rw [mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB hBA hcAB hcBA he,
-    mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB' hBA' hcAB' hcBA' he']
+  rw [mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB hBA,
+    mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB' hBA']
 
 end Involution
 
