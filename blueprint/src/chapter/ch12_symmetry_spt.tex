@@ -375,16 +375,27 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
 
 \begin{theorem}[No normal spin-$\tfrac12$ tensor is $\mathrm{SU}(2)$ symmetric]
     \label{thm:spin_half_su2_obstruction}
-    \lean{MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal, MPSTensor.blockKron_smul}
+    \lean{MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal, MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal, MPSTensor.mpv_twistedTensor, MPSTensor.mpv_twistedTensor_eq_of_mul_eq, MPSTensor.blockKron_smul}
     \leanok
     \uses{def:on_site_symmetric, thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted, thm:anticommuting_physical_obstruction}
-    No normal tensor on a spin-$\tfrac12$ site with $D\ge1$ has MPV-family
-    invariance under the defining representation of $\mathrm{SU}(2)$
-    \cite[Section~III.A]{Cirac2021Matrix}.
+    No normal tensor $A$ on a spin-$\tfrac12$ site with $D\ge1$ is invariant up to
+    phases under the defining representation of $\mathrm{SU}(2)$: it is not the
+    case that for every $g$ and every $N$ the vector $U(g)^{\otimes N}\ket{\psi_N(A)}$
+    is a multiple of $\ket{\psi_N(A)}$ \cite[Section~III.A]{Cirac2021Matrix}.  In
+    particular $A$ has no MPV-family invariance under $\mathrm{SU}(2)$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted, thm:anticommuting_physical_obstruction}
+    Fix $N$ with $\ket{\psi_N(A)}\ne0$ and write
+    $U(g)^{\otimes N}\ket{\psi_N(A)}=c(g)\ket{\psi_N(A)}$.  Then
+    $c(gh)=c(g)c(h)$, so $c$ is trivial on commutators.  Both $i\sigma_x$ and
+    $i\sigma_z$ are commutators in $\mathrm{SU}(2)$:
+    $i\sigma_x=(i\sigma_z)b_1(i\sigma_z)^{-1}b_1^{-1}$ and
+    $i\sigma_z=(i\sigma_x)b_2(i\sigma_x)^{-1}b_2^{-1}$ with
+    $b_1=\tfrac12\begin{pmatrix}1-i&1-i\\-1-i&1+i\end{pmatrix}$ and
+    $b_2=\tfrac12\begin{pmatrix}1-i&1+i\\-1+i&1+i\end{pmatrix}$.  So the
+    tensor has MPV-family invariance under these two elements.
     Block to an odd length $L$ at which the tensor is injective.  The blocked tensor
     is symmetric under the $L$-fold Kronecker powers, and the powers of
     $i\sigma_x$ and $i\sigma_z$ anticommute because $L$ is odd.  The fundamental

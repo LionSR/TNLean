@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.UnitaryGroup
+import TNLean.Algebra.FinKronecker
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.TimeReversalIndex
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
@@ -23,21 +24,28 @@ form of the Lieb–Schultz–Mattis theorem.
   virtual gauges for both, `∑ⱼ Pᵢⱼ Aʲ = ζ X Aⁱ X⁻¹` and
   `∑ⱼ Qᵢⱼ Aʲ = η Y Aⁱ Y⁻¹` with `ζ, η ≠ 0`: composing the two twists in both orders
   gives `(Y X) Aⁱ (Y X)⁻¹ = -(X Y) Aⁱ (X Y)⁻¹`, which eq. `eq:XAX=B` rules out.
-* `MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal`: no normal
-  tensor on a spin-`1/2` site of positive bond dimension is on-site symmetric under
-  the defining representation of `SU(2)`.  Blocking to an odd injective length, the
-  two elements `iσ_x` and `iσ_z` act by anticommuting Kronecker powers.
+* `MPSTensor.mpv_twistedTensor_eq_of_mul_eq`: if every twist of a tensor multiplies
+  its matrix product vector at length `N` by a phase, the phase of a commutator is
+  one.
+* `MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal`:
+  no normal tensor on a spin-`1/2` site of positive bond dimension is invariant up to
+  phases, `U(g)^{⊗N} |ψ_N⟩ ≃ |ψ_N⟩`, under the defining representation of `SU(2)`.
+  The phases are trivial on `iσ_x` and `iσ_z`, which are commutators in `SU(2)`;
+  blocking to an odd injective length, these two elements act by anticommuting
+  Kronecker powers.  `MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal`
+  is the exact-invariance form.
 
 The source argues through the Clebsch–Gordan structure of the virtual
 representations (integer and half-integer spins alternate).  The proof here uses
-only the anticommuting pair `iσ_x`, `iσ_z` inside `SU(2)`.  On-site symmetry is the
-project's predicate: each group element preserves the matrix product vectors
-exactly.
+only the anticommuting pair `iσ_x`, `iσ_z` inside `SU(2)`.
 
 ## Main results
 
 * `MPSTensor.not_anticommuting_gauges_of_isNormal`
 * `MPSTensor.blockKron_smul`
+* `MPSTensor.mpv_twistedTensor`
+* `MPSTensor.mpv_twistedTensor_eq_of_mul_eq`
+* `MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal`
 * `MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal`
 
 ## References
@@ -122,6 +130,54 @@ theorem blockKron_smul {m n : ℕ} (L : ℕ) (c : ℂ) (P : Matrix (Fin m) (Fin 
   ext I J
   simp [blockKron, Finset.prod_mul_distrib, Finset.prod_const]
 
+/-- **The twisted matrix product vector is the Kronecker-power image of the original.**
+`ψ_{A_g}(σ) = ∑_τ (∏ₗ U(g)_{σₗ τₗ}) ψ_A(τ)`. -/
+theorem mpv_twistedTensor {G : Type*} [Monoid G] (B : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (twistedTensor B U g) σ =
+      ∑ τ : Fin N → Fin d, (∏ l, U g (σ l) (τ l)) * mpv B τ := by
+  simp only [mpv, coeff, evalWord_ofFn_eq_prod, twistedTensor]
+  exact Matrix.trace_prod_ofFn_sum_smul (fun l j => U g (σ l) j) (fun _ j => B j)
+
+/-- **Invariance up to a phase is exact on commutators.** Suppose that at length `N`
+every twist of `A` has a matrix product vector proportional to that of `A`,
+`U(g)^{⊗N} ψ = c(g) ψ`.  If `k b a = a b`, that is, `k` is the commutator
+`a b a⁻¹ b⁻¹`, then the twist by `k` has the same matrix product vector as `A`: the
+phases `c` are multiplicative whenever `ψ ≠ 0`, so `c(k) = 1`. -/
+theorem mpv_twistedTensor_eq_of_mul_eq {G : Type*} [Group G] {A : MPSTensor d D}
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} {N : ℕ}
+    (hproj : ∀ g : G, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+      mpv (twistedTensor A U g) σ = c * mpv A σ)
+    {a b k : G} (hk : k * (b * a) = a * b) (σ : Fin N → Fin d) :
+    mpv (twistedTensor A U k) σ = mpv A σ := by
+  classical
+  by_cases hψ : ∀ τ : Fin N → Fin d, mpv A τ = 0
+  · obtain ⟨c, hc⟩ := hproj k
+    rw [hc, hψ, mul_zero]
+  push Not at hψ
+  obtain ⟨τ₀, hτ₀⟩ := hψ
+  choose c hc using hproj
+  have hmul : ∀ g h : G, c (g * h) = c g * c h := by
+    intro g h
+    have e : mpv (twistedTensor A U (g * h)) τ₀ = c g * c h * mpv A τ₀ := by
+      rw [twistedTensor_mul, mpv_twistedTensor]
+      simp_rw [hc h, mul_left_comm _ (c h), ← Finset.mul_sum, ← mpv_twistedTensor, hc g]
+      ring
+    exact mul_right_cancel₀ hτ₀ ((hc (g * h) τ₀).symm.trans e)
+  have h1 : c 1 = 1 := by
+    have e := hc 1 τ₀
+    rw [twistedTensor_one] at e
+    exact mul_right_cancel₀ hτ₀ (e.symm.trans (one_mul _).symm)
+  have hne : ∀ g, c g ≠ 0 := fun g h0 => by
+    have e := hmul g g⁻¹
+    rw [mul_inv_cancel, h1, h0, zero_mul] at e
+    exact one_ne_zero e
+  have hck : c k = 1 := by
+    have e := congrArg c hk
+    rw [hmul, hmul, hmul] at e
+    exact mul_right_cancel₀ (mul_ne_zero (hne b) (hne a)) (by rw [e, one_mul, mul_comm])
+  rw [hc k, hck, one_mul]
+
 /-- The matrix `iσ_x` lies in `SU(2)`. -/
 private lemma iPauliX_mem : (!![0, Complex.I; Complex.I, 0] : Matrix (Fin 2) (Fin 2) ℂ) ∈
     Matrix.specialUnitaryGroup (Fin 2) ℂ := by
@@ -140,28 +196,76 @@ private lemma iPauliZ_mem : (!![Complex.I, 0; 0, -Complex.I] : Matrix (Fin 2) (F
   fin_cases a <;> fin_cases b <;>
     simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.star_eq_conjTranspose]
 
-/-- **No normal spin-`1/2` MPS is invariant under on-site `SU(2)`.**
-Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
-line 1100): "no uniform normal/injective MPS can exhibit such a symmetry", the
+/-- A binary-tetrahedral element `b₁` with `iσ_x = [iσ_z, b₁]`. -/
+private lemma tetraX_mem :
+    (!![(1 - Complex.I) / 2, (1 - Complex.I) / 2; (-1 - Complex.I) / 2, (1 + Complex.I) / 2] :
+      Matrix (Fin 2) (Fin 2) ℂ) ∈ Matrix.specialUnitaryGroup (Fin 2) ℂ := by
+  rw [Matrix.mem_specialUnitaryGroup_iff, Matrix.mem_unitaryGroup_iff]
+  refine ⟨?_, ?_⟩
+  · ext a b
+    fin_cases a <;> fin_cases b <;>
+      simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.star_eq_conjTranspose, map_ofNat,
+        Complex.ext_iff] <;> norm_num
+  · simp [Matrix.det_fin_two, Complex.ext_iff]; norm_num
+
+/-- A binary-tetrahedral element `b₂` with `iσ_z = [iσ_x, b₂]`. -/
+private lemma tetraZ_mem :
+    (!![(1 - Complex.I) / 2, (1 + Complex.I) / 2; (-1 + Complex.I) / 2, (1 + Complex.I) / 2] :
+      Matrix (Fin 2) (Fin 2) ℂ) ∈ Matrix.specialUnitaryGroup (Fin 2) ℂ := by
+  rw [Matrix.mem_specialUnitaryGroup_iff, Matrix.mem_unitaryGroup_iff]
+  refine ⟨?_, ?_⟩
+  · ext a b
+    fin_cases a <;> fin_cases b <;>
+      simp [Matrix.mul_apply, Fin.sum_univ_two, Matrix.star_eq_conjTranspose, map_ofNat,
+        Complex.ext_iff] <;> norm_num
+  · simp [Matrix.det_fin_two, Complex.ext_iff]; norm_num
+
+/-- **No normal spin-`1/2` MPS is invariant, even up to phases, under on-site
+`SU(2)`.** Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+lines 1086 and 1100): for the symmetry `U(g)^{⊗N} |ψ_N⟩ ≃ |ψ_N⟩` of a spin-`1/2`
+chain under `SU(2)`, "no uniform normal/injective MPS can exhibit such a symmetry", the
 tensor-network form of the Lieb–Schultz–Mattis theorem (line 1230).
 
-Here the symmetry is on-site symmetry under the defining representation of
-`SU(2)` on `ℂ²`. -/
-theorem not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal [NeZero D]
+The hypothesis is the source's invariance up to a phase: at every length `N`, the
+Kronecker power of each `g ∈ SU(2)` maps the matrix product vector to a multiple of
+itself.  The phases are trivial on the commutators `iσ_x = [iσ_z, b₁]` and
+`iσ_z = [iσ_x, b₂]` (with `b₁, b₂` in the binary tetrahedral group), which reduces to
+the anticommuting pair `iσ_x`, `iσ_z`. -/
+theorem not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal [NeZero D]
     {A : MPSTensor 2 D} (hA : Kraus.IsNormal A) :
-    ¬ IsOnSiteSymmetric A (Matrix.specialUnitaryGroup (Fin 2) ℂ).subtype := by
-  intro hsymm
+    ¬ ∀ (g : Matrix.specialUnitaryGroup (Fin 2) ℂ) (N : ℕ), ∃ c : ℂ, ∀ σ : Fin N → Fin 2,
+      mpv (twistedTensor A (Matrix.specialUnitaryGroup (Fin 2) ℂ).subtype g) σ =
+        c * mpv A σ := by
+  intro hproj
   obtain ⟨N, hNpos, hN⟩ := hA
+  let U := (Matrix.specialUnitaryGroup (Fin 2) ℂ).subtype
+  let gx : Matrix.specialUnitaryGroup (Fin 2) ℂ := ⟨_, iPauliX_mem⟩
+  let gz : Matrix.specialUnitaryGroup (Fin 2) ℂ := ⟨_, iPauliZ_mem⟩
+  let b₁ : Matrix.specialUnitaryGroup (Fin 2) ℂ := ⟨_, tetraX_mem⟩
+  let b₂ : Matrix.specialUnitaryGroup (Fin 2) ℂ := ⟨_, tetraZ_mem⟩
+  have hx : gx * (b₁ * gz) = gz * b₁ := by
+    ext a b
+    fin_cases a <;> fin_cases b <;>
+      simp [gx, gz, b₁, Complex.ext_iff] <;> norm_num
+  have hz : gz * (b₂ * gx) = gx * b₂ := by
+    ext a b
+    fin_cases a <;> fin_cases b <;>
+      simp [gz, gx, b₂, Complex.ext_iff] <;> norm_num
+  have hSx : SameMPV A (twistedTensor A U gx) := fun M σ =>
+    (mpv_twistedTensor_eq_of_mul_eq (fun g => hproj g M) hx σ).symm
+  have hSz : SameMPV A (twistedTensor A U gz) := fun M σ =>
+    (mpv_twistedTensor_eq_of_mul_eq (fun g => hproj g M) hz σ).symm
   -- Block to the odd length `L = 2N + 1`, where the blocked tensor is injective.
   set L := 2 * N + 1 with hL
   have hinj : Kraus.IsInjective (blockTensor A L) :=
     (isNBlkInjective_iff_blockTensor_isInjective A L).1
       (isNBlkInjective_of_le hNpos hN (by omega))
-  have hBsymm := isOnSiteSymmetric_blockTensor A _ L hsymm
-  let gx : Matrix.specialUnitaryGroup (Fin 2) ℂ := ⟨_, iPauliX_mem⟩
-  let gz : Matrix.specialUnitaryGroup (Fin 2) ℂ := ⟨_, iPauliZ_mem⟩
-  obtain ⟨X, hX⟩ := gaugeEquiv_twistedTensor_of_injective _ hinj _ hBsymm gx
-  obtain ⟨Y, hY⟩ := gaugeEquiv_twistedTensor_of_injective _ hinj _ hBsymm gz
+  have hgauge {g : Matrix.specialUnitaryGroup (Fin 2) ℂ} (hS : SameMPV A (twistedTensor A U g)) :
+      GaugeEquiv (blockTensor A L) (twistedTensor (blockTensor A L) (blockKronAction L U) g) := by
+    rw [twistedTensor_blockTensor_comm]
+    exact (sameMPV_iff_gaugeEquiv_of_injective hinj).1 (hS.blockTensor L)
+  obtain ⟨X, hX⟩ := hgauge hSx
+  obtain ⟨Y, hY⟩ := hgauge hSz
   have hanti : (gx : Matrix (Fin 2) (Fin 2) ℂ) * (gz : Matrix (Fin 2) (Fin 2) ℂ) =
       (-1 : ℂ) • ((gz : Matrix (Fin 2) (Fin 2) ℂ) * (gx : Matrix (Fin 2) (Fin 2) ℂ)) := by
     ext a b
@@ -171,7 +275,17 @@ theorem not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal [NeZero D]
     rw [← blockKron_mul, ← blockKron_mul, hanti, blockKron_smul, hL, pow_succ, pow_mul]
     simp
   exact not_anticommuting_gauges_of_isNormal hinj.isNormal hPQ X Y one_ne_zero one_ne_zero
-    (fun i => by simpa [twistedTensor] using hX i)
-    (fun i => by simpa [twistedTensor] using hY i)
+    (fun i => by simpa [twistedTensor, U] using hX i)
+    (fun i => by simpa [twistedTensor, U] using hY i)
+
+/-- **No normal spin-`1/2` MPS is invariant under on-site `SU(2)`.** The exact form of
+`not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal`: on-site
+symmetry, which preserves the matrix product vectors exactly, is invariance with every
+phase equal to one. -/
+theorem not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal [NeZero D]
+    {A : MPSTensor 2 D} (hA : Kraus.IsNormal A) :
+    ¬ IsOnSiteSymmetric A (Matrix.specialUnitaryGroup (Fin 2) ℂ).subtype := fun hsymm =>
+  not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal hA fun g _ =>
+    ⟨1, fun σ => by rw [one_mul, ← hsymm g _ σ]⟩
 
 end MPSTensor
