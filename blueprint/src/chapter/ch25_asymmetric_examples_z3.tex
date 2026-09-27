@@ -572,8 +572,7 @@ conjugate by one diagonal unitary built from on-site and two-site gates
         Z3Anomalous.mpo_family_eq_cocycleGauge_conj}
     \leanok
     \uses{thm:asymex_z3anomalous_family,
-        thm:asymex_z3anomalous_cocycle_family,
-        thm:asymex_z3_physical_kernels, thm:asymex_group_cocycle_cyclic}
+        thm:asymex_z3anomalous_cocycle_family}
     For $N>0$ define the diagonal unitary $V_N$ by
     $V_N\ket{t}=\omega^{E(t)}\ket{t}$, where
     \begin{align}
@@ -599,6 +598,7 @@ conjugate by one diagonal unitary built from on-site and two-site gates
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_z3_physical_kernels, thm:asymex_group_cocycle_cyclic}
     For $g=1$ both sides vanish at $(s,t)$ unless $s=Xt$. On that support
     the left side is $\omega^{F(t)+E(t)}$, by
     Theorem~\ref{thm:asymex_z3_physical_kernels}, and the right side is
@@ -673,6 +673,35 @@ proved here.
     of $M\otimes M$. The product is invariant under the fusion-tensor gauge
     action because $g^3=e$, and $\omega^2\neq1$.
 \end{proof}
+
+\begin{theorem}[Orientation of the class]
+    \label{thm:asymex_z3anomalous_class_orientation}
+    \lean{Z3Anomalous.cyclicInvariant_cyclicCocycle_one,
+        Z3Anomalous.cyclicInvariant_omega_z3_mul_cyclicCocycle_one}
+    \leanok
+    Let $g$ be the generator of $\Z_3$. The cocycle $\omega_1$
+    of~\cite{GarreRubioSchuch2024DomainWall} has
+    $\omega_1(g,1,g)\,\omega_1(g,g,g)\,\omega_1(g,g^2,g)=\omega$, while the
+    anomaly three-cochain of the family has the inverse product $\omega^2$
+    for every choice of fusion tensors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_z3anomalous_anomaly_class}
+    Since $\omega_1(a,b,c)=\omega^{a\lfloor(b+c)/3\rfloor}$, only the factor
+    $\omega_1(g,g^2,g)=\omega$ is nontrivial. The product for the family is
+    $\omega^2$ by Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}, and
+    $\omega^2\cdot\omega=1$.
+\end{proof}
+
+Both~\cite{GarreRubioSchuch2024DomainWall} and the three-cochain used here define
+the anomaly by the same move between the two fusion trees of $(g,h,k)$. The
+construction for $\omega_1$ is conjugate to the family by the circuit $V_N$
+of Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}, so, granting the
+invariance of the class under such conjugation, it realizes the class
+$j=2$ of $\omega_2=\omega_1^{-1}$ in this orientation, not the class of
+$\omega_1$.
 
 \subsection{The condensation defect}%
 \label{sec:asymex_z3anomalous_defect}

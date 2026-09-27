@@ -181,4 +181,35 @@ theorem mpo_family_eq_cocycleGauge_conj (g : Multiplicative (ZMod 3)) :
   have hu := Matrix.mem_unitaryGroup_iff.mp (cocycleGauge_mem_unitaryGroup (L := L))
   rw [← mpo_family_mul_cocycleGauge, Matrix.mul_assoc, hu, Matrix.mul_one]
 
+/-! ### Orientation of the anomaly class -/
+
+/-- Project result: **the cyclic invariant of `ω_1` is `ω₃`.** At the generator `g` only the
+factor `ω_1(g, g², g) = ζ` of `ω_1(g,1,g) ω_1(g,g,g) ω_1(g,g²,g)` is nontrivial
+(arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040), and `ζ = exp(2πi/3) = ω₃`. -/
+theorem cyclicInvariant_cyclicCocycle_one :
+    (cyclicInvariant (cyclicCocycle 3 1) z3Gen 3 : ℂ) = eisensteinOmega := by
+  simp only [cyclicInvariant, Finset.prod_range_succ, Finset.prod_range_zero, one_mul,
+    Units.val_mul, cyclicCocycle_val]
+  have h0 : (Multiplicative.toAdd (z3Gen ^ 0)).val = 0 := by decide
+  have h1 : (Multiplicative.toAdd (z3Gen ^ 1)).val = 1 := by decide
+  have h2 : (Multiplicative.toAdd (z3Gen ^ 2)).val = 2 := by decide
+  have hg : (Multiplicative.toAdd z3Gen).val = 1 := by decide
+  rw [h0, h1, h2, hg, rootOfUnity, eisensteinOmega_eq_exp]
+  norm_num
+
+/-- Project result: **the construction for `ω_1` has the inverse class in the orientation of
+arXiv:2502.20257.** For every choice of fusion tensors of `family`, the cyclic invariant of
+its anomaly three-cochain is the inverse of the cyclic invariant of `ω_1`: `ω₃² = ω₃⁻¹`.
+Since `family` is conjugate to `cocycleFamily` by the diagonal circuit `V_N`, and the class
+is invariant under conjugation by such a circuit (not formalized here), the representation
+constructed from `ω_1` by arXiv:2203.12563 carries the class `j = 2` for the three-cochain of arXiv:2502.20257 (`Papers/2502.20257/main.tex`, display preceding
+`eq:3-cocycle`), which is defined by the same fusion-tree move as in arXiv:2405.00439
+(lines 1745–1772). -/
+theorem cyclicInvariant_omega_z3_mul_cyclicCocycle_one (fd : family.FusionData) :
+    (cyclicInvariant fd.omega z3Gen 3 : ℂ) *
+      (cyclicInvariant (cyclicCocycle 3 1) z3Gen 3 : ℂ) = 1 := by
+  rw [cyclicInvariant_omega_z3, cyclicInvariant_cyclicCocycle_one, ← pow_succ]
+  have h := eisensteinOmega_quadratic
+  linear_combination (eisensteinOmega - 1) * h
+
 end Z3Anomalous
