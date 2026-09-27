@@ -110,6 +110,27 @@ closing a chain of $N$ copies of $\mathcal U$.
     condition in \cite[Section~III, equation~(10)]{Cirac2017MPU}.
 \end{definition}
 
+\begin{center}
+    % Formula: U^{(N)}_{\sigma,\tau}=\tr(\mathcal U^{\sigma_1\tau_1}\cdots
+    % \mathcal U^{\sigma_N\tau_N}), the periodic operator whose unitarity for
+    % every N>1 is the condition of this definition
+    % (\cite[Section~III, equation~(10)]{Cirac2017MPU}).
+    % Ink-to-index map: one row of N copies of the tensor; the upper legs carry
+    % the output indices \sigma_1,\ldots,\sigma_N and the lower legs the input
+    % indices \tau_1,\ldots,\tau_N.
+    % Contraction set: every horizontal virtual bond, including the return bond
+    % closing the ring.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N); the dots cell abbreviates the omitted sites.
+    \tenkzkernel
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{\mathcal U} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{\mathcal U} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{\mathcal U}
+    \end{tenkz}
+\end{center}
+
 \begin{lemma}[First matrix product unitarity equation]
     \label{lem:mpu_mul_adjoint}
     \lean{MPOTensor.IsMPU.mpo_mul_conjTranspose_mpo}
@@ -156,6 +177,34 @@ closing a chain of $N$ copies of $\mathcal U$.
     concatenation tensor $\mathcal W$ in the proof of
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
 \end{theorem}
+
+\begin{center}
+    % Formula: the closed chain of the concatenation tensor,
+    % \sum_{\rho}U^{(N)}_{\sigma,\rho}V^{(N)}_{\rho,\tau}
+    % =\bigl(U^{(N)}V^{(N)}\bigr)_{\sigma,\tau}.
+    % Ink-to-index map: the upper row is \mathcal U with output legs \sigma_x,
+    % the lower row is \mathcal V with input legs \tau_x; each vertical leg
+    % contracts the input index of \mathcal U with the output index of
+    % \mathcal V at one site.
+    % Contraction set: the vertical legs and both periodic rows of virtual bonds.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N); the right-hand side is mathematics.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$\sigma_1$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$\sigma_2$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$\sigma_N$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$\tau_1$, 180:virtual, 0:virtual}]{\mathcal V}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$\tau_2$, 180:virtual, 0:virtual}]{\mathcal V}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$\tau_N$, 180:virtual, 0:virtual}]{\mathcal V}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=\bigl(U^{(N)}V^{(N)}\bigr)_{\sigma,\tau}$
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpu, thm:mpdo_operator_product_mpo}
@@ -208,6 +257,29 @@ closing a chain of $N$ copies of $\mathcal U$.
     \texttt{II\_Simple2.png} of \cite{Cirac2017MPU}.
 \end{definition}
 
+\begin{center}
+    % Formula: \mathcal W^{ik}=\sum_j(\mathcal U^\sharp)^{ij}\otimes\mathcal U^{jk},
+    % the displayed equation of this definition; compare the barred upper layer
+    % of Figures II_Simple1 and II_Simple2 of \cite{Cirac2017MPU}.
+    % Ink-to-index map: the upper box is \mathcal U^\sharp with open upper leg i,
+    % the lower box is \mathcal U with open lower leg k; the vertical leg between
+    % them is the summed index j.  On the right, the two west and the two east
+    % virtual legs of \mathcal W are the two factors of the doubled bond space.
+    % Contraction set: the vertical leg j only.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 | physical-up=1 |
+    % physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$k$}]{\mathcal U}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[cols=1, west=open, east=open]
+        \tn[skin=mpo, wires=2,
+            ports={90:physical:$i$, 270:physical:$k$, 180@1:virtual, 180@2:virtual, 0@1:virtual, 0@2:virtual}]{\mathcal W}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Closed double layer]
     \label{thm:mpu_closed_double_layer}
     \lean{MPOTensor.mpo_doubleLayerTensor}
@@ -218,6 +290,42 @@ closing a chain of $N$ copies of $\mathcal U$.
         W^{(N)} & =\bigl(U^{(N)}\bigr)^\dagger U^{(N)}.
     \end{align}
 \end{theorem}
+
+\begin{center}
+    % Formula: W^{(N)}=\bigl(U^{(N)}\bigr)^\dagger U^{(N)}, drawn as the closed
+    % double layer; the upper row closes to (\mathcal U^\sharp)^{(N)}, which is
+    % \bigl(U^{(N)}\bigr)^\dagger by the physical-adjoint identities below.
+    % Ink-to-index map: the upper row is \mathcal U^\sharp with open upper legs
+    % \sigma_x, the lower row is \mathcal U with open lower legs \tau_x; each
+    % vertical leg is the summed middle physical index of the operator product.
+    % On the right, each \mathcal W carries the doubled bond.
+    % Contraction set: the vertical legs, the horizontal bonds of both rows and
+    % their return bonds on the left; the doubled horizontal bonds and one
+    % return bond on the right.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$\sigma_1$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U^\sharp}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$\sigma_2$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U^\sharp}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$\sigma_N$, 270:physical, 180:virtual, 0:virtual}]{\mathcal U^\sharp}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$\tau_1$, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$\tau_2$, 180:virtual, 0:virtual}]{\mathcal U}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$\tau_N$, 180:virtual, 0:virtual}]{\mathcal U}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{\mathcal W} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{\mathcal W} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{\mathcal W}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpdo_physical_adjoint, thm:mpdo_operator_product_mpo}
@@ -300,6 +408,52 @@ closing a chain of $N$ copies of $\mathcal U$.
     diagrams in \cite[Definition~III.2]{Cirac2017MPU}.
 \end{definition}
 
+\begin{center}
+    % Formula: first row (simple1), (a|W^{ij}|b)=\delta_{ij}; second row
+    % (simple2), W^{ij}W^{k\ell}=W^{ij}|b)(a|W^{k\ell}.  These are the two
+    % diagrams of \cite[Definition~III.2]{Cirac2017MPU}.
+    % Ink-to-index map: each column is one double-layer letter W, the upper box
+    % \mathcal U^\sharp with upper leg i or k and the lower box \mathcal U with
+    % lower leg j or \ell.  The labelled west cup is the vector a and the
+    % labelled east cup is the vector b of the doubled bond space.
+    % Contraction set: in simple1, the vertical middle leg and both cups; the
+    % right-hand side is the bare physical wire \delta_{ij}.  In simple2, the
+    % vertical legs and, on the left, the doubled bond between the two letters;
+    % on the right that bond is replaced by the rank-one insertion |b)(a|.
+    % Boundary signature: simple1 (virtual=0 | physical-up=1 | physical-down=1);
+    % simple2 (virtual-west=2 | virtual-east=2 | physical-up=2 |
+    % physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, bonds=none, west={cup=$a$}, east={cup=$b$}]
+        \tn[at=(1,1), name=us, skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical:$i$, 270:physical}]{\mathcal U^\sharp}
+        \tn[at=(2,1), name=u, skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical:$j$}]{\mathcal U}
+        \tnwire{us.270}{u.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[skin=none, ports={90:physical:$i$, 270:physical:$j$}]{}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={op,op}, cols=2, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{\mathcal U^\sharp} &
+        \tn[skin=mpo, ports={90:physical:$k$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{\mathcal U} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$\ell$}]{\mathcal U}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east={cup=$b$}]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{\mathcal U}
+    \end{tenkz}
+    \;
+    \begin{tenkz}[rows={op,op}, cols=1, west={cup=$a$}, east=open]
+        \tn[skin=mpo, ports={90:physical:$k$, 270:physical}]{\mathcal U^\sharp} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$\ell$}]{\mathcal U}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Sequential contraction of a simple double layer]
     \label{thm:mpu_simple_closed_identity}
     \lean{MPOTensor.IsMPUSimple.mpo_doubleLayerTensor_eq_one}
@@ -310,6 +464,33 @@ closing a chain of $N$ copies of $\mathcal U$.
         W^{(N)} & =\Id.
     \end{align}
 \end{theorem}
+
+\begin{center}
+    % Formula: W^{(N)}=\Id, the closed double layer equals the identity on N
+    % sites.
+    % Ink-to-index map: each \mathcal W is one double-layer letter with output
+    % leg \sigma_x and input leg \tau_x; its horizontal bond is the doubled bond.
+    % On the right, the x-th straight wire is the Kronecker delta
+    % \delta_{\sigma_x,\tau_x}.
+    % Contraction set: the doubled horizontal bonds and the return bond on the
+    % left; nothing on the right.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{\mathcal W} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{\mathcal W} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{\mathcal W}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+        \tn[skin=none, ports={90:physical:$\sigma_1$, 270:physical:$\tau_1$}]{} &
+        \tn[skin=none, ports={90:physical:$\sigma_2$, 270:physical:$\tau_2$}]{} &
+        \tn[skin=dots]{} &
+        \tn[skin=none, ports={90:physical:$\sigma_N$, 270:physical:$\tau_N$}]{}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpu_simple}
@@ -2580,6 +2761,43 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \cite[Section~III]{Cirac2017MPU}.
 \end{theorem}
 
+\begin{center}
+    % Formula: M_1=X_1Y_1 and M_2=X_2Y_2, read entrywise as
+    % \mathcal U^i_{j,\alpha,\beta}=\sum_r(X_1)_{(i,\beta),r}(Y_1)_{r,(\alpha,j)}
+    % =\sum_l(X_2)_{(\alpha,i),l}(Y_2)_{l,(j,\beta)}; compare the source figure
+    % SVDforms2 of \cite[Section~III]{Cirac2017MPU}.
+    % Ink-to-index map: \mathcal U has upper leg i, lower leg j, left bond
+    % \alpha, right bond \beta.  The first cut groups (i,\beta) into X_1 and
+    % (\alpha,j) into Y_1, joined by the diagonal index of range r; the second
+    % groups (\alpha,i) into X_2 and (j,\beta) into Y_2, joined by the diagonal
+    % index of range \ell.
+    % Contraction set: the diagonal index in each factorization.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=1) in all three panels.
+    \tenkzkernel
+    \begin{tenkz}[cols=1, bonds=none]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$, 180:virtual:$\alpha$, 0:virtual:$\beta$}]{\mathcal U}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,2), name=x, skin=box, label pos=w,
+            ports={90:physical:$i$, 0:virtual:$\beta$, 225:virtual}]{X_1}
+        \tn[at=(2,1), name=y, skin=box, label pos=e,
+            ports={180:virtual:$\alpha$, 270:physical:$j$, 45:virtual}]{Y_1}
+        \tnwire[name=wr]{y.45}{x.225}
+        \tnmark[form=label, label pos=nw]{midway x and y}{$r$}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=x, skin=box, label pos=e,
+            ports={90:physical:$i$, 180:virtual:$\alpha$, 315:virtual}]{X_2}
+        \tn[at=(2,2), name=y, skin=box, label pos=w,
+            ports={0:virtual:$\beta$, 270:physical:$j$, 135:virtual}]{Y_2}
+        \tnwire[name=wl]{x.315}{y.135}
+        \tnmark[form=label, label pos=ne]{midway x and y}{$l$}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
@@ -2748,6 +2966,45 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     These are the literal triangle contractions in
     \cite[Section~III, equations~\texttt{uuvv}--\texttt{vdagger}]{Cirac2017MPU}.
 \end{definition}
+
+\begin{center}
+    % Formula: u_{(l,r),(i_1,i_2)}=\sum_\beta(Y_2)_{l,(i_1,\beta)}
+    % (Y_1)_{r,(\beta,i_2)} (left pair) and
+    % v_{(j_1,j_2),(r,l)}=\sum_\alpha(X_1)_{(j_1,\alpha),r}(X_2)_{(\alpha,j_2),l}
+    % (right pair), the two displayed equations of this definition.
+    % Ink-to-index map: in u, the upper legs are the source indices l and r
+    % and the lower legs are the physical inputs i_1,i_2; in v, the upper legs
+    % are the physical outputs j_1,j_2 and the lower legs are the source indices
+    % r and l.  The horizontal bond is the summed auxiliary index \beta in u
+    % and \alpha in v.
+    % Contraction set: the one horizontal bond in each right-hand panel.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | up=2 | down=2) on
+    % both sides of each equation.
+    \tenkzkernel
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), skin=mpo, wide=2, size=l,
+            ports={90@1:virtual:$l$, 90@2:virtual:$r$, 270@1:physical:$i_1$, 270@2:physical:$i_2$}]{u}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), name=y2, ports={90:virtual:$l$, 270:physical:$i_1$, 0:virtual}]{Y_2}
+        \tn[at=(1,2), name=y1, ports={180:virtual, 90:virtual:$r$, 270:physical:$i_2$}]{Y_1}
+        \tnwire[name=wb]{y2.0}{y1.180}
+        \tnmark[form=label, label pos=n]{on wb 0.5}{$\beta$}
+    \end{tenkz}
+    \qquad\qquad
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), skin=mpo, wide=2, size=l,
+            ports={90@1:physical:$j_1$, 90@2:physical:$j_2$, 270@1:virtual:$r$, 270@2:virtual:$l$}]{v}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), name=x1, ports={90:physical:$j_1$, 270:virtual:$r$, 0:virtual}]{X_1}
+        \tn[at=(1,2), name=x2, ports={180:virtual, 90:physical:$j_2$, 270:virtual:$l$}]{X_2}
+        \tnwire[name=wa]{x1.0}{x2.180}
+        \tnmark[form=label, label pos=n]{on wa 0.5}{$\alpha$}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Paper-gate two-site factorization]
     \label{thm:mpu_source_gates_two_site_factorization}
@@ -5278,6 +5535,39 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % to the source tensor and is not a condition on supplied gates.
 \end{definition}
 
+\begin{center}
+    % Formula: W^{(i_1,i_2),(j_1,j_2)}_{\alpha,\gamma}=\sum_{l,s}
+    % (X_2)_{(\alpha,i_1),l}\,u_{(l,s),(j_1,j_2)}\,(X_1)_{(i_2,\gamma),s}, the
+    % second displayed equation of this definition; compare the source figure
+    % StandardForm of \cite{Cirac2017MPU}.
+    % Ink-to-index map: W is the two-site tensor with outputs i_1,i_2, inputs
+    % j_1,j_2 and bonds \alpha,\gamma.  On the right, X_2 carries \alpha and
+    % i_1, X_1 carries i_2 and \gamma, and the gate u takes the inputs j_1,j_2
+    % to the source indices l and s.
+    % Contraction set: the two vertical source indices l and s.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=2 |
+    % physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[cols=2, bonds=none]
+        \tn[at=(1,1), skin=box, wide=2,
+            ports={90@1:physical:$i_1$, 90@2:physical:$i_2$, 270@1:physical:$j_1$, 270@2:physical:$j_2$,
+                    180:virtual:$\alpha$, 0:virtual:$\gamma$}]{W}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=x2, skin=box, label pos=n,
+            ports={180:virtual:$\alpha$, 90:physical:$i_1$, 270:virtual}]{X_2}
+        \tn[at=(1,2), name=x1, skin=box,
+            ports={90:physical:$i_2$, 0:virtual:$\gamma$, 270:virtual}]{X_1}
+        \tn[at=(2,1), name=u, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical:$j_1$, 270@2:physical:$j_2$}]{u}
+        \tnwire[name=wl]{x2.270}{u.90@1}
+        \tnwire[name=ws]{x1.270}{u.90@2}
+        \tnmark[form=label, label pos=w]{on wl 0.5}{$l$}
+        \tnmark[form=label, label pos=e]{on ws 0.5}{$s$}
+    \end{tenkz}
+\end{center}
+
 \begin{definition}[The two layers of a supplied standard form]
     \label{def:mpu_two_site_circuit_layers}
     \lean{MPOTensor.twoSiteUnshiftedLayer,
@@ -5419,6 +5709,50 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     arbitrary matrices may therefore be inserted at the two ends before
     taking the trace.
 \end{theorem}
+
+\begin{center}
+    % Formula: the case n=3 of W^{i_0,j_0}W^{i_1,j_1}W^{i_2,j_2}
+    % =L(i_0)u(j_0)v(i_0,i_1)u(j_1)v(i_1,i_2)u(j_2)R(i_2).
+    % Ink-to-index map: the three boxes W on the left are consecutive two-site
+    % letters, upper legs the outputs i_{x,1},i_{x,2} and lower legs the inputs
+    % j_{x,1},j_{x,2}.  On the right, the lower layer carries the three gates
+    % u(j_x); the upper layer carries L(i_0) on the output i_{0,1}, the two
+    % gates v(i_{x-1},i_x) on the outputs i_{x-1,2},i_{x,1}, and R(i_2) on the
+    % output i_{2,2}.
+    % Contraction set: on the left, the two virtual bonds between letters; on
+    % the right, the six vertical source indices between the two layers.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=6 |
+    % physical-down=6) on both sides; the two virtual ends stay free, as stated.
+    \tenkzkernel
+    \begin{tenkz}[cols=6, bonds=none]
+        \tn[at=(1,1), name=w0, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:physical, 270@2:physical, 180:virtual, 0:virtual}]{W}
+        \tn[at=(1,3), name=w1, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:physical, 270@2:physical, 180:virtual, 0:virtual}]{W}
+        \tn[at=(1,5), name=w2, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:physical, 270@2:physical, 180:virtual, 0:virtual}]{W}
+        \tnwire{open w}{w0.180} \tnwire{w0.0}{w1.180} \tnwire{w1.0}{w2.180} \tnwire{w2.0}{open e}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=6, bonds=none]
+        \tn[at=(1,1), name=L, skin=box, ports={180:virtual, 90:physical, 270:virtual}]{L}
+        \tn[at=(1,2), name=v1, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:virtual, 270@2:virtual}]{v}
+        \tn[at=(1,4), name=v2, skin=box, wide=2,
+            ports={90@1:physical, 90@2:physical, 270@1:virtual, 270@2:virtual}]{v}
+        \tn[at=(1,6), name=R, skin=box, ports={0:virtual, 90:physical, 270:virtual}]{R}
+        \tn[at=(2,1), name=u0, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical, 270@2:physical}]{u}
+        \tn[at=(2,3), name=u1, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical, 270@2:physical}]{u}
+        \tn[at=(2,5), name=u2, skin=box, wide=2,
+            ports={90@1:virtual, 90@2:virtual, 270@1:physical, 270@2:physical}]{u}
+        \tnwire{open w}{L.180} \tnwire{R.0}{open e}
+        \tnwire{L.270}{u0.90@1} \tnwire{v1.270@1}{u0.90@2}
+        \tnwire{v1.270@2}{u1.90@1} \tnwire{v2.270@1}{u1.90@2}
+        \tnwire{v2.270@2}{u2.90@1} \tnwire{R.270}{u2.90@2}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{def:mpu_supplied_two_site_standard_form}
