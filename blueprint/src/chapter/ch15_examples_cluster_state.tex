@@ -295,20 +295,26 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
 
 \begin{theorem}[The cluster state is the $\Z_2\times\Z_2$ SPT fixed point]
     \label{thm:cluster_spt_fixed_point}
-    \lean{MPSTensor.clusterSPTUnitary, MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor, MPSTensor.clusterSPTUnitary_mul_conjTranspose, MPSTensor.isNontrivialClass_of_clusterSPTFixedPoint}
+    \lean{MPSTensor.clusterSPTUnitary, MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor, MPSTensor.clusterSPTUnitary_mul_conjTranspose, MPSTensor.clusterZ2Z2Action_mul_clusterSPTUnitary, MPSTensor.isNontrivialClass_of_clusterSPTFixedPoint}
     \leanok
-    \uses{def:spt_fixed_point_tensor, thm:spt_fixed_point_class, thm:cluster_nontrivial_spt}
+    \uses{def:spt_fixed_point_tensor, thm:spt_fixed_point_class, thm:cluster_nontrivial_spt, thm:spt_fixed_point_transfer}
     Let $B$ be the SPT fixed-point tensor of the projective representation of
     $\Z_2\times\Z_2$ by $\sigma_z$ and $\sigma_x$.  The length-$2$ blocked
     cluster-state tensor satisfies $A^i=\sum_jV_{ij}B^j$ for a unitary $V$ on the
-    four-dimensional physical space, and every virtual projective representation of
-    $B$ has a non-trivial class \cite[Section~III.A]{Cirac2021Matrix}.
+    four-dimensional physical space.  This unitary intertwines the two symmetries:
+    $u(g)\,V=V\,U(g)$ for every $g$, where $u$ is the on-site
+    $\Z_2\times\Z_2$ action on the blocked cluster state and $U$ is the physical
+    action of the fixed point.  Every virtual projective representation of $B$ has
+    a non-trivial class \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:spt_fixed_point_class, thm:cluster_nontrivial_spt}
+    \uses{thm:spt_fixed_point_class, thm:cluster_nontrivial_spt, thm:spt_fixed_point_transfer, thm:cluster_z2z2_symmetric}
     Take $V_{i,(a,b)}=\sqrt2\,(A^i)_{ab}$; the four blocked letters are orthogonal
-    with $\tr(A^iA^{j\dagger})=\tfrac12\delta_{ij}$, so $V$ is unitary.  The class
+    with $\tr(A^iA^{j\dagger})=\tfrac12\delta_{ij}$, so $V$ is unitary.  Both
+    tensors realize the symmetry $g$ with the same virtual gauge, so
+    $\sum_j(u(g)V)_{ij}B^j=\sum_j(VU(g))_{ij}B^j$, and the letters $B^j$ are
+    linearly independent.  The class
     statement follows from Theorem~\ref{thm:spt_fixed_point_class} and the
     non-triviality of the cluster factor system.
 \end{proof}

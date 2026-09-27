@@ -174,12 +174,12 @@ is the dimer fixed point that the printed claims describe
 
 \begin{theorem}[The SPT fixed point has zero correlation length]
     \label{thm:spt_fixed_point_transfer}
-    \lean{MPSTensor.transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isTransferIdempotent, MPSTensor.finrank_range_transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isInjective, MPSTensor.sptFixedPointTensor_isNormal}
+    \lean{MPSTensor.transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isTransferIdempotent, MPSTensor.finrank_range_transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isInjective, MPSTensor.sptFixedPointTensor_isNormal, MPSTensor.sum_smul_sptFixedPointTensor_apply, MPSTensor.eq_of_sum_smul_sptFixedPointTensor_eq}
     \leanok
     \uses{def:spt_fixed_point_tensor, def:transfer_map, def:injective}
-    The transfer map of the SPT fixed-point tensor is
+    Let $D\geq1$.  The transfer map of the SPT fixed-point tensor is
     $X\mapsto D^{-1}\tr(X)\,\Id$, an idempotent of rank one, and the tensor is
-    injective \cite[Section~III.A]{Cirac2021Matrix}.
+    injective, so its letters are linearly independent \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -193,7 +193,7 @@ is the dimer fixed point that the printed claims describe
     \leanok
     \uses{def:spt_fixed_point_tensor, def:on_site_symmetric, thm:virtual_rep_injective, thm:cocycle_gauge_independence, thm:spt_fixed_point_transfer}
     For every $g$ and $i$, $\sum_jU(g)_{ij}A^j=\phi(g)\,W_gA^iW_g^{-1}$.  For
-    $\phi=1$ the tensor has MPV-family invariance under $U$, and every virtual
+    $\phi=1$ the tensor has MPV-family invariance under $U$, and, when $D\geq1$, every virtual
     projective representation of this symmetry has a factor system cohomologous to
     $\omega$ \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}

@@ -19,7 +19,8 @@ Review: arXiv:2011.12127, Appendix A, "The cluster state".
 **Formalized here.** For the non-trivial class of `Z₂ × Z₂`, represented by the
 cluster projective representation `clusterProjRep` (`σ_z`, `σ_x`), the fixed-point
 tensor `sptFixedPointTensor 2` and the length-`2` blocked cluster tensor differ by a
-unitary on the four-dimensional physical space and the trivial gauge.  Every virtual
+unitary on the four-dimensional physical space and the trivial gauge, and this unitary
+intertwines the cluster `Z₂ × Z₂` action with the fixed-point action.  Every virtual
 representation of the fixed-point tensor has a non-trivial class.
 
 The fixed-point tensor is the one of `TNLean.MPS.Symmetry.SPTFixedPoint`, not the
@@ -34,6 +35,7 @@ printed tensor; see the local fix recorded there and
 
 * `MPSTensor.clusterSPTUnitary_mul_conjTranspose`
 * `MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor`
+* `MPSTensor.clusterZ2Z2Action_mul_clusterSPTUnitary`
 * `MPSTensor.isNontrivialClass_of_clusterSPTFixedPoint`
 
 ## References
@@ -94,6 +96,43 @@ theorem clusterSPTUnitary_mul_conjTranspose :
   fin_cases i <;> fin_cases k <;>
     simp [clusterBlocked_zero, clusterBlocked_one, clusterBlocked_two, clusterBlocked_three,
       Fin.sum_univ_two] <;> norm_num
+
+/-- **The unitary intertwines the two symmetries.** `clusterSPTUnitary` carries the
+fixed-point action of `clusterProjRep` to the `Z₂ × Z₂` action of the blocked cluster
+state: `U_cluster(g) V = V U_fp(g)`.  Both tensors realize the symmetry `g` with the
+same virtual gauge `σ`-matrix, and the fixed-point letters are linearly independent. -/
+theorem clusterZ2Z2Action_mul_clusterSPTUnitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
+    clusterZ2Z2Action g * clusterSPTUnitary =
+      clusterSPTUnitary * sptFixedPointAction clusterProjRep 1 g := by
+  classical
+  have hg : g⁻¹ = g := by revert g; decide
+  have hA (i : Fin 4) : twistedTensor clusterBlocked clusterZ2Z2Action g i =
+      (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) * clusterBlocked i *
+        (((clusterProjRep.X g)⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
+    rw [← clusterBlocked_twist_intertwine g i, Matrix.mul_assoc, Units.mul_inv,
+      Matrix.mul_one]
+  have expand {ι : Type} [Fintype ι] (P : Matrix (Fin 4) ι ℂ) (Q : Matrix ι (Fin (2 * 2)) ℂ)
+      (i : Fin 4) : ∑ k, (P * Q) i k • sptFixedPointTensor 2 k =
+        ∑ l, P i l • ∑ k, Q l k • sptFixedPointTensor 2 k := by
+    simp only [Matrix.mul_apply, Finset.sum_smul, Finset.smul_sum, smul_smul]
+    exact Finset.sum_comm
+  ext i k
+  refine congrFun (eq_of_sum_smul_sptFixedPointTensor_eq (D := 2) ?_) k
+  calc ∑ k, (clusterZ2Z2Action g * clusterSPTUnitary) i k • sptFixedPointTensor 2 k
+      = twistedTensor clusterBlocked clusterZ2Z2Action g i := by
+        rw [expand]
+        simp only [← clusterBlocked_eq_sum_sptFixedPointTensor]
+        rfl
+    _ = (clusterProjRep.X g : Matrix (Fin 2) (Fin 2) ℂ) *
+          (∑ l, clusterSPTUnitary i l • sptFixedPointTensor 2 l) *
+          (((clusterProjRep.X g)⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) := by
+        rw [hA, ← clusterBlocked_eq_sum_sptFixedPointTensor]
+    _ = ∑ l, clusterSPTUnitary i l •
+          twistedTensor (sptFixedPointTensor 2) (sptFixedPointAction clusterProjRep 1) g l := by
+        simp only [twistedTensor_sptFixedPointTensor, sptGauge, MonoidHom.one_apply,
+          one_smul, Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_smul, Matrix.smul_mul]
+        erw [hg]
+    _ = _ := by rw [expand]; rfl
 
 /-- **The cluster fixed point is a non-trivial SPT phase.** Every virtual projective
 representation of the fixed-point tensor built from `clusterProjRep` has a

@@ -52,6 +52,7 @@ dimer fixed point that the printed claims describe; documented in
 * `MPSTensor.sptFixedPointTensor_isTransferIdempotent`
 * `MPSTensor.finrank_range_transferMap_sptFixedPointTensor`
 * `MPSTensor.sptFixedPointTensor_isInjective`, `MPSTensor.sptFixedPointTensor_isNormal`
+* `MPSTensor.eq_of_sum_smul_sptFixedPointTensor_eq`
 * `MPSTensor.twistedTensor_sptFixedPointTensor`
 * `MPSTensor.sptFixedPointTensor_isOnSiteSymmetric`
 * `MPSTensor.cohomologousTo_of_sptFixedPointTensor`
@@ -166,6 +167,29 @@ theorem sptFixedPointTensor_isInjective [NeZero D] :
 /-- **The fixed-point tensor is normal.** -/
 theorem sptFixedPointTensor_isNormal [NeZero D] : Kraus.IsNormal (sptFixedPointTensor D) :=
   sptFixedPointTensor_isInjective.isNormal
+
+/-- The entry `(a, b)` of a linear combination of the letters is `D^{-1/2}` times the
+coefficient of the letter `(a, b)`. -/
+theorem sum_smul_sptFixedPointTensor_apply (c : Fin (D * D) → ℂ) (a b : Fin D) :
+    (∑ j, c j • sptFixedPointTensor D j) a b = sptScale D * c (finProdFinEquiv (a, b)) := by
+  classical
+  rw [← finProdFinEquiv.sum_comp]
+  simp [Matrix.sum_apply, sptFixedPointTensor, Matrix.single_apply, Fintype.sum_prod_type,
+    ite_and, mul_comm]
+
+/-- **The letters are linearly independent**: for `D > 0` a linear combination of the
+letters determines its coefficients. -/
+theorem eq_of_sum_smul_sptFixedPointTensor_eq [NeZero D] {c c' : Fin (D * D) → ℂ}
+    (h : ∑ j, c j • sptFixedPointTensor D j = ∑ j, c' j • sptFixedPointTensor D j) :
+    c = c' := by
+  have hc : sptScale D ≠ 0 := by
+    refine inv_ne_zero (Complex.ofReal_ne_zero.mpr ((Real.sqrt_ne_zero').mpr ?_))
+    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  funext j
+  obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective j
+  have hab := congrFun (congrFun h a) b
+  rw [sum_smul_sptFixedPointTensor_apply, sum_smul_sptFixedPointTensor_apply] at hab
+  exact mul_left_cancel₀ hc hab
 
 /-! ### The physical symmetry -/
 
