@@ -23,7 +23,7 @@ sufficiently large $N$
 \begin{align}
     \bra{\phi_N}\mathcal O_1\ket{\phi_N}
      & =\bra{\phi_N}\mathcal O'_s\ket{\phi_N}=0,
-    \label{eq:mswc24_decaying_correlations_one_point}   \\
+    \label{eq:mswc24_decaying_correlations_one_point} \\
     \bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}
      & \ge c\,e^{-(s-1)/\xi},
     \label{eq:mswc24_decaying_correlations_printed_bound}
@@ -36,9 +36,13 @@ with $c>0$ independent of $s$ and $N$.\footnote{Source traceability: label
 
 \section{What holds and what fails}
 \paragraph{The source's observables.}
-Let $R_2\neq0$ satisfy $\mathcal E_A(R_2)=\lambda_2R_2$ and let $\ell_2$ be a
-linear functional with $\ell_2\circ\mathcal E_A=\lambda_2\ell_2$ and
-$\ell_2(R_2)=1$. The proof of Lemma~2 chooses, by injectivity, observables
+Let $\ell_2\neq0$ be a linear functional with
+$\ell_2\circ\mathcal E_A=\lambda_2\ell_2$, and let $R_2$ be a generalized
+eigenvector for $\lambda_2$, that is, $(\mathcal E_A-\lambda_2)^kR_2=0$ for some
+$k$, with $\ell_2(R_2)=1$. Such a pair exists for every eigenvalue; when
+$\lambda_2$ is semisimple $R_2$ is an eigenvector, while for a single nontrivial Jordan
+block every left eigenvector vanishes on every eigenvector, so a generalized
+eigenvector is needed. The proof of Lemma~2 chooses, by injectivity, observables
 whose one-site maps are the rank-one maps
 \begin{align}
     \mathcal E_{\mathcal O}(Z)
@@ -48,12 +52,15 @@ whose one-site maps are the rank-one maps
      & =\operatorname{Tr}(Z)\,R_2,
     \label{eq:mswc24_decaying_correlations_source_choice}
 \end{align}
-rescaled to norm one. Since $\rho$ and $R_2$ are eigenvectors for the
-distinct eigenvalues $1$ and $\lambda_2$, $\ell_2(\rho)=0$, and trace
-preservation gives $\operatorname{Tr}R_2=0$. Both one-point functions are
-therefore $0$ at every $N$, so
+rescaled to norm one. Since $\ell_2$ is a left eigenvector for $\lambda_2$
+and $\rho$ an eigenvector for $1\neq\lambda_2$, $\ell_2(\rho)=0$; since
+trace preservation makes $\operatorname{Tr}$ a left eigenvector for $1$, it
+vanishes on the generalized eigenspace of $\lambda_2$, so
+$\operatorname{Tr}R_2=0$. Both one-point functions are therefore $0$ at every
+$N\ge s$, the chain lengths on which the site $s$ exists, so
 (\ref{eq:mswc24_decaying_correlations_one_point}) is exact and algebraic, not
-asymptotic. The two-point function is exactly
+asymptotic. Because $\ell_2\circ\mathcal E_A^{\,s-2}=\lambda_2^{\,s-2}\ell_2$, the
+two-point function is exactly
 \begin{align}
     \bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}
      & =\frac{\lambda_2^{\,s-2}}{\operatorname{Tr}\mathcal E_A^{\,N}},
@@ -66,20 +73,22 @@ $\operatorname{Tr}\mathcal E_A^{\,N}\le D^2$. Hence the modulus form
      & \ge c\,e^{-(s-1)/\xi}
     \label{eq:mswc24_decaying_correlations_modulus}
 \end{align}
-holds for every $s\ge2$ and every $N$.
+holds for every $s\ge2$ and every $N\ge s$.
 
 \paragraph{The printed real inequality.}
 When $\lambda_2$ is not real, the pair
 (\ref{eq:mswc24_decaying_correlations_source_choice}) cannot be Hermitian:
 a Hermitian observable has a map with
 $\mathcal E_{\mathcal O}(Z^\dagger)=\mathcal E_{\mathcal O}(Z)^\dagger$, whereas
-$R_2^\dagger$ is an eigenvector for $\bar\lambda_2\neq\lambda_2$, so
+$R_2^\dagger$ is a generalized eigenvector for $\bar\lambda_2\neq\lambda_2$, so
 $\ell_2(R_2^\dagger)=0\neq\overline{\ell_2(R_2)}$. The correlator
 (\ref{eq:mswc24_decaying_correlations_exact}) is then complex, and the printed
 inequality (\ref{eq:mswc24_decaying_correlations_printed_bound}) is false:
 writing $\lambda_2=\lvert\lambda_2\rvert e^{i\theta}$, the real part is a
-multiple of $\lvert\lambda_2\rvert^{s-2}\cos((s-2)\theta)$, which vanishes at
-some $s$ and is negative at others.
+multiple of $\lvert\lambda_2\rvert^{s-2}\cos((s-2)\theta)$, which is negative
+for infinitely many $s$ since $\theta$ is not a multiple of $\pi$; it vanishes
+at some $s$ only for particular $\theta$, such as $\theta=\pi/2$, and never
+for $\theta=\pi/3$.
 
 \paragraph{The Hermitian reading.}
 Reading $\mathcal O,\mathcal O'$ as Hermitian does not rescue the printed
@@ -93,7 +102,8 @@ the limit of the connected correlator as $N\to\infty$ is
     \label{eq:mswc24_decaying_correlations_limit}
 \end{align}
 which is real. When $\lambda_2$ and $\bar\lambda_2$ are the only eigenvalues
-of modulus $\lvert\lambda_2\rvert$, its leading part is
+of modulus $\lvert\lambda_2\rvert$ and both are semisimple, its leading part
+is
 \begin{align}
     \lvert\lambda_2\rvert^{t}\bigl(a\,e^{it\theta}+\bar a\,e^{-it\theta}\bigr)
      & =2\lvert a\rvert\,\lvert\lambda_2\rvert^{t}\cos(t\theta+\varphi),
@@ -122,7 +132,7 @@ with $\sum_iA^{i\dagger}A^i=\one$ and transfer spectrum
 $\{1,(1+e^{i\theta})/4,(1+e^{-i\theta})/4,0\}$. At $\theta=\pi/2$ the
 Hermitian parts of the source's observables
 (\ref{eq:mswc24_decaying_correlations_source_choice}) have one-point functions
-$0$ and a correlator that vanishes exactly at $s=4,8,12,\dots$ for every $N$
+$0$ and a correlator that vanishes exactly at $s=4,8,12,\dots$ for every $N\ge s$
 and is negative at $s=5,6,7$.
 
 \paragraph{The rest of the proof.}
