@@ -623,7 +623,9 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   tensors omit the factors `v_e v_f` of the `G`-symbols and store the `σ`
   tensor multiplied by `√2`, so that all entries lie in `ℤ[√2]`; states the
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
-  leaves open whether omitting the factors `v` changes the periodic operators.
+  shows that the source's G-symbol tensors are related to the formal tensors by
+  the diagonal bond similarity `g(u, l) = (v_u / v_l)^{1/2}`, so omitting the
+  factors `v` leaves the periodic operators and the fusion algebra unchanged.
 
 For the domain walls of anomalous symmetries in arXiv:2405.00439:
 
@@ -691,3 +693,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   the remaining repairs to the proof of Theorem 1 (normal versus injective,
   Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
   constant `ξ/4`, which is implicit in the source's final inequality.
+- `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
+  in depth `o(log N)`) is formalized for a normal tensor in the gauge
+  `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
+  quantitative form `N ≤ C(T+1)e^{b(T+1)}`; the reduction of a normal tensor to
+  this gauge, with which both proofs begin, is not formalized.
