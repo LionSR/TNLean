@@ -193,9 +193,10 @@ is the dimer fixed point that the printed claims describe
     \leanok
     \uses{def:spt_fixed_point_tensor, def:on_site_symmetric}
     For every $g$ and $i$, $\sum_jU(g)_{ij}A^j=\phi(g)\,W_gA^iW_g^{-1}$.  For
-    $\phi=1$ the tensor has MPV-family invariance under $U$, and, when $D\geq1$, every virtual
-    projective representation of this symmetry has a factor system cohomologous to
-    $\omega$ \cite[Section~III.A]{Cirac2021Matrix}.
+    $\phi=1$ the tensor has MPV-family invariance under $U$, and, when $D\geq1$, this
+    symmetry has a virtual projective representation, and every virtual projective
+    representation of it has a factor system cohomologous to $\omega$
+    \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -204,5 +205,7 @@ is the dimer fixed point that the printed claims describe
     $W_g\ket{a}\bra{b}W_g^{-1}=\sum_{a',b'}(W_g)_{a'a}(W_g^{-1})_{bb'}
         \ket{a'}\bra{b'}$.  With $\phi=1$ the gauges $\rho(g^{-1})$ realize the
     symmetry, so Theorem~\ref{thm:cocycle_gauge_independence} makes every other
-    virtual representation cohomologous to $\rho$.
+    virtual representation cohomologous to $\rho$.  The tensor is injective, so
+    Theorem~\ref{thm:virtual_rep_injective} also produces a virtual representation
+    directly, and its factor system is then cohomologous to $\omega$.
 \end{proof}
