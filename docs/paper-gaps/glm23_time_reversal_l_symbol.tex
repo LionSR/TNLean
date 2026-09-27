@@ -92,20 +92,25 @@ $\overline L/L$ by $\overline LL$.
 
 For a general matrix product operator symmetry the fusion tensors also pick
 up time-reversal phases $\beta_{g,h}$, as at lines 873--889 of the source,
-and the gauge-covariant form of (\ref{eq:corrected}) is that
-$\overline L$ equals the joint gauge transform of $L$ by $(\beta,\gamma)$,
-jointly with $\overline\omega$ equal to the gauge transform of $\omega$ by
-$\beta$. Under these two relations a single joint gauge makes both $\omega$
-and $L$ real, by taking unimodular square roots of the phases of $\beta$ and
-$\gamma$.
+which yield $\overline\omega=\beta\mathbin{\triangleright}\omega$. The
+source's relation for $L$ omits $\beta$: it is the case
+$\overline L=(1,\gamma)\mathbin{\triangleright}L$ of the joint gauge. The
+same-$\beta$ pair, $\overline\omega=\beta\mathbin{\triangleright}\omega$
+together with $\overline L=(\beta,\gamma)\mathbin{\triangleright}L$, is the
+gauge-consistent generalization, but it is not derived in the source and is
+not derived here from a time-reversal operator. The formalization treats it
+as a hypothesis: under these two relations a single joint gauge makes both
+$\omega$ and $L$ real, by taking unimodular square roots of the phases of
+$\beta$ and $\gamma$. This is a conditional statement beyond the source.
 
 \section{Formalized statement}
 
 The formalization proves, at the level of scalars, the cancellation step
 from (\ref{eq:display}) and the conjugate of (\ref{eq:f1}) to
 (\ref{eq:corrected}); the statement that the squared phase of $L$ is the
-gauge ratio; the reality of the anomaly under lines 873--891; and the joint
-reality of $\omega$ and $L$.\footnote{Formal declarations:
+gauge ratio; the reality of the anomaly under lines 873--891; and, as a
+conditional statement under the same-$\beta$ hypothesis, the joint reality
+of $\omega$ and $L$.\footnote{Formal declarations:
 \leanid{TNLean.Algebra.LSymbol.star\_apply\_eq\_gauge\_one\_apply},
 \leanid{TNLean.Algebra.LSymbol.phase\_sq\_eq\_of\_gauge\_eq\_star},
 \leanid{TNLean.Algebra.ScalarThreeCochain.exists\_cohomologousTo\_star\_eq\_self}
