@@ -141,16 +141,12 @@ private theorem primitiveCubeRoot_two_pow_not_tendsto (z : ℂ) :
     refine tendsto_atTop.2 fun b => ?_
     filter_upwards [eventually_ge_atTop b] with a ha
     omega
-  have hzEven : z = primitiveCubeRoot := by
-    have he := h.comp heven
-    have he' : Tendsto (fun _ : ℕ => primitiveCubeRoot) atTop (𝓝 z) :=
-      he.congr' (Filter.Eventually.of_forall fun n => primitiveCubeRoot_two_pow_even n)
-    exact tendsto_nhds_unique he' tendsto_const_nhds
-  have hzOdd : z = primitiveCubeRoot ^ 2 := by
-    have ho := h.comp hodd
-    have ho' : Tendsto (fun _ : ℕ => primitiveCubeRoot ^ 2) atTop (𝓝 z) :=
-      ho.congr' (Filter.Eventually.of_forall fun n => primitiveCubeRoot_two_pow_odd n)
-    exact tendsto_nhds_unique ho' tendsto_const_nhds
+  have hzEven : z = primitiveCubeRoot :=
+    tendsto_nhds_unique_of_forall (h.comp heven) tendsto_const_nhds
+      primitiveCubeRoot_two_pow_even
+  have hzOdd : z = primitiveCubeRoot ^ 2 :=
+    tendsto_nhds_unique_of_forall (h.comp hodd) tendsto_const_nhds
+      primitiveCubeRoot_two_pow_odd
   have hpows : primitiveCubeRoot ^ 1 = primitiveCubeRoot ^ 2 := by
     simpa [pow_one] using hzEven.symm.trans hzOdd
   have : (1 : ℕ) = 2 :=

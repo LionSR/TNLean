@@ -5,8 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-
 /-!
 # Common blocked cyclic-sector families
 
@@ -20,6 +18,8 @@ The structure and its derived theorems are intermediate constructions — they
 record reindexing, flattening, and common-alphabet transport.  They are
 not independent results of 1606.00608 or 2011.12127.
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 

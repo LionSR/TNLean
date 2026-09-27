@@ -60,20 +60,6 @@ theorem WordTupleSpanTop.exists_simultaneous_left_inverse
   simpa [wordTuple, target, Fintype.linearCombination_apply,
     Matrix.sum_apply, Matrix.smul_apply] using hentry
 
-/-- The physical observable transfer as a double sum of word insertions. -/
-private theorem physicalObservableTransfer_apply
-    (A : MPSTensor d D) (L : ℕ)
-    (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
-    (X : Matrix (Fin D) (Fin D) ℂ) :
-    physicalObservableTransfer A L O X =
-      ∑ σ : Fin L → Fin d, ∑ τ : Fin L → Fin d,
-        O τ σ • (Kraus.evalWord A (List.ofFn σ) * X *
-          (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
-  classical
-  simp only [physicalObservableTransfer, LinearMap.sum_apply, LinearMap.smul_apply,
-    LinearMap.comp_apply, LinearMap.mulLeft_apply, LinearMap.mulRight_apply]
-  simp only [Matrix.mul_assoc]
-
 /-- A word of a direct-sum tensor is the direct sum of the corresponding block
 words. -/
 private theorem evalWord_directSumTensor

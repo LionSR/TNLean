@@ -10,7 +10,8 @@
 %% condition. The virtual-level theory (fusion and action tensors,
 %% gauge, associator, obstruction) is Chapter ch:mpo_algebras.
 %% Lean modules: TNLean/MPS/Symmetry/MPOSymmetry/{Defs,NIMRep,Character,
-%%   Examples}.lean (Sections sec:mposym_fusion and sec:mposym_symmetric).
+%%   FusionRing,SymmetricBoundary,Examples}.lean (Sections sec:mposym_fusion
+%%   and sec:mposym_symmetric).
 %% Planned Lean module for the Perron--Frobenius dimension:
 %%   TNLean/MPS/Symmetry/MPOSymmetry/Dimension.lean.
 %% **Scope restriction (periodic boundary):** Garre-Rubio, Lootens and
@@ -66,6 +67,50 @@ $\chi_a\chi_b$, whose periodic operator is $O_a^{(N)}O_b^{(N)}$, and
 $T_a\cdot A$ denotes the matrix product state tensor
 $(T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j$, whose periodic vector is
 $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
+
+\begin{center}
+    % Formula: (\ref{eq:mposym_periodic_operator}), the matrix element
+    % \bra{i_1,\ldots,i_N}O_a^{(N)}\ket{j_1,\ldots,j_N}
+    % =\tr(T_a^{i_1j_1}\cdots T_a^{i_Nj_N}).
+    % Ink-to-index map: each box is one copy of T_a; its upper leg is the
+    % output index i_l and its lower leg the input index j_l; the elision
+    % cell stands for the omitted sites.
+    % Contraction set: the horizontal virtual bonds, closed by the periodic
+    % return, which is the trace.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3).
+    \tenkzkernel
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{T_a} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical:$j_N$}]{T_a}
+    \end{tenkz}
+\end{center}
+
+\begin{center}
+    % Formula: the stacked tensor (T_aT_b)^{ij}=\sum_mT_a^{im}\otimes T_b^{mj}
+    % (left) and the tensor (T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j (right),
+    % as defined in the paragraph above.
+    % Ink-to-index map: left, T_a above T_b with open physical legs i and j;
+    % right, T_a above the state tensor A (dot) with open physical leg i.
+    % Contraction set: the vertical leg between the two rows, the summed index
+    % m (left) or j (right). The two virtual legs on each side are the factors
+    % of the product bond space.
+    % Boundary signature: left (virtual-west=2 | virtual-east=2 |
+    % physical-up=1 | physical-down=1); right (virtual-west=2 |
+    % virtual-east=2 | physical-up=1 | physical-down=0).
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{T_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{T_b}
+    \end{tenkz}
+    \qquad\qquad
+    \begin{tenkz}[rows={op,ket}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$}]{T_a} \\
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{A}
+    \end{tenkz}
+\end{center}
 
 %% ---------------------------------------------------------
 \section{Invertible symmetries}%
@@ -131,8 +176,10 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     \emph{anomaly}. An injective matrix product operator representation with
     $U_e=\Id$ whose fusion tensors reduce every stacked tensor $T_gT_h$
     exactly to $T_{gh}$ is on-site, and then its three-cocycle is trivial
-    \cite[Section~4]{GarreRubio2023MPOSym}. Hence a nontrivial
-    class forbids an on-site form. It also forbids an invariant normal matrix
+    (Theorem~\ref{thm:mposym_closed_fusion_onsite}). Hence, for such a
+    representation, a nontrivial class forbids closed fusion. In the examples
+    of Chapter~\ref{ch:asymmetric_examples} with a nontrivial class, the
+    stacked tensor reduces onto $T_{gh}$ up to a nilpotent remainder. It also forbids an invariant normal matrix
     product state (Theorem~\ref{thm:mpoalg_no_symmetric_normal}). The sources
     argue further that a symmetric local Hamiltonian then cannot have a
     normal matrix product state as its unique ground state, and that such
@@ -143,21 +190,104 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     %   representation with closed fusion is on-site), 2064--2070 (the
     %   cocycle construction and the Z_2 example); arXiv:2011.12127,
     %   Papers/2011.12127/TN-Review-main.tex, lines 1397--1419.
-    % Lean: the on-site lemma of lines 1211--1216 is not formalized; planned
-    %   name MPOTensor.GroupFamily.isOnSite_of_closed_fusion.
 \end{remark}
+
+\begin{theorem}[Closed fusion forces an on-site representation]%
+    \label{thm:mposym_closed_fusion_onsite}
+    \lean{MPOTensor.GroupFamily.IsOnSite,
+        MPOTensor.GroupFamily.FusionData.IsClosed,
+        MPOTensor.bondDim_le_one_of_mpo_eq_one,
+        MPOTensor.eq_ite_one_of_mpo_eq_one,
+        MPOTensor.bondDim_le_one_of_mulTensor_eq_ite,
+        MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion,
+        MPOTensor.GroupFamily.isOnSite_of_closed_fusion,
+        MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_of_closed_fusion,
+        MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion}
+    \leanok
+    \uses{def:injective, def:mpo_to_mps, def:mpdo_operator_product,
+        def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec,
+        def:mpug_anomaly_class}
+    Let $\{T_g\}_{g\in G}$ be matrix product operator tensors of a group $G$
+    whose doubled-index tensors are injective, with $U_gU_h=U_{gh}$ and
+    $U_e=\Id$ on every nonempty chain, and let $(F^<_{g,h},F^>_{g,h})$ be
+    fusion tensors reducing $T_gT_h$ onto $T_{gh}$. Suppose the fusion is
+    closed, $(T_gT_h)^{ij}=F^>_{g,h}\,T_{gh}^{ij}\,F^<_{g,h}$ for all $g,h$
+    and all physical indices $i,j$. Then every $T_g$ has bond dimension one,
+    the representation is on-site, $U_g=u_g^{\otimes N}$ with
+    $(u_g)_{ij}=T_g^{ij}$, and the anomaly three-cocycle $\omega$ of the
+    fusion tensors is a coboundary, so its class in $H^{3}(G,\C^{\times})$
+    vanishes. The on-site conclusion does not use the product law.
+    % Source anchor: arXiv:2203.12563, Papers/2203.12563/REsubmission.tex,
+    %   lines 1211--1213 (Lemma and proof), 641--656 (closed fusion,
+    %   eq. fusiontensorG), 658 and 842 (on-site operators).
+\end{theorem}
+
+\begin{center}
+    % Formula: the closed-fusion hypothesis
+    % (T_gT_h)^{ij}=F^>_{g,h}\,T_{gh}^{ij}\,F^<_{g,h} of this theorem.
+    % Ink-to-index map: left, T_g above T_h with output i and input j;
+    % right, the embedding F^>_{g,h} (two legs to the west, one leg to the
+    % east), the tensor T_{gh}, and the compression F^<_{g,h} (one leg to the
+    % west, two legs to the east).
+    % Contraction set: left, the vertical middle index; right, the two bonds
+    % of the bond space of T_{gh}.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 |
+    % physical-up=1 | physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{T_g} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j$}]{T_h}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fr, skin=pill]{F_{g,h}^{>}}
+        \tn[at=(1,2), name=T, skin=mpo, size=l,
+            ports={90:physical:$i$, 270:physical:$j$, 180:virtual, 0:virtual}]{T_{gh}}
+        \tn[at=(2,2), skin=none]{}
+        \tnfuse[at=(1,3), name=Fl, skin=pill]{F_{g,h}^{<}}
+        \tnwire{open w}{Fr.180@1}
+        \tnwire{open w}{Fr.180@2}
+        \tnwire{Fr.0}{T.180}
+        \tnwire{T.0}{Fl.180}
+        \tnwire{Fl.0@1}{open e}
+        \tnwire{Fl.0@2}{open e}
+    \end{tenkz}
+\end{center}
+
+\begin{proof}\leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec,
+        cor:mpug_anomaly_class}
+    The tensor $T_e$ is injective with $\tr T_e^{ij}=\delta_{ij}$ and
+    $\tr(T_e^{ij}T_e^{kl})=\delta_{ij}\delta_{kl}$, so
+    $\tr(XY)=\tr X\,\tr Y$ on the whole matrix algebra; testing on two
+    off-diagonal matrix units shows that $T_e$ has bond dimension one and
+    $T_e^{ij}=\delta_{ij}$. Closed fusion then gives
+    $(T_gT_{g^{-1}})^{ij}=\delta_{ij}P$ and
+    $(T_{g^{-1}}T_g)^{ij}=\delta_{ij}Q$ with
+    $\tr P=\tr(F^<_{g,g^{-1}}F^>_{g,g^{-1}})\neq0$. Decomposing the triple
+    product $T_gT_{g^{-1}}T_g$ in the two ways gives
+    $P\otimes T_g^{ij}=T_g^{ij}\otimes Q$, hence $P\otimes X=X\otimes Q$ for
+    every matrix $X$ by injectivity. If $T_g$ had bond dimension at least
+    two, testing on $X=E_{cc}$ with $c\neq a$ would kill every diagonal
+    entry of $P$ in the block $a$, and $\tr P$ would vanish. With every bond
+    dimension one, the periodic operator is the product of the one-site
+    entries, and the fusion tensors are nonzero scalars $v(g,h)$. The two
+    fusion trees are then proportional with ratio
+    $v(gh,k)v(g,h)/(v(g,hk)v(h,k))$, which is $\omega(g,h,k)$ by
+    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}; this is the
+    coboundary of $v^{-1}$. A coboundary has trivial class, so the anomaly
+    class vanishes by Corollary~\ref{cor:mpug_anomaly_class}.
+\end{proof}
 
 %% ---------------------------------------------------------
 \section{Fusion algebras of matrix product operators}%
 \label{sec:mposym_fusion}
 
-An invertible on-site symmetry acts on a matrix product state through a group
-representation on the physical index. A matrix product operator symmetry is
-given instead by a finite family of operators whose periodic operators
-multiply according to fusion rules~\cite{GarreRubio2023MPOSym}. The source
-defines the symmetry by invariance of the states with arbitrary boundary
-conditions; the statements below use only its consequence for periodic
-boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
+A matrix product operator symmetry is given by a finite family of operators
+satisfying the fusion rule~(\ref{eq:mpo_fusion_algebra})~\cite{GarreRubio2023MPOSym}.
+The source defines the symmetry by invariance of the states with arbitrary
+boundary conditions; the statements below use only its consequence for
+periodic boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
 \cite{gap:glm23_mpo_symmetric_mps_scope}.
 
 \begin{definition}[Matrix product operator fusion algebra]%
@@ -178,6 +308,38 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     % Source anchor: arXiv:2203.12563, lines 361--362.
 \end{definition}
 
+\begin{center}
+    % Formula: (\ref{eq:mpo_fusion_algebra}), written through the matrix
+    % elements \bra{i_1,\ldots,i_N}\,\cdot\,\ket{j_1,\ldots,j_N}.
+    % Ink-to-index map: left, the stacked tensor T_aT_b at every site, with
+    % output legs i_l on T_a and input legs j_l on T_b; right, T_c with the
+    % same open legs.
+    % Contraction set: left, the vertical legs between the rows (the summed
+    % middle indices, which compose O_a^{(N)} with O_b^{(N)}) and the virtual
+    % bonds of each row, each row closed periodically; right, the virtual
+    % bonds of T_c closed periodically.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{T_a} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical}]{T_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{T_b} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{T_b} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_N$}]{T_b}
+    \end{tenkz}
+    \quad $=\;\displaystyle\sum_{c\in I}N_{ab}^c$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{T_c} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{T_c} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical:$j_N$}]{T_c}
+    \end{tenkz}
+\end{center}
+
 \begin{definition}[Unit and invertible labels]%
     \label{def:fusion_unit_invertible}
     \lean{MPOTensor.IsFusionUnit,
@@ -187,9 +349,9 @@ boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     A label $e$ is a \emph{unit} of the structure constants if
     $N_{eb}^c=N_{be}^c=\delta_{bc}$ for all $b,c$. A label $a$ is
     \emph{invertible} with respect to $e$ if there is a label $b$ with
-    $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for all $c$. The operator $O_e^{(N)}$ need
-    not be the identity; outside the on-site case it is a projector
-    \cite[Section~4]{GarreRubio2023MPOSym}.
+    $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for all $c$. Outside the on-site case
+    where $O_e^{(N)}=\Id$, the unit operator is in general a projector
+    $(O_e^{(N)})^2=O_e^{(N)}$ \cite[Section~4]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, line 660.
 \end{definition}
 
@@ -450,6 +612,37 @@ relation between word traces has nonnegative integer coefficients.
     % Source anchor: arXiv:2203.12563, lines 567--568 (restated at line 1801).
 \end{definition}
 
+\begin{center}
+    % Formula: (\ref{eq:mpo_symmetric_family}), the component of both
+    % sides on \ket{i_1,\ldots,i_N}.
+    % Ink-to-index map: left, T_a above A_x at every site, the tensor
+    % T_a\cdot A_x; right, A_y. The open legs are the physical indices i_l.
+    % Contraction set: left, the vertical legs joining the input of T_a to
+    % the physical leg of A_x, and the virtual bonds of both rows, each row
+    % closed periodically; right, the virtual bonds of A_y closed
+    % periodically.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$}]{T_a} &
+        \tn[skin=mpo, ports={90:physical:$i_2$}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$}]{T_a} \\
+        \tn[label pos=nw, ports={180:virtual, 0:virtual}]{A_x} &
+        \tn[label pos=nw, ports={180:virtual, 0:virtual}]{A_x} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=nw, ports={180:virtual, 0:virtual}]{A_x}
+    \end{tenkz}
+    \quad $=\;\displaystyle\sum_{y\in K}M_{a,x}^y$ \quad
+    \begin{tenkz}[rows={ket}, cols=4, boundary=periodic]
+        \tn[label pos=nw, ports={90:physical:$i_1$}]{A_y} &
+        \tn[label pos=nw, ports={90:physical:$i_2$}]{A_y} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=nw, ports={90:physical:$i_N$}]{A_y}
+    \end{tenkz}
+\end{center}
+
 \begin{definition}[Fusion character and nonnegative integer representation]%
     \label{def:fusion_character_nimrep}
     \lean{MPOTensor.IsFusionCharacter,
@@ -529,6 +722,69 @@ relation between word traces has nonnegative integer coefficients.
     Apply Theorem~\ref{thm:asymex_fib_anomaly_trace_integral}.
 \end{proof}
 
+Garre-Rubio and Schuch~\cite[Section~II.B]{GarreRubioSchuch2024DomainWall}
+normalize the action of a matrix product unitary on an injective ground
+state by absorbing a phase into the image tensor. A footnote justifies this:
+a length-dependent phase of modulus one relating the two states is the
+$N$-th power of one phase.
+
+\begin{theorem}[Power sums of modulus one]%
+    \label{thm:mpoalg_unimodular_power_sum}
+    \lean{Complex.exists_norm_eq_one_sum_pow_eq_pow}
+    \leanok
+    Let $\mu_1,\ldots,\mu_n$ be nonzero complex numbers with
+    $\left|\sum_k\mu_k^L\right|=1$ for every $L\geq1$. Then $n=1$ and
+    $|\mu_1|=1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_tail_weights}
+    For $L\geq1$,
+    $\sum_{k,l}(\mu_k\bar\mu_l)^L=\left|\sum_k\mu_k^L\right|^2=1$, so the
+    $n^2$ nonzero numbers $\mu_k\bar\mu_l$ have the power sums of the single
+    number $1$ at every positive exponent. By uniqueness of power sums on a
+    tail they coincide with $\{1\}$ as a multiset, so $n^2=1$. The case $L=1$
+    gives $|\mu_1|=1$.
+\end{proof}
+
+\begin{theorem}[A unimodular length-dependent phase is a power]%
+    \label{thm:mpoalg_length_dependent_phase_power}
+    \lean{MPSTensor.exists_mpv_ne_zero_of_isInjective,
+        MPOTensor.exists_eq_pow_of_mpo_mulVec_mpv_eq_smul}
+    \leanok
+    \uses{def:injective}
+    Let $T$ be a matrix product operator tensor, $A$ a matrix product state
+    tensor, and $B$ an injective matrix product state tensor of positive bond
+    dimension, all with the same physical alphabet. Suppose that for every
+    $N\geq1$
+    \begin{align}
+        O_N(T)\ket{V^{(N)}(A)} & =c_N\ket{V^{(N)}(B)},
+        \qquad |c_N|=1.
+        \notag
+    \end{align}
+    Then there is $\lambda\in\C$ with $|\lambda|=1$ and $c_N=\lambda^N$ for
+    every $N\geq1$. In particular this holds when $T$ is a matrix product
+    unitary and $A$ is injective, as
+    in~\cite[Section~II.B]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpoalg_unimodular_power_sum, thm:asym_unblocked_coefficients,
+        cor:asym_action_tensors}
+    By Corollary~\ref{cor:asym_action_tensors} the left-hand side is the
+    periodic vector of the tensor $T\cdot A$. Theorem~\ref{thm:asym_unblocked_coefficients},
+    applied to $T\cdot A$ and the single normal target $B$, gives nonzero
+    $\mu_1,\ldots,\mu_n$ with
+    $\ket{V^{(N)}(T\cdot A)}=\left(\sum_k\mu_k^N\right)\ket{V^{(N)}(B)}$ for
+    every $N\geq1$. The vector $\ket{V^{(N)}(B)}$ is nonzero: for $N=1$
+    because the letters of $B$ span the full matrix algebra and so do not all
+    have trace zero, and for $N\geq2$ by the nonvanishing of the periodic
+    vectors of an injective tensor. Hence $c_N=\sum_k\mu_k^N$, and
+    Theorem~\ref{thm:mpoalg_unimodular_power_sum} finishes the proof.
+\end{proof}
+
 \begin{theorem}[Integrality of multi-block word-trace relations]%
     \label{thm:mpoalg_multiblock_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
@@ -562,12 +818,11 @@ relation between word traces has nonnegative integer coefficients.
         =c_{y_0}\,\tr(E_{jj}^k)=c_{y_0}.
         \label{eq:mpoalg_trace_integral_powers}
     \end{align}
-    A constant trace of all positive powers of a fixed finite-dimensional
-    matrix is a nonnegative integer: the power sums of its nonzero
-    eigenvalues, counted with algebraic multiplicity, are constant only when
-    every nonzero eigenvalue is one, and the constant is their total
-    multiplicity. This is the argument of
-    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} with several blocks.
+    Let $\lambda_i$ be the nonzero eigenvalues of $Q$, counted with algebraic
+    multiplicity. Since $\tr(Q^k) = \sum_i \lambda_i^k = c_{y_0}$ for all
+    $k\geq1$, every $\lambda_i$ equals $1$, so $c_{y_0}$ is their total
+    algebraic multiplicity and lies in $\N$. This extends the power-sum argument of
+    Theorem~\ref{thm:asymex_fib_anomaly_trace_integral} to multiple blocks.
 \end{proof}
 
 \begin{theorem}[The action coefficients form a nonnegative integer representation]%
@@ -628,10 +883,9 @@ relation between word traces has nonnegative integer coefficients.
     \uses{thm:mpo_symmetric_character}
     If the structure constants admit no fusion character with values in
     $\N$, no normal tensor of positive bond dimension is symmetric with
-    $c_e=1$. This obstruction sees only the fusion ring; the cohomological
-    obstruction of Theorem~\ref{thm:mpoalg_no_symmetric_normal}, which also
-    excludes group-like algebras with a nontrivial three-cocycle, is a
-    different statement.
+    $c_e=1$. This obstruction depends only on the fusion ring;
+    Theorem~\ref{thm:mpoalg_no_symmetric_normal} gives the cohomological
+    obstruction for group-like algebras with a nontrivial three-cocycle.
 \end{corollary}
 
 \begin{proof}
@@ -730,6 +984,128 @@ relation between word traces has nonnegative integer coefficients.
     % Source anchor: arXiv:1511.08090, lines 1308--1312 and 1323.
 \end{example}
 
+\begin{definition}[The fusion rings of $su(2)_4$ and $\mathrm{Rep}(S_3)$]%
+    \label{def:mposym_su24_reps3}
+    \lean{MPOTensor.su24Fusion, MPOTensor.repS3Fusion, MPOTensor.repS3ToSU24}
+    \leanok
+    \uses{def:fusion_unit_invertible}
+    The labels of $su(2)_4$ are $0,\tfrac12,1,\tfrac32,2$, with
+    fusion rules $j_1\times j_2=\sum j$ over
+    $j=|j_1-j_2|,|j_1-j_2|+1,\ldots,\min(j_1+j_2,4-j_1-j_2)$. The labels of
+    $\mathrm{Rep}(S_3)$ are $1,\pi,\psi$, with
+    $\pi\times\pi=1+\pi+\psi$, $\psi\times\psi=1$ and
+    $\psi\times\pi=\pi\times\psi=\pi$. The labels $1,\pi,\psi$ are assigned
+    to the integer labels $0,1,2$ of $su(2)_4$
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 1891--1904 and 1934.
+\end{definition}
+
+\begin{theorem}[Units and the embedding of $\mathrm{Rep}(S_3)$ in $su(2)_4$]%
+    \label{thm:mposym_su24_reps3_units}
+    \lean{MPOTensor.isFusionUnit_su24Fusion, MPOTensor.isFusionUnit_repS3Fusion,
+        MPOTensor.su24Fusion_repS3ToSU24,
+        MPOTensor.su24Fusion_repS3ToSU24_odd}
+    \leanok
+    \uses{def:mposym_su24_reps3}
+    The label $0$ is the unit of $su(2)_4$ and $1$ is the unit of
+    $\mathrm{Rep}(S_3)$. The assignment $1,\pi,\psi\mapsto0,1,2$ identifies
+    $\mathrm{Rep}(S_3)$ with the fusion subring of integer labels of
+    $su(2)_4$: the fusion rules agree, and products of integer labels contain
+    no half-integer label \cite[Section~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 1934.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compare the finitely many structure constants.
+\end{proof}
+
+\begin{theorem}[The phases of $su(2)_4$ and $\mathrm{Rep}(S_3)$ represent the fusion rings]%
+    \label{thm:mposym_su24_reps3_nimreps}
+    \lean{MPOTensor.su24TY, MPOTensor.isNIMRep_su24Fusion,
+        MPOTensor.isNIMRep_su24TY, MPOTensor.repS3Fusion_eq_table,
+        MPOTensor.isNIMRep_repS3Fusion, MPOTensor.repS3Z1, MPOTensor.repS3Z2,
+        MPOTensor.repS3Z3, MPOTensor.isNIMRep_repS3Z1,
+        MPOTensor.isNIMRep_repS3Z2, MPOTensor.isNIMRep_repS3Z3,
+        MPOTensor.repS3Z3Printed, MPOTensor.not_isNIMRep_repS3Z3Printed}
+    \leanok
+    \uses{thm:mposym_su24_reps3_units, def:fusion_character_nimrep}
+    The following actions on blocks, with the unit acting as the identity,
+    satisfy (\ref{eq:mpo_nimrep}).
+    \begin{enumerate}
+        \item For $su(2)_4$: the fusion rules on five blocks, one per label;
+              and the module $\mathcal M_{TY}$ on blocks $x,y,z,s$, where $0$
+              and $2$ fix every block, $\tfrac12$ and $\tfrac32$ send $x,y,z$
+              to $s$ and $s$ to $x+y+z$, and $1$ sends $x$ to $y+z$, $y$ to
+              $x+z$, $z$ to $x+y$ and $s$ to $2s$.
+        \item For $\mathrm{Rep}(S_3)$: on one block $s$, $\pi\cdot s=2s$ and
+              $\psi\cdot s=s$ (the subgroup $\Z_1$); on blocks $x,y$,
+              $\pi\cdot x=\pi\cdot y=x+y$ and $\psi$ exchanging $x$ and $y$
+              ($\Z_2$); on blocks $x,y,z$, $\pi\cdot x=y+z$, $\pi\cdot y=x+z$,
+              $\pi\cdot z=x+y$ and $\psi$ fixing every block ($\Z_3$); and the
+              fusion rules on three blocks ($S_3$).
+    \end{enumerate}
+    These are the phases listed in \cite[Section~6]{GarreRubio2023MPOSym},
+    except that the source prints the $\Z_3$ action with $\psi$ exchanging
+    $y$ and $z$; that action does not satisfy (\ref{eq:mpo_nimrep}), since
+    $\pi\cdot(\pi\cdot y)=x+2y+z$ while $(1+\pi+\psi)\cdot y=x+y+2z$
+    \cite{gap:glm23_reps3_z3_table}. That the lists are complete is
+    not treated here beyond one block
+    (Theorem~\ref{thm:mposym_su24_reps3_one_block};
+    \cite{gap:glm23_reps3_su24_module_list}).
+    % Source anchor: arXiv:2203.12563, lines 1906--1925 and 1936--1987.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each identity (\ref{eq:mpo_nimrep}) is a finite check on nonnegative
+    integer matrices.
+\end{proof}
+
+\begin{theorem}[The $\mathrm{Rep}(S_3)$ phases inside the $su(2)_4$ phases]%
+    \label{thm:mposym_reps3_in_su24}
+    \lean{MPOTensor.su24TY_repS3ToSU24_castSucc,
+        MPOTensor.su24TY_repS3ToSU24_last,
+        MPOTensor.su24TY_repS3ToSU24_mix,
+        MPOTensor.su24Fusion_repS3ToSU24_half,
+        MPOTensor.su24Fusion_repS3ToSU24_half_mix}
+    \leanok
+    \uses{thm:mposym_su24_reps3_nimreps}
+    Under the identification of $\mathrm{Rep}(S_3)$ with the integer labels of
+    $su(2)_4$, the integer labels do not mix the blocks $\{x,y,z\}$ and
+    $\{s\}$ of $\mathcal M_{TY}$; they act on $\{x,y,z\}$ as in the $\Z_3$
+    phase and on $\{s\}$ as in the $\Z_1$ phase. They do not mix the blocks
+    $\tfrac12,\tfrac32$ of the first $su(2)_4$ phase with the other blocks,
+    and act on them as in the $\Z_2$ phase
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 1927, 1940, 1957 and 1972.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compare the entries of the actions.
+\end{proof}
+
+\begin{theorem}[Actions on one block]%
+    \label{thm:mposym_su24_reps3_one_block}
+    \lean{MPOTensor.isFusionCharacter_repS3Fusion_iff,
+        MPOTensor.not_isFusionCharacter_su24Fusion}
+    \leanok
+    \uses{def:mposym_su24_reps3, def:fusion_character_nimrep}
+    The only fusion character of $\mathrm{Rep}(S_3)$ with values in $\N$ is
+    $(m_1,m_\pi,m_\psi)=(1,2,1)$, the $\Z_1$ phase; $su(2)_4$ has no fusion
+    character with values in $\N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $\mathrm{Rep}(S_3)$, $m_\psi^2=m_1=1$ gives $m_\psi=1$, and
+    $m_\pi^2=1+m_\pi+m_\psi$ then gives $m_\pi=2$; conversely $(1,2,1)$
+    satisfies all relations. For $su(2)_4$, $m_2^2=1$ gives $m_2=1$,
+    $m_1^2=2+m_1$ gives $m_1=2$, and then $m_{1/2}^2=m_0+m_1=3$ has no
+    solution in $\N$.
+\end{proof}
+
 \begin{example}[Anomalous cyclic group of order three]%
     \label{ex:mpo_symmetry_z3}
     \lean{Z3Anomalous.isMPOFusionAlgebra_z3Block,
@@ -738,34 +1114,167 @@ relation between word traces has nonnegative integer coefficients.
     \uses{def:fusion_unit_invertible}
     The operators $1,U,U^\dagger$ of
     Section~\ref{sec:asymex_z3anomalous} form a group-like fusion algebra in
-    which every label is invertible. The fusion ring does not see the
-    nontrivial three-cocycle of this representation; the obstruction to
-    invariant normal states comes from
+    which every label is invertible. The fusion ring does not detect the
+    nontrivial three-cocycle class $[\omega]\neq 1\in H^3(\Z_3,\C^\times)$ of
+    this representation; the
+    obstruction to invariant normal states comes from
     Theorem~\ref{thm:mpoalg_no_symmetric_normal}.
 \end{example}
 
-\begin{remark}[Symmetric superpositions of several normal states]%
-    \label{rem:mposym_pf_symmetric_state}
-    \uses{thm:mpo_symmetric_nimrep, ex:mpo_symmetry_fibonacci,
+The obstruction of Corollary~\ref{cor:mpo_symmetric_no_go} concerns a
+single normal tensor. A superposition of the periodic vectors of several
+normal tensors can still be an eigenvector of every operator. When the
+algebra is that of a fusion category, such a superposition with positive
+weights exists for every module \cite[Section~5]{GarreRubio2023MPOSym}; it
+is the boundary state compatible with a two-dimensional bulk carrying the
+operators as virtual symmetries. The fusion category enters only through its
+fusion ring.
+
+\begin{definition}[Fusion ring]%
+    \label{def:mposym_fusion_ring}
+    \lean{MPOTensor.IsFusionRing}
+    \leanok
+    \uses{def:fusion_unit_invertible}
+    Structure constants $N_{ab}^c\in\N$ on a finite label set $I$ form a
+    \emph{fusion ring} with unit $e$ and duality $a\mapsto a^*$ if they are
+    associative,
+    $\sum_xN_{ab}^xN_{xc}^f=\sum_xN_{bc}^xN_{ax}^f$ for all $a,b,c,f$, the
+    label $e$ is a unit in the sense of
+    Definition~\ref{def:fusion_unit_invertible}, the duality is an
+    involution, $N_{ab}^e=\delta_{b,a^*}$, and
+    $N_{b^*a^*}^{c^*}=N_{ab}^c$. These are the identity element and dual
+    elements of the fusion category of a physical symmetry
+    \cite[Section~5]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 1236.
+\end{definition}
+
+\begin{theorem}[Positive regular element of a fusion ring]%
+    \label{thm:mposym_fusion_ring_regular}
+    \lean{MPOTensor.IsFusionRing.exists_pos_mul,
+        MPOTensor.IsFusionRing.exists_pos_regular,
+        MPOTensor.IsFusionRing.perronFrobeniusDim_pos,
+        Matrix.exists_eq_smul_of_pos_of_mulVec_eq}
+    \leanok
+    \uses{def:mposym_fusion_ring, def:mposym_pf_dimension}
+    For a fusion ring there are positive numbers $r_b$ with
+    $\sum_br_bN_{ab}^c=d_a\,r_c$ for all labels $a$ and $c$, where $d_a$ is
+    the Perron--Frobenius dimension of $a$, and $d_a>0$ for every $a$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mposym_pf_eigenvector, lem:mposym_pf_dimension_positive}
+    The coefficient of $c$ in $(b\times b^*)\times c$ is at least
+    $N_{bb^*}^eN_{ec}^c=1$, and by associativity it equals the coefficient
+    of $c$ in $b\times(b^*\times c)$; so for all $b,c$ some label $a$ has
+    $N_{ba}^c>0$. Hence the matrix $P_{bc}=\sum_aN_{ba}^c$ of right
+    multiplication by the sum of all labels has positive entries. By
+    the Perron--Frobenius argument of Theorem~\ref{thm:mposym_pf_eigenvector}, which applies to every nonnegative square matrix, used for the transpose of $P$,
+    there is a nonzero row vector $r\geq0$ with $rP=\rho r$, and positivity of
+    $P$ forces every $r_c>0$. An eigenvector of a positive matrix with
+    positive entries spans its eigenspace: if $wP=\rho w$ and $t=\min_c
+        w_c/r_c$, then $w-tr$ is a nonnegative eigenvector with a vanishing entry,
+    and positivity of $P$ forces $w=tr$. Left multiplication by $a$, the
+    matrix $N_a$, commutes with $P$ by associativity, so $rN_a$ is again an
+    eigenvector of $P$ for $\rho$ and $rN_a=t_ar$. By
+    Lemma~\ref{lem:mposym_pf_dimension_positive}, $t_a=d_a$. Finally
+    $d_ar_a=\sum_br_bN_{ab}^a\geq r_eN_{ae}^a=r_e>0$.
+\end{proof}
+
+\begin{theorem}[A positive common eigenvector of a nonnegative integer representation]%
+    \label{thm:mposym_nimrep_pos_eigenvector}
+    \lean{MPOTensor.IsNIMRep.exists_pos_left_eigenvector,
+        MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim}
+    \leanok
+    \uses{def:mposym_fusion_ring, def:fusion_character_nimrep,
         def:mposym_pf_dimension}
-    The obstruction of Corollary~\ref{cor:mpo_symmetric_no_go} concerns a
-    single normal tensor. A superposition of the periodic vectors of several
-    normal tensors can still be an eigenvector of every operator. If positive
-    numbers $v_x$ satisfy $\sum_xv_xM_{a,x}^y=r_av_y$ for all $a$ and $y$,
-    with the coefficients $M_{a,x}^y$ of
-    Theorem~\ref{thm:mpo_symmetric_nimrep}, then
-    $\ket{\psi^{(N)}}=\sum_xv_x\ket{V^{(N)}(A_x)}$ satisfies
-    $O_a^{(N)}\ket{\psi^{(N)}}=r_a\ket{\psi^{(N)}}$; Garre-Rubio, Lootens
-    and Molnár show that such a $v$ exists when the algebra is that of a
-    fusion category \cite[Section~5]{GarreRubio2023MPOSym}. For the Fibonacci
-    family of Example~\ref{ex:mpo_symmetry_fibonacci}, $M_\tau=N_\tau$ and
+    Let $N$ be a fusion ring with unit $e$ and let $M_{a,x}^y$ be a
+    nonnegative integer representation of it on a finite set $K$ with
+    $M_{e,x}^y=\delta_{xy}$. Then there are positive numbers $v_x$ with
+    \begin{align}
+        \sum_xv_xM_{a,x}^y & =d_a\,v_y
+        \label{eq:mposym_nimrep_eigenvector}
+    \end{align}
+    for all labels $a$ and all $y\in K$. If $K$ is nonempty, $d_a$ is the
+    spectral radius of the matrix $M_a$. No indecomposability of the
+    representation and no commutativity of the fusion ring is needed.
+    % Source anchor: arXiv:2203.12563, lines 1801--1803.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mposym_fusion_ring_regular, lem:mposym_pf_dimension_positive}
+    Let $r$ be as in Theorem~\ref{thm:mposym_fusion_ring_regular} and
+    $S=\sum_br_bM_b$. By (\ref{eq:mpo_nimrep}),
+    $M_bM_a=\sum_cN_{ab}^cM_c$, so
+    $SM_a=\sum_c\left(\sum_br_bN_{ab}^c\right)M_c=d_aS$. The column sums
+    $v_y=\sum_xS_{xy}$ therefore satisfy (\ref{eq:mposym_nimrep_eigenvector}),
+    and $v_y\geq r_eM_{e,y}^y=r_e>0$. A positive left eigenvector of the
+    nonnegative matrix $M_a$ has the spectral radius as its eigenvalue, by
+    the argument of Lemma~\ref{lem:mposym_pf_dimension_positive}.
+\end{proof}
+
+\begin{theorem}[Positive symmetric boundary state]%
+    \label{thm:mposym_symmetric_boundary_state}
+    \lean{MPOTensor.IsMPOSymmetricFamily.mpo_mulVec_sum_eq_smul,
+        MPOTensor.exists_pos_symmetric_boundary_state}
+    \leanok
+    \uses{def:normal, def:mpo_symmetric_family, def:mposym_fusion_ring,
+        def:mposym_pf_dimension}
+    Let $(A_x)_{x\in K}$, with $K$ nonempty, be normal tensors of positive bond dimension whose
+    periodic vectors are linearly independent at some length $N_0\geq1$,
+    symmetric under a fusion algebra whose structure constants form a fusion
+    ring with unit $e$, and suppose $M_{e,x}^y=\delta_{xy}$. Then there are
+    positive numbers $v_x$ such that for every label $a$ and every
+    $N\geq1$,
+    \begin{align}
+        O_a^{(N)}\ket{\psi^{(N)}} & =d_a\ket{\psi^{(N)}},         &
+        \ket{\psi^{(N)}}          & =\sum_xv_x\ket{V^{(N)}(A_x)},
+        \notag
+    \end{align}
+    with $d_a>0$, and $\ket{\psi^{(N_0)}}\neq0$. This is the symmetric boundary state of
+    \cite[Section~5]{GarreRubio2023MPOSym}, whose eigenvalue $r_a$ is the
+    spectral radius of $M_a$.
+    % Source anchor: arXiv:2203.12563, lines 1795--1805 (symboundary).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_symmetric_nimrep, thm:mposym_nimrep_pos_eigenvector}
+    By Theorem~\ref{thm:mpo_symmetric_nimrep} the coefficients $M_{a,x}^y$
+    form a nonnegative integer representation. Take $v$ from
+    Theorem~\ref{thm:mposym_nimrep_pos_eigenvector}. Then
+    $O_a^{(N)}\ket{\psi^{(N)}}=\sum_xv_x\sum_yM_{a,x}^y\ket{V^{(N)}(A_y)}
+        =\sum_y\left(\sum_xv_xM_{a,x}^y\right)\ket{V^{(N)}(A_y)}
+        =d_a\ket{\psi^{(N)}}$. Since the periodic vectors are linearly independent at length $N_0$ and $v\neq0$, $\ket{\psi^{(N_0)}}\neq0$.
+\end{proof}
+
+\begin{example}[The Fibonacci boundary state]%
+    \label{ex:mposym_fibonacci_boundary_state}
+    \lean{FibonacciCompression.isFusionRing_fibNim,
+        FibonacciCompression.fibDim_left_eigenvector,
+        FibonacciCompression.fibBoundaryState,
+        FibonacciCompression.mpo_fibBlock_mulVec_boundary,
+        FibonacciCompression.mpo_fibTau_mulVec_boundary,
+        FibonacciCompression.mpo_fibOne_mulVec_boundary}
+    \leanok
+    \uses{def:mposym_fusion_ring, thm:mposym_symmetric_boundary_state,
+        thm:asymex_fib_anomaly_nim_rep, ex:mpo_symmetry_fibonacci,
+        ex:mposym_fibonacci_dimension}
+    The Fibonacci structure constants form a fusion ring with unit $1$ and
+    both labels self-dual. For the family of
+    Example~\ref{ex:mpo_symmetry_fibonacci}, $M_\tau=N_\tau$ and
     $v=(1,\varphi)$, so
-    $\ket{V^{(N)}(A_1)}+\varphi\ket{V^{(N)}(A_\tau)}$ is an eigenvector of
-    $O_\tau^{(N)}$ with eigenvalue $d_\tau=\varphi$, which is not an integer.
-    % Source anchor: arXiv:2203.12563, lines 1795--1805 (common positive
-    %   eigenvector of the M_a, eigenvalue r_a, and r_a = d_a when
+    $\ket{\psi^{(N)}}=\ket{V^{(N)}(A_1)}+\varphi\ket{V^{(N)}(A_\tau)}$
+    satisfies $O_1^{(N)}\ket{\psi^{(N)}}=\ket{\psi^{(N)}}$ and
+    $O_\tau^{(N)}\ket{\psi^{(N)}}=\varphi\ket{\psi^{(N)}}$ for every
+    $N\geq1$. The eigenvalue $d_\tau=\varphi$ is not an integer. At
+    $N=1$ the vector $\ket{\psi^{(1)}}$ vanishes, since the traces of the one-site
+    matrices are $0,0$ on the trivial letter and $1,-\varphi^{-1}$ on $\tau$;
+    the eigenvector equations carry information only for $N\geq2$.
+    % Source anchor: arXiv:2203.12563, lines 1795--1805 (r_a = d_a when
     %   M_a = N_a) and line 1993 (the Fibonacci action).
-\end{remark}
+\end{example}
 
 %% ---------------------------------------------------------
 \section{The zipper condition}%
@@ -787,9 +1296,62 @@ relation between word traces has nonnegative integer coefficients.
         X_{ab,\mu}^{c+}(T_aT_b)^{ik} & =T_c^{ik}\,X_{ab,\mu}^{c+}
         \label{eq:mposym_zipper}
     \end{align}
-    for all physical indices $i,k$ \cite{Bultinck2017Anyons}. A fusion
-    tensor can then be slid through the product of two operators one site at
-    a time. If in addition the product is reconstructed on the span of the zipper
+    for all physical indices $i,k$ \cite{Bultinck2017Anyons}.
+
+    \begin{center}
+        % Formula: (\ref{eq:mposym_zipper}); left pair
+        % (T_aT_b)^{ik}X_{ab,\mu}^c=X_{ab,\mu}^cT_c^{ik}, right pair
+        % X_{ab,\mu}^{c+}(T_aT_b)^{ik}=T_c^{ik}X_{ab,\mu}^{c+}.
+        % Ink-to-index map: T_a above T_b is the stacked tensor with physical
+        % legs i (output) and k (input); the tall box X_{ab,\mu}^c has its two
+        % product-bond legs on the west and its one bond leg of T_c on the east,
+        % and X_{ab,\mu}^{c+} the reverse.
+        % Contraction set: the vertical middle index of the stacked tensor and
+        % the bonds between the stacked tensor or T_c and the fusion map.
+        % Boundary signature: left pair (virtual-west=2 | virtual-east=1 |
+        % physical-up=1 | physical-down=1); right pair (virtual-west=1 |
+        % virtual-east=2 | physical-up=1 | physical-down=1); both sides of each
+        % pair agree.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op}, cols=2, west=open]
+            \tn[at=(1,1), skin=mpo, ports={90:physical:$i$, 270:physical}]{T_a}
+            \tn[at=(2,1), skin=mpo, ports={90:physical, 270:physical:$k$}]{T_b}
+            \tnfuse[at=(1,2), name=X, skin=pill]{X_{ab,\mu}^c}
+            \tnwire{X.0}{open e}
+        \end{tenkz}
+        \quad$=$\quad
+        \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+            \tnfuse[at=(1,1), name=X, skin=pill]{X_{ab,\mu}^c}
+            \tn[at=(1,2), skin=mpo, name=T,
+                ports={90:physical:$i$, 270:physical:$k$, 180:virtual, 0:virtual}]{T_c}
+            \tn[at=(2,2), skin=none]{}
+            \tnwire{open w}{X.180@1}
+            \tnwire{open w}{X.180@2}
+            \tnwire{X.0}{T.180}
+            \tnwire{T.0}{open e}
+        \end{tenkz}
+        \qquad\qquad
+        \begin{tenkz}[rows={op,op}, cols=2, east=open]
+            \tnfuse[at=(1,1), name=Y, skin=pill]{X_{ab,\mu}^{c+}}
+            \tn[at=(1,2), skin=mpo, ports={90:physical:$i$, 270:physical}]{T_a}
+            \tn[at=(2,2), skin=mpo, ports={90:physical, 270:physical:$k$}]{T_b}
+            \tnwire{open w}{Y.180}
+        \end{tenkz}
+        \quad$=$\quad
+        \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+            \tn[at=(1,1), skin=mpo, name=T,
+                ports={90:physical:$i$, 270:physical:$k$, 180:virtual, 0:virtual}]{T_c}
+            \tn[at=(2,1), skin=none]{}
+            \tnfuse[at=(1,2), name=Y, skin=pill]{X_{ab,\mu}^{c+}}
+            \tnwire{open w}{T.180}
+            \tnwire{T.0}{Y.180}
+            \tnwire{Y.0@1}{open e}
+            \tnwire{Y.0@2}{open e}
+        \end{tenkz}
+    \end{center}
+
+    A fusion tensor can then be slid through the product of two operators
+    one site at a time. If in addition the product is reconstructed on the span of the zipper
     maps, $(T_aT_b)^{ik}=\sum_{c,\mu}X_{ab,\mu}^cT_c^{ik}X_{ab,\mu}^{c+}$,
     as required in Definition~\ref{def:mpdo_complete_zipper_fusion_family},
     then closing the chain gives (\ref{eq:mpo_fusion_algebra}) at every

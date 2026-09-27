@@ -7,9 +7,6 @@ import TNLean.MPS.BNT.Construction
 import TNLean.MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction
 import TNLean.Wielandt.Inequality.Bounds
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Filter
-
 /-!
 # Normality consequences of TP-primitive irreducible blocks
 
@@ -54,6 +51,9 @@ the full CPSV16 BNT multiplicity data with repeated copies inside one sector.
 
 matrix product states, canonical form, normality, blocking
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
 
 namespace MPSTensor
 

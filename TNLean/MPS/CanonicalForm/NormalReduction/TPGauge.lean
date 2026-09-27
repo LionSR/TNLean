@@ -12,8 +12,6 @@ import TNLean.MPS.CanonicalForm.Existence
 import TNLean.PiAlgebra.CanonicalFormSepAux
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-
 /-!
 # TP-gauge reduction for normal canonical-form construction
 
@@ -39,6 +37,8 @@ Its public outputs are:
 The auxiliary declarations stay file-local because they are elementary lemmas for
 rescaling and gauge transport.
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor
 

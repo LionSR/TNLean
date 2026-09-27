@@ -7,37 +7,19 @@
 \chapter{Physics Examples of the Multi-Block Compression Theorem: Supporting Results}%
 \label{ch:asymmetric_examples_supporting}
 
-This appendix supports Chapter~\ref{ch:asymmetric_examples}. It collects the
-explicit gauges and the integer arithmetic behind the compression theorems of
-the examples there that are treated in explicit bond coordinates, the adapted
-bases and scaled matrix units behind the normality certificates and behind the
-compression of the Bell-bond fixed points, and a sign-weighted pair of blocks
-constructed in this development to test the sharpness of the compression
-theorem.
+The compression theorems of Chapter~\ref{ch:asymmetric_examples} rely on
+several explicit coordinate constructions: explicit gauge transformations and
+integer arithmetic certificates, adapted bases and scaled matrix units for
+normality certificates, and a sign-weighted pair testing the sharpness of the
+remainder bound.
 
 \section{Explicit gauges and exact arithmetic}%
 \label{sec:asymex_explicit_gauge}
 
-This section supplies the change of bond coordinates and the integer
-certificates used by the compression theorems of the examples in
-Chapter~\ref{ch:asymmetric_examples} that are treated in explicit bond
-coordinates: the symmetry and fusion operators, the elementary states, and
-the sign-weighted pair of Section~\ref{sec:asymex_parity}.
-Theorem~\ref{thm:asymex_czx_compression} and
-Theorem~\ref{thm:asymex_ising_compression}, for the CZX operator and the
-Ising fusion operators of the review~\cite{Cirac2021Matrix}, invoke it
-directly; the Bell-bond fixed points rest on
-Section~\ref{sec:asymex_rfp_basis} instead.
 The compression datum of Theorem~\ref{thm:asym_multiblock}
 carries its change of bond coordinates as an invertible map onto a graded
-coordinate space, one summand per slot. In each worked example that map is
-an explicit invertible matrix together with an explicit labelling of the
-bond coordinates by slots and positions inside slots.
-Theorem~\ref{thm:asymex_explicit_gauge} reads the compression pairs of a
-slot off that matrix, Theorem~\ref{thm:asymex_one_slot} treats the
-recurring one-slot shape, and Theorem~\ref{thm:asymex_int_certificates}
-turns integer identities into certificates of normality and of vanishing
-sitewise intertwiners.
+coordinate space, one summand per slot. For explicit bond coordinates, this
+map is given by an invertible matrix and a labelling of coordinates by slots.
 
 \begin{definition}[Explicit gauge and entrywise integer coercion]
     \label{def:asymex_explicit_gauge}
@@ -146,6 +128,86 @@ sitewise intertwiners.
     carries across words by the length $|w|$.
 \end{proof}
 
+\begin{theorem}[Stacked products of block-diagonal tensors]%
+    \label{thm:asymex_mul_block_diagonal}
+    \lean{MPOTensor.sigmaProdFinEquiv, MPOTensor.mulBond,
+        MPOTensor.mulTensor_blockDiagonal'}
+    \leanok
+    \uses{def:mpdo_operator_product}
+    Let $M$ and $N$ be matrix product operator tensors whose letters are,
+    after relabellings of their bond coordinates, block diagonal with blocks
+    $M_k$ and $N_l$. Then every letter of the stacked product
+    $M\mathbin{\cdot}N$ is, after a relabelling of its bond coordinates,
+    block diagonal over the pairs $(k,l)$, with the block
+    $(M_k\mathbin{\cdot}N_l)^{ij}$ at the pair $(k,l)$. The bond coordinates
+    of the block $(k,l)$ are the pairs of a bond coordinate of $M_k$ and a
+    bond coordinate of $N_l$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The entry of $M^{ij}\otimes N^{jk}$ at a pair of pairs of coordinates is
+    the product of an entry of $M^{ij}$ and an entry of $N^{jk}$. It vanishes
+    unless both row coordinates lie in the same block as the corresponding
+    column coordinates, and it then equals the corresponding entry of
+    $M_k^{ij}\otimes N_l^{jk}$. Summing over $j$ gives the claim.
+\end{proof}
+
+\begin{lemma}[Direct sums over a subring of the complex numbers]%
+    \label{lem:asymex_direct_sum_ring}
+    \lean{MPOTensor.directSum_complexOfRing}
+    \leanok
+    \uses{def:asymex_explicit_gauge}
+    Let $f\colon R\to\C$ be a ring homomorphism and let $M$ and $N$ be
+    matrix product operator tensors with entries in $R$. The direct sum of
+    the entrywise images of $M$ and $N$ under $f$ is the entrywise image of
+    the direct sum of $M$ and $N$ formed over $R$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both sides are block diagonal with the images of $M^{ij}$ and $N^{ij}$
+    on the diagonal, and $f(0)=0$ off the diagonal blocks.
+\end{proof}
+
+\begin{theorem}[Direct sums of one-slot compression data]%
+    \label{thm:asymex_direct_sum_compression}
+    \lean{MPSTensor.MultiBlockCompression.directSum,
+        MPSTensor.MultiBlockCompression.ofTargetEq,
+        MPSTensor.MultiBlockCompression.conjMatrix_directSumGauge,
+        MPSTensor.MultiBlockCompression.remainder_directSum,
+        MPSTensor.MultiBlockCompression.evalWord_remainder_directSum,
+        MPSTensor.MultiBlockCompression.evalWord_remainder_directSum_eq_zero,
+        MPSTensor.MultiBlockCompression.evalWord_remainder_directSum_ne_zero}
+    \leanok
+    \uses{def:asymex_one_slot, thm:asym_multiblock}
+    Let the letters of a tensor $B$ be, after a relabelling of the bond
+    coordinates, block diagonal with blocks $B_k$, $k$ in a finite set $K$,
+    and let every $B_k$ carry a one-slot compression datum onto a target
+    $C_k$ with $z_k$ zero slots and remainder $R_k$. Then the direct sum of
+    the gauges of the blocks is a compression datum of $B$ onto the family
+    $(C_k)_{k\in K}$ in the sense of Theorem~\ref{thm:asym_multiblock}, with
+    $z=\sum_kz_k$ zero slots, and its remainder is
+    \begin{align}
+        R^a & =\bigoplus_{k\in K}R_k^a,
+    \end{align}
+    relabelled in the same way. Consequently a word $w$ satisfies $R^w=0$ if
+    and only if $R_k^w=0$ for every $k$: the nilpotency order of the
+    remainder of $B$ is the largest nilpotency order of the remainders of the
+    blocks.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    In the direct sum of the gauges, the letters of $B$ are block diagonal
+    with the letters of the blocks in their own block coordinates. Ordering
+    the blocks of $B$ block by block, each in its own order, makes every
+    letter block upper triangular, with the targets and the zero diagonal
+    blocks of the summands on the diagonal. Removing the diagonal blocks of a
+    block-diagonal matrix removes the diagonal blocks of each summand, so the
+    remainder is the direct sum of the remainders, and so are its words.
+\end{proof}
+
 \begin{theorem}[Integer certificates for normality and for vanishing
         sitewise intertwiners]%
     \label{thm:asymex_int_certificates}
@@ -228,27 +290,15 @@ and the following lemma shows that it preserves every nonempty word.
 \section{Adapted bases and scaled matrix units}%
 \label{sec:asymex_rfp_basis}
 
-This section supplies two tools. Theorem~\ref{thm:asymex_normal_units}
-certifies normality of a tensor whose letters contain a scaled copy of
-every matrix unit; it is invoked in the CZX and Ising sections of
-Chapter~\ref{ch:asymmetric_examples} and in the fixed-point section
-there. Theorem~\ref{thm:asymex_stacked_pair} converts an integer matrix
-identity, written in an adapted basis of the inner bond, into the weighted
-direct-sum hypothesis of Proposition~\ref{prop:asym_projector_weighted_sum};
-it is the form in which the vertical components of the renormalization
-fixed points of Chapter~\ref{ch:asymmetric_examples} enter the compression
-theorem.
-
-The stacked bond spaces of those vertical components are tensor squares.
+The stacked bond spaces of vertical components are tensor squares.
 Reordering the four bond bits separates the two middle bits, which form
-the inner bond, from the two outer bits, and the intermediate
+the inner bond, from the two outer bits; the intermediate
 physical-index sum acts on the inner bond. The Bell vectors together with
 the two remaining coordinate vectors form the adapted basis used
 throughout. Each weighted copy of a target contributes its weight raised
 to the number of sites $N$, and weights are summed when they multiply the
-same target; this is the power-sum mechanism of
-Theorem~\ref{thm:asym_unblocked_coefficients}. The results below
-establish tensor decompositions and periodic trace identities, not a
+same target as in Theorem~\ref{thm:asym_unblocked_coefficients}. The results
+below establish tensor decompositions and periodic trace identities, not a
 classification of length-dependent renormalization fixed points.
 
 \begin{definition}[The idempotents of an adapted basis]
@@ -296,9 +346,8 @@ classification of length-dependent renormalization fixed points.
     \begin{align}
         n\,\mu_s\,\frac{c_C}{2} & =k_s\,c_B,
         \label{eq:asymex_stacked_pair_scalar}
-    \end{align}
-    \begin{align}
-        n\,\widehat B^a & =\sum_sk_s\,(\widehat\Pi_s\otimes\widehat C_s^a),
+        \\
+        n\,\widehat B^a         & =\sum_sk_s\,(\widehat\Pi_s\otimes\widehat C_s^a),
         \label{eq:asymex_stacked_pair_letters}
     \end{align}
     where $\widehat\Pi_s=2\Pi_s$ and the right-hand side
@@ -344,18 +393,14 @@ classification of length-dependent renormalization fixed points.
 \section{A sign-weighted pair with a non-split extension}%
 \label{sec:asymex_parity}
 
-The tensors of this section are a construction of this development with
-no literature source: a bond-dimension-two tensor $A$, the sign-weighted
-pair of targets $(A,-A)$, and a bond-dimension-five source that carries
-both targets together with a one-dimensional zero slot, in coordinates
-where no direct-sum structure is visible. The construction tests three
-features of Theorem~\ref{thm:asym_multiblock} on explicit data: the
-remainder bound is attained
-(Theorem~\ref{thm:asymex_parity_compression}), the periodic trace
-identity acts as a length filter
-(Theorem~\ref{thm:asymex_parity_trace}), and a word-level compression
-need not come from sitewise intertwiners
-(Theorem~\ref{thm:asymex_parity_no_intertwiner}).
+The sign-weighted pair $(A,-A)$ of bond dimension two and a bond-dimension-five
+source $B$ carrying both targets together with a one-dimensional zero slot
+illustrate the sharpness of Theorem~\ref{thm:asym_multiblock}: the remainder
+bound is attained (Theorem~\ref{thm:asymex_parity_compression}), the periodic
+trace identity $\tr(B^w)=(1+(-1)^{|w|})\tr(A^w)$~(\ref{eq:asymex_parity_trace})
+acts as an even-length filter (Theorem~\ref{thm:asymex_parity_trace}), and a
+word-level compression need not arise from sitewise intertwiners
+($B^iV=V(-A^i)\implies V=0$, Theorem~\ref{thm:asymex_parity_no_intertwiner}).
 
 Consider a two-state physical site with basis $\{\ket{0},\ket{1}\}$.
 Define the bond-two MPS tensor by
@@ -381,9 +426,9 @@ where $\ket{x}=\ket{x_0}\otimes\cdots\otimes\ket{x_{N-1}}$.
 As in the elementary MPS examples of
 Refs.~\cite[Section~II]{PerezGarcia2008StringOrder} and~\cite[Appendix~A]{Cirac2021Matrix},
 the state can be understood directly from its tensor letters, with an on-site
-$\Z_2$ symmetry reflected on the virtual bond space. The matrix $P$
-selects virtual coordinate $0$, while $X$ exchanges the two virtual
-coordinates.
+$\Z_2$ symmetry reflected on the virtual bond space:
+$P=\ketbra{0}{0}$ projects onto virtual coordinate $0$, while
+$X=\ketbra{0}{1}+\ketbra{1}{0}$ exchanges the two virtual coordinates.
 
 Multiplying both letters of $A$ by $-1$ gives one minus sign per
 site, whatever the physical labels. For a word
@@ -394,10 +439,10 @@ empty product. Then
     (-A)^w=(-1)^{|w|}A^w.
     \label{eq:asymex_parity_weight}
 \end{align}
-The two weights $+1$ and $-1$ therefore produce a factor
-$1+(-1)^N$ in the sum of their periodic amplitudes. The following
-five-dimensional tensor realizes that sum without being a direct
-sum in its displayed coordinates.
+The sum of periodic amplitudes
+$\tr(A^w)+\tr((-A)^w)=(1+(-1)^{|w|})\tr(A^w)$ therefore vanishes on all odd
+lengths $|w|$. The following five-dimensional tensor realizes that sum without
+being a direct sum in its displayed coordinates.
 
 \begin{definition}[The graded pair and the five-dimensional source]
     \label{def:asymex_parity}

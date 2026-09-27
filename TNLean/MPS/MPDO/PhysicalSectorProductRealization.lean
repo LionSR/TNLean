@@ -10,8 +10,6 @@ import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 
-open scoped ComplexOrder Matrix
-
 /-!
 # Product realization from physical-sector coordinates
 
@@ -26,7 +24,7 @@ hypothesis is imposed.
   Appendix C.2, Proposition C.8, lines 1581--1593
 -/
 
-open scoped Matrix BigOperators Kronecker
+open scoped ComplexOrder Matrix BigOperators Kronecker
 
 namespace MPOTensor.PhysicalSectorFactorization
 

@@ -29,14 +29,17 @@ taken over `ℂ` (Mathlib's `spectralRadius`):
   (`fixedPoint_of_compact_convex` of QICLean) is an eigenvector of `M` whose eigenvalue is at
   least `ρ` and at most `ρ`;
 * a positive left eigenvector `δ M = r δ` forces `ρ(M) = r`, by pairing `δ` with the entrywise
-  moduli of an arbitrary complex eigenvector.
+  moduli of an arbitrary complex eigenvector;
+* for a matrix with strictly positive entries, a positive eigenvector spans the real eigenspace
+  of its eigenvalue.
 
 ## Main results
 
 * `Matrix.exists_nonneg_mulVec_eq_spectralRadius_smul`: the weak Perron–Frobenius theorem.
 * `Matrix.spectralRadius_map_ofReal_eq_of_pos_vecMul_eq`: the spectral radius equals the
   eigenvalue of a positive left eigenvector.
-* `Matrix.spectrum_transpose`: a matrix and its transpose have the same spectrum.
+* `Matrix.exists_eq_smul_of_pos_of_mulVec_eq`: uniqueness of the positive eigenvector of a
+  positive matrix.
 -/
 
 open scoped Matrix ENNReal NNReal
@@ -112,11 +115,14 @@ theorem exists_mem_spectrum_spectralRadius_eq [Nonempty ι] (A : Matrix ι ι �
       spectralRadius ℂ A = ENNReal.ofReal ‖μ‖ := by
   obtain ⟨μ, hμ, hmax⟩ := Set.exists_max_image (spectrum ℂ A) (‖·‖) A.finite_spectrum
     (spectrum.nonempty_of_isAlgClosed_of_finiteDimensional ℂ A)
-  refine ⟨μ, hμ, hmax, le_antisymm (iSup₂_le fun ν hν => ?_) (le_iSup₂_of_le μ hμ ?_)⟩
+  refine ⟨μ, hμ, hmax, ?_⟩
+  rw [spectralRadius_eq_of_unital]
+  refine le_antisymm (iSup₂_le fun ν hν => ?_) (le_iSup₂_of_le μ hμ ?_)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
     exact ENNReal.ofReal_le_ofReal (hmax ν hν)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
 
+omit [DecidableEq ι] in
 /-- **Weak Perron–Frobenius theorem.** A real matrix `M` with nonnegative entries over a
 nonempty index type has an eigenvector with nonnegative entries, not all zero, for the
 eigenvalue `ρ(M)`, its spectral radius over `ℂ`. -/
@@ -124,6 +130,7 @@ theorem exists_nonneg_mulVec_eq_spectralRadius_smul [Nonempty ι] {M : Matrix ι
     (hM : ∀ i j, 0 ≤ M i j) :
     ∃ v : ι → ℝ, v ≠ 0 ∧ (∀ i, 0 ≤ v i) ∧
       M *ᵥ v = (spectralRadius ℂ (M.map ((↑) : ℝ → ℂ))).toReal • v := by
+  classical
   obtain ⟨μ, hμ, hmax, hρ⟩ := exists_mem_spectrum_spectralRadius_eq (M.map ((↑) : ℝ → ℂ))
   rw [hρ, ENNReal.toReal_ofReal (norm_nonneg _)]
   set ρ := ‖μ‖ with hρdef
@@ -254,6 +261,51 @@ theorem exists_nonneg_mulVec_eq_spectralRadius_smul [Nonempty ι] {M : Matrix ι
     exact le_of_mul_le_mul_right h1 hi
   exact ⟨x, hx0, hx.1, by rw [hMeig, le_antisymm hle hge]⟩
 
+omit [DecidableEq ι] in
+/-- **Uniqueness of the positive eigenvector of a positive matrix.** If a real matrix `M` with
+strictly positive entries has an eigenvector `u` with positive entries for the eigenvalue `ρ`,
+then every real eigenvector `w` for `ρ` is a multiple of `u`. With `t = min_i w_i / u_i`, the
+vector `w - t u` is a nonnegative eigenvector with a vanishing entry; positivity of `M` forces it
+to vanish. -/
+theorem exists_eq_smul_of_pos_of_mulVec_eq {M : Matrix ι ι ℝ} (hM : ∀ i j, 0 < M i j)
+    {u w : ι → ℝ} (hu : ∀ i, 0 < u i) {ρ : ℝ} (hMu : M *ᵥ u = ρ • u) (hMw : M *ᵥ w = ρ • w) :
+    ∃ t : ℝ, w = t • u := by
+  cases isEmpty_or_nonempty ι with
+  | inl _ => exact ⟨0, Subsingleton.elim _ _⟩
+  | inr _ =>
+    obtain ⟨i₀, -, hi₀⟩ := Finset.exists_min_image Finset.univ (fun i => w i / u i)
+      Finset.univ_nonempty
+    set t := w i₀ / u i₀
+    set z := w - t • u with hz
+    have hz0 : ∀ j, 0 ≤ z j := by
+      intro j
+      have h := hi₀ j (Finset.mem_univ _)
+      rw [div_le_div_iff₀ (hu i₀) (hu j)] at h
+      have : t * u j ≤ w j := by
+        rw [show t = w i₀ / u i₀ from rfl, div_mul_eq_mul_div, div_le_iff₀ (hu i₀)]
+        linarith
+      simp only [hz, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+      linarith
+    have hzi₀ : z i₀ = 0 := by
+      simp only [hz, Pi.sub_apply, Pi.smul_apply, smul_eq_mul, t]
+      rw [div_mul_cancel₀ _ (hu i₀).ne']
+      ring
+    have hMz : M *ᵥ z = ρ • z := by
+      rw [hz, Matrix.mulVec_sub, Matrix.mulVec_smul, hMw, hMu, smul_sub, smul_comm]
+    have hsum : ∑ j, M i₀ j * z j = 0 := by
+      have := congrFun hMz i₀
+      simp only [Pi.smul_apply, smul_eq_mul, hzi₀, mul_zero] at this
+      exact this
+    have hzero : ∀ j, z j = 0 := by
+      intro j
+      have h := (Finset.sum_eq_zero_iff_of_nonneg fun k _ =>
+        mul_nonneg (hM i₀ k).le (hz0 k)).1 hsum j (Finset.mem_univ _)
+      exact (mul_eq_zero.1 h).resolve_left (hM i₀ j).ne'
+    refine ⟨t, funext fun j => ?_⟩
+    have := hzero j
+    simp only [hz, Pi.sub_apply, Pi.smul_apply, smul_eq_mul] at this ⊢
+    linarith
+
 /-- Every complex eigenvalue `μ` of a nonnegative real matrix `M` with a positive left
 eigenvector `δ ᵥ* M = r • δ` satisfies `‖μ‖ ≤ r`: pairing `δ` with the entrywise moduli of an
 eigenvector `v` gives `‖μ‖ ∑ δ_i ‖v_i‖ ≤ ∑_{i,j} δ_i M_{ij} ‖v_j‖ = r ∑ δ_j ‖v_j‖`. -/
@@ -304,26 +356,22 @@ theorem ofReal_mem_spectrum_of_pos_vecMul_eq [Nonempty ι] {M : Matrix ι ι ℝ
     simp only [Matrix.vecMul, dotProduct, Matrix.map_apply]
     exact_mod_cast hj.symm
 
+omit [DecidableEq ι] in
 /-- **Spectral radius from a positive left eigenvector.** A nonnegative real matrix `M` with a
 positive left eigenvector `δ ᵥ* M = r • δ` has spectral radius `r` over `ℂ`. -/
 theorem spectralRadius_map_ofReal_eq_of_pos_vecMul_eq [Nonempty ι] {M : Matrix ι ι ℝ}
     (hM : ∀ i j, 0 ≤ M i j) {δ : ι → ℝ} (hδ : ∀ i, 0 < δ i) {r : ℝ} (h : δ ᵥ* M = r • δ) :
     spectralRadius ℂ (M.map ((↑) : ℝ → ℂ)) = ENNReal.ofReal r := by
+  classical
   have hr := ofReal_mem_spectrum_of_pos_vecMul_eq hδ h
   have hr0 : 0 ≤ r := by
     have := norm_le_of_mem_spectrum_of_pos_vecMul_eq hM hδ h hr
     rw [Complex.norm_real, Real.norm_eq_abs] at this
     exact (abs_nonneg r).trans this
+  rw [spectralRadius_eq_of_unital]
   refine le_antisymm (iSup₂_le fun μ hμ => ?_) (le_iSup₂_of_le (r : ℂ) hr ?_)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
     exact ENNReal.ofReal_le_ofReal (norm_le_of_mem_spectrum_of_pos_vecMul_eq hM hδ h hμ)
   · rw [← ENNReal.ofReal_coe_nnreal, coe_nnnorm, Complex.norm_real, Real.norm_of_nonneg hr0]
-
-/-- The spectrum of a square matrix over a commutative ring is that of its transpose. -/
-theorem spectrum_transpose {R : Type*} [CommRing R] (A : Matrix ι ι R) :
-    spectrum R Aᵀ = spectrum R A := by
-  ext μ
-  rw [Matrix.mem_spectrum_iff_not_isUnit_eval_charpoly,
-    Matrix.mem_spectrum_iff_not_isUnit_eval_charpoly, Matrix.charpoly_transpose]
 
 end Matrix

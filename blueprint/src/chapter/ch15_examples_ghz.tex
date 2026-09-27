@@ -83,11 +83,12 @@ with bond dimension $d$~\cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
         MPSTensor.ghzCyclicShiftAction,
         MPSTensor.ghzTensorD_isOnSiteSymmetric_cyclic}
     \leanok
-    \uses{def:ghz_tensor_d, def:on_site_symmetric, thm:ghz_d_mpv}
+    \uses{def:ghz_tensor_d, def:on_site_symmetric}
     Let the symmetric group on $\{0,\ldots,d-1\}$ act on $\C^d$ by permutation
     matrices. The GHZ tensor on a $d$-level system is on-site symmetric under
-    this action, and in particular under the cyclic group $\Z_d$ acting by the
-    cyclic shift $\ket{i}\mapsto\ket{i+1 \bmod d}$.
+    this action. In particular, for $d\ge1$ it is on-site symmetric under the
+    cyclic group $\Z_d$ acting by the cyclic shift
+    $\ket{i}\mapsto\ket{i+1 \bmod d}$.
 \end{theorem}
 
 \begin{proof}
@@ -287,6 +288,116 @@ the rest of this section.
     The claim follows from the idempotence of the GHZ transfer map and the
     equivalence of zero correlation length with transfer-map idempotence
     (Theorem~\ref{thm:zcl_iff_idempotent_transfer}).
+\end{proof}
+
+
+\subsection{The $G$-injective fixed-point tensor}
+
+For a finite group $G$, the review constructs a $G$-injective MPS that is a
+renormalization fixed point and generalizes the GHZ state to arbitrary groups
+\cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}. Write $L_g$ for
+the left regular representation, $L_g\ket{k}=\ket{gk}$.
+
+\begin{definition}[$G$-injective fixed-point tensor]\label{def:ghz_g_injective_tensor}
+    \lean{MPSTensor.gInjEntry, MPSTensor.gInjEntry_eq, MPSTensor.gInjPhysEquiv,
+        MPSTensor.gInjTensor, MPSTensor.gInjTensor_apply}
+    \leanok
+    \uses{def:mps_tensor}
+    The tensor with physical index $(i,j)\in G\times G$ and bond dimension
+    $|G|$ is
+    \begin{align}
+        A^{ij} & =\frac{1}{|G|}\sum_{g\in G}\sum_{\alpha,\beta}
+        (L_g)_{\alpha i}(\bar L_g)_{\beta j}\,\ketbra{\alpha}{\beta}
+        \notag
+    \end{align}
+    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}. Only
+    $g=\alpha i^{-1}$ contributes, so $A^{ij}_{\alpha\beta}=|G|^{-1}$ if
+    $\beta=\alpha i^{-1}j$ and $0$ otherwise.
+\end{definition}
+
+\begin{theorem}[The $G$-injective tensor is a renormalization fixed point]%
+    \label{thm:ghz_g_injective_rfp}
+    \lean{MPSTensor.gInjTensor_transferMap_apply,
+        MPSTensor.gInjTensor_isTransferIdempotent,
+        MPSTensor.gInjTensor_eq_one_of_hasEigenvalue}
+    \leanok
+    \uses{def:ghz_g_injective_tensor, def:transfer_map,
+        def:mps_transfer_idempotence, thm:transfer_idempotent_eigenvalue_eq_one}
+    The transfer map of the $G$-injective tensor is
+    $\E_A(X)_{\alpha\beta}=|G|^{-1}\sum_{k\in G}X_{\alpha k,\beta k}$. It is
+    idempotent, so every nonzero eigenvalue of the transfer map equals $1$
+    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:transfer_idempotent_eigenvalue_eq_one}
+    The term $A^{ij}X(A^{ij})^\dagger$ has entries
+    $|G|^{-2}X_{\alpha i^{-1}j,\beta i^{-1}j}$; summing over $j$ and then $i$
+    gives the formula. Applying it twice averages over $k$ and then over
+    $k'$, and the substitution $k'\mapsto kk'$ returns the single average.
+\end{proof}
+
+\begin{theorem}[$G$-injectivity]\label{thm:ghz_g_injective}
+    \lean{MPSTensor.siteMap, MPSTensor.siteMap_apply, MPSTensor.pairPermRep,
+        MPSTensor.pairPermRep_apply, MPSTensor.siteMap_comp_pairPermRep,
+        MPSTensor.gInjVirtualShift, MPSTensor.gInjVirtualShift_apply,
+        MPSTensor.isGInjective_gInjTensor}
+    \leanok
+    \uses{def:ghz_g_injective_tensor, def:peps_g_injective}
+    Let $G$ act on the two virtual legs by $L_g\otimes\bar L_g$. The map
+    $\mathcal P(A)=\sum_{ij}\sum_{\alpha\beta}A^{ij}_{\alpha\beta}
+        \ket{ij}(\alpha\beta|$ is invariant under this action and injective on
+    its invariant subspace, so the tensor is $G$-injective
+    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix},
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The condition $\beta=\alpha i^{-1}j$ is unchanged by
+    $(\alpha,\beta)\mapsto(h\alpha,h\beta)$. An invariant vector satisfies
+    $x_{\alpha\beta}=x_{1,\alpha^{-1}\beta}$, and the component of
+    $\mathcal P(A)x$ at $(1,w)$ is $|G|^{-1}\sum_\alpha x_{\alpha,\alpha w}
+        =x_{1,w}$, so $\mathcal P(A)x=0$ forces $x=0$.
+\end{proof}
+
+\begin{theorem}[Invariance under the regular representation]%
+    \label{thm:ghz_g_injective_symmetric}
+    \lean{MPSTensor.gInjPhysShift, MPSTensor.gInjPhysRep,
+        MPSTensor.twistedTensor_gInjTensor, MPSTensor.gInjTensor_isOnSiteSymmetric}
+    \leanok
+    \uses{def:ghz_g_injective_tensor, def:on_site_symmetric}
+    Let $G$ act on the physical index by $L_g\otimes\bar L_g$, that is
+    $(i,j)\mapsto(gi,gj)$. Each matrix $A^{ij}$ is unchanged by this action,
+    so the tensor is on-site symmetric under the regular representation
+    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    $(gi)^{-1}(gj)=i^{-1}j$.
+\end{proof}
+
+\begin{theorem}[The case $G=\Z_2$ is the GHZ tensor]\label{thm:ghz_g_injective_z2}
+    \lean{MPSTensor.z2Label, MPSTensor.z2Label_apply, MPSTensor.z2Label_symm_apply,
+        MPSTensor.z2Fourier, MPSTensor.z2Fourier_apply, MPSTensor.z2FourierGL,
+        MPSTensor.coe_z2FourierGL, MPSTensor.coe_z2FourierGL_inv,
+        MPSTensor.z2FourierGInjTensor, MPSTensor.gInjTensor_z2_apply,
+        MPSTensor.z2FourierGInjTensor_eq_blockTensor_ghz}
+    \leanok
+    \uses{def:ghz_g_injective_tensor, def:ghz_tensor_d, def:gauge_equiv}
+    For $G=\Z_2$ the tensor is $A^{ij}=\tfrac12\sigma_x^{i+j}$. Let
+    $H=\bigl(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\bigr)$. After the
+    Fourier transform $\tfrac12 H\otimes H$ on the physical index $(i,j)$,
+    the resulting tensor is gauge equivalent, through $H$ on the bond, to the
+    GHZ tensor on two-level systems blocked over two sites
+    \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The transformed tensor at $(a,b)$ is
+    $\tfrac14\sum_{ij}(-1)^{ai+bj}\sigma_x^{i+j}$, and conjugation by $H$ turns
+    $\sigma_x$ into $\sigma_z$, giving
+    $\tfrac14\bigl(1+(-1)^a\sigma_z\bigr)\bigl(1+(-1)^b\sigma_z\bigr)
+        =\ketbra{a}{a}\,\ketbra{b}{b}$.
 \end{proof}
 
 %% ===================================================================
