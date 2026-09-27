@@ -38,9 +38,19 @@ golden integers (`goldenChainTerm_local_tau`, `goldenChainTerm_local_one`), the 
 pulling-through relation of the review, closed around the ring by
 `MPOTensor.siteOperator_mul_neighbourKernel`.
 
-The blocks `B_1`, `B_τ` carry the entries fixed by the Local fix (provenance) of
-`Fibonacci.lean` (`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`); the
-statements here are about those blocks.
+**Local fix (provenance):** the source draws the operator tensor only as a diagram and prints no
+numeric entries of `B_1`, `B_τ`. The blocks used here, and hence the commutations with
+`O_N(B_1)`, `O_N(B_τ)` and `P_N`, place the bare F-symbol
+`[F^{τ x τ}_{x'_{j+1}}]_{x'_j}^{x_{j+1}}` at the physical letter `(x', x)` and the bond letters
+`(x'_j, x_j)`, `(x'_{j+1}, x_{j+1})`, without the source's closed-loop factors, and `B_1` is
+the admissibility projector of bond dimension two. Documented in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
+
+**Scope restriction (edge labels τ):** `goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau`
+is stated for the source's G-symbol tensor on the configurations whose vertical edge labels are
+all `τ`; commutation of `H_N` with that tensor on the full alphabet, including edge label `1`,
+is not proved here. Documented, with the elimination plan, in
+`docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 ## Main definitions
 
@@ -265,7 +275,7 @@ theorem goldenChainHamiltonian_commute_fibProjector {N : ℕ} [NeZero N] (hN : 2
 /-- **The golden chain commutes with the G-symbol operators.** Source: arXiv:2011.12127,
 lines 1388–1393: for each label `f`, `H_N` commutes with the periodic operator of the G-symbol
 tensor of arXiv:1511.08090 (lines 1257–1268) restricted to edge label `τ`, which equals
-`O_N(B_f)` by `mpo_fibStringNetEdgeTau`. -/
+`O_N(B_f)` by `mpo_fibStringNetEdgeTau` (the Scope restriction of the module header). -/
 theorem goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau {N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (f : Fin 2) : Commute (goldenChainHamiltonian N) (mpo (fibStringNetEdgeTau f) N) := by
   rw [mpo_fibStringNetEdgeTau]
