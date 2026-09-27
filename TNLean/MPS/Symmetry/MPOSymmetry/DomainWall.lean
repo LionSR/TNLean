@@ -771,8 +771,8 @@ involution exchanging the blocks `x` and `y`, and let the domain walls `e_{AB}` 
 `c_{AB} c_{BA} = Lˣ_{g,g} Lˣ_{1,1} / (L^y_{g,g} L^y_{1,1})`.
 
 The proof applies `g` twice, which gives the local action of `g² = 1` on `e_{AB}` with phase
-`b = (L^y_{g,g} / Lˣ_{g,g}) c_{BA} c_{AB}` (`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul`),
-as in the source's display before `eq:CC-LL`; composing the identity with itself then forces
+`b = (L^y_{g,g} / Lˣ_{g,g}) c_{BA} c_{AB}`
+(`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul`), as in the source's display before `eq:CC-LL`; composing the identity with itself then forces
 `b = Lˣ_{1,1} / L^y_{1,1}`. With the source's trivial identity tensor (line 861) the L-symbols of
 the identity are one and the conclusion is `c_{AB} c_{BA} = L_A / L_B`. -/
 theorem mul_eq_lSymbol_of_mul_self_eq_one (hA : ∀ x, Kraus.IsNormal (A x))
