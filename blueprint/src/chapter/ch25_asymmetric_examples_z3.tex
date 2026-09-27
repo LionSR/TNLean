@@ -178,10 +178,22 @@ Sun~\cite{Sun2025Anomalous}.
 
 \begin{lemma}[The cube of the phase-decorated shift]
     \label{lem:asymex_z3_physical_cube}
+    \lean{Z3Anomalous.mpo_uDagTensor_eq_sq, Z3Anomalous.mpo_u_pow_three}
+    \leanok
     For every $N>0$, $U_N^3=\Id$ and $V_N=U_N^2$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_z3anomalous_uu_trace, thm:asymex_z3anomalous_group_law}
+    Theorem~\ref{thm:asymex_z3anomalous_uu_trace} gives $U_NU_N=V_N$, so
+    $V_N=U_N^2$. Theorem~\ref{thm:asymex_z3anomalous_group_law} gives
+    $V_NU_N=\Id$, hence $U_N^3=U_N^2U_N=V_NU_N=\Id$.
+\end{proof}
+
+\begin{remark}[A direct check of the cube]
+    \label{rem:asymex_z3_physical_cube_direct}
+    The cube law also follows from the kernel formula alone.
     For $a,b\in\{0,1,2\}$, direct evaluation gives
     \begin{align}
         \left[\sum_{r=0}^{2}\chi(a+r\bmod3)(b+r\bmod3)\right]_{a,b=0}^{2}
@@ -199,7 +211,7 @@ Sun~\cite{Sun2025Anomalous}.
     (\ref{eq:asymex_z3_phase_telescope}) gives
     $U_N^3\ket{t}=\ket{t}$. Since $V_N=U_N^{-1}$, it follows that
     $V_N=U_N^2$.
-\end{proof}
+\end{remark}
 
 \begin{theorem}[Normality of the three blocks up to normalization]
     \label{thm:asymex_z3anomalous_normal}
@@ -428,7 +440,7 @@ $U_L^2=O_L(M^\dagger)$:
     \label{thm:asymex_z3anomalous_group_law}
     \lean{Z3Anomalous.ud_trace_evalWord, Z3Anomalous.du_trace_evalWord, Z3Anomalous.mpo_ud,
         Z3Anomalous.mpo_du, Z3Anomalous.mpo_u_mul_uDag, Z3Anomalous.mpo_uDag_mul_u,
-        Z3Anomalous.mpo_u_pow_three, Z3Anomalous.mpo_identityTensor}
+        Z3Anomalous.mpo_identityTensor}
     \leanok
     \uses{thm:asymex_z3anomalous_ud_compression, thm:asymex_z3anomalous_uu_trace,
         prop:asym_compression_trace, thm:asym_mpo_product}
@@ -543,8 +555,9 @@ operator laws; injectivity holds after blocking two sites.
 The periodic construction of Section~\ref{sec:asymex_group_cocycle_mpo},
 applied to the cocycle $\omega_1$ of $\Z_3$ from
 Definition~\ref{def:asymex_group_cocycle_cyclic}, gives a second exact
-representation of $\Z_3$, of bond dimension three. No relation between
-the two families is established here.
+representation of $\Z_3$, of bond dimension three. The two families are
+conjugate by one diagonal unitary built from on-site and two-site gates
+(Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}).
 
 \begin{theorem}[The cocycle construction for \texorpdfstring{$\Z_3$}{Z3}]
     \label{thm:asymex_z3anomalous_cocycle_family}
@@ -561,6 +574,73 @@ the two families is established here.
     This is Theorem~\ref{thm:asymex_group_cocycle_cyclic} with $n=3$ and
     $j=1$.
 \end{proof}
+
+\begin{theorem}[The two representations are conjugate]
+    \label{thm:asymex_z3anomalous_cocycle_bridge}
+    \lean{Z3Anomalous.gateExponent, Z3Anomalous.gaugeExponent,
+        Z3Anomalous.cocycleGauge, Z3Anomalous.mpo_uTensor_mul_cocycleGauge,
+        Z3Anomalous.mpo_family_mul_cocycleGauge,
+        Z3Anomalous.cocycleGauge_mem_unitaryGroup,
+        Z3Anomalous.mpo_family_eq_cocycleGauge_conj}
+    \leanok
+    \uses{thm:asymex_z3anomalous_family,
+        thm:asymex_z3anomalous_cocycle_family}
+    For $N>0$ define the diagonal unitary $V_N$ by
+    $V_N\ket{t}=\omega^{E(t)}\ket{t}$, where
+    \begin{align}
+        E(t)
+         & =\sum_{k=0}^{N-1}\bigl([t_k=2]+[t_k=1][t_{k+1}=2]\bigr),
+        \label{eq:asymex_z3anomalous_bridge_exponent}
+    \end{align}
+    with $t_N=t_0$. Equivalently, $V_N=D^{\otimes N}\prod_kC_{k,k+1}$,
+    where $D=\operatorname{diag}(1,1,\omega)$ and the commuting two-site
+    gate $C$ multiplies $\ket{1,2}$ by $\omega$ and fixes the other basis
+    vectors. Let $U^{\omega_1}_g$ be the operators of the cocycle
+    construction of Theorem~\ref{thm:asymex_z3anomalous_cocycle_family}.
+    Then for every $g\in\Z_3$ and every $N>0$,
+    \begin{align}
+        O_N(T_g)\,V_N
+         & =V_N\,U^{\omega_1}_g,
+         &
+        O_N(T_g)
+         & =V_N\,U^{\omega_1}_g\,V_N^\dagger.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_z3_physical_kernels, thm:asymex_group_cocycle_cyclic}
+    For $g=1$ both sides vanish at $(s,t)$ unless $s=Xt$. On that support
+    the left side is $\omega^{F(t)+E(t)}$, by
+    Theorem~\ref{thm:asymex_z3_physical_kernels}, and the right side is
+    $\omega^{E(Xt)+c(t)}$, where $c(t)$ counts the bonds with
+    $t_k<t_{k+1}$, by Theorem~\ref{thm:asymex_group_cocycle_cyclic}; for
+    $n=3$ the carry $\lfloor(t_{k+1}+[t_k-t_{k+1}])/3\rfloor$ is
+    $[t_k<t_{k+1}]$. Both exponents are sums over the bonds $(t_k,t_{k+1})$,
+    and the two bond terms agree modulo three for each of the nine pairs.
+    For $g=0$ both operators are the identity, and for $g=2$ both
+    operators are the squares of those at $g=1$, by the product laws of
+    Theorems~\ref{thm:asymex_z3anomalous_family}
+    and~\ref{thm:asymex_z3anomalous_cocycle_family}. The matrix $V_N$ is
+    diagonal with entries of modulus one, hence unitary.
+\end{proof}
+
+No purely on-site diagonal gauge relates the two families. A diagonal
+unitary $\prod_k\omega^{w(t_k,t_{k+1})}$ changes the exponent of the shift
+by $\sum_k\bigl(w(t_k+1,t_{k+1}+1)-w(t_k,t_{k+1})\bigr)$. For an on-site
+gate $w(a,b)=\alpha(a)$ this is a sum of single-site terms, whereas the
+difference $[a\neq0]\,b-[a<b]$ of the two bond exponents is not, modulo
+three, the sum of a function of $a$ and a function of $b$, which it would
+have to be for the exponents to agree on every chain. What relates the two
+families is the identity $O_N(T_g)=V_N\,U^{\omega_1}_g\,V_N^\dagger$ of
+Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}, with
+$V_N=D^{\otimes N}\prod_kC_{k,k+1}$ a product of commuting diagonal gates.
+The class of Theorem~\ref{thm:asymex_z3anomalous_anomaly_class} is computed from fusion
+tensors of the family $\{T_g\}$. Assigning it to the construction for
+$\omega_1$ needs fusion tensors for the operators $U^{\omega_1}_g$ obtained
+from those of $\{T_g\}$ by this conjugation, together with the invariance of
+the class under that transport; neither is proved here.
 
 \begin{theorem}[The anomaly class of the family]
     \label{thm:asymex_z3anomalous_anomaly_class}
@@ -611,6 +691,69 @@ the two families is established here.
     action because $g^3=e$, and $\omega^2\neq1$.
 \end{proof}
 
+\begin{theorem}[Orientation of the class]
+    \label{thm:asymex_z3anomalous_class_orientation}
+    \lean{Z3Anomalous.cyclicInvariant_cyclicCocycle_one,
+        Z3Anomalous.cyclicInvariant_omega_z3_mul_cyclicCocycle_one}
+    \leanok
+    \uses{thm:asymex_z3anomalous_cocycle_family, thm:asymex_z3anomalous_anomaly_class}
+    Let $g$ be the generator of $\Z_3$. The cocycle $\omega_1$
+    of~\cite{GarreRubioSchuch2024DomainWall} has
+    $\omega_1(g,e,g)\,\omega_1(g,g,g)\,\omega_1(g,g^2,g)=\omega$, while the
+    anomaly three-cochain of the family has the inverse product $\omega^2$
+    for every choice of fusion tensors.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_z3anomalous_anomaly_class}
+    Since $\omega_1(a,b,c)=\omega^{a\lfloor(b+c)/3\rfloor}$, only the factor
+    $\omega_1(g,g^2,g)=\omega$ is nontrivial. The product for the family is
+    $\omega^2$ by Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}, and
+    $\omega^2\cdot\omega=1$.
+\end{proof}
+
+Both~\cite{GarreRubioSchuch2024DomainWall} and the three-cochain used here define
+the anomaly by the same move between the two fusion trees of $(g,h,k)$. The
+construction for $\omega_1$ is conjugate to the family by the circuit $V_N$
+of Theorem~\ref{thm:asymex_z3anomalous_cocycle_bridge}, so, granting the
+invariance of the class under that conjugation (which is not proved here), it
+realizes the class $j=2$ of $\omega_2=\omega_1^{-1}$ in this orientation, not the class of
+$\omega_1$.
+
+\begin{corollary}[The domain-wall phase of the family]
+    \label{cor:asymex_z3anomalous_domain_wall}
+    \lean{Z3Anomalous.eisensteinOmega_eq_rootOfUnity,
+        Z3Anomalous.orderOf_z3Gen,
+        Z3Anomalous.cyclicInvariant_omega_z3_eq_cyclicCocycle_two,
+        Z3Anomalous.not_cohomologousTo_cyclicCocycle_omega_z3,
+        Z3Anomalous.domainWallPhase_omega_z3}
+    \leanok
+    \uses{thm:asymex_z3anomalous_anomaly_class,
+        thm:asymex_group_cocycle_cyclic_domain_wall}
+    For every choice of fusion tensors, the anomaly three-cochain
+    $\omega_{\mathrm{an}}$ of the family has, at the generator $g$, the same
+    cyclic invariant as the cocycle $\omega_2$ of
+    Definition~\ref{def:asymex_group_cocycle_cyclic} for $n=3$, and it is not
+    cohomologous to $\omega_j$ for $j\not\equiv2\pmod3$. Its domain-wall phase
+    is $P_g(\omega_{\mathrm{an}})=e^{2\pi\mathrm{i}/3}$, the entry $j=2$,
+    $a=1$ of the table of
+    Theorem~\ref{thm:asymex_group_cocycle_cyclic_domain_wall}.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_z3anomalous_anomaly_class,
+        thm:asymex_group_cocycle_cyclic_domain_wall,
+        def:asymex_group_cocycle_domain_wall_phase}
+    The primitive cube root $\omega$ equals $e^{2\pi\mathrm{i}/3}=\zeta$, so
+    the invariant $\omega^2$ of
+    Theorem~\ref{thm:asymex_z3anomalous_anomaly_class} is $\zeta^2$, the
+    cyclic invariant of $\omega_2$ at $g$. The classes $\omega_j$ are
+    separated by this invariant, and $P_g=I_{g,3}^{-1}=\zeta^{-2}=\zeta$
+    because $g$ has order three.
+\end{proof}
+
 \subsection{The condensation defect}%
 \label{sec:asymex_z3anomalous_defect}
 
@@ -653,6 +796,18 @@ pair blocks, each compressing onto one group tensor.
 
 \begin{lemma}[The normalized defect projects onto invariant states]
     \label{lem:asymex_z3_defect_projector}
+    \lean{Z3Anomalous.isStarProjection_defectProjector,
+        Z3Anomalous.defectProjector, Z3Anomalous.defectProjector_eq,
+        Z3Anomalous.operatorRepresentation,
+        Z3Anomalous.defectProjector_eq_finiteGroupUnitaryAverage,
+        Z3Anomalous.mpo_uTensor_mul_defectProjector,
+        Z3Anomalous.defectProjector_mulVec_eq_self_iff,
+        Z3Anomalous.range_defectProjector_mulVecLin,
+        Z3Anomalous.defectProjector_mulVec_single,
+        Z3Anomalous.trace_mpo_uTensor, Z3Anomalous.trace_mpo_uDagTensor,
+        Z3Anomalous.rank_defectProjector}
+    \leanok
+    \uses{def:asymex_z3anomalous_defect}
     For $L>0$, the operator
     $P_L=O_L(A)/3=(\Id+U_L+U_L^2)/3$ is the orthogonal projector onto
     $\{\psi:U_L\psi=\psi\}$. Its basis action is
@@ -665,16 +820,32 @@ pair blocks, each compressing onto one group tensor.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_z3anomalous_defect_sum, thm:asymex_z3_physical_kernels,
+        lem:asymex_z3_physical_cube, thm:asymex_z3anomalous_group_law,
+        thm:mpug_finite_group_unitary_average_projection,
+        thm:asymex_z3anomalous_defect_square, thm:asymex_z3anomalous_family,
+        def:mpug_operator_representation}
     Theorem~\ref{thm:asymex_z3anomalous_defect_sum} and
-    Theorem~\ref{thm:asymex_z3_physical_kernels}
-    and Lemma~\ref{lem:asymex_z3_physical_cube} give the formula for $P_L$.
-    Since $U_L^3=\Id$, each power $\Id,U_L,U_L^2$ occurs three times
-    in $(\Id+U_L+U_L^2)^2$, so $P_L^2=P_L$.
-    Also $U_L^\dagger=U_L^2$, hence $P_L^\dagger=P_L$.
-    The identities $U_LP_L=P_L$ and
-    $P_L\psi=\psi$ whenever $U_L\psi=\psi$ identify its range.
-    Neither $X$ nor $X^2$ fixes a configuration when $L>0$.
-    Thus $\tr U_L=\tr U_L^2=0$, and
+    Lemma~\ref{lem:asymex_z3_physical_cube} give
+    $P_L=(\Id+U_L+U_L^2)/3$, and
+    Theorem~\ref{thm:asymex_z3_physical_kernels} gives its basis action.
+    By the operator laws of Theorem~\ref{thm:asymex_z3anomalous_family}, the
+    operators $\Id,U_L,U_L^\dagger$ form a unitary representation of $\Z_3$
+    (Definition~\ref{def:mpug_operator_representation}), and
+    $P_L$ is its normalized group average. By
+    Theorem~\ref{thm:mpug_finite_group_unitary_average_projection},
+    $P_L$ is an orthogonal projector.
+    Since $U_L^3=\Id$, $U_LP_L=P_L$, and
+    $P_L\psi=\psi$ whenever $U_L\psi=\psi$; these identify its range.
+    The identity $O_L(A)^2=3O_L(A)$ is $P_L^2=P_L$ multiplied by nine,
+    and is also Theorem~\ref{thm:asymex_z3anomalous_defect_square}.
+    The diagonal entries of the kernels in
+    Theorem~\ref{thm:asymex_z3_physical_kernels} are
+    $U_L(t,t)=\delta_{t,Xt}\,\omega^{F(t)}$ and
+    $U_L^\dagger(t,t)=\delta_{t,X^{-1}t}\,\omega^{-F(X^{-1}t)}$.
+    When $L>0$, $Xt\neq t$ and $X^{-1}t\neq t$ for every configuration $t$, so
+    $\tr U_L=\sum_tU_L(t,t)=0$ and likewise $\tr U_L^\dagger=0$. Hence
     $\rank P_L=\tr P_L=3^L/3$.
 \end{proof}
 
@@ -756,31 +927,37 @@ targets separately.
 
 \begin{theorem}[Compression of the stacked square]
     \label{thm:asymex_z3anomalous_defect_compression}
-    \lean{Z3Anomalous.pairTarget, Z3Anomalous.defectSquare_compression,
+    \lean{Z3Anomalous.pairTarget, Z3Anomalous.pairStackMPS,
+        Z3Anomalous.defectSquare_eq_blockDiagonal, Z3Anomalous.pairCompression,
+        Z3Anomalous.defectSquare_compression, Z3Anomalous.defectSquare_compression_z,
         Z3Anomalous.defectSquare_isReduction, Z3Anomalous.defectSquare_left_mul_right_of_ne,
-        Z3Anomalous.defectSquare_dim_eq, Z3Anomalous.defectSquare_evalWord_remainder_eq_zero,
-        Z3Anomalous.sum_pairTargetDim}
+        Z3Anomalous.defectSquare_dim_eq, Z3Anomalous.pairCompression_evalWord_remainder_eq_zero,
+        Z3Anomalous.defectSquare_evalWord_remainder_eq_zero,
+        Z3Anomalous.defectSquare_remainder_mul_ne_zero, Z3Anomalous.sum_pairTargetDim}
     \leanok
     \uses{thm:asymex_z3anomalous_defect_square_blocks, thm:asym_multiblock,
         thm:asymex_z3anomalous_uu_compression, thm:asymex_z3anomalous_ud_compression,
-        thm:asymex_explicit_gauge}
+        thm:asymex_explicit_gauge, thm:asymex_direct_sum_compression}
     The stacked tensor $A\cdot A$ has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for the nine targets $M_{g+h}$,
     $(g,h)\in\{0,1,2\}^2$, with $z=10$ one-dimensional zero diagonal
     blocks and $25=15+10$. The nine compression pairs are mutually
-    biorthogonal, and the remainder is nilpotent of order at most nineteen.
+    biorthogonal, and the remainder is nilpotent of order exactly three.
     Explicitly, writing $s=(g,h)$ and $C_s=M_{g+h}$, the pairs satisfy
     $W_s(A\cdot A)^wV_s=C_s^w$ for every word and $W_sV_t=0$ for $s\neq t$.
     The remainder is
     \begin{align}
         R^a & =(A\cdot A)^a-\sum_s V_sC_s^aW_s,
     \end{align}
-    and $R^w=0$ whenever $|w|\geq19$.
+    and $R^w=0$ whenever $|w|\geq3$, while $R^1R^5\neq0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge}
+    \uses{thm:asymex_explicit_gauge, thm:asymex_direct_sum_compression,
+        thm:asymex_z3anomalous_defect_square_blocks,
+        thm:asymex_z3anomalous_uu_compression,
+        thm:asymex_z3anomalous_ud_compression}
     On the five pairs with $g=0$ or $h=0$, the pair block equals its
     target under the natural bond identification and requires no zero
     diagonal block. On the other four pairs, use the gauges of
@@ -788,7 +965,8 @@ targets separately.
     Theorem~\ref{thm:asymex_z3anomalous_ud_compression}.
     Their direct sum, transported along the bond reindexing of
     Theorem~\ref{thm:asymex_z3anomalous_defect_square_blocks}, gives
-    the required triangular form. Distinct pair blocks have disjoint
+    the required triangular form
+    (Theorem~\ref{thm:asymex_direct_sum_compression}). Distinct pair blocks have disjoint
     coordinates, which gives $W_sV_t=0$ for $s\neq t$.
 
     The original block dimensions sum to
@@ -796,6 +974,13 @@ targets separately.
     The target dimensions sum to $1+2+2+2+2+1+2+1+2=15$,
     and the zero diagonal blocks number $0+0+0+0+2+3+0+3+2=10$.
     Clause~(vi) of Theorem~\ref{thm:asym_multiblock} bounds the
-    nilpotency order by $|S|+z=9+10=19$, where $S$ is the set of
-    nine target slots.
+    nilpotency order only by $|S|+z=9+10=19$, where $S$ is the set of
+    nine target slots. By
+    Theorem~\ref{thm:asymex_direct_sum_compression}, the remainder is the
+    direct sum of the nine pair remainders. These vanish on the five pairs
+    with $g=0$ or $h=0$, and on the four other pairs every word of length
+    three vanishes while $R^1R^5\neq0$ on the pair $(1,1)$, by
+    Theorems~\ref{thm:asymex_z3anomalous_uu_compression}
+    and~\ref{thm:asymex_z3anomalous_ud_compression}. Hence the order is
+    exactly three.
 \end{proof}

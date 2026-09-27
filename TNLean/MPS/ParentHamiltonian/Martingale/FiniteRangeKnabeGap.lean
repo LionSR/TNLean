@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
@@ -19,6 +20,8 @@ finite-range Knabe inequality.  The resulting periodic gap is
 For a primitive MPS, the open-chain martingale estimate provides
 \(\gamma = (1 - \varepsilon_l\sqrt{l + 1})^2\) at range \(R = l + 1\).  Choosing \(m\) so that
 \(l^2 < m\gamma\) gives a positive periodic gap uniformly for \(N \geq 2m\).
+Taking a minimum with the positive bounds at the finitely many shorter lengths
+extends any such estimate to all lengths.
 
 ## References
 
@@ -36,6 +39,26 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-- At a fixed length, the restriction of the parent Hamiltonian to the
+orthogonal complement of its kernel has a positive lower norm bound. -/
+theorem parentHamiltonianES_exists_gap (A : MPSTensor d D) (R N : ℕ) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
+      δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ :=
+  (parentHamiltonianES A R N).exists_pos_mul_norm_le_of_mem_orthogonal_ker
+
+/-- A periodic parent-Hamiltonian gap for all sufficiently large lengths extends
+to all lengths by taking the minimum with finitely many positive bounds. -/
+theorem parentHamiltonianES_gap_of_eventual_gap (A : MPSTensor d D) (R M : ℕ)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hGap : ∀ N : ℕ, M ≤ N → ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
+      δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖) :
+    ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ,
+      ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ :=
+  Nat.exists_pos_forall_of_eventually
+    (fun _ _ _ hγδ h v hv ↦ (mul_le_mul_of_nonneg_right hγδ (norm_nonneg v)).trans (h v hv))
+    (parentHamiltonianES_exists_gap A R) hδ hGap
 
 /-- A uniform norm gap for the open Hamiltonian on the active sites of a
 Knabe window gives the finite-range periodic parent-Hamiltonian gap.
