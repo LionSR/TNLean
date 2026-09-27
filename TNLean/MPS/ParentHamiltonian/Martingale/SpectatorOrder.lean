@@ -46,7 +46,7 @@ theorem rightFiberwiseMap_mono
     (h : G.toLinearMap ≤ H.toLinearMap) :
     (rightFiberwiseMap (S := S) G).toLinearMap ≤
       (rightFiberwiseMap (S := S) H).toLinearMap := by
-  apply (LinearMap.le_def _ _).mpr
+  apply LinearMap.le_def.mpr
   simpa only [rightFiberwiseMap_sub, toLinearMap_sub] using
     (isPositive_rightFiberwiseMap (S := S) (H - G) h)
 
