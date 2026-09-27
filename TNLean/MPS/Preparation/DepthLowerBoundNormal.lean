@@ -34,7 +34,7 @@ variable {d D : ℕ}
 
 /-- **No preparation in depth `o(log N)`** (arXiv:2307.01696, Theorem 1). Let `A` be normal in
 the source's sense: irreducible, with `E_A` having "a unique largest eigenvalue `λ_1 = 1` and no
-other of the same magnitude" (the definition after eq. (2); `IsNormalTensor`). Let `λ₂` be an
+other of the same magnitude" (the definition after eq. (4); `IsNormalTensor`). Let `λ₂` be an
 eigenvalue of `E_A` of largest modulus among those different from `1`, with correlation length
 `ξ = -1/ln|λ₂| > 0`. If unit vectors `ψ_N` are prepared from product vectors by local circuits
 of depth `T_N = o(log N)`, then `ε(φ_N, ψ_N) = 1 - |⟨φ_N|ψ_N⟩| > 1/2` for all sufficiently

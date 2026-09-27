@@ -106,7 +106,7 @@ theorem _root_.Module.End.hasEigenvalue_smul_iff {V : Type*} [AddCommGroup V] [M
 /-! ### Normalized periodic vectors under gauges and rescalings -/
 
 /-- A gauge leaves the normalized periodic vector `φ_N/‖φ_N‖` unchanged, since it leaves every
-trace `Tr(A^{i_1} ⋯ A^{i_N})` of arXiv:2307.01696, eq. (1), unchanged. -/
+trace `Tr(A^{i_1} ⋯ A^{i_N})` of arXiv:2307.01696, eq. (3), unchanged. -/
 theorem normalizedMPVState_eq_of_gaugeEquiv {A B : MPSTensor d D} (h : GaugeEquiv A B)
     (N : ℕ) : normalizedMPVState A N = normalizedMPVState B N := by
   have : mpvState A N = mpvState B N := by
@@ -129,7 +129,7 @@ theorem norm_inner_normalizedMPVState_smul {A : MPSTensor d D} {D' : ℕ} {B : M
 /-! ### The gauge `eq:ldp_normal_gauge` -/
 
 /-- **The gauge of a normal tensor.** A normal tensor in the sense of arXiv:2307.01696 (the
-definition after eq. (2): irreducible, with `E_A` having "a unique largest eigenvalue
+definition after eq. (4): irreducible, with `E_A` having "a unique largest eigenvalue
 `λ_1 = 1` and no other of the same magnitude"; `IsNormalTensor`) is gauge equivalent, without
 rescaling, to a tensor `B` with `∑ᵢ (Bⁱ)† Bⁱ = 1` and a fixed point `E_B(ρ) = ρ`, `ρ > 0`,
 `Tr ρ = 1`; the products of `L` matrices of `B` span the matrix algebra for some `L ≥ 1`.
