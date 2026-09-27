@@ -317,7 +317,9 @@ theorem exists_fibEdgeOneLetter_or_fibEdgeTauLetter (i : Fin 4) :
 
 /-- A family of letters on the four physical letters (plaquette, edge label) that conserves the
 edge label: `T (x', x)` at edge label `τ`, `U (x', x)` at edge label `1`, and zero when the edge
-label changes, as for the source's tensor `fibStringNetTensor`. -/
+label changes, as for the source's tensor `fibStringNetTensor`. As everywhere in this development
+the label `0 : Fin 2` is the trivial label `1` and `1 : Fin 2` is `τ`, so the test
+`(fibSiteLetter j).2 = 1` selects the edge label `τ`. -/
 def fibEdgeGraded {α : Type*} [Zero α] (T U : Fin 2 → Fin 2 → α) (i j : Fin 4) : α :=
   if (fibSiteLetter i).2 = (fibSiteLetter j).2 then
     if (fibSiteLetter j).2 = 1 then T (fibSiteLetter i).1 (fibSiteLetter j).1
@@ -440,7 +442,7 @@ tensor unchanged, and they are the diagonal matrix units of `fibBlockFull`:
 theorem fibStringNetTensor_edgeOne_conj (f b c : Fin 2) :
     Matrix.diagonal (fibStringNetGauge f) *
         fibStringNetTensor f (fibEdgeOneLetter b) (fibEdgeOneLetter c) *
-        Matrix.diagonal (fibStringNetGauge f)⁻¹ =
+        Matrix.diagonal ((fibStringNetGauge f)⁻¹) =
       fibBlockFull f (fibEdgeOneLetter b) (fibEdgeOneLetter c) := by
   ext p q
   rw [Matrix.mul_diagonal, Matrix.diagonal_mul, fibBlockFull_edgeOne_apply]
@@ -469,7 +471,7 @@ source's tensor (arXiv:1511.08090, `AnyonsPEPS.tex` lines 1262–1265), at both 
 the letter of the extended F-symbol block: `h S_f^{ij} h⁻¹ = B_f^{ij}`. -/
 theorem fibStringNetTensor_conj (f : Fin 2) (i j : Fin 4) :
     Matrix.diagonal (fibStringNetGauge f) * fibStringNetTensor f i j *
-        Matrix.diagonal (fibStringNetGauge f)⁻¹ = fibBlockFull f i j := by
+        Matrix.diagonal ((fibStringNetGauge f)⁻¹) = fibBlockFull f i j := by
   rcases exists_fibEdgeOneLetter_or_fibEdgeTauLetter i with ⟨x', rfl⟩ | ⟨x', rfl⟩ <;>
     rcases exists_fibEdgeOneLetter_or_fibEdgeTauLetter j with ⟨x, rfl⟩ | ⟨x, rfl⟩
   · exact fibStringNetTensor_edgeOne_conj f x' x
