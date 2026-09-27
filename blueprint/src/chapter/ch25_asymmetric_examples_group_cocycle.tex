@@ -294,10 +294,9 @@ class of $\omega$.
 \begin{definition}[The domain-wall phase]
     \label{def:asymex_group_cocycle_domain_wall_phase}
     \lean{TNLean.Algebra.ScalarThreeCochain.domainWallPhase,
-        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant,
-        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.domainWallPhase_eq}
+        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant}
     \leanok
-    \uses{def:mpug_cyclic_invariant, thm:mpug_cyclic_invariant_gauge}
+    \uses{def:mpug_cyclic_invariant}
     For a scalar three-cochain $\omega$ of a group $G$ and $g\in G$ of order
     $o(g)$, set
     \begin{align}
@@ -305,8 +304,23 @@ class of $\omega$.
         =I_{g,o(g)}(\omega)^{-1}.
         \notag
     \end{align}
-    Cohomologous three-cochains have the same phase $P_g$.
 \end{definition}
+
+\begin{theorem}[Gauge invariance of the domain-wall phase]
+    \label{thm:asymex_group_cocycle_domain_wall_phase_gauge}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.domainWallPhase_eq}
+    \leanok
+    \uses{def:asymex_group_cocycle_domain_wall_phase}
+    Cohomologous three-cochains have the same phase $P_g$ for every $g\in G$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpug_cyclic_invariant_gauge}
+    Since $P_g(\omega)=I_{g,o(g)}(\omega)^{-1}$, this is the gauge invariance
+    of the cyclic invariant in
+    Theorem~\ref{thm:mpug_cyclic_invariant_gauge}.
+\end{proof}
 
 \begin{theorem}[Domain-wall phases of the cyclic cocycles]
     \label{thm:asymex_group_cocycle_cyclic_domain_wall}
@@ -348,6 +362,7 @@ class of $\omega$.
 
 \begin{proof}
     \leanok
+    \uses{thm:mpug_cyclic_invariant_gauge}
     By Theorem~\ref{thm:asymex_group_cocycle_cyclic},
     $\omega_j(a,[ka],a)=\zeta^{ja\lfloor([ka]+a)/n\rfloor}$. Writing
     $[ka]+a=[(k+1)a]+n\lfloor([ka]+a)/n\rfloor$ and summing over $k<m$, the
