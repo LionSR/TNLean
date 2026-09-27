@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Examples.Z3Anomalous
 
+import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousCocycleBridge
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefect
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefectCompression
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefectProjector
