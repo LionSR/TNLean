@@ -73,9 +73,13 @@ one tensor.
     \item The primal tensor's virtual symmetry under every irreducible
     representation $\pi$ is formalized as the single-tensor identity
     $A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=A_{t,r,b,l}\,\mathbb 1$
-    for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support.
-    The resulting matrix product operator symmetry of the contracted
-    network is not formalized.
+    for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support,
+    and for the contracted network on the torus: the virtual string that
+    multiplies $\pi(g)$ for each bond with label $g$ it crosses can be
+    pulled through every rectangle of sites, since on the support
+    $\pi(t)\pi(r)=\pi(l)\pi(b)$ at each site and the two boundary paths
+    of a grid of such squares have the same product. This item is
+    resolved.
     \item The review states that the equal-weight superposition of
     plaquette colorings is the equal-weight superposition of the
     configurations obeying Gauss' law. On a plane, or on a disc with open
@@ -90,16 +94,16 @@ one tensor.
 \end{enumerate}
 
 \section{Verdict and elimination plan}
-The note is a scope restriction: the review's statements about the
-contracted network are formalized only for one tensor or not at all. The
+The note is a scope restriction: of the review's two statements about the
+contracted network, the second is not formalized. The
 normalization and the representation are local corrections within that
 restriction.
 The normalization and the choice of regular representation are
-conventions and need no further work. For the scope restrictions, place
-the quantum-double tensors on the torus, prove the pulling-through
-identity of the representation operators across the contracted network,
-and state the coloring superposition as the trivial-holonomy sector of
-the Gauss-law configurations.
+conventions and need no further work. The pulling-through
+identity of the representation operators across the contracted primal
+network is formalized on the torus. For the remaining scope restriction,
+place the dual tensor on the torus and state the coloring superposition
+as the trivial-holonomy sector of the Gauss-law configurations.
 
 \bibliographystyle{alpha}
 \bibliography{references}
