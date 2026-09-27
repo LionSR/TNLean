@@ -65,7 +65,10 @@ lemma siteOperator_apply (X : Matrix (Fin d) (Fin d) ℂ) (j : Fin N) (ψ : NSit
 of two sites of a chain of \(N\) sites for the operator family \(S\), acting on
 coefficient vectors: \((\mathbf S_j\cdot\mathbf S_k\,\psi)(\sigma)
 =\sum_{\alpha,a,b}S^\alpha_{\sigma_j a}S^\alpha_{\sigma_k b}\,
-\psi(\sigma\text{ with }\sigma_j=a,\ \sigma_k=b)\). -/
+\psi(\sigma\text{ with }\sigma_j=a,\ \sigma_k=b)\). The formula is the exchange only for
+distinct sites \(j\ne k\) (`sum_siteOperator_comp_of_ne`); for \(j=k\) the second
+update overwrites the first, and the operator \(\sum_\alpha S^\alpha_jS^\alpha_j\) is
+given instead by `sum_siteOperator_comp_self`. -/
 def spinExchange (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (j k : Fin N) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N where
   toFun ψ σ := ∑ α, ∑ a, ∑ b,

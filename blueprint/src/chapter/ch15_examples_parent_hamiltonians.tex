@@ -691,8 +691,7 @@ eigenspace.
         MPSTensor.akltSpinTwoES_eq_orthogonal_groundSpaceES,
         MPSTensor.akltBondTerm_shift_eq_spinTwo_starProjection}
     \leanok
-    \uses{def:aklt_polynomial_hamiltonian, def:parent_interaction,
-        thm:aklt_ground_space_two}
+    \uses{def:aklt_polynomial_hamiltonian, def:parent_interaction}
     On two spin-$1$ sites,
     \begin{align}
         P^{(2)}
@@ -713,6 +712,7 @@ eigenspace.
 
 \begin{proof}
     \leanok
+    \uses{thm:aklt_ground_space_two}
     In the basis of Definition~\ref{def:aklt_polynomial_hamiltonian},
     $\vec S_0\cdot\vec S_1=S^z\otimes S^z+\tfrac12(S^+\otimes S^-+S^-\otimes S^+)$
     has integer entries: it fixes $\ket{11}$ and $\ket{22}$, exchanges
@@ -751,10 +751,7 @@ eigenspace.
         MPSTensor.neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian,
         MPSTensor.eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian}
     \leanok
-    \uses{def:aklt_polynomial_hamiltonian, def:parent_hamiltonian,
-        thm:aklt_spin_two_projector, lem:transported_es_positive,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        thm:aklt_chain_ground_space_two}
+    \uses{def:aklt_polynomial_hamiltonian, def:parent_hamiltonian}
     For $N\ge2$ the Hamiltonian~(\ref{eq:aklt_polynomial_hamiltonian})
     satisfies
     \begin{align}
@@ -775,6 +772,9 @@ eigenspace.
 
 \begin{proof}
     \leanok
+    \uses{thm:aklt_spin_two_projector, lem:transported_es_positive,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        thm:aklt_chain_ground_space_two}
     Restricting a chain vector to the window $i,i+1$ turns
     $\vec S_i\cdot\vec S_{i+1}$ into $\vec S_0\cdot\vec S_1$, so the local term
     of the two-site parent Hamiltonian at $i$ is

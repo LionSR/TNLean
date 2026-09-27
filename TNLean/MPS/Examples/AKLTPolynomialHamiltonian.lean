@@ -36,11 +36,15 @@ the total-spin-2 subspace. On a periodic chain of \(N\ge2\) sites this gives
 and at least \(-\tfrac{2N}3\). For \(N\ge3\) the eigenspace for \(-\tfrac{2N}3\) is
 spanned by the periodic AKLT vector: the AKLT state is the unique ground state of
 \(H\), the source's claim, and its ground energy \(-\tfrac{2N}3\) is derived here.
-The source fixes no boundary condition or chain length; the periodic range
-\(N\ge3\) is that of the existing two-site uniqueness theorem
-`aklt_chainGroundSpace_two_eq_mpvSubmodule`. The physical labelling
-\(0,1,2\leftrightarrow m=0,+1,-1\) is the convention fixed in
-`TNLean.MPS.Examples.SpinOne`.
+The physical labelling \(0,1,2\leftrightarrow m=0,+1,-1\) is the convention fixed
+in `TNLean.MPS.Examples.SpinOne`.
+
+**Scope restriction (periodic chains, \(N\ge3\)):** the source fixes no boundary
+condition or chain length; the ground-state theorems here are proved on periodic
+chains of \(N\ge3\) sites, the range of the existing two-site uniqueness theorem
+`aklt_chainGroundSpace_two_eq_mpvSubmodule`, and the open-boundary edge-mode
+degeneracy is not formalized. Documented in
+`docs/paper-gaps/rmp_example_parent_hamiltonian_scope.tex`.
 
 ## Main definitions
 * `MPSTensor.akltBondTerm` : the two-site term \(h\)
