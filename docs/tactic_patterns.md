@@ -2302,7 +2302,7 @@ abstracted — record why, so it is not re-proposed).
   `(m ^ 2 - r + 1) * m ^ 2 ≤ (D ^ 2 + 1) ^ 2` for `m ≤ D`, stated over `ℕ`.
 - **Notes:** promote at a third occurrence, for example a reduction at composite length.
 
-### Decomposing membership in a finite sum of subspaces — candidate
+### Decomposing membership in a finite sum of subspaces — promoted
 - **Pattern:** obtain vectors in the individual subspaces from membership in
   their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
   apply a norm or inner-product estimate to their sum.
@@ -2312,14 +2312,13 @@ abstracted — record why, so it is not re-proposed).
   (`TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`), and the
   private lemma `norm_inner_sum_starProjection_sub_le` in
   `TNLean/MPS/ParentHamiltonian/BlockProjectorSum.lean`.
-- **Abstraction:** a helper lemma turning `y ∈ ⨆ i, V i` over a finite index
-  type directly into a family `v : ∀ i, V i` with `∑ i, (v i : E) = y`,
-  absorbing the `(s := Finset.univ)` instantiation and the `simpa` coercion
-  from the indexed supremum.
-- **Status:** at the rule of three (three occurrences, two files). Promotion
-  is deferred because refactoring the call sites needs a Lean build to
-  verify; promote in the next PR that touches these files with a build
-  available.
+- **Abstraction:** `Submodule.exists_sum_eq_of_mem_iSup` in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean` turns
+  `u ∈ ⨆ i, V i` over a finite index type into a family `v : ∀ i, V i` with
+  `∑ i, (v i : M) = u`, absorbing the `(s := Finset.univ)` instantiation and
+  the `simpa` coercion from the indexed supremum.
+- **Status:** promoted; all three call sites now read
+  `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
 
 ### carrying a boundary through one Kronecker factor of a letter sum — candidate
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
