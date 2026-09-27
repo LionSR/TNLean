@@ -643,6 +643,14 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   printed for the two CZX product states do not give reductions, the
   corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
   $L_0/L_1=-1=\omega$ is unchanged.
+- `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
+  the unbroken subgroup `H` of the classification of the L-symbols by `H`
+  and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
+  trivialization of `ω|_H` is chosen) is the stabilizer of one block, as in
+  arXiv:2203.12563, not the kernel of the action on blocks printed in
+  arXiv:2405.00439; the two agree exactly when the stabilizer is normal, in
+  particular for abelian groups, and `S_3` acting on three blocks separates
+  them.
 
 For the group matrix product operators of arXiv:2203.12563:
 
