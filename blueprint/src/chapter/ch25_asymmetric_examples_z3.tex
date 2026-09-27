@@ -180,12 +180,20 @@ Sun~\cite{Sun2025Anomalous}.
     \label{lem:asymex_z3_physical_cube}
     \lean{Z3Anomalous.mpo_uDagTensor_eq_sq, Z3Anomalous.mpo_u_pow_three}
     \leanok
-    \uses{thm:asymex_z3_physical_kernels}
     For every $N>0$, $U_N^3=\Id$ and $V_N=U_N^2$.
 \end{lemma}
 
 \begin{proof}
     \leanok
+    \uses{thm:asymex_z3anomalous_uu_trace, thm:asymex_z3anomalous_group_law}
+    Theorem~\ref{thm:asymex_z3anomalous_uu_trace} gives $U_NU_N=V_N$, so
+    $V_N=U_N^2$. Theorem~\ref{thm:asymex_z3anomalous_group_law} gives
+    $V_NU_N=\Id$, hence $U_N^3=U_N^2U_N=V_NU_N=\Id$.
+\end{proof}
+
+\begin{remark}[A direct check of the cube]
+    \label{rem:asymex_z3_physical_cube_direct}
+    The cube law also follows from the kernel formula alone.
     For $a,b\in\{0,1,2\}$, direct evaluation gives
     \begin{align}
         \left[\sum_{r=0}^{2}\chi(a+r\bmod3)(b+r\bmod3)\right]_{a,b=0}^{2}
@@ -203,7 +211,7 @@ Sun~\cite{Sun2025Anomalous}.
     (\ref{eq:asymex_z3_phase_telescope}) gives
     $U_N^3\ket{t}=\ket{t}$. Since $V_N=U_N^{-1}$, it follows that
     $V_N=U_N^2$.
-\end{proof}
+\end{remark}
 
 \begin{theorem}[Normality of the three blocks up to normalization]
     \label{thm:asymex_z3anomalous_normal}
@@ -682,17 +690,25 @@ pair blocks, each compressing onto one group tensor.
 \begin{proof}
     \leanok
     \uses{thm:asymex_z3anomalous_defect_sum, thm:asymex_z3_physical_kernels,
-        lem:asymex_z3_physical_cube}
+        lem:asymex_z3_physical_cube, thm:asymex_z3anomalous_group_law,
+        thm:mpug_finite_group_unitary_average_projection,
+        thm:asymex_z3anomalous_defect_square}
     Theorem~\ref{thm:asymex_z3anomalous_defect_sum} and
-    Theorem~\ref{thm:asymex_z3_physical_kernels}
-    and Lemma~\ref{lem:asymex_z3_physical_cube} give the formula for $P_L$.
-    Since $U_L^3=\Id$, each power $\Id,U_L,U_L^2$ occurs three times
-    in $(\Id+U_L+U_L^2)^2$, so $P_L^2=P_L$.
-    Also $U_L^\dagger=U_L^2$, hence $P_L^\dagger=P_L$.
-    The identities $U_LP_L=P_L$ and
-    $P_L\psi=\psi$ whenever $U_L\psi=\psi$ identify its range.
-    Neither $X$ nor $X^2$ fixes a configuration when $L>0$.
-    Thus $\tr U_L=\tr U_L^2=0$, and
+    Lemma~\ref{lem:asymex_z3_physical_cube} give
+    $P_L=(\Id+U_L+U_L^2)/3$, and
+    Theorem~\ref{thm:asymex_z3_physical_kernels} gives its basis action.
+    By Theorem~\ref{thm:asymex_z3anomalous_group_law} and
+    Theorem~\ref{thm:asymex_z3_physical_kernels}, the operators
+    $\Id,U_L,U_L^\dagger$ form a unitary representation of $\Z_3$, and
+    $P_L$ is its normalized group average. By
+    Theorem~\ref{thm:mpug_finite_group_unitary_average_projection},
+    $P_L$ is an orthogonal projector.
+    Since $U_L^3=\Id$, $U_LP_L=P_L$, and
+    $P_L\psi=\psi$ whenever $U_L\psi=\psi$; these identify its range.
+    The identity $O_L(A)^2=3O_L(A)$ is $P_L^2=P_L$ multiplied by nine,
+    and is also Theorem~\ref{thm:asymex_z3anomalous_defect_square}.
+    Neither $X$ nor $X^{-1}$ fixes a configuration when $L>0$.
+    Thus $\tr U_L=\tr U_L^\dagger=0$, and
     $\rank P_L=\tr P_L=3^L/3$.
 \end{proof}
 
