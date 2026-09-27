@@ -787,6 +787,123 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
     physical index, and relabelling preserves $G$-injectivity.
 \end{proof}
 
+For $G$-injective tensors the parent-Hamiltonian argument runs as in the
+injective case, with the left inverses replaced by left inverses up to the
+twirl $\sigma$
+\cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}. In the next two
+theorems $A$ and $B$ are $G$-injective for the same representation $U$; three-leg
+tensors $M$, $N$ carry one physical and two virtual legs, and the operators $X$,
+$M$, $N$, $U_g$ sit on a bond.
+
+\begin{lemma}[Twirling the closing operator]%
+    \label{lem:peps_mps_g_injective_twirl}
+    \lean{TNLean.PEPS.mpsSiteMap_averageMap,
+        TNLean.PEPS.averageMap_mul_of_conj_eq,
+        TNLean.PEPS.mul_comm_of_conj_eq,
+        TNLean.PEPS.concatTensor_conj_eq}
+    \leanok
+    \uses{def:peps_mps_g_injective}
+    If $U_gC^iU_g^{-1}=C^i$ for all $i$ and $g$, then
+    $\tr[C^i\sigma(X)]=\tr[C^iX]$ for every operator $X$: an operator closing
+    an invariant tensor may be replaced by its twirl without changing the
+    state. Moreover $\sigma(YZ)=\sigma(Y)Z$ whenever $Z$ commutes with every
+    $U_g$, and the concatenation of two invariant tensors is invariant
+    \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_mps_g_injective_source_form, thm:peps_group_averaging}
+    Invariance of $C$ is invariance of the map $X\mapsto(\tr[C^iX])_i$ under
+    conjugation, and an invariant map does not see the average over the
+    group. For the second claim, $U_gYZU_g^{-1}=(U_gYU_g^{-1})Z$.
+\end{proof}
+
+\begin{lemma}[The concatenated left inverse on traces]%
+    \label{lem:peps_mps_g_injective_left_inverse_traces}
+    \lean{TNLean.PEPS.concatLeftInverse_apply_trace_mul}
+    \leanok
+    \uses{thm:peps_mps_g_injective_concatenation}
+    Let $L_A$ be any linear map and let $L_B\mathcal{P}(B)=\sigma$. The map
+    $L_C\ket{j,k}=|G|\,(L_A\ket{k})\,\Delta\,(L_B\ket{j})$ of the concatenation
+    $C^{jk}=B^jA^k$ sends the vector $(\tr[B^jY_k])_{j,k}$ to
+    $|G|\sum_k(L_A\ket{k})\,\Delta\,\sigma(Y_k)$, for every family of
+    operators $Y_k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Summing over $j$ first, $\sum_j\tr[B^jY_k]\,L_B\ket{j}
+        =L_B\mathcal{P}(B)Y_k=\sigma(Y_k)$.
+\end{proof}
+
+\begin{theorem}[Intersection property for $G$-injective tensors]%
+    \label{thm:peps_mps_g_injective_intersection}
+    \lean{TNLean.PEPS.IsGInjective.intersection_property}
+    \leanok
+    \uses{thm:peps_mps_g_injective_source_form,
+        thm:peps_mps_g_injective_concatenation}
+    \begin{align*}
+        \Big\{\sum_{ijk}\tr[A^iB^jM^k]\ket{ijk}\ \Big|\ M\Big\}\cap
+        \Big\{\sum_{ijk}\tr[N^iB^jA^k]\ket{ijk}\ \Big|\ N\Big\}
+        =\Big\{\sum_{ijk}\tr[A^iB^jA^kX]\ket{ijk}\ \Big|\ X\Big\}
+    \end{align*}
+    \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_mps_g_injective_twirl,
+        lem:peps_mps_g_injective_left_inverse_traces}
+    The right-hand side lies in both sets, with $M^k=A^kX$ and $N^i=XA^i$.
+    Conversely, let $\tr[A^iB^jM^k]=\tr[N^iB^jA^k]$ for all $i,j,k$. Fix
+    left inverses with $L_A\mathcal{P}(A)=L_B\mathcal{P}(B)=\sigma$, and let
+    $L_C$ be the left inverse of $C^{jk}=B^jA^k$, so that
+    $L_C\mathcal{P}(C)=\sigma$. For fixed $i$ the vector
+    $(\tr[B^jA^kN^i])_{j,k}$ equals $(\tr[B^jM^kA^i])_{j,k}$, and applying
+    $L_C$ gives
+    \begin{align*}
+        \sigma(N^i)=|G|\sum_k(L_A\ket{k})\,\Delta\,\sigma(M^kA^i)=XA^i,
+        \qquad X=|G|\sum_k(L_A\ket{k})\,\Delta\,\sigma(M^k),
+    \end{align*}
+    because $A^i$ commutes with every $U_g$. Since $C$ is invariant,
+    $\tr[N^iB^jA^k]=\tr[B^jA^k\sigma(N^i)]=\tr[A^iB^jA^kX]$.
+\end{proof}
+
+\begin{theorem}[Closure property for $G$-injective tensors]%
+    \label{thm:peps_mps_g_injective_closure}
+    \lean{TNLean.PEPS.IsGInjective.eq_sum_of_closure,
+        TNLean.PEPS.IsGInjective.closure_property}
+    \leanok
+    \uses{thm:peps_mps_g_injective_source_form,
+        thm:peps_mps_g_injective_concatenation, def:peps_delta_operator}
+    \begin{align*}
+        \Big\{\sum_{ij}\tr[B^iA^jM]\ket{ij}\ \Big|\ M\Big\}\cap
+        \Big\{\sum_{ij}\tr[B^iNA^j]\ket{ij}\ \Big|\ N\Big\}
+        =\Big\{\sum_g\lambda_g\sum_{ij}\tr[B^iA^jU_g]\ket{ij}\ \Big|\
+        \lambda_g\in\C\Big\}.
+    \end{align*}
+    A vector in the intersection, given by $M$ and $N$, has
+    $\lambda_g=\tr[U_{g^{-1}}\sigma(N)\Delta]$
+    \cite[Section~``Parent Hamiltonians'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_mps_g_injective_twirl,
+        lem:peps_mps_g_injective_left_inverse_traces}
+    The right-hand side lies in both sets, with $M=N=\sum_g\lambda_gU_g$,
+    since $U_g$ commutes with $A^j$. Conversely, let
+    $\tr[B^iA^jM]=\tr[B^iNA^j]$ for all $i,j$, and let $L_C$ be the left
+    inverse of $C^{ij}=B^iA^j$. Applying $L_C$ to the vector
+    $(\tr[B^iNA^j])_{i,j}$, and then the identity
+    $\sum_j(L_A\ket{j})\,Y\,A^j=\frac{1}{|G|}\sum_h\tr[U_{h^{-1}}Y]\,U_h$ with
+    $Y=\Delta\sigma(N)$,
+    \begin{align*}
+        \sigma(M)=|G|\sum_j(L_A\ket{j})\,\Delta\,\sigma(N)\,A^j
+        =\sum_h\tr[U_{h^{-1}}\Delta\sigma(N)]\,U_h .
+    \end{align*}
+    Since $C$ is invariant, $\tr[B^iA^jM]=\tr[B^iA^j\sigma(M)]$, and
+    $\tr[U_{h^{-1}}\Delta\sigma(N)]=\tr[U_{h^{-1}}\sigma(N)\Delta]$ because
+    $\sigma(N)$ commutes with $U_{h^{-1}}$.
+\end{proof}
+
 The source asks for a tensor that is $G$-isometric with respect to the
 left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its
