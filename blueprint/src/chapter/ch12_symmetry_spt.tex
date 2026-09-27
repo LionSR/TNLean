@@ -386,9 +386,11 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
 
 \begin{proof}\leanok
     \uses{thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted, thm:anticommuting_physical_obstruction}
-    Fix $N$ with $\ket{\psi_N(A)}\ne0$ and write
-    $U(g)^{\otimes N}\ket{\psi_N(A)}=c(g)\ket{\psi_N(A)}$.  Then
-    $c(gh)=c(g)c(h)$, so $c$ is trivial on commutators.  Both $i\sigma_x$ and
+    Fix a length $N$.  If $\ket{\psi_N(A)}=0$, every twist leaves it
+    unchanged.  Otherwise write
+    $U(g)^{\otimes N}\ket{\psi_N(A)}=c_N(g)\ket{\psi_N(A)}$; then
+    $c_N(gh)=c_N(g)c_N(h)$, so $c_N$ is trivial on commutators.  Thus at every
+    length $N$ each commutator leaves $\ket{\psi_N(A)}$ unchanged.  Both $i\sigma_x$ and
     $i\sigma_z$ are commutators in $\mathrm{SU}(2)$:
     $i\sigma_x=(i\sigma_z)b_1(i\sigma_z)^{-1}b_1^{-1}$ and
     $i\sigma_z=(i\sigma_x)b_2(i\sigma_x)^{-1}b_2^{-1}$ with
