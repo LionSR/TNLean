@@ -769,10 +769,13 @@ not a discrepancy between the two definitions of the anomaly.
         Z3Anomalous.orderOf_z3Gen,
         Z3Anomalous.cyclicInvariant_omega_z3_eq_cyclicCocycle_two,
         Z3Anomalous.not_cohomologousTo_cyclicCocycle_omega_z3,
-        Z3Anomalous.domainWallPhase_omega_z3}
+        Z3Anomalous.domainWallPhase_omega_z3,
+        Z3Anomalous.cohomologousTo_cyclicCocycle_two_omega_z3,
+        Z3Anomalous.anomalyClass_family_eq_cyclicCocycle_two}
     \leanok
     \uses{thm:asymex_z3anomalous_anomaly_class,
-        thm:asymex_group_cocycle_cyclic_domain_wall}
+        thm:asymex_group_cocycle_cyclic_domain_wall,
+        thm:asymex_group_cocycle_cyclic_classes}
     For every choice of fusion tensors, the anomaly three-cochain
     $\omega_{\mathrm{an}}$ of the family has, at the generator $g$, the same
     cyclic invariant as the cocycle $\omega_2$ of
@@ -780,20 +783,27 @@ not a discrepancy between the two definitions of the anomaly.
     cohomologous to $\omega_j$ for $j\not\equiv2\pmod3$. Its domain-wall phase
     is $P_g(\omega_{\mathrm{an}})=e^{2\pi\mathrm{i}/3}$, the entry $j=2$,
     $a=1$ of the table of
-    Theorem~\ref{thm:asymex_group_cocycle_cyclic_domain_wall}.
+    Theorem~\ref{thm:asymex_group_cocycle_cyclic_domain_wall}. The
+    three-cochain $\omega_{\mathrm{an}}$ is cohomologous to $\omega_2$, so the
+    anomaly class of the family in $H^3(\Z_3,\C^\times_{\mathrm{triv}})$ is
+    $[\omega_2]$.
 \end{corollary}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_z3anomalous_anomaly_class,
         thm:asymex_group_cocycle_cyclic_domain_wall,
+        thm:asymex_group_cocycle_cyclic_classes,
         def:asymex_group_cocycle_domain_wall_phase}
     The primitive cube root $\omega$ equals $e^{2\pi\mathrm{i}/3}=\zeta$, so
     the invariant $\omega^2$ of
     Theorem~\ref{thm:asymex_z3anomalous_anomaly_class} is $\zeta^2$, the
     cyclic invariant of $\omega_2$ at $g$. The classes $\omega_j$ are
     separated by this invariant, and $P_g=I_{g,3}^{-1}=\zeta^{-2}=\zeta$
-    because $g$ has order three.
+    because $g$ has order three. The cyclic invariant at the generator
+    determines the class by
+    Theorem~\ref{thm:asymex_group_cocycle_cyclic_classes}, so
+    $\omega_{\mathrm{an}}$ is cohomologous to $\omega_2$.
 \end{proof}
 
 \subsection{The condensation defect}%
