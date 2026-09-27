@@ -683,8 +683,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   Under the added hypothesis that the `q`-site states of distinct blocks are
   orthogonal, the block form holds for multiplicity one and part (ii) is proved
   with no condition `q = o(N)`.
-- `mswc24_decaying_correlations_windowed_connected.tex` records that Lemma 2
-  of the Supplemental Material holds in modulus for the source's
+- `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
+  false-source note for Lemma 2 of the Supplemental Material. It records that
+  the lemma holds in modulus for the source's
   observables, whose one-point functions vanish exactly at every `N ≥ s`, but that
   its printed real inequality fails for nonreal and for negative `λ₂` and its Hermitian reading
   fails in general, since the limit correlator of Hermitian observables is a
