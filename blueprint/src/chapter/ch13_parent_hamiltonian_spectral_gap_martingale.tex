@@ -2384,8 +2384,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:open_hamiltonian_kernel_le_ground_space}
     \lean{MPSTensor.ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective,
-        lem:open_parent_hamiltonian_window_ground_space}
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
     $L_0$-block-injective, then
     \begin{align}
@@ -2396,21 +2395,17 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_zero_local_terms, lem:open_parent_hamiltonian_window_ground_space, lem:mem_ground_space_es, rem:contiguous_window_operators, rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions, thm:normal_open_chain_range_reduction}
+    \uses{lem:open_parent_hamiltonian_window_ground_space, lem:mem_ground_space_es, rem:contiguous_window_operators, rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
     In the following display, $s$ ranges over all starts satisfying
     $s+L_0+1\leq N$, and $\tau$ ranges over all complementary configurations.
-    The three ingredients give
+    The window restriction and the open-chain intersection theorem give
     \begin{align}
         H^{\mathrm{open}}_{N,L_0+1}(A)v=0
          & \Longrightarrow
-        \bigl(\forall s,\ h_{s,\mathrm{ES}}(A,L_0+1)v=0\bigr)
-        \Longrightarrow
         \bigl(\forall s,\tau,\
-        \Res^\tau_{s,L_0+1}v\in G_{L_0+1}^{\mathrm{ES}}(A)\bigr)
+        \Res^\tau_{s,L_0+1}v\in G_{L_0+1}(A)\bigr)
         \Longrightarrow v\in G_N^{\mathrm{ES}}(A).
     \end{align}
-    The middle implication is the local kernel criterion, and the last is the
-    open-chain intersection theorem.
 \end{proof}
 
 \begin{theorem}[Ground-state property of the compatible open chain]
