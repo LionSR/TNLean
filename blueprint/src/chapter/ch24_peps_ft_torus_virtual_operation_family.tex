@@ -253,15 +253,16 @@ correspondence in the proof sketch of the two-dimensional corollary
     The end members of the family are
     \begin{align}
         C_0(X)       & =I_{B,W_0,e,X^{\mathsf T}},
-                     &
+        \label{eq:peps_staircase_first} \\
         C_{L+K-1}(X) & =I_{B,W_{L+K-1},e,X}.
-        \notag
+        \label{eq:peps_staircase_last}
     \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
-    The first identity is the $j=0$ case of the definition.  Since $K>0$,
-    the last index satisfies $L\le L+K-1$, which gives the second identity.
+    Identity~(\ref{eq:peps_staircase_first}) is the $j=0$ case of
+    Definition~\ref{def:peps_staircase_virtual_operation_insert}.  Since $K>0$,
+    the last index satisfies $L\le L+K-1$, which yields~(\ref{eq:peps_staircase_last}).
 \end{proof}
 
 \begin{theorem}[Common state of the staircase virtual-operation family]%

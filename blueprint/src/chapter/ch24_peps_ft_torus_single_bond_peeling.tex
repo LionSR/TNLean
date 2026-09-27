@@ -250,16 +250,16 @@
         \sum_{\mu\in K} C_{1,\mu}\otimes A_{2,\mu}
         =
         \sum_{\nu\in K} A_{1,\nu}\otimes C_{2,\nu}.
-        \notag
+        \label{eq:peps_open_contraction_id}
     \end{align}
     Then there is a unique matrix $X\in\MN{|K|}$ such that
     \begin{align}
         C_{1,\nu}
          & =\sum_{\mu\in K} A_{1,\mu}X_{\mu,\nu},
-         &
+        \label{eq:peps_c1_expansion} \\
         C_{2,\mu}
          & =\sum_{\nu\in K} X_{\mu,\nu}A_{2,\nu}.
-        \notag
+        \label{eq:peps_c2_expansion}
     \end{align}
     Thus the two end operations are obtained by inserting the same virtual
     operation $X$ on their common bond.  No injectivity is required of the
@@ -269,12 +269,12 @@
 \begin{proof}
     \leanok
     Apply a dual functional to the linearly independent family
-    $\{A_{2,\mu}\}$ in the open contraction identity.  This expresses every
+    $\{A_{2,\mu}\}$ in~(\ref{eq:peps_open_contraction_id}) to express
     $C_{1,\nu}$ as a linear combination of the $A_{1,\mu}$ with a coefficient
-    matrix $X$.  Substitution into the same identity and linear independence
-    of $\{A_{1,\mu}\}$ gives the second displayed relation with the same
-    matrix.  Linear independence of the first genuine family also makes the
-    coefficient matrix unique.
+    matrix $X$, yielding~(\ref{eq:peps_c1_expansion}).
+    Substitution into~(\ref{eq:peps_open_contraction_id}) and linear independence
+    of $\{A_{1,\mu}\}$ yields~(\ref{eq:peps_c2_expansion}) with the same
+    matrix.  Linear independence of $\{A_{1,\mu}\}$ also makes $X$ unique.
 \end{proof}
 
 \begin{definition}[End operations realizing a virtual matrix]
