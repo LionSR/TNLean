@@ -65,6 +65,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   character `φ`, but on-site symmetry and the realization of the class of `ω`
   only for `φ = 1`, because the formal symmetry predicate does not allow the
   global phase `φ(g)^N`; symmetry up to a character would remove the restriction.
+- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction) records that the
+  source's construction covers groups combining on-site, time-reversal and
+  reflection symmetries, with cocycles twisted by `α` and `β`, while the
+  formalized fixed point and its symmetry results treat only a linear on-site
+  action with untwisted cocycles.
 
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 

@@ -59,6 +59,15 @@ the twist identity `twistedTensor_sptFixedPointTensor` is proved, since
 vector on `N` sites by `φ(g)^N`. Documented in
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 
+**Scope restriction (on-site symmetries):** the source's group may combine on-site,
+time-reversal and reflection symmetries, with cocycles in the twisted groups
+`H^2_α(G, U(1))` and `H^1_β(G, U(1))`, while `sptFixedPointAction`,
+`twistedTensor_sptFixedPointTensor`, `sptFixedPointTensor_isOnSiteSymmetric`,
+`cohomologousTo_of_sptFixedPointTensor` and `exists_virtualRep_sptFixedPointTensor`
+treat a linear on-site action with an untwisted factor system and character; time
+reversal and reflection are not represented. Documented in
+`docs/paper-gaps/rmp_spt_fixed_point_onsite_scope.tex`.
+
 ## Main definitions
 
 * `MPSTensor.sptFixedPointTensor` : the letters `D^{-1/2} |a⟩⟨b|`
