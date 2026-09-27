@@ -1,0 +1,74 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Domain Walls: Nonzero Tensors, Phases and Blocked Local Actions}
+\author{}
+\date{2026-09-27}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+Ref.~\cite{GarreRubioSchuch2024DomainWall} models the excitations between two
+symmetry-broken ground states $A_x$ and $A_y$ of a matrix product unitary
+symmetry by domain-wall tensors $e_{xy}$, and describes the symmetry action on
+them locally: the action tensors of $g$ on the two regions, applied to $O_g$
+acting on the chain $A_x\,e_{xy}\,A_y$, return $B^g_{x,y}$ times the chain
+$A_{gx}\,e_{gx,gy}\,A_{gy}$.\footnote{Source traceability:
+\path{Papers/2405.00439/MPU-DW.tex}, lines 643--838 (the $\mathbb Z_2$ case,
+\texttt{SingleDW}, \texttt{DWopmps}, \texttt{eq:localcdef}) and lines
+1889--1933 (the finite-group case, \texttt{eq:localcdefG}, \texttt{PentLB}).}
+Two readings of these definitions are adopted as conventions.
+
+\section{Nonzero domain walls and phases}
+
+The source never states that a domain-wall tensor is nonzero, nor that the
+scalars $c_{AB}$, $c_{BA}$ and $B^g_{x,y}$ are nonzero. Read literally, the
+zero tensor is a domain wall carried to itself with every phase, and a zero
+phase is allowed for a nonzero wall. Neither is intended: the tensors model
+excitations, and the scalars are called phases and phase factors (lines 712,
+1656 and 1894). The formalization requires the walls to be nonzero and the
+phases to be nonzero wherever a scalar identity between phases is derived; for
+the families of domain walls of Section~IV both conditions are part of the
+definition.\footnote{Formal declarations:
+\leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq},
+\leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one}.}
+Without a nonzero wall no phase is determined, so the literal reading has no
+content to formalize.
+
+\section{Blocked local actions}
+
+The source draws the local action at the renormalization fixed point, with
+one site of $A_x$ and one site of $A_y$ beside the wall (lines 774--832), and
+states that away from the fixed point the same analysis applies after
+blocking (line 1358). The formalization states the local action for all words
+of $A_x$ and $A_y$ longer than a fixed buffer. The buffered form is needed even
+for the fixed-point example of the source: for the CZX symmetry and the
+product states $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N}$, the wall
+$e_{BA}=-|1\rangle$ acquires its phase $c_{BA}=-1$ only with at least one site
+to the right of the wall.\footnote{Formal declarations:
+\leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction},
+\leanid{CZXCompression.czx_isDomainWallAction_ba}.}
+
+\textbf{Verdict: resolved local fix.} Domain walls are nonzero, their phases
+are nonzero, and the local action holds against blocked regions; with these
+readings the source's relations $c_{AB}c_{BA}=L_A/L_B=\omega$, \texttt{PentLB}
+and \texttt{Intequiv} are proved.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -57,10 +57,15 @@ argument is the identity, this is `ω(g,g,g)`.
 * `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV_eq_omega`:
   `U |ψ(A-B-A)⟩ = ω |ψ(B-A-B)⟩`.
 
-The blocks are normal rather than injective, and the phases are not assumed unimodular. A
-domain wall is nonzero, and its phases are nonzero, where the proofs need it: the reading of the
-source's domain walls as excitations and of `c_{AB}`, `c_{BA}` as phase factors (lines 712 and
-1656). The group family need not have the bond-one identity tensor of the source, so the
+The blocks are normal rather than injective, and the phases are not assumed unimodular.
+
+**Local fix (nondegenerate domain walls, blocked local action):** a domain wall is nonzero and
+its phases are nonzero where a phase identity is derived (the source's walls are excitations and
+`c_{AB}`, `c_{BA}` are phase factors, lines 712 and 1656), and the local action
+`IsDomainWallAction` holds against regions longer than a buffer rather than at one site of the
+fixed point; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+
+The group family need not have the bond-one identity tensor of the source, so the
 identity element enters through its L-symbols `L_{1,1}` and through `ω(g,1,g)`, which are one in
 the source's convention.
 
