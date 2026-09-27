@@ -276,7 +276,6 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \label{lem:involution_index_of_twice}
     \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_twice, MPSTensor.mul_map_star_eq_of_eq_smul, MPSTensor.mul_map_star_eq_of_gauges}
     \leanok
-    \uses{lem:gauge_phase_unique_normal}
     Let $A$ be normal with $D\ge1$ and let $X$ be unitary.  If
     $A^i=c\,(X\bar X)^\dagger A^i(X\bar X)$ for all $i$, then $X\bar X=\pm\Id$.
     If two unitaries $X,X'$ satisfy
@@ -296,7 +295,6 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \label{thm:time_reversal_index}
     \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge, MPSTensor.mul_map_star_eq_of_timeReversal_gauges}
     \leanok
-    \uses{lem:involution_index_of_twice}
     Let $A$ be normal with $D\ge1$, let $P$ satisfy $P\bar P=\Id$, and let $X$ be
     unitary with $\sum_jP_{ij}\bar A^j=\zeta\,X^\dagger A^iX$ for all $i$.  Then
     $X\bar X=\pm\Id$, and the sign is the same for every unitary $X$ with this
@@ -315,7 +313,6 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \label{thm:reflection_index}
     \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_reflection_gauge, MPSTensor.mul_map_star_eq_of_reflection_gauges}
     \leanok
-    \uses{lem:involution_index_of_twice}
     Let $A$ be normal with $D\ge1$ and let $X$ be unitary with
     $(A^i)^{T}=\zeta\,X^\dagger A^iX$ for all $i$.  Then $X\bar X=\pm\Id$, and the
     sign is the same for every unitary $X$ with this property
@@ -334,7 +331,6 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \label{thm:kramers_obstruction}
     \lean{MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one, MPSTensor.pauliY_mul_map_star, MPSTensor.not_wignerTimeReversal_gauge, MPSTensor.not_sameMPV_wignerTimeReversal_of_isInjective}
     \leanok
-    \uses{lem:gauge_phase_unique_normal}
     Let $P$ satisfy $P\bar P=-\Id$, as $\sigma_y$ does.  No normal tensor with
     $D\ge1$ admits $X\in\GL_{D}(\C)$ and $\zeta\in\C$ with
     $\sum_jP_{ij}\bar A^j=\zeta\,X^{-1}A^iX$ for all $i$.  In particular no normal
@@ -357,7 +353,6 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \label{thm:anticommuting_physical_obstruction}
     \lean{MPSTensor.not_anticommuting_gauges_of_isNormal}
     \leanok
-    \uses{lem:gauge_phase_unique_normal}
     Let $P,Q$ be physical matrices with $PQ=-QP$.  No normal tensor with $D\ge1$
     satisfies $\sum_jP_{ij}A^j=\zeta\,XA^iX^{-1}$ and
     $\sum_jQ_{ij}A^j=\eta\,YA^iY^{-1}$ for all $i$, with $X,Y\in\GL_{D}(\C)$ and
@@ -375,7 +370,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \label{thm:spin_half_su2_obstruction}
     \lean{MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal, MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal, MPSTensor.mpv_twistedTensor, MPSTensor.mpv_twistedTensor_eq_of_mul_eq, MPSTensor.blockKron_smul}
     \leanok
-    \uses{def:on_site_symmetric, thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted, thm:anticommuting_physical_obstruction}
+    \uses{def:on_site_symmetric}
     No normal tensor $A$ on a spin-$\tfrac12$ site with $D\ge1$ is invariant up to
     phases under the defining representation of $\mathrm{SU}(2)$: it is not the
     case that for every $g$ and every $N$ the vector $U(g)^{\otimes N}\ket{\psi_N(A)}$
