@@ -149,3 +149,60 @@ of the virtual projective representation.
     that separates SPT phases is the cohomology class of the virtual
     representation cocycle (Theorem~\ref{thm:spt_classification}).
 \end{remark}
+
+\subsection{Renormalization fixed points of SPT phases}
+\label{sec:spt_fixed_points}
+
+Within each SPT phase a representative with zero correlation length can be built
+from the cocycle data \cite[Section~III.A]{Cirac2021Matrix}.  The tensor printed in
+the source commutes with its own gauges and is not normal; the construction below
+is the dimer fixed point that the printed claims describe
+\cite{gap:rmp_spt_fixed_point_tensor}.
+
+\begin{definition}[SPT fixed-point tensor and its symmetry]
+    \label{def:spt_fixed_point_tensor}
+    \lean{MPSTensor.sptFixedPointTensor, MPSTensor.sptFixedPointAction, MPSTensor.sptGauge, MPSTensor.sptKron}
+    \leanok
+    \uses{def:projective_rep}
+    Let $\rho$ be a projective representation of $G$ on $\C^D$ with factor system
+    $\omega$, let $\phi$ be a character of $G$, and put $W_g=\rho(g^{-1})$.  The
+    SPT fixed-point tensor has physical space $\C^D\otimes\C^D$ and letters
+    $A^{(a,b)}=D^{-1/2}\ket{a}\bra{b}$, and $G$ acts on the physical space by
+    $U(g)=\phi(g)\,W_g^{T}\otimes W_g^{-1}$.  The factor system cancels between the
+    two tensor factors, so $U$ is a representation.
+\end{definition}
+
+\begin{theorem}[The SPT fixed point has zero correlation length]
+    \label{thm:spt_fixed_point_transfer}
+    \lean{MPSTensor.transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isTransferIdempotent, MPSTensor.finrank_range_transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isInjective, MPSTensor.sptFixedPointTensor_isNormal}
+    \leanok
+    \uses{def:spt_fixed_point_tensor, def:transfer_map, def:injective}
+    The transfer map of the SPT fixed-point tensor is
+    $X\mapsto D^{-1}\tr(X)\,\Id$, an idempotent of rank one, and the tensor is
+    injective \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    $\sum_{a,b}\ket{a}\bra{b}X\ket{b}\bra{a}=\tr(X)\,\Id$; the letters are nonzero
+    multiples of the matrix units.
+\end{proof}
+
+\begin{theorem}[The SPT fixed point realizes the class of $\omega$]
+    \label{thm:spt_fixed_point_class}
+    \lean{MPSTensor.twistedTensor_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isOnSiteSymmetric, MPSTensor.cohomologousTo_of_sptFixedPointTensor, MPSTensor.exists_virtualRep_sptFixedPointTensor}
+    \leanok
+    \uses{def:spt_fixed_point_tensor, def:on_site_symmetric, thm:virtual_rep_injective, thm:cocycle_gauge_independence, thm:spt_fixed_point_transfer}
+    For every $g$ and $i$, $\sum_jU(g)_{ij}A^j=\phi(g)\,W_gA^iW_g^{-1}$.  For
+    $\phi=1$ the tensor has MPV-family invariance under $U$, and every virtual
+    projective representation of this symmetry has a factor system cohomologous to
+    $\omega$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:cocycle_gauge_independence, thm:virtual_rep_injective}
+    The first identity is checked entry by entry:
+    $W_g\ket{a}\bra{b}W_g^{-1}=\sum_{a',b'}(W_g)_{a'a}(W_g^{-1})_{bb'}
+        \ket{a'}\bra{b'}$.  With $\phi=1$ the gauges $\rho(g^{-1})$ realize the
+    symmetry, so Theorem~\ref{thm:cocycle_gauge_independence} makes every other
+    virtual representation cohomologous to $\rho$.
+\end{proof}

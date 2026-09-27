@@ -41,6 +41,16 @@ For the Kitaev chain of arXiv:2011.12127, Appendix A:
   the decomposition into two injective bond-dimension-one states), and
   that the fermionic injectivity claim awaits graded tensor networks.
 
+For the SPT fixed points of arXiv:2011.12127, Section III.A:
+
+- `rmp_spt_fixed_point_tensor.tex` (false source claim) records that the
+  printed zero-correlation-length tensor for a 2-cocycle and a 1-cocycle has
+  letters commuting with the printed gauges, so it is not normal and its
+  transfer map is not of rank one, and that the formalized fixed point is the
+  dimer tensor `D^{-1/2}|a⟩⟨b|` with the physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`,
+  which realizes the prescribed class and gives the blocked cluster tensor for
+  `Z₂ × Z₂`.
+
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
 - `rmp_peps_examples_small_torus.tex` records that the cluster, CZX, AKLT

@@ -293,6 +293,26 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
     the cluster state realizes a non-trivial SPT phase.
 \end{theorem}
 
+\begin{theorem}[The cluster state is the $\Z_2\times\Z_2$ SPT fixed point]
+    \label{thm:cluster_spt_fixed_point}
+    \lean{MPSTensor.clusterSPTUnitary, MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor, MPSTensor.clusterSPTUnitary_mul_conjTranspose, MPSTensor.isNontrivialClass_of_clusterSPTFixedPoint}
+    \leanok
+    \uses{def:spt_fixed_point_tensor, thm:spt_fixed_point_class, thm:cluster_nontrivial_spt}
+    Let $B$ be the SPT fixed-point tensor of the projective representation of
+    $\Z_2\times\Z_2$ by $\sigma_z$ and $\sigma_x$.  The length-$2$ blocked
+    cluster-state tensor satisfies $A^i=\sum_jV_{ij}B^j$ for a unitary $V$ on the
+    four-dimensional physical space, and every virtual projective representation of
+    $B$ has a non-trivial class \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:spt_fixed_point_class, thm:cluster_nontrivial_spt}
+    Take $V_{i,(a,b)}=\sqrt2\,(A^i)_{ab}$; the four blocked letters are orthogonal
+    with $\tr(A^iA^{j\dagger})=\tfrac12\delta_{ij}$, so $V$ is unitary.  The class
+    statement follows from Theorem~\ref{thm:spt_fixed_point_class} and the
+    non-triviality of the cluster factor system.
+\end{proof}
+
 \begin{theorem}[The cluster state has string order under its $\Z_2 \times \Z_2$ symmetry]\label{thm:cluster_string_order}
     \lean{MPSTensor.cluster_hasStringOrder}
     \leanok

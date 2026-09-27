@@ -19,6 +19,7 @@ import TNLean.MPS.Examples.CZX
 import TNLean.MPS.Examples.Cluster
 import TNLean.MPS.Examples.ClusterParentHamiltonian
 import TNLean.MPS.Examples.ClusterReview
+import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState
 import TNLean.MPS.Examples.EvenParity
 import TNLean.MPS.Examples.Fibonacci
