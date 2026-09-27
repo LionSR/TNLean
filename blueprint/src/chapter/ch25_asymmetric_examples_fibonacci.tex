@@ -782,7 +782,7 @@ These vectors are not normalized unless this is stated explicitly.
 
 \begin{proof}
     \leanok
-    \uses{lem:asymex_fib_vacuum, thm:asymex_fib_state_action,
+    \uses{thm:asymex_fib_state_action, thm:asymex_fib_unit,
         thm:asymex_fib_anomaly_nim_rep}
     The bond-one trace is $\prod_v\delta_{x_v1}$.
     For the chain, put
@@ -797,8 +797,12 @@ These vectors are not normalized unless this is stated explicitly.
     zero is followed by a one, giving $n_0(x)$ factors of $\sigma$.
     Each pair $10$ contributes $1$, and each pair $11$ contributes
     $-\sigma^2$. This proves~(\ref{eq:asymex_fib_chain_amplitude}).
-    Both vectors have admissible support, so
-    Lemma~\ref{lem:asymex_fib_vacuum} shows that $P_N$ fixes them.
+    The operator $P_N=O_N(A_1)$ fixes the product vector by
+    Theorem~\ref{thm:asymex_fib_state_action}. The chain vector is
+    $O_N(A_\tau)\ket{V^{(N)}(A)}$ by the same theorem, and the unit law
+    $O_N(A_1)O_N(A_\tau)=O_N(A_\tau)$ of
+    Theorem~\ref{thm:asymex_fib_unit} shows that $P_N$ fixes it
+    (Theorem~\ref{thm:asymex_fib_anomaly_nim_rep}).
     Summing squared amplitudes proves~(\ref{eq:asymex_fib_chain_norm}).
     The all-one amplitude is $(-\sigma^2)^N\neq0$.
 \end{proof}
