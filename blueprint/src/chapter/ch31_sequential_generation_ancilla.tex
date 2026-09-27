@@ -786,7 +786,8 @@ bound concerns the bond $k$ between the sites $k-1$ and $k$.
 \begin{proof}
     \leanok
     \uses{thm:seqanc_sweep_obc, thm:seqanc_unitary_extension,
-        thm:seqanc_block_congr, thm:seqanc_boundary_coords}
+        thm:seqanc_block_congr, thm:seqanc_boundary_coords,
+        thm:seqanc_bond_bound_pos}
     For $N=0$ take $\ket{\varphi_I}=\psi()\ket{0}$ and
     $\ket{\varphi_F}=\ket{0}$. Otherwise apply
     Theorem~\ref{thm:seqanc_sweep_obc} with the scalar $c^{-1}$: this gives
@@ -1027,8 +1028,9 @@ bound concerns the bond $k$ between the sites $k-1$ and $k$.
 \begin{proof}
     \leanok
     \uses{thm:seqanc_sweep, thm:seqanc_assemble, thm:seqanc_coeff_corner,
-        thm:seqanc_norm,
-        thm:seqanc_block_congr, thm:seqanc_unitary_extension}
+        thm:seqanc_norm, thm:seqanc_block_congr, thm:seqanc_unitary_extension,
+        thm:seqanc_bond_bound_pos, thm:seqanc_boundary_coords,
+        thm:seqanc_eval_last}
     With $A^{[k]}_{i,\beta\alpha}=\bra{i,\beta}U^{[k]}\ket{\alpha,0}$ the
     recursion for $\chi_k$ gives
     $\psi(\sigma)=\bigl(A^{[N-1]}_{\sigma_1}\cdots
