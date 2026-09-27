@@ -1266,7 +1266,7 @@ $A^\mu=v(\mu)^\dagger$.
         \label{eq:fnw_boundary_inner_source}
     \end{align}
     These are the two forms of the scalar-product identity in
-    \cite[Equation~(5.8)]{Fannes1992Finitely}. The second equality preserves
+    \cite[Equation~(5.8)]{Fannes1992Finitely}. Identity~(\ref{eq:fnw_boundary_inner_source}) preserves
     the source orientation $B^\dagger E_{ik}C$.
 \end{theorem}
 
@@ -2433,9 +2433,9 @@ existential rate-dependent one.  Documented in
         \ran\Gamma^{\mathrm{left}}_{K+l,1}=\mathcal U_{K+l}(A),
         \label{eq:openchain_defect_range_identifications}
     \end{align}
-    the first equality by
+    where $\ran\widetilde\Gamma^{\mathrm{tail}}_{K;l,1}=\ran\Gamma^{\mathrm{tail}}_{K,l+1}$ follows by
     (\ref{eq:reassociated_tail_boundary_one_site}) and the remaining
-    two by Theorem~\ref{thm:spectator_boundary_hilbert_factorization}.  Taking
+    subspace identifications hold by Theorem~\ref{thm:spectator_boundary_hilbert_factorization}.  Taking
     orthogonal projectors onto the three subspaces gives
     \begin{align}
         P^{\mathrm{tail}}_{K;l,1}=P^{\mathrm{tail}}_{K,l+1}(A),
@@ -3364,14 +3364,15 @@ translated copies of the local interaction.
         (h_i(A,L)^2\psi)(\sigma)
          & =
         (h_L(A)^2f_{\sigma,i})
-        \left(\sigma|_{[i,i+L-1]}\right) =
+        \left(\sigma|_{[i,i+L-1]}\right) \notag \\
+         & =
         (h_L(A)f_{\sigma,i})
-        \left(\sigma|_{[i,i+L-1]}\right) =
-        (h_i(A,L)\psi)(\sigma).
+        \left(\sigma|_{[i,i+L-1]}\right) \notag \\
+         & =
+        (h_i(A,L)\psi)(\sigma),
         \notag
     \end{align}
-    Here the second equality follows from
-    Lemma~\ref{lem:parent_interaction_idempotent}.
+    using $h_L(A)^2=h_L(A)$ by Lemma~\ref{lem:parent_interaction_idempotent}.
 \end{proof}
 
 \begin{definition}[Parent Hamiltonian]\label{def:parent_hamiltonian}
