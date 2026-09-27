@@ -325,12 +325,36 @@ identities.\footnote{Formal declarations:
 \leanid{MPSTensor.cluster_stabilizer_unique_gs} in
 \path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.}
 
-Three items remain outside the formal development: the identification of the
+The polynomial AKLT Hamiltonian
+(\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) is now
+formalized on periodic chains. In the physical basis
+$\ket{m=0},\ket{m=+1},\ket{m=-1}$, which is the labelling in which the AKLT
+tensor carries $\sigma^z,\sigma^+,-\sigma^-$, spin addition gives the
+operator identity
+\begin{align}
+    \frac12\left(\vec S_i\cdot\vec S_{i+1}
+        +\frac13\left(\vec S_i\cdot\vec S_{i+1}\right)^2
+        +\frac23\right)
+        &= P^{(2)}_{i,i+1},
+    \label{eq:rmp_example_parent_hamiltonian_scope_aklt_spin_two}
+\end{align}
+and the projector $P^{(2)}$ onto total spin $2$ of two spins $1$ is the two-site
+parent interaction, whose kernel is the five-constraint space above. Summing
+over the bonds of a periodic chain of $N\ge2$ sites gives
+$H_{\mathrm{AKLT}}+\tfrac{2N}{3}=2H^{(2)}_{\mathrm{parent}}$, so
+$H_{\mathrm{AKLT}}\ge-\tfrac{2N}{3}$, and for $N\ge3$ the eigenspace for
+$-\tfrac{2N}{3}$ is spanned by the AKLT state.\footnote{Formal declarations:
+\leanid{MPSTensor.akltBondTerm_shift_eq_parentInteraction},
+\leanid{MPSTensor.akltBondTerm_shift_eq_spinTwo_starProjection},
+\leanid{MPSTensor.akltHamiltonian_add_eq_parentHamiltonian},
+\leanid{MPSTensor.akltHamiltonian_eigenvalue_ge}, and
+\leanid{MPSTensor.akltHamiltonian_eigenspace_eq_mpvSubmodule} in
+\path{TNLean/MPS/Examples/AKLTPolynomialHamiltonian.lean}.}
+
+Two items remain outside the formal development: the identification of the
 GHZ parent interaction with the ferromagnetic Ising interaction
 (\ref{eq:rmp_example_parent_hamiltonian_scope_ising_hamiltonian}) as an
-operator identity, the polynomial AKLT Hamiltonian
-(\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) and its
-spin-$2$ projector form, and the open-boundary edge-mode degeneracy.
+operator identity, and the open-boundary edge-mode degeneracy.
 
 \section{Source-faithful order of work}
 
@@ -361,7 +385,9 @@ A source-faithful formalization of issue \#2315 should proceed as follows.
           polynomial Hamiltonian in
           (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) is
           locally sourced. Introduce the spin-$2$ projector formulation only
-          after citing or proving its equivalence with the polynomial form.
+          after citing or proving its equivalence with the polynomial form;
+          this is done by
+          (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_spin_two}).
           Treat the fourfold open-boundary degeneracy separately from the
           periodic unique-ground-state theorem.
 \end{enumerate}
@@ -376,8 +402,9 @@ statements with distinct source obligations. The first type is formalized, and
 so is the cluster stabilizer for the reflected convention, including its
 periodic unique-ground-state statement. For the two matrices printed in the
 older review, the on-site equivalence, ground energy and periodic uniqueness
-are now proved for $N\ge3$. The GHZ Ising operator identity, the AKLT polynomial and
-spin-$2$ projector forms, and the open-boundary edge modes remain open.
+are now proved for $N\ge3$. The AKLT polynomial Hamiltonian and its spin-$2$
+projector form are formalized on periodic chains. The GHZ Ising operator
+identity and the open-boundary edge modes remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
