@@ -137,16 +137,30 @@ through its own period agrees with the directly $p$-blocked block.
     fixed point not proportional to the faithful one.
 \end{proof}
 
+\begin{lemma}[Transfer map of a blocked tensor]
+    \label{lem:blocked_transfer_map}
+    \lean{MPSTensor.transferMap_blockTensor,
+        MPSTensor.transferMap_blockTensor_apply}
+    \leanok
+    \uses{def:blocked_tensor, def:transfer_map}
+    For every tensor $A$ and every $L$, $\E_{A^{[L]}}=\E_A^{\,L}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    A letter of $A^{[L]}$ is a word $w$ of length $L$ with matrix $A^w$, so
+    $\E_{A^{[L]}}(X)=\sum_{\lvert w\rvert=L}A^wX(A^w)^\dagger$, which is the
+    $L$-fold iterate of $\E_A$ by induction on $L$.
+\end{proof}
+
 \begin{lemma}[Fixed-point criteria for irreducibility after primitive blocking]%
     \label{lem:blocked_irreducibility_direct_support}
     \lean{Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible}
     \lean{Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily}
-    \lean{MPSTensor.transferMap_blockTensor}
-    \lean{MPSTensor.transferMap_blockTensor_apply}
     \lean{MPSTensor.transferMap_blockTensor_fixedPoint}
     \lean{Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM}
     \leanok
-    \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel}
+    \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel, lem:blocked_transfer_map}
     Let $A$ be left-canonical, tensor-irreducible, and have primitive transfer
     map. Then $A$ has primitive fixed-point data $(\rho,P_\rho,N)$ with
     $\rho>0$ and $N^n\to0$. For every blocking length~$P$, the tensor
