@@ -484,6 +484,51 @@ normalizations.
   multigraph coverings; recorded in
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
+#### `TNLean.PEPS.IsTorusParallelSection` and `TNLean.PEPS.IsTorusFlat`
+
+- **Declarations:**
+  `TNLean.PEPS.IsTorusParallelSection (a b f : TorusVertex width height → G) : Prop`
+  and `TNLean.PEPS.IsTorusFlat (a b : TorusVertex width height → G) : Prop`.
+- **Defined in:** `TNLean/PEPS/TorusParallelSection.lean`.
+- **Meaning:** `f` is a parallel section of the horizontal transports `a` and
+  the vertical transports `b` if `f (x + 1, y) = a (x, y) * f (x, y)` and
+  `f (x, y + 1) = b (x, y) * f (x, y)` at every site; `a, b` are flat if
+  `b (x + 1, y) * a (x, y) = a (x, y + 1) * b (x, y)` around every elementary
+  square.
+- **Source:** project combinatorics for the coloring superposition of
+  arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex:2914-2923`; no source
+  predicate.
+- **Sanctioned bridges:** `TNLean.PEPS.exists_isTorusParallelSection_iff`
+  (sections exist exactly for flat transports with trivial holonomy around the
+  row and the column through the origin) and
+  `TNLean.PEPS.card_isTorusParallelSection` (there are `|G|` sections or none).
+
+#### `TNLean.PEPS.IsQuantumDoubleGaussLaw` and `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy`
+
+- **Declarations:**
+  `TNLean.PEPS.IsQuantumDoubleGaussLaw (s : TorusVertex width height → G × G × G × G) : Prop`
+  and `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy s : Prop`.
+- **Defined in:** `TNLean/PEPS/Examples/QuantumDouble.lean`.
+- **Meaning:** for the four physical spins `(s₁, s₂, s₃, s₄)` (top left, top
+  right, bottom right, bottom left) of each site of the dual quantum-double
+  network, Gauss' law is the vertex rule `s₂ s₁ = s₃ s₄` at every site together
+  with the plaquette rule
+  `s₁(v + (1, 0)) s₂(v) = s₄(v + (1, 1)) s₃(v + (0, 1))` around every corner;
+  trivial holonomy asks that the ordered products of the transports
+  `s₂ s₁` along the row `y = 0` and `s₄(v + (0, 1))⁻¹ s₁(v)` along the column
+  `x = 0` are the identity.
+- **Source:** arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex:2918-2921` (local
+  and plaquette terms of the Hamiltonian), and arXiv:2011.12127,
+  `Papers/2011.12127/TN-Review-main.tex:2452` (Gauss' law).
+- **Sanctioned bridges:** `TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS` (the
+  coefficient of the contracted dual network is `|G|` on configurations obeying
+  both predicates and `0` elsewhere).
+- **Caveat:** the review identifies the network with the superposition of all
+  Gauss-law configurations; on the torus only the trivial-holonomy sector
+  occurs, and the bridge is stated for width and height at least three.
+  Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
+  `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are

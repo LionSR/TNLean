@@ -36,7 +36,8 @@ factor `σ` in `IsingFusionAlgebraOnePsi`, `IsingFusionAlgebraOneSigma` and
 **Local fix (sigma scaling):** the tensors carry the physical index `(x', ρ, x)` and bond pairs of
 the source, omit the factors `v_e v_f` of the `G`-symbols (lines 1257–1260), and store the `σ`
 tensor multiplied by `√2`, so that every entry lies in `ℤ[√2]`. The operator statements are proved
-for these `v`-free tensors. Documented in
+for these `v`-free tensors and transfer to the source's `G`-symbol tensors, which are bond-similar
+to them (`IsingGSymbol`). Documented in
 `docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
 
 Every product is proved in the same way (`MPSTensor.mpo_mul_eq_of_zsqrt2_conj`): the stacked

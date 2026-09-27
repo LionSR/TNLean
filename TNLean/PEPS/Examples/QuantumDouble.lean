@@ -5,8 +5,11 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Data.ZMod.Defs
+import Mathlib.LinearAlgebra.Matrix.Permutation
 import Mathlib.Tactic.Group
 import TNLean.PEPS.GInjective
+import TNLean.PEPS.TorusOperatorString
+import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusVirtualString
 
 /-!
@@ -42,7 +45,13 @@ affect the physical state" (line 2465).
   one-dimensional representation this is a scalar invariance of the tensor;
 * placed at every site of the torus, the primal tensor has this symmetry as a network: the
   virtual string that multiplies `π(g)` for each bond with label `g` it crosses can be pulled
-  through every rectangle of sites of the contracted network.
+  through every rectangle of sites of the contracted network;
+* placed at every site of the torus, the dual tensor lets a string of right-regular `R_g`'s on
+  the bonds be deformed across every rectangle of sites, arXiv:1001.3807, equation
+  `eq:2d:move-strings`, `Papers/1001.3807/paper_v3.tex` lines 1622–1647;
+* placed at every site of the torus, the dual tensor contracts to the equal-weight
+  superposition, with weight `|G|`, of the spin configurations that obey Gauss' law (the vertex
+  and plaquette rules) and have trivial holonomy around the two non-contractible cycles.
 The toric code is the instance `G = ℤ₂`.
 
 **Local fix (normalization and representation):** colours are shifted by right
@@ -53,10 +62,14 @@ normalizes the tensor, so `G`-isometry holds with the factor `|G|` (see
 `TNLean.PEPS.IsGIsometric`).
 Documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
-**Scope restriction (Gauss-law superposition):** the identification of the equal-weight
-superposition of plaquette colorings with that of the Gauss-law configurations
-(lines 2460–2461) is not stated; on a torus the differences of plaquette colorings are the
-Gauss-law configurations of trivial holonomy. Documented in
+**Scope restriction (Gauss-law superposition):** arXiv:1001.3807 reads the contracted dual
+network as the superposition over all color patterns, `Papers/1001.3807/paper_v3.tex`
+lines 2824–2827 and 2914–2916, whose Hamiltonian enforces the vertex and plaquette rules and
+equal weight, lines 2918–2923; the review identifies it with the equal-weight superposition of
+all Gauss-law configurations, `Papers/2011.12127/TN-Review-main.tex` lines 2460–2461. On the
+torus only the Gauss-law configurations of trivial holonomy around the two non-contractible
+cycles are differences of colorings, so the statement is proved for that sector, which carries
+the whole state; it is proved on tori of width and height at least three. Documented in
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
 ## Main definitions
@@ -64,10 +77,15 @@ Gauss-law configurations of trivial holonomy. Documented in
 * `TNLean.PEPS.quantumDoubleDualSpins`, `TNLean.PEPS.quantumDoubleDualTensor`: the dual
   tensor of the review.
 * `TNLean.PEPS.colorShiftRep`: the simultaneous shift of the four colors.
+* `TNLean.PEPS.rightRegularMatrix`: the right-regular representation by permutation matrices.
 * `TNLean.PEPS.quantumDoublePrimalLabels`, `TNLean.PEPS.quantumDoublePrimalTensor`: the
   primal tensor of the review.
 * `TNLean.PEPS.quantumDoublePrimalSiteTensor`, `TNLean.PEPS.quantumDoublePrimalPEPS`: the
   primal tensor at every site of the torus.
+* `TNLean.PEPS.quantumDoubleDualSiteTensor`, `TNLean.PEPS.quantumDoubleDualPEPS`: the dual
+  tensor at every site of the torus.
+* `TNLean.PEPS.IsQuantumDoubleGaussLaw`, `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy`: Gauss'
+  law and trivial holonomy of a configuration of the physical spins.
 
 ## Main results
 
@@ -81,6 +99,12 @@ Gauss-law configurations of trivial holonomy. Documented in
   `TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_mul`.
 * `TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq`: the virtual
   symmetry of the contracted primal network.
+* `TNLean.PEPS.colorShiftRep_eq_torusLegRep`,
+  `TNLean.PEPS.torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq`: the color shift
+  is the right-regular representation on the legs, and strings of `R_g`'s deform across the
+  dual network.
+* `TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS`: the contracted dual network is the
+  equal-weight superposition of the Gauss-law configurations of trivial holonomy.
 
 ## References
 
@@ -273,6 +297,39 @@ theorem isGIsometric_toricCodeDualTensor :
       (siteMap (quantumDoubleDualTensor ToricCodeGroup)) :=
   isGIsometric_quantumDoubleDualTensor
 
+variable (G) in
+/-- The right-regular representation of `G` by permutation matrices: `R_k` has the entry `1`
+at `(a, a k)` and `0` elsewhere. -/
+def rightRegularMatrix : G →* Matrix G G ℂ where
+  toFun k := (Equiv.mulRight k : Equiv.Perm G).permMatrix ℂ
+  map_one' := by
+    rw [show Equiv.mulRight (1 : G) = 1 from Equiv.ext fun x => mul_one x, Matrix.permMatrix_one]
+  map_mul' g h := by
+    rw [show Equiv.mulRight (g * h) = Equiv.mulRight h * Equiv.mulRight g from
+      Equiv.ext fun x => (mul_assoc x g h).symm, Matrix.permMatrix_mul]
+
+/-- Bridge: the color shift of the dual tensor is the action of the right-regular
+representation on the four legs in the convention of arXiv:1001.3807, equation
+`eq:2d-ug-sym`, `Papers/1001.3807/paper_v3.tex` lines 1278–1295: `R_g` on the incoming legs
+(top and left) and `R_g⁻¹` on the outgoing legs (right and down), each acting along the
+orientation of its edge. -/
+theorem colorShiftRep_eq_torusLegRep : colorShiftRep G = torusLegRep (rightRegularMatrix G) := by
+  refine MonoidHom.ext fun g => LinearMap.ext fun x => funext fun c => ?_
+  have hR : ∀ (k a b : G), rightRegularMatrix G k a b = if a * k = b then 1 else 0 := by
+    intro k a b
+    simp [rightRegularMatrix, PEquiv.toMatrix_apply]
+  have hk : ∀ c' : G × G × G × G, torusLegMatrix (rightRegularMatrix G) g c c' =
+      if c' = c * colorDiag G g then 1 else 0 := by
+    intro c'
+    obtain ⟨t, r, b, l⟩ := c
+    obtain ⟨t', r', b', l'⟩ := c'
+    simp only [torusLegMatrix, MonoidHom.coe_mk, OneHom.coe_mk, torusLegKernel_apply, hR,
+      colorDiag, Prod.mk_mul_mk, Prod.mk.injEq, mul_inv_eq_iff_eq_mul, ite_zero_mul_ite_zero,
+      mul_one]
+    grind
+  rw [colorShiftRep_apply, torusLegRep_apply]
+  simp [Matrix.mulVec, dotProduct, hk]
+
 end Dual
 
 /-! ### The primal tensor -/
@@ -385,9 +442,10 @@ around a site is `π(t) π(r) π(b)⁻¹ π(l)⁻¹`, with `π` on the top and r
 the down and left legs.
 
 arXiv:1001.3807 does not treat the primal tensor; its string deformation,
-`Papers/1001.3807/paper_v3.tex` lines 1624–1648, concerns strings of `U_g` on the `G`-injective
-(dual) tensor, and the review's bimodule remark (line 2467) assigns the group-labelled string
-operators to the dual tensor and the representation-labelled ones to the primal tensor.
+`Papers/1001.3807/paper_v3.tex` lines 1622–1647, concerns strings of `U_g` on the `G`-injective
+(dual) tensor (`torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq`), and the
+review's bimodule remark (line 2467) assigns the group-labelled string operators to the dual
+tensor and the representation-labelled ones to the primal tensor.
 
 The statement holds on every torus of width and height at least two. On a torus of width or
 height two the left and right (or down and top) legs of a site are one edge of the lattice
@@ -411,6 +469,224 @@ theorem sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq {M : Type*} [Se
       exact congrArg π (quantumDoublePrimalTensor_ne_zero_mul_eq_mul h)) σ v₀ m n
 
 end Primal
+
+/-! ### The dual tensor on the torus -/
+
+section DualTorus
+
+variable (G : Type*) [Group G] [DecidableEq G] [Fintype G]
+
+/-- The dual tensor with its virtual colors and its four physical spins enumerated,
+`G ≃ Fin |G|` and `G⁴ ≃ Fin |G|⁴`, so that it can be placed on the torus. -/
+noncomputable def quantumDoubleDualSiteTensor (t r b l : Fin (Fintype.card G))
+    (s : Fin (Fintype.card (G × G × G × G))) : ℂ :=
+  quantumDoubleDualTensor G ((Fintype.equivFin G).symm t) ((Fintype.equivFin G).symm r)
+    ((Fintype.equivFin G).symm b) ((Fintype.equivFin G).symm l)
+    ((Fintype.equivFin (G × G × G × G)).symm s)
+
+/-- Source: arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2904–2916, and
+arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2460–2463. The dual
+quantum-double PEPS: the dual tensor at every site of the `width × height` torus. Every bond
+carries a color in `G`, and the four physical spins of a site are the differences of the colors
+of its adjacent bonds. -/
+noncomputable def quantumDoubleDualPEPS (width height : ℕ) [NeZero width] [NeZero height]
+    [Fact (1 < width)] [Fact (1 < height)] :
+    Tensor (torusGraph width height) (Fintype.card (G × G × G × G)) :=
+  torusSiteTensor (quantumDoubleDualSiteTensor G)
+
+variable {G}
+variable {width height : ℕ} [NeZero width] [NeZero height]
+
+/-- The horizontal transport of a spin configuration `s` at the site `v`, the product
+`s₂ s₁` of its top right and top left spins. For the spins of a coloring it is `r l⁻¹`, the
+right color of `v` times the inverse of its left color. -/
+def quantumDoubleDualRowTransport (s : TorusVertex width height → G × G × G × G)
+    (v : TorusVertex width height) : G :=
+  (s v).2.1 * (s v).1
+
+/-- The vertical transport of a spin configuration `s` at the site `v = (x, y)`, the product
+`s₄(x, y + 1)⁻¹ s₁(x, y)` of the inverse bottom left spin of the site above and the top left
+spin of `v`. For the spins of a coloring it is the left color of `(x, y + 1)` times the inverse
+of the left color of `v`. -/
+def quantumDoubleDualColumnTransport (s : TorusVertex width height → G × G × G × G)
+    (v : TorusVertex width height) : G :=
+  (s (v.1, v.2 + 1)).2.2.2⁻¹ * (s v).1
+
+/-- Source: arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2918–2921, and
+arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2452. A configuration
+`s v = (s₁, s₂, s₃, s₄)` of the physical spins of the dual network, the top left, top right,
+bottom right and bottom left spins of each site, obeys Gauss' law if
+
+* (`vertex`) the four spins of each site multiply to the identity, `s₂ s₁ = s₃ s₄`, the local
+  term i) of the source;
+* (`plaquette`) the four spins around the corner shared by the sites `v`, `v + (1, 0)`,
+  `v + (1, 1)` and `v + (0, 1)` multiply to the identity,
+  `s₁(v + (1, 0)) s₂(v) = s₄(v + (1, 1)) s₃(v + (0, 1))`, the plaquette term ii) of the source.
+
+The inverses follow the orientation of the differences of the dual tensor
+(`quantumDoubleDualSpins`), as in the review's Gauss law `g₁g₂g₃⁻¹g₄⁻¹ = 1`. -/
+structure IsQuantumDoubleGaussLaw (s : TorusVertex width height → G × G × G × G) : Prop where
+  vertex : ∀ v, (s v).2.1 * (s v).1 = (s v).2.2.1 * (s v).2.2.2
+  plaquette : ∀ v : TorusVertex width height,
+    (s (v.1 + 1, v.2)).1 * (s v).2.1 = (s (v.1 + 1, v.2 + 1)).2.2.2 * (s (v.1, v.2 + 1)).2.2.1
+
+/-- A spin configuration has trivial holonomy around the two non-contractible cycles of the
+torus if the ordered product of the horizontal transports along the row `y = 0`, and that of
+the vertical transports along the column `x = 0`, are the identity. Each is the product of the
+spins met by a closed path around the torus through the bonds of that row or column. -/
+def IsQuantumDoubleTrivialHolonomy (s : TorusVertex width height → G × G × G × G) : Prop :=
+  zmodTransport (fun x => quantumDoubleDualRowTransport s (x, 0)) width = 1 ∧
+    zmodTransport (fun y => quantumDoubleDualColumnTransport s (0, y)) height = 1
+
+omit [DecidableEq G] [Fintype G] [NeZero width] [NeZero height] in
+/-- For configurations obeying the vertex rule, flatness of the horizontal and vertical
+transports is the plaquette rule. -/
+theorem isTorusFlat_quantumDoubleDualTransport_iff
+    {s : TorusVertex width height → G × G × G × G}
+    (hs : ∀ v, (s v).2.1 * (s v).1 = (s v).2.2.1 * (s v).2.2.2) :
+    IsTorusFlat (quantumDoubleDualRowTransport s) (quantumDoubleDualColumnTransport s) ↔
+      ∀ v : TorusVertex width height, (s (v.1 + 1, v.2)).1 * (s v).2.1 =
+        (s (v.1 + 1, v.2 + 1)).2.2.2 * (s (v.1, v.2 + 1)).2.2.1 := by
+  refine forall_congr' fun v => ?_
+  simp only [quantumDoubleDualRowTransport, quantumDoubleDualColumnTransport]
+  rw [hs (v.1, v.2 + 1)]
+  have e1 : (s (v.1 + 1, v.2 + 1)).2.2.2⁻¹ * (s (v.1 + 1, v.2)).1 * ((s v).2.1 * (s v).1) =
+      (s (v.1 + 1, v.2 + 1)).2.2.2⁻¹ * ((s (v.1 + 1, v.2)).1 * (s v).2.1) * (s v).1 := by group
+  have e2 : (s (v.1, v.2 + 1)).2.2.1 * (s (v.1, v.2 + 1)).2.2.2 *
+      ((s (v.1, v.2 + 1)).2.2.2⁻¹ * (s v).1) = (s (v.1, v.2 + 1)).2.2.1 * (s v).1 := by group
+  rw [e1, e2, mul_left_inj, inv_mul_eq_iff_eq_mul]
+
+omit [DecidableEq G] [Fintype G] [NeZero width] [NeZero height] in
+/-- The colorings of the bonds whose differences are the spins `s`, written through the left
+color `f v` of each site and the top color `U v`, are the parallel sections `f` of the
+horizontal and vertical transports of `s`, with `U v = s₁(v) f v`, provided `s` obeys the
+vertex rule. -/
+theorem forall_eq_quantumDoubleDualSpins_iff (s : TorusVertex width height → G × G × G × G)
+    (f U : TorusVertex width height → G) :
+    (∀ v, s v = quantumDoubleDualSpins (U v, f (v.1 + 1, v.2), U (v.1, v.2 - 1), f v)) ↔
+      U = (fun v => (s v).1 * f v) ∧
+        (∀ v, (s v).2.1 * (s v).1 = (s v).2.2.1 * (s v).2.2.2) ∧
+        IsTorusParallelSection (quantumDoubleDualRowTransport s)
+          (quantumDoubleDualColumnTransport s) f := by
+  simp only [quantumDoubleDualSpins, Prod.ext_iff]
+  constructor
+  · intro h
+    have hU : ∀ v, U v = (s v).1 * f v := fun v => by rw [(h v).1]; group
+    refine ⟨funext hU, fun v => ?_, fun v => ⟨?_, ?_⟩⟩
+    · rw [(h v).1, (h v).2.1, (h v).2.2.1, (h v).2.2.2]; group
+    · simp only [quantumDoubleDualRowTransport]
+      rw [(h v).1, (h v).2.1]; group
+    · have h4 := (h (v.1, v.2 + 1)).2.2.2
+      simp only [add_sub_cancel_right] at h4
+      simp only [quantumDoubleDualColumnTransport]
+      rw [h4, (h v).1]; group
+  · rintro ⟨rfl, hs, hf⟩ v
+    have hdown : (s (v.1, v.2 - 1)).1 * f (v.1, v.2 - 1) = (s v).2.2.2 * f v := by
+      have h := (hf (v.1, v.2 - 1)).2
+      simp only [sub_add_cancel, quantumDoubleDualColumnTransport] at h
+      rw [h]; group
+    refine ⟨by group, ?_, ?_, ?_⟩
+    · rw [(hf v).1, quantumDoubleDualRowTransport]; group
+    · simp only
+      rw [(hf v).1, quantumDoubleDualRowTransport, hdown, hs v]; group
+    · simp only
+      rw [hdown]; group
+
+open Classical in
+/-- Source: arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2824–2827 and 2914–2923,
+and arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2460–2461: the contracted
+dual quantum-double network on the torus is the equal-weight superposition of the spin
+configurations obeying Gauss' law with trivial holonomy. Its coefficient is `|G|` at every such
+configuration, the number of bond colorings with these differences, which differ by one global
+shift of all colors, and `0` at every other configuration.
+
+The source states the equal-weight superposition of the Gauss-law configurations without
+qualification. On the torus the Gauss-law configurations of nontrivial holonomy are not
+differences of colorings and have coefficient `0`
+(`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`). The torus has width and height at
+least three, so that the four legs of every site are four distinct bonds
+(`docs/paper-gaps/rmp_peps_examples_small_torus.tex`). The spins are the differences of the
+dual tensor of the review, `quantumDoubleDualSpins`; the tensor `K` of arXiv:1001.3807,
+lines 2906–2911, orients the differences the other way round, which inverts the spins and
+reverses the products in Gauss' law. -/
+theorem stateCoeff_quantumDoubleDualPEPS [Fact (1 < width)] [Fact (1 < height)]
+    [Fact (2 < width)] [Fact (2 < height)] (s : TorusVertex width height → G × G × G × G) :
+    stateCoeff (quantumDoubleDualPEPS G width height)
+        (fun v => Fintype.equivFin (G × G × G × G) (s v)) =
+      if IsQuantumDoubleGaussLaw s ∧ IsQuantumDoubleTrivialHolonomy s then
+        (Fintype.card G : ℂ) else 0 := by
+  set P : (TorusVertex width height → G) → (TorusVertex width height → G) → Prop :=
+    fun f U => ∀ v, s v = quantumDoubleDualSpins (U v, f (v.1 + 1, v.2), U (v.1, v.2 - 1), f v)
+  -- The coefficient counts the colorings, written through the left color of each site.
+  have hsum : stateCoeff (quantumDoubleDualPEPS G width height)
+      (fun v => Fintype.equivFin (G × G × G × G) (s v)) =
+        ∑ f : TorusVertex width height → G, ∑ U : TorusVertex width height → G,
+          if P f U then (1 : ℂ) else 0 := by
+    rw [quantumDoubleDualPEPS, stateCoeff_torusSiteTensor]
+    let eR :
+        (TorusVertex width height → G) ≃ (TorusVertex width height → Fin (Fintype.card G)) :=
+      Equiv.arrowCongr (Equiv.addRight ((1, 0) : TorusVertex width height)).symm
+        (Fintype.equivFin G)
+    let eU :
+        (TorusVertex width height → G) ≃ (TorusVertex width height → Fin (Fintype.card G)) :=
+      Equiv.arrowCongr (Equiv.refl _) (Fintype.equivFin G)
+    rw [← Equiv.sum_comp eR]
+    refine Fintype.sum_congr _ _ fun f => ?_
+    rw [← Equiv.sum_comp eU]
+    refine Fintype.sum_congr _ _ fun U => ?_
+    simp only [eR, eU, P, quantumDoubleDualSiteTensor, quantumDoubleDualTensor,
+        Equiv.symm_apply_apply, Equiv.arrowCongr_apply, Equiv.refl_symm,
+        Equiv.refl_apply, Equiv.symm_symm, Function.comp_apply, Equiv.coe_addRight,
+        Fintype.prod_boole]
+    have hx : ∀ i : TorusVertex width height, i + (1, 0) = (i.1 + 1, i.2) :=
+      fun i => Prod.ext rfl (add_zero _)
+    simp only [hx, sub_add_cancel]
+  rw [hsum]
+  simp only [P, forall_eq_quantumDoubleDualSpins_iff, ite_and, Fintype.sum_ite_eq']
+  have hiff : ((∀ v, (s v).2.1 * (s v).1 = (s v).2.2.1 * (s v).2.2.2) ∧
+      ∃ f, IsTorusParallelSection (quantumDoubleDualRowTransport s)
+        (quantumDoubleDualColumnTransport s) f) ↔
+      IsQuantumDoubleGaussLaw s ∧ IsQuantumDoubleTrivialHolonomy s := by
+    constructor
+    · rintro ⟨hV, hE⟩
+      obtain ⟨hflat, hrow, hcol⟩ := exists_isTorusParallelSection_iff.mp hE
+      exact ⟨⟨hV, (isTorusFlat_quantumDoubleDualTransport_iff hV).mp hflat⟩, hrow, hcol⟩
+    · rintro ⟨⟨hV, hP⟩, hrow, hcol⟩
+      exact ⟨hV, exists_isTorusParallelSection_iff.mpr
+        ⟨(isTorusFlat_quantumDoubleDualTransport_iff hV).mpr hP, hrow, hcol⟩⟩
+  by_cases hV : ∀ v, (s v).2.1 * (s v).1 = (s v).2.2.1 * (s v).2.2.2
+  · rw [Finset.sum_congr rfl fun f _ => ite_eq_left hV, Finset.sum_boole,
+      ← Fintype.card_subtype, card_isTorusParallelSection]
+    split_ifs with hE hGL hTH hGL hTH <;> push_cast
+    all_goals first
+      | rfl
+      | exact absurd (hiff.mp ⟨hV, hE⟩) (by tauto)
+      | exact absurd (hiff.mpr ⟨hGL, hTH⟩).2 hE
+  · simp only [hV, ite_false, Finset.sum_const_zero]
+    have : ¬IsQuantumDoubleGaussLaw s := fun h => hV h.vertex
+    simp [this]
+
+/-- Source: arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 1622–1647 (equation
+`eq:2d:move-strings`) and the Lemma "Deformations of the string", lines 2199–2214, for the
+dual quantum-double tensor, which is `G`-injective for the right-regular representation on its
+legs (`isGInjective_quantumDoubleDualTensor`, `colorShiftRep_eq_torusLegRep`). In the torus
+network of the dual tensor, with colors in `G` on the bonds, the string of right-regular
+`R_g`'s along the left and bottom sides of a rectangle of sites gives the same network as the
+string along its top and right sides. -/
+theorem torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq
+    (σ : TorusVertex width height → G × G × G × G) (g : G) (v₀ : TorusVertex width height)
+    {m n : ℕ} (hm : m < width) (hn : n < height) :
+    torusBondNetwork (fun v c => quantumDoubleDualTensor G c.1 c.2.1 c.2.2.1 c.2.2.2 (σ v))
+        (torusWestSouthOperatorString (rightRegularMatrix G) g v₀ m n).1
+        (torusWestSouthOperatorString (rightRegularMatrix G) g v₀ m n).2 =
+      torusBondNetwork (fun v c => quantumDoubleDualTensor G c.1 c.2.1 c.2.2.1 c.2.2.2 (σ v))
+        (torusNorthEastOperatorString (rightRegularMatrix G) g v₀ m n).1
+        (torusNorthEastOperatorString (rightRegularMatrix G) g v₀ m n).2 :=
+  (colorShiftRep_eq_torusLegRep (G := G) ▸
+    isGInjective_quantumDoubleDualTensor).torusBondNetwork_westSouthOperatorString_eq
+      σ g v₀ hm hn
+
+end DualTorus
 
 end PEPS
 end TNLean

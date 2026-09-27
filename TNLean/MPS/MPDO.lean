@@ -227,6 +227,7 @@ import TNLean.MPS.MPDO.OperatorClosurePowerSum
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.OperatorFromWordTrace
 import TNLean.MPS.MPDO.OperatorProduct
+import TNLean.MPS.MPDO.OperatorProductBlockDiagonal
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.PerCopyHorizontalCF

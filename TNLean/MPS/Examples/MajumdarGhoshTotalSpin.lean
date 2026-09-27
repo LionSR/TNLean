@@ -52,14 +52,17 @@ namespace MPSTensor
 /-- On three spin-\(\tfrac12\) sites, the squared total spin is \(\tfrac34\) plus
 the sum of the three transpositions of the sites. -/
 lemma totalSpinSq_three_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
-    totalSpinSq v σ = (3 / 4) * v σ + (v (σ ∘ Equiv.swap 0 1) + v (σ ∘ Equiv.swap 1 2) +
-      v (σ ∘ Equiv.swap 0 2)) := by
-  rw [totalSpinSq_eq]
+    totalSpinSq spinHalfOperator v σ = (3 / 4) * v σ + (v (σ ∘ Equiv.swap 0 1) +
+      v (σ ∘ Equiv.swap 1 2) + v (σ ∘ Equiv.swap 0 2)) := by
+  rw [totalSpinSq_eq spinHalfOperator spinHalfOperator_sum_mul_self]
   simp only [Fin.sum_univ_three, Fin.isValue, ↓reduceIte, Fin.reduceEq, LinearMap.add_apply,
     Pi.add_apply, LinearMap.smul_apply, LinearMap.id_apply, Pi.smul_apply, smul_eq_mul]
-  rw [spinExchange_apply (by decide), spinExchange_apply (by decide),
-    spinExchange_apply (by decide), spinExchange_apply (by decide),
-    spinExchange_apply (by decide), spinExchange_apply (by decide),
+  rw [spinExchange_spinHalfOperator_apply (by decide),
+    spinExchange_spinHalfOperator_apply (by decide),
+    spinExchange_spinHalfOperator_apply (by decide),
+    spinExchange_spinHalfOperator_apply (by decide),
+    spinExchange_spinHalfOperator_apply (by decide),
+    spinExchange_spinHalfOperator_apply (by decide),
     Equiv.swap_comm (1 : Fin 3) 0, Equiv.swap_comm (2 : Fin 3) 0,
     Equiv.swap_comm (2 : Fin 3) 1]
   ring
@@ -69,7 +72,7 @@ lemma totalSpinSq_three_apply (v : NSiteSpace 2 3) (σ : Cfg 2 3) :
 \(h=\tfrac12(\mathbf S_1\cdot\mathbf S_2+\mathbf S_2\cdot\mathbf S_3
 +\mathbf S_1\cdot\mathbf S_3)\). -/
 theorem totalSpinSq_three_eq_majumdarGhoshTerm :
-    (totalSpinSq : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) =
+    (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) =
       (9 / 4 : ℂ) • LinearMap.id + (4 : ℂ) • majumdarGhoshTerm := by
   refine LinearMap.ext fun v => funext fun σ => ?_
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply, Pi.add_apply,
@@ -82,7 +85,7 @@ theorem totalSpinSq_three_eq_majumdarGhoshTerm :
 the eigenvalue \(\tfrac34\) on \(\ker P\) and \(\tfrac{15}4\) on the range of
 \(P\). -/
 theorem totalSpinSq_three_eq_parentInteraction :
-    (totalSpinSq : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) =
+    (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) =
       (3 / 4 : ℂ) • LinearMap.id + (3 : ℂ) • parentInteraction majumdarGhoshTensor 3 := by
   rw [← majumdarGhoshTerm_shift_eq_parentInteraction, totalSpinSq_three_eq_majumdarGhoshTerm]
   refine LinearMap.ext fun v => funext fun σ => ?_
@@ -97,7 +100,8 @@ of `majumdarGhoshTensor` is the eigenspace of the squared total spin for
 \(\tfrac34=\tfrac12(\tfrac12+1)\), the total-spin-\(\tfrac12\) subspace. -/
 theorem majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace :
     groundSpace majumdarGhoshTensor 3 =
-      Module.End.eigenspace (totalSpinSq : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) (3 / 4) := by
+      Module.End.eigenspace
+        (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) (3 / 4) := by
   rw [majumdarGhosh_groundSpace_three_eq_eigenspace]
   ext v
   simp only [Module.End.mem_eigenspace_iff, totalSpinSq_three_eq_majumdarGhoshTerm,
@@ -115,7 +119,8 @@ theorem majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace :
 \(\tfrac{15}4=\tfrac32(\tfrac32+1)\), the total-spin-\(\tfrac32\) subspace, in the
 \(\ell^2\) space of coefficient vectors. -/
 def spinThreeHalvesES : Submodule ℂ (EuclideanSpace ℂ (Cfg 2 3)) :=
-  (Module.End.eigenspace (totalSpinSq : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) (15 / 4)).map
+  (Module.End.eigenspace
+      (totalSpinSq spinHalfOperator : NSiteSpace 2 3 →ₗ[ℂ] NSiteSpace 2 3) (15 / 4)).map
     (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)).symm.toLinearMap
 
 /-- The total-spin-\(\tfrac32\) subspace is the orthogonal complement of the
