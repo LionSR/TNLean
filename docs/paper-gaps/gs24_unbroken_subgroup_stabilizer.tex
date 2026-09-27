@@ -26,8 +26,10 @@ Let a finite group $G$ act by matrix product unitaries with three-cocycle
 $\omega$ on the set $\mathcal I$ of blocks $x$ of a symmetry-broken ground space,
 and assume, as both sources do, that the action on $\mathcal I$ is transitive.
 The two sources define the unbroken subgroup $H$ differently, and only one of
-the definitions supports the classification of phases by pairs $(H,\alpha)$
-with $\alpha\in\mathcal H^2(H,U(1))$.
+the definitions supports the classification of phases by $H$ together with a
+point of a torsor for $\mathcal H^2(H,U(1))$, which becomes a class
+$\alpha\in\mathcal H^2(H,U(1))$ once a trivialization of $\omega|_H$ is
+chosen.
 
 \section{The two definitions}
 
@@ -68,8 +70,9 @@ The classification needs the stabilizer, for three reasons.
     \item \emph{Counting blocks.} By the orbit--stabilizer theorem
           $|\mathcal I|=|G/\operatorname{Stab}(x_0)|$, while
           $|G/K|\geq|\mathcal I|$ with equality only when the stabilizer is
-          normal. The degeneracy $|G/H|$ asserted at line 1880 of the first
-          source holds for the stabilizer.
+          normal. The degeneracy $|G/H|$ asserted in the first
+          source~\cite{GarreRubioSchuch2024DomainWall} holds for the
+          stabilizer.
     \item \emph{Trivializing the cocycle.} The coupled pentagon equation
           $L^x_{h,k}L^x_{g,hk}=\omega(g,h,k)L^{k\cdot x}_{g,h}L^x_{gh,k}$,
           restricted to $g,h,k$ in a subgroup fixing the single block $x$,
@@ -88,8 +91,8 @@ The classification needs the stabilizer, for three reasons.
           after a choice of trivializing gauge $\beta$ is
           $\psi_{x_0}=L^{x_0}/\beta$ a two-cocycle. For fixed $(G,\omega,H)$
           the gauge classes of solutions therefore form a torsor for
-          $\mathcal H^2(H,U(1))$, as stated at line 761 of the second
-          source, and the classifying data are the stabilizer $H$ up to
+          $\mathcal H^2(H,U(1))$, as the second source
+          states~\cite{GarreRubio2023MPOSym}, and the classifying data are the stabilizer $H$ up to
           conjugacy together with a point of that torsor, the data
           classifying the indecomposable module categories of
           $\mathrm{Vec}_G^\omega$.
@@ -98,7 +101,8 @@ The classification needs the stabilizer, for three reasons.
 The domain-wall discussion of the first source also uses the stabilizer
 reading for normal $H$: when $\operatorname{Stab}(x_0)$ is normal, every
 block has the same stabilizer, so $g\notin H$ implies $g\cdot x\neq x$ for
-every block $x$, as assumed at line 2013 of that source.
+every block $x$, as that source assumes for the interchange of domain
+walls~\cite{GarreRubioSchuch2024DomainWall}.
 
 \section{A non-normal example}
 
@@ -121,9 +125,16 @@ as an unbroken symmetry.
 \section{The formal statement}
 
 The formal theorem that a subgroup fixing a block trivializes the
-restricted three-cocycle takes an arbitrary homomorphism $f:H\to G$ and one
-block $x$ with $f(a)\cdot x=x$ for all $a\in H$, that is, the stabilizer
-reading.\footnote{Formal declaration:
+restricted three-cocycle assumes a group of matrix product operators with
+normal tensors multiplying exactly as the group on every nonempty chain,
+normal block tensors of positive bond dimension, and that the operator of
+every $g$ carries the periodic vector of every block $x$ to that of
+$g\cdot x$ at every positive length. The source setting, injective matrix
+product unitaries permuting injective blocks, satisfies these assumptions, and
+so does the example above, whose operator and block tensors have bond
+dimension one. Given these, the theorem takes an arbitrary homomorphism
+$f:H\to G$ and one block $x$ with $f(a)\cdot x=x$ for all $a\in H$, that is,
+the stabilizer reading.\footnote{Formal declaration:
 \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
 in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks}.} It applies in
 particular to the kernel, which fixes every block.
