@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.Examples.Fibonacci.FibonacciFSymbol
+import TNLean.MPS.Examples.Fibonacci.FibonacciGSymbol
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.SiteOperatorKernel
 
@@ -53,6 +53,8 @@ statements here are about those blocks.
 * `FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibTau`,
   `FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibOne`,
   `FibonacciCompression.goldenChainHamiltonian_commute_fibProjector`: the three commutations.
+* `FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau`: the same for
+  the periodic operators of the source's G-symbol tensor on edge label `τ`.
 
 ## References
 - [arXiv:cond-mat/0612341](https://arxiv.org/abs/cond-mat/0612341) -- A. Feiguin, S. Trebst,
@@ -254,5 +256,16 @@ theorem goldenChainHamiltonian_commute_fibProjector {N : ℕ} [NeZero N] (hN : 2
     Commute (goldenChainHamiltonian N) (fibProjector N) :=
   ((goldenChainHamiltonian_commute_mpo_fibOne hN).smul_right _).add_right
     ((goldenChainHamiltonian_commute_mpo_fibTau hN).smul_right _)
+
+/-- **The golden chain commutes with the G-symbol operators.** Source: arXiv:2011.12127,
+line 1393: for each label `f`, `H_N` commutes with the periodic operator of the G-symbol tensor
+of arXiv:1511.08090 (lines 1257–1268) restricted to edge label `τ`, which equals `O_N(B_f)` by
+`mpo_fibStringNetEdgeTau`. -/
+theorem goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau {N : ℕ} [NeZero N] (hN : 2 ≤ N)
+    (f : Fin 2) : Commute (goldenChainHamiltonian N) (mpo (fibStringNetEdgeTau f) N) := by
+  rw [mpo_fibStringNetEdgeTau]
+  fin_cases f
+  · exact goldenChainHamiltonian_commute_mpo_fibOne hN
+  · exact goldenChainHamiltonian_commute_mpo_fibTau hN
 
 end FibonacciCompression
