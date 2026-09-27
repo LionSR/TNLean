@@ -73,14 +73,14 @@ variable {g : G} {x y x' y' : X} {hx : g • x = x'} {hy : g • y = y'}
   {e : Fin d → Matrix (Fin (D x)) (Fin (D y)) ℂ} {e' : Fin d → Matrix (Fin (D x')) (Fin (D y')) ℂ}
   {c : ℂ}
 
-/-- Rescaling the carried domain wall by `a` rescales its phase by `a`.
+/-- Rescaling the carried domain wall by a nonzero `a` rescales its phase by `a`.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 826--832 (the choice of
 `e_{AB}` and `c_{AB}` fixes `e_{BA}`). -/
-theorem smul_source (h : ad.IsDomainWallAction g hx hy e e' c) (a : ℂ) :
+theorem smul_source (h : ad.IsDomainWallAction g hx hy e e' c) {a : ℂ} (ha : a ≠ 0) :
     ad.IsDomainWallAction g hx hy (fun i ↦ a • e i) e' (a * c) := by
-  obtain ⟨N, hN⟩ := h
-  refine ⟨N, fun u v i hu hv ↦ ?_⟩
+  obtain ⟨N, hN⟩ := h.eq
+  refine ⟨h.target_ne_zero, mul_ne_zero ha h.phase_ne_zero, N, fun u v i hu hv ↦ ?_⟩
   rw [actRect_smul, Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_smul, Matrix.smul_mul,
     Matrix.mul_smul, Matrix.smul_mul, hN u v i hu hv, smul_smul]
 
@@ -90,28 +90,36 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 826--832 (`e_{BA}
 defined through `eq:localcdef` for an arbitrary choice of `c_{AB}`). -/
 theorem smul_target (h : ad.IsDomainWallAction g hx hy e e' c) {a : ℂ} (ha : a ≠ 0) :
     ad.IsDomainWallAction g hx hy e (fun i ↦ a • e' i) (c / a) := by
-  obtain ⟨N, hN⟩ := h
-  refine ⟨N, fun u v i hu hv ↦ ?_⟩
+  obtain ⟨N, hN⟩ := h.eq
+  have he' : (fun i ↦ a • e' i) ≠ 0 := by
+    intro h0
+    refine h.target_ne_zero (funext fun i ↦ ?_)
+    have := congrFun h0 i
+    simpa [ha] using this
+  refine ⟨he', div_ne_zero h.phase_ne_zero ha, N, fun u v i hu hv ↦ ?_⟩
   rw [hN u v i hu hv, Matrix.mul_smul, Matrix.smul_mul, smul_smul, div_mul_cancel₀ _ ha]
 
 /-- **The phases of an involution can be made equal** (arXiv:2405.00439,
 `Papers/2405.00439/MPU-DW.tex` line 1664: "we can choose `c_{AB} = c_{BA} = i`"): if `g`
-exchanges the domain walls `e_{AB}` and `e_{BA}` with nonzero phases `c_{AB}`, `c_{BA}`, then for
+exchanges the domain walls `e_{AB}` and `e_{BA}` with phases `c_{AB}`, `c_{BA}`, then for
 every `s` with `s² = c_{AB} c_{BA}` the rescaled wall `(c_{AB} / s) e_{BA}` is exchanged with
 `e_{AB}` with both phases equal to `s`. -/
 theorem exists_eq_of_mul_self {hxy : g • x = y} {hyx : g • y = x}
     {eAB : Fin d → Matrix (Fin (D x)) (Fin (D y)) ℂ}
     {eBA : Fin d → Matrix (Fin (D y)) (Fin (D x)) ℂ} {cAB cBA : ℂ}
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) (hc : cAB ≠ 0) {s : ℂ}
-    (hs : s * s = cAB * cBA) (hs0 : s ≠ 0) :
+    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) {s : ℂ} (hs : s * s = cAB * cBA) :
     ad.IsDomainWallAction g hxy hyx eAB (fun i ↦ (cAB / s) • eBA i) s ∧
       ad.IsDomainWallAction g hyx hxy (fun i ↦ (cAB / s) • eBA i) eAB s := by
+  have hc : cAB ≠ 0 := hAB.phase_ne_zero
+  have hs0 : s ≠ 0 := by
+    rintro rfl
+    exact mul_ne_zero hc hBA.phase_ne_zero (by simpa using hs.symm)
   have hcs : cAB / s ≠ 0 := div_ne_zero hc hs0
   refine ⟨?_, ?_⟩
   · have h := hAB.smul_target hcs
     rwa [div_div_cancel₀ hc] at h
-  · have h := hBA.smul_source (cAB / s)
+  · have h := hBA.smul_source hcs
     convert h using 1
     field_simp
     linear_combination hs
@@ -141,8 +149,8 @@ theorem pair (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {z z
         (c * c') • (Kraus.evalWord (A x') u * e' i * Kraus.evalWord (A y') v * f' j *
           Kraus.evalWord (A z') w) := by
   subst hx hy hz
-  obtain ⟨N₁, H₁⟩ := he
-  obtain ⟨N₂, H₂⟩ := hf
+  obtain ⟨N₁, H₁⟩ := he.eq
+  obtain ⟨N₂, H₂⟩ := hf.eq
   have hBy := (ad.isReduction g y).bondDim_isReductionResidualNilpotencyBound
     ((hperm g y).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
   set M := N₁ + N₂ + F.bondDim g * D y

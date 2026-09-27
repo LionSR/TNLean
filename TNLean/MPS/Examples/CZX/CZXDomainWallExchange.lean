@@ -57,7 +57,7 @@ theorem czx_isDomainWallAction_semion :
       czxBlockActionData.IsDomainWallAction czxGen czxGen_smul_one czxGen_smul_zero
         czxWallBASemion czxWallAB Complex.I :=
   BlockActionData.IsDomainWallAction.exists_eq_of_mul_self czx_isDomainWallAction_ab
-    czx_isDomainWallAction_ba one_ne_zero (by simp) Complex.I_ne_zero
+    czx_isDomainWallAction_ba (by simp)
 
 /-- **A CZX string over a pair of domain walls acquires `-1`** (arXiv:2405.00439, `signphysop`,
 `Papers/2405.00439/MPU-DW.tex` lines 1667--1672, with `ω = -1`): the local action of the
