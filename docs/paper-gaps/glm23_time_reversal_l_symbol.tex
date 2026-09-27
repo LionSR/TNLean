@@ -23,25 +23,29 @@ operator symmetry $(O_g)_{g\in G}$ and under an antiunitary time reversal
 $\mathcal T=v^{\otimes n}\mathcal K$ commuting with every $O_g$. Write
 $V_{g,x}$ for the action tensor mapping block $x$ to block $g\cdot x$ and
 $L^x_{g,h}$ for the L-symbols defined by
-\begin{equation}
-  V_{g,h\cdot x}V_{h,x}=L^x_{g,h}\,W_{g,h}V_{gh,x},
+\begin{align}
+  V_{g,h\cdot x}V_{h,x} & =L^x_{g,h}\,W_{g,h}V_{gh,x},
   \label{eq:f1}
-\end{equation}
-the equation \texttt{F1group} of the source, written schematically with the
-fusion tensor $W_{g,h}$. Comparing the local actions of $\mathcal TO_g$ and
+\end{align}
+the defining relation of the L-symbols in Ref.~\cite{GarreRubio2023MPOSym},
+written schematically with the fusion tensor
+$W_{g,h}$.\footnote{Source traceability:
+\path{Papers/2203.12563/REsubmission.tex}, line 703.} Comparing the local actions of $\mathcal TO_g$ and
 $O_g\mathcal T$, the source finds nonzero scalars $\gamma_{g,x}$ with
 $S_{g\cdot x}^{-1}V_{g,x}S_x=\gamma_{g,x}V_{g,x}^*$, and from them the
 display at lines 935--952,
-\begin{equation}
+\begin{align}
   \gamma_{h,x}\gamma_{g,h\cdot x}\,(V_{g,h\cdot x}V_{h,x})^*
-  =L^x_{g,h}\,\gamma_{gh,x}\,(W_{g,h}V_{gh,x})^*.
+   & =L^x_{g,h}\,\gamma_{gh,x}\,(W_{g,h}V_{gh,x})^*.
   \label{eq:display}
-\end{equation}
-Equation \texttt{TRSF1group} at line 954 then states
-\begin{equation}
-  |L^x_{g,h}|^2=\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}},
+\end{align}
+The next displayed equation of Ref.~\cite{GarreRubio2023MPOSym} then
+states\footnote{Source traceability:
+\path{Papers/2203.12563/REsubmission.tex}, line 954.}
+\begin{align}
+  |L^x_{g,h}|^2 & =\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}},
   \label{eq:printed}
-\end{equation}
+\end{align}
 and the text concludes that the L-symbols squared are trivial because they
 can be written as a gauge transformation.
 
@@ -77,11 +81,11 @@ Taking the complex conjugate of (\ref{eq:f1}) gives
 $(V_{g,h\cdot x}V_{h,x})^*=\overline{L^x_{g,h}}\,(W_{g,h}V_{gh,x})^*$.
 Substituting into (\ref{eq:display}) and cancelling the nonzero tensor
 $(W_{g,h}V_{gh,x})^*$ yields
-\begin{equation}
+\begin{align}
   \frac{\overline{L^x_{g,h}}}{L^x_{g,h}}
-  =\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}} .
+   & =\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}} .
   \label{eq:corrected}
-\end{equation}
+\end{align}
 In the example, $\overline{L_{a,b}}/L_{a,b}=i/(-i)=-1$, in agreement with
 (\ref{eq:corrected}). Since $\overline L/L=(|L|/L)^2$, the relation
 (\ref{eq:corrected}) says that the square of the phase $L/|L|$ is a gauge
@@ -120,7 +124,7 @@ The antiunitary symmetry itself, and the derivation of $\gamma$ and $\beta$
 from $\mathcal T$ commuting with $O_g$, are not formalized.
 
 \textbf{Verdict: resolved local correction.} The printed
-\texttt{TRSF1group} is false; the source's own preceding display gives
+relation (\ref{eq:printed}) is false; the source's own preceding display gives
 (\ref{eq:corrected}), which is the relation used in the formalization, and
 the source's conclusion that the L-symbols squared are trivial holds in
 that corrected form.

@@ -6701,19 +6701,26 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     follow.
 \end{proof}
 
-\begin{lemma}[Unimodular square roots of phases]
-    \label{lem:mpug_phase_root}
+\begin{definition}[Unimodular square root and modulus of a phase]
+    \label{def:mpug_phase_root}
     \lean{TNLean.Algebra.phaseRoot,
-        TNLean.Algebra.modulusUnit,
-        TNLean.Algebra.star_phaseRoot,
+        TNLean.Algebra.modulusUnit}
+    \leanok
+    For $u\in\C^\times$ put $s_u=e^{i\arg(u)/2}$, the unimodular square root
+    of the phase of $u$, and regard $|u|$ as an element of $\C^\times$.
+\end{definition}
+
+\begin{theorem}[Unimodular square roots of phases]
+    \label{thm:mpug_phase_root}
+    \lean{TNLean.Algebra.star_phaseRoot,
         TNLean.Algebra.phaseRoot_mul_phaseRoot_mul_modulusUnit,
         TNLean.Algebra.star_eq_self_of_star_eq_ofReal_mul}
     \leanok
-    For $u\in\C^\times$ put $s_u=e^{i\arg(u)/2}$. Then
-    $\overline{s_u}=s_u^{-1}$ and $u=s_u^2\,|u|$. If $w\in\C^\times$ and
-    $\overline w=p\,w$ for a positive real number $p$, then $p=1$ and $w$ is
-    real.
-\end{lemma}
+    \uses{def:mpug_phase_root}
+    For $u\in\C^\times$, $\overline{s_u}=s_u^{-1}$ and $u=s_u^2\,|u|$. If
+    $w\in\C^\times$ and $\overline w=p\,w$ for a positive real number $p$,
+    then $p=1$ and $w$ is real.
+\end{theorem}
 
 \begin{proof}\leanok
     The first two claims are $\overline{e^{i\theta}}=e^{-i\theta}$ and the
@@ -6730,12 +6737,12 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_star_eq_self}
     \leanok
     \uses{def:mpug_fusion_gauge, def:mpug_cohomologous_to,
-        lem:mpug_phase_root}
+        def:mpug_phase_root}
     Let $\omega$ be a scalar $3$-cochain and $\beta$ a scalar $2$-cochain with
     $\beta\mathbin{\triangleright}\omega=\overline\omega$. Then
     $s\mathbin{\triangleright}\omega$ is real-valued, where
     $s(g,h)=s_{\beta(g,h)}$ is the unimodular square root of the phase of
-    $\beta(g,h)$ from Lemma~\ref{lem:mpug_phase_root}. Consequently, a
+    $\beta(g,h)$ from Definition~\ref{def:mpug_phase_root}. Consequently, a
     scalar $3$-cochain cohomologous to its complex conjugate is cohomologous
     to a real-valued one. This is the conclusion
     of~\cite[Section~4.3]{GarreRubio2023MPOSym} that, when time reversal
@@ -6746,7 +6753,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_fusion_gauge, lem:mpug_phase_root}
+    \uses{def:mpug_fusion_gauge, thm:mpug_phase_root}
     The coboundary is multiplicative in $\beta$ and commutes with complex
     conjugation. Write $\beta=s^2N$ with $N(g,h)=|\beta(g,h)|$. Since
     $\overline s=s^{-1}$,
@@ -6757,7 +6764,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         =N\mathbin{\triangleright}(s\mathbin{\triangleright}\omega).
     \end{align}
     The values of $dN$ are positive real numbers, so
-    Lemma~\ref{lem:mpug_phase_root} gives $dN=1$ and
+    Theorem~\ref{thm:mpug_phase_root} gives $dN=1$ and
     $\overline{s\mathbin{\triangleright}\omega}
         =s\mathbin{\triangleright}\omega$. If
     $\omega=\beta\mathbin{\triangleright}\overline\omega$, conjugating gives
@@ -6772,7 +6779,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.LSymbol.star_gauge_phaseRoot,
         TNLean.Algebra.LSymbol.exists_gauge_star_eq_self}
     \leanok
-    \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, lem:mpug_phase_root}
+    \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, def:mpug_phase_root}
     Let $\omega$ be a scalar $3$-cochain, $L$ an $L$-symbol, $\beta$ a
     scalar $2$-cochain and $\gamma$ an action-tensor scalar gauge with
     $\beta\mathbin{\triangleright}\omega=\overline\omega$ and
@@ -6791,7 +6798,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{proof}\leanok
     \uses{def:mpug_l_gauge, thm:mpug_l_gauge_composition,
-        thm:mpug_time_reversal_real_anomaly, lem:mpug_phase_root}
+        thm:mpug_time_reversal_real_anomaly, thm:mpug_phase_root}
     The claim for $\omega$ is Theorem~\ref{thm:mpug_time_reversal_real_anomaly}.
     For $L$, write $\beta=s^2N$ and $\gamma=t^2M$ with
     $N_{g,h}=|\beta_{g,h}|$ and $M^x_g=|\gamma^x_g|$. As in that proof,
@@ -6799,7 +6806,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         =(N,M)\mathbin{\triangleright}((s,t)\mathbin{\triangleright}L)$, whose
     prefactor
     $M^x_{gh}N_{g,h}/(M^{h x}_gM^x_h)$ is a positive real number, hence
-    equal to one by Lemma~\ref{lem:mpug_phase_root}.
+    equal to one by Theorem~\ref{thm:mpug_phase_root}.
 \end{proof}
 
 \begin{theorem}[The L-symbol relation imposed by time reversal]
