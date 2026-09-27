@@ -86,11 +86,8 @@ theorem prod_div_eq_inv_cyclicInvariant {L : LSymbol G X} {ω : ScalarThreeCocha
     Finset.prod_range_div (fun k ↦ L x g (g ^ k)), Finset.prod_range_div (fun k ↦ L x (g ^ k) g),
     hg, pow_zero, div_self', inv_one, mul_one, ScalarThreeCochain.cyclicInvariant]
 
-/-- The subgroup fixing two blocks `y` and `z`. -/
-def fixingSubgroup₂ (y z : X) : Subgroup G := MulAction.stabilizer G y ⊓ MulAction.stabilizer G z
-
 /-- The ratio `L^y_{a,b} / L^z_{a,b}` on the subgroup fixing `y` and `z`. -/
-def ratioCocycle (L : LSymbol G X) (y z : X) : ScalarCocycle (fixingSubgroup₂ (G := G) y z) :=
+def ratioCocycle (L : LSymbol G X) (y z : X) : ScalarCocycle (fixingSubgroup G ({y, z} : Set X)) :=
   fun a b ↦ L y a b / L z a b
 
 /-- **The L-symbol ratio is a two-cocycle on the subgroup fixing two blocks** (arXiv:2405.00439,
@@ -99,11 +96,11 @@ def ratioCocycle (L : LSymbol G X) (y z : X) : ScalarCocycle (fixingSubgroup₂ 
 and `z`; the three-cocycle cancels in the ratio. -/
 theorem ratioCocycle_isCocycle {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (y z : X) : (ratioCocycle L y z).IsCocycle := by
-  rintro ⟨a, -⟩ ⟨b, -⟩ ⟨c, hcy, hcz⟩
+  rintro ⟨a, -⟩ ⟨b, -⟩ ⟨c, hc⟩
   have hy := hL y a b c
   have hz := hL z a b c
-  rw [MulAction.mem_stabilizer_iff.mp hcy] at hy
-  rw [MulAction.mem_stabilizer_iff.mp hcz] at hz
+  rw [((mem_fixingSubgroup_iff G).mp hc) y (by simp)] at hy
+  rw [((mem_fixingSubgroup_iff G).mp hc) z (by simp)] at hz
   simp only [ratioCocycle, Subgroup.coe_mul]
   rw [div_mul_div_comm, div_mul_div_comm, mul_comm (L y a b), mul_comm (L z a b)]
   rw [show L y (a * b) c * L y a b = (ω a b c)⁻¹ * (L y a (b * c) * L y b c) by
@@ -111,6 +108,15 @@ theorem ratioCocycle_isCocycle {L : LSymbol G X} {ω : ScalarThreeCochain G}
     show L z (a * b) c * L z a b = (ω a b c)⁻¹ * (L z a (b * c) * L z b c) by
       rw [mul_comm, hz]; group]
   rw [mul_div_mul_left_eq_div]
+
+/-- The two-cocycle `L^y/L^z` in the form of Mathlib's multiplicative two-cocycles
+(`groupCohomology.IsMulCocycle₂`), through
+`TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂`. -/
+theorem ratioCocycle_isMulCocycle₂ {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (y z : X) :
+    letI := ScalarCocycle.trivialMulDistribMulAction (G := fixingSubgroup G ({y, z} : Set X))
+    groupCohomology.IsMulCocycle₂ (Function.uncurry (ratioCocycle L y z)) :=
+  (ScalarCocycle.isCocycle_iff_isMulCocycle₂ _).mp (ratioCocycle_isCocycle hL y z)
 
 end TNLean.Algebra.LSymbol
 
@@ -209,12 +215,12 @@ theorem prod_eq_inv_cyclicInvariant (hB : ad.IsDomainWallFamily e B)
 states this on the subgroup fixing every block, which is contained in the subgroup here. -/
 theorem mul_eq_of_fixed (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {y z : X}
-    (a b : LSymbol.fixingSubgroup₂ (G := G) y z) :
+    (a b : fixingSubgroup G ({y, z} : Set X)) :
     B a y z * B b y z =
       (LSymbol.ratioCocycle (ad.lSymbol fd) y z a b : ℂ) * B (a * b : G) y z := by
   have h := hB.mul_eq fd hA hperm a b y z
-  obtain ⟨hby, hbz⟩ := b.2
-  rw [MulAction.mem_stabilizer_iff.mp hby, MulAction.mem_stabilizer_iff.mp hbz] at h
+  rw [((mem_fixingSubgroup_iff G).mp b.2) y (by simp),
+    ((mem_fixingSubgroup_iff G).mp b.2) z (by simp)] at h
   exact h
 
 include fd in
@@ -222,7 +228,7 @@ include fd in
 lines 2034--2035): for `y = z`, the phases of the stabilizer of `y` multiply. -/
 theorem mul_eq_of_fixed_self (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {y : X}
-    (a b : LSymbol.fixingSubgroup₂ (G := G) y y) :
+    (a b : fixingSubgroup G ({y, y} : Set X)) :
     B a y y * B b y y = B (a * b : G) y y := by
   rw [hB.mul_eq_of_fixed fd hA hperm a b]
   simp [LSymbol.ratioCocycle]
