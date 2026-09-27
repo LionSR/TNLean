@@ -3989,15 +3989,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         \tr(E^N)
          & =\sum_\sigma V^{(N)}(\widetilde U)_\sigma
-        \overline{V^{(N)}(\widetilde U)_\sigma}                \\
+        \overline{V^{(N)}(\widetilde U)_\sigma}                \notag \\
          & =d^{-N}\sum_\sigma V^{(N)}(U^{\mathrm{MPS}})_\sigma
-        \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}            \\
-         & =d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)   \\
-         & =d^{-N}\tr(\Id)                                     \\
-         & =d^{-N}d^N                                          \\
-         & =1.
+        \overline{V^{(N)}(U^{\mathrm{MPS}})_\sigma}            \notag \\
+         & =d^{-N}\tr\!\left(U^{(N)}(U^{(N)})^\dagger\right)   \notag \\
+         & =d^{-N}\tr(\Id)                                     \label{eq:mpu_overlap_unitarity_eval} \\
+         & =d^{-N}d^N                                          \notag \\
+         & =1.                                                 \notag
     \end{align}
-    Here the fourth equality uses $N>1$, so that the MPU equation applies.
+    Here~(\ref{eq:mpu_overlap_unitarity_eval}) uses $N>1$, so that the MPU equation applies.
 \end{proof}
 
 \section{Block transfer multiplicity}
