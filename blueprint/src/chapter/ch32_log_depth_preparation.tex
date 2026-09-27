@@ -766,6 +766,117 @@ $1/\gamma$ in the block length here
     disjoint sets.
 \end{proof}
 
+The two lemmas above extend from unitary gates to channels, the operations
+of a local circuit that may add product ancillas and discard them
+\cite{Piroli2021LOCC}.
+
+\begin{definition}[Local channel circuit of depth $T$]
+    \label{def:ldp_local_channel_circuit}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.ChannelLayer, MPSPreparation.ChannelLayer.map,
+        MPSPreparation.ChannelLayer.dual, MPSPreparation.channelCircuitMap,
+        MPSPreparation.channelCircuitDual,
+        MPSPreparation.IsChannelPreparedInDepth}
+    \leanok
+    A \emph{channel on the pair} $\{k,k+1\}$ is a map
+    $\rho\mapsto\sum_jK_j\rho K_j^\dagger$ on density matrices of the ring,
+    where each $K_j$ is an operator on the whole ring acting trivially off
+    $\{k,k+1\}$ and
+    $\sum_jK_j^\dagger K_j=\mathbb 1$. A \emph{channel layer} is a composition
+    of channels on disjoint pairs, and a
+    \emph{local channel circuit of depth $T$} is a composition
+    $\Phi=\Phi_T\circ\dots\circ\Phi_1$ of $T$ channel layers.
+    Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$
+    replaces each channel on a pair by $A\mapsto\sum_jK_j^\dagger AK_j$. A
+    density matrix is \emph{prepared in depth $T$ by local channels} if it
+    equals $\Phi(\bigotimes_i\sigma_i)$ for a local channel circuit $\Phi$ of
+    depth $T$ and density matrices $\sigma_i$ on single sites.
+\end{definition}
+
+\begin{lemma}[Duality and complete positivity of local channel circuits]
+    \label{lem:ldp_local_channel_circuit_properties}
+    \uses{def:ldp_local_channel_circuit, def:ldp_local_circuit}
+    \lean{MPSPreparation.channelCircuitMap_isKrausCPTP,
+        MPSPreparation.trace_channelCircuitMap_mul,
+        MPSPreparation.channelCircuitMap_map_toChannelLayer}
+    \leanok
+    Let $\Phi$ be a local channel circuit. Then
+    \begin{align}
+        \Tr(\Phi(\rho)A) & =\Tr(\rho\,\Phi^\dagger(A))
+        \label{eq:ldp_channel_circuit_duality}
+    \end{align}
+    for all operators $\rho$ and $A$ on the ring, and $\Phi$ is trace
+    preserving and completely positive. A local circuit $U$ of depth $T$ is
+    the local channel circuit $\rho\mapsto U\rho U^\dagger$ of depth $T$ with
+    one operator per channel.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For one channel on a pair,
+    $\Tr\bigl(\sum_jK_j\rho K_j^\dagger A\bigr)
+        =\Tr\bigl(\rho\sum_jK_j^\dagger AK_j\bigr)$ by cyclicity of the
+    trace, and $\sum_jK_j^\dagger K_j=\mathbb 1$ makes it trace preserving
+    and completely positive. Both properties pass to compositions, hence to
+    layers and circuits. A gate $G$ on a pair is the channel with the single
+    operator $G$.
+\end{proof}
+
+\begin{lemma}[Light cone of a local channel circuit]
+    \label{lem:ldp_channel_light_cone}
+    \uses{def:ldp_local_channel_circuit}
+    \lean{MPSPreparation.channelCircuitDual_mem_supportedOperators,
+        MPSPreparation.ChannelLayer.dual_mem_supportedOperators}
+    \leanok
+    Let $\Phi$ be a local channel circuit of depth $T$ and let $Z$ act on a
+    set of sites $X$. Then $\Phi^\dagger(Z)$ acts on the sites within ring
+    distance $T$ of $X$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the layers it suffices to treat one layer. The dual of a
+    channel on a pair disjoint from $X$ fixes $Z$: its operators commute with
+    $Z$, so $\sum_jK_j^\dagger ZK_j=\sum_jK_j^\dagger K_jZ=Z$. The dual of a
+    channel on a pair meeting $X$ maps operators acting on the sites within
+    distance $1$ of $X$ to such operators, since that set contains the pair.
+    The channels of a layer commute, so the dual of the layer is the dual of
+    the channels meeting $X$ applied after the dual of the others.
+\end{proof}
+
+\begin{lemma}[No connected correlations beyond the light cone of channels]
+    \label{lem:ldp_channel_light_cone_correlations}
+    \uses{lem:ldp_channel_light_cone, lem:ldp_local_channel_circuit_properties}
+    \lean{MPSPreparation.trace_mul_mul_eq_of_isChannelPreparedInDepth,
+        MPSPreparation.channelCircuitDual_mul,
+        MPSPreparation.ChannelLayer.dual_mul,
+        MPSPreparation.trace_finKronecker_mul_mul}
+    \leanok
+    Let $\rho$ be prepared in depth $T$ by local channels, and let $Z$, $Z'$
+    act on sets of sites at distance larger than $2T$. Then
+    $\Tr(\rho ZZ')
+        =\Tr(\rho Z)\Tr(\rho Z')$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The dual of a channel is not multiplicative, but the dual of one layer is
+    multiplicative on operators $Z$, $Z'$ acting on sets $X$, $Y$ whose
+    neighbourhoods of radius $1$ are disjoint. Indeed, no pair of the layer
+    meets both $X$ and $Y$. If a channel acts off a set on which an operator
+    $B$ acts, then its dual $\Psi$ satisfies $\Psi(AB)=\Psi(A)B$ and
+    $\Psi(BA)=B\Psi(A)$. Writing the dual of the layer as the dual of the
+    channels meeting $X$ after the dual of the others, and using
+    Lemma~\ref{lem:ldp_channel_light_cone} for the latter applied to $Z'$,
+    one obtains the dual of $ZZ'$ as the product of the duals. By induction
+    on the layers, $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$, and
+    the two factors act on disjoint sets. For a product density
+    $\sigma=\bigotimes_i\sigma_i$ of trace one and products
+    $\bigotimes_im_i$, $\bigotimes_im'_i$ with disjoint supports,
+    $\Tr(\sigma\bigotimes_im_im'_i)
+        =\prod_i\Tr(\sigma_im_im'_i)$, and at each site one of
+    $m_i$, $m'_i$ is the identity; bilinearity and the duality
+    $\Tr(\Phi(\sigma)A)=\Tr(\sigma\Phi^\dagger(A))$
+    conclude.
+\end{proof}
+
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
     \uses{def:ldp_local_circuit, lem:ldp_unitary_implementing_isometry,
@@ -1198,17 +1309,25 @@ $A$ along $w$.
 
 \begin{theorem}[No preparation in depth $o(\log N)$]
     \label{thm:ldp_depth_lower_bound}
+    \lean{MPSTensor.eventually_one_half_lt_infidelity_of_isNormal,
+        MPSTensor.eventually_one_half_lt_infidelity_of_isNormalTensor}
+    \leanok
     \uses{def:ldp_local_circuit, def:correlation_length}
-    Let $A$ be normal with correlation length $\xi>0$, let $\ket{\phi_N}$ be the
-    normalized vectors (\ref{eq:ldp_ti_mps}), and let $\ket{\psi_N}$ be prepared
-    in depth $T_N$ with $T_N=o(\log N)$. Then there is $N_0$ such that
+    Let $A$ be normal with correlation length $\xi>0$. Here
+    $\xi=-1/\log\lvert\lambda_2/\lambda_1\rvert$, where $\lambda_1$ is an
+    eigenvalue of $\E_A$ of largest modulus and $\lambda_2$ is an eigenvalue of
+    largest modulus among those different from $\lambda_1$; in the normalization
+    $\lambda_1=1$ this is Definition~\ref{def:correlation_length}. Let
+    $\ket{\phi_N}$ be the normalized vectors (\ref{eq:ldp_ti_mps}), and let
+    $\ket{\psi_N}$ be prepared in depth $T_N$ with $T_N=o(\log N)$. Then there is $N_0$ such that
     $\varepsilon(\phi_N,\psi_N)>1/2$ for all $N>N_0$. This is
     \cite[Theorem~1]{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
         thm:wielandt_proposition_three, lem:ldp_window_averages,
-        thm:ldp_depth_lower_bound_gauge}
+        thm:ldp_depth_lower_bound_gauge, lem:ldp_normal_gauge_reduction}
     We may assume that $A$ is in the gauge (\ref{eq:ldp_normal_gauge}). Since
     $A$ is normal, $\E_A$ is strongly irreducible
     (Theorem~\ref{thm:wielandt_proposition_three}), so its spectral radius
@@ -1316,9 +1435,12 @@ $A$ along $w$.
 %% replaces the product-fidelity step by the concentration of averages of
 %% n ~ N/s' translated observables. This concentration argument is not in
 %% the source. It is formalized for a tensor in the gauge
-%% (eq:ldp_normal_gauge) in Theorem thm:ldp_depth_lower_bound_gauge; the
-%% reduction to the gauge in the first paragraph is not formalized, so this
-%% entry carries no formalization tag.
+%% (eq:ldp_normal_gauge) in Theorem thm:ldp_depth_lower_bound_gauge, and the
+%% reduction to the gauge in the first paragraph is Lemma
+%% lem:ldp_normal_gauge_reduction. The formal statement is given twice: for a
+%% tensor normal in the source's sense (irreducible, with the unique largest
+%% eigenvalue 1 of E_A), and for a tensor some blocking of which is injective,
+%% with the correlation length computed from lambda_2/lambda_1.
 
 \begin{lemma}[Averages over separated windows]
     \label{lem:ldp_window_averages}
@@ -1403,8 +1525,8 @@ $A$ along $w$.
               sufficiently large $N$.
     \end{enumerate}
     Part (2) is Theorem~\ref{thm:ldp_depth_lower_bound} for a tensor in the
-    gauge (\ref{eq:ldp_normal_gauge}); the restriction is recorded
-    in~\cite{gap:mswc24_depth_lower_bound_gauge}.
+    gauge (\ref{eq:ldp_normal_gauge}); Lemma~\ref{lem:ldp_normal_gauge_reduction}
+    removes the restriction~\cite{gap:mswc24_depth_lower_bound_gauge}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1417,6 +1539,54 @@ $A$ along $w$.
     $T_N\le\log N/(2(b+1))$ for large $N$ gives
     $C(T_N+1)e^{b(T_N+1)}\le Ce^{b+1}\sqrt N<N$ and $B(T_N+1)\le N$, so
     $\lvert\braket{\phi_N}{\psi_N}\rvert<1/2$ by (1).
+\end{proof}
+
+\begin{lemma}[Reduction to the gauge]
+    \label{lem:ldp_normal_gauge_reduction}
+    \lean{MPSTensor.IsNormalTensor.exists_normalGauge,
+        MPSTensor.exists_normalGauge_of_isNormal,
+        MPSTensor.hasEigenvalue_transferMap_iff_of_gaugeEquiv,
+        MPSTensor.transferMap_smul_eq_norm_sq_smul,
+        MPSTensor.normalizedMPVState_eq_of_gaugeEquiv,
+        MPSTensor.norm_inner_normalizedMPVState_smul}
+    \leanok
+    \uses{def:normal, thm:cpsv_normal_tp_gauge,
+        thm:normalized_normal_strongly_irreducible,
+        thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal}
+    Let the products of some fixed number of matrices of $A$ span $\MN{D}$, and
+    let $\lambda_1$ be an eigenvalue of $\E_A$ of largest modulus. Then
+    $\lambda_1\ne0$, and there are $\zeta\ne0$, an invertible $X$ and $L\ge1$
+    such that $B^i=X\zeta A^iX^{-1}$ satisfies the
+    gauge~(\ref{eq:ldp_normal_gauge}) for some $\rho$, the products of $L$
+    matrices of $B$ span $\MN{D}$, the eigenvalues of $\E_B$ are those of
+    $\E_A$ divided by $\lambda_1$, and $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$
+    for every $N$. In particular, whenever $\ket{\phi_N(A)}\neq0$,
+    $\lvert\braket{\phi_N(B)}{\psi}\rvert/\lVert\phi_N(B)\rVert
+        =\lvert\braket{\phi_N(A)}{\psi}\rvert/\lVert\phi_N(A)\rVert$ for every
+    vector $\ket{\psi}$; when $\ket{\phi_N(A)}=0$, also $\ket{\phi_N(B)}=0$.
+    If instead $A$ is irreducible and $\E_A$ has the unique eigenvalue $1$ of
+    largest modulus, the same holds with $\zeta=1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The eigenvalues of $\E_{\zeta A}=\lvert\zeta\rvert^2\E_A$ are those of
+    $\E_A$ times $\lvert\zeta\rvert^2$, and a gauge $B^i=XA^iX^{-1}$ maps an
+    eigenvector $Y$ of $\E_A$ to the eigenvector $XYX^\dagger$ of $\E_B$ with
+    the same eigenvalue; it leaves every trace in (\ref{eq:ldp_ti_mps})
+    unchanged. Since $A$ is normal, $\E_A$ is irreducible, so it has a
+    positive eigenvector for its spectral radius $r>0$ and a positive
+    eigenvector $\sigma$ of its dual; with $\zeta=r^{-1/2}$ and
+    $X=\sigma^{1/2}$, the tensor $B$ satisfies $\sum_i(B^i)^\dagger B^i=\Id$
+    (Theorem~\ref{thm:cpsv_normal_tp_gauge}). By
+    Theorem~\ref{thm:normalized_normal_strongly_irreducible}, $\E_B$ has a fixed point
+    $\rho>0$, which we scale to unit trace, and $1$ is its only eigenvalue of
+    modulus one. All eigenvalues of the trace-preserving map $\E_B$ have
+    modulus at most one, and $\lvert\zeta\rvert^2\lambda_1$ is one of largest
+    modulus, so $\lvert\zeta\rvert^2\lambda_1=1$. When $A$ is irreducible and
+    $1$ is the unique eigenvalue of $\E_A$ of largest modulus, $r=1$, so
+    $\zeta=1$; primitivity of $\E_A$ passes to $\E_B$, and some blocking of $B$
+    is injective by Theorems~\ref{thm:cpsv_normal_eventually_injective}
+    and~\ref{thm:gauge_invariance_normal}.
 \end{proof}
 
 \section{Tensors that are not normal}

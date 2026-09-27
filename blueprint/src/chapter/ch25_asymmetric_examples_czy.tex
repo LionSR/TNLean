@@ -1,0 +1,298 @@
+\section{The anomalous \texorpdfstring{$\Z_2$}{Z2} symmetry of the Levin--Gu edge}%
+\label{sec:asymex_czy}
+
+The edge Hamiltonian of the Levin--Gu model, unitarily equivalent to the
+XX chain, commutes with the $\Z_2$ symmetry
+$U_N=\prod_nCZ_{n,n+1}\prod_nZ_nX_n$ on a ring of $N$
+qubits~\cite[Section~II]{Liu2025Bialgebraic}. The source writes it as a
+bond-two matrix product operator, reduces the product of two copies to a
+bond-three tensor $A_0$ padded by a zero block, and states that $A_0$ is
+not injective, cannot be further decomposed into a direct sum of
+injective matrix product operators, and generates the identity on
+periodic chains. This section reads these statements through the
+multi-block asymmetric compression theorem
+(Theorem~\ref{thm:asym_multiblock}). The associator of the fusion
+tensors, $\omega(1,1,1)=-1$ in~\cite[Section~II]{Liu2025Bialgebraic},
+is not treated here.
+
+The first physical index is the output and the second the input, as in
+the source. For a word $w$ in the index pairs, $B^w$ denotes the product
+of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
+
+\begin{definition}[The CZY tensor and its stacked square]
+    \label{def:asymex_czy_tensors}
+    \lean{CZYCompression.czyTensor, CZYCompression.czySquare,
+        CZYCompression.czySquareTarget}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+    The CZY tensor $A_1$ has bond dimension two and the only nonzero
+    matrices
+    \begin{align}
+        A_1^{01} & =\begin{pmatrix}1&1\\0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    \begin{align}
+        A_1^{10} & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}.
+        \notag
+    \end{align}
+    Its stacked square is the bond-four tensor
+    $\widetilde A_0^{ik}=\sum_jA_1^{ij}\otimes A_1^{jk}$, so that
+    $\widetilde A_0^{00}=A_1^{01}\otimes A_1^{10}$,
+    $\widetilde A_0^{11}=A_1^{10}\otimes A_1^{01}$, and the two mixed
+    matrices vanish~\cite[Section~II]{Liu2025Bialgebraic}. The single
+    target of its compression is the bond-one identity tensor
+    $\delta^{ij}=\delta_{i,j}$.
+\end{definition}
+
+\begin{theorem}[Periodic kernel of the CZY operator]
+    \label{thm:asymex_czy_kernel}
+    \lean{CZYCompression.mpo_czyTensor_apply}
+    \leanok
+    \uses{def:asymex_czy_tensors}
+    For every $N>0$ and $s,t\in\{0,1\}^N$, with site subscripts modulo $N$,
+    \begin{align}
+        U_N(s,t) & =\delta_{s,\bar t}\prod_{n=0}^{N-1}(-1)^{s_n(1-s_{n+1})},
+        \label{eq:asymex_czy_kernel}
+    \end{align}
+    where $\bar t_n=1-t_n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The periodic operator is the cyclic trace
+    \begin{align}
+        U_N(s,t) & =\sum_{\alpha\in\{0,1\}^N}\prod_{n=0}^{N-1}
+        (A_1^{s_nt_n})_{\alpha_n\alpha_{n+1}},
+        \notag
+    \end{align}
+    with $\alpha_N=\alpha_0$. The entry $(A_1^{ij})_{\alpha\beta}$ vanishes
+    unless $i=1-j$ and $\alpha=i$, and then equals $(-1)^{i(1-\beta)}$. The
+    incoming bond at every site is therefore forced to equal the output bit,
+    so a product is nonzero only if $s=\bar t$ and $\alpha_n=s_n$ for every
+    $n$. The sum then has the single surviving term
+    $\prod_n(-1)^{s_n(1-s_{n+1})}$, which is~(\ref{eq:asymex_czy_kernel}).
+\end{proof}
+
+\begin{theorem}[Compression of the stacked square onto the identity]
+    \label{thm:asymex_czy_compression}
+    \lean{CZYCompression.czySquare_compression, CZYCompression.czySquareLeft,
+        CZYCompression.czySquareRight, CZYCompression.czySquare_isReduction,
+        CZYCompression.czySquare_dim_eq,
+        CZYCompression.czySquare_evalWord_remainder_eq_zero,
+        CZYCompression.czySquareTarget_isNormal}
+    \leanok
+    \uses{def:asymex_czy_tensors, thm:asym_multiblock, def:normal}
+    The stacked square carries the block triangular form of
+    Theorem~\ref{thm:asym_multiblock} for the single normal slot $\delta$
+    with $z=3$ zero slots and $4=1+3$. The compression pair is
+    $W=(0,1,-1,0)$ and $V=(0,1,0,0)^{\mathsf T}$; it satisfies $WV=1$ and
+    $W\widetilde A_0^wV=\delta^w$ for every word $w$. The remainder
+    $R^{ij}=\widetilde A_0^{ij}-V\delta^{ij}W$ satisfies
+    \begin{align}
+        R^{i_1j_1}R^{i_2j_2}R^{i_3j_3}R^{i_4j_4} & =0
+        \notag
+    \end{align}
+    for every choice of four index pairs.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_explicit_gauge}
+    With bond coordinates ordered as in the Kronecker product,
+    $\widetilde A_0^{00}=e_1u^{\mathsf T}$ and
+    $\widetilde A_0^{11}=e_2v^{\mathsf T}$ with $u=(-1,1,-1,1)$ and
+    $v=(-1,-1,1,1)$. In the basis
+    \begin{align}
+        f_0 & =(0,1,1,0)^{\mathsf T},\quad f_1=(0,1,0,0)^{\mathsf T},\quad
+        f_2=(1,0,0,0)^{\mathsf T},\quad f_3=(0,0,0,1)^{\mathsf T}
+        \notag
+    \end{align}
+    both letters annihilate $f_0$, have image in $\spn\{f_0,f_1\}$, and
+    satisfy $\widetilde A_0^{00}f_1=f_1$ and
+    $\widetilde A_0^{11}f_1=f_1-f_0$. Hence every letter is upper
+    triangular with diagonal $(0,\delta^{ij},0,0)$. The row $W$ is the
+    second row of the inverse of the basis matrix and $V=f_1$. The
+    target is normal because its matrix at $(0,0)$ is the scalar $1$.
+    The nilpotency is clause~(vi) of Theorem~\ref{thm:asym_multiblock}
+    with $|S|+z=4$.
+\end{proof}
+
+\begin{theorem}[The stacked operator is the identity at every positive length]
+    \label{thm:asymex_czy_square_identity}
+    \lean{CZYCompression.czySquare_trace_evalWord, CZYCompression.mpo_czySquare,
+        CZYCompression.mpo_czyTensor_mul_self,
+        CZYCompression.mpo_czySquare_zero_ne_one}
+    \leanok
+    \uses{thm:asymex_czy_compression, prop:asym_compression_trace,
+        lem:asym_mpo_trace_eq, thm:mpdo_operator_product_mpo}
+    For every nonempty word $w$, $\tr(\widetilde A_0^w)=\tr(\delta^w)$.
+    Consequently $U_N^2=\Id$ for every $N\geq1$, odd $N$ included. At
+    $N=0$ the empty periodic contraction of the stacked square is
+    $\tr(\Id_4)=4$, so the restriction $N\geq1$ is necessary.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Proposition~\ref{prop:asym_compression_trace} applied to the
+    compression of Theorem~\ref{thm:asymex_czy_compression} gives the
+    trace identity, and Lemma~\ref{lem:asym_mpo_trace_eq} turns it into
+    the identity of periodic operators, since $\delta$ generates $\Id$.
+    The product formula of the operator of a stacked tensor gives
+    $U_N^2=\Id$.
+\end{proof}
+
+\begin{theorem}[Nonsplitting of the stacked square]
+    \label{thm:asymex_czy_no_intertwiner}
+    \lean{CZYCompression.czySquare_right_intertwiner_eq_zero,
+        CZYCompression.czySquare_left_intertwiner_eq_zero,
+        CZYCompression.czySquare_remainder_ne_zero,
+        CZYCompression.czySquare_not_starClosed}
+    \leanok
+    \uses{thm:asymex_czy_compression, cor:asym_anomaly_not_star}
+    If $X\in\C^{4\times1}$ satisfies $\widetilde A_0^{ij}X=X\delta^{ij}$
+    for every index pair, then $X=0$; likewise for row vectors $Y$ with
+    $Y\widetilde A_0^{ij}=\delta^{ij}Y$. Hence every multi-block
+    compression of $\widetilde A_0$ onto $\delta$ has a nonzero remainder,
+    and the algebra generated by the matrices of $\widetilde A_0$ is not
+    closed under conjugate transposition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    From $\widetilde A_0^{00}X=X$ the vector $X$ is a multiple of $e_1$,
+    and $\widetilde A_0^{11}e_1=-e_2$ forces the multiple to vanish. For
+    rows, $Y\widetilde A_0^{00}=Y$ gives $Y=y_1u^{\mathsf T}$, and
+    $Y\widetilde A_0^{11}=Y$ then gives $y_1=0$. A vanishing remainder
+    would make $V$ a sitewise intertwiner with $WV=1$; the last assertion
+    is Corollary~\ref{cor:asym_anomaly_not_star}.
+\end{proof}
+
+\begin{definition}[The reduced tensor]
+    \label{def:asymex_czy_reduced}
+    \lean{CZYCompression.czyReducedTensor, CZYCompression.czyReduced}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps}
+    The tensor $A_0$ of~\cite[Section~II]{Liu2025Bialgebraic} has bond
+    dimension three, vanishing mixed matrices, and
+    \begin{align}
+        A_0^{00} & =\begin{pmatrix}0&-1&1\\0&1&-1\\0&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+    \begin{align}
+        A_0^{11} & =\begin{pmatrix}0&1&1\\0&1&1\\0&0&0\end{pmatrix}.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The printed change of basis]
+    \label{thm:asymex_czy_printed_reduction}
+    \lean{CZYCompression.czyX11, CZYCompression.czyX11_mul_transpose,
+        CZYCompression.czyX11_conj, CZYCompression.czyReducedPadInt_apply}
+    \leanok
+    \uses{def:asymex_czy_tensors, def:asymex_czy_reduced}
+    The matrix
+    \begin{align}
+        X_{1,1} & =\frac{1}{\sqrt2}\begin{pmatrix}
+                                       0  & 1  & 1 & 0  \\
+                                       0  & -1 & 1 & 0  \\
+                                       -1 & 0  & 0 & 1  \\
+                                       -1 & 0  & 0 & -1
+                                   \end{pmatrix}
+        \notag
+    \end{align}
+    of~\cite[Appendix~B]{Liu2025Bialgebraic} is orthogonal, and
+    $X_{1,1}\widetilde A_0^{ij}X_{1,1}^{-1}=A_0^{ij}\oplus0$ for every
+    index pair, exactly as printed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both identities are integer matrix identities after multiplying by
+    $\sqrt2$ on each side: $(\sqrt2X_{1,1})(\sqrt2X_{1,1})^{\mathsf T}=2\Id$
+    and
+    $(\sqrt2X_{1,1})\widetilde A_0^{ij}(\sqrt2X_{1,1})^{\mathsf T}
+        =2(A_0^{ij}\oplus0)$.
+\end{proof}
+
+\begin{theorem}[Compression of the reduced tensor]
+    \label{thm:asymex_czy_reduced_compression}
+    \lean{CZYCompression.czyReduced_compression,
+        CZYCompression.czyReduced_evalWord_remainder_eq_zero,
+        CZYCompression.mpo_czyReducedTensor}
+    \leanok
+    \uses{def:asymex_czy_reduced, thm:asym_multiblock, lem:asym_mpo_trace_eq}
+    In its own coordinates, $A_0$ carries the block triangular form of
+    Theorem~\ref{thm:asym_multiblock} for the single slot $\delta$ with
+    $z=2$ zero slots, ordered as a zero slot, the slot $\delta$, and a zero
+    slot. The remainder $R^{ij}$ of this compression satisfies
+    \begin{align}
+        R^{i_1j_1}R^{i_2j_2}R^{i_3j_3} & =0
+        \notag
+    \end{align}
+    for every choice of three index pairs, and the periodic operator of $A_0$
+    is the identity at every length $N\geq1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_explicit_gauge}
+    The matrices $A_0^{00}$ and $A_0^{11}$ are upper triangular with
+    diagonal $(0,1,0)$, and the mixed matrices vanish, so the diagonal is
+    $(0,\delta^{ij},0)$. The operator identity follows as in
+    Theorem~\ref{thm:asymex_czy_square_identity}.
+\end{proof}
+
+\begin{theorem}[The reduced tensor does not split]
+    \label{thm:asymex_czy_reduced_nonsplit}
+    \lean{CZYCompression.czyReduced_right_intertwiner_eq_zero,
+        CZYCompression.czyReduced_left_intertwiner_eq_zero,
+        CZYCompression.czyReduced_remainder_ne_zero,
+        CZYCompression.czyReduced_not_starClosed,
+        CZYCompression.czyReduced_adjoin_ne_top}
+    \leanok
+    \uses{thm:asymex_czy_reduced_compression, cor:asym_anomaly_not_star}
+    Both sitewise intertwiner spaces between $A_0$ and $\delta$ vanish.
+    Hence every multi-block compression of $A_0$ onto $\delta$ has a
+    nonzero remainder, the algebra generated by the matrices of $A_0$ is
+    not closed under conjugate transposition, and in particular it is a
+    proper subalgebra of the $3\times3$ matrices. In particular $A_0$ is
+    not injective, as stated in~\cite[Section~II]{Liu2025Bialgebraic}.
+    The further statement there that $A_0$ does not decompose into a
+    direct sum of injective matrix product operators concerns arbitrary
+    decompositions; the assertions above exclude only compressions onto
+    $\delta$ with zero remainder.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $X=(a,b,c)^{\mathsf T}$, $A_0^{00}X=X$ gives $c=0$ and $a=-b$,
+    and $A_0^{11}X=X$ then gives $b=0$. For $Y=(p,q,r)$,
+    $YA_0^{00}=Y$ gives $p=0$ and $r=-q$, and $YA_0^{11}=Y$ gives $q=0$.
+    The remaining assertions follow as in
+    Theorem~\ref{thm:asymex_czy_no_intertwiner}; the full matrix algebra is
+    closed under conjugate transposition.
+\end{proof}
+
+\begin{theorem}[A one-sided fusion identity]
+    \label{thm:asymex_czy_fusion}
+    \lean{CZYCompression.czyY00_fusion}
+    \leanok
+    \uses{def:asymex_czy_reduced}
+    Let $Y_{0,0}$ be the first three rows of the matrix $X_{0,0}$
+    of~\cite[Appendix~B]{Liu2025Bialgebraic}:
+    \begin{align}
+        Y_{0,0} & =\begin{pmatrix}
+                       0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+                       0 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 2 \\
+                       0 & 0 & 0 & 0 & 0 & 2 & 0 & 2 & 0
+                   \end{pmatrix}.
+        \notag
+    \end{align}
+    Then $Y_{0,0}\sum_jA_0^{ij}\otimes A_0^{jk}=A_0^{ik}Y_{0,0}$ for all
+    $i,k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Direct multiplication of integer matrices.
+\end{proof}
