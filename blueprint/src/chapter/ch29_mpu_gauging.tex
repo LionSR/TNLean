@@ -7767,19 +7767,9 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses_mk,
         TNLean.Algebra.StabilizerRepresentatives.solutionAction,
         TNLean.Algebra.StabilizerRepresentatives.solutionAction_mk,
-        TNLean.Algebra.StabilizerRepresentatives.solutionAction_one,
-        TNLean.Algebra.StabilizerRepresentatives.solutionAction_mul,
-        TNLean.Algebra.StabilizerRepresentatives.solutionMulAction,
-        TNLean.Algebra.H2.instCommGroup,
-        TNLean.Algebra.H2.mk,
-        TNLean.Algebra.H2.mk_mul,
-        TNLean.Algebra.H2.one_def,
-        TNLean.Algebra.H2.mk_inv,
-        TNLean.Algebra.ScalarCocycle.IsCocycle.mul,
-        TNLean.Algebra.ScalarCocycle.IsCocycle.inv,
-        TNLean.Algebra.ScalarCocycle.isCocycle_one,
-        TNLean.Algebra.ScalarCocycle.CohomologousTo.mul,
-        TNLean.Algebra.ScalarCocycle.CohomologousTo.inv,
+        TNLean.Algebra.StabilizerRepresentatives.solutionAddAction,
+        TNLean.Algebra.StabilizerRepresentatives.existsUnique_vadd_eq,
+        TNLean.Algebra.StabilizerRepresentatives.h2EquivGroupCohomology_symm_H2π,
         TNLean.Algebra.StabilizerRepresentatives.existsUnique_solutionAction_eq,
         TNLean.Algebra.LSymbol.ActionGaugeEquiv,
         TNLean.Algebra.LSymbol.actionGaugeEquiv_equivalence,
@@ -7817,13 +7807,11 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
               class of $L_0L[\psi]$ is a bijection from $H^2(H,\C^\times)$
               onto the action-gauge classes of $L$-symbols compatible with
               $\omega$.
-        \item Pointwise multiplication of cocycles makes
-              $H^2(H,\C^\times)$ a commutative group. Sending the class of
-              $\psi$ and the class of $L$ to the class of $L\,L[\psi]$ is a
-              well-defined action of this group on these classes: the unit
-              acts trivially, acting by $\psi_2$ and then by $\psi_1$ is
-              acting by $\psi_1\psi_2$, and for any two classes exactly one
-              cohomology class carries the first to the second.
+        \item Sending the class of $\psi$ and the class of $L$ to the
+              class of $L\,L[\psi]$ is a well-defined action of the group
+              cohomology $H^2(H,\C^\times)$, for the trivial action of $H$
+              on $\C^\times$, on these classes, and for any two classes
+              exactly one cohomology class carries the first to the second.
     \end{enumerate}
     The last two items are the torsor statement of \cite{GarreRubio2023MPOSym}
     for fixed $(G,\omega,H)$, with the fusion gauge held fixed as in the
@@ -7851,10 +7839,11 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     freeness statement to (\ref{eq:mpug_induced_cohomology_iff}). The second
     item is the third with $L_0$ the formula at $\psi=1$, which is
     compatible by Theorem~\ref{thm:mpug_stabilizer_reconstruction}.
-    For the last item, products and inverses of cocycles are cocycles and
-    respect cohomology, which gives the group structure; cohomologous
-    cocycles give induced $L$-symbols related by an action gauge, so the
-    rule is well defined; the induced
+    For the last item, cocycles modulo cohomology form the second group
+    cohomology of $H$ with coefficients in $\C^\times$, and the sum of two
+    classes is the class of the pointwise product; cohomologous cocycles
+    give induced $L$-symbols related by an action gauge, so the rule is well
+    defined; the induced
     $L$-symbol of a pointwise product is the pointwise product of the induced
     $L$-symbols; and with base point $L$ the action is the bijection of the
     third item.
