@@ -664,16 +664,6 @@ For the group matrix product operators of arXiv:2203.12563:
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
 
-For the symmetric matrix product states of arXiv:2011.12127, Section III.A:
-
-- `cpgsv21_wigner_time_reversal_exact_invariance.tex` (open scope
-  restriction) records that the state-level Kramers obstruction for
-  injective spin-`1/2` tensors is formalized only for exact equality of the
-  matrix product vectors with those of the Wigner time-reversed tensor, while
-  the source allows invariance up to a phase at every length; the gauge-level
-  obstruction already carries an arbitrary scalar, and the elimination plan is
-  a phase-proportional bridge through the proportional fundamental theorem.
-
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
 - `rmp_aklt_pauli_basis_sign.tex` records that in the printed basis

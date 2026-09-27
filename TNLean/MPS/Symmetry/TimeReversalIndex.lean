@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.MPS.Core.Blocking
+import TNLean.MPS.FundamentalTheorem.InjectivePhase
 import TNLean.MPS.SharedInfra.CoisometryGauge
 import TNLean.MPS.Symmetry.GaugeUniqueness
 
@@ -28,16 +29,11 @@ so no normal tensor carries that symmetry.  Reflection acts by transposition,
 * The reflection index: the same conclusions for `(Aⁱ)ᵀ = ζ X† Aⁱ X`.
 * The Kramers obstruction: if `P P* = -1` (as for `σ_y`), no normal tensor of
   positive bond dimension satisfies `∑ⱼ Pᵢⱼ A*ʲ = ζ X⁻¹ Aⁱ X` with `X` invertible;
-  for injective tensors this excludes equality of the matrix product vectors with
-  those of the time-reversed tensor.
+  for injective tensors this excludes invariance of the matrix product vectors up to
+  a phase at every length under the time reversal.
 
 The source derives the gauge relations from the fundamental theorem for
 symmetric states; the index statements here start from the gauge relations.
-
-**Scope restriction (exact MPV equality):** `not_sameMPV_wignerTimeReversal_of_isInjective`
-excludes only exact equality of the matrix product vectors, while the source
-(line 1117) allows invariance up to a phase; documented in
-`docs/paper-gaps/cpgsv21_wigner_time_reversal_exact_invariance.tex`.
 
 ## Main results
 
@@ -47,7 +43,7 @@ excludes only exact equality of the matrix product vectors, while the source
 * `MPSTensor.mul_map_star_eq_of_reflection_gauges`
 * `MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one`
 * `MPSTensor.not_wignerTimeReversal_gauge`
-* `MPSTensor.not_sameMPV_wignerTimeReversal_of_isInjective`
+* `MPSTensor.not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective`
 
 ## References
 
@@ -333,15 +329,17 @@ theorem not_wignerTimeReversal_gauge [NeZero D] {A : MPSTensor 2 D} (hA : Kraus.
 
 /-- **No injective spin-`1/2` MPS is invariant under the Wigner time reversal.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
-line 1117): the ground state of a system with this symmetry cannot be an injective
-MPS.  Invariance is equality of the matrix product vectors of `A` and of its
-time-reversed tensor `∑ⱼ (σ_y)ᵢⱼ A*ʲ`; the fundamental theorem for injective
-tensors turns it into a gauge relation. -/
-theorem not_sameMPV_wignerTimeReversal_of_isInjective [NeZero D] {A : MPSTensor 2 D}
-    (hA : Kraus.IsInjective A) :
-    ¬ SameMPV A (fun i => ∑ j : Fin 2, pauliY i j • (A j).map (starRingEnd ℂ)) := by
-  intro hsame
-  obtain ⟨X, hX⟩ := (sameMPV_iff_gaugeEquiv_of_injective hA).1 hsame
-  exact not_wignerTimeReversal_gauge hA.isNormal X⁻¹ 1 (fun i => by simpa using hX i)
+lines 1116–1117): the ground state of a system with this symmetry cannot be an injective
+MPS.  Invariance is up to a phase: for every positive length `N`, the vector of the
+time-reversed tensor `∑ⱼ (σ_y)ᵢⱼ A*ʲ` is `c_N |ψ_N(A)⟩` with `|c_N| = 1`.  The fundamental
+theorem for injective tensors up to a phase turns this into a gauge relation, which
+`not_wignerTimeReversal_gauge` excludes. -/
+theorem not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective [NeZero D]
+    {A : MPSTensor 2 D} (hA : Kraus.IsInjective A) :
+    ¬ ∀ N, 0 < N → ∃ c : ℂ, ‖c‖ = 1 ∧ ∀ σ : Fin N → Fin 2,
+      mpv (fun i => ∑ j : Fin 2, pauliY i j • (A j).map (starRingEnd ℂ)) σ = c * mpv A σ := by
+  intro hinv
+  obtain ⟨X, ζ, -, hX⟩ := unitGaugePhaseEquiv_of_mpv_eq_smul_of_isInjective hA hinv
+  exact not_wignerTimeReversal_gauge hA.isNormal X⁻¹ ζ (fun i => by simpa using hX i)
 
 end MPSTensor

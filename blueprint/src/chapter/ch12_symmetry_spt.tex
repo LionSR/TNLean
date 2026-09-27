@@ -348,36 +348,22 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     Lemma~\ref{lem:gauge_phase_unique_normal}, $-|\zeta|^2=1$, which is impossible.
 \end{proof}
 
-\begin{theorem}[Kramers obstruction for injective tensors, exact invariance]
-    \label{thm:kramers_obstruction_exact_mpv}
-    \lean{MPSTensor.not_sameMPV_wignerTimeReversal_of_isInjective}
+\begin{theorem}[Kramers obstruction for injective tensors]
+    \label{thm:kramers_obstruction_phase}
+    \lean{MPSTensor.not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective}
     \leanok
-    \uses{thm:kramers_obstruction}
-    No injective spin-$\tfrac12$ tensor with $D\ge1$ generates, at every length,
-    the same matrix product vector as its Wigner time reversal
-    $A^i\mapsto\sum_j(\sigma_y)_{ij}\bar A^j$.  This is the source's
-    state-level statement restricted to exact invariance; invariance up to a
-    phase is Theorem~\ref{thm:kramers_obstruction_phase}
-    \cite{gap:cpgsv21_wigner_time_reversal_exact_invariance}.
+    \uses{thm:kramers_obstruction, thm:ft_single_phase}
+    No injective spin-$\tfrac12$ tensor with $D\ge1$ is invariant up to a phase
+    under the Wigner time reversal: it is not the case that for every $N\ge1$ the
+    matrix product vector of $\tilde A^i=\sum_j(\sigma_y)_{ij}\bar A^j$ is
+    $c_N\ket{\psi_N(A)}$ with $|c_N|=1$ \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:ft_single}
-    For an injective tensor, equality of the matrix product vectors gives the
-    relation of Theorem~\ref{thm:kramers_obstruction} with $\zeta=1$ by the
-    fundamental theorem.
+    By Theorem~\ref{thm:ft_single_phase}, $\tilde A^i=\lambda\,XA^iX^{-1}$ for an
+    invertible $X$ and a phase $\lambda$, which Theorem~\ref{thm:kramers_obstruction}
+    excludes.
 \end{proof}
-
-\begin{theorem}[Kramers obstruction for injective tensors]
-    \label{thm:kramers_obstruction_phase}
-    \uses{thm:kramers_obstruction, thm:ft_single}
-    No injective spin-$\tfrac12$ tensor with $D\ge1$ is invariant up to a phase
-    under the Wigner time reversal: it is not the case that for every $N$ the
-    vector $\sigma_y^{\otimes N}\ket{\overline{\psi_N(A)}}$ is a multiple of
-    $\ket{\psi_N(A)}$ \cite[Section~III.A]{Cirac2021Matrix}.  The case of
-    exact invariance is Theorem~\ref{thm:kramers_obstruction_exact_mpv}
-    \cite{gap:cpgsv21_wigner_time_reversal_exact_invariance}.
-\end{theorem}
 
 \begin{theorem}[Anticommuting physical symmetries are obstructed]
     \label{thm:anticommuting_physical_obstruction}
