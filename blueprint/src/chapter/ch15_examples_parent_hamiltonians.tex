@@ -650,30 +650,148 @@ eigenspace.
     $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
 \end{proof}
 
-\begin{remark}[AKLT polynomial Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
-    The displayed local spin-chain Hamiltonian of the AKLT state is
+\begin{definition}[AKLT polynomial Hamiltonian]\label{def:aklt_polynomial_hamiltonian}
+    \lean{MPSTensor.spinOneOperator, MPSTensor.akltBondTerm,
+        MPSTensor.akltHamiltonian}
+    \leanok
+    \uses{def:aklt_tensor}
+    Let $S^x,S^y,S^z$ be the spin-$1$ operators in the basis
+    $\ket0=\ket{m=0}$, $\ket1=\ket{m=+1}$, $\ket2=\ket{m=-1}$, with
+    $S^z=\diag(0,1,-1)$, $S^+\ket0=\sqrt2\ket1$, $S^+\ket2=\sqrt2\ket0$,
+    $S^x=\tfrac12(S^++S^-)$ and $S^y=\tfrac1{2i}(S^+-S^-)$. This is the
+    labelling in which the three matrices of the AKLT tensor of
+    Definition~\ref{def:aklt_tensor} are proportional to
+    $\sigma^z,\sqrt2\sigma^+,-\sqrt2\sigma^-$ on the indices $0,1,2$. For two sites
+    $j,k$ of a chain let
+    $\vec S_j\cdot\vec S_k=\sum_\alpha S^\alpha_jS^\alpha_k$. On a periodic
+    chain of $N$ spin-$1$ sites, with indices modulo $N$, the AKLT Hamiltonian is
     \begin{align}
         H_{\mathrm{AKLT},N}
          & =
         \sum_i
         \left(\vec S_i\cdot\vec S_{i+1}
-        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right),
-        \notag
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right)
+        \label{eq:aklt_polynomial_hamiltonian}
     \end{align}
-    up to an additive constant~\cite{AKLT1987Rigorous,AKLT1988ValenceBond};
-    see also \cite[local TeX lines~340--349]{PerezGarcia2007Matrix} and
-    \cite[lines~2126--2130]{Schuch2011Phases}. The spin-$2$ projector form
-    is related to the polynomial Hamiltonian by the spin-addition identity
+    \cite{AKLT1987Rigorous,AKLT1988ValenceBond}; see also
+    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix}, and, up to an
+    additive constant, \cite[lines~2126--2130]{Schuch2011Phases}. Its two-site
+    term is
+    $h=\vec S_0\cdot\vec S_1+\tfrac13(\vec S_0\cdot\vec S_1)^2$.
+\end{definition}
+
+\begin{theorem}[The AKLT term and the spin-two projector]%
+    \label{thm:aklt_spin_two_projector}
+    \lean{MPSTensor.spinExchange_spinOneOperator_zero_one_apply,
+        MPSTensor.spinOneOperator_sum_mul_self,
+        MPSTensor.totalSpinSq_spinOneOperator_two,
+        MPSTensor.akltBondTerm_shift_apply,
+        MPSTensor.akltBondTerm_shift_eq_parentInteraction,
+        MPSTensor.akltSpinTwoES,
+        MPSTensor.akltSpinTwoES_eq_orthogonal_groundSpaceES,
+        MPSTensor.akltBondTerm_shift_eq_spinTwo_starProjection}
+    \leanok
+    \uses{def:aklt_polynomial_hamiltonian, def:parent_interaction}
+    On two spin-$1$ sites,
     \begin{align}
-        P^{(2)}_{i,i+1}
+        P^{(2)}
          & =
         \frac12
-        \left(\vec S_i\cdot\vec S_{i+1}
-        +\frac13(\vec S_i\cdot\vec S_{i+1})^2
-        +\frac23\Id\right)
+        \left(\vec S_0\cdot\vec S_1
+        +\frac13(\vec S_0\cdot\vec S_1)^2
+        +\frac23\Id\right),
+        \label{eq:aklt_spin_two_projector}
+    \end{align}
+    where $P^{(2)}$ is the orthogonal projector onto the subspace of total spin
+    $2$, the eigenspace of $\vec S_{\mathrm{tot}}^{2}$ for $6=2(2+1)$, with
+    $\vec S_{\mathrm{tot}}=\vec S_0+\vec S_1$. This projector is the two-site
+    parent interaction of the AKLT tensor, the orthogonal projector onto
+    $\mathcal G_2(A_{\mathrm{AKLT}})^{\perp}$. Writing the Hamiltonian as a sum
+    of such spin-$2$ projectors is the form of~\cite{AKLT1987Rigorous}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_ground_space_two}
+    In the basis of Definition~\ref{def:aklt_polynomial_hamiltonian},
+    $\vec S_0\cdot\vec S_1=S^z\otimes S^z+\tfrac12(S^+\otimes S^-+S^-\otimes S^+)$
+    has integer entries: it fixes $\ket{11}$ and $\ket{22}$, exchanges
+    $\ket{01}\leftrightarrow\ket{10}$ and $\ket{02}\leftrightarrow\ket{20}$, and
+    maps $\ket{00}\mapsto\ket{12}+\ket{21}$, $\ket{12}\mapsto\ket{00}-\ket{12}$,
+    $\ket{21}\mapsto\ket{00}-\ket{21}$. A computation on the nine coordinates
+    shows that the right side $Q$ of~(\ref{eq:aklt_spin_two_projector}) is
+    $\sum_kw_kw_k^{\mathsf T}/\lVert w_k\rVert^{2}$ for the five vectors
+    $\ket{11}$, $\ket{22}$, $\ket{01}+\ket{10}$, $\ket{02}+\ket{20}$,
+    $\ket{12}+2\ket{00}+\ket{21}$. Hence $Q$ is real symmetric and idempotent,
+    and its kernel is cut out by the five constraints
+    (\ref{eq:aklt_two_site_constraints}), which is
+    $\mathcal G_2(A_{\mathrm{AKLT}})$ by
+    Theorem~\ref{thm:aklt_ground_space_two}. A self-adjoint idempotent is the
+    orthogonal projector onto the orthogonal complement of its kernel. The same
+    computation gives $(\vec S_0\cdot\vec S_1)Q=Q$, so a vector is fixed by
+    $\vec S_0\cdot\vec S_1$ exactly when it is fixed by $Q$. Since
+    $\sum_\alpha(S^\alpha)^{2}=2$ on each site,
+    $\vec S_{\mathrm{tot}}^{2}=4+2\,\vec S_0\cdot\vec S_1$, so the eigenspace of
+    $\vec S_{\mathrm{tot}}^{2}$ for $6$ is the set of vectors fixed by
+    $\vec S_0\cdot\vec S_1$, which is the range of $Q$.
+\end{proof}
+
+\begin{theorem}[Ground state of the AKLT Hamiltonian]%
+    \label{thm:aklt_polynomial_ground_state}
+    \lean{MPSTensor.cyclicRestrictₗ_spinExchange,
+        MPSTensor.aklt_localTerm_two_apply,
+        MPSTensor.akltHamiltonian_add_eq_parentHamiltonian,
+        MPSTensor.akltHamiltonian_add_isPositive,
+        MPSTensor.akltHamiltonian_eigenvalue_ge,
+        MPSTensor.akltHamiltonian_eigenspace_eq_ker,
+        MPSTensor.akltHamiltonian_eigenspace_eq_mpvSubmodule,
+        MPSTensor.akltHamiltonian_hasUniqueGroundState,
+        MPSTensor.akltHamiltonian_hasEigenvalue,
+        MPSTensor.isPositive_conj_of_add_eq_smul_parentHamiltonian,
+        MPSTensor.neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian,
+        MPSTensor.eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian}
+    \leanok
+    \uses{def:aklt_polynomial_hamiltonian, def:parent_hamiltonian}
+    For $N\ge2$ the Hamiltonian~(\ref{eq:aklt_polynomial_hamiltonian})
+    satisfies
+    \begin{align}
+        H_{\mathrm{AKLT},N}+\tfrac{2N}{3}
+         & =2\sum_iP^{(2)}_{i,i+1}=2H^{(2)}_{N,\mathrm{AKLT}},
         \notag
     \end{align}
-    for two spin-$1$ particles. For open boundary conditions and $N\geq2$,
+    where $H^{(2)}_{N,\mathrm{AKLT}}$ is the two-site parent Hamiltonian of the
+    AKLT tensor. Hence every eigenvalue of $H_{\mathrm{AKLT},N}$ is real and at
+    least $-\tfrac{2N}{3}$. For $N\ge3$ the eigenspace for $-\tfrac{2N}{3}$ is
+    $\C\,V^{(N)}(A_{\mathrm{AKLT}})$, so the AKLT state is the unique ground
+    state of $H_{\mathrm{AKLT},N}$
+    \cite{AKLT1987Rigorous}, \cite[local TeX lines~340--349]{PerezGarcia2007Matrix}.
+    The ground energy $-\tfrac{2N}{3}$ is derived here from the identity above;
+    the local source states only the ground-state property, for no specified
+    boundary condition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_spin_two_projector, lem:transported_es_positive,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        thm:aklt_chain_ground_space_two}
+    Restricting a chain vector to the window $i,i+1$ turns
+    $\vec S_i\cdot\vec S_{i+1}$ into $\vec S_0\cdot\vec S_1$, so the local term
+    of the two-site parent Hamiltonian at $i$ is
+    $\tfrac12\bigl(h_i+\tfrac23\bigr)$ by
+    Theorem~\ref{thm:aklt_spin_two_projector}. Summing over the $N$ bonds gives
+    the identity. The parent Hamiltonian is positive by
+    Lemma~\ref{lem:transported_es_positive}, so a nonzero $v$ with
+    $H_{\mathrm{AKLT},N}v=\mu v$ satisfies $\mu+\tfrac{2N}{3}\ge0$. The
+    eigenspace for $-\tfrac{2N}{3}$ is the kernel of $H^{(2)}_{N,\mathrm{AKLT}}$,
+    which is $\mathcal G_{N,2}(A_{\mathrm{AKLT}})$ by
+    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} and
+    $\C\,V^{(N)}(A_{\mathrm{AKLT}})$, a line, by
+    Theorem~\ref{thm:aklt_chain_ground_space_two}.
+\end{proof}
+
+\begin{remark}[AKLT edge modes]\label{rem:aklt_parent_hamiltonian}
+    For open boundary conditions and $N\geq2$,
     \begin{align}
         \dim\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
          & = 4, \notag \\
@@ -685,7 +803,6 @@ eigenspace.
     \end{align}
     \cite[lines~1169--1174]{Cirac2021Matrix}; see
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
-    % Neither the polynomial form nor the open-boundary degeneracy is
-    % formalized; the periodic two-site uniqueness is
-    % thm:aklt_chain_ground_space_two.
+    % The open-boundary degeneracy is not formalized; the periodic polynomial
+    % Hamiltonian is thm:aklt_polynomial_ground_state.
 \end{remark}

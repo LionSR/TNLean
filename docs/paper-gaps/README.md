@@ -17,12 +17,13 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   prints the Fibonacci F-symbols but no numeric entries of the two operator
   blocks, the placement of the F-symbols used for the blocks, that on edge
   label `τ` a diagonal bond similarity relates the source's G-symbol tensor to
-  these blocks (so the periodic operators and fusion rules agree there), and
-  that the review's prefactor `1/√(d_A d_D)` gives the congruence
+  these blocks, that at edge label `1` the same similarity fixes the source's
+  letters, which are diagonal matrix units, so the source's blocks satisfy the
+  Fibonacci fusion rules on the full alphabet (the former scope restriction to
+  edge label `τ` is resolved), and that the review's prefactor `1/√(d_A d_D)` gives the congruence
   `W^{-1/2} O W^{-1/2}`, which contradicts the review's own fusion statement in
   the orthonormal basis (a Local fix, together with the review's garbled
-  F-symbol selection rule). The fusion rules of the source's tensor on edge
-  label `1` remain open, with an elimination plan (issue #8217).
+  F-symbol selection rule).
 - `bmwshv17_joint_block_left_inverse.tex` records that the simultaneous left
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical
@@ -59,16 +60,22 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
   and that the plaquette state follows when each bond identifies the pair
   `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_czx_boundary_chain.tex` records that the virtual action of the
+  on-site CZX symmetry is identified with the CZX matrix product unitary on a
+  closed chain of legs subject to the plaquette constraint, and that the
+  support of the contraction of a region of the torus on that chain is not
+  formalized.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the
   printed quantum-double tensor is not normalized (factor `|G|`); that the
   quantum-double instance uses the right-regular representation, equivalent
   to the printed left-regular one; and that the review's statements about the
-  contracted network (the primal tensor's symmetry under every irreducible
-  representation, and the coloring superposition, which on a torus covers only
-  the Gauss-law configurations of trivial holonomy) are formalized only for
-  one tensor or not at all.
+  contracted network are formalized on the torus: the primal tensor's
+  symmetry under every irreducible representation as a pulling-through
+  identity, and the coloring superposition as the equal-weight superposition
+  of the Gauss-law configurations of trivial holonomy, the only sector the
+  dual network reaches on a torus.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -587,6 +594,14 @@ note.
 
 For the matrix product operator symmetries of arXiv:2203.12563:
 
+- `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
+  `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
+  trivial action of `ψ` is forced by the source's identification of that phase
+  with part of `𝓜_TY`.
+- `glm23_reps3_su24_module_list.tex` records that completeness of the listed
+  `Rep(S₃)` and `su(2)₄` phases is formalized only on one block, with a
+  two-block representation of `Rep(S₃)` showing that the representation
+  identity alone does not determine the list.
 - `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
   algebras, symmetric families, and nonnegative integer representations uses
   only the periodic-boundary form of the source's arbitrary-boundary
@@ -623,7 +638,9 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   tensors omit the factors `v_e v_f` of the `G`-symbols and store the `σ`
   tensor multiplied by `√2`, so that all entries lie in `ℤ[√2]`; states the
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
-  leaves open whether omitting the factors `v` changes the periodic operators.
+  shows that the source's G-symbol tensors are related to the formal tensors by
+  the diagonal bond similarity `g(u, l) = (v_u / v_l)^{1/2}`, so omitting the
+  factors `v` leaves the periodic operators and the fusion algebra unchanged.
 
 For the domain walls of anomalous symmetries in arXiv:2405.00439:
 
@@ -631,6 +648,14 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   printed for the two CZX product states do not give reductions, the
   corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
   $L_0/L_1=-1=\omega$ is unchanged.
+- `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
+  the unbroken subgroup `H` of the classification of the L-symbols by `H`
+  and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
+  trivialization of `ω|_H` is chosen) is the stabilizer of one block, as in
+  arXiv:2203.12563, not the kernel of the action on blocks printed in
+  arXiv:2405.00439; the two agree exactly when the stabilizer is normal, in
+  particular for abelian groups, and `S_3` acting on three blocks separates
+  them.
 
 For the group matrix product operators of arXiv:2203.12563:
 
@@ -687,3 +712,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   connected correlator, since for complex `λ₂` the limit correlator of Hermitian
   observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
   need not vanish at finite `N`; the corrected form suffices for Theorem 1.
+- `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
+  in depth `o(log N)`) was first formalized for a normal tensor in the gauge
+  `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
+  quantitative form `N ≤ C(T+1)e^{b(T+1)}`; resolved: the reduction of a normal
+  tensor to this gauge, with which both proofs begin, is now formalized, and
+  the theorem holds for every normal tensor.

@@ -160,6 +160,17 @@ theorem eisensteinOmega_re : eisensteinOmega.re = -1 / 2 := by
 theorem eisensteinOmega_im : eisensteinOmega.im = Real.sqrt 3 / 2 := by
   simp [eisensteinOmega]
 
+/-- The cube root `ω = (-1 + i√3)/2` is the primitive root `exp(2πi/3)`. -/
+theorem eisensteinOmega_eq_exp :
+    eisensteinOmega = Complex.exp (2 * Real.pi * Complex.I / 3) := by
+  have h : 2 * (Real.pi : ℂ) * Complex.I / 3 = ((Real.pi - Real.pi / 3 : ℝ) : ℂ) * Complex.I := by
+    push_cast
+    ring
+  rw [h, Complex.exp_mul_I, ← Complex.ofReal_cos, ← Complex.ofReal_sin, Real.cos_pi_sub,
+    Real.sin_pi_sub, Real.cos_pi_div_three, Real.sin_pi_div_three, eisensteinOmega]
+  push_cast
+  ring
+
 /-- The exact embedding of the Eisenstein integers into the complex numbers,
 `ω ↦ (-1 + i√3)/2`. -/
 noncomputable def eisensteinToComplex : EisensteinInt →+* ℂ where

@@ -268,13 +268,13 @@
         \tr_{\mathrm{mult}}
         \left(\frac{\mu_\gamma}{m_\gamma}\otimes X_\gamma\right)
          & =X_\gamma,
-         &
+        \notag        \\
         \tr_{\mathrm{mult}}
         \left(\frac{\nu_{\sigma(\gamma)}}{m_\gamma}\otimes Y_\gamma\right)
          & =Y_\gamma,
-        \notag
+        \label{eq:mpdo_bnt_ambient_retract_nu}
     \end{align}
-    where the second equality uses
+    where (\ref{eq:mpdo_bnt_ambient_retract_nu}) follows from
     $\tr(\nu_{\sigma(\gamma)})=m_\gamma$.  The two coordinate relabellings in
     the two-site composite cancel.  These identities prove
     (\ref{eq:mpdo_bnt_ambient_sector_retractions}).
@@ -297,30 +297,32 @@
     \begin{align}
         R_1(\widetilde M_v)
          & =\bigl(m_\gamma M_\gamma^v\bigr)_\gamma,
-         &
+        \label{eq:mpdo_bnt_ambient_sector_one_site_fwd}
+        \\
         \widetilde R_1\bigl((m_\gamma M_\gamma^v)_\gamma\bigr)
          & =\widetilde M_v.
-        \label{eq:mpdo_bnt_ambient_sector_one_site_letters}
+        \label{eq:mpdo_bnt_ambient_sector_one_site_rev}
     \end{align}
     The relabelled two-site maps satisfy
     \begin{align}
         R_2\!\left(\kappa_\ast(\widetilde{M^{[2]}}_v)\right)
          & =\bigl(m_\gamma A_{\sigma(\gamma)}^v\bigr)_\gamma,
-        \notag                                                \\
+        \label{eq:mpdo_bnt_ambient_sector_two_site_fwd}
+        \\
         \widetilde R_2\bigl((m_\gamma A_{\sigma(\gamma)}^v)_\gamma\bigr)
          & =\kappa_\ast(\widetilde{M^{[2]}}_v).
-        \label{eq:mpdo_bnt_ambient_sector_two_site_letters}
+        \label{eq:mpdo_bnt_ambient_sector_two_site_rev}
     \end{align}
-    The first and second one-site identities combine the one-site weighted
+    Identities~(\ref{eq:mpdo_bnt_ambient_sector_one_site_fwd}) and~(\ref{eq:mpdo_bnt_ambient_sector_one_site_rev}) combine the one-site weighted
     sector form of
     \cite[Appendix~C.4, lines~2048--2051]{Cirac2016MPDO_arXiv} with,
     respectively,
     \cite[Appendix~C.4, lines~2067--2068]{Cirac2016MPDO_arXiv} and
     \cite[Appendix~C.4, lines~2081--2083]{Cirac2016MPDO_arXiv}.
-    The first two-site identity combines the matched weighted sector form of
+    Identity~(\ref{eq:mpdo_bnt_ambient_sector_two_site_fwd}) combines the matched weighted sector form of
     \cite[Appendix~C.4, lines~2048--2064]{Cirac2016MPDO_arXiv} with the map
     $R_2$ of \cite[Appendix~C.4, lines~2078--2079]{Cirac2016MPDO_arXiv}.
-    The second combines the same sector form with the normalized map
+    Identity~(\ref{eq:mpdo_bnt_ambient_sector_two_site_rev}) combines the same sector form with the normalized map
     $\widetilde R_2$ of
     \cite[Appendix~C.4, lines~2070--2071]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -341,9 +343,10 @@
     Compression removes the two outer coisometries, and partial trace over the
     multiplicity coordinate multiplies the simple-sector letter by
     $\tr(\mu_\gamma)=m_\gamma$ or
-    $\tr(\nu_{\sigma(\gamma)})=m_\gamma$.  This proves the first identity in
-    each of (\ref{eq:mpdo_bnt_ambient_sector_one_site_letters}) and
-    (\ref{eq:mpdo_bnt_ambient_sector_two_site_letters}).  Preparing the
-    normalized multiplicity matrix cancels the factor $m_\gamma$ and the
-    reconstruction identities give the two reverse formulas.
+    $\tr(\nu_{\sigma(\gamma)})=m_\gamma$.  This proves
+    (\ref{eq:mpdo_bnt_ambient_sector_one_site_fwd}) and
+    (\ref{eq:mpdo_bnt_ambient_sector_two_site_fwd}).  Preparing the
+    normalized multiplicity matrix cancels the factor $m_\gamma$, yielding
+    (\ref{eq:mpdo_bnt_ambient_sector_one_site_rev}) and
+    (\ref{eq:mpdo_bnt_ambient_sector_two_site_rev}).
 \end{proof}
