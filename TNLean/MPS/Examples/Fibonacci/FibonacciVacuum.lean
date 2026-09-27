@@ -131,16 +131,6 @@ theorem mpo_fibOne_mulVec (w : (Fin N → Fin 2) → ℂ) :
   ext x
   exact Matrix.mulVec_diagonal _ _ x
 
-/-- A vector supported on admissible configurations is fixed by `P_N`. -/
-theorem mpo_fibOne_mulVec_eq_self {w : (Fin N → Fin 2) → ℂ}
-    (hw : ∀ x, fibAdmissibility x = 0 → w x = 0) :
-    MPOTensor.mpo fibOne N *ᵥ w = w := by
-  rw [mpo_fibOne_mulVec]
-  ext x
-  rcases fibAdmissibility_eq_zero_or_one x with h | h
-  · simp [hw x h]
-  · simp [h]
-
 /-- Project result: blueprint `lem:asymex_fib_vacuum`.
 **The vacuum operator is an orthogonal projection**: `P_N² = P_N = P_N†`. -/
 lemma mpo_fibOne_isStarProjection : IsStarProjection (MPOTensor.mpo fibOne N) := by

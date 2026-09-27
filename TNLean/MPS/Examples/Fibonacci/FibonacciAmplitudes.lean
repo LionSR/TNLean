@@ -27,8 +27,7 @@ label `1` is `τ`, `σ = φ^{-1/2}` is `goldenSigmaReal`, the periodic vector is
 `MPSTensor.mpvState`, and the cyclic successor `v + 1` is addition in `Fin N`. The remaining
 clause of the blueprint lemma, that both vectors are fixed by the vacuum operator
 `P_N = O_N(B_1)`, is `mpo_fibOne_mulVec_allTau` (`Examples/FibonacciAction.lean`) and
-`mpo_fibOne_mulVec_chain` (`Examples/FibonacciAnomaly.lean`); the amplitude formula also shows
-that the chain vector has admissible support, so `mpo_fibOne_mulVec_eq_self` applies to it.
+`mpo_fibOne_mulVec_chain` (`Examples/FibonacciAnomaly.lean`).
 
 ## Main definitions
 
