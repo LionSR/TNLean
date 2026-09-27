@@ -78,51 +78,6 @@ variable {G X : Type*} [Group G] [MulAction G X]
 
 namespace LSymbol
 
-/-- Compatibility is multiplicative: pointwise products of compatible L-symbols are compatible
-with the pointwise product of the three-cochains. -/
-theorem IsCompatible.mul {L₁ L₂ : LSymbol G X} {ω₁ ω₂ : ScalarThreeCochain G}
-    (h₁ : IsCompatible L₁ ω₁) (h₂ : IsCompatible L₂ ω₂) :
-    IsCompatible (L₁ * L₂) (ω₁ * ω₂) := by
-  intro x g h k
-  simp only [Pi.mul_apply]
-  calc
-    _ = (L₁ x g (h * k) * L₁ x h k) * (L₂ x g (h * k) * L₂ x h k) := by ac_rfl
-    _ = (ω₁ g h k * L₁ (k • x) g h * L₁ x (g * h) k) *
-        (ω₂ g h k * L₂ (k • x) g h * L₂ x (g * h) k) := by rw [h₁, h₂]
-    _ = _ := by ac_rfl
-
-/-- The pointwise inverse of a compatible L-symbol is compatible with the inverse
-three-cochain. -/
-theorem IsCompatible.inv {L : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) : IsCompatible L⁻¹ ω⁻¹ := by
-  intro x g h k
-  simp only [Pi.inv_apply]
-  rw [← mul_inv, hL x g h k, mul_inv, mul_inv]
-
-/-- The ratio of two L-symbols compatible with the same three-cochain is compatible with the
-trivial three-cochain. -/
-theorem IsCompatible.mul_inv_one {L L₀ : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) (hL₀ : IsCompatible L₀ ω) :
-    IsCompatible (L * L₀⁻¹) (fun _ _ _ ↦ 1) := by
-  have h := hL.mul hL₀.inv
-  rw [mul_inv_cancel] at h
-  exact h
-
-/-- An action-tensor gauge with trivial fusion gauge commutes with multiplication by a fixed
-L-symbol. -/
-theorem gauge_one_mul (γ : ActionTensorGauge G X) (L₁ L₂ : LSymbol G X) :
-    gauge (fun _ _ ↦ 1) γ (L₁ * L₂) = L₁ * gauge (fun _ _ ↦ 1) γ L₂ := by
-  funext x g h
-  simp only [gauge, Pi.mul_apply]
-  ac_rfl
-
-/-- An action-tensor gauge with trivial fusion gauge preserves compatibility with the same
-three-cochain. -/
-theorem IsCompatible.gauge_one {L : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) (γ : ActionTensorGauge G X) :
-    IsCompatible (LSymbol.gauge (fun _ _ ↦ 1) γ L) ω := by
-  simpa only [ScalarThreeCochain.fusionGauge_one] using hL.gauge (fun _ _ ↦ 1) γ
-
 /-- Two L-symbols are action-gauge equivalent when they differ by an action-tensor gauge and
 the trivial fusion-tensor gauge. This is the equivalence relation of arXiv:2203.12563,
 `gdgroup` (`REsubmission.tex` line 718), with the fusion gauge `β` fixed as at line 761. -/
