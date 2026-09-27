@@ -734,10 +734,53 @@ The Hamiltonian is $H_N=-\sum_ip_i$. The review states that such anyonic
 chains commute with the whole algebra of periodic
 operators~\cite{Cirac2021Matrix}.
 
+\begin{definition}[The golden chain]%
+    \label{def:asymex_fib_golden_chain}
+    \lean{FibonacciCompression.goldenChainTermGolden,
+        FibonacciCompression.goldenChainTerm,
+        FibonacciCompression.goldenChainHamiltonian,
+        FibonacciCompression.goldenChainTermGolden_tau_tau,
+        FibonacciCompression.goldenChainTermGolden_of_ne_tau_tau,
+        FibonacciCompression.fibYGolden,
+        FibonacciCompression.fibOneKernelGolden}
+    \leanok
+    \uses{def:asymex_fib_fsymbols}
+    The golden chain is $H_N=-\sum_ip_i$ with the local terms
+    of~(\ref{eq:asymex_fib_golden_term}). The topological symmetry has the
+    factors $\left(F^{\tau x_n\tau}_{x_{n+1}'}\right)_{x_n'}^{x_{n+1}}$, and the
+    vacuum factor is $\delta_{x_n'x_n}\delta_{x_{n+1}'x_{n+1}}$ unless
+    $x_n=x_{n+1}=1$, where it vanishes.
+\end{definition}
+
+\begin{lemma}[Site operators and nearest-neighbour kernels]%
+    \label{lem:mpo_site_operator_neighbour_kernel}
+    \lean{MPOTensor.neighbourKernel, MPOTensor.siteOperator,
+        MPOTensor.sum_ite_agree, MPOTensor.siteOperator_mul_neighbourKernel}
+    \leanok
+    On a periodic chain of $N\geq2$ sites, let $K$ have the entries
+    $\bra{s}K\ket{t}=\prod_nf(s_n,s_{n+1},t_n,t_{n+1})$, and let $p_i$ change
+    only the state at site $i$, with amplitude $h(t_{i-1},t_{i+1},s_i,t_i)$.
+    If
+    \begin{align}
+        \sum_yh(a',c',b',y)f(a',y,a,b)f(y,c',b,c)
+         & =\sum_yf(a',b',a,y)f(b',c',y,c)h(a,c,y,b)
+        \notag
+    \end{align}
+    for all labels, then $p_iK=Kp_i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Both entries of $p_iK$ and $Kp_i$ at $(s,t)$ are sums over the label
+    at site $i$ of an intermediate configuration that agrees with $s$ or
+    $t$ elsewhere. The factors of $K$ on the bonds away from site $i$ are
+    the same in every term, and the remaining sums are the two sides of
+    the three-site identity.
+\end{proof}
+
 \begin{theorem}[The golden chain commutes with the Fibonacci operators]%
     \label{thm:asymex_fib_golden_chain}
-    \lean{FibonacciCompression.goldenChainTermGolden_tau_tau,
-        FibonacciCompression.mpo_fibTau_eq_neighbourKernel,
+    \lean{FibonacciCompression.mpo_fibTau_eq_neighbourKernel,
         FibonacciCompression.goldenChainTerm_local_tau,
         FibonacciCompression.mpo_fibOne_eq_neighbourKernel,
         FibonacciCompression.goldenChainTerm_local_one,
@@ -746,13 +789,14 @@ operators~\cite{Cirac2021Matrix}.
         FibonacciCompression.goldenChainHamiltonian_commute_fibProjector,
         FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau}
     \leanok
-    \uses{def:asymex_fib, def:asymex_fib_fsymbols, def:asymex_fib_projector}
+    \uses{def:asymex_fib, def:asymex_fib_golden_chain, def:asymex_fib_projector}
     For every $N\geq2$, the golden chain $H_N$ commutes with $O_N(B_\tau)$,
     with $O_N(B_1)$ and with the projector $\Pi_N$.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{lem:mpo_site_operator_neighbour_kernel}
     In the $\tau$ block the bond index at site $n$ is determined by the
     pair $(x_n',x_n)$, so the only closed bond configuration that survives
     gives

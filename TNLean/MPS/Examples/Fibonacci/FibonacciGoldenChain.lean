@@ -19,7 +19,7 @@ the three-site term `(H_i)_{x_i}^{x'_i} = −(F^{x_{i+1}}_{x_{i−1} τ τ})^1_{
 neighbours (lines 154–175); lines 510–516: the topological symmetry `Y` with
 `⟨x'|Y|x⟩ = ∏_i (F^{x'_{i+1}}_{τ x_i τ})^{x'_i}_{x_{i+1}}` on the periodic chain.
 Review: arXiv:2011.12127, Section 4 "MPO symmetries" and Appendix A, "The MPO for the Fibonacci
-model", `Papers/2011.12127/TN-Review-main.tex` line 1393 and lines 2613–2627: the anyonic spin
+model", `Papers/2011.12127/TN-Review-main.tex` lines 1388–1393 and 2613–2627: the anyonic spin
 chains built from the pulling-through tensors commute with the whole matrix product operator
 algebra, with the Fibonacci F-symbols.
 
@@ -205,7 +205,7 @@ theorem mpo_fibOne_eq_neighbourKernel (N : ℕ) [NeZero N] :
 /-- **The local relation with the `τ` block.** Project result: the three-site identity
 `∑_y Π(a',c')_{b'y} Y(a',y;a,b) Y(y,c';b,c) = ∑_y Y(a',b';a,y) Y(b',c';y,c) Π(a,c)_{yb}`
 over the golden integers, the local form of the pulling-through relation of
-arXiv:2011.12127, line 1393. -/
+arXiv:2011.12127, lines 1388–1393. -/
 theorem goldenChainTerm_local_tau : ∀ a' b' c' a b c : Fin 2,
     ∑ y, goldenChainTermGolden a' c' b' y * fibYGolden a' y a b * fibYGolden y c' b c =
       ∑ y, fibYGolden a' b' a y * fibYGolden b' c' y c * goldenChainTermGolden a c y b := by
@@ -234,7 +234,7 @@ private theorem goldenChainHamiltonian_commute_of_local {N : ℕ} [NeZero N] (hN
   simpa only [goldenChainTerm, map_sum, map_mul] using
     congrArg goldenToComplex (hloc a' b' c' a b c)
 
-/-- **The golden chain commutes with the `τ` operator.** Source: arXiv:2011.12127, line 1393,
+/-- **The golden chain commutes with the `τ` operator.** Source: arXiv:2011.12127, lines 1388–1393,
 and arXiv:cond-mat/0612341, `fibonacci.tex` lines 510–516: `[H_N, O_N(B_τ)] = 0` on every
 periodic chain of `N ≥ 2` links. -/
 theorem goldenChainHamiltonian_commute_mpo_fibTau {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
@@ -243,13 +243,13 @@ theorem goldenChainHamiltonian_commute_mpo_fibTau {N : ℕ} [NeZero N] (hN : 2 �
   exact goldenChainHamiltonian_commute_of_local hN fibYGolden goldenChainTerm_local_tau
 
 /-- **The golden chain commutes with the vacuum operator.** Source: arXiv:2011.12127,
-line 1393: `[H_N, O_N(B_1)] = 0` on every periodic chain of `N ≥ 2` links. -/
+lines 1388–1393: `[H_N, O_N(B_1)] = 0` on every periodic chain of `N ≥ 2` links. -/
 theorem goldenChainHamiltonian_commute_mpo_fibOne {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     Commute (goldenChainHamiltonian N) (mpo fibOne N) := by
   rw [mpo_fibOne_eq_neighbourKernel]
   exact goldenChainHamiltonian_commute_of_local hN fibOneKernelGolden goldenChainTerm_local_one
 
-/-- **The golden chain commutes with the projector.** Source: arXiv:2011.12127, line 1393:
+/-- **The golden chain commutes with the projector.** Source: arXiv:2011.12127, lines 1388–1393:
 `[H_N, P_N] = 0` for the projector `P_N = w_1 O_N(B_1) + w_τ O_N(B_τ)` on every periodic chain
 of `N ≥ 2` links. -/
 theorem goldenChainHamiltonian_commute_fibProjector {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
@@ -258,7 +258,7 @@ theorem goldenChainHamiltonian_commute_fibProjector {N : ℕ} [NeZero N] (hN : 2
     ((goldenChainHamiltonian_commute_mpo_fibTau hN).smul_right _)
 
 /-- **The golden chain commutes with the G-symbol operators.** Source: arXiv:2011.12127,
-line 1393: for each label `f`, `H_N` commutes with the periodic operator of the G-symbol tensor
+lines 1388–1393: for each label `f`, `H_N` commutes with the periodic operator of the G-symbol tensor
 of arXiv:1511.08090 (lines 1257–1268) restricted to edge label `τ`, which equals `O_N(B_f)` by
 `mpo_fibStringNetEdgeTau`. -/
 theorem goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau {N : ℕ} [NeZero N] (hN : 2 ≤ N)
