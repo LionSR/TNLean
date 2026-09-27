@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{SPT Fixed Points with a Nontrivial Character}
+\author{}
+\date{2026-09-27}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+In the paragraph ``Symmetry protected topological order'' of
+\cite{Cirac2021Matrix}, a symmetry acts on an MPS by
+$S_g(A^i)=e^{i\phi(g)}X_g^\dagger A^iX_g$ with $\phi$ a 1-cocycle, and the
+zero-correlation-length representative is constructed so that it ``transforms
+according to a given 1- and 2-cocycle $\phi$ and $\omega$''.\footnote{Source
+    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, lines 1147--1157.}
+The phase $e^{i\phi(g)}$ is part of the symmetry: on a ring of $N$ sites the
+matrix product vector is multiplied by $e^{iN\phi(g)}$.
+
+\section{What is formalized}
+For a projective representation $\rho$ with factor system $\omega$, a character
+$\phi$ and $W_g=\rho(g^{-1})$, the twist identity
+\begin{align}
+    \sum_jU(g)_{ij}A^j & =\phi(g)\,W_gA^iW_g^{-1}
+    \label{eq:rmp_spt_trivial_character_twist}
+\end{align}
+is proved for every $\phi$. On-site symmetry, the existence of a virtual
+projective representation, and the identification of its factor system with
+$\omega$ up to a coboundary are proved only for $\phi=1$. The formal on-site
+symmetry predicate asks that each twisted tensor generate the same matrix
+product vectors as the tensor itself, and for $\phi\neq1$ the twisted vector on
+$N$ sites is $\phi(g)^N$ times the original one, so the predicate fails.
+
+\section{Elimination plan}
+Introduce on-site symmetry up to a character, asking that each twisted tensor be
+gauge equivalent to $\phi(g)$ times the tensor, and state the symmetry and
+cocycle-class results for it with the character $\phi$ of
+(\ref{eq:rmp_spt_trivial_character_twist}). Since $\phi(g)^{-1}U(g)$ is the
+action with trivial character, the factor system of the virtual representation
+is again cohomologous to $\omega$. The affected declarations are
+\leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetric},
+\leanid{MPSTensor.cohomologousTo_of_sptFixedPointTensor} and
+\leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -46,9 +46,18 @@ dimer fixed point that the printed claims describe; documented in
 `twistedTensor_sptFixedPointTensor`, `sptFixedPointTensor_isOnSiteSymmetric`,
 `cohomologousTo_of_sptFixedPointTensor`, `exists_virtualRep_sptFixedPointTensor`) take a
 projective representation `ρ` with factor system `ω` as input; the transfer, injectivity
-and normality results do not involve `ρ`. The existence of such a `ρ` for finite `G`, for instance the
-twisted regular representation on `ℂ^G`, is not formalized; documented in
+and normality results do not involve `ρ`. The existence of such a `ρ` for finite `G`, for
+instance the twisted regular representation on `ℂ^G`, is not formalized; documented in
 `docs/paper-gaps/rmp_spt_fixed_point_supplied_representation.tex`.
+
+**Scope restriction (trivial character):** the source's symmetry
+`S_g(A) = e^{iφ(g)} X_g† A X_g` carries the phase of a 1-cocycle `φ`, while
+`sptFixedPointTensor_isOnSiteSymmetric`, `cohomologousTo_of_sptFixedPointTensor` and
+`exists_virtualRep_sptFixedPointTensor` are stated for `φ = 1`; for nontrivial `φ` only
+the twist identity `twistedTensor_sptFixedPointTensor` is proved, since
+`IsOnSiteSymmetric` asks for equal matrix product vectors and the twist multiplies the
+vector on `N` sites by `φ(g)^N`. Documented in
+`docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 
 ## Main definitions
 
@@ -161,7 +170,9 @@ theorem finrank_range_transferMap_sptFixedPointTensor [NeZero D] :
   rw [hrange, finrank_span_singleton one_ne_zero]
 
 /-- **The fixed-point tensor is injective**: its letters are nonzero multiples of
-the matrix units. -/
+the matrix units.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), the fixed point whose
+transfer matrix is a rank-one projector. -/
 theorem sptFixedPointTensor_isInjective [NeZero D] :
     Kraus.IsInjective (sptFixedPointTensor D) := by
   classical
@@ -175,7 +186,8 @@ theorem sptFixedPointTensor_isInjective [NeZero D] :
     inv_mul_cancel₀ hc, one_smul] at this
   exact this
 
-/-- **The fixed-point tensor is normal.** -/
+/-- **The fixed-point tensor is normal.**  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157). -/
 theorem sptFixedPointTensor_isNormal [NeZero D] : Kraus.IsNormal (sptFixedPointTensor D) :=
   sptFixedPointTensor_isInjective.isNormal
 
@@ -298,7 +310,9 @@ theorem twistedTensor_sptFixedPointTensor (ρ : ProjectiveRepresentation (D := D
 
 /-- **On-site symmetry of the fixed-point tensor.** With the trivial character, the
 fixed-point tensor has the same matrix product vectors as each of its twists by
-`sptFixedPointAction ρ 1`. -/
+`sptFixedPointAction ρ 1`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1155–1157), for the trivial character
+(scope restriction of the module docstring). -/
 theorem sptFixedPointTensor_isOnSiteSymmetric (ρ : ProjectiveRepresentation (D := D) ω) :
     IsOnSiteSymmetric (sptFixedPointTensor D) (sptFixedPointAction ρ 1) := fun g =>
   GaugeEquiv.sameMPV ⟨sptGauge ρ g, fun i => by
@@ -322,7 +336,9 @@ theorem cohomologousTo_of_sptFixedPointTensor [NeZero D]
 
 /-- **The fixed-point tensor realizes the class `[ω]`.**  The virtual representation
 theorem applies to the fixed-point tensor, and the factor system it produces is
-cohomologous to `ω`. -/
+cohomologous to `ω`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1147–1157), for the trivial character
+(scope restriction of the module docstring). -/
 theorem exists_virtualRep_sptFixedPointTensor [NeZero D]
     (ρ : ProjectiveRepresentation (D := D) ω) :
     ∃ ω' : ScalarCocycle G, ∃ ρ' : ProjectiveRepresentation (D := D) ω',

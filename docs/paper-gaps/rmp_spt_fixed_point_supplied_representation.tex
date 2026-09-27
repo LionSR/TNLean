@@ -19,17 +19,22 @@ alone.\footnote{Source traceability:
     \path{Papers/2011.12127/TN-Review-main.tex}, lines 1147--1157.}
 
 \section{What is formalized}
-Every formal result about the fixed point takes as input a projective
-representation $\rho$ of $G$ on $\mathbb C^D$ whose factor system is $\omega$,
-together with a character $\phi$. From these data the dimer tensor
-$A^{(a,b)}=D^{-1/2}\ket{a}\bra{b}$ with the physical action
-$\phi(g)\,W_g^{T}\otimes W_g^{-1}$, $W_g=\rho(g^{-1})$, is shown to be normal, to
-have a rank-one transfer map, and to realize the class of $\omega$; the
-correction of the printed tensor is recorded in
-\cite{gap:rmp_spt_fixed_point_tensor}. The theorems are therefore proved for
-those 2-cocycles that are supplied together with a projective representation,
-which is a special case of the source's statement until every 2-cocycle is shown
-to arise this way.
+The dimer tensor $A^{(a,b)}=D^{-1/2}\ket{a}\bra{b}$ depends on the bond
+dimension $D$ alone, and its transfer, idempotence, injectivity, normality and
+linear-independence results involve no representation; the correction of the
+printed tensor is recorded in \cite{gap:rmp_spt_fixed_point_tensor}. The
+symmetry results take as input a projective representation $\rho$ of $G$ on
+$\mathbb C^D$ whose factor system is $\omega$, together with a character $\phi$:
+the physical action $\phi(g)\,W_g^{T}\otimes W_g^{-1}$, $W_g=\rho(g^{-1})$, its
+twist identity, the on-site symmetry, and the realization of the class of
+$\omega$ (\leanid{MPSTensor.sptFixedPointAction},
+\leanid{MPSTensor.twistedTensor_sptFixedPointTensor},
+\leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetric},
+\leanid{MPSTensor.cohomologousTo_of_sptFixedPointTensor},
+\leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}). These symmetry
+results are therefore proved for those 2-cocycles that are supplied together
+with a projective representation, which is a special case of the source's
+statement until every 2-cocycle is shown to arise this way.
 
 \section{The missing step}
 For finite $G$ every 2-cocycle arises: the twisted regular representation

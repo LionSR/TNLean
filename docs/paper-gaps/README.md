@@ -60,6 +60,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   that the formal fixed point takes a projective representation with the given
   factor system as input, whereas the source starts from the 2-cocycle alone; the
   twisted regular representation on `ℂ^G` would supply it and is not formalized.
+- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction) records that
+  the twist identity `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹` is proved for every
+  character `φ`, but on-site symmetry and the realization of the class of `ω`
+  only for `φ = 1`, because the formal symmetry predicate does not allow the
+  global phase `φ(g)^N`; symmetry up to a character would remove the restriction.
 
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
