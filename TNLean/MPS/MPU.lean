@@ -58,6 +58,7 @@ import TNLean.MPS.MPU.ReducedToHatTransport
 import TNLean.MPS.MPU.ReductionCommonBlocking
 import TNLean.MPS.MPU.RepresentativeIndex
 import TNLean.MPS.MPU.RepresentativeIndexOperations
+import TNLean.MPS.MPU.RepresentativeIndexTensorProduct
 import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
