@@ -485,7 +485,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     $A\text{ vertex-injective}\Longrightarrow\kappa(\{v\})$.
 \end{theorem}
 \begin{proof}\leanok
-    For each $v$, the preceding theorem gives
+    For each $v$, Theorem~\ref{thm:peps_singletonRegionTensorInjective} gives
     $A\text{ vertex-injective}\Longrightarrow
         \inj(T_{A,\{v\}})$. The comparison hypothesis gives
     $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$. Their
@@ -505,8 +505,8 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     $\kappa(R)$.
 \end{theorem}
 \begin{proof}\leanok
-    For $R\ne\varnothing$, write $R=\bigcup_{v\in R}\{v\}$. The preceding
-    theorem turns singleton comparison and vertex injectivity into
+    For $R\ne\varnothing$, write $R=\bigcup_{v\in R}\{v\}$.
+    Theorem~\ref{thm:peps_singletonRegionInjectivityFromVertexInjectivity} turns singleton comparison and vertex injectivity into
     $\kappa(\{v\})$ for every $v\in R$. Applying the finite-union consequence
     of union closure to these singleton regions gives $\kappa(R)$.
 \end{proof}
@@ -612,7 +612,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The comparison gives
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. Vertex injectivity
     supplies $\inj(T_{A,u})$ and $\inj(T_{A,v})$.
-    The preceding reduction then gives
+    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} then gives
     $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{proof}
 
@@ -676,12 +676,12 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons}
     \leanok
     \uses{thm:peps_edgeMiddleTensorInjective_of_singletons, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
-    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Under the hypotheses of the
-    preceding theorem, vertex injectivity of $A$ gives injectivity of the
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Under the hypotheses of
+    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons}, vertex injectivity of $A$ gives injectivity of the
     edge-blocked three-site chain at $e$.
 \end{theorem}
 \begin{proof}\leanok
-    The preceding theorem gives $\inj(T_{A,M_e})$. The endpoint
+    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} gives $\inj(T_{A,M_e})$. The endpoint
     reduction combines this middle-tensor injectivity with vertex injectivity
     at $u$ and $v$.
 \end{proof}
@@ -691,8 +691,8 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons}
     \leanok
     \uses{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}
-    If $M_e=V\setminus\{u,v\}$ is nonempty for every edge $e=(u,v)$, then the
-    preceding one-edge statement applies at every edge. Thus vertex
+    If $M_e=V\setminus\{u,v\}$ is nonempty for every edge $e=(u,v)$, then
+    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_singletons} applies at every edge. Thus vertex
     injectivity of $A$ gives injectivity of every edge-blocked three-site
     chain.
 \end{theorem}
@@ -716,6 +716,6 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     For each $e=(u,v)$,
     Theorem~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
-    gives $V\setminus\{u,v\}\ne\varnothing$. Apply the preceding all-edge
-    singleton theorem.
+    gives $V\setminus\{u,v\}\ne\varnothing$. Apply
+    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
 \end{proof}
