@@ -62,7 +62,7 @@ variable {L : ℕ} [NeZero L]
 /-! ### The group operators -/
 
 /-- Project result: `U_L† = U_L²` at every positive length (`lem:asymex_z3_physical_cube`). -/
-theorem mpo_uDagTensor_eq_sq : mpo uDagTensor L = mpo uTensor L ^ 2 := by
+lemma mpo_uDagTensor_eq_sq : mpo uDagTensor L = mpo uTensor L ^ 2 := by
   rw [pow_two, mpo_uu L (NeZero.pos L)]
 
 /-- The shift of every qutrit label fixes no configuration of a nonempty chain. -/
@@ -74,12 +74,12 @@ theorem qutritShift_symm_apply_ne (t : Fin L → Fin 3) : (qutritShift L).symm t
   simpa using congr_fun h 0
 
 /-- The forward operator is traceless at positive length. -/
-theorem trace_mpo_uTensor : (mpo uTensor L).trace = 0 := by
+lemma trace_mpo_uTensor : (mpo uTensor L).trace = 0 := by
   rw [mpo_uTensor]
   exact Matrix.trace_monomial_eq_zero _ _ qutritShift_apply_ne
 
 /-- The inverse operator is traceless at positive length. -/
-theorem trace_mpo_uDagTensor : (mpo uDagTensor L).trace = 0 := by
+lemma trace_mpo_uDagTensor : (mpo uDagTensor L).trace = 0 := by
   rw [mpo_uDagTensor]
   exact Matrix.trace_monomial_eq_zero _ _ qutritShift_symm_apply_ne
 
@@ -98,7 +98,7 @@ def defectProjector (L : ℕ) : Matrix (Fin L → Fin 3) (Fin L → Fin 3) ℂ :
 
 /-- Project result: `P_L = (1 + U_L + U_L²)/3` at every positive length
 (`lem:asymex_z3_defect_projector`). -/
-theorem defectProjector_eq :
+lemma defectProjector_eq :
     defectProjector L = (3 : ℂ)⁻¹ • (1 + mpo uTensor L + mpo uTensor L ^ 2) := by
   rw [defectProjector, mpo_defectTensor, mpo_identityTensor, mpo_uDagTensor_eq_sq]
 
@@ -114,7 +114,7 @@ theorem defectProjector_eq_finiteGroupUnitaryAverage :
 
 /-- Project result: the normalized defect is an orthogonal projector: self-adjoint and
 idempotent (`lem:asymex_z3_defect_projector`). -/
-theorem isStarProjection_defectProjector : IsStarProjection (defectProjector L) := by
+lemma isStarProjection_defectProjector : IsStarProjection (defectProjector L) := by
   rw [defectProjector_eq_finiteGroupUnitaryAverage]
   exact isStarProjection_finiteGroupUnitaryAverage _
 
@@ -128,7 +128,7 @@ theorem mpo_uTensor_mul_defectProjector :
 
 /-- Project result: a vector is fixed by `P_L` exactly when it is fixed by `U_L`
 (`lem:asymex_z3_defect_projector`). -/
-theorem defectProjector_mulVec_eq_self_iff (ψ : (Fin L → Fin 3) → ℂ) :
+lemma defectProjector_mulVec_eq_self_iff (ψ : (Fin L → Fin 3) → ℂ) :
     defectProjector L *ᵥ ψ = ψ ↔ mpo uTensor L *ᵥ ψ = ψ := by
   constructor
   · intro h
@@ -142,7 +142,7 @@ theorem defectProjector_mulVec_eq_self_iff (ψ : (Fin L → Fin 3) → ℂ) :
 
 /-- Project result: the range of `P_L` is the space of `U_L`-invariant vectors
 (`lem:asymex_z3_defect_projector`). -/
-theorem range_defectProjector_mulVecLin :
+lemma range_defectProjector_mulVecLin :
     LinearMap.range (defectProjector L).mulVecLin =
       LinearMap.ker (mpo uTensor L - 1).mulVecLin := by
   ext ψ
@@ -156,7 +156,7 @@ theorem range_defectProjector_mulVecLin :
 
 /-- Project result: the basis action
 `P_L |t⟩ = (|t⟩ + ω^{F(t)} |Xt⟩ + ω^{-F(X⁻¹t)} |X⁻¹t⟩)/3` (`lem:asymex_z3_defect_projector`). -/
-theorem defectProjector_mulVec_single (t : Fin L → Fin 3) :
+lemma defectProjector_mulVec_single (t : Fin L → Fin 3) :
     defectProjector L *ᵥ Pi.single t 1 =
       (3 : ℂ)⁻¹ • (Pi.single t 1 +
         eisensteinOmega ^ phaseExponent t • Pi.single (qutritShift L t) 1 +
@@ -168,7 +168,7 @@ theorem defectProjector_mulVec_single (t : Fin L → Fin 3) :
 
 /-- Project result: `rank P_L = tr P_L = 3^{L-1}` at every positive length
 (`lem:asymex_z3_defect_projector`). -/
-theorem rank_defectProjector : (defectProjector L).rank = 3 ^ (L - 1) := by
+lemma rank_defectProjector : (defectProjector L).rank = 3 ^ (L - 1) := by
   have hP := isStarProjection_defectProjector (L := L)
   have hrank := Matrix.IsHermitian.rank_eq_trace_re_of_idem hP.isSelfAdjoint
     hP.isIdempotentElem.eq
