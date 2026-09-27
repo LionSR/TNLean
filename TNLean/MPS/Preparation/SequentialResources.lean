@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.IsometricChain
-import QICLean.Algebra.MatrixUnitaryBetween
+import TNLean.Algebra.StackedIsometryCard
 
 /-!
 # Bond dimensions of the successive-decomposition representation
@@ -44,6 +44,16 @@ where the sweep starts: in the chain, bond `k` has dimension at most
   same isometric sites whose bond `k` is at most
   `min(D_k, d^k, d^{N-k})`, where `D_k ≤ D` is the bond of the given chain.
 
+## Scope restriction
+
+**Scope restriction (upper bounds only):** this file proves the upper bounds
+`min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions. The exact
+dimension `2min[D,2^k] × min[D,2^{k+1}]` and the equality of each bond with the
+Schmidt rank across its cut, which the "minimal resources" remark of
+arXiv:quant-ph/0608197, lines 1574--1577, asserts, are not formalized.
+Documented in `docs/paper-gaps/ssvcw05_sequential_bond_upper_bound_scope.tex`
+(https://sirui-lu.com/TNLean/paper-gaps/ssvcw05_sequential_bond_upper_bound_scope.pdf).
+
 ## References
 
 * Schön, Solano, Verstraete, Cirac, Wolf, *Sequential generation of entangled
@@ -63,30 +73,17 @@ namespace OBCChainTensor
 
 variable {d D N : ℕ}
 
-/-- **The rank consideration.** If `A_0, …, A_{d-1}` are `a × b` matrices with
-`∑_i A_i^† A_i = 1`, then `b ≤ a d`: the stacked `(a d) × b` matrix has
-orthonormal columns.
+/-- A site of an open chain with `∑_i A_i^† A_i = 1` has right bond at most `d`
+times its left bond, by `Matrix.card_le_mul_of_sum_conjTranspose_mul_eq_one`.
 
 This is the step behind "Simple rank considerations show that `V'_{[n-k]}` has
 dimension `2min[D,2^k] × min[D,2^{k+1}]`", arXiv:quant-ph/0501096, lines
 200--202 of `References/quant-ph_0501096/PhotoMPS.tex`, for local dimension
 `d`. -/
-theorem le_mul_of_sum_conjTranspose_mul_eq_one {a b : ℕ}
-    (A : Fin d → Matrix (Fin a) (Fin b) ℂ) (hA : ∑ i, (A i)ᴴ * A i = 1) : b ≤ a * d := by
-  let S : Matrix (Fin a × Fin d) (Fin b) ℂ := Matrix.of fun x β => A x.2 x.1 β
-  have hS : Sᴴ * S = 1 := by
-    rw [← hA]
-    ext β β'
-    simp only [S, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.sum_apply, Matrix.of_apply]
-    rw [Fintype.sum_prod_type, Finset.sum_comm]
-  simpa using Matrix.IsIsometry.card_le S hS
-
-/-- A site of an open chain with `∑_i A_i^† A_i = 1` has right bond at most `d`
-times its left bond. See `le_mul_of_sum_conjTranspose_mul_eq_one`. -/
 theorem bondDim_succ_le_mul (B : OBCChainTensor d D N) (p : Fin N)
     (hp : ∑ i, (B.tensor p i)ᴴ * B.tensor p i = 1) :
     B.bondDim p.succ ≤ B.bondDim p.castSucc * d :=
-  le_mul_of_sum_conjTranspose_mul_eq_one (B.tensor p) hp
+  Matrix.card_le_mul_of_sum_conjTranspose_mul_eq_one (B.tensor p) hp
 
 /-- **Bond growth from the start of the sweep.** In an open chain of positive
 local dimension whose sites, except possibly the last, satisfy

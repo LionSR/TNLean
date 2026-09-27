@@ -542,12 +542,13 @@ the proof of the characterization by open-boundary representations also
 provides a recipe for the generation of any given state with minimal resources.
 The entries below give only the upper bounds on the bond dimensions; the
 equality of each bond dimension with the Schmidt rank across the
-corresponding cut is not formalized. In the present labelling the decompositions start at site $0$, and the
+corresponding cut is not formalized
+\cite{gap:ssvcw05_sequential_bond_upper_bound_scope}. In the present labelling the decompositions start at site $0$, and the
 bound concerns the bond $k$ between the sites $k-1$ and $k$.
 
 \begin{theorem}[Rank bound for one isometric site]
     \label{thm:seqanc_rank_bound}
-    \lean{OBCChainTensor.le_mul_of_sum_conjTranspose_mul_eq_one,
+    \lean{Matrix.card_le_mul_of_sum_conjTranspose_mul_eq_one,
         OBCChainTensor.bondDim_succ_le_mul}
     \leanok
     \uses{def:varying_bond_obc_chain}
