@@ -46,8 +46,6 @@ open scoped Matrix
 
 namespace CZXCompression
 
-open MPSTensor
-
 /-! ### The operator family of the bond-three tensor -/
 
 /-- Bridge: the bond-three tensor `N = δ ⊕ M` is the direct sum of the bond-one identity
