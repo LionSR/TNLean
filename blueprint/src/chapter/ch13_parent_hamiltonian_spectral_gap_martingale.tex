@@ -2355,11 +2355,37 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Thus every compatible local term annihilates $v$.
 \end{proof}
 
+\begin{lemma}[Compatible zero energy restricts to each window]
+    \label{lem:open_parent_hamiltonian_window_ground_space}
+    \lean{MPSTensor.cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_parent}
+    Let $L\le N$. If $H^{\mathrm{open}}_{N,L}(A)v=0$, then for every
+    nonwrapping start $s$ with $s+L\le N$ and every complementary
+    configuration $\tau$,
+    \begin{align}
+        \Res^\tau_{s,L}v & \in G_L(A).
+        \notag
+    \end{align}
+    This is the frustration-free extraction in
+    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_zero_local_terms,
+        lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es}
+    A kernel vector of a sum of orthogonal projections is a kernel vector of
+    each summand. The local kernel criterion then places every window
+    restriction in the local ground space.
+\end{proof}
+
 \begin{theorem}[Compatible zero energy has open-boundary form]
     \label{thm:open_hamiltonian_kernel_le_ground_space}
     \lean{MPSTensor.ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective,
+        lem:open_parent_hamiltonian_window_ground_space}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
     $L_0$-block-injective, then
     \begin{align}
@@ -2370,7 +2396,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_zero_local_terms, lem:mem_ground_space_es, rem:contiguous_window_operators, rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions, thm:normal_open_chain_range_reduction}
+    \uses{thm:open_parent_hamiltonian_zero_local_terms, lem:open_parent_hamiltonian_window_ground_space, lem:mem_ground_space_es, rem:contiguous_window_operators, rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions, thm:normal_open_chain_range_reduction}
     In the following display, $s$ ranges over all starts satisfying
     $s+L_0+1\leq N$, and $\tau$ ranges over all complementary configurations.
     The three ingredients give
@@ -2462,7 +2488,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_kernel_ground_space, thm:ground_space_map_injective_blk}
+    \uses{thm:open_parent_hamiltonian_kernel_ground_space, thm:ground_space_map_injective_blk,
+        thm:wordspan_blk_inj_succ}
     Block injectivity at length $L$ makes $\Gamma_{L}$ injective, so
     $\dim G_{L}(A)=\dim\MN{D}=D^{2}$, and the canonical $\ell^{2}$
     identification is a linear isomorphism. Block injectivity at length

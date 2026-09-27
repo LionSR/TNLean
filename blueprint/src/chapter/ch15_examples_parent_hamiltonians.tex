@@ -680,7 +680,7 @@ eigenspace.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_full_window, lem:parent_interaction_es_kernel, thm:open_parent_hamiltonian_zero_local_terms, rem:cyclic_window_operators, thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:open_ground_space_le_hamiltonian_kernel, thm:normal_open_chain_range_reduction, lem:ground_space_span_open_states, thm:open_parent_hamiltonian_kernel_finrank}
+    \uses{thm:open_parent_hamiltonian_full_window, lem:parent_interaction_es_kernel, thm:open_parent_hamiltonian_zero_local_terms, rem:cyclic_window_operators, thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:open_ground_space_le_hamiltonian_kernel, lem:open_parent_hamiltonian_window_ground_space, thm:normal_open_chain_range_reduction, lem:ground_space_span_open_states, thm:open_parent_hamiltonian_kernel_finrank, thm:wordspan_blk_inj_succ}
     For $N=2$ the Hamiltonian is the projector onto the orthogonal complement
     of $\mathcal G_{2}(A_{\mathrm{AKLT}})$. For $N\ge3$, a kernel vector
     satisfies every nonwrapping two-site constraint. Each nonwrapping
@@ -689,8 +689,18 @@ eigenspace.
     every three-site restriction in $\mathcal G_{3}(A_{\mathrm{AKLT}})$; this
     is the local check of \cite[line~2095]{Cirac2021Matrix}, used here on
     nonwrapping windows. The AKLT tensor is injective after blocking
-    $L_{0}=2$ sites (Theorem~\ref{thm:aklt_normal}), and the open-chain
-    intersection theorem grows the three-site constraints to the whole chain.
+    $L_{0}=2$ sites (Theorem~\ref{thm:aklt_normal}). For $N\ge3$, with $s$
+    ranging over starts satisfying $s+3\le N$ and $\tau$ over complementary
+    configurations,
+    \begin{align}
+        H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}})v=0
+         & \Longrightarrow
+        \bigl(\forall s,\tau,\
+        \Res^\tau_{s,3}v\in\mathcal G_3(A_{\mathrm{AKLT}})\bigr)
+        \Longrightarrow v\in G_N^{\mathrm{ES}}(A_{\mathrm{AKLT}}).
+        \notag
+    \end{align}
+    The last step is the open-chain intersection theorem.
     The reverse inclusion holds for every tensor. The span description is
     Lemma~\ref{lem:ground_space_span_open_states}, and
     Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} with $D=2$ gives
