@@ -18,6 +18,14 @@ same interaction range.
 Source: CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129 and
 2183--2187; the canonical decomposition is CPSV16, arXiv:1606.00608,
 equations `II_CF1`, `eq:II_ABasicTensors`, and `decBSV`.
+
+**Scope restriction (simultaneous injectivity range):** the gap declarations of
+this module prove the gap only at ranges \(R\geq S+1\), for a supplied \(S>0\) at
+which the length-\(S\) word tuples of the distinct normal representatives span
+the full product matrix algebra (lines 2114--2129). The gap theorem at lines
+2183--2187 is stated for all parent Hamiltonians without a range hypothesis. The
+parent-Hamiltonian identification with the representatives carries no such
+restriction. Documented in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 -/
 
 namespace MPSTensor

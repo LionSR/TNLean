@@ -20,6 +20,14 @@ This combines the block-injective interaction range in CPGSV21,
 arXiv:2011.12127, Section IV.C, lines 2114--2129, with its gap theorem,
 lines 2183--2187. The finite-range periodic comparison is documented in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`.
+
+**Scope restriction (simultaneous injectivity range):**
+`exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop`
+proves the gap only at ranges \(R\geq S+1\), for a supplied \(S>0\) at which the
+length-\(S\) word tuples of the blocks span the full product matrix algebra
+(lines 2114--2129). The gap theorem at lines 2183--2187 is stated for all parent
+Hamiltonians without a range hypothesis. Documented in
+`docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 -/
 
 open Filter
