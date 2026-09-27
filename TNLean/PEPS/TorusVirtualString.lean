@@ -28,10 +28,13 @@ Section "MPO and PEPO", `Papers/2011.12127/TN-Review-main.tex` lines 405–408, 
 primal quantum-double tensor in Appendix A, "The Toric Code and quantum double models",
 line 2465.
 
-The strings here are diagonal in the bond basis. The deformation of strings of `U_g` across a
-`G`-injective PEPS, arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 1624–1648
-(equation `eq:2d:move-strings`) and lines 2199–2211, acts on the bonds by the regular
-representation and is a different statement, not formalized here.
+The strings here are diagonal in the bond basis, with values in a monoid that need not be
+commutative: a matrix product operator on the virtual level. The deformation of strings of
+`U_g` across a `G`-invariant PEPS, arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex`
+lines 1622–1647 (equation `eq:2d:move-strings`) and lines 2199–2214, acts on each crossed bond
+by a matrix; it is `TNLean.PEPS.torusBondNetwork_westSouthOperatorString_eq`, stated for the
+torus network with an operator on every bond. A diagonal string with scalar values is that
+network with diagonal matrices on the bonds (`TNLean.PEPS.torusBondNetwork_diagonal`).
 
 The combinatorial core is a statement about a grid of monoid elements: if every elementary
 square commutes, then the two boundary paths of a rectangle have the same product

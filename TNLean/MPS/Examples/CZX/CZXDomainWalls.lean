@@ -29,6 +29,12 @@ right action vector `|+̂⟩` of the source (line 1273) gives the opposite sign.
 which holds for every choice of action tensors. Documented in
 `docs/paper-gaps/gs24_czx_action_left_vectors.tex`.
 
+**Local fix (nondegenerate domain walls, blocked local action):** `czx_domainWall_mul_eq_neg_one`,
+`czx_isDomainWallAction_ab`, `czx_isDomainWallAction_ba` and `czx_mpo_mulVec_twoWallMPV` are
+stated for `IsDomainWallAction`, whose walls and phase are nonzero and whose local relation holds
+against regions longer than a buffer; documented in
+`docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+
 ## Main results
 
 * `CZXCompression.czx_domainWall_mul_eq_neg_one`: `c_{AB} c_{BA} = -1` for every choice.

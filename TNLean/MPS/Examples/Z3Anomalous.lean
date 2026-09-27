@@ -10,12 +10,16 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefect
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefectCompression
+import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefectProjector
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousFusion
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousInverseFusion
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousTensor
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousUnitary
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass
+import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyDomainWall
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeData
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUDU
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUUU
+import TNLean.MPS.Examples.Z3Anomalous.Z3ClockDefect
+import TNLean.MPS.Examples.Z3Anomalous.Z3ClockTensor
