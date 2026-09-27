@@ -14,5 +14,6 @@ import TNLean.MPS.Examples.Fibonacci.FibonacciAmplitudes
 import TNLean.MPS.Examples.Fibonacci.FibonacciAnomaly
 import TNLean.MPS.Examples.Fibonacci.FibonacciDimension
 import TNLean.MPS.Examples.Fibonacci.FibonacciFSymbol
+import TNLean.MPS.Examples.Fibonacci.FibonacciGSymbol
 import TNLean.MPS.Examples.Fibonacci.FibonacciUnit
 import TNLean.MPS.Examples.Fibonacci.FibonacciVacuum
