@@ -65,6 +65,31 @@ end Example
         assert "Example.after" in decls
 
 
+def test_root_prefixed_decls_escape_namespace() -> None:
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        lean_root = root / "TNLean"
+        lean_root.mkdir()
+        source = lean_root / "Example.lean"
+        source.write_text(
+            """namespace Owner
+
+theorem _root_.Other.Thing.escaped : True := by trivial
+
+theorem local_decl : True := by trivial
+
+end Owner
+"""
+        )
+        decls = {decl.fqn: decl for decl in collect_file_lean_decls(source, lean_root)}
+        # `_root_.` re-qualifies the declaration away from the enclosing
+        # namespace: the fully-qualified name is the remainder, not
+        # `Owner._root_.…`.
+        assert "Other.Thing.escaped" in decls
+        assert "Owner._root_.Other.Thing.escaped" not in decls
+        assert "Owner.local_decl" in decls
+
+
 def test_duplicate_lean_tags_are_reported_once_per_declaration() -> None:
     def entry(file: str, line: int, decl: str) -> BlueprintEntry:
         return BlueprintEntry(
@@ -95,4 +120,5 @@ if __name__ == "__main__":
     test_split_tex_lean_decls_handles_continuations_and_top_level_commas()
     test_structure_fields_are_declarations()
     test_duplicate_lean_tags_are_reported_once_per_declaration()
+    test_root_prefixed_decls_escape_namespace()
     print("Blueprint declaration scanner tests passed.")

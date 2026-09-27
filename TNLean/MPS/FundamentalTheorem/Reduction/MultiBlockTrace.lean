@@ -19,6 +19,8 @@ to exist, but is exactly the trace identity that every multi-block compression d
 
 * `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum`: the trace of `B`'s word evaluation is
   the sum of the traces of the corresponding word evaluations of the target blocks.
+* `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum_smul`: the same identity for weighted
+  blocks `μ_s • A_s`, with the weights pulled out as `μ_s^{|w|}`.
 * `MPSTensor.MultiBlockCompression.mpv_eq_sum`: the same identity in the matrix-product-vector
   form, for every positive system size.
 -/
@@ -84,6 +86,17 @@ theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d
   rw [Finset.sum_congr rfl fun s _ => hleft s, Finset.sum_congr rfl fun t _ => hright t,
     Finset.sum_const_zero, add_zero]
   exact Finset.sum_attach S fun s => Matrix.trace (Kraus.evalWord (C s) w)
+
+/-- **The word-trace converse for weighted blocks.** When the target blocks are rescaled tensors
+`μ_s • A_s`, the word trace of `B` is the weighted sum `∑_s μ_s^{|w|} tr(A_s^w)`. -/
+theorem trace_evalWord_eq_sum_smul {μ : ι → ℂ} {A : ∀ s, MPSTensor d (D s)}
+    (P : MultiBlockCompression B S fun s => μ s • A s) (w : List (Fin d)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord B w) =
+      ∑ s ∈ S, μ s ^ w.length * Matrix.trace (Kraus.evalWord (A s) w) := by
+  rw [P.trace_evalWord_eq_sum w hw]
+  refine Finset.sum_congr rfl fun s _ => ?_
+  rw [show μ s • A s = fun i => μ s • A s i from rfl, Kraus.evalWord_smul, Matrix.trace_smul,
+    smul_eq_mul]
 
 /-- The matrix-product-vector form of `trace_evalWord_eq_sum`: for every positive system size,
 the MPV of `B` is the sum of the MPVs of the blocks. -/

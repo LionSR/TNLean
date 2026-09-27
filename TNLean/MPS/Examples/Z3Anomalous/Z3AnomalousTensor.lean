@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Rings.EisensteinCertificates
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.OperatorFromWordTrace
 
 /-!
@@ -199,20 +200,20 @@ def uDagUnitCoeff : Fin 2 → Fin 2 → Fin 4 → EisensteinInt
   | 1, 1 => ![⟨0, 0⟩, ⟨0, 1⟩, ⟨0, 0⟩, ⟨1, 1⟩]
 
 private theorem uUnit_single (i j : Fin 2) :
-    ∑ k, uUnitCoeff i j k • evalWordEisenstein uEisMPS (List.ofFn (uUnitWord k)) =
+    ∑ k, uUnitCoeff i j k • evalWordR uEisMPS (List.ofFn (uUnitWord k)) =
       (omega - 1) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
 
 private theorem uDagUnit_single (i j : Fin 2) :
-    ∑ k, uDagUnitCoeff i j k • evalWordEisenstein uDagEisMPS (List.ofFn (uDagUnitWord k)) =
+    ∑ k, uDagUnitCoeff i j k • evalWordR uDagEisMPS (List.ofFn (uDagUnitWord k)) =
       (omega - 1) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
 
 private theorem identityUnit_single (i j : Fin 1) :
     ∑ k : Fin 1, (1 : EisensteinInt) •
-        evalWordEisenstein identityEisMPS (List.ofFn (![![0]] k)) =
+        evalWordR identityEisMPS (List.ofFn (![![0]] k)) =
       (1 : EisensteinInt) • Matrix.single i j 1 := by
   revert i j
   decide +kernel
@@ -261,65 +262,46 @@ def ddStack : MPSTensor 9 4 := (MPOTensor.mulTensor uDagTensor uDagTensor).toMPS
 /-- The Eisenstein matrices of the stacked product tensor of `U ⊗ U`, in the bond order
 `2 p₁ + p₂`. -/
 def uuStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uEis uEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uEis uEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The Eisenstein matrices of the stacked product tensor of `U ⊗ U†`. -/
 def udStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The Eisenstein matrices of the stacked product tensor of `U† ⊗ U`. -/
 def duStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uDagEis uEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uDagEis uEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The Eisenstein matrices of the stacked product tensor of `U† ⊗ U†`. -/
 def ddStackEis : Fin 9 → Matrix (Fin 4) (Fin 4) EisensteinInt :=
-  fun a => mulEisensteinTensor uDagEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
+  fun a => mulTensorR uDagEis uDagEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 theorem uuStack_eq (a : Fin 9) : uuStack a = complexOfEisenstein (uuStackEis a) :=
-  mulTensor_complexOfEisenstein uEis uEis _ _
+  mulTensor_complexOfRing _ uEis uEis _ _
 
 theorem udStack_eq (a : Fin 9) : udStack a = complexOfEisenstein (udStackEis a) :=
-  mulTensor_complexOfEisenstein uEis uDagEis _ _
+  mulTensor_complexOfRing _ uEis uDagEis _ _
 
 theorem duStack_eq (a : Fin 9) : duStack a = complexOfEisenstein (duStackEis a) :=
-  mulTensor_complexOfEisenstein uDagEis uEis _ _
+  mulTensor_complexOfRing _ uDagEis uEis _ _
 
 theorem ddStack_eq (a : Fin 9) : ddStack a = complexOfEisenstein (ddStackEis a) :=
-  mulTensor_complexOfEisenstein uDagEis uDagEis _ _
+  mulTensor_complexOfRing _ uDagEis uDagEis _ _
 
 /-! ### The identity operator -/
 
-/-- The two-word evaluation of the identity tensor is the one-by-one identity when the two
-configurations agree and zero otherwise. -/
-theorem evalWord_identityTensor {L : ℕ} (σ τ : Fin L → Fin 3) :
-    MPOTensor.evalWord identityTensor (List.ofFn σ) (List.ofFn τ) = if σ = τ then 1 else 0 := by
-  induction L with
-  | zero => simp [Subsingleton.elim σ τ]
-  | succ n ih =>
-    rw [List.ofFn_succ, List.ofFn_succ, MPOTensor.evalWord_cons, ih]
-    have h1 : identityTensor (σ 0) (τ 0) = if σ 0 = τ 0 then 1 else 0 := by
-      simp only [identityTensor, identityEis]
-      split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
-    rw [h1]
-    by_cases h0 : σ 0 = τ 0
-    · by_cases hs : (fun i : Fin n => σ i.succ) = fun i : Fin n => τ i.succ
-      · have hστ : σ = τ := by
-          funext i
-          exact Fin.cases h0 (fun i => congrFun hs i) i
-        simp [hστ]
-      · have hστ : σ ≠ τ := fun h => hs (by rw [h])
-        simp [h0, hs, hστ]
-    · have hστ : σ ≠ τ := fun h => h0 (by rw [h])
-      simp [h0, hστ]
+/-- Bridge: the identity tensor is the general identity tensor `MPOTensor.idTensor`. -/
+theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 3 := by
+  funext i j
+  simp only [identityTensor, identityEis, MPOTensor.idTensor]
+  split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
 
 /-- **The periodic operator of the identity tensor is the identity** at every length. -/
 theorem mpo_identityTensor (L : ℕ) : MPOTensor.mpo identityTensor L = 1 := by
-  ext σ τ
-  rw [MPOTensor.mpo_apply, MPOTensor.mpoMatrixEntry, evalWord_identityTensor, Matrix.one_apply]
-  split_ifs <;> simp
+  rw [identityTensor_eq_idTensor, MPOTensor.mpo_idTensor]
 
 end Z3Anomalous

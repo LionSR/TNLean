@@ -9,8 +9,10 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.CZX
 
 import TNLean.MPS.Examples.CZX.CZXAnomaly
+import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Examples.CZX.CZXDecoratedFusion
 import TNLean.MPS.Examples.CZX.CZXDecoratedTensor
+import TNLean.MPS.Examples.CZX.CZXNoInvariant
 import TNLean.MPS.Examples.CZX.CZXPlusIdentity
 import TNLean.MPS.Examples.CZX.CZXReviewCanonicalForm
 import TNLean.MPS.Examples.CZX.CZXReviewTensor

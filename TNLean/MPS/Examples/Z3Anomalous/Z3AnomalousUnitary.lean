@@ -20,7 +20,7 @@ class `j = 1` for `n = 3`, a fact checked only in the verification script and no
 Garre-Rubio, Lootens and Molnár (arXiv:2203.12563), subsubsection "Periodic boundary condition
 case", `Papers/2203.12563/REsubmission.tex` lines 2202–2224, construct periodic matrix product
 operator representations of a finite group with a `3`-cocycle and print the `ℤ/2` instance
-`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2222); the phase-decorated shift used here is a `ℤ/3` operator of
+`∏ CZ_{i,i+1} Z_i ∏ X_i` (line 2224); the phase-decorated shift used here is a `ℤ/3` operator of
 the same kind, not the operator of that construction.
 No anomaly invariant is asserted here.
 
@@ -113,31 +113,9 @@ def phaseExponent (s : Fin L → Fin 3) : ℕ :=
 theorem mpo_uTensor_apply (s t : Fin L → Fin 3) :
     MPOTensor.mpo uTensor L s t =
       if s = qutritShift L t then eisensteinOmega ^ phaseExponent t else 0 := by
-  let g0 : Fin L → Fin 2 := fun k ↦ occupied (t (k - 1))
-  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond uTensor s t g0 fun g hg ↦ by
-    obtain ⟨k, hk⟩ := Function.ne_iff.mp hg
-    refine ⟨k - 1, ?_⟩
-    rw [uTensor_apply, ite_eq_right]
-    intro h
-    apply hk
-    simpa [g0] using h.2]
-  by_cases hst : s = qutritShift L t
-  · have hp : ∀ k, s k = t k + 1 := fun k ↦ congrFun hst k
-    rw [ite_eq_left hst]
-    calc
-      _ = ∏ k, eisensteinOmega ^ ((occupied (t (k - 1))).val * (t k).val) := by
-        refine Finset.prod_congr rfl fun k _ ↦ ?_
-        rw [uTensor_apply, ite_eq_left ⟨hp k, by simp [g0]⟩]
-      _ = eisensteinOmega ^ ∑ k, (occupied (t (k - 1))).val * (t k).val :=
-        Finset.prod_pow_eq_pow_sum _ _ _
-      _ = _ := by
-        congr 1
-        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun k ↦ by simp
-  · rw [ite_eq_right hst]
-    obtain ⟨k, hk⟩ := Function.ne_iff.mp hst
-    refine Finset.prod_eq_zero (Finset.mem_univ k) ?_
-    rw [uTensor_apply, ite_eq_right]
-    exact fun h ↦ hk h.1
+  rw [MPOTensor.mpo_apply_of_forced_right_bond uTensor_apply, phaseExponent,
+    ← Finset.prod_pow_eq_pow_sum]
+  rfl
 
 /-- The forward operator is a phase-decorated permutation matrix. -/
 theorem mpo_uTensor :

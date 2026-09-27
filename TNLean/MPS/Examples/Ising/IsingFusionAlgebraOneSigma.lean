@@ -55,18 +55,11 @@ length. This is the Ising analogue of line 1268, which states the operator fusio
 Fibonacci blocks. -/
 theorem isingOne_mul_isingSigma {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingOne N * MPOTensor.mpo isingSigma N = MPOTensor.mpo isingSigma N :=
-  mpo_mul_eq_of_zsqrt2_conj isingOneZ isingSigmaZ isingSigmaZ (z := 8) isingGaugeOneSigmaZ
-    isingGaugeOneSigmaZᵀ 1 one_ne_zero (by rw [one_smul]; decide +kernel)
-    (by rw [one_smul]; decide +kernel)
-    (isingConj_of_rho_eq isingOneZ_eq_zero_of_rho_ne isingSigmaZ_eq_zero_of_rho_ne
-      isingSigmaZ_eq_zero_of_rho_ne fun i j _ => by
-      rw [one_smul]
-      refine (mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _
-        isingOneZ_eq_smul_single isingSigmaZ_eq_smul_single isingOneNext isingOneNext_nodup
-        isingOneCoef_eq_zero _ i j).trans ?_
-      rw [isingSigmaZ_eq_smul_single i j, padZsqrt2_smul_single]
-      revert i j
-      decide +kernel) hN
+  isingFusion_of_signedPerm isingOneZ isingSigmaZ isingSigmaZ isingOneZ_eq_smul_single
+    isingSigmaZ_eq_smul_single isingSigmaZ_eq_smul_single isingOneNext isingOneNext_nodup
+    isingOneCoef_eq_zero isingOneZ_eq_zero_of_rho_ne isingSigmaZ_eq_zero_of_rho_ne
+    isingSigmaZ_eq_zero_of_rho_ne (z := 8) isingGaugeOneSigmaZ
+    (by decide +kernel) (by decide +kernel) (by decide +kernel) hN
 
 /-- **`O_σ O_1 = O_σ`.** Source: arXiv:1511.08090, lines 1308–1312 and 1323: the fusion rule
 `σ × 1 = σ` for the periodic operators of the tensors built as in lines 1257–1268, at every positive
@@ -74,26 +67,19 @@ length. This is the Ising analogue of line 1268, which states the operator fusio
 Fibonacci blocks. -/
 theorem isingSigma_mul_isingOne {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingSigma N * MPOTensor.mpo isingOne N = MPOTensor.mpo isingSigma N :=
-  mpo_mul_eq_of_zsqrt2_conj isingSigmaZ isingOneZ isingSigmaZ (z := 8) isingGaugeSigmaOneZ
-    isingGaugeSigmaOneZᵀ 1 one_ne_zero (by rw [one_smul]; decide +kernel)
-    (by rw [one_smul]; decide +kernel)
-    (isingConj_of_rho_eq isingSigmaZ_eq_zero_of_rho_ne isingOneZ_eq_zero_of_rho_ne
-      isingSigmaZ_eq_zero_of_rho_ne fun i j _ => by
-      rw [one_smul]
-      refine (mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _
-        isingSigmaZ_eq_smul_single isingOneZ_eq_smul_single isingSigmaNext isingSigmaNext_nodup
-        isingSigmaCoef_eq_zero _ i j).trans ?_
-      rw [isingSigmaZ_eq_smul_single i j, padZsqrt2_smul_single]
-      revert i j
-      decide +kernel) hN
+  isingFusion_of_signedPerm isingSigmaZ isingOneZ isingSigmaZ isingSigmaZ_eq_smul_single
+    isingOneZ_eq_smul_single isingSigmaZ_eq_smul_single isingSigmaNext isingSigmaNext_nodup
+    isingSigmaCoef_eq_zero isingSigmaZ_eq_zero_of_rho_ne isingOneZ_eq_zero_of_rho_ne
+    isingSigmaZ_eq_zero_of_rho_ne (z := 8) isingGaugeSigmaOneZ
+    (by decide +kernel) (by decide +kernel) (by decide +kernel) hN
 
 /-- **`O_1 O_σ = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and 1323,
 as in `isingOne_mul_isingSigma`: for `(√2)⁻¹ • isingSigma`, the unscaled tensor `A_σ`
 of this module (`v`-free, see the module's Local fix; the stored `isingSigma` is `√2 A_σ`),
 the fusion rule `1 × σ = σ` holds at every positive length. -/
 theorem isingOne_mul_isingSigma_normalized {N : ℕ} (hN : 0 < N) :
-    MPOTensor.mpo isingOne N * MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N =
-      MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N := by
+    MPOTensor.mpo isingOne N * MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N =
+      MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N := by
   rw [MPOTensor.mpo_smul, Matrix.mul_smul, isingOne_mul_isingSigma hN]
 
 /-- **`O_σ O_1 = O_σ` for the unscaled tensor.** Source: arXiv:1511.08090, lines 1308–1312 and 1323,
@@ -101,8 +87,8 @@ as in `isingSigma_mul_isingOne`: for `(√2)⁻¹ • isingSigma`, the unscaled 
 of this module (`v`-free, see the module's Local fix; the stored `isingSigma` is `√2 A_σ`),
 the fusion rule `σ × 1 = σ` holds at every positive length. -/
 theorem isingSigma_normalized_mul_isingOne {N : ℕ} (hN : 0 < N) :
-    MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N * MPOTensor.mpo isingOne N =
-      MPOTensor.mpo ((Real.sqrt 2 : ℂ)⁻¹ • isingSigma) N := by
+    MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N * MPOTensor.mpo isingOne N =
+      MPOTensor.mpo (Complex.invSqrtTwo • isingSigma) N := by
   rw [MPOTensor.mpo_smul, Matrix.smul_mul, isingSigma_mul_isingOne hN]
 
 end IsingTwist

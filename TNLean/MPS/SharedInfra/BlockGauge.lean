@@ -97,7 +97,7 @@ theorem globalGaugeOfBlocks_unitaryGL_mem
   rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose]
   simp only [globalGaugeOfBlocks, Matrix.toRingEquiv_reindexAlgEquiv,
     RingHom.toMonoidHom_eq_coe, RingEquiv.toRingHom_eq_coe, blockDiagonalGL,
-    Units.coe_map, MonoidHom.coe_coe, Matrix.blockDiagonal'RingHom_apply,
+    Units.coe_map, MonoidHom.coe_ofClass, Matrix.blockDiagonal'RingHom_apply,
     RingHom.coe_coe, Matrix.coe_reindexRingEquiv, Matrix.reindex_apply,
     Matrix.conjTranspose_submatrix, Matrix.blockDiagonal'_conjTranspose,
     MulEquiv.val_piUnits_symm_apply, unitaryGL_val, Matrix.submatrix_mul_equiv,

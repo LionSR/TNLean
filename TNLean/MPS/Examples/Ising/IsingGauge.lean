@@ -147,12 +147,12 @@ theorem isingGaugeZ_mul_transpose : isingGaugeZ * isingGaugeZᵀ = 1 := by decid
 theorem isingGaugeZ_transpose_mul : isingGaugeZᵀ * isingGaugeZ = 1 := by decide +kernel
 
 theorem isingGaugeComplex_mul_transpose :
-    complexOfZsqrt2 isingGaugeZ * complexOfZsqrt2 isingGaugeZᵀ = 1 := by
-  rw [← complexOfZsqrt2_mul, isingGaugeZ_mul_transpose, complexOfZsqrt2_one]
+    complexOfZsqrt2 isingGaugeZ * complexOfZsqrt2 isingGaugeZᵀ = 1 :=
+  complexOfRing_mul_eq_one _ isingGaugeZ_mul_transpose
 
 theorem isingGaugeComplex_transpose_mul :
-    complexOfZsqrt2 isingGaugeZᵀ * complexOfZsqrt2 isingGaugeZ = 1 := by
-  rw [← complexOfZsqrt2_mul, isingGaugeZ_transpose_mul, complexOfZsqrt2_one]
+    complexOfZsqrt2 isingGaugeZᵀ * complexOfZsqrt2 isingGaugeZ = 1 :=
+  complexOfRing_mul_eq_one _ isingGaugeZ_transpose_mul
 
 /-! ### The slots and the block coordinates -/
 

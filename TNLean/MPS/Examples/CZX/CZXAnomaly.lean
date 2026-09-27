@@ -74,9 +74,9 @@ target `-δ`, contradicting `czxSquare_right_intertwiner_eq_zero`. -/
 theorem czxSquare_not_starClosed :
     ¬ ∀ i, (czxSquare i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czxSquare) := by
   refine MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
-    squareSlots czxSquareTarget (fun s _ => czxSquareTarget_isNormal s)
+    oneSlot czxSquareTarget (fun s _ => czxSquareTarget_isNormal s)
     (fun _ _ => Nat.one_pos) czxSquare
-    (fun w hw => czxSquare_compression.trace_evalWord_eq_sum w hw) squareSlot ?_
+    (fun w hw => czxSquare_compression.trace_evalWord_eq_sum w hw) oneSlotMem ?_
   intro X hX
   have hv : ∀ i, czxSquare i *ᵥ (fun x => X x 0) =
       czxSquareTarget () i 0 0 • (fun x => X x 0) := by

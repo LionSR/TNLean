@@ -326,8 +326,8 @@ theorem kwSquare_conjMatrix (a : Fin 4) :
 
 /-! ### The compression datum -/
 
-private theorem kwSquare_triangular_int (a : Fin 4)
-    (x y : BlockSpace kwSquareBlockDim kwSquareSlots 0) (h : kwSquareOrd y.1 < kwSquareOrd x.1) :
+private theorem kwSquare_offDiag_int (a : Fin 4)
+    (x y : BlockSpace kwSquareBlockDim kwSquareSlots 0) (h : x.1 ≠ y.1) :
     kwSquareConjInt a (kwSquareTau x) (kwSquareTau y) = 0 := by
   revert a x y
   decide
@@ -341,20 +341,11 @@ private theorem kwSquare_matched_int (a : Fin 4) (s : Fin 2) (p q : Fin (kwSquar
 /-- **The multi-block asymmetric compression datum of the Kramers–Wannier square** (construction note,
 Theorem 7.7, clauses (i)–(iii)). There are no zero slots: `D~²` is fully split into `2T` and
 `2ηT`. -/
-def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquareTargets where
-  z := 0
-  ord := kwSquareOrd
-  gauge := kwSquareGauge
-  triangular a x y h := by
-    rw [kwSquare_conjMatrix, Matrix.submatrix_apply, complexOfInt_apply, Int.cast_eq_zero]
-    exact kwSquare_triangular_int a x y h
-  matched a s := by
-    obtain ⟨s, hs⟩ := s
-    ext p q
-    rw [Matrix.blockDiag'_apply, kwSquare_conjMatrix, Matrix.submatrix_apply,
-      complexOfInt_apply, kwSquareTargets_eq, complexOfInt_apply, Int.cast_inj]
-    exact kwSquare_matched_int a s p q
-  unmatched _ t := t.elim0
+def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquareTargets :=
+  MultiBlockCompression.ofRing (Int.castRingHom ℂ) kwSquareOrd kwSquareTau kwSquareGauge
+    kwSquareConjInt kwSquare_conjMatrix kwSquareTargetsInt kwSquareTargets_eq
+    (fun a => MultiBlockCompression.triangular_of_offDiag (kwSquare_offDiag_int a))
+    (fun a s p q => kwSquare_matched_int a s.1 p q) fun _ t => t.elim0
 
 /-! ### Consequences -/
 
@@ -462,41 +453,11 @@ theorem kwSquareRight1_eq :
   fin_cases j <;> fin_cases x <;>
     exact_mod_cast (by decide)
 
-private theorem kwSquare_remainder_int (a : Fin 4) :
-    (2 : ℤ) • kwSquareInt a =
-      kwSquareRight0Int * kwSquareTargetsInt 0 a * kwSquareLeft0Int +
-        kwSquareRight1Int * kwSquareTargetsInt 1 a * kwSquareLeft1Int := by
-  revert a
-  decide
-
-/-- The subtype `{s // s ∈ kwSquareSlots}` of the two slots is equivalent to `Fin 2` via its
-underlying value. -/
-private def kwSquareSlotEquiv : Fin 2 ≃ {s // s ∈ kwSquareSlots} where
-  toFun s := ⟨s, Finset.mem_univ s⟩
-  invFun s := s.1
-  left_inv _ := rfl
-  right_inv _s := Subtype.ext rfl
-
-/-- Expanding the compression's slot-indexed sum into its two explicit summands. -/
-private theorem kwSquareSlots_sum {M : Type*} [AddCommMonoid M]
-    (f : {s // s ∈ kwSquareSlots} → M) :
-    ∑ s, f s = f ⟨0, Finset.mem_univ 0⟩ + f ⟨1, Finset.mem_univ 1⟩ := by
-  rw [← Equiv.sum_comp kwSquareSlotEquiv f, Fin.sum_univ_two]
-  rfl
-
 /-- **The remainder of the compression vanishes identically.** The extension is fully split:
 the stacked tensor is gauge equivalent to the direct sum of `2T` and `2ηT` (construction note, §1.3). -/
 theorem kwSquare_remainder_eq_zero (a : Fin 4) : kwSquare_compression.remainder a = 0 := by
-  have hsum : kwSquare_compression.remainder a =
-      kwSquare a - (kwSquareRight0 * kwSquareTargets 0 a * kwSquareLeft0 +
-        kwSquareRight1 * kwSquareTargets 1 a * kwSquareLeft1) := by
-    rw [MultiBlockCompression.remainder, kwSquareSlots_sum, kwSquareRight0_eq, kwSquareLeft0_eq,
-      kwSquareRight1_eq, kwSquareLeft1_eq]
-  rw [hsum, sub_eq_zero, kwSquareRight0, kwSquareRight1, kwSquareLeft0, kwSquareLeft1,
-    kwSquareTargets_eq, kwSquareTargets_eq, kwSquare_eq]
-  simp only [Matrix.mul_smul, ← complexOfInt_mul, ← smul_add, ← complexOfInt_add]
-  rw [← kwSquare_remainder_int, complexOfInt_two_smul, smul_smul,
-    show (1 / 2 : ℂ) * 2 = 1 by norm_num, one_smul]
+  unfold kwSquare_compression
+  exact MultiBlockCompression.remainder_ofRing kwSquare_offDiag_int a
 
 /-! ### The sitewise intertwiners (the split case) -/
 

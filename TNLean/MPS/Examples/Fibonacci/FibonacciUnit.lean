@@ -174,16 +174,9 @@ theorem fibOneOneStack_mul_gaugeInv (i : Fin 4) :
   revert i
   decide +kernel
 
-private theorem fibOneOne_triangular (i : Fin 4)
-    (x y : BlockSpace (fun _ : Unit => 2) unitSlots 2)
-    (h : unitOrd 2 y.1 < unitOrd 2 x.1) :
-    fibOneOneConjGolden i (unitCoord 2 2 x) (unitCoord 2 2 y) = 0 := by
-  revert i x y
-  decide +kernel
-
 private theorem fibOneOne_matched (i : Fin 4) (p q : Fin 2) :
-    fibOneOneConjGolden i (unitCoord 2 2 ⟨Sum.inl unitSlot, p⟩)
-      (unitCoord 2 2 ⟨Sum.inl unitSlot, q⟩) = fibOneGoldenMPS i p q := by
+    fibOneOneConjGolden i (unitCoord 2 2 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 2 2 ⟨Sum.inl oneSlotMem, q⟩) = fibOneGoldenMPS i p q := by
   revert i
   revert p q
   decide +kernel
@@ -195,7 +188,7 @@ private theorem fibOneOne_unmatched (i : Fin 4) (t : Fin 2) (p q : Fin 1) :
   decide +kernel
 
 private theorem fibOneOne_offDiagonal (i : Fin 4)
-    (x y : BlockSpace (fun _ : Unit => 2) unitSlots 2) (h : x.1 ≠ y.1) :
+    (x y : BlockSpace (fun _ : Unit => 2) oneSlot 2) (h : x.1 ≠ y.1) :
     fibOneOneConjGolden i (unitCoord 2 2 x) (unitCoord 2 2 y) = 0 := by
   revert i x y
   decide +kernel
@@ -204,19 +197,19 @@ private theorem fibOneOne_offDiagonal (i : Fin 4)
 clauses (i)-(iii); data file §3.1): the stacked product compresses onto the single block
 `fibOneMPS` with `z = 2` zero slots. -/
 def fibOneOne_compression :
-    MultiBlockCompression fibOneOneStack unitSlots (fun _ : Unit => fibOneMPS) :=
+    MultiBlockCompression fibOneOneStack oneSlot (fun _ : Unit => fibOneMPS) :=
   MultiBlockCompression.ofGolden 2 (unitOrd 2) (unitCoord 2 2) fibOneOneStackGolden
     fibOneOneStack_eq (fun _ => fibOneGoldenMPS) (fun _ a => fibOneMPS_eq a) fibOneOneGaugeGolden
     fibOneOneGaugeInvGolden fibOneOneGauge_mul_inv fibOneOneGaugeInv_mul fibOneOneConjGolden
-    fibOneOneStack_mul_gaugeInv fibOneOne_triangular
+    fibOneOneStack_mul_gaugeInv
+    (fun i => MultiBlockCompression.triangular_of_offDiag (fibOneOne_offDiagonal i))
     (fun i s _ p q => by cases s; exact fibOneOne_matched i p q) fibOneOne_unmatched
 
 /-- **The remainder of the compression of `1 ⊗ 1` vanishes**: the extension splits (data file
 §3.1). -/
-theorem fibOneOne_remainder_eq_zero (i : Fin 4) : fibOneOne_compression.remainder i = 0 :=
-  fibOneOne_compression.remainder_eq_zero_of_goldenGauge (hG := fibOneOneGauge_mul_inv)
-    (hG' := fibOneOneGaugeInv_mul) rfl fibOneOneStack_eq fibOneOneStack_mul_gaugeInv
-    fibOneOne_offDiagonal i
+theorem fibOneOne_remainder_eq_zero (i : Fin 4) : fibOneOne_compression.remainder i = 0 := by
+  unfold fibOneOne_compression
+  exact MultiBlockCompression.remainder_ofRing fibOneOne_offDiagonal i
 
 /-- **The admissibility projector is idempotent**, `O_1 O_1 = O_1`, as an identity of periodic
 operators at every positive system size (data file §2, §3.1). -/
@@ -224,7 +217,7 @@ theorem fibOne_mul_fibOne (L : ℕ) (hL : 0 < L) :
     MPOTensor.mpo fibOne L * MPOTensor.mpo fibOne L = MPOTensor.mpo fibOne L := by
   have h := MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibOne)
     fibOneOne_compression L hL
-  rwa [Fintype.sum_unique] at h
+  rwa [Finset.sum_singleton] at h
 
 /-! ### The projector times the `τ` family -/
 
@@ -341,16 +334,9 @@ theorem fibOneTauStack_mul_gaugeInv (i : Fin 4) :
   revert i
   decide +kernel
 
-private theorem fibOneTau_triangular (i : Fin 4)
-    (x y : BlockSpace (fun _ : Unit => 3) unitSlots 3)
-    (h : unitOrd 3 y.1 < unitOrd 3 x.1) :
-    fibOneTauConjGolden i (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
-  revert i x y
-  decide +kernel
-
 private theorem fibOneTau_matched (i : Fin 4) (p q : Fin 3) :
-    fibOneTauConjGolden i (unitCoord 3 3 ⟨Sum.inl unitSlot, p⟩)
-      (unitCoord 3 3 ⟨Sum.inl unitSlot, q⟩) = fibTauGoldenMPS i p q := by
+    fibOneTauConjGolden i (unitCoord 3 3 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauGoldenMPS i p q := by
   revert i
   revert p q
   decide +kernel
@@ -362,7 +348,7 @@ private theorem fibOneTau_unmatched (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
   decide +kernel
 
 private theorem fibOneTau_offDiagonal (i : Fin 4)
-    (x y : BlockSpace (fun _ : Unit => 3) unitSlots 3) (h : x.1 ≠ y.1) :
+    (x y : BlockSpace (fun _ : Unit => 3) oneSlot 3) (h : x.1 ≠ y.1) :
     fibOneTauConjGolden i (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
   revert i x y
   decide +kernel
@@ -371,19 +357,19 @@ private theorem fibOneTau_offDiagonal (i : Fin 4)
 clauses (i)-(iii); data file §3.2): the stacked product compresses onto the single block
 `fibTauMPS` with `z = 3` zero slots. -/
 def fibOneTau_compression :
-    MultiBlockCompression fibOneTauStack unitSlots (fun _ : Unit => fibTauMPS) :=
+    MultiBlockCompression fibOneTauStack oneSlot (fun _ : Unit => fibTauMPS) :=
   MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3) fibOneTauStackGolden
     fibOneTauStack_eq (fun _ => fibTauGoldenMPS) (fun _ a => fibTauMPS_eq a) fibOneTauGaugeGolden
     fibOneTauGaugeInvGolden fibOneTauGauge_mul_inv fibOneTauGaugeInv_mul fibOneTauConjGolden
-    fibOneTauStack_mul_gaugeInv fibOneTau_triangular
+    fibOneTauStack_mul_gaugeInv
+    (fun i => MultiBlockCompression.triangular_of_offDiag (fibOneTau_offDiagonal i))
     (fun i s _ p q => by cases s; exact fibOneTau_matched i p q) fibOneTau_unmatched
 
 /-- **The remainder of the compression of `1 ⊗ τ` vanishes**: the extension splits (data file
 §3.2). -/
-theorem fibOneTau_remainder_eq_zero (i : Fin 4) : fibOneTau_compression.remainder i = 0 :=
-  fibOneTau_compression.remainder_eq_zero_of_goldenGauge (hG := fibOneTauGauge_mul_inv)
-    (hG' := fibOneTauGaugeInv_mul) rfl fibOneTauStack_eq fibOneTauStack_mul_gaugeInv
-    fibOneTau_offDiagonal i
+theorem fibOneTau_remainder_eq_zero (i : Fin 4) : fibOneTau_compression.remainder i = 0 := by
+  unfold fibOneTau_compression
+  exact MultiBlockCompression.remainder_ofRing fibOneTau_offDiagonal i
 
 /-- **The admissibility projector is a left unit on the `τ` family**, `O_1 O_τ = O_τ`, as an
 identity of periodic operators at every positive system size (data file §2, §3.2). -/
@@ -391,7 +377,7 @@ theorem fibOne_mul_fibTau (L : ℕ) (hL : 0 < L) :
     MPOTensor.mpo fibOne L * MPOTensor.mpo fibTau L = MPOTensor.mpo fibTau L := by
   have h := MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibTau)
     fibOneTau_compression L hL
-  rwa [Fintype.sum_unique] at h
+  rwa [Finset.sum_singleton] at h
 
 /-! ### The `τ` family times the projector -/
 
@@ -508,16 +494,9 @@ theorem fibTauOneStack_mul_gaugeInv (i : Fin 4) :
   revert i
   decide +kernel
 
-private theorem fibTauOne_triangular (i : Fin 4)
-    (x y : BlockSpace (fun _ : Unit => 3) unitSlots 3)
-    (h : unitOrd 3 y.1 < unitOrd 3 x.1) :
-    fibTauOneConjGolden i (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
-  revert i x y
-  decide +kernel
-
 private theorem fibTauOne_matched (i : Fin 4) (p q : Fin 3) :
-    fibTauOneConjGolden i (unitCoord 3 3 ⟨Sum.inl unitSlot, p⟩)
-      (unitCoord 3 3 ⟨Sum.inl unitSlot, q⟩) = fibTauGoldenMPS i p q := by
+    fibTauOneConjGolden i (unitCoord 3 3 ⟨Sum.inl oneSlotMem, p⟩)
+      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauGoldenMPS i p q := by
   revert i
   revert p q
   decide +kernel
@@ -529,7 +508,7 @@ private theorem fibTauOne_unmatched (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
   decide +kernel
 
 private theorem fibTauOne_offDiagonal (i : Fin 4)
-    (x y : BlockSpace (fun _ : Unit => 3) unitSlots 3) (h : x.1 ≠ y.1) :
+    (x y : BlockSpace (fun _ : Unit => 3) oneSlot 3) (h : x.1 ≠ y.1) :
     fibTauOneConjGolden i (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
   revert i x y
   decide +kernel
@@ -538,19 +517,19 @@ private theorem fibTauOne_offDiagonal (i : Fin 4)
 clauses (i)-(iii); data file §3.3): the stacked product compresses onto the single block
 `fibTauMPS` with `z = 3` zero slots. -/
 def fibTauOne_compression :
-    MultiBlockCompression fibTauOneStack unitSlots (fun _ : Unit => fibTauMPS) :=
+    MultiBlockCompression fibTauOneStack oneSlot (fun _ : Unit => fibTauMPS) :=
   MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3) fibTauOneStackGolden
     fibTauOneStack_eq (fun _ => fibTauGoldenMPS) (fun _ a => fibTauMPS_eq a) fibTauOneGaugeGolden
     fibTauOneGaugeInvGolden fibTauOneGauge_mul_inv fibTauOneGaugeInv_mul fibTauOneConjGolden
-    fibTauOneStack_mul_gaugeInv fibTauOne_triangular
+    fibTauOneStack_mul_gaugeInv
+    (fun i => MultiBlockCompression.triangular_of_offDiag (fibTauOne_offDiagonal i))
     (fun i s _ p q => by cases s; exact fibTauOne_matched i p q) fibTauOne_unmatched
 
 /-- **The remainder of the compression of `τ ⊗ 1` vanishes**: the extension splits (data file
 §3.3). -/
-theorem fibTauOne_remainder_eq_zero (i : Fin 4) : fibTauOne_compression.remainder i = 0 :=
-  fibTauOne_compression.remainder_eq_zero_of_goldenGauge (hG := fibTauOneGauge_mul_inv)
-    (hG' := fibTauOneGaugeInv_mul) rfl fibTauOneStack_eq fibTauOneStack_mul_gaugeInv
-    fibTauOne_offDiagonal i
+theorem fibTauOne_remainder_eq_zero (i : Fin 4) : fibTauOne_compression.remainder i = 0 := by
+  unfold fibTauOne_compression
+  exact MultiBlockCompression.remainder_ofRing fibTauOne_offDiagonal i
 
 /-- **The admissibility projector is a right unit on the `τ` family**, `O_τ O_1 = O_τ`, as an
 identity of periodic operators at every positive system size (data file §2, §3.3). -/
@@ -558,6 +537,6 @@ theorem fibTau_mul_fibOne (L : ℕ) (hL : 0 < L) :
     MPOTensor.mpo fibTau L * MPOTensor.mpo fibOne L = MPOTensor.mpo fibTau L := by
   have h := MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibTau)
     fibTauOne_compression L hL
-  rwa [Fintype.sum_unique] at h
+  rwa [Finset.sum_singleton] at h
 
 end FibonacciCompression

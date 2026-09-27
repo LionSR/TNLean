@@ -21,7 +21,8 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical
   dimension two, and names joint one-site independence as the missing
-  hypothesis, with blocking as the elimination route.
+  hypothesis, and records its elimination after blocking for normal blocks
+  that are pairwise inequivalent up to a nonzero scalar.
 
 - `bmwshv17_fibonacci_projector_positive_length.tex` records that the source
   asks for the projector identity `P_L^2 = P_L` at every length `L`, that at
@@ -40,17 +41,47 @@ For the Kitaev chain of arXiv:2011.12127, Appendix A:
   the decomposition into two injective bond-dimension-one states), and
   that the fermionic injectivity claim awaits graded tensor networks.
 
+For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
+
+- `rmp_peps_examples_small_torus.tex` records that the cluster, CZX, AKLT
+  and RVB tensors are placed on the simple torus graph, on which a torus of width or
+  height two has a single edge between neighbouring sites, so their state
+  formulas are stated for tori of width and height at least three; the GHZ
+  example holds on every torus.
+- `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
+  printed CZX tensor, contracted with equal labels at the two ends of each
+  bond, gives GHZ states on diagonal loops rather than the plaquette state,
+  and that the plaquette state follows when each bond identifies the pair
+  `(a, b)` at one end with `(b, a)` at the other.
+- `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
+  `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
+  as a parameter and allow a positive factor in the isometry, because the
+  printed quantum-double tensor is not normalized (factor `|G|`); that the
+  quantum-double instance uses the right-regular representation, equivalent
+  to the printed left-regular one; and that the review's statements about the
+  contracted network (the primal tensor's symmetry under every irreducible
+  representation, and the coloring superposition, which on a torus covers only
+  the Gauss-law configurations of trivial holonomy) are formalized only for
+  one tensor or not at all.
+- `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
+  printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
+  bond of dimension three, makes the tensor vanish, and that the formal
+  tensor uses `Y ⊕ 1`, with bond state `|01) - |10) + |22)`.
+
 For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
-  tensors and physical Z gates of the 2025 diagram. The shared-tensor
-  correspondence remains open under #7738. The note also records that the
+  tensors and physical Z gates of the 2025 diagram. The corrected
+  Z-decorated tensor is formalized with its all-length unitarity, which
+  resolves the note. The note also records that the
   bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
   the normalized tensor, while the matrices printed there are its unnormalized
   rescaling, for which the claims of that passage hold, and that the printed
   matrices give the gate order opposite to the verbal description, a global
-  sign `(-1)^N`.
+  sign `(-1)^N`, and that the review's main text calls the one-dimensional
+  block of the square the identity where the appendix obtains `(-1)^N I`, a
+  difference by the same sign that a rescaling of the tensor by `i` removes.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
@@ -65,6 +96,13 @@ For the MPU index of arXiv:1703.09188:
   source gate's weight. In the source's diagonal canonical-form-II coordinates,
   $\rho^{\mathsf T}=\rho$ closes the retained source-$u$ contraction and proves
   $u^\dagger u=I$ for the supplied fixed pair.
+- `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
+  to the unblocked all-length converse printed in the Fundamental Theorem of
+  MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
+  $\mathcal V^{ij}=-\delta_{ij}$ are simple and have identical two-site
+  standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
+  operators differ at odd lengths. The blocked-family reading and the
+  unaffected forward implication are kept distinct.
 - `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
   formulas are values of the displayed tensors, while the source states the
   public blocking-independent MPU index. The remaining public construction is
@@ -431,6 +469,10 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
+- `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
+  scheme without an ancilla presupposes two sites, since its first operation
+  acts on sites 1 and 2, that the literal one-site reading of the theorem is
+  false, and that the formal statements are for chains of length at least two.
 - `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the
@@ -577,6 +619,13 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
   leaves open whether omitting the factors `v` changes the periodic operators.
 
+For the domain walls of anomalous symmetries in arXiv:2405.00439:
+
+- `gs24_czx_action_left_vectors.tex` records that the left action vectors
+  printed for the two CZX product states do not give reductions, the
+  corrected vectors $\langle1|$ and $-\langle0|$, and that the ratio
+  $L_0/L_1=-1=\omega$ is unchanged.
+
 For the group matrix product operators of arXiv:2203.12563:
 
 - `glm23_pbc_group_mpo_single_shift.tex` records that the periodic display
@@ -593,3 +642,32 @@ For the AKLT example of arXiv:2011.12127, Appendix A:
   $\sigma_y$ and the scalar $-1$, so the states differ only by the global sign
   $(-1)^N$; the printed Pauli form holds exactly with the phase of $\ket{+}$
   conjugated. These identities are formally verified.
+
+For the log-depth preparation of matrix product states in arXiv:2307.01696:
+
+- `mswc24_sequential_factorization_positive_block_length.tex` records that the
+  sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
+  is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
+  restriction could be traded for the positive bond dimension the source assumes.
+- `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
+  fixed-point state of a basis of normal tensors, eq. (19), is stated for an
+  arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
+  hypothesis, that the isometry of `W` and the normalization of `|Ω'⟩` take the
+  local orthogonality `⟨ω_j|ω_{j'}⟩ = δ_{jj'}` asserted after eq. (S7) as a
+  hypothesis, and that disjoint supports give its off-diagonal half. The
+  hypothesis is discharged for fixed-point pairs placed on one copy of each block
+  of a canonical form, where orthogonality follows from the placement alone; the
+  link to the source's pairs, the fixed points of the positive parts of the
+  blocked tensor, stays open.
+- `mswc24_multiplicity_fixed_point.tex` records that when a block of the
+  canonical form has multiplicity `m_j ≥ 2`, the block form of the positive part
+  in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
+  approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
+  tends to `1/√5` for every blocking length.
+- `mswc24_decaying_correlations_windowed_connected.tex` records that the
+  correlation estimate of Lemma 2 of the Supplemental Material is proved with
+  the bound in every window of `K ≤ 2` consecutive separations and for the
+  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
+  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
+  need not vanish at finite `N`; the corrected form suffices for Theorem 1.

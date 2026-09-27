@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.Algebra.ComplexOfRing
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 
 /-!
@@ -38,6 +39,11 @@ verifications as finite decisions.
 * `MPSTensor.right_intertwiner_eq_zero_of_certificate`,
   `MPSTensor.left_intertwiner_eq_zero_of_certificate`: vanishing of the sitewise intertwiner
   spaces from an explicit certificate.
+* `MPSTensor.right_intertwiner_eq_zero_of_ringCertificate`,
+  `MPSTensor.left_intertwiner_eq_zero_of_ringCertificate`: the same, with the letters and the
+  certificate over a subring of the complex numbers, so that the certificate is decided there.
+* `MPSTensor.mulVec_eq_zero_of_ringCertificate`, `MPSTensor.vecMul_eq_zero_of_ringCertificate`:
+  the vector form for a block of bond dimension one.
 * `MPSTensor.evalWord_blockDiagonal'_submatrix`,
   `MPSTensor.trace_evalWord_blockDiagonal'_submatrix`: word evaluation and word traces of a
   reindexed block-diagonal tensor.
@@ -148,6 +154,83 @@ theorem left_intertwiner_eq_zero_of_certificate {d m n k : ℕ}
   have h := right_intertwiner_eq_zero_of_certificate (fun i => (B i)ᵀ) (fun i => (C i)ᵀ) rows N
     hc hN Yᵀ fun i => by rw [← Matrix.transpose_mul, hY, Matrix.transpose_mul]
   simpa using congrArg Matrix.transpose h
+
+/-! ### Certificates over a subring of the complex numbers -/
+
+section RingCertificate
+
+variable {R : Type*} [CommRing R] (f : R →+* ℂ) {d m n k : ℕ}
+
+/-- **No nonzero right sitewise intertwiner from a certificate over a subring.** The form of
+`right_intertwiner_eq_zero_of_certificate` for letters that are images of matrices over `R`
+under a ring homomorphism `f : R →+* ℂ`: the certificate is stated, and decided, over `R`. -/
+theorem right_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
+    {C : Fin d → Matrix (Fin n) (Fin n) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
+    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
+    (N : Matrix (Fin m × Fin n) (Fin k) R) {c : R} (hc : f c ≠ 0)
+    (hN : N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1)
+    (X : Matrix (Fin m) (Fin n) ℂ) (hX : ∀ i, B i * X = X * C i) : X = 0 := by
+  obtain rfl : B = fun i => complexOfRing f (BR i) := funext hB
+  obtain rfl : C = fun i => complexOfRing f (CR i) := funext hC
+  refine right_intertwiner_eq_zero_of_certificate _ _ rows (complexOfRing f N) hc ?_ X hX
+  have h := congrArg (complexOfRing f) hN
+  rw [complexOfRing_mul, complexOfRing_submatrix, complexOfRing_smul, complexOfRing_one,
+    show complexOfRing f (sitewiseEqMatrix BR CR) = _ from sitewiseEqMatrix_map f BR CR] at h
+  exact h
+
+/-- **No nonzero left sitewise intertwiner from a certificate over a subring**: the transposed
+form of `right_intertwiner_eq_zero_of_ringCertificate`. -/
+theorem left_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
+    {C : Fin d → Matrix (Fin n) (Fin n) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
+    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
+    (N : Matrix (Fin m × Fin n) (Fin k) R) {c : R} (hc : f c ≠ 0)
+    (hN : N * (sitewiseEqMatrix (fun i => (BR i)ᵀ) (fun i => (CR i)ᵀ)).submatrix rows id =
+      c • 1)
+    (Y : Matrix (Fin n) (Fin m) ℂ) (hY : ∀ i, Y * B i = C i * Y) : Y = 0 := by
+  have h := right_intertwiner_eq_zero_of_ringCertificate f (B := fun i => (B i)ᵀ)
+    (C := fun i => (C i)ᵀ) _ (fun i => by rw [hB]; rfl) _ (fun i => by rw [hC]; rfl) rows N hc
+    hN Yᵀ fun i => by rw [← Matrix.transpose_mul, hY, Matrix.transpose_mul]
+  simpa using congrArg Matrix.transpose h
+
+/-- **No nonzero right sitewise intertwiner into a bond-one block, in vector form.** For a
+block with bond dimension one and scalar letters `C^i`, a certificate over `R` forces every
+vector with `B^i v = C^i v` for all `i` to vanish. -/
+theorem mulVec_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
+    {C : Fin d → Matrix (Fin 1) (Fin 1) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
+    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
+    (N : Matrix (Fin m × Fin 1) (Fin k) R) {c : R} (hc : f c ≠ 0)
+    (hN : N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1)
+    (v : Fin m → ℂ) (hv : ∀ i, B i *ᵥ v = C i 0 0 • v) : v = 0 := by
+  have h := right_intertwiner_eq_zero_of_ringCertificate f BR hB CR hC rows N hc hN
+    (Matrix.replicateCol (Fin 1) v) fun i => by
+      ext p q
+      rw [← Matrix.replicateCol_mulVec, hv, Subsingleton.elim q 0]
+      simp [Matrix.mul_apply, mul_comm]
+  funext p
+  simpa using congrFun (congrFun h p) 0
+
+/-- **No nonzero left sitewise intertwiner into a bond-one block, in vector form**: the
+transposed form of `mulVec_eq_zero_of_ringCertificate`. -/
+theorem vecMul_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
+    {C : Fin d → Matrix (Fin 1) (Fin 1) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
+    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
+    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
+    (N : Matrix (Fin m × Fin 1) (Fin k) R) {c : R} (hc : f c ≠ 0)
+    (hN : N * (sitewiseEqMatrix (fun i => (BR i)ᵀ) (fun i => (CR i)ᵀ)).submatrix rows id =
+      c • 1)
+    (u : Fin m → ℂ) (hu : ∀ i, u ᵥ* B i = C i 0 0 • u) : u = 0 := by
+  have h := left_intertwiner_eq_zero_of_ringCertificate f BR hB CR hC rows N hc hN
+    (Matrix.replicateRow (Fin 1) u) fun i => by
+      ext q p
+      rw [← Matrix.replicateRow_vecMul, hu, Subsingleton.elim q 0]
+      simp [Matrix.mul_apply]
+  funext p
+  simpa using congrFun (congrFun h 0) p
+
+end RingCertificate
 
 /-! ### Words of reindexed block-diagonal tensors -/
 

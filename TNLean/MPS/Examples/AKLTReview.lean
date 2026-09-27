@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.SingletMatrix
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Examples.AKLTParentHamiltonian
@@ -44,7 +45,8 @@ for `|+⟩ = -i(|-1⟩+|+1⟩)/√2`. Documented in
 `docs/paper-gaps/rmp_aklt_pauli_basis_sign.tex`.
 
 ## Main definitions
-* `MPSTensor.rmpSingletY` : the singlet matrix `Y` of `eq:app:singlet-Y`
+* `Matrix.singletY` (in `TNLean.Algebra.SingletMatrix`) : the singlet matrix `Y` of
+  `eq:app:singlet-Y`
 * `MPSTensor.akltRMPSpinOneState` : the three spin-`1` states as coefficient matrices
 * `MPSTensor.akltTensorRMP` : the review's AKLT tensor
 * `MPSTensor.akltRMPBasis` : the review's basis `|-⟩, |+⟩, |0⟩`
@@ -82,10 +84,6 @@ namespace MPSTensor
 
 /-! ### The review's tensor -/
 
-/-- Source: arXiv:2011.12127, `eq:app:singlet-Y`, `Papers/2011.12127/TN-Review-main.tex`
-lines 2380–2385. The singlet matrix `Y = [[0,-1],[1,0]]`. -/
-def rmpSingletY : Matrix (Fin 2) (Fin 2) ℂ := !![0, -1; 1, 0]
-
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2372–2378. The
 three spin-`1` states `|↑↑⟩`, `(|↑↓⟩+|↓↑⟩)/√2`, `|↓↓⟩` of two spin-`½` particles, written as
 coefficient matrices; the physical label `0, 1, 2` stands for `S_z = 0, +1, -1`, the order
@@ -96,7 +94,7 @@ def akltRMPSpinOneState : Fin 3 → Matrix (Fin 2) (Fin 2) ℂ :=
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2372–2385. The
 review's AKLT tensor `A^{+1} = diag(1,0) Y`, `A^0 = (1/√2) σ_x Y`, `A^{-1} = diag(0,1) Y`,
 with physical labels `0, 1, 2` for `S_z = 0, +1, -1`. -/
-def akltTensorRMP : MPSTensor 3 2 := fun s => akltRMPSpinOneState s * rmpSingletY
+def akltTensorRMP : MPSTensor 3 2 := fun s => akltRMPSpinOneState s * Matrix.singletY
 
 private lemma sqrt2_ne_zero : (↑(Real.sqrt 2) : ℂ) ≠ 0 := by
   exact_mod_cast (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 2)).ne'
@@ -112,17 +110,17 @@ private lemma sqrt3_ne_zero : (↑(Real.sqrt 3) : ℂ) ≠ 0 := by
 lemma akltTensorRMP_zero :
     akltTensorRMP 0 = Complex.invSqrtTwo • !![1, 0; 0, -1] := by
   ext i j; fin_cases i <;> fin_cases j <;>
-    simp [akltTensorRMP, akltRMPSpinOneState, rmpSingletY, Matrix.mul_apply]
+    simp [akltTensorRMP, akltRMPSpinOneState, Matrix.singletY, Matrix.mul_apply]
 
 /-- Source: arXiv:2011.12127, lines 2374–2378. `A^{+1} = -|0⟩⟨1|`. -/
 lemma akltTensorRMP_one : akltTensorRMP 1 = !![0, -1; 0, 0] := by
   ext i j; fin_cases i <;> fin_cases j <;>
-    simp [akltTensorRMP, akltRMPSpinOneState, rmpSingletY, Matrix.mul_apply]
+    simp [akltTensorRMP, akltRMPSpinOneState, Matrix.singletY, Matrix.mul_apply]
 
 /-- Source: arXiv:2011.12127, lines 2374–2378. `A^{-1} = |1⟩⟨0|`. -/
 lemma akltTensorRMP_two : akltTensorRMP 2 = !![0, 0; 1, 0] := by
   ext i j; fin_cases i <;> fin_cases j <;>
-    simp [akltTensorRMP, akltRMPSpinOneState, rmpSingletY, Matrix.mul_apply]
+    simp [akltTensorRMP, akltRMPSpinOneState, Matrix.singletY, Matrix.mul_apply]
 
 /-- Project result: the three coefficient matrices are symmetric, so they are states of the
 symmetric (spin-`1`) subspace of two spin-`½` particles (arXiv:2011.12127, lines 2372–2373,

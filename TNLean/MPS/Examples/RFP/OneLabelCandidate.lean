@@ -177,17 +177,9 @@ theorem oneLabel_remainder : oneLabelCompression.remainder = 0 :=
 theorem oneLabel_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord oneLabelStacked w) =
       (1 + (7 / 25 : ℂ) ^ w.length) * Matrix.trace (Kraus.evalWord oneLabelTarget w) := by
-  have h := oneLabelCompression.trace_evalWord_eq_sum w hw
-  have hs : ∀ s : Fin 2,
-      Matrix.trace (Kraus.evalWord (oneLabelWeights s • oneLabelBlocks s) w) =
-        oneLabelWeights s ^ w.length * Matrix.trace (Kraus.evalWord oneLabelTarget w) := by
-    intro s
-    rw [show oneLabelWeights s • oneLabelBlocks s =
-        fun i => oneLabelWeights s • oneLabelBlocks s i from rfl,
-      Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
-    rfl
-  rw [h, show pairSlots = Finset.univ from rfl, Fin.sum_univ_two, hs 0, hs 1]
-  simp only [oneLabelWeights, Matrix.cons_val_zero, Matrix.cons_val_one, one_pow]
+  rw [oneLabelCompression.trace_evalWord_eq_sum_smul w hw, show pairSlots = Finset.univ from rfl,
+    Fin.sum_univ_two]
+  simp only [oneLabelWeights, oneLabelBlocks, Matrix.cons_val_zero, Matrix.cons_val_one, one_pow]
   ring
 
 /-- **Biorthogonal compression onto each weighted slot** (P5 note, Theorem 7.7(iv)–(v)). -/

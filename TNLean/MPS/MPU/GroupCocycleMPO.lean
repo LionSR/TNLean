@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.ScalarThreeCocycle
-import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.GroupRepresentation
 
 /-!
@@ -182,37 +182,8 @@ theorem mpo_tensor_apply (ω : ScalarThreeCochain G) (g : G) (s t : Fin N → Fi
       if s = shift e g N t then
         ∏ i, (ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i)) : ℂ)
       else 0 := by
-  rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic (tensor e ω g).toMPSTensor
-    (fun m ↦ finProdFinEquiv (s m, t m))
-  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  have h' : (List.ofFn fun m ↦ tensor e ω g (s m) (t m)).prod.trace =
-      ∑ b : Fin N → Fin n, ∏ v : Fin N, tensor e ω g (s v) (t v) (b v) (b (v + 1)) := by
-    simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using h
-  rw [h']
-  let b0 : Fin N → Fin n := fun m ↦ t (m - 1)
-  rw [Fintype.sum_eq_single b0]
-  · by_cases hst : s = shift e g N t
-    · have hp : ∀ m, s m = siteShift e g (t m) := fun m ↦ congrFun hst m
-      rw [ite_eq_left hst]
-      calc
-        _ = ∏ m, (ω g (e.symm (t m)) ((e.symm (t m))⁻¹ * e.symm (t (m - 1))) : ℂ) := by
-          refine Finset.prod_congr rfl fun m _ ↦ ?_
-          rw [tensor_apply, ite_eq_left ⟨hp m, by simp [b0]⟩]
-        _ = _ := (Fintype.prod_equiv (Equiv.addRight 1) _ _ fun m ↦ by simp).symm
-    · rw [ite_eq_right hst]
-      obtain ⟨m, hm⟩ := Function.ne_iff.mp hst
-      refine Finset.prod_eq_zero (Finset.mem_univ m) ?_
-      rw [tensor_apply, ite_eq_right]
-      exact fun h ↦ hm h.1
-  · intro b hb
-    obtain ⟨m, hm⟩ := Function.ne_iff.mp hb
-    refine Finset.prod_eq_zero (Finset.mem_univ (m - 1)) ?_
-    rw [tensor_apply, ite_eq_right]
-    intro h
-    apply hm
-    simpa [b0] using h.2
+  rw [mpo_apply_of_forced_right_bond (tensor_apply e ω g)]
+  rfl
 
 /-- **The periodic operator of `T̂_g` is monomial**: the global left shift by `g` with the
 phase of the input configuration.

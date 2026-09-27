@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.MatrixSingleSpan
-import TNLean.MPS.MPDO.StackedLayers
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 
 /-!
@@ -191,8 +191,6 @@ theorem forall_zmod_three {P : Multiplicative (ZMod 3) → Prop}
   exacts [h0, h1, h2]
 
 end Multiplicative
-
-
 
 namespace MPOTensor
 

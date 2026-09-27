@@ -579,6 +579,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \begin{proposition}[Periodic data of a compression]
     \label{prop:asym_compression_trace}
     \lean{MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum,
+        MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum_smul,
         MPSTensor.MultiBlockCompression.mpv_eq_sum}
     \leanok
     \uses{thm:asym_multiblock, lem:asym_triangular}
@@ -587,6 +588,8 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     $(C_s)_{s\in S}$, its periodic data are those of the direct sum:
     $\tr(B^w)=\sum_{s\in S}\tr(C_s^w)$ for every nonempty word $w$, that
     is, $\ket{V^{(N)}(B)}=\ket{V^{(N)}(\bigoplus_sC_s)}$ for every $N\geq1$.
+    When the blocks are rescaled tensors $C_s=\mu_sA_s$, this reads
+    $\tr(B^w)=\sum_{s\in S}\mu_s^{|w|}\tr(A_s^w)$.
 \end{proposition}
 
 \begin{proof}
@@ -596,7 +599,8 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     traces of the diagonal blocks; by Lemma~\ref{lem:asym_triangular} the
     diagonal blocks of $B^w$ are the words of the diagonal blocks, which are
     the $C_s^w$ on the matched slots and $0$ on the one-dimensional zero
-    slots.
+    slots. For $C_s=\mu_sA_s$ a word of length $|w|$ gives
+    $C_s^w=\mu_s^{|w|}A_s^w$.
 \end{proof}
 
 \begin{proposition}[A vanishing remainder gives sitewise intertwiners]

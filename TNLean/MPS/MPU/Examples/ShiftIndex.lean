@@ -25,12 +25,6 @@ Source: arXiv:1703.09188, lines 2037--2041.
 
 namespace MPOTensor
 
-private theorem sourceIndexValue_eq_zero_of_rightRank_eq_leftRank
-    (U : MPOTensor d D) (hr : 0 < r[U]) (hℓ : 0 < ℓ[U])
-    (h : r[U] = ℓ[U]) :
-    sourceIndexValue U hr hℓ = 0 := by
-  simp only [sourceIndexValue, h, sub_self, mul_zero]
-
 /-- The source ranks of the specified right-shift tensor are positive. -/
 lemma sourceRanks_pos_rightShiftTensor (d : ℕ) [NeZero d] :
     0 < r[rightShiftTensor d] ∧ 0 < ℓ[rightShiftTensor d] := by

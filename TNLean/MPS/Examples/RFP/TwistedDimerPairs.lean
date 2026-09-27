@@ -4,17 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.RFP.TwistedDimerPairZeroOne
-import TNLean.MPS.Examples.RFP.TwistedDimerPairOneZero
-import TNLean.MPS.Examples.RFP.TwistedDimerPairOneOne
 
 /-!
 # The fusion rule of the graded quantum-dimer twist
 
-The four pairwise letter identities of the graded quantum-dimer twist at `x = 7/8`
-(`TwistedDimer` for the fusion of the zero sector with itself and `TwistedDimerPairZeroOne`,
-`TwistedDimerPairOneZero`, `TwistedDimerPairOneOne` for the other three pairs) assembled into
-one statement about every pair of sectors: the stacked product of the sectors `f` and `f'` is the
-multi-block asymmetric compression
+The letter identities of the graded quantum-dimer twist at `x = 7/8` for the fusion of the zero
+sector with itself (`TwistedDimer`) and with the one sector (`TwistedDimerPairZeroOne`),
+extended by the sign rule `dimerStackedInt_eq_add` to one statement about every pair of
+sectors: the stacked product of the sectors `f` and `f'` is the multi-block asymmetric compression
 (`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) onto
 the sector `f + f'` with the weight `x/2 = 7/16` and the sector `f + f' + 1` with the weight
 `y/2 = 1/16`, with eight zero slots and a vanishing remainder. This is the
@@ -58,15 +55,16 @@ namespace P6Compression
 open MPSTensor
 
 /-- **The integer letter identity of every pair of sectors** (`p6_examples_compression_data.md`,
-§1.3): the four exhaustive checks assembled. -/
+§1.3): by the sign rule the pair `(f, f')` reduces to the pair `(0, f + f')`, whose two cases are
+checked exhaustively. -/
 theorem dimerFusion_letter_int (f f' : Fin 2) (a : Fin 64) :
     (2 : ℤ) • dimerStackedInt f f' a =
       ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt f f') s a := by
-  fin_cases f <;> fin_cases f'
+  rw [dimerStackedInt_eq_add, dimerBlockInt_eq_add]
+  generalize f + f' = g
+  fin_cases g
   · exact dimer_letter_int a
   · exact dimerZeroOne_letter_int a
-  · exact dimerOneZero_letter_int a
-  · exact dimerOneOne_letter_int a
 
 /-- **The multi-block asymmetric compression datum of every fusion of two sectors** (P5 note,
 Theorem 7.7(i)–(iii)): the stacked product of the sectors `f` and `f'` compresses onto the two

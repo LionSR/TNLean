@@ -1,0 +1,82 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{The Anomaly Class of the Two-Qubit $\mathbb{Z}_2\times\mathbb{Z}_2$
+Tensors on the Diagonal Subgroup}
+\author{}
+\date{2026-09-25}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The target statement}
+
+Ref.~\cite{GarreRubio2023MPOSym}, subsubsection ``MPO algebras representing
+$\mathbb{Z}_2\times\mathbb{Z}_2$'', lists the three-cocycles of
+$\mathbb{Z}_2\times\mathbb{Z}_2$; its mixed type-II representative takes
+the value $-1$ on the triples $(g_1g_2^i,g_1^jg_2,g_1^kg_2)$ with
+$i,j,k\in\{0,1\}$ and $1$ elsewhere, where $g_1,g_2$ are the two
+generators,
+equivalently $\omega(a,b,c)=(-1)^{a_1b_2c_2}$ in the coordinates
+$a=(a_1,a_2)$. The
+anomaly three-cocycle of an exact matrix product operator representation
+of a finite group by normal tensors is defined from its fusion tensors in
+Ref.~\cite{FrancoRubio2025MPUGauging}, in the display preceding the
+three-cocycle equation, and its cohomology class does not depend on the
+choice of fusion tensors. Neither source prints a local tensor for the
+mixed class.
+
+\section{The formalized statement}
+
+The two-qubit tensors $M_e,M_x,M_y,M_{xy}$ of the condensation-defect
+example are a construction of this development. Their periodic operators
+satisfy $U_gU_h=\lambda(g,h)^LU_{gh}$ on a ring of $L$ sites with
+$\lambda(g,h)=(-1)^{g_1h_2}$. Since $\lambda(x,y)=-1\neq1=\lambda(y,x)$,
+the operators $U_x$ and $U_y$ anticommute on odd rings, and no rescaling
+$M_g\mapsto c_gM_g$ makes the family exact: a rescaling multiplies
+$\lambda(g,h)$ by the symmetric factor $c_gc_h/c_{gh}$. The anomaly
+three-cochain of Ref.~\cite{FrancoRubio2025MPUGauging} is therefore not
+defined for the full family.
+
+On the diagonal subgroup $\{e,xy\}$ the sign is $\lambda(xy,xy)=-1$, and
+the rescaled family $e\mapsto M_e$, $xy\mapsto iM_{xy}$ is an exact
+representation of $\mathbb{Z}_2$ by normal tensors. For it the formalization
+proves $\omega(s,e,s)\,\omega(s,s,s)=-1$ for every choice of fusion
+tensors, with $s=xy$, and hence that the anomaly class of the diagonal
+subgroup is nontrivial.\footnote{Formal declarations:
+\leanid{Z2Z2Condensation.diagFamily},
+\leanid{Z2Z2Condensation.diagFamily\_isNormalRepresentation} and
+\leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_diag} in
+\doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.}
+This is the value of the same gauge-invariant
+product for the mixed cocycle at $s=(1,1)$; at $(1,0)$ and $(0,1)$ that
+product is $1$, so the diagonal subgroup is the one on which the mixed
+class restricts nontrivially.
+
+\section{Missing piece and elimination plan}
+
+The statement about the class of the full $\mathbb{Z}_2\times\mathbb{Z}_2$
+family is not made. Two routes would supply it: blocking two sites, after
+which $\lambda^2=1$ and the family is exact at the cost of a pair alphabet
+of size $256$; or an anomaly three-cochain for projective families
+$U_gU_h=c(g,h)^LU_{gh}$. Either would be combined with the restriction of
+cochains to the diagonal subgroup, which preserves triviality of the class.
+
+\textbf{Verdict: open scope restriction.} The formalized result is correct
+and restricted to the diagonal subgroup: it proves that the anomaly class
+of the rescaled diagonal family is nontrivial, which is what the mixed
+class of the source predicts there. The class of the full
+$\mathbb{Z}_2\times\mathbb{Z}_2$ family remains unformalized, because
+the full family is projective rather than exact and the anomaly
+three-cochain is not defined for it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

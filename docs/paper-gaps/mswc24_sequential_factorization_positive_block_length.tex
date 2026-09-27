@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Sequential Factorization of the Blocked Isometry: Positive Block Length}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+Let $A$ be a tensor of physical dimension $d$ and bond dimension $D$, and let
+$\mathcal B_q\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$ be its map blocked
+over $q$ sites, with polar decomposition $\mathcal B_q=VP$. Equations~(13)--(15)
+of~\cite{Malz2024Preparation} write the isometry as an ordered product of $q$
+isometries acting on one site and a bond each,
+\begin{align}
+    V
+     & =V_q\cdots V_1,
+    \label{eq:mswc24_sequential_product}
+\end{align}
+where $V_k\colon\C^{D'_k}\to\C^{D'_{k+1}}\otimes\C^d$, $D'_1=D^2$,
+$D'_{q+1}=1$ and $D'_k\leq D^2$. The source states no lower bound on the block
+length $q$; the construction factors the blocked map site by site and blocks
+at least one site.
+
+\section{The empty block}
+For $q=0$ the blocked map has a single matrix, the empty product
+$\Id_D$, and the output space $(\C^d)^{\otimes0}$ is $\C$. The one matrix
+$\Id_D$ spans the full matrix algebra only when $D\leq1$. When $D=1$,
+$V=1$ and (\ref{eq:mswc24_sequential_product}) is the empty product with
+$D'_1=D'_{q+1}=1$, so the statement holds trivially. When $D=0$ the space
+$\C^D\otimes\C^D$ is zero, and the requirement $D'_1=D^2=0$ contradicts
+$D'_{q+1}=1$ at $q=0$, where these are the same bond. The empty block
+carries no content of the preparation scheme, which blocks at least one site.
+
+\section{The restriction adopted}
+The sequential factorization is stated for block lengths $q\geq1$ and injective
+$\mathcal B_q$.\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isometric_chain_polarIsoMatrix} in
+    \doclink{TNLean/MPS/Preparation/SequentialFactorization}.}
+For every $q\geq1$ the conclusion is exactly
+(\ref{eq:mswc24_sequential_product}) in matrix product form, with no further
+hypothesis. Elimination: replace $q\geq1$ by a positive bond dimension $D\geq1$,
+which the source takes for granted, and treat the case $q=0$, $D=1$ directly
+as the empty product.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -18,6 +18,8 @@ rescaling.
 * `MPSTensor.wordSpan_smul_eq`: the span of the length-`N` words is invariant.
 * `MPSTensor.isNBlkInjective_smul_iff`: block injectivity at every blocking length is invariant.
 * `MPSTensor.isNormal_smul_iff`: normality is invariant.
+* `MPSTensor.mpv_smul`: scaling a tensor by `c` multiplies the coefficients of length `N` by
+  `c ^ N`.
 
 ## References
 
@@ -30,6 +32,13 @@ open scoped Matrix
 namespace MPSTensor
 
 variable {d D : ℕ}
+
+/-- Scaling a tensor by `c` scales MPVs by `c^N`. -/
+theorem mpv_smul (c : ℂ) (A : MPSTensor d D) {N : ℕ} (σ : Fin N → Fin d) :
+    mpv (fun i => c • A i) σ = c ^ N * mpv A σ := by
+  simp only [mpv, coeff]
+  rw [Kraus.evalWord_smul]
+  simp [List.length_ofFn, Matrix.trace_smul]
 
 /-- Rescaling every matrix of a tensor by a nonzero scalar preserves the span of
 the length-\(N\) words.

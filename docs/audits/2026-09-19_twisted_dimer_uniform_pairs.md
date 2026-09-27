@@ -62,6 +62,15 @@ unchanged.  The pair-generic constructions of
 `dimer_trace_evalWord_of_compression`, `dimer_letter_int_of_halves`), the
 sector tensors, their normality and their gauge inequivalence are untouched.
 
+**Superseded in part (2026-09-25).** A later refactor removed
+`dimerOneZero_letter_int` and `dimerOneOne_letter_int` with their modules
+`TwistedDimerPairOneZero.lean` and `TwistedDimerPairOneOne.lean`. The sign rule
+`P6Compression.dimerStackedInt_eq_add` (with `dimerBlockInt_eq_add`) shows that
+the stacked product of the sectors `f` and `f'` is that of the sectors `0` and
+`f + f'`. Hence `dimerFusion_letter_int` needs only the checks of the pairs
+`(0, 0)` and `(0, 1)`, which remain in separate modules as before. The modules
+now live under `TNLean/MPS/Examples/RFP/`.
+
 ## Blueprint
 
 Two nodes of `blueprint/src/chapter/ch25_asymmetric_examples_rfp.tex` tagged

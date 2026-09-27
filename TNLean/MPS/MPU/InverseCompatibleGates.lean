@@ -109,9 +109,9 @@ theorem inverseCompatibleGates_unitary_and_phase
   have hK : K.IsUnitaryBetween :=
     inverseCompatibleComparisonK_isUnitaryBetween U T hU hsimple hT σ hσ
   have hu : (sourceU U hU.ρ hU.ρ_posDef).IsUnitaryBetween :=
-    (hU.isMPUSimple_tfae.out 0 2).mp hsimple
+    (hU.isMPUSimple_tfae.out 1 3).mp hsimple
   have hv : (sourceV U hU.ρ hU.ρ_posDef).IsUnitaryBetween :=
-    (hU.isMPUSimple_tfae.out 0 3).mp hsimple
+    (hU.isMPUSimple_tfae.out 1 4).mp hsimple
   have hnewu : inverseCompatibleU U T = (I ⊗ₖ Kᴴ) * sourceU U hU.ρ hU.ρ_posDef := by
     rw [inverseCompatibleU_eq_comparisonJ_mul_sourceU U T hT hU.ρ hU.ρ_posDef,
       inverseCompatibleComparisonJ_eq_conjTranspose U T hU hsimple hT σ hσ]

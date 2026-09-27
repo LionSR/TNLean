@@ -55,12 +55,6 @@ theorem z3Gen_pow_three : z3Gen ^ 3 = 1 := by decide
 
 /-! ### The identity tensor -/
 
-/-- The bond-one identity tensor of `Z3AnomalousTensor` is `MPOTensor.idTensor 3`. -/
-theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 3 := by
-  funext i j
-  unfold identityTensor identityEis MPOTensor.idTensor
-  split_ifs <;> simp [complexOfEisenstein_one, complexOfEisenstein_zero]
-
 theorem mulTensor_identityTensor_left (M : MPOTensor 3 2) :
     mulTensor identityTensor M = (M : MPOTensor 3 (1 * 2)) := by
   rw [identityTensor_eq_idTensor, mulTensor_idTensor_left]
@@ -99,10 +93,10 @@ def z3LabelV : (a b : Fin 3) →
   | 0, 2 => (1 : Matrix (Fin 2) (Fin 2) ℂ)
   | 1, 0 => (1 : Matrix (Fin 2) (Fin 2) ℂ)
   | 2, 0 => (1 : Matrix (Fin 2) (Fin 2) ℂ)
-  | 1, 1 => uu_compression.left theSlot
-  | 1, 2 => ud_compression.left theSlot
-  | 2, 1 => du_compression.left theSlot
-  | 2, 2 => dd_compression.left theSlot
+  | 1, 1 => uu_compression.left oneSlotMem
+  | 1, 2 => ud_compression.left oneSlotMem
+  | 2, 1 => du_compression.left oneSlotMem
+  | 2, 2 => dd_compression.left oneSlotMem
 
 /-- The right fusion tensors attached to a pair of residues. -/
 def z3LabelW : (a b : Fin 3) →
@@ -112,10 +106,10 @@ def z3LabelW : (a b : Fin 3) →
   | 0, 2 => (1 : Matrix (Fin 2) (Fin 2) ℂ)
   | 1, 0 => (1 : Matrix (Fin 2) (Fin 2) ℂ)
   | 2, 0 => (1 : Matrix (Fin 2) (Fin 2) ℂ)
-  | 1, 1 => uu_compression.right theSlot
-  | 1, 2 => ud_compression.right theSlot
-  | 2, 1 => du_compression.right theSlot
-  | 2, 2 => dd_compression.right theSlot
+  | 1, 1 => uu_compression.right oneSlotMem
+  | 1, 2 => ud_compression.right oneSlotMem
+  | 2, 1 => du_compression.right oneSlotMem
+  | 2, 2 => dd_compression.right oneSlotMem
 
 /-- **Fusion tensors of `{1, U, U†}`**: trivial whenever a factor is the identity,
 and the recorded compressions `U ⊗ U → U†`, `U ⊗ U† → 1`, `U† ⊗ U → 1`,
@@ -177,31 +171,31 @@ private theorem assocInv_two_one_two :
 
 private theorem mulTensor_uTensor_uTensor :
     mulTensor uTensor uTensor =
-      fun i j ↦ complexOfEisenstein (mulEisensteinTensor uEis uEis i j) :=
-  funext₂ fun i j ↦ mulTensor_complexOfEisenstein uEis uEis i j
+      fun i j ↦ complexOfEisenstein (mulTensorR uEis uEis i j) :=
+  funext₂ fun i j ↦ mulTensor_complexOfRing _ uEis uEis i j
 
 private theorem mulTensor_uTensor_uDagTensor :
     mulTensor uTensor uDagTensor =
-      fun i j ↦ complexOfEisenstein (mulEisensteinTensor uEis uDagEis i j) :=
-  funext₂ fun i j ↦ mulTensor_complexOfEisenstein uEis uDagEis i j
+      fun i j ↦ complexOfEisenstein (mulTensorR uEis uDagEis i j) :=
+  funext₂ fun i j ↦ mulTensor_complexOfRing _ uEis uDagEis i j
 
 private theorem tripleUUU_eq (a : Fin 9) :
     (family.tripleTensor z3Gen z3Gen z3Gen).toMPSTensor a =
       complexOfEisenstein (tripleUUUTable a) := by
   change (mulTensor (mulTensor uTensor uTensor) uTensor).toMPSTensor a = _
   rw [mulTensor_uTensor_uTensor, ← tripleUUUEis_eq_table]
-  exact mulTensor_complexOfEisenstein _ uEis _ _
+  exact mulTensor_complexOfRing _ _ uEis _ _
 
 private theorem tripleUDU_eq (a : Fin 9) :
     (family.tripleTensor z3Gen (z3Gen * z3Gen) z3Gen).toMPSTensor a =
       complexOfEisenstein (tripleUDUTable a) := by
   change (mulTensor (mulTensor uTensor uDagTensor) uTensor).toMPSTensor a = _
   rw [mulTensor_uTensor_uDagTensor, ← tripleUDUEis_eq_table]
-  exact mulTensor_complexOfEisenstein _ uEis _ _
+  exact mulTensor_complexOfRing _ _ uEis _ _
 
 theorem z3FusionData_leftV_gen_gen_gen :
     z3FusionData.leftV z3Gen z3Gen z3Gen = complexOfEisenstein leftUUUEis := by
-  change du_compression.left theSlot * kronId (uu_compression.left theSlot) 2 = _
+  change du_compression.left oneSlotMem * kronId (uu_compression.left oneSlotMem) 2 = _
   rw [du_left_eq, uu_left_eq, kronId_complexOfEisenstein, ← complexOfEisenstein_mul]
   rfl
 
@@ -212,15 +206,15 @@ theorem z3FusionData_rightV_gen_gen_gen :
     rw [GroupFamily.castMat_eq_finCongr]
     exact finCongr_toMatrix_eq_one _
   rw [GroupFamily.FusionData.rightV, hc]
-  change (1 : Matrix (Fin 1) (Fin 1) ℂ) * (ud_compression.left theSlot *
-    idKron 2 (uu_compression.left theSlot) * mulTensorAssocInvMatrix 2 2 2) = _
+  change (1 : Matrix (Fin 1) (Fin 1) ℂ) * (ud_compression.left oneSlotMem *
+    idKron 2 (uu_compression.left oneSlotMem) * mulTensorAssocInvMatrix 2 2 2) = _
   rw [ud_left_eq, uu_left_eq, assocInv_two_two_two, idKron_complexOfEisenstein, Matrix.one_mul,
     Matrix.mul_one, ← complexOfEisenstein_mul]
   rfl
 
 theorem z3FusionData_leftV_gen_sq_gen :
     z3FusionData.leftV z3Gen (z3Gen * z3Gen) z3Gen = complexOfEisenstein leftUDUEis := by
-  change (1 : Matrix (Fin 2) (Fin 2) ℂ) * kronId (ud_compression.left theSlot) 2 = _
+  change (1 : Matrix (Fin 2) (Fin 2) ℂ) * kronId (ud_compression.left oneSlotMem) 2 = _
   rw [ud_left_eq, kronId_complexOfEisenstein, Matrix.one_mul]
   rfl
 
@@ -232,7 +226,7 @@ theorem z3FusionData_rightV_gen_sq_gen :
     exact finCongr_toMatrix_eq_one _
   rw [GroupFamily.FusionData.rightV, hc]
   change (1 : Matrix (Fin 2) (Fin 2) ℂ) * ((1 : Matrix (Fin 2) (Fin 2) ℂ) *
-    idKron 2 (du_compression.left theSlot) * mulTensorAssocInvMatrix 2 2 2) = _
+    idKron 2 (du_compression.left oneSlotMem) * mulTensorAssocInvMatrix 2 2 2) = _
   rw [du_left_eq, assocInv_two_two_two, idKron_complexOfEisenstein, Matrix.one_mul,
     Matrix.one_mul, Matrix.mul_one]
   rfl
@@ -273,16 +267,16 @@ theorem z3FusionData_isAssociator_gen_sq_gen :
 /-- For the fusion tensors of `z3FusionData`, `ω(g,1,g) = 1`: both trees are the
 recorded fusion tensor of `U ⊗ U`. -/
 theorem z3FusionData_omega_gen_one_gen : z3FusionData.omega z3Gen 1 z3Gen = 1 := by
-  have hL : z3FusionData.leftV z3Gen 1 z3Gen = uu_compression.left theSlot := by
-    change uu_compression.left theSlot * kronId (1 : Matrix (Fin 2) (Fin 2) ℂ) 2 = _
+  have hL : z3FusionData.leftV z3Gen 1 z3Gen = uu_compression.left oneSlotMem := by
+    change uu_compression.left oneSlotMem * kronId (1 : Matrix (Fin 2) (Fin 2) ℂ) 2 = _
     rw [kronId_one, Matrix.mul_one]
   have hc : family.castMat (mul_assoc z3Gen 1 z3Gen).symm =
       (1 : Matrix (Fin 2) (Fin 2) ℂ) := by
     rw [GroupFamily.castMat_eq_finCongr]
     exact finCongr_toMatrix_eq_one _
-  have hR : z3FusionData.rightV z3Gen 1 z3Gen = uu_compression.left theSlot := by
+  have hR : z3FusionData.rightV z3Gen 1 z3Gen = uu_compression.left oneSlotMem := by
     rw [GroupFamily.FusionData.rightV, hc]
-    change (1 : Matrix (Fin 2) (Fin 2) ℂ) * (uu_compression.left theSlot *
+    change (1 : Matrix (Fin 2) (Fin 2) ℂ) * (uu_compression.left oneSlotMem *
       idKron 2 (1 : Matrix (Fin 2) (Fin 2) ℂ) * mulTensorAssocInvMatrix 2 1 2) = _
     rw [idKron_one, Matrix.mul_one, assocInv_two_one_two, Matrix.mul_one, Matrix.one_mul]
   have h : z3FusionData.IsAssociator z3Gen 1 z3Gen 1 := by

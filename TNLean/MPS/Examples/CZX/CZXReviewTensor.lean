@@ -139,21 +139,9 @@ controlled-`Z` gates followed by a Pauli `X`, reads as `X^{⊗ N} D_N`, which di
 theorem mpo_reviewCZXTensor_apply (s t : Fin N → Fin 2) :
     MPOTensor.mpo reviewCZXTensor N s t =
       if s = spinFlip N t then (-1 : ℂ) ^ czExponent s else 0 := by
-  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond reviewCZXTensor s t s fun g hg ↦ by
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
-    refine ⟨n, ?_⟩
-    rw [reviewCZXTensor_apply, ite_eq_right]
-    exact fun h ↦ hn h.2]
-  by_cases hst : s = spinFlip N t
-  · have hp : ∀ n, s n = (t n).rev := fun n ↦ congrFun hst n
-    rw [ite_eq_left hst, czExponent, ← Finset.prod_pow_eq_pow_sum]
-    refine Finset.prod_congr rfl fun n _ ↦ ?_
-    rw [reviewCZXTensor_apply, ite_eq_left ⟨hp n, rfl⟩]
-  · rw [ite_eq_right hst]
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
-    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
-    rw [reviewCZXTensor_apply, ite_eq_right]
-    exact fun h ↦ hn h.1
+  rw [MPOTensor.mpo_apply_of_forced_left_bond reviewCZXTensor_apply, czExponent,
+    ← Finset.prod_pow_eq_pow_sum]
+  rfl
 
 /-- The periodic operator of the review's tensor is the monomial matrix of the global spin flip
 whose phase at the input `t` is the controlled-`Z` sign of the output. -/

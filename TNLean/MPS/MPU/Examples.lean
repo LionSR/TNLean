@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.MPU.Examples.CZXNormalizationAudit
 import TNLean.MPS.MPU.Examples.Shift
+import TNLean.MPS.MPU.Examples.ShiftBlockedIndex
 import TNLean.MPS.MPU.Examples.ShiftIndex
 import TNLean.MPS.MPU.Examples.ShiftPaperSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas

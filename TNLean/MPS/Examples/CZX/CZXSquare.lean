@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXTensor
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 
 /-!
 # CZX: compression of the stacked square onto `-δ`
@@ -70,9 +70,6 @@ open MPSTensor
 
 /-! ### The target family and the flag -/
 
-/-- The single slot of Example D. -/
-abbrev squareSlots : Finset Unit := {()}
-
 /-- The bond dimension of the single slot of Example D. -/
 abbrev squareDim : Unit → ℕ := fun _ => 1
 
@@ -99,16 +96,16 @@ theorem czxSquareGauge_mul_inv : czxSquareGaugeInt * czxSquareGaugeInvInt = 1 :=
 theorem czxSquareGaugeInv_mul : czxSquareGaugeInvInt * czxSquareGaugeInt = 1 := by decide
 
 theorem czxSquareGaugeComplex_mul_inv :
-    complexOfInt czxSquareGaugeInt * complexOfInt czxSquareGaugeInvInt = 1 := by
-  rw [← complexOfInt_mul, czxSquareGauge_mul_inv, complexOfInt_one]
+    complexOfInt czxSquareGaugeInt * complexOfInt czxSquareGaugeInvInt = 1 :=
+  complexOfRing_mul_eq_one _ czxSquareGauge_mul_inv
 
 theorem czxSquareGaugeComplex_inv_mul :
-    complexOfInt czxSquareGaugeInvInt * complexOfInt czxSquareGaugeInt = 1 := by
-  rw [← complexOfInt_mul, czxSquareGaugeInv_mul, complexOfInt_one]
+    complexOfInt czxSquareGaugeInvInt * complexOfInt czxSquareGaugeInt = 1 :=
+  complexOfRing_mul_eq_one _ czxSquareGaugeInv_mul
 
 /-- The block ordering of Example D: a zero slot at position `0`, the weighted target at
 position `1`, and two more zero slots at positions `2` and `3`. -/
-def czxSquareOrd : BlockIndex squareSlots 3 ≃ Fin 4 where
+def czxSquareOrd : BlockIndex oneSlot 3 ≃ Fin 4 where
   toFun
     | Sum.inl _ => 1
     | Sum.inr t => ![0, 2, 3] t
@@ -122,7 +119,7 @@ def czxSquareOrd : BlockIndex squareSlots 3 ≃ Fin 4 where
 
 /-- The labelling of the four bond coordinates of Example D by the graded block space; each
 block is one-dimensional, so it agrees with `czxSquareOrd`. -/
-def czxSquareTau : BlockSpace squareDim squareSlots 3 ≃ Fin 4 where
+def czxSquareTau : BlockSpace squareDim oneSlot 3 ≃ Fin 4 where
   toFun x := czxSquareOrd x.1
   invFun
     | 0 => ⟨Sum.inr 0, 0⟩
@@ -133,7 +130,7 @@ def czxSquareTau : BlockSpace squareDim squareSlots 3 ≃ Fin 4 where
   right_inv := by decide
 
 /-- The gauge of Example D. -/
-def czxSquareGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace squareDim squareSlots 3 → ℂ) :=
+def czxSquareGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace squareDim oneSlot 3 → ℂ) :=
   gaugeOfMatrix czxSquareTau (complexOfInt czxSquareGaugeInt) (complexOfInt czxSquareGaugeInvInt)
     czxSquareGaugeComplex_mul_inv czxSquareGaugeComplex_inv_mul
 
@@ -158,18 +155,15 @@ theorem czxSquare_conjMatrix (i : Fin 4) :
 
 /-! ### The compression datum -/
 
-/-- The single slot of Example D as an element of the slot subtype. -/
-abbrev squareSlot : {s // s ∈ squareSlots} := ⟨(), Finset.mem_singleton_self ()⟩
-
 private theorem czxSquare_triangular_int (i : Fin 4)
-    (x y : BlockSpace squareDim squareSlots 3) (h : czxSquareOrd y.1 < czxSquareOrd x.1) :
+    (x y : BlockSpace squareDim oneSlot 3) (h : czxSquareOrd y.1 < czxSquareOrd x.1) :
     czxSquareConjInt i (czxSquareTau x) (czxSquareTau y) = 0 := by
   revert i x y
   decide
 
 private theorem czxSquare_matched_int (i : Fin 4) (p q : Fin 1) :
-    czxSquareConjInt i (czxSquareTau ⟨Sum.inl squareSlot, p⟩)
-        (czxSquareTau ⟨Sum.inl squareSlot, q⟩) = negIdentityIntMPS i p q := by
+    czxSquareConjInt i (czxSquareTau ⟨Sum.inl oneSlotMem, p⟩)
+        (czxSquareTau ⟨Sum.inl oneSlotMem, q⟩) = negIdentityIntMPS i p q := by
   obtain rfl : p = 0 := Subsingleton.elim p 0
   obtain rfl : q = 0 := Subsingleton.elim q 0
   revert i
@@ -182,25 +176,14 @@ private theorem czxSquare_unmatched_int (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
 
 /-- **The multi-block asymmetric compression datum of Example D** (P5 note, Theorem 7.7,
 clauses (i)–(iii), for `ex:p5ft-czx`). -/
-def czxSquare_compression : MultiBlockCompression czxSquare squareSlots czxSquareTarget where
-  z := 3
-  ord := czxSquareOrd
-  gauge := czxSquareGauge
-  triangular i x y h := by
-    rw [czxSquare_conjMatrix, Matrix.submatrix_apply, complexOfInt_apply, Int.cast_eq_zero]
-    exact czxSquare_triangular_int i x y h
-  matched i s := by
-    have hs : s = squareSlot := Subtype.ext (Subsingleton.elim _ _)
-    subst hs
-    ext p q
-    rw [Matrix.blockDiag'_apply, czxSquare_conjMatrix, Matrix.submatrix_apply,
-      complexOfInt_apply, czxSquareTarget_eq, complexOfInt_apply, Int.cast_inj]
-    exact czxSquare_matched_int i p q
-  unmatched i t := by
-    ext p q
-    rw [Matrix.blockDiag'_apply, czxSquare_conjMatrix, Matrix.submatrix_apply,
-      complexOfInt_apply, Matrix.zero_apply, Int.cast_eq_zero]
-    exact czxSquare_unmatched_int i t p q
+def czxSquare_compression : MultiBlockCompression czxSquare oneSlot czxSquareTarget :=
+  MultiBlockCompression.ofRing (Int.castRingHom ℂ) czxSquareOrd czxSquareTau czxSquareGauge
+    czxSquareConjInt czxSquare_conjMatrix (fun _ => negIdentityIntMPS) czxSquareTarget_eq
+    czxSquare_triangular_int
+    (fun i s p q => by
+      obtain rfl := eq_oneSlotMem s
+      exact czxSquare_matched_int i p q)
+    czxSquare_unmatched_int
 
 /-! ### Consequences -/
 
@@ -223,7 +206,7 @@ def czxSquareLeft : Matrix (Fin 1) (Fin 4) ℂ := !![0, 0, -1, 0]
 `ex:p5ft-czx`). -/
 def czxSquareRight : Matrix (Fin 4) (Fin 1) ℂ := !![1; 1; -1; -1]
 
-theorem czxSquare_left_eq : czxSquare_compression.left squareSlot = czxSquareLeft := by
+theorem czxSquare_left_eq : czxSquare_compression.left oneSlotMem = czxSquareLeft := by
   rw [MultiBlockCompression.left_gaugeOfMatrix czxSquare_compression
     (hG := czxSquareGaugeComplex_mul_inv) (hG' := czxSquareGaugeComplex_inv_mul) rfl]
   ext i y
@@ -231,7 +214,7 @@ theorem czxSquare_left_eq : czxSquare_compression.left squareSlot = czxSquareLef
   fin_cases i
   fin_cases y <;> norm_num [czxSquareGaugeInt, czxSquareLeft]
 
-theorem czxSquare_right_eq : czxSquare_compression.right squareSlot = czxSquareRight := by
+theorem czxSquare_right_eq : czxSquare_compression.right oneSlotMem = czxSquareRight := by
   rw [MultiBlockCompression.right_gaugeOfMatrix czxSquare_compression
     (hG := czxSquareGaugeComplex_mul_inv) (hG' := czxSquareGaugeComplex_inv_mul) rfl]
   ext x j
@@ -244,7 +227,7 @@ witnesses `W = (0,0,-1,0)` and `V = (1,1,-1,-1)ᵀ` compress every word of the s
 onto the corresponding word of the weighted identity block. -/
 theorem czxSquare_isReduction :
     IsReduction czxSquare (czxSquareTarget ()) czxSquareLeft czxSquareRight := by
-  have h := czxSquare_compression.isReduction squareSlot
+  have h := czxSquare_compression.isReduction oneSlotMem
   rwa [czxSquare_left_eq, czxSquare_right_eq] at h
 
 /-- The note's witnesses satisfy `W V = 1`. -/
@@ -259,84 +242,33 @@ theorem czxSquare_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 4 ≤ w.le
   have hsum : (fun i => czxSquare i - czxSquareRight * czxSquareTarget () i * czxSquareLeft) =
       czxSquare_compression.remainder := by
     funext i
-    rw [MultiBlockCompression.remainder,
-      Finset.sum_eq_single_of_mem squareSlot (Finset.mem_univ squareSlot)
-        fun b _ hb => absurd (Subtype.ext (Subsingleton.elim b.1 squareSlot.1)) hb,
-      czxSquare_left_eq, czxSquare_right_eq]
+    rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, czxSquare_left_eq,
+      czxSquare_right_eq]
   rw [hsum]
   refine czxSquare_compression.evalWord_remainder_eq_zero w ?_
   change (1 : ℕ) + 3 ≤ w.length
   omega
 
 /-- **The dimension count of Example D**: `4 = 1 + 3` (P5 note, Theorem 7.7(vii)). -/
-theorem czxSquare_dim_eq : (4 : ℕ) = ∑ s ∈ squareSlots, squareDim s + 3 :=
+theorem czxSquare_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, squareDim s + 3 :=
   czxSquare_compression.dim_eq
 
 /-! ### Absence of sitewise intertwiners -/
 
-theorem czxSquare_apply_zero :
-    czxSquare 0 = !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0] := by
-  rw [czxSquare_eq]
-  ext p q
-  fin_cases p <;> fin_cases q <;> norm_num [czxSquareInt, complexOfInt]
-
-theorem czxSquare_apply_three :
-    czxSquare 3 = !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0] := by
-  rw [czxSquare_eq]
-  ext p q
-  fin_cases p <;> fin_cases q <;> norm_num [czxSquareInt, complexOfInt]
-
-private theorem czxSquareTarget_scalar_zero : czxSquareTarget () 0 0 0 = (-1 : ℂ) := by
-  rw [czxSquareTarget_eq]
-  norm_num [negIdentityIntMPS, identityIntMPS, complexOfInt]
-
-private theorem czxSquareTarget_scalar_three : czxSquareTarget () 3 0 0 = (-1 : ℂ) := by
-  rw [czxSquareTarget_eq]
-  norm_num [negIdentityIntMPS, identityIntMPS, complexOfInt]
-
 /-- **No nonzero right sitewise intertwiner in Example D** (P5 note, `ex:p5ft-czx`). -/
 theorem czxSquare_right_intertwiner_eq_zero (v : Fin 4 → ℂ)
-    (h : ∀ i, czxSquare i *ᵥ v = czxSquareTarget () i 0 0 • v) : v = 0 := by
-  have h0 := h 0
-  have h3 := h 3
-  rw [czxSquare_apply_zero, czxSquareTarget_scalar_zero] at h0
-  rw [czxSquare_apply_three, czxSquareTarget_scalar_three] at h3
-  have e0 := congrFun h0 0
-  have e1 := congrFun h0 1
-  have e3 := congrFun h0 3
-  have f0 := congrFun h3 0
-  have f2 := congrFun h3 2
-  simp only [Matrix.mulVec_apply_eq_sum, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-    Matrix.cons_val_one, Matrix.cons_val, Matrix.cons_val_fin_one, Fin.sum_univ_four, zero_mul,
-    one_mul, neg_mul, zero_add, add_zero, Pi.smul_apply, smul_eq_mul] at e0 e1 e3 f0 f2
-  have hv1 : v 1 = 0 := by linear_combination (e1 + f0 - e0) / 2
-  have hv2 : v 2 = 0 := by linear_combination f2 - hv1
-  have hv0 : v 0 = 0 := by linear_combination e0 - hv2
-  have hv3 : v 3 = 0 := by linear_combination e3 + hv2
-  funext k
-  fin_cases k
-  exacts [hv0, hv1, hv2, hv3]
+    (h : ∀ i, czxSquare i *ᵥ v = czxSquareTarget () i 0 0 • v) : v = 0 :=
+  mulVec_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
+    negIdentityIntMPS (czxSquareTarget_eq ()) ![(0, 0, 0), (0, 3, 0), (3, 2, 0), (3, 3, 0)]
+    (Matrix.of fun x => ![![2, 1, -1, -1], ![0, 1, 1, -1], ![0, -1, 1, 1], ![0, 1, 1, 1]] x.1)
+    (c := 2) (by norm_num) (by decide) v h
 
 /-- **No nonzero left sitewise intertwiner in Example D** (P5 note, `ex:p5ft-czx`). -/
 theorem czxSquare_left_intertwiner_eq_zero (u : Fin 4 → ℂ)
-    (h : ∀ i, u ᵥ* czxSquare i = czxSquareTarget () i 0 0 • u) : u = 0 := by
-  have h0 := h 0
-  have h3 := h 3
-  rw [czxSquare_apply_zero, czxSquareTarget_scalar_zero] at h0
-  rw [czxSquare_apply_three, czxSquareTarget_scalar_three] at h3
-  have e0 := congrFun h0 0
-  have e1 := congrFun h0 1
-  have e3 := congrFun h0 3
-  have f2 := congrFun h3 2
-  simp only [Matrix.vecMul_apply_eq_sum, Matrix.of_apply, Matrix.cons_val', Matrix.cons_val_zero,
-    Matrix.cons_val_one, Matrix.cons_val, Matrix.cons_val_fin_one, Fin.sum_univ_four, mul_zero,
-    add_zero, Pi.smul_apply, smul_eq_mul, neg_one_mul] at e0 e1 e3 f2
-  have hu0 : u 0 = 0 := by linear_combination e0
-  have hu1 : u 1 = 0 := by linear_combination e1
-  have hu3 : u 3 = 0 := by linear_combination e3
-  have hu2 : u 2 = 0 := by linear_combination f2
-  funext k
-  fin_cases k
-  exacts [hu0, hu1, hu2, hu3]
+    (h : ∀ i, u ᵥ* czxSquare i = czxSquareTarget () i 0 0 • u) : u = 0 :=
+  vecMul_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czxSquareInt czxSquare_eq
+    negIdentityIntMPS (czxSquareTarget_eq ()) ![(0, 1, 0), (0, 2, 0), (0, 3, 0), (3, 2, 0)]
+    (Matrix.of fun x => ![![-1, 1, 1, 0], ![1, 0, 0, 0], ![0, 0, 0, 1], ![0, 0, 1, 0]] x.1)
+    (c := 1) (by norm_num) (by decide) u h
 
 end CZXCompression

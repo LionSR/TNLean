@@ -8,8 +8,9 @@ import TNLean.MPS.Defs
 /-!
 # Physical-index rotation of a tensor
 
-An on-site map \(\Lambda\) on the physical space \(\mathbb C^d\) acts on a tensor by mixing
-its physical matrices, \(A^i \mapsto \sum_j \Lambda_{ij} A^j\).  This is the physical
+An on-site map \(\Lambda : \mathbb C^d \to \mathbb C^m\) on the physical space acts on a tensor
+by mixing its physical matrices, \(A^i \mapsto \sum_j \Lambda_{ij} A^j\).  The map may be
+rectangular, so the rotated tensor has physical dimension \(m\).  This is the physical
 perturbation \(A^i \to \sum_j \Lambda_{ij} A^j\) of arXiv:2011.12127, lines 2260--2262, and
 the on-site twist used for symmetric matrix product states.
 
@@ -33,17 +34,17 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {d m p D : ℕ}
 
 /-- Physical-index rotation of a tensor by a matrix `M` on the physical leg:
 
 `(rotatePhysical M A) i = ∑ j, M i j • A j`.
 -/
-def rotatePhysical (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor d D :=
+def rotatePhysical (M : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) : MPSTensor m D :=
   fun i => ∑ j : Fin d, M i j • A j
 
 @[simp] lemma rotatePhysical_apply
-    (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) (i : Fin d) :
+    (M : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (i : Fin m) :
     rotatePhysical M A i = ∑ j : Fin d, M i j • A j := rfl
 
 /-- Rotating by the identity on the physical index leaves the tensor unchanged. -/
@@ -54,22 +55,23 @@ def rotatePhysical (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) : MPSTen
 
 /-- Two successive physical-index rotations compose to the rotation by the product:
 \(M (M' A) = (M M') A\). -/
-lemma rotatePhysical_rotatePhysical (M M' : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) :
+lemma rotatePhysical_rotatePhysical (M : Matrix (Fin p) (Fin m) ℂ)
+    (M' : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
     rotatePhysical M (rotatePhysical M' A) = rotatePhysical (M * M') A := by
   funext i
   calc
     rotatePhysical M (rotatePhysical M' A) i
-        = ∑ j : Fin d, ∑ k : Fin d, (M i j * M' j k) • A k := by
+        = ∑ j : Fin m, ∑ k : Fin d, (M i j * M' j k) • A k := by
           simp [rotatePhysical, Finset.smul_sum, smul_smul]
-    _ = ∑ k : Fin d, ∑ j : Fin d, (M i j * M' j k) • A k := Finset.sum_comm
+    _ = ∑ k : Fin d, ∑ j : Fin m, (M i j * M' j k) • A k := Finset.sum_comm
     _ = rotatePhysical (M * M') A i := by
           simp [rotatePhysical, Matrix.mul_apply, Finset.sum_smul]
 
 /-- Expanding a word of a physically rotated tensor gives the sitewise matrix
 coefficients multiplying the corresponding unrotated words. -/
 theorem evalWord_rotatePhysical_ofFn
-    (M : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) :
-    ∀ (N : ℕ) (s : Fin N → Fin d),
+    (M : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
+    ∀ (N : ℕ) (s : Fin N → Fin m),
       Kraus.evalWord (rotatePhysical M A) (List.ofFn s) =
         ∑ t : Fin N → Fin d,
           (∏ n : Fin N, M (s n) (t n)) • Kraus.evalWord A (List.ofFn t) := by
@@ -116,8 +118,8 @@ theorem evalWord_rotatePhysical_ofFn
 
 /-- The matrix product vector of a physical-index rotation is the sitewise
 matrix action on the original matrix product vector. -/
-theorem mpv_rotatePhysical (M : Matrix (Fin d) (Fin d) ℂ)
-    (A : MPSTensor d D) {N : ℕ} (s : Fin N → Fin d) :
+theorem mpv_rotatePhysical (M : Matrix (Fin m) (Fin d) ℂ)
+    (A : MPSTensor d D) {N : ℕ} (s : Fin N → Fin m) :
     mpv (rotatePhysical M A) s =
       ∑ t : Fin N → Fin d, (∏ n : Fin N, M (s n) (t n)) * mpv A t := by
   rw [mpv, coeff, evalWord_rotatePhysical_ofFn, Matrix.trace_sum]

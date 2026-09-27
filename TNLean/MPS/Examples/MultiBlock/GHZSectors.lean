@@ -3,7 +3,8 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.Algebra.ComplexOfInt
+import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 
 /-!
 # GHZ sectors: an upper-triangular tensor generating the GHZ state
@@ -150,50 +151,36 @@ theorem ghzSectors_isReduction (s : {s // s ∈ GHZS}) :
 theorem ghzSectors_dim_eq : (4 : ℕ) = ∑ s ∈ GHZS, GHZD s + 2 :=
   ghzSectors_compression.dim_eq
 
+/-- The integer letters of `ghzB`. -/
+private def ghzBInt : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ :=
+  ![!![0, 1, 2, 0; 0, 0, 1, 1; 0, 0, 1, 3; 0, 0, 0, 0],
+    !![1, 1, 0, 2; 0, 0, 2, 0; 0, 0, 0, 1; 0, 0, 0, 0]]
+
+private theorem ghzB_eq (i : Fin 2) : ghzB i = complexOfInt (ghzBInt i) := by
+  fin_cases i <;> ext p q <;> fin_cases p <;> fin_cases q <;> simp [ghzB, ghzBInt]
+
+private theorem ghzC0_eq (i : Fin 2) :
+    ghzC 0 i = complexOfInt ((![1, 0] : Fin 2 → Matrix (Fin 1) (Fin 1) ℤ) i) := by
+  fin_cases i <;> ext p q <;> fin_cases p <;> fin_cases q <;> simp [ghzC]
+
 /-- No nonzero right sitewise intertwiner for the all-zeros sector: there is no `v ≠ 0` with
 `ghzB 0 *ᵥ v = v` and `ghzB 1 *ᵥ v = 0` (construction note, Example B). -/
 theorem ghzC0_right_intertwiner_eq_zero (v : Fin 4 → ℂ) (h0 : ghzB 0 *ᵥ v = v)
-    (h1 : ghzB 1 *ᵥ v = 0) : v = 0 := by
-  have e0 := congrFun h0 0
-  have e1 := congrFun h0 1
-  have e3 := congrFun h0 3
-  have f1 := congrFun h1 1
-  simp only [ghzB, Fin.isValue, Matrix.cons_val_zero, Matrix.mulVec_apply_eq_sum, Matrix.of_apply,
-    Matrix.cons_val', Matrix.cons_val_fin_one, Fin.sum_univ_four, zero_mul, Matrix.cons_val_one,
-    one_mul, zero_add, Matrix.cons_val, add_zero, Pi.zero_apply, mul_eq_zero, OfNat.ofNat_ne_zero,
-    false_or] at e0 e1 e3 f1
-  have hv3 : v 3 = 0 := e3.symm
-  have hv2 : v 2 = 0 := f1
-  have hv1 : v 1 = 0 := by linear_combination -e1 + hv2 + hv3
-  have hv0 : v 0 = 0 := by linear_combination -e0 + hv1 + 2 * hv2
-  funext k
-  fin_cases k
-  · exact hv0
-  · exact hv1
-  · exact hv2
-  · exact hv3
+    (h1 : ghzB 1 *ᵥ v = 0) : v = 0 :=
+  mulVec_eq_zero_of_ringCertificate (Int.castRingHom ℂ) ghzBInt ghzB_eq _ ghzC0_eq
+    ![(0, 0, 0), (1, 0, 0), (1, 1, 0), (1, 2, 0)]
+    (Matrix.of fun x => ![![-1, 1, 1, -2], ![1, 1, -1, -2], ![0, 0, 1, 0], ![0, 0, 0, 2]] x.1)
+    (c := 2) (by norm_num) (by decide) v
+    (Fin.forall_fin_two.2 ⟨by simpa [ghzC] using h0, by simpa [ghzC] using h1⟩)
 
 /-- No nonzero left sitewise intertwiner for the all-zeros sector: there is no `u ≠ 0` with
 `u ᵥ* ghzB 0 = u` and `u ᵥ* ghzB 1 = 0` (construction note, Example B). -/
 theorem ghzC0_left_intertwiner_eq_zero (u : Fin 4 → ℂ) (h0 : u ᵥ* ghzB 0 = u)
-    (h1 : u ᵥ* ghzB 1 = 0) : u = 0 := by
-  have e3 := congrFun h0 3
-  have g0 := congrFun h1 0
-  have g2 := congrFun h1 2
-  have g3 := congrFun h1 3
-  simp only [ghzB, Fin.isValue, Matrix.cons_val_zero, Matrix.vecMul_apply_eq_sum, Matrix.of_apply,
-    Matrix.cons_val', Matrix.cons_val, Matrix.cons_val_fin_one, Fin.sum_univ_four, mul_zero,
-    Matrix.cons_val_one, mul_one, zero_add, add_zero, Pi.zero_apply, mul_eq_zero,
-    OfNat.ofNat_ne_zero, or_false] at e3 g0 g2 g3
-  have hu0 : u 0 = 0 := g0
-  have hu1 : u 1 = 0 := g2
-  have hu2 : u 2 = 0 := by linear_combination g3 - 2 * hu0
-  have hu3 : u 3 = 0 := by linear_combination -e3 + hu1 + 3 * hu2
-  funext k
-  fin_cases k
-  · exact hu0
-  · exact hu1
-  · exact hu2
-  · exact hu3
+    (h1 : u ᵥ* ghzB 1 = 0) : u = 0 :=
+  vecMul_eq_zero_of_ringCertificate (Int.castRingHom ℂ) ghzBInt ghzB_eq _ ghzC0_eq
+    ![(0, 1, 0), (0, 3, 0), (1, 0, 0), (1, 3, 0)]
+    (Matrix.of fun x => ![![0, 0, 1, 0], ![-1, 0, 1, 0], ![0, 0, -2, 1], ![-1, -1, -5, 3]] x.1)
+    (c := 1) (by norm_num) (by decide) u
+    (Fin.forall_fin_two.2 ⟨by simpa [ghzC] using h0, by simpa [ghzC] using h1⟩)
 
 end MPSTensor

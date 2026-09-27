@@ -311,6 +311,93 @@ theorem groundSpace_finrank_eq {A : MPSTensor d D} (hA : Kraus.IsInjective A)
 
 /-! ### The intersection property -/
 
+/-- The open-boundary matrices of the one-site restrictions of a state on
+\(K+2\) sites agree on the common \(K\)-site interior: if fixing the first
+letter to \(i\) gives \(\Gamma_{K+1}(Y_i)\) and fixing the last letter to
+\(j\) gives \(\Gamma_{K+1}(Z_j)\), then
+\(\Gamma_K(A^jY_i)=\Gamma_K(Z_jA^i)\).
+
+This is the overlap comparison in the "inverting and growing back" step of
+arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
+theorem groundSpaceMap_mul_eq_of_restrict {A : MPSTensor d D} {K : ℕ}
+    {ψ : NSiteSpace d (K + 2)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (hY : ∀ i, restrictFirst ψ i = groundSpaceMap A (K + 1) (Y i))
+    (hZ : ∀ j, restrictLast ψ j = groundSpaceMap A (K + 1) (Z j)) (i j : Fin d) :
+    groundSpaceMap A K (A j * Y i) = groundSpaceMap A K (Z j * A i) := by
+  ext σ
+  have hYi :
+      groundSpaceMap A K (A j * Y i) σ = ψ (Fin.cons i (Fin.snoc σ j)) := by
+    calc
+      groundSpaceMap A K (A j * Y i) σ
+          = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (A j * Y i)) := by
+              simp [groundSpaceMap_apply]
+      _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.snoc σ j)) * Y i) := by
+            rw [evalWord_ofFn_snoc]
+            simp [Matrix.mul_assoc]
+      _ = ψ (Fin.cons i (Fin.snoc σ j)) := by
+            simpa [restrictFirst_apply, groundSpaceMap_apply] using
+              (congrArg (fun φ => φ (Fin.snoc σ j)) (hY i)).symm
+  have hZj :
+      groundSpaceMap A K (Z j * A i) σ = ψ (Fin.snoc (Fin.cons i σ) j) := by
+    calc
+      groundSpaceMap A K (Z j * A i) σ
+          = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (Z j * A i)) := by
+              simp [groundSpaceMap_apply]
+      _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons i σ)) * Z j) := by
+            simpa [evalWord_ofFn_cons, Matrix.mul_assoc] using
+              Matrix.trace_mul_cycle' (Kraus.evalWord A (List.ofFn σ)) (Z j) (A i)
+      _ = ψ (Fin.snoc (Fin.cons i σ) j) := by
+            simpa [restrictLast_apply, groundSpaceMap_apply] using
+              (congrArg (fun φ => φ (Fin.cons i σ)) (hZ j)).symm
+  rw [hYi, hZj, Fin.cons_snoc_eq_snoc_cons]
+
+/-- Growing back from intertwined boundary matrices. Let \(\psi\) be a state on
+\(K+1\) sites whose restriction with first letter \(i\) is
+\(\Gamma_K(Y_i)\), and suppose \(A^jY_i=Z_jA^i\) for all \(i,j\). If some
+matrices \(R_j\) satisfy \(\sum_jR_jA^j=1\), then
+\(\psi=\Gamma_{K+1}(X)\) with \(X=\sum_jR_jZ_j\).
+
+For an injective tensor the \(R_j\) are the scalar decomposition coefficients of
+the identity; for a left-canonical tensor they are the adjoints
+\((A^j)^\dagger\). This is the final step of the "inverting and growing back"
+argument of arXiv:2011.12127, Section IV.C, lines 2013--2078. -/
+theorem mem_groundSpace_succ_of_intertwine {A : MPSTensor d D} {K : ℕ}
+    {ψ : NSiteSpace d (K + 1)} {Y Z : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (R : Fin d → Matrix (Fin D) (Fin D) ℂ) (hR : ∑ j, R j * A j = 1)
+    (hY : ∀ i, restrictFirst ψ i = groundSpaceMap A K (Y i))
+    (hCompat : ∀ i j, A j * Y i = Z j * A i) :
+    ψ ∈ groundSpace A (K + 1) := by
+  let X : Matrix (Fin D) (Fin D) ℂ := ∑ j, R j * Z j
+  have hY_eq : ∀ i, Y i = X * A i := by
+    intro i
+    calc
+      Y i = (∑ j, R j * A j) * Y i := by rw [hR, Matrix.one_mul]
+      _ = ∑ j, R j * (Z j * A i) := by
+            rw [Finset.sum_mul]
+            exact Finset.sum_congr rfl fun j _ => by rw [Matrix.mul_assoc, hCompat i j]
+      _ = X * A i := by
+            simp only [X, Finset.sum_mul, Matrix.mul_assoc]
+  rw [groundSpace, LinearMap.mem_range]
+  refine ⟨X, ?_⟩
+  ext τ
+  have hτ :
+      ψ (Fin.cons (τ 0) (Fin.tail τ)) =
+        Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
+    simpa [restrictFirst_apply, groundSpaceMap_apply] using
+      congrArg (fun φ => φ (Fin.tail τ)) (hY (τ 0))
+  calc
+    groundSpaceMap A (K + 1) X τ
+        = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons (τ 0) (Fin.tail τ))) * X) := by
+            rw [← Fin.cons_self_tail τ]
+            simp [groundSpaceMap_apply]
+    _ = Matrix.trace (A (τ 0) * Kraus.evalWord A (List.ofFn (Fin.tail τ)) * X) := by
+          rw [evalWord_ofFn_cons, Matrix.mul_assoc]
+    _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * (X * A (τ 0))) := by
+          simpa [Matrix.mul_assoc] using
+            (Matrix.trace_mul_cycle' (Kraus.evalWord A (List.ofFn (Fin.tail τ))) X (A (τ 0))).symm
+    _ = ψ (Fin.cons (τ 0) (Fin.tail τ)) := by rw [← hY_eq (τ 0), hτ]
+    _ = ψ τ := by rw [Fin.cons_self_tail τ]
+
 /-- Nontrivial direction of the intersection property for injective MPS: a state
 on \(L+1\) sites that restricts to ground-space elements on both the left and right
 \(L\)-site windows is itself in \(G_{L+1}(A)\).
@@ -335,108 +422,16 @@ theorem groundSpace_intersection {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     (hLeft : InLeftGround A L ψ) (hRight : InRightGround A L ψ) :
     ψ ∈ groundSpace A (L + 1) := by
   classical
-  have hL0 : 0 < L := by omega
-  obtain ⟨K, hKeq⟩ := Nat.exists_eq_add_of_lt hL0
-  rw [zero_add] at hKeq
-  subst hKeq
+  obtain ⟨K, rfl⟩ : ∃ K, L = K + 1 := ⟨L - 1, by omega⟩
   have hK : 0 < K := by omega
-  have hRight' :
-      ∀ i : Fin d, ∃ Y : Matrix (Fin D) (Fin D) ℂ,
-        restrictFirst ψ i = groundSpaceMap A (K + 1) Y := by
-    intro i
-    have hi := hRight i
-    rw [groundSpace, LinearMap.mem_range] at hi
-    rcases hi with ⟨Y, hY⟩
-    exact ⟨Y, hY.symm⟩
-  choose Y hY using hRight'
-  have hLeft' :
-      ∀ j : Fin d, ∃ Z : Matrix (Fin D) (Fin D) ℂ,
-        restrictLast ψ j = groundSpaceMap A (K + 1) Z := by
-    intro j
-    have hj := hLeft j
-    rw [groundSpace, LinearMap.mem_range] at hj
-    rcases hj with ⟨Z, hZ⟩
-    exact ⟨Z, hZ.symm⟩
-  choose Z hZ using hLeft'
-  have hCompat : ∀ i j, A j * Y i = Z j * A i := by
-    intro i j
-    apply groundSpaceMap_injective hA hK
-    ext σ
-    have hYi :
-        groundSpaceMap A K (A j * Y i) σ = ψ (Fin.cons i (Fin.snoc σ j)) := by
-      calc
-        groundSpaceMap A K (A j * Y i) σ
-            = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (A j * Y i)) := by
-                simp [groundSpaceMap_apply]
-        _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.snoc σ j)) * Y i) := by
-              rw [evalWord_ofFn_snoc]
-              simp [Matrix.mul_assoc]
-        _ = ψ (Fin.cons i (Fin.snoc σ j)) := by
-              simpa [restrictFirst_apply, groundSpaceMap_apply] using
-                (congrArg (fun φ => φ (Fin.snoc σ j)) (hY i)).symm
-    have hZj :
-        groundSpaceMap A K (Z j * A i) σ = ψ (Fin.snoc (Fin.cons i σ) j) := by
-      calc
-        groundSpaceMap A K (Z j * A i) σ
-            = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (Z j * A i)) := by
-                simp [groundSpaceMap_apply]
-        _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons i σ)) * Z j) := by
-              simpa [evalWord_ofFn_cons, Matrix.mul_assoc] using
-                Matrix.trace_mul_cycle' (Kraus.evalWord A (List.ofFn σ)) (Z j) (A i)
-        _ = ψ (Fin.snoc (Fin.cons i σ) j) := by
-              simpa [restrictLast_apply, groundSpaceMap_apply] using
-                (congrArg (fun φ => φ (Fin.cons i σ)) (hZ j)).symm
-    have hψeq :
-        ψ (Fin.cons i (Fin.snoc σ j)) = ψ (Fin.snoc (Fin.cons i σ) j) := by
-      rw [Fin.cons_snoc_eq_snoc_cons]
-    exact hYi.trans (hψeq.trans hZj.symm)
-  let X : Matrix (Fin D) (Fin D) ℂ := ∑ j, Kraus.decompositionMap hA 1 j • Z j
-  have hY_eq : ∀ i, Y i = X * A i := by
-    intro i
-    calc
-      Y i = (1 : Matrix (Fin D) (Fin D) ℂ) * Y i := by simp
-      _ = (∑ j, Kraus.decompositionMap hA 1 j • A j) * Y i := by
-            rw [Kraus.decompositionMap_sum hA 1]
-      _ = ∑ j, (Kraus.decompositionMap hA 1 j • A j) * Y i := by
-            rw [Finset.sum_mul]
-      _ = ∑ j, Kraus.decompositionMap hA 1 j • (A j * Y i) := by
-            refine Finset.sum_congr rfl ?_
-            intro j hj
-            rw [smul_mul_assoc]
-      _ = ∑ j, Kraus.decompositionMap hA 1 j • (Z j * A i) := by
-            refine Finset.sum_congr rfl ?_
-            intro j hj
-            rw [hCompat i j]
-      _ = (∑ j, Kraus.decompositionMap hA 1 j • Z j) * A i := by
-            symm
-            rw [Finset.sum_mul]
-            refine Finset.sum_congr rfl ?_
-            intro j hj
-            rw [smul_mul_assoc]
-      _ = X * A i := rfl
-  rw [groundSpace, LinearMap.mem_range]
-  refine ⟨X, ?_⟩
-  ext τ
-  have hτ :
-      ψ (Fin.cons (τ 0) (Fin.tail τ)) =
-        Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
-    simpa [restrictFirst_apply, groundSpaceMap_apply] using
-      congrArg (fun φ => φ (Fin.tail τ)) (hY (τ 0))
-  calc
-    groundSpaceMap A (K + 2) X τ
-        = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons (τ 0) (Fin.tail τ))) * X) := by
-            rw [← Fin.cons_self_tail τ]
-            simp [groundSpaceMap_apply]
-    _ = Matrix.trace (A (τ 0) * Kraus.evalWord A (List.ofFn (Fin.tail τ)) * X) := by
-          rw [evalWord_ofFn_cons, Matrix.mul_assoc]
-    _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * (X * A (τ 0))) := by
-          simpa [Matrix.mul_assoc] using
-            (Matrix.trace_mul_cycle' (Kraus.evalWord A (List.ofFn (Fin.tail τ))) X (A (τ 0))).symm
-    _ = Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.tail τ)) * Y (τ 0)) := by
-          rw [hY_eq (τ 0)]
-    _ = ψ (Fin.cons (τ 0) (Fin.tail τ)) := hτ.symm
-    _ = ψ τ := by
-          rw [Fin.cons_self_tail τ]
+  choose Y hY using fun i => LinearMap.mem_range.mp (hRight i)
+  choose Z hZ using fun j => LinearMap.mem_range.mp (hLeft j)
+  refine mem_groundSpace_succ_of_intertwine (Z := Z)
+    (fun j => Kraus.decompositionMap hA 1 j • (1 : Matrix (Fin D) (Fin D) ℂ)) ?_
+    (fun i => (hY i).symm) fun i j => groundSpaceMap_injective hA hK
+      (groundSpaceMap_mul_eq_of_restrict (fun i => (hY i).symm) (fun j => (hZ j).symm) i j)
+  simp only [smul_mul_assoc, Matrix.one_mul]
+  exact Kraus.decompositionMap_sum hA 1
 
 /-- The ground space on \(L+1\) sites is characterized by the intersection property:
 \(ψ ∈ G_{L+1}(A)\) iff both the left and right \(L\)-site restrictions lie in \(G_L(A)\). -/

@@ -114,3 +114,5 @@ integer certificate carries a complex prefactor outside the ring while the golde
 ones keep the scalar inside it, so no one of them subsumes the others, and the three datum
 constructors are three decidability designs rather than one construction with the ring swapped.
 Both are recorded as follow-ups on issue #7846.
+
+The second slice is recorded in `docs/audits/2026-09-25_ring_embedding_transport_second_slice.md`.

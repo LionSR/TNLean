@@ -298,7 +298,7 @@ theorem fibProjector_eq_trace_fibDelta (L : ℕ) :
     Matrix.trace_smul]
 
 /-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` lines 152–160 and 1268–1269. With the fusion
-rules of the two blocks (`fibonacci_fusion_algebra`) and the weight relation
+rules of the two blocks (`isMPOFusionAlgebra_fibBlock`) and the weight relation
 `∑_{a,b} N_{ab}^c w_a w_b = w_c` (`fibWeight_fusion`), the weighted operator is a projector at
 every positive length, `P_L² = P_L`. The source asks this for all `L`; at `L = 0` the empty trace
 gives the bond dimensions, `O_1^0 = 2` and `O_τ^0 = 3`, so `P_0 = (2 + 3φ)/(1 + φ²)` is a scalar

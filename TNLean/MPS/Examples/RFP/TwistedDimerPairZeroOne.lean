@@ -50,20 +50,21 @@ open scoped Matrix Kronecker
 namespace P6Compression
 
 open MPSTensor
+open MPOTensor.TwistedDimer (bitF)
 
 /-! ### The letter identity -/
 
 private theorem dimerZeroOne_letter_int_even : ∀ a : Fin 64,
-    dimerFlag (Fin.divNat (m := 8) (n := 8) a) = 0 →
-      dimerFlag (Fin.modNat (m := 8) (n := 8) a) = 0 →
+    bitF (Fin.divNat (m := 8) (n := 8) a) = 0 →
+      bitF (Fin.modNat (m := 8) (n := 8) a) = 0 →
         (2 : ℤ) • dimerStackEven 0 1 (Fin.divNat (m := 8) (n := 8) a)
             (Fin.modNat (m := 8) (n := 8) a) =
           ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 1) s a := by
   decide +kernel
 
 private theorem dimerZeroOne_letter_int_odd : ∀ a : Fin 64,
-    dimerFlag (Fin.divNat (m := 8) (n := 8) a) = 1 →
-      dimerFlag (Fin.modNat (m := 8) (n := 8) a) = 1 →
+    bitF (Fin.divNat (m := 8) (n := 8) a) = 1 →
+      bitF (Fin.modNat (m := 8) (n := 8) a) = 1 →
         (2 : ℤ) • dimerStackOdd 0 1 (Fin.divNat (m := 8) (n := 8) a)
             (Fin.modNat (m := 8) (n := 8) a) =
           ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 1) s a := by

@@ -31,26 +31,6 @@ namespace PEPS
 variable {width height d : ℕ} [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
 
-/-- A torus right edge is a horizontal edge. -/
-theorem isHorizontalTorusEdge_torusRightEdge (p : TorusVertex width height) :
-    IsHorizontalTorusEdge (torusRightEdge p) := by
-  have hadj : torusHorizontalNeighbor p (p.1 + 1, p.2) := ⟨rfl, Or.inl rfl⟩
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · change torusHorizontalNeighbor (torusRightEdge p).1.1 (torusRightEdge p).1.2
-    rw [torusRightEdge, h1, h2]; exact hadj
-  · change torusHorizontalNeighbor (torusRightEdge p).1.1 (torusRightEdge p).1.2
-    rw [torusRightEdge, h1, h2]; exact torusHorizontalNeighbor_symm hadj
-
-/-- A torus up edge is a vertical edge. -/
-theorem isVerticalTorusEdge_torusUpEdge (p : TorusVertex width height) :
-    IsVerticalTorusEdge (torusUpEdge p) := by
-  have hadj : torusVerticalNeighbor p (p.1, p.2 + 1) := ⟨rfl, Or.inl rfl⟩
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · change torusVerticalNeighbor (torusUpEdge p).1.1 (torusUpEdge p).1.2
-    rw [torusUpEdge, h1, h2]; exact hadj
-  · change torusVerticalNeighbor (torusUpEdge p).1.1 (torusUpEdge p).1.2
-    rw [torusUpEdge, h1, h2]; exact torusVerticalNeighbor_symm hadj
-
 /-- The reference horizontal edge is a horizontal edge. -/
 theorem isHorizontalTorusEdge_torusHorizontalReferenceEdge (xStart yStart : ℕ) :
     IsHorizontalTorusEdge

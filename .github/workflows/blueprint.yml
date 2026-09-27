@@ -22,6 +22,7 @@ on:
       - 'docs/**/*.md'
       - 'tenkz.toml'
       - 'scripts/fetch_tenkz.py'
+      - 'scripts/prune_tenkz_render_cache.py'
       - 'scripts/tenkz_paths.py'
       - 'docs/slides/**'
       - '.github/workflows/blueprint.yml'
@@ -56,6 +57,14 @@ jobs:
   pdf:
     runs-on: ubuntu-latest
     name: Build blueprint PDFs
+    env:
+      PRINT_AUX_FILES: |
+        blueprint/print/*.aux
+        blueprint/print/*.bbl
+        blueprint/print/*.blg
+        blueprint/print/*.fdb_latexmk
+        blueprint/print/*.out
+        blueprint/print/*.toc
     steps:
       - name: Checkout project
         uses: actions/checkout@v7
@@ -100,8 +109,33 @@ jobs:
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
 
+      # Seed latexmk with the previous build's auxiliary files. From a cold
+      # start the print volume needs four full XeLaTeX passes (about six
+      # minutes each) before labels, citations and page numbers settle; from
+      # the last build's auxiliary files a typical merge needs one or two.
+      - name: Restore PDF auxiliary files
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.PRINT_AUX_FILES }}
+          key: blueprint-print-aux-${{ github.run_id }}
+          restore-keys: blueprint-print-aux-
+
+      # A stale auxiliary file can name a macro that a changed preamble no
+      # longer defines; a failed seeded build is retried from a clean slate,
+      # so only a genuinely broken source fails the step.
       - name: Build blueprint PDF
-        run: leanblueprint pdf
+        run: |
+          if ! leanblueprint pdf; then
+            echo "::warning::Seeded PDF build failed; rebuilding from a clean print directory"
+            rm -rf blueprint/print
+            leanblueprint pdf
+          fi
+
+      - name: Save PDF auxiliary files
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ env.PRINT_AUX_FILES }}
+          key: blueprint-print-aux-${{ github.run_id }}
 
       - name: Build FT-MPS blueprint volume
         run: ./scripts/build_blueprint_ch01_12.sh
@@ -149,6 +183,20 @@ jobs:
           ./scripts/generate_paper_aux.sh 1606.00608
           ./scripts/generate_paper_aux.sh 2502.20257
 
+      # Every picture is compiled standalone and stored under its content
+      # hash (blueprint/src/Packages/tenkz_pic.py), so an SVG from an earlier
+      # build is reused exactly when its source, the macros and the pinned
+      # tenkz package are unchanged. The key names the renderer, whose engine
+      # route the hash does not cover, so a renderer change starts afresh.
+      - name: Restore tenkz picture cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            blueprint/web/tenkz_svg
+            blueprint/src/.tenkz_svg_cache
+          key: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-${{ github.run_id }}
+          restore-keys: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-
+
       - name: Build blueprint web pages
         run: |
           set -o pipefail
@@ -181,6 +229,19 @@ jobs:
           python3 -m pip install --disable-pip-version-check playwright==1.55.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+
+      # Drop pictures no page references any more, so neither the published
+      # site nor the saved cache carries figures that were edited away.
+      - name: Prune unused tenkz pictures
+        run: python3 scripts/prune_tenkz_render_cache.py
+
+      - name: Save tenkz picture cache
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            blueprint/web/tenkz_svg
+            blueprint/src/.tenkz_svg_cache
+          key: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-${{ github.run_id }}
 
       - name: Upload web pages
         uses: actions/upload-artifact@v7

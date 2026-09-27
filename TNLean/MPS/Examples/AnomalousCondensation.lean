@@ -14,3 +14,4 @@ import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Instan
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Split
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Unitary
+import TNLean.MPS.Examples.AnomalousCondensation.Z2Z2AnomalyClass

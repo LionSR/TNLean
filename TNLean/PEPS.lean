@@ -33,6 +33,7 @@ import TNLean.PEPS.EdgeGaugeExtraction
 import TNLean.PEPS.EdgeGaugeFamily
 import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.EdgeScalarSolve
+import TNLean.PEPS.Examples
 import TNLean.PEPS.FiniteKernelDescent
 import TNLean.PEPS.FundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
@@ -40,6 +41,7 @@ import TNLean.PEPS.FundamentalTheorem.GaugeAction
 import TNLean.PEPS.FundamentalTheorem.LocalGaugeExtraction
 import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
+import TNLean.PEPS.GInjective
 import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
 import TNLean.PEPS.IdentityInsertion
 import TNLean.PEPS.InjectiveRegion
@@ -105,10 +107,12 @@ import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleRegion
 import TNLean.PEPS.TorusRowColumnReductionObstruction
+import TNLean.PEPS.TorusSiteTensor
 import TNLean.PEPS.TorusStateTranslationInvariant
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusUnconditionalFundamentalTheorem
+import TNLean.PEPS.TorusVirtualString
 import TNLean.PEPS.TorusWindowBondLocal
 import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusWindowBondUniform

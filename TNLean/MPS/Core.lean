@@ -22,6 +22,7 @@ import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.Core.PhysicalReindexTransport
 import TNLean.MPS.Core.PhysicalRotation
+import TNLean.MPS.Core.ProductVector
 import TNLean.MPS.Core.ProjectionTriangularTrace
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionBlocking
@@ -30,6 +31,7 @@ import TNLean.MPS.Core.ReductionCrossMatrix
 import TNLean.MPS.Core.ReductionExistence
 import TNLean.MPS.Core.ReductionResidual
 import TNLean.MPS.Core.ReductionResidual.Basic
+import TNLean.MPS.Core.ReductionResidualComposition
 import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.Core.RepeatedWord
 import TNLean.MPS.Core.ScaledNormality

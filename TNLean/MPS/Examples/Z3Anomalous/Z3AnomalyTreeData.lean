@@ -44,12 +44,12 @@ def idKronEis {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) EisensteinInt) :
 
 /-- The letters of the triple product `(U U) U` over `ℤ[ω]`. -/
 def tripleUUUEis (a : Fin 9) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
-  mulEisensteinTensor (mulEisensteinTensor uEis uEis) uEis (Fin.divNat (m := 3) (n := 3) a)
+  mulTensorR (mulTensorR uEis uEis) uEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The letters of the triple product `(U U†) U` over `ℤ[ω]`. -/
 def tripleUDUEis (a : Fin 9) : Matrix (Fin 8) (Fin 8) EisensteinInt :=
-  mulEisensteinTensor (mulEisensteinTensor uEis uDagEis) uEis (Fin.divNat (m := 3) (n := 3) a)
+  mulTensorR (mulTensorR uEis uDagEis) uEis (Fin.divNat (m := 3) (n := 3) a)
     (Fin.modNat (m := 3) (n := 3) a)
 
 /-- The tree of `(g,g,g)` fusing the first two factors first. -/

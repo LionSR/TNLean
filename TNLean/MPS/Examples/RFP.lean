@@ -10,7 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.RFP.OneLabelCandidate
 import TNLean.MPS.Examples.RFP.TwistedDimer
-import TNLean.MPS.Examples.RFP.TwistedDimerPairOneOne
-import TNLean.MPS.Examples.RFP.TwistedDimerPairOneZero
 import TNLean.MPS.Examples.RFP.TwistedDimerPairZeroOne
 import TNLean.MPS.Examples.RFP.TwistedDimerPairs

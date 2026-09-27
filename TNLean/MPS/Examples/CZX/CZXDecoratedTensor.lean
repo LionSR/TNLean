@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
 import TNLean.MPS.MPDO.CZXTensor
+import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 
 /-!
 # The decorated CZX matrix product unitary: the tensor and its operator
@@ -177,32 +178,11 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1128–1129 and 1
 theorem mpo_czxDecoratedTensor_apply (s t : Fin N → Fin 2) :
     MPOTensor.mpo czxDecoratedTensor N s t =
       if s = spinFlip N t then (-1 : ℂ) ^ (czExponent s + spinParity s) else 0 := by
-  let g0 : Fin N → Fin 2 := fun n ↦ s (n - 1)
-  rw [MPOTensor.mpo_apply_eq_prod_of_forced_bond czxDecoratedTensor s t g0 fun g hg ↦ by
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
-    refine ⟨n - 1, ?_⟩
-    rw [czxDecoratedTensor_apply, ite_eq_right]
-    intro h
-    apply hn
-    simpa [g0] using h.2]
-  by_cases hst : s = spinFlip N t
-  · have hp : ∀ n, s n = (t n).rev := fun n ↦ congrFun hst n
-    rw [ite_eq_left hst]
-    calc
-      _ = ∏ n, (-1 : ℂ) ^ ((s (n - 1)).val * (s n).val + (s n).val) := by
-        refine Finset.prod_congr rfl fun n _ ↦ ?_
-        rw [czxDecoratedTensor_apply, ite_eq_left ⟨hp n, by simp [g0]⟩]
-      _ = (-1 : ℂ) ^ ∑ n, ((s (n - 1)).val * (s n).val + (s n).val) :=
-        Finset.prod_pow_eq_pow_sum _ _ _
-      _ = _ := by
-        rw [Finset.sum_add_distrib, czExponent, spinParity]
-        congr 2
-        exact Fintype.sum_equiv (Equiv.subRight 1) _ _ fun n ↦ by simp
-  · rw [ite_eq_right hst]
-    obtain ⟨n, hn⟩ := Function.ne_iff.mp hst
-    refine Finset.prod_eq_zero (Finset.mem_univ n) ?_
-    rw [czxDecoratedTensor_apply, ite_eq_right]
-    exact fun h ↦ hn h.1
+  rw [MPOTensor.mpo_apply_of_forced_right_bond czxDecoratedTensor_apply,
+    Finset.prod_pow_eq_pow_sum, Finset.sum_add_distrib,
+    Fintype.sum_equiv (Equiv.addRight 1) (fun n ↦ (s (n + 1)).val) (fun n ↦ (s n).val)
+      fun _ ↦ rfl]
+  rfl
 
 /-- The periodic operator of the decorated tensor is the monomial matrix of the global spin flip
 whose phase at the input `t` is the sign `(-1)^{∑_n s_n s_{n+1} + ∑_n s_n}` of the output. -/
@@ -227,34 +207,38 @@ theorem mpo_czxDecoratedTensor_eq :
   rw [globalZ, Matrix.diagonal_mul, mpo_czxDecoratedTensor_apply, mpo_reviewCZXTensor_apply]
   split_ifs <;> simp [pow_add, mul_comm]
 
+/-- Bridge: the decorated operator is the operator `∏ CZ_{i,i+1} Z_i ∏ X_i` of
+`MPOTensor.GroupCocycle.czxDecorated`, hence the periodic operator of the group-cocycle
+construction for the generator of `ℤ₂` and the nontrivial three-cocycle.
+
+Source: arXiv:2203.12563, line 2224. -/
+theorem mpo_czxDecoratedTensor_eq_groupCocycle :
+    MPOTensor.mpo czxDecoratedTensor N =
+      MPOTensor.mpo (MPOTensor.GroupCocycle.tensor MPOTensor.GroupCocycle.bitEquiv
+        (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle 1)
+        (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2))) N := by
+  rw [MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo, mpo_czxDecoratedTensor]
+  rfl
+
 /-- **The decorated CZX operator has order two**: `U^2 = 1` at every positive length.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 412–428 (the MPU of order
 two) and lines 1128–1136 (the CZX symmetry is a `ℤ_2` symmetry). -/
 theorem mpo_czxDecoratedTensor_mul_self :
     MPOTensor.mpo czxDecoratedTensor N * MPOTensor.mpo czxDecoratedTensor N = 1 := by
-  rw [mpo_czxDecoratedTensor, Matrix.monomial_mul_monomial, spinFlip_mul_self,
-    ← Matrix.monomial_one]
-  congr 1
-  funext t
-  have hff : spinFlip N (spinFlip N t) = t := by
-    rw [← Equiv.Perm.mul_apply, spinFlip_mul_self, Equiv.Perm.one_apply]
-  rw [hff, pow_add, pow_add]
-  calc
-    _ = ((-1 : ℂ) ^ czExponent (spinFlip N t) * (-1 : ℂ) ^ czExponent t) *
-        ((-1 : ℂ) ^ spinParity (spinFlip N t) * (-1 : ℂ) ^ spinParity t) := by ring
-    _ = 1 := by
-      rw [neg_one_pow_czExponent_spinFlip_mul, ← pow_add, spinParity_spinFlip_add, ← pow_add,
-        ← two_mul, pow_mul]
-      simp
+  rw [mpo_czxDecoratedTensor_eq_groupCocycle, MPOTensor.GroupCocycle.mpo_tensor_mul _
+    (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isCocycle 1),
+    show (Multiplicative.ofAdd 1 * Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) = 1 by
+      decide,
+    MPOTensor.GroupCocycle.mpo_tensor_one _
+      (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isNormalized 1)]
 
 /-- The periodic operator of the decorated tensor is unitary at every positive length. -/
 theorem mpo_czxDecoratedTensor_mem_unitaryGroup :
     MPOTensor.mpo czxDecoratedTensor N ∈ Matrix.unitaryGroup (Fin N → Fin 2) ℂ := by
-  rw [mpo_czxDecoratedTensor]
-  refine Matrix.monomial_mem_unitaryGroup _ _ fun t ↦ ?_
-  rw [star_pow, star_neg, star_one, ← mul_pow]
-  simp
+  rw [mpo_czxDecoratedTensor_eq_groupCocycle]
+  exact MPOTensor.GroupCocycle.mpo_tensor_mem_unitaryGroup _
+    (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_norm 1) _
 
 omit [NeZero N] in
 /-- **The decorated CZX tensor is a matrix product unitary** on every periodic chain of

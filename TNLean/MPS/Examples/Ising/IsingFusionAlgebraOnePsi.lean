@@ -56,18 +56,11 @@ length. This is the Ising analogue of line 1268, which states the operator fusio
 Fibonacci blocks. -/
 theorem isingOne_mul_isingOne {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingOne N * MPOTensor.mpo isingOne N = MPOTensor.mpo isingOne N :=
-  mpo_mul_eq_of_zsqrt2_conj isingOneZ isingOneZ isingOneZ (z := 6) isingGaugeOneOneZ
-    isingGaugeOneOneZᵀ 1 one_ne_zero (by rw [one_smul]; decide +kernel)
-    (by rw [one_smul]; decide +kernel)
-    (isingConj_of_rho_eq isingOneZ_eq_zero_of_rho_ne isingOneZ_eq_zero_of_rho_ne
-      isingOneZ_eq_zero_of_rho_ne fun i j _ => by
-      rw [one_smul]
-      refine (mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _
-        isingOneZ_eq_smul_single isingOneZ_eq_smul_single isingOneNext isingOneNext_nodup
-        isingOneCoef_eq_zero _ i j).trans ?_
-      rw [isingOneZ_eq_smul_single i j, padZsqrt2_smul_single]
-      revert i j
-      decide +kernel) hN
+  isingFusion_of_signedPerm isingOneZ isingOneZ isingOneZ isingOneZ_eq_smul_single
+    isingOneZ_eq_smul_single isingOneZ_eq_smul_single isingOneNext isingOneNext_nodup
+    isingOneCoef_eq_zero isingOneZ_eq_zero_of_rho_ne isingOneZ_eq_zero_of_rho_ne
+    isingOneZ_eq_zero_of_rho_ne (z := 6) isingGaugeOneOneZ
+    (by decide +kernel) (by decide +kernel) (by decide +kernel) hN
 
 /-- **`O_1 O_ψ = O_ψ`.** Source: arXiv:1511.08090, lines 1308–1312 and 1323: the fusion rule
 `1 × ψ = ψ` for the periodic operators of the tensors built as in lines 1257–1268, at every positive
@@ -75,18 +68,11 @@ length. This is the Ising analogue of line 1268, which states the operator fusio
 Fibonacci blocks. The gauge is that of `A_ψ ⋆ A_ψ`. -/
 theorem isingOne_mul_isingPsi {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingOne N * MPOTensor.mpo isingPsi N = MPOTensor.mpo isingPsi N :=
-  mpo_mul_eq_of_zsqrt2_conj isingOneZ isingPsiZ isingPsiZ (z := 6) isingGaugePsiPsiZ
-    isingGaugePsiPsiZᵀ 1 one_ne_zero (by rw [one_smul]; decide +kernel)
-    (by rw [one_smul]; decide +kernel)
-    (isingConj_of_rho_eq isingOneZ_eq_zero_of_rho_ne isingPsiZ_eq_zero_of_rho_ne
-      isingPsiZ_eq_zero_of_rho_ne fun i j _ => by
-      rw [one_smul]
-      refine (mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _
-        isingOneZ_eq_smul_single isingPsiZ_eq_smul_single isingOneNext isingOneNext_nodup
-        isingOneCoef_eq_zero _ i j).trans ?_
-      rw [isingPsiZ_eq_smul_single i j, padZsqrt2_smul_single]
-      revert i j
-      decide +kernel) hN
+  isingFusion_of_signedPerm isingOneZ isingPsiZ isingPsiZ isingOneZ_eq_smul_single
+    isingPsiZ_eq_smul_single isingPsiZ_eq_smul_single isingOneNext isingOneNext_nodup
+    isingOneCoef_eq_zero isingOneZ_eq_zero_of_rho_ne isingPsiZ_eq_zero_of_rho_ne
+    isingPsiZ_eq_zero_of_rho_ne (z := 6) isingGaugePsiPsiZ
+    (by decide +kernel) (by decide +kernel) (by decide +kernel) hN
 
 /-- **`O_ψ O_1 = O_ψ`.** Source: arXiv:1511.08090, lines 1308–1312 and 1323: the fusion rule
 `ψ × 1 = ψ` for the periodic operators of the tensors built as in lines 1257–1268, at every positive
@@ -94,18 +80,11 @@ length. This is the Ising analogue of line 1268, which states the operator fusio
 Fibonacci blocks. The gauge is that of `A_1 ⋆ A_1`. -/
 theorem isingPsi_mul_isingOne {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingPsi N * MPOTensor.mpo isingOne N = MPOTensor.mpo isingPsi N :=
-  mpo_mul_eq_of_zsqrt2_conj isingPsiZ isingOneZ isingPsiZ (z := 6) isingGaugeOneOneZ
-    isingGaugeOneOneZᵀ 1 one_ne_zero (by rw [one_smul]; decide +kernel)
-    (by rw [one_smul]; decide +kernel)
-    (isingConj_of_rho_eq isingPsiZ_eq_zero_of_rho_ne isingOneZ_eq_zero_of_rho_ne
-      isingPsiZ_eq_zero_of_rho_ne fun i j _ => by
-      rw [one_smul]
-      refine (mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _
-        isingPsiZ_eq_smul_single isingOneZ_eq_smul_single isingPsiNext isingPsiNext_nodup
-        isingPsiCoef_eq_zero _ i j).trans ?_
-      rw [isingPsiZ_eq_smul_single i j, padZsqrt2_smul_single]
-      revert i j
-      decide +kernel) hN
+  isingFusion_of_signedPerm isingPsiZ isingOneZ isingPsiZ isingPsiZ_eq_smul_single
+    isingOneZ_eq_smul_single isingPsiZ_eq_smul_single isingPsiNext isingPsiNext_nodup
+    isingPsiCoef_eq_zero isingPsiZ_eq_zero_of_rho_ne isingOneZ_eq_zero_of_rho_ne
+    isingPsiZ_eq_zero_of_rho_ne (z := 6) isingGaugeOneOneZ
+    (by decide +kernel) (by decide +kernel) (by decide +kernel) hN
 
 /-- **`O_ψ O_ψ = O_1`.** Source: arXiv:1511.08090, lines 1308–1312 and 1323: the fusion rule
 `ψ × ψ = 1` for the periodic operators of the tensors built as in lines 1257–1268, at every positive
@@ -113,18 +92,11 @@ length. This is the Ising analogue of line 1268, which states the operator fusio
 Fibonacci blocks. -/
 theorem isingPsi_mul_isingPsi {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingPsi N * MPOTensor.mpo isingPsi N = MPOTensor.mpo isingOne N :=
-  mpo_mul_eq_of_zsqrt2_conj isingPsiZ isingPsiZ isingOneZ (z := 6) isingGaugePsiPsiZ
-    isingGaugePsiPsiZᵀ 1 one_ne_zero (by rw [one_smul]; decide +kernel)
-    (by rw [one_smul]; decide +kernel)
-    (isingConj_of_rho_eq isingPsiZ_eq_zero_of_rho_ne isingPsiZ_eq_zero_of_rho_ne
-      isingOneZ_eq_zero_of_rho_ne fun i j _ => by
-      rw [one_smul]
-      refine (mul_mulTensorR_mul_transpose_eq_list _ _ _ _ _ _ _ _
-        isingPsiZ_eq_smul_single isingPsiZ_eq_smul_single isingPsiNext isingPsiNext_nodup
-        isingPsiCoef_eq_zero _ i j).trans ?_
-      rw [isingOneZ_eq_smul_single i j, padZsqrt2_smul_single]
-      revert i j
-      decide +kernel) hN
+  isingFusion_of_signedPerm isingPsiZ isingPsiZ isingOneZ isingPsiZ_eq_smul_single
+    isingPsiZ_eq_smul_single isingOneZ_eq_smul_single isingPsiNext isingPsiNext_nodup
+    isingPsiCoef_eq_zero isingPsiZ_eq_zero_of_rho_ne isingPsiZ_eq_zero_of_rho_ne
+    isingOneZ_eq_zero_of_rho_ne (z := 6) isingGaugePsiPsiZ
+    (by decide +kernel) (by decide +kernel) (by decide +kernel) hN
 
 /-- **`O_ψ` is a partial isometry onto the closed paths.** Project result, from
 `mpo_isingPsi_conjTranspose` and `isingPsi_mul_isingPsi`: at every positive length
