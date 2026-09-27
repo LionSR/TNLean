@@ -752,8 +752,8 @@ operators~\cite{Cirac2021Matrix}.
     $x_n=x_{n+1}=1$, where it vanishes.
 \end{definition}
 
-\begin{lemma}[Site operators and nearest-neighbour kernels]%
-    \label{lem:mpo_site_operator_neighbour_kernel}
+\begin{theorem}[Site operators and nearest-neighbour kernels]%
+    \label{thm:mpo_site_operator_neighbour_kernel}
     \lean{MPOTensor.neighbourKernel, MPOTensor.siteOperator,
         MPOTensor.sum_ite_agree, MPOTensor.siteOperator_mul_neighbourKernel}
     \leanok
@@ -767,7 +767,7 @@ operators~\cite{Cirac2021Matrix}.
         \notag
     \end{align}
     for all labels, then $p_iK=Kp_i$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -796,7 +796,7 @@ operators~\cite{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{lem:mpo_site_operator_neighbour_kernel}
+    \uses{thm:mpo_site_operator_neighbour_kernel}
     In the $\tau$ block the bond index at site $n$ is determined by the
     pair $(x_n',x_n)$, so the only closed bond configuration that survives
     gives
