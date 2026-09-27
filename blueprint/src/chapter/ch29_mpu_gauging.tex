@@ -170,6 +170,21 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \end{tenkz}
 \end{center}
 
+\begin{definition}[The operator representation on one chain]
+    \label{def:mpug_operator_representation}
+    \lean{MPOTensor.GroupFamily.operatorRepresentation,
+        MPOTensor.GroupFamily.operatorRepresentation_coe}
+    \leanok
+    \uses{def:mpug_positive_mpu}
+    Let $\{\mathcal U_g\}_{g\in G}$ be a dependent-bond family in which every
+    $\mathcal U_g$ is a matrix product unitary on nonempty chains, and which
+    satisfies~(\ref{eq:mpug_rep_identity})
+    and~(\ref{eq:mpug_rep_multiplication}) for all $N\geq1$. For a fixed
+    $N\geq1$, the map $g\mapsto U_g^{(N)}$ is then a unitary representation
+    of $G$ on $(\C^d)^{\otimes N}$. Injectivity and simplicity of the
+    tensors are not required.
+\end{definition}
+
 \begin{theorem}[Group fusion rules]
     \label{thm:mpug_group_fusion_rules}
     \lean{MPOTensor.GroupFamily.isMPOFusionAlgebra,
@@ -9351,15 +9366,18 @@ three defect domains and maps, which the displayed matrices do not supply.
         Matrix.monomial_mul_monomial,
         Matrix.conjTranspose_monomial,
         Matrix.smul_monomial,
+        Matrix.neg_monomial,
         Matrix.monomial_one,
         Matrix.reindex_monomial,
-        Matrix.monomial_mem_unitaryGroup}
+        Matrix.monomial_mem_unitaryGroup,
+        Matrix.trace_monomial,
+        Matrix.trace_monomial_eq_zero}
     \leanok
     \uses{def:mpug_monomial_matrix}
     A vector $v\in\C^S$ is fixed by $M(\sigma,\varphi)$ if and only if
     $v_{\sigma(s)}=\varphi(s)v_s$ for every $s\in S$. Products, adjoints,
-    scalar multiples, and simultaneous relabellings of monomial matrices are
-    monomial:
+    scalar multiples, negatives, and simultaneous relabellings of monomial
+    matrices are monomial:
     \begin{align}
         M(\sigma,\varphi)M(\tau,\psi)
          & =M\bigl(\sigma\tau,\ s\mapsto\varphi(\tau(s))\psi(s)\bigr),
@@ -9369,7 +9387,9 @@ three defect domains and maps, which the displayed matrices do not supply.
         \label{eq:mpug_monomial_adjoint}
     \end{align}
     The identity is $M(\id,1)$, and $M(\sigma,\varphi)$ is unitary when
-    $|\varphi(s)|=1$ for every $s$.
+    $|\varphi(s)|=1$ for every $s$. The trace is
+    $\tr M(\sigma,\varphi)=\sum_{s:\,\sigma(s)=s}\varphi(s)$, which vanishes
+    when $\sigma$ has no fixed point.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -9383,6 +9403,8 @@ three defect domains and maps, which the displayed matrices do not supply.
     relabelling conjugates the permutation. For unitarity,
     (\ref{eq:mpug_monomial_mul}) and (\ref{eq:mpug_monomial_adjoint}) give
     $M(\sigma,\varphi)^\dagger M(\sigma,\varphi)=M(\id,|\varphi|^2)=\Id$.
+    The diagonal entry at $s$ is $\varphi(s)$ if $\sigma(s)=s$ and zero
+    otherwise, which gives the trace.
 \end{proof}
 
 \begin{theorem}[Flat phases on the hypercube have a potential]

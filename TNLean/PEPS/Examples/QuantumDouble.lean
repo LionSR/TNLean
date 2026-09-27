@@ -5,8 +5,10 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Data.ZMod.Defs
+import Mathlib.LinearAlgebra.Matrix.Permutation
 import Mathlib.Tactic.Group
 import TNLean.PEPS.GInjective
+import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusVirtualString
 
@@ -44,6 +46,9 @@ affect the physical state" (line 2465).
 * placed at every site of the torus, the primal tensor has this symmetry as a network: the
   virtual string that multiplies `π(g)` for each bond with label `g` it crosses can be pulled
   through every rectangle of sites of the contracted network;
+* placed at every site of the torus, the dual tensor lets a string of right-regular `R_g`'s on
+  the bonds be deformed across every rectangle of sites, arXiv:1001.3807, equation
+  `eq:2d:move-strings`, `Papers/1001.3807/paper_v3.tex` lines 1622–1647;
 * placed at every site of the torus, the dual tensor contracts to the equal-weight
   superposition, with weight `|G|`, of the spin configurations that obey Gauss' law (the vertex
   and plaquette rules) and have trivial holonomy around the two non-contractible cycles.
@@ -72,6 +77,7 @@ the whole state; it is proved on tori of width and height at least three. Docume
 * `TNLean.PEPS.quantumDoubleDualSpins`, `TNLean.PEPS.quantumDoubleDualTensor`: the dual
   tensor of the review.
 * `TNLean.PEPS.colorShiftRep`: the simultaneous shift of the four colors.
+* `TNLean.PEPS.rightRegularMatrix`: the right-regular representation by permutation matrices.
 * `TNLean.PEPS.quantumDoublePrimalLabels`, `TNLean.PEPS.quantumDoublePrimalTensor`: the
   primal tensor of the review.
 * `TNLean.PEPS.quantumDoublePrimalSiteTensor`, `TNLean.PEPS.quantumDoublePrimalPEPS`: the
@@ -93,6 +99,10 @@ the whole state; it is proved on tori of width and height at least three. Docume
   `TNLean.PEPS.quantumDoublePrimalTensor_ne_zero_mul_eq_mul`.
 * `TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq`: the virtual
   symmetry of the contracted primal network.
+* `TNLean.PEPS.colorShiftRep_eq_torusLegRep`,
+  `TNLean.PEPS.torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq`: the color shift
+  is the right-regular representation on the legs, and strings of `R_g`'s deform across the
+  dual network.
 * `TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS`: the contracted dual network is the
   equal-weight superposition of the Gauss-law configurations of trivial holonomy.
 
@@ -287,6 +297,39 @@ theorem isGIsometric_toricCodeDualTensor :
       (siteMap (quantumDoubleDualTensor ToricCodeGroup)) :=
   isGIsometric_quantumDoubleDualTensor
 
+variable (G) in
+/-- The right-regular representation of `G` by permutation matrices: `R_k` has the entry `1`
+at `(a, a k)` and `0` elsewhere. -/
+def rightRegularMatrix : G →* Matrix G G ℂ where
+  toFun k := (Equiv.mulRight k : Equiv.Perm G).permMatrix ℂ
+  map_one' := by
+    rw [show Equiv.mulRight (1 : G) = 1 from Equiv.ext fun x => mul_one x, Matrix.permMatrix_one]
+  map_mul' g h := by
+    rw [show Equiv.mulRight (g * h) = Equiv.mulRight h * Equiv.mulRight g from
+      Equiv.ext fun x => (mul_assoc x g h).symm, Matrix.permMatrix_mul]
+
+/-- Bridge: the color shift of the dual tensor is the action of the right-regular
+representation on the four legs in the convention of arXiv:1001.3807, equation
+`eq:2d-ug-sym`, `Papers/1001.3807/paper_v3.tex` lines 1278–1295: `R_g` on the incoming legs
+(top and left) and `R_g⁻¹` on the outgoing legs (right and down), each acting along the
+orientation of its edge. -/
+theorem colorShiftRep_eq_torusLegRep : colorShiftRep G = torusLegRep (rightRegularMatrix G) := by
+  refine MonoidHom.ext fun g => LinearMap.ext fun x => funext fun c => ?_
+  have hR : ∀ (k a b : G), rightRegularMatrix G k a b = if a * k = b then 1 else 0 := by
+    intro k a b
+    simp [rightRegularMatrix, PEquiv.toMatrix_apply]
+  have hk : ∀ c' : G × G × G × G, torusLegMatrix (rightRegularMatrix G) g c c' =
+      if c' = c * colorDiag G g then 1 else 0 := by
+    intro c'
+    obtain ⟨t, r, b, l⟩ := c
+    obtain ⟨t', r', b', l'⟩ := c'
+    simp only [torusLegMatrix, MonoidHom.coe_mk, OneHom.coe_mk, torusLegKernel_apply, hR,
+      colorDiag, Prod.mk_mul_mk, Prod.mk.injEq, mul_inv_eq_iff_eq_mul, ite_zero_mul_ite_zero,
+      mul_one]
+    grind
+  rw [colorShiftRep_apply, torusLegRep_apply]
+  simp [Matrix.mulVec, dotProduct, hk]
+
 end Dual
 
 /-! ### The primal tensor -/
@@ -399,9 +442,10 @@ around a site is `π(t) π(r) π(b)⁻¹ π(l)⁻¹`, with `π` on the top and r
 the down and left legs.
 
 arXiv:1001.3807 does not treat the primal tensor; its string deformation,
-`Papers/1001.3807/paper_v3.tex` lines 1624–1648, concerns strings of `U_g` on the `G`-injective
-(dual) tensor, and the review's bimodule remark (line 2467) assigns the group-labelled string
-operators to the dual tensor and the representation-labelled ones to the primal tensor.
+`Papers/1001.3807/paper_v3.tex` lines 1622–1647, concerns strings of `U_g` on the `G`-injective
+(dual) tensor (`torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq`), and the
+review's bimodule remark (line 2467) assigns the group-labelled string operators to the dual
+tensor and the representation-labelled ones to the primal tensor.
 
 The statement holds on every torus of width and height at least two. On a torus of width or
 height two the left and right (or down and top) legs of a site are one edge of the lattice
@@ -621,6 +665,26 @@ theorem stateCoeff_quantumDoubleDualPEPS [Fact (1 < width)] [Fact (1 < height)]
   · simp only [hV, ite_false, Finset.sum_const_zero]
     have : ¬IsQuantumDoubleGaussLaw s := fun h => hV h.vertex
     simp [this]
+
+/-- Source: arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 1622–1647 (equation
+`eq:2d:move-strings`) and the Lemma "Deformations of the string", lines 2199–2214, for the
+dual quantum-double tensor, which is `G`-injective for the right-regular representation on its
+legs (`isGInjective_quantumDoubleDualTensor`, `colorShiftRep_eq_torusLegRep`). In the torus
+network of the dual tensor, with colors in `G` on the bonds, the string of right-regular
+`R_g`'s along the left and bottom sides of a rectangle of sites gives the same network as the
+string along its top and right sides. -/
+theorem torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq
+    (σ : TorusVertex width height → G × G × G × G) (g : G) (v₀ : TorusVertex width height)
+    {m n : ℕ} (hm : m < width) (hn : n < height) :
+    torusBondNetwork (fun v c => quantumDoubleDualTensor G c.1 c.2.1 c.2.2.1 c.2.2.2 (σ v))
+        (torusWestSouthOperatorString (rightRegularMatrix G) g v₀ m n).1
+        (torusWestSouthOperatorString (rightRegularMatrix G) g v₀ m n).2 =
+      torusBondNetwork (fun v c => quantumDoubleDualTensor G c.1 c.2.1 c.2.2.1 c.2.2.2 (σ v))
+        (torusNorthEastOperatorString (rightRegularMatrix G) g v₀ m n).1
+        (torusNorthEastOperatorString (rightRegularMatrix G) g v₀ m n).2 :=
+  (colorShiftRep_eq_torusLegRep (G := G) ▸
+    isGInjective_quantumDoubleDualTensor).torusBondNetwork_westSouthOperatorString_eq
+      σ g v₀ hm hn
 
 end DualTorus
 
