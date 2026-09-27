@@ -9,25 +9,27 @@ import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 # The `ℤ₂` group-cocycle operator as a symmetry of spin-chain Hamiltonians
 
 **Source.** Garre-Rubio, Lootens, Molnár 2023 (arXiv:2203.12563), subsubsection
-"MPO algebras representing `ℤ₂`", `Papers/2203.12563/REsubmission.tex` lines 1832–1843: for the
+"MPO algebras representing `ℤ₂`", `Papers/2203.12563/REsubmission.tex` line 1843: for the
 nontrivial three-cocycle of `ℤ₂`, the Hamiltonian `H = ∑_i CZ_{i,i+2} X_{i+1} − μ Z_i Z_{i+1}`
 of Roose et al. "is invariant under `U = ∏ CZ_{i,i+1} Z_i ∏ X_i`"; line 2224 identifies `U` with
 the periodic operator of the group-cocycle construction.
-Review: arXiv:2011.12127, Section 4 "MPO symmetries", `Papers/2011.12127/TN-Review-main.tex`
-line 1393: the local Hamiltonian commuting with this operator "is precisely the cluster state
-Hamiltonian with critical magnetic field".
+Review: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 1393: the local
+Hamiltonian commuting with the MPO of the nontrivial three-cocycle of `ℤ₂` "is precisely the
+cluster state Hamiltonian with critical magnetic field"; line 1472 writes this MPO, the virtual
+symmetry of the CZX state, as `O_Z = ∏ CZ_{i,i+1} ∏ X_i`, without the factors `Z_i`.
 
-**Formalized here.** On a periodic chain of `N ≥ 2` qubits, `U = ∏ CZ_{i,i+1} Z_i ∏ X_i`
-(`MPOTensor.GroupCocycle.czxDecorated`, the periodic operator of the construction by
-`MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo`) commutes with the Hamiltonian of lines 1841–1842
-for every `μ`. For the cluster–Ising Hamiltonian
-`H(λ) = −∑_j Z_{j−1} X_j Z_{j+1} − λ ∑_j X_j`, conjugation by `U` exchanges the two terms with a
-sign: `U X_j U† = −Z_{j−1} X_j Z_{j+1}` and `U Z_{j−1} X_j Z_{j+1} U† = −X_j`, so
-`U H(λ) U† = λ ∑_j Z_{j−1} X_j Z_{j+1} + ∑_j X_j`. Hence `U` commutes with `H(−1)`, the cluster
-Hamiltonian in the critical field of the review, and `U H(1) U† = −H(1)`: in the sign
-convention `H(λ)` the self-dual point `λ = 1` is mapped to its negative, not fixed. The review
-prints no formula for the cluster Hamiltonian, so its sign convention is not fixed by the
-source.
+**Formalized here.** On a periodic chain of `N ≥ 2` qubits:
+
+* `U = ∏ CZ_{i,i+1} Z_i ∏ X_i` (`MPOTensor.GroupCocycle.czxDecorated`, the periodic operator of
+  the construction by `MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo`) commutes with the
+  Hamiltonian of line 1843 for every `μ`.
+* For the cluster–Ising Hamiltonian `H(λ) = −∑_j Z_{j−1} X_j Z_{j+1} − λ ∑_j X_j`, the review's
+  operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` (the periodic operator `CZXCompression.mpo_czxTensor` of
+  the undecorated CZX tensor) exchanges the two terms, `O_Z X_j O_Z† = Z_{j−1} X_j Z_{j+1}`, so
+  `O_Z H(λ) O_Z† = λ H(λ⁻¹)` and `O_Z` commutes with the critical Hamiltonian `H(1)`.
+* The decorated operator `U` exchanges them with a sign, `U X_j U† = −Z_{j−1} X_j Z_{j+1}`, so
+  `U H(λ) U† = −λ H(λ⁻¹)`: `U` commutes with `H(−1)` and sends `H(1)` to `−H(1)`. The factors
+  `Z_i` of `U` flip the sign of the transverse field at the symmetric point.
 
 All operators are monomial matrices on the configurations `Fin N → Fin 2`, and every identity
 reduces to one parity computation: flipping bit `j` changes `∑_i s_i s_{i+1}` by
@@ -49,7 +51,9 @@ reduces to one parity computation: flipping bit `j` changes `∑_i s_i s_{i+1}` 
 * `MPOTensor.GroupCocycle.czxDecorated_mul_pauliXAt`,
   `MPOTensor.GroupCocycle.czxDecorated_mul_clusterTerm`: the local conjugation relations.
 * `MPOTensor.GroupCocycle.czxDecorated_mul_rooseHamiltonian`: `U` commutes with the Hamiltonian
-  of arXiv:2203.12563, lines 1841–1842.
+  of arXiv:2203.12563, line 1843.
+* `MPOTensor.GroupCocycle.mpo_czxTensor_conj_clusterIsingHamiltonian_one`: the review's CZX
+  operator commutes with the critical cluster–Ising Hamiltonian `H(1)`.
 * `MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian`: `U H(λ) U†` exchanges the
   two terms; `czxDecorated_conj_clusterIsingHamiltonian_neg_one` and
   `czxDecorated_conj_clusterIsingHamiltonian_one` are the points `λ = −1` and `λ = 1`.
@@ -107,7 +111,7 @@ multiply by the signs of the two neighbours. -/
 noncomputable def clusterTerm (j : Fin N) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   Matrix.monomial (flipAt j) fun t ↦ (-1 : ℂ) ^ ((t (j - 1)).val + (t (j + 1)).val)
 
-/-- The operator `CZ_{i,i+2} X_{i+1}` of arXiv:2203.12563, line 1841: flip bit `i + 1` and
+/-- The operator `CZ_{i,i+2} X_{i+1}` of arXiv:2203.12563, line 1843: flip bit `i + 1` and
 multiply by the controlled-`Z` sign `(−1)^{t_i t_{i+2}}` of the two neighbours. -/
 noncomputable def czXTerm (i : Fin N) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   Matrix.monomial (flipAt (i + 1)) fun t ↦ (-1 : ℂ) ^ ((t i).val * (t (i + 2)).val)
@@ -122,7 +126,7 @@ noncomputable def clusterIsingHamiltonian (N : ℕ) [NeZero N] (c : ℂ) :
     Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
   -(∑ j, clusterTerm j) - c • ∑ j, pauliXAt j
 
-/-- Source: arXiv:2203.12563, lines 1841–1842: the Hamiltonian
+/-- Source: arXiv:2203.12563, line 1843: the Hamiltonian
 `H = ∑_i CZ_{i,i+2} X_{i+1} − μ Z_i Z_{i+1}` of Roose et al. on a periodic chain of `N`
 qubits. -/
 noncomputable def rooseHamiltonian (N : ℕ) [NeZero N] (μ : ℂ) :
@@ -217,9 +221,7 @@ theorem czxDecorated_phase_flipAt (hN : 2 ≤ N) (j : Fin N) (t : Fin N → Fin 
 
 /-! ### The local conjugation relations -/
 
-/-- **`U X_j = −Z_{j−1} X_j Z_{j+1} U`.** Project result: the source (arXiv:2011.12127,
-line 1393) asserts the symmetry of the cluster Hamiltonian in a critical field without printing
-the conjugation relations. -/
+/-- **`U X_j = −Z_{j−1} X_j Z_{j+1} U`.** Project result. -/
 theorem czxDecorated_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
     czxDecorated N * pauliXAt j = -(clusterTerm j * czxDecorated N) := by
   rw [czxDecorated_eq, pauliXAt, clusterTerm, Matrix.monomial_mul_monomial,
@@ -233,9 +235,7 @@ theorem czxDecorated_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
     fin_cases a <;> fin_cases b <;> simp [Fin.rev]
   rw [spinFlip_apply, spinFlip_apply, hrev]
 
-/-- **`U Z_{j−1} X_j Z_{j+1} = −X_j U`.** Project result: the source (arXiv:2011.12127,
-line 1393) asserts the symmetry of the cluster Hamiltonian in a critical field without printing
-the conjugation relations. -/
+/-- **`U Z_{j−1} X_j Z_{j+1} = −X_j U`.** Project result. -/
 theorem czxDecorated_mul_clusterTerm (hN : 2 ≤ N) (j : Fin N) :
     czxDecorated N * clusterTerm j = -(pauliXAt j * czxDecorated N) := by
   rw [czxDecorated_eq, pauliXAt, clusterTerm, Matrix.monomial_mul_monomial,
@@ -281,7 +281,7 @@ theorem czxDecorated_mul_zzTerm (i : Fin N) :
 /-! ### The two Hamiltonians -/
 
 /-- **The group-cocycle operator is a symmetry of the Hamiltonian of Roose et al.** Source:
-arXiv:2203.12563, lines 1841–1842: `H = ∑_i CZ_{i,i+2} X_{i+1} − μ Z_i Z_{i+1}` "is invariant
+arXiv:2203.12563, line 1843: `H = ∑_i CZ_{i,i+2} X_{i+1} − μ Z_i Z_{i+1}` "is invariant
 under `U = ∏ CZ_{i,i+1} Z_i ∏ X_i`", here on every periodic chain of `N ≥ 2` qubits and for
 every `μ`. -/
 theorem czxDecorated_mul_rooseHamiltonian (hN : 2 ≤ N) (μ : ℂ) :
@@ -290,7 +290,7 @@ theorem czxDecorated_mul_rooseHamiltonian (hN : 2 ≤ N) (μ : ℂ) :
     Finset.mul_sum, Finset.sum_mul, czxDecorated_mul_czXTerm hN, czxDecorated_mul_zzTerm]
 
 /-- **Conjugation by `U` exchanges the two terms of the cluster–Ising Hamiltonian.** Project
-result, in the direction of arXiv:2011.12127, line 1393: `U H(λ) = (λ ∑_j Z_{j−1} X_j Z_{j+1} +
+result: `U H(λ) = (λ ∑_j Z_{j−1} X_j Z_{j+1} +
 ∑_j X_j) U` on every periodic chain of `N ≥ 2` qubits. -/
 theorem czxDecorated_mul_clusterIsingHamiltonian (hN : 2 ≤ N) (c : ℂ) :
     czxDecorated N * clusterIsingHamiltonian N c =
@@ -327,10 +327,8 @@ theorem czxDecorated_conj_clusterIsingHamiltonian_eq_smul (hN : 2 ≤ N) {c : �
     smul_smul, neg_mul, mul_inv_cancel₀ hc, neg_smul, neg_smul, one_smul, sub_neg_eq_add,
     neg_neg]
 
-/-- **The symmetry at the critical field.** Source: arXiv:2011.12127, line 1393: the operator
-`U` of the nontrivial three-cocycle of `ℤ₂` commutes with the cluster Hamiltonian in the
-critical field, here `H(−1) = −∑_j Z_{j−1} X_j Z_{j+1} + ∑_j X_j` on every periodic chain of
-`N ≥ 2` qubits. The review prints no formula, so the sign of the field is fixed here. -/
+/-- **The decorated operator fixes `H(−1)`.** Project result: `U` commutes with
+`H(−1) = −∑_j Z_{j−1} X_j Z_{j+1} + ∑_j X_j` on every periodic chain of `N ≥ 2` qubits. -/
 theorem czxDecorated_conj_clusterIsingHamiltonian_neg_one (hN : 2 ≤ N) :
     czxDecorated N * clusterIsingHamiltonian N (-1) * (czxDecorated N)ᴴ =
       clusterIsingHamiltonian N (-1) := by
@@ -345,5 +343,61 @@ theorem czxDecorated_conj_clusterIsingHamiltonian_one (hN : 2 ≤ N) :
       -clusterIsingHamiltonian N 1 := by
   rw [czxDecorated_conj_clusterIsingHamiltonian hN, clusterIsingHamiltonian, one_smul, one_smul,
     neg_sub, sub_neg_eq_add, add_comm]
+
+/-! ### The undecorated CZX operator of the review -/
+
+private theorem neg_one_pow_rev_add (a b : Fin 2) :
+    (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ a.val * (-1) ^ b.val := by
+  fin_cases a <;> fin_cases b <;> simp [Fin.rev]
+
+/-- **`O_Z X_j = Z_{j−1} X_j Z_{j+1} O_Z`** for the CZX operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` of
+arXiv:2011.12127, line 1472. Project result. -/
+theorem mpo_czxTensor_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
+    MPOTensor.mpo czxTensor N * pauliXAt j = clusterTerm j * MPOTensor.mpo czxTensor N := by
+  rw [mpo_czxTensor, pauliXAt, clusterTerm, Matrix.monomial_mul_monomial,
+    Matrix.monomial_mul_monomial, spinFlip_mul_flipAt]
+  congr 1
+  funext s
+  rw [neg_one_pow_czExponent_flipAt hN, mul_one, spinFlip_apply, spinFlip_apply,
+    neg_one_pow_rev_add]
+  ring
+
+/-- **`O_Z Z_{j−1} X_j Z_{j+1} = X_j O_Z`.** Project result. -/
+theorem mpo_czxTensor_mul_clusterTerm (hN : 2 ≤ N) (j : Fin N) :
+    MPOTensor.mpo czxTensor N * clusterTerm j = pauliXAt j * MPOTensor.mpo czxTensor N := by
+  rw [mpo_czxTensor, pauliXAt, clusterTerm, Matrix.monomial_mul_monomial,
+    Matrix.monomial_mul_monomial, spinFlip_mul_flipAt]
+  congr 1
+  funext s
+  rw [neg_one_pow_czExponent_flipAt hN, one_mul, pow_add]
+  have hsq : ∀ k : ℕ, (-1 : ℂ) ^ k * (-1) ^ k = 1 := fun k ↦ by
+    rw [← mul_pow, neg_one_mul, neg_neg, one_pow]
+  linear_combination (-1 : ℂ) ^ czExponent s * ((-1) ^ (s (j + 1)).val * (-1) ^ (s (j + 1)).val *
+    hsq (s (j - 1)).val + hsq (s (j + 1)).val)
+
+/-- **The review's CZX operator exchanges the two terms.** Project result:
+`O_Z H(λ) O_Z† = −∑_j X_j − λ ∑_j Z_{j−1} X_j Z_{j+1}` on every periodic chain of `N ≥ 2`
+qubits, which is `λ H(λ⁻¹)` for `λ ≠ 0`. -/
+theorem mpo_czxTensor_conj_clusterIsingHamiltonian (hN : 2 ≤ N) (c : ℂ) :
+    MPOTensor.mpo czxTensor N * clusterIsingHamiltonian N c * (MPOTensor.mpo czxTensor N)ᴴ =
+      -(∑ j, pauliXAt j) - c • ∑ j, clusterTerm j := by
+  have hU := Matrix.mem_unitaryGroup_iff.mp (mpo_czxTensor_mem_unitaryGroup (N := N))
+  have hmul : MPOTensor.mpo czxTensor N * clusterIsingHamiltonian N c =
+      (-(∑ j, pauliXAt j) - c • ∑ j, clusterTerm j) * MPOTensor.mpo czxTensor N := by
+    simp only [clusterIsingHamiltonian, Matrix.mul_sub, Matrix.mul_neg, Matrix.sub_mul,
+      Matrix.neg_mul, Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul,
+      mpo_czxTensor_mul_pauliXAt hN, mpo_czxTensor_mul_clusterTerm hN]
+  rw [hmul, Matrix.mul_assoc, ← Matrix.star_eq_conjTranspose, hU, Matrix.mul_one]
+
+/-- **The CZX symmetry of the critical cluster Hamiltonian.** Source: arXiv:2011.12127,
+line 1393, with the operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` of line 1472: `O_Z` commutes with the
+cluster Hamiltonian in the critical field, here `H(1) = −∑_j Z_{j−1} X_j Z_{j+1} − ∑_j X_j`, on
+every periodic chain of `N ≥ 2` qubits. The review prints no formula for the Hamiltonian; the
+sign convention of `H(λ)` is the one of the cluster–Ising model. -/
+theorem mpo_czxTensor_conj_clusterIsingHamiltonian_one (hN : 2 ≤ N) :
+    MPOTensor.mpo czxTensor N * clusterIsingHamiltonian N 1 * (MPOTensor.mpo czxTensor N)ᴴ =
+      clusterIsingHamiltonian N 1 := by
+  rw [mpo_czxTensor_conj_clusterIsingHamiltonian hN, clusterIsingHamiltonian, one_smul, one_smul,
+    sub_eq_add_neg, sub_eq_add_neg, add_comm]
 
 end MPOTensor.GroupCocycle
