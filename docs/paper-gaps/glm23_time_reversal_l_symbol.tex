@@ -25,7 +25,7 @@ $V_{g,x}$ for the action tensor mapping block $x$ to block $g\cdot x$ and
 $L^x_{g,h}$ for the L-symbols defined by
 \begin{align}
   V_{g,h\cdot x}V_{h,x} & =L^x_{g,h}\,W_{g,h}V_{gh,x},
-  \label{eq:f1}
+  \label{eq:glm23_time_reversal_l_symbol_defining_relation}
 \end{align}
 the defining relation of the L-symbols in Ref.~\cite{GarreRubio2023MPOSym},
 written schematically with the fusion tensor
@@ -37,14 +37,14 @@ display at lines 935--952,
 \begin{align}
   \gamma_{h,x}\gamma_{g,h\cdot x}\,(V_{g,h\cdot x}V_{h,x})^*
    & =L^x_{g,h}\,\gamma_{gh,x}\,(W_{g,h}V_{gh,x})^*.
-  \label{eq:display}
+  \label{eq:glm23_time_reversal_l_symbol_time_reversal_display}
 \end{align}
 The next displayed equation of Ref.~\cite{GarreRubio2023MPOSym} then
 states\footnote{Source traceability:
 \path{Papers/2203.12563/REsubmission.tex}, line 954.}
 \begin{align}
   |L^x_{g,h}|^2 & =\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}},
-  \label{eq:printed}
+  \label{eq:glm23_time_reversal_l_symbol_printed_modulus}
 \end{align}
 and the text concludes that the L-symbols squared are trivial because they
 can be written as a gauge transformation.
@@ -54,8 +54,8 @@ can be written as a gauge transformation.
 Rescaling the action tensors $V_{g,x}\mapsto c_{g,x}V_{g,x}$ multiplies
 $L^x_{g,h}$ by $c_{g,h\cdot x}c_{h,x}/c_{gh,x}$ and $\gamma_{g,x}$ by the
 unimodular number $c_{g,x}/\overline{c_{g,x}}$. The left side of
-(\ref{eq:printed}) changes by a positive factor that can take any value,
-while the right side changes by a unimodular factor, so (\ref{eq:printed})
+(\ref{eq:glm23_time_reversal_l_symbol_printed_modulus}) changes by a positive factor that can take any value,
+while the right side changes by a unimodular factor, so (\ref{eq:glm23_time_reversal_l_symbol_printed_modulus})
 cannot hold in every gauge.
 
 An explicit instance with an on-site symmetry, where $W_{g,h}$ is trivial
@@ -65,11 +65,13 @@ components $\mathbb 1,X,iY,Z$, where $X,Y,Z$ are the Pauli matrices. It is
 invariant under $\mathcal T=\mathcal K$ with $S=\mathbb 1$, and under the
 real diagonal on-site symmetry $u_g$ whose virtual action is conjugation by
 the action tensors
-\[
-  V_e=\mathbb 1,\qquad V_a=X,\qquad V_b=Z,\qquad V_{ab}=Y .
-\]
+\begin{align}
+  V_e &= \mathbb 1,\qquad V_a=X,\qquad V_b=Z,\qquad V_{ab}=Y .
+  \label{eq:glm23_time_reversal_l_symbol_action_tensors}
+\end{align}
 Since $V_e,V_a,V_b$ are real and $Y^*=-Y$, the scalars $\gamma$ are
-$\gamma_e=\gamma_a=\gamma_b=1$ and $\gamma_{ab}=-1$. From $XZ=-iY$ one has
+$\gamma_e=\gamma_a=\gamma_b=1$ and $\gamma_{ab}=-1$. From
+(\ref{eq:glm23_time_reversal_l_symbol_action_tensors}) and $XZ=-iY$ one has
 $L_{a,b}=-i$. Then $|L_{a,b}|^2=1$, while
 $\gamma_{ab}/(\gamma_b\gamma_a)=-1$. The numerical check with
 $V_b=e^{i\theta}Z$ gives $|L_{a,b}|^2=1$ against the ratio
@@ -77,21 +79,21 @@ $-e^{-2i\theta}$.
 
 \section{The corrected statement}
 
-Taking the complex conjugate of (\ref{eq:f1}) gives
+Taking the complex conjugate of (\ref{eq:glm23_time_reversal_l_symbol_defining_relation}) gives
 $(V_{g,h\cdot x}V_{h,x})^*=\overline{L^x_{g,h}}\,(W_{g,h}V_{gh,x})^*$.
-Substituting into (\ref{eq:display}) and cancelling the nonzero tensor
+Substituting into (\ref{eq:glm23_time_reversal_l_symbol_time_reversal_display}) and cancelling the nonzero tensor
 $(W_{g,h}V_{gh,x})^*$ yields
 \begin{align}
   \frac{\overline{L^x_{g,h}}}{L^x_{g,h}}
    & =\frac{\gamma_{gh,x}}{\gamma_{h,x}\gamma_{g,h\cdot x}} .
-  \label{eq:corrected}
+  \label{eq:glm23_time_reversal_l_symbol_corrected_ratio}
 \end{align}
 In the example, $\overline{L_{a,b}}/L_{a,b}=i/(-i)=-1$, in agreement with
-(\ref{eq:corrected}). Since $\overline L/L=(|L|/L)^2$, the relation
-(\ref{eq:corrected}) says that the square of the phase $L/|L|$ is a gauge
+(\ref{eq:glm23_time_reversal_l_symbol_corrected_ratio}). Since $\overline L/L=(|L|/L)^2$, the relation
+(\ref{eq:glm23_time_reversal_l_symbol_corrected_ratio}) says that the square of the phase $L/|L|$ is a gauge
 transformation of the trivial L-symbol; this is the correct reading of the
 statement that the L-symbols squared are trivial. The modulus $|L|$ is not
-constrained. The printed (\ref{eq:printed}) replaces the ratio
+constrained. The printed (\ref{eq:glm23_time_reversal_l_symbol_printed_modulus}) replaces the ratio
 $\overline L/L$ by $\overline LL$.
 
 For a general matrix product operator symmetry the fusion tensors also pick
@@ -110,8 +112,8 @@ $\beta$ and $\gamma$. This is a conditional statement beyond the source.
 \section{Formalized statement}
 
 The formalization proves, at the level of scalars, the cancellation step
-from (\ref{eq:display}) and the conjugate of (\ref{eq:f1}) to
-(\ref{eq:corrected}); the statement that the squared phase of $L$ is the
+from (\ref{eq:glm23_time_reversal_l_symbol_time_reversal_display}) and the conjugate of (\ref{eq:glm23_time_reversal_l_symbol_defining_relation}) to
+(\ref{eq:glm23_time_reversal_l_symbol_corrected_ratio}); the statement that the squared phase of $L$ is the
 gauge ratio; the reality of the anomaly under lines 873--891; and, as a
 conditional statement under the same-$\beta$ hypothesis, the joint reality
 of $\omega$ and $L$.\footnote{Formal declarations:
@@ -124,8 +126,8 @@ The antiunitary symmetry itself, and the derivation of $\gamma$ and $\beta$
 from $\mathcal T$ commuting with $O_g$, are not formalized.
 
 \textbf{Verdict: resolved local correction.} The printed
-relation (\ref{eq:printed}) is false; the source's own preceding display gives
-(\ref{eq:corrected}), which is the relation used in the formalization, and
+relation (\ref{eq:glm23_time_reversal_l_symbol_printed_modulus}) is false; the source's own preceding display gives
+(\ref{eq:glm23_time_reversal_l_symbol_corrected_ratio}), which is the relation used in the formalization, and
 the source's conclusion that the L-symbols squared are trivial holds in
 that corrected form.
 
