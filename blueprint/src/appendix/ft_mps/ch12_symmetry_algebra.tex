@@ -162,26 +162,28 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     (\ref{eq:symmetry_mpv_rotation}).
 \end{proof}
 
-\begin{lemma}[Word expansion for a twisted tensor]
-    \label{lem:eval_word_twisted_tensor}
-    \lean{MPSTensor.evalWord_twistedTensor_ofFn}
+\begin{theorem}[Blocking commutes with physical maps]
+    \label{thm:block_tensor_rotate_physical}
+    \lean{MPSTensor.blockTensor_rotatePhysical}
     \leanok
-    \uses{def:twisted_tensor}
-    For a word $b:\{0,\ldots,L-1\}\to\{0,\ldots,d-1\}$,
+    \uses{def:rotate_physical, def:blocked_tensor}
+    For $W\in\C^{m\times n}$, a tensor~$C$ with physical dimension~$n$, and
+    $L\ge0$, blocking the rotated tensor over $L$ sites is rotating the
+    blocked tensor by the $L$-fold Kronecker power of $W$:
     \begin{align}
-        A_g^{b_0}\cdots A_g^{b_{L-1}}
-         & =\sum_{v:\{0,\ldots,L-1\}\to\{0,\ldots,d-1\}}
-        \left(\prod_{k=0}^{L-1}U(g)_{b_kv_k}\right)
-        A^{v_0}\cdots A^{v_{L-1}}.
-        \label{eq:app_symmetry_twisted_word}
+        (C_W)^{[L]} & =\bigl(C^{[L]}\bigr)_{W^{\otimes L}}.
+        \label{eq:app_block_tensor_rotate_physical}
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
-    Substitute $A_g^{b_k}=\sum_{v_k}U(g)_{b_kv_k}A^{v_k}$ into the ordered
-    product.  Repeated distributivity gives one summand for each function
-    $v$, scalar coefficients commute past the matrices and multiply, and the
-    remaining ordered product is $A^{v_0}\cdots A^{v_{L-1}}$.
+    Decode a blocked physical index as a word $b$ of length~$L$.  Substituting
+    $(C_W)^{b_k}=\sum_{v_k}W_{b_kv_k}C^{v_k}$ into the ordered product and
+    distributing gives, for each word~$v$, the summand
+    $(\prod_kW_{b_kv_k})\,C^{v_0}\cdots C^{v_{L-1}}$.  Reindexing the sum over
+    words by the blocked index gives the right-hand side of
+    (\ref{eq:app_block_tensor_rotate_physical}), whose coefficients are the
+    entries of $W^{\otimes L}$.
 \end{proof}
 
 \section{Gauge ratios and scalar uniqueness}
