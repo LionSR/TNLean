@@ -790,9 +790,10 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   (`A (0, 0) * A (0, 1) = 0` while `A (0, 1) * A (0, 0) ≠ 0`). The composition
   case therefore needs `IsMPU.exists_reduced_cfii_representative` applied to
   the product plus a transport of the source cuts and ranks across that
-  reduction, which that theorem explicitly does not give, and
-  `lem:mpu_admissible_index_composition` stays restricted until both exist.
-  The
+  reduction, which that theorem explicitly does not give.
+  `thm:mpu_admissible_index_composition` now proves composition additivity
+  of the representative index without this restriction, through rectangular
+  reductions to canonical representatives (`IsMPU.index_mulTensor`). The
   nonsymmetric same-fixed-point problem in #7653 remains an optional
   out-of-source question; the transpose-reparameterized construction rejected
   in #7705 is not part of this plan.

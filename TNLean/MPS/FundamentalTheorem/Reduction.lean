@@ -18,6 +18,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Identification
 import TNLean.MPS.FundamentalTheorem.Reduction.IntegralRankOneAction
 import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockDirectSum
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
 import TNLean.MPS.FundamentalTheorem.Reduction.RingEmbedding
