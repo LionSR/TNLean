@@ -68,9 +68,10 @@ $q\leq q'<2q$. Three steps generalize.
 \end{enumerate}
 With these, (\ref{eq:mswc24_depth_log}) holds for every $N\geq2$ with
 $N\geq q$, where $q=\lceil a\log(N/\varepsilon)+b\rceil$. Chains shorter
-than this block length are not covered by the three steps and need a separate
-argument, as in the source, which takes $N$ with ``a large number of
-blocks''.
+than this block length, $N<q$, have no block of length $q$ and are not covered
+by the three steps; they need a separate argument. The source does not treat
+them: its proof of the lower bound takes $N$ ``such that we have a large number
+of blocks''.
 
 \bibliographystyle{alpha}
 \bibliography{references}

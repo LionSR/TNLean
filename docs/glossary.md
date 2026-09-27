@@ -447,6 +447,30 @@ normalizations.
   connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
   `torusSiteTensor`.
 
+#### `Representation.IsSemiRegular`
+
+- **Declaration:** `Representation.IsSemiRegular (ρ : Representation ℂ G V) : Prop`,
+  for `G : Type u`.
+- **Defined in:** `TNLean/Algebra/RepresentationDelta.lean`.
+- **Meaning:** every finite-dimensional irreducible complex representation of
+  `G` on a type in the universe of `G` admits a nonzero intertwining map into
+  `ρ`.
+- **Source:** arXiv:1001.3807, Definition 4.5,
+  `Papers/1001.3807/paper_v3.tex:1010-1013`.
+- **Sanctioned bridges:** `Representation.isSemiRegular_leftRegular` (the
+  left-regular representation is semi-regular) and
+  `Representation.irreducibleCharacters_eq_leftRegular_of_isSemiRegular` (a
+  semi-regular representation has the irreducible characters of the regular
+  representation), used in
+  `Representation.trace_inv_comp_comp_deltaOperator_of_isSemiRegular`
+  (Lemma 4.6).
+- **Caveat:** irreducible representations of a finite group are
+  finite-dimensional, so the restriction to finite-dimensional ones loses
+  nothing; the universe restriction suffices because every irreducible
+  representation is equivalent to one on a coordinate space. The trace
+  identities of Lemmas 4.4 and 4.6 are stated with `ρ(h⁻¹)` in place of the
+  source's `U_h†`; the two agree for unitary representations.
+
 #### `TNLean.PEPS.IsGIsometric`
 
 - **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
@@ -1500,6 +1524,30 @@ involve no boundary.
   dimension one (`MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`), so
   the anomalous examples (CZX, $\mathbb Z_3$, $\mathbb Z_2\times\mathbb Z_2$)
   satisfy only the reduction with a nilpotent remainder, never this predicate.
+
+### `MPOTensor.IsFusionRing`
+
+- **Declaration:** `MPOTensor.IsFusionRing (N : ι → ι → ι → ℕ) (e : ι)
+  (dual : ι → ι) : Prop`, a structure with fields `assoc`, `isFusionUnit`,
+  `dual_dual`, `apply_unit` and `dual_anti`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/FusionRing.lean`.
+- **Meaning:** the structure constants `N_{ab}^c` of a fusion ring: they are
+  associative, `e` is a two-sided unit (`MPOTensor.IsFusionUnit`), and the
+  duality `a ↦ a*` is an involution with `N_{ab}^e = δ_{b,a*}` and
+  `N_{b*a*}^{c*} = N_{ab}^c`.
+- **Source:** arXiv:2203.12563, line 1236 (the identity element and dual
+  elements of the fusion category of a physical symmetry); the source uses the
+  fusion category at lines 1801–1803 to obtain a positive common eigenvector of
+  the multiplicity matrices.
+- **Sanctioned bridges:** `MPOTensor.IsFusionRing.exists_pos_regular` gives a
+  positive regular element with the Perron–Frobenius dimensions
+  (`MPOTensor.perronFrobeniusDim`) as eigenvalues;
+  `MPOTensor.IsNIMRep.exists_pos_left_eigenvector` transfers it to every
+  nonnegative integer representation on which the unit acts as the identity.
+- **Caveat:** only the fusion ring of a fusion category is recorded; the
+  `F`-symbols, the pivotal structure and the rigidity maps are not. The
+  predicate is independent of `MPOTensor.IsMPOFusionAlgebra`, which constrains
+  periodic operators rather than structure constants.
 
 ## Symmetries of matrix product density operators
 

@@ -19,6 +19,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ClosedFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.Defs
 import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
+import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
@@ -27,4 +28,5 @@ import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.Similarity
+import TNLean.MPS.Symmetry.MPOSymmetry.SymmetricBoundary
 import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness

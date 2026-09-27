@@ -14,6 +14,7 @@ import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CStarSqrtHolder
 import TNLean.Algebra.CentralStarSubalgebraMatrix
+import TNLean.Algebra.CharacterProjector
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CocycleRestriction
@@ -75,6 +76,7 @@ import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
 import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
