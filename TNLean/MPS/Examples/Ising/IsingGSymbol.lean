@@ -4,8 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Ising.IsingDimension
+import TNLean.MPS.Examples.Ising.IsingFusionAlgebra
+import TNLean.MPS.Examples.Ising.IsingTensors
 import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.SimpleScaling
+import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 
 /-!
 # Ising string-net: the source's G-symbol tensors and the F-symbol blocks
@@ -70,7 +73,7 @@ open scoped Matrix
 
 namespace IsingTwist
 
-open MPOTensor MPSTensor Zsqrtd
+open MPOTensor Zsqrtd
 
 /-! ### Closed-loop factors, F-symbols and G-symbols -/
 
@@ -166,7 +169,6 @@ theorem isingGSymbol_tetrahedral (a b c d e f : Fin 3) :
   · have hk := congrArg zsqrt2ToComplex hkey
     simp only [map_mul, map_pow] at hk
     rw [← ht2, ← pow_mul, ← pow_mul, Nat.mul_div_cancel' (Nat.dvd_of_mod_eq_zero hpar)] at hk
-    have hs : (Real.sqrt 2 : ℂ) ≠ 0 := by simp
     rw [div_eq_div_iff (by simp [ht]) (by simp [ht])]
     apply mul_right_cancel₀ (pow_ne_zero (isingLoopExp e + isingLoopExp f) ht)
     calc _ = (Real.sqrt 2 : ℂ)⁻¹ * (zsqrt2ToComplex (isingFSymbolZ a b c d e f) *

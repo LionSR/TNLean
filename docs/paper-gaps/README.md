@@ -615,7 +615,7 @@ For the Ising string-net operators of arXiv:1511.08090, Appendix D.2:
   tensor multiplied by `√2`, so that all entries lie in `ℤ[√2]`; states the
   fusion rule `O_σ² = O_1 + O_ψ` in both the scaled and the rescaled form; and
   shows that the source's G-symbol tensors are related to the formal tensors by
-  the diagonal bond similarity `h(u, l) = (v_u / v_l)^{1/2}`, so omitting the
+  the diagonal bond similarity `g(u, l) = (v_u / v_l)^{1/2}`, so omitting the
   factors `v` leaves the periodic operators and the fusion algebra unchanged.
 
 For the domain walls of anomalous symmetries in arXiv:2405.00439:
