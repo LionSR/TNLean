@@ -18,6 +18,7 @@ import TNLean.MPS.Preparation.ControlledGates
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
 import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
+import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.DepthUpperBound
 import TNLean.MPS.Preparation.EmbeddedProduct
 import TNLean.MPS.Preparation.FixedPointPairs

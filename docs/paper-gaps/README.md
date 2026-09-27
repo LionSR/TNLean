@@ -668,3 +668,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   connected correlator, since for complex `λ₂` the limit correlator of Hermitian
   observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
   need not vanish at finite `N`; the corrected form suffices for Theorem 1.
+- `mswc24_depth_upper_bound_divisible_length.tex` records that the preparation
+  of a normal translation-invariant state with error `ε` in depth
+  `O(log(N/ε))`, eq. (1), is proved for chain lengths divisible by a block
+  length `q` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, as in the `N/q`
+  equal blocks of eq. (10), and that allowing a larger last block, as the proof
+  of the lower bound does, removes the restriction.

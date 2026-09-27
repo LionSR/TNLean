@@ -735,6 +735,50 @@ $1/\gamma$ in the block length here
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
 
+The following theorem proves Theorem~\ref{thm:ldp_depth_upper_bound} for
+chain lengths that a block length of order $\log(N/\varepsilon)$ divides, as
+in the $N/q$ equal blocks of \cite[eq.~(10)]{Malz2024Preparation}; the general
+chain length is open, see
+\cite{gap:mswc24_depth_upper_bound_divisible_length}.
+
+\begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
+    \label{thm:ldp_depth_upper_bound_divisible}
+    \uses{def:ldp_local_circuit, thm:ldp_approximating_state_depth,
+        thm:ldp_approximation_error_normal}
+    \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le,
+        MPSPreparation.exists_isPreparedInDepth_le_log,
+        MPSPreparation.IsPreparedInDepth.mono,
+        MPSPreparation.norm_inner_normalizedMPVState_of_mpv_eq,
+        MPSPreparation.norm_approximatingMPVState}
+    \leanok
+    There is $C$, depending only on $d$ and $D$, such that the following holds.
+    Let $A$ be normal with $D\ge1$. There are $a>0$ and $b>0$, depending only
+    on $A$, such that for $0<\varepsilon\le1$ and every $q$ dividing $N$ with
+    $q\ge a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$ is prepared in depth at most $Cq$.
+    If moreover $N\ge2$ and $q\le2(a\log(N/\varepsilon)+b)$, for instance
+    $q=\lceil a\log(N/\varepsilon)+b\rceil$, the depth is at most
+    $c\log(N/\varepsilon)$ with $c$ depending only on $A$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A gauge transformation and a rescaling bring $A$ into the
+    gauge~(\ref{eq:ldp_normal_gauge}); they multiply $\ket{\phi_N(A)}$ by a
+    nonzero scalar, so the normalized state changes by a phase and the error
+    is unchanged. Normality gives a bound $t<1$ on the moduli of the
+    eigenvalues of $\E_A$ other than $1$, and
+    Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/4$ gives
+    $K$ with $\varepsilon(\widetilde\phi_N,\phi_N)\le K\,(N/q)\,e^{-rq}$,
+    where $r=-\tfrac14\log t>0$. Take $a=1/r$ and
+    $b=\max(\log K,0)/r+L_0+3D+1$, with $L_0$ the injectivity length of $A$.
+    Then $q\ge b$ makes the blocked tensor injective and $q\ge3D$, and
+    $rq\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$ gives
+    $K(N/q)e^{-rq}\le\varepsilon$. The approximating state is a unit vector and is prepared in depth at most $Cq$ by
+    Theorem~\ref{thm:ldp_approximating_state_depth}. For the second statement,
+    $\log(N/\varepsilon)\ge\log2$ gives
+    $Cq\le C(2a+2b/\log2)\log(N/\varepsilon)$.
+\end{proof}
+
 The correlation estimate below rests on the following lemmas, which are
 proved first. For an operator $X$ on $(\C^d)^{\otimes L}$ write $\E_X$ for the map
 $Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$ on $\MN{D}$, where
