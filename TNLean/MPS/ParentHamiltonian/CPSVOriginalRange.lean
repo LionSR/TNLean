@@ -195,7 +195,7 @@ the sum of the local spaces of its distinct normal representatives.
 This is the unblocked form of equation `II_CF1` and the BNT regrouping in
 equations `eq:II_ABasicTensors` and `decBSV`, arXiv:1606.00608, lines
 237--301. -/
-private theorem CPSVCanonicalFormData.groundSpace_eq_iSup_representatives
+theorem CPSVCanonicalFormData.groundSpace_eq_iSup_representatives
     {s d : ℕ} {A : MPSTensor s d} (data : CPSVCanonicalFormData A)
     (ref : data.BNTRefinement) {L : ℕ} (hL : 0 < L) :
     groundSpace A L =

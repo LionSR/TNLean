@@ -39,6 +39,7 @@ import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
+import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.FlagBlockTriangular
@@ -53,6 +54,7 @@ import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
+import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum

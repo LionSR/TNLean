@@ -2257,6 +2257,35 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Positive local terms with prescribed kernels
+
+For two finite families of positive operators with equal kernels term by
+term, rewrite each kernel of a sum with
+`WeightedPositiveKernel.ker_sum_eq_iInf`, then substitute the pointwise kernel
+equalities. This proves equality of the two total kernels without comparing
+the operators in order.
+
+Occurrences: `BlockGroundSpaceAtInjectivityLength.lean` and
+`CanonicalBlockGroundSpaceAtInjectivityLength.lean`. Both use the existing
+QICLean kernel-of-sum theorem. A further occurrence would justify a direct
+kernel-equality corollary there; no new tactic is needed.
+
+### Scalar-valued norms and equal ambient lengths
+
+When a linear map acts on a Hilbert space indexed by an arithmetic expression,
+rewriting an equality of lengths inside the map can introduce dependent casts.
+First express the entire operator norm as a scalar-valued function of the
+ambient length and interval endpoints. A `change` then exposes ordinary natural
+number arguments, and `rw` transports the scalar expression without transporting
+the underlying Hilbert space explicitly.
+
+Example: `GroupedProjectorEstimate.lean`, in
+`grouped_martingaleDifference_norm_le_of_projector_defect`, uses
+`F N a b : ℝ` for the norm of a suffix projection composed with a difference of
+prefix projections. This permits the active-volume identity and spectator bound
+to be combined using ordinary arithmetic equalities. Candidate helper pattern;
+currently one occurrence, so no general declaration is warranted.
+
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
   projector by the norm of its adjoint, reverse the product, and reverse the
@@ -2294,24 +2323,24 @@ abstracted — record why, so it is not re-proposed).
   requested tolerance among the overlap correction and the individual blocks;
   no new tactic is needed.
 
-### Preserving overlap bounds under finite orthogonal sums — locally factored
+### Preserving overlap bounds under finite orthogonal sums — promoted
 - **Pattern:** expand the inner product over fixed spectator configurations,
   apply the pointwise overlap bound, and finish with finite Cauchy–Schwarz.
 - **Occurrences:** the two nested restrictions to a middle interval in
-  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the hand-written
-  calculation in `norm_inner_overlap_sub_inner_aggregates_le` in
-  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean` (lines 47–92),
-  which runs the same chain `norm_sum_le`, `Finset.sum_le_sum`,
-  `Finset.mul_sum`, `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator
-  configurations.
-- **Status:** private lemmas express the finite orthogonal-sum estimate and
-  its transport along a configuration equivalence. The three boundary-range
-  cases use the same middle-interval theorem. The previously private
+  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the aggregate
+  estimate `norm_inner_overlap_sub_inner_aggregates_le` in
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean`, which ran the same
+  chain `norm_sum_le`, `Finset.sum_le_sum`, `Finset.mul_sum`,
+  `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator configurations.
+- **Abstraction:** `Finset.norm_sum_le_mul_sqrt_mul_sqrt` in
+  `TNLean/Algebra/FinsetNormSumCauchySchwarz.lean`: termwise bounds
+  `‖z i‖ ≤ c * a i * b i` with `0 ≤ c` give
+  `‖∑ i ∈ s, z i‖ ≤ c * (√(∑ a i ^ 2) * √(∑ b i ^ 2))`.
+- **Status:** promoted; the fiber bound in `SpectatorOverlap.lean` and the
+  FNW aggregate estimate both close with it. The transport along a
+  configuration equivalence stays private in `SpectatorOverlap.lean`, and the
   three-interval evaluation of the right boundary map is shared with
   `FNWProjectorDefect.lean` through `SpectatorBoundaryCoordinates.lean`.
-  With the occurrence in `FNWOverlapEstimate.lean` the pattern meets the rule
-  of three; promotion means making the finite orthogonal-sum estimate public
-  and rewriting that calculation through it, which needs a Lean build.
 
 ### Lower Gram bounds and off-diagonal pairings — locally factored
 - **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
@@ -2378,7 +2407,7 @@ abstracted — record why, so it is not re-proposed).
   `(m ^ 2 - r + 1) * m ^ 2 ≤ (D ^ 2 + 1) ^ 2` for `m ≤ D`, stated over `ℕ`.
 - **Notes:** promote at a third occurrence, for example a reduction at composite length.
 
-### Decomposing membership in a finite sum of subspaces — candidate
+### Decomposing membership in a finite sum of subspaces — promoted
 - **Pattern:** obtain vectors in the individual subspaces from membership in
   their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
   apply a norm or inner-product estimate to their sum.
@@ -2388,14 +2417,13 @@ abstracted — record why, so it is not re-proposed).
   (`TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`), and the
   private lemma `norm_inner_sum_starProjection_sub_le` in
   `TNLean/MPS/ParentHamiltonian/BlockProjectorSum.lean`.
-- **Abstraction:** a helper lemma turning `y ∈ ⨆ i, V i` over a finite index
-  type directly into a family `v : ∀ i, V i` with `∑ i, (v i : E) = y`,
-  absorbing the `(s := Finset.univ)` instantiation and the `simpa` coercion
-  from the indexed supremum.
-- **Status:** at the rule of three (three occurrences, two files). Promotion
-  is deferred because refactoring the call sites needs a Lean build to
-  verify; promote in the next PR that touches these files with a build
-  available.
+- **Abstraction:** `Submodule.exists_sum_eq_of_mem_iSup` in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean` turns
+  `u ∈ ⨆ i, V i` over a finite index type into a family `v : ∀ i, V i` with
+  `∑ i, (v i : M) = u`, absorbing the `(s := Finset.univ)` instantiation and
+  the `simpa` coercion from the indexed supremum.
+- **Status:** promoted; all three call sites now read
+  `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
 
 ### carrying a boundary through one Kronecker factor of a letter sum — candidate
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
