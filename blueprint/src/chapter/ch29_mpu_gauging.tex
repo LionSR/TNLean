@@ -4746,7 +4746,7 @@ $g$, $x$ and $N\geq1$ \cite[line~1064]{GarreRubio2023MPOSym}.
     \label{thm:mpug_involution_anomaly_identity_ratio}
     \lean{TNLean.Algebra.LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one}
     \leanok
-    \uses{def:mpug_l_symbols, thm:mpug_involution_anomaly_ratio}
+    \uses{def:mpug_l_symbols}
     If $L$ is compatible with $\omega$ and $g^2=e$, then for every
     $x\in\mathsf X$
     \begin{align}
@@ -4797,7 +4797,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \cite[Section~III.B]{GarreRubioSchuch2024DomainWall}, drawn there at the
     renormalization fixed point with one site on each side of the wall; the
     words $\mathbf u,\mathbf v$ are the blocked sites of the discussion away
-    from the fixed point.
+    from the fixed point \cite{gap:gs24_domain_wall_nondegenerate}.
 \end{definition}
 
 \begin{theorem}[Fractionalization of the symmetry on domain walls]
@@ -4813,7 +4813,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.physAct_wallChain,
         MPOTensor.exists_evalWord_mul_mul_evalWord_ne_zero}
     \leanok
-    \uses{def:mpug_domain_wall_action, thm:mpug_permuted_block_l_symbol_spec}
+    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol}
     Suppose $h$ carries the domain wall $e_1$ between $x$ and $y$ to $e_2$
     with phase $B^h_{x,y}$ and $g$ carries $e_2$ to $e_3$ with phase
     $B^g_{hx,hy}$. Then $gh$ carries $e_1$ to $e_3$ with phase
@@ -4878,6 +4878,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_exterior_buffer}
     The coefficient of $O_g\ket{\psi}$ is the trace of the acted chain. In
     each of the two acted regions insert the reduced block
     $W_{g,z}A_{gz}^{\mathbf c}V_{g,z}$, which leaves long words unchanged by
@@ -4976,9 +4978,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV_eq_omega,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_elem}
     \leanok
-    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_domain_wall_state,
-        thm:mpug_permuted_block_l_compatibility,
-        thm:mpug_involution_anomaly_identity_ratio}
+    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol,
+        def:mpug_anomaly_three_cochain}
     Let $g^2=e$ exchange the blocks $x$ and $y$, let $g$ carry the domain wall
     $e_{AB}\neq0$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}\neq0$ and
     $e_{BA}$ to $e_{AB}$ with phase $c_{BA}\neq0$. Then
@@ -4998,7 +4999,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_domain_wall_pentagon,
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_domain_wall_state,
+        thm:mpug_permuted_block_l_compatibility,
         thm:mpug_involution_anomaly_identity_ratio}
     Applying $g$ twice, Theorem~\ref{thm:mpug_domain_wall_pentagon} shows that
     $g^2=e$ carries $e_{AB}$ to itself with phase
