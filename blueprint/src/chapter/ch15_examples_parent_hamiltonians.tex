@@ -650,6 +650,74 @@ eigenspace.
     $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
 \end{proof}
 
+\begin{theorem}[Fourfold open-boundary degeneracy of the AKLT chain]
+    \label{thm:aklt_open_ground_space}
+    \lean{MPSTensor.aklt_ker_openParentHamiltonianES_two_le_groundSpaceES, MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two, MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_three}
+    \leanok
+    \uses{def:aklt_tensor, def:open_parent_hamiltonian_es, def:ground_space_es, def:open_state}
+    For $N\ge2$, the kernel of the open-chain two-site projector parent
+    Hamiltonian of the AKLT tensor is the open-boundary MPS space,
+    \begin{align}
+        \ker H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}})
+         & = G_{N}^{\mathrm{ES}}(A_{\mathrm{AKLT}})
+        = \spn_{\C}\bigl\{\sigma\mapsto
+        (l|A_{\mathrm{AKLT}}^{\sigma}|r) :
+        ((l|,|r))\in\C^{2}\times\C^{2}\bigr\},
+        \notag
+    \end{align}
+    and it is four-dimensional. The count is for this open-chain projector
+    parent Hamiltonian. The passage
+    \cite[lines~1171--1174]{Cirac2021Matrix} states a fourfold degeneracy for
+    the AKLT chain with open boundary conditions, whose displayed Hamiltonian
+    is the polynomial spin interaction. Summing the local identity
+    $P^{(2)}=\frac12\bigl(h_{\mathrm{poly}}+\frac23 I\bigr)$ over the
+    $N-1$ open bonds gives
+    $H_{\mathrm{proj}}=\frac12\bigl(H_{\mathrm{poly}}+\frac{2(N-1)}{3}I\bigr)$.
+    The projector kernel is the ground eigenspace of the polynomial
+    Hamiltonian, equivalently the kernel of this shifted operator, and not
+    the kernel of the polynomial Hamiltonian itself. For $N=2$ the
+    polynomial interaction has eigenvalues $-\frac23$ and $\frac43$, so its
+    kernel is trivial, while the projector kernel is four-dimensional. The identification of the projector kernel with the
+    open-boundary matrix-product space uses the boundary vectors of that
+    passage together with the three-site intersection check of
+    \cite[line~2095]{Cirac2021Matrix}, which the review prints for the
+    periodic chain. As a consequence of
+    Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} at $L_{0}=2$,
+    and not as a statement of the review, the three-site open-chain parent
+    Hamiltonian also has a four-dimensional kernel for $N\ge3$. The spin-$0$
+    statement of the same passage is not part of this theorem; see
+    \cite{gap:rmp_example_parent_hamiltonian_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_full_window, lem:parent_interaction_es_kernel, rem:cyclic_window_operators, thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:open_ground_space_le_hamiltonian_kernel, thm:open_parent_hamiltonian_window_ground_space, thm:normal_open_chain_range_reduction, thm:ground_space_span_open_states, thm:open_parent_hamiltonian_kernel_finrank, thm:wordspan_blk_inj_succ}
+    For $N=2$ the Hamiltonian is the projector onto the orthogonal complement
+    of $\mathcal G_{2}(A_{\mathrm{AKLT}})$. For $N\ge3$, a kernel vector
+    satisfies every nonwrapping two-site constraint. Each nonwrapping
+    three-site window restricts on either side to a nonwrapping two-site
+    window, so Theorem~\ref{thm:aklt_ground_space_intersection_two} places
+    every three-site restriction in $\mathcal G_{3}(A_{\mathrm{AKLT}})$; this
+    is the local check of \cite[line~2095]{Cirac2021Matrix}, used here on
+    nonwrapping windows. The AKLT tensor is injective after blocking
+    $L_{0}=2$ sites (Theorem~\ref{thm:aklt_normal}). For $N\ge3$, with $s$
+    ranging over starts satisfying $s+3\le N$ and $\tau$ over complementary
+    configurations,
+    \begin{align}
+        H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}})v=0
+         & \Longrightarrow
+        \bigl(\forall s,\tau,\
+        \Res^\tau_{s,3}v\in\mathcal G_3(A_{\mathrm{AKLT}})\bigr)
+        \Longrightarrow v\in G_N^{\mathrm{ES}}(A_{\mathrm{AKLT}}).
+        \notag
+    \end{align}
+    The last step is the open-chain intersection theorem.
+    The reverse inclusion holds for every tensor. The span description is
+    Theorem~\ref{thm:ground_space_span_open_states}, and
+    Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} with $D=2$ gives
+    dimension $D^{2}=4$.
+\end{proof}
+
 \begin{definition}[AKLT polynomial Hamiltonian]\label{def:aklt_polynomial_hamiltonian}
     \lean{MPSTensor.spinOneOperator, MPSTensor.akltBondTerm,
         MPSTensor.akltHamiltonian}
@@ -801,8 +869,19 @@ eigenspace.
          & = 1
         \notag
     \end{align}
-    \cite[lines~1169--1174]{Cirac2021Matrix}; see
+    \cite[lines~1169--1174]{Cirac2021Matrix}.
+    Theorem~\ref{thm:aklt_open_ground_space} proves the fourfold count for
+    the open-chain projector parent Hamiltonian. Summing the displayed local
+    identity over the open chain gives
+    $H_{\mathrm{proj}}=\frac12\bigl(H_{\mathrm{poly}}+\frac{2(N-1)}{3}I\bigr)$,
+    so the projector kernel is the ground eigenspace of the polynomial
+    Hamiltonian and the kernel of that shifted operator. It is not the
+    kernel of the polynomial Hamiltonian: for $N=2$ that interaction has
+    eigenvalues $-\frac23$ and $\frac43$. The theorem says nothing about
+    the spin-$0$ count in the second equality; see
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
-    % The open-boundary degeneracy is not formalized; the periodic polynomial
-    % Hamiltonian is thm:aklt_polynomial_ground_state.
+    % Neither the polynomial-projector identification nor the spin-0 count is
+    % formalized; the periodic two-site uniqueness is
+    % thm:aklt_chain_ground_space_two, and the periodic polynomial Hamiltonian is
+    % thm:aklt_polynomial_ground_state.
 \end{remark}
