@@ -27,6 +27,7 @@ import TNLean.MPS.MPU.FactorFreeSandwich
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.GroupCocycleMPO
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionAlgebra
+import TNLean.MPS.MPU.GroupCocycleMPO.FusionTensors
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
