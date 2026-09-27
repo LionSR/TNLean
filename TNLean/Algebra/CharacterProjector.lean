@@ -229,6 +229,7 @@ theorem nonempty_equiv_iff_character_eq [Finite G] (σ : Representation ℂ G W)
   rw [ite_eq_right hne] at h1
   simp at h1
 
+open Classical in
 /-- Source: arXiv:1001.3807, proof of Lemma `lemma:1d-ghh-anyrep`,
 `Papers/1001.3807/paper_v3.tex` lines 983–990 (equation `eq:noninj:sum-CHIi-Di-is-PROJi`).
 For irreducible representations `σ = D^i` and `τ = D^j`,
@@ -236,7 +237,7 @@ For irreducible representations `σ = D^i` and `τ = D^j`,
 The source derives this from the group orthogonality theorem; here it follows from Schur's lemma
 and Mathlib's orthogonality of characters. -/
 theorem sum_character_inv_smul_eq (σ : Representation ℂ G W) (τ : Representation ℂ G T)
-    [σ.IsIrreducible] [τ.IsIrreducible] [Decidable (Nonempty (σ.Equiv τ))] :
+    [σ.IsIrreducible] [τ.IsIrreducible] :
     ∑ g, σ.character g⁻¹ • τ g =
       if Nonempty (σ.Equiv τ) then ((Nat.card G : ℂ) / finrank ℂ W) • (1 : Module.End ℂ T)
       else 0 := by
