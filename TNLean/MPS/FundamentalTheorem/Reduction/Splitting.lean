@@ -83,19 +83,20 @@ module, in coordinates turning every one-letter action into the prescribed diago
 theorem FlagData.exists_isInternal_blockCoordinates [IsSemisimpleModule (WordAlgebra d) M]
     (F : FlagData M S C) :
     ∃ (W : Fin F.r → Submodule ℂ M)
-      (hmaps : ∀ (i : Fin d) (k : Fin F.r), Set.MapsTo (actAlgHom M (ofWord [i])) (W k) (W k))
+      (hmaps : ∀ (i : Fin d) (k : Fin F.r),
+        Set.MapsTo (Algebra.lsmul ℂ ℂ M (ofWord [i])) (W k) (W k))
       (ψ : ∀ k, ↥(W k) ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ)),
       DirectSum.IsInternal W ∧ ∀ (i : Fin d) (k : Fin F.r),
-        LinearMap.toMatrix' ((ψ k).conj ((actAlgHom M (ofWord [i])).restrict (hmaps i k))) =
+        LinearMap.toMatrix' ((ψ k).conj ((Algebra.lsmul ℂ ℂ M (ofWord [i])).restrict (hmaps i k))) =
           blockOf D C i (F.label k) := by
   classical
   choose V hVsup hViso using F.exists_invariant_complement
   set W : Fin F.r → Submodule ℂ M := fun k => (V k).restrictScalars ℂ with hWdef
   have hmaps : ∀ (i : Fin d) (k : Fin F.r),
-      Set.MapsTo (actAlgHom M (ofWord [i])) (W k) (W k) :=
+      Set.MapsTo (Algebra.lsmul ℂ ℂ M (ofWord [i])) (W k) (W k) :=
     fun _ k _ hx => (V k).smul_mem _ hx
   have hcoord : ∀ k : Fin F.r, ∃ ψ : ↥(W k) ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ),
-      ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (actAlgHom (↥(W k)) (ofWord [i]))) =
+      ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (Algebra.lsmul ℂ ℂ (↥(W k)) (ofWord [i]))) =
         blockOf D C i (F.label k) :=
     fun k => F.exists_blockCoordinates_of_equiv k (hViso k).some
   choose ψ hψ using hcoord
@@ -120,7 +121,8 @@ theorem FlagData.exists_isInternal_blockCoordinates [IsSemisimpleModule (WordAlg
   have hsurj : Function.Surjective (DirectSum.coeLinearMap W) := by
     rw [← LinearMap.range_eq_top, DirectSum.range_coeLinearMap, hiSup]
   have hrestrict : ∀ (i : Fin d) (k : Fin F.r),
-      (actAlgHom M (ofWord [i])).restrict (hmaps i k) = actAlgHom (↥(W k)) (ofWord [i]) :=
+      (Algebra.lsmul ℂ ℂ M (ofWord [i])).restrict (hmaps i k) =
+        Algebra.lsmul ℂ ℂ (↥(W k)) (ofWord [i]) :=
     fun _ _ => LinearMap.ext fun _ => rfl
   refine ⟨W, hmaps, ψ,
     ⟨(LinearMap.injective_iff_surjective_of_finrank_eq_finrank hdim).2 hsurj, hsurj⟩,
@@ -155,7 +157,7 @@ theorem exists_multiBlockCompression_remainder_eq_zero_of_isSemisimpleModule (S 
   set ord : BlockIndex S F.z ≃ Fin (S.card + F.z) := lab.symm.trans (finCongr hr) with hord
   obtain ⟨W, hmaps, ψ, hinternal, hblocks⟩ := F.exists_isInternal_blockCoordinates
   obtain ⟨e, he⟩ := exists_linearEquiv_blockDiagonal_of_isInternal hinternal
-    (fun k => slotSize D (F.label k)) ψ (fun i => actAlgHom B.WordModule (ofWord [i])) hmaps
+    (fun k => slotSize D (F.label k)) ψ (fun i => Algebra.lsmul ℂ ℂ B.WordModule (ofWord [i])) hmaps
   set σ : ((k : Fin F.r) × Fin (slotSize D (F.label k))) ≃ BlockSpace D S F.z :=
     Equiv.sigmaCongrLeft (β := fun b : BlockIndex S F.z => Fin (slotSize D b)) lab with hσ
   set gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S F.z → ℂ) :=
@@ -165,8 +167,8 @@ theorem exists_multiBlockCompression_remainder_eq_zero_of_isSemisimpleModule (S 
       (Matrix.blockDiagonal' fun k => blockOf D C i (F.label k)).submatrix σ.symm σ.symm := by
     intro i
     have hfi : B.wordRep.asModuleEquiv.symm.conj (Matrix.toLin' (B i)) =
-        actAlgHom B.WordModule (ofWord [i]) := by
-      rw [MPSTensor.actAlgHom_wordModule_ofWord B [i]]
+        Algebra.lsmul ℂ ℂ B.WordModule (ofWord [i]) := by
+      rw [MPSTensor.lsmul_wordModule_ofWord B [i]]
       simp [Kraus.evalWord]
     rw [conjMatrix_apply, hgauge,
       show ((B.wordRep.asModuleEquiv.symm.trans e).trans
