@@ -494,6 +494,181 @@ from the virtual to the physical system
     $A^{\bullet}_{\alpha\beta\gamma\delta}$.
 \end{proof}
 
+The group-theoretic input to $G$-injectivity is the averaging over the group
+and an operator $\Delta$ that inverts the expansion of an operator in the
+$U_g$'s \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+Throughout, $g\mapsto U_g$ is a representation of a finite group $G$ on a
+finite-dimensional complex space.
+
+\begin{theorem}[Group averaging]%
+    \label{thm:peps_group_averaging}
+    \lean{Representation.averageMap_linHom_apply,
+        Representation.mem_invariants_linHom_iff,
+        Representation.isProj_averageMap_linHom,
+        Representation.averageMap_linHom_apply_of_adjoint,
+        Representation.trace_adjoint_comp_averageMap_linHom}
+    \leanok
+    The map $\sigma(X)=\frac{1}{|G|}\sum_g U_gXU_g^{-1}$ is a projection onto
+    the operators commuting with every $U_g$. If the representation is unitary,
+    then $\sigma(X)=\frac{1}{|G|}\sum_g U_gXU_g^\dagger$ and
+    $\tr[Y^\dagger\sigma(X)]=\tr[\sigma(Y)^\dagger X]$, so $\sigma$ is the
+    orthogonal projector onto these operators for the Hilbert--Schmidt inner
+    product \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The map $\sigma$ is the average of the conjugation action
+    $X\mapsto U_gXU_g^{-1}$, so it is a projection onto the operators fixed
+    by every conjugation, and these are the operators commuting with every
+    $U_g$. For a unitary representation,
+    $\tr[Y^\dagger U_gXU_g^\dagger]=\tr[(U_g^\dagger YU_g)^\dagger X]$, and
+    summing over $g$, with $g$ replaced by $g^{-1}$, gives the symmetry of
+    $\sigma$.
+\end{proof}
+
+\begin{definition}[Isotypic projectors and the operator $\Delta$]%
+    \label{def:peps_delta_operator}
+    \lean{Representation.charProjector,
+        Representation.irreducibleCharacters,
+        Representation.characterMultiplicity,
+        Representation.deltaOperator}
+    \leanok
+    Let $\chi_U$ be the character of $U$, and let $\chi_1,\dots,\chi_r$ be the
+    distinct characters of the irreducible subrepresentations of $U$, with
+    $d_i=\chi_i(1)$ and multiplicities
+    $m_i=\frac{1}{|G|}\sum_g\chi_U(g)\chi_i(g^{-1})$. The isotypic projectors
+    are $P_i=\frac{d_i}{|G|}\sum_g\chi_i(g^{-1})U_g$, and
+    \begin{align*}
+        \Delta=\frac{1}{|G|}\sum_{i=1}^{r}\frac{d_i}{m_i}P_i
+    \end{align*}
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Isotypic projectors from characters]%
+    \label{thm:peps_isotypic_projectors}
+    \lean{Representation.sum_character_inv_smul_eq,
+        Representation.exists_isInternal_isAtom,
+        Representation.charProjector_apply_of_mem,
+        Representation.irreducibleCharacters_finite,
+        Representation.characterMultiplicity_eq_finrank,
+        Representation.sum_charProjector_irreducibleCharacters,
+        Representation.trace_comp_charProjector}
+    \leanok
+    \uses{def:peps_delta_operator}
+    For irreducible representations $D^i$ and $D^j$ of $G$,
+    $\sum_g\chi_i(g^{-1})D^j(g)$ equals $\frac{|G|}{d_i}\Id$ if $D^i$
+    and $D^j$ are equivalent and $0$ otherwise. Consequently $P_i$ acts as
+    the identity on every irreducible subrepresentation of $U$ with
+    character $\chi_i$ and as zero on every other irreducible
+    subrepresentation, the number $m_i$ is the dimension of the space of
+    intertwining maps from $D^i$ to $U$, and
+    \begin{align*}
+        \sum_{i=1}^{r}P_i & =\Id, & \tr[U_kP_i] & =m_i\chi_i(k)
+    \end{align*}
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The operator $\sum_g\chi_i(g^{-1})D^j(g)$ commutes with every $D^j(h)$,
+    because characters are constant on conjugacy classes, so by Schur's lemma
+    it is a multiple of the identity; its trace is
+    $\sum_g\chi_i(g^{-1})\chi_j(g)$, which orthogonality of characters
+    evaluates. By Maschke's theorem $U$ is a direct sum of irreducible
+    subrepresentations. On each summand the projectors act as just
+    described, which gives $\sum_iP_i=\Id$, and the trace of
+    $U_kP_i$ is the sum of $\chi_i(k)$ over the summands with character
+    $\chi_i$. Orthogonality of characters counts these summands as $m_i$.
+\end{proof}
+
+\begin{theorem}[Block form of $\Delta$]%
+    \label{thm:peps_delta_block_form}
+    \lean{Representation.deltaOperator_apply_of_mem}
+    \leanok
+    \uses{def:peps_delta_operator}
+    On every irreducible subrepresentation of $U$ with character $\chi_i$,
+    $\Delta$ acts as the scalar $\frac{d_i}{m_i|G|}$. Thus, in a basis in which
+    $U_g\cong\bigoplus_iD^i(g)\otimes\Id_{m_i}$,
+    \begin{align*}
+        \Delta\cong\frac{1}{|G|}\bigoplus_i\frac{d_i}{m_i}\,
+        \Id_{d_i}\otimes\Id_{m_i}
+    \end{align*}
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_isotypic_projectors}
+    Only the projector of $\chi_i$ acts nontrivially on such a
+    subrepresentation, and it acts as the identity.
+\end{proof}
+
+\begin{theorem}[Expansion in the representation]%
+    \label{thm:peps_delta_expansion}
+    \lean{Representation.trace_comp_deltaOperator,
+        Representation.sum_trace_comp_deltaOperator_smul,
+        Representation.sum_trace_inv_comp_deltaOperator_comp_smul}
+    \leanok
+    \uses{def:peps_delta_operator}
+    For every $g\in G$,
+    \begin{align*}
+        \sum_h\tr[U_{h^{-1}}\Delta U_g]\,U_h
+        =\sum_h\tr[U_{gh^{-1}}\Delta]\,U_h=U_g .
+    \end{align*}
+    For a unitary representation $U_{h^{-1}}=U_h^\dagger$
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_isotypic_projectors}
+    By the trace formula for the projectors,
+    $\tr[U_k\Delta]=\frac{1}{|G|}\sum_i d_i\chi_i(k)$, so
+    $\sum_k\tr[U_{k^{-1}}\Delta]U_k=\sum_iP_i=\Id$. Substituting
+    $h=kg$ gives
+    $\sum_h\tr[U_{gh^{-1}}\Delta]U_h=\big(\sum_k\tr[U_{k^{-1}}\Delta]U_k\big)U_g
+        =U_g$, and the first expression equals the second by cyclicity of
+    the trace.
+\end{proof}
+
+\begin{definition}[Semi-regular representation]%
+    \label{def:peps_semiregular}
+    \lean{Representation.IsSemiRegular,
+        Representation.isSemiRegular_leftRegular}
+    \leanok
+    A representation of $G$ is semi-regular if it contains every irreducible
+    representation of $G$, that is, if every irreducible representation
+    admits a nonzero intertwining map into it
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}. The
+    left-regular representation is semi-regular.
+\end{definition}
+
+\begin{theorem}[Linear independence of a semi-regular representation]%
+    \label{thm:peps_semiregular_trace}
+    \lean{Representation.character_leftRegular,
+        Representation.deltaOperator_leftRegular,
+        Representation.sum_irreducibleCharacters_mul_of_isSemiRegular,
+        Representation.trace_inv_comp_comp_deltaOperator_of_isSemiRegular}
+    \leanok
+    \uses{def:peps_delta_operator, def:peps_semiregular}
+    If $U$ is semi-regular, then $\tr[U_{g^{-1}}U_h\Delta]=\delta_{g,h}$ for
+    all $g,h\in G$, with $U_{g^{-1}}=U_g^\dagger$ for a unitary
+    representation. For the left-regular representation
+    $\Delta=\frac{1}{|G|}\Id$
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_delta_expansion, thm:peps_isotypic_projectors}
+    The character of the left-regular representation is $|G|\delta_{k,1}$,
+    so every character $\chi_i$ has multiplicity $d_i$ in it, and
+    $\Delta=\frac{1}{|G|}\sum_iP_i=\frac{1}{|G|}\Id$. Every
+    irreducible representation occurs in the left-regular representation,
+    and, since $U$ is semi-regular, in $U$; hence $U$ and the left-regular
+    representation have the same irreducible characters. Comparing the two
+    expressions for $\tr[U_k\Delta]$ in the left-regular representation gives
+    $\sum_id_i\chi_i(k)=|G|\delta_{k,1}$, and therefore
+    $\tr[U_{g^{-1}}U_h\Delta]=\frac{1}{|G|}\sum_id_i\chi_i(g^{-1}h)
+        =\delta_{g,h}$.
+\end{proof}
+
 The source asks for a tensor that is $G$-isometric with respect to the
 left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its
