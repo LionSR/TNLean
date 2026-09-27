@@ -4802,7 +4802,9 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 
 \begin{theorem}[Fractionalization of the symmetry on domain walls]
     \label{thm:mpug_domain_wall_pentagon}
-    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq,
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.phase_eq,
         MPOTensor.GroupFamily.BlockActionData.actW,
         MPOTensor.GroupFamily.BlockActionData.fuseW,
         MPOTensor.GroupFamily.BlockActionData.exists_evalWord_mul_actW_eq,
@@ -4813,9 +4815,10 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \leanok
     \uses{def:mpug_domain_wall_action, thm:mpug_permuted_block_l_symbol_spec}
     Suppose $h$ carries the domain wall $e_1$ between $x$ and $y$ to $e_2$
-    with phase $B^h_{x,y}$, $g$ carries $e_2$ to $e_3$ with phase
-    $B^g_{hx,hy}$, and $gh$ carries $e_1$ to $e_3$ with phase
-    $B^{gh}_{x,y}$. If $e_3\neq0$, then
+    with phase $B^h_{x,y}$ and $g$ carries $e_2$ to $e_3$ with phase
+    $B^g_{hx,hy}$. Then $gh$ carries $e_1$ to $e_3$ with phase
+    $(L^y_{g,h}/L^x_{g,h})\,B^g_{hx,hy}B^h_{x,y}$. Consequently, if $gh$
+    carries $e_1$ to $e_3\neq0$ with phase $B^{gh}_{x,y}$, then
     \begin{align}
         B^g_{hx,hy}\,B^h_{x,y}
          & =\frac{L^x_{g,h}}{L^y_{g,h}}\,B^{gh}_{x,y}.
@@ -4844,10 +4847,11 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $F^<_{g,h}$; by the two-sided comparison of reductions onto a normal
     tensor, the right boundary equals $(L^y_{g,h})^{-1}$ times the right
     boundary through $F^>_{g,h}$. The fusion tensors reduce
-    $O_gO_h\cdot\mathsf C$ to $O_{gh}\cdot\mathsf C$, and the local relation
-    of $gh$ gives $B^{gh}_{x,y}\mathsf C_3$. Since $A_{ghx}$ and $A_{ghy}$ are
+    $O_gO_h\cdot\mathsf C$ to $O_{gh}\cdot\mathsf C$, which gives the local
+    action of $gh$ with the stated phase. Since $A_{ghx}$ and $A_{ghy}$ are
     normal and $e_3\neq0$, some chain $\mathsf C_3$ with long regions is
-    nonzero, and the two scalars agree.
+    nonzero, so the phase of a local action is unique, and the two phases of
+    $gh$ agree.
 \end{proof}
 
 \begin{theorem}[The symmetry on states with two domain walls]
@@ -4948,9 +4952,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         thm:mpug_permuted_block_l_compatibility,
         thm:mpug_involution_anomaly_identity_ratio}
     Let $g^2=e$ exchange the blocks $x$ and $y$, let $g$ carry the domain wall
-    $e_{AB}$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}$ and $e_{BA}$ to
-    $e_{AB}$ with phase $c_{BA}$, let $e_{AB}\neq0$, and let the identity
-    element carry $e_{AB}$ to itself with a nonzero phase. Then
+    $e_{AB}\neq0$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}\neq0$ and
+    $e_{BA}$ to $e_{AB}$ with phase $c_{BA}\neq0$. Then
     \begin{align}
         c_{AB}\,c_{BA}
          & =\frac{L^x_{g,g}L^x_{e,e}}{L^y_{g,g}L^y_{e,e}}
@@ -4961,7 +4964,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     tensors or the domain walls, and
     $U\ket{\psi(A\text{-}B\text{-}A)}=\omega(g,g,g)\,\omega(g,e,g)
         \ket{\psi(B\text{-}A\text{-}B)}$. When the tensors of the identity are
-    trivial, as in the source, the phase of the identity is one and this is
+    trivial, as in the source, $L_{e,e}=1$ and $\omega(g,e,g)=1$, and this is
     $c_{AB}c_{BA}=L_A/L_B=\omega$
     \cite[Section~III.C]{GarreRubioSchuch2024DomainWall}.
 \end{theorem}
@@ -4969,10 +4972,11 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \begin{proof}\leanok
     \uses{thm:mpug_domain_wall_pentagon,
         thm:mpug_involution_anomaly_identity_ratio}
-    Theorem~\ref{thm:mpug_domain_wall_pentagon} for $(e,e)$ gives
-    $b^2=(L^x_{e,e}/L^y_{e,e})\,b$ for the phase $b\neq0$ of the identity, so
-    $b=L^x_{e,e}/L^y_{e,e}$; for $(g,g)$ it gives
-    $c_{BA}c_{AB}=(L^x_{g,g}/L^y_{g,g})\,b$. The second equality is
+    Applying $g$ twice, Theorem~\ref{thm:mpug_domain_wall_pentagon} shows that
+    $g^2=e$ carries $e_{AB}$ to itself with phase
+    $b=(L^y_{g,g}/L^x_{g,g})\,c_{BA}c_{AB}\neq0$. The same theorem for $(e,e)$
+    gives $b^2=(L^x_{e,e}/L^y_{e,e})\,b$, so $b=L^x_{e,e}/L^y_{e,e}$, which is
+    the first equality. The second equality is
     Theorem~\ref{thm:mpug_involution_anomaly_identity_ratio} for the compatible
     L-symbols of Theorem~\ref{thm:mpug_permuted_block_l_compatibility}. Its
     right-hand side involves only the fusion tensors, and it is invariant
