@@ -995,12 +995,28 @@ in the $N/q$ equal blocks of \cite[eq.~(10)]{Malz2024Preparation}; the general
 chain length is open, see
 \cite{gap:mswc24_depth_upper_bound_divisible_length}.
 
+\begin{lemma}[Rescaling changes the normalized state by a phase]
+    \label{lem:ldp_normalized_state_rescaling}
+    \lean{MPSPreparation.norm_inner_normalizedMPVState_of_mpv_eq}
+    \leanok
+    Let $A$ and $B$ be tensors with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for
+    some $\zeta\neq0$, and write $\ket{\hat\phi_N(A)}$ for the normalization of
+    $\ket{\phi_N(A)}$ (zero when $\ket{\phi_N(A)}=0$). Then every vector
+    $\ket\psi$ on $N$ sites satisfies
+    $\lvert\braket{\psi}{\hat\phi_N(B)}\rvert=\lvert\braket{\psi}{\hat\phi_N(A)}\rvert$,
+    so the error of $\ket\psi$ is the same against both normalized states.
+\end{lemma}
+\begin{proof}
+    \leanok
+    $\ket{\hat\phi_N(B)}=(\zeta^N/\lvert\zeta^N\rvert)\ket{\hat\phi_N(A)}$,
+    and if $\ket{\phi_N(A)}=0$ both normalized states vanish.
+\end{proof}
+
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
     \label{thm:ldp_depth_upper_bound_divisible}
     \uses{def:ldp_local_circuit}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le,
         MPSPreparation.exists_isPreparedInDepth_le_log,
-        MPSPreparation.norm_inner_normalizedMPVState_of_mpv_eq,
         MPSTensor.norm_approximatingMPVStateRaw,
         MPSTensor.norm_approximatingMPVState}
     \leanok
@@ -1020,16 +1036,19 @@ chain length is open, see
         thm:ldp_approximation_error_normal, thm:normality_rescaling_invariance,
         thm:gauge_invariance_normal,
         thm:is_normal_tensor_of_is_normal_left_canonical,
-        thm:wordspan_blk_inj_succ}
+        thm:wordspan_blk_inj_succ, thm:eigenvalue_bound,
+        lem:ldp_normalized_state_rescaling}
     A gauge transformation and a rescaling bring $A$ into the
     gauge~(\ref{eq:ldp_normal_gauge}) by
     Theorem~\ref{thm:normalized_primitive_gauge}; they multiply $\ket{\phi_N(A)}$ by a
-    nonzero scalar, so the normalized state changes by a phase and the error
-    is unchanged. The new tensor is normal by
+    nonzero scalar, so by Lemma~\ref{lem:ldp_normalized_state_rescaling} the
+    error is unchanged. The new tensor is normal by
     Theorems~\ref{thm:normality_rescaling_invariance}
     and~\ref{thm:gauge_invariance_normal}. By
     Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} its transfer
-    map is primitive, so $1$ is its only eigenvalue of modulus $1$, which gives a bound $t<1$ on the
+    map is primitive, so $1$ is its only eigenvalue of modulus $1$; all
+    eigenvalues have modulus at most $1$ by Theorem~\ref{thm:eigenvalue_bound},
+    and finitely many of them give a bound $t<1$ on the
     moduli of the other eigenvalues, and
     Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/4$ gives
     $K$ with $\varepsilon(\widetilde\phi_N,\phi_N)\le K\,(N/q)\,e^{-rq}$,
