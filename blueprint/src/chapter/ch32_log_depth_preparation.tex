@@ -1058,7 +1058,7 @@ chain length is open, see
         lem:ldp_normalized_state_rescaling,
         thm:primitive_fixed_point_trace_normalization,
         lem:isNBlkInjective_iff_blockTensor_isInjective,
-        lem:ldp_approximating_state_unit_norm}
+        lem:ldp_approximating_state_unit_norm, thm:transfer_channel}
     A gauge transformation and a rescaling bring $A$ into the
     gauge~(\ref{eq:ldp_normal_gauge}) by
     Theorem~\ref{thm:normalized_primitive_gauge}, and the positive definite
@@ -1070,8 +1070,10 @@ chain length is open, see
     Theorems~\ref{thm:normality_rescaling_invariance}
     and~\ref{thm:gauge_invariance_normal}. By
     Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} its transfer
-    map is primitive, so $1$ is its only eigenvalue of modulus $1$; all
-    eigenvalues have modulus at most $1$ by Theorem~\ref{thm:eigenvalue_bound},
+    map is primitive, so $1$ is its only eigenvalue of modulus $1$. The gauge is
+    left canonical, so the transfer map is a channel by
+    Theorem~\ref{thm:transfer_channel}, and all its eigenvalues have modulus at
+    most $1$ by Theorem~\ref{thm:eigenvalue_bound},
     and finitely many of them give a bound $t<1$ on the
     moduli of the other eigenvalues, and
     Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/4$ gives
