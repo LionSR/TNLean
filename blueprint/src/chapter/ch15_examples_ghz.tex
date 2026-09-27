@@ -321,7 +321,7 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
         MPSTensor.gInjTensor_eq_one_of_hasEigenvalue}
     \leanok
     \uses{def:ghz_g_injective_tensor, def:transfer_map,
-        def:mps_transfer_idempotence, lem:transfer_idempotent_eigenvalue_eq_one}
+        def:mps_transfer_idempotence, thm:transfer_idempotent_eigenvalue_eq_one}
     The transfer map of the $G$-injective tensor is
     $\E_A(X)_{\alpha\beta}=|G|^{-1}\sum_{k\in G}X_{\alpha k,\beta k}$. It is
     idempotent, so every nonzero eigenvalue of the transfer map equals $1$
@@ -329,7 +329,7 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:transfer_idempotent_eigenvalue_eq_one}
+    \uses{thm:transfer_idempotent_eigenvalue_eq_one}
     The term $A^{ij}X(A^{ij})^\dagger$ has entries
     $|G|^{-2}X_{\alpha i^{-1}j,\beta i^{-1}j}$; summing over $j$ and then $i$
     gives the formula. Applying it twice averages over $k$ and then over
@@ -383,7 +383,7 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
         MPSTensor.z2FourierGInjTensor_eq_blockTensor_ghz}
     \leanok
     \uses{def:ghz_g_injective_tensor, def:ghz_tensor_d, def:gauge_equiv}
-    For $G=\Z_2$ the tensor is $A^{ij}=\tfrac12X^{i+j}$. Let
+    For $G=\Z_2$ the tensor is $A^{ij}=\tfrac12\sigma_x^{i+j}$. Let
     $H=\bigl(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\bigr)$. After the
     Fourier transform $\tfrac12 H\otimes H$ on the physical index $(i,j)$,
     the resulting tensor is gauge equivalent, through $H$ on the bond, to the
@@ -393,9 +393,9 @@ the left regular representation, $L_g\ket{k}=\ket{gk}$.
 
 \begin{proof}\leanok
     The transformed tensor at $(a,b)$ is
-    $\tfrac14\sum_{ij}(-1)^{ai+bj}X^{i+j}$, and conjugation by $H$ turns $X$
-    into $Z$, giving
-    $\tfrac14\bigl(1+(-1)^aZ\bigr)\bigl(1+(-1)^bZ\bigr)
+    $\tfrac14\sum_{ij}(-1)^{ai+bj}\sigma_x^{i+j}$, and conjugation by $H$ turns
+    $\sigma_x$ into $\sigma_z$, giving
+    $\tfrac14\bigl(1+(-1)^a\sigma_z\bigr)\bigl(1+(-1)^b\sigma_z\bigr)
         =\ketbra{a}{a}\,\ketbra{b}{b}$.
 \end{proof}
 

@@ -25,15 +25,15 @@
     $\E_A\circ\E_A=\E_A$.
 \end{definition}
 
-\begin{lemma}[Eigenvalues of an idempotent transfer map]
-    \label{lem:transfer_idempotent_eigenvalue_eq_one}
+\begin{theorem}[Eigenvalues of an idempotent transfer map]
+    \label{thm:transfer_idempotent_eigenvalue_eq_one}
     \lean{MPSTensor.eq_one_of_hasEigenvalue_of_isTransferIdempotent}
     \leanok
     \uses{def:mps_transfer_idempotence}
     If $\E_A\circ\E_A=\E_A$, then every nonzero eigenvalue of $\E_A$ equals
     $1$, the form in which \cite[Section~III.A]{Cirac2021Matrix} states the
     renormalization fixed-point property.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     If $\E_A(X)=\mu X$ with $X\neq0$, then $\mu^2X=\E_A^2(X)=\E_A(X)=\mu X$,
