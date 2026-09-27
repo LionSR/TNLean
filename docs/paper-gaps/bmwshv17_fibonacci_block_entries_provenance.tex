@@ -8,7 +8,7 @@
 \date{2026-09-24}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{What the source prints}
 Appendix D.1.1 of \cite{Bultinck2017Anyons} gives the categorical data of the
@@ -102,34 +102,33 @@ of $B_1$ or $B_\tau$,
 the entries of $S_f$ involving $\phi^{\pm1/4}$ while those of $B_f$ lie in
 $\mathbb{Z}[\phi^{-1/2}]$. The similarity cancels in the trace, so on edge label
 $\tau$ the periodic operators of the source's blocks equal those of $B_1$ and
-$B_\tau$ at every length, and they satisfy the Fibonacci fusion
-rules.\footnote{Results:
+$B_\tau$ at every length.\footnote{Results:
     \leanid{FibonacciCompression.fibStringNetEdgeTau_conj},
-    \leanid{FibonacciCompression.mpo_fibStringNetTensor_edgeTau},
-    \leanid{FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau}.}
+    \leanid{FibonacciCompression.mpo_fibStringNetTensor_edgeTau}.}
 
-\paragraph{Scope restriction (edge label $\tau$).}
-The operator statements for the source's tensor are restricted to edge label
-$\tau$. The source's fusion statement concerns the full alphabet of four
-letters per site (plaquette and edge label), and on that alphabet it is not
-proved. This is the only open part of the note. When an edge carries the label
-$1$, admissibility of $G^{abc}_{d1f}$ forces $a=b$ and $c=d$, so the two
-plaquettes on either side of the edge coincide and the right bond letter
-equals the left one. Moreover $G^{bbc}_{c1f}v_bv_c=1$ whenever
-$N_{bc}^f>0$. Hence the letter of $S_f$ at $\bigl((b,1),(c,1)\bigr)$ is the
-matrix unit $E_{pp}$ with $p=(b,c)$ when $(b,c)$ is a bond letter of the block
-$f$, and zero otherwise. The similarity $h$ leaves these letters unchanged.
-
-\emph{Elimination plan.} (i)~Extend $B_1$ and $B_\tau$ to the four-letter
-alphabet, with the edge-$\tau$ letters (\ref{eq:fib_block}) and the edge-$1$
-letters $E_{pp}$, and prove (\ref{eq:fib_conj}) on the full alphabet.
-(ii)~Reuse the four compression data of the products $B_a\otimes B_b$ with the
-same gauges on the sixteen-letter pair alphabet. The conjugated edge-$1$
-letters are to be shown block upper triangular, with the edge-$1$ letters of
-the target blocks on the diagonal, so that the trace identity of the
-compression, and with it the fusion rules, extends with a nilpotent remainder.
-(iii)~Remove the restriction from the fusion theorem. The work is tracked in
-issue \#8217 of the formalization repository.
+\paragraph{Edge label $1$ (formerly a scope restriction, now resolved).}
+The source's fusion statement concerns the full alphabet of four letters per
+site (plaquette and edge label). When an edge carries the label $1$,
+admissibility of $G^{abc}_{d1f}$ forces $a=b$ and $c=d$, so the two plaquettes
+on either side of the edge coincide and the right bond letter equals the left
+one. Moreover $G^{bbc}_{c1f}v_bv_c=1$ whenever $N_{bc}^f>0$. Hence the letter
+of $S_f$ at $\bigl((b,1),(c,1)\bigr)$ is the matrix unit $E_{pp}$ with
+$p=(b,c)$ when $(b,c)$ is a bond letter of the block $f$, and zero otherwise.
+The similarity $h$ leaves these letters unchanged, so (\ref{eq:fib_conj})
+holds on the full alphabet for the blocks $B_1,B_\tau$ extended by these
+matrix units at edge label $1$. The four compression data of the products
+$B_a\otimes B_b$ extend to the sixteen letters of the extended products with
+the same gauges: the conjugated edge-$1$ letters are block upper triangular,
+with the edge-$1$ letters of the target blocks on the diagonal and further
+entries only in the columns of the zero slots. The remainder no longer
+vanishes, but it is nilpotent and the trace identity of the compression still
+holds. Hence the source's blocks satisfy the Fibonacci fusion rules on the
+full alphabet at every positive length, and no restriction to edge label
+$\tau$ remains.\footnote{Results:
+    \leanid{FibonacciCompression.fibStringNetTensor_conj},
+    \leanid{FibonacciCompression.mpo_fibStringNetTensor},
+    \leanid{FibonacciCompression.isMPOFusionAlgebra_fibBlockFull},
+    \leanid{FibonacciCompression.isMPOFusionAlgebra_fibStringNetTensor}.}
 
 The review \cite{Cirac2021Matrix} writes the operator tensor with plaquettes
 $A$ (upper left), $B$ (upper right), $C$ (lower left), $D$ (lower right), and

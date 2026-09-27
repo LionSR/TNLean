@@ -447,6 +447,30 @@ normalizations.
   connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
   `torusSiteTensor`.
 
+#### `Representation.IsSemiRegular`
+
+- **Declaration:** `Representation.IsSemiRegular (ρ : Representation ℂ G V) : Prop`,
+  for `G : Type u`.
+- **Defined in:** `TNLean/Algebra/RepresentationDelta.lean`.
+- **Meaning:** every finite-dimensional irreducible complex representation of
+  `G` on a type in the universe of `G` admits a nonzero intertwining map into
+  `ρ`.
+- **Source:** arXiv:1001.3807, Definition 4.5,
+  `Papers/1001.3807/paper_v3.tex:1010-1013`.
+- **Sanctioned bridges:** `Representation.isSemiRegular_leftRegular` (the
+  left-regular representation is semi-regular) and
+  `Representation.irreducibleCharacters_eq_leftRegular_of_isSemiRegular` (a
+  semi-regular representation has the irreducible characters of the regular
+  representation), used in
+  `Representation.trace_inv_comp_comp_deltaOperator_of_isSemiRegular`
+  (Lemma 4.6).
+- **Caveat:** irreducible representations of a finite group are
+  finite-dimensional, so the restriction to finite-dimensional ones loses
+  nothing; the universe restriction suffices because every irreducible
+  representation is equivalent to one on a coordinate space. The trace
+  identities of Lemmas 4.4 and 4.6 are stated with `ρ(h⁻¹)` in place of the
+  source's `U_h†`; the two agree for unitary representations.
+
 #### `TNLean.PEPS.IsGIsometric`
 
 - **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
@@ -482,6 +506,51 @@ normalizations.
   At width or height two the right and left edges of a site coincide in the
   simple torus graph, so the predicate no longer counts the source's
   multigraph coverings; recorded in
+  `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
+
+#### `TNLean.PEPS.IsTorusParallelSection` and `TNLean.PEPS.IsTorusFlat`
+
+- **Declarations:**
+  `TNLean.PEPS.IsTorusParallelSection (a b f : TorusVertex width height → G) : Prop`
+  and `TNLean.PEPS.IsTorusFlat (a b : TorusVertex width height → G) : Prop`.
+- **Defined in:** `TNLean/PEPS/TorusParallelSection.lean`.
+- **Meaning:** `f` is a parallel section of the horizontal transports `a` and
+  the vertical transports `b` if `f (x + 1, y) = a (x, y) * f (x, y)` and
+  `f (x, y + 1) = b (x, y) * f (x, y)` at every site; `a, b` are flat if
+  `b (x + 1, y) * a (x, y) = a (x, y + 1) * b (x, y)` around every elementary
+  square.
+- **Source:** project combinatorics for the coloring superposition of
+  arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex:2914-2923`; no source
+  predicate.
+- **Sanctioned bridges:** `TNLean.PEPS.exists_isTorusParallelSection_iff`
+  (sections exist exactly for flat transports with trivial holonomy around the
+  row and the column through the origin) and
+  `TNLean.PEPS.card_isTorusParallelSection` (there are `|G|` sections or none).
+
+#### `TNLean.PEPS.IsQuantumDoubleGaussLaw` and `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy`
+
+- **Declarations:**
+  `TNLean.PEPS.IsQuantumDoubleGaussLaw (s : TorusVertex width height → G × G × G × G) : Prop`
+  and `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy s : Prop`.
+- **Defined in:** `TNLean/PEPS/Examples/QuantumDouble.lean`.
+- **Meaning:** for the four physical spins `(s₁, s₂, s₃, s₄)` (top left, top
+  right, bottom right, bottom left) of each site of the dual quantum-double
+  network, Gauss' law is the vertex rule `s₂ s₁ = s₃ s₄` at every site together
+  with the plaquette rule
+  `s₁(v + (1, 0)) s₂(v) = s₄(v + (1, 1)) s₃(v + (0, 1))` around every corner;
+  trivial holonomy asks that the ordered products of the transports
+  `s₂ s₁` along the row `y = 0` and `s₄(v + (0, 1))⁻¹ s₁(v)` along the column
+  `x = 0` are the identity.
+- **Source:** arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex:2918-2921` (local
+  and plaquette terms of the Hamiltonian), and arXiv:2011.12127,
+  `Papers/2011.12127/TN-Review-main.tex:2452` (Gauss' law).
+- **Sanctioned bridges:** `TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS` (the
+  coefficient of the contracted dual network is `|G|` on configurations obeying
+  both predicates and `0` elsewhere).
+- **Caveat:** the review identifies the network with the superposition of all
+  Gauss-law configurations; on the torus only the trivial-holonomy sector
+  occurs, and the bridge is stated for width and height at least three.
+  Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 `TNLean.PEPS.SingletonRegionTensorInjective`,
@@ -1362,6 +1431,30 @@ involve no boundary.
   dimension one (`MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`), so
   the anomalous examples (CZX, $\mathbb Z_3$, $\mathbb Z_2\times\mathbb Z_2$)
   satisfy only the reduction with a nilpotent remainder, never this predicate.
+
+### `MPOTensor.IsFusionRing`
+
+- **Declaration:** `MPOTensor.IsFusionRing (N : ι → ι → ι → ℕ) (e : ι)
+  (dual : ι → ι) : Prop`, a structure with fields `assoc`, `isFusionUnit`,
+  `dual_dual`, `apply_unit` and `dual_anti`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/FusionRing.lean`.
+- **Meaning:** the structure constants `N_{ab}^c` of a fusion ring: they are
+  associative, `e` is a two-sided unit (`MPOTensor.IsFusionUnit`), and the
+  duality `a ↦ a*` is an involution with `N_{ab}^e = δ_{b,a*}` and
+  `N_{b*a*}^{c*} = N_{ab}^c`.
+- **Source:** arXiv:2203.12563, line 1236 (the identity element and dual
+  elements of the fusion category of a physical symmetry); the source uses the
+  fusion category at lines 1801–1803 to obtain a positive common eigenvector of
+  the multiplicity matrices.
+- **Sanctioned bridges:** `MPOTensor.IsFusionRing.exists_pos_regular` gives a
+  positive regular element with the Perron–Frobenius dimensions
+  (`MPOTensor.perronFrobeniusDim`) as eigenvalues;
+  `MPOTensor.IsNIMRep.exists_pos_left_eigenvector` transfers it to every
+  nonnegative integer representation on which the unit acts as the identity.
+- **Caveat:** only the fusion ring of a fusion category is recorded; the
+  `F`-symbols, the pivotal structure and the rigidity maps are not. The
+  predicate is independent of `MPOTensor.IsMPOFusionAlgebra`, which constrains
+  periodic operators rather than structure constants.
 
 ## Symmetries of matrix product density operators
 
