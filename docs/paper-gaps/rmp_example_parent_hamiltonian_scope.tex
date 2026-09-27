@@ -326,8 +326,11 @@ identities.\footnote{Formal declarations:
 \path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.}
 
 The fourfold open-boundary degeneracy of the AKLT chain is formalized for the
-open-chain two-site parent Hamiltonian, whose local projectors act only on
-nonwrapping windows. For $N\ge2$ its kernel is the open-boundary MPS space
+open-chain two-site projector parent Hamiltonian of the AKLT tensor, whose
+local projectors act only on nonwrapping windows. It is a statement about the
+polynomial Hamiltonian
+(\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) only after the
+polynomial and projector forms are identified, which remains open. For $N\ge2$ its kernel is the open-boundary MPS space
 spanned by $\sigma\mapsto\langle l|A^\sigma|r\rangle$ with
 $(\langle l|,|r\rangle)\in\mathbb C^2\times\mathbb C^2$, and it is
 four-dimensional. The proof reuses the two-site intersection check
@@ -338,7 +341,7 @@ the squared irreducible-representation dimension, which is at most
 $D^2$.\footnote{Formal declarations:
 \leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES},
 \leanid{MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two}, and
-\leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_boundaryVectors}
+\leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState}
 in \path{TNLean/MPS/Examples/AKLTOpenBoundary.lean};
 \leanid{MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective} in
 \path{TNLean/MPS/ParentHamiltonian/Martingale/OpenHamiltonian.lean}.} The

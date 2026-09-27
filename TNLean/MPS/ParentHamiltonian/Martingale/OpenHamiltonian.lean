@@ -286,45 +286,42 @@ theorem ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
 
 /-! ### Dimension of the open-boundary ground space -/
 
-/-- Project result: for a tensor block-injective at length \(L₀ > 0\), the local
-ground space on \(N \ge L₀\) sites has dimension \(D^2\).
-
-This extends `groundSpace_finrank_eq` from injective tensors to block-injective
-ones, and `groundSpace_finrank_eq_of_isNBlkInjective` from the blocking length
-itself to every longer chain. -/
-theorem groundSpace_finrank_eq_of_isNBlkInjective_of_le {A : MPSTensor d D} {L₀ N : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hN : L₀ ≤ N) :
-    Module.finrank ℂ (groundSpace A N) = D ^ 2 := by
-  let e : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] groundSpace A N :=
-    LinearEquiv.ofInjective (groundSpaceMap A N)
-      (groundSpaceMap_injective_of_isNBlkInjective (isNBlkInjective_of_le hL₀ hInj hN))
-  rw [← LinearEquiv.finrank_eq e, Module.finrank_matrix]
-  simp [pow_two]
-
-/-- Project result: the canonical \(\ell^2\) realization of the local ground space
-has dimension \(D^2\) under block injectivity at length \(L₀ \le N\). -/
-theorem groundSpaceES_finrank_eq_of_isNBlkInjective_of_le {A : MPSTensor d D} {L₀ N : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hN : L₀ ≤ N) :
-    Module.finrank ℂ (groundSpaceES A N) = D ^ 2 := by
+/-- The canonical \(\ell^2\) realization of the local ground space has dimension
+\(D^2\) under block injectivity at length \(L\). -/
+theorem groundSpaceES_finrank_eq_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L) :
+    Module.finrank ℂ (groundSpaceES A L) = D ^ 2 := by
   rw [groundSpaceES, LinearEquiv.finrank_map_eq]
-  exact groundSpace_finrank_eq_of_isNBlkInjective_of_le hInj hL₀ hN
+  exact groundSpace_finrank_eq_of_isNBlkInjective hInj
 
 /-- Project result: **boundary degeneracy of the open-chain parent Hamiltonian.**
 For a tensor block-injective at length \(L₀ > 0\), the kernel of the
 length-\((L₀ + 1)\) open parent Hamiltonian on \(N \ge L₀ + 1\) sites has
 dimension exactly \(D^2\).
 
+Primary sources. Nachtergaele, arXiv:cond-mat/9410110,
+`References/cond-mat_9410110/main.tex` lines 1505--1510, summarizing
+Fannes--Nachtergaele--Werner (lines 1484--1486), states that the local support
+spaces \(\mathcal G_{[M,N]}\) of a pure generalized valence-bond-solid state with
+auxiliary algebra \(M_k\) have dimension \(k^2\) on long intervals, and lines
+1545--1558 (equations (3.12)--(3.13)) that the kernel of the open-interval
+Hamiltonian is \(\mathcal G_{[M,N]}\). Pérez-García--Verstraete--Wolf--Cirac,
+arXiv:quant-ph/0608197, `Papers/quant-ph_0608197/MPSarchive.tex` lines
+1211--1233, proves the growth step on an open chain: every ground state of the
+nearest-neighbour projector Hamiltonian has the form
+\(\operatorname{tr}(Y B^{i_j} \cdots B^{i_{j+2}})\) on growing windows.
+
 arXiv:2011.12127, line 1174, states that the open-boundary ground-state
 degeneracy is at least the square of the dimension of the irreducible
 projective representation carried by the boundary vectors. That dimension is
 at most \(D\), and this theorem gives the exact count \(D^2\) for every
-block-injective tensor; it is a sharper statement than the source's lower
-bound, not the source statement itself. -/
+block-injective tensor; it is a sharper statement than the review's lower
+bound, not the review's statement itself. -/
 theorem finrank_ker_openParentHamiltonianES_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N)) = D ^ 2 := by
   rw [ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀N]
-  exact groundSpaceES_finrank_eq_of_isNBlkInjective_of_le hInj hL₀ (by omega)
+  exact groundSpaceES_finrank_eq_of_isNBlkInjective (isNBlkInjective_of_le hL₀ hInj (by omega))
 
 end MPSTensor

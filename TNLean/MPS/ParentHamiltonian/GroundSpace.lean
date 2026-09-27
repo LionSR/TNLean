@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
 import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.OpenBoundary
 
 import Mathlib.LinearAlgebra.Dimension.Finite
 import Mathlib.LinearAlgebra.Pi
@@ -56,18 +57,18 @@ noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
     Submodule ℂ (NSiteSpace d L) :=
   (groundSpaceMap A L).range
 
-/-- A rank-one boundary matrix \(|r⟩⟨l|\) produces the open-boundary MPS with
+/-- A rank-one boundary matrix \(|r⟩⟨l|\) produces the open-boundary state with
 boundary vectors \(⟨l|\) and \(|r⟩\):
 \[
   Γ_L(|r⟩⟨l|)(σ) = ⟨l|A^σ|r⟩.
 \] -/
 lemma groundSpaceMap_vecMulVec (A : MPSTensor d D) (L : ℕ) (l r : Fin D → ℂ) :
-    groundSpaceMap A L (Matrix.vecMulVec r l) =
-      fun σ => l ⬝ᵥ (Kraus.evalWord A (List.ofFn σ) *ᵥ r) := by
+    groundSpaceMap A L (Matrix.vecMulVec r l) = openState l r A L := by
   funext σ
+  simp only [openState, openCoeff_def]
   rw [groundSpaceMap_apply, Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm]
 
-/-- Bridge: the local ground space is spanned by the open-boundary MPS
+/-- Bridge: the local ground space is spanned by the open-boundary states
 \(σ ↦ ⟨l|A^σ|r⟩\), with the boundary vectors \(⟨l|\) and \(|r⟩\) ranging over
 \(ℂ^D × ℂ^D\).
 
@@ -75,9 +76,9 @@ This is the boundary-vector description of the open-boundary ground space in
 arXiv:2011.12127, line 1174 ("we can define boundary vectors on both sides").
 Every boundary matrix is a sum of matrix units, and each matrix unit is the
 rank-one matrix of two standard basis vectors. -/
-theorem groundSpace_eq_span_boundaryVectors (A : MPSTensor d D) (L : ℕ) :
+theorem groundSpace_eq_span_openState (A : MPSTensor d D) (L : ℕ) :
     groundSpace A L = Submodule.span ℂ (Set.range fun p : (Fin D → ℂ) × (Fin D → ℂ) =>
-      fun σ : Cfg d L => p.1 ⬝ᵥ (Kraus.evalWord A (List.ofFn σ) *ᵥ p.2)) := by
+      openState p.1 p.2 A L) := by
   apply le_antisymm
   · rintro _ ⟨X, rfl⟩
     rw [Matrix.matrix_eq_sum_single X, map_sum]

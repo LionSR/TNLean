@@ -15,14 +15,37 @@ subsubsection "SPT phases and edge modes",
 degeneracy of an MPS parent Hamiltonian with open boundary conditions comes from
 boundary vectors on both sides, and "for the case of the AKLT model, this
 indeed leads to a \(4\)-fold degeneracy". Line 2095 of the same
-file states that the two-site AKLT parent Hamiltonian already suffices, via the
-hand check \(\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}\).
+file states that the two-site AKLT parent Hamiltonian already has a unique
+periodic ground state, via the hand check
+\(\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}\).
+
+Primary sources for the open-chain count. Nachtergaele, arXiv:cond-mat/9410110,
+`References/cond-mat_9410110/main.tex` lines 1505--1510 and 1545--1558,
+summarizing Fannes--Nachtergaele--Werner (lines 1484--1486): the local support
+spaces of a pure generalized valence-bond-solid state with auxiliary algebra
+\(M_k\) have dimension \(k^2\) on long intervals, and they are the kernels of
+the open-interval Hamiltonian (equations (3.12)--(3.13)).
+Pérez-García--Verstraete--Wolf--Cirac, arXiv:quant-ph/0608197,
+`Papers/quant-ph_0608197/MPSarchive.tex` lines 1211--1233: the growth argument
+on an open chain, which places every ground state of the nearest-neighbour
+projector Hamiltonian in the span of \(\operatorname{tr}(Y B^{i_j} \cdots B^{i_k})\)
+on growing windows.
 
 **Formalized here.** For every \(N \ge 2\), the kernel of the open-chain
 two-site AKLT parent Hamiltonian on \(N\) sites is the open-boundary MPS space
-\(\{σ ↦ ⟨l|A^σ|r⟩\}\), spanned by the boundary vectors
+\(\{σ ↦ ⟨l|A^σ|r⟩\}\), spanned by the open-boundary states with boundary vectors
 \((⟨l|, |r⟩) ∈ ℂ^2 × ℂ^2\), and it is four-dimensional. The three-site open
 parent Hamiltonian has the same four-dimensional kernel for \(N \ge 3\).
+
+These statements concern the projector parent Hamiltonian of the AKLT tensor.
+The review's line 1174 speaks of the AKLT model, whose Hamiltonian is the
+polynomial \(\vec S_i\cdot\vec S_{i+1} + \tfrac13(\vec S_i\cdot\vec S_{i+1})^2\);
+the identification of that polynomial with the spin-\(2\) projector is not
+formalized (see `docs/paper-gaps/rmp_example_parent_hamiltonian_scope.tex`).
+The two-site statements combine line 1174 with the local hand check of line
+2095, which the review prints for the periodic chain; the check itself is an
+identity of three-site local spaces, and the proof reuses it on nonwrapping
+windows.
 
 The tensor is the one of the AKLT example module, which is the review's Pauli
 form of lines 2390--2392 rescaled by \(\sqrt{2/3}\) and read in a rotated
@@ -37,7 +60,7 @@ sites and is not formalized here.
 
 * `MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES`
 * `MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two`
-* `MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_boundaryVectors`
+* `MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState`
 * `MPSTensor.aklt_finrank_ker_openParentHamiltonianES_three`
 
 ## References
@@ -45,6 +68,10 @@ sites and is not formalized here.
 - [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- Cirac, Pérez-García,
   Schuch, Verstraete, *Matrix product states and projected entangled pair
   states: Concepts, symmetries, theorems*
+- [arXiv:cond-mat/9410110](https://arxiv.org/abs/cond-mat/9410110) -- Nachtergaele,
+  *The spectral gap for some spin chains with discrete symmetry breaking*
+- [arXiv:quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197) -- Pérez-García,
+  Verstraete, Wolf, Cirac, *Matrix product state representations*
 -/
 
 open scoped Matrix
@@ -86,40 +113,48 @@ theorem aklt_ker_openParentHamiltonianES_two_le_groundSpaceES {N : ℕ} (hN : 2 
       rw [Nat.mod_eq_of_lt (by omega)]
       omega
 
-/-- Source: arXiv:2011.12127, lines 1174 and 2095. For \(N \ge 2\), the kernel
-of the open-chain two-site AKLT parent Hamiltonian is the open-boundary MPS
-space \(\{σ ↦ \operatorname{tr}(A^σ X)\}\). -/
+/-- Project result: for \(N \ge 2\), the kernel of the open-chain two-site AKLT
+parent Hamiltonian is the open-boundary MPS space
+\(\{σ ↦ \operatorname{tr}(A^σ X)\}\).
+
+This combines two passages of arXiv:2011.12127 that neither states alone: the
+open-boundary ground space of line 1174, and the hand check
+\(\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}\) of line 2095, which
+the review prints for the periodic chain and which is a local identity reused
+here on nonwrapping windows. -/
 theorem aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES {N : ℕ} (hN : 2 ≤ N) :
     LinearMap.ker (openParentHamiltonianES akltTensor 2 N) = groundSpaceES akltTensor N :=
   le_antisymm (aklt_ker_openParentHamiltonianES_two_le_groundSpaceES hN)
     (groundSpaceES_le_ker_openParentHamiltonianES akltTensor 2 N)
 
 /-- Source: arXiv:2011.12127, line 1174: **fourfold open-boundary degeneracy of
-the AKLT chain.** For \(N \ge 2\), the open-chain two-site AKLT parent
-Hamiltonian has a four-dimensional kernel. -/
+the AKLT chain**, for the open-chain two-site projector parent Hamiltonian of
+the AKLT tensor. For \(N \ge 2\), this Hamiltonian has a four-dimensional
+kernel. -/
 theorem aklt_finrank_ker_openParentHamiltonianES_two {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES akltTensor 2 N)) = 4 := by
   rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN,
-    groundSpaceES_finrank_eq_of_isNBlkInjective_of_le aklt_isNBlkInjective_two
-      (by norm_num) hN]
+    groundSpaceES_finrank_eq_of_isNBlkInjective
+      (isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)]
   norm_num
 
 /-- Source: arXiv:2011.12127, line 1174 ("we can define boundary vectors on both
 sides"). For \(N \ge 2\), the kernel of the open-chain two-site AKLT parent
-Hamiltonian is spanned by the open-boundary MPS \(σ ↦ ⟨l|A^σ|r⟩\), with
+Hamiltonian is spanned by the open-boundary states \(σ ↦ ⟨l|A^σ|r⟩\), with
 boundary vectors \((⟨l|, |r⟩)\) ranging over \(ℂ^2 × ℂ^2\). -/
-theorem aklt_ker_openParentHamiltonianES_two_eq_span_boundaryVectors {N : ℕ} (hN : 2 ≤ N) :
+theorem aklt_ker_openParentHamiltonianES_two_eq_span_openState {N : ℕ} (hN : 2 ≤ N) :
     LinearMap.ker (openParentHamiltonianES akltTensor 2 N) =
       Submodule.span ℂ (Set.range fun p : (Fin 2 → ℂ) × (Fin 2 → ℂ) =>
-        WithLp.toLp 2 fun σ : Cfg 3 N =>
-          p.1 ⬝ᵥ (Kraus.evalWord akltTensor (List.ofFn σ) *ᵥ p.2)) := by
+        WithLp.toLp 2 (openState p.1 p.2 akltTensor N)) := by
   rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN, groundSpaceES,
-    groundSpace_eq_span_boundaryVectors, Submodule.map_span, ← Set.range_comp]
+    groundSpace_eq_span_openState, Submodule.map_span, ← Set.range_comp]
   rfl
 
-/-- Source: arXiv:2011.12127, line 1174, for the three-site open parent
-Hamiltonian. For \(N \ge 3\) its kernel is four-dimensional; this is the
-general boundary-degeneracy count at the injectivity length \(L_0 = 2\). -/
+/-- Project result: for \(N \ge 3\), the open-chain three-site AKLT parent
+Hamiltonian has a four-dimensional kernel. This is the specialization of
+`finrank_ker_openParentHamiltonianES_of_isNBlkInjective` to the AKLT tensor at
+its injectivity length \(L_0 = 2\); it is a project corollary, not a statement
+printed in the review. -/
 theorem aklt_finrank_ker_openParentHamiltonianES_three {N : ℕ} (hN : 3 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES akltTensor 3 N)) = 4 := by
   rw [finrank_ker_openParentHamiltonianES_of_isNBlkInjective (L₀ := 2)

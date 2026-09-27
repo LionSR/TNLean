@@ -2412,19 +2412,19 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Theorem~\ref{thm:open_hamiltonian_kernel_le_ground_space}.
 \end{proof}
 
-\begin{lemma}[Boundary-vector span of the local ground space]
-    \label{lem:ground_space_span_boundary_vectors}
-    \lean{MPSTensor.groundSpaceMap_vecMulVec, MPSTensor.groundSpace_eq_span_boundaryVectors}
+\begin{lemma}[Open-boundary states span the local ground space]
+    \label{lem:ground_space_span_open_states}
+    \lean{MPSTensor.groundSpaceMap_vecMulVec, MPSTensor.groundSpace_eq_span_openState}
     \leanok
     \uses{def:ground_space_parent, def:ground_space_map}
     For every tensor $A$ and every $L$, the local ground space $G_{L}(A)$ is
-    spanned by the open-boundary vectors
+    spanned by the open-boundary states
     \begin{align}
         \sigma\longmapsto\langle l|A^{\sigma}|r\rangle,
         \qquad (\langle l|,|r\rangle)\in\C^{D}\times\C^{D}.
         \notag
     \end{align}
-    These are the boundary vectors on both sides of
+    Here $\langle l|$ and $|r\rangle$ are the boundary vectors on both sides of
     \cite[line~1174]{Cirac2021Matrix}.
 \end{lemma}
 
@@ -2438,29 +2438,35 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{theorem}[Dimension of the open-chain ground space]
     \label{thm:open_parent_hamiltonian_kernel_finrank}
-    \lean{MPSTensor.groundSpace_finrank_eq_of_isNBlkInjective_of_le, MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective_of_le, MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective}
+    \lean{MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
-    Assume $L_{0}>0$. If $A$ is $L_{0}$-block-injective, then
-    $\dim G_{N}(A)=\dim G_{N}^{\mathrm{ES}}(A)=D^{2}$ for every $N\geq L_{0}$.
-    If moreover $D\geq1$ and $N\geq L_{0}+1$, then
+    If $A$ is $L$-block-injective, then $\dim G_{L}^{\mathrm{ES}}(A)=D^{2}$.
+    If $A$ is $L_{0}$-block-injective with $L_{0}>0$, $D\geq1$ and
+    $N\geq L_{0}+1$, then
     \begin{align}
         \dim\ker H^{\mathrm{open}}_{N,L_{0}+1}(A) & =D^{2}.
         \notag
     \end{align}
-    The review states that the open-boundary degeneracy is at least the
-    square of the dimension of the irreducible projective representation
-    carried by the boundary \cite[line~1174]{Cirac2021Matrix}. That dimension
-    is at most $D$, so the exact count $D^{2}$ is a sharper statement than the
-    printed lower bound.
+    The local support spaces of a pure generalized valence-bond-solid state with
+    auxiliary algebra $\MN{k}$ have dimension $k^{2}$ on long intervals, and
+    they are the kernels of the open-interval Hamiltonian
+    \cite[lines~1505--1510 and 1545--1558]{Nachtergaele1996Spectral}; the
+    growth argument on an open chain is
+    \cite[lines~1211--1233]{PerezGarcia2007Matrix}. The review states that
+    the open-boundary degeneracy is at least the square of the dimension of
+    the irreducible projective representation carried by the boundary
+    \cite[line~1174]{Cirac2021Matrix}. That dimension is at most $D$, so the
+    exact count $D^{2}$ is sharper than the review's lower bound.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:open_parent_hamiltonian_kernel_ground_space, thm:ground_space_map_injective_blk}
-    Block injectivity at length $L_{0}$ persists to every length $N\geq L_{0}$,
-    so $\Gamma_{N}$ is injective and $\dim G_{N}(A)=\dim\MN{D}=D^{2}$. The
-    canonical $\ell^{2}$ identification is a linear isomorphism, and
+    Block injectivity at length $L$ makes $\Gamma_{L}$ injective, so
+    $\dim G_{L}(A)=\dim\MN{D}=D^{2}$, and the canonical $\ell^{2}$
+    identification is a linear isomorphism. Block injectivity at length
+    $L_{0}$ persists to every length $N\geq L_{0}$, and
     Theorem~\ref{thm:open_parent_hamiltonian_kernel_ground_space} identifies
     the kernel with $G_{N}^{\mathrm{ES}}(A)$.
 \end{proof}

@@ -38,6 +38,8 @@ state of the parent Hamiltonian.
   word-span fullness
 * `MPSTensor.groundSpaceMap_injective_of_isNBlkInjective` — injectivity at a
   block-injective length
+* `MPSTensor.groundSpace_finrank_eq_of_isNBlkInjective` — \(\dim G_L(A) = D^2\) at a
+  block-injective length
 * `MPSTensor.groundSpace_finrank_eq` — dimension equals \(D^2\)
 * `MPSTensor.groundSpace_intersection` — the intersection property
 
@@ -288,6 +290,15 @@ theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D}
     Function.Injective (groundSpaceMap A L₀) := by
   apply groundSpaceMap_injective_of_wordSpan_eq_top
   exact (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
+
+/-- Under block injectivity at length \(L\), the ground space \(G_L(A)\) has
+dimension \(D^2\): the map \(Γ_L\) is injective on \(M_D(ℂ)\). -/
+theorem groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L) :
+    Module.finrank ℂ (groundSpace A L) = D ^ 2 := by
+  rw [groundSpace, LinearMap.finrank_range_of_inj
+    (groundSpaceMap_injective_of_isNBlkInjective hInj), Module.finrank_matrix]
+  simp [pow_two]
 
 /-- For an injective tensor, the ground space has dimension exactly \(D^2\) for
 \(L \geq 1\).
