@@ -29,12 +29,12 @@ abstracted — record why, so it is not re-proposed).
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
   `ker_starProjection_conj_linearIsometryEquiv` with
   `ContinuousLinearMap.ker_starProjection_rightFiberwiseMap` and a `change`.
-- **Seen:** four occurrences across two files:
+- **Seen:** five occurrences across two files:
   `openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
   `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
   and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
-  in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and the
-  prefix and suffix projections of
+  in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and
+  both `hP` and `hQ` in
   `norm_suffixGroundProjection_comp_prefixDifference_le_active` in
   `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`.
 - **Abstraction:** `MPSTensor.ker_starProjection_conj_of_rightFiberwiseMap` in

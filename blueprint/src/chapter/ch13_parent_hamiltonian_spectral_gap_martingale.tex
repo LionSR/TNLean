@@ -5970,7 +5970,8 @@ tensors.
     \leanok
     \uses{thm:open-hamiltonian-right-spectator-conjugacy,
         thm:fixed-volume-c3-projector-conjugacy,
-        lem:right-spectator-kernel-projection}
+        lem:right-spectator-kernel-projection,
+        thm:left_boundary_map_range_eq}
     Decompose a vector $v$ on $n+r$ sites according to the last $r$
     physical coordinates, writing $v_s$ for the vector on $n$ sites
     obtained by fixing these coordinates to $s\in\{0,\ldots,d-1\}^r$.
@@ -5996,7 +5997,8 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:fixed-volume-c3-projector-conjugacy}
+    \uses{thm:fixed-volume-c3-projector-conjugacy,
+        thm:spectator_boundary_hilbert_factorization}
     Write $\sigma$ for the reassociation isometry from the physical space
     on $K+(L+Q)$ sites to that on $(K+L)+Q$ sites. It preserves the ordered
     physical coordinates, so for every family $(S_n)_n$ of subspaces of the
