@@ -242,18 +242,21 @@
     and Hermitian matrices $R_q$ on
     $\mathcal H\otimes\mathcal H_{q,l}$ and $S_q$ on
     $\mathcal H_{q,r}\otimes\mathcal H$ such that, after conjugating the
-    middle site by this unitary, the first identity below holds on the first
-    pair and the second on the last pair:
+    middle site by this unitary, the interaction decomposes as
     \begin{align}
-        Q_A
+        Q_A\otimes\Id
          & =
-        \bigoplus_q(R_q\otimes\Id_{q,r}),
-        \notag \\
-        Q_A
-         & =
-        \bigoplus_q(\Id_{q,l}\otimes S_q).
-        \notag
+        \bigoplus_q(R_q\otimes\Id_{q,r})
+        \label{eq:two_site_parent_spatial_left}
     \end{align}
+    on the first pair and
+    \begin{align}
+        \Id\otimes Q_A
+         & =
+        \bigoplus_q(\Id_{q,l}\otimes S_q)
+        \label{eq:two_site_parent_spatial_right}
+    \end{align}
+    on the last pair.
     This is the spatial decomposition of
     \cite[Lemma~2.1]{Beigi2012Classification} for the canonical parent
     interaction.

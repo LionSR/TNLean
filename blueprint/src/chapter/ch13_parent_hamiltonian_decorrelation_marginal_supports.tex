@@ -416,10 +416,12 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \begin{align}
         \widehat P_{XB}\widehat P_{AX}
          & =\widehat P_{XB}P\widehat P_{AX}
-        +\widehat P_{XB}(\Id-P)\widehat P_{AX} =P+0 =P.
-        \notag
+        +\widehat P_{XB}(\Id-P)\widehat P_{AX} \notag \\
+         & =P+0 =P,
+        \label{eq:parent_support_product_xb_ax_split}
     \end{align}
-    Here the second equality uses the support-absorption identities and
+    where $\widehat P_{XB}P\widehat P_{AX}=P$ by the support-absorption identities and
+    $\widehat P_{XB}(\Id-P)\widehat P_{AX}=0$ by
     (\ref{eq:parent_support_complementary_zero}). The same calculation with
     the two factors reversed, using
     (\ref{eq:parent_reverse_support_complementary_zero}), gives
