@@ -850,17 +850,32 @@ change the local dimension act on single sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the protocol, a local channel protocol $\Psi$ of depth
-    $T$ has a dual $\Psi^\dagger$ with
+    Write $\rho=\bigotimes_i\sigma_i$ and $\sigma=\Psi(\rho)$ for a local
+    channel protocol $\Psi$ of depth $T$. By induction on the protocol,
+    $\Psi$ has a dual $\Psi^\dagger$ with
     $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
-    on $X$ to operators acting on the sites within distance $T$ of $X$ and is
-    multiplicative on operators acting on sets whose neighbourhoods of radius
-    $T$ are disjoint. For an onsite channel this is
+    on $X$ to operators acting on the sites within distance $T$ of $X$, and
+    that satisfies
+    \begin{align}
+        \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
+        \label{eq:ldp_conversion_dual_mul}
+    \end{align}
+    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
+    disjoint. For an onsite channel this is
     Lemma~\ref{lem:ldp_onsite_channel_locality}; a channel layer adds one to
-    the radius as in the proof of
-    Lemma~\ref{lem:ldp_channel_light_cone_correlations}, and an onsite
-    channel keeps it. The factorization in the product state then concludes
-    as in that lemma.
+    the radius, by Lemma~\ref{lem:ldp_channel_light_cone} for the support and
+    as in the proof of Lemma~\ref{lem:ldp_channel_light_cone_correlations}
+    for (\ref{eq:ldp_conversion_dual_mul}), and an onsite channel keeps it.
+    If $Z$ and $Z'$ act on sets at distance larger than $2T$, then
+    $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and the
+    factorization of the product density $\rho$ gives
+    \begin{align}
+        \Tr(\sigma ZZ') & =\Tr\bigl(\rho\,\Psi^\dagger(ZZ')\bigr)
+        =\Tr\bigl(\rho\,\Psi^\dagger(Z)\Psi^\dagger(Z')\bigr) \notag \\
+                        & =\Tr\bigl(\rho\,\Psi^\dagger(Z)\bigr)
+        \Tr\bigl(\rho\,\Psi^\dagger(Z')\bigr)
+        =\Tr(\sigma Z)\Tr(\sigma Z'). \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
