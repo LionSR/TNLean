@@ -1445,6 +1445,29 @@ abstracted — record why, so it is not re-proposed).
   transported by `complexOfRing`. When more words or another length are
   needed, use `MPSTensor.isNormal_of_complexOfRing_single` instead.
 
+### inner product of combinations of orthogonal sequences — promoted
+- **Pattern:**
+  ```lean
+  rw [sum_star_sum_mul_sum (fun j τ => a j * F j τ) (fun j τ => b j * G j τ)]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [Finset.sum_eq_single j]
+  · calc _ = star (a j) * b j * ∑ τ, star (F j τ) * G j τ := by
+          rw [Finset.mul_sum]
+          exact Finset.sum_congr rfl fun τ _ => by rw [star_mul']; ring
+      _ = _ := ...
+  ```
+- **Seen:** eight occurrences across two files (2026-09-26): six in
+  `TNLean/MPS/Preparation/OrthogonalBlockError.lean` (the norm, target-norm and
+  overlap sums of `norm_nonNormalApproxOverlap_blockSum`, diagonal and cross terms)
+  and two in `TNLean/MPS/Preparation/DiagonalPolar.lean`.
+- **Abstraction:** `MPSTensor.sum_star_mul_mul_mul`, `MPSTensor.sum_star_mul_mul`
+  (scalars out of `∑_τ conj(a F τ) (b G τ)`), and
+  `MPSTensor.sum_star_sum_mul_sum_of_orthogonal` (the whole inner product
+  `∑ⱼ conj(aⱼ) bⱼ cⱼ` from `⟨Fⱼ, Gⱼ'⟩ = δⱼⱼ' cⱼ`) in
+  `TNLean/MPS/Preparation/DiagonalPolar.lean`.
+- **Notes:** all eight call sites are refactored; the three sums of
+  `norm_nonNormalApproxOverlap_blockSum` each became two lines.
+
 ## Completed refactors
 
 ### Appending a tuple endpoint under `List.ofFn`
