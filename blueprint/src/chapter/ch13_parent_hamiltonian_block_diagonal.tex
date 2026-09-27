@@ -185,10 +185,17 @@ periodic boundary step of \cite[Theorem~IV.16]{Cirac2021Matrix}.
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup,
         MPSTensor.groundSpaceES_toTensorFromBlocks_eq_iSup}
     \leanok
-    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum, lem:local_ground_space_block_le_assembled}
+    \uses{def:ground_space_parent, def:ground_space_es,
+        lem:block_diagonal_boundary_condition_sum, lem:local_ground_space_block_le_assembled}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$. Then, for every length $L$,
-    $G_L(B)=\bigvee_{j=1}^gG_L(A_j)$.
+    \begin{align}
+        G_L(B) & =\bigvee_{j=1}^gG_L(A_j), \notag \\
+        G_L^{\mathrm{ES}}(B) & =\bigvee_{j=1}^gG_L^{\mathrm{ES}}(A_j).
+        \notag
+    \end{align}
+    The second identity is the image of the first under the canonical
+    identification $\iota_L$, using $G_L^{\mathrm{ES}}(A)=\iota_L(G_L(A))$.
 \end{theorem}
 
 \begin{proof}
@@ -198,6 +205,8 @@ periodic boundary step of \cite[Theorem~IV.16]{Cirac2021Matrix}.
     $\Gamma_L^B(X) =\sum_{j=1}^g\Gamma_L^{A_j}(\mu_j^LX_j)$.
     This proves $G_L(B)\subseteq\bigvee_jG_L(A_j)$. The reverse inclusion is
     Lemma~\ref{lem:local_ground_space_block_le_assembled} for each block $j$.
+    Applying $\iota_L$, which preserves finite sums of subspaces, gives
+    $G_L^{\mathrm{ES}}(B)=\bigvee_jG_L^{\mathrm{ES}}(A_j)$.
 \end{proof}
 
 \begin{lemma}[Periodic constraints for a block-diagonal tensor]
