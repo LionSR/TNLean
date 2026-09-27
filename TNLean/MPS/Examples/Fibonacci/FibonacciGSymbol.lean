@@ -29,20 +29,18 @@ and 1341 state the fusion rules `O_a O_b = ∑_c N_{ab}^c O_c` for the operators
 
 **Formalized here.** The source's tensor over the physical letters (plaquette, edge label), and
 the review's tensor at the edge label `τ`, both over `ℂ` with the factors `v_a = d_a^{1/2}`.
-For the source's tensor at edge label `τ` on every site, a diagonal bond similarity
-`h(x', x) = (v_{x'}/v_x)^{1/2}` carries every letter to the F-symbol blocks `fibOne`, `fibTau`, so
-the periodic operators are equal at every length and the fusion rules of
-`isMPOFusionAlgebra_fibBlock` are the source's fusion rules on that sector. For the review's
+A diagonal bond similarity `h(x', x) = (v_{x'}/v_x)^{1/2}` carries every letter of the source's
+tensor to the F-symbol blocks `fibOne`, `fibTau` extended to the four letters: at edge label `τ`
+to their letters, at edge label `1`, where the plaquettes on both sides of the edge coincide, to
+the diagonal matrix units `E_{pp}` at the bond letter `p`. So the periodic operators are equal at
+every length. The four compression data of the products of the F-symbol blocks extend to the
+sixteen letters of the extended products with the same gauges, block upper triangular with a
+nonzero nilpotent remainder at edge label `1`, and the source's blocks satisfy the Fibonacci
+fusion rules on the full alphabet (`isMPOFusionAlgebra_fibStringNetTensor`). For the review's
 prefactor the periodic operator is the congruence `O_a^{rev} = W^{-1/2} O_a W^{-1/2}`,
 `W = diag ∏_k d_{x_k}`, of the F-symbol operator `O_a`; it fails the fusion rules already at one
 site, while the composed operator `O_a^{rev} W = W^{-1/2} O_a W^{1/2}`, a similarity transform of
 `O_a`, satisfies them.
-
-**Scope restriction (edge labels τ):** the operator identities for the source's tensor are
-stated on the configurations whose vertical edge labels are all `τ`. The source's tensor also
-has edge label `1`, where the two plaquettes on each side of the edge coincide, and its fusion
-rules on the full alphabet of four letters per site are not proved here. Documented, with the
-elimination plan, in `docs/paper-gaps/bmwshv17_fibonacci_block_entries_provenance.tex`.
 
 **Local fix (review normalization):** read literally in the orthonormal basis of plaquette
 configurations, the review's prefactor `1/√(d_A d_D)` gives operators that contradict the fusion
@@ -67,6 +65,8 @@ the pair of plaquettes above and below the operator line, restricted to the admi
 * `FibonacciCompression.fibStringNetTensor`: the source's tensor `G^{abc}_{def} √(v_a v_b v_c v_d)`
   on the letters (plaquette, edge label).
 * `FibonacciCompression.fibStringNetEdgeTau`: its letters at edge label `τ`.
+* `FibonacciCompression.fibBlockFull`: the F-symbol blocks extended to the four letters, with
+  the diagonal matrix units at edge label `1`.
 * `FibonacciCompression.fibReviewTensor`: the review's tensor `(1/√(d_A d_D)) F` at edge label `τ`.
 
 ## Main results
@@ -76,8 +76,12 @@ the pair of plaquettes above and below the operator line, restricted to the admi
   blocks.
 * `FibonacciCompression.mpo_fibStringNetTensor_edgeTau`: on edge label `τ` the source's periodic
   operators are those of the F-symbol blocks.
-* `FibonacciCompression.isMPOFusionAlgebra_fibStringNetEdgeTau`: the source's blocks at edge label
-  `τ` form a fusion algebra with the Fibonacci fusion rules.
+* `FibonacciCompression.fibStringNetTensor_conj`, `FibonacciCompression.mpo_fibStringNetTensor`:
+  the diagonal bond similarity to the extended blocks on the full alphabet.
+* `FibonacciCompression.isMPOFusionAlgebra_fibBlockFull`: the extended blocks satisfy the
+  Fibonacci fusion rules.
+* `FibonacciCompression.isMPOFusionAlgebra_fibStringNetTensor`: the source's blocks form a fusion
+  algebra with the Fibonacci fusion rules (arXiv:1511.08090, `AnyonsPEPS.tex` line 1268).
 * `FibonacciCompression.mpo_fibReviewTensor`: the review's operator is `W^{-1/2} O_a W^{-1/2}`.
 * `FibonacciCompression.not_isMPOFusionAlgebra_fibReviewTensor`: the review's operators do not
   satisfy the fusion rules.
@@ -296,15 +300,325 @@ theorem mpo_fibStringNetTensor_edgeTau (f : Fin 2) (L : ℕ) (σ τ : Fin L → 
   rw [mpo_apply_comp]
   exact congrFun (congrFun (mpo_fibStringNetEdgeTau f L) σ) τ
 
-/-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` line 1268: the blocks `B_1`, `B_τ` of the source's
-tensor satisfy the Fibonacci fusion rules, here on edge label `τ` (the Scope restriction of the
-module header). This is `isMPOFusionAlgebra_fibBlock` transported along
-`mpo_fibStringNetEdgeTau`. -/
-theorem isMPOFusionAlgebra_fibStringNetEdgeTau :
-    IsMPOFusionAlgebra fibStringNetEdgeTau fibNim :=
-  isMPOFusionAlgebra_fibBlock.of_mpo_eq_mul_mul (fun _ => 1) (fun _ => 1)
+/-! ### Both edge labels -/
+
+/-- The physical letter with plaquette `x` and edge label `1`. -/
+def fibEdgeOneLetter : Fin 2 → Fin 4 := ![0, 2]
+
+theorem fibSiteLetter_fibEdgeOneLetter (x : Fin 2) :
+    fibSiteLetter (fibEdgeOneLetter x) = (x, 0) := by
+  fin_cases x <;> rfl
+
+/-- Every physical letter carries the edge label `1` or the edge label `τ`. -/
+theorem exists_fibEdgeOneLetter_or_fibEdgeTauLetter (i : Fin 4) :
+    (∃ x, i = fibEdgeOneLetter x) ∨ ∃ x, i = fibEdgeTauLetter x := by
+  fin_cases i
+  exacts [Or.inl ⟨0, rfl⟩, Or.inr ⟨0, rfl⟩, Or.inl ⟨1, rfl⟩, Or.inr ⟨1, rfl⟩]
+
+/-- A family of letters on the four physical letters (plaquette, edge label) that conserves the
+edge label: `T (x', x)` at edge label `τ`, `U (x', x)` at edge label `1`, and zero when the edge
+label changes, as for the source's tensor `fibStringNetTensor`. -/
+def fibEdgeGraded {α : Type*} [Zero α] (T U : Fin 2 → Fin 2 → α) (i j : Fin 4) : α :=
+  if (fibSiteLetter i).2 = (fibSiteLetter j).2 then
+    if (fibSiteLetter j).2 = 1 then T (fibSiteLetter i).1 (fibSiteLetter j).1
+    else U (fibSiteLetter i).1 (fibSiteLetter j).1
+  else 0
+
+section EdgeGraded
+
+variable {α : Type*} [Zero α] (T U : Fin 2 → Fin 2 → α)
+
+theorem fibEdgeGraded_edgeTau (x' x : Fin 2) :
+    fibEdgeGraded T U (fibEdgeTauLetter x') (fibEdgeTauLetter x) = T x' x := by
+  simp [fibEdgeGraded, fibSiteLetter_fibEdgeTauLetter]
+
+theorem fibEdgeGraded_edgeOne (x' x : Fin 2) :
+    fibEdgeGraded T U (fibEdgeOneLetter x') (fibEdgeOneLetter x) = U x' x := by
+  simp [fibEdgeGraded, fibSiteLetter_fibEdgeOneLetter]
+
+theorem fibEdgeGraded_edgeOne_edgeTau (x' x : Fin 2) :
+    fibEdgeGraded T U (fibEdgeOneLetter x') (fibEdgeTauLetter x) = 0 := by
+  simp [fibEdgeGraded, fibSiteLetter_fibEdgeOneLetter, fibSiteLetter_fibEdgeTauLetter]
+
+theorem fibEdgeGraded_edgeTau_edgeOne (x' x : Fin 2) :
+    fibEdgeGraded T U (fibEdgeTauLetter x') (fibEdgeOneLetter x) = 0 := by
+  simp [fibEdgeGraded, fibSiteLetter_fibEdgeOneLetter, fibSiteLetter_fibEdgeTauLetter]
+
+end EdgeGraded
+
+/-- The letter at edge label `1` of a block with bond letters `bond`: the diagonal matrix unit
+`E_{pp}` at the bond letter `p = (x', x)`, and zero when `(x', x)` is not a bond letter. -/
+def fibEdgeOneGolden {D : ℕ} (bond : Fin D → Fin 2 × Fin 2) (x' x : Fin 2) :
+    Matrix (Fin D) (Fin D) GoldenInt :=
+  Matrix.diagonal fun p => if bond p = (x', x) then 1 else 0
+
+/-- The trivial block on the four physical letters over `ℤ[σ]`: the letters of `fibOneGolden` at
+edge label `τ` and the diagonal matrix units at edge label `1`. -/
+def fibOneFullGolden : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) GoldenInt :=
+  fibEdgeGraded fibOneGolden (fibEdgeOneGolden (fibBondLetter 0))
+
+/-- The `τ` block on the four physical letters over `ℤ[σ]`. -/
+def fibTauFullGolden : Fin 4 → Fin 4 → Matrix (Fin 3) (Fin 3) GoldenInt :=
+  fibEdgeGraded fibTauGolden (fibEdgeOneGolden fibLetter)
+
+/-- The trivial block on the four physical letters. -/
+def fibOneFull : MPOTensor 4 2 := fun i j => complexOfGolden (fibOneFullGolden i j)
+
+/-- The `τ` block on the four physical letters. -/
+def fibTauFull : MPOTensor 4 3 := fun i j => complexOfGolden (fibTauFullGolden i j)
+
+/-- The F-symbol blocks `B_1`, `B_τ` extended to the four physical letters (plaquette, edge
+label): at edge label `τ` their letters are those of `fibBlock`, at edge label `1` the diagonal
+matrix units `E_{pp}` at the bond letter `p = (x', x)`. -/
+def fibBlockFull : (f : Fin 2) → MPOTensor 4 (fibBlockDim f)
+  | 0 => fibOneFull
+  | 1 => fibTauFull
+
+/-- At edge label `τ` the extended blocks are the F-symbol blocks. -/
+theorem fibBlockFull_edgeTau (f x' x : Fin 2) :
+    fibBlockFull f (fibEdgeTauLetter x') (fibEdgeTauLetter x) = fibBlock f x' x := by
+  fin_cases f
+  · exact congrArg complexOfGolden (fibEdgeGraded_edgeTau _ _ x' x)
+  · exact congrArg complexOfGolden (fibEdgeGraded_edgeTau _ _ x' x)
+
+/-- The entries of the extended blocks at edge label `1`. -/
+theorem fibBlockFull_edgeOne_apply (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) :
+    fibBlockFull f (fibEdgeOneLetter x') (fibEdgeOneLetter x) p q =
+      if p = q ∧ fibBondLetter f p = (x', x) then 1 else 0 := by
+  have h : ∀ {D : ℕ} (bond : Fin D → Fin 2 × Fin 2) (p q : Fin D),
+      goldenToComplex (fibEdgeOneGolden bond x' x p q) =
+        if p = q ∧ bond p = (x', x) then 1 else 0 := by
+    intro D bond p q
+    rw [fibEdgeOneGolden, Matrix.diagonal_apply]
+    split_ifs <;> simp_all
+  fin_cases f
+  · exact (congrArg (fun M => goldenToComplex (M p q)) (fibEdgeGraded_edgeOne _ _ x' x)).trans
+      (h _ p q)
+  · exact (congrArg (fun M => goldenToComplex (M p q)) (fibEdgeGraded_edgeOne _ _ x' x)).trans
+      (h _ p q)
+
+/-- The extended blocks vanish when the edge label changes. -/
+theorem fibBlockFull_edgeOne_edgeTau (f x' x : Fin 2) :
+    fibBlockFull f (fibEdgeOneLetter x') (fibEdgeTauLetter x) = 0 := by
+  fin_cases f
+  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeOne_edgeTau _ _ x' x)).trans
+      (map_zero _)
+  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeOne_edgeTau _ _ x' x)).trans
+      (map_zero _)
+
+theorem fibBlockFull_edgeTau_edgeOne (f x' x : Fin 2) :
+    fibBlockFull f (fibEdgeTauLetter x') (fibEdgeOneLetter x) = 0 := by
+  fin_cases f
+  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeTau_edgeOne _ _ x' x)).trans
+      (map_zero _)
+  · exact (congrArg complexOfGolden (fibEdgeGraded_edgeTau_edgeOne _ _ x' x)).trans
+      (map_zero _)
+
+/-- At edge label `1` the G-symbol forces the right bond letter to equal the left one:
+`G^{abc}_{d1f} = δ_{(a,d),(b,c)} / (v_b v_c)` when `(b, c)` is a bond letter of the block `f`. -/
+theorem fibGSymbolGolden_edgeOne :
+    ∀ (f : Fin 2) (p q : Fin (fibBlockDim f)) (b c : Fin 2), fibBondLetter f p = (b, c) →
+      fibGSymbolGolden (fibBondLetter f q).1 b c (fibBondLetter f q).2 0 f =
+        if q = p then fibQuantumDimInvSqrt b * fibQuantumDimInvSqrt c else 0 := by
+  intro f
+  fin_cases f <;> decide
+
+/-- Bridge: on edge label `1` the diagonal bond similarity `h` leaves the letters of the source's
+tensor unchanged, and they are the diagonal matrix units of `fibBlockFull`:
+`G^{bbc}_{c1f} v_b v_c = 1` whenever `(b, c)` is a bond letter of the block `f`. -/
+theorem fibStringNetTensor_edgeOne_conj (f b c : Fin 2) :
+    Matrix.diagonal (fibStringNetGauge f) *
+        fibStringNetTensor f (fibEdgeOneLetter b) (fibEdgeOneLetter c) *
+        Matrix.diagonal (fibStringNetGauge f)⁻¹ =
+      fibBlockFull f (fibEdgeOneLetter b) (fibEdgeOneLetter c) := by
+  ext p q
+  rw [Matrix.mul_diagonal, Matrix.diagonal_mul, fibBlockFull_edgeOne_apply]
+  simp only [fibStringNetTensor, Matrix.of_apply, fibSiteLetter_fibEdgeOneLetter, true_and,
+    Pi.inv_apply]
+  by_cases hp : fibBondLetter f p = (b, c)
+  · rw [if_pos hp, fibGSymbol, fibGSymbolGolden_edgeOne f p q b c hp]
+    by_cases hq : q = p
+    · subst hq
+      rw [if_pos rfl, if_pos ⟨rfl, hp⟩, map_mul, goldenToComplex_fibQuantumDimInvSqrt,
+        goldenToComplex_fibQuantumDimInvSqrt, hp, sqrt_fibLoopFactor_mul, fibLoopFactor_eq_sq,
+        fibLoopFactor_eq_sq]
+      have h1 := (fibLoopFactorSqrt_pos b).ne'
+      have h2 := (fibLoopFactorSqrt_pos c).ne'
+      have hg := fibStringNetGauge_ne_zero f q
+      push_cast
+      field_simp
+    · rw [if_neg hq, if_neg fun h => hq h.1.symm, map_zero]
+      simp
+  · rw [if_neg hp, if_neg fun h => hp h.2]
+    simp
+
+/-- Bridge: the diagonal bond similarity `h(u, l) = (v_u/v_l)^{1/2}` carries every letter of the
+source's tensor (arXiv:1511.08090, `AnyonsPEPS.tex` lines 1262–1265), at both edge labels, to
+the letter of the extended F-symbol block: `h S_f^{ij} h⁻¹ = B_f^{ij}`. -/
+theorem fibStringNetTensor_conj (f : Fin 2) (i j : Fin 4) :
+    Matrix.diagonal (fibStringNetGauge f) * fibStringNetTensor f i j *
+        Matrix.diagonal (fibStringNetGauge f)⁻¹ = fibBlockFull f i j := by
+  rcases exists_fibEdgeOneLetter_or_fibEdgeTauLetter i with ⟨x', rfl⟩ | ⟨x', rfl⟩ <;>
+    rcases exists_fibEdgeOneLetter_or_fibEdgeTauLetter j with ⟨x, rfl⟩ | ⟨x, rfl⟩
+  · exact fibStringNetTensor_edgeOne_conj f x' x
+  · rw [fibBlockFull_edgeOne_edgeTau]
+    ext p q
+    simp [fibStringNetTensor, fibSiteLetter_fibEdgeOneLetter, fibSiteLetter_fibEdgeTauLetter]
+  · rw [fibBlockFull_edgeTau_edgeOne]
+    ext p q
+    simp [fibStringNetTensor, fibSiteLetter_fibEdgeOneLetter, fibSiteLetter_fibEdgeTauLetter]
+  · rw [fibBlockFull_edgeTau]
+    exact fibStringNetEdgeTau_conj f x' x
+
+/-- Bridge: the periodic operators of the source's blocks (arXiv:1511.08090, `AnyonsPEPS.tex`
+lines 1262–1268) on the four physical letters equal those of the extended F-symbol blocks at
+every length, by `MPOTensor.mpo_eq_of_diagonal_conj`. -/
+theorem mpo_fibStringNetTensor (f : Fin 2) (L : ℕ) :
+    mpo (fibStringNetTensor f) L = mpo (fibBlockFull f) L :=
+  mpo_eq_of_diagonal_conj _ (fibStringNetGauge_ne_zero f) (fibStringNetTensor_conj f) L
+
+/-! ### Fusion of the extended blocks
+
+The four compression data of `Fibonacci.lean` and `FibonacciUnit.lean` extend to the sixteen
+letters of the stacked products of the extended blocks with the same gauges. At the letters with
+edge label `τ` the conjugated letters are the recorded block-diagonal ones; at the letters with
+edge label `1` they are block upper triangular, with the edge-label-`1` letters of the target
+blocks on the diagonal and further entries only in the columns of the zero slots, so the
+remainder no longer vanishes but the trace identity of the compression still holds. -/
+
+/-- The conjugated letters of a stacked product on the four physical letters: the recorded
+letters `Kτ` of the product of the F-symbol blocks at edge label `τ` (indexed by the pair
+alphabet `Fin 4`), the letters `K₁` at edge label `1`, and zero when the edge label changes. -/
+def fibConjFull {n : ℕ} (Kτ : Fin 4 → Matrix (Fin n) (Fin n) GoldenInt)
+    (K₁ : Fin 2 → Fin 2 → Matrix (Fin n) (Fin n) GoldenInt) :
+    Fin 4 → Fin 4 → Matrix (Fin n) (Fin n) GoldenInt :=
+  fibEdgeGraded (fun x' x => Kτ (finProdFinEquiv (x', x))) K₁
+
+/-- The conjugated letters of `1 ⊗ 1` at edge label `1`. -/
+def fibOneOneEdgeOneConjGolden : Fin 2 → Fin 2 → Matrix (Fin 4) (Fin 4) GoldenInt
+  | 0, 0 => Matrix.single 0 0 1 + Matrix.single 0 2 1 + Matrix.single 0 3 1
+  | 1, 1 => Matrix.single 1 1 1
+  | _, _ => 0
+
+/-- The conjugated letters of `1 ⊗ τ` at edge label `1`. -/
+def fibOneTauEdgeOneConjGolden : Fin 2 → Fin 2 → Matrix (Fin 6) (Fin 6) GoldenInt
+  | 0, 1 => Matrix.single 0 0 1 + Matrix.single 0 3 1 + Matrix.single 0 4 1 + Matrix.single 0 5 1
+  | 1, 0 => Matrix.single 1 1 1 + Matrix.single 1 5 ⟨0, 1, 0, 1⟩
+  | 1, 1 => Matrix.single 2 2 1 + Matrix.single 2 5 (-1)
+  | _, _ => 0
+
+/-- The conjugated letters of `τ ⊗ 1` at edge label `1`. -/
+def fibTauOneEdgeOneConjGolden : Fin 2 → Fin 2 → Matrix (Fin 6) (Fin 6) GoldenInt
+  | 0, 1 => Matrix.single 0 0 1 + Matrix.single 0 5 ⟨-1, 0, 1, 0⟩
+  | 1, 0 => Matrix.single 1 1 1 + Matrix.single 1 3 1 + Matrix.single 1 4 ⟨0, -1, 0, 0⟩ +
+      Matrix.single 1 5 ⟨0, 0, 0, -1⟩
+  | 1, 1 => Matrix.single 2 2 1 + Matrix.single 2 5 ⟨1, 0, -1, 0⟩
+  | _, _ => 0
+
+/-- The conjugated letters of `τ ⊗ τ` at edge label `1`. -/
+def fibTauTauEdgeOneConjGolden : Fin 2 → Fin 2 → Matrix (Fin 9) (Fin 9) GoldenInt
+  | 0, 0 => Matrix.single 0 0 1 + Matrix.single 0 8 ⟨-1, 0, -1, 0⟩
+  | 0, 1 => Matrix.single 2 2 1 + Matrix.single 2 7 ⟨0, 0, 0, 1⟩ + Matrix.single 2 8 ⟨-1, 0, 1, 0⟩
+  | 1, 0 => Matrix.single 3 3 1 + Matrix.single 3 7 ⟨0, 0, -1, 0⟩
+  | 1, 1 => Matrix.single 1 1 1 + Matrix.single 1 5 ⟨0, 0, 0, -1⟩ +
+      Matrix.single 1 6 ⟨0, 0, -1, 0⟩ + Matrix.single 4 4 1 + Matrix.single 4 5 ⟨0, 0, 0, 1⟩ + Matrix.single 4 6 ⟨0, 0, 1, 0⟩ +
+      Matrix.single 4 8 1
+
+/-- The compression datum of `1 ⊗ 1` on the four physical letters: the gauge of
+`fibOneOne_compression`, with a nonzero nilpotent remainder at edge label `1`. -/
+def fibOneOneFull_compression :
+    MultiBlockCompression (MPOTensor.mulTensor fibOneFull fibOneFull).toMPSTensor oneSlot
+      (fun _ : Unit => fibOneFull.toMPSTensor) :=
+  MultiBlockCompression.ofGolden 2 (unitOrd 2) (unitCoord 2 2)
+    (fun a => mulGoldenTensor fibOneFullGolden fibOneFullGolden a.divNat a.modNat)
+    (fun _ => mulTensor_complexOfGolden fibOneFullGolden fibOneFullGolden _ _)
+    (fun _ a => fibOneFullGolden a.divNat a.modNat) (fun _ _ => rfl)
+    fibOneOneGaugeGolden fibOneOneGaugeInvGolden fibOneOneGauge_mul_inv fibOneOneGaugeInv_mul
+    (fun a => fibConjFull fibOneOneConjGolden fibOneOneEdgeOneConjGolden a.divNat a.modNat)
+    (by decide +kernel) (by decide +kernel)
+    (fun a s _ p q => by cases s; revert a p q; decide +kernel) (by decide +kernel)
+
+/-- The compression datum of `1 ⊗ τ` on the four physical letters. -/
+def fibOneTauFull_compression :
+    MultiBlockCompression (MPOTensor.mulTensor fibOneFull fibTauFull).toMPSTensor oneSlot
+      (fun _ : Unit => fibTauFull.toMPSTensor) :=
+  MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3)
+    (fun a => mulGoldenTensor fibOneFullGolden fibTauFullGolden a.divNat a.modNat)
+    (fun _ => mulTensor_complexOfGolden fibOneFullGolden fibTauFullGolden _ _)
+    (fun _ a => fibTauFullGolden a.divNat a.modNat) (fun _ _ => rfl)
+    fibOneTauGaugeGolden fibOneTauGaugeInvGolden fibOneTauGauge_mul_inv fibOneTauGaugeInv_mul
+    (fun a => fibConjFull fibOneTauConjGolden fibOneTauEdgeOneConjGolden a.divNat a.modNat)
+    (by decide +kernel) (by decide +kernel)
+    (fun a s _ p q => by cases s; revert a p q; decide +kernel) (by decide +kernel)
+
+/-- The compression datum of `τ ⊗ 1` on the four physical letters. -/
+def fibTauOneFull_compression :
+    MultiBlockCompression (MPOTensor.mulTensor fibTauFull fibOneFull).toMPSTensor oneSlot
+      (fun _ : Unit => fibTauFull.toMPSTensor) :=
+  MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3)
+    (fun a => mulGoldenTensor fibTauFullGolden fibOneFullGolden a.divNat a.modNat)
+    (fun _ => mulTensor_complexOfGolden fibTauFullGolden fibOneFullGolden _ _)
+    (fun _ a => fibTauFullGolden a.divNat a.modNat) (fun _ _ => rfl)
+    fibTauOneGaugeGolden fibTauOneGaugeInvGolden fibTauOneGauge_mul_inv fibTauOneGaugeInv_mul
+    (fun a => fibConjFull fibTauOneConjGolden fibTauOneEdgeOneConjGolden a.divNat a.modNat)
+    (by decide +kernel) (by decide +kernel)
+    (fun a s _ p q => by cases s; revert a p q; decide +kernel) (by decide +kernel)
+
+/-- The golden letters of the extended blocks, indexed by the label. -/
+def fibBlockFullGolden : (s : Fin 2) → Fin 4 → Fin 4 →
+    Matrix (Fin (fibBlockDim s)) (Fin (fibBlockDim s)) GoldenInt
+  | 0 => fibOneFullGolden
+  | 1 => fibTauFullGolden
+
+/-- The compression datum of `τ ⊗ τ` on the four physical letters, onto both extended blocks. -/
+def fibTauTauFull_compression :
+    MultiBlockCompression (MPOTensor.mulTensor fibTauFull fibTauFull).toMPSTensor fibSlots
+      (fun s => (fibBlockFull s).toMPSTensor) :=
+  MultiBlockCompression.ofGolden 4 fibOrd fibCoord
+    (fun a => mulGoldenTensor fibTauFullGolden fibTauFullGolden a.divNat a.modNat)
+    (fun _ => mulTensor_complexOfGolden fibTauFullGolden fibTauFullGolden _ _)
+    (fun s a => fibBlockFullGolden s a.divNat a.modNat)
+    (fun s _ => by fin_cases s <;> rfl)
+    fibGaugeGolden fibGaugeInvGolden fibGauge_mul_inv fibGaugeInv_mul
+    (fun a => fibConjFull fibConjGolden fibTauTauEdgeOneConjGolden a.divNat a.modNat)
+    (by decide +kernel) (by decide +kernel)
+    (fun a s _ p q => by fin_cases s <;> revert a p q <;> decide +kernel) (by decide +kernel)
+
+/-- **The Fibonacci fusion rules of the extended blocks.** On the four physical letters
+(plaquette, edge label), the periodic operators of the extended F-symbol blocks satisfy
+`O_1 O_1 = O_1`, `O_1 O_τ = O_τ O_1 = O_τ` and `O_τ O_τ = O_1 + O_τ` at every positive length. -/
+theorem isMPOFusionAlgebra_fibBlockFull : IsMPOFusionAlgebra fibBlockFull fibNim := by
+  intro a b L hL
+  match a, b with
+  | 0, 0 =>
+    have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibOneFull)
+      fibOneOneFull_compression L hL
+    rw [Finset.sum_singleton] at h
+    simpa [fibBlockFull, fibNim, Fin.sum_univ_two] using h
+  | 0, 1 =>
+    have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibTauFull)
+      fibOneTauFull_compression L hL
+    rw [Finset.sum_singleton] at h
+    simpa [fibBlockFull, fibNim, Fin.sum_univ_two] using h
+  | 1, 0 =>
+    have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fun _ : Unit => fibTauFull)
+      fibTauOneFull_compression L hL
+    rw [Finset.sum_singleton] at h
+    simpa [fibBlockFull, fibNim, fibFusionMatrix, Fin.sum_univ_two] using h
+  | 1, 1 =>
+    have h := mpo_mul_eq_sum_of_multiBlockCompression (C := fibBlockFull)
+      fibTauTauFull_compression L hL
+    simpa [fibBlockFull, fibNim, fibFusionMatrix, Fin.sum_univ_two] using h
+
+/-- Source: arXiv:1511.08090, `AnyonsPEPS.tex` line 1268: the blocks `B_1`, `B_τ` of the
+string-net operator tensor `G^{abc}_{def} √(v_a v_b v_c v_d)` satisfy the Fibonacci fusion rules,
+on the full alphabet of four physical letters (plaquette, edge label) per site. This is
+`isMPOFusionAlgebra_fibBlockFull` transported along `mpo_fibStringNetTensor`. -/
+theorem isMPOFusionAlgebra_fibStringNetTensor :
+    IsMPOFusionAlgebra fibStringNetTensor fibNim :=
+  isMPOFusionAlgebra_fibBlockFull.of_mpo_eq_mul_mul (fun _ => 1) (fun _ => 1)
     (fun _ _ => Matrix.one_mul 1) fun a L _ => by
-      rw [mpo_fibStringNetEdgeTau, Matrix.one_mul, Matrix.mul_one]
+      rw [mpo_fibStringNetTensor, Matrix.one_mul, Matrix.mul_one]
 
 /-! ### The review's prefactor -/
 
