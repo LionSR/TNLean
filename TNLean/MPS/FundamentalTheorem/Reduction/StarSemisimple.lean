@@ -125,9 +125,7 @@ theorem isSemisimpleModule_wordModule_of_conjTranspose_mem_adjoin (B : MPSTensor
       intro v hv
       rw [← Matrix.mulVec_mulVec]
       exact hX _ (hY v hv)
-  let WS : Submodule S.toSubalgebra (Fin D → ℂ) :=
-    { W with smul_mem' := fun X v hv => hWinv X.1 X.2 v hv }
-  obtain ⟨WS', hcompl⟩ := exists_isCompl WS
+  obtain ⟨WS', hcompl⟩ := exists_isCompl (S.submoduleOfInvariant W hWinv)
   set N : Submodule ℂ B.WordModule := (WS'.restrictScalars ℂ).comap (e : _ →ₗ[ℂ] _) with hNdef
   have hN : ∀ (i : Fin d), ∀ x ∈ N, (ofWord [i] : WordAlgebra d) • x ∈ N := by
     intro i x hx
