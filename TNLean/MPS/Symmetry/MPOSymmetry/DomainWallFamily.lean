@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.LSymbolDomainWall
+import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
 
 /-!
@@ -150,11 +151,24 @@ theorem prod_eq_inv_cyclicInvariant (hB : ad.IsDomainWallFamily e B)
   rw [hB.prod_eq_prod_lSymbol fd hA hperm hg x, ← LSymbol.prod_div_eq_inv_cyclicInvariant
     (isCompatible_lSymbol (fd := fd) (ad := ad) hF hA hD hperm) x hg, Units.coe_prod]
 
+/-- **The interchange phase is the domain-wall phase of the anomaly** (arXiv:2405.00439,
+`Intequiv`, `Papers/2405.00439/MPU-DW.tex` lines 2013--2023): for `g` of finite order,
+`∏_{k<o(g)} B^g_{g^k(gx), g^k x} = ∏_{i=1}^{o(g)} ω⁻¹(g,g^i,g)`, the phase
+`TNLean.Algebra.ScalarThreeCochain.domainWallPhase` of the anomaly three-cochain. -/
+theorem prod_eq_domainWallPhase (hB : ad.IsDomainWallFamily e B)
+    (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
+    (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g : G) (x : X) :
+    ∏ k ∈ Finset.range (orderOf g), B g (g ^ k • g • x) (g ^ k • x) =
+      (ScalarThreeCochain.domainWallPhase fd.omega g : ℂ) := by
+  rw [hB.prod_eq_inv_cyclicInvariant fd hF hA hD hperm (pow_orderOf_eq_one g) x,
+    ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant]
+
 /-- **The subgroup fixing two blocks acts projectively on the domain walls between them**
 (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2028--2036): for `a, b` fixing `y` and
 `z`, `B^a_{y,z} B^b_{y,z} = α(a, b) B^{ab}_{y,z}` with the two-cocycle
 `α(a, b) = L^y_{a,b} / L^z_{a,b}` of `TNLean.Algebra.LSymbol.ratioCocycle_isCocycle`. The source
-states this on the subgroup fixing every block, which is contained in the subgroup here. -/
+states this on the subgroup fixing every block, which is contained in the subgroup here; see
+`docs/paper-gaps/gs24_unbroken_subgroup_stabilizer.tex` for the stabilizer reading. -/
 theorem mul_eq_of_fixed (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {y z : X}
     (a b : fixingSubgroup G ({y, z} : Set X)) :
