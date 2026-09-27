@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.IsometricChain
-import Mathlib.LinearAlgebra.Matrix.Rank
+import QICLean.Algebra.MatrixUnitaryBetween
 
 /-!
 # Bond dimensions of the successive-decomposition representation
@@ -57,7 +57,7 @@ where the sweep starts: in the chain, bond `k` has dimension at most
   minimal resources)".
 -/
 
-open scoped BigOperators Matrix ComplexOrder
+open scoped Matrix
 
 namespace OBCChainTensor
 
@@ -79,10 +79,7 @@ theorem le_mul_of_sum_conjTranspose_mul_eq_one {a b : ℕ}
     ext β β'
     simp only [S, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.sum_apply, Matrix.of_apply]
     rw [Fintype.sum_prod_type, Finset.sum_comm]
-  calc b = (1 : Matrix (Fin b) (Fin b) ℂ).rank := by rw [Matrix.rank_one, Fintype.card_fin]
-    _ = S.rank := by rw [← hS, Matrix.rank_conjTranspose_mul_self]
-    _ ≤ Fintype.card (Fin a × Fin d) := Matrix.rank_le_card_height S
-    _ = a * d := by simp
+  simpa using Matrix.IsIsometry.card_le S hS
 
 /-- A site of an open chain with `∑_i A_i^† A_i = 1` has right bond at most `d`
 times its left bond. See `le_mul_of_sum_conjTranspose_mul_eq_one`. -/
