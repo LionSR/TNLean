@@ -13,11 +13,11 @@ import TNLean.MPS.MPDO.OperatorFromWordTrace
 /-!
 # CZY: the stacked square as a nonsplit compression onto the identity
 
-**Source.** arXiv:2509.03600, main.tex lines 219–240: the stacked bond-four tensor `Ã_0` of
-two copies of the CZY operator is brought by a change of virtual basis to `A_0 ⊕ 0` with a
-non-injective bond-three tensor `A_0`, which "cannot be further decomposed into a direct sum of
-injective MPOs"; on periodic boundary conditions it generates the identity, "as expected from
-`(U_CZY)² = 1`".
+**Source.** arXiv:2509.03600, `References/2509.03600/main.tex` lines 219–240: the stacked
+bond-four tensor `Ã_0` of two copies of the CZY operator is brought by a change of virtual
+basis to `A_0 ⊕ 0` with a non-injective bond-three tensor `A_0`, which "cannot be further
+decomposed into a direct sum of injective MPOs"; on periodic boundary conditions it generates
+the identity, "as expected from `(U_CZY)² = 1`".
 
 **Formalized here.** The stacked tensor is an instance of the multi-block asymmetric
 compression theorem with the single target the bond-one identity tensor `δ` and three zero

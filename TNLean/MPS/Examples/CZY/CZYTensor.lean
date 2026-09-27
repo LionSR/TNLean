@@ -11,11 +11,12 @@ import TNLean.MPS.MPDO.OperatorCyclicSum
 
 **Source.** Liu, Molnár, Sun, Verstraete, Kato, Lootens, *Trading Mathematical for Physical
 Simplicity: Bialgebraic Structures in Matrix Product Operator Symmetries*, arXiv:2509.03600,
-main.tex lines 198–223: the symmetry `U_CZY = ∏ CZ_{i,i+1} ∏ Z_i X_i` of the Levin–Gu edge
-Hamiltonian is the matrix product operator whose only nonzero components are
-`A_1^{01} = [[1,1],[0,0]]` and `A_1^{10} = [[0,0],[-1,1]]`, the first physical index being the
-output (ket) and the second the input (bra); the product of two copies is the bond-four tensor
-`Ã_0^{00} = A_1^{01} ⊗ A_1^{10}`, `Ã_0^{11} = A_1^{10} ⊗ A_1^{01}`, all other components zero.
+`References/2509.03600/main.tex` lines 198–223: the symmetry `U_CZY = ∏ CZ_{i,i+1} ∏ Z_i X_i`
+of the Levin–Gu edge Hamiltonian is the matrix product operator whose only nonzero components
+are `A_1^{01} = [[1,1],[0,0]]` and `A_1^{10} = [[0,0],[-1,1]]`, the first physical index being
+the output (ket) and the second the input (bra); the product of two copies is the bond-four
+tensor `Ã_0^{00} = A_1^{01} ⊗ A_1^{10}`, `Ã_0^{11} = A_1^{10} ⊗ A_1^{01}`, all other
+components zero.
 
 **Formalized here.** The tensor over the integers and the complexes, in the source's index
 convention (which is also the convention of `MPOTensor`); its periodic operator entrywise;

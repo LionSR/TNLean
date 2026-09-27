@@ -9,14 +9,14 @@ import TNLean.MPS.Examples.CZY.CZYSquare
 /-!
 # CZY: the reduced bond-three tensor `A_0`
 
-**Source.** arXiv:2509.03600, main.tex lines 223–240: the change of virtual basis `X_{1,1}`
-brings the stacked tensor to `A_0 ⊕ 0` with `A_0^{00} = [[0,-1,1],[0,1,-1],[0,0,0]]`,
-`A_0^{11} = [[0,1,1],[0,1,1],[0,0,0]]`, and the mixed components zero; `A_0` is not injective,
-"cannot be further decomposed into a direct sum of injective MPOs", and generates the identity
-on periodic chains. The matrix `X_{1,1}` is printed in the appendix, main.tex lines 664–673; the
-fusion tensor `Y_{0,0}` is the first three rows of `X_{0,0}`, main.tex lines 700–714,
-with the one-sided fusion identity `Y_{0,0} (∑_j A_0^{ij} ⊗ A_0^{jk}) = A_0^{ik} Y_{0,0}` of
-main.tex lines 249–253.
+**Source.** arXiv:2509.03600, `References/2509.03600/main.tex` lines 223–240: the change of
+virtual basis `X_{1,1}` brings the stacked tensor to `A_0 ⊕ 0` with
+`A_0^{00} = [[0,-1,1],[0,1,-1],[0,0,0]]`, `A_0^{11} = [[0,1,1],[0,1,1],[0,0,0]]`, and the
+mixed components zero; `A_0` is not injective, "cannot be further decomposed into a direct sum
+of injective MPOs", and generates the identity on periodic chains. The matrix `X_{1,1}` is
+printed in the appendix, main.tex lines 664–673; the fusion tensor `Y_{0,0}` is the first three
+rows of `X_{0,0}`, main.tex lines 700–714, with the one-sided fusion identity
+`Y_{0,0} (∑_j A_0^{ij} ⊗ A_0^{jk}) = A_0^{ik} Y_{0,0}` of main.tex lines 249–253.
 
 **Formalized here.** The printed `X_{1,1}` is orthogonal and conjugates the stacked tensor to
 `A_0 ⊕ 0` exactly as printed. The tensor `A_0` is an instance of the multi-block asymmetric
