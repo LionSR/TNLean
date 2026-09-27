@@ -45,7 +45,7 @@ dimer fixed point that the printed claims describe; documented in
 2-cocycle `ω` alone, while every result here takes a projective representation `ρ` with
 factor system `ω` as input. The existence of such a `ρ` for finite `G`, for instance the
 twisted regular representation on `ℂ^G`, is not formalized; documented in
-`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`.
+`docs/paper-gaps/rmp_spt_fixed_point_supplied_representation.tex`.
 
 ## Main definitions
 
@@ -88,8 +88,12 @@ abbrev sptPair (i : Fin (D * D)) : Fin D × Fin D := finProdFinEquiv.symm i
 abbrev sptScale (D : ℕ) : ℂ := ((Real.sqrt D : ℂ))⁻¹
 
 lemma star_sptScale_mul_sptScale : star (sptScale D) * sptScale D = (D : ℂ)⁻¹ := by
-  rw [sptScale, star_inv₀, Complex.star_def, Complex.conj_ofReal, ← mul_inv,
-    ← Complex.ofReal_mul, Real.mul_self_sqrt (Nat.cast_nonneg D), Complex.ofReal_natCast]
+  rw [sptScale, star_inv₀, Complex.star_def, Complex.conj_ofReal,
+    Complex.ofReal_sqrt_inv_mul_self _ (Nat.cast_nonneg D), Complex.ofReal_natCast]
+
+private lemma sptScale_ne_zero [NeZero D] : sptScale D ≠ 0 := by
+  refine inv_ne_zero (Complex.ofReal_ne_zero.mpr ((Real.sqrt_ne_zero').mpr ?_))
+  exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
 
 /-- **The SPT fixed-point tensor.** The letter at the physical index `(a, b)` is
 `D^{-1/2} |a⟩⟨b|`.  Source: arXiv:2011.12127, §III.A
@@ -158,9 +162,7 @@ the matrix units. -/
 theorem sptFixedPointTensor_isInjective [NeZero D] :
     Kraus.IsInjective (sptFixedPointTensor D) := by
   classical
-  have hc : sptScale D ≠ 0 := by
-    refine inv_ne_zero (Complex.ofReal_ne_zero.mpr ((Real.sqrt_ne_zero').mpr ?_))
-    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  have hc : sptScale D ≠ 0 := sptScale_ne_zero
   refine Submodule.eq_top_of_forall_single_mem _ fun a b => ?_
   have hmem : sptFixedPointTensor D (finProdFinEquiv (a, b)) ∈
       Submodule.span ℂ (Set.range (sptFixedPointTensor D)) := Submodule.subset_span ⟨_, rfl⟩
@@ -188,9 +190,7 @@ letters determines its coefficients. -/
 theorem eq_of_sum_smul_sptFixedPointTensor_eq [NeZero D] {c c' : Fin (D * D) → ℂ}
     (h : ∑ j, c j • sptFixedPointTensor D j = ∑ j, c' j • sptFixedPointTensor D j) :
     c = c' := by
-  have hc : sptScale D ≠ 0 := by
-    refine inv_ne_zero (Complex.ofReal_ne_zero.mpr ((Real.sqrt_ne_zero').mpr ?_))
-    exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+  have hc : sptScale D ≠ 0 := sptScale_ne_zero
   funext j
   obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective j
   have hab := congrFun (congrFun h a) b

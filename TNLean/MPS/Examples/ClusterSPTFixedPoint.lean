@@ -23,8 +23,11 @@ unitary on the four-dimensional physical space and the trivial gauge, and this u
 intertwines the cluster `Z₂ × Z₂` action with the fixed-point action.  Every virtual
 representation of the fixed-point tensor has a non-trivial class.
 
-The fixed-point tensor is the one of `TNLean.MPS.Symmetry.SPTFixedPoint`, not the
-printed tensor; see the local fix recorded there and
+**Local fix (fixed-point tensor):** the source's claim concerns the fixed-point tensor it
+prints, `A^{ab}_{xy} = e^{i(ω(a,x) + φ(b))} δ_{y,ax}`, whose letters commute with the printed
+gauges, so it is not normal and cannot equal the injective blocked cluster tensor.  The
+comparison here uses the dimer fixed point `D^{-1/2} |a⟩⟨b|` of
+`TNLean.MPS.Symmetry.SPTFixedPoint`, which the printed claims describe; documented in
 `docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`.
 
 ## Main definitions
@@ -65,8 +68,7 @@ theorem clusterBlocked_eq_sum_sptFixedPointTensor (i : Fin 4) :
     clusterBlocked i = ∑ j : Fin (2 * 2), clusterSPTUnitary i j • sptFixedPointTensor 2 j := by
   classical
   have h2 : (Real.sqrt 2 : ℂ) * ((Real.sqrt ((2 : ℕ) : ℝ) : ℂ))⁻¹ = 1 := by
-    rw [Nat.cast_ofNat, mul_inv_cancel₀]
-    exact_mod_cast (Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 2)).ne'
+    rw [Nat.cast_ofNat]; exact Complex.sqrtTwo_mul_invSqrtTwo
   simp only [clusterSPTUnitary, sptFixedPointTensor, smul_smul, mul_assoc]
   conv_lhs => rw [Matrix.matrix_eq_sum_single (clusterBlocked i)]
   rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
@@ -80,8 +82,8 @@ theorem clusterSPTUnitary_mul_conjTranspose :
     clusterSPTUnitary * clusterSPTUnitaryᴴ = 1 := by
   classical
   have hs : (Real.sqrt 2 : ℂ) * star (Real.sqrt 2 : ℂ) = 2 := by
-    rw [Complex.star_def, Complex.conj_ofReal, ← Complex.ofReal_mul,
-      Real.mul_self_sqrt (by norm_num)]; norm_num
+    rw [Complex.star_def, Complex.conj_ofReal, ← sq, Complex.ofReal_sqrt_sq 2 (by norm_num)]
+    norm_num
   ext i k
   have hik : (clusterSPTUnitary * clusterSPTUnitaryᴴ) i k =
       2 * ∑ a : Fin 2, ∑ b : Fin 2, clusterBlocked i a b * star (clusterBlocked k a b) := by

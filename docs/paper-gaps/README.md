@@ -56,6 +56,10 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   dimer tensor `D^{-1/2}|a⟩⟨b|` with the physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`,
   which realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
+- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
+  that the formal fixed point takes a projective representation with the given
+  factor system as input, whereas the source starts from the 2-cocycle alone; the
+  twisted regular representation on `ℂ^G` would supply it and is not formalized.
 
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
