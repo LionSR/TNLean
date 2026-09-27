@@ -44,6 +44,32 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     This is \cite[Section~5.1]{PerezGarcia2007Matrix}.
 \end{definition}
 
+\begin{center}
+    % Formula: psi(sigma) = <phi_F| A_0^{sigma_0} A_1^{sigma_1} ...
+    % A_{N-1}^{sigma_{N-1}} |phi_I>, equation (eq:seqanc_state).
+    % Source: PGVWC07 Section 5.1, the generated state in the ket
+    % labelling of this chapter.
+    % Ink-to-index map: each box is the matrix A_k with row index on its
+    % west face and column index on its east face; the up leg of A_k is
+    % the physical index sigma_k.  The west dot is the covector
+    % <phi_F|, the east dot is the vector |phi_I>.
+    % Contraction set: every horizontal wire is a summed ancilla index;
+    % the two boundary vectors close the chain at both ends.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0); the leg count is schematic
+    % under the ellipsis.
+    $\psi(\sigma)\;=\;$
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=6]
+        \tn[skin=dot, label pos=s, ports={0:virtual}]{\bra{\varphi_F}} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$\sigma_0$}]{A_0} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$\sigma_1$}]{A_1} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$\sigma_{N-1}$}]{A_{N-1}} &
+        \tn[skin=dot, label pos=s, ports={180:virtual}]{\ket{\varphi_I}}
+    \end{tenkz}
+\end{center}
+
 \begin{definition}[Probabilistic sequential scheme]
     \label{def:seqanc_probabilistic}
     \lean{MPSPreparation.IsProbabilisticallyGenerated}
@@ -72,6 +98,34 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \cite[Section~5.1]{PerezGarcia2007Matrix}.
 \end{definition}
 
+\begin{center}
+    % Formula: (A^i)_{alpha beta} = <alpha, i| U |beta, 0>, the matrices
+    % induced by a unitary U on C^D (x) C^d acting on the site state |0>.
+    % Source: PGVWC07 Section 5.1.
+    % Ink-to-index map: on the left, the box A has row index alpha (west),
+    % column index beta (east) and physical index i (up).  On the right,
+    % the wide box U acts on ancilla (x) site: its upper legs are the
+    % output ancilla index alpha and the output site index i, its lower
+    % legs the input ancilla index beta and the input site index, which
+    % the dot |0> fixes.
+    % Contraction set: only the input site index, closed by |0>.
+    % Boundary signature: (alpha, beta, i open) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[skin=box, ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+            90:physical:$i$}]{A}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=2, bonds=none, align=1]
+        \tn[at=(1,1), skin=box, wide=2, name=U,
+            ports={90@1:virtual:$\alpha$, 90@2:physical:$i$,
+                270@1:virtual:$\beta$, 270@2:physical}]{U}
+        \tn[at=(2,2), skin=dot, name=z, label pos=e,
+            ports={90:physical}]{\ket{0}}
+        \tnwire{z.90}{U.270@2}
+    \end{tenkz}
+\end{center}
+
 \begin{definition}[Deterministic sequential scheme]
     \label{def:seqanc_deterministic}
     \lean{MPSPreparation.IsDeterministicallyGenerated}
@@ -85,6 +139,44 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     final joint state is $\ket{\varphi_F}\otimes\ket{\psi}$ and the ancilla
     decouples in the last step without measurement.
 \end{definition}
+
+\begin{center}
+    % Formula: A_0^{sigma_0} A_1^{sigma_1} ... A_{N-1}^{sigma_{N-1}}
+    % |phi_I> = psi(sigma) |phi_F>, the ancilla component of the final
+    % joint state of a deterministic scheme at the configuration sigma.
+    % Source: PGVWC07 Section 5.1, deterministic scheme; the staircase is
+    % the sequential order of the operations.
+    % Ink-to-index map: each box is the operation A_k induced by the
+    % unitary applied at step N-k, drawn as in the preceding picture; its
+    % up leg is the site index sigma_k, its lower-right leg the incoming
+    % ancilla and its upper-left leg the outgoing ancilla.  The dot is the
+    % initial ancilla state |phi_I>.  The operation on site N-1 acts
+    % first, the one on site 0 last.
+    % Contraction set: the diagonal wires are the ancilla indices between
+    % consecutive steps.
+    % Boundary signature: one open ancilla leg (upper left) and the
+    % physical legs sigma_0, ..., sigma_{N-1}; the leg count is schematic
+    % under the ellipsis.
+    $\psi(\sigma)\,\ket{\varphi_F}\;=\;$
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none]
+        \tn[skin=box, at=(1,1), name=a0,
+            ports={90:physical:$\sigma_0$, 315:virtual, 135:virtual}]{A_0}
+        \tn[skin=box, at=(2,2), name=a1,
+            ports={90:physical:$\sigma_1$, 315:virtual, 135:virtual}]{A_1}
+        \tn[skin=dots, at=(3,3), name=dd,
+            ports={315:virtual, 135:virtual}]{}
+        \tn[skin=box, at=(4,4), name=an,
+            ports={90:physical:$\sigma_{N-1}$, 315:virtual,
+                135:virtual}]{A_{N-1}}
+        \tn[skin=dot, at=(5,5), name=phi, label pos=e,
+            ports={135:virtual}]{\ket{\varphi_I}}
+        \tnwire{phi.135}{an.315}
+        \tnwire{an.135}{dd.315}
+        \tnwire{dd.135}{a1.315}
+        \tnwire{a1.135}{a0.315}
+    \end{tenkz}
+\end{center}
 
 \begin{definition}[Open-boundary representation with bounded bond dimension]
     \label{def:seqanc_obc_rep}
@@ -523,6 +615,34 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     This is the $(\ket{\beta,0},\ket{\beta',0})$ entry of $U^\dagger U=\Id$.
 \end{proof}
 
+\begin{center}
+    % Formula: sum_i (A^i)^dagger A^i = Id_D, that is,
+    % sum_{i,alpha} conj(A^i_{alpha beta}) A^i_{alpha beta'} =
+    % delta_{beta beta'}.
+    % Source: PGVWC07 Section 5.1; the (|beta,0>, |beta',0>) entry of
+    % U^dagger U = Id.
+    % Ink-to-index map: the upper box is A (column index beta' east), the
+    % lower box its complex conjugate (column index beta east); the
+    % vertical wire is the physical index i and the west cup the row
+    % index alpha.
+    % Contraction set: i and alpha; beta and beta' remain open.
+    % Boundary signature: (virtual-east=2) on both sides; the right-hand
+    % side is the identity on the column index.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, west=cup]
+        \tn[at=(1,1), skin=box, name=ket,
+            ports={180:virtual, 0:virtual:$\beta'$, 270:physical}]{A}
+        \tn[at=(2,1), skin=box, name=bra,
+            ports={180:virtual, 0:virtual:$\beta$, 90:physical}]{\overline{A}}
+        \tnwire{ket.270}{bra.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none, west=cup]
+        \tn[at=(1,1), skin=none, ports={180:virtual, 0:virtual:$\beta'$}]{}
+        \tn[at=(2,1), skin=none, ports={180:virtual, 0:virtual:$\beta$}]{}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Deterministically generated states are normalized]
     \label{thm:seqanc_deterministic_norm}
     \lean{MPSPreparation.star_dotProduct_self_of_isDeterministicallyGenerated}
@@ -747,6 +867,46 @@ physical index write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
     \end{equation*}
     and the generated state is $\chi_{N-1}$.
 \end{definition}
+
+\begin{center}
+    % Formula: chi_3 for N = 4, the state after U^{[1]}, U^{[2]}, U^{[3]}
+    % act in turn on source sites (1,2), (2,3), (3,4) of |0>^{(x) 4};
+    % chi_k(..., i, beta) = sum_alpha <i, beta| U^{[k]} |alpha, 0>
+    % chi_{k-1}(..., alpha).
+    % Source: PGVWC07 Section 5.2, sequential generation without an
+    % ancilla.
+    % Ink-to-index map: columns are the source sites 1, ..., 4 from left
+    % to right, and time runs upward.  Each wide box U^{[k]} has its two
+    % input legs below (site k, carrying alpha, and site k+1 in |0>) and
+    % its two output legs above (i on site k, beta on site k+1).  The
+    % dots are the initial states |0>; i_j is the final index of site j.
+    % Contraction set: each vertical wire between gates is the index beta
+    % of the recursion; the dots close the initial site indices.
+    % Boundary signature: (physical-up=4 | physical-down=0).
+    $\chi_3\;=\;$
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+        \tn[at=(1,3), skin=box, wide=2, name=u3,
+            ports={90@1:physical:$i_3$, 90@2:physical:$i_4$,
+                270@1:physical, 270@2:physical}]{U^{[3]}}
+        \tn[at=(2,2), skin=box, wide=2, name=u2,
+            ports={90@1:physical:$i_2$, 90@2:physical,
+                270@1:physical, 270@2:physical}]{U^{[2]}}
+        \tn[at=(3,1), skin=box, wide=2, name=u1,
+            ports={90@1:physical:$i_1$, 90@2:physical,
+                270@1:physical, 270@2:physical}]{U^{[1]}}
+        \tn[at=(4,1), skin=dot, name=z1, label pos=s, ports={90:physical}]{\ket{0}}
+        \tn[at=(4,2), skin=dot, name=z2, label pos=s, ports={90:physical}]{\ket{0}}
+        \tn[at=(4,3), skin=dot, name=z3, label pos=s, ports={90:physical}]{\ket{0}}
+        \tn[at=(4,4), skin=dot, name=z4, label pos=s, ports={90:physical}]{\ket{0}}
+        \tnwire{z1.90}{u1.270@1}
+        \tnwire{z2.90}{u1.270@2}
+        \tnwire{u1.90@2}{u2.270@1}
+        \tnwire{z3.90}{u2.270@2}
+        \tnwire{u2.90@2}{u3.270@1}
+        \tnwire{z4.90}{u3.270@2}
+    \end{tenkz}
+\end{center}
 
 \begin{remark}
     The recursion describes the chain state: before $U^{[k]}$ acts, sites

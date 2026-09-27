@@ -31,6 +31,30 @@ stacking and $\sigma$ for column stacking.
     This is the tensor $P_\infty$ of \cite{Malz2024Preparation}.
 \end{definition}
 
+\begin{center}
+    % Formula: (P_infty^{(l,r)})_{alpha beta} = (sqrt sigma)_{alpha l}
+    % delta_{r beta}, the entries of sqrt(sigma) |l><r|.
+    % Source: MSWC24, the fixed-point tensor P_infty.
+    % Ink-to-index map: the box P_infty has virtual indices alpha (west)
+    % and beta (east) and the two physical indices l and r (up).  On the
+    % right, the dot is the matrix sqrt(sigma) with row index alpha and
+    % column index l; the bare corner identifies r with beta.
+    % Contraction set: none; the two pieces are disconnected.
+    % Boundary signature: (alpha, beta, l, r open) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[skin=box, ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+            120:physical:$l$, 60:physical:$r$}]{P_\infty}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), skin=dot, label pos=s,
+            ports={180:virtual:$\alpha$, 90:physical:$l$}]{\sqrt{\sigma}}
+        \tn[at=(1,2), skin=none,
+            ports={90:physical:$r$, 0:virtual:$\beta$}]{}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Positivity of the fixed-point tensor]
     \label{thm:prep_fixed_point_tensor_psd}
     \lean{MPSTensor.fixedPointTensor_reshape_eq}
@@ -108,6 +132,53 @@ stacking and $\sigma$ for column stacking.
     $V^{(N)}(P_\infty)_c=\Omega(c)$, where $\Omega$ is the pair product
     state~(\ref{eq:prep_pair_product}) of the entangled pair of $\sigma$.
 \end{theorem}
+
+\begin{center}
+    % Formula: V^{(N)}(P_infty)_c = tr(prod_k sqrt(sigma) |l_k><r_k|)
+    % = prod_k omega_{(r_k, l_{k+1})} = Omega(c), indices modulo N.
+    % Source: MSWC24, the fixed-point state as a product of
+    % nearest-neighbour entangled pairs omega on R_k L_{k+1}.
+    % Ink-to-index map: on the left, each wide box is P_infty at site k
+    % with physical legs l_k and r_k.  On the right, each site is drawn as
+    % in the preceding picture: the dot sqrt(sigma) carries l_k and the
+    % bare corner carries r_k.  The wire from r_k through the next dot to
+    % l_{k+1} is the pair omega_{(r_k, l_{k+1})} = (sqrt sigma)_{r_k
+    % l_{k+1}}; the periodic return joins r_{N-1} to l_0.
+    % Contraction set: all horizontal wires and the periodic return.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=6 | physical-down=0) on both sides; the leg count is
+    % schematic under the ellipsis.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=7, boundary=periodic]
+        \tn[at=(1,1), skin=box, wide=2, ports={180:virtual, 0:virtual,
+            90@1:physical:$l_0$, 90@2:physical:$r_0$}]{P_\infty}
+        \tn[at=(1,3), skin=box, wide=2, ports={180:virtual, 0:virtual,
+            90@1:physical:$l_1$, 90@2:physical:$r_1$}]{P_\infty}
+        \tn[at=(1,5), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,6), skin=box, wide=2, ports={180:virtual, 0:virtual,
+            90@1:physical:$l_{N-1}$, 90@2:physical:$r_{N-1}$}]{P_\infty}
+    \end{tenkz}
+    \\[2ex]
+    $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=7, bonds=none, boundary=periodic]
+        \tn[at=(1,1), skin=dot, name=s0, label pos=s,
+            ports={180:virtual, 90:physical:$l_0$}]{\sqrt{\sigma}}
+        \tn[at=(1,2), skin=none, name=j0,
+            ports={90:physical:$r_0$, 0:virtual}]{}
+        \tn[at=(1,3), skin=dot, name=s1, label pos=s,
+            ports={180:virtual, 90:physical:$l_1$}]{\sqrt{\sigma}}
+        \tn[at=(1,4), skin=none, name=j1,
+            ports={90:physical:$r_1$, 0:virtual}]{}
+        \tn[at=(1,5), skin=dots, name=dd, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,6), skin=dot, name=s2, label pos=s,
+            ports={180:virtual, 90:physical:$l_{N-1}$}]{\sqrt{\sigma}}
+        \tn[at=(1,7), skin=none, name=j2,
+            ports={90:physical:$r_{N-1}$, 0:virtual}]{}
+        \tnwire{j0.0}{s1.180}
+        \tnwire{j1.0}{dd.180}
+        \tnwire{dd.0}{s2.180}
+    \end{tenkz}
+\end{center}
 \begin{proof}
     \leanok
     Expand the trace of the product

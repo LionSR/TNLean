@@ -166,6 +166,60 @@ injective.
     $\bigl(\bigotimes_kU_k\bigr)\bigotimes_k\bigl(\ket{\omega}_{R_kL_{k+1}}\ket{0}_{C_k}\bigr)$.
     This is \cite[eqs.~(10) and~(11)]{Malz2024Preparation}.
 \end{lemma}
+
+\begin{center}
+    % Formula: |phi~_N> = (U_1 (x) ... (x) U_M) (x)_k (|omega>_{R_k
+    % L_{k+1}} |0>_{C_k}), the right-hand side of
+    % (eq:ldp_unitary_preparation), drawn for M = 3.
+    % Source: MSWC24 eqs. (10) and (11), the depth-two preparation from
+    % entangled pairs.
+    % Ink-to-index map: each wide box is the unitary U_k on the block
+    % (C^d)^{(x) q} = L (x) C (x) R, with its lower legs L_k, C_k, R_k
+    % from left to right and its upper legs the output indices of the
+    % same three parts.  Each dot omega is the entangled pair on R_k
+    % L_{k+1}; the pair on R_M L_1 closes around the bottom.  The dots
+    % |0>_C are the central sites.
+    % Contraction set: every lower leg of every U_k.
+    % Boundary signature: (physical-up=3M | physical-down=0).
+    $\ket{\widetilde\phi_N}\;=\;$
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=12, bonds=none, align=2]
+        \tn[at=(1,1), skin=box, wide=3, name=u1,
+            ports={90@1:physical, 90@2:physical, 90@3:physical,
+                270@1:physical, 270@2:physical, 270@3:physical}]{U_1}
+        \tn[at=(1,5), skin=box, wide=3, name=u2,
+            ports={90@1:physical, 90@2:physical, 90@3:physical,
+                270@1:physical, 270@2:physical, 270@3:physical}]{U_2}
+        \tn[at=(1,9), skin=box, wide=3, name=u3,
+            ports={90@1:physical, 90@2:physical, 90@3:physical,
+                270@1:physical, 270@2:physical, 270@3:physical}]{U_3}
+        \tn[at=(2,2), skin=dot, name=z1, label pos=e,
+            ports={90:physical}]{\ket{0}_C}
+        \tn[at=(2,6), skin=dot, name=z2, label pos=e,
+            ports={90:physical}]{\ket{0}_C}
+        \tn[at=(2,10), skin=dot, name=z3, label pos=e,
+            ports={90:physical}]{\ket{0}_C}
+        \tn[at=(2,4), skin=dot, name=w1, label pos=s,
+            ports={135:physical, 45:physical}]{\omega}
+        \tn[at=(2,8), skin=dot, name=w2, label pos=s,
+            ports={135:physical, 45:physical}]{\omega}
+        \tn[at=(2,12), skin=dot, name=w3, label pos=w,
+            ports={135:physical, 270:physical}]{\omega}
+        \tn[at=(3,12), skin=none, name=se, ports={90:physical, 180:physical}]{}
+        \tn[at=(3,1), skin=none, name=sw, ports={0:physical, 90:physical}]{}
+        \tnwire{z1.90}{u1.270@2}
+        \tnwire{z2.90}{u2.270@2}
+        \tnwire{z3.90}{u3.270@2}
+        \tnwire{w1.135}{u1.270@3}
+        \tnwire{w1.45}{u2.270@1}
+        \tnwire{w2.135}{u2.270@3}
+        \tnwire{w2.45}{u3.270@1}
+        \tnwire{w3.135}{u3.270@3}
+        \tnwire{w3.270}{se.90}
+        \tnwire{se.180}{sw.0}
+        \tnwire{sw.90}{u1.270@1}
+    \end{tenkz}
+\end{center}
 \begin{proof}
     \leanok
     Since $V$ is an isometry, its columns $V\ket{\gamma,\delta}$ are
@@ -305,6 +359,37 @@ injective.
     in the source, which draws at least one site; the empty block $q=0$ is
     excluded, see~\cite{gap:mswc24_sequential_factorization_positive_block_length}.
 \end{theorem}
+
+\begin{center}
+    % Formula: <i_1 ... i_q| V |x> = (W_q^{i_1} W_{q-1}^{i_2} ...
+    % W_1^{i_q})_{1x}, equation (eq:ldp_sequential_factorization).
+    % Source: MSWC24 eqs. (13)--(15), sequential factorization of the
+    % isometry.
+    % Ink-to-index map: on the left, V has input index x (down) and the
+    % q physical indices i_1, ..., i_q (up).  On the right, the box W_k
+    % has row index on its west face and column index on its east face;
+    % the west end of W_q is the one-dimensional bond D'_{q+1} = 1 and
+    % carries no leg, and the east leg of W_1 is x in C^{D'_1} =
+    % C^D (x) C^D.
+    % Contraction set: the horizontal wires are the bonds D'_k.
+    % Boundary signature: (x, i_1, ..., i_q open) on both sides; the leg
+    % count is schematic under the ellipsis.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+        \tn[at=(1,1), skin=box, wide=4, ports={90@1:physical:$i_1$,
+            90@2:physical:$i_2$, 90@4:physical:$i_q$,
+            270:physical:$x$}]{V}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=4]
+        \tn[skin=box, ports={0:virtual, 90:physical:$i_1$}]{W_q} &
+        \tn[skin=box, ports={180:virtual, 0:virtual,
+            90:physical:$i_2$}]{W_{q-1}} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, ports={180:virtual, 0:virtual:$x$,
+            90:physical:$i_q$}]{W_1}
+    \end{tenkz}
+\end{center}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldpolar_tensor_injective,
@@ -415,6 +500,49 @@ injective.
     decomposition of the blocked map is left implicit there and is supplied
     here.
 \end{theorem}
+
+\begin{center}
+    % Formula: B_4 = (V^{(1)} (x) V^{(1)}) V^{(2)} P_2, equation
+    % (eq:ldp_tree_factorization) for k = 2, read as tensors: the
+    % four-site block of A equals the binary tree of isometries applied
+    % to the tensor of P_2.
+    % Source: MSWC24 eq. (16), the renormalization-group circuit.
+    % Ink-to-index map: on the left, four boxes A with outer virtual
+    % indices alpha and beta and physical indices i_1, ..., i_4.  On the
+    % right, the box P_2 has the same virtual indices and one physical
+    % index in C^{D^2}; the pill V^{(2)} maps it to C^{D^2} (x) C^{D^2},
+    % and each pill V^{(1)} maps one factor to two sites.
+    % Contraction set: the three vertical and diagonal wires of the tree,
+    % and on the left the three internal virtual bonds.
+    % Boundary signature: (alpha, beta, i_1, i_2, i_3, i_4 open) on both
+    % sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=4]
+        \tn[skin=box, ports={180:virtual:$\alpha$, 0:virtual,
+            90:physical:$i_1$}]{A} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A} &
+        \tn[skin=box, ports={180:virtual, 0:virtual, 90:physical:$i_3$}]{A} &
+        \tn[skin=box, ports={180:virtual, 0:virtual:$\beta$,
+            90:physical:$i_4$}]{A}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, align=3]
+        \tn[at=(1,1), skin=pill, name=va, label pos=w,
+            ports={135:physical:$i_1$, 45:physical:$i_2$,
+                270:physical}]{V^{(1)}}
+        \tn[at=(1,3), skin=pill, name=vb, label pos=e,
+            ports={135:physical:$i_3$, 45:physical:$i_4$,
+                270:physical}]{V^{(1)}}
+        \tn[at=(2,2), skin=pill, name=v2, label pos=e,
+            ports={135:physical, 45:physical, 270:physical}]{V^{(2)}}
+        \tn[at=(3,2), skin=box, name=p,
+            ports={180:virtual:$\alpha$, 0:virtual:$\beta$,
+                90:physical}]{P_2}
+        \tnwire{v2.135}{va.270}
+        \tnwire{v2.45}{vb.270}
+        \tnwire{p.90}{v2.270}
+    \end{tenkz}
+\end{center}
 \begin{proof}
     \leanok
     \uses{lem:physical_rotation_mul, lem:ldpolar_physical_matrix_rotate,
