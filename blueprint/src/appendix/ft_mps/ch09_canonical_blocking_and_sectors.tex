@@ -71,8 +71,9 @@ through its own period agrees with the directly $p$-blocked block.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:blocked_irreducibility_direct_support}
-    The transfer map of $A^{[L]}$ is $\E_A^L$. Therefore
+    \uses{thm:blocked_transfer_map}
+    The transfer map of $A^{[L]}$ is $\E_A^L$
+    (Theorem~\ref{thm:blocked_transfer_map}). Therefore
     \begin{align}
         (\E_A^L)^2
          & =(\E_A^2)^L
@@ -137,14 +138,14 @@ through its own period agrees with the directly $p$-blocked block.
     fixed point not proportional to the faithful one.
 \end{proof}
 
-\begin{lemma}[Transfer map of a blocked tensor]
-    \label{lem:blocked_transfer_map}
+\begin{theorem}[Transfer map of a blocked tensor]
+    \label{thm:blocked_transfer_map}
     \lean{MPSTensor.transferMap_blockTensor,
         MPSTensor.transferMap_blockTensor_apply}
     \leanok
     \uses{def:blocked_tensor, def:transfer_map}
     For every tensor $A$ and every $L$, $\E_{A^{[L]}}=\E_A^{\,L}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -177,13 +178,13 @@ through its own period agrees with the directly $p$-blocked block.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel, lem:blocked_transfer_map}
+    \uses{def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel, thm:blocked_transfer_map}
     Peripheral primitivity, tensor irreducibility, and left-canonical
     normalization first give primitive fixed-point data, and tensor
     irreducibility makes its positive semidefinite fixed point positive
     definite. Blocking preserves the left-canonical identity, replaces the
     transfer map by its positive power
-    (Lemma~\ref{lem:blocked_transfer_map}), and therefore preserves the fixed
+    (Theorem~\ref{thm:blocked_transfer_map}), and therefore preserves the fixed
     point. The defining complementary-power identity gives
     (\ref{eq:canonical_primitive_fixed_point_power}). The channel fixed-point
     criterion then gives map irreducibility from uniqueness of positive
