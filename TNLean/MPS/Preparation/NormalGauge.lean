@@ -25,8 +25,9 @@ This file proves that reduction and records what it leaves unchanged.
   (`Kraus.IsNormal`, the chapter's `def:normal`) reaches such a `B` after a nonzero rescaling
   `ζ • A` and a gauge. The eigenvalues of `E_B` are those of `E_A` divided by the leading
   eigenvalue `λ₁` of `E_A`, and `φ_N(B) = ζ^N φ_N(A)`.
-* `hasEigenvalue_transferMap_iff_of_gaugeEquiv`, `transferMap_smul_eq_norm_sq_smul`: the eigenvalues of the
-  transfer map are invariant under a gauge and scale by `|ζ|²` under `A ↦ ζ • A`.
+* `hasEigenvalue_transferMap_iff_of_gaugeEquiv`, `transferMap_smul_eq_norm_sq_smul`: the
+  eigenvalues of the transfer map are invariant under a gauge and scale by `|ζ|²` under
+  `A ↦ ζ • A`.
 * `normalizedMPVState_eq_of_gaugeEquiv`, `norm_inner_normalizedMPVState_smul`: the normalized
   periodic vector `φ_N/‖φ_N‖` is unchanged by a gauge, and changed only by a phase by a
   rescaling.
