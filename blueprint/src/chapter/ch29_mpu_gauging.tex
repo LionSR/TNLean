@@ -139,6 +139,37 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     not an equality of local tensors.
 \end{definition}
 
+\begin{center}
+    % Formula: U_g^{(N)}U_h^{(N)}=U_{gh}^{(N)}, the multiplicative law
+    % (\ref{eq:mpug_rep_multiplication}); source: arXiv:2502.20257,
+    % Subsection ``MPU group representations''.
+    % Ink-to-index map: the upper row is \mathcal U_g with output legs i_n,
+    % the lower row is \mathcal U_h with input legs j_n; the vertical leg
+    % between the rows at each site is the summed middle physical index.
+    % Contraction set: the middle physical indices at every site and the
+    % periodic virtual bonds of each row; the legs i_n, j_n remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{\mathcal U_g} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical}]{\mathcal U_g} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_N$, 270:physical}]{\mathcal U_g} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{\mathcal U_h} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{\mathcal U_h} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_N$}]{\mathcal U_h}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, size=l, ports={90:physical:$i_1$, 270:physical:$j_1$}]{\mathcal U_{gh}} &
+        \tn[skin=mpo, size=l, ports={90:physical:$i_2$, 270:physical:$j_2$}]{\mathcal U_{gh}} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, size=l, ports={90:physical:$i_N$, 270:physical:$j_N$}]{\mathcal U_{gh}}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Group fusion rules]
     \label{thm:mpug_group_fusion_rules}
     \lean{MPOTensor.GroupFamily.isMPOFusionAlgebra,
@@ -407,6 +438,30 @@ left-canonical.  This is the canonical-form hypothesis used in
     the dagger--inverse gauge relation in
     \cite[lines~1552--1557]{FrancoRubio2025MPUGauging}.
 \end{theorem}
+
+\begin{center}
+    % Formula: \mathcal U_g^\dagger=T_g^\dagger\,\mathcal U_{g^{-1}}T_g,
+    % equation (\ref{eq:mpug_dagger_inverse_gauge}); source:
+    % arXiv:2502.20257, eq:defT, lines 1552--1557.
+    % Ink-to-index map: the left box is the physical-adjoint letter of
+    % \mathcal U_g with physical indices i,j; the right box is the letter of
+    % \mathcal U_{g^{-1}} with the same physical indices; the two beads are
+    % the unitary gauge T_g^\dagger on the left bond and T_g on the right.
+    % Contraction set: the two virtual bonds joining the beads to the box;
+    % the outer virtual legs and i,j remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$}]{\mathcal U_g^\dagger}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+        \tn[skin=ring]{T_g^\dagger} &
+        \tn[skin=mpo, size=l, label pos=45, ports={90:physical:$i$, 270:physical:$j$}]{\mathcal U_{g^{-1}}} &
+        \tn[skin=ring]{T_g}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{thm:mpug_physical_adjoint_inverse_mpv,
@@ -2127,6 +2182,62 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         quantifiers on line 1498]{FrancoRubio2025MPUGauging}, with $m\geq\ell$.
 \end{definition}
 
+\begin{center}
+    % Formula: B_{g,h}^{\mathbf p}W_{g,h}A_{g,h}^{\mathbf c}V_{g,h}
+    % B_{g,h}^{\mathbf q}=B_{g,h}^{\mathbf p\mathbf c\mathbf q}, the exterior
+    % identity (\ref{eq:mpug_pair_exterior_identity}); source: arXiv:2502.20257,
+    % eq:fusion_1, lines 1406--1457.
+    % Ink-to-index map: a two-row column is one letter of B_{g,h}=\mathcal
+    % U_g\cdot\mathcal U_h (upper row \mathcal U_g, lower row \mathcal U_h);
+    % the single box is one letter of A_{g,h}=\mathcal U_{gh}; each bracket
+    % stands for the whole word it names (one column drawn per word).
+    % The two-row pill W_{g,h} has its paired side facing west and its
+    % single side facing east; V_{g,h} is the reverse.
+    % Contraction set: the middle physical index in every two-row column and
+    % all horizontal virtual bonds; the two paired virtual legs at each end
+    % and the outer physical legs remain open.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=5, bonds=none]
+        \tn[at=(1,1), name=Pg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{\mathcal U_g}
+        \tn[at=(2,1), name=Ph, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{\mathcal U_h}
+        \tnfuse[at=(1,2), name=W, skin=pill]{W_{g,h}}
+        \tn[at=(1,3), name=C, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{\mathcal U_{gh}}
+        \tn[at=(2,3), void=sealed]{}
+        \tnfuse[at=(1,4), name=V, skin=pill]{V_{g,h}}
+        \tn[at=(1,5), name=Qg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{\mathcal U_g}
+        \tn[at=(2,5), name=Qh, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{\mathcal U_h}
+        \tnwire{Pg.270}{Ph.90}
+        \tnwire{Qg.270}{Qh.90}
+        \tnwire{open w}{Pg.180}
+        \tnwire{open w}{Ph.180}
+        \tnwire{Pg.0}{W.180@1}
+        \tnwire{Ph.0}{W.180@2}
+        \tnwire{W.0}{C.180}
+        \tnwire{C.0}{V.180}
+        \tnwire{V.0@1}{Qg.180}
+        \tnwire{V.0@2}{Qh.180}
+        \tnwire{Qg.0}{open e}
+        \tnwire{Qh.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Pg}{\mathbf p}
+        \tnmark[form=bracket, label pos=90]{C}{\mathbf c}
+        \tnmark[form=bracket, label pos=90]{Qg}{\mathbf q}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op,op}, cols=3, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_g} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_g} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_g} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_h} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_h} &
+        \tn[skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_h}
+        \tnmark[form=bracket, label pos=90]{(1,1)}{\mathbf p}
+        \tnmark[form=bracket, label pos=90]{(1,2)}{\mathbf c}
+        \tnmark[form=bracket, label pos=90]{(1,3)}{\mathbf q}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Existence of selected reductions]
     \label{thm:mpug_pair_reductions_exist}
     \lean{MPOTensor.GroupFamily.IsRepresentation.nonempty_reductionFamily}
@@ -2285,6 +2396,37 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     Definition~8 in \cite{Molnar2018SemiInjective} need not be $1$
     \cite{gap:mgsc18_nilpotency_length_one_terminology}.
 \end{definition}
+
+\begin{center}
+    % Formula: V_{g,h}B_{g,h}^{\mathbf a}W_{g,h}=A_{g,h}^{\mathbf a}, the
+    % interior fusion equation; source: arXiv:2502.20257, eq:fusion_2,
+    % lines 1459--1497, with F^<_{g,h}=V_{g,h} and F^>_{g,h}=W_{g,h}.
+    % Ink-to-index map: the bracketed two-row column stands for the word
+    % \mathbf a of B_{g,h} (upper row \mathcal U_g, lower row \mathcal U_h);
+    % the right-hand box is the same word of \mathcal U_{gh}.  The pill
+    % V_{g,h} has its single side west and its paired side east; W_{g,h}
+    % is the reverse.
+    % Contraction set: the paired virtual bonds between the pills and the
+    % word, and the middle physical index; the single virtual legs of the
+    % pills and the outer physical legs remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=1 | physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=3]
+        \tnfuse[at=(1,1), name=V, skin=pill]{V_{g,h}}
+        \tn[at=(1,2), name=Ag, skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_g}
+        \tn[at=(2,2), skin=mpo, ports={90:physical, 270:physical}]{\mathcal U_h}
+        \tnfuse[at=(1,3), name=W, skin=pill]{W_{g,h}}
+        \tnwire{open w}{V.180}
+        \tnwire{W.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Ag}{\mathbf a}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, size=l, ports={90:physical, 270:physical}]{\mathcal U_{gh}}
+        \tnmark[form=bracket, label pos=90]{(1,1)}{\mathbf a}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Reciprocal scalar rescaling of the fusion tensors]
     \label{thm:mpug_fusion_scalar_gauge}
@@ -2620,6 +2762,37 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     % assert the unitarity or normalization conclusions of cor:mpu.
 \end{definition}
 
+\begin{center}
+    % Formula: (w_L)_{(l,i),(j,l')}=\sum_\beta(Y_2)_{l,(j,\beta)}
+    % (X_2)_{(\beta,i),l'} and (w_R)_{(i,r),(r',j)}=\sum_\beta
+    % (X_1)_{(i,\beta),r'}(Y_1)_{r,(\beta,j)}; source: arXiv:2502.20257,
+    % eq:wLR, lines 811--869.
+    % Ink-to-index map: upper legs are the row indices and lower legs the
+    % column indices, each in spatial left-to-right order; the horizontal
+    % bond joining the two dots is the summed virtual index \beta.
+    % Contraction set: \beta only; all four vertical legs remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=2 | physical-down=2) on both sides of each equation.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=2]
+        \tn[skin=box, wide=2, ports={90@1:physical:$l$, 90@2:physical:$i$, 270@1:physical:$j$, 270@2:physical:$l'$}]{w_L}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2]
+        \tn[skin=dot, ports={90:physical:$l$, 270:physical:$j$, 0:virtual}]{Y_2} &
+        \tn[skin=dot, ports={180:virtual, 90:physical:$i$, 270:physical:$l'$}]{X_2}
+    \end{tenkz}
+    \qquad\qquad
+    \begin{tenkz}[rows={wire}, cols=2]
+        \tn[skin=box, wide=2, ports={90@1:physical:$i$, 90@2:physical:$r$, 270@1:physical:$r'$, 270@2:physical:$j$}]{w_R}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2]
+        \tn[skin=dot, ports={90:physical:$i$, 270:physical:$r'$, 0:virtual}]{X_1} &
+        \tn[skin=dot, ports={180:virtual, 90:physical:$r$, 270:physical:$j$}]{Y_1}
+    \end{tenkz}
+\end{center}
+
 \begin{definition}[An operator on the middle two legs]
     \label{def:mpug_staircase_middle}
     \lean{MPOTensor.staircaseMiddle}
@@ -2907,6 +3080,29 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     No group representation or unitarity assertion is included in this
     definition; arbitrary endpoint matrices need not give a unitary map.
 \end{definition}
+
+\begin{center}
+    % Formula: (U^{N+2})_{(l,\sigma,r),(a,\tau,b)}=\sum_{\alpha,\beta}
+    % (Y_2)_{l,(a,\alpha)}(\mathcal U^{\sigma,\tau})_{\alpha,\beta}
+    % (Y_1)_{r,(\beta,b)}, equation
+    % (\ref{eq:mpug_truncated_symmetry_contraction}); source:
+    % arXiv:2502.20257, eq:truncsym, lines 2062--2100.
+    % Ink-to-index map: the two triangles are the endpoint matrices Y_2
+    % (output l, input a) and Y_1 (output r, input b); the boxes are the
+    % bulk letters \mathcal U^{\sigma_n,\tau_n}, output legs up.
+    % Contraction set: the virtual bonds \alpha, the bulk bonds, and \beta;
+    % every physical leg remains open, and there is no virtual leg.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=N+2 | physical-down=N+2).
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=5]
+        \tn[skin=tri, ports={90:physical:$l$, 270:physical:$a$, 0:virtual}]{Y_2} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_0$, 270:physical:$\tau_0$}]{\mathcal U} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_{N-1}$, 270:physical:$\tau_{N-1}$}]{\mathcal U} &
+        \tn[skin=triwest, ports={180:virtual, 90:physical:$r$, 270:physical:$b$}]{Y_1}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[The zero-bulk contraction]
     \label{thm:mpug_truncated_symmetry_zero}
@@ -4181,6 +4377,66 @@ space of $(MN)P$.
     No normalization of $\omega$ is imposed.
 \end{definition}
 
+\begin{center}
+    % Formula: V^LT^{\mathbf w}=\omega(g,h,k)\,V^RT^{\mathbf w} with
+    % V^L=F^<_{gh,k}(F^<_{g,h}\otimes\mathbf 1) and
+    % V^R=F^<_{g,hk}(\mathbf 1\otimes F^<_{h,k})\mathsf a^{-1}; source:
+    % arXiv:2502.20257, the display before eq:3-cocycle, lines 1505--1535
+    % (drawn there with right boundaries).
+    % Ink-to-index map: the bracketed three-row column stands for the word
+    % \mathbf w of T=(O_gO_h)O_k, rows O_g, O_h, O_k from top to bottom;
+    % each pill has its single side west.  The inner pill fuses two rows,
+    % and the outer pill fuses its output with the remaining row.  The
+    % associator \mathsf a only regroups the Kronecker factors of the triple
+    % bond and is not drawn.
+    % Contraction set: the middle physical indices, the bonds between the
+    % pills, and the bonds from the pills into the word; the three east
+    % virtual legs, the single west leg, and the outer physical legs remain
+    % open.
+    % Boundary signature: (virtual-west=1 | virtual-east=3 |
+    % physical-up=1 | physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{F^<_{gh,k}}
+        \tnfuse[at=(1,2), name=Fi, skin=pill]{F^<_{g,h}}
+        \tn[at=(3,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=Tk, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_k}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{Tk.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Fi.180}
+        \tnwire{Fo.0@3}{Tk.180}
+        \tnwire{Fi.0@1}{Tg.180}
+        \tnwire{Fi.0@2}{Th.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{Tk.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+    \quad $=\omega(g,h,k)$ \quad
+    \begin{tenkz}[rows={op,op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{F^<_{g,hk}}
+        \tnfuse[at=(2,2), name=Fi, skin=pill]{F^<_{h,k}}
+        \tn[at=(1,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=Tk, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_k}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{Tk.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Tg.180}
+        \tnwire{Fo.0@2}{Fi.180}
+        \tnwire{Fi.0@1}{Th.180}
+        \tnwire{Fi.0@2}{Tk.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{Tk.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+\end{center}
+
 \begin{lemma}[The two fusion trees are reductions]
     \label{thm:mpug_fusion_trees_reductions}
     \lean{MPOTensor.GroupFamily.FusionData.isReduction_left,
@@ -4338,6 +4594,37 @@ space of $(MN)P$.
     $\ket{V^{(N)}(T\cdot B)}=\rho^{(N)}(T)\ket{V^{(N)}(B)}$ for every $N$.
 \end{theorem}
 
+\begin{center}
+    % Formula: \ket{V^{(N)}(T\cdot B)}=\rho^{(N)}(T)\ket{V^{(N)}(B)}, the
+    % consequence of (\ref{eq:mpug_action_tensor_word}).
+    % Ink-to-index map: the left ring is the periodic vector of the action
+    % tensor T\cdot B; on the right the upper row is T and the lower row B,
+    % and the vertical leg at each site is the summed index j of
+    % (\ref{eq:mpug_action_tensor}).
+    % Contraction set: the periodic virtual bonds of each ring and the
+    % summed indices j; the physical legs \sigma_n remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={ket}, cols=4, boundary=periodic]
+        \tn[ports={90:physical:$\sigma_1$}]{T\cdot B} &
+        \tn[ports={90:physical:$\sigma_2$}]{T\cdot B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[ports={90:physical:$\sigma_N$}]{T\cdot B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$}]{T} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$}]{T} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$}]{T} \\
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{B} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{B}
+    \end{tenkz}
+\end{center}
+
 \begin{proof}\leanok
     Induction on $N$: the empty word gives $\mathbf 1\otimes\mathbf 1$, and
     one more letter multiplies both sides by $(T\cdot B)^i$, since
@@ -4459,6 +4746,65 @@ space of $(MN)P$.
     is the $L$-symbol of a single invariant block
     \cite{FrancoRubio2025MPUGauging}.
 \end{definition}
+
+\begin{center}
+    % Formula: \alpha_{g,h}B^{\mathbf w}=L_{g,h}\,\varphi_{g,h}B^{\mathbf w}
+    % with \alpha_{g,h}=V_g(\mathbf 1\otimes V_h)\mathsf a^{-1},
+    % \varphi_{g,h}=V_{gh}(F^<_{g,h}\otimes\mathbf 1), and
+    % B=(O_gO_h)\cdot A; source: arXiv:2502.20257, eq:defL, lines 1875--1914
+    % (drawn there with right boundaries).
+    % Ink-to-index map: the bracketed column stands for the word \mathbf w
+    % of B, with rows O_g, O_h and the state tensor A from top to bottom;
+    % each pill has its single side west.  On the left, V_h reduces
+    % O_h\cdot A and V_g then reduces O_g\cdot A; on the right, F^<_{g,h}
+    % fuses O_gO_h and V_{gh} reduces O_{gh}\cdot A.  The associator is
+    % not drawn.
+    % Contraction set: the physical indices between the rows, the bonds
+    % between the pills, and the bonds into the word; the three east virtual
+    % legs, the west leg, and the upper physical leg remain open.
+    % Boundary signature: (virtual-west=1 | virtual-east=3 |
+    % physical-up=1 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,ket}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{V_g}
+        \tnfuse[at=(2,2), name=Fi, skin=pill]{V_h}
+        \tn[at=(1,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=A, label pos=s, ports={90:physical, 180:virtual, 0:virtual}]{A}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{A.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Tg.180}
+        \tnwire{Fo.0@2}{Fi.180}
+        \tnwire{Fi.0@1}{Th.180}
+        \tnwire{Fi.0@2}{A.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{A.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+    \quad $=L_{g,h}$ \quad
+    \begin{tenkz}[rows={op,op,ket}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{V_{gh}}
+        \tnfuse[at=(1,2), name=Fi, skin=pill]{F^<_{g,h}}
+        \tn[at=(3,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=A, label pos=s, ports={90:physical, 180:virtual, 0:virtual}]{A}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{A.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Fi.180}
+        \tnwire{Fo.0@3}{A.180}
+        \tnwire{Fi.0@1}{Tg.180}
+        \tnwire{Fi.0@2}{Th.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{A.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Characterization of the single-block L-symbol]
     \label{thm:mpug_single_block_l_symbol_spec}
@@ -6081,6 +6427,34 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
          & =\ket{\Psi_{\mathrm{gauged}}}.
     \end{align}
 \end{theorem}
+
+\begin{center}
+    % Formula: \widetilde{\mathcal G}^{j,j+1}_g(R)\ket{\Psi_{\mathrm{gauged}}}
+    % =\ket{\Psi_{\mathrm{gauged}}}, equation
+    % (\ref{eq:mpug_universal_invariant_vector}); source: arXiv:2502.20257,
+    % lines 4325--4335.
+    % Ink-to-index map: the wide lower box is the gauged vector, one leg per
+    % chain site carrying the matter index and the gauge label of that site;
+    % sites 1, j, j+1, N are drawn.  The upper box is the placed Gauss
+    % operator acting on the window (j,j+1) and as the identity elsewhere.
+    % Contraction set: the two window legs between the operator and the
+    % vector; the output legs remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=4 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=4, bonds=none]
+        \tn[at=(1,2), name=G, skin=box, wide=2, ports={90@1:physical:$j$, 90@2:physical:$j{+}1$, 270@1:physical, 270@2:physical}]{\widetilde{\mathcal G}^{j,j+1}_g(R)}
+        \tn[at=(2,1), name=P, skin=box, wide=4, ports={90@1:physical:$1$, 90@2:physical, 90@3:physical, 90@4:physical:$N$}]{\Psi_{\mathrm{gauged}}}
+        \tn[at=(1,1), void=sealed]{}
+        \tn[at=(1,4), void=sealed]{}
+        \tnwire{G.270@1}{P.90@2}
+        \tnwire{G.270@2}{P.90@3}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={ket}, cols=4, bonds=none]
+        \tn[at=(1,1), name=P, skin=box, wide=4, ports={90@1:physical:$1$, 90@2:physical:$j$, 90@3:physical:$j{+}1$, 90@4:physical:$N$}]{\Psi_{\mathrm{gauged}}}
+    \end{tenkz}
+\end{center}
 
 \begin{proof}\leanok
     \uses{thm:mpug_completion_transport,
