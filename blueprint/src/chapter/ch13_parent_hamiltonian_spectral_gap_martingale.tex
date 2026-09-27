@@ -6412,49 +6412,6 @@ tensors.
     $R$.
 \end{proof}
 
-\begin{theorem}[Positive gap at a fixed length]
-    \label{thm:parent_hamiltonian_fixed_length_gap}
-    \lean{MPSTensor.parentHamiltonianES_exists_gap}
-    \leanok
-    \uses{def:parent_hamiltonian_es}
-    For any tensor $A$, interaction range $L$, and chain length $N$, there
-    exists $\delta_N>0$ such that
-    $\delta_N\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
-    for every $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    The restriction of $H_{N,L}^{\mathrm{ES}}(A)$ to its kernel complement
-    is injective. Its inverse on its image is bounded, since the domain is
-    finite dimensional. Thus $\lVert v\rVert\leq C_N\lVert
-        H_{N,L}^{\mathrm{ES}}(A)v\rVert$ for some $C_N>0$; take
-    $\delta_N=C_N^{-1}$. If the kernel complement is zero, any positive
-    constant suffices.
-\end{proof}
-
-\begin{theorem}[Extension of an eventual uniform gap]
-    \label{thm:parent_hamiltonian_eventual_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_of_eventual_gap}
-    \leanok
-    \uses{def:parent_hamiltonian_es}
-    Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ satisfy
-    $\delta\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
-    for every $N\geq M$ and every
-    $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
-    Then some $\gamma>0$ satisfies the inequality with $\gamma$ in place of
-    $\delta$ for every $N$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:parent_hamiltonian_fixed_length_gap}
-    Take the minimum of $\delta$ and the finitely many positive constants
-    $\delta_N$ supplied by Theorem~\ref{thm:parent_hamiltonian_fixed_length_gap}
-    for $N<M$. Equivalently, induct on $M$, replacing $\delta$ by
-    $\min\{\delta,\delta_{M-1}\}$ at each step.
-\end{proof}
-
 \begin{theorem}[Gap uniform in every chain length]
     \label{thm:primitive-block-parent-uniform-gap-three-block-bound}
     \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
