@@ -24,11 +24,14 @@ symmetry of the CZX state, as `O_Z = ∏ CZ_{i,i+1} ∏ X_i`, without the factor
   the construction by `MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo`) commutes with the
   Hamiltonian of line 1843 for every `μ`.
 * For the cluster–Ising Hamiltonian `H(λ) = −∑_j Z_{j−1} X_j Z_{j+1} − λ ∑_j X_j`, the review's
-  operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` (the periodic operator `CZXCompression.mpo_czxTensor` of
-  the undecorated CZX tensor) exchanges the two terms, `O_Z X_j O_Z† = Z_{j−1} X_j Z_{j+1}`, so
-  `O_Z H(λ) O_Z† = λ H(λ⁻¹)` and `O_Z` commutes with the critical Hamiltonian `H(1)`.
+  operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` exchanges the two terms,
+  `O_Z X_j O_Z† = Z_{j−1} X_j Z_{j+1}`, so `O_Z H(λ) O_Z† = λ H(λ⁻¹)` for `λ ≠ 0` and `O_Z`
+  commutes with the critical Hamiltonian `H(1)`. Here `O_Z` is the periodic operator
+  `CZXCompression.mpo_czxTensor` of the undecorated CZX tensor, which is `X^{⊗N} D_N` rather
+  than the review's `D_N X^{⊗N}`; the two differ by the global sign `(−1)^N`
+  (`docs/paper-gaps/mpu_czx_tensor_normalization.tex`), which cancels in every conjugation.
 * The decorated operator `U` exchanges them with a sign, `U X_j U† = −Z_{j−1} X_j Z_{j+1}`, so
-  `U H(λ) U† = −λ H(λ⁻¹)`: `U` commutes with `H(−1)` and sends `H(1)` to `−H(1)`. The factors
+  `U H(λ) U† = −λ H(λ⁻¹)` for `λ ≠ 0`: `U` commutes with `H(−1)` and sends `H(1)` to `−H(1)`. The factors
   `Z_i` of `U` flip the sign of the transverse field at the symmetric point.
 
 All operators are monomial matrices on the configurations `Fin N → Fin 2`, and every identity
@@ -390,7 +393,8 @@ theorem mpo_czxTensor_conj_clusterIsingHamiltonian (hN : 2 ≤ N) (c : ℂ) :
   rw [hmul, Matrix.mul_assoc, ← Matrix.star_eq_conjTranspose, hU, Matrix.mul_one]
 
 /-- **The CZX symmetry of the critical cluster Hamiltonian.** Source: arXiv:2011.12127,
-line 1393, with the operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` of line 1472: `O_Z` commutes with the
+line 1393, with the operator `O_Z = ∏ CZ_{i,i+1} ∏ X_i` of line 1472 (up to the global sign
+`(−1)^N` of the tensor convention, which cancels here): `O_Z` commutes with the
 cluster Hamiltonian in the critical field, here `H(1) = −∑_j Z_{j−1} X_j Z_{j+1} − ∑_j X_j`, on
 every periodic chain of `N ≥ 2` qubits. The review prints no formula for the Hamiltonian; the
 sign convention of `H(λ)` is the one of the cluster–Ising model. -/

@@ -240,11 +240,12 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_neg_one,
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_one}
     \leanok
-    \uses{thm:asymex_group_cocycle_z2}
+    \uses{thm:asymex_group_cocycle_z2, def:asymex_czx_tensors}
     On a periodic chain of $N\geq2$ qubits the following hold.
     \begin{enumerate}
         \item $O_ZX_jO_Z^\dagger=K_j$ and $O_ZK_jO_Z^\dagger=X_j$, so
-              $O_ZH(\lambda)O_Z^\dagger=-\sum_jX_j-\lambda\sum_jK_j$, and
+              $O_ZH(\lambda)O_Z^\dagger=-\sum_jX_j-\lambda\sum_jK_j$, which is
+              $\lambda H(\lambda^{-1})$ for $\lambda\neq0$, and
               $O_Z$ commutes with $H(1)$.
         \item $UX_jU^\dagger=-K_j$ and $UK_jU^\dagger=-X_j$, so
               $UH(\lambda)U^\dagger=\lambda\sum_jK_j+\sum_jX_j$, which is
@@ -256,7 +257,11 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
 
 \begin{proof}
     \leanok
-    All operators are monomial in the computational basis. The operator
+    \uses{thm:asymex_czx_kernel, thm:asymex_czx_unitarity}
+    All operators are monomial in the computational basis. The periodic
+    operator of the undecorated CZX tensor is $O_Z$ up to the global sign
+    $(-1)^N$ of its gate order~\cite{gap:mpu_czx_tensor_normalization},
+    which cancels in every conjugation. The operator
     $O_Z$ flips every bit of the input $t$ and multiplies by $(-1)^{q(t)}$,
     and $U$ multiplies instead by $(-1)^{q(\bar t)+\sum_i\bar t_i}$.
     Flipping bit $j$ of $t$ changes $q(t)$ by $t_{j-1}+t_{j+1}$ and
