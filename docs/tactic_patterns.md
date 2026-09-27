@@ -2294,24 +2294,24 @@ abstracted — record why, so it is not re-proposed).
   requested tolerance among the overlap correction and the individual blocks;
   no new tactic is needed.
 
-### Preserving overlap bounds under finite orthogonal sums — locally factored
+### Preserving overlap bounds under finite orthogonal sums — promoted
 - **Pattern:** expand the inner product over fixed spectator configurations,
   apply the pointwise overlap bound, and finish with finite Cauchy–Schwarz.
 - **Occurrences:** the two nested restrictions to a middle interval in
-  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the hand-written
-  calculation in `norm_inner_overlap_sub_inner_aggregates_le` in
-  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean` (lines 47–92),
-  which runs the same chain `norm_sum_le`, `Finset.sum_le_sum`,
-  `Finset.mul_sum`, `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator
-  configurations.
-- **Status:** private lemmas express the finite orthogonal-sum estimate and
-  its transport along a configuration equivalence. The three boundary-range
-  cases use the same middle-interval theorem. The previously private
+  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the aggregate
+  estimate `norm_inner_overlap_sub_inner_aggregates_le` in
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean`, which ran the same
+  chain `norm_sum_le`, `Finset.sum_le_sum`, `Finset.mul_sum`,
+  `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator configurations.
+- **Abstraction:** `Finset.norm_sum_le_mul_sqrt_mul_sqrt` in
+  `TNLean/Algebra/FinsetNormSumCauchySchwarz.lean`: termwise bounds
+  `‖z i‖ ≤ c * a i * b i` with `0 ≤ c` give
+  `‖∑ i ∈ s, z i‖ ≤ c * (√(∑ a i ^ 2) * √(∑ b i ^ 2))`.
+- **Status:** promoted; the fiber bound in `SpectatorOverlap.lean` and the
+  FNW aggregate estimate both close with it. The transport along a
+  configuration equivalence stays private in `SpectatorOverlap.lean`, and the
   three-interval evaluation of the right boundary map is shared with
   `FNWProjectorDefect.lean` through `SpectatorBoundaryCoordinates.lean`.
-  With the occurrence in `FNWOverlapEstimate.lean` the pattern meets the rule
-  of three; promotion means making the finite orthogonal-sum estimate public
-  and rewriting that calculation through it, which needs a Lean build.
 
 ### Lower Gram bounds and off-diagonal pairings — locally factored
 - **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
