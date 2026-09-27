@@ -6242,7 +6242,9 @@ tensors.
 
 \begin{lemma}[Comparison with the kernel projection]
     \label{lem:positive-kernel-projection-comparison}
-    \lean{LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le, LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection}
+    \lean{LinearMap.exists_pos_norm_gap_on_orthogonal_ker,
+        LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le,
+        LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection}
     \leanok
     Let $H$ be a positive operator on a finite-dimensional complex Hilbert
     space. If $P$ is the orthogonal projection onto $(\ker H)^\perp$,
