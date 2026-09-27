@@ -136,13 +136,13 @@ gauge transformations form a projective representation on the bond space.
     \label{lem:twisted_tensor_block_gauge}
     \lean{MPSTensor.twistedTensor_blockTensor_eq_gauge}
     \leanok
-    \uses{lem:twisted_tensor_block_comm}
     If $R\in\GL_{D}(\C)$ satisfies $(\widetilde A_g)^i=R\,A^i\,R^{-1}$ for all
     $i$, then $(\widetilde{(A^{[L]})}^{\,U^{[L]}}_g)^I=R\,(A^{[L]})^I\,R^{-1}$
     for every blocked index $I$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:twisted_tensor_block_comm, lem:eval_word_gauge}
     By (\ref{eq:symmetry_twist_block_comm}) the left side is a product of $L$
     matrices $(\widetilde A_g)^{i_k}=R\,A^{i_k}R^{-1}$, and the inner factors
     $R^{-1}R$ cancel.
