@@ -4884,6 +4884,86 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $\ket{\psi(gx\text{-}gy\text{-}gx)}$.
 \end{proof}
 
+\begin{definition}[A family of domain walls permuted by the group]
+    \label{def:mpug_domain_wall_family}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_target}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    A family of domain walls permuted by the group is a nonzero domain wall
+    $e_{yz}$ between $y$ and $z$ for every ordered pair of blocks, together
+    with nonzero phases $B^g_{y,z}$ such that every $g$ carries $e_{yz}$ to
+    $e_{gy,gz}$ with phase $B^g_{y,z}$
+    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}.
+\end{definition}
+
+\begin{theorem}[The interchange phase of a family of domain walls]
+    \label{thm:mpug_domain_wall_interchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_prod_lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant,
+        TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant}
+    \leanok
+    \uses{def:mpug_domain_wall_family, thm:mpug_domain_wall_pentagon,
+        thm:mpug_permuted_block_l_compatibility}
+    For a family of domain walls permuted by the group, every $g$ with
+    $g^n=e$ and every block $x$,
+    \begin{align}
+        \prod_{k=0}^{n-1}B^g_{g^k(gx),\,g^kx}
+         & =\prod_{k=0}^{n-1}\frac{L^{gx}_{g,g^k}}{L^x_{g,g^k}}
+        =\Bigl(\prod_{k=0}^{n-1}\omega(g,g^k,g)\Bigr)^{-1}.
+        \notag
+    \end{align}
+    This is \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}; the
+    interchange phase depends only on the anomaly.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    Write $\beta_k=B^{g^k}_{gx,x}$. By
+    Theorem~\ref{thm:mpug_domain_wall_pentagon} for $(g,g^k)$,
+    $B^g_{g^k(gx),g^kx}\,\beta_k=(L^{gx}_{g,g^k}/L^x_{g,g^k})\,\beta_{k+1}$.
+    Multiplying over $k<n$ and using $\beta_n=\beta_0$ gives the first
+    equality. Compatibility at $(g,g^k,g)$ gives
+    $L^{gx}_{g,g^k}/L^x_{g,g^k}=\omega(g,g^k,g)^{-1}
+        (L^x_{g,g^{k+1}}/L^x_{g,g^k})(L^x_{g^{k+1},g}/L^x_{g^k,g})^{-1}$,
+    and both quotients telescope to one over $k<n$.
+\end{proof}
+
+\begin{theorem}[The stabilizer of two blocks acts projectively]
+    \label{thm:mpug_domain_wall_projective}
+    \lean{TNLean.Algebra.LSymbol.fixingSubgroup₂,
+        TNLean.Algebra.LSymbol.ratioCocycle,
+        TNLean.Algebra.LSymbol.ratioCocycle_isCocycle,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed_self}
+    \leanok
+    \uses{def:mpug_domain_wall_family, thm:mpug_domain_wall_pentagon,
+        thm:mpug_permuted_block_l_compatibility}
+    Let $H_{y,z}$ be the subgroup of elements fixing the blocks $y$ and $z$.
+    For $a,b\in H_{y,z}$,
+    \begin{align}
+        B^a_{y,z}B^b_{y,z}
+         & =\alpha(a,b)\,B^{ab}_{y,z},
+         &
+        \alpha(a,b)
+         & =\frac{L^y_{a,b}}{L^z_{a,b}},
+        \notag
+    \end{align}
+    and $\alpha$ is a two-cocycle on $H_{y,z}$; for $y=z$ the phases form a
+    linear representation. The source states this for the subgroup fixing
+    every block \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}, which is
+    contained in $H_{y,z}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    The first identity is Theorem~\ref{thm:mpug_domain_wall_pentagon} with
+    $by=y$ and $bz=z$. Dividing the compatibility relations at $y$ and at $z$
+    for $(a,b,c)$ with $c\in H_{y,z}$ cancels $\omega(a,b,c)$ and gives the
+    two-cocycle equation.
+\end{proof}
+
 \begin{theorem}[Domain walls of an involution detect the anomaly]
     \label{thm:mpug_domain_wall_involution}
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_eq_lSymbol_of_mul_self_eq_one,
