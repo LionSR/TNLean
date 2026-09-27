@@ -9,6 +9,8 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.AnomalousCondensation
 
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2
+import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Adjoint
+import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Assembled
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Defect
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Instance
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2NonSplit

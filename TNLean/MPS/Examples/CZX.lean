@@ -14,6 +14,7 @@ import TNLean.MPS.Examples.CZX.CZXDecoratedFusion
 import TNLean.MPS.Examples.CZX.CZXDecoratedTensor
 import TNLean.MPS.Examples.CZX.CZXNoInvariant
 import TNLean.MPS.Examples.CZX.CZXPlusIdentity
+import TNLean.MPS.Examples.CZX.CZXPlusParity
 import TNLean.MPS.Examples.CZX.CZXReviewCanonicalForm
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
 import TNLean.MPS.Examples.CZX.CZXSquare
