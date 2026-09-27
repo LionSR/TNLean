@@ -4900,7 +4900,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $e_{yz}$ between $y$ and $z$ for every ordered pair of blocks, together
     with nonzero phases $B^g_{y,z}$ such that every $g$ carries $e_{yz}$ to
     $e_{gy,gz}$ with phase $B^g_{y,z}$
-    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}.
+    \cite[Section~IV.B]{GarreRubioSchuch2024DomainWall}. The walls and phases
+    are nonzero by convention \cite{gap:gs24_domain_wall_nondegenerate}.
 \end{definition}
 
 \begin{theorem}[The interchange phase of a family of domain walls]
@@ -4908,10 +4909,11 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \lean{MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_prod_lSymbol,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant,
-        TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant}
+        TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant,
+        TNLean.Algebra.LSymbol.prod_Ico_div_eq_inv_cyclicInvariant}
     \leanok
-    \uses{def:mpug_domain_wall_family, thm:mpug_domain_wall_pentagon,
-        thm:mpug_permuted_block_l_compatibility}
+    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol,
+        def:mpug_anomaly_three_cochain}
     For a family of domain walls permuted by the group, every $g$ with
     $g^n=e$ and every block $x$,
     \begin{align}
@@ -4921,7 +4923,11 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         \notag
     \end{align}
     This is \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}; the
-    interchange phase depends only on the anomaly.
+    interchange phase depends only on the anomaly. The middle product
+    includes the factor $k=0$, $L^{gx}_{g,e}/L^x_{g,e}$, which is one for
+    normalized L-symbols; the source's middle product runs over
+    $1\leq k<n$, and for normalized L-symbols that product is again
+    $\bigl(\prod_{k=0}^{n-1}\omega(g,g^k,g)\bigr)^{-1}$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4944,8 +4950,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed_self}
     \leanok
-    \uses{def:mpug_domain_wall_family, thm:mpug_domain_wall_pentagon,
-        thm:mpug_permuted_block_l_compatibility}
+    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol}
     Let $H_{y,z}$ be the subgroup of elements fixing the blocks $y$ and $z$.
     For $a,b\in H_{y,z}$,
     \begin{align}

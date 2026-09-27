@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CocycleCohomology
+import TNLean.Algebra.LSymbolDomainWall
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
 
 /-!
@@ -14,10 +14,13 @@ Garre-Rubio and Schuch (arXiv:2405.00439, Section IV.B, `Papers/2405.00439/MPU-D
 every group element permutes them: `g` carries `e_{yz}` to `e_{gy,gz}` with a phase `B^g_{y,z}`
 (`eq:localcdefG`). This file formalizes the consequences of `PentLB` drawn there:
 
-* **The interchange phase** (`Intequiv`, lines 2013--2021). For `g` with `g^n = 1`,
+* **The interchange phase** (`Intequiv`, lines 2013--2023). For `g` with `g^n = 1`,
   `∏_{k<n} B^g_{g^k(gx), g^k x} = ∏_{k<n} L^{gx}_{g,g^k} / L^x_{g,g^k} = (∏_{k<n} ω(g,g^k,g))⁻¹`,
-  which is `∏_{i=1}^{n} ω⁻¹(g,g^i,g)` of the source. It depends only on `ω`, so it is
-  independent of the action tensors, the domain walls and the ground state `x`.
+  which is `∏_{i=1}^{n} ω⁻¹(g,g^i,g)` of the source. The middle product includes the factor
+  `k = 0`, `L^{gx}_{g,1} / L^x_{g,1}`, which is one for the source's normalized L-symbols; the
+  source's range `1 ≤ k < n` is `TNLean.Algebra.LSymbol.prod_Ico_div_eq_inv_cyclicInvariant`.
+  The interchange phase depends only on `ω`, so it is independent of the action tensors, the
+  domain walls and the ground state `x`.
 * **The unbroken subgroup acts projectively** (lines 2028--2036). For `h₁, h₂` fixing both
   blocks `y` and `z`, `B^{h₁}_{y,z} B^{h₂}_{y,z} = (L^y_{h₁,h₂}/L^z_{h₁,h₂}) B^{h₁h₂}_{y,z}`,
   and `(h₁, h₂) ↦ L^y_{h₁,h₂}/L^z_{h₁,h₂}` is a two-cocycle on the subgroup fixing `y` and `z`;
@@ -27,8 +30,10 @@ The source states the second item for the subgroup fixing every block; the subgr
 two blocks adjacent to the wall contains it, and the statement here holds on that larger
 stabilizer subgroup.
 
-The phases are nonzero, the reading of the source's "phase factors" (line 1894), and the
-domain walls are nonzero, the reading of the source's domain walls as excitations.
+**Local fix (nondegenerate domain walls, blocked local action):** the walls of a family are
+nonzero and their phases are nonzero, fields of `IsDomainWallFamily` (the source's walls are
+excitations and `B` are "phase factors", line 1894), and the local action holds against blocked
+regions; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
 
 ## Main definitions
 
@@ -40,8 +45,9 @@ domain walls are nonzero, the reading of the source's domain walls as excitation
 * `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_prod_lSymbol`,
   `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant`:
   `Intequiv`.
-* `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed`,
-  `TNLean.Algebra.LSymbol.ratio_isTwoCocycle_of_fixed`: the projective action of the stabilizer.
+* `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed`: the projective
+  action of the subgroup fixing the two blocks (Mathlib's `fixingSubgroup`), with the two-cocycle
+  of `TNLean.Algebra.LSymbol.ratioCocycle_isCocycle` (`TNLean/Algebra/LSymbolDomainWall.lean`).
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -51,74 +57,6 @@ domain walls are nonzero, the reading of the source's domain walls as excitation
 open scoped Matrix Kronecker
 open TNLean.Algebra
 
-namespace TNLean.Algebra.LSymbol
-
-variable {G X : Type*} [Group G] [MulAction G X]
-
-/-- **The interchange product of L-symbols is the inverse cyclic invariant.** If `L` is
-compatible with `ω` and `g ^ n = 1`, then
-`∏_{k<n} L^{gx}_{g,g^k} / L^x_{g,g^k} = (∏_{k<n} ω(g,g^k,g))⁻¹`.
-
-Source: arXiv:2405.00439, `Intequiv`, `Papers/2405.00439/MPU-DW.tex` lines 2017--2023, second
-equality, which uses `coupledpent` at `(g, g^i, g)`. -/
-theorem prod_div_eq_inv_cyclicInvariant {L : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) (x : X) {g : G} {n : ℕ} (hg : g ^ n = 1) :
-    ∏ k ∈ Finset.range n, L (g • x) g (g ^ k) / L x g (g ^ k) =
-      (ScalarThreeCochain.cyclicInvariant ω g n)⁻¹ := by
-  have hterm : ∀ k : ℕ, L (g • x) g (g ^ k) / L x g (g ^ k) =
-      (ω g (g ^ k) g)⁻¹ * ((L x g (g ^ (k + 1)) / L x g (g ^ k)) *
-        (L x (g ^ (k + 1)) g / L x (g ^ k) g)⁻¹) := by
-    intro k
-    have h := hL x g (g ^ k) g
-    rw [← pow_succ, ← pow_succ'] at h
-    apply Units.ext
-    have h' := congrArg Units.val h
-    simp only [Units.val_mul] at h'
-    simp only [Units.val_mul, Units.val_div_eq_div_val, Units.val_inv_eq_inv_val]
-    have h1 := (L (g • x) g (g ^ k)).ne_zero
-    have h2 := (L x g (g ^ k)).ne_zero
-    have h3 := (L x (g ^ k) g).ne_zero
-    have h4 := (L x (g ^ (k + 1)) g).ne_zero
-    have h5 := (ω g (g ^ k) g).ne_zero
-    field_simp
-    linear_combination -h'
-  simp only [hterm, Finset.prod_mul_distrib, Finset.prod_inv_distrib,
-    Finset.prod_range_div (fun k ↦ L x g (g ^ k)), Finset.prod_range_div (fun k ↦ L x (g ^ k) g),
-    hg, pow_zero, div_self', inv_one, mul_one, ScalarThreeCochain.cyclicInvariant]
-
-/-- The ratio `L^y_{a,b} / L^z_{a,b}` on the subgroup fixing `y` and `z`. -/
-def ratioCocycle (L : LSymbol G X) (y z : X) : ScalarCocycle (fixingSubgroup G ({y, z} : Set X)) :=
-  fun a b ↦ L y a b / L z a b
-
-/-- **The L-symbol ratio is a two-cocycle on the subgroup fixing two blocks** (arXiv:2405.00439,
-`Papers/2405.00439/MPU-DW.tex` lines 2028--2034): if `L` is compatible with `ω`, then
-`(a, b) ↦ L^y_{a,b} / L^z_{a,b}` satisfies the two-cocycle equation on the elements fixing `y`
-and `z`; the three-cocycle cancels in the ratio. -/
-theorem ratioCocycle_isCocycle {L : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) (y z : X) : (ratioCocycle L y z).IsCocycle := by
-  rintro ⟨a, -⟩ ⟨b, -⟩ ⟨c, hc⟩
-  have hy := hL y a b c
-  have hz := hL z a b c
-  rw [((mem_fixingSubgroup_iff G).mp hc) y (by simp)] at hy
-  rw [((mem_fixingSubgroup_iff G).mp hc) z (by simp)] at hz
-  simp only [ratioCocycle, Subgroup.coe_mul]
-  rw [div_mul_div_comm, div_mul_div_comm, mul_comm (L y a b), mul_comm (L z a b)]
-  rw [show L y (a * b) c * L y a b = (ω a b c)⁻¹ * (L y a (b * c) * L y b c) by
-      rw [mul_comm, hy]; group,
-    show L z (a * b) c * L z a b = (ω a b c)⁻¹ * (L z a (b * c) * L z b c) by
-      rw [mul_comm, hz]; group]
-  rw [mul_div_mul_left_eq_div]
-
-/-- The two-cocycle `L^y/L^z` in the form of Mathlib's multiplicative two-cocycles
-(`groupCohomology.IsMulCocycle₂`), through
-`TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂`. -/
-theorem ratioCocycle_isMulCocycle₂ {L : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) (y z : X) :
-    letI := ScalarCocycle.trivialMulDistribMulAction (G := fixingSubgroup G ({y, z} : Set X))
-    groupCohomology.IsMulCocycle₂ (Function.uncurry (ratioCocycle L y z)) :=
-  (ScalarCocycle.isCocycle_iff_isMulCocycle₂ _).mp (ratioCocycle_isCocycle hL y z)
-
-end TNLean.Algebra.LSymbol
 
 namespace MPOTensor.GroupFamily.BlockActionData
 
@@ -168,7 +106,8 @@ theorem mul_eq (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x
     ((hB.action (g * h) y z).congr_target (mul_smul g h y) (mul_smul g h z)) (hB.ne_zero _ _)
 
 /-- **The interchange phase as a product of L-symbols** (arXiv:2405.00439, `Intequiv`, first
-equality, `Papers/2405.00439/MPU-DW.tex` lines 2017--2023): for `g ^ n = 1`,
+equality, in the normalization-free form with the factor `k = 0`,
+`Papers/2405.00439/MPU-DW.tex` lines 2017--2023): for `g ^ n = 1`,
 `∏_{k<n} B^g_{g^k(gx), g^k x} = ∏_{k<n} L^{gx}_{g,g^k} / L^x_{g,g^k}`. The walls
 `e_{g^k(gx), g^k x}` are those of the source, `e_{g^i x, g^{i-1} x}` for `i = k + 1`. -/
 theorem prod_eq_prod_lSymbol (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))
