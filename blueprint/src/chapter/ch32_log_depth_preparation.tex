@@ -1017,18 +1017,26 @@ chain length is open, see
 \begin{proof}
     \leanok
     \uses{thm:normalized_primitive_gauge, thm:ldp_approximating_state_depth,
-        thm:ldp_approximation_error_normal}
+        thm:ldp_approximation_error_normal, thm:normality_rescaling_invariance,
+        thm:gauge_invariance_normal,
+        thm:is_normal_tensor_of_is_normal_left_canonical,
+        thm:wordspan_blk_inj_succ}
     A gauge transformation and a rescaling bring $A$ into the
     gauge~(\ref{eq:ldp_normal_gauge}) by
     Theorem~\ref{thm:normalized_primitive_gauge}; they multiply $\ket{\phi_N(A)}$ by a
     nonzero scalar, so the normalized state changes by a phase and the error
-    is unchanged. Normality gives a bound $t<1$ on the moduli of the
-    eigenvalues of $\E_A$ other than $1$, and
+    is unchanged. The new tensor is normal by
+    Theorems~\ref{thm:normality_rescaling_invariance}
+    and~\ref{thm:gauge_invariance_normal}. By
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} its transfer
+    map is primitive, so $1$ is its only eigenvalue of modulus $1$, which gives a bound $t<1$ on the
+    moduli of the other eigenvalues, and
     Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/4$ gives
     $K$ with $\varepsilon(\widetilde\phi_N,\phi_N)\le K\,(N/q)\,e^{-rq}$,
     where $r=-\tfrac14\log t>0$. Take $a=1/r$ and
     $b=\max(\log K,0)/r+L_0+3D+1$, with $L_0$ a length at which the blocked tensor is injective.
-    Then $q\ge b$ makes the blocked tensor injective and $q\ge3D$, and
+    Then $q\ge b$ makes the blocked tensor injective by
+    Theorem~\ref{thm:wordspan_blk_inj_succ} and $q\ge3D$, and
     $rq\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$ gives
     $K(N/q)e^{-rq}\le\varepsilon$. The approximating state is a unit vector and is prepared in depth at most $Cq$ by
     Theorem~\ref{thm:ldp_approximating_state_depth}. For the second statement,
