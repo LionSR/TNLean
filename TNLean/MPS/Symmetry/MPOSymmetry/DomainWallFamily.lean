@@ -95,9 +95,8 @@ theorem phase_ne_zero (hB : ad.IsDomainWallFamily e B) (g : G) (y z : X) : B g y
   (hB g y z).phase_ne_zero
 
 /-- The domain walls of a family are nonzero. -/
-theorem ne_zero (hB : ad.IsDomainWallFamily e B) (y z : X) : e y z ≠ 0 := by
-  have h := (hB 1 y z).target_ne_zero
-  rwa [one_smul, one_smul] at h
+theorem ne_zero (hB : ad.IsDomainWallFamily e B) (y z : X) : e y z ≠ 0 :=
+  (hB 1 y z).source_ne_zero
 
 /-- **Fractionalization of the symmetry on a family of domain walls** (arXiv:2405.00439,
 `PentLB`, `Papers/2405.00439/MPU-DW.tex` lines 1928--1933):
