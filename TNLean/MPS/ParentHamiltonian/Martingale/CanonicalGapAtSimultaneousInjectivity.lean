@@ -33,15 +33,9 @@ theorem CPSVCanonicalFormData.parentHamiltonianES_eq_representatives
     {R : ℕ} (hR : 0 < R) (N : ℕ) :
     parentHamiltonianES A R N = parentHamiltonianES
       (toTensorFromBlocks (d := d) (fun _ ↦ 1)
-        (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
-  have hGS : groundSpace A R = groundSpace
-      (toTensorFromBlocks (d := d) (fun _ ↦ 1)
-        (fun j ↦ data.blocks (data.representativeIndex j))) R :=
-    (data.groundSpace_eq_iSup_representatives data.bntRefinement hR).trans
-      (groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1)
-        (fun j ↦ data.blocks (data.representativeIndex j)) (by simp) R).symm
-  simp only [parentHamiltonianES, parentHamiltonian, localTerm, parentInteraction,
-    groundSpaceES, hGS]
+        (fun j ↦ data.blocks (data.representativeIndex j))) R N :=
+  parentHamiltonianES_eq_of_groundSpace_eq
+    (data.groundSpace_eq_toTensorFromBlocks_representatives hR) N
 
 variable [NeZero d]
 

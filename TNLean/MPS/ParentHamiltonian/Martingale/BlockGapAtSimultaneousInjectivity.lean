@@ -6,8 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanSeparation
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanNormalization
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanPropagation
-import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGap
-import TNLean.MPS.ParentHamiltonian.Martingale.FixedRangeGapTransfer
+import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapThreshold
 
 /-!
 # A uniform gap at the simultaneous block-injectivity range
@@ -56,16 +55,9 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSp
       (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving B hSpanB
         (fun j ↦ (hP j).norm) hn) hR hRW
   simp_rw [hEq]
-  obtain ⟨W, hRW, _, γ, hγ, hGap⟩ :=
-    exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
-      μ B hμ ρ hP hρ (fun i j hij h ↦ by
-        simpa only [eqRec_eq_cast] using
-          not_gaugePhaseEquiv_of_wordTupleSpanTop B hSpanB i j hij h) (2 * R)
-  obtain ⟨δ, hδ, hPeriodic⟩ := exists_parentHamiltonianES_gap_of_larger_range
-    (toTensorFromBlocks (d := d) (μ := μ) B) (by omega) hRW
-    (hKernel W (by omega)) hγ hGap
-  obtain ⟨M, hM⟩ := hPeriodic.exists_forall_of_atTop
-  exact parentHamiltonianES_gap_of_eventual_gap
-    (toTensorFromBlocks (d := d) (μ := μ) B) R M hδ hM
+  exact exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_ker_openParentHamiltonianES_eq
+    μ B hμ ρ hP hρ (fun i j hij h ↦ by
+      simpa only [eqRec_eq_cast] using
+        not_gaugePhaseEquiv_of_wordTupleSpanTop B hSpanB i j hij h) (by omega) hKernel
 
 end MPSTensor

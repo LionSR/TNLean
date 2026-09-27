@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGap
-import TNLean.MPS.ParentHamiltonian.Martingale.FixedRangeGapTransfer
+import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapThreshold
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockSharpOpenGroundSpace
 
 /-!
@@ -49,12 +48,9 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS_of_t
         (toTensorFromBlocks (d := d) (μ := μ) A) R N))ᗮ,
       γ * ‖v‖ ≤ ‖parentHamiltonianES
         (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
-  obtain ⟨W, hRW, _, γ, hγ, hGap⟩ :=
-    exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
-      μ A hμ ρ hP hρ hDistinct (2 * R)
-  exact exists_parentHamiltonianES_gap_of_larger_range
-    (toTensorFromBlocks (d := d) (μ := μ) A) (by omega) hRW
-    (ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound
-      μ A hμ ρ hP hρ hDistinct hL₀ hBlk hr hR (by omega)) hγ hGap
+  exact exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamiltonianES_eq
+    μ A hμ ρ hP hρ hDistinct (by omega) fun _ hW ↦
+      ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound
+        μ A hμ ρ hP hρ hDistinct hL₀ hBlk hr hR hW
 
 end MPSTensor
