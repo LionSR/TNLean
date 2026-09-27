@@ -17,13 +17,16 @@ import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.DepthLowerBound
 import TNLean.MPS.Preparation.DepthLowerBoundCore
+import TNLean.MPS.Preparation.DepthLowerBoundNormal
 import TNLean.MPS.Preparation.DiagonalPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.IsometricChain
+import TNLean.MPS.Preparation.LocalChannelCircuit
 import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
+import TNLean.MPS.Preparation.NormalGauge
 import TNLean.MPS.Preparation.ObservableTransferBound
 import TNLean.MPS.Preparation.OrthogonalBlockError
 import TNLean.MPS.Preparation.OrthogonalBlockSum
