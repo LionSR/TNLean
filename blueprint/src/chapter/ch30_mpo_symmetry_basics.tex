@@ -254,7 +254,8 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 \end{center}
 
 \begin{proof}\leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec,
+        cor:mpug_anomaly_class}
     The tensor $T_e$ is injective with $\tr T_e^{ij}=\delta_{ij}$ and
     $\tr(T_e^{ij}T_e^{kl})=\delta_{ij}\delta_{kl}$, so
     $\tr(XY)=\tr X\,\tr Y$ on the whole matrix algebra; testing on two
@@ -273,7 +274,8 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
     fusion trees are then proportional with ratio
     $v(gh,k)v(g,h)/(v(g,hk)v(h,k))$, which is $\omega(g,h,k)$ by
     Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}; this is the
-    coboundary of $v^{-1}$.
+    coboundary of $v^{-1}$. A coboundary has trivial class, so the anomaly
+    class vanishes by Corollary~\ref{cor:mpug_anomaly_class}.
 \end{proof}
 
 %% ---------------------------------------------------------
