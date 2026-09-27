@@ -16,10 +16,11 @@ $A^2=3A$ at every length
 treats a second family of $\Z_3$ symmetry operators whose representatives
 multiply only up to phases depending on the length, and shows that the
 structure constants of its condensation defect then genuinely depend on the
-length. The symmetry is not anomalous: its Else--Nayak class is trivial, a
-fact checked in exact arithmetic and not formalized here. The length
-dependence is therefore not a signature of an anomaly; it comes from the
-per-site phases of the chosen representatives.
+length. The symmetry is not anomalous: its Else--Nayak class is trivial.
+% The triviality of the anomaly class is checked in the exact-arithmetic
+% verification record only and is not formalized.
+The length dependence is therefore not a signature of an anomaly; it comes
+from the per-site phases of the chosen representatives.
 
 As in Section~\ref{sec:asymex_z3anomalous}, let
 $\omega=\exp(2\pi\mathrm{i}/3)$, let $X\ket{s}=\ket{s+1}$ on a qutrit, and
@@ -151,56 +152,52 @@ periodic chain of $N>0$ qutrits the clock operators are
         Z3Clock.not_exists_const_defect_coeff}
     \leanok
     \uses{def:asymex_z3clock_defect, thm:asymex_z3clock_table}
-    On every periodic chain of length $L>0$,
+    On every periodic chain of length $N>0$,
     \begin{align}
-        O_L(A)^2 & =(1+2\omega^L)\,\Id+3\,U_L+(2+\omega^L)\,V_L,
+        O_N(A)^2 & =(1+2\omega^N)\,\Id+3\,U_N+(2+\omega^N)\,V_N,
     \end{align}
-    and the operators $\Id$, $U_L$ and $V_L$ are linearly independent, so
+    and the operators $\Id$, $U_N$ and $V_N$ are linearly independent, so
     these coefficients are the unique ones. The coefficients are the power
     sums of the weight multisets $\{1,\omega,\omega\}$, $\{1,1,1\}$ and
-    $\{1,1,\omega\}$. In particular $O_L(A)^2=3\,O_L(A)$ if and only if
-    $3\mid L$, and there are no coefficients independent of $L$ with
-    $O_L(A)^2=a\,\Id+b\,U_L+c\,V_L$ for every $L>0$.
+    $\{1,1,\omega\}$. In particular $O_N(A)^2=3\,O_N(A)$ if and only if
+    $3\mid N$, and there are no coefficients independent of $N$ with
+    $O_N(A)^2=a\,\Id+b\,U_N+c\,V_N$ for every $N>0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Expanding $(\Id+U_L+V_L)^2$ with
+    Expanding $(\Id+U_N+V_N)^2$ with
     Theorem~\ref{thm:asymex_z3clock_table} gives
-    $\Id+3U_L+2V_L+\omega^LV_L+2\omega^L\Id$. The three operators shift the
+    $\Id+3U_N+2V_N+\omega^NV_N+2\omega^N\Id$. The three operators shift the
     constant configuration $0$ to the constant configurations $0$, $1$ and
     $2$ respectively, each with phase one, so reading a combination of them
     in these three entries recovers its coefficients. The coefficient of
-    $V_L$ is $2+\omega^L$, which equals $3$ exactly when $\omega^L=1$, that
-    is, when $3\mid L$; comparing the lengths $1$ and $3$ would force
+    $V_N$ is $2+\omega^N$, which equals $3$ exactly when $\omega^N=1$, that
+    is, when $3\mid N$; comparing the lengths $1$ and $3$ would force
     $\omega=1$.
 \end{proof}
 
-\begin{corollary}[The clock family is not a fusion algebra]
-    \label{cor:asymex_z3clock_not_fusion_algebra}
+\begin{theorem}[The clock family is not a fusion algebra]
+    \label{thm:asymex_z3clock_not_fusion_algebra}
     \lean{Z3Clock.repBondDim, Z3Clock.repTensor, Z3Clock.not_isMPOFusionAlgebra}
     \leanok
     \uses{thm:asymex_z3clock_defect_square, def:mpo_fusion_algebra}
-    For no nonnegative integers $N_{ab}^c$, independent of the length, do
+    For no nonnegative integers $m_{ab}^{c}$, independent of the length, do
     the periodic operators of $\delta$, $U$ and $V$ satisfy
-    $O_L(T_a)O_L(T_b)=\sum_cN_{ab}^cO_L(T_c)$ at every positive length.
+    $O_N(T_a)O_N(T_b)=\sum_cm_{ab}^{c}O_N(T_c)$ at every positive length.
     In contrast, the group operators of the trivial cocycle form such an
     algebra (Theorem~\ref{thm:asymex_group_cocycle_defect}).
-\end{corollary}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    Such constants would give $\omega^LV_L=U_L^2=N_{11}^0\Id+N_{11}^1U_L+N_{11}^2V_L$,
-    hence $\omega^L=N_{11}^2$ for every $L>0$ by linear independence, and
+    Such constants would give $\omega^NV_N=U_N^2=m_{11}^{0}\Id+m_{11}^{1}U_N+m_{11}^{2}V_N$,
+    hence $\omega^N=m_{11}^{2}$ for every $N>0$ by linear independence, and
     the lengths $1$ and $3$ give $\omega=1$.
 \end{proof}
 
-\begin{remark}[What remains]
-    \label{rem:asymex_z3clock_scope}
-    The stacked square $A\cdot A$ has bond dimension $49$ and, by the
-    verification record, the block triangular form of
-    Theorem~\ref{thm:asym_multiblock} with nine targets and $28$
-    one-dimensional zero diagonal blocks. That compression is not
-    formalized; the fusion identity above is proved directly at the level
-    of periodic operators.
-\end{remark}
+% The stacked square A.A has bond dimension 49 and, by the verification
+% record, the block triangular form of the multi-block compression theorem
+% with nine targets and 28 zero diagonal blocks. That compression is not
+% formalized; the fusion identity above is proved at the level of periodic
+% operators.
