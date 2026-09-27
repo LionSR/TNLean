@@ -779,22 +779,39 @@ relation between word traces has nonnegative integer coefficients.
 
 \begin{definition}[The fusion rings of $su(2)_4$ and $\mathrm{Rep}(S_3)$]%
     \label{def:mposym_su24_reps3}
-    \lean{MPOTensor.su24Fusion, MPOTensor.repS3Fusion,
-        MPOTensor.isFusionUnit_su24Fusion, MPOTensor.isFusionUnit_repS3Fusion,
-        MPOTensor.repS3ToSU24, MPOTensor.su24Fusion_repS3ToSU24,
-        MPOTensor.su24Fusion_repS3ToSU24_odd}
+    \lean{MPOTensor.su24Fusion, MPOTensor.repS3Fusion, MPOTensor.repS3ToSU24}
     \leanok
     \uses{def:fusion_unit_invertible}
-    The labels of $su(2)_4$ are $0,\tfrac12,1,\tfrac32,2$, with unit $0$ and
+    The labels of $su(2)_4$ are $0,\tfrac12,1,\tfrac32,2$, with
     fusion rules $j_1\times j_2=\sum j$ over
     $j=|j_1-j_2|,|j_1-j_2|+1,\ldots,\min(j_1+j_2,4-j_1-j_2)$. The labels of
-    $\mathrm{Rep}(S_3)$ are $1,\pi,\psi$, with unit $1$,
+    $\mathrm{Rep}(S_3)$ are $1,\pi,\psi$, with
     $\pi\times\pi=1+\pi+\psi$, $\psi\times\psi=1$ and
-    $\psi\times\pi=\pi\times\psi=\pi$. The assignment $1,\pi,\psi\mapsto0,1,2$
-    identifies $\mathrm{Rep}(S_3)$ with the fusion subring of integer labels of
-    $su(2)_4$ \cite[Section~6]{GarreRubio2023MPOSym}.
+    $\psi\times\pi=\pi\times\psi=\pi$. The labels $1,\pi,\psi$ are assigned
+    to the integer labels $0,1,2$ of $su(2)_4$
+    \cite[Section~6]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 1891--1904 and 1934.
 \end{definition}
+
+\begin{theorem}[Units and the embedding of $\mathrm{Rep}(S_3)$ in $su(2)_4$]%
+    \label{thm:mposym_su24_reps3_units}
+    \lean{MPOTensor.isFusionUnit_su24Fusion, MPOTensor.isFusionUnit_repS3Fusion,
+        MPOTensor.su24Fusion_repS3ToSU24,
+        MPOTensor.su24Fusion_repS3ToSU24_odd}
+    \leanok
+    \uses{def:mposym_su24_reps3}
+    The label $0$ is the unit of $su(2)_4$ and $1$ is the unit of
+    $\mathrm{Rep}(S_3)$. The assignment $1,\pi,\psi\mapsto0,1,2$ identifies
+    $\mathrm{Rep}(S_3)$ with the fusion subring of integer labels of
+    $su(2)_4$: the fusion rules agree, and products of integer labels contain
+    no half-integer label \cite[Section~6]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, line 1934.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compare the finitely many structure constants.
+\end{proof}
 
 \begin{theorem}[The phases of $su(2)_4$ and $\mathrm{Rep}(S_3)$ represent the fusion rings]%
     \label{thm:mposym_su24_reps3_nimreps}
@@ -805,7 +822,7 @@ relation between word traces has nonnegative integer coefficients.
         MPOTensor.isNIMRep_repS3Z2, MPOTensor.isNIMRep_repS3Z3,
         MPOTensor.repS3Z3Printed, MPOTensor.not_isNIMRep_repS3Z3Printed}
     \leanok
-    \uses{def:mposym_su24_reps3, def:fusion_character_nimrep}
+    \uses{thm:mposym_su24_reps3_units, def:fusion_character_nimrep}
     The following actions on blocks, with the unit acting as the identity,
     satisfy (\ref{eq:mpo_nimrep}).
     \begin{enumerate}
