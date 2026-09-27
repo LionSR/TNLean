@@ -263,9 +263,9 @@ theorem goldenChainHamiltonian_commute_fibProjector {N : ℕ} [NeZero N] (hN : 2
     ((goldenChainHamiltonian_commute_mpo_fibTau hN).smul_right _)
 
 /-- **The golden chain commutes with the G-symbol operators.** Source: arXiv:2011.12127,
-lines 1388–1393: for each label `f`, `H_N` commutes with the periodic operator of the G-symbol tensor
-of arXiv:1511.08090 (lines 1257–1268) restricted to edge label `τ`, which equals `O_N(B_f)` by
-`mpo_fibStringNetEdgeTau`. -/
+lines 1388–1393: for each label `f`, `H_N` commutes with the periodic operator of the G-symbol
+tensor of arXiv:1511.08090 (lines 1257–1268) restricted to edge label `τ`, which equals
+`O_N(B_f)` by `mpo_fibStringNetEdgeTau`. -/
 theorem goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau {N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (f : Fin 2) : Commute (goldenChainHamiltonian N) (mpo (fibStringNetEdgeTau f) N) := by
   rw [mpo_fibStringNetEdgeTau]
