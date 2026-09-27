@@ -235,8 +235,9 @@ omit [NeZero n] in
 theorem orderOf_ofAdd_one : orderOf (Multiplicative.ofAdd (1 : ZMod n)) = n := by
   rw [orderOf_ofAdd_eq_addOrderOf, ZMod.addOrderOf_one]
 
-/-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2013–2021 and 2040:
-**the domain-wall phase at the generator determines the class**: two three-cocycles of `ℤ_n`
+/-- Project result: **the domain-wall phase at the generator determines the class**, a
+consequence of the classification of arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040,
+and of the gauge invariance of the phase of lines 2013–2021: two three-cocycles of `ℤ_n`
 are cohomologous exactly when `∏_{k=1}^{n} ω⁻¹(1, k, 1)` agree. -/
 theorem cohomologousTo_iff_domainWallPhase_eq (hn : 1 < n)
     {ω η : ScalarThreeCochain (Multiplicative (ZMod n))} (hω : IsCocycle ω) (hη : IsCocycle η) :
@@ -247,9 +248,8 @@ theorem cohomologousTo_iff_domainWallPhase_eq (hn : 1 < n)
     orderOf_ofAdd_one] at h
   exact inv_injective h
 
-/-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2013–2021 and 2040: two
-three-cocycles of `ℤ_n` have the same class in `H³(ℤ_n, ℂˣ)` exactly when their domain-wall
-phases at the generator agree. -/
+/-- Project result: two three-cocycles of `ℤ_n` have the same class in `H³(ℤ_n, ℂˣ)` exactly
+when their domain-wall phases at the generator agree. -/
 theorem anomalyClass_eq_iff_domainWallPhase_eq (hn : 1 < n)
     (ω η : {ω : ScalarThreeCochain (Multiplicative (ZMod n)) // IsCocycle ω}) :
     anomalyClass ω = anomalyClass η ↔

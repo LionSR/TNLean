@@ -101,8 +101,10 @@ theorem domainWallPhase_omega_z3 (fd : family.FusionData) :
   change _ = ((ScalarThreeCochain.cyclicInvariant _ z3Gen (orderOf z3Gen))⁻¹ : ℂˣ).val
   rw [orderOf_z3Gen]
 
-/-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: **for every choice of
-fusion tensors, the anomaly three-cochain of `{1, U, U†}` is cohomologous to `ω₂`**. -/
+/-- Project result: **for every choice of fusion tensors, the anomaly three-cochain of
+`{1, U, U†}` is cohomologous to `ω₂`**, the cocycle of arXiv:2405.00439,
+`Papers/2405.00439/MPU-DW.tex` line 2040. It follows from the equality of cyclic invariants and
+the classification of the three-cocycles of `ℤ₃` stated there. -/
 theorem cohomologousTo_cyclicCocycle_two_omega_z3 (fd : family.FusionData) :
     ScalarThreeCochain.CohomologousTo fd.omega (ScalarThreeCochain.cyclicCocycle 3 2) :=
   ScalarThreeCochain.cohomologousTo_of_cyclicInvariant_eq (by norm_num)
@@ -110,8 +112,8 @@ theorem cohomologousTo_cyclicCocycle_two_omega_z3 (fd : family.FusionData) :
     (ScalarThreeCochain.cyclicCocycle_isCocycle 3 2)
     (cyclicInvariant_omega_z3_eq_cyclicCocycle_two fd)
 
-/-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: **the anomaly class of
-`{1, U, U†}` in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`**. -/
+/-- Project result: **the anomaly class of `{1, U, U†}` in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`**,
+the cocycle of arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040. -/
 theorem anomalyClass_family_eq_cyclicCocycle_two :
     family_isNormalRepresentation.anomalyClass =
       ScalarThreeCochain.anomalyClass (ScalarThreeCochain.cyclicCocycleSubtype 3 2) := by
