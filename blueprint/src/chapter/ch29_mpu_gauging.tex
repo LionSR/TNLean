@@ -4785,7 +4785,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \uses{def:mpug_permuted_block_l_symbol}
     Let $e$ be a domain wall between $x$ and $y$, and $e'$ a domain wall
     between $gx$ and $gy$. The element $g$ carries $e$ to $e'$ with phase $c$
-    if there is $N$ such that
+    if $e'\neq0$, $c\neq0$, and there is $N$ such that
     \begin{align}
         V_{g,x}\,(O_g\cdot A_x)^{\mathbf u}\,(O_g\cdot e)^i\,
         (O_g\cdot A_y)^{\mathbf v}\,W_{g,y}
@@ -4818,7 +4818,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     with phase $B^h_{x,y}$ and $g$ carries $e_2$ to $e_3$ with phase
     $B^g_{hx,hy}$. Then $gh$ carries $e_1$ to $e_3$ with phase
     $(L^y_{g,h}/L^x_{g,h})\,B^g_{hx,hy}B^h_{x,y}$. Consequently, if $gh$
-    carries $e_1$ to $e_3\neq0$ with phase $B^{gh}_{x,y}$, then
+    carries $e_1$ to $e_3$ with phase $B^{gh}_{x,y}$, then
     \begin{align}
         B^g_{hx,hy}\,B^h_{x,y}
          & =\frac{L^x_{g,h}}{L^y_{g,h}}\,B^{gh}_{x,y}.
@@ -4901,8 +4901,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol,
         def:mpug_anomaly_three_cochain}
     Let $g^2=e$ exchange the blocks $x$ and $y$, let $g$ carry the domain wall
-    $e_{AB}\neq0$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}\neq0$ and
-    $e_{BA}$ to $e_{AB}$ with phase $c_{BA}\neq0$. Then
+    $e_{AB}$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}$ and
+    $e_{BA}$ to $e_{AB}$ with phase $c_{BA}$. Then
     \begin{align}
         c_{AB}\,c_{BA}
          & =\frac{L^x_{g,g}L^x_{e,e}}{L^y_{g,g}L^y_{e,e}}
