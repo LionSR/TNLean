@@ -39,11 +39,11 @@ takes the separation `s'` from the windowed correlation estimate
 
 **Scope restriction (gauge):** the tensor is assumed to be in the gauge
 `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of arXiv:2307.01696, eq. (5), with a
-blocking length `L` at which `A` is injective and a subleading eigenvalue `λ₂` of `E_A`. The
-source's Theorem 1 is stated for every normal tensor; its proof, and the chapter's, first pass
-to this gauge. That reduction is not formalized here, so the Lean results are tagged against the
-separate gauge-form entry `thm:ldp_depth_lower_bound_gauge`, and the source entry
-`thm:ldp_depth_lower_bound` stays untagged. Documented in
+blocking length `L` at which `A` is injective and a subleading eigenvalue `λ₂` of `E_A`, so the
+results here are tagged against the gauge-form entry `thm:ldp_depth_lower_bound_gauge`. The
+source's Theorem 1 is stated for every normal tensor; the reduction to this gauge is proved in
+`TNLean/MPS/Preparation/NormalGauge.lean`, and the source statement in
+`TNLean/MPS/Preparation/DepthLowerBoundNormal.lean`. Documented, as resolved, in
 `docs/paper-gaps/mswc24_depth_lower_bound_gauge.tex`.
 -/
 
