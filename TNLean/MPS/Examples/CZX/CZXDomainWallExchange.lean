@@ -63,7 +63,8 @@ theorem czx_domainWall_pair :
       castIndex czxBlockDim czxGen_smul_zero *
           (czxBlockActionData.V czxGen (Multiplicative.ofAdd 0) *
             (Kraus.evalWord (actTensor (czxFamily.tensor czxGen)
-                (czxBlock (Multiplicative.ofAdd 0))) u * actRect (czxFamily.tensor czxGen) czxWallAB i *
+                (czxBlock (Multiplicative.ofAdd 0))) u *
+              actRect (czxFamily.tensor czxGen) czxWallAB i *
               Kraus.evalWord (actTensor (czxFamily.tensor czxGen)
                 (czxBlock (Multiplicative.ofAdd 1))) v *
               actRect (czxFamily.tensor czxGen) czxWallBA j *
