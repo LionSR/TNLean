@@ -72,10 +72,10 @@ of `(a, b, c)`.
 Source: arXiv:2204.05940, `mpo.tex`, lines 866--875 and 1655. -/
 noncomputable def coproductRight (Y : Fus.PairSpace) (a b c : Λ) :
     Matrix (Fus.TripleBond a b c) (Fus.TripleBond a b c) ℂ :=
-  (∑ f, ∑ μ, ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
-      Fus.fusionTensor b c f μ) * Y a f *
+  (∑ f, ∑ l, ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
+      Fus.fusionTensor b c f l) * Y a f *
     ((1 : Matrix (Fin (Fus.bondDim a)) (Fin (Fus.bondDim a)) ℂ) ⊗ₖ
-      Fus.fusionTensorLeftInverse b c f μ)).submatrix
+      Fus.fusionTensorLeftInverse b c f l)).submatrix
     (Equiv.prodAssoc _ _ _) (Equiv.prodAssoc _ _ _)
 
 private theorem sum_kronecker {ι l m n q : Type*} (s : Finset ι) (A : ι → Matrix l m ℂ)
@@ -147,15 +147,14 @@ theorem coproductLeft_smul (r : ℂ) (Y : Fus.PairSpace) (a b c : Λ) :
 theorem coproductRight_add (Y Y' : Fus.PairSpace) (a b c : Λ) :
     Fus.coproductRight (Y + Y') a b c =
       Fus.coproductRight Y a b c + Fus.coproductRight Y' a b c := by
-  simp only [coproductRight, Pi.add_apply, Matrix.mul_add, Matrix.add_mul,
-    Finset.sum_add_distrib]
-  rfl
+  ext x y
+  simp [coproductRight, Matrix.mul_add, Matrix.add_mul, Finset.sum_add_distrib]
 
 theorem coproductRight_smul (r : ℂ) (Y : Fus.PairSpace) (a b c : Λ) :
     Fus.coproductRight (r • Y) a b c = r • Fus.coproductRight Y a b c := by
-  simp only [coproductRight, Pi.smul_apply, Matrix.mul_smul, Matrix.smul_mul,
-    ← Finset.smul_sum]
-  rfl
+  ext x y
+  simp only [coproductRight, submatrix_apply, Matrix.smul_apply, Matrix.sum_apply,
+    Pi.smul_apply, Matrix.mul_smul, Matrix.smul_mul, smul_eq_mul, Finset.mul_sum]
 
 /-- **Coassociativity of the fusion coproduct.**
 $(\Delta\otimes\mathrm{id})\circ\Delta=(\mathrm{id}\otimes\Delta)\circ\Delta$ on the boundary
