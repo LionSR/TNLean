@@ -9247,7 +9247,9 @@ three defect domains and maps, which the displayed matrices do not supply.
         Matrix.smul_monomial,
         Matrix.monomial_one,
         Matrix.reindex_monomial,
-        Matrix.monomial_mem_unitaryGroup}
+        Matrix.monomial_mem_unitaryGroup,
+        Matrix.trace_monomial,
+        Matrix.trace_monomial_eq_zero}
     \leanok
     \uses{def:mpug_monomial_matrix}
     A vector $v\in\C^S$ is fixed by $M(\sigma,\varphi)$ if and only if
@@ -9263,7 +9265,9 @@ three defect domains and maps, which the displayed matrices do not supply.
         \label{eq:mpug_monomial_adjoint}
     \end{align}
     The identity is $M(\id,1)$, and $M(\sigma,\varphi)$ is unitary when
-    $|\varphi(s)|=1$ for every $s$.
+    $|\varphi(s)|=1$ for every $s$. The trace is
+    $\tr M(\sigma,\varphi)=\sum_{s:\,\sigma(s)=s}\varphi(s)$, which vanishes
+    when $\sigma$ has no fixed point.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -9277,6 +9281,8 @@ three defect domains and maps, which the displayed matrices do not supply.
     relabelling conjugates the permutation. For unitarity,
     (\ref{eq:mpug_monomial_mul}) and (\ref{eq:mpug_monomial_adjoint}) give
     $M(\sigma,\varphi)^\dagger M(\sigma,\varphi)=M(\id,|\varphi|^2)=\Id$.
+    The diagonal entry at $s$ is $\varphi(s)$ if $\sigma(s)=s$ and zero
+    otherwise, which gives the trace.
 \end{proof}
 
 \begin{theorem}[Flat phases on the hypercube have a potential]
