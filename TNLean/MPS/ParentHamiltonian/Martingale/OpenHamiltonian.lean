@@ -204,7 +204,7 @@ theorem localTermES_eq_zero_of_openParentHamiltonianES_eq_zero
     (fun i => localTermES_isSymmetricProjection A L i.1) hv i
 
 /-- A kernel vector of the open-chain Hamiltonian restricts into the local
-ground space on every nonwrapping length-`L` window.
+ground space on every nonwrapping window of length \(L\).
 
 This is the frustration-free extraction of Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12), read in `NSiteSpace` coordinates. -/
