@@ -267,9 +267,12 @@ an arbitrary positive diagonal weight and an arbitrary stabilization exponent,
 through which \texttt{lemuisometry} is proved. The remaining restricted
 full-support statements include the distinct labels
 \texttt{def:mpu\_admissible\_index},
-\texttt{prop:mpu\_admissible\_index\_well\_defined},
-\texttt{lem:mpu\_admissible\_index\_tensor}, and
-\texttt{lem:mpu\_admissible\_index\_composition}.
+\texttt{prop:mpu\_admissible\_index\_well\_defined}, and
+\texttt{lem:mpu\_admissible\_index\_composition}. The tensor-product entry
+\texttt{thm:mpu\_admissible\_index\_tensor} no longer needs full-support
+data: it is stated for factors in canonical form II, and the representative
+entry \texttt{thm:mpu\_representative\_index\_tensor\_product} covers all
+positive-dimensional MPUs.
 
 Chapter~28 now contains thirty-six labelled \texttt{mpu\_admissible} entries.
 Thirty-five are restricted forms of results or definitions in
@@ -289,8 +292,9 @@ The unrestricted source Index Theorem remains under
 unrestricted tensor-product and composition additivity, source continuity, and
 source equivalence.
 
-The common-block reduced-data versions of the two additivity statements have
-distinct admissible labels and feed only the Admissible Index Theorem. This
+The common-block reduced-data version of composition additivity has a
+distinct admissible label and feeds only the Admissible Index Theorem;
+tensor-product additivity no longer has such a version, as described below. This
 theorem records the result currently justified by the formal interfaces. It
 requires source data at every blocking length where Theorem~III.8 of
 Ref.~\cite{Cirac2017MPU} is used. A blocking length is admissible only if the
@@ -320,8 +324,20 @@ physical adjunction reverses its sign
 rectangular reduction preserves the two source-cut ranks of the unreduced
 tensor itself, or identify this representative definition with the printed
 unrestricted source-cut formula without further argument.
-Tensor-product additivity still requires one common blocking length at which
-both factors and their tensor product are simple and have source data.
+For two canonical-form-II representatives, tensor-product additivity follows without
+separately supplied data at a common blocking length. Their independent
+tensor product is again in canonical form II; all three tensors become simple
+after a sufficiently long positive blocking, and both source-cut ranks
+multiply. The logarithmic formula therefore gives
+$\operatorname{ind}(\mathcal U\otimes\mathcal V)
+    =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V)$.
+In particular, tensoring with a positive-dimensional identity factor leaves
+the index unchanged. Passing to reduced representatives and using the exact
+periodic tensor-product identity gives the same additivity and identity-ancilla
+invariance for all positive-dimensional MPUs
+(\leanid{MPOTensor.IsMPU.index_tensorProduct},
+\leanid{MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}). The remaining
+composition hypotheses below are not removed by this tensor-product argument.
 
 The published composition proof first uses $\mathcal U_k$,
 $\mathcal U'_k$, and $\mathcal W_k$, then places $\mathcal U_{2k}$ and

@@ -15,8 +15,14 @@ For the Fibonacci string-net example of arXiv:1511.08090:
 
 - `bmwshv17_fibonacci_block_entries_provenance.tex` records that the source
   prints the Fibonacci F-symbols but no numeric entries of the two operator
-  blocks, the placement of the F-symbols used for the blocks, and that the
-  checked fusion rules and projector identity concern the bare F-symbols.
+  blocks, the placement of the F-symbols used for the blocks, that on edge
+  label `τ` a diagonal bond similarity relates the source's G-symbol tensor to
+  these blocks (so the periodic operators and fusion rules agree there), and
+  that the review's prefactor `1/√(d_A d_D)` gives the congruence
+  `W^{-1/2} O W^{-1/2}`, which contradicts the review's own fusion statement in
+  the orthonormal basis (a Local fix, together with the review's garbled
+  F-symbol selection rule). The fusion rules of the source's tensor on edge
+  label `1` remain open, with an elimination plan (issue #8217).
 - `bmwshv17_joint_block_left_inverse.tex` records that the simultaneous left
   inverse of the labelled blocks used to extract the F-symbols does not follow
   from injectivity of each block, gives a two-block counterexample at physical
@@ -72,13 +78,16 @@ For the MPU index of arXiv:1703.09188:
 
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
-  tensors and physical Z gates of the 2025 diagram. The shared-tensor
-  correspondence remains open under #7738. The note also records that the
+  tensors and physical Z gates of the 2025 diagram. The corrected
+  Z-decorated tensor is formalized with its all-length unitarity, which
+  resolves the note. The note also records that the
   bra-ket display of the CZX tensor in arXiv:2011.12127, Appendix A, repeats
   the normalized tensor, while the matrices printed there are its unnormalized
   rescaling, for which the claims of that passage hold, and that the printed
   matrices give the gate order opposite to the verbal description, a global
-  sign `(-1)^N`.
+  sign `(-1)^N`, and that the review's main text calls the one-dimensional
+  block of the square the identity where the appendix obtains `(-1)^N I`, a
+  difference by the same sign that a rescaling of the tensor by `i` removes.
 
 - `mpu_source_cut_orientation.tex` records the resolved correction of the first
   source cut from the transposed row-column convention to row $(i,\beta)$ and
@@ -662,6 +671,16 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
   tends to `1/√5` for every blocking length.
+- `mswc24_block_form_mixed_overlap.tex` records that the block form of the
+  positive part in eq. (S5) also fails when every multiplicity is one, because
+  `B†B` couples distinct blocks through the overlaps of their `q`-site states,
+  and that part (ii) of the approximation-error lemma fails for the state of
+  eq. (S7): for `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` the error is at least
+  `(9/25)^q/16` for `M ≥ 3`, which the printed rate `(N/q) e^{-γq/ξ_diag}` does
+  not control since the one-dimensional blocks leave `ξ_diag` unconstrained.
+  Under the added hypothesis that the `q`-site states of distinct blocks are
+  orthogonal, the block form holds for multiplicity one and part (ii) is proved
+  with no condition `q = o(N)`.
 - `mswc24_decaying_correlations_windowed_connected.tex` records that the
   correlation estimate of Lemma 2 of the Supplemental Material is proved with
   the bound in every window of `K ≤ 2` consecutive separations and for the
