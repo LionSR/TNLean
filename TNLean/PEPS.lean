@@ -112,6 +112,7 @@ import TNLean.PEPS.TorusStateTranslationInvariant
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusUnconditionalFundamentalTheorem
+import TNLean.PEPS.TorusVirtualString
 import TNLean.PEPS.TorusWindowBondLocal
 import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusWindowBondUniform
