@@ -109,9 +109,9 @@ than `1`, with correlation length `ξ = -1/log t`. Then for every `a > ξ/2` the
 such that for `0 < ε ≤ 1` and every block length `q` dividing `N ≥ 1` with
 `q ≥ a log(N/ε) + b`, some unit vector `|ψ⟩` on `N` sites with
 `ε(ψ, φ_N(A)) = 1 - |⟨ψ|φ_N(A)⟩| ≤ ε` is prepared from a product state in depth at most `C q`.
-`exists_normalGaugeData` provides such data for every normal `A`, with `t` arbitrarily close
-to the largest modulus of the eigenvalues other than `1` when that modulus is positive; `ξ` is
-the correlation length at this bound `t`.
+`exists_normalGaugeData` provides such data for every normal `A`, with some admissible bound
+`t ≥ 1/2`. Any `t` in `(0, 1)` that bounds these moduli is admissible, so when the largest of
+them is positive, `t` may be taken equal to it and `ξ` is then the correlation length of `B`.
 
 Project result. arXiv:2307.01696, in the paragraph after Lemma 1, takes
 `q = ⌈2 ξ (1 + η) ln N⌉`, a slope `2 ξ` in `log N`, and arXiv:2606.24475, App. B4, eq. (S54),

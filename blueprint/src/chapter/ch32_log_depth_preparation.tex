@@ -831,8 +831,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     bound follows from $\varepsilon\leq1\leq Cy\leq Cy\,e^{Cy}$.
 \end{proof}
 
-\begin{lemma}[Powers of a perturbed idempotent without first-order term]
-    \label{lem:ldp_idempotent_second_order}
+\begin{theorem}[Powers of a perturbed idempotent without first-order term]
+    \label{thm:ldp_idempotent_second_order}
     \lean{IsIdempotentElem.norm_trace_add_pow_sub_le_of_le,
         IsIdempotentElem.norm_trace_add_pow_sub_le}
     \leanok
@@ -845,7 +845,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
          & \le K\bigl(\lVert e\rVert+3\lVert f\rVert\bigr)\,2Mz^2\,e^{2Mz^2}.
         \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     Put $T=e+Z$, $W=fZf$, $\beta=\lVert fZe\rVert$, $\beta'=\lVert eZf\rVert$,
@@ -863,14 +863,14 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     $(1+2z^2)^M-1\le2Mz^2e^{2Mz^2}$.
 \end{proof}
 
-\begin{lemma}[Overlap of the positive part with the fixed point, to second order]
-    \label{lem:ldp_positive_part_overlap_second_order}
+\begin{theorem}[Overlap of the positive part with the fixed point, to second order]
+    \label{thm:ldp_positive_part_overlap_second_order}
     \lean{MPSTensor.exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq,
         MPSTensor.exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le,
         MPSTensor.transferMatrix_fixedPointTensor_mul_mul,
         MPSTensor.inner_sqrtWeightLM, MPSTensor.exists_norm_map_polarPosTensor_sub_le}
     \leanok
-    \uses{lem:ldp_idempotent_second_order, thm:ldp_positive_part_rate,
+    \uses{thm:ldp_idempotent_second_order, thm:ldp_positive_part_rate,
         def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1$. There is $C>0$ such that for all $q$ and
@@ -889,7 +889,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     of first order, and so is the
     bound of \cite[App.~B4, eq.~(S52)]{Murota2026ExactLogDepth}, which is
     linear in the residual. The second-order bounds are new here.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     By Theorem~\ref{thm:ldp_positive_part_rate}, every linear function of the
@@ -907,7 +907,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     $\lvert1-\alpha\rvert\le\lVert v_q-v_\infty\rVert$. Write
     $\tau_q=\alpha(\tau_\infty+Z)$. Then $\tau_\infty Z\tau_\infty=0$ and
     $\lVert Z\rVert=O(e^{-\gamma q/\xi})$, so
-    Lemma~\ref{lem:ldp_idempotent_second_order} bounds
+    Theorem~\ref{thm:ldp_idempotent_second_order} bounds
     $\lvert\Tr(\tau_\infty+Z)^M-1\rvert$ by a multiple of $y\,e^{c y}$, and
     $\lvert\alpha\rvert^M\ge1-M(1-\lvert\alpha\rvert)$ is at least $1$ minus a
     multiple of $y$.
@@ -926,7 +926,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le,
         MPSTensor.one_sub_norm_inner_smul_inv_norm_le_two_mul}
     \leanok
-    \uses{lem:ldp_positive_part_overlap_second_order, def:ldp_approximating_state,
+    \uses{thm:ldp_positive_part_overlap_second_order, def:ldp_approximating_state,
         thm:ldpolar_blocked_state, thm:ldpolar_tensor_injective,
         thm:ldp_injectivity_cutoff, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
@@ -968,12 +968,12 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     which is at most $2(c_N^2-\lvert a\rvert^2)$ once $c_N^2\ge1/2$. The
     normalization satisfies $\lvert c_N^2-1\rvert=\lvert\Tr\E_A^{\,N}-1\rvert
         \le Ke^{-\gamma' N/\xi}$ for every $0<\gamma'<1$; we use it at $\gamma'=\gamma$.
-    For $M=1$, Lemma~\ref{lem:ldp_positive_part_overlap_second_order} bounds
+    For $M=1$, Theorem~\ref{thm:ldp_positive_part_overlap_second_order} bounds
     $c_N^2-\lvert a\rvert^2$ directly. For $M\ge2$,
     $c_N^2-\lvert a\rvert^2\le\lvert c_N^2-1\rvert+2\max(0,1-\lvert a\rvert)$,
     with $\lvert c_N^2-1\rvert\le Ke^{-2\gamma q/\xi}$ because $N\ge2q$, and
     $1-\lvert a\rvert$ is bounded by
-    Lemma~\ref{lem:ldp_positive_part_overlap_second_order}. The finitely many
+    Theorem~\ref{thm:ldp_positive_part_overlap_second_order}. The finitely many
     $q$ below the injectivity length, and the case $Cy\ge1$, are covered by
     $\varepsilon\le1$.
 \end{proof}
