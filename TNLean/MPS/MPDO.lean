@@ -138,6 +138,7 @@ import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CompleteZipperFusion
 import TNLean.MPS.MPDO.CompleteZipperFusionBlocked
+import TNLean.MPS.MPDO.CompleteZipperFusionCoassoc
 import TNLean.MPS.MPDO.CompleteZipperFusionCoproduct
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
@@ -163,6 +164,7 @@ import TNLean.MPS.MPDO.CyclicEdgeWeightTensor
 import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.DiagonalCutRank
+import TNLean.MPS.MPDO.DiagonalDressing
 import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.DirectSum
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
@@ -227,6 +229,7 @@ import TNLean.MPS.MPDO.OperatorClosurePowerSum
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.OperatorFromWordTrace
 import TNLean.MPS.MPDO.OperatorProduct
+import TNLean.MPS.MPDO.OperatorProductBlockDiagonal
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
@@ -335,6 +338,7 @@ import TNLean.MPS.MPDO.SimpleLocalInverseMaps
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleScaling
 import TNLean.MPS.MPDO.SimpleTensor
+import TNLean.MPS.MPDO.SiteOperatorKernel
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.SitewisePhysicalRecovery
 import TNLean.MPS.MPDO.SourceBNTBlocking

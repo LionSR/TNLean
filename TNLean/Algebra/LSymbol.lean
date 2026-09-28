@@ -20,6 +20,14 @@ attach these scalars to a matrix product unitary.
 * `LSymbol.IsCompatible`: compatibility with a scalar 3-cochain.
 * `LSymbol.gauge`: the joint fusion-tensor and action-tensor gauge action.
 * `LSymbol.IsNormalized`: triviality when either group argument is the identity.
+
+## Main results
+
+* `LSymbol.IsCompatible.gauge`: joint gauges transport compatibility along the fusion gauge.
+* `LSymbol.IsCompatible.mul`, `LSymbol.IsCompatible.inv`, `LSymbol.IsCompatible.mul_inv_one`:
+  compatibility is multiplicative.
+* `LSymbol.gauge_one_mul`, `LSymbol.IsCompatible.gauge_one`: action-tensor gauges with trivial
+  fusion gauge.
 -/
 
 namespace TNLean.Algebra
@@ -111,6 +119,51 @@ theorem IsCompatible.gauge {L : LSymbol G X} {ω : ScalarThreeCochain G}
         ((ω g h k : ℂ) * (L (k • x) g h : ℂ) * (L x (g * h) k : ℂ)) := by
       rw [hL']
     _ = _ := by ring
+
+/-- Compatibility is multiplicative: pointwise products of compatible L-symbols are compatible
+with the pointwise product of the three-cochains. -/
+theorem IsCompatible.mul {L₁ L₂ : LSymbol G X} {ω₁ ω₂ : ScalarThreeCochain G}
+    (h₁ : IsCompatible L₁ ω₁) (h₂ : IsCompatible L₂ ω₂) :
+    IsCompatible (L₁ * L₂) (ω₁ * ω₂) := by
+  intro x g h k
+  simp only [Pi.mul_apply]
+  calc
+    _ = (L₁ x g (h * k) * L₁ x h k) * (L₂ x g (h * k) * L₂ x h k) := by ac_rfl
+    _ = (ω₁ g h k * L₁ (k • x) g h * L₁ x (g * h) k) *
+        (ω₂ g h k * L₂ (k • x) g h * L₂ x (g * h) k) := by rw [h₁, h₂]
+    _ = _ := by ac_rfl
+
+/-- The pointwise inverse of a compatible L-symbol is compatible with the inverse
+three-cochain. -/
+theorem IsCompatible.inv {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) : IsCompatible L⁻¹ ω⁻¹ := by
+  intro x g h k
+  simp only [Pi.inv_apply]
+  rw [← mul_inv, hL x g h k, mul_inv, mul_inv]
+
+/-- The ratio of two L-symbols compatible with the same three-cochain is compatible with the
+trivial three-cochain. -/
+theorem IsCompatible.mul_inv_one {L L₀ : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (hL₀ : IsCompatible L₀ ω) :
+    IsCompatible (L * L₀⁻¹) (fun _ _ _ ↦ 1) := by
+  have h := hL.mul hL₀.inv
+  rw [mul_inv_cancel] at h
+  exact h
+
+/-- An action-tensor gauge with trivial fusion gauge commutes with multiplication by a fixed
+L-symbol. -/
+theorem gauge_one_mul (γ : ActionTensorGauge G X) (L₁ L₂ : LSymbol G X) :
+    gauge (fun _ _ ↦ 1) γ (L₁ * L₂) = L₁ * gauge (fun _ _ ↦ 1) γ L₂ := by
+  funext x g h
+  simp only [gauge, Pi.mul_apply]
+  ac_rfl
+
+/-- An action-tensor gauge with trivial fusion gauge preserves compatibility with the same
+three-cochain. -/
+theorem IsCompatible.gauge_one {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (γ : ActionTensorGauge G X) :
+    IsCompatible (LSymbol.gauge (fun _ _ ↦ 1) γ L) ω := by
+  simpa only [ScalarThreeCochain.fusionGauge_one] using hL.gauge (fun _ _ ↦ 1) γ
 
 /-- L-symbols are normalized when `Lˣ_{g,1} = Lˣ_{1,g} = 1`. This is the
 standing convention in arXiv:2502.20257, `eq:triv_Ls`. -/
