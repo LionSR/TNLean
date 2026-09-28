@@ -14,6 +14,7 @@ import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CStarSqrtHolder
+import TNLean.Algebra.CStarSqrtLipschitz
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CharacterProjector
 import TNLean.Algebra.CharacterProjectorTwirl

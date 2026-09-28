@@ -162,7 +162,8 @@ theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d 
           C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
             Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
-  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
+  obtain ⟨K₁, hK₁, hpos⟩ :=
+    exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 (by linarith)
   set Ψ := mixedTransferMatrixLeft (fixedPointTensor σ)
   set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
   have hK₃ : 0 ≤ K₃ := norm_nonneg _
@@ -292,7 +293,9 @@ theorem exists_norm_transferMatrix_pow_sub_le (A : MPSTensor d D) (hN : Kraus.Is
       ‖transferMatrix (Kraus.transferMap A) ^ n -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤
         K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ n := by
-  obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
+  obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam
+    (γ := 2 * γ) (by positivity) (by linarith)
+  rw [exp_neg_two_mul_div_correlationLength] at hgap
   obtain ⟨K, hK, h⟩ := exists_norm_le_of_entry_eq_pow_sub (Kraus.transferMap A) σ hC.le hgap
     (fun (_ b : Fin D × Fin D) => Matrix.single b.2 b.1 (1 : ℂ))
     (fun a _ => a.2) (fun a _ => a.1)

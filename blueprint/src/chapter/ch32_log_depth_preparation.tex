@@ -106,6 +106,69 @@ remaining eigenvalues have modulus strictly less than $1$.
     the square root is continuous on positive semidefinite matrices.
 \end{proof}
 
+\begin{lemma}[Square root near a positive definite element]
+    \label{lem:ldp_sqrt_lipschitz}
+    \lean{CFC.algebraMap_sqrt_le_sqrt, CFC.norm_sqrt_sub_sqrt_le_div,
+        IsStrictlyPositive.exists_norm_sqrt_sub_sqrt_le}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra with $b\ge c\,\Id$ for
+    a real number $c>0$. Then
+    $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert/\sqrt c$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\varepsilon=\lVert a-b\rVert$, so that
+    $-\varepsilon\le a-b\le\varepsilon$. The square root is operator
+    monotone, so $\sqrt b\ge\sqrt c$. If $\varepsilon>c$, the bound
+    $\lVert\sqrt a-\sqrt b\rVert\le\sqrt\varepsilon$ suffices, since
+    $\sqrt\varepsilon\le\varepsilon/\sqrt c$. Otherwise let
+    $s=\varepsilon/\sqrt c\le\sqrt c$. Then
+    $(\sqrt b+s)^2=b+2s\sqrt b+s^2\ge b+2s\sqrt c\ge b+\varepsilon\ge a$,
+    and $\sqrt b-s\ge0$ with
+    $(\sqrt b-s)^2\le b-2s\sqrt c+s^2\le a+\varepsilon-2\varepsilon+s^2\le a$,
+    because $s^2\le\varepsilon$. Operator monotonicity of the square root
+    gives $\sqrt b-s\le\sqrt a\le\sqrt b+s$, that is,
+    $\lVert\sqrt a-\sqrt b\rVert\le s$.
+\end{proof}
+
+\begin{lemma}[Rate of convergence of the positive part]
+    \label{lem:ldp_positive_part_rate}
+    \lean{MPSTensor.exists_norm_transferMap_pow_sub_le,
+        MPSTensor.exists_norm_gram_blockTensor_sub_le,
+        MPSTensor.exists_norm_polarPos_blockTensor_sub_le}
+    \leanok
+    \uses{lem:ldp_positive_part_converges, lem:ldp_sqrt_lipschitz,
+        def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
+    length $\xi$, and let $0<\gamma<1$. There are constants $C,K$ depending
+    only on $A$, $\rho$, and $\gamma$ such that
+    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Ce^{-\gamma n/\xi}\lVert X\rVert$
+    for all $n$ and $X$, and $\lVert P_q-P_\infty\rVert\le Ke^{-\gamma q/\xi}$
+    for all $q$.
+    The sources prove the second bound for $0<\gamma<1/2$ only
+    \cite[Supplemental Material]{Piroli2021LOCC}, quoted in
+    \cite[eq.~(S9)]{Malz2024Preparation}; the range $0<\gamma<1$ is a result
+    of this project.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\E_\infty(X)=\Tr(X)\rho$ and $r=e^{-\gamma/\xi}$, so that
+    $r=\lvert\lambda_2\rvert^{\gamma}>\lvert\lambda_2\rvert$ when
+    $0<\lvert\lambda_2\rvert<1$, because $\gamma<1$. The eigenvalues of
+    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
+    $1$, so the spectral radius of $\E_A-\E_\infty$ is less than $r$, and
+    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives the first
+    bound. By the rearrangement in the proof of
+    Lemma~\ref{lem:ldp_positive_part_converges},
+    $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$. Since
+    $P_\infty^2=\rho^{\mathsf T}\otimes\Id\ge c\,\Id$ with $c>0$ the least
+    eigenvalue of $\rho$, Lemma~\ref{lem:ldp_sqrt_lipschitz} gives
+    $\lVert P_q-P_\infty\rVert\le K_1r^q/\sqrt c$.
+\end{proof}
+%% The source applies ||sqrt X - sqrt Y|| <= ||X - Y||^{1/2}, which halves the
+%% exponent and forces gamma < 1/2. At the positive definite point P_infty^2
+%% the square root is Lipschitz, so no exponent is lost.
+
 \begin{definition}[Approximating state]
     \label{def:ldp_approximating_state}
     \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
@@ -587,7 +650,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
-        lem:ldp_positive_part_converges, def:correlation_length}
+        lem:ldp_positive_part_rate, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1/2$.
     Then, for $N=qM$,
@@ -606,17 +669,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Write $\E_\infty(X)=\Tr(X)\rho$ and $r=e^{-2\gamma/\xi}$, so that
-    $r=\lvert\lambda_2\rvert^{2\gamma}>\lvert\lambda_2\rvert$ when
-    $0<\lvert\lambda_2\rvert<1$, because $2\gamma<1$. The eigenvalues of
-    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
-    $1$, so the spectral radius of $\E_A-\E_\infty$ is less than $r$, and
-    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives
-    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Kr^n\lVert X\rVert$. By the
-    rearrangement in the proof of
-    Lemma~\ref{lem:ldp_positive_part_converges},
-    $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$, and since
-    $\lVert\sqrt X-\sqrt Y\rVert\le\lVert X-Y\rVert^{1/2}$ for $X,Y\ge0$,
+    By Lemma~\ref{lem:ldp_positive_part_rate},
     $\lVert P_q-P_\infty\rVert\le K_2e^{-\gamma q/\xi}$.
 
     Let $\tau_q$ and $\tau_\infty$ be the transfer matrices of the mixed
