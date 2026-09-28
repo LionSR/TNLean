@@ -178,6 +178,14 @@ private theorem transferMap_virtualSandwich_projection
 The rank-one formula is supplied as a hypothesis rather than derived from `IsMPU`;
 the matrices `P` and `Q` forming the reduced projection are parameters.
 
+**Local fix (unnormalized transfer map):** the hypothesis and conclusion use the
+unnormalized MPO transfer map, whereas the source states the rank-one formula for
+the transfer map of the normalized flattening, arXiv:1703.09188, equation
+`eq:transfer-op`, lines 336--340. The two differ by the physical dimension; the
+normalized statement is
+`MPOTensor.transferMap_normalizedFlattening_reducedProjection`. See
+`docs/paper-gaps/mpu_reduced_representative_supplied_fixed_pair.tex`.
+
 Source: arXiv:1703.09188, Proposition IV.5, lines 747--752 and 778--781. -/
 theorem transferMap_virtualSandwich_reducedProjection
     (W : MPOTensor d D) (L R P Q : Matrix (Fin D) (Fin D) ℂ)

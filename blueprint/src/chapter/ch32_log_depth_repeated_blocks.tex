@@ -1,0 +1,169 @@
+%% ==================================================
+%% Subsection: Blocks with multiplicities
+%% Source: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), Supplemental
+%% Material, "Proof of Lemma 1 and extension to non-normal tensors",
+%% eqs. (S2)-(S7) and Lemma 1'(ii).
+%% Local fix: the approximating state of eq. (S7) is replaced by the fixed
+%% point of the corrected block form of the positive part;
+%% docs/paper-gaps/mswc24_repeated_block_corrected_state.tex.
+%% ==================================================
+
+\subsection{Blocks with multiplicities}\label{sec:ldp_repeated_blocks}
+
+When a block of the canonical form is repeated, the positive part of the
+blocked map is not the direct sum printed in the source, and the state built
+from nearest-neighbour pairs does not approximate the target
+\cite{gap:mswc24_multiplicity_fixed_point}. This subsection gives the correct
+block form, the corrected approximating state, and the approximation error
+for it when the states of distinct blocks on $q$ sites are orthogonal
+\cite{gap:mswc24_repeated_block_corrected_state}.
+
+\begin{definition}[Direct sum with multiplicities]
+    \label{def:ldp_repeated_block_sum}
+    \lean{MPSTensor.CopyWeights, MPSTensor.CopyWeights.weight_fun_ne_zero,
+        MPSTensor.repeatedBlockSum, MPSTensor.copyNorm, MPSTensor.copyNorm_sq,
+        MPSTensor.copyNorm_pos, MPSTensor.copyIsometry,
+        MPSTensor.conjTranspose_copyIsometry}
+    \leanok
+    Let $A_1,\dots,A_b$ be tensors, let the isometries $E_{j,k}$,
+    $1\leq k\leq m_j$, place the copy $k$ of block $j$ in the bond space, with
+    $E_{j,k}^\dagger E_{j',k'}=\delta_{jj'}\delta_{kk'}\mathbf 1$, and let
+    $\mu_{j,k}$ be nonzero weights, with at least one copy of every block. The
+    direct sum with multiplicities is
+    $A^i=\sum_{j,k}\mu_{j,k}E_{j,k}A_j^iE_{j,k}^\dagger$. For $q\geq1$ put
+    $K_{j,k}=E_{j,k}\otimes E_{j,k}$,
+    \begin{align*}
+        c_j=\Bigl(\sum_k\lvert\mu_{j,k}\rvert^{2q}\Bigr)^{1/2},\qquad
+        L_j=\sum_k\frac{\overline{\mu_{j,k}^q}}{c_j}K_{j,k}.
+    \end{align*}
+\end{definition}
+
+\begin{theorem}[Positive part of a blocked tensor with multiplicities]
+    \label{thm:ldp_repeated_block_polar}
+    \lean{MPSTensor.repeatedBlockSum_eq_blockSum,
+        MPSTensor.flat_disjoint_coord,
+        MPSTensor.physicalMatrix_blockTensor_repeatedBlockSum,
+        MPSTensor.conjTranspose_pairEmbedding_mul_copy,
+        MPSTensor.mpv_repeatedBlockSum,
+        MPSTensor.physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry,
+        MPSTensor.conjTranspose_copyIsometry_mul_self,
+        MPSTensor.conjTranspose_copyIsometry_mul_eq_zero,
+        MPSTensor.polarIso_blockTensor_repeatedBlockSum,
+        MPSTensor.polarPos_blockTensor_repeatedBlockSum}
+    \leanok
+    \uses{def:ldp_repeated_block_sum, lem:ldp_orthogonal_sum_polar}
+    Let $A$ be the direct sum with multiplicities of
+    Definition~\ref{def:ldp_repeated_block_sum}. Its periodic state on $N\geq1$
+    sites is $\sum_j\beta_j\ket{\phi_N(A_j)}$ with $\beta_j=\sum_k\mu_{j,k}^N$.
+    For $q\geq1$ the blocked map of $A$ is $B=\sum_jc_jB_jL_j^\dagger$, with
+    $B_j$ the blocked map of $A_j$, and $L_j^\dagger L_{j'}=\delta_{jj'}\mathbf 1$.
+    If $B_j^\dagger B_{j'}=0$ for $j\neq j'$, then, with $B_j=V_jP_j$,
+    \begin{align*}
+        V=\sum_jV_jL_j^\dagger,\qquad P=\sum_jc_jL_jP_jL_j^\dagger.
+    \end{align*}
+    On the copies of block $j$ the positive part is therefore of rank one in
+    the copy index, where \cite[eq.~(S5)]{Malz2024Preparation} prints
+    $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$
+    \cite{gap:mswc24_repeated_block_corrected_state}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Listing all copies as blocks of multiplicity one, every word of length
+    $q\geq1$ is a direct sum, so $B=\sum_{j,k}\mu_{j,k}^qB_jK_{j,k}^\dagger$ and
+    $\phi_N(A)=\sum_{j,k}\mu_{j,k}^N\phi_N(A_j)$. Grouping the copies of each
+    block gives $B=\sum_jc_jB_jL_j^\dagger$, since
+    $c_j\,\mu_{j,k}^q/c_j=\mu_{j,k}^q$. Moreover
+    $L_j^\dagger L_{j'}=\sum_{k,k'}(\mu_{j,k}^q/c_j)
+        (\overline{\mu_{j',k'}^q}/c_{j'})K_{j,k}^\dagger K_{j',k'}$, which is
+    $\sum_k\lvert\mu_{j,k}\rvert^{2q}/c_j^2=1$ times the identity for $j=j'$ and
+    zero otherwise. Lemma~\ref{lem:ldp_orthogonal_sum_polar} gives the polar
+    decomposition.
+\end{proof}
+
+\begin{definition}[Corrected approximating state]
+    \label{def:ldp_repeated_block_state}
+    \lean{MPSTensor.copyFixedPointState, MPSTensor.copyApproxVector,
+        MPSTensor.copyApproxOverlap, MPSTensor.copyApproxOverlap_eq}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_repeated_block_sum,
+        thm:ldp_repeated_block_polar}
+    With the notation of Definition~\ref{def:ldp_repeated_block_sum} and
+    Theorem~\ref{thm:ldp_repeated_block_polar}, fixed points
+    $\rho_j$ of the blocks, and $\ket{\Omega_j}$ the product of the pairs of
+    $\rho_j$ over $M$ sites in the bond space of block $j$, the corrected
+    approximating state on $N=qM$ sites with coefficients $\alpha_j$ is
+    \begin{align*}
+        \ket{\widetilde\phi_N}\propto V^{\otimes M}\sum_j\alpha_j
+        L_j^{\otimes M}\ket{\Omega_j}.
+    \end{align*}
+    When the weights $\beta_j$ of Theorem~\ref{thm:ldp_repeated_block_polar} are
+    not all zero, the source's coefficients are
+    $\alpha_j=\beta_j/\bigl(\sum_l\lvert\beta_l\rvert^2\bigr)^{1/2}$; if all
+    $\beta_j$ vanish these coefficients are undefined.
+    It is obtained from the corrected block form of
+    Theorem~\ref{thm:ldp_repeated_block_polar} by replacing each $P_j$ by its
+    fixed point, as \cite[eq.~(S7)]{Malz2024Preparation} does with the printed
+    block form. The weights are those of the source. The isometry $L_j$ acts
+    on the two legs of each site, so for a repeated block the state
+    $L_j^{\otimes M}\ket{\Omega_j}$ is not a product of nearest-neighbour pairs
+    of the full bond space; for multiplicity one and $\mu_j>0$ it is the state
+    of Definition~\ref{def:ldp_non_normal_fixed_point}
+    \cite{gap:mswc24_repeated_block_corrected_state}.
+\end{definition}
+
+\begin{theorem}[Approximation error for orthogonal blocks with multiplicities]
+    \label{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+    \lean{MPSTensor.exists_approximationError_le_repeatedBlockSum,
+        MPSTensor.exists_approximationError_le_mul_repeatedBlockSum,
+        MPSTensor.copyApproxVector_repeatedBlockSum,
+        MPSTensor.norm_copyApproxOverlap_repeatedBlockSum,
+        MPSTensor.norm_overlap_of_orthogonal}
+    \leanok
+    \uses{def:ldp_repeated_block_state, thm:ldp_repeated_block_polar,
+        thm:ldp_approximation_error_orthogonal_blocks,
+        lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
+        thm:ldp_injectivity_cutoff, def:correlation_length}
+    With the notation of Theorem~\ref{thm:ldp_repeated_block_polar}, let the
+    blocks $A_j$ be normal in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
+    points $\rho_j$, let $\lambda_2$ bound the moduli of the eigenvalues other
+    than one of every transfer map $\E_{A_j}$, with correlation length $\xi$, and
+    let $0<\gamma<1/2$. There are constants $C,C'>0$ such that for every block
+    length $q\geq1$ at which the $q$-site states of distinct blocks are orthogonal,
+    $B_j^\dagger B_{j'}=0$ for $j\neq j'$, and every $M\geq1$ with $N=qM$ and
+    $(\beta_1,\dots,\beta_b)\neq0$, the corrected approximating state of
+    Definition~\ref{def:ldp_repeated_block_state} satisfies, with
+    $y=(N/q)\,e^{-\gamma q/\xi}$,
+    \begin{align*}
+        \varepsilon(\widetilde\phi_N,\phi_N) & \leq C'y,        &
+        \varepsilon(\widetilde\phi_N,\phi_N) & \leq Cy\,e^{Cy}.
+    \end{align*}
+    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the corrected
+    approximating state, with arbitrary multiplicities and complex weights,
+    restricted to blocks whose $q$-site states are orthogonal and without the
+    condition $q=o(N)$
+    \cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_repeated_block_polar}, $VL_j=V_j$, so
+    $V^{\otimes M}\sum_j\alpha_jL_j^{\otimes M}\ket{\Omega_j}
+        =\sum_j\alpha_j\ket{s_j}$ with $\ket{s_j}=\ket{\phi_M(V_jP_{j,\infty})}$,
+    while $\ket{\phi_N(A)}=\sum_j\beta_j\ket{t_j}$ with
+    $\ket{t_j}=\ket{\phi_N(A_j)}$. These are the vectors of the proof of
+    Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}, with the
+    weights $\beta_j$ in place of $\mu_j^N$, and all cross overlaps vanish. If
+    every blocked tensor $B_j$ is injective, the vectors $\ket{s_j}$ are unit
+    vectors and, with $p_j=\lvert\beta_j\rvert^2$, $z_j=\braket{s_j}{t_j}$ and
+    $c_j'=\braket{t_j}{t_j}$,
+    \begin{align*}
+        \lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
+        =\frac{\bigl\lvert\sum_jp_jz_j\bigr\rvert}
+        {\bigl(\sum_jp_j\bigr)^{1/2}\bigl(\sum_jp_jc_j'\bigr)^{1/2}},
+    \end{align*}
+    because $\overline{\alpha_j}\,\beta_j=p_j/(\sum_lp_l)^{1/2}$. The remaining
+    estimate is that of
+    Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}, which uses
+    only $p_j\geq0$ and $\sum_jp_j>0$. The finitely many block lengths below
+    the injectivity length of some block are covered by $\varepsilon\leq1$
+    after enlarging the constants (Theorem~\ref{thm:ldp_injectivity_cutoff}).
+\end{proof}

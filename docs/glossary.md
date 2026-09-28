@@ -1583,6 +1583,21 @@ involve no boundary.
   `IsDomainWallFamily.mul_eq_of_fixed` (projective action of Mathlib's `fixingSubgroup` of the two
   blocks).
 
+### `MPOTensor.GroupFamily.IsSeparatingLeftInverse`
+
+- **Declaration:** `IsSeparatingLeftInverse Âx Ây Ax Ay : Prop` for one-site families
+  `Âx`, `Ây` of square matrices on the bond spaces of the tensors `Ax`, `Ay`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallString.lean`.
+- **Meaning:** `physPairing Âx Ax = 1`, `physPairing Âx Ay = 0`, `physPairing Ây Ay = 1` and
+  `physPairing Ây Ax = 0`, where `physPairing P Q = ∑_σ P^σ_{αβ} Q^σ_{γδ}`: each family is a left
+  inverse of its tensor, read as a map from the virtual to the physical space, and annihilates
+  the other tensor.
+- **Source boundary:** arXiv:2405.00439, lines 1422--1425 (the left inverses `Â`, `B̂` in the
+  endpoint tensors of `eq:defEndT`, with orthogonal supports at the renormalization fixed point).
+- **Sanctioned bridges:** `BlockActionData.wallString_mulVec_mpv_left` and
+  `BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`).
+
 ## Symmetries of matrix product density operators
 
 ### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
