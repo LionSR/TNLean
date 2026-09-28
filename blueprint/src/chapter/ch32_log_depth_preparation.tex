@@ -766,7 +766,104 @@ $1/\gamma$ in the block length here
     disjoint sets.
 \end{proof}
 
-The two lemmas above extend from unitary gates to channels, the operations
+\begin{theorem}[Unitaries on a bounded number of sites]
+    \label{thm:ldp_bounded_unitary_two_site_gates}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPairProduct,
+        MPSPreparation.isTwoLevelWord_of_det_eq_one,
+        MPSPreparation.exists_isPairProduct_ctrlOp,
+        MPSPreparation.isPairProduct_embedOp_pairSites}
+    \leanok
+    For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
+    $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
+    two neighbouring sites of the open chain of $n$ sites. This is the step
+    that the unitaries with constant support ``can be further expressed with
+    a low-depth circuit of local gates''
+    \cite[caption of Fig.~1]{Malz2024Preparation}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Dividing by a root of the determinant of order $d^n$, a global phase and
+    hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
+    a unitary as a product of two-level operators, each a real rotation or a
+    diagonal phase on the span of two basis vectors. Write $G_{ab}(g)$ for the
+    operator acting as the $2\times2$ matrix $g$ on the span of the basis vectors
+    $\ket a,\ket b$ and as the identity on their complement, and
+    $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ for the
+    quarter turn. For pairwise distinct $a,b,c$,
+    \begin{align}
+        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q),
+        \label{eq:ldp_two_level_quarter_turn}
+    \end{align}
+    and choosing $c$ to differ from $a$ at one site fewer than $b$ does reduces
+    a two-level operator between configurations differing at several sites to
+    one between configurations differing at one site fewer. Between configurations
+    differing at one site $t$ it is a single-site operation at $t$ controlled by
+    the other sites. Every rotation and every phase of determinant one is a group
+    commutator $g_1g_2g_1^\dagger g_2^\dagger$. Write $C_S(u)$ for the single-site
+    operation $u$ at $t$ controlled by the sites of $S$, with $t\notin S$; for
+    unitaries $v,w$ and a site $s\neq t$,
+    \begin{align}
+        C_{S\cup\{s\}}(vwv^\dagger w^\dagger)
+         & =C_S(v)\,C_{\{s\}}(w)\,C_S(v^\dagger)\,C_{\{s\}}(w^\dagger),
+        \label{eq:ldp_controlled_commutator}
+    \end{align}
+    so a controlled commutator is a product of two operations with one control
+    fewer and two operations on two sites; induction removes the controls. An
+    operation on two distant sites is conjugated to neighbouring sites by SWAP
+    gates.
+\end{proof}
+
+\begin{theorem}[The approximating state in depth $O(q)$]
+    \label{thm:ldp_approximating_state_depth}
+    \uses{def:ldp_local_circuit, def:ldp_approximating_state}
+    \lean{MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
+        MPSPreparation.approximatingMPVStateRaw_eq_mulVec,
+        MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
+        MPSPreparation.IsCircuitOn.finset_noncommProd}
+    \leanok
+    There is $C$, depending only on $d$ and $D$, such that the following
+    holds. Let $A$ be a tensor, let $\sigma\ge0$ with $\Tr\sigma=1$, let
+    $q\ge3D$ be a block length for which the $q$-site blocked tensor is
+    injective, and let $M\ge1$. Then the approximating state of
+    Definition~\ref{def:ldp_approximating_state} on $N=Mq$ sites is prepared
+    in depth at most $Cq$. This is the depth count behind
+    \cite[eq.~(1)]{Malz2024Preparation}; it does not choose $q$ in terms of
+    $N$ and $\varepsilon$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_unitary_implementing_isometry,
+        thm:ldp_sequential_factorization,
+        thm:ldp_bounded_unitary_two_site_gates}
+    The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
+    $D\ge1$, injectivity of the blocked tensor gives $D^2\le d^q$, which
+    forces $d=D=1$. In either case $D\le d^D$, so each bond index can be
+    encoded in $D$ sites. Encode the two bond indices
+    of a block in its first and last $D$ sites, and write $\ket{l,0,r}$ for the block with $l$ on the first $D$ sites, $r$
+    on the last $D$ sites, and $\ket0$ elsewhere. A first layer of unitaries,
+    one on the last $D$ sites of each block and the first $D$ sites of the
+    next, sends $\ket{0\cdots0}$ to
+    $\bigotimes_k\ket\omega_{R_kL_{k+1}}\ket0_{C_k}$
+    \cite[eq.~(12)]{Malz2024Preparation}; by
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} it has constant depth.
+    On each block, in parallel, a unitary $U$ with $U\ket{l,0,r}=V\ket{l,r}$
+    is applied, as in Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
+    gates move the first $D$ sites next to the last ones in $O(q)$ gates.
+    By Theorem~\ref{thm:ldp_sequential_factorization}, $V$ is the ordered
+    product of $q$ isometries, each from the bond space into the bond space
+    and one site; each is extended to a unitary on the bond register of $2D$
+    sites and one fresh site, and the register moves one site to the left at
+    each step, so the staircase consists of $q-2D$ unitaries on $2D+1$ sites
+    followed by one unitary on the first $2D$ sites
+    \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
+    of them has bounded depth by
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, and circuits on
+    disjoint blocks run in the same layers.
+\end{proof}
+
+Lemmas~\ref{lem:ldp_light_cone} and~\ref{lem:ldp_light_cone_correlations}
+extend from unitary gates to channels, the operations
 of a local circuit that may add product ancillas and discard them
 \cite{Piroli2021LOCC}.
 
@@ -877,106 +974,9 @@ of a local circuit that may add product ancillas and discard them
     conclude.
 \end{proof}
 
-\begin{theorem}[Unitaries on a bounded number of sites]
-    \label{thm:ldp_bounded_unitary_two_site_gates}
-    \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.exists_isPairProduct,
-        MPSPreparation.isTwoLevelWord_of_det_eq_one,
-        MPSPreparation.exists_isPairProduct_ctrlOp,
-        MPSPreparation.isPairProduct_embedOp_pairSites}
-    \leanok
-    For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
-    $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
-    two neighbouring sites of the open chain of $n$ sites. This is the step
-    that the unitaries with constant support ``can be further expressed with
-    a low-depth circuit of local gates''
-    \cite[caption of Fig.~1]{Malz2024Preparation}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Dividing by a root of the determinant of order $d^n$, a global phase and
-    hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
-    a unitary as a product of two-level operators, each a real rotation or a
-    diagonal phase on the span of two basis vectors. Write $G_{ab}(g)$ for the
-    operator acting as the $2\times2$ matrix $g$ on the span of the basis vectors
-    $\ket a,\ket b$ and as the identity on their complement, and
-    $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ for the
-    quarter turn. For pairwise distinct $a,b,c$,
-    \begin{align}
-        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q),
-        \label{eq:ldp_two_level_quarter_turn}
-    \end{align}
-    and choosing $c$ to differ from $a$ at one site fewer than $b$ reduces
-    a two-level operator between configurations differing at several sites to
-    one between configurations differing at one site fewer. Between configurations
-    differing at one site $t$ it is a single-site operation at $t$ controlled by
-    the other sites. Every rotation and every phase of determinant one is a group
-    commutator $g_1g_2g_1^\dagger g_2^\dagger$. Write $C_S(u)$ for the single-site
-    operation $u$ at $t$ controlled by the sites of $S$, with $t\notin S$; for
-    unitaries $v,w$ and a site $s\neq t$,
-    \begin{align}
-        C_{S\cup\{s\}}(vwv^\dagger w^\dagger)
-         & =C_S(v)\,C_{\{s\}}(w)\,C_S(v^\dagger)\,C_{\{s\}}(w^\dagger),
-        \label{eq:ldp_controlled_commutator}
-    \end{align}
-    so a controlled commutator is a product of two operations with one control
-    fewer and two operations on two sites; induction removes the controls. An
-    operation on two distant sites is conjugated to neighbouring sites by SWAP
-    gates.
-\end{proof}
-
-\begin{theorem}[The approximating state in depth $O(q)$]
-    \label{thm:ldp_approximating_state_depth}
-    \uses{def:ldp_local_circuit, def:ldp_approximating_state}
-    \lean{MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
-        MPSPreparation.approximatingMPVStateRaw_eq_mulVec,
-        MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
-        MPSPreparation.IsCircuitOn.finset_noncommProd}
-    \leanok
-    There is $C$, depending only on $d$ and $D$, such that the following
-    holds. Let $A$ be a tensor, let $\sigma\ge0$ with $\Tr\sigma=1$, let
-    $q\ge3D$ be a block length for which the $q$-site blocked tensor is
-    injective, and let $M\ge1$. Then the approximating state of
-    Definition~\ref{def:ldp_approximating_state} on $N=Mq$ sites is prepared
-    in depth at most $Cq$. This is the depth count behind
-    \cite[eq.~(1)]{Malz2024Preparation}; it does not choose $q$ in terms of
-    $N$ and $\varepsilon$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{lem:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization,
-        thm:ldp_bounded_unitary_two_site_gates}
-    The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
-    $D\ge1$, injectivity of the blocked tensor gives $D^2\le d^q$, which
-    forces $d=D=1$. In either case $D\le d^D$, so each bond index can be
-    encoded in $D$ sites. Encode the two bond indices
-    of a block in its first and last $D$ sites, and write $\ket{l,0,r}$ for the block with $l$ on the first $D$ sites, $r$
-    on the last $D$ sites, and $\ket0$ elsewhere. A first layer of unitaries,
-    one on the last $D$ sites of each block and the first $D$ sites of the
-    next, sends $\ket{0\cdots0}$ to
-    $\bigotimes_k\ket\omega_{R_kL_{k+1}}\ket0_{C_k}$
-    \cite[eq.~(12)]{Malz2024Preparation}; by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} it has constant depth.
-    On each block, in parallel, a unitary $U$ with $U\ket{l,0,r}=V\ket{l,r}$
-    is applied, as in Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
-    gates move the first $D$ sites next to the last ones in $O(q)$ gates.
-    By Theorem~\ref{thm:ldp_sequential_factorization}, $V$ is the ordered
-    product of $q$ isometries, each from the bond space into the bond space
-    and one site; each is extended to a unitary on the bond register of $2D$
-    sites and one fresh site, and the register moves one site to the left at
-    each step, so the staircase consists of $q-2D$ unitaries on $2D+1$ sites
-    followed by one unitary on the first $2D$ sites
-    \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
-    of them has bounded depth by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, and circuits on
-    disjoint blocks run in the same layers.
-\end{proof}
-
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
-    \uses{def:ldp_local_circuit, thm:ldp_approximating_state_depth,
-        thm:ldp_tree_factorization, thm:ldp_approximation_error_normal}
+    \uses{def:ldp_local_circuit}
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
     for every $N\ge2$ and $0<\varepsilon\le1$, a state $\ket{\psi_N}$ with
     $\varepsilon(\psi_N,\phi_N)\le\varepsilon$ is prepared in depth at most
@@ -989,6 +989,109 @@ of a local circuit that may add product ancillas and discard them
 %% up to constants. The pair layer has constant depth, and the
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
+
+The following theorem proves Theorem~\ref{thm:ldp_depth_upper_bound} for
+chain lengths that a block length of order $\log(N/\varepsilon)$ divides, as
+in the $N/q$ equal blocks of \cite[eq.~(10)]{Malz2024Preparation}; the general
+chain length is open, see
+\cite{gap:mswc24_depth_upper_bound_divisible_length}.
+
+\begin{lemma}[The approximating state is a unit vector]
+    \label{lem:ldp_approximating_state_unit_norm}
+    \lean{MPSTensor.norm_approximatingMPVStateRaw,
+        MPSTensor.norm_approximatingMPVState}
+    \leanok
+    \uses{def:ldp_approximating_state}
+    Let $\sigma\ge0$ with $\Tr\sigma=1$, let the $q$-site blocked tensor
+    $\mathcal B_q$ be injective, and let $M\ge1$. Then
+    $\lVert\phi_M(VP_\infty)\rVert=1$, so the approximating state
+    $\ket{\widetilde\phi_N}$ of Definition~\ref{def:ldp_approximating_state}
+    equals $\ket{\phi_M(VP_\infty)}$ and is a unit vector.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:ldp_approximating_state}
+    The squared norm $\lVert\phi_M(VP_\infty)\rVert^2$ is the sum of the
+    squared moduli of its coefficients, which equals $1$ by the norm identity
+    recorded with Definition~\ref{def:ldp_approximating_state}.
+\end{proof}
+
+\begin{lemma}[Rescaling changes the normalized state by a phase]
+    \label{lem:ldp_normalized_state_rescaling}
+    \lean{MPSPreparation.norm_inner_normalizedMPVState_of_mpv_eq}
+    \leanok
+    Let $A$ and $B$ be tensors with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for
+    some $\zeta\neq0$, and write $\ket{\hat\phi_N(A)}$ for the normalization of
+    $\ket{\phi_N(A)}$ (zero when $\ket{\phi_N(A)}=0$). Then every vector
+    $\ket\psi$ on $N$ sites satisfies
+    $\lvert\braket{\psi}{\hat\phi_N(B)}\rvert=\lvert\braket{\psi}{\hat\phi_N(A)}\rvert$,
+    so the error of $\ket\psi$ is the same against both normalized states.
+\end{lemma}
+\begin{proof}
+    \leanok
+    $\ket{\hat\phi_N(B)}=(\zeta^N/\lvert\zeta^N\rvert)\ket{\hat\phi_N(A)}$,
+    and if $\ket{\phi_N(A)}=0$ both normalized states vanish.
+\end{proof}
+
+\begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
+    \label{thm:ldp_depth_upper_bound_divisible}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le,
+        MPSPreparation.exists_isPreparedInDepth_le_log}
+    \leanok
+    There is $C$, depending only on $d$ and $D$, such that the following holds.
+    Let $A$ be normal with $D\ge1$. There are $a>0$ and $b\ge1$, depending only
+    on $A$, such that for $0<\varepsilon\le1$, every $N\ge1$ and every $q$
+    dividing $N$ with
+    $q\ge a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$ is prepared in depth at most $Cq$.
+    If moreover $N\ge2$ and $q\le2(a\log(N/\varepsilon)+b)$, for instance
+    $q=\lceil a\log(N/\varepsilon)+b\rceil$ when it divides $N$, the depth is at most
+    $c\log(N/\varepsilon)$ with $c$ depending only on $A$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge, thm:ldp_approximating_state_depth,
+        thm:ldp_approximation_error_normal, thm:normality_rescaling_invariance,
+        thm:gauge_invariance_normal,
+        thm:is_normal_tensor_of_is_normal_left_canonical,
+        thm:wordspan_blk_inj_succ, thm:eigenvalue_bound,
+        lem:ldp_normalized_state_rescaling,
+        thm:primitive_fixed_point_trace_normalization,
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        lem:ldp_approximating_state_unit_norm, thm:transfer_channel}
+    A gauge transformation and a rescaling bring $A$ into the
+    gauge~(\ref{eq:ldp_normal_gauge}) by
+    Theorem~\ref{thm:normalized_primitive_gauge}, and the positive definite
+    fixed point $\rho$ it provides is replaced by
+    $\sigma=\rho/\Tr\rho$, still a fixed point of trace one, by
+    Theorem~\ref{thm:primitive_fixed_point_trace_normalization}; they multiply $\ket{\phi_N(A)}$ by a
+    nonzero scalar, so by Lemma~\ref{lem:ldp_normalized_state_rescaling} the
+    error is unchanged. The new tensor is normal by
+    Theorems~\ref{thm:normality_rescaling_invariance}
+    and~\ref{thm:gauge_invariance_normal}. By
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} its transfer
+    map is primitive, so $1$ is its only eigenvalue of modulus $1$. The gauge is
+    left canonical, so the transfer map is a channel by
+    Theorem~\ref{thm:transfer_channel}, and all its eigenvalues have modulus at
+    most $1$ by Theorem~\ref{thm:eigenvalue_bound},
+    and finitely many of them give a bound $t<1$ on the
+    moduli of the other eigenvalues, and
+    Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/4$ gives
+    $K$ with $\varepsilon(\widetilde\phi_N,\phi_N)\le K\,(N/q)\,e^{-rq}$,
+    where $r=-\tfrac14\log t>0$. Take $a=1/r$ and
+    $b=\max(\log K,0)/r+L_0+3D+1$, with $L_0$ a length at which the blocked tensor is injective.
+    Then $q\ge b$ makes the words of length $q$ span the full matrix algebra by
+    Theorem~\ref{thm:wordspan_blk_inj_succ}, so the blocked tensor
+    $\mathcal B_q$ is injective by
+    Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective}, and $q\ge3D$, and
+    $rq\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$ gives
+    $K(N/q)e^{-rq}\le\varepsilon$. The approximating state is a unit vector by
+    Lemma~\ref{lem:ldp_approximating_state_unit_norm} and is prepared in depth at most $Cq$ by
+    Theorem~\ref{thm:ldp_approximating_state_depth}. For the second statement,
+    $\log(N/\varepsilon)\ge\log2$ gives
+    $Cq\le C(2a+2b/\log2)\log(N/\varepsilon)$.
+\end{proof}
 
 For an operator $X$ on $(\C^d)^{\otimes L}$, let $\E_X\colon\MN{D}\to\MN{D}$ be
 the linear map $Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$, where
