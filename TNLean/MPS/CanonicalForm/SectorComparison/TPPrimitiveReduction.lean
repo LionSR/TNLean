@@ -14,9 +14,6 @@ import TNLean.Wielandt.SpanGrowth.CumulativeSpan
 import TNLean.Wielandt.RectangularSpan.Basic
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder
-open Filter
-
 /-!
 # TP-primitive reduction after blocking
 
@@ -68,6 +65,9 @@ positive length.  This is the mathematical content that justifies the
 
 matrix product states, canonical form, blocking, primitive transfer maps
 -/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
 
 namespace MPSTensor
 

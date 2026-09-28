@@ -447,6 +447,30 @@ normalizations.
   connects `IsGInjective` of a site map to `IsVertexInjective` of the torus PEPS
   `torusSiteTensor`.
 
+#### `Representation.IsSemiRegular`
+
+- **Declaration:** `Representation.IsSemiRegular (ρ : Representation ℂ G V) : Prop`,
+  for `G : Type u`.
+- **Defined in:** `TNLean/Algebra/RepresentationDelta.lean`.
+- **Meaning:** every finite-dimensional irreducible complex representation of
+  `G` on a type in the universe of `G` admits a nonzero intertwining map into
+  `ρ`.
+- **Source:** arXiv:1001.3807, Definition 4.5,
+  `Papers/1001.3807/paper_v3.tex:1010-1013`.
+- **Sanctioned bridges:** `Representation.isSemiRegular_leftRegular` (the
+  left-regular representation is semi-regular) and
+  `Representation.irreducibleCharacters_eq_leftRegular_of_isSemiRegular` (a
+  semi-regular representation has the irreducible characters of the regular
+  representation), used in
+  `Representation.trace_inv_comp_comp_deltaOperator_of_isSemiRegular`
+  (Lemma 4.6).
+- **Caveat:** irreducible representations of a finite group are
+  finite-dimensional, so the restriction to finite-dimensional ones loses
+  nothing; the universe restriction suffices because every irreducible
+  representation is equivalent to one on a coordinate space. The trace
+  identities of Lemmas 4.4 and 4.6 are stated with `ρ(h⁻¹)` in place of the
+  source's `U_h†`; the two agree for unitary representations.
+
 #### `TNLean.PEPS.IsGIsometric`
 
 - **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
@@ -482,6 +506,51 @@ normalizations.
   At width or height two the right and left edges of a site coincide in the
   simple torus graph, so the predicate no longer counts the source's
   multigraph coverings; recorded in
+  `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
+
+#### `TNLean.PEPS.IsTorusParallelSection` and `TNLean.PEPS.IsTorusFlat`
+
+- **Declarations:**
+  `TNLean.PEPS.IsTorusParallelSection (a b f : TorusVertex width height → G) : Prop`
+  and `TNLean.PEPS.IsTorusFlat (a b : TorusVertex width height → G) : Prop`.
+- **Defined in:** `TNLean/PEPS/TorusParallelSection.lean`.
+- **Meaning:** `f` is a parallel section of the horizontal transports `a` and
+  the vertical transports `b` if `f (x + 1, y) = a (x, y) * f (x, y)` and
+  `f (x, y + 1) = b (x, y) * f (x, y)` at every site; `a, b` are flat if
+  `b (x + 1, y) * a (x, y) = a (x, y + 1) * b (x, y)` around every elementary
+  square.
+- **Source:** project combinatorics for the coloring superposition of
+  arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex:2914-2923`; no source
+  predicate.
+- **Sanctioned bridges:** `TNLean.PEPS.exists_isTorusParallelSection_iff`
+  (sections exist exactly for flat transports with trivial holonomy around the
+  row and the column through the origin) and
+  `TNLean.PEPS.card_isTorusParallelSection` (there are `|G|` sections or none).
+
+#### `TNLean.PEPS.IsQuantumDoubleGaussLaw` and `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy`
+
+- **Declarations:**
+  `TNLean.PEPS.IsQuantumDoubleGaussLaw (s : TorusVertex width height → G × G × G × G) : Prop`
+  and `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy s : Prop`.
+- **Defined in:** `TNLean/PEPS/Examples/QuantumDouble.lean`.
+- **Meaning:** for the four physical spins `(s₁, s₂, s₃, s₄)` (top left, top
+  right, bottom right, bottom left) of each site of the dual quantum-double
+  network, Gauss' law is the vertex rule `s₂ s₁ = s₃ s₄` at every site together
+  with the plaquette rule
+  `s₁(v + (1, 0)) s₂(v) = s₄(v + (1, 1)) s₃(v + (0, 1))` around every corner;
+  trivial holonomy asks that the ordered products of the transports
+  `s₂ s₁` along the row `y = 0` and `s₄(v + (0, 1))⁻¹ s₁(v)` along the column
+  `x = 0` are the identity.
+- **Source:** arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex:2918-2921` (local
+  and plaquette terms of the Hamiltonian), and arXiv:2011.12127,
+  `Papers/2011.12127/TN-Review-main.tex:2452` (Gauss' law).
+- **Sanctioned bridges:** `TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS` (the
+  coefficient of the contracted dual network is `|G|` on configurations obeying
+  both predicates and `0` elsewhere).
+- **Caveat:** the review identifies the network with the superposition of all
+  Gauss-law configurations; on the torus only the trivial-holonomy sector
+  occurs, and the bridge is stated for width and height at least three.
+  Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex` and
   `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 `TNLean.PEPS.SingletonRegionTensorInjective`,
@@ -1099,6 +1168,99 @@ The following notions use different transfer objects and are not interchangeable
   predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
   `OBCChainTensor.ofSupported`.
 
+## Local circuits of two-site gates
+
+### `MPSPreparation.IsNeighbourGate` and `MPSPreparation.IsPairProduct`
+
+- **Declarations:**
+  `MPSPreparation.IsNeighbourGate (Z : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`
+  and
+  `MPSPreparation.IsPairProduct (d n K : ℕ) (X : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/PairProduct.lean`.
+- **Meaning:** `IsNeighbourGate Z` says that `Z` is unitary and acts on two
+  neighbouring sites `{p, p + 1}` of the open chain of `n` sites.
+  `IsPairProduct d n K X` says that `X` is a product of at most `K` such gates.
+- **Source:** Malz--Styliaris--Wei--Cirac, arXiv:2307.01696, main text before
+  Theorem 1 (local circuits of two-site gates) and the caption of Fig. 1
+  (unitaries with constant support "can be further expressed with a low-depth
+  circuit of local gates").
+- **Sanctioned bridges:** `MPSPreparation.exists_isPairProduct` (for `0 < d`
+  and `2 ≤ n`, one bound `K` covers every unitary on `n` sites), and
+  `MPSPreparation.IsPairProduct.isCircuitOn`, which places such a product on
+  consecutive sites of the ring as a local circuit of depth `K`.
+- **Caveat:** the chain is open; the ring structure enters only through the
+  placement map of `IsPairProduct.isCircuitOn`.
+
+### `MPSPreparation.Layer.IsIn`
+
+- **Declaration:**
+  `MPSPreparation.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/CircuitComposition.lean`.
+- **Meaning:** every gate of the layer `L` acts on a bond `{k, k+1}` contained
+  in the set of sites `R`.
+- **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit", where
+  the block unitaries act in parallel on disjoint blocks of sites; the source
+  has no separate name for this support condition.
+- **Sanctioned bridges:** `Layer.IsIn.mono` enlarges `R`;
+  `Layer.op_mem_supportedOperators` places the layer operator among the
+  operators supported on `R`; `Layer.union` and `Layer.union_op` merge layers
+  acting in disjoint sets; `Layer.empty_isIn` covers the empty layer.
+- **Caveat:** the condition is on the bonds of the layer, not on its operator;
+  it is the per-layer ingredient of `IsCircuitOn`.
+
+### `MPSPreparation.IsCircuitOn`
+
+- **Declaration:**
+  `MPSPreparation.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/CircuitComposition.lean`.
+- **Meaning:** `U` is the operator of a list of exactly `T` layers of the ring,
+  each of whose gates acts inside the set of sites `R`.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
+  quantum circuits"), restricted to gates inside `R` as in the parallel
+  application of block unitaries in the paragraph "The sequential-RG circuit".
+- **Sanctioned bridges:** `MPSPreparation.IsCircuitOn.isLocalCircuitOfDepth`
+  forgets the support; `IsCircuitOn.mul` composes in series (depths add), and
+  `IsCircuitOn.par` runs two circuits of the same depth on disjoint sets of
+  sites in parallel.
+- **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
+  with empty layers.
+
+### `MPSPreparation.IsSpecialTwo`, `MPSPreparation.IsTwoLevelWord`, and `MPSPreparation.FixesOutside`
+
+- **Declarations:**
+  `MPSPreparation.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
+  `MPSPreparation.IsTwoLevelWord (K : ℕ) (X : Matrix ι ι ℂ) : Prop`, and
+  `MPSPreparation.FixesOutside (T : Finset ι) (X : Matrix ι ι ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/ControlledGateProducts.lean`
+  (`IsSpecialTwo`) and `TNLean/MPS/Preparation/GivensDecomposition.lean`.
+- **Meaning:** `IsSpecialTwo g` says that `g` is a real rotation `rotTwo z` or
+  a diagonal phase `diagTwo ν` with `‖z‖ = ‖ν‖ = 1`. `IsTwoLevelWord K X` says
+  that `X` is a product of at most `K` two-level operators `twoLevel a b g` with
+  `a ≠ b` and `IsSpecialTwo g`. `FixesOutside T X` says that every entry of
+  `X` in a row or column outside `T` is that of the identity, so `X` fixes the
+  basis vectors outside `T` and preserves the span of `T`.
+- **Source:** no separate source notion; these are the intermediate steps of
+  the Givens elimination behind the caption of Fig. 1 of arXiv:2307.01696.
+- **Sanctioned bridges:** `MPSPreparation.isTwoLevelWord_of_det_eq_one` (every
+  unitary of determinant one is a two-level word of bounded length) and
+  `MPSPreparation.isTwoLevelWord_of_fixesOutside`.
+- **Caveat:** these predicates are proof-internal vocabulary for
+  `exists_isPairProduct`; statements about circuits should use
+  `IsPairProduct` or `IsCircuitOn`.
+
+### `MPSPreparation.AgreeOff`
+
+- **Declaration:**
+  `MPSPreparation.AgreeOff (e : Fin m → Fin n) (x y : Cfg d n) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SiteEmbedding.lean`.
+- **Meaning:** the configurations `x` and `y` of the `n`-site chain agree at
+  every site outside the range of `e`.
+- **Source:** no separate source notion; it describes the entries of the
+  placement `MPSPreparation.embedOp e X` of an operator on `m` sites.
+- **Sanctioned bridges:** `MPSPreparation.sum_agreeOff` and
+  `MPSPreparation.eq_extend_of_agreeOff` (for injective `e`).
+- **Caveat:** proof-internal vocabulary for the site embedding.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`
@@ -1120,6 +1282,206 @@ The following notions use different transfer objects and are not interchangeable
   `MPSTensor.exists_not_isPeriodicWState_le`). The source's single-length bound
   $D^3\log D=\Omega(N)$ is not formalized; see
   `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
+
+## Scalar L-symbols of group matrix product operators
+
+### `TNLean.Algebra.LSymbol.ActionGaugeEquiv`
+
+- **Declaration:** `LSymbol.ActionGaugeEquiv L₁ L₂`, for scalar L-symbols of a
+  group `G` acting on a set `X`.
+- **Defined in:** `TNLean/Algebra/StabilizerCocycleReconstruction.lean`.
+- **Meaning:** `L₁ = LSymbol.gauge 1 γ L₂` for some action-tensor gauge
+  `γ : G → X → ℂˣ`, that is,
+  $L_1{}^x_{g,h}=\gamma^x_{gh}(\gamma^{hx}_g\gamma^x_h)^{-1}L_2{}^x_{g,h}$
+  with the fusion-tensor gauge held equal to one.
+- **Source:** arXiv:2203.12563, `gdgroup` with the fusion gauge fixed as at
+  line 761, `Papers/2203.12563/REsubmission.tex:716-721,761`.
+- **Sanctioned bridges:**
+  `StabilizerRepresentatives.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq`
+  and `StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff`
+  identify the relation on induced L-symbols with cohomology of stabilizer
+  cocycles; on the classes of `StabilizerRepresentatives.solutionSetoid`,
+  `StabilizerRepresentatives.solutionAddAction`,
+  `StabilizerRepresentatives.h2EquivSolutionClasses`, and
+  `StabilizerRepresentatives.existsUnique_vadd_eq` give the torsor under
+  Mathlib's `groupCohomology.H2`.
+- **Caveat:** `LSymbol.gauge` is the reciprocal of the source's `gdgroup`;
+  with trivial fusion gauge this replaces `γ` by `γ⁻¹` and defines the same
+  relation. Allowing fusion gauges that preserve `ω` gives a coarser relation,
+  under which the classes collapse to the quotient of `H²(H, ℂˣ)` by the
+  restriction of `H²(G, ℂˣ)`; that coarser relation is not formalized. See
+  `docs/paper-gaps/glm23_eq20_fusion_gauge.tex`.
+
+## Fusion symmetries of matrix product operators
+
+The periodic-boundary layer of non-invertible matrix product operator symmetry.
+The operator-level predicates `IsMPOFusionAlgebra`, `IsMPOSymmetricFamily`,
+`IsMPOSymmetric` and `GroupFamily.IsNormalRepresentation` impose their
+identities only with identity boundaries; for the symmetric-state predicates that
+restriction is recorded in `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
+The remaining entries are conditions on structure constants or on words and
+involve no boundary.
+
+### `MPOTensor.IsMPOFusionAlgebra`
+
+- **Declaration:** `MPOTensor.IsMPOFusionAlgebra O N : Prop`, for a family
+  `O : ∀ a, MPOTensor d (χ a)` and structure constants `N : ι → ι → ι → ℕ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Meaning:** the periodic operators obey the fusion rules
+  $O_aO_b=\sum_cN_{ab}^cO_c$ at every positive chain length.
+- **Source:** arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex`,
+  lines 321–361 (matrix product operator algebras and their fusion rules).
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.IsNormalRepresentation.isMPOFusionAlgebra`
+  (a normal group representation satisfies the group fusion rules) and
+  `MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors` (fusion tensors with
+  multiplicity, for normal tensors of positive bond dimension).
+- **Caveat:** nothing is asserted at length zero, and neither normality of the
+  tensors nor associativity of `N` is part of the definition; results add them
+  where they use them.
+
+### `MPOTensor.IsFusionUnit` and `MPOTensor.IsInvertibleLabel`
+
+- **Declarations:** `MPOTensor.IsFusionUnit N e : Prop` and
+  `MPOTensor.IsInvertibleLabel N e a : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Meaning:** conditions on the structure constants alone:
+  $N_{eb}^c=N_{be}^c=\delta_{bc}$ for the unit, and some $b$ with
+  $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for an invertible label $a$.
+- **Source:** arXiv:2203.12563, line 660 (the trivial block $e$ and inverses
+  $g^{-1}$ with $O_{g^{-1}}O_g=O_gO_{g^{-1}}=O_e$).
+- **Sanctioned bridges:** `MPOTensor.IsInvertibleLabel.exists_isInvertibleLabel`
+  (the inverse is invertible), `MPOTensor.IsFusionCharacter.eq_one_of_isInvertibleLabel`,
+  and `MPOTensor.IsNIMRep.exists_equiv_of_isInvertibleLabel` (an invertible
+  label acts on the blocks by a permutation).
+- **Caveat:** these are statements about `N`, not about the operators; the
+  unit operator $O_e$ need not be the identity and in the source is in general
+  a projector (line 660).
+
+### `MPOTensor.IsMPOSymmetricFamily`
+
+- **Declaration:** `MPOTensor.IsMPOSymmetricFamily O A M : Prop`, for block
+  tensors `A : ∀ x, MPSTensor d (D x)` and complex coefficients
+  `M : ι → κ → κ → ℂ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Meaning:** $O_a\ket{\psi_{A_x}}=\sum_yM_{a,x}^y\ket{\psi_{A_y}}$ at every
+  positive chain length, with coefficients independent of the length.
+- **Source:** arXiv:2203.12563, lines 567–568, restated at line 1801; the
+  multiplicities are introduced at lines 429–460.
+- **Sanctioned bridges:** `MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily`
+  (the coefficients are nonnegative integers) and
+  `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily` (they form a
+  nonnegative integer representation), both for normal blocks with linearly
+  independent periodic vectors at one positive length.
+- **Caveat:** **Scope restriction (periodic boundary)**: the source defines
+  symmetry by invariance of the arbitrary-boundary subspace under the
+  arbitrary-boundary algebra (lines 431–434); only the identity-boundary
+  consequence is formalized
+  (`docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`). The coefficients are
+  complex in the definition; integrality is a theorem.
+
+### `MPOTensor.IsMPOSymmetric`
+
+- **Declaration:** `MPOTensor.IsMPOSymmetric O A c : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Meaning:** the periodic vector of a single tensor is a common eigenvector,
+  $O_a\ket{\psi_A}=c_a\ket{\psi_A}$ at every positive length, with
+  length-independent eigenvalues.
+- **Source:** arXiv:2203.12563, lines 567–568 with one block (the setting of
+  line 610; compare line 1797).
+- **Sanctioned bridges:** `MPOTensor.exists_isFusionCharacter_of_isMPOSymmetric`
+  (for a normal block on which the unit acts trivially, the eigenvalues are a
+  fusion character in `ℕ`),
+  `MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter`, and
+  `MPOTensor.mpo_mulVec_eq_of_isInvertibleLabel`. `MPOTensor.GroupFamily.FixesMPV`
+  is the single-operator case $c_a=1$, by unfolding.
+- **Caveat:** the source's single-block subsection also assumes
+  $M_{a,x}^x=1$ (line 610); that clause is **not** carried by this predicate.
+  The periodic-boundary scope restriction of `IsMPOSymmetricFamily` applies.
+
+### `MPOTensor.IsFusionCharacter`
+
+- **Declaration:** `MPOTensor.IsFusionCharacter N e χ : Prop`, for `χ : ι → R`
+  in a semiring.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Meaning:** a one-dimensional representation of the fusion ring:
+  $\chi_e=1$ and $\chi_a\chi_b=\sum_cN_{ab}^c\chi_c$.
+- **Source:** project-introduced; the source does not use this notion.
+- **Sanctioned bridges:** `MPOTensor.exists_isFusionCharacter_of_isMPOSymmetric`,
+  `MPOTensor.IsStrongMPOSymmetry.isFusionCharacter`, and
+  `MPOTensor.perronFrobeniusDim_eq_of_isFusionCharacter` (a positive real
+  character is the Perron–Frobenius dimension).
+- **Caveat:** the obstruction it yields
+  (`not_isMPOSymmetric_of_forall_not_isFusionCharacter`) differs from the
+  source's no-multiplicity obstruction at line 634: it detects only fusion
+  rings without a nonnegative integer character, such as the Fibonacci ring,
+  and says nothing about group-like algebras.
+
+### `MPOTensor.IsNIMRep`
+
+- **Declaration:** `MPOTensor.IsNIMRep N M : Prop`, for
+  `M : ι → κ → κ → ℕ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Meaning:** $\sum_cN_{ab}^cM_{c,x}^y=\sum_zM_{b,x}^zM_{a,z}^y$ for all
+  labels and blocks: the matrices $M_a$ represent the fusion ring.
+- **Source:** arXiv:2203.12563, lines 564–565, from the associativity of lines
+  491–492; for groups, line 683.
+- **Sanctioned bridges:** `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily`
+  and `MPOTensor.IsNIMRep.exists_equiv_of_isInvertibleLabel`.
+- **Caveat:** the definition does not require the unit to act as the identity;
+  the permutation result adds `M_e = 1` as a hypothesis, matching line 683.
+
+### `MPOTensor.GroupFamily.IsNormalRepresentation`
+
+- **Declaration:** `MPOTensor.GroupFamily.IsNormalRepresentation F : Prop`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`.
+- **Meaning:** every doubled-index tensor $T_g$ is normal and
+  $U_gU_h=U_{gh}$ holds exactly on every nonempty periodic chain.
+- **Source:** arXiv:2502.20257, `main.tex` lines 1403–1407 (the representation
+  law); arXiv:2203.12563, line 1211 (the fusion-tensor lemma for an injective,
+  not necessarily unitary, representation).
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.IsRepresentation.isNormalRepresentation`
+  (from the matrix product unitary representation bundle),
+  `MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors`,
+  `MPOTensor.GroupFamily.IsNormalRepresentation.nonempty_fusionData`, and
+  `MPOTensor.GroupFamily.IsNormalRepresentation.isMPOFusionAlgebra`.
+- **Caveat:** weaker than the source's injectivity, and it carries neither
+  unitarity, simplicity, nor the identity law $U_e=\mathbb 1$. The lemma at
+  `REsubmission.tex` line 1211 lists $U_e=\mathbb 1$, but the fusion-tensor
+  statement it rests on (line 1001) assumes only $U_gU_h=U_{gh}$ and
+  injectivity, and line 1216 allows $U_e$ to be a projector. The anomaly
+  three-cocycle is defined under this hypothesis alone.
+
+### `MPOTensor.GroupFamily.FusionData`
+
+- **Declaration:** `MPOTensor.GroupFamily.FusionData F : Type`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`.
+- **Meaning:** a choice, for every pair $g,h$, of a reduction
+  $(F^<_{g,h},F^>_{g,h})$ of the stacked product of $T_g$ and $T_h$ onto
+  $T_{gh}$.
+- **Source:** arXiv:2502.20257, `eq:fusion_1` and `eq:fusion_2`, `main.tex`
+  lines 1403–1497; arXiv:2203.12563, equation `fusiontensorG2`.
+- **Sanctioned bridges:** `MPOTensor.GroupFamily.IsNormalRepresentation.nonempty_fusionData`
+  (existence); `MPOTensor.GroupFamily.FusionData.omega` is the anomaly
+  three-cochain, and `FusionData.omega_cohomologousTo` shows its class does not
+  depend on the choice.
+- **Caveat:** data, not a proposition; the nilpotent-remainder clause of the
+  existence theorem is not stored.
+
+### `MPSTensor.IsDressedProportional`
+
+- **Declaration:** `MPSTensor.IsDressedProportional B X Y z : Prop`.
+- **Defined in:** `TNLean/MPS/Core/ReductionComposition.lean`.
+- **Meaning:** $XB^{\mathbf w}=z\,YB^{\mathbf w}$ for every sufficiently long
+  word $\mathbf w$.
+- **Source:** Molnár–Ge–Schuch–Cirac, arXiv:1706.07329v2, Theorem 22,
+  `cornerproblem.tex` lines 3156–3162; the definition of the anomaly
+  three-cocycle, arXiv:2502.20257, `main.tex` lines 1506–1535.
+- **Sanctioned bridges:** `MPSTensor.exists_isDressedProportional` (two
+  reductions onto a normal tensor are dressed proportional with a nonzero
+  scalar), `IsDressedProportional.refl` and `.trans`, and
+  `MPSTensor.IsDressedProportional.of_forall_mul_mul`.
+- **Caveat:** the scalar is not required to be nonzero in the definition, and
+  the threshold length is existential.
 
 ## Invariant states of matrix product operators
 
@@ -1156,6 +1518,114 @@ The following notions use different transfer objects and are not interchangeable
   `MPOTensor.GroupFamily.nonempty_blockActionData`.
 - **Caveat:** no theorem states the equivalence with `FixesMPV` at $B=B'$; the
   definitions agree by unfolding.
+
+### `MPOTensor.GroupFamily.IsOnSite`
+
+- **Declaration:** `MPOTensor.GroupFamily.IsOnSite F : Prop`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`.
+- **Meaning:** there are one-site matrices $u_g$ with
+  $O_N(T_g)=u_g^{\otimes N}$, entrywise
+  $\langle\sigma|O_N(T_g)|\tau\rangle=\prod_n (u_g)_{\sigma_n\tau_n}$, for
+  every chain length $N\geq1$; nothing is asserted at $N=0$.
+- **Source:** arXiv:2203.12563, lines 658 and 842 ($O_g=(u_g)^{\otimes n}$).
+- **Sanctioned bridge:** `MPOTensor.GroupFamily.isOnSite_of_closed_fusion`
+  derives it from injectivity, $U_e=\Id$ and closed fusion, through
+  `MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`.
+- **Caveat:** the matrices $u_g$ are not required to form a representation;
+  for a representation, $u_gu_h=u_{gh}$ follows from the operator law at
+  $N=1$.
+
+### `MPOTensor.GroupFamily.FusionData.IsClosed`
+
+- **Declaration:** `MPOTensor.GroupFamily.FusionData.IsClosed fd : Prop`, for
+  a choice of fusion tensors `fd : FusionData F`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`.
+- **Meaning:** closed fusion: the stacked tensor decomposes exactly, letter by
+  letter, $(T_gT_h)^{ij}=F^>_{g,h}\,T_{gh}^{ij}\,F^<_{g,h}$ for all $g,h$ and
+  all physical indices, with no remainder. Together with
+  $F^<_{g,h}F^>_{g,h}=\mathbf 1$, carried by `FusionData`, this is the zipper
+  case of the reduction.
+- **Source:** arXiv:2203.12563, equation `fusiontensorG`, lines 641--656, with
+  the fusion tensors of `fusiontensorG2`, lines 1002--1026.
+- **Sanctioned bridge:** `FusionData.IsClosed.mulTensor_apply` restates it in
+  the two physical indices of the operator tensors.
+- **Caveat:** for an injective representation with $U_e=\Id$ it forces bond
+  dimension one (`MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion`), so
+  the anomalous examples (CZX, $\mathbb Z_3$, $\mathbb Z_2\times\mathbb Z_2$)
+  satisfy only the reduction with a nilpotent remainder, never this predicate.
+
+### `MPOTensor.IsFusionRing`
+
+- **Declaration:** `MPOTensor.IsFusionRing (N : ι → ι → ι → ℕ) (e : ι)
+  (dual : ι → ι) : Prop`, a structure with fields `assoc`, `isFusionUnit`,
+  `dual_dual`, `apply_unit` and `dual_anti`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/FusionRing.lean`.
+- **Meaning:** the structure constants `N_{ab}^c` of a fusion ring: they are
+  associative, `e` is a two-sided unit (`MPOTensor.IsFusionUnit`), and the
+  duality `a ↦ a*` is an involution with `N_{ab}^e = δ_{b,a*}` and
+  `N_{b*a*}^{c*} = N_{ab}^c`.
+- **Source:** arXiv:2203.12563, line 1236 (the identity element and dual
+  elements of the fusion category of a physical symmetry); the source uses the
+  fusion category at lines 1801–1803 to obtain a positive common eigenvector of
+  the multiplicity matrices.
+- **Sanctioned bridges:** `MPOTensor.IsFusionRing.exists_pos_regular` gives a
+  positive regular element with the Perron–Frobenius dimensions
+  (`MPOTensor.perronFrobeniusDim`) as eigenvalues;
+  `MPOTensor.IsNIMRep.exists_pos_left_eigenvector` transfers it to every
+  nonnegative integer representation on which the unit acts as the identity.
+- **Caveat:** only the fusion ring of a fusion category is recorded; the
+  `F`-symbols, the pivotal structure and the rigidity maps are not. The
+  predicate is independent of `MPOTensor.IsMPOFusionAlgebra`, which constrains
+  periodic operators rather than structure constants.
+
+## Domain walls of permuted blocks
+
+### `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction`
+
+- **Declaration:** `ad.IsDomainWallAction g hx hy e e' c : Prop` for action tensors
+  `ad : BlockActionData F A`, a group element `g`, a domain wall `e` between the blocks `x` and
+  `y`, a domain wall `e'` between `x' = g • x` and `y' = g • y`, and a scalar `c`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWall.lean`.
+- **Meaning:** `e ≠ 0`, `e' ≠ 0`, `c ≠ 0`, and the action tensors of `g`, applied to `O_g`
+  acting on `A_x^u e^i A_y^v`, give `c A_{x'}^u e'^i A_{y'}^v` for all words `u`, `v` longer
+  than a fixed buffer.
+- **Source boundary:** arXiv:2405.00439, `eq:localcdef` and `eq:localcdefG`; the source draws
+  the relation with one site on each side of the wall at the renormalization fixed point and
+  does not state the nonzero conditions. Both conventions are recorded in
+  `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+- **Sanctioned bridges:** `IsDomainWallAction.physAct_eq` (configuration-indexed form),
+  `IsDomainWallAction.mul` (composition, with L-symbols), `IsDomainWallAction.phase_eq`
+  (uniqueness of the phase), `IsDomainWallAction.pair` (a string over a pair of walls),
+  `IsDomainWallAction.mpo_mulVec_twoWallMPV` (the periodic state with two walls).
+
+### `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily`
+
+- **Declaration:** `ad.IsDomainWallFamily e B : Prop` for domain walls
+  `e : (y z : X) → Fin d → Matrix (Fin (D y)) (Fin (D z)) ℂ` and phases `B : G → X → X → ℂ`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallFamily.lean`.
+- **Meaning:** every `g` carries `e_{yz}` to `e_{gy,gz}` with phase `B^g_{y,z}`, in the sense of
+  `IsDomainWallAction`; in particular all walls and phases are nonzero.
+- **Source boundary:** arXiv:2405.00439, line 1894 and `eq:localcdefG`, with the conventions of
+  `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
+- **Sanctioned bridges:** `IsDomainWallFamily.mul_eq` (`PentLB`),
+  `IsDomainWallFamily.prod_eq_inv_cyclicInvariant` (`Intequiv`),
+  `IsDomainWallFamily.mul_eq_of_fixed` (projective action of Mathlib's `fixingSubgroup` of the two
+  blocks).
+
+### `MPOTensor.GroupFamily.IsSeparatingLeftInverse`
+
+- **Declaration:** `IsSeparatingLeftInverse Âx Ây Ax Ay : Prop` for one-site families
+  `Âx`, `Ây` of square matrices on the bond spaces of the tensors `Ax`, `Ay`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallString.lean`.
+- **Meaning:** `physPairing Âx Ax = 1`, `physPairing Âx Ay = 0`, `physPairing Ây Ay = 1` and
+  `physPairing Ây Ax = 0`, where `physPairing P Q = ∑_σ P^σ_{αβ} Q^σ_{γδ}`: each family is a left
+  inverse of its tensor, read as a map from the virtual to the physical space, and annihilates
+  the other tensor.
+- **Source boundary:** arXiv:2405.00439, lines 1422--1425 (the left inverses `Â`, `B̂` in the
+  endpoint tensors of `eq:defEndT`, with orthogonal supports at the renormalization fixed point).
+- **Sanctioned bridges:** `BlockActionData.wallString_mulVec_mpv_left` and
+  `BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`).
 
 ## Symmetries of matrix product density operators
 

@@ -270,9 +270,12 @@ theorem transferMap_polarPosTensor_blockTensor (A : MPSTensor d D) (q : ℕ) :
 `A` equals `V^{⊗M}` applied to the periodic `M`-site state of the positive-part tensor `P` of
 the `q`-site blocked tensor.
 
-arXiv:2307.01696, eq. `eq:B`, eq. `eq:key_approximation` (first equality), and Supplemental
-Material, "Proof of Lemma 1 and extension to non-normal tensors":
-`|φ_N⟩ = (⊗_{i=1}^{N/q} Vᵢ) |φ_pos⟩` (before normalization). -/
+arXiv:2307.01696, eq. `eq:B`, eq. `eq:key_approximation` (first equality), and eq. `eq:phi_pos`
+(the state `|φ_pos⟩` of the positive parts): before normalization, `|φ_N⟩` is
+`(⊗_{i=1}^{N/q} Vᵢ) |φ_pos⟩`. This is the identity
+`|φ_N⟩ = (1/c_N) (⊗_{i=1}^{N/q} Vᵢ) ∑ⱼ βⱼ |v_{pos,j}⟩` of the Supplemental Material, "Proof of
+Lemma 1 and extension to non-normal tensors", with the positive-part tensor kept whole rather
+than split into its normal blocks. -/
 theorem mpv_blockedConfigEquiv_eq_sum_polar (A : MPSTensor d D) (q M : ℕ)
     (σ : Fin M → Fin (blockPhysDim d q)) :
     mpv A (blockedConfigEquiv d M q σ) =

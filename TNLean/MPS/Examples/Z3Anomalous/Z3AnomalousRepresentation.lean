@@ -31,9 +31,11 @@ in the blocked sense.
 
 Beside it stands the representation `cocycleFamily` produced by the general construction of
 arXiv:2203.12563 from the cocycle `ω_1` of line 2040, of bond dimension three. Both are exact
-representations of `ℤ₃`. The verification record below certifies the class `j = 1` for
-`{1, U, U†}`; no class is computed in Lean for either family, and no on-site gauge or other
-relation between the two families is claimed.
+representations of `ℤ₃`. The anomaly class of `{1, U, U†}` is computed in `Z3AnomalyClass`,
+and `Z3AnomalousCocycleBridge` shows that the two families are conjugate by one diagonal
+unitary built from on-site and two-site gates; no purely on-site diagonal gauge relates them.
+Built from `ω_1`, the construction carries `ω_1⁻¹ = ω_2`, as its source states (line 2044),
+which is the class of `{1, U, U†}`.
 
 ## Main definitions
 
@@ -205,8 +207,9 @@ theorem family_block_two_isRawRepresentation : (family.block 2).IsRawRepresentat
 
 /-- The periodic representation of `ℤ₃` constructed in arXiv:2203.12563 from the three-cocycle
 `ω_1` of arXiv:2405.00439, line 2040, of bond dimension three. It is an exact representation
-built from `ω_1`; its class is not computed here, and no on-site gauge between it and `family`
-is claimed.
+built from `ω_1`; its operators are those of `family` conjugated by a diagonal unitary
+(`mpo_family_eq_cocycleGauge_conj`). With the fusion tensors of the source it carries the
+inverse cocycle `ω_1⁻¹ = ω_2` (arXiv:2203.12563, line 2044; `cocycleFusionData_omega`).
 
 Source: arXiv:2203.12563, lines 2204–2222; arXiv:2405.00439, line 2040. -/
 abbrev cocycleFamily : GroupFamily (Multiplicative (ZMod 3)) 3 :=

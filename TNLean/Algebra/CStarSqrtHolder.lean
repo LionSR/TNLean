@@ -11,7 +11,7 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 
 For positive elements `a` and `b` of a C⋆-algebra, `‖√a - √b‖ ≤ √‖a - b‖`. This is the operator
 inequality `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for positive semidefinite matrices that arXiv:2103.13367,
-Supplemental Material, eq. `intermediate`, quotes from Bhatia.
+Supplemental Material, eq. `eq:intermediate`, quotes from Bhatia.
 
 ## Main declarations
 
@@ -27,7 +27,7 @@ theorem IsSelfAdjoint.norm_le_of_le_algebraMap {A : Type*} [CStarAlgebra A] [Par
   · rw [Subsingleton.elim a 0, norm_zero]; exact hr
   have hup := (le_algebraMap_iff_spectrum_le (R := ℝ) ha).1 h₁
   have hlo := (algebraMap_le_iff_le_spectrum (R := ℝ) ha).1 (by rwa [map_neg])
-  rcases CStarAlgebra.norm_or_neg_norm_mem_spectrum ha with h | h
+  rcases CStarAlgebra.norm_or_neg_norm_mem_spectrum a ha with h | h
   · exact hup _ h
   · linarith [hlo _ h]
 
@@ -40,7 +40,7 @@ theorem CFC.sqrt_sub_sqrt_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrd
   set c := algebraMap ℝ A (Real.sqrt ε)
   have h₁ : a ≤ b + algebraMap ℝ A ε :=
     sub_le_iff_le_add'.1
-      (IsSelfAdjoint.le_algebraMap_norm_self (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
+      (IsSelfAdjoint.le_algebraMap_norm_self (a - b) (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
   have hS : 0 ≤ S := CFC.sqrt_nonneg b
   have hcS : c * S = Real.sqrt ε • S := (Algebra.smul_def _ _).symm
   have hSc : S * c = Real.sqrt ε • S := by rw [← Algebra.commutes, hcS]
@@ -65,7 +65,7 @@ theorem CFC.sqrt_sub_sqrt_le_algebraMap {A : Type*} [CStarAlgebra A] [PartialOrd
 /-- **Square roots are `1/2`-Hölder**: for `a, b ≥ 0` in a C⋆-algebra,
 `‖√a - √b‖ ≤ √‖a - b‖`.
 
-arXiv:2103.13367, eq. `intermediate` (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for `X, Y ≥ 0`,
+arXiv:2103.13367, eq. `eq:intermediate` (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for `X, Y ≥ 0`,
 quoted there from Bhatia). -/
 theorem CFC.norm_sqrt_sub_sqrt_le {A : Type*} [CStarAlgebra A] [PartialOrder A]
     [StarOrderedRing A] {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :

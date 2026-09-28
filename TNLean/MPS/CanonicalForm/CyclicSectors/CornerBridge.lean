@@ -6,6 +6,24 @@ Authors: TNLean contributors
 import QICLean.Channel.Peripheral.Conjugation
 import TNLean.MPS.CanonicalForm.CyclicSectors.Compression
 
+/-!
+# Corner bridge for compressed cyclic sectors
+
+This file transports primitivity and irreducibility from the corner restriction
+of an ambient adjoint transfer map to the adjoint transfer map of a compressed
+tensor. The transport runs along a multiplicative, adjoint-preserving linear
+equivalence between the full matrix algebra and the corner `P M_D P` that
+intertwines the two transfer maps.
+
+## Main results
+
+* `MPSTensor.cyclic_projection_ne_zero_of_sum_one` — a family summing to the
+  identity whose members a linear map permutes cyclically has no zero member.
+* `MPSTensor.compressedTensor_adjointTransferMap_cornerBridge` — primitivity and
+  irreducibility of the corner restriction pass to the compressed tensor's
+  adjoint transfer map.
+-/
+
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
 namespace MPSTensor

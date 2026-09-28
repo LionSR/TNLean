@@ -315,8 +315,8 @@ theorem FlagData.cflag_mono (F : FlagData M S C) : Monotone F.cflag :=
   fun _ _ hab _ hx => F.H_mono hab hx
 
 /-- Every member of the flag is invariant under the action of a one-letter word. -/
-theorem FlagData.actAlgHom_mem_cflag (F : FlagData M S C) (i : Fin d) (k : Fin (F.r + 1)) :
-    ∀ x ∈ F.cflag k, actAlgHom M (ofWord [i]) x ∈ F.cflag k :=
+theorem FlagData.lsmul_mem_cflag (F : FlagData M S C) (i : Fin d) (k : Fin (F.r + 1)) :
+    ∀ x ∈ F.cflag k, Algebra.lsmul ℂ ℂ M (ofWord [i]) x ∈ F.cflag k :=
   fun _ hx => (F.H k).smul_mem _ hx
 
 variable [FiniteDimensional ℂ M]
@@ -331,7 +331,8 @@ theorem FlagData.exists_blockCoordinates_of_equiv (F : FlagData M S C) (k : Fin 
     [IsScalarTower ℂ (WordAlgebra d) Q] [FiniteDimensional ℂ Q]
     (γ : Q ≃ₗ[WordAlgebra d] F.step k) :
     ∃ ψ : Q ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ), ∀ i : Fin d,
-      LinearMap.toMatrix' (ψ.conj (actAlgHom Q (ofWord [i]))) = blockOf D C i (F.label k) := by
+      LinearMap.toMatrix' (ψ.conj (Algebra.lsmul ℂ ℂ Q (ofWord [i]))) =
+        blockOf D C i (F.label k) := by
   classical
   rcases hk : F.label k with s | t
   · obtain ⟨ε⟩ := F.matched k s hk
@@ -343,7 +344,7 @@ theorem FlagData.exists_blockCoordinates_of_equiv (F : FlagData M S C) (k : Fin 
       rw [map_smul, MPSTensor.asModuleEquiv_ofWord_smul]
       simp [Kraus.evalWord]
     have hmap : ((δ.restrictScalars ℂ) ≪≫ₗ (C s.1).wordRep.asModuleEquiv).conj
-        (actAlgHom Q (ofWord [i])) = Matrix.toLin' (C s.1 i) := by
+        (Algebra.lsmul ℂ ℂ Q (ofWord [i])) = Matrix.toLin' (C s.1 i) := by
       refine LinearMap.ext fun y => ?_
       rw [LinearEquiv.conj_apply_apply, Matrix.toLin'_apply]
       exact (hstep _).trans (congrArg (fun z => C s.1 i *ᵥ z)
@@ -356,9 +357,9 @@ theorem FlagData.exists_blockCoordinates_of_equiv (F : FlagData M S C) (k : Fin 
         Module.finrank_fintype_fun_eq_card]
       simp
     refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
-    have hzero : actAlgHom Q (ofWord [i]) = 0 := by
+    have hzero : Algebra.lsmul ℂ ℂ Q (ofWord [i]) = 0 := by
       refine LinearMap.ext fun x => ?_
-      rw [actAlgHom_apply, LinearMap.zero_apply]
+      rw [Algebra.lsmul_apply, LinearMap.zero_apply]
       refine γ.injective ?_
       rw [map_smul, F.unmatched_smul k t hk i (γ x), map_zero]
     rw [hzero]
@@ -370,12 +371,14 @@ zero matrix on an unmatched step (P5 note, Theorem 7.7, clauses (ii) and (iii)).
 theorem FlagData.exists_blockCoordinates (F : FlagData M S C) (k : Fin F.r) :
     ∃ ψ : Submodule.flagQuot F.cflag k ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ),
       ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (LinearMap.flagQuotMap F.cflag
-        (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k)) = blockOf D C i (F.label k) := by
+        (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i) k)) =
+          blockOf D C i (F.label k) := by
   classical
   let β : Submodule.flagQuot F.cflag k ≃ₗ[ℂ] F.step k :=
     Submodule.Quotient.restrictScalarsEquiv ℂ ((F.H k.castSucc).comap (F.H k.succ).subtype)
   have hβ : ∀ (i : Fin d) (x : Submodule.flagQuot F.cflag k),
-      β (LinearMap.flagQuotMap F.cflag (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k x) =
+      β (LinearMap.flagQuotMap F.cflag (Algebra.lsmul ℂ ℂ M (ofWord [i]))
+          (F.lsmul_mem_cflag i) k x) =
         (ofWord [i] : WordAlgebra d) • β x := by
     intro i x
     refine Submodule.Quotient.induction_on _ x fun v => ?_
@@ -385,13 +388,13 @@ theorem FlagData.exists_blockCoordinates (F : FlagData M S C) (k : Fin F.r) :
     refine ⟨β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv), fun i => ?_⟩
     have hcomm : ∀ x : Submodule.flagQuot F.cflag k,
         (C s.1).wordRep.asModuleEquiv (ε (β (LinearMap.flagQuotMap F.cflag
-            (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k x))) =
+            (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i) k x))) =
           Matrix.toLin' (C s.1 i) ((C s.1).wordRep.asModuleEquiv (ε (β x))) := by
       intro x
       rw [hβ i x, map_smul, MPSTensor.asModuleEquiv_ofWord_smul, Matrix.toLin'_apply]
       simp [Kraus.evalWord]
     have hmap : (β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv)).conj
-        (LinearMap.flagQuotMap F.cflag (actAlgHom M (ofWord [i])) (F.actAlgHom_mem_cflag i) k) =
+        (LinearMap.flagQuotMap F.cflag (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i) k) =
           Matrix.toLin' (C s.1 i) := by
       refine LinearMap.ext fun y => ?_
       rw [LinearEquiv.conj_apply_apply]
@@ -404,8 +407,8 @@ theorem FlagData.exists_blockCoordinates (F : FlagData M S C) (k : Fin F.r) :
       rw [β.finrank_eq, F.unmatched_finrank k t hk, Module.finrank_fintype_fun_eq_card]
       simp
     refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
-    have hzero : LinearMap.flagQuotMap F.cflag (actAlgHom M (ofWord [i]))
-        (F.actAlgHom_mem_cflag i) k = 0 := by
+    have hzero : LinearMap.flagQuotMap F.cflag (Algebra.lsmul ℂ ℂ M (ofWord [i]))
+        (F.lsmul_mem_cflag i) k = 0 := by
       refine LinearMap.ext fun x => ?_
       have hx := hβ i x
       rw [F.unmatched_smul k t hk i (β x)] at hx
@@ -435,19 +438,19 @@ theorem exists_multiBlockCompression_of_isNormal (S : Finset ι) (C : ∀ s, MPS
   -- Coordinates on each subquotient of the flag, matching the prescribed diagonal blocks.
   choose ψ hψprop using F.exists_blockCoordinates
   obtain ⟨e, htri, hdiag, -, -⟩ := exists_linearEquiv_blockTriangular_of_flag F.cflag
-    F.cflag_zero F.cflag_last F.cflag_mono (fun i => actAlgHom B.WordModule (ofWord [i]))
-    F.actAlgHom_mem_cflag (fun k => slotSize D (F.label k)) ψ
+    F.cflag_zero F.cflag_last F.cflag_mono (fun i => Algebra.lsmul ℂ ℂ B.WordModule (ofWord [i]))
+    F.lsmul_mem_cflag (fun k => slotSize D (F.label k)) ψ
   set σ : ((k : Fin F.r) × Fin (slotSize D (F.label k))) ≃ BlockSpace D S F.z :=
     Equiv.sigmaCongrLeft (β := fun b : BlockIndex S F.z => Fin (slotSize D b)) lab with hσ
   set gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S F.z → ℂ) :=
     (B.wordRep.asModuleEquiv.symm.trans e).trans (LinearEquiv.funCongrLeft ℂ ℂ σ.symm) with hgauge
   have hconj : ∀ i, conjMatrix gauge (B i) =
-      (LinearMap.toMatrix' (e.conj (actAlgHom B.WordModule (ofWord [i])))).submatrix
+      (LinearMap.toMatrix' (e.conj (Algebra.lsmul ℂ ℂ B.WordModule (ofWord [i])))).submatrix
         σ.symm σ.symm := by
     intro i
     have hfi : B.wordRep.asModuleEquiv.symm.conj (Matrix.toLin' (B i)) =
-        actAlgHom B.WordModule (ofWord [i]) := by
-      rw [MPSTensor.actAlgHom_wordModule_ofWord B [i]]
+        Algebra.lsmul ℂ ℂ B.WordModule (ofWord [i]) := by
+      rw [MPSTensor.lsmul_wordModule_ofWord B [i]]
       simp [Kraus.evalWord]
     rw [conjMatrix_apply, hgauge,
       show ((B.wordRep.asModuleEquiv.symm.trans e).trans

@@ -213,7 +213,7 @@ theorem mpo_tensor_apply_eq_leftShift_wGate [DecidableEq G] (ω : ScalarThreeCoc
 /-- The sitewise cocycle identity behind the multiplication law: after the shift by `h`, the
 phases of `g` and `h` multiply to the phase of `gh` times a ratio that telescopes around the
 chain. -/
-private theorem phase_site {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
+theorem phase_site {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
     (g h a x : G) :
     ω g (h * a) ((h * a)⁻¹ * (h * x)) * ω h a (a⁻¹ * x) =
       ω (g * h) a (a⁻¹ * x) * (ω g h x * (ω g h a)⁻¹) := by

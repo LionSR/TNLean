@@ -149,3 +149,269 @@ of the virtual projective representation.
     that separates SPT phases is the cohomology class of the virtual
     representation cocycle (Theorem~\ref{thm:spt_classification}).
 \end{remark}
+
+\subsection{Degeneracy of the entanglement spectrum}
+\label{sec:spt_entanglement_spectrum}
+
+For an injective tensor in canonical form, the positive fixed point of the
+transfer map is the half-chain reduced density matrix, whose spectrum is the
+entanglement spectrum.  A symmetry forces this fixed point to commute with the
+virtual gauges, and a projective representation whose factor system has a
+non-trivial class, and hence no one-dimensional invariant subspace, then forces
+every eigenvalue to be degenerate \cite[Section~III.A]{Cirac2021Matrix}.  Here the
+canonical form is $\E_A(\Id)=\Id$ and the fixed point is that of the adjoint
+map $\E_A^\dagger$; the reflected normalization, in which the fixed point of
+$\E_A$ itself is used, describes the same spectrum.
+
+\begin{lemma}[Anticommuting invertible operators force even dimension]
+    \label{lem:even_finrank_of_anticommute}
+    \lean{Module.End.even_finrank_of_anticommute, Matrix.even_finrank_eigenspace_of_anticommute}
+    \leanok
+    Let $f,g$ be invertible operators on a finite-dimensional complex vector
+    space $V$ with $fg=-gf$.  Then $\dim V$ is even.  Consequently, if a matrix
+    $\Lambda$ commutes with two anticommuting invertible matrices $X$ and $Y$,
+    every eigenspace of $\Lambda$ has even dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    Taking determinants in $fg=-gf$ gives
+    $\det f\det g=(-1)^{\dim V}\det g\det f$ with $\det f\det g\neq0$, so
+    $(-1)^{\dim V}=1$.  For the second statement, $X$ and $Y$ map each eigenspace
+    of $\Lambda$ into itself, and their restrictions are invertible and
+    anticommute.
+\end{proof}
+
+\begin{theorem}[Virtual gauges fix the boundary state]
+    \label{thm:virtual_gauge_fixes_boundary_state}
+    \lean{MPSTensor.exists_unitary_gauge_of_symmetry, MPSTensor.commute_boundaryState_of_symmetry}
+    \leanok
+    \uses{def:injective}
+    Let $A$ be injective with $\E_A(\Id)=\Id$, let $\Lambda$ be a positive
+    definite matrix with $\E_A^\dagger(\Lambda)=\Lambda$, and let $u$ be a
+    unitary with
+    $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ for all $i$, where $X\in\GL_{D}(\C)$
+    and $\zeta\neq0$.  Then $X=c\,W$ for a nonzero scalar $c$ and a unitary $W$
+    with $W\Lambda W^\dagger=\Lambda$.  In particular $X\Lambda=\Lambda X$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
+    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase}, applied to the
+    physical unitary $u^\dagger$, gives a unitary $V$ and a phase $\mu$ with
+    $\sum_j (u^\dagger)_{ij}A^j=\mu\,VA^iV^\dagger$, and
+    Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives
+    $V^\dagger\Lambda V=\Lambda$ after normalizing the trace of $\Lambda$.
+    Undoing the physical mixing yields $A^i=\mu\zeta\,(VX)A^i(VX)^{-1}$, so
+    Lemma~\ref{lem:gauge_phase_unique} makes $VX$ a nonzero scalar.  Hence $X$
+    is a multiple of $W=V^\dagger$.
+\end{proof}
+
+\begin{lemma}[No one-dimensional eigenspace for a commutant of a non-trivial projective representation]
+    \label{lem:projective_commutant_eigenspace}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute}
+    \leanok
+    \uses{def:projective_rep, def:scalar_cocycle, def:nontrivial_class}
+    Let $\rho$ be a projective representation of $G$ on $\C^D$ whose factor system
+    $\omega$ is not cohomologous to the trivial one, and let $\Lambda$ commute with
+    every $\rho(g)$.  Then no eigenspace of $\Lambda$ is one-dimensional.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each $\rho(g)$ maps every eigenspace of $\Lambda$ into itself.  If an
+    eigenspace were spanned by one vector $v$, then $\rho(g)v=c_gv$ with
+    $c_g\neq0$, and $\rho(g)\rho(h)=\omega(g,h)\rho(gh)$ applied to $v$ gives
+    $\omega(g,h)=c_gc_hc_{gh}^{-1}$, a coboundary.
+\end{proof}
+
+\begin{theorem}[Degeneracy of the entanglement spectrum]
+    \label{thm:spt_entanglement_spectrum_degenerate}
+    \lean{MPSTensor.finrank_eigenspace_ne_one_of_isNontrivialClass}
+    \leanok
+    \uses{def:injective, def:projective_rep, def:nontrivial_class}
+    Let $A$ be injective with $\E_A(\Id)=\Id$, let $\Lambda$ be a positive
+    definite matrix with $\E_A^\dagger(\Lambda)=\Lambda$, and let $U$ be a unitary
+    representation of $G$ under which $A$ is symmetric with virtual projective
+    representation $\rho$ up to nonzero scalars $\zeta(g)$, that is,
+    $\sum_jU(g)_{ij}A^j=\zeta(g)\,\rho(g^{-1})A^i\rho(g^{-1})^{-1}$.  If the factor system of
+    $\rho$ has a non-trivial class, no eigenspace of $\Lambda$ is one-dimensional:
+    every eigenvalue of the entanglement spectrum is degenerate
+    \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_gauge_fixes_boundary_state, lem:projective_commutant_eigenspace}
+    Every $\rho(g)$ is the virtual gauge of $U(g^{-1})$ and commutes with $\Lambda$
+    by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
+    Lemma~\ref{lem:projective_commutant_eigenspace}.
+\end{proof}
+
+\begin{theorem}[Even degeneracy for anticommuting gauges]
+    \label{thm:spt_entanglement_spectrum_even}
+    \lean{MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges}
+    \leanok
+    In the setting of Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, let
+    $u,v$ be unitaries with virtual gauges $X,Y$, that is,
+    $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ and
+    $\sum_j v_{ij}A^j=\eta\,YA^iY^{-1}$ with $\zeta,\eta\neq0$.  If $XY=-YX$,
+    then every eigenspace of $\Lambda$ has even dimension.  This sharpens
+    Theorem~\ref{thm:spt_entanglement_spectrum_degenerate} when the projective
+    representation contains an anticommuting pair.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:virtual_gauge_fixes_boundary_state, lem:even_finrank_of_anticommute}
+    Both gauges commute with $\Lambda$ by
+    Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
+    Lemma~\ref{lem:even_finrank_of_anticommute}.
+\end{proof}
+
+\subsection{Time reversal, reflection, and symmetry obstructions}
+\label{sec:spt_time_reversal_reflection}
+
+Time reversal acts on an MPS tensor by $A^i\mapsto\sum_j P_{ij}\bar A^j$, with
+$\bar A$ the entrywise conjugate and $P$ its on-site part, and reflection acts by
+transposition $A^i\mapsto(A^i)^{T}$.  Applying either symmetry twice returns the
+tensor up to the gauge $X\bar X$, which Lemma~\ref{lem:gauge_phase_unique_normal}
+forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
+
+\begin{lemma}[Involution index from a doubled symmetry]
+    \label{lem:involution_index_of_twice}
+    \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_twice, MPSTensor.mul_map_star_eq_of_eq_smul, MPSTensor.mul_map_star_eq_of_gauges}
+    \leanok
+    Let $A$ be normal with $D\ge1$ and let $X$ be unitary.  If
+    $A^i=c\,(X\bar X)^\dagger A^i(X\bar X)$ for all $i$, then $X\bar X=\pm\Id$.
+    If two unitaries $X,X'$ satisfy
+    $\zeta X^\dagger A^iX=\zeta'X'^\dagger A^iX'$ for all $i$ with $\zeta\neq0$, then
+    $X\bar X=X'\bar X'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique_normal}
+    By Lemma~\ref{lem:gauge_phase_unique_normal} the unitary $X\bar X$ is a scalar
+    $\sigma$, and $\sigma=\pm1$ because $X\bar X=\sigma$ implies
+    $\bar X X=\sigma$ and $\sigma=\bar\sigma$ with $|\sigma|=1$.  In the second
+    statement $X=u\,X'$ with $|u|=1$, so $X\bar X=|u|^2X'\bar X'$.
+\end{proof}
+
+\begin{theorem}[Time-reversal index]
+    \label{thm:time_reversal_index}
+    \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge, MPSTensor.mul_map_star_eq_of_timeReversal_gauges}
+    \leanok
+    Let $A$ be normal with $D\ge1$, let $P$ satisfy $P\bar P=\Id$, and let $X$ be
+    unitary with $\sum_jP_{ij}\bar A^j=\zeta\,X^\dagger A^iX$ for all $i$.  Then
+    $X\bar X=\pm\Id$, and the sign is the same for every unitary $X$ with this
+    property \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:involution_index_of_twice}
+    Conjugating the relation and substituting it into itself gives
+    $A^i=|\zeta|^2(X\bar X)^\dagger A^i(X\bar X)$, because the doubled on-site
+    action is $P\bar P=\Id$.  Apply Lemma~\ref{lem:involution_index_of_twice}; the
+    phase $\zeta$ is nonzero because $A$ has a nonzero letter.
+\end{proof}
+
+\begin{theorem}[Reflection index]
+    \label{thm:reflection_index}
+    \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_reflection_gauge, MPSTensor.mul_map_star_eq_of_reflection_gauges}
+    \leanok
+    Let $A$ be normal with $D\ge1$ and let $X$ be unitary with
+    $(A^i)^{T}=\zeta\,X^\dagger A^iX$ for all $i$.  Then $X\bar X=\pm\Id$, and the
+    sign is the same for every unitary $X$ with this property
+    \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:involution_index_of_twice}
+    Transposing the relation and substituting it into itself gives
+    $A^i=\zeta^2(X\bar X)^\dagger A^i(X\bar X)$, since
+    $X^{T}X^\dagger=(X\bar X)^\dagger$ and $(X^\dagger)^{T}=\bar X$.  Apply
+    Lemma~\ref{lem:involution_index_of_twice}.
+\end{proof}
+
+\begin{theorem}[Kramers obstruction]
+    \label{thm:kramers_obstruction}
+    \lean{MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one, MPSTensor.pauliY_mul_map_star, MPSTensor.not_wignerTimeReversal_gauge}
+    \leanok
+    Let $P$ satisfy $P\bar P=-\Id$, as $\sigma_y$ does.  No normal tensor with
+    $D\ge1$ admits $X\in\GL_{D}(\C)$ and $\zeta\in\C$ with
+    $\sum_jP_{ij}\bar A^j=\zeta\,X^{-1}A^iX$ for all $i$.  In particular no normal
+    spin-$\tfrac12$ tensor carries the Wigner time reversal
+    $A^i\mapsto\sum_j(\sigma_y)_{ij}\bar A^j$ in this form
+    \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique_normal}
+    Applying the relation twice gives
+    $-A^i=|\zeta|^2(X\bar X)^{-1}A^i(X\bar X)$.  By
+    Lemma~\ref{lem:gauge_phase_unique_normal}, $-|\zeta|^2=1$, which is impossible.
+\end{proof}
+
+\begin{theorem}[Kramers obstruction for injective tensors]
+    \label{thm:kramers_obstruction_phase}
+    \lean{MPSTensor.not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective}
+    \leanok
+    \uses{thm:kramers_obstruction, thm:ft_single_phase}
+    No injective spin-$\tfrac12$ tensor with $D\ge1$ is invariant up to a phase
+    under the Wigner time reversal: it is not the case that for every $N\ge1$ the
+    matrix product vector of $\tilde A^i=\sum_j(\sigma_y)_{ij}\bar A^j$ is
+    $c_N\ket{\psi_N(A)}$ with $|c_N|=1$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:ft_single_phase}, $\tilde A^i=\lambda\,XA^iX^{-1}$ for an
+    invertible $X$ and a phase $\lambda$, which Theorem~\ref{thm:kramers_obstruction}
+    excludes.
+\end{proof}
+
+\begin{theorem}[Anticommuting physical symmetries are obstructed]
+    \label{thm:anticommuting_physical_obstruction}
+    \lean{MPSTensor.not_anticommuting_gauges_of_isNormal}
+    \leanok
+    Let $P,Q$ be physical matrices with $PQ=-QP$.  No normal tensor with $D\ge1$
+    satisfies $\sum_jP_{ij}A^j=\zeta\,XA^iX^{-1}$ and
+    $\sum_jQ_{ij}A^j=\eta\,YA^iY^{-1}$ for all $i$, with $X,Y\in\GL_{D}(\C)$ and
+    $\zeta,\eta\neq0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_unique_normal}
+    Composing the two twists in both orders gives
+    $\eta\zeta\,(YX)A^i(YX)^{-1}=-\zeta\eta\,(XY)A^i(XY)^{-1}$, so
+    Lemma~\ref{lem:gauge_phase_unique_normal} would give $-1=1$.
+\end{proof}
+
+\begin{theorem}[No normal spin-$\tfrac12$ tensor is $\mathrm{SU}(2)$ symmetric]
+    \label{thm:spin_half_su2_obstruction}
+    \lean{MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal, MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal, MPSTensor.mpv_twistedTensor, MPSTensor.mpv_twistedTensor_eq_of_mul_eq, MPSTensor.blockKron_smul}
+    \leanok
+    \uses{def:on_site_symmetric}
+    No normal tensor $A$ on a spin-$\tfrac12$ site with $D\ge1$ is invariant up to
+    phases under the defining representation of $\mathrm{SU}(2)$: it is not the
+    case that for every $g$ and every $N$ the vector $U(g)^{\otimes N}\ket{\psi_N(A)}$
+    is a multiple of $\ket{\psi_N(A)}$ \cite[Section~III.A]{Cirac2021Matrix}.  In
+    particular $A$ has no MPV-family invariance under $\mathrm{SU}(2)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted, thm:anticommuting_physical_obstruction}
+    Fix a length $N$.  If $\ket{\psi_N(A)}=0$, every twist leaves it
+    unchanged.  Otherwise write
+    $U(g)^{\otimes N}\ket{\psi_N(A)}=c_N(g)\ket{\psi_N(A)}$; then
+    $c_N(gh)=c_N(g)c_N(h)$, so $c_N$ is trivial on commutators.  Thus at every
+    length $N$ each commutator leaves $\ket{\psi_N(A)}$ unchanged.  Both $i\sigma_x$ and
+    $i\sigma_z$ are commutators in $\mathrm{SU}(2)$:
+    $i\sigma_x=(i\sigma_z)b_1(i\sigma_z)^{-1}b_1^{-1}$ and
+    $i\sigma_z=(i\sigma_x)b_2(i\sigma_x)^{-1}b_2^{-1}$ with
+    $b_1=\tfrac12\begin{pmatrix}1-i&1-i\\-1-i&1+i\end{pmatrix}$ and
+    $b_2=\tfrac12\begin{pmatrix}1-i&1+i\\-1+i&1+i\end{pmatrix}$.  So the
+    tensor has MPV-family invariance under these two elements.
+    Block to an odd length $L$ at which the tensor is injective.  The blocked tensor
+    is symmetric under the $L$-fold Kronecker powers, and the powers of
+    $i\sigma_x$ and $i\sigma_z$ anticommute because $L$ is odd.  The fundamental
+    theorem supplies virtual gauges for both, which
+    Theorem~\ref{thm:anticommuting_physical_obstruction} rules out.  The source
+    argues instead through the alternation of integer and half-integer virtual
+    spins.
+\end{proof}

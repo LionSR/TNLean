@@ -30,7 +30,7 @@ private theorem selected_source_u_unitary_of_simple
     (hU : IsMPUCanonicalFormII U) (hSimple : IsMPUSimple U) :
     (SourceFactors.sourceU U (sourceFactors U hU.ρ hU.ρ_posDef)).IsUnitaryBetween := by
   change (sourceU U hU.ρ hU.ρ_posDef).IsUnitaryBetween
-  exact (hU.isMPUSimple_tfae.out 0 2).mp hSimple
+  exact (hU.isMPUSimple_tfae.out 1 3).mp hSimple
 
 end MPOTensor
 
