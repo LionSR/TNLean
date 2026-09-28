@@ -1283,6 +1283,35 @@ The following notions use different transfer objects and are not interchangeable
   $D^3\log D=\Omega(N)$ is not formalized; see
   `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
 
+## Scalar L-symbols of group matrix product operators
+
+### `TNLean.Algebra.LSymbol.ActionGaugeEquiv`
+
+- **Declaration:** `LSymbol.ActionGaugeEquiv L₁ L₂`, for scalar L-symbols of a
+  group `G` acting on a set `X`.
+- **Defined in:** `TNLean/Algebra/StabilizerCocycleReconstruction.lean`.
+- **Meaning:** `L₁ = LSymbol.gauge 1 γ L₂` for some action-tensor gauge
+  `γ : G → X → ℂˣ`, that is,
+  $L_1{}^x_{g,h}=\gamma^x_{gh}(\gamma^{hx}_g\gamma^x_h)^{-1}L_2{}^x_{g,h}$
+  with the fusion-tensor gauge held equal to one.
+- **Source:** arXiv:2203.12563, `gdgroup` with the fusion gauge fixed as at
+  line 761, `Papers/2203.12563/REsubmission.tex:716-721,761`.
+- **Sanctioned bridges:**
+  `StabilizerRepresentatives.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq`
+  and `StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff`
+  identify the relation on induced L-symbols with cohomology of stabilizer
+  cocycles; on the classes of `StabilizerRepresentatives.solutionSetoid`,
+  `StabilizerRepresentatives.solutionAddAction`,
+  `StabilizerRepresentatives.h2EquivSolutionClasses`, and
+  `StabilizerRepresentatives.existsUnique_vadd_eq` give the torsor under
+  Mathlib's `groupCohomology.H2`.
+- **Caveat:** `LSymbol.gauge` is the reciprocal of the source's `gdgroup`;
+  with trivial fusion gauge this replaces `γ` by `γ⁻¹` and defines the same
+  relation. Allowing fusion gauges that preserve `ω` gives a coarser relation,
+  under which the classes collapse to the quotient of `H²(H, ℂˣ)` by the
+  restriction of `H²(G, ℂˣ)`; that coarser relation is not formalized. See
+  `docs/paper-gaps/glm23_eq20_fusion_gauge.tex`.
+
 ## Fusion symmetries of matrix product operators
 
 The periodic-boundary layer of non-invertible matrix product operator symmetry.
