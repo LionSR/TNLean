@@ -1768,6 +1768,47 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     and if $\ket{\phi_N(A)}=0$ both normalized states vanish.
 \end{proof}
 
+\begin{theorem}[Block length $a\log(N/\varepsilon)+b$ for every slope $a>\xi/2$]
+    \label{thm:ldp_depth_upper_bound_slope}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le_of_slope}
+    \leanok
+    There is $C$, depending only on $d$ and $D$, such that the following holds.
+    Let $B$ be a normal tensor in the gauge~(\ref{eq:ldp_normal_gauge}), with a
+    positive definite fixed point $\sigma$ of trace one, and let $A$ be a tensor
+    with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for all $N$ and some
+    $\zeta\neq0$. Let $0<t<1$ bound the moduli of the eigenvalues of $\E_B$ other
+    than $1$, and let $\xi=-1/\log t$. For every $a>\xi/2$ there is $b\ge1$ such
+    that for $0<\varepsilon\le1$, every $N\ge1$ and every $q$ dividing $N$ with
+    $q\ge a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
+    $\varepsilon(\psi,\phi_N(A))\le\varepsilon$ is prepared in depth at most $Cq$.
+    The source chooses $q\approx2(1+\eta)\xi\ln N$, a slope $2\xi$; the slope
+    $\xi/2$ is a result of this project.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_approximating_state_depth,
+        thm:ldp_approximation_error_normal,
+        thm:wordspan_blk_inj_succ,
+        lem:ldp_normalized_state_rescaling,
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        lem:ldp_approximating_state_unit_norm}
+    Since $a>\xi/2$, the number $\gamma=\xi/(2a)$ satisfies $0<\gamma<1$, and
+    Theorem~\ref{thm:ldp_approximation_error_normal} at this $\gamma$ gives $K$
+    with $\varepsilon(\widetilde\phi_N,\phi_N(B))\le K\,(N/q)\,e^{-q/a}$, since
+    $2\gamma/\xi=1/a$. Take $b=a\max(\log K,0)+L_0+3D+1$, with $L_0$ a length at
+    which the blocked tensor is injective. Then $q\ge b$ makes the blocked
+    tensor $\mathcal B_q$ injective by
+    Theorem~\ref{thm:wordspan_blk_inj_succ} and
+    Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective}, and $q\ge3D$.
+    Moreover $q/a\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$,
+    so $K(N/q)e^{-q/a}\le\varepsilon$. The approximating state is a unit vector
+    by Lemma~\ref{lem:ldp_approximating_state_unit_norm}, is prepared in depth at
+    most $Cq$ by Theorem~\ref{thm:ldp_approximating_state_depth}, and has the
+    same error against $\phi_N(A)$ as against $\phi_N(B)$ by
+    Lemma~\ref{lem:ldp_normalized_state_rescaling}.
+\end{proof}
+
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
     \label{thm:ldp_depth_upper_bound_divisible}
     \uses{def:ldp_local_circuit}
@@ -1786,23 +1827,20 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:normalized_primitive_gauge, thm:ldp_approximating_state_depth,
-        thm:ldp_approximation_error_normal, thm:normality_rescaling_invariance,
+    \uses{thm:normalized_primitive_gauge, thm:ldp_depth_upper_bound_slope,
+        thm:normality_rescaling_invariance,
         thm:gauge_invariance_normal,
         thm:is_normal_tensor_of_is_normal_left_canonical,
-        thm:wordspan_blk_inj_succ, thm:eigenvalue_bound,
-        lem:ldp_normalized_state_rescaling,
+        thm:eigenvalue_bound,
         thm:primitive_fixed_point_trace_normalization,
-        lem:isNBlkInjective_iff_blockTensor_isInjective,
-        lem:ldp_approximating_state_unit_norm, thm:transfer_channel}
+        thm:transfer_channel}
     A gauge transformation and a rescaling bring $A$ into the
     gauge~(\ref{eq:ldp_normal_gauge}) by
     Theorem~\ref{thm:normalized_primitive_gauge}, and the positive definite
     fixed point $\rho$ it provides is replaced by
     $\sigma=\rho/\Tr\rho$, still a fixed point of trace one, by
-    Theorem~\ref{thm:primitive_fixed_point_trace_normalization}; they multiply $\ket{\phi_N(A)}$ by a
-    nonzero scalar, so by Lemma~\ref{lem:ldp_normalized_state_rescaling} the
-    error is unchanged. The new tensor is normal by
+    Theorem~\ref{thm:primitive_fixed_point_trace_normalization}; they multiply
+    $\ket{\phi_N(A)}$ by a nonzero scalar. The new tensor is normal by
     Theorems~\ref{thm:normality_rescaling_invariance}
     and~\ref{thm:gauge_invariance_normal}. By
     Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} its transfer
@@ -1810,20 +1848,10 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     left canonical, so the transfer map is a channel by
     Theorem~\ref{thm:transfer_channel}, and all its eigenvalues have modulus at
     most $1$ by Theorem~\ref{thm:eigenvalue_bound},
-    and finitely many of them give a bound $t<1$ on the
-    moduli of the other eigenvalues, and
-    Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/8$ gives
-    $K$ with $\varepsilon(\widetilde\phi_N,\phi_N)\le K\,(N/q)\,e^{-rq}$,
-    where $r=-\tfrac14\log t>0$. Take $a=1/r$ and
-    $b=\max(\log K,0)/r+L_0+3D+1$, with $L_0$ a length at which the blocked tensor is injective.
-    Then $q\ge b$ makes the words of length $q$ span the full matrix algebra by
-    Theorem~\ref{thm:wordspan_blk_inj_succ}, so the blocked tensor
-    $\mathcal B_q$ is injective by
-    Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective}, and $q\ge3D$, and
-    $rq\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$ gives
-    $K(N/q)e^{-rq}\le\varepsilon$. The approximating state is a unit vector by
-    Lemma~\ref{lem:ldp_approximating_state_unit_norm} and is prepared in depth at most $Cq$ by
-    Theorem~\ref{thm:ldp_approximating_state_depth}. For the second statement,
+    and finitely many of them give a bound $0<t<1$ on the
+    moduli of the other eigenvalues. With $\xi=-1/\log t>0$,
+    Theorem~\ref{thm:ldp_depth_upper_bound_slope} at the slope $a=\xi>\xi/2$
+    gives $b\ge1$ and the first statement. For the second statement,
     $\log(N/\varepsilon)\ge\log2$ gives
     $Cq\le C(2a+2b/\log2)\log(N/\varepsilon)$.
 \end{proof}
