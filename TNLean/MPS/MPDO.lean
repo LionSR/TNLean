@@ -138,6 +138,7 @@ import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CompleteZipperFusion
 import TNLean.MPS.MPDO.CompleteZipperFusionBlocked
+import TNLean.MPS.MPDO.CompleteZipperFusionCoassoc
 import TNLean.MPS.MPDO.CompleteZipperFusionCoproduct
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold

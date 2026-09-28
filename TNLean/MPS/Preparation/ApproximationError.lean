@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.NormedRingTelescoping
+import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.Spectral.MPVOverlapTrace
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
@@ -51,11 +52,15 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 * Steps 1 and 2 are `MPSTensor.exists_norm_transferMap_pow_sub_le` and
   `MPSTensor.exists_norm_polarPos_blockTensor_sub_le` in
   `TNLean.MPS.Preparation.PositivePartRate`.
+* `MPSTensor.exists_norm_trace_prod_range_transferMatrix_sub_one_le` — the telescoping
+  estimate for a product of mixed transfer matrices, each near the idempotent `τ_∞`.
 * `MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le` and its `O`-form
   `MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul` — the overlap estimate
   (S29) of arXiv:2103.13367.
 * `MPSTensor.normalizedMPVState`, `MPSTensor.approximatingMPVState` — the normalized states
   `φ_N` and `φ'_N`.
+* `MPSTensor.one_sub_norm_inner_smul_inv_norm_le` — the triangle inequality of the source's
+  proof of Lemma 1'(i), as a statement about vectors.
 * `MPSTensor.exists_approximationError_le` and its `O`-form
   `MPSTensor.exists_approximationError_le_mul` — the approximation error, Lemma 1'(i).
 
@@ -128,22 +133,34 @@ theorem mpvOverlap_fixedPointTensor_self {σ : Matrix (Fin D) (Fin D) ℂ} (hσ 
   rfl
 
 open scoped Matrix.Norms.L2Operator in
-/-- **Overlap of the positive part with the fixed point, as a complex number.** In the setting of
-`exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le`, the overlap itself, not only its modulus,
-is close to `1`: `|⟨φ_M(P_∞)|φ_M(P_q)⟩ - 1| ≤ C y e^{C y}` with `y = M e^{-γ q/ξ}`.
+/-- **Telescoping bound for products of mixed transfer matrices.** In the setting of
+`exists_norm_polarPos_blockTensor_sub_le`, write `τ_L` for the mixed transfer matrix of the
+positive part `P_L` of the `L`-site blocked tensor against the fixed-point tensor `P_∞`, and
+`τ_∞` for that of `P_∞` against itself. There are `K ≥ 0` and `C > 0` such that
+`‖τ_L - τ_∞‖ ≤ K e^{-γ L/ξ}` for every `L`, and every family of matrices `X j` with
+`‖X j - τ_∞‖ ≤ K e^{-γ q/ξ}` satisfies `|Tr(X_0 ⋯ X_{M-1}) - 1| ≤ C y e^{C y}` for `M ≥ 1`,
+with `y = M e^{-γ q/ξ}`.
 
 arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", eqs.
-`final_eq` to `finished`: the telescoping estimate bounds `Tr τ_{AB}^M - Tr τ_{BB}^M`, which is
-this difference. -/
-theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
+`final_eq` to `finished`: `τ_∞` is idempotent with `Tr τ_∞^M = 1`, and the telescoping estimate
+bounds the distance of the product from `τ_∞^M`. -/
+theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
-      ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ ≤
-        C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
-          Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
+    ∃ K C : ℝ, 0 ≤ K ∧ 0 < C ∧
+      (∀ L : ℕ, ‖transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A L))
+          (fixedPointTensor σ)) -
+        transferMatrix (Kraus.mixedMapLM (fixedPointTensor σ) (fixedPointTensor σ))‖ ≤
+          K * Real.exp (-γ / correlationLength lam₂) ^ L) ∧
+      ∀ (q M : ℕ) [NeZero M] (X : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ),
+        (∀ j, ‖X j -
+          transferMatrix (Kraus.mixedMapLM (fixedPointTensor σ) (fixedPointTensor σ))‖ ≤
+            K * Real.exp (-γ / correlationLength lam₂) ^ q) →
+        ‖Matrix.trace ((List.range M).map X).prod - 1‖ ≤
+          C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
+            Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set Ψ := mixedTransferMatrixLeft (fixedPointTensor σ)
@@ -159,44 +176,40 @@ theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
   have hc : 0 ≤ c := by positivity
   set K := c * (K₃ * K₁)
   have hK : 0 ≤ K := by positivity
-  refine ⟨K₄ * c * K + K + 1, by positivity, fun q M _ => ?_⟩
+  refine ⟨K₃ * K₁, K₄ * c * K + K + 1, by positivity, by positivity, fun L => ?_,
+    fun q M _ X hδ => ?_⟩
+  · -- `τ_L - τ_∞ = Ψ(P_L - P_∞)`.
+    have hTΨ : transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A L))
+        (fixedPointTensor σ)) - Tinf = Ψ (Matrix.polarPos (physicalMatrix (blockTensor A L)) -
+          (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
+      rw [map_sub]
+      congr 1
+      change Tinf = transferMatrix (Kraus.mixedMapLM (ofPhysicalMatrix
+        (((CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)).submatrix (virtualPairEquiv D) id))
+        (fixedPointTensor σ))
+      rw [ofPhysicalMatrix_sqrt_transpose_kronecker_one]
+    rw [hTΨ, mul_assoc]
+    exact (hΨ _).trans (mul_le_mul_of_nonneg_left (hpos L) hK₃)
   set x := Real.exp (-γ / correlationLength lam₂)
   have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
     rw [← Real.exp_nat_mul]; congr 1; ring
   rw [hxq]
   set u := (M : ℝ) * x ^ q
   have hu : 0 ≤ u := by positivity
-  set T := transferMatrix
-    (Kraus.mixedMapLM (polarPosTensor (blockTensor A q)) (fixedPointTensor σ))
-  -- `T - Tinf = Ψ(P_q - P_∞)`.
-  have hTΨ : T - Tinf = Ψ (Matrix.polarPos (physicalMatrix (blockTensor A q)) -
-      (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
-    rw [map_sub]
-    congr 1
-    change Tinf = transferMatrix (Kraus.mixedMapLM (ofPhysicalMatrix
-      (((CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)).submatrix (virtualPairEquiv D) id))
-      (fixedPointTensor σ))
-    rw [ofPhysicalMatrix_sqrt_transpose_kronecker_one]
-  have hδ : ‖T - Tinf‖ ≤ K₃ * K₁ * x ^ q := by
-    rw [hTΨ]
-    refine (hΨ _).trans ?_
-    rw [mul_assoc]
-    exact mul_le_mul_of_nonneg_left (hpos q) hK₃
-  have htel := norm_pow_sub_pow_le_of_isIdempotentElem
+  have htel := norm_prod_range_sub_pow_le_of_isIdempotentElem
     (isIdempotentElem_transferMatrix_fixedPointTensor hσ.posSemidef htr)
     (c := c) (le_add_of_nonneg_left (norm_nonneg _)) (le_add_of_nonneg_right (norm_nonneg _))
     hδ M
-  -- The overlap is `Tr T^M`, and `1 = Tr Tinf^M`.
-  have hover : mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1 =
-      Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ (T ^ M - Tinf ^ M) := by
+  -- `1 = Tr τ_∞^M`.
+  have hover : Matrix.trace ((List.range M).map X).prod - 1 =
+      Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ (((List.range M).map X).prod - Tinf ^ M) := by
     rw [map_sub, Matrix.traceLinearMap_apply, Matrix.traceLinearMap_apply,
-      trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap,
       trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap,
       mpvOverlap_fixedPointTensor_self hσ.posSemidef htr]
   have hy : 0 ≤ c * (K₃ * K₁ * x ^ q) := by positivity
   have hgeom := one_add_pow_sub_one_le_mul_exp hy M
-  calc ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖
-      ≤ K₄ * ‖T ^ M - Tinf ^ M‖ := by rw [hover]; exact htrace _
+  calc ‖Matrix.trace ((List.range M).map X).prod - 1‖
+      ≤ K₄ * ‖((List.range M).map X).prod - Tinf ^ M‖ := by rw [hover]; exact htrace _
     _ ≤ K₄ * (c * ((1 + c * (K₃ * K₁ * x ^ q)) ^ M - 1)) := by gcongr
     _ ≤ K₄ * (c * (M * (c * (K₃ * K₁ * x ^ q)) *
           Real.exp (M * (c * (K₃ * K₁ * x ^ q))))) := by gcongr
@@ -206,6 +219,33 @@ theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
         have hKC : K ≤ K₄ * c * K + K + 1 := by nlinarith [mul_nonneg (mul_nonneg hK₄ hc) hK]
         have hKC' : K₄ * c * K ≤ K₄ * c * K + K + 1 := by linarith
         gcongr
+
+open scoped Matrix.Norms.L2Operator in
+/-- **Overlap of the positive part with the fixed point, as a complex number.** In the setting of
+`exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le`, the overlap itself, not only its modulus,
+is close to `1`: `|⟨φ_M(P_∞)|φ_M(P_q)⟩ - 1| ≤ C y e^{C y}` with `y = M e^{-γ q/ξ}`.
+
+arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", eqs.
+`final_eq` to `finished`: the telescoping estimate bounds `Tr τ_{AB}^M - Tr τ_{BB}^M`, which is
+this difference (`exists_norm_trace_prod_range_transferMatrix_sub_one_le` with all factors
+equal). -/
+theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
+    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
+    (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M],
+      ‖mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M - 1‖ ≤
+        C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
+          Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
+  have := Matrix.neZero_of_trace_eq_one htr
+  obtain ⟨K, C, -, hC, hδ, h⟩ :=
+    exists_norm_trace_prod_range_transferMatrix_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
+  refine ⟨C, hC, fun q M _ => ?_⟩
+  have := h q M _ fun _ => hδ q
+  rwa [List.map_const', List.length_range, List.prod_replicate,
+    trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap]
+    at this
 
 /-- **Overlap of the positive part with the fixed point.** Let `A` be normal in the gauge
 `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` (arXiv:2307.01696, eq. (5)), let `λ₂`
@@ -395,6 +435,12 @@ theorem exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul (A : MPSTensor 
 noncomputable def normalizedMPVState (A : MPSTensor d D) (N : ℕ) : MPVSpace d N :=
   ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
 
+/-- The normalized periodic state is a unit vector when the periodic state does not vanish. -/
+theorem norm_normalizedMPVState {A : MPSTensor d D} {N : ℕ} (h : mpvState A N ≠ 0) :
+    ‖normalizedMPVState A N‖ = 1 := by
+  rw [normalizedMPVState, norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+    inv_mul_cancel₀ (norm_ne_zero_iff.mpr h)]
+
 /-- The periodic state of `B' = V P_∞` on `M` blocks of `q` sites, read on the `Mq` sites
 through the regrouping of sites into blocks (arXiv:2307.01696, eqs. (9) and (10)). -/
 noncomputable def approximatingMPVStateRaw (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)
@@ -472,6 +518,44 @@ theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
   simp only [mpvOverlap, mpv_fixedPointTensor]
   exact Finset.sum_congr rfl fun τ _ => mul_comm _ _
 
+/-- **The triangle inequality of Lemma 1'(i).** If `‖ψ‖ ≤ 1`, `|1 - |⟨ψ|v⟩|| ≤ a`, and
+`|‖v‖² - 1| ≤ b`, then the error `1 - |⟨ψ|v/‖v‖⟩|` against the normalization of `v` is at most
+`a + b`.
+
+arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(i):
+`ε ≤ |1 - c_N |⟨φ'_N|φ_N⟩|| + |c_N - 1| |⟨φ'_N|φ_N⟩|`. -/
+theorem one_sub_norm_inner_smul_inv_norm_le {E : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℂ E] {ψ v : E} (hψ : ‖ψ‖ ≤ 1) {a b : ℝ}
+    (ha : |1 - ‖⟪ψ, v⟫_ℂ‖| ≤ a) (hb : |‖v‖ ^ 2 - 1| ≤ b) :
+    1 - ‖⟪ψ, ((‖v‖ : ℂ)⁻¹) • v⟫_ℂ‖ ≤ a + b := by
+  have ha0 : 0 ≤ a := (abs_nonneg _).trans ha
+  set c := ‖v‖ with hcdef
+  set z := ⟪ψ, v⟫_ℂ
+  rcases eq_or_ne c 0 with hc0 | hc0
+  · have : 1 ≤ b := by simpa [hc0] using hb
+    linarith [norm_nonneg ⟪ψ, ((c : ℂ)⁻¹) • v⟫_ℂ]
+  have hcpos : 0 < c := lt_of_le_of_ne (norm_nonneg _) (Ne.symm hc0)
+  have hinner : ⟪ψ, ((c : ℂ)⁻¹) • v⟫_ℂ = (c : ℂ)⁻¹ * z := inner_smul_right _ _ _
+  set w := ‖⟪ψ, ((c : ℂ)⁻¹) • v⟫_ℂ‖
+  have hw1 : w ≤ 1 := by
+    refine (norm_inner_le_norm (𝕜 := ℂ) ψ _).trans ?_
+    rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hcpos,
+      inv_mul_cancel₀ hc0, mul_one]
+    exact hψ
+  have hcw : c * w = ‖z‖ := by
+    simp only [w, hinner, norm_mul, norm_inv, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_pos hcpos, ← mul_assoc, mul_inv_cancel₀ hc0, one_mul]
+  have hc1 : |c - 1| ≤ |c ^ 2 - 1| := by
+    rw [show c ^ 2 - 1 = (c - 1) * (c + 1) by ring, abs_mul]
+    exact le_mul_of_one_le_right (abs_nonneg _) (by rw [abs_of_pos (by linarith)]; linarith)
+  have e : 1 - w = (1 - ‖z‖) + (c - 1) * w := by rw [← hcw]; ring
+  have : (c - 1) * w ≤ |c - 1| := by
+    calc (c - 1) * w ≤ |c - 1| * w := mul_le_mul_of_nonneg_right (le_abs_self _) (norm_nonneg _)
+      _ ≤ |c - 1| * 1 := mul_le_mul_of_nonneg_left hw1 (abs_nonneg _)
+      _ = |c - 1| := mul_one _
+  rw [e]
+  linarith [le_abs_self (1 - ‖z‖)]
+
 /-- **Approximation error, normal case** (arXiv:2307.01696, Lemma 1 and Lemma 1'(i)). Let `A`
 be normal in the gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` (eq. (5)), let
 `λ₂` bound the moduli of the eigenvalues of `E_A` other than `1`, with correlation length
@@ -483,7 +567,8 @@ In particular `ε = O((N/q) e^{-γ q/ξ})` whenever `(N/q) e^{-γ q/ξ}` stays b
 and eq. (S11)); see `exists_approximationError_le_mul` for the unconditional `O`-form.
 
 The proof is the triangle inequality of the source,
-`ε ≤ |1 - c_N |⟨φ'_N|φ_N⟩|| + |c_N - 1| |⟨φ'_N|φ_N⟩|`, with the first term bounded by
+`ε ≤ |1 - c_N |⟨φ'_N|φ_N⟩|| + |c_N - 1| |⟨φ'_N|φ_N⟩|`
+(`one_sub_norm_inner_smul_inv_norm_le`), with the first term bounded by
 `exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le` (eq. (S9)) and the second by
 `exists_abs_norm_mpvState_sq_sub_one_le`. The source drops the second term using `q = o(N)`;
 here it is bounded by `e^{-2γN/ξ} ≤ e^{-γ q/ξ}` since `N ≥ q`, so no condition relating `q`
@@ -509,44 +594,23 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   have hxL : 0 < (x ^ L)⁻¹ := by positivity
   have hC₁C : C₁ ≤ C := by linarith
   refine ⟨C, by positivity, fun q M _ => ?_⟩
-  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
-    rw [← Real.exp_nat_mul]; congr 1; ring
+  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q :=
+    Real.exp_neg_mul_div_eq_pow _ _ q
   rw [hxq]
-  set u := (M : ℝ) * x ^ q
   have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  have hu : 0 ≤ u := by positivity
-  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   set φt := approximatingMPVState A σ q M
   set φ := normalizedMPVState A (M * q)
   have hε1 : 1 - ‖⟪φt, φ⟫_ℂ‖ ≤ 1 := by linarith [norm_nonneg ⟪φt, φ⟫_ℂ]
-  -- When `C u ≥ 1` the bound is trivial.
-  have htriv : 1 ≤ C * u → 1 - ‖⟪φt, φ⟫_ℂ‖ ≤ C * u * Real.exp (C * u) := fun h =>
-    hε1.trans (h.trans (le_mul_of_one_le_right (by positivity) hexp))
-  by_cases hbig : 1 ≤ C * u
-  · exact htriv hbig
-  rw [not_le] at hbig
-  have hx1 : x < 1 := by
-    by_contra h
-    rw [not_lt] at h
-    have : 1 ≤ u := one_le_mul_of_one_le_of_one_le hM (one_le_pow₀ h)
-    have : 1 ≤ C := by linarith
-    nlinarith
-  have hLq : L ≤ q := by
-    by_contra h
-    rw [not_le] at h
-    have hxLq : x ^ L ≤ x ^ q := pow_le_pow_of_le_one hx.le hx1.le h.le
-    have : x ^ L ≤ u := hxLq.trans (le_mul_of_one_le_left (by positivity) hM)
-    have : 1 ≤ (x ^ L)⁻¹ * u := by
-      rw [← inv_mul_cancel₀ (by positivity : x ^ L ≠ 0)]
-      exact mul_le_mul_of_nonneg_left this (by positivity)
-    have : (x ^ L)⁻¹ * u ≤ C * u := by
-      refine mul_le_mul_of_nonneg_right ?_ hu
-      linarith
-    linarith
+  refine le_mul_mul_exp_of_forall_le (L := fun _ : Unit => L) hx
+    (by simp only [Finset.univ_unique, Finset.sum_singleton, C]; linarith) hM hε1
+    fun hx1 hLq _ => ?_
+  replace hLq := hLq ()
+  set u := (M : ℝ) * x ^ q
+  have hu : 0 ≤ u := by positivity
+  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   have hB : Kraus.IsInjective (blockTensor A q) :=
     (isNBlkInjective_iff_blockTensor_isInjective A q).1 (isNBlkInjective_of_le hLpos hL hLq)
   obtain ⟨-, hz⟩ := inner_approximatingMPVState_mpvState A hB hσ.posSemidef htr M
-  set z := mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor σ) M
   set c := ‖mpvState A (M * q)‖
   -- The normalization term: `|c² - 1| ≤ K₅ e^{-2γN/ξ} ≤ K₅ u`.
   have hcu : |c ^ 2 - 1| ≤ K₅ * u := by
@@ -555,8 +619,6 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
       _ ≤ x ^ q := pow_le_pow_of_le_one hx.le hx1.le (by
           have := Nat.one_le_iff_ne_zero.2 (NeZero.ne M); nlinarith)
       _ ≤ u := le_mul_of_one_le_left (by positivity) hM
-  have hinner : ⟪φt, φ⟫_ℂ = (c : ℂ)⁻¹ * z := by
-    rw [show φ = ((c : ℂ)⁻¹) • mpvState A (M * q) from rfl, inner_smul_right, hz]
   have hC' : C₁ * u * Real.exp (C₁ * u) + K₅ * u ≤ C * u * Real.exp (C * u) := by
     have h1 : C₁ * u * Real.exp (C₁ * u) ≤ C₁ * u * Real.exp (C * u) := by
       gcongr
@@ -566,39 +628,10 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
       gcongr
       linarith
     nlinarith
-  rcases eq_or_ne c 0 with hc0 | hc0
-  · -- `c = 0`: then `|c² - 1| = 1 ≤ K₅ u`.
-    have : 1 ≤ K₅ * u := by simpa [hc0] using hcu
-    refine hε1.trans (this.trans ?_)
-    nlinarith [Real.exp_pos (C₁ * u), mul_nonneg (mul_nonneg hC₁.le hu) (Real.exp_pos (C₁ * u)).le]
-  · have hcpos : 0 < c := lt_of_le_of_ne (norm_nonneg _) (Ne.symm hc0)
-    set w := ‖⟪φt, φ⟫_ℂ‖
-    have hw1 : w ≤ 1 := by
-      refine (norm_inner_le_norm (𝕜 := ℂ) φt φ).trans ?_
-      have hunit : ∀ v : MPVSpace d (M * q), ‖((‖v‖ : ℂ)⁻¹) • v‖ ≤ 1 := fun v => by
-        rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm]
-        exact inv_mul_le_one_of_le₀ le_rfl (norm_nonneg _)
-      calc ‖φt‖ * ‖φ‖ ≤ 1 * 1 := mul_le_mul (hunit _) (hunit _) (norm_nonneg _) zero_le_one
-        _ = 1 := one_mul 1
-    have hcw : c * w = ‖z‖ := by
-      have hw : w = ‖(c : ℂ)⁻¹ * z‖ := by simp only [w, hinner]
-      rw [hw, norm_mul, norm_inv, Complex.norm_real, Real.norm_eq_abs,
-        abs_of_pos hcpos, ← mul_assoc, mul_inv_cancel₀ hc0, one_mul]
-    have hc1 : |c - 1| ≤ |c ^ 2 - 1| := by
-      rw [show c ^ 2 - 1 = (c - 1) * (c + 1) by ring, abs_mul]
-      exact le_mul_of_one_le_right (abs_nonneg _) (by rw [abs_of_pos (by linarith)]; linarith)
-    have hover' := hover q M
-    rw [hxq] at hover'
-    have : 1 - w ≤ |1 - ‖z‖| + |c - 1| := by
-      have e : 1 - w = (1 - ‖z‖) + (c - 1) * w := by rw [← hcw]; ring
-      rw [e]
-      have : (c - 1) * w ≤ |c - 1| := by
-        calc (c - 1) * w ≤ |c - 1| * w := mul_le_mul_of_nonneg_right (le_abs_self _)
-              (norm_nonneg _)
-          _ ≤ |c - 1| * 1 := mul_le_mul_of_nonneg_left hw1 (abs_nonneg _)
-          _ = |c - 1| := mul_one _
-      linarith [le_abs_self (1 - ‖z‖)]
-    linarith
+  have hφt : ‖φt‖ ≤ 1 := (norm_approximatingMPVState A hB hσ.posSemidef htr M).le
+  have hover' := hover q M
+  rw [hxq, ← hz] at hover'
+  exact (one_sub_norm_inner_smul_inv_norm_le hφt hover' hcu).trans hC'
 
 /-- **Approximation error, normal case, `O`-form** (arXiv:2307.01696, Lemma 1, eq. (17), and
 Lemma 1'(i), eq. (S11)): in the setting of `exists_approximationError_le`, there is `C` with
