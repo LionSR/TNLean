@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### bilinear identities on operators with disjoint supports — promoted
+- **Pattern:** prove an identity `f A B = g A B`, bilinear in operators `A`, `B` acting on
+  sets of sites `S`, `S'`, by nested `Submodule.span_induction` on
+  `A ∈ supportedOperators d S` and `B ∈ supportedOperators d S'`: a product-generator case
+  `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
+  scalar cases.
+- **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
+  and `expect_productVector_mul` in `TNLean/MPS/Preparation/LocalCircuit.lean`,
+  `trace_finKronecker_mul_mul` in `TNLean/MPS/Preparation/LocalChannelCircuit.lean`,
+  and `OnsiteChannel.dual_mul` in
+  `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+- **Abstraction:** `MPSPreparation.eq_of_mem_supportedOperators₂` in
+  `TNLean/MPS/Preparation/LocalCircuit.lean`: two bilinear maps
+  `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
+  generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
+  maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
+  product-generator case after a `change`.
+- **Notes:** all four call sites are refactored (2026-09-28).
+
 ### injectivity lengths below the error cutoff — promoted
 - **Pattern:** in an error bound `ε ≤ C u e^{C u}` with `u = M x^q`, dispose of
   `C u ≥ 1` by `ε ≤ 1`, then derive `x < 1` and `L_j ≤ q` for every injectivity

@@ -1261,6 +1261,64 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.eq_extend_of_agreeOff` (for injective `e`).
 - **Caveat:** proof-internal vocabulary for the site embedding.
 
+## Local channel conversions
+
+### `MPSPreparation.IsLocalChannelProtocol`
+
+- **Declaration:**
+  `MPSPreparation.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ) → Prop`
+  (an inductive predicate, with the local dimensions `d`, `e` implicit).
+- **Defined in:** `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+- **Meaning:** `IsLocalChannelProtocol T Ψ` says that
+  $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$
+  alternates `T` layers `L_t` of local channels on pairs of neighbouring sites
+  of the ring (`MPSPreparation.ChannelLayer`) with onsite channels $\Phi_t$
+  (`MPSPreparation.OnsiteChannel`), each a tensor product of one-site channels
+  that may change the local dimension. Attaching an ancilla in a fixed state
+  (`OnsiteChannel.attach`) and discarding it (`OnsiteChannel.discard`) are
+  onsite channels.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, main text, paragraph
+  "Quantum circuits and LOCC" (the circuits
+  $V'=U_\ell V_\ell\cdots U_1V_1U_0$ with local operations $U_n$ on each site
+  and its ancillas between the layers $V_n$), with channels in place of
+  unitaries.
+- **Sanctioned bridges:** `IsLocalChannelProtocol.isKrausCPTP` (the map is a
+  channel), `IsLocalChannelProtocol.comp` (protocols compose and depths add),
+  `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
+  circuit of `n` layers adds `n` to the depth), and
+  `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
+  Heisenberg dual).
+- **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
+  are free. There are no measurements or classical communication, so this is
+  not the LOCC class of the source.
+
+### `MPSPreparation.IsLocalChannelConversion`
+
+- **Declaration:**
+  `MPSPreparation.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) (σ : Matrix (Cfg d' N) (Cfg d' N) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+- **Meaning:** `σ = Ψ ρ` for a map `Ψ` with `IsLocalChannelProtocol T' Ψ` for
+  some `T' ≤ T`.
+- **Source:** arXiv:2103.13367, main text, paragraph "Quantum circuits and
+  LOCC" (circuits with ancillas attached to each site) and paragraph "Phases
+  of matter" (a protocol "where ancillas are traced out at the end, defines a
+  quantum channel"), without measurements or classical communication.
+- **Sanctioned bridges:** `IsLocalChannelConversion.refl` (depth `0`),
+  `IsLocalChannelConversion.mono`, `IsLocalChannelConversion.trans` (depths
+  add), `IsLocalChannelConversion.exists_isKrausCPTP`,
+  `IsLocalChannelConversion.density` (a conversion of a density matrix is a
+  density matrix), `MPSPreparation.isLocalChannelConversion_circuit` (attach,
+  run a local channel circuit, discard),
+  `MPSPreparation.IsChannelPreparedInDepth.exists_isLocalChannelConversion`,
+  and `MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion` (vanishing
+  connected correlations beyond ring distance `2T` from a product density).
+- **Caveat:** the relation is directed and not symmetric: a channel need not be
+  undone by another channel. Neither `ρ` nor `σ` is required to be a density
+  matrix; positivity and unit trace of `σ` follow from those of `ρ` by
+  `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
+  polylogarithmic-depth conversions of the phase equivalence in
+  arXiv:2103.13367 are not formalized, nor is blocking of sites.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`

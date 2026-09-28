@@ -34,6 +34,7 @@ import TNLean.MPS.Preparation.GivensDecomposition
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalChannelCircuit
+import TNLean.MPS.Preparation.LocalChannelConversion
 import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.LogDepthPreparation
 import TNLean.MPS.Preparation.MatrixPolar

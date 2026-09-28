@@ -103,33 +103,17 @@ theorem trace_finKronecker_mul_mul {S S' : Set (Fin N)} (hSS' : Disjoint S S')
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S') :
     trace (finKronecker σ * (A * B)) * trace (finKronecker σ) =
       trace (finKronecker σ * A) * trace (finKronecker σ * B) := by
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
-    induction hB using Submodule.span_induction with
-    | mem y hy =>
-      obtain ⟨m', hm', rfl⟩ := hy
-      simp only [finKronecker_mul, trace_finKronecker, ← Finset.prod_mul_distrib]
-      refine Finset.prod_congr rfl fun i _ ↦ ?_
-      by_cases hi : i ∈ S
-      · simp [hm' i (Set.disjoint_left.mp hSS' hi)]
-      · simp [hm i hi, mul_comm]
-    | zero => simp
-    | add y z _ _ hy hz =>
-      rw [Matrix.mul_add, Matrix.mul_add, trace_add, add_mul, hy, hz, Matrix.mul_add, trace_add,
-        mul_add]
-    | smul c y _ hy =>
-      rw [Matrix.mul_smul, Matrix.mul_smul, trace_smul, smul_eq_mul, mul_assoc, hy,
-        Matrix.mul_smul, trace_smul, smul_eq_mul]
-      ring
-  | zero => simp
-  | add x y _ _ hx hy =>
-    rw [Matrix.add_mul, Matrix.mul_add, trace_add, add_mul, hx, hy, Matrix.mul_add, trace_add,
-      add_mul]
-  | smul c x _ hx =>
-    rw [Matrix.smul_mul, Matrix.mul_smul, trace_smul, smul_eq_mul, mul_assoc, hx,
-      Matrix.mul_smul, trace_smul, smul_eq_mul]
-    ring
+  let φ := traceLinearMap (Cfg d N) ℂ ℂ ∘ₗ LinearMap.mulLeft ℂ (finKronecker σ)
+  rw [mul_comm]
+  refine eq_of_mem_supportedOperators₂ (trace (finKronecker σ) • (LinearMap.mul ℂ _).compr₂ φ)
+    ((LinearMap.mul ℂ ℂ).compl₁₂ φ φ) (fun m m' hm hm' ↦ ?_) hA hB
+  change trace (finKronecker σ) * trace (finKronecker σ * (finKronecker m * finKronecker m')) =
+    trace (finKronecker σ * finKronecker m) * trace (finKronecker σ * finKronecker m')
+  simp only [finKronecker_mul, trace_finKronecker, ← Finset.prod_mul_distrib]
+  refine Finset.prod_congr rfl fun i _ ↦ ?_
+  by_cases hi : i ∈ S
+  · simp [hm' i (Set.disjoint_left.mp hSS' hi), mul_comm]
+  · simp [hm i hi]
 
 /-! ### Kraus maps on the chain -/
 
@@ -155,13 +139,12 @@ theorem commute_rectangularKrausMap {ι κ : Type*} [Fintype ι] [Fintype κ]
         simp only [conjTranspose_mul, Matrix.mul_assoc]
 
 /-- Kraus maps are dual for the trace pairing to the Kraus maps of the adjoint operators:
-`tr(∑ⱼ Kⱼ ρ Kⱼ† A) = tr(ρ ∑ⱼ Kⱼ† A Kⱼ)`. -/
-theorem trace_rectangularKrausMap_mul {ι : Type*} [Fintype ι]
-    (K : ι → Matrix (Cfg d N) (Cfg d N) ℂ) (ρ A : Matrix (Cfg d N) (Cfg d N) ℂ) :
-    trace (rectangularKrausMap K ρ * A) =
-      trace (ρ * rectangularKrausMap (fun j ↦ (K j)ᴴ) A) := by
-  simp only [krausMap_apply, conjTranspose_conjTranspose, Matrix.sum_mul, Matrix.mul_sum,
-    trace_sum]
+`tr(∑ⱼ Kⱼ ρ Kⱼ† A) = tr(ρ ∑ⱼ Kⱼ† A Kⱼ)`, for rectangular Kraus operators. -/
+theorem trace_rectangularKrausMap_mul {ι α β : Type*} [Fintype ι] [Fintype α] [Fintype β]
+    (K : ι → Matrix β α ℂ) (ρ : Matrix α α ℂ) (A : Matrix β β ℂ) :
+    trace (rectangularKrausMap K ρ * A) = trace (ρ * rectangularKrausMap (fun j ↦ (K j)ᴴ) A) := by
+  change trace ((∑ j, K j * ρ * (K j)ᴴ) * A) = trace (ρ * ∑ j, (K j)ᴴ * A * (K j)ᴴᴴ)
+  simp only [conjTranspose_conjTranspose, Matrix.sum_mul, Matrix.mul_sum, trace_sum]
   refine Finset.sum_congr rfl fun j _ ↦ ?_
   rw [show K j * ρ * (K j)ᴴ * A = K j * (ρ * ((K j)ᴴ * A)) by simp only [Matrix.mul_assoc],
     trace_mul_comm]
