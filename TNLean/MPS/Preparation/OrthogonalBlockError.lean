@@ -18,7 +18,8 @@ whose `q`-site states overlap (`docs/paper-gaps/mswc24_block_form_mixed_overlap.
 This file proves the bound for blocks of multiplicity one with positive weights whose `q`-site
 states are orthogonal: for `Aⁱ = ⊕ⱼ μⱼ A_jⁱ` with `μⱼ > 0`, normal blocks `A_j` in the gauge of
 eq. (5), and a common bound `λ₂` on the subleading eigenvalues of their transfer maps, there is
-`C` such that `ε ≤ C y e^{C y}` with `y = (N/q) e^{-γ q/ξ_diag}`, for every block length `q` at
+`C` such that `ε ≤ C y e^{C y}` with `y = M e^{-γ q/ξ_diag}` (`= (N/q) e^{-γ q/ξ_diag}` for
+`q ≥ 1`), for every block length `q` at
 which the blocked tensors of distinct blocks satisfy `B_jᴴ B_{j'} = 0`, and every number of
 blocks `M ≥ 1` (`exists_approximationError_le_blockSum`); in `O`-form, `ε ≤ C y`
 (`exists_approximationError_le_mul_blockSum`).
@@ -314,7 +315,8 @@ transfer map `E_{A_j}`, so that `ξ = -1/log|λ₂|` bounds the correlation leng
 `0 < γ < 1/2`. There is `C > 0` such that for every block length `q` at which the `q`-site
 states of distinct blocks are orthogonal, `B_jᴴ B_{j'} = 0`, and every number of blocks
 `M ≥ 1`, with `N = qM`, `βⱼ = μⱼ^N` (eq. (S4) for `m_j = 1`), the pairs of the `σ_j` embedded
-along `ι_j`, and `y = (N/q) e^{-γ q/ξ}`, the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating
+along `ι_j`, and `y = M e^{-γ q/ξ}` (`= (N/q) e^{-γ q/ξ}` for `q ≥ 1`), the error
+`ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating
 state of eq. (S7) satisfies `ε ≤ C y e^{C y}`.
 
 No condition `q = o(N)` is needed: under the orthogonality the source's off-diagonal term

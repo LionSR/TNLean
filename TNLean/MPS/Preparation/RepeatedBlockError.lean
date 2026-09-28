@@ -226,7 +226,8 @@ let `0 < γ < 1/2`. There is `C > 0` such that for every block length `q` at whi
 states of distinct blocks are orthogonal, `B_jᴴ B_{j'} = 0`, and every number of blocks
 `M ≥ 1` with `N = qM` and `βⱼ = ∑ₖ μ_{j,k}^N` not all zero (eq. (S4)), the
 error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the corrected approximating state
-`V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` satisfies `ε ≤ C y e^{C y}` with `y = (N/q) e^{-γ q/ξ}`. -/
+`V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` satisfies `ε ≤ C y e^{C y}` with `y = M e^{-γ q/ξ}`, which is
+`(N/q) e^{-γ q/ξ}` for `q ≥ 1`. -/
 theorem exists_approximationError_le_repeatedBlockSum [NeZero b]
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
@@ -329,7 +330,8 @@ theorem exists_approximationError_le_repeatedBlockSum [NeZero b]
 /-- **Approximation error for orthogonal blocks with multiplicities, `O`-form**
 (arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), for the corrected
 approximating state): in the setting of `exists_approximationError_le_repeatedBlockSum`, there is
-`C` with `ε ≤ C (N/q) e^{-γ q/ξ}` for every block length `q` at which the `q`-site states of
+`C` with `ε ≤ C M e^{-γ q/ξ}`, which is `C (N/q) e^{-γ q/ξ}` for `q ≥ 1`, for every block
+length `q` at which the `q`-site states of
 distinct blocks are orthogonal and every number of blocks `M ≥ 1` with the weights `βⱼ` not all
 zero. -/
 theorem exists_approximationError_le_mul_repeatedBlockSum [NeZero b]

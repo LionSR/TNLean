@@ -20,8 +20,10 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
 
 \begin{definition}[Direct sum with multiplicities]
     \label{def:ldp_repeated_block_sum}
-    \lean{MPSTensor.CopyWeights, MPSTensor.repeatedBlockSum, MPSTensor.copyNorm,
-        MPSTensor.copyIsometry}
+    \lean{MPSTensor.CopyWeights, MPSTensor.CopyWeights.weight_fun_ne_zero,
+        MPSTensor.repeatedBlockSum, MPSTensor.copyNorm, MPSTensor.copyNorm_sq,
+        MPSTensor.copyNorm_pos, MPSTensor.copyIsometry,
+        MPSTensor.conjTranspose_copyIsometry}
     \leanok
     Let $A_1,\dots,A_b$ be tensors, let the isometries $E_{j,k}$,
     $1\leq k\leq m_j$, place the copy $k$ of block $j$ in the bond space, with
@@ -39,6 +41,9 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
 \begin{theorem}[Positive part of a blocked tensor with multiplicities]
     \label{thm:ldp_repeated_block_polar}
     \lean{MPSTensor.repeatedBlockSum_eq_blockSum,
+        MPSTensor.flat_disjoint_coord,
+        MPSTensor.physicalMatrix_blockTensor_repeatedBlockSum,
+        MPSTensor.conjTranspose_pairEmbedding_mul_copy,
         MPSTensor.mpv_repeatedBlockSum,
         MPSTensor.physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry,
         MPSTensor.conjTranspose_copyIsometry_mul_self,
@@ -78,7 +83,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
 \begin{definition}[Corrected approximating state]
     \label{def:ldp_repeated_block_state}
     \lean{MPSTensor.copyFixedPointState, MPSTensor.copyApproxVector,
-        MPSTensor.copyApproxOverlap}
+        MPSTensor.copyApproxOverlap, MPSTensor.copyApproxOverlap_eq}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_repeated_block_sum,
         thm:ldp_repeated_block_polar}

@@ -122,7 +122,8 @@ $p_j=\lvert\beta_j\rvert^2$, $z_j=\braket{s_j}{v_j}$ and $c_j'=\braket{v_j}{v_j}
 \end{align*}
 and $\varepsilon\leq2\sum_j(\lvert z_j-1\rvert+\lvert c_j'-1\rvert)$. Part~(i) of the
 lemma for each block bounds this by $Cy\,e^{Cy}$ with
-$y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$, with no condition $q=o(N)$. The phases
+$y=Me^{-\gamma q/\xi_{\mathrm{diag}}}$, which is $(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$
+for $q\geq1$, with no condition $q=o(N)$. The phases
 and the possible cancellations in $\beta_j$ enter only through the weights $p_j$.
 
 \section{Numerical check}
@@ -165,9 +166,12 @@ the source.
 The corrected block form (\ref{eq:mswc24_rc_polar}), the identity
 (\ref{eq:mswc24_rc_after_v}) and the overlap formula are formalized for arbitrary
 multiplicities and nonzero complex weights, for blocks whose
-$q$-site states are orthogonal, at every $q\geq1$. The bound
+$q$-site states are orthogonal, at every $q\geq1$; the overlap formula in addition
+needs every blocked tensor $B_j$ to be injective, so that the vectors $\ket{s_j}$ are
+unit vectors, and the error bound covers the shorter block lengths by
+$\varepsilon\leq1$ after enlarging the constants. The bound
 $\varepsilon\leq Cy\,e^{Cy}$, together with its $O$-form $\varepsilon\leq Cy$, is
-formalized under the same assumptions at every $q\geq0$ and $M\geq1$ with
+formalized under the same assumptions, with $y=Me^{-\gamma q/\xi}$, at every $q\geq0$ and $M\geq1$ with
 $\beta\neq0$.\footnote{Formal declarations:
     \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum},
     \leanid{MPSTensor.polarPos_blockTensor_repeatedBlockSum} and
