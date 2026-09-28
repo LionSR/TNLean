@@ -33,20 +33,26 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 
 ## Proof outline (following arXiv:2103.13367)
 
-1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C r^n ‖X‖` with `r = e^{-2γ/ξ}`, which exceeds
-   the spectral radius of `E_A - |σ⟩⟨1|` because `2γ < 1` (compare eq. `difference`,
-   `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix).
-2. **Positive parts.** `P_q² - P_∞²` is a rearrangement of `E_A^q - |σ⟩⟨1|`. The source
-   uses `‖√X - √Y‖ ≤ √‖X - Y‖` (eq. `intermediate`); here `P_∞²` is bounded below by a
-   positive multiple of the identity, so the Lipschitz bound `‖√X - √Y‖ ≤ ‖X - Y‖ / √c` of
-   `CFC.norm_sqrt_sub_sqrt_le_div` applies instead, and `exists_norm_polarPos_blockTensor_sub_le`
-   gives `‖P_q - P_∞‖ ≤ C e^{-γ q/ξ}` for every `γ < 1`. This file calls it at the rate it needs.
+1. **Transfer-map gap.** `exists_norm_transferMap_pow_sub_le` gives
+   `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-γ' n/ξ} ‖X‖` for every `0 < γ' < 1`, since `e^{-γ'/ξ}` exceeds
+   the spectral radius of `E_A - |σ⟩⟨1|` (compare eq. `difference`, `‖R‖_F ≤ Λ(q) e^{-qα}` with
+   `|λ₁| = e^{-qα}` for the blocked transfer matrix). The overlap estimate uses it at `γ' = γ`,
+   through the Gram matrices `P_q² = B_q† B_q`, a rearrangement of `E_A^q`, which are
+   `e^{-γ q/ξ}`-close to `P_∞² = σᵀ ⊗ 1`.
+2. **Positive parts.** The source uses `‖√X - √Y‖ ≤ √‖X - Y‖` (eq. `intermediate`), which halves
+   the exponent. Here `P_∞²` is bounded below by a positive multiple of the identity, so the
+   Lipschitz bound `‖√X - √Y‖ ≤ ‖X - Y‖ / √c` of `CFC.norm_sqrt_sub_sqrt_le_div` applies instead
+   and the exponent is kept: `exists_norm_polarPos_blockTensor_sub_le`, called at rate `γ`, gives
+   `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`.
 3. **Telescoping.** For an idempotent `T_∞` and `‖T - T_∞‖ ≤ δ`,
-   `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied to the mixed
-   transfer matrices `τ_{AB}` and `τ_{BB}` of `P_q` against `P_∞`.
-4. **Normalization.** `c_N² = Tr E_A^N` differs from `1` by `O(e^{-2γN/ξ})`, and the triangle
-   inequality of arXiv:2307.01696, proof of Lemma 1'(i), combines the two errors. Since `N ≥ q`
-   the normalization term is dominated by the overlap term; no condition `q = o(N)` is needed.
+   `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied with
+   `δ = K e^{-γ q/ξ}` from step 2 to the mixed transfer matrices `τ_{AB}` and `τ_{BB}` of `P_q`
+   against `P_∞`.
+4. **Normalization.** `exists_norm_transferMatrix_pow_sub_le` calls the gap of step 1 separately
+   at `γ' = 2γ`, which is admissible because `γ < 1/2`; hence `c_N² = Tr E_A^N` differs from `1`
+   by `O(e^{-2γN/ξ})`. The triangle inequality of arXiv:2307.01696, proof of Lemma 1'(i),
+   combines the two errors. Since `N ≥ q` the normalization term is dominated by the overlap
+   term; no condition `q = o(N)` is needed.
 
 ## Main declarations
 

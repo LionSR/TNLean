@@ -15,14 +15,15 @@ Lipschitz, which improves on the global `1/2`-Hölder bound `CFC.norm_sqrt_sub_s
 The proof is order-theoretic and uses only the operator monotonicity of the square root: with
 `ε = ‖a - b‖` and `s = ε / √c ≤ √c`, the inequalities `a ≤ (√b + s)²` and `(√b - s)² ≤ a`
 follow from `-ε ≤ a - b ≤ ε` and `√b ≥ √c`, and `√b - s ≥ 0`. When `ε > c` the Hölder bound
-`√ε ≤ ε / √c` suffices.
+`√ε ≤ ε / √c` suffices. The upper half, `CFC.sqrt_sub_sqrt_le_algebraMap_of_le`, and the scalar
+bound `CFC.algebraMap_sqrt_le_sqrt` live in `TNLean.Algebra.CStarSqrtHolder`, where the Hölder
+bound is their case `c = 0`.
 
 Mathlib has no Lipschitz bound for the square root; the results here are upstream candidates for
 `Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order`.
 
 ## Main declarations
 
-* `CFC.algebraMap_sqrt_le_sqrt` — `c ≤ b` gives `√c ≤ √b`.
 * `CFC.norm_sqrt_sub_sqrt_le_div` — `‖√a - √b‖ ≤ ‖a - b‖ / √c` for `a ≥ 0` and `b ≥ c > 0`.
 * `IsStrictlyPositive.exists_norm_sqrt_sub_sqrt_le` — a Lipschitz constant for the square root
   at a strictly positive element.
@@ -31,59 +32,6 @@ Mathlib has no Lipschitz bound for the square root; the results here are upstrea
 namespace CFC
 
 variable {A : Type*} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
-
-/-- The scalars `algebraMap ℝ A` are monotone. -/
-private theorem algebraMap_le_algebraMap_of_le {x y : ℝ} (h : x ≤ y) :
-    algebraMap ℝ A x ≤ algebraMap ℝ A y := by
-  rw [← sub_nonneg, ← map_sub, Algebra.algebraMap_eq_smul_one]
-  exact smul_nonneg (sub_nonneg.2 h) zero_le_one
-
-/-- A scalar lower bound passes to square roots: `c ≤ b` gives `√c ≤ √b`. -/
-theorem algebraMap_sqrt_le_sqrt {b : A} {c : ℝ} (hc : 0 ≤ c) (h : algebraMap ℝ A c ≤ b) :
-    algebraMap ℝ A (Real.sqrt c) ≤ CFC.sqrt b := by
-  have h0 : 0 ≤ algebraMap ℝ A (Real.sqrt c) := by
-    simpa using algebraMap_le_algebraMap_of_le (A := A) (Real.sqrt_nonneg c)
-  calc algebraMap ℝ A (Real.sqrt c) = CFC.sqrt (algebraMap ℝ A (Real.sqrt c) ^ 2) :=
-        (CFC.sqrt_sq _ h0).symm
-    _ ≤ CFC.sqrt b := CFC.sqrt_le_sqrt _ _ (by rwa [← map_pow, Real.sq_sqrt hc])
-
-/-- The square of `√b + s` for a real scalar `s`. -/
-private theorem sq_sqrt_add_algebraMap {b : A} (hb : 0 ≤ b) (s : ℝ) :
-    (CFC.sqrt b + algebraMap ℝ A s) ^ 2 =
-      b + (s • CFC.sqrt b + s • CFC.sqrt b) + algebraMap ℝ A (s * s) := by
-  rw [sq, add_mul, mul_add, mul_add, CFC.sqrt_mul_sqrt_self b hb, ← Algebra.smul_def,
-    ← Algebra.commutes, ← Algebra.smul_def, ← map_mul]
-  abel
-
-/-- Upper half of `norm_sqrt_sub_sqrt_le_div`: if `b ≥ c ≥ 0` and `s ≥ 0` satisfies
-`‖a - b‖ ≤ 2 s √c + s²`, then `√a - √b ≤ s`. -/
-theorem sqrt_sub_sqrt_le_algebraMap_of_le {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) {c s : ℝ}
-    (hc : 0 ≤ c) (hcb : algebraMap ℝ A c ≤ b) (hs : 0 ≤ s)
-    (hε : ‖a - b‖ ≤ 2 * s * Real.sqrt c + s * s) :
-    CFC.sqrt a - CFC.sqrt b ≤ algebraMap ℝ A s := by
-  have hS := algebraMap_sqrt_le_sqrt hc hcb
-  have hC : 0 ≤ algebraMap ℝ A s := by simpa using algebraMap_le_algebraMap_of_le (A := A) hs
-  have hsS : algebraMap ℝ A (s * Real.sqrt c) ≤ s • CFC.sqrt b := by
-    rw [map_mul, ← Algebra.smul_def]
-    exact smul_le_smul_of_nonneg_left hS hs
-  have h₁ : a ≤ b + algebraMap ℝ A ‖a - b‖ :=
-    sub_le_iff_le_add'.1
-      (IsSelfAdjoint.le_algebraMap_norm_self (a - b) (ha.isSelfAdjoint.sub hb.isSelfAdjoint))
-  have h₂ : a ≤ (CFC.sqrt b + algebraMap ℝ A s) ^ 2 := by
-    rw [sq_sqrt_add_algebraMap hb]
-    refine h₁.trans ?_
-    rw [add_assoc]
-    refine add_le_add_right ?_ b
-    calc algebraMap ℝ A ‖a - b‖
-        ≤ algebraMap ℝ A (s * Real.sqrt c + s * Real.sqrt c + s * s) :=
-          algebraMap_le_algebraMap_of_le (by linarith)
-      _ = algebraMap ℝ A (s * Real.sqrt c) + algebraMap ℝ A (s * Real.sqrt c) +
-          algebraMap ℝ A (s * s) := by rw [map_add, map_add]
-      _ ≤ s • CFC.sqrt b + s • CFC.sqrt b + algebraMap ℝ A (s * s) := by gcongr
-  have h₃ : CFC.sqrt a ≤ CFC.sqrt b + algebraMap ℝ A s :=
-    calc CFC.sqrt a ≤ CFC.sqrt ((CFC.sqrt b + algebraMap ℝ A s) ^ 2) := CFC.sqrt_le_sqrt _ _ h₂
-      _ = CFC.sqrt b + algebraMap ℝ A s := CFC.sqrt_sq _ (add_nonneg (CFC.sqrt_nonneg b) hC)
-  exact sub_le_iff_le_add'.2 h₃
 
 /-- Lower half of `norm_sqrt_sub_sqrt_le_div`: if `b ≥ c ≥ 0` and `0 ≤ s ≤ √c` satisfies
 `‖a - b‖ + s² ≤ 2 s √c`, then `√b - √a ≤ s`. -/
