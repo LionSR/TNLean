@@ -21,9 +21,13 @@ The pairs are encoded by `finProdFinEquiv`. When `E` is rank one, Mathlib's
 column-stacking convention for `Matrix.vec` identifies this contraction with
 an ordinary virtual sandwich, with no transpose, adjoint, or scalar factor.
 
-The results do not choose the rank-one factors continuously, deduce positivity
-from arbitrary factors, construct reduced representatives, or assert rank
-constancy.
+For a transfer map $X\mapsto\operatorname{tr}(LX)R$, the left vector in its
+rank-one matrix is the vectorization of $L^{\mathsf T}$. Reversing the column
+pair before contraction therefore gives $L W^{ij}R$. This expression is
+continuous in $W$ without any continuity assumption on the chosen factors.
+
+The results do not deduce positivity from arbitrary factors, construct reduced
+representatives, or assert rank constancy.
 -/
 
 open scoped Matrix BigOperators
@@ -132,13 +136,16 @@ theorem continuous_normalizedDiagonal_doubleLayerTensor :
     Continuous (fun W : MPOTensor d D ↦ normalizedDiagonal (doubleLayerTensor W)) :=
   continuous_normalizedDiagonal.comp continuous_doubleLayerTensor
 
-/-- Contract the normalized double-layer diagonal directly into the original
-MPO tensor, without choosing rank-one factors.
+/-- Contract the normalized double-layer diagonal into the original MPO tensor,
+reversing its column pair to represent the trace pairing. This gives
+$L W^{ij}R$ whenever the normalized transfer map is $X\mapsto\operatorname{tr}(LX)R$.
 
 Source: arXiv:1703.09188, Proposition IV.5, Figure `IV_index4.png`, lines
 807--812. -/
 noncomputable def factorFreeSandwich (W : MPOTensor d D) : MPOTensor d D :=
-  doubledVirtualContraction W (normalizedDiagonal (doubleLayerTensor W))
+  doubledVirtualContraction W
+    ((normalizedDiagonal (doubleLayerTensor W)).submatrix id
+      (fun k ↦ finProdFinEquiv (Prod.swap (finProdFinEquiv.symm k))))
 
 /-- Entrywise expansion of the factor-free sandwich. -/
 @[simp] theorem factorFreeSandwich_apply (W : MPOTensor d D)
@@ -146,8 +153,25 @@ noncomputable def factorFreeSandwich (W : MPOTensor d D) : MPOTensor d D :=
     factorFreeSandwich W i j a b =
       ∑ c : Fin D, ∑ e : Fin D,
         normalizedDiagonal (doubleLayerTensor W)
-          (finProdFinEquiv (b, e)) (finProdFinEquiv (c, a)) * W i j c e :=
-  rfl
+          (finProdFinEquiv (b, e)) (finProdFinEquiv (a, c)) * W i j c e := by
+  simp [factorFreeSandwich, doubledVirtualContraction]
+
+/-- The factor-free contraction equals $L W^{ij}R$ when the normalized
+transfer map has the trace-factor form $X\mapsto\operatorname{tr}(LX)R$.
+No positivity or normalization assumption on the factors is needed.
+
+Source: arXiv:1703.09188, Proposition IV.5, lines 807--812. -/
+theorem factorFreeSandwich_eq_of_trace_pair [NeZero d]
+    (W : MPOTensor d D) (L R : Matrix (Fin D) (Fin D) ℂ)
+    (hmap : ∀ X, Kraus.transferMap W.normalizedFlattening X =
+      Matrix.trace (L * X) • R) :
+    factorFreeSandwich W = virtualSandwich L W R := by
+  unfold factorFreeSandwich
+  rw [normalizedDiagonal_doubleLayerTensor]
+  convert doubledVirtualContraction_vecMulVec_vec W L R using 2
+  ext p q
+  simp [Matrix.submatrix_apply, transferMatrix, hmap, Matrix.trace_mul_single,
+    Matrix.vecMulVec_apply, Matrix.vec, mul_comm]
 
 /-- The factor-free sandwich is continuous in the entries of the MPO tensor.
 
@@ -155,10 +179,22 @@ Source: arXiv:1703.09188, Proposition IV.5, Figure `IV_index4.png`, lines
 807--812. -/
 theorem continuous_factorFreeSandwich :
     Continuous (factorFreeSandwich : MPOTensor d D → MPOTensor d D) := by
-  change Continuous (fun W : MPOTensor d D ↦
-    doubledVirtualContraction W (normalizedDiagonal (doubleLayerTensor W)))
-  exact continuous_doubledVirtualContraction continuous_id
-    continuous_normalizedDiagonal_doubleLayerTensor
+  apply continuous_doubledVirtualContraction continuous_id
+  exact continuous_normalizedDiagonal_doubleLayerTensor.matrix_submatrix _ _
+
+/-- For a continuous tensor family whose normalized transfer maps have the
+pointwise form $X\mapsto\operatorname{tr}(L(x)X)R(x)$, the sandwiched tensors
+$L(x)W^{ij}(x)R(x)$ are continuous. The factors need not be chosen continuously.
+
+Source: arXiv:1703.09188, Proposition IV.5, lines 807--812. -/
+theorem continuous_virtualSandwich_of_trace_pair {X : Type*} [TopologicalSpace X]
+    [NeZero d] (W : X → MPOTensor d D)
+    (L R : X → Matrix (Fin D) (Fin D) ℂ) (hW : Continuous W)
+    (hmap : ∀ x A, Kraus.transferMap (W x).normalizedFlattening A =
+      Matrix.trace (L x * A) • R x) :
+    Continuous (fun x ↦ virtualSandwich (L x) (W x) (R x)) := by
+  simpa only [Function.comp_def, factorFreeSandwich_eq_of_trace_pair _ _ _ (hmap _)] using
+    (continuous_factorFreeSandwich.comp hW)
 
 end MPOTensor
 
