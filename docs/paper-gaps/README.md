@@ -482,6 +482,10 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
+- `ssvcw05_sequential_bond_upper_bound_scope.tex` records that only the upper
+  bounds `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of
+  the successive decompositions are formalized, not the exact dimension or the
+  equality with the Schmidt rank implied by "minimal resources".
 - `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
   scheme without an ancilla presupposes two sites, since its first operation
   acts on sites 1 and 2, that the literal one-site reading of the theorem is
@@ -745,3 +749,10 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   quantitative form `N ≤ C(T+1)e^{b(T+1)}`; resolved: the reduction of a normal
   tensor to this gauge, with which both proofs begin, is now formalized, and
   the theorem holds for every normal tensor.
+- `mswc24_depth_upper_bound_divisible_length.tex` records that the preparation
+  of a normal translation-invariant state with error `ε` in depth
+  `O(log(N/ε))`, eq. (1), is proved for chain lengths divisible by a block
+  length `q` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, as in the `N/q`
+  equal blocks of eq. (10), and that allowing a larger last block, as the proof
+  of the lower bound does, removes the restriction for chains with `N ≥ q`;
+  chains shorter than the block length need a separate argument.

@@ -19,6 +19,7 @@ import TNLean.MPS.Preparation.ControlledGates
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
 import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
+import TNLean.MPS.Preparation.DepthLogBound
 import TNLean.MPS.Preparation.DepthLowerBound
 import TNLean.MPS.Preparation.DepthLowerBoundCore
 import TNLean.MPS.Preparation.DepthLowerBoundNormal
@@ -48,6 +49,7 @@ import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
+import TNLean.MPS.Preparation.SequentialResources
 import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.SiteEmbedding
 import TNLean.MPS.Preparation.Staircase

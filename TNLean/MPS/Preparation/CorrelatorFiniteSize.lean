@@ -66,9 +66,9 @@ theorem limitCorrelator_zero_right (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin
 /-- The algebraic estimate behind the replacement of the finite-size correlator by its
 limit: if the normalization `Z`, the two-point numerator and the one-point numerators
 are within `ε ≤ 1/2` of `1`, `ab + g` and `a, b`, then the connected correlator
-`n_{XY}/Z - (n_X/Z)(n_Y/Z)` is within `4(M+2)^2 ε` of `g`. This is the step
-"Replacing the last power by `P` … changes `G_N(X,Y;s)` by at most `C r^{N-s-L+1}`"
-of the chapter's proof of `thm:ldp_decaying_correlations`, which makes precise the
+`n_{XY}/Z - (n_X/Z)(n_Y/Z)` is within `4(M+2)^2 ε` of `g`. This is the step "Replacing
+the last power … by `P` … changes `G_N(X,Y;s)` by at most `C_{X,Y} r^{N-s-L+1}`" of the
+chapter's proof of `thm:ldp_decaying_correlations`, which makes precise the
 large-`N` limit of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
 theorem _root_.Complex.norm_div_sub_div_mul_div_sub_le {Z nXY nX nY a b g : ℂ} {ε M : ℝ}
     (hε0 : 0 ≤ ε) (hε : ε ≤ 1 / 2) (hM : 0 ≤ M) (hZ : ‖Z - 1‖ ≤ ε)
