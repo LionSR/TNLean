@@ -9,8 +9,8 @@ import Mathlib.Data.Finset.NoncommProd
 /-!
 # Products of operators placed on disjoint sets of sites
 
-For injective maps `e_k : Fin m → Fin n` with pairwise disjoint ranges and operators `X_k` on
-`m` sites, the operators `X_k ⊗ 1` placed by `e_k` commute, and their product has the matrix
+For injective maps `e_k : Fin m_k → Fin n` with pairwise disjoint ranges and operators `X_k` on
+`m_k` sites, the operators `X_k ⊗ 1` placed by `e_k` commute, and their product has the matrix
 elements
 `⟨x| ∏_k (X_k ⊗ 1) |y⟩ = ∏_k ⟨x ∘ e_k| X_k |y ∘ e_k⟩` when `x` and `y` agree outside the ranges,
 and `0` otherwise (`MPSPreparation.noncommProd_embedOp_apply`). This is the tensor product
@@ -24,15 +24,16 @@ namespace MPSPreparation
 
 variable {d m n : ℕ}
 
-theorem commute_embedOp_of_disjoint {e e' : Fin m → Fin n} (he : Function.Injective e)
-    (he' : Function.Injective e') (h : Disjoint (Set.range e) (Set.range e'))
-    (X X' : Matrix (Cfg d m) (Cfg d m) ℂ) : Commute (embedOp e X) (embedOp e' X') :=
+theorem commute_embedOp_of_disjoint {m' : ℕ} {e : Fin m → Fin n} {e' : Fin m' → Fin n}
+    (he : Function.Injective e) (he' : Function.Injective e')
+    (h : Disjoint (Set.range e) (Set.range e')) (X : Matrix (Cfg d m) (Cfg d m) ℂ)
+    (X' : Matrix (Cfg d m') (Cfg d m') ℂ) : Commute (embedOp e X) (embedOp e' X') :=
   commute_of_mem_supportedOperators h (embedOp_mem_supportedOperators he X)
     (embedOp_mem_supportedOperators he' X')
 
 /-- **Matrix elements of a product of placed operators.** -/
-theorem noncommProd_embedOp_apply {ι : Type*} (e : ι → Fin m → Fin n)
-    (he : ∀ k, Function.Injective (e k)) (X : ι → Matrix (Cfg d m) (Cfg d m) ℂ) :
+theorem noncommProd_embedOp_apply {ι : Type*} {m : ι → ℕ} (e : ∀ k, Fin (m k) → Fin n)
+    (he : ∀ k, Function.Injective (e k)) (X : ∀ k, Matrix (Cfg d (m k)) (Cfg d (m k)) ℂ) :
     ∀ (s : Finset ι) (_ : (s : Set ι).PairwiseDisjoint fun k => Set.range (e k))
       (hcomm : (s : Set ι).Pairwise (Function.onFun Commute fun k => embedOp (e k) (X k)))
       (x y : Cfg d n),

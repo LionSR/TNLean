@@ -732,6 +732,14 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   Under the added hypothesis that the `q`-site states of distinct blocks are
   orthogonal, the block form holds for multiplicity one and part (ii) is proved
   with no condition `q = o(N)`.
+- `mswc24_repeated_block_corrected_state.tex` records the corrected block form
+  of the positive part for blocks with multiplicities, `P = ∑ⱼ cⱼ L_j P_j L_jᴴ`
+  with `L_j = ∑ₖ (conj(μ_{j,k}^q)/cⱼ) K_{j,k}`, which is of rank one in the copy
+  index, and the corrected approximating state `V^{⊗M} ∑ⱼ βⱼ L_j^{⊗M} |Ω_j⟩`
+  with the source's weights. For blocks whose `q`-site states are orthogonal,
+  part (ii) of the approximation-error lemma is proved for it with arbitrary
+  multiplicities and complex weights; numerical checks on the counterexamples
+  are recorded.
 - `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
   false-source note for Lemma 2 of the Supplemental Material. It records that
   the lemma holds in modulus for the source's
@@ -751,8 +759,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   the theorem holds for every normal tensor.
 - `mswc24_depth_upper_bound_divisible_length.tex` records that the preparation
   of a normal translation-invariant state with error `ε` in depth
-  `O(log(N/ε))`, eq. (1), is proved for chain lengths divisible by a block
-  length `q` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, as in the `N/q`
-  equal blocks of eq. (10), and that allowing a larger last block, as the proof
-  of the lower bound does, removes the restriction for chains with `N ≥ q`;
-  chains shorter than the block length need a separate argument.
+  `O(log(N/ε))`, eq. (1), was first proved for chain lengths divisible by a
+  block length `q` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, as in the
+  `N/q` equal blocks of eq. (10); resolved: a larger last block, as in the
+  proof of the lower bound, covers the chains with `N ≥ q`, and chains shorter
+  than the block length are prepared exactly in depth `O(N)`.
+- `mswc24_depth_upper_bound_nonzero_state.tex` records that the normalized
+  state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
+  `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
+  which holds for every `N ≥ N₀`.

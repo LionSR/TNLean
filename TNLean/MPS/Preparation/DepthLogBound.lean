@@ -7,28 +7,26 @@ import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
 import TNLean.MPS.Preparation.DepthUpperBound
 
 /-!
-# Preparation of a normal translation-invariant MPS in depth `O(log(N/ε))`
+# Preparation in depth `O(log(N/ε))` with blocks of equal length
 
 This file combines the depth count for the approximating state
 (`MPSPreparation.exists_isPreparedInDepth_approximatingMPVState`) with the approximation error of
 arXiv:2307.01696, Lemma 1'(i) (`MPSTensor.exists_approximationError_le_mul`), for the block
 length `q ∝ log(N/ε)` chosen after Lemma 1 of the source ("it follows that
-$q = O (\log (N / \epsilon))$"). This is the content of eq. (1) of the source,
-`T = O(log(N/ε))`, for chains whose length is a multiple of the block length.
+$q = O (\log (N / \epsilon))$"), for chains whose length is a multiple of the block length, as
+for the `N/q` equal blocks of eq. (10).
 
 * `MPSPreparation.exists_isPreparedInDepth_approximationError_le`: there is `C`, depending only
   on `d` and `D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending
   only on `A`, such that on `N` sites, for every block length `q` dividing `N` with
   `q ≥ a log(N/ε) + b`, a unit vector with error at most `ε` against `|φ_N⟩` is prepared in
   depth `C q`.
-* `MPSPreparation.exists_isPreparedInDepth_le_log`: with `q` moreover at most
+* `MPSPreparation.exists_isPreparedInDepth_le_log_of_dvd`: with `q` moreover at most
   `2 (a log(N/ε) + b)`, for example `q = ⌈a log(N/ε) + b⌉` when it divides `N`, the depth is at
   most `c log(N/ε)` with `c` depending only on `A`.
-
-**Scope restriction (block length dividing the chain length):** the approximating state of the
-source, eq. (10), `⊗_{i=1}^{N/q} U_i`, has `N/q` blocks of `q` sites, and both theorems here ask
-that the block length divide `N`. The source's eq. (1) is stated for every `N`. Documented in
-`docs/paper-gaps/mswc24_depth_upper_bound_divisible_length.tex`.
+* `MPSPreparation.exists_normalGaugeData`: the gauge of eq. (5) of the source, with the bound on
+  the subleading eigenvalues and the injectivity length used by these proofs and by those of
+  `TNLean.MPS.Preparation.LogDepthPreparation`, where eq. (1) is proved for every chain length.
 
 The tensor is not assumed to be in the gauge of eq. (5) of the source: a normal tensor is brought
 into it by a gauge transformation and a rescaling
@@ -59,6 +57,46 @@ theorem norm_inner_normalizedMPVState_of_mpv_eq {D D' : ℕ} {A : MPSTensor d D}
   · simp [h0]
   · field_simp
 
+/-! ### The gauge of eq. (5) -/
+
+/-- **The gauge of eq. (5).** A normal tensor `A` with `D ≥ 1` has a gauge-equivalent rescaling
+`B`, with `|φ_N(B)⟩ = ζ^N |φ_N(A)⟩`, which is normal and left canonical with a positive definite
+fixed point `σ` of trace one, together with a bound `t < 1` on the moduli of the eigenvalues of
+its transfer map other than `1` and a length `L` from which on its blocked tensors are
+injective.
+
+arXiv:2307.01696, eq. (5) and the remark after it: the transfer map of a normal tensor in this
+gauge has `1` as its only eigenvalue of modulus `1`. -/
+theorem exists_normalGaugeData {D : ℕ} [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) :
+    ∃ (B : MPSTensor d D) (ζ : ℂ) (σ : Matrix (Fin D) (Fin D) ℂ) (t : ℝ) (L : ℕ),
+      ζ ≠ 0 ∧ (∀ (N : ℕ) (s : Fin N → Fin d), mpv B s = ζ ^ N * mpv A s) ∧
+      Kraus.IsNormal B ∧ IsLeftCanonical B ∧ σ.PosDef ∧ σ.trace = 1 ∧
+      Kraus.transferMap B σ = σ ∧ 0 < t ∧ t < 1 ∧
+      (∀ μ, Module.End.HasEigenvalue (Kraus.transferMap B) μ → μ ≠ 1 → ‖μ‖ ≤ ‖(t : ℂ)‖) ∧
+      ‖(t : ℂ)‖ = t ∧ ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := by
+  obtain ⟨B, ζ, ρ, hζ, hGauge, hmpv, hP, hρ, -⟩ := exists_isPrimitiveMPS_gauge_of_isNormal hA
+  have hNB : Kraus.IsNormal B :=
+    isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
+  have hLC : IsLeftCanonical B := hP.norm
+  have hPσ := hP.smul_inv_trace hρ
+  have hNT := isNormalTensor_of_isNormal_leftCanonical B hNB hLC
+  have hCh := Kraus.isChannel_mapLM B hLC
+  obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
+    (Module.End.finite_hasEigenvalue (Kraus.transferMap B)) fun μ hμ hne =>
+      lt_of_le_of_ne (hCh.eigenvalue_norm_le_one μ hμ)
+        fun h => hne (hNT.primitive_transfer.unique_peripheral μ hμ h)
+  set t := max (1 - δ) (1 / 2)
+  have ht0 : 0 < t := lt_max_of_lt_right (by norm_num)
+  have ht1 : t < 1 := max_lt (by linarith) (by norm_num)
+  have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
+  obtain ⟨L, hLpos, hL⟩ := hNB
+  refine ⟨B, ζ, (Matrix.trace ρ)⁻¹ • ρ, t, L, hζ, hmpv, ⟨L, hLpos, hL⟩, hLC,
+    hρ.inv_trace_smul, Matrix.trace_inv_trace_smul (ne_of_gt hρ.trace_pos),
+    hPσ.fixedPoint_is_fixed, ht0, ht1, fun μ hμ hne => ?_, hnorm, fun n hn =>
+      (isNBlkInjective_iff_blockTensor_isInjective B n).1 (isNBlkInjective_of_le hLpos hL hn)⟩
+  rw [hnorm]; exact (hgap μ hμ hne).trans (le_max_left _ _)
+
 /-- **Error `ε` in depth `O(q)` with `q ∝ log(N/ε)`.** There is `C`, depending only on `d` and
 `D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending only on `A`,
 with the following property. For `0 < ε ≤ 1` and every block length `q` dividing `N ≥ 1` with
@@ -70,7 +108,8 @@ $q = O (\log (N / \epsilon))$", combined with the depth `T = O(q)` of the paragr
 "The sequential-RG circuit". The vector `|ψ⟩` is the approximating state `|φ'_N⟩` of eq. (10)
 for a gauge-equivalent rescaling of `A` in the gauge of eq. (5). The bond dimension is positive,
 as it is for the source's normal tensors, whose transfer matrix has the leading eigenvalue `1`.
-The block length divides `N`, the scope restriction recorded in the module docstring. -/
+The block length divides `N`, so that the `N/q` blocks of eq. (10) all have length `q`; for
+general `N` see `exists_isPreparedInDepth_le_log_of_mpvState_ne_zero`. -/
 theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     ∃ C : ℕ, ∀ A : MPSTensor d D, Kraus.IsNormal A →
       ∃ a b : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
@@ -80,30 +119,8 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
   classical
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_approximatingMPVState d D
   refine ⟨C, fun A hA => ?_⟩
-  -- The gauge of eq. (5).
-  obtain ⟨B, ζ, ρ, hζ, hGauge, hmpv, hP, hρ, -⟩ := exists_isPrimitiveMPS_gauge_of_isNormal hA
-  have hNB : Kraus.IsNormal B :=
-    isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
-  have hLC : IsLeftCanonical B := hP.norm
-  set σ := (Matrix.trace ρ)⁻¹ • ρ with hσdef
-  have hPσ := hP.smul_inv_trace hρ
-  have hσ : σ.PosDef := hρ.inv_trace_smul
-  have htr : σ.trace = 1 := Matrix.trace_inv_trace_smul (ne_of_gt hρ.trace_pos)
-  have hfix : Kraus.transferMap B σ = σ := hPσ.fixedPoint_is_fixed
-  -- A bound `t < 1` on the subleading eigenvalues.
-  have hNT := isNormalTensor_of_isNormal_leftCanonical B hNB hLC
-  have hCh := Kraus.isChannel_mapLM B hLC
-  obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
-    (Module.End.finite_hasEigenvalue (Kraus.transferMap B)) fun μ hμ hne =>
-      lt_of_le_of_ne (hCh.eigenvalue_norm_le_one μ hμ)
-        fun h => hne (hNT.primitive_transfer.unique_peripheral μ hμ h)
-  set t := max (1 - δ) (1 / 2)
-  have ht0 : 0 < t := lt_max_of_lt_right (by norm_num)
-  have ht1 : t < 1 := max_lt (by linarith) (by norm_num)
-  have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
-  have hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap B) μ → μ ≠ 1 →
-      ‖μ‖ ≤ ‖(t : ℂ)‖ := fun μ hμ hne => by
-    rw [hnorm]; exact (hgap μ hμ hne).trans (le_max_left _ _)
+  obtain ⟨B, ζ, σ, t, L, hζ, hmpv, hNB, hLC, hσ, htr, hfix, ht0, ht1, hlam, hnorm, hinj⟩ :=
+    exists_normalGaugeData hA
   -- Lemma 1'(i) with `γ = 1/4`.
   obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul B hNB hLC hσ htr hfix hlam
     (γ := 1 / 4) (by norm_num) (by norm_num)
@@ -116,7 +133,6 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     congr 1
     rw [mul_div_right_comm, neg_div_correlationLength, hnorm, hr]
     ring
-  obtain ⟨L, hLpos, hL⟩ := hNB
   refine ⟨1 / r, max (Real.log K) 0 / r + L + 3 * D + 1, by positivity,
     le_add_of_nonneg_left (by positivity),
     fun ε hε hε1 N q _ hqN hq => ?_⟩
@@ -134,8 +150,7 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
   rw [mul_comm] at hM
   subst hM
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
-  have hB : Kraus.IsInjective (blockTensor B q) :=
-    (isNBlkInjective_iff_blockTensor_isInjective B q).1 (isNBlkInjective_of_le hLpos hL hLq)
+  have hB : Kraus.IsInjective (blockTensor B q) := hinj q hLq
   refine ⟨approximatingMPVState B σ q M, norm_approximatingMPVState B hB hσ.posSemidef htr M,
     hC B σ hσ.posSemidef htr q h3D hB M, ?_⟩
   rw [← norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv (M * q))]
@@ -163,19 +178,19 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
     _ = ε := Real.exp_log hε
 
-/-- **Preparation in depth `O(log(N/ε))`**, arXiv:2307.01696, eq. (1), for block lengths
-dividing the chain length. For every normal tensor `A` there are `a > 0`, `b ≥ 1` and `c`,
-depending only on `A`, with the following property. For `N ≥ 2`, `0 < ε ≤ 1`, and a block length
-`q` dividing `N` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, for example
+/-- **Preparation in depth `O(log(N/ε))` with equal blocks**, arXiv:2307.01696, eq. (1), for
+block lengths dividing the chain length. For every normal tensor `A` there are `a > 0`, `b ≥ 1`
+and `c`, depending only on `A`, with the following property. For `N ≥ 2`, `0 < ε ≤ 1`, and a
+block length `q` dividing `N` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, for example
 `q = ⌈a log(N/ε) + b⌉` when it divides `N` (the upper bound holds because `b ≥ 1`), some unit
 vector `|ψ⟩` with `1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared from a product state in depth at most
 `c log(N/ε)`.
 
 arXiv:2307.01696, eq. (1) (`T=O(\log (N/\eps))`) and the sentence after Lemma 1 ("it follows
 that $q = O (\log (N / \epsilon))$"); the depth is `C q` with `C` depending only on `d` and `D`
-(`exists_isPreparedInDepth_approximationError_le`). The block length divides `N`, the scope
-restriction recorded in the module docstring. -/
-theorem exists_isPreparedInDepth_le_log {D : ℕ} [NeZero D] (A : MPSTensor d D)
+(`exists_isPreparedInDepth_approximationError_le`). The block length divides `N`; for general
+`N` see `exists_isPreparedInDepth_le_log_of_mpvState_ne_zero`. -/
+theorem exists_isPreparedInDepth_le_log_of_dvd {D : ℕ} [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
     ∃ a b c : ℝ, 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N q : ℕ) [NeZero N], 2 ≤ N → q ∣ N → a * Real.log (N / ε) + b ≤ q →
