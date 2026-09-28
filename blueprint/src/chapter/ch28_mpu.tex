@@ -4799,7 +4799,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $r[\mathcal B]=r[\mathcal U]$ and
     $\ell[\mathcal B]=\ell[\mathcal U]$.
     This is the canonical-gauge construction used in the proof of
-    \cite[Proposition~IV.5, lines~798--802]{Cirac2017MPU}.
+    \cite[Proposition~IV.5, lines~798--804]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -4824,8 +4824,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Positivity gives $\tr(\Lambda)>0$, and linearity preserves the
     fixed-point equation. The resulting normal, left-canonical tensor
     has a one-block canonical-form-II presentation with weight one and
-    no omitted bond coordinates. Finally, both conjugations preserve
-    traces of all words, proving equality of the periodic operators.
+    no omitted bond coordinates. Finally, put $T=S^{-1}V$, so that
+    $\mathcal B^{ij}=T^{-1}\mathcal U^{ij}T$. The interior factors
+    $TT^{-1}$ cancel, and cyclicity of the trace removes the outer pair:
+    \begin{align}
+        \tr\left(\mathcal B^{i_1j_1}\cdots\mathcal B^{i_Nj_N}\right)
+         & =\tr\left(T^{-1}\mathcal U^{i_1j_1}\cdots
+        \mathcal U^{i_Nj_N}T\right)
+        =\tr\left(\mathcal U^{i_1j_1}\cdots\mathcal U^{i_Nj_N}\right).
+        \notag
+    \end{align}
+    Since these traces are the coefficients of the periodic operators,
+    $O_N(\mathcal B)=O_N(\mathcal U)$ for every $N$.
     Since $S$, $S^{-1}$, $V$, and $V^\dagger$ are invertible,
     Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks} applied to the two
     successive bond transformations proves equality of both source ranks.

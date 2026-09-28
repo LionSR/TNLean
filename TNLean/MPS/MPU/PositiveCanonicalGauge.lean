@@ -19,7 +19,7 @@ Unitary diagonalization of a right fixed point then gives canonical form II
 without changing the bond dimension or the periodic operators.
 
 Source: arXiv:1703.09188, canonical form II, lines 269–281, and the
-canonical-gauge step in Proposition IV.5, lines 798–802.
+canonical-gauge step in Proposition IV.5, lines 798–804.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
@@ -29,7 +29,7 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 /-- The positive square-root bond gauge preserves every periodic operator.
-Source: CPSV17, Proposition IV.5, lines 798–802. -/
+Source: CPSV17, Proposition IV.5, lines 798–804. -/
 private theorem positive_gauge_mpo_eq {d D : ℕ}
     (U : MPOTensor d D) (L : Matrix (Fin D) (Fin D) ℂ) (hL : L.PosDef)
     (N : ℕ) :
@@ -39,26 +39,15 @@ private theorem positive_gauge_mpo_eq {d D : ℕ}
     (Matrix.mul_nonsing_inv _ hL.isUnit_det_cfc_sqrt)
     (Matrix.nonsing_inv_mul _ hL.isUnit_det_cfc_sqrt) (fun _ _ ↦ rfl) N).symm
 
-private theorem normalizedFlattening_positive_gauge {d D : ℕ}
-    (U : MPOTensor d D) (L : Matrix (Fin D) (Fin D) ℂ) :
-    MPOTensor.normalizedFlattening
-        (fun i j ↦ CFC.sqrt L * U i j * (CFC.sqrt L)⁻¹ : MPOTensor d D) =
-      Kraus.tpGauge U.normalizedFlattening L := by
+/-- Normalized flattening commutes with conjugation of every letter by fixed
+bond matrices. -/
+private theorem normalizedFlattening_conj {d D : ℕ}
+    (U : MPOTensor d D) (X Y : Matrix (Fin D) (Fin D) ℂ) :
+    MPOTensor.normalizedFlattening (fun i j ↦ X * U i j * Y : MPOTensor d D) =
+      fun ij ↦ X * U.normalizedFlattening ij * Y := by
   funext ij
-  simp only [MPOTensor.normalizedFlattening, MPOTensor.toMPSTensor, Kraus.tpGauge,
+  simp only [MPOTensor.normalizedFlattening, MPOTensor.toMPSTensor,
     Matrix.mul_smul, Matrix.smul_mul]
-
-/-- Normalized flattening commutes with unitary bond conjugation. -/
-private theorem normalizedFlattening_unitary_conj {d D : ℕ}
-    (U : MPOTensor d D) (V : Matrix.unitaryGroup (Fin D) ℂ) :
-    MPOTensor.normalizedFlattening
-        (fun i j ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j *
-          (V : Matrix (Fin D) (Fin D) ℂ) : MPOTensor d D) =
-      fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * U.normalizedFlattening ij *
-        (V : Matrix (Fin D) (Fin D) ℂ) := by
-  exact funext fun ij ↦ by
-    simp only [MPOTensor.normalizedFlattening, MPOTensor.toMPSTensor,
-      Matrix.mul_smul, Matrix.smul_mul]
 
 /-- Unitary bond conjugation preserves every periodic operator. -/
 private theorem unitary_conj_mpo_eq {d D : ℕ}
@@ -111,7 +100,7 @@ private theorem unitary_conj_normal {r D : ℕ} (A : MPSTensor r D)
 /-- Unitary diagonalization after the positive square-root gauge.
 
 Source: arXiv:1703.09188, canonical form II, lines 269–281, and the
-canonical-gauge step of Proposition IV.5, lines 798–802. -/
+canonical-gauge step of Proposition IV.5, lines 798–804. -/
 private theorem positive_gauge_exists_diagonal_fixedPoint
     (U : MPOTensor d D) (hNormal : MPSTensor.IsNormalTensor U.normalizedFlattening)
     (L : Matrix (Fin D) (Fin D) ℂ) (hL : L.PosDef)
@@ -162,7 +151,7 @@ a full-support MPU canonical-form-II representative with the same periodic
 operators and both source ranks unchanged.
 This construction assumes normality and a positive definite adjoint fixed point.
 It is the canonical-gauge step of arXiv:1703.09188, Proposition IV.5,
-lines 798–802, with canonical form II as in lines 269–281. -/
+lines 798–804, with canonical form II as in lines 269–281. -/
 theorem exists_canonicalFormII_positiveGauge
     (U : MPOTensor d D) (hU : U.IsMPU)
     (hNormal : MPSTensor.IsNormalTensor U.normalizedFlattening)
@@ -184,10 +173,10 @@ theorem exists_canonicalFormII_positiveGauge
           MPOTensor d D) =
       fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
         Kraus.tpGauge U.normalizedFlattening L ij * (V : Matrix (Fin D) (Fin D) ℂ) :=
-    (normalizedFlattening_unitary_conj _ V).trans
+    (normalizedFlattening_conj _ _ _).trans
       (congrArg (fun A : MPSTensor (d * d) D ↦ fun ij ↦
         (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * A ij * (V : Matrix (Fin D) (Fin D) ℂ))
-        (normalizedFlattening_positive_gauge U L))
+        (normalizedFlattening_conj U (CFC.sqrt L) (CFC.sqrt L)⁻¹))
   have hEq (N : ℕ) : MPOTensor.mpo
       (fun i j ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
         (CFC.sqrt L * U i j * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)) N =
