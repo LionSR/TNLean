@@ -52,10 +52,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
 
 - `rmp_spt_fixed_point_tensor.tex` (false source claim) records that the
   printed zero-correlation-length tensor for a 2-cocycle and a 1-cocycle has
-  letters commuting with the printed gauges, so it is not normal and its
-  transfer map is not of rank one, and that the formalized fixed point is the
-  dimer tensor `D^{-1/2}|a⟩⟨b|` with the physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`,
-  which realizes the prescribed class and gives the blocked cluster tensor for
+  letters commuting with the printed gauges, so for a nontrivial group
+  (`|G| > 1`) it is not normal and its transfer map is not of rank one, and that
+  the formalized fixed point is the dimer tensor `D^{-1/2}|a⟩⟨b|` with the
+  physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
+  realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
   that the formal fixed point takes a projective representation with the given
