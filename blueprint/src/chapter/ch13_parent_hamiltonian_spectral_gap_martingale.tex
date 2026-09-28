@@ -3795,23 +3795,14 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:primitive_fnw_openchain_defect_geometric, thm:wordspan_blk_inj_succ, thm:nachtergaele_open_chain_projector_defect}
-    The open-chain geometric estimate supplies $c>0$, $0<\lambda<1$, and a
-    positive block-injectivity length.
-    Since
-    \begin{align}
-        \sqrt{n+1}\,\lambda^n & \longrightarrow0,
-    \end{align}
-    continuity of inversion at $1$ gives
-    \begin{align}
-        \frac{c\lambda^n(1+c\lambda^n)}{1-c\lambda^n}\sqrt{n+1}
-         & \longrightarrow0.
-    \end{align}
-    Choose $l$ above that length and above $1$ so that $c\lambda^l<1$ and the
-    last display is less than $1$.  Block injectivity propagates to $l$, and the geometric
-    estimate gives the uniform defect bound with
-    $\epsilon_l=c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$.  The open-chain
-    projector-defect theorem gives the anticommutator statement.
+    \uses{thm:primitive-prescribed-projector-defect,
+        thm:nachtergaele_open_chain_projector_defect}
+    Apply Theorem~\ref{thm:primitive-prescribed-projector-defect} with
+    $a=1$ and choose one of its sufficiently large lengths $l$.
+    Since $\sqrt{l+1}>0$, the inequality
+    $\epsilon_l\sqrt{l+1}<1$ gives
+    $\epsilon_l<1/\sqrt{l+1}$. The open-chain projector-defect
+    identity gives the anticommutator statement.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094.
@@ -3864,6 +3855,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator,
         MPSTensor.norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain,
+        MPSTensor.fixedAmbient_martingaleDifference_norm_le_of_openChain,
         MPSTensor.IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}
     \leanok
     \uses{lem:right-spectator-extension,
@@ -3886,6 +3878,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
     This is the same overlap length and the same coefficient as in
     Theorem~\ref{thm:literal_open_chain_martingale_c3}.
+    More generally, for any tensor of positive bond dimension that is
+    $l$-block injective with $l>1$, a uniform physical open-chain bound
+    $\epsilon\ge0$ gives the same bound in every final volume, without
+    requiring $\epsilon<1/\sqrt{l+1}$.
 \end{theorem}
 
 \begin{proof}
@@ -7370,4 +7366,167 @@ tensors.
     \uses{thm:canonical-gap-simultaneous-injectivity,thm:positive-parent-interaction-uniform-gap}
     Apply the canonical projector gap at range $R$, then the comparison theorem
     for the fixed interaction $h$. The constants depend on $h$ but not on $N$.
+\end{proof}
+
+\section{Prescribed gaps at sufficiently long interaction ranges}
+
+Write $H_{R,N}$ for the periodic parent Hamiltonian on $N$ sites with
+interaction range $R$. The local interactions in this section are orthogonal
+projectors with coefficient one. The range increases with the requested gap; no rescaling
+of the Hamiltonian is made. The bounds follow from the projector-decay and
+martingale estimates of~\cite[Theorem~2.1 and Section~6]{Nachtergaele1996Spectral}
+and the finite-range comparison. They do not improve the gap at a prescribed
+shorter interaction range.
+
+\begin{theorem}[A prescribed periodic gap from an open-chain estimate]
+    \label{thm:parent-prescribed-gap-window}
+    \lean{MPSTensor.parentHamiltonianES_gap_ge_one_sub_of_open_gap}
+    \leanok
+    \uses{def:parent_hamiltonian_es}
+    Let $0<\eta<1$, $1\le R\le m$, and
+    $2(R-1)^2\le m\eta$. Suppose the open parent Hamiltonian on
+    $m+R-1$ sites has gap at least $1-\eta/2$. Then, for every
+    $N\ge2m$ and every $v\perp\ker H_{R,N}$,
+    \begin{align}
+        (1-\eta)\|v\| & \le\|H_{R,N}v\|.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Put $l=R-1$ and $\gamma=1-\eta/2$. The finite-range comparison
+    gives $\delta=(m\gamma-l^2)/(m-l)$. Its denominator is positive,
+    and
+    \begin{align}
+        (m-l)(\delta-(1-\eta))
+         & =m\eta/2-l^2+(1-\eta)l \\
+         & \ge0.
+    \end{align}
+    Thus $\delta\ge1-\eta>0$, which also verifies the positive-numerator
+    hypothesis of the comparison.
+\end{proof}
+
+\begin{theorem}[Prescribed open-chain projector defects]
+    \label{thm:primitive-prescribed-projector-defect}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_openChain_groundProjection_defect_mul_sqrt_lt}
+    \leanok
+    \uses{def:primitive_mps,def:l_blk_injective,
+        def:open_chain_ground_subspaces_es,def:ground_space_es}
+    Let $A$ be a normalized primitive tensor with positive bond dimension
+    and a positive-definite invariant matrix. For every $a>0$, every
+    sufficiently large integer $l$ satisfies $l>1$, $l$-block injectivity,
+    and a number $\epsilon_l\ge0$ with $\epsilon_l\sqrt{l+1}<a$
+    such that, for every prefix length $K\ge0$,
+    \begin{align}
+        \left\|G_{[K,K+l+1)}G_{[0,K+l)}-G_{[0,K+l+1)}\right\|
+         & \le\epsilon_l.
+    \end{align}
+    Here $G_I$ denotes the projection onto the matrix-product boundary
+    space on the indicated interval, extended by the identity on its
+    complement in the chain of length $K+l+1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_fnw_openchain_defect_geometric,thm:wordspan_blk_inj_succ}
+    The geometric estimate gives
+    $\epsilon_l=c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$ beyond the
+    injectivity threshold, with $c>0$ and $0<\lambda<1$.
+    Since $\sqrt{l+1}\lambda^l\to0$ and $c\lambda^l\to0$,
+    \begin{align}
+        \epsilon_l\sqrt{l+1}
+         & =\bigl(\sqrt{l+1}\lambda^l\bigr)
+        \frac{c(1+c\lambda^l)}{1-c\lambda^l}\longrightarrow0.
+    \end{align}
+    Choose $l$ beyond the injectivity threshold, above one, and sufficiently
+    large that $c\lambda^l<1$ and this product is below $a$.
+\end{proof}
+
+\begin{theorem}[Prescribed gaps for primitive tensors]
+    \label{thm:primitive-parent-prescribed-gap}
+    \lean{MPSTensor.IsPrimitiveMPS.eventually_parentHamiltonianES_gap_ge_one_sub}
+    \leanok
+    \uses{def:primitive_mps,def:parent_hamiltonian_es}
+    Let $A$ be a normalized primitive tensor with positive bond dimension
+    and a positive-definite invariant matrix. For every $0<\eta<1$,
+    every sufficiently large integer $l$ has the following property.
+    If $m\ge l+1$, $2l^2\le m\eta$, and $N\ge2m$, then
+    \begin{align}
+        (1-\eta)\|v\| & \le\|H_{l+1,N}v\|
+    \end{align}
+    for every $v\perp\ker H_{l+1,N}$. One may take
+    $m=\max\{l+1,\lceil2l^2/\eta\rceil\}$.
+    The threshold for $l$ depends on the tensor; no dimension-only
+    bound on this threshold is asserted.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:primitive-prescribed-projector-defect,
+        thm:literal_fixed_volume_martingale_c3,
+        thm:open_parent_hamiltonian_fixed_c3_gap,
+        thm:parent-prescribed-gap-window}
+    The geometric projector estimate gives
+    $\epsilon_l=c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$ and
+    $\epsilon_l\sqrt{l+1}\to0$. Choose $l$ above the injectivity
+    threshold and sufficiently large that
+    $0\le s_l=\epsilon_l\sqrt{l+1}<\eta/4$. The open-chain
+    martingale coefficient satisfies
+    \begin{align}
+        (1-s_l)^2=1-2s_l+s_l^2\ge1-\eta/2.
+    \end{align}
+    Apply Theorem~\ref{thm:parent-prescribed-gap-window} with $R=l+1$.
+\end{proof}
+
+\begin{theorem}[Prescribed gaps for primitive block sums]
+    \label{thm:primitive-block-parent-prescribed-gap}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub}
+    \leanok
+    Let $B=\bigoplus_j\mu_jA_j$, where the $A_j$ are normalized
+    primitive tensors with common positive physical dimension, positive
+    bond dimensions, and positive-definite invariant matrices. Suppose
+    $\mu_j\ne0$ and no two blocks are related by similarity and a phase.
+    For every $0<\eta<1$ and every sufficiently large integer $p$,
+    the periodic range-$2p$ parent Hamiltonian has gap at least
+    $1-\eta$ at every sufficiently large chain length.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_primitive_blocks_open_kernel,
+        thm:ph_block_diagonal_projector_decay,
+        thm:grouped_c3_from_projector_defect,
+        thm:grouped_open_parent_gap,thm:parent-prescribed-gap-window}
+    Choose $p$ above the open-kernel threshold and large enough that
+    the three-interval projector error is at most
+    $\epsilon=\eta/(4\sqrt2)$. The grouped open-chain bound on
+    $pM$ sites has coefficient
+    $(1-\epsilon\sqrt2)^2=(1-\eta/4)^2\ge1-\eta/2$.
+    Choose $M$ large enough that $m=pM-2p+1$ satisfies
+    $2p\le m$ and $2(2p-1)^2\le m\eta$.
+    The active comparison window has $m+2p-1=pM$ sites, so
+    Theorem~\ref{thm:parent-prescribed-gap-window} applies for every
+    $N\ge2m$.
+\end{proof}
+
+\begin{theorem}[Prescribed gaps without normalization]
+    \label{thm:normal-parent-prescribed-gap}
+    \lean{MPSTensor.eventually_parentHamiltonianES_gap_ge_one_sub_of_isNormal,
+        MPSTensor.eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub_of_isNormal}
+    \leanok
+    \uses{def:normal,def:parent_hamiltonian_es}
+    The conclusion of Theorem~\ref{thm:primitive-parent-prescribed-gap}
+    holds for every normal tensor of positive bond dimension, without
+    a normalization hypothesis. Likewise, the conclusion of
+    Theorem~\ref{thm:primitive-block-parent-prescribed-gap} holds for
+    normal blocks satisfying its nonzero-weight, positive-dimension,
+    and pairwise inequivalence hypotheses.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge,
+        thm:ph_primitive_representatives_parent_equality,
+        thm:primitive-parent-prescribed-gap,
+        thm:primitive-block-parent-prescribed-gap}
+    Replace the tensor, or each block independently, by its normalized
+    primitive representative. The canonical parent Hamiltonians agree
+    exactly at every interaction range and every chain length, so the
+    prescribed lower bounds transfer unchanged.
 \end{proof}

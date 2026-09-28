@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### fixed-volume C3 from a physical open-chain bound — promoted
+- **Pattern:** split a martingale index into `n < l`, `n = l`, and `l < n`;
+  the first two products vanish, while the last is bounded by its physical
+  open-chain representative after adjoining the right spectator sites.
+- **Seen:** the original threshold theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/FixedAmbientMartingaleBound.lean`
+  and the prescribed-gap theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrescribedGap.lean` (2026-09-28).
+- **Abstraction:** `fixedAmbient_martingaleDifference_norm_le_of_openChain`
+  in `FixedAmbientMartingaleBound.lean` retains the chosen nonnegative bound
+  without tying it to the threshold `1 / sqrt (l + 1)`.
+- **Notes:** both uses share the original three-case proof; no new tactic is
+  needed.
+
 ### bilinear identities on operators with disjoint supports — promoted
 - **Pattern:** prove an identity `f A B = g A B`, bilinear in operators `A`, `B` acting on
   sets of sites `S`, `S'`, by nested `Submodule.span_induction` on
