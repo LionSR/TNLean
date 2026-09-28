@@ -415,6 +415,33 @@ noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D)
       mpv (approximatingTensor (blockTensor A q) σ) ((blockedConfigEquiv d M q).symm s) := by
   simp [approximatingMPVStateRaw, EuclideanSpace.equiv, PiLp.toLp_apply]
 
+/-- For `B_q` injective, the unnormalized approximating state is a unit vector.
+
+arXiv:2307.01696, eq. (10) and Supplemental Material, line 1013: the approximating state is the
+product of the block unitaries
+applied to "(normalized) nearest-neighbor entangled pairs", hence a unit vector. -/
+theorem norm_approximatingMPVStateRaw (A : MPSTensor d D) {q : ℕ}
+    (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
+    ‖approximatingMPVStateRaw A σ q M‖ = 1 := by
+  have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (approximatingMPVStateRaw A σ q M)).symm
+  rw [PiLp.inner_apply, ← (blockedConfigEquiv d M q).sum_comp] at h
+  simp only [RCLike.inner_apply, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply] at h
+  refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (Complex.ofReal_injective ?_)
+  push_cast
+  exact h.trans ((Finset.sum_congr rfl fun _ _ => mul_comm _ _).trans
+    (mpv_approximatingTensor_norm_sq hB hσ htr))
+
+/-- For `B_q` injective, the approximating state is a unit vector.
+
+arXiv:2307.01696, eq. (10), as for `norm_approximatingMPVStateRaw`. -/
+theorem norm_approximatingMPVState (A : MPSTensor d D) {q : ℕ}
+    (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M] :
+    ‖approximatingMPVState A σ q M‖ = 1 := by
+  rw [approximatingMPVState, norm_approximatingMPVStateRaw A hB hσ htr M]
+  simp [norm_approximatingMPVStateRaw A hB hσ htr M]
+
 /-- For `B_q` injective, the approximating state is the periodic state of `V P_∞` itself
 (its norm is `1`), and its overlap with the periodic state of `A` is the overlap of the
 positive part with the fixed point: `⟨φ'_N|φ_N(A)⟩ = ⟨φ_M(P_∞)|φ_M(P_q)⟩`.
@@ -437,16 +464,8 @@ theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
     refine Finset.sum_congr rfl fun τ _ => ?_
     rw [RCLike.inner_apply, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply, mul_comm]
     rfl
-  have hnorm : ‖approximatingMPVStateRaw A σ q M‖ = 1 := by
-    have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (approximatingMPVStateRaw A σ q M)).symm
-    simp only [hinner, approximatingMPVStateRaw_apply, Equiv.symm_apply_apply,
-      mpv_approximatingTensor_norm_sq hB hσ htr] at h
-    refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1
-      (Complex.ofReal_injective ?_)
-    push_cast
-    exact h
   have heq : approximatingMPVState A σ q M = approximatingMPVStateRaw A σ q M := by
-    rw [approximatingMPVState, hnorm]; simp
+    rw [approximatingMPVState, norm_approximatingMPVStateRaw A hB hσ htr M]; simp
   refine ⟨heq, ?_⟩
   rw [heq, hinner]
   simp only [mpvState_apply, mpv_blockedConfigEquiv_eq_sum_polar, mpv_approximatingTensor]
