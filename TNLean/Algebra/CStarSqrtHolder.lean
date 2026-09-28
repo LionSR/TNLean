@@ -42,17 +42,11 @@ namespace CFC
 
 variable {A : Type*} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
 
-/-- The scalars `algebraMap ℝ A` are monotone. -/
-theorem algebraMap_le_algebraMap_of_le {x y : ℝ} (h : x ≤ y) :
-    algebraMap ℝ A x ≤ algebraMap ℝ A y := by
-  rw [← sub_nonneg, ← map_sub, Algebra.algebraMap_eq_smul_one]
-  exact smul_nonneg (sub_nonneg.2 h) zero_le_one
-
 /-- A scalar lower bound passes to square roots: `c ≤ b` gives `√c ≤ √b`. -/
 theorem algebraMap_sqrt_le_sqrt {b : A} {c : ℝ} (hc : 0 ≤ c) (h : algebraMap ℝ A c ≤ b) :
     algebraMap ℝ A (Real.sqrt c) ≤ CFC.sqrt b := by
   have h0 : 0 ≤ algebraMap ℝ A (Real.sqrt c) := by
-    simpa using algebraMap_le_algebraMap_of_le (A := A) (Real.sqrt_nonneg c)
+    simpa using algebraMap_mono A (Real.sqrt_nonneg c)
   calc algebraMap ℝ A (Real.sqrt c) = CFC.sqrt (algebraMap ℝ A (Real.sqrt c) ^ 2) :=
         (CFC.sqrt_sq _ h0).symm
     _ ≤ CFC.sqrt b := CFC.sqrt_le_sqrt _ _ (by rwa [← map_pow, Real.sq_sqrt hc])
@@ -72,7 +66,7 @@ theorem sqrt_sub_sqrt_le_algebraMap_of_le {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b
     (hε : ‖a - b‖ ≤ 2 * s * Real.sqrt c + s * s) :
     CFC.sqrt a - CFC.sqrt b ≤ algebraMap ℝ A s := by
   have hS := algebraMap_sqrt_le_sqrt hc hcb
-  have hC : 0 ≤ algebraMap ℝ A s := by simpa using algebraMap_le_algebraMap_of_le (A := A) hs
+  have hC : 0 ≤ algebraMap ℝ A s := by simpa using algebraMap_mono A hs
   have hsS : algebraMap ℝ A (s * Real.sqrt c) ≤ s • CFC.sqrt b := by
     rw [map_mul, ← Algebra.smul_def]
     exact smul_le_smul_of_nonneg_left hS hs
@@ -86,7 +80,7 @@ theorem sqrt_sub_sqrt_le_algebraMap_of_le {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b
     refine add_le_add_right ?_ b
     calc algebraMap ℝ A ‖a - b‖
         ≤ algebraMap ℝ A (s * Real.sqrt c + s * Real.sqrt c + s * s) :=
-          algebraMap_le_algebraMap_of_le (by linarith)
+          algebraMap_mono A (by linarith)
       _ = algebraMap ℝ A (s * Real.sqrt c) + algebraMap ℝ A (s * Real.sqrt c) +
           algebraMap ℝ A (s * s) := by rw [map_add, map_add]
       _ ≤ s • CFC.sqrt b + s • CFC.sqrt b + algebraMap ℝ A (s * s) := by gcongr

@@ -46,7 +46,7 @@ theorem sqrt_sub_sqrt_le_algebraMap_of_le' {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ 
   have hS := algebraMap_sqrt_le_sqrt hc hcb
   have hT : 0 ≤ CFC.sqrt b + algebraMap ℝ A (-s) := by
     rw [map_neg, ← sub_eq_add_neg, sub_nonneg]
-    exact (algebraMap_le_algebraMap_of_le hsc).trans hS
+    exact (algebraMap_mono A hsc).trans hS
   have hsS : algebraMap ℝ A (s * Real.sqrt c) ≤ s • CFC.sqrt b := by
     rw [map_mul, ← Algebra.smul_def]
     exact smul_le_smul_of_nonneg_left hS hs
@@ -59,7 +59,7 @@ theorem sqrt_sub_sqrt_le_algebraMap_of_le' {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ 
     have hle : algebraMap ℝ A ‖a - b‖ + algebraMap ℝ A (s * s) ≤
         algebraMap ℝ A (s * Real.sqrt c) + algebraMap ℝ A (s * Real.sqrt c) := by
       rw [← map_add, ← map_add]
-      exact algebraMap_le_algebraMap_of_le (by linarith)
+      exact algebraMap_mono A (by linarith)
     calc b + (-(s • CFC.sqrt b) + -(s • CFC.sqrt b)) + algebraMap ℝ A (s * s)
         ≤ a + algebraMap ℝ A ‖a - b‖ + (-(s • CFC.sqrt b) + -(s • CFC.sqrt b)) +
             algebraMap ℝ A (s * s) := by gcongr
@@ -83,7 +83,7 @@ Upstream candidate for Mathlib, beside `CFC.sqrt_le_sqrt`. -/
 theorem norm_sqrt_sub_sqrt_le_div {a b : A} (ha : 0 ≤ a) {c : ℝ} (hc : 0 < c)
     (hcb : algebraMap ℝ A c ≤ b) :
     ‖CFC.sqrt a - CFC.sqrt b‖ ≤ ‖a - b‖ / Real.sqrt c := by
-  have hb : 0 ≤ b := by simpa using (algebraMap_le_algebraMap_of_le (A := A) hc.le).trans hcb
+  have hb : 0 ≤ b := by simpa using (algebraMap_mono A hc.le).trans hcb
   have hsc : 0 < Real.sqrt c := Real.sqrt_pos.2 hc
   set ε := ‖a - b‖ with hε_def
   have hε : 0 ≤ ε := norm_nonneg _
