@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput
-import TNLean.MPS.ParentHamiltonian.GroundSpace
+import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 
 /-!
 # Direct-sum image-space consequences
@@ -75,14 +75,6 @@ theorem groundSpace_eq_of_three_block_trace_relation
     groundSpace A L = groundSpace B L := by
   rw [groundSpace_eq_leftTraceWordMap_range A L, groundSpace_eq_leftTraceWordMap_range B L]
   exact leftTraceWordMap_range_eq_of_three_block_trace_relation hA hB hΔA hΔB hRel
-
-/-- Under block injectivity, the finite-chain image space has dimension equal to
-the boundary matrix algebra. -/
-theorem groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
-    (hA : Kraus.IsNBlkInjective A L) :
-    Module.finrank ℂ (groundSpace A L) = D ^ 2 := by
-  rw [groundSpace_eq_leftTraceWordMap_range]
-  exact leftTraceWordMap_range_finrank_eq_of_isNBlkInjective hA
 
 /-- Equal finite-chain image spaces for two block-injective tensors force equal
 bond dimensions.

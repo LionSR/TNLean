@@ -24,6 +24,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### kernel projection under a right-spectator fiberwise conjugacy — promoted
+- **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
+  conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
+  `ker_starProjection_conj_linearIsometryEquiv` with
+  `ContinuousLinearMap.ker_starProjection_rightFiberwiseMap` and a `change`.
+- **Seen:** five occurrences across two files:
+  `openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  `openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
+  and `openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`
+  in `TNLean/MPS/ParentHamiltonian/Martingale/SpectatorTransport.lean`, and
+  both `hP` and `hQ` in
+  `norm_suffixGroundProjection_comp_prefixDifference_le_active` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/GroupedSpectatorNorm.lean`.
+- **Abstraction:** `MPSTensor.ker_starProjection_conj_of_rightFiberwiseMap` in
+  `SpectatorTransport.lean`, stated in the composition form of the Hamiltonian
+  conjugacy lemmas; each call site is one application. The grouped estimate
+  ascribes the `LinearEquiv.conj` form, which is definitionally equal.
+
 ### common positive simple blocking of two or three MPUs — promoted
 - **Pattern:** choose a positive simple blocking for each MPU, add the chosen
   lengths, and use persistence of simplicity at every later direct blocking.
@@ -41,6 +59,25 @@ abstracted — record why, so it is not re-proposed).
   sites are refactored on their respective dependent branches: representative
   index at `008464fc4`, tensor-product index at `86217104a`, and composition
   index at `4a9bbc2f5`. No fourth copy is introduced.
+
+### fixed-range block parent gap from an open-chain kernel identity — promoted
+- **Pattern:** obtain a gapped range `W ≥ 2 * R` for a primitive block sum, then transfer the
+  gap to range `R` through the open-chain kernel identity at `W`; the uniform form then
+  converts the eventual gap into a gap for every chain length with
+  `Filter.Eventually.exists_forall_of_atTop` and `parentHamiltonianES_gap_of_eventual_gap`.
+- **Seen:** the transfer step three times, in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockGapAtC1Range.lean`,
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockGapThreshold.lean`, and
+  `TNLean/MPS/ParentHamiltonian/Martingale/BlockGapAtSimultaneousInjectivity.lean`; the
+  eventual-to-uniform step twice, in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockUniformGap.lean` and
+  `BlockGapAtSimultaneousInjectivity.lean`.
+- **Abstraction:** `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamiltonianES_eq`
+  and its uniform companion
+  `exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_ker_openParentHamiltonianES_eq`
+  in `PrimitiveBlockGapThreshold.lean`. Both take the primitive block data, a positive range
+  `R`, and `∀ W, R ≤ W → ker (openParentHamiltonianES B R W) = groundSpaceES B W`; each call
+  site supplies only its kernel identity.
 
 ### every list is a `List.ofFn` — promoted
 - **Pattern:**
@@ -2239,6 +2276,101 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Positive local terms with prescribed kernels
+
+For two finite families of positive operators with equal kernels term by
+term, rewrite each kernel of a sum with
+`WeightedPositiveKernel.ker_sum_eq_iInf`, then substitute the pointwise kernel
+equalities. This proves equality of the two total kernels without comparing
+the operators in order.
+
+Occurrences: `BlockGroundSpaceAtInjectivityLength.lean` and
+`CanonicalBlockGroundSpaceAtInjectivityLength.lean`. Both use the existing
+QICLean kernel-of-sum theorem. A further occurrence would justify a direct
+kernel-equality corollary there; no new tactic is needed.
+
+### Scalar-valued norms and equal ambient lengths
+
+When a linear map acts on a Hilbert space indexed by an arithmetic expression,
+rewriting an equality of lengths inside the map can introduce dependent casts.
+First express the entire operator norm as a scalar-valued function of the
+ambient length and interval endpoints. A `change` then exposes ordinary natural
+number arguments, and `rw` transports the scalar expression without transporting
+the underlying Hilbert space explicitly.
+
+Example: `GroupedProjectorEstimate.lean`, in
+`grouped_martingaleDifference_norm_le_of_projector_defect`, uses
+`F N a b : ℝ` for the norm of a suffix projection composed with a difference of
+prefix projections. This permits the active-volume identity and spectator bound
+to be combined using ordinary arithmetic equalities. Candidate helper pattern;
+currently one occurrence, so no general declaration is warranted.
+
+### Adjoint reversal of an orthogonal-projector error — candidate
+- **Pattern:** replace the norm of a projector product minus a self-adjoint
+  projector by the norm of its adjoint, reverse the product, and reverse the
+  sign of the difference.
+- **Occurrences:** `norm_projector_defect_adjoint` in
+  `TNLean/MPS/ParentHamiltonian/BlockIntervalDefectDecay.lean` and
+  `norm_projection_difference` in
+  `TNLean/MPS/ParentHamiltonian/Martingale/WholeIncrementSpectatorTransport.lean`.
+- **Count:** two occurrences across two files. The second also removes a
+  nested projection using subspace containment. If another use appears,
+  separate the common adjoint identity into a submodule helper theorem.
+
+### Spectator ranges of block sums — factored
+- **Pattern:** identify a spectator boundary map as a coordinate map composed
+  with the pointwise extension of the local boundary map, then distribute its
+  range over a sum of local ground spaces.
+- **Seen:** the left and tail boundary ranges in
+  `TNLean/MPS/ParentHamiltonian/BlockSumIntervalSpaces.lean`.
+- **Abstraction:** the private `pi_univ_iSup_const` lemma follows from Mathlib's
+  `Submodule.iSup_map_single`, `Submodule.map_iSup`, and `iSup_comm`.
+  Both range calculations use `LinearMap.range_compLeft`; the Hilbert-space
+  statements follow by mapping the same submodule identities.
+- **Notes:** two occurrences in one file. No new tactic or general simp set is
+  needed; promote the submodule lemma only if another file needs it.
+
+
+### Uniform decay of whole-increment block errors — factored
+- **Pattern:** combine the geometric FNW estimate with the vanishing rational
+  coefficient, then choose a common overlap length independently of the two
+  exterior intervals.
+- **Occurrences:** the single-block numerical threshold in `C3Threshold.lean`
+  and the finite-block decay argument.
+- **Status:** `IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le`
+  states the uniform estimate once. Finite-family assembly distributes the
+  requested tolerance among the overlap correction and the individual blocks;
+  no new tactic is needed.
+
+### Preserving overlap bounds under finite orthogonal sums — promoted
+- **Pattern:** expand the inner product over fixed spectator configurations,
+  apply the pointwise overlap bound, and finish with finite Cauchy–Schwarz.
+- **Occurrences:** the two nested restrictions to a middle interval in
+  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the aggregate
+  estimate `norm_inner_overlap_sub_inner_aggregates_le` in
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean`, which ran the same
+  chain `norm_sum_le`, `Finset.sum_le_sum`, `Finset.mul_sum`,
+  `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator configurations.
+- **Abstraction:** `Finset.norm_sum_le_mul_sqrt_mul_sqrt` in
+  `TNLean/Algebra/FinsetNormSumCauchySchwarz.lean`: termwise bounds
+  `‖z i‖ ≤ c * a i * b i` with `0 ≤ c` give
+  `‖∑ i ∈ s, z i‖ ≤ c * (√(∑ a i ^ 2) * √(∑ b i ^ 2))`.
+- **Status:** promoted; the fiber bound in `SpectatorOverlap.lean` and the
+  FNW aggregate estimate both close with it. The transport along a
+  configuration equivalence stays private in `SpectatorOverlap.lean`, and the
+  three-interval evaluation of the right boundary map is shared with
+  `FNWProjectorDefect.lean` through `SpectatorBoundaryCoordinates.lean`.
+
+### Lower Gram bounds and off-diagonal pairings — locally factored
+- **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
+  norm of the component norms, then apply a bilinear matrix estimate.
+- **Occurrences:** three uses of `norm_norms_le_of_lower_bound` in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`.
+- **Status:** factored into a private lemma. The two projector-pairing
+  expansions in `BlockProjectorSum.lean` likewise share private lemmas
+  for removing the diagonal and bounding the remaining finite sum.
+  No new tactic is needed.
+
 ### diagonal bond similarity with nowhere-zero entries — candidate
 - **Pattern:**
   ```lean
@@ -2251,10 +2383,11 @@ abstracted — record why, so it is not re-proposed).
     ...
   exact MPOTensor.mpo_eq_of_conj hGH hHG hconj L
   ```
-- **Seen:** three occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
-  (`mpo_fibStringNetEdgeTau`, `mpo_fibReviewTensor`, and the configuration-space variant in
-  `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review before merge.
-- **Status:** three occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
+- **Seen:** four occurrences in `TNLean/MPS/Examples/Fibonacci/FibonacciGSymbol.lean`
+  (`mpo_fibStringNetEdgeTau`, `mpo_fibStringNetTensor`, `mpo_fibReviewTensor`, and the
+  configuration-space variant in `isMPOFusionAlgebra_fibReviewWeightedTensor`), found in review
+  before merge; the first three already call `mpo_eq_of_diagonal_conj`.
+- **Status:** four occurrences in one file; the rule of three needs a second file before promotion. The helper lemmas below already live in a general module, per the reuse rule, and are the target once a second file needs them.
 - **Abstraction (available):** `Matrix.diagonal_mul_diagonal_inv`, `Matrix.diagonal_inv_mul_diagonal` and
   `MPOTensor.mpo_eq_of_diagonal_conj` in `TNLean/MPS/MPDO/BondSimilarity.lean`.
 - **Notes:** `mpo_eq_of_diagonal_conj g hg hconj L` takes a nowhere-zero `g` and the letterwise
@@ -2293,14 +2426,23 @@ abstracted — record why, so it is not re-proposed).
   `(m ^ 2 - r + 1) * m ^ 2 ≤ (D ^ 2 + 1) ^ 2` for `m ≤ D`, stated over `ℕ`.
 - **Notes:** promote at a third occurrence, for example a reduction at composite length.
 
-### Decomposing membership in a finite sum of subspaces — candidate
+### Decomposing membership in a finite sum of subspaces — promoted
 - **Pattern:** obtain vectors in the individual subspaces from membership in
   their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
   apply a norm or inner-product estimate to their sum.
-- **Occurrences:** two proofs in
-  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`.
-- **Status:** the existing Mathlib theorem supplies the decomposition. No
-  additional abstraction is needed for these two uses in one file.
+- **Occurrences:** three proofs across two files:
+  `Submodule.norm_inner_le_iSup_of_overlapMatrix` and
+  `Submodule.iSup_overlap_bound_of_uniform`
+  (`TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`), and the
+  private lemma `norm_inner_sum_starProjection_sub_le` in
+  `TNLean/MPS/ParentHamiltonian/BlockProjectorSum.lean`.
+- **Abstraction:** `Submodule.exists_sum_eq_of_mem_iSup` in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean` turns
+  `u ∈ ⨆ i, V i` over a finite index type into a family `v : ∀ i, V i` with
+  `∑ i, (v i : M) = u`, absorbing the `(s := Finset.univ)` instantiation and
+  the `simpa` coercion from the indexed supremum.
+- **Status:** promoted; all three call sites now read
+  `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
 
 ### carrying a boundary through one Kronecker factor of a letter sum — candidate
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
@@ -3191,6 +3333,53 @@ spectral split → block extraction → MPV calculation → strict bounds
   module where the general statement is first needed. Promoting means moving the statement
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
   that rebuild is large enough to deserve its own change.
+
+### canonical form of normalized one-dimensional blocks — candidate
+- **Pattern:** certify `IsBNTCanonicalForm` for a `SectorDecomposition` whose blocks are
+  normalized tensors of bond dimension one with unit weights: linear independence of the block
+  states from `mpv_of_dim_one` evaluated on constant words, `basis_distinct` by
+  `not_gaugePhaseEquiv_of_dim_one` after a `cast_eq`, then `totalDim_*`, bijectivity of the
+  copy coordinates by `sigma_eq_of_copyCoord_eq`, the ordering `(Equiv.ofBijective _ _).symm`,
+  and `reindex_toTensor_*` by `toTensor_copyCoord` / `toTensor_copyCoord_of_ne`.
+- **Seen:** 2 occurrences, `TNLean/MPS/Preparation/RepeatedBlockCounterexample.lean` and
+  `TNLean/MPS/Preparation/OverlappingBlockCounterexample.lean` (recorded 2026-09-27).
+- **Abstraction:** proposed lemma giving `IsBNTCanonicalForm` for a sector decomposition of
+  normalized one-dimensional blocks with unit weights whose letters are pairwise distinguished
+  by their zero patterns.
+- **Notes:** below the rule of three; the two copies differ only in the literals.
+
+### parent interaction from an explicit symmetric idempotent — candidate
+- **Pattern:** identify a spin-chain local term, shifted and rescaled, with
+  `parentInteraction A n`: prove a coordinate formula by `fin_cases` over the window,
+  deduce from it that the operator is symmetric for the \(\ell^2\) pairing and idempotent
+  (both by `ring` on the coordinates), match its kernel with `groundSpace A n` through the
+  explicit constraint characterization, and close with
+  `Submodule.eq_starProjection_of_mem_orthogonal` and `inner_withLpLinearEquiv_symm`.
+- **Seen:** `MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction`
+  (`TNLean/MPS/Examples/MajumdarGhoshLowerBound.lean`) and
+  `MPSTensor.akltBondTerm_shift_eq_parentInteraction`
+  (`TNLean/MPS/Examples/AKLTPolynomialHamiltonian.lean`) (recorded 2026-09-27).
+- **Abstraction (proposed):** a lemma `parentInteraction_eq_of_symm_idem_ker` taking a
+  linear endomorphism `Q` of `NSiteSpace d n` that is symmetric for the coefficient
+  pairing, idempotent, and has kernel `groundSpace A n`, and concluding
+  `Q = parentInteraction A n`.
+- **Notes:** two occurrences in two files, below the rule of three. The chain-level
+  consequences that both examples also need (positivity of \(H+c\), the eigenvalue bound
+  \(\mu\ge-c\), and the ground eigenspace as the parent kernel, from
+  \(H+c=s\,H_{\mathrm{parent}}\)) are already shared lemmas in
+  `TNLean/MPS/ParentHamiltonian/ShiftedParentHamiltonian.lean`, and the exchange
+  interaction is the operator-family-generic `MPSTensor.spinExchange` of
+  `TNLean/MPS/Examples/SpinOperator.lean`.
+
+### canonical local space as the representative block sum — factored
+- **Pattern:** compose `CPSVCanonicalFormData.groundSpace_eq_iSup_representatives` with the
+  symmetric form of `groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) B (by simp) L`.
+- **Seen:** 2 occurrences, in
+  `TNLean/MPS/ParentHamiltonian/CanonicalBlockGroundSpaceAtInjectivityLength.lean` and
+  `TNLean/MPS/ParentHamiltonian/Martingale/CanonicalGapAtSimultaneousInjectivity.lean`.
+- **Abstraction:** `CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives`
+  in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
+  parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
 
 ## Rejected
 

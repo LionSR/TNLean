@@ -108,14 +108,19 @@ block ordering of $P$ in Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_litera
         MPSTensor.permGL_inv_val}
     \leanok
     \uses{def:ft_perm_gl}
-    The matrix of $G_\rho$ is $\Pi_\rho$, and the matrix of its inverse is
-    $\Pi_{\rho^{-1}}$.
+    The matrix of $G_\rho$ and the matrix of its inverse satisfy
+    \begin{align}
+        G_\rho
+         & = \Pi_\rho, \label{eq:ft_perm_gl_val}            \\
+        G_\rho^{-1}
+         & = \Pi_{\rho^{-1}}. \label{eq:ft_perm_gl_inv_val}
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
-    The first identity is the definition of the permutation gauge. Since the
-    inverse permutation reverses the coordinate relabelling,
-    $G_\rho^{-1}=G_{\rho^{-1}}$, which gives the second identity.
+    Identity~(\ref{eq:ft_perm_gl_val}) is the definition of the permutation gauge.
+    Since the inverse permutation reverses the coordinate relabelling,
+    $G_\rho^{-1}=G_{\rho^{-1}}$, which yields~(\ref{eq:ft_perm_gl_inv_val}).
 \end{proof}
 
 Every row and every column of $\Pi_\rho$ contains exactly one nonzero entry,

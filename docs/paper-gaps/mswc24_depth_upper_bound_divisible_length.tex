@@ -1,0 +1,78 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Preparation in Logarithmic Depth: Chain Lengths Divisible by the Block Length}
+\author{}
+\date{2026-09-27}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+Let $A$ be a normal tensor of physical dimension $d$ and bond dimension $D$, and
+let $\ket{\phi_N}$ be the normalized translation-invariant state it generates on
+a ring of $N$ sites. Equation~(1) of~\cite{Malz2024Preparation} states that
+$\ket{\phi_N}$ is prepared with error $\varepsilon$ by a circuit of local gates
+of depth
+\begin{align}
+    T
+     & =O(\log(N/\varepsilon)).
+    \label{eq:mswc24_depth_log}
+\end{align}
+The error of a unit vector $\ket\psi$ is
+$\varepsilon(\psi,\phi_N)=1-\lvert\braket{\psi}{\phi_N}\rvert$. The argument
+blocks $q$ sites, prepares the approximating state
+$\ket{\widetilde\phi_N}=(\bigotimes_{i=1}^{N/q}U_i)\ket\Omega$ of eq.~(10) of
+the source in depth $O(q)$, bounds its error by
+$O((N/q)e^{-\gamma q/\xi})$ (Lemma~1), and concludes that
+$q=O(\log(N/\varepsilon))$ suffices. Equation~(10) has $N/q$ blocks of $q$
+sites, so the argument as written takes $q$ to divide $N$. The proof of the
+lower bound in the Supplemental Material of the source, which uses the same
+blocking, says instead that the blocks are ``all of the same size, $q_N$,
+except for the last one, which may be larger''.
+
+\section{The restriction adopted}
+The formal statement asks that the block length divide the chain
+length.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isPreparedInDepth_approximationError_le} and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_le_log} in
+    \doclink{TNLean/MPS/Preparation/DepthLogBound}.}
+There is $C$, depending only on $d$ and $D$, such that for every normal tensor
+$A$ with $D\geq1$ there are $a>0$ and $b\geq1$, depending only on $A$, with the
+following property. For $0<\varepsilon\leq1$, every $N\geq1$ and every $q$
+dividing $N$ with
+$q\geq a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
+$\varepsilon(\psi,\phi_N)\leq\varepsilon$ is prepared in depth at most $Cq$. If
+moreover $N\geq2$ and $q\leq2(a\log(N/\varepsilon)+b)$, for instance
+$q=\lceil a\log(N/\varepsilon)+b\rceil$ when it divides $N$, the depth is at most
+$c\log(N/\varepsilon)$ with $c$ depending only on $A$. This is
+(\ref{eq:mswc24_depth_log}) for those pairs $(N,\varepsilon)$ for which such a
+$q$ divides $N$. For other chain lengths, such as prime $N$ larger than the
+admissible block lengths, the statement says nothing.
+
+\section{Elimination}
+Allow the last block to be larger, as in the proof of the lower bound: $N=(M-1)q+q'$ with
+$q\leq q'<2q$. Three steps generalize.
+\begin{enumerate}
+    \item The approximating state is the product of the isometries $V_q$ on the
+          first $M-1$ blocks and $V_{q'}$ on the last block, applied to the same
+          product of pairs $\ket\omega$.
+    \item Its overlap with $\ket{\phi_N}$ is the trace of the product of $M-1$
+          mixed transfer matrices of $P_q$ and one of $P_{q'}$ against the fixed
+          point, and the telescoping bound of Lemma~1 applies to a product of
+          matrices each within $O(e^{-\gamma q/\xi})$ of the same idempotent.
+    \item The circuit applies the block unitary of length $q'$ to the last block;
+          its depth is $O(q')=O(q)$.
+\end{enumerate}
+With these, (\ref{eq:mswc24_depth_log}) holds for every $N\geq2$ with
+$N\geq q$, where $q=\lceil a\log(N/\varepsilon)+b\rceil$. Chains shorter
+than this block length, $N<q$, have no block of length $q$ and are not covered
+by the three steps; they need a separate argument. The source does not treat
+them: its proof of the lower bound takes $N$ ``such that we have a large number
+of blocks''.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

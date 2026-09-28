@@ -362,11 +362,17 @@ with `O` on the sites `1, …, L` and `O'` on the sites `s', …, s'+L-1`.
 
 **Local fix (arXiv:2307.01696, Supplemental Material, Lemma 2):** the source
 asserts, for injective `A` and `L = 1`, the bound at every `s > 1` for large `N`,
-with vanishing one-point functions. For complex `λ₂` the limit correlator of
-Hermitian observables is `|λ₂|^t (μ^t + conj(μ)^t)` up to scale, which can vanish
-at individual separations; the statement therefore takes the bound in windows of
-`K` consecutive separations and uses the connected correlator. Documented in
-`docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex`. -/
+with vanishing one-point functions. The source's observables, which cannot be
+Hermitian for nonreal `λ₂`, satisfy
+\(\langle O_1 O'_s\rangle = \lambda_2^{s-2} / \operatorname{Tr}(E_A^N)\) up to
+the positive rescaling constant, and therefore give the bound in modulus at
+every separation, with one-point functions exactly zero; its printed real
+inequality fails for nonreal and for negative `λ₂`. This theorem is a separate
+Hermitian variant, as the proof of Theorem 1 needs Hermitian observables: for
+complex `λ₂` their limit correlator is `|λ₂|^t (μ^t + conj(μ)^t)` up to scale,
+which can vanish at individual separations, so the statement takes the bound in
+windows of `K` consecutive separations and uses the connected correlator.
+Documented in `docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex`. -/
 theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L)
     (hL : Kraus.IsNBlkInjective A L) (hA : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (hρfix : Kraus.transferMap A ρ = ρ)
@@ -387,19 +393,8 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
   /- Elementary facts about the gauge and `λ₂`. -/
   have htr : Matrix.trace ρ ≠ 0 := by rw [hρtr]; exact one_ne_zero
   have : NeZero D := ⟨by rintro rfl; simp [Matrix.trace] at hρtr⟩
-  have hlog : Real.log ‖lam₂‖ < 0 := by
-    by_contra h
-    push Not at h
-    have : correlationLength lam₂ ≤ 0 := by
-      unfold correlationLength
-      exact div_nonpos_iff.mpr (Or.inr ⟨by norm_num, h⟩)
-    linarith
-  have hpos : 0 < ‖lam₂‖ := by
-    rcases (norm_nonneg lam₂).lt_or_eq with h | h
-    · exact h
-    · rw [← h, Real.log_zero] at hlog
-      exact absurd hlog (lt_irrefl 0)
-  have hlt1 : ‖lam₂‖ < 1 := (Real.log_neg_iff hpos).mp hlog
+  obtain ⟨hpos, hlt1⟩ := norm_pos_and_lt_one_of_correlationLength_pos hξ
+  have hlog : Real.log ‖lam₂‖ < 0 := Real.log_neg hpos hlt1
   have hlam0 : lam₂ ≠ 0 := norm_pos_iff.mp hpos
   /- The observables. -/
   obtain ⟨O, O', hOh, hO'h, hOn, hO'n, K, μ, a, hK1, hK2, hKreal, hμ, hμ1, ha, hGO⟩ :=
