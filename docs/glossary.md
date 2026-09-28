@@ -1300,11 +1300,11 @@ The following notions use different transfer objects and are not interchangeable
   `StabilizerRepresentatives.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq`
   and `StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff`
   identify the relation on induced L-symbols with cohomology of stabilizer
-  cocycles; `StabilizerRepresentatives.solutionSetoid` and
-  `StabilizerRepresentatives.existsUnique_solutionAction_eq` give the
-  `H²(H, ℂˣ)`-torsor of classes, and `StabilizerRepresentatives.solutionAddAction`
-  with `StabilizerRepresentatives.existsUnique_vadd_eq` state it for Mathlib's
-  `groupCohomology.H2` through `h2EquivGroupCohomology`.
+  cocycles; on the classes of `StabilizerRepresentatives.solutionSetoid`,
+  `StabilizerRepresentatives.solutionAddAction`,
+  `StabilizerRepresentatives.h2EquivSolutionClasses`, and
+  `StabilizerRepresentatives.existsUnique_vadd_eq` give the torsor under
+  Mathlib's `groupCohomology.H2`.
 - **Caveat:** `LSymbol.gauge` is the reciprocal of the source's `gdgroup`;
   with trivial fusion gauge this replaces `γ` by `γ⁻¹` and defines the same
   relation. Allowing fusion gauges that preserve `ω` gives a coarser relation,

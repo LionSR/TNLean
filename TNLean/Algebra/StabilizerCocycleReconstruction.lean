@@ -39,12 +39,11 @@ equivalence relation.
 * `LSymbol.ActionGaugeEquiv`: equality up to an action-tensor gauge.
 * `StabilizerRepresentatives.reconstructedLSymbol`: the L-symbol of Equation (20).
 * `StabilizerRepresentatives.solutionSetoid`: action-gauge classes of compatible L-symbols.
-* `StabilizerRepresentatives.solutionAction`: `[ψ] · [L] = [L · L[ψ]]` on solution classes.
-* `StabilizerRepresentatives.solutionAddAction`: the corresponding additive action of Mathlib's
-  `groupCohomology.H2` for the trivial action of the stabilizer on `ℂˣ`, transported along the
-  existing identification `h2EquivGroupCohomology`.
-* `StabilizerRepresentatives.h2EquivSolutionClasses`: the bijection `H²(H, ℂˣ) ≃` solution
-  classes determined by a base solution.
+* `StabilizerRepresentatives.solutionAddAction`: the additive action `[ψ] +ᵥ [L] = [L · L[ψ]]`
+  of Mathlib's `groupCohomology.H2`, for the trivial action of the stabilizer on `ℂˣ`, on
+  solution classes.
+* `StabilizerRepresentatives.h2EquivSolutionClasses`: the bijection from Mathlib's
+  `H²(H, ℂˣ)` onto solution classes determined by a base solution.
 
 ## Main results
 
@@ -60,9 +59,9 @@ equivalence relation.
 * `StabilizerRepresentatives.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol` and
   `StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff`: transitivity and freeness
   of the `H²(H, ℂˣ)` action on solution classes, packaged as the bijection
-  `StabilizerRepresentatives.h2EquivSolutionClasses`; `existsUnique_solutionAction_eq` and, for
-  Mathlib's group `H²(H, ℂˣ)`, `StabilizerRepresentatives.existsUnique_vadd_eq` show that the
-  action is free and transitive.
+  `StabilizerRepresentatives.h2EquivSolutionClasses`, the orbit map of the base class
+  (`h2EquivSolutionClasses_apply`); `StabilizerRepresentatives.existsUnique_vadd_eq` shows that
+  the action is free and transitive.
 
 No finiteness, normalization, or tensor assumption is used.
 
@@ -398,14 +397,10 @@ def solutionSetoid (ω : ScalarThreeCochain G) :
     fun h ↦ LSymbol.actionGaugeEquiv_equivalence.symm h,
     fun h₁₂ h₂₃ ↦ LSymbol.actionGaugeEquiv_equivalence.trans h₁₂ h₂₃⟩
 
-/-- **The torsor of solutions.** A base solution `L₀` compatible with `ω` determines a
-bijection from `H²(H, ℂˣ)` onto the action-gauge classes of L-symbols compatible with `ω`,
-sending the class of `ψ` to the class of `L₀ · L[ψ]`, where `L[ψ]` is the induced L-symbol.
-This is the torsor statement with the base point `L₀`: the action of `H²(H, ℂˣ)` by
-multiplication with induced L-symbols is free and transitive on solution classes.
-
-Source: arXiv:2203.12563, `REsubmission.tex` line 761. -/
-noncomputable def h2EquivSolutionClasses (K : StabilizerRepresentatives G X x₀)
+/-- The bijection from TNLean's concrete quotient of stabilizer cocycles onto the solution
+classes, sending the class of `ψ` to the class of `L₀ · L[ψ]`. The public statement is
+`h2EquivSolutionClasses`, on Mathlib's `groupCohomology.H2`. -/
+private noncomputable def concreteH2EquivSolutionClasses (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω) :
     H2 (MulAction.stabilizer G x₀) ≃ Quotient (solutionSetoid (X := X) ω) :=
   Equiv.ofBijective
@@ -427,21 +422,10 @@ noncomputable def h2EquivSolutionClasses (K : StabilizerRepresentatives G X x₀
         funext x g h
         simp [LSymbol.gauge]⟩⟩⟩
 
-/-- The bijection `h2EquivSolutionClasses` sends the class of `ψ` to the class of
-`L₀ · L[ψ]`. -/
-theorem h2EquivSolutionClasses_mk (K : StabilizerRepresentatives G X x₀)
-    {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω)
-    (ψ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle}) :
-    K.h2EquivSolutionClasses hL₀ (Quotient.mk _ ψ) =
-      Quotient.mk (solutionSetoid ω) ⟨L₀ * K.inducedLSymbol ψ.1,
-        ((K.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol hL₀ _).2
-          ⟨ψ.1, ψ.2, fun _ _ ↦ 1, (LSymbol.gauge_one _).symm⟩)⟩ :=
-  rfl
-
-/-- The action of a stabilizer cohomology class on action-gauge classes of solutions:
-`[ψ] · [L] = [L · L[ψ]]`, where `L[ψ]` is the induced L-symbol. This is the action of
-`𝒢 = H²(H, ℂˣ)` in arXiv:2203.12563, `REsubmission.tex` line 761. -/
-def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G} :
+/-- The action of a class of TNLean's concrete quotient of stabilizer cocycles on action-gauge
+classes of solutions, `[ψ] · [L] = [L · L[ψ]]`, where `L[ψ]` is the induced L-symbol. The public
+action is `solutionAddAction`, of Mathlib's `groupCohomology.H2`. -/
+private def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G} :
     H2 (MulAction.stabilizer G x₀) → Quotient (solutionSetoid (X := X) ω) →
       Quotient (solutionSetoid (X := X) ω) :=
   Quotient.map₂ (sa := ScalarCocycle.IsCocycle.instSetoid) (sb := solutionSetoid ω)
@@ -463,42 +447,11 @@ def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCoc
       push_cast
       field_simp)
 
-/-- The action on representatives: `[ψ] · [L] = [L · L[ψ]]`. -/
-theorem solutionAction_mk (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G}
-    (ψ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle})
-    (L : {L : LSymbol G X // LSymbol.IsCompatible L ω}) :
-    K.solutionAction (Quotient.mk _ ψ) (Quotient.mk (solutionSetoid ω) L) =
-      Quotient.mk (solutionSetoid ω) ⟨L.1 * K.inducedLSymbol ψ.1, by
-        have h := L.2.mul (K.inducedLSymbol_isCompatible ψ.2)
-        rwa [show (fun _ _ _ ↦ (1 : Units ℂ)) = (1 : ScalarThreeCochain G) from rfl,
-          mul_one] at h⟩ :=
-  rfl
-
-/-- **The torsor property.** The action of `H²(H, ℂˣ)` on action-gauge classes of L-symbols
-compatible with `ω` is free and transitive: for any two classes there is exactly one
-cohomology class carrying the first to the second.
-
-Source: arXiv:2203.12563, `REsubmission.tex` line 761, "the solutions of `L|_H` are a
-`𝒢`-torsor" with `𝒢 = H²(H, ℂˣ)`, for action-tensor gauge classes with the fusion gauge fixed. -/
-theorem existsUnique_solutionAction_eq (K : StabilizerRepresentatives G X x₀)
-    {ω : ScalarThreeCochain G} (c₁ c₂ : Quotient (solutionSetoid (X := X) ω)) :
-    ∃! a : H2 (MulAction.stabilizer G x₀), K.solutionAction a c₁ = c₂ := by
-  induction c₁ using Quotient.ind with
-  | _ L₀ =>
-  have hmap : ∀ a, K.solutionAction a (Quotient.mk _ L₀) = K.h2EquivSolutionClasses L₀.2 a := by
-    intro a
-    induction a using Quotient.ind with
-    | _ ψ =>
-      rw [solutionAction_mk, h2EquivSolutionClasses_mk]
-  simp only [hmap]
-  exact (K.h2EquivSolutionClasses L₀.2).bijective.existsUnique c₂
-
-
 /-! ### The torsor under Mathlib's group cohomology
 
-The concrete quotient `H2` is identified with Mathlib's `groupCohomology.H2` for the trivial
-action on `ℂˣ` by `h2EquivGroupCohomology`. Transporting `solutionAction` along this
-identification gives an additive action of Mathlib's `H²(H, ℂˣ)` on solution classes. -/
+The action of `H²(H, ℂˣ)` and the torsor bijection are stated for Mathlib's
+`groupCohomology.H2` for the trivial action of the stabilizer on `ℂˣ`. The representative-level
+quotient machinery above is private and is transported along `h2EquivGroupCohomology`. -/
 
 section GroupCohomology
 
@@ -506,7 +459,7 @@ variable {G X : Type} [Group G] [MulAction G X] {x₀ : X}
 
 /-- The inverse of `h2EquivGroupCohomology` on the class of a Mathlib cocycle is the class of
 the corresponding curried scalar cocycle. -/
-theorem h2EquivGroupCohomology_symm_H2π {H : Type} [Group H]
+private theorem h2EquivGroupCohomology_symm_H2π {H : Type} [Group H]
     (α : groupCohomology.cocycles₂ (scalarH2Representation H)) :
     (h2EquivGroupCohomology H).symm (groupCohomology.H2π _ α) =
       (Quotient.mk _ (ScalarCocycle.ofMathlibCocycle α) : H2 H) := by
@@ -553,6 +506,48 @@ noncomputable def solutionAddAction (K : StabilizerRepresentatives G X x₀)
     refine (congrArg (L.1 x g h * ·) ?_).trans (mul_assoc _ _ _).symm
     exact mul_comm _ _
 
+/-- **The torsor of solutions.** A base solution `L₀` compatible with `ω` determines a
+bijection from Mathlib's `H²(H, ℂˣ)`, for the trivial action of the stabilizer `H` on `ℂˣ`, onto
+the action-gauge classes of L-symbols compatible with `ω`, sending the class of `ψ` to the class
+of `L₀ · L[ψ]`, where `L[ψ]` is the induced L-symbol. This is the torsor statement with the base
+point `L₀`: the action of `H²(H, ℂˣ)` by multiplication with induced L-symbols is free and
+transitive on solution classes.
+
+Source: arXiv:2203.12563, `REsubmission.tex` line 761. -/
+noncomputable def h2EquivSolutionClasses (K : StabilizerRepresentatives G X x₀)
+    {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω) :
+    groupCohomology.H2 (scalarH2Representation (MulAction.stabilizer G x₀)) ≃
+      Quotient (solutionSetoid (X := X) ω) :=
+  (h2EquivGroupCohomology _).symm.trans (K.concreteH2EquivSolutionClasses hL₀)
+
+/-- The bijection `h2EquivSolutionClasses` sends the class of a cocycle `α` to the class of
+`L₀ · L[α]`. -/
+theorem h2EquivSolutionClasses_H2π (K : StabilizerRepresentatives G X x₀)
+    {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω)
+    (α : groupCohomology.cocycles₂ (scalarH2Representation (MulAction.stabilizer G x₀))) :
+    K.h2EquivSolutionClasses hL₀ (groupCohomology.H2π _ α) =
+      Quotient.mk (solutionSetoid ω) ⟨L₀ * K.inducedLSymbol (ScalarCocycle.ofMathlibCocycle α).1,
+        ((K.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol hL₀ _).2
+          ⟨_, (ScalarCocycle.ofMathlibCocycle α).2, fun _ _ ↦ 1,
+            (LSymbol.gauge_one _).symm⟩)⟩ := by
+  change K.concreteH2EquivSolutionClasses hL₀ ((h2EquivGroupCohomology _).symm _) = _
+  rw [h2EquivGroupCohomology_symm_H2π]
+  rfl
+
+/-- The torsor bijection based at `L₀` is the orbit map of the class of `L₀` under
+`solutionAddAction`. -/
+theorem h2EquivSolutionClasses_apply (K : StabilizerRepresentatives G X x₀)
+    {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω)
+    (a : groupCohomology.H2 (scalarH2Representation (MulAction.stabilizer G x₀))) :
+    letI := K.solutionAddAction ω
+    K.h2EquivSolutionClasses hL₀ a = a +ᵥ Quotient.mk (solutionSetoid ω) ⟨L₀, hL₀⟩ := by
+  let _ := K.solutionAddAction ω
+  induction a using groupCohomology.H2_induction_on with | _ α =>
+  rw [h2EquivSolutionClasses_H2π]
+  change _ = K.solutionAction _ _
+  rw [h2EquivGroupCohomology_symm_H2π]
+  rfl
+
 /-- **The torsor of solutions under Mathlib's group cohomology.** The additive action of
 `H²(H, ℂˣ)` on action-gauge classes of L-symbols compatible with `ω` is free and transitive:
 for any two classes exactly one cohomology class carries the first to the second.
@@ -565,12 +560,9 @@ theorem existsUnique_vadd_eq (K : StabilizerRepresentatives G X x₀)
     ∃! a : groupCohomology.H2 (scalarH2Representation (MulAction.stabilizer G x₀)),
       a +ᵥ c₁ = c₂ := by
   let _ := K.solutionAddAction ω
-  obtain ⟨b, hb, hbu⟩ := K.existsUnique_solutionAction_eq c₁ c₂
-  refine ⟨h2EquivGroupCohomology _ b, ?_, fun a ha ↦ ?_⟩
-  · change K.solutionAction _ c₁ = c₂
-    rwa [Equiv.symm_apply_apply]
-  · rw [← Equiv.symm_apply_eq]
-    exact hbu _ ha
+  induction c₁ using Quotient.ind with | _ L₀ =>
+  simp only [← K.h2EquivSolutionClasses_apply L₀.2]
+  exact (K.h2EquivSolutionClasses L₀.2).bijective.existsUnique c₂
 
 end GroupCohomology
 
