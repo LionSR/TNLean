@@ -152,16 +152,19 @@ $B$, for $N=qM$.
 \end{itemize}
 
 \section{Blocks that occur}
-The decomposition (S2) lists the normal tensors that occur in $A$. A block with
-no copies, or whose weights $\mu_{j,k}$ all vanish, contributes nothing to $A$,
-and for it $c_j=0$ and $L_j$ is undefined. The formalization adopts the intended
-reading as a convention of the data: every block has some nonzero weight. This
-is a local fix of a degenerate reading, not a hypothesis added to the source.
+The decomposition (S2) lists the normal tensors that occur in $A$, each copy
+with its weight. A block with no copies, or a copy whose weight $\mu_{j,k}$
+vanishes, is a summand with coefficient zero: it contributes nothing to $A$ and
+only pads the bond dimension, and a block with no nonzero weight has $c_j=0$ and
+$L_j$ undefined. The formalization adopts the intended reading as a convention of
+the data: every block has at least one copy, and every copy has a nonzero
+weight. This is a local fix of a degenerate reading, not a hypothesis added to
+the source.
 
 \section{What is formalized}
 The corrected block form (\ref{eq:mswc24_rc_polar}), the identity
 (\ref{eq:mswc24_rc_after_v}) and the overlap formula are formalized for arbitrary
-multiplicities and complex weights, for blocks with some nonzero weight whose
+multiplicities and nonzero complex weights, for blocks whose
 $q$-site states are orthogonal, at every $q\geq1$. The bound
 $\varepsilon\leq Cy\,e^{Cy}$, together with its $O$-form $\varepsilon\leq Cy$, is
 formalized under the same assumptions at every $q\geq0$ and $M\geq1$ with

@@ -75,20 +75,28 @@ variable {d D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ}
 
 /-- The weights `μ_{j,k}` of the copies of the blocks in the decomposition
 `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` of arXiv:2307.01696, Supplemental Material,
-eq. (S2), with some nonzero weight in every block.
+eq. (S2): every block has at least one copy, and every copy has a nonzero weight.
 
-**Local fix (blocks that occur):** eq. (S2) lists the normal tensors that occur in `A`; a block
-without copies, or with all weights zero, contributes nothing to `A`, and the condition is part of
-the data rather than a hypothesis of each statement. Documented in
+**Local fix (summands that occur):** eq. (S2) lists the normal tensors that occur in `A`, each
+copy with its weight. A block without copies, or a copy with weight zero, is a summand with
+coefficient zero that contributes nothing to `A` and only pads the bond dimension. As for the
+nonzero coefficients of `SectorDecomposition`, both conditions are part of the data rather than
+hypotheses of each statement. Documented in
 `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`. -/
 structure CopyWeights (b : ℕ) (m : Fin b → ℕ) where
   /-- The weight `μ_{j,k}` of the copy `k` of block `j`. -/
   weight : (j : Fin b) → Fin (m j) → ℂ
-  /-- Every block has some nonzero weight. -/
-  weight_ne_zero : ∀ j, weight j ≠ 0
+  /-- Every block has at least one copy. -/
+  mult_pos : ∀ j, 0 < m j
+  /-- Every copy has a nonzero weight. -/
+  weight_ne_zero : ∀ j k, weight j k ≠ 0
 
 instance : CoeFun (CopyWeights b m) fun _ => (j : Fin b) → Fin (m j) → ℂ :=
   ⟨CopyWeights.weight⟩
+
+/-- The weights of each block, as a function of the copy, are not identically zero. -/
+theorem CopyWeights.weight_fun_ne_zero (μ : CopyWeights b m) (j : Fin b) : μ.weight j ≠ 0 :=
+  fun h => μ.weight_ne_zero j ⟨0, μ.mult_pos j⟩ (congrFun h _)
 
 /-- The direct sum `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` of arXiv:2307.01696,
 Supplemental Material, eq. (S2): the copy `k` of block `j` is placed on the bond coordinates
@@ -223,7 +231,7 @@ theorem conjTranspose_copyIsometry_mul_eq_zero
     k k' (fun h' => h (Sigma.mk.inj h').1), smul_zero]
 
 /-- The physical matrix of the `q`-site blocked tensor of the direct sum, for `q ≥ 1` and blocks
-with some nonzero weight: `B = ∑ⱼ cⱼ B_j L_jᴴ`. -/
+with nonzero weights: `B = ∑ⱼ cⱼ B_j L_jᴴ`. -/
 theorem physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
@@ -234,14 +242,14 @@ theorem physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry
   rw [physicalMatrix_blockTensor_repeatedBlockSum hι hdisj μ hq]
   refine Finset.sum_congr rfl fun j _ => ?_
   have hc0 : (copyNorm μ q j : ℂ) ≠ 0 :=
-    Complex.ofReal_ne_zero.2 (copyNorm_pos (μ.weight_ne_zero j) q).ne'
+    Complex.ofReal_ne_zero.2 (copyNorm_pos (μ.weight_fun_ne_zero j) q).ne'
   rw [conjTranspose_copyIsometry, Matrix.mul_sum, Finset.smul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
   rw [Matrix.mul_smul, smul_smul, mul_div_cancel₀ _ hc0]
 
 /-! ### The corrected block form -/
 
-/-- **The partial isometry of the blocked direct sum.** For blocks with some nonzero weight whose
+/-- **The partial isometry of the blocked direct sum.** For blocks with nonzero weights whose
 `q`-site states are orthogonal, `B_jᴴ B_{j'} = 0` for `j ≠ j'`, the partial isometry of the
 `q`-site blocked tensor is `V = ∑ⱼ V_j L_jᴴ`: the corrected form of arXiv:2307.01696,
 Supplemental Material, eq. (S5), for blocks with multiplicities. -/
@@ -253,8 +261,8 @@ theorem polarIso_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective
     polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) =
       ∑ j, polarIso (physicalMatrix (blockTensor (Aj j) q)) * (copyIsometry ι μ q j)ᴴ := by
   rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
-  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_ne_zero j) q)
-    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_ne_zero j) q)
+  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_fun_ne_zero j) q)
+    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j) q)
     (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).1
 
 /-- **The positive part of the blocked direct sum.** In the setting of
@@ -271,8 +279,8 @@ theorem polarPos_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective
       ∑ j, (copyNorm μ q j : ℂ) • (copyIsometry ι μ q j *
         polarPos (physicalMatrix (blockTensor (Aj j) q)) * (copyIsometry ι μ q j)ᴴ) := by
   rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
-  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_ne_zero j) q)
-    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_ne_zero j) q)
+  exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_fun_ne_zero j) q)
+    (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j) q)
     (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).2
 
 /-! ### The corrected approximating state -/
@@ -299,7 +307,7 @@ noncomputable def copyApproxVector (A : MPSTensor d D) (q M : ℕ) (α : Fin b �
   tensorPower M (polarIso (physicalMatrix (blockTensor A q))) *ᵥ copyFixedPointState α L σ
 
 /-- **The corrected approximating state of a direct sum with multiplicities.** For blocks with
-some nonzero weight whose `q`-site states are orthogonal, `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` is
+nonzero weights whose `q`-site states are orthogonal, `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` is
 `∑ⱼ αⱼ |φ_M(V_j P_{j,∞})⟩`, the combination of the approximating states of the normal case for
 the blocks (arXiv:2307.01696, eqs. (9), (10) and Supplemental Material, eq. (S7), corrected as in
 the module docstring). -/
@@ -316,7 +324,7 @@ theorem copyApproxVector_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι
   have hVL : ∀ j, polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) *
       copyIsometry ι μ q j = polarIso (physicalMatrix (blockTensor (Aj j) q)) := fun j => by
     rw [hV, Matrix.sum_mul, Finset.sum_eq_single j]
-    · rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_ne_zero j),
+    · rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j),
         Matrix.mul_one]
     · intro j' _ hj'
       rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_eq_zero hdisj μ q hj',

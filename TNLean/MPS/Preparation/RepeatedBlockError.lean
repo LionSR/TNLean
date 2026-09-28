@@ -135,7 +135,7 @@ theorem norm_overlap_of_orthogonal {τs : Type*} [Fintype τs] {β : Fin b → �
 variable {Aj : (j : Fin b) → MPSTensor d (Dj j)} {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
 
 /-- The overlap of the corrected approximating state with the target, for orthogonal blocks with
-some nonzero weight whose blocked tensors are injective: with `pⱼ = |βⱼ|²`,
+nonzero weights whose blocked tensors are injective: with `pⱼ = |βⱼ|²`,
 `zⱼ = ⟨φ_M(P_{j,∞})|φ_M(P_{j,q})⟩` and `cⱼ = ‖φ_N(A_j)‖²`,
 `|⟨φ~_N|φ_N⟩| = |∑ⱼ pⱼ zⱼ| / ((∑ⱼ pⱼ)^{1/2} (∑ⱼ pⱼ cⱼ)^{1/2})`, whenever `β ≠ 0`. -/
 theorem norm_copyApproxOverlap_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
@@ -217,8 +217,8 @@ theorem norm_copyApproxOverlap_repeatedBlockSum (hι : ∀ j k, Function.Injecti
 /-- **Approximation error for orthogonal blocks with multiplicities** (arXiv:2307.01696,
 Supplemental Material, Lemma 1'(ii), eq. (S12), for the corrected approximating state and in the
 scope of the module docstring). Let `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (eq. (S2)), the
-copy `k` of block `j` placed on the bond coordinates `ι_{j,k}`, with some nonzero weight in every
-block, let every block `A_j` be normal in the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`,
+copy `k` of block `j` placed on the bond coordinates `ι_{j,k}` with a nonzero weight, let every
+block `A_j` be normal in the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`,
 `σ_j > 0`, `Tr σ_j = 1` (eq. (5)), let `λ₂` bound the moduli of the eigenvalues other than `1` of
 every transfer map `E_{A_j}`, so that `ξ = -1/log|λ₂|` bounds the correlation lengths `ξ_jj`, and
 let `0 < γ < 1/2`. There is `C > 0` such that for every block length `q` at which the `q`-site
