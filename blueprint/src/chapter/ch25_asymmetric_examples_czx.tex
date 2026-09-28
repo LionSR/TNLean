@@ -11,10 +11,7 @@ reduction~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix}; the
 symmetry-protected context is \cite[Section~III.B.1]{Cirac2021Matrix}. The
 decorated representative with additional Pauli $Z$ factors
 in~\cite[Section~III.D]{GarreRubioSchuch2024DomainWall} is a different
-tensor. This section treats the undecorated periodic operator on a ring of
-$N$ qubits, the tensor printed in the review and the reduction of its square
-to canonical form, the decorated representative and its associator sign, the
-asymmetric compression of the square, and a non-simple family built from it.
+tensor.
 
 \subsection{The bond-two tensor and the periodic operator}
 
@@ -60,10 +57,8 @@ Definition~\ref{def:asymex_czx_tensors} on the input bits.
     $\delta_{a,b}$ is the Kronecker delta, $\oplus$ denotes addition
     modulo two, and
     \begin{align}
-        T_0 & =\begin{pmatrix}1&0\\1&0\end{pmatrix}.
-        \notag
-    \end{align}
-    \begin{align}
+        T_0 & =\begin{pmatrix}1&0\\1&0\end{pmatrix},
+        \notag                                        \\
         T_1 & =\begin{pmatrix}0&1\\0&-1\end{pmatrix}.
         \notag
     \end{align}
@@ -247,8 +242,8 @@ therefore retain their positive-length or nonempty-word hypotheses.
 The review~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix} prints the
 CZX matrix product unitary through its two nonzero matrices and reduces its
 square to canonical form in two steps, following the construction of the
-canonical form in~\cite[Section~IV]{Cirac2021Matrix}. This subsection
-formalizes that passage in the review's own coordinates. Throughout, the
+canonical form in~\cite[Section~IV]{Cirac2021Matrix}. The presentation
+below uses the review's coordinates. Throughout, the
 first physical index is the output, and for a configuration
 $s\in\{0,1\}^N$ the exponent $q(s)$ is~(\ref{eq:asymex_czx_exponent}).
 
@@ -523,7 +518,7 @@ sign $(-1)^N$~\cite{gap:mpu_czx_tensor_normalization}.
     \uses{lem:asymex_absorbing_compression}
     Both nonzero letters annihilate $(1,1)^{\mathsf T}$, which spans the
     range of $\Id-Q$; this gives $b^{ij}Q=b^{ij}$, and multiplying on the
-    left by $Q$ gives the second identity.
+    left by $Q$ gives $Qb^{ij}=Qb^{ij}Q$.
     Identity~(\ref{eq:asymex_czx_review_canonical}) is a direct
     computation. Let $W_2=\tfrac12(1,-1)$ and $V_2=(1,-1)^{\mathsf T}$.
     Then $V_2W_2=Q$ and $W_2b^{ij}V_2=-\delta_{ij}$, and
@@ -564,6 +559,11 @@ globally means $O(A)^2=(-1)^N\Id$: the stacked product generates the
 square of the generated operators, so the statement agrees with
 Theorem~\ref{thm:asymex_czx_review_square}, reached here through the two
 reduction steps instead of the explicit kernel.
+The main text of the review instead describes the one-dimensional block
+of the square as the identity operator. The block $(-1)\delta_{ij}$
+generates $(-1)^N\Id$, which is the identity for even $N$; rescaling the
+tensor by a scalar $c$ with $c^2=-1$ turns the block into $\delta_{ij}$ at
+every length~\cite{gap:mpu_czx_tensor_normalization}.
 
 \subsection{The decorated representative}%
 \label{sec:asymex_czx_decorated}
@@ -623,7 +623,7 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
         O_N(\widehat T)(s,t) & =\delta_{s,\bar t}(-1)^{q(s)+|s|}.
         \notag
     \end{align}
-    Thus $O_N(\widehat T)=Z^{\otimes N}O_N(A)$. Moreover $O_N(\widehat T)$ is unitary and
+    Thus $O_N(\widehat T)=Z^{\otimes N}O_N(A)$, $O_N(\widehat T)$ is unitary, and
     \begin{align}
         O_N(\widehat T)^2 & =\Id.
         \notag
@@ -736,11 +736,10 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
     index pairs $a,b$,
     \begin{align}
         \hat VS^wV & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)\Id_1,
-        \notag
-    \end{align}
-    \begin{align}
-        S^aS^wS^b & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)S^aV\hat VS^b.
-        \notag
+        \label{eq:asymex_czx_v_contract}
+        \\
+        S^aS^wS^b  & =\Bigl(\prod_{n=1}^k\delta_{s_nt_n}\Bigr)S^aV\hat VS^b.
+        \label{eq:asymex_czx_s_contract}
     \end{align}
     In particular $\hat VV=1$ and $S^aS^b=S^aV\hat VS^b$.
 \end{theorem}
@@ -748,14 +747,14 @@ $\omega=-1$~\cite[Section~III.A]{GarreRubioSchuch2024DomainWall}.
 \begin{proof}
     \leanok
     The identities $S^aS^b=S^aV\hat VS^b$ and
-    $\hat VS^{(s,t)}V=\delta_{st}$ are finite integer computations. The
-    first displayed identity follows by induction on $k$: inserting
-    $V\hat V$ between the first two letters splits off the factor
-    $\hat VS^{(s_1,t_1)}V$. The second follows by the same induction,
-    contracting one intermediate letter at a time.
+    $\hat VS^{(s,t)}V=\delta_{st}$ are finite integer computations.
+    Identity~(\ref{eq:asymex_czx_v_contract}) follows by induction on $k$:
+    inserting $V\hat V$ between the first two letters splits off the factor
+    $\hat VS^{(s_1,t_1)}V$. Identity~(\ref{eq:asymex_czx_s_contract}) follows by
+    the same induction, contracting one intermediate letter at a time.
 \end{proof}
 
-The source states the second identity with at least one intermediate site;
+The source states~(\ref{eq:asymex_czx_s_contract}) with at least one intermediate site;
 the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \begin{theorem}[The associator sign of the decorated tensor]
@@ -898,6 +897,128 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     and its value is $\omega(s,s,s)=-1$.
 \end{proof}
 
+\begin{theorem}[Domain walls between the two product states]
+    \label{thm:asymex_czx_domain_walls}
+    \lean{CZXCompression.czx_domainWall_mul_eq_neg_one,
+        CZXCompression.czxWallAB,
+        CZXCompression.czxWallBA,
+        CZXCompression.czx_isDomainWallAction_ab,
+        CZXCompression.czx_isDomainWallAction_ba,
+        CZXCompression.czx_mpo_mulVec_twoWallMPV}
+    \leanok
+    \uses{thm:asymex_czx_product_state_l_symbols, def:mpug_domain_wall_action}
+    For every choice of action tensors on the product states
+    $|0\rangle^{\otimes N}$ and $|1\rangle^{\otimes N}$, and every pair of
+    domain walls $e_{AB}$ and $e_{BA}$ exchanged by the generator with
+    phases $c_{AB}$ and $c_{BA}$,
+    \begin{align}
+        c_{AB}\,c_{BA} & =-1,
+        \notag
+    \end{align}
+    the anomaly of the decorated CZX symmetry seen on its domain walls
+    \cite[Section~III]{GarreRubioSchuch2024DomainWall}. For the action tensors
+    of Theorem~\ref{thm:asymex_czx_product_state_l_symbols}, the walls
+    $e_{AB}=|0\rangle$ and $e_{BA}=-|1\rangle$ are exchanged with
+    $c_{AB}=1$ and $c_{BA}=-1$ (with the corrected left action vectors
+    \cite{gap:gs24_czx_action_left_vectors}), and
+    $U\ket{\psi(0\text{-}1\text{-}0)}=-\ket{\psi(1\text{-}0\text{-}1)}$ on
+    every chain with long enough regions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_decorated_anomaly_class,
+        thm:mpug_domain_wall_involution, thm:mpug_domain_wall_state}
+    By Theorem~\ref{thm:mpug_domain_wall_involution} with the fusion tensors
+    of Theorem~\ref{thm:asymex_czx_decorated_anomaly_class},
+    $c_{AB}c_{BA}=\omega(s,s,s)\,\omega(s,e,s)=-1$. For the explicit walls
+    write $V_x$ and $W_x$ for the left and right action vectors of $s$ on
+    $|x\rangle^{\otimes N}$, and $\tilde A_x=O_s\cdot A_x$ for the acted
+    letters. For $e_{AB}$, with $V_0=\langle1|$ and $W_1=-|\hat+\rangle$, each
+    letter satisfies
+    \begin{align}
+        A_1^jV_0                  & =V_0\tilde A_0^j,
+        \notag                                        \\
+        \tilde A_1^jW_1           & =W_1A_0^j,
+        \notag                                        \\
+        V_0(O_s\cdot e_{AB})^iW_1 & =e_{BA}^i,
+        \notag
+    \end{align}
+    so
+    $V_0\tilde A_0^{\mathbf u}(O_s\cdot e_{AB})^i\tilde A_1^{\mathbf v}W_1
+        =A_1^{\mathbf u}e_{BA}^iA_0^{\mathbf v}$ for all words, and
+    $c_{AB}=1$. For $e_{BA}$, the right action vector $W_0=|\hat+\rangle$ and
+    $W'=-|0\rangle+|1\rangle$ satisfy $\tilde A_0^jW_0=W'A_1^j$ and
+    $\tilde A_0^jW'=W'A_1^j$, so
+    $\tilde A_0^{\mathbf v}W_0=W'A_1^{\mathbf v}$ for every nonempty word
+    $\mathbf v$. Together with $A_0^jV_1=V_1\tilde A_1^j$ for $V_1=-\langle0|$
+    and $V_1(O_s\cdot e_{BA})^iW'=-e_{AB}^i$, this gives $c_{BA}=-1$ with at
+    least one site on the right of the wall. The last statement is
+    Theorem~\ref{thm:mpug_domain_wall_state}.
+\end{proof}
+
+\begin{theorem}[Equal domain-wall phases and a string over a pair of walls]
+    \label{thm:asymex_czx_semionic_domain_walls}
+    \lean{CZXCompression.czxWallBASemion,
+        CZXCompression.czx_isDomainWallAction_semion,
+        CZXCompression.czx_domainWall_pair}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, def:mpug_domain_wall_action}
+    With the action tensors of
+    Theorem~\ref{thm:asymex_czx_product_state_l_symbols} (with the corrected
+    left action vectors \cite{gap:gs24_czx_action_left_vectors}), the walls
+    $e_{AB}=|0\rangle$ and $e_{BA}=i|1\rangle$ are exchanged by the generator
+    with $c_{AB}=c_{BA}=i$, and the local action of the generator on an open
+    chain containing the pair $|0\rangle$, $-|1\rangle$ with long regions is
+    the phase $-1$. These are the tensor identities behind the semionic
+    exchange statistics of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_pair,
+        thm:mpug_domain_wall_rescaling}
+    Rescale the wall $-|1\rangle$ of Theorem~\ref{thm:asymex_czx_domain_walls}
+    by $1/i$, using Theorem~\ref{thm:mpug_domain_wall_rescaling} with $s=i$;
+    the second statement is Theorem~\ref{thm:mpug_domain_wall_pair} with
+    $c_{AB}c_{BA}=-1$.
+\end{proof}
+
+\begin{theorem}[Semionic exchange of domain-wall strings]
+    \label{thm:asymex_czx_string_exchange}
+    \lean{CZXCompression.czx_isSeparatingLeftInverse,
+        CZXCompression.czxWallString,
+        CZXCompression.czx_wallString_mulVec_mpv,
+        CZXCompression.czx_wallString_exchange}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, def:mpug_domain_wall_string,
+        thm:mpug_domain_wall_string_creation,
+        thm:mpug_domain_wall_string_exchange}
+    With the action tensors and the domain walls $e_{AB}=|0\rangle$,
+    $e_{BA}=-|1\rangle$ of Theorem~\ref{thm:asymex_czx_domain_walls}, the
+    vectors $\langle0|$ and $\langle1|$ are left inverses of the two product
+    states with separated supports, and the domain-wall string $O^{[i,j]}$
+    creates the state $\ket{\psi(0\text{-}1\text{-}0)}$ from
+    $|0\rangle^{\otimes N}$ on the periodic chain of every length $N\geq2$,
+    for all sites $i<j$. For sites $i_2<i_1<j_1<j_2$ whose three inner
+    regions are longer than a fixed buffer,
+    \begin{align}
+        O^{[i_1,j_1]}O^{[i_2,j_2]}|0\rangle^{\otimes N}
+         & =-\,O^{[i_2,j_2]}O^{[i_1,j_1]}|0\rangle^{\otimes N},
+        \notag
+    \end{align}
+    the semionic statistics of the domain walls of
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_string_exchange}
+    The left inverses are checked letter by letter. The exchange is
+    Theorem~\ref{thm:mpug_domain_wall_string_exchange} with
+    $c_{AB}c_{BA}=1\cdot(-1)=-1$.
+\end{proof}
+
 \begin{corollary}[No invariant normal state]
     \label{cor:asymex_czx_decorated_no_invariant}
     \lean{CZXCompression.not_exists_normal_fixesMPV_czxDecoratedTensor}
@@ -920,13 +1041,13 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
 
 \subsection{Asymmetric compression of the square}
 
-The physical square law supplies the periodic comparison for
-asymmetric compression: $B$ has the nonempty-word traces of the
-bond-one identity tensor with weight $-1$. This comparison lies
-beyond the unit-weight setting. The sitewise theory
-of~\cite[Appendix~A]{GarreRubio2023MPOSym} imposes a closedness
-requirement for arbitrary boundary conditions. The following example
-distinguishes a word-level compression from a sitewise intertwiner.
+By~(\ref{eq:asymex_czx_square_operator}), the periodic operator satisfies
+$O_N(B)=U_N^2=(-1)^N\Id$, and $\tr(B^w)=(-1)^{|w|}\tr(\delta^w)$ for all
+nonempty words $w$. This periodic comparison with the bond-one identity tensor with weight $-1$
+lies beyond the unit-weight setting. The sitewise theory
+of~\cite[Appendix~A]{GarreRubio2023MPOSym} imposes a closedness requirement for
+arbitrary boundary conditions. The following example distinguishes a
+word-level compression from a sitewise intertwiner.
 
 For a word $w=((i_1,j_1),\ldots,(i_{|w|},j_{|w|}))$,
 write $B^w=B^{i_1j_1}\cdots B^{i_{|w|}j_{|w|}}$, and use the
@@ -1116,14 +1237,11 @@ the identity matrix on the corresponding bond space.
 \subsection{A non-simple family with an oscillating coefficient}%
 \label{sec:asymex_czx_plus}
 
-The family of this subsection is a construction of this development built on
-the CZX operator; it has no literature source. Let $M$ be the bond-two tensor
-of Definition~\ref{def:asymex_czx_tensors}, with the first physical index
-denoting the output. For a bit configuration $t=(t_0,\ldots,t_{N-1})$, write
-$\bar t_n=1-t_n$ and $E(t)=\sum_{n=0}^{N-1}t_nt_{n+1}$, with cyclic
-subscripts, so that $E$ is the exponent~(\ref{eq:asymex_czx_exponent}) in
-the notation of this subsection. By Theorem~\ref{thm:asymex_czx_kernel},
-the periodic operator acts as
+Let $M$ be the bond-two tensor of Definition~\ref{def:asymex_czx_tensors},
+with the first physical index denoting the output. For a bit configuration
+$t=(t_0,\ldots,t_{N-1})$, write $\bar t_n=1-t_n$ and
+$E(t)=\sum_{n=0}^{N-1}t_nt_{n+1}$ (with cyclic subscripts).
+By Theorem~\ref{thm:asymex_czx_kernel}, the periodic operator acts as
 \begin{align}
     U_N\ket{t} & =(-1)^{E(t)}\ket{\bar t}.
     \label{eq:asymex_plus_basis}
@@ -1166,11 +1284,18 @@ The identity coefficient is two on even rings and zero on odd rings.
 
 \begin{lemma}[Projectors on even rings and inverses on odd rings]
     \label{lem:asymex_plus_parity}
+    \lean{CZXCompression.isStarProjection_half_one_add_mpo_czxTensor,
+        CZXCompression.one_add_mpo_czxTensor_mul_half_one_sub,
+        CZXCompression.half_one_sub_mul_one_add_mpo_czxTensor,
+        CZXCompression.inv_one_add_mpo_czxTensor}
+    \leanok
     For even $N>0$, $O_N/2$ is an orthogonal projector. For odd $N>0$,
     $O_N$ is invertible, with inverse $(I_N-U_N)/2$.
 \end{lemma}
 
 \begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_unitarity, thm:asymex_czx_square_operator}
     For even $N$, unitarity and~(\ref{eq:asymex_plus_unitary}) give
     $U_N^\dagger=U_N$ and $U_N^2=I_N$. Consequently,
     \begin{align}
@@ -1198,7 +1323,8 @@ for positive lengths.
 \begin{definition}[The non-simple family and its square]
     \label{def:asymex_czx_plus}
     \lean{CZXCompression.plusTensor, CZXCompression.czxPlusIdentity,
-        CZXCompression.plusBlockDim, CZXCompression.plusTargets}
+        CZXCompression.plusBlockDim, CZXCompression.plusTargets,
+        CZXCompression.plusTensor_eq_directSum, CZXCompression.mpo_plusTensor}
     \leanok
     \uses{def:asymex_czx_tensors, def:mpdo_operator_product}
     The generating tensor is $N^{ij}=\delta^{ij}\oplus M^{ij}$ of bond

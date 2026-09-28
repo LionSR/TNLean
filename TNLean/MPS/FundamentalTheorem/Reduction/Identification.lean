@@ -73,15 +73,15 @@ theorem exists_linearEquiv_wordModule_of_isSimpleModule_quotient
   obtain ⟨p, hp, hpQ, hpS⟩ :=
     exists_aug_eq_zero_of_forall_isEmpty_linearEquiv (M ⧸ K) hQ S C hC hne
   -- `p` acts as zero on every block, so all its trace powers on `M` vanish.
-  have hzero : ∀ k : ℕ, 0 < k → LinearMap.trace ℂ M ((actAlgHom M p) ^ k) = 0 := by
+  have hzero : ∀ k : ℕ, 0 < k → LinearMap.trace ℂ M ((Algebra.lsmul ℂ ℂ M p) ^ k) = 0 := by
     intro k hk
     rw [← map_pow, ← traceChar_apply, traceChar_eq_sum_of_traceWord_eq M S C htr (aug_pow hp hk)]
     refine Finset.sum_eq_zero fun s hs => ?_
-    have h0 : actAlgHom (C s).WordModule p = 0 := by
+    have h0 : Algebra.lsmul ℂ ℂ (C s).WordModule p = 0 := by
       ext v
       simp [hpS s hs v]
     rw [traceChar_apply, map_pow, h0, zero_pow hk.ne', map_zero]
-  obtain ⟨n, hn⟩ := LinearMap.isNilpotent_of_forall_trace_pow_eq_zero (actAlgHom M p) hzero
+  obtain ⟨n, hn⟩ := LinearMap.isNilpotent_of_forall_trace_pow_eq_zero (Algebra.lsmul ℂ ℂ M p) hzero
   -- `p ^ n` acts as zero on `M`, hence on the quotient, where `p` acts as the identity.
   have hpow : ∀ m : M, (p ^ n) • m = 0 := by
     intro m

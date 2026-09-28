@@ -16,6 +16,40 @@ an audit note name the removed declaration and its replacement. This local
 policy applies to definitions, structures, abbreviations, and theorems alike;
 do not retain an otherwise dead declaration solely as a compatibility alias.
 
+### Mathlib structures before local ones
+
+Group cohomology (SPT 2-cocycles, anomaly 3-cocycles, L-symbols), projective
+representations, coalgebras, bialgebras and Hopf algebras, monoidal and
+fusion categories, and fusion rings are built on Mathlib's structures, not on
+local parallels. When Mathlib has the notion, TNLean deletes its own
+definition and states every downstream declaration on Mathlib's type; it
+keeps no parallel type and no bridge or equivalence lemmas between the two.
+When Mathlib lacks the notion, TNLean adds the thinnest layer over the closest
+Mathlib class, stated so that the standard case is literally Mathlib's
+instance. Tracker: #8315.
+
+### Toolchain and Mathlib upgrades
+
+Every Lean/Mathlib bump ships a dated replacement audit,
+`docs/audits/<YYYY-MM-DD>_mathlib_<version>_replacement_audit.md`, covering the Mathlib
+range from the old pin to the new one. Besides local lemmas that new Mathlib
+declarations replace, each audit rechecks Mathlib's coverage of the areas in
+the previous subsection and of matrix-algebra semisimplicity:
+- group cohomology: a multiplicative degree-3 API, universe polymorphism,
+  projective representations, twisted group algebras, and the comparison of
+  circle-valued with complex-unit coefficients;
+- weak and pre-bialgebras, and C\*-structures on Hopf algebras;
+- rigid, pivotal, spherical, fusion and module categories, and Frobenius–Perron
+  dimensions;
+- fusion (based) rings and NIM-reps;
+- semisimplicity of star-closed matrix algebras, which
+  `TNLean/Algebra/StarClosedSemisimple.lean` proves locally.
+
+Every local layer that Mathlib has since covered is then migrated by deleting
+the local definition as above, either in the bump PR or in a follow-up PR. The
+audit lists each layer it defers, with an issue linked to tracker #8315, and
+every deferred migration lands before the next bump PR is opened.
+
 ## Proof integrity (PROOF_INTEGRITY)
 
 ### Sanctioned-axiom history

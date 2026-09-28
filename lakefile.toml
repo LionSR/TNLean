@@ -22,12 +22,12 @@ rev = "ec93e4daed4ad8b4784a9d760e492832e7711433"
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.34.0-rc1"
+rev = "v4.35.0-rc3"
 
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-rev = "cdaa636d1f41560f7caca7077c11068229cb9727"
+rev = "af43b1c6f147a4a717583c9e6f4049a1306ea34e"
 
 [[lean_lib]]
 name = "TNLean"

@@ -5,10 +5,10 @@
 \input{command}
 \title{Quantum-Double PEPS: Normalization, Representations and Scope}
 \author{}
-\date{2026-09-26}
+\date{2026-09-27}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the sources print}
 Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
@@ -73,33 +73,57 @@ one tensor.
     \item The primal tensor's virtual symmetry under every irreducible
     representation $\pi$ is formalized as the single-tensor identity
     $A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=A_{t,r,b,l}\,\mathbb 1$
-    for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support.
-    The resulting matrix product operator symmetry of the contracted
-    network is not formalized.
+    for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support,
+    and for the contracted network on the torus: the virtual string that
+    multiplies $\pi(g)$ for each bond with label $g$ it crosses can be
+    pulled through every rectangle of sites, since on the support
+    $\pi(t)\pi(r)=\pi(l)\pi(b)$ at each site and the two boundary paths
+    of a grid of such squares have the same product. This item is
+    resolved.
     \item The review states that the equal-weight superposition of
     plaquette colorings is the equal-weight superposition of the
-    configurations obeying Gauss' law. On a plane, or on a disc with open
-    boundary, every Gauss-law configuration is a difference of colorings.
-    On a torus the differences of plaquette colorings are exactly the
-    Gauss-law configurations of trivial holonomy around the two
-    non-contractible cycles, so the statement holds for that sector only.
-    It is not formalized. The review also prints the Gauss law as
-    $g_1g_2g_3^{-1}g_4^{-1}=0$, where the identity element $1$ is
-    meant.\footnote{Source traceability:
+    configurations obeying Gauss' law. The primary source reads the
+    contracted dual network as the superposition over all color
+    patterns, with a Hamiltonian whose local term makes the four spins
+    of each tensor multiply to the identity, whose plaquette term does
+    the same for the spins of four tensors around a corner, and whose
+    two-body term enforces equal weight.\footnote{Source traceability:
+        \path{Papers/1001.3807/paper_v3.tex}, lines 2824--2827 and
+        2914--2923; \path{Papers/2011.12127/TN-Review-main.tex}, lines
+        2460--2461.}
+    On a plane, or on a disc with open boundary, every Gauss-law
+    configuration is a difference of colorings. On a torus the
+    differences of colorings are exactly the Gauss-law configurations of
+    trivial holonomy around the two non-contractible cycles, so the
+    statement holds for that sector only. This is formalized: with the
+    dual tensor at every site of a torus of width and height at least
+    three, the coefficient of the contracted network is $|G|$ at every
+    spin configuration obeying the vertex and plaquette rules with
+    trivial holonomy around one row and one column, and $0$ elsewhere.
+    The factor $|G|$ counts the colorings with given differences, which
+    differ by one global shift. The proof writes a coloring through the
+    left color $f_v$ of each site; the spins then prescribe
+    $f_{v+(1,0)}=a_vf_v$ and $f_{v+(0,1)}=b_vf_v$ for elements $a_v,b_v$
+    built from the spins, and such $f$ exist exactly when the $a,b$ are
+    flat around every elementary square, which is the plaquette rule, and
+    have trivial holonomy around one row and one column. The review also
+    prints the Gauss law as $g_1g_2g_3^{-1}g_4^{-1}=0$, where the
+    identity element $1$ is meant.\footnote{Source traceability:
         \path{Papers/2011.12127/TN-Review-main.tex}, line 2452.}
+    This item is resolved within the trivial-holonomy sector, which is
+    the whole state of the network.
 \end{enumerate}
 
 \section{Verdict and elimination plan}
-The note is a scope restriction: the review's statements about the
-contracted network are formalized only for one tensor or not at all. The
-normalization and the representation are local corrections within that
-restriction.
-The normalization and the choice of regular representation are
-conventions and need no further work. For the scope restrictions, place
-the quantum-double tensors on the torus, prove the pulling-through
-identity of the representation operators across the contracted network,
-and state the coloring superposition as the trivial-holonomy sector of
-the Gauss-law configurations.
+The note is a scope restriction: the review's identification of the
+contracted dual network with the equal-weight superposition of all
+Gauss-law configurations holds on the torus for the trivial-holonomy
+sector, which is the sector formalized; the configurations of nontrivial
+holonomy have coefficient $0$. The normalization and the representation
+are local corrections within that restriction and are conventions that
+need no further work. The pulling-through identity of the representation
+operators across the contracted primal network is formalized on the torus.
+No elimination is planned: the unrestricted reading is false on the torus.
 
 \bibliographystyle{alpha}
 \bibliography{references}

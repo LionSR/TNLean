@@ -218,6 +218,29 @@
          & =\sum_{a,b\in I}X_{i,a}(X^{-1})_{b,j}M^{a,b}.
         \notag
     \end{align}
+    \begin{center}
+        % Formula: M_X^{i,j} = \sum_{a,b} X_{i,a} (X^{-1})_{b,j} M^{a,b}.
+        % Ink-to-index map: the upper stub carries the ket index i and the
+        % lower stub the bra index j of M_X; the west and east wires carry
+        % the free bond indices of M, of dimension four.
+        % Contraction set: on the right the leg between X and M is the summed
+        % ket index a, and the leg between M and X^{-1} is the summed bra
+        % index b.
+        % Boundary signature (both sides): virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=1.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open,
+                physical=updown]
+            \tn[skin=mpo, size=l, ports={90:physical:$i$, 270:physical:$j$}]{M_X}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={op,op,op}, cols=1, west=none, east=none,
+                physical=updown]
+            \tn[skin=ring, ports={90:physical:$i$, 270:physical}]{X} \\
+            \tn[skin=mpo, ports={180:virtual, 0:virtual}]{M} \\
+            \tn[skin=ring, ports={90:physical, 270:physical:$j$}]{X^{-1}}
+        \end{tenkz}
+    \end{center}
     This family is motivated by the sector comparison in
     \cite[Appendix~C.4, lines~2048--2057]{Cirac2016MPDO_arXiv} and the
     physical-sector argument of
@@ -233,6 +256,28 @@
     \uses{def:mpdo_bond_two_singleton_physical_deformation, thm:mpdo_bond_two_singleton_vertical_identity}
     For every vertical letter $v$, the vertical tensor of $M_X$ satisfies
     $\widetilde M_X^v=XA^vX^{-1}$.
+    Drawing the vertical letter $v$ as the upper leg, the physical
+    similarity becomes a gauge on the virtual legs of $A$:
+    \begin{center}
+        % Formula: \widetilde M_X^v = X A^v X^{-1}.
+        % Ink-to-index map: the upper leg carries the vertical letter v, the
+        % doubled bond index of M; the west and east wires carry the ket and
+        % bra indices of M_X, which are the virtual indices of the vertical
+        % tensor.
+        % Contraction set: on the right exactly the two bonds X--A and
+        % A--X^{-1} are summed.
+        % Boundary signature (both sides): virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$v$}]{\widetilde M_X}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={wire}, cols=3, west=open, east=open]
+            \tn[skin=ring]{X} & \tn[label pos=s, ports={90:physical:$v$}]{A} &
+            \tn[skin=ring]{X^{-1}}
+        \end{tenkz}
+    \end{center}
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_vertical_one_site_actions, thm:mpdo_bond_two_singleton_vertical_identity}
@@ -426,6 +471,52 @@
         O_L(M_0)^2 & =s^L O_L(M_0).
         \notag
     \end{align}
+    \begin{center}
+        % Formula: O_L(M_0)^2 = s^L O_L(M_0) for L >= 1, the one-label case
+        % of the product law of CPSV16 Theorem 4.14(ii), lines 962--991,
+        % with structure coefficient tr(\chi_{0,0,0}^L) = s^L.
+        % Ink-to-index map: each site carries M_0 with its doubled physical
+        % index separated into the ket leg i and the bra leg j; at site \ell on the left, the vertical pairleg
+        % contracts the bra index of the upper copy with the ket index of
+        % the lower copy, and i_\ell, j_\ell remain free.  The two periodic
+        % rows close their bonds independently.
+        % Contraction set: all horizontal bonds, both periodic returns, and
+        % the L vertical pairlegs on the left; the horizontal bonds and the
+        % periodic return on the right.
+        % Boundary signatures (virtual-west, virtual-east, physical-up,
+        % physical-down): both sides have semantic signature (0,0,L,L); each
+        % three-site representative emits (0,0,3,3).
+        % The elided column is bare on the left because the frame would mint
+        % a pairleg stub between the two ellipsis cells.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op}, cols=4, west=trace, east=trace,
+                bonds=none]
+            \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{M_0} &
+            \tn[skin=mpo, ports={90:physical, 270:physical}]{M_0} &
+            \tn[skin=dots]{} &
+            \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical}]{M_0} \\
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M_0} &
+            \tn[skin=mpo, ports={90:physical, 270:physical}]{M_0} &
+            \tn[skin=dots]{} &
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{M_0}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+            \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+            \tnwire{(1,1)}{(2,1)} \tnwire{(1,2)}{(2,2)} \tnwire{(1,4)}{(2,4)}
+            \tnmark[form=bracket]{(2,1) .. (2,4)}{$L\text{ sites}$}
+        \end{tenkz}
+        \quad$=s^L$\quad
+        \begin{tenkz}[cols=4, west=trace, east=trace]
+            \tn[skin=mpo,
+                ports={90:physical:$i_1$, 270:physical:$j_1$}]{M_0} &
+            \tn[skin=mpo, ports={90:physical, 270:physical}]{M_0} &
+            \tn[skin=dots]{} &
+            \tn[skin=mpo,
+                ports={90:physical:$i_L$, 270:physical:$j_L$}]{M_0}
+            \tnmark[form=bracket]{(1,1) .. (1,4)}{$L\text{ sites}$}
+        \end{tenkz}
+    \end{center}
+    Each site carries $M_0$ with its doubled physical index separated into
+    an upper and a lower leg, so each periodic row is $O_L(M_0)$.
     The weighted tensor $\mu_0\otimes M_0$ reconstructs $A$ exactly.
     For $m_0=\tr(\mu_0)=s^{-1}$, the identity
     $m_0=c_{0,0,0}^{(1)}m_0^2$ says that the vector $m$ is an idempotent

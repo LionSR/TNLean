@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Basic
-import Mathlib.Data.Complex.BigOperators
+import Mathlib.Basic.Complex.BigOperators
 import Mathlib.LinearAlgebra.LinearIndependent.Defs
 
 /-!

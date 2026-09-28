@@ -115,7 +115,7 @@ theorem openParentHamiltonianES_C1_full_range_quadratic_form
   constructor
   · exact Finset.sum_nonneg fun n hn ↦
       (openSuffixParentHamiltonianES_isPositive A (l + 1) (l + 1) N (n + 1)).2 x
-  · have hpos := (LinearMap.le_def S (openParentHamiltonianES A (l + 1) N)).mp hC1.2
+  · have hpos := (LinearMap.le_def (f := S) (g := openParentHamiltonianES A (l + 1) N)).mp hC1.2
     have hx := hpos.2 x
     have hSform :
         RCLike.re ⟪S x, x⟫_ℂ =

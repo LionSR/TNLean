@@ -6,8 +6,6 @@ Authors: TNLean contributors
 import QICLean.Analysis.MatrixReducedProjection
 import TNLean.MPS.MPU.VirtualSandwich
 
-open scoped ComplexOrder
-
 /-!
 # Source-rank comparison for the reduced and hatted representatives
 
@@ -23,6 +21,8 @@ and constructing a positive fixed pair. See
 
 Source: `Papers/1703.09188/paper_v2.tex:786-804`.
 -/
+
+open scoped ComplexOrder
 
 namespace MPOTensor
 
