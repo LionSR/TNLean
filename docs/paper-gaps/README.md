@@ -48,6 +48,31 @@ For the Kitaev chain of arXiv:2011.12127, Appendix A:
   the decomposition into two injective bond-dimension-one states), and
   that the fermionic injectivity claim awaits graded tensor networks.
 
+For the SPT fixed points of arXiv:2011.12127, Section III.A:
+
+- `rmp_spt_fixed_point_tensor.tex` (false source claim) records that the
+  printed zero-correlation-length tensor for a 2-cocycle and a 1-cocycle has
+  letters commuting with the printed gauges, so for a nontrivial group
+  (`|G| > 1`) it is not normal and its transfer map is not of rank one, and that
+  the formalized fixed point is the dimer tensor `D^{-1/2}|a⟩⟨b|` with the
+  physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
+  realizes the prescribed class and gives the blocked cluster tensor for
+  `Z₂ × Z₂`.
+- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
+  that the formal fixed point takes a projective representation with the given
+  factor system as input, whereas the source starts from the 2-cocycle alone; the
+  twisted regular representation on `ℂ^G` would supply it and is not formalized.
+- `rmp_spt_fixed_point_trivial_character.tex` (scope restriction) records that
+  the twist identity `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹` is proved for every
+  character `φ`, but on-site symmetry and the realization of the class of `ω`
+  only for `φ = 1`, because the formal symmetry predicate does not allow the
+  global phase `φ(g)^N`; symmetry up to a character would remove the restriction.
+- `rmp_spt_fixed_point_onsite_scope.tex` (scope restriction) records that the
+  source's construction covers groups combining on-site, time-reversal and
+  reflection symmetries, with cocycles twisted by `α` and `β`, while the
+  formalized fixed point and its symmetry results treat only a linear on-site
+  action with untwisted cocycles.
+
 For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
 - `rmp_peps_examples_small_torus.tex` records that the cluster, CZX, AKLT

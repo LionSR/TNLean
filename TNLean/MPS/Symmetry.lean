@@ -16,6 +16,7 @@ import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
+import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.SpinHalfObstruction
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Symmetry.StringOrderAux

@@ -293,9 +293,59 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
     the cluster state realizes a non-trivial SPT phase.
 \end{theorem}
 
+\begin{theorem}[Virtual implementation of the cluster-state symmetry]
+    \label{thm:cluster_twist_intertwine}
+    \lean{MPSTensor.clusterBlocked_twist_intertwine}
+    \leanok
+    \uses{thm:cluster_z2z2_symmetric, def:cluster_omega}
+    Let $u$ be the on-site $\Z_2\times\Z_2$ action of
+    Theorem~\ref{thm:cluster_z2z2_symmetric} and let $X$ be the projective
+    representation with factor system of Definition~\ref{def:cluster_omega} whose
+    generators act by $\sigma_z$ and $\sigma_x$.  For every $g$ and every letter
+    $i$ of the length-$2$ blocked cluster-state tensor $A$,
+    \begin{align}
+        \Bigl(\sum_j u(g)_{ij}A^j\Bigr)X_g=X_gA^i.
+        \label{eq:cluster_twist_intertwine}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $g$ the identity both sides equal $A^i$.  For each of the other three
+    elements, with $X_g$ equal to $\sigma_z$, $\sigma_x$ or $\sigma_z\sigma_x$, a
+    direct computation on the four blocked letters gives
+    $\sum_ju(g)_{ij}A^j=X_gA^iX_g^{-1}$; multiplying on the right by $X_g$ gives
+    (\ref{eq:cluster_twist_intertwine}).
+\end{proof}
+
+\begin{theorem}[The cluster state is the $\Z_2\times\Z_2$ SPT fixed point]
+    \label{thm:cluster_spt_fixed_point}
+    \lean{MPSTensor.clusterSPTUnitary, MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor, MPSTensor.clusterSPTUnitary_mul_conjTranspose, MPSTensor.clusterZ2Z2Action_mul_clusterSPTUnitary, MPSTensor.isNontrivialClass_of_clusterSPTFixedPoint}
+    \leanok
+    \uses{def:spt_fixed_point_tensor, def:cluster_tensor}
+    Let $B$ be the SPT fixed-point tensor of the projective representation of
+    $\Z_2\times\Z_2$ by $\sigma_z$ and $\sigma_x$.  The length-$2$ blocked
+    cluster-state tensor satisfies $A^i=\sum_jV_{ij}B^j$ for a unitary $V$ on the
+    four-dimensional physical space.  This unitary intertwines the two symmetries:
+    $u(g)\,V=V\,U(g)$ for every $g$, where $u$ is the on-site
+    $\Z_2\times\Z_2$ action on the blocked cluster state and $U$ is the physical
+    action of the fixed point.  Every virtual projective representation of $B$ has
+    a non-trivial class \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:spt_fixed_point_class, thm:cluster_nontrivial_spt, thm:spt_fixed_point_transfer, thm:cluster_twist_intertwine}
+    Take $V_{i,(a,b)}=\sqrt2\,(A^i)_{ab}$; the four blocked letters are orthogonal
+    with $\tr(A^iA^{j\dagger})=\tfrac12\delta_{ij}$, so $V$ is unitary.  Both
+    tensors realize the symmetry $g$ with the same virtual gauge, so
+    $\sum_j(u(g)V)_{ij}B^j=\sum_j(VU(g))_{ij}B^j$, and the letters $B^j$ are
+    linearly independent.  The class
+    statement follows from Theorem~\ref{thm:spt_fixed_point_class} and the
+    non-triviality of the cluster factor system.
+\end{proof}
+
 \begin{theorem}[Doubly degenerate entanglement spectrum of the cluster state]
     \label{thm:cluster_entanglement_spectrum_even}
-    \lean{MPSTensor.clusterBlocked_even_finrank_eigenspace, MPSTensor.clusterBlocked_twist_intertwine, MPSTensor.clusterBlocked_transferMap_one, MPSTensor.clusterZ2Z2Action_unitary}
+    \lean{MPSTensor.clusterBlocked_even_finrank_eigenspace, MPSTensor.clusterBlocked_transferMap_one, MPSTensor.clusterZ2Z2Action_unitary}
     \leanok
     \uses{def:cluster_tensor}
     Let $\Lambda$ be a positive definite fixed point of the adjoint transfer map
@@ -304,7 +354,7 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_normal, thm:cluster_gauge_anticomm}
+    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_normal, thm:cluster_gauge_anticomm, thm:cluster_twist_intertwine}
     The blocked tensor is injective and satisfies $\E(\Id)=\Id$; the two
     generators of $\Z_2\times\Z_2$ act by unitary permutation matrices with
     anticommuting virtual gauges $\sigma_z$ and $\sigma_x$.  Apply
