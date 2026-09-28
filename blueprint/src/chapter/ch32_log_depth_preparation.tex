@@ -186,7 +186,8 @@ remaining eigenvalues have modulus strictly less than $1$.
 
 \begin{theorem}[Rate of convergence of the positive part]
     \label{thm:ldp_positive_part_rate}
-    \lean{MPSTensor.exists_norm_transferMap_pow_sub_le,
+    \lean{MPSTensor.lt_exp_neg_div_correlationLength,
+        MPSTensor.exists_norm_transferMap_pow_sub_le,
         MPSTensor.exists_norm_gram_blockTensor_sub_le,
         MPSTensor.exists_norm_polarPos_blockTensor_sub_le}
     \leanok
@@ -197,12 +198,19 @@ remaining eigenvalues have modulus strictly less than $1$.
     $\lambda_2$ of Definition~\ref{def:correlation_length}, and let
     $0<\gamma<1$. Write $r=e^{-\gamma/\xi}$, where $-\gamma/\xi$ is read as $0$
     when $\xi=0$; thus $r=\lvert\lambda_2\rvert^{\gamma}$ when $\lambda_2\ne0$,
-    and $r=1$ when $\lambda_2=0$. There are constants $C,K$ depending only on
+    and $r=1$ when $\lambda_2=0$. Then $a<r$ for every real number $a<1$ with
+    $a\le\lvert\lambda_2\rvert$. There are constants $C,K$ depending only on
     $A$, $\rho$, $\lambda_2$, and $\gamma$ such that
     $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Cr^n\lVert X\rVert$
-    for all $n$ and $X$, and $\lVert P_q-P_\infty\rVert\le Kr^q$
+    for all $n$ and $X$, and
+    \begin{equation*}
+        \lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
+        \le Kr^q,
+        \qquad
+        \lVert P_q-P_\infty\rVert\le Kr^q
+    \end{equation*}
     for all $q$.
-    The sources prove the second bound for $0<\gamma<1/2$ only
+    The sources prove the bound on $P_q-P_\infty$ for $0<\gamma<1/2$ only
     \cite[Supplemental Material]{Piroli2021LOCC}, quoted in
     \cite[eq.~(S9)]{Malz2024Preparation}; the range $0<\gamma<1$ is a result
     of this project.
@@ -210,19 +218,25 @@ remaining eigenvalues have modulus strictly less than $1$.
 \begin{proof}
     \leanok
     \uses{thm:ldp_sqrt_lipschitz_constant}
+    Let $a<1$ with $a\le\lvert\lambda_2\rvert$. If
+    $0<\lvert\lambda_2\rvert<1$, then
+    $r=\lvert\lambda_2\rvert^{\gamma}>\lvert\lambda_2\rvert\ge a$,
+    because $\gamma<1$. Otherwise $\lambda_2=0$ and $r=1$, or
+    $\lvert\lambda_2\rvert\ge1$ and $r=\lvert\lambda_2\rvert^{\gamma}\ge1$;
+    in both cases $r\ge1>a$.
+
     Write $\E_\infty(X)=\Tr(X)\rho$. The eigenvalues $z$ of
     $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
     $1$, so $\lvert z\rvert\le\lvert\lambda_2\rvert$, and
-    $\lvert z\rvert<1$ by normality. If $0<\lvert\lambda_2\rvert<1$, then
-    $r=\lvert\lambda_2\rvert^{\gamma}>\lvert\lambda_2\rvert\ge\lvert z\rvert$,
-    because $\gamma<1$. Otherwise $\lambda_2=0$ and $r=1$, or
-    $\lvert\lambda_2\rvert\ge1$ and $r=\lvert\lambda_2\rvert^{\gamma}\ge1$;
-    in both cases $r\ge1>\lvert z\rvert$. Hence the spectral radius of
+    $\lvert z\rvert<1$ by normality. Taking $a=\lvert z\rvert$ gives
+    $\lvert z\rvert<r$. Hence the spectral radius of
     $\E_A-\E_\infty$ is less than $r$, and
     $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives the first
     bound. By the rearrangement in the proof of
-    Lemma~\ref{lem:ldp_positive_part_converges},
-    $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$. Since
+    Lemma~\ref{lem:ldp_positive_part_converges}, the first bound gives
+    $\lVert P_q^2-P_\infty^2\rVert
+        =\lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
+        \le K_1r^q$. Since
     $P_\infty^2=\rho^{\mathsf T}\otimes\Id$ is positive definite,
     Theorem~\ref{thm:ldp_sqrt_lipschitz_constant} gives $L\ge0$ with
     $\lVert P_q-P_\infty\rVert\le LK_1r^q$.
@@ -712,7 +726,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
-        thm:ldp_positive_part_rate, def:correlation_length}
+        def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1/2$.
     Then, for $N=qM$,
@@ -731,6 +745,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:ldp_positive_part_rate}
     By Theorem~\ref{thm:ldp_positive_part_rate},
     $\lVert P_q-P_\infty\rVert\le K_2e^{-\gamma q/\xi}$.
 
