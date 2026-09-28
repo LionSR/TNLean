@@ -31,6 +31,7 @@ import TNLean.MPS.Preparation.DiagonalPolar
 import TNLean.MPS.Preparation.EmbeddedProduct
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.GivensDecomposition
+import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalChannelCircuit
 import TNLean.MPS.Preparation.LocalCircuit
@@ -50,6 +51,8 @@ import TNLean.MPS.Preparation.PairProduct
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
+import TNLean.MPS.Preparation.RepeatedBlockError
+import TNLean.MPS.Preparation.RepeatedBlockSum
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla

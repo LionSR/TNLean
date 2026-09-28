@@ -727,6 +727,14 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   Under the added hypothesis that the `q`-site states of distinct blocks are
   orthogonal, the block form holds for multiplicity one and part (ii) is proved
   with no condition `q = o(N)`.
+- `mswc24_repeated_block_corrected_state.tex` records the corrected block form
+  of the positive part for blocks with multiplicities, `P = ∑ⱼ cⱼ L_j P_j L_jᴴ`
+  with `L_j = ∑ₖ (conj(μ_{j,k}^q)/cⱼ) K_{j,k}`, which is of rank one in the copy
+  index, and the corrected approximating state `V^{⊗M} ∑ⱼ βⱼ L_j^{⊗M} |Ω_j⟩`
+  with the source's weights. For blocks whose `q`-site states are orthogonal,
+  part (ii) of the approximation-error lemma is proved for it with arbitrary
+  multiplicities and complex weights; numerical checks on the counterexamples
+  are recorded.
 - `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
   false-source note for Lemma 2 of the Supplemental Material. It records that
   the lemma holds in modulus for the source's

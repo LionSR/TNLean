@@ -24,6 +24,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### injectivity lengths below the error cutoff — promoted
+- **Pattern:** in an error bound `ε ≤ C u e^{C u}` with `u = M x^q`, dispose of
+  `C u ≥ 1` by `ε ≤ 1`, then derive `x < 1` and `L_j ≤ q` for every injectivity
+  length `L_j` from `C u < 1` and `C ≥ 1 + ∑ⱼ x^{-L_j}`.
+- **Seen:** three occurrences across three files (2026-09-27):
+  `exists_approximationError_le` in `ApproximationError.lean` (one length),
+  `exists_approximationError_le_blockSum` in `OrthogonalBlockError.lean`, and
+  `exists_approximationError_le_repeatedBlockSum` in `RepeatedBlockError.lean`,
+  all under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `le_mul_mul_exp_of_forall_le` (the whole case split, built
+  on `lt_one_and_forall_le_of_mul_mul_pow_lt_one`) and
+  `Real.exp_neg_mul_div_eq_pow` (the rewrite `e^{-γ q/ξ} = (e^{-γ/ξ})^q`), in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`; the single-length site
+  instantiates the index type with `Unit`.
+- **Notes:** all three call sites are refactored. The block-by-block bound
+  `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
+  block-sum files and is a candidate for the same treatment.
+
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
