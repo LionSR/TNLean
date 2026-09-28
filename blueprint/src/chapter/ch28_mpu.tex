@@ -866,7 +866,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_second_block_residual_three_forms}
     \lean{MPOTensor.IsMPU.normalizedDiagonal_mul_mem_residualAlgebra_mul_normalizedDiagonal_eq_zero,
         MPOTensor.IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSubmodule,
-        MPOTensor.IsMPU.residualSlice_doubleLayerTensor_blockTensor_mem_threeFormSubmodule}
+        MPOTensor.IsMPU.residualSlice_doubleLayerTensor_blockTensor_mem_threeFormSubmodule,
+        MPOTensor.diagonal_coeff_prod_eq}
     \leanok
     \uses{def:mpu, def:mpu_residual_algebra, def:mpu_three_form_subspace}
     Let the first-block tensor be an MPU of bond dimension $D>0$.  Assume its
@@ -1034,8 +1035,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     $n$ words of length $m$ into the direct word of length $mn$.
 \end{proof}
 
-\begin{lemma}[The trace is a character on the double-layer algebra]
-    \label{lem:mpu_double_layer_trace_character}
+\begin{theorem}[The trace is a character on the double-layer algebra]
+    \label{thm:mpu_double_layer_trace_character}
     \lean{MPOTensor.doubleLayerAlgebra,
         MPOTensor.doubleLayerTensor_mem_doubleLayerAlgebra,
         MPOTensor.normalizedDiagonal_mem_doubleLayerAlgebra,
@@ -1054,7 +1055,7 @@ closing a chain of $N$ copies of $\mathcal U$.
          & =\prod_{q=1}^{N}\delta_{i_qj_q}.
     \end{align}
     Consequently $\tr(ab)=\tr(a)\tr(b)$ for all $a,b\in\mathcal A$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_positive_mixed_residual_trace, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one}
@@ -1079,7 +1080,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPUSimple.blockTensor,
         MPOTensor.IsMPUSimple.reindexPhysical}
     \leanok
-    \uses{lem:mpu_double_layer_trace_character, thm:mpu_nil_matrices, thm:mpu_ordered_second_block_expansion, thm:mpu_three_form_contractions, thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpu_double_layer_trace_character, thm:mpu_nil_matrices, thm:mpu_ordered_second_block_expansion, thm:mpu_three_form_contractions, thm:mpu_all_later_simple_blockings}
     Every MPU of positive physical and bond dimensions becomes simple after
     blocking exactly $D^2$ sites, and hence after blocking any $k\geq D^2$
     sites.  The witnesses at length $D^2$ are the normalized fixed vectors
@@ -1087,14 +1088,13 @@ closing a chain of $N$ copies of $\mathcal U$.
     every further iterated blocking by a positive factor and under a
     bijective relabeling of the physical basis.
 
-    This is a project result.  It sharpens the blocking length below $D^4$ of
-    \cite[Proposition~III.3(ii)]{Cirac2017MPU} and completes the $D^2$
-    blocking claim sketched in
-    \cite[Theorem~2]{Sahinoglu2018LocalityPreserving}.
+    The length $D^2$ is the one stated in
+    \cite[Theorem~2]{Sahinoglu2018LocalityPreserving};
+    \cite[Proposition~III.3(ii)]{Cirac2017MPU} gives a length below $D^4$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_double_layer_trace_character, thm:mpu_nil_matrices, thm:mpu_ordered_second_block_expansion, thm:mpu_three_form_contractions, thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpu_double_layer_trace_character, thm:mpu_nil_matrices, thm:mpu_ordered_second_block_expansion, thm:mpu_three_form_contractions, thm:mpu_all_later_simple_blockings}
     Let $\mathcal A$ be the double-layer algebra, $p=E^J=|\rho)(\Phi|$ the
     stabilized transfer power, and
     \begin{align}
