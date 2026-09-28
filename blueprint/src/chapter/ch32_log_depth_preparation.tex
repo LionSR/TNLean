@@ -106,6 +106,188 @@ remaining eigenvalues have modulus strictly less than $1$.
     the square root is continuous on positive semidefinite matrices.
 \end{proof}
 
+\begin{theorem}[Scalar lower bound for the square root]
+    \label{thm:ldp_sqrt_scalar_lower_bound}
+    \lean{CFC.algebraMap_sqrt_le_sqrt}
+    \leanok
+    Let $b$ be an element of a C$^*$-algebra and $c\ge0$ a real number with
+    $b\ge c\,\Id$. Then $\sqrt b\ge\sqrt c\,\Id$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The element $\sqrt c\,\Id$ is positive and its square is $c\,\Id\le b$, so
+    operator monotonicity of the square root gives
+    $\sqrt c\,\Id=\sqrt{c\,\Id}\le\sqrt b$.
+\end{proof}
+
+\begin{lemma}[One-sided bounds for the square root above a scalar floor]
+    \label{lem:ldp_sqrt_floor_bounds}
+    \lean{CFC.sq_sqrt_add_algebraMap, CFC.sqrt_sub_sqrt_le_algebraMap_of_le,
+        CFC.sqrt_sub_sqrt_le_algebraMap_of_le'}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra, and let $c,s\ge0$ be
+    real numbers with $b\ge c\,\Id$. Write $\varepsilon=\lVert a-b\rVert$.
+    \begin{enumerate}
+        \item If $\varepsilon\le2s\sqrt c+s^2$, then $\sqrt a-\sqrt b\le s$.
+        \item If $s\le\sqrt c$ and $\varepsilon+s^2\le2s\sqrt c$, then
+              $\sqrt b-\sqrt a\le s$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_scalar_lower_bound}
+    For every real $t$,
+    $(\sqrt b+t)^2=b+2t\sqrt b+t^2$. By
+    Theorem~\ref{thm:ldp_sqrt_scalar_lower_bound}, $\sqrt b\ge\sqrt c$, and
+    $-\varepsilon\le a-b\le\varepsilon$. For the first bound,
+    $(\sqrt b+s)^2\ge b+2s\sqrt c+s^2\ge b+\varepsilon\ge a$. For the second,
+    $\sqrt b-s\ge\sqrt c-s\ge0$ and
+    $(\sqrt b-s)^2\le b-2s\sqrt c+s^2\le a+\varepsilon+s^2-2s\sqrt c\le a$.
+    Operator monotonicity of the square root gives $\sqrt a\le\sqrt b+s$ and
+    $\sqrt b-s\le\sqrt a$.
+\end{proof}
+
+\begin{theorem}[H\"older bound for the square root]
+    \label{thm:ldp_sqrt_holder}
+    \lean{CFC.norm_sqrt_sub_sqrt_le, CFC.sqrt_sub_sqrt_le_algebraMap}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra. Then
+    $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert^{1/2}$.
+    This is the operator inequality quoted from Bhatia in
+    \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_sqrt_floor_bounds}
+    Write $\varepsilon=\lVert a-b\rVert$ and $s=\sqrt\varepsilon$. The first
+    bound of Lemma~\ref{lem:ldp_sqrt_floor_bounds} with $c=0$ gives
+    $\sqrt a-\sqrt b\le s$, since $\varepsilon=s^2$. Exchanging $a$ and $b$
+    gives $\sqrt b-\sqrt a\le s$. Since $\sqrt a-\sqrt b$ is self-adjoint and
+    lies between $-s$ and $s$, its norm is at most $s$.
+\end{proof}
+
+\begin{theorem}[Square root near a positive definite element]
+    \label{thm:ldp_sqrt_lipschitz}
+    \lean{CFC.norm_sqrt_sub_sqrt_le_div}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra with $b\ge c\,\Id$ for
+    a real number $c>0$. Then
+    $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert/\sqrt c$.
+    For matrices and the Frobenius norm, the corresponding bound with the
+    smallest eigenvalue of $\sqrt b$ in place of $\sqrt c$ is
+    \cite[App.~B3, eqs.~(S27)--(S31)]{Murota2026ExactLogDepth}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_holder, lem:ldp_sqrt_floor_bounds}
+    Write $\varepsilon=\lVert a-b\rVert$. If $\varepsilon>c$, the bound
+    $\lVert\sqrt a-\sqrt b\rVert\le\sqrt\varepsilon$ of
+    Theorem~\ref{thm:ldp_sqrt_holder} suffices, since
+    $\sqrt\varepsilon\le\varepsilon/\sqrt c$. Otherwise let
+    $s=\varepsilon/\sqrt c\le\sqrt c$, so that $2s\sqrt c=2\varepsilon$ and
+    $s^2\le\varepsilon$. Both hypotheses of
+    Lemma~\ref{lem:ldp_sqrt_floor_bounds} hold, so
+    $\sqrt b-s\le\sqrt a\le\sqrt b+s$, that is,
+    $\lVert\sqrt a-\sqrt b\rVert\le s$.
+\end{proof}
+
+\begin{theorem}[Lipschitz constant of the square root at an invertible positive element]
+    \label{thm:ldp_sqrt_lipschitz_constant}
+    \lean{IsStrictlyPositive.exists_norm_sqrt_sub_sqrt_le}
+    \leanok
+    Let $b$ be a positive invertible element of a C$^*$-algebra. There is a
+    real number $K\ge0$ such that
+    $\lVert\sqrt a-\sqrt b\rVert\le K\lVert a-b\rVert$ for every positive
+    element $a$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_lipschitz}
+    If the algebra is zero, take $K=0$. Otherwise the spectrum of $b$ is a
+    compact subset of $(0,\infty)$, so $b\ge c\,\Id$ for some real $c>0$, and
+    Theorem~\ref{thm:ldp_sqrt_lipschitz} gives the bound with
+    $K=1/\sqrt c$.
+\end{proof}
+
+\begin{theorem}[Rate of convergence of the positive part]
+    \label{thm:ldp_positive_part_rate}
+    \lean{MPSTensor.lt_exp_neg_div_correlationLength,
+        MPSTensor.exists_norm_transferMap_pow_sub_le,
+        MPSTensor.exists_norm_gram_blockTensor_sub_le,
+        MPSTensor.exists_norm_polarPos_blockTensor_sub_le}
+    \leanok
+    \uses{def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let
+    $\lambda_2\in\C$ satisfy $\lvert\mu\rvert\le\lvert\lambda_2\rvert$ for every
+    eigenvalue $\mu\ne1$ of $\E_A$, let $\xi$ be the correlation length at
+    $\lambda_2$ of Definition~\ref{def:correlation_length}, and let
+    $0<\gamma<1$. Write $r=e^{-\gamma/\xi}$, where $-\gamma/\xi$ is read as $0$
+    when $\xi=0$; thus $r=\lvert\lambda_2\rvert^{\gamma}$ when $\lambda_2\ne0$,
+    and $r=1$ when $\lambda_2=0$. Then $a<r$ for every real number $a<1$ with
+    $a\le\lvert\lambda_2\rvert$. There are constants $C,K,K'$ depending only
+    on $A$, $\rho$, $\lambda_2$, and $\gamma$ such that
+    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Cr^n\lVert X\rVert$
+    for all $n$ and $X$, and
+    \begin{align*}
+        \lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
+         & \le Kr^q, \\
+        \lVert P_q-P_\infty\rVert
+         & \le K'r^q
+    \end{align*}
+    for all $q$.
+    In \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC} the bound on
+    $P_q-P_\infty$ comes from Theorem~\ref{thm:ldp_sqrt_holder}, which halves
+    the exponent. This gives the rate of
+    \cite[eq.~(34)]{Piroli2021LOCC} and the range $0<\gamma<1/2$ of
+    \cite[Lemma~1 and eq.~(S9)]{Malz2024Preparation}. The Lipschitz bound at
+    the positive definite limit $P_\infty^2$ gives the range $0<\gamma<1$.
+    This step is \cite[App.~B3, eqs.~(S27)--(S32)]{Murota2026ExactLogDepth}
+    for diagonalizable transfer matrices, and eqs.~(S33)--(S38) there extend
+    it to every normal tensor at each correlation length larger than $\xi$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_lipschitz_constant}
+    Let $a<1$ with $a\le\lvert\lambda_2\rvert$. If
+    $0<\lvert\lambda_2\rvert<1$, then
+    $r=\lvert\lambda_2\rvert^{\gamma}>\lvert\lambda_2\rvert\ge a$,
+    because $\gamma<1$. Otherwise $\lambda_2=0$ and $r=1$, or
+    $\lvert\lambda_2\rvert\ge1$ and $r=\lvert\lambda_2\rvert^{\gamma}\ge1$;
+    in both cases $r\ge1>a$.
+
+    Write $\E_\infty(X)=\Tr(X)\rho$. The eigenvalues $z$ of
+    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
+    $1$, so $\lvert z\rvert\le\lvert\lambda_2\rvert$, and
+    $\lvert z\rvert<1$ by normality. Taking $a=\lvert z\rvert$ gives
+    $\lvert z\rvert<r$. Hence the spectral radius of
+    $\E_A-\E_\infty$ is less than $r$, and
+    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ gives the first bound for
+    $n\ge1$. For $n=0$ it reads
+    $\lVert X-\E_\infty(X)\rVert\le C\lVert X\rVert$, which holds once
+    $C\ge1+\lVert\E_\infty\rVert$; enlarge $C$ accordingly.
+
+    The transfer map of the $q$-site blocked tensor is $\E_A^{\,q}$, so the
+    entries of $\mathcal B_q^\dagger\mathcal B_q$ are entries of $\E_A^{\,q}$
+    applied to matrix units:
+    $(\mathcal B_q^\dagger\mathcal B_q)_{(\alpha,\beta),(\alpha',\beta')}
+        =\E_A^{\,q}(\ketbra{\beta'}{\beta})_{\alpha'\alpha}$. In the same way
+    $(\rho^{\mathsf T}\otimes\Id)_{(\alpha,\beta),(\alpha',\beta')}
+        =\Tr(\ketbra{\beta'}{\beta})\,\rho_{\alpha'\alpha}$. Hence every entry
+    of $\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id$ is an
+    entry of $\E_A^{\,q}(X)-\Tr(X)\rho$ at a matrix unit $X$, and is at most
+    a fixed multiple of $Cr^q$ by the first bound. Bounding the operator norm
+    by the sum of the moduli of the finitely many entries gives
+    $\lVert P_q^2-P_\infty^2\rVert
+        =\lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
+        \le Kr^q$. Since
+    $P_\infty^2=\rho^{\mathsf T}\otimes\Id$ is positive definite,
+    Theorem~\ref{thm:ldp_sqrt_lipschitz_constant} gives $L\ge0$ with
+    $\lVert P_q-P_\infty\rVert\le LKr^q$, so $K'=LK$.
+\end{proof}
+%% The source applies ||sqrt X - sqrt Y|| <= ||X - Y||^{1/2}, which halves the
+%% exponent and forces gamma < 1/2. At the positive definite point P_infty^2
+%% the square root is Lipschitz, so no exponent is lost.
+
 \begin{definition}[Approximating state]
     \label{def:ldp_approximating_state}
     \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
@@ -587,7 +769,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
-        lem:ldp_positive_part_converges, def:correlation_length}
+        def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1/2$.
     Then, for $N=qM$,
@@ -606,17 +788,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Write $\E_\infty(X)=\Tr(X)\rho$ and $r=e^{-2\gamma/\xi}$, so that
-    $r=\lvert\lambda_2\rvert^{2\gamma}>\lvert\lambda_2\rvert$ when
-    $0<\lvert\lambda_2\rvert<1$, because $2\gamma<1$. The eigenvalues of
-    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
-    $1$, so the spectral radius of $\E_A-\E_\infty$ is less than $r$, and
-    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives
-    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Kr^n\lVert X\rVert$. By the
-    rearrangement in the proof of
-    Lemma~\ref{lem:ldp_positive_part_converges},
-    $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$, and since
-    $\lVert\sqrt X-\sqrt Y\rVert\le\lVert X-Y\rVert^{1/2}$ for $X,Y\ge0$,
+    \uses{thm:ldp_positive_part_rate}
+    By Theorem~\ref{thm:ldp_positive_part_rate},
     $\lVert P_q-P_\infty\rVert\le K_2e^{-\gamma q/\xi}$.
 
     Let $\tau_q$ and $\tau_\infty$ be the transfer matrices of the mixed
@@ -641,9 +814,11 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \begin{theorem}[Block lengths below the injectivity lengths]
     \label{thm:ldp_injectivity_cutoff}
     \lean{Real.exp_neg_mul_div_eq_pow,
+        MPSTensor.exp_neg_two_mul_div_correlationLength,
         lt_one_and_forall_le_of_mul_mul_pow_lt_one, le_mul_mul_exp_of_forall_le}
     \leanok
-    Let $x=e^{-\gamma/\xi}>0$, so that $e^{-\gamma q/\xi}=x^q$. Let
+    Let $x=e^{-\gamma/\xi}>0$, so that $e^{-\gamma q/\xi}=x^q$ and
+    $e^{-2\gamma/\xi}=x^2$. Let
     $L_1,\dots,L_b$ be natural numbers, $C\geq1+\sum_jx^{-L_j}$, $M\geq1$, and
     $y=Mx^q$. If $Cy<1$, then $x<1$ and $L_j\leq q$ for every $j$. Hence, if
     $\varepsilon\leq1$ and $\varepsilon\leq Cy\,e^{Cy}$ holds whenever $x<1$,

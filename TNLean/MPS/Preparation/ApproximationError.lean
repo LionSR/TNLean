@@ -33,17 +33,27 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 
 ## Proof outline (following arXiv:2103.13367)
 
-1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C r^n ‖X‖` with `r = e^{-2γ/ξ}`, which exceeds
-   the spectral radius of `E_A - |σ⟩⟨1|` because `2γ < 1` (compare eq. `difference`,
-   `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix).
-2. **Positive parts.** `P_q² - P_∞²` is a rearrangement of `E_A^q - |σ⟩⟨1|`, and
-   `‖√X - √Y‖ ≤ √‖X - Y‖` (eq. `intermediate`) gives `‖P_q - P_∞‖ ≤ C e^{-γ q/ξ}`.
+1. **Transfer-map gap.** `exists_norm_transferMap_pow_sub_le` gives
+   `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-γ' n/ξ} ‖X‖` for every `0 < γ' < 1`, since `e^{-γ'/ξ}` exceeds
+   the spectral radius of `E_A - |σ⟩⟨1|` (compare arXiv:2103.13367, eq. (21),
+   `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix). The overlap
+   estimate uses it at `γ' = γ`, through the Gram matrices `P_q² = B_q† B_q`, a rearrangement of
+   `E_A^q`, which are `e^{-γ q/ξ}`-close to `P_∞² = σᵀ ⊗ 1`.
+2. **Positive parts.** The source bounds this step with `‖√X - √Y‖ ≤ √‖X - Y‖`
+   (arXiv:2103.13367, eq. (26)), which halves the exponent. Here `P_∞²` is bounded below by a
+   positive multiple of the identity, so the Lipschitz bound `‖√X - √Y‖ ≤ ‖X - Y‖ / √c` of
+   `CFC.norm_sqrt_sub_sqrt_le_div` applies and keeps the exponent, as in arXiv:2606.24475,
+   App. B3, eqs. (S27)–(S32). `exists_norm_polarPos_blockTensor_sub_le`, called at rate `γ`,
+   gives `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`.
 3. **Telescoping.** For an idempotent `T_∞` and `‖T - T_∞‖ ≤ δ`,
-   `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied to the mixed
-   transfer matrices `τ_{AB}` and `τ_{BB}` of `P_q` against `P_∞`.
-4. **Normalization.** `c_N² = Tr E_A^N` differs from `1` by `O(e^{-2γN/ξ})`, and the triangle
-   inequality of arXiv:2307.01696, proof of Lemma 1'(i), combines the two errors. Since `N ≥ q`
-   the normalization term is dominated by the overlap term; no condition `q = o(N)` is needed.
+   `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied with
+   `δ = K e^{-γ q/ξ}` from step 2 to the mixed transfer matrices `τ_{AB}` and `τ_{BB}` of `P_q`
+   against `P_∞`.
+4. **Normalization.** `exists_norm_transferMatrix_pow_sub_le` calls the gap of step 1 separately
+   at `γ' = 2γ`, which is admissible because `γ < 1/2`; hence `c_N² = Tr E_A^N` differs from `1`
+   by `O(e^{-2γN/ξ})`. The triangle inequality of arXiv:2307.01696, proof of Lemma 1'(i),
+   combines the two errors. Since `N ≥ q` the normalization term is dominated by the overlap
+   term; no condition `q = o(N)` is needed.
 
 ## Main declarations
 
@@ -162,7 +172,8 @@ theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d 
           C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
             Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
-  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
+  obtain ⟨K₁, hK₁, hpos⟩ :=
+    exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 (by linarith)
   set Ψ := mixedTransferMatrixLeft (fixedPointTensor σ)
   set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
   have hK₃ : 0 ≤ K₃ := norm_nonneg _
@@ -292,7 +303,9 @@ theorem exists_norm_transferMatrix_pow_sub_le (A : MPSTensor d D) (hN : Kraus.Is
       ‖transferMatrix (Kraus.transferMap A) ^ n -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤
         K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ n := by
-  obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
+  obtain ⟨C, hC, hgap⟩ := exists_norm_transferMap_pow_sub_le A hN hA hσ htr hfix hlam
+    (γ := 2 * γ) (by positivity) (by linarith)
+  rw [exp_neg_two_mul_div_correlationLength] at hgap
   obtain ⟨K, hK, h⟩ := exists_norm_le_of_entry_eq_pow_sub (Kraus.transferMap A) σ hC.le hgap
     (fun (_ b : Fin D × Fin D) => Matrix.single b.2 b.1 (1 : ℂ))
     (fun a _ => a.2) (fun a _ => a.1)
