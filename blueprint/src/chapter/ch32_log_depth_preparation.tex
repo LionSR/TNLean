@@ -697,6 +697,134 @@ $\gamma=1/2$ that the estimate above does not cover; hence the factor
 $1/\gamma$ in the block length here
 (compare \cite[after Lemma~1]{Malz2024Preparation}).
 
+The proof of the lower bound in the Supplemental Material of
+\cite{Malz2024Preparation} cuts the chain into blocks ``all of the same size,
+$q_N$, except for the last one, which may be larger''. The approximating state
+and its error extend to blocks of any lengths.
+
+\begin{definition}[Approximating state for blocks of prescribed lengths]
+    \label{def:ldp_block_isometry_state}
+    \lean{MPSTensor.blockIsometryState, MPSTensor.mpvFamily,
+        MPSPreparation.blockOffset, MPSPreparation.blockSite,
+        MPSPreparation.blockCfgEquiv, MPSTensor.blockIndexEquiv}
+    \leanok
+    \uses{def:ldp_approximating_state, thm:ldpolar_tensor_decomposition,
+        def:prep_pair_product_state}
+    Cut the ring of $N$ sites into $M\ge1$ consecutive blocks of lengths
+    $\ell_1,\dots,\ell_M$ with $\sum_k\ell_k=N$, block $k$ consisting of the
+    sites $o_k+1,\dots,o_k+\ell_k$ with $o_k=\sum_{i<k}\ell_i$. Let
+    $\mathcal B_\ell=V_\ell P_\ell$ be the polar decomposition of the
+    $\ell$-site blocked tensor, and let $\omega$ be a vector on
+    $\C^D\otimes\C^D$. The state
+    \begin{align}
+        \ket{\psi_{\ell,\omega}}
+         & =\Bigl(\bigotimes_{k=1}^MV_{\ell_k}\Bigr)
+        \bigotimes_{k=1}^M\ket{\omega}_{R_kL_{k+1}}
+        \label{eq:ldp_block_isometry_state}
+    \end{align}
+    has the coefficient
+    $\sum_c\prod_k\bra{s_k}V_{\ell_k}\ket{c_k}\,\Omega(c)$ at the configuration
+    $s=(s_1,\dots,s_M)$ read block by block, where $c_k=(l_k,r_k)$ and $\Omega$ is
+    the pair product state~(\ref{eq:prep_pair_product}) of $\omega$. For
+    $\ell_k=q$ and $\omega$ the pair of the fixed point it is the approximating
+    state of Definition~\ref{def:ldp_approximating_state}.
+\end{definition}
+
+\begin{lemma}[Norm and overlap for blocks of prescribed lengths]
+    \label{lem:ldp_block_isometry_state_overlap}
+    \lean{MPSTensor.sum_star_blockIsometryState,
+        MPSTensor.norm_blockIsometryState,
+        MPSTensor.inner_blockIsometryState_mpvState,
+        MPSTensor.mpv_eq_mpvFamily_blockTensor,
+        MPSTensor.sum_mpvFamily_mul_star_mpv,
+        MPSTensor.mpvFamily_rotatePhysical,
+        MPSPreparation.prod_ofFn_blockSite,
+        Matrix.IsIsometry.sum_star_mul_prod}
+    \leanok
+    \uses{def:ldp_block_isometry_state, thm:ldpolar_tensor_injective,
+        thm:ldpolar_tensor_decomposition, thm:prep_pair_product_norm,
+        thm:prep_mpv_fixed_point_tensor, thm:mpu_transfer_matrix_overlap}
+    Suppose every blocked tensor $\mathcal B_{\ell_k}$ is injective. Then
+    $\braket{\psi_{\ell,\omega}}{\psi_{\ell,\omega}}=\braket\omega\omega^M$, and
+    for the pair $\omega$ of the fixed point
+    \begin{align}
+        \braket{\psi_{\ell,\omega}}{\phi_N(A)}
+         & =\Tr\bigl(\tau_{\ell_1}\tau_{\ell_2}\cdots\tau_{\ell_M}\bigr),
+        \label{eq:ldp_block_isometry_state_overlap}
+    \end{align}
+    where $\tau_\ell$ is the transfer matrix of the mixed transfer map
+    $X\mapsto\sum_iP_\ell^iX(P_\infty^i)^\dagger$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    An ordered product over the sites of the ring is the ordered product over
+    the blocks of the products over their sites, so
+    $\phi_N(A)(s)=\Tr(\mathcal B_{\ell_1}^{s_1}\cdots\mathcal B_{\ell_M}^{s_M})$,
+    and $\mathcal B_{\ell_k}=V_{\ell_k}P_{\ell_k}$ gives
+    $\ket{\phi_N(A)}=(\bigotimes_kV_{\ell_k})\ket{\phi_M(P_{\ell_1},\dots,P_{\ell_M})}$,
+    the periodic state with the tensor $P_{\ell_k}$ at site $k$. Isometries
+    $W_k$, one on each site, preserve inner products:
+    $\sum_s\overline{((\bigotimes_kW_k)\psi)(s)}((\bigotimes_kW_k)\varphi)(s)
+        =\braket\psi\varphi$, since
+    $\sum_{s_k}\overline{(W_k)_{s_ka}}(W_k)_{s_kb}=\delta_{ab}$ factor by factor.
+    This gives the norm by Theorem~\ref{thm:prep_pair_product_norm}, and reduces
+    the overlap to
+    $\sum_u\Tr(P_{\ell_1}^{u_1}\cdots P_{\ell_M}^{u_M})
+        \overline{\Tr(P_\infty^{u_1}\cdots P_\infty^{u_M})}$ by
+    Theorem~\ref{thm:prep_mpv_fixed_point_tensor}. Expanding the trace of
+    $\tau_{\ell_1}\cdots\tau_{\ell_M}$ as a sum over cyclic paths of pairs of
+    bond indices, with
+    $(\tau_\ell)_{(j,i),(l,m)}=\sum_a(P_\ell^a)_{im}\overline{(P_\infty^a)_{jl}}$,
+    and summing the two paths separately gives the same sum, as in
+    Theorem~\ref{thm:mpu_transfer_matrix_overlap}.
+\end{proof}
+
+\begin{theorem}[Approximation error for blocks of unequal lengths]
+    \label{thm:ldp_block_approximation_error}
+    \lean{MPSTensor.exists_blockApproximationError_le_mul,
+        MPSTensor.exists_norm_trace_prod_transferMatrix_sub_one_le,
+        MPSTensor.one_sub_norm_inner_smul_inv_norm_le,
+        norm_prod_range_sub_pow_le_of_isIdempotentElem,
+        prod_range_sub_pow_eq_sum_mul_sub_mul}
+    \leanok
+    \uses{lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
+        def:ldp_block_isometry_state, lem:ldp_block_isometry_state_overlap,
+        def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
+    length $\xi$, and let $0<\gamma<1/2$. There is a constant $C>0$ depending
+    only on $A$, $\rho$, and $\gamma$ such that for every cutting of the ring of
+    $N$ sites into $M\ge1$ blocks of lengths $\ell_k\ge q$ with injective
+    blocked tensors, the state $\ket{\psi_{\ell,\omega}}$ of
+    Definition~\ref{def:ldp_block_isometry_state} with the pair $\omega$ of the
+    fixed point satisfies
+    $\varepsilon(\psi_{\ell,\omega},\phi_N)\le CM\,e^{-\gamma q/\xi}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:ldp_block_isometry_state_overlap} the overlap
+    $\braket{\psi_{\ell,\omega}}{\phi_N(A)}$ is
+    $\Tr(\tau_{\ell_1}\cdots\tau_{\ell_M})$, and $1=\Tr\tau_\infty^M$. As in the
+    proof of Lemma~\ref{lem:ldp_positive_part_overlap},
+    $\lVert\tau_\ell-\tau_\infty\rVert\le K_3e^{-\gamma\ell/\xi}\le\delta$ with
+    $\delta=K_3e^{-\gamma q/\xi}$ for $\ell\ge q$, since
+    $\lvert\lambda_2\rvert<1$. For matrices $X_1,\dots,X_M$ with
+    $\lVert X_k-E\rVert\le\delta$ and $E^2=E$,
+    \begin{align}
+        X_1\cdots X_M-E^M
+         & =\sum_{k=1}^MX_1\cdots X_{k-1}(X_k-E)E^{M-k},
+        \label{eq:ldp_block_telescoping}
+    \end{align}
+    and the induction of Lemma~\ref{lem:ldp_positive_part_overlap}, with
+    $\lVert X_1\cdots X_{k-1}\rVert\le c+\lVert X_1\cdots X_{k-1}-E^{k-1}\rVert$,
+    gives $\lVert X_1\cdots X_M-E^M\rVert\le c((1+c\delta)^M-1)$. So
+    $\lvert\braket{\psi_{\ell,\omega}}{\phi_N(A)}-1\rvert\le Cy\,e^{Cy}$ with
+    $y=Me^{-\gamma q/\xi}$. The triangle inequality of
+    Theorem~\ref{thm:ldp_approximation_error_normal} and
+    $\lvert c_N^2-1\rvert\le Ke^{-2\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
+    $N\ge\ell_1\ge q$, bound $\varepsilon$ by $Cy\,e^{Cy}+Ky$, and
+    $\varepsilon\le1$ covers $y>1$.
+\end{proof}
+
 \section{Depth of the preparation}
 
 \begin{definition}[Local circuit of depth $T$]
@@ -816,16 +944,25 @@ $1/\gamma$ in the block length here
 
 \begin{theorem}[The approximating state in depth $O(q)$]
     \label{thm:ldp_approximating_state_depth}
-    \uses{def:ldp_local_circuit, def:ldp_approximating_state}
-    \lean{MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
-        MPSPreparation.approximatingMPVStateRaw_eq_mulVec,
+    \uses{def:ldp_local_circuit, def:ldp_approximating_state,
+        def:ldp_block_isometry_state}
+    \lean{MPSPreparation.exists_isPreparedInDepth_blockIsometryState,
+        MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
+        MPSPreparation.blockIsometryState_eq_mulVec,
+        MPSPreparation.approximatingMPVState_eq_blockIsometryState,
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
-        MPSPreparation.IsCircuitOn.finset_noncommProd}
+        MPSPreparation.IsCircuitOn.finset_noncommProd,
+        MPSPreparation.noncommProd_embedOp_apply}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following
-    holds. Let $A$ be a tensor, let $\sigma\ge0$ with $\Tr\sigma=1$, let
-    $q\ge3D$ be a block length for which the $q$-site blocked tensor is
-    injective, and let $M\ge1$. Then the approximating state of
+    holds. Let $A$ be a tensor, let $\omega$ be a unit vector on
+    $\C^D\otimes\C^D$, and cut the ring of $N\ge1$ sites into $M\ge1$ blocks
+    of lengths $3D\le\ell_k\le L$ for which every blocked tensor is injective.
+    Then the state $\ket{\psi_{\ell,\omega}}$ of
+    Definition~\ref{def:ldp_block_isometry_state} is prepared in depth at
+    most $CL$. In particular, for $\sigma\ge0$ with $\Tr\sigma=1$, a block
+    length $q\ge3D$ for which the $q$-site blocked tensor is injective, and
+    $M\ge1$, the approximating state of
     Definition~\ref{def:ldp_approximating_state} on $N=Mq$ sites is prepared
     in depth at most $Cq$. This is the depth count behind
     \cite[eq.~(1)]{Malz2024Preparation}; it does not choose $q$ in terms of
@@ -847,19 +984,55 @@ $1/\gamma$ in the block length here
     $\bigotimes_k\ket\omega_{R_kL_{k+1}}\ket0_{C_k}$
     \cite[eq.~(12)]{Malz2024Preparation}; by
     Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} it has constant depth.
-    On each block, in parallel, a unitary $U$ with $U\ket{l,0,r}=V\ket{l,r}$
-    is applied, as in Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
+    On each block $k$, in parallel, a unitary $U_k$ with
+    $U_k\ket{l,0,r}=V_{\ell_k}\ket{l,r}$ is applied, as in
+    Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
     gates move the first $D$ sites next to the last ones in $O(q)$ gates.
-    By Theorem~\ref{thm:ldp_sequential_factorization}, $V$ is the ordered
-    product of $q$ isometries, each from the bond space into the bond space
+    By Theorem~\ref{thm:ldp_sequential_factorization}, $V_\ell$ is the ordered
+    product of $\ell$ isometries, each from the bond space into the bond space
     and one site; each is extended to a unitary on the bond register of $2D$
     sites and one fresh site, and the register moves one site to the left at
     each step, so the staircase consists of $q-2D$ unitaries on $2D+1$ sites
     followed by one unitary on the first $2D$ sites
     \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
     of them has bounded depth by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, and circuits on
-    disjoint blocks run in the same layers.
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, so $U_k$ has depth
+    $O(\ell_k)\le O(L)$, and circuits on disjoint blocks run in the same layers.
+    A configuration contributes to the pair layer applied to $\ket{0\cdots0}$
+    only if it carries a pair on every window and $\ket0$ elsewhere, which
+    identifies the output with~(\ref{eq:ldp_block_isometry_state}).
+\end{proof}
+
+\begin{theorem}[Exact preparation on short chains]
+    \label{thm:ldp_short_chain_preparation}
+    \lean{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState,
+        MPSPreparation.blockIsometryState_normalizedTracePair,
+        MPSPreparation.exists_isPreparedInDepth_of_norm_eq_one,
+        MPSPreparation.norm_normalizedMPVState}
+    \leanok
+    \uses{thm:ldp_approximating_state_depth, def:ldp_block_isometry_state,
+        thm:ldp_bounded_unitary_two_site_gates, def:ldp_local_circuit}
+    There is $C$, depending only on $d$ and $D$, such that for every tensor $A$
+    and every $N\ge3D$ for which the $N$-site blocked tensor is injective and
+    $\ket{\phi_N(A)}\neq0$, the normalized state $\ket{\phi_N}$ is prepared
+    exactly in depth at most $CN$. For $d\ge1$ and every $n_0$ there is $K$ such
+    that every unit vector on a ring of $N$ sites with $2\le N\le n_0$ is
+    prepared in depth at most $K$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $\mathcal B_N=VP$. Then
+    $\phi_N(A)(s)=\Tr\mathcal B_N^s
+        =\sum_{l,r}\bra sV\ket{l,r}\Tr P^{(l,r)}$, so $\ket{\phi_N}$ is the
+    state~(\ref{eq:ldp_block_isometry_state}) of a single block with the pair
+    $\omega(r,l)=\Tr P^{(l,r)}/\lVert\phi_N(A)\rVert$, whose right leg is
+    joined to its own left leg around the ring; $\omega$ is a unit vector
+    because $\ket{\phi_N}$ is, by Lemma~\ref{lem:ldp_block_isometry_state_overlap}.
+    Theorem~\ref{thm:ldp_approximating_state_depth} with $M=1$ and $L=N$ gives
+    the first statement. For the second, a unit vector $\ket\psi$ is the first
+    column of a unitary, which by
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} is a product of at
+    most $K_N$ gates on neighbouring sites; take $K=\sum_{N\le n_0}K_N$.
 \end{proof}
 
 Lemmas~\ref{lem:ldp_light_cone} and~\ref{lem:ldp_light_cone_correlations}
@@ -977,11 +1150,73 @@ of a local circuit that may add product ancillas and discard them
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
     \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPreparedInDepth_le_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_isPreparedInDepth_le_log}
+    \leanok
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
-    for every $N\ge2$ and $0<\varepsilon\le1$, a state $\ket{\psi_N}$ with
+    for every $N\ge2$ and $0<\varepsilon\le1$ for which the periodic state
+    $\ket{\phi_N(A)}$ is nonzero, a state $\ket{\psi_N}$ with
     $\varepsilon(\psi_N,\phi_N)\le\varepsilon$ is prepared in depth at most
-    $c\log(N/\varepsilon)$. This is \cite[eq.~(1)]{Malz2024Preparation}.
+    $c\log(N/\varepsilon)$. There is $N_0$ such that $\ket{\phi_N(A)}\neq0$ for
+    every $N\ge N_0$, so for $N\ge N_0$ the condition can be dropped. This is
+    \cite[eq.~(1)]{Malz2024Preparation}; the source normalizes
+    $\ket{\phi_N}=\ket{\phi_N(A)}/c_N$ with $c_N>0$, and for some normal tensors
+    $\ket{\phi_2(A)}=0$ \cite{gap:mswc24_depth_upper_bound_nonzero_state}.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge, lem:ldp_normalized_state_rescaling,
+        thm:ldp_block_approximation_error, thm:ldp_approximating_state_depth,
+        thm:ldp_short_chain_preparation, lem:ldp_periodic_state_nonzero,
+        lem:ldp_block_isometry_state_overlap, thm:wordspan_blk_inj_succ,
+        lem:isNBlkInjective_iff_blockTensor_isInjective}
+    Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
+    Theorem~\ref{thm:ldp_depth_upper_bound_divisible}, with fixed point $\sigma$,
+    a bound $t<1$ on the moduli of the eigenvalues other than $1$, and
+    $r=-\tfrac14\log t$; the error is unchanged by
+    Lemma~\ref{lem:ldp_normalized_state_rescaling}. Let $K$ be the constant of
+    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/4$, so the error
+    is at most $KMe^{-rq}$, and let $L_0$ be a length at which the blocked
+    tensor is injective. Put $a=1/r$, $b=\max(\log K,0)/r+L_0+3D+1$,
+    $Q=a\log(N/\varepsilon)+b$ and $q=\lceil Q\rceil$, so $Q\le q<2Q$ and
+    $Q\le(a+b/\log2)\log(N/\varepsilon)$.
+
+    If $q\le N$, write $N=(M-1)q+q'$ with $M=\lfloor N/q\rfloor$ and
+    $q'=q+(N\bmod q)$, so $q\le q'<2q$, and cut the ring into $M-1$ blocks of
+    length $q$ followed by one of length $q'$, as in the Supplemental Material
+    of \cite{Malz2024Preparation}, proof of Theorem~1. All blocked tensors are
+    injective since $q\ge L_0$, and
+    Theorem~\ref{thm:ldp_block_approximation_error} gives error at most
+    $KMe^{-rq}\le KNe^{-rQ}=Ke^{-rb}\varepsilon\le\varepsilon$. By
+    Theorem~\ref{thm:ldp_approximating_state_depth} with $L=2q$ the depth is at
+    most $2Cq\le4CQ$.
+
+    If $N<q$, then $N<Q$. If $N\ge L_0+3D$, the state $\ket{\phi_N}$ is prepared
+    exactly in depth at most $C'N\le C'Q$ by
+    Theorem~\ref{thm:ldp_short_chain_preparation}; otherwise $N$ is bounded by a
+    constant depending only on $A$, and the same theorem prepares $\ket{\phi_N}$
+    exactly in depth at most $K'\le(K'/\log2)\log(N/\varepsilon)$. In every case
+    the depth is at most
+    $c\log(N/\varepsilon)$ with $c=(4C+C')(a+b/\log2)+K'/\log2$. The second
+    statement follows from Lemma~\ref{lem:ldp_periodic_state_nonzero}.
+\end{proof}
+
+\begin{lemma}[The periodic state does not vanish on long chains]
+    \label{lem:ldp_periodic_state_nonzero}
+    \lean{MPSPreparation.exists_mpvState_ne_zero_of_le}
+    \leanok
+    \uses{thm:normalized_primitive_gauge, thm:ldp_approximation_error_normal}
+    Let $A$ be normal with $D\ge1$. There is $N_0$ such that
+    $\ket{\phi_N(A)}\neq0$ for every $N\ge N_0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    In the gauge~(\ref{eq:ldp_normal_gauge}), which multiplies $\ket{\phi_N(A)}$
+    by a nonzero scalar, $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ differs from $1$
+    by at most $Ke^{-2\gamma N/\xi}$, as in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_normal}, which is less than $1$ for
+    large $N$.
+\end{proof}
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
 %% R_k are realized on groups of D sites, as in
 %% thm:ldp_approximating_state_depth (groups of ceil(log_d D) sites would also
@@ -990,10 +1225,10 @@ of a local circuit that may add product ancillas and discard them
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
 
-The following theorem proves Theorem~\ref{thm:ldp_depth_upper_bound} for
-chain lengths that a block length of order $\log(N/\varepsilon)$ divides, as
-in the $N/q$ equal blocks of \cite[eq.~(10)]{Malz2024Preparation}; the general
-chain length is open, see
+The following theorem is the case of equal blocks, for chain lengths that a
+block length of order $\log(N/\varepsilon)$ divides, as in the $N/q$ equal
+blocks of \cite[eq.~(10)]{Malz2024Preparation}; it was the first formalized
+case of Theorem~\ref{thm:ldp_depth_upper_bound}
 \cite{gap:mswc24_depth_upper_bound_divisible_length}.
 
 \begin{lemma}[The approximating state is a unit vector]
@@ -1037,7 +1272,7 @@ chain length is open, see
     \label{thm:ldp_depth_upper_bound_divisible}
     \uses{def:ldp_local_circuit}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le,
-        MPSPreparation.exists_isPreparedInDepth_le_log}
+        MPSPreparation.exists_isPreparedInDepth_le_log_of_dvd}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following holds.
     Let $A$ be normal with $D\ge1$. There are $a>0$ and $b\ge1$, depending only
