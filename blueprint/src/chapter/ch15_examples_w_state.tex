@@ -367,7 +367,8 @@ illustrates this remark by closing the same tensor with a trace.
     C1, and with the threshold enlarged by $L_0$ so that it also covers a single
     block. The distinctness hypothesis is stricter than the source's
     pairwise-different block states. The reduction of an arbitrary tensor to this
-    form holds only at prime lengths (Theorem~\ref{thm:w_state_prime_bound}); the
+    form holds when $N\geq2$ has no divisor between $2$ and $D$
+    (Theorem~\ref{thm:w_state_no_small_divisor_bound}); the
     review's asymptotic bound $D^3\log D=\Omega(N)$ at every length is outside
     the scope of these results~\cite{gap:rmp_w_state_ti_bound}.
 \end{theorem}
@@ -394,19 +395,25 @@ illustrates this remark by closing the same tensor with a trace.
     $L_0\leq(D^2+1)^2$.
 \end{proof}
 
-\begin{lemma}[The period is at most the square of the bond dimension]%
-    \label{lem:periodic_period_le_sq}
-    \lean{MPSTensor.IsPeriodic.period_le_sq}
+\begin{theorem}[The period is at most the bond dimension]%
+    \label{thm:periodic_period_le_bondDim}
+    \lean{MPSTensor.IsPeriodic.period_le_bondDim}
     \leanok
     \uses{def:periodic_tensor}
-    If a tensor of bond dimension $D$ is periodic with period $m$, then $m\leq D^2$.
-\end{lemma}
+    If a tensor of bond dimension $D$ is periodic with period $m$, then $m\leq D$.
+\end{theorem}
 
 \begin{proof}
     \leanok
-    The peripheral eigenvalues of the transfer map are the $m$ distinct $m$-th
-    roots of unity. Eigenvectors for distinct eigenvalues are linearly independent
-    in the $D^2$-dimensional space of $D\times D$ matrices.
+    \uses{thm:cyclic_sector_compression_letter_isometry_periodic}
+    The cyclic sectors have positive dimensions $D_j$ and support isometries
+    $V_j:\C^{D_j}\to\C^D$, with $V_j^\dagger V_j=\Id_{D_j}$,
+    $V_jV_j^\dagger=P_j$, and $\sum_jP_j=\Id_D$. Taking traces gives
+    \begin{align}
+        \tr P_j & =\tr(V_jV_j^\dagger)=\tr(V_j^\dagger V_j)=D_j, \\
+        D       & =\tr\Id_D=\sum_{j=0}^{m-1}\tr P_j
+        =\sum_{j=0}^{m-1}D_j\geq\sum_{j=0}^{m-1}1=m.
+    \end{align}
 \end{proof}
 
 \begin{lemma}[The blocks of the canonical form are irreducible]%
@@ -451,40 +458,43 @@ illustrates this remark by closing the same tensor with a trace.
     which is primitivity.
 \end{proof}
 
-\begin{theorem}[Single-length bound at prime length]%
-    \label{thm:w_state_prime_bound}
-    \lean{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime}
+\begin{theorem}[Single-length bound without small divisors]%
+    \label{thm:w_state_no_small_divisor_bound}
+    \lean{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_no_small_divisor}
     \leanok
     \uses{def:w_indicator}
-    Let $A$ be any translation-invariant tensor of bond dimension $D$ and let $N$
-    be prime. If the periodic vector of $A$ on $N$ sites is $c\ket{W_N}$ with
+    Let $A$ be any translation-invariant tensor of bond dimension $D$. Let
+    $N\geq2$, and suppose no integer $m$ with $2\leq m\leq D$ divides $N$. If the periodic vector of $A$ on $N$ sites is $c\ket{W_N}$ with
     $c\neq0$, then
     \begin{align}
         N<2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr),
-        \label{eq:w_state_prime_bound}
+        \label{eq:w_state_no_small_divisor_bound}
     \end{align}
-    so $D=\Omega(N^{1/5})$ along the prime lengths. This is not the source's
-    $D=\Omega(N^{1/3})$, which assumes Conjecture~2 of
-    \cite{PerezGarcia2007Matrix}; composite lengths are not covered
-    \cite{gap:rmp_w_state_ti_bound}.
+    The admissible lengths include every $N$ whose prime divisors exceed $D$,
+    such as $N=p^2$ for a prime $p>D$.
+    % This is a project consequence of the canonical-block argument, with the
+    % existing general Wielandt bound. The source's stronger exponent and
+    % arbitrary composite lengths remain deferred in gap:rmp_w_state_ti_bound.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:w_state_canonical_bound, thm:pgvwc07_positive_length_witness,
         thm:pgvwc07_periodic_state_vector_decomposition, def:mpv_phase_class_data,
-        lem:periodic_period_le_sq, lem:pgvwc07_block_irreducible,
+        thm:periodic_period_le_bondDim, lem:pgvwc07_block_irreducible,
         lem:periodic_scale_of_irreducible, thm:wielandt_general}
-    For $N\leq D^2$ there is nothing to prove. Otherwise write the periodic vector
+    Write the periodic vector
     as $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with unital irreducible blocks $A^j$.
     Each block is irreducible by Lemma~\ref{lem:pgvwc07_block_irreducible}, and,
     rescaled and gauged, periodic by Lemma~\ref{lem:periodic_scale_of_irreducible},
-    with a period $m_j\leq D^2<N$ by Lemma~\ref{lem:periodic_period_le_sq}. The reduction of
-    \cite{PerezGarcia2007Matrix} at prime length applies: if $m_j\neq1$ then $m_j$
-    does not divide $N$, and the block state vanishes by
+    with a period $m_j\leq D_j\leq D$ by
+    Theorem~\ref{thm:periodic_period_le_bondDim}. If $m_j\neq1$, then
+    $2\leq m_j\leq D$, so the divisor assumption gives $m_j\nmid N$.
+    The block state vanishes by
     Theorem~\ref{thm:pgvwc07_periodic_state_vector_decomposition}. If $m_j=1$ the
     block is primitive, and the general quantum Wielandt bound of
-    Theorem~\ref{thm:wielandt_general} gives condition C1 at $L_0=(D^2+1)^2$. Group the blocks into the phase classes of
+    Theorem~\ref{thm:wielandt_general} gives injectivity after
+    $L_0=(D^2+1)^2$ sites. Group the blocks into the phase classes of
     Definition~\ref{def:mpv_phase_class_data}: the $q$-th member $A^{(j,q)}$ of
     class $j$ satisfies
     $\ket{\phi_{A^{(j,q)}}}=\xi_{j,q}^N\ket{\phi_{A^{(j,0)}}}$, with $A^{(j,0)}$
@@ -500,7 +510,26 @@ illustrates this remark by closing the same tensor with a trace.
     and no two representatives are related by a gauge transformation and a
     phase. Dropping the classes with $c_j=0$ or
     period other than one leaves at most $D$ blocks. The generalized first item of
-    Theorem~\ref{thm:w_state_canonical_bound} then gives~(\ref{eq:w_state_prime_bound}).
+    Theorem~\ref{thm:w_state_canonical_bound} then gives~(\ref{eq:w_state_no_small_divisor_bound}).
+\end{proof}
+
+\begin{theorem}[Single-length bound at prime length]%
+    \label{thm:w_state_prime_bound}
+    \lean{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime}
+    \leanok
+    \uses{def:w_indicator}
+    Let $A$ be any translation-invariant tensor of bond dimension $D$ and let
+    $N$ be prime. If its periodic vector is $c\ket{W_N}$ with $c\neq0$, then
+    the bound~(\ref{eq:w_state_no_small_divisor_bound}) holds. In particular,
+    $D=\Omega(N^{1/5})$ along prime lengths.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:w_state_no_small_divisor_bound}
+    If $N\leq D$, the bound is immediate. Otherwise a divisor $m>1$ of the
+    prime $N$ equals $N>D$. Thus no $m$ with $2\leq m\leq D$ divides $N$,
+    and Theorem~\ref{thm:w_state_no_small_divisor_bound} applies.
 \end{proof}
 
 \begin{remark}[Growth of the translation-invariant bond dimension]%
@@ -517,8 +546,9 @@ illustrates this remark by closing the same tensor with a trace.
     bound is outside the scope of the results here:
     Theorem~\ref{thm:w_state_canonical_bound} proves the conditional single-length
     bound of its source, and Theorem~\ref{thm:w_state_prime_bound} establishes the
-    unconditional bound $D=\Omega(N^{1/5})$ at prime
-    lengths~\cite{gap:rmp_w_state_ti_bound}.
+    bound $D=\Omega(N^{1/5})$ at prime lengths.
+    Theorem~\ref{thm:w_state_no_small_divisor_bound} also covers lengths with
+    no divisor between $2$ and $D$~\cite{gap:rmp_w_state_ti_bound}.
 \end{remark}
 
 %% ===================================================================
