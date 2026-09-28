@@ -138,9 +138,12 @@ remaining eigenvalues have modulus strictly less than $1$.
         MPSTensor.exists_norm_polarPos_blockTensor_sub_le}
     \leanok
     \uses{lem:ldp_sqrt_lipschitz, def:correlation_length}
-    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
-    length $\xi$, and let $0<\gamma<1$. There are constants $C,K$ depending
-    only on $A$, $\rho$, and $\gamma$ such that
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let
+    $\lambda_2\in\C$ satisfy $\lvert\mu\rvert\le\lvert\lambda_2\rvert$ for every
+    eigenvalue $\mu\ne1$ of $\E_A$, let $\xi$ be the correlation length at
+    $\lambda_2$ of Definition~\ref{def:correlation_length}, and let
+    $0<\gamma<1$. There are constants $C,K$ depending only on $A$, $\rho$,
+    $\lambda_2$, and $\gamma$ such that
     $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Ce^{-\gamma n/\xi}\lVert X\rVert$
     for all $n$ and $X$, and $\lVert P_q-P_\infty\rVert\le Ke^{-\gamma q/\xi}$
     for all $q$.
