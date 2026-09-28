@@ -1265,7 +1265,8 @@ change the local dimension act on single sites.
 
 \begin{lemma}[Basic properties of local channel conversions]
     \label{lem:ldp_local_channel_conversion_properties}
-    \uses{def:ldp_local_channel_conversion, lem:ldp_onsite_channel_properties}
+    \uses{def:ldp_local_channel_conversion, def:ldp_local_channel_circuit,
+        lem:ldp_onsite_channel_properties}
     \lean{MPSPreparation.IsLocalChannelProtocol.isKrausCPTP,
         MPSPreparation.IsLocalChannelProtocol.channelCircuitMap_comp,
         MPSPreparation.isLocalChannelConversion_circuit,
@@ -1319,12 +1320,39 @@ change the local dimension act on single sites.
     channel layers raises it by one.
 \end{proof}
 
-\begin{lemma}[No connected correlations after a conversion]
-    \label{lem:ldp_local_channel_conversion_correlations}
+\begin{lemma}[Light cone of a local channel protocol]
+    \label{lem:ldp_protocol_light_cone}
     \uses{def:ldp_local_channel_conversion, lem:ldp_onsite_channel_locality,
         lem:ldp_channel_light_cone, lem:ldp_channel_light_cone_correlations}
-    \lean{MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion,
-        MPSPreparation.IsLocalChannelProtocol.exists_dual}
+    \lean{MPSPreparation.IsLocalChannelProtocol.exists_dual}
+    \leanok
+    A local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
+    $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
+    on a set of sites $X$ to operators acting on the sites within distance
+    $T$ of $X$, and that satisfies
+    \begin{align}
+        \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
+        \label{eq:ldp_conversion_dual_mul}
+    \end{align}
+    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
+    disjoint. This is the light cone of a depth-$T$ circuit in the proof of
+    \cite[Theorem~1]{Malz2024Preparation}, here with channels and onsite
+    operations.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the protocol. For an onsite channel this is
+    Lemma~\ref{lem:ldp_onsite_channel_locality} with radius $0$; a channel
+    layer adds one to the radius, by Lemma~\ref{lem:ldp_channel_light_cone}
+    for the support and as in the proof of
+    Lemma~\ref{lem:ldp_channel_light_cone_correlations} for
+    (\ref{eq:ldp_conversion_dual_mul}), and an onsite channel keeps it.
+\end{proof}
+
+\begin{lemma}[No connected correlations after a conversion]
+    \label{lem:ldp_local_channel_conversion_correlations}
+    \uses{def:ldp_local_channel_conversion, lem:ldp_protocol_light_cone}
+    \lean{MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion}
     \leanok
     Let $\sigma$ be converted in depth $T$ from a product
     $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
@@ -1336,24 +1364,12 @@ change the local dimension act on single sites.
 \begin{proof}
     \leanok
     Write $\rho=\bigotimes_i\sigma_i$ and $\sigma=\Psi(\rho)$ for a local
-    channel protocol $\Psi$ of depth $T'\le T$. By induction on the protocol,
-    $\Psi$ has a dual $\Psi^\dagger$ with
-    $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
-    on $X$ to operators acting on the sites within distance $T'$ of $X$, and
-    that satisfies
-    \begin{align}
-        \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
-        \label{eq:ldp_conversion_dual_mul}
-    \end{align}
-    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T'$ are
-    disjoint. For an onsite channel this is
-    Lemma~\ref{lem:ldp_onsite_channel_locality}; a channel layer adds one to
-    the radius, by Lemma~\ref{lem:ldp_channel_light_cone} for the support and
-    as in the proof of Lemma~\ref{lem:ldp_channel_light_cone_correlations}
-    for (\ref{eq:ldp_conversion_dual_mul}), and an onsite channel keeps it.
+    channel protocol $\Psi$ of depth $T'\le T$, and let $\Psi^\dagger$ be its
+    dual from Lemma~\ref{lem:ldp_protocol_light_cone}, of radius $T'$.
     If $Z$ and $Z'$ act on sets at distance larger than $2T\ge2T'$, then
-    $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and the
-    factorization of the product density $\rho$ gives
+    $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and
+    (\ref{eq:ldp_conversion_dual_mul}) together with the factorization of the
+    product density $\rho$ gives
     \begin{align}
         \Tr(\sigma ZZ') & =\Tr\bigl(\rho\,\Psi^\dagger(ZZ')\bigr)
         =\Tr\bigl(\rho\,\Psi^\dagger(Z)\Psi^\dagger(Z')\bigr) \notag \\
