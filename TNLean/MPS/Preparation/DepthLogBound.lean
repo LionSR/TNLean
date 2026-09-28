@@ -18,8 +18,8 @@ for the `N/q` equal blocks of eq. (10).
 
 * `MPSPreparation.exists_isPreparedInDepth_approximationError_le_of_slope`: the preparation below
   holds with every slope `a > ξ/2`, where `ξ = -1/log t` is the correlation length at a bound
-  `t < 1` on the moduli of the transfer eigenvalues other than `1` in the gauge of eq. (5); a
-  project result.
+  `t < 1` on the moduli of the transfer eigenvalues other than `1` in the gauge of eq. (5).
+  Project result; the source's block length has slope `2 ξ`.
 * `MPSPreparation.exists_isPreparedInDepth_approximationError_le`: there is `C`, depending only
   on `d` and `D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending
   only on `A`, such that on `N` sites, for every block length `q` dividing `N` with
@@ -113,10 +113,10 @@ such that for `0 < ε ≤ 1` and every block length `q` dividing `N ≥ 1` with
 to the largest modulus of the eigenvalues other than `1` when that modulus is positive; `ξ` is
 the correlation length at this bound `t`.
 
-Project result. arXiv:2307.01696, after Lemma 1, chooses `q ≈ 2 (1 + η) ξ ln N`, a slope `2 ξ`
-in `log N`; the previous version of this theorem, through the rate `γ = 1/8` of
-`exists_approximationError_le_mul`, had a slope of about `4 ξ`. Here the rate `2γ/ξ` with
-`γ = ξ/(2a) < 1` of `exists_approximationError_le_mul` gives every slope `a > ξ/2`. The vector
+Project result. arXiv:2307.01696, in the paragraph after Lemma 1, takes
+`q = ⌈2 ξ (1 + η) ln N⌉`, a slope `2 ξ` in `log N`, and arXiv:2606.24475, App. B4, eq. (S54),
+takes `q = O(ξ log(Γ L/ε))` in its notation. Here the rate `2γ/ξ` with `γ = ξ/(2a) < 1` of
+`exists_approximationError_le_mul` gives every slope `a > ξ/2`. The vector
 `|ψ⟩` is the approximating state `|φ'_N⟩` of eq. (10) for `B`, prepared in depth `C q` as in
 the paragraph "The sequential-RG circuit" of the source. -/
 theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZero D] :

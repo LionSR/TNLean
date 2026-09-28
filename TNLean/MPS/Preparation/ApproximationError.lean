@@ -21,16 +21,16 @@ this file proves explicit forms of
 * the overlap estimate of Piroli, Styliaris, and Cirac (arXiv:2103.13367, Supplemental Material,
   "Proof of Theorem MPS_classification", eq. (S29)), quoted as eq. (S9) of arXiv:2307.01696:
   `|1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩|| = O((N/q) e^{-γ q/ξ})` for `0 < γ < 1/2`;
-* the approximation error of arXiv:2307.01696, Lemma 1 and Lemma 1'(i), with an improved rate
-  (a project result): `ε(φ'_N, φ_N) = 1 - |⟨φ'_N|φ_N⟩| = O((N/q) e^{-2γ q/ξ})` for every
-  `0 < γ < 1`, where the source has `e^{-γ q/ξ}` with `γ < 1/2`.
+* the approximation error `ε(φ'_N, φ_N) = 1 - |⟨φ'_N|φ_N⟩| = O((N/q) e^{-2γ q/ξ})` for every
+  `0 < γ < 1`. arXiv:2307.01696, Lemma 1, eq. (17), and Lemma 1'(i), proves the rate
+  `e^{-γ q/ξ}` for `0 < γ < 1/2`; the rate `e^{-2γ q/ξ}` is a project result.
 
 Both are stated as `≤ C y e^{C y}`, with `y = (N/q) e^{-γ q/ξ}`, respectively
 `y = (N/q) e^{-2γ q/ξ}`, and a constant `C` depending only on `A`, `σ`, `λ₂`, and `γ`, for all
-`q` and all `M ≥ 1`. This is the form in which the source's iteration closes (arXiv:2103.13367,
-eq. `finished`: `ε_q + ε_q² (1 + ε_q/M)^{M-2}`), and it gives the `O`-bound whenever `y` stays
-bounded. The variants ending in `_mul` state the `O`-bound itself for all `q` and all `M ≥ 1`:
-for `y > 1` it follows from `ε ≤ 1` and from the boundedness of the norms `‖φ_N(A)‖`.
+`q` and all `M ≥ 1`. The source's iteration closes in this form, `ε_q + ε_q² (1 + ε_q/M)^{M-2}`
+(arXiv:2103.13367, Supplemental Material, eq. (32)), and it gives the `O`-bound whenever `y`
+stays bounded. The variants ending in `_mul` state the `O`-bound itself for all `q` and all
+`M ≥ 1`. For `y > 1` it follows from `ε ≤ 1` and from the boundedness of the norms `‖φ_N(A)‖`.
 
 ## Proof outline (following arXiv:2103.13367)
 
@@ -55,13 +55,16 @@ for `y > 1` it follows from `ε ≤ 1` and from the boundedness of the norms `�
    by `O(e^{-2γN/ξ})`. The triangle inequality of arXiv:2307.01696, proof of Lemma 1'(i),
    combines the two errors. Since `N ≥ q` the normalization term is dominated by the overlap
    term; no condition `q = o(N)` is needed.
-5. **Second order (project result).** The error is at most `2 (‖φ_N‖² - |⟨φ'_N|φ_N⟩|²)`, which
-   is of second order in `‖P_q - P_∞‖`. Since `τ_∞` is the rank-one idempotent `X ↦ Tr(X) σ`,
-   `τ_∞ τ_q τ_∞ = α τ_∞` with `1 - |α| = O(‖P_q - P_∞‖²)`, and `τ_q = α (τ_∞ + Z)` with
-   `τ_∞ Z τ_∞ = 0`; the trace of `(τ_∞ + Z)^M` is `1` up to `O(M ‖Z‖²)` for `M ≥ 2`
-   (`IsIdempotentElem.norm_trace_add_pow_sub_le_of_le`). This gives the rate `e^{-2γ q/ξ}` for
-   every `γ < 1`; the normalization is used at rate `γ` and `N = Mq ≥ 2q`, and `M = 1` is a
-   direct estimate.
+5. **Second order.** This step is a project result. The error is at most
+   `2 (‖φ_N‖² - |⟨φ'_N|φ_N⟩|²)`, which is of second order in `‖P_q - P_∞‖`. Since `τ_∞` is the
+   rank-one idempotent `X ↦ Tr(X) σ`, `τ_∞ τ_q τ_∞ = α τ_∞` with `1 - |α| = O(‖P_q - P_∞‖²)`,
+   and `τ_q = α (τ_∞ + Z)` with `τ_∞ Z τ_∞ = 0`. The trace of `(τ_∞ + Z)^M` is `1` up to
+   `O(M ‖Z‖²)` for `M ≥ 2` (`IsIdempotentElem.norm_trace_add_pow_sub_le_of_le`). This gives the
+   rate `e^{-2γ q/ξ}` for every `γ < 1`. The normalization is used at rate `γ` and
+   `N = Mq ≥ 2q`, and `M = 1` is a direct estimate. For comparison, arXiv:2606.24475, App. B4,
+   eq. (S52), bounds the trace linearly in the residual, which gives the rate `e^{-q/ξ}`. The
+   error observed numerically decays as `e^{-γ q/ξ}` with `γ ≈ 2` (arXiv:2307.01696,
+   Supplemental Material, discussion of Fig. S1; arXiv:2503.14645, eq. (4)).
 
 ## Main declarations
 
@@ -92,7 +95,10 @@ for `y > 1` it follows from `ε ≤ 1` and from the boundedness of the norms `�
   `difference`, `final_eq`, `intermediate`, `inequality`, `almost_done`, `finished`).
 * arXiv:2307.01696, Lemma 1 (`lm:1`), eq. (17) (`eq:fid_err`), and Supplemental Material,
   "Proof of Lemma 1 and extension to non-normal tensors", eq. (S9) (`eq:app_error`) and
-  Lemma 1'(i) (`eq:fid_err_gen_normal`).
+  Lemma 1'(i) (`eq:fid_err_gen_normal`); Supplemental Material, discussion of Fig. S1, for the
+  numerically observed rate.
+* arXiv:2606.24475, App. B3, eqs. (S27)–(S32), and App. B4, eq. (S52).
+* arXiv:2503.14645, eq. (4).
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
@@ -667,7 +673,7 @@ theorem one_sub_norm_inner_smul_inv_norm_le {E : Type*} [NormedAddCommGroup E]
   linarith [le_abs_self (1 - ‖z‖)]
 
 /-- **The error as a squared distance.** If `‖ψ‖ ≤ 1`, `‖v‖² ≥ 1/2`, and
-`‖v‖² - |⟨ψ|v⟩|² ≤ W`, then the error `1 - |⟨ψ|v/‖v‖⟩|` is at most `2W`: with
+`‖v‖² - |⟨ψ|v⟩|² ≤ W`, then the error `1 - |⟨ψ|v/‖v‖⟩|` is at most `2W`. With
 `t = |⟨ψ|v⟩|/‖v‖ ≤ 1`, the error `1 - t` is at most `1 - t² = (‖v‖² - |⟨ψ|v⟩|²)/‖v‖²`.
 
 Unlike `one_sub_norm_inner_smul_inv_norm_le`, the bound is of second order in the distance of
@@ -696,7 +702,7 @@ theorem one_sub_norm_inner_smul_inv_norm_le_two_mul {E : Type*} [NormedAddCommGr
     nlinarith
   nlinarith
 
-/-- For a unit vector `w`, `‖u‖² - |⟨w|u⟩|² ≤ ‖u - w‖²`: the squared distance of `u` from the
+/-- For a unit vector `w`, `‖u‖² - |⟨w|u⟩|² ≤ ‖u - w‖²`. The squared distance of `u` from the
 line through `w` is at most its squared distance from `w`. -/
 theorem norm_sq_sub_norm_inner_sq_le {F : Type*} [NormedAddCommGroup F]
     [InnerProductSpace ℂ F] {w u : F} (hw : ‖w‖ = 1) :
@@ -712,8 +718,10 @@ open scoped Matrix.Norms.L2Operator in
 `C > 0` such that for all `q` and all `M ≥ 2` with `C y < 1`, `y = M x^{2q} = M e^{-2γ q/ξ}`,
 `1 - |⟨φ_M(P_∞)|φ_M(P_q)⟩| ≤ C y e^{C y}`.
 
-Project result; improves the first-order estimate (S29) of arXiv:2103.13367, quoted as
-arXiv:2307.01696, eq. (S9) (`exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le`). The overlap
+Project result. It improves the first-order estimate of arXiv:2103.13367, Supplemental Material,
+eq. (34) (cited as eq. (S29) there by arXiv:2307.01696), quoted as arXiv:2307.01696, eq. (S9)
+(`exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le`), and the estimate of arXiv:2606.24475,
+App. B4, eq. (S52), which is linear in the residual. The overlap
 is `Tr τ_q^M` for the mixed transfer matrix `τ_q` of `P_q` against `P_∞`. Since `τ_∞` is the
 rank-one idempotent `X ↦ Tr(X) σ`, `τ_∞ τ_q τ_∞ = α τ_∞` with `α = ⟨ι(P_∞)|ι(P_q)⟩` for the
 vectors `ι(X) = (Xⁱ √σ)ᵢ` of norm one; hence `1 - |α| ≤ ‖ι(P_q) - ι(P_∞)‖²/2`, of second order.
@@ -911,7 +919,7 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
 
 /-- **One block, to second order.** In the setting of `exists_norm_polarPos_blockTensor_sub_le`,
 with `0 < γ < 1` and `x = e^{-γ/ξ}`, there is `K ≥ 0` with
-`‖φ_1(P_q)‖² - |⟨φ_1(P_∞)|φ_1(P_q)⟩|² ≤ K x^{2q}` for all `q`: the left side is at most
+`‖φ_1(P_q)‖² - |⟨φ_1(P_∞)|φ_1(P_q)⟩|² ≤ K x^{2q}` for all `q`. The left side is at most
 `‖φ_1(P_q) - φ_1(P_∞)‖²` since `φ_1(P_∞)` is a unit vector, and `φ_1` is linear. -/
 theorem exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
@@ -954,9 +962,10 @@ Lemma 1'(i), with an improved rate). Let `A` be normal in the gauge `∑ᵢ (A�
 and `y = (N/q) e^{-2γ q/ξ} = M e^{-2γ q/ξ}`, the error `ε = 1 - |⟨φ'_N|φ_N⟩|` of the
 approximating state satisfies `ε ≤ C y e^{C y}`.
 
-Project result; improves the rate `e^{-γ q/ξ}` with `γ < 1/2` of the source (eqs. (17) and
-(S11)) to `e^{-2γ q/ξ}` with `γ < 1`. The error is of second order in the distance of the
-positive parts: with `b = ‖φ_N(A)‖²` and `a = ⟨φ'_N|φ_N(A)⟩ = ⟨φ_M(P_∞)|φ_M(P_q)⟩`,
+Project result. It improves the rate `e^{-γ q/ξ}` with `γ < 1/2` of arXiv:2307.01696,
+eqs. (17) and (S11), to `e^{-2γ q/ξ}` with `γ < 1`; compare the rate `e^{-q/ξ}` of
+arXiv:2606.24475, App. B4, eqs. (S52) and (S53). The error is of second order in the distance
+of the positive parts. With `b = ‖φ_N(A)‖²` and `a = ⟨φ'_N|φ_N(A)⟩ = ⟨φ_M(P_∞)|φ_M(P_q)⟩`,
 `ε ≤ 2 (b - |a|²)` once `b ≥ 1/2` (`one_sub_norm_inner_smul_inv_norm_le_two_mul`). For `M = 1`,
 `b - |a|²` is bounded by `exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le`; for `M ≥ 2`,
 `b - 1 = O(e^{-γ N/ξ}) = O(e^{-2γ q/ξ})` (`exists_abs_norm_mpvState_sq_sub_one_le`) and
@@ -1078,13 +1087,13 @@ theorem exists_approximationError_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
   linarith only [(abs_le.1 hcy).2, hsq, h1, h2, h3, h4]
 
 /-- **Approximation error, normal case, `O`-form** (arXiv:2307.01696, Lemma 1, eq. (17), and
-Lemma 1'(i), eq. (S11)): in the setting of `exists_approximationError_le`, there is `C` with
+Lemma 1'(i), eq. (S11)). In the setting of `exists_approximationError_le`, there is `C` with
 `ε(φ'_N, φ_N) ≤ C (N/q) e^{-2γ q/ξ}` for every block length `q` and every number of blocks
 `M ≥ 1`, `N = Mq`, and every `0 < γ < 1`.
 
-Project result; improves the rate `e^{-γ q/ξ}`, `γ < 1/2`, of the source to `e^{-2γ q/ξ}`,
-`γ < 1` (see `exists_approximationError_le`). For `(N/q) e^{-2γ q/ξ} ≤ 1` this is the explicit
-bound; otherwise it holds because `ε ≤ 1`. -/
+Project result. It improves the rate `e^{-γ q/ξ}`, `γ < 1/2`, of the source to
+`e^{-2γ q/ξ}`, `γ < 1` (see `exists_approximationError_le`). For `(N/q) e^{-2γ q/ξ} ≤ 1` this
+is the explicit bound; otherwise it holds because `ε ≤ 1`. -/
 theorem exists_approximationError_le_mul (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}

@@ -883,9 +883,12 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     For $M=1$ there is $K$ with
     $\lVert\phi_1(P_q)\rVert^2
         -\lvert\bra{\phi_1(P_\infty)}\phi_1(P_q)\rangle\rvert^2\le Ke^{-2\gamma q/\xi}$
-    for all $q$. This is a result of this project; it is of second order in
-    $e^{-\gamma q/\xi}$, where Lemma~\ref{lem:ldp_positive_part_overlap} is of
-    first order.
+    for all $q$. These bounds are of second order in $e^{-\gamma q/\xi}$.
+    Lemma~\ref{lem:ldp_positive_part_overlap}, the estimate of
+    \cite{Piroli2021LOCC} quoted as \cite[eq.~(S9)]{Malz2024Preparation}, is
+    of first order, and so is the
+    bound of \cite[App.~B4, eq.~(S52)]{Murota2026ExactLogDepth}, which is
+    linear in the residual. The second-order bounds are new here.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -939,9 +942,14 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     Explicitly, there is a constant $C>0$ depending only on $A$, $\rho$, and $\gamma$
     such that $\varepsilon(\widetilde\phi_N,\phi_N)\le Cy\,e^{Cy}$ for all $q\ge0$
     and $M\ge1$, where $y=M\,e^{-2\gamma q/\xi}$.
-    The source proves the rate $e^{-\gamma q/\xi}$ for $0<\gamma<1/2$
-    \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}; the rate
-    $e^{-2\gamma q/\xi}$ for $0<\gamma<1$ is a result of this project.
+    The rate $e^{-\gamma q/\xi}$ for $0<\gamma<1/2$ is
+    \cite[Lemma~1, eq.~(17), and Lemma~1$'$(i)]{Malz2024Preparation}, and
+    \cite[App.~B4, eqs.~(S52) and~(S53)]{Murota2026ExactLogDepth} gives the
+    rate $e^{-q/\xi}$. The rate $e^{-2\gamma q/\xi}$ for every $0<\gamma<1$
+    and every normal tensor is new here. Numerically, the error decays as
+    $e^{-\gamma q/\xi}$ with $\gamma\approx2$
+    \cite[Supplemental Material, discussion of Fig.~S1]{Malz2024Preparation},
+    \cite[eq.~(4)]{Wei2026ParallelSequential}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -976,10 +984,10 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 
 In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/(2\gamma)\rceil$
 gives $e^{-2\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
-for every $\eta>0$. The source's choice $q=\lceil2\xi(1+\eta)\ln N\rceil$
-corresponds to $\gamma=1/4$
-(compare \cite[after Lemma~1]{Malz2024Preparation}); every $\gamma<1$ is
-admissible here, which shortens the block length by nearly a factor of four.
+for every $\eta>0$. The choice $q=\lceil2\xi(1+\eta)\ln N\rceil$ of
+\cite[paragraph after Lemma~1]{Malz2024Preparation} corresponds to
+$\gamma=1/4$. Since every $\gamma<1$ is admissible here, the block length can
+be taken shorter by any factor less than four.
 
 The proof of the lower bound in the Supplemental Material of
 \cite{Malz2024Preparation} cuts the chain into blocks ``all of the same size,
@@ -1782,8 +1790,10 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     that for $0<\varepsilon\le1$, every $N\ge1$ and every $q$ dividing $N$ with
     $q\ge a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
     $\varepsilon(\psi,\phi_N(A))\le\varepsilon$ is prepared in depth at most $Cq$.
-    The source chooses $q\approx2(1+\eta)\xi\ln N$, a slope $2\xi$; the slope
-    $\xi/2$ is a result of this project.
+    The block length $q=\lceil2\xi(1+\eta)\ln N\rceil$ of
+    \cite[paragraph after Lemma~1]{Malz2024Preparation} has slope $2\xi$, and
+    \cite[App.~B4, eq.~(S54)]{Murota2026ExactLogDepth} takes
+    $q=O(\xi\log(N/\varepsilon))$. The slopes $a>\xi/2$ are new here.
 \end{theorem}
 \begin{proof}
     \leanok

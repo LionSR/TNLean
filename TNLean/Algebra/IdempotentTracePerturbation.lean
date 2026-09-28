@@ -13,10 +13,13 @@ Let `e` be an idempotent of a normed ring, `f = 1 - e`, and let `Z` satisfy `e Z
 put `ρ = 1 + β β' / (1 - ζ)`. For a trace `tr` bounded by `K ‖·‖`,
 `|tr (e + Z)^M - tr e| ≤ K (‖e‖ (ρ^M - 1) + ‖f‖ (β β' / (1 - ζ)² (ρ^M - ζ^M) + ζ^M))`.
 
-The point is that `ρ - 1` is of second order in `Z`: a first-order term `e Z e` would contribute
-`M ‖e Z e‖` to the exponent, but it vanishes, and the off-diagonal blocks enter only through
-excursions `e Z f (f Z f)^k f Z e`, each of second order. The only first-order contribution is
-`tr (f (f Z f)^M)`, which is of order `ζ^M`, of second order once `M ≥ 2`.
+Here `ρ - 1` is of second order in `Z`. A nonzero block `e Z e` would contribute `M ‖e Z e‖` to
+the exponent. Since it vanishes, the off-diagonal blocks enter only through the products
+`e Z f (f Z f)^k f Z e`, each of second order. The only first-order contribution is
+`tr (f (f Z f)^M)`, of order `ζ^M`, which is of second order once `M ≥ 2`.
+
+The bound is a project result. It replaces the first-order iteration of arXiv:2103.13367,
+Supplemental Material, eqs. (29)–(33), in which the error of `tr T^M` is linear in `‖T - e‖`.
 
 The proof follows the blocks `P (e + Z)^M e` and `P (e + Z)^M f` of the powers for `P = e` and
 `P = f`, which satisfy a two-term linear recursion in `M`, and bounds them by induction.
@@ -235,8 +238,8 @@ idempotent of a normed ring, `f = 1 - e`, and `e Z e = 0`, with `‖f Z e‖ ≤
 `tr (x y) = tr (y x)` and `‖tr x‖ ≤ K ‖x‖`,
 `‖tr (e + Z)^M - tr e‖ ≤ K (‖e‖ (ρ^M - 1) + ‖f‖ (β β' / (1 - ζ)² (ρ^M - ζ^M) + ζ^M))`.
 
-Project result; it is the second-order estimate behind the approximation error of the
-log-depth preparation at rate `2γ/ξ`, see `MPSTensor.exists_approximationError_le`. -/
+Project result. It gives the approximation error of the log-depth preparation at
+rate `2γ/ξ` in `MPSTensor.exists_approximationError_le`. -/
 theorem norm_trace_add_pow_sub_le (he : IsIdempotentElem e) (hZ : e * Z * e = 0)
     {tr : R →+ ℂ} (htr : ∀ x y, tr (x * y) = tr (y * x)) {K : ℝ} (hK0 : 0 ≤ K)
     (hK : ∀ x, ‖tr x‖ ≤ K * ‖x‖) {β β' ζ : ℝ}
