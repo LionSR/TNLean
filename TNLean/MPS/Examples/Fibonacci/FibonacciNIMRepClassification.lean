@@ -51,7 +51,7 @@ variable {κ : Type*} [Fintype κ] [DecidableEq κ]
 
 /-- The representation identity at `a = b = τ` with the unit acting trivially:
 `δ_{xy} + M_{τ,x}^y = ∑_z M_{τ,x}^z M_{τ,z}^y`, since `τ × τ = 1 + τ`. -/
-theorem IsNIMRep.fibNim_tau_sq {M : Fin 2 → κ → κ → ℕ} (hM : IsNIMRep fibNim M)
+theorem fibNim_tau_sq_of_isNIMRep {M : Fin 2 → κ → κ → ℕ} (hM : IsNIMRep fibNim M)
     (hunit : ∀ x y, M 0 x y = if x = y then 1 else 0) (x y : κ) :
     (if x = y then 1 else 0) + M 1 x y = ∑ z, M 1 x z * M 1 z y := by
   have h := hM 1 1 x y
@@ -77,7 +77,7 @@ theorem not_isNIMRep_fibNim_of_card_eq_one (hκ : Fintype.card κ = 1)
     {M : Fin 2 → κ → κ → ℕ} (hM : IsNIMRep fibNim M)
     (hunit : ∀ x y, M 0 x y = if x = y then 1 else 0) : False := by
   obtain ⟨x, hx⟩ := Fintype.card_eq_one_iff.1 hκ
-  have h := IsNIMRep.fibNim_tau_sq hM hunit x x
+  have h := fibNim_tau_sq_of_isNIMRep hM hunit x x
   rw [Fintype.sum_eq_single x fun z hz => absurd (hx z) hz] at h
   simp only [↓reduceIte] at h
   exact Nat.mul_self_ne_add_one (M 1 x x) (by omega)
@@ -94,7 +94,7 @@ theorem exists_equiv_of_isNIMRep_fibNim_of_card_eq_two (hκ : Fintype.card κ = 
   have hsq : ∀ i j : Fin 2, (if i = j then 1 else 0) + M 1 (τ₀ i) (τ₀ j) =
       ∑ k : Fin 2, M 1 (τ₀ i) (τ₀ k) * M 1 (τ₀ k) (τ₀ j) := by
     intro i j
-    have h := IsNIMRep.fibNim_tau_sq hM hunit (τ₀ i) (τ₀ j)
+    have h := fibNim_tau_sq_of_isNIMRep hM hunit (τ₀ i) (τ₀ j)
     rw [← Equiv.sum_comp τ₀] at h
     simpa [τ₀.injective.eq_iff] using h
   have h11 := hsq 0 0
