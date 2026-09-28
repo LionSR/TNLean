@@ -36,8 +36,11 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C r^n ‖X‖` with `r = e^{-2γ/ξ}`, which exceeds
    the spectral radius of `E_A - |σ⟩⟨1|` because `2γ < 1` (compare eq. `difference`,
    `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix).
-2. **Positive parts.** `P_q² - P_∞²` is a rearrangement of `E_A^q - |σ⟩⟨1|`, and
-   `‖√X - √Y‖ ≤ √‖X - Y‖` (eq. `intermediate`) gives `‖P_q - P_∞‖ ≤ C e^{-γ q/ξ}`.
+2. **Positive parts.** `P_q² - P_∞²` is a rearrangement of `E_A^q - |σ⟩⟨1|`. The source
+   uses `‖√X - √Y‖ ≤ √‖X - Y‖` (eq. `intermediate`); here `P_∞²` is bounded below by a
+   positive multiple of the identity, so the Lipschitz bound `‖√X - √Y‖ ≤ ‖X - Y‖ / √c` of
+   `CFC.norm_sqrt_sub_sqrt_le_div` applies instead, and `exists_norm_polarPos_blockTensor_sub_le`
+   gives `‖P_q - P_∞‖ ≤ C e^{-γ q/ξ}` for every `γ < 1`. This file calls it at the rate it needs.
 3. **Telescoping.** For an idempotent `T_∞` and `‖T - T_∞‖ ≤ δ`,
    `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied to the mixed
    transfer matrices `τ_{AB}` and `τ_{BB}` of `P_q` against `P_∞`.
