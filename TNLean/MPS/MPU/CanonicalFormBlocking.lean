@@ -75,19 +75,21 @@ theorem IsMPUCanonicalFormII.sourceV_blockTensor_isIsometry
   exact (hU.blockTensor p hp).sourceV_isIsometry hS
 
 /-- An MPU in canonical form II has a simple positive block of length at
-most `D⁴` whose source gate is isometric for the same ambient fixed matrix.
+most `D²` whose source gate is isometric for the same ambient fixed matrix.
 This includes bond dimension one.
 
 Source: arXiv:1703.09188, Proposition III.3(ii), lines 378--427, and
-Theorem `ThmFund1`, lines 577--588. -/
+Theorem `ThmFund1`, lines 577--588; the blocking length `D²` sharpens the
+source bound. -/
 theorem IsMPUCanonicalFormII.exists_sourceV_blockTensor_isIsometry
     (hU : IsMPUCanonicalFormII U) :
-    ∃ p : ℕ, 0 < p ∧ p ≤ D ^ 4 ∧
+    ∃ p : ℕ, 0 < p ∧ p ≤ D * D ∧
       IsMPUSimple (MPOTensor.blockTensor U p) ∧
       (sourceV (MPOTensor.blockTensor U p) hU.ρ hU.ρ_posDef).IsIsometry := by
   let _ : NeZero d := hU.neZero_phys
   let _ : NeZero D := hU.neZero_bond
-  obtain ⟨p, hp, hpD, hS⟩ := hU.isMPU.exists_blockTensor_isMPUSimple
-  exact ⟨p, hp, hpD, hS, hU.sourceV_blockTensor_isIsometry p hp hS⟩
+  have hp : 0 < D * D := Nat.mul_pos (NeZero.pos D) (NeZero.pos D)
+  have hS := hU.isMPU.blockTensor_sq_isMPUSimple
+  exact ⟨D * D, hp, le_rfl, hS, hU.sourceV_blockTensor_isIsometry (D * D) hp hS⟩
 
 end MPOTensor
