@@ -669,6 +669,27 @@ finite-dimensional complex space.
         =\delta_{g,h}$.
 \end{proof}
 
+\begin{theorem}[Tensor products of semi-regular representations]%
+    \label{thm:peps_semiregular_tensor_product}
+    \lean{Representation.isIrreducible_of_finrank_eq_one,
+        Representation.IsSemiRegular.exists_mem_invariants_ne_zero,
+        Representation.IsSemiRegular.tprod_of_mem_invariants,
+        Representation.IsSemiRegular.tprod}
+    \leanok
+    \uses{def:peps_semiregular}
+    If $U$ and $V$ are semi-regular representations of $G$, then so is
+    $U\otimes V$
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A one-dimensional representation is irreducible, so the semi-regular
+    representation $V$ contains the trivial representation and has a nonzero
+    invariant vector $v$. If $D$ is irreducible and $f$ is a nonzero
+    intertwining map from $D$ to $U$, then $x\mapsto f(x)\otimes v$ is a
+    nonzero intertwining map from $D$ to $U\otimes V$.
+\end{proof}
+
 A matrix product tensor is a family of operators $A^i$ on a bond space
 carrying the representation $U$. Its virtual system is the space of
 operators $X$ on the bond space, on which $G$ acts by conjugation
@@ -1049,6 +1070,141 @@ $G$-injective for the representation $U$.
     instead quotes that the numbers of conjugacy classes and of irreducible
     representations agree, and passes from the $U_g$ to the $P_i$ through the
     completeness of the characters in the class functions.
+\end{proof}
+
+In two dimensions every link of the network carries its own representation,
+and the two tensors on a link act with the same one
+\cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}. A
+leg entered by $U_g$ is a space $E$ carrying the representation $\tau$, and
+the leg at the other end of the link, left by $U_g^{-1}$, is the dual space
+$E^*$ carrying the contragredient representation
+$\tau^*(g)f=f\circ\tau(g^{-1})$. For a basis $e_i$ of $E$ with dual basis
+$e_i^*$, contracting the two legs is pairing against
+$\omega=\sum_ie_i^*\otimes e_i$, and a tensor is identified with its map
+$\mathcal{P}$ from the virtual to the physical system.
+
+\begin{lemma}[Contracted links]%
+    \label{lem:peps_link_contraction}
+    \lean{Representation.averageMap_apply_eq_sum,
+        Representation.map_dual_coevaluation,
+        contractRight_map_coevaluation, contractRight_map_dual,
+        TNLean.PEPS.linkVector, TNLean.PEPS.map_comm_apply,
+        TNLean.PEPS.map_dual_linkVector, TNLean.PEPS.linkPairing,
+        TNLean.PEPS.linkPairing_tmul, TNLean.PEPS.linkPairing_comm,
+        TNLean.PEPS.linkPairing_linkVector,
+        TNLean.PEPS.linkPairing_deltaOperator_map}
+    \leanok
+    \uses{def:peps_delta_operator, def:peps_semiregular,
+        thm:peps_semiregular_trace}
+    The vector $\omega$ is invariant under $\tau^*(g)\otimes\tau(g)$ for every
+    $g$. For an operator $M$ on $E$, the pairing $f\otimes e\mapsto f(Me)$
+    sends $\omega$ to $\tr M$ and $(\tau^*(g)\otimes\tau(h))\,\omega$ to
+    $\tr[U_{g^{-1}}MU_h]$. If $\tau$ is semi-regular and $M=\Delta$, the
+    latter is $\delta_{g,h}$
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expanding $\tau^*(g)e_i^*$ in the dual basis,
+    $(\tau^*(g)\otimes\tau(g))\,\omega
+        =\sum_j e_j^*\otimes\tau(g)\sum_ie_i^*\big(\tau(g^{-1})e_j\big)e_i
+        =\sum_je_j^*\otimes e_j$. The pairing of $\omega$ is
+    $\sum_ie_i^*(Me_i)=\tr M$, and the pairing of
+    $(\tau^*(g)\otimes\tau(h))\,\omega$ is
+    $\sum_ie_i^*\big(\tau(g^{-1})M\tau(h)e_i\big)$. For $M=\Delta$ this is
+    $\tr[U_hU_{g^{-1}}\Delta]=\delta_{g,h}$ by
+    Theorem~\ref{thm:peps_semiregular_trace}.
+\end{proof}
+
+\begin{theorem}[Stability of $G$-injectivity under concatenation]%
+    \label{thm:peps_g_injective_concatenation}
+    \lean{TNLean.PEPS.linkContraction, TNLean.PEPS.linkContraction_tmul,
+        TNLean.PEPS.linkContraction_comp_tprod,
+        TNLean.PEPS.innerContraction, TNLean.PEPS.innerContraction_tmul,
+        TNLean.PEPS.innerContraction_map,
+        TNLean.PEPS.linkContractionLeftInverse,
+        TNLean.PEPS.linkContractionLeftInverse_comp,
+        TNLean.PEPS.IsGInjective.linkContraction}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_delta_operator,
+        def:peps_semiregular, thm:peps_g_injective_left_inverse,
+        lem:peps_link_contraction, thm:peps_semiregular_tensor_product}
+    Let $A$ be a tensor with virtual system $W_A\otimes E^*$ and group action
+    $\sigma_A\otimes\tau^*$, where $E^*$ is its right leg and $W_A$ collects
+    its left, up and down legs, and let $B$ be a tensor with virtual system
+    $E\otimes W_B$ and group action $\tau\otimes\sigma_B$, where $E$ is its
+    left leg and $W_B$ collects its up, right and down legs. Let $\tau$ be
+    semi-regular, and let $C$ be the tensor obtained by contracting the right
+    leg of $A$ with the left leg of $B$, with the up, down and physical
+    indices blocked:
+    \begin{align*}
+        \mathcal{P}(C)(x\otimes y)
+        =\sum_i\mathcal{P}(A)(x\otimes e_i^*)\otimes\mathcal{P}(B)(e_i\otimes y).
+    \end{align*}
+    If $A$ and $B$ are $G$-injective, then $C$ is $G$-injective for
+    $\sigma_A\otimes\sigma_B$. Precisely, if
+    $L_A\mathcal{P}(A)=\Pi_{\sigma_A\otimes\tau^*}$ and
+    $L_B\mathcal{P}(B)=\Pi_{\tau\otimes\sigma_B}$, then the map $L_C$ that
+    applies $L_A\otimes L_B$ and contracts the two inner legs through $\Delta$,
+    $(x\otimes f)\otimes(e\otimes y)\mapsto|G|\,f(\Delta e)\,x\otimes y$,
+    satisfies $L_C\mathcal{P}(C)=\Pi_{\sigma_A\otimes\sigma_B}$. If moreover
+    $\sigma_A$ and $\sigma_B$ are semi-regular, then so is
+    $\sigma_A\otimes\sigma_B$ \cite[Lemma~5.2]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Invariance of $A$ gives
+    $\mathcal{P}(A)(\sigma_A(g)x\otimes f)=\mathcal{P}(A)(x\otimes\tau^*(g^{-1})f)$
+    and similarly for $B$, so acting with $\sigma_A(g)\otimes\sigma_B(g)$ on
+    the virtual system of $C$ acts with $\tau^*(g^{-1})\otimes\tau(g^{-1})$
+    on $\omega$, which leaves it invariant by
+    Lemma~\ref{lem:peps_link_contraction}. For the left inverse,
+    $L_A\mathcal{P}(A)(x\otimes f)
+        =\frac{1}{|G|}\sum_g\sigma_A(g)x\otimes\tau^*(g)f$ and
+    $L_B\mathcal{P}(B)(e\otimes y)
+        =\frac{1}{|G|}\sum_h\tau(h)e\otimes\sigma_B(h)y$. Contracting through
+    $\Delta$ gives
+    \begin{align*}
+        L_C\mathcal{P}(C)(x\otimes y)
+        =\frac{1}{|G|}\sum_{g,h}\tr[U_{g^{-1}}\Delta U_h]\,
+        \sigma_A(g)x\otimes\sigma_B(h)y
+        =\frac{1}{|G|}\sum_g\sigma_A(g)x\otimes\sigma_B(g)y
+    \end{align*}
+    by Lemma~\ref{lem:peps_link_contraction}. Theorem~\ref{thm:peps_g_injective_left_inverse}
+    turns invariance and the left inverse into $G$-injectivity, and
+    Theorem~\ref{thm:peps_semiregular_tensor_product} gives the last claim.
+\end{proof}
+
+\begin{theorem}[Contracting legs of a connected block]%
+    \label{thm:peps_g_injective_leg_contraction}
+    \lean{TNLean.PEPS.legContraction,
+        TNLean.PEPS.legContractionLeftInverse,
+        TNLean.PEPS.legContraction_comp,
+        TNLean.PEPS.legContractionLeftInverse_comp,
+        TNLean.PEPS.IsGInjective.legContraction}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_delta_operator,
+        def:peps_semiregular, thm:peps_g_injective_left_inverse,
+        lem:peps_link_contraction}
+    Let a tensor have virtual system $W\otimes E^*\otimes E$ with group action
+    $\sigma\otimes\tau^*\otimes\tau$, as for the up leg of $A$ and the down leg
+    of $B$ in the block $C$ above. Contracting the legs $E^*$ and $E$ gives
+    the map $x\mapsto\sum_i\mathcal{P}(x\otimes e_i^*\otimes e_i)$. If
+    $L\mathcal{P}=\Pi_{\sigma\otimes\tau^*\otimes\tau}$ and $\tr M\ne0$, then
+    contracting the corresponding legs of $L$ through $M$ and dividing by
+    $\tr M$ gives a left inverse of the contracted map up to $\Pi_\sigma$.
+    Consequently, if the tensor is $G$-injective and $\tau$ is semi-regular,
+    the contracted map is $G$-injective for $\sigma$, with $M=\Delta$, whose
+    trace is $1$ \cite[Observation~5.3]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The group elements attached to the two contracted legs cancel, because
+    $\omega$ is invariant under $\tau^*(g)\otimes\tau(g)$. Hence
+    $\Pi_{\sigma\otimes\tau^*\otimes\tau}(x\otimes\omega)
+        =\frac{1}{|G|}\sum_g\sigma(g)x\otimes\omega$, and pairing $\omega$
+    through $M$ gives $\tr M$. By Theorem~\ref{thm:peps_semiregular_trace}
+    with $g=h=1$, $\tr\Delta=1$ for semi-regular $\tau$.
 \end{proof}
 
 The source asks for a tensor that is $G$-isometric with respect to the

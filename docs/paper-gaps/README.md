@@ -482,6 +482,10 @@ For the non-periodic MPS Fundamental Theorem background:
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
   corrected same-state conclusion up to an $N$th-root phase.
+- `ssvcw05_sequential_bond_upper_bound_scope.tex` records that only the upper
+  bounds `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of
+  the successive decompositions are formalized, not the exact dimension or the
+  equality with the Schmidt rank implied by "minimal resources".
 - `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
   scheme without an ancilla presupposes two sites, since its first operation
   acts on sites 1 and 2, that the literal one-site reading of the theorem is
@@ -674,6 +678,12 @@ For the group matrix product operators of arXiv:2203.12563:
   $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
+- `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
+  $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
+  $Z$ on the second qubit, form an exact normal representation whose
+  anomaly three-cocycle has the detector values $(+1,+1,-1)$ of the type-II
+  row of the table, and that the separation of the eight classes by these
+  values is not formalized.
 
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
@@ -717,15 +727,27 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   Under the added hypothesis that the `q`-site states of distinct blocks are
   orthogonal, the block form holds for multiplicity one and part (ii) is proved
   with no condition `q = o(N)`.
-- `mswc24_decaying_correlations_windowed_connected.tex` records that the
-  correlation estimate of Lemma 2 of the Supplemental Material is proved with
-  the bound in every window of `K ≤ 2` consecutive separations and for the
-  connected correlator, since for complex `λ₂` the limit correlator of Hermitian
-  observables is a multiple of `|λ₂|^t cos(tθ + φ)` and the one-point functions
-  need not vanish at finite `N`; the corrected form suffices for Theorem 1.
+- `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
+  false-source note for Lemma 2 of the Supplemental Material. It records that
+  the lemma holds in modulus for the source's
+  observables, whose one-point functions vanish exactly at every `N ≥ s`, but that
+  its printed real inequality fails for nonreal and for negative `λ₂` and its Hermitian reading
+  fails in general, since the limit correlator of Hermitian observables is a
+  multiple of `|λ₂|^t cos(tθ + φ)`. The formal Hermitian statement asserts the
+  bound in every window of `K ≤ 2` consecutive separations. The note also lists
+  the remaining repairs to the proof of Theorem 1 (normal versus injective,
+  Jordan blocks, a factor `1/2`, the light cone at `s = 2T + 1`) and the depth
+  constant `ξ/4`, which is implicit in the source's final inequality.
 - `mswc24_depth_lower_bound_gauge.tex` records that Theorem 1 (no preparation
   in depth `o(log N)`) was first formalized for a normal tensor in the gauge
   `∑ᵢ Aⁱ†Aⁱ = 1`, `E_A(ρ) = ρ`, `ρ > 0`, `Tr ρ = 1` of eq. (5), together with a
   quantitative form `N ≤ C(T+1)e^{b(T+1)}`; resolved: the reduction of a normal
   tensor to this gauge, with which both proofs begin, is now formalized, and
   the theorem holds for every normal tensor.
+- `mswc24_depth_upper_bound_divisible_length.tex` records that the preparation
+  of a normal translation-invariant state with error `ε` in depth
+  `O(log(N/ε))`, eq. (1), is proved for chain lengths divisible by a block
+  length `q` with `a log(N/ε) + b ≤ q ≤ 2 (a log(N/ε) + b)`, as in the `N/q`
+  equal blocks of eq. (10), and that allowing a larger last block, as the proof
+  of the lower bound does, removes the restriction for chains with `N ≥ q`;
+  chains shorter than the block length need a separate argument.

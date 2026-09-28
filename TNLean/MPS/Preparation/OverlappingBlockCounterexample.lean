@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexSqrt
-import TNLean.MPS.Preparation.DiagonalPolar
+import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
+import TNLean.MPS.Preparation.OneDimensionalBlocks
 
 /-!
 # The approximating state fails for blocks of multiplicity one
@@ -27,6 +28,12 @@ state with the target is `(u^M + v^M) / (1 + s^M)^{1/2}` for all `q, M ≥ 1`
 (`nonNormalApproxOverlap_overlappingBlockTensor`). For `M ≥ 3` the error is at least
 `s²/16 = (9/25)^q/16` (`le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`).
 
+The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
+canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with both weights
+equal to one (`isBNTCanonicalForm_overlappingBlockSector`,
+`reindex_toTensor_overlappingBlockSector`), and the pairs and weights of the approximating
+state are those of this canonical form (`embeddedFixedPointPair_overlappingBlockSector`).
+
 The transfer maps of one-dimensional blocks are the identity, so the hypothesis on the
 subleading eigenvalue that defines `ξ_diag` holds for every `λ₂`, and `e^{-γ/ξ_diag}` can be
 any number in `(0, 1)`. When it is below `9/25`, the printed rate decays faster than the error:
@@ -47,6 +54,11 @@ the approximating state of eq. (S7) even when every multiplicity is one. Documen
 * `MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor` — the overlap, for all `q, M ≥ 1`.
 * `MPSTensor.not_approximationError_le_overlappingBlockTensor` — the bound of Lemma 1'(ii)
   fails.
+* `MPSTensor.overlappingBlockSector`, `MPSTensor.isBNTCanonicalForm_overlappingBlockSector`,
+  `MPSTensor.reindex_toTensor_overlappingBlockSector` — the tensor is, after ordering its bond
+  coordinates, the canonical form of eq. (S2) of a basis of normal tensors.
+* `MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock` — the tensor
+  satisfies every hypothesis of Lemma 1'(ii), and the bound fails for it.
 
 ## References
 
@@ -80,16 +92,20 @@ gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp`. -/
 noncomputable def overlappingBlockBasis (j : Fin 2) : MPSTensor 2 1 :=
   fun i => of fun _ _ => overlappingBlockDiag i j
 
+/-- The blocks are in the gauge `∑ᵢ |aᵢ|² = 1` of arXiv:2307.01696, eq. `eq:Ek_decomp`. -/
+theorem overlappingBlockBasis_norm (j : Fin 2) :
+    ∑ i, star (overlappingBlockBasis j i 0 0) * overlappingBlockBasis j i 0 0 = 1 := by
+  fin_cases j <;>
+    simp [overlappingBlockBasis, overlappingBlockDiag, Fin.sum_univ_two, map_ofNat]
+  norm_num
+
 /-- The transfer maps of the blocks have no eigenvalue other than `1`, so the hypothesis on the
 subleading eigenvalue that defines the correlation length `ξ_diag` of arXiv:2307.01696,
 Lemma 1'(ii), holds for every `λ₂`. -/
 theorem norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis (j : Fin 2) (lam₂ μ : ℂ)
     (h : Module.End.HasEigenvalue (Kraus.transferMap (overlappingBlockBasis j)) μ)
-    (hμ : μ ≠ 1) : ‖μ‖ ≤ ‖lam₂‖ := by
-  refine norm_le_of_hasEigenvalue_transferMap_of_dim_one _ ?_ lam₂ μ h hμ
-  fin_cases j <;>
-    simp [overlappingBlockBasis, overlappingBlockDiag, Fin.sum_univ_two, map_ofNat]
-  norm_num
+    (hμ : μ ≠ 1) : ‖μ‖ ≤ ‖lam₂‖ :=
+  norm_le_of_hasEigenvalue_transferMap_of_dim_one _ (overlappingBlockBasis_norm j) lam₂ μ h hμ
 
 /-- The normalized weights `α^{(N)} = (1, 1)/√2`. -/
 theorem ghzAmplitude_overlappingBlock (N : ℕ) :
@@ -328,5 +344,184 @@ theorem not_approximationError_le_overlappingBlockTensor {lam₂ : ℂ} {γ : �
   have hlow := le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor (q := q) (M := q)
     (by omega) hq
   linarith
+
+/-! ## The tensor satisfies the hypotheses of Lemma 1'(ii) -/
+
+/-- The canonical form of arXiv:2307.01696, eq. (S2), of `overlappingBlockTensor`: the basis of
+the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (3/5, 4/5)`, each of
+multiplicity one with weight `μ_{j,1} = 1`. -/
+noncomputable abbrev overlappingBlockSector : SectorDecomposition 2 where
+  basisCount := 2
+  basisDim := fun _ => 1
+  basis := overlappingBlockBasis
+  sectors :=
+    { copies := overlappingBlockMult
+      copies_pos := fun j => by fin_cases j <;> simp [overlappingBlockMult]
+      weight := overlappingBlockWeight
+      weight_ne_zero := fun _ _ => one_ne_zero }
+
+/-- The coefficients `βⱼ = ∑ₖ μ_{j,k}^N` of the canonical form (arXiv:2307.01696, eq. (S4)). -/
+theorem coeff_overlappingBlockSector (N : ℕ) :
+    overlappingBlockSector.coeff N = bntWeight overlappingBlockWeight N :=
+  rfl
+
+/-- The states `|0⋯0⟩` and `(3/5 |0⟩ + 4/5 |1⟩)^{⊗N}` of the two blocks are linearly independent
+on every ring of `N ≥ 1` sites, although not orthogonal. This is the basis-of-normal-tensors
+property of arXiv:2307.01696, eq. (S2). -/
+theorem hasBNTSectorData_overlappingBlockSector : HasBNTSectorData overlappingBlockSector := by
+  refine ⟨0, fun N hN => ?_⟩
+  rw [Fintype.linearIndependent_iff]
+  intro g hg
+  have hval : ∀ i : Fin 2, ∑ j : Fin 2, g j * overlappingBlockBasis j i 0 0 ^ N = 0 := fun i => by
+    have := congrArg (fun v => v (fun _ : Fin N => i)) hg
+    simpa [-mpv_eq, mpv_of_dim_one, Fin.sum_univ_two] using this
+  have h1 : g 1 = 0 := by
+    simpa [Fin.sum_univ_two, overlappingBlockBasis, overlappingBlockDiag, zero_pow hN.ne']
+      using hval 1
+  have h0 : g 0 = 0 := by
+    simpa [Fin.sum_univ_two, overlappingBlockBasis, overlappingBlockDiag, h1] using hval 0
+  intro j
+  fin_cases j
+  · exact h0
+  · exact h1
+
+/-- **The canonical form of `overlappingBlockTensor` is a basis of normal tensors**
+(arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
+self-overlap, their states are linearly independent, they are not related by a gauge
+transformation and a phase, and every weight is `μ_{j,1} = 1`. -/
+theorem isBNTCanonicalForm_overlappingBlockSector : IsBNTCanonicalForm overlappingBlockSector where
+  basis_dim_pos := fun _ => Nat.one_pos
+  basis_irreducible := fun j => isIrreducibleTensor_of_bondDim_one (overlappingBlockBasis j)
+  basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (overlappingBlockBasis_norm j)
+  basis_normalized_self_overlap := fun j =>
+    tendsto_mpvOverlap_self_of_dim_one _ (overlappingBlockBasis_norm j)
+  bnt_data := hasBNTSectorData_overlappingBlockSector
+  basis_distinct := fun j k hjk h => by
+    have hc : cast (congr_arg (MPSTensor 2) h) (overlappingBlockSector.basis j) =
+        overlappingBlockBasis j :=
+      cast_eq _ _
+    rw [hc]
+    refine not_gaugePhaseEquiv_of_dim_one 1 ?_
+    fin_cases j <;> fin_cases k <;> simp_all [overlappingBlockBasis, overlappingBlockDiag]
+  weight_norm_le_one := fun _ _ => by
+    change ‖(1 : ℂ)‖ ≤ 1
+    simp
+  weight_unit_exists := ⟨(0 : Fin 2), ⟨0, by decide⟩, by change ‖(1 : ℂ)‖ = 1; simp⟩
+
+/-- The bond coordinates of the two blocks in the canonical form. -/
+noncomputable def overlappingBlockCopyCoord : Fin 2 → Fin overlappingBlockSector.totalDim :=
+  ![overlappingBlockSector.copyCoord 0 ⟨0, by decide⟩ ⟨0, Nat.one_pos⟩,
+    overlappingBlockSector.copyCoord 1 ⟨0, by decide⟩ ⟨0, Nat.one_pos⟩]
+
+/-- The canonical form has bond dimension two, the sum `∑ⱼ m_j D_j` of the bond dimensions of
+the copies of the blocks in arXiv:2307.01696, eq. (S2). -/
+theorem totalDim_overlappingBlockSector : overlappingBlockSector.totalDim = 2 := by
+  have h : overlappingBlockSector.totalCopies = 2 := by
+    simp [SectorDecomposition.totalCopies, SectorDecomposition.copies, overlappingBlockMult,
+      Fin.sum_univ_two]
+  simp only [SectorDecomposition.totalDim, SectorDecomposition.flatDim, Finset.sum_const,
+    Finset.card_univ, Fintype.card_fin, smul_eq_mul, mul_one, h]
+
+/-- The bond coordinates of the copies of the blocks exhaust the bond coordinates of the
+canonical form of arXiv:2307.01696, eq. (S2), each exactly once. -/
+theorem bijective_overlappingBlockCopyCoord : Function.Bijective overlappingBlockCopyCoord := by
+  refine (Fintype.bijective_iff_injective_and_card _).2 ⟨fun x y hxy => ?_, by
+    simp [totalDim_overlappingBlockSector]⟩
+  fin_cases x <;> fin_cases y <;>
+    first
+    | rfl
+    | (exfalso
+       exact absurd (congrArg Sigma.fst (overlappingBlockSector.sigma_eq_of_copyCoord_eq hxy))
+         (by decide))
+
+/-- The ordering of the bond coordinates of the canonical form under which its assembled tensor
+is `overlappingBlockTensor`: a permutation of the bond basis, which is a gauge
+transformation. -/
+noncomputable def overlappingBlockEquiv : Fin overlappingBlockSector.totalDim ≃ Fin 2 :=
+  (Equiv.ofBijective _ bijective_overlappingBlockCopyCoord).symm
+
+/-- The ordering of the bond coordinates of the canonical form of arXiv:2307.01696, eq. (S2),
+sends the coordinate `x` to the bond coordinate of the `x`-th copy. -/
+theorem overlappingBlockEquiv_symm_apply (x : Fin 2) :
+    overlappingBlockEquiv.symm x = overlappingBlockCopyCoord x :=
+  rfl
+
+/-- **`overlappingBlockTensor` is the canonical form** `⊕ⱼ μ_{j,1} A_j` of arXiv:2307.01696,
+eq. (S2), of `overlappingBlockSector`, after ordering the bond coordinates. -/
+theorem reindex_toTensor_overlappingBlockSector (i : Fin 2) :
+    reindex overlappingBlockEquiv overlappingBlockEquiv (overlappingBlockSector.toTensor i) =
+      overlappingBlockTensor i := by
+  ext x y
+  rw [reindex_apply, submatrix_apply, overlappingBlockEquiv_symm_apply,
+    overlappingBlockEquiv_symm_apply]
+  fin_cases x <;> fin_cases y <;>
+    simp only [overlappingBlockCopyCoord, Fin.zero_eta, Fin.mk_one, cons_val_zero,
+      cons_val_one] <;>
+    first
+    | (rw [SectorDecomposition.toTensor_copyCoord]
+       fin_cases i <;> simp [SectorDecomposition.weight, overlappingBlockWeight,
+         overlappingBlockBasis, overlappingBlockDiag])
+    | (rw [SectorDecomposition.toTensor_copyCoord_of_ne _ _ (by simp)]
+       fin_cases i <;> simp)
+
+/-- The fixed-point pairs of the blocks of the canonical form
+(`SectorDecomposition.embeddedFixedPointPair`, with the fixed point `σ_j = 1` of the
+one-dimensional block) are the pairs placed on the coordinate `j`. -/
+theorem embeddedFixedPointPair_overlappingBlockSector (j : Fin 2) (p : Fin 2 × Fin 2) :
+    overlappingBlockSector.embeddedFixedPointPair (fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ))
+        (fun j => ⟨0, overlappingBlockSector.copies_pos j⟩) j
+        (overlappingBlockEquiv.symm p.1, overlappingBlockEquiv.symm p.2) =
+      embedPair (fun _ : Fin 1 => j) (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)) p := by
+  have hc : overlappingBlockSector.copyCoord j ⟨0, overlappingBlockSector.copies_pos j⟩ =
+      fun _ : Fin 1 => overlappingBlockEquiv.symm j := by
+    funext a
+    obtain rfl : a = 0 := Subsingleton.elim _ _
+    rw [overlappingBlockEquiv_symm_apply]
+    fin_cases j <;> rfl
+  rw [SectorDecomposition.embeddedFixedPointPair, hc, embedPair_symm_comp]
+  simp
+
+/-- **Lemma 1'(ii) of arXiv:2307.01696 fails for a tensor satisfying all its hypotheses, with
+every multiplicity one.** The tensor `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)` is, after
+ordering its bond coordinates, the canonical form `⊕ⱼ μ_{j,1} A_j` of eq. (S2) of a basis of two
+normal blocks in canonical form II, with weights `μ_{j,1} = 1` (`IsBNTCanonicalForm`,
+normality, and the diagonal positive-definite fixed point `1` of each block), whose states
+"produce orthogonal vectors in the thermodynamic limit" (arXiv:2307.01696, line 973). The
+transfer maps of the blocks have no eigenvalue other than `1`, so every `λ₂` bounds their
+subleading eigenvalues. When `e^{-γ/ξ_diag} < 9/25`, for the approximating state of eq. (S7),
+built from the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` and the pairs of that same fixed point `1`, and
+for every constant `C`, there is `q ≥ 3` such that, with `M = q` and `N = q²` (so `q = o(N)`
+along this sequence) and `y = (N/q) e^{-γ q/ξ_diag}`, the error exceeds `C y e^{C y}`. -/
+theorem isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock :
+    IsBNTCanonicalForm overlappingBlockSector ∧
+      (∀ j k, j ≠ k → Tendsto (fun N : ℕ =>
+        mpvOverlap (overlappingBlockSector.basis j) (overlappingBlockSector.basis k) N)
+          atTop (𝓝 0)) ∧
+      (∀ j, IsNormalTensor (overlappingBlockSector.basis j)) ∧
+      (∀ j, (1 : Matrix (Fin 1) (Fin 1) ℂ).PosDef ∧ (1 : Matrix (Fin 1) (Fin 1) ℂ).IsDiag ∧
+        Kraus.transferMap (overlappingBlockSector.basis j) 1 = 1) ∧
+      (∀ i, reindex overlappingBlockEquiv overlappingBlockEquiv
+        (overlappingBlockSector.toTensor i) = overlappingBlockTensor i) ∧
+      (∀ j (lam₂ μ : ℂ),
+        Module.End.HasEigenvalue (Kraus.transferMap (overlappingBlockSector.basis j)) μ →
+          μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖) ∧
+      ∀ {lam₂ : ℂ} {γ : ℝ}, Real.exp (-γ / correlationLength lam₂) < 9 / 25 → ∀ C : ℝ,
+        ∃ q : ℕ, 3 ≤ q ∧
+          C * (q * Real.exp (-γ * q / correlationLength lam₂)) *
+              Real.exp (C * (q * Real.exp (-γ * q / correlationLength lam₂))) <
+            1 - ‖nonNormalApproxOverlap overlappingBlockTensor q q
+              (ghzAmplitude (overlappingBlockSector.coeff (q * q)))
+              (fun j p => overlappingBlockSector.embeddedFixedPointPair
+                (fun _ => (1 : Matrix (Fin 1) (Fin 1) ℂ))
+                (fun j => ⟨0, overlappingBlockSector.copies_pos j⟩) j
+                (overlappingBlockEquiv.symm p.1, overlappingBlockEquiv.symm p.2))‖ := by
+  refine ⟨isBNTCanonicalForm_overlappingBlockSector,
+    fun _ _ hjk => isBNTCanonicalForm_overlappingBlockSector.cross_overlap_basis_tendsto_zero hjk,
+    fun j => isNormalTensor_of_dim_one _ (overlappingBlockBasis_norm j),
+    fun j => posDef_isDiag_transferMap_one_of_dim_one _ (overlappingBlockBasis_norm j),
+    reindex_toTensor_overlappingBlockSector,
+    norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis, fun hr C => ?_⟩
+  simp only [embeddedFixedPointPair_overlappingBlockSector, coeff_overlappingBlockSector]
+  exact not_approximationError_le_overlappingBlockTensor hr C
 
 end MPSTensor

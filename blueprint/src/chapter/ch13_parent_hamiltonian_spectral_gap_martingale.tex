@@ -2361,6 +2361,32 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Thus every compatible local term annihilates $v$.
 \end{proof}
 
+\begin{theorem}[Compatible zero energy restricts to each window]
+    \label{thm:open_parent_hamiltonian_window_ground_space}
+    \lean{MPSTensor.cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_parent,
+        rem:cyclic_window_operators}
+    Let $L\le N$. If $H^{\mathrm{open}}_{N,L}(A)v=0$, then for every
+    nonwrapping start $s$ with $s+L\le N$ and every complementary
+    configuration $\tau$,
+    \begin{align}
+        \Res^\tau_{s,L}v & \in G_L(A).
+        \notag
+    \end{align}
+    This is the frustration-free extraction in
+    \cite[Equation~(3.12)]{Nachtergaele1996Spectral}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_zero_local_terms,
+        lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es}
+    A kernel vector of a sum of orthogonal projections is a kernel vector of
+    each summand. The local kernel criterion then places every window
+    restriction in the local ground space.
+\end{proof}
+
 \begin{theorem}[Compatible zero energy has open-boundary form]
     \label{thm:open_hamiltonian_kernel_le_ground_space}
     \lean{MPSTensor.ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective}
@@ -2376,21 +2402,17 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_zero_local_terms, lem:mem_ground_space_es, rem:contiguous_window_operators, rem:cyclic_window_operators, lem:local_term_es_kernel_restrictions, thm:normal_open_chain_range_reduction}
+    \uses{thm:open_parent_hamiltonian_window_ground_space, lem:mem_ground_space_es, rem:cyclic_window_operators, thm:normal_open_chain_range_reduction}
     In the following display, $s$ ranges over all starts satisfying
     $s+L_0+1\leq N$, and $\tau$ ranges over all complementary configurations.
-    The three ingredients give
+    The window restriction and the open-chain intersection theorem give
     \begin{align}
         H^{\mathrm{open}}_{N,L_0+1}(A)v=0
          & \Longrightarrow
-        \bigl(\forall s,\ h_{s,\mathrm{ES}}(A,L_0+1)v=0\bigr)
-        \Longrightarrow
         \bigl(\forall s,\tau,\
-        \Res^\tau_{s,L_0+1}v\in G_{L_0+1}^{\mathrm{ES}}(A)\bigr)
+        \Res^\tau_{s,L_0+1}v\in G_{L_0+1}(A)\bigr)
         \Longrightarrow v\in G_N^{\mathrm{ES}}(A).
     \end{align}
-    The middle implication is the local kernel criterion, and the last is the
-    open-chain intersection theorem.
 \end{proof}
 
 \begin{theorem}[Ground-state property of the compatible open chain]
@@ -2416,6 +2438,66 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Combine the mutual inclusions
     Theorem~\ref{thm:open_ground_space_le_hamiltonian_kernel} and
     Theorem~\ref{thm:open_hamiltonian_kernel_le_ground_space}.
+\end{proof}
+
+\begin{theorem}[Open-boundary states span the local ground space]
+    \label{thm:ground_space_span_open_states}
+    \lean{MPSTensor.groundSpaceMap_vecMulVec, MPSTensor.groundSpace_eq_span_openState}
+    \leanok
+    \uses{def:ground_space_parent, def:ground_space_map, def:open_state}
+    For every tensor $A$ and every $L$, the local ground space $G_{L}(A)$ is
+    spanned by the open-boundary states
+    \begin{align}
+        \sigma\longmapsto(l|A^{\sigma}|r),
+        \qquad ((l|,|r))\in\C^{D}\times\C^{D}.
+        \notag
+    \end{align}
+    Here $(l|$ and $|r)$ are the boundary vectors on both sides of
+    \cite[line~1174]{Cirac2021Matrix}, written with the bilinear pairing.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The rank-one boundary matrix $|r)(l|$ gives
+    $\Gamma_{L}(|r)(l|)(\sigma)=\tr(A^{\sigma}|r)(l|)
+        =(l|A^{\sigma}|r)$. Every boundary matrix is a linear
+    combination of matrix units, and each matrix unit is rank one.
+\end{proof}
+
+\begin{theorem}[Dimension of the open-chain ground space]
+    \label{thm:open_parent_hamiltonian_kernel_finrank}
+    \lean{MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
+    If $A$ is $L$-block-injective, then $\dim G_{L}^{\mathrm{ES}}(A)=D^{2}$.
+    If $A$ is $L_{0}$-block-injective with $L_{0}>0$, $D\geq1$ and
+    $N\geq L_{0}+1$, then
+    \begin{align}
+        \dim\ker H^{\mathrm{open}}_{N,L_{0}+1}(A) & =D^{2}.
+        \notag
+    \end{align}
+    The local support spaces of a pure generalized valence-bond-solid state with
+    auxiliary algebra $\MN{k}$ have dimension $k^{2}$ on long intervals, and
+    they are the kernels of the open-interval Hamiltonian
+    \cite[lines~1505--1510 and 1545--1558]{Nachtergaele1996Spectral}; the
+    growth argument on an open chain is
+    \cite[lines~1211--1233]{PerezGarcia2007Matrix}. The review states that
+    the open-boundary degeneracy is at least the square of the dimension of
+    the irreducible projective representation carried by the boundary
+    \cite[line~1174]{Cirac2021Matrix}. That dimension is at most $D$, so the
+    exact count $D^{2}$ is sharper than the review's lower bound.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_kernel_ground_space, lem:direct_sum_two_block_dimension_step,
+        thm:wordspan_blk_inj_succ}
+    By Lemma~\ref{lem:direct_sum_two_block_dimension_step},
+    $\dim G_{L}(A)=D^{2}$, and the canonical $\ell^{2}$
+    identification is a linear isomorphism. Block injectivity at length
+    $L_{0}$ persists to every length $N\geq L_{0}$, and
+    Theorem~\ref{thm:open_parent_hamiltonian_kernel_ground_space} identifies
+    the kernel with $G_{N}^{\mathrm{ES}}(A)$.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, equation En, lines 1060--1073.
