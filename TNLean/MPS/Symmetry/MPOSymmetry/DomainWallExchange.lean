@@ -33,8 +33,8 @@ This file formalizes the tensor-level content of these statements:
 regions longer than a buffer; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
 
 The truncated string operators `O^{[i,j]}` of `eq:DWophys`, with the endpoint tensors of
-`eq:defEndT` built from left inverses, and the operator identities `eq:z2int` and `signphysop`
-themselves, are not constructed here.
+`eq:defEndT` built from left inverses, and the operator identity `signphysop` are formalized in
+`TNLean/MPS/Symmetry/MPOSymmetry/DomainWallString.lean`.
 
 ## Main results
 

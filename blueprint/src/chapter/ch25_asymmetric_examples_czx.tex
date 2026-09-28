@@ -972,8 +972,6 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     chain containing the pair $|0\rangle$, $-|1\rangle$ with long regions is
     the phase $-1$. These are the tensor identities behind the semionic
     exchange statistics of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
-    % The truncated string operators and their exchange relation are not
-    % formalized.
 \end{theorem}
 
 \begin{proof}
@@ -984,6 +982,41 @@ the case $k=0$ is the identity $S^aS^b=S^aV\hat VS^b$.
     by $1/i$, using Theorem~\ref{thm:mpug_domain_wall_rescaling} with $s=i$;
     the second statement is Theorem~\ref{thm:mpug_domain_wall_pair} with
     $c_{AB}c_{BA}=-1$.
+\end{proof}
+
+\begin{theorem}[Semionic exchange of domain-wall strings]
+    \label{thm:asymex_czx_string_exchange}
+    \lean{CZXCompression.czx_isSeparatingLeftInverse,
+        CZXCompression.czxWallString,
+        CZXCompression.czx_wallString_mulVec_mpv,
+        CZXCompression.czx_wallString_exchange}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, def:mpug_domain_wall_string,
+        thm:mpug_domain_wall_string_creation,
+        thm:mpug_domain_wall_string_exchange}
+    With the action tensors and the domain walls $e_{AB}=|0\rangle$,
+    $e_{BA}=-|1\rangle$ of Theorem~\ref{thm:asymex_czx_domain_walls}, the
+    vectors $\langle0|$ and $\langle1|$ are left inverses of the two product
+    states with separated supports, and the domain-wall string $O^{[i,j]}$
+    creates the state $\ket{\psi(0\text{-}1\text{-}0)}$ from
+    $|0\rangle^{\otimes N}$ on the periodic chain of every length $N\geq2$,
+    for all sites $i<j$. For sites $i_2<i_1<j_1<j_2$ whose three inner
+    regions are longer than a fixed buffer,
+    \begin{align}
+        O^{[i_1,j_1]}O^{[i_2,j_2]}|0\rangle^{\otimes N}
+         & =-\,O^{[i_2,j_2]}O^{[i_1,j_1]}|0\rangle^{\otimes N},
+        \notag
+    \end{align}
+    the semionic statistics of the domain walls of
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_domain_walls, thm:mpug_domain_wall_string_exchange}
+    The left inverses are checked letter by letter. The exchange is
+    Theorem~\ref{thm:mpug_domain_wall_string_exchange} with
+    $c_{AB}c_{BA}=1\cdot(-1)=-1$.
 \end{proof}
 
 \begin{corollary}[No invariant normal state]

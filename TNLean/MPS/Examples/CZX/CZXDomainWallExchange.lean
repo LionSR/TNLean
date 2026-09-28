@@ -20,7 +20,8 @@ and a symmetry string passing over a pair of domain walls acquires `ω` (`signph
 the local action of the generator on an open chain containing the pair of walls
 `e_{AB} = |0⟩`, `e_{BA} = -|1⟩` of `CZXCompression.czxWallAB` and `CZXCompression.czxWallBA` is
 `-1`. These are the tensor identities behind the semionic statistics of the source; the
-truncated string operators and their exchange relation are not constructed.
+exchange relation of the truncated string operators is
+`CZXCompression.czx_wallString_exchange`.
 
 **Local fix (printed left action vectors):** the explicit walls use the action tensors of
 `CZXCompression.czxBlockActionData`, whose left action vectors `⟨1|` and `-⟨0|` replace the vector

@@ -5312,6 +5312,122 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     the local relations of $e$ and $f$.
 \end{proof}
 
+\begin{definition}[Domain-wall string operators]
+    \label{def:mpug_domain_wall_string}
+    \lean{MPOTensor.physPairing,
+        MPOTensor.leftEndpoint,
+        MPOTensor.rightEndpoint,
+        MPOTensor.leftAct,
+        MPOTensor.rightAct,
+        MPOTensor.wallSplit,
+        MPOTensor.wallConfig,
+        MPOTensor.wallConfig_comp_cast,
+        MPOTensor.ofFn_wallConfig,
+        MPOTensor.stringKernel,
+        MPOTensor.stringOperator,
+        MPOTensor.GroupFamily.IsSeparatingLeftInverse,
+        MPOTensor.GroupFamily.BlockActionData.wallLeftEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.wallRightEndpoint,
+        MPOTensor.GroupFamily.BlockActionData.wallString}
+    \leanok
+    \uses{def:mpug_domain_wall_action}
+    Let $g$ exchange the blocks $A=A_x$ and $B=A_y$, with left and right action
+    tensors $V_B=V_{g,x}$, $W_B=W_{g,x}$ on $A$ and $V_A=V_{g,y}$,
+    $W_A=W_{g,y}$ on $B$, and let $e_{AB}$ and $e_{BA}$ be domain walls. Let
+    $\hat A$ and $\hat B$ be left inverses of $A$ and $B$ with separated
+    supports,
+    \begin{align}
+        \sum_\sigma \hat A^\sigma_{\alpha\beta}A^\sigma_{\gamma\delta}
+         & =\delta_{\alpha\gamma}\delta_{\beta\delta},
+         &
+        \sum_\sigma \hat A^\sigma_{\alpha\beta}B^\sigma_{\gamma\delta}
+         & =0,
+        \notag
+    \end{align}
+    and likewise for $\hat B$. The left endpoint tensor is
+    $V_Be_{AB}\hat A+V_Ae_{BA}\hat B$: its input leg is mapped by the left
+    inverse to a pair of virtual indices, which are closed by the domain wall
+    and the left action tensor, leaving the output leg and one bond of the
+    operator string. The right endpoint tensor is
+    $W_Be_{BA}\hat A+W_Ae_{AB}\hat B$. The string operator $O^{[i,j]}$ on the
+    periodic chain acts by the identity outside the sites $i,\dots,j$, by the
+    two endpoint tensors on the sites $i$ and $j$, and by the tensor of $O_g$
+    on the sites between them
+    \cite[Section~III.E]{GarreRubioSchuch2024DomainWall}.
+\end{definition}
+
+\begin{theorem}[Domain-wall strings create pairs of domain walls]
+    \label{thm:mpug_domain_wall_string_creation}
+    \lean{MPOTensor.stringOperator_mulVec_wallConfig,
+        MPOTensor.stringOperator_mulVec_trace,
+        MPOTensor.mpv_wallConfig,
+        MPOTensor.leftAct_mul_physAct_mul_rightAct,
+        MPOTensor.leftAct_leftEndpoint,
+        MPOTensor.leftAct_leftEndpoint_eq_zero,
+        MPOTensor.rightAct_rightEndpoint,
+        MPOTensor.rightAct_rightEndpoint_eq_zero,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_left,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right}
+    \leanok
+    \uses{def:mpug_domain_wall_string, thm:mpug_domain_wall_state}
+    On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
+    \begin{align}
+        O^{[i,j]}\ket{\psi_A}
+         & =\ket{\psi(A\text{-}B\text{-}A)},
+         &
+        O^{[i,j]}\ket{\psi_B}
+         & =\ket{\psi(B\text{-}A\text{-}B)},
+        \notag
+    \end{align}
+    with the domain walls $e_{AB}$ at $i$ and $e_{BA}$ at $j$ in the first
+    state and $e_{BA}$ at $i$ and $e_{AB}$ at $j$ in the second
+    \cite[Section~III.E]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    On a state given by the trace of a chain, the string operator acts by
+    its endpoint tensors on the letters of the two endpoint sites and by the
+    physical action of $O_g$ on the chain between them. On $A$ the left
+    inverse $\hat A$ turns the left endpoint into $e_{AB}V_B$ and the right
+    endpoint into $W_Be_{BA}$, while the terms with $\hat B$ vanish; the
+    action tensors reduce the string of $O_g\cdot A$ between them to $B$.
+    On $B$ the terms with $\hat B$ act in the same way.
+\end{proof}
+
+\begin{theorem}[Exchange of two domain-wall strings]
+    \label{thm:mpug_domain_wall_string_exchange}
+    \lean{MPOTensor.wallConfig_resplit,
+        MPOTensor.twoWallChain_append,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv}
+    \leanok
+    \uses{thm:mpug_domain_wall_string_creation, thm:mpug_domain_wall_pair}
+    Suppose $g$ carries $e_{AB}$ to $e_{BA}$ with phase $c_{AB}$ and $e_{BA}$
+    to $e_{AB}$ with phase $c_{BA}$. For sites $i_2<i_1<j_1<j_2$ whose three
+    inner regions are longer than a fixed buffer,
+    \begin{align}
+        O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}
+         & =c_{AB}c_{BA}\,O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}.
+        \notag
+    \end{align}
+    When $(c_{AB}c_{BA})^2=1$, this is equivalent to the relation
+    $O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}=c_{AB}c_{BA}\,
+        O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}$ of
+    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}; for a general
+    product of phases the relation proved here is that relation with
+    $c_{AB}c_{BA}$ replaced by its inverse. The buffer is the
+    blocked form of the local action \cite{gap:gs24_domain_wall_nondegenerate}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Both sides are multiples of the state with the domain walls $e_{AB}$,
+    $e_{BA}$, $e_{AB}$, $e_{BA}$ at $i_2,i_1,j_1,j_2$. If the inner string
+    acts first, the outer string passes over its two domain walls, and
+    Theorem~\ref{thm:mpug_domain_wall_pair} gives the phase $c_{AB}c_{BA}$.
+    If the outer string acts first, the inner string acts on the $B$ region
+    it created, and Theorem~\ref{thm:mpug_domain_wall_string_creation} gives
+    no phase.
+\end{proof}
+
 \begin{theorem}[Rescaling domain walls]
     \label{thm:mpug_domain_wall_rescaling}
     \lean{MPOTensor.actRect_smul,
