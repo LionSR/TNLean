@@ -725,9 +725,10 @@ and its error extend to blocks of any lengths.
     has the coefficient
     $\sum_c\prod_k\bra{s_k}V_{\ell_k}\ket{c_k}\,\Omega(c)$ at the configuration
     $s=(s_1,\dots,s_M)$ read block by block, where $c_k=(l_k,r_k)$ and $\Omega$ is
-    the pair product state~(\ref{eq:prep_pair_product}) of $\omega$. For
-    $\ell_k=q$ and $\omega$ the pair of the fixed point it is the approximating
-    state of Definition~\ref{def:ldp_approximating_state}.
+    the pair product state~(\ref{eq:prep_pair_product}) of $\omega$. If the
+    $q$-site blocked tensor is injective, $\ell_k=q$ for every $k$, and $\omega$
+    is the pair of a fixed point $\sigma\ge0$ with $\Tr\sigma=1$, it is the
+    approximating state of Definition~\ref{def:ldp_approximating_state}.
 \end{definition}
 
 \begin{lemma}[Norm and overlap for blocks of prescribed lengths]
@@ -1008,9 +1009,10 @@ and its error extend to blocks of any lengths.
     \lean{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState,
         MPSPreparation.blockIsometryState_normalizedTracePair,
         MPSPreparation.exists_isPreparedInDepth_of_norm_eq_one,
-        MPSPreparation.norm_normalizedMPVState}
+        MPSTensor.norm_normalizedMPVState}
     \leanok
     \uses{thm:ldp_approximating_state_depth, def:ldp_block_isometry_state,
+        lem:ldp_block_isometry_state_overlap,
         thm:ldp_bounded_unitary_two_site_gates, def:ldp_local_circuit}
     There is $C$, depending only on $d$ and $D$, such that for every tensor $A$
     and every $N\ge3D$ for which the $N$-site blocked tensor is injective and
@@ -1157,8 +1159,8 @@ of a local circuit that may add product ancillas and discard them
     for every $N\ge2$ and $0<\varepsilon\le1$ for which the periodic state
     $\ket{\phi_N(A)}$ is nonzero, a state $\ket{\psi_N}$ with
     $\varepsilon(\psi_N,\phi_N)\le\varepsilon$ is prepared in depth at most
-    $c\log(N/\varepsilon)$. There is $N_0$ such that $\ket{\phi_N(A)}\neq0$ for
-    every $N\ge N_0$, so for $N\ge N_0$ the condition can be dropped. This is
+    $c\log(N/\varepsilon)$. If $D\ge1$, there is $N_0$ such that
+    $\ket{\phi_N(A)}\neq0$ for every $N\ge N_0$, so for $N\ge N_0$ the condition can be dropped. This is
     \cite[eq.~(1)]{Malz2024Preparation}; the source normalizes
     $\ket{\phi_N}=\ket{\phi_N(A)}/c_N$ with $c_N>0$, and for some normal tensors
     $\ket{\phi_2(A)}=0$ \cite{gap:mswc24_depth_upper_bound_nonzero_state}.
@@ -1169,7 +1171,10 @@ of a local circuit that may add product ancillas and discard them
         thm:ldp_block_approximation_error, thm:ldp_approximating_state_depth,
         thm:ldp_short_chain_preparation, lem:ldp_periodic_state_nonzero,
         lem:ldp_block_isometry_state_overlap, thm:wordspan_blk_inj_succ,
-        lem:isNBlkInjective_iff_blockTensor_isInjective}
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        thm:gauge_invariance_normal, thm:normality_rescaling_invariance,
+        thm:is_normal_tensor_of_is_normal_left_canonical, thm:eigenvalue_bound,
+        thm:primitive_fixed_point_trace_normalization, thm:transfer_channel}
     Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
     Theorem~\ref{thm:ldp_depth_upper_bound_divisible}, with fixed point $\sigma$,
     a bound $t<1$ on the moduli of the eigenvalues other than $1$, and
