@@ -108,7 +108,6 @@ theorem IsMPU.neZero_bond [NeZero d] (hU : IsMPU U) : NeZero D := ⟨by
   have hentry := congrFun (congrFun hunit c) c
   simp at hentry⟩
 
-
 /-- A trace-normalized positive diagonal factor of a positive stabilized power
 gives canonical-form-II data for the original tensor, in its original bond
 coordinates.
