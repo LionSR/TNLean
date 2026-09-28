@@ -106,6 +106,26 @@ remaining eigenvalues have modulus strictly less than $1$.
     the square root is continuous on positive semidefinite matrices.
 \end{proof}
 
+\begin{theorem}[H\"older bound for the square root]
+    \label{thm:ldp_sqrt_holder}
+    \lean{CFC.norm_sqrt_sub_sqrt_le}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra. Then
+    $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert^{1/2}$.
+    This is the operator inequality quoted in
+    \cite[Supplemental Material]{Piroli2021LOCC}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $\varepsilon=\lVert a-b\rVert$ and $s=\sqrt\varepsilon$, so that
+    $a\le b+\varepsilon$. Then
+    $(\sqrt b+s)^2=b+2s\sqrt b+s^2\ge b+\varepsilon\ge a$, and operator
+    monotonicity of the square root gives $\sqrt a\le\sqrt b+s$.
+    Exchanging $a$ and $b$ gives $\sqrt b\le\sqrt a+s$. Since
+    $\sqrt a-\sqrt b$ is self-adjoint and lies between $-s$ and $s$, its norm
+    is at most $s$.
+\end{proof}
+
 \begin{theorem}[Square root near a positive definite element]
     \label{thm:ldp_sqrt_lipschitz}
     \lean{CFC.algebraMap_sqrt_le_sqrt, CFC.norm_sqrt_sub_sqrt_le_div,
@@ -117,10 +137,12 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:ldp_sqrt_holder}
     Write $\varepsilon=\lVert a-b\rVert$, so that
     $-\varepsilon\le a-b\le\varepsilon$. The square root is operator
     monotone, so $\sqrt b\ge\sqrt c$. If $\varepsilon>c$, the bound
-    $\lVert\sqrt a-\sqrt b\rVert\le\sqrt\varepsilon$ suffices, since
+    $\lVert\sqrt a-\sqrt b\rVert\le\sqrt\varepsilon$ of
+    Theorem~\ref{thm:ldp_sqrt_holder} suffices, since
     $\sqrt\varepsilon\le\varepsilon/\sqrt c$. Otherwise let
     $s=\varepsilon/\sqrt c\le\sqrt c$. Then
     $(\sqrt b+s)^2=b+2s\sqrt b+s^2\ge b+2s\sqrt c\ge b+\varepsilon\ge a$,
