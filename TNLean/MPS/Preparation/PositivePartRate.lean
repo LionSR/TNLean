@@ -270,7 +270,10 @@ Project result; improves the rate of arXiv:2307.01696, Lemma 1 / SM positive-par
 it) applies the Hölder bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` to `\tilde{A} = √(A†A)` and
 `\tilde{B} = √(B†B)`; here `P_∞² = σᵀ ⊗ 1` is positive definite, so the square root is Lipschitz
 there (`CFC.norm_sqrt_sub_sqrt_le_div`) and the rate of the Gram matrices passes to the positive
-parts without halving the exponent. -/
+parts without halving the exponent. The same Lipschitz step appears in arXiv:2606.24475
+(Murota, Sauvage, Ballarin, Matos, Rinaldi), App. B3, eqs. (S27)–(S32), under a
+diagonalizability assumption on the transfer matrix; the range `γ < 1` for every normal tensor
+is the part proved here. -/
 theorem exists_norm_polarPos_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
