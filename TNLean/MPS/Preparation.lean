@@ -10,6 +10,9 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
+import TNLean.MPS.Preparation.BlockApproximationError
+import TNLean.MPS.Preparation.BlockIsometryState
+import TNLean.MPS.Preparation.BlockSites
 import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
@@ -31,6 +34,7 @@ import TNLean.MPS.Preparation.GivensDecomposition
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalChannelCircuit
 import TNLean.MPS.Preparation.LocalCircuit
+import TNLean.MPS.Preparation.LogDepthPreparation
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
@@ -51,6 +55,7 @@ import TNLean.MPS.Preparation.SequentialFactorization
 import TNLean.MPS.Preparation.SequentialNoAncilla
 import TNLean.MPS.Preparation.SequentialResources
 import TNLean.MPS.Preparation.SequentialTransition
+import TNLean.MPS.Preparation.ShortChainPreparation
 import TNLean.MPS.Preparation.SiteEmbedding
 import TNLean.MPS.Preparation.Staircase
 import TNLean.MPS.Preparation.TreeFactorization

@@ -5,10 +5,10 @@
 \input{command}
 \title{Preparation in Logarithmic Depth: Chain Lengths Divisible by the Block Length}
 \author{}
-\date{2026-09-27}
+\date{2026-09-27; resolved 2026-09-28}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 Let $A$ be a normal tensor of physical dimension $d$ and bond dimension $D$, and
@@ -33,11 +33,11 @@ lower bound in the Supplemental Material of the source, which uses the same
 blocking, says instead that the blocks are ``all of the same size, $q_N$,
 except for the last one, which may be larger''.
 
-\section{The restriction adopted}
-The formal statement asks that the block length divide the chain
+\section{The restriction formerly adopted}
+The formal statement first asked that the block length divide the chain
 length.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isPreparedInDepth_approximationError_le} and
-    \leanid{MPSPreparation.exists_isPreparedInDepth_le_log} in
+    \leanid{MPSPreparation.exists_isPreparedInDepth_le_log_of_dvd} in
     \doclink{TNLean/MPS/Preparation/DepthLogBound}.}
 There is $C$, depending only on $d$ and $D$, such that for every normal tensor
 $A$ with $D\geq1$ there are $a>0$ and $b\geq1$, depending only on $A$, with the
@@ -72,6 +72,57 @@ than this block length, $N<q$, have no block of length $q$ and are not covered
 by the three steps; they need a separate argument. The source does not treat
 them: its proof of the lower bound takes $N$ ``such that we have a large number
 of blocks''.
+
+\section{Resolution}
+The restriction is removed by the unequal blocks of the proof of the lower
+bound, together with an exact preparation of chains shorter than the block
+length.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isPreparedInDepth_le_log_of_mpvState_ne_zero}
+    and \leanid{MPSPreparation.exists_isPreparedInDepth_le_log} in
+    \doclink{TNLean/MPS/Preparation/LogDepthPreparation}; the three steps are
+    \leanid{MPSTensor.blockIsometryState},
+    \leanid{MPSTensor.exists_blockApproximationError_le_mul}, and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_blockIsometryState}; the
+    short chains are
+    \leanid{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState} and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_of_norm_eq_one}.}
+Let $q=\lceil a\log(N/\varepsilon)+b\rceil$.
+
+\paragraph{Chains with $N\ge q$.} Write $N=(M-1)q+q'$ with $M=\lfloor N/q\rfloor$
+and $q'=q+(N\bmod q)$, so $q\le q'<2q$. The three steps of the elimination
+plan above hold for any lengths $\ell_1,\dots,\ell_M$ of the blocks. The
+state $(\bigotimes_kV_{\ell_k})\ket\Omega$ is a unit vector when the blocked
+tensors are injective. Its overlap with $\ket{\phi_N(A)}$ is
+$\operatorname{Tr}(\tau_{\ell_1}\cdots\tau_{\ell_M})$, with $\tau_\ell$ the mixed transfer
+matrix of $P_\ell$ against $P_\infty$. The telescoping identity
+\begin{align}
+    X_1\cdots X_M-E^M
+     & =\sum_{k=1}^{M}X_1\cdots X_{k-1}(X_k-E)E^{M-k}
+    \label{eq:mswc24_depth_telescoping_product}
+\end{align}
+bounds it for any matrices with $\lVert X_k-E\rVert\le\delta$ and $E^2=E$, by
+$c((1+c\delta)^M-1)$ as for equal factors. With $\lVert\tau_\ell-\tau_\infty\rVert
+=O(e^{-\gamma\ell/\xi})\le O(e^{-\gamma q/\xi})$ for $\ell\ge q$ and
+$\lvert\lambda_2\rvert\le1$, the error is $O(Me^{-\gamma q/\xi})$, which is at
+most $\varepsilon$ as for equal blocks. The circuit applies a staircase of depth
+$O(\ell_k)$ on each block, in parallel; the depth is $O(q')=O(q)$.
+
+\paragraph{Chains with $N<q$.} Then $N<a\log(N/\varepsilon)+b$, and it suffices
+to prepare $\ket{\phi_N}$ exactly in depth $O(N)$. When the $N$-site blocked
+tensor $\mathcal B_N=VP$ is injective and $N\ge3D$,
+$\phi_N(A)(s)=\operatorname{Tr}\mathcal B_N^s=\sum_{l,r}\bra sV\ket{l,r}\operatorname{Tr} P^{(l,r)}$, so
+$\ket{\phi_N}$ is the state of a single block with the pair
+$\omega(r,l)\propto\operatorname{Tr} P^{(l,r)}$ in place of the pair of the fixed point, and
+the same circuit prepares it in depth $O(N)$. This is the sequential
+preparation of a matrix product state. Below the injectivity length plus $3D$,
+which depends only on $A$, every unit vector is a unitary applied to
+$\ket{0\cdots0}$ on a bounded number of sites, a circuit of bounded depth.
+In both regimes the depth is at most a constant times
+$a\log(N/\varepsilon)+b\le(a+b/\log2)\log(N/\varepsilon)$.
+
+The normalization of $\ket{\phi_N(A)}$ presupposes $\ket{\phi_N(A)}\neq0$; the
+main theorem assumes it, and it holds for every sufficiently large $N$; see
+\path{docs/paper-gaps/mswc24_depth_upper_bound_nonzero_state.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
