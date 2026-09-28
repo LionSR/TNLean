@@ -126,10 +126,23 @@ remaining eigenvalues have modulus strictly less than $1$.
     is at most $s$.
 \end{proof}
 
+\begin{theorem}[Scalar lower bound for the square root]
+    \label{thm:ldp_sqrt_scalar_lower_bound}
+    \lean{CFC.algebraMap_sqrt_le_sqrt}
+    \leanok
+    Let $b$ be an element of a C$^*$-algebra and $c\ge0$ a real number with
+    $b\ge c\,\Id$. Then $\sqrt b\ge\sqrt c\,\Id$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The element $\sqrt c\,\Id$ is positive and its square is $c\,\Id\le b$, so
+    operator monotonicity of the square root gives
+    $\sqrt c\,\Id=\sqrt{c\,\Id}\le\sqrt b$.
+\end{proof}
+
 \begin{theorem}[Square root near a positive definite element]
     \label{thm:ldp_sqrt_lipschitz}
-    \lean{CFC.algebraMap_sqrt_le_sqrt, CFC.norm_sqrt_sub_sqrt_le_div,
-        IsStrictlyPositive.exists_norm_sqrt_sub_sqrt_le}
+    \lean{CFC.norm_sqrt_sub_sqrt_le_div}
     \leanok
     Let $a,b$ be positive elements of a C$^*$-algebra with $b\ge c\,\Id$ for
     a real number $c>0$. Then
@@ -137,10 +150,10 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_sqrt_holder}
+    \uses{thm:ldp_sqrt_holder, thm:ldp_sqrt_scalar_lower_bound}
     Write $\varepsilon=\lVert a-b\rVert$, so that
-    $-\varepsilon\le a-b\le\varepsilon$. The square root is operator
-    monotone, so $\sqrt b\ge\sqrt c$. If $\varepsilon>c$, the bound
+    $-\varepsilon\le a-b\le\varepsilon$. By
+    Theorem~\ref{thm:ldp_sqrt_scalar_lower_bound}, $\sqrt b\ge\sqrt c$. If $\varepsilon>c$, the bound
     $\lVert\sqrt a-\sqrt b\rVert\le\sqrt\varepsilon$ of
     Theorem~\ref{thm:ldp_sqrt_holder} suffices, since
     $\sqrt\varepsilon\le\varepsilon/\sqrt c$. Otherwise let
@@ -151,6 +164,24 @@ remaining eigenvalues have modulus strictly less than $1$.
     because $s^2\le\varepsilon$. Operator monotonicity of the square root
     gives $\sqrt b-s\le\sqrt a\le\sqrt b+s$, that is,
     $\lVert\sqrt a-\sqrt b\rVert\le s$.
+\end{proof}
+
+\begin{theorem}[Lipschitz constant of the square root at an invertible positive element]
+    \label{thm:ldp_sqrt_lipschitz_constant}
+    \lean{IsStrictlyPositive.exists_norm_sqrt_sub_sqrt_le}
+    \leanok
+    Let $b$ be a positive invertible element of a C$^*$-algebra. There is a
+    real number $K\ge0$ such that
+    $\lVert\sqrt a-\sqrt b\rVert\le K\lVert a-b\rVert$ for every positive
+    element $a$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_lipschitz}
+    If the algebra is zero, take $K=0$. Otherwise the spectrum of $b$ is a
+    compact subset of $(0,\infty)$, so $b\ge c\,\Id$ for some real $c>0$, and
+    Theorem~\ref{thm:ldp_sqrt_lipschitz} gives the bound with
+    $K=1/\sqrt c$.
 \end{proof}
 
 \begin{theorem}[Rate of convergence of the positive part]
@@ -178,7 +209,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_sqrt_lipschitz}
+    \uses{thm:ldp_sqrt_lipschitz_constant}
     Write $\E_\infty(X)=\Tr(X)\rho$. The eigenvalues $z$ of
     $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
     $1$, so $\lvert z\rvert\le\lvert\lambda_2\rvert$, and
@@ -192,9 +223,9 @@ remaining eigenvalues have modulus strictly less than $1$.
     bound. By the rearrangement in the proof of
     Lemma~\ref{lem:ldp_positive_part_converges},
     $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$. Since
-    $P_\infty^2=\rho^{\mathsf T}\otimes\Id\ge c\,\Id$ with $c>0$ the least
-    eigenvalue of $\rho$, Theorem~\ref{thm:ldp_sqrt_lipschitz} gives
-    $\lVert P_q-P_\infty\rVert\le K_1r^q/\sqrt c$.
+    $P_\infty^2=\rho^{\mathsf T}\otimes\Id$ is positive definite,
+    Theorem~\ref{thm:ldp_sqrt_lipschitz_constant} gives $L\ge0$ with
+    $\lVert P_q-P_\infty\rVert\le LK_1r^q$.
 \end{proof}
 %% The source applies ||sqrt X - sqrt Y|| <= ||X - Y||^{1/2}, which halves the
 %% exponent and forces gamma < 1/2. At the positive definite point P_infty^2
