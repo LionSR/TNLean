@@ -122,7 +122,9 @@ $\ket{\phi_{A^j}}$ are pairwise different
 \cite[lines~1329--1330]{PerezGarcia2007MPSReps}: two equal blocks with
 different weights, or two blocks related by a gauge transformation and a
 phase $\omega$ with $\omega^N\neq1$, give different states. Step~5 is
-formalized when the first matrix of every block is invertible. The formal
+formalized when the one-letter span of every block contains a matrix with a
+nonzero eigenvalue; an invertible first matrix is a sufficient special case.
+An unequal-cut argument also sharpens the finite-length estimate. The formal
 results are the following.
 \begin{itemize}
     \item The amplitudes of a canonical form are the weighted sums of the block
@@ -176,6 +178,24 @@ results are the following.
           arbitrary nonzero coefficients $c_j$ in place of $\lambda_j^N$, for blocks
           that satisfy the three conditions of the canonical form.
 
+    \item An unequal-cut refinement. Put $F=\max\{L_0,3(b-1)(L_0+1)\}$.
+          Then
+          \begin{align}
+              N & <\max\{L_0+F,12(b-1)\}.
+              \label{eq:rmp_w_state_ti_bound_asymmetric}
+          \end{align}
+          For $b=0$, the expression $b-1$ is read as zero. If $N\ge L_0+F$,
+          the long side of the cut isolates any single block, while injectivity
+          on the short side gives $D_j^2\le2$. All blocks are therefore scalar
+          and, by unitality, injective at length one. Applying
+          (\ref{eq:rmp_w_state_ti_bound_conditional}) at that length gives
+          $N<2\max\{1,6(b-1)\}$ and proves
+          (\ref{eq:rmp_w_state_ti_bound_asymmetric}). Its threshold is never larger
+          than $2F$, and equals $L_0+F$ for $L_0\ge3$.\footnote{Formal declarations:
+              \leanid{MPSTensor.sq_dim_le_finrank_of_forall_mem},
+              \leanid{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator_asymmetric}, and
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_asymmetric}.}
+
     \item Step~5 when every $A^j_0$ is invertible. The source proves that
           condition C1 then holds at $L_0=D^2$
           \cite[lines~2115--2118]{PerezGarcia2007MPSReps}. The formal counterpart
@@ -186,6 +206,20 @@ results are the following.
           $N<2\max\bigl(D^2+1,\,3(D-1)(D^2+2)\bigr)$, that is,
           $D=\Omega(N^{1/3})$.\footnote{Formal declaration:
               \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit}.}
+
+    \item The cubic conclusion under a weaker hypothesis. Suppose each
+          block is injective at some positive length and its one-letter span
+          contains $X_j$ with $X_j\phi_j=\mu_j\phi_j$, where $\mu_j\ne0$ and
+          $\phi_j\ne0$. Wolf's nonzero-eigenvalue bound gives injectivity at
+          $D_j^2$ \cite[Theorem~6.9(3)]{Wolf2012Quantum}. With $L=\max\{1,D^2\}$,
+          (\ref{eq:rmp_w_state_ti_bound_asymmetric}) gives
+          \begin{align}
+              N & <\max\bigl\{L+\max\{L,3(D-1)(L+1)\},12(D-1)\bigr\}.
+              \label{eq:rmp_w_state_ti_bound_eigenvalue}
+          \end{align}
+          For $D>0$, $L=D^2$, so $D=\Omega(N^{1/3})$. The maximum with one
+          includes $D=N=0$.\footnote{Formal declaration:
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_nonzero_eigenvalue}.}
 
     \item An explicit bound in $D$ for primitive blocks, weaker than the
           source's. If the adjoint
@@ -297,10 +331,12 @@ $D\succeq O(N^{1/3})$.
           changes the length to $N/p$ and needs the periods to divide $N$.
 
     \item The explicit Wielandt index $L_0=O(D^2)$ (Conjecture~2) or
-          $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov) for blocks without an
-          invertible matrix. Wolf's general bound $(D^2-k+1)D^2$ is formalized,
-          which yields $D=\Omega(N^{1/5})$; the bound $D^2$ is formalized only when
-          every $A^j_0$ is invertible.
+          $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov) for blocks without a
+          one-step matrix having a nonzero eigenvalue. Wolf's general bound
+          $(D^2-k+1)D^2$ is formalized, which yields $D=\Omega(N^{1/5})$;
+          the bound $D^2$ is available when each one-letter span contains a matrix
+          with a nonzero eigenvalue, as in
+          (\ref{eq:rmp_w_state_ti_bound_eigenvalue}).
 \end{itemize}
 
 \section{Formalized open-boundary representation}
@@ -364,7 +400,9 @@ This note records a deferred result, not a gap in a claimed formalization. The
 open-boundary representation with $D=2$ is fully proved. The core of the
 source proof is formalized as the conditional bound
 (\ref{eq:rmp_w_state_ti_bound_conditional}), with the single-block threshold
-corrected. When every $A^j_0$ is invertible it gives the source's
+corrected and the unequal-cut refinement
+(\ref{eq:rmp_w_state_ti_bound_asymmetric}) proved. When every one-letter
+span contains a matrix with a nonzero eigenvalue, it gives
 $D=\Omega(N^{1/3})$, and with primitive blocks it gives
 $D=\Omega(N^{1/5})$. For an arbitrary tensor at prime length the reduction is
 formalized, which gives

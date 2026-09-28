@@ -2327,6 +2327,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### weighted W-state rows across a cut — candidate
+- **Pattern:** rewrite a weighted sum of traces of two word products as a
+  scalar multiple of the W amplitude on the concatenated configuration, then
+  use `wIndicator_append_mem_span` to put the cut row in the two-dimensional
+  span of the vacuum and single-excitation indicators.
+- **Seen:** two occurrences in one file (2026-09-28):
+  `lt_of_sum_mpv_eq_smul_wIndicator` and
+  `lt_of_sum_mpv_eq_smul_wIndicator_asymmetric` in
+  `TNLean/MPS/Examples/WStateCanonicalBound.lean`.
+- **Abstraction:** if another cut-rank application repeats this conversion,
+  state a row-membership lemma taking the weighted W-state identity and the
+  two cut lengths.
+- **Notes:** below the promotion threshold. The shared long-side spanning
+  argument is already extracted as
+  `blockTracePairing_range_le_of_forall_mem` in
+  `TNLean/MPS/ParentHamiltonian/PGVWC07CutRank.lean` and used in both cut-rank
+  estimates.
+
 ### Positive local terms with prescribed kernels
 
 For two finite families of positive operators with equal kernels term by
