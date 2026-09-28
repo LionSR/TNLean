@@ -50,8 +50,8 @@ choice functions `J`.
   identity, attaching an ancilla in a fixed state, and discarding the ancilla.
 * `MPSPreparation.IsLocalChannelProtocol` — maps of the form
   `Φ_T ∘ L_T ∘ ⋯ ∘ L_1 ∘ Φ_0` with `T` channel layers `L_t`.
-* `MPSPreparation.IsLocalChannelConversion` — conversion of one density matrix into another
-  by such a map of depth at most `T`.
+* `MPSPreparation.IsLocalChannelConversion` — conversion of one matrix into another by such
+  a map of depth at most `T`; a conversion of a density matrix is a density matrix.
 
 ## Main results
 
@@ -441,8 +441,8 @@ theorem exists_dual {T : ℕ}
 
 end IsLocalChannelProtocol
 
-/-- A density matrix `ρ` on `d`-level sites is *locally convertible in depth `T`* into a
-density matrix `σ` on `d'`-level sites when `σ = Ψ(ρ)` for a protocol `Ψ` of depth at most `T`
+/-- A matrix `ρ` on `d`-level sites is *locally convertible in depth `T`* into a
+matrix `σ` on `d'`-level sites when `σ = Ψ(ρ)` for a protocol `Ψ` of depth at most `T`
 alternating onsite channels (attaching ancillas, local operations on each site and its
 ancillas, discarding ancillas) with layers of local channels on pairs of neighbouring sites.
 
@@ -459,7 +459,7 @@ namespace IsLocalChannelConversion
 
 variable {d' d'' : ℕ}
 
-/-- Every density matrix is converted into itself in depth `0`. -/
+/-- Every matrix is converted into itself in depth `0`. -/
 theorem refl (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) : IsLocalChannelConversion 0 ρ ρ :=
   ⟨0, le_rfl, _, .onsite (OnsiteChannel.id d N), by rw [OnsiteChannel.id_map, LinearMap.id_apply]⟩
 

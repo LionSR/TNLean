@@ -1336,22 +1336,22 @@ change the local dimension act on single sites.
 \begin{proof}
     \leanok
     Write $\rho=\bigotimes_i\sigma_i$ and $\sigma=\Psi(\rho)$ for a local
-    channel protocol $\Psi$ of depth $T$. By induction on the protocol,
+    channel protocol $\Psi$ of depth $T'\le T$. By induction on the protocol,
     $\Psi$ has a dual $\Psi^\dagger$ with
     $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
-    on $X$ to operators acting on the sites within distance $T$ of $X$, and
+    on $X$ to operators acting on the sites within distance $T'$ of $X$, and
     that satisfies
     \begin{align}
         \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
         \label{eq:ldp_conversion_dual_mul}
     \end{align}
-    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
+    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T'$ are
     disjoint. For an onsite channel this is
     Lemma~\ref{lem:ldp_onsite_channel_locality}; a channel layer adds one to
     the radius, by Lemma~\ref{lem:ldp_channel_light_cone} for the support and
     as in the proof of Lemma~\ref{lem:ldp_channel_light_cone_correlations}
     for (\ref{eq:ldp_conversion_dual_mul}), and an onsite channel keeps it.
-    If $Z$ and $Z'$ act on sets at distance larger than $2T$, then
+    If $Z$ and $Z'$ act on sets at distance larger than $2T\ge2T'$, then
     $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and the
     factorization of the product density $\rho$ gives
     \begin{align}
