@@ -138,7 +138,7 @@ theorem mpvExpectation_smul (A : MPSTensor d D) (N : ℕ) (c : ℂ)
 /-- The normalized expectation of the identity is `1` when `φ_N(A) ≠ 0`. -/
 theorem mpvExpectation_one (A : MPSTensor d D) {N : ℕ} (h : mpvState A N ≠ 0) :
     mpvExpectation A N 1 = 1 := by
-  have hχ := norm_inv_smul_mpvState h
+  have hχ : ‖((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N‖ = 1 := norm_normalizedMPVState h
   simp only [mpvExpectation, Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply]
   rw [inner_self_eq_norm_sq_to_K, hχ]
   norm_num
@@ -309,7 +309,7 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
   have hn1 : 0 < n := hn_def ▸ Nat.div_pos (by omega) hΔpos
   set φ : EuclideanSpace ℂ (Cfg d N) := ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N with hφ_def
   set χ : EuclideanSpace ℂ (Cfg d N) := WithLp.toLp 2 ψ with hχ_def
-  have hφ : ‖φ‖ = 1 := norm_inv_smul_mpvState hne
+  have hφ : ‖φ‖ = 1 := norm_normalizedMPVState hne
   have hχ : ‖χ‖ = 1 := MPSPreparation.norm_toLp_eq_one hψ1
   /- The centred observables. -/
   obtain ⟨e, he⟩ : ∃ e, e = mpvExpectation A N (chainWindowOperator N 0 O) := ⟨_, rfl⟩

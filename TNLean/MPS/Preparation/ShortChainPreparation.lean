@@ -42,12 +42,6 @@ theorem sum_star_mul_self_eq_norm_sq {N : ℕ} (v : MPVSpace d N) :
   rw [← Complex.conj_mul']
   rfl
 
-/-- The normalized periodic state is a unit vector when the periodic state does not vanish. -/
-theorem norm_normalizedMPVState {A : MPSTensor d D} {N : ℕ} (h : mpvState A N ≠ 0) :
-    ‖normalizedMPVState A N‖ = 1 := by
-  rw [normalizedMPVState, norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
-    inv_mul_cancel₀ (norm_ne_zero_iff.mpr h)]
-
 /-! ### Bounded chains -/
 
 /-- A placed operator on all sites of the chain, in their order, is the operator itself. -/
@@ -60,8 +54,10 @@ theorem embedOp_id {N : ℕ} (X : Matrix (Cfg d N) (Cfg d N) ℂ) : embedOp id X
 every unit vector on a ring of `N` sites, `2 ≤ N ≤ n₀`, is prepared in depth at most `K` from a
 product state.
 
-arXiv:2307.01696, caption of Fig. 1: unitaries with constant support "can be further expressed
-with a low-depth circuit of local gates". -/
+The proof writes `ψ` as the first column of a unitary on the `N ≤ n₀` sites and decomposes that
+unitary into boundedly many two-site gates by `exists_isPairProduct`. arXiv:2307.01696, caption of
+Fig. 1(b), says the analogous thing of the circuit for the isometry `V`: it "can be further
+expressed with a low-depth circuit of local gates". -/
 theorem exists_isPreparedInDepth_of_norm_eq_one (hd : 0 < d) (n₀ : ℕ) :
     ∃ K : ℕ, ∀ N [NeZero N], 2 ≤ N → N ≤ n₀ → ∀ ψ : MPVSpace d N, ‖ψ‖ = 1 →
       IsPreparedInDepth K fun s => ψ s := by
