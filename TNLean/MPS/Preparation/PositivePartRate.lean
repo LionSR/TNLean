@@ -17,8 +17,8 @@ Let `A` be a normal tensor in the gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = 
 first two steps of the approximation estimate of Piroli, Styliaris, and Cirac (arXiv:2103.13367,
 Supplemental Material, "Proof of Theorem MPS_classification"):
 
-1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-γ n/ξ} ‖X‖` (compare eq. `eq:difference`,
-   `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix); the rate
+1. **Transfer-map gap.** `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-γ n/ξ} ‖X‖` (compare arXiv:2103.13367,
+   eq. (21), `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix); the rate
    `e^{-γ/ξ} = |λ₂|^γ` exceeds the spectral radius of `E_A - |σ⟩⟨1|` because `γ < 1`.
 2. **Positive parts.** The positive part `P_q` of the polar decomposition of the `q`-site blocked
    tensor satisfies `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`, from the rearrangement
@@ -26,10 +26,15 @@ Supplemental Material, "Proof of Theorem MPS_classification"):
    `b ≥ c > 0` (`CFC.norm_sqrt_sub_sqrt_le_div` in `TNLean.Algebra.CStarSqrtLipschitz`), which
    applies because `P_∞² = σᵀ ⊗ 1` is positive definite.
 
-Step 2 is a project result. The sources (arXiv:2103.13367, eq. `eq:intermediate`, quoted as
-arXiv:2307.01696, eq. (S9)) use the Hölder bound `‖√a - √b‖ ≤ √‖a - b‖` instead, which halves
-the exponent and restricts the rate to `0 < γ < 1/2`. The rate `e^{-γ q/ξ}` of step 2 feeds the
-telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
+The earlier estimates use the Hölder bound `‖√a - √b‖ ≤ √‖a - b‖` in step 2
+(arXiv:2103.13367, Supplemental Material, eq. (26)), which halves the exponent. This gives the
+rate `e^{-βq}` with `β < α/2` of arXiv:2103.13367, eq. (34), and the range `0 < γ < 1/2` of
+arXiv:2307.01696, Lemma 1 and Supplemental Material, eq. (S9). The Lipschitz step at the positive
+definite point `P_∞²` is taken from arXiv:2606.24475, App. B3, eqs. (S27)–(S32), where it is
+proved for diagonalizable transfer matrices; eqs. (S33)–(S38) there extend it to the remaining
+normal tensors at every correlation length larger than `ξ`. The proof here covers every normal
+tensor directly, from the spectral radius of `E_A - |σ⟩⟨1|`. The rate `e^{-γ q/ξ}` of step 2
+feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 
 ## Main declarations
 
@@ -39,8 +44,9 @@ telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 ## References
 
 * arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification" (eqs.
-  `eq:difference` and `eq:intermediate`).
-* arXiv:2307.01696, eqs. (5) and (8), and eq. (S9) for the range `0 < γ < 1/2`.
+  (21), (26) and (34)).
+* arXiv:2307.01696, eqs. (5) and (8), and Lemma 1 and eq. (S9) for the range `0 < γ < 1/2`.
+* arXiv:2606.24475, App. B3, eqs. (S27)–(S38), for the Lipschitz step.
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -134,10 +140,10 @@ open scoped Matrix.Norms.L2Operator in
 correlation length `ξ`, and let `0 < γ < 1`. Then there is `C > 0` with
 `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-γ n/ξ} ‖X‖` for all `n` and `X`.
 
-arXiv:2103.13367, eq. `eq:difference`: `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked
-transfer matrix, where `R = τ_AA - τ_BB` is the remainder of the `q`-blocked transfer matrix. Here
-the unblocked `E_A^n` is bounded directly, and the polynomial prefactor `Λ` is absorbed into the
-rate `e^{-γ/ξ} > |λ₂|`. -/
+arXiv:2103.13367, Supplemental Material, eq. (21), bounds `‖R‖_F ≤ Λ(q) e^{-qα}` with
+`|λ₁| = e^{-qα}` for the blocked transfer matrix, where `R = τ_AA - τ_BB` is the remainder of
+the `q`-blocked transfer matrix. Here the unblocked `E_A^n` is bounded directly, and the
+polynomial prefactor `Λ` is absorbed into the rate `e^{-γ/ξ} > |λ₂|`. -/
 theorem exists_norm_transferMap_pow_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
@@ -234,7 +240,8 @@ open scoped Matrix.Norms.L2Operator in
 `B_q† B_q = P_q²` of the `q`-site blocked tensor is `e^{-γ q/ξ}`-close to
 `σᵀ ⊗ 1 = P_∞²`.
 
-arXiv:2103.13367, eq. `eq:difference` (`τ_AA = τ_BB + R`, read with the lower lines as input). -/
+arXiv:2103.13367, Supplemental Material, eqs. (19) and (21) (`τ_AA = τ_BB + R`, read with the
+lower lines as input). -/
 theorem exists_norm_gram_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
@@ -265,15 +272,15 @@ open scoped Matrix.Norms.L2Operator in
 `0 < γ < 1`, the positive part `P_q = (B_q† B_q)^{1/2}` of the `q`-site blocked tensor satisfies
 `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`, with `P_∞ = (√σ)ᵀ ⊗ 1`.
 
-Project result; improves the rate of arXiv:2307.01696, Lemma 1 / SM positive-part estimate
-(`γ < 1/2` there). The source (arXiv:2103.13367, eq. `eq:intermediate` and the sentence after
-it) applies the Hölder bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` to `\tilde{A} = √(A†A)` and
-`\tilde{B} = √(B†B)`; here `P_∞² = σᵀ ⊗ 1` is positive definite, so the square root is Lipschitz
-there (`CFC.norm_sqrt_sub_sqrt_le_div`) and the rate of the Gram matrices passes to the positive
-parts without halving the exponent. The same Lipschitz step appears in arXiv:2606.24475
-(Murota, Sauvage, Ballarin, Matos, Rinaldi), App. B3, eqs. (S27)–(S32), under a
-diagonalizability assumption on the transfer matrix; the range `γ < 1` for every normal tensor
-is the part proved here. -/
+arXiv:2103.13367, Supplemental Material, eq. (26) and the sentence after it, applies the Hölder
+bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` to `\tilde{A} = √(A†A)` and `\tilde{B} = √(B†B)`. This halves
+the exponent and gives the range `0 < γ < 1/2` of arXiv:2307.01696, Lemma 1 and Supplemental
+Material, eq. (S9). Here `P_∞² = σᵀ ⊗ 1` is positive definite, so the square root is Lipschitz
+at that point (`CFC.norm_sqrt_sub_sqrt_le_div`), and the rate of the Gram matrices passes to the
+positive parts with the same exponent. This Lipschitz step is due to Murota, Sauvage, Ballarin,
+Matos, and Rinaldi, arXiv:2606.24475, App. B3, eqs. (S27)–(S32), for diagonalizable transfer
+matrices; eqs. (S33)–(S38) there extend it to the remaining normal tensors at every correlation
+length larger than `ξ`. -/
 theorem exists_norm_polarPos_blockTensor_sub_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}

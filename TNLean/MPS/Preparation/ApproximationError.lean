@@ -35,15 +35,16 @@ and from the boundedness of the norms `‖φ_N(A)‖`.
 
 1. **Transfer-map gap.** `exists_norm_transferMap_pow_sub_le` gives
    `‖E_A^n(X) - Tr(X) σ‖ ≤ C e^{-γ' n/ξ} ‖X‖` for every `0 < γ' < 1`, since `e^{-γ'/ξ}` exceeds
-   the spectral radius of `E_A - |σ⟩⟨1|` (compare eq. `difference`, `‖R‖_F ≤ Λ(q) e^{-qα}` with
-   `|λ₁| = e^{-qα}` for the blocked transfer matrix). The overlap estimate uses it at `γ' = γ`,
-   through the Gram matrices `P_q² = B_q† B_q`, a rearrangement of `E_A^q`, which are
-   `e^{-γ q/ξ}`-close to `P_∞² = σᵀ ⊗ 1`.
-2. **Positive parts.** The source uses `‖√X - √Y‖ ≤ √‖X - Y‖` (eq. `intermediate`), which halves
-   the exponent. Here `P_∞²` is bounded below by a positive multiple of the identity, so the
-   Lipschitz bound `‖√X - √Y‖ ≤ ‖X - Y‖ / √c` of `CFC.norm_sqrt_sub_sqrt_le_div` applies instead
-   and the exponent is kept: `exists_norm_polarPos_blockTensor_sub_le`, called at rate `γ`, gives
-   `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`.
+   the spectral radius of `E_A - |σ⟩⟨1|` (compare arXiv:2103.13367, eq. (21),
+   `‖R‖_F ≤ Λ(q) e^{-qα}` with `|λ₁| = e^{-qα}` for the blocked transfer matrix). The overlap
+   estimate uses it at `γ' = γ`, through the Gram matrices `P_q² = B_q† B_q`, a rearrangement of
+   `E_A^q`, which are `e^{-γ q/ξ}`-close to `P_∞² = σᵀ ⊗ 1`.
+2. **Positive parts.** The source bounds this step with `‖√X - √Y‖ ≤ √‖X - Y‖`
+   (arXiv:2103.13367, eq. (26)), which halves the exponent. Here `P_∞²` is bounded below by a
+   positive multiple of the identity, so the Lipschitz bound `‖√X - √Y‖ ≤ ‖X - Y‖ / √c` of
+   `CFC.norm_sqrt_sub_sqrt_le_div` applies and keeps the exponent, as in arXiv:2606.24475,
+   App. B3, eqs. (S27)–(S32). `exists_norm_polarPos_blockTensor_sub_le`, called at rate `γ`,
+   gives `‖P_q - P_∞‖ ≤ K e^{-γ q/ξ}`.
 3. **Telescoping.** For an idempotent `T_∞` and `‖T - T_∞‖ ≤ δ`,
    `‖T^M - T_∞^M‖ ≤ c((1 + cδ)^M - 1)` (eqs. `final_eq` to `finished`), applied with
    `δ = K e^{-γ q/ξ}` from step 2 to the mixed transfer matrices `τ_{AB}` and `τ_{BB}` of `P_q`

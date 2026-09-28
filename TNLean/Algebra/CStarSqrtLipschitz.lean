@@ -12,12 +12,16 @@ For positive elements `a` and `b` of a C⋆-algebra with `b ≥ c` for a real `c
 `‖√a - √b‖ ≤ ‖a - b‖ / √c`. Near a strictly positive element the square root is therefore
 Lipschitz, which improves on the global `1/2`-Hölder bound `CFC.norm_sqrt_sub_sqrt_le`.
 
-The proof is order-theoretic and uses only the operator monotonicity of the square root: with
+The proof is order-theoretic and uses only the operator monotonicity of the square root. With
 `ε = ‖a - b‖` and `s = ε / √c ≤ √c`, the inequalities `a ≤ (√b + s)²` and `(√b - s)² ≤ a`
 follow from `-ε ≤ a - b ≤ ε` and `√b ≥ √c`, and `√b - s ≥ 0`. When `ε > c` the Hölder bound
 `√ε ≤ ε / √c` suffices. The upper half, `CFC.sqrt_sub_sqrt_le_algebraMap_of_le`, and the scalar
 bound `CFC.algebraMap_sqrt_le_sqrt` live in `TNLean.Algebra.CStarSqrtHolder`, where the Hölder
 bound is their case `c = 0`.
+
+For matrices in the Frobenius norm, arXiv:2606.24475, App. B3, eqs. (S27)–(S31), proves the
+corresponding bound with the smallest eigenvalue of `√b` in place of `√c`, from the identity
+`√a (√a - √b) + (√a - √b) √b = a - b`.
 
 Mathlib has no Lipschitz bound for the square root; the results here are upstream candidates for
 `Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order`.

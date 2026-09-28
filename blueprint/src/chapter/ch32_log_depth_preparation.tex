@@ -112,8 +112,8 @@ remaining eigenvalues have modulus strictly less than $1$.
     \leanok
     Let $a,b$ be positive elements of a C$^*$-algebra. Then
     $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert^{1/2}$.
-    This is the operator inequality quoted in
-    \cite[Supplemental Material]{Piroli2021LOCC}.
+    This is the operator inequality quoted from Bhatia in
+    \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -147,6 +147,9 @@ remaining eigenvalues have modulus strictly less than $1$.
     Let $a,b$ be positive elements of a C$^*$-algebra with $b\ge c\,\Id$ for
     a real number $c>0$. Then
     $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert/\sqrt c$.
+    For matrices and the Frobenius norm, the corresponding bound with the
+    smallest eigenvalue of $\sqrt b$ in place of $\sqrt c$ is
+    \cite[App.~B3, eqs.~(S27)--(S31)]{Murota2026ExactLogDepth}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -210,13 +213,15 @@ remaining eigenvalues have modulus strictly less than $1$.
          & \le K'r^q
     \end{align*}
     for all $q$.
-    The sources prove the bound on $P_q-P_\infty$ for $0<\gamma<1/2$ only
-    \cite[Supplemental Material]{Piroli2021LOCC}, quoted in
-    \cite[eq.~(S9)]{Malz2024Preparation}. The Lipschitz step at a
-    positive definite limit also appears in
-    \cite[App.~B3]{Murota2026ExactLogDepth}, for transfer matrices that are
-    diagonalizable; the range $0<\gamma<1$ for every normal tensor is a
-    result of this project.
+    In \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC} the bound on
+    $P_q-P_\infty$ comes from Theorem~\ref{thm:ldp_sqrt_holder}, which halves
+    the exponent. This gives the rate of
+    \cite[eq.~(34)]{Piroli2021LOCC} and the range $0<\gamma<1/2$ of
+    \cite[Lemma~1 and eq.~(S9)]{Malz2024Preparation}. The Lipschitz bound at
+    the positive definite limit $P_\infty^2$ gives the range $0<\gamma<1$.
+    This step is \cite[App.~B3, eqs.~(S27)--(S32)]{Murota2026ExactLogDepth}
+    for diagonalizable transfer matrices, and eqs.~(S33)--(S38) there extend
+    it to every normal tensor at each correlation length larger than $\xi$.
 \end{theorem}
 \begin{proof}
     \leanok

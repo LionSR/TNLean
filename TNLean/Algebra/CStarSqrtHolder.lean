@@ -11,9 +11,9 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 
 For positive elements `a` and `b` of a C⋆-algebra, `‖√a - √b‖ ≤ √‖a - b‖`. This is the operator
 inequality `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for positive semidefinite matrices that arXiv:2103.13367,
-Supplemental Material, eq. `eq:intermediate`, quotes from Bhatia.
+Supplemental Material, eq. (26), quotes from Bhatia.
 
-The upper half comes from a one-sided bound with a scalar floor: if `b ≥ c ≥ 0` and
+The upper half follows from a one-sided bound with a scalar floor. If `b ≥ c ≥ 0` and
 `‖a - b‖ ≤ 2 s √c + s²` with `s ≥ 0`, then `a ≤ (√b + s)²`, so `√a - √b ≤ s` by operator
 monotonicity of the square root. The Hölder bound is the case `c = 0`, `s = √‖a - b‖`; the
 Lipschitz bound of `TNLean.Algebra.CStarSqrtLipschitz` uses a positive floor.
@@ -105,8 +105,8 @@ theorem sqrt_sub_sqrt_le_algebraMap {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :
 /-- **Square roots are `1/2`-Hölder**: for `a, b ≥ 0` in a C⋆-algebra,
 `‖√a - √b‖ ≤ √‖a - b‖`.
 
-arXiv:2103.13367, eq. `eq:intermediate` (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for `X, Y ≥ 0`,
-quoted there from Bhatia). -/
+arXiv:2103.13367, Supplemental Material, eq. (26) (the bound `‖√X - √Y‖_∞ ≤ √‖X - Y‖_∞` for
+`X, Y ≥ 0`, quoted there from Bhatia). -/
 theorem norm_sqrt_sub_sqrt_le {a b : A} (ha : 0 ≤ a) (hb : 0 ≤ b) :
     ‖CFC.sqrt a - CFC.sqrt b‖ ≤ Real.sqrt ‖a - b‖ := by
   refine IsSelfAdjoint.norm_le_of_le_algebraMap
