@@ -43,7 +43,6 @@ choice functions `J`.
 
 ## Main definitions
 
-* `MPSPreparation.rectKronecker` — the product `⊗ᵢ Kᵢ` of rectangular one-site matrices.
 * `MPSPreparation.OnsiteChannel` — an onsite channel between two local dimensions, with its
   map `OnsiteChannel.map` and Heisenberg dual `OnsiteChannel.dual`.
 * `MPSPreparation.OnsiteChannel.id`, `MPSPreparation.OnsiteChannel.attach`,
@@ -92,41 +91,6 @@ namespace MPSPreparation
 variable {d e f N : ℕ}
 
 /-! ### Rectangular product operators -/
-
-/-- The product operator `⊗ᵢ Kᵢ` of rectangular one-site matrices `Kᵢ : e × d`, a matrix from
-configurations of `d`-level sites to configurations of `e`-level sites. -/
-def rectKronecker (K : Fin N → Matrix (Fin e) (Fin d) ℂ) : Matrix (Cfg e N) (Cfg d N) ℂ :=
-  Matrix.of fun x y ↦ ∏ i, K i (x i) (y i)
-
-@[simp] theorem rectKronecker_apply (K : Fin N → Matrix (Fin e) (Fin d) ℂ) (x : Cfg e N)
-    (y : Cfg d N) : rectKronecker K x y = ∏ i, K i (x i) (y i) :=
-  rfl
-
-theorem rectKronecker_eq_finKronecker (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    rectKronecker m = finKronecker m :=
-  rfl
-
-theorem rectKronecker_mul (K : Fin N → Matrix (Fin f) (Fin e) ℂ)
-    (L : Fin N → Matrix (Fin e) (Fin d) ℂ) :
-    rectKronecker K * rectKronecker L = rectKronecker fun i ↦ K i * L i := by
-  ext x y
-  simp only [mul_apply, rectKronecker_apply]
-  rw [Fintype.prod_sum]
-  exact Finset.sum_congr rfl fun z _ ↦ (Finset.prod_mul_distrib).symm
-
-theorem rectKronecker_conjTranspose (K : Fin N → Matrix (Fin e) (Fin d) ℂ) :
-    (rectKronecker K)ᴴ = rectKronecker fun i ↦ (K i)ᴴ := by
-  ext x y
-  simp [rectKronecker_apply, conjTranspose_apply]
-
-/-- Summing product operators over all choice functions gives the product of the sums. -/
-theorem sum_rectKronecker {r : Fin N → ℕ}
-    (K : (i : Fin N) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ) :
-    ∑ J : (i : Fin N) → Fin (r i), rectKronecker (fun i ↦ K i (J i)) =
-      rectKronecker fun i ↦ ∑ j, K i j := by
-  ext x y
-  simp only [Matrix.sum_apply, rectKronecker_apply]
-  exact (Fintype.prod_sum fun i j ↦ K i j (x i) (y i)).symm
 
 /-- The Kraus map whose Kraus operators are the products `⊗ᵢ K_{i J(i)}` maps a product
 operator `⊗ᵢ mᵢ` to the product `⊗ᵢ ∑ⱼ Kᵢⱼ mᵢ Kᵢⱼ†`. -/
@@ -321,10 +285,6 @@ noncomputable def attachZero (d a N : ℕ) [NeZero a] : OnsiteChannel d (d * a) 
 ancilla. -/
 def discardKraus (d : ℕ) {a : ℕ} (b : Fin a) : Matrix (Fin d) (Fin (d * a)) ℂ :=
   Matrix.of fun y p ↦ if p = finProdFinEquiv (y, b) then 1 else 0
-
-theorem discardKraus_apply {a : ℕ} (b : Fin a) (y x : Fin d) (c : Fin a) :
-    discardKraus d b y (finProdFinEquiv (x, c)) = if x = y ∧ c = b then 1 else 0 := by
-  simp only [discardKraus, of_apply, EmbeddingLike.apply_eq_iff_eq, Prod.mk.injEq]
 
 /-- Discarding at every site an `a`-level ancilla: the partial trace over the ancilla factor.
 

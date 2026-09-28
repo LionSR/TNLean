@@ -1174,7 +1174,7 @@ change the local dimension act on single sites.
 \begin{definition}[Onsite channel]
     \label{def:ldp_onsite_channel}
     \uses{def:ldp_local_channel_circuit}
-    \lean{MPSPreparation.rectKronecker, MPSPreparation.OnsiteChannel,
+    \lean{Matrix.rectKronecker, MPSPreparation.OnsiteChannel,
         MPSPreparation.OnsiteChannel.map, MPSPreparation.OnsiteChannel.dual,
         MPSPreparation.OnsiteChannel.id, MPSPreparation.OnsiteChannel.attach,
         MPSPreparation.OnsiteChannel.attachZero,
@@ -1254,8 +1254,8 @@ change the local dimension act on single sites.
     channel layers $L_t$ and maps $\Phi_t$, each a composition of finitely
     many onsite channels, which may change the local dimension; $\Phi_0$
     contains at least one onsite channel, and $\Phi_t$ for $t\ge1$ may be
-    the identity. A density matrix $\rho$ is
-    \emph{converted in depth $T$} into a density matrix $\sigma$, possibly of
+    the identity. A matrix $\rho$ on the chain is
+    \emph{converted in depth $T$} into a matrix $\sigma$, possibly of
     another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
     protocol $\Psi$ of depth at most $T$. This is the channel form of the circuits
     $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC}, with
@@ -1279,9 +1279,9 @@ change the local dimension act on single sites.
     Attaching ancillas, running a local channel circuit of depth $T$ and
     discarding is a local channel protocol of depth $T$. Every density matrix
     is converted into itself in depth $0$, a conversion in depth $T$ is a
-    conversion in every larger depth, the result of a conversion is a density
-    matrix, and a density matrix prepared in depth $T$ by local channels is
-    converted in depth $T$ from a product density.
+    conversion in every larger depth, a conversion of a density matrix is a
+    density matrix, and a density matrix prepared in depth $T$ by local
+    channels is converted in depth $T$ from a product density.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1291,9 +1291,11 @@ change the local dimension act on single sites.
     composition. Appending the layers of a circuit of depth $T$ one at a time,
     each onsite channel keeps the depth and each layer raises it by one; the
     attaching and discarding channels are onsite. The identity onsite channel
-    gives depth $0$, depth bounds are monotone, and channels preserve density
-    matrices. A preparation in depth $T$ by local channels starts from a
-    product density and is itself such a protocol.
+    gives depth $0$, depth bounds are monotone, and a conversion is realized by
+    a channel, which maps a positive semidefinite matrix of trace one to a
+    positive semidefinite matrix of trace one. A preparation in depth $T$ by
+    local channels starts from a product density and is itself such a
+    protocol.
 \end{proof}
 
 \begin{lemma}[Composition of conversions]
