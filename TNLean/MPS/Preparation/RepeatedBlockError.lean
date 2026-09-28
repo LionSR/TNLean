@@ -19,7 +19,8 @@ This file proves the bound for the corrected state `V^{⊗M} ∑ⱼ αⱼ L_j^{�
 `TNLean.MPS.Preparation.RepeatedBlockSum`, with `αⱼ = βⱼ / (∑ₗ |βₗ|²)^{1/2}` and
 `βⱼ = ∑ₖ μ_{j,k}^N` as in the source, for arbitrary multiplicities and complex weights, when the
 `q`-site states of distinct blocks are orthogonal: there is `C` such that `ε ≤ C y e^{C y}` with
-`y = (N/q) e^{-γ q/ξ}` for every block length `q` at which the blocks are orthogonal and every
+`y = M e^{-γ q/ξ}`, which is `(N/q) e^{-γ q/ξ}` for `q ≥ 1`, for every block length `q` at
+which the blocks are orthogonal and every
 number of blocks `M ≥ 1` with the weights `βⱼ` not all zero
 (`exists_approximationError_le_repeatedBlockSum`); in
 `O`-form, `ε ≤ C y` (`exists_approximationError_le_mul_repeatedBlockSum`). As for multiplicity
