@@ -112,7 +112,7 @@ Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` lines 
 with the local fix of the module docstring (`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
 abbrev sptScale (D : ℕ) : ℂ := ((Real.sqrt D : ℂ))⁻¹
 
-/-- The normalization of the letters: `c̄ c = D⁻¹` for `c = D^{-1/2}`, the scale of the letters
+/-- The normalization of the letters: `star c * c = D⁻¹` for `c = D^{-1/2}`, the scale of the letters
 `D^{-1/2} |a⟩⟨b|` in arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
 lines 1149–1150), with the local fix of the module docstring
 (`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
