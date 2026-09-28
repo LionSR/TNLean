@@ -160,11 +160,12 @@ is a local fix of a degenerate reading, not a hypothesis added to the source.
 
 \section{What is formalized}
 The corrected block form (\ref{eq:mswc24_rc_polar}), the identity
-(\ref{eq:mswc24_rc_after_v}), the overlap formula and the bound
-$\varepsilon\leq Cy\,e^{Cy}$, together with its $O$-form $\varepsilon\leq Cy$, are
-formalized for arbitrary multiplicities and complex weights, for blocks with some
-nonzero weight whose $q$-site states are orthogonal, at every $q$ and $M\geq1$
-with $\beta\neq0$.\footnote{Formal declarations:
+(\ref{eq:mswc24_rc_after_v}) and the overlap formula are formalized for arbitrary
+multiplicities and complex weights, for blocks with some nonzero weight whose
+$q$-site states are orthogonal, at every $q\geq1$. The bound
+$\varepsilon\leq Cy\,e^{Cy}$, together with its $O$-form $\varepsilon\leq Cy$, is
+formalized under the same assumptions at every $q\geq0$ and $M\geq1$ with
+$\beta\neq0$.\footnote{Formal declarations:
     \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum},
     \leanid{MPSTensor.polarPos_blockTensor_repeatedBlockSum} and
     \leanid{MPSTensor.copyApproxVector_repeatedBlockSum} in
