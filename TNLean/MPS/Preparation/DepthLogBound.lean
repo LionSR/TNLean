@@ -121,14 +121,14 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
   refine ⟨C, fun A hA => ?_⟩
   obtain ⟨B, ζ, σ, t, L, hζ, hmpv, hNB, hLC, hσ, htr, hfix, ht0, ht1, hlam, hnorm, hinj⟩ :=
     exists_normalGaugeData hA
-  -- Lemma 1'(i) with `γ = 1/4`.
+  -- Lemma 1'(i) at rate `2γ/ξ` with `γ = 1/8`.
   obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul B hNB hLC hσ htr hfix hlam
-    (γ := 1 / 4) (by norm_num) (by norm_num)
+    (γ := 1 / 8) (by norm_num) (by norm_num)
   set r := -(1 / 4 * Real.log t) with hr
   have hr0 : 0 < r := by
     have := Real.log_neg ht0 ht1
     rw [hr]; linarith
-  have hexp : ∀ q : ℕ, Real.exp (-(1 / 4) * q / correlationLength (t : ℂ)) =
+  have hexp : ∀ q : ℕ, Real.exp (-(2 * (1 / 8)) * q / correlationLength (t : ℂ)) =
       Real.exp (-(r * q)) := fun q => by
     congr 1
     rw [mul_div_right_comm, neg_div_correlationLength, hnorm, hr]
