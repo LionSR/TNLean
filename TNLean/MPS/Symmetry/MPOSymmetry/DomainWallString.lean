@@ -476,7 +476,7 @@ theorem rightAct_wallRightEndpoint_right (hÂ : IsSeparatingLeftInverse Âx Ây 
 /-- **The string creates two domain walls on `|ψ_A⟩`** (arXiv:2405.00439, `eq:DWophys`,
 `Papers/2405.00439/MPU-DW.tex` lines 1365--1386, and lines 1387--1388): `O^{[i,j]} |ψ_A⟩ =
 |ψ(A-B-A)⟩`, the state of `DWopmps` with the domain wall `e_{AB}` at `i` and `e_{BA}` at `j`,
-on the periodic chain of every length. The left inverses turn the endpoints into
+on the periodic chain of every length `L ≥ 2`. The left inverses turn the endpoints into
 `e_{AB} V_B` and `W_B e_{BA}`, and the action tensors reduce the string of `O_g · A` between
 them to `B`. -/
 theorem wallString_mulVec_mpv_left (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y))
@@ -516,7 +516,7 @@ theorem wallString_mulVec_mpv_right (hÂ : IsSeparatingLeftInverse Âx Ây (A x)
 
 /-- **Exchange of two domain-wall strings** (arXiv:2405.00439, `signphysop`,
 `Papers/2405.00439/MPU-DW.tex` lines 1667--1672): for strings on sites `i₂ < i₁ < j₁ < j₂`,
-here `O^{[i₂,j₂]}` with endpoints at `u` and `u + 1 + u' + 1 + v + 1 + w' + 1` and
+here `O^{[i₂,j₂]}` with endpoints at `u` and `u + 1 + u' + 1 + v + 1 + w'` and
 `O^{[i₁,j₁]}` with endpoints at `u + 1 + u'` and `u + 1 + u' + 1 + v`,
 
 `O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩ = c_{AB} c_{BA} O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩`
