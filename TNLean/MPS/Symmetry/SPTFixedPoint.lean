@@ -102,12 +102,20 @@ open TNLean.Algebra
 
 variable {D : ℕ}
 
-/-- The pair of bond labels `(a, b)` encoded by a physical index of `ℂ^D ⊗ ℂ^D`. -/
+/-- The pair of bond labels `(a, b)` encoded by a physical index of `ℂ^D ⊗ ℂ^D`: the source
+parameterizes the local physical space as a tensor product `(a, b)` of two bond labels.
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1149). -/
 abbrev sptPair (i : Fin (D * D)) : Fin D × Fin D := finProdFinEquiv.symm i
 
-/-- The normalization `D^{-1/2}` of the letters. -/
+/-- The normalization `D^{-1/2}` of the letters `D^{-1/2} |a⟩⟨b|` of the fixed-point tensor.
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` lines 1149–1150),
+with the local fix of the module docstring (`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
 abbrev sptScale (D : ℕ) : ℂ := ((Real.sqrt D : ℂ))⁻¹
 
+/-- The normalization of the letters: `c̄ c = D⁻¹` for `c = D^{-1/2}`, the scale of the letters
+`D^{-1/2} |a⟩⟨b|` in arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+lines 1149–1150), with the local fix of the module docstring
+(`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
 lemma star_sptScale_mul_sptScale : star (sptScale D) * sptScale D = (D : ℂ)⁻¹ := by
   rw [sptScale, star_inv₀, Complex.star_def, Complex.conj_ofReal,
     Complex.ofReal_sqrt_inv_mul_self _ (Nat.cast_nonneg D), Complex.ofReal_natCast]
