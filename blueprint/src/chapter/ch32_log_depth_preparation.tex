@@ -831,29 +831,117 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     bound follows from $\varepsilon\leq1\leq Cy\leq Cy\,e^{Cy}$.
 \end{proof}
 
+\begin{lemma}[Powers of a perturbed idempotent without first-order term]
+    \label{lem:ldp_idempotent_second_order}
+    \lean{IsIdempotentElem.norm_trace_add_pow_sub_le_of_le,
+        IsIdempotentElem.norm_trace_add_pow_sub_le}
+    \leanok
+    Let $e$ be an idempotent of a normed ring, $f=1-e$, and let $Z$ satisfy
+    $eZe=0$ and $\lVert fZe\rVert,\lVert eZf\rVert,\lVert fZf\rVert\le z\le1/2$.
+    Let $\Tr$ be additive with $\Tr(xy)=\Tr(yx)$ and
+    $\lvert\Tr x\rvert\le K\lVert x\rVert$. Then for $M\ge2$,
+    \begin{align}
+        \bigl\lvert\Tr(e+Z)^M-\Tr e\bigr\rvert
+         & \le K\bigl(\lVert e\rVert+3\lVert f\rVert\bigr)\,2Mz^2\,e^{2Mz^2}.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $T=e+Z$, $W=fZf$, $\beta=\lVert fZe\rVert$, $\beta'=\lVert eZf\rVert$,
+    $\zeta=\lVert W\rVert$, and $\rho=1+\beta\beta'/(1-\zeta)$. For $P\in\{e,f\}$
+    the blocks $x_M=PT^Me$ and $y_M=PT^Mf$ satisfy
+    $x_{M+1}=x_M+y_M\,fZe$ and $y_{M+1}=x_M\,eZf+y_MW$, because $eTe=e$.
+    Induction on $M$ gives $\lVert eT^Me-e\rVert\le\lVert e\rVert(\rho^M-1)$ and
+    $\lVert eT^Mf\rVert\le\lVert e\rVert\beta'\rho^M/(1-\zeta)$, and also
+    $\lVert fT^Me\rVert\le\lVert f\rVert\beta(\rho^M-\zeta^M)/(1-\zeta)$ and
+    $\lVert fT^Mf-fW^M\rVert\le\lVert f\rVert\beta\beta'(\rho^M-\zeta^M)/(1-\zeta)^2$.
+    Since $\Tr x=\Tr(exe)+\Tr(fxf)$, it follows that $\Tr T^M-\Tr e$ is the sum of
+    the traces of $eT^Me-e$, of $fT^Mf-fW^M$, and of $fW^M$, the last of norm at
+    most $\lVert f\rVert\zeta^M\le\lVert f\rVert z^2$. With $z\le1/2$ one has
+    $\rho\le1+2z^2$ and $\beta\beta'/(1-\zeta)^2\le4z^2$, and
+    $(1+2z^2)^M-1\le2Mz^2e^{2Mz^2}$.
+\end{proof}
+
+\begin{lemma}[Overlap of the positive part with the fixed point, to second order]
+    \label{lem:ldp_positive_part_overlap_second_order}
+    \lean{MPSTensor.exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq,
+        MPSTensor.exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le,
+        MPSTensor.transferMatrix_fixedPointTensor_mul_mul,
+        MPSTensor.inner_sqrtWeightLM, MPSTensor.exists_norm_map_polarPosTensor_sub_le}
+    \leanok
+    \uses{lem:ldp_idempotent_second_order, thm:ldp_positive_part_rate,
+        def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
+    length $\xi$, and let $0<\gamma<1$. There is $C>0$ such that for all $q$ and
+    all $M\ge2$ with $Cy<1$, where $y=M\,e^{-2\gamma q/\xi}$,
+    \begin{align}
+        1-\bigl\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\bigr\rvert
+         & \le Cy\,e^{Cy}.
+        \notag
+    \end{align}
+    For $M=1$ there is $K$ with
+    $\lVert\phi_1(P_q)\rVert^2
+        -\lvert\bra{\phi_1(P_\infty)}\phi_1(P_q)\rangle\rvert^2\le Ke^{-2\gamma q/\xi}$
+    for all $q$. This is a result of this project; it is of second order in
+    $e^{-\gamma q/\xi}$, where Lemma~\ref{lem:ldp_positive_part_overlap} is of
+    first order.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_positive_part_rate}, every linear function of the
+    tensor $P_q$ is within $K'e^{-\gamma q/\xi}$ of its value at $P_\infty$. Let
+    $\tau_q$ and $\tau_\infty$ be as in the proof of
+    Lemma~\ref{lem:ldp_positive_part_overlap}, so that the overlap is
+    $\Tr\tau_q^M$. The idempotent $\tau_\infty$ is the transfer matrix of the
+    rank-one map $X\mapsto\Tr(X)\rho$; hence $\tau_\infty\tau_q\tau_\infty
+        =\alpha\tau_\infty$ with
+    $\alpha=\Tr\sum_iP_q^i\rho P_\infty^{i\dagger}=\braket{v_\infty}{v_q}$, where
+    $v_q$ and $v_\infty$ are the vectors $(P^i\sqrt\rho)_i$. Both are unit
+    vectors, because $\E_{P_q}=\E_A^q$ fixes $\rho$ and $\Tr\rho=1$. Hence
+    $1-\lvert\alpha\rvert\le1-\operatorname{Re}\alpha
+        =\tfrac12\lVert v_q-v_\infty\rVert^2=O(e^{-2\gamma q/\xi})$, and
+    $\lvert1-\alpha\rvert\le\lVert v_q-v_\infty\rVert$. Write
+    $\tau_q=\alpha(\tau_\infty+Z)$. Then $\tau_\infty Z\tau_\infty=0$ and
+    $\lVert Z\rVert=O(e^{-\gamma q/\xi})$, so
+    Lemma~\ref{lem:ldp_idempotent_second_order} bounds
+    $\lvert\Tr(\tau_\infty+Z)^M-1\rvert$ by a multiple of $y\,e^{c y}$, and
+    $\lvert\alpha\rvert^M\ge1-M(1-\lvert\alpha\rvert)$ is at least $1$ minus a
+    multiple of $y$.
+    For $M=1$, the vector $\phi_1(P_\infty)$ is a unit vector, and
+    $\lVert u\rVert^2-\lvert\braket wu\rvert^2\le\lVert u-w\rVert^2$ for every
+    unit vector $w$; here
+    $\lVert\phi_1(P_q)-\phi_1(P_\infty)\rVert=O(e^{-\gamma q/\xi})$, since
+    $\phi_1$ is linear in the tensor.
+\end{proof}
+
 \begin{theorem}[Approximation error, normal case]
     \label{thm:ldp_approximation_error_normal}
     \lean{MPSTensor.exists_approximationError_le_mul,
         MPSTensor.exists_approximationError_le, MPSTensor.normalizedMPVState,
         MPSTensor.approximatingMPVState,
-        MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le}
+        MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le,
+        MPSTensor.one_sub_norm_inner_smul_inv_norm_le_two_mul}
     \leanok
-    \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state,
+    \uses{lem:ldp_positive_part_overlap_second_order, def:ldp_approximating_state,
         thm:ldpolar_blocked_state, thm:ldpolar_tensor_injective,
         thm:ldp_injectivity_cutoff, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, let $\ket{\phi_N}$ be the
-    normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1/2$. For
+    normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1$. For
     $N=qM$,
     \begin{align}
         \varepsilon(\widetilde\phi_N,\phi_N)
-         & =O\!\left(\frac Nq\,e^{-\gamma q/\xi}\right)
+         & =O\!\left(\frac Nq\,e^{-2\gamma q/\xi}\right)
         \label{eq:ldp_approximation_error_normal}
     \end{align}
-    for $q\ge1$ \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}.
+    for $q\ge1$.
     Explicitly, there is a constant $C>0$ depending only on $A$, $\rho$, and $\gamma$
     such that $\varepsilon(\widetilde\phi_N,\phi_N)\le Cy\,e^{Cy}$ for all $q\ge0$
-    and $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$.
+    and $M\ge1$, where $y=M\,e^{-2\gamma q/\xi}$.
+    The source proves the rate $e^{-\gamma q/\xi}$ for $0<\gamma<1/2$
+    \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}; the rate
+    $e^{-2\gamma q/\xi}$ for $0<\gamma<1$ is a result of this project.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -863,33 +951,35 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     normalized. Since $\ket{\phi_N(A)}=V^{\otimes M}\ket{\phi_M(P_q)}$ by
     Theorem~\ref{thm:ldpolar_blocked_state}, this gives
     $c_N\braket{\widetilde\phi_N}{\phi_N}
-        =\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle$. The triangle inequality
+        =\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle=:a$, and
+    $c_N=\lVert\phi_M(P_q)\rVert$. With $t=\lvert a\rvert/c_N\le1$,
     \begin{align}
-        \varepsilon
-         & \le\bigl\lvert1-c_N\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert\bigr\rvert
-        +\lvert c_N-1\rvert\,\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
+        \varepsilon=1-t\le1-t^2=\frac{c_N^2-\lvert a\rvert^2}{c_N^2},
         \notag
     \end{align}
-    bounds the first term by Lemma~\ref{lem:ldp_positive_part_overlap}. For the
-    second, $\lvert c_N-1\rvert\le\lvert c_N^2-1\rvert
-        =\lvert\Tr\E_A^{\,N}-1\rvert\le Ke^{-2\gamma N/\xi}$, and
-    $e^{-2\gamma N/\xi}\le e^{-\gamma q/\xi}$ because $N\ge q$. The finitely
-    many smaller $q$, and the case $y>1$, are covered by
+    which is at most $2(c_N^2-\lvert a\rvert^2)$ once $c_N^2\ge1/2$. The
+    normalization satisfies $\lvert c_N^2-1\rvert=\lvert\Tr\E_A^{\,N}-1\rvert
+        \le Ke^{-\gamma' N/\xi}$ for every $0<\gamma'<1$; we use it at $\gamma'=\gamma$.
+    For $M=1$, Lemma~\ref{lem:ldp_positive_part_overlap_second_order} bounds
+    $c_N^2-\lvert a\rvert^2$ directly. For $M\ge2$,
+    $c_N^2-\lvert a\rvert^2\le\lvert c_N^2-1\rvert+2\max(0,1-\lvert a\rvert)$,
+    with $\lvert c_N^2-1\rvert\le Ke^{-2\gamma q/\xi}$ because $N\ge2q$, and
+    $1-\lvert a\rvert$ is bounded by
+    Lemma~\ref{lem:ldp_positive_part_overlap_second_order}. The finitely many
+    $q$ below the injectivity length, and the case $Cy\ge1$, are covered by
     $\varepsilon\le1$.
 \end{proof}
 %% The source's proof of Lemma 1'(i) drops the normalization term
-%% |c_N - 1| = O(exp(-N/xi)) using q = o(N). Since N >= q, that term is at most
-%% a constant times exp(-gamma q/xi) <= (N/q) exp(-gamma q/xi), so the
-%% statement above carries no condition relating q and N, as in the source's
-%% statement.
+%% |c_N - 1| = O(exp(-N/xi)) using q = o(N). Here N >= q suffices for M = 1
+%% and N >= 2q for M >= 2, so the statement carries no condition relating q
+%% and N, as in the source's statement.
 
-In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/\gamma\rceil$
-gives $e^{-\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
-for every $\eta>0$. The source takes
-$q=\lceil2\xi(1+\eta)\ln N\rceil$, which corresponds to the endpoint
-$\gamma=1/2$ that the estimate above does not cover; hence the factor
-$1/\gamma$ in the block length here
-(compare \cite[after Lemma~1]{Malz2024Preparation}).
+In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/(2\gamma)\rceil$
+gives $e^{-2\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
+for every $\eta>0$. The source's choice $q=\lceil2\xi(1+\eta)\ln N\rceil$
+corresponds to $\gamma=1/4$
+(compare \cite[after Lemma~1]{Malz2024Preparation}); every $\gamma<1$ is
+admissible here, which shortens the block length by nearly a factor of four.
 
 The proof of the lower bound in the Supplemental Material of
 \cite{Malz2024Preparation} cuts the chain into blocks ``all of the same size,
@@ -1722,7 +1812,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     most $1$ by Theorem~\ref{thm:eigenvalue_bound},
     and finitely many of them give a bound $t<1$ on the
     moduli of the other eigenvalues, and
-    Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/4$ gives
+    Theorem~\ref{thm:ldp_approximation_error_normal} with $\gamma=1/8$ gives
     $K$ with $\varepsilon(\widetilde\phi_N,\phi_N)\le K\,(N/q)\,e^{-rq}$,
     where $r=-\tfrac14\log t>0$. Take $a=1/r$ and
     $b=\max(\log K,0)/r+L_0+3D+1$, with $L_0$ a length at which the blocked tensor is injective.
