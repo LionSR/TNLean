@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### bilinear identities on operators with disjoint supports — promoted
+- **Pattern:** prove an identity `f A B = g A B`, bilinear in operators `A`, `B` acting on
+  sets of sites `S`, `S'`, by nested `Submodule.span_induction` on
+  `A ∈ supportedOperators d S` and `B ∈ supportedOperators d S'`: a product-generator case
+  `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
+  scalar cases.
+- **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
+  and `expect_productVector_mul` in `TNLean/MPS/Preparation/LocalCircuit.lean`,
+  `trace_finKronecker_mul_mul` in `TNLean/MPS/Preparation/LocalChannelCircuit.lean`,
+  and `OnsiteChannel.dual_mul` in
+  `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+- **Abstraction:** `MPSPreparation.eq_of_mem_supportedOperators₂` in
+  `TNLean/MPS/Preparation/LocalCircuit.lean`: two bilinear maps
+  `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
+  generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
+  maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
+  product-generator case after a `change`.
+- **Notes:** all four call sites are refactored (2026-09-28).
+
 ### injectivity lengths below the error cutoff — promoted
 - **Pattern:** in an error bound `ε ≤ C u e^{C u}` with `u = M x^q`, dispose of
   `C u ≥ 1` by `ε ≤ 1`, then derive `x < 1` and `L_j ≤ q` for every injectivity
@@ -3351,40 +3370,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   module where the general statement is first needed. Promoting means moving the statement
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
   that rebuild is large enough to deserve its own change.
-
-### disjoint_support_bilinear_span_induction — candidate
-- **Pattern:** prove a bilinear identity for operators `A`, `B` acting on disjoint sets
-  of sites by nested `Submodule.span_induction` on `A ∈ supportedOperators d S` and
-  `B ∈ supportedOperators d S'`, with a product-generator case
-  `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition
-  and scalar cases.
-
-  ```lean
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
-    induction hB using Submodule.span_induction with
-    | mem y hy => obtain ⟨m', hm', rfl⟩ := hy; ...
-    | zero => simp
-    | add y z _ _ hy hz => ...
-    | smul c y _ hy => ...
-  | zero => simp
-  | add x y _ _ hx hy => ...
-  | smul c x _ hx => ...
-  ```
-- **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
-  and `expect_productVector_mul` in `TNLean/MPS/Preparation/LocalCircuit.lean`,
-  `trace_finKronecker_mul_mul` in `TNLean/MPS/Preparation/LocalChannelCircuit.lean`,
-  and `OnsiteChannel.dual_mul` in
-  `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
-- **Abstraction (proposed):** an eliminator `supportedOperators_induction₂` proving
-  `P A B` for `A ∈ supportedOperators d S`, `B ∈ supportedOperators d S'` from the
-  product-generator case and additivity and homogeneity of `P` in each argument,
-  or a bilinear map `LinearMap.mk₂` whose equality with another is checked on the
-  product generators.
-- **Notes:** The rule-of-three threshold is met. The promotion is deferred until the
-  local channel circuit module has landed on main, so that one refactor can update all
-  four call sites together.
 
 ### canonical form of normalized one-dimensional blocks — candidate
 - **Pattern:** certify `IsBNTCanonicalForm` for a `SectorDecomposition` whose blocks are
