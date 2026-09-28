@@ -199,16 +199,16 @@ remaining eigenvalues have modulus strictly less than $1$.
     $0<\gamma<1$. Write $r=e^{-\gamma/\xi}$, where $-\gamma/\xi$ is read as $0$
     when $\xi=0$; thus $r=\lvert\lambda_2\rvert^{\gamma}$ when $\lambda_2\ne0$,
     and $r=1$ when $\lambda_2=0$. Then $a<r$ for every real number $a<1$ with
-    $a\le\lvert\lambda_2\rvert$. There are constants $C,K$ depending only on
-    $A$, $\rho$, $\lambda_2$, and $\gamma$ such that
+    $a\le\lvert\lambda_2\rvert$. There are constants $C,K,K'$ depending only
+    on $A$, $\rho$, $\lambda_2$, and $\gamma$ such that
     $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Cr^n\lVert X\rVert$
     for all $n$ and $X$, and
-    \begin{equation*}
+    \begin{align*}
         \lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
-        \le Kr^q,
-        \qquad
-        \lVert P_q-P_\infty\rVert\le Kr^q
-    \end{equation*}
+         & \le Kr^q, \\
+        \lVert P_q-P_\infty\rVert
+         & \le K'r^q
+    \end{align*}
     for all $q$.
     The sources prove the bound on $P_q-P_\infty$ for $0<\gamma<1/2$ only
     \cite[Supplemental Material]{Piroli2021LOCC}, quoted in
@@ -234,15 +234,28 @@ remaining eigenvalues have modulus strictly less than $1$.
     $\lvert z\rvert<1$ by normality. Taking $a=\lvert z\rvert$ gives
     $\lvert z\rvert<r$. Hence the spectral radius of
     $\E_A-\E_\infty$ is less than $r$, and
-    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives the first
-    bound. By the rearrangement in the proof of
-    Lemma~\ref{lem:ldp_positive_part_converges}, the first bound gives
+    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ gives the first bound for
+    $n\ge1$. For $n=0$ it reads
+    $\lVert X-\E_\infty(X)\rVert\le C\lVert X\rVert$, which holds once
+    $C\ge1+\lVert\E_\infty\rVert$; enlarge $C$ accordingly.
+
+    The transfer map of the $q$-site blocked tensor is $\E_A^{\,q}$, so the
+    entries of $\mathcal B_q^\dagger\mathcal B_q$ are entries of $\E_A^{\,q}$
+    applied to matrix units:
+    $(\mathcal B_q^\dagger\mathcal B_q)_{(\alpha,\beta),(\alpha',\beta')}
+        =\E_A^{\,q}(\ketbra{\beta'}{\beta})_{\alpha'\alpha}$. In the same way
+    $(\rho^{\mathsf T}\otimes\Id)_{(\alpha,\beta),(\alpha',\beta')}
+        =\Tr(\ketbra{\beta'}{\beta})\,\rho_{\alpha'\alpha}$. Hence every entry
+    of $\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id$ is an
+    entry of $\E_A^{\,q}(X)-\Tr(X)\rho$ at a matrix unit $X$, and is at most
+    a fixed multiple of $Cr^q$ by the first bound. Bounding the operator norm
+    by the sum of the moduli of the finitely many entries gives
     $\lVert P_q^2-P_\infty^2\rVert
         =\lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
-        \le K_1r^q$. Since
+        \le Kr^q$. Since
     $P_\infty^2=\rho^{\mathsf T}\otimes\Id$ is positive definite,
     Theorem~\ref{thm:ldp_sqrt_lipschitz_constant} gives $L\ge0$ with
-    $\lVert P_q-P_\infty\rVert\le LK_1r^q$.
+    $\lVert P_q-P_\infty\rVert\le LKr^q$, so $K'=LK$.
 \end{proof}
 %% The source applies ||sqrt X - sqrt Y|| <= ||X - Y||^{1/2}, which halves the
 %% exponent and forces gamma < 1/2. At the positive definite point P_infty^2
@@ -774,9 +787,11 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \begin{theorem}[Block lengths below the injectivity lengths]
     \label{thm:ldp_injectivity_cutoff}
     \lean{Real.exp_neg_mul_div_eq_pow,
+        MPSTensor.exp_neg_two_mul_div_correlationLength,
         lt_one_and_forall_le_of_mul_mul_pow_lt_one, le_mul_mul_exp_of_forall_le}
     \leanok
-    Let $x=e^{-\gamma/\xi}>0$, so that $e^{-\gamma q/\xi}=x^q$. Let
+    Let $x=e^{-\gamma/\xi}>0$, so that $e^{-\gamma q/\xi}=x^q$ and
+    $e^{-2\gamma/\xi}=x^2$. Let
     $L_1,\dots,L_b$ be natural numbers, $C\geq1+\sum_jx^{-L_j}$, $M\geq1$, and
     $y=Mx^q$. If $Cy<1$, then $x<1$ and $L_j\leq q$ for every $j$. Hence, if
     $\varepsilon\leq1$ and $\varepsilon\leq Cy\,e^{Cy}$ holds whenever $x<1$,
