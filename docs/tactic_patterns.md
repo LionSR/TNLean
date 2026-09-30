@@ -2061,6 +2061,17 @@ abstracted — record why, so it is not re-proposed).
   is replaced by one exact application; its previously profiled 31-second
   declaration falls below the 200-millisecond profiler threshold.
 
+### Scalar invariance of the MPU double layer — promoted
+- **Pattern:** expand the double layer of a scalar multiple entrywise and
+  cancel the scalar against its conjugate.
+- **Reuse:** `MPOTensor.physicalAdjointTensor_smul` and
+  `MPOTensor.doubleLayerTensor_smul_of_star_mul_self` reduce this to
+  `mulTensor_smul_smul`. The parity witness specializes the latter at `-1`.
+- **Result:** the parity example no longer splits over physical and bond
+  coordinates. Its identity simplicity proof and the shift identity proof
+  share `MPOTensor.isMPUSimple_idTensor` in `MPS/MPU/Simple.lean`.
+  Net Lean line delta: -6 across the four changed modules.
+
 ### Unit-norm complex scalars are nonzero
 - **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
