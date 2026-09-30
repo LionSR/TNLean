@@ -36,8 +36,13 @@ mapping identity for every tensor and positive blocking length.
 \leanid{MPSTensor.IsPeriodic.peripheral_blockTensor} identifies the resulting
 roots for a periodic tensor. Both are in
 \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.
-The irreducibility of each compressed block is a separate assertion;
-this note does not certify that remaining part of Lemma~6.
+The full decomposition is assembled in
+\leanid{MPSTensor.IsPeriodic.exists_periodic_stepOrbit_decomposition}, in
+\doclink{TNLean/MPS/Periodic/BlockingDecomposition.lean}. It derives the cyclic
+projections, constructs the $\gcd(m,p)$ nonzero compressed blocks, and proves
+irreducibility, left canonicality, and exact period $m/\gcd(m,p)$ for each.
+The isometries, total dimension, and equality of matrix product vectors are
+retained.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -3618,3 +3618,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
 - **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
   monoid; below the three-occurrence promotion threshold.
+
+### Unitary transport of left-canonical sums — candidate
+- **Pattern:** expand the conjugate transpose of `U * A i * Uᴴ`, cancel the
+  middle unitary pair, move the outer matrices through the finite sum, and
+  use the original left-canonical identity.
+- **Seen:** two occurrences in two files: the normalization proof in
+  `exists_isLeftCanonical_blockTensor_eq_of_unitary_conj` in
+  `TNLean/MPS/Periodic/SectorPhaseBlocking.lean`, and
+  `leftCanonical_of_unitary_block_intertwining` in
+  `TNLean/MPS/MPU/VirtualUnitaryGauge.lean`.
+- **Abstraction (proposed):** a left-canonical transport lemma for a unitary
+  matrix intertwining two tensor families, if a third occurrence arises.
+- **Notes:** the periodic application uses the inverse unitary orientation.
+  Below the three-occurrence promotion threshold; no custom tactic introduced.
