@@ -141,10 +141,12 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
-- `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
-  formulas are values of the displayed tensors, while the source states the
-  public blocking-independent MPU index. The remaining public construction is
-  tracked by issues #7011 and #5856.
+- `mpu_shift_specified_tensor_index_scope.tex` records the resolved distinction
+  between the specified-tensor formulas and the public blocking-independent
+  MPU index. `ShiftPublicIndex.lean` constructs the right-shift canonical form
+  and proves the public right/left shift indices and the three zero-index
+  examples; representative invariance transports these values to other MPU
+  presentations of the same periodic operators.
 - `mpu_ancilla_three_swap_orientation.tex` records that the literal crossed
   swap labels in Figure `fig:TR-ancilla` agree with $\widetilde U_3$ and differ
   from the claimed $\widetilde U_2$ endpoint when $N\geq3$ and $d\geq2$, and
