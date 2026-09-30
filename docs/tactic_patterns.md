@@ -29,7 +29,8 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
   `StepOrbitSectors.lean` (2026-09-29).
 - **Abstraction:** the core Lean theorem `Nat.div_gcd_pos_of_pos_left p hm`
-  (`Init/Data/Nat/Gcd.lean`) provides the result directly; the phase construction and prescribed-blocking sectors use it.
+  (`Init/Data/Nat/Gcd.lean`) provides the result directly; the phase
+  construction and prescribed-blocking sectors use it.
 - **Notes:** no local theorem or extra positivity hypothesis is needed.
 
 ### virtual-leg cancellation in source-gate contractions — promoted
