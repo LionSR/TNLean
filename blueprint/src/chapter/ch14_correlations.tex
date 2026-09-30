@@ -142,78 +142,67 @@ spectral decomposition, and quantitative decay bounds.
 
 \section{Spectral expansion and exponential decay}
 
-\begin{theorem}[Sum of exponentials (spectral expansion)]%
+\begin{theorem}[Sum of exponentials under diagonalizability]%
     \label{thm:correlator_sum_exponentials}
-    \lean{MPSTensor.connectedCorrelator_eq_sum}
-    \leanok
     \uses{def:connected_correlator}
-    If coefficients $c_j\in\C$ and eigenvalues $\lambda_j\in\C$, for
-    $j=1,\ldots,D^2-1$, satisfy, for all $n\ge 0$,
+    Let $\E_A$ be primitive and trace-preserving, with fixed state $\rho$
+    satisfying $\tr\rho=1$. Suppose its restriction to the traceless matrices
+    is diagonalizable, with eigenvalues $\lambda_1,\ldots,\lambda_{D^2-1}$,
+    counted with multiplicity. For every $X,Y$, there are coefficients
+    $c_j\in\C$ such that, for all $n\ge0$,
     \begin{align}
         C(X,Y;n)
-         & = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
+         & = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n.
         \label{eq:correlations_spectral_expansion}
     \end{align}
-    then the connected correlator equals the stated sum of exponentials.
-    When the subleading spectrum of the transfer map is diagonalizable, the
-    connected correlator expands as a sum of pure exponentials
-    $C(X,Y;n)=\sum_{j=1}^{D^2-1} c_j\,\lambda_j^n$
-    \cite[Section~II.B.3]{Cirac2021Matrix}; Jordan blocks can produce polynomial
-    factors $n^k\lambda^n$ when the transfer map is defective.
+    This is the diagonalizable case of the expansion in
+    \cite[Section~II.B.3]{Cirac2021Matrix}. Without diagonalizability,
+    Jordan blocks can contribute polynomial factors multiplying the
+    exponential terms.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    Given the expansion hypothesis
-    (\ref{eq:correlations_spectral_expansion}), the equality is immediate.
-    Under the corresponding diagonalizability hypothesis, the expansion
-    follows from the spectral decomposition of $\E_A^n$ restricted to the
-    complement of the fixed-point eigenspace. The leading eigenvalue
-    $\lambda_1=1$ contributes
-    $\langle X_0\rangle\langle Y_0\rangle$, which is subtracted in the
-    connected correlator, leaving the sum over subleading eigenvalues.
-    This is the spectral mechanism described in
-    \cite[Section~II.B.3]{Cirac2021Matrix}.
-    % Constructing the eigendecomposition coefficients from $\E_A$
-    % is tracked in Issue~\#1447.
+    Expand $Z_\rho(X)=X\rho-\tr(X\rho)\rho$ in an eigenbasis of the
+    traceless subspace. Applying $\E_A^n$ multiplies each component by
+    $\lambda_j^n$. Pairing the result with $Y$ under the trace gives the
+    coefficients $c_j$. The fixed-state contribution is exactly the product
+    of the one-point expectations subtracted in the connected correlator.
+    % The eigenbasis construction is tracked in Issue~\#1447.
 \end{proof}
 
 \begin{theorem}[Exponential decay bound]%
     \label{thm:correlator_exponential_bound}
-    \lean{MPSTensor.connectedCorrelator_bound}
-    \leanok
     \uses{def:connected_correlator}
-    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ satisfy, for all
-    $n\ge0$,
+    Let $\E_A$ be primitive and trace-preserving, with fixed state $\rho$
+    satisfying $\tr\rho=1$, and put $P(Z)=\tr(Z)\rho$.
+    For every $r$ with $\rho(\E_A-P)<r<1$ and every $X,Y$, there is a
+    constant $C_{XY}>0$ such that, for all $n\ge0$,
     \begin{align}
         |C(X,Y;n)|
-         & \le C_{XY}\,|\lambda_2|^n,
+         & \le C_{XY}\,r^n.
         \label{eq:correlations_decay_bound}
     \end{align}
-    then the connected correlator satisfies that exponential decay bound.
-    Combining the spectral expansion with the triangle inequality yields this
-    bound with $|\lambda_2|<1$ whenever the transfer map is primitive or
-    injective \cite[Section~II.B.3]{Cirac2021Matrix}.
+    If the complementary transfer map is diagonalizable, the rate may
+    instead be taken to be its spectral radius, as in the pure-exponential
+    expansion of \cite[Section~II.B.3]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    Given the bound hypothesis (\ref{eq:correlations_decay_bound}), the
-    estimate is immediate.
-    For a pure-exponential expansion, the source
-    \cite[Section~II.B.3]{Cirac2021Matrix} obtains such a bound by applying
-    the triangle inequality and using
-    $|\lambda_j|\le|\lambda_2|$ for all subleading eigenvalues; when the
-    transfer-map gap gives $|\lambda_2|<1$, this is a decaying bound.
-    % Deriving the bound from the eigendecomposition of $\E_A$
-    % is tracked in Issue~\#1447.
+    The matrix $Z_\rho(X)$ is traceless, and its iterates under $\E_A$
+    agree with its iterates under $\E_A-P$. For any rate strictly above
+    the spectral radius, the powers of this complementary map satisfy a
+    geometric norm bound. The trace pairing with $Y$ is a continuous
+    linear functional, so it preserves that bound up to a constant.
+    In the diagonalizable case the same conclusion at the spectral radius
+    follows by bounding the finite eigenbasis expansion term by term.
+    % Composing these bounds for the connected correlator is tracked in Issue~\#1447.
 \end{proof}
 
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
     \uses{thm:correlator_exponential_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
-    The condition $|\lambda_2|<1$ turns the bound in
-    Theorem~\ref{thm:correlator_exponential_bound} into exponential decay. It
+    The rate $r<1$ in Theorem~\ref{thm:correlator_exponential_bound}
+    gives exponential decay. It
     is a transfer-map gap condition: all non-leading eigenvalues of $\E_A$ lie
     strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of
     Chapter~\ref{ch:parent_hamiltonian_commuting_and_gap}.

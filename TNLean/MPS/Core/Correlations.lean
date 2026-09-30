@@ -17,12 +17,12 @@ thermodynamic limit.  One-point and two-point observables are expressed
 through the transfer map, and the connected two-point function is obtained
 by subtracting the product of one-point expectations.
 
-The spectral statements `connectedCorrelator_eq_sum` and
-`connectedCorrelator_bound` take the spectral decomposition or bound
-as an explicit hypothesis; the source (arXiv:2011.12127 [CPGSV21])
-states the connected-correlation formulas in Sec. 2.3
-("Correlations, Entanglement, and the Transfer Matrix") and derives
-the transfer-matrix gap hypotheses in Sec. 4 ("Formal results").
+The spectral expansion and decay results remain separate proof obligations
+tracked in issue #1447. The source (arXiv:2011.12127 [CPGSV21]) discusses
+connected correlations in Section II.B.3. A pure exponential expansion
+requires diagonalizability; in general Jordan blocks contribute polynomial
+factors, and a geometric bound uses a rate above the complementary spectral
+radius.
 The definitions here are used by the zero-correlation-length results.
 -/
 
@@ -70,55 +70,6 @@ noncomputable def connectedCorrelator (A : MPSTensor d D)
     (ρR X Y : Mat D) (n : ℕ) :
     twoPointExpectation (d := d) (D := D) A ρR X Y n =
       Matrix.trace (Y * ((Kraus.transferMap (d := d) (D := D) A) ^ n) (X * ρR)) := rfl
-
-/--
-Spectral expansion of connected correlators (conditional on supplied
-coefficients and eigenvalues).
-
-If coefficients `cⱼ` and eigenvalues `λⱼ` satisfying the spectral expansion
-identity are supplied, then the connected correlator equals the sum of
-exponentials `∑ⱼ cⱼ λⱼⁿ`.
-
-The source CPGSV21, Sec. 2.3, asserts that the connected correlator
-`C(X,Y;n)` is of the form `∑_{j≥2}^{D²} c_{XY}(j) λⱼⁿ`, a sum of
-`D²−1` pure exponentials, where `λⱼ` are the subleading eigenvalues of
-the transfer matrix.  The leading eigenvalue `λ₁=1` contributes
-`⟨X⟩⟨Y⟩` which is subtracted in the connected part.
--/
-theorem connectedCorrelator_eq_sum
-    (A : MPSTensor d D)
-    (ρR X Y : Mat D)
-    (c lam : Fin (D * D - 1) → ℂ)
-    (hdecomp : ∀ n : ℕ,
-      connectedCorrelator (d := d) (D := D) A ρR X Y n =
-        ∑ j : Fin (D * D - 1), c j * (lam j) ^ n) :
-    ∀ n : ℕ,
-      connectedCorrelator (d := d) (D := D) A ρR X Y n =
-        ∑ j : Fin (D * D - 1), c j * (lam j) ^ n :=
-  hdecomp
-
-/--
-Exponential decay bound for connected correlations (conditional on
-supplied constant and subleading eigenvalue).
-
-If a constant `C_X_Y` and a subleading eigenvalue `λ₂` with the
-exponential-decay bound are supplied, then the connected correlator
-satisfies `|C(X,Y;n)| ≤ C_X_Y · |λ₂|ⁿ`.
-
-The source CPGSV21, Sec. 2.3, notes that `|λ₂| < 1` defines the
-correlation length `ξ = −1/log|λ₂|`.  The exponential decay bound
-follows by applying the triangle inequality to the sum-of-exponentials
-expansion and using `|λⱼ| ≤ |λ₂| < 1` for all subleading eigenvalues
-(the transfer-matrix gap proved in Sec. 4).
--/
-theorem connectedCorrelator_bound
-    (A : MPSTensor d D)
-    (ρR X Y : Mat D) (CXY : ℝ) (lam₂ : ℂ)
-    (hbound : ∀ n : ℕ,
-      ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n) :
-    ∀ n : ℕ,
-      ‖connectedCorrelator (d := d) (D := D) A ρR X Y n‖ ≤ CXY * ‖lam₂‖ ^ n :=
-  hbound
 
 /-- Correlation length associated with a chosen subleading eigenvalue `λ₂`.
 
