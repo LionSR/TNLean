@@ -98,6 +98,18 @@ abstracted — record why, so it is not re-proposed).
   `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
   block-sum files and is a candidate for the same treatment.
 
+### error from a logarithmic block-length threshold — promoted
+- **Pattern:** close `K * (M * Real.exp (-x)) ≤ ε` from a threshold
+  `log K + log M - log ε ≤ x` by a hand-written `calc` through
+  `Real.exp_log`, `Real.exp_add`/`Real.exp_sub` and `Real.exp_le_exp`.
+- **Seen:** three occurrences across three files (2026-09-30):
+  `DepthLogBound.lean`, `LogDepthPreparation.lean` and `TreeMERA.lean`, all
+  under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_le_of_log_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** all three call sites use the helper; each now proves only the
+  threshold inequality.
+
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
@@ -3491,6 +3503,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** `CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives`
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
+
+### GHZ zero-image non-injectivity witnesses — candidate
+
+- **Pattern:** choose virtual labels forcing one physical label to equal both 0 and 1,
+  then use the resulting zero basis image to disprove injectivity.
+- **Occurrences:** `ghzSiteTensor_not_linearIndependent` and
+  `ghzPEPS_not_isVertexInjective` in `TNLean/PEPS/Examples/GHZ.lean`.
+- **Count:** two occurrences in one file; below the promotion threshold.
+- **Possible abstraction:** a bridge from linear independence of the four-leg
+  site tensor to vertex injectivity of its torus realization, if another example
+  repeats the construction.
 
 ### Transposed Kronecker gauge inverses — candidate
 
