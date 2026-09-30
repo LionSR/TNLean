@@ -218,18 +218,6 @@ private theorem source_right_gauge_two_coisometry {d D : ℕ}
   simp only [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
     Matrix.conjTranspose_one, hz, Matrix.one_mul, Matrix.one_kronecker_one]
 
-private theorem unitary_matrix_isUnit {D : ℕ}
-    (z : Matrix.unitaryGroup (Fin D) ℂ) :
-    IsUnit (z : Matrix (Fin D) (Fin D) ℂ) := by
-  apply (Matrix.isUnit_iff_isUnit_det _).mpr
-  exact Matrix.isUnit_det_of_left_inverse z.2.1
-
-private theorem unitary_adjoint_isUnit {D : ℕ}
-    (z : Matrix.unitaryGroup (Fin D) ℂ) :
-    IsUnit (star (z : Matrix (Fin D) (Fin D) ℂ)) := by
-  apply (Matrix.isUnit_iff_isUnit_det _).mpr
-  exact Matrix.isUnit_det_of_left_inverse z.2.2
-
 /-- A unitary virtual conjugation preserves both source-cut ranks.
 
 Source: CPSV17, arXiv:1703.09188, Proposition IV.5 (lines 786–812). -/
@@ -240,10 +228,10 @@ theorem source_rank_virtual_unitary_sandwich
       (star (z : Matrix (Fin D) (Fin D) ℂ))] = r[U] ∧
     ℓ[virtualSandwich (z : Matrix (Fin D) (Fin D) ℂ) U
       (star (z : Matrix (Fin D) (Fin D) ℂ))] = ℓ[U] := by
-  exact ⟨rightRank_virtualSandwich _ U _ (unitary_matrix_isUnit z)
-    (unitary_adjoint_isUnit z),
-    leftRank_virtualSandwich _ U _ (unitary_matrix_isUnit z)
-    (unitary_adjoint_isUnit z)⟩
+  exact ⟨rightRank_virtualSandwich _ U _ (Unitary.isUnit_coe (U := z))
+    (Unitary.isUnit_coe (U := z)).star,
+    leftRank_virtualSandwich _ U _ (Unitary.isUnit_coe (U := z))
+    (Unitary.isUnit_coe (U := z)).star⟩
 
 /-- The transported factors, reindexed to the source ranks selected for the
 conjugated tensor, give both cut factorizations and right inverses. Their
