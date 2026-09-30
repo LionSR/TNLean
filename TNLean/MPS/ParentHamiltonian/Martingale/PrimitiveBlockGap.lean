@@ -19,7 +19,7 @@ and the finite-range comparison for periodic chains.
 
 ## References
 
-* Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(ii), lines 1130--1139,
+* Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(ii), lines 1131--1136,
   and Section 6, Lemma `commutation` (ii).
 * The finite-range periodic comparison is recorded in
   `docs/paper-gaps/knabe88_finite_range_coefficient.tex`.

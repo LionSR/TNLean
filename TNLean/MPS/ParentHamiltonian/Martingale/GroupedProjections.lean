@@ -16,7 +16,7 @@ in the grouped index.
 ## References
 
 * Nachtergaele, arXiv:cond-mat/9410110, conditions C1-prime and C3-prime,
-  lines 1095--1120, and Theorem 2.1(ii), lines 1130--1139.
+  lines 1095--1120, and Theorem 2.1(ii), lines 1131--1136.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace
