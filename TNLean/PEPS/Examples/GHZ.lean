@@ -16,8 +16,8 @@ Review: arXiv:2011.12127, Appendix A, "The GHZ state" (two dimensions).
 
 **Formalized here.** The four-leg tensor contraction on every torus of positive width and
 height generates the unnormalized GHZ state: its coefficient at `σ` is
-`∑ i, ∏ v, [σ v = i]`. Horizontal and vertical bond arrays retain self-loops and parallel
-bonds. The state is invariant under all simultaneous permutations of its physical labels,
+`∑ i, ∏ v, [σ v = i]`. Horizontal and vertical assignments of bond indices retain self-loops and
+parallel bonds. The state is invariant under all simultaneous permutations of its physical labels,
 with the same permutation on all four virtual legs. The site tensor is not injective for
 `d ≥ 2`.
 

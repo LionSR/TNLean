@@ -132,7 +132,7 @@ matrix product operator on the virtual level.
 The two-dimensional GHZ state is a superposition of the $d$ constant
 spin configurations \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
 All bonds are contracted periodically. Separate horizontal and vertical
-bond arrays retain the self-loops and parallel bonds at small lattice sizes.
+assignments of bond indices retain the self-loops and parallel bonds at small lattice sizes.
 The simple-graph representation requires $w,h\ge2$
 \cite{gap:rmp_peps_examples_small_torus}.
 
@@ -150,16 +150,18 @@ The simple-graph representation requires $w,h\ge2$
     \label{thm:peps_ghz_state}
     \lean{TNLean.PEPS.sum_prod_ghzSiteTensor, TNLean.PEPS.stateCoeff_ghzPEPS}
     \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff}
+    \uses{def:peps_ghz_tensor, def:peps_stateCoeff,
+        lem:peps_torus_site_tensor_contraction}
     On every torus with $w,h\ge1$, the GHZ tensor generates the unnormalized
     state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$
     \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
-    With horizontal and vertical bond arrays $h_{x,y},v_{x,y}$ as in
-    Definition~\ref{def:peps_torus_site_tensor}, its coefficient is
+    With horizontal and vertical assignments of bond indices $h_{(x,y)},v_{(x,y)}$ as in
+    Lemma~\ref{lem:peps_torus_site_tensor_contraction}, its coefficient is
     \begin{align}
         \sum_{h,v}\prod_{(x,y)}
-        A^{\sigma(x,y)}_{v_{x,y},h_{x,y},v_{x,y-1},h_{x-1,y}}
+        A^{\sigma(x,y)}_{v_{(x,y)},h_{(x,y)},v_{(x,y-1)},h_{(x-1,y)}}
          & = \sum_i\prod_{(x,y)}\delta_{\sigma(x,y),i}.
+        \label{eq:peps_ghz_periodic_contraction}
     \end{align}
     For $w,h\ge2$, the simple-graph GHZ PEPS has the same coefficients.
 \end{theorem}
@@ -186,6 +188,7 @@ The simple-graph representation requires $w,h\ge2$
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
     The four-leg basis vector with labels $(0,1,0,0)$ has zero image.
     In the simple graph, give the right bond at one vertex label $1$
     and every other incident bond label $0$. The top and right bonds are distinct,
@@ -205,9 +208,10 @@ The simple-graph representation requires $w,h\ge2$
         A^{\pi(i)}_{\pi(\alpha)\pi(\beta)\pi(\gamma)\pi(\delta)}
          & = A^i_{\alpha\beta\gamma\delta}.
     \end{align}
-    For every positive $w,h$, the periodically contracted state satisfies
-    $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$.
-    For $w,h\ge2$, this also holds for the simple-graph GHZ PEPS.
+    For every positive $w,h$, the contraction in
+    (\ref{eq:peps_ghz_periodic_contraction}) is unchanged when $\sigma$
+    is replaced by $\pi\circ\sigma$. For $w,h\ge2$, the simple-graph
+    GHZ PEPS therefore satisfies $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$.
     In particular, for $d\ge1$ the on-site $\Z_d$ shift is a symmetry,
     and its virtual action is the same shift on every bond.
 \end{theorem}
