@@ -10,8 +10,9 @@ import TNLean.Algebra.CocycleCohomology
 /-!
 # Periodic MPS — conditional projective representation after the symmetry corollary
 
-This file starts from the conditional group-action reformulation
-`MPSTensor.cor_4_1_physical_symmetry_zgauge_explicit`. The source paper
+The pointwise group-action symmetry theorem is
+`MPSTensor.exists_diagonal_unitary_of_irreducibleForm_onSiteSymmetry`.
+This file studies a separate coherence assumption on virtual gauges. The source paper
 arXiv:1708.00029, Section 4.2, lines 834--845, proves a symmetry-to-`Z`-gauge
 corollary for a single local unitary and then says that its consequences will be
 explored elsewhere. It does not choose the virtual gauges coherently over a
@@ -25,9 +26,8 @@ The injective analogue is `MPSTensor.virtual_rep_of_symmetric_injective`
 virtual action to a scalar 2-cocycle on `G`. In the genuinely periodic case
 there is a non-trivial `Z`-gauge ambiguity (`Z_g^{m_g} = 1`), so an additional
 analytic input is required to reduce the full rigidity back to a scalar
-cocycle. Following the established repository
-pattern (see `PeriodicEqualCaseFT`), that input is exposed as an explicit
-hypothesis `PeriodicProjectiveRigidity`. The remaining projective-representation
+cocycle. That input is exposed as the explicit hypothesis
+`PeriodicProjectiveRigidity`. The remaining projective-representation
 conclusions - the cocycle identity and the construction of a
 `ProjectiveRepresentation` on the bond space - are formalized here.
 
@@ -83,8 +83,8 @@ pointwise `Z`-gauge conclusion modeled on the source symmetry corollary: there i
 In the injective case (period `1`), this hypothesis reduces to
 `gauge_unique_up_to_scalar` applied to `A`; in the genuinely periodic case the
 `Z`-commutant of `A` is non-trivial, so an additional analytic input is required.
-Callers committing to this Prop are committing to a finiteness/rigidity result
-analogous to `MPSTensor.PeriodicEqualCaseFT`. -/
+This coherence statement is additional to the pointwise symmetry corollary;
+the latter alone does not provide a common scalar factor system. -/
 def PeriodicProjectiveRigidity
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
   ∃ (Y : G → GL (Fin D) ℂ) (u : G → G → Units ℂ),

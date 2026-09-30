@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNTCharacterization
 import TNLean.MPS.MPDO.BNTMultiplicityNormalization
-import TNLean.MPS.MPDO.CPSVVerticalDecomposition
+import TNLean.MPS.MPDO.CPSVBlocking
+import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 
 /-!
@@ -353,7 +354,8 @@ noncomputable def toTwoSiteExactSectorGauge
     rw [hPair] at hEntry
     exact hEntry.trans (P.mpv_toTensor_eq_sum_coeff σ).symm
   let D₂ : CPSVVerticalDecomposition (blockTwo M) := Classical.choice
-    (hCanonical.exists_cpsvVerticalDecomposition_blockTwo M hM)
+    ((IsCPSVCanonicalForm_toMPSTensor_blockTwo hCanonical).hasVerticalBNTGroupingInputs
+      (blockTwo M) hM.blockTwo).exists_cpsvVerticalDecomposition
   let Q : MPSTensor.SectorDecomposition (D * D) := {
     basisCount := D₂.labelCount
     basisDim := D₂.bondDim

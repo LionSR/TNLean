@@ -437,6 +437,80 @@ theorem sameMPV₂Pos_blockScalarMatrix_mul_toTensor
     rw [hzero]
     simp
 
+/-- The copy permutation transports the weighted scalar-gauge identity to
+all flattened blocks. Source: arXiv:1708.00029, Theorem 3.8, lines 667--690. -/
+theorem equalCase_flat_conj_of_blockwise
+    {P Q : SectorDecomposition d}
+    (perm : Fin P.basisCount ≃ Fin Q.basisCount)
+    (hDim : ∀ j, P.basisDim j = Q.basisDim (perm j))
+    (τ : (j : Fin P.basisCount) → Fin (P.copies j) ≃ Fin (Q.copies (perm j)))
+    (ξ : Fin P.basisCount → ℂ)
+    (Yb : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ)
+    (hConj : ∀ (j : Fin P.basisCount) (i : Fin d),
+      (cast (congr_arg (MPSTensor d) (hDim j)) (P.basis j)) i =
+        ξ j • ((Yb (perm j) :
+            Matrix (Fin (Q.basisDim (perm j))) (Fin (Q.basisDim (perm j))) ℂ) *
+          Q.basis (perm j) i *
+          (((Yb (perm j))⁻¹ : GL (Fin (Q.basisDim (perm j))) ℂ) :
+            Matrix (Fin (Q.basisDim (perm j))) (Fin (Q.basisDim (perm j))) ℂ)))
+    (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ)
+    (hz : ∀ j q, z j q * (ξ j * P.weight j q) = Q.weight (perm j) (τ j q)) :
+    let e := SectorDecomposition.sectorFlatEquiv (P := Q) (Q := P) perm τ
+    let hd : ∀ s, P.flatDim s = Q.flatDim (e s) := fun s =>
+      (SectorDecomposition.flatDim_sectorFlatEquiv (P := Q) (Q := P) perm
+        (fun j => (hDim j).symm) τ s).symm
+    ∀ (s : Fin P.totalCopies) (i : Fin d),
+      Matrix.reindex (finCongr (hd s)) (finCongr (hd s))
+          ((P.flatCopyScalar z s * P.flatWeight s) • P.flatBasis s i) =
+        Q.flatWeight (e s) •
+          ((matched_block_gauge (Q := Q) Yb (e s) :
+              Matrix (Fin (Q.flatDim (e s))) (Fin (Q.flatDim (e s))) ℂ) *
+            Q.flatBasis (e s) i *
+            (((matched_block_gauge (Q := Q) Yb (e s))⁻¹ :
+                GL (Fin (Q.flatDim (e s))) ℂ) :
+              Matrix (Fin (Q.flatDim (e s))) (Fin (Q.flatDim (e s))) ℂ)) := by
+  classical
+  set e : Fin P.totalCopies ≃ Fin Q.totalCopies :=
+    SectorDecomposition.sectorFlatEquiv (P := Q) (Q := P) perm τ with he
+  have hd : ∀ s, P.flatDim s = Q.flatDim (e s) := fun s =>
+    (SectorDecomposition.flatDim_sectorFlatEquiv (P := Q) (Q := P) perm
+      (fun j => (hDim j).symm) τ s).symm
+  dsimp only
+  intro s i
+  set j : Fin P.basisCount := (P.flatIndexEquiv.symm s).1 with hj
+  set q : Fin (P.copies j) := (P.flatIndexEquiv.symm s).2 with hq
+  have ht : Q.flatIndexEquiv.symm (e s) = ⟨perm j, τ j q⟩ := by
+    rw [he, SectorDecomposition.sectorFlatEquiv_apply, Equiv.symm_apply_apply]
+  have hQd : Q.flatDim (e s) = Q.basisDim (perm j) :=
+    congrArg (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
+      Q.basisDim x.1) ht
+  have hQw : Q.flatWeight (e s) = Q.weight (perm j) (τ j q) :=
+    congrArg (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
+      Q.weight x.1 x.2) ht
+  have hQb : Q.flatBasis (e s) ≍ Q.basis (perm j) :=
+    congr_arg_heq (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
+      Q.basis x.1) ht
+  have hQx : matched_block_gauge (Q := Q) Yb (e s) ≍ Yb (perm j) :=
+    congr_arg_heq (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
+      Yb x.1) ht
+  refine (Matrix.reindex (finCongr hQd) (finCongr hQd)).injective ?_
+  rw [reindex_trans_finCongr,
+    reindex_smul_conj_eq hQd (Q.flatWeight (e s)) (Q.weight (perm j) (τ j q))
+      (Q.flatBasis (e s)) (Q.basis (perm j))
+      (matched_block_gauge (Q := Q) Yb (e s)) (Yb (perm j)) hQw hQb hQx i]
+  have hsmul : Matrix.reindex (finCongr ((hd s).trans hQd))
+        (finCongr ((hd s).trans hQd))
+        ((P.flatCopyScalar z s * P.flatWeight s) • P.flatBasis s i) =
+      (z j q * P.weight j q) •
+        Matrix.reindex (finCongr (hDim j)) (finCongr (hDim j)) (P.basis j i) := by
+    have hcong : (hd s).trans hQd = hDim j := rfl
+    rw [hcong]
+    rfl
+  rw [hsmul, reindex_finCongr_apply_eq_cast, hConj j i, smul_smul]
+  congr 1
+  rw [← hz j q]
+  ring
+
 /-! ## The global multiplicity gauge in the equal case -/
 
 /-- **Global multiplicity gauge and similarity in the equal case.**
@@ -519,41 +593,8 @@ theorem equalCase_global_zgauge_of_blockwise
             Q.flatBasis (e s) i *
             (((matched_block_gauge (Q := Q) Yb (e s))⁻¹ :
                 GL (Fin (Q.flatDim (e s))) ℂ) :
-              Matrix (Fin (Q.flatDim (e s))) (Fin (Q.flatDim (e s))) ℂ)) := by
-    intro s i
-    set j : Fin P.basisCount := (P.flatIndexEquiv.symm s).1 with hj
-    set q : Fin (P.copies j) := (P.flatIndexEquiv.symm s).2 with hq
-    have ht : Q.flatIndexEquiv.symm (e s) = ⟨perm j, τ j q⟩ := by
-      rw [he, SectorDecomposition.sectorFlatEquiv_apply, Equiv.symm_apply_apply]
-    have hQd : Q.flatDim (e s) = Q.basisDim (perm j) :=
-      congrArg (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
-        Q.basisDim x.1) ht
-    have hQw : Q.flatWeight (e s) = Q.weight (perm j) (τ j q) :=
-      congrArg (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
-        Q.weight x.1 x.2) ht
-    have hQb : Q.flatBasis (e s) ≍ Q.basis (perm j) :=
-      congr_arg_heq (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
-        Q.basis x.1) ht
-    have hQx : matched_block_gauge (Q := Q) Yb (e s) ≍ Yb (perm j) :=
-      congr_arg_heq (fun x : (k : Fin Q.basisCount) × Fin (Q.copies k) =>
-        Yb x.1) ht
-    refine (Matrix.reindex (finCongr hQd) (finCongr hQd)).injective ?_
-    rw [reindex_trans_finCongr,
-      reindex_smul_conj_eq hQd (Q.flatWeight (e s)) (Q.weight (perm j) (τ j q))
-        (Q.flatBasis (e s)) (Q.basis (perm j))
-        (matched_block_gauge (Q := Q) Yb (e s)) (Yb (perm j)) hQw hQb hQx i]
-    have hsmul : Matrix.reindex (finCongr ((hd s).trans hQd))
-          (finCongr ((hd s).trans hQd))
-          ((zflat s * P.flatWeight s) • P.flatBasis s i) =
-        (z j q * P.weight j q) •
-          Matrix.reindex (finCongr (hDim j)) (finCongr (hDim j)) (P.basis j i) := by
-      have hcong : (hd s).trans hQd = hDim j := rfl
-      rw [hcong]
-      rfl
-    rw [hsmul, reindex_finCongr_apply_eq_cast, hConj j i, smul_smul]
-    congr 1
-    rw [← hz j q]
-    ring
+              Matrix (Fin (Q.flatDim (e s))) (Fin (Q.flatDim (e s))) ℂ)) :=
+    equalCase_flat_conj_of_blockwise perm hDim τ ξ Yb hConj z hz
   obtain ⟨Y, Y', hYY', hY'Y, hconj⟩ :=
     toTensorFromBlocks_conj_of_matched_blocks (d := d)
       (fun s => zflat s * P.flatWeight s) P.flatBasis

@@ -34,6 +34,23 @@
     $\tau \in \{0,\ldots,d^p-1\}^N$.
 \end{definition}
 
+\begin{theorem}[The one-site boundary of refinement and divisibility]
+    \label{lem:periodic_refinement_one_site}
+    \lean{MPSTensor.isPRefinable_one, MPSTensor.isPDivisibleChannel_one_iff}
+    \leanok
+    \uses{def:p_refinable, def:p_divisible_channel}
+    Every tensor is $1$-refinable. A linear map is $1$-divisible if and only
+    if it is a channel. Thus, at $p=1$, the forward implication of the
+    printed Theorem~4.1 requires trace preservation of $\E_B$; see
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    One-site blocking only permutes the physical labels. Use the associated
+    permutation matrix for the refinement isometry. The channel assertion
+    follows because the first power of a linear map is the map itself.
+\end{proof}
+
 \begin{theorem}[The tensor $C$ associated to a refinement witness]
     \label{thm:p_refinement_pullback_irreducible_form}
     \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
@@ -61,180 +78,1125 @@
     irreducible-form decomposition of $C$.
 \end{proof}
 
-\begin{definition}[$Z$-gauge after applying the blocked equal-case theorem]
-    \label{def:peripheral_equalcase_zgauge_sameMPV}
-    \lean{MPSTensor.PeripheralEqualCaseZGaugeOfSameMPV}
+\begin{theorem}[Normalization from periodic equal-case matching]
+    \label{thm:periodic_equalcase_weight_norm}
+    \lean{MPSTensor.SectorDecomposition.weight_norm_eq_one_of_periodic_sameMPV₂Pos,
+        MPSTensor.SectorDecomposition.leftCanonical_of_periodic_sameMPV₂Pos}
     \leanok
-    \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
-    Fix $(d,D,p)$. This hypothesis says that whenever a blocked tensor $C$ in
-    irreducible form~II has the same MPV family as the $p$-blocked tensor
-    $A^{[p]}$,
-    there exists an integer $m \ge 1$ and a $\Z_m$-gauge equivalence
-    between $C$ and $A^{[p]}$.
-\end{definition}
-
-\begin{theorem}[$Z$-gauge equivalence from the periodic theorem]
-    \label{thm:zgauge_equiv_periodicFT_irreducible_form}
-    \lean{MPSTensor.zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm}
-    \leanok
-    \uses{thm:periodic_ft, def:irreducible_form, def:blocked_tensor, def:same_mpv, def:z_gauge_equiv}
-    Assume the periodic equal-case Fundamental Theorem at the blocked physical
-    dimension. Let $C$ and $A^{[p]}$ be MPS tensors of the same bond dimension,
-    both in irreducible form~II, and suppose that they have the same MPV family.
-    Then there exists an integer $m \ge 1$ and a $\Z_m$-gauge equivalence
-    between $C$ and $A^{[p]}$.
-    % Scope restriction: this is only the equal-case application of the periodic
-    % Fundamental Theorem; the irreducible-form hypothesis on $A^{[p]}$ is an
-    % explicit assumption, not a consequence of equality of MPV families.
-\end{theorem}
-
-\begin{definition}[Construction of $\widetilde A$ from the $Z$-gauge]
-    \label{def:peripheral_equalcase_root_from_zgauge}
-    \lean{MPSTensor.PeripheralEqualCaseRootFromZGauge}
-    \leanok
-    \uses{def:irreducible_form, def:blocked_tensor, def:z_gauge_equiv}
-    Fix $(d,D,p)$. This hypothesis says that if $m \ge 1$ and a blocked tensor
-    $C$ in irreducible form~II is $\Z_m$-gauge equivalent to $A^{[p]}$,
-    then one can construct a tensor $\widetilde A$ with
-    $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
-    $\E_C = \E_{\widetilde A^{[p]}}$.
-    This channel-level condition is a strictly weaker consequence of the
-    construction in \cite[lines~765--810]{DeLasCuevas2017Irreducible}, which
-    additionally supplies block scalars, intermediate matrices, and the full
-    blocked-tensor identity $\widetilde A^{[p]} = C$.
-\end{definition}
-
-\begin{definition}[Construction of $\widetilde A$ after the equal-case theorem]
-    \label{def:peripheral_equalcase_periodicFT_sameMPV}
-    \lean{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}
-    \leanok
-    \uses{def:irreducible_form, def:blocked_tensor, def:same_mpv}
-    Fix $(d,D,p)$. This states the combined construction: whenever a
-    blocked tensor $C$ in irreducible form~II has the same MPV family as a
-    $p$-blocked tensor $A^{[p]}$, one can replace $A$ by a left-canonical
-    tensor $\widetilde A$ with
-    $\E_C = \E_{\widetilde A^{[p]}}$.
-\end{definition}
-
-\begin{theorem}[Construction of $\widetilde A$ from $Z$-gauge extraction]
-    \label{thm:peripheral_equalcase_sameMPV_zgauge_reduction}
-    \lean{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV}
-    \leanok
-    \uses{def:peripheral_equalcase_zgauge_sameMPV, def:peripheral_equalcase_root_from_zgauge, def:peripheral_equalcase_periodicFT_sameMPV}
-    If the blocked equal-case $Z$-gauge extraction hypothesis and the
-    construction of $\widetilde A$ from that $Z$-gauge both hold, then the
-    combined equal-case construction holds.
+    \uses{thm:periodic_ft}
+    Let $P,Q$ be literal sector decompositions with trace-preserving
+    periodic basis tensors, pairwise inequivalent up to scalar gauge
+    within each basis. Suppose their periodic vectors agree at every
+    positive length. If every copy weight of $Q$ has modulus one, then
+    every copy weight of $P$ has modulus one and the assembled tensor
+    $P$ is trace preserving.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the $Z$-gauge extraction hypothesis to obtain a blocked
-    $\Z_m$-gauge witness between $C$ and $A^{[p]}$, and then apply the
-    construction of $\widetilde A$ to that witness.
+    Equal-case matching gives
+    $z_{j,q}\xi_j\mu_{j,q}=\nu_{\pi(j),\tau_j(q)}$, where
+    $|\xi_j|=1$ and $z_{j,q}^{m_j}=1$ with $m_j>0$.
+    Taking absolute values gives $|\mu_{j,q}|=1$.
+    Each weighted block is therefore trace preserving, as is their
+    direct sum.
 \end{proof}
 
-\begin{theorem}[Reduction to the blocked equal-case construction]
-    \label{thm:p_refinement_forward_equalcase_reduction}
-    \lean{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV}
+\begin{theorem}[Unitary gauges within a periodic phase class]
+    \label{thm:periodic_phase_class_unitary}
+    \lean{MPSTensor.MPVBlockPhaseEquiv.exists_unitary_of_isPeriodic,
+      MPSTensor.hetRepeatedBlocks_of_mpvBlockPhaseEquiv_of_isPeriodic,
+      MPSTensor.dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic}
     \leanok
-    \uses{def:peripheral_equalcase_periodicFT_sameMPV, def:irreducible_form, def:p_refinable, thm:p_refinement_pullback_irreducible_form}
-    Assume the blocked equal-case construction. Then every
-    $p$-refinable tensor $B$ in irreducible form~II admits a left-canonical
-    tensor $\widetilde A$ with
-    $\E_B = \E_{\widetilde A^{[p]}}$.
+    Let $A,B$ be trace-preserving periodic tensors of periods $m,n$.
+    Suppose there is a nonzero scalar $\lambda$ such that
+    $v_N(B)=\lambda^Nv_N(A)$ for every $N\geq1$.
+    Their bond dimensions agree, and there are a unitary $U$ and a
+    scalar $\zeta$ of modulus one such that $A^i=\zeta UB^iU^*$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
-    refinement witness of $B$. This produces a blocked tensor $C$ in
-    irreducible form~II with $\E_C = \E_B$ and the same MPV
-    family as $A^{[p]}$. The blocked equal-case construction then
-    gives a left-canonical tensor $\widetilde A$ with
-    $\E_C = \E_{\widetilde A^{[p]}}$. Combining the two
-    transfer-map identities yields
-    $\E_B = \E_{\widetilde A^{[p]}}$.
+    If the blocks were not repeated, their cross overlap would tend
+    to zero. Proportionality gives
+    \[
+      |\langle v_N(A),v_N(B)\rangle|^2
+      =\|v_N(A)\|^2\|v_N(B)\|^2.
+    \]
+    Along common multiples of $m$ and $n$, the right side tends
+    to $mn>0$, a contradiction. The repeated-block relation thus
+    gives a similarity and a unit-modulus phase. Canonical
+    normalization and irreducibility allow the similarity to be
+    chosen unitary.
 \end{proof}
 
-\begin{theorem}[Forward direction from the blocked equal-case construction]
-    \label{thm:thm_4_1_p_refinement_forward_blocked_equalcase}
-    \lean{MPSTensor.thm_4_1_p_refinement_forward_of_peripheralEqualCase_periodicFT_of_sameMPV}
+\begin{theorem}[Grouping periodic blocks while retaining copy scalars]
+    \label{thm:periodic_unitary_phase_class_grouping}
+    \lean{MPSTensor.exists_unitary_phaseClass_grouping}
     \leanok
-    \uses{def:peripheral_equalcase_periodicFT_sameMPV, def:irreducible_form, def:p_refinable, def:p_divisible_channel, thm:p_refinement_forward_equalcase_reduction}
-    Assume the blocked equal-case construction. Then for every tensor
-    $B$ in irreducible form~II, $p$-refinability of $B$ implies
-    $p$-divisibility of $\E_B$.
+    \uses{thm:periodic_phase_class_unitary, thm:periodic_unitary_block_assembly}
+    Let $(\mu_kA_k)_k$ be a finite family of trace-preserving periodic
+    blocks with nonzero weights. There is a sector decomposition
+    with pairwise non-repeated periodic representatives $B_j$ and
+    nonzero copy weights $\nu_s$, together with a bijection $e$
+    from its copies to the original blocks. The representative of
+    copy $s$ and $A_{e(s)}$ have the same bond dimension and period,
+    and $|\nu_s|=|\mu_{e(s)}|$.
+
+    For every family of copy scalars $z_s$, there is a unitary $Y$
+    between the assembled bond spaces such that
+    \[
+      \bigoplus_s z_s\nu_sB_{j(s)}^i
+      =Y\left(\bigoplus_k z_{e^{-1}(k)}\mu_kA_k^i\right)Y^*.
+    \]
 \end{theorem}
 
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:p_refinement_forward_equalcase_reduction} with the
-    witness-level forward implication: once $\E_B$ is identified with
-    $\E_{\widetilde A^{[p]}}$ for a left-canonical $\widetilde A$, the
-    blocking identity gives $\E_B = (\E_{\widetilde A})^p$.
+    Partition the blocks by proportionality of their periodic vectors
+    through powers of a nonzero scalar. Choose one representative per
+    class. Theorem~\ref{thm:periodic_phase_class_unitary} gives
+    $B_j^i=\zeta_sU_sA_{e(s)}^iU_s^*$, with $|\zeta_s|=1$.
+    Set $\nu_s=\mu_{e(s)}/\zeta_s$. These weights have the required
+    moduli, and repeated periodic blocks have equal periods.
+    Multiplying each weighted identity by $z_s$ and assembling the
+    block unitaries proves the formula.
 \end{proof}
 
-The refinability--divisibility equivalence of
-\cite[Theorem~4.1]{DeLasCuevas2017Irreducible} decomposes into the two one-way
-implications of Theorem~\ref{thm:thm_4_1_p_refinement_forward} and
-Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
-
-% Source comparison: arXiv:1708.00029, Theorem 4.1, lines 728--731 asserts
-% the same refinability--divisibility equivalence without additional
-% hypotheses. The forward construction of \widetilde A corresponds to
-% lines 735--810, while the reverse transfer-map construction corresponds
-% to lines 812--818. The Lean theorem below combines the two proved one-way
-% implications and is therefore conditional on those two hypotheses.
-\begin{theorem}[$p$-refinability iff transfer-map $p$-divisibility, conditional]%
-    \label{thm:thm_4_1_p_refinement}
-    \lean{MPSTensor.thm_4_1_p_refinement}
+\begin{theorem}[Unitary periodic matching with unchanged phases]
+    \label{thm:periodic_equalcase_unitary_matching}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_unitary_matching}
     \leanok
-    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel, thm:periodic_ft, thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
-    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume the forward construction of $\widetilde A$ for
-    refinability $\Rightarrow$ divisibility and the reverse transfer-map
-    construction for divisibility $\Rightarrow$ refinability. Then $B$ is
-    $p$-refinable iff its transfer map $\E_B$ is $p$-divisible.
+    \uses{thm:periodic_ft}
+    Under the periodic equal-case hypotheses with trace-preserving
+    basis tensors, the matched basis gauges may be chosen unitary
+    without changing the phases in the copy-weight identity. Thus
+    $A_j^i=\xi_jU_jB_{\pi(j)}^iU_j^*$ and
+    $z_{j,q}\xi_j\mu_{j,q}=\nu_{\pi(j),\tau_j(q)}$ hold with the
+    same $\xi_j$, where $z_{j,q}^{m_j}=1$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:thm_4_1_p_refinement_forward, thm:thm_4_1_p_refinement_reverse}
-    Combine the forward implication
-    (Theorem~\ref{thm:thm_4_1_p_refinement_forward}) with the reverse
-    implication (Theorem~\ref{thm:thm_4_1_p_refinement_reverse}) into a
-    single biconditional. The forward direction assumes the construction of
-    $\widetilde A$; the reverse direction assumes the transfer-map construction.
-    Together they give the full equivalence under those hypotheses.
+    Retain the matching, phases, and copy permutations supplied by the
+    equal-case theorem. Canonical normalization and irreducibility make
+    each matching similarity a scalar multiple of a unitary, so its
+    scalar cancels in conjugation. The factor $\xi_j$ and all copy-weight
+    identities remain unchanged.
 \end{proof}
 
-\begin{theorem}[$p$-refinability implies transfer-map $p$-divisibility]%
-    \label{thm:thm_4_1_p_refinement_forward}
-    \lean{MPSTensor.thm_4_1_p_refinement_forward}
+\begin{theorem}[Unitary assembly of matched weighted blocks]
+    \label{thm:periodic_unitary_block_assembly}
+    \lean{MPSTensor.toTensorFromBlocks_unitary_conj_of_matched_blocks}
+    \leanok
+    Suppose a bijection $\pi$ matches the dimensions of two finite
+    families of blocks and unitaries $U_{\pi(k)}$ satisfy
+    $\mu_kA_k^i=\nu_{\pi(k)}U_{\pi(k)}B_{\pi(k)}^iU_{\pi(k)}^*$.
+    There is a unitary $Y$ between the full bond spaces such that
+    \[
+        \bigoplus_k\mu_kA_k^i
+        =Y\left(\bigoplus_l\nu_lB_l^i\right)Y^*.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Compose the direct sum of the $U_l$ with the permutation of the
+    matched block coordinates. Both maps are unitary, and their
+    conjugation acts on each block by the prescribed identity.
+\end{proof}
+
+\begin{theorem}[Global unitary in the periodic equal case]
+    \label{thm:periodic_equalcase_unitary_global}
+    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_unitary_global}
+    \leanok
+    \uses{thm:periodic_equalcase_unitary_matching,
+        thm:periodic_unitary_block_assembly}
+    Let $A,B$ be literal sector decompositions satisfying the periodic
+    equal-case hypotheses, with trace-preserving basis tensors.
+    Let $m_j$ be the periods of the basis tensors of $A$, and let
+    $L$ be a common multiple of the $m_j$. There are scalars
+    $z_{j,q}$ with $z_{j,q}^{m_j}=1$ and a unitary $Y$ such that,
+    on setting $Z=\bigoplus_{j,q}z_{j,q}\Id_{D_j}$,
+    \[
+        Z^L=\Id,\qquad ZA^i=A^iZ,\qquad ZA^i=YB^iY^*.
+    \]
+    The periodic vectors of $A$ and $ZA$ agree at every positive
+    length. This is the unitary relation used in
+    \cite[Theorem~4.1, lines~752--765]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Unitary matching gives
+    $A_j^i=\xi_jU_jB_{\pi(j)}^iU_j^*$ and
+    $z_{j,q}\xi_j\mu_{j,q}=\nu_{\pi(j),\tau_j(q)}$.
+    Apply Theorem~\ref{thm:periodic_unitary_block_assembly} to these
+    weighted copies. Since $Z$ is scalar on each copy, it commutes
+    with $A^i$, and $Z^L=\Id$. At length $N$, a copy contributes
+    zero unless $m_j\mid N$; otherwise its additional factor
+    $z_{j,q}^N$ is one.
+\end{proof}
+
+\begin{theorem}[Distributing a phase across a blocked cyclic word]
+    \label{lem:periodic_phase_distribution}
+    \lean{MPSTensor.phaseDistribution_of_residue_coordinates}
+    \leanok
+    Let $m,n\geq 1$ and $p\geq 0$. Suppose each cyclic site
+    $u\in\mathbb Z/m\mathbb Z$ has an orbit label $\alpha(u)$ and a
+    coordinate $k(u)\in\mathbb Z/n\mathbb Z$ such that
+    $\alpha(u+p)=\alpha(u)$ and $k(u+p)=k(u)+1$. Every orbit has a
+    label, and two sites have the same label exactly when their
+    difference is an integer multiple of $p$ modulo $m$. Thus there
+    are exactly $\gcd(m,p)$ orbit labels.
+    Given phases $c_a$ with $c_a^n=1$, put
+    $b_u=c_{\alpha(u)}^{k(u)}$ and $d_u=b_{u+1}/b_u$, where the exponent
+    is the representative in $\{0,\ldots,n-1\}$. Then
+    \begin{align}
+        \prod_{j=0}^{p-1}d_{u+j}=c_{\alpha(u)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    The product telescopes to $b_{u+p}/b_u$. The hypotheses on the orbit
+    coordinates give $b_{u+p}=c_{\alpha(u)}b_u$; the closing step uses
+    $c_{\alpha(u)}^n=1$.
+\end{proof}
+
+\begin{theorem}[Cyclic residue coordinates]
+    \label{lem:periodic_refinement_residue_coordinates}
+    \lean{MPSTensor.phase_residue_orbit_length, MPSTensor.exists_phase_residue_coordinates}
+    \leanok
+    Let $m\geq1$ and $p\geq0$. The shift by $p$ on
+    $\mathbb Z/m\mathbb Z$ partitions the sites into orbits, each of length
+    $n=m/\gcd(m,p)$. There are an orbit label $\alpha(u)$ and a coordinate
+    $k(u)\in\mathbb Z/n\mathbb Z$ such that
+    $\alpha(u+p)=\alpha(u)$ and $k(u+p)=k(u)+1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Quotient the cyclic group by the subgroup generated by $p$ to obtain
+    the orbit labels. Choose one representative in each orbit and identify
+    the generated subgroup with $\mathbb Z/n\mathbb Z$; translation by $p$
+    increases the resulting coordinate by one.
+\end{proof}
+
+\begin{theorem}[Existence of the distributed phases]
+    \label{lem:periodic_refinement_distributed_phases}
+    \lean{MPSTensor.exists_phaseDistribution_of_shift_invariant}
+    \leanok
+    \uses{lem:periodic_refinement_residue_coordinates, lem:periodic_phase_distribution}
+    Let $c_u$ be phases on the cyclic sites satisfying $c_{u+p}=c_u$ and
+    $c_u^n=1$, where $n=m/\gcd(m,p)$. Then there are one-site phases
+    $d_u$ such that the product over every $p$-site segment beginning at
+    $u$ is $c_u$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the cyclic coordinates of
+    Lemma~\ref{lem:periodic_refinement_residue_coordinates} and use the
+    ratios of vertex phases from Lemma~\ref{lem:periodic_phase_distribution}.
+\end{proof}
+
+\begin{theorem}[Phase-twisted tensor on blocked words]
+    \label{thm:periodic_phase_twisted_block}
+    \lean{MPSTensor.blockTensor_phaseTwisted_apply_projection}
+    \leanok
+    \uses{def:blocked_tensor}
+    Let $P_u$ be orthogonal cyclic-sector projections summing to the
+    identity, with $P_uA^i=A^iP_{u+1}$. For arbitrary complex scalars
+    $d_u$, define $A'^i=\sum_u d_uP_uA^i$. Then the $p$-blocked letter
+    indexed by a word $w$ of length $p$ satisfies
+    \begin{align}
+      A'^{[p]}_w
+      &=\sum_u\left(\prod_{j=0}^{p-1}d_{u+j}\right)
+        P_u A^w P_{u+p}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the twisted tensor one letter at a time. Orthogonality leaves
+    only paths through consecutive sectors, and the scalar factors multiply
+    along each surviving path.
+\end{proof}
+
+\begin{theorem}[Corners of a blocked cyclic tensor]
+    \label{lem:periodic_blocked_orbit_corners}
+    \lean{MPSTensor.cyclic_projection_blockTensor_shift,
+      MPSTensor.cyclic_projection_blockTensor_corner_zero,
+      MPSTensor.cyclic_projection_blockTensor_offOrbit_zero}
+    \leanok
+    If $P_uA^i=A^iP_{u+1}$, then
+    $P_u A^{[p]}_w=A^{[p]}_wP_{u+p}$. Consequently the corner
+    $P_u A^{[p]}_wP_v$ vanishes unless $v=u+p$; in particular it
+    vanishes when $u$ and $v$ belong to distinct orbits of the blocked
+    shift.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the one-site relation successively along the word, then use
+    orthogonality of distinct sector projections.
+\end{proof}
+
+\begin{theorem}[Cyclic projections under a blocked transfer map]
+    \label{lem:periodic_blocked_adjoint_shift}
+    \lean{MPSTensor.adjointTransferMap_cyclic_projection_shift,
+      MPSTensor.adjointTransferMap_pow_cyclic_projection_shift,
+      MPSTensor.adjointTransferMap_blockTensor_cyclic_projection_shift}
+    \leanok
+    If the tensor is trace preserving and $P_uA^i=A^iP_{u+1}$, then
+    its adjoint transfer map sends $P_u$ to $P_{u+1}$. Consequently the
+    adjoint transfer map of the $p$-blocked tensor sends $P_u$ to
+    $P_{u+p}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Move the projection through each letter and use trace preservation.
+    Iterate this identity and identify the blocked transfer map with
+    the corresponding power of the one-site map.
+\end{proof}
+
+\begin{theorem}[Orbit corners of a blocked periodic tensor]
+    \label{lem:periodic_blocked_orbit_decomposition}
+    \lean{MPSTensor.exists_blockTensor_offOrbit_corners}
+    \leanok
+    \uses{lem:periodic_refinement_residue_coordinates,
+      lem:periodic_blocked_orbit_corners}
+    A period-$m$ tensor has a complete family of nonzero cyclic sector
+    projections and labels for the shift by $p$. Two sectors have the
+    same label exactly when they belong to the same shift orbit, and
+    every $p$-blocked letter has zero matrix corners between distinct
+    orbits. There are $\gcd(m,p)$ orbits, each of length
+    $m/\gcd(m,p)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take the cyclic projections of the periodic tensor, reverse their
+    indices to use the forward cyclic convention, and combine the
+    corner-vanishing identity with the residue coordinates.
+\end{proof}
+
+\begin{theorem}[Compression to blocked shift orbits]
+    \label{lem:periodic_blocked_orbit_compression}
+    \lean{MPSTensor.exists_blockTensor_orbit_compression}
+    \leanok
+    \uses{lem:periodic_blocked_orbit_decomposition}
+    For a period-$m$ tensor $A$, the $p$-blocked tensor has a direct-sum
+    presentation with one compressed tensor $C_a$ for each of the
+    $\gcd(m,p)$ shift orbits. There are mutually orthogonal projections
+    $Q_a$ summing to the identity and isometries $V_a$ onto their ranges
+    such that every blocked letter obeys
+    \begin{align}
+      A^{[p]}_w=\sum_a V_a C_a^w V_a^*.
+    \end{align}
+    Each compressed bond space is nonzero, each $C_a$ is trace
+    preserving, and the unit-weight direct sum of
+    the $C_a$ generates the same matrix-product vectors as $A^{[p]}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Sum the cyclic projections over each shift orbit. The vanishing of
+    off-orbit corners makes these orbit projections commute with every
+    blocked letter. Compress each orbit to the range of its projection;
+    the isometries restore the ambient letters upon summation.
+\end{proof}
+
+\begin{theorem}[Faithful stationary matrices on reducing sectors]
+    \label{lem:periodic_compressed_fixed_point}
+    \lean{MPSTensor.compressed_posDef_fixedPoint}
+    \leanok
+    If a tensor has a positive-definite stationary matrix, then its
+    isometric compression to a reducing sector has the positive-definite
+    stationary matrix obtained by compressing the original one.
+\end{theorem}
+
+\begin{proof}\leanok
+    Positivity is strict because the isometry is injective. Commutation
+    of the reducing projection with every letter carries stationarity
+    through the compression.
+\end{proof}
+
+\begin{theorem}[Lifting a reducing sector's transfer map]
+    \label{lem:periodic_compressed_fixed_lift}
+    \lean{MPSTensor.compressedLetter_lift_of_commute,
+      MPSTensor.compressedKrausMap_lift_of_commute,
+      MPSTensor.compressedTensorMap_lift_of_commute,
+      MPSTensor.compressedTensorFixedPoint_lift_of_commute}
+    \leanok
+    If a projection commutes with every letter of a tensor, the
+    transfer map on matrices supported in its range agrees with the
+    isometric lift of the compressed transfer map. In particular,
+    a stationary matrix of the compressed tensor lifts to a
+    stationary matrix of the original tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    The commuting projection moves across each letter. The resulting
+    identity holds term by term in the Kraus sum.
+\end{proof}
+
+\begin{theorem}[Cyclic shifts on a compressed sector]
+    \label{lem:periodic_compressed_cyclic_shift}
+    \lean{MPSTensor.compressed_adjointTransferMap_shift}
+    \leanok
+    If the adjoint transfer map sends a matrix supported on a sector
+    to another matrix, then the compressed adjoint transfer map sends
+    its compression to the compression of the image.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the compressed Kraus sum and use the support projection on
+    both sides of the original matrix.
+\end{proof}
+
+\begin{theorem}[Cyclic microsectors in a blocked orbit]
+    \label{lem:periodic_blocked_microsectors}
+    \lean{MPSTensor.orbitProjection_supports_cyclic_projection,
+      MPSTensor.compressed_cyclic_projection_ne_zero,
+      MPSTensor.compressed_cyclic_projection_isOrthogonalProjection,
+      MPSTensor.compressed_cyclic_projections_mul_eq_zero,
+      MPSTensor.linearIndependent_compressed_cyclic_projections,
+      MPSTensor.compressed_blockTensor_cyclic_projection_shift}
+    \leanok
+    Each cyclic projection of the original tensor is supported on its
+    shift-orbit projection. Its compression is a nonzero orthogonal
+    projection, distinct cyclic projections remain orthogonal, and
+    the compressed adjoint transfer advances it by $p$ sectors.
+\end{theorem}
+
+\begin{proof}\leanok
+    Orthogonality follows from the original cyclic projections and
+    the orbit support. The transfer identity follows by compressing
+    the original $p$-step cyclic shift.
+\end{proof}
+
+\begin{theorem}[Spectrum of a cyclic shift]
+    \label{lem:periodic_cyclic_shift_spectrum}
+    \lean{LinearMap.hasEigenvalue_of_cyclic_shift}
+    \leanok
+    If a linear map cyclically permutes $n$ independent vectors, then
+    every $n$th root of unity is an eigenvalue of the map.
+\end{theorem}
+
+\begin{proof}\leanok
+    For each root of unity, form the corresponding Fourier sum of
+    the cyclic vectors. Independence makes this sum nonzero, and
+    cyclic permutation gives its eigenvalue equation.
+\end{proof}
+
+\begin{theorem}[Orbit roots in the compressed spectrum]
+    \label{lem:periodic_blocked_orbit_root_spectrum}
+    \lean{ZMod.orbitIndex_injective,
+      ZMod.orbitIndex_finRotate,
+      MPSTensor.compressed_blockTensor_roots_of_unity_eigenvalues,
+      MPSTensor.compressed_blockTensor_roots_of_unity_eigenvalues_of_orbit,
+      MPSTensor.compressed_blockTensor_roots_subset_peripheral}
+    \leanok
+    If a tensor has cyclic projections and the blocked shift has
+    orbit length $n$, then every $n$th root of unity is an eigenvalue
+    of the adjoint transfer map on each compressed orbit sector.
+\end{theorem}
+
+\begin{proof}\leanok
+    Enumerate one orbit by repeated blocked shifts. Its cyclic
+    projections compress to an independent family, and the compressed
+    adjoint transfer rotates that family. Apply the cyclic Fourier
+    construction.
+\end{proof}
+
+\begin{theorem}[Spectrum of a reducing compression]
+    \label{lem:periodic_compressed_spectrum_lift}
+    \lean{MPSTensor.compressedTensorMap_spectrum_subset}
+    \leanok
+    Every eigenvalue of the transfer map on a reducing sector is an
+    eigenvalue of the ambient transfer map.
+\end{theorem}
+
+\begin{proof}\leanok
+    Isometrically lift an eigenmatrix from the compressed sector.
+    This lift is nonzero and satisfies the ambient eigenvalue equation.
+\end{proof}
+
+\begin{theorem}[Peripheral bound after blocking]
+    \label{lem:periodic_blocked_spectrum_orbit_bound}
+    \lean{MPSTensor.period_dvd_blockSize_mul_orbitLength,
+      MPSTensor.IsPeriodic.blockTensor_peripheral_pow_orbitLength}
+    \leanok
+    If the original tensor has period $m$, then every peripheral
+    eigenvalue of its $p$-blocked tensor has order dividing
+    $m/\gcd(m,p)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Spectral mapping writes a blocked eigenvalue as the $p$th power
+    of an original peripheral eigenvalue. The original phase is an
+    $m$th root of unity, and $m$ divides $p m/\gcd(m,p)$.
+\end{proof}
+
+\begin{theorem}[Fixed points of a power lie in the peripheral subspace]
+    \label{lem:periodic_blocked_fixed_peripheral}
+    \lean{MPSTensor.mem_peripheralSubspace_of_pow_fixed}
+    \leanok
+    Let $T$ be a positive trace-preserving map. If $T^p(X)=X$ for
+    $p>0$, then $X$ belongs to the peripheral spectral subspace of $T$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decompose $X$ into its peripheral and nonperipheral parts. The
+    nonperipheral part is fixed by $T^p$, but its iterates decay to zero,
+    so it vanishes.
+\end{proof}
+
+\begin{theorem}[Fixed space of a positive power]
+    \label{lem:periodic_blocked_fixed_spectral_decomposition}
+    \lean{MPSTensor.eigenspace_pow_one_eq_iSup_peripheral}
+    \leanok
+    \uses{lem:periodic_blocked_fixed_peripheral}
+    For a positive trace-preserving map $T$ and $p>0$, the fixed space
+    of $T^p$ is the sum of the peripheral eigenspaces of $T$ with
+    eigenvalues $\lambda$ satisfying $\lambda^p=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decompose a fixed matrix into peripheral eigenvectors. Distinct
+    eigenspaces are independent, so only phases whose $p$th power is one
+    can contribute. The reverse inclusion follows by applying $T^p$ to
+    an eigenvector.
+\end{proof}
+
+\begin{theorem}[Dimension bound for the blocked fixed space]
+    \label{lem:periodic_blocked_fixed_dimension}
+    \lean{MPSTensor.finrank_eigenspace_pow_one_le_gcd}
+    \leanok
+    \uses{lem:periodic_blocked_fixed_spectral_decomposition}
+    If the peripheral spectrum of a positive trace-preserving map
+    consists of all $m$th roots of unity and each peripheral eigenspace
+    has dimension at most one, then the fixed space of its $p$th power,
+    for $p>0$, has dimension at most $\gcd(m,p)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The fixed space is a sum of eigenspaces indexed by common $m$th
+    and $p$th roots of unity. These are exactly the
+    $\gcd(m,p)$th roots of unity, each contributing at most one
+    dimension.
+\end{proof}
+
+\begin{theorem}[Simple peripheral eigenvalues of a periodic tensor]
+    \label{lem:periodic_peripheral_multiplicity_one}
+    \lean{MPSTensor.finrank_eigenspace_adjoint_eq,
+      MPSTensor.finrank_eigenspace_conjTranspose_eq,
+      MPSTensor.IsPeriodic.finrank_peripheral_eigenspace_eq_one}
+    \leanok
+    Every peripheral eigenspace of a period-$m$ tensor's transfer map
+    has dimension one.
+\end{theorem}
+
+\begin{proof}\leanok
+    The trace-preserving transfer map has a faithful stationary matrix.
+    Its adjoint is unital and irreducible, so its peripheral
+    eigenspaces are one-dimensional. Frobenius adjunction carries
+    this multiplicity back to the original transfer map.
+\end{proof}
+
+\begin{theorem}[Blocked fixed-space dimension bound]
+    \label{lem:periodic_tensor_blocked_fixed_dimension}
+    \lean{MPSTensor.IsPeriodic.finrank_blocked_fixed_le_gcd}
+    \leanok
+    \uses{lem:periodic_blocked_fixed_dimension,
+      lem:periodic_peripheral_multiplicity_one}
+    If $A$ has period $m$ and $p>0$, then the fixed space of the
+    $p$th power of its transfer map has dimension at most
+    $\gcd(m,p)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the spectral dimension bound to the irreducible,
+    trace-preserving transfer map of $A$ and its simple peripheral
+    eigenspaces.
+\end{proof}
+
+\begin{theorem}[Stationary basis of the blocked orbit sectors]
+    \label{lem:periodic_blocked_orbit_fixed_basis}
+    \lean{MPSTensor.linearIndependent_orthogonal_corners,
+      MPSTensor.span_eq_of_finrank_le_card,
+      MPSTensor.linearIndependent_orbit_stationary_corners,
+      MPSTensor.map_orbit_stationary_corner,
+      MPSTensor.orbit_stationary_corners_span_fixed,
+      MPSTensor.compressed_eq_smul_of_mem_orbit_stationary_span,
+      MPSTensor.compressed_letter_eq_conj,
+      MPSTensor.IsPeriodic.exists_blockTensor_orbit_fixed_basis}
+    \leanok
+    \uses{lem:periodic_blocked_orbit_compression,
+      lem:periodic_tensor_blocked_fixed_dimension}
+    Let $A$ have period $m$ and let $p>0$. Its blocked tensor has
+    $\gcd(m,p)$ orthogonal orbit sectors, with unit-weight compressed
+    tensors. There is a positive-definite stationary matrix $\rho$
+    such that the matrices $Q_a\rho Q_a$ form a basis of the fixed
+    space of the blocked transfer map.
+\end{theorem}
+
+\begin{proof}\leanok
+    A faithful stationary matrix for the original irreducible channel
+    remains stationary after blocking. Its restrictions to distinct
+    orbit sectors are nonzero, stationary, and linearly independent.
+    Their number equals the spectral upper bound on the dimension of
+    the blocked fixed space, so they span it.
+\end{proof}
+
+\begin{theorem}[Irreducibility of the blocked orbit sectors]
+    \label{lem:periodic_blocked_orbit_irreducible}
+    \lean{MPSTensor.irreducible_compression_of_orbit_fixed_basis,
+      MPSTensor.IsPeriodic.exists_blockTensor_irreducible_orbit_compression}
+    \leanok
+    \uses{lem:periodic_blocked_orbit_fixed_basis,
+      lem:periodic_compressed_fixed_point,
+      lem:periodic_compressed_fixed_lift}
+    If a period-$m$ tensor is blocked by $p>0$ sites, its
+    $\gcd(m,p)$ compressed shift-orbit tensors are nonzero,
+    trace preserving, and irreducible. Their unit-weight direct sum
+    has the same matrix-product vectors as the blocked tensor.
+\end{theorem}
+
+\begin{proof}\leanok
+    A fixed positive matrix of a compressed orbit lifts to a fixed
+    matrix of the blocked channel. The stationary orbit matrices span
+    the ambient fixed space, so compression back to the chosen orbit
+    makes it proportional to that orbit's faithful stationary matrix.
+    The fixed-point criterion then gives irreducibility.
+\end{proof}
+
+\begin{theorem}[Period under arbitrary positive blocking]
+    \label{lem:periodic_arbitrary_blocking}
+    \lean{MPSTensor.IsPeriodic.exists_blockTensor_periodic_orbit_decomposition,
+      MPSTensor.IsPeriodic.exists_blockTensor_periodic_orbit_compression,
+      MPSTensor.IsPeriodic.blockTensor_isIrreducibleForm}
+    \leanok
+    \uses{lem:periodic_blocked_orbit_irreducible,
+      lem:periodic_blocked_orbit_root_spectrum,
+      lem:periodic_compressed_spectrum_lift,
+      lem:periodic_blocked_spectrum_orbit_bound}
+    If a tensor has period $m$ and is blocked by $p>0$ sites, the
+    blocked tensor decomposes into exactly $\gcd(m,p)$ nonzero
+    irreducible orbit tensors. Each has period $m/\gcd(m,p)$, each
+    has unit coefficient, and their direct sum has the same
+    matrix-product vectors as the blocked tensor.
+    More precisely, there are nonzero orthogonal cyclic projections
+    $P_u$ summing to the identity, with $P_uA^i=A^iP_{u+1}$,
+    and a surjective orbit map $\alpha$ satisfying
+    $\alpha(u+p)=\alpha(u)$. The orbit projections and isometries
+    satisfy
+    \[
+        Q_j=\sum_{\alpha(u)=j}P_u=V_jV_j^*,\qquad V_j^*V_j=\Id,
+        \qquad [Q_j,A^{[p],I}]=0.
+    \]
+    They are pairwise orthogonal and sum to the identity. The
+    compressed tensors $C_j$ have nonzero bond dimension, the stated
+    period, and the literal decomposition
+    \[
+        V_jC_j^IV_j^*=Q_jA^{[p],I}Q_j,\qquad
+        A^{[p],I}=\sum_jV_jC_j^IV_j^*.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    The orbit compression gives the direct sum and trace preservation;
+    the fixed-space argument gives irreducibility. Its surviving
+    cyclic projections yield every root of unity of order dividing
+    $m/\gcd(m,p)$. Conversely, an eigenvalue of a compressed orbit
+    lifts to the blocked transfer map, whose peripheral eigenvalues
+    have order dividing that same orbit length.
+\end{proof}
+
+\begin{theorem}[Coordinate reconstruction of a direct sum]
+    \label{thm:periodic_block_coordinate_reconstruction}
+    \lean{MPSTensor.reindex_blockDiagonal_eq_sum_blockInclusion,
+      MPSTensor.sum_blockInclusion_mul_conjTranspose,
+      MPSTensor.toTensorFromBlocks_eq_sum_blockInclusion}
+    \leanok
+    Let $E_j$ be the coordinate inclusion of $\mathbb C^{d_j}$
+    into $\bigoplus_j\mathbb C^{d_j}$. Then
+    \[
+      \bigoplus_jB_j=\sum_jE_jB_jE_j^*,\qquad
+      \sum_jE_jE_j^*=\Id.
+    \]
+    In particular, a weighted block tensor has letters
+    $\sum_jE_j(\mu_jA_j^i)E_j^*$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compressing to the $(j,k)$ coordinate corner gives $B_j$
+    when $j=k$ and zero otherwise. Taking $B_j=\Id$ gives
+    the second identity.
+\end{proof}
+
+\begin{theorem}[Unitary coordinates for an isometric block decomposition]
+    \label{thm:periodic_isometric_block_unitary}
+    \lean{MPSTensor.exists_unitary_of_isometric_block_decomposition}
+    \leanok
+    Suppose $V_j\colon\mathbb C^{d_j}\to\mathbb C^D$ satisfy
+    $V_j^*V_j=\Id$ and $\sum_jV_jV_j^*=\Id$. There is a unitary
+    $Y\colon\bigoplus_j\mathbb C^{d_j}\to\mathbb C^D$ such that,
+    for every family of matrices $B_j\in M_{d_j}(\mathbb C)$,
+    \[
+      Y\left(\bigoplus_j B_j\right)Y^*=\sum_jV_jB_jV_j^*.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Define $Y$ by placing the matrices $V_j$ side by side. Then
+    $YY^*=\sum_jV_jV_j^*=\Id$. Taking traces gives
+    $D=\sum_jd_j$, so $Y^*Y=\Id$ as well. Expanding a
+    block-diagonal matrix as the sum of its coordinate corners
+    gives the displayed formula.
+\end{proof}
+
+\begin{theorem}[Unitary coordinates for nested isometric decompositions]
+    \label{thm:periodic_nested_isometric_unitary}
+    \lean{MPSTensor.exists_unitary_of_nested_isometric_block_decomposition}
+    \leanok
+    \uses{thm:periodic_isometric_block_unitary,
+      thm:periodic_block_coordinate_reconstruction}
+    Suppose $V_{j,a}\colon\mathbb C^{d_{j,a}}\to\mathbb C^{d_j}$
+    satisfy $V_{j,a}^*V_{j,a}=\Id$ and
+    $\sum_aV_{j,a}V_{j,a}^*=\Id$. There is a unitary $Y$ such that,
+    for every family of matrices $B_{j,a}$,
+    \[
+      Y\left(\bigoplus_{j,a}B_{j,a}\right)Y^*
+      =\bigoplus_j\left(\sum_aV_{j,a}B_{j,a}V_{j,a}^*\right).
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Compose $V_{j,a}$ with the coordinate inclusion $E_j$ of
+    the outer summand. The matrices $E_jV_{j,a}$ are isometries
+    and their range projections sum to the identity. Apply
+    Theorem~\ref{thm:periodic_isometric_block_unitary}.
+\end{proof}
+
+\begin{theorem}[Absorbing phases of the compressed orbit tensors]
+    \label{thm:periodic_orbit_phase_twist}
+    \lean{MPSTensor.IsPeriodic.exists_phaseTwisted_orbit_decomposition}
+    \leanok
+    \uses{lem:periodic_arbitrary_blocking, lem:periodic_phase_distribution}
+    Let $A$ be a trace-preserving periodic tensor of period $m$,
+    let $p>0$, and put $r=\gcd(m,p)$. The isometric orbit
+    decomposition
+    \[
+        A^{[p],I}=\sum_{j=0}^{r-1}V_jC_j^IV_j^*
+    \]
+    can be chosen so that, for every family of phases
+    $c_j^{m/r}=1$, there is a trace-preserving one-site tensor
+    $A'$ on the same physical and bond spaces satisfying
+    \[
+        A'^{[p],I}=\sum_{j=0}^{r-1}c_jV_jC_j^IV_j^*.
+    \]
+    Each $C_j$ has nonzero bond dimension and period $m/r$.
+    The orbit tensors and their isometries are independent of
+    the subsequent choice of phases.
+\end{theorem}
+
+\begin{proof}\leanok
+    Give a cyclic sector $u$ the phase $c_{\alpha(u)}$, where
+    $\alpha$ is the orbit map. This phase is invariant under
+    $u\mapsto u+p$ and has order dividing $m/r$. Distribute it
+    among the one-site letters by
+    Theorem~\ref{lem:periodic_phase_distribution}. Orthogonality
+    removes the terminal cyclic projection from each blocked
+    corner. Summing over each fibre of $\alpha$ then gives
+    $c_jQ_jA^{[p],I}Q_j=c_jV_jC_j^IV_j^*$. Unit-modulus
+    one-site phases preserve trace preservation.
+\end{proof}
+
+\begin{theorem}[A common unitary for all orbit phase twists]
+    \label{thm:periodic_orbit_phase_unitary}
+    \lean{MPSTensor.IsPeriodic.exists_unitary_phaseTwisted_orbit_decomposition}
+    \leanok
+    \uses{thm:periodic_orbit_phase_twist, thm:periodic_isometric_block_unitary}
+    Let $A$ be a trace-preserving periodic tensor of period $m$,
+    let $p>0$, and put $r=\gcd(m,p)$. There are nonzero periodic
+    orbit tensors $C_j$ of period $m/r$ and one unitary $Y$ with
+    \[
+      A^{[p],I}=Y\left(\bigoplus_{j=0}^{r-1}C_j^I\right)Y^*.
+    \]
+    For every phase family $c_j^{m/r}=1$, there is a
+    trace-preserving tensor $A'$ on the original physical and
+    bond spaces such that
+    \[
+      A'^{[p],I}=Y\left(\bigoplus_{j=0}^{r-1}c_jC_j^I\right)Y^*.
+    \]
+    The same $C_j$ and $Y$ work for every permitted phase family.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the orbit compression isometries and the one-site twists
+    from Theorem~\ref{thm:periodic_orbit_phase_twist}. Their range
+    projections resolve the identity. Apply
+    Theorem~\ref{thm:periodic_isometric_block_unitary} first to
+    $C_j^I$ and then to $c_jC_j^I$.
+\end{proof}
+
+\begin{theorem}[Simultaneous phase twists of a weighted periodic family]
+    \label{thm:periodic_blocked_family_phase_twist}
+    \lean{MPSTensor.exists_unitary_phaseTwisted_block_family}
+    \leanok
+    \uses{thm:periodic_orbit_phase_twist,
+      thm:periodic_nested_isometric_unitary}
+    Let $A_j$ be trace-preserving periodic tensors of periods $m_j$,
+    let $\mu_j\in\mathbb C$, and let $p>0$. Put
+    $r_j=\gcd(m_j,p)$. There are nonzero periodic orbit tensors
+    $C_{j,a}$ of period $m_j/r_j$ and one unitary $Y$ satisfying
+    \[
+      \left(\bigoplus_j\mu_jA_j\right)^{[p],I}
+      =Y\left(\bigoplus_{j,a}\mu_j^pC_{j,a}^I\right)Y^*.
+    \]
+    For every family $c_{j,a}^{m_j/r_j}=1$, if all $|\mu_j|=1$,
+    there is a trace-preserving tensor $A'$ on the original
+    physical and total bond spaces such that
+    \[
+      A'^{[p],I}
+      =Y\left(\bigoplus_{j,a}\mu_j^pc_{j,a}C_{j,a}^I\right)Y^*.
+    \]
+    The orbit tensors and $Y$ are chosen before the phases.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose the orbit isometries and twists for each $A_j$, then
+    assemble their coordinate inclusions by
+    Theorem~\ref{thm:periodic_nested_isometric_unitary}.
+    Blocking a weighted direct sum raises each weight to the
+    $p$th power. For the phase family, use the weighted direct
+    sum of the one-site twisted blocks. Unit-modulus weights
+    preserve trace preservation of that direct sum.
+\end{proof}
+
+\begin{theorem}[Unitary matching before grouping repeated blocks]
+    \label{thm:periodic_repeated_family_unitary_matching}
+    \lean{MPSTensor.exists_unitary_matching_of_periodic_block_families_sameMPV₂Pos}
+    \leanok
+    \uses{thm:periodic_unitary_phase_class_grouping,
+      thm:periodic_equalcase_unitary_matching}
+    Let $A_j$ and $B_k$ be trace-preserving periodic tensors, with
+    respective periods $m_j$ and $n_k$, and let $\mu_j,\nu_k$ be
+    nonzero complex weights. Suppose their weighted direct sums
+    generate the same vectors at every positive length. Then there
+    are scalars $c_j^{m_j}=1$ and a unitary $W$ between the total
+    bond spaces such that
+    \[
+      \bigoplus_j c_j\mu_j A_j^i
+      =W\left(\bigoplus_k\nu_kB_k^i\right)W^*.
+    \]
+    Repeated blocks are permitted in both families.
+\end{theorem}
+
+\begin{proof}\leanok
+    Group each family by phase equivalence, retaining the bijection
+    of copies with original blocks. Apply unitary equal-case matching
+    to the grouped families. Transport its copy phases back through
+    the first grouping, and compose the three unitary changes of
+    coordinates. The grouping preserves periods, so the transported
+    phases have the asserted orders.
+\end{proof}
+
+\begin{theorem}[Normalization of ungrouped periodic weights]
+    \label{thm:periodic_ungrouped_weight_normalization}
+    \lean{MPSTensor.weight_norm_eq_one_of_periodic_block_families_sameMPV₂Pos}
+    \leanok
+    \uses{thm:periodic_unitary_phase_class_grouping}
+    Under the hypotheses of
+    Theorem~\ref{thm:periodic_repeated_family_unitary_matching},
+    if every $|\nu_k|=1$, then every $|\mu_j|=1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Group each family into non-repeated representatives. Equal-case
+    matching identifies the copy weights up to unit-modulus phases.
+    Grouping preserves each weight's modulus, proving the assertion
+    for the original weights.
+\end{proof}
+
+\begin{theorem}[Normalization of a periodic refinement root]
+    \label{thm:periodic_root_weight_normalization}
+    \lean{MPSTensor.weight_norm_eq_one_of_blocked_periodic_sameMPV₂Pos}
+    \leanok
+    \uses{thm:periodic_ungrouped_weight_normalization,
+      thm:periodic_blocked_family_phase_twist}
+    Let $A_j$ be trace-preserving periodic tensors, let $\mu_j\ne0$,
+    and let $p>0$. Suppose the blocked tensor
+    $(\bigoplus_j\mu_j A_j)^{[p]}$ generates the same vectors at
+    every positive length as a weighted direct sum
+    $B=\bigoplus_k\nu_kB_k$ of trace-preserving periodic tensors
+    with $|\nu_k|=1$. Then $|\mu_j|=1$ for every $j$, and
+    $\bigoplus_j\mu_jA_j$ is trace preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decompose each blocked root block into its periodic orbits.
+    Every orbit has weight $\mu_j^p$. The preceding normalization
+    theorem gives $|\mu_j|^p=1$. Each root block has at least one
+    orbit, and $p>0$, so $|\mu_j|=1$. Weighted direct sums with
+    unit-modulus weights preserve trace preservation.
+\end{proof}
+
+\begin{theorem}[Exact trace-preserving root of a literal periodic target]
+    \label{thm:periodic_literal_trace_preserving_root}
+    \lean{MPSTensor.exists_leftCanonical_root_of_blocked_periodic_sameMPV₂Pos}
+    \leanok
+    \uses{thm:periodic_root_weight_normalization,
+      thm:periodic_repeated_family_unitary_matching,
+      thm:periodic_blocked_family_phase_twist}
+    Under the hypotheses of
+    Theorem~\ref{thm:periodic_root_weight_normalization}, there is
+    a trace-preserving tensor $R$ on the root's one-site physical
+    space and the target's bond space such that $R^{[p]}=B$
+    letter by letter. The target here is literally the displayed
+    weighted direct sum; this assertion does not concern an arbitrary
+    tensor generating the same vector family
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Normalize the root weights by the preceding theorem. Decompose
+    the blocked root into periodic orbit tensors, and use unitary
+    matching to obtain a permitted phase on each orbit. Simultaneous
+    orbit twists give a trace-preserving tensor $A'$ and a unitary
+    $T$ with $A'^{[p],I}=TB^IT^*$. Set $R^i=T^*A'^iT$.
+    Unitarity preserves trace preservation and cancels between
+    consecutive letters, giving $R^{[p],I}=B^I$.
+\end{proof}
+
+\begin{corollary}[Exact root from an arbitrary refinement witness]
+    \label{cor:periodic_literal_root_arbitrary_witness}
+    \lean{MPSTensor.exists_leftCanonical_root_of_sameMPV₂Pos_blockTensor}
+    \leanok
+    \uses{thm:periodic_literal_trace_preserving_root}
+    Let $A$ be any tensor, let $p>0$, and let
+    $B=\bigoplus_k\nu_kB_k$ be a literal direct sum of
+    trace-preserving periodic blocks with $|\nu_k|=1$.
+    If $A^{[p]}$ and $B$ generate the same vectors at every positive
+    length, then $B=R^{[p]}$ for a trace-preserving tensor $R$ on
+    the one-site physical space of $A$ and the bond space of $B$.
+\end{corollary}
+
+\begin{proof}\leanok
+    Replace $A$ by its active periodic direct sum. This preserves
+    all positive-length vectors and therefore their positive
+    blockings. Apply Theorem~\ref{thm:periodic_literal_trace_preserving_root}.
+\end{proof}
+
+\begin{theorem}[Refinability implies divisibility for normalized literal block forms]
+    \label{thm:periodic_literal_refinement_forward}
+    \lean{MPSTensor.toTensorFromBlocks_sum_smul,
+      MPSTensor.exists_leftCanonical_root_of_isPRefinable_periodic_block_family,
+      MPSTensor.isPDivisibleChannel_of_isPRefinable_periodic_block_family}
+    \leanok
+    \uses{cor:periodic_literal_root_arbitrary_witness, def:p_refinable,
+      def:p_divisible_channel}
+    Let $B=\bigoplus_k\mu_kB_k$ be a literal direct sum of
+    trace-preserving periodic blocks with $|\mu_k|=1$, and let $p>0$.
+    If $B$ is $p$-refinable, there is a left-canonical $d$-letter tensor
+    $R$ on the same bond space with $\mathcal E_B=(\mathcal E_R)^p$.
+    In particular, its transfer channel is $p$-divisible. This is the
+    normalized literal-block version
+    of the forward implication in
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}; the missing
+    normalization in the printed statement is discussed in
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    A refinement witness gives a tensor $A$ and a physical isometry
+    $W$ such that $A^{[p]}$ has the same vectors as
+    $C^\tau=\sum_\sigma W_{\tau\sigma}B^\sigma$.
+    Physical mixing commutes with the literal direct sum and
+    preserves the period and trace preservation of each block.
+    The preceding corollary gives $C=R^{[p]}$ with $R$ trace
+    preserving. Since $W$ is an isometry,
+    $\mathcal E_B=\mathcal E_C=(\mathcal E_R)^p$.
+\end{proof}
+
+\begin{theorem}[Irreducible form under positive blocking]
+    \label{lem:periodic_blocked_irreducible_form}
+    \lean{MPSTensor.nestedBlockFlatDim,
+      MPSTensor.nestedBlockFlatTensor,
+      MPSTensor.sameMPV₂_weighted_nested_blocks_flatten,
+      MPSTensor.positiveRealWeight_pow,
+      MPSTensor.IsIrreducibleForm.blockTensor_isIrreducibleForm}
+    \leanok
+    \uses{lem:periodic_arbitrary_blocking}
+    If $A$ is in irreducible form and $p>0$, then $A^{[p]}$ is again
+    in irreducible form. Each original periodic block splits into
+    its shift-orbit tensors, and every orbit inherits the original
+    positive weight raised to the $p$th power.
+\end{theorem}
+
+\begin{proof}\leanok
+    Block the original weighted direct sum. Apply arbitrary blocking
+    to each periodic block, flatten the resulting nested direct sums,
+    and note that a positive real weight stays positive under a power.
+\end{proof}
+
+\begin{theorem}[Active irreducible sector decomposition]
+    \label{lem:periodic_active_irreducible_sector_decomposition}
+    \lean{MPSTensor.exists_active_irreducible_sectorDecomposition}
+    \leanok
+    Every tensor of bond dimension $D$ has a sector decomposition into
+    periodic irreducible representatives with nonzero weights, no repeated
+    representatives, and total bond dimension at most $D$. Its periodic
+    vectors agree with those of the original tensor at every positive
+    length.
+\end{theorem}
+
+\begin{proof}\leanok
+    Decompose into nonzero irreducible composition factors, normalize
+    each factor, and collect gauge-phase equivalent factors into
+    multiplicity classes. Omitting zero factors can only decrease the
+    bond dimension and does not change positive-length traces.
+\end{proof}
+
+\begin{theorem}[Recovery of the full bond dimension]
+    \label{lem:periodic_active_sector_full_dimension}
+    \lean{MPSTensor.SectorDecomposition.totalDim_eq_of_periodic_sameMPV₂Pos,
+      MPSTensor.exists_active_irreducible_sectorDecomposition_of_equal_target,
+      MPSTensor.sameMPV₂_of_sameMPV₂Pos_of_bondDim_eq}
+    \leanok
+    \uses{lem:periodic_active_irreducible_sector_decomposition}
+    Let $A$ have bond dimension $D$, and let $Q$ be a sector decomposition
+    of total bond dimension $D$ whose irreducible periodic basis contains
+    no repeated representatives. If $A$ and $Q$ have equal periodic
+    vectors at every positive length, then $A$ has an active irreducible
+    sector representative of bond dimension exactly $D$ with equality
+    at all lengths.
+\end{theorem}
+
+\begin{proof}\leanok
+    Compare the active representative with $Q$ by the periodic equal-case
+    theorem. The resulting bijection preserves representative dimensions
+    and copy multiplicities, so the two sector decompositions have equal
+    total dimension. Their empty-word traces therefore agree as well.
+\end{proof}
+
+\begin{theorem}[Full sector presentation of irreducible form]
+    \label{lem:periodic_irreducible_form_full_sector}
+    \lean{MPSTensor.IsIrreducibleForm.exists_full_sectorDecomposition}
+    \leanok
+    Every all-length irreducible-form presentation of bond dimension $D$
+    admits a sector decomposition of total dimension $D$, with periodic
+    irreducible representatives and no repeated representatives. Its
+    periodic vectors agree with the original tensor at positive lengths.
+\end{theorem}
+
+\begin{proof}\leanok
+    Group the periodic blocks into gauge-phase classes. Members of each
+    class have the same bond dimension, so grouping preserves the total
+    dimension; equality at the empty word identifies it with $D$.
+\end{proof}
+
+\begin{theorem}[Canonical root for a blocked irreducible target]
+    \label{lem:periodic_canonical_refinement_root}
+    \lean{MPSTensor.SectorDecomposition.toIsIrreducibleForm,
+      MPSTensor.IsIrreducibleForm.bondDim_eq_of_sameMPV₂Pos,
+      MPSTensor.exists_irreducibleForm_refinement_root,
+      MPSTensor.exists_irreducibleForm_refinement_root_tensor}
+    \leanok
+    \uses{lem:periodic_active_irreducible_sector_decomposition,
+      lem:periodic_irreducible_form_full_sector,
+      lem:periodic_blocked_irreducible_form}
+    Let $C$ be a tensor in irreducible form on a bond space of dimension
+    $D$, and suppose $C$ and the positive $p$-blocking of an arbitrary
+    tensor $A$ of the same bond dimension have equal periodic vectors at
+    positive lengths. Then $A$ has an irreducible-form representative
+    $A'$ on the same bond space. Both $A$ and $A'$, and also $C$ and
+    $(A')^{[p]}$, have equal periodic vectors at every length.
+\end{theorem}
+
+\begin{proof}\leanok
+    Discard the zero composition factors of $A$ and normalize every
+    remaining sector weight by absorbing its phase into the periodic
+    block. Positive blocking preserves irreducible form. Compare the
+    blocked representative with $C$ by the equal-case theorem; matching
+    dimensions and multiplicities force its active bond dimension to
+    equal $D$. Equality at length zero then follows.
+\end{proof}
+
+\begin{theorem}[Canonical root of a refinement witness]
+    \label{lem:periodic_refinement_literal_canonical_root}
+    \lean{MPSTensor.pRefinementCanonicalization_literal_root}
+    \leanok
+    \uses{lem:periodic_canonical_refinement_root}
+    Let $B$ be in irreducible form and admit a positive $p$-refinement.
+    The refinement isometry gives a blocked tensor $C$ with the same
+    transfer map as $B$. There is a same-bond tensor $A'$ in irreducible
+    form whose $p$-blocking has the same periodic vectors as $C$ at
+    every length.
+\end{theorem}
+
+\begin{proof}\leanok
+    Form $C$ by applying the refinement isometry to the physical index
+    of $B$. The isometry preserves irreducible form and the transfer map.
+    Apply the canonical-root theorem to the refinement identity.
+\end{proof}
+
+\begin{theorem}[Trace preservation under a cyclic phase twist]
+    \label{lem:periodic_phase_twist_trace_preserving}
+    \lean{MPSTensor.phaseTwisted_tracePreserving}
+    \leanok
+    If $\sum_i (A^i)^*A^i=I$ and each $d_u$ has modulus one, then the
+    tensor $A'^i=\sum_u d_uP_uA^i$ also satisfies
+    $\sum_i (A'^i)^*A'^i=I$, provided the $P_u$ are complete,
+    pairwise orthogonal projections.
+\end{theorem}
+
+\begin{proof}\leanok
+    The matrix $U=\sum_u d_uP_u$ is unitary and $A'^i=UA^i$.
+\end{proof}
+
+\begin{theorem}[Absorbing blocked-sector phases into one-site letters]
+    \label{thm:periodic_absorb_block_phases}
+    \lean{MPSTensor.exists_phaseTwistedTensor_blockTensor}
+    \leanok
+    \uses{lem:periodic_refinement_distributed_phases, thm:periodic_phase_twisted_block,
+      lem:periodic_phase_twist_trace_preserving}
+    Let $P_u$ be orthogonal cyclic-sector projections summing to the
+    identity, with $P_uA^i=A^iP_{u+1}$. Suppose $c_u$ is a complex unit
+    phase, constant under $u\mapsto u+p$, whose order divides
+    $m/\gcd(m,p)$. Then there is a tensor $A'$ on the same physical and
+    bond dimensions such that every blocked letter satisfies
+    \begin{align}
+      A'^{[p]}_w=\sum_u c_u P_u A^w P_{u+p}.
+    \end{align}
+    If $A$ is trace preserving, then so is $A'$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Distribute each blocked phase into one-site factors and apply
+    Theorem~\ref{thm:periodic_phase_twisted_block}.
+\end{proof}
+
+\begin{theorem}[A refinable positive-weight tensor without a channel square root]
+    \label{thm:periodic_refinement_normalization_counterexample}
+    \lean{MPSTensor.refinementScalarCounterexample,
+      MPSTensor.refinement_normalization_counterexample}
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
-    Let $B$ be an MPS tensor in irreducible form~II. Assume that every
-    refinement witness gives a tensor $\widetilde A$ with
-    $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
-    $\E_B = \E_{\widetilde A^{[p]}}$. Then
-    $p$-refinability of $B$ implies $p$-divisibility of $\E_B$.
+    Let the physical and bond dimensions both be one, and take $B=(4)$.
+    The tensor $B$ is literally the period-one normalized block $(1)$
+    with positive weight $4$. It is $2$-refinable with root $A=(2)$,
+    but its transfer map $\E_B(x)=16x$ is not $2$-divisible as a channel.
+    This contradicts the forward implication of the printed
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}; see
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
 \end{theorem}
-% Formalization status: the assumed construction is refuted, not merely
-% unproved (Remark~\ref{rem:thm_4_1_forward_trace_preservation}), so the
-% Lean theorem carries an Unfaithful marker and this node stays conditional;
-% the elimination plan is in
-% docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex.
 
 \begin{proof}\leanok
-    The construction supplies $\widetilde A$ with
-    $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
-    $\E_B = \E_{\widetilde A^{[p]}}$. The left-canonical
-    property makes $\E_{\widetilde A}$ a CPTP channel, and the
-    blocking identity
-    $\E_{\widetilde A^{[p]}} = (\E_{\widetilde A})^p$
-    then identifies $\E_B$ with the $p$-th power of the channel
-    $\E_{\widetilde A}$.
+    \uses{lem:bond_dimension_one_identity_transfer_normal,
+      thm:periodic_refinement_from_blocked_transfer}
+    The block $(1)$ has identity transfer map and period one.
+    Since $A^{[2]}=B$, equality of the blocked and target transfer maps
+    gives a refinement isometry. If $\E_B=\mathcal F^2$ for a channel
+    $\mathcal F$, then $\E_B$ preserves trace. This contradicts
+    $\tr \E_B(1)=16\ne 1$.
 \end{proof}
 
 \begin{remark}[Trace preservation in the forward direction]
     \label{rem:thm_4_1_forward_trace_preservation}
-    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel, def:peripheral_equalcase_root_from_zgauge, def:peripheral_equalcase_periodicFT_sameMPV, def:peripheral_equalcase_root_channel_from_zgauge}
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel,
+      thm:periodic_literal_refinement_forward,
+      thm:periodic_refinement_normalization_counterexample}
     In \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}, $p$-divisibility presupposes
     trace preservation of $\E_B$, which is explicit in the hypotheses here.
     Without trace preservation, let $p \ge 1$, let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in
@@ -268,10 +1230,8 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     map. At physical and bond dimension one, with $B_0 = (1)$, the same data
     give $C = A^{[p]} = (\lambda)$ related by the trivial $\Z_1$-gauge, and
     no left-canonical $\widetilde A$ or CPTP root has $p$-th power
-    $x \mapsto \lambda^2 x$; so the constructions assumed in
-    Definitions~\ref{def:peripheral_equalcase_root_from_zgauge},
-    \ref{def:peripheral_equalcase_periodicFT_sameMPV},
-    and~\ref{def:peripheral_equalcase_root_channel_from_zgauge} fail as well.
+    $x \mapsto \lambda^2 x$. Thus a blocked finite-order gauge
+    alone does not imply existence of a trace-preserving root.
     The corrected statement takes $B$ literally in the block form of
     irreducible form~II from \cite{DeLasCuevas2017Irreducible}, as the source
     does, and adds trace preservation of $\E_B$; for such a block form this is
@@ -285,61 +1245,277 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     while its transfer map is not trace preserving.
 \end{remark}
 
-\begin{definition}[Blocked-to-root channel-root hypothesis from $Z$-gauge]
-    \label{def:peripheral_equalcase_root_channel_from_zgauge}
-    \lean{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge}
+\begin{theorem}[Refinement from a blocked transfer identity]
+    \label{thm:periodic_refinement_from_blocked_transfer}
+    \lean{MPSTensor.isPRefinable_of_transferMap_eq_blockTensor}
     \leanok
-    \uses{def:peripheral_equalcase_root_from_zgauge, def:z_gauge_equiv, def:p_divisible_channel}
-    Fix $(d,D,p)$. This sharpened reconstruction hypothesis asks for a CPTP map
-    $\E'$ such that $\E_C = (\E')^p$ and the Choi/Kraus rank of
-    $\E'$ is at most $d$, whenever $C$ is related to $A^{[p]}$ by a
-    blocked $\Z_m$-gauge witness.
-\end{definition}
-
-\begin{theorem}[Channel-root criterion for blocked-to-root reconstruction]
-    \label{thm:peripheral_equalcase_root_from_root_channel}
-    \lean{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}
-    \leanok
-    \uses{def:peripheral_equalcase_root_channel_from_zgauge, def:peripheral_equalcase_root_from_zgauge}
-    If the blocked-to-root channel-root hypothesis holds, then the tensor-level
-    blocked-to-root reconstruction hypothesis holds as well.
+    \uses{def:p_refinable}
+    Let $A$ and $B$ have the same one-site physical and bond
+    dimensions, and let $p>0$. If
+    $\mathcal E_B=\mathcal E_{A^{[p]}}$, then $B$ is $p$-refinable.
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose a tensor $A'$ whose matrix family realizes the root channel with at
-    most $d$ nonzero terms. Since this channel is trace-preserving, the matrices
-    of $A'$ satisfy
-    $\sum_i (A'^i)^\dagger A'^i = \Id$. The identity
-    $\E_C = (\E_{A'})^p$ is then equivalent to
-    $\E_C = \E_{A'^{[p]}}$ by the blocking formula.
+    The two tensors give Kraus representations of the same completely
+    positive map, of respective sizes $d^p$ and $d$. Since $d\le d^p$,
+    isometric freedom of Kraus representations gives
+    $A^{[p],\alpha}=\sum_j W_{\alpha j}B^j$ with $W^*W=I$.
+    Expanding products and taking traces gives the refinement identity.
 \end{proof}
 
-\begin{theorem}[Transfer-map $p$-divisibility implies $p$-refinability]%
-    \label{thm:thm_4_1_p_refinement_reverse}
-    \lean{MPSTensor.thm_4_1_p_refinement_reverse}
+\begin{theorem}[Irreducibility and period constraints on a refinement root]
+    \label{thm:periodic_irreducible_root_constraints}
+    \lean{MPSTensor.isIrreducibleFamily_of_blockTensor,
+      MPSTensor.isIrreducibleFamily_of_transferMap_eq_blockTensor,
+      MPSTensor.IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor}
     \leanok
-    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
-    Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
-    Assume the reverse transfer-map root hypothesis: there is a tensor $A$ with
-    $\E_B = \E_{A^{[p]}}$ whenever $\E_B$ is
-    $p$-divisible. Then $p$-divisibility of $\E_B$ implies
-    $p$-refinability of $B$.
+    \uses{lem:periodic_blocked_orbit_compression}
+    Let $A$ be a tensor and let $p\geq0$. If its blocked tensor
+    $A^{(p)}$ is irreducible, then $A$ is irreducible. In particular,
+    this holds if $\mathcal E_A^p=\mathcal E_B$ for an irreducible
+    tensor $B$, even when $A$ and $B$ have different physical dimensions.
+    If moreover $A$ is periodic of period $m$, then $\gcd(m,p)=1$.
+    These are necessary conditions for the converse construction in
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
-    From the reverse transfer-map root hypothesis, extract $A$ with
-    $\E_B = \E_{A^{[p]}}$. This matches two finite Kraus
-    families of the same completely positive map: the blocked family $A^{[p]}$
-    with $d^p$ operators and the original family $B$ with $d$ operators.
-    The cardinality comparison $d \le d^p$ holds whenever $p \ge 1$, so
-    \cite[Theorem~2.1(4)]{Wolf2012Quantum} supplies an isometry
-    $V \in M_{d^p \times d}(\C)$ with $V^\dagger V = \Id$ and
-    $(A^{[p]})^\alpha = \sum_j V_{\alpha,j}B^j$. Expanding the
-    coefficient of $A^{[p]}$ at the word~$\tau$ by linearity of matrix
-    multiplication and of the trace, the contributions reorganise into the
-    $V$-weighted sum over length-$N$ words of $B$ required by
-    Definition~\ref{def:p_refinable}, exhibiting $V$ as the isometry $W$ in the
-    statement of $p$-refinability.
+    A subspace invariant under every $A^i$ is invariant under every
+    product of $p$ letters. Equality of transfer maps preserves
+    irreducibility. For the period assertion, blocking gives
+    $\gcd(m,p)$ nonzero orthogonal orbit projections, each commuting
+    with every blocked letter. Irreducibility forces each projection
+    to be the identity. Orthogonality then permits only one orbit.
+\end{proof}
+
+\begin{theorem}[A supplied channel root of larger Kraus rank]
+    \label{thm:periodic_supplied_root_rank_obstruction}
+    \lean{MPSTensor.CyclicResetCounterexample.root,
+      MPSTensor.CyclicResetCounterexample.square,
+      MPSTensor.CyclicResetCounterexample.choiRank_root,
+      MPSTensor.CyclicResetCounterexample.choiRank_square,
+      MPSTensor.CyclicResetCounterexample.root_isTP,
+      MPSTensor.CyclicResetCounterexample.square_isTP,
+      MPSTensor.CyclicResetCounterexample.root_isChannel,
+      MPSTensor.CyclicResetCounterexample.square_isChannel,
+      MPSTensor.CyclicResetCounterexample.transferMap_square_eq_pow,
+      MPSTensor.CyclicResetCounterexample.square_isIrreducibleFamily,
+      MPSTensor.CyclicResetCounterexample.root_isIrreducibleFamily,
+      MPSTensor.supplied_root_rank_counterexample}
+    \leanok
+    \uses{thm:spectral_periodic_period_existence,
+      thm:periodic_choi_rank_kraus_span}
+    Decompose $\mathbb C^7$ into five sectors of dimensions
+    $(1,2,2,1,1)$. Let $\mathcal F$ discard all off-diagonal sector
+    blocks and send the diagonal block in sector $i$ to its trace
+    times the normalized identity in sector $i+1$, with indices modulo five.
+    Both $\mathcal F$ and $\mathcal F^2$ are irreducible channels.
+    Their Kraus ranks are ten and nine, respectively. A minimal nine-letter tensor
+    $B$ for $\mathcal F^2$ is trace preserving and periodic, and is
+    a one-block irreducible form with weight one. Thus $\mathcal E_B$
+    is $2$-divisible, but the supplied root $\mathcal F$ has no Kraus
+    representation on $B$'s nine-letter physical alphabet.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Kraus matrices for $\mathcal F$ are the matrix units between
+    consecutive sectors, divided by the square root of the output-sector
+    dimension. They are linearly independent. The analogous two-step
+    family represents $\mathcal F^2$, and its matrices are also linearly
+    independent. The two ranks are therefore
+    $2+4+2+1+1=10$ and $2+2+2+1+2=9$.
+    Summing the squared Kraus matrices gives the identity in each input
+    sector. The two-step matrix units propagate a nonzero invariant
+    subspace through all five sectors, so $B$ is irreducible.
+    Trace preservation gives spectral radius one, and the peripheral
+    structure theorem supplies its positive period.
+\end{proof}
+
+\begin{remark}
+    The theorem bounds no alternative root of $\mathcal E_B$.
+    It rules out obtaining the required physical dimension merely by
+    changing the Kraus representation of an arbitrary supplied root;
+    selecting a different root remains possible. See
+    \cite{gap:dccsp17_root_kraus_rank_thm41}.
+\end{remark}
+
+\begin{theorem}[Refinement from a root with bounded Kraus rank]
+    \label{thm:periodic_refinement_from_bounded_root}
+    \lean{MPSTensor.isPRefinable_of_channel_root_hasKrausRankLE}
+    \leanok
+    \uses{thm:periodic_refinement_from_blocked_transfer}
+    Let $B$ have physical dimension $d$, let $p>0$, and suppose
+    $\mathcal E_B=\mathcal F^p$, where $\mathcal F$ has a Kraus
+    representation with at most $d$ operators. Then $B$ is $p$-refinable.
+\end{theorem}
+
+\begin{proof}\leanok
+    Pad a Kraus family for $\mathcal F$ with zeros to obtain a
+    $d$-letter tensor $A$. Then
+    $\mathcal E_{A^{[p]}}=\mathcal F^p=\mathcal E_B$; apply
+    Theorem~\ref{thm:periodic_refinement_from_blocked_transfer}.
+\end{proof}
+
+\begin{theorem}[Refinement and bounded-rank channel roots]
+    \label{thm:periodic_refinement_iff_bounded_root}
+    \lean{MPSTensor.isPRefinable_iff_exists_channel_root_hasKrausRankLE}
+    \leanok
+    \uses{thm:periodic_literal_refinement_forward,
+      thm:periodic_refinement_from_bounded_root}
+    Let $B=\bigoplus_k\mu_kB_k$ be a literal direct sum of
+    trace-preserving periodic blocks with $|\mu_k|=1$, and let $p>0$.
+    Then $B$ is $p$-refinable if and only if there is a CPTP map
+    $\mathcal F$ with $\mathcal F^p=\mathcal E_B$ and Kraus rank at most
+    the physical dimension $d$ of $B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The construction in
+    Theorem~\ref{thm:periodic_literal_refinement_forward} gives a
+    left-canonical $d$-letter tensor $R$ with
+    $\mathcal E_R^p=\mathcal E_B$. Its transfer map is a channel of
+    Kraus rank at most $d$. Conversely, pad a Kraus representation of
+    $\mathcal F$ to $d$ terms and apply
+    Theorem~\ref{thm:periodic_refinement_from_bounded_root}.
+\end{proof}
+
+\begin{remark}
+    Channel divisibility alone does not specify the Kraus rank of the
+    selected root. Removing the rank bound in
+    Theorem~\ref{thm:periodic_refinement_iff_bounded_root} requires a
+    further root-selection argument; see
+    \cite{gap:dccsp17_root_kraus_rank_thm41}.
+\end{remark}
+
+\begin{theorem}[Choi rank and the Kraus span]
+    \label{thm:periodic_choi_rank_kraus_span}
+    \lean{Channel.choiRank_mapLM_eq_finrank_span,
+      Channel.choiRank_mapLM_eq_finrank_wordSpan_one}
+    \leanok
+    Let $\mathcal F(X)=\sum_a A^aX(A^a)^*$, and let
+    $S=\spn_{\C}\{A^a\}_a$. The Choi rank of $\mathcal F$ is
+    $\dim_{\C}S$, including when the bond space is zero dimensional.
+\end{theorem}
+
+\begin{proof}\leanok
+    In positive bond dimension, let $C$ have columns equal to the
+    vectorized Kraus operators, multiplied by the common nonzero
+    normalization of the Choi matrix. That matrix is $CC^*$, whose rank
+    is the rank of $C$. Vectorization preserves the dimension of the
+    Kraus span. In dimension zero, both ranks are zero.
+\end{proof}
+
+\begin{theorem}[Rank under an injective positive map]
+    \label{thm:periodic_injective_positive_rank}
+    \lean{Matrix.rank_le_rank_map_of_injective_positive,
+      Matrix.rank_le_rank_map_of_injective_positive_fintype}
+    \leanok
+    Let $\Phi:M_D(\C)\to M_D(\C)$ be an injective positive linear map.
+    If $A\ge0$, then $\operatorname{rank}A\le\operatorname{rank}\Phi(A)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The positive matrices bounded above by a positive multiple of $A$
+    span the matrix algebra on its support. Positivity carries this span
+    into the analogous span for $\Phi(A)$. Their complex dimensions are
+    $(\operatorname{rank}A)^2$ and $(\operatorname{rank}\Phi(A))^2$,
+    respectively, so injectivity gives the inequality.
+\end{proof}
+
+\begin{theorem}[Choi rank under injective composition]
+    \label{thm:periodic_injective_composition_choi_rank}
+    \lean{Channel.choiRank_le_comp_of_injective,
+      Channel.choiRank_le_pow_of_injective}
+    \leanok
+    \uses{thm:periodic_injective_positive_rank}
+    Let $\mathcal F$ and $\mathcal G$ be completely positive maps on
+    $M_D(\C)$, and suppose $\mathcal F$ is injective. Then
+    $\operatorname{rank}C_{\mathcal G}\le
+    \operatorname{rank}C_{\mathcal F\circ\mathcal G}$.
+    Consequently $\operatorname{rank}C_{\mathcal F}\le
+    \operatorname{rank}C_{\mathcal F^p}$ for every $p>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:periodic_injective_positive_rank} to the
+    injective positive map $\mathcal F\otimes\mathrm{id}$ and the
+    positive Choi matrix $C_{\mathcal G}$. The image is
+    $C_{\mathcal F\circ\mathcal G}$. Iteration gives the power inequality.
+\end{proof}
+
+\begin{theorem}[Refinement for an invertible transfer map]
+    \label{thm:periodic_refinement_injective_transfer}
+    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_injective}
+    \leanok
+    \uses{thm:periodic_injective_composition_choi_rank,
+      thm:periodic_refinement_from_bounded_root}
+    Let $B$ have physical dimension $d$ and an invertible transfer map,
+    and let $p>0$. If $\mathcal E_B$ is $p$-divisible as a channel,
+    then $B$ is $p$-refinable.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a channel root $\mathcal F$ with $\mathcal F^p=\mathcal E_B$.
+    It is invertible, so the preceding theorem gives
+    $\operatorname{rank}C_{\mathcal F}\le
+    \operatorname{rank}C_{\mathcal E_B}\le d$.
+    Apply Theorem~\ref{thm:periodic_refinement_from_bounded_root}.
+\end{proof}
+
+\begin{remark}
+    This proves the converse of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} for invertible transfer
+    maps without a canonical-form assumption. The corresponding assertion
+    for singular transfer maps remains unresolved; see
+    \cite{gap:dccsp17_root_kraus_rank_thm41}.
+\end{remark}
+
+\begin{theorem}[Word-span dimension under invertible multiplication]
+    \label{thm:periodic_root_word_span_dimension}
+    \lean{Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_pred,
+      Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_one}
+    \leanok
+    Let $S$ be the span of a finite family of square matrices, and let
+    $S^q$ denote the span of products of exactly $q$ members, with
+    $S^0=\C I$. If $p>0$ and $S^{p-1}$ contains an invertible matrix,
+    then $\dim S\le\dim S^p$. In particular, the inequality holds
+    whenever $S$ contains an invertible matrix.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $K\in S^{p-1}$ is invertible, the injective linear map
+    $X\mapsto KX$ sends $S$ into $S^p$. For the final assertion,
+    take the $(p-1)$st power of an invertible member of $S$.
+\end{proof}
+
+\begin{theorem}[Refinement from an invertible root word span]
+    \label{thm:periodic_refinement_invertible_root_word_span}
+    \lean{MPSTensor.choiRank_transferMap_le_of_isUnit_mem_root_wordSpan_pred,
+      MPSTensor.isPRefinable_of_root_isUnit_mem_wordSpan_pred}
+    \leanok
+    \uses{thm:periodic_choi_rank_kraus_span,
+      thm:periodic_root_word_span_dimension,
+      thm:periodic_refinement_from_bounded_root}
+    Let $B$ have physical dimension $d$, and let $A$ have the same
+    bond dimension but any finite physical dimension. Suppose $p>0$
+    and $\mathcal E_B=(\mathcal E_A)^p$. If the span of products of
+    $p-1$ letters of $A$ contains an invertible matrix, then
+    $\operatorname{rank}_{\mathrm{Choi}}\mathcal E_A\le
+      \operatorname{rank}_{\mathrm{Choi}}\mathcal E_B\le d$,
+    and $B$ is $p$-refinable.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $S$ is the Kraus span of $A$, the preceding two theorems give
+    \begin{align}
+      \operatorname{rank}_{\mathrm{Choi}}\mathcal E_A
+        &=\dim S\le\dim S^p
+         =\operatorname{rank}_{\mathrm{Choi}}\mathcal E_B\le d.
+      \notag
+    \end{align}
+    A completely positive map has a Kraus representation with as many
+    operators as its Choi rank. Apply
+    Theorem~\ref{thm:periodic_refinement_from_bounded_root}.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready

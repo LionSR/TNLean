@@ -12,29 +12,17 @@ import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
 
 /-!
-Copyright (c) 2026 TNLean contributors. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
+# Physical rotations of periodic tensors
 
-# Periodic applications of the fundamental theorem
+Unitary rotation of the physical index preserves transfer maps, rectangular
+mixed transfer maps, left-canonical normalization, irreducibility, periodicity,
+and the generated-family irreducible-form predicate.
 
-This module contains formal material around the applications in arXiv:1708.00029,
-Section 4, that depend on the periodic fundamental theorem. The refinement and
-divisibility material belongs to Section 4.1, while the symmetry-to-`Z`-gauge
-corollary belongs to Section 4.2. It contains:
+The source symmetry corollary for literal irreducible form II is proved in
+`Symmetry/LiteralSymmetry.lean`. Refinability of normalized literal block
+forms implies channel divisibility by `Symmetry/LiteralRefinementForward.lean`.
 
-1. A **periodic-form theorem** that isolates the periodic equal-case FT input
-   for the symmetry corollary of arXiv:1708.00029, Section 4.2.
-2. **Preservation lemmas** showing that unitary rotation of the physical index
-   preserves transfer maps, rectangular mixed transfer maps, left-canonical
-   normalization, irreducibility, periodicity, and irreducible form II
-   structure.
-
-## Status for Section 4 (as of merged periodic FT theory)
-
-* Corollary 4.1 (symmetry corollary): reduced to one call to the periodic
-  equal-case FT, now that `isIrreducibleForm_rotatePhysical` is fully proven.
-* Theorem 4.1 (`p`-refinement): still needs the periodic-block
-  phase-distribution construction from Section 4.1.
+Source: arXiv:1708.00029, Section 4, lines 735--845.
 -/
 
 open scoped Matrix BigOperators
@@ -44,31 +32,6 @@ namespace MPSTensor
 noncomputable section
 
 variable {d D : ℕ}
-
-/-- Corollary 4.1 (periodic form).
-
-Assume the periodic equal-case FT as a hypothesis (`hPeriodicEq`): whenever two
-tensors are in irreducible form II and generate the same MPV family, they are
-Z-gauge equivalent. Then the symmetry corollary follows immediately for
-`B := rotatePhysical M A` once `B` is known to be in irreducible form II.
-
-This theorem states the current dependency boundary: no
-additional overlap arguments are needed *here* beyond the periodic equal-case
-FT input. -/
-theorem zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical
-    (M : Matrix (Fin d) (Fin d) ℂ)
-    (A : MPSTensor d D)
-    (hA : IsIrreducibleForm A)
-    (hRot : IsIrreducibleForm (rotatePhysical M A))
-    (hSym : SameMPV A (rotatePhysical M A))
-    (hPeriodicEq :
-      ∀ {X Y : MPSTensor d D},
-        IsIrreducibleForm X →
-        IsIrreducibleForm Y →
-        SameMPV X Y →
-        ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m X Y) :
-    ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m A (rotatePhysical M A) :=
-  hPeriodicEq hA hRot hSym
 
 /-! ### Transfer map preservation under rotation -/
 

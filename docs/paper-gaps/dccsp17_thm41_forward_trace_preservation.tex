@@ -10,11 +10,11 @@
 \title{Trace Preservation in the Forward Direction of Theorem 4.1
   (de las Cuevas--Cirac--Schuch--P\'erez-Garc\'ia)}
 \author{}
-\date{2026-09-04}
+\date{2026-09-26}
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The assertion}
 
@@ -90,6 +90,15 @@ power of a trace-preserving map is trace preserving, so $\mathcal E_B$ is not
 $p$-divisible. The forward implication of Theorem~4.1 therefore fails on
 nondegenerate data satisfying its printed hypothesis.
 
+The concrete choice $p=2$, $B_0=A_0=(1)$, and $\lambda=4$ is formalized:
+$B=(4)$ is literally the positive-weight block $4(1)$, has the
+two-site refinement $A=(2)$, and has transfer map $x\mapsto16x$.
+The formal theorem proves that $B$ is in irreducible form, is
+$2$-refinable, and is not $2$-divisible as a channel.\footnote{See
+  \leanid{MPSTensor.refinement_normalization_counterexample} and
+  \leanid{MPSTensor.refinementScalarCounterexample} in
+  \path{TNLean/MPS/Periodic/Symmetry/RefinementNormalizationCounterexample.lean}.}
+
 The printed argument breaks at its last line,
 \path{Papers/1708.00029/main.tex:806--810}. It constructs $\widetilde A$ with
 $\widetilde A^{(p)}=C$ and concludes
@@ -136,13 +145,12 @@ generates, at every length including zero, the same matrix product vectors as
 a scalar-weighted direct sum of periodic left-canonical blocks with positive
 weights.\footnote{The definition is \leanid{MPSTensor.IsIrreducibleForm} in
     \path{TNLean/MPS/Periodic/Defs.lean}.} It does not fix the transfer map of the
-tensor. Two consequences follow for the forward canonicalization hypothesis,
-which asks, for every tensor $B$ in this formal irreducible form whose family
+tensor. Two consequences follow for the former forward canonicalization hypothesis,
+which asked, for every tensor $B$ in this formal irreducible form whose family
 is $p$-refinable, for a left-canonical tensor $\widetilde A$ with
-$\mathcal E_B=\mathcal E_{\widetilde A^{[p]}}$.\footnote{The hypothesis is
-    \leanid{MPSTensor.PRefinementCanonicalization} and the conditional forward
-    theorem is \leanid{MPSTensor.thm_4_1_p_refinement_forward}, both in
-    \path{TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean}.}
+$\mathcal E_B=\mathcal E_{\widetilde A^{[p]}}$.
+The hypothesis and its conditional forward theorem have been removed in
+favour of the literal normalized block-form result described below.
 
 First, the scaling counterexample refutes the hypothesis at bond dimension
 one for every positive physical dimension and every $p\geq1$: the tensor
@@ -170,32 +178,69 @@ equal to one, the structure already used by the formal equal-case
 theorem,\footnote{The equal-case theorem is
     \leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm} in
     \path{TNLean/MPS/Periodic/EqualCaseGlobal.lean}.} and then to follow the
-printed argument. Its ingredients without a formal counterpart are the
-blocking lemma for a periodic block,
-\path{Papers/1708.00029/main.tex:432--446}, the cyclic projector structure of
-a periodic block, \path{Papers/1708.00029/main.tex:335--341}, the unique
-decomposition of residues, \path{Papers/1708.00029/main.tex:446--450}, and
-the redistribution of the root-of-unity factors across the sites,
-\path{Papers/1708.00029/main.tex:765--806}. The restatement is tracked in
-\href{https://github.com/LionSR/TNLean/issues/7762}{issue \#7762}, a child
-of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}. Until
-that restatement lands, every formal theorem whose proof consumes a refuted
-hypothesis carries an unfaithfulness marker naming this note: the conditional
-forward theorem, its blocked-stage variant, the bundled biconditional, and
-the three reduction theorems between the refuted hypotheses, namely
-\leanid{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV},
-\leanid{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV},
-and \leanid{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}. The
-hypotheses themselves are
-\leanid{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge},
-\leanid{MPSTensor.PeripheralEqualCaseRootFromZGauge},
-\leanid{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}, and
-\leanid{MPSTensor.PRefinementCanonicalization}. The first implies the
-second, the second together with the blocked $Z$-gauge extraction
-hypothesis \leanid{MPSTensor.PeripheralEqualCaseZGaugeOfSameMPV} implies the
-third, and the third implies the fourth. For $p\geq1$ each of the four is
-refuted by the one-dimensional data $C = A^{(p)} = (\lambda)$ with the
-trivial $Z$-gauge, since no channel has $p$-th power $x\mapsto\lambda^2x$.
+printed argument. Several of its ingredients are now formalized. The
+arbitrary-blocking lemma, \path{Papers/1708.00029/main.tex:432--446},
+constructs exactly $\gcd(m,p)$ nonzero trace-preserving irreducible sectors,
+each of period $m/\gcd(m,p)$, with unit weights and the same generated
+family as the blocked tensor. It uses the actual cyclic projections and
+isometric sector compressions, not an assumed sector decomposition.\footnote{
+    The theorem is
+    \leanid{MPSTensor.IsPeriodic.exists_blockTensor_periodic_orbit_compression}
+    in \path{TNLean/MPS/Periodic/BlockedOrbitPeriod.lean}.}
+The cyclic projector structure, residue coordinates, and distribution of
+shift-invariant phases across the sites are also available.\footnote{
+    See \path{TNLean/MPS/Periodic/BlockedOrbitCorners.lean},
+    \path{TNLean/MPS/Periodic/PhaseDistribution.lean}, and
+    \path{TNLean/MPS/Periodic/PhaseTwistedTensor.lean}.}
+Canonicalization of an arbitrary refinement witness now yields a
+same-bond irreducible-form root whose blocked vectors agree with the
+isometric target. For literal periodic decompositions, equal-case matching
+also derives unit-modulus source weights from unit-modulus target weights.
+The matching gauges can be chosen unitary with the scalar phases unchanged,
+and their assembly gives the relation $ZA^i=YB^iY^*$ together with
+$Z^L=I$ and $[Z,A^i]=0$.\footnote{
+    See \path{TNLean/MPS/Periodic/CanonicalRefinementWitness.lean},
+    \path{TNLean/MPS/Periodic/EqualCaseWeightNorm.lean}, and
+    \path{TNLean/MPS/Periodic/EqualCaseUnitary.lean}.}
+The periodic blocking theorem now retains its literal cyclic projections
+and compression isometries. With that fixed choice, any permitted family
+of orbit phases is realized by a trace-preserving one-site twist; see
+\path{TNLean/MPS/Periodic/OrbitPhaseTwist.lean}.
+Unitary grouping now retains a bijection between grouped copies and original
+blocks, equality of their periods, and equality of weight moduli. Arbitrary
+copy scalars are transported through that grouping by unitary conjugation;
+see \path{TNLean/MPS/Periodic/UnitaryPhaseClassGrouping.lean}.
+The isometric assembly is also available across all root blocks:
+\path{TNLean/MPS/Periodic/BlockedFamilyPhaseTwist.lean} provides one
+unitary for the blocked weighted family and all permitted simultaneous
+orbit phase twists. Unit-modulus outer weights make the resulting
+one-site direct sum trace preserving.
+The normalization and unitary composition are now proved in
+\path{TNLean/MPS/Periodic/TracePreservingRefinementRoot.lean}:
+if the positive-length vectors of a blocked weighted periodic family agree
+with those of a literal periodic target with unit-modulus weights, there is
+a trace-preserving root on the original one-site physical space whose
+blocked matrices equal the target matrices exactly. Repeated blocks are
+allowed on both sides. The proof first normalizes the original root weights,
+then transports the finite-order matching phases to the orbit tensors and
+conjugates the resulting one-site twist by the composed unitary.
+
+These results do not identify the transfer map of an arbitrary tensor from
+its generated family. The connection to a general refinement witness is now proved in
+\path{TNLean/MPS/Periodic/Symmetry/LiteralRefinementForward.lean}.
+Canonical reduction supplies the active periodic root family, while the
+physical isometry acts separately on each literal target block and preserves
+its period. Thus a refinable literal direct sum with unit-modulus weights
+has a divisible transfer channel, without an assumed root-normalization or
+reconstruction hypothesis. The former global reconstruction predicates and their conditional
+consequences have been removed. They were refuted by the rescaling example
+above and by non-unitary bond similarities, so they could not be discharged
+as stated. Their replacement is the explicit normalized literal-block theorem,
+tracked in \href{https://github.com/LionSR/TNLean/issues/7762}{issue \#7762},
+a child of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}.
+The remaining conditional equivalence assumes only bounded-rank root
+selection for the reverse implication; that separate problem is documented in
+\path{docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex}.
 
 \section{Conclusion}
 
@@ -207,8 +252,9 @@ preservation of $\mathcal E_B$, equivalently unit multiplicities, which the
 source's definition of $p$-divisibility presupposes; the printed argument then
 proves it. The formal forward canonicalization hypothesis inherits the
 counterexample and is refuted independently by non-unitary similarities, so
-it must be replaced by a restatement over block-form tensors with
-trace-preserving transfer map rather than discharged.
+it has been replaced by the proved statement over literal block-form tensors
+with unit-modulus weights. The reverse implication still requires the separate
+bounded-rank root-selection argument.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -94,6 +94,39 @@ private lemma gauge_product_intertwines
   rw [hX g i]
   simp only [invMat, Matrix.GeneralLinearGroup.coe_mul, mul_inv_rev, Matrix.mul_assoc]
 
+/-- Chosen exact virtual gauges assemble into a projective representation,
+with inversion of the group index accounting for the order of virtual
+conjugations. Source: arXiv:1010.3732, Section II.F.1. -/
+theorem exists_virtual_rep_of_gauges
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (X : G → GL (Fin D) ℂ)
+    (hX : ∀ g i, twistedTensor A U g i =
+      (X g : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
+    ∃ ω : ScalarCocycle G, ∃ ρ : ProjectiveRepresentation (D := D) ω,
+      ∀ g, ρ.X g = X (g⁻¹) := by
+  have hProd : ∀ g h : G, ∀ i : Fin d,
+      twistedTensor A U (g * h) i =
+        ((X h * X g : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
+          (((X h * X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
+    fun g h => gauge_product_intertwines A U X hX g h
+  have hScalar : ∀ g h : G, ∃ u : Units ℂ,
+      (X h : Matrix (Fin D) (Fin D) ℂ) * (X g : Matrix (Fin D) (Fin D) ℂ) =
+        (u : ℂ) • (X (g * h) : Matrix (Fin D) (Fin D) ℂ) := by
+    intro g h
+    rcases gauge_unique_up_to_scalar hA (hX (g * h)) (hProd g h) with ⟨u, hu⟩
+    refine ⟨u, ?_⟩
+    simpa [Matrix.GeneralLinearGroup.coe_mul] using hu
+  choose ω hω using fun g h => hScalar (h⁻¹) (g⁻¹)
+  let ρ : ProjectiveRepresentation (D := D) ω := {
+    X := fun g => X (g⁻¹)
+    map_mul' := by
+      intro g h
+      simpa [mul_inv_rev] using hω g h
+  }
+  exact ⟨ω, ρ, fun _ => rfl⟩
+
 /-- **Virtual representation theorem for injective MPS with on-site symmetry.**
 
 If an injective MPS tensor `A` is symmetric under on-site action of a group `G`,
@@ -118,28 +151,10 @@ theorem virtual_rep_of_symmetric_injective
   have hGauge : ∀ g : G, GaugeEquiv A (twistedTensor A U g) :=
     gaugeEquiv_twistedTensor_of_injective A hA U hSymm
   choose X hX using fun g => (hGauge g)
-  have hProd : ∀ g h : G, ∀ i : Fin d,
-      twistedTensor A U (g * h) i =
-        ((X h * X g : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
-          (((X h * X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-    fun g h => gauge_product_intertwines A U X hX g h
-  have hScalar : ∀ g h : G, ∃ u : Units ℂ,
-      (X h : Matrix (Fin D) (Fin D) ℂ) * (X g : Matrix (Fin D) (Fin D) ℂ) =
-        (u : ℂ) • (X (g * h) : Matrix (Fin D) (Fin D) ℂ) := by
-    intro g h
-    rcases gauge_unique_up_to_scalar hA (hX (g * h)) (hProd g h) with ⟨u, hu⟩
-    refine ⟨u, ?_⟩
-    simpa [Matrix.GeneralLinearGroup.coe_mul] using hu
-  choose ω hω using fun g h => hScalar (h⁻¹) (g⁻¹)
-  let ρ : ProjectiveRepresentation (D := D) ω := {
-    X := fun g => X (g⁻¹)
-    map_mul' := by
-      intro g h
-      simpa [mul_inv_rev] using hω g h
-  }
+  obtain ⟨ω, ρ, hρ⟩ := exists_virtual_rep_of_gauges A hA U X hX
   refine ⟨ω, ρ, ?_⟩
   intro g i
-  simpa [ρ] using hX g i
+  simpa only [hρ, inv_inv] using hX g i
 
 /-- For positive bond dimension, the factor system obtained from
 `virtual_rep_of_symmetric_injective` satisfies the 2-cocycle identity. -/

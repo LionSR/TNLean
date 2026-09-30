@@ -24,6 +24,32 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Hermitian eigenvector equation in Euclidean coordinates — promoted
+- **Pattern:** convert `Matrix.IsHermitian.mulVec_eigenvectorBasis` to an eigenvector
+  equation for `Matrix.toEuclideanLin` by extending the equality coordinatewise.
+- **Seen:** three uses in `Algebra/CommonKernelSpectralGap.lean`,
+  `MPS/Symmetry/BondProductSpectralGap.lean`, and
+  `MPS/Symmetry/InjectiveParentGappedPath.lean`.
+- **Abstraction:** `Matrix.IsHermitian.toEuclideanLin_eigenvectorBasis` in
+  `TNLean/Algebra/CommonKernelSpectralGap.lean`.
+- **Notes:** the helper keeps the spectral arguments on Euclidean space while
+  Mathlib's matrix lemma states the equation on coordinate functions.
+
+### isometric block assembly — promoted
+- **Pattern:** assemble isometries whose range projections sum to the identity into
+  one unitary, then conjugate arbitrary block matrices, including scalar-weighted
+  ones; flatten nested families by composing with coordinate inclusions.
+- **Seen:** three applications in `MPS/SharedInfra/NestedIsometricBlockAssembly.lean`,
+  `MPS/Periodic/OrbitPhaseUnitary.lean`, and `MPS/Periodic/BlockedFamilyPhaseTwist.lean`.
+- **Abstraction:** `MPSTensor.exists_unitary_of_isometric_block_decomposition` and
+  `MPSTensor.exists_unitary_of_nested_isometric_block_decomposition` in
+  `TNLean/MPS/SharedInfra/IsometricBlockAssembly.lean` and
+  `TNLean/MPS/SharedInfra/NestedIsometricBlockAssembly.lean`.
+- **Notes:** both theorems choose the unitary before quantifying over the block
+  matrices. Thus later scalar or phase choices use the same unitary. Use these
+  results instead of repeating coordinate-entry sums and a dimension calculation.
+
+
 ### operator identity from a word-trace identity — promoted
 - **Pattern:**
   ```lean
@@ -1978,6 +2004,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Isometric transport of finite-window projections
+
+- **Observed:** September 26, 2026.
+- **Occurrences:** `Symmetry/ParentHamiltonianSymmetry.lean` and
+  `Symmetry/PhysicalIsometricEmbedding.lean` derive an inner-product
+  isometry from `T.adjoint.comp T = 1`, then use
+  `LinearIsometry.map_starProjection`.
+- **Candidate:** a finite-dimensional linear-map helper returning the
+  isometry from the adjoint identity. Promote if a third use appears;
+  the projection transport itself is already supplied by Mathlib.
+
+
 ### Positive local terms with prescribed kernels
 
 For two finite families of positive operators with equal kernels term by
@@ -2893,6 +2931,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
   that rebuild is large enough to deserve its own change.
 
+### positive-length injectivity from one-site injectivity — candidate
+- **Pattern:** obtain one-block injectivity with
+  `Kraus.isNBlkInjective_one_of_isInjective`, apply
+  `MPSTensor.isNBlkInjective_mul_of_isNBlkInjective` at a positive length,
+  and simplify multiplication by one.
+- **Seen:** the private `injective_blockTensor` argument in
+  `TNLean/MPS/MPU/GroupRepresentation.lean` and the local helper in
+  `TNLean/MPS/ParentHamiltonian/KnabeGapNeighborhood.lean`.
+- **Possible abstraction:** a tensor theorem deriving injectivity at every
+  positive length directly from one-site injectivity. Two uses have been
+  identified; promote if another independent use appears.
+
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
@@ -3034,6 +3085,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   branches close by `omega` alone — and are left as they are.
 
 
+
+
 ## Retired
 
 ### block_words — retired
@@ -3047,3 +3100,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+
+### dimension comparison by invertible multiplication — candidate
+- **Pattern:** map a matrix subspace by multiplication with an invertible
+  matrix, prove its image lies in a second subspace, and compare dimensions
+  using `Submodule.equivMapOfInjective` and `Submodule.finrank_mono`.
+- **Seen:** the invertible-word argument in
+  `QICLean/Kraus/Wielandt/SpanGrowth/InvertibleWordSpan.lean` and
+  `TNLean/MPS/Periodic/RootWordSpan.lean` (2026-09-26).
+- **Abstraction:** the word-span specialization is
+  `Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_pred`.
+- **Notes:** two occurrences; no additional general helper is needed yet.

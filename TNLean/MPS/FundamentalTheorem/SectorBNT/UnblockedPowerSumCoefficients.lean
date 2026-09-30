@@ -111,29 +111,30 @@ theorem gaugePhaseEquiv_cast_symm_of_repeatedBlocks {D₁ D₂ : ℕ}
   simp only [cast_eq] at hRep ⊢
   exact gaugePhaseEquiv_of_repeatedBlocks hRep
 
-/-! ### Dimension preserved by proportional periodic vectors -/
+/-! ### Repeated blocks from proportional periodic vectors -/
 
 /-- Two periodic blocks whose periodic vectors are proportional by a power of a
-nonzero scalar at every positive length have the same bond dimension.
+nonzero scalar at every positive length are repeated blocks, including equality
+of their bond dimensions.
 
 By the periodic overlap dichotomy (arXiv:1708.00029, Proposition
-`equal-or-orthogonal-generalized`) the overlap of blocks of different bond
-dimension tends to zero, whereas proportionality forces
+`equal-or-orthogonal-generalized`) the overlap of non-repeated blocks
+tends to zero, whereas proportionality forces
 `⟨A,B⟩ * conj ⟨A,B⟩ = ⟨A,A⟩ * ⟨B,B⟩`, whose limit along common multiples of the
 periods is the product of the periods. -/
-theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic {D₁ D₂ m_a m_b : ℕ}
+theorem hetRepeatedBlocks_of_mpvBlockPhaseEquiv_of_isPeriodic {D₁ D₂ m_a m_b : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B) (h : MPVBlockPhaseEquiv A B) :
-    D₁ = D₂ := by
+    ∃ hd : D₁ = D₂, RepeatedBlocks (cast (congrArg (MPSTensor d) hd) A) B := by
   classical
-  by_contra hD
+  by_contra hRep
   have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
   have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   obtain ⟨ζ, hζ, hmpv⟩ := h
   have hdecay : Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
-    rcases periodicOverlapDichotomy A B hA hB with h1 | ⟨hdim, -⟩
+    rcases periodicOverlapDichotomy A B hA hB with h1 | h2
     · exact h1
-    · exact absurd hdim hD
+    · exact (hRep h2).elim
   have hma := hA.period_pos
   have hmb := hB.period_pos
   have hg : Tendsto (fun k : ℕ => m_b * (k + 1)) atTop atTop := by
@@ -187,6 +188,14 @@ theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic {D₁ D₂ m_a m_b : ℕ}
   have := tendsto_nhds_unique h1 h2
   simp at this
   omega
+
+/-- Proportional periodic vector families have equal bond dimensions.
+Source: arXiv:1708.00029, Proposition `equal-or-orthogonal-generalized`. -/
+theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic {D₁ D₂ m_a m_b : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B) (h : MPVBlockPhaseEquiv A B) :
+    D₁ = D₂ :=
+  (hetRepeatedBlocks_of_mpvBlockPhaseEquiv_of_isPeriodic hA hB h).1
 
 /-! ### Trace reduction into periodic representatives -/
 

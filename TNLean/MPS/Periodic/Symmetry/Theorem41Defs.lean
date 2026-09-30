@@ -3,7 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
+import TNLean.MPS.Periodic.FundamentalTheorem
+import TNLean.MPS.Periodic.Applications
+import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Core.Blocking
+import TNLean.MPS.Core.BlockingTransfer
+import QICLean.Kraus.CPPrimitive
+import QICLean.Channel.Basic
+import QICLean.Channel.KrausRepresentation
+import QICLean.Channel.KrausUnitaryFreedom
 
 /-!
 # Theorem 4.1 definitions

@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Finite-Group Fixed-Point Realization in the One-Dimensional SPT Classification}
+\author{}
+\date{2026-09-26}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source statement}
+
+Schuch, P\'erez-Garc\'ia, and Cirac, arXiv:1010.3732, Section~II.F.2,
+classify symmetric injective matrix product states by the cohomology class of
+their virtual projective representations. Their equality-of-phases argument
+first replaces each state by its isometric form, then interpolates between
+two maximally entangled bonds in a common direct-sum virtual space. The
+interpolating parent Hamiltonians are commuting and remain gapped. The source
+statement permits distinct endpoint physical representations, embedded in a
+larger common on-site representation.
+
+The assertion covers more than the existence of a tensor with a prescribed
+virtual cocycle: it compares arbitrary symmetric injective endpoints by a
+symmetric gapped path and proves that distinct classes cannot be joined by a
+smooth MPS path.
+
+\section{Formalized finite-group construction}
+
+Let $G$ be a finite group, and let
+$\omega:G\times G\to\mathbb C^\times$ be a genuine multiplicative
+$2$-cocycle. The formalization takes the unit-modulus part of $\omega$, uses
+its inverse as input to the cocycle-twisted left regular matrices, and thereby
+obtains a unitary projective virtual representation with factor system in
+$[\omega]$. Inverting the input is necessary because the chosen left regular
+matrices have factor system equal to the inverse of their input phase.
+
+On a bond space of dimension $D=|G|>0$, the local matrix-unit tensor has
+physical dimension $D^2$ and letters $A^{(i,j)}=|i\rangle\langle j|$. Its
+letters span the full matrix algebra. Conjugation by the virtual matrices
+induces a linear unitary on-site representation on the physical matrix space;
+the tensor is symmetric under this representation. The row convention in the
+Lean definition is the transpose of the inverse adjoint action, so that the
+physical twist of a letter is exactly its virtual conjugate.
+
+The principal declaration is
+\leanid{MPSTensor.exists_unitary_injective_fixedPoint_for_cocycle} in
+\doclink{TNLean/MPS/Symmetry/MatrixUnitFixedPoint}. Its conclusion gives an
+injective symmetric tensor, a unitary physical representation chosen from
+$\omega$, and a virtual factor system cohomologous to $\omega$. For finite
+$G$, the comparison of $H^2(G,\mathbb C^\times)$ with
+$H^2(G,\mathrm U(1))$ is proved separately in
+\leanid{TNLean.Algebra.circleH2EquivComplexUnitsH2}.
+
+\section{Restriction and elimination plan}
+
+The construction assumes a finite group and chooses both the physical Hilbert
+space and its on-site action from the prescribed class. It does not address a
+preassigned physical representation, arbitrary groups, or the deformation of
+an arbitrary endpoint tensor to this fixed point. In particular, it does not
+supply the continuous symmetric path, uniformly gapped parent Hamiltonians,
+or path invariance needed for the classification theorem in
+\path{blueprint/src/chapter/ch12_symmetry_spt.tex}.
+
+The direct-sum virtual action, normalized interpolating bond, and unitary
+on-site action are now formalized.  In independent-bond coordinates,
+\leanid{MPSTensor.normalizedBondInterpolation_parent_gap_one} proves a
+chain-length- and parameter-independent gap of at least one, while
+\leanid{MPSTensor.mpv_weightedMatrixUnitInterpolation_eq_incomingBondProduct}
+identifies the corresponding positive-length matrix product coefficients
+after regrouping physical registers.  These are ingredients of the forward
+construction, not a path theorem for arbitrary endpoints.
+
+Every one-site injective tensor with exact unitary on-site symmetry now
+admits a symmetric uniformly gapped parent path to an isometric physical
+map. The declaration is
+\leanid{MPSTensor.exists_symmetric_injective_parent_path_to_isometry}.
+First, scalar normalization and a virtual gauge preserve all parent
+interactions and put the tensor in canonical form. The virtual symmetry
+can then be chosen unitary. The simultaneous equivariant polar
+factorization gives a continuous injective tensor path.
+
+The uniform gap is proved independently of the polar factorization.
+For each injective tensor, an open-chain comparison provides a strict
+Knabe window. Continuity of the finite-window ground projection and
+Hamiltonian preserves a smaller bound locally; a finite subcover gives
+one bound on a compact parameter set for all sufficiently long rings.
+Continuity of the periodic ground-state projection handles the finitely
+many shorter lengths. The resulting declaration
+\leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}
+has no additional gap hypothesis and covers every ring of at least two
+sites. Canonical parent interactions are projections of norm at most one,
+and tensor covariance implies symmetry of every periodic Hamiltonian.
+
+One must also connect the independent-bond
+Hamiltonian to the specified embedded endpoint parent Hamiltonians with
+the required locality and smoothness, and establish that the resulting
+path meets the chain-length-uniform condition of
+\leanid{MPSTensor.SymmetricGappedInteractionPath}.  For the reverse implication,
+\leanid{MPSTensor.unitary_projectivePath_factor_endpoints_cohomologous}
+now proves cohomology invariance for a given continuous, fixed-positive-
+dimension virtual projective path, for any group.  It remains to extract
+such a virtual path from an arbitrary smooth symmetric MPS/parent-Hamiltonian
+path, including the blocking and gauge choices in the source.  The source classification entry
+remains unformalized until these steps are proved with its stated
+hypotheses.
+
+\end{document}
