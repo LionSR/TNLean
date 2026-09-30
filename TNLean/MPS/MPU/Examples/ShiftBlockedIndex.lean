@@ -29,8 +29,8 @@ $r=\ell=d^{2k+2}$, giving the values $\log_2 d$, $-\log_2 d$, $0$, $0$ at every
 blocking. The right and left shifts and all their blockings are simple. Since
 tensor products of simple tensors are simple, so are $U_1$, $U_2$, $U_3$ and all
 blockings of $U_2$ and $U_3$. All four values are therefore values at simple
-blockings, which meets the simplicity requirement of Definition IV.1; its
-canonical-form hypothesis is not established for these tensors. For $d>1$ the
+blockings. The canonical-form-II witness for the right shift and the identification
+with the public indices are proved in `ShiftPublicIndex.lean`. For $d>1$ the
 right and left ranks of every blocked shift differ, so its index value is nonzero.
 
 The review sentence itself is not formalized. The unequal ranks are no
