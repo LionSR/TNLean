@@ -597,7 +597,8 @@ In the source theorem `thm:bdequal`, hypothesis (3) follows from BNT linear
 independence + equal MPVs (via `power_sums_eq_of_eventually_eq_hetero`), and
 hypothesis (1) is the Newton-Girard consequence of (3) restricted to multiples of `m`.
 The source theorem uses matrix-valued multiplicities `R_j` and `S_j`; this theorem is
-the scalar-entry component used by the current Lean statement. -/
+the scalar-entry case of that multiplicity comparison. The source-faithful equal case is
+`fundamentalTheorem_periodic_equalCase_derivedPeriods`. -/
 theorem equalCase_zgauge_of_power_sums
     {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
     (hν : ∀ i, ν i ≠ 0)
