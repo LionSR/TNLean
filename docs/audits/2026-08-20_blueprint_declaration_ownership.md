@@ -18,12 +18,20 @@ Displayed order alone does not determine ownership.  In particular, a contextual
 application does not acquire ownership merely because it occurs before the general
 discussion in the compiled book.
 
-At present, Chapters 23 and 24 are excluded from `blueprint/src/content.tex`.  A
-dependency edge between one of those chapters and the compiled Chapters 13 or 21 is
-therefore unresolved by `leanblueprint`.  In such a cross-scope case the contextual
-entry relinquishes its duplicate `\lean{...}` tag, but does not acquire an invalid
-`\uses` edge.  The edge should be added when both entries belong to a common compiled
-volume.
+When this note was written, Chapters 23 and 24 were excluded from
+`blueprint/src/content.tex`, so a dependency edge between one of those chapters and
+the compiled Chapters 13 or 21 was unresolved by `leanblueprint`.  In such a
+cross-scope case the contextual entry relinquished its duplicate `\lean{...}` tag
+without acquiring an invalid `\uses` edge, and the edge was deferred until both
+entries belonged to a common compiled volume.
+
+That exemption no longer applies.  `blueprint/src/content.tex` now inputs both
+chapters, every entry named below is reachable from it, and the deferred edges were
+added on 2026-09-19; see
+`docs/audits/2026-09-19_blueprint_duplicate_declaration_tags.md`.  A breach of the
+convention is now reportable: `python3 scripts/blueprint_lean_sync.py --ci
+--report-duplicate-tags` fails when one declaration carries a `\lean{...}` tag in
+two entries.
 
 ## Channel representations: Chapters 4 and 16
 
@@ -61,22 +69,20 @@ declarations are:
 - `MPSTensor.perBlockLinearExtension_bijective`;
 - `MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension`.
 
-These are presently cross-scope cases: Chapter 21 belongs to the full-book router,
-whereas Chapter 23 is excluded from it.  The Chapter 21 entries therefore relinquish
-their duplicate ownership tags without adding unresolved dependencies.  Once Chapter
-23 and Chapter 21 occur in a common compiled volume, the Chapter 21 definition should
-cite the Chapter 23 definition at statement level, and its structural results should
-cite the corresponding Chapter 23 results at proof level.
+The Chapter 21 entries relinquished their duplicate ownership tags.  The two chapters
+now occur in a common compiled volume, so the deferred edges were added: the Chapter
+21 definition cites the Chapter 23 definition at statement level, and its
+multiplicativity, bijectivity, and unitary-implementation results cite the
+corresponding Chapter 23 results at proof level.
 
 ## Cyclic trace expansion: Chapters 13 and 24
 
 Chapter 13 owns `MPSTensor.trace_evalWord_eq_sum_cyclic`: it states the general cyclic
 trace expansion for a closed MPS chain.  Chapter 24 uses this identity to identify the
 coefficients of a cycle PEPS tensor, so the proof of that identification cites the
-Chapter 13 theorem mathematically.  Since Chapter 24 is currently excluded from the
-full-book router, this dependency cannot yet be represented by a resolvable `\uses`
-edge.  The Chapter 24 entry relinquishes its duplicate ownership tag, and the edge
-should be added when the two chapters occur in a common compiled volume.
+Chapter 13 theorem mathematically.  The Chapter 24 entry relinquished its duplicate
+ownership tag, and the proof-level `\uses` edge to the Chapter 13 theorem was added
+once the two chapters occurred in a common compiled volume.
 
 All eighteen shared declarations therefore have an unambiguous general owner.  No case
 in these three clusters needs to retain two ownership tags.

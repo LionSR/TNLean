@@ -5,7 +5,7 @@
     \lean{MPOTensor.TranslationInvariantBondData}
     \leanok
     \uses{def:mpdo_commuting_form_data}
-    This records one positive semidefinite two-site bond $B\ge0$ whose
+    A positive semidefinite two-site bond $B\ge0$ whose
     translated copies commute pairwise on the periodic $N$-site chain at
     every chain length $N\ge2$: $[B_{i,i+1},B_{j,j+1}]=0$.
 \end{definition}
@@ -15,8 +15,8 @@
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
     \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
-    This defines the one-bond eta-local form constructed in
-    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv}:
+    The one-bond $\eta$-local form constructed in
+    \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} consists of
     a two-site bond $B$ as in
     Definition~\ref{def:mpdo_translation_invariant_bond_data} together with,
     for every chain length $N\ge2$, a constant $c>0$ such that
@@ -322,10 +322,10 @@
     $H_{k_n,r}\otimes H_{k_{n+1},l}$ to the site factors
     $H_{k_n,r}\otimes H_{k_n,l}$. The factor $c_N$ is retained from the
     proportionality relation in
-    \cite[Appendix~C.2, lines~1571--1576]{Cirac2016MPDO_arXiv}. The passage at
+    \cite[Appendix~C.2, lines~1571--1576]{Cirac2016MPDO_arXiv}, whereas the
+    subsequent passage at
     \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv} suppresses this
-    factor when invoking the coefficient-free equation \emph{sigmaNK2}; the
-    coefficient-free assertion is not part of the present theorem.
+    factor when invoking equation \emph{sigmaNK2}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -354,16 +354,11 @@
     Any positive neighboring decomposition of the one-dimensional physical
     space has one sector and one scalar $a\ge0$. A coefficient-free identity
     at lengths two and four would give $a^2=2$ and $a^4=2$, a contradiction.
-    This example is not a normal injective block. More generally, the source
-    does not claim that every proportional commuting-bond presentation can be
-    made coefficient-free by one local rescaling. In the SAL-to-commuting-form
-    direction, the proof chooses the neighboring operators from the source
-    tensor and obtains scalar one directly. This distinguishes the
-    proportionality at
-    \cite[Appendix~C.2, lines~1571--1576]{Cirac2016MPDO_arXiv} from the
-    coefficient-free invocation at
-    \cite[Appendix~C.2, lines~1603--1605]{Cirac2016MPDO_arXiv}. The
-    source-selected normal representative is
+    This example is not a normal injective block. More generally, an arbitrary
+    proportional commuting-bond presentation need not be made coefficient-free
+    by a single local rescaling. In the SAL-to-commuting-form direction, the proof
+    chooses the neighboring operators from the source tensor and obtains scalar one
+    directly, yielding the source-selected normal representative in
     Corollary~\ref{cor:mpdo_normal_fixed_product_tensor_of_is_sal}.
 \end{remark}
 
@@ -489,7 +484,8 @@
         sectorCoordinateBond_etaPair_decomposition}
     \leanok
     \uses{thm:mpdo_eta_fixed_bond_product_tensor}
-    Let $C$ be the selected fixed tensor of the preceding theorem. There are
+    Let $C$ be the selected fixed tensor of
+    Theorem~\ref{thm:mpdo_eta_fixed_bond_product_tensor}. There are
     physical sectors
     $\C^d\cong\bigoplus_{q=0}^{K-1}H_q^L\otimes H_q^R$,
     a unitary $U$, and matrices $L_\beta(q)$ and $R_\alpha(q)$ such that,
@@ -599,8 +595,6 @@
         (\zeta s)^N\prod_{n=0}^{N-1}B_{n,n+1}.
         \notag
     \end{align}
-    This is a conditional reduction: it does not assert that $C$, or any
-    rescaling of $C$, is normal.
 \end{theorem}
 
 \begin{proof}\leanok

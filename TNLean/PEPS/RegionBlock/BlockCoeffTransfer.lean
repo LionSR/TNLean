@@ -233,7 +233,7 @@ slice `fun τ => regionInsertedCoeff A R f M σ' τ` (a function of `τ`) in the
 tensor's complement-block range; the row coordinate is a finite linear combination
 of these slices (the region left inverse is linear), so it lies in the same range.
 The chosen complement left inverse then reads off the transfer kernel
-`transferCoeff` (`TNLean.PEPS.RegionBlock.Recovery10`) without single-vertex
+`transferCoeff` (`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`) without single-vertex
 injectivity. -/
 
 /-- **Block-frame membership of the transferred row in the complement-block range.**
@@ -304,7 +304,7 @@ theorem blockTransferRow_mem_range (A B : Tensor G d) (R : Finset V)
 /-- **Block-frame complement read-off.** The region-transferred row coordinate, as a
 function of the complement physical configuration, is the second tensor's complement
 blocked tensor map of the transfer kernel `transferCoeff`
-(`TNLean.PEPS.RegionBlock.Recovery10`). This is the complement read-off from the
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`). This is the complement read-off from the
 block-frame membership `blockTransferRow_mem_range`, without single-vertex
 injectivity.
 
@@ -341,7 +341,7 @@ complement read-off `blockTransferRow_eq_complement_blockedMap` writes the first
 tensor's region-inserted coefficient as a boundary-configuration double sum of the
 transfer kernel against the second tensor's region and complement blocked weights.
 This is the block-frame replacement of `regionInsertedCoeff_eq_doubleSum_transferCoeff`
-(`TNLean.PEPS.RegionBlock.Recovery10`): the kernel `transferCoeff` is the same, but
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`): the kernel `transferCoeff` is the same, but
 the factorization uses only the block-level image coincidence, never single-vertex
 injectivity. -/
 
@@ -392,7 +392,7 @@ If the transfer kernel `transferCoeff` has the incident-matrix coupling form of 
 single matrix `N` on the boundary bond `f`, then the first tensor's region-inserted
 coefficient of `M` equals the second tensor's of `N`. This is the block-frame
 replacement of `regionInsertedCoeff_eq_of_transferCoeff_form`
-(`TNLean.PEPS.RegionBlock.Recovery10`), built on the block-frame double factorization
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), built on the block-frame double factorization
 above. -/
 
 open scoped Classical in

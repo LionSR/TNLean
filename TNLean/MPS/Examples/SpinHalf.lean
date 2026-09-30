@@ -1,0 +1,77 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.Examples.SpinOperator
+
+/-!
+# Spin-\(\tfrac12\) chains: the spin operators and the exchange interaction
+
+The spin-\(\tfrac12\) operators \(S^\alpha=\sigma^\alpha/2\) in the basis
+\(|0\rangle,|1\rangle\). For two distinct sites of a chain of \(N\)
+spin-\(\tfrac12\) sites the exchange interaction
+\(\mathbf S_j\cdot\mathbf S_k\) of `MPSTensor.spinExchange` is
+\(\tfrac12P_{jk}-\tfrac14\), with \(P_{jk}\) the transposition of the two sites.
+These are the building blocks of Heisenberg-type Hamiltonians such as the
+Majumdar-Ghosh Hamiltonian.
+
+## Main definitions
+* `MPSTensor.spinHalfOperator` : the spin-\(\tfrac12\) operators \(S^x,S^y,S^z\)
+
+## Main results
+* `MPSTensor.spinHalfOperator_sum` : the completeness relation of the spin operators
+* `MPSTensor.spinHalfOperator_sum_mul_self` : \(\mathbf S^2=\tfrac34\) on one site
+* `MPSTensor.spinExchange_spinHalfOperator_apply` :
+  \(\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14\) for \(j\ne k\)
+-/
+
+open scoped Matrix BigOperators
+open Matrix Finset
+
+noncomputable section
+
+namespace MPSTensor
+
+/-- The spin-\(\tfrac12\) operators \(S^x,S^y,S^z\), each half a Pauli matrix,
+in the basis \(|0\rangle,|1\rangle\). -/
+def spinHalfOperator : Fin 3 → Matrix (Fin 2) (Fin 2) ℂ :=
+  ![(1 / 2 : ℂ) • !![0, 1; 1, 0], (1 / 2 : ℂ) • !![0, -Complex.I; Complex.I, 0],
+    (1 / 2 : ℂ) • !![1, 0; 0, -1]]
+
+/-- The completeness relation of the spin operators:
+\(\sum_\alpha S^\alpha_{pa}S^\alpha_{qb}
+=\tfrac12\delta_{pb}\delta_{qa}-\tfrac14\delta_{pa}\delta_{qb}\). -/
+lemma spinHalfOperator_sum (p q a b : Fin 2) :
+    ∑ α, spinHalfOperator α p a * spinHalfOperator α q b =
+      (if a = q ∧ b = p then 1 / 2 else 0) - (if a = p ∧ b = q then 1 / 4 else 0) := by
+  fin_cases p <;> fin_cases q <;> fin_cases a <;> fin_cases b <;>
+    simp [spinHalfOperator, Fin.sum_univ_three] <;> ring_nf <;> simp [Complex.I_sq] <;> norm_num
+
+/-- For two distinct sites, the exchange interaction is half the transposition of
+the two sites minus a quarter: \(\mathbf S_j\cdot\mathbf S_k=\tfrac12P_{jk}-\tfrac14\). -/
+theorem spinExchange_spinHalfOperator_apply {N : ℕ} {j k : Fin N} (hjk : j ≠ k)
+    (ψ : NSiteSpace 2 N) (σ : Cfg 2 N) :
+    spinExchange spinHalfOperator j k ψ σ =
+      (1 / 2) * ψ (σ ∘ Equiv.swap j k) - (1 / 4) * ψ σ := by
+  have hswap : σ ∘ Equiv.swap j k =
+      Function.update (Function.update σ j (σ k)) k (σ j) := by
+    rw [Equiv.comp_swap_eq_update, Function.update_comm hjk.symm]
+  have hself : Function.update (Function.update σ j (σ j)) k (σ k) = σ := by simp
+  rw [spinExchange_apply _ _ _ hjk]
+  simp only [spinHalfOperator_sum, sub_mul, Finset.sum_sub_distrib, ite_mul, zero_mul,
+    ite_and, Finset.sum_ite_eq', Finset.mem_univ, ite_true, Finset.sum_ite_irrel,
+    Finset.sum_const_zero]
+  rw [hswap, hself]
+
+/-- The squares of the three spin-\(\tfrac12\) operators sum to \(\tfrac34=s(s+1)\). -/
+lemma spinHalfOperator_sum_mul_self :
+    ∑ α, spinHalfOperator α * spinHalfOperator α = (3 / 4 : ℂ) • 1 := by
+  ext p b
+  fin_cases p <;> fin_cases b <;>
+    simp [spinHalfOperator, Fin.sum_univ_three] <;>
+    ring_nf <;> simp [Complex.I_sq] <;> norm_num
+
+end MPSTensor
+
+end

@@ -107,92 +107,49 @@ second is its tensor-letter specialization.
 Source: CPSV16, arXiv:1606.00608, Appendix C.4, lines 2001--2008. -/
 theorem transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
     {g₁ g₂ d D : ℕ}
-    (dim₁ mult₁ : Fin g₁ → ℕ)
-    (weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ)
-    (dim₂ mult₂ : Fin g₂ → ℕ)
-    (weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ)
-    (hMult₁ : ∀ α, 0 < mult₁ α)
-    (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
-    (hMult₂ : ∀ β, 0 < mult₂ β)
-    (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
-    (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
-    (hBNT₁ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
-      (fun α ↦ ⟨dim₁ α, A₁ α⟩))
-    (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor (blockTwo M))
-      (fun β ↦ ⟨dim₂ β, A₂ β⟩))
-    (U₁ : Matrix
-      (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
-      (Fin d) ℂ)
-    (U₂ : Matrix
-      (Fin (∑ q : Fin (∑ β : Fin g₂, mult₂ β), verticalCopyDim dim₂ mult₂ q))
-      (Fin (d * d)) ℂ)
-    (hU₁ : U₁ * U₁ᴴ = 1)
-    (hU₂ : U₂ * U₂ᴴ = 1)
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d) (Fin d) ℂ)
-    (hTCPTP : IsKrausCPTP T)
-    (hSCPTP : IsKrausCPTP S)
-    (hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ =
-      verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab)
-    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
-      U₁ᴴ * verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab * U₁)
-    (hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ =
-      verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab)
-    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
-      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (hTphys : ∀ X, T (physClose1 M X) = physClose2 M X)
-    (hSphys : ∀ X, S (physClose2 M X) = physClose1 M X) :
-    ∃ sigma : Fin g₁ ≃ Fin g₂, ∃ hDim : ∀ i, dim₁ i = dim₂ (sigma i),
-      ∃ V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ,
+    (h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D)) :
+    ∃ sigma : Fin g₁ ≃ Fin g₂, ∃ hDim : ∀ i, h.dim₁ i = h.dim₂ (sigma i),
+      ∃ V : ∀ i, Matrix.unitaryGroup (Fin (h.dim₂ (sigma i))) ℂ,
         (∀ (i : Fin g₁) (X : Matrix (Fin D) (Fin D) ℂ),
-          MPSTensor.contractBondMatrix (A₂ (sigma i)) X =
-            (verticalMultiplicityTrace weight₁ i /
-              verticalMultiplicityTrace weight₂ (sigma i)) •
-            ((V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ) *
+          MPSTensor.contractBondMatrix (h.A₂ (sigma i)) X =
+            (verticalMultiplicityTrace h.weight₁ i /
+              verticalMultiplicityTrace h.weight₂ (sigma i)) •
+            ((V i : Matrix (Fin (h.dim₂ (sigma i))) (Fin (h.dim₂ (sigma i))) ℂ) *
               Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i))
-                (MPSTensor.contractBondMatrix (A₁ i) X) *
-              (V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ)ᴴ)) ∧
+                (MPSTensor.contractBondMatrix (h.A₁ i) X) *
+              (V i : Matrix (Fin (h.dim₂ (sigma i))) (Fin (h.dim₂ (sigma i))) ℂ)ᴴ)) ∧
         ∀ (i : Fin g₁) (ab : Fin (D * D)),
-          A₂ (sigma i) ab =
-            (verticalMultiplicityTrace weight₁ i /
-              verticalMultiplicityTrace weight₂ (sigma i)) •
-            ((V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ) *
-              Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (A₁ i ab) *
-              (V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ)ᴴ) := by
+          h.A₂ (sigma i) ab =
+            (verticalMultiplicityTrace h.weight₁ i /
+              verticalMultiplicityTrace h.weight₂ (sigma i)) •
+            ((V i : Matrix (Fin (h.dim₂ (sigma i))) (Fin (h.dim₂ (sigma i))) ℂ) *
+              Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (h.A₁ i ab) *
+              (V i : Matrix (Fin (h.dim₂ (sigma i))) (Fin (h.dim₂ (sigma i))) ℂ)ᴴ) := by
   classical
   obtain ⟨sigma, hDim, V, hVT, _⟩ :=
-    transportedVerticalSector_exists_unitaryBlockEquiv
-      dim₁ mult₁ weight₁ dim₂ mult₂ weight₂
-      hMult₁ hWeight₁ hMult₂ hWeight₂ M A₁ A₂ hBNT₁ hBNT₂
-      U₁ U₂ hU₁ hU₂ T S hTCPTP hSCPTP
-      hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ hTphys hSphys
+    transportedVerticalSector_exists_unitaryBlockEquiv h
   have hCoefficient : ∀ (i : Fin g₁) (X : Matrix (Fin D) (Fin D) ℂ),
-      MPSTensor.contractBondMatrix (A₂ (sigma i)) X =
-        (verticalMultiplicityTrace weight₁ i /
-          verticalMultiplicityTrace weight₂ (sigma i)) •
-        ((V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ) *
+      MPSTensor.contractBondMatrix (h.A₂ (sigma i)) X =
+        (verticalMultiplicityTrace h.weight₁ i /
+          verticalMultiplicityTrace h.weight₂ (sigma i)) •
+        ((V i : Matrix (Fin (h.dim₂ (sigma i))) (Fin (h.dim₂ (sigma i))) ℂ) *
           Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i))
-            (MPSTensor.contractBondMatrix (A₁ i) X) *
-          (V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ)ᴴ) := by
+            (MPSTensor.contractBondMatrix (h.A₁ i) X) *
+          (V i : Matrix (Fin (h.dim₂ (sigma i))) (Fin (h.dim₂ (sigma i))) ℂ)ᴴ) := by
     intro i X
-    let X₁ : VerticalSectorAlgebra dim₁ :=
-      fun α ↦ MPSTensor.contractBondMatrix (A₁ α) X
-    let X₂ : VerticalSectorAlgebra dim₂ :=
-      fun β ↦ MPSTensor.contractBondMatrix (A₂ β) X
+    let X₁ : VerticalSectorAlgebra h.dim₁ :=
+      fun α ↦ MPSTensor.contractBondMatrix (h.A₁ α) X
+    let X₂ : VerticalSectorAlgebra h.dim₂ :=
+      fun β ↦ MPSTensor.contractBondMatrix (h.A₂ β) X
     have hScaled :
-        transportedVerticalSectorT dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T
-            (fun α ↦ verticalMultiplicityTrace weight₁ α • X₁ α) =
-          fun β ↦ verticalMultiplicityTrace weight₂ β • X₂ β := by
+        h.Tbar (fun α ↦ verticalMultiplicityTrace h.weight₁ α • X₁ α) =
+          fun β ↦ verticalMultiplicityTrace h.weight₂ β • X₂ β := by
       exact transportedVerticalSectorT_contractBondMatrix_trace_smul
-        dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ hMult₁ hWeight₁
-        M A₁ A₂ U₁ U₂ T hReconstruct₁ hForward₂ X (hTphys X)
+        h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.weight₂ h.hMult₁ h.hWeight₁
+        h.M h.A₁ h.A₂ h.U₁ h.U₂ h.T h.hReconstruct₁ h.hForward₂ X (h.hTphys X)
     exact component_eq_trace_ratio_smul_of_unitary_single
-      weight₁ weight₂ hMult₂ hWeight₂
-      (transportedVerticalSectorT dim₁ mult₁ weight₁ dim₂ mult₂ U₁ U₂ T)
+      h.weight₁ h.weight₂ h.hMult₂ h.hWeight₂ h.Tbar
       sigma hDim V hVT X₁ X₂ hScaled i
   refine ⟨sigma, hDim, V, hCoefficient, ?_⟩
   intro i ab

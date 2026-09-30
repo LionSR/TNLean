@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CPSVBlocking
-import TNLean.MPS.MPDO.CPSVNormalizedGroupedSectors
 import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 
 /-!
 # Vertical decomposition from literal CPSV canonical form
@@ -60,7 +60,8 @@ theorem exists_cpsvVerticalDecomposition
       (fun j ↦ ⟨dim (C.repr j), blocks (C.repr j)⟩) :=
     hSpectralBNT.of_sameMPV₂Pos hSame.symm
   obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
-    hCanonical.exists_normalized_grouped_sector_maps blocks hM mu V hDimPos
+    MPOTensor.exists_normalized_grouped_sector_maps_of_dressing blocks
+      (hCanonical.hasGroupedCornerGramDressing M hM) mu V hDimPos
       hNormal hdim X zeta hXDist hCoeffPos hGroupedIso hGroupedOrth
       hGroupedInter hGroupedCorner hGroupedReconstruct
   have hWReconstructFlat : ∀ ab, MPOTensor.verticalTensor M ab =

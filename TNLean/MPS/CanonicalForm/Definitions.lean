@@ -179,7 +179,47 @@ theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       apply mul_right_cancel₀ hX00
       simpa using hEq00.symm
 
-/-! ## CPSV canonical form (CF) -/
+/-! ## Retained-block reconstruction and CPSV canonical form (CF) -/
+
+/-- Common exact reconstruction of a tensor from nonzero weighted blocks in
+coisometrically embedded coordinates. The canonical-form conventions below
+specify separately whether an unused ambient complement is permitted.
+
+Source: arXiv:1606.00608, eq. `II_CF1`, lines 214--245, and
+arXiv:1703.09188, canonical form, lines 259--265. -/
+structure RetainedBlockReconstructionData (A : MPSTensor d D) where
+  /-- Number of retained blocks (CPSV16, eq. `II_CF1`; CPSV17, lines 259--265). -/
+  r : ℕ
+  /-- Bond dimension of each retained block (CPSV16, eq. `II_CF1`;
+  CPSV17, lines 259--265). -/
+  dim : Fin r → ℕ
+  /-- Every retained block has positive bond dimension (CPSV16, lines 219--225;
+  CPSV17, lines 259--265). -/
+  dim_pos : ∀ k, 0 < dim k
+  /-- Scalar weight of each retained block (CPSV16, eq. `II_CF1`;
+  CPSV17, lines 259--265). -/
+  weights : Fin r → ℂ
+  /-- **Local fix (nonzero coefficients):** Every retained block contributes
+  nontrivially. CPSV16, lines 224--225,
+  normalize the transfer map of each weighted block, so its weight cannot
+  vanish. In CPSV17, the same convention excludes listed blocks that contribute
+  nothing at any length. See
+  `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex` and
+  `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex`. -/
+  weights_ne_zero : ∀ k, weights k ≠ 0
+  /-- The retained blocks (CPSV16, eq. `II_CF1`; CPSV17, lines 259--265). -/
+  blocks : (k : Fin r) → MPSTensor d (dim k)
+  /-- Coisometric inclusion of retained coordinates into the ambient space
+  (CPSV16, lines 219--225; CPSV17, lines 259--265). -/
+  ambient_coisometry : Matrix (Fin (∑ k : Fin r, dim k)) (Fin D) ℂ
+  /-- The retained coordinates embed coisometrically (CPSV16, lines 219--225;
+  CPSV17, lines 259--265). -/
+  coisometric : ambient_coisometry * ambient_coisometryᴴ = 1
+  /-- Exact reconstruction from the weighted retained blocks (CPSV16, eq. `II_CF1`;
+  CPSV17, lines 259--265). -/
+  reconstruct : ∀ i,
+    A i = ambient_coisometryᴴ * toTensorFromBlocks (d := d) weights blocks i *
+      ambient_coisometry
 
 /-- Witness data for the literal CPSV canonical form of `A`.
 
@@ -187,39 +227,12 @@ This is arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`.
 The retained weighted direct sum occupies a coisometrically embedded subspace
 of the original bond space.  Its orthogonal complement consists literally of
 the omitted zero coordinates. -/
-structure CPSVCanonicalFormData (A : MPSTensor d D) where
-  /-- Number of retained normal blocks (CPSV16, lines 214--225). -/
-  r : ℕ
-  /-- Bond dimension of each retained block (CPSV16, lines 219--225). -/
-  dim : Fin r → ℕ
-  /-- Every retained block has positive bond dimension (CPSV16, lines 219--225). -/
-  dim_pos : ∀ k, 0 < dim k
-  /-- Scalar weight of each retained block (CPSV16, eq. `II_Aiplusk1`). -/
-  weights : Fin r → ℂ
-  /-- Every retained weight is nonzero.  CPSV16, line 219, locates the degenerate case in
-  the block dimensions ("there can be zero blocks", i.e. `D_k = 0`), not in the weights;
-  lines 224--225 choose each `μ_k` so that the transfer map of `μ_k A_k` has spectral
-  radius one, which forces `μ_k ≠ 0` because a vanishing weight gives spectral radius
-  zero; line 246 then normalizes `‖μ_k‖ ≤ 1` with one weight of modulus one.
-
-  **Local fix (nonzero coefficients):** the formalization reads every listed weight as
-  nonzero; documented in `docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex`. -/
-  weights_ne_zero : ∀ k, weights k ≠ 0
-  /-- Retained normal blocks (CPSV16, eq. `II_CF1`). -/
-  blocks : (k : Fin r) → MPSTensor d (dim k)
+structure CPSVCanonicalFormData (A : MPSTensor d D)
+    extends RetainedBlockReconstructionData A where
   /-- Every retained block is normal (CPSV16, lines 233--245 and eq. `II_CF1`). -/
   blocks_normal : ∀ k, IsNormalTensor (blocks k)
   /-- The retained direct sum fits inside the original bond space (CPSV16, lines 219--225). -/
   total_dim_le : ∑ k : Fin r, dim k ≤ D
-  /-- Coisometric inclusion implementing the zero ambient coordinates of CPSV16, lines 219--225. -/
-  ambient_coisometry : Matrix (Fin (∑ k : Fin r, dim k)) (Fin D) ℂ
-  /-- The retained coordinates embed coisometrically (CPSV16, lines 214--225). -/
-  coisometric : ambient_coisometry * ambient_coisometryᴴ = 1
-  /-- Exact eq. `II_CF1` reconstruction, including the zero coordinates of
-  CPSV16, lines 219--225. -/
-  reconstruct : ∀ i,
-    A i = ambient_coisometryᴴ * toTensorFromBlocks (d := d) weights blocks i *
-      ambient_coisometry
 
 /-- A tensor is in literal CPSV canonical form when it has an exact retained-block
 reconstruction in its ambient bond space.

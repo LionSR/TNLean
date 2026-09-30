@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Fibonacci String-Net: the Projector Identity at Positive Length}
+\author{}
+\date{2026-09-25}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{What the source prints}
+Section~3.2 of \cite{Bultinck2017Anyons} writes the projector matrix product
+operator on a ring of $L$ sites as $P_L=\sum_a w_aO_a^L$, where
+$O_a^L=\sum_{i,j}\tr(B_a^{i_1j_1}\cdots B_a^{i_Lj_L})\ket{i_1\cdots i_L}\bra{j_1\cdots j_L}$,
+and requires
+\begin{align}
+    P_L^2=\sum_{a,b}w_aw_bO_a^LO_b^L=\sum_aw_aO_a^L=P_L,
+    \label{eq:fib_proj}
+\end{align}
+which ``has to hold for all $L$''.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 143--156.}
+No lower bound on $L$ is stated. For the Fibonacci theory, Appendix~D.1.1
+gives two blocks $B_1,B_\tau$ of bond dimensions $2$ and $3$ with weights
+$w_1=1/(1+\phi^2)$ and $w_\tau=\phi/(1+\phi^2)$, where
+$\phi=(1+\sqrt5)/2$.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 1257--1269.}
+
+\section{The empty chain}
+At $L=0$ the Hilbert space of the chain is one-dimensional and each $O_a^0$ is
+the trace of the empty product, the bond dimension $\chi_a$ of the block:
+$O_1^0=2$ and $O_\tau^0=3$. Using $\phi^2=\phi+1$,
+\begin{align}
+    P_0
+     & =2w_1+3w_\tau
+    =\frac{2+3\phi}{1+\phi^2}
+    =\frac{2+3\phi}{2+\phi}\approx1.894,
+    \label{eq:fib_empty}
+\end{align}
+which is neither $0$ nor $1$, so $P_0^2\neq P_0$. The source derives from
+(\ref{eq:fib_proj}), required for all $L$, the fusion rules
+$O_a^LO_b^L=\sum_cN_{ab}^cO_c^L$.\footnote{Source traceability:
+    \path{References/1511.08090/AnyonsPEPS.tex}, lines 157--160.}
+These also fail at $L=0$: the fusion $\tau\otimes\tau=1\oplus\tau$ would give
+$O_\tau^0O_\tau^0=9$ against $O_1^0+O_\tau^0=5$, the unit law $1\otimes1=1$ would
+give $O_1^0O_1^0=4$ against $O_1^0=2$, and the unit laws $1\otimes\tau=\tau\otimes1=\tau$
+would give $O_1^0O_\tau^0=6$ against $O_\tau^0=3$. The identity
+(\ref{eq:fib_proj}) is a statement about rings with at least one site, and the
+empty chain carries no physical content.
+
+\section{The reading adopted}
+The empty chain is read as a degenerate case the source does not intend.
+Idempotence, the fusion rule $O_\tau^LO_\tau^L=O_1^L+O_\tau^L$, and the unit laws
+$O_1^LO_1^L=O_1^L$, $O_1^LO_\tau^L=O_\tau^LO_1^L=O_\tau^L$ are stated under the
+added hypothesis $L\geq1$.\footnote{Results:
+    \leanid{FibonacciCompression.fibProjector_mul_self},
+    \leanid{FibonacciCompression.fibonacci_fusion_rule},
+    \leanid{FibonacciCompression.fibOne_mul_fibOne},
+    \leanid{FibonacciCompression.fibOne_mul_fibTau},
+    \leanid{FibonacciCompression.fibTau_mul_fibOne}.}
+This hypothesis is the only restriction recorded here: at every $L\geq1$ the
+source's identity (\ref{eq:fib_proj}), with the source's weights, holds for the
+blocks used in the formalization. Those blocks carry the bare F-symbols and are
+not identified with the source's diagram tensor; that separate deviation is
+recorded in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

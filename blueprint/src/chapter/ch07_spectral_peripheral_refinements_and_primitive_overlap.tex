@@ -1,20 +1,17 @@
 \section{Peripheral spectral refinements}
 
-Every result in this section concerning peripheral eigenvalues, cyclic
-projections, or peripheral eigenspaces is stated for a finite Kraus map and
-therefore assumes complete positivity. These results do not supply the abstract
-Schwarz-map case of Wolf Theorem~6.6; the restriction and its elimination plan
-are documented in the scope-restriction note
-\cite{gap:wolf_thm6_6_kraus_scope}.
+The results in this section concerning peripheral eigenvalues, cyclic
+projections, and peripheral eigenspaces are stated for completely positive finite
+Kraus maps, rather than the general Schwarz-map setting of Wolf
+Theorem~6.6; see \cite{gap:wolf_thm6_6_kraus_scope}.
 
 
 \subsection{Cyclic decomposition of irreducible finite Kraus maps}
 
-The construction --- normalizing a peripheral eigenvalue to a unitary
-eigenvector, forming its discrete Fourier (cyclic) spectral projections,
-and the supporting corner-algebra apparatus (restriction to an invariant
-corner, corner rank, and the compression isometry
-$P\MN{D}P\cong\MN{n}$) --- is given in
+The cyclic decomposition proceeds by normalizing a peripheral eigenvalue to a
+unitary eigenvector, constructing the discrete Fourier spectral projections,
+and restricting the map to the resulting invariant corners
+$P\MN{D}P\cong\MN{n}$; details appear in
 Section~\ref{sec:app_spectral_periodicity}.
 
 
@@ -156,17 +153,13 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \section{Primitive overlap convergence (complementary transfer-map gap form)}
 
-The theorems in this section are stated directly in terms of the
-complementary map $E-P$. This is the analytic form needed for the later
-overlap argument, corresponding to the primitive-case specialization
-of~\cite[Theorem~6.7]{Wolf2012Quantum} where $T_\phi$ is a rank-one
-projection.
-For primitive normalized transfer maps, the companion quantum-channel
-volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}
-supplies this complementary transfer-map input under explicit hypotheses; the
-rank-one Perron projection $P=P_\rho$, its trace, and the concrete
-irreducible instantiation of the complementary spectral-radius gap are
-given in Section~\ref{sec:app_spectral_perron_projection}.
+For a primitive quantum channel or transfer map, removing the rank-one Perron
+projection $P$ leaves a complementary map $E-P$ with spectral radius strictly
+less than $1$ \cite[Theorem~6.7]{Wolf2012Quantum}. Trace convergence and
+self-overlap asymptotics follow from this spectral gap, with the rank-one
+projection $P=P_\rho$ and its trace properties developed in
+Section~\ref{sec:app_spectral_perron_projection} following
+\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}.
 
 \begin{theorem}[Complementary transfer-map gap implies trace convergence to $1$]%
     \label{thm:trace_pow_one}

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Permutation
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.MPDO.AreaLaw
+import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.StackedLayers
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.TensorProduct
@@ -53,18 +54,7 @@ theorem mpo_rightShiftTensor_apply (d N : ℕ) [NeZero N]
     (σ τ : Fin N → Fin d) :
     mpo (rightShiftTensor d) N σ τ =
       Equiv.Perm.permMatrix ℂ (rotateConfig N d) σ τ := by
-  rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic
-    (rightShiftTensor d).toMPSTensor
-    (fun n ↦ finProdFinEquiv (σ n, τ n))
-  rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  have h' :
-      (List.ofFn fun i ↦ rightShiftTensor d (σ i) (τ i)).prod.trace =
-        ∑ g : Fin N → Fin d, ∏ v : Fin N,
-          rightShiftTensor d (σ v) (τ v) (g v) (g (v + 1)) := by
-    simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using h
-  rw [h']
+  rw [MPOTensor.mpo_apply_eq_sum_cyclic]
   by_cases hστ : rotateConfig N d σ = τ
   · rw [Fintype.sum_eq_single σ]
     · have hp : ∀ n, τ n = σ (n + 1) := by

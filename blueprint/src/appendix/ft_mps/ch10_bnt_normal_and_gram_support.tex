@@ -3,9 +3,8 @@
 
 Throughout this section, $V^{(N)}(A)$ denotes the length-$N$ matrix product
 vector of a tensor $A$, and $O_{AB}(N)$ denotes the corresponding mixed
-overlap.  We first record elementary consequences of the two notions of
-normality used in Chapter~\ref{ch:bnt}, and then prove the finite-family
-linear-independence criteria used in the BNT characterization and matching
+overlap. Asymptotic Gram-matrix criteria govern the linear independence of
+matrix product vector families in the BNT characterization and matching
 arguments.
 
 \begin{lemma}[Positive bond dimensions in a coefficient-form BNT]
@@ -47,7 +46,7 @@ arguments.
 \end{lemma}
 
 \begin{proof}\leanok
-    Irreducibility follows from the preceding lemma. The identity transfer map
+    Irreducibility follows from Lemma~\ref{lem:bond_dimension_one_irreducible}. The identity transfer map
     has spectral radius one, and its only eigenvalue is one.
 \end{proof}
 
@@ -124,8 +123,7 @@ arguments.
     large $N$ it is invertible, so the MPV states are linearly independent.
 \end{proof}
 
-The same conclusion is often more convenient with an explicit threshold rather
-than the eventual quantifier.
+Stating the threshold explicitly yields an existential formulation.
 
 \begin{theorem}[Existential BNT independence from overlap limits]%
     \label{thm:bnt_li_from_overlap_limits_exists}
@@ -168,12 +166,9 @@ than the eventual quantifier.
     the off-diagonal limits between the two blocks.
 \end{proof}
 
-The eventual Gram-matrix criterion also yields a coefficient-extraction
-corollary.
-
-Eventual linear independence is also what converts an equality of two finite
-linear combinations into equality of their coefficients; this is the mechanism
-behind the coefficient identities of Chapter~\ref{ch:ft_proof}.
+Eventual linear independence converts equality of linear combinations of MPV
+states into equality of their scalar coefficients, supplying the identification
+used in Chapter~\ref{ch:ft_proof}.
 
 \begin{lemma}[Eventual coefficient extraction from linear independence]%
     \label{lem:eventual_coeff_eq_of_eventual_li}

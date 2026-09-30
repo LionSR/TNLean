@@ -136,7 +136,7 @@
 \end{proof}
 
 \begin{theorem}[Renormalization maps and normalization obstruction for the
-        four-sector witness]
+        four-sector tensor]
     \label{thm:mpdo_four_sector_witness_rfp}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.normalizedTensor}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.tensor_isRFPViaTS}
@@ -216,7 +216,7 @@
 % coarsened channel pair exists.  This is a project-derived example, not the
 % construction used in the source proof of Proposition C.15.
 % Taxonomy: proof-path drift.
-\begin{theorem}[Pair-preserving obstruction for the four-sector witness]
+\begin{theorem}[Pair-preserving obstruction for the four-sector tensor]
     \label{thm:mpdo_four_sector_pair_preserving_obstruction}
     \lean{MPOTensor.ActiveSectorSpanningCounterexample.%
         factorization_neighboringTraceMatrix}
@@ -373,7 +373,7 @@
     \leanok
     \uses{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     Apply Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}.
-    Its factorization witness already contains the physical isometry, the
+    This gives the physical isometry, the
     direct-sum physical-slice formula, and positive neighboring operators.
     Theorem~\ref{thm:mpdo_casei_all_sector_rank_one_coefficients_of_is_sal}
     gives the real-part identity
@@ -429,8 +429,8 @@
         (\mathcal K_x)^{kj}_{\beta_x\alpha_x} & =0.
         \notag
     \end{align}
-    The factor order is exactly $\mathcal K_y\mathcal K_x$; no adjoint occurs.
-    This is equation \texttt{AppKxKy=0} in
+    The factor order is $\mathcal K_y\mathcal K_x$ without adjoints.
+    This is the orthogonality relation in
     \cite[Appendix~C.2, lines~1634--1639]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -594,7 +594,7 @@
     isometries.
 \end{proof}
 
-\begin{theorem}[Canonical restriction assembled from the active sector factors]
+\begin{theorem}[Canonical restriction constructed from the active sector factors]
     \label{thm:mpdo_active_physical_sector_restriction}
     \lean{MPOTensor.PhysicalSectorFactorization.ActiveFactorSupportData,
         MPOTensor.PhysicalSectorFactorization.physicalSupportInclusion,
@@ -709,11 +709,11 @@
          & =1.
         \notag
     \end{align}
-    The identities being preserved are those of CPSV16 Theorem~4.9(iv),
-    equations \texttt{tralktrrk} and \texttt{PsiPhi}, lines~864--889
-    \cite{Cirac2016MPDO_arXiv}.  Their transport through the active physical
-    support compression is an auxiliary construction, not an assertion of
-    that source theorem; see
+    \textbf{Scope restriction (active physical support compression):}
+    The identities being preserved correspond to
+    \cite[Theorem~4.9(iv), lines~864--889]{Cirac2016MPDO_arXiv}. Their
+    transport through active physical support compression is an auxiliary
+    construction rather than an assertion of that source theorem; documented in
     \cite{gap:cpsv16_active_physical_support_compression}.
 \end{theorem}
 
@@ -1106,7 +1106,7 @@ This is the calculation in
 % The IsHorizontalCF conclusion uses the normalized BNT-refined notion; its
 % scope relative to the literal source grouping is documented in
 % docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
-\begin{theorem}[Normal BNT representatives, biCF, exact assembly, and
+\begin{theorem}[Normal BNT representatives, biCF, exact direct sum, and
         nonnilpotence in the Case-II example]
     \label{thm:mpdo_caseii_absorption_algebraic_data}
     \lean{MPOTensor.CaseIIAbsorptionCounterexample.basis_isNormalTensor,
@@ -1185,7 +1185,7 @@ This is the calculation in
     \uses{def:nt_cpsv, def:mpdo_common_sector_weight_absorption, def:mpo_physical_trace_transfer, def:is_rfp_via_ts, def:is_sal, def:mpdo_simple_cf_tensor, thm:mpdo_caseii_absorption_algebraic_data, thm:mpdo_rfp_implies_sal}
     Let $A_0$ have scalar entries $1/\sqrt2$ on doubled symbols $(0,0)$ and
     $(1,1)$, let $A_1$ have scalar entry $1$ only on $(2,2)$, and take
-    $(\mu_0,\mu_1)=(1/\sqrt2,1)$. Their weighted bond-diagonal assembly has
+    $(\mu_0,\mu_1)=(1/\sqrt2,1)$. Their weighted direct sum has
     \begin{align}
         K^{00}=K^{11} & =\operatorname{diag}(1/2,0),
                       & K^{22}                       & =\operatorname{diag}(0,1).                    \label{eq:caseii-ambient-slices}
@@ -1228,10 +1228,10 @@ This is the calculation in
         \omega_P & =\frac14(P\otimes P),
                  & \omega_Q                     & =Q\otimes Q.                                  \label{eq:caseii-pq-states}
     \end{align}
-    Equations~\eqref{eq:caseii-ambient-slices} and
-    \eqref{eq:caseii-ambient-mpo} follow by multiplying the diagonal slices.
+    Equations~(\ref{eq:caseii-ambient-slices}) and
+    (\ref{eq:caseii-ambient-mpo}) follow by multiplying the diagonal slices.
     There are $2^N$ binary strings and one terminal string, which gives
-    \eqref{eq:caseii-ambient-trace}. For a virtual matrix $X$, the one-site and
+    (\ref{eq:caseii-ambient-trace}). For a virtual matrix $X$, the one-site and
     two-site physical closures are
     \begin{align}
         M_1(X) & =\frac{X_{00}}2P+X_{11}Q,
@@ -1250,8 +1250,8 @@ This is the calculation in
     \end{align}
     These are the channel equations of Definition~4.1
     \cite[lines~638--660]{Cirac2016MPDO_arXiv}; with
-    \eqref{eq:caseii-ambient-trace}, they imply saturation of the area law. Summing
-    the diagonal slices gives \eqref{eq:caseii-ambient-zcl}, the literal
+    (\ref{eq:caseii-ambient-trace}), they imply saturation of the area law. Summing
+    the diagonal slices gives (\ref{eq:caseii-ambient-zcl}), the literal
     diagram of Definition~4.2
     \cite[lines~735--739]{Cirac2016MPDO_arXiv}.
 
@@ -1273,7 +1273,7 @@ This is the calculation in
         \notag
     \end{align}
     A normal tensor has transfer spectral radius one, proving
-    \eqref{eq:caseii-absorbed-radius} and the failure of the printed inference.
+    (\ref{eq:caseii-absorbed-radius}) and the failure of the printed inference.
 \end{proof}
 
 % The declaration below packages explicit component witnesses for every
@@ -1371,10 +1371,13 @@ This is the calculation in
     Example~4.12 is unnormalized, so its fixed-point and zero-correlation-length
     assertions fail for that representative
     (Theorem~\ref{thm:cpsv_example412_literal_zcl_rfp_gap}); the halved tensor
-    satisfies the two channel equations
-    (Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps}) without supplying
-    the unit-weight convention, and both representatives lie outside the full
-    GSNNCH class (Theorems~\ref{thm:cpsv_example412_not_gsnnch}
+    saturates the area law, has literal zero correlation length, and
+    satisfies the two channel equations without supplying the unit-weight
+    convention
+    (Theorems~\ref{thm:cpsv_example412_normalized_rfp_maps}
+    and~\ref{thm:cpsv_example412_normalized_four_properties}), and both
+    representatives lie outside the full GSNNCH class
+    (Theorems~\ref{thm:cpsv_example412_not_gsnnch}
     and~\ref{thm:cpsv_example412_normalized_not_gsnnch}).
 \end{remark}
 
@@ -2537,6 +2540,79 @@ This is the calculation in
     of $cM$ equals that of $M$, so every clause of Definition~4.8 holds for
     $cM$ exactly when it holds for $M$. Taking $c=\frac12$ transports the
     obstruction proved for the printed tensor to $\widehat M$.
+\end{proof}
+
+% CPSV16 line 792 normalization and Definition 4.6, lines 797 and 811--815.
+\begin{lemma}[Rescaling invariance of the area-law quantities]
+    \label{lem:mpdo_area_law_scaling_invariance}
+    \lean{MPOTensor.reducedBlockState_smul,
+        MPOTensor.blockEntropy_smul,
+        MPOTensor.mutualInfoChain_smul,
+        MPOTensor.isSAL_smul_ofReal_iff}
+    \leanok
+    \uses{def:block_entropy, def:mutual_info_chain, def:is_sal, thm:mpdo_normalized_mpo_scaling_invariance}
+    Let $M$ be an MPO tensor, let $c$ be a nonzero complex number, and let
+    $L\le N$ be natural numbers. Then
+    \begin{align}
+        \rho_L^{(N)}(cM) & =\rho_L^{(N)}(M).
+        \notag
+    \end{align}
+    If $\rho^{(N)}(cM)$ and $\rho^{(N)}(M)$ are positive semidefinite, then
+    \begin{align}
+        S_L^{(N)}(cM) & =S_L^{(N)}(M),
+                      & I_L(cM)        & =I_L(M).
+        \notag
+    \end{align}
+    For every real $r>0$, the tensor $rM$ saturates the area law if and only
+    if $M$ does.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpdo_normalized_mpo_scaling_invariance, thm:mpdo_mpo_scalar_scaling, thm:mpdo_positive_rescaling_iff}
+    By Theorem~\ref{thm:mpdo_normalized_mpo_scaling_invariance}, the
+    normalized operator $\sigma^{(N)}(cM)$ equals $\sigma^{(N)}(M)$, so their
+    partial traces agree; the block entropies and mutual informations are
+    functions of these reduced states. For $r>0$,
+    Theorem~\ref{thm:mpdo_positive_rescaling_iff} shows that $rM$ generates
+    positive semidefinite operators exactly when $M$ does, and
+    Theorem~\ref{thm:mpdo_mpo_scalar_scaling} gives
+    $\rho^{(N)}(rM)=r^N\rho^{(N)}(M)$, so the traces of the two operators
+    vanish together.
+    The mutual-information clause of Definition~\ref{def:is_sal} transfers by
+    the displayed identity.
+\end{proof}
+
+% CPSV16 Example 4.12, lines 932--939, with Definitions 4.1, 4.2, 4.6, and 4.8.
+\begin{theorem}[Four properties of the normalized representative in Example 4.12]
+    \label{thm:cpsv_example412_normalized_four_properties}
+    \lean{MPOTensor.CPSVExample412NormalizedRFP.Mhat_isSAL,
+        MPOTensor.CPSVExample412NormalizedRFP.Mhat_isPhysicalTraceIdempotent,
+        MPOTensor.CPSVExample412NormalizedRFP.Mhat_isSAL_isPhysicalTraceIdempotent_not_isGSNNCH_isRFPViaTS}
+    \leanok
+    \uses{def:is_sal, def:mpo_physical_trace_idempotence, def:mpdo_source_gsnnch, def:is_rfp_via_ts, lem:mpdo_area_law_scaling_invariance, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_normalized_not_gsnnch}
+    The normalized representative
+    $\widehat M=\frac12 M$ of Example~4.12 saturates the area law, its
+    physical-trace transfer is idempotent, it is not a Gibbs state of a
+    nearest-neighbor commuting Hamiltonian, and it satisfies the two channel
+    equations of Definition~4.1.
+
+    This is a scope-restricted form of
+    \cite[Example~4.12]{Cirac2016MPDO_arXiv}: the tensor is the halved
+    representative rather than the printed one, and the fixed-point assertion
+    is read as the two channel equations, without the global unit-weight
+    canonical convention of the source
+    \cite{gap:cpsv16_example_4_12_normalization,
+        gap:cpsv16_unit_weight_rfp_scale_tension}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:mpdo_area_law_scaling_invariance, thm:cpsv_example412_literal_sal, thm:cpsv_example412_normalized_rfp_maps, thm:rfp_via_ts_physical_trace_idempotent, thm:cpsv_example412_normalized_not_gsnnch}
+    Lemma~\ref{lem:mpdo_area_law_scaling_invariance} with $r=\frac12$
+    transfers saturation from the printed tensor
+    (Theorem~\ref{thm:cpsv_example412_literal_sal}) to $\widehat M$. By
+    Theorem~\ref{thm:rfp_via_ts_physical_trace_idempotent}, the channel
+    equations of Theorem~\ref{thm:cpsv_example412_normalized_rfp_maps} imply
+    that the physical-trace transfer is idempotent. The commuting-form
+    obstruction is
+    Theorem~\ref{thm:cpsv_example412_normalized_not_gsnnch}.
 \end{proof}
 
 % CPSV16 Theorem 4.9 and Appendix C.2, lines 1381--1403, 1441--1450, and 1647--1782.

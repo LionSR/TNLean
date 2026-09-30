@@ -41,14 +41,6 @@ private theorem sourceSqrt_ne_zero (d : ℕ) [NeZero d] : sourceSqrt d ≠ 0 := 
 private theorem sourceSqrt_sq (d : ℕ) : sourceSqrt d ^ 2 = (d : ℂ) := by
   exact Complex.ofReal_sqrt_sq d (by positivity)
 
-private theorem sourceSqrt_mul_inv (d : ℕ) [NeZero d] :
-    sourceSqrt d * (sourceSqrt d)⁻¹ = 1 := by
-  exact mul_inv_cancel₀ (sourceSqrt_ne_zero d)
-
-private theorem sourceSqrt_inv_mul (d : ℕ) [NeZero d] :
-    (sourceSqrt d)⁻¹ * sourceSqrt d = 1 := by
-  exact inv_mul_cancel₀ (sourceSqrt_ne_zero d)
-
 private theorem sourceSqrt_mul_nat_inv_mul_sourceSqrt (d : ℕ) [NeZero d] :
     sourceSqrt d * (d : ℂ)⁻¹ * sourceSqrt d = 1 := by
   calc
@@ -417,9 +409,9 @@ noncomputable def rightShiftPaperSourceFactors (d : ℕ) [NeZero d] :
   let Y₁ := s⁻¹ • S.Y₁
   let Z₁ := s • S.Z₁
   have hs_mul_inv : s * s⁻¹ = 1 := by
-    simpa only [s] using sourceSqrt_mul_inv d
+    simpa only [s] using mul_inv_cancel₀ (sourceSqrt_ne_zero d)
   have hs_inv_mul : s⁻¹ * s = 1 := by
-    simpa only [s] using sourceSqrt_inv_mul d
+    simpa only [s] using inv_mul_cancel₀ (sourceSqrt_ne_zero d)
   have hs_weight : s * ((d : ℂ)⁻¹ * s) = 1 := by
     simpa only [s, mul_assoc] using sourceSqrt_mul_nat_inv_mul_sourceSqrt d
   have hcut₁ : sourceCutM₁ (rightShiftTensor d) = X₁ * Y₁ := by
@@ -888,59 +880,6 @@ noncomputable def shiftExampleU₃RightRankEquiv (d : ℕ) [NeZero d] :
     ((Equiv.prodCongr (rightShiftRightRankEquiv d)
       (leftShiftRightRankEquiv d)).trans
         (tensorProductRightRankEquiv (rightShiftTensor d) (leftShiftTensor d)))
-
-/-- Evaluation of the left source-rank coordinates of $U_1$.
-
-Formalization coordinate identity for arXiv:1703.09188, equation
-`eq:SF_u1_u3` (lines 2009--2016); the paper states the resulting source
-matrix, not this intermediate equivalence. -/
-@[simp] theorem shiftExampleU₁LeftRankEquiv_apply (d : ℕ) (a b : Fin d) :
-    shiftExampleU₁LeftRankEquiv d (a, b) =
-      tensorProductLeftRankEquiv (identityMPUTensor d) (identityMPUTensor d)
-        (identityLeftRankEquiv d a, identityLeftRankEquiv d b) := rfl
-
-/-- Evaluation of the right source-rank coordinates of $U_1$.
-
-Formalization coordinate identity for arXiv:1703.09188, equation
-`eq:SF_u1_u3` (lines 2009--2016); the paper states the resulting source
-matrix, not this intermediate equivalence. -/
-@[simp] theorem shiftExampleU₁RightRankEquiv_apply (d : ℕ) (a b : Fin d) :
-    shiftExampleU₁RightRankEquiv d (a, b) =
-      tensorProductRightRankEquiv (identityMPUTensor d) (identityMPUTensor d)
-        (identityRightRankEquiv d a, identityRightRankEquiv d b) := rfl
-
-/-- Evaluation of the left source-rank coordinates of $U_2$.
-
-Formalization coordinate identity for arXiv:1703.09188, equation `eq:uv2_U2`
-(lines 2018--2027); the paper states the resulting source matrix, not this
-intermediate equivalence. -/
-@[simp] theorem shiftExampleU₂LeftRankEquiv_apply (d : ℕ) [NeZero d]
-    (a b : Fin d) :
-    shiftExampleU₂LeftRankEquiv d (a, b) =
-      tensorProductLeftRankEquiv (leftShiftTensor d) (rightShiftTensor d)
-        (leftShiftLeftRankEquiv d (a, b), rightShiftLeftRankEquiv d 0) := rfl
-
-/-- Evaluation of the right source-rank coordinates of $U_2$.
-
-Formalization coordinate identity for arXiv:1703.09188, equation `eq:uv2_U2`
-(lines 2018--2027); the paper states the resulting source matrix, not this
-intermediate equivalence. -/
-@[simp] theorem shiftExampleU₂RightRankEquiv_apply (d : ℕ) [NeZero d]
-    (a b : Fin d) :
-    shiftExampleU₂RightRankEquiv d (a, b) =
-      tensorProductRightRankEquiv (leftShiftTensor d) (rightShiftTensor d)
-        (leftShiftRightRankEquiv d 0, rightShiftRightRankEquiv d (a, b)) := rfl
-
-/-- Evaluation of the left source-rank coordinates of $U_3$.
-
-Formalization coordinate identity for arXiv:1703.09188, equations
-`eq:SF_u1_u3` and `eq:uv2_U3` (lines 2009--2016 and 2028--2034); the paper
-states the resulting source matrices, not this intermediate equivalence. -/
-@[simp] theorem shiftExampleU₃LeftRankEquiv_apply (d : ℕ) [NeZero d]
-    (a b : Fin d) :
-    shiftExampleU₃LeftRankEquiv d (a, b) =
-      tensorProductLeftRankEquiv (rightShiftTensor d) (leftShiftTensor d)
-        (rightShiftLeftRankEquiv d 0, leftShiftLeftRankEquiv d (a, b)) := rfl
 
 /-- Evaluation of the right source-rank coordinates of $U_3$.
 

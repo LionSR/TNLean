@@ -1,10 +1,9 @@
 \section{Matched phases and coefficient extraction}
 \label{sec:app_ft_matched_phases}
 
-This section isolates two elementary steps used by the main proof. First, the
-sector partners obtained in both directions determine a finite bijection.
-Second, normalization of the matched normal tensors forces every gauge scalar
-to be a phase.
+Sector pairings in both directions determine a finite bijection between BNT
+canonical forms, and normalization forces every intertwining gauge scalar to be
+a unit phase.
 
 \begin{theorem}[Bijective matching under eventual proportionality]
     \label{thm:sector_bnt_proportional_bijective_match}
@@ -70,9 +69,8 @@ to be a phase.
 \section{Coefficient identities from gauge-phase equalities}
 \label{sec:app_ft_coefficient_identities}
 
-The main coefficient theorem takes the matched phases as input. The next result
-shows how those phases are selected from gauge-phase equivalences before the
-linear-independence argument is applied.
+Gauge-phase equivalences select unit phases for each sector, allowing eventual
+coefficient identification from the linear independence of the BNT basis.
 
 \begin{lemma}[Full-basis coefficient identity from matched sectors]%
     \label{lem:sector_bnt_coeff_identity_via_global_gauge}
@@ -109,7 +107,7 @@ linear-independence argument is applied.
 \section{The scalar-threaded proportional identity}
 \label{sec:app_ft_proportional_scalar}
 
-For proportional total MPVs, coefficient extraction retains the one scalar
+For proportional total MPVs, coefficient extraction retains the single scalar
 that relates the two total vectors at each length. This identity is exact, but
 it does not imply the scalar-free identity needed to recover copy weights; the
 counterexample in Remark~\ref{rem:proportional_length_scalar_gap} shows that no
@@ -158,9 +156,8 @@ such implication is possible.
 \section{Direct-sum conjugation}
 \label{sec:app_ft_direct_sum_conjugation}
 
-We now prove the general block-matrix identities used by the global gauge in
-Section~\ref{sec:ft_equal_global_gauge}. These statements do not choose or
-match sectors; they only combine conjugacies that have already been obtained.
+Block-diagonal gauge conjugations assemble into a global similarity
+transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}).
 
 \begin{definition}[Invertible matrix associated to a unitary]
     \label{def:unitary_gl}
@@ -226,8 +223,9 @@ match sectors; they only combine conjugacies that have already been obtained.
     If the same phases also give a copy-weight matching, then the flattened
     $Q$-tensor is obtained from the matched-coordinate $P$-tensor by the
     direct-sum gauge $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
-    This is only a reformulation of
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
+    This reformulates
+    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}
+    in terms of copy-weight matchings.
 \end{theorem}
 
 \begin{proof}\leanok

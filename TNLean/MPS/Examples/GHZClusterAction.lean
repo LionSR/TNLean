@@ -44,8 +44,14 @@ def z4z2GHZClusterPerm : Multiplicative (ZMod 4 × ZMod 2) →* Equiv.Perm (Fin 
   toFun g :=
     { toFun := z4z2GHZClusterBasisAction g.toAdd
       invFun := z4z2GHZClusterBasisAction (-g.toAdd)
-      left_inv i := by rw [← basisAction_add, neg_add_cancel]; exact basisAction_zero i
-      right_inv i := by rw [← basisAction_add, add_neg_cancel]; exact basisAction_zero i }
+      left_inv i := by
+        rw [← basisAction_add]
+        exact (congrArg (z4z2GHZClusterBasisAction · i) (neg_add_cancel _)).trans
+          (basisAction_zero i)
+      right_inv i := by
+        rw [← basisAction_add]
+        exact (congrArg (z4z2GHZClusterBasisAction · i) (add_neg_cancel _)).trans
+          (basisAction_zero i) }
   map_one' := Equiv.ext basisAction_zero
   map_mul' g h := Equiv.ext (basisAction_add g.toAdd h.toAdd)
 

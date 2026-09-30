@@ -1,9 +1,8 @@
 \section{PEPS boundary tensors}
 
-Let $d$ be the physical dimension. We allow horizontal virtual dimension
-$D_{\mathrm h}$ and vertical virtual dimension $D_{\mathrm v}$ to differ. The
-source uses a common virtual dimension, while the local contraction below also
-makes sense with separate horizontal and vertical dimensions.
+For physical dimension $d$, the local contraction admits separate horizontal
+virtual dimension $D_{\mathrm h}$ and vertical virtual dimension
+$D_{\mathrm v}$.
 
 \begin{definition}[Local PEPS boundary tensor]
     \label{def:peps_local_boundary_tensor}
@@ -18,14 +17,11 @@ makes sense with separate horizontal and vertical dimensions.
     between a ket copy and a bra copy defines an MPO tensor $E_A$ with physical
     dimension $D_{\mathrm v}$ and bond dimension $D_{\mathrm h}^2$.
 
-    The unlabelled diagram at source lines~721--724 of
-    \cite{Cirac2016MPDO_arXiv} depicts this local ket--bra contraction. Under
-    the PEPS renormalization hypothesis at lines~716--724, the source identifies
-    it with the boundary-theory tensor. For arbitrary $A$, the definition
-    records only the algebraic contraction pattern. The source does not label
-    the virtual directions. Directional names are local to each copy. After
-    choosing matching inward legs in the ket and bra copies, we denote their
-    common contracted coordinate by $b$ in both component functions.
+    This local ket--bra contraction corresponds to the diagram in
+    \cite[lines~721--724]{Cirac2016MPDO_arXiv}. Under the PEPS renormalization
+    hypothesis \cite[lines~716--724]{Cirac2016MPDO_arXiv}, this contraction
+    represents the boundary tensor, with the common contracted inward leg denoted
+    by $b$.
 \end{definition}
 
 \begin{theorem}[Component formula for the local boundary tensor]
@@ -43,9 +39,9 @@ makes sense with separate horizontal and vertical dimensions.
         \label{eq:peps_local_boundary_tensor_component}
     \end{align}
     The physical coordinates are the remaining ket and bra indices $u,u'$, and
-    the bond coordinates are $(l,l')$ and $(r,r')$. We order the five legs as
-    left, right, up, down, physical and pack each horizontal ket-bra pair into
-    one product index.
+    the bond coordinates are $(l,l')$ and $(r,r')$. Legs are ordered as
+    left, right, up, down, physical, with horizontal ket--bra indices grouped
+    into a single bond coordinate.
 \end{theorem}
 
 \begin{proof}
@@ -69,12 +65,10 @@ makes sense with separate horizontal and vertical dimensions.
          & = A^s_{l,r,u,b}.
         \notag
     \end{align}
-    Under the PEPS renormalization hypothesis at source lines~716--724,
-    \cite{Cirac2016MPDO_arXiv} identifies this contraction with the tensor of
-    the boundary theory. The displayed Gram factorization proves the stronger
-    algebraic statement that the same contraction pattern is an LPDO for every
-    rank-five tensor $A$; this positivity assertion itself requires no transfer
-    fixed point or renormalization channel.
+    Under the PEPS renormalization hypothesis \cite[lines~716--724]{Cirac2016MPDO_arXiv},
+    this contraction represents the boundary tensor. The Gram factorization
+    exhibits $E_A$ as an LPDO for every rank-five tensor $A$, independently of
+    any transfer fixed point or renormalization channel.
 \end{theorem}
 
 \begin{proof}
@@ -121,7 +115,7 @@ makes sense with separate horizontal and vertical dimensions.
     the largest eigenvalue of the transfer operator and notes that topological
     degeneracy can make the fixed point non-unique. These constructions specify
     the boundary operators in their respective cylinder settings, but not their
-    algebraic passage to the local boundary tensor and channels below.
+    passage to the local boundary tensor and channels.
 \end{definition}
 
 \begin{definition}[Algebraic PEPS renormalization fixed-point relation]
@@ -183,14 +177,11 @@ makes sense with separate horizontal and vertical dimensions.
     \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
         def:peps_boundary_coarse_graining, def:peps_boundary_refinement,
         def:is_rfp_via_ts}
-    The source diagrams do not specify the domain and codomain of the physical
-    isometry, the virtual-space identifications, the passage from the
-    finite-cylinder operators $\sigma_L,\sigma_R$ to the displayed local tensor,
-    a fixed-point selection in the degenerate case, or the inserted factor in
-    the refinement map. Consequently, complete positivity, trace preservation,
-    and the identities
-    $\mathcal S[M_2(X)]=M_1(X)$ and
-    $\mathcal T[M_1(X)]=M_2(X)$ cannot yet be checked algebraically. This
-    missing specification is recorded in
-    \cite{gap:cpsv16_peps_boundary_rfp_specification}.
+    The domain and codomain of the physical isometry, the virtual-space
+    identifications, the transition from the finite-cylinder operators
+    $\sigma_L,\sigma_R$ to the local tensor, and the normalization of the
+    refinement channel are unspecified in \cite{Cirac2016MPDO_arXiv}; complete
+    positivity, trace preservation, and the intertwining identities
+    $\mathcal S[M_2(X)]=M_1(X)$ and $\mathcal T[M_1(X)]=M_2(X)$ await complete
+    algebraic formulation \cite{gap:cpsv16_peps_boundary_rfp_specification}.
 \end{proof}

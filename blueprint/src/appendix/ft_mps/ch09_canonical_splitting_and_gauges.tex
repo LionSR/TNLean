@@ -71,7 +71,10 @@ Similarity invariance and strict dimension decrease justify the induction used i
 \section{Projector closure and isometric corner decompositions}
 \label{sec:app_canonical_projector_corners}
 
-The results below turn reducing projections into support isometries, compress tensors to their corners, and reconstruct closed-chain traces from an orthogonal family of corners. They support Theorem~\ref{thm:projector_closure_irreducible_corners} and Theorem~\ref{thm:projector_closure_canonical_form}.
+Reducing orthogonal projections yield support isometries that compress tensors to
+corner blocks, preserving matrix product vectors across direct sums (supporting
+Theorems~\ref{thm:projector_closure_irreducible_corners} and
+\ref{thm:projector_closure_canonical_form}).
 
 \begin{theorem}[Invariant projections are reducing under projector closure]
     \label{thm:invariant_projector_closure_commutes}
@@ -325,7 +328,8 @@ companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unita
 \section{Perron gauges and preservation under conjugation}
 \label{sec:app_canonical_perron_gauges}
 
-This section records the positive Perron eigenpair, its spectral normalization, and the behavior of irreducibility and eigenvalues under the corresponding gauge.
+Positive Perron eigenpairs determine the spectral normalization and unital
+gauge transformations of irreducible blocks.
 
 \begin{lemma}[Perron eigenpair of a nonzero irreducible tensor]
     \label{lem:irreducible_transfer_perron_pair}

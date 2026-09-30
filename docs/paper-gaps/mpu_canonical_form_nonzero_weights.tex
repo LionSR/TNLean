@@ -1,0 +1,43 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Nonzero Weights in the MPU Canonical Form}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{Canonical blocks and zero weights}
+
+The canonical form of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete writes
+each local matrix as
+\begin{align}
+  A^i = \bigoplus_{k=1}^{r}\mu_k A_k^i,
+\end{align}
+where each $A_k$ is irreducible and its transfer map has spectral radius one
+\cite[canonical-form definition]{Cirac2017MPU}. The source does not explicitly
+say $\mu_k\ne0$. A zero weight, however, contributes no matrix at any site and
+does not describe a canonical block of $A$. The formal canonical-form
+predicate therefore lists only weights satisfying $\mu_k\ne0$.
+% Source: Papers/1703.09188/paper_v2.tex, lines 259--265.
+
+This convention is needed in the proof of Proposition~III.1. A retained
+irreducible block has a nonzero transfer eigenvalue after weighting only when
+$\mu_k\ne0$. The shifted trace identities of an MPU then force that
+eigenvalue to equal one. With zero weights, arbitrary invisible blocks could be
+adjoined and the number of listed blocks would no longer be determined by the
+transfer spectrum.
+% Source: Papers/1703.09188/paper_v2.tex, lines 344--354.
+
+Nonzero weights do not resolve unused ambient bond coordinates. The separate
+full-support convention requires $\sum_k D_k=D$ for the MPU canonical-form
+representative; its mathematical scope and the distinction from literal CPSV
+canonical-form data are recorded in
+\url{https://sirui-lu.com/TNLean/paper-gaps/mpu_canonical_form_full_support.pdf}.
+
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.RFPViaTS
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 import TNLean.MPS.MPDO.VerticalProductFusionDecomposition
 
 /-!
@@ -16,10 +18,10 @@ positivity.
 
 ## Main results
 
-* `CPSVVerticalDecomposition`: a vertical canonical decomposition retaining
-  the source basis-of-normal-tensors predicate.
-* `IsHorizontalCF.exists_cpsvVerticalDecomposition`: construction of this
-  decomposition from normalized BNT-refined horizontal form and positivity.
+* `IsHorizontalCF.exists_cpsvVerticalDecomposition`: construction of a
+  vertical canonical decomposition retaining the source
+  basis-of-normal-tensors predicate, from normalized BNT-refined horizontal
+  form and positivity.
 * `exists_positiveFusionDecomposition_of_isRFPViaTS`: the BNT-refined positive
   fusion theorem corresponding to CPSV16, Appendix C.4, lines 2020--2029.
 
@@ -35,46 +37,54 @@ noncomputable section
 
 namespace MPOTensor
 
-/-- A vertical canonical decomposition which retains the CPSV16
-basis-of-normal-tensors predicate.
+/-- The Appendix C.4 vertical-sector hypotheses assembled from a one-site and a
+two-site vertical canonical decomposition of the same tensor together with the
+two trace-preserving completely positive maps of the renormalization
+fixed-point condition and their intertwining identities.
 
-The ordinary predicate `IsVerticalCF` records the algebraic BNT predicate used
-elsewhere in the project.  The comparison of the one-site and two-site
-decompositions in CPSV16, Appendix C.4, additionally uses the literal CPSV16
-basis predicate.  This structure retains that assertion together with the
-positive diagonal weights and both coisometric decomposition identities.
-
-Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
-structure CPSVVerticalDecomposition (M : MPOTensor d D) where
-  /-- Number of vertical BNT labels. -/
-  labelCount : ℕ
-  /-- Bond dimension of each vertical BNT representative. -/
-  bondDim : Fin labelCount → ℕ
-  /-- Multiplicity of each representative. -/
-  multiplicity : Fin labelCount → ℕ
-  /-- Positive entries of the diagonal multiplicity matrices. -/
-  weight : (α : Fin labelCount) → Fin (multiplicity α) → ℂ
-  /-- The vertical BNT representatives. -/
-  tensor : (α : Fin labelCount) → MPSTensor (D * D) (bondDim α)
-  /-- Coisometry from the original physical space onto the retained sectors. -/
-  verticalCoisometry : Matrix
-    (Fin (∑ q : Fin (∑ α : Fin labelCount, multiplicity α),
-      verticalCopyDim bondDim multiplicity q)) (Fin d) ℂ
-  /-- Every BNT representative has at least one retained copy. -/
-  multiplicity_pos : ∀ α, 0 < multiplicity α
-  /-- Every retained diagonal weight is positive. -/
-  weight_pos : ∀ α q, (0 : ℂ) < weight α q
-  /-- The vertical representatives form a CPSV16 basis of normal tensors. -/
-  isCPSVBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
-    (fun α ↦ ⟨bondDim α, tensor α⟩)
-  /-- The vertical change of basis is a coisometry. -/
-  coisometry : verticalCoisometry * verticalCoisometryᴴ = 1
-  /-- Forward conjugation gives the weighted direct sum. -/
-  forward : ∀ ab, verticalCoisometry * verticalTensor M ab * verticalCoisometryᴴ =
-    verticalAssembledTensor bondDim multiplicity weight tensor ab
-  /-- The weighted direct sum reconstructs every vertical letter. -/
-  reconstruction : ∀ ab, verticalTensor M ab = verticalCoisometryᴴ *
-    verticalAssembledTensor bondDim multiplicity weight tensor ab * verticalCoisometry
+Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4,
+lines 1955--1995. -/
+def VerticalSectorHypotheses.ofDecompositions {d D : ℕ} {M : MPOTensor d D}
+    (D₁ : CPSVVerticalDecomposition M)
+    (D₂ : CPSVVerticalDecomposition (blockTwo M))
+    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d) (Fin d) ℂ)
+    (hTCPTP : IsKrausCPTP T) (hSCPTP : IsKrausCPTP S)
+    (hTphys : ∀ X, T (physClose1 M X) = physClose2 M X)
+    (hSphys : ∀ X, S (physClose2 M X) = physClose1 M X) :
+    VerticalSectorHypotheses (g₁ := D₁.labelCount) (g₂ := D₂.labelCount)
+      (d := d) (D := D) :=
+  { dim₁ := D₁.bondDim
+    mult₁ := D₁.multiplicity
+    weight₁ := D₁.weight
+    dim₂ := D₂.bondDim
+    mult₂ := D₂.multiplicity
+    weight₂ := D₂.weight
+    hMult₁ := D₁.multiplicity_pos
+    hWeight₁ := D₁.weight_pos
+    hMult₂ := D₂.multiplicity_pos
+    hWeight₂ := D₂.weight_pos
+    M := M
+    A₁ := D₁.tensor
+    A₂ := D₂.tensor
+    U₁ := D₁.verticalCoisometry
+    U₂ := D₂.verticalCoisometry
+    T := T
+    S := S
+    hForward₁ := D₁.forward
+    hReconstruct₁ := D₁.reconstruction
+    hForward₂ := D₂.forward
+    hReconstruct₂ := D₂.reconstruction
+    hTphys := hTphys
+    hSphys := hSphys
+    hBNT₁ := D₁.isCPSVBNT
+    hBNT₂ := D₂.isCPSVBNT
+    hU₁ := D₁.coisometry
+    hU₂ := D₂.coisometry
+    hTCPTP := hTCPTP
+    hSCPTP := hSCPTP }
 
 /-- Orthogonal grouped vertical sectors assemble into a vertical canonical
 decomposition while retaining the CPSV16 basis predicate.
@@ -224,7 +234,8 @@ theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
       (fun j ↦ ⟨dim (C.repr j), blocks (C.repr j)⟩) :=
     hSpectralBNT.of_sameMPV₂Pos hSame.symm
   obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
-    hM.exists_normalized_grouped_sector_maps blocks hHorizontal mu V hDimPos
+    exists_normalized_grouped_sector_maps_of_dressing blocks
+      (hHorizontal.hasGroupedCornerGramDressing M hM) mu V hDimPos
       hNormal hdim X zeta hXDist hCoeffPos hGroupedIso hGroupedOrth
       hGroupedInter hGroupedCorner hGroupedReconstruct
   have hWReconstructFlat : ∀ ab, verticalTensor M ab =
@@ -304,14 +315,7 @@ theorem exists_positiveFusionDecomposition_of_isRFPViaTS
   obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
   refine ⟨D₁.labelCount, D₁.bondDim, D₁.tensor, D₁.isCPSVBNT, ?_⟩
   exact transportedVerticalSector_exists_positiveFusionDecomposition
-    D₁.bondDim D₁.multiplicity D₁.weight
-    D₂.bondDim D₂.multiplicity D₂.weight
-    D₁.multiplicity_pos D₁.weight_pos
-    D₂.multiplicity_pos D₂.weight_pos
-    M D₁.tensor D₂.tensor D₁.isCPSVBNT D₂.isCPSVBNT
-    D₁.verticalCoisometry D₂.verticalCoisometry
-    D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
-    D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
-    hTphys hSphys hHorizontal hM
+    (VerticalSectorHypotheses.ofDecompositions D₁ D₂ T Smap hTCPTP hSCPTP
+      hTphys hSphys) hHorizontal hM
 
 end MPOTensor

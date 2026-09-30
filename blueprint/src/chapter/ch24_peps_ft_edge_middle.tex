@@ -5,9 +5,8 @@ $V\setminus\{u,v\}$ presents the state coefficient as a three-site contraction:
 the endpoint tensors at $u$ and $v$ joined through one blocked middle tensor.
 Inserting the identity on the bond $e$ recovers the original coefficient, so a
 matrix inserted on $e$ records the difference between two tensors that generate
-the same state. This section also identifies when the middle tensor is
-injective, the hypothesis used by the edge-kernel argument of
-Section~\ref{sec:peps_edge_kernel_gauges}.
+the same state. Injectivity of this middle tensor provides the foundation
+used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
 
 \begin{definition}[Open middle tensor at an edge]%
     \label{def:peps_edgeOpenMiddleWeight}
@@ -344,8 +343,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.SameState.edgeBlockedCoeff_eq}
     \leanok
     \uses{def:peps_same_state, thm:peps_edgeBlockedCoeff_eq_stateCoeff}
-    If two PEPS tensors have the same state, then their edge-blocked
-    coefficients agree at every edge and every physical configuration.
+    If two PEPS tensors $A$ and $B$ represent the same state, then their edge-blocked
+    coefficients agree at every edge $e$ and every physical configuration $\sigma$:
+    \begin{align}
+        C_A(e;\sigma) & = C_B(e;\sigma). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For every physical configuration $\sigma$,
@@ -357,8 +359,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.SameState.edgeInsertedCoeff_identity_eq}
     \leanok
     \uses{def:peps_same_state, thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
-    If two PEPS tensors have the same state, then their edge-centered identity
-    insertions agree at every edge and every physical configuration.
+    If two PEPS tensors $A$ and $B$ represent the same state, then their edge-centered identity
+    insertions agree at every edge $e$ and every physical configuration $\sigma$:
+    \begin{align}
+        C_A(e,\Id;\sigma) & = C_B(e,\Id;\sigma). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For every physical configuration $\sigma$,
@@ -403,7 +408,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     injective.
 \end{lemma}
 \begin{proof}\leanok
-    Choose a residual boundary label. By the preceding lemma its middle-tensor
+    Choose a residual boundary label. By Lemma~\ref{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty} its middle-tensor
     vector is the zero vector. A linearly independent family cannot contain a
     zero vector.
 \end{proof}
@@ -480,7 +485,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     $A\text{ vertex-injective}\Longrightarrow\kappa(\{v\})$.
 \end{theorem}
 \begin{proof}\leanok
-    For each $v$, the preceding theorem gives
+    For each $v$, Theorem~\ref{thm:peps_singletonRegionTensorInjective} gives
     $A\text{ vertex-injective}\Longrightarrow
         \inj(T_{A,\{v\}})$. The comparison hypothesis gives
     $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$. Their
@@ -500,8 +505,8 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     $\kappa(R)$.
 \end{theorem}
 \begin{proof}\leanok
-    For $R\ne\varnothing$, write $R=\bigcup_{v\in R}\{v\}$. The preceding
-    theorem turns singleton comparison and vertex injectivity into
+    For $R\ne\varnothing$, write $R=\bigcup_{v\in R}\{v\}$.
+    Theorem~\ref{thm:peps_singletonRegionInjectivityFromVertexInjectivity} turns singleton comparison and vertex injectivity into
     $\kappa(\{v\})$ for every $v\in R$. Applying the finite-union consequence
     of union closure to these singleton regions gives $\kappa(R)$.
 \end{proof}
@@ -524,8 +529,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
     \leanok
     \uses{def:IsVertexInjective}
-    If the original PEPS tensor is vertex-injective, then the two endpoint
-    tensor maps in the edge-blocked three-site chain are injective.
+    If the original PEPS tensor $A$ is vertex-injective, then for each edge $e=(u,v)$,
+    the two endpoint tensor maps in the edge-blocked three-site chain are injective:
+    \begin{align}
+        \inj(T_{A,u}) \quad\text{and}\quad \inj(T_{A,v}). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     If $e=(u,v)$, vertex injectivity gives
@@ -538,9 +546,11 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all}
     \leanok
     \uses{def:IsVertexInjective, thm:peps_edgeBlockedEndpointTensorMaps_injective}
-    If the original PEPS tensor is vertex-injective, then the two endpoint
-    tensor maps in the edge-blocked three-site chain are injective at every
-    edge.
+    If the original PEPS tensor $A$ is vertex-injective, then the two endpoint
+    tensor maps in the edge-blocked three-site chain are injective at every edge $e=(u,v)$:
+    \begin{align}
+        \forall e=(u,v),\quad \inj(T_{A,u}) \quad\text{and}\quad \inj(T_{A,v}). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For each $e=(u,v)$,
@@ -553,9 +563,13 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleTensorFamily}
-    For a vertex-injective PEPS tensor, injectivity of the edge-blocked middle
+    For a vertex-injective PEPS tensor $A$, injectivity of the edge-blocked middle
     tensor gives the full injectivity statement for the edge-blocked three-site
-    chain.
+    chain at $e=(u,v)$:
+    \begin{align}
+        \inj(T_{A,u}) \wedge \inj(T_{A,M_e}) \wedge \inj(T_{A,v}), \notag
+    \end{align}
+    where $M_e = V\setminus\{u,v\}$.
 \end{theorem}
 \begin{proof}\leanok
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The endpoint theorem supplies
@@ -570,7 +584,10 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeMiddleTensorFamily, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     If every edge-middle tensor is injective, then a vertex-injective PEPS
-    tensor gives an injective edge-blocked three-site chain at every edge.
+    tensor $A$ gives an injective edge-blocked three-site chain at every edge $e=(u,v)$:
+    \begin{align}
+        \forall e=(u,v),\quad \inj(T_{A,u}) \wedge \inj(T_{A,M_e}) \wedge \inj(T_{A,v}). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     For each $e=(u,v)$, put $M_e=V\setminus\{u,v\}$. Vertex injectivity gives
@@ -595,7 +612,7 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. The comparison gives
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$. Vertex injectivity
     supplies $\inj(T_{A,u})$ and $\inj(T_{A,v})$.
-    The preceding reduction then gives
+    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} then gives
     $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{proof}
 
@@ -659,12 +676,12 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons}
     \leanok
     \uses{thm:peps_edgeMiddleTensorInjective_of_singletons, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
-    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Under the hypotheses of the
-    preceding theorem, vertex injectivity of $A$ gives injectivity of the
+    Let $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. Under the hypotheses of
+    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons}, vertex injectivity of $A$ gives injectivity of the
     edge-blocked three-site chain at $e$.
 \end{theorem}
 \begin{proof}\leanok
-    The preceding theorem gives $\inj(T_{A,M_e})$. The endpoint
+    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} gives $\inj(T_{A,M_e})$. The endpoint
     reduction combines this middle-tensor injectivity with vertex injectivity
     at $u$ and $v$.
 \end{proof}
@@ -674,8 +691,8 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons}
     \leanok
     \uses{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}
-    If $M_e=V\setminus\{u,v\}$ is nonempty for every edge $e=(u,v)$, then the
-    preceding one-edge statement applies at every edge. Thus vertex
+    If $M_e=V\setminus\{u,v\}$ is nonempty for every edge $e=(u,v)$, then
+    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_singletons} applies at every edge. Thus vertex
     injectivity of $A$ gives injectivity of every edge-blocked three-site
     chain.
 \end{theorem}
@@ -699,6 +716,6 @@ Section~\ref{sec:peps_edge_kernel_gauges}.
 \begin{proof}\leanok
     For each $e=(u,v)$,
     Theorem~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card}
-    gives $V\setminus\{u,v\}\ne\varnothing$. Apply the preceding all-edge
-    singleton theorem.
+    gives $V\setminus\{u,v\}\ne\varnothing$. Apply
+    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}.
 \end{proof}

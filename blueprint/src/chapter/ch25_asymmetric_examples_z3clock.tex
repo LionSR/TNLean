@@ -1,0 +1,275 @@
+%% =========================================================
+%% Chapter: Physics examples of the multi-block asymmetric
+%% compression theorem (continued).
+%% Covers the non-anomalous Z_3 clock symmetry and the
+%% length-dependent fusion of its condensation defect
+%% (Example II of the Z_3 verification record).
+%% =========================================================
+
+\section{The non-anomalous \texorpdfstring{$\Z_3$}{Z3} clock symmetry}%
+\label{sec:asymex_z3clock}
+
+The anomalous symmetry of Section~\ref{sec:asymex_z3anomalous} is an exact
+representation of $\Z_3$, and its condensation defect satisfies
+$A^2=3A$ at every length
+(Theorem~\ref{thm:asymex_z3anomalous_defect_square}). This section
+treats a second family of $\Z_3$ symmetry operators whose representatives
+multiply only up to phases depending on the length, and shows that the
+structure constants of its condensation defect then genuinely depend on the
+length. The symmetry is not anomalous: its Else--Nayak class is trivial.
+% The triviality of the anomaly class is checked in the exact-arithmetic
+% verification record only and is not formalized.
+The length dependence is therefore not a signature of an anomaly; it comes
+from the per-site phases of the chosen representatives.
+
+As in Section~\ref{sec:asymex_z3anomalous}, let
+$\omega=\exp(2\pi\mathrm{i}/3)$, let $X\ket{s}=\ket{s+1}$ on a qutrit, and
+let $CZ\ket{a,b}=\omega^{ab}\ket{a,b}$ and $Z\ket{a}=\omega^a\ket{a}$. On a
+periodic chain of $N>0$ qutrits the clock operators are
+\begin{align}
+    U_N & =X^{\otimes N}\prod_{k}CZ_{k,k+1},                    &
+    V_N & =(X^{2})^{\otimes N}\prod_{k}CZ^{2}_{k,k+1}Z^{2}_{k}.
+\end{align}
+
+\begin{definition}[The clock tensors]
+    \label{def:asymex_z3clock_tensors}
+    \lean{Z3Clock.phaseChar, Z3Clock.clockTensor, Z3Clock.uTensor, Z3Clock.vTensor}
+    \leanok
+    For $g\in\Z_3$ and a weight $f\colon\Z_3\times\Z_3\to\Z_3$, the clock
+    tensor of bond dimension three has the entries
+    \begin{align}
+        \bigl(T_{g,f}^{o,i}\bigr)_{l,r} & =
+        \begin{cases}
+            \omega^{f(l,i)} & \text{if } o=i+g \text{ and } r=i, \\
+            0               & \text{otherwise},
+        \end{cases}
+    \end{align}
+    with output label $o$, input label $i$ and bond labels $l,r$. The
+    tensor $U$ is $T_{1,f_U}$ with $f_U(l,i)=li$, and the tensor $V$ is
+    $T_{2,f_V}$ with $f_V(l,i)=2li+2i$.
+\end{definition}
+
+The clock tensor has the shape of the group tensor of
+Definition~\ref{def:asymex_group_cocycle_tensor}: it copies the input $i$ to
+the outgoing bond, weights the pair formed by the incoming bond and the input
+by $\omega^{f(l,i)}$, and applies $X^g$ to the input to give the output.
+
+\begin{center}
+    % Formula: (T_{g,f}^{o,i})_{l,r}=\omega^{f(l,i)}\delta_{o,i+g}\delta_{r,i},
+    % Definition~\ref{def:asymex_z3clock_tensors}.
+    % Ink-to-index map: on the left, the upper leg is the output o, the lower
+    % leg the input i, the west leg the incoming bond l and the east leg the
+    % outgoing bond r. On the right, the two dots are copy tensors, whose legs
+    % all carry one label; the lower dot sends the input i to the outgoing bond
+    % r, the box \omega^f carries the weight \omega^{f(l,i)}, and the box X^g
+    % maps i to the output o=i+g.
+    % Contraction set: on the right, the three internal wires (X^g to the upper
+    % dot, \omega^f to the upper dot, and the vertical wire between the dots).
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[cols=1, bonds=none]
+        \tn[at=(1,1), skin=mpo, size=l,
+            ports={90:physical:$o$, 270:physical:$i$, 180:virtual:$l$, 0:virtual:$r$}]{T_{g,f}}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,2), name=X, skin=box, ports={90:physical:$o$, 270:physical}]{X^g}
+        \tn[at=(2,1), name=w, skin=box, ports={180:virtual:$l$, 0:physical}]{\omega^f}
+        \tn[at=(2,2), name=c, skin=dot, ports={90:physical, 270:physical, 180:physical}]{}
+        \tn[at=(3,2), name=d, skin=dot, ports={90:physical, 270:physical:$i$, 0:virtual:$r$}]{}
+        \tnwire{X.270}{c.90}
+        \tnwire{w.0}{c.180}
+        \tnwire{c.270}{d.90}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Kernels and the trivial cocycle]
+    \label{thm:asymex_z3clock_kernels}
+    \lean{Z3Clock.mpo_clockTensor, Z3Clock.mpo_uTensor_apply, Z3Clock.mpo_vTensor_apply,
+        Z3Clock.clockTensor_apply_eq_cocycle, Z3Clock.mpo_clockTensor_eq_cocycle,
+        Z3Clock.mpo_uTensor_eq_cocycle, Z3Clock.mpo_vTensor_eq_cocycle,
+        Z3Clock.clockTensor_isMPUPos}
+    \leanok
+    \uses{def:asymex_z3clock_tensors, def:asymex_group_cocycle_tensor,
+        def:asymex_group_cocycle_cyclic, thm:asymex_group_cocycle_kernel}
+    On a periodic chain of $N>0$ qutrits, the periodic operator of
+    $T_{g,f}$ is monomial:
+    \begin{align}
+        \bra{s}O_N(T_{g,f})\ket{t} & =
+        \prod_k\delta_{s_k,t_k+g}\,\omega^{f(t_k,t_{k+1})}.
+    \end{align}
+    In particular the periodic operators of $U$ and $V$ are $U_N$ and
+    $V_N$. The tensor $T_{g,f}$ is, entrywise, the group tensor of
+    Definition~\ref{def:asymex_group_cocycle_tensor} for the trivial
+    cocycle $\omega_0=1$ of $\Z_3$ times the bond weight $\omega^{f(l,i)}$,
+    so that $O_N(T_{g,f})$ is the diagonal circuit with phase
+    $\omega^{\sum_k f(t_k,t_{k+1})}$ on the input configuration $t$, followed
+    by the plain shift by $g$. Every clock tensor is a matrix product unitary.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The tensor $T_{g,f}$ forces its right bond to carry the input label,
+    so on a closed chain the only surviving bond configuration is
+    $b_k=t_{k-1}$, which gives the kernel. With the trivial cocycle the
+    group tensor has entry one exactly where $T_{g,f}$ is nonzero, and its
+    periodic operator is the shift by $g$. A permutation matrix times a
+    diagonal matrix of unit-modulus phases is unitary.
+\end{proof}
+
+The first relation of the next theorem, $U_N^2=\omega^NV_N$, reads as
+follows on a ring of $N$ sites.
+\begin{center}
+    % Formula: U_N^2=\omega^NV_N (Theorem~\ref{thm:asymex_z3clock_table}), as
+    % the entry (s,t) of both sides.
+    % Ink-to-index map: on the left, both rows are the clock tensor U, the
+    % upper row with output s_k and the lower row with input t_k, and the
+    % vertical wire at site k is the summed intermediate label; on the right,
+    % the single row is the clock tensor V with output s_k and input t_k.
+    % Contraction set: every vertical wire between the rows, every horizontal
+    % virtual bond of each row, and the periodic return bond of each ring.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides; three sites are drawn and the ellipsis
+    % stands for the others.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$s_0$, 270:physical, 180:virtual, 0:virtual}]{U}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$s_1$, 270:physical, 180:virtual, 0:virtual}]{U}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$s_{N-1}$, 270:physical, 180:virtual, 0:virtual}]{U}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$t_0$, 180:virtual, 0:virtual}]{U}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$t_1$, 180:virtual, 0:virtual}]{U}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$t_{N-1}$, 180:virtual, 0:virtual}]{U}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=\;\omega^N$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$s_0$, 270:physical:$t_0$}]{V} &
+        \tn[skin=mpo, ports={90:physical:$s_1$, 270:physical:$t_1$}]{V} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$s_{N-1}$, 270:physical:$t_{N-1}$}]{V}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Multiplication with length-dependent phases]
+    \label{thm:asymex_z3clock_table}
+    \lean{Z3Clock.mpo_clockTensor_mul, Z3Clock.mpo_u_mul_u, Z3Clock.mpo_u_mul_v,
+        Z3Clock.mpo_v_mul_u, Z3Clock.mpo_v_mul_v, Z3Clock.mpo_u_mul_u_mul_u}
+    \leanok
+    \uses{thm:asymex_z3clock_kernels}
+    On every periodic chain of $N>0$ qutrits,
+    \begin{align}
+        U_N^2  & =\omega^N V_N,       &
+        U_NV_N & =V_NU_N=\omega^N\Id, &
+        V_N^2  & =U_N,                &
+        U_N^3  & =\omega^{2N}\Id.
+    \end{align}
+    When $3\mid N$ these are the relations of $\Z_3$; otherwise the
+    representatives multiply only up to the phases $\omega^N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The product of $O_N(T_{g,f})$ and $O_N(T_{h,f'})$ is the shift by
+    $g+h$ with phase
+    $\omega^{\sum_k (f(t_k+h,t_{k+1}+h)+f'(t_k,t_{k+1}))}$. If
+    $f(a+h,b+h)+f'(a,b)=f''(a,b)+c+\kappa(a)-\kappa(b)$ for all $a,b$, the
+    terms $\kappa(t_k)-\kappa(t_{k+1})$ cancel around the chain and the
+    product is $\omega^{cN}O_N(T_{g+h,f''})$. For $U\cdot U$ one has
+    $(a+1)(b+1)+ab=(2ab+2b)+1+(a-b)$; for $U\cdot V$ and $V\cdot U$ the
+    left side is $2a+b+1=0+1+(2a-2b)$ modulo three; for $V\cdot V$ it is
+    $ab+(a-b)$. These are checked on the nine pairs $(a,b)$.
+\end{proof}
+
+\begin{theorem}[The condensation defect of an exact group representation]
+    \label{thm:asymex_group_cocycle_defect}
+    \lean{MPOTensor.GroupCocycle.isMPOFusionAlgebra, MPOTensor.GroupCocycle.sum_mpo_mul_sum_mpo,
+        Z3Clock.cocycleDefect, Z3Clock.cocycleDefect_mul_self}
+    \leanok
+    \uses{thm:asymex_group_cocycle_mul, def:mpo_fusion_algebra}
+    For every finite group $G$ and every three-cocycle, the periodic
+    operators $U_g$ of Definition~\ref{def:asymex_group_cocycle_tensor}
+    form a matrix product operator fusion algebra with structure constants
+    $N_{gh}^k=\delta_{k,gh}$, and $A_0=\sum_g U_g$ satisfies $A_0^2=\lvert G\rvert A_0$
+    at every positive length. For $\Z_3$ and the trivial cocycle,
+    $A_0^2=3A_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The first claim restates $U_gU_h=U_{gh}$. For the second,
+    $A_0^2=\sum_g\sum_h U_{gh}$, and for each $g$ the map $h\mapsto gh$
+    is a bijection of $G$, so every term $U_k$ occurs $\lvert G\rvert$ times.
+\end{proof}
+
+\begin{definition}[The clock condensation defect]
+    \label{def:asymex_z3clock_defect}
+    \lean{Z3Clock.defectTensor, Z3Clock.mpo_defectTensor}
+    \leanok
+    \uses{def:asymex_z3clock_tensors}
+    The defect $A=\delta\oplus U\oplus V$ is the block-diagonal tensor of
+    bond dimension $1+3+3$ whose blocks are the identity tensor $\delta$ and
+    the clock tensors $U$ and $V$. Its periodic operator is
+    $O_N(A)=\Id+U_N+V_N$.
+\end{definition}
+
+\begin{theorem}[Length-dependent fusion of the clock defect]
+    \label{thm:asymex_z3clock_defect_square}
+    \lean{Z3Clock.mpo_defect_mul_defect, Z3Clock.eq_of_smul_add_smul_add_smul_eq,
+        Z3Clock.defect_coeff_eq, Z3Clock.mpo_defect_mul_defect_eq_three_smul_iff,
+        Z3Clock.not_exists_const_defect_coeff}
+    \leanok
+    \uses{def:asymex_z3clock_defect, thm:asymex_z3clock_table}
+    On every periodic chain of length $N>0$,
+    \begin{align}
+        O_N(A)^2 & =(1+2\omega^N)\,\Id+3\,U_N+(2+\omega^N)\,V_N,
+    \end{align}
+    and the operators $\Id$, $U_N$ and $V_N$ are linearly independent, so
+    these coefficients are the unique ones. The coefficients are the power
+    sums of the weight multisets $\{1,\omega,\omega\}$, $\{1,1,1\}$ and
+    $\{1,1,\omega\}$. In particular $O_N(A)^2=3\,O_N(A)$ if and only if
+    $3\mid N$, and there are no coefficients independent of $N$ with
+    $O_N(A)^2=a\,\Id+b\,U_N+c\,V_N$ for every $N>0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expanding $(\Id+U_N+V_N)^2$ with
+    Theorem~\ref{thm:asymex_z3clock_table} gives
+    $\Id+3U_N+2V_N+\omega^NV_N+2\omega^N\Id$. The three operators shift the
+    constant configuration $0$ to the constant configurations $0$, $1$ and
+    $2$ respectively, each with phase one, so reading a combination of them
+    in these three entries recovers its coefficients. The coefficient of
+    $V_N$ is $2+\omega^N$, which equals $3$ exactly when $\omega^N=1$, that
+    is, when $3\mid N$; comparing the lengths $1$ and $3$ would force
+    $\omega=1$.
+\end{proof}
+
+\begin{theorem}[The clock family is not a fusion algebra]
+    \label{thm:asymex_z3clock_not_fusion_algebra}
+    \lean{Z3Clock.repBondDim, Z3Clock.repTensor, Z3Clock.not_isMPOFusionAlgebra}
+    \leanok
+    \uses{thm:asymex_z3clock_defect_square, def:mpo_fusion_algebra}
+    For no nonnegative integers $m_{ab}^{c}$, independent of the length, do
+    the periodic operators of $\delta$, $U$ and $V$ satisfy
+    $O_N(T_a)O_N(T_b)=\sum_cm_{ab}^{c}O_N(T_c)$ at every positive length.
+    In contrast, the group operators of the trivial cocycle form such an
+    algebra (Theorem~\ref{thm:asymex_group_cocycle_defect}).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Such constants would give $\omega^NV_N=U_N^2=m_{11}^{0}\Id+m_{11}^{1}U_N+m_{11}^{2}V_N$,
+    hence $\omega^N=m_{11}^{2}$ for every $N>0$ by linear independence, and
+    the lengths $1$ and $3$ give $\omega=1$.
+\end{proof}
+
+% The stacked square A.A has bond dimension 49 and, by the verification
+% record, the block triangular form of the multi-block compression theorem
+% with nine targets and 28 zero diagonal blocks. That compression is not
+% formalized; the fusion identity above is proved at the level of periodic
+% operators.

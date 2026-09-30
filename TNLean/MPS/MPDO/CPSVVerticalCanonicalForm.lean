@@ -3,9 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.CPSVFigureEight
-import TNLean.MPS.MPDO.CPSVVerticalBNT
-import TNLean.MPS.MPDO.VerticalCanonicalFormConstruction
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 
 /-!
 # Vertical canonical form from literal CPSV canonical form
@@ -45,11 +43,7 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem verticalCF_of_cpsvCanonicalForm (M : MPOTensor d D)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) :
-    IsVerticalCF M := by
-  apply verticalCF_of_grouping_and_gramDressing M
-  · exact hCanonical.exists_verticalBNTGrouping_with_isometry M hM
-  · intro n A VX VY X Y cX cY hcX hcY hcornerX hcornerY
-    exact hCanonical.gramDressing_eq_of_two_grouped_corners M hM
-      A VX VY X Y cX cY hcX hcY hcornerX hcornerY
+    IsVerticalCF M :=
+  (hCanonical.hasVerticalBNTGroupingInputs M hM).verticalCF
 
 end MPOTensor

@@ -253,40 +253,6 @@ theorem mergeCollapse2 {T B₁ B₂ K₁ H₂ : Finset V}
 
 /-! ### The product split over `P \ R = (S \ R) ⊔ (P \ S)` -/
 
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- For `R ⊆ S ⊆ P`, the vertex set `P \ R` is the disjoint union of `S \ R` and `P \ S`. -/
-theorem sdiff_union_sdiff_of_subset {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆ P) :
-    (S \ R) ∪ (P \ S) = P \ R := by
-  ext w
-  simp only [Finset.mem_union, Finset.mem_sdiff]
-  constructor
-  · rintro (⟨hwS, hwR⟩ | ⟨hwP, hwS⟩)
-    · exact ⟨hSP hwS, hwR⟩
-    · exact ⟨hwP, fun hwR => hwS (hRS hwR)⟩
-  · rintro ⟨hwP, hwR⟩
-    by_cases hwS : w ∈ S
-    · exact Or.inl ⟨hwS, hwR⟩
-    · exact Or.inr ⟨hwP, hwS⟩
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- `S \ R` and `P \ S` are disjoint. -/
-theorem sdiff_disjoint_sdiff {R S P : Finset V} : Disjoint (S \ R) (P \ S) := by
-  rw [Finset.disjoint_left]
-  rintro w hwSR hwPS
-  exact (Finset.mem_sdiff.mp hwPS).2 (Finset.mem_sdiff.mp hwSR).1
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- For `R ⊆ S ⊆ P`, `S \ R ⊆ P \ R`. -/
-theorem sdiff_subset_sdiff_left {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆ P) :
-    S \ R ⊆ P \ R := by
-  rw [← sdiff_union_sdiff_of_subset hRS hSP]; exact Finset.subset_union_left
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- For `R ⊆ S ⊆ P`, `P \ S ⊆ P \ R`. -/
-theorem sdiff_subset_sdiff_right {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆ P) :
-    P \ S ⊆ P \ R := by
-  rw [← sdiff_union_sdiff_of_subset hRS hSP]; exact Finset.subset_union_right
-
 omit [Fintype V] in
 /-- A vertex product over a region `B` that is the disjoint union `B₁ ∪ B₂` splits as the product
 over `B₁` against the product over `B₂`, each sub-block reading the physical leg `σ` restricted to
@@ -354,20 +320,20 @@ theorem threeBlockBlueCoeff_comp {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆
     (bcP : RegionBoundaryConfig (G := G) A (Finset.univ \ P)) :
     (∑ ν' : RegionBoundaryConfig (G := G) A S,
       (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff bdryR
-          (fun w => σ ⟨w.1, sdiff_subset_sdiff_left hRS hSP w.2⟩)
+          (fun w => σ ⟨w.1, Finset.sdiff_subset_sdiff_left _ hSP w.2⟩)
           (regionComplementBoundaryConfig (G := G) A S ν') *
         (nestedThreeBlockGeometry (V := V) hSP).threeBlockBlueCoeff
           (regionComplementBoundaryConfig (G := G) A S ν')
-          (fun w => σ ⟨w.1, sdiff_subset_sdiff_right hRS hSP w.2⟩)
+          (fun w => σ ⟨w.1, Finset.sdiff_subset_sdiff_right _ hRS w.2⟩)
           bcP) =
       regionInteriorBondProd (G := G) A (Finset.univ \ S) •
         (nestedThreeBlockGeometry (V := V) (hRS.trans hSP)).threeBlockBlueCoeff bdryR σ bcP := by
   classical
   -- Abbreviations for the two blue physical legs, restrictions of `σ` to `S \ R` and `P \ S`.
   let σ₁ : RegionPhysicalConfig (V := V) (d := d) (S \ R) :=
-    fun w => σ ⟨w.1, sdiff_subset_sdiff_left hRS hSP w.2⟩
+    fun w => σ ⟨w.1, Finset.sdiff_subset_sdiff_left _ hSP w.2⟩
   let σ₂ : RegionPhysicalConfig (V := V) (d := d) (P \ S) :=
-    fun w => σ ⟨w.1, sdiff_subset_sdiff_right hRS hSP w.2⟩
+    fun w => σ ⟨w.1, Finset.sdiff_subset_sdiff_right _ hRS w.2⟩
   change (∑ ν' : RegionBoundaryConfig (G := G) A S,
       (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff bdryR σ₁
           (regionComplementBoundaryConfig (G := G) A S ν') *
@@ -387,9 +353,10 @@ theorem threeBlockBlueCoeff_comp {R S P : Finset V} (hRS : R ⊆ S) (hSP : S ⊆
             regionBoundaryLabel (G := G) A (Finset.univ \ P) η = bcP),
         ∏ w : {w : V // w ∈ P \ R}, A.component w.1 (fun ie => η ie.1) (σ w)) = _
       refine Finset.sum_congr rfl (fun η _ => ?_)
-      exact regionProd_split (A := A) sdiff_disjoint_sdiff
-        (sdiff_union_sdiff_of_subset hRS hSP) η σ
-        (sdiff_subset_sdiff_left hRS hSP) (sdiff_subset_sdiff_right hRS hSP)]
+      exact regionProd_split (A := A) (B₁ := S \ R) (B₂ := P \ S)
+        (Finset.disjoint_sdiff.mono_left Finset.sdiff_subset)
+        ((Finset.union_comm _ _).trans (Finset.sdiff_union_sdiff_cancel hSP hRS)) η σ
+        (Finset.sdiff_subset_sdiff_left _ hSP) (Finset.sdiff_subset_sdiff_right _ hRS)]
   -- Transform the LHS: unfold the two blue couplings and reindex the `ν'` sum.
   rw [show (∑ ν' : RegionBoundaryConfig (G := G) A S,
         (nestedThreeBlockGeometry (V := V) hRS).threeBlockBlueCoeff bdryR σ₁

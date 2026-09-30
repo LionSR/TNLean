@@ -20,6 +20,13 @@ No comparison with the two-site vertical canonical form is included here.  In
 particular, the definitions do not assume the eventual power-sum equality, a
 multiplicity-spectrum comparison, fusion isometries, or renormalization maps.
 
+## Main results
+
+* `CPSVVerticalDecomposition`: a vertical canonical decomposition retaining the
+  source basis-of-normal-tensors predicate.
+* `BNTAlgebraTensorClause`: such a decomposition together with the algebra
+  conditions of Theorem 4.14(ii).
+
 ## References
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
@@ -90,10 +97,67 @@ theorem verticalBNTTraceScalarFamily_traceScalar {g : ℕ} {mult : Fin g → ℕ
     (verticalBNTTraceScalarFamily ω).traceScalar α = ∑ q, ω α q :=
   rfl
 
+/-- A vertical canonical decomposition which retains the CPSV16
+basis-of-normal-tensors predicate.
+
+The ordinary predicate `IsVerticalCF` records the algebraic BNT predicate used
+elsewhere in the project.  The comparison of the one-site and two-site
+decompositions in CPSV16, Appendix C.4, additionally uses the literal CPSV16
+basis predicate.  This structure retains that assertion together with the
+positive diagonal weights and both coisometric decomposition identities.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 943--951 and
+lines 1863--1921. -/
+structure CPSVVerticalDecomposition (M : MPOTensor d D) where
+  /-- Number of BNT labels in the chosen vertical decomposition. -/
+  labelCount : ℕ
+  /-- Bond dimension of each vertical BNT tensor. -/
+  bondDim : Fin labelCount → ℕ
+  /-- Dimension of the positive diagonal matrix \(\mu_\alpha\). -/
+  multiplicity : Fin labelCount → ℕ
+  /-- Positive diagonal entries of \(\mu_\alpha\). -/
+  weight : (α : Fin labelCount) → Fin (multiplicity α) → ℂ
+  /-- The chosen vertical basis of normal tensors \(M_\alpha\). -/
+  tensor : (α : Fin labelCount) → MPSTensor (D * D) (bondDim α)
+  /-- The coisometry from the original physical space onto the retained
+  vertical sectors. -/
+  verticalCoisometry : Matrix
+    (Fin (∑ q : Fin (∑ α : Fin labelCount, multiplicity α),
+      verticalCopyDim bondDim multiplicity q)) (Fin d) ℂ
+  /-- Every BNT label occurs with a nonempty multiplicity space.
+
+  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
+  multiplicity_pos : ∀ α, 0 < multiplicity α
+  /-- Every diagonal entry of \(\mu_\alpha\) is positive.
+
+  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
+  weight_pos : ∀ α q, (0 : ℂ) < weight α q
+  /-- The chosen tensors form a CPSV16 basis of normal tensors of the vertical
+  tensor.
+
+  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
+  isCPSVBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+    (fun α ↦ ⟨bondDim α, tensor α⟩)
+  /-- The vertical change of basis is a coisometry onto the retained sectors.
+
+  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
+  coisometry : verticalCoisometry * verticalCoisometryᴴ = 1
+  /-- Conjugating the vertical tensor gives the weighted BNT direct sum.
+
+  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
+  forward : ∀ ab, verticalCoisometry * verticalTensor M ab * verticalCoisometryᴴ =
+    verticalAssembledTensor bondDim multiplicity weight tensor ab
+  /-- The weighted BNT direct sum reconstructs the vertical tensor, including
+  the possible zero-sector complement.
+
+  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
+  reconstruction : ∀ ab, verticalTensor M ab = verticalCoisometryᴴ *
+    verticalAssembledTensor bondDim multiplicity weight tensor ab * verticalCoisometry
+
 /-- The algebra clause of Theorem 4.14(ii), attached to a chosen vertical
 canonical decomposition of the MPO tensor \(M\).
 
-The fields through `reconstruction` are precisely a witness of the vertical
+The underlying `CPSVVerticalDecomposition M` is a witness of the vertical
 canonical form
 \[
   U\widetilde M U^\dagger
@@ -114,54 +178,8 @@ implication (ii) to (i), not part of statement (ii).
 Source: arXiv:1606.00608, Proposition 4.13, lines 943--951; Theorem 4.14(ii),
 lines 972--993; and Appendix C.4, lines 2046--2064 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-structure BNTAlgebraTensorClause (M : MPOTensor d D) where
-  /-- Number of BNT labels in the chosen vertical decomposition. -/
-  labelCount : ℕ
-  /-- Bond dimension of each vertical BNT tensor. -/
-  bondDim : Fin labelCount → ℕ
-  /-- Dimension of the positive diagonal matrix \(\mu_\alpha\). -/
-  multiplicity : Fin labelCount → ℕ
-  /-- Positive diagonal entries of \(\mu_\alpha\). -/
-  weight : (α : Fin labelCount) → Fin (multiplicity α) → ℂ
-  /-- The chosen vertical basis of normal tensors \(M_\alpha\). -/
-  tensor : (α : Fin labelCount) → MPSTensor (D * D) (bondDim α)
-  /-- The coisometry from the original physical space onto the retained
-  vertical sectors. -/
-  verticalCoisometry :
-    Matrix
-      (Fin (∑ q : Fin (∑ α : Fin labelCount, multiplicity α),
-        verticalCopyDim bondDim multiplicity q)) (Fin d) ℂ
-  /-- Every BNT label occurs with a nonempty multiplicity space.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  multiplicity_pos : ∀ α, 0 < multiplicity α
-  /-- Every diagonal entry of \(\mu_\alpha\) is positive.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  weight_pos : ∀ α q, (0 : ℂ) < weight α q
-  /-- The vertical change of basis is a coisometry onto the retained sectors.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  coisometry : verticalCoisometry * (verticalCoisometry)ᴴ = 1
-  /-- The chosen tensors form a CPSV16 basis of normal tensors of the vertical tensor.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  isCPSVBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
-    (fun α ↦ ⟨bondDim α, tensor α⟩)
-  /-- Conjugating the vertical tensor gives the weighted BNT direct sum.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  forward : ∀ v : Fin (D * D),
-    verticalCoisometry * verticalTensor M v * (verticalCoisometry)ᴴ =
-      verticalAssembledTensor bondDim multiplicity weight tensor v
-  /-- The weighted BNT direct sum reconstructs the vertical tensor, including
-  the possible zero-sector complement.
-
-  Source: arXiv:1606.00608, Proposition 4.13, lines 948--951. -/
-  reconstruction : ∀ v : Fin (D * D),
-    verticalTensor M v = (verticalCoisometry)ᴴ *
-      verticalAssembledTensor bondDim multiplicity weight tensor v *
-        verticalCoisometry
+structure BNTAlgebraTensorClause (M : MPOTensor d D)
+    extends CPSVVerticalDecomposition M where
   /-- The coefficient family \(c^{(L)}_{\alpha,\beta,\gamma}\). -/
   coeffs : BNTLabelCoefficientFamily (Fin labelCount)
   /-- The positive chi trace-power law, the concrete same-length product law,
@@ -173,12 +191,6 @@ structure BNTAlgebraTensorClause (M : MPOTensor d D) where
     (verticalBNTOperatorFamily tensor) (verticalBNTTraceScalarFamily weight)
 
 namespace BNTAlgebraTensorClause
-
-/-- The source BNT predicate in the tensor clause entails the algebraic BNT
-predicate for its chosen vertical decomposition. -/
-theorem isBNT {M : MPOTensor d D} (H : BNTAlgebraTensorClause M) :
-    MPSTensor.IsBNT (verticalTensor M) H.labelCount H.bondDim H.tensor :=
-  H.isCPSVBNT.isBNT
 
 variable {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
 

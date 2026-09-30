@@ -1,0 +1,345 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.Algebra.UnitaryEntrywiseConjugation
+import TNLean.MPS.Core.Blocking
+import TNLean.MPS.FundamentalTheorem.InjectivePhase
+import TNLean.MPS.SharedInfra.CoisometryGauge
+import TNLean.MPS.Symmetry.GaugeUniqueness
+
+/-!
+# Time-reversal and reflection indices of normal MPS; the Kramers obstruction
+
+**Source.** Cirac, Pérez-García, Schuch, Verstraete (arXiv:2011.12127), §III.A,
+`Papers/2011.12127/TN-Review-main.tex` lines 1085–1086 (eq. `eq:XAX=B`), lines
+1116–1117 (time reversal and the Kramers obstruction) and line 1120 (reflection):
+for a normal tensor with `A*ⁱ = e^{iφ} X† Aⁱ X`, applying the symmetry twice gives
+`Aⁱ = (X X*)† Aⁱ (X X*)`, so `X X* = ±1`, a topological index; for the Wigner time
+reversal `Aⁱ ↦ ∑ⱼ (σ_y)ᵢⱼ A*ʲ` the same computation gives `Aⁱ = -Aⁱ` up to gauge,
+so no normal tensor carries that symmetry.  Reflection acts by transposition,
+`(Aⁱ)ᵀ = e^{iφ} X† Aⁱ X`, with the same index.
+
+**Formalized here.**
+* The time-reversal index: for a normal tensor, a physical matrix `P` with
+  `P P* = 1` (the on-site part of time reversal, `P = 1` for pure time reversal)
+  and a unitary gauge `X` with `∑ⱼ Pᵢⱼ A*ʲ = ζ X† Aⁱ X`, `X X* = 1` or `X X* = -1`,
+  and the sign does not depend on the choice of the unitary gauge.
+* The reflection index: the same conclusions for `(Aⁱ)ᵀ = ζ X† Aⁱ X`.
+* The Kramers obstruction: if `P P* = -1` (as for `σ_y`), no normal tensor of
+  positive bond dimension satisfies `∑ⱼ Pᵢⱼ A*ʲ = ζ X⁻¹ Aⁱ X` with `X` invertible;
+  for injective tensors this excludes invariance of the matrix product vectors up to
+  a phase at every length under the time reversal.
+
+The source derives the gauge relations from the fundamental theorem for
+symmetric states; the index statements here start from the gauge relations.
+
+## Main results
+
+* `MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge`
+* `MPSTensor.mul_map_star_eq_of_timeReversal_gauges`
+* `MPSTensor.mul_map_star_eq_one_or_neg_one_of_reflection_gauge`
+* `MPSTensor.mul_map_star_eq_of_reflection_gauges`
+* `MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one`
+* `MPSTensor.not_wignerTimeReversal_gauge`
+* `MPSTensor.not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective`
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- Cirac, Pérez-García,
+  Schuch, Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-! ### The involution index `X X* = ±1` -/
+
+/-- Core of the index lemmas: if applying a symmetry twice returns
+`Aⁱ = c (X X*)† Aⁱ (X X*)` for a unitary `X` and a normal tensor `A`, then
+`X X* = ±1`. -/
+theorem mul_map_star_eq_one_or_neg_one_of_twice [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) (X : Matrix.unitaryGroup (Fin D) ℂ) {c : ℂ}
+    (h : ∀ i, A i = c • (((X : Matrix (Fin D) (Fin D) ℂ) *
+      (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ))ᴴ * A i *
+        ((X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)))) :
+    (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
+      (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1 := by
+  let Xb : Matrix.unitaryGroup (Fin D) ℂ := Matrix.UnitaryGroup.map_star X
+  let W : Matrix.unitaryGroup (Fin D) ℂ := X * Xb
+  have hW : ((W : Matrix.unitaryGroup (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) := rfl
+  obtain ⟨-, u, hu⟩ := gauge_phase_unique_of_isNormal hA (X := 1) (Y := unitaryGL W) (c := c)
+    (fun i => by simpa [unitaryGL, hW, Matrix.star_eq_conjTranspose] using h i)
+  -- `1 = u W`, so `W = u⁻¹ · 1`.
+  have hWs : (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
+      ((u⁻¹ : Units ℂ) : ℂ) • 1 := by
+    have h1 : ((u⁻¹ : Units ℂ) : ℂ) • (1 : Matrix (Fin D) (Fin D) ℂ) =
+        ((u⁻¹ : Units ℂ) : ℂ) • ((u : ℂ) • (W : Matrix (Fin D) (Fin D) ℂ)) := by
+      simpa [unitaryGL] using congrArg (((u⁻¹ : Units ℂ) : ℂ) • ·) hu
+    rw [smul_smul, Units.inv_mul, one_smul] at h1
+    rw [← hW, h1]
+  have := Matrix.scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one X _ hWs
+  rcases this with h1 | h1
+  · left; rw [hWs, h1, one_smul]
+  · right; rw [hWs, h1, neg_one_smul]
+
+/-- Two unitary matrices that differ by a scalar have the same involution index
+`X X*`: the scalar has unit modulus and cancels against its conjugate. -/
+theorem mul_map_star_eq_of_eq_smul (X Y : Matrix.unitaryGroup (Fin D) ℂ) [NeZero D] {u : ℂ}
+    (h : (X : Matrix (Fin D) (Fin D) ℂ) = u • (Y : Matrix (Fin D) (Fin D) ℂ)) :
+    (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
+      (Y : Matrix (Fin D) (Fin D) ℂ) * (Y : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) := by
+  have hXX := Matrix.mem_unitaryGroup_iff.mp X.2
+  have hYY := Matrix.mem_unitaryGroup_iff.mp Y.2
+  have hu : u * starRingEnd ℂ u = 1 := by
+    rw [h, Matrix.star_eq_conjTranspose, Matrix.conjTranspose_smul, Matrix.smul_mul,
+      Matrix.mul_smul, smul_smul, ← Matrix.star_eq_conjTranspose, hYY] at hXX
+    have h0 := congrFun (congrFun hXX 0) 0
+    simpa [Matrix.one_apply] using h0
+  rw [h, Matrix.map_smul', Matrix.smul_mul, Matrix.mul_smul, smul_smul]
+  · simp [hu]
+  · intro a b; simp
+
+private lemma map_conj_smul_mul_mul (a : ℂ) (M N P : Matrix (Fin D) (Fin D) ℂ) :
+    (a • (M * N * P)).map (starRingEnd ℂ) = starRingEnd ℂ a •
+      (M.map (starRingEnd ℂ) * N.map (starRingEnd ℂ) * P.map (starRingEnd ℂ)) := by
+  ext; simp [Matrix.mul_apply, Finset.mul_sum, Finset.sum_mul]
+
+private lemma conjTranspose_mul_map_star (M : Matrix (Fin D) (Fin D) ℂ) :
+    (M * M.map (starRingEnd ℂ))ᴴ = (Mᴴ).map (starRingEnd ℂ) * Mᴴ := by
+  rw [Matrix.conjTranspose_mul]; congr 1
+
+/-- Applying the antiunitary twist `Bⁱ ↦ ∑ⱼ Pᵢⱼ B*ʲ` twice is the linear twist by `P P*`. -/
+private lemma antiunitaryTwist_twice (A : MPSTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    (i : Fin d) :
+    ∑ j : Fin d, P i j • (∑ k : Fin d, P j k • (A k).map (starRingEnd ℂ)).map (starRingEnd ℂ) =
+      ∑ k : Fin d, (P * P.map (starRingEnd ℂ)) i k • A k := by
+  ext a b
+  simp only [Matrix.sum_apply, Matrix.smul_apply, Matrix.map_apply, smul_eq_mul, map_sum,
+    map_mul, Complex.conj_conj, Matrix.mul_apply, Finset.mul_sum, Finset.sum_mul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun j _ => ?_
+  ring
+
+/-- The antiunitary twist of a transformed family: if `Bʲ = ζ M Aʲ N`, then
+`∑ⱼ Pᵢⱼ B*ʲ = ζ* M* (∑ⱼ Pᵢⱼ A*ʲ) N*`. -/
+private lemma antiunitaryTwist_smul_mul_mul (A : MPSTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
+    (M N : Matrix (Fin D) (Fin D) ℂ) (ζ : ℂ) (i : Fin d) :
+    ∑ j : Fin d, P i j • (ζ • (M * A j * N)).map (starRingEnd ℂ) =
+      starRingEnd ℂ ζ • (M.map (starRingEnd ℂ) *
+        (∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ)) * N.map (starRingEnd ℂ)) := by
+  simp only [map_conj_smul_mul_mul, Finset.mul_sum, Finset.sum_mul, Finset.smul_sum,
+    Matrix.mul_smul, Matrix.smul_mul, smul_smul, mul_comm]
+
+/-- **Time-reversal index.**
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+lines 1116–1117 and 1120): time reversal acts on an MPS tensor as
+`Aⁱ ↦ ∑ⱼ Pᵢⱼ A*ʲ`, with `A*` the entrywise conjugate and `P` its on-site part
+(`P = 1` for pure time reversal), and for a normal tensor with
+`∑ⱼ Pᵢⱼ A*ʲ = e^{iφ} X† Aⁱ X` "this is only possible for `X X* = ±1`".  Here
+`P P* = 1`, so that time reversal squares to the identity on the site, and `X` is
+unitary. -/
+theorem mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) {P : Matrix (Fin d) (Fin d) ℂ}
+    (hP : P * P.map (starRingEnd ℂ) = 1) (X : Matrix.unitaryGroup (Fin D) ℂ) {ζ : ℂ}
+    (h : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X)) :
+    (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
+      (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1 := by
+  refine mul_map_star_eq_one_or_neg_one_of_twice hA X (c := starRingEnd ℂ ζ * ζ) fun i => ?_
+  have h1 := antiunitaryTwist_twice A P i
+  rw [hP] at h1
+  simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
+    Finset.mem_univ, ite_true] at h1
+  calc A i = ∑ j : Fin d, P i j • (∑ k : Fin d, P j k • (A k).map (starRingEnd ℂ)).map
+        (starRingEnd ℂ) := h1.symm
+    _ = ∑ j : Fin d, P i j • (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A j * X)).map
+        (starRingEnd ℂ) := Finset.sum_congr rfl fun j _ => by rw [h j]
+    _ = starRingEnd ℂ ζ • (((X : Matrix (Fin D) (Fin D) ℂ)ᴴ).map (starRingEnd ℂ) *
+        (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X)) *
+          (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) := by
+        rw [antiunitaryTwist_smul_mul_mul, h i]
+    _ = _ := by
+        rw [conjTranspose_mul_map_star]
+        simp only [Matrix.mul_smul, Matrix.smul_mul, smul_smul, Matrix.mul_assoc]
+
+/-- **The time-reversal and reflection indices do not depend on the gauge.**
+Two unitary gauges related to the same normal tensor by `ζ X† Aⁱ X = ζ' X'† Aⁱ X'`,
+with `ζ ≠ 0`, have the same involution index `X X* = X' X*'`.  Source:
+arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1117), where
+`±1` is called a topological index. -/
+theorem mul_map_star_eq_of_gauges [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsNormal A)
+    (X X' : Matrix.unitaryGroup (Fin D) ℂ) {ζ ζ' : ℂ} (hζ : ζ ≠ 0)
+    (h : ∀ i, ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X) =
+      ζ' • ((X' : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X')) :
+    (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
+      (X' : Matrix (Fin D) (Fin D) ℂ) * (X' : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) := by
+  obtain ⟨-, u, hu⟩ := gauge_phase_unique_of_isNormal hA (X := unitaryGL X)
+    (Y := unitaryGL X') (c := ζ⁻¹ * ζ') (fun i => by
+      have hi := congrArg (ζ⁻¹ • ·) (h i)
+      simp only [smul_smul, inv_mul_cancel₀ hζ, one_smul] at hi
+      simpa [unitaryGL, Matrix.star_eq_conjTranspose] using hi)
+  exact mul_map_star_eq_of_eq_smul X X' (u := u) (by simpa [unitaryGL] using hu)
+
+/-- **Reflection index.**
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+line 1120): reflection acts on an MPS tensor by transposition, and for a normal
+tensor with `(Aⁱ)ᵀ = e^{iφ} X† Aⁱ X` the argument of the time-reversal case gives
+`X X* = ±1`.  Here `X` is unitary. -/
+theorem mul_map_star_eq_one_or_neg_one_of_reflection_gauge [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) (X : Matrix.unitaryGroup (Fin D) ℂ) {ζ : ℂ}
+    (h : ∀ i, (A i)ᵀ = ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X)) :
+    (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
+      (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1 := by
+  refine mul_map_star_eq_one_or_neg_one_of_twice hA X (c := ζ * ζ) fun i => ?_
+  have e : ∀ M : Matrix (Fin D) (Fin D) ℂ,
+      (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * M * (X : Matrix (Fin D) (Fin D) ℂ)))ᵀ =
+      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᵀ * Mᵀ * ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ)ᵀ) := by
+    intro M
+    rw [Matrix.transpose_smul, Matrix.transpose_mul, Matrix.transpose_mul, Matrix.mul_assoc]
+  calc A i = ((A i)ᵀ)ᵀ := (Matrix.transpose_transpose _).symm
+    _ = (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (X : Matrix (Fin D) (Fin D) ℂ)))ᵀ := by
+        rw [h i]
+    _ = ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᵀ * (A i)ᵀ * ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ)ᵀ) := e _
+    _ = ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᵀ * (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X)) *
+          ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ)ᵀ) := by rw [h i]
+    _ = _ := by
+      rw [conjTranspose_mul_map_star]
+      have h1 : ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ).map (starRingEnd ℂ) =
+          (X : Matrix (Fin D) (Fin D) ℂ)ᵀ := by ext; simp
+      have h2 : ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ)ᵀ =
+          (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) := by ext; simp
+      rw [h1, h2]
+      simp only [Matrix.mul_smul, Matrix.smul_mul, smul_smul, Matrix.mul_assoc]
+
+/-- A normal tensor of positive bond dimension admits no vanishing gauge phase:
+`A*ⁱ = 0 · X† Aⁱ X` (or `(Aⁱ)ᵀ = 0`) would make every letter zero. -/
+private lemma ne_zero_of_map_eq_smul [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsNormal A)
+    (f : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ) (hf : ∀ M, f M = 0 → M = 0)
+    {X : Matrix (Fin D) (Fin D) ℂ} {ζ : ℂ} (h : ∀ i, f (A i) = ζ • (Xᴴ * A i * X)) : ζ ≠ 0 := by
+  rintro rfl
+  obtain ⟨i, hi⟩ := exists_apply_ne_zero_of_isNormal hA
+  exact hi (hf _ (by simpa using h i))
+
+/-- **The time-reversal index does not depend on the unitary gauge.**
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+line 1117): "`±1` is a topological index". -/
+theorem mul_map_star_eq_of_timeReversal_gauges [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) {P : Matrix (Fin d) (Fin d) ℂ}
+    (hP : P * P.map (starRingEnd ℂ) = 1) (X X' : Matrix.unitaryGroup (Fin D) ℂ) {ζ ζ' : ℂ}
+    (h : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X))
+    (h' : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+      ζ' • ((X' : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X')) :
+    (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
+      (X' : Matrix (Fin D) (Fin D) ℂ) * (X' : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) := by
+  refine mul_map_star_eq_of_gauges hA X X' ?_ (fun i => (h i).symm.trans (h' i))
+  rintro rfl
+  obtain ⟨i, hi⟩ := exists_apply_ne_zero_of_isNormal hA
+  apply hi
+  have h1 := antiunitaryTwist_twice A P i
+  rw [hP] at h1
+  simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
+    Finset.mem_univ, ite_true] at h1
+  rw [← h1]
+  simp [h]
+
+/-- **The reflection index does not depend on the unitary gauge.**
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+lines 1117–1120). -/
+theorem mul_map_star_eq_of_reflection_gauges [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) (X X' : Matrix.unitaryGroup (Fin D) ℂ) {ζ ζ' : ℂ}
+    (h : ∀ i, (A i)ᵀ = ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X))
+    (h' : ∀ i, (A i)ᵀ = ζ' • ((X' : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X')) :
+    (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
+      (X' : Matrix (Fin D) (Fin D) ℂ) * (X' : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) :=
+  mul_map_star_eq_of_gauges hA X X'
+    (ne_zero_of_map_eq_smul hA (fun M => Mᵀ) (fun M hM => by
+      rw [← Matrix.transpose_transpose M, hM, Matrix.transpose_zero]) h)
+    (fun i => (h i).symm.trans (h' i))
+
+/-! ### The Kramers obstruction -/
+
+/-- **Kramers obstruction for a physical time reversal squaring to `-1`.**
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+line 1117) and §III.C, paragraph "Kramers theorem and Lieb-Schultz-Mattis"
+(line 1218): if time reversal acts as `Aⁱ ↦ ∑ⱼ Pᵢⱼ A*ʲ` with `P P* = -1`, applying it
+twice gives `-Aⁱ = |ζ|² (X X*)⁻¹ Aⁱ (X X*)`, which eq. `eq:XAX=B` rules out.  So no
+normal tensor of positive bond dimension admits a gauge `X` and a scalar `ζ` with
+`∑ⱼ Pᵢⱼ A*ʲ = ζ X⁻¹ Aⁱ X`. -/
+theorem not_timeReversal_gauge_of_mul_map_star_eq_neg_one [NeZero D] {A : MPSTensor d D}
+    (hA : Kraus.IsNormal A) {P : Matrix (Fin d) (Fin d) ℂ}
+    (hP : P * P.map (starRingEnd ℂ) = -1) (X : GL (Fin D) ℂ) (ζ : ℂ)
+    (h : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+      ζ • (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X)) : False := by
+  let Xb : GL (Fin D) ℂ := Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X
+  have hXb : (Xb : Matrix (Fin D) (Fin D) ℂ) = (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) :=
+    rfl
+  have hXbinv : ((Xb⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) := by
+    simp only [Xb, ← Matrix.GeneralLinearGroup.map_inv]; rfl
+  have htwice : ∀ i, A i = (-(starRingEnd ℂ ζ * ζ)) •
+      ((((X * Xb)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (X * Xb : GL (Fin D) ℂ)) := by
+    intro i
+    have h1 := antiunitaryTwist_twice A P i
+    rw [hP] at h1
+    simp only [Matrix.neg_apply, Matrix.one_apply, neg_smul, ite_smul, one_smul, zero_smul,
+      Finset.sum_neg_distrib, Finset.sum_ite_eq, Finset.mem_univ, ite_true] at h1
+    simp_rw [h] at h1
+    rw [antiunitaryTwist_smul_mul_mul, h i, ← hXbinv, ← hXb] at h1
+    calc A i = -(-A i) := (neg_neg _).symm
+      _ = -(starRingEnd ℂ ζ • (((Xb⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
+            (ζ • (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X)) * Xb)) := by
+          rw [h1]
+      _ = _ := by
+          simp only [mul_inv_rev, Units.val_mul, Matrix.mul_smul, Matrix.smul_mul, smul_smul,
+            Matrix.mul_assoc, neg_smul]
+  obtain ⟨hc, -⟩ := gauge_phase_unique_of_isNormal hA (X := 1) (Y := X * Xb)
+    (c := -(starRingEnd ℂ ζ * ζ)) (fun i => by simpa using htwice i)
+  have hre := congrArg Complex.re hc
+  rw [Complex.conj_mul', ← Complex.ofReal_pow, Complex.neg_re, Complex.ofReal_re,
+    Complex.one_re] at hre
+  nlinarith [sq_nonneg ‖ζ‖]
+
+/-- The Pauli matrix `σ_y = !![0, -i; i, 0]`. -/
+def pauliY : Matrix (Fin 2) (Fin 2) ℂ := !![0, -Complex.I; Complex.I, 0]
+
+/-- `σ_y σ*_y = -1`: the Wigner time reversal of a spin `1/2` squares to `-1`. -/
+theorem pauliY_mul_map_star : pauliY * pauliY.map (starRingEnd ℂ) = -1 := by
+  ext a b
+  fin_cases a <;> fin_cases b <;> simp [pauliY, Matrix.mul_apply, Fin.sum_univ_two]
+
+/-- **Kramers obstruction for spin `1/2`.**
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+line 1117): with time reversal `Aⁱ ↦ ∑ⱼ (σ_y)ᵢⱼ A*ʲ`, as in Wigner's treatment of
+spin `1/2`, no normal tensor of positive bond dimension is time-reversal symmetric:
+there is no gauge `X` and scalar `ζ` with `∑ⱼ (σ_y)ᵢⱼ A*ʲ = ζ X⁻¹ Aⁱ X`. -/
+theorem not_wignerTimeReversal_gauge [NeZero D] {A : MPSTensor 2 D} (hA : Kraus.IsNormal A)
+    (X : GL (Fin D) ℂ) (ζ : ℂ)
+    (h : ∀ i, ∑ j : Fin 2, pauliY i j • (A j).map (starRingEnd ℂ) =
+      ζ • (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X)) : False :=
+  not_timeReversal_gauge_of_mul_map_star_eq_neg_one hA pauliY_mul_map_star X ζ h
+
+/-- **No injective spin-`1/2` MPS is invariant under the Wigner time reversal.**
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+lines 1116–1117): the ground state of a system with this symmetry cannot be an injective
+MPS.  Invariance is up to a phase: for every positive length `N`, the vector of the
+time-reversed tensor `∑ⱼ (σ_y)ᵢⱼ A*ʲ` is `c_N |ψ_N(A)⟩` with `|c_N| = 1`.  The fundamental
+theorem for injective tensors up to a phase turns this into a gauge relation, which
+`not_wignerTimeReversal_gauge` excludes. -/
+theorem not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective [NeZero D]
+    {A : MPSTensor 2 D} (hA : Kraus.IsInjective A) :
+    ¬ ∀ N, 0 < N → ∃ c : ℂ, ‖c‖ = 1 ∧ ∀ σ : Fin N → Fin 2,
+      mpv (fun i => ∑ j : Fin 2, pauliY i j • (A j).map (starRingEnd ℂ)) σ = c * mpv A σ := by
+  intro hinv
+  obtain ⟨X, ζ, -, hX⟩ := unitGaugePhaseEquiv_of_mpv_eq_smul_of_isInjective hA hinv
+  exact not_wignerTimeReversal_gauge hA.isNormal X⁻¹ ζ (fun i => by simpa using hX i)
+
+end MPSTensor

@@ -12,7 +12,7 @@
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
          & =
         \Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
-        \notag
+        \label{eq:boundary_crossing_restriction_match}
     \end{align}
     Then there are boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ such that, for every complementary position $k$,
@@ -38,8 +38,9 @@
 
 \begin{proof}
     \leanok
-    For the product indexed by $j$ and $\sigma$, specialize the preceding
-    equality at the outside letter $\eta=j$. Take
+    For the product indexed by $j$ and $\sigma$, specialize
+    (\ref{eq:boundary_crossing_restriction_match}) at the outside letter
+    $\eta=j$. Take
     $\rho^+_{j,\sigma}=\tau^+_j(\mu)$ and
     $\rho^-_{j,\sigma}=\tau^-_j(\mu)$. The complement equations are the two
     identities of Lemma~\ref{lem:wrapped_middle_backgrounds}. Fix $j$. Applying
@@ -413,12 +414,10 @@
         \mu_k,
         \notag
     \end{align}
-    and put the letter $\eta$ on the remaining sites. The notation
-    $\tau^\pm_\eta(\mu)$ is a coordinate parametrization for the comparison used
-    at the periodic boundary in \cite[Section~IV.C, lines~2078--2079]
-    {Cirac2021Matrix}; it is not notation
-    from the source. The corresponding boundary-crossing restriction equality
-    is
+    and assign the letter $\eta$ to the remaining sites, following the coordinate
+    parametrization of the periodic-boundary comparison in
+    \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}.
+    The corresponding boundary-crossing restriction equality is
     \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
          & =

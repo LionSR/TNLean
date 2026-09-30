@@ -2,9 +2,8 @@
 
 The source states its Lemma~5 for site-dependent tensors: five sites
 carrying tensors $A_1, \ldots, A_5$ whose two-site windows are injective.
-The entries above specialize to one repeated tensor; the remaining entries
-of this section formalize the site-dependent setting itself. A closed
-chain carries one tensor per site, windows are arcs of consecutive sites,
+While the previous results focus on a repeated tensor, the site-dependent setting
+treats chains carrying a distinct tensor per site. Windows are arcs of consecutive sites,
 and the closed-chain corollary delivers one gauge per bond. Most of the
 matrix-chain statements below take one physical dimension $d$ and one bond
 dimension $D$. For the Applications-section translational-invariance
@@ -234,7 +233,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     matrices $Z_v$, one per bond of the closed chain, with
     $B_v^i=Z_vA_v^iZ_{v+1}^{-1}$ for every site $v$ and every $i$, with
     indices read cyclically. This is the closed-chain corollary of the
-    closing section of \cite{Molnar2018NormalPEPS} assembled from its
+    closing section of \cite{Molnar2018NormalPEPS} obtained from its
     site-dependent Lemma~5 at every bond; the source displays the corollary
     for translation-invariant tensors
     (Corollary~\ref{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}),
@@ -695,12 +694,9 @@ dimensions; this uniform-dimension restriction is the only narrowing.
     the normal blocking hypotheses. Then their defining tensors are related by
     a local gauge.
     This is the vertex-injective specialization of the general normal-PEPS
-    theorem: when each single tensor is already injective the gauge follows
-    from the injective Fundamental Theorem, so the region blocking hypotheses
-    are not used. The general region-injective theorem, in which only blocked
-    regions are injective, remains open; the missing step is the
-    region-level insertion-algebra isomorphism that produces the per-edge gauge
-    after blocking.
+    theorem: when each single tensor is already injective, the gauge follows
+    from the injective Fundamental Theorem, without requiring the region blocking
+    hypotheses.
 \end{theorem}
 \begin{proof}\leanok
     Vertex injectivity, positive bond dimensions, same state, and connectivity

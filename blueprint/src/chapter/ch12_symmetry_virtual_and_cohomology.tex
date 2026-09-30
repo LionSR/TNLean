@@ -1,9 +1,8 @@
 \section{Virtual Local Covariance and Projective Bond Actions}
 \label{sec:injective_symmetry_cocycle}
 
-With a full group of on-site symmetries (rather than just a single
-unitary), the resulting gauges determine a projective representation
-on the bond space.
+When an MPS is invariant under an on-site group action, the resulting virtual
+gauge transformations form a projective representation on the bond space.
 
 \begin{definition}[Twisted tensor]\label{def:twisted_tensor}
     \lean{MPSTensor.twistedTensor}
@@ -23,14 +22,30 @@ on the bond space.
     \lean{MPSTensor.IsOnSiteSymmetric}
     \leanok
     \uses{def:twisted_tensor, def:same_mpv}
-    The predicate called on-site symmetry requires
-    $\mc{V}(A)=\mc{V}(\widetilde A_g)$ for every $g\in G$, where
-    $U:G\to\GL_d(\C)$ acts on the physical index.  This is equality of
-    periodic MPV families and is the hypothesis used to construct virtual
-    local gauges.  It is not, by itself, the source notion that every reduced
-    density operator of an infinite physical state is invariant under
-    $U(g)^{\otimes N}$.
+    An MPS tensor $A$ has \emph{on-site symmetry} under a representation
+    $U:G\to\GL_d(\C)$ if $\mc{V}(A)=\mc{V}(\widetilde A_g)$ for every $g\in G$.
+    This equality of periodic MPV families provides the condition for constructing
+    virtual symmetry gauges.
 \end{definition}
+
+\begin{lemma}[On-site symmetry under rescaling and gauge]\label{lem:on_site_symmetric_smul_gauge}
+    \lean{MPSTensor.IsOnSiteSymmetric.smul, MPSTensor.IsOnSiteSymmetric.of_gaugeEquiv}
+    \leanok
+    \uses{def:on_site_symmetric, def:gauge_equiv, thm:gauge_invariance}
+    If $A$ has on-site symmetry under $U$, then so does $cA$ for every
+    $c\in\C$, and so does every tensor gauge equivalent to $A$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:twisted_tensor, thm:gauge_invariance}
+    Twisting commutes with rescaling, $\widetilde{(cA)}_g=c\,\widetilde A_g$, and
+    the $N$-site coefficients of $cB$ are $c^N$ times those of $B$. If
+    $B^i=XA^iX^{-1}$, then
+    $(\widetilde B_g)^i=\sum_j U(g)_{ij}XA^jX^{-1}=X(\widetilde A_g)^iX^{-1}$, so
+    $\widetilde B_g$ is gauge equivalent to $\widetilde A_g$, and
+    Theorem~\ref{thm:gauge_invariance} gives
+    $\mc{V}(B)=\mc{V}(A)=\mc{V}(\widetilde A_g)=\mc{V}(\widetilde B_g)$.
+\end{proof}
 
 \begin{lemma}[Functoriality of twisting]\label{lem:twisted_tensor_mul}
     \lean{MPSTensor.twistedTensor_mul}
@@ -84,7 +99,7 @@ on the bond space.
     \label{lem:twisted_tensor_block_comm}
     \lean{MPSTensor.twistedTensor_blockTensor_comm}
     \leanok
-    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor, lem:eval_word_twisted_tensor}
+    \uses{def:block_kron_action, def:blocked_tensor, def:twisted_tensor}
     For every $g\in G$ and $L\ge0$,
     \begin{align}
         \widetilde{(A^{[L]})}^{\,U^{[L]}}_g
@@ -94,11 +109,11 @@ on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok
-    Decode a blocked physical index as a word of length $L$ and use the word
-    expansion from Lemma~\ref{lem:eval_word_twisted_tensor}.  Reindexing the
-    sum over words by the blocked index gives exactly the Kronecker-product
-    matrix coefficients on the left of
-    (\ref{eq:symmetry_twist_block_comm}).
+    \uses{thm:block_tensor_rotate_physical}
+    The twisted tensor $\widetilde A_g$ is the physical rotation of $A$ by
+    $U(g)$, and $U^{[L]}(g)=U(g)^{\otimes L}$.  Hence
+    (\ref{eq:symmetry_twist_block_comm}) is the case $W=U(g)$, $C=A$ of
+    Theorem~\ref{thm:block_tensor_rotate_physical}.
 \end{proof}
 
 \begin{theorem}[MPV-family symmetry is preserved by blocking]
@@ -115,6 +130,22 @@ on the bond space.
     blocked tensor with the blocking of the twisted tensor.  Equality of MPV
     families is preserved by blocking, so the defining equality for $A$
     yields the defining equality for $A^{[L]}$.
+\end{proof}
+
+\begin{lemma}[Virtual gauges survive blocking]
+    \label{lem:twisted_tensor_block_gauge}
+    \lean{MPSTensor.twistedTensor_blockTensor_eq_gauge}
+    \leanok
+    If $R\in\GL_{D}(\C)$ satisfies $(\widetilde A_g)^i=R\,A^i\,R^{-1}$ for all
+    $i$, then $(\widetilde{(A^{[L]})}^{\,U^{[L]}}_g)^I=R\,(A^{[L]})^I\,R^{-1}$
+    for every blocked index $I$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:twisted_tensor_block_comm, lem:eval_word_gauge}
+    By (\ref{eq:symmetry_twist_block_comm}) the left side is a product of $L$
+    matrices $(\widetilde A_g)^{i_k}=R\,A^{i_k}R^{-1}$, and the inner factors
+    $R^{-1}R$ cancel.
 \end{proof}
 
 \begin{lemma}[Symmetric twists are gauge equivalent]%
@@ -134,17 +165,14 @@ on the bond space.
     equivalence.
 \end{proof}
 
-\begin{remark}[Fundamental-Theorem route for injective symmetry]%
+\begin{remark}[Virtual representation via the Fundamental Theorem]%
     \label{rem:injective_symmetry_ft_route}
     \uses{thm:ft_single, lem:gauge_equiv_twisted, lem:gauge_unique_up_to_scalar, lem:twisted_tensor_mul, thm:virtual_rep_injective}
-    The injective virtual-representation theorem is not proved from
-    virtual-boundary nondecay. The on-site symmetry condition first identifies
-    $A$ and $\widetilde{A}_g$ as the same MPV family; the single-block
-    Fundamental Theorem gives the gauge in
-    Lemma~\ref{lem:gauge_equiv_twisted}. Gauge uniqueness and the twist
-    composition law then give Theorem~\ref{thm:virtual_rep_injective}. The
-    virtual-boundary nondecay results later in this chapter use this virtual
-    representation as an input.
+    On-site symmetry identifies $A$ and $\widetilde{A}_g$ as defining the same MPV
+    family. The single-block Fundamental Theorem yields the gauge matrices in
+    Lemma~\ref{lem:gauge_equiv_twisted}; gauge uniqueness and twist functoriality
+    then establish the projective representation of
+    Theorem~\ref{thm:virtual_rep_injective}.
 \end{remark}
 
 \begin{theorem}[Virtual symmetry equation]\label{thm:virtual_symmetry_eq}
@@ -237,6 +265,58 @@ on the bond space.
     This is exactly Lemma~\ref{lem:gauge_unique_up_to_scalar}; the extra MPV
     hypothesis specifies the setting in which the two gauges are usually
     produced.
+\end{proof}
+
+\begin{lemma}[Gauge-phase uniqueness]\label{lem:gauge_phase_unique}
+    \lean{MPSTensor.gauge_phase_unique}
+    \leanok
+    \uses{def:injective}
+    Let $A$ be an injective tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and
+    $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and
+    $X=u\,Y$ for some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:center_scalar}
+    The matrix $Z=YX^{-1}$ satisfies $ZA^i=c\,A^iZ$ for every $i$, hence
+    $ZM=c\,MZ$ for every matrix $M$ by linearity.  Taking $M=\Id$ gives
+    $(1-c)Z=0$, so $c=1$ because $Z$ is invertible.  Then $Z$ commutes with
+    $\MN{D}$, so it is a nonzero scalar by Lemma~\ref{lem:center_scalar}.
+\end{proof}
+
+\begin{lemma}[Gauge phases on words]\label{lem:gauge_phase_words}
+    \lean{MPSTensor.evalWord_gauge_phase}
+    \leanok
+    If $X,Y\in\GL_{D}(\C)$ and $c\in\C$ satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$
+    for all $i$, then for every word $w$,
+    \begin{align}
+        X^{-1}A^wX & =c^{\lvert w\rvert}\,Y^{-1}A^wY.
+        \label{eq:gauge_phase_words}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    By induction on $w$: inserting $XX^{-1}$ and $YY^{-1}$ between the letters
+    gives $X^{-1}A^{iw}X=(X^{-1}A^iX)(X^{-1}A^wX)$, and likewise for $Y$.
+\end{proof}
+
+\begin{lemma}[Gauge-phase uniqueness for normal tensors]\label{lem:gauge_phase_unique_normal}
+    \lean{MPSTensor.gauge_phase_unique_of_isNormal}
+    \leanok
+    \uses{def:normal}
+    Let $A$ be a normal tensor with $D\ge1$.  If $X,Y\in\GL_{D}(\C)$ and $c\in\C$
+    satisfy $X^{-1}A^iX=c\,Y^{-1}A^iY$ for all $i$, then $c=1$ and $X=u\,Y$ for
+    some $u\in\C^{\times}$ \cite[Section~III.A]{Cirac2021Matrix}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:gauge_phase_words, lem:gauge_phase_unique, thm:normal_tensor_nonzero_matrix, lem:isNBlkInjective_iff_blockTensor_isInjective}
+    By Lemma~\ref{lem:gauge_phase_words} the relation propagates to words of
+    length $N$ with the scalar $c^N$.  For an
+    injective blocking length $N$, Lemma~\ref{lem:gauge_phase_unique} applied to
+    the blocked tensor gives $X=u\,Y$.  Substituting back,
+    $(1-c)\,Y^{-1}A^iY=0$ for every $i$, and some $A^i$ is nonzero because the
+    words of length $N$ span the full matrix algebra; hence $c=1$.
 \end{proof}
 
 \begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}
@@ -385,9 +465,8 @@ on the bond space.
 
 \section{Cohomology Classes of Virtual Symmetry Cocycles}
 
-Two cocycles may differ by a coboundary yet represent the same
-projective-representation class. The following definitions and results
-make this precise and establish the quotient $H^2(G,\C^{\times})$.
+Projective representations are classified up to projective equivalence by the
+second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 
 \begin{definition}[Coboundary]\label{def:is_coboundary}
     \lean{TNLean.Algebra.ScalarCocycle.IsCoboundary}
@@ -537,10 +616,8 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
     \lean{TNLean.Algebra.ProjectivelyEquivalent}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
-    The relation called projective equivalence holds precisely when
-    the two factor systems are cohomologous.  It compares their classes in
-    $H^2(G,\C^\times)$; it does not assert an intertwining equivalence between
-    the underlying representation spaces.
+    Two projective representations are \emph{projectively equivalent} when their
+    factor systems are cohomologous in $H^2(G,\C^\times)$.
 \end{definition}
 
 \begin{theorem}[Factor-system class agreement]%
@@ -565,16 +642,16 @@ make this precise and establish the quotient $H^2(G,\C^{\times})$.
 \subsection{Non-triviality via the commutator phase}
 
 For an abelian symmetry group, the antisymmetric commutator phase is invariant
-under a change of cocycle representative. A value not equal to $1$ therefore
-witnesses non-triviality; no converse is asserted here.
+under a change of cocycle representative, so a value different from $1$
+witnesses non-triviality of the class.
 
 \begin{definition}[Commutator phase]\label{def:comm_phase}
     \lean{TNLean.Algebra.ScalarCocycle.commPhase}
     \leanok
     \uses{def:scalar_cocycle}
     The \emph{commutator phase} of a $2$-cochain $\omega$ at a pair $g,h$ is
-    $\beta_\omega(g,h):=\omega(g,h) \omega(h,g)^{-1}$. It is defined for any
-    $\C^{\times}$-valued $2$-cochain; the cocycle condition is not needed.
+    $\beta_\omega(g,h):=\omega(g,h) \omega(h,g)^{-1}$, defined for any
+    $\C^{\times}$-valued $2$-cochain.
 \end{definition}
 
 \begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}

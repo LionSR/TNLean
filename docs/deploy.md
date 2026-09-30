@@ -50,6 +50,11 @@ The first run is slow (hours) because `lake build TNLean:docs` in `docbuild/`
 needs to elaborate the full codebase including Mathlib for doc-gen4.
 Subsequent runs are incremental — only changed files are re-elaborated.
 
+`docbuild/` shares the root package directory, so `docbuild/lake-manifest.json`
+must pin the same revisions as `lake-manifest.json`. After any dependency bump,
+run `lake update` inside `docbuild/` in the same pull request; PR CI enforces
+this with `scripts/check_docbuild_manifest.py`.
+
 To generate API docs without deploying:
 
 ```bash

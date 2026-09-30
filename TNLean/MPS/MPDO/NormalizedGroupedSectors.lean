@@ -3,15 +3,22 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.GroupedGramNormalization
 import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 
 /-!
-# Normalized physical maps from horizontal canonical form
+# Normalized physical maps from the grouped-corner Gram dressing
 
-This file supplies the positive Gram scalars from normalized BNT-refined
-horizontal form and applies the canonical-form-independent grouped-sector map
-construction.
+The grouped-corner Gram dressing supplies a positive Gram scalar for every
+grouped gauge. Absorbing the corresponding normalized unitary into the
+physical isometry gives orthogonal representative-sector maps and preserves
+the exact vertical reconstruction. No canonical-form hypothesis enters: each
+canonical form supplies the Gram dressing independently.
+
+## Main result
+
+* `MPOTensor.exists_normalized_grouped_sector_maps_of_dressing`
 
 ## References
 
@@ -41,13 +48,12 @@ from the copy bond space to the representative bond space.  These maps are
 isometries with mutually orthogonal ranges and intertwine the vertical tensor
 with the undressed representative tensors.
 
-All hypotheses are clauses furnished by
-`IsHorizontalCF.exists_verticalBNTGrouping_with_isometry`.
+The hypotheses after `hDressing` are clauses furnished by
+`exists_verticalBNTGrouping_with_isometry` on either canonical-form side.
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1895--1921. -/
-theorem IsMPDO.exists_normalized_grouped_sector_maps
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (hHorizontal : IsHorizontalCF M)
+theorem exists_normalized_grouped_sector_maps_of_dressing
+    {M : MPOTensor d D} (hDressing : HasGroupedCornerGramDressing M)
     (mu : Fin r → ℂ) (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hDimPos : ∀ k, 0 < dim k)
     (hNormal : ∀ k, MPSTensor.IsNormalTensor (blocks k))
@@ -105,8 +111,11 @@ theorem IsMPDO.exists_normalized_grouped_sector_maps
             (W ⟨j, q⟩)ᴴ := by
   apply exists_normalized_grouped_sector_maps_of_gram blocks mu V hdim X zeta
   · intro j q
-    exact hM.grouped_sector_gram_eq_pos_smul_one blocks hHorizontal mu V
-      hDimPos hNormal hdim X zeta hXDist hCoeffPos hCorner j q
+    refine grouped_sector_gram_eq_pos_smul_one_of_dressing blocks hDressing mu V
+      hDimPos hdim ?_ X zeta hXDist hCoeffPos hCorner j q
+    intro l p
+    exact ((MPSTensor.isNormalTensor_cast_iff (hdim l p)
+      (blocks ((C).repr l))).2 (hNormal ((C).repr l))).isNormal
   · exact hIso
   · exact hOrth
   · exact hInter

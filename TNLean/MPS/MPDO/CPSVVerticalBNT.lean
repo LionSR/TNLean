@@ -61,9 +61,10 @@ lines 1135--1148.  Every effective grouped coefficient is positive by the
 sector-compression argument in Proposition 4.13, lines 1895--1902.
 
 The theorem stops at grouping.  The proportional Gram identity, normalized
-grouped-sector maps, and final coisometry from lines 1903--1921 are proved in
-`MPSTensor.IsCPSVCanonicalForm.grouped_sector_gram_eq_pos_smul_one`,
-`MPSTensor.IsCPSVCanonicalForm.exists_normalized_grouped_sector_maps`, and
+grouped-sector maps, and final coisometry from lines 1903--1921 are proved
+without a canonical-form hypothesis in
+`MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing`,
+`MPOTensor.exists_normalized_grouped_sector_maps_of_dressing`, and
 `MPOTensor.verticalCF_of_cpsvCanonicalForm`. -/
 theorem exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D)

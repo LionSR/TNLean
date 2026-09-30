@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
 import TNLean.MPS.MPDO.BNTSourceSectorProjectors
+import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.CommonWeightAbsorption
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 
@@ -485,18 +486,6 @@ theorem changePhysicalBasis_bntSectorProjection_basis
       hC hρ hη hR i s s (Or.inr fun his ↦ hsi his.symm) β α
     exact Matrix.ext_iff.mpr hzero a b
 
-/-- The MPO of the zero local tensor vanishes at every physical chain length. -/
-theorem mpo_zero_of_pos {D : ℕ} {N : ℕ} (hN : 0 < N) :
-    mpo (0 : MPOTensor d D) N = 0 := by
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
-  ext u v
-  obtain ⟨a, u', rfl⟩ : ∃ a u', u = Fin.cons a u' :=
-    ⟨u 0, u ∘ Fin.succ, (Fin.cons_self_tail u).symm⟩
-  obtain ⟨b, v', rfl⟩ : ∃ b v', v = Fin.cons b v' :=
-    ⟨v 0, v ∘ Fin.succ, (Fin.cons_self_tail v).symm⟩
-  rw [mpo_cons_cons]
-  simp
-
 /-- Sitewise compression of a BNT representative by `P_s` retains precisely
 the matching representative.
 
@@ -750,49 +739,27 @@ theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
       ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) :
-    let ρ := Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
-      (_root_.finThreeArrowEquiv (Fin d))
-      (M.reducedBlockState 4 3 (by omega))
-    ∃ (C : Matrix (MPSTensor.BlockEntryIndex S.basisDim)
-        (Fin d × Fin d) ℂ),
-      ∃ hC : MPSTensor.IsMPOBlockLeftInverse
-          (fun j ↦ S.basisMPOTensor j) C,
-        ∃ hη : EtaStructure ρ,
-          let hρ : IsThreeSiteFamilyClosure
-              (fun j ↦ S.basisMPOTensor j)
-              (S.normalizedThreeSiteClosingMatrix M 1) ρ :=
-            (reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-              M S hM hWeight hnonNil hSAL).1
-          let hR : ∀ j : Fin S.basisCount,
-              S.normalizedThreeSiteClosingMatrix M 1 j ≠ 0 :=
-            (reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-              M S hM hWeight hnonNil hSAL).2
-          (∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
-              ∀ (β α : Fin (S.basisDim i)),
-                bntSectorProjection hC hρ hη hR s *
-                    physicalSlice (S.basisMPOTensor i) β α *
-                    bntSectorProjection hC hρ hη hR t = 0) ∧
-            (∀ (N : ℕ), 0 < N → ∀ s : Fin S.basisCount,
-              let P := sitewisePhysicalMatrix
-                (bntSectorProjection hC hρ hη hR s) N
-              P * mpo M N * P =
-                (S.copies s : ℂ) •
-                  mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) := by
-  dsimp only
-  obtain ⟨C, hC, hη, _hunique, _hproj, _horth, _hsum⟩ :=
+    ∃ W : ThreeSiteClosureWitness M S,
+      (∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
+          ∀ (β α : Fin (S.basisDim i)),
+            bntSectorProjection W.hC W.hρ W.hη W.hR s *
+                physicalSlice (S.basisMPOTensor i) β α *
+                bntSectorProjection W.hC W.hρ W.hη W.hR t = 0) ∧
+        (∀ (N : ℕ), 0 < N → ∀ s : Fin S.basisCount,
+          let P := sitewisePhysicalMatrix
+            (bntSectorProjection W.hC W.hρ W.hη W.hR s) N
+          P * mpo M N * P =
+            (S.copies s : ℂ) •
+              mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) := by
+  obtain ⟨W, _hunique, _hproj, _horth, _hsum⟩ :=
     exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL
-  let hClosure :=
-    reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-      M S hM hWeight hnonNil hSAL
-  let hρ := hClosure.1
-  let hR := hClosure.2
-  refine ⟨C, hC, hη, ?_, ?_⟩
+  refine ⟨W, ?_, ?_⟩
   · intro i s t hst β α
     exact bntSectorProjection_mul_physicalSlice_mul_eq_zero
-      hC hρ hη hR i s t hst β α
+      W.hC W.hρ W.hη W.hR i s t hst β α
   · intro N hN s
     exact sitewise_bntSectorProjection_mul_mpo_mul_self
-      M S hM hWeight hC hρ hη hR hN s
+      M S hM hWeight W.hC W.hρ W.hη W.hR hN s
 
 end MPOTensor

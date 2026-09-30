@@ -1,6 +1,9 @@
 name: TenkzPicture
 {{ obj.tenkz_svg_html }}
 
+name: hfil hfill
+<span class="tex-hfil"></span>
+
 name: TenkzEquation
 <div class="tenkz-equation">
   <div class="tenkz-equation-row">{{ obj }}</div>

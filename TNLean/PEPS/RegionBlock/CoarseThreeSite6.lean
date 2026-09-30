@@ -160,41 +160,5 @@ theorem redBundleInsertedCoeff_eq (A : Tensor G d) (red blue : Finset V)
               (regionComplementBoundaryConfig (G := G) A red ν) τ := by
   rw [redBundleInsertedCoeff]
 
-/-- The whole-bundle red inserted coefficient is additive in the inserted matrix. -/
-theorem redBundleInsertedCoeff_add (A : Tensor G d) (red blue : Finset V)
-    (M M' : Matrix (CrossingConfig (G := G) A red blue)
-      (CrossingConfig (G := G) A red blue) ℂ)
-    (σ : RegionPhysicalConfig (V := V) (d := d) red)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ red)) :
-    redBundleInsertedCoeff (G := G) A red blue (M + M') σ τ =
-      redBundleInsertedCoeff (G := G) A red blue M σ τ +
-        redBundleInsertedCoeff (G := G) A red blue M' σ τ := by
-  classical
-  rw [redBundleInsertedCoeff_eq, redBundleInsertedCoeff_eq, redBundleInsertedCoeff_eq,
-    ← Finset.sum_add_distrib]
-  refine Finset.sum_congr rfl (fun μ _ => ?_)
-  rw [← Finset.sum_add_distrib]
-  refine Finset.sum_congr rfl (fun ν _ => ?_)
-  by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
-  · simp only [ite_eq_left h, Matrix.add_apply]; ring
-  · simp only [ite_eq_right h]; ring
-
-/-- The whole-bundle red inserted coefficient is homogeneous in the inserted matrix. -/
-theorem redBundleInsertedCoeff_smul (A : Tensor G d) (red blue : Finset V) (c : ℂ)
-    (M : Matrix (CrossingConfig (G := G) A red blue)
-      (CrossingConfig (G := G) A red blue) ℂ)
-    (σ : RegionPhysicalConfig (V := V) (d := d) red)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ red)) :
-    redBundleInsertedCoeff (G := G) A red blue (c • M) σ τ =
-      c * redBundleInsertedCoeff (G := G) A red blue M σ τ := by
-  classical
-  rw [redBundleInsertedCoeff_eq, redBundleInsertedCoeff_eq, Finset.mul_sum]
-  refine Finset.sum_congr rfl (fun μ _ => ?_)
-  rw [Finset.mul_sum]
-  refine Finset.sum_congr rfl (fun ν _ => ?_)
-  by_cases h : SameAwayFromRBBundle (G := G) A red blue μ ν
-  · simp only [ite_eq_left h, Matrix.smul_apply, smul_eq_mul]; ring
-  · simp only [ite_eq_right h]; ring
-
 end PEPS
 end TNLean

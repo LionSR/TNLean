@@ -23,14 +23,15 @@
     The opposite product
     $P_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X^{c+}_{ab,\mu}$ is the projector onto
     the product-MPO support; it need not be the identity on the ambient bond
-    space. Every product-MPO letter is reconstructed on this support:
+    space or an orthogonal projector. Write
+    $B_{ab}^{ik}=\sum_j B_a^{ij}\otimes B_b^{jk}$.
+    Every product-MPO matrix is reconstructed on this support:
     \begin{align}
         B_{ab}^{ik}
          & =\sum_{c,\mu}X^c_{ab,\mu}B_c^{ik}X^{c+}_{ab,\mu}.
         \label{eq:rfp_fusion_reconstruction}
     \end{align}
-    Writing $B_{ab}^{ik}=\sum_j B_a^{ij}\otimes B_b^{jk}$, the two zipper
-    identities are
+    The two zipper identities are
     \begin{align}
         B_{ab}^{ik}X^c_{ab,\mu}
          & =X^c_{ab,\mu}B_c^{ik},
@@ -39,15 +40,104 @@
          & =B_c^{ik}X^{c+}_{ab,\mu}.
         \label{eq:rfp_zipper_analysis}
     \end{align}
-    Each block is injective, and the labelled block-letter matrix has a common
-    left inverse: its contraction with $B_d^{ij}$ is
-    $\delta_{cd}E_{xy}$ on the block selected by $(c,x,y)$.
+    Each block is injective, and the matrix of coefficients of all labelled
+    blocks has a simultaneous left inverse. Contraction of its row indexed
+    by $(c,x,y)$ with $B_d^{ij}$ gives $E_{xy}$ when $d=c$ and zero otherwise.
     These are the fusion-tensor, reconstruction, zipper, and simultaneous
     inverse relations of
     \cite[lines~161, 181--200, and 269--277]{Bultinck2017Anyons}.
 \end{definition}
 
-\begin{theorem}[Complete zipper family from a source BNT]%
+The three displayed diagrams are, in order, the zipper identities
+(\ref{eq:rfp_zipper_synthesis}) and (\ref{eq:rfp_zipper_analysis}) and the
+reconstruction (\ref{eq:rfp_fusion_reconstruction}), with the index $j$ of
+$B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
+\begin{center}
+    % Formulas, row by row:
+    %   B_{ab}^{ik} X^c_{ab,\mu} = X^c_{ab,\mu} B_c^{ik},
+    %   X^{c+}_{ab,\mu} B_{ab}^{ik} = B_c^{ik} X^{c+}_{ab,\mu},
+    %   B_{ab}^{ik} = \sum_{c,\mu} X^c_{ab,\mu} B_c^{ik} X^{c+}_{ab,\mu},
+    %   with B_{ab}^{ik} = \sum_j B_a^{ij} \otimes B_b^{jk}.
+    % Source: Bultinck et al., arXiv:1511.08090, lines 161 and 181--200,
+    %   the fusion tensors and the two zipper orientations.
+    % Ink-to-index map: matrix products read from west to east.  The
+    %   stacked pair B_a over B_b is B_{ab}: its vertical bond is the summed
+    %   index j, and i, k are its free physical legs.  Each pill spans both
+    %   rows; its split side carries the two bond strands of D_a and D_b and
+    %   its single stub, drawn on the first row, is the fused bond of D_c.
+    %   The synthesis tensor X^c_{ab,\mu} has its split side to the west, the
+    %   left inverse X^{c+}_{ab,\mu} has its split side to the east.  The
+    %   labels c, \mu of the fused block are summed only in the third row.
+    % Boundary signatures (virtual-west | virtual-east | physical-up |
+    %   physical-down), each side of each row:
+    %   row 1: (2 | 1 | 1 | 1) = (2 | 1 | 1 | 1);
+    %   row 2: (1 | 2 | 1 | 1) = (1 | 2 | 1 | 1);
+    %   row 3: (2 | 2 | 1 | 1) = (2 | 2 | 1 | 1).
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=2, west=open]
+        \tn[at=(1,1), skin=mpo,
+            ports={90:physical:$i$, 270:physical}]{B_a}
+        \tn[at=(2,1), skin=mpo,
+            ports={90:physical, 270:physical:$k$}]{B_b}
+        \tnfuse[at=(1,2), name=X, skin=pill]{X^c_{ab,\mu}}
+        \tnwire{X.0}{open e}
+    \end{tenkz}
+    \qquad$=$\qquad
+    \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+        \tnfuse[at=(1,1), name=X, skin=pill]{X^c_{ab,\mu}}
+        \tn[at=(1,2), skin=mpo, name=B,
+            ports={90:physical:$i$, 270:physical:$k$,
+                    180:virtual, 0:virtual}]{B_c}
+        \tn[at=(2,2), skin=none]{}
+        \tnwire{open w}{X.180@1}
+        \tnwire{open w}{X.180@2}
+        \tnwire{X.0}{B.180}
+        \tnwire{B.0}{open e}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={op,op}, cols=2, east=open]
+        \tnfuse[at=(1,1), name=Xp, skin=pill]{X^{c+}_{ab,\mu}}
+        \tn[at=(1,2), skin=mpo,
+            ports={90:physical:$i$, 270:physical}]{B_a}
+        \tn[at=(2,2), skin=mpo,
+            ports={90:physical, 270:physical:$k$}]{B_b}
+        \tnwire{open w}{Xp.180}
+    \end{tenkz}
+    \qquad$=$\qquad
+    \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+        \tn[at=(1,1), skin=mpo, name=B,
+            ports={90:physical:$i$, 270:physical:$k$,
+                    180:virtual, 0:virtual}]{B_c}
+        \tn[at=(2,1), skin=none]{}
+        \tnfuse[at=(1,2), name=Xp, skin=pill]{X^{c+}_{ab,\mu}}
+        \tnwire{open w}{B.180}
+        \tnwire{B.0}{Xp.180}
+        \tnwire{Xp.0@1}{open e}
+        \tnwire{Xp.0@2}{open e}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{B_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$k$}]{B_b}
+    \end{tenkz}
+    \qquad$=\displaystyle\sum_{c,\mu}$\qquad
+    \begin{tenkz}[rows={op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=X, skin=pill]{X^c_{ab,\mu}}
+        \tn[at=(1,2), skin=mpo, name=B,
+            ports={90:physical:$i$, 270:physical:$k$,
+                    180:virtual, 0:virtual}]{B_c}
+        \tn[at=(2,2), skin=none]{}
+        \tnfuse[at=(1,3), name=Xp, skin=pill]{X^{c+}_{ab,\mu}}
+        \tnwire{open w}{X.180@1}
+        \tnwire{open w}{X.180@2}
+        \tnwire{X.0}{B.180}
+        \tnwire{B.0}{Xp.180}
+        \tnwire{Xp.0@1}{open e}
+        \tnwire{Xp.0@2}{open e}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Complete zipper family from a BNT]%
     \label{thm:mpdo_blocked_bnt_complete_zipper}
     \lean{MPOTensor.BNTFusionIsometryFamily.blockedFusionSynthesis}
     \lean{MPOTensor.BNTFusionIsometryFamily.blockedFusionAnalysis}
@@ -55,9 +145,12 @@
         exists_blocked_completeZipperFusionFamily}
     \leanok
     \uses{thm:mpdo_bnt_common_positive_blocked_fusion, thm:mpdo_pair_fusion_bnt_completeness, thm:mpdo_one_letter_simultaneous_inverse, def:mpdo_complete_zipper_fusion_family}
-    Suppose that the labelled tensors of a length-independent fusion family
-    form a source basis of normal tensors. There is one common positive
-    blocking at which they determine a complete zipper fusion family. Its
+    Suppose that the labelled tensors of a fusion-isometry family with
+    length-independent structure coefficients
+    $c_{\alpha,\beta,\gamma}^{(L)}
+        =\tr(\chi_{\alpha,\beta,\gamma}^{L})$
+    form a BNT. There is a common positive blocking length at which they
+    determine a complete zipper fusion family. Its
     bond dimensions are the original labelled bond dimensions, its fusion
     multiplicities are
     $N_{\alpha\beta}^{\gamma}=\dim\chi_{\alpha,\beta,\gamma}$,
@@ -65,38 +158,166 @@
     map is $U_{\alpha,\beta}$, after the canonical identification
     $\C^{D_\alpha D_\beta}
         \cong\C^{D_\alpha}\otimes\C^{D_\beta}$.
-    In particular, the two zipper identities, literal reconstruction,
-    injectivity, and the simultaneous block-letter inverse are conclusions;
-    none is an additional hypothesis.
+    The two zipper identities, exact reconstruction, injectivity, and the
+    simultaneous left inverse of the block coefficients follow as conclusions
+    rather than additional hypotheses.
 \end{theorem}
 \begin{proof}\leanok
-    Length independence makes every chi matrix the identity. Use the common
-    positive BNT blocking for the labelled tensors and transport the fusion
-    equation through it. Pair completeness gives
-    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$, so analysis followed by
-    synthesis is the identity. The other three matrix identities are the
-    transported zipper identities
+    Length independence makes each positive diagonal matrix
+    $\chi_{\alpha,\beta,\gamma}$ the identity. Use a common positive
+    blocking length for the BNT and carry the fusion equation through
+    the blocking. Completeness of the pair decomposition gives
+    $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$, so the synthesis
+    map followed by the analysis map is the identity. The other three
+    matrix identities are the blocked zipper identities
     (\ref{eq:rfp_zipper_synthesis}) and
     (\ref{eq:rfp_zipper_analysis}) and the reconstruction identity
-    (\ref{eq:rfp_fusion_reconstruction}). The common one-letter
-    product-algebra span supplies both block injectivity and the simultaneous
-    block-letter inverse. These data are exactly those of
+    (\ref{eq:rfp_fusion_reconstruction}). At this blocking length, the
+    labelled matrices span the direct sum of the block matrix algebras.
+    This supplies both block injectivity and the simultaneous left inverse
+    of the block coefficients. These maps satisfy
     Definition~\ref{def:mpdo_complete_zipper_fusion_family}.
 \end{proof}
 
-\begin{definition}[One-letter final-block selector]
+\begin{theorem}[Complete zipper family from split compressions]%
+    \label{thm:mpdo_complete_zipper_of_compression}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofCompression}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofCompression_fusionTensor}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        ofCompression_fusionTensorLeftInverse}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        pairLetter_eq_compressionSynthesis_mul}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        compressionAnalysis_mul_compressionSynthesis}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        exists_pairCompression_remainder_eq_zero_of_star}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofStar}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        exists_ofStar_fusionTensor_eq}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock}
+    Let $B_a^{ij}$, $a\in\Lambda$, be injective MPO blocks of positive bond
+    dimension whose labelled letters have a simultaneous left inverse as in
+    Definition~\ref{def:mpdo_complete_zipper_fusion_family}. Suppose that for
+    every pair $a,b$ the product tensor $B_{ab}$ admits a multi-block
+    compression, as in Theorem~\ref{thm:asym_multiblock}, onto $N_{ab}^{c}$
+    copies of each block $B_c$, with vanishing remainder. Then the
+    compression maps $V_{(c,\mu)}$ and $W_{(c,\mu)}$ are the fusion tensors
+    $X^c_{ab,\mu}$ and their left inverses $X^{c+}_{ab,\mu}$ of a complete
+    zipper fusion family. The vanishing remainder is the absence of nonzero
+    blocks above the diagonal assumed in
+    \cite[lines~181--191]{Bultinck2017Anyons}.
+    In particular, if for every nonempty word the word trace of every product
+    $B_{ab}$ is the sum of the word traces of $N_{ab}^{c}$ copies of each
+    $B_c$, and $(B_{ab}^{ik})^\dagger$ lies in the unital algebra generated by
+    the $B_{ab}^{jl}$ for every $i,k$, then such compressions exist and the
+    conclusion holds.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock,
+        thm:asym_splitting}
+    Biorthogonality (\ref{eq:rfp_fusion_biorthogonality}) is
+    $W_sV_t=\delta_{st}\Id$. Since the remainder
+    $B_{ab}^{ik}-\sum_sV_sB_{c(s)}^{ik}W_s$ vanishes, this sum is the
+    reconstruction (\ref{eq:rfp_fusion_reconstruction}). Multiplying the
+    reconstruction by $X^c_{ab,\mu}$ on the right, or by $X^{c+}_{ab,\mu}$ on
+    the left, and using biorthogonality gives the two zipper identities.
+    In the star-closed case the word-algebra module of each product is semisimple, so
+    its multi-block compression can be chosen with vanishing remainder.
+\end{proof}
+
+\begin{theorem}[Simultaneous left inverse after blocking]%
+    \label{thm:mpdo_complete_zipper_of_compression_blocked}
+    \lean{MPSTensor.exists_positive_wordTupleSpanTop_of_isNormal}
+    \lean{MPSTensor.wordTupleSpanTop_of_smul}
+    \lean{MPOTensor.exists_blockTensor_isMPOBlockLeftInverse}
+    \lean{MPSTensor.MultiBlockCompression.ofWords}
+    \lean{MPSTensor.MultiBlockCompression.remainder_ofWords_eq_zero}
+    \lean{MPOTensor.CompleteZipperFusionFamily.PairCompression.blockTensor}
+    \lean{MPOTensor.CompleteZipperFusionFamily.jointBlockLength}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofCompressionBlocked}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofCompressionBlocked_tensor}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        ofCompressionBlocked_fusionTensor}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        ofCompressionBlocked_fusionTensorLeftInverse}
+    \lean{MPOTensor.CompleteZipperFusionFamily.ofStarBlocked}
+    \leanok
+    \uses{thm:mpdo_complete_zipper_of_compression, def:mpdo_block_left_inverse,
+        def:blockwise_product_word_span}
+    Let $B_1,\ldots,B_m$ be MPO blocks of positive bond dimension which,
+    read as tensors on the doubled physical alphabet, are normal, and no two
+    of which are gauge equivalent up to a nonzero scalar. Then there is $L>0$
+    such that the tuples $(B_1^w,\ldots,B_m^w)$ of the words $w$ of length
+    $L$ span $\bigoplus_cM_{D_c}$, as in
+    Definition~\ref{def:blockwise_product_word_span}, so the blocked tensors
+    $B_c^{[L]}$ are injective and have a simultaneous left inverse at one blocked site, as in
+    Definition~\ref{def:mpdo_block_left_inverse}: there are coefficients
+    $C_{(c,x,y),(I,J)}$ with
+    $\sum_{I,J}C_{(c,x,y),(I,J)}\bigl((B_d^{[L]})^{IJ}\bigr)_{x'y'}
+        =\delta_{cd}\delta_{xx'}\delta_{yy'}$. If
+    every product $B_aB_b$ admits a multi-block compression onto $N_{ab}^c$
+    copies of each $B_c$ with vanishing remainder, as in
+    Theorem~\ref{thm:mpdo_complete_zipper_of_compression}, then the same
+    compression maps are the fusion tensors of a complete zipper fusion
+    family of the blocked tensors $B_c^{[L]}$, with no simultaneous left
+    inverse among the hypotheses. Under the same hypotheses on the blocks,
+    this applies in the star-closed case of
+    Theorem~\ref{thm:mpdo_complete_zipper_of_compression}.
+    The simultaneous left inverse at one unblocked site, as printed
+    in~\cite[line~269]{Bultinck2017Anyons}, can fail for injective,
+    inequivalent blocks, and the scalar in the non-equivalence cannot be
+    dropped~\cite{gap:bmwshv17_joint_block_left_inverse}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mpdo_complete_zipper_of_compression, def:mpdo_block_left_inverse,
+        def:blockwise_product_word_span, thm:mpdo_one_letter_simultaneous_inverse}
+    After a gauge and a nonzero rescaling each block has transfer map of
+    spectral radius one. Rescaling a block multiplies its words of length $L$
+    by a nonzero constant, so it changes neither the joint span nor
+    non-equivalence up to a scalar. For normal, pairwise inequivalent
+    tensors the block-injectivity argument
+    of~\cite[lines~317--345]{Cirac2016MPDO_arXiv} gives one length $L>0$ at
+    which the word tuples span $\bigoplus_cM_{D_c}$. Grouping $L$ sites into
+    one physical index turns the words of length $L$ into single letters.
+    Projecting the span onto the summand $c$ shows that the letters of
+    $B_c^{[L]}$ span $M_{D_c}$, so each blocked tensor is injective.
+    The coefficients $C_{(c,x,y),(I,J)}$ expressing the matrix unit
+    $E_{xy}$ of the summand $c$, with zero in every other summand, as a
+    combination of the blocked letters are the left inverse of
+    Definition~\ref{def:mpdo_block_left_inverse}, by
+    Theorem~\ref{thm:mpdo_one_letter_simultaneous_inverse}. Each blocked
+    letter of a product is a word of the unblocked letters. In the
+    coordinates $g$ of a split compression every unblocked letter is block
+    diagonal, $g\,B_{ab}^{ik}g^{-1}=\bigoplus_s B_{c(s)}^{ik}$, with one
+    summand for each slot $s=(c,\mu)$. Hence for the word $w=(i_1k_1)\cdots
+        (i_Lk_L)$ of the blocked letter $(I,J)$,
+    \begin{align}
+        g\,(B_{ab}^{[L]})^{IJ}g^{-1}
+         & =\prod_{t=1}^{L}\Bigl(\bigoplus_sB_{c(s)}^{i_tk_t}\Bigr)
+        =\bigoplus_s\prod_{t=1}^{L}B_{c(s)}^{i_tk_t}
+        =\bigoplus_s(B_{c(s)}^{[L]})^{IJ}.
+        \notag
+    \end{align}
+    The compression
+    therefore remains split after blocking, with the same compression maps,
+    and Theorem~\ref{thm:mpdo_complete_zipper_of_compression} applies to the
+    blocked tensors.
+\end{proof}
+
+\begin{definition}[Final-block selection from one physical index pair]
     \label{def:mpdo_complete_zipper_final_block_selector}
     \lean{MPOTensor.CompleteZipperFusionFamily.finalBlockSelector}
     \leanok
     \uses{def:mpdo_complete_zipper_fusion_family}
     Fix a final label $d$. Summing the diagonal matrix-unit coefficients of
-    the simultaneous block inverse defines
+    the simultaneous left inverse defines
     \begin{align}
         s_d(i,j)
          & =\sum_{x=0}^{D_d-1}C_{(d,x,x),(i,j)}. \notag
     \end{align}
     Here $C_{(d,x,y),(i,j)}$ denotes the coefficient of the simultaneous
-    block inverse corresponding to the matrix unit $E_{xy}$ in block $d$.
+    left inverse corresponding to the matrix unit $E_{xy}$ in block $d$.
 \end{definition}
 
 \begin{lemma}[Final-block selection identity]
@@ -105,7 +326,7 @@
         MPOTensor.CompleteZipperFusionFamily.finalBlockSelector_sum}
     \leanok
     \uses{def:mpdo_complete_zipper_final_block_selector}
-    The one-letter selector satisfies
+    The coefficients $s_d$ satisfy
     \begin{align}
         \sum_{i,j}s_d(i,j)B_e^{ij}
          & =
@@ -114,16 +335,16 @@
             0,         & e\ne d.
         \end{cases} \notag
     \end{align}
-    Thus one physical letter selects the identity on the chosen final block
-    and annihilates every other final block.
+    Thus contraction over one physical index pair selects the identity on
+    the chosen final block and annihilates every other final block.
 \end{lemma}
 \begin{proof}\leanok
-    Apply the simultaneous block inverse entrywise and sum over the diagonal
+    Apply the simultaneous left inverse entrywise and sum over the diagonal
     matrix units of block $d$. If $e=d$, their sum is $\Id_{D_d}$; if
     $e\ne d$, every term vanishes.
 \end{proof}
 
-\begin{theorem}[Printed F-move and inverse]%
+\begin{theorem}[F-move and inverse]%
     \label{thm:mpdo_complete_zipper_printed_fmove}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         rightTripleSynthesis_mul_printedFMatrix}
@@ -151,7 +372,7 @@
         \label{eq:rfp_printed_fmove}
     \end{align}
     The matrix in the opposite orientation is its two-sided inverse. This is
-    the printed $F$-move of \cite[Section~3.4]{Bultinck2017Anyons}.
+    the $F$-move of \cite[Section~3.4]{Bultinck2017Anyons}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:mpdo_complete_zipper_final_block_selector, lem:matrix_kronecker_identity_cancellation}
@@ -165,11 +386,11 @@
         =R D_{\mathrm R}^{il}R^+.
         \label{eq:rfp_triple_reconstruction}
     \end{align}
-    Contracting (\ref{eq:rfp_triple_reconstruction}) with the one-letter
-    final-block selector from
-    Definition~\ref{def:mpdo_complete_zipper_final_block_selector}, the two
-    direct sums $D_{\mathrm L}$ and $D_{\mathrm R}$ both contract to the
-    identity. Consequently,
+    Contract (\ref{eq:rfp_triple_reconstruction}) with the coefficients
+    $s_d$ from
+    Definition~\ref{def:mpdo_complete_zipper_final_block_selector} and sum
+    over the final labels $d$. The direct sums $D_{\mathrm L}$ and
+    $D_{\mathrm R}$ both contract to the identity. Consequently,
     \begin{align}
         P    & :=LL^+=RR^+,
         \label{eq:rfp_triple_support} \\
@@ -188,13 +409,15 @@
     \end{align}
     The zipper identities (\ref{eq:rfp_zipper_synthesis}) and
     (\ref{eq:rfp_zipper_analysis}) show that $R^+L$ intertwines the direct
-    sums of the final-block letters. The simultaneous block inverse annihilates
-    its corners with different final labels. On the $d$-diagonal corner,
-    injectivity gives $(R^+L)_d=F^{abc}_d\otimes\Id_{D_d}$.
-    Restricting $R(R^+L)=L$ to this corner gives
+    sums of the final-block matrices. The simultaneous left inverse
+    annihilates its blocks with different final labels. On the
+    $d$-diagonal block, injectivity gives
+    $(R^+L)_d=F^{abc}_d\otimes\Id_{D_d}$.
+    Restricting $R(R^+L)=L$ to this block gives
     (\ref{eq:rfp_printed_fmove}).
-    The corresponding fixed-final corner of $L^+R$, together with
-    $(R^+L)(L^+R)=\Id=(L^+R)(R^+L)$, gives amplified inverse identities.
+    The corresponding fixed-final block of $L^+R$, together with
+    $(R^+L)(L^+R)=\Id=(L^+R)(R^+L)$, gives the inverse identities
+    tensored with $\Id_{D_d}$.
     Lemma~\ref{lem:matrix_kronecker_identity_cancellation} removes the
     nonempty bond-space identity factor and yields the two inverse identities
     for $F^{abc}_d$.
@@ -221,7 +444,117 @@
     \label{fig:mpdo_complete_zipper_printed_fmove}
 \end{figure}
 
-\begin{definition}[Fourfold complete zipper fusion data]%
+\begin{theorem}[Gauge covariance of the F-matrices]%
+    \label{thm:mpdo_complete_zipper_fmatrix_gauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.regauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.regauge_fusionTensor}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        eq_printedFMatrix_of_rightTripleSynthesis_mul}
+    \lean{MPOTensor.CompleteZipperFusionFamily.%
+        rightTreeGauge_mul_printedFMatrix_regauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge}
+    \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
+        lem:matrix_kronecker_identity_cancellation}
+    For every triple of labels let $Y^c_{ab}$ be an invertible
+    $N_{ab}^{c}\times N_{ab}^{c}$ matrix, write
+    $\Pi_{ab}=\bigoplus_c (Y^c_{ab})^{\mathsf T}\otimes\Id_{D_c}$, and let $X_{ab}$ and
+    $X^+_{ab}$ be the synthesis and analysis matrices whose blocks are the
+    $X^c_{ab,\mu}$ and the $X^{c+}_{ab,\mu}$. Replace them by
+    $X_{ab}\Pi_{ab}$ and $\Pi_{ab}^{-1}X^+_{ab}$. The transposes occur because the fusion tensors are columns of $X_{ab}$.
+    The new fusion tensors are
+    \begin{align}
+        X'^c_{ab,\mu}
+         & =\sum_\nu (Y^c_{ab})_{\mu\nu}X^c_{ab,\nu}. \notag
+    \end{align}
+    The new matrices, with the same blocks, multiplicities and simultaneous
+    left inverse, again form a complete zipper fusion family. The matrix
+    $F^{abc}_d$ is the only matrix satisfying (\ref{eq:rfp_printed_fmove}),
+    and the matrix $F'^{abc}_d$ of the new family is
+    \begin{align}
+        F'^{abc}_d
+         & =G_{\mathrm R}^{-1}F^{abc}_d G_{\mathrm L},
+         &
+        G_{\mathrm L}
+         & =\bigoplus_e (Y^e_{ab})^{\mathsf T}\otimes (Y^d_{ec})^{\mathsf T},
+         &
+        G_{\mathrm R}
+         & =\bigoplus_f (Y^f_{bc})^{\mathsf T}\otimes (Y^d_{af})^{\mathsf T}.
+        \label{eq:rfp_fmatrix_gauge}
+    \end{align}
+    Its inverse transforms as
+    $(F'^{abc}_d)^{-1}=G_{\mathrm L}^{-1}(F^{abc}_d)^{-1}G_{\mathrm R}$.
+    This is the gauge freedom of the fusion tensors in
+    \cite[after eq.~\emph{gauge}]{Bultinck2017Anyons} and the induced transformation of
+    the $F$-symbols in \cite[lines~415--422]{GarreRubio2023MPOSym}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
+        lem:matrix_kronecker_identity_cancellation}
+    Write $\mathcal B^{ik}_{ab}=\bigoplus_c\Id_{N_{ab}^c}\otimes B_c^{ik}$,
+    so that (\ref{eq:rfp_fusion_reconstruction}) reads
+    $B_{ab}^{ik}=X_{ab}\mathcal B^{ik}_{ab}X^+_{ab}$. Since $\Pi_{ab}$ acts
+    only on the multiplicity factors, it commutes with
+    $\mathcal B^{ik}_{ab}$. The biorthogonality
+    (\ref{eq:rfp_fusion_biorthogonality}) and the reconstruction
+    (\ref{eq:rfp_fusion_reconstruction}) of the new family are
+    \begin{align}
+        (\Pi_{ab}^{-1}X^+_{ab})(X_{ab}\Pi_{ab})
+         & =\Pi_{ab}^{-1}(X^+_{ab}X_{ab})\Pi_{ab}=\Id,
+        \notag                                                      \\
+        (X_{ab}\Pi_{ab})\mathcal B^{ik}_{ab}(\Pi_{ab}^{-1}X^+_{ab})
+         & =X_{ab}\mathcal B^{ik}_{ab}\Pi_{ab}\Pi_{ab}^{-1}X^+_{ab}
+        =X_{ab}\mathcal B^{ik}_{ab}X^+_{ab}=B_{ab}^{ik}.
+        \notag
+    \end{align}
+    The zipper identities (\ref{eq:rfp_zipper_synthesis}) and
+    (\ref{eq:rfp_zipper_analysis}) of the new family are
+    \begin{align}
+        B_{ab}^{ik}X_{ab}\Pi_{ab}
+         & =X_{ab}\mathcal B^{ik}_{ab}\Pi_{ab}
+        =(X_{ab}\Pi_{ab})\mathcal B^{ik}_{ab},
+        \notag                                        \\
+        \Pi_{ab}^{-1}X^+_{ab}B_{ab}^{ik}
+         & =\Pi_{ab}^{-1}\mathcal B^{ik}_{ab}X^+_{ab}
+        =\mathcal B^{ik}_{ab}(\Pi_{ab}^{-1}X^+_{ab}).
+        \notag
+    \end{align}
+    If $R(G\otimes\Id)=L$ for the fixed-final synthesis matrices $L$ and $R$,
+    multiplying on the left by $R^+$ and using $R^+R=\Id$ gives
+    $G\otimes\Id=F^{abc}_d\otimes\Id$, hence $G=F^{abc}_d$.
+    Expanding the composites shows that the new synthesis matrices are
+    $L'=L(G_{\mathrm L}\otimes\Id)$ and $R'=R(G_{\mathrm R}\otimes\Id)$.
+    For $G=G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}$, the $F$-move
+    (\ref{eq:rfp_printed_fmove}) of the original family gives
+    \begin{align}
+        R'(G\otimes\Id)
+         & =R\bigl(G_{\mathrm R}G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}
+        \otimes\Id\bigr)
+        =R(F^{abc}_d\otimes\Id)(G_{\mathrm L}\otimes\Id)
+        =L(G_{\mathrm L}\otimes\Id)=L'.
+        \notag
+    \end{align}
+    By the uniqueness just shown, applied to the new family,
+    $F'^{abc}_d=G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}$, which is
+    (\ref{eq:rfp_fmatrix_gauge}); multiplying on the left by $G_{\mathrm R}$
+    gives the intertwining form $G_{\mathrm R}F'^{abc}_d=F^{abc}_dG_{\mathrm L}$.
+    For the inverse, let
+    $H=G_{\mathrm L}^{-1}(F^{abc}_d)^{-1}G_{\mathrm R}$. By
+    (\ref{eq:rfp_fmatrix_gauge}),
+    \begin{align}
+        F'^{abc}_dH
+         & =G_{\mathrm R}^{-1}F^{abc}_dG_{\mathrm L}G_{\mathrm L}^{-1}
+        (F^{abc}_d)^{-1}G_{\mathrm R}=\Id,
+        \notag                                                         \\
+        (F'^{abc}_d)^{-1}
+         & =(F'^{abc}_d)^{-1}\bigl(F'^{abc}_dH\bigr)
+        =\bigl((F'^{abc}_d)^{-1}F'^{abc}_d\bigr)H=H.
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{definition}[Fourfold fusion maps and changes of basis]%
     \label{def:mpdo_complete_zipper_fourfold_fusion_data}
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         FourfoldLeftAssocMultiplicity}
@@ -264,14 +597,15 @@
     Fix labels $a,b,c,d,e$. The five fusion trees in equation~(33) of
     \cite{Bultinck2017Anyons} determine five multiplicity spaces and five
     synthesis maps into the fourfold bond space. These spaces use the integer
-    multiplicities $N_{ab}^{c}$ of the complete zipper family, rather than the
-    weighted positive-diagonal coordinates introduced earlier.
+    multiplicities $N_{ab}^{c}$ of the complete zipper family, rather than
+    multiplicity coordinates weighted by the positive diagonal matrices
+    $\chi_{\alpha,\beta,\gamma}$.
 
-    Each edge of the pentagon carries the printed $F$-matrix for the affected
+    Each edge of the pentagon carries the $F$-matrix for the affected
     triple tensor factor and the identity on the untouched multiplicity
     factor. The three upper edges and the two lower edges define composites
     in the forward orientation. Replacing each edge by its inverse defines
-    the opposite-oriented composites whose entries occur literally in
+    the opposite-oriented composites whose entries occur in
     equation~(33).
 \end{definition}
 
@@ -306,10 +640,10 @@
     \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}
     \leanok
     \uses{def:mpdo_complete_zipper_fourfold_fusion_data, thm:mpdo_complete_zipper_printed_fmove, lem:matrix_kronecker_identity_cancellation}
-    The three-edge and two-edge composites of the forward printed
+    The three-edge and two-edge composites of the forward
     $F$-matrices are equal. The corresponding composites of the inverse
     $F$-matrices are also equal. In the upper/lower convention of
-    \cite[equation~(33)]{Bultinck2017Anyons}, the latter equality is
+    \cite[equation~(33)]{Bultinck2017Anyons}, the inverse composite equality is
     \begin{align}
          & \sum_{h,\sigma,\lambda,\omega}
         (F^{abc}_{g})^{f\mu\nu}_{h\sigma\lambda}
@@ -321,8 +655,9 @@
         (F^{abj}_{e})^{f\mu\tau}_{i\delta\kappa}.
         \label{eq:rfp_fusion_pentagon}
     \end{align}
-    Every displayed entry denotes the inverse of the forward matrix in the
-    $F$-move convention.
+    Every entry in (\ref{eq:rfp_fusion_pentagon}) is an entry of the inverse
+    of the forward matrix in (\ref{eq:rfp_printed_fmove}), not the reciprocal
+    of an individual entry.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:matrix_kronecker_identity_cancellation}
@@ -347,9 +682,9 @@
     \leanok
     \uses{def:mpdo_operator_product_associator, def:mpdo_bnt_fusion_isometry_family}
     Fix four labels $\alpha,\beta,\gamma,\delta$ in a BNT fusion-isometry
-    family, and write $A=\{1,\ldots,D_\alpha\}$,
-    $B=\{1,\ldots,D_\beta\}$, $C=\{1,\ldots,D_\gamma\}$, and
-    $D=\{1,\ldots,D_\delta\}$ for their bond-coordinate sets. Let
+    family, and write $A=\{0,\ldots,D_\alpha-1\}$,
+    $B=\{0,\ldots,D_\beta-1\}$, $C=\{0,\ldots,D_\gamma-1\}$, and
+    $D=\{0,\ldots,D_\delta-1\}$ for their bond-coordinate sets. Let
     \begin{align}
         r_{X,Y,Z}:((X\times Y)\times Z)
          & \longrightarrow X\times(Y\times Z) \notag
@@ -405,8 +740,7 @@
     \caption{The five parenthesizations of four bond-coordinate factors.
         The upper path is the three-edge composite
         $r_3\circ r_2\circ r_1$, and the lower path is the two-edge composite
-        $s_2\circ s_1$. This figure depicts only canonical Cartesian
-        reassociation. It does not contain fusion multiplicity spaces or
-        $F$-matrices.}
+        $s_2\circ s_1$, depicting canonical Cartesian reassociation of the
+        bond coordinates.}
     \label{fig:mpdo_fourfold_bond_coordinate_reassociation}
 \end{figure}

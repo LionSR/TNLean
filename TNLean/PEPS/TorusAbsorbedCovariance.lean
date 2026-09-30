@@ -99,69 +99,6 @@ translation carrying one fixed reference edge to a given edge of its orientation
 This is the bookkeeping that identifies the per-edge choice of translation made by the gauge
 family with any other translation reaching the same edge. -/
 
-/-- For `2 < width`, distinct left endpoints give distinct right edges. -/
-theorem torusRightEdge_injective (hw : 2 < width) {p q : TorusVertex width height}
-    (h : torusRightEdge p = torusRightEdge q) : p = q := by
-  have h20 : ((2 : ℕ) : ZMod width) ≠ 0 := by
-    intro hcon
-    rw [ZMod.natCast_eq_zero_iff] at hcon
-    have := Nat.le_of_dvd (by norm_num) hcon
-    omega
-  have hp := Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
-  have hq := Edge.ofAdj_endpoints (torusGraph_adj_right q.1 q.2)
-  rw [show Edge.ofAdj (torusGraph_adj_right p.1 p.2) = torusRightEdge q from h] at hp
-  rw [show Edge.ofAdj (torusGraph_adj_right q.1 q.2) = torusRightEdge q from rfl] at hq
-  simp only [Prod.mk.eta] at hp hq
-  rcases hp with ⟨hp1, hp2⟩ | ⟨hp1, hp2⟩ <;> rcases hq with ⟨hq1, hq2⟩ | ⟨hq1, hq2⟩
-  · exact hp1.symm.trans hq1
-  · -- `p = q + (1, 0)` and `p + (1, 0) = q`, so `2 = 0` in `ZMod width`.
-    exfalso
-    have e1 : p.1 = q.1 + 1 := congrArg Prod.fst (hp1.symm.trans hq1)
-    have e2 : p.1 + 1 = q.1 := congrArg Prod.fst (hp2.symm.trans hq2)
-    refine h20 (add_left_cancel (a := q.1) (b := ((2 : ℕ) : ZMod width)) (c := 0) ?_)
-    calc
-      q.1 + ((2 : ℕ) : ZMod width) = p.1 + 1 := by rw [e1]; ring
-      _ = q.1 + 0 := by rw [e2, add_zero]
-  · exfalso
-    have e1 : p.1 + 1 = q.1 := congrArg Prod.fst (hp1.symm.trans hq1)
-    have e2 : p.1 = q.1 + 1 := congrArg Prod.fst (hp2.symm.trans hq2)
-    refine h20 (add_left_cancel (a := q.1) (b := ((2 : ℕ) : ZMod width)) (c := 0) ?_)
-    calc
-      q.1 + ((2 : ℕ) : ZMod width) = p.1 + 1 := by rw [e2]; ring
-      _ = q.1 + 0 := by rw [e1, add_zero]
-  · exact hp2.symm.trans hq2
-
-/-- For `2 < height`, distinct lower endpoints give distinct up edges. -/
-theorem torusUpEdge_injective (hh : 2 < height) {p q : TorusVertex width height}
-    (h : torusUpEdge p = torusUpEdge q) : p = q := by
-  have h20 : ((2 : ℕ) : ZMod height) ≠ 0 := by
-    intro hcon
-    rw [ZMod.natCast_eq_zero_iff] at hcon
-    have := Nat.le_of_dvd (by norm_num) hcon
-    omega
-  have hp := Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2)
-  have hq := Edge.ofAdj_endpoints (torusGraph_adj_up q.1 q.2)
-  rw [show Edge.ofAdj (torusGraph_adj_up p.1 p.2) = torusUpEdge q from h] at hp
-  rw [show Edge.ofAdj (torusGraph_adj_up q.1 q.2) = torusUpEdge q from rfl] at hq
-  simp only [Prod.mk.eta] at hp hq
-  rcases hp with ⟨hp1, hp2⟩ | ⟨hp1, hp2⟩ <;> rcases hq with ⟨hq1, hq2⟩ | ⟨hq1, hq2⟩
-  · exact hp1.symm.trans hq1
-  · exfalso
-    have e1 : p.2 = q.2 + 1 := congrArg Prod.snd (hp1.symm.trans hq1)
-    have e2 : p.2 + 1 = q.2 := congrArg Prod.snd (hp2.symm.trans hq2)
-    refine h20 (add_left_cancel (a := q.2) (b := ((2 : ℕ) : ZMod height)) (c := 0) ?_)
-    calc
-      q.2 + ((2 : ℕ) : ZMod height) = p.2 + 1 := by rw [e1]; ring
-      _ = q.2 + 0 := by rw [e2, add_zero]
-  · exfalso
-    have e1 : p.2 + 1 = q.2 := congrArg Prod.snd (hp1.symm.trans hq1)
-    have e2 : p.2 = q.2 + 1 := congrArg Prod.snd (hp2.symm.trans hq2)
-    refine h20 (add_left_cancel (a := q.2) (b := ((2 : ℕ) : ZMod height)) (c := 0) ?_)
-    calc
-      q.2 + ((2 : ℕ) : ZMod height) = p.2 + 1 := by rw [e2]; ring
-      _ = q.2 + 0 := by rw [e1, add_zero]
-  · exact hp2.symm.trans hq2
-
 /-- For `2 < width`, the translation carrying a right edge to a given edge is unique. -/
 theorem translate_param_unique_right (hw : 2 < width) (p : TorusVertex width height)
     {a a' : ZMod width} {b b' : ZMod height}
@@ -170,7 +107,8 @@ theorem translate_param_unique_right (hw : 2 < width) (p : TorusVertex width hei
     a = a' ∧ b = b' := by
   rw [← translateEdge_eq_map, ← translateEdge_eq_map, translateEdge_torusRightEdge,
     translateEdge_torusRightEdge] at h
-  have := torusRightEdge_injective hw h
+  have : Fact (2 < width) := ⟨hw⟩
+  have := torusRightEdge_injective h
   exact ⟨add_left_cancel (congrArg Prod.fst this), add_left_cancel (congrArg Prod.snd this)⟩
 
 /-- For `2 < height`, the translation carrying an up edge to a given edge is unique. -/
@@ -181,7 +119,8 @@ theorem translate_param_unique_up (hh : 2 < height) (p : TorusVertex width heigh
     a = a' ∧ b = b' := by
   rw [← translateEdge_eq_map, ← translateEdge_eq_map, translateEdge_torusUpEdge,
     translateEdge_torusUpEdge] at h
-  have := torusUpEdge_injective hh h
+  have : Fact (2 < height) := ⟨hh⟩
+  have := torusUpEdge_injective h
   exact ⟨add_left_cancel (congrArg Prod.fst this), add_left_cancel (congrArg Prod.snd this)⟩
 
 /-! ### The endpoint geometry of a translated boundary edge -/

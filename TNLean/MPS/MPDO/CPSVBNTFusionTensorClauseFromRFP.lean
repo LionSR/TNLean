@@ -57,15 +57,8 @@ theorem of_isRFPViaTS (M : MPOTensor d D)
   obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
   obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=
     transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
-      D₁.bondDim D₁.multiplicity D₁.weight
-      D₂.bondDim D₂.multiplicity D₂.weight
-      D₁.multiplicity_pos D₁.weight_pos
-      D₂.multiplicity_pos D₂.weight_pos
-      M D₁.tensor D₂.tensor D₁.isCPSVBNT D₂.isCPSVBNT
-      D₁.verticalCoisometry D₂.verticalCoisometry
-      D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
-      D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
-      hTphys hSphys
+      (VerticalSectorHypotheses.ofDecompositions D₁ D₂ T Smap hTCPTP hSCPTP
+        hTphys hSphys)
   obtain ⟨chi, U, hChiPos, hU, hFusion, hFusionReconstruction⟩ :=
     exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm
       D₁.bondDim D₁.multiplicity D₁.weight

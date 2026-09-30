@@ -10,10 +10,8 @@
     (Definition~\ref{def:normal}); at each system size~$N\geq1$ the MPV of
     $A_{\mathrm{tot}}$ lies in the span of the block MPVs
     $\{\ket{V^{(N)}(A_j)}\}_{j=1}^g$; and for sufficiently large~$N$ those block
-    MPVs are linearly independent. Here normality means eventual block
-    injectivity, as in Definition~\ref{def:normal}. Thus this is the algebraic
-    form of \cite[Definition~IV.2]{Cirac2021Matrix}, rather than its primitive-channel
-    formulation. In the canonical-form characterization of
+    MPVs are linearly independent \cite[Definition~IV.2]{Cirac2021Matrix}.
+    In the canonical-form characterization of
     \cite[Section~2.3]{Cirac2016MPDO_arXiv}, a BNT is a minimal family of
     representatives for $\widetilde A_k^i=e^{i\phi_k}X_kA_j^iX_k^{-1}$ among
     the normal blocks.
@@ -24,16 +22,13 @@
     \leanok
     \uses{def:nt_cpsv, def:mpv}
     % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
-    The coefficient form of a basis of normal tensors: each block $A_j$ is a
-    CPSV normal tensor (Definition~\ref{def:nt_cpsv}), the MPV of $A$ is given at
-    every positive length by explicit coefficients $c_j^{(N)} \in \C$ with
+    In the coefficient form of a basis of normal tensors, each block $A_j$ is a
+    normal tensor in the spectral sense (Definition~\ref{def:nt_cpsv}), the
+    MPV of $A$ is given at every positive length by coefficients
+    $c_j^{(N)} \in \C$ with
     $\ket{V^{(N)}(A)} = \sum_{j=1}^{g} c_j^{(N)} \ket{V^{(N)}(A_j)}$, and the
-    block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent.
-    This is the literal coefficient-form definition of
-    \cite[Section~2.3]{Cirac2016MPDO_arXiv}. It differs from
-    Definition~\ref{def:bnt} only in the chosen normality predicate.
-    Theorem~\ref{thm:cpsv_bnt_is_bnt} proves the implication between the two
-    forms.
+    block MPVs $\{\ket{V^{(N)}(A_j)}\}$ are eventually linearly independent
+    \cite[Section~2.3]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Distinct BNT members are not gauge-phase equivalent]

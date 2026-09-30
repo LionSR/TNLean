@@ -273,12 +273,12 @@ theorem edgeInsertedCoeff_endpointPhysicalRealization (A : Tensor G d)
             edgeOpenMiddleWeight (G := G) A e σ β.leftResidual β.rightResidual *
             O₂ (A.component e.1.2 (edgeRightLocalConfig (G := G) A e β)) (σ e.1.2)) := by
   constructor
-  · obtain ⟨O₁, hO₁⟩ := localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeLeftIncident (G := G) e) M.transpose
+  · obtain ⟨O₁, hO₁⟩ := localIncidentMatrixOp_physicalRealizationAt
+      (A := A) (hA e.1.1) (edgeLeftIncident (G := G) e) M.transpose
     exact ⟨O₁, hO₁, edgeInsertedCoeff_eq_sum_left_physicalRealization
       (G := G) A e σ M O₁ hO₁⟩
-  · obtain ⟨O₂, hO₂⟩ := localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeRightIncident (G := G) e) M
+  · obtain ⟨O₂, hO₂⟩ := localIncidentMatrixOp_physicalRealizationAt
+      (A := A) (hA e.1.2) (edgeRightIncident (G := G) e) M
     exact ⟨O₂, hO₂, edgeInsertedCoeff_eq_sum_right_physicalRealization
       (G := G) A e σ M O₂ hO₂⟩
 

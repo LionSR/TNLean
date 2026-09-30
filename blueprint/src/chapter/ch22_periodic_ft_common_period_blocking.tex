@@ -2,8 +2,9 @@
     \label{def:lcm_period}
     \lean{MPSTensor.lcmPeriod}
     \leanok
-    Given a finite family of blocking periods $(p_i)$ indexed by a finite set,
-    their least common multiple serves as the shared blocking period.
+    For a finite family of positive integer periods $(p_i)_{i \in I}$, their
+    least common multiple $\lcm_{i \in I}(p_i)$ defines the shared blocking
+    period.
 \end{definition}
 
 \begin{definition}[Common-period blocked family]
@@ -11,9 +12,9 @@
     \lean{MPSTensor.commonPeriodBlocking}
     \leanok
     \uses{def:lcm_period, def:blocked_tensor}
-    Given a finite family of tensors $(B_i)$ with designated periods $(p_i)$,
-    block each $B_i$ to the shared period $\lcm(p_i)$, so
-    every block lives in the same physical space.
+    For a finite family of tensors $(B_i)_{i \in I}$ with periods
+    $(p_i)_{i \in I}$, the \emph{common-period blocked family} consists of the
+    blocked tensors $B_i^{[L]}$ with $L = \lcm_{j \in I}(p_j)$.
 \end{definition}
 
 \begin{theorem}[Common-period blocking preserves transfer-map primitivity]
@@ -21,13 +22,13 @@
     \lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
     \leanok
     \uses{def:common_period_blocking, thm:iterated_blocking_transfer, thm:primitive_blocking_divisible}
-    If each tensor $B_i$ has a primitive transfer map after blocking by its own
-    positive period $p_i$, then blocking the entire family to the common
-    LCM period preserves primitivity of each member's transfer map.
+    If each tensor $B_i$ has a primitive transfer map after blocking by its
+    period $p_i \ge 1$, then each blocked tensor $B_i^{[L]}$ with
+    $L = \lcm_j(p_j)$ also has a primitive transfer map.
 \end{theorem}
 
 \begin{proof}\leanok
-    Each $p_i$ divides $\lcm(p_i)$.
-    Apply the divisibility monotonicity theorem for primitive blocked transfer maps
-    to each family member separately.
+    Because each $p_i$ divides $L = \lcm_j(p_j)$,
+    Theorem~\ref{thm:primitive_blocking_divisible} implies that the transfer map
+    $\E_{B_i^{[L]}}$ is primitive for every $i \in I$.
 \end{proof}

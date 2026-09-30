@@ -1,0 +1,48 @@
+%% =========================================================
+%% Chapter: The Multi-Block Asymmetric Fundamental Theorem
+%% Covers Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex, \S7,
+%% and the single-block corollary of
+%% Notes/OpenProblemsTN/strategies/p5_asymmetric_compression_theorem.tex.
+%% =========================================================
+
+\chapter{The Multi-Block Asymmetric Fundamental Theorem}%
+\label{ch:asymmetric_ft}
+
+The asymmetric Fundamental Theorem of matrix product states and operators
+compares an arbitrary tensor with a weighted direct sum of normal tensors.
+Equality of all positive-length periodic vectors determines every nonzero
+simple composition factor of the arbitrary tensor, including its multiplicity;
+the only undetectable factor is the one-dimensional tensor on which every
+physical matrix vanishes. The remaining freedom is an upper-triangular,
+globally nilpotent extension between the factors, explaining the failure of
+sitewise intertwiners under periodic equality alone
+(Remark~\ref{rem:asym_zipper}).
+
+\begin{center}
+    % Formula: the periodic trace tr(B^w), generating the periodic
+    % vector V^{(N)}(B) compared against the target family throughout
+    % this chapter.
+    % Source: chapter introduction; the same picture as
+    % Definition~\ref{def:periodic_mps_vector} (Chapter~\ref{ch:mps}),
+    % drawn here for the arbitrary tensor B of the compression theorem.
+    % Ink-to-index map: each node is the same local tensor B; the upper
+    % legs carry the letters i_1,...,i_N of the word w, and the
+    % ellipsis and brace make the N-site ring schematic.
+    % Contraction set: the horizontal virtual legs are contracted around
+    % the ring, closing the trace; no leg is left open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) for the finite schematic shown.
+    \tenkzkernel
+    \begin{tenkz}[cols=4, boundary=periodic, physical=up]
+        \tn[label pos=135, ports={90:physical:$i_1$}]{B} &
+        \tn[label pos=135]{B} & \tn[skin=dots]{} &
+        \tn[label pos=135, ports={90:physical:$i_N$}]{B}
+        \tnmark[form=bracket]{(1,1) .. (1,4)}{$N\text{ sites}$}
+    \end{tenkz}
+\end{center}
+
+\input{chapter/ch25_asymmetric_ft_algebra.tex}%
+\input{chapter/ch25_asymmetric_ft_mpo_coefficients.tex}%
+\input{chapter/ch25_asymmetric_ft_unblocked_coefficients.tex}%
+\input{chapter/ch25_asymmetric_ft_splitting.tex}%
+\input{chapter/ch25_asymmetric_ft_reductions.tex}%

@@ -378,18 +378,7 @@ theorem of_verticalDecompositions_of_unitaryBlockEquiv
     D₁ D₂ sigma chi U hChiPos hCoisometry hFusion hReconstruction
     hRepresentations
   exact ⟨{
-    labelCount := D₁.labelCount
-    bondDim := D₁.bondDim
-    multiplicity := D₁.multiplicity
-    weight := D₁.weight
-    tensor := D₁.tensor
-    verticalCoisometry := D₁.verticalCoisometry
-    multiplicity_pos := D₁.multiplicity_pos
-    weight_pos := D₁.weight_pos
-    coisometry := D₁.coisometry
-    isCPSVBNT := D₁.isCPSVBNT
-    forward := D₁.forward
-    reconstruction := D₁.reconstruction
+    toCPSVVerticalDecomposition := D₁
     chi := chi
     chi_pos := hChiPos
     fusionCoisometry := U
@@ -422,15 +411,8 @@ theorem of_isRFPViaTS_of_horizontalCF (M : MPOTensor d D)
   obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
   obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=
     transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
-      D₁.bondDim D₁.multiplicity D₁.weight
-      D₂.bondDim D₂.multiplicity D₂.weight
-      D₁.multiplicity_pos D₁.weight_pos
-      D₂.multiplicity_pos D₂.weight_pos
-      M D₁.tensor D₂.tensor D₁.isCPSVBNT D₂.isCPSVBNT
-      D₁.verticalCoisometry D₂.verticalCoisometry
-      D₁.coisometry D₂.coisometry T Smap hTCPTP hSCPTP
-      D₁.forward D₁.reconstruction D₂.forward D₂.reconstruction
-      hTphys hSphys
+      (VerticalSectorHypotheses.ofDecompositions D₁ D₂ T Smap hTCPTP hSCPTP
+        hTphys hSphys)
   obtain ⟨chi, U, hChiPos, hU, hFusion, hFusionReconstruction⟩ :=
     exists_positiveFusionDecomposition_of_unitaryBlockEquiv
       D₁.bondDim D₁.multiplicity D₁.weight

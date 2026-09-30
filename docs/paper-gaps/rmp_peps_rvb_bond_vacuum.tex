@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The RVB Tensor: the Singlet Matrix on the Vacuum}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{What the source prints}
+Appendix~A of \cite{Cirac2021Matrix}, under ``Two dimensions: PEPS'', writes
+the nearest-neighbour resonating valence bond state as a PEPS of bond
+dimension three. Each site carries the projector
+\begin{align}
+    P=\ket{0}\bigl[(0222|+(2022|+\dots\bigr]
+    +\ket{1}\bigl[(1222|+(2122|+\dots\bigr],
+    \label{eq:rmp_peps_rvb_projector}
+\end{align}
+whose nonzero entries have exactly one virtual index in a spin state $0,1$
+and the other three in the vacuum state $2$. The projector is combined with
+$\pm Y$ on the links, and on the square lattice with a translation-invariant
+orientation of the singlets the tensor is
+$A=P(\mathbb 1\otimes\mathbb 1\otimes Y\otimes Y)$, where
+$Y=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$ is the
+$2\times 2$ singlet matrix introduced for the AKLT
+state.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2434 and
+    2440--2448.}
+
+\section{The degenerate reading}
+The bond has dimension three, while $Y$ is printed as a $2\times 2$ matrix.
+If $Y$ is extended to the bond by zero on the vacuum, the down and left legs
+of $A$ can never carry the vacuum index: every column of
+$\mathbb 1\otimes\mathbb 1\otimes Y\otimes Y$ with a vacuum down or left
+index vanishes, and every other column has at least two spin indices, which
+\eqref{eq:rmp_peps_rvb_projector} annihilates. The tensor $A$ is then zero.
+The source plainly does not intend this reading, since it describes the
+state as the superposition of all nearest-neighbour singlet coverings.
+
+\section{The correction}
+The singlet matrix acts on the bond as $Y\oplus 1$: it is $Y$ on the spin
+states $0,1$ and the identity on the vacuum $2$, so the state on each bond is
+$\ket{01}-\ket{10}+\ket{22}$. An edge with vacuum at both ends carries no
+singlet, and an edge with spin labels at both ends carries a singlet. With
+this reading, on a torus of width and height at least three, the coefficient
+of a configuration $\sigma$ is the sum over nearest-neighbour dimer coverings
+$c$ of the product of the singlet coefficients $Y_{\sigma_{v+e},\sigma_v}$
+over the edges $(v,v+e)$ of $c$, with $e$ the unit step to the right or
+up.\footnote{Results: \leanid{TNLean.PEPS.rvbSingletY},
+    \leanid{TNLean.PEPS.stateCoeff_rvbPEPS}.}
+
+\section{Elimination plan}
+None needed beyond this record: the extension by the identity on the vacuum
+is part of the definition of the tensor. Any other nonzero entry $c$ on the
+vacuum gives the same state up to normalization, since each edge not in a
+covering carries the vacuum on exactly one down or left leg and every
+covering of a torus of $N$ sites leaves $3N/2$ edges uncovered, so each
+covering acquires the same factor $c^{3N/2}$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

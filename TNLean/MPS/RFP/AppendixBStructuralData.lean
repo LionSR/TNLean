@@ -437,7 +437,7 @@ theorem
     (hXB : QXB = hStruct.appendixBQXBOnCoeffSpace) :
     HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
       hStruct.appendixBQXBOnCoeffSpace := by
-  simpa [hAX, hXB] using hD2.to_overlapping
+  simpa [hAX, hXB] using hD2.toHasOverlappingTwoSiteCommutation
 
 /-- On a three-site window, the first translated length-two parent term is the
 \(AX\) lift of the Appendix B \(AX\) coefficient representative.
@@ -523,7 +523,7 @@ theorem AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendix
       (d := d) KAXB hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace) :
     localTerm A 2 3 (0 : Fin 3) * localTerm A 2 3 (1 : Fin 3) =
       localTerm A 2 3 (1 : Fin 3) * localTerm A 2 3 (0 : Fin 3) :=
-  hStruct.localTerm_two_three_zero_one_commute_of_overlapping hD2.to_overlapping
+  hStruct.localTerm_two_three_zero_one_commute_of_overlapping hD2.toHasOverlappingTwoSiteCommutation
 
 /-- A Definition D.2 projector pair gives commutation of the first two
 translated length-two parent terms, once the source projectors are transported

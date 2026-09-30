@@ -1,8 +1,12 @@
 \section{Parent Hamiltonian statements for the examples}\label{sec:example_parent_hamiltonians}
 %% ===================================================================
 
-The parent-Hamiltonian construction of \cite[lines~1988--2000]{Cirac2021Matrix},
-reviewed in Chapter~\ref{ch:parent_hamiltonian}, is recorded here in the form
+Following the parent-Hamiltonian construction of
+\cite[lines~1988--2000]{Cirac2021Matrix} reviewed in
+Chapter~\ref{ch:parent_hamiltonian}, originally introduced for finitely
+correlated states by Fannes, Nachtergaele, and Werner~\cite{Fannes1992Finitely}
+and developed for matrix product states by Perez-Garcia et
+al.~\cite{PerezGarcia2007Matrix}, the range-$L$ local parent space is
 \begin{align}
     \mathcal G_L(A)
      & =
@@ -12,13 +16,9 @@ reviewed in Chapter~\ref{ch:parent_hamiltonian}, is recorded here in the form
     : X\in \MN{D}\right\}.
     \notag
 \end{align}
-Thus
-\begin{align}
-    \ker h_L  & = \mathcal G_L(A), \notag \\
-    H_N^{(L)} & = \sum_i (h_L)_i.
-    \notag
-\end{align}
-We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
+Then $\ker h_L = \mathcal G_L(A)$, the range-$L$ parent Hamiltonian is
+$H_N^{(L)} = \sum_i (h_L)_i$, and $\GS(H)=\ker(H-E_0(H)\Id)$ denotes the ground
+eigenspace.
 
 \begin{theorem}[GHZ two-site parent space]\label{thm:ghz_ground_space_two}
     \lean{MPSTensor.ghz_groundSpace_two_eq_span}
@@ -325,6 +325,144 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $\dim\mathcal G_{N,3}(A_{\mathrm{cl}}) = 1$.
 \end{proof}
 
+\begin{theorem}[Periodic ground space for the source cluster matrices]
+    \label{thm:cluster_source_stabilizer_chain_ground_space}
+    \lean{MPSTensor.clusterSource_iInf_eigenspace_eq_chainGroundSpace}
+    \leanok
+    \uses{thm:cluster_source_ground_space_three_eigenspace, def:chain_ground_space, def:cluster_chain_stabilizer}
+    For $N\ge3$, the periodic three-site ground space of the source tensor is
+    the common $-1$ eigenspace of the translated stabilizers:
+    \begin{align}
+        \bigcap_i\{\psi : K_i\psi = -\psi\}
+         & = \mathcal G_{N,3}(A_{\mathrm{src}}).\notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:cluster_source_ground_space_three_eigenspace, rem:cyclic_window_operators, def:chain_ground_space}
+    The three-site calculation in
+    Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace} identifies
+    $\mathcal G_3(A_{\mathrm{src}})$ with the $-1$ eigenspace of $K=ZXZ$.
+    The periodic ground space imposes this local condition at every position
+    around the ring. Each translated operator $K_i$ acts only on its three
+    sites, so we can apply the local calculation with the outside spins fixed.
+
+    Fix a site $i$ and fix the spins outside $[i,i+2]$ to a configuration
+    $\tau$. The remaining coefficients form a three-site vector
+    $\psi|_{[i,i+2],\tau}$. The operator $K_i$ acts only on these three
+    sites: it flips the middle spin and multiplies by the two endpoint
+    signs. Since $N\ge3$, these sites are distinct, and therefore
+    \begin{align}
+        K\bigl(\psi|_{[i,i+2],\tau}\bigr)
+         & = (K_i\psi)|_{[i,i+2],\tau}.\notag
+    \end{align}
+    It follows that $K_i\psi=-\psi$ if and only if
+    $K\bigl(\psi|_{[i,i+2],\tau}\bigr)
+        =-\psi|_{[i,i+2],\tau}$ for every $\tau$. For the reverse implication,
+    every coefficient of $K_i\psi+\psi$ occurs in one of these
+    three-site vectors, so all its coefficients vanish.
+
+    Substituting the local ground-space identity, we obtain
+    $K_i\psi=-\psi$ for every $i$ exactly when every three-site
+    restriction belongs to $\mathcal G_3(A_{\mathrm{src}})$, which is the
+    defining condition for $\psi\in\mathcal G_{N,3}(A_{\mathrm{src}})$.
+\end{proof}
+
+\begin{theorem}[Source cluster ground state]\label{thm:cluster_source_periodic_ground_state}
+    \lean{MPSTensor.clusterSource_mpv_eq_globalZ, MPSTensor.clusterSource_mpv_ne_zero, MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_stabilizer_unique_gs, MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_energy_lower_bound}
+    \leanok
+    \uses{def:cluster_tensor, thm:cluster_source_ground_space_three_eigenspace, def:cluster_chain_stabilizer, def:mpv_submodule}
+    Let $N\ge3$ and put
+    $U=(\sigma^z)^{\otimes N}$ and $H=\sum_i K_i$. Then
+    \begin{align}
+        \ket{V^{(N)}(A_{\mathrm{src}})}
+         & =(\sqrt2)^N U\ket{V^{(N)}(A_{\mathrm{cl}})}\ne0.
+        \label{eq:cluster_source_vector}
+    \end{align}
+    The common $-1$ eigenspace of the $K_i$ and the ground eigenspace of $H$
+    are both $\C\ket{V^{(N)}(A_{\mathrm{src}})}$. More precisely, with the
+    usual inner product $\langle v,w\rangle=\sum_s\overline{v_s}w_s$, the
+    bound below holds for every vector $v$:
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle & \ge-N\|v\|^2,\notag                       \\
+        \ker(H+N\Id)                         & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
+    \end{align}
+    Thus the ground energy is $-N$, and the normalized ground state is unique
+    up to phase. This proves the periodic-chain claim for the matrices in
+    \cite{PerezGarcia2007Matrix}, for odd as well as
+    even $N\ge3$.
+    % Source location: Papers/quant-ph_0608197/MPSarchive.tex, lines 374--387.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cluster_stabilizer_unique_gs, thm:cluster_normal, thm:gauge_invariance, lem:mpv_smul}
+    Applying $\sigma^z$ at every site changes every stabilizer eigenvalue from
+    $+1$ to $-1$. We first relate the vector associated with the normalized
+    cluster tensor to the vector defined by the source matrices.
+
+    Put
+    \begin{align}
+        G=\begin{pmatrix}1&-1\\1&1\end{pmatrix},\qquad
+        G^{-1}=\frac12\begin{pmatrix}1&1\\-1&1\end{pmatrix}.\notag
+    \end{align}
+    Direct multiplication gives, for $t=0,1$,
+    \begin{align}
+        A_{\mathrm{src}}^t
+         & =\sqrt2\,(-1)^tG A_{\mathrm{cl}}^tG^{-1}.\notag
+    \end{align}
+    For a configuration $s=(s_0,\ldots,s_{N-1})$, adjacent inverse factors
+    cancel in the ordered product:
+    \begin{align}
+        A_{\mathrm{src}}^{s_0}\cdots A_{\mathrm{src}}^{s_{N-1}}
+         & =(\sqrt2)^N(-1)^{\sum_j s_j}
+        G\bigl(A_{\mathrm{cl}}^{s_0}\cdots A_{\mathrm{cl}}^{s_{N-1}}\bigr)G^{-1}.
+        \label{eq:cluster_source_product}
+    \end{align}
+    Taking the trace in (\ref{eq:cluster_source_product}) and using
+    $\operatorname{tr}(GBG^{-1})=\operatorname{tr}(B)$ gives
+    \begin{align}
+        V^{(N)}(A_{\mathrm{src}})_s
+         & =\operatorname{tr}\bigl(A_{\mathrm{src}}^{s_0}\cdots A_{\mathrm{src}}^{s_{N-1}}\bigr)\notag \\
+         & =(\sqrt2)^N(-1)^{\sum_j s_j}
+        \operatorname{tr}\bigl(A_{\mathrm{cl}}^{s_0}\cdots A_{\mathrm{cl}}^{s_{N-1}}\bigr)\notag       \\
+         & =(\sqrt2)^N(-1)^{\sum_j s_j}V^{(N)}(A_{\mathrm{cl}})_s.\notag
+    \end{align}
+    The parity factor is precisely the action of $U$ on the coefficient at
+    $s$. This proves (\ref{eq:cluster_source_vector}); nonvanishing follows
+    from the nonzero cluster vector, since $(\sqrt2)^N\ne0$ and $U^2=\Id$.
+
+    Conjugating by $\sigma^z$ fixes $\sigma^z$ and sends $\sigma^x$ to
+    $-\sigma^x$. The three sites in each $K_i$ are distinct, so $UK_iU=-K_i$.
+    If $K_iv=v$ for every $i$, then $K_i(Uv)=-Uv$ for every $i$.
+    Conversely, if $K_iw=-w$ for every $i$, then $K_i(Uw)=Uw$; applying $U$
+    again returns $w$. Thus $U$ maps the common $+1$ eigenspace bijectively
+    onto the common $-1$ eigenspace. By
+    Theorem~\ref{thm:cluster_stabilizer_unique_gs} and
+    (\ref{eq:cluster_source_vector}),
+    \begin{align}
+        \bigcap_i\{v:K_iv=-v\} & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
+    \end{align}
+    This space is one-dimensional.
+
+    % The formal argument below uses norm preservation and the real quadratic
+    % form; it does not invoke a separately formalized Hermiticity theorem.
+    Each $K_i$ changes coefficient signs and permutes the computational basis,
+    so it preserves the norm. Expanding the squares gives
+    \begin{align}
+        \frac12\sum_i\|(\Id+K_i)v\|^2
+         & =N\|v\|^2+\operatorname{Re}\langle v,Hv\rangle\ge0.
+        \label{eq:cluster_source_energy}
+    \end{align}
+    Equality holds exactly when every $(\Id+K_i)v$ vanishes, that is, when
+    $v\in\C\ket{V^{(N)}(A_{\mathrm{src}})}$. Conversely, summing the equations
+    $K_i\ket{V^{(N)}(A_{\mathrm{src}})}=-\ket{V^{(N)}(A_{\mathrm{src}})}$
+    gives $H\ket{V^{(N)}(A_{\mathrm{src}})}=-N\ket{V^{(N)}(A_{\mathrm{src}})}$.
+    Together with (\ref{eq:cluster_source_energy}), this identifies $-N$ as
+    the attained ground energy and its eigenspace as
+    $\C\ket{V^{(N)}(A_{\mathrm{src}})}$.
+\end{proof}
+
 \begin{remark}[Cluster-state stabilizer convention]\label{rem:cluster_stabilizer_convention}
     The cluster tensor of Definition~\ref{def:cluster_tensor} is the reflected
     convention of the tensor displayed in
@@ -354,8 +492,9 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $\bra{\pm}\sigma^x = \pm\bra{\pm}$ the states differ by $\sigma^z$ on
     every site, which conjugates each $K_i$ to $-K_i$ and exchanges the two
     Hamiltonians $\sum_i K_i$ and $-\sum_i K_i = \sum_i(\Id-K_i) - N\Id$.
-    The scope of what is established here for the printed cluster matrices, and
-    what is left aside, is recorded in
+    Theorem~\ref{thm:cluster_source_periodic_ground_state} proves this on-site
+    relation for the matrix product vectors and identifies the ground energy
+    and eigenspace for the printed matrices; see
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
 \end{remark}
 
@@ -511,30 +650,216 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
     $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
 \end{proof}
 
-\begin{remark}[AKLT polynomial Hamiltonian and edge modes]\label{rem:aklt_parent_hamiltonian}
-    The displayed local spin-chain Hamiltonian of the AKLT state is
+\begin{theorem}[Fourfold open-boundary degeneracy of the AKLT chain]
+    \label{thm:aklt_open_ground_space}
+    \lean{MPSTensor.aklt_ker_openParentHamiltonianES_two_le_groundSpaceES, MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two, MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_three}
+    \leanok
+    \uses{def:aklt_tensor, def:open_parent_hamiltonian_es, def:ground_space_es, def:open_state}
+    For $N\ge2$, the kernel of the open-chain two-site projector parent
+    Hamiltonian of the AKLT tensor is the open-boundary MPS space,
+    \begin{align}
+        \ker H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}})
+         & = G_{N}^{\mathrm{ES}}(A_{\mathrm{AKLT}})
+        = \spn_{\C}\bigl\{\sigma\mapsto
+        (l|A_{\mathrm{AKLT}}^{\sigma}|r) :
+        ((l|,|r))\in\C^{2}\times\C^{2}\bigr\},
+        \notag
+    \end{align}
+    and it is four-dimensional. The count is for this open-chain projector
+    parent Hamiltonian. The passage
+    \cite[lines~1171--1174]{Cirac2021Matrix} states a fourfold degeneracy for
+    the AKLT chain with open boundary conditions, whose displayed Hamiltonian
+    is the polynomial spin interaction. Summing the local identity
+    $P^{(2)}=\frac12\bigl(h_{\mathrm{poly}}+\frac23 I\bigr)$ over the
+    $N-1$ open bonds gives
+    $H_{\mathrm{proj}}=\frac12\bigl(H_{\mathrm{poly}}+\frac{2(N-1)}{3}I\bigr)$.
+    The projector kernel is the ground eigenspace of the polynomial
+    Hamiltonian, equivalently the kernel of this shifted operator, and not
+    the kernel of the polynomial Hamiltonian itself. For $N=2$ the
+    polynomial interaction has eigenvalues $-\frac23$ and $\frac43$, so its
+    kernel is trivial, while the projector kernel is four-dimensional. The identification of the projector kernel with the
+    open-boundary matrix-product space uses the boundary vectors of that
+    passage together with the three-site intersection check of
+    \cite[line~2095]{Cirac2021Matrix}, which the review prints for the
+    periodic chain. As a consequence of
+    Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} at $L_{0}=2$,
+    and not as a statement of the review, the three-site open-chain parent
+    Hamiltonian also has a four-dimensional kernel for $N\ge3$. The spin-$0$
+    statement of the same passage is not part of this theorem; see
+    \cite{gap:rmp_example_parent_hamiltonian_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_full_window, lem:parent_interaction_es_kernel, rem:cyclic_window_operators, thm:aklt_ground_space_intersection_two, thm:aklt_normal, thm:open_ground_space_le_hamiltonian_kernel, thm:open_parent_hamiltonian_window_ground_space, thm:normal_open_chain_range_reduction, thm:ground_space_span_open_states, thm:open_parent_hamiltonian_kernel_finrank, thm:wordspan_blk_inj_succ}
+    For $N=2$ the Hamiltonian is the projector onto the orthogonal complement
+    of $\mathcal G_{2}(A_{\mathrm{AKLT}})$. For $N\ge3$, a kernel vector
+    satisfies every nonwrapping two-site constraint. Each nonwrapping
+    three-site window restricts on either side to a nonwrapping two-site
+    window, so Theorem~\ref{thm:aklt_ground_space_intersection_two} places
+    every three-site restriction in $\mathcal G_{3}(A_{\mathrm{AKLT}})$; this
+    is the local check of \cite[line~2095]{Cirac2021Matrix}, used here on
+    nonwrapping windows. The AKLT tensor is injective after blocking
+    $L_{0}=2$ sites (Theorem~\ref{thm:aklt_normal}). For $N\ge3$, with $s$
+    ranging over starts satisfying $s+3\le N$ and $\tau$ over complementary
+    configurations,
+    \begin{align}
+        H^{\mathrm{open}}_{N,2}(A_{\mathrm{AKLT}})v=0
+         & \Longrightarrow
+        \bigl(\forall s,\tau,\
+        \Res^\tau_{s,3}v\in\mathcal G_3(A_{\mathrm{AKLT}})\bigr)
+        \Longrightarrow v\in G_N^{\mathrm{ES}}(A_{\mathrm{AKLT}}).
+        \notag
+    \end{align}
+    The last step is the open-chain intersection theorem.
+    The reverse inclusion holds for every tensor. The span description is
+    Theorem~\ref{thm:ground_space_span_open_states}, and
+    Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} with $D=2$ gives
+    dimension $D^{2}=4$.
+\end{proof}
+
+\begin{definition}[AKLT polynomial Hamiltonian]\label{def:aklt_polynomial_hamiltonian}
+    \lean{MPSTensor.spinOneOperator, MPSTensor.akltBondTerm,
+        MPSTensor.akltHamiltonian}
+    \leanok
+    \uses{def:aklt_tensor}
+    Let $S^x,S^y,S^z$ be the spin-$1$ operators in the basis
+    $\ket0=\ket{m=0}$, $\ket1=\ket{m=+1}$, $\ket2=\ket{m=-1}$, with
+    $S^z=\diag(0,1,-1)$, $S^+\ket0=\sqrt2\ket1$, $S^+\ket2=\sqrt2\ket0$,
+    $S^x=\tfrac12(S^++S^-)$ and $S^y=\tfrac1{2i}(S^+-S^-)$. This is the
+    labelling in which the three matrices of the AKLT tensor of
+    Definition~\ref{def:aklt_tensor} are proportional to
+    $\sigma^z,\sqrt2\sigma^+,-\sqrt2\sigma^-$ on the indices $0,1,2$. For two sites
+    $j,k$ of a chain let
+    $\vec S_j\cdot\vec S_k=\sum_\alpha S^\alpha_jS^\alpha_k$. On a periodic
+    chain of $N$ spin-$1$ sites, with indices modulo $N$, the AKLT Hamiltonian is
     \begin{align}
         H_{\mathrm{AKLT},N}
          & =
         \sum_i
         \left(\vec S_i\cdot\vec S_{i+1}
-        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right),
-        \notag
+        +\frac13(\vec S_i\cdot\vec S_{i+1})^2\right)
+        \label{eq:aklt_polynomial_hamiltonian}
     \end{align}
-    up to an additive constant
-    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix};
-    \cite[lines~2126--2130]{Schuch2011Phases}. The spin-$2$ projector form
-    is related to the polynomial Hamiltonian by the spin-addition identity
+    \cite{AKLT1987Rigorous,AKLT1988ValenceBond}; see also
+    \cite[local TeX lines~340--349]{PerezGarcia2007Matrix}, and, up to an
+    additive constant, \cite[lines~2126--2130]{Schuch2011Phases}. Its two-site
+    term is
+    $h=\vec S_0\cdot\vec S_1+\tfrac13(\vec S_0\cdot\vec S_1)^2$.
+\end{definition}
+
+\begin{theorem}[The AKLT term and the spin-two projector]%
+    \label{thm:aklt_spin_two_projector}
+    \lean{MPSTensor.spinExchange_spinOneOperator_zero_one_apply,
+        MPSTensor.spinOneOperator_sum_mul_self,
+        MPSTensor.totalSpinSq_spinOneOperator_two,
+        MPSTensor.akltBondTerm_shift_apply,
+        MPSTensor.akltBondTerm_shift_eq_parentInteraction,
+        MPSTensor.akltSpinTwoES,
+        MPSTensor.akltSpinTwoES_eq_orthogonal_groundSpaceES,
+        MPSTensor.akltBondTerm_shift_eq_spinTwo_starProjection}
+    \leanok
+    \uses{def:aklt_polynomial_hamiltonian, def:parent_interaction}
+    On two spin-$1$ sites,
     \begin{align}
-        P^{(2)}_{i,i+1}
+        P^{(2)}
          & =
         \frac12
-        \left(\vec S_i\cdot\vec S_{i+1}
-        +\frac13(\vec S_i\cdot\vec S_{i+1})^2
-        +\frac23\Id\right)
+        \left(\vec S_0\cdot\vec S_1
+        +\frac13(\vec S_0\cdot\vec S_1)^2
+        +\frac23\Id\right),
+        \label{eq:aklt_spin_two_projector}
+    \end{align}
+    where $P^{(2)}$ is the orthogonal projector onto the subspace of total spin
+    $2$, the eigenspace of $\vec S_{\mathrm{tot}}^{2}$ for $6=2(2+1)$, with
+    $\vec S_{\mathrm{tot}}=\vec S_0+\vec S_1$. This projector is the two-site
+    parent interaction of the AKLT tensor, the orthogonal projector onto
+    $\mathcal G_2(A_{\mathrm{AKLT}})^{\perp}$. Writing the Hamiltonian as a sum
+    of such spin-$2$ projectors is the form of~\cite{AKLT1987Rigorous}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_ground_space_two}
+    In the basis of Definition~\ref{def:aklt_polynomial_hamiltonian},
+    $\vec S_0\cdot\vec S_1=S^z\otimes S^z+\tfrac12(S^+\otimes S^-+S^-\otimes S^+)$
+    has integer entries: it fixes $\ket{11}$ and $\ket{22}$, exchanges
+    $\ket{01}\leftrightarrow\ket{10}$ and $\ket{02}\leftrightarrow\ket{20}$, and
+    maps $\ket{00}\mapsto\ket{12}+\ket{21}$, $\ket{12}\mapsto\ket{00}-\ket{12}$,
+    $\ket{21}\mapsto\ket{00}-\ket{21}$. A computation on the nine coordinates
+    shows that the right side $Q$ of~(\ref{eq:aklt_spin_two_projector}) is
+    $\sum_kw_kw_k^{\mathsf T}/\lVert w_k\rVert^{2}$ for the five vectors
+    $\ket{11}$, $\ket{22}$, $\ket{01}+\ket{10}$, $\ket{02}+\ket{20}$,
+    $\ket{12}+2\ket{00}+\ket{21}$. Hence $Q$ is real symmetric and idempotent,
+    and its kernel is cut out by the five constraints
+    (\ref{eq:aklt_two_site_constraints}), which is
+    $\mathcal G_2(A_{\mathrm{AKLT}})$ by
+    Theorem~\ref{thm:aklt_ground_space_two}. A self-adjoint idempotent is the
+    orthogonal projector onto the orthogonal complement of its kernel. The same
+    computation gives $(\vec S_0\cdot\vec S_1)Q=Q$, so a vector is fixed by
+    $\vec S_0\cdot\vec S_1$ exactly when it is fixed by $Q$. Since
+    $\sum_\alpha(S^\alpha)^{2}=2$ on each site,
+    $\vec S_{\mathrm{tot}}^{2}=4+2\,\vec S_0\cdot\vec S_1$, so the eigenspace of
+    $\vec S_{\mathrm{tot}}^{2}$ for $6$ is the set of vectors fixed by
+    $\vec S_0\cdot\vec S_1$, which is the range of $Q$.
+\end{proof}
+
+\begin{theorem}[Ground state of the AKLT Hamiltonian]%
+    \label{thm:aklt_polynomial_ground_state}
+    \lean{MPSTensor.cyclicRestrictₗ_spinExchange,
+        MPSTensor.aklt_localTerm_two_apply,
+        MPSTensor.akltHamiltonian_add_eq_parentHamiltonian,
+        MPSTensor.akltHamiltonian_add_isPositive,
+        MPSTensor.akltHamiltonian_eigenvalue_ge,
+        MPSTensor.akltHamiltonian_eigenspace_eq_ker,
+        MPSTensor.akltHamiltonian_eigenspace_eq_mpvSubmodule,
+        MPSTensor.akltHamiltonian_hasUniqueGroundState,
+        MPSTensor.akltHamiltonian_hasEigenvalue,
+        MPSTensor.isPositive_conj_of_add_eq_smul_parentHamiltonian,
+        MPSTensor.neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian,
+        MPSTensor.eigenspace_neg_eq_ker_of_add_eq_smul_parentHamiltonian}
+    \leanok
+    \uses{def:aklt_polynomial_hamiltonian, def:parent_hamiltonian}
+    For $N\ge2$ the Hamiltonian~(\ref{eq:aklt_polynomial_hamiltonian})
+    satisfies
+    \begin{align}
+        H_{\mathrm{AKLT},N}+\tfrac{2N}{3}
+         & =2\sum_iP^{(2)}_{i,i+1}=2H^{(2)}_{N,\mathrm{AKLT}},
         \notag
     \end{align}
-    for two spin-$1$ particles. For open boundary conditions and $N\geq2$,
+    where $H^{(2)}_{N,\mathrm{AKLT}}$ is the two-site parent Hamiltonian of the
+    AKLT tensor. Hence every eigenvalue of $H_{\mathrm{AKLT},N}$ is real and at
+    least $-\tfrac{2N}{3}$. For $N\ge3$ the eigenspace for $-\tfrac{2N}{3}$ is
+    $\C\,V^{(N)}(A_{\mathrm{AKLT}})$, so the AKLT state is the unique ground
+    state of $H_{\mathrm{AKLT},N}$
+    \cite{AKLT1987Rigorous}, \cite[local TeX lines~340--349]{PerezGarcia2007Matrix}.
+    The ground energy $-\tfrac{2N}{3}$ is derived here from the identity above;
+    the local source states only the ground-state property, for no specified
+    boundary condition.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:aklt_spin_two_projector, lem:transported_es_positive,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        thm:aklt_chain_ground_space_two}
+    Restricting a chain vector to the window $i,i+1$ turns
+    $\vec S_i\cdot\vec S_{i+1}$ into $\vec S_0\cdot\vec S_1$, so the local term
+    of the two-site parent Hamiltonian at $i$ is
+    $\tfrac12\bigl(h_i+\tfrac23\bigr)$ by
+    Theorem~\ref{thm:aklt_spin_two_projector}. Summing over the $N$ bonds gives
+    the identity. The parent Hamiltonian is positive by
+    Lemma~\ref{lem:transported_es_positive}, so a nonzero $v$ with
+    $H_{\mathrm{AKLT},N}v=\mu v$ satisfies $\mu+\tfrac{2N}{3}\ge0$. The
+    eigenspace for $-\tfrac{2N}{3}$ is the kernel of $H^{(2)}_{N,\mathrm{AKLT}}$,
+    which is $\mathcal G_{N,2}(A_{\mathrm{AKLT}})$ by
+    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} and
+    $\C\,V^{(N)}(A_{\mathrm{AKLT}})$, a line, by
+    Theorem~\ref{thm:aklt_chain_ground_space_two}.
+\end{proof}
+
+\begin{remark}[AKLT edge modes]\label{rem:aklt_parent_hamiltonian}
+    For open boundary conditions and $N\geq2$,
     \begin{align}
         \dim\GS(H_{\mathrm{AKLT},N}^{\mathrm{open}})
          & = 4, \notag \\
@@ -544,10 +869,19 @@ We write $\GS(H)=\ker(H-E_0(H)\Id)$ for the ground eigenspace.
          & = 1
         \notag
     \end{align}
-    \cite[lines~1169--1174]{Cirac2021Matrix}. Which of the review's AKLT
-    statements are established here, and which are left aside, is recorded in
+    \cite[lines~1169--1174]{Cirac2021Matrix}.
+    Theorem~\ref{thm:aklt_open_ground_space} proves the fourfold count for
+    the open-chain projector parent Hamiltonian. Summing the displayed local
+    identity over the open chain gives
+    $H_{\mathrm{proj}}=\frac12\bigl(H_{\mathrm{poly}}+\frac{2(N-1)}{3}I\bigr)$,
+    so the projector kernel is the ground eigenspace of the polynomial
+    Hamiltonian and the kernel of that shifted operator. It is not the
+    kernel of the polynomial Hamiltonian: for $N=2$ that interaction has
+    eigenvalues $-\frac23$ and $\frac43$. The theorem says nothing about
+    the spin-$0$ count in the second equality; see
     \cite{gap:rmp_example_parent_hamiltonian_scope}.
-    % Neither the polynomial form nor the open-boundary degeneracy is
+    % Neither the polynomial-projector identification nor the spin-0 count is
     % formalized; the periodic two-site uniqueness is
-    % thm:aklt_chain_ground_space_two.
+    % thm:aklt_chain_ground_space_two, and the periodic polynomial Hamiltonian is
+    % thm:aklt_polynomial_ground_state.
 \end{remark}

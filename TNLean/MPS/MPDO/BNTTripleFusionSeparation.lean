@@ -283,24 +283,6 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
       (Fam.hasFinalLabelSelectorWords_of_hasBlockSelectorWords hBlockSelectors)
       α β
 
-private theorem mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq
-    {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
-    (U : Matrix m n ℂ) (hcard : Fintype.card m = Fintype.card n)
-    (hU : Uᴴ * U = 1) : U * Uᴴ = 1 := by
-  let e : m ≃ n := Fintype.equivOfCardEq hcard
-  let V : Matrix n n ℂ := U.submatrix e.symm id
-  have hV : Vᴴ * V = 1 := by
-    unfold V
-    rw [Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_mul_equiv _ _ _ e.symm _, hU, Matrix.submatrix_id_id]
-  have hVV : V * Vᴴ = 1 := mul_eq_one_comm.mpr hV
-  have hreindex : (U * Uᴴ).submatrix e.symm e.symm = 1 := by
-    rw [← Matrix.submatrix_mul_equiv U Uᴴ e.symm (Equiv.refl n) e.symm]
-    exact hVV
-  ext i j
-  have hij := congrArg (fun M => M (e i) (e j)) hreindex
-  simpa [Matrix.one_apply] using hij
-
 private theorem card_fusionIndex_eq_of_lengthIndependent_of_selectorWords
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
@@ -413,10 +395,9 @@ theorem leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_sele
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
     (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
     Fam.leftFusionIsometry α β γ * (Fam.leftFusionIsometry α β γ)ᴴ = 1 := by
-  exact mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq
-    (Fam.leftFusionIsometry α β γ)
+  exact (Matrix.mul_eq_one_comm_of_card_eq _ _ _
     (Fam.card_leftTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
-      c hχ hLI hS hSel α β γ)
+      c hχ hLI hS hSel α β γ)).mpr
     (Fam.leftFusionIsometry_isometry α β γ)
 
 /-- **Positive-length final-label selectors make the right iterated fusion map surjective.**
@@ -432,10 +413,9 @@ theorem rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_sel
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
     (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
     Fam.rightFusionIsometry α β γ * (Fam.rightFusionIsometry α β γ)ᴴ = 1 := by
-  exact mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq
-    (Fam.rightFusionIsometry α β γ)
+  exact (Matrix.mul_eq_one_comm_of_card_eq _ _ _
     (Fam.card_rightTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
-      c hχ hLI hS hSel α β γ)
+      c hχ hLI hS hSel α β γ)).mpr
     (Fam.rightFusionIsometry_isometry α β γ)
 
 /-- **The full triple-fusion comparison has a right adjoint inverse under positive-length

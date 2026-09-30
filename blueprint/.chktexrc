@@ -21,10 +21,14 @@ CmdLine
   -n 18  # Quote-style heuristic.
   -n 24  # Page-reference spacing heuristic.
   -n 25  # Brace-insertion heuristic.
+  -n 27  # "Could not execute LaTeX command"; fires on the extensionless modular
+         # \input{chapter/...} includes, which chktex cannot resolve when
+         # linting files individually even though they exist and compile.
   -n 36  # Space-before-parenthesis heuristic.
   -n 38  # Punctuation-before-quotes heuristic.
   -n 39  # Double-space heuristic.
   -n 26  # Space-before-punctuation heuristic; false positive on tenkz range syntax `..`.
+  -n 27  # Input-following ("Could not execute LaTeX command"): the chapter aggregators use `\input{chapter/...}` paths that only resolve when a parent is linted first, so linting a chapter file standalone floods this non-actionable warning depending on file order.
   -n 40  # Punctuation around inline math heuristic.
   -n 45  # Display-math delimiter heuristic.
 }

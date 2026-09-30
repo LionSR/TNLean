@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.Core.TracePairing
 import TNLean.MPS.MPDO.BiCFDerivation.Selectors
 
@@ -72,13 +73,8 @@ private theorem single_mem_span_diagonalRestrictionUnits (a b : Fin 2) :
 /-- The doubled-index tensor is injective. -/
 private theorem diagonalRestrictionUnits_isInjective :
     Kraus.IsInjective diagonalRestrictionUnits := by
-  rw [Kraus.IsInjective, eq_top_iff]
-  intro M _
-  rw [Matrix.matrix_eq_sum_single M]
-  refine Submodule.sum_mem _ (fun a _ => Submodule.sum_mem _ (fun b _ => ?_))
-  rw [show Matrix.single a b (M a b) = M a b • Matrix.single a b (1 : ℂ) by
-    rw [Matrix.smul_single, smul_eq_mul, mul_one]]
-  exact Submodule.smul_mem _ _ (single_mem_span_diagonalRestrictionUnits a b)
+  rw [Kraus.IsInjective]
+  exact Submodule.eq_top_of_forall_single_mem _ single_mem_span_diagonalRestrictionUnits
 
 /-- The doubled-index tensor is left-canonical. -/
 private theorem diagonalRestrictionUnits_leftCanonical :

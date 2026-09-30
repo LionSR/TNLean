@@ -32,6 +32,8 @@ not part of the generic canonical-form construction.
   normalized flattening.
 * `MPOTensor.hasFullSupport_tensorProductCFIIData`: full support of those data
   from full support of the two inputs.
+* `MPOTensor.IsMPUCanonicalFormII.tensorProduct`: independent tensor products
+  preserve the bundled presentation, with the reindexed product fixed matrix.
 
 ## References
 
@@ -40,7 +42,7 @@ not part of the generic canonical-form construction.
   lines 824--845.
 -/
 
-open scoped Matrix Kronecker BigOperators
+open scoped Matrix Kronecker BigOperators ComplexOrder
 
 namespace MPSTensor.CPSVCanonicalFormIIData
 
@@ -145,5 +147,31 @@ theorem hasFullSupport_tensorProductCFIIData (U : MPOTensor d D)
   exact
     ((dataU.tensorProduct dataV).reindexPhysical (finDoubledProdEquiv d e)).hasFullSupport_cast
       hreindex (normalizedFlattening_tensorProduct U V)
+
+/-- The independent tensor product of two MPUs in canonical form II is again
+in canonical form II. Its ambient right fixed matrix is the reindexed tensor
+product of the two recorded matrices, in the product bond coordinates.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--845;
+canonical-form-II convention, lines 269--281. The full-support convention is
+documented in `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
+noncomputable def IsMPUCanonicalFormII.tensorProduct
+    {U : MPOTensor d D} {V : MPOTensor e E}
+    (hU : IsMPUCanonicalFormII U) (hV : IsMPUCanonicalFormII V) :
+    IsMPUCanonicalFormII (tensorProduct U V) where
+  isMPU := hU.isMPU.tensorProduct hV.isMPU
+  cfii := tensorProductCFIIData U V hU.cfii hV.cfii
+  fullSupport_eq := hasFullSupport_tensorProductCFIIData U V hU.cfii hV.cfii
+    hU.hasFullSupport hV.hasFullSupport
+  ρ := Matrix.reindex finProdFinEquiv finProdFinEquiv (hU.ρ ⊗ₖ hV.ρ)
+  ρ_posDef := (hU.ρ_posDef.kronecker hV.ρ_posDef).submatrix finProdFinEquiv.symm.injective
+  ρ_isDiag := (hU.ρ_isDiag.kronecker hV.ρ_isDiag).submatrix finProdFinEquiv.symm.injective
+  ρ_trace := by
+    rw [Matrix.trace_reindex, Matrix.trace_kronecker, hU.ρ_trace, hV.ρ_trace, one_mul]
+  ρ_fixed := by
+    rw [normalizedFlattening_tensorProduct,
+      MPSTensor.transferMap_reindexPhysical_equiv,
+      MPSTensor.transferMap_tensorProduct_kronecker,
+      hU.ρ_fixed, hV.ρ_fixed]
 
 end MPOTensor

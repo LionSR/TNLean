@@ -197,12 +197,8 @@
 
 \begin{theorem}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
-    \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
-    \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
-    \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
-    \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS, thm:peps_oneVertexComplementComparison, def:peps_torus_translation_invariant, thm:peps_torusUniformBondDim_of_translationInvariant, def:GaugeEquivPEPS}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS, thm:peps_oneVertexComplementComparison, def:peps_torus_translation_invariant, thm:peps_torusUniformBondDim_of_translationInvariant, def:GaugeEquivPEPS, thm:fundamentalTheorem_normalTorusPEPS_unconditional, thm:torusAbsorbedGauge_unique_scalar, thm:torusCovariantAbsorbedGauge_unique_classScalar, thm:torusGauge_unique_scalar_of_perVertex}
     Let $A$ and $B$ be translationally invariant normal PEPS on the discrete
     torus such that every $2\times 3$ and $3\times 2$ region is injective. If
     they generate the same state on an $n\times m$ region with $n,m\geq 7$, then

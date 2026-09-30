@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{SPT Fixed Points for On-Site Symmetries Only}
+\author{}
+\date{2026-09-27}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+In the paragraph ``Symmetry protected topological order'' of
+\cite{Cirac2021Matrix}, the symmetry group $\mathcal G$ may combine on-site,
+time-reversal and reflection symmetries. An element $x$ acts on the tensor by
+$S_x(A^i)=e^{i\phi(x)}X_x^\dagger A^iX_x$, and the associated map on the bond
+space is $X\mapsto X_xX$ or $X\mapsto X_x\bar X$, ``dependent on whether
+time-reversal and/or reflection invariance is involved''. The cocycles lie in
+the twisted cohomology groups $H^2_\alpha(\mathcal G,U(1))$ and
+$H^1_\beta(\mathcal G,U(1))$. The zero-correlation-length representative is
+constructed for every such pair of cocycles, with the twists $\alpha$ and
+$\beta$ entering its phases.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1142--1157.}
+
+\section{What is formalized}
+Only on-site symmetries are formalized. For a projective representation $\rho$
+of $G$ on $\mathbb C^D$ with an ordinary (untwisted) factor system $\omega$, a
+character $\phi$ of $G$ and $W_g=\rho(g^{-1})$, the group acts on the physical
+space $\mathbb C^D\otimes\mathbb C^D$ of the dimer fixed point
+$A^{(a,b)}=D^{-1/2}\ket{a}\bra{b}$ by the linear representation
+$U(g)=\phi(g)\,W_g^{T}\otimes W_g^{-1}$, and
+\begin{align}
+    \sum_jU(g)_{ij}A^j & =\phi(g)\,W_gA^iW_g^{-1}
+    \label{eq:rmp_spt_onsite_scope_twist}
+\end{align}
+involves no complex conjugation of $A^i$ and no reversal of the order of the
+sites. Time reversal, which conjugates the tensor, and reflection, which
+transposes it, are not represented, and neither are the twists $\alpha$ and
+$\beta$.
+
+\section{Elimination plan}
+Introduce symmetry actions on tensors in which a time-reversing element
+conjugates the letters, $A^i\mapsto\sum_jU(x)_{ij}\bar A^j$, and a reflection
+also reverses the order of the sites and transposes the letters. State the
+cocycle conditions twisted by $\alpha$ and $\beta$ for the corresponding
+bond-space maps $X\mapsto X_xX$ and $X\mapsto X_x\bar X$, construct the dimer
+fixed point from a projective representation with a twisted factor system, and
+prove the analogue of (\ref{eq:rmp_spt_onsite_scope_twist}) and of the class
+statements for it. The on-site results are the special case in which $\alpha$ and $\beta$ are
+trivial.\footnote{Affected formal declarations:
+    \leanid{MPSTensor.sptFixedPointAction},
+    \leanid{MPSTensor.twistedTensor_sptFixedPointTensor},
+    \leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetric},
+    \leanid{MPSTensor.cohomologousTo_of_sptFixedPointTensor} and
+    \leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.SupportCompletion
+import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.SimpleTensor
 
@@ -26,26 +27,11 @@ open scoped Matrix BigOperators ComplexOrder Matrix.Norms.Operator
 
 namespace MPOTensor.CaseIIAbsorptionCounterexample
 
-/-- The coefficient $1/\sqrt 2$, viewed as a complex number. -/
-noncomputable def invSqrtTwo : ℂ := ((Real.sqrt 2)⁻¹ : ℝ)
-
-private lemma invSqrtTwo_ne_zero : invSqrtTwo ≠ 0 := by
-  rw [invSqrtTwo]
-  exact_mod_cast inv_ne_zero (ne_of_gt (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 2)))
+open Complex (invSqrtTwo invSqrtTwo_ne_zero invSqrtTwo_mul_self star_invSqrtTwo)
 
 private lemma norm_invSqrtTwo : ‖invSqrtTwo‖ = (Real.sqrt 2)⁻¹ := by
-  rw [invSqrtTwo, Complex.norm_real, Real.norm_eq_abs, abs_inv, abs_of_pos]
-  exact Real.sqrt_pos.2 (by norm_num)
-
-private lemma invSqrtTwo_mul_self : invSqrtTwo * invSqrtTwo = (1 / 2 : ℂ) := by
-  rw [← pow_two, invSqrtTwo]
-  change ((↑((Real.sqrt 2)⁻¹) : ℂ) ^ 2) = 1 / 2
-  rw [← Complex.ofReal_pow, inv_pow,
-    Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
-  norm_num
-
-private lemma star_invSqrtTwo : starRingEnd ℂ invSqrtTwo = invSqrtTwo := by
-  simp [invSqrtTwo]
+  rw [invSqrtTwo, norm_inv, Complex.norm_real, Real.norm_eq_abs,
+    abs_of_pos (Real.sqrt_pos.2 (by norm_num))]
 
 /-- The first normal representative, supported on doubled symbols `(0,0)` and `(1,1)`,
 which are indices `0` and `4` under `finProdFinEquiv`. -/
@@ -113,8 +99,8 @@ private lemma firstBasis_transferMap :
   fin_cases a
   fin_cases b
   have hterm :
-      invSqrtTwo * X 0 0 * starRingEnd ℂ invSqrtTwo +
-          invSqrtTwo * X 0 0 * starRingEnd ℂ invSqrtTwo = X 0 0 := by
+      invSqrtTwo * X 0 0 * star invSqrtTwo +
+          invSqrtTwo * X 0 0 * star invSqrtTwo = X 0 0 := by
     rw [star_invSqrtTwo]
     calc
       invSqrtTwo * X 0 0 * invSqrtTwo + invSqrtTwo * X 0 0 * invSqrtTwo =
@@ -201,10 +187,9 @@ theorem sectors_isBNTCanonicalForm :
             (∑ x : Fin (3 * 3),
               starRingEnd ℂ (firstBasisTensor x 0 0) *
                 firstBasisTensor x 0 0) =
-              starRingEnd ℂ invSqrtTwo * invSqrtTwo +
-                starRingEnd ℂ invSqrtTwo * invSqrtTwo := by
+              invSqrtTwo * invSqrtTwo + invSqrtTwo * invSqrtTwo := by
           simp [firstBasisTensor, Fin.sum_univ_succ]
-        rw [hsum, star_invSqrtTwo, invSqrtTwo_mul_self]
+        rw [hsum, invSqrtTwo_mul_self]
         ring
       · change MPSTensor.IsLeftCanonical secondBasisTensor
         rw [MPSTensor.IsLeftCanonical]

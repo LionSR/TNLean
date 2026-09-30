@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.EdgeMiddlePhysical
+import TNLean.PEPS.EdgeMiddlePhysical.Basic
 
 /-!
 # Physical realization of edge virtual insertions
@@ -134,52 +134,18 @@ theorem edgeVirtualInsertionPhysicalRealization (A : Tensor G d)
           localTensorMap A e.1.2
             (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M c)) := by
   constructor
-  · exact localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeLeftIncident (G := G) e) M
-  · exact localIncidentMatrixOp_physicalRealization
-      (A := A) hA (edgeRightIncident (G := G) e) M
-
-/-- Projected recovery at the left endpoint of an edge.
-
-For the left endpoint, the matrix inserted on the edge is represented by
-\(M^{\mathsf T}\) on the distinguished incident edge. This is the endpoint
-specialization of the local \(O_1,O_2 \mapsto W\) recovery step in
-Lemma \(\mathrm{inj\_isomorph}\) of arXiv:1804.04964, Section 3. -/
-theorem edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
-    (A : Tensor G d) (hA : IsVertexInjective A) (e : Edge G)
-    (O₁ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
-    localVirtualOpOfPhysicalOp A hA e.1.1 O₁ =
-        localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose ↔
-      (localProjector A hA e.1.1).comp (O₁.comp (localProjector A hA e.1.1)) =
-        physRealizeLocalOp A hA e.1.1
-          (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose) :=
-  localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.1 O₁
-    (localIncidentMatrixOp A (edgeLeftIncident (G := G) e) M.transpose)
-
-/-- Projected recovery at the right endpoint of an edge.
-
-For the right endpoint, the inserted matrix acts directly on the distinguished
-incident edge. This is the endpoint specialization of the local
-\(O_1,O_2 \mapsto W\) recovery step in Lemma \(\mathrm{inj\_isomorph}\) of
-arXiv:1804.04964, Section 3. -/
-theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
-    (A : Tensor G d) (hA : IsVertexInjective A) (e : Edge G)
-    (O₂ : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
-    (M : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
-    localVirtualOpOfPhysicalOp A hA e.1.2 O₂ =
-        localIncidentMatrixOp A (edgeRightIncident (G := G) e) M ↔
-      (localProjector A hA e.1.2).comp (O₂.comp (localProjector A hA e.1.2)) =
-        physRealizeLocalOp A hA e.1.2
-          (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M) :=
-  localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq A hA e.1.2 O₂
-    (localIncidentMatrixOp A (edgeRightIncident (G := G) e) M)
+  · exact localIncidentMatrixOp_physicalRealizationAt
+      (A := A) (hA e.1.1) (edgeLeftIncident (G := G) e) M
+  · exact localIncidentMatrixOp_physicalRealizationAt
+      (A := A) (hA e.1.2) (edgeRightIncident (G := G) e) M
 
 /-- Projected recovery at the left endpoint of an edge, under linear
 independence of the tensor family at that single endpoint.
 
-This is the per-endpoint form of
-`edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq`: it requires
+For the left endpoint, the matrix inserted on the edge is represented by
+\(M^{\mathsf T}\) on the distinguished incident edge. This is the endpoint
+specialization of the local \(O_1,O_2 \mapsto W\) recovery step in
+Lemma \(\mathrm{inj\_isomorph}\) of arXiv:1804.04964, Section 3. It requires
 only `LinearIndependent ℂ (A.component e.1.1)`, the fact that
 `EdgeBlockedThreeSiteInjective` already supplies via
 `EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`. -/
@@ -199,9 +165,11 @@ theorem edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
 /-- Projected recovery at the right endpoint of an edge, under linear
 independence of the tensor family at that single endpoint.
 
-This is the per-endpoint form of
-`edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq`: it
-requires only `LinearIndependent ℂ (A.component e.1.2)`, the fact that
+For the right endpoint, the inserted matrix acts directly on the distinguished
+incident edge. This is the endpoint specialization of the local
+\(O_1,O_2 \mapsto W\) recovery step in Lemma \(\mathrm{inj\_isomorph}\) of
+arXiv:1804.04964, Section 3. It requires only
+`LinearIndependent ℂ (A.component e.1.2)`, the fact that
 `EdgeBlockedThreeSiteInjective` already supplies via
 `EdgeBlockedThreeSiteInjective.endpoint_linearIndependent`. -/
 theorem edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
@@ -244,10 +212,10 @@ theorem edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq
       localVirtualOpOfPhysicalOp A hA e.1.2 O₂ =
         localIncidentMatrixOp A (edgeRightIncident (G := G) e) M := by
   constructor
-  · exact (edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
-      A hA e O₁ M).2 hO₁
-  · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq
-      A hA e O₂ M).2 hO₂
+  · exact (edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
+      A e (hA e.1.1) O₁ M).2 hO₁
+  · exact (edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt
+      A e (hA e.1.2) O₂ M).2 hO₂
 
 /-- Projected endpoint realizations of a common bond matrix give the endpoint
 conclusion of physical-to-virtual insertion once the endpoint physical actions
@@ -291,13 +259,19 @@ theorem edgePhysicalToVirtualInsertion_of_projected_realization_eq
       A hA e O₁ O₂ M hO₁ hO₂
   constructor
   · intro c
-    have hrealize :=
-      localVirtualOpOfPhysicalOp_realizes_of_projector A hA e.1.1 O₁ hO₁_image c
+    have hrealize :
+        localTensorMap A e.1.1 (localVirtualOpOfPhysicalOp A hA e.1.1 O₁ c) =
+          O₁ (localTensorMap A e.1.1 c) :=
+      localVirtualOpOfPhysicalOpAt_realizes_of_projector A (hA e.1.1) O₁
+        hO₁_image c
     rw [hLeft] at hrealize
     exact hrealize.symm
   · intro c
-    have hrealize :=
-      localVirtualOpOfPhysicalOp_realizes_of_projector A hA e.1.2 O₂ hO₂_image c
+    have hrealize :
+        localTensorMap A e.1.2 (localVirtualOpOfPhysicalOp A hA e.1.2 O₂ c) =
+          O₂ (localTensorMap A e.1.2 c) :=
+      localVirtualOpOfPhysicalOpAt_realizes_of_projector A (hA e.1.2) O₂
+        hO₂_image c
     rw [hRight] at hrealize
     exact hrealize.symm
 

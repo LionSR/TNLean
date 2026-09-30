@@ -267,54 +267,32 @@ theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_ind
       ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) :
-    let ρ := Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
-      (_root_.finThreeArrowEquiv (Fin d))
-      (M.reducedBlockState 4 3 (by omega))
-    ∃ (C : Matrix (MPSTensor.BlockEntryIndex S.basisDim)
-        (Fin d × Fin d) ℂ),
-      ∃ hC : MPSTensor.IsMPOBlockLeftInverse
-          (fun j ↦ S.basisMPOTensor j) C,
-        ∃ hη : EtaStructure ρ,
-          let hρ : IsThreeSiteFamilyClosure
-              (fun j ↦ S.basisMPOTensor j)
-              (S.normalizedThreeSiteClosingMatrix M 1) ρ :=
-            (reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-              M S hM hWeight hnonNil hSAL).1
-          let hR : ∀ j : Fin S.basisCount,
-              S.normalizedThreeSiteClosingMatrix M 1 j ≠ 0 :=
-            (reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-              M S hM hWeight hnonNil hSAL).2
-          ∃ s₀ : Fin S.basisCount,
-            (∀ s, IsOrthogonalProjection
-              (completedBntSectorProjection hC hρ hη hR s₀ s)) ∧
-            (∀ s t, s ≠ t →
-              completedBntSectorProjection hC hρ hη hR s₀ s *
-                completedBntSectorProjection hC hρ hη hR s₀ t = 0) ∧
-            (∑ s, completedBntSectorProjection hC hρ hη hR s₀ s) = 1 ∧
-            ∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
-              ∀ (β α : Fin (S.basisDim i)),
-                completedBntSectorProjection hC hρ hη hR s₀ s *
-                    physicalSlice (S.basisMPOTensor i) β α *
-                  completedBntSectorProjection hC hρ hη hR s₀ t = 0 := by
-  dsimp only
+    ∃ W : ThreeSiteClosureWitness M S,
+      ∃ s₀ : Fin S.basisCount,
+        (∀ s, IsOrthogonalProjection
+          (completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s)) ∧
+        (∀ s t, s ≠ t →
+          completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s *
+            completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ t = 0) ∧
+        (∑ s, completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s) = 1 ∧
+        ∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
+          ∀ (β α : Fin (S.basisDim i)),
+            completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s *
+                physicalSlice (S.basisMPOTensor i) β α *
+              completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ t = 0 := by
   obtain ⟨s₀, _q₀, _hs₀⟩ := hCF.weight_unit_exists
-  obtain ⟨C, hC, hη, _hunique, _hproj, _horth, _hsum⟩ :=
+  obtain ⟨W, _hunique, _hproj, _horth, _hsum⟩ :=
     exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL
-  let hClosure :=
-    reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-      M S hM hWeight hnonNil hSAL
-  let hρ := hClosure.1
-  let hR := hClosure.2
-  refine ⟨C, hC, hη, s₀, ?_, ?_, ?_, ?_⟩
+  refine ⟨W, s₀, ?_, ?_, ?_, ?_⟩
   · intro s
-    exact completedBntSectorProjection_isOrthogonal hC hρ hη hR s₀ s
+    exact completedBntSectorProjection_isOrthogonal W.hC W.hρ W.hη W.hR s₀ s
   · intro s t hst
-    exact completedBntSectorProjection_mul_eq_zero hC hρ hη hR s₀ hst
-  · exact sum_completedBntSectorProjection hC hρ hη hR s₀
+    exact completedBntSectorProjection_mul_eq_zero W.hC W.hρ W.hη W.hR s₀ hst
+  · exact sum_completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀
   · intro i s t hst β α
     exact completedBntSectorProjection_mul_physicalSlice_mul_eq_zero
-      hC hρ hη hR s₀ i s t hst β α
+      W.hC W.hρ W.hη W.hR s₀ i s t hst β α
 
 /-- **Separating projectors in the source standing context.**
 
@@ -376,7 +354,7 @@ theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
   have hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q' :=
     weight_copy_independent_of_isSourceZCL S rfl X hEq hZCL hnonNil
-  obtain ⟨_, _, _, _, hProj, hOrth, hSum, hSeparate⟩ :=
+  obtain ⟨_W, _s₀, hProj, hOrth, hSum, hSeparate⟩ :=
     exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent
       M S hM hCF hWeight hnonNil hSpan hSAL
   exact ⟨_, hProj, hOrth, hSum, hSeparate⟩

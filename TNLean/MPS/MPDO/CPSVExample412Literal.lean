@@ -11,33 +11,65 @@ import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.RFPViaTS
 
 /-!
-# The literal tensor printed in CPSV16 Example 4.12
+# CPSV16 Example 4.12: the printed tensor generating $I^{\otimes N}+\sigma_z^{\otimes N}$
 
-CPSV16 Example 4.12 prints a tensor $M$ with $d=D=2$ whose only nonzero
-components are
+**Source.** Cirac, Pérez-García, Schuch, Verstraete 2017 (arXiv:1606.00608),
+Example 4.12, `Papers/1606.00608/MPDO-22-12-17-2.tex` lines 932--939: a tensor
+$M$ with $d=D=2$ whose only nonzero components are
 \[
-  1=M_{00}^{00}=M_{00}^{11}=M_{11}^{00}=-M_{11}^{11}.
+  1=M_{00}^{00}=M_{00}^{11}=M_{11}^{00}=-M_{11}^{11},
 \]
+generating $\rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}$; the source states
+that tracing one spin leaves a reduced state proportional to the identity, that
+the tensor is SAL and has ZCL, that it is not of the commuting form
+(`rhoNComm`), and that it is an RFP in the sense of Definition 4.1 (line 657).
 Thus $M^{00}=I$ and $M^{11}=\sigma_z$, with the off-diagonal physical letters
-zero.  At every positive length it generates
-\[
-  \rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}.
-\]
+zero.
 
-The printed tensor is not normalized in the convention used by
-`MPOTensor.IsRFPViaTS`: its physical-trace transfer is $I+\sigma_z$, whose
-square is twice itself rather than itself.  Consequently the literal tensor
-satisfies the project's scale-invariant `IsSourceZCL` relation with scale $2$,
-but it fails the paper's literal ZCL equation and is not an RFP via
-trace-preserving physical maps. The separate likely normalized representative
-$(1/2)\,M$ is discussed in
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>
-and is not treated here.
+**Formalized here.** The printed tensor `M` in the source's normalization; the
+displayed operator formula at every positive length, entrywise
+(`rho_eq_diagonal`) and as a sum of two finite Kronecker powers
+(`rho_eq_finKronecker`); positivity (`M_isMPDO`) and the trace $2^N$
+(`trace_rho`); the loss of the $\sigma_z^{\otimes N}$ part when the last
+$N-L\ge 1$ sites of the normalized state are traced out, keeping $L\ge 1$ sites
+(`reducedBlockState_M_eq_scaled_one`); and saturation of the area
+law (`M_isSAL`). The failure of the commuting form is
+`MPOTensor.CPSVExample412Literal.M_not_isGSNNCH` in
+`TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.ExampleFourCycleObstruction`. The
+density-normalized representative $\tfrac12 M$, with its explicit channels for
+Definition 4.1, is `MPOTensor.CPSVExample412NormalizedRFP.Mhat` in
+`TNLean.MPS.MPDO.CPSVExample412NormalizedRFP`; it is defined as
+`((1 / 2 : ℝ) : ℂ) • M`.
+
+**Local fix (normalization):** the printed tensor has physical-trace transfer
+$I+\sigma_z$, whose square is twice itself, so it satisfies the ZCL
+idempotence of Definition 4.2 only up to the scale $2$ (`M_isSourceZCL`) and is
+not an RFP via trace-preserving maps (`M_not_isRFPViaTS`); the source's RFP
+claim is proved for $\tfrac12 M$ (`CPSVExample412NormalizedRFP.Mhat_isRFPViaTS`).
+Documented in
+`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`, whose complete text is
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+
+## Main definitions
+
+* `sigmaZ`: the Pauli matrix $\sigma_z$.
+* `M`: the printed tensor of Example 4.12.
+
+## Main results
+
+* `rho_eq_diagonal`, `rho_eq_finKronecker`: the displayed operator formula.
+* `M_isMPDO`, `trace_rho`: positivity and trace $2^N$ at positive length.
+* `reducedBlockState_M_eq_scaled_one`, `one_site_trace_loses_sigmaZ`: the
+  one-site trace loss.
+* `M_isSAL`: saturation of the area law.
+* `M_isSourceZCL`, `physTraceTransfer_M_not_idempotent`, `M_not_isRFPViaTS`:
+  the normalization mismatch.
 
 ## References
 
-* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Example 4.12,
-  lines 932--939.
+- [arXiv:1606.00608](https://arxiv.org/abs/1606.00608) -- J. I. Cirac,
+  D. Pérez-García, N. Schuch, F. Verstraete, *Matrix product density operators:
+  Renormalization fixed points and boundary theories*
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -318,10 +350,9 @@ theorem physTraceTransfer_M :
 representative has scale $\lambda=2$:
 $(I+\sigma_z)^2=2(I+\sigma_z)$.
 
-**Local fix (normalization):** Definition 4.2 of the source requires literal
-idempotence, whereas the tensor printed in Example 4.12 satisfies only this
-scale-two relation. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+Definition 4.2 of the source requires literal idempotence, whereas the tensor
+printed in Example 4.12 satisfies only this scale-two relation; this is the
+module's normalization Local fix.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem physTraceTransfer_M_sq :
@@ -335,11 +366,10 @@ theorem physTraceTransfer_M_sq :
 /-- The literal tensor satisfies the project's scale-invariant `IsSourceZCL`
 relation with the explicit positive scale $\lambda=2$.
 
-**Local fix (normalization):** `IsSourceZCL` allows a positive scale and is
-therefore broader than the literal idempotence in CPSV16 Definition 4.2. This
-theorem records the corrected scale-two relation for the printed tensor, not
-the paper's literal ZCL assertion. See
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+`IsSourceZCL` allows a positive scale and is therefore broader than the literal
+idempotence in CPSV16 Definition 4.2. This theorem records the corrected
+scale-two relation for the printed tensor, not the paper's literal ZCL
+assertion (the module's normalization Local fix).
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
 theorem M_isSourceZCL : IsSourceZCL M := by
@@ -351,10 +381,7 @@ theorem M_isSourceZCL : IsSourceZCL M := by
 
 /-- The transfer of the literal printed tensor is not idempotent.  This is the
 normalization mismatch hidden by the source's statement that the same printed
-representative is an RFP.
-
-**Local fix (normalization):** see
-<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+representative is an RFP (the module's normalization Local fix).
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
 theorem physTraceTransfer_M_not_idempotent :
@@ -366,10 +393,8 @@ theorem physTraceTransfer_M_not_idempotent :
 
 /-- The literal printed representative cannot satisfy Definition 4.1 with
 trace-preserving physical maps, since that condition forces literal transfer
-idempotence.
-
-**Local fix (normalization):** the likely $(1/2)\,M$ representative is separate;
-see <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+idempotence. The normalized representative $\tfrac12 M$ is treated in
+`TNLean.MPS.MPDO.CPSVExample412NormalizedRFP`.
 
 Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
 theorem M_not_isRFPViaTS : ¬ IsRFPViaTS M := by

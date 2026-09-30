@@ -38,6 +38,8 @@ of the chosen simple blocking, is not asserted here.
 
 ## Main results
 
+* `MPOTensor.sourceIndexValue_eq_zero_of_rightRank_eq_leftRank`: equal source
+  ranks give value zero.
 * `MPOTensor.sourceIndexValue_eq_of_common_rank_scale`: cancellation of a
   supplied common positive rank scale.
 * `MPOTensor.sourceIndexValue_blockTensor_eq_of_products`: blocking invariance
@@ -67,6 +69,16 @@ This is the numerical expression in arXiv:1703.09188, Definition IV.1, lines
 noncomputable def sourceIndexValue (U : MPOTensor d D)
     (_hr : 0 < r[U]) (_hℓ : 0 < ℓ[U]) : ℝ :=
   (1 / 2 : ℝ) * (Real.logb 2 r[U] - Real.logb 2 ℓ[U])
+
+/-- Equal positive source ranks give source-index value zero.
+
+This is the arithmetic of arXiv:1703.09188, Definition IV.1, lines 681--686, at
+$r=\ell$. -/
+theorem sourceIndexValue_eq_zero_of_rightRank_eq_leftRank
+    (U : MPOTensor d D) (hr : 0 < r[U]) (hℓ : 0 < ℓ[U])
+    (h : r[U] = ℓ[U]) :
+    sourceIndexValue U hr hℓ = 0 := by
+  simp only [sourceIndexValue, h, sub_self, mul_zero]
 
 /-- Multiplying both positive source ranks by the same positive natural number
 does not change the source-index value.

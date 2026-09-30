@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.NormalEdgeBlockingInterior
-import TNLean.PEPS.RegionBlock.CoarseThreeSite2
+import TNLean.PEPS.RegionBlock.CoarseThreeSiteCoherentFrame
 import TNLean.PEPS.SquareLatticeCoordinateSwap
 
 /-!

@@ -129,9 +129,8 @@ the resulting splitting decomposes any tensor into irreducible blocks.
 
 \subsection{Iterated reduction to irreducible blocks}
 
-Iterating the two-block splitting on bond dimension decomposes any tensor into
-irreducible blocks; the remaining lemmas record the spectral facts about
-irreducible unital blocks and the algebra-spanning input used later.
+Iterating the two-block splitting decomposes any tensor into irreducible blocks
+of strictly smaller bond dimensions.
 
 \begin{definition}[Irreducible tensor]\label{def:irreducible_tensor}
     \lean{Kraus.IsIrreducibleFamily}
@@ -195,9 +194,7 @@ trace-preserving gauge.
         \label{eq:canonical_blockwise_tp}
     \end{align}
     each $C_k$ is irreducible and left-canonical,
-    $\sum_i(C_k^i)^\dagger C_k^i=\Id$, with positive bond dimension. This is
-    the blockwise form used in the arbitrary-tensor trace-preserving gauge
-    below.
+    $\sum_i(C_k^i)^\dagger C_k^i=\Id$, with positive bond dimension.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -380,11 +377,7 @@ sector maps. The cyclic projections come from
     Let $A$ be a left-canonical irreducible tensor. Then there is a period
     $m\ge1$ and a unit-weight decomposition of $A^{[m]}$ into sector blocks
     $(C_k)_{k=1}^m$, each of which is left-canonical, has primitive transfer map,
-    is tensor-irreducible, and has nonzero bond dimension. Equivalently, the
-    cyclic-sector decomposition of $A^{[m]}$ already satisfies the
-    trace-preservation, primitivity, and irreducibility hypotheses needed for
-    the common-blocking step
-    (Lemma~\ref{thm:exists_common_blocked_cyclic_sector_family}).
+    is tensor-irreducible, and has nonzero bond dimension.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -445,10 +438,8 @@ sector maps. The cyclic projections come from
 \section{Cyclic-sector irreducibility}%
 \label{subsec:internal_lean_only_labels}
 
-The powered map is analyzed corner by corner before the resulting sector
-families are placed over a common blocked alphabet. The compression and
-common-alphabet identities are proved in
-Section~\ref{sec:app_canonical_cyclic_sectors}.
+The powered transfer map is analyzed on each corner projection before the
+sector families are placed over a common blocked alphabet.
 
 \begin{theorem}[Fixed-point upgrade on an invariant corner]%
     \label{thm:adjoint_corner_fixed_of_preserved}

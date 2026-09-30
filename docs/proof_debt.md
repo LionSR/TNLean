@@ -23,9 +23,11 @@ The process has these artifacts:
   deletable lines* (`name: 'proof-shrink-tournament'`).
 - `scripts/loc_report.py` — the deterministic size snapshot feeding the
   Metrics table.
-- `.claude/skills/find-simplification/SKILL.md` — the hand-driven audit for
-  one directory, PR, or weekly slice: candidate classes, consumer
-  classification, proof-by-build, and where each finding is recorded.
+- The `find-simplification` skill of texra-lean-skills — the hand-driven
+  audit for one directory, PR, or weekly slice: candidate classes, consumer
+  classification, proof-by-build, and recording. Its TNLean addendum,
+  `.claude/skills/find-simplification/SKILL.md`, supplies the repository
+  context: debt records, settled surfaces, and known concentrations.
 
 ## What counts as proof debt
 

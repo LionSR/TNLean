@@ -103,26 +103,22 @@ eventual exact-word spanning, and spectral strong irreducibility.
     If the set is empty, its value is defined to be zero.
 \end{definition}
 
-% Scope restriction (explicit irreducibility): the condition below strengthens
-% Sanz et al., Proposition 3(c). See
-% docs/paper-gaps/spwc10_wielandt_one_step_subspace.tex.
 \begin{definition}[Strengthened strong irreducibility]
     \label{def:strongly_irreducible_paper}
     \lean{MPSTensor.IsStronglyIrreduciblePaper}
     \leanok
     \uses{def:transfer_map}
-    We call the tensor \emph{strongly irreducible} here if there is a matrix
+    An MPS tensor $A$ is \emph{strongly irreducible} if there exists a matrix
     $\rho>0$ such that
     \begin{align}
         \E_A(\rho)                 & =\rho, \notag \\
         \spec_{\mathrm{per}}(\E_A) & =\{1\},
         \notag
     \end{align}
-    and $\E_A$ is irreducible. The condition in
-    \cite[Proposition~3(c)]{Sanz2010Quantum} requires that $1$ be the only
-    peripheral eigenvalue and that its eigenspace be one-dimensional, generated
-    by a positive-definite fixed point. The definition above strengthens this
-    condition by also requiring irreducibility explicitly.
+    and $\E_A$ is irreducible. This formulation includes explicit irreducibility
+    alongside the peripheral spectrum and fixed-point condition of
+    Sanz et al.~\cite[Proposition~3(c)]{Sanz2010Quantum}; see
+    \cite{gap:spwc10_wielandt_one_step_subspace}.
 \end{definition}
 
 The next seven results use the following notation. For nonnegative integers
@@ -314,23 +310,20 @@ matrices, and let $\E_K$ be its Kraus map.
     gives strong irreducibility.
 \end{proof}
 
-% Scope restriction (primitive channels): Proposition 1 is universal, whereas
-% the theorem below assumes paper primitivity. See
-% docs/paper-gaps/spwc10_wielandt_one_step_subspace.tex.
 \begin{theorem}[Primitive-channel specialization of the index bound]
     \label{thm:q_index_le_i_index}
     \lean{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper}
     \leanok
     \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
-    Under the hypotheses of
-    Theorem~\ref{thm:wielandt_proposition_three}, paper primitivity implies
+    Under the hypotheses of Theorem~\ref{thm:wielandt_proposition_three},
+    paper primitivity implies
     \begin{align}
         q(\E_A) & \le\iota(A).
         \notag
     \end{align}
-    Proposition~1 of~\cite{Sanz2010Quantum} states this inequality for every
-    quantum channel; the present theorem records its specialization under
-    normalization and paper primitivity.
+    This is the primitive-channel specialization of the universal inequality
+    $q(\E)\le\iota$ of Sanz et al.~\cite[Proposition~1]{Sanz2010Quantum}; see
+    \cite{gap:spwc10_wielandt_one_step_subspace}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -367,12 +360,11 @@ matrices, and let $\E_K$ be its Kraus map.
     $\rho_0$; rescaling $\rho_0$ by the inverse of its (positive) trace
     gives the unique density-matrix representative $\rho$.
 
-    The source proves this instead by passing to $\E_A^n$, showing every
-    $\E_A^n(\ket\psi\!\bra\psi)$ has full rank from the span hypothesis, and
-    ruling out a fixed-point space of dimension larger than one via
-    Corollary~6.5 of~\cite{Wolf2012Quantum}. Both routes use only Wolf's own
-    Chapter~6 machinery; the present proof reuses the already-formalized
-    Proposition~3 equivalence.
+    The source establishes this by showing that $\E_A^n(\ket\psi\!\bra\psi)$
+    has full rank for each pure state and ruling out multidimensional fixed
+    spaces via Corollary~6.5 of~\cite{Wolf2012Quantum}. The present argument
+    proceeds via the Proposition~3 equivalence
+    (Theorem~\ref{thm:wielandt_proposition_three}).
 \end{proof}
 
 \begin{lemma}[Monotonicity of cumulative span]\label{lem:cumulative_mono}
@@ -457,10 +449,9 @@ matrices, and let $\E_K$ be its Kraus map.
     \end{align}
     Consequently, if $L>0$ and $A$ is $L$-block injective, then
     $A$ is $m$-block injective for every $m\ge L$.
-    This auxiliary length-shift statement combines the block-injectivity
-    discussion in~\cite[Section~II]{Cirac2016MPDO_arXiv} with
-    \cite[Appendix~C.3, Lemma~L]{Cirac2016MPDO_arXiv}; it is not stated there
-    as a separate lemma.
+    This combines the block-injectivity discussion in
+    \cite[Section~II]{Cirac2016MPDO_arXiv} with
+    \cite[Appendix~C.3, Lemma~L]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:word_span}
@@ -487,9 +478,8 @@ matrices, and let $\E_K$ be its Kraus map.
     \leanok
     \uses{def:cumulative_span, def:normal}
     Let $D>0$. If $A$ is normal, then $T_{D^2}(A)=\MN{D}$.
-    This cumulative estimate supports the proof of
-    \cite[Lemma~1]{Sanz2010Quantum}; it is not a conclusion of source
-    Theorem~1.
+    This cumulative estimate corresponds to the intermediate step in the proof of
+    \cite[Lemma~1]{Sanz2010Quantum}.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:cumulative_eq_top_bound}
@@ -940,20 +930,14 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     direct dimension growth, giving
     $S_{D^2-k_B+1}(B)=\MN{D}$, where $k_B=\krausrk(B)$.
     In the non-invertible case, the bound $S_{D^2}(B)=\MN{D}$ follows from
-    tracking indices through the rank-one extraction argument of
-    \cite[Lemma~2(b)]{Sanz2010Quantum}; the separate blocked support
-    construction in Theorem~\ref{thm:wielandt_lemma2b} does not supply this
-    explicit bound. In both cases,
-    $\iota(A)\le D^2n\le D^2(D^2-d'+1)$.
+    the rank-one extraction argument of \cite[Lemma~2(b)]{Sanz2010Quantum}.
+    In both cases, $\iota(A)\le D^2n\le D^2(D^2-d'+1)$.
 \end{proof}
 
 \begin{remark}[Quantitative and qualitative Wielandt bounds]%
     \leanok
-    The quantitative bound
-    $\iota(A)\le(D^2-d'+1)D^2$
-    is cited from~\cite[Theorem~1, case~(1)]{Sanz2010Quantum}.
-    The later Fundamental Theorem needs only the qualitative conclusion
-    $S_N(A)=\MN{D}$ for some $N$. The blocked construction in
-    Theorem~\ref{thm:wielandt_lemma2b} supplies this conclusion directly from
-    normality; the explicit index bound is not needed there.
+    The quantitative bound $\iota(A)\le(D^2-d'+1)D^2$
+    (\cite[Theorem~1, case~(1)]{Sanz2010Quantum}) gives an explicit upper bound
+    on the injectivity length. For the Fundamental Theorem of MPS, the
+    qualitative assertion that $S_N(A)=\MN{D}$ for some finite $N$ suffices.
 \end{remark}

@@ -1,22 +1,16 @@
 \section{Half-chain Schmidt spectrum and the dual fixed point}%
 \label{sec:half_chain_schmidt}
 
-This section carries out the Schmidt-decomposition step behind the half-chain
-interpretation of the positive diagonal fixed point $\Lambda$ of
-\cite[Theorem~6]{PerezGarcia2007Matrix}; it does not establish the full
-statement of that theorem. On a ring of $2L$ sites the matrix product vector
-splits at the two boundaries into a pair of half-chain families, the overlaps
-of the half-chain vectors are matrix elements of the $L$-fold transfer map,
-and the unnormalized half-chain reduced density matrix factors exactly through
-the half-chain Gram matrix. Away from zero, its spectrum is that of a boundary
-comparison matrix of size $D^2$, and under the generic spectral condition of
-the source that comparison matrix converges entrywise, geometrically in $L$,
-to the diagonal matrix with entries $\lambda_\alpha\lambda_\beta$ up to the
-trace normalization of $\Lambda$. Two conclusions of the source remain outside
-this section: the passage from entrywise convergence of the comparison matrix
-to convergence of its eigenvalues, and the normalization of the finite-size
-reduced density matrix to unit trace. The finite-size convention throughout is
-the ring of $N=2L$ sites split into two halves of $L$ sites each.
+On a ring of $2L$ sites split into two halves of $L$ sites each, the matrix
+product vector splits at the two boundaries into a pair of half-chain
+families whose overlaps are matrix elements of the $L$-fold transfer
+map~\cite[Theorem~6]{PerezGarcia2007Matrix}.
+The unnormalized half-chain reduced density matrix factors through the
+half-chain Gram matrix. Away from zero, its spectrum matches that of a
+boundary comparison matrix of size $D^2$, which, under the spectral gap
+condition $\rho_{\mathrm{spec}}(\E_A - P_\Lambda) < 1$, converges entrywise,
+geometrically in $L$, to the diagonal matrix with entries
+$\lambda_\alpha\lambda_\beta/\tr(\Lambda)^2$ determined by the fixed point $\Lambda$.
 
 The source states its canonical form with a trace-preserving dual map and a
 positive diagonal fixed point $\Lambda$ of that dual. Here the trace-preserving
@@ -218,13 +212,11 @@ conjugate-transposed tensor.
          & \leq C r^{L}.
         \label{eq:half_chain_gram_geometric}
     \end{align}
-    The hypothesis (\ref{eq:half_chain_c2_gap}) expresses the generic
-    condition C2 of \cite{PerezGarcia2007Matrix} in the trace-preserving
-    gauge: apart from the simple eigenvalue one, the spectrum of $\E_A$ lies
-    strictly inside the unit disc. The proof chooses $r$ strictly between the
-    spectral radius of $\E_A-P_{\Lambda}$ and one. Without a semisimplicity
-    assumption on the subleading spectrum, the theorem does not assert the
-    same estimate with $r$ equal to that spectral radius.
+    The hypothesis~(\ref{eq:half_chain_c2_gap}) is the spectral gap condition
+    of \cite[Theorem~6]{PerezGarcia2007Matrix} in the trace-preserving gauge:
+    apart from the simple eigenvalue one, the spectrum of $\E_A$ lies
+    strictly inside the unit disc. The rate $r$ is chosen strictly between the
+    spectral radius of $\E_A-P_{\Lambda}$ and one.
 \end{theorem}
 
 \begin{proof}

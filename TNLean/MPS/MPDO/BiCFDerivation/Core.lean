@@ -8,6 +8,7 @@ import TNLean.MPS.SharedInfra.WordTupleGauge
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.RingTheory.Noetherian.Defs
+import QICLean.Algebra.MatrixTracePairing
 
 /-!
 # Finite-word trace separation for MPDO block families
@@ -389,31 +390,15 @@ theorem pairTraceSeparatingUpTo_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
   exact hSep ΔA ΔB (fun w => by
     simpa using hΔ (List.ofFn w) (by simp))
 
+/-- Every linear functional on a finite matrix algebra is the trace pairing against a
+matrix: the inverse of the linear equivalence with the dual induced by the nondegenerate
+trace form. -/
 private theorem exists_trace_repr {n : Type*} [Fintype n]
     (f : Matrix n n ℂ →ₗ[ℂ] ℂ) :
     ∃ Δ : Matrix n n ℂ, ∀ M : Matrix n n ℂ, f M = Matrix.trace (Δ * M) := by
-  classical
-  let Δ : Matrix n n ℂ := fun p q => f (Matrix.single q p (1 : ℂ))
-  refine ⟨Δ, ?_⟩
-  have hfg : f = (Matrix.traceLinearMap n ℂ ℂ).comp (LinearMap.mulLeft ℂ Δ) := by
-    apply Matrix.ext_linearMap ℂ
-    intro i j
-    apply LinearMap.ext
-    intro a
-    simp only [LinearMap.comp_apply, Matrix.singleLinearMap_apply,
-      Matrix.traceLinearMap_apply, LinearMap.mulLeft_apply]
-    have hsingle : Matrix.single i j a = a • Matrix.single i j (1 : ℂ) := by
-      ext p q
-      by_cases hp : p = i <;> by_cases hq : q = j <;> simp [Matrix.single, hp, hq]
-    calc
-      f (Matrix.single i j a) = a * f (Matrix.single i j (1 : ℂ)) := by
-        rw [hsingle, map_smul]
-        rfl
-      _ = Matrix.trace (Δ * Matrix.single i j a) := by
-        rw [Matrix.trace_mul_single]
-        simp [Δ, mul_comm]
-  intro M
-  simp [hfg]
+  refine ⟨((Matrix.traceBilinForm n).toDual Matrix.traceBilinForm_nondegenerate).symm f,
+    fun M ↦ ?_⟩
+  rw [← Matrix.traceBilinForm_apply, LinearMap.BilinForm.apply_toDual_symm_apply]
 
 private theorem exists_pi_trace_repr
     (f : ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) →ₗ[ℂ] ℂ) :
@@ -421,25 +406,13 @@ private theorem exists_pi_trace_repr
       ∀ M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
         f M = ∑ k : Fin r, Matrix.trace (Δ k * M k) := by
   classical
-  have hcomponent : ∀ k : Fin r,
-      ∃ Δk : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-        ∀ Mk : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          (f.comp (LinearMap.single ℂ
-            (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k)) Mk =
-            Matrix.trace (Δk * Mk) :=
-    fun k => exists_trace_repr
-      (f.comp (LinearMap.single ℂ
-        (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k))
-  choose Δ hΔ using hcomponent
-  refine ⟨Δ, ?_⟩
-  intro M
-  have hM : (∑ k : Fin r, Pi.single k (M k)) = M := by
-    ext j
-    simp
-  rw [← hM, map_sum]
-  apply Finset.sum_congr rfl
-  intro k _
-  simpa [LinearMap.comp_apply, LinearMap.single_apply] using hΔ k (M k)
+  choose Δ hΔ using fun k : Fin r ↦ exists_trace_repr
+    (f.comp (LinearMap.single ℂ
+      (fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k))
+  refine ⟨Δ, fun M ↦ ?_⟩
+  conv_lhs => rw [← Finset.univ_sum_single M]
+  rw [map_sum]
+  exact Finset.sum_congr rfl fun k _ ↦ by simpa using hΔ k (M k)
 
 private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
     (f : (Matrix m m ℂ × Matrix n n ℂ) →ₗ[ℂ] ℂ) :
@@ -451,19 +424,8 @@ private theorem exists_pair_trace_repr {m n : Type*} [Fintype m] [Fintype n]
     (f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
   obtain ⟨ΔB, hB⟩ := exists_trace_repr
     (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ)))
-  refine ⟨ΔA, ΔB, ?_⟩
-  intro M
-  calc
-    f M = ((f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ))).coprod
-        (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ)))) M := by
-      exact (congrArg
-        (fun g : (Matrix m m ℂ × Matrix n n ℂ) →ₗ[ℂ] ℂ => g M)
-        (LinearMap.coprod_comp_inl_inr f)).symm
-    _ = Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) := by
-      rw [LinearMap.coprod_apply]
-      change (f.comp (LinearMap.inl ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.1 +
-          (f.comp (LinearMap.inr ℂ (Matrix m m ℂ) (Matrix n n ℂ))) M.2 = _
-      rw [hA M.1, hB M.2]
+  refine ⟨ΔA, ΔB, fun M ↦ ?_⟩
+  rw [← LinearMap.coprod_comp_inl_inr f, LinearMap.coprod_apply, hA M.1, hB M.2]
 
 private theorem matrix_pi_span_top_of_trace_separating
     (W : Submodule ℂ
@@ -553,24 +515,11 @@ private theorem pair_trace_zero_on_span {D₁ D₂ : ℕ}
     ∀ M : Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ,
       M ∈ Submodule.span ℂ Ω →
         Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2) = 0 := by
+  have hle : Submodule.span ℂ Ω ≤ LinearMap.ker
+      ((Matrix.traceBilinForm _ ΔA).coprod (Matrix.traceBilinForm _ ΔB)) :=
+    Submodule.span_le.2 fun M hM ↦ by simpa using hΩ M hM
   intro M hM
-  induction hM using Submodule.span_induction with
-  | mem M hMmem =>
-      exact hΩ M hMmem
-  | zero => simp
-  | add M N _ _ hM hN =>
-      calc
-        Matrix.trace (ΔA * (M + N).1) + Matrix.trace (ΔB * (M + N).2)
-            = (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) +
-                (Matrix.trace (ΔA * N.1) + Matrix.trace (ΔB * N.2)) := by
-              simp [Matrix.mul_add, Matrix.trace_add, add_assoc, add_left_comm]
-        _ = 0 := by simp [hM, hN]
-  | smul a M _ hM =>
-      calc
-        Matrix.trace (ΔA * (a • M).1) + Matrix.trace (ΔB * (a • M).2)
-            = a * (Matrix.trace (ΔA * M.1) + Matrix.trace (ΔB * M.2)) := by
-              simp [Matrix.trace_smul, mul_add]
-        _ = 0 := by simp [hM]
+  simpa using hle hM
 
 private theorem eq_zero_and_eq_zero_of_pair_trace_eq_zero {D₁ D₂ : ℕ}
     (W : Submodule ℂ

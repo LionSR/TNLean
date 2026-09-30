@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.Defs
 
 /-!
@@ -203,13 +204,8 @@ theorem single_mem_span_Aunits (a b : Fin 4) :
 /-- `Aunits` is injective: its range spans the whole matrix algebra, since it
 contains every matrix unit. -/
 theorem Aunits_isInjective : Kraus.IsInjective Aunits := by
-  rw [Kraus.IsInjective, eq_top_iff]
-  intro M _
-  rw [Matrix.matrix_eq_sum_single M]
-  refine Submodule.sum_mem _ (fun a _ => Submodule.sum_mem _ (fun b _ => ?_))
-  rw [show Matrix.single a b (M a b) = M a b • Matrix.single a b (1 : ℂ) by
-    rw [Matrix.smul_single, smul_eq_mul, mul_one]]
-  exact Submodule.smul_mem _ _ (single_mem_span_Aunits a b)
+  rw [Kraus.IsInjective]
+  exact Submodule.eq_top_of_forall_single_mem _ single_mem_span_Aunits
 
 /-- `Bunits` is the `Gunit⁻¹`-gauge of `Aunits`. -/
 theorem gaugeEquiv_Aunits_Bunits : GaugeEquiv Aunits Bunits :=

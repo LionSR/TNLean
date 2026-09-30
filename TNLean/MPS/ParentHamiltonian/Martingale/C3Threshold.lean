@@ -31,6 +31,8 @@ is itself indexed by volumes strictly larger than the interaction range.
   chooses one original-site scale uniformly for every prefix length.
 * `MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths`
   specializes the uniform estimate to three equal original-site blocks.
+* `MPSTensor.IsPrimitiveMPS.eventually_openChain_groundProjection_defect_mul_sqrt_lt`
+  retains every prescribed positive scaled-defect threshold at all sufficiently large lengths.
 * `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold`
   chooses a block-injective overlap length and one uniform C3 defect coefficient.
 * `MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold`
@@ -118,6 +120,27 @@ private theorem tendsto_fnw_coefficient
   rw [zero_div] at h
   exact h
 
+/-- The individual-block error in Nachtergaele,
+arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
+uniformly in the prefix length and in every positive suffix length. -/
+theorem IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
+      ‖(reassocTailBoundaryMapES A K L Q).range.starProjection ∘L
+            (leftBoundaryMapES A (K + L) Q).range.starProjection -
+          (groundSpaceES A (K + L + Q)).starProjection‖ ≤ ε := by
+  obtain ⟨c, lam, L₀, hc, hlam, hlam_one, hL₀, hInj, hDefect⟩ :=
+    hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ
+  have hsmall : Tendsto (fun n : ℕ ↦ c * lam ^ n) atTop (𝓝 0) := by
+    simpa using tendsto_const_nhds.mul
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hlam.le hlam_one)
+  filter_upwards [eventually_ge_atTop L₀,
+    (tendsto_order.1 hsmall).2 1 zero_lt_one,
+    (tendsto_order.1 (tendsto_fnw_coefficient (c := c) hlam.le hlam_one)).2 ε hε]
+    with L hL hsmallL hcoef K Q hQ
+  exact (hDefect L hL hsmallL K Q hQ).trans hcoef.le
+
 /-- There is a positive block-injective length \(p\), measured in sites of the
 input tensor, such that the whole-increment projector defect with overlap and
 suffix lengths \(L=Q=p\) is at most \(7/16\) for every prefix length \(K\),
@@ -135,26 +158,13 @@ theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
           ‖(reassocTailBoundaryMapES A K p p).range.starProjection ∘L
                 (leftBoundaryMapES A (K + p) p).range.starProjection -
               (groundSpaceES A (K + p + p)).starProjection‖ ≤ 7 / 16 := by
-  obtain ⟨c, lam, L, hc, hlam, hlam_lt_one, hLpos, hLinj, hDefect⟩ :=
-    hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ
-  have hlam_pow : Tendsto (fun n : ℕ => lam ^ n) atTop (𝓝 0) :=
-    tendsto_pow_atTop_nhds_zero_of_lt_one hlam.le hlam_lt_one
-  have hsmall_lim : Tendsto (fun n : ℕ => c * lam ^ n) atTop (𝓝 0) := by
-    simpa using tendsto_const_nhds.mul hlam_pow
-  have hcoefficient_lim := tendsto_fnw_coefficient (c := c) hlam.le hlam_lt_one
-  have hsmall : ∀ᶠ n : ℕ in atTop, c * lam ^ n < 1 :=
-    (tendsto_order.1 hsmall_lim).2 1 zero_lt_one
-  have hcoefficient : ∀ᶠ n : ℕ in atTop,
-      c * lam ^ n * (1 + c * lam ^ n) / (1 - c * lam ^ n) < 7 / 16 :=
-    (tendsto_order.1 hcoefficient_lim).2 (7 / 16) (by norm_num)
-  have hlarge : ∀ᶠ n : ℕ in atTop, max 1 L ≤ n := eventually_ge_atTop _
-  obtain ⟨p, hp_large, hp_small, hp_coefficient⟩ :=
-    (hlarge.and (hsmall.and hcoefficient)).exists
-  have hp : 0 < p := lt_of_lt_of_le (by omega) hp_large
-  have hLle : L ≤ p := le_trans (le_max_right 1 L) hp_large
-  have hInj : Kraus.IsNBlkInjective A p := isNBlkInjective_of_le hLpos hLinj hLle
-  refine ⟨p, hp, hInj, fun K ↦ ?_⟩
-  exact (hDefect p hLle hp_small K p hp).trans hp_coefficient.le
+  obtain ⟨L, hLpos, hLinj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  obtain ⟨p, hp, hDefect⟩ :=
+    ((eventually_ge_atTop (max 1 L)).and
+      (hP.eventually_wholeIncrement_groundProjection_defect_le hρ
+        (ε := 7 / 16) (by norm_num))).exists
+  exact ⟨p, by omega, isNBlkInjective_of_le hLpos hLinj (by omega),
+    fun K ↦ hDefect K p (by omega)⟩
 
 /-- At the length \(p\) chosen uniformly above, taking the prefix length
 \(K=p\) gives three consecutive blocks of \(p\) original sites and projector
@@ -170,6 +180,48 @@ theorem IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteent
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_uniform_wholeIncrement_defect_le_seven_sixteenths hρ
   exact ⟨p, hp, hInj, hDefect p⟩
+
+/-- At every sufficiently large overlap length, the uniform open-chain
+projector defect times \(\sqrt{l+1}\) is below any prescribed positive
+number. This retains the decay used in Nachtergaele,
+arXiv:cond-mat/9410110, display (6.1), rather than choosing only the C3
+threshold one. -/
+theorem IsPrimitiveMPS.eventually_openChain_groundProjection_defect_mul_sqrt_lt
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {η : ℝ} (hη : 0 < η) :
+    ∀ᶠ l : ℕ in atTop, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ ε : ℝ,
+      0 ≤ ε ∧ ε * Real.sqrt ((l + 1 : ℕ) : ℝ) < η ∧
+      ∀ K : ℕ,
+        ‖openChainTailGroundProjectionES A K (l + 1) ∘L
+              openChainLeftGroundProjectionES A (K + l) -
+            (groundSpaceES A (K + l + 1)).starProjection‖ ≤ ε := by
+  obtain ⟨c, lam, L, hc, hlam, hlam_lt_one, hLpos, hLinj, hDefect⟩ :=
+    hP.exists_openChain_groundProjection_defect_le_fnw_geometric hρ
+  have hlam_pow : Tendsto (fun n : ℕ => lam ^ n) atTop (𝓝 0) :=
+    tendsto_pow_atTop_nhds_zero_of_lt_one hlam.le hlam_lt_one
+  have hsmall_lim : Tendsto (fun n : ℕ => c * lam ^ n) atTop (𝓝 0) := by
+    simpa using tendsto_const_nhds.mul hlam_pow
+  have hcoefficient_lim :=
+    tendsto_fnw_coefficient_mul_sqrt (c := c) hlam.le hlam_lt_one
+  have hsmall : ∀ᶠ n : ℕ in atTop, c * lam ^ n < 1 :=
+    (tendsto_order.1 hsmall_lim).2 1 zero_lt_one
+  have hcoefficient : ∀ᶠ n : ℕ in atTop,
+      c * lam ^ n * (1 + c * lam ^ n) / (1 - c * lam ^ n) *
+          Real.sqrt ((n + 1 : ℕ) : ℝ) < η :=
+    (tendsto_order.1 hcoefficient_lim).2 η hη
+  have hlarge : ∀ᶠ n : ℕ in atTop, max 2 L ≤ n := eventually_ge_atTop _
+  filter_upwards [hlarge, hsmall, hcoefficient] with l hl_large hl_small hl_coefficient
+  let ε := c * lam ^ l * (1 + c * lam ^ l) / (1 - c * lam ^ l)
+  have hl : 1 < l := lt_of_lt_of_le (by omega) hl_large
+  have hLle : L ≤ l := le_trans (le_max_right 2 L) hl_large
+  have hInj : Kraus.IsNBlkInjective A l := isNBlkInjective_of_le hLpos hLinj hLle
+  have hden : 0 < 1 - c * lam ^ l := sub_pos.mpr hl_small
+  have hε : 0 ≤ ε := by
+    have hnum : 0 ≤ c * lam ^ l * (1 + c * lam ^ l) := by positivity
+    exact div_nonneg hnum hden.le
+  refine ⟨hl, hInj, ε, hε, hl_coefficient, ?_⟩
+  intro K
+  exact hDefect l hLle hl_small K
 
 /-- A primitive MPS with faithful fixed point has a block-injective overlap length
 at which the uniform open-chain ground-projector defect satisfies Nachtergaele's
@@ -189,38 +241,10 @@ theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
         ‖openChainTailGroundProjectionES A K (l + 1) ∘L
               openChainLeftGroundProjectionES A (K + l) -
             (groundSpaceES A (K + l + 1)).starProjection‖ ≤ ε := by
-  obtain ⟨c, lam, L, hc, hlam, hlam_lt_one, hLpos, hLinj, hDefect⟩ :=
-    hP.exists_openChain_groundProjection_defect_le_fnw_geometric hρ
-  have hlam_pow : Tendsto (fun n : ℕ => lam ^ n) atTop (𝓝 0) :=
-    tendsto_pow_atTop_nhds_zero_of_lt_one hlam.le hlam_lt_one
-  have hsmall_lim : Tendsto (fun n : ℕ => c * lam ^ n) atTop (𝓝 0) := by
-    simpa using tendsto_const_nhds.mul hlam_pow
-  have hcoefficient_lim :=
-    tendsto_fnw_coefficient_mul_sqrt (c := c) hlam.le hlam_lt_one
-  have hsmall : ∀ᶠ n : ℕ in atTop, c * lam ^ n < 1 :=
-    (tendsto_order.1 hsmall_lim).2 1 zero_lt_one
-  have hcoefficient : ∀ᶠ n : ℕ in atTop,
-      c * lam ^ n * (1 + c * lam ^ n) / (1 - c * lam ^ n) *
-          Real.sqrt ((n + 1 : ℕ) : ℝ) < 1 :=
-    (tendsto_order.1 hcoefficient_lim).2 1 zero_lt_one
-  have hlarge : ∀ᶠ n : ℕ in atTop, max 2 L ≤ n := eventually_ge_atTop _
-  obtain ⟨l, hl_large, hl_small, hl_coefficient⟩ :=
-    (hlarge.and (hsmall.and hcoefficient)).exists
-  let ε := c * lam ^ l * (1 + c * lam ^ l) / (1 - c * lam ^ l)
-  have hl : 1 < l := lt_of_lt_of_le (by omega) hl_large
-  have hLle : L ≤ l := le_trans (le_max_right 2 L) hl_large
-  have hInj : Kraus.IsNBlkInjective A l := isNBlkInjective_of_le hLpos hLinj hLle
-  have hden : 0 < 1 - c * lam ^ l := sub_pos.mpr hl_small
-  have hε : 0 ≤ ε := by
-    have hnum : 0 ≤ c * lam ^ l * (1 + c * lam ^ l) := by positivity
-    exact div_nonneg hnum hden.le
-  have hsqrt : 0 < Real.sqrt ((l + 1 : ℕ) : ℝ) := Real.sqrt_pos.2 (by positivity)
-  have hε_lt : ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) := by
-    rw [lt_div_iff₀ hsqrt]
-    simpa only [ε, one_mul] using hl_coefficient
-  refine ⟨l, ε, hl, hInj, hε, hε_lt, ?_⟩
-  intro K
-  exact hDefect l hLle hl_small K
+  obtain ⟨l, hl, hInj, ε, hε, hsmall, hDefect⟩ :=
+    (hP.eventually_openChain_groundProjection_defect_mul_sqrt_lt hρ zero_lt_one).exists
+  exact ⟨l, ε, hl, hInj, hε,
+    (lt_div_iff₀ (Real.sqrt_pos.2 (by positivity))).2 hsmall, hDefect⟩
 
 /-- A primitive MPS with faithful fixed point satisfies Nachtergaele's condition C3
 in its literal martingale-difference form

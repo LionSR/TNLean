@@ -8,6 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPDO
 
+import TNLean.MPS.MPDO.ActionTensor
+import TNLean.MPS.MPDO.ActionTensorReduction
 import TNLean.MPS.MPDO.ActiveSectorInverseMapProvenance
 import TNLean.MPS.MPDO.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.MPDO.ActiveSectorSpanningCounterexample
@@ -16,6 +18,7 @@ import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.MPDO.AlgebraFusionCounterexample
 import TNLean.MPS.MPDO.AlgebraStructure
 import TNLean.MPS.MPDO.AreaLaw
+import TNLean.MPS.MPDO.AreaLawScaling
 import TNLean.MPS.MPDO.BNTAlgebraTensorClause
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseConditionalPhysicalMaps
@@ -32,6 +35,7 @@ import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTBoundaryDecomposition
 import TNLean.MPS.MPDO.BNTChannelComposition
 import TNLean.MPS.MPDO.BNTClosingSelection
+import TNLean.MPS.MPDO.BNTCoefficientRescaling
 import TNLean.MPS.MPDO.BNTCoefficients
 import TNLean.MPS.MPDO.BNTFactorizationChannels
 import TNLean.MPS.MPDO.BNTFinalSectorFusion
@@ -65,7 +69,9 @@ import TNLean.MPS.MPDO.BiCFDerivation
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.BlockedBNTFusionIsometries
 import TNLean.MPS.MPDO.BlockedCompleteZipper
+import TNLean.MPS.MPDO.BondOneOperator
 import TNLean.MPS.MPDO.BondOnePhysicalSectorFactorization
+import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
@@ -88,11 +94,9 @@ import TNLean.MPS.MPDO.CPSVExample412FourCycleEntropy
 import TNLean.MPS.MPDO.CPSVExample412Literal
 import TNLean.MPS.MPDO.CPSVExample412NormalizedGSNNCH
 import TNLean.MPS.MPDO.CPSVExample412NormalizedRFP
+import TNLean.MPS.MPDO.CPSVExample412NormalizedSummary
 import TNLean.MPS.MPDO.CPSVExamples410411Arithmetic
 import TNLean.MPS.MPDO.CPSVFigureEight
-import TNLean.MPS.MPDO.CPSVGroupedFigureEight
-import TNLean.MPS.MPDO.CPSVGroupedGramNormalization
-import TNLean.MPS.MPDO.CPSVNormalizedGroupedSectors
 import TNLean.MPS.MPDO.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.CPSVRepresentativeGroupedLemmaL
@@ -133,9 +137,14 @@ import TNLean.MPS.MPDO.CommutingFormBridge
 import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CompleteZipperFusion
+import TNLean.MPS.MPDO.CompleteZipperFusionBlocked
+import TNLean.MPS.MPDO.CompleteZipperFusionCoassoc
+import TNLean.MPS.MPDO.CompleteZipperFusionCoproduct
 import TNLean.MPS.MPDO.CompleteZipperFusionDefs
 import TNLean.MPS.MPDO.CompleteZipperFusionFourfold
+import TNLean.MPS.MPDO.CompleteZipperFusionGauge
 import TNLean.MPS.MPDO.CompleteZipperFusionInverse
+import TNLean.MPS.MPDO.CompleteZipperFusionOfCompression
 import TNLean.MPS.MPDO.CompleteZipperFusionPentagon
 import TNLean.MPS.MPDO.CompleteZipperFusionSupport
 import TNLean.MPS.MPDO.Correlations
@@ -155,7 +164,9 @@ import TNLean.MPS.MPDO.CyclicEdgeWeightTensor
 import TNLean.MPS.MPDO.CyclicProjector
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.DiagonalCutRank
+import TNLean.MPS.MPDO.DiagonalDressing
 import TNLean.MPS.MPDO.DiagonalFiniteChain
+import TNLean.MPS.MPDO.DirectSum
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
 import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.EtaPreparation
@@ -170,14 +181,11 @@ import TNLean.MPS.MPDO.FixedBondProductEtaTensor
 import TNLean.MPS.MPDO.FixedBondProductTensor
 import TNLean.MPS.MPDO.FusionIsometries
 import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov
-import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.ExampleFourCycleObstruction
-import TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.FourCycle
 import TNLean.MPS.MPDO.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.GSNNCHSectorRescaling
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.MPS.MPDO.GaugeInvariantSubspace
 import TNLean.MPS.MPDO.GaussProjectorPlacement
-import TNLean.MPS.MPDO.GroupedFigure8
 import TNLean.MPS.MPDO.GroupedGramNormalization
 import TNLean.MPS.MPDO.GroupedReferenceCorner
 import TNLean.MPS.MPDO.GroupedSectorGram
@@ -186,6 +194,7 @@ import TNLean.MPS.MPDO.HayashiSectorProjector
 import TNLean.MPS.MPDO.HorizontalBNT
 import TNLean.MPS.MPDO.HorizontalBlocking
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.InvariantProjection
 import TNLean.MPS.MPDO.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.InverseMapActiveSectorRecurrence
@@ -216,13 +225,18 @@ import TNLean.MPS.MPDO.NonCartesianActiveSectorRigidity
 import TNLean.MPS.MPDO.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.NormalizedGroupedSectors
 import TNLean.MPS.MPDO.NormalizedMPOProportionality
+import TNLean.MPS.MPDO.OperatorClosurePowerSum
+import TNLean.MPS.MPDO.OperatorCyclicSum
+import TNLean.MPS.MPDO.OperatorFromWordTrace
 import TNLean.MPS.MPDO.OperatorProduct
+import TNLean.MPS.MPDO.OperatorProductBlockDiagonal
 import TNLean.MPS.MPDO.OrthogonalSectorAreaLaw
 import TNLean.MPS.MPDO.PRFP
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
 import TNLean.MPS.MPDO.PeriodicExclusion
 import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.PhysicalBlocking
+import TNLean.MPS.MPDO.PhysicalBlockingResiduals
 import TNLean.MPS.MPDO.PhysicalClosure
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.MPDO.PhysicalIsometricEmbedding
@@ -324,6 +338,7 @@ import TNLean.MPS.MPDO.SimpleLocalInverseMaps
 import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleScaling
 import TNLean.MPS.MPDO.SimpleTensor
+import TNLean.MPS.MPDO.SiteOperatorKernel
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.SitewisePhysicalRecovery
 import TNLean.MPS.MPDO.SourceBNTBlocking
@@ -358,6 +373,7 @@ import TNLean.MPS.MPDO.TwoSitePrefixReflectedMarkedChain
 import TNLean.MPS.MPDO.TwoSiteVerticalCanonicalForm
 import TNLean.MPS.MPDO.VerticalBNT
 import TNLean.MPS.MPDO.VerticalBNTConstruction
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.VerticalCF

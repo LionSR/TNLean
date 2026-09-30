@@ -2,7 +2,9 @@
 \section{Blocking identities and primitive stability}
 \label{sec:app_canonical_blocking}
 
-These identities control transfer-map powers, weighted direct sums, and positive-length MPV equalities under repeated blocking. They are used in the common-length reduction of Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}.
+Transfer-map powers, weighted direct sums, and matrix product vectors commute
+with blocking, enabling the common-length reduction of
+Theorem~\ref{thm:ft_after_blocking_common_length_common_sector_theorem}.
 
 Blocking by a length~$p$ commutes with weighted direct sums up to the $p$th power
 of each weight: for nonzero weights $(\mu_k)$ and blocks $(B_k)$,
@@ -69,8 +71,9 @@ through its own period agrees with the directly $p$-blocked block.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:blocked_irreducibility_direct_support}
-    The transfer map of $A^{[L]}$ is $\E_A^L$. Therefore
+    \uses{thm:blocked_transfer_map}
+    The transfer map of $A^{[L]}$ is $\E_A^L$
+    (Theorem~\ref{thm:blocked_transfer_map}). Therefore
     \begin{align}
         (\E_A^L)^2
          & =(\E_A^2)^L
@@ -135,11 +138,26 @@ through its own period agrees with the directly $p$-blocked block.
     fixed point not proportional to the faithful one.
 \end{proof}
 
+\begin{theorem}[Transfer map of a blocked tensor]
+    \label{thm:blocked_transfer_map}
+    \lean{MPSTensor.transferMap_blockTensor,
+        MPSTensor.transferMap_blockTensor_apply}
+    \leanok
+    \uses{def:blocked_tensor, def:transfer_map}
+    For every tensor $A$ and every $L$, $\E_{A^{[L]}}=\E_A^{\,L}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A letter of $A^{[L]}$ is a word $w$ of length $L$ with matrix $A^w$, so
+    $\E_{A^{[L]}}(X)=\sum_{\lvert w\rvert=L}A^wX(A^w)^\dagger$, which is the
+    $L$-fold iterate of $\E_A$ by induction on $L$.
+\end{proof}
+
 \begin{lemma}[Fixed-point criteria for irreducibility after primitive blocking]%
     \label{lem:blocked_irreducibility_direct_support}
     \lean{Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible}
     \lean{Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily}
-    \lean{MPSTensor.transferMap_blockTensor}
     \lean{MPSTensor.transferMap_blockTensor_fixedPoint}
     \lean{Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM}
     \leanok
@@ -160,12 +178,13 @@ through its own period agrees with the directly $p$-blocked block.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel}
+    \uses{def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel, thm:blocked_transfer_map}
     Peripheral primitivity, tensor irreducibility, and left-canonical
     normalization first give primitive fixed-point data, and tensor
     irreducibility makes its positive semidefinite fixed point positive
     definite. Blocking preserves the left-canonical identity, replaces the
-    transfer map by its positive power, and therefore preserves the fixed
+    transfer map by its positive power
+    (Theorem~\ref{thm:blocked_transfer_map}), and therefore preserves the fixed
     point. The defining complementary-power identity gives
     (\ref{eq:canonical_primitive_fixed_point_power}). The channel fixed-point
     criterion then gives map irreducibility from uniqueness of positive
@@ -341,7 +360,8 @@ through its own period agrees with the directly $p$-blocked block.
 \section{Support compression and cyclic-sector families}
 \label{sec:app_canonical_cyclic_sectors}
 
-Support isometries first realize the cyclic corners. The remaining results place finitely many cyclic-sector families over one blocked alphabet and identify their weighted nonzero parts.
+Support isometries project a blocked tensor onto its cyclic corners, embedding
+multiple cyclic-sector families into a single common blocked alphabet.
 
 \begin{theorem}[Supported corner compression with a support isometry]%
     \label{thm:supported_corner_compression_isometry}
@@ -577,7 +597,10 @@ Support isometries first realize the cyclic corners. The remaining results place
 \section{Prepared normal-form consequences}
 \label{sec:app_canonical_prepared_consequences}
 
-The first theorem derives the overlap condition from a prepared primitive family. The second does not construct primitive blocks from an arbitrary tensor: it only orders a family that already satisfies all primitive, irreducible, trace-preserving, nonzero-weight, and positive-dimension hypotheses.
+For families of irreducible, trace-preserving, primitive blocks with non-zero
+weights and positive bond dimensions, the asymptotic overlap condition
+$O_{A_kA_k}(N)\to1$ is a derived consequence, and ordering the blocks by
+non-increasing weight modulus produces a normal canonical form.
 
 \begin{theorem}[Self-overlap is derived in normal canonical form]%
     \label{thm:ncf_overlap_tendsto_one}
@@ -625,11 +648,10 @@ The first theorem derives the overlap condition from a prepared primitive family
 \end{proof}
 
 \begin{remark}[Scope of Theorem~\ref{thm:exists_normal_canonical_form}]
-    Theorem~\ref{thm:exists_normal_canonical_form} assumes all six block
-    hypotheses in advance and produces the normal canonical form by reordering.
-    It is not the arbitrary-input existence theorem
-    of~\cite[Section~2.3]{Cirac2016MPDO_arXiv}; that primitive-block reduction,
-    including its structural bond-dimension bound, is
+    Theorem~\ref{thm:exists_normal_canonical_form} reorganizes an already
+    reduced family of primitive, irreducible blocks into normal canonical form
+    by sorting their weight moduli. The reduction from an arbitrary MPS tensor,
+    including the structural bond-dimension bound, is established by
     Theorem~\ref{thm:tp_primitive_blockdecomp} in
-    Section~\ref{sec:reduction_to_normal_form}.
+    Section~\ref{sec:reduction_to_normal_form} following~\cite[Section~2.3]{Cirac2016MPDO_arXiv}.
 \end{remark}

@@ -70,10 +70,10 @@
     for every sector $v$ and every letter $i$.
 
     This is the normalization in
-    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}: after the
-    preceding translation step has made the scalar independent of the sector
-    label, choosing a common $m$-th root of that scalar leaves a product-one
-    family of sector scalars.
+    \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}: after
+    Theorem~\ref{thm:periodic_product_tensor_phase_extraction} has extracted
+    scalars independent of the sector coordinates, choosing a common $m$-th
+    root of their product leaves a product-one family of sector scalars.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -94,16 +94,13 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The two left-canonical equations give
+    Left-canonicity of $cA$ gives
     \begin{align}
-        \sum_i (A^i)^\dagger A^i    & =\Id,
-        \notag                              \\
-        \sum_i (cA^i)^\dagger(cA^i) & =\Id.
-        \notag
+        \Id & = \sum_i (cA^i)^\dagger(cA^i) = |c|^2 \sum_i (A^i)^\dagger A^i = |c|^2\Id,
     \end{align}
-    Substituting the first equation into the second gives
-    $(\bar c c)\Id=\Id$. Since the bond dimension is positive, comparison of
-    any diagonal entry gives $\bar c c=1$, hence $|c|=1$.
+    where the last equality uses left-canonicity of $A$. Since the bond
+    dimension is positive, comparison of any diagonal entry gives $|c|^2=1$,
+    hence $|c|=1$.
 \end{proof}
 
 \begin{theorem}[Left-canonical sector scalar normalization]
@@ -145,9 +142,7 @@
         P_k \cdot M_D(\mathbb{C}) \cdot P_k$
     (multiplicative and adjoint-preserving) intertwining the compressed adjoint
     transfer map with the sector adjoint transfer map on the corner of~$P_k$.
-    We shall sometimes keep these projections and corner isomorphisms as
-    specified witnesses; forgetting the witnesses gives the displayed
-    decomposition.
+    Retaining the projections and corner isomorphisms as data gives the witness-bearing formulation.
     This is the inverse cyclic indexing of the off-diagonal convention in
     \cite[Appendix~A]{DeLasCuevas2017Irreducible}. There the same adjoint
     transfer map is written $E^*$, and the source projectors satisfy
@@ -461,7 +456,7 @@
     \uses{lem:periodic_cornerprod_blockdiag}
     Induct on $W$. The head blocked letter collapses by the blocked-letter
     diagonal corner to $\varphi_k(\bar A_k^I)$, and multiplicativity of
-    $\varphi$ reassembles the letters:
+    $\varphi$ combines the letters:
     \begin{align}
         F_k^{\widehat W}
          & =

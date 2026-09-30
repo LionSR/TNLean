@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.RegionBlock.Recovery6
+import TNLean.PEPS.RegionBlock.RecoveryOutRegionEndpoint
 
 /-!
 # Region physical-to-virtual recovery: the region resonate identity and endpoint pin
 
 This file assembles the two endpoint readings of the region-inserted coefficient
 (the in-region endpoint reading of `TNLean.PEPS.RegionBlock.Recovery2` and the
-out-of-region endpoint reading of `TNLean.PEPS.RegionBlock.Recovery6`) into the
+out-of-region endpoint reading of `TNLean.PEPS.RegionBlock.RecoveryOutRegionEndpoint`) into the
 **region resonate identity**: the two endpoint operators built from the first
 tensor `A`, applied to the *second* tensor `B`'s closed state vectors, agree at the
 endpoint physical legs. This is the region analogue of the resonate identity
@@ -49,7 +49,7 @@ The in-region endpoint pin `regionInsertionOp_regionStateVec_pin` applied to the
 set complement `univ \ R` of `R`, with the inserted matrix transposed and the
 region/complement physical arguments exchanged, recovers the first tensor's
 region-inserted coefficient through the out-of-region endpoint `vout`. The cast
-identity `regionInsertedCoeff_eq_compl` (`TNLean.PEPS.RegionBlock.Recovery6`) turns
+identity `regionInsertedCoeff_eq_compl` (`TNLean.PEPS.RegionBlock.RecoveryOutRegionEndpoint`) turns
 the complement-side coefficient back into the original region-inserted coefficient. -/
 
 /-- **The out-of-region-endpoint pin.** The out-of-region endpoint operator of the

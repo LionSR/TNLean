@@ -9,8 +9,9 @@ import Mathlib.Logic.Equiv.Fin.Rotate
 /-!
 # Finite cyclic-index identities
 
-This file records an induction principle for a nonempty finite cyclic index and
-the action of one-step rotation on nonterminal indices.
+This file records an induction principle for a nonempty finite cyclic index, the
+reindexing of statements about cyclically adjacent pairs, and the action of one-step
+rotation on nonterminal indices.
 -/
 
 namespace Fin
@@ -35,6 +36,12 @@ theorem cyclic_induction {m : ℕ} [NeZero m] {P : Fin m → Prop}
       exact Nat.mod_eq_of_lt (by have := i.isLt; omega)
     rw [← e]
     exact hstep _ (ih ⟨k, hk⟩ rfl)
+
+/-- A statement about every pair `(j, j - 1)` of cyclically adjacent indices is the same
+as the statement about every pair `(j + 1, j)`. -/
+theorem forall_sub_one_iff {m : ℕ} [NeZero m] {P : Fin m → Fin m → Prop} :
+    (∀ j, P j (j - 1)) ↔ ∀ j, P (j + 1) j :=
+  ⟨fun h j => by simpa using h (j + 1), fun h j => by simpa using h (j - 1)⟩
 
 /-- One-step rotation on `Fin (N + 1)` sends the nonterminal embedding of
 `i : Fin N` to its ordinary successor. -/

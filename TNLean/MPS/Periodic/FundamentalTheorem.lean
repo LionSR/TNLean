@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Periodic.Defs
 import QICLean.Algebra.ScalarPowerSumIdentity
 import TNLean.MPS.Overlap.Basic
-import TNLean.MPS.Periodic.Overlap
+import TNLean.MPS.Periodic.Overlap.Dichotomy
+import TNLean.MPS.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.Periodic.ZGauge
 import TNLean.MPS.SharedInfra.Scaling
 import TNLean.MPS.Tactic.Basic
@@ -596,7 +597,8 @@ In the source theorem `thm:bdequal`, hypothesis (3) follows from BNT linear
 independence + equal MPVs (via `power_sums_eq_of_eventually_eq_hetero`), and
 hypothesis (1) is the Newton-Girard consequence of (3) restricted to multiples of `m`.
 The source theorem uses matrix-valued multiplicities `R_j` and `S_j`; this theorem is
-the scalar-entry component used by the current Lean statement. -/
+the scalar-entry case of that multiplicity comparison. The source-faithful equal case is
+`fundamentalTheorem_periodic_equalCase_derivedPeriods`. -/
 theorem equalCase_zgauge_of_power_sums
     {r : ℕ} (m : ℕ) (μ ν : Fin r → ℂ)
     (hν : ∀ i, ν i ≠ 0)
@@ -610,123 +612,5 @@ theorem equalCase_zgauge_of_power_sums
   ⟨Z, hZm, hZmul, Matrix.sum_pow_eq_implies_multiset_eq μ ν hPS⟩
 
 end ZGaugeConstruction
-
-/-! ## Conditional scalar components toward theorem `thm:bdequal`
-
-The source equal-case Fundamental Theorem at arXiv:1708.00029, lines 643--690,
-combines:
-
-1. **Multiplicity-bearing proportional block matching** from theorem `thm:bd`.
-2. **Z-gauge construction** (`equalCase_zgauge_of_power_sums`):
-   Newton–Girard plus a scalar multiplicity-entry Z-gauge diagonal.
-
-The declarations below provide conditional matching and one-dimensional
-multiplicity components. They do not prove the source theorem: the unrestricted
-non-decaying partners, the grouped multiplicity power relations, and their
-assembly into the source matrices remain to be derived. The Z-gauge construction
-itself is fully proved.
--/
-
-section EqualCase
-
-variable {D₁ D₂ : ℕ}
-
-/-- **Conditional block-matching component toward the equal case.**
-
-If two tensors in irreducible form with non-repeated blocks satisfy the periodic overlap
-dichotomy, their bases of periodic tensors match: equal block counts, a bijection, and
-per-block `HetRepeatedBlocks` equivalence.
-
-Convenience reformulation of `fundamentalTheorem_periodic_proportional` that extracts block
-families from `IsIrreducibleForm`.
-
-**Scope restriction (conditional overlap hypothesis):** this declaration takes
-`PeriodicOverlapHypothesis` as an additional premise. Source theorem
-`thm:bdequal` at arXiv:1708.00029, lines 643--690 instead assumes equality of
-the multiplicity-bearing MPV families. Thus this is a conditional component,
-not the source theorem. The gap is recorded in
-`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
-theorem fundamentalTheorem_periodic_equalCase_matching
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
-    (hNonRepA : ∀ j₁ j₂ : Fin hA.r, j₁ ≠ j₂ →
-      ¬ HetRepeatedBlocks (hA.blocks j₁) (hA.blocks j₂))
-    (hNonRepB : ∀ k₁ k₂ : Fin hB.r, k₁ ≠ k₂ →
-      ¬ HetRepeatedBlocks (hB.blocks k₁) (hB.blocks k₂))
-    (hOverlap : PeriodicOverlapHypothesis hA.blocks hB.blocks) :
-    PeriodicBlockMatchingWitness (d := d) hA.blocks hB.blocks :=
-  fundamentalTheorem_periodic_proportional hA.blocks hB.blocks
-    hNonRepA hNonRepB hOverlap
-
-/-- **Scalar component of the equal-case periodic FT (arXiv:1708.00029).**
-
-If two MPS tensors in irreducible form with non-repeated blocks satisfy the periodic
-overlap dichotomy and per-block multiplicity-entry power equality, then:
-
-1. **Block matching**: equal block counts, a bijection, and per-block `HetRepeatedBlocks`.
-2. **Scalar multiplicity-entry Z-gauge**: for each matched pair with period `m_j`,
-   there exists a `1 × 1` diagonal matrix `Z_j` with `Z_j^{m_j} = 1` and
-   `Z_j * diag(μA_j) = diag(μB_{perm j})`.
-3. **Multiplicity-entry equality**: `μA_j` and `μB_{perm j}` determine the same
-   singleton multiset.
-
-This composes the conditional block-matching lemma with the scalar Z-gauge
-construction.
-
-**Scope restriction (conditional scalar component):** the declaration assumes
-both `PeriodicOverlapHypothesis` and the power equality `hPowEq`, and it treats
-only one-dimensional multiplicity spaces. Source theorem `thm:bdequal` at
-arXiv:1708.00029, lines 643--690 derives the corresponding facts from equal
-MPVs and allows arbitrary diagonal multiplicity matrices `R_j, S_j`. Hence the
-present result is not the full source theorem. The gap is recorded in
-`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
-theorem fundamentalTheorem_periodic_equalCase
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
-    (hNonRepA : ∀ j₁ j₂ : Fin hA.r, j₁ ≠ j₂ →
-      ¬ HetRepeatedBlocks (hA.blocks j₁) (hA.blocks j₂))
-    (hNonRepB : ∀ k₁ k₂ : Fin hB.r, k₁ ≠ k₂ →
-      ¬ HetRepeatedBlocks (hB.blocks k₁) (hB.blocks k₂))
-    (hOverlap : PeriodicOverlapHypothesis hA.blocks hB.blocks)
-    (hPowEq : ∀ (perm : Fin hA.r ≃ Fin hB.r),
-      (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) →
-      ∀ j N, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N) :
-    -- Block matching:
-    ∃ (_ : hA.r = hB.r) (perm : Fin hA.r ≃ Fin hB.r),
-      -- Per-block HetRepeatedBlocks:
-      (∀ j, HetRepeatedBlocks (hA.blocks j) (hB.blocks (perm j))) ∧
-      -- Per-block Z-gauge + multiplicity-entry multiset equality:
-      (∀ j, ∃ Z : Matrix (Fin 1) (Fin 1) ℂ,
-        Z ^ (hA.period j) = 1 ∧
-        Z * Matrix.diagonal (fun _ : Fin 1 => hA.μ j) =
-          Matrix.diagonal (fun _ : Fin 1 => hB.μ (perm j)) ∧
-        ({hA.μ j} : Multiset ℂ) = {hB.μ (perm j)}) := by
-  -- Step 1: block matching via the conditional matching lemma.
-  obtain ⟨hrAB, perm, hRep⟩ :=
-    fundamentalTheorem_periodic_equalCase_matching A B hA hB hNonRepA hNonRepB hOverlap
-  refine ⟨hrAB, perm, hRep, fun j => ?_⟩
-  -- Step 2: Per-block multiplicity-entry power equality from hypothesis.
-  have hPowEqJ : ∀ N : ℕ, 0 < N → (hA.μ j) ^ N = (hB.μ (perm j)) ^ N :=
-    hPowEq perm hRep j
-  -- Step 3: Z-gauge construction from matched multiplicity entries.
-  have hPow_period : (hA.μ j) ^ (hA.period j) = (hB.μ (perm j)) ^ (hA.period j) :=
-    hPowEqJ (hA.period j) (hA.periodic j).period_pos
-  have hμA_ne : hA.μ j ≠ 0 := by
-    intro hzero
-    have hcontr : (0 : ℝ) < 0 := by
-      simpa [hzero] using (hA.weight_pos j).1
-    exact (lt_irrefl (0 : ℝ)) hcontr
-  obtain ⟨Z, hZpow, hZmul, hMultiset⟩ :=
-    equalCase_zgauge_of_power_sums (hA.period j)
-      (fun _ : Fin 1 => hB.μ (perm j)) (fun _ : Fin 1 => hA.μ j)
-      (fun _ => hμA_ne)
-      (fun _ => hPow_period.symm)
-      (fun k hk => by simp only [Fin.sum_univ_one, (hPowEqJ k hk).symm])
-  refine ⟨Z, hZpow, hZmul, ?_⟩
-  -- Convert Finset.univ.val.map to multiset singleton equality.
-  simp only [Finset.univ_unique] at hMultiset
-  exact hMultiset.symm
-
-end EqualCase
 
 end MPSTensor

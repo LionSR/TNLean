@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.SpinCover.Basic
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.ZeroCorrelationLength
 
@@ -420,14 +421,12 @@ theorem bellPairChainTensor_not_isPhysicalCID :
 /-- The four letters of the Bell-pair chain tensor are the (rescaled) matrix
 units, so they span the full matrix algebra. -/
 theorem bellPairChainTensor_isInjective : Kraus.IsInjective bellPairChainTensor := by
-  rw [Kraus.IsInjective, eq_top_iff]
-  intro M _
-  rw [Matrix.matrix_eq_sum_single M]
-  refine Submodule.sum_mem _ fun a _ => Submodule.sum_mem _ fun b _ => ?_
-  have hletter : Matrix.single a b (M a b) =
-      (M a b * bellCoeff⁻¹) • bellPairChainTensor (finProdFinEquiv (a, b)) := by
-    rw [bellPairChainTensor, Equiv.symm_apply_apply, smul_smul, Matrix.smul_single,
-      smul_eq_mul, mul_one, mul_assoc, inv_mul_cancel₀ bellCoeff_ne_zero, mul_one]
+  rw [Kraus.IsInjective]
+  refine Submodule.eq_top_of_forall_single_mem _ fun a b => ?_
+  have hletter : Matrix.single a b (1 : ℂ) =
+      bellCoeff⁻¹ • bellPairChainTensor (finProdFinEquiv (a, b)) := by
+    rw [bellPairChainTensor, Equiv.symm_apply_apply, smul_smul,
+      inv_mul_cancel₀ bellCoeff_ne_zero, one_smul]
   rw [hletter]
   exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨finProdFinEquiv (a, b), rfl⟩)
 

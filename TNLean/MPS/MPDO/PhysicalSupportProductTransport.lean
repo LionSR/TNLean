@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.KroneckerFactorPositivity
 import QICLean.Channel.SingleKrausPositivity
+import TNLean.Algebra.FinKronecker
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 
@@ -31,19 +32,6 @@ namespace MPOTensor
 variable {d e D : ℕ}
 
 open PhysicalSectorFactorization
-
-private theorem finKronecker_mul {N : ℕ}
-    (A B : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    Matrix.finKronecker A * Matrix.finKronecker B =
-      Matrix.finKronecker (fun n ↦ A n * B n) := by
-  classical
-  ext x y
-  simp only [Matrix.mul_apply, Matrix.finKronecker_apply]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin d)))
-    (fun n z ↦ A n (x n) z * B n z (y n))]
 
 /-- Isometric conjugation preserves the product of a nonempty list.  No
 coisometry, and hence no unitality assertion, is used. -/
@@ -140,7 +128,7 @@ private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
       | cons B l =>
           rw [List.map_cons, List.prod_cons]
           rw [ih (by simp)]
-          rw [finKronecker_mul]
+          rw [Matrix.finKronecker_mul]
           simp only [List.map_cons, List.prod_cons]
 
 private theorem list_prod_eq_of_mem_idempotent

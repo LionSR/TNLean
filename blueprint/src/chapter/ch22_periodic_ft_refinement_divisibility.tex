@@ -57,7 +57,7 @@
     $W^\dagger W = \Id$,
     while irreducibility and the peripheral spectrum are preserved because the
     transfer map of each transported block agrees with that of $B_j$.
-    Reassembling these transported blocks with the same weights gives an
+    Combining these transported blocks with the same weights gives an
     irreducible-form decomposition of $C$.
 \end{proof}
 
@@ -98,22 +98,10 @@
     then one can construct a tensor $\widetilde A$ with
     $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
     $\E_C = \E_{\widetilde A^{[p]}}$.
-    This channel-level hypothesis is the transfer-map reading of the
-    construction in
-    \cite[lines~765--810]{DeLasCuevas2017Irreducible}: for each periodic block
-    $A_j$, the scalars $c_{j,\alpha}$ define matrices $A'_j$, and then
-    $\widetilde A = U^\dagger A'U$.
-    This source description is the intended irreducible-form subcase of the
-    hypothesis; the definition above keeps the construction as a conditional
-    input and does not assert these block scalars $c_{j,\alpha}$ and matrices
-    $A'_j$ for arbitrary $A$.
-    The cited source moreover obtains the blocked-tensor identity
-    $\widetilde A^{[p]} = C$, whereas the formal hypothesis above records only
-    its channel-level consequence
-    $\E_C = \E_{\widetilde A^{[p]}}$
-    (equality of $p$-blocked transfer maps). This conditional input is therefore
-    the transfer-map weakening of the source construction, not the full blocked
-    tensor equality.
+    This channel-level condition is a strictly weaker consequence of the
+    construction in \cite[lines~765--810]{DeLasCuevas2017Irreducible}, which
+    additionally supplies block scalars, intermediate matrices, and the full
+    blocked-tensor identity $\widetilde A^{[p]} = C$.
 \end{definition}
 
 \begin{definition}[Construction of $\widetilde A$ after the equal-case theorem]
@@ -183,9 +171,10 @@
     blocking identity gives $\E_B = (\E_{\widetilde A})^p$.
 \end{proof}
 
-The following conditional statements separate the refinability--divisibility
-equivalence of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} from the
-additional constructions used below.
+The refinability--divisibility equivalence of
+\cite[Theorem~4.1]{DeLasCuevas2017Irreducible} decomposes into the two one-way
+implications of Theorem~\ref{thm:thm_4_1_p_refinement_forward} and
+Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 % Source comparison: arXiv:1708.00029, Theorem 4.1, lines 728--731 asserts
 % the same refinability--divisibility equivalence without additional
@@ -246,12 +235,9 @@ additional constructions used below.
 \begin{remark}[Trace preservation in the forward direction]
     \label{rem:thm_4_1_forward_trace_preservation}
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel, def:peripheral_equalcase_root_from_zgauge, def:peripheral_equalcase_periodicFT_sameMPV, def:peripheral_equalcase_root_channel_from_zgauge}
-    The construction assumed in
-    Theorem~\ref{thm:thm_4_1_p_refinement_forward} does not follow from
-    irreducible form~II alone, and the printed forward implication of
-    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} omits the trace
-    preservation of $\E_B$ that its notion of $p$-divisibility presupposes.
-    Let $p \ge 1$, let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in
+    In \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}, $p$-divisibility presupposes
+    trace preservation of $\E_B$, which is explicit in the hypotheses here.
+    Without trace preservation, let $p \ge 1$, let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in
     irreducible form~II with every multiplicity equal to one, and let
     $\lambda > 1$. Set
     \begin{align}
@@ -358,10 +344,7 @@ additional constructions used below.
 
 \begin{remark}[Continuum-limit application]\notready
     \label{rem:thm_4_1_continuum_limit}
-    The original motivation for Theorem~\ref{thm:thm_4_1_p_refinement}
-    is a continuum-limit construction in the spirit of
-    \cite{DeLasCuevas2017Irreducible}: refinability along arbitrarily
-    large $p$ is equivalent to infinite divisibility of the transfer
-    map, which selects out continuum limits of translationally invariant
-    MPS. The further consequences are explored elsewhere.
+    Refinability along arbitrarily large $p$ corresponds to infinite
+    divisibility of the transfer map, which characterizes continuum limits of
+    translationally invariant MPS (\cite{DeLasCuevas2017Irreducible}).
 \end{remark}

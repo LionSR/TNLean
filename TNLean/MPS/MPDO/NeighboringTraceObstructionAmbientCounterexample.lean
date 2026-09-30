@@ -526,13 +526,6 @@ private theorem doubledPhysTraceTransfer_smul {d D : ℕ}
     doubledPhysTraceTransfer d (c • A) = c • doubledPhysTraceTransfer d A := by
   simp [doubledPhysTraceTransfer, Finset.smul_sum]
 
-/-- Scalar multiplication preserves nilpotency. -/
-private theorem isNilpotent_smul {n : ℕ} (c : ℂ)
-    {T : Matrix (Fin n) (Fin n) ℂ} (hT : IsNilpotent T) :
-    IsNilpotent (c • T) := by
-  obtain ⟨m, hm⟩ := hT
-  exact ⟨m, by rw [smul_pow, hm]; simp⟩
-
 /-- The doubled physical-trace transfers of gauge-equivalent tensors are
 similar matrices. -/
 private theorem exists_doubledPhysTraceTransfer_eq_conj_of_gaugeEquiv
@@ -586,7 +579,7 @@ theorem obstructionBasis_doubledPhysTraceTransfer_not_isNilpotent
   intro hNil
   have hScaled : IsNilpotent (doubledPhysTraceTransfer 5 (mu • B)) := by
     rw [doubledPhysTraceTransfer_smul]
-    exact isNilpotent_smul mu hNil
+    exact hNil.smul mu
   have hEmbedded :
       IsNilpotent (doubledPhysTraceTransfer 5 embeddedObstruction.toMPSTensor) :=
     (isNilpotent_doubledPhysTraceTransfer_iff_of_gaugePhaseEquiv

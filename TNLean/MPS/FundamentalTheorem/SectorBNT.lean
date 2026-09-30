@@ -21,6 +21,7 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Fundamental
 import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord
 import TNLean.MPS.FundamentalTheorem.SectorBNT.MatchAux
+import TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PreparedReconstruction
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch.Core
@@ -28,5 +29,6 @@ import TNLean.MPS.FundamentalTheorem.SectorBNT.SingleSector
 import TNLean.MPS.FundamentalTheorem.SectorBNT.StrongMatch
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
 import TNLean.MPS.FundamentalTheorem.SectorBNT.SupplierNormalized
+import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
 import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv

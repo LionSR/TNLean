@@ -1,0 +1,78 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{One Left Shift per Site in the Periodic Group Operators}
+\author{}
+\date{2026-09-24}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+Let $G$ be a finite group and $\omega$ a normalized three-cocycle of $G$
+with values in $U(1)$. On $\mathbb{C}[G]\otimes\mathbb{C}[G]$ write
+\begin{align}
+    W_g|k,l\rangle
+        &=\omega(g,l,l^{-1}k)|k,l\rangle,
+    \qquad
+    L_g|k\rangle=|gk\rangle .
+    \label{eq:glm23_gate_shift}
+\end{align}
+The periodic construction of Ref.~\cite{GarreRubio2023MPOSym}, in the
+subsubsection on periodic boundary conditions, prints
+\begin{align}
+    U_g
+        &=\bigotimes_i \bigl(L_g^{i}\otimes L_g^{i+1}\bigr)\cdot W_g^{i,i+1}
+    \label{eq:glm23_printed_display}
+\end{align}
+on a ring of sites $i$.\footnote{Source traceability:
+\path{Papers/2203.12563/REsubmission.tex}, lines 2068, 2070 and
+2204--2222.}
+Read literally, every site $i$ receives one factor $L_g$ from the pair
+$(i-1,i)$ and one from the pair $(i,i+1)$, so the product acts on each
+site by $L_g^2=L_{g^2}$. For $G=\mathbb{Z}_2$ this would give
+$U_g=\prod_i CZ_{i,i+1}Z_i$ without the spin flips, contradicting the
+printed $\mathbb{Z}_2$ example $U_g=\prod CZ_{i,i+1}Z_i\prod X_i$ on
+line 2224.
+
+The pair $L_g^{i}\otimes L_g^{i+1}$ descends from the arbitrary-boundary
+operator
+$O_g=\bigotimes_i (L_g^{[i]_l}\otimes L_g^{[i]_r})\cdot
+W_g^{[i]_l,[i]_r}\cdot\mathcal{P}^{[i]_r,[i+1]_l}$ of line 2094, where the
+two factors act on the two halves of one site. The isometry
+$\Gamma:|g,g\rangle_{[i]_r,[i+1]_l}\mapsto|g\rangle_i$ merges the halves
+$[i]_r$ and $[i+1]_l$ into one site, on which the two shifts act jointly
+as a single $L_g$. The tensor $\hat T_g$ drawn on lines 2208--2222 carries
+exactly one $L_g$ per site. The intended operator is therefore
+\begin{align}
+    U_g
+        &=\Bigl(\bigotimes_i L_g^{i}\Bigr)\cdot\prod_i W_g^{i,i+1},
+    \label{eq:glm23_corrected_display}
+\end{align}
+with entries
+$\langle s|U_g|t\rangle=\prod_i\delta_{s_i,gt_i}\,
+\omega(g,t_{i+1},t_{i+1}^{-1}t_i)$.
+With this reading $U_gU_h=U_{gh}$ follows from the cocycle identity, whose
+correction factors
+$\omega(g,h,t_{i+1})/\omega(g,h,t_i)$ telescope around the ring, and
+$U_e=\mathrm{id}$ from normalization.\footnote{Formal declarations:
+\leanid{MPOTensor.GroupCocycle.mpo\_tensor\_apply\_eq\_leftShift\_wGate},
+\leanid{MPOTensor.GroupCocycle.mpo\_tensor\_mul},
+\leanid{MPOTensor.GroupCocycle.mpo\_tensor\_one} and
+\leanid{MPOTensor.GroupCocycle.mpo\_tensor\_cyclicTwo} in
+\doclink{TNLean/MPS/MPU/GroupCocycleMPO} and
+\doclink{TNLean/MPS/MPU/GroupCocycleMPO/Instances}.}
+
+\textbf{Verdict: resolved local fix.}
+The printed tensor and the printed $\mathbb{Z}_2$ example both fix the
+reading (\ref{eq:glm23_corrected_display}).
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

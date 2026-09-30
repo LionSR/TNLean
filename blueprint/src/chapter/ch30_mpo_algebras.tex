@@ -1,0 +1,1029 @@
+%% =========================================================
+%% Chapter: Matrix Product Operator Algebras
+%% Symmetry theory of matrix product operator algebras built on the
+%% multi-block asymmetric compression theorem of Chapter ch:asymmetric_ft:
+%% fusion and action tensors, their gauge freedom, associators and
+%% F-symbols, cohomological obstructions, and the relation to weak Hopf
+%% algebras, dualities, and density operators. Fusion algebras, symmetric
+%% families, and their integrality are in Chapter ch:mpo_symmetry_basics
+%% (ch30_mpo_symmetry_basics.tex).
+%% Planned Lean modules:
+%%   TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
+%%   TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean.
+%% =========================================================
+
+\chapter{Matrix Product Operator Algebras}%
+\label{ch:mpo_algebras}
+
+A matrix product operator algebra is a finite family of matrix product
+operators satisfying the fusion rule~(\ref{eq:mpo_fusion_algebra}) with
+structure constants $N_{ab}^c\in\N$
+\cite{Bultinck2017Anyons,GarreRubio2023MPOSym,Molnar2022MPOAlgebrasI}.
+Chapter~\ref{ch:mpo_symmetry_basics} introduces these algebras and their
+non-invertible examples, defines symmetric matrix product states, and proves
+the integrality of their action coefficients.
+Transfer of the symmetry to the virtual level rests on the multi-block
+asymmetric compression theorem (Theorem~\ref{thm:asym_multiblock}): the stacked
+tensor of a product of two matrix product operators, or of an operator acting
+on a state, need not be in canonical form and in general admits no sitewise
+intertwiner with the tensors of the fusion products
+(Remark~\ref{rem:asym_zipper}), so the Fundamental Theorem for tensors in
+canonical form does not apply to it in general; the asymmetric theorem, which
+requires equality of periodic traces only, does.
+
+Throughout, $T_a$ denotes a matrix product operator tensor of bond dimension
+$\chi_a$, $O_a^{(N)}$ its periodic operator on $N$ sites, and
+$\ket{V^{(N)}(A)}$ the periodic vector of a matrix product state tensor $A$.
+For two operator tensors, $T_aT_b$ denotes the stacked tensor
+$(T_aT_b)^{ij}=\sum_mT_a^{im}\otimes T_b^{mj}$ of bond dimension
+$\chi_a\chi_b$, and $T_a\cdot A$ denotes the tensor
+$(T_a\cdot A)^i=\sum_jT_a^{ij}\otimes A^j$. A reduction of a tensor $B$ onto a
+tensor $C$ is a pair of maps $(V,W)$ with $VW=\Id$ and $VB^wW=C^w$ for every
+word $w$ (Definition~\ref{def:mps_rectangular_reduction}), with compression $V$
+and embedding $W$.
+
+%% ---------------------------------------------------------
+\section{Fusion tensors and action tensors}%
+\label{sec:mpoalg_virtual}
+
+Equality of periodic traces in the fusion rule (\ref{eq:mpo_fusion_algebra})
+decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
+
+\begin{definition}[Fusion tensors]%
+    \label{def:mpoalg_fusion_tensors}
+    \notready
+    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
+    %   MPOTensor.FusionTensors (structure).
+    \uses{def:mpo_fusion_algebra, def:mps_rectangular_reduction}
+    Let $(T_a)_{a\in I}$ be a fusion algebra of normal tensors of positive
+    bond dimension. A family of \emph{fusion tensors} for the pair $(a,b)$
+    consists of maps
+    \begin{align}
+        V_{ab}^{c,\mu} & \colon\C^{\chi_a}\otimes\C^{\chi_b}\to\C^{\chi_c}, &
+        W_{ab}^{c,\mu} & \colon\C^{\chi_c}\to\C^{\chi_a}\otimes\C^{\chi_b},
+        \label{eq:mpoalg_fusion_maps}
+    \end{align}
+    for $c\in I$ and $1\leq\mu\leq N_{ab}^c$, such that the pairs are mutually
+    biorthogonal, $V_{ab}^{c,\mu}W_{ab}^{d,\nu}=\delta_{cd}\delta_{\mu\nu}
+        \Id_{\chi_c}$, each pair is a reduction of $T_aT_b$ onto $T_c$,
+    \begin{align}
+        V_{ab}^{c,\mu}(T_aT_b)^{\mathbf w}W_{ab}^{c,\mu}
+         & =T_c^{\mathbf w}
+        \label{eq:mpoalg_fusion_reduction}
+    \end{align}
+    for every word $\mathbf w$ in the pair alphabet, and the remainder
+    $(T_aT_b)^{ij}-\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{ij}V_{ab}^{c,\mu}$ generates
+    a nilpotent algebra. This is the decomposition of
+    \cite[Section~2]{GarreRubio2023MPOSym} and
+    \cite{Bultinck2017Anyons}, with the nilpotent remainder of
+    \cite[Section~4.4]{GarreRubio2023MPOSym} in place of an exact identity.
+    % Source anchor: arXiv:2203.12563, lines 361--391 (fusion tensors and
+    %   orthogonality) and lines 1026--1030 (nilpotent off-diagonal blocks);
+    %   arXiv:1511.08090, AnyonsPEPS.tex lines 237--251.
+\end{definition}
+
+\begin{center}
+    % Formula: (\ref{eq:mpoalg_fusion_reduction}),
+    % V_{ab}^{c,\mu}(T_aT_b)^{\mathbf w}W_{ab}^{c,\mu}=T_c^{\mathbf w}, drawn
+    % for a word \mathbf w=(i_1,j_1)\cdots(i_n,j_n) in the pair alphabet.
+    % Ink-to-index map: the tall box on the west is the compression
+    % V_{ab}^{c,\mu}, with its one bond leg of T_c open to the west; the tall
+    % box on the east is the embedding W_{ab}^{c,\mu}, with its one bond leg
+    % of T_c open to the east. Between them each site is T_a above T_b, with
+    % open physical legs i_l and j_l; the elision cell stands for the omitted
+    % letters.
+    % Contraction set: the vertical middle index at each site, the virtual
+    % bonds of both rows, and the two product-bond legs of each fusion map.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=5]
+        \tnfuse[at=(1,1), name=V, skin=pill]{V_{ab}^{c,\mu}}
+        \tn[at=(1,2), skin=mpo, ports={90:physical:$i_1$, 270:physical}]{T_a}
+        \tn[at=(2,2), skin=mpo, ports={90:physical, 270:physical:$j_1$}]{T_b}
+        \tn[at=(1,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), skin=mpo, ports={90:physical:$i_n$, 270:physical}]{T_a}
+        \tn[at=(2,4), skin=mpo, ports={90:physical, 270:physical:$j_n$}]{T_b}
+        \tnfuse[at=(1,5), name=W, skin=pill]{W_{ab}^{c,\mu}}
+        \tnwire{open w}{V.180}
+        \tnwire{W.0}{open e}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={op}, cols=3, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{T_c} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_n$, 270:physical:$j_n$}]{T_c}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Existence of fusion tensors]%
+    \label{thm:mpoalg_fusion_tensors_exist}
+    % Formalized as cor:asym_fusion_action_multiplicity and
+    %   thm:asym_multiplicity_reductions (ch25), which carry the Lean tags.
+    % Existing Lean special cases:
+    %   MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum
+    %   (Theorem thm:asym_mpo_product) and
+    %   MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors
+    %   (Corollary cor:asym_fusion_tensors_group).
+    \uses{def:mpoalg_fusion_tensors, thm:asym_mpo_product,
+        cor:asym_fusion_action_multiplicity, thm:asym_multiplicity_reductions}
+    Every pair $(a,b)$ of labels of a fusion algebra of normal tensors of
+    positive bond dimension admits a family of fusion tensors
+    (Corollary~\ref{cor:asym_fusion_action_multiplicity}). This is the
+    existence of fusion tensors in \cite[Appendix~A]{GarreRubio2023MPOSym},
+    here under the periodic fusion rule (\ref{eq:mpo_fusion_algebra}).
+    % Source anchor: arXiv:2203.12563, line 361 and Appendix A (lines
+    %   2305--2455).
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:asym_mpo_product, thm:asym_multiplicity_reductions}
+    Apply Theorem~\ref{thm:asym_mpo_product} with the target family
+    consisting of $N_{ab}^c$ copies of $T_c$ for each $c$, all with weight
+    $1$. Its compression pairs, indexed by $(c,\mu)$, are mutually
+    biorthogonal reductions with a nilpotent remainder; this is
+    Theorem~\ref{thm:asym_multiplicity_reductions} for the stacked product.
+\end{proof}
+
+For a group-like algebra, with labels in a group $G$ and
+$N_{gh}^k=\delta_{k,gh}$, the fusion tensors reduce to one pair
+$(V_{g,h},W_{g,h})$ for each pair of group elements; for representations by
+normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
+
+\begin{definition}[Action tensors]%
+    \label{def:mpoalg_action_tensors}
+    \notready
+    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
+    %   MPOTensor.ActionTensors (structure).
+    \uses{def:mpo_symmetric_family, def:mps_rectangular_reduction}
+    Let $(A_x)_{x\in K}$ be a symmetric family of normal tensors of positive
+    bond dimension whose coefficients $M_{a,x}^y$ are nonnegative integers. A
+    family of \emph{action tensors} for $(a,x)$ consists of maps
+    $V_{ax}^{y,i}\colon\C^{\chi_a}\otimes\C^{D_x}\to\C^{D_y}$ and
+    $W_{ax}^{y,i}\colon\C^{D_y}\to\C^{\chi_a}\otimes\C^{D_x}$, for $y\in K$
+    and $1\leq i\leq M_{a,x}^y$, that are mutually biorthogonal reductions of
+    $T_a\cdot A_x$ onto the blocks $A_y$ with a nilpotent remainder.
+    % Source anchor: arXiv:2203.12563, lines 459--490 (action tensors and
+    %   orthogonality) and lines 1062--1091 (periodic-boundary form).
+\end{definition}
+
+\begin{center}
+    % Formula: V_{ax}^{y,i}(T_a\cdot A_x)^wW_{ax}^{y,i}=A_y^w, the reduction
+    % property of this definition, drawn for a word w=s_1\cdots s_n.
+    % Ink-to-index map: the tall boxes are the compression V_{ax}^{y,i}
+    % (west) and the embedding W_{ax}^{y,i} (east), each with one bond leg of
+    % A_y open to the outside; between them each site is T_a above A_x (dot),
+    % with open physical leg s_l.
+    % Contraction set: the vertical leg joining the input of T_a to the
+    % physical leg of A_x, the virtual bonds of both rows, and the two
+    % product-bond legs of each map.
+    % Boundary signature: (virtual-west=1 | virtual-east=1 |
+    % physical-up=2 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,ket}, cols=5]
+        \tnfuse[at=(1,1), name=V, skin=pill]{V_{ax}^{y,i}}
+        \tn[at=(1,2), skin=mpo, ports={90:physical:$s_1$}]{T_a}
+        \tn[at=(2,2), label pos=s, ports={180:virtual, 0:virtual}]{A_x}
+        \tn[at=(1,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,3), skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), skin=mpo, ports={90:physical:$s_n$}]{T_a}
+        \tn[at=(2,4), label pos=s, ports={180:virtual, 0:virtual}]{A_x}
+        \tnfuse[at=(1,5), name=W, skin=pill]{W_{ax}^{y,i}}
+        \tnwire{open w}{V.180}
+        \tnwire{W.0}{open e}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={ket}, cols=3, west=open, east=open]
+        \tn[label pos=nw, ports={90:physical:$s_1$}]{A_y} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=nw, ports={90:physical:$s_n$}]{A_y}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[Existence of action tensors]%
+    \label{thm:mpoalg_action_tensors_exist}
+    % Formalized as the action clause of cor:asym_fusion_action_multiplicity
+    %   (ch25), which carries the Lean tag.
+    % Existing Lean: MPOTensor.exists_isReduction_actTensor_of_isNormal,
+    %   MPOTensor.exists_multiBlockCompression_actTensor_of_isNormal
+    %   (Corollary cor:asym_action_tensors).
+    \uses{def:mpoalg_action_tensors, cor:asym_action_tensors,
+        thm:mpo_symmetric_nimrep, cor:asym_fusion_action_multiplicity}
+    Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, every
+    pair $(a,x)$ admits a family of action tensors; for integer
+    coefficients this is the action clause of
+    Corollary~\ref{cor:asym_fusion_action_multiplicity}. This is the existence of
+    action tensors in \cite[Section~3]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 459--460 and 1065--1091.
+\end{theorem}
+
+\begin{proof}
+    \uses{cor:asym_action_tensors, thm:mpo_symmetric_nimrep}
+    By Theorem~\ref{thm:mpo_symmetric_nimrep} the coefficients are
+    nonnegative integers, so (\ref{eq:mpo_symmetric_family}) writes
+    $O_a^{(N)}\ket{V^{(N)}(A_x)}$ as a sum of periodic vectors of blocks
+    repeated with multiplicities $M_{a,x}^y$. Corollary~\ref{cor:asym_action_tensors}
+    applied to this family with unit weights gives the reductions.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Gauge freedom of fusion and action tensors}%
+\label{sec:mpoalg_gauge}
+
+Fusion tensors are unique up to a dressed scalar when the stacked product
+reduces onto a single normal block, and up to the multiplicity gauge under the
+zipper condition (Remark~\ref{rem:mpoalg_nonunique}).
+
+\begin{corollary}[Uniqueness of a single-target reduction]%
+    \label{cor:mpoalg_single_target_uniqueness}
+    % Formalized as thm:mps_reduction_boundary_dressed_uniqueness and
+    %   cor:asym_fusion_gauge_single (existence of lambda) and
+    %   thm:mpug_dressed_proportionality (uniqueness), which carry the Lean tags.
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness,
+        def:mps_rectangular_reduction, cor:asym_fusion_gauge_single,
+        thm:mpug_dressed_proportionality}
+    Let $B$ be a tensor, $C$ a normal tensor, and $(V,W)$, $(\widetilde
+        V,\widetilde W)$ two reductions of $B$ onto $C$ whose residual tensors
+    $B-WCV$ and $B-\widetilde WC\widetilde V$ are nilpotent with a common
+    bound $N_0$. Then there is a unique $\lambda\in\C^\times$ with
+    \begin{align}
+        \widetilde VB^{\mathbf w} & =\lambda\,VB^{\mathbf w},   &
+        B^{\mathbf w}\widetilde W & =\lambda^{-1}B^{\mathbf w}W
+        \label{eq:mpoalg_single_target}
+    \end{align}
+    for every word with $|\mathbf w|>2N_0$. This applies to the fusion tensors
+    of a group-like algebra, where $T_gT_h$ reduces onto the single block
+    $T_{gh}$, to the composite reductions of
+    Theorem~\ref{thm:mpoalg_composite_reduction}, and to the action tensors of
+    an invertible label on a permuted block. It does not apply to a single slot
+    of a reduction onto multiple blocks, whose residual is not nilpotent.
+    % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3156--3162
+    %   (Theorem 22); arXiv:2203.12563, lines 1028--1060.
+\end{corollary}
+
+\begin{proof}
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness,
+        cor:asym_fusion_gauge_single, thm:mpug_dressed_proportionality}
+    Existence of $\lambda$ is
+    Theorem~\ref{thm:mps_reduction_boundary_dressed_uniqueness} written for
+    compressions on the left and embeddings on the right, and for fusion
+    tensors Corollary~\ref{cor:asym_fusion_gauge_single}. Uniqueness is
+    Lemma~\ref{thm:mpug_dressed_proportionality}: $VB^{\mathbf w}W=
+        C^{\mathbf w}$ is nonzero for arbitrarily long words.
+\end{proof}
+
+\begin{theorem}[Uniqueness of zipper fusion tensors up to multiplicity gauge]%
+    \label{thm:mpoalg_zipper_fusion_uniqueness}
+    % Formalized as cor:asym_zipper_fusion_uniqueness (ch25), which carries the
+    %   Lean tag.
+    \uses{def:mpoalg_fusion_tensors, def:normal,
+        cor:asym_zipper_fusion_uniqueness}
+    Let the blocks $T_c$ of a fusion algebra be normal and pairwise not
+    related by a gauge transformation, and let
+    $(V_{ab}^{c,\mu},W_{ab}^{c,\mu})$ and
+    $(\widetilde V_{ab}^{c,\mu},\widetilde W_{ab}^{c,\mu})$ be two families
+    of fusion tensors for $(a,b)$ with vanishing remainder,
+    \begin{align}
+        (T_aT_b)^{\mathbf w}
+         & =\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{\mathbf w}V_{ab}^{c,\mu}
+        =\sum_{c,\mu}\widetilde W_{ab}^{c,\mu}T_c^{\mathbf w}
+        \widetilde V_{ab}^{c,\mu}
+        \label{eq:mpoalg_zipper_decomposition}
+    \end{align}
+    for every nonempty word $\mathbf w$. Then for each $c$ there is a unique
+    $Y_{ab}^c\in\GL_{N_{ab}^c}(\C)$ with
+    $\widetilde V_{ab}^{c,\mu}=\sum_\nu(Y_{ab}^c)_{\mu\nu}V_{ab}^{c,\nu}$ and
+    $\widetilde W_{ab}^{c,\mu}=\sum_\nu W_{ab}^{c,\nu}
+        \bigl((Y_{ab}^c)^{-1}\bigr)_{\nu\mu}$ on the support of the
+    decomposition, so the ambiguity is $\bigoplus_c\GL_{N_{ab}^c}(\C)$ with
+    no word dressing. This is the uniqueness of fusion tensors under the zipper
+    condition in \cite{Bultinck2017Anyons}, and the basis change of
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}; it is
+    Corollary~\ref{cor:asym_zipper_fusion_uniqueness}.
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200;
+    %   arXiv:2204.05940, mpo.tex line 1725;
+    %   arXiv:2203.12563, lines 416--424.
+    % The F-matrix side is thm:mpdo_complete_zipper_printed_fmove (ch21); the
+    % F-matrix gauge statement is added by PR #7985.
+\end{theorem}
+
+\begin{center}
+    % Formula: (\ref{eq:mpoalg_zipper_decomposition}),
+    % (T_aT_b)^{\mathbf w}=\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{\mathbf w}V_{ab}^{c,\mu},
+    % drawn for a word \mathbf w=(i_1,j_1)\cdots(i_n,j_n).
+    % Ink-to-index map: left, T_a above T_b at every site with open physical
+    % legs i_l and j_l; right, the embedding W_{ab}^{c,\mu} (two legs open to
+    % the west), the word of T_c, and the compression V_{ab}^{c,\mu} (two legs
+    % open to the east).
+    % Contraction set: left, the vertical middle indices and the virtual
+    % bonds of both rows; right, the virtual bonds of T_c, including those
+    % joining it to the two fusion maps.
+    % Boundary signature: (virtual-west=2 | virtual-east=2 |
+    % physical-up=2 | physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=3, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical}]{T_a} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_n$, 270:physical}]{T_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{T_b} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_n$}]{T_b}
+    \end{tenkz}
+    \quad$=\;\displaystyle\sum_{c,\mu}$\quad
+    \begin{tenkz}[rows={op,op}, cols=5, bonds=none]
+        \tnfuse[at=(1,1), name=W, skin=pill]{W_{ab}^{c,\mu}}
+        \tn[at=(1,2), name=t1, skin=mpo,
+            ports={90:physical:$i_1$, 270:physical:$j_1$, 180:virtual, 0:virtual}]{T_c}
+        \tn[at=(1,3), name=td, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=tn, skin=mpo,
+            ports={90:physical:$i_n$, 270:physical:$j_n$, 180:virtual, 0:virtual}]{T_c}
+        \tnfuse[at=(1,5), name=V, skin=pill]{V_{ab}^{c,\mu}}
+        \tn[at=(2,2), skin=none]{} \tn[at=(2,3), skin=none]{} \tn[at=(2,4), skin=none]{}
+        \tnwire{open w}{W.180@1}
+        \tnwire{open w}{W.180@2}
+        \tnwire{W.0}{t1.180} \tnwire{t1.0}{td.180} \tnwire{td.0}{tn.180}
+        \tnwire{tn.0}{V.180}
+        \tnwire{V.0@1}{open e}
+        \tnwire{V.0@2}{open e}
+    \end{tenkz}
+\end{center}
+
+\begin{proof}
+    \uses{def:normal, thm:asym_zipper_uniqueness}
+    This is the argument of Theorem~\ref{thm:asym_zipper_uniqueness}.
+    Multiply (\ref{eq:mpoalg_zipper_decomposition}) by
+    $\widetilde V_{ab}^{c,\mu}$ on the left and $W_{ab}^{e,\nu}$ on the right
+    and use biorthogonality of both families:
+    $T_c^{\mathbf w}\,\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}
+        =\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}\,T_e^{\mathbf w}$ for every
+    nonempty word. For normal blocks, the words of a fixed injective length
+    span the full matrix algebra, so an intertwiner between $T_c$ and $T_e$ is
+    zero unless $T_c$ and $T_e$ are gauge equivalent, and is a scalar when
+    $e=c$. This gives $\widetilde V_{ab}^{c,\mu}W_{ab}^{e,\nu}=
+        \delta_{ce}(Y_{ab}^c)_{\mu\nu}\Id$, and the same argument with the
+    families exchanged gives the inverse matrix.
+\end{proof}
+
+\begin{theorem}[Uniqueness of zipper action tensors up to multiplicity gauge]%
+    \label{thm:mpoalg_zipper_action_uniqueness}
+    % Formalized as cor:asym_zipper_action_uniqueness (ch25), which carries the
+    %   Lean tag.
+    \uses{def:mpoalg_action_tensors, def:normal,
+        cor:asym_zipper_action_uniqueness}
+    Let the blocks $A_y$ be normal and pairwise not related by a gauge
+    transformation. Two families of action tensors for $(a,x)$ with
+    vanishing remainder, $(T_a\cdot A_x)^w=\sum_{y,i}W_{ax}^{y,i}A_y^w
+        V_{ax}^{y,i}$ for every nonempty word, are related by a unique
+    $X_{ax}^y\in\GL_{M_{a,x}^y}(\C)$ for each $y$, in the sense of
+    Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}. This is the gauge
+    freedom of the action tensors in \cite[Section~3.1]{GarreRubio2023MPOSym},
+    and it is Corollary~\ref{cor:asym_zipper_action_uniqueness}.
+    % Source anchor: arXiv:2203.12563, lines 595--602.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpoalg_zipper_fusion_uniqueness}
+    The proof of Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness} applies to
+    the tensor $T_a\cdot A_x$ and the blocks $A_y$.
+\end{proof}
+
+\begin{remark}[Uniqueness fails with a nilpotent remainder]%
+    \label{rem:mpoalg_nonunique}
+    With only a nilpotent remainder, reductions are not unique up to scalars.
+    Let $C$ be normal of bond dimension $D$, let $R^i\in\C^{D\times1}$ be
+    arbitrary, and let
+    \begin{align}
+        B^i & =\begin{pmatrix}C^i & R^i\\ 0 & 0\end{pmatrix},
+            &
+        W   & =\begin{pmatrix}\Id_D\\ 0\end{pmatrix},
+            &
+        V_y & =\begin{pmatrix}\Id_D & y\end{pmatrix}
+        \label{eq:mpoalg_nonunique}
+    \end{align}
+    for $y\in\C^D$. Then $V_yW=\Id_D$, $V_yB^wW=C^w$ for every word $w$, and
+    the remainder $B^i-WC^iV_y$ has vanishing products of length two, so
+    every $(V_y,W)$ is a reduction of $B$ onto $C$ with nilpotent remainder.
+    For $y\neq0$ the compressions $V_y$ and $V_0$ are not proportional,
+    although $V_yB^w=V_0B^w$ for every nonempty word; with a single target,
+    Corollary~\ref{cor:mpoalg_single_target_uniqueness} recovers uniqueness
+    after dressing.
+
+    With several targets even the dressed identities fail. Let
+    $(V_\mu,W_\mu)$ and $(V_\nu,W_\nu)$ be two slots of a compression of $B$
+    onto blocks $C_\mu$ and $C_\nu$ of the same bond dimension $D$, with
+    $\mu$ before $\nu$ in the block upper triangular order, and conjugate the
+    slot coordinates by $S=\begin{pmatrix}\Id & Z\\ 0 & \Id\end{pmatrix}$
+    for an arbitrary $Z\in\MN{D}$. The new family is still block upper
+    triangular, hence again a compression with nilpotent remainder, and
+    $\widetilde V_\mu=V_\mu-ZV_\nu$. Then
+    $\widetilde V_\mu B^{\mathbf w}=V_\mu B^{\mathbf w}-ZV_\nu B^{\mathbf w}$
+    on every long word, which is not a combination of the
+    $V_\kappa B^{\mathbf w}$ with scalar coefficients unless $Z$ is scalar.
+    This holds whether $\nu$ is a duplicate copy of the same block or a
+    distinct block. The zipper condition of \cite{Bultinck2017Anyons}, with
+    vanishing remainder, rules out both ambiguities and restores uniqueness up
+    to the multiplicity gauge
+    (Theorem~\ref{thm:mpoalg_zipper_fusion_uniqueness}).
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200.
+\end{remark}
+
+
+%% ---------------------------------------------------------
+\section{The associator of a group-like algebra}%
+\label{sec:mpoalg_associator}
+
+Let $G$ be a group and $(T_g)_{g\in G}$ a fusion algebra of normal tensors of
+positive bond dimension with $N_{gh}^k=\delta_{k,gh}$, so that
+$O_g^{(N)}O_h^{(N)}=O_{gh}^{(N)}$ for every $N\geq1$. Choose fusion tensors
+$(V_{g,h},W_{g,h})$ for every pair. The triple product $T_gT_hT_k$ has two
+composite reductions onto $T_{ghk}$,
+\begin{align}
+    V^{(gh)k}
+     & =V_{gh,k}\,(V_{g,h}\otimes\Id_{\chi_k}),
+     &
+    V^{g(hk)}
+     & =V_{g,hk}\,(\Id_{\chi_g}\otimes V_{h,k}),
+    \label{eq:mpoalg_composite_compressions}
+\end{align}
+with the corresponding composite embeddings.
+
+\begin{theorem}[Composite reductions]%
+    \label{thm:mpoalg_composite_reduction}
+    \lean{MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans,
+        MPSTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul,
+        MPSTensor.reductionResidual_trans_apply,
+        MPSTensor.isReductionResidualNilpotencyBound_of_intertwine,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_idKron,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_assoc_left,
+        MPOTensor.isReductionResidualNilpotencyBound_mulTensor_assoc_right,
+        MPOTensor.GroupFamily.isReductionResidualNilpotencyBound_castIndex,
+        MPOTensor.isReductionResidualNilpotencyBound_actTensor_kronId,
+        MPOTensor.isReductionResidualNilpotencyBound_actTensor_idKron,
+        MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_left,
+        MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_right}
+    \leanok
+    \uses{def:mps_rectangular_reduction,
+        def:mps_reduction_residual_nilpotency_length, def:mpoalg_fusion_tensors,
+        thm:mpug_reduction_composition, thm:mpug_fusion_trees_reductions}
+    Let $(V_1,W_1)$ be a reduction of a tensor $C$ onto $B$ whose residual
+    letters $N^i=C^i-W_1B^iV_1$ have vanishing products of length $N_1$, and
+    let $(V_2,W_2)$ be a reduction of $B$ onto $A$ whose residual letters
+    $M^i=B^i-W_2A^iV_2$ have vanishing products of length $N_2$. Then the
+    residual letters $R^i=C^i-W_1W_2A^iV_2V_1$ of the composite reduction
+    $(V_2V_1,W_1W_2)$ have vanishing products of length $2N_1+N_2$. The
+    residual bound is unchanged when a reduction is tensored with an identity
+    strand, $(V\otimes\Id,W\otimes\Id)$ on $T_aT_d$ or
+    $(\Id\otimes V,\Id\otimes W)$ on $T_dT_a$, and likewise for an operator
+    tensor acting on a state tensor, and it is unchanged under the bond
+    associator. In particular, if $(V,W)$ reduces $T_aT_b$ onto $T_c$ and
+    $(V',W')$ reduces $T_cT_d$ onto $T_e$, both with residual bound $K$, then
+    $(V'(V\otimes\Id),(W\otimes\Id)W')$ reduces $T_aT_bT_d$ onto $T_e$ with
+    residual bound $3K$. The reduction property, without the residual bound,
+    is Lemma~\ref{thm:mpug_reduction_composition}, and for the two fusion
+    trees of a triple product it is
+    Lemma~\ref{thm:mpug_fusion_trees_reductions}.
+    % Source anchor: arXiv:1706.07329, cornerproblem.tex lines 3147--3152
+    %   (Definition 8) and 3946--3970 (Lemma VNW=0); arXiv:2203.12563, lines
+    %   1026--1060; arXiv:2502.20257, main.tex lines 1506--1535.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The letters satisfy $R^i=N^i+W_1M^iV_1$, and $V_1N^{\mathbf q}W_1=0$ for
+    every nonempty word $\mathbf q$ because $(V_1,W_1)$ is a reduction. Three
+    inductions on words give the following.
+    \begin{enumerate}
+        \item $V_1R^{\mathbf w}W_1=M^{\mathbf w}$, and
+              $V_1R^{\mathbf w}N^{\mathbf q}W_1=0$ for nonempty $\mathbf q$.
+              Append a letter $x$ to $\mathbf w$: since
+              $R^{\mathbf wx}=R^{\mathbf w}N^x+R^{\mathbf w}W_1M^xV_1$, both
+              identities for $\mathbf wx$ follow from those for $\mathbf w$
+              and from $V_1W_1=\Id$.
+        \item $N^{\mathbf p}R^{\mathbf w}W_1=0$ when
+              $|\mathbf p|+|\mathbf w|\geq N_1+N_2$. Prepend a letter $x$:
+              $N^{\mathbf p}R^{x\mathbf w}W_1=N^{\mathbf px}R^{\mathbf w}W_1
+                  +N^{\mathbf p}W_1M^{x\mathbf w}$ by the first step, and the
+              last term vanishes because $|\mathbf p|\geq N_1$ or
+              $|x\mathbf w|\geq N_2$.
+        \item $R^{\mathbf w}N^{\mathbf q}=0$ when
+              $|\mathbf w|+|\mathbf q|\geq 2N_1+N_2$. Append a letter $x$:
+              $R^{\mathbf wx}N^{\mathbf q}=R^{\mathbf w}N^{x\mathbf q}
+                  +R^{\mathbf w}W_1M^xV_1N^{\mathbf q}$, and the last term
+              vanishes because $|\mathbf q|\geq N_1$, or else
+              $|\mathbf w|\geq N_1+N_2$ and the second step applies.
+    \end{enumerate}
+    The third step with $\mathbf q$ empty is the claim. The residual of
+    $(V\otimes\Id,W\otimes\Id)$ on $T_aT_d$ has words
+    $\sum_{\mathbf m}(T_a-WT_cV)^{(\mathbf i,\mathbf m)}\otimes
+        T_d^{(\mathbf m,\mathbf j)}$, which vanish at the same length, and an
+    invertible intertwiner of letters conjugates the residual letters.
+\end{proof}
+
+\begin{remark}[Sharpness of the hypotheses and of the bound]%
+    \label{rem:mpoalg_composite_reduction_sharp}
+    \uses{thm:mpoalg_composite_reduction}
+    In Theorem~\ref{thm:mpoalg_composite_reduction} the factors must have
+    nilpotent residuals: a single slot of a reduction onto several blocks has a residual that is not nilpotent, and composing
+    it with the identity reduction of $T_cT_d$ for a trivial $T_d$ returns it
+    unchanged. The bound $N_1+N_2$ fails: for one letter acting as the shift
+    $f_0\to f_1\to e_1\to e_2\to f_3\to f_4$ on $\C^6$, with $(V_1,W_1)$ the
+    compression onto $\operatorname{span}\{e_1,e_2\}$ and $(V_2,W_2)$ the
+    compression of the shift $e_1\to e_2$ onto $\operatorname{span}\{e_2\}$
+    with $A=0$, one has $N_1=3$, $N_2=2$, and $R^5\neq0$.
+    Counting the lengths of the nonvanishing terms in the expansion of the
+    proof more carefully gives the bound $\max(N_1,2N_1+N_2-2)$, which this
+    example attains.
+\end{remark}
+
+\begin{definition}[Associator]%
+    \label{def:mpoalg_associator}
+    % Formalized as def:mpug_anomaly_three_cochain with its characterization
+    %   thm:mpug_anomaly_three_cochain_spec (ch29), which carry the Lean tags.
+    \uses{thm:mpoalg_composite_reduction,
+        cor:mpoalg_single_target_uniqueness, def:mpug_anomaly_three_cochain,
+        thm:mpug_anomaly_three_cochain_spec}
+    The \emph{associator} of the chosen fusion tensors is the function
+    $\omega\colon G^3\to\C^\times$ defined by
+    \begin{align}
+        V^{(gh)k}(T_gT_hT_k)^{\mathbf w}
+         & =\omega(g,h,k)\,V^{g(hk)}(T_gT_hT_k)^{\mathbf w}
+        \label{eq:mpoalg_associator}
+    \end{align}
+    for all sufficiently long words $\mathbf w$; equivalently,
+    $(T_gT_hT_k)^{\mathbf w}W^{g(hk)}=\omega(g,h,k)\,
+        (T_gT_hT_k)^{\mathbf w}W^{(gh)k}$ for the composite embeddings, which is
+    the orientation of the defining display of
+    \cite{FrancoRubio2025MPUGauging}. It exists and is nonzero by
+    Corollary~\ref{cor:mpoalg_single_target_uniqueness} applied to the two
+    composite reductions of Theorem~\ref{thm:mpoalg_composite_reduction}, and
+    it is unique because $T_{ghk}^{\mathbf w}\neq0$ for some long word. This is
+    the three-cocycle of \cite[Section~4.4]{GarreRubio2023MPOSym}, and it is
+    the anomaly three-cochain of
+    Definition~\ref{def:mpug_anomaly_three_cochain}, characterized by
+    Theorem~\ref{thm:mpug_anomaly_three_cochain_spec}.
+    % Source anchor: arXiv:2502.20257, main.tex lines 1507--1537 (defining
+    %   display: right fusion trees, g(hk) = omega(g,h,k) (gh)k), eq:omegagauge
+    %   at lines 1542--1543; the orientation of def:mpug_anomaly_three_cochain.
+    % Source anchor: arXiv:2203.12563, lines 1028--1060 (periodic-boundary
+    %   definition, words of length at least ell) and lines 664--676.
+\end{definition}
+
+\begin{center}
+    % Formula: (\ref{eq:mpoalg_associator}),
+    % V^{(gh)k}(T_gT_hT_k)^{\mathbf w}=\omega(g,h,k)\,V^{g(hk)}
+    % (T_gT_hT_k)^{\mathbf w}, with the composite compressions of
+    % (\ref{eq:mpoalg_composite_compressions}), drawn for a word
+    % \mathbf w=(i_1,j_1)\cdots(i_n,j_n).
+    % Ink-to-index map: each site is T_g above T_h above T_k, with output
+    % i_l on T_g and input j_l on T_k. Left, V_{g,h} fuses the bonds of T_g
+    % and T_h, and V_{gh,k} fuses the result with the bond of T_k; right,
+    % V_{h,k} fuses the bonds of T_h and T_k, and V_{g,hk} fuses the bond of
+    % T_g with the result. The long horizontal segments are single bonds
+    % passing a column without a tensor.
+    % Contraction set: the two vertical middle indices at each site, the
+    % virtual bonds of the three rows, and the bonds between the fusion maps.
+    % Boundary signature: (virtual-west=1 | virtual-east=3 |
+    % physical-up=2 | physical-down=2) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,op}, cols=5, bonds=none]
+        \tn[at=(1,1), name=O, skin=pill, wires=3,
+            ports={180@1:virtual, 0@1:virtual, 0@3:virtual}]{V_{gh,k}}
+        \tn[at=(1,2), name=I, skin=pill, wires=2,
+            ports={180@1:virtual, 0@1:virtual, 0@2:virtual}]{V_{g,h}}
+        \tn[at=(1,3), name=g1, skin=mpo, ports={90:physical:$i_1$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,3), name=h1, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,3), name=k1, skin=mpo, ports={90:physical, 270:physical:$j_1$, 180:virtual, 0:virtual}]{T_k}
+        \tn[at=(1,4), name=gd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=hd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(3,4), name=kd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,5), name=gn, skin=mpo, ports={90:physical:$i_n$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,5), name=hn, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,5), name=kn, skin=mpo, ports={90:physical, 270:physical:$j_n$, 180:virtual, 0:virtual}]{T_k}
+        \tnwire{open w}{O.180@1}
+        \tnwire{O.0@1}{I.180@1}
+        \tn[at=(3,2), name=J, skin=none, ports={180:virtual, 0:virtual}]{}
+        \tnwire{O.0@3}{J.180} \tnwire{J.0}{k1.180}
+        \tnwire{I.0@1}{g1.180}
+        \tnwire{I.0@2}{h1.180}
+        \tnwire{g1.270}{h1.90} \tnwire{h1.270}{k1.90}
+        \tnwire{gn.270}{hn.90} \tnwire{hn.270}{kn.90}
+        \tnwire{g1.0}{gd.180} \tnwire{gd.0}{gn.180}
+        \tnwire{h1.0}{hd.180} \tnwire{hd.0}{hn.180}
+        \tnwire{k1.0}{kd.180} \tnwire{kd.0}{kn.180}
+        \tnwire{gn.0}{open e} \tnwire{hn.0}{open e} \tnwire{kn.0}{open e}
+    \end{tenkz}
+    \quad$=\omega(g,h,k)$\quad
+    \begin{tenkz}[rows={op,op,op}, cols=5, bonds=none]
+        \tn[at=(1,1), name=O, skin=pill, wires=2,
+            ports={180@1:virtual, 0@1:virtual, 0@2:virtual}]{V_{g,hk}}
+        \tn[at=(3,1), skin=none]{}
+        \tn[at=(1,2), name=J, skin=none, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,2), name=I, skin=pill, wires=2,
+            ports={180@1:virtual, 0@1:virtual, 0@2:virtual}]{V_{h,k}}
+        \tn[at=(1,3), name=g1, skin=mpo, ports={90:physical:$i_1$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,3), name=h1, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,3), name=k1, skin=mpo, ports={90:physical, 270:physical:$j_1$, 180:virtual, 0:virtual}]{T_k}
+        \tn[at=(1,4), name=gd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=hd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(3,4), name=kd, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,5), name=gn, skin=mpo, ports={90:physical:$i_n$, 270:physical, 180:virtual, 0:virtual}]{T_g}
+        \tn[at=(2,5), name=hn, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{T_h}
+        \tn[at=(3,5), name=kn, skin=mpo, ports={90:physical, 270:physical:$j_n$, 180:virtual, 0:virtual}]{T_k}
+        \tnwire{open w}{O.180@1}
+        \tnwire{O.0@1}{J.180} \tnwire{J.0}{g1.180}
+        \tnwire{O.0@2}{I.180@1}
+        \tnwire{I.0@1}{h1.180}
+        \tnwire{I.0@2}{k1.180}
+        \tnwire{g1.270}{h1.90} \tnwire{h1.270}{k1.90}
+        \tnwire{gn.270}{hn.90} \tnwire{hn.270}{kn.90}
+        \tnwire{g1.0}{gd.180} \tnwire{gd.0}{gn.180}
+        \tnwire{h1.0}{hd.180} \tnwire{hd.0}{hn.180}
+        \tnwire{k1.0}{kd.180} \tnwire{kd.0}{kn.180}
+        \tnwire{gn.0}{open e} \tnwire{hn.0}{open e} \tnwire{kn.0}{open e}
+    \end{tenkz}
+\end{center}
+
+\begin{theorem}[The associator is a three-cocycle]%
+    \label{thm:mpoalg_associator_cocycle}
+    % Formalized as thm:mpug_anomaly_three_cocycle (ch29), which carries the Lean
+    %   tag.
+    \uses{def:mpoalg_associator, def:mpug_three_cocycle,
+        thm:mpug_anomaly_three_cocycle}
+    The associator satisfies the three-cocycle relation
+    (\ref{eq:mpug_three_cocycle}),
+    \begin{align}
+        \omega(gh,k,l)\,\omega(g,h,kl)
+         & =\omega(g,h,k)\,\omega(g,hk,l)\,\omega(h,k,l),
+        \label{eq:mpoalg_pentagon_group}
+    \end{align}
+    which is the pentagon equation for a group-like algebra
+    \cite[Section~4]{GarreRubio2023MPOSym}. This is
+    Theorem~\ref{thm:mpug_anomaly_three_cocycle}.
+    % Source anchor: arXiv:2203.12563, lines 677--679.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpoalg_composite_reduction}
+    Write $X=(T_gT_hT_kT_l)^{\mathbf w}$ for a long word $\mathbf w$ and
+    $V^P$ for the composite compression of the fourfold product onto
+    $T_{ghkl}$ along a bracketing $P$. By
+    Theorem~\ref{thm:mpoalg_composite_reduction}, applying
+    (\ref{eq:mpoalg_associator}) to one triple inside a bracketing, tensored
+    with identities and followed by the remaining compressions, replaces
+    $(xy)z$ by $x(yz)$ at the cost of $\omega(x,y,z)$. Along the two paths of
+    the pentagon this gives
+    \begin{align}
+        V^{((gh)k)l}X & =\omega(gh,k,l)\,V^{(gh)(kl)}X
+        =\omega(gh,k,l)\,\omega(g,h,kl)\,V^{g(h(kl))}X,
+        \notag                                                          \\
+        V^{((gh)k)l}X & =\omega(g,h,k)\,V^{(g(hk))l}X
+        =\omega(g,h,k)\,\omega(g,hk,l)\,V^{g((hk)l)}X
+        \notag                                                          \\
+                      & =\omega(g,h,k)\,\omega(g,hk,l)\,\omega(h,k,l)\,
+        V^{g(h(kl))}X.
+        \label{eq:mpoalg_pentagon_paths}
+    \end{align}
+    Since $V^{g(h(kl))}XW^{g(h(kl))}=T_{ghkl}^{\mathbf w}$ is nonzero for some
+    long word, comparing the two lines of (\ref{eq:mpoalg_pentagon_paths})
+    gives (\ref{eq:mpoalg_pentagon_group}).
+\end{proof}
+
+\begin{theorem}[Gauge dependence of the associator]%
+    \label{thm:mpoalg_associator_gauge}
+    % Formalized as thm:mpug_anomaly_three_cocycle_gauge (ch29), which carries the
+    %   Lean tags.
+    \uses{def:mpoalg_associator, cor:mpoalg_single_target_uniqueness,
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        thm:mpug_anomaly_three_cocycle_gauge}
+    Replacing the fusion tensors by $(\beta_{g,h}^{-1}V_{g,h},
+        \beta_{g,h}W_{g,h})$, so that $V_{g,h}B^{\mathbf w}=\beta_{g,h}\,
+        V'_{g,h}B^{\mathbf w}$ for the new compression $V'_{g,h}$, with $\beta\colon G^2\to\C^\times$ replaces
+    $\omega$ by $\beta\mathbin{\triangleright}\omega$ of
+    Definition~\ref{def:mpug_fusion_gauge}. Consequently the class of
+    $\omega$ under the relation of
+    Definition~\ref{def:mpug_cohomologous_to} does not depend on the choice
+    of fusion tensors, and depends only on the family $(T_g)_{g\in G}$.
+    This is the coboundary freedom of \cite[Section~4]{GarreRubio2023MPOSym},
+    and it is Theorem~\ref{thm:mpug_anomaly_three_cocycle_gauge}.
+    % Source anchor: arXiv:2203.12563, lines 680--682 and 720--726.
+\end{theorem}
+
+\begin{proof}
+    \uses{cor:mpoalg_single_target_uniqueness, thm:mpug_fusion_scalar_gauge}
+    The rescaled pairs are again fusion tensors
+    (Theorem~\ref{thm:mpug_fusion_scalar_gauge}). Substituting them into
+    (\ref{eq:mpoalg_composite_compressions}) multiplies $V^{(gh)k}$ by
+    $(\beta_{g,h}\beta_{gh,k})^{-1}$ and $V^{g(hk)}$ by
+    $(\beta_{g,hk}\beta_{h,k})^{-1}$, so (\ref{eq:mpoalg_associator}) holds
+    for the new tensors with $\omega$ multiplied by
+    $\beta_{g,hk}\beta_{h,k}/(\beta_{g,h}\beta_{gh,k})$, which is
+    (\ref{eq:mpug_coboundary}). By
+    Corollary~\ref{cor:mpoalg_single_target_uniqueness} every other choice of
+    fusion tensors is boundary-dressed equal to such a rescaling.
+\end{proof}
+
+\begin{remark}[A computed anomaly class]%
+    \label{rem:mpoalg_associator_examples}
+    \uses{thm:mpoalg_associator_gauge, thm:asymex_z3anomalous_anomaly_class}
+    For a cyclic group generated by $g$ of order $n$, the product
+    $\prod_{k<n}\omega(g,g^k,g)$ is unchanged by the gauge action of
+    Theorem~\ref{thm:mpoalg_associator_gauge}, so it depends only on the
+    family $(T_g)_{g\in G}$. For the phase-decorated shift representation of
+    $\Z_3$ it is a primitive cube root of unity
+    (Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}), so its associator
+    does not have trivial gauge class.
+\end{remark}
+
+\begin{remark}[F-symbols with multiplicity under the zipper condition]%
+    \label{rem:mpoalg_f_symbols}
+    For a general fusion algebra the analogue of the associator is a matrix
+    $F^{abc}_d$ relating the two families of composite fusion tensors of
+    $T_aT_bT_c$ onto copies of $T_d$. Under the zipper condition of
+    \cite{Bultinck2017Anyons}, which asks that the fusion tensors intertwine
+    the stacked tensor letter by letter, $F^{abc}_d$ is an invertible matrix
+    between multiplicity spaces satisfying the $F$-move
+    (\ref{eq:rfp_printed_fmove}) of
+    Theorem~\ref{thm:mpdo_complete_zipper_printed_fmove}, and its inverse
+    satisfies the pentagon equation (\ref{eq:rfp_fusion_pentagon}) of
+    Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon}; both are stated
+    for the complete zipper fusion families of
+    Definition~\ref{def:mpdo_complete_zipper_fusion_family}. For a group-like
+    algebra, the scalar playing the role of $F^{ghk}_{ghk}$ in the orientation
+    of (\ref{eq:rfp_printed_fmove}) is $\omega(g,h,k)^{-1}$, and the pentagon
+    equation is
+    (\ref{eq:mpoalg_pentagon_group}).
+
+    Without the zipper condition, the fusion tensors of
+    Theorem~\ref{thm:mpoalg_fusion_tensors_exist} carry a nilpotent remainder
+    and, with several targets, are not determined up to the multiplicity
+    gauge, even after dressing with long words
+    (Remark~\ref{rem:mpoalg_nonunique}). No $F$-move with multiplicity is
+    stated in that setting; for group-like algebras, single-target uniqueness
+    yields (\ref{eq:mpoalg_associator}).
+    % Source anchor: arXiv:1511.08090, AnyonsPEPS.tex lines 181--200 (zipper
+    %   condition), 247--251 (F-move), 279--283 (pentagon);
+    %   arXiv:2203.12563, lines 392--424.
+\end{remark}
+
+%% ---------------------------------------------------------
+\section{Cohomological obstruction to symmetric states}%
+\label{sec:mpoalg_obstruction}
+
+\begin{definition}[L-symbols of an action]%
+    \label{def:mpoalg_l_symbols}
+    \notready
+    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
+    %   MPOTensor.GroupFusionAlgebra.lSymbol.
+    \uses{def:mpoalg_associator, def:mpoalg_action_tensors,
+        thm:mpo_invertible_labels, def:mpug_l_symbols}
+    In the setting of Section~\ref{sec:mpoalg_associator}, let $(A_x)_{x\in
+                K}$ be a symmetric family as in Theorem~\ref{thm:mpo_invertible_labels},
+    so that $O_g^{(N)}\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{g\cdot x})}$, with
+    action tensors $(V_{g,x},W_{g,x})$ reducing $T_g\cdot A_x$ onto
+    $A_{g\cdot x}$. The tensor $T_gT_h\cdot A_x$ has two composite reductions
+    onto $A_{gh\cdot x}$, and the \emph{$L$-symbol} $L^x_{g,h}\in\C^\times$ is
+    defined by
+    \begin{align}
+        V_{g,h\cdot x}(\Id\otimes V_{h,x})(T_gT_h\cdot A_x)^w
+         & =L^x_{g,h}\,V_{gh,x}(V_{g,h}\otimes\Id)
+        (T_gT_h\cdot A_x)^w
+        \label{eq:mpoalg_l_symbol}
+    \end{align}
+    for all sufficiently long words $w$. This is the $L$-symbol of
+    \cite[Section~4.4]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2502.20257, main.tex lines 1874--1889 (eq:defL:
+    %   right trees, (gh)x = L^x_{g,h} g(hx)) and eq:Lsymbgauge;
+    % Source anchor: arXiv:2203.12563, lines 1091--1129 (periodic boundary),
+    %   lines 700--716 (group case).
+\end{definition}
+
+\begin{theorem}[Compatibility of L-symbols with the associator]%
+    \label{thm:mpoalg_l_compatible}
+    \notready
+    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
+    %   MPOTensor.GroupFusionAlgebra.lSymbol_isCompatible.
+    \uses{def:mpoalg_l_symbols, def:mpug_l_symbols, def:mpug_l_gauge}
+    The $L$-symbols of Definition~\ref{def:mpoalg_l_symbols} are compatible
+    with the associator in the sense of
+    (\ref{eq:mpug_l_compatibility}),
+    \begin{align}
+        L^x_{g,hk}\,L^x_{h,k}
+         & =\omega(g,h,k)\,L^{k\cdot x}_{g,h}\,L^x_{gh,k},
+        \label{eq:mpoalg_l_compatible}
+    \end{align}
+    and replacing the fusion and action tensors by
+    $(\beta_{g,h}^{-1}V_{g,h},\beta_{g,h}W_{g,h})$ and
+    $((\gamma^x_g)^{-1}V_{g,x},\gamma^x_gW_{g,x})$ changes $(\omega,L)$ to
+    $(\beta\mathbin{\triangleright}\omega,(\beta,\gamma)\mathbin{\triangleright}L)$
+    of Definitions~\ref{def:mpug_fusion_gauge} and~\ref{def:mpug_l_gauge}.
+    This is the coupled pentagon equation for a group-like algebra
+    \cite[Section~4]{GarreRubio2023MPOSym}.
+    % Source anchor: arXiv:2203.12563, lines 716--726 (pentagongroups and
+    %   gdgroup).
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpoalg_composite_reduction, def:mpoalg_associator}
+    Write $Y=(T_gT_hT_k\cdot A_x)^w$ for a long word $w$ and $V^P$ for the
+    composite compression onto $A_{ghk\cdot x}$ along a bracketing $P$. By
+    Theorem~\ref{thm:mpoalg_composite_reduction}, (\ref{eq:mpoalg_l_symbol})
+    and (\ref{eq:mpoalg_associator}) applied inside a bracketing give
+    \begin{align}
+        V^{g(h(kx))}Y & =L^x_{h,k}\,V^{g((hk)x)}Y
+        =L^x_{h,k}\,L^x_{g,hk}\,V^{(g(hk))x}Y,
+        \notag                                                           \\
+        V^{g(h(kx))}Y & =L^{k\cdot x}_{g,h}\,V^{(gh)(kx)}Y
+        =L^{k\cdot x}_{g,h}\,L^x_{gh,k}\,V^{((gh)k)x}Y
+        \notag                                                           \\
+                      & =L^{k\cdot x}_{g,h}\,L^x_{gh,k}\,\omega(g,h,k)\,
+        V^{(g(hk))x}Y.
+        \label{eq:mpoalg_l_paths}
+    \end{align}
+    Since $V^{(g(hk))x}YW^{(g(hk))x}=A_{ghk\cdot x}^w$ is nonzero for some
+    long word, comparing the two lines of (\ref{eq:mpoalg_l_paths}) gives
+    (\ref{eq:mpoalg_l_compatible}). The gauge
+    statement follows by substituting the rescaled tensors into
+    (\ref{eq:mpoalg_associator}) and (\ref{eq:mpoalg_l_symbol}).
+\end{proof}
+
+\begin{theorem}[No symmetric normal tensor under a nontrivial associator]%
+    \label{thm:mpoalg_no_symmetric_normal}
+    \notready
+    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
+    %   MPOTensor.GroupFusionAlgebra.not_isMPOSymmetric_of_not_isTrivialGaugeClass;
+    %   algebraic step TNLean.Algebra.LSymbol.IsCompatible.isTrivialGaugeClass_of_unique.
+    \uses{thm:mpoalg_l_compatible, def:mpug_trivial_gauge_class,
+        thm:mpoalg_associator_gauge}
+    Let $(T_g)_{g\in G}$ be a group-like fusion algebra of normal tensors
+    whose associator does not have trivial gauge class. Then there is no
+    normal tensor $A$ of positive bond dimension with
+    $O_g^{(N)}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for all $g\in G$ and
+    $N\geq1$. This is the statement of
+    \cite[Section~3.2]{GarreRubio2023MPOSym} that an injective state without
+    multiplicity cannot be invariant under a nontrivial algebra, specialized
+    to group-like algebras; for group-like algebras it goes back to
+    \cite{ChenLiuWen2011CZX}.
+    % Source anchor: arXiv:2203.12563, lines 607--636.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:mpoalg_l_compatible, thm:mpoalg_action_tensors_exist}
+    Action tensors exist by Theorem~\ref{thm:mpoalg_action_tensors_exist}
+    with $K$ a single point fixed by every $g$. Then
+    (\ref{eq:mpoalg_l_compatible}) reads
+    $L_{g,hk}L_{h,k}=\omega(g,h,k)L_{g,h}L_{gh,k}$, that is,
+    $\omega=dL$ in the notation of (\ref{eq:mpug_coboundary}). Hence
+    $\omega=L\mathbin{\triangleright}1$ has trivial gauge class, a
+    contradiction.
+\end{proof}
+
+%% ---------------------------------------------------------
+\section{Weak Hopf algebras, dualities, and density operators}%
+\label{sec:mpoalg_backbone}
+
+\begin{remark}[Fusion tensors from a coproduct]%
+    \label{rem:mpoalg_weak_hopf}
+    For a matrix product operator representation of a cosemisimple
+    pre-bialgebra $\mathcal A$, the operators are indexed by irreducible
+    representations $\psi_a$ of the dual algebra, and the fusion tensors
+    decompose the coproduct of $\mathcal A^*$,
+    $(\psi_a\otimes\psi_b)\circ\Delta(f)=\sum_{c,\mu}W_{ab}^{c\mu}\psi_c(f)
+        V_{ab}^{c\mu}$ with $V_{ab}^{c\mu}W_{ab}^{d\nu}=
+        \delta_{cd}\delta_{\mu\nu}\Id$ \cite[Section~4]{Molnar2022MPOAlgebrasI}.
+    The maps are named as in Definition~\ref{def:mpoalg_fusion_tensors}; the
+    source writes the same identity as $\sum_{c,\mu}V_{ab}^{c\mu}\psi_c(f)
+        W_{ab}^{c\mu}$ with $W_{ab}^{c\mu}V_{ab}^{d\nu}=\delta_{cd}\delta_{\mu\nu}\Id$,
+    so the letters $V$ and $W$ are swapped. Theorem~\ref{thm:mpoalg_fusion_coproduct}
+    reads this identity backwards: the fusion tensors of a complete zipper
+    fusion family define the coproduct. No part of the correspondence
+    concerning units, counits, or antipodes is stated here.
+    % Source anchor: arXiv:2204.05940, mpo.tex line 1655
+    %   (eq:splitting_algebraic) and 1725--1892 (basis change, F-symbols,
+    %   pentagon).
+\end{remark}
+
+\begin{theorem}[Coproduct of a complete zipper fusion family]%
+    \label{thm:mpoalg_fusion_coproduct}
+    \lean{MPOTensor.CompleteZipperFusionFamily.coproduct,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_apply_eq_sum,
+        MPOTensor.CompleteZipperFusionFamily.span_letter_eq_top,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_letter,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_unique,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_mul,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_one}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family}
+    Let $(B_a)_{a\in\Lambda}$ be a complete zipper fusion family
+    (Definition~\ref{def:mpdo_complete_zipper_fusion_family}) with fusion
+    tensors $X^c_{ab,\mu}$ and left inverses $X^{c+}_{ab,\mu}$. For
+    $X=(X_c)_c\in\bigoplus_c\MN{D_c}$ put
+    \begin{align}
+        \Delta(X)_{ab}
+         & =\sum_{c,\mu}X^c_{ab,\mu}\,X_c\,X^{c+}_{ab,\mu}
+        \in\MN{D_a}\otimes\MN{D_b}.
+        \label{eq:mpoalg_fusion_coproduct}
+    \end{align}
+    Then the elements $(B_c^{ik})_c$ span $\bigoplus_c\MN{D_c}$, and
+    \begin{align}
+        \Delta\big((B_c^{ik})_c\big)_{ab}
+         & =\sum_jB_a^{ij}\otimes B_b^{jk}.
+        \label{eq:mpoalg_fusion_coproduct_letter}
+    \end{align}
+    The map $\Delta$ is the only linear map with
+    (\ref{eq:mpoalg_fusion_coproduct_letter}), so it depends only on the
+    blocks. It is multiplicative, $\Delta(XY)=\Delta(X)\Delta(Y)$, and
+    $\Delta(\Id)_{ab}=\sum_{c,\mu}X^c_{ab,\mu}X^{c+}_{ab,\mu}$ is the support
+    projector of the fusion tensors. In the notation of
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}, $X^c_{ab,\mu}$ and
+    $X^{c+}_{ab,\mu}$ are the source's $V_{ab}^{c\mu}$ and $W_{ab}^{c\mu}$,
+    (\ref{eq:mpoalg_fusion_coproduct}) is the decomposition of the coproduct of
+    the dual algebra, (\ref{eq:mpoalg_fusion_coproduct_letter}) is the
+    coproduct of the matrix coefficients of the physical representation, and
+    multiplicativity is the pre-bialgebra axiom.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 1409--1419
+    %   (pre-bialgebra), 1655 (eq:splitting_algebraic), 1708
+    %   (eq:delta_epsilon), 1182 (injectivity), 2003--2006
+    %   (eq:MPO_tensor_product).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_complete_zipper_fusion_family}
+    The simultaneous left inverse of the block letters writes every matrix
+    unit of every block as a combination of the elements $(B_c^{ik})_c$, so
+    they span. Equation (\ref{eq:mpoalg_fusion_coproduct_letter}) is the
+    reconstruction of the product letters through the fusion support, and
+    uniqueness follows from spanning. Multiplicativity follows from
+    $X^{d+}_{ab,\nu}X^c_{ab,\mu}=\delta_{cd}\delta_{\mu\nu}\Id$, which gives
+    $\Delta(X)\Delta(Y)=\sum_{c,\mu}X^c_{ab,\mu}X_cY_cX^{c+}_{ab,\mu}$.
+\end{proof}
+
+\begin{theorem}[Coassociativity of the fusion coproduct]%
+    \label{thm:mpoalg_fusion_coproduct_coassoc}
+    \lean{MPOTensor.CompleteZipperFusionFamily.coproductLeft,
+        MPOTensor.CompleteZipperFusionFamily.coproductRight,
+        MPOTensor.CompleteZipperFusionFamily.coproduct_coassoc}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct}
+    The coproduct (\ref{eq:mpoalg_fusion_coproduct}) is coassociative,
+    $(\Delta\otimes\Id)\circ\Delta=(\Id\otimes\Delta)\circ\Delta$, where on the
+    triple bond space
+    \begin{align}
+        (\Delta\otimes\Id)(Y)_{abc}
+         & =\sum_{e,\mu}(X^e_{ab,\mu}\otimes\Id)\,Y_{ec}\,
+        (X^{e+}_{ab,\mu}\otimes\Id), \notag                         \\
+        (\Id\otimes\Delta)(Y)_{abc}
+         & =\sum_{f,\lambda}(\Id\otimes X^f_{bc,\lambda})\,Y_{af}\,
+        (\Id\otimes X^{f+}_{bc,\lambda}). \notag
+    \end{align}
+    This is the coassociativity axiom of a coalgebra
+    \cite[Section~3]{Molnar2022MPOAlgebrasI}. The source assumes it and
+    derives the associativity of fusion trees and the $F$-symbols; here it is
+    proved from the fusion tensors.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875 (coalgebra),
+    %   1732--1787 (eq:associative), 2003--2006 (eq:MPO_tensor_product).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct}
+    Both sides are linear in the argument, and by
+    Theorem~\ref{thm:mpoalg_fusion_coproduct} the elements $(B_c^{il})_c$
+    span the space of tuples $(Z_c)_c$ on which $\Delta$ acts. By (\ref{eq:mpoalg_fusion_coproduct_letter}) applied twice, both
+    sides send $(B_c^{il})_c$ to
+    $\sum_{j,k}B_a^{ij}\otimes B_b^{jk}\otimes B_c^{kl}$.
+\end{proof}
+
+\begin{remark}[Kramers--Wannier duality is an intertwiner]%
+    \label{rem:mpoalg_kramers_wannier}
+    The Kramers--Wannier operator of Section~\ref{sec:asymex_kw} does not
+    belong to a fusion algebra on one lattice: by
+    (\ref{eq:asymex_kw_fusion}) its square is $(\Id+\eta)T$ up to
+    normalization, which contains the translation $T$ and is not a
+    length-independent combination of the operators of a finite family.
+    It is a matrix product operator intertwiner between two symmetric
+    Hamiltonians, a bimodule between the symmetry algebras of the primal and
+    dual chains, rather than a symmetry of one of them
+    \cite{Lootens2023Dualities,Lootens2021MPOStringNet}. Fusion and action
+    tensors for such intertwiners come from the same asymmetric compression
+    theorem, applied to products of operators between different chains; the
+    Kramers--Wannier case is worked out in
+    Section~\ref{sec:asymex_kw_bimodule}.
+    % Source anchor: arXiv:2112.09091, _Hamiltonian.tex lines 22--28 and
+    %   _Examples.tex lines 55--63.
+\end{remark}
+
+\begin{remark}[Density operators]%
+    \label{rem:mpoalg_mpdo}
+    Renormalization fixed points of matrix product density operators are
+    described by matrix product operator algebras of $C^*$-weak Hopf algebras
+    through the pulling-through identity of the canonical regular element
+    \cite{RuizDeAlarcon2024MPOAlgebrasII}; the density-operator setting is
+    that of Chapter~\ref{ch:mpdo}. The fusion tensors of
+    Section~\ref{sec:mpoalg_virtual} apply there without change, since they
+    use only equality of periodic traces.
+    % Source anchor: arXiv:2204.06295, main.tex lines 461--470 (C*-weak Hopf
+    %   algebra) and 802--818 (canonical regular element).
+\end{remark}

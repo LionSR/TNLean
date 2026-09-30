@@ -68,8 +68,7 @@
     $g_{\mathrm{mid}}=n_2-n_1-1$,
     $g_{\mathrm{wrap}}=N+n_1-n_2-1$, and
     $N=g_{\mathrm{mid}}+g_{\mathrm{wrap}}+2$.
-    This is the unnormalized contraction: the source introduces normalization
-    only at lines~792--793 for entropic quantities.
+    This unnormalized contraction matches \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{theorem}[Zero correlation length removes positive wrapping-gap dependence]
@@ -87,14 +86,12 @@
          & =C_M(O_1,O_2;g_{\mathrm{mid}},g'_{\mathrm{wrap}}).
         \label{eq:mpdo_zcl_correlation_positive_wrap_gap_independence}
     \end{align}
-    This is independence under changing the ring length at fixed observable
-    separation. It includes adjacent marked sites, for which
-    $g_{\mathrm{mid}}=0$. In particular, it applies when $M$ generates an
-    MPDO, which is the source context of the assertion following
-    \cite[Definition~4.2, lines~735--742]{Cirac2016MPDO_arXiv}. The exact
-    positive-power boundary is recorded in
+    This establishes independence of the periodic correlation under variations
+    of the ring length at fixed observable separation, including adjacent
+    marked sites ($g_{\mathrm{mid}}=0$), in the setting of
+    \cite[Definition~4.2, lines~735--742]{Cirac2016MPDO_arXiv}. The restriction
+    to strictly positive wrapping gaps is documented in
     \cite{gap:cpsv16_mpdo_zcl_correlation_length_boundary}.
-    No invariance between a zero wrapping gap and a positive one is asserted.
 \end{theorem}
 
 \begin{proof}
@@ -120,14 +117,11 @@
          & =C_M(O_1,O_2;g'_{\mathrm{mid}},g'_{\mathrm{wrap}}).
         \label{eq:mpdo_zcl_correlation_positive_gap_independence}
     \end{align}
-    For equal gap sums this is correlation independence under changing the
-    observable distance on a fixed ring while the observables are nonadjacent
-    on both complementary arcs, as in the CID discussion at
-    \cite[lines~433--500]{Cirac2016MPDO_arXiv}. The positive-power boundary is
-    recorded in
+    For equal gap sums, this establishes correlation independence under varying
+    observable distance on a fixed ring when the observables are nonadjacent on
+    both complementary arcs \cite[lines~433--500]{Cirac2016MPDO_arXiv}; the
+    positive-gap regime is documented in
     \cite{gap:cpsv16_mpdo_zcl_correlation_length_boundary}.
-    No invariance between a zero complementary gap and a positive one is
-    asserted.
 \end{corollary}
 
 \begin{proof}
@@ -151,14 +145,10 @@
         \mathcal T_M^2 & =\lambda\,\mathcal T_M.
         \notag
     \end{align}
-    The nonzero condition excludes the degenerate zero transfer, and the
-    positive scalar makes the condition invariant under positive real
-    rescaling of $M$.
-    This is a scale-invariant relation at the level of the generated state
-    family. It is broader than the paper's literal diagram, which fixes
-    $\lambda=1$ for the displayed tensor.
-    % **Scope restriction (up-to-scalar interpretation):** documented in
-    % docs/paper-gaps/cpsv16_zcl_canonical_form_normalization.tex.
+    This scale-invariant condition excludes the zero transfer while remaining
+    invariant under positive rescaling of $M$, extending the literal $\lambda=1$
+    diagram of \cite[Definition~4.2]{Cirac2016MPDO_arXiv}
+    \cite{gap:cpsv16_zcl_canonical_form_normalization}.
 \end{definition}
 
 \begin{theorem}[The nonzero physical-trace relation requires a nonzero bond
@@ -189,7 +179,7 @@
 
 \begin{proof}
     \leanok
-    This is the preceding definition with $\lambda=1$.
+    This is Definition~\ref{def:mpo_source_zcl} with $\lambda=1$.
 \end{proof}
 
 \begin{align}
@@ -284,10 +274,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $\mathcal T_M^2=\mathcal T_M$.
     This proves the zero-correlation-length component of implication
     (i)$\Rightarrow$(ii) in
-    \cite[Theorem~4.9, lines~851--893]{Cirac2016MPDO_arXiv}. The corresponding
-    calculation appears in the proposition ``RFP implies ZCL and SAL'' in
-    Appendix~C, lines~1333--1340; the part establishing saturation of the area
-    law is separate.
+    \cite[Theorem~4.9, lines~851--893]{Cirac2016MPDO_arXiv} and
+    \cite[Appendix~C, lines~1333--1340]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -319,9 +307,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         renormalization maps]
     \label{thm:kato_deformed_mpdo_fixed_tensor_obstruction}
     \lean{MPOTensor.KatoDeformedRFPObstruction.pauliZ,
-        MPOTensor.siteSign,
         MPOTensor.KatoDeformedRFPObstruction.tensor,
-        MPOTensor.configurationSign,
         MPOTensor.KatoDeformedRFPObstruction.mpo_tensor_eq_diagonal,
         MPOTensor.KatoDeformedRFPObstruction.tensor_isMPDO,
         MPOTensor.KatoDeformedRFPObstruction.trace_mpo_tensor,
@@ -372,20 +358,18 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Nevertheless, $K$ is not a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}.
 
-    The tensor is the $p=1/2$ example of
-    \cite[lines~709--838]{Kato2024Exact}, after conjugating every physical site
-    by the Hadamard matrix. Kato's exact renormalization changes the tensor
-    along the flow and the source explicitly states that this example is not a
-    fixed point. The fixed-tensor-channel obstruction follows directly from
-    the one- and two-site closure identities; it is not asserted as a theorem
-    in that source. No conclusion about canonical form or saturation of the area law
-    is part of this statement. Theorem~\ref{thm:kato_deformed_mpdo_cf_sal_capstone}
-    establishes both conclusions for the same tensor.
+    This tensor corresponds to the $p=1/2$ model of
+    \cite[lines~709--838]{Kato2024Exact} conjugated by Hadamard matrices on each
+    physical site. While its physical-trace transfer is idempotent, the one- and
+    two-site physical closures prevent any trace-preserving completely positive
+    coarse-graining channel from satisfying $\mathcal S[K_2(X)]=K_1(X)$.
+    Canonical form and area-law saturation for $K$ are established in
+    Theorem~\ref{thm:kato_deformed_mpdo_cf_sal_capstone}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_trace_loop_chain}
+    \uses{lem:mpdo_trace_loop_chain, def:cpsv_example412_site_sign, def:cpsv_example412_configuration_sign}
     Since the two virtual sectors are diagonal, set $z_0=1$ and $z_1=-1$.
     A physical configuration $\sigma$ has weight
     \begin{align}
@@ -455,11 +439,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     which is not a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}.
 
-    The canonical-form decomposition follows the construction of
-    \cite[Section~2.3, lines~214--245]{Cirac2016MPDO_arXiv}. The
-    decomposition and the entropy evaluation are project derivations;
-    neither is asserted for this tensor in \cite{Kato2024Exact} or in
-    \cite{Cirac2016MPDO_arXiv}.
+    The canonical-form decomposition follows
+    \cite[Section~2.3, lines~214--245]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}
@@ -495,8 +476,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction} supplies
     the remaining three properties: $K$ generates an MPDO, its
     physical-trace transfer is idempotent, and it is not a renormalization
-    fixed point. Together with the two properties above, this gives the
-    existential.
+    fixed point. Together with canonical form and area-law saturation, this
+    proves the claim.
 \end{proof}
 
 \begin{theorem}[Renormalization fixed points satisfy the up-to-scalar
@@ -512,8 +493,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}
     \leanok
-    Apply the preceding idempotence theorem and take the positive scalar in
-    Definition~\ref{def:mpo_source_zcl} to be $1$.
+    Apply Theorem~\ref{thm:rfp_via_ts_physical_trace_idempotent} and take the
+    positive scalar in Definition~\ref{def:mpo_source_zcl} to be $1$.
 \end{proof}
 
 \section{Purification fixed points}
@@ -607,17 +588,16 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     as in \cite[line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Global-family purification RFP witness]
+\begin{definition}[Existence of a purifying fixed-point tensor]
     \label{def:mpdo_purification_rfp_witness}
     \lean{MPOTensor.HasPurificationRFPWitness}
     \leanok
     \uses{def:mpdo_global_purification_equation, def:mps_transfer_idempotence}
-    An MPO tensor $M$ has a global-family purification RFP witness if, for some
-    purifying spin--ancilla tensor $A$, it satisfies the positive-length global
-    purification equation and $\widehat A$ is a pure-state renormalization fixed
-    point. This auxiliary condition records the density-operator equation at
-    \cite[line~751]{Cirac2016MPDO_arXiv}. It does not assert the one-site
-    ancillary-contraction presentation in Definition~\ref{def:mpdo_is_prfp}.
+    For an MPO tensor $M$, require the existence of a spin--ancilla tensor $A$
+    such that $\rho^{(N)}(M)=\rho^{(N)}_p(A)$ for every $N>0$ and
+    $\widehat A$ is a pure-state renormalization fixed point.
+    This condition records the density-operator equation of
+    \cite[line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Trace-preserving spin reduction]
@@ -626,9 +606,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \leanok
     \uses{def:mpdo_ancillary_trace_map}
     The spin reduction obtained by tracing the ancillary index is
-    trace-preserving completely positive: the ancillary trace map
-    $\tr_a$ satisfies the corresponding definition in the companion quantum-channel volume~\cite[``Trace-preserving completely positive map'']{QICLean2026Blueprint}.
-    This is the structure described immediately after Definition~4.3 in
+    trace-preserving completely positive
+    \cite[``Trace-preserving completely positive map'']{QICLean2026Blueprint}.
+    This formalizes the structure described immediately after Definition~4.3 in
     \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -666,9 +646,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \overline{A^{(j,k)}}\right)_{e,e},
         \notag
     \end{align}
-    and $\widehat A$ is a pure-state renormalization fixed point. Here PRFP
-    denotes the standing one-site presentation; the positive-length equation is
-    its MPDO interpretation.
+    and $\widehat A$ is a pure-state renormalization fixed point. This defines a
+    purification renormalization fixed point (PRFP) in the one-site
+    presentation of \cite[lines~744--763]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Nondegenerate purification RFP]
@@ -734,12 +714,12 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     physical-trace condition.
 \end{proof}
 
-\begin{lemma}[Physical-trace transfer of the maximally mixed witness]
+\begin{lemma}[Physical-trace transfer of the maximally mixed tensor]
     \label{lem:phys_trace_transfer_witnessM}
     \lean{MPOTensor.physTraceTransfer_witnessM}
     \leanok
     \uses{def:mpo_physical_trace_transfer}
-    For the maximally mixed witness $M_{\mathrm w}$, closing the ket and bra
+    For the maximally mixed tensor $M_{\mathrm w}$, closing the ket and bra
     physical legs gives
     $\mathcal T_{M_{\mathrm w}}
         =M_{\mathrm w}^{00}+M_{\mathrm w}^{11}
@@ -749,16 +729,16 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 \begin{proof}
     \leanok
     This is the direct computation of the two nonzero diagonal entries of the
-    witness tensor.
+    tensor.
 \end{proof}
 
-\begin{theorem}[The maximally mixed witness satisfies the nonzero
+\begin{theorem}[The maximally mixed tensor satisfies the nonzero
         physical-trace relation]
     \label{thm:witness_source_zcl}
     \lean{MPOTensor.isSourceZCL_witnessM}
     \leanok
     \uses{def:mpo_source_zcl, thm:prfp_not_doubled_index_zcl}
-    The maximally mixed witness $M_{\mathrm w}$ satisfies the nonzero
+    The maximally mixed tensor $M_{\mathrm w}$ satisfies the nonzero
     up-to-scalar physical-trace relation.
 \end{theorem}
 \begin{proof}\leanok
@@ -828,9 +808,8 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \mathcal T_M^2 & = \mathcal T_M.
         \notag
     \end{align}
-    Thus the forward implication from PRFP to the literal zero-correlation-
-    length equation in \cite[Theorem~4.4]{Cirac2016MPDO_arXiv} requires no
-    nonzero assumption.
+    This establishes the forward implication from PRFP to literal zero
+    correlation length \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -969,13 +948,14 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     length, so no positive-length restriction is needed.
 \end{proof}
 
-\begin{theorem}[A purification RFP supplies a global-family witness]
+\begin{theorem}[A local purification gives the global purification equation]
     \label{thm:prfp_has_purification_rfp_witness}
     \lean{MPOTensor.IsPRFP.hasPurificationRFPWitness}
     \leanok
     \uses{def:mpdo_is_prfp, def:mpdo_purification_rfp_witness}
-    Every purification renormalization fixed point has a global-family
-    purification RFP witness with the same purifying tensor.
+    For every purification renormalization fixed point $M$, its purifying
+    tensor $A$ satisfies $\rho^{(N)}(M)=\rho^{(N)}_p(A)$ for every $N>0$,
+    and $\widehat A$ is a pure-state renormalization fixed point.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -993,26 +973,18 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \discussion{7298}
     \uses{def:mpdo_is_prfp, def:mpo_physical_trace_idempotence}
     \notready
-    For an MPO tensor with the one-site purification presentation displayed in
+    For an MPO tensor with the one-site purification presentation of
     \cite[lines~744--763]{Cirac2016MPDO_arXiv}, Theorem~4.4 asserts the
-    equivalence of the following conditions: the purifying tensor is a
-    pure-state renormalization fixed point, the physical-trace transfer is
-    idempotent, and the generated density operators have the repeated-copy
-    form displayed in \cite[lines~765--773]{Cirac2016MPDO_arXiv}.
+    equivalence of three conditions: the purifying tensor is a pure-state
+    renormalization fixed point, the physical-trace transfer is idempotent, and
+    the generated density operators have the repeated-copy form of
+    \cite[lines~765--773]{Cirac2016MPDO_arXiv}.
 
-    % The identification with the repeated-copy density formula is the only
-    % part not yet formalized.
     The equivalence between the first two conditions is
-    Theorem~\ref{thm:prfp_iff_lpdo_physical_trace_idempotent}. The
-    positive-length global purification equation follows from the local
-    presentation by
-    Theorem~\ref{thm:prfp_has_purification_rfp_witness}, but it does not by
-    itself determine that presentation.
-
-    The repeated-copy formula uses phases indexed by $(j,q)$, whereas the
-    physical isometry in \cite[lines~546--563]{Cirac2016MPDO_arXiv} is indexed
-    only by $j$. The source does not specify how the copy index $q$ enters
-    that isometry or the physical direct sum. Thus the displayed formulas
-    do not determine a common physical realization of the repeated copies;
-    this ambiguity is recorded in \cite{gap:cpsv16_rfp_isometry_scope}.
+    Theorem~\ref{thm:prfp_iff_lpdo_physical_trace_idempotent}, and
+    Theorem~\ref{thm:prfp_has_purification_rfp_witness} yields the global
+    purification equation. The repeated-copy formula involves phases indexed by
+    $(j,q)$, while the physical isometry of \cite[lines~546--563]{Cirac2016MPDO_arXiv}
+    depends only on $j$; the physical embedding of the repeated copies is
+    documented in \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{theorem}

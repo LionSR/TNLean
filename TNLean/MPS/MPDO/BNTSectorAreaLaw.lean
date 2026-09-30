@@ -323,14 +323,11 @@ theorem commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos
     (hSAL : IsSAL M) (hZCL : IsSourceZCL M)
     (s : Fin S.basisCount) :
     IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
-  obtain ⟨C, hC, hη, _hlocal, _hcompression⟩ :=
+  obtain ⟨W, _hlocal, _hcompression⟩ :=
     exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL
-  let hClosure :=
-    reducedBlockState_four_threeSiteFamilyClosure_nonzero_closing
-      M S hM hWeight hnonNil hSAL
   apply commonWeightAbsorbedBasisMPOTensor_isSAL_of_projectorSelection
-    M S hM hWeight hC hClosure.1 hη hClosure.2 hSAL
+    M S hM hWeight W.hC W.hρ W.hη W.hR hSAL
   · intro t
     exact commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL t

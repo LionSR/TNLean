@@ -5,9 +5,32 @@
     \lean{MPSTensor.IsLocallyOrthogonal}
     \leanok
     \uses{def:mps_transfer_idempotence}
-    This auxiliary one-block convention means $\E_A^2=\E_A$. It is not
-    local orthogonality in the sense of the source, which is the family of
-    mixed-sector equations $\E_{j,j'}=0$ for distinct BNT components.
+    An MPS tensor $A$ satisfies one-block transfer idempotence if $\E_A^2=\E_A$.
+    Diagrammatically, two doubled columns equal one:
+    \begin{tenkzequation}
+        % E_A^2 = E_A (CPSV16, line 1209: blocking acts as
+        % E -> E^2, so a fixed point satisfies E = E^2).  Each column is
+        % the transfer map sum_i A^i (.) (A^i)^dagger: the upper node is A,
+        % the lower node its conjugate, and the vertical rung sums the
+        % physical index.  On the left the two columns are joined by their
+        % virtual bonds, which composes the maps.  Both sides carry the
+        % boundary signature (virtual-west=2 | virtual-east=2 |
+        % physical-up=0 | physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=2, west=open, east=open]
+            \tn[label pos=n]{A} & \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}} &
+            \tn[label pos=s, conjugate]{\overline{A}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}}
+        \end{tenkz}
+    \end{tenkzequation}
+    In \cite[Definition~3.5]{Cirac2016MPDO_arXiv}, local orthogonality denotes
+    instead the vanishing of mixed transfer maps between distinct BNT components
+    (Definition~\ref{def:is_bnt_locally_orthogonal}).
 \end{definition}
 
 \begin{definition}[BNT local orthogonality]%
@@ -16,13 +39,29 @@
     \leanok
     \uses{def:mixed_transfer_rect}
     Let $(A_j)_j$ be a basis of normal tensors. The
-    family is \emph{locally orthogonal} when, for every pair of distinct
-    components,
+    family is \emph{locally orthogonal} if for every pair of distinct
+    components $j\ne j'$,
     \begin{align}
         \E_{j,j'}
          & =\sum_i A_j^i\otimes\overline{A_{j'}^i}=0.
         \notag
     \end{align}
+    Diagrammatically,
+    \begin{center}
+        % E_{j,j'} = sum_i A_j^i (x) conj(A_{j'}^i) = 0 for j != j'
+        % (CPSV16 Definition 3.5, lines 470--474).  The upper node is
+        % A_j, the lower node is the conjugate of A_{j'}, and the rung sums
+        % the shared physical index i.  The two west and two east virtual
+        % legs stay open.  Boundary signature of the picture:
+        % (virtual-west=2 | virtual-east=2 | physical-up=0 |
+        % physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[label pos=n]{A_j} \\
+            \tn[label pos=s, conjugate]{\overline{A_{j'}}}
+        \end{tenkz}
+        $ = 0.$
+    \end{center}
     This is the mixed-sector condition of
     \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -32,11 +71,14 @@
     \lean{MPSTensor.IsBNTZCL}
     \leanok
     \uses{def:bnt_cpsv, def:is_cid, def:is_bnt_locally_orthogonal}
-    Let $(A_j)_j$ be a basis of normal tensors for $A$. This auxiliary
-    condition requires virtual-insertion distance independence and
-    $\E_{j,j'}=0$ for every pair of distinct BNT components. It is not
-    \cite[Definition~3.6]{Cirac2016MPDO_arXiv}, which quantifies over physical
-    observables on all disjoint regions.
+    Let $(A_j)_j$ be a basis of normal tensors for $A$. The family $(A_j)_j$
+    satisfies \emph{virtual-insertion BNT zero correlation length} for $A$ if
+    $A$ satisfies virtual-insertion distance independence
+    (Definition~\ref{def:is_cid}) and the components $(A_j)_j$ are locally
+    orthogonal: $\E_{j,j'}=0$ for all $j\ne j'$
+    (Definition~\ref{def:is_bnt_locally_orthogonal}). In contrast,
+    \cite[Definition~3.6]{Cirac2016MPDO_arXiv} quantifies over physical
+    observables on all disjoint regions (Definition~\ref{def:source_bnt_zcl}).
 \end{definition}
 
 \begin{definition}[Positive-gap restriction of BNT zero correlation length]%
@@ -44,25 +86,30 @@
     \lean{MPSTensor.IsPositiveGapBNTZCL}
     \leanok
     \uses{def:bnt_cpsv, def:is_positive_gap_physical_cid, def:is_bnt_locally_orthogonal}
-    A family $(A_j)_j$ of MPS tensors has positive-gap BNT zero correlation
-    length for $A$ when $(A_j)_j$ is a basis of normal tensors for $A$ in the
-    sense of Definition~\ref{def:bnt_cpsv}, its components are locally
-    orthogonal, and the physical correlations of $A$ are independent of
-    separation whenever both complementary gaps are positive. Adjacent regions
-    are not included.
+    A family $(A_j)_j$ of MPS tensors has \emph{positive-gap BNT zero correlation
+        length} for $A$ if $(A_j)_j$ is a basis of normal tensors for $A$
+    (Definition~\ref{def:bnt_cpsv}), its components are locally orthogonal
+    (Definition~\ref{def:is_bnt_locally_orthogonal}), and the physical
+    correlations of $A$ are independent of separation whenever both complementary
+    gaps are positive (Definition~\ref{def:is_positive_gap_physical_cid}).
+    Adjacent regions are excluded.
 \end{definition}
 
 \begin{lemma}[Positive-gap restriction, unfolded]%
     \label{lem:is_positive_gap_bnt_zcl_iff}
     \lean{MPSTensor.isPositiveGapBNTZCL_iff}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl}
-    The positive-gap restriction is equivalent to the conjunction
-    of the BNT relation, positive-gap physical distance independence, and BNT
-    local orthogonality.
+    \uses{def:is_positive_gap_bnt_zcl, def:bnt_cpsv, def:is_positive_gap_physical_cid, def:is_bnt_locally_orthogonal}
+    A family $(A_j)_j$ has positive-gap BNT zero correlation length for $A$ if
+    and only if $(A_j)_j$ is a basis of normal tensors for $A$
+    (Definition~\ref{def:bnt_cpsv}), the physical correlations of $A$ are
+    independent of separation whenever both complementary gaps are positive
+    (Definition~\ref{def:is_positive_gap_physical_cid}), and the components
+    $(A_j)_j$ are locally orthogonal
+    (Definition~\ref{def:is_bnt_locally_orthogonal}).
 \end{lemma}
 \begin{proof}\leanok
-    This is the defining conjunction.
+    This is the defining conjunction of Definition~\ref{def:is_positive_gap_bnt_zcl}.
 \end{proof}
 
 \begin{definition}[Physical BNT zero correlation length]%
@@ -70,9 +117,11 @@
     \lean{MPSTensor.IsPhysicalBNTZCL}
     \leanok
     \uses{def:bnt_cpsv, def:source_physical_cid, def:is_bnt_locally_orthogonal}
-    A BNT family has zero correlation length when the associated matrix-product
-    vectors have correlations independent of distance for all disjoint physical
-    regions and the BNT components are locally orthogonal. This is
+    A basis of normal tensors $(A_j)_j$ for $A$ has \emph{physical BNT zero
+        correlation length} if the generated matrix product states have physical
+    correlations independent of distance for all disjoint regions
+    (Definition~\ref{def:source_physical_cid}) and the components $(A_j)_j$ are
+    locally orthogonal (Definition~\ref{def:is_bnt_locally_orthogonal}). This is
     \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
@@ -86,8 +135,9 @@
     \label{thm:cpsv_theorem_zcl_pure_status}
     \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:source_bnt_zcl, def:mps_transfer_idempotence, def:has_nncph_ground_spaces, thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid, thm:is_positive_gap_physical_cid_of_is_rfp}
     \notready
-    CPSV asserts that a tensor $A$ in canonical form has physical BNT zero
-    correlation length if and only if
+    Cirac et al.~\cite[Theorems~3.8 and~3.10]{Cirac2016MPDO_arXiv} assert that a
+    tensor $A$ in canonical form has physical BNT zero correlation length if and
+    only if
     \begin{align}
         \E_A^2 & =\E_A,
         \notag
@@ -95,10 +145,8 @@
     and, more generally, that for such $A$ the following are equivalent: $A$ is
     a renormalization fixed point; $A$ has physical zero correlation length;
     and, for every $N>2$, the vector $|V^{(N)}(A)\rangle$ belongs to the ground
-    space of a nearest-neighbor commuting parent Hamiltonian
-    \cite[Theorems~3.8 and~3.10]{Cirac2016MPDO_arXiv}.
-    Both directions of the biconditional fail as printed, and with them the
-    three-way equivalence.
+    space of a nearest-neighbor commuting parent Hamiltonian. Both directions of
+    the biconditional fail as printed, and with them the three-way equivalence.
 
     For the reverse implication, let $C^0=(1)$ and form the direct sum of two
     scalar copies with weights $1$ and $1/2$. The resulting tensor is
@@ -115,38 +163,32 @@
         \E_A^2 & \neq\E_A.
         \notag
     \end{align}
-    Thus zero correlation length does not imply transfer idempotence under the
-    source's raw weight normalization.
+    Thus zero correlation length does not imply transfer map idempotence under
+    the source weight normalization.
 
-    Independently, the Bell-pair chain of
-    Theorem~\ref{thm:bell_pair_chain_not_cid} is a single normal block. Taking
-    its weight to be $1$ and the ambient coisometry to be the identity gives a
-    literal CPSV canonical-form tensor. Its transfer map is idempotent, so it is
-    a renormalization fixed point, but its adjacent two-region expectation is
-    $1$, while the expectation after an allowed one-site shift is $0$.
-    Hence transfer idempotence does not imply physical zero correlation length
-    for the unrestricted quantification over disjoint regions, regardless of
-    the commuting-parent condition.
+    For the forward implication, the Bell-pair chain of
+    Theorem~\ref{thm:bell_pair_chain_not_cid} is a normal tensor with idempotent
+    transfer map, but its expectation on adjacent regions differs from its
+    expectation when the regions are shifted by one site. Thus transfer map
+    idempotence does not imply correlation independence when adjacent regions are
+    included.
 
-    \textbf{Source gap (adjacent regions).} The printed forward argument uses
-    $\E_A^n=\E_A$, which follows from idempotence only for $n\geq1$. Adjacent
-    regions insert $\E_A^0=\Id$ and are included in the source definition. This
-    gap and its scope are recorded in
+    \textbf{Local fix (false source claim for adjacent regions):}
+    The printed forward implication in \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}
+    asserts correlation independence for all disjoint regions, including adjacent
+    ones. However, the Bell-pair counterexample (Theorem~\ref{thm:bell_pair_chain_not_cid})
+    shows that transfer idempotence does not imply correlation independence for adjacent
+    regions; the source derivation uses $\E_A^n=\E_A$, which holds only for $n\ge1$,
+    whereas adjacent regions insert $\E_A^0=\Id$. Documented in
     \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}.
-    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} proves the repaired
-    forward implication when both complementary gaps are positive. It does not
-    prove the unrestricted biconditional of
-    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv} or the unrestricted three-way
-    equivalence of \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}. The converse and
-    equivalence results below require their stated unit-weight,
-    multiplicity-one, or spectral hypotheses. The printed statements are
-    recorded here as refuted, not as theorems awaiting proof.
+    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} establishes the
+    forward implication when both complementary gaps are positive.
 \end{theorem}
 \begin{proof}
     \uses{thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid}
-    Theorem~\ref{thm:halved_weight_zcl_not_rfp} refutes the reverse implication.
-    Theorem~\ref{thm:bell_pair_chain_not_cid} refutes the forward implication,
-    and with it the implication from fixed points to zero correlation length.
+    Theorem~\ref{thm:halved_weight_zcl_not_rfp} refutes the reverse implication,
+    and Theorem~\ref{thm:bell_pair_chain_not_cid} refutes the forward
+    implication.
 \end{proof}
 
 \begin{theorem}[Auxiliary weighted-sector example]%
@@ -192,7 +234,7 @@
     weights have moduli at most $1$, and the first has modulus $1$; hence $P$
     satisfies the auxiliary BNT sector hypotheses.
 
-    The two one-dimensional weighted copies assemble exactly to
+    The two one-dimensional weighted copies yield
     $A^0=\diag(1,1/2)$. This equality gives equality of the generated
     matrix-product vectors at every length, and therefore at every positive
     length. The sector power sum is
@@ -241,6 +283,34 @@
         =\tfrac12\tr(X)\,\Id,
         \notag
     \end{align}
+    Diagrammatically, the transfer map is the rank-one map whose output legs
+    carry $\operatorname{diag}(\Lambda)$ and whose input legs are traced:
+    \begin{tenkzequation}
+        % E_A(X) = tr(X) diag(Lambda) (CPSV16, lines 1295--1298: an RFP
+        % normal tensor has E = |R)(L| with |R) = sum_a Lambda_a |a,a) and
+        % (L| = sum_a (a,a|).  Left: the doubled column of A and its
+        % conjugate with the physical pair (alpha,beta) summed on the
+        % rung.  Right: the west output pair closes on a cup carrying the
+        % diagonal matrix diag(Lambda), written Lambda on the bead, and the
+        % east input pair closes on a bare cup, which is the trace of X.
+        % Both sides carry the boundary signature (virtual-west=2 |
+        % virtual-east=2 | physical-up=0 | physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={wire,wire}, cols=1, west=open,
+                east={cup=$\Lambda$}, bonds=none]
+            \tn[skin=none]{} \\ \tn[skin=none]{}
+        \end{tenkz}
+        $\;\otimes\;$
+        \begin{tenkz}[rows={wire,wire}, cols=1, west=cup, east=open,
+                bonds=none]
+            \tn[skin=none]{} \\ \tn[skin=none]{}
+        \end{tenkz}
+    \end{tenkzequation}
     which is idempotent since $\tr\operatorname{diag}(\Lambda)=1$, and $A$ is
     a single normal tensor, so no copy weights are involved. With the Pauli
     matrix $Z$ on the second spin of one node and on the first spin of the
@@ -282,14 +352,19 @@
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
     \leanok
     \uses{def:source_bnt_zcl, def:is_positive_gap_bnt_zcl}
-    If a BNT family has zero correlation length for all disjoint physical
-    regions, then it has positive-gap BNT zero correlation length.
+    If a BNT family $(A_j)_j$ for $A$ has zero correlation length for all
+    disjoint physical regions ($\mathrm{ZCL}_{\mathrm{phys}}$), then it satisfies
+    the positive-gap zero correlation length condition ($\mathrm{ZCL}_+$):
+    \begin{align}
+        \mathrm{ZCL}_{\mathrm{phys}}((A_j)_j, A) \implies \mathrm{ZCL}_+((A_j)_j, A).
+        \notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:is_positive_gap_physical_cid_of_physical_cid}
-    Restrict the physical distance-independence condition to configurations in
-    which both complementary gaps are positive. The BNT relation and local
-    orthogonality are unchanged.
+    Follows from Lemma~\ref{lem:is_positive_gap_physical_cid_of_physical_cid}
+    by restricting the physical distance-independence condition to positive
+    complementary gaps.
 \end{proof}
 
 \begin{theorem}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
@@ -300,10 +375,11 @@
     Let $(A_j)_j$ be nonzero-dimensional, irreducible, left-canonical,
     pairwise gauge-phase-distinct BNT components. If the direct-sum tensor
     $A=\bigoplus_j A_j$ satisfies $\E_A^2=\E_A$, then $A$ has positive-gap
-    physical CID and $\E_{j,j'}=0$ for all $j\ne j'$. Thus this explicit
-    direct-sum representative has positive-gap BNT zero correlation length.
-    This does not include the adjacent-region cases in
-    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
+    physical correlations independent of distance and $\E_{j,j'}=0$ for all
+    $j\ne j'$. Thus $A$ has positive-gap BNT zero correlation length
+    (Definition~\ref{def:is_positive_gap_bnt_zcl}). As shown in
+    Theorem~\ref{thm:bell_pair_chain_not_cid}, this does not extend to adjacent
+    regions.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:is_positive_gap_physical_cid_of_is_rfp, thm:bnt_locally_orthogonal_of_rfp_direct_sum}
@@ -323,11 +399,10 @@
     \leanok
     \uses{def:cpsv_canonical_form, def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
-    tensors $(A_j)_j$. The multiplicity-one unit-weight tensor
-    $A=\bigoplus_j A_j$ is in literal CPSV canonical form, with retained
-    weights all equal to $1$, retained blocks $(A_j)_j$, and the identity
-    ambient coisometry. This statement does not reconstruct the raw weighted
-    repeated-copy tensor represented by $P$.
+    tensors $(A_j)_j$. The multiplicity-one unit-weight direct sum
+    $A=\bigoplus_j A_j$ is in CPSV canonical form
+    (Definition~\ref{def:cpsv_canonical_form}), with unit retained weights,
+    retained blocks $(A_j)_j$, and the identity ambient coisometry.
 \end{theorem}
 \begin{proof}\leanok
     \uses{cor:sector_bnt_cf_basis_normal}
@@ -375,21 +450,16 @@
     \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf, def:mps_transfer_idempotence}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
     tensors $(A_j)_j$, and
-    let $A=\bigoplus_j A_j$ be their direct sum with one unit-weight copy of
-    each sector. If $A$ is a renormalization fixed point,
-    \begin{align}
-        \E_A^2 & =\E_A,
-        \notag
-    \end{align}
-    then the following restricted conclusion holds: its physical
-    correlations are independent of the separation whenever both complementary
-    gaps are positive, and for all distinct BNT components $j\ne j'$
+    let $A=\bigoplus_j A_j$ be their multiplicity-one direct sum. If $A$ is a
+    renormalization fixed point ($\E_A^2 = \E_A$), then $A$ has positive-gap
+    BNT zero correlation length: its physical correlations are independent of
+    separation whenever both complementary gaps are positive, and for all
+    distinct BNT components $j\ne j'$,
     \begin{align}
         \E_{j,j'} & =0.
         \notag
     \end{align}
-    This is a multiplicity-one, unit-weight, positive-gap statement. It does
-    not assert the physical zero-correlation-length conclusion of
+    This establishes the positive-gap, multiplicity-one formulation of
     \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
@@ -463,16 +533,12 @@
     \leanok
     \uses{def:sector_bnt_cf, def:physical_observable_transfer, thm:bnt_sector_supported_physical_observable}
     Let $P$ be an auxiliary BNT sector decomposition of total bond dimension
-    $D$, and form the
-    direct sum $A=\bigoplus_j A_j$ with one unit-weight copy of each BNT basis
-    tensor. There is a positive length $L\leq3D^5$ such that, for every basis
-    sector $j$ and every $R,l\in\MN{D_j}$, a physical observable on $L$ sites
-    realizes the sector-supported insertion
-    (\ref{eq:zcl_sector_rank_one}). This is the multiplicity-one specialization
-    of the block-injective physical-observable assertion used in
-    \cite[proof of Theorem~3.8]{Cirac2016MPDO_arXiv}, equations (1252) and
-    (1256) in the local source. It does not realize the weighted copy-pair
-    insertions for the full weighted tensor represented by $P$.
+    $D$, and let $A=\bigoplus_j A_j$ be the direct sum of its basis tensors.
+    There exists a length $L\leq3D^5$ such that, for every basis sector $j$
+    and every $R,l\in\MN{D_j}$, a physical observable on $L$ sites realizes the
+    sector-supported insertion (\ref{eq:zcl_sector_rank_one}). This establishes
+    the multiplicity-one case of the block-injective observable construction
+    in \cite[proof of Theorem~3.8, lines~1252--1256]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:sharp_bnt_block_separation, thm:bnt_sector_supported_physical_observable}
@@ -541,7 +607,8 @@
          & =\bigl(\lambda r,\lambda l,1\bigr).
         \notag
     \end{align}
-    Then $A$ does not have positive-gap physical CID.
+    Then $A$ does not have positive-gap physical correlations independent of
+    distance (Definition~\ref{def:is_positive_gap_physical_cid}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:zcl_direct_sum_sector_calculus, thm:bnt_rank_one_observables_sharp_length}
@@ -723,38 +790,33 @@
     \begin{align}
         A\text{ has positive-gap BNT zero correlation length}
         \quad\Longleftrightarrow\quad
-        A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j.
+        A\text{ has all-chain commuting parent ground spaces spanned by }(A_j)_j. \notag
     \end{align}
-    This statement concerns one unit-weight copy of each distinct sector and
-    positive complementary gaps. It does not include repeated copies,
-    arbitrary raw weights, or adjacent complementary regions.
+    This equivalence holds for the multiplicity-one direct sum of distinct BNT
+    basis tensors with positive complementary gaps.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    By
-    Theorem~\ref{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp},
+    By Theorem~\ref{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp},
     positive-gap BNT zero correlation length is equivalent to transfer
     idempotence. The latter is equivalent to the all-chain commuting parent
     ground-space condition by
     Theorem~\ref{thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}.
 \end{proof}
 
-\begin{remark}[Remaining obstructions in the printed converse]
-    For the multiplicity-one unit-weight representative, the sector-supported
-    observables require no additional hypothesis. The full literal CPSV
-    canonical-form equations (1252) and (1256) also contain all repeated-copy
-    pairs and their
-    raw weight powers; the theorem above does not realize those weighted
-    insertions. Moreover, the preceding claim that $\E_j^2\ne\E_j$ yields a
-    nonzero eigenvalue $\lambda$ with $|\lambda|<1$ is not valid for a
-    non-idempotent operator with a nilpotent Jordan part at eigenvalue zero.
-    Hence the printed argument does not prove the unconditional converse in
-    Theorem~3.8. At multiplicity one,
-    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} repairs the
-    argument by arbitrary trace probes, without deriving the nonzero
-    subleading left and right eigenvectors used at lines 1260--1268.
-    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid} remains the formal
-    record of the printed spectral argument, taking the normalized nonzero
-    subleading pair as an explicit hypothesis.
+\begin{remark}[Scope and obstructions in the converse]
+    For the multiplicity-one unit-weight direct sum, sector-supported
+    observables require no additional hypotheses. In the general canonical
+    form of \cite[equations~(1252) and~(1256)]{Cirac2016MPDO_arXiv}, observable
+    insertions must also cover repeated-copy sectors with their respective
+    weights. Furthermore, the source argument infers from $\E_j^2\ne\E_j$ the
+    existence of an eigenvalue $\lambda$ with $0<|\lambda|<1$, which omits
+    non-idempotent channels whose non-trivial Jordan blocks occur at eigenvalue
+    zero. At multiplicity one,
+    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} resolves this
+    unconditionally using trace probes
+    (Lemma~\ref{lem:positive_gap_bnt_rank_one_probe_expectation}), while
+    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid} covers the spectral
+    case when a nonzero subleading eigenpair exists.
 \end{remark}

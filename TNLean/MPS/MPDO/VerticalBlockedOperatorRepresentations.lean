@@ -243,79 +243,39 @@ $(m_γ/n_γ)^L$. Documented in
 `docs/paper-gaps/cpsv16_blocked_operator_trace_ratio_exponent.tex`. -/
 theorem transportedVerticalSector_exists_blockedOperatorRepresentations
     {g₁ g₂ d D : ℕ}
-    (dim₁ mult₁ : Fin g₁ → ℕ)
-    (weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ)
-    (dim₂ mult₂ : Fin g₂ → ℕ)
-    (weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ)
-    (hMult₁ : ∀ α, 0 < mult₁ α)
-    (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
-    (hMult₂ : ∀ β, 0 < mult₂ β)
-    (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
-    (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
-    (hBNT₁ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
-      (fun α ↦ ⟨dim₁ α, A₁ α⟩))
-    (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor (blockTwo M))
-      (fun β ↦ ⟨dim₂ β, A₂ β⟩))
-    (U₁ : Matrix
-      (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
-      (Fin d) ℂ)
-    (U₂ : Matrix
-      (Fin (∑ q : Fin (∑ β : Fin g₂, mult₂ β), verticalCopyDim dim₂ mult₂ q))
-      (Fin (d * d)) ℂ)
-    (hU₁ : U₁ * U₁ᴴ = 1)
-    (hU₂ : U₂ * U₂ᴴ = 1)
-    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
-      Matrix (Fin d) (Fin d) ℂ)
-    (hTCPTP : IsKrausCPTP T)
-    (hSCPTP : IsKrausCPTP S)
-    (hForward₁ : ∀ ab, U₁ * verticalTensor M ab * U₁ᴴ =
-      verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab)
-    (hReconstruct₁ : ∀ ab, verticalTensor M ab =
-      U₁ᴴ * verticalAssembledTensor dim₁ mult₁ weight₁ A₁ ab * U₁)
-    (hForward₂ : ∀ ab, U₂ * verticalTensor (blockTwo M) ab * U₂ᴴ =
-      verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab)
-    (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
-      U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (hTphys : ∀ X, T (physClose1 M X) = physClose2 M X)
-    (hSphys : ∀ X, S (physClose2 M X) = physClose1 M X)
+    (h : VerticalSectorHypotheses
+      (g₁ := g₁) (g₂ := g₂) (d := d) (D := D))
     {L : ℕ} (hL : 0 < L) :
     ∃ sigma : Fin g₁ ≃ Fin g₂,
-      ∃ hDim : ∀ i, dim₁ i = dim₂ (sigma i),
-        ∃ V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ,
+      ∃ hDim : ∀ i, h.dim₁ i = h.dim₂ (sigma i),
+        ∃ V : ∀ i, Matrix.unitaryGroup (Fin (h.dim₂ (sigma i))) ℂ,
           (∀ (i : Fin g₁) (ab : Fin (D * D)),
-            A₂ (sigma i) ab =
-              (verticalMultiplicityTrace weight₁ i /
-                verticalMultiplicityTrace weight₂ (sigma i)) •
-              ((V i : Matrix (Fin (dim₂ (sigma i)))
-                  (Fin (dim₂ (sigma i))) ℂ) *
-                Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (A₁ i ab) *
-                (V i : Matrix (Fin (dim₂ (sigma i)))
-                  (Fin (dim₂ (sigma i))) ℂ)ᴴ)) ∧
-          mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+            h.A₂ (sigma i) ab =
+              (verticalMultiplicityTrace h.weight₁ i /
+                verticalMultiplicityTrace h.weight₂ (sigma i)) •
+              ((V i : Matrix (Fin (h.dim₂ (sigma i)))
+                  (Fin (h.dim₂ (sigma i))) ℂ) *
+                Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (h.A₁ i ab) *
+                (V i : Matrix (Fin (h.dim₂ (sigma i)))
+                  (Fin (h.dim₂ (sigma i))) ℂ)ᴴ)) ∧
+          mpo (verticalBNTMPO (verticalTensor (blockTwo h.M))) L =
               ∑ i,
-                (((verticalMultiplicityTrace weight₁ i /
-                    verticalMultiplicityTrace weight₂ (sigma i)) ^ L) *
-                  (∑ q, weight₂ (sigma i) q ^ L)) •
-                  mpo (verticalBNTMPO (A₁ i)) L ∧
-          mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+                (((verticalMultiplicityTrace h.weight₁ i /
+                    verticalMultiplicityTrace h.weight₂ (sigma i)) ^ L) *
+                  (∑ q, h.weight₂ (sigma i) q ^ L)) •
+                  mpo (verticalBNTMPO (h.A₁ i)) L ∧
+          mpo (verticalBNTMPO (verticalTensor (blockTwo h.M))) L =
             ∑ i, ∑ j,
-              ((∑ q, weight₁ i q ^ L) * (∑ r, weight₁ j r ^ L)) •
-                (mpo (verticalBNTMPO (A₁ i)) L *
-                  mpo (verticalBNTMPO (A₁ j)) L) := by
+              ((∑ q, h.weight₁ i q ^ L) * (∑ r, h.weight₁ j r ^ L)) •
+                (mpo (verticalBNTMPO (h.A₁ i)) L *
+                  mpo (verticalBNTMPO (h.A₁ j)) L) := by
   obtain ⟨sigma, hDim, V, _, hLetter⟩ :=
-    transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
-      dim₁ mult₁ weight₁ dim₂ mult₂ weight₂
-      hMult₁ hWeight₁ hMult₂ hWeight₂ M A₁ A₂ hBNT₁ hBNT₂
-      U₁ U₂ hU₁ hU₂ T S hTCPTP hSCPTP
-      hForward₁ hReconstruct₁ hForward₂ hReconstruct₂ hTphys hSphys
+    transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq h
   obtain ⟨hFirst, hSecond⟩ :=
     blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv
-      dim₁ mult₁ weight₁ dim₂ mult₂ weight₂ M A₁ A₂ U₁ U₂ hU₁ hU₂
-      hReconstruct₁ hReconstruct₂ sigma hDim V hLetter hL
+      h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.weight₂ h.M h.A₁ h.A₂
+      h.U₁ h.U₂ h.hU₁ h.hU₂ h.hReconstruct₁ h.hReconstruct₂
+      sigma hDim V hLetter hL
   exact ⟨sigma, hDim, V, hLetter, hFirst, hSecond⟩
 
 end MPOTensor

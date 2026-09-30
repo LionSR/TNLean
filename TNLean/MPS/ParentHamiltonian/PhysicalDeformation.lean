@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinKronecker
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
@@ -67,6 +68,14 @@ noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
 @[simp] lemma onSiteTensorPow_apply (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
     (σ τ : Cfg d L) :
     onSiteTensorPow L Λ σ τ = ∏ n : Fin L, Λ (σ n) (τ n) := rfl
+
+/-- The tensor power is the constant-family finite Kronecker product
+\(\bigotimes_{n<L}\Lambda\); the algebra of the latter is in
+`TNLean/Algebra/FinKronecker.lean`. -/
+lemma onSiteTensorPow_eq_finKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
+    onSiteTensorPow L Λ = Matrix.finKronecker fun _ : Fin L => Λ := by
+  ext σ τ
+  simp [onSiteTensorPow, Matrix.finKronecker_apply]
 
 /-- The tensor power is the blocked Kronecker lift read through the decoding of blocked
 physical indices. -/

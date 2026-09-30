@@ -1,15 +1,10 @@
 \section{Direct-sum separation and prepared-family bookkeeping}
 \label{sec:app_bnt_separation_supplier}
 
-We now prove the supporting separation and regrouping results used by the
-source-facing block-injectivity and supplier theorems in
-Chapter~\ref{ch:bnt}.  The direct-sum argument follows the ground-space
-uniqueness mechanism of \cite{PerezGarcia2007Matrix}: disjoint local
-MPS spaces give pair-trace selectors, products of those selectors isolate one
-BNT block, and an injective prefix supplies an arbitrary matrix on that block.
-The remaining results identify dimensions while phase-equivalent prepared
-blocks are grouped into sectors and normalize the resulting finite weight
-family.
+Following Pérez-García et al.~\cite{PerezGarcia2007Matrix}, disjoint local MPS
+spaces yield pair-trace selectors whose products isolate individual BNT blocks.
+Grouping phase-equivalent blocks into sectors preserves total bond dimension and
+allows projective weight normalization.
 
 \begin{lemma}[Three-block separation of distinct BNT representatives]
     \label{lem:bnt_direct_sum_injective_prefix_word_span}
@@ -66,8 +61,8 @@ family.
         \label{eq:app_bnt_common_three_block_vector}
     \end{align}
     Injectivity at $S$ gives $X\ne0$ and $Y\ne0$. Split every length-$S$ word
-    as $uvw$ with $|u|=|v|=|w|=L$. Equality
-    \ref{eq:app_bnt_common_three_block_vector} gives
+    as $uvw$ with $|u|=|v|=|w|=L$. Relation (\ref{eq:app_bnt_common_three_block_vector})
+    gives
     \begin{align}
         \tr(XA^k_uA^k_vA^k_w)
          & =\tr(YA^j_uA^j_vA^j_w).
@@ -85,7 +80,7 @@ family.
     $Z\in\MN{D_k}$, choose coefficients $a_{uv}$ with
     $Z=\sum_{u,v}a_{uv}A^k_uXA^k_v$ and set
     $R(Z)=\sum_{u,v}a_{uv}A^j_uYA^j_v$. Cyclicity of the trace and
-    \ref{eq:app_bnt_three_block_trace_relation}, applied to the word $vwu$,
+    (\ref{eq:app_bnt_three_block_trace_relation}), applied to the word $vwu$,
     yield
     \begin{align}
         \tr(ZA^k_w)
@@ -100,8 +95,8 @@ family.
         \mathcal G_L(A^k) & \subseteq\mathcal G_L(A^j).
         \label{eq:app_bnt_local_space_inclusion}
     \end{align}
-    Equations~\ref{eq:app_bnt_local_space_dimension} and
-    \ref{eq:app_bnt_local_space_inclusion} give
+    Equations~(\ref{eq:app_bnt_local_space_dimension}) and
+    (\ref{eq:app_bnt_local_space_inclusion}) give
     \begin{align}
         D_k^2
          & =\dim\mathcal G_L(A^k)
@@ -109,7 +104,7 @@ family.
         \notag
     \end{align}
     Together with $D_j\leq D_k$, this forces $D_j=D_k$ and equality in
-    \ref{eq:app_bnt_local_space_inclusion}. This proves the unequal-dimension
+    (\ref{eq:app_bnt_local_space_inclusion}). This proves the unequal-dimension
     branch immediately: if $D_j<D_k$, a nonzero intersection is impossible.
     Reversing the initial ordering treats $D_k<D_j$ in the same way.
 
@@ -172,7 +167,7 @@ family.
         \label{eq:app_bnt_pair_map_annihilator}
     \end{align}
     The right-hand side vanishes by
-    \ref{eq:app_bnt_three_block_intersection_zero}, and hence so does the
+    (\ref{eq:app_bnt_three_block_intersection_zero}), and hence so does the
     annihilator. The trace pairing is nondegenerate and all spaces are
     finite-dimensional, so
     $\operatorname{im}(\Phi_{kj})^\perp=\{0\}$ implies that $\Phi_{kj}$ is
@@ -292,10 +287,10 @@ family.
 
 \begin{proof}\leanok\uses{lem:collapsed_bnt_sector_decomp_total_dim, lem:prepared_phase_class_dim_eq}
     Every assigned summand shares the bond dimension of its representative, by
-    the equal-dimension fact above. The displayed regrouping identity in
-    Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then identifies the
-    collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$, the original
-    direct-sum dimension.
+    Lemma~\ref{lem:prepared_phase_class_dim_eq}. The displayed regrouping
+    identity in Lemma~\ref{lem:collapsed_bnt_sector_decomp_total_dim} then
+    identifies the collapsed sum over pairs $(j,q)$ with $\sum_{k=1}^{r}D_k$,
+    the original direct-sum dimension.
 \end{proof}
 
 \begin{theorem}[Projective weight normalization]%

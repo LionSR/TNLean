@@ -167,10 +167,9 @@ strong subadditivity for a normalized three-site reduced state.
     Here
     $\kappa^{(s)}_{\beta_1,\alpha_3}(i,j)
         ={(\mathcal K_s^{ij})}_{\beta_1,\alpha_3}$.
-    Thus both the normal-sector and Markov-sector off-diagonal entries are
-    retained in the statement, rather than being suppressed by a prior
-    choice of equal labels. This is the full entrywise identity used
-    in~\cite[Appendix~C.2, lines~1719--1732]{Cirac2016MPDO_arXiv}.
+    This is the entrywise identity used
+    in~\cite[Appendix~C.2, lines~1719--1732]{Cirac2016MPDO_arXiv}, retaining
+    both the normal-sector and Markov-sector off-diagonal entries.
 
     The closing entry ${(R_s)}_{\beta_3,\alpha_1}$ is the corrected tail-index
     orientation of the display at lines~1422--1438, recorded in
@@ -397,14 +396,11 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{proof}
     \leanok
-    This is the forward implication of the Hayashi equality
-    characterization. The product-reference raw Petz formula, including its
-    singular-support compression, is given by
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Raw Petz factorization for a product reference'']{QICLean2026Blueprint}. The singular-support
-    equality-to-recovery theorem is still separate. Beyond it, the remaining
-    structural ingredient is the family-level Koashi--Imoto decomposition and
-    the induced action of the middle-system channel on its common direct-sum
-    factors.
+    This follows from the characterization of states saturating strong
+    subadditivity~\cite{Hayden2004Structure}. Petz recovery with a product
+    reference and the Koashi--Imoto decomposition yield the direct-sum
+    decomposition into tensor products on the middle system, giving the local
+    $\eta$-structure of Definition~\ref{def:mpdo_eta_structure}.
 \end{proof}
 
 \begin{lemma}[Partial trace along a right tensor factor]
@@ -592,7 +588,7 @@ strong subadditivity for a normalized three-site reduced state.
     orthogonality, mutual disjointness, and resolution of the active support.
 \end{proof}
 
-\begin{definition}[Sitewise physical action and absorbed BNT representatives]
+\begin{definition}[Sitewise physical action and BNT coefficients]
     \label{def:mpdo_sitewise_physical_matrix}
     \lean{MPOTensor.sitewisePhysicalMatrix}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor}
@@ -605,8 +601,7 @@ strong subadditivity for a normalized three-site reduced state.
         \notag
     \end{align}
     If the copies of the $j$-th normal tensor have common coefficient
-    $\mu_j$, let $\mathcal K_j=\mu_j A_j$ denote the representative with this
-    coefficient absorbed into its local tensor.
+    $\mu_j$, set $\mathcal K_j=\mu_j A_j$.
 \end{definition}
 
 \begin{theorem}[Local selection by the BNT projectors]
@@ -829,7 +824,6 @@ strong subadditivity for a normalized three-site reduced state.
 % Source: arXiv:1606.00608, Appendix C.2, lines 1745--1782.
 \begin{theorem}[Literal ZCL descends to absorbed BNT representatives]
     \label{thm:mpdo_absorbed_bnt_sector_literal_zcl}
-    \lean{MPOTensor.weighted_basis_physTraceTransfer_sq_of_literal_ZCL}
     \lean{MPOTensor.%
         commonWeightAbsorbedBasisMPOTensor_physTraceTransfer_sq_of_literal_ZCL}
     \leanok
@@ -853,7 +847,7 @@ strong subadditivity for a normalized three-site reduced state.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:global_gauge_of_blocks, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_copy_weight_eq_common_weight, thm:mpdo_absorbed_bnt_sector_phys_trace_transfer}
+    \uses{def:global_gauge_of_blocks, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_copy_weight_eq_common_weight, thm:mpdo_absorbed_bnt_sector_phys_trace_transfer, lem:mpdo_simple_blockwise_zcl_equation}
     Conjugating $\mathcal T_K^2=\mathcal T_K$ by the block-diagonal gauge
     gives the same identity for the weighted direct sum. Its diagonal block
     indexed by $(s,q)$ is
@@ -1042,8 +1036,7 @@ strong subadditivity for a normalized three-site reduced state.
     BNT label are copy-independent,
     $\mu_{s,q}=\mu_{s,q'}$, and that $K$ saturates the area law and satisfies
     literal zero correlation length, $\mathcal T_K^2=\mathcal T_K$. For every
-    BNT label $s$, let $\mathcal K_s=\mu_sA_s$ be the absorbed BNT
-    representative. Then
+    BNT label $s$, set $\mathcal K_s=\mu_sA_s$. Then
     $\mathcal K_s$ is one-site injective, generates positive semidefinite
     operators on every nonempty periodic chain, saturates the area law, and
     satisfies

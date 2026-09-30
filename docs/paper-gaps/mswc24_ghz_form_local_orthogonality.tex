@@ -1,0 +1,97 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{GHZ Form of the Fixed-Point State: Local Orthogonality as a Hypothesis}
+\author{}
+\date{2026-09-26}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
+    \otimes A_j^i$ be a basis of normal tensors, let $\ket{\omega_j}$ be the
+fixed-point pair of the normal block $A_j$, embedded in the bond space
+$\C^D\otimes\C^D$ of $A$, and put
+\begin{align}
+    \ket{\Omega'}
+     & =\sum_{j=1}^b\alpha_j\bigotimes_{k=1}^{M}\ket{\omega_j}_{R_kL_{k+1}}.
+    \label{eq:mswc24_fixed_point_state}
+\end{align}
+After eq.~(S7) of~\cite{Malz2024Preparation} the pairs are asserted to be
+locally orthogonal,
+\begin{align}
+    \braket{\omega_j}{\omega_{j'}} & =\delta_{jj'},
+    \label{eq:mswc24_local_orthogonality}
+\end{align}
+with a reference to the canonical-form theory of matrix product density
+operators. The paragraph after eq.~(19) then concludes that
+$W\colon\ket{j}\mapsto\ket{\omega_j}$ is an isometry and that
+$\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ with
+$\ket{\chi_M}=\sum_j\alpha_j\ket{j}^{\otimes M}$. In the source,
+(\ref{eq:mswc24_local_orthogonality}) is a property of these particular pairs,
+not a hypothesis.
+
+\section{The restriction adopted}
+The formal statements are made for an arbitrary family
+$\omega_1,\dots,\omega_b\in\C^D\otimes\C^D$ and arbitrary coefficients
+$\alpha$.\footnote{Formal declarations:
+    \leanid{MPSTensor.isIsometry_pairIsometry},
+    \leanid{MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState}
+    and \leanid{MPSTensor.nonNormalFixedPointState_norm_sq} in
+    \doclink{TNLean/MPS/Preparation/NonNormalFixedPoint}.}
+The identity $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ holds for every such
+family, since
+$W^{\otimes M}\ket{j}^{\otimes M}=\bigotimes_k\ket{\omega_j}$. The isometry of
+$W$ and the normalization $\braket{\Omega'}{\Omega'}=1$ take
+(\ref{eq:mswc24_local_orthogonality}) as a hypothesis. For the pairs of the
+source they are therefore proved only once
+(\ref{eq:mswc24_local_orthogonality}) is supplied.
+
+One half of the hypothesis is available: if the components $\omega_{(a,c)}$ vanish
+for $a\notin S$ and the components $\omega'_{(a,c)}$ vanish for $a\notin S'$,
+where $S$ and $S'$ are disjoint sets of virtual indices, then $\braket{\omega}{\omega'}=0$.\footnote{Formal declaration:
+    \leanid{MPSTensor.inner_pair_eq_zero_of_disjoint} in the same module.}
+The embedded pairs of distinct blocks are supported in this way.
+
+\section{A discharged instance}
+The hypothesis is discharged for one identification of the pairs, which the
+source does not make.\footnote{Formal declarations:
+    \leanid{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair},
+    \leanid{MPSTensor.SectorDecomposition.isIsometry_pairIsometry_embeddedFixedPointPair},
+    \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_tensorPower_mulVec_ghzState}
+    and \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq} in
+    \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
+The canonical form is taken as a sector decomposition, whose bond space is
+$\C^D$ with $D=\sum_jm_jD_j$ and whose blocks carry no normality or gauge
+condition. The pair of block $j$ is the fixed-point pair of a positive
+semidefinite, unit-trace matrix $\sigma_j$ on $\C^{D_j}$, a free parameter,
+placed on both legs on the bond coordinates of one chosen copy $k_j$ of that
+block. The coordinates of distinct blocks are distinct, so the right legs of
+the pairs of distinct blocks have disjoint supports and the pairs are
+orthogonal by the disjoint-support lemma; the coordinates of one copy are
+distinct, so $\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. For
+these pairs (\ref{eq:mswc24_local_orthogonality}) holds, and the isometry of
+$W$, the GHZ form and the normalization hold without the hypothesis.
+
+This orthogonality follows from the placement alone. It uses neither the
+normality of the blocks nor the basis-of-normal-tensors property, which is the
+reason the source gives. The source's pairs are the fixed points of the
+positive parts $P_j$ of the blocked tensor, and the block form of the positive
+part that would identify them with the pairs above is not formalized. When some
+block has multiplicity $m_j\ge2$ that block form fails and no product of pairs
+carrying the weights $\beta_j$ gives the approximating state
+\cite{gap:mswc24_multiplicity_fixed_point}.
+
+\section{Elimination}
+Formalize the block form of the positive part of the blocked tensor for
+$m_j=1$, identify its fixed-point pairs with the embedded pairs above, and
+derive (\ref{eq:mswc24_local_orthogonality}) for them; the case $m_j\ge2$ is
+governed by the false-source record
+\cite{gap:mswc24_multiplicity_fixed_point}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

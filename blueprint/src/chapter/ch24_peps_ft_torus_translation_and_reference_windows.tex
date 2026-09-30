@@ -124,7 +124,7 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_tensor_transport, def:peps_torus_geometry_translation}
     A PEPS tensor $A$ on the discrete torus is translation invariant if
-    $A^{\tau_{a,b}}=A$ for every translation $\tau_{a,b}$. This formalizes
+    $A^{\tau_{a,b}}=A$ for every translation $\tau_{a,b}$. This is
     the setting of \cite[Theorem~3]{Molnar2018NormalPEPS}, where one tensor
     is repeated at every site of a periodic lattice.
 \end{definition}
@@ -146,8 +146,7 @@ site-independent tensor and produces the global phase of
         =\Coeff_A(\sigma),
         \notag
     \end{align}
-    where the second equality substitutes $A^{\tau_{a,b}}=A$ from translation
-    invariance.
+    using $A^{\tau_{a,b}}=A$ from translation invariance.
 \end{proof}
 
 \begin{definition}[Translation-invariant torus state]%
@@ -174,8 +173,11 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_torus_translation_invariant,
         def:peps_torus_state_translation_invariant}
-    A translation-invariant torus tensor represents a translation-invariant
-    state.
+    A translation-invariant torus tensor $A$ represents a translation-invariant
+    state: for every lattice translation $\tau_{a,b}$ and physical configuration $\sigma$,
+    \begin{align}
+        \Coeff_A(\sigma\circ\tau_{a,b}) & = \Coeff_A(\sigma). \notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_stateCoeff_translationInvariant}

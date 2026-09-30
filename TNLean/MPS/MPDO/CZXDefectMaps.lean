@@ -385,14 +385,6 @@ def prescribedMap (a b : Multiplicative (ZMod 2)) :
   vecMulVec (defectVector 1 (a * b) 0) (star (defectVector a b 0)) +
     vecMulVec (defectVector 1 (a * b) 1) (star (defectVector a b 1))
 
-/-- `Matrix.vecMulVec_mulVec` with the scalar of the commutative field ℂ in
-place of its opposite. -/
-theorem vecMulVec_mulVec_eq_smul (u v w : (Fin 2 → Fin 4) → ℂ) :
-    vecMulVec u v *ᵥ w = (v ⬝ᵥ w) • u := by
-  rw [Matrix.vecMulVec_mulVec]
-  funext i
-  simp [MulOpposite.smul_eq_mul_unop, mul_comm]
-
 theorem star_prescribedMap (a b : Multiplicative (ZMod 2)) :
     star (prescribedMap a b) =
       vecMulVec (defectVector a b 0) (star (defectVector 1 (a * b) 0)) +
@@ -405,13 +397,15 @@ $\tilde\lambda_{a,b}v(a,b,x)=v(e,ab,x)$ of FBC25 (arXiv:2502.20257, lines
 4215--4254). -/
 theorem prescribedMap_mulVec_defectVector (a b : Multiplicative (ZMod 2)) (x : ZMod 2) :
     prescribedMap a b *ᵥ defectVector a b x = defectVector 1 (a * b) x := by
-  rw [prescribedMap, add_mulVec, vecMulVec_mulVec_eq_smul, vecMulVec_mulVec_eq_smul,
+  rw [prescribedMap, add_mulVec, Matrix.vecMulVec_mulVec, Matrix.vecMulVec_mulVec,
+    op_smul_eq_smul, op_smul_eq_smul,
     star_defectVector_dotProduct_defectVector, star_defectVector_dotProduct_defectVector]
   rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl <;> simp +decide
 
 theorem star_prescribedMap_mulVec_defectVector (a b : Multiplicative (ZMod 2)) (x : ZMod 2) :
     star (prescribedMap a b) *ᵥ defectVector 1 (a * b) x = defectVector a b x := by
-  rw [star_prescribedMap, add_mulVec, vecMulVec_mulVec_eq_smul, vecMulVec_mulVec_eq_smul,
+  rw [star_prescribedMap, add_mulVec, Matrix.vecMulVec_mulVec, Matrix.vecMulVec_mulVec,
+    op_smul_eq_smul, op_smul_eq_smul,
     star_defectVector_dotProduct_defectVector, star_defectVector_dotProduct_defectVector]
   rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl <;> simp +decide
 

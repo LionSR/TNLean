@@ -22,6 +22,7 @@ on:
       - 'docs/**/*.md'
       - 'tenkz.toml'
       - 'scripts/fetch_tenkz.py'
+      - 'scripts/prune_tenkz_render_cache.py'
       - 'scripts/tenkz_paths.py'
       - 'docs/slides/**'
       - '.github/workflows/blueprint.yml'
@@ -38,18 +39,32 @@ on:
   workflow_dispatch:
 
 # Rapid pushes to main only need the newest build; actual Pages deployments
-# are serialized by the deploy job in deploy-pages.yml.
+# are serialized by the deploy job in deploy-pages.yml. A manual run on
+# another branch builds in its own group and never deploys.
 concurrency:
-  group: blueprint-build
-  cancel-in-progress: true
+  group: blueprint-build-${{ github.ref }}
+  # Let a running build finish: with merges to main every few minutes and a
+  # build of about half an hour, cancelling in progress meant no run ever
+  # reached the deploy job. GitHub still keeps only the newest pending run.
+  cancel-in-progress: false
 
 permissions:
   contents: read
 
 jobs:
-  blueprint:
+  # The print volumes and the web pages share no build output, so they are
+  # built on separate runners at once; the site job below joins them.
+  pdf:
     runs-on: ubuntu-latest
-    name: Build blueprint site components
+    name: Build blueprint PDFs
+    env:
+      PRINT_AUX_FILES: |
+        blueprint/print/*.aux
+        blueprint/print/*.bbl
+        blueprint/print/*.blg
+        blueprint/print/*.fdb_latexmk
+        blueprint/print/*.out
+        blueprint/print/*.toc
     steps:
       - name: Checkout project
         uses: actions/checkout@v7
@@ -94,20 +109,98 @@ jobs:
       - name: Build paper-gap PDFs
         run: texra-blueprint --root . paper-gaps build
 
-      - name: Build blueprint
+      # Seed latexmk with the previous build's auxiliary files. From a cold
+      # start the print volume needs four full XeLaTeX passes (about six
+      # minutes each) before labels, citations and page numbers settle; from
+      # the last build's auxiliary files a typical merge needs one or two.
+      - name: Restore PDF auxiliary files
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.PRINT_AUX_FILES }}
+          key: blueprint-print-aux-${{ github.run_id }}
+          restore-keys: blueprint-print-aux-
+
+      # A stale auxiliary file can name a macro that a changed preamble no
+      # longer defines; a failed seeded build is retried from a clean slate,
+      # so only a genuinely broken source fails the step.
+      - name: Build blueprint PDF
+        run: |
+          if ! leanblueprint pdf; then
+            echo "::warning::Seeded PDF build failed; rebuilding from a clean print directory"
+            rm -rf blueprint/print
+            leanblueprint pdf
+          fi
+
+      - name: Save PDF auxiliary files
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ env.PRINT_AUX_FILES }}
+          key: blueprint-print-aux-${{ github.run_id }}
+
+      - name: Build FT-MPS blueprint volume
+        run: ./scripts/build_blueprint_ch01_12.sh
+
+      - name: Package PDFs
+        run: |
+          mkdir -p site-pdf
+          cp blueprint/print/print.pdf site-pdf/blueprint.pdf
+          cp blueprint/print/print12.pdf site-pdf/blueprint-ch01-12.pdf
+          texra-blueprint --root . paper-gaps site site-pdf/paper-gaps
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v7
+        with:
+          name: blueprint-pdf-part
+          path: site-pdf
+          retention-days: 1
+
+  web:
+    runs-on: ubuntu-latest
+    name: Build blueprint web pages
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v7
+
+      - name: Install system dependencies
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
+
+      - name: Fetch pinned tenkz package
+        run: python3 scripts/fetch_tenkz.py
+
+      - name: Build blueprint bibliography
+        run: texra-blueprint bbl
+
+      - name: Generate paper source aux for paper-gap references
+        run: |
+          ./scripts/generate_paper_aux.sh 1606.00608
+          ./scripts/generate_paper_aux.sh 2502.20257
+
+      # Every picture is compiled standalone and stored under its content
+      # hash (blueprint/src/Packages/tenkz_pic.py), so an SVG from an earlier
+      # build is reused exactly when its source, the macros and the pinned
+      # tenkz package are unchanged. The key names the renderer, whose engine
+      # route the hash does not cover, so a renderer change starts afresh.
+      - name: Restore tenkz picture cache
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            blueprint/web/tenkz_svg
+            blueprint/src/.tenkz_svg_cache
+          key: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-${{ github.run_id }}
+          restore-keys: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-
+
+      - name: Build blueprint web pages
         run: |
           set -o pipefail
           tmp_output_file="$(mktemp)"
-
-          leanblueprint pdf
-
-          # `leanblueprint pdf` finishes by copying print/print.bbl over
-          # src/web.bbl. The print build's bibtex run uses the `plain`
-          # style, whose `\bibitem{key}` carries no natbib optional label,
-          # and plasTeX then renders every citation as "??" (the reader-facing
-          # check below catches it). Regenerate the natbib-style web
-          # bibliography that web.tex needs after the PDF build has run.
-          texra-blueprint bbl
 
           # texra-blueprint web wraps leanblueprint web and fails when the
           # renderer meets a command it does not know (unrecognized
@@ -137,20 +230,53 @@ jobs:
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
-      - name: Build FT-MPS blueprint volume
-        run: ./scripts/build_blueprint_ch01_12.sh
+      # Drop pictures no page references any more, so neither the published
+      # site nor the saved cache carries figures that were edited away.
+      - name: Prune unused tenkz pictures
+        run: python3 scripts/prune_tenkz_render_cache.py
 
-      - name: Package site components
+      - name: Save tenkz picture cache
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            blueprint/web/tenkz_svg
+            blueprint/src/.tenkz_svg_cache
+          key: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-${{ github.run_id }}
+
+      - name: Upload web pages
+        uses: actions/upload-artifact@v7
+        with:
+          name: blueprint-web-part
+          path: blueprint/web
+          retention-days: 1
+
+  site:
+    needs: [pdf, web]
+    runs-on: ubuntu-latest
+    name: Build blueprint site components
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v7
+
+      - name: Download web pages
+        uses: actions/download-artifact@v8
+        with:
+          name: blueprint-web-part
+          path: site-blueprint/blueprint
+
+      - name: Download PDFs
+        uses: actions/download-artifact@v8
+        with:
+          name: blueprint-pdf-part
+          path: site-blueprint
+
+      - name: Write badges
         run: |
-          mkdir -p site-blueprint site-badges
-          cp -r blueprint/web site-blueprint/blueprint
-          cp blueprint/print/print.pdf site-blueprint/blueprint.pdf
-          cp blueprint/print/print12.pdf site-blueprint/blueprint-ch01-12.pdf
-          texra-blueprint --root . paper-gaps site site-blueprint/paper-gaps
+          mkdir -p site-badges
           python3 scripts/write_badges.py site-badges
 
       # Runs in Docker and produces root-owned output; keep it after the
-      # packaging step so it only writes into the pre-created directory.
+      # other steps so it only writes into the pre-created directory.
       - name: Build homepage
         uses: actions/jekyll-build-pages@v1
         with:
@@ -173,7 +299,8 @@ jobs:
 
   deploy:
     name: Deploy Pages site
-    needs: blueprint
+    needs: site
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-pages.yml
     permissions:
       contents: read

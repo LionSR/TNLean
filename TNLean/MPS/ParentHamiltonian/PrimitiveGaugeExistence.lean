@@ -3,9 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Irreducible.PerronGauge
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
+import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.Wielandt.Primitivity.Equivalence
 
 /-!
@@ -48,14 +50,12 @@ valence-bond construction.
 
 ## Main results
 
-* `MPSTensor.isNBlkInjective_smul_iff`, `MPSTensor.isNormal_smul_iff`: block
-  injectivity and normality are invariant under a nonzero rescaling.
-* `MPSTensor.exists_apply_ne_zero_of_isNormal`: a normal tensor on a nonzero
-  bond space has a nonzero matrix.
 * `MPSTensor.exists_isPrimitiveMPS_gauge_of_isNormal`: the normalized primitive
   gauge of a normal tensor.
 * `MPSTensor.exists_parentHamiltonianES_gap_of_isNormal`: the finite-range
   Knabe gap for the parent Hamiltonian of an arbitrary normal tensor.
+* `MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal`: the uniform
+  gap for every periodic length.
 
 ## References
 
@@ -74,71 +74,6 @@ open scoped Matrix BigOperators ComplexOrder
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-! ### Rescaling invariance of block injectivity -/
-
-/-- Rescaling every matrix of a tensor by a nonzero scalar preserves the span of
-the length-\(N\) words.
-
-Each length-\(N\) word acquires the common factor \(\zeta^N\), which is a unit,
-and the span of a set is unchanged by a unit scalar. -/
-theorem wordSpan_smul_eq {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) (N : ℕ) :
-    Kraus.wordSpan (ζ • A) N = Kraus.wordSpan A N := by
-  have hword : ∀ σ : Fin N → Fin d,
-      Kraus.evalWord (ζ • A) (List.ofFn σ) =
-        (ζ ^ N) • Kraus.evalWord A (List.ofFn σ) := fun σ => by
-    have h := Kraus.evalWord_smul ζ A (List.ofFn σ)
-    rw [List.length_ofFn] at h
-    exact h
-  simp only [Kraus.wordSpan]
-  simp_rw [hword]
-  rw [Set.range_smul]
-  exact Submodule.span_smul_eq_of_isUnit _ _ (pow_ne_zero N hζ).isUnit
-
-/-- Rescaling every matrix of a tensor by a nonzero scalar preserves block
-injectivity at every blocking length. -/
-theorem isNBlkInjective_smul_iff {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) (N : ℕ) :
-    Kraus.IsNBlkInjective (ζ • A) N ↔ Kraus.IsNBlkInjective A N := by
-  simp only [Kraus.IsNBlkInjective, wordSpan_smul_eq hζ A N]
-
-/-- Rescaling every matrix of a tensor by a nonzero scalar preserves normality.
-
-This is the scalar half of the normalization taken without loss of generality at
-arXiv:quant-ph/0608197, proof lines 765--767. -/
-theorem isNormal_smul_iff {ζ : ℂ} (hζ : ζ ≠ 0) (A : MPSTensor d D) :
-    Kraus.IsNormal (ζ • A) ↔ Kraus.IsNormal A := by
-  constructor
-  · rintro ⟨N, hN, hInj⟩
-    exact ⟨N, hN, (isNBlkInjective_smul_iff hζ A N).1 hInj⟩
-  · rintro ⟨N, hN, hInj⟩
-    exact ⟨N, hN, (isNBlkInjective_smul_iff hζ A N).2 hInj⟩
-
-/-- A normal tensor on a nonzero bond space has a nonzero matrix.
-
-If every matrix vanished, every positive-length word would vanish and the word
-span could not be the full matrix algebra. -/
-theorem exists_apply_ne_zero_of_isNormal [NeZero D] {A : MPSTensor d D}
-    (hA : Kraus.IsNormal A) : ∃ i : Fin d, A i ≠ 0 := by
-  obtain ⟨N, hN, hInj⟩ := hA
-  by_contra hall
-  simp only [not_exists, not_not] at hall
-  have hsub : (Set.range fun σ : Fin N → Fin d =>
-      Kraus.evalWord A (List.ofFn σ)) ⊆ {0} := by
-    rintro _ ⟨σ, rfl⟩
-    obtain ⟨N', rfl⟩ : ∃ N', N = N' + 1 := ⟨N - 1, by omega⟩
-    change Kraus.evalWord A (List.ofFn σ) ∈ ({0} : Set (Matrix (Fin D) (Fin D) ℂ))
-    rw [Set.mem_singleton_iff, List.ofFn_succ, Kraus.evalWord_cons, hall (σ 0),
-      Matrix.zero_mul]
-  have hle : (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) ≤ ⊥ := by
-    rw [← hInj.span_eq_top, ← Submodule.span_zero_singleton (R := ℂ)
-      (M := Matrix (Fin D) (Fin D) ℂ)]
-    exact Submodule.span_mono hsub
-  have h10 : (1 : Matrix (Fin D) (Fin D) ℂ) = 0 :=
-    (Submodule.mem_bot ℂ).mp (hle Submodule.mem_top)
-  have hD : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
-  have hentry := congrFun (congrFun h10 ⟨0, hD⟩) ⟨0, hD⟩
-  rw [Matrix.one_apply_eq] at hentry
-  exact one_ne_zero hentry
 
 /-! ### Transport of the parent Hamiltonian along equal local MPS spaces -/
 
@@ -252,5 +187,22 @@ theorem exists_parentHamiltonianES_gap_of_isNormal [NeZero D] {A : MPSTensor d D
   intro N hN v hv
   rw [parentHamiltonianES_eq_of_groundSpace_eq (hGS (l + 1)) N] at hv ⊢
   exact hGap N hN v hv
+
+/-- A normal tensor has a uniform positive parent-Hamiltonian gap at a suitable
+interaction range, for every periodic length.
+
+This is the normal-tensor case of arXiv:2011.12127, lines 2183--2187.
+The finite-range Knabe estimate treats all sufficiently large lengths; taking
+a minimum with the finitely many remaining positive bounds removes its volume
+threshold. No normalization hypothesis is imposed on the tensor. -/
+theorem exists_parentHamiltonianES_uniform_gap_of_isNormal [NeZero D]
+    {A : MPSTensor d D} (hA : Kraus.IsNormal A) :
+    ∃ l : ℕ, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ γ : ℝ, 0 < γ ∧
+      ∀ N : ℕ, ∀ v ∈ (LinearMap.ker (parentHamiltonianES A (l + 1) N))ᗮ,
+        γ * ‖v‖ ≤ ‖parentHamiltonianES A (l + 1) N v‖ := by
+  obtain ⟨l, ε, m, δ, hl, hInj, _, _, _, _, hδ, hGap⟩ :=
+    exists_parentHamiltonianES_gap_of_isNormal hA
+  obtain ⟨γ, hγ, hAll⟩ := parentHamiltonianES_gap_of_eventual_gap A (l + 1) (2 * m) hδ hGap
+  exact ⟨l, hl, hInj, γ, hγ, hAll⟩
 
 end MPSTensor

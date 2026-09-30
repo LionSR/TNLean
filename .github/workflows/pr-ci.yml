@@ -23,6 +23,8 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'docbuild/**'
+      - 'scripts/check_docbuild_manifest.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -46,6 +48,7 @@ on:
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/latexindent'
+      - 'scripts/check_latexindent_formatting.sh'
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/test_blueprint_lean_sync.py'
       - 'scripts/paper_gap_leanid_sync.py'
@@ -70,6 +73,7 @@ on:
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_web.py'
+      - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
   pull_request:
@@ -93,6 +97,8 @@ on:
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
+      - 'docbuild/**'
+      - 'scripts/check_docbuild_manifest.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
@@ -110,6 +116,7 @@ on:
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
       - 'scripts/latexindent'
+      - 'scripts/check_latexindent_formatting.sh'
       - 'scripts/blueprint_lean_sync.py'
       - 'scripts/test_blueprint_lean_sync.py'
       - 'scripts/paper_gap_leanid_sync.py'
@@ -134,6 +141,7 @@ on:
       - 'scripts/test_tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_tenkz_equation_web.py'
+      - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_tenkz_peps_torus.py'
       - 'scripts/test_tenkz_index_routing.py'
   workflow_dispatch:
@@ -188,6 +196,8 @@ jobs:
               - 'scripts/check_oversized_lean_files.py'
               - 'scripts/lean_import_syntax.py'
               - 'scripts/test_lean_file_policies.py'
+              - 'docbuild/**'
+              - 'scripts/check_docbuild_manifest.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/lake_build_locked.sh'
@@ -205,6 +215,7 @@ jobs:
               - 'blueprint/.chktexrc'
               - 'blueprint/latexindent.yaml'
               - 'scripts/latexindent'
+              - 'scripts/check_latexindent_formatting.sh'
               - 'scripts/check_reader_facing_prose.py'
               - 'scripts/badge_utils.py'
               - 'scripts/write_badges.py'
@@ -215,6 +226,7 @@ jobs:
               - 'scripts/test_tenkz_blueprint_sweep.py'
               - 'scripts/test_tenkz_pic.py'
               - 'scripts/test_tenkz_equation_web.py'
+              - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_tenkz_peps_torus.py'
               - 'scripts/test_tenkz_index_routing.py'
             # Everything the paper-gap reference check reads: the notes,
@@ -285,6 +297,44 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/MatrixReciprocalSmul.lean
+
+      - name: Test unblocked power-sum coefficients
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/UnblockedPowerSumCoefficients.lean
+
+      - name: Test operator-closure power-sum coefficients
+        timeout-minutes: 2
+        run: >
+          lake env lean
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/OperatorClosurePowerSum.lean
+
+      - name: Test structure coefficients, cocycles, and boundary examples
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in ScalarThreeCocycleCyclicTwoExamples IsingCrossingCoefficients BNTCoefficientRescaling JordanBoundary; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
+
+      - name: Test example physical states and operators
+        timeout-minutes: 5
+        run: |
+          set -e
+          for example in ElementaryStates AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator; do
+            lake env lean \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "TNLeanTest/$example.lean"
+          done
 
       - name: Check changed Lean compilation times
         id: compilation-time
@@ -429,6 +479,11 @@ jobs:
           bash -n scripts/seed_lake_build.sh
           bash -n scripts/test_seed_lake_build.sh
 
+      # docbuild/ shares the root package directory, so its manifest must pin
+      # the same revisions or the weekly API docs build checks out stale ones.
+      - name: Check docbuild manifest against the root manifest
+        run: python3 scripts/check_docbuild_manifest.py --root .
+
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.
       - name: Run oversized-file guard
@@ -463,6 +518,38 @@ jobs:
           python3 scripts/check_numbered_lean_files.py
           --root .
           --base-ref HEAD^
+
+  inline-layout:
+    name: Check inline diagram semantics
+    needs: changes
+    if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install parser and browser
+        run: |
+          python3 -m pip install plasTeX==3.1 playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Test inline picture semantics
+        run: python3 scripts/test_tenkz_inline_web.py
+
+      - name: Diagnose full TeX system environment
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          extra-packages: texlive-fonts-extra texlive-publishers
+      - name: Check layout with TeX system dependencies
+        run: |
+          fc-match 'Times New Roman'
+          python3 scripts/test_tenkz_inline_web.py
+      - name: Diagnose full blueprint Python environment
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
+      - name: Check layout with blueprint Python dependencies
+        run: python3 scripts/test_tenkz_inline_web.py
 
   blueprint:
     name: Check blueprint compiles without errors
@@ -584,36 +671,29 @@ jobs:
           find blueprint/src -name '*.tex' -not -path '*/Packages/*' -print0 \
             | xargs -0 -r chktex -q -l blueprint/.chktexrc
 
-      # latexindent's -k mode remains nondeterministic on GitHub runners even
-      # at the pinned version (LionSR/TNLean#6878). Format temporary copies and
-      # compare bytes instead; -w mode is stable and leaves sources untouched.
+      # Formats temporary copies in parallel and compares bytes; see the
+      # script for why -w mode is used instead of -k.
       - name: Check LaTeX formatting (latexindent)
         if: env.TEX_CHANGED == 'true'
         timeout-minutes: 5
-        run: |
-          set -e
-          scripts/latexindent --version
-          tmpdir="$(mktemp -d)"
-          trap 'rm -rf "$tmpdir"' EXIT
-          status=0
-          index=0
-          while IFS= read -r f; do
-            candidate_dir="$tmpdir/$index"
-            index=$((index + 1))
-            mkdir "$candidate_dir"
-            candidate="$candidate_dir/$(basename "$f")"
-            cp -- "$f" "$candidate"
-            scripts/latexindent -w -s -l blueprint/latexindent.yaml "$candidate" > /dev/null
-            if ! cmp -s -- "$f" "$candidate"; then
-              echo "::warning file=$f::not formatted to blueprint/latexindent.yaml; run 'scripts/latexindent -l blueprint/latexindent.yaml -w -s \"$f\"' locally to fix"
-              status=1
-            fi
-          done < <(find blueprint/src -name '*.tex' -not -path '*/Packages/*')
-          exit $status
+        run: scripts/check_latexindent_formatting.sh
 
       - name: Build blueprint bibliography
         if: env.TEX_CHANGED == 'true'
         run: texra-blueprint bbl
+
+      # Reuse the pictures the last main build compiled (blueprint.yml saves
+      # them); a picture is named by the hash of its source, so only figures
+      # this branch edits are compiled again. Read only: branches never save.
+      - name: Restore tenkz picture cache
+        if: env.TEX_CHANGED == 'true'
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            blueprint/web/tenkz_svg
+            blueprint/src/.tenkz_svg_cache
+          key: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-${{ github.run_id }}
+          restore-keys: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-
 
       - name: Run texra-blueprint web and check for errors
         if: env.TEX_CHANGED == 'true'
@@ -652,9 +732,17 @@ jobs:
       - name: Test tenkz equation web layout
         if: env.TEX_CHANGED == 'true'
         run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.55.0
+          python3 -m pip install --disable-pip-version-check playwright==1.56.0
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
+
+      - name: Preserve failed blueprint render
+        if: failure() && env.TEX_CHANGED == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: blueprint-render-failure
+          path: blueprint/web
+          retention-days: 3
 
       # A zero exit status says the build ran, not that the pages read. This
       # opens every generated page and measures what a reader would meet.
@@ -677,7 +765,7 @@ jobs:
 
       - name: Check blueprint and Lean source stay in sync
         if: steps.lean-decls.outcome == 'success'
-        run: python3 scripts/blueprint_lean_sync.py --root . --ci
+        run: python3 scripts/blueprint_lean_sync.py --root . --ci --report-duplicate-tags
 
       - name: Fetch PR base ref for diff
         id: fetch-base-ref

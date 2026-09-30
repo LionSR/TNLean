@@ -1,7 +1,7 @@
 \subsection{Reverse comparison for boundary-crossing restrictions}\label{subsec:normal_boundary_closing_reverse}
 
-This subsection runs the comparison in the reverse direction: from equality of
-the two cyclic restrictions it recovers the first-letter product equation
+Conversely, equality of the two cyclic restrictions yields the first-letter
+product equation
 $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$ and the
 left-multiplied boundary comparison.
 
@@ -17,8 +17,6 @@ left-multiplied boundary comparison.
     $\Gamma_{L_0+1}(Y_{M+1-L_0}(\tau^-_\eta(\mu)))$.
     If these two restrictions are equal, then for every physical letter $j$,
     $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
-    Thus the first-letter restriction of the preceding equality is precisely the
-    displayed product equation.
 \end{lemma}
 
 \begin{proof}
@@ -63,7 +61,7 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
-    The preceding lemma gives
+    Lemma~\ref{lem:closure_property_boundary_first_products_restrictions} gives
     $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
     Multiplying on the left by $A^\alpha$ and on the right by $A^\sigma$
     gives the desired comparison.
@@ -93,7 +91,7 @@ left-multiplied boundary comparison.
 \begin{proof}
     \leanok
     The matrices $Y_i(\tau)$ give the local ground-space representations needed
-    in the preceding lemma. Once the preceding boundary-restriction equality is
+    in Lemma~\ref{lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}. Once that boundary-restriction equality is
     proved, it gives
     \begin{align}
         \Res^{\tau^+_\eta(\mu)}_{M,L_0+1}(\psi)
@@ -172,8 +170,8 @@ left-multiplied boundary comparison.
         R_j\Res^{\tau^-_\eta(\mu)}_{M+1-L_0,L_0+1}(\psi).
         \notag
     \end{align}
-    This is the one-letter product form of the local comparison corresponding to
-    \cite[lines~2078--2079]{Cirac2021Matrix}.
+    This provides the single-letter product form of the periodic-boundary
+    comparison in \cite[Section~IV.C, lines~2078--2079]{Cirac2021Matrix}.
 \end{lemma}
 
 \begin{proof}
@@ -434,9 +432,9 @@ left-multiplied boundary comparison.
         Y^{-}_{\tau^{-}_{\eta}(\mu)}
          & =
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu)).
-        \notag
+        \label{eq:boundary_restriction_matrix_id}
     \end{align}
-    Together with the preceding identifications,
+    Together with (\ref{eq:boundary_restriction_matrix_id}),
     Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space}
     gives, for every physical letter $j$,
     \begin{align}
@@ -447,6 +445,35 @@ left-multiplied boundary comparison.
     \end{align}
     Lemma~\ref{lem:wrapped_mirror_right_products_determine} then gives the
     desired equality of boundary matrices.
+\end{proof}
+
+\begin{theorem}[Change of cut on the full ring]
+    \label{thm:full_ring_boundary_change_of_cut}
+    \lean{MPSTensor.groundSpaceMap_mul_eq_of_cyclicTranslate_groundSpaceMap_eq}
+    \leanok
+    \uses{def:ground_space_map, def:parent_cyclic_translate_state}
+    Let $A$ be any tensor. If
+    \begin{align}
+        T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)
+         & =\Gamma_{L_0+1}(Y),
+        \notag
+    \end{align}
+    then $\Gamma_{L_0}(XA^j)=\Gamma_{L_0}(A^jY)$ for every physical letter $j$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:parent_cyclic_translate_append}
+    Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
+    Cyclic translation exchanges the two parts of the word, and cyclicity of the
+    trace gives
+    \begin{align}
+        \Gamma_{L_0}(XA^j)(\beta)
+         & =\tr(A^jA^\beta X)
+        =\tr(A^\beta A^jY)
+        =\Gamma_{L_0}(A^jY)(\beta).
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[One-step full-ring boundary comparison]
@@ -465,16 +492,14 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_cyclic_translate_append, thm:ground_space_map_injective_blk}
-    Evaluate the translated equality on a word $\beta j$, where $|\beta|=L_0$.
-    Cyclic translation exchanges the two parts of the word, and cyclicity of the
-    trace gives
+    \uses{thm:full_ring_boundary_change_of_cut, thm:ground_space_map_injective_blk}
+    Theorem~\ref{thm:full_ring_boundary_change_of_cut} gives
     \begin{align}
-        \Gamma_{L_0}(XA^j)(\beta)
-         & =\Gamma_{L_0}(A^jY)(\beta).
+        \Gamma_{L_0}(XA^j)
+         & =\Gamma_{L_0}(A^jY),
         \notag
     \end{align}
-    Injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
+    and injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
 \end{proof}
 
 \begin{theorem}[Full-ring boundary comparison]
@@ -531,12 +556,12 @@ left-multiplied boundary comparison.
 
 \subsection{Normal unique-ground-state consequences}\label{subsec:normal_unique_ground_state}
 
-In the injective case, for $N\ge2$ and $1<L\le N$, the chain ground space equals
-$\spn\{V^{(N)}(A)\}$, so the parent Hamiltonian has a unique ground state in
-that length range. In the normal case the same conclusion is the payoff of the
-section, given the boundary-crossing comparison and the length hypotheses
-$N\ge2$, $L_0+1\le N$, and $L_0<L\le N$. At equality, the full-ring
-change-of-cut theorem replaces the complementary-word comparison.
+For injective tensors with $N\ge2$ and $1<L\le N$, the chain ground space equals
+$\spn\{V^{(N)}(A)\}$, ensuring a unique ground state for the parent
+Hamiltonian. For normal tensors, uniqueness holds for $N\ge2$, $L_0+1\le N$, and
+$L_0<L\le N$ by combining the boundary-crossing comparison with the open-chain
+range reduction. In the minimal-ring case $N=L_0+1$, the full-ring change-of-cut
+theorem replaces the complementary-word comparison.
 
 \begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
@@ -614,9 +639,9 @@ change-of-cut theorem replaces the complementary-word comparison.
     \uses{def:chain_ground_space, def:l_blk_injective, def:has_unique_ground_state}
     If $D \ge 1$, $A$ is injective after blocking $L_0>0$ sites, and
     $L_0 < L \le N$, then the parent Hamiltonian of interaction range $L$ has
-    a unique periodic ground state. These inequalities already imply $N\ge2$
-    and $N\ge L_0+1$. Thus this strengthens the finite-size range $N\ge 2L_0$
-    printed in PGVWC07, Theorem~\texttt{uniqueGS}~\cite{PerezGarcia2007Matrix}.
+    a unique periodic ground state. These inequalities imply $N\ge2$ and
+    $N\ge L_0+1$, extending the finite-size range $N\ge 2L_0$ of
+    \cite[Theorem~10]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}

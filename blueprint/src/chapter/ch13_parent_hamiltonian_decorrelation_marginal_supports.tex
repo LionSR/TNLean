@@ -17,16 +17,13 @@
 \end{proof}
 
 
-Left and right absorption by the marginal support projector — for $\rho$
-positive semidefinite on $H_L\otimes H_R$ with $P_L$ the orthogonal
-projector onto the support of $\tr_R\rho$, the identities
-$(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$, which for
-$H_L=H_A\otimes H_X$ and $H_R=H_B$ are precisely the $P_{AX}$
-support-projector identities in \cite[Appendix~D.2, lines
-    2228--2235]{Cirac2016MPDO_arXiv} — are pure bipartite-operator facts with no
-tensor-network content, proved in the companion quantum-channel volume~\cite[``Left absorption by the marginal support projector'', ``Right absorption by the marginal support projector'', ``Partial trace over the left factor'']{QICLean2026Blueprint}. The
-partial trace over the left factor that they and the absorption theorems
-below are stated against is defined there as well.
+For $\rho \ge 0$ on $H_L\otimes H_R$ with $P_L$ the orthogonal projector
+onto the support of $\tr_R\rho$, the identities
+$(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$ provide
+the $P_{AX}$ support-projector identities in
+\cite[Appendix~D.2]{Cirac2016MPDO_arXiv} upon setting
+$H_L=H_A\otimes H_X$ and $H_R=H_B$, as developed in
+\cite{QICLean2026Blueprint}.
 
 \begin{theorem}[Hermiticity of the left partial trace]
     \label{thm:partial_trace_left_hermitian}
@@ -47,12 +44,8 @@ below are stated against is defined there as well.
 \end{proof}
 
 
-Left and right absorption by the right marginal support — for $\rho\geq0$
-and $P_R$ the support projector of $\tr_L\rho$, the identities
-$(\Id_L\otimes P_R)\rho=\rho$ and $\rho(\Id_L\otimes P_R)=\rho$ — are the
-same kind of generic bipartite-operator fact, proved in the companion
-quantum-channel volume~\cite[``Left absorption by the right marginal support'', ``Right absorption by the right marginal support'']{QICLean2026Blueprint} alongside the
-left-marginal absorption theorems above.
+Similarly, for the support projector $P_R$ of $\tr_L\rho$, one has
+$(\Id_L\otimes P_R)\rho=\rho$ and $\rho(\Id_L\otimes P_R)=\rho$.
 
 We now use the explicit tripartite indexing
 $H_A\otimes(H_X\otimes H_B)$. Reassociation identifies it with
@@ -67,16 +60,12 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     $R\in\{AX,XB,A,B\}$, the four lifts to
     $H_A\otimes(H_X\otimes H_B)$ are
     \begin{align}
-        \widehat M_{AX} & =M_{AX}\otimes\Id_B,
-        \notag                                  \\
-        \widehat M_{XB} & =\Id_A\otimes M_{XB},
-        \notag                                  \\
-        \widehat M_A    & =M_A\otimes\Id_{XB},
-        \notag                                  \\
-        \widehat M_B    & =\Id_{AX}\otimes M_B.
-        \notag
+        \widehat M_{AX} & =M_{AX}\otimes\Id_B, \label{eq:tripartite_lift_ax} \\
+        \widehat M_{XB} & =\Id_A\otimes M_{XB}, \notag                       \\
+        \widehat M_A    & =M_A\otimes\Id_{XB}, \notag                        \\
+        \widehat M_B    & =\Id_{AX}\otimes M_B. \label{eq:tripartite_lift_b}
     \end{align}
-    The first and fourth formulas use the canonical identification
+    Identities~(\ref{eq:tripartite_lift_ax}) and~(\ref{eq:tripartite_lift_b}) use the canonical identification
     $(H_A\otimes H_X)\otimes H_B\cong H_A\otimes(H_X\otimes H_B)$.
 \end{definition}
 
@@ -423,10 +412,12 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \begin{align}
         \widehat P_{XB}\widehat P_{AX}
          & =\widehat P_{XB}P\widehat P_{AX}
-        +\widehat P_{XB}(\Id-P)\widehat P_{AX} =P+0 =P.
+        +\widehat P_{XB}(\Id-P)\widehat P_{AX} \notag \\
+         & =P+0 =P,
         \notag
     \end{align}
-    Here the second equality uses the support-absorption identities and
+    where $\widehat P_{XB}P\widehat P_{AX}=P$ by the support-absorption identities and
+    $\widehat P_{XB}(\Id-P)\widehat P_{AX}=0$ by
     (\ref{eq:parent_support_complementary_zero}). The same calculation with
     the two factors reversed, using
     (\ref{eq:parent_reverse_support_complementary_zero}), gives
