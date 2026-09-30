@@ -13,8 +13,8 @@ import TNLean.MPS.Examples.GHZ
 
 For the tensor `ParityGraded.parA`, the number of occupied sites controls the
 physical parity, while the lengths of the runs between zero letters determine
-its periodic amplitudes. These are the statements `lem:asymex_parity_occupation`
-and `lem:asymex_parity_runs` in the supporting blueprint appendix. The tensor is
+its periodic amplitudes. These are the statements `thm:asymex_parity_occupation`
+and `thm:asymex_parity_runs` in the supporting blueprint appendix. The tensor is
 an example constructed in this development, as documented in `ParityGraded`.
 
 ## Main results
