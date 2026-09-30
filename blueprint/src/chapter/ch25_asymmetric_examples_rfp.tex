@@ -683,12 +683,9 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
 
 \begin{theorem}[Split compression of the one-label fixed point]
     \label{thm:asymex_one_label_compression}
-    % Principal declaration: P6Compression.oneLabel_isReduction.
-    \lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_isReduction,
-        P6Compression.oneLabel_left_mul_right_of_ne, P6Compression.oneLabel_z_eq,
-        P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder,
-        P6Compression.oneLabel_mul_right_eq_right_mul,
-        P6Compression.oneLabel_left_mul_eq_mul_left}
+    % Principal declaration: P6Compression.oneLabel_dim_eq.
+    \lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_z_eq,
+        P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder}
     \leanok
     \uses{def:asymex_one_label, thm:asym_multiblock}
     The stacked tensor $B$ has the block triangular form of
