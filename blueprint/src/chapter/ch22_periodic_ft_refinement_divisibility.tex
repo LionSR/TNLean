@@ -108,14 +108,15 @@
 
 \begin{theorem}[Step-orbit compression of a periodic tensor]
     \label{thm:periodic_prescribed_blocking_compression}
-    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition,
-        MPSTensor.adjoint_blockTensor_projection}
+    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
     \leanok
     \uses{thm:periodic_step_orbit_compression}
     If $A$ is periodic of period $m$ and $p\ge0$, there is a family of nonzero
     cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
-    $P_uA^i=A^iP_{u+1}$ for which the compression conclusions of
-    Theorem~\ref{thm:periodic_step_orbit_compression} hold.
+    $P_uA^i=A^iP_{u+1}$ for which the dimensions $D_\alpha$, isometries
+    $V_\alpha$, and left-canonical tensors $C_\alpha$ of
+    Theorem~\ref{thm:periodic_step_orbit_compression} exist, with the same
+    identities and the same MPV at every length.
 \end{theorem}
 
 \begin{proof}\leanok
