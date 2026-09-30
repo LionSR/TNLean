@@ -54,6 +54,12 @@ The W tensor precedes the general open-boundary definitions; its lower-bound
 proof discussion is unchanged. The CZY, group-cocycle, and clock introductions
 now state the trace boundary and link the proved operator and fusion properties,
 with the associator, normality, and anomaly-class limits explicit. A uniform
-opening property list for the remaining Chapter 25 sections is still to be written. Keep #8062 open until that pass is complete. Missing mathematics must
+opening property list now also covers the elementary GHZ, repeated-block and
+Jordan examples, the anomalous Z3 family, and the Z2-by-Z2 family, with the
+dressed-family detector restriction explicit. Fibonacci, its anomaly continuation, Ising, and the Bell-bond constructions
+now also link their property results. The remaining editorial check is the
+ordered presentation of the source tensor, boundary, and properties in
+Fibonacci and Ising, where the arithmetic conventions still precede the
+explicit tensors. Keep #8062 open until that pass is complete. Missing mathematics must
 remain attached to the issues above, not acquire new `leanok` tags through an
 editorial change.
