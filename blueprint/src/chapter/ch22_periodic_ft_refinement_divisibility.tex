@@ -69,6 +69,24 @@
     (\ref{eq:periodic_sector_rephasing_words}); summing it over $u$ gives the second.
 \end{proof}
 
+\begin{theorem}[Left canonicality under sector rephasing]
+    \label{thm:periodic_sector_rephasing_left_canonical}
+    \lean{MPSTensor.isLeftCanonical_sectorPhaseTensor}
+    \leanok
+    \uses{def:periodic_sector_rephasing}
+    Suppose $P_u^\dagger=P_u$, $P_uP_v=\delta_{uv}P_u$,
+    $\sum_uP_u=\Id$, and $|c_u|=1$. If $A$ is left canonical, then
+    $A'^i=\sum_uc_uP_uA^i$ is left canonical as well. Thus the rephasing
+    in the proof of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}
+    preserves trace preservation of a left-canonical block.
+\end{theorem}
+
+\begin{proof}\leanok
+    Put $U=\sum_uc_uP_u$. Orthogonality gives
+    $U^\dagger U=\sum_u|c_u|^2P_u=\Id$. Since $A'^i=UA^i$,
+    $\sum_i(A'^i)^\dagger A'^i=\sum_i(A^i)^\dagger U^\dagger UA^i=\Id$.
+\end{proof}
+
 \begin{theorem}[The tensor $C$ associated to a refinement witness]
     \label{thm:p_refinement_pullback_irreducible_form}
     \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}

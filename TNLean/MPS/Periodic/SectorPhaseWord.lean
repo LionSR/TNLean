@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Word
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import TNLean.MPS.Core.CanonicalNormalization
 
 /-!
 # Products of cyclically rephased tensor letters
@@ -18,13 +19,14 @@ projector convention `P u * A i = A i * P (u + 1)`.
 
 * `MPSTensor.mul_evalWord_sectorPhaseTensor`: the phase product in one sector.
 * `MPSTensor.evalWord_sectorPhaseTensor`: the sum over all sectors.
+* `MPSTensor.isLeftCanonical_sectorPhaseTensor`: unit phases preserve left canonicality.
 
-These identities allow arbitrary complex coefficients. Choosing unit phases
+The word identities allow arbitrary complex coefficients. Choosing unit phases
 with the prescribed products on step-`p` orbits is a separate part of the
 root construction in Theorem 4.1; it is not assumed or proved here.
 -/
 
-open scoped BigOperators
+open scoped BigOperators Matrix
 
 namespace MPSTensor
 
@@ -77,5 +79,29 @@ theorem evalWord_sectorPhaseTensor [NeZero m] (A : MPSTensor d D)
         (P u * Kraus.evalWord A w) := by
   simp only [← mul_evalWord_sectorPhaseTensor A P c hP hShift,
     ← Finset.sum_mul, hSum, Matrix.one_mul]
+
+/-- Unit-modulus sector phases preserve left-canonical normalization. This supplies
+trace preservation for the rephasing before `eq:Aprime-is-cPA` in arXiv:1708.00029,
+Theorem 4.1, when the original block is left canonical. -/
+theorem isLeftCanonical_sectorPhaseTensor (A : MPSTensor d D)
+    (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (c : Fin m → ℂ)
+    (hP : ∀ u v, P u * P v = if u = v then P u else 0)
+    (hHerm : ∀ u, (P u)ᴴ = P u) (hSum : ∑ u, P u = 1)
+    (hc : ∀ u, ‖c u‖ = 1) (hA : IsLeftCanonical A) :
+    IsLeftCanonical (sectorPhaseTensor A P c) := by
+  have hc' (u) : (starRingEnd ℂ) (c u) * c u = 1 := by
+    rw [← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq, hc u]
+    norm_num
+  have hU : (∑ u, c u • P u)ᴴ * (∑ u, c u • P u) = 1 := by
+    simp [mul_comm _ ((starRingEnd ℂ) _), Matrix.conjTranspose_sum,
+      Matrix.conjTranspose_smul, hHerm, Matrix.sum_mul, Matrix.mul_sum,
+      smul_smul, hP, hc', hSum]
+  have heq (i) : sectorPhaseTensor A P c i = (∑ u, c u • P u) * A i := by
+    simp [sectorPhaseTensor, Matrix.sum_mul]
+  have hi (i) : (sectorPhaseTensor A P c i)ᴴ * sectorPhaseTensor A P c i =
+      (A i)ᴴ * A i := by
+    rw [heq, Matrix.conjTranspose_mul, Matrix.mul_assoc,
+      ← Matrix.mul_assoc (∑ u, c u • P u)ᴴ, hU, Matrix.one_mul]
+  simpa only [IsLeftCanonical, Kraus.IsTP, hi] using hA
 
 end MPSTensor
