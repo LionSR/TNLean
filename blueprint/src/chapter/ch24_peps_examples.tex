@@ -1219,21 +1219,37 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     \label{def:peps_mps_g_isometric}
     \lean{TNLean.PEPS.regularAdjoint, TNLean.PEPS.regularAdjoint_mul,
         TNLean.PEPS.regularAdjoint_smul, TNLean.PEPS.mpsAdjointSiteMap,
-        TNLean.PEPS.mpsAdjointSiteMap_single, TNLean.PEPS.IsGIsometricMPS,
-        TNLean.PEPS.IsGIsometricMPS.isGInjective}
+        TNLean.PEPS.mpsAdjointSiteMap_single, TNLean.PEPS.IsGIsometricMPS}
     \leanok
     \uses{def:peps_mps_g_injective}
     A matrix product tensor $A$ with bond space $\mathbb{C}[G]$ is
     $G$-isometric if $L_gA^iL_g^{-1}=A^i$ for all $g$ and $i$ and
     $\mathcal{P}(A^\dagger)\mathcal{P}(A)=c\,\sigma$ for one constant $c>0$,
     where $\sigma$ is the twirl onto the commutant of the left-regular
-    representation. Then $c^{-1}\mathcal{P}(A^\dagger)$ is a left inverse of
-    $\mathcal{P}(A)$, so $A$ is $G$-injective. For $c=1$ this is the
-    condition $\mathcal{P}(A)^{-1}=\mathcal{P}(A^\dagger)$ of the source; the
-    constant absorbs the normalization of the tensor
+    representation. For $c=1$ this is the condition
+    $\mathcal{P}(A)^{-1}=\mathcal{P}(A^\dagger)$ of the source; the constant
+    absorbs the normalization of the tensor
     \cite[Definition~6.1]{Schuch2010PEPS},
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{definition}
+
+\begin{theorem}[$G$-isometric tensors are $G$-injective]%
+    \label{thm:peps_mps_g_isometric_injective}
+    \lean{TNLean.PEPS.IsGIsometricMPS.isGInjective}
+    \leanok
+    \uses{def:peps_mps_g_isometric, thm:peps_g_injective_left_inverse,
+        thm:peps_mps_g_injective_source_form}
+    A $G$-isometric matrix product tensor is $G$-injective for the left-regular
+    representation, with left inverse $c^{-1}\mathcal{P}(A^\dagger)$
+    \cite[Definition~6.1]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Invariance of $\mathcal{P}(A)$ under conjugation is equivalent to
+    $L_gA^iL_g^{-1}=A^i$, and
+    $c^{-1}\mathcal{P}(A^\dagger)\mathcal{P}(A)=\sigma$; the left-inverse form
+    of $G$-injectivity applies.
+\end{proof}
 
 \begin{lemma}[The left inverse for the regular representation]%
     \label{lem:peps_regular_left_inverse}
