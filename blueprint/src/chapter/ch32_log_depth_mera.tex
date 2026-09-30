@@ -22,7 +22,7 @@ in~\cite{gap:mswc24_tree_mera_scope}.
         MPSPreparation.BinaryMERA.state_apply}
     \leanok
     \uses{thm:ldp_tree_factorization}
-    Let $k\ge0$. A \emph{binary finite-range network} with $k+1$
+    Let $n,k\ge0$. A \emph{binary finite-range network} with $k+1$
     isometry layers consists of a unitary $u$ on $\C^D\otimes\C^D$, isometries
     $W_0,\dots,W_{k-1}\colon\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ and an isometry
     $W\colon\C^{D^2}\to\C^n\otimes\C^n$. Its tree map is
@@ -62,8 +62,17 @@ in~\cite{gap:mswc24_tree_mera_scope}.
 \end{lemma}
 \begin{proof}
     \leanok
-    A Kronecker power of an isometry is an isometry, and so is a product of
-    isometries, so induction on $k$ shows that $\mathcal W$ is an isometry.
+    For an isometry $W$ and isometries $\mathcal W_1$, $\mathcal W_2$,
+    \begin{align*}
+        (W^{\otimes m})^\dagger W^{\otimes m}
+         & =(W^\dagger W)^{\otimes m}=1,
+         &
+        (\mathcal W_1\mathcal W_2)^\dagger\mathcal W_1\mathcal W_2
+         & =\mathcal W_2^\dagger(\mathcal W_1^\dagger\mathcal W_1)\mathcal W_2
+        =1,
+    \end{align*}
+    and a regrouping of the sites is a permutation, so induction on $k$ gives
+    $\mathcal W^\dagger\mathcal W=1$.
     The pair $u\ket0\ket0$ is a unit vector because $u$ is unitary, so the
     product of pairs is a unit vector
     (Theorem~\ref{thm:prep_pair_product_norm}), and $\mathcal W^{\otimes M}$
@@ -91,9 +100,12 @@ in~\cite{gap:mswc24_tree_mera_scope}.
 \end{lemma}
 \begin{proof}
     \leanok
-    If a tensor $Y$ rotated by a matrix on its physical leg is injective, so
-    is $Y$, because the matrices of the rotated tensor are combinations of those
-    of $Y$. The two-site blocked tensor of an injective tensor is injective.
+    If a tensor $Y$ rotated by a matrix $W$ on its physical leg is injective,
+    so is $Y$: the rotated tensor has matrices $(WY)^i=\sum_jW_{ij}Y^j$, so
+    \begin{align*}
+        M_D(\C)=\operatorname{span}\{(WY)^i\}
+        \subseteq\operatorname{span}\{Y^j\}.
+    \end{align*} The two-site blocked tensor of an injective tensor is injective.
     Blocking $\mathcal B^{(1)}=V^{(1)}P_1$ twice gives $(V^{(1)})^{\otimes2}$
     applied to $T_1$ blocked twice
     (Theorem~\ref{thm:block_tensor_rotate_physical}), so the two-site blocked
@@ -105,26 +117,44 @@ in~\cite{gap:mswc24_tree_mera_scope}.
 
 \begin{definition}[The tree network of a tensor]
     \label{def:ldp_tree_mera}
-    \lean{MPSPreparation.treeMERA,
-        MPSPreparation.exists_disentangler_fixedPointPair}
+    \lean{MPSPreparation.treeMERA}
     \leanok
-    \uses{def:ldp_binary_mera, lem:ldp_tree_layers_isometries,
-        def:prep_pair_product_state, thm:prep_pair_norm,
-        lem:ldp_unitary_implementing_isometry}
+    \uses{def:ldp_binary_mera, lem:ldp_tree_layers_isometries}
     Let the two-site blocked tensor of $A$ be injective and let $u$ be a unitary
     on $\C^D\otimes\C^D$. The \emph{tree network} of $A$ with $k+1$ isometry
     layers is the binary finite-range network with isometries
-    $W=V^{(1)}$, $W_i=V^{(i+2)}$ for $0\le i<k$, and unitary $u$. For
-    $\rho\ge0$ with $\tr\rho=1$ there is a unitary $u$ with
-    $u\ket0\ket0=\ket\omega$, the pair of the fixed-point state.
+    $W=V^{(1)}$, $W_i=V^{(i+2)}$ for $0\le i<k$, and unitary $u$.
 \end{definition}
+
+\begin{lemma}[A unitary preparing the fixed-point pair]
+    \label{lem:ldp_tree_mera_disentangler}
+    \lean{MPSPreparation.exists_disentangler_fixedPointPair}
+    \leanok
+    \uses{def:prep_pair_product_state, thm:prep_pair_norm,
+        lem:ldp_unitary_implementing_isometry}
+    Let $D\ge1$ and let $\rho\ge0$ with $\tr\rho=1$. Then there is a unitary
+    $u$ on $\C^D\otimes\C^D$ with $u\ket0\ket0=\ket\omega$, the pair of the
+    fixed-point state.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The map $V\colon\C\to\C^D\otimes\C^D$, $1\mapsto\ket\omega$, satisfies
+    $V^\dagger V=\langle\omega|\omega\rangle=\tr\rho=1$
+    (Theorem~\ref{thm:prep_pair_norm}), so it is an isometry. An isometry
+    defined on the span of some computational basis vectors extends to a
+    unitary, as in the proof of
+    Lemma~\ref{lem:ldp_unitary_implementing_isometry}; applied to the basis
+    vector $\ket0\ket0$, this gives a unitary $u$ with
+    $u\ket0\ket0=V1=\ket\omega$.
+\end{proof}
 
 \begin{theorem}[The approximating state is a network state]
     \label{thm:ldp_approximating_state_tree_mera}
     \lean{MPSPreparation.approximatingMPVState_eq_state_treeMERA}
     \leanok
     \uses{def:ldp_tree_mera, def:ldp_approximating_state,
-        thm:ldp_tree_factorization, lem:ldp_approximating_state_unit_norm}
+        thm:ldp_tree_factorization, lem:ldp_approximating_state_unit_norm,
+        lem:ldp_tree_layers_isometries}
     Let the two-site blocked tensor of $A$ be injective, let $\rho\ge0$ with
     $\tr\rho=1$, and let $u$ be a unitary with $u\ket0\ket0=\ket\omega$. For
     $q=2^{k+1}$ and $M\ge1$, the approximating state
@@ -148,7 +178,7 @@ in~\cite{gap:mswc24_tree_mera_scope}.
         MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
     \leanok
     \uses{thm:ldp_approximating_state_tree_mera,
-        thm:ldp_approximation_error_normal, thm:ldp_log_threshold_error,
+        thm:ldp_approximation_error_normal, lem:ldp_log_threshold_error,
         def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let $0<t<1$
     bound the moduli of the eigenvalues of $\E_A$ other than $1$, with
@@ -190,7 +220,7 @@ in~\cite{gap:mswc24_tree_mera_scope}.
     count of layers up to a constant. From
     (\ref{eq:ldp_tree_mera_threshold}) and $M\le N$,
     $\log C+\log M-\log\varepsilon\le q/\xi$, so $CMe^{-q/\xi}\le\varepsilon$
-    by Lemma~\ref{thm:ldp_log_threshold_error}. For the count, write
+    by Lemma~\ref{lem:ldp_log_threshold_error}. For the count, write
     $x_k=\xi\log(CM/\varepsilon)+(k+1)\xi\log2$ for the left side of
     (\ref{eq:ldp_tree_mera_threshold}). It grows linearly in $k$ while
     $2^{k+1}$ grows exponentially, so some $k$ satisfies
