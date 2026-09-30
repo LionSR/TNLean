@@ -194,7 +194,7 @@ cohomology without introducing another quotient.
 
 Mathlib's low-degree comparison theorems currently place the coefficient ring and
 the acting group in the same universe. Consequently, the cocycle-bearing modules use
-`G : Type` throughout the migration to Mathlib group cohomology (tracker #8315, step #8316).
+`G : Type` throughout, matching the universe restriction of Mathlib group cohomology.
 -/
 
 set_option warn.classDefReducibility false in
