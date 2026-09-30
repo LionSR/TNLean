@@ -1173,7 +1173,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \lean{TNLean.Algebra.LSymbol.actionGaugeEquiv_of_bijective_smul,
         TNLean.Algebra.LSymbol.isCompatible_regular}
     \leanok
-    \uses{def:mpug_l_symbols,def:mpug_l_gauge,def:mpug_l_normalized}
+    \uses{def:mpug_l_symbols,def:mpug_l_gauge}
     Let $G$ act freely and transitively on a nonempty set $X$.
     Any two L-symbols $L_1,L_2$ compatible with the same three-cochain
     $\omega$ are related by an action-tensor gauge, with the fusion gauge
@@ -1247,7 +1247,9 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 \begin{proof}
     \leanok
     Compatibility at $(g,e,e)$ and $(e,e,g)$ gives
-    $L^x_{g,e}=L^x_{e,e}$ and $L^x_{e,g}=L^{g\cdot x}_{e,e}$.
+    $L^x_{g,e}=L^x_{e,e}/\omega(g,e,e)$ and
+    $L^x_{e,g}=\omega(e,e,g)L^{g\cdot x}_{e,e}$. Since $\omega$ is normalized,
+    these are $L^x_{g,e}=L^x_{e,e}$ and $L^x_{e,g}=L^{g\cdot x}_{e,e}$.
     The gauge formula then makes both identity-axis values equal to one.
     Compatibility at $(g,g,g)$ reduces to the stated sign relation.
 \end{proof}
