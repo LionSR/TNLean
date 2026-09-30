@@ -207,6 +207,49 @@ theorem IsNormalized.gauge {L : LSymbol G X} (hL : IsNormalized L)
   exact ⟨fun x g => by simp [hβ.2, hL.1, hγ x],
     fun x g => by simp [hβ.1, hL.2, hγ (g • x)]⟩
 
+/-- Compatibility at `(g,1,1)` gives
+`Lˣ_{g,1} = Lˣ_{1,1} / ω(g,1,1)`.
+This is arXiv:2502.20257, `eq:aux1`. -/
+theorem IsCompatible.apply_right_one {L : LSymbol G X}
+    {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) (g : G) :
+    L x g 1 = L x 1 1 / ω g 1 1 := by
+  have h := hL x g 1 1
+  simp only [mul_one, one_smul] at h
+  calc
+    L x g 1 = (ω g 1 1 * L x g 1 * L x g 1) /
+        (ω g 1 1 * L x g 1) := by simp [div_eq_mul_inv]
+    _ = (L x g 1 * L x 1 1) / (ω g 1 1 * L x g 1) := by rw [← h]
+    _ = L x 1 1 / ω g 1 1 := by
+      (apply Units.ext; push_cast; field_simp)
+
+/-- Compatibility at `(1,1,g)` gives
+`Lˣ_{1,g} = ω(1,1,g) L^{g • x}_{1,1}`.
+This is arXiv:2502.20257, `eq:aux2`. -/
+theorem IsCompatible.apply_left_one {L : LSymbol G X}
+    {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) (g : G) :
+    L x 1 g = ω 1 1 g * L (g • x) 1 1 := by
+  have h := hL x 1 1 g
+  simp only [one_mul] at h
+  apply (mul_right_cancel (b := L x 1 g))
+  simpa [mul_assoc] using h
+
+/-- An action-tensor gauge normalizes compatible L-symbols without changing a
+normalized three-cochain, as asserted in arXiv:2203.12563, lines 1830–1839. -/
+theorem IsCompatible.isNormalized_gauge {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (hω : ω.IsNormalized) :
+    IsNormalized (LSymbol.gauge (fun _ _ ↦ 1) (fun _ x ↦ L x 1 1) L) := by
+  apply (isNormalized_gauge_iff _ _ _).2
+  exact ⟨fun x g ↦ by simpa [hω.2.2] using hL.apply_right_one x g,
+    fun x g ↦ by simpa [hω.1] using hL.apply_left_one x g⟩
+
+/-- For an involution, the diagonal L-symbol changes along its block action by
+its diagonal three-cochain value. This gives the sign relations of
+arXiv:2203.12563, lines 1830–1839 and 1886. -/
+theorem IsCompatible.apply_involution {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (hn : IsNormalized L) (x : X) {g : G}
+    (hg : g * g = 1) : L x g g = ω g g g * L (g • x) g g := by
+  simpa only [hg, hn.1, hn.2, one_mul, mul_one] using hL x g g g
+
 end LSymbol
 
 end TNLean.Algebra

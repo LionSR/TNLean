@@ -1225,3 +1225,54 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Every value of $\omega_{111}$ is $\pm1$, so its inverse equals itself.
     The regular solution also proves existence.
 \end{proof}
+
+\begin{theorem}[Normalization and involution signs]
+    \label{thm:asymex_l_symbol_normalization}
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge,
+        TNLean.Algebra.LSymbol.IsCompatible.apply_involution}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    Let $L$ be compatible with a normalized three-cochain $\omega$ for an
+    action of $G$ on $X$. The action-tensor gauge
+    $\gamma_{g,x}=L^x_{e,e}$, with fusion gauge equal to one, makes $L$
+    normalized. For every normalized compatible $L$, every $x\in X$,
+    and every $g\in G$ with $g^2=e$, one has
+    $L^x_{g,g}=\omega(g,g,g)L^{g\cdot x}_{g,g}$.
+    These are the normalization and sign relations used in
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Compatibility at $(g,e,e)$ and $(e,e,g)$ gives
+    $L^x_{g,e}=L^x_{e,e}$ and $L^x_{e,g}=L^{g\cdot x}_{e,e}$.
+    The gauge formula then makes both identity-axis values equal to one.
+    Compatibility at $(g,g,g)$ reduces to the stated sign relation.
+\end{proof}
+
+\begin{theorem}[Diagonal L-symbols for the Klein-four representatives]
+    \label{thm:asymex_klein_l_symbol_signs}
+    \lean{TNLean.Algebra.LSymbol.apply_self_of_kleinCocycleFamily}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,def:mpug_l_symbols}
+    Let $L$ be normalized and compatible with $\omega_{pqr}$, with
+    $p,q,r\in\Z_2$. For $g=(u,v)\in\Z_2^2$ and every block $x$,
+    \begin{align}
+        \label{eq:asymex_klein_l_sign}
+        L^x_{g,g}=(-1)^{pu+qv+ruv}L^{g\cdot x}_{g,g}.
+    \end{align}
+    In particular, for the type-II representative $\omega_{001}$,
+    $L^x_{ab,ab}=-L^{ab\cdot x}_{ab,ab}$.
+    If $ab$ exchanges two blocks $x,y$, this is
+    $L^x_{ab,ab}=-L^y_{ab,ab}$, as in
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_l_symbol_normalization,def:asymex_klein_cocycle_family}
+    Every element of $\Z_2^2$ squares to the identity. Substitute
+    $\omega_{pqr}(g,g,g)=(-1)^{pu+qv+ruv}$ into
+    Theorem~\ref{thm:asymex_l_symbol_normalization}, using $u^2=u$ and
+    $v^2=v$ in $\Z_2$.
+\end{proof}
