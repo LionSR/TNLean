@@ -87,12 +87,11 @@ private theorem hasEigenvalue_adjoint_compressed_stepOrbit
       _ = P (e (a, k)) := by rw [hleft, hright]
   have hprod (k : Fin (m / m.gcd p)) :
       P (e (a, k)) * P (e (a, 0)) = if k = 0 then P (e (a, 0)) else 0 := by
-    by_cases hk : k = 0
-    · simpa [hk] using (hproj (e (a, 0))).2
-    · rw [ite_eq_right hk]
-      apply orthogonalProjection_mul_eq_zero_of_sum_eq_one P hproj hsum
-      intro he
-      exact hk (congrArg Prod.snd (e.injective he))
+    rw [orthogonalProjection_mul_eq_ite_of_sum_eq_one P hproj hsum]
+    simp only [Equiv.apply_eq_iff_eq, Prod.mk.injEq, true_and]
+    split_ifs with hk
+    · rw [hk]
+    · rfl
   apply hasEigenvalue_of_eigenvector_eq _ z⁻¹ (∑ k, z ^ k.val • v k)
   · exact map_cyclic_sum _ v hcycle z hz
   · intro hzero

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinStepOrbit
+import TNLean.Algebra.OrthogonalResolution
 import TNLean.MPS.CanonicalForm.CyclicSectors.CommutingProj
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Periodic.SectorLift
@@ -76,12 +77,7 @@ theorem stepOrbitProjection_mul_original
         P (Fin.stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m)) (b, k)) =
       if a = b then P (Fin.stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m)) (b, k))
       else 0 := by
-  have hmul (u v : Fin m) : P u * P v = if u = v then P u else 0 := by
-    by_cases huv : u = v
-    · subst v
-      simp only [ite_true, (hproj u).2]
-    · rw [ite_eq_right huv]
-      exact orthogonalProjection_mul_eq_zero_of_sum_eq_one P hproj hsum huv
+  have hmul := orthogonalProjection_mul_eq_ite_of_sum_eq_one P hproj hsum
   by_cases hab : a = b
   · subst b
     simp [stepOrbitProjection, Finset.sum_mul, hmul]

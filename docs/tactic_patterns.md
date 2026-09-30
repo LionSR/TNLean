@@ -2319,6 +2319,18 @@ abstracted — record why, so it is not re-proposed).
 
 ---
 
+### Orthogonal-resolution multiplication table — promoted
+- **Pattern:** split equality of two indices; use idempotence in the equal
+  case and `orthogonalProjection_mul_eq_zero_of_sum_eq_one` otherwise.
+- **Seen:** three occurrences in `stepOrbitProjection_mul_original`,
+  `hasEigenvalue_adjoint_compressed_stepOrbit`, and the private
+  `exists_root_of_orbit_phase`, in `StepOrbitSectors.lean`,
+  `BlockingEigenvalues.lean`, and `OrbitUnitary.lean` under
+  `TNLean/MPS/Periodic/` (2026-09-30).
+- **Abstraction:** `orthogonalProjection_mul_eq_ite_of_sum_eq_one` in
+  `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
+  table. All three consumers use it; no custom tactic is needed.
+
 ## Candidates
 
 ### Positive local terms with prescribed kernels
