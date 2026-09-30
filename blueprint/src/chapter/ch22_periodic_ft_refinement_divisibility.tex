@@ -775,7 +775,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_weighted_block_refinement}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_refinement}
     \leanok
-    If $A_k$ and $\bigoplus_{a=1}^{n_k}B_{k,a}$ have equal matrix product
+    If $A_k$ and $\bigoplus_{a=0}^{n_k-1}B_{k,a}$ have equal matrix product
     vectors at every length, then $\bigoplus_k\mu_k A_k$ and
     $\bigoplus_{k,a}\mu_k B_{k,a}$ do as well, for arbitrary complex
     weights $\mu_k$.
@@ -783,16 +783,22 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    Expand the trace of each block-diagonal product. The contribution from
-    $A_k$ is multiplied by $\mu_k^N$ at length $N$; substitute its refined
-    trace sum and enumerate the pairs $(k,a)$ in one finite list.
+    Expand the trace of each block-diagonal product and substitute the
+    refined vectors of each $A_k$. At every length $N$,
+    \begin{align}
+        V^{(N)}\Bigl(\bigoplus_k\mu_kA_k\Bigr)_\sigma
+         & =\sum_k\mu_k^NV^{(N)}(A_k)_\sigma
+        =\sum_k\sum_{a=0}^{n_k-1}\mu_k^NV^{(N)}(B_{k,a})_\sigma
+        =V^{(N)}\Bigl(\bigoplus_{k,a}\mu_kB_{k,a}\Bigr)_\sigma. \notag
+    \end{align}
+    The last equality reindexes the double sum by the pairs $(k,a)$.
 \end{proof}
 
 \begin{theorem}[Positive blocking of an irreducible-form presentation]
     \label{thm:periodic_irreducible_form_blocking}
     \lean{MPSTensor.IsIrreducibleForm.block,MPSTensor.IsIrreducibleForm.sum_dim_eq}
     \leanok
-    \uses{def:periodic_tensor}
+    \uses{def:periodic_tensor,def:irreducible_form}
     Suppose $A$ has the same matrix product vectors at every length,
     including zero, as $\bigoplus_k\mu_k A_k$, where $\mu_k>0$ and
     $A_k$ is left-canonical periodic of period $m_k$.
@@ -808,12 +814,19 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 \begin{proof}
     \leanok
     \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement}
-    Apply the prescribed-blocking decomposition separately to each $A_k$.
-    Blocking raises $\mu_k$ to the power $p$, and refinement preserves that
+    Apply the prescribed-blocking decomposition separately to each $A_k$,
+    giving blocks $B_{k,a}$ with $0\le a<\gcd(m_k,p)$. Blocking raises
+    $\mu_k$ to the power $p$, and refinement preserves that
     weight on every orbit block. The preceding theorem assembles the
     resulting vector identities. All new weights remain positive.
-    At length zero the matrix product vector is the trace of the identity,
-    so equality at that length gives equality of total dimensions.
+    At length zero every matrix product vector is the trace of the identity,
+    so, writing $D_{k,a}$ for the bond dimension of the block indexed by
+    $(k,a)$,
+    \begin{align}
+        D & =V^{(0)}\bigl(A^{[p]}\bigr)
+        =V^{(0)}\Bigl(\bigoplus_{k,a}\mu_k^pB_{k,a}\Bigr)
+        =\sum_{k,a}D_{k,a}. \notag
+    \end{align}
 \end{proof}
 
 
@@ -853,29 +866,33 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_unitary_orbit_root}
     \lean{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
     \leanok
-    \uses{def:periodic_tensor,thm:periodic_prescribed_blocking_compression}
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection,
+        thm:periodic_prescribed_blocking_compression}
     Let $A$ be left-canonical periodic of period $m$ and let $p>0$.
     Put $r=\gcd(m,p)$. The prescribed orbit blocks $C_a$, of period $m/r$,
-    admit a unitary $U$ such that
-    \[
-        A^{[p],i}=U\left(\bigoplus_{a=0}^{r-1} C_a^i\right)U^\dagger,
-        \qquad (UE_a)(UE_a)^\dagger=\widetilde P_a.
-    \]
+    admit a unitary $U$ such that, with $Q_a$ the step-orbit projections of
+    Definition~\ref{def:periodic_step_orbit_projection} and $E_a$ the
+    coordinate inclusions,
+    \begin{align}
+        (A^{[p]})^I     & =U\Bigl(\bigoplus_{a=0}^{r-1}C_a^I\Bigr)U^\dagger, \notag \\
+        (UE_a)(UE_a)^\dagger & =Q_a. \notag
+    \end{align}
     For every choice of $c_a$ with $c_a^{m/r}=1$, there is a left-canonical
     tensor $A'$ with the same physical and bond dimensions as $A$ such that
-    \[
-        A'^{[p],i}=U\left(\bigoplus_{a=0}^{r-1}c_a C_a^i\right)U^\dagger.
-    \]
+    \begin{align}
+        (A'^{[p]})^I & =U\Bigl(\bigoplus_{a=0}^{r-1}c_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
     The unitary and orbit blocks are chosen independently of the phases.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:periodic_unitary_resolution,thm:periodic_absorb_orbit_gauge}
+    \uses{lem:periodic_unitary_resolution,thm:periodic_absorb_orbit_gauge,
+        thm:periodic_prescribed_blocking_compression}
     Apply the preceding lemma to the orbit isometries. Conjugate the diagonal
     matrix with entries $c_a\mathbf 1_{D_a}$ by this unitary to obtain $Z$.
-    Since $UE_a$ is the original orbit isometry, $Z$ acts by $c_a$ on
-    $\widetilde P_a$. Absorbing these phases into the original cyclic sectors
+    Since $UE_a$ is the original orbit isometry,
+    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the original cyclic sectors
     gives $A'^{[p]}=ZA^{[p]}$, which is the stated weighted conjugation.
 \end{proof}
 
