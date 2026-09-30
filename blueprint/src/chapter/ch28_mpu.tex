@@ -11170,7 +11170,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₃Paper_sourceU_fourSpin_apply,
         MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply}
     \leanok
-    \uses{threeMPU, def:mpu_weighted_source_factors}
+    \uses{threeMPU, def:mpu_weighted_source_factors,
+        def:mpu_source_uv}
     For $d>0$, the two counterpropagating shift tensors have source factors
     with trace-one weight $\rho=d^{-2}\Id_{d^2}$. In the four-spin coordinates
     used above, their source gates are
@@ -11192,16 +11193,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factors in the identity-weight formulas.
 \end{proof}
 
-\begin{proposition}[Standard forms of the three shift MPUs]
-    \label{prop:threeMPU_standard_forms}
-    \lean{MPOTensor.shiftExampleU₁StandardForm,
-        MPOTensor.shiftExampleU₃StandardForm,
-        MPOTensor.shiftExampleU₂BlockedStandardForm,
-        MPOTensor.shiftExampleU₃BlockedStandardForm,
-        MPOTensor.shiftExampleU₁StandardForm_normalized,
+\begin{theorem}[Standard forms of the three shift MPUs]
+    \label{thm:threeMPU_standard_forms}
+    \lean{MPOTensor.shiftExampleU₁StandardForm_normalized,
         MPOTensor.shiftExampleU₃StandardForm_normalized,
         MPOTensor.shiftExampleU₂BlockedStandardForm_normalized,
-        MPOTensor.shiftExampleU₃BlockedStandardForm_normalized}
+        MPOTensor.shiftExampleU₃BlockedStandardForm_normalized,
+        MPOTensor.shiftExampleU₁StandardForm,
+        MPOTensor.shiftExampleU₃StandardForm,
+        MPOTensor.shiftExampleU₂BlockedStandardForm,
+        MPOTensor.shiftExampleU₃BlockedStandardForm}
     \leanok
     \uses{threeMPU, def:mpu_supplied_two_site_standard_form}
     Assume $d>0$. The three shift families have standard forms whose
@@ -11220,7 +11221,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $((1,2),(3,4))$. These are unitary gates with normalized half factors
     satisfying the open standard-form equation.
     % Source lines: paper_v2.tex 2002--2042.
-\end{proposition}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpu_source_weight, thm:threeMPU_normalized_source_gates,
@@ -11374,7 +11375,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{threeMPU2, prop:threeMPU_standard_forms,
+    \uses{threeMPU2, thm:threeMPU_standard_forms,
         def:mpu_source_weight, def:mpu_supplied_two_site_standard_form}
     The physical swap exchanges the two output indices of each tensor.
     For the first family, retain the identity family's half factors and
