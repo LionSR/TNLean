@@ -89,33 +89,55 @@ clauses of the general theorem now named in its `\uses`.
 - `python3 scripts/blueprint_lean_sync.py --ci` resolves all 8938 tagged
   declarations, 66 of them in the edited chapter file.
 
-## What is retained and what is deferred
+## Retained results and completed follow-up
 
 Retained here: every `_z_eq` and `_dim_eq`, which print the counts their entries
 assert; `IsingTwist.isingBondObject_remainder` and
 `IsingTwist.sectorAction_remainder`, which are example content, not projections.
 
-Deferred: a census of the same directory finds twenty-six further theorems of
-this shape, in twelve modules, and every one of them is tagged, by thirteen
-entries across the other `ch25_asymmetric_examples*` chapter files. They are
-`czxPlusIdentity_isReduction` and `czxPlusIdentity_left_mul_right_of_ne`;
-`fibonacci_isReduction` and `fibonacci_left_mul_right_of_ne`;
-`ghzSectors_isReduction`; `kwSquare_isReduction` and
-`kwSquare_left_mul_right_of_ne`; `plus_isReduction`; `kwGHZ_isReduction`;
-`oneLabel_isReduction`, `oneLabel_left_mul_right_of_ne`,
-`oneLabel_mul_right_eq_right_mul` and `oneLabel_left_mul_eq_mul_left`;
-`parityGraded_isReduction` and `parityGraded_left_mul_right_of_ne`;
-`repeatedBlock_isReduction`; `dimer_isReduction`,
-`dimer_left_mul_right_of_ne`, `dimer_mul_right_eq_right_mul` and
-`dimer_left_mul_eq_mul_left`; `defectSquare_isReduction` and
-`defectSquare_left_mul_right_of_ne`; `uu_isReduction` and `dd_isReduction`;
-`ud_isReduction` and `du_isReduction`. Those modules are under active
-development in queued work, so the removals and retags are recorded as a
-separate item rather than taken here. Four entries —
-`thm:asymex_ghz_compression`, `thm:asymex_repeated_compression`,
-`thm:asymex_kw_plus` and `thm:asymex_kw_ghz` — name such a wrapper as their
-principal declaration, so each needs a surviving declaration named in its place
-when its module is treated.
+The follow-up in PR #8402 removes the following 22 declarations. Each
+replacement is dot notation for the corresponding generic
+`MPSTensor.MultiBlockCompression` theorem on the retained datum; slot
+arguments are unchanged. The two one-label intertwining results still use
+the retained zero-remainder proof. No compatibility aliases are introduced.
+
+| Removed declaration | Generic replacement on the retained datum |
+|---|---|
+| `CZXCompression.czxPlusIdentity_isReduction` | `CZXCompression.czxPlusIdentity_compression.isReduction` |
+| `CZXCompression.czxPlusIdentity_left_mul_right_of_ne` | `CZXCompression.czxPlusIdentity_compression.left_mul_right_of_ne` |
+| `FibonacciCompression.fibonacci_isReduction` | `FibonacciCompression.fibonacci_compression.isReduction` |
+| `FibonacciCompression.fibonacci_left_mul_right_of_ne` | `FibonacciCompression.fibonacci_compression.left_mul_right_of_ne` |
+| `MPSTensor.ghzSectors_isReduction` | `MPSTensor.ghzSectors_compression.isReduction` |
+| `KWExample.kwSquare_isReduction` | `KWExample.kwSquare_compression.isReduction` |
+| `KWExample.kwSquare_left_mul_right_of_ne` | `KWExample.kwSquare_compression.left_mul_right_of_ne` |
+| `KWExample.plus_isReduction` | `KWExample.plusCompression.isReduction` |
+| `KWExample.kwGHZ_isReduction` | `KWExample.kwGHZCompression.isReduction` |
+| `P6Compression.oneLabel_isReduction` | `P6Compression.oneLabelCompression.isReduction` |
+| `P6Compression.oneLabel_left_mul_right_of_ne` | `P6Compression.oneLabelCompression.left_mul_right_of_ne` |
+| `P6Compression.oneLabel_mul_right_eq_right_mul` | `P6Compression.oneLabelCompression.mul_right_eq_right_mul oneLabel_remainder` |
+| `P6Compression.oneLabel_left_mul_eq_mul_left` | `P6Compression.oneLabelCompression.left_mul_eq_mul_left oneLabel_remainder` |
+| `ParityGraded.parityGraded_isReduction` | `ParityGraded.parityGraded_compression.isReduction` |
+| `ParityGraded.parityGraded_left_mul_right_of_ne` | `ParityGraded.parityGraded_compression.left_mul_right_of_ne` |
+| `MPSTensor.repeatedBlock_isReduction` | `MPSTensor.repeatedBlock_compression.isReduction` |
+| `Z3Anomalous.defectSquare_isReduction` | `Z3Anomalous.defectSquare_compression.isReduction` |
+| `Z3Anomalous.defectSquare_left_mul_right_of_ne` | `Z3Anomalous.defectSquare_compression.left_mul_right_of_ne` |
+| `Z3Anomalous.uu_isReduction` | `Z3Anomalous.uu_compression.isReduction` |
+| `Z3Anomalous.dd_isReduction` | `Z3Anomalous.dd_compression.isReduction` |
+| `Z3Anomalous.ud_isReduction` | `Z3Anomalous.ud_compression.isReduction` |
+| `Z3Anomalous.du_isReduction` | `Z3Anomalous.du_compression.isReduction` |
+
+The four `dimer_*` wrappers in the historical 26-declaration census are
+not part of this diff and are already absent from the current tree. The live
+parametrized `dimerFusion_*` family remains. The 22 names above are the exact
+removed-theorem inventory of this follow-up, not a deferred-work list.
+
+The affected example nodes now tag their compression data and retain their
+numerical and remainder results. The four Z3 anomaly uses of `uu_isReduction`,
+`dd_isReduction`, `ud_isReduction`, and `du_isReduction` now invoke the generic
+field lemma on their respective data with `oneSlotMem`. A scan of Lean source
+and blueprint tags finds no remaining reference to any of the 22 removed names.
+Full Lean, blueprint rendering/browser, import, policy, and timing checks passed
+on the implementation head `37d765e77`; this follow-up changes only its audit.
 
 Excluded from that count and not proposed: the
 `AnomalousCondensationZ2Z2NonSplit` statements, whose file is owned by other

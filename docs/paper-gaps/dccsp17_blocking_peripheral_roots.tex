@@ -8,11 +8,11 @@
 \date{2026-09-30}
 \begin{document}
 \maketitle
-\gapnote{clarification}{resolved}
+\gapnote{local-correction}{resolved}
 
 \section{The printed expression}
 The proof of Lemma~6 in~\cite{DeLasCuevas2017Irreducible}, at
-\path{Papers/1708.00029/main.tex:452--456}, writes the peripheral spectrum
+\path{Papers/1708.00029/main.tex:451}, writes the peripheral spectrum
 of $\mathcal E_A^p$ as $\{\omega^l:0\leq l<m/r\}$, where
 $\omega=e^{2\pi i/m}$ and $r=\gcd(m,p)$. The exponent is missing the
 factor $p$. Throughout this calculation $m,p>0$.
@@ -31,18 +31,21 @@ is $\{1,-1\}$. This is a correction to the displayed description of the
 roots, not a change to the period $m/r$ asserted in the lemma.
 
 \section{Formal statement}
-\leanid{MPSTensor.peripheralEigenvalues_blockTensor} proves the spectral
-mapping identity for every tensor and positive blocking length.
-\leanid{MPSTensor.IsPeriodic.peripheral_blockTensor} identifies the resulting
-roots for a periodic tensor. Both are in
-\doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.
-The full decomposition is assembled in
-\leanid{MPSTensor.IsPeriodic.exists_periodic_stepOrbit_decomposition}, in
-\doclink{TNLean/MPS/Periodic/BlockingDecomposition.lean}. It derives the cyclic
-projections, constructs the $\gcd(m,p)$ nonzero compressed blocks, and proves
-irreducibility, left canonicality, and exact period $m/\gcd(m,p)$ for each.
-The isometries, total dimension, and equality of matrix product vectors are
-retained.
+The spectral mapping identity holds for every tensor and every positive
+blocking length.\footnote{Formal declaration:
+    \leanid{MPSTensor.peripheralEigenvalues_blockTensor}, in
+    \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
+For a periodic tensor of period $m$, the peripheral spectrum of
+$\mathcal E_A^p$ is exactly the set of $q$-th roots of unity.\footnote{Formal
+    declaration: \leanid{MPSTensor.IsPeriodic.peripheral_blockTensor}, in
+    \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
+The full decomposition derives the cyclic projections, constructs the
+$\gcd(m,p)$ nonzero compressed blocks, and proves irreducibility, left
+canonicality, and exact period $m/\gcd(m,p)$ for each; the isometries, total
+dimension, and equality of matrix product vectors are retained.\footnote{Formal
+    declaration:
+    \leanid{MPSTensor.IsPeriodic.exists_periodic_stepOrbit_decomposition}, in
+    \doclink{TNLean/MPS/Periodic/BlockingDecomposition.lean}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

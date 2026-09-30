@@ -23,6 +23,10 @@ conclusion of arXiv:1708.00029, Lemma `lem:blocking-arbitrary`.
 ## Main results
 
 * `IsPeriodic.adjoint_pow_fixed_iff_gcd`: the fixed space depends only on the gcd.
+* `IsPeriodic.adjoint_pow_fixed_of_pow_fixed`: a fixed point of a positive power
+  of the adjoint transfer map is fixed by its `m`-th power.
+* `sum_adjoint_pow_stepOrbitProjection`: the adjoint iterates of one step-orbit
+  projection resolve the identity.
 * `IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection`: supported fixed-point rigidity.
 * `IsPeriodic.isIrreducibleFamily_compressed_stepOrbit`: the compressed blocks are irreducible.
 -/
