@@ -115,19 +115,21 @@
     cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
     $P_uA^i=A^iP_{u+1}$ for which the compression conclusions of
     Theorem~\ref{thm:periodic_step_orbit_compression} hold. If $p>0$, every
-    resulting block satisfies
-    $\operatorname{spec}_{\mathrm{per}}(\E_{C_\alpha})
-        =\{z\in\C:z^{m/\gcd(m,p)}=1\}$.
+    resulting block is periodic of period $m/\gcd(m,p)$.
+    This is the prescribed-blocking conclusion of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum}
+    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum,thm:periodic_compressed_irreducible}
     Take the cyclic spectral projections, with their indices negated to give
     $P_uA^i=A^iP_{u+1}$. No projection vanishes: the cyclic adjoint-transfer
     relation would then force all projections to vanish, contradicting their
     sum being $\Id_D$. Apply Theorem~\ref{thm:periodic_step_orbit_compression}.
     For $p>0$, Theorem~\ref{thm:periodic_compressed_exact_spectrum} identifies
-    each block's peripheral spectrum.
+    each block's peripheral spectrum, and
+    Theorem~\ref{thm:periodic_compressed_irreducible} gives irreducibility.
+    Together with left canonicality, these prove periodicity.
 \end{proof}
 
 \begin{theorem}[Peripheral roots after positive blocking]
@@ -220,6 +222,76 @@
     Given $\lambda^q=1$, choose $z=\overline{\lambda}^{-1}$.
     The adjoint has eigenvalue $\overline{\lambda}$, so $\E_C$ has
     eigenvalue $\lambda$. Its modulus is one.
+\end{proof}
+
+\begin{theorem}[Fixed spaces of positive adjoint powers]
+    \label{thm:periodic_adjoint_fixed_gcd}
+    \lean{MPSTensor.IsPeriodic.adjoint_pow_fixed_of_pow_fixed,
+        MPSTensor.IsPeriodic.adjoint_pow_fixed_iff_gcd}
+    \leanok
+    Let $A$ be periodic of period $m$, let $p>0$, and write
+    $F=\E_A^*$ and $r=\gcd(m,p)$. If $F^p(X)=X$, then $F^m(X)=X$.
+    Moreover, $F^p(X)=X$ if and only if $F^r(X)=X$.
+\end{theorem}
+
+\begin{proof}\leanok
+    On $S=\ker(F^p-1)$, the restriction of $F$ is annihilated by the
+    separable polynomial $t^p-1$, and hence is diagonalizable.
+    Each eigenvalue has modulus one and therefore is an $m$th root
+    of unity. Thus $F^m$ is the identity on $S$.
+    A point of periods $m$ and $p$ also has period $r$; conversely,
+    $r\mid p$ gives the other implication.
+\end{proof}
+
+\begin{theorem}[Fixed-point rigidity on one orbit of sectors]
+    \label{thm:periodic_orbit_fixed_rigidity}
+    \lean{MPSTensor.sum_adjoint_pow_stepOrbitProjection,
+        MPSTensor.IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    Let $A$ be periodic of period $m$, let $p>0$, and put $r=\gcd(m,p)$.
+    Suppose $P_u$ are orthogonal projections summing to $\Id_D$ with
+    $P_uA^i=A^iP_{u+1}$. Write $F=\E_A^*$ and fix $\alpha<r$.
+    Then $\sum_{j=0}^{r-1}F^j(Q_\alpha)=\Id_D$.
+    If $F^p(X)=X$ and $Q_\alpha X=X$, there is $c\in\C$ such that
+    $X=cQ_\alpha$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates}
+    The projections $R_j=F^j(Q_\alpha)$, for $0\le j<r$, are pairwise
+    orthogonal and sum to $\Id_D$, since their cyclic-sector indices
+    partition $\Z_m$. The letter relation gives
+    $F(P_uY)=P_{u+1}F(Y)$, so $R_jF^j(X)=F^j(X)$.
+    By Theorem~\ref{thm:periodic_adjoint_fixed_gcd}, $F^r(X)=X$.
+    Thus $S=\sum_{j=0}^{r-1}F^j(X)$ is fixed by the irreducible unital
+    map $F$, and $S=c\Id_D$. Orthogonality gives
+    $Q_\alpha S=X=cQ_\alpha$.
+\end{proof}
+
+\begin{theorem}[Irreducibility of each compressed orbit block]
+    \label{thm:periodic_compressed_irreducible}
+    \lean{MPSTensor.IsPeriodic.isIrreducibleFamily_compressed_stepOrbit}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    Let $A$ be periodic of period $m$, let $p>0$, and let $P_u$ be
+    orthogonal projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
+    Fix $\alpha<\gcd(m,p)$ and an isometry $V$ with
+    $VV^\dagger=Q_\alpha$. The compressed tensor
+    $C^I=V^\dagger(A^{[p]})^IV$ is irreducible.
+    This supplies the irreducibility assertion in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_orbit_fixed_rigidity}
+    Let $R$ be an invariant orthogonal projection for $\E_C^*$.
+    The projection $L=VRV^\dagger$ has invariant corner under
+    $F^p$, where $F=\E_A^*$. The faithful invariant state of $\E_A$
+    implies $F^p(L)=L$. Since $Q_\alpha L=L$, fixed-point rigidity
+    gives $L=cQ_\alpha$, and compression gives $R=c\Id$.
+    Idempotence forces $R=0$ or $R=\Id$. Irreducibility is preserved
+    when passing between a Kraus family and its adjoint family.
 \end{proof}
 
 \begin{theorem}[Orbit roots as consecutive products]
