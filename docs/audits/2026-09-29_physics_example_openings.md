@@ -41,7 +41,7 @@ paper merely because their physical target is familiar.
 | Flagged Bell bonds (same file) | Constructed controlled flip and even-parity flag; source of flag factor identified. | Separate physical-state and fixed-point-map statements; retain distinction between positivity, normalization and fixed-point identities. |
 | One-label and dimer vertical tensors (same file) | Derived vertical components of the displayed constructions; matrices and inherited periodic closure stated. | `thm:asymex_one_label_normal`, `thm:asymex_dimer_normal` and their compression entries; general length-dependent classification not asserted. |
 
-## Remaining editorial work for #8062
+## Editorial changes and validation for #8062
 
 The source relations now present on main should replace the stale list of known
 missing bridges in the issue. The changes accompanying this audit expose the
@@ -64,8 +64,17 @@ now also link their property results. The Fibonacci and Ising source tensor defi
 arithmetic conventions; quantum dimensions are stated at first use, followed
 by the source-to-block relation, trace boundary, and property links.
 A four-page XeLaTeX excerpt of the reordered Fibonacci and Ising openings
-was visually checked: no clipping or overfull boxes. The excerpt does not
-resolve full-document cross-references. Full rendering and a final review
-of the four opening requirements remain before #8062 can close. Keep #8062 open until that pass is complete. Missing mathematics must
-remain attached to the issues above, not acquire new `leanok` tags through an
-editorial change.
+was visually checked: no clipping or overfull boxes. A full `texra-blueprint web`
+run with the generated bibliography subsequently completed successfully. Browser
+inspection confirmed the Fibonacci and Ising openings render their source tensors
+before the arithmetic conventions, with readable formulas and resolved citations.
+All 119 cross-references added by this branch have static targets in the generated
+HTML. This is an opening-link check, not a claim that every equation anchor in the
+whole blueprint has been independently checked in the browser.
+
+The completed full render covers `324336209`; the subsequent source edits in
+`91784c878` move the Kitaev boundary formula, remove the early repeated
+Majumdar--Ghosh property paragraph, and qualify the clock heading. Their source
+synchronization, formatting, and prose checks pass. Final CI on those edits and
+integration remain before #8062 can close. Missing mathematics stays attached to
+the issues above and receives no new `leanok` tags through this editorial change.
