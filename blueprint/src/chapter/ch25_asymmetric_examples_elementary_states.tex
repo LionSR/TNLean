@@ -193,9 +193,8 @@ Theorem~\ref{thm:asymex_ghz_state}.
 
 \begin{theorem}[Compression of the two sectors]
     \label{thm:asymex_ghz_compression}
-    % Principal declaration: MPSTensor.ghzSectors_isReduction.
-    \lean{MPSTensor.ghzSectors_compression, MPSTensor.ghzSectors_isReduction,
-        MPSTensor.ghzSectors_dim_eq}
+    % Principal declaration: MPSTensor.ghzSectors_dim_eq.
+    \lean{MPSTensor.ghzSectors_compression, MPSTensor.ghzSectors_dim_eq}
     \leanok
     \uses{def:asymex_ghz, thm:asym_multiblock}
     The source of Definition~\ref{def:asymex_ghz} carries the block
@@ -410,9 +409,8 @@ $\tr(B^w)=2\tr(A^w)$ that proves the factor two in~(\ref{eq:asymex_repeated_ampl
 
 \begin{theorem}[Compression onto the two copies]
     \label{thm:asymex_repeated_compression}
-    % Principal declaration: MPSTensor.repeatedBlock_isReduction.
-    \lean{MPSTensor.repeatedBlock_compression, MPSTensor.repeatedBlock_isReduction,
-        MPSTensor.repB_trace_evalWord_eq_two_mul}
+    % Principal declaration: MPSTensor.repeatedBlock_dim_eq.
+    \lean{MPSTensor.repeatedBlock_compression, MPSTensor.repB_trace_evalWord_eq_two_mul}
     \leanok
     \uses{def:asymex_repeated, thm:asym_multiblock}
     The source of Definition~\ref{def:asymex_repeated} carries the block

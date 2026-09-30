@@ -34,7 +34,7 @@ slots.
   multi-block trace theorem (`MultiBlockTrace`) with four target slots and three zero slots.
 * `CZXCompression.czxPlusIdentity_trace_evalWord`: the word-trace identity
   `O_L² = (1 + (-1)^L) id + 2 U_L`.
-* `CZXCompression.czxPlusIdentity_isReduction`: the biorthogonal compression pair of each of
+* `CZXCompression.czxPlusIdentity_compression`: the biorthogonal compression pair of each of
   the four slots.
 * `CZXCompression.czxPlusIdentity_dim_eq`: the dimension count `9 = 1 + 1 + 2 + 2 + 3`.
 * `CZXCompression.czxPlusIdentity_evalWord_remainder_eq_zero`: the remainder of the
@@ -359,18 +359,6 @@ theorem czxPlusIdentity_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
       (-1 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord identityMPS w) := hneg identityMPS
   rw [h, h0, h1, h2, h3]
   ring
-
-/-- **Biorthogonal compression onto each of the four slots of Example E** (P5 note,
-Theorem 7.7(iv)–(v), for `ex:p5ft-oscillating`). -/
-theorem czxPlusIdentity_isReduction (s : {s // s ∈ plusSlots}) :
-    IsReduction czxPlusIdentity (plusTargets s.1) (czxPlusIdentity_compression.left s)
-      (czxPlusIdentity_compression.right s) :=
-  czxPlusIdentity_compression.isReduction s
-
-/-- Two distinct slots of Example E are biorthogonal (P5 note, Theorem 7.7(iv)). -/
-theorem czxPlusIdentity_left_mul_right_of_ne {s t : {s // s ∈ plusSlots}} (h : s ≠ t) :
-    czxPlusIdentity_compression.left s * czxPlusIdentity_compression.right t = 0 :=
-  czxPlusIdentity_compression.left_mul_right_of_ne h
 
 /-- **The dimension count of Example E**: `9 = 1 + 1 + 2 + 2 + 3` (P5 note,
 Theorem 7.7(vii)). -/

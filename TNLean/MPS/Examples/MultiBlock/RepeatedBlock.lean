@@ -37,7 +37,7 @@ source.
   `repB` onto the two copies of `repA`.
 * `MPSTensor.repB_trace_evalWord_eq_two_mul`: the word-trace identity for `repB`, specializing
   `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum`.
-* `MPSTensor.repeatedBlock_isReduction`: the biorthogonal compression pair for each copy.
+* `MPSTensor.repeatedBlock_compression`: the biorthogonal compression pair for each copy.
 * `MPSTensor.not_gaugeEquiv_directSum_repA`: no invertible gauge conjugates `repB` into the
   direct sum `A ⊕ A`.
 -/
@@ -118,12 +118,6 @@ theorem repB_trace_evalWord_eq_two_mul (w : List (Fin 2)) (hw : w ≠ []) :
   have h := repeatedBlock_compression.trace_evalWord_eq_sum w hw
   simp only [repC, Fin.sum_univ_two] at h
   rwa [← two_mul] at h
-
-/-- **Biorthogonal compression of each copy out of `repB`.** -/
-theorem repeatedBlock_isReduction (s : {s // s ∈ RepS}) :
-    IsReduction repB (repC s.1) (repeatedBlock_compression.left s)
-      (repeatedBlock_compression.right s) :=
-  repeatedBlock_compression.isReduction s
 
 /-- **The symmetric conclusion is false.** No invertible gauge conjugates `repB` into the direct
 sum `A ⊕ A`: the first diagonal block of that direct sum, coming from `repA 0 = (1)`, is the

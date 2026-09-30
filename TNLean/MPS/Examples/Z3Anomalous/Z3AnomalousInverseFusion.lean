@@ -44,7 +44,7 @@ identities of the representation at every positive length: `U U† = U† U = 1`
 
 * `Z3Anomalous.ud_trace_evalWord`, `Z3Anomalous.du_trace_evalWord`: the word-trace form of the
   fusion rules `U U† = 1` and `U† U = 1`.
-* `Z3Anomalous.ud_isReduction`, `Z3Anomalous.ud_left_eq`, `Z3Anomalous.ud_right_eq` and their
+* `Z3Anomalous.ud_compression`, `Z3Anomalous.ud_left_eq`, `Z3Anomalous.ud_right_eq` and their
   `du` siblings: the explicit biorthogonal compression pairs.
 * `Z3Anomalous.ud_evalWord_remainder_eq_zero`, `Z3Anomalous.ud_remainder_mul_ne_zero` and their
   `du` siblings: the remainders are nilpotent of order exactly three.
@@ -223,12 +223,6 @@ theorem ud_trace_evalWord (w : List (Fin 9)) (hw : w ≠ []) :
       Matrix.trace (Kraus.evalWord identityMPS w) := by
   have h := ud_compression.trace_evalWord_eq_sum w hw
   rwa [Finset.sum_singleton] at h
-
-/-- **Biorthogonal compression of `U ⊗ U† → δ`** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem ud_isReduction :
-    IsReduction udStack identityMPS (ud_compression.left oneSlotMem)
-      (ud_compression.right oneSlotMem) :=
-  ud_compression.isReduction oneSlotMem
 
 /-- The compression pair of `U ⊗ U† → δ` is the recorded one (data file §2.2): `V` is the column
 block of the inverse gauge carrying the target and `W` the row block of the gauge. -/
@@ -484,12 +478,6 @@ theorem du_trace_evalWord (w : List (Fin 9)) (hw : w ≠ []) :
       Matrix.trace (Kraus.evalWord identityMPS w) := by
   have h := du_compression.trace_evalWord_eq_sum w hw
   rwa [Finset.sum_singleton] at h
-
-/-- **Biorthogonal compression of `U† ⊗ U → δ`** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem du_isReduction :
-    IsReduction duStack identityMPS (du_compression.left oneSlotMem)
-      (du_compression.right oneSlotMem) :=
-  du_compression.isReduction oneSlotMem
 
 /-- The compression pair of `U† ⊗ U → δ` is the recorded one (data file §2.3): `V` is the column
 block of the inverse gauge carrying the target and `W` the row block of the gauge. -/

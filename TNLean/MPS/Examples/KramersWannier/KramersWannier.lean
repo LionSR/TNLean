@@ -70,7 +70,6 @@ equation acts on the bosonic Ising chain.
 * `KWExample.kwSquare_compression`: the multi-block asymmetric compression datum, with `z = 0`.
 * `KWExample.kwSquare_trace_evalWord`: the word-trace identity
   `tr(D~²)^w = 2^{|w|} (tr(T^w) + tr((η T)^w))`.
-* `KWExample.kwSquare_isReduction`: biorthogonal compression onto each of the two slots.
 * `KWExample.kwSquare_dim_eq`: the dimension count `4 = 2 + 2 + 0`.
 * `KWExample.kwSquare_remainder_eq_zero`: the remainder of the compression vanishes identically
   (the extension splits).
@@ -369,17 +368,6 @@ theorem kwSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
     hweighted flipShiftTensor.toMPSTensor
   rw [h, h0, h1]
   ring
-
-/-- **Biorthogonal compression onto each of the two slots** (construction note, Theorem 7.7(iv)–(v)). -/
-theorem kwSquare_isReduction (s : {s // s ∈ kwSquareSlots}) :
-    IsReduction kwSquare (kwSquareTargets s.1) (kwSquare_compression.left s)
-      (kwSquare_compression.right s) :=
-  kwSquare_compression.isReduction s
-
-/-- Two distinct slots are biorthogonal (construction note, Theorem 7.7(iv)). -/
-theorem kwSquare_left_mul_right_of_ne {s t : {s // s ∈ kwSquareSlots}} (h : s ≠ t) :
-    kwSquare_compression.left s * kwSquare_compression.right t = 0 :=
-  kwSquare_compression.left_mul_right_of_ne h
 
 /-- **The dimension count**: `4 = 2 + 2 + 0` (construction note, Theorem 7.7(vii)). -/
 theorem kwSquare_dim_eq : (4 : ℕ) = ∑ s ∈ kwSquareSlots, kwSquareBlockDim s + 0 :=

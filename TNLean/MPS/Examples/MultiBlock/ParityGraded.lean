@@ -278,18 +278,6 @@ theorem parityGraded_trace_evalWord (w : List (Fin 2)) (hw : w ≠ []) :
     rw [Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
   rw [h, h0, h1]; ring
 
-/-- **Biorthogonal compression onto each of the two slots of Example PAR** (construction note,
-Theorem 7.7(iv)–(v)). -/
-theorem parityGraded_isReduction (s : {s // s ∈ parSlots}) :
-    IsReduction parB (parTargets s.1) (parityGraded_compression.left s)
-      (parityGraded_compression.right s) :=
-  parityGraded_compression.isReduction s
-
-/-- Two distinct slots of Example PAR are biorthogonal (construction note, Theorem 7.7(iv)). -/
-theorem parityGraded_left_mul_right_of_ne {s t : {s // s ∈ parSlots}} (h : s ≠ t) :
-    parityGraded_compression.left s * parityGraded_compression.right t = 0 :=
-  parityGraded_compression.left_mul_right_of_ne h
-
 /-- **The dimension count of Example PAR**: `5 = 2 + 2 + 1` (construction note, Theorem 7.7(vii)). -/
 theorem parityGraded_dim_eq : (5 : ℕ) = ∑ s ∈ parSlots, parDim s + 1 :=
   parityGraded_compression.dim_eq

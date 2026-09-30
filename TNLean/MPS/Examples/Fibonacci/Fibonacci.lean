@@ -86,7 +86,7 @@ exact arithmetic over that ring and then transported to the complex matrices alo
   `O_τ O_τ = O_1 + O_τ`.
 * `FibonacciCompression.fibonacci_fusion_rule`: the same fusion rule as an identity of periodic
   operators at every positive system size.
-* `FibonacciCompression.fibonacci_isReduction`: the biorthogonal compression pair of each block.
+* `FibonacciCompression.fibonacci_compression`: the biorthogonal compression pair of each block.
 * `FibonacciCompression.fibonacci_dim_eq`: the dimension count `9 = 2 + 3 + 4`.
 * `FibonacciCompression.fibonacci_remainder_eq_zero`: the remainder vanishes, so the extension
   splits.
@@ -611,17 +611,6 @@ theorem fibStack_mpv (N : ℕ) (hN : 0 < N) (σ : Fin N → Fin 4) :
   have h := fibonacci_compression.mpv_eq_sum N hN σ
   rw [show fibSlots = Finset.univ from rfl, Fin.sum_univ_two] at h
   exact h
-
-/-- **Biorthogonal compression onto each of the two blocks** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem fibonacci_isReduction (s : {s // s ∈ fibSlots}) :
-    IsReduction fibStack (fibTargets s.1) (fibonacci_compression.left s)
-      (fibonacci_compression.right s) :=
-  fibonacci_compression.isReduction s
-
-/-- The two blocks are biorthogonal (P5 note, Theorem 7.7(iv)). -/
-theorem fibonacci_left_mul_right_of_ne {s t : {s // s ∈ fibSlots}} (h : s ≠ t) :
-    fibonacci_compression.left s * fibonacci_compression.right t = 0 :=
-  fibonacci_compression.left_mul_right_of_ne h
 
 /-- **The dimension count** `9 = 2 + 3 + 4` (P5 note, Theorem 7.7(vii)). -/
 theorem fibonacci_dim_eq : (9 : ℕ) = ∑ s ∈ fibSlots, fibBlockDim s + 4 :=
