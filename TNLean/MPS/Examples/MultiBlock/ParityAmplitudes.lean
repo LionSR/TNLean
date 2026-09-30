@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinKronecker
+import TNLean.MPS.Core.WordGrading
 import TNLean.MPS.Examples.MultiBlock.ParityGraded
 import TNLean.MPS.Examples.GHZ
 
@@ -42,12 +43,13 @@ theorem pauliZ_mul_parA (i : Fin 2) :
 theorem pauliZ_mul_evalWord_parA (w : List (Fin 2)) :
     pauliZ * Kraus.evalWord parA w =
       (-1 : ℂ) ^ (w.map Fin.val).sum • (Kraus.evalWord parA w * pauliZ) := by
-  induction w with
-  | nil => simp [Kraus.evalWord]
-  | cons i w ih =>
-      rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, pauliZ_mul_parA, Matrix.smul_mul,
-        Matrix.mul_assoc, ih, Matrix.mul_smul, smul_smul, List.map_cons, List.sum_cons,
-        pow_add, Matrix.mul_assoc]
+  have hc : (w.map fun i => (-1 : ℂ) ^ i.val).prod = (-1 : ℂ) ^ (w.map Fin.val).sum := by
+    induction w with
+    | nil => simp
+    | cons i w ih => simp [ih, pow_add]
+  simpa only [hc] using
+    mul_evalWord_of_mul_eq_smul_letter parA pauliZ (fun i => (-1 : ℂ) ^ i.val)
+      pauliZ_mul_parA w
 
 /-- The periodic amplitude is unchanged by the physical occupation sign. -/
 theorem occupation_sign_mul_trace_evalWord_parA (w : List (Fin 2)) :
@@ -65,7 +67,7 @@ theorem trace_evalWord_parA_eq_zero_of_odd (w : List (Fin 2))
     occupation_sign_mul_trace_evalWord_parA w
 
 /-- The local conjugation identity of the occupation-parity symmetry. -/
-theorem pauliZ_mul_parA_mul_pauliZ (i : Fin 2) :
+lemma pauliZ_mul_parA_mul_pauliZ (i : Fin 2) :
     pauliZ * parA i * pauliZ = (-1 : ℂ) ^ i.val • parA i := by
   simp [pauliZ_mul_parA, Matrix.mul_assoc, pauliZ_sq]
 
@@ -136,7 +138,7 @@ private theorem trace_evalWord_parA_rotate (w : List (Fin 2)) (n : ℕ) :
     ← Kraus.evalWord_append, List.take_append_drop]
 
 /-- The run formula is independent of the site at which the cyclic word starts. -/
-theorem trace_evalWord_parA_cyclic_runs {w : List (Fin 2)} (r : ℕ) (rs : List ℕ)
+lemma trace_evalWord_parA_cyclic_runs {w : List (Fin 2)} (r : ℕ) (rs : List ℕ)
     (hw : w.IsRotated ((r :: rs).flatMap fun n => 0 :: List.replicate n 1)) :
     Matrix.trace (Kraus.evalWord parA w) =
       ((r :: rs).map fun n => if Even n then (1 : ℂ) else 0).prod := by
