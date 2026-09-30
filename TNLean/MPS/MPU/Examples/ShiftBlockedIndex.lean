@@ -42,11 +42,9 @@ shift is not a finite-depth circuit of local gates needs Theorem `IndexTh`
 and characterizes equivalence), together with index zero for one layer of
 nearest-neighbour gates. None of these is proved here.
 
-**Scope restriction (specified tensors):** The values are for the displayed
-shift tensors and their blockings. Definition IV.1 defines the index for a
-tensor in canonical form, and the identification of these values with the public
-index of any tensor generating the shift needs the canonical form of the shift
-and the uniqueness of that form. Documented in
+**Scope restriction (specified tensors):** This module computes source-index
+values of the displayed tensors. The public, blocking-independent index values
+are proved in `TNLean.MPS.MPU.Examples.ShiftPublicIndex`, resolving
 `docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex`.
 
 ## Main results
