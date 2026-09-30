@@ -48,6 +48,95 @@
     \cite[lines~161, 181--200, and 269--277]{Bultinck2017Anyons}.
 \end{definition}
 
+The three displayed diagrams are, in order, the zipper identities
+(\ref{eq:rfp_zipper_synthesis}) and (\ref{eq:rfp_zipper_analysis}) and the
+reconstruction (\ref{eq:rfp_fusion_reconstruction}), with the index $j$ of
+$B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
+\begin{center}
+    % Formulas, row by row:
+    %   B_{ab}^{ik} X^c_{ab,\mu} = X^c_{ab,\mu} B_c^{ik},
+    %   X^{c+}_{ab,\mu} B_{ab}^{ik} = B_c^{ik} X^{c+}_{ab,\mu},
+    %   B_{ab}^{ik} = \sum_{c,\mu} X^c_{ab,\mu} B_c^{ik} X^{c+}_{ab,\mu},
+    %   with B_{ab}^{ik} = \sum_j B_a^{ij} \otimes B_b^{jk}.
+    % Source: Bultinck et al., arXiv:1511.08090, lines 161 and 181--200,
+    %   the fusion tensors and the two zipper orientations.
+    % Ink-to-index map: matrix products read from west to east.  The
+    %   stacked pair B_a over B_b is B_{ab}: its vertical bond is the summed
+    %   index j, and i, k are its free physical legs.  Each pill spans both
+    %   rows; its split side carries the two bond strands of D_a and D_b and
+    %   its single stub, drawn on the first row, is the fused bond of D_c.
+    %   The synthesis tensor X^c_{ab,\mu} has its split side to the west, the
+    %   left inverse X^{c+}_{ab,\mu} has its split side to the east.  The
+    %   labels c, \mu of the fused block are summed only in the third row.
+    % Boundary signatures (virtual-west | virtual-east | physical-up |
+    %   physical-down), each side of each row:
+    %   row 1: (2 | 1 | 1 | 1) = (2 | 1 | 1 | 1);
+    %   row 2: (1 | 2 | 1 | 1) = (1 | 2 | 1 | 1);
+    %   row 3: (2 | 2 | 1 | 1) = (2 | 2 | 1 | 1).
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=2, west=open]
+        \tn[at=(1,1), skin=mpo,
+            ports={90:physical:$i$, 270:physical}]{B_a}
+        \tn[at=(2,1), skin=mpo,
+            ports={90:physical, 270:physical:$k$}]{B_b}
+        \tnfuse[at=(1,2), name=X, skin=pill]{X^c_{ab,\mu}}
+        \tnwire{X.0}{open e}
+    \end{tenkz}
+    \qquad$=$\qquad
+    \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+        \tnfuse[at=(1,1), name=X, skin=pill]{X^c_{ab,\mu}}
+        \tn[at=(1,2), skin=mpo, name=B,
+            ports={90:physical:$i$, 270:physical:$k$,
+                    180:virtual, 0:virtual}]{B_c}
+        \tn[at=(2,2), skin=none]{}
+        \tnwire{open w}{X.180@1}
+        \tnwire{open w}{X.180@2}
+        \tnwire{X.0}{B.180}
+        \tnwire{B.0}{open e}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={op,op}, cols=2, east=open]
+        \tnfuse[at=(1,1), name=Xp, skin=pill]{X^{c+}_{ab,\mu}}
+        \tn[at=(1,2), skin=mpo,
+            ports={90:physical:$i$, 270:physical}]{B_a}
+        \tn[at=(2,2), skin=mpo,
+            ports={90:physical, 270:physical:$k$}]{B_b}
+        \tnwire{open w}{Xp.180}
+    \end{tenkz}
+    \qquad$=$\qquad
+    \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+        \tn[at=(1,1), skin=mpo, name=B,
+            ports={90:physical:$i$, 270:physical:$k$,
+                    180:virtual, 0:virtual}]{B_c}
+        \tn[at=(2,1), skin=none]{}
+        \tnfuse[at=(1,2), name=Xp, skin=pill]{X^{c+}_{ab,\mu}}
+        \tnwire{open w}{B.180}
+        \tnwire{B.0}{Xp.180}
+        \tnwire{Xp.0@1}{open e}
+        \tnwire{Xp.0@2}{open e}
+    \end{tenkz}
+    \\[2ex]
+    \begin{tenkz}[rows={op,op}, cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical}]{B_a} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$k$}]{B_b}
+    \end{tenkz}
+    \qquad$=\displaystyle\sum_{c,\mu}$\qquad
+    \begin{tenkz}[rows={op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=X, skin=pill]{X^c_{ab,\mu}}
+        \tn[at=(1,2), skin=mpo, name=B,
+            ports={90:physical:$i$, 270:physical:$k$,
+                    180:virtual, 0:virtual}]{B_c}
+        \tn[at=(2,2), skin=none]{}
+        \tnfuse[at=(1,3), name=Xp, skin=pill]{X^{c+}_{ab,\mu}}
+        \tnwire{open w}{X.180@1}
+        \tnwire{open w}{X.180@2}
+        \tnwire{X.0}{B.180}
+        \tnwire{B.0}{Xp.180}
+        \tnwire{Xp.0@1}{open e}
+        \tnwire{Xp.0@2}{open e}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Complete zipper family from a BNT]%
     \label{thm:mpdo_blocked_bnt_complete_zipper}
     \lean{MPOTensor.BNTFusionIsometryFamily.blockedFusionSynthesis}
