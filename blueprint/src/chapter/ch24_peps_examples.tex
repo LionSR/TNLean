@@ -1260,7 +1260,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     two left inverses.
 \end{proof}
 
-\begin{theorem}[Stability of isometry under concatenation]%
+\begin{theorem}[Stability of isometry under concatenation in one dimension]%
     \label{thm:peps_mps_g_isometric_concatenation}
     \lean{TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap,
         TNLean.PEPS.IsGIsometricMPS.concatTensor}
@@ -1270,8 +1270,13 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     If the matrix product tensors $A$ and $B$ are $G$-isometric, so is
     $C^{ij}=A^iB^j$: the left inverse built from $\mathcal{P}(A^\dagger)$ and
     $\mathcal{P}(B^\dagger)$ is $\mathcal{P}(C^\dagger)$, and
-    $\mathcal{P}(C^\dagger)\mathcal{P}(C)=c_Ac_B\,\sigma$
-    \cite[Lemma~6.2]{Schuch2010PEPS}.
+    $\mathcal{P}(C^\dagger)\mathcal{P}(C)=c_Ac_B\,\sigma$. This is the
+    one-dimensional case of the source's lemma, which is stated for the
+    concatenation of PEPS in general and proved in one dimension; in two
+    dimensions only the simplification of the left inverse in
+    Lemma~\ref{lem:peps_regular_left_inverse} is formalized
+    \cite[Lemma~6.2]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 
 \begin{proof}\leanok

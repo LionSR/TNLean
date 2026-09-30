@@ -8,7 +8,7 @@
 \date{2026-09-27}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{What the sources print}
 Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
@@ -79,6 +79,24 @@ Lemma~``lemma:iso:sym-virt-can-be-done-on-phys'', uses only the isometry
 of $\mathcal P(A)$ on the invariant subspace, and is stated for the
 representation parameter.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 1729--1761.}
+
+\section{Scope: concatenation in one dimension}
+Lemma~``lemma:iso:iso-stable-under-concat'' states that $G$-isometry is
+stable under concatenation of PEPS; its proof is written for the
+one-dimensional left inverse of Lemma~4.7.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1688--1689 and 1704--1716.}
+The formalization proves the one-dimensional case for matrix product
+tensors with the left-regular representation on the bond, and for the
+two-dimensional contraction of one link it proves only that, with the
+left-regular representation on that link, the left inverse of the
+contracted tensor is the plain contraction of the left inverses of the
+two factors. It does not state that this contraction is the adjoint of the
+contracted map, because the virtual spaces of the two-dimensional
+concatenation are abstract tensor products without inner products.
+Elimination: equip the virtual and physical spaces of the two-dimensional
+concatenation with inner products for which the left-regular
+representation is unitary, and show that the contraction of adjoints is
+the adjoint of the contraction.
 
 \section{Scope: statements about the whole network}
 Two statements of the review concern the contracted lattice rather than

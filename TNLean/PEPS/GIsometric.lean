@@ -53,6 +53,13 @@ operation `𝒫(A) V 𝒫(A)⁻¹` is unitary only under it. The two directions 
 operation `V = 𝒫(A)⁻¹ U 𝒫(A)` of the second is `G`-invariant on both sides and unitary on the
 invariant subspace, which is where the source says it acts (lines 1722–1728).
 
+**Scope restriction (one dimension):** Lemma 6.2 is stated for the concatenation of `G`-isometric
+PEPS in general; `IsGIsometricMPS.concatTensor` proves the one-dimensional case, the case in which
+the source writes its proof, and `linkContractionLeftInverse_leftRegular` proves the step
+`Δ = |G|⁻¹ 𝟙` for the two-dimensional link contraction. The two-dimensional statement, that the
+contracted left inverse is the adjoint of the contracted map, is not formalized. Documented in
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
 **Local fix (normalization):** as for `TNLean.PEPS.IsGIsometric`, `𝒫(A†) 𝒫(A)` is required to
 be a positive multiple `c Π` of the projector onto the invariant subspace rather than `Π`
 itself; the concatenation has factor `c_A c_B`. Documented in
