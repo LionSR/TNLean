@@ -258,7 +258,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates}
+    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates,
+        thm:transfer_map_irreducible_of_tensor}
     The projections $R_j=F^j(Q_\alpha)$, for $0\le j<r$, are pairwise
     orthogonal and sum to $\Id_D$, since their cyclic-sector indices
     partition $\Z_m$. The letter relation gives
@@ -284,7 +285,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_orbit_fixed_rigidity}
+    \uses{thm:periodic_orbit_fixed_rigidity,thm:adjoint_corner_fixed_of_preserved,
+        thm:transfer_map_irreducible_of_tensor}
     Let $R$ be an invariant orthogonal projection for $\E_C^*$.
     The projection $L=VRV^\dagger$ has invariant corner under
     $F^p$, where $F=\E_A^*$. The faithful invariant state of $\E_A$
