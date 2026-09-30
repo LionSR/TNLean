@@ -1,0 +1,90 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Exchange of Domain-Wall Strings: the Square of the Exchange Phase}
+\author{}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Let $U=\bigotimes O_g$ be a matrix product unitary representation of an
+involution $g$ acting on a periodic chain, and let $\ket{\psi_A}$ and
+$\ket{\psi_B}=U\ket{\psi_A}$ be the matrix product states of two
+symmetry-broken injective tensors $A$ and $B$. A domain wall $e_{AB}$ from $A$
+to $B$ is carried by the local action of $g$ to a domain wall $e_{BA}$ with a
+phase $c_{AB}$, and $e_{BA}$ is carried back to $e_{AB}$ with a phase $c_{BA}$.
+For sites $i<j$, the string operator $O^{[i,j]}$ applies $O_g$ strictly between
+$i$ and $j$ and endpoint tensors at $i$ and $j$; on $\ket{\psi_A}$ it creates
+the state $\ket{\psi(A\text{-}B\text{-}A)}$ with the walls $e_{AB}$ at $i$ and
+$e_{BA}$ at $j$ \cite{GarreRubioSchuch2024DomainWall}.\footnote{Source
+    traceability: \path{Papers/2405.00439/MPU-DW.tex}, lines 643--838 (domain
+    walls and their phases) and lines 1341--1425 (string operators).}
+
+For sites $i_2<i_1<j_1<j_2$, Ref.~\cite{GarreRubioSchuch2024DomainWall} states
+the exchange of two strings as
+\begin{align}
+    O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}
+     & =c_{AB}c_{BA}\,O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}.
+    \label{eq:gs24_domain_wall_exchange_square_printed}
+\end{align}\footnote{Source traceability:
+    \path{Papers/2405.00439/MPU-DW.tex}, lines 1667--1672.}
+The computation places the phase on the other side:
+\begin{align}
+    O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}
+     & =c_{AB}c_{BA}\,O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}.
+    \label{eq:gs24_domain_wall_exchange_square_computed}
+\end{align}
+Relation~(\ref{eq:gs24_domain_wall_exchange_square_computed}) is proved for
+every pair of phases.\footnote{Formal declaration:
+    \leanid{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv}.}
+Relations~(\ref{eq:gs24_domain_wall_exchange_square_printed}) and
+(\ref{eq:gs24_domain_wall_exchange_square_computed}) agree exactly when
+\begin{align}
+    (c_{AB}c_{BA})^2 & =1.
+    \label{eq:gs24_domain_wall_exchange_square_square}
+\end{align}
+Ref.~\cite{GarreRubioSchuch2024DomainWall} obtains
+(\ref{eq:gs24_domain_wall_exchange_square_square}) from $U^2=\mathrm{id}$:
+since $U\ket{\psi(A\text{-}B\text{-}A)}=c_{BA}c_{AB}
+    \ket{\psi(B\text{-}A\text{-}B)}$, applying $U$ twice returns
+$(c_{BA}c_{AB})^2\ket{\psi(A\text{-}B\text{-}A)}$.\footnote{Source
+    traceability: \path{Papers/2405.00439/MPU-DW.tex}, lines 835--839.}
+
+\section{Restriction}
+
+Relation~(\ref{eq:gs24_domain_wall_exchange_square_printed}) is formalized
+with (\ref{eq:gs24_domain_wall_exchange_square_square}) as an explicit
+hypothesis.\footnote{Formal declaration:
+    \leanid{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_of_sq_eq_one}.}
+The derivation of that hypothesis from $U^2=\mathrm{id}$ is not formalized.
+
+\section{Elimination plan}
+
+The action of $U$ on the two-wall state is formalized.\footnote{Formal
+    declaration:
+    \leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV}.}
+Applying it twice, with $U^2=\mathrm{id}$ as an identity of periodic
+operators at the length considered and a length at which
+$\ket{\psi(A\text{-}B\text{-}A)}\neq0$, gives (\ref{eq:gs24_domain_wall_exchange_square_square}). With that
+lemma the hypothesis is discharged from the involution, and the printed
+relation holds under the source's own assumptions.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

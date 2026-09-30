@@ -31,6 +31,12 @@ invertible, the source's `L₀ = D²` (lines 2115–2118, through Wolf's Theorem
 into `N < 2 max(D²+1, 3(D-1)(D²+2))`, the source's `D = Ω(N^{1/3})` for such blocks. For
 primitive blocks, Wolf's general quantum Wielandt bound gives the weaker
 `N < 2 max((D²+1)², 3(D-1)((D²+1)²+1))`.
+Two project refinements retain the canonical-block hypotheses. Unequal cut lengths improve
+`N < 2 * F` to `N < max (L₀ + F) (12 * (b - 1))`, where
+`F = max L₀ (3 * (b - 1) * (L₀ + 1))`. The cubic estimate also holds when each
+one-letter span contains an element with a nonzero eigenvalue, by Wolf, Theorem 6.9(3);
+no invertible letter is needed for that variant.
+
 Along the way: the reduced state of `W_N` across any cut has rank at most `2`, and a sum of at
 most two translation-invariant product states is not a multiple of `W_N` for `N ≥ 3`.
 
@@ -41,7 +47,9 @@ Michałek and Shitov. Here the canonical form, condition C1, and pairwise distin
 blocks are hypotheses. The reduction of an arbitrary `D × D` tensor to this situation is
 formalized only at prime length `N`, with `L₀ = (D²+1)²` from the general Wielandt bound
 (`TNLean.MPS.Examples.WStatePrimeLengthBound`); `L₀ = O(D²)` is formalized only when every
-`A^j_0` is invertible (the source's proposition), not in general, nor is `O(D² log D)`.
+`A^j_0` is invertible (the source's proposition), or when the one-letter span contains an
+element with a nonzero eigenvalue (the project refinement), not in general, nor is
+`O(D² log D)`.
 Distinctness is taken in the form used by the direct-sum lemma, no two blocks related by a
 gauge and a phase, which is stricter than the source's pairwise different block states
 (lines 1329–1330).
@@ -419,5 +427,124 @@ theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit {D : ℕ
   have : 3 * (h.r - 1) * (D ^ 2 + 1 + 1) ≤ 3 * (D - 1) * (D ^ 2 + 2) :=
     Nat.mul_le_mul (Nat.mul_le_mul_left _ (by omega)) le_rfl
   exact Nat.mul_le_mul_left _ (max_le_max le_rfl this)
+
+private theorem isNBlkInjective_one_of_unital_of_dim_eq_one {d D : ℕ}
+    (A : MPSTensor d D) (hD : D = 1) (hU : ∑ i, A i * (A i)ᴴ = 1) :
+    Kraus.IsNBlkInjective A 1 := by
+  subst D
+  apply Kraus.isNBlkInjective_one_of_isInjective
+  apply Submodule.eq_top_of_finrank_eq
+  have hne : Submodule.span ℂ (Set.range A) ≠ ⊥ := by
+    intro hbot
+    have hzero : ∀ i, A i = 0 := fun i ↦ by
+      have hmem : A i ∈ Submodule.span ℂ (Set.range A) := Submodule.subset_span ⟨i, rfl⟩
+      simpa [hbot] using hmem
+    simp [hzero] at hU
+  have hpos : 0 < Module.finrank ℂ (Submodule.span ℂ (Set.range A)) :=
+    Module.finrank_pos_iff.mpr (Submodule.nontrivial_iff_ne_bot.mpr hne)
+  have hle := Submodule.finrank_le (Submodule.span ℂ (Set.range A))
+  have hdim : Module.finrank ℂ (Matrix (Fin 1) (Fin 1) ℂ) = 1 := by
+    simp [Module.finrank_matrix]
+  omega
+
+/-- Project refinement of the W-state argument of arXiv:quant-ph/0608197,
+lines 2193--2225, using cuts of different lengths. Put
+`F = max L₀ (3 * (r - 1) * (L₀ + 1))`. Individual block injectivity at the
+short cut and simultaneous spanning at the long cut force every block to be
+one-dimensional. Reapplying the original bound at injectivity length one gives
+`N < max (L₀ + F) (12 * (r - 1))`, which is never weaker than `N < 2 * F`.
+
+The canonical-block and distinctness restrictions in the module docstring apply. -/
+theorem lt_of_sum_mpv_eq_smul_wIndicator_asymmetric {r : ℕ} {dim : Fin r → ℕ}
+    (B : (k : Fin r) → MPSTensor 2 (dim k)) (hdim : ∀ k, 0 < dim k)
+    (hUnital : ∀ k, ∑ i, B k i * (B k i)ᴴ = 1)
+    (hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
+      Kraus.transferMap (d := 2) (D := dim k) (fun a => (B k a)ᴴ) Λ = Λ)
+    (hIrr : ∀ k, Kraus.IsIrreducibleFamily (B k))
+    {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (B k) L₀)
+    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) B)
+    (coef : Fin r → ℂ) (hcoef : ∀ k, coef k ≠ 0)
+    {N : ℕ} {c : ℂ} (hc : c ≠ 0)
+    (hW : ∀ σ : Cfg 2 N, ∑ k, coef k * mpv (B k) σ = c * wIndicator N σ) :
+    N < max (L₀ + max L₀ (3 * (r - 1) * (L₀ + 1))) (12 * (r - 1)) := by
+  classical
+  by_contra hN
+  push Not at hN
+  obtain ⟨R', rfl⟩ : ∃ R', N = L₀ + R' := ⟨N - L₀, by omega⟩
+  have hSpan : WordTupleSpanTop B R' :=
+    wordTupleSpanTop_of_ge_of_isNBlkInjective
+      B hdim hUnital hDual hIrr hL₀ hC1 hDistinct (by omega)
+  have hdim1 : ∀ k, dim k = 1 := fun k ↦ by
+    have hsq : dim k ^ 2 ≤ 2 := by
+      refine le_trans (sq_dim_le_finrank_of_forall_mem B coef hcoef k (hC1 k) hSpan
+        (Submodule.span ℂ (Set.range ![weightIndicator L₀ 1, weightIndicator L₀ 0]))
+        (fun τ ↦ ?_)) (finrank_span_wIndicator_append_le_two L₀)
+      have hfun : (fun σ : Cfg 2 L₀ ↦ ∑ k, coef k *
+          Matrix.trace (Kraus.evalWord (B k) (List.ofFn σ) *
+            Kraus.evalWord (B k) (List.ofFn τ))) =
+          c • fun σ : Cfg 2 L₀ ↦ wIndicator (L₀ + R') (Fin.append σ τ) := by
+        funext σ
+        rw [Pi.smul_apply, smul_eq_mul, ← hW]
+        simp [List.ofFn_fin_append, Kraus.evalWord_append]
+      rw [hfun]
+      exact Submodule.smul_mem _ _ (wIndicator_append_mem_span τ)
+    have := hdim k
+    nlinarith
+  have hC1' : ∀ k, Kraus.IsNBlkInjective (B k) 1 := fun k ↦
+    isNBlkInjective_one_of_unital_of_dim_eq_one (B k) (hdim1 k) (hUnital k)
+  have hshort := lt_of_sum_mpv_eq_smul_wIndicator B hdim hUnital hDual hIrr
+    (by omega) hC1' hDistinct coef hcoef hc hW
+  omega
+
+/-- The asymmetric-cut W-state estimate for a canonical form, with coefficients
+`λ_j^N`. This is the project refinement of arXiv:quant-ph/0608197,
+lines 2193--2225, proved for arbitrary nonzero block coefficients above. -/
+theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_asymmetric
+    {D : ℕ} {A : MPSTensor 2 D} (h : PGVWC07CanonicalFormData A)
+    {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
+    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
+    N < max (L₀ + max L₀ (3 * (h.r - 1) * (L₀ + 1))) (12 * (h.r - 1)) :=
+  lt_of_sum_mpv_eq_smul_wIndicator_asymmetric h.blocks h.dim_pos h.unital
+    h.dualFixedPoint_transferMap h.isIrreducibleFamily_blocks hL₀ hC1 hDistinct
+    (fun k ↦ (h.weight k : ℂ) ^ N)
+    (fun k ↦ pow_ne_zero _ (Complex.ofReal_ne_zero.mpr (h.weight_pos k).ne')) hc
+    (fun σ ↦ by rw [← hW, h.mpv_eq_sum])
+
+/-- Project refinement of the conditional cubic W-state bound in
+arXiv:quant-ph/0608197, lines 2115--2118 and 2182--2225. Each block need only have
+an element of its one-letter span with a nonzero eigenvalue, rather than an
+invertible first letter. Wolf, Theorem 6.9(3), gives injectivity at `D_j²`.
+
+The maximum with one preserves the zero-dimensional case; for positive bond
+dimension the common length is exactly `D²`. The canonical-block and distinctness
+restrictions in the module docstring apply. -/
+theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_nonzero_eigenvalue
+    {D : ℕ} {A : MPSTensor 2 D} (h : PGVWC07CanonicalFormData A)
+    (hC1 : ∀ k, ∃ L, 0 < L ∧ Kraus.IsNBlkInjective (h.blocks k) L)
+    (hEigen : ∀ k, ∃ (X : Matrix (Fin (h.dim k)) (Fin (h.dim k)) ℂ)
+      (μ : ℂ) (φ : Fin (h.dim k) → ℂ), X ∈ Kraus.wordSpan (h.blocks k) 1 ∧
+        μ ≠ 0 ∧ φ ≠ 0 ∧ X *ᵥ φ = μ • φ)
+    (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) h.blocks)
+    {N : ℕ} {c : ℂ} (hc : c ≠ 0) (hW : ∀ σ : Cfg 2 N, mpv A σ = c * wIndicator N σ) :
+    let L₀ := max 1 (D ^ 2)
+    N < max (L₀ + max L₀ (3 * (D - 1) * (L₀ + 1))) (12 * (D - 1)) := by
+  classical
+  dsimp only
+  obtain ⟨hrD, hdimD⟩ := h.r_le_and_dim_le
+  have hC1' : ∀ k, Kraus.IsNBlkInjective (h.blocks k) (max 1 (D ^ 2)) := by
+    intro k
+    have : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩
+    obtain ⟨L, hL, hinj⟩ := hC1 k
+    have hFull : Kraus.HasEventuallyFullWordSpan (h.blocks k) :=
+      Filter.eventually_atTop.mpr ⟨L, fun n hn ↦ isNBlkInjective_of_le hL hinj hn⟩
+    obtain ⟨X, μ, φ, hX, hμ, hφ, heig⟩ := hEigen k
+    have hq := Kraus.wordSpan_eq_top_of_mem_wordSpan_one_of_nonzero_eigenvalue
+      (h.blocks k) hFull hX hμ hφ heig
+    exact isNBlkInjective_of_le (Nat.pow_pos (h.dim_pos k)) hq
+      ((Nat.pow_le_pow_left (hdimD k) 2).trans (le_max_right 1 (D ^ 2)))
+  refine (h.lt_of_mpv_eq_smul_wIndicator_asymmetric
+    (by omega) hC1' hDistinct hc hW).trans_le ?_
+  gcongr
 
 end MPSTensor

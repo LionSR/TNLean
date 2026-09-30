@@ -145,48 +145,6 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     Newton--Girard power-sum identity to recover the multiplicity multiset.
 \end{proof}
 
-\begin{theorem}[Conditional matching of bases of periodic tensors]
-    \label{thm:periodic_equalcase_matching}
-    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_matching}
-    \leanok
-    \uses{def:irreducible_form}
-    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
-    tensors contain no repeated pair of distinct basis elements. If the
-    periodic-overlap hypothesis holds for the two bases, then the two bases
-    have the same cardinality and are matched by a bijection whose matched
-    elements are repeated blocks.
-\end{theorem}
-
-\begin{proof}\leanok
-    Apply the conditional block-matching theorem to the two bases extracted
-    from the irreducible-form representations.
-\end{proof}
-
-\begin{theorem}[Conditional scalar equal-case component]
-    \label{thm:periodic_equalcase_scalar_component}
-    \lean{MPSTensor.fundamentalTheorem_periodic_equalCase}
-    \leanok
-    \uses{thm:periodic_equalcase_matching, thm:equalcase_zgauge_power_sums}
-    Let $A$ and $B$ be in irreducible form, and suppose their bases of periodic
-    tensors contain no repeated pair of distinct basis elements. Assume the
-    periodic-overlap hypothesis and the corresponding power equality for the
-    scalar multiplicity entries. Then the bases are matched by a bijection, and
-    each matched pair has a scalar diagonal $Z_j\in\MN{1}$ with
-    \begin{align}
-        Z_j^{m_j}             & =\Id, \notag                   \\
-        Z_j\,\diag(\mu_{A,j}) & =\diag(\mu_{B,\pi(j)}). \notag
-    \end{align}
-    The two scalar multiplicity entries also determine the same singleton
-    multiset.
-\end{theorem}
-
-\begin{proof}\leanok
-    First use Theorem~\ref{thm:periodic_equalcase_matching} to match the
-    bases of periodic tensors. For each matched block, apply
-    Theorem~\ref{thm:equalcase_zgauge_power_sums} to the singleton list of
-    multiplicity entries.
-\end{proof}
-
 \begin{lemma}[Power weights of a sector decomposition]%
     \label{lem:sector_power_weights}
     \lean{MPSTensor.SectorDecomposition.powWeights,
