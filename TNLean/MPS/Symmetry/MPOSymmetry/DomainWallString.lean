@@ -38,7 +38,8 @@ The source prints `signphysop` as `O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_
 O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`; the computation above gives the phase on the other side,
 `O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩ = c_{AB}c_{BA} O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩`, which holds for
 every pair of phases. The two forms agree when `(c_{AB} c_{BA})² = 1`, which the source derives
-from `U² = 1` (lines 837--839); the printed form is the corollary under that relation.
+from `U² = 1` (lines 837--839); the printed form is proved as a corollary with that relation as
+an explicit hypothesis, whose derivation from `U² = 1` is not formalized here.
 
 **Local fix (nondegenerate domain walls, blocked local action):** the exchange relation
 `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv` is stated for
@@ -602,9 +603,11 @@ theorem wallString_mul_wallString_mulVec_mpv
   simp only [Matrix.mul_assoc, Matrix.trace_smul, smul_eq_mul]
 
 /-- **Exchange of two domain-wall strings, in the printed orientation** (arXiv:2405.00439,
-`signphysop`, `Papers/2405.00439/MPU-DW.tex` lines 1667--1672): when `(c_{AB} c_{BA})² = 1`, as
-the source derives from `U² = 1` (lines 837--839),
-`O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB} c_{BA} O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`. -/
+`signphysop`, `Papers/2405.00439/MPU-DW.tex` lines 1667--1672): under the hypothesis
+`(c_{AB} c_{BA})² = 1`,
+`O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB} c_{BA} O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`.
+The source derives the hypothesis from `U² = 1` (lines 837--839); here it is assumed, not
+derived. -/
 theorem wallString_mul_wallString_mulVec_mpv_of_sq_eq_one
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y)) {cAB cBA : ℂ}
