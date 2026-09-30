@@ -21,6 +21,43 @@ of~\cite{Aasen2016Topological} up to the factor $2^{N/2}$. Its square
 and its action on ground states are characterized both as operator identities
 and as asymmetric compressions of stacked tensors.
 
+\begin{definition}[The duality kernel and the two translation tensors]
+    \label{def:asymex_kw}
+    \lean{KWExample.kwTensor, KWExample.shiftTensor, KWExample.flipShiftTensor,
+        KWExample.kwSquare, KWExample.kwSquareTargets}
+    \leanok
+    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+    With the outgoing label $s'$ written first, the duality tensor is
+    \begin{align}
+        W^{00} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
+               &
+        W^{01} & =\begin{pmatrix}0&0\\1&1\end{pmatrix},
+        \notag                                           \\
+        W^{10} & =\begin{pmatrix}1&-1\\0&0\end{pmatrix},
+               &
+        W^{11} & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}.
+        \notag
+    \end{align}
+    The translation tensor is $T^{s's}=E_{s,s'}$ and the flipped
+    translation tensor is $(\eta T)^{s's}=E_{s,1-s'}$, where $E_{pq}$ is
+    the matrix unit with a single entry $1$ in row $p$ and column $q$.
+    The same symbols $T$ and $\eta T$ denote their periodic operators.
+    The stacked product tensor is
+    $B^{s's}=\sum_{m=0}^1W^{s'm}\otimes W^{ms}$, of bond dimension four.
+    Its two target tensors are $2T$ and $2\eta T$.
+\end{definition}
+
+Close the virtual bonds by the ordinary trace on a ring of $N>0$ sites,
+without dividing by the bond dimension. The resulting operator is
+$K_N(a,b)=\tr(W^{a_0b_0}\cdots W^{a_{N-1}b_{N-1}})$.
+Its normalization relative to the source defect follows from
+Theorem~\ref{thm:asymex_kw_kernel} and Corollary~\ref{cor:asymex_kw_square}.
+Theorem~\ref{thm:asymex_kw_normal} proves normality;
+Corollary~\ref{cor:asymex_kw_exchange} gives the exchange of Ising couplings,
+and Lemma~\ref{lem:asymex_kw_states} describes its action on product and
+GHZ states. The compression of its square is
+Theorem~\ref{thm:asymex_kw_compression}.
+
 Consider $N\geq1$ qubits on a periodic chain, with sites
 $I_N=\{0,\ldots,N-1\}$ and all site indices understood modulo $N$.
 The Hilbert space $\mathcal H_N=(\C^2)^{\otimes N}$ has computational
@@ -57,32 +94,6 @@ is $Z_0^2=\Id$, and at $N=2$ the two bond terms both equal $Z_0Z_1$.
 The duality exchanges the bond terms with the field terms.
 
 \subsection{The duality kernel and its square}
-
-\begin{definition}[The duality kernel and the two translation tensors]
-    \label{def:asymex_kw}
-    \lean{KWExample.kwTensor, KWExample.shiftTensor, KWExample.flipShiftTensor,
-        KWExample.kwSquare, KWExample.kwSquareTargets}
-    \leanok
-    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
-    With the outgoing label $s'$ written first, the duality tensor is
-    \begin{align}
-        W^{00} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
-               &
-        W^{01} & =\begin{pmatrix}0&0\\1&1\end{pmatrix},
-        \notag                                           \\
-        W^{10} & =\begin{pmatrix}1&-1\\0&0\end{pmatrix},
-               &
-        W^{11} & =\begin{pmatrix}0&0\\-1&1\end{pmatrix}.
-        \notag
-    \end{align}
-    The translation tensor is $T^{s's}=E_{s,s'}$ and the flipped
-    translation tensor is $(\eta T)^{s's}=E_{s,1-s'}$, where $E_{pq}$ is
-    the matrix unit with a single entry $1$ in row $p$ and column $q$.
-    The same symbols $T$ and $\eta T$ denote their periodic operators.
-    The stacked product tensor is
-    $B^{s's}=\sum_{m=0}^1W^{s'm}\otimes W^{ms}$, of bond dimension four.
-    Its two target tensors are $2T$ and $2\eta T$.
-\end{definition}
 
 The translation tensor is the shift matrix product unitary
 of~\cite[Appendix~A, ``The shift MPU'']{Cirac2021Matrix}, taken with

@@ -15,7 +15,7 @@ paper merely because their physical target is familiar.
 
 | Example / file suffix | Tensor and boundary evidence | Property evidence and remaining work |
 |---|---|---|
-| Product states (`ch15...product_states`) | Appendix A scalar tensor; `def:product_state_tensor`; open boundaries both 1. | `thm:product_state_mps`. The general open-boundary definition precedes the example tensor; move the example description earlier in a final ordering pass. |
+| Product states (`ch15...product_states`) | Appendix A scalar tensor; `def:product_state_tensor`; open boundaries both 1. | `thm:product_state_mps`. The product tensor now precedes the general contraction; scalar boundary vectors and the two state-identification results are listed immediately after it. |
 | GHZ (`ch15...ghz`) | Appendix A delta tensor, `def:ghz_tensor_d`; periodic trace, including the empty-chain convention. | `thm:ghz_d_mpv`, `thm:ghz_d_transfer`, `thm:ghz_d_not_injective`, `thm:ghz_d_symmetric`; parent results in `ch15...parent_hamiltonians`. |
 | AKLT (`ch15...aklt`) | Now starts with the singlet-bond tensor, `def:aklt_tensor_review`; physical-basis and scalar/gauge changes in `thm:aklt_review_pauli_form` and `lem:aklt_review_gauge_bridge`. | Review symmetries, SPT and parent claims have `thm:aklt_review_symmetries`, `thm:aklt_review_spt`, `thm:aklt_review_parent_hamiltonian`; correlation-length subsection follows. The issue's claim that the opening starts from an unrelated representative is stale. |
 | Majumdar–Ghosh (`ch15...majumdar_ghosh`) | Printed shorthand and its literal bond-six reading now appear in `def:majumdar_ghosh_review_tensor`; the singlet-bond representative is distinguished later. | `thm:majumdar_ghosh_review_mpv`, `thm:majumdar_ghosh_ground_space`, `thm:majumdar_ghosh_review_hamiltonian`; retain `rmp_majumdar_ghosh_tensor_gap`. Spin-exchange correction is #8353, PR #8396. |
@@ -26,10 +26,10 @@ paper merely because their physical target is familiar.
 | Parent-Hamiltonian section (`ch15...parent_hamiltonians`) | Shared construction, not a new tensor example; explicit boundary-matrix local space. | Links back to the individual tensors. Do not require a second printed tensor for every parent theorem. |
 | GHZ compression (`ch25...elementary_states`) | Standard GHZ target distinguished from constructed bond-four source; periodic trace stated. | `thm:asymex_ghz_state`, `thm:asymex_ghz_compression`; construction is not claimed to be the printed GHZ tensor. |
 | Repeated-block product state (same file) | Constructed extension of a scalar product-state target; inherits explicit trace convention. | `thm:asymex_repeated_compression`, `thm:asymex_repeated_not_gauge`; boundary-detectable Jordan extension is separate. |
-| CZX (`ch25...czx`) | Constructed input-phase convention distinguished from printed output-phase convention; source tensor `def:asymex_czx_review_tensor`, kernel bridge `thm:asymex_czx_review_kernel`. | Added these bridge and property links to the opening. The printed-tensor subsection still follows the constructed tensor and should be reordered in the final presentation pass. |
+| CZX (`ch25...czx`) | Constructed input-phase convention distinguished from printed output-phase convention; source tensor `def:asymex_czx_review_tensor`, kernel bridge `thm:asymex_czx_review_kernel`. | The printed tensor now comes first, with its normalization caveat, trace boundary convention and links to the kernel, unitarity, square and normality results; the constructed input-phase tensor follows. |
 | Decorated CZX (same file) | Separate representative from the cited domain-wall paper; periodic convention explicit. | `thm:asymex_czx_decorated_normal`, `thm:asymex_czx_decorated_anomaly_class`. Domain-wall statistics themselves remain #8013. |
 | Levin–Gu / CZY (`ch25...czy`) | Section II source, explicit matrices and physical-index convention. | Kernel, printed reduction, nonsplitting and fusion have linked statements. The opening explicitly excludes the source's associator; the missing associator needs a dedicated follow-up under #8012. |
-| Kramers–Wannier (`ch25...kramers_wannier`) | Sources and normalization factor `2^(N/2)` stated; periodic and short-ring conventions explicit. | Kernel/square, normality and ground-state action precede compression; opening still delays the actual tensor until after operator notation. |
+| Kramers–Wannier (`ch25...kramers_wannier`) | Sources and normalization factor `2^(N/2)` stated; periodic and short-ring conventions explicit. | The tensor definition now precedes operator notation; trace closure and links to the kernel, square, normality, coupling exchange and state action follow it. |
 | Fibonacci (`ch25...fibonacci`) | Two-label restriction distinguished from full source alphabet; `def:asymex_fib_gsymbol_tensor`, `thm:asymex_fib_gsymbol_similarity`, `thm:asymex_fib_review_congruence`. | Added opening links to the dimension factors, bond similarity and physical normalization. These bridges resolve the old omitted-factor concern; full classification remains #8053. |
 | Fibonacci anomaly (`ch25...fibonacci_anomaly`) | Continuation of the preceding example, not a new source tensor; regular two-block action distinguished from single-block no-go. | `thm:asymex_fib_anomaly_no_go` is explicitly restricted; not a uniqueness/classification theorem (#8053). |
 | Ising (`ch25...ising`) | F-symbol convention, integer-ring scaling and periodic trace explicit; full G-symbol tensor and bridge now exist. | Added opening links to `def:asymex_ising_gsymbol_tensor` and `thm:asymex_ising_gsymbol_similarity`; normality at `thm:asymex_ising_normal`. |
@@ -46,9 +46,9 @@ paper merely because their physical target is familiar.
 The source relations now present on main should replace the stale list of known
 missing bridges in the issue. The changes accompanying this audit expose the
 CZX, Fibonacci and Ising bridges in their openings and remove the clock-class
-overclaim. They do not complete the strict four-part ordering for every section:
-product-state, CZX and Kramers–Wannier introductions still interleave general
-notation with the example, and a uniform opening property list remains to be
-written. Keep #8062 open until that pass is complete. Missing mathematics must
+overclaim. The product-state, CZX and Kramers–Wannier introductions now put their
+example tensors before general operator or contraction notation, followed by
+boundary data and property links. A uniform opening property list for the
+remaining sections is still to be written. Keep #8062 open until that pass is complete. Missing mathematics must
 remain attached to the issues above, not acquire new `leanok` tags through an
 editorial change.
