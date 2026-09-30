@@ -3444,6 +3444,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
 
+### Transposed Kronecker gauge inverses — candidate
+
+- **Pattern:** reduce block-diagonal inverse products to Kronecker products,
+  combine factors with `Matrix.mul_kronecker_mul` and `Matrix.transpose_mul`,
+  and cancel unit-valued gauges.
+- **Occurrences:** the two pair-gauge inverse identities and four left/right
+  tree-gauge inverse identities in `TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean`.
+- **Count:** six occurrences in one file; the two-file promotion threshold
+  has not been reached.
+- **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
+  second module needs the same cancellation pattern.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected

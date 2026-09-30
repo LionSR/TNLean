@@ -2,15 +2,14 @@
 
 Issue: #8088, under #8011. Checked against the arXiv:1511.08090v2 source
 archive, `AnyonsPEPS.tex` line 169, immediately after equation `gauge`.
-The mathematical formula is retained in
-`Papers/1511.08090/fusion-gauge-excerpt.tex`, with its download URL and the
-SHA-256 digest of the original TeX file.
+The source is link-only under `Papers/NOTICE.md`: download
+[arXiv:1511.08090v2](https://arxiv.org/src/1511.08090v2) and use the local,
+non-distributed mirror `References/1511.08090/AnyonsPEPS.tex`.
+The SHA-256 digest recorded for the original TeX file is
+`03d4ffdb440f7f0d7686766650977a15d29c21e1f35267d643c103ae96a98a57`.
 
-The source writes
-
-\[
-X'_{ab,\mu}^{c}=\sum_\nu (Y_{ab}^{c})_{\mu\nu}X_{ab,\nu}^{c}.
-\]
+The first matrix index selects the new fusion tensor and the second indexes
+the sum over the old fusion tensors.
 
 The old `regauge_fusionTensor` used the entry with indices `ν μ` instead.
 This was an internally consistent column convention, but it did not match

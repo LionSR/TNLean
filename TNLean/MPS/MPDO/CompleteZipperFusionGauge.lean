@@ -19,7 +19,8 @@ $(Y^e_{ab})^{\mathsf T}\otimes (Y^d_{ec})^{\mathsf T}$, and on the right tree by
 $(Y^f_{bc})^{\mathsf T}\otimes (Y^d_{af})^{\mathsf T}$.
 The transposes arise because each fusion tensor is a column of the synthesis map,
 whereas the source uses the first index of $Y$ for the new multiplicity label.
-The source formula is retained in `Papers/1511.08090/fusion-gauge-excerpt.tex`.
+The source formula is at `References/1511.08090/AnyonsPEPS.tex`, line 169,
+in the local mirror of arXiv:1511.08090v2.
 
 ## Main definitions
 
