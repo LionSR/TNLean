@@ -8,7 +8,6 @@ import TNLean.MPS.Periodic.StepOrbitSectors
 import QICLean.Channel.KrausCornerCompression
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.Core.BlockingTransfer
-import QICLean.Channel.Peripheral.PeriodicityRemoval
 
 /-!
 # Peripheral spectrum after prescribed blocking
