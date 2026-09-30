@@ -877,13 +877,13 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 \end{proof}
 
 
-\begin{lemma}[Multiplication of an orthogonal resolution]
-    \label{lem:periodic_orthogonal_resolution_multiplication}
+\begin{theorem}[Multiplication of an orthogonal resolution]
+    \label{thm:periodic_orthogonal_resolution_multiplication}
     \lean{orthogonalProjection_mul_eq_ite_of_sum_eq_one}
     \leanok
     If orthogonal projections $P_u$ satisfy $\sum_u P_u=\mathbf 1$, then
     $P_uP_v=\delta_{uv}P_u$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -891,8 +891,8 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     resolution have orthogonal ranges.
 \end{proof}
 
-\begin{lemma}[Unitary assembly of a resolution]
-    \label{lem:periodic_unitary_resolution}
+\begin{theorem}[Unitary assembly of a resolution]
+    \label{thm:periodic_unitary_resolution}
     \lean{MPSTensor.exists_unitary_toTensorFromBlocks_of_resolution}
     \leanok
     Let $V_a:\mathbb C^{D_a}\to\mathbb C^D$ satisfy
@@ -900,7 +900,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     If $A^iV_a=V_aB_a^i$ for every $a,i$, then there is a unitary
     $U:\bigoplus_a\mathbb C^{D_a}\to\mathbb C^D$ with $UE_a=V_a$ and
     $A^i=U(\bigoplus_a B_a^i)U^\dagger$, where $E_a$ is the coordinate inclusion.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -934,9 +934,10 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    \uses{lem:periodic_unitary_resolution,thm:periodic_absorb_orbit_gauge,
+    \uses{thm:periodic_unitary_resolution,thm:periodic_orthogonal_resolution_multiplication,
+        thm:periodic_absorb_orbit_gauge,
         thm:periodic_prescribed_blocking}
-    Apply the preceding lemma to the orbit isometries. Conjugate the diagonal
+    Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit isometries. Conjugate the diagonal
     matrix with entries $c_a\mathbf 1_{D_a}$ by this unitary to obtain $Z$.
     Since $UE_a$ is the original orbit isometry,
     $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the original cyclic sectors
