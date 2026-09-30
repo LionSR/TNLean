@@ -1173,7 +1173,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \lean{TNLean.Algebra.LSymbol.actionGaugeEquiv_of_bijective_smul,
         TNLean.Algebra.LSymbol.isCompatible_regular}
     \leanok
-    \uses{def:mpug_l_symbols}
+    \uses{def:mpug_l_symbols,def:mpug_l_gauge,def:mpug_l_normalized}
     Let $G$ act freely and transitively on a nonempty set $X$.
     Any two L-symbols $L_1,L_2$ compatible with the same three-cochain
     $\omega$ are related by an action-tensor gauge, with the fusion gauge
@@ -1233,7 +1233,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \lean{TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge,
         TNLean.Algebra.LSymbol.IsCompatible.apply_involution}
     \leanok
-    \uses{def:mpug_l_symbols}
+    \uses{def:mpug_l_symbols,def:mpug_l_gauge,def:mpug_l_normalized}
     Let $L$ be compatible with a normalized three-cochain $\omega$ for an
     action of $G$ on $X$. The action-tensor gauge
     $\gamma_{g,x}=L^x_{e,e}$, with fusion gauge equal to one, makes $L$
@@ -1256,7 +1256,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \label{thm:asymex_klein_l_symbol_signs}
     \lean{TNLean.Algebra.LSymbol.apply_self_of_kleinCocycleFamily}
     \leanok
-    \uses{def:asymex_klein_cocycle_family,def:mpug_l_symbols}
+    \uses{def:asymex_klein_cocycle_family,def:mpug_l_symbols,def:mpug_l_normalized}
     Let $L$ be normalized and compatible with $\omega_{pqr}$, with
     $p,q,r\in\Z_2$. For $g=(u,v)\in\Z_2^2$ and every block $x$,
     \begin{align}

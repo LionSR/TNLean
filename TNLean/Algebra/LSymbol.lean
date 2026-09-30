@@ -28,6 +28,11 @@ attach these scalars to a matrix product unitary.
   compatibility is multiplicative.
 * `LSymbol.gauge_one_mul`, `LSymbol.IsCompatible.gauge_one`: action-tensor gauges with trivial
   fusion gauge.
+* `LSymbol.IsCompatible.apply_right_one`, `LSymbol.IsCompatible.apply_left_one`: the values
+  with one identity argument.
+* `LSymbol.IsCompatible.isNormalized_gauge`: an action-tensor gauge normalizes compatible
+  L-symbols.
+* `LSymbol.IsCompatible.apply_involution`: the diagonal relation for an involution.
 -/
 
 namespace TNLean.Algebra
@@ -233,8 +238,9 @@ theorem IsCompatible.apply_left_one {L : LSymbol G X}
   apply (mul_right_cancel (b := L x 1 g))
   simpa [mul_assoc] using h
 
-/-- An action-tensor gauge normalizes compatible L-symbols without changing a
-normalized three-cochain, as asserted in arXiv:2203.12563, lines 1830–1839. -/
+/-- The action-tensor gauge `γ_{g,x} = Lˣ_{1,1}`, with trivial fusion gauge, turns
+compatible L-symbols `L` for a normalized three-cochain into `L'` with
+`L'ˣ_{g,1} = L'ˣ_{1,g} = 1`, as asserted in arXiv:2203.12563, lines 1830–1839. -/
 theorem IsCompatible.isNormalized_gauge {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (hω : ω.IsNormalized) :
     IsNormalized (LSymbol.gauge (fun _ _ ↦ 1) (fun _ x ↦ L x 1 1) L) := by
@@ -242,8 +248,8 @@ theorem IsCompatible.isNormalized_gauge {L : LSymbol G X} {ω : ScalarThreeCocha
   exact ⟨fun x g ↦ by simpa [hω.2.2] using hL.apply_right_one x g,
     fun x g ↦ by simpa [hω.1] using hL.apply_left_one x g⟩
 
-/-- For an involution, the diagonal L-symbol changes along its block action by
-its diagonal three-cochain value. This gives the sign relations of
+/-- For an involution `g` and normalized compatible L-symbols,
+`Lˣ_{g,g} = ω(g,g,g) L^{g • x}_{g,g}`. This gives the sign relations of
 arXiv:2203.12563, lines 1830–1839 and 1886. -/
 theorem IsCompatible.apply_involution {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (hn : IsNormalized L) (x : X) {g : G}
