@@ -79,7 +79,8 @@ itself; the concatenation has factor `c_A c_B`. Documented in
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
-open Module LinearMap Representation
+open Module LinearMap Representation TensorProduct
+open scoped Matrix
 
 namespace TNLean
 namespace PEPS
@@ -111,7 +112,8 @@ theorem concatLeftInverse_leftRegular (LA : (ι → ℂ) →ₗ[ℂ] Module.End 
   simp only [concatLeftInverse, LinearMap.smul_apply, LinearMap.sum_apply,
     LinearMap.smulRight_apply, Finset.smul_sum]
   refine Finset.sum_congr rfl fun p _ => ?_
-  rw [smul_comm, ← mul_smul_comm, ← smul_mul_assoc, h, mul_one]
+  rw [smul_comm, ← smul_mul_assoc (Fintype.card G : ℂ), ← mul_smul_comm (Fintype.card G : ℂ), h,
+    mul_one]
 
 end Regular
 
@@ -155,13 +157,15 @@ whose matrix in this basis is the conjugate transpose. -/
 noncomputable def regularAdjoint (X : Module.End ℂ (MonoidAlgebra ℂ G)) :
     Module.End ℂ (MonoidAlgebra ℂ G) :=
   (LinearMap.toMatrixAlgEquiv (MonoidAlgebra.basis G ℂ)).symm
-    (LinearMap.toMatrixAlgEquiv (MonoidAlgebra.basis G ℂ) X)ᴴ
+    (LinearMap.toMatrixAlgEquiv (MonoidAlgebra.basis G ℂ) X).conjTranspose
 
+omit [Group G] in
 /-- The adjoint reverses products, `(XY)† = Y† X†`. -/
 theorem regularAdjoint_mul (X Y : Module.End ℂ (MonoidAlgebra ℂ G)) :
     regularAdjoint (X * Y) = regularAdjoint Y * regularAdjoint X := by
   simp only [regularAdjoint, map_mul, Matrix.conjTranspose_mul]
 
+omit [Group G] in
 theorem regularAdjoint_smul (r : ℂ) (X : Module.End ℂ (MonoidAlgebra ℂ G)) :
     regularAdjoint (r • X) = star r • regularAdjoint X := by
   simp only [regularAdjoint, map_smul, Matrix.conjTranspose_smul]
@@ -176,6 +180,7 @@ noncomputable def mpsAdjointSiteMap (A : ι → Module.End ℂ (MonoidAlgebra �
     (ι → ℂ) →ₗ[ℂ] Module.End ℂ (MonoidAlgebra ℂ G) :=
   ∑ i, (LinearMap.proj i).smulRight (regularAdjoint (A i))
 
+omit [Group G] in
 @[simp]
 theorem mpsAdjointSiteMap_single (A : ι → Module.End ℂ (MonoidAlgebra ℂ G)) (i : ι) :
     mpsAdjointSiteMap A (Pi.single i 1) = regularAdjoint (A i) := by
@@ -189,9 +194,10 @@ theorem concatLeftInverse_mpsAdjointSiteMap (A : ι → Module.End ℂ (MonoidAl
     (B : κ → Module.End ℂ (MonoidAlgebra ℂ G)) :
     concatLeftInverse (leftRegular ℂ G) (mpsAdjointSiteMap A) (mpsAdjointSiteMap B) =
       mpsAdjointSiteMap (concatTensor A B) := by
-  rw [concatLeftInverse_leftRegular, mpsAdjointSiteMap]
+  simp only [concatLeftInverse_leftRegular, mpsAdjointSiteMap_single]
+  rw [mpsAdjointSiteMap]
   refine Finset.sum_congr rfl fun p _ => ?_
-  rw [mpsAdjointSiteMap_single, mpsAdjointSiteMap_single, concatTensor_apply, regularAdjoint_mul]
+  rw [concatTensor_apply, regularAdjoint_mul]
 
 /-- Source: arXiv:1001.3807, Definition 6.1 (`def:iso:isopeps`), `Papers/1001.3807/paper_v3.tex`
 lines 1692–1700, for an MPS tensor in the form `𝒫(A)⁻¹ = 𝒫(A†)`. The bond carries the
@@ -207,6 +213,7 @@ structure IsGIsometricMPS (A : ι → Module.End ℂ (MonoidAlgebra ℂ G)) : Pr
     mpsAdjointSiteMap A ∘ₗ mpsSiteMap A =
       (c : ℂ) • (linHom (leftRegular ℂ G) (leftRegular ℂ G)).averageMap
 
+omit [DecidableEq ι] in
 /-- Bridge: arXiv:1001.3807, Definition 6.1, `Papers/1001.3807/paper_v3.tex` lines 1692–1695.
 A `G`-isometric MPS tensor is `G`-injective for the left-regular representation, with the left
 inverse `c⁻¹ 𝒫(A†)`. -/
@@ -242,11 +249,12 @@ theorem IsGIsometricMPS.concatTensor {A : ι → Module.End ℂ (MonoidAlgebra �
   have hsmul : concatLeftInverse (leftRegular ℂ G) ((cA : ℂ)⁻¹ • mpsAdjointSiteMap A)
       ((cB : ℂ)⁻¹ • mpsAdjointSiteMap B) =
       ((cA : ℂ) * cB)⁻¹ • mpsAdjointSiteMap (PEPS.concatTensor A B) := by
-    rw [concatLeftInverse_leftRegular, mpsAdjointSiteMap, Finset.smul_sum]
-    refine Finset.sum_congr rfl fun p _ => LinearMap.ext fun x => ?_
-    simp only [LinearMap.smul_apply, mpsAdjointSiteMap_single, LinearMap.smulRight_apply,
-      concatTensor_apply, regularAdjoint_mul, smul_mul_smul_comm, smul_smul]
-    rw [mul_inv, mul_comm (cA : ℂ)⁻¹]
+    simp only [concatLeftInverse_leftRegular, LinearMap.smul_apply, mpsAdjointSiteMap_single]
+    rw [mpsAdjointSiteMap, Finset.smul_sum]
+    refine Finset.sum_congr rfl fun p _ => ?_
+    refine LinearMap.ext fun x => ?_
+    simp only [LinearMap.smul_apply, LinearMap.smulRight_apply, concatTensor_apply, regularAdjoint_mul, smul_mul_smul_comm, smul_smul]
+    rw [mul_inv, mul_comm (cA : ℂ)⁻¹, mul_comm]
   rw [hsmul, LinearMap.smul_comp] at hC
   rw [← hC, smul_smul, Complex.ofReal_mul, mul_inv_cancel₀ (mul_ne_zero hcA' hcB'), one_smul]
 
@@ -275,6 +283,7 @@ theorem dotProduct_mulVec_of_mem_unitaryGroup {n : Type*} [Fintype n] [Decidable
 variable {G ι κ : Type*} [Group G] [Fintype G] [Fintype ι] [Fintype κ] [DecidableEq ι]
   [DecidableEq κ] {ρ : Representation ℂ G (ι → ℂ)} {T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)}
 
+omit [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ] in
 /-- Under the standing assumption that `𝒫(A)` is onto the physical system, a left inverse `L`
 with `L 𝒫(A) = Π` lands in the invariant subspace and is a right inverse. -/
 theorem IsGInjective.leftInverse_mem_invariants_of_surjective (hT : IsGInjective ρ T)
@@ -306,12 +315,13 @@ theorem IsGIsometric.exists_unitary_comp_eq (hT : IsGIsometric ρ T)
     rw [← this, hx g]
   -- On the range, `U (T x) = T (V x)` for invariant `x`.
   have hU : ∀ x ∈ ρ.invariants, T (V *ᵥ L (T x)) = T (V *ᵥ x) := fun x hx => by
-    rw [LinearMap.congr_fun hL x, ρ.averageMap_id x hx]
+    rw [← LinearMap.comp_apply L T, hL, ρ.averageMap_id x hx]
   refine ⟨LinearMap.toMatrix' (T ∘ₗ Matrix.toLin' V ∘ₗ L), ?_, ?_⟩
   · refine mem_unitaryGroup_of_dotProduct fun y y' => ?_
     obtain ⟨hy, hTy⟩ := hT.toIsGInjective.leftInverse_mem_invariants_of_surjective hsurj hL y
     obtain ⟨hy', hTy'⟩ := hT.toIsGInjective.leftInverse_mem_invariants_of_surjective hsurj hL y'
     simp only [← Matrix.toLin'_apply, Matrix.toLin'_toMatrix', LinearMap.comp_apply]
+    simp only [Matrix.toLin'_apply]
     rw [hcT _ (hVinv _ hy) _ (hVinv _ hy'), dotProduct_mulVec_of_mem_unitaryGroup hV,
       ← hcT _ hy _ hy', hTy, hTy']
   · refine LinearMap.ext fun x => ?_
@@ -327,6 +337,7 @@ theorem IsGIsometric.exists_unitary_comp_eq (hT : IsGIsometric ρ T)
     simp only [hg, Finset.sum_const, Finset.card_univ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul,
       invOf_mul_self, one_smul]
 
+omit [DecidableEq ι] in
 /-- Source: arXiv:1001.3807, Lemma 6.3 (`lemma:iso:sym-virt-can-be-done-on-phys`), second
 direction, `Papers/1001.3807/paper_v3.tex` lines 1752–1761, figure
 `figs4/virt-op-from-phys.pdf`. For a `G`-isometric map `T = 𝒫(A)` onto the physical system
