@@ -18,6 +18,13 @@ physical lengths; removing zero blocks can reduce the bond dimension.
 
 This decomposition does not yet group repeated blocks into a basis, diagonalize
 fixed points, or decompose the blocks after an arbitrary prescribed blocking.
+
+## References
+
+* De las Cuevas, Cirac, Schuch, Pérez-García, arXiv:1708.00029, Proposition
+  `thm:irr`, lines 238--271, and `eq:unital`, lines 313--320.
+* [M. Wolf, *Quantum Channels & Operations: Guided Tour*, Proposition
+  6.1][Wolf2012QChannels]
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.Operator Kraus
