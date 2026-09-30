@@ -939,3 +939,84 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     the claimed dimension. Absorb each weight into its periodic block;
     a unit-modulus scalar preserves left canonicality and the period.
 \end{proof}
+
+\begin{lemma}[Recovery under a physical isometry]
+    \label{lem:periodic_physical_isometry_recovery}
+    \lean{MPSTensor.sum_star_smul_sum_smul_of_isometry,
+        MPSTensor.hetRepeatedBlocks_of_kraus_isometry}
+    \leanok
+    Let $W^\dagger W=\mathbf 1$ and $C^t=\sum_i W_{ti}A^i$. Then
+    $A^i=\sum_t\overline{W_{ti}}C^t$. In particular, if the images of two
+    tensors under the same physical isometry are related by a similarity
+    and a unit-modulus scalar, the original tensors satisfy the same relation.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Expand the two finite sums and use $W^\dagger W=\mathbf 1$.
+    The recovery map commutes with the fixed bond similarity and scalar.
+\end{proof}
+
+\begin{definition}[Physical mixing of a sector decomposition]
+    \label{def:periodic_sector_physical_mixing}
+    \lean{MPSTensor.SectorDecomposition.mapPhysical}
+    \leanok
+    For a sector decomposition $P$ and a physical linear map $W$, let
+    $W\cdot P$ have representatives $(W\cdot P)_j^t=\sum_iW_{ti}P_j^i$
+    and the same multiplicities and bond coordinates as $P$.
+\end{definition}
+
+\begin{lemma}[Physical mixing and block assembly]
+    \label{lem:periodic_sector_physical_mixing}
+    \lean{MPSTensor.toTensorFromBlocks_sum_smul,
+        MPSTensor.SectorDecomposition.mapPhysical_toTensor,
+        MPSTensor.SectorDecomposition.transferMap_mapPhysical}
+    \leanok
+    \uses{def:periodic_sector_physical_mixing}
+    Physical mixing commutes with weighted block sums:
+    \[
+        \bigoplus_k\mu_k\Bigl(\sum_iW_{ti}A_k^i\Bigr)
+        =\sum_iW_{ti}\Bigl(\bigoplus_k\mu_k A_k^i\Bigr).
+    \]
+    Consequently the tensor assembled from $W\cdot P$ is the physical
+    image of the tensor assembled from $P$. If $W^\dagger W=\mathbf 1$,
+    their transfer maps coincide.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The block-sum identity follows entrywise. Expanding the transfer map
+    and summing over the physical index gives the final claim by
+    $W^\dagger W=\mathbf 1$.
+\end{proof}
+
+\begin{theorem}[Normalized blocks of a refining tensor]
+    \label{thm:periodic_refinement_normalized_input}
+    \lean{MPSTensor.exists_unitWeight_periodic_blocks_of_isPRefinable}
+    \leanok
+    \uses{def:periodic_sector_physical_mixing,thm:periodic_refinement_normalized_presentation}
+    Let $P$ be a periodic sector decomposition with a pairwise non-repeated
+    basis and all multiplicities equal to one. If its assembled tensor is
+    $p$-refinable for $p>0$, there are a physical isometry $W$ and
+    left-canonical periodic tensors $A_k$ such that $\sum_k D_k$ equals
+    the total bond dimension of $P$, and
+    \[
+        \left(\bigoplus_k A_k\right)^{[p]}
+        \quad\text{and}\quad W\cdot P
+    \]
+    have the same positive-length matrix product vectors.
+    This is the normalization step of the corrected forward implication
+    of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}; the unit multiplicities
+    are the restriction recorded in \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:periodic_physical_isometry_recovery,
+        lem:periodic_sector_physical_mixing,thm:periodic_refinement_normalized_presentation}
+    Take the refining tensor and physical isometry from refinability.
+    Physical mixing preserves the periods and multiplicities, and the recovery
+    identity shows that distinct basis members remain non-repeated.
+    Apply the unit-weight presentation theorem to the refining tensor and
+    this mixed target, then block the resulting positive-length equality.
+\end{proof}

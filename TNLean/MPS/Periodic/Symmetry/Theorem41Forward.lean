@@ -103,76 +103,6 @@ theorem isPeriodic_kraus_isometry
     hB.period_pos, ?_⟩
   simpa [C, hEq] using hB.peripheral_eq
 
-private theorem sameMPV₂_toTensorFromBlocks_sum_smul_ofFn
-    {m r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (W : Matrix (Fin m) (Fin d) ℂ) :
-    SameMPV₂
-      (fun τ : Fin m => ∑ σ : Fin d, W τ σ •
-        toTensorFromBlocks (d := d) (μ := μ) blocks σ)
-      (toTensorFromBlocks (d := m) (μ := μ)
-        (fun k : Fin r => fun τ : Fin m => ∑ σ : Fin d, W τ σ • blocks k σ)) := by
-  intro N τ
-  calc
-    mpv (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' •
-        toTensorFromBlocks (d := d) (μ := μ) blocks σ') τ =
-        ∑ σ : Fin N → Fin d,
-          (∏ k : Fin N, W (τ k) (σ k)) *
-            mpv (toTensorFromBlocks (d := d) (μ := μ) blocks) σ := by
-          simpa [mpv_eq, coeff_eq] using
-            mpv_sum_smul_ofFn (B := toTensorFromBlocks (d := d) (μ := μ) blocks) W N τ
-    _ = ∑ σ : Fin N → Fin d,
-          (∏ k : Fin N, W (τ k) (σ k)) *
-            ∑ j : Fin r, (μ j) ^ N * mpv (blocks j) σ := by
-          refine Finset.sum_congr rfl ?_
-          intro σ _
-          rw [mpv_toTensorFromBlocks_eq_sum]
-          simp only [smul_eq_mul]
-    _ = ∑ σ : Fin N → Fin d,
-          ∑ j : Fin r,
-            (∏ k : Fin N, W (τ k) (σ k)) *
-              ((μ j) ^ N * mpv (blocks j) σ) := by
-          simp_rw [Finset.mul_sum]
-    _ = ∑ j : Fin r,
-          ∑ σ : Fin N → Fin d,
-            (∏ k : Fin N, W (τ k) (σ k)) *
-              ((μ j) ^ N * mpv (blocks j) σ) := by
-          rw [Finset.sum_comm]
-    _ = ∑ j : Fin r,
-          (μ j) ^ N *
-            ∑ σ : Fin N → Fin d,
-              (∏ k : Fin N, W (τ k) (σ k)) * mpv (blocks j) σ := by
-          refine Finset.sum_congr rfl ?_
-          intro j _
-          calc
-            ∑ σ : Fin N → Fin d,
-                (∏ k : Fin N, W (τ k) (σ k)) *
-                  ((μ j) ^ N * mpv (blocks j) σ)
-                = ∑ σ : Fin N → Fin d,
-                    (μ j) ^ N *
-                      ((∏ k : Fin N, W (τ k) (σ k)) * mpv (blocks j) σ) := by
-                    refine Finset.sum_congr rfl ?_
-                    intro σ _
-                    simp [mul_assoc, mul_comm]
-            _ = (μ j) ^ N *
-                  ∑ σ : Fin N → Fin d,
-                    (∏ k : Fin N, W (τ k) (σ k)) * mpv (blocks j) σ := by
-                    rw [← Finset.mul_sum]
-    _ = ∑ j : Fin r,
-          (μ j) ^ N *
-            mpv (fun τ' : Fin m => ∑ σ' : Fin d, W τ' σ' • blocks j σ') τ := by
-          refine Finset.sum_congr rfl ?_
-          intro j _
-          congr 1
-          symm
-          simpa [mpv_eq, coeff_eq] using mpv_sum_smul_ofFn (B := blocks j) W N τ
-    _ = mpv (toTensorFromBlocks (d := m) (μ := μ)
-          (fun k : Fin r => fun τ' : Fin m => ∑ σ : Fin d, W τ' σ • blocks k σ)) τ := by
-          symm
-          rw [mpv_toTensorFromBlocks_eq_sum]
-          simp only [smul_eq_mul]
-
 /-- A physical-index isometry preserves irreducible form II. -/
 noncomputable def isIrreducibleForm_kraus_isometry
     {m : ℕ} (B : MPSTensor d D)
@@ -191,22 +121,12 @@ noncomputable def isIrreducibleForm_kraus_isometry
       sameMPV := ?_ }
   · intro k
     exact isPeriodic_kraus_isometry (B := hB.blocks k) W hW (hB.periodic k)
-  · have hPullbackSame :
-        SameMPV₂
-          (fun τ : Fin m => ∑ σ : Fin d, W τ σ • B σ)
-          (fun τ : Fin m => ∑ σ : Fin d, W τ σ •
-            toTensorFromBlocks (d := d) (μ := hB.μ) hB.blocks σ) :=
-        sameMPV₂_sum_smul_ofFn B
-          (toTensorFromBlocks (d := d) (μ := hB.μ) hB.blocks) W hB.sameMPV
-    have hBlocksSame :
-        SameMPV₂
-          (fun τ : Fin m => ∑ σ : Fin d, W τ σ •
-            toTensorFromBlocks (d := d) (μ := hB.μ) hB.blocks σ)
-          (toTensorFromBlocks (d := m) (μ := hB.μ)
-            (fun k : Fin hB.r => fun τ : Fin m => ∑ σ : Fin d, W τ σ • hB.blocks k σ)) :=
-        sameMPV₂_toTensorFromBlocks_sum_smul_ofFn hB.μ hB.blocks W
-    intro N τ
-    exact (hPullbackSame N τ).trans (hBlocksSame N τ)
+  · have he : toTensorFromBlocks (d := m) hB.μ
+        (fun k τ ↦ ∑ σ, W τ σ • hB.blocks k σ) =
+        fun τ ↦ ∑ σ, W τ σ • toTensorFromBlocks hB.μ hB.blocks σ :=
+      funext (toTensorFromBlocks_sum_smul hB.μ hB.blocks W)
+    rw [he]
+    exact sameMPV₂_sum_smul_ofFn B (toTensorFromBlocks hB.μ hB.blocks) W hB.sameMPV
 
 /-- **The tensor \(C\) in the forward proof of Theorem 4.1.**
 

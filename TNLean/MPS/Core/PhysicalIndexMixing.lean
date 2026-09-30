@@ -54,6 +54,18 @@ theorem isLeftCanonical_kraus_isometry
   exact kraus_sum_conjTranspose_mul_of_tp C (Kraus.transferMap C)
     (fun X ↦ by simp) hCh.tp
 
+/-- The conjugate coefficients recover a tensor from an isometric physical mixing.
+This is the left-inverse identity used for the tensor in arXiv:1708.00029,
+Theorem 4.1, lines 735–743. -/
+theorem sum_star_smul_sum_smul_of_isometry {m : ℕ} (A : MPSTensor d D)
+    (W : Matrix (Fin m) (Fin d) ℂ) (hW : Wᴴ * W = 1) (i : Fin d) :
+    (∑ t, star (W t i) • (∑ j, W t j • A j)) = A i := by
+  simp_rw [Finset.smul_sum, smul_smul]
+  rw [Finset.sum_comm]
+  simp_rw [← Finset.sum_smul,
+    Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one W hW]
+  simp
+
 /-- An isometric physical-index mixing of an injective matrix family remains
 injective.
 
@@ -67,34 +79,8 @@ theorem isInjective_kraus_isometry
     Kraus.IsInjective (fun τ : Fin m ↦ ∑ σ : Fin d, W τ σ • B σ) := by
   let C : MPSTensor m D := fun τ ↦ ∑ σ : Fin d, W τ σ • B σ
   have hrecover (sigma : Fin d) :
-      ∑ tau : Fin m, star (W tau sigma) • C tau = B sigma := by
-    ext i j
-    simp only [C, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-    calc
-      ∑ tau : Fin m, star (W tau sigma) * ∑ rho : Fin d, W tau rho * B rho i j =
-          ∑ tau : Fin m, ∑ rho : Fin d,
-            (star (W tau sigma) * W tau rho) * B rho i j := by
-              apply Finset.sum_congr rfl
-              intro tau _
-              rw [Finset.mul_sum]
-              apply Finset.sum_congr rfl
-              intro rho _
-              ring
-      _ = ∑ rho : Fin d, ∑ tau : Fin m,
-          (star (W tau sigma) * W tau rho) * B rho i j := Finset.sum_comm
-      _ = ∑ rho : Fin d,
-          (∑ tau : Fin m, star (W tau sigma) * W tau rho) * B rho i j := by
-            apply Finset.sum_congr rfl
-            intro rho _
-            rw [Finset.sum_mul]
-      _ = B sigma i j := by
-        have hentry (rho : Fin d) :
-            (∑ tau : Fin m, star (W tau sigma) * W tau rho) =
-              if sigma = rho then 1 else 0 := by
-          exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
-            W hW sigma rho
-        simp_rw [hentry]
-        simp
+      ∑ tau : Fin m, star (W tau sigma) • C tau = B sigma :=
+    sum_star_smul_sum_smul_of_isometry B W hW sigma
   rw [Kraus.IsInjective, eq_top_iff]
   intro X _
   have hle : Submodule.span ℂ (Set.range B) ≤

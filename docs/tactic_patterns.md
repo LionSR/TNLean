@@ -3656,3 +3656,16 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction (proposed):** a family-level decomposition lemma returning
   the chosen blocks and dimension identities if a third consumer appears.
   The shared weighted-sum refinement is already a separate theorem.
+
+### Recovering letters after an isometric physical mixing — promoted
+
+- **Pattern:** apply the conjugate physical coefficients to recover the original
+  matrix family from an isometric mixing, then transport a linear-span or
+  block-similarity identity back to the original letters.
+- **Shared lemma:** `MPSTensor.sum_star_smul_sum_smul_of_isometry` in
+  `TNLean/MPS/Core/PhysicalIndexMixing.lean`.
+- **Call sites:** the injectivity proof in that module and recovery of both
+  tensor families in `hetRepeatedBlocks_of_kraus_isometry` in
+  `TNLean/MPS/Periodic/RefinementInput.lean` (three applications in two files).
+- **Mechanism:** a finite-sum identity using the existing Mathlib matrix-isometry
+  coefficient lemma; no new tactic or simp set is needed.

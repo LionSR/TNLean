@@ -32,6 +32,29 @@ noncomputable def toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
   (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
     (Matrix.blockDiagonal' fun k => (μ k) • (A k i))
 
+/-- Mixing physical letters commutes with the weighted block sum as an equality
+of matrices. Source: arXiv:1708.00029, Theorem 4.1, lines 735–743. -/
+theorem toTensorFromBlocks_sum_smul {m r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (W : Matrix (Fin m) (Fin d) ℂ) (t : Fin m) :
+    toTensorFromBlocks μ (fun k t ↦ ∑ i, W t i • A k i) t =
+      ∑ i, W t i • toTensorFromBlocks μ A i := by
+  ext x y
+  simp only [toTensorFromBlocks, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  generalize hx : finSigmaFinEquiv.symm x = sx
+  generalize hy : finSigmaFinEquiv.symm y = sy
+  rcases sx with ⟨a, x⟩
+  rcases sy with ⟨b, y⟩
+  by_cases hab : a = b
+  · subst b
+    simp only [Matrix.blockDiagonal'_apply_eq, Matrix.smul_apply, Matrix.sum_apply,
+      smul_eq_mul, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    ring
+  · simp [Matrix.blockDiagonal'_apply_ne _ _ _ hab]
+
 /-- The coordinate inclusion of one dependent block into the flattened direct sum.
 
 This is the coordinate inclusion underlying the block reconstruction in
