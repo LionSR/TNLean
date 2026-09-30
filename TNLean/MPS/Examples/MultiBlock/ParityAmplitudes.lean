@@ -67,7 +67,7 @@ theorem trace_evalWord_parA_eq_zero_of_odd (w : List (Fin 2))
     occupation_sign_mul_trace_evalWord_parA w
 
 /-- The local conjugation identity of the occupation-parity symmetry. -/
-lemma pauliZ_mul_parA_mul_pauliZ (i : Fin 2) :
+theorem pauliZ_mul_parA_mul_pauliZ (i : Fin 2) :
     pauliZ * parA i * pauliZ = (-1 : ℂ) ^ i.val • parA i := by
   simp [pauliZ_mul_parA, Matrix.mul_assoc, pauliZ_sq]
 
@@ -138,7 +138,7 @@ private theorem trace_evalWord_parA_rotate (w : List (Fin 2)) (n : ℕ) :
     ← Kraus.evalWord_append, List.take_append_drop]
 
 /-- The run formula is independent of the site at which the cyclic word starts. -/
-lemma trace_evalWord_parA_cyclic_runs {w : List (Fin 2)} (r : ℕ) (rs : List ℕ)
+theorem trace_evalWord_parA_cyclic_runs {w : List (Fin 2)} (r : ℕ) (rs : List ℕ)
     (hw : w.IsRotated ((r :: rs).flatMap fun n => 0 :: List.replicate n 1)) :
     Matrix.trace (Kraus.evalWord parA w) =
       ((r :: rs).map fun n => if Even n then (1 : ℂ) else 0).prod := by
