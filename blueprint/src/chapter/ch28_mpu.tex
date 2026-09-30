@@ -6839,7 +6839,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =\operatorname{ind}(\mathcal U).
     \end{align}
     The bridge to physical identity-ancilla attachment is
-    Lemma~\ref{lem:mpu_physical_ancilla_index}.
+    Theorem~\ref{thm:mpu_physical_ancilla_index}.
     This is the canonical-form-II representative case of the tensoring claim in
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--833.
@@ -6914,8 +6914,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     and the ancilla assertion follows from additivity.
 \end{proof}
 
-\begin{lemma}[Physical identity ancillas and the representative index]
-    \label{lem:mpu_physical_ancilla_index}
+\begin{theorem}[Physical identity ancillas and the representative index]
+    \label{thm:mpu_physical_ancilla_index}
     \lean{MPOTensor.mpo_tensorProduct_identityMPUTensor,
         MPOTensor.mpo_tensorPhysicalId,
         MPOTensor.IsMPU.index_tensorPhysicalId}
@@ -6939,7 +6939,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source: paper_v2.tex, def:equivalent-tensors, lines 706--720;
     % IndexTh(ii), lines 824--845.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_finite_tensor_product, thm:threeMPU_chain_formulas,
