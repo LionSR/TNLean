@@ -344,7 +344,7 @@
     \end{align}
     Each letter of $M_0$ is a ket copy of $A$ over a bra copy of
     $\overline A$ that share no index:
-    \begin{center}
+    \begin{tenkzequation}
         % Formula: M_0^{(a,b)}=A^a (x) conj(A^b), the display above; the
         % doubled layer of arXiv:1606.00608, eq. (Psipuri), line 747
         % (figure MPDO_M=AA), without the ancilla contraction drawn there.
@@ -370,7 +370,7 @@
             \tn[skin=box, ports={270:physical:$b$, 180:virtual,
                         0:virtual}]{\overline A}
         \end{tenkz}
-    \end{center}
+    \end{tenkzequation}
     The positive diagonal multiplicity and coefficient matrices are
     \begin{align}
         \mu_0        & =\begin{pmatrix}\frac{25}{32}\end{pmatrix},
@@ -421,7 +421,7 @@
 The square computed in this proof is the following contraction. The two
 middle rings form the self-overlap of the periodic vector of $A$, a closed
 network equal to $\tr(W^L)=\tr(\chi_{0,0,0}^L)$:
-\begin{center}
+\begin{tenkzequation}
     % Formula: O_L(M_0)^2=tr(chi_{0,0,0}^L) O_L(M_0), with
     % O_L(M_0)=|V^{(L)}(A)><V^{(L)}(A)|, from the proof above; the product
     % law of arXiv:1606.00608, Theorem 4.14(ii), lines 972--985, for the
@@ -493,7 +493,7 @@ network equal to $\tr(W^L)=\tr(\chi_{0,0,0}^L)$:
         \tnwire{k1.0}{k2.180} \tnwire{k2.0}{kd.180} \tnwire{kd.0}{kL.180}
         \tnwire{b1.0}{b2.180} \tnwire{b2.0}{bd.180} \tnwire{bd.0}{bL.180}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 
 \begin{remark}[Vertical and horizontal contractions]
     Let $\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained
