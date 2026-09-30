@@ -806,7 +806,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_weighted_block_refinement}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_refinement}
     \leanok
-    If $A_k$ and $\bigoplus_{a=1}^{n_k}B_{k,a}$ have equal matrix product
+    If $A_k$ and $\bigoplus_{a=0}^{n_k-1}B_{k,a}$ have equal matrix product
     vectors at every length, then $\bigoplus_k\mu_k A_k$ and
     $\bigoplus_{k,a}\mu_k B_{k,a}$ do as well, for arbitrary complex
     weights $\mu_k$.
@@ -814,16 +814,22 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    Expand the trace of each block-diagonal product. The contribution from
-    $A_k$ is multiplied by $\mu_k^N$ at length $N$; substitute its refined
-    trace sum and enumerate the pairs $(k,a)$ in one finite list.
+    Expand the trace of each block-diagonal product and substitute the
+    refined vectors of each $A_k$. At every length $N$,
+    \begin{align}
+        V^{(N)}\Bigl(\bigoplus_k\mu_kA_k\Bigr)_\sigma
+         & =\sum_k\mu_k^NV^{(N)}(A_k)_\sigma
+        =\sum_k\sum_{a=0}^{n_k-1}\mu_k^NV^{(N)}(B_{k,a})_\sigma
+        =V^{(N)}\Bigl(\bigoplus_{k,a}\mu_kB_{k,a}\Bigr)_\sigma. \notag
+    \end{align}
+    The last equality reindexes the double sum by the pairs $(k,a)$.
 \end{proof}
 
 \begin{theorem}[Positive blocking of an irreducible-form presentation]
     \label{thm:periodic_irreducible_form_blocking}
     \lean{MPSTensor.IsIrreducibleForm.block,MPSTensor.IsIrreducibleForm.sum_dim_eq}
     \leanok
-    \uses{def:periodic_tensor}
+    \uses{def:periodic_tensor,def:irreducible_form}
     Suppose $A$ has the same matrix product vectors at every length,
     including zero, as $\bigoplus_k\mu_k A_k$, where $\mu_k>0$ and
     $A_k$ is left-canonical periodic of period $m_k$.
@@ -843,6 +849,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     Blocking raises $\mu_k$ to the power $p$, and refinement preserves that
     weight on every orbit block. The preceding theorem assembles the
     resulting vector identities. All new weights remain positive.
-    At length zero the matrix product vector is the trace of the identity,
-    so equality at that length gives equality of total dimensions.
+    At length zero every matrix product vector is the trace of the identity,
+    so, writing $D_{k,a}$ for the bond dimension of the block indexed by
+    $(k,a)$,
+    \begin{align}
+        D & =V^{(0)}\bigl(A^{[p]}\bigr)
+        =V^{(0)}\Bigl(\bigoplus_{k,a}\mu_k^pB_{k,a}\Bigr)
+        =\sum_{k,a}D_{k,a}. \notag
+    \end{align}
 \end{proof}
