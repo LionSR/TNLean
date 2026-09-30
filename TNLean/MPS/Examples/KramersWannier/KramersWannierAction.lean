@@ -223,11 +223,6 @@ theorem kwPlus_trace_evalWord_eq_sum (w : List (Fin 2)) (hw : w ≠ []) :
   have h := plusCompression.trace_evalWord_eq_sum w hw
   simpa [plusTarget, Fin.sum_univ_two] using h
 
-/-- **Biorthogonal compression of each Greenberger–Horne–Zeilinger sector out of `kwPlus`.** -/
-theorem plus_isReduction (s : {s // s ∈ PlusS}) :
-    IsReduction kwPlus (plusTarget s.1) (plusCompression.left s) (plusCompression.right s) :=
-  plusCompression.isReduction s
-
 /-- **The dimension count of part (a)**: `2 = 1 + 1 + 0`. -/
 theorem plus_dim_eq : (2 : ℕ) = ∑ s ∈ PlusS, PlusD s + 0 :=
   plusCompression.dim_eq
@@ -408,11 +403,6 @@ theorem kwGHZ_trace_evalWord_eq_two (w : List (Fin 2)) (hw : w ≠ []) :
     Matrix.one_apply_eq] at h
   rw [h]
   norm_num
-
-/-- **Biorthogonal compression of each copy out of `kwGHZ`.** -/
-theorem kwGHZ_isReduction (s : {s // s ∈ KWGHZS}) :
-    IsReduction kwGHZ (kwGHZTarget s.1) (kwGHZCompression.left s) (kwGHZCompression.right s) :=
-  kwGHZCompression.isReduction s
 
 /-- **The dimension count of part (b)**: `4 = 1 + 1 + 2`. -/
 theorem kwGHZ_dim_eq : (4 : ℕ) = ∑ s ∈ KWGHZS, KWGHZD s + 2 :=
