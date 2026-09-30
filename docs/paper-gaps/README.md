@@ -804,3 +804,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
+  of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
+  (paragraph "Connection to MERA") is formalized for tensors whose two-site
+  blocked tensor is injective, so that every layer is an isometry, and for
+  chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
+  a coarser last block remove the two restrictions.

@@ -98,6 +98,18 @@ abstracted — record why, so it is not re-proposed).
   `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
   block-sum files and is a candidate for the same treatment.
 
+### error from a logarithmic block-length threshold — promoted
+- **Pattern:** close `K * (M * Real.exp (-x)) ≤ ε` from a threshold
+  `log K + log M - log ε ≤ x` by a hand-written `calc` through
+  `Real.exp_log`, `Real.exp_add`/`Real.exp_sub` and `Real.exp_le_exp`.
+- **Seen:** three occurrences across three files (2026-09-30):
+  `DepthLogBound.lean`, `LogDepthPreparation.lean` and `TreeMERA.lean`, all
+  under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_le_of_log_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** all three call sites use the helper; each now proves only the
+  threshold inequality.
+
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining

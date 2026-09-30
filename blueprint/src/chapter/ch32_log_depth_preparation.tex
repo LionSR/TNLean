@@ -831,6 +831,18 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     bound follows from $\varepsilon\leq1\leq Cy\leq Cy\,e^{Cy}$.
 \end{proof}
 
+\begin{lemma}[From a logarithmic threshold to the error]
+    \label{lem:ldp_log_threshold_error}
+    \lean{mul_mul_exp_neg_le_of_log_le}
+    \leanok
+    Let $K,M,\varepsilon>0$ and $\log K+\log M-\log\varepsilon\leq x$. Then
+    $KMe^{-x}\leq\varepsilon$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    $KMe^{-x}=e^{\log K+\log M-x}\leq e^{\log\varepsilon}=\varepsilon$.
+\end{proof}
+
 \begin{theorem}[Powers of a perturbed idempotent without first-order term]
     \label{thm:ldp_idempotent_second_order}
     \lean{IsIdempotentElem.norm_trace_add_pow_sub_le_of_le,
@@ -2611,6 +2623,8 @@ $A$ along $w$.
     is injective by Theorems~\ref{thm:cpsv_normal_eventually_injective}
     and~\ref{thm:gauge_invariance_normal}.
 \end{proof}
+
+\input{chapter/ch32_log_depth_mera}
 
 \section{Tensors that are not normal}
 
