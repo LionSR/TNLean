@@ -1207,6 +1207,128 @@ $\mathcal{P}$ from the virtual to the physical system.
     with $g=h=1$, $\tr\Delta=1$ for semi-regular $\tau$.
 \end{proof}
 
+\subsection{\texorpdfstring{$G$}{G}-isometric tensors}
+
+For a tensor $A$ let $A^\dagger$ be the tensor with complex conjugate entries
+and the roles of the incoming and outgoing legs exchanged, so that
+$\mathcal{P}(A^\dagger)=\mathcal{P}(A)^\dagger$. For a matrix product tensor
+with bond space $\mathbb{C}[G]$, on which the left-regular representation acts
+by $L_g\ket{h}=\ket{gh}$ and the group elements are orthonormal,
+$\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
+\cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+
+\begin{definition}[$G$-isometric matrix product tensor]%
+    \label{def:peps_mps_g_isometric}
+    \lean{TNLean.PEPS.regularAdjoint, TNLean.PEPS.regularAdjoint_mul,
+        TNLean.PEPS.regularAdjoint_smul, TNLean.PEPS.mpsAdjointSiteMap,
+        TNLean.PEPS.mpsAdjointSiteMap_single, TNLean.PEPS.IsGIsometricMPS,
+        TNLean.PEPS.IsGIsometricMPS.isGInjective}
+    \leanok
+    \uses{def:peps_mps_g_injective}
+    A matrix product tensor $A$ with bond space $\mathbb{C}[G]$ is
+    $G$-isometric if $L_gA^iL_g^{-1}=A^i$ for all $g$ and $i$ and
+    $\mathcal{P}(A^\dagger)\mathcal{P}(A)=c\,\sigma$ for one constant $c>0$,
+    where $\sigma$ is the twirl onto the commutant of the left-regular
+    representation. Then $c^{-1}\mathcal{P}(A^\dagger)$ is a left inverse of
+    $\mathcal{P}(A)$, so $A$ is $G$-injective. For $c=1$ this is the
+    condition $\mathcal{P}(A)^{-1}=\mathcal{P}(A^\dagger)$ of the source; the
+    constant absorbs the normalization of the tensor
+    \cite[Definition~6.1]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{lemma}[The left inverse for the regular representation]%
+    \label{lem:peps_regular_left_inverse}
+    \lean{TNLean.PEPS.card_smul_deltaOperator_leftRegular,
+        TNLean.PEPS.concatLeftInverse_leftRegular,
+        TNLean.PEPS.innerContraction_smul,
+        TNLean.PEPS.linkContractionLeftInverse_leftRegular}
+    \leanok
+    \uses{thm:peps_semiregular_trace, thm:peps_mps_g_injective_concatenation,
+        thm:peps_g_injective_concatenation}
+    For the left-regular representation $|G|\,\Delta=\mathbb{1}$. Hence the
+    left inverse of a concatenation $C^{ij}=A^iB^j$ of matrix product tensors
+    built from left inverses $L_A$ and $L_B$ is
+    $L_C\ket{i,j}=(L_B\ket{j})(L_A\ket{i})$, and if the contracted link of two
+    tensors in two dimensions carries the left-regular representation, the left
+    inverse of the contracted tensor applies $L_A\otimes L_B$ and contracts the
+    two ends of the link directly \cite[Lemma~6.2]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The operator $\Delta$ acts on the irreducible subrepresentation with
+    character $\chi$ as $\chi(1)/(m_\chi|G|)$, and in the regular
+    representation $m_\chi=\chi(1)$. Substitute $|G|\,\Delta=\mathbb{1}$ in the
+    two left inverses.
+\end{proof}
+
+\begin{theorem}[Stability of isometry under concatenation]%
+    \label{thm:peps_mps_g_isometric_concatenation}
+    \lean{TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap,
+        TNLean.PEPS.IsGIsometricMPS.concatTensor}
+    \leanok
+    \uses{def:peps_mps_g_isometric, lem:peps_regular_left_inverse,
+        thm:peps_mps_g_injective_concatenation}
+    If the matrix product tensors $A$ and $B$ are $G$-isometric, so is
+    $C^{ij}=A^iB^j$: the left inverse built from $\mathcal{P}(A^\dagger)$ and
+    $\mathcal{P}(B^\dagger)$ is $\mathcal{P}(C^\dagger)$, and
+    $\mathcal{P}(C^\dagger)\mathcal{P}(C)=c_Ac_B\,\sigma$
+    \cite[Lemma~6.2]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_regular_left_inverse} the left inverse built from
+    $c_A^{-1}\mathcal{P}(A^\dagger)$ and $c_B^{-1}\mathcal{P}(B^\dagger)$ sends
+    $\ket{i,j}$ to $(c_Ac_B)^{-1}(B^j)^\dagger(A^i)^\dagger
+        =(c_Ac_B)^{-1}(A^iB^j)^\dagger$, and by
+    Theorem~\ref{thm:peps_mps_g_injective_concatenation} it is a left
+    inverse of $\mathcal{P}(C)$. Invariance of $C$ holds as for
+    $G$-injective tensors.
+\end{proof}
+
+The source shows next that for a $G$-isometric tensor the virtual level,
+restricted to the invariant subspace, and the physical level are related by a
+unitary. Its standing convention is that the physical system of a site is the
+range of $\mathcal{P}(A)$, which can always be arranged by a local isometry
+\cite[Sections~``MPS and PEPS'' and ``Isometric PEPS'']{Schuch2010PEPS}.
+
+\begin{theorem}[Virtual unitaries implementable on the physical level]%
+    \label{thm:peps_g_isometric_virtual_unitaries}
+    \lean{TNLean.PEPS.mem_unitaryGroup_of_dotProduct,
+        TNLean.PEPS.dotProduct_mulVec_of_mem_unitaryGroup,
+        TNLean.PEPS.IsGInjective.leftInverse_mem_invariants_of_surjective,
+        TNLean.PEPS.IsGIsometric.exists_unitary_comp_eq,
+        TNLean.PEPS.IsGIsometric.exists_comp_eq_of_unitary}
+    \leanok
+    \uses{def:peps_g_injective, thm:peps_g_injective_left_inverse}
+    Let $A$ be $G$-isometric with $\mathcal{P}(A)$ onto the physical system.
+    If $V$ is a unitary on the virtual level that commutes with $U_g$ for
+    every $g$, there is a unitary $W$ on the physical system with
+    $W\mathcal{P}(A)=\mathcal{P}(A)V$. Conversely, for every unitary $W$ on the
+    physical system, $V=\mathcal{P}(A)^{-1}W\mathcal{P}(A)$ satisfies
+    $VU_g=U_gV=V$ for every $g$, preserves the inner products of invariant
+    vectors, and $\mathcal{P}(A)V=W\mathcal{P}(A)$
+    \cite[Lemma~6.3]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $L$ be a left inverse with $L\mathcal{P}(A)=\Pi_U$. Since
+    $\mathcal{P}(A)$ is onto, every physical vector is $\mathcal{P}(A)x$ with
+    $x$ invariant, $Ly$ is invariant and $\mathcal{P}(A)Ly=y$. For the first
+    claim let $W=\mathcal{P}(A)VL$. As $V$ commutes with $U_g$, it preserves
+    the invariant subspace and commutes with $\Pi_U$, so
+    $W\mathcal{P}(A)=\mathcal{P}(A)V\Pi_U=\mathcal{P}(A)\Pi_UV=\mathcal{P}(A)V$;
+    and for invariant $x,x'$,
+    $\langle W\mathcal{P}(A)x,W\mathcal{P}(A)x'\rangle
+        =c\langle Vx,Vx'\rangle=c\langle x,x'\rangle
+        =\langle\mathcal{P}(A)x,\mathcal{P}(A)x'\rangle$, so $W$ is unitary.
+    For the converse, $V=LW\mathcal{P}(A)$ satisfies $VU_g=V$ because
+    $\mathcal{P}(A)U_g=\mathcal{P}(A)$, and $U_gV=V$ because $V$ takes
+    invariant values; $\mathcal{P}(A)V=W\mathcal{P}(A)$ because
+    $\mathcal{P}(A)L$ is the identity, and the same computation as before
+    shows that $V$ preserves inner products of invariant vectors.
+\end{proof}
+
 The source asks for a tensor that is $G$-isometric with respect to the
 left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its
