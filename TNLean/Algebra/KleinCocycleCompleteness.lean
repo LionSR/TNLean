@@ -22,6 +22,19 @@ normalization assumption. For normalized cocycles these are the three diagonal
 values in the source's table. The proof first normalizes an arbitrary cocycle,
 then uses one complex square root to fix six entries by a two-cochain gauge.
 The cocycle equation determines all remaining entries from the three signs.
+
+## Main results
+
+* `cohomologousTo_of_klein_diagonal_eq`: normalized Klein cocycles with the same three
+  diagonal values are cohomologous.
+* `cohomologousTo_iff_klein_cyclicInvariant_eq`: the order-two cyclic invariants detect
+  cohomology classes.
+* `exists_cohomologousTo_kleinCocycleFamily`,
+  `existsUnique_cohomologousTo_kleinCocycleFamily`: every cocycle is cohomologous to exactly
+  one representative.
+* `kleinCocycleFamily_add`: the parameters add under multiplication.
+* `kleinAnomalyClass`, `kleinAnomalyClass_bijective`, `kleinH3Equiv`: the additive
+  equivalence between degree-three cohomology and `ZMod 2 × ZMod 2 × ZMod 2`.
 -/
 
 namespace TNLean.Algebra.ScalarThreeCochain
@@ -269,57 +282,6 @@ theorem cohomologousTo_of_klein_diagonal_eq
   have he := congrFun (congrFun (congrFun hβ g) h) k
   simp only [fusionGauge, mul_one, Pi.mul_apply, Pi.inv_apply] at he
   simp only [fusionGauge, he, mul_assoc, inv_mul_cancel, mul_one]
-
-/-- Every scalar three-cocycle admits a normalized representative. The explicit gauge
-is `β(g,h) = ω(g,1,1) / ω(1,1,h)`, giving the normalization used in
-arXiv:2203.12563, Section 6, and arXiv:2502.20257, `eq:triv_omegas`. -/
-theorem exists_isNormalized_cohomologousTo {G : Type*} [Group G] {ω : ScalarThreeCochain G}
-    (hw : IsCocycle ω) : ∃ ν, IsCocycle ν ∧ IsNormalized ν ∧ CohomologousTo ν ω := by
-  have hlast (g h : G) : ω g h 1 = ω (g * h) 1 1 / ω h 1 1 := by
-    have he := hw g h 1 1
-    simp only [mul_one] at he
-    rw [mul_comm (ω (g * h) 1 1) (ω g h 1), mul_assoc] at he
-    exact eq_div_iff_mul_eq'.2 (mul_left_cancel he).symm
-  have hfirst (g h : G) : ω 1 g h = ω 1 1 (g * h) / ω 1 1 g := by
-    have he := hw 1 1 g h
-    simp only [mul_one, one_mul] at he
-    rw [mul_comm (ω 1 1 g) (ω 1 g h), mul_assoc] at he
-    apply eq_div_iff_mul_eq'.2
-    simpa only [mul_comm (ω 1 1 g) (ω 1 g h)] using (mul_left_cancel he).symm
-  have hmid (g h : G) : ω g 1 h = ω g 1 1 * ω 1 1 h := by
-    have he := hw g 1 1 h
-    simp only [mul_one, one_mul] at he
-    rw [mul_comm (ω g 1 1) (ω g 1 h), mul_assoc] at he
-    exact mul_left_cancel he
-  have h0 : ω 1 1 1 = 1 := by
-    have he : ω 1 1 1 * 1 = ω 1 1 1 * ω 1 1 1 := by
-      simpa only [mul_one] using hmid 1 1
-    exact (mul_left_cancel he).symm
-  let β : ScalarCocycle G := fun g h ↦ ω g 1 1 / ω 1 1 h
-  refine ⟨fusionGauge β ω, hw.fusionGauge β, ?_, ⟨β, rfl⟩⟩
-  constructor
-  · intro g h
-    dsimp [fusionGauge, coboundary, β]
-    rw [hfirst g h]
-    simp only [one_mul, h0]
-    apply Units.ext
-    push_cast
-    field_simp
-  · constructor
-    · intro g h
-      dsimp [fusionGauge, coboundary, β]
-      rw [hmid g h]
-      simp only [one_mul, mul_one, h0]
-      apply Units.ext
-      push_cast
-      field_simp
-    · intro g h
-      dsimp [fusionGauge, coboundary, β]
-      rw [hlast g h]
-      simp only [mul_one, h0]
-      apply Units.ext
-      push_cast
-      field_simp
 
 /-- Order-two cyclic invariants determine arbitrary Klein cocycles up to gauge.
 This is the normalization-independent form of arXiv:2203.12563, lines 1850–1852. -/

@@ -20,6 +20,10 @@ vectors and of the uniform vector together with its image under `U_a`.
 The uniform vector is left unnormalized, which does not change its span.
 This file proves the operator and subspace statements, not the full-group
 three-cocycle identification.
+
+The generic construction `MPOTensor.GroupCocycle.kleinEquiv` realizes the type-II
+cocycle `ScalarThreeCochain.kleinCocycle` on four-level sites. The operators here act on
+qubits, so they are a different realization, and this file does not compare the two.
 -/
 
 open scoped Matrix
