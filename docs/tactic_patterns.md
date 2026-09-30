@@ -33,6 +33,32 @@ abstracted — record why, so it is not re-proposed).
   construction and prescribed-blocking sectors use it.
 - **Notes:** no local theorem or extra positivity hypothesis is needed.
 
+### fixed-volume C3 from a physical open-chain bound — promoted
+- **Pattern:** split a martingale index into `n < l`, `n = l`, and `l < n`;
+  the first two products vanish, while the last is bounded by its physical
+  open-chain representative after adjoining the right spectator sites.
+- **Seen:** the original threshold theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/FixedAmbientMartingaleBound.lean`
+  and the prescribed-gap theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrescribedGap.lean` (2026-09-28).
+- **Abstraction:** `fixedAmbient_martingaleDifference_norm_le_of_openChain`
+  in `FixedAmbientMartingaleBound.lean` retains the chosen nonnegative bound
+  without tying it to the threshold `1 / sqrt (l + 1)`.
+- **Notes:** both uses share the original three-case proof; no new tactic is
+  needed.
+
+### passing a scalar grading through a matrix word — promoted
+- **Pattern:** move a grading matrix through each letter and multiply the
+  letter-dependent scalars.
+- **Seen:** three occurrences across `MPS/ParentHamiltonian/Basic.lean`,
+  `MPS/Examples/MajumdarGhoshGroundSpace.lean`, and
+  `MPS/Examples/MultiBlock/ParityAmplitudes.lean`.
+- **Abstraction:** `MPSTensor.mul_evalWord_of_mul_eq_smul_letter` in
+  `MPS/Core/WordGrading.lean`; the constant-scalar theorem is a specialization.
+- **Notes:** all three matrix-word inductions now share one proof. The parity
+  example only retains the scalar identity combining occupation signs.
+  The promotion adds 21 Lean lines including the helper module and imports.
+
 ### virtual-leg cancellation in source-gate contractions — promoted
 - **Pattern:** cancel the adjacent factors $z^\dagger z=I$ between two
   rectangular matrices, leaving the site-specific Kronecker expansions intact.
@@ -80,6 +106,18 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** all three call sites are refactored. The block-by-block bound
   `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
   block-sum files and is a candidate for the same treatment.
+
+### error from a logarithmic block-length threshold — promoted
+- **Pattern:** close `K * (M * Real.exp (-x)) ≤ ε` from a threshold
+  `log K + log M - log ε ≤ x` by a hand-written `calc` through
+  `Real.exp_log`, `Real.exp_add`/`Real.exp_sub` and `Real.exp_le_exp`.
+- **Seen:** three occurrences across three files (2026-09-30):
+  `DepthLogBound.lean`, `LogDepthPreparation.lean` and `TreeMERA.lean`, all
+  under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_le_of_log_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** all three call sites use the helper; each now proves only the
+  threshold inequality.
 
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
@@ -2344,6 +2382,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### weighted W-state rows across a cut — candidate
+- **Pattern:** rewrite a weighted sum of traces of two word products as a
+  scalar multiple of the W amplitude on the concatenated configuration, then
+  use `wIndicator_append_mem_span` to put the cut row in the two-dimensional
+  span of the vacuum and single-excitation indicators.
+- **Seen:** two occurrences in one file (2026-09-28):
+  `lt_of_sum_mpv_eq_smul_wIndicator` and
+  `lt_of_sum_mpv_eq_smul_wIndicator_asymmetric` in
+  `TNLean/MPS/Examples/WStateCanonicalBound.lean`.
+- **Abstraction:** if another cut-rank application repeats this conversion,
+  state a row-membership lemma taking the weighted W-state identity and the
+  two cut lengths.
+- **Notes:** below the promotion threshold. The shared long-side spanning
+  argument is already extracted as
+  `blockTracePairing_range_le_of_forall_mem` in
+  `TNLean/MPS/ParentHamiltonian/PGVWC07CutRank.lean` and used in both cut-rank
+  estimates.
+
 ### Positive local terms with prescribed kernels
 
 For two finite families of positive operators with equal kernels term by
@@ -3456,6 +3512,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** `CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives`
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
+
+### GHZ zero-image non-injectivity witnesses — candidate
+
+- **Pattern:** choose virtual labels forcing one physical label to equal both 0 and 1,
+  then use the resulting zero basis image to disprove injectivity.
+- **Occurrences:** `ghzSiteTensor_not_linearIndependent` and
+  `ghzPEPS_not_isVertexInjective` in `TNLean/PEPS/Examples/GHZ.lean`.
+- **Count:** two occurrences in one file; below the promotion threshold.
+- **Possible abstraction:** a bridge from linear independence of the four-leg
+  site tensor to vertex injectivity of its torus realization, if another example
+  repeats the construction.
 
 ### Transposed Kronecker gauge inverses — candidate
 
