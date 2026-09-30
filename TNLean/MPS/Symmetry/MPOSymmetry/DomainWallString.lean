@@ -389,7 +389,7 @@ end StringOperator
 
 namespace GroupFamily
 
-variable {G X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
+variable {G : Type} {X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
   {A : (x : X) → MPSTensor d (D x)}
 
 /-- **Left inverses with separated supports** (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex`

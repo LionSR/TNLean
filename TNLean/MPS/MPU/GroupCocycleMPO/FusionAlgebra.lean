@@ -41,7 +41,7 @@ namespace MPOTensor.GroupCocycle
 
 open TNLean.Algebra
 
-variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {n : ℕ} (e : G ≃ Fin n)
+variable {G : Type} [Group G] [Fintype G] [DecidableEq G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- **The group operators form a matrix product operator fusion algebra** with the structure
 constants `N_{gh}^k = δ_{k, gh}` of the group, for every three-cocycle `ω`.

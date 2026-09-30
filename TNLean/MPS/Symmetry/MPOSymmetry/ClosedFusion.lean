@@ -254,9 +254,7 @@ end EntrySum
 
 namespace GroupFamily
 
-universe u
-
-variable {G : Type u} [Group G] {F : GroupFamily G d}
+variable {G : Type} [Group G] {F : GroupFamily G d}
 
 /-- A group family is **on-site** when every periodic operator is a tensor power of a one-site
 matrix, `U_g = u_g^{⊗ N}` on every nonempty chain.

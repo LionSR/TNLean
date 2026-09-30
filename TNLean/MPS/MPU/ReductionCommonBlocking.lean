@@ -76,9 +76,7 @@ namespace MPOTensor
 
 namespace GroupFamily
 
-universe u
-
-variable {G : Type u} {d : ℕ}
+variable {G : Type} {d : ℕ}
 
 /-- The vectorized product tensor $\mathcal U_g\mathcal U_h$, the source of the
 reduction for the pair `(g, h)`.

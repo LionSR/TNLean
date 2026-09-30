@@ -62,9 +62,7 @@ variable {d : ℕ}
 
 namespace GroupFamily
 
-universe u
-
-variable {G : Type u} [Group G]
+variable {G : Type} [Group G]
 
 variable {F : GroupFamily G d}
 

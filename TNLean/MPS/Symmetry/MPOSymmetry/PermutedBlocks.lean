@@ -54,7 +54,7 @@ namespace GroupFamily
 
 universe u v
 
-variable {d : ℕ} {G : Type u} [Group G] {F : GroupFamily G d}
+variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}
   {X : Type v} [MulAction G X] {D : X → ℕ} {A : (x : X) → MPSTensor d (D x)}
 
 /-! ### Carried vectors -/
@@ -402,7 +402,7 @@ invariant trivializes the three-cocycle), in the periodic setting of `sec:PBC`, 
 theorem IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed
     (hF : F.IsNormalRepresentation) (fd : FusionData F) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
-    {H : Type*} [Group H] (f : H →* G) (x : X) (hfix : ∀ a, f a • x = x) :
+    {H : Type} [Group H] (f : H →* G) (x : X) (hfix : ∀ a, f a • x = x) :
     ScalarThreeCochain.IsTrivialGaugeClass (ScalarThreeCochain.comap f fd.omega) := by
   obtain ⟨ad⟩ := nonempty_blockActionData (F := F) hA hD hperm
   exact LSymbol.isTrivialGaugeClass_comap_of_isCompatible

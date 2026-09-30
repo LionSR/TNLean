@@ -402,7 +402,7 @@ end TwoWalls
 
 namespace GroupFamily
 
-variable {G X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
+variable {G : Type} {X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
   {A : (x : X) → MPSTensor d (D x)}
 
 namespace BlockActionData

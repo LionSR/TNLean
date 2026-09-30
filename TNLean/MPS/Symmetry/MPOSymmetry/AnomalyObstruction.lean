@@ -61,9 +61,7 @@ namespace MPOTensor
 
 namespace GroupFamily
 
-universe u
-
-variable {d : ℕ} {G : Type u} [Group G] {F : GroupFamily G d} {D : ℕ} {A : MPSTensor d D}
+variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d} {D : ℕ} {A : MPSTensor d D}
 
 /-! ### Invariance -/
 

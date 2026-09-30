@@ -50,7 +50,7 @@ open TNLean.Algebra
 
 namespace MPOTensor.GroupFamily
 
-variable {G H : Type*} [Group G] [Group H] {d : ℕ}
+variable {G H : Type} [Group G] [Group H] {d : ℕ}
 
 /-- **Restriction along a homomorphism**: the family `a ↦ O_{f a}` indexed by `H`. -/
 def comap (F : GroupFamily G d) (f : H →* G) : GroupFamily H d where

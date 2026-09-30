@@ -82,7 +82,7 @@ namespace MPOTensor.GroupCocycle
 
 open TNLean.Algebra
 
-variable {G : Type*} [Group G] {n : ℕ}
+variable {G : Type} [Group G] {n : ℕ}
 
 /-! ### The local gates -/
 
@@ -294,7 +294,7 @@ namespace MPOTensor.GroupCocycle
 
 open TNLean.Algebra
 
-variable {G : Type*} [Group G] {n : ℕ} (e : G ≃ Fin n)
+variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- Project result: **`T̂_g` is a matrix product unitary** on every nonempty periodic chain
 when `ω` takes unit-modulus values (see `mpo_tensor_mem_unitaryGroup`). -/

@@ -62,7 +62,7 @@ namespace MPOTensor.GroupCocycle
 
 open TNLean.Algebra MPOTensor.GroupFamily
 
-variable {G : Type*} [Group G] {n : ℕ} (e : G ≃ Fin n)
+variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- The pair of bond labels `(h l, l)` of the stacked product of `T̂_g` and `T̂_h` that sits
 over the bond label `l` of `T̂_{gh}`: the label of `T̂_h` is `l`, that of `T̂_g` is `h l`. -/

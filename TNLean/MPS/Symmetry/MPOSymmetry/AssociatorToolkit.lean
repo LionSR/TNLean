@@ -145,7 +145,7 @@ theorem mulTensorAssocMatrix_eq_finCongr (D₁ D₂ D₃ : ℕ) :
 /-- The bond identification of `GroupFamily.castMat` is the permutation matrix of
 `finCongr`; for explicit bond dimensions it is the identity by
 `finCongr_toMatrix_eq_one`. -/
-theorem GroupFamily.castMat_eq_finCongr {G : Type*} [Group G] (F : GroupFamily G d)
+theorem GroupFamily.castMat_eq_finCongr {G : Type} [Group G] (F : GroupFamily G d)
     {a b : G} (e : a = b) :
     F.castMat e = (finCongr (congrArg F.bondDim e.symm)).toPEquiv.toMatrix := rfl
 
@@ -331,7 +331,7 @@ end MPSTensor
 
 namespace MPOTensor.GroupFamily
 
-variable {G : Type*} [Group G] {d : ℕ}
+variable {G : Type} [Group G] {d : ℕ}
 
 /-! ### Trivial values of the anomaly three-cochain -/
 

@@ -61,7 +61,7 @@ open TNLean.Algebra
 
 namespace MPOTensor.GroupFamily.BlockActionData
 
-variable {d : ℕ} {G X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
+variable {d : ℕ} {G : Type} {X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
   {A : (x : X) → MPSTensor d (D x)}
 
 /-- The local action on domain walls transports along equalities of the target blocks, for a
