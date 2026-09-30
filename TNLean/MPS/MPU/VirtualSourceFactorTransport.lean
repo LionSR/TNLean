@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.VirtualSandwich
@@ -45,15 +46,6 @@ private theorem transported_source_u_contraction
       ∑ β : Fin D, Y₂ l (p, β) * Y₁ r (β, q) := by
   let A : Matrix (Fin ℓ[U]) (Fin D) ℂ := fun l β => Y₂ l (p, β)
   let B : Matrix (Fin D) (Fin r[U]) ℂ := fun β r => Y₁ r (β, q)
-  have hmain : ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
-      ((z : Matrix (Fin D) (Fin D) ℂ) * B)) l r = (A * B) l r := by
-    have hz : (z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        (z : Matrix (Fin D) (Fin D) ℂ) = 1 := z.2.1
-    calc
-      _ = (A * ((z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-          (z : Matrix (Fin D) (Fin D) ℂ)) * B) l r := by
-        simp only [Matrix.mul_assoc]
-      _ = _ := by rw [hz]; simp
   calc
     _ = ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
         ((z : Matrix (Fin D) (Fin D) ℂ) * B)) l r := by
@@ -69,7 +61,7 @@ private theorem transported_source_u_contraction
           apply Finset.sum_congr rfl
           intro x₁ _
           ring
-    _ = (A * B) l r := hmain
+    _ = (A * B) l r := by rw [Matrix.mul_unitary_adjoint_mul_cancel]
     _ = _ := by rw [Matrix.mul_apply]
 
 /-- A unitary virtual conjugation transports both source-cut factorizations.
