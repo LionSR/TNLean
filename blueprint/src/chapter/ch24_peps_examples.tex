@@ -154,11 +154,12 @@ The simple-graph representation requires $w,h\ge2$
     On every torus with $w,h\ge1$, the GHZ tensor generates the unnormalized
     state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$
     \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
-    With horizontal and vertical bond arrays $b,c$, its coefficient is
+    With horizontal and vertical bond arrays $h_{x,y},v_{x,y}$ as in
+    Definition~\ref{def:peps_torus_site_tensor}, its coefficient is
     \begin{align}
-        \sum_{b,c}\prod_{v=(x,y)}
-        A^{\sigma(v)}_{c(v),b(v),c(x,y-1),b(x-1,y)}
-         & = \sum_i\prod_v\delta_{\sigma(v),i}.
+        \sum_{h,v}\prod_{(x,y)}
+        A^{\sigma(x,y)}_{v_{x,y},h_{x,y},v_{x,y-1},h_{x-1,y}}
+         & = \sum_i\prod_{(x,y)}\delta_{\sigma(x,y),i}.
     \end{align}
     For $w,h\ge2$, the simple-graph GHZ PEPS has the same coefficients.
 \end{theorem}
@@ -181,7 +182,7 @@ The simple-graph representation requires $w,h\ge2$
     \leanok
     \uses{def:peps_ghz_tensor, def:IsVertexInjective}
     For $d\ge2$, the four-leg GHZ tensor is not injective.
-    For $w,h\ge2$, the simple-graph GHZ PEPS is not vertex-injective.
+    For $d\ge2$ and $w,h\ge2$, the simple-graph GHZ PEPS is not vertex-injective.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -205,7 +206,8 @@ The simple-graph representation requires $w,h\ge2$
          & = A^i_{\alpha\beta\gamma\delta}.
     \end{align}
     For every positive $w,h$, the periodically contracted state satisfies
-    $\Psi(\pi\circ\sigma)=\Psi(\sigma)$.
+    $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$.
+    For $w,h\ge2$, this also holds for the simple-graph GHZ PEPS.
     In particular, for $d\ge1$ the on-site $\Z_d$ shift is a symmetry,
     and its virtual action is the same shift on every bond.
 \end{theorem}
