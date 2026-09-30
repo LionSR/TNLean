@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.IdentityIndex
+import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.TensorProductCanonicalForm
 
 /-!
@@ -63,7 +64,16 @@ theorem IsMPUCanonicalFormII.index_tensorProduct
           (hU.sourceIndexValue_eq_index hk hSU hu.1 hu.2)
           (hV.sourceIndexValue_eq_index hk hSV hv.1 hv.2)))
 
-/-- Adding a finite identity factor does not change the index.
+/-- Tensoring with the bond-one identity gives exactly the periodic operators
+of physical identity-ancilla attachment. The two constructions retain their
+own bond-coordinate types. CPSV17, `def:equivalent-tensors`, lines 706–720. -/
+theorem mpo_tensorProduct_identityMPUTensor (U : MPOTensor d D) (n N : ℕ) :
+    mpo (tensorProduct U (identityMPUTensor n)) N = mpo (tensorPhysicalId U n) N := by
+  rw [mpo_tensorProduct, mpo_identityMPUTensor, mpo_tensorPhysicalId]
+
+/-- Tensoring with the bond-one identity does not change the index.
+The periodic-operator bridge to physical ancilla attachment is
+`mpo_tensorProduct_identityMPUTensor`.
 Source: arXiv:1703.09188, `def:equivalent-tensors`, lines 706--720, and
 Theorem `IndexTh` (ii), lines 824--845. -/
 theorem IsMPUCanonicalFormII.index_tensorProduct_identityMPUTensor
