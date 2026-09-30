@@ -537,6 +537,11 @@ operator has basis action
 
 \begin{lemma}[Occupation parity]
     \label{lem:asymex_parity_occupation}
+    \lean{ParityGraded.pauliZ_mul_parA_mul_pauliZ,
+        ParityGraded.trace_evalWord_parA_eq_zero_of_odd,
+        ParityGraded.finKronecker_pauliZ_mulVec_mpv_parA}
+    \leanok
+    \uses{def:asymex_parity}
     For each physical label $i\in\{0,1\}$, the tensor satisfies
     \begin{align}
         ZA^iZ=(-1)^iA^i.
@@ -550,6 +555,7 @@ operator has basis action
 \end{lemma}
 
 \begin{proof}
+    \leanok
     Direct multiplication gives $ZPZ=P$ and $ZXZ=-X$.
     Since $Z^2=\Id_2$, multiplying~(\ref{eq:asymex_parity_covariance})
     along the word yields
@@ -570,6 +576,11 @@ zeros.
 
 \begin{lemma}[Amplitudes from cyclic runs]
     \label{lem:asymex_parity_runs}
+    \lean{ParityGraded.trace_evalWord_parA_cyclic_runs,
+        ParityGraded.exists_parA_cyclic_runs,
+        ParityGraded.trace_evalWord_parA_replicate_one}
+    \leanok
+    \uses{def:asymex_parity}
     Suppose $x$ contains $m\geq1$ zeros. Read the sites cyclically, and
     let $r_1,\ldots,r_m$ be the numbers of ones between successive
     zeros. Define $b(r)=1$ for even $r$ and $b(r)=0$ for odd $r$.
@@ -586,6 +597,7 @@ zeros.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     The identities $X^2=\Id_2$ and $PXP=0$ imply
     $PX^rP=b(r)P$ and $\tr(PX^r)=b(r)$. Rotate the word to
     start at a zero, using cyclicity of the trace. Successive

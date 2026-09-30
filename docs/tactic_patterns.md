@@ -2313,6 +2313,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### passing a scalar grading through a matrix word — candidate
+- **Pattern:** induct on a word, move a grading matrix through the first letter,
+  then combine scalar factors using matrix associativity and `smul_smul`.
+- **Seen:** 2 occurrences in 2 files (2026-09-29):
+  `majumdarGhoshGrading_mul_evalWord` in `MPS/Examples/MajumdarGhoshGroundSpace.lean`
+  and `pauliZ_mul_evalWord_parA` in `MPS/Examples/MultiBlock/ParityAmplitudes.lean`.
+- **Abstraction:** a letter-dependent scalar version of `Kraus.evalWord_intertwine`,
+  with the product of letter scalars along the word.
+- **Notes:** the first example has a constant sign; the second has an occupation-dependent
+  sign. Revisit the shared lemma if a third occurrence appears.
+
 ### Positive local terms with prescribed kernels
 
 For two finite families of positive operators with equal kernels term by
