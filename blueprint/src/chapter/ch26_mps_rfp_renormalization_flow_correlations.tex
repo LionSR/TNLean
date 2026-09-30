@@ -14,7 +14,7 @@ produce the dyadic powers $\E_B^{2^n}$.
 
 \begin{figure}[ht]
     \centering
-    \begin{center}
+    \begin{tenkzequation}
         % B^{i_1} B^{i_2} = sum_j U_{(i_1,i_2),j} A^j (CPSV16, eq. RG,
         % lines 389--394): two copies of B on physical legs i_1, i_2 are
         % contracted along their shared virtual bond.  On the right the
@@ -36,8 +36,8 @@ produce the dyadic powers $\E_B^{2^n}$.
                 ports={180:virtual, 0:virtual, 90:physical:$j$}]{A} &
             \tnwire{A.90}{U.270@2}
         \end{tenkz}
-    \end{center}
-    \begin{center}
+    \end{tenkzequation}
+    \begin{tenkzequation}
         % E_B^2 = E_A (CPSV16, line 1209).  Left: two doubled columns of
         % B and its conjugate, each rung summing one physical index, which
         % is the transfer map of the blocked pair.  Substituting the top
@@ -57,7 +57,7 @@ produce the dyadic powers $\E_B^{2^n}$.
             \tn[label pos=n]{A} \\
             \tn[label pos=s, conjugate]{\overline{A}}
         \end{tenkz}
-    \end{center}
+    \end{tenkzequation}
     \caption{One renormalization step. Top: blocking two sites of $B$ and
         compressing the pair index by the isometry $U$ gives the tensor $A$.
         Bottom: on the doubled network the isometry cancels, so

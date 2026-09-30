@@ -313,7 +313,7 @@
     \end{align}
     Diagrammatically, contracting $U_j$ with the conjugate of $U_{j'}$ over
     the physical index identifies the virtual legs pairwise:
-    \begin{center}
+    \begin{tenkzequation}
         % sum_i (U_j^i)_{a,b} conj((U_{j'}^i)_{a',b'})
         %   = delta_{j,j'} delta_{a,a'} delta_{b,b'}
         % (CPSV16 Theorem 3.11, eq. III_isometry, lines 549--552).  Left:
@@ -338,7 +338,7 @@
                 bonds=none]
             \tn[skin=none]{} \\ \tn[skin=none]{}
         \end{tenkz}
-    \end{center}
+    \end{tenkzequation}
     Each block satisfies unit pair-index orthonormality ($j=j'$), and the
     cross-block sums between distinct blocks vanish ($j\ne j'$), as in
     \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}.
@@ -447,7 +447,7 @@
         \notag
     \end{align}
     that is,
-    \begin{center}
+    \begin{tenkzequation}
         % A_j^i = X_j sqrt(rho_j) U_j^i X_j^{-1} (CPSV16 Corollary 3.12,
         % lines 583--590, with the square-root weight of
         % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).  X_j, sqrt(rho_j)
@@ -465,7 +465,7 @@
             \tn[label pos=s, ports={90:physical:$i$}]{U_j} &
             \tn[skin=ring]{X_j^{-1}}
         \end{tenkz}
-    \end{center}
+    \end{tenkzequation}
     such that $(U_j)_j$ satisfies the joint isometry condition
     (Definition~\ref{def:is_residual_isometry_family}). This formalizes the
     isometry equations of \cite[Corollary~3.12]{Cirac2016MPDO_arXiv} for

@@ -7,7 +7,7 @@
     \uses{def:mps_transfer_idempotence}
     An MPS tensor $A$ satisfies one-block transfer idempotence if $\E_A^2=\E_A$.
     Diagrammatically, two doubled columns equal one:
-    \begin{center}
+    \begin{tenkzequation}
         % E_A^2 = E_A (CPSV16, line 1209: blocking acts as
         % E -> E^2, so a fixed point satisfies E = E^2).  Each column is
         % the transfer map sum_i A^i (.) (A^i)^dagger: the upper node is A,
@@ -27,7 +27,7 @@
             \tn[label pos=n]{A} \\
             \tn[label pos=s, conjugate]{\overline{A}}
         \end{tenkz}
-    \end{center}
+    \end{tenkzequation}
     In \cite[Definition~3.5]{Cirac2016MPDO_arXiv}, local orthogonality denotes
     instead the vanishing of mixed transfer maps between distinct BNT components
     (Definition~\ref{def:is_bnt_locally_orthogonal}).
@@ -60,7 +60,7 @@
             \tn[label pos=n]{A_j} \\
             \tn[label pos=s, conjugate]{\overline{A_{j'}}}
         \end{tenkz}
-        $ = 0\qquad(j\ne j').$
+        $ = 0.$
     \end{center}
     This is the mixed-sector condition of
     \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
@@ -285,7 +285,7 @@
     \end{align}
     Diagrammatically, the transfer map is the rank-one map whose output legs
     carry $\operatorname{diag}(\Lambda)$ and whose input legs are traced:
-    \begin{center}
+    \begin{tenkzequation}
         % E_A(X) = tr(X) diag(Lambda) (CPSV16, lines 1295--1298: an RFP
         % normal tensor has E = |R)(L| with |R) = sum_a Lambda_a |a,a) and
         % (L| = sum_a (a,a|).  Left: the doubled column of A and its
@@ -310,7 +310,7 @@
                 bonds=none]
             \tn[skin=none]{} \\ \tn[skin=none]{}
         \end{tenkz}
-    \end{center}
+    \end{tenkzequation}
     which is idempotent since $\tr\operatorname{diag}(\Lambda)=1$, and $A$ is
     a single normal tensor, so no copy weights are involved. With the Pauli
     matrix $Z$ on the second spin of one node and on the first spin of the
