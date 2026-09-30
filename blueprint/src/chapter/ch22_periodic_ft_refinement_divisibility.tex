@@ -896,28 +896,32 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_unitary_orbit_root}
     \lean{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
     \leanok
-    \uses{def:periodic_tensor,thm:periodic_prescribed_blocking}
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection,
+        thm:periodic_prescribed_blocking}
     Let $A$ be left-canonical periodic of period $m$ and let $p>0$.
     Put $r=\gcd(m,p)$. The prescribed orbit blocks $C_a$, of period $m/r$,
-    admit a unitary $U$ such that
-    \[
-        A^{[p],i}=U\left(\bigoplus_{a=0}^{r-1} C_a^i\right)U^\dagger,
-        \qquad (UE_a)(UE_a)^\dagger=\widetilde P_a.
-    \]
+    admit a unitary $U$ such that, with $Q_a$ the step-orbit projections of
+    Definition~\ref{def:periodic_step_orbit_projection} and $E_a$ the
+    coordinate inclusions,
+    \begin{align}
+        (A^{[p]})^I     & =U\Bigl(\bigoplus_{a=0}^{r-1}C_a^I\Bigr)U^\dagger, \notag \\
+        (UE_a)(UE_a)^\dagger & =Q_a. \notag
+    \end{align}
     For every choice of $c_a$ with $c_a^{m/r}=1$, there is a left-canonical
     tensor $A'$ with the same physical and bond dimensions as $A$ such that
-    \[
-        A'^{[p],i}=U\left(\bigoplus_{a=0}^{r-1}c_a C_a^i\right)U^\dagger.
-    \]
+    \begin{align}
+        (A'^{[p]})^I & =U\Bigl(\bigoplus_{a=0}^{r-1}c_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
     The unitary and orbit blocks are chosen independently of the phases.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:periodic_unitary_resolution,thm:periodic_absorb_orbit_gauge}
+    \uses{lem:periodic_unitary_resolution,thm:periodic_absorb_orbit_gauge,
+        thm:periodic_prescribed_blocking}
     Apply the preceding lemma to the orbit isometries. Conjugate the diagonal
     matrix with entries $c_a\mathbf 1_{D_a}$ by this unitary to obtain $Z$.
-    Since $UE_a$ is the original orbit isometry, $Z$ acts by $c_a$ on
-    $\widetilde P_a$. Absorbing these phases into the original cyclic sectors
+    Since $UE_a$ is the original orbit isometry,
+    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the original cyclic sectors
     gives $A'^{[p]}=ZA^{[p]}$, which is the stated weighted conjugation.
 \end{proof}
