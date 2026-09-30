@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.SwapMatrix
-import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas
+import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
 import TNLean.MPS.MPU.Examples.ShiftTilde
 import TNLean.MPS.MPU.TwoSiteStandardForm
 
@@ -14,6 +14,10 @@ import TNLean.MPS.MPU.TwoSiteStandardForm
 The supplied gates and half factors realize CPSV17, equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009–2034). The first two swap-transformed
 families realize the gates in `SFu1u3` (lines 2090–2099).
+
+These data prove the gate unitarity and open contractions. They do not yet
+identify the half factors with the trace-normalized supplied source factors;
+that remaining requirement of #7028 is separate from these contractions.
 -/
 
 open scoped Matrix
@@ -74,25 +78,6 @@ noncomputable def shiftExampleU₃StandardForm (d : ℕ) [NeZero d] :
     split_ifs <;> simp_all
 
 
-private theorem identitySwapIdentityMatrix_isUnitaryBetween (d : ℕ) :
-    (identitySwapIdentityMatrix d).IsUnitaryBetween := by
-  change (_ᴴ * _ = 1) ∧ (_ * _ᴴ = 1)
-  constructor <;> ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩ <;>
-    simp [Matrix.mul_apply,
-      Matrix.conjTranspose_apply, Fintype.sum_prod_type, identitySwapIdentityMatrix,
-      Matrix.one_apply, Prod.mk.injEq, ite_and, eq_comm]
-  all_goals split_ifs <;> simp_all
-
-private theorem swapTensorSwapMatrix_isUnitaryBetween (d : ℕ) :
-    (swapTensorSwapMatrix d).IsUnitaryBetween := by
-  change (_ᴴ * _ = 1) ∧ (_ * _ᴴ = 1)
-  constructor <;> ext ⟨⟨a, b⟩, ⟨c, e⟩⟩ ⟨⟨i, j⟩, ⟨k, l⟩⟩ <;>
-    simp [Matrix.mul_apply,
-      Matrix.conjTranspose_apply, Fintype.sum_prod_type,
-      swapTensorSwapMatrix_apply, Matrix.one_apply, Prod.mk.injEq, ite_and, eq_comm]
-  all_goals split_ifs <;> simp_all
-
-
 /-- The first counterpropagating family after two-site blocking, with the
 four-spin gates of CPSV17, equation `eq:uv2_U2`, lines 2021–2026. -/
 noncomputable def shiftExampleU₂BlockedStandardForm (d : ℕ) [NeZero d] :
@@ -112,8 +97,7 @@ noncomputable def shiftExampleU₂BlockedStandardForm (d : ℕ) [NeZero d] :
     X₂ := fun i l => if i.1.divNat = l.divNat ∧
       i.2.divNat = l.modNat ∧ i.1.modNat = i.2.modNat then 1 else 0
     u_unitary := (identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
-    v_unitary := ((swapTensorSwapMatrix_isUnitaryBetween d).mul _ _
-      (identitySwapIdentityMatrix_isUnitaryBetween d)).reindex _ _ _
+    v_unitary := (swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
     v_apply := ?_
     W_apply := ?_
   }
@@ -149,8 +133,7 @@ noncomputable def shiftExampleU₃BlockedStandardForm (d : ℕ) [NeZero d] :
       i.1.divNat = r.divNat ∧ i.2.modNat = i.1.modNat then 1 else 0
     X₂ := fun i l => if i.1.divNat = i.2.divNat ∧
       i.1.modNat = l.divNat ∧ i.2.modNat = l.modNat then 1 else 0
-    u_unitary := ((identitySwapIdentityMatrix_isUnitaryBetween d).mul _ _
-      (swapTensorSwapMatrix_isUnitaryBetween d)).reindex _ _ _
+    u_unitary := (identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_isUnitaryBetween d).reindex _ _ _
     v_unitary := (identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
     v_apply := ?_
     W_apply := ?_

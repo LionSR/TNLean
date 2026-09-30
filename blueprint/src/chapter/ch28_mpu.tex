@@ -11051,11 +11051,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proposition}[Standard forms of the three shift MPUs]
     \label{prop:threeMPU_standard_forms}
-    \lean{MPOTensor.shiftExampleU₁StandardForm,
-        MPOTensor.shiftExampleU₃StandardForm,
-        MPOTensor.shiftExampleU₂BlockedStandardForm,
-        MPOTensor.shiftExampleU₃BlockedStandardForm}
-    \leanok
+    \notready
     \uses{threeMPU, def:mpu_supplied_two_site_standard_form}
     Assume $d>0$. The three shift families have standard forms whose
     unitary gates satisfy
@@ -11075,11 +11071,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2002--2042.
 \end{proposition}
 
-\begin{proof}\leanok
-    \uses{def:mpu_supplied_two_site_standard_form,
-        thm:threeMPU_U2_supplied_source_gates_two,
-        thm:threeMPU_U3_supplied_source_gates_two}
-    Use Kronecker deltas for the half factors, connecting each physical spin
+\begin{proof}
+    The gate identities and open contractions follow using Kronecker deltas for the half factors, connecting each physical spin
     to the virtual spin along its shift direction. For the identity family,
     the half factors are $X_1(i,\gamma;r)=\delta_{i,r}$ and
     $X_2(\alpha,i;\ell)=\delta_{i,\ell}$. For the unblocked third family,
@@ -11091,6 +11084,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     displayed four-spin order give the ordered products above. All gates
     are permutation matrices and hence unitary. Contracting each unshifted
     gate with its two half factors recovers the corresponding tensor entries.
+    The identification with trace-normalized source factors remains to be proved;
+    these contractions alone do not establish the normalization asserted above.
 \end{proof}
 
 \begin{definition}[Transformation with swaps]
