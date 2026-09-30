@@ -5,13 +5,15 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.SwapMatrix
 import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas
+import TNLean.MPS.MPU.Examples.ShiftTilde
 import TNLean.MPS.MPU.TwoSiteStandardForm
 
 /-!
 # Explicit standard forms of the shift families
 
 The supplied gates and half factors realize CPSV17, equations `eq:SF_u1_u3`,
-`eq:uv2_U2`, and `eq:uv2_U3` (lines 2009–2034).
+`eq:uv2_U2`, and `eq:uv2_U3` (lines 2009–2034). The first two swap-transformed
+families realize the gates in `SFu1u3` (lines 2090–2099).
 -/
 
 open scoped Matrix
@@ -166,5 +168,67 @@ noncomputable def shiftExampleU₃BlockedStandardForm (d : ℕ) [NeZero d] :
       Matrix.single, shiftTwoSitePhysicalEquiv, Fintype.sum_prod_type,
       ite_and, eq_comm]
     split_ifs <;> simp_all [eq_comm]
+
+private theorem ketLeftMul_shiftPhysicalSwap_apply {d D : ℕ}
+    (U : MPOTensor (d * d) D) (i j : Fin (d * d)) (α β : Fin D) :
+    U.ketLeftMul (shiftPhysicalSwap d) i j α β =
+      U (finProdFinEquiv (i.modNat, i.divNat)) j α β := by
+  simp [ketLeftMul, shiftPhysicalSwap, Equiv.Perm.permMatrix, PEquiv.toMatrix,
+    bondPairSwapEquiv, bondPairSwap, Matrix.sum_apply, Matrix.ite_apply]
+
+/-- The swap-transformed identity family has a swap gate followed by an
+identity gate (CPSV17, `SFu1u3`, lines 2090–2099). -/
+noncomputable def shiftExampleTildeU₁StandardForm (d : ℕ) [NeZero d] :
+    TwoSiteStandardFormData (shiftExampleTildeU₁ d) (Matrix.swapMatrix d)
+      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) := by
+  classical
+  let S := shiftExampleU₁StandardForm d
+  refine {
+    phys_pos := S.phys_pos
+    bond_pos := S.bond_pos
+    left_pos := S.left_pos
+    right_pos := S.right_pos
+    X₁ := S.X₁
+    X₂ := S.X₂
+    u_unitary := Matrix.swapMatrix_isUnitaryBetween d
+    v_unitary := S.v_unitary
+    v_apply := S.v_apply
+    W_apply := ?_
+  }
+  intro i j α γ
+  have hαγ : α = γ := Subsingleton.elim _ _
+  rw [shiftExampleTildeU₁, ketLeftMul_shiftPhysicalSwap_apply]
+  simp [S, shiftExampleU₁StandardForm, shiftExampleU₁, identityMPUTensor,
+    tensorProduct, idTensor, Matrix.reindex_apply,
+    Matrix.swapMatrix, ite_and, apply_ite]
+  split_ifs <;> simp_all
+
+/-- The swap-transformed second family has an identity gate followed by a
+swap gate (CPSV17, `SFu1u3`, lines 2090–2099). -/
+noncomputable def shiftExampleTildeU₂StandardForm (d : ℕ) [NeZero d] :
+    TwoSiteStandardFormData (shiftExampleTildeU₂ d)
+      (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (Matrix.swapMatrix d) := by
+  classical
+  refine {
+    phys_pos := NeZero.pos d
+    bond_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
+    left_pos := NeZero.pos d
+    right_pos := NeZero.pos d
+    X₁ := fun i r => if i.2.divNat = i.1 ∧ i.2.modNat = r then 1 else 0
+    X₂ := fun i l => if i.1.divNat = l ∧ i.1.modNat = i.2 then 1 else 0
+    u_unitary := ⟨by simp [Matrix.IsIsometry], by simp [Matrix.IsCoisometry]⟩
+    v_unitary := Matrix.swapMatrix_isUnitaryBetween d
+    v_apply := ?_
+    W_apply := ?_
+  }
+  · intro i₁ i₂ r l
+    rw [← Equiv.sum_comp finProdFinEquiv]
+    simp [Matrix.swapMatrix, Fintype.sum_prod_type, ite_and, eq_comm]
+  · intro i j α γ
+    rw [shiftExampleTildeU₂, ketLeftMul_shiftPhysicalSwap_apply]
+    simp [shiftExampleU₂, tensorProduct, rightShiftTensor, leftShiftTensor,
+      physicalAdjointTensor, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
+      Matrix.single, Matrix.one_apply, Prod.mk.injEq, ite_and, eq_comm]
+    split_ifs <;> simp_all
 
 end MPOTensor

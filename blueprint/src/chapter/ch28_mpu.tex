@@ -11194,10 +11194,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{theorem}[Standard forms of the swap-transformed shifts]
     \label{thm:threeMPU2_remaining_formulas}
-    \notready
-    \discussion{5715}
-    \uses{threeMPU2, def:mpu_source_uv}
-    The first two standard forms are
+    \lean{MPOTensor.shiftExampleTildeU₁StandardForm,
+        MPOTensor.shiftExampleTildeU₂StandardForm}
+    \leanok
+    \uses{threeMPU2, def:mpu_supplied_two_site_standard_form}
+    For $d>0$, the first two transformed families have standard forms
     \begin{align}
         \widetilde u_1 & =\mathbb S,     &
         \widetilde v_1 & =\Id\otimes\Id,   \\
@@ -11206,6 +11207,19 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     % Source lines: paper_v2.tex 2087--2099.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{threeMPU2, prop:threeMPU_standard_forms,
+        def:mpu_supplied_two_site_standard_form}
+    The physical swap exchanges the two output indices of each tensor.
+    For the first family, retain the identity family's half factors and
+    replace its unshifted gate by the swap. For the second family, choose
+    $X_1(i,(a,b);r)=\delta_{a,i}\delta_{b,r}$ and
+    $X_2((a,b),i;\ell)=\delta_{a,\ell}\delta_{b,i}$.
+    Their contraction gives the shifted swap gate, while inserting the
+    unshifted identity gate recovers the transformed tensor.
+    Both gates are unitary.
+\end{proof}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
     \label{lemma:sym-trafo-swap}
