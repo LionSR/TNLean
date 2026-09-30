@@ -64,7 +64,8 @@
     Let $G$ be an abelian group, $m>0$, $p\ge0$, $r=\gcd(m,p)$,
     and $q=m/r$. Suppose $c_\alpha\in G$ satisfies $c_\alpha^q=1$
     for every $0\le\alpha<r$. There are $b_u\in G$, indexed modulo
-    $m$, such that
+    $m$, such that, writing $u=\alpha_u+pk_u$ for the coordinates of
+    Theorem~\ref{thm:periodic_step_coordinates},
     \begin{align}
         \prod_{j=0}^{p-1}b_{u+j} & = c_{\alpha_u}.
         \label{eq:periodic_orbit_phase_product}
@@ -126,7 +127,7 @@
     $\sum_uP_u=\Id$, and $|c_u|=1$. If $A$ is left canonical, then
     $A'^i=\sum_uc_uP_uA^i$ is left canonical as well. Thus the rephasing
     in the proof of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}
-    preserves trace preservation of a left-canonical block.
+    keeps a left-canonical block trace preserving.
 \end{theorem}
 
 \begin{proof}\leanok
