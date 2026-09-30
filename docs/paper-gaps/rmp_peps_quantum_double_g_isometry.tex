@@ -54,7 +54,14 @@ unitary onto its range, and $K/\sqrt{|G|}$ satisfies the printed
 definition. The formal notion of $G$-isometry asks for
 $\langle Kx,Ky\rangle=c\,\langle x,y\rangle$ with one constant $c>0$,
 which the rescaling by $c^{-1/2}$ turns into the printed notion; the
-quantum-double tensor satisfies it with $c=|G|$.
+quantum-double tensor satisfies it with $c=|G|$. For a matrix product
+tensor with the left-regular representation on its bond the formal notion
+is the first form of Definition~``def:iso:isopeps'',
+$\mathcal P(A^\dagger)\mathcal P(A)=c\,\Pi$; under concatenation
+$C^{ij}=A^iB^j$ the constants multiply, $c_C=c_Ac_B$, and for $c_A=c_B=1$
+this is the source's Lemma~``lemma:iso:iso-stable-under-concat''.\footnote{Source
+    traceability: \path{Papers/1001.3807/paper_v3.tex}, lines
+    1704--1716.}
 
 \section{Representations}
 The formal notions of $G$-injectivity and $G$-isometry take the
@@ -64,7 +71,14 @@ quantum-double instance shifts every color by right multiplication,
 $h\mapsto hg$, which leaves the differences $hh'^{-1}$ unchanged also for
 non-abelian $G$. On each leg this is the right-regular representation
 $R_g\ket h=\ket{hg^{-1}}$, and the unitary $\ket h\mapsto\ket{h^{-1}}$ intertwines it with the left-regular
-one. Both are semi-regular.
+one. Both are semi-regular. The one-dimensional notion and the stability
+under concatenation fix the left-regular representation, since their
+proof uses $\Delta=|G|^{-1}\mathbb 1$. The correspondence between
+virtual unitaries commuting with the symmetry and physical unitaries,
+Lemma~``lemma:iso:sym-virt-can-be-done-on-phys'', uses only the isometry
+of $\mathcal P(A)$ on the invariant subspace, and is stated for the
+representation parameter.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1729--1761.}
 
 \section{Scope: statements about the whole network}
 Two statements of the review concern the contracted lattice rather than
