@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Tree Circuit as a Multiscale Network: Two-Site Injectivity and Chain Length}
+\author{}
+\date{2026-09-30}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+Let $A$ be a normal tensor of physical dimension $d$ and bond dimension $D$, and
+let $\ket{\phi_N}$ be the normalized translation-invariant state it generates on
+a ring of $N$ sites. The paragraph ``Connection to MERA''
+of~\cite{Malz2024Preparation} reads the tree circuit of eq.~(16) as a
+finite-range multiscale entanglement renormalization ansatz with
+$O(\log\log N)$ layers: the isometries $V^{(i)}$ of eq.~(16) are the isometries
+of the network, every disentangler is the identity except those of the first
+layer, which prepare the fixed-point state $\ket\Omega$, and hence, within the
+approximation error $\varepsilon$, normal translation-invariant matrix product
+states are such networks with $O(\log\log N)$ layers.
+
+The paragraph ``The tree-RG circuit'' of the source describes the layers as
+isometries from dimension $D^2$ to $D^4$, except the lowest, and its picture
+starts from a blocked tensor. A layer $V^{(i)}$ is the partial isometry of the
+polar decomposition of a two-site blocked map; it is an isometry exactly when
+that map is injective. For $d^2<D^2$ the lowest layer, a map from $\mathbb{C}^{D^2}$ to
+$(\mathbb{C}^d)^{\otimes2}$, cannot be an isometry at all.
+
+\section{The restriction adopted}
+The formal statements\footnote{Formal declarations:
+    \leanid{MPSPreparation.approximatingMPVState_eq_state_treeMERA},
+    \leanid{MPSPreparation.exists_state_treeMERA_approximationError_le}, and
+    \leanid{MPSPreparation.exists_state_treeMERA_approximationError_le_of_lt}
+    in \doclink{TNLean/MPS/Preparation/TreeMERA}.}
+assume two things.
+\begin{enumerate}
+    \item The two-site blocked tensor of $A$ is injective. Then every layer
+          $V^{(i)}$ is an isometry: blocking the two-site blocked tensor
+          $V^{(1)}T_1$ twice gives $(V^{(1)})^{\otimes2}$ applied to $T_1$
+          blocked twice, so the two-site blocked tensor of $T_1$ is injective,
+          and so on up the tree.
+    \item The chain length is $N=M2^{k+1}$, so that the $M$ blocks of the
+          approximating state of eq.~(10) all have $q=2^{k+1}$ sites and the
+          tree of each block is complete.
+\end{enumerate}
+Under these assumptions the approximating state of eq.~(10) is exactly the state
+of the network with $k+1$ isometry layers, and its error against $\ket{\phi_N}$
+is at most $\varepsilon$ once $2^{k+1}\ge\xi\log(CN/\varepsilon)$, with $\xi$
+the correlation length of $A$ and $C$ depending only on $A$. The least such $k$
+satisfies $k<\log_2(\xi\log(CN/\varepsilon))$, which is the source's
+$O(\log\log(N/\varepsilon))$ count.
+
+\section{Elimination}
+\begin{enumerate}
+    \item \emph{Two-site injectivity.} A normal tensor has an injectivity length
+          $L_0$ independent of $N$. The tensor $A$ blocked over $L_0$ sites has
+          an injective one-site, hence two-site, blocked tensor, is again normal,
+          and generates $\ket{\phi_{NL_0}}$ from $\ket{\phi_N}$ of the blocked
+          tensor after the regrouping of sites. Applying the statements to it
+          gives networks on sites of dimension $d^{L_0}$, a constant, which is
+          what the source's picture, starting from a blocked tensor, shows.
+          What remains is to transport the gauge data (left-canonical form, the
+          fixed point $\sigma$ and the bound on the subleading eigenvalues,
+          raised to the power $L_0$) to the blocked tensor.
+    \item \emph{Chain length.} The unequal blocks of the depth bound for every
+          chain length (the note on divisible lengths) let the last block have
+          length $q'$ with $q\le q'<2q$. A complete binary tree has $2^{k+1}$
+          leaves, so the last block needs either one extra isometry layer
+          $\mathbb{C}^{D^2}\to(\mathbb{C}^d)^{\otimes r}$ with $r\le 3$ at its lowest level, or a
+          network whose last site is coarser; either extends the definition of
+          the network and is left open.
+\end{enumerate}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
