@@ -103,15 +103,6 @@ private theorem rawV_virtual_cancel
   ext ⟨p, q⟩ ⟨r, l⟩
   let A : Matrix (Fin a) (Fin D) ℂ := fun r β => X₁ (p, β) r
   let B : Matrix (Fin D) (Fin b) ℂ := fun β l => X₂ (β, q) l
-  have hmain : ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
-      ((z : Matrix (Fin D) (Fin D) ℂ) * B)) r l = (A * B) r l := by
-    have hz : (z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        (z : Matrix (Fin D) (Fin D) ℂ) = 1 := z.2.1
-    calc
-      _ = (A * ((z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-          (z : Matrix (Fin D) (Fin D) ℂ)) * B) r l := by
-        simp only [Matrix.mul_assoc]
-      _ = _ := by rw [hz]; simp
   calc
     _ = ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
         ((z : Matrix (Fin D) (Fin D) ℂ) * B)) r l := by
@@ -119,7 +110,7 @@ private theorem rawV_virtual_cancel
             Matrix.one_apply, Matrix.transpose_apply, Fintype.sum_prod_type]
           simp only [Matrix.conjTranspose_apply, A, B]
           simp [star_apply, RCLike.star_def, ite_mul, mul_ite, mul_comm]
-    _ = (A * B) r l := hmain
+    _ = (A * B) r l := by rw [Matrix.mul_unitary_adjoint_mul_cancel]
     _ = _ := by change (∑ α, X₁ (p, α) r * X₂ (α, q) l) = _; rfl
 
 private theorem rawU_virtual_cancel
@@ -134,15 +125,6 @@ private theorem rawU_virtual_cancel
   ext ⟨l, r⟩ ⟨p, q⟩
   let A : Matrix (Fin b) (Fin D) ℂ := fun l β => Y₂ l (p, β)
   let B : Matrix (Fin D) (Fin a) ℂ := fun β r => Y₁ r (β, q)
-  have hmain : ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
-      ((z : Matrix (Fin D) (Fin D) ℂ) * B)) l r = (A * B) l r := by
-    have hz : (z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        (z : Matrix (Fin D) (Fin D) ℂ) = 1 := z.2.1
-    calc
-      _ = (A * ((z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-          (z : Matrix (Fin D) (Fin D) ℂ)) * B) l r := by
-        simp only [Matrix.mul_assoc]
-      _ = _ := by rw [hz]; simp
   calc
     _ = ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
         ((z : Matrix (Fin D) (Fin D) ℂ) * B)) l r := by
@@ -150,7 +132,7 @@ private theorem rawU_virtual_cancel
             Matrix.one_apply, Matrix.transpose_apply, Fintype.sum_prod_type]
           simp only [Matrix.conjTranspose_apply, A, B]
           simp [star_apply, RCLike.star_def, ite_mul, mul_ite, mul_comm]
-    _ = (A * B) l r := hmain
+    _ = (A * B) l r := by rw [Matrix.mul_unitary_adjoint_mul_cancel]
     _ = _ := by change (∑ β, Y₂ l (p, β) * Y₁ r (β, q)) = _; rfl
 
 private theorem rawU_selected_factor_gauge

@@ -135,13 +135,13 @@ def z3FusionData : family.FusionData where
     · change MPSTensor.IsReduction (mulTensor uTensor identityTensor).toMPSTensor
         ((uTensor : MPOTensor 3 (2 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_right])
-    · exact uu_isReduction
-    · exact ud_isReduction
+    · exact uu_compression.isReduction oneSlotMem
+    · exact ud_compression.isReduction oneSlotMem
     · change MPSTensor.IsReduction (mulTensor uDagTensor identityTensor).toMPSTensor
         ((uDagTensor : MPOTensor 3 (2 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_right])
-    · exact du_isReduction
-    · exact dd_isReduction
+    · exact du_compression.isReduction oneSlotMem
+    · exact dd_compression.isReduction oneSlotMem
 
 /-! ### The trees of the two nontrivial triples -/
 

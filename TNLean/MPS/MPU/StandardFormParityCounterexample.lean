@@ -51,38 +51,13 @@ private theorem parity_mpo_three_ne :
       M (fun _ => 0) (fun _ => 0)) h
   norm_num at h00
 
-private theorem parity_identity_simple : IsMPUSimple parityIdentityTensor := by
-  have hW (i j : Fin 2) :
-      doubleLayerTensor parityIdentityTensor i j =
-        (if i = j then 1 else 0) := by
-    ext a b
-    fin_cases i <;> fin_cases j <;> fin_cases a <;> fin_cases b <;>
-      simp [parityIdentityTensor, doubleLayerTensor_apply, idTensor,
-        Matrix.kroneckerMap_apply, Matrix.submatrix_apply]
-  have houter :
-      Matrix.vecMulVec (fun _ : Fin 1 => (1 : ℂ)) (fun _ : Fin 1 => (1 : ℂ)) =
-        (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
-    ext a b
-    fin_cases a
-    fin_cases b
-    simp [Matrix.vecMulVec]
-  refine ⟨fun _ => 1, fun _ => 1, ?_, ?_⟩
-  · intro i j
-    rw [hW]
-    by_cases hij : i = j <;> simp [hij, Matrix.mulVec, dotProduct]
-  · intro i j k l
-    rw [hW, hW, houter]
-    simp
+private theorem parity_identity_simple : IsMPUSimple parityIdentityTensor :=
+  isMPUSimple_idTensor 2
 
 private theorem parity_double_negative_eq_identity :
     doubleLayerTensor parityNegativeIdentityTensor =
       doubleLayerTensor parityIdentityTensor := by
-  funext i j
-  ext a b
-  fin_cases i <;> fin_cases j <;> fin_cases a <;> fin_cases b <;>
-    simp [parityNegativeIdentityTensor, parityIdentityTensor,
-      doubleLayerTensor_apply, idTensor,
-      Matrix.kroneckerMap_apply, Matrix.submatrix_apply]
+  exact doubleLayerTensor_smul_of_star_mul_self (-1) parityIdentityTensor (by norm_num)
 
 private theorem parity_negative_simple : IsMPUSimple parityNegativeIdentityTensor := by
   obtain ⟨a, b, h₁, h₂⟩ := parity_identity_simple
