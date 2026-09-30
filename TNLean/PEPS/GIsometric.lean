@@ -226,6 +226,7 @@ theorem IsGIsometricMPS.isGInjective {A : ι → Module.End ℂ (MonoidAlgebra �
   · exact (mpsSiteMap_comp_linHom_eq_iff _ _).2 hA.invariant
   · rw [LinearMap.smul_comp, h, smul_smul, inv_mul_cancel₀ hc', one_smul]
 
+omit [DecidableEq ι] [DecidableEq κ] in
 /-- Source: arXiv:1001.3807, Lemma 6.2 (stability of isometry under concatenation),
 `Papers/1001.3807/paper_v3.tex` lines 1704–1716. If the MPS tensors `A` and `B` are
 `G`-isometric, so is `C^{ij} = A^i B^j`: the left inverse `eq:noninj:linv` built from
@@ -234,6 +235,7 @@ theorem IsGIsometricMPS.isGInjective {A : ι → Module.End ℂ (MonoidAlgebra �
 theorem IsGIsometricMPS.concatTensor {A : ι → Module.End ℂ (MonoidAlgebra ℂ G)}
     {B : κ → Module.End ℂ (MonoidAlgebra ℂ G)} (hA : IsGIsometricMPS A)
     (hB : IsGIsometricMPS B) : IsGIsometricMPS (PEPS.concatTensor A B) := by
+  classical
   obtain ⟨cA, hcA, hA'⟩ := hA.exists_adjoint_comp
   obtain ⟨cB, hcB, hB'⟩ := hB.exists_adjoint_comp
   have hcA' : (cA : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hcA.ne'
@@ -253,7 +255,8 @@ theorem IsGIsometricMPS.concatTensor {A : ι → Module.End ℂ (MonoidAlgebra �
     rw [mpsAdjointSiteMap, Finset.smul_sum]
     refine Finset.sum_congr rfl fun p _ => ?_
     refine LinearMap.ext fun x => ?_
-    simp only [LinearMap.smul_apply, LinearMap.smulRight_apply, concatTensor_apply, regularAdjoint_mul, smul_mul_smul_comm, smul_smul]
+    simp only [LinearMap.smul_apply, LinearMap.smulRight_apply, concatTensor_apply,
+      regularAdjoint_mul, smul_mul_smul_comm, smul_smul]
     rw [mul_inv, mul_comm (cA : ℂ)⁻¹, mul_comm]
   rw [hsmul, LinearMap.smul_comp] at hC
   rw [← hC, smul_smul, Complex.ofReal_mul, mul_inv_cancel₀ (mul_ne_zero hcA' hcB'), one_smul]
@@ -294,6 +297,7 @@ theorem IsGInjective.leftInverse_mem_invariants_of_surjective (hT : IsGInjective
   rw [h]
   exact ⟨ρ.averageMap_invariant x, apply_averageMap_of_forall_comp_eq hT.invariant x⟩
 
+omit [Fintype G] in
 /-- Source: arXiv:1001.3807, Lemma 6.3 (`lemma:iso:sym-virt-can-be-done-on-phys`), first
 direction, `Papers/1001.3807/paper_v3.tex` lines 1739–1752, figures `figs4/V-comm-w-sym.pdf`,
 `figs4/phys-op-from-V.pdf` and `figs4/phys-op-from-V-action.pdf`. For a `G`-isometric map
@@ -301,10 +305,11 @@ direction, `Papers/1001.3807/paper_v3.tex` lines 1739–1752, figures `figs4/V-c
 `V` on the virtual level commuting with the symmetry (equation `eq:iso:V-comm-sym`) is
 implemented by a unitary `U` on the physical system, `U 𝒫(A) = 𝒫(A) V`; here
 `U = 𝒫(A) V 𝒫(A)⁻¹`. -/
-theorem IsGIsometric.exists_unitary_comp_eq (hT : IsGIsometric ρ T)
+theorem IsGIsometric.exists_unitary_comp_eq [Finite G] (hT : IsGIsometric ρ T)
     (hsurj : Function.Surjective T) {V : Matrix ι ι ℂ} (hV : V ∈ Matrix.unitaryGroup ι ℂ)
     (hVρ : ∀ g, Matrix.toLin' V ∘ₗ ρ g = ρ g ∘ₗ Matrix.toLin' V) :
     ∃ U ∈ Matrix.unitaryGroup κ ℂ, Matrix.toLin' U ∘ₗ T = T ∘ₗ Matrix.toLin' V := by
+  have := Fintype.ofFinite G
   obtain ⟨-, L, hL⟩ := (isGInjective_iff_exists_leftInverse ρ T).1 hT.toIsGInjective
   obtain ⟨c, hc, hcT⟩ := hT.exists_inner_eq
   have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hc.ne'
@@ -337,7 +342,7 @@ theorem IsGIsometric.exists_unitary_comp_eq (hT : IsGIsometric ρ T)
     simp only [hg, Finset.sum_const, Finset.card_univ, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul,
       invOf_mul_self, one_smul]
 
-omit [DecidableEq ι] in
+omit [DecidableEq ι] [Fintype G] in
 /-- Source: arXiv:1001.3807, Lemma 6.3 (`lemma:iso:sym-virt-can-be-done-on-phys`), second
 direction, `Papers/1001.3807/paper_v3.tex` lines 1752–1761, figure
 `figs4/virt-op-from-phys.pdf`. For a `G`-isometric map `T = 𝒫(A)` onto the physical system
@@ -345,11 +350,12 @@ direction, `Papers/1001.3807/paper_v3.tex` lines 1752–1761, figure
 `U` on the physical system acts on the virtual level as `V = 𝒫(A)⁻¹ U 𝒫(A)`: `V` is invariant under
 the symmetry on both sides, so it commutes with it, it is unitary on the invariant subspace,
 and `𝒫(A) V = U 𝒫(A)`. -/
-theorem IsGIsometric.exists_comp_eq_of_unitary (hT : IsGIsometric ρ T)
+theorem IsGIsometric.exists_comp_eq_of_unitary [Finite G] (hT : IsGIsometric ρ T)
     (hsurj : Function.Surjective T) {U : Matrix κ κ ℂ} (hU : U ∈ Matrix.unitaryGroup κ ℂ) :
     ∃ V : (ι → ℂ) →ₗ[ℂ] (ι → ℂ), (∀ g, V ∘ₗ ρ g = V) ∧ (∀ g, ρ g ∘ₗ V = V) ∧
       (∀ x ∈ ρ.invariants, ∀ y ∈ ρ.invariants, star (V x) ⬝ᵥ V y = star x ⬝ᵥ y) ∧
       T ∘ₗ V = Matrix.toLin' U ∘ₗ T := by
+  have := Fintype.ofFinite G
   obtain ⟨-, L, hL⟩ := (isGInjective_iff_exists_leftInverse ρ T).1 hT.toIsGInjective
   obtain ⟨c, hc, hcT⟩ := hT.exists_inner_eq
   have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hc.ne'
