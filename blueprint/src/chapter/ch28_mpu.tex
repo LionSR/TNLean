@@ -6355,6 +6355,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
 
+\begin{theorem}[Scalar invariance of the double layer]
+    \label{thm:mpu_double_layer_scalar_invariance}
+    \lean{MPOTensor.physicalAdjointTensor_smul,
+        MPOTensor.doubleLayerTensor_smul_of_star_mul_self}
+    \leanok
+    \uses{def:mpu_double_layer}
+    For any tensor $\mathcal U$ and scalar $c\in\mathbb C$,
+    $(c\mathcal U)^\sharp=\overline c\,\mathcal U^\sharp$.
+    If $\overline c c=1$, the double layers of $c\mathcal U$ and
+    $\mathcal U$ agree.
+\end{theorem}
+\begin{proof}\leanok
+    Conjugation sends $c$ to $\overline c$, and contracting the two
+    layers multiplies their scalars to $\overline c c=1$.
+\end{proof}
+
+\begin{theorem}[Simplicity of the identity tensor]
+    \label{thm:mpu_identity_tensor_simple}
+    \lean{MPOTensor.isMPUSimple_idTensor}
+    \leanok
+    \uses{def:mpu_simple, def:mpo_stacked_layers}
+    For every physical dimension $d$, the bond-one identity tensor
+    $\mathcal I^{ij}=\delta_{ij}$ is simple.
+\end{theorem}
+\begin{proof}\leanok
+    Its double-layer letters are $\delta_{ij}$, so both simplicity
+    identities hold with boundary vectors $a=b=1$.
+\end{proof}
+
 \begin{theorem}[Parity obstruction to an unblocked standard-form converse]
     \label{thm:mpu_standard_form_parity_obstruction}
     \lean{MPOTensor.exists_simple_blockTwo_eq_mpo_three_ne}
@@ -6376,6 +6405,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:mpu_simple, def:mpo_family, def:mpo_stacked_layers,
+        thm:mpu_double_layer_scalar_invariance, thm:mpu_identity_tensor_simple,
         thm:mpdo_block_tensor_scalar_scaling,
         thm:mpdo_mpo_scalar_scaling}
     Let $\mathcal U^{ij}=\delta_{ij}$ on its one-dimensional bond space and
@@ -6845,6 +6875,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \operatorname{ind}(\mathcal U\boxtimes\Id_n)
          & =\operatorname{ind}(\mathcal U).
     \end{align}
+    The bridge to physical identity-ancilla attachment is
+    Theorem~\ref{thm:mpu_physical_ancilla_index}.
     This is the canonical-form-II representative case of the tensoring claim in
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--833.
@@ -6917,6 +6949,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     The identity tensor itself is a canonical representative of index zero,
     and the ancilla assertion follows from additivity.
+\end{proof}
+
+\begin{theorem}[Physical identity ancillas and the representative index]
+    \label{thm:mpu_physical_ancilla_index}
+    \lean{MPOTensor.mpo_tensorProduct_identityMPUTensor,
+        MPOTensor.mpo_tensorPhysicalId,
+        MPOTensor.IsMPU.index_tensorPhysicalId}
+    \leanok
+    \uses{def:equivalent-tensors, def:mpu_independent_tensor_product, threeMPU,
+        def:mpu_reduced_representative_index}
+    Let $U$ be a tensor and let $U^{(n)}=U\otimes\Id_n$ denote attachment
+    of an identity ancilla of dimension $n$ at each physical site, keeping
+    the bond dimension fixed. For every chain length $N$, its periodic
+    operator equals that of the independent tensor product with the
+    bond-one identity tensor:
+    \begin{align}
+        (U^{(n)})^{(N)}=(U\boxtimes\Id_n)^{(N)}
+        \cong U^{(N)}\otimes I_{n^N}.
+    \end{align}
+    Here the identification groups the original physical coordinates and
+    the ancilla coordinates separately. If $U$ is a positive-dimensional
+    MPU and $n>0$, then
+    \begin{align}
+        \operatorname{ind}(U^{(n)})=\operatorname{ind}(U).
+    \end{align}
+    % Source: paper_v2.tex, def:equivalent-tensors, lines 706--720;
+    % IndexTh(ii), lines 824--845.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_finite_tensor_product, thm:threeMPU_chain_formulas,
+        thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_representative_index_tensor_product}
+    Both constructions give the displayed Kronecker product in the same
+    sitewise coordinates. Equality of the periodic operators identifies
+    their representative indices, and the bond-one identity factor has
+    index zero.
 \end{proof}
 
 \begin{lemma}[Source ranks under rectangular reduction]
