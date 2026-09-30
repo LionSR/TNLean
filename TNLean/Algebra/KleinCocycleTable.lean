@@ -20,6 +20,7 @@ third cohomology or classify the corresponding matrix product operator phases.
 * `kleinCocycleFamily_restriction_iff`: the test on each cyclic subgroup.
 * `kleinCocycleFamily_one_subgroup_iff`: only the trivial subgroup has identically
   one restriction for the all-ones parameter triple.
+* `kleinCocycleFamily_zero_zero_one`: the `(0,0,1)` representative is `kleinCocycle`.
 
 ## References
 
