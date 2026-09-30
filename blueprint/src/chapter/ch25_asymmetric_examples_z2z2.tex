@@ -1112,3 +1112,56 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     nonzero $g$. Hence any subgroup on which the restriction is one contains
     only zero.
 \end{proof}
+
+
+\begin{theorem}[Distinct Klein-four classes and the last-row restriction]
+    \label{thm:asymex_klein_distinct_classes}
+    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_diagonal_eq_of_cohomologousTo,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_cohomologousTo_iff,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_one_isTrivialGaugeClass_comap_iff}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,thm:asymex_klein_cocycle_restrictions}
+    The representatives $\omega_{pqr}$ and $\omega_{p'q'r'}$ are cohomologous
+    if and only if $(p,q,r)=(p',q',r')$. For every subgroup $H\leq\Z_2^2$,
+    the class of $\omega_{111}|_H$ is trivial if and only if $H=\{0\}$.
+    These are the distinction of the eight representatives and the last-row
+    subgroup assertion in~\cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_cocycle_restrictions}
+    For an element $g$ of order dividing two, the cyclic product
+    $\omega(g,0,g)\omega(g,g,g)$ is invariant under multiplication by a
+    three-coboundary. Normalization reduces it to $\omega(g,g,g)$.
+    The three signs therefore agree for cohomologous representatives;
+    they recover $p$, $q$, and then $r$. Conversely, equal parameters give
+    the same cocycle. If the restriction of $\omega_{111}$ to $H$ has
+    trivial class, its diagonal value is $1$ at every $g\in H$.
+    The last row has diagonal value $-1$ at every nonzero element, so
+    $H=\{0\}$. On the trivial subgroup the cocycle is identically one.
+\end{proof}
+
+
+\begin{theorem}[Four-block orbits for the last Klein-four class]
+    \label{thm:asymex_klein_four_blocks}
+    \lean{TNLean.Algebra.LSymbol.stabilizer_eq_bot_of_kleinCocycleFamily_one,
+        TNLean.Algebra.LSymbol.card_orbit_of_kleinCocycleFamily_one,
+        TNLean.Algebra.LSymbol.card_of_kleinCocycleFamily_one}
+    \leanok
+    \uses{def:mpug_l_symbols,def:asymex_klein_cocycle_family}
+    Let $G=\Z_2^2$ act on a set $X$, and let $L$ be compatible with
+    $\omega_{111}$. For each $x\in X$, the stabilizer $G_x$ is trivial
+    and $|Gx|=4$. In particular, if $X$ is nonempty and the action is
+    transitive, then $|X|=4$. This gives the block count for the last
+    class in~\cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpug_fixed_block_trivializes,thm:asymex_klein_distinct_classes}
+    Compatibility implies $\omega_{111}|_{G_x}=d(L^x|_{G_x})$.
+    Thus the restricted class is trivial and $G_x=\{0\}$.
+    The orbit--stabilizer identity gives $|Gx|\,|G_x|=|G|=4$.
+    For a transitive action, $Gx=X$.
+\end{proof}
