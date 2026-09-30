@@ -159,6 +159,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:transfer_map_corner_intertwine}
     Spectral mapping for $\E_A^p$ gives the first assertion: a complex number
     has unit modulus if and only if its positive $p$th power does.
     A primitive $m$th root raised to the $p$th power has order $q$, giving
@@ -357,6 +358,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:periodic_sector_rephasing}
     Orthogonality gives $P_u A'^i=c_uP_u A^i=c_uA^iP_{u+1}$.
     Induction on the word length gives the first identity in
     (\ref{eq:periodic_sector_rephasing_words}); summing it over $u$ gives the second.
@@ -375,6 +377,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:periodic_sector_rephasing}
     Put $U=\sum_uc_uP_u$. Orthogonality gives
     $U^\dagger U=\sum_u|c_u|^2P_u=\Id$. Since $A'^i=UA^i$,
     $\sum_i(A'^i)^\dagger A'^i=\sum_i(A^i)^\dagger U^\dagger UA^i=\Id$.
@@ -399,7 +402,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_orbit_phase_products,
+    \uses{def:periodic_sector_rephasing,thm:periodic_orbit_phase_products,
         thm:periodic_sector_rephasing_words,
         thm:periodic_sector_rephasing_left_canonical}
     Since $m/r>0$, each root $c_\alpha$ has modulus one. Apply
@@ -734,7 +737,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
     Let $A$ be periodic of period $m>0$, and let $p>0$.
     Set $r=\gcd(m,p)$ and $q=m/r$. There are nonzero cyclic projections
-    $P_u$ with $P_uA^i=A^iP_{u+1}$ and isometries $V_\alpha$ onto their
+    $P_u$ with $\sum_uP_u=\Id_D$ and $P_uA^i=A^iP_{u+1}$ and isometries $V_\alpha$ onto their
     step-orbit sums $Q_\alpha$, for $0\le\alpha<r$, such that
     $B_\alpha^I=V_\alpha^\dagger(A^{[p]})^IV_\alpha$ is periodic of
     period $q$. All $r$ blocks have positive bond dimension; their dimensions
@@ -749,8 +752,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_irreducible,
         thm:periodic_compressed_exact_spectrum}
     Obtain the cyclic projections from periodicity and reverse their cyclic
-    indices to give the stated letter convention. Their nonvanishing follows
-    from the nonzero cyclic-sector dimensions and the supporting isometries.
+    indices to give the stated letter convention. Each cyclic sector has
+    positive dimension $D_u$ and an isometry $W_u$ with $W_uW_u^\dagger=P_u$,
+    so $P_u=0$ would give
+    \begin{align}
+        \Id_{D_u} & =W_u^\dagger W_uW_u^\dagger W_u=W_u^\dagger P_uW_u=0. \notag
+    \end{align}
     Compress onto each orbit sum. The orbit-compression theorem gives left
     canonicality, the dimension identity, and equality of matrix product
     vectors. Each compressed block is irreducible and has exactly the $q$th
@@ -848,8 +855,16 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     \uses{thm:periodic_prescribed_blocking,thm:periodic_weighted_block_refinement}
     Apply the prescribed-blocking decomposition separately to each $A_k$,
-    giving blocks $B_{k,a}$ with $0\le a<\gcd(m_k,p)$. Blocking raises $\mu_k$ to the power $p$, and refinement preserves that
-    weight on every orbit block. The preceding theorem assembles the
+    giving blocks $B_{k,a}$ with $0\le a<\gcd(m_k,p)$. Blocking raises
+    $\mu_k$ to the power $p$: if $\sigma'$ is the unblocked configuration of
+    length $pN$ underlying a blocked configuration $\sigma$ of length $N$, then
+    \begin{align}
+        V^{(N)}\bigl(A^{[p]}\bigr)_\sigma
+         & =V^{(pN)}(A)_{\sigma'}
+        =\sum_k\mu_k^{pN}V^{(pN)}(A_k)_{\sigma'}
+        =\sum_k\bigl(\mu_k^p\bigr)^NV^{(N)}\bigl(A_k^{[p]}\bigr)_\sigma. \notag
+    \end{align}
+    Refinement preserves the weight $\mu_k^p$ on every orbit block. The preceding theorem assembles the
     resulting vector identities. All new weights remain positive.
     At length zero every matrix product vector is the trace of the identity,
     so, writing $D_{k,a}$ for the bond dimension of the block indexed by
