@@ -250,6 +250,33 @@ theorem norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openCha
       congrArg norm hconjCLM
     _ ≤ ‖t‖ := ContinuousLinearMap.norm_rightFiberwiseMap_le t
 
+/-- A uniform bound for the physical open-chain martingale products gives
+exactly the same bound at every index of every fixed final volume. The
+products at the early indices vanish. -/
+theorem fixedAmbient_martingaleDifference_norm_le_of_openChain
+    [NeZero D] {A : MPSTensor d D} {l : ℕ} (hl : 1 < l)
+    (hInj : Kraus.IsNBlkInjective A l) {ε : ℝ} (hε : 0 ≤ ε)
+    (hOpen : ∀ (K : ℕ) (hK : 0 < K),
+      ‖openChainTailGroundProjectionES A K (l + 1) ∘L
+        openChainMartingaleDifferenceES A K l hInj hl.le hK‖ ≤ ε)
+    (N n : ℕ) (hnN : n < N) :
+    ‖LinearMap.toContinuousLinearMap
+      ((openIntervalGroundProjectionES A (l + 1) l N n).comp
+        ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).martingaleDifference n))‖ ≤
+      ε := by
+  rcases lt_trichotomy n l with hnl | rfl | hln
+  · rw [fixedAmbient_martingaleDifference_eq_zero_of_lt A hnl,
+      LinearMap.comp_zero]
+    simpa using hε
+  · rw [openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
+      A hl.le (by omega)]
+    simpa using hε
+  · obtain ⟨K, rfl⟩ : ∃ K, n = K + l := ⟨n - l, by omega⟩
+    obtain ⟨r, rfl⟩ : ∃ r, N = (K + (l + 1)) + r :=
+      ⟨N - (K + (l + 1)), by omega⟩
+    exact (norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
+      (r := r) hInj hl.le (by omega)).trans (hOpen K (by omega))
+
 /-- A primitive MPS satisfies Nachtergaele's C3 bound on every active index of
 the fixed final-volume filtration.  The same overlap length and coefficient as
 in the physical open-chain estimate are used. -/
@@ -265,18 +292,7 @@ theorem IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_thres
           ε := by
   obtain ⟨l, ε, hl, hInj, hε, hε_lt, hOpen⟩ :=
     hP.exists_openChain_martingaleDifference_norm_lt_c3_threshold hρ
-  refine ⟨l, ε, hl, hInj, hε, hε_lt, fun N n hnN ↦ ?_⟩
-  rcases lt_trichotomy n l with hnl | rfl | hln
-  · rw [fixedAmbient_martingaleDifference_eq_zero_of_lt A hnl,
-      LinearMap.comp_zero]
-    simpa using hε
-  · rw [openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
-      A hl.le (by omega)]
-    simpa using hε
-  · obtain ⟨K, rfl⟩ : ∃ K, n = K + l := ⟨n - l, by omega⟩
-    obtain ⟨r, rfl⟩ : ∃ r, N = (K + (l + 1)) + r :=
-      ⟨N - (K + (l + 1)), by omega⟩
-    exact (norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
-      (r := r) hInj hl.le (by omega)).trans (hOpen K (by omega))
+  exact ⟨l, ε, hl, hInj, hε, hε_lt,
+    fixedAmbient_martingaleDifference_norm_le_of_openChain hl hInj hε hOpen⟩
 
 end MPSTensor

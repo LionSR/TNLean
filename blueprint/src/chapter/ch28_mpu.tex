@@ -10820,11 +10820,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     displayed unblocked tensors. It is not the public MPU index
     $\operatorname{ind}$ of Definition~\ref{def:index}, whose definition uses a
     simple blocking and requires independence of that choice.
-    % **Scope restriction (specified tensors):** the source states the public
-    % blocking-independent MPU index, while this theorem computes only the raw
-    % value of each displayed tensor. Documented in
-    % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex; elimination is
-    % tracked by issues #7011 and #5856.
+    The public index values follow in
+    Theorem~\ref{thm:mpu_shift_public_index_values}.
     % Source: paper_v2.tex lines 2037--2041.
 \end{theorem}
 
@@ -10838,6 +10835,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     ranks multiply under the independent tensor product, so each of
     $U_1,U_2,U_3$ has equal right and left rank $d^2$. Their logarithmic
     differences therefore vanish.
+\end{proof}
+
+\begin{theorem}[Public indices of the shift examples]
+    \label{thm:mpu_shift_public_index_values}
+    \lean{MPOTensor.rightShiftTensor_exists_canonicalFormII,
+        MPOTensor.rightShiftTensor_index, MPOTensor.leftShiftTensor_index,
+        MPOTensor.shiftExampleU₁_index, MPOTensor.shiftExampleU₂_index,
+        MPOTensor.shiftExampleU₃_index}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_reduced_representative_index,
+        threeMPU}
+    Let $d>0$. The right shift is in canonical form II in its original bond
+    coordinates, with ambient right fixed matrix $\rho=I/d$. The right and
+    left shifts and the three two-spin families satisfy
+    \begin{align}
+        \operatorname{ind}(T)        & =\log_2 d,               &
+        \operatorname{ind}(T^\sharp) & =-\log_2 d,                \\
+        \operatorname{ind}(U_1)      & =\operatorname{ind}(U_2)
+        =\operatorname{ind}(U_3)=0.
+    \end{align}
+    These are the blocking-independent indices of the families in
+    Definition~\ref{threeMPU}, as asserted in \cite{Cirac2017MPU}.
+    % Source: paper_v2.tex lines 2037--2041.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_stabilization_converse,
+        thm:mpu_shift_blocked_source_index_values,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_representative_index_blocking_adjoint,
+        thm:mpu_representative_index_tensor_product}
+    The normalized transfer map of the right shift sends $X$ to
+    $\operatorname{tr}(X)I/d$. Its positive diagonal fixed matrix $I/d$
+    gives a canonical-form-II presentation. The source-rank computation
+    therefore yields the public index $\log_2 d$. Physical adjunction negates
+    this index, giving the left-shift value. The identity has index zero,
+    and additivity under the tensor product gives all three remaining values.
 \end{proof}
 
 \begin{theorem}[Index of the bond-one identity tensor]
@@ -10936,17 +10971,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The tensors $U_1$, $U_2$, and $U_3$ are simple, and so are the blockings
     of $U_2$ and $U_3$ over $k+1$ sites, because independent tensor products
     of simple tensors are simple. Thus all four values are taken at simple
-    blockings, which is the simplicity requirement of Definition~\ref{def:index};
-    its canonical-form hypothesis is not established for these tensors. None of the values is asserted
-    for an arbitrary tensor generating the same operators; that step needs the
-    canonical form of the shift and its uniqueness. Unequal ranks do not by
+    blockings, which is the simplicity requirement of Definition~\ref{def:index}.
+    The canonical-form construction and representative invariance in
+    Theorem~\ref{thm:mpu_shift_public_index_values} identify these values with
+    the public indices and transport them to any positive-dimensional MPU
+    generating the same periodic operators. Unequal ranks do not by
     themselves exclude a circuit: after blocking, every matrix product unitary,
     the shift included, is a depth-two circuit of nearest-neighbour unitaries
     in its standard form. The statement that the shift is not a finite-depth
     circuit of local gates needs parts (ii)--(iv) of Theorem~\ref{IndexTh}
     together with index zero for one layer of nearest-neighbour gates, and is
     not asserted here.
-    % Scope restriction (specified tensors): documented in
+    % The former specified-tensor restriction is resolved in
     % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex.
     % Source: paper_v2.tex lines 605--622, 681--704, 1980--2001, 2037--2041, 2308;
     % review TN-Review-main.tex lines 2607--2611.

@@ -13,7 +13,22 @@
         \left(\bigoplus_k B_k^i\right)^\dagger
         \notag
     \end{align}
-    equals $\E_{j,j'}$ applied to the $(j,j')$ bond block of $X$.
+    equals $\E_{j,j'}$ applied to the $(j,j')$ bond block of $X$:
+    \begin{center}
+        % E_{j,j'}(X_{j,j'}) = sum_i B_j^i X_{j,j'} (B_{j'}^i)^dagger.
+        % The upper node is B_j and the lower node is the conjugate of
+        % B_{j'}; the rung sums the physical index i.  The (j,j') bond block
+        % X_{j,j'} rides the east cup (the input), and the west pair stays
+        % open as the (j,j') block of the output.  Boundary signature:
+        % (virtual-west=2 | virtual-east=0 | physical-up=0 |
+        % physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open,
+                east={cup=$X_{j,j'}$}]
+            \tn[label pos=n]{B_j} \\
+            \tn[label pos=s, conjugate]{\overline{B_{j'}}}
+        \end{tenkz}
+    \end{center}
 \end{lemma}
 \begin{proof}\leanok
     A block-diagonal factor connects only matching blocks, so the $(j,j')$ block
@@ -296,6 +311,34 @@
          & =\delta_{j,j'}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
+    Diagrammatically, contracting $U_j$ with the conjugate of $U_{j'}$ over
+    the physical index identifies the virtual legs pairwise:
+    \begin{tenkzequation}
+        % sum_i (U_j^i)_{a,b} conj((U_{j'}^i)_{a',b'})
+        %   = delta_{j,j'} delta_{a,a'} delta_{b,b'}
+        % (CPSV16 Theorem 3.11, eq. III_isometry, lines 549--552).  Left:
+        % U_j above the conjugate of U_{j'}, the rung summing i; the west
+        % legs are a (upper) and a' (lower), the east legs b and b'.
+        % Right: the first factor joins a to a' (delta_{a,a'}), the second
+        % joins b to b' (delta_{b,b'}).  Both sides carry the boundary
+        % signature (virtual-west=2 | virtual-east=2 | physical-up=0 |
+        % physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[skin=box, label pos=n]{U_j} \\
+            \tn[skin=box, label pos=s, conjugate]{\overline{U_{j'}}}
+        \end{tenkz}
+        $ = \delta_{j,j'}\,$
+        \begin{tenkz}[rows={wire,wire}, cols=1, west=open, east=cup,
+                bonds=none]
+            \tn[skin=none]{} \\ \tn[skin=none]{}
+        \end{tenkz}
+        $ \otimes $
+        \begin{tenkz}[rows={wire,wire}, cols=1, west=cup, east=open,
+                bonds=none]
+            \tn[skin=none]{} \\ \tn[skin=none]{}
+        \end{tenkz}
+    \end{tenkzequation}
     Each block satisfies unit pair-index orthonormality ($j=j'$), and the
     cross-block sums between distinct blocks vanish ($j\ne j'$), as in
     \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}.
@@ -403,6 +446,26 @@
         A_j^i & =X_j\sqrt{\rho_j}\,U_j^iX_j^{-1},
         \notag
     \end{align}
+    that is,
+    \begin{tenkzequation}
+        % A_j^i = X_j sqrt(rho_j) U_j^i X_j^{-1} (CPSV16 Corollary 3.12,
+        % lines 583--590, with the square-root weight of
+        % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).  X_j, sqrt(rho_j)
+        % and X_j^{-1} are matrices on the bond; U_j carries the physical
+        % leg i.  Both sides carry the boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=1 |
+        % physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[label pos=s, ports={90:physical:$i$}]{A_j}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={wire}, cols=4, west=open, east=open]
+            \tn[skin=ring]{X_j} & \tn[skin=ring]{\sqrt{\rho_j}} &
+            \tn[label pos=s, ports={90:physical:$i$}]{U_j} &
+            \tn[skin=ring]{X_j^{-1}}
+        \end{tenkz}
+    \end{tenkzequation}
     such that $(U_j)_j$ satisfies the joint isometry condition
     (Definition~\ref{def:is_residual_isometry_family}). This formalizes the
     isometry equations of \cite[Corollary~3.12]{Cirac2016MPDO_arXiv} for

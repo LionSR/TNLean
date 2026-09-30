@@ -72,6 +72,45 @@ in~\cite{gap:glm23_pbc_group_mpo_single_shift}.
     denotes the periodic operator.
 \end{definition}
 
+Following~\cite{GarreRubio2023MPOSym}, write
+$\omega_g(l,b)=\omega(g,b,b^{-1}l)$ for the diagonal entries of $W_g$.
+By~(\ref{eq:asymex_group_cocycle_tensor}), the tensor $\hat T_g$ copies its
+input $b$ to the outgoing bond, weights the pair formed by the incoming
+bond and the input by $\omega_g$, and applies $L_g$ to the input to give
+the output.
+
+\begin{center}
+    % Formula: (\hat T_g^{a,b})_{l,r}=\delta_{a,gb}\delta_{r,b}\omega(g,b,b^{-1}l),
+    % equation~(\ref{eq:asymex_group_cocycle_tensor}); compare the local tensor
+    % \hat T_g drawn in \cite{GarreRubio2023MPOSym} (arXiv:2203.12563, lines
+    % 2205--2222).
+    % Ink-to-index map: on the left, the upper leg is the output a, the lower
+    % leg the input b, the west leg the incoming bond l and the east leg the
+    % outgoing bond r. On the right, the two dots are copy tensors, whose legs
+    % all carry one label; the lower dot sends the input b to the outgoing bond
+    % r, the box \omega_g carries the weight \omega_g(l,b) of the incoming bond
+    % and the input, and the box L_g maps b to the output a=gb.
+    % Contraction set: on the right, the three internal wires (L_g to the upper
+    % dot, \omega_g to the upper dot, and the vertical wire between the dots).
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[cols=1, bonds=none]
+        \tn[at=(1,1), skin=mpo,
+            ports={90:physical:$a$, 270:physical:$b$, 180:virtual:$l$, 0:virtual:$r$}]{\hat T_g}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,2), name=L, skin=box, ports={90:physical:$a$, 270:physical}]{L_g}
+        \tn[at=(2,1), name=w, skin=box, ports={180:virtual:$l$, 0:physical}]{\omega_g}
+        \tn[at=(2,2), name=c, skin=dot, ports={90:physical, 270:physical, 180:physical}]{}
+        \tn[at=(3,2), name=d, skin=dot, ports={90:physical, 270:physical:$b$, 0:virtual:$r$}]{}
+        \tnwire{L.270}{c.90}
+        \tnwire{w.0}{c.180}
+        \tnwire{c.270}{d.90}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[The periodic operator is monomial]
     \label{thm:asymex_group_cocycle_kernel}
     \lean{MPOTensor.GroupCocycle.mpo_tensor_apply,
@@ -101,6 +140,43 @@ in~\cite{gap:glm23_pbc_group_mpo_single_shift}.
     of $\bigl(\bigotimes_iL_g\bigr)\prod_iW_g^{i,i+1}$ at $(s,t)$ is the
     same product.
 \end{proof}
+
+The product law is the following identity of periodic operators, with
+$U_g$ applied after $U_h$.
+\begin{center}
+    % Formula: U_gU_h=U_{gh} (Theorem~\ref{thm:asymex_group_cocycle_mul}), as
+    % the entry (s,t) of both sides on a ring of N sites.
+    % Ink-to-index map: on the left, the upper row is \hat T_g with output
+    % s_i, the lower row is \hat T_h with input t_i, and the vertical wire at
+    % site i is the summed intermediate label; on the right, the single row
+    % is \hat T_{gh} with output s_i and input t_i.
+    % Contraction set: every vertical wire between the rows, every horizontal
+    % virtual bond of each row, and the periodic return bond of each ring.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides; three sites are drawn and the ellipsis
+    % stands for the others.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$s_0$, 270:physical, 180:virtual, 0:virtual}]{\hat T_g}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$s_1$, 270:physical, 180:virtual, 0:virtual}]{\hat T_g}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$s_{N-1}$, 270:physical, 180:virtual, 0:virtual}]{\hat T_g}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$t_0$, 180:virtual, 0:virtual}]{\hat T_h}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$t_1$, 180:virtual, 0:virtual}]{\hat T_h}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$t_{N-1}$, 180:virtual, 0:virtual}]{\hat T_h}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, size=l, ports={90:physical:$s_0$, 270:physical:$t_0$}]{\hat T_{gh}} &
+        \tn[skin=mpo, size=l, ports={90:physical:$s_1$, 270:physical:$t_1$}]{\hat T_{gh}} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, size=l, ports={90:physical:$s_{N-1}$, 270:physical:$t_{N-1}$}]{\hat T_{gh}}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Product law]
     \label{thm:asymex_group_cocycle_mul}
