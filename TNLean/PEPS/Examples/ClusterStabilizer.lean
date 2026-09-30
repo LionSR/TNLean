@@ -11,6 +11,7 @@ import TNLean.PEPS.Examples.Cluster
 The controlled-Z circuit description in arXiv:2011.12127, Appendix A,
 "The cluster state" (two dimensions), applies to arbitrary graphs. We index
 bonds by their two endpoints, so parallel bonds retain their multiplicity.
+We derive the stabilizer action and its common eigenspace from this circuit.
 The stabilizer at a vertex flips its qubit and applies Z at the other endpoint
 of every incident bond.
 -/
@@ -30,8 +31,7 @@ def graphCircuitSign (a b : E → V) (s : V → Fin 2) : ℂ :=
 def graphFlip (v : V) (s : V → Fin 2) : V → Fin 2 :=
   Function.update s v (s v + 1)
 
-/-- The Z factors in the graph-state stabilizer at a vertex, one per incident bond.
-Source: arXiv:2011.12127, Appendix A, controlled-Z preparation of cluster states. -/
+/-- The Z factors in the graph-state stabilizer at a vertex, one per incident bond. -/
 def graphNeighborSign (a b : E → V) (v : V) (s : V → Fin 2) : ℂ :=
   ∏ e, if a e = v then (-1 : ℂ) ^ (s (b e)).val
     else if b e = v then (-1 : ℂ) ^ (s (a e)).val else 1
@@ -58,13 +58,13 @@ private lemma graphNeighborSign_sq (a b : E → V) (v : V) (s : V → Fin 2) :
   split_ifs <;> simp [← mul_pow]
 
 /-- The graph-state stabilizer X at v times Z at the opposite endpoint of each incident
-bond. Source: arXiv:2011.12127, Appendix A, controlled-Z preparation of cluster states. -/
+bond. -/
 def graphStabilizer (a b : E → V) (v : V) (ψ : (V → Fin 2) → ℂ)
     (s : V → Fin 2) : ℂ :=
   graphNeighborSign a b v s * ψ (graphFlip v s)
 
-/-- The controlled-Z circuit state is fixed by every graph stabilizer.
-Source: arXiv:2011.12127, Appendix A, two-dimensional cluster state. -/
+/-- The controlled-Z circuit state is fixed by every graph stabilizer, as follows
+by comparing its coefficients before and after a single-site flip. -/
 theorem graphStabilizer_graphCircuitSign (a b : E → V) (h : ∀ e, a e ≠ b e)
     (v : V) : graphStabilizer a b v (graphCircuitSign a b) = graphCircuitSign a b := by
   funext s
@@ -74,7 +74,7 @@ theorem graphStabilizer_graphCircuitSign (a b : E → V) (h : ∀ e, a e ≠ b e
 private lemma eq_zeroConfig_of_flip_invariant [Finite V]
     (f : (V → Fin 2) → ℂ) (hf : ∀ v s, f (graphFlip v s) = f s)
     (s : V → Fin 2) : f s = f (fun _ => 0) := by
-  let := Fintype.ofFinite V
+  haveI := Fintype.ofFinite V
   have hu (v : V) (t : V → Fin 2) (x : Fin 2) : f (Function.update t v x) = f t := by
     by_cases hx : x = t v
     · simp [hx]
@@ -105,7 +105,8 @@ private lemma graphCircuitSign_sq (a b : E → V) (s : V → Fin 2) :
   simp [graphCircuitSign, ← Finset.prod_mul_distrib, ← mul_pow]
 
 /-- The common positive stabilizer eigenspace consists exactly of scalar multiples of the
-controlled-Z circuit state. Source: arXiv:2011.12127, Appendix A, cluster-state preparation. -/
+controlled-Z circuit state. Multiplication by the circuit sign reduces the
+stabilizer equations to invariance under every single-site flip. -/
 theorem graphStabilizer_fixed_iff [Finite V] (a b : E → V) (h : ∀ e, a e ≠ b e)
     (ψ : (V → Fin 2) → ℂ) :
     (∀ v, graphStabilizer a b v ψ = ψ) ↔
@@ -161,8 +162,7 @@ def clusterBondTarget : TorusVertex width height ⊕ TorusVertex width height �
     TorusVertex width height :=
   Sum.elim (fun v => (v.1 + 1, v.2)) (fun v => (v.1, v.2 + 1))
 
-/-- X at the indicated site and Z at each of its four neighbours.
-Source: arXiv:2011.12127, Appendix A, two-dimensional cluster-state circuit. -/
+/-- X at the indicated site and Z at each of its four neighbours. -/
 def clusterStabilizer (v : TorusVertex width height)
     (ψ : (TorusVertex width height → Fin 2) → ℂ) :
     (TorusVertex width height → Fin 2) → ℂ :=
@@ -173,8 +173,7 @@ private lemma clusterBondTarget_ne (e : TorusVertex width height ⊕
     TorusVertex width height) : Sum.elim id id e ≠ clusterBondTarget width height e := by
   rcases e with ⟨x, y⟩ | ⟨x, y⟩ <;> simp [clusterBondTarget]
 
-/-- Coefficient formula for the four-neighbour Pauli stabilizer.
-Source: arXiv:2011.12127, Appendix A, square-lattice cluster state. -/
+/-- Coefficient formula for the four-neighbour Pauli stabilizer. -/
 theorem clusterStabilizer_apply (v : TorusVertex width height)
     (ψ : (TorusVertex width height → Fin 2) → ℂ) (s : TorusVertex width height → Fin 2) :
     clusterStabilizer width height v ψ s =
@@ -217,7 +216,8 @@ theorem stateCoeff_clusterPEPS_eq_smul_clusterCircuitState :
     smul_smul, ← mul_pow, Complex.invSqrtTwo_mul_self]
 
 /-- The common +1 eigenspace of the square-torus cluster stabilizers is exactly the line
-spanned by the printed cluster PEPS. Source: arXiv:2011.12127, Appendix A, cluster state. -/
+spanned by the printed cluster PEPS. This follows from the graph-state
+eigenspace theorem and the PEPS-to-circuit coefficient identity. -/
 theorem clusterStabilizer_fixed_iff (ψ : (TorusVertex width height → Fin 2) → ℂ) :
     (∀ v, clusterStabilizer width height v ψ = ψ) ↔
       ∃ c : ℂ, ψ = c • stateCoeff (clusterPEPS width height) := by

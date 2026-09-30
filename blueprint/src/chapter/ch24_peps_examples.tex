@@ -206,6 +206,7 @@ matrix product operator on the virtual level.
         TNLean.PEPS.clusterBondTarget, TNLean.PEPS.clusterCircuitState,
         TNLean.PEPS.clusterStabilizer}
     \leanok
+    \uses{def:peps_torus_geometry_translation}
     Let a finite set of bonds have distinct endpoints $a(e),b(e)$ in a finite
     vertex set $V$. Parallel bonds are counted with multiplicity. The product
     of controlled-$Z$ gates has diagonal coefficient
@@ -256,6 +257,7 @@ matrix product operator on the virtual level.
     Its span is precisely the common $+1$ eigenspace of
     \begin{align}
         K_v=X_v Z_{v+(1,0)}Z_{v-(1,0)}Z_{v+(0,1)}Z_{v-(0,1)}.
+        \label{eq:peps_cluster_stabilizer_pauli}
     \end{align}
 \end{theorem}
 
@@ -264,7 +266,7 @@ matrix product operator on the virtual level.
     Theorem~\ref{thm:peps_cluster_state} identifies the coefficient with
     $2^{-N}g(\sigma)$, and its all-zero coefficient is $2^{-N}\ne0$.
     Each site has one incoming and one outgoing bond in each coordinate
-    direction, giving the displayed Pauli product. Apply
+    direction, giving (\ref{eq:peps_cluster_stabilizer_pauli}). Apply
     Theorem~\ref{thm:peps_graph_stabilizer_line} and absorb the nonzero scalar.
 \end{proof}
 
