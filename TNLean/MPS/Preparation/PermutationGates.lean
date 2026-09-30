@@ -19,7 +19,9 @@ site by site by the gate of the pair containing the site
 
 These are the gates of the measurement-assisted preparation of GHZ-type states in
 arXiv:2103.13367, Example 1: controlled shifts `|k⟩|a⟩ ↦ |k⟩|a ± k⟩` and single-site shifts
-`X^c`, generalizing the CNOT and Pauli corrections from qubits to qudits.
+`X^c`, generalizing the CNOT and Pauli corrections from qubits to qudits. A product of
+single-site permutation matrices acts by permuting the label of every site
+(`MPSPreparation.finKronecker_permMatrix_mulVec`).
 
 ## Main definitions
 
@@ -32,6 +34,7 @@ arXiv:2103.13367, Example 1: controlled shifts `|k⟩|a⟩ ↦ |k⟩|a ± k⟩` 
 
 * `MPSPreparation.IsLocalPerm.permMatrix_mem_supportedOperators`.
 * `MPSPreparation.exists_permLayer_op_mulVec`, `MPSPreparation.exists_shiftLayer_op_mulVec`.
+* `MPSPreparation.finKronecker_permMatrix_mulVec`.
 -/
 
 open Matrix MPSTensor
@@ -50,11 +53,6 @@ def IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Cfg d N)) : Prop :=
 private theorem permMatrix_cfg_apply (σ : Equiv.Perm (Cfg d N)) (x y : Cfg d N) :
     σ.permMatrix ℂ x y = if σ x = y then 1 else 0 := by
   simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
-
-/-- A permutation matrix of the configurations is unitary. -/
-theorem permMatrix_cfg_mem_unitary (σ : Equiv.Perm (Cfg d N)) :
-    σ.permMatrix ℂ ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
-  Equiv.Perm.permMatrix_mem_unitaryGroup σ
 
 /-- The permutation matrix of a permutation changing and reading only the sites of `S` acts
 on `S`. -/
@@ -134,13 +132,6 @@ theorem isLocalPerm_shiftPerm {S : Set (Fin N)} {t : Fin N} (ht : t ∈ S) (f : 
     · subst hit; simp [hxy i ht, hfS x y hxy]
     · rw [Function.update_of_ne hit, Function.update_of_ne hit, hxy i hi]
 
-/-- Adding a vector `δ` vanishing off `S` changes and reads only the sites of `S`. -/
-theorem isLocalPerm_addRight {S : Set (Fin N)} {δ : Cfg d N} (hδ : ∀ i ∉ S, δ i = 0) :
-    IsLocalPerm S (Equiv.addRight δ) := by
-  refine ⟨fun x i hi => ?_, fun x y hxy i hi => ?_⟩
-  · simp [hδ i hi]
-  · simp [hxy i hi]
-
 end Shift
 
 /-! ### Layers of permutation gates -/
@@ -156,7 +147,7 @@ noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).Pairwis
     Layer d N where
   bonds := K
   gate k := (τ k).permMatrix ℂ
-  gate_mem_unitary _ _ := permMatrix_cfg_mem_unitary _
+  gate_mem_unitary _ _ := Equiv.Perm.permMatrix_mem_unitaryGroup _
   gate_mem_supportedOperators k hk := (hτ k hk).permMatrix_mem_supportedOperators
   pairwiseDisjoint := hK
 
@@ -233,5 +224,23 @@ theorem exists_shiftLayer_op_mulVec (K : Finset (Fin N))
     · exact h2 x i fun k hk hik => hb ⟨k, hk, hik⟩
 
 end Layer
+
+/-! ### Single-site permutations -/
+
+/-- **Single-site permutations.** The Kronecker product of the permutation matrices of
+permutations `σ i` of the labels of the sites `i` acts on vectors as `v ↦ v ∘ σ`, where `σ`
+applies `σ i` at every site `i`. -/
+theorem finKronecker_permMatrix_mulVec (σ : Fin N → Equiv.Perm (Fin d)) (v : Cfg d N → ℂ) :
+    finKronecker (fun i => (σ i).permMatrix ℂ) *ᵥ v = fun x => v fun i => σ i (x i) := by
+  classical
+  funext x
+  have h : ∀ y : Cfg d N, finKronecker (fun i => (σ i).permMatrix ℂ) x y =
+      if y = (fun i => σ i (x i)) then 1 else 0 := fun y => by
+    simp only [finKronecker_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply,
+      Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq]
+    rw [Finset.prod_boole]
+    simp only [Finset.mem_univ, true_implies, funext_iff, eq_comm]
+  simp only [mulVec, dotProduct, h, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq',
+    Finset.mem_univ, ite_true]
 
 end MPSPreparation

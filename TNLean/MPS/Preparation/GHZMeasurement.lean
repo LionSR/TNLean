@@ -17,15 +17,16 @@ circuit of depth `T` vanish beyond distance `2T`
 this to show that the GHZ state needs a depth growing with the system size. With
 measurements it is prepared in constant depth: arXiv:2307.01696, paragraph "Long-range MPS using
 measurements", states that "the creation of GHZ-like states `|χ_M⟩ = ∑_{i=1}^b αᵢ |i⟩^{⊗M}`
-becomes possible in only constant depth", following arXiv:2103.13367, Example 1. This file
-proves it for every dimension `b ≥ 1` and every nonzero `α`, with depth `3` for every `M`
+becomes possible in only constant depth", citing among others arXiv:2103.13367, whose
+Example 1 gives the preparation for qubits. This file proves it for every dimension `b ≥ 1`
+and every nonzero `α`, with depth `2` for every `M`, the depth of that example
 (`MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`).
 
 ## The protocol
 
 The system qudit `n` sits at the site `2n` of a ring of `2M` sites and its ancilla at
 `2n + 1`, between the system qudits `n` and `n + 1`. The protocol is Example 1 of
-arXiv:2103.13367 for qudits, with the parities of the neighbouring system qudits measured
+arXiv:2103.13367 for qudits, with the differences of neighbouring system values measured
 through the ancillas.
 
 * Product state: the first system qudit is in `∑ᵢ αᵢ |i⟩`, the other system qudits in the
@@ -36,16 +37,16 @@ through the ancillas.
   `n < M - 1`.
 * Measuring the ancillas `n < M - 1` in the computational basis gives outcomes `mₙ`, and
   leaves `∑ᵢ αᵢ ⊗ₙ |i - pₙ⟩` on the system qudits with `pₙ = m₀ + ⋯ + m_{n-1}`.
-* One layer of single-site shifts, `X^{pₙ}` on the system qudit `n` and `X^{-mₙ}` on the
-  ancilla `n`, gives `|χ_M⟩` with every ancilla back in `|0⟩`.
+* The single-site shifts `X^{pₙ}` on the system qudit `n` and `X^{-mₙ}` on the ancilla `n`,
+  free corrections, give `|χ_M⟩` with every ancilla back in `|0⟩`.
 
 The correction at the system qudit `n` depends on all the outcomes `m₀, …, m_{n-1}`, which is
-where the global classical communication of the model is used. Every gate acts inside the
-pair formed by a system qudit and its ancilla, or between the ancilla of one system qudit and
-the next system qudit; in the model of the source, where ancillas are attached to their
-sites, these are gates between neighbouring sites conjugated by local unitaries, so the
-depth `3` counted here bounds the source's depth. Every outcome has the same
-probability, and every outcome gives exactly `|χ_M⟩`: no outcome is post-selected.
+where the global classical communication of the model is used. Every gate of the circuit
+acts inside the pair formed by a system qudit and its ancilla, or between the ancilla of one
+system qudit and the next system qudit; in the model of arXiv:2103.13367, where ancillas are
+attached to their sites, these are gates between neighbouring sites conjugated by local
+unitaries, so the depth `2` counted here bounds the depth of arXiv:2103.13367. Every outcome
+has the same probability, and every outcome gives exactly `|χ_M⟩`: no outcome is post-selected.
 
 ## Main definitions
 
@@ -79,10 +80,10 @@ variable {b M : ℕ} [NeZero b]
 def site (n : Fin M) (r : Fin 2) : Fin (M * 2) :=
   finProdFinEquiv (n, r)
 
-theorem site_val (n : Fin M) (r : Fin 2) : (site n r).val = r.val + 2 * n.val :=
+private theorem site_val (n : Fin M) (r : Fin 2) : (site n r).val = r.val + 2 * n.val :=
   rfl
 
-theorem site_injective {n n' : Fin M} {r r' : Fin 2} (h : site n r = site n' r') :
+private theorem site_injective {n n' : Fin M} {r r' : Fin 2} (h : site n r = site n' r') :
     n = n' ∧ r = r' := by
   simpa [site] using h
 
@@ -139,10 +140,6 @@ these are also the measured ancillas. -/
 private def secondBonds : Finset (Fin (M * 2)) :=
   (Finset.univ.filter fun n : Fin M => n.val + 1 < M).image fun n => site n 1
 
-/-- The left sites `2n` of the pairs `{2n, 2n + 1}` of the correction layer, every `n`. -/
-private def correctionBonds : Finset (Fin (M * 2)) :=
-  Finset.univ.image fun n : Fin M => site n 0
-
 omit [NeZero b] [NeZero M] in
 private theorem mem_firstBonds {k : Fin (M * 2)} :
     k ∈ firstBonds ↔ ∃ n : Fin M, n.val + 1 < M ∧ site n 0 = k := by
@@ -176,17 +173,6 @@ private theorem secondBonds_pairwiseDisjoint :
   · exact absurd (site_injective h).2 (by decide)
   · exact absurd (site_injective h).2 (by decide)
   · exact hn (Fin.ext (by have := congrArg Fin.val (site_injective h).1; simp at this; omega))
-
-private theorem correctionBonds_pairwiseDisjoint :
-    ((correctionBonds : Finset (Fin (M * 2))) : Set (Fin (M * 2))).PairwiseDisjoint bond := by
-  intro k hk k' hk' hkk'
-  obtain ⟨n, -, rfl⟩ := Finset.mem_image.mp hk
-  obtain ⟨n', -, rfl⟩ := Finset.mem_image.mp hk'
-  have hn : n ≠ n' := fun h => hkk' (h ▸ rfl)
-  change Disjoint (bond _) (bond _)
-  rw [bond_site_zero, bond_site_zero, Set.disjoint_left]
-  rintro i (rfl | rfl) (h | h) <;> exact hn (site_injective h).1
-
 
 omit [NeZero b] in
 private theorem firstShift_aux (k : Fin (M * 2)) (x : Cfg b (M * 2)) (c : Fin b) :
@@ -254,16 +240,12 @@ private theorem ghzCorrection_site_one (m : secondBonds (M := M) → Fin b)
     (n : Fin M) : ghzCorrection m (site n 1) = ghzOutcome m n := by
   simp [ghzCorrection, site]
 
-/-- The gate of the correction layer on `{2n, 2n + 1}`. -/
-private def correctionShift (m : secondBonds (M := M) → Fin b) (k : Fin (M * 2)) :
-    Equiv.Perm (Cfg b (M * 2)) :=
-  Equiv.addRight fun i => if i = k ∨ i = k + 1 then ghzCorrection m i else 0
-
-/-- The correction layer of single-site shifts, for the outcome `m`. -/
-private noncomputable def correctionLayer (m : secondBonds (M := M) → Fin b) :
-    Layer b (M * 2) :=
-  permLayer correctionBonds correctionBonds_pairwiseDisjoint (correctionShift m)
-    fun _ _ => isLocalPerm_addRight fun _ hi => ite_eq_right hi
+/-- The correction at the site `j` for the outcome `m`: the shift `|a⟩ ↦ |a - δⱼ⟩` by the
+value `δⱼ` of `ghzCorrection m`, that is `X^{pₙ}` at the system qudit `n` and `X^{-mₙ}` at the
+ancilla `n`. -/
+private noncomputable def correctionUnitary (m : secondBonds (M := M) → Fin b) (j : Fin (M * 2)) :
+    Matrix (Fin b) (Fin b) ℂ :=
+  (Equiv.addRight (ghzCorrection m j)).permMatrix ℂ
 
 /-- The product state of the protocol: `∑ᵢ αᵢ |i⟩` at the first system qudit, `∑ᵢ |i⟩` at
 the other system qudits, and `|0⟩` at the ancillas. -/
@@ -272,7 +254,7 @@ def ghzInitial (α : Fin b → ℂ) : Fin (M * 2) → Fin b → ℂ := fun j =>
   else if (finProdFinEquiv.symm j).2 = 0 then fun _ => 1 else Pi.single 0 1
 
 /-- The measurement-assisted preparation of the GHZ-type state: two layers of controlled
-shifts, the measurement of the ancillas `n < M - 1`, and one layer of corrections.
+shifts, the measurement of the ancillas `n < M - 1`, and single-site shifts as corrections.
 
 Source: arXiv:2103.13367, Example 1, for qudits; arXiv:2307.01696, paragraph "Long-range MPS
 using measurements". -/
@@ -280,7 +262,8 @@ noncomputable def ghzProtocol (α : Fin b → ℂ) : MeasurementProtocol b (M * 
   initial := ghzInitial α
   first := [firstLayer, secondLayer]
   measured := secondBonds
-  correction m := [correctionLayer m]
+  correction := correctionUnitary
+  correction_mem_unitary _ _ := Equiv.Perm.permMatrix_mem_unitaryGroup _
 
 /-! ### The action of the protocol -/
 
@@ -334,21 +317,6 @@ private theorem exists_secondLayer_op_mulVec : ∃ P : Cfg b (M * 2) → Cfg b (
     have := (site_injective h).1
     subst this
     omega
-
-private theorem exists_correctionLayer_op_mulVec (m : secondBonds (M := M) → Fin b) :
-    ∃ P : Cfg b (M * 2) → Cfg b (M * 2),
-      (∀ v, (correctionLayer m).op *ᵥ v = v ∘ P) ∧ ∀ x, P x = x + ghzCorrection m := by
-  obtain ⟨P, hv, h1, -⟩ := exists_permLayer_op_mulVec (d := b) correctionBonds
-    correctionBonds_pairwiseDisjoint (correctionShift m)
-    fun _ _ => isLocalPerm_addRight fun _ hi => ite_eq_right hi
-  refine ⟨P, hv, fun x => funext fun j => ?_⟩
-  obtain ⟨n, r, rfl⟩ := exists_site j
-  have hk : site n 0 ∈ correctionBonds := Finset.mem_image.mpr ⟨n, Finset.mem_univ _, rfl⟩
-  have hj : site n r = site n 0 ∨ site n r = site n 0 + 1 := by
-    rw [site_zero_add_one]
-    fin_cases r <;> simp
-  rw [h1 x _ hk _ hj]
-  simp [correctionShift, hj]
 
 private theorem ghzPrefix_zero (m : secondBonds (M := M) → Fin b) :
     ghzPrefix m 0 = 0 := by
@@ -409,17 +377,6 @@ private theorem productVector_ghzInitial (α : Fin b → ℂ) (y : Cfg b (M * 2)
     ite_eq_left rfl]
 
 omit [NeZero b] in
-theorem ghzState_apply (α : Fin b → ℂ) (s : Fin M → Fin b) :
-    ghzState α s = if ∀ n, s n = s 0 then α (s 0) else 0 := by
-  classical
-  simp only [ghzState, Pi.single_apply, Finset.prod_boole, Finset.mem_univ, true_implies]
-  rw [Finset.sum_eq_single (s 0)]
-  · split_ifs <;> simp
-  · intro j _ hj
-    rw [ite_eq_right fun h => hj (h 0).symm, mul_zero]
-  · simp
-
-omit [NeZero b] in
 private theorem forall_succ_eq_iff (s : Fin M → Fin b) :
     (∀ (n : Fin M) (hn : n.val + 1 < M), s ⟨n.val + 1, hn⟩ = s n) ↔ ∀ n, s n = s 0 := by
   constructor
@@ -436,23 +393,22 @@ private theorem ghzProtocol_output_aux (α : Fin b → ℂ) (m : secondBonds (M 
   classical
   obtain ⟨PA, hA, hA1, hA0, hAl⟩ := exists_firstLayer_op_mulVec (b := b) (M := M)
   obtain ⟨PB, hB, hB1, hB0, hBl⟩ := exists_secondLayer_op_mulVec (b := b) (M := M)
-  obtain ⟨PC, hC, hCx⟩ := exists_correctionLayer_op_mulVec (M := M) m
   have hout : (ghzProtocol α).output m = fun x =>
       (outcomeProj secondBonds m *ᵥ
         fun z => productVector (ghzInitial α) (PA (PB z)))
         (x + ghzCorrection m) := by
-    change circuitOp [correctionLayer m] *ᵥ (outcomeProj secondBonds m *ᵥ
-      (circuitOp [firstLayer, secondLayer] *ᵥ productVector (ghzInitial α))) = _
-    simp only [circuitOp, Matrix.one_mul, ← mulVec_mulVec, hA, hB, hC]
-    funext x
-    simp only [Function.comp_apply, hCx]
+    change finKronecker (fun j => (Equiv.addRight (ghzCorrection m j)).permMatrix ℂ) *ᵥ
+      (outcomeProj secondBonds m *ᵥ
+        (circuitOp [firstLayer, secondLayer] *ᵥ productVector (ghzInitial α))) = _
+    simp only [circuitOp, Matrix.one_mul, ← mulVec_mulVec, hA, hB,
+      finKronecker_permMatrix_mulVec]
     rfl
   funext x
   rw [hout]
   dsimp only
   rw [outcomeProj_mulVec_apply]
   simp only [forall_add_ghzCorrection_eq_iff]
-  rw [productVector_ghzInitial, withZeroAncillas, ghzState_apply]
+  rw [productVector_ghzInitial, withZeroAncillas, MPSTensor.ghzState_apply]
   set s : Fin M → Fin b := fun n => x (site n 0) with hs
   set z := x + ghzCorrection m
   have hz0 : ∀ n, z (site n 0) = s n - ghzPrefix m n := fun n => by
@@ -500,16 +456,16 @@ theorem ghzProtocol_output (α : Fin b → ℂ) (m : (ghzProtocol (M := M) α).m
 /-- **GHZ-type states in constant depth with measurements.** For every `M ≥ 1`, every
 dimension `b ≥ 1` and every nonzero `α`, the GHZ-type state
 `|χ_M⟩ = ∑ᵢ αᵢ |i⟩^{⊗M}`, with one ancilla per system qudit left in `|0⟩`, is prepared with
-measurements in depth `3` on the ring of `2M` sites.
+measurements in depth `2` on the ring of `2M` sites.
 
 Source: arXiv:2307.01696, paragraph "Long-range MPS using measurements" ("the creation of
 GHZ-like states `|χ_M⟩ = ∑_{i=1}^b αᵢ |i⟩^{⊗M}` becomes possible in only constant depth");
-arXiv:2103.13367, Example 1 (`|0⟩ → |GHZ⟩` by `QCcc₂`). -/
+arXiv:2103.13367, Example 1 (`|0⟩ → |GHZ⟩` by `QCcc₂`), for qudits. -/
 theorem isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState (α : Fin b → ℂ)
     (hα : α ≠ 0) :
-    IsPreparedWithMeasurementsInDepth 3 (withZeroAncillas (M := M) (ghzState α)) := by
+    IsPreparedWithMeasurementsInDepth 2 (withZeroAncillas (M := M) (ghzState α)) := by
   classical
-  refine ⟨ghzProtocol α, fun _ => le_rfl, ?_, fun m _ => ⟨1, ?_⟩⟩
+  refine ⟨ghzProtocol α, le_rfl, ?_, fun m _ => ⟨1, ?_⟩⟩
   swap
   · rw [one_smul]
     exact ghzProtocol_output α m

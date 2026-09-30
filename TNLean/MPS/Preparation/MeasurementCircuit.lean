@@ -4,31 +4,38 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.CircuitComposition
+import TNLean.MPS.Preparation.ControlledGates
 
 /-!
 # Local circuits assisted by measurements
 
 A measurement-assisted preparation on the ring of `N` sites starts from a product vector,
 applies a local circuit, measures a set `S` of sites in the computational basis, and then,
-for every outcome string `m`, applies a local circuit chosen according to `m`. It prepares
-`ψ` in depth `T` when every outcome of nonzero probability leaves the chain in `ψ` up to a
-nonzero scalar (phase and normalization), and the two circuits together have at most `T`
-layers for every outcome. Only the layers of the circuits are counted: the measurement and
-the classical processing of its outcomes are free.
+for every outcome string `m`, applies a product of single-site unitaries chosen according to
+`m`. It prepares `ψ` in depth `T` when every outcome of nonzero probability leaves the chain in
+`ψ` up to a nonzero scalar (phase and normalization), and the circuit before the measurement
+has at most `T` layers. Only the layers of that circuit are counted: the measurement, the
+classical processing of its outcomes, and the single-site corrections are free.
 
-This is the class `QCcc` of Piroli, Styliaris and Cirac (arXiv:2103.13367, paragraph
-"Quantum circuits and LOCC" and Definition "Transformations under QC and LOCC"), which is the
-model behind the paragraph "Preparations using measurements" of arXiv:2307.01696: a depth-`ℓ`
-circuit followed by measurements and by local unitaries "depending on the outcomes of all
-previous measurements", the outcomes being "classically communicated among all the qudits".
-The correction applied at a site may therefore depend on the whole outcome string, not only
-on outcomes measured nearby: classical communication is global and free. In the Example 1
-preparation of the GHZ state the correction at the site `n` is `X^{k₂ + ⋯ + kₙ}`, which
-depends on outcomes at every distance.
+This is the class `QCcc` of Piroli, Styliaris and Cirac (arXiv:2103.13367, paragraphs
+"Quantum circuits and LOCC" and "State transformations with QC and LOCC", and Definition
+"Transformations under QC and LOCC"). In the words of arXiv:2103.13367, a depth-`ℓ` circuit
+is followed by measurements and by local unitaries: "apply `U ∈ LU` depending on the outcomes
+of all previous measurements", the outcomes being "classically communicated among all the
+qudits". The correction applied at a site may therefore depend on the whole outcome string,
+not only on outcomes measured nearby: classical communication is global and free. In the
+Example 1 preparation of the GHZ state the correction at the site `n` is
+`X^{k₂ + ⋯ + kₙ}`, which depends on outcomes at every distance.
+
+The paragraph "Preparations using measurements" of arXiv:2307.01696 states the idea,
+"Measurements and subsequent conditional unitaries can make state preparation much faster",
+without fixing a model and without citing arXiv:2103.13367; that paper cites
+arXiv:2103.13367 for the constant-depth preparation of GHZ-like states (paragraph
+"Long-range MPS using measurements" and the paragraph after eq. (19)).
 
 This differs from the relation `MPSPreparation.IsLocalChannelConversion`
-(`TNLean.MPS.Preparation.LocalChannelConversion`), which models the circuits of the same
-paragraph with ancillas and local operations but without measurements and without classical
+(`TNLean.MPS.Preparation.LocalChannelConversion`), which models the circuits of arXiv:2307.01696
+with ancillas and local operations but without measurements and without classical
 communication: there every step is a local channel, and connected correlations beyond the
 light cone vanish (`trace_mul_mul_eq_of_isLocalChannelConversion`). Global classical
 communication breaks this light cone, which is why GHZ-type states, whose connected
@@ -37,31 +44,34 @@ correlations do not decay, can be prepared in constant depth with measurements
 
 ## Conventions
 
-Every protocol of this model is a protocol of the source's, of no larger depth, so a
-preparation proved here is a preparation in the source's sense. The differences are these.
+Every protocol of this model is a protocol of arXiv:2103.13367, of no larger depth, so a
+preparation proved here is a preparation in the sense of that paper. The differences are
+these.
 
 * Ancillas are sites of the ring, of the same local dimension as the system: a preparation
   of a state of the system with its ancillas left in `|0⟩` is a preparation of the
-  corresponding state of the ring. The source's free local unitaries, acting on a site and
-  its ancillas, are counted here as gates of the circuits.
-* Any site may be measured; in the source a qudit is measured after a free local unitary
-  swaps it into an ancilla.
-* The measurement is in the computational basis and is fixed in advance. The source
+  corresponding state of the ring. The free local unitaries of arXiv:2103.13367 between the
+  layers of the circuit, acting on a site and its ancillas, are counted here as gates of the
+  circuit.
+* Any site may be measured; in arXiv:2103.13367 a qudit is measured after a free local
+  unitary swaps it into an ancilla, and the correction swaps it back.
+* The measurement is in the computational basis and is fixed in advance. arXiv:2103.13367
   measures the ancillas one after the other in orthonormal bases that may depend on the
   earlier outcomes; a measurement in another product basis is a computational-basis
   measurement after one layer of single-site unitaries.
-* The corrections are local circuits whose layers are counted; in the source they are free
-  local unitaries.
+* The correction is a product of single-site unitaries of the ring, applied once after all
+  the measurements; in arXiv:2103.13367 it is a local unitary, acting on a site and its
+  ancillas, and one may be applied after each measurement.
 
-The source performs a single round of measurements and corrections, and so does this
+arXiv:2103.13367 performs a single round of measurements and corrections, and so does this
 definition.
 
 ## Main definitions
 
 * `MPSPreparation.outcomeProj` — the projection onto an outcome of a computational-basis
   measurement of a set of sites.
-* `MPSPreparation.MeasurementProtocol` — product vector, first circuit, measured sites, and
-  outcome-dependent correction circuits.
+* `MPSPreparation.MeasurementProtocol` — product vector, circuit, measured sites, and
+  outcome-dependent single-site corrections.
 * `MPSPreparation.IsPreparedWithMeasurementsInDepth` — preparation with measurements in
   depth `T`.
 
@@ -71,14 +81,17 @@ definition.
 * `MPSPreparation.MeasurementProtocol.Prepares.ne_zero` — a prepared vector is nonzero, so
   the definition is not vacuous.
 * `MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`,
-  `MPSPreparation.isPreparedInDepth_of_prepares_of_measured_eq_empty` — without
-  measurements, preparation with measurements is preparation by a local circuit.
+  `MPSPreparation.exists_isPreparedInDepth_of_prepares_of_measured_eq_empty` — without
+  measurements, preparation with measurements is preparation by a local circuit, up to
+  single-site unitaries.
 
 ## References
 
-* arXiv:2103.13367 (Piroli, Styliaris, Cirac), main text, paragraph "Quantum circuits and
-  LOCC" and Definition "Transformations under QC and LOCC".
-* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), paragraph "Preparations using measurements".
+* arXiv:2103.13367 (Piroli, Styliaris, Cirac), main text, paragraphs "Quantum circuits and
+  LOCC" and "State transformations with QC and LOCC", and Definition "Transformations under
+  QC and LOCC".
+* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), paragraphs "Preparations using
+  measurements" and "Long-range MPS using measurements".
 -/
 
 open Matrix MPSTensor
@@ -90,13 +103,24 @@ variable {d N : ℕ}
 
 /-- The projection onto the outcome `m` of a measurement of the sites `S` in the
 computational basis: the diagonal projection onto the configurations agreeing with `m`
-on `S`.
+on `S`. It is `MPSPreparation.ctrlProj S c` for every configuration `c` extending `m`
+(`MPSPreparation.outcomeProj_eq_ctrlProj`); the outcome is indexed by `S → Fin d` so that
+the outcomes of the measurement are the strings on `S`.
 
 Source: arXiv:2103.13367, paragraph "Quantum circuits and LOCC" ("local (orthogonal)
 measurements"). -/
 noncomputable def outcomeProj (S : Finset (Fin N)) (m : S → Fin d) :
     Matrix (Cfg d N) (Cfg d N) ℂ :=
   diagonal fun x => if ∀ i : S, x i = m i then 1 else 0
+
+theorem outcomeProj_eq_ctrlProj (S : Finset (Fin N)) (m : S → Fin d) (c : Cfg d N)
+    (hc : ∀ i : S, c i = m i) : outcomeProj S m = ctrlProj S c := by
+  unfold outcomeProj ctrlProj
+  congr 1
+  funext x
+  refine if_congr ⟨fun h i hi => ?_, fun h i => ?_⟩ rfl rfl
+  · rw [h ⟨i, hi⟩, hc ⟨i, hi⟩]
+  · rw [h i i.2, hc i]
 
 theorem outcomeProj_mulVec_apply (S : Finset (Fin N)) (m : S → Fin d) (v : Cfg d N → ℂ)
     (x : Cfg d N) :
@@ -121,27 +145,21 @@ theorem sum_outcomeProj (S : Finset (Fin N)) :
     exact h x
   · simp [outcomeProj, diagonal_apply_ne _ hxy, one_apply_ne hxy]
 
-/-- Measuring no site: the only outcome projection is the identity. -/
-theorem outcomeProj_empty (m : (∅ : Finset (Fin N)) → Fin d) : outcomeProj ∅ m = 1 := by
-  ext x y
-  by_cases hxy : x = y
-  · subst hxy
-    simp [outcomeProj]
-  · simp [outcomeProj, diagonal_apply_ne _ hxy, one_apply_ne hxy]
-
-/-- A scalar multiple of a product vector is a product vector: the scalar is absorbed into
-the vector of one site. -/
-theorem smul_productVector (c : ℂ) (v : Fin N → Fin d → ℂ) (i : Fin N) :
-    c • productVector v = productVector (Function.update v i (c • v i)) := by
-  classical
+/-- Measuring no site leaves every vector unchanged. -/
+private theorem outcomeProj_mulVec_of_isEmpty {S : Finset (Fin N)} [IsEmpty S] (m : S → Fin d)
+    (v : Cfg d N → ℂ) : outcomeProj S m *ᵥ v = v := by
   funext x
-  simp only [productVector, Pi.smul_apply, smul_eq_mul]
-  rw [← Finset.mul_prod_erase _ _ (Finset.mem_univ i),
-    ← Finset.mul_prod_erase _ _ (Finset.mem_univ i), Function.update_self, Pi.smul_apply,
-    smul_eq_mul, mul_assoc]
-  congr 2
-  exact Finset.prod_congr rfl fun j hj => by
-    rw [Function.update_of_ne (Finset.ne_of_mem_erase hj)]
+  rw [outcomeProj_mulVec_apply]
+  exact ite_eq_left fun i => isEmptyElim i
+
+/-- A product of single-site unitaries is unitary. -/
+theorem finKronecker_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
+    (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
+    finKronecker u ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+  rw [Unitary.mem_iff, star_eq_conjTranspose, finKronecker_conjTranspose, finKronecker_mul,
+    finKronecker_mul]
+  simp only [← star_eq_conjTranspose, Unitary.star_mul_self_of_mem (hu _),
+    Unitary.mul_star_self_of_mem (hu _), finKronecker_one, and_self]
 
 private theorem eq_zero_of_mem_unitary_of_mulVec_eq_zero {n : Type*} [Fintype n] [DecidableEq n]
     {U : Matrix n n ℂ} (hU : U ∈ unitary (Matrix n n ℂ)) {v : n → ℂ} (h : U *ᵥ v = 0) :
@@ -154,12 +172,13 @@ variable [NeZero N]
 
 /-- A measurement-assisted preparation protocol on the ring of `N` sites: a product vector, a
 local circuit applied to it, a set of sites measured in the computational basis, and, for
-every outcome string, a local circuit applied after the measurement. The circuits are lists
-of layers, the head of the list applied first.
+every outcome string, a unitary at every site applied after the measurement. The circuit is
+a list of layers, the head of the list applied first.
 
-Source: arXiv:2103.13367, paragraph "Quantum circuits and LOCC": "We first apply a depth-`ℓ`
-circuit ... Then, we sequentially measure each ancilla ... and apply `U` depending on the
-outcomes of all previous measurements". -/
+Source: arXiv:2103.13367, paragraph "State transformations with QC and LOCC": "We first apply
+a depth-`ℓ` circuit, with possibly local unitaries acting in between different layers of
+gates ... Then, we sequentially measure each ancilla `a_i` in some orthonormal basis ... and
+apply `U ∈ LU` depending on the outcomes of all previous measurements". -/
 structure MeasurementProtocol (d N : ℕ) [NeZero N] where
   /-- The site vectors of the product vector the protocol starts from. -/
   initial : Fin N → Fin d → ℂ
@@ -167,9 +186,10 @@ structure MeasurementProtocol (d N : ℕ) [NeZero N] where
   first : List (Layer d N)
   /-- The sites measured in the computational basis. -/
   measured : Finset (Fin N)
-  /-- The local circuit applied after the outcome `m`; it may depend on the whole outcome
-  string. -/
-  correction : (measured → Fin d) → List (Layer d N)
+  /-- The unitary applied at the site `i` after the outcome `m`; it may depend on the whole
+  outcome string. -/
+  correction : (measured → Fin d) → Fin N → Matrix (Fin d) (Fin d) ℂ
+  correction_mem_unitary : ∀ m i, correction m i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)
 
 namespace MeasurementProtocol
 
@@ -184,9 +204,10 @@ times that of the product vector. -/
 noncomputable def postMeasurement (m : P.measured → Fin d) : Cfg d N → ℂ :=
   outcomeProj P.measured m *ᵥ P.preMeasurement
 
-/-- The vector after the outcome `m` and its correction. -/
+/-- The vector after the outcome `m` and its correction, the product of the unitaries
+`P.correction m i` over the sites `i`. -/
 noncomputable def output (m : P.measured → Fin d) : Cfg d N → ℂ :=
-  circuitOp (P.correction m) *ᵥ P.postMeasurement m
+  finKronecker (P.correction m) *ᵥ P.postMeasurement m
 
 /-- The protocol prepares `ψ`: it starts from a nonzero product vector, and after every
 outcome of nonzero probability the corrected vector is a scalar multiple of `ψ`.
@@ -212,7 +233,8 @@ theorem exists_postMeasurement_ne_zero (h : productVector P.initial ≠ 0) :
 
 theorem output_ne_zero {m : P.measured → Fin d} (hm : P.postMeasurement m ≠ 0) :
     P.output m ≠ 0 :=
-  fun h0 => hm (eq_zero_of_mem_unitary_of_mulVec_eq_zero (circuitOp_mem_unitary _) h0)
+  fun h0 => hm (eq_zero_of_mem_unitary_of_mulVec_eq_zero
+    (finKronecker_mem_unitary (P.correction_mem_unitary m)) h0)
 
 /-- A vector prepared by a protocol is nonzero. -/
 theorem Prepares.ne_zero {ψ : Cfg d N → ℂ} (h : P.Prepares ψ) : ψ ≠ 0 := by
@@ -224,50 +246,52 @@ theorem Prepares.ne_zero {ψ : Cfg d N → ℂ} (h : P.Prepares ψ) : ψ ≠ 0 :
 end MeasurementProtocol
 
 /-- A vector `ψ` is *prepared with measurements in depth `T`* when a measurement-assisted
-protocol prepares it and, for every outcome, the circuits before and after the measurement
-have at most `T` layers together.
+protocol whose circuit has at most `T` layers prepares it.
 
-Source: arXiv:2103.13367, Definition "Transformations under QC and LOCC" (`QCcc_ℓ`), and
-arXiv:2307.01696, paragraph "Preparations using measurements". -/
+Source: arXiv:2103.13367, Definition "Transformations under QC and LOCC" (`QCcc_ℓ`). -/
 def IsPreparedWithMeasurementsInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
-  ∃ P : MeasurementProtocol d N,
-    (∀ m, P.first.length + (P.correction m).length ≤ T) ∧ P.Prepares ψ
+  ∃ P : MeasurementProtocol d N, P.first.length ≤ T ∧ P.Prepares ψ
 
 /-- **Circuits are protocols without measurements.** A nonzero vector prepared by a local
 circuit of depth `T` is prepared with measurements in depth `T`, measuring no site. -/
 theorem isPreparedWithMeasurementsInDepth_of_isPreparedInDepth {T : ℕ} {ψ : Cfg d N → ℂ}
     (hψ : IsPreparedInDepth T ψ) (hψ0 : ψ ≠ 0) : IsPreparedWithMeasurementsInDepth T ψ := by
   obtain ⟨U, ⟨Ls, hl, rfl⟩, v, rfl⟩ := hψ
-  refine ⟨⟨v, Ls, ∅, fun _ => []⟩, fun _ => by simp [hl], fun h0 => hψ0 (by simp [h0]),
-    fun m _ => ⟨1, ?_⟩⟩
-  simp [MeasurementProtocol.output, MeasurementProtocol.postMeasurement,
-    MeasurementProtocol.preMeasurement, outcomeProj_empty, circuitOp]
+  refine ⟨⟨v, Ls, ∅, fun _ _ => 1, fun _ _ => one_mem _⟩, hl.le,
+    fun h0 => hψ0 (by simp [h0]), fun m _ => ⟨1, ?_⟩⟩
+  change finKronecker (fun _ => 1) *ᵥ (outcomeProj ∅ m *ᵥ (circuitOp Ls *ᵥ productVector v)) =
+    (1 : ℂ) • (circuitOp Ls *ᵥ productVector v)
+  rw [outcomeProj_mulVec_of_isEmpty, finKronecker_one, one_mulVec, one_smul]
 
-/-- **Protocols without measurements are circuits.** A protocol measuring no site prepares
-only vectors prepared by a local circuit of the same depth. -/
-theorem isPreparedInDepth_of_prepares_of_measured_eq_empty {T : ℕ} {ψ : Cfg d N → ℂ}
-    (P : MeasurementProtocol d N) (hP : P.measured = ∅)
-    (hT : ∀ m, P.first.length + (P.correction m).length ≤ T) (h : P.Prepares ψ) :
-    IsPreparedInDepth T ψ := by
+/-- **Protocols without measurements are circuits up to single-site unitaries.** If a protocol
+measuring no site, with at most `T` layers, prepares `ψ`, then some product of single-site
+unitaries takes `ψ` to a vector prepared by a local circuit of depth `T`. -/
+theorem exists_isPreparedInDepth_of_prepares_of_measured_eq_empty {T : ℕ} {ψ : Cfg d N → ℂ}
+    (P : MeasurementProtocol d N) (hP : P.measured = ∅) (hT : P.first.length ≤ T)
+    (h : P.Prepares ψ) :
+    ∃ u : Fin N → Matrix (Fin d) (Fin d) ℂ, (∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) ∧
+      IsPreparedInDepth T (finKronecker u *ᵥ ψ) := by
   obtain ⟨m, hm⟩ := P.exists_postMeasurement_ne_zero h.1
   obtain ⟨c, hc⟩ := h.2 m hm
   have hc0 : c ≠ 0 := by
     rintro rfl
     exact P.output_ne_zero hm (by rw [hc, zero_smul])
-  have hpost : P.postMeasurement m = P.preMeasurement := by
-    have hall : ∀ (x : Cfg d N) (i : P.measured), x i = m i := fun x i =>
-      absurd i.2 (by simp [hP])
-    have : outcomeProj P.measured m = 1 := by
-      ext x y
-      simp only [outcomeProj, diagonal_apply, one_apply, hall, implies_true, ite_true]
-    rw [MeasurementProtocol.postMeasurement, this, one_mulVec]
-  have hcirc : IsCircuitOn (Set.univ : Set (Fin N)) T
-      (circuitOp (P.first ++ P.correction m)) :=
-    IsCircuitOn.mono ⟨P.first ++ P.correction m, rfl,
-      fun _ _ _ _ => Set.subset_univ _, rfl⟩ (by simpa using hT m)
-  refine ⟨_, hcirc.isLocalCircuitOfDepth, Function.update P.initial 0 (c⁻¹ • P.initial 0), ?_⟩
-  rw [← smul_productVector, mulVec_smul, circuitOp_append, ← mulVec_mulVec]
-  change ψ = c⁻¹ • (circuitOp (P.correction m) *ᵥ P.preMeasurement)
-  rw [← hpost, ← MeasurementProtocol.output, hc, smul_smul, inv_mul_cancel₀ hc0, one_smul]
+  have : IsEmpty P.measured := by rw [hP]; infer_instance
+  have hpost : P.postMeasurement m = P.preMeasurement :=
+    outcomeProj_mulVec_of_isEmpty m _
+  have hcirc : IsCircuitOn (Set.univ : Set (Fin N)) T (circuitOp P.first) :=
+    IsCircuitOn.mono ⟨P.first, rfl, fun _ _ _ _ => Set.subset_univ _, rfl⟩ hT
+  refine ⟨fun i => star (P.correction m i),
+    fun i => Unitary.star_mem (P.correction_mem_unitary m i),
+    _, hcirc.isLocalCircuitOfDepth, Function.update P.initial 0 (c⁻¹ • P.initial 0), ?_⟩
+  rw [← smul_productVector, mulVec_smul]
+  have hψ : ψ = c⁻¹ • P.output m := by rw [hc, smul_smul, inv_mul_cancel₀ hc0, one_smul]
+  rw [hψ, mulVec_smul, MeasurementProtocol.output, mulVec_mulVec, hpost]
+  have hstar : finKronecker (fun i => star (P.correction m i)) *
+      finKronecker (P.correction m) = 1 := by
+    rw [finKronecker_mul]
+    simp only [Unitary.star_mul_self_of_mem (P.correction_mem_unitary m _), finKronecker_one]
+  rw [hstar, one_mulVec]
+  rfl
 
 end MPSPreparation
