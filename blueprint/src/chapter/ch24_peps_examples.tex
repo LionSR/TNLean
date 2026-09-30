@@ -105,7 +105,7 @@ matrix product operator on the virtual level.
     the string that crosses the top legs of the top row and then the right
     legs of the rightmost column. On every labelling of the bonds whose term
     in the contraction of the torus PEPS of $a$ is nonzero the two strings
-    have the same product, and so, for an algebra $M$ over $\C$, the
+    have the same product, and so, for a semiring $M$ with a $\C$-module structure, the
     contracted network with the first string inserted equals the contracted
     network with the second string inserted. This is the pulling-through
     equation of a matrix product operator symmetry
@@ -202,7 +202,7 @@ The simple-graph representation requires $w,h\ge2$
         TNLean.PEPS.sum_prod_ghzSiteTensor_perm,
         TNLean.PEPS.stateCoeff_ghzPEPS_perm, TNLean.PEPS.stateCoeff_ghzPEPS_add}
     \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff}
+    \uses{def:peps_ghz_tensor, def:peps_stateCoeff, thm:peps_ghz_state}
     Every permutation $\pi$ of the $d$ labels acts on the GHZ site tensor by
     \begin{align}
         A^{\pi(i)}_{\pi(\alpha)\pi(\beta)\pi(\gamma)\pi(\delta)}
