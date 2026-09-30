@@ -370,13 +370,14 @@
         lem:matrix_kronecker_identity_cancellation}
     For every triple of labels let $Y^c_{ab}$ be an invertible
     $N_{ab}^{c}\times N_{ab}^{c}$ matrix, write
-    $\Pi_{ab}=\bigoplus_c Y^c_{ab}\otimes\Id_{D_c}$, and let $X_{ab}$ and
+    $\Pi_{ab}=\bigoplus_c (Y^c_{ab})^{\mathsf T}\otimes\Id_{D_c}$, and let $X_{ab}$ and
     $X^+_{ab}$ be the synthesis and analysis matrices whose blocks are the
     $X^c_{ab,\mu}$ and the $X^{c+}_{ab,\mu}$. Replace them by
-    $X_{ab}\Pi_{ab}$ and $\Pi_{ab}^{-1}X^+_{ab}$. The new fusion tensors are
+    $X_{ab}\Pi_{ab}$ and $\Pi_{ab}^{-1}X^+_{ab}$. The transposes occur because the fusion tensors are columns of $X_{ab}$.
+    The new fusion tensors are
     \begin{align}
         X'^c_{ab,\mu}
-         & =\sum_\nu (Y^c_{ab})_{\nu\mu}X^c_{ab,\nu}. \notag
+         & =\sum_\nu (Y^c_{ab})_{\mu\nu}X^c_{ab,\nu}. \notag
     \end{align}
     The new matrices, with the same blocks, multiplicities and simultaneous
     left inverse, again form a complete zipper fusion family. The matrix
@@ -387,16 +388,16 @@
          & =G_{\mathrm R}^{-1}F^{abc}_d G_{\mathrm L},
          &
         G_{\mathrm L}
-         & =\bigoplus_e Y^e_{ab}\otimes Y^d_{ec},
+         & =\bigoplus_e (Y^e_{ab})^{\mathsf T}\otimes (Y^d_{ec})^{\mathsf T},
          &
         G_{\mathrm R}
-         & =\bigoplus_f Y^f_{bc}\otimes Y^d_{af}.
+         & =\bigoplus_f (Y^f_{bc})^{\mathsf T}\otimes (Y^d_{af})^{\mathsf T}.
         \label{eq:rfp_fmatrix_gauge}
     \end{align}
     Its inverse transforms as
     $(F'^{abc}_d)^{-1}=G_{\mathrm L}^{-1}(F^{abc}_d)^{-1}G_{\mathrm R}$.
     This is the gauge freedom of the fusion tensors in
-    \cite[lines~164--166]{Bultinck2017Anyons} and the induced transformation of
+    \cite[after eq.~\emph{gauge}]{Bultinck2017Anyons} and the induced transformation of
     the $F$-symbols in \cite[lines~415--422]{GarreRubio2023MPOSym}.
 \end{theorem}
 \begin{proof}\leanok
