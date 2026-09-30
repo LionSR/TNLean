@@ -90,7 +90,8 @@ def parTargetsInt : (s : Fin 2) → Fin 2 → Matrix (Fin (parDim s)) (Fin (parD
   | 1 => fun i => -(parAInt i)
 
 /-- **The two target blocks of Example PAR**: `parA` with weight `+1`, and `parA` with weight
-`-1` (construction note, §4). These are inequivalent simple modules, since `tr(A^0) = 1 ≠ -1 = tr((-A)^0)`,
+`-1` (construction note, §4). These are inequivalent simple modules, since `tr(A^0) = 1
+≠ -1 = tr((-A)^0)`,
 so no gauge can relate them. -/
 def parTargets : (s : Fin 2) → MPSTensor 2 (parDim s)
   | 0 => parA
@@ -110,7 +111,8 @@ private theorem parAInt_single : ∀ i j : Fin 2, Matrix.single i j (1 : ℤ) =
     parAInt i * parAInt j + (if i = 1 ∧ j = 1 then -1 else 0 : ℤ) • (parAInt 0 * parAInt 0) := by
   decide
 
-/-- **`parA` is normal at word length two** (construction note, §4): its length-two words span the full
+/-- **`parA` is normal at word length two** (construction note, §4): its length-two
+words span the full
 two-by-two matrix algebra. -/
 theorem parA_isNormal : Kraus.IsNormal parA :=
   isNormal_of_single_eq_two_words parA fun i j =>
@@ -278,19 +280,8 @@ theorem parityGraded_trace_evalWord (w : List (Fin 2)) (hw : w ≠ []) :
     rw [Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
   rw [h, h0, h1]; ring
 
-/-- **Biorthogonal compression onto each of the two slots of Example PAR** (construction note,
-Theorem 7.7(iv)–(v)). -/
-theorem parityGraded_isReduction (s : {s // s ∈ parSlots}) :
-    IsReduction parB (parTargets s.1) (parityGraded_compression.left s)
-      (parityGraded_compression.right s) :=
-  parityGraded_compression.isReduction s
-
-/-- Two distinct slots of Example PAR are biorthogonal (construction note, Theorem 7.7(iv)). -/
-theorem parityGraded_left_mul_right_of_ne {s t : {s // s ∈ parSlots}} (h : s ≠ t) :
-    parityGraded_compression.left s * parityGraded_compression.right t = 0 :=
-  parityGraded_compression.left_mul_right_of_ne h
-
-/-- **The dimension count of Example PAR**: `5 = 2 + 2 + 1` (construction note, Theorem 7.7(vii)). -/
+/-- **The dimension count of Example PAR**: `5 = 2 + 2 + 1` (construction note, Theorem
+7.7(vii)). -/
 theorem parityGraded_dim_eq : (5 : ℕ) = ∑ s ∈ parSlots, parDim s + 1 :=
   parityGraded_compression.dim_eq
 
@@ -390,7 +381,8 @@ theorem parityGraded_remainder_eq (i : Fin 2) :
           Matrix.sub_apply, Matrix.add_apply, Fin.sum_univ_two, Fin.sum_univ_five]
 
 /-- **Sharpness of the nilpotency bound of Example PAR**: the residual is already nonzero at
-word length two, so the bound `r = |S| + z = 3` of the theorem is attained (construction note, §4). -/
+word length two, so the bound `r = |S| + z = 3` of the theorem is attained (construction
+note, §4). -/
 theorem parityGraded_remainder_sq_ne_zero :
     Kraus.evalWord parityGraded_compression.remainder [0, 0] ≠ 0 := by
   simp only [Kraus.evalWord, mul_one]

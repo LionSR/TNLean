@@ -62,11 +62,10 @@
     \leanok
     \uses{thm:periodic_step_coordinates}
     Let $m>0$, $p\ge0$, $r=\gcd(m,p)$, and let $P_u$ be projections indexed
-    modulo $m$. Set
-    \[
-        Q_\alpha=\sum_{k=0}^{m/r-1}P_{[\alpha+pk]_m},
-        \qquad 0\le\alpha<r.
-    \]
+    modulo $m$. For $0\le\alpha<r$, set
+    \begin{align}
+        Q_\alpha & =\sum_{k=0}^{m/r-1}P_{[\alpha+pk]_m}. \notag
+    \end{align}
     These are the grouped projections of
     \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{definition}
@@ -82,11 +81,11 @@
     $D_\alpha$ with $\sum_\alpha D_\alpha=D$, isometries
     $V_\alpha:\C^{D_\alpha}\to\C^D$, and left-canonical tensors $C_\alpha$
     such that
-    \[
-        V_\alpha^\dagger V_\alpha=\Id_{D_\alpha},\qquad
-        V_\alpha V_\alpha^\dagger=Q_\alpha,\qquad
-        C_\alpha^I=V_\alpha^\dagger(A^{[p]})^IV_\alpha.
-    \]
+    \begin{align}
+        V_\alpha^\dagger V_\alpha & =\Id_{D_\alpha}, \notag            \\
+        V_\alpha V_\alpha^\dagger & =Q_\alpha, \notag                   \\
+        C_\alpha^I               & =V_\alpha^\dagger(A^{[p]})^IV_\alpha. \notag
+    \end{align}
     The tensors $A^{[p]}$ and $\bigoplus_\alpha C_\alpha$ have the same MPV
     at every length, including zero. The adjoint transfer map satisfies
     $\E_{A^{[p]}}^*(P_u)=P_{u+p}$, with indices taken modulo $m$.
@@ -99,8 +98,9 @@
     Iterating $P_uA^i=A^iP_{u+1}$ over a word of length $p$ shifts the
     projector index by $p$. Multiplying by the adjoint word and summing,
     left canonicality gives $\E_{A^{[p]}}^*(P_u)=P_{u+p}$.
-    Summing over one orbit therefore shows that
-    $Q_\alpha$ commutes with each letter of $A^{[p]}$.
+    Iterating the shift relation gives $P_u(A^{[p]})^I=(A^{[p]})^IP_{u+p}$.
+    Since $u\mapsto u+p$ permutes the orbit of $\alpha$, summing over that
+    orbit gives $Q_\alpha(A^{[p]})^I=(A^{[p]})^IQ_\alpha$.
     Compress to the ranges of these projections. Their dimensions sum to $D$,
     and the commuting projection resolution preserves both left canonicality
     and traces of every word. The empty-word trace gives the same dimension sum.
@@ -108,9 +108,10 @@
 
 \begin{theorem}[Step-orbit compression of a periodic tensor]
     \label{thm:periodic_prescribed_blocking_compression}
-    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
+    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition,
+        MPSTensor.adjoint_blockTensor_projection}
     \leanok
-    \uses{def:periodic_step_orbit_projection}
+    \uses{thm:periodic_step_orbit_compression}
     If $A$ is periodic of period $m$ and $p\ge0$, there is a family of nonzero
     cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
     $P_uA^i=A^iP_{u+1}$ for which the compression conclusions of
@@ -123,9 +124,10 @@
 \begin{proof}\leanok
     \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum,thm:periodic_compressed_irreducible}
     Take the cyclic spectral projections, with their indices negated to give
-    $P_uA^i=A^iP_{u+1}$. No projection vanishes: the cyclic adjoint-transfer
-    relation would then force all projections to vanish, contradicting their
-    sum being $\Id_D$. Apply Theorem~\ref{thm:periodic_step_orbit_compression}.
+    $P_uA^i=A^iP_{u+1}$. No projection vanishes: left canonicality and the
+    shift relation give $\E_A^*(P_u)=P_{u+1}$, and $\E_A^*(0)=0$, so
+    $P_u=0$ would give $P_{u+1}=0$ and hence, around the cycle,
+    $\Id_D=\sum_vP_v=0$. Apply Theorem~\ref{thm:periodic_step_orbit_compression}.
     For $p>0$, Theorem~\ref{thm:periodic_compressed_exact_spectrum} identifies
     each block's peripheral spectrum, and
     Theorem~\ref{thm:periodic_compressed_irreducible} gives irreducibility.
@@ -142,7 +144,7 @@
     $\E_{A^{[p]}}$ are the $p$th powers of those of $\E_A$.
     If $A$ is periodic of period $m$, put $q=m/\gcd(m,p)$. Then
     \begin{align}
-        \operatorname{spec}_{\mathrm{per}}(\E_{A^{[p]}})
+        \spec_{\mathrm{per}}(\E_{A^{[p]}})
          & =\{z\in\C:z^q=1\}.
         \label{eq:periodic_blocking_roots}
     \end{align}
@@ -258,7 +260,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates}
+    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates,
+        thm:transfer_map_irreducible_of_tensor}
     The projections $R_j=F^j(Q_\alpha)$, for $0\le j<r$, are pairwise
     orthogonal and sum to $\Id_D$, since their cyclic-sector indices
     partition $\Z_m$. The letter relation gives
@@ -284,7 +287,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_orbit_fixed_rigidity}
+    \uses{thm:periodic_orbit_fixed_rigidity,thm:adjoint_corner_fixed_of_preserved,
+        thm:transfer_map_irreducible_of_tensor}
     Let $R$ be an invariant orthogonal projection for $\E_C^*$.
     The projection $L=VRV^\dagger$ has invariant corner under
     $F^p$, where $F=\E_A^*$. The faithful invariant state of $\E_A$
@@ -302,7 +306,8 @@
     Let $G$ be an abelian group, $m>0$, $p\ge0$, $r=\gcd(m,p)$,
     and $q=m/r$. Suppose $c_\alpha\in G$ satisfies $c_\alpha^q=1$
     for every $0\le\alpha<r$. There are $b_u\in G$, indexed modulo
-    $m$, such that
+    $m$, such that, writing $u=\alpha_u+pk_u$ for the coordinates of
+    Theorem~\ref{thm:periodic_step_coordinates},
     \begin{align}
         \prod_{j=0}^{p-1}b_{u+j} & = c_{\alpha_u}.
         \label{eq:periodic_orbit_phase_product}
@@ -364,7 +369,7 @@
     $\sum_uP_u=\Id$, and $|c_u|=1$. If $A$ is left canonical, then
     $A'^i=\sum_uc_uP_uA^i$ is left canonical as well. Thus the rephasing
     in the proof of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}
-    preserves trace preservation of a left-canonical block.
+    keeps a left-canonical block trace preserving.
 \end{theorem}
 
 \begin{proof}\leanok

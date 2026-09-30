@@ -58,7 +58,7 @@ theorem spinExchange_spinHalfOperator_apply {N : ℕ} {j k : Fin N} (hjk : j ≠
       Function.update (Function.update σ j (σ k)) k (σ j) := by
     rw [Equiv.comp_swap_eq_update, Function.update_comm hjk.symm]
   have hself : Function.update (Function.update σ j (σ j)) k (σ k) = σ := by simp
-  rw [spinExchange_apply]
+  rw [spinExchange_apply _ _ _ hjk]
   simp only [spinHalfOperator_sum, sub_mul, Finset.sum_sub_distrib, ite_mul, zero_mul,
     ite_and, Finset.sum_ite_eq', Finset.mem_univ, ite_true, Finset.sum_ite_irrel,
     Finset.sum_const_zero]

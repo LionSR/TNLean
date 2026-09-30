@@ -432,7 +432,8 @@ noncomputable def quantumDoublePrimalPEPS (width height : ℕ) [NeZero width] [N
 variable {G}
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2465, for the
-contracted network. For every representation `π` of `G` by elements of a `ℂ`-algebra `M`,
+contracted network. For every representation `π` of `G` by elements of a semiring `M`
+with a `ℂ`-module structure,
 such as the matrices of an irreducible representation, consider the virtual string that
 multiplies `π(g)` for each bond with label `g` it crosses. In the contracted primal PEPS on the
 torus this string can be pulled through every rectangle of sites: inserted along the left and
