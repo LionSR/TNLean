@@ -124,6 +124,12 @@ def physicalAdjointTensor (K : MPOTensor d D) : MPOTensor d D :=
     (i j : Fin d) (β α : Fin D) :
     physicalAdjointTensor K i j β α = star (K j i β α) := rfl
 
+/-- Scalar multiplication is conjugated by the physical adjoint. -/
+@[simp] theorem physicalAdjointTensor_smul (c : ℂ) (U : MPOTensor d D) :
+    physicalAdjointTensor (c • U) = star c • physicalAdjointTensor U := by
+  ext i j a b
+  simp [physicalAdjointTensor]
+
 /-- The physical adjoint reverses the order of an MPO tensor product. Since `mulTensor U V`
 has bond coordinates ordered as `Fin D₁ × Fin D₂`, while the reversed product has coordinates
 ordered as `Fin D₂ × Fin D₁`, the right-hand side is transported by `productBondSwapEquiv`:
