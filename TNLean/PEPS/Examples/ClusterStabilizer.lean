@@ -74,7 +74,7 @@ theorem graphStabilizer_graphCircuitSign (a b : E → V) (h : ∀ e, a e ≠ b e
 private lemma eq_zeroConfig_of_flip_invariant [Finite V]
     (f : (V → Fin 2) → ℂ) (hf : ∀ v s, f (graphFlip v s) = f s)
     (s : V → Fin 2) : f s = f (fun _ => 0) := by
-  haveI := Fintype.ofFinite V
+  have := Fintype.ofFinite V
   have hu (v : V) (t : V → Fin 2) (x : Fin 2) : f (Function.update t v x) = f t := by
     by_cases hx : x = t v
     · simp [hx]
