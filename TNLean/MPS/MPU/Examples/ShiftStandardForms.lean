@@ -97,7 +97,8 @@ noncomputable def shiftExampleU₂BlockedStandardForm (d : ℕ) [NeZero d] :
     X₂ := fun i l => if i.1.divNat = l.divNat ∧
       i.2.divNat = l.modNat ∧ i.1.modNat = i.2.modNat then 1 else 0
     u_unitary := (identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
-    v_unitary := (swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
+    v_unitary :=
+      (swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
     v_apply := ?_
     W_apply := ?_
   }
@@ -133,7 +134,8 @@ noncomputable def shiftExampleU₃BlockedStandardForm (d : ℕ) [NeZero d] :
       i.1.divNat = r.divNat ∧ i.2.modNat = i.1.modNat then 1 else 0
     X₂ := fun i l => if i.1.divNat = i.2.divNat ∧
       i.1.modNat = l.divNat ∧ i.2.modNat = l.modNat then 1 else 0
-    u_unitary := (identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_isUnitaryBetween d).reindex _ _ _
+    u_unitary :=
+      (identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_isUnitaryBetween d).reindex _ _ _
     v_unitary := (identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
     v_apply := ?_
     W_apply := ?_

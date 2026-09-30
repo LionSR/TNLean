@@ -2313,6 +2313,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### rescaling a source cut to normalize its virtual weight — candidate
+- **Pattern:** scale the first cut's `X₁` and `Z₁` by a nonzero real scalar,
+  scale `Y₁` inversely, and divide the virtual weight by the scalar's square.
+- **Seen:** `rightShiftPaperSourceFactors` in `Examples/ShiftSourceFactors.lean`
+  and `normalizeProductShiftSourceFactors` in `Examples/ShiftNormalizedSourceFactors.lean`.
+- **Reuse:** the latter helper already serves both counterpropagating families.
+  A third distinct proof should extract the general scalar-weight operation.
+
+
 ### delta-contraction standard-form witnesses — candidate
 - **Pattern:** reindex a finite bond sum by `finProdFinEquiv`, expand tensor
   entries, and contract Kronecker deltas with `simp`; finish reordered

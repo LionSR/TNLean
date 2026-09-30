@@ -11049,6 +11049,37 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factorizations.
 \end{proof}
 
+\begin{theorem}[Trace-normalized source gates for the counterpropagating shifts]
+    \label{thm:threeMPU_normalized_source_gates}
+    \lean{MPOTensor.shiftExampleU₂PaperSourceFactors,
+        MPOTensor.shiftExampleU₃PaperSourceFactors,
+        MPOTensor.shiftExampleU₂Paper_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₂Paper_sourceV_fourSpin_apply,
+        MPOTensor.shiftExampleU₃Paper_sourceU_fourSpin_apply,
+        MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply}
+    \leanok
+    \uses{threeMPU, def:mpu_weighted_source_factors}
+    For $d>0$, the two counterpropagating shift tensors have source factors
+    with trace-one weight $\rho=d^{-2}I_{d^2}$. In the four-spin coordinates
+    used above, their source gates are
+    \begin{align}
+        u_2 & = I\otimes\mathbb S\otimes I,
+            & v_2                                                        & = (\mathbb S\otimes\mathbb S)(I\otimes\mathbb S\otimes I), \\
+        u_3 & = (I\otimes\mathbb S\otimes I)(\mathbb S\otimes\mathbb S),
+            & v_3                                                        & = I\otimes\mathbb S\otimes I.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:threeMPU_U2_supplied_source_gates_two,
+        thm:threeMPU_U3_supplied_source_gates_two}
+    Starting with the identity-weight source factors, replace
+    $X_1,Y_1,Z_1$ by $dX_1,d^{-1}Y_1,dZ_1$, respectively, and leave the
+    second cut unchanged. The cut factorizations and right inverses are
+    preserved, while the first weighted isometry now uses $d^{-2}I_{d^2}$.
+    The source gates scale by $d^{-1}$ and $d$, cancelling the reciprocal
+    factors in the identity-weight formulas.
+\end{proof}
+
 \begin{proposition}[Standard forms of the three shift MPUs]
     \label{prop:threeMPU_standard_forms}
     \notready
