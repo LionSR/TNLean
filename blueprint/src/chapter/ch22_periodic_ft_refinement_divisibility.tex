@@ -114,15 +114,20 @@
     If $A$ is periodic of period $m$ and $p\ge0$, there is a family of nonzero
     cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
     $P_uA^i=A^iP_{u+1}$ for which the compression conclusions of
-    Theorem~\ref{thm:periodic_step_orbit_compression} hold.
+    Theorem~\ref{thm:periodic_step_orbit_compression} hold. If $p>0$, every
+    resulting block satisfies
+    $\operatorname{spec}_{\mathrm{per}}(\E_{C_\alpha})
+        =\{z\in\C:z^{m/\gcd(m,p)}=1\}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_orbit_compression}
+    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum}
     Take the cyclic spectral projections, with their indices negated to give
     $P_uA^i=A^iP_{u+1}$. No projection vanishes: the cyclic adjoint-transfer
     relation would then force all projections to vanish, contradicting their
     sum being $\Id_D$. Apply Theorem~\ref{thm:periodic_step_orbit_compression}.
+    For $p>0$, Theorem~\ref{thm:periodic_compressed_exact_spectrum} identifies
+    each block's peripheral spectrum.
 \end{proof}
 
 \begin{theorem}[Peripheral roots after positive blocking]
@@ -182,6 +187,39 @@
     yields $\E_C^*(Y)=V^\dagger\E_{A^{[p]}}^*(VYV^\dagger)V$.
     Apply this identity to $Y=V^\dagger P_uV$ and use
     $\E_{A^{[p]}}^*(P_u)=P_{u+p}$.
+\end{proof}
+
+\begin{theorem}[Exact peripheral spectrum of each orbit block]
+    \label{thm:periodic_compressed_exact_spectrum}
+    \lean{MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    Let $A$ be periodic of period $m$, let $p>0$, and put
+    $r=\gcd(m,p)$ and $q=m/r$. Suppose $P_u$ are nonzero orthogonal
+    projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
+    Fix $\alpha<r$, an isometry $V$ with $VV^\dagger=Q_\alpha$, and set
+    $C^I=V^\dagger(A^{[p]})^IV$. Then
+    \begin{align}
+        \operatorname{spec}_{\mathrm{per}}(\E_C)
+         & =\{\lambda\in\C:\lambda^q=1\}.
+        \label{eq:periodic_compressed_exact_spectrum}
+    \end{align}
+    This is the spectral-set assertion in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}, with the root notation
+    corrected as in~\cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_blocking_peripheral_roots,thm:periodic_compressed_projection_shift}
+    The ambient spectral bound gives one inclusion. For the other, put
+    $R_k=V^\dagger P_{[\alpha+pk]_m}V$. The compressed adjoint map sends
+    $R_k$ to $R_{k+1}$. If $z^q=1$, the sum
+    $X_z=\sum_{k=0}^{q-1}z^kR_k$ therefore satisfies
+    $\E_C^*(X_z)=z^{-1}X_z$. It is nonzero: expanding by $V$ and then
+    multiplying by $P_\alpha$ leaves exactly $P_\alpha\ne0$.
+    Given $\lambda^q=1$, choose $z=\overline{\lambda}^{-1}$.
+    The adjoint has eigenvalue $\overline{\lambda}$, so $\E_C$ has
+    eigenvalue $\lambda$. Its modulus is one.
 \end{proof}
 
 \begin{theorem}[Orbit roots as consecutive products]
