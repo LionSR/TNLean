@@ -2337,8 +2337,10 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** reindex a finite bond sum by `finProdFinEquiv`, expand tensor
   entries, and contract Kronecker deltas with `simp`; finish reordered
   equality tests with `split_ifs` and `simp_all`.
-- **Seen:** the direct identity, unblocked third-family, and swap-transformed
-  witnesses in `TNLean/MPS/MPU/Examples/ShiftStandardForms.lean`.
+- **Seen:** the unblocked third-family and swap-transformed second-family
+  witnesses in `TNLean/MPS/MPU/Examples/ShiftStandardForms.lean`. The direct
+  identity witness has the trivial bond `Fin 1`, so it contracts deltas without
+  any bond reindexing and is not an occurrence.
 - **Normalization:** the unblocked third family and transformed second family
   also evaluate Gram sums after the same bond reindexing, with reciprocal
   square-root scalings. Both occurrences remain in this one module.

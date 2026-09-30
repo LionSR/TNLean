@@ -11269,8 +11269,23 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     replace its unshifted gate by the swap. For the second family, choose
     $X_1(i,(a,b);r)=\sqrt d\,\delta_{a,i}\delta_{b,r}$ and
     $X_2((a,b),i;\ell)=d^{-1/2}\delta_{a,\ell}\delta_{b,i}$.
-    Their contraction gives the shifted swap gate, while inserting the
-    unshifted identity gate recovers the transformed tensor.
+    Contracting over the bond index $\beta=(a,b)$ gives the shifted swap
+    gate,
+    \begin{align}
+        \sum_{a,b}X_1(i_1,(a,b);s)\,X_2((a,b),i_2;t)
+        =\delta_{i_1,t}\delta_{i_2,s}
+        =\mathbb S_{(i_1,i_2),(s,t)}.
+    \end{align}
+    Inserting the unshifted identity gate $\Id\otimes\Id$ between the half
+    factors gives, for $\alpha=(a,b)$ and $\gamma=(a',b')$,
+    \begin{align}
+        \sum_{\ell,r}X_2(\alpha,i_1;\ell)\,
+        (\Id\otimes\Id)_{(\ell,r),(j_1,j_2)}\,X_1(i_2,\gamma;r)
+        =X_2(\alpha,i_1;j_1)\,X_1(i_2,\gamma;j_2)
+        =\delta_{a,j_1}\delta_{b,i_1}\delta_{a',i_2}\delta_{b',j_2},
+    \end{align}
+    which is the entry of $\widetilde{\mathcal U}_2$ with output
+    $(i_1,i_2)$, input $(j_1,j_2)$, and bond indices $\alpha,\gamma$.
     Both gates are unitary. The reciprocal scalars cancel in the
     contractions; their Gram sums give the weighted normalization of
     $X_1$ for $\rho=d^{-2}\Id$ and the isometry of $X_2$.

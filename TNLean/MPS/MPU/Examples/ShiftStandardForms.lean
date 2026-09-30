@@ -104,7 +104,7 @@ theorem shiftExampleU₃StandardForm_normalized (d : ℕ) [NeZero d] :
     simp [sourceWeight, shiftPaperWeightSquared, shiftPaperWeight, Matrix.kronecker_smul]
   have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
   have hs : (Real.sqrt d : ℂ) * (Real.sqrt d : ℂ) = (d : ℂ) := by
-    exact_mod_cast Real.mul_self_sqrt (Nat.cast_nonneg d : (0 : ℝ) ≤ d)
+    simpa [sq] using Complex.ofReal_sqrt_sq d (by positivity)
   constructor
   · rw [hw, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul]
     ext r t
@@ -352,7 +352,7 @@ theorem shiftExampleTildeU₂StandardForm_normalized (d : ℕ) [NeZero d] :
     simp [sourceWeight, shiftPaperWeightSquared, shiftPaperWeight, Matrix.kronecker_smul]
   have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
   have hs : (Real.sqrt d : ℂ) * (Real.sqrt d : ℂ) = (d : ℂ) := by
-    exact_mod_cast Real.mul_self_sqrt (Nat.cast_nonneg d : (0 : ℝ) ≤ d)
+    simpa [sq] using Complex.ofReal_sqrt_sq d (by positivity)
   constructor
   · rw [hw, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul]
     ext r t
