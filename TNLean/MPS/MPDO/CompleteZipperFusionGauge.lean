@@ -11,11 +11,15 @@ import TNLean.MPS.MPDO.CompleteZipperFusionInverse
 
 The fusion tensors of a complete zipper fusion family are fixed only up to an invertible
 change of basis of each multiplicity space: replacing $X^c_{ab,\mu}$ by
-$\sum_\nu (Y^c_{ab})_{\nu\mu} X^c_{ab,\nu}$ and the left inverses by the inverse change
+$\sum_\nu (Y^c_{ab})_{\mu\nu} X^c_{ab,\nu}$ and the left inverses by the inverse change
 leaves the biorthogonality, zipper and reconstruction identities unchanged.  Under this
 change the printed $F$-matrix of arXiv:1511.08090, equation `Fmove`, transforms by the
-two tree gauges: on the left tree by $Y^e_{ab}\otimes Y^d_{ec}$, and on the right tree by
-the inverse of $Y^f_{bc}\otimes Y^d_{af}$.
+two tree gauges: on the left tree by
+$(Y^e_{ab})^{\mathsf T}\otimes (Y^d_{ec})^{\mathsf T}$, and on the right tree by the inverse of
+$(Y^f_{bc})^{\mathsf T}\otimes (Y^d_{af})^{\mathsf T}$.
+The transposes arise because each fusion tensor is a column of the synthesis map,
+whereas the source uses the first index of $Y$ for the new multiplicity label.
+The source formula is retained in `Papers/1511.08090/fusion-gauge-excerpt.tex`.
 
 ## Main definitions
 
@@ -37,7 +41,7 @@ the inverse of $Y^f_{bc}\otimes Y^d_{af}$.
 
 ## References
 
-* arXiv:1511.08090, `AnyonsPEPS.tex`, lines 164--166 (the gauge freedom of the fusion
+* arXiv:1511.08090v2, `AnyonsPEPS.tex`, line 169 (the gauge freedom of the fusion
   tensors) and lines 248--251 (equation `Fmove`).
 * arXiv:2203.12563, `REsubmission.tex`, lines 415--422 (the induced transformation of the
   $F$-symbols).
@@ -94,29 +98,29 @@ theorem eq_printedFMatrix_of_rightTripleSynthesis_mul (a b c d : Λ)
 
 /-- A fusion gauge: an invertible matrix on each multiplicity space $\mathbb C^{N_{ab}^c}$.
 
-Source: arXiv:1511.08090, lines 164--166; arXiv:2203.12563, lines 415--416. -/
+Source: arXiv:1511.08090, v2, `AnyonsPEPS.tex` line 169; arXiv:2203.12563, lines 415--416. -/
 abbrev FusionGauge : Type u :=
   ∀ a b c : Λ, GL (Fin (Fus.fusionMultiplicity a b c)) ℂ
 
 variable {Fus}
 
-/-- The block-diagonal matrix $\bigoplus_c Y^c_{ab}\otimes 1_{\chi_c}$ acting on the fusion
-coordinates of the pair `a b`. -/
+/-- The block-diagonal matrix $\bigoplus_c (Y^c_{ab})^{\mathsf T}\otimes 1_{\chi_c}$ acting on the
+fusion coordinates of the pair `a b`. -/
 noncomputable def pairGauge (Y : Fus.FusionGauge) (a b : Λ) :
     Matrix ((c : Λ) × (Fin (Fus.fusionMultiplicity a b c) × Fin (Fus.bondDim c)))
       ((c : Λ) × (Fin (Fus.fusionMultiplicity a b c) × Fin (Fus.bondDim c))) ℂ :=
   Matrix.blockDiagonal' fun c =>
     ((Y a b c : GL (Fin (Fus.fusionMultiplicity a b c)) ℂ) :
-        Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ) ⊗ₖ
+        Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ)ᵀ ⊗ₖ
       (1 : Matrix (Fin (Fus.bondDim c)) (Fin (Fus.bondDim c)) ℂ)
 
-/-- The inverse block-diagonal matrix $\bigoplus_c (Y^c_{ab})^{-1}\otimes 1_{\chi_c}$. -/
+/-- The inverse block-diagonal matrix $\bigoplus_c (Y^c_{ab})^{-\mathsf T}\otimes 1_{\chi_c}$. -/
 noncomputable def pairGaugeInv (Y : Fus.FusionGauge) (a b : Λ) :
     Matrix ((c : Λ) × (Fin (Fus.fusionMultiplicity a b c) × Fin (Fus.bondDim c)))
       ((c : Λ) × (Fin (Fus.fusionMultiplicity a b c) × Fin (Fus.bondDim c))) ℂ :=
   Matrix.blockDiagonal' fun c =>
     (((Y a b c)⁻¹ : GL (Fin (Fus.fusionMultiplicity a b c)) ℂ) :
-        Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ) ⊗ₖ
+        Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ)ᵀ ⊗ₖ
       (1 : Matrix (Fin (Fus.bondDim c)) (Fin (Fus.bondDim c)) ℂ)
 
 /-- `pairGaugeInv` is a left inverse of `pairGauge`. -/
@@ -125,7 +129,8 @@ theorem pairGaugeInv_mul_pairGauge (Y : Fus.FusionGauge) (a b : Λ) :
   rw [pairGaugeInv, pairGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
   congr 1
   funext c
-  rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.inv_mul, Matrix.one_mul,
+  simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
+    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- `pairGaugeInv` is a right inverse of `pairGauge`. -/
@@ -134,7 +139,8 @@ theorem pairGauge_mul_pairGaugeInv (Y : Fus.FusionGauge) (a b : Λ) :
   rw [pairGaugeInv, pairGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
   congr 1
   funext c
-  rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.mul_inv, Matrix.one_mul,
+  simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
+    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- The fusion gauges commute with the direct sum of block letters, because they act only on
@@ -156,11 +162,11 @@ private theorem blockDiagonal_gauge_comm {ι : Type*} [DecidableEq ι] {m n : ι
 variable (Fus)
 
 /-- **The gauge-transformed complete zipper fusion family.** The fusion tensors are replaced
-by $X'^c_{ab,\mu}=\sum_\nu (Y^c_{ab})_{\nu\mu}X^c_{ab,\nu}$ and the left inverses by the
+by $X'^c_{ab,\mu}=\sum_\nu (Y^c_{ab})_{\mu\nu}X^c_{ab,\nu}$ and the left inverses by the
 inverse change of basis; the blocks, multiplicities and block left inverse are unchanged.
 
-Source: arXiv:1511.08090, lines 164--166 (every transformed set of fusion tensors again
-satisfies equation `gauge`); arXiv:2203.12563, lines 415--416.
+Source: arXiv:1511.08090, v2, `AnyonsPEPS.tex` line 169 (every transformed set of fusion tensors
+again satisfies equation `gauge`); arXiv:2203.12563, lines 415--416.
 
 The definition is reducible so that the bond dimensions and multiplicities of the regauged
 family are syntactically those of the original family. -/
@@ -184,7 +190,7 @@ family are syntactically those of the original family. -/
   pairLetter_eq_synthesis_mul_directSum_mul_analysis a b i k := by
     have hcomm := blockDiagonal_gauge_comm
       (fun c => ((Y a b c : GL (Fin (Fus.fusionMultiplicity a b c)) ℂ) :
-        Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ))
+        Matrix (Fin (Fus.fusionMultiplicity a b c)) (Fin (Fus.fusionMultiplicity a b c)) ℂ)ᵀ)
       (fun c => Fus.tensor c i k)
     rw [Fus.pairLetter_eq_synthesis_mul_directSum_mul_analysis]
     simp only [Matrix.mul_assoc]
@@ -200,47 +206,50 @@ theorem regauge_fusionTensor (Y : Fus.FusionGauge) (a b c : Λ)
     (Fus.regauge Y).fusionTensor a b c μ x z =
       ∑ ν, Fus.fusionTensor a b c ν x z *
         (Y a b c : Matrix (Fin (Fus.fusionMultiplicity a b c))
-          (Fin (Fus.fusionMultiplicity a b c)) ℂ) ν μ := by
+          (Fin (Fus.fusionMultiplicity a b c)) ℂ) μ ν := by
   simp only [fusionTensor, regauge, pairGauge, Matrix.mul_apply, Fintype.sum_sigma]
   rw [Finset.sum_eq_single c
     (fun c' _ hc' => Finset.sum_eq_zero fun q _ => by
       rw [Matrix.blockDiagonal'_apply_ne _ _ _ hc', mul_zero])
     (fun h => absurd (Finset.mem_univ c) h)]
-  simp only [Matrix.blockDiagonal'_apply_eq, Matrix.kronecker_apply, Matrix.one_apply,
+  simp only [Matrix.blockDiagonal'_apply_eq, Matrix.kronecker_apply, Matrix.transpose_apply,
+    Matrix.one_apply,
     Fintype.sum_prod_type, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ,
     ite_true]
 
 /-! ### The tree gauges -/
 
-/-- The gauge $\bigoplus_e Y^e_{ab}\otimes Y^d_{ec}$ induced on the left-tree multiplicity
-space.
+/-- The gauge $\bigoplus_e (Y^e_{ab})^{\mathsf T}\otimes (Y^d_{ec})^{\mathsf T}$ induced on the
+left-tree multiplicity space.
 
 Source: arXiv:2203.12563, lines 417--422. -/
 noncomputable def leftTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) :
     Matrix (Fus.LeftTripleMultiplicity a b c d) (Fus.LeftTripleMultiplicity a b c d) ℂ :=
   Matrix.blockDiagonal' fun e =>
-    ((Y a b e : GL _ ℂ) : Matrix _ _ ℂ) ⊗ₖ ((Y e c d : GL _ ℂ) : Matrix _ _ ℂ)
+    ((Y a b e : GL _ ℂ) : Matrix _ _ ℂ)ᵀ ⊗ₖ ((Y e c d : GL _ ℂ) : Matrix _ _ ℂ)ᵀ
 
-/-- The gauge $\bigoplus_f Y^f_{bc}\otimes Y^d_{af}$ induced on the right-tree multiplicity
-space.
+/-- The gauge $\bigoplus_f (Y^f_{bc})^{\mathsf T}\otimes (Y^d_{af})^{\mathsf T}$ induced on the
+right-tree multiplicity space.
 
 Source: arXiv:2203.12563, lines 417--422. -/
 noncomputable def rightTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) :
     Matrix (Fus.RightTripleMultiplicity a b c d) (Fus.RightTripleMultiplicity a b c d) ℂ :=
   Matrix.blockDiagonal' fun f =>
-    ((Y b c f : GL _ ℂ) : Matrix _ _ ℂ) ⊗ₖ ((Y a f d : GL _ ℂ) : Matrix _ _ ℂ)
+    ((Y b c f : GL _ ℂ) : Matrix _ _ ℂ)ᵀ ⊗ₖ ((Y a f d : GL _ ℂ) : Matrix _ _ ℂ)ᵀ
 
-/-- The inverse of `rightTreeGauge`, $\bigoplus_f (Y^f_{bc})^{-1}\otimes (Y^d_{af})^{-1}$. -/
+/-- The inverse of `rightTreeGauge`, $\bigoplus_f (Y^f_{bc})^{-\mathsf T}\otimes
+(Y^d_{af})^{-\mathsf T}$. -/
 noncomputable def rightTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
     Matrix (Fus.RightTripleMultiplicity a b c d) (Fus.RightTripleMultiplicity a b c d) ℂ :=
   Matrix.blockDiagonal' fun f =>
-    (((Y b c f)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) ⊗ₖ (((Y a f d)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
+    (((Y b c f)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)ᵀ ⊗ₖ (((Y a f d)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)ᵀ
 
-/-- The inverse of `leftTreeGauge`, $\bigoplus_e (Y^e_{ab})^{-1}\otimes (Y^d_{ec})^{-1}$. -/
+/-- The inverse of `leftTreeGauge`, $\bigoplus_e (Y^e_{ab})^{-\mathsf T}\otimes
+(Y^d_{ec})^{-\mathsf T}$. -/
 noncomputable def leftTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
     Matrix (Fus.LeftTripleMultiplicity a b c d) (Fus.LeftTripleMultiplicity a b c d) ℂ :=
   Matrix.blockDiagonal' fun e =>
-    (((Y a b e)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) ⊗ₖ (((Y e c d)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)
+    (((Y a b e)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)ᵀ ⊗ₖ (((Y e c d)⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)ᵀ
 
 /-- `rightTreeGaugeInv` is a left inverse of `rightTreeGauge`. -/
 theorem rightTreeGaugeInv_mul_rightTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) :
@@ -248,7 +257,8 @@ theorem rightTreeGaugeInv_mul_rightTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ
   rw [rightTreeGaugeInv, rightTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
   congr 1
   funext e
-  rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.inv_mul, Units.inv_mul,
+  simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
+    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- `rightTreeGaugeInv` is a right inverse of `rightTreeGauge`. -/
@@ -257,7 +267,8 @@ theorem rightTreeGauge_mul_rightTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ
   rw [rightTreeGaugeInv, rightTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
   congr 1
   funext e
-  rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.mul_inv, Units.mul_inv,
+  simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
+    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- `leftTreeGaugeInv` is a left inverse of `leftTreeGauge`. -/
@@ -266,7 +277,8 @@ theorem leftTreeGaugeInv_mul_leftTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) 
   rw [leftTreeGaugeInv, leftTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
   congr 1
   funext e
-  rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.inv_mul, Units.inv_mul,
+  simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
+    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- `leftTreeGaugeInv` is a right inverse of `leftTreeGauge`. -/
@@ -275,7 +287,8 @@ theorem leftTreeGauge_mul_leftTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) 
   rw [leftTreeGaugeInv, leftTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
   congr 1
   funext e
-  rw [Pi.one_apply, ← Matrix.mul_kronecker_mul, Units.mul_inv, Units.mul_inv,
+  simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
+    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- The regauged left-associated synthesis map is the original one followed by the
@@ -300,7 +313,8 @@ theorem regauge_leftTripleSynthesis (Y : Fus.FusionGauge) (a b c d : Λ) :
     (fun h => absurd (Finset.mem_univ e) h)]
   simp only [Matrix.kronecker_apply, leftTreeGauge, Matrix.blockDiagonal'_apply_eq,
     Matrix.one_apply, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
-    Fintype.sum_prod_type, leftTripleSynthesis, Finset.sum_mul, Finset.mul_sum]
+    Fintype.sum_prod_type, Matrix.transpose_apply, leftTripleSynthesis, Finset.sum_mul,
+    Finset.mul_sum]
   rw [Fintype.sum_reverse_three]
   refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
     Finset.sum_congr rfl fun _ _ => ?_
@@ -328,7 +342,8 @@ theorem regauge_rightTripleSynthesis (Y : Fus.FusionGauge) (a b c d : Λ) :
     (fun h => absurd (Finset.mem_univ f) h)]
   simp only [Matrix.kronecker_apply, rightTreeGauge, Matrix.blockDiagonal'_apply_eq,
     Matrix.one_apply, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
-    Fintype.sum_prod_type, rightTripleSynthesis, Finset.sum_mul, Finset.mul_sum]
+    Fintype.sum_prod_type, Matrix.transpose_apply, rightTripleSynthesis, Finset.sum_mul,
+    Finset.mul_sum]
   rw [Fintype.sum_reverse_three]
   refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
     Finset.sum_congr rfl fun _ _ => ?_
@@ -356,8 +371,8 @@ theorem printedFMatrix_regauge (Y : Fus.FusionGauge) (a b c d : Λ) :
 $G_R\,F' = F\,G_L$, where $F'$ is the printed $F$-matrix of the regauged family and $G_L$,
 $G_R$ are the induced gauges of the two fusion trees.
 
-Source: arXiv:2203.12563, lines 415--422; arXiv:1511.08090, lines 164--166 and equation
-`Fmove`, lines 248--251. -/
+Source: arXiv:2203.12563, lines 415--422; arXiv:1511.08090, v2, `AnyonsPEPS.tex` line 169 and
+equation `Fmove`, lines 248--251. -/
 theorem rightTreeGauge_mul_printedFMatrix_regauge (Y : Fus.FusionGauge) (a b c d : Λ) :
     Fus.rightTreeGauge Y a b c d * (Fus.regauge Y).printedFMatrix a b c d =
       Fus.printedFMatrix a b c d * Fus.leftTreeGauge Y a b c d := by
