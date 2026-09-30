@@ -377,8 +377,13 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     $z_{j,l}$ makes the rescaled entries equal to the matched entries of $B$.
     The matched blocks are therefore related copy by copy, so the two
     direct-sum tensors are related by the permutation of the matched copies
-    followed by the direct sum of the blockwise similarities. If the blockwise
-    similarities are unitary, their direct sum and the permutation are unitary. For the
+    followed by the direct sum of the blockwise similarities. If every $Y_j$
+    is unitary, then, since each $T_j$ is a permutation matrix,
+    \begin{align}
+        YY^\dagger & =\bigoplus_{j\in J}\bigl(T_jT_j^\dagger\bigr)\otimes\bigl(Y_jY_j^\dagger\bigr)=\Id,
+        \notag
+    \end{align}
+    and likewise $Y^\dagger Y=\Id$. For the
     matrix-product vectors, a copy whose period divides the length contributes
     the factor $z_{j,l}^N=1$, and a copy whose period does not divide the
     length contributes the zero vector by
