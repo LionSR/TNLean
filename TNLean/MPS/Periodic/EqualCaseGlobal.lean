@@ -16,7 +16,9 @@ multiplicity gauge, which is the scalar acting by a root of unity on each
 multiplicity copy, and the similarity, which permutes the matched copies and
 applies the blockwise similarity inside each of them.
 
-This module supplies the linear algebra of that assembly.
+This module supplies the linear algebra of that assembly. For trace-preserving
+blocks the global similarity is unitary, and matched multiplicities have the
+same moduli.
 
 ## Main declarations
 
@@ -227,7 +229,8 @@ related by a single invertible matrix between their bond spaces.
 
 The matrix is the composition of the permutation of the matched blocks with the
 direct sum of the blockwise similarities, which is the matrix
-`Y = ⊕_j T_j ⊗ Y_j` of arXiv:1708.00029, line 690. -/
+`Y = ⊕_j T_j ⊗ Y_j` of arXiv:1708.00029, line 690. If each blockwise
+similarity is unitary, its global inverse is the conjugate transpose. -/
 theorem toTensorFromBlocks_conj_of_matched_blocks
     {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
@@ -243,6 +246,8 @@ theorem toTensorFromBlocks_conj_of_matched_blocks
     ∃ (Y : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ t : Fin r', dim' t)) ℂ)
       (Y' : Matrix (Fin (∑ t : Fin r', dim' t)) (Fin (∑ k : Fin r, dim k)) ℂ),
       Y * Y' = 1 ∧ Y' * Y = 1 ∧
+      ((∀ t, (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (dim' t)) ℂ) → Y' = Yᴴ) ∧
       ∀ i : Fin d,
         toTensorFromBlocks (d := d) (μ := μ) A i =
           Y * toTensorFromBlocks (d := d) (μ := μ') B i * Y' := by
@@ -281,7 +286,7 @@ theorem toTensorFromBlocks_conj_of_matched_blocks
   have hG'G : G' * G = 1 := by
     rw [hG, hG']
     simp
-  refine ⟨permMatrixOfEquiv E * G, G' * (permMatrixOfEquiv E)ᵀ, ?_, ?_, ?_⟩
+  refine ⟨permMatrixOfEquiv E * G, G' * (permMatrixOfEquiv E)ᵀ, ?_, ?_, ?_, ?_⟩
   · calc permMatrixOfEquiv E * G * (G' * (permMatrixOfEquiv E)ᵀ)
         = permMatrixOfEquiv E * (G * G') * (permMatrixOfEquiv E)ᵀ := by
           simp [Matrix.mul_assoc]
@@ -290,6 +295,26 @@ theorem toTensorFromBlocks_conj_of_matched_blocks
         = G' * ((permMatrixOfEquiv E)ᵀ * permMatrixOfEquiv E) * G := by
           simp [Matrix.mul_assoc]
     _ = 1 := by rw [permMatrixOfEquiv_transpose_mul]; simp [hG'G]
+  · intro hX
+    have hGX : G ∈ Matrix.unitaryGroup (Fin (∑ t : Fin r', dim' t)) ℂ := by
+      let U : (t : Fin r') → Matrix.unitaryGroup (Fin (dim' t)) ℂ :=
+        fun t => ⟨(X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ), hX t⟩
+      have heq : X = fun t => unitaryGL (U t) := by
+        funext t
+        apply Units.ext
+        rfl
+      rw [hG, heq]
+      exact globalGaugeOfBlocks_unitaryGL_mem _
+    have hGGstar : G * Gᴴ = 1 := by
+      simpa only [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff.mp hGX
+    have hGadj : G' = Gᴴ := by
+      calc
+        G' = G' * (G * Gᴴ) := by rw [hGGstar, Matrix.mul_one]
+        _ = Gᴴ := by rw [← Matrix.mul_assoc, hG'G, Matrix.one_mul]
+    have hEadj : (permMatrixOfEquiv E)ᴴ = (permMatrixOfEquiv E)ᵀ := by
+      ext i j
+      simp [permMatrixOfEquiv, Matrix.conjTranspose_apply, Matrix.transpose_apply]
+    rw [Matrix.conjTranspose_mul, hGadj, hEadj]
   · intro i
     rw [hreindex i, hconj i, reindex_eq_permMatrixOfEquiv_conj]
     simp only [Matrix.mul_assoc]
@@ -454,7 +479,8 @@ The unit-modulus scalar of each matched pair is carried explicitly by the
 hypothesis relating the multiplicity entries: the ratio that becomes a root of
 unity is the one between the multiplicity entries of the second tensor and the
 *rescaled* multiplicity entries of the first, exactly as at
-arXiv:1708.00029, lines 667--671 and 681--688. -/
+arXiv:1708.00029, lines 667--671 and 681--688. Unitary blockwise
+similarities give a unitary global similarity, as used at lines 747--756. -/
 theorem equalCase_global_zgauge_of_blockwise
     {P Q : SectorDecomposition d}
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
@@ -478,6 +504,8 @@ theorem equalCase_global_zgauge_of_blockwise
     ∃ (Y : Matrix (Fin P.totalDim) (Fin Q.totalDim) ℂ)
       (Y' : Matrix (Fin Q.totalDim) (Fin P.totalDim) ℂ),
       Y * Y' = 1 ∧ Y' * Y = 1 ∧
+      ((∀ k, (Yb k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ) → Y' = Yᴴ) ∧
       blockScalarMatrix P.flatDim (P.flatCopyScalar z) ^ L = 1 ∧
       (∀ i : Fin d,
         blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i =
@@ -554,11 +582,13 @@ theorem equalCase_global_zgauge_of_blockwise
     congr 1
     rw [← hz j q]
     ring
-  obtain ⟨Y, Y', hYY', hY'Y, hconj⟩ :=
+  obtain ⟨Y, Y', hYY', hY'Y, hUnitary, hconj⟩ :=
     toTensorFromBlocks_conj_of_matched_blocks (d := d)
       (fun s => zflat s * P.flatWeight s) P.flatBasis
       Q.flatWeight Q.flatBasis e hd (matched_block_gauge (Q := Q) Yb) hrel
-  refine ⟨Y, Y', hYY', hY'Y, ?_, ?_, ?_, ?_⟩
+  refine ⟨Y, Y', hYY', hY'Y, ?_, ?_, ?_, ?_, ?_⟩
+  · intro hYb
+    exact hUnitary (fun s => hYb (Q.flatIndexEquiv.symm s).1)
   · rw [hZ, blockScalarMatrix_pow]
     have hone : (fun s : Fin P.totalCopies => zflat s ^ L) = fun _ => (1 : ℂ) := by
       funext s
@@ -644,6 +674,24 @@ theorem IsPeriodic.period_eq_of_hetRepeatedBlocks
   exact IsPeriodic.period_eq_of_repeatedBlocks hA hB hRep
     hRep.peripheralEigenvalues_transferMap_eq
 
+private theorem exists_unitary_of_periodic_gaugePhase
+    {d D₁ D₂ m n : ℕ} (hD : D₁ = D₂)
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    (hA : IsPeriodic m A) (hB : IsPeriodic n B)
+    (X : GL (Fin D₂) ℂ) {ζ : ℂ} (hζ : ζ ≠ 0)
+    (hrel : ∀ i, (cast (congrArg (MPSTensor d) hD) A) i =
+      ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) * B i *
+        ((X⁻¹ : GL (Fin D₂) ℂ) : Matrix (Fin D₂) (Fin D₂) ℂ))) :
+    ∃ U : Matrix.unitaryGroup (Fin D₂) ℂ,
+      ∀ i, (cast (congrArg (MPSTensor d) hD) A) i =
+        ζ • ((U : Matrix (Fin D₂) (Fin D₂) ℂ) * B i *
+          (U : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ) := by
+  subst D₂
+  let : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
+  obtain ⟨U, _, hU⟩ := exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
+    X ζ hζ hrel hB.leftCanonical hA.leftCanonical hB.irreducible hA.irreducible
+  exact ⟨U, hU⟩
+
 /-- **Fundamental theorem for matrix product states, equal case.**
 
 Let two tensors carry the multiplicity-bearing irreducible forms
@@ -661,7 +709,7 @@ of unity with `Z_j (ξ_j R_j) = S_{π(j)}`, where `ξ_j` is the unit-modulus sca
 of the repeated-block relation. Collecting the `Z_j` gives a matrix `Z` on the
 bond space of the first tensor that commutes with every one of its matrices,
 whose order divides the least common multiple of the periods, that satisfies
-`Z A^i = Y B^i Y^{-1}` for an invertible `Y`, and that leaves the generated
+`Z A^i = Y B^i Yᴴ` for a unitary `Y`, and that leaves the generated
 matrix-product vectors unchanged.
 
 Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 643--693, over the
@@ -681,7 +729,9 @@ form and asserts at lines 330--332 that one passes between the forms by a
 block-diagonal similarity; that passage is carried out in
 `fundamentalTheorem_periodic_equalCase_irreducibleForm`, which receives the
 periods of the blocks as input, and of which the present statement is the
-normalized half. The source statement itself, with the periods derived, is
+normalized half. The blockwise gauges are made unitary without changing their
+phases, so the global inverse is the conjugate transpose, as required by the
+application at lines 747--756. The source statement itself, with the periods derived, is
 `fundamentalTheorem_periodic_equalCase_derivedPeriods`. The normalized half is
 isolated because the periodic overlap dichotomy and the vanishing of an
 off-period block are available in the normalized orientation. -/
@@ -706,7 +756,7 @@ theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
               Matrix.diagonal (fun q => Q.weight (perm j) (τ q))) ∧
       ∃ (Y : Matrix (Fin P.totalDim) (Fin Q.totalDim) ℂ)
         (Y' : Matrix (Fin Q.totalDim) (Fin P.totalDim) ℂ),
-        Y * Y' = 1 ∧ Y' * Y = 1 ∧
+        Y * Y' = 1 ∧ Y' * Y = 1 ∧ Y' = Yᴴ ∧
         blockScalarMatrix P.flatDim (P.flatCopyScalar z) ^
           (Finset.univ.lcm periodP) = 1 ∧
         (∀ i : Fin d,
@@ -724,8 +774,21 @@ theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
     fundamentalTheorem_periodic_proportional P.basis Q.basis hNonRepP hNonRepQ
       (PeriodicOverlapHypothesis.ofSectorDecompositions P Q periodP periodQ
         hPerP hPerQ hNonRepP hNonRepQ hSame.toNonzeroProportionalMPV₂)
-  choose hDimJ ξ Yb' hξ hConj' using hMatch
+  choose hDimJ ξ Xb hξ hConjRaw using hMatch
   have hξ0 : ∀ j, ξ j ≠ 0 := fun j => Complex.ne_zero_of_norm_eq_one (hξ j)
+  have hUnitaryMatch : ∀ j, ∃ U : Matrix.unitaryGroup (Fin (Q.basisDim (perm j))) ℂ,
+      ∀ i, (cast (congrArg (MPSTensor d) (hDimJ j)) (P.basis j)) i =
+        ξ j • ((U : Matrix (Fin (Q.basisDim (perm j))) (Fin (Q.basisDim (perm j))) ℂ) *
+          Q.basis (perm j) i *
+          (U : Matrix (Fin (Q.basisDim (perm j))) (Fin (Q.basisDim (perm j))) ℂ)ᴴ) :=
+    fun j => exists_unitary_of_periodic_gaugePhase (hDimJ j)
+      (hPerP j) (hPerQ (perm j)) (Xb j) (hξ0 j) (hConjRaw j)
+  choose U hU using hUnitaryMatch
+  let Yb' := fun j => unitaryGL (U j)
+  have hConj' (j) (i) : (cast (congrArg (MPSTensor d) (hDimJ j)) (P.basis j)) i =
+      ξ j • ((Yb' j : Matrix (Fin (Q.basisDim (perm j))) (Fin (Q.basisDim (perm j))) ℂ) *
+        Q.basis (perm j) i *
+        ((Yb' j)⁻¹ : GL (Fin (Q.basisDim (perm j))) ℂ)) := hU j i
   have hMatch' : ∀ j, HetRepeatedBlocks (P.basis j) (Q.basis (perm j)) :=
     fun j => ⟨hDimJ j, ξ j, Yb' j, hξ j, hConj' j⟩
   have hPeriodEq : ∀ j, periodP j = periodQ (perm j) := fun j =>
@@ -783,7 +846,8 @@ theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
     rw [Matrix.diagonal_mul_diagonal]
     exact congrArg Matrix.diagonal (funext fun q => hz j q)
   · -- global multiplicity gauge and similarity
-    exact equalCase_global_zgauge_of_blockwise perm hDimJ τ ξ
+    obtain ⟨Y, Y', h1, h2, hUnitary, hrest⟩ :=
+      equalCase_global_zgauge_of_blockwise perm hDimJ τ ξ
       (Equiv.piCongrLeft (fun k => GL (Fin (Q.basisDim k)) ℂ) perm Yb')
       (by
         intro j i
@@ -791,6 +855,41 @@ theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
         exact hConj' j i)
       z hz periodP hPerP hzm (Finset.univ.lcm periodP)
       (fun j => Finset.dvd_lcm (Finset.mem_univ j))
+    refine ⟨Y, Y', h1, h2, hUnitary ?_, hrest⟩
+    intro k
+    obtain ⟨j, rfl⟩ := perm.surjective k
+    rw [Equiv.piCongrLeft_apply_apply]
+    exact (U j).prop
+
+/-- Multiplicities matched to unit-modulus multiplicities also have modulus one.
+In particular, nonnegative real multiplicities are then one. This is the
+normalization step in the corrected forward implication of arXiv:1708.00029,
+Theorem 4.1, lines 743–756, allowing the phases introduced when grouping repeated blocks. -/
+theorem weight_norm_eq_one_of_sameMPV₂Pos
+    (P Q : SectorDecomposition d)
+    (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
+    (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
+    (hPerQ : ∀ k, IsPeriodic (periodQ k) (Q.basis k))
+    (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
+    (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
+    (hSame : SameMPV₂Pos P.toTensor Q.toTensor)
+    (hQweight : ∀ j q, ‖Q.weight j q‖ = 1) :
+    ∀ j q, ‖P.weight j q‖ = 1 := by
+  obtain ⟨perm, ξ, z, hξ, _, _, _, hz, hw, _⟩ :=
+    fundamentalTheorem_periodic_equalCase_sectorDecomposition
+      P Q periodP periodQ hPerP hPerQ hNonRepP hNonRepQ hSame
+  intro j q
+  obtain ⟨_, τ, hτ⟩ := hw j
+  have hzm := congrArg (fun M : Matrix (Fin (P.copies j)) (Fin (P.copies j)) ℂ => M q q)
+    (hz j)
+  simp only [Matrix.diagonal_pow, Matrix.diagonal_apply_eq, Pi.pow_apply,
+    Matrix.one_apply_eq] at hzm
+  have hznorm := Complex.norm_eq_one_of_pow_eq_one hzm
+    (Nat.ne_of_gt (hPerP j).period_pos)
+  have hrel := congrArg (fun M : Matrix (Fin (P.copies j)) (Fin (P.copies j)) ℂ => M q q) hτ
+  simp only [Matrix.diagonal_mul_diagonal, Matrix.diagonal_apply_eq] at hrel
+  have hnorm := congrArg norm hrel
+  simpa only [norm_mul, hznorm, hξ, hQweight, one_mul] using hnorm
 
 /-! ## Removing the trace-preserving restriction -/
 
@@ -946,7 +1045,7 @@ theorem fundamentalTheorem_periodic_equalCase_irreducibleForm
       Y * Y' = 1 ∧ Y' * Y = 1 ∧ Z ^ (Finset.univ.lcm periodP) = 1 ∧
       (∀ i : Fin d, Z * (XP * P.toTensor i * XP') =
         Y * (XQ * Q.toTensor i * XQ') * Y') := by
-    obtain ⟨Y, Y', h1, h2, h3, -, h5, -⟩ := hEqual
+    obtain ⟨Y, Y', h1, h2, -, h3, -, h5, -⟩ := hEqual
     refine ⟨Y, Y', h1, h2, h3, fun i => ?_⟩
     rw [← hPconj i, ← hQconj i]
     exact h5 i
