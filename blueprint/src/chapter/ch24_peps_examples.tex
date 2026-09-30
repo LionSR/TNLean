@@ -235,10 +235,21 @@ matrix product operator on the virtual level.
 \end{theorem}
 
 \begin{proof}\leanok
-    Flipping $v$ changes $g$ by the product of the neighbouring $Z$ signs.
-    Each such sign squares to one, so $K_vg=g$. Conversely, the stabilizer
-    equations imply that $g(\sigma)\psi(\sigma)$ is unchanged by every
-    single-site flip. Changing the sites one at a time reduces every
+    Flipping $v$ multiplies $g$ by the product of the neighbouring $Z$ signs:
+    \begin{align}
+        g(\sigma\mathbin{\oplus}\mathbf{1}_v)=s_v(\sigma)g(\sigma),
+        \qquad
+        s_v(\sigma)=\prod_{e:a(e)=v}(-1)^{\sigma_{b(e)}}
+        \prod_{e:b(e)=v}(-1)^{\sigma_{a(e)}}.
+    \end{align}
+    Since $s_v(\sigma)^2=1$, this gives $K_vg=g$. Conversely,
+    $K_v\psi=\psi$ reads $\psi(\sigma)=s_v(\sigma)\psi(\sigma\mathbin{\oplus}\mathbf{1}_v)$,
+    so
+    \begin{align}
+        g(\sigma\mathbin{\oplus}\mathbf{1}_v)\psi(\sigma\mathbin{\oplus}\mathbf{1}_v)
+        =g(\sigma)\psi(\sigma)
+    \end{align}
+    for every site $v$. Changing the sites one at a time reduces every
     configuration to the all-zero configuration. Hence
     $g(\sigma)\psi(\sigma)=\psi(0)$ and $\psi(\sigma)=\psi(0)g(\sigma)$.
 \end{proof}

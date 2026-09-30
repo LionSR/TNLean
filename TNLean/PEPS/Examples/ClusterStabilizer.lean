@@ -14,6 +14,11 @@ bonds by their two endpoints, so parallel bonds retain their multiplicity.
 We derive the stabilizer action and its common eigenspace from this circuit.
 The stabilizer at a vertex flips its qubit and applies Z at the other endpoint
 of every incident bond.
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
+  N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*, Appendix A
 -/
 
 open scoped BigOperators
@@ -231,8 +236,9 @@ theorem clusterStabilizer_fixed_iff (ψ : (TorusVertex width height → Fin 2) �
   · rintro ⟨c, rfl⟩
     exact ⟨c * (2⁻¹ : ℂ) ^ (width * height), smul_smul _ _ _⟩
 
-/-- The printed square-torus cluster PEPS is nonzero.
-Source: arXiv:2011.12127, Appendix A, two-dimensional cluster state. -/
+/-- The printed square-torus cluster PEPS is nonzero. This is derived here from its explicit
+coefficient formula, whose all-zero coefficient is `2^(-N)`; the cited passage does not state
+nonvanishing. -/
 theorem stateCoeff_clusterPEPS_ne_zero : stateCoeff (clusterPEPS width height) ≠ 0 := by
   intro hzero
   have h := congrFun hzero (fun _ => 0)
