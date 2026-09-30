@@ -988,6 +988,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         Z2Z2Condensation.cyclicInvariant_omega_kleinFamily_xy,
         Z2Z2Condensation.cyclicInvariant_omega_kleinFamily,
         Z2Z2Condensation.not_isTrivialGaugeClass_omega_kleinFamily,
+        Z2Z2Condensation.anomalyClass_omega_kleinFamily_ne_zero,
         Z2Z2Condensation.kxIntTensor,
         Z2Z2Condensation.kxyIntTensor,
         Z2Z2Condensation.kxTensor,
@@ -1023,7 +1024,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         Multiplicative.forall_zmod_two_prod}
     \leanok
     \uses{thm:asymex_z2z2_exact, def:mpug_anomaly_three_cochain,
-        def:mpug_trivial_gauge_class}
+        def:mpug_trivial_gauge_class, def:mpug_h3_group_cohomology}
     Let $\omega$ be the anomaly three-cochain of any choice of fusion
     tensors of the representation $g\mapsto M'_g$ of
     Theorem~\ref{thm:asymex_z2z2_exact}. For every
@@ -1035,7 +1036,9 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \end{align}
     which is the same product for the cocycle $(-1)^{a_1b_2c_2}$. It equals
     $+1$ at $x$ and $y$ and $-1$ at $xy$. In particular $\omega$ is not
-    cohomologous to the constant cochain one. Its class is the mixed type-II
+    cohomologous to the constant cochain one, so
+    $[\omega]\neq0$ in $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$.
+    Its class is the mixed type-II
     class $[(-1)^{a_1b_2c_2}]$.
 \end{theorem}
 
