@@ -1,5 +1,70 @@
 \section{Renormalization flow and physical correlations}
 
+One renormalization step blocks two sites of a tensor $B$ and compresses the
+blocked physical index by an isometry $U$ with $U^\dagger U=\Id$, producing a
+tensor $A$ with
+\begin{align}
+    B^{i_1}B^{i_2} & =\sum_j U_{(i_1,i_2),j}A^j
+    \notag
+\end{align}
+\cite[lines~389--394]{Cirac2016MPDO_arXiv}. Since $U^\dagger U=\Id$, the
+isometry cancels in the doubled contraction, so the step acts on transfer maps
+as $\E_A=\E_B^2$ \cite[line~1209]{Cirac2016MPDO_arXiv}; repeated steps
+produce the dyadic powers $\E_B^{2^n}$.
+
+\begin{figure}[ht]
+    \centering
+    \begin{center}
+        % B^{i_1} B^{i_2} = sum_j U_{(i_1,i_2),j} A^j (CPSV16, eq. RG,
+        % lines 389--394): two copies of B on physical legs i_1, i_2 are
+        % contracted along their shared virtual bond.  On the right the
+        % isometry U is a wide pill whose outer slots keep the open up legs
+        % i_1, i_2, while its centre slot carries the summed index j down
+        % into A.  Both sides carry the boundary signature
+        % (virtual-west=1 | virtual-east=1 | physical-up=2 |
+        % physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[cols=2, west=open, east=open]
+            \tn[ports={90:physical:$i_1$}]{B} & \tn[ports={90:physical:$i_2$}]{B}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={op,wire}, cols=3, bonds=none]
+            \tn[skin=pill, wide=3, name=U,
+                ports={90@1:physical:$i_1$, 90@3:physical:$i_2$,
+                        270@2:physical}]{U} \\
+            & \tn[name=A,
+                ports={180:virtual, 0:virtual, 90:physical:$j$}]{A} &
+            \tnwire{A.90}{U.270@2}
+        \end{tenkz}
+    \end{center}
+    \begin{center}
+        % E_B^2 = E_A (CPSV16, line 1209).  Left: two doubled columns of
+        % B and its conjugate, each rung summing one physical index, which
+        % is the transfer map of the blocked pair.  Substituting the top
+        % identity on both layers pairs U with its conjugate through
+        % (i_1,i_2), and U^dagger U = Id identifies the two copies of j,
+        % leaving the single doubled column of A on the right.  Both sides
+        % carry the boundary signature (virtual-west=2 | virtual-east=2 |
+        % physical-up=0 | physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=2, west=open, east=open]
+            \tn[label pos=n]{B} & \tn[label pos=n]{B} \\
+            \tn[label pos=s, conjugate]{\overline{B}} &
+            \tn[label pos=s, conjugate]{\overline{B}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}}
+        \end{tenkz}
+    \end{center}
+    \caption{One renormalization step. Top: blocking two sites of $B$ and
+        compressing the pair index by the isometry $U$ gives the tensor $A$.
+        Bottom: on the doubled network the isometry cancels, so
+        $\E_B^2=\E_A$ \cite[lines~389--394 and~1209]{Cirac2016MPDO_arXiv}.}
+    \label{fig:rfp_renormalization_step}
+\end{figure}
+
 \begin{theorem}[Primitive-transfer convergence for each auxiliary block]%
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
@@ -242,6 +307,46 @@
         A^{\boldsymbol i}X(A^{\boldsymbol j})^\dagger.
         \notag
     \end{align}
+    Diagrammatically, $O$ is inserted between the two layers of the doubled
+    chain on its $L$ sites:
+    \begin{center}
+        % E_O(X) = sum_{i,j} <j|O|i> A^i X (A^j)^dagger (CPSV16, lines
+        % 490--496).  Top row: the L copies of A, whose physical legs
+        % i_1..i_L run down into the pill O; bottom row: the L conjugate
+        % copies, whose physical legs j_1..j_L run up into O.  The dots
+        % stand for the interior sites.  The west pair (output) and the
+        % east pair (input X) of virtual legs stay open.  Boundary
+        % signature: (virtual-west=2 | virtual-east=2 | physical-up=0 |
+        % physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,op,bra}, cols=3, bonds=none]
+            \tn[name=k1, label pos=n,
+                ports={180:virtual, 0:virtual, 270:physical}]{A} &
+            \tn[name=kd, skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[name=k3, label pos=n,
+                ports={180:virtual, 0:virtual, 270:physical}]{A} \\
+            \tn[name=O, skin=pill, wide=3,
+                ports={90@1:physical, 90@3:physical,
+                        270@1:physical, 270@3:physical}]{O} \\
+            \tn[name=b1, label pos=s, conjugate,
+                ports={180:virtual, 0:virtual, 90:physical}]{\overline{A}} &
+            \tn[name=bd, skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[name=b3, label pos=s, conjugate,
+                ports={180:virtual, 0:virtual, 90:physical}]{\overline{A}}
+            \tnwire{k1.0}{kd.180}
+            \tnwire{kd.0}{k3.180}
+            \tnwire{b1.0}{bd.180}
+            \tnwire{bd.0}{b3.180}
+            \tnwire{k1.270}{O.90@1}
+            \tnwire{k3.270}{O.90@3}
+            \tnwire{O.270@1}{b1.90}
+            \tnwire{O.270@3}{b3.90}
+            \tnwire{k1.180}{open w}
+            \tnwire{b1.180}{open w}
+            \tnwire{k3.0}{open e}
+            \tnwire{b3.0}{open e}
+        \end{tenkz}
+    \end{center}
     This is the observable transfer map of
     \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -258,6 +363,24 @@
         \Tr_{\MN{D}}\!\left(\E_{O_2}\circ\E_A^{n_2}\circ\E_{O_1}\circ\E_A^{n_1}\right).
         \notag
     \end{align}
+    Diagrammatically, the four maps are composed around the ring:
+    \begin{center}
+        % Tr(E_{O_2} E_A^{n_2} E_{O_1} E_A^{n_1}) (CPSV16, eq. Corr,
+        % lines 490--496).  Each ring is a map on the doubled bond space,
+        % with its output pair on the west and its input pair on the east,
+        % so reading west to east is the order of composition.  The west
+        % and east sides are traced, closing both layers into the periodic
+        % chain; this is the operator trace on the virtual matrix space.
+        % Boundary signature: (virtual-west=0 | virtual-east=0 |
+        % physical-up=0 | physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire}, cols=4, west=trace, east=trace]
+            \tn[skin=ring, wires=2]{\E_{O_2}} &
+            \tn[skin=ring, wires=2]{\E_A^{n_2}} &
+            \tn[skin=ring, wires=2]{\E_{O_1}} &
+            \tn[skin=ring, wires=2]{\E_A^{n_1}}
+        \end{tenkz}
+    \end{center}
     The trace is the operator trace on the virtual matrix space, as in
     \cite[lines~490--496]{Cirac2016MPDO_arXiv}.
 \end{definition}

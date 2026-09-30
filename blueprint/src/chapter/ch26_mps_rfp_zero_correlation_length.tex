@@ -6,6 +6,28 @@
     \leanok
     \uses{def:mps_transfer_idempotence}
     An MPS tensor $A$ satisfies one-block transfer idempotence if $\E_A^2=\E_A$.
+    Diagrammatically, two doubled columns equal one:
+    \begin{center}
+        % E_A^2 = E_A (CPSV16, line 1209: blocking acts as
+        % E -> E^2, so a fixed point satisfies E = E^2).  Each column is
+        % the transfer map sum_i A^i (.) (A^i)^dagger: the upper node is A,
+        % the lower node its conjugate, and the vertical rung sums the
+        % physical index.  On the left the two columns are joined by their
+        % virtual bonds, which composes the maps.  Both sides carry the
+        % boundary signature (virtual-west=2 | virtual-east=2 |
+        % physical-up=0 | physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=2, west=open, east=open]
+            \tn[label pos=n]{A} & \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}} &
+            \tn[label pos=s, conjugate]{\overline{A}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}}
+        \end{tenkz}
+    \end{center}
     In \cite[Definition~3.5]{Cirac2016MPDO_arXiv}, local orthogonality denotes
     instead the vanishing of mixed transfer maps between distinct BNT components
     (Definition~\ref{def:is_bnt_locally_orthogonal}).
@@ -24,6 +46,22 @@
          & =\sum_i A_j^i\otimes\overline{A_{j'}^i}=0.
         \notag
     \end{align}
+    Diagrammatically,
+    \begin{center}
+        % E_{j,j'} = sum_i A_j^i (x) conj(A_{j'}^i) = 0 for j != j'
+        % (CPSV16 Definition 3.5, lines 470--474).  The upper node is
+        % A_j, the lower node is the conjugate of A_{j'}, and the rung sums
+        % the shared physical index i.  The two west and two east virtual
+        % legs stay open.  Boundary signature of the picture:
+        % (virtual-west=2 | virtual-east=2 | physical-up=0 |
+        % physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[label pos=n]{A_j} \\
+            \tn[label pos=s, conjugate]{\overline{A_{j'}}}
+        \end{tenkz}
+        $ = 0\qquad(j\ne j').$
+    \end{center}
     This is the mixed-sector condition of
     \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
 \end{definition}
@@ -245,6 +283,34 @@
         =\tfrac12\tr(X)\,\Id,
         \notag
     \end{align}
+    Diagrammatically, the transfer map is the rank-one map whose output legs
+    carry $\operatorname{diag}(\Lambda)$ and whose input legs are traced:
+    \begin{center}
+        % E_A(X) = tr(X) diag(Lambda) (CPSV16, lines 1295--1298: an RFP
+        % normal tensor has E = |R)(L| with |R) = sum_a Lambda_a |a,a) and
+        % (L| = sum_a (a,a|).  Left: the doubled column of A and its
+        % conjugate with the physical pair (alpha,beta) summed on the
+        % rung.  Right: the west output pair closes on a cup carrying the
+        % diagonal matrix diag(Lambda), written Lambda on the bead, and the
+        % east input pair closes on a bare cup, which is the trace of X.
+        % Both sides carry the boundary signature (virtual-west=2 |
+        % virtual-east=2 | physical-up=0 | physical-down=0).
+        \tenkzkernel
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open]
+            \tn[label pos=n]{A} \\
+            \tn[label pos=s, conjugate]{\overline{A}}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={wire,wire}, cols=1, west=open,
+                east={cup=$\Lambda$}, bonds=none]
+            \tn[skin=none]{} \\ \tn[skin=none]{}
+        \end{tenkz}
+        $\;\otimes\;$
+        \begin{tenkz}[rows={wire,wire}, cols=1, west=cup, east=open,
+                bonds=none]
+            \tn[skin=none]{} \\ \tn[skin=none]{}
+        \end{tenkz}
+    \end{center}
     which is idempotent since $\tr\operatorname{diag}(\Lambda)=1$, and $A$ is
     a single normal tensor, so no copy weights are involved. With the Pauli
     matrix $Z$ on the second spin of one node and on the first spin of the
