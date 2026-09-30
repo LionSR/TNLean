@@ -174,7 +174,8 @@ def kleinCocycle : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2)) :=
     (-1) ^ ((Multiplicative.toAdd a).1 * (Multiplicative.toAdd b).2 *
       (Multiplicative.toAdd c).2).val
 
-private theorem neg_one_pow_val_add (x y : ZMod 2) :
+/-- The sign character takes addition modulo two to multiplication. -/
+theorem neg_one_pow_val_add (x y : ZMod 2) :
     ((-1 : ℂˣ) ^ x.val) * (-1) ^ y.val = (-1) ^ (x + y).val := by
   apply Units.ext
   push_cast
