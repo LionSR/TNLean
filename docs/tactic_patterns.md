@@ -2059,7 +2059,7 @@ abstracted — record why, so it is not re-proposed).
 - **Result:** the parity example no longer splits over physical and bond
   coordinates. Its identity simplicity proof and the shift identity proof
   share `MPOTensor.isMPUSimple_idTensor` in `MPS/MPU/Simple.lean`.
-  Net Lean line delta: -11 across the four changed modules.
+  Net Lean line delta: -6 across the four changed modules.
 
 ### Unit-norm complex scalars are nonzero
 - **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
