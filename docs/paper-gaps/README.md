@@ -100,7 +100,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   symmetry under every irreducible representation as a pulling-through
   identity, and the coloring superposition as the equal-weight superposition
   of the Gauss-law configurations of trivial holonomy, the only sector the
-  dual network reaches on a torus.
+  dual network reaches on a torus. It also records that stability of
+  `G`-isometry under concatenation (Lemma 6.2) is formalized in one
+  dimension, with the constants multiplying, and that in two dimensions only
+  the simplification of the left inverse for the left-regular representation
+  on the contracted link is formalized (open scope restriction).
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
