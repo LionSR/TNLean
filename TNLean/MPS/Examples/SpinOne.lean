@@ -77,7 +77,7 @@ lemma spinExchange_spinOneOperator_zero_one_apply (v : NSiteSpace 3 2) (σ : Cfg
       !![v ![1, 2] + v ![2, 1], v ![1, 0], v ![2, 0];
         v ![0, 1], v ![1, 1], v ![0, 0] - v ![1, 2];
         v ![0, 2], v ![0, 0] - v ![2, 1], v ![2, 2]] (σ 0) (σ 1) := by
-  rw [spinExchange_apply]
+  rw [spinExchange_apply _ _ _ (by decide)]
   simp only [update_update_fin_two]
   generalize σ 0 = p, σ 1 = q
   fin_cases p <;> fin_cases q <;>

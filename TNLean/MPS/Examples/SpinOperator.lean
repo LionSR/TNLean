@@ -25,9 +25,8 @@ these with their spin operators.
 ## Main results
 * `MPSTensor.spinExchange_apply` : the coordinate formula of the exchange
 * `MPSTensor.spinExchange_comm` : \(\mathbf S_j\cdot\mathbf S_k=\mathbf S_k\cdot\mathbf S_j\)
-* `MPSTensor.sum_siteOperator_comp_of_ne`, `MPSTensor.sum_siteOperator_comp_self` :
-  \(\sum_\alpha S^\alpha_jS^\alpha_k\) is the exchange for \(j\ne k\) and the
-  Casimir value \(c\) for \(j=k\) when \(\sum_\alpha(S^\alpha)^2=c\)
+* `MPSTensor.spinExchange_self` : the coincident-site exchange is the Casimir value
+  \(c\) when \(\sum_\alpha(S^\alpha)^2=c\)
 * `MPSTensor.totalSpinSq_eq` : \(\mathbf S^2=cN+\sum_{j\ne k}\mathbf S_j\cdot\mathbf S_k\)
 * `MPSTensor.cyclicRestrictₗ_spinExchange` : restricting a periodic chain to the
   window \(i,i+1\) turns \(\mathbf S_i\cdot\mathbf S_{i+1}\) into the exchange of a
@@ -62,69 +61,45 @@ lemma siteOperator_apply (X : Matrix (Fin d) (Fin d) ℂ) (j : Fin N) (ψ : NSit
     siteOperator X j ψ σ = ∑ a, X (σ j) a * ψ (Function.update σ j a) := rfl
 
 /-- The exchange interaction \(\mathbf S_j\cdot\mathbf S_k=\sum_\alpha S^\alpha_jS^\alpha_k\)
-of two sites of a chain of \(N\) sites for the operator family \(S\), acting on
-coefficient vectors: \((\mathbf S_j\cdot\mathbf S_k\,\psi)(\sigma)
-=\sum_{\alpha,a,b}S^\alpha_{\sigma_j a}S^\alpha_{\sigma_k b}\,
-\psi(\sigma\text{ with }\sigma_j=a,\ \sigma_k=b)\). The formula is the exchange only for
-distinct sites \(j\ne k\) (`sum_siteOperator_comp_of_ne`); for \(j=k\) the second
-update overwrites the first, and the operator \(\sum_\alpha S^\alpha_jS^\alpha_j\) is
-given instead by `sum_siteOperator_comp_self`. -/
+of two sites of a chain of \(N\) sites for the operator family \(S\).
+The composition also applies when the two sites coincide. -/
 def spinExchange (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (j k : Fin N) :
-    NSiteSpace d N →ₗ[ℂ] NSiteSpace d N where
-  toFun ψ σ := ∑ α, ∑ a, ∑ b,
-    S α (σ j) a * S α (σ k) b * ψ (Function.update (Function.update σ j a) k b)
-  map_add' ψ φ := by
-    ext σ
-    simp only [Pi.add_apply, mul_add, Finset.sum_add_distrib]
-  map_smul' c ψ := by
-    ext σ
-    simp only [Pi.smul_apply, smul_eq_mul, RingHom.id_apply, Finset.mul_sum]
-    refine Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ =>
-      Finset.sum_congr rfl fun _ _ => by ring
+    NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
+  ∑ α, siteOperator (S α) j ∘ₗ siteOperator (S α) k
 
 /-- The coordinate formula of the exchange, with the sum over the three spin
-components carried out inside the coefficient. -/
+components carried out inside the coefficient, for distinct sites. -/
 lemma spinExchange_apply (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) (j k : Fin N)
+    (hjk : j ≠ k)
     (ψ : NSiteSpace d N) (σ : Cfg d N) :
     spinExchange S j k ψ σ =
       ∑ a, ∑ b, (∑ α, S α (σ j) a * S α (σ k) b) *
         ψ (Function.update (Function.update σ j a) k b) := by
-  change (∑ α, ∑ a, ∑ b, S α (σ j) a * S α (σ k) b *
-      ψ (Function.update (Function.update σ j a) k b)) = _
+  simp only [spinExchange, LinearMap.sum_apply, Finset.sum_apply, LinearMap.comp_apply,
+    siteOperator_apply, Function.update_of_ne hjk.symm, Finset.mul_sum, ← mul_assoc]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun a _ => ?_
   rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun b _ => ?_
-  rw [Finset.sum_mul]
+  simp only [Finset.sum_mul]
 
 /-- The exchange of two distinct sites is symmetric in the two sites. -/
 theorem spinExchange_comm (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {j k : Fin N}
     (hjk : j ≠ k) : spinExchange S j k = spinExchange S k j := by
   refine LinearMap.ext fun ψ => funext fun σ => ?_
-  rw [spinExchange_apply, spinExchange_apply, Finset.sum_comm]
+  rw [spinExchange_apply S j k hjk, spinExchange_apply S k j hjk.symm, Finset.sum_comm]
   refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
   rw [Function.update_comm hjk.symm]
   congr 1
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
 
-/-- For two distinct sites, \(\sum_\alpha S^\alpha_jS^\alpha_k\) is the exchange
-interaction \(\mathbf S_j\cdot\mathbf S_k\). -/
-theorem sum_siteOperator_comp_of_ne (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {j k : Fin N}
-    (hjk : j ≠ k) :
-    ∑ α, siteOperator (S α) j ∘ₗ siteOperator (S α) k = spinExchange S j k := by
-  refine LinearMap.ext fun ψ => funext fun σ => ?_
-  simp only [LinearMap.sum_apply, Finset.sum_apply, LinearMap.comp_apply, siteOperator_apply,
-    Function.update_of_ne hjk.symm, Finset.mul_sum, ← mul_assoc]
-  rfl
-
 /-- On a single site, \(\sum_\alpha S^\alpha_jS^\alpha_j=c\) when the one-site
 matrices satisfy \(\sum_\alpha(S^\alpha)^2=c\). -/
-theorem sum_siteOperator_comp_self (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {c : ℂ}
+theorem spinExchange_self (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {c : ℂ}
     (hS : ∑ α, S α * S α = c • 1) (j : Fin N) :
-    ∑ α, siteOperator (S α) j ∘ₗ siteOperator (S α) j = c • LinearMap.id := by
+    spinExchange S j j = c • LinearMap.id := by
   refine LinearMap.ext fun ψ => funext fun σ => ?_
-  simp only [LinearMap.sum_apply, Finset.sum_apply, LinearMap.comp_apply, siteOperator_apply,
-    Function.update_self, Function.update_idem, Finset.mul_sum, ← mul_assoc,
+  simp only [spinExchange, LinearMap.sum_apply, Finset.sum_apply, LinearMap.comp_apply,
+    siteOperator_apply, Function.update_self, Function.update_idem, Finset.mul_sum, ← mul_assoc,
     LinearMap.smul_apply, LinearMap.id_apply, Pi.smul_apply, smul_eq_mul]
   have h : ∀ α : Fin 3, (∑ a, ∑ b, S α (σ j) a * S α a b * ψ (Function.update σ j b)) =
       ∑ b, (S α * S α) (σ j) b * ψ (Function.update σ j b) := fun α => by
@@ -161,8 +136,8 @@ theorem totalSpinSq_eq (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) {c : ℂ}
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun k _ => ?_
   split_ifs with h
-  · subst h; exact sum_siteOperator_comp_self S hS j
-  · exact sum_siteOperator_comp_of_ne S h
+  · subst h; exact spinExchange_self S hS j
+  · rfl
 
 /-- Restricting to the cyclic window of sites \(i,i+1\) intertwines the exchange of
 these two sites with the exchange of a two-site chain. -/
@@ -182,7 +157,12 @@ lemma cyclicRestrictₗ_spinExchange (S : Fin 3 → Matrix (Fin d) (Fin d) ℂ) 
     have e1 := update_cyclicCfg hN hN2 i (Function.update ω 0 a) τ 1 b
     simp only [Fin.val_zero, cyclicForwardSite_zero, Fin.val_one] at e0 e1
     rw [e0, e1]
-  simp only [cyclicRestrictₗ_apply, spinExchange_apply, h0, h1, hu]
+  have hi : i ≠ cyclicForwardSite i 1 := by
+    intro h
+    have hoff : 0 = N - 1 := by simpa [← h] using cyclicForwardSite_one_offset i
+    omega
+  simp only [cyclicRestrictₗ_apply, spinExchange_apply S _ _ hi,
+    spinExchange_apply S (0 : Fin 2) 1 (by decide), h0, h1, hu]
 
 end MPSTensor
 
