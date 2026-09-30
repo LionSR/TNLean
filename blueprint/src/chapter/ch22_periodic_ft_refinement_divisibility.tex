@@ -1,3 +1,26 @@
+\begin{theorem}[Positive-weight periodic decomposition]
+    \label{thm:periodic_positive_decomposition}
+    \lean{MPSTensor.exists_isPeriodic_of_irreducible_of_isLeftCanonical,
+        MPSTensor.exists_periodic_blockDecomposition}
+    \leanok
+    \uses{def:periodic_tensor}
+    Every tensor $A$ has the same matrix product vectors at all positive lengths
+    as a direct sum $\bigoplus_k\mu_k B_k$, where $\mu_k>0$, each $B_k$ is
+    left-canonical and periodic, each bond dimension $D_k$ is positive, and
+    $\sum_kD_k\le D$. No physical sites are blocked
+    \cite[lines~238--271 and~313--320]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:tp_gauge_arbitrary, thm:spectral_periodic_period_existence}
+    Theorem~\ref{thm:tp_gauge_arbitrary} gives irreducible left-canonical blocks
+    and positive weights. A positive trace-preserving map on a nonzero matrix
+    space has spectral radius one. Its irreducibility then implies that its
+    peripheral spectrum is the full set of roots of unity of some positive
+    order. The construction preserves the positive-length coefficients and
+    the total bond-dimension bound.
+\end{proof}
+
 \begin{definition}[$p$-divisible CP map]
     \label{def:p_divisible_channel}
     \lean{MPSTensor.IsPDivisibleChannel}
