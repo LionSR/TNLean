@@ -87,12 +87,8 @@ lemma majumdarGhoshGrading_mul_self :
 lemma majumdarGhoshGrading_mul_evalWord (w : List (Fin 2)) :
     majumdarGhoshGrading * Kraus.evalWord majumdarGhoshTensor w =
       (-1 : ℂ) ^ w.length • (Kraus.evalWord majumdarGhoshTensor w * majumdarGhoshGrading) := by
-  induction w with
-  | nil => simp [Kraus.evalWord]
-  | cons a w ih =>
-    rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, majumdarGhoshGrading_mul, Matrix.smul_mul,
-      Matrix.mul_assoc, ih, Matrix.mul_smul, smul_smul, List.length_cons, pow_succ,
-      mul_comm, Matrix.mul_assoc]
+  exact mul_evalWord_of_mul_eq_smul majumdarGhoshTensor majumdarGhoshGrading (-1)
+    majumdarGhoshGrading_mul w
 
 /-- Left multiplication by a matrix of the tensor flips the parity. -/
 lemma majumdarGhosh_parity_mul_left {ε : ℂ} {X : Matrix (Fin 3) (Fin 3) ℂ}
