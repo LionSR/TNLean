@@ -11056,7 +11056,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₂Paper_sourceU_fourSpin_apply,
         MPOTensor.shiftExampleU₂Paper_sourceV_fourSpin_apply,
         MPOTensor.shiftExampleU₃Paper_sourceU_fourSpin_apply,
-        MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply}
+        MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply,
+        MPOTensor.shiftExampleU₂BlockedStandardForm,
+        MPOTensor.shiftExampleU₃BlockedStandardForm,
+        MPOTensor.shiftExampleU₂BlockedStandardForm_normalized,
+        MPOTensor.shiftExampleU₃BlockedStandardForm_normalized}
     \leanok
     \uses{threeMPU, def:mpu_weighted_source_factors}
     For $d>0$, the two counterpropagating shift tensors have source factors
@@ -11068,16 +11072,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_3 & = (I\otimes\mathbb S\otimes I)(\mathbb S\otimes\mathbb S),
             & v_3                                                        & = I\otimes\mathbb S\otimes I.
     \end{align}
+    After relabeling the intermediate coordinates, these same factors give
+    standard forms of the two-site blocks of $U_2$ and $U_3$. Their
+    normalizations are $X_1^*(I\otimes\rho)X_1=I$ and $X_2^*X_2=I$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:threeMPU_U2_supplied_source_gates_two,
-        thm:threeMPU_U3_supplied_source_gates_two}
+        thm:threeMPU_U3_supplied_source_gates_two,
+        thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity}
     Starting with the identity-weight source factors, replace
     $X_1,Y_1,Z_1$ by $dX_1,d^{-1}Y_1,dZ_1$, respectively, and leave the
     second cut unchanged. The cut factorizations and right inverses are
     preserved, while the first weighted isometry now uses $d^{-2}I_{d^2}$.
     The source gates scale by $d^{-1}$ and $d$, cancelling the reciprocal
-    factors in the identity-weight formulas.
+    factors in the identity-weight formulas. Relabel the intermediate rank
+    coordinates by the displayed pairs of spin indices. The source-factor
+    contraction theorem supplies the open equation, and the permutation
+    matrix identities give both gate unitarities. Relabeling preserves the
+    two normalization identities.
 \end{proof}
 
 \begin{proposition}[Standard forms of the three shift MPUs]

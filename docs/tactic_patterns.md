@@ -2313,6 +2313,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### relabeling normalized source factors into a standard form — candidate
+- **Pattern:** pull source factors back along intermediate-rank equivalences,
+  use the supplied gate entry formulas, and rewrite both finite sums along
+  those equivalences to inherit the open source-factor contraction.
+- **Seen:** `shiftExampleU₂BlockedStandardForm` and
+  `shiftExampleU₃BlockedStandardForm` in `Examples/ShiftStandardForms.lean`.
+- **Notes:** their weighted and ordinary isometry identities are transported
+  along the same column equivalences. Consider a shared constructor when a
+  third tensor requires this exact combination of data.
+
+
 ### rescaling a source cut to normalize its virtual weight — candidate
 - **Pattern:** scale the first cut's `X₁` and `Z₁` by a nonzero real scalar,
   scale `Y₁` inversely, and divide the virtual weight by the scalar's square.

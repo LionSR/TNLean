@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.SwapMatrix
 import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
+import TNLean.MPS.MPU.Examples.ShiftNormalizedSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftTilde
 import TNLean.MPS.MPU.TwoSiteStandardForm
 
@@ -15,9 +16,9 @@ The supplied gates and half factors realize CPSV17, equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009–2034). The first two swap-transformed
 families realize the gates in `SFu1u3` (lines 2090–2099).
 
-These data prove the gate unitarity and open contractions. They do not yet
-identify the half factors with the trace-normalized supplied source factors;
-that remaining requirement of #7028 is separate from these contractions.
+The two blocked families use trace-normalized supplied source factors, with
+both normalization identities proved below. The unblocked third family still
+uses direct half factors; its normalization remains part of #7028.
 -/
 
 open scoped Matrix
@@ -87,34 +88,47 @@ noncomputable def shiftExampleU₂BlockedStandardForm (d : ℕ) [NeZero d] :
       (Matrix.reindex (shiftTwoSitePhysicalEquiv d) (shiftTwoSitePhysicalEquiv d)
         (swapTensorSwapMatrix d * identitySwapIdentityMatrix d)) := by
   classical
+  let S := shiftExampleU₂PaperSourceFactors d
+  let eL := finProdFinEquiv.symm.trans (shiftExampleU₂LeftRankEquiv d)
+  let eR := finProdFinEquiv.symm.trans (shiftExampleU₂RightRankEquiv d)
+  have hdecode (x : Fin (d * d)) : finProdFinEquiv (x.divNat, x.modNat) = x :=
+    finProdFinEquiv.apply_symm_apply x
+  have hu (l r : Fin (d * d)) (i j : Fin (d * d)) :
+      SourceFactors.sourceU (shiftExampleU₂ d) S (eL l, eR r) (i, j) =
+        Matrix.reindex (shiftTwoSitePhysicalEquiv d) (shiftTwoSitePhysicalEquiv d)
+          (identitySwapIdentityMatrix d) (l, r) (i, j) := by
+    simpa [S, eL, eR, shiftExampleU₂SourceURowEquiv, shiftTwoSitePhysicalEquiv,
+      Matrix.reindex_apply, hdecode] using
+      shiftExampleU₂Paper_sourceU_fourSpin_apply d l.divNat l.modNat r.divNat r.modNat
+        i.divNat i.modNat j.divNat j.modNat
+  have hv (i j r l : Fin (d * d)) :
+      Matrix.reindex (shiftTwoSitePhysicalEquiv d) (shiftTwoSitePhysicalEquiv d)
+          ((swapTensorSwapMatrix d * identitySwapIdentityMatrix d)) (i, j) (r, l) =
+        SourceFactors.sourceV (shiftExampleU₂ d) S (i, j) (eR r, eL l) := by
+    simpa [S, eL, eR, shiftExampleU₂SourceVColumnEquiv, shiftTwoSitePhysicalEquiv,
+      Matrix.reindex_apply, hdecode] using
+      (shiftExampleU₂Paper_sourceV_fourSpin_apply d i.divNat i.modNat j.divNat j.modNat
+        r.divNat r.modNat l.divNat l.modNat).symm
   refine {
     phys_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     bond_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     left_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     right_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
-    X₁ := fun i r => if i.2.divNat = i.1.divNat ∧
-      i.1.modNat = r.divNat ∧ i.2.modNat = r.modNat then 1 else 0
-    X₂ := fun i l => if i.1.divNat = l.divNat ∧
-      i.2.divNat = l.modNat ∧ i.1.modNat = i.2.modNat then 1 else 0
+    X₁ := fun i r => S.X₁ i (eR r)
+    X₂ := fun i l => S.X₂ i (eL l)
     u_unitary := (identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
     v_unitary :=
       (swapTensorSwapMatrix_mul_identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
-    v_apply := ?_
+    v_apply := hv
     W_apply := ?_
   }
-  · intro i₁ i₂ r l
-    rw [← Equiv.sum_comp finProdFinEquiv]
-    simp [Matrix.reindex_apply, shiftTwoSitePhysicalEquiv,
-      Fintype.sum_prod_type, ite_and, eq_comm]
-    split_ifs <;> simp_all
-  · intro i j α γ
-    simp only [blockTwo, Matrix.mul_apply]
-    simp_rw [← Equiv.sum_comp finProdFinEquiv]
-    simp [shiftExampleU₂, tensorProduct, rightShiftTensor, leftShiftTensor,
-      physicalAdjointTensor, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-      Matrix.single, shiftTwoSitePhysicalEquiv, Fintype.sum_prod_type,
-      ite_and, eq_comm]
-    split_ifs <;> simp_all [eq_comm]
+  intro i j α γ
+  rw [SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁ (shiftExampleU₂ d) S,
+    ← Equiv.sum_comp eL]
+  apply Finset.sum_congr rfl
+  intro l _
+  rw [← Equiv.sum_comp eR]
+  simp only [hu]
 
 /-- The reversed family after two-site blocking, with the four-spin gates
 of CPSV17, equation `eq:uv2_U3`, lines 2030–2034. -/
@@ -125,34 +139,90 @@ noncomputable def shiftExampleU₃BlockedStandardForm (d : ℕ) [NeZero d] :
       (Matrix.reindex (shiftTwoSitePhysicalEquiv d) (shiftTwoSitePhysicalEquiv d)
         (identitySwapIdentityMatrix d)) := by
   classical
+  let S := shiftExampleU₃PaperSourceFactors d
+  let eL := finProdFinEquiv.symm.trans (shiftExampleU₃LeftRankEquiv d)
+  let eR := finProdFinEquiv.symm.trans (shiftExampleU₃RightRankEquiv d)
+  have hdecode (x : Fin (d * d)) : finProdFinEquiv (x.divNat, x.modNat) = x :=
+    finProdFinEquiv.apply_symm_apply x
+  have hu (l r : Fin (d * d)) (i j : Fin (d * d)) :
+      SourceFactors.sourceU (shiftExampleU₃ d) S (eL l, eR r) (i, j) =
+        Matrix.reindex (shiftTwoSitePhysicalEquiv d) (shiftTwoSitePhysicalEquiv d)
+          ((identitySwapIdentityMatrix d * swapTensorSwapMatrix d)) (l, r) (i, j) := by
+    simpa [S, eL, eR, shiftExampleU₃SourceURowEquiv, shiftTwoSitePhysicalEquiv,
+      Matrix.reindex_apply, hdecode] using
+      shiftExampleU₃Paper_sourceU_fourSpin_apply d l.divNat l.modNat r.divNat r.modNat
+        i.divNat i.modNat j.divNat j.modNat
+  have hv (i j r l : Fin (d * d)) :
+      Matrix.reindex (shiftTwoSitePhysicalEquiv d) (shiftTwoSitePhysicalEquiv d)
+          (identitySwapIdentityMatrix d) (i, j) (r, l) =
+        SourceFactors.sourceV (shiftExampleU₃ d) S (i, j) (eR r, eL l) := by
+    simpa [S, eL, eR, shiftExampleU₃SourceVColumnEquiv, shiftTwoSitePhysicalEquiv,
+      Matrix.reindex_apply, hdecode] using
+      (shiftExampleU₃Paper_sourceV_fourSpin_apply d i.divNat i.modNat j.divNat j.modNat
+        r.divNat r.modNat l.divNat l.modNat).symm
   refine {
     phys_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     bond_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     left_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     right_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
-    X₁ := fun i r => if i.2.divNat = r.modNat ∧
-      i.1.divNat = r.divNat ∧ i.2.modNat = i.1.modNat then 1 else 0
-    X₂ := fun i l => if i.1.divNat = i.2.divNat ∧
-      i.1.modNat = l.divNat ∧ i.2.modNat = l.modNat then 1 else 0
+    X₁ := fun i r => S.X₁ i (eR r)
+    X₂ := fun i l => S.X₂ i (eL l)
     u_unitary :=
       (identitySwapIdentityMatrix_mul_swapTensorSwapMatrix_isUnitaryBetween d).reindex _ _ _
     v_unitary := (identitySwapIdentityMatrix_isUnitaryBetween d).reindex _ _ _
-    v_apply := ?_
+    v_apply := hv
     W_apply := ?_
   }
-  · intro i₁ i₂ r l
-    rw [← Equiv.sum_comp finProdFinEquiv]
-    simp [Matrix.reindex_apply, shiftTwoSitePhysicalEquiv,
-      Fintype.sum_prod_type, ite_and, eq_comm]
-    split_ifs <;> simp_all
-  · intro i j α γ
-    simp only [blockTwo, Matrix.mul_apply]
-    simp_rw [← Equiv.sum_comp finProdFinEquiv]
-    simp [shiftExampleU₃, tensorProduct, rightShiftTensor, leftShiftTensor,
-      physicalAdjointTensor, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-      Matrix.single, shiftTwoSitePhysicalEquiv, Fintype.sum_prod_type,
-      ite_and, eq_comm]
-    split_ifs <;> simp_all [eq_comm]
+  intro i j α γ
+  rw [SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁ (shiftExampleU₃ d) S,
+    ← Equiv.sum_comp eL]
+  apply Finset.sum_congr rfl
+  intro l _
+  rw [← Equiv.sum_comp eR]
+  simp only [hu]
+
+
+/-- The blocked standard form retains the trace-normalized source-factor identities.
+Source: CPSV17, `Y1Y1X1X1` and `eq:uv2_U2`. -/
+theorem shiftExampleU₂BlockedStandardForm_normalized (d : ℕ) [NeZero d] :
+    let T := shiftExampleU₂BlockedStandardForm d
+    T.X₁ᴴ * sourceWeight (d := d * d) (shiftPaperWeightSquared d) * T.X₁ = 1 ∧
+      T.X₂.IsIsometry := by
+  let S := shiftExampleU₂PaperSourceFactors d
+  let eR := finProdFinEquiv.symm.trans (shiftExampleU₂RightRankEquiv d)
+  let eL := finProdFinEquiv.symm.trans (shiftExampleU₂LeftRankEquiv d)
+  constructor
+  · let X : Matrix (Fin (d * d) × Fin (d * d)) (Fin (d * d)) ℂ :=
+      fun x r => S.X₁ x (eR r)
+    change Xᴴ * sourceWeight (d := d * d) (shiftPaperWeightSquared d) * X = 1
+    ext r t
+    change (S.X₁ᴴ * sourceWeight (d := d * d) (shiftPaperWeightSquared d) * S.X₁)
+      (eR r) (eR t) = (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) r t
+    rw [S.X₁_weighted_isometry]
+    change (if eR r = eR t then (1 : ℂ) else 0) = if r = t then 1 else 0
+    simp
+  · exact S.X₂_isometry.reindex S.X₂ (Equiv.refl _) eL.symm
+
+/-- The blocked standard form retains the trace-normalized source-factor identities.
+Source: CPSV17, `Y1Y1X1X1` and `eq:uv2_U3`. -/
+theorem shiftExampleU₃BlockedStandardForm_normalized (d : ℕ) [NeZero d] :
+    let T := shiftExampleU₃BlockedStandardForm d
+    T.X₁ᴴ * sourceWeight (d := d * d) (shiftPaperWeightSquared d) * T.X₁ = 1 ∧
+      T.X₂.IsIsometry := by
+  let S := shiftExampleU₃PaperSourceFactors d
+  let eR := finProdFinEquiv.symm.trans (shiftExampleU₃RightRankEquiv d)
+  let eL := finProdFinEquiv.symm.trans (shiftExampleU₃LeftRankEquiv d)
+  constructor
+  · let X : Matrix (Fin (d * d) × Fin (d * d)) (Fin (d * d)) ℂ :=
+      fun x r => S.X₁ x (eR r)
+    change Xᴴ * sourceWeight (d := d * d) (shiftPaperWeightSquared d) * X = 1
+    ext r t
+    change (S.X₁ᴴ * sourceWeight (d := d * d) (shiftPaperWeightSquared d) * S.X₁)
+      (eR r) (eR t) = (1 : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) r t
+    rw [S.X₁_weighted_isometry]
+    change (if eR r = eR t then (1 : ℂ) else 0) = if r = t then 1 else 0
+    simp
+  · exact S.X₂_isometry.reindex S.X₂ (Equiv.refl _) eL.symm
 
 private theorem ketLeftMul_shiftPhysicalSwap_apply {d D : ℕ}
     (U : MPOTensor (d * d) D) (i j : Fin (d * d)) (α β : Fin D) :
