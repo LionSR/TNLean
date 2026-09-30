@@ -3,7 +3,9 @@
 Run from the repository root with single-threaded BLAS:
     OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 -B \
         docs/audits/rfp_intrinsic/checks/environment_four_search.py
-Use --validate-only to independently rebuild saved numerical results.
+The default run saves the 16 initial trials; then run --supplementary for the
+eight recentered refinements and --validate-only to independently rebuild
+all saved endpoints. --controls-only writes only the exact structural controls.
 
 Source: next_targets.tex, equations Gram, trace-cp, Pauli, cheap. Physical
 basis is (logical, redundant) followed by the scalar, with lexicographic
@@ -457,6 +459,7 @@ def main() -> None:
     config = replace(CONFIG, output=args.output) if args.output else CONFIG
     out = Path(config.output)
     if args.controls_only:
+        out.mkdir(parents=True, exist_ok=True)
         proof = Path('docs/audits/rfp_intrinsic/sections/environment_four/obstruction.tex')
         write_json(out/'structural_controls.json', {
             'exact': exact_ideal_diagnostics(), 'pauli_and_seed_checks': exact_structured_checks(),

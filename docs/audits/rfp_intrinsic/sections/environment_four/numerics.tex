@@ -18,7 +18,10 @@ $R=I$, $L=\diag(p,1-p)$ and $0.1\leq p\leq0.5$; four used independently
 parameterized faithful input and output weights. Finite Grassmann charts
 around seeded unitary frames do not assert global numerical coverage.
 Eight recentered sensitivity refinements completed the saved set of
-24 endpoints. For the physical Hilbert--Schmidt coefficient matrices,
+24 endpoints. The default invocation of the script produces the sixteen
+initial trials; a second invocation with \texttt{-{}-supplementary} adds the
+eight refinements, and a third with \texttt{-{}-validate-only} reconstructs
+all saved endpoints. For the physical Hilbert--Schmidt coefficient matrices,
 the forward residual was
 \begin{align}
 	\epsilon_{\rm fwd}
