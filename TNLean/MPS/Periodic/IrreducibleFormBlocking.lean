@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.BlockingInfrastructure
-import TNLean.MPS.Periodic.BlockingDecomposition
+import TNLean.MPS.Periodic.PrescribedBlocking
 
 /-!
 # Positive blocking of an irreducible-form presentation
@@ -16,7 +16,7 @@ arXiv:1708.00029, Theorem 4.1, lines 750–756.
 
 The supplied presentation carries all-length MPV equality, not a literal bond
 similarity. The explicit orbit isometries remain available from
-`IsPeriodic.exists_periodic_stepOrbit_decomposition`; the global similarity
+`IsPeriodic.exists_stepOrbit_blockDecomposition`; the global similarity
 needed for the corrected forward theorem is a separate construction.
 -/
 
@@ -64,10 +64,9 @@ noncomputable def IsIrreducibleForm.block {D : ℕ} {A : MPSTensor d D}
         (B : (a : Fin (n k)) → MPSTensor (blockPhysDim d p) (sd a)),
         (∀ a, IsPeriodic (h.period k / n k) (B a)) ∧
         SameMPV₂ (blockTensor (h.blocks k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
-    let : NeZero (h.period k) := ⟨Nat.ne_of_gt (h.periodic k).period_pos⟩
-    obtain ⟨_, sd, B, _, _, _, _, _, _, _, hper, hSame, _⟩ :=
-      IsPeriodic.exists_periodic_stepOrbit_decomposition (h.blocks k) (h.periodic k) hp
-    exact ⟨sd, B, hper, hSame⟩
+    obtain ⟨_, sd, B, _, _, _, _, _, _, _, _, hSame, _, _, _, hper⟩ :=
+      (h.periodic k).exists_stepOrbit_blockDecomposition p
+    exact ⟨sd, B, hper hp, hSame⟩
   choose sd B hper hSame using hex
   let e := (finSigmaFinEquiv (n := n)).symm
   refine {

@@ -719,37 +719,6 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     translationally invariant MPS (\cite{DeLasCuevas2017Irreducible}).
 \end{remark}
 
-\begin{theorem}[Prescribed blocking of a periodic tensor]
-    \label{thm:periodic_prescribed_blocking}
-    \lean{MPSTensor.IsPeriodic.exists_paper_cyclic_projections,
-        MPSTensor.IsPeriodic.exists_periodic_stepOrbit_decomposition}
-    \leanok
-    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
-    Let $A$ be periodic of period $m>0$, and let $p>0$.
-    Set $r=\gcd(m,p)$ and $q=m/r$. There are nonzero cyclic projections
-    $P_u$ with $P_uA^i=A^iP_{u+1}$ and isometries $V_\alpha$ onto their
-    step-orbit sums $Q_\alpha$, for $0\le\alpha<r$, such that
-    $B_\alpha^I=V_\alpha^\dagger(A^{[p]})^IV_\alpha$ is periodic of
-    period $q$. All $r$ blocks have positive bond dimension; their dimensions
-    sum to the bond dimension of $A$; and their direct sum has the same
-    matrix product vectors as $A^{[p]}$ at every length.
-    This is \cite[Lemma~6]{DeLasCuevas2017Irreducible}, with the displayed
-    peripheral-root correction of \cite{gap:dccsp17_blocking_peripheral_roots}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_irreducible,
-        thm:periodic_compressed_exact_spectrum}
-    Obtain the cyclic projections from periodicity and reverse their cyclic
-    indices to give the stated letter convention. Their nonvanishing follows
-    from the nonzero cyclic-sector dimensions and the supporting isometries.
-    Compress onto each orbit sum. The orbit-compression theorem gives left
-    canonicality, the dimension identity, and equality of matrix product
-    vectors. Each compressed block is irreducible and has exactly the $q$th
-    roots of unity as its peripheral spectrum, hence has period $q$.
-\end{proof}
-
 \begin{theorem}[Absorbing the orbitwise gauge into the root]
     \label{thm:periodic_absorb_orbit_gauge}
     \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action}
@@ -833,7 +802,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_prescribed_blocking,thm:periodic_weighted_block_refinement}
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement}
     Apply the prescribed-blocking decomposition separately to each $A_k$.
     Blocking raises $\mu_k$ to the power $p$, and refinement preserves that
     weight on every orbit block. The preceding theorem assembles the
@@ -879,7 +848,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_unitary_orbit_root}
     \lean{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
     \leanok
-    \uses{def:periodic_tensor,thm:periodic_prescribed_blocking}
+    \uses{def:periodic_tensor,thm:periodic_prescribed_blocking_compression}
     Let $A$ be left-canonical periodic of period $m$ and let $p>0$.
     Put $r=\gcd(m,p)$. The prescribed orbit blocks $C_a$, of period $m/r$,
     admit a unitary $U$ such that
@@ -903,4 +872,70 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     Since $UE_a$ is the original orbit isometry, $Z$ acts by $c_a$ on
     $\widetilde P_a$. Absorbing these phases into the original cyclic sectors
     gives $A'^{[p]}=ZA^{[p]}$, which is the stated weighted conjugation.
+\end{proof}
+
+\begin{theorem}[Periodic presentation of an arbitrary tensor]
+    \label{thm:periodic_arbitrary_presentation}
+    \lean{MPSTensor.exists_periodic_presentation}
+    \leanok
+    Every tensor $A$ of bond dimension $D$ has the same positive-length matrix
+    product vectors as $\bigoplus_k\mu_k B_k$, where $\mu_k\ne0$, each $B_k$ is
+    left-canonical periodic, and $\sum_k D_k\le D$.
+    Equality at length zero is not asserted.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply the irreducible-block reduction and trace-preserving gauges from
+    \cite[Section~2]{DeLasCuevas2017Irreducible}, discarding zero blocks.
+    Each retained block is irreducible and trace preserving, hence has spectral
+    radius one and a positive period. The reductions do not increase total dimension.
+\end{proof}
+
+\begin{theorem}[Weight and dimension recovery from a blocked comparison]
+    \label{thm:periodic_blocked_weight_normalization}
+    \lean{MPSTensor.weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos}
+    \leanok
+    \uses{def:periodic_tensor,thm:periodic_prescribed_blocking_compression}
+    Let $T=\bigoplus_k\mu_k B_k$, where $\mu_k\ne0$ and the $B_k$ are
+    left-canonical periodic. Suppose that, for $p>0$, $T^{[p]}$ has the same
+    positive-length matrix product vectors as a periodic sector decomposition
+    $Q$ with a pairwise non-repeated basis and unit-modulus multiplicities.
+    Then $|\mu_k|=1$ for every $k$, and $\sum_k D_k$ equals the total bond
+    dimension of $Q$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
+        thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary}
+    Decompose each blocked $B_k$ into its prescribed orbits. Every resulting
+    block inherits weight $\mu_k^p$. Group repeated blocks and apply the
+    multiplicity-bearing equal-case theorem. Matching to the unit-modulus
+    multiplicities of $Q$ gives $|\mu_k|^p=1$, hence $|\mu_k|=1$.
+    The global invertible similarity equates the total bond dimensions;
+    orbit decomposition and grouping both preserve the original total dimension.
+\end{proof}
+
+\begin{theorem}[Unit-weight presentation from a blocked comparison]
+    \label{thm:periodic_refinement_normalized_presentation}
+    \lean{MPSTensor.exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos}
+    \leanok
+    \uses{thm:periodic_blocked_weight_normalization}
+    Let $A$ be any tensor of bond dimension $D$. Suppose that, for $p>0$,
+    $A^{[p]}$ has the same positive-length matrix product vectors as a periodic
+    sector decomposition $Q$ with a pairwise non-repeated basis and
+    unit-modulus multiplicities. Then $A$ has the same positive-length matrix
+    product vectors as a unit-weight sum $\bigoplus_k C_k$ of left-canonical
+    periodic tensors. Their total bond dimension equals that of $Q$ and is
+    at most $D$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_arbitrary_presentation,thm:periodic_blocked_weight_normalization}
+    Take a periodic presentation of $A$ and block it by $p$.
+    The preceding theorem gives unit modulus for each original weight and
+    the claimed dimension. Absorb each weight into its periodic block;
+    a unit-modulus scalar preserves left canonicality and the period.
 \end{proof}

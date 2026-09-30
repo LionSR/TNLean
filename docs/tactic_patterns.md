@@ -3644,3 +3644,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   matrix intertwining two tensor families, if a third occurrence arises.
 - **Notes:** the periodic application uses the inverse unitary orientation.
   Below the three-occurrence promotion threshold; no custom tactic introduced.
+
+### Selecting and flattening prescribed orbit blocks — candidate
+- **Pattern:** choose the prescribed periodic decomposition separately for each
+  original block, flatten `(original block, orbit)` with `finSigmaFinEquiv`,
+  and transport the weighted MPV identity through that enumeration.
+- **Seen:** two occurrences in `IsIrreducibleForm.block` in
+  `TNLean/MPS/Periodic/IrreducibleFormBlocking.lean` and
+  `weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos` in
+  `TNLean/MPS/Periodic/RefinementNormalization.lean` (2026-09-30).
+- **Abstraction (proposed):** a family-level decomposition lemma returning
+  the chosen blocks and dimension identities if a third consumer appears.
+  The shared weighted-sum refinement is already a separate theorem.
