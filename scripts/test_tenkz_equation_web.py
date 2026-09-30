@@ -25,7 +25,7 @@ PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 8,
     "ch-mpdo.html": 2,
-    "ch-mpdo_rfp.html": 7,
+    "ch-mpdo_rfp.html": 12,
 }
 
 
