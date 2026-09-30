@@ -44,13 +44,12 @@ on the multiplicity space with `Z_j R_j = S_j`. The present hypothesis forgets
 that blockwise structure and records only the resulting global finite-order
 intertwining relation.
 
-Note that the Lean theorem `fundamentalTheorem_periodic_equalCase` in
-`MPS/Periodic/FundamentalTheorem.lean` requires four extra hypotheses beyond
-irreducibility and `SameMPV` (non-repetition of blocks for both tensors, the periodic
-overlap dichotomy, and a per-block weight-power equality). The Prop introduced here
-asserts an unconditional abstract equal-case hypothesis, so it is strictly stronger
-than the current repository theorem; callers committing to it are committing to the
-hypotheses recorded in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
+The multiplicity-bearing source theorem is
+`fundamentalTheorem_periodic_equalCase_derivedPeriods` in
+`MPS/Periodic/IrreducibleFormPeriods.lean`. It produces blockwise gauge data;
+the global relation in this definition is still an explicit hypothesis here.
+See `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex` for the
+source comparison.
 The convention follows the analogous
 hypothesis in `MPS/Periodic/Applications.lean`. -/
 def PeriodicEqualCaseFT (d D : ℕ) : Prop :=

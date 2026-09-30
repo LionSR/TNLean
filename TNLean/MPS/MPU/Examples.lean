@@ -13,6 +13,7 @@ import TNLean.MPS.MPU.Examples.Shift
 import TNLean.MPS.MPU.Examples.ShiftBlockedIndex
 import TNLean.MPS.MPU.Examples.ShiftIndex
 import TNLean.MPS.MPU.Examples.ShiftPaperSourceFactors
+import TNLean.MPS.MPU.Examples.ShiftPublicIndex
 import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftSourceGateFormulas
