@@ -8,6 +8,7 @@ import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Examples.KleinSymmetry
 import TNLean.MPS.MPDO.BondOneOperator
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 
 /-!
 # The anomaly of the printed Klein symmetry
@@ -137,5 +138,13 @@ theorem exists_normalized_omega_printedFamily (fd : printedFamily.FusionData) :
     (g := Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) (n := 2) (by decide)
   rw [cyclicInvariant_omega_printedFamily] at hc
   simpa [ScalarThreeCochain.cyclicInvariant, Finset.prod_range_succ, hn.2.1] using hc
+
+/-- The anomaly class of the printed symmetry in Mathlib's `H³(ℤ₂ × ℤ₂, ℂˣ)` is nonzero
+for every choice of fusion tensors (arXiv:2203.12563, line 1884). -/
+theorem anomalyClass_omega_printedFamily_ne_zero (fd : printedFamily.FusionData) :
+    ScalarThreeCochain.anomalyClass
+      ⟨fd.omega, fd.isCocycle_omega printedFamily_isNormalRepresentation⟩ ≠ 0 := fun h ↦
+  not_isTrivialGaugeClass_omega_printedFamily fd
+    ((ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero _).2 h)
 
 end KleinSymmetry
