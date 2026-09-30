@@ -606,8 +606,9 @@ theorem wallString_mul_wallString_mulVec_mpv
 `signphysop`, `Papers/2405.00439/MPU-DW.tex` lines 1667--1672): under the hypothesis
 `(c_{AB} c_{BA})² = 1`,
 `O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB} c_{BA} O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`.
-The source derives the hypothesis from `U² = 1` (lines 837--839); here it is assumed, not
-derived. -/
+**Scope restriction (exchange phase squared):** the source derives the hypothesis from
+`U² = 1` (lines 837--839); here it is assumed, not derived. Documented in
+`docs/paper-gaps/gs24_domain_wall_exchange_square.tex`. -/
 theorem wallString_mul_wallString_mulVec_mpv_of_sq_eq_one
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y)) {cAB cBA : ℂ}

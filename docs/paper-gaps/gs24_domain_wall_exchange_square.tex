@@ -1,0 +1,66 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Exchange of Domain-Wall Strings: the Square of the Exchange Phase}
+\author{}
+\date{2026-10-02}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Ref.~\cite{GarreRubioSchuch2024DomainWall} states the exchange of two
+domain-wall strings on sites $i_2<i_1<j_1<j_2$ as
+\begin{equation*}
+    O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}
+    =c_{AB}c_{BA}\,O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}.
+\end{equation*}\footnote{Source traceability:
+\path{Papers/2405.00439/MPU-DW.tex}, lines 1667--1672 (\texttt{signphysop})
+and lines 835--839.}
+The computation gives the phase on the other side,
+\begin{equation*}
+    O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}
+    =c_{AB}c_{BA}\,O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A},
+\end{equation*}
+and this form is proved for every pair of phases.\footnote{Formal declaration:
+\leanid{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv}.}
+The two forms agree exactly when $(c_{AB}c_{BA})^2=1$. The source obtains this
+from $U^2=\mathrm{id}$: since $U\ket{\psi(A\text{-}B\text{-}A)}
+=c_{BA}c_{AB}\ket{\psi(B\text{-}A\text{-}B)}$, applying $U$ twice returns
+$(c_{BA}c_{AB})^2\ket{\psi(A\text{-}B\text{-}A)}$ (lines 835--839).
+
+\section{Restriction}
+
+The printed orientation is formalized with $(c_{AB}c_{BA})^2=1$ as an explicit
+hypothesis.\footnote{Formal declaration:
+\leanid{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_of_sq_eq_one}.}
+The derivation of that hypothesis from $U^2=\mathrm{id}$ is not formalized.
+
+\section{Elimination plan}
+
+The action of $U$ on the two-wall state is formalized.\footnote{Formal
+declaration:
+\leanid{MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV}.}
+Applying it twice, with $U^2=\mathrm{id}$ as an identity of periodic
+operators at the length considered and a length at which
+$\ket{\psi(A\text{-}B\text{-}A)}\neq0$, gives $(c_{AB}c_{BA})^2=1$. With that
+lemma the hypothesis is discharged from the involution, and the printed
+relation holds under the source's own assumptions.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
