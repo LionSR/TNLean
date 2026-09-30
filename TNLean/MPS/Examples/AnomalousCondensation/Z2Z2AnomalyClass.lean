@@ -650,4 +650,12 @@ theorem not_isTrivialGaugeClass_omega_kleinFamily (fd : kleinFamily.FusionData) 
   have := congrArg Units.val h
   norm_num at this
 
+/-- The anomaly class of the dressed family in Mathlib's `H³(ℤ₂ × ℤ₂, ℂˣ)` is nonzero for
+every choice of fusion tensors (arXiv:2203.12563, lines 1845–1872). -/
+theorem anomalyClass_omega_kleinFamily_ne_zero (fd : kleinFamily.FusionData) :
+    ScalarThreeCochain.anomalyClass
+      ⟨fd.omega, fd.isCocycle_omega kleinFamily_isNormalRepresentation⟩ ≠ 0 := fun h ↦
+  not_isTrivialGaugeClass_omega_kleinFamily fd
+    ((ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero _).2 h)
+
 end Z2Z2Condensation
