@@ -284,15 +284,10 @@ theorem isingStringNetTensor_conj (f : Fin 3) (h h' : Fin 10) :
 
 /-- Bridge: the periodic operators of the source's tensors (arXiv:1511.08090, `AnyonsPEPS.tex`
 lines 1262–1266 and 1323) equal those of the formal blocks `isingBlock`, at every length, by
-`MPOTensor.mpo_eq_of_conj`. -/
+`MPOTensor.mpo_eq_of_diagonal_conj`. -/
 theorem mpo_isingStringNetTensor (f : Fin 3) (L : ℕ) :
-    mpo (isingStringNetTensor f) L = mpo (isingBlock f) L := by
-  have hg := isingStringNetGauge_ne_zero f
-  refine mpo_eq_of_conj ?_ ?_ (isingStringNetTensor_conj f) L
-  · rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    exact congrArg Matrix.diagonal (funext fun p => mul_inv_cancel₀ (hg p))
-  · rw [Matrix.diagonal_mul_diagonal, ← Matrix.diagonal_one]
-    exact congrArg Matrix.diagonal (funext fun p => inv_mul_cancel₀ (hg p))
+    mpo (isingStringNetTensor f) L = mpo (isingBlock f) L :=
+  mpo_eq_of_diagonal_conj _ (isingStringNetGauge_ne_zero f) (isingStringNetTensor_conj f) L
 
 /-- The analogue of arXiv:1511.08090, `AnyonsPEPS.tex` line 1268, for the Ising category
 (line 1323): the source's tensors of the blocks `1, ψ, σ` satisfy the Ising fusion rules at every
