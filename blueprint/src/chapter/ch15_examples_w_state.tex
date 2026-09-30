@@ -16,6 +16,35 @@ Definition~\ref{def:w_tensor} is the one printed there, in the same basis and
 with the same boundary vectors, so the results below are stated for it
 directly.
 
+\begin{definition}[W tensor and boundary vectors]\label{def:w_tensor}
+    \lean{MPSTensor.wTensor}
+    \lean{MPSTensor.wLeftBoundary}
+    \lean{MPSTensor.wRightBoundary}
+    \lean{MPSTensor.wRaising}
+    \leanok
+    \uses{def:mps_tensor}
+    Following \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, set $d=D=2$.
+    The W tensor is the site-independent family
+    \begin{align}
+        A^0 & = \begin{pmatrix}1&0\\0&1\end{pmatrix},
+        \notag                                        \\
+        A^1 & = \begin{pmatrix}0&1\\0&0\end{pmatrix},
+        \notag
+    \end{align}
+    with left boundary covector $(l|=(0|$ and right boundary vector $|r)=|1)$.
+    Here $A^1$ is the single raising operator: it sends $|1)\mapsto|0)$ and
+    annihilates $|0)$, and squares to zero.
+\end{definition}
+
+Theorem~\ref{thm:w_state_identification} proves the open-boundary state
+identity. Closing the same matrices by a trace instead gives the vacuum
+term of Theorem~\ref{thm:w_state_periodic_closure}.
+The single-length periodic bond-dimension question is distinct: the
+review's general bound $D^3\log D=\Omega(N)$ remains open, with the
+conditional and restricted-length results summarized in
+Remark~\ref{rem:w_state_ti_bound} and \cite{gap:rmp_w_state_ti_bound}.
+% The unrestricted lower bound is tracked in #2947.
+
 \begin{definition}[Open-boundary contraction]\label{def:open_coeff}
     \lean{MPSTensor.openCoeff}
     \leanok
@@ -37,26 +66,6 @@ directly.
     The open-boundary state on $N$ sites assigns to each configuration
     $\sigma=(\sigma_1,\ldots,\sigma_N)$ the amplitude
     $(v_L| A^{\sigma_1}\cdots A^{\sigma_N}\,|v_R)$.
-\end{definition}
-
-\begin{definition}[W tensor and boundary vectors]\label{def:w_tensor}
-    \lean{MPSTensor.wTensor}
-    \lean{MPSTensor.wLeftBoundary}
-    \lean{MPSTensor.wRightBoundary}
-    \lean{MPSTensor.wRaising}
-    \leanok
-    \uses{def:mps_tensor}
-    Following \cite[Appendix~A, ``The W state'']{Cirac2021Matrix}, set $d=D=2$.
-    The W tensor is the site-independent family
-    \begin{align}
-        A^0 & = \begin{pmatrix}1&0\\0&1\end{pmatrix},
-        \notag                                        \\
-        A^1 & = \begin{pmatrix}0&1\\0&0\end{pmatrix},
-        \notag
-    \end{align}
-    with left boundary covector $(l|=(0|$ and right boundary vector $|r)=|1)$.
-    Here $A^1$ is the single raising operator: it sends $|1)\mapsto|0)$ and
-    annihilates $|0)$, and squares to zero.
 \end{definition}
 
 \begin{definition}[W-state indicator]\label{def:w_indicator}

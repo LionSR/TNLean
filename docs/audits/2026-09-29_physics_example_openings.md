@@ -48,7 +48,10 @@ missing bridges in the issue. The changes accompanying this audit expose the
 CZX, Fibonacci and Ising bridges in their openings and remove the clock-class
 overclaim. The product-state, CZX and Kramers–Wannier introductions now put their
 example tensors before general operator or contraction notation, followed by
-boundary data and property links. A uniform opening property list for the
-remaining sections is still to be written. Keep #8062 open until that pass is complete. Missing mathematics must
+boundary data and property links. Chapter 15 now also links the boundary conventions and property results
+for GHZ, AKLT, cluster, Majumdar--Ghosh, W, Kitaev, and CPSV16 Example 3.4.
+The W tensor precedes the general open-boundary definitions; its lower-bound
+proof discussion is unchanged. A uniform opening property list for the
+remaining Chapter 25 sections is still to be written. Keep #8062 open until that pass is complete. Missing mathematics must
 remain attached to the issues above, not acquire new `leanok` tags through an
 editorial change.
