@@ -17,6 +17,9 @@ import TNLean.MPS.Periodic.CornerTransition
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Periodic.EqualCase
 import TNLean.MPS.Periodic.EqualCaseGlobal
+import TNLean.MPS.Periodic.EqualCaseGlobal.Basic
+import TNLean.MPS.Periodic.EqualCaseGlobal.Canonical
+import TNLean.MPS.Periodic.EqualCaseGlobal.IrreducibleForm
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Periodic.IrreducibleFormPeriods
