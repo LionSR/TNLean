@@ -535,8 +535,8 @@ operator has basis action
     \label{eq:asymex_parity_basis}
 \end{align}
 
-\begin{lemma}[Occupation parity]
-    \label{lem:asymex_parity_occupation}
+\begin{theorem}[Occupation parity]
+    \label{thm:asymex_parity_occupation}
     \lean{ParityGraded.pauliZ_mul_parA_mul_pauliZ,
         ParityGraded.trace_evalWord_parA_eq_zero_of_odd,
         ParityGraded.finKronecker_pauliZ_mulVec_mpv_parA}
@@ -552,7 +552,7 @@ operator has basis action
         z^{\otimes N}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}.
         \label{eq:asymex_parity_invariance}
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -574,8 +574,8 @@ operator has basis action
 The support of the state is further constrained by the relative positions of the
 zeros.
 
-\begin{lemma}[Amplitudes from cyclic runs]
-    \label{lem:asymex_parity_runs}
+\begin{theorem}[Amplitudes from cyclic runs]
+    \label{thm:asymex_parity_runs}
     \lean{ParityGraded.trace_evalWord_parA_cyclic_runs,
         ParityGraded.exists_parA_cyclic_runs,
         ParityGraded.trace_evalWord_parA_replicate_one}
@@ -594,7 +594,7 @@ zeros.
         a_N(1,\ldots,1)=1+(-1)^N.
         \label{eq:asymex_parity_all_one}
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -771,7 +771,7 @@ The source acts as a length filter: at odd length the periodic vector
 vanishes, while at even length every amplitude of $A$ is doubled.
 For instance, at odd length the all-zero amplitude of $A$ is one but its
 amplitude in $B$ vanishes; at even length the run restrictions of
-Lemma~\ref{lem:asymex_parity_runs} apply with doubled amplitudes.
+Theorem~\ref{thm:asymex_parity_runs} apply with doubled amplitudes.
 
 The positive-length hypothesis is necessary. The empty-word
 traces are $\tr(\Id_5)=5$ and $\tr(\Id_2)=2$, whereas substituting
