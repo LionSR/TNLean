@@ -11051,11 +11051,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proposition}[Standard forms of the three shift MPUs]
     \label{prop:threeMPU_standard_forms}
-    \notready
-    \discussion{5715}
-    \uses{threeMPU, def:mpu_source_uv}
-    Assume $d>0$. For the fixed standard-form source factors, the corresponding
-    unitaries satisfy
+    \lean{MPOTensor.shiftExampleU₁StandardForm,
+        MPOTensor.shiftExampleU₃StandardForm,
+        MPOTensor.shiftExampleU₂BlockedStandardForm,
+        MPOTensor.shiftExampleU₃BlockedStandardForm}
+    \leanok
+    \uses{threeMPU, def:mpu_supplied_two_site_standard_form}
+    Assume $d>0$. The three shift families have standard forms whose
+    unitary gates satisfy
     \begin{align}
         u_1                          & =\Id\otimes\Id,                  & v_1 & =\Id\otimes\Id, \\
         u_3                          & =\mathbb S,                      & v_3 & =\mathbb S,     \\
@@ -11066,14 +11069,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         (\mathbb S\otimes\mathbb S), &
         v_3^{(2)}                    & =\Id\otimes\mathbb S\otimes\Id.
     \end{align}
-    These statements concern the paper gates $u=Y_2\mathbin{-}Y_1$ and
-    $v=X_1\mathbin{-}X_2$ for trace-normalized standard-form factors. The
-    supplied identity-weight computations above give the same gate matrices
-    only after transferring reciprocal scalar factors between $u$ and $v$.
-    Constructing the trace-normalized factors and proving the displayed
-    equalities remains.
+    The two-site blockings in the last two lines use the physical order
+    $((1,2),(3,4))$. These are unitary gates with normalized half factors
+    satisfying the open standard-form equation.
     % Source lines: paper_v2.tex 2002--2042.
 \end{proposition}
+
+\begin{proof}\leanok
+    \uses{def:mpu_supplied_two_site_standard_form,
+        thm:threeMPU_U2_supplied_source_gates_two,
+        thm:threeMPU_U3_supplied_source_gates_two}
+    Use Kronecker deltas for the half factors, connecting each physical spin
+    to the virtual spin along its shift direction. For the identity family,
+    the half factors are $X_1(i,\gamma;r)=\delta_{i,r}$ and
+    $X_2(\alpha,i;\ell)=\delta_{i,\ell}$. For the unblocked third family,
+    they are
+    $X_1(i,(a,b);r)=\delta_{a,r}\delta_{b,i}$ and
+    $X_2((a,b),i;\ell)=\delta_{a,i}\delta_{b,\ell}$.
+    Contracting the common virtual index gives the identity and swap gates,
+    respectively. For the two-site blocks, the same contractions in the
+    displayed four-spin order give the ordered products above. All gates
+    are permutation matrices and hence unitary. Contracting each unshifted
+    gate with its two half factors recovers the corresponding tensor entries.
+\end{proof}
 
 \begin{definition}[Transformation with swaps]
     \label{threeMPU2}
