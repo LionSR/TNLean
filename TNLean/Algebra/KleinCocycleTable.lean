@@ -27,6 +27,10 @@ orbit to have four elements.
 * `kleinCocycleFamily_signs`: the three diagonal signs for every parameter triple.
 * `kleinCocycleFamily_restriction_iff`: the test on each cyclic subgroup.
 * `kleinCocycleFamily_cohomologousTo_iff`: equality of classes detects all three parameters.
+* `kleinCocycleFamily_isTrivialGaugeClass_comap_iff`,
+  `kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators`: the restricted class to a
+  subgroup is trivial exactly when the diagonal sign is one at its elements, equivalently at
+  the order-two generators it contains.
 * `kleinCocycleFamily_one_isTrivialGaugeClass_comap_iff`: the last row remains valid
   when arbitrary fusion gauges are allowed.
 * `kleinCocycleFamily_one_subgroup_iff`: only the trivial subgroup has identically
