@@ -184,8 +184,9 @@ spectral decomposition, and quantitative decay bounds.
     \label{thm:correlator_exponential_bound}
     \uses{def:connected_correlator}
     Let $\E_A$ be primitive and trace-preserving, with fixed state $\rho$
-    satisfying $\tr\rho=1$, and put $P(Z)=\tr(Z)\rho$.
-    For every $r$ with $\rho(\E_A-P)<r<1$ and every $X,Y$, there is a
+    satisfying $\tr\rho=1$, and put $P(Z)=\tr(Z)\rho$. Write
+    $\operatorname{spr}(\E_A-P)$ for the spectral radius of $\E_A-P$.
+    For every $r$ with $\operatorname{spr}(\E_A-P)<r<1$ and every $X,Y$, there is a
     constant $C_{XY}>0$ such that, for all $n\ge0$,
     \begin{align}
         |C(X,Y;n)|
@@ -199,6 +200,9 @@ spectral decomposition, and quantitative decay bounds.
 
 \begin{proof}
     \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part}
+    Primitivity gives $\operatorname{spr}(\E_A-P)<1$
+    \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
+    so such rates $r$ exist.
     The matrix $Z_\rho(X)$ is traceless, so $P(Z_\rho(X))=0$ and
     $\E_A^n(Z_\rho(X))=(\E_A-P)^n(Z_\rho(X))$. The Gelfand formula yields
     $\|(\E_A-P)^n\|\le C r^n$ for some constant $C$. By
@@ -373,6 +377,11 @@ for the transfer map $\E_A$.
     product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and that
     physical observable insertions reduce to the auxiliary functionals defined
     above. If the hypotheses of
-    Theorem~\ref{thm:correlator_exponential_bound} hold, then the corresponding
-    ground-state correlations decay with finite correlation length $\xi$.
+    Theorem~\ref{thm:correlator_exponential_bound} hold, then for every rate
+    $r$ with $\operatorname{spr}(\E_A-P)<r<1$ the corresponding ground-state
+    correlations decay as $r^n=e^{-n/\xi}$ with finite correlation length
+    $\xi=-1/\log r$, the quantity of
+    Definition~\ref{def:correlation_length} evaluated at $r$. When $\E_A-P$ is
+    diagonalizable, one may take $r=|\lambda_2|$, the largest modulus of a
+    subleading eigenvalue, provided $\lambda_2\neq0$.
 \end{remark}
