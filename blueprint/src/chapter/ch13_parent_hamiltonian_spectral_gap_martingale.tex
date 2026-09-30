@@ -7386,7 +7386,7 @@ shorter interaction range.
     \label{thm:parent-prescribed-gap-window}
     \lean{MPSTensor.parentHamiltonianES_gap_ge_one_sub_of_open_gap}
     \leanok
-    \uses{def:parent_hamiltonian_es}
+    \uses{def:parent_hamiltonian_es,def:open_parent_hamiltonian_es}
     Let $0<\eta<1$, $1\le R\le m$, and
     $2(R-1)^2\le m\eta$. Suppose the open parent Hamiltonian on
     $m+R-1$ sites has gap at least $1-\eta/2$. Then, for every
@@ -7484,6 +7484,7 @@ shorter interaction range.
     \label{thm:primitive-block-parent-prescribed-gap}
     \lean{MPSTensor.eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub}
     \leanok
+    \uses{def:primitive_mps,def:parent_hamiltonian_es,def:gauge_phase_equiv}
     Let $B=\bigoplus_j\mu_jA_j$, where the $A_j$ are normalized
     primitive tensors with common positive physical dimension, positive
     bond dimensions, and positive-definite invariant matrices. Suppose
