@@ -38,9 +38,10 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     indices the mixed Gram matrix of their physical matrices, read as maps from bond
     pairs to physical indices, is a rearrangement of the mixed transfer map,
     $(\mathcal B_X^\dagger\mathcal B_Y)_{(a,b),(a',b')}
-        =\E_{YX}(\ket{b'}\bra b)_{a'a}$. Let $\lambda_2\in\C$ with
-    $\lvert\lambda_2\rvert<1$, let $\xi$ be its correlation length, let
-    $0<\gamma<1$, and write $r=e^{-\gamma/\xi}$; then $r\leq1$.
+        =\E_{YX}(\ket{b'}\bra b)_{a'a}$. For $\lambda_2\in\C$ with
+    $\lvert\lambda_2\rvert\leq1$, correlation length $\xi$, and $\gamma\geq0$,
+    $e^{-\gamma/\xi}\leq1$. Now let $\lvert\lambda_2\rvert<1$ and $0<\gamma<1$, and
+    write $r=e^{-\gamma/\xi}$.
     \begin{enumerate}
         \item If every eigenvalue of $\E_{XY}$ has modulus at most
               $\lvert\lambda_2\rvert$, there are $C,K$ with
@@ -54,7 +55,8 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     \end{enumerate}
     For distinct blocks $A_j$, $A_{j'}$ of a basis of normal tensors the spectral
     radius $\tau_{jj'}$ of $\E_{jj'}=\E_{A_jA_{j'}}$ is below one, and the source
-    writes $\xi_{jj'}=-1/\ln\tau_{jj'}$ \cite[eq.~(S11)]{Malz2024Preparation}.
+    writes $\xi_{jj'}=-1/\ln\tau_{\max}$ with $\tau_{\max}=\tau_{jj'}$
+    \cite[eqs.~(S14)--(S15)]{Malz2024Preparation}.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -138,8 +140,9 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 
 \begin{lemma}[Overlaps for overlapping blocks]
     \label{lem:ldp_overlapping_overlaps}
-    \lean{MPSTensor.sum_star_tensorPower_mulVec_mul,
-        MPSTensor.sum_norm_sq_tensorPower_mulVec_le,
+    \lean{Matrix.conjTranspose_tensorPower,
+        Matrix.sum_star_tensorPower_mulVec_mul,
+        Matrix.sum_norm_sq_tensorPower_mulVec_le,
         MPSTensor.embeddedBlockState, MPSTensor.embedPair_fixedPointPair,
         MPSTensor.sum_star_nonNormalApproxVector_mul_mpv,
         MPSTensor.mixedMapLM_blockSumPosLimit_apply,
@@ -151,6 +154,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal}
     \begin{enumerate}
         \item For a matrix $W$ and vectors $\psi,\varphi$ on $M$ sites,
+              $(W^{\otimes M})^\dagger=(W^\dagger)^{\otimes M}$,
               $\braket{W^{\otimes M}\psi}{W^{\otimes M}\varphi}
                   =\braket{\psi}{(W^\dagger W)^{\otimes M}\varphi}$; if $W^\dagger W$ is
               idempotent, then $\lVert W^{\otimes M}\psi\rVert\leq\lVert\psi\rVert$.
@@ -225,8 +229,8 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     definite fixed points $\rho_j$ of trace one, each placed on its own bond
     coordinates. Let $\lambda_2\in\C$ bound the moduli of the eigenvalues other than one
     of every transfer map $\E_{A_j}$ and the moduli of all eigenvalues of the mixed
-    transfer maps $\E_{jj'}$, $j\neq j'$, so that its correlation length $\xi$ bounds
-    every $\xi_j$ and every $\xi_{jj'}$, and let $0<\gamma<1/2$. Form the
+    transfer maps $\E_{jj'}$, $j\neq j'$, so that, when $\lvert\lambda_2\rvert<1$, its
+    correlation length $\xi$ bounds every $\xi_j$ and every $\xi_{jj'}$, and let $0<\gamma<1/2$. Form the
     approximating state $\widetilde\phi_N$ of
     Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of the $\rho_j$ on
     the bond coordinates of their blocks and $\beta_j=1$. There are constants $C,C'>0$

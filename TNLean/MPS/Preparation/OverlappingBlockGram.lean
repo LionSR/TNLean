@@ -36,6 +36,11 @@ Lipschitz bound of the square root at a strictly positive point
 on the blocks of smaller weight. Documented in
 `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
+**Local fix (positive part of overlapping blocks):** the block form (S5) of the positive part,
+false for finite `q` when the blocks overlap, is replaced by the estimate
+`‖P - P_∞‖ ≤ K e^{-γ q/ξ}`, whose rate includes the correlation lengths of the mixed transfer
+maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+
 ## Main declarations
 
 * `MPSTensor.exists_norm_mixedMapLM_pow_apply_le` — the rate `e^{-γ/ξ}` for the powers of a
@@ -84,20 +89,6 @@ theorem mixedMapLM_blockTensor_apply {D₁ D₂ : ℕ} (X : MPSTensor d D₁) (Y
         Kraus.evalWord X (List.ofFn (e i)) * Z * (Kraus.evalWord Y (List.ofFn (e i)))ᴴ)
       (g := fun σ => Kraus.evalWord X (List.ofFn σ) * Z * (Kraus.evalWord Y (List.ofFn σ))ᴴ)
       (by intro i; rfl))
-
-/-- The mixed Gram matrix `Xᴴ Y` of the physical matrices of two tensors is a rearrangement of
-their mixed transfer map: `(Xᴴ Y)_{(α,β),(α',β')} = E_{YX}(|β'⟩⟨β|)_{α' α}`. -/
-theorem conjTranspose_physicalMatrix_mul_physicalMatrix_apply {n D₁ D₂ : ℕ}
-    (X : MPSTensor n D₁) (Y : MPSTensor n D₂) (a : Fin D₁ × Fin D₁) (b : Fin D₂ × Fin D₂) :
-    ((physicalMatrix X)ᴴ * physicalMatrix Y) a b =
-      Kraus.mixedMapLM Y X (Matrix.single b.2 a.2 1) b.1 a.1 := by
-  rw [Kraus.mixedMapLM_apply, Matrix.sum_apply, Matrix.mul_apply]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Matrix.mul_apply, Finset.sum_eq_single a.2]
-  · simp [physicalMatrix, Matrix.mul_apply, Matrix.single_apply, mul_comm]
-  · intro y _ hy
-    simp [Matrix.mul_apply, Ne.symm hy]
-  · simp
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Decay of a mixed transfer map.** If every eigenvalue of the mixed transfer map

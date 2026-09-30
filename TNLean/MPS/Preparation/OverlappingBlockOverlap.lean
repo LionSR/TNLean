@@ -13,15 +13,15 @@ This file collects the ingredients of the approximation error of arXiv:2307.0169
 Supplemental Material, Lemma 1'(ii), for a direct sum `Aⁱ = ⊕ⱼ A_jⁱ` of normal blocks with unit
 weights whose `q`-site states need not be orthogonal. The approximating state of eq. (S7) is
 `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` with `αⱼ = b^{-1/2}`; after `V^{⊗M}` its overlap with the target is a
-combination of the overlaps `zⱼ = ⟨φ_M(P̃_{j,∞})|φ_M(P)⟩` of the positive part `P` of the whole
-blocked tensor with the fixed-point tensors `P̃_{j,∞}` of the blocks placed in the full bond
+combination of the overlaps `zⱼ = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` of the positive part `P` of the whole
+blocked tensor with the fixed-point tensors `P'_{j,∞}` of the blocks placed in the full bond
 space. The results are:
 
 * the partial isometry `V^{⊗M}` does not increase norms
   (`sum_norm_sq_tensorPower_mulVec_le`), so the normalization of the approximating state can only
   increase the overlap;
-* the mixed transfer matrix of the limit `P_∞` against `P̃_{j,∞}` is the rank-one idempotent
-  `ρ ↦ Tr(Π_j ρ) σ̃_j` (`mixedMapLM_blockSumPosLimit_apply`), so `zⱼ` is `1` up to the telescoping
+* the mixed transfer matrix of the limit `P_∞` against `P'_{j,∞}` is the rank-one idempotent
+  `ρ ↦ Tr(Π_j ρ) σ'_j` (`mixedMapLM_blockSumPosLimit_apply`), so `zⱼ` is `1` up to the telescoping
   error of `‖P - P_∞‖` (`exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le`);
 * the norm of the target is `b` up to the self-overlaps of the blocks and the overlaps of
   distinct blocks, which decay at the rate of the mixed transfer maps
@@ -30,17 +30,21 @@ space. The results are:
 **Scope restriction (multiplicity one, unit weights):** every block occurs once, with weight
 `μⱼ = 1`. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
+**Local fix (rate of the overlapping blocks):** the overlaps `zⱼ` and the norm of the target
+are estimated at the rate `e^{-γ/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`, which includes the
+correlation lengths of the mixed transfer maps, in place of the block form (S5) and the rate
+`e^{-γ/ξ_diag}` of the source. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+
 ## Main declarations
 
-* `MPSTensor.embeddedBlockState` — the fixed point `σ̃_j = E_j σ_j E_jᴴ` in the full bond space.
-* `MPSTensor.sum_star_tensorPower_mulVec_mul`, `MPSTensor.sum_norm_sq_tensorPower_mulVec_le` —
+* `MPSTensor.embeddedBlockState` — the fixed point `σ'_j = E_j σ_j E_jᴴ` in the full bond space.
+* `Matrix.sum_star_tensorPower_mulVec_mul`, `Matrix.sum_norm_sq_tensorPower_mulVec_le` —
   inner products and norms after a tensor power of a partial isometry.
 * `MPSTensor.embedPair_fixedPointPair` — embedded pairs are the pairs of the embedded fixed points.
 * `MPSTensor.mixedMapLM_blockSumPosLimit_apply`
 * `MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le`
 * `MPSTensor.exists_norm_mpvOverlap_le_of_mixedMapLM` — overlaps of distinct blocks decay.
 * `MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le`
-* `MPSTensor.exp_neg_div_correlationLength_le_one`
 
 ## References
 
@@ -61,57 +65,6 @@ attribute [local instance 1001]
   ContinuousLinearMap.toNormedSpace
   ContinuousLinearMap.toNormedRing
   ContinuousLinearMap.toNormedAlgebra
-
-/-! ### Partial isometries on many sites -/
-
-/-- The conjugate transpose of a tensor power is the tensor power of the conjugate transpose:
-`(W^{⊗M})ᴴ = (Wᴴ)^{⊗M}`. -/
-private theorem conjTranspose_tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ ℂ) :
-    (tensorPower M W)ᴴ = tensorPower M Wᴴ := by
-  ext s t
-  simp [tensorPower, conjTranspose_apply, star_prod]
-
-/-- `⟨W^{⊗M} ψ, W^{⊗M} φ⟩ = ⟨ψ, (Wᴴ W)^{⊗M} φ⟩`. -/
-theorem sum_star_tensorPower_mulVec_mul {n κ : Type*} [Fintype n] [Fintype κ]
-    (W : Matrix n κ ℂ) {M : ℕ} (ψ φ : (Fin M → κ) → ℂ) :
-    ∑ s, star ((tensorPower M W *ᵥ ψ) s) * (tensorPower M W *ᵥ φ) s =
-      ∑ τ, star (ψ τ) * (tensorPower M (Wᴴ * W) *ᵥ φ) τ := by
-  change star (tensorPower M W *ᵥ ψ) ⬝ᵥ (tensorPower M W *ᵥ φ) =
-    star ψ ⬝ᵥ (tensorPower M (Wᴴ * W) *ᵥ φ)
-  rw [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, conjTranspose_tensorPower,
-    tensorPower_mul]
-
-/-- **Partial isometries do not increase norms.** If `Wᴴ W` is a projector, then
-`‖W^{⊗M} ψ‖ ≤ ‖ψ‖`. For the partial isometry `V` of the polar decomposition, `Vᴴ V = Π` is the
-projector onto the range of `P` (arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and
-extension to non-normal tensors"). -/
-theorem sum_norm_sq_tensorPower_mulVec_le {n κ : Type*} [Fintype n] [Fintype κ]
-    {W : Matrix n κ ℂ} (hidem : (Wᴴ * W) * (Wᴴ * W) = Wᴴ * W) {M : ℕ}
-    (ψ : (Fin M → κ) → ℂ) :
-    ∑ s, ‖(tensorPower M W *ᵥ ψ) s‖ ^ 2 ≤ ∑ τ, ‖ψ τ‖ ^ 2 := by
-  classical
-  set Pr := tensorPower M (Wᴴ * W)
-  have hH : Prᴴ = Pr := by
-    rw [conjTranspose_tensorPower, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
-  have hI : Pr * Pr = Pr := by rw [tensorPower_mul, hidem]
-  have hpsd : (1 - Pr).PosSemidef := by
-    have h := Matrix.posSemidef_conjTranspose_mul_self (1 - Pr)
-    have e : (1 - Pr)ᴴ * (1 - Pr) = 1 - Pr := by
-      rw [Matrix.conjTranspose_sub, Matrix.conjTranspose_one, hH, Matrix.sub_mul,
-        Matrix.mul_sub, Matrix.mul_sub, Matrix.one_mul, Matrix.mul_one, Matrix.one_mul, hI]
-      abel
-    rwa [e] at h
-  have hnn := hpsd.dotProduct_mulVec_nonneg ψ
-  have h1 := ofReal_sum_norm_sq (tensorPower M W *ᵥ ψ)
-  have h2 := ofReal_sum_norm_sq ψ
-  rw [sum_star_tensorPower_mulVec_mul] at h1
-  have key : ((∑ τ, ‖ψ τ‖ ^ 2 - ∑ s, ‖(tensorPower M W *ᵥ ψ) s‖ ^ 2 : ℝ) : ℂ) =
-      star ψ ⬝ᵥ ((1 - Pr) *ᵥ ψ) := by
-    rw [Complex.ofReal_sub, h1, h2, sub_mulVec, one_mulVec, dotProduct_sub]
-    rfl
-  rw [← key] at hnn
-  have := Complex.zero_le_real.1 hnn
-  linarith
 
 /-! ### The fixed points of the blocks in the full bond space -/
 
@@ -170,7 +123,7 @@ private theorem cfc_sqrt_coordEmbedding_mul_mul {D' : ℕ} {ι : Fin D' → Fin 
         rw [conjTranspose_coordEmbedding_mul_self hι, Matrix.mul_one,
           CFC.sqrt_mul_sqrt_self σ hσ.nonneg]
 
-/-- The fixed point `σ̃ = E_ι σ E_ιᴴ` of a block, placed in the full bond space along `ι`. -/
+/-- The fixed point `σ' = E_ι σ E_ιᴴ` of a block, placed in the full bond space along `ι`. -/
 noncomputable def embeddedBlockState {D' : ℕ} (ι : Fin D' → Fin D)
     (σ : Matrix (Fin D') (Fin D') ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   coordEmbedding ι * σ * (coordEmbedding ι)ᴴ
@@ -260,7 +213,7 @@ variable (hι : ∀ j, Function.Injective (ι j))
   {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ}
 include hι hdisj
 
-/-- The embedded roots `r_j = E_j √σ_j E_jᴴ` multiply as `r_k r_j = δ_{kj} σ̃_j`. -/
+/-- The embedded roots `r_j = E_j √σ_j E_jᴴ` multiply as `r_k r_j = δ_{kj} σ'_j`. -/
 private theorem embeddedBlockState_sqrt_mul (hσ : ∀ j, (σ j).PosSemidef) (k j : Fin b) :
     embeddedBlockState (ι k) (CFC.sqrt (σ k)) * embeddedBlockState (ι j) (CFC.sqrt (σ j)) =
       if k = j then embeddedBlockState (ι j) (σ j) else 0 := by
@@ -285,7 +238,7 @@ private theorem embeddedBlockState_sqrt_mul (hσ : ∀ j, (σ j).PosSemidef) (k 
           simp
 
 omit hdisj in
-/-- `Tr(Π_j σ̃_j) = Tr σ_j`. -/
+/-- `Tr(Π_j σ'_j) = Tr σ_j`. -/
 private theorem trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState (j : Fin b) :
     (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ * embeddedBlockState (ι j) (σ j)).trace =
       (σ j).trace := by
@@ -298,8 +251,8 @@ private theorem trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState (j
     _ = _ := by rw [conjTranspose_coordEmbedding_mul_self (hι j), Matrix.mul_one]
 
 /-- **The mixed transfer map of the limit.** The mixed transfer map of the limit `P_∞` of the
-positive parts against the fixed-point tensor `P̃_{j,∞}` of block `j`, placed in the full bond
-space, is the rank-one map `ρ ↦ Tr(Π_j ρ) σ̃_j`, where `Π_j = E_j E_jᴴ` and `σ̃_j = E_j σ_j E_jᴴ`
+positive parts against the fixed-point tensor `P'_{j,∞}` of block `j`, placed in the full bond
+space, is the rank-one map `ρ ↦ Tr(Π_j ρ) σ'_j`, where `Π_j = E_j E_jᴴ` and `σ'_j = E_j σ_j E_jᴴ`
 (compare `E_{P_∞} = |ρ⟩⟨1|` in arXiv:2307.01696, eq. `eq:B_TM`). -/
 theorem mixedMapLM_blockSumPosLimit_apply (hσ : ∀ j, (σ j).PosSemidef) (j : Fin b)
     (ρ : Matrix (Fin D) (Fin D) ℂ) :
@@ -379,11 +332,11 @@ variable {Aj : (j : Fin b) → MPSTensor d (Dj j)}
 open scoped Matrix.Norms.L2Operator in
 /-- **The overlap of one block.** In the setting of
 `exists_norm_polarPos_blockTensor_blockSum_sub_le`, with `0 < γ < 1`, the overlap
-`zⱼ = ⟨φ_M(P̃_{j,∞})|φ_M(P)⟩` of the positive part `P` of the `q`-site blocked direct sum with the
+`zⱼ = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` of the positive part `P` of the `q`-site blocked direct sum with the
 fixed-point tensor of block `j` placed in the full bond space satisfies
 `|zⱼ - 1| ≤ C u e^{C u}` with `u = M e^{-γ q/ξ}`, for `q ≥ 1` and `M ≥ 1`.
 
-The mixed transfer matrix of `P_∞` against `P̃_{j,∞}` is idempotent with trace one
+The mixed transfer matrix of `P_∞` against `P'_{j,∞}` is idempotent with trace one
 (`mixedMapLM_blockSumPosLimit_apply`), and the telescoping estimate of arXiv:2103.13367,
 Supplemental Material, eqs. `final_eq` to `finished`, applies as in the normal case
 (`exists_norm_trace_prod_range_transferMatrix_sub_one_le`). -/
@@ -467,7 +420,7 @@ open scoped Matrix.Norms.L2Operator in
 /-- **Decay of the overlaps of distinct blocks.** In the setting of
 `exists_norm_mixedMapLM_pow_apply_le`, `|⟨φ_N(Y)|φ_N(X)⟩| ≤ K e^{-γ N/ξ}`.
 
-arXiv:2307.01696, Supplemental Material, eq. (S11) (`eq:app_decay_mixed`):
+arXiv:2307.01696, Supplemental Material, eq. (S14) (`eq:app_decay_mixed`):
 `|⟨v_j|v_{j'}⟩| = O(e^{-N/ξ_{jj'}})`. -/
 theorem exists_norm_mpvOverlap_le_of_mixedMapLM {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
     (X : MPSTensor d D₁) (Y : MPSTensor d D₂) {lam₂ : ℂ} (hl : ‖lam₂‖ < 1)
@@ -489,12 +442,6 @@ theorem exists_norm_mpvOverlap_le_of_mixedMapLM {D₁ D₂ : ℕ} [NeZero D₁] 
       ≤ K₂ * (C * x ^ N * ‖(Matrix.single p r 1 : Matrix (Fin D₁) (Fin D₂) ℂ)‖) :=
         (hent _ _ _).trans (by gcongr; exact hpow N _)
     _ = K₂ * C * ‖(Matrix.single p r 1 : Matrix (Fin D₁) (Fin D₂) ℂ)‖ * x ^ N := by ring
-
-/-- `e^{-γ/ξ} ≤ 1` for `|λ₂| ≤ 1` and `γ ≥ 0`. -/
-theorem exp_neg_div_correlationLength_le_one {γ : ℝ} (hγ0 : 0 ≤ γ) {lam₂ : ℂ}
-    (hl : ‖lam₂‖ ≤ 1) : Real.exp (-γ / correlationLength lam₂) ≤ 1 := by
-  rw [neg_div_correlationLength, Real.exp_le_one_iff]
-  exact mul_nonpos_of_nonneg_of_nonpos hγ0 (Real.log_nonpos (norm_nonneg _) hl)
 
 /-- **The norm of the target.** In the setting of `exists_norm_gram_blockTensor_blockSum_sub_le`,
 with `0 < γ < 1/2`, the periodic state of the direct sum with unit weights on `N ≥ 1` sites

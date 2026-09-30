@@ -29,7 +29,7 @@ state with the target is `(u^M + v^M) / (1 + s^M)^{1/2}` for all `q, M ≥ 1`
 `s²/16 = (9/25)^q/16` (`le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`), and
 for every `M ≥ 1` it is at most `M s²`
 (`one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le`): the construction converges,
-at a rate governed by the overlap of the blocks.
+at the rate `M s²` set by the square of the overlap of the blocks.
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
 canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with both weights
@@ -42,8 +42,8 @@ subleading eigenvalue that defines `ξ_diag` holds for every `λ₂`, and `e^{-�
 any number in `(0, 1)`. When it is below `9/25`, the printed rate decays faster than the error:
 along `q = M`, `N = q²`, which satisfies `q = o(N)`, the error exceeds
 `C (N/q) e^{-γ q/ξ_diag} exp(C (N/q) e^{-γ q/ξ_diag})` for every `C`
-(`not_approximationError_le_overlappingBlockTensor`). The error is governed by the overlap
-`(3/5)^q` of the blocks, which the source's estimate relegates to the term
+(`not_approximationError_le_overlappingBlockTensor`). The error is set by the overlap
+`s = (3/5)^q` of the blocks, through `s²`, which the source's estimate relegates to the term
 `O(e^{-N/ξ_offdiag})` that `q = o(N)` removes.
 
 **False source (Lemma 1'(ii), overlapping blocks):** the block form of eq. (S5) fails when the
