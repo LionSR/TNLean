@@ -57,9 +57,12 @@ with the associator, normality, and anomaly-class limits explicit. A uniform
 opening property list now also covers the elementary GHZ, repeated-block and
 Jordan examples, the anomalous Z3 family, and the Z2-by-Z2 family, with the
 dressed-family detector restriction explicit. Fibonacci, its anomaly continuation, Ising, and the Bell-bond constructions
-now also link their property results. The remaining editorial check is the
-ordered presentation of the source tensor, boundary, and properties in
-Fibonacci and Ising, where the arithmetic conventions still precede the
-explicit tensors. Keep #8062 open until that pass is complete. Missing mathematics must
+now also link their property results. The Fibonacci and Ising source tensor definitions now precede the
+arithmetic conventions; quantum dimensions are stated at first use, followed
+by the source-to-block relation, trace boundary, and property links.
+A four-page XeLaTeX excerpt of the reordered Fibonacci and Ising openings
+was visually checked: no clipping or overfull boxes. The excerpt does not
+resolve full-document cross-references. Full rendering and a final review
+of the four opening requirements remain before #8062 can close. Keep #8062 open until that pass is complete. Missing mathematics must
 remain attached to the issues above, not acquire new `leanok` tags through an
 editorial change.
