@@ -34,6 +34,24 @@
     $\tau \in \{0,\ldots,d^p-1\}^N$.
 \end{definition}
 
+\begin{theorem}[Coordinates for a cyclic step]
+    \label{thm:periodic_step_coordinates}
+    \lean{Fin.stepOrbit_bijective, Fin.stepOrbitEquiv}
+    \leanok
+    Let $m>0$, $p\geq0$, and $r=\gcd(m,p)$. Every residue $u$ modulo $m$
+    has a unique expression $u=\alpha+pk\pmod m$, with
+    $0\leq\alpha<r$ and $0\leq k<m/r$.
+    This is \cite[Lemma~\emph{unique-dec}]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    If two such expressions agree modulo $m$, reduction modulo $r$
+    identifies their representatives $\alpha$. Cancelling that common
+    representative gives $pk=pk'\pmod m$, hence $k=k'\pmod{m/r}$.
+    Their bounds imply $k=k'$. There are $r(m/r)=m$ pairs of coordinates,
+    so this injective map to the $m$ residues is also surjective.
+\end{proof}
+
 \begin{definition}[Sector rephasing]
     \label{def:periodic_sector_rephasing}
     \lean{MPSTensor.sectorPhaseTensor}
