@@ -33,7 +33,7 @@ $(\mathbb{C}^d)^{\otimes2}$, cannot be an isometry at all.
 The formal statements\footnote{Formal declarations:
     \leanid{MPSPreparation.approximatingMPVState_eq_state_treeMERA},
     \leanid{MPSPreparation.exists_state_treeMERA_approximationError_le}, and
-    \leanid{MPSPreparation.exists_state_treeMERA_approximationError_le_of_lt}
+    \leanid{MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
     in \doclink{TNLean/MPS/Preparation/TreeMERA}.}
 assume two things.
 \begin{enumerate}
@@ -48,10 +48,15 @@ assume two things.
 \end{enumerate}
 Under these assumptions the approximating state of eq.~(10) is exactly the state
 of the network with $k+1$ isometry layers, and its error against $\ket{\phi_N}$
-is at most $\varepsilon$ once $2^{k+1}\ge\xi\log(CN/\varepsilon)$, with $\xi$
-the correlation length of $A$ and $C$ depending only on $A$. The least such $k$
-satisfies $k<\log_2(\xi\log(CN/\varepsilon))$, which is the source's
-$O(\log\log(N/\varepsilon))$ count.
+is at most $\varepsilon$ once $2^{k+1}\ge\xi\log(CN/\varepsilon)$, with
+$\xi=-1/\log t$ for a bound $0<t<1$ on the moduli of the subleading
+eigenvalues of the transfer map and $C$ depending on $A$ and $t$. For every
+number $M$ of blocks such a $k$ exists, and the least one satisfies
+$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$, which is the source's
+$O(\log\log(N/\varepsilon))$ count along the chain lengths $N=M2^{k+1}$ so
+obtained. For a fixed chain length and accuracy the count is not proved: for
+$N=2p$ with $p$ odd only $k=0$ is available, and the threshold fails once
+$\varepsilon$ is small; this is the second restriction below.
 
 \section{Elimination}
 \begin{enumerate}

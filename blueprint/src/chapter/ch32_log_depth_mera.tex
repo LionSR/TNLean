@@ -21,8 +21,8 @@ in~\cite{gap:mswc24_tree_mera_scope}.
         MPSPreparation.BinaryMERA.state,
         MPSPreparation.BinaryMERA.state_apply}
     \leanok
-    \uses{def:ldp_approximating_state, thm:ldp_tree_factorization}
-    Let $n,D\ge1$ and $k\ge0$. A \emph{binary finite-range network} with $k+1$
+    \uses{thm:ldp_tree_factorization}
+    Let $k\ge0$. A \emph{binary finite-range network} with $k+1$
     isometry layers consists of a unitary $u$ on $\C^D\otimes\C^D$, isometries
     $W_0,\dots,W_{k-1}\colon\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ and an isometry
     $W\colon\C^{D^2}\to\C^n\otimes\C^n$. Its tree map is
@@ -35,8 +35,8 @@ in~\cite{gap:mswc24_tree_mera_scope}.
     where the Kronecker powers act on the regrouping of the $2^{k+1}$ sites
     into neighbouring pairs, then pairs of pairs, and so on, as in
     (\ref{eq:ldp_tree_factorization}). On $M$ top sites
-    $\C^{D^2}=L_i\otimes R_i$, the state of the network on $N=M2^{k+1}$ sites
-    is
+    $\C^{D^2}=L_i\otimes R_i$, and for $D\ge1$, the state of the network on
+    $N=M2^{k+1}$ sites is
     \begin{align}
         \mathcal W^{\otimes M}\bigotimes_{i=1}^{M}
         u_{R_iL_{i+1}}\ket{0}_{R_i}\ket{0}_{L_{i+1}},
@@ -109,7 +109,8 @@ in~\cite{gap:mswc24_tree_mera_scope}.
         MPSPreparation.exists_disentangler_fixedPointPair}
     \leanok
     \uses{def:ldp_binary_mera, lem:ldp_tree_layers_isometries,
-        def:prep_pair_product_state, thm:prep_pair_norm}
+        def:prep_pair_product_state, thm:prep_pair_norm,
+        lem:ldp_unitary_implementing_isometry}
     Let the two-site blocked tensor of $A$ be injective and let $u$ be a unitary
     on $\C^D\otimes\C^D$. The \emph{tree network} of $A$ with $k+1$ isometry
     layers is the binary finite-range network with isometries
@@ -144,10 +145,11 @@ in~\cite{gap:mswc24_tree_mera_scope}.
 \begin{theorem}[Normal states are networks with $O(\log\log(N/\varepsilon))$ layers]
     \label{thm:ldp_tree_mera_error}
     \lean{MPSPreparation.exists_state_treeMERA_approximationError_le,
-        MPSPreparation.exists_state_treeMERA_approximationError_le_of_lt}
+        MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
     \leanok
     \uses{thm:ldp_approximating_state_tree_mera,
-        thm:ldp_approximation_error_normal, def:correlation_length}
+        thm:ldp_approximation_error_normal, thm:ldp_log_threshold_error,
+        def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let $0<t<1$
     bound the moduli of the eigenvalues of $\E_A$ other than $1$, with
     $\xi=-1/\log t$, and let the two-site blocked tensor of $A$ be injective.
@@ -159,23 +161,40 @@ in~\cite{gap:mswc24_tree_mera_scope}.
         \label{eq:ldp_tree_mera_threshold}
     \end{align}
     the state $\ket\psi$ of the tree network of $A$ with $k+1$ isometry layers
-    satisfies $\varepsilon(\psi,\phi_N)\le\varepsilon$. If moreover
-    $2^k<x$, that is, $k$ is the least exponent with
-    (\ref{eq:ldp_tree_mera_threshold}), then $k<\log_2x$, so the network has
-    fewer than $\log_2(\xi\log(CN/\varepsilon))+1$ isometry layers. This is
+    satisfies $\varepsilon(\psi,\phi_N)\le\varepsilon$. Moreover, for every
+    such $u$, every $\varepsilon>0$ and every $M\ge1$ there is $k\ge0$
+    satisfying (\ref{eq:ldp_tree_mera_threshold}) with
+    $k\le\max(0,\log_2x)$, so the network has at most
+    $\max(0,\log_2(\xi\log(CN/\varepsilon)))+1$ isometry layers. This is
     the containment of normal translation-invariant matrix product states in
     finite-range networks with $O(\log\log N)$ layers, within the
     approximation error, of~\cite[paragraph ``Connection to
-        MERA'']{Malz2024Preparation}, for $N=M2^{k+1}$ and tensors whose
-    two-site blocked tensor is injective~\cite{gap:mswc24_tree_mera_scope}.
+        MERA'']{Malz2024Preparation}, for the chain lengths $N=M2^{k+1}$ with
+    $k$ as above and tensors whose two-site blocked tensor is
+    injective~\cite{gap:mswc24_tree_mera_scope}. It does not cover every
+    fixed $N$ and $\varepsilon$: for $N=2p$ with $p$ odd only $k=0$ is
+    available, and (\ref{eq:ldp_tree_mera_threshold}) fails for small
+    $\varepsilon$.
 \end{theorem}
 \begin{proof}
     \leanok
     By Theorem~\ref{thm:ldp_approximating_state_tree_mera} the network state
     is the approximating state, and Theorem~\ref{thm:ldp_approximation_error_normal}
     at $\gamma=1/2$ gives $C>0$ with
-    $\varepsilon(\widetilde\phi_N,\phi_N)\le CMe^{-q/\xi}$. From
+    $\varepsilon(\widetilde\phi_N,\phi_N)\le CMe^{-q/\xi}$. This rate is
+    the strengthening of the first bound of Lemma~1$'$
+    of~\cite{Malz2024Preparation} proved in
+    Theorem~\ref{thm:ldp_approximation_error_normal}; the bound as printed
+    in the source, for $0<\gamma<1/2$ with rate $e^{-\gamma q/\xi}$, gives the
+    threshold $(\xi/\gamma)\log(CN/\varepsilon)$ instead, with the same
+    count of layers up to a constant. From
     (\ref{eq:ldp_tree_mera_threshold}) and $M\le N$,
-    $\log(CM/\varepsilon)\le q/\xi$, so $CMe^{-q/\xi}\le\varepsilon$. The
-    bound on $k$ is $2^k<x$ read through $\log_2$.
+    $\log C+\log M-\log\varepsilon\le q/\xi$, so $CMe^{-q/\xi}\le\varepsilon$
+    by Lemma~\ref{thm:ldp_log_threshold_error}. For the count, write
+    $x_k=\xi\log(CM/\varepsilon)+(k+1)\xi\log2$ for the left side of
+    (\ref{eq:ldp_tree_mera_threshold}). It grows linearly in $k$ while
+    $2^{k+1}$ grows exponentially, so some $k$ satisfies
+    (\ref{eq:ldp_tree_mera_threshold}); let $k$ be the least one. If
+    $k\ge1$, the threshold fails at $k-1$, so
+    $2^k<x_{k-1}\le x_k$ and $k<\log_2x_k$.
 \end{proof}

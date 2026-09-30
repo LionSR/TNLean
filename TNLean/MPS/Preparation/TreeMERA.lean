@@ -44,16 +44,24 @@ class is therefore a subclass of the finite-range MERA with `k + 2` layers.
   whose disentanglers prepare the pairs `|ω⟩` of the fixed-point state.
 * `MPSPreparation.approximatingMPVState_eq_state_treeMERA` — the approximating state
   `|φ'_N⟩ = V^{⊗M} |Ω⟩` of eq. (10) for `q = 2^{k+1}` is the state of `treeMERA` (exact).
-* `MPSPreparation.exists_state_treeMERA_approximationError_le` — with Lemma 1'(i), the error of
-  the MERA state against `|φ_N⟩` is at most `ε` once `2^{k+1} ≥ ξ log(C N/ε)`;
-  `MPSPreparation.exists_state_treeMERA_approximationError_le_of_lt` adds that the least such
-  `k` satisfies `k < log₂(ξ log(C N/ε))`, so `k + 1 = O(log log(N/ε))` layers suffice.
+* `MPSPreparation.exists_state_treeMERA_approximationError_le` — with the approximation-error
+  bound `exists_approximationError_le_mul` at `γ = 1/2` (the rate `e^{-2γq/ξ}` of that theorem,
+  which strengthens Lemma 1'(i) of the source, stated there for `0 < γ < 1/2` with rate
+  `e^{-γq/ξ}`), the error of the MERA state against `|φ_N⟩` is at most `ε` once
+  `2^{k+1} ≥ ξ log(C N/ε)`;
+  `MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb` shows that for every
+  `M` such a `k` exists with `k ≤ max 0 (log₂(ξ log(C N/ε)))`, so
+  `k + 1 = O(log log(N/ε))` layers suffice.
 
-**Scope restriction (two-site injectivity and chain length):** the theorems assume that the
-two-site blocked tensor is injective, so that every layer `V⁽ʲ⁾` is an isometry, as in the
-source, whose eq. (16) starts from a blocked tensor and calls the layers isometries; a normal
+**Scope restriction (two-site injectivity and chain length):** the theorems
+`approximatingMPVState_eq_state_treeMERA`, `exists_state_treeMERA_approximationError_le` and
+`exists_state_treeMERA_approximationError_le_and_le_logb` (and the definition `treeMERA`) assume
+that the two-site blocked tensor is injective, so that every layer `V⁽ʲ⁾` is an isometry, as in
+the source, whose eq. (16) starts from a blocked tensor and calls the layers isometries; a normal
 tensor satisfies this after blocking a number of sites independent of `N`. The chain length is
-`N = M 2^{k+1}`. Documented in `docs/paper-gaps/mswc24_tree_mera_scope.tex`.
+`N = M 2^{k+1}`: the layer count holds for the chain lengths `M 2^{k+1}` with `k` given by the
+threshold, not for every fixed `N` and `ε` (for `N = 2p` with `p` odd only `k = 0` is
+available). Documented in `docs/paper-gaps/mswc24_tree_mera_scope.tex`.
 
 ## References
 
@@ -322,10 +330,7 @@ theorem exists_disentangler_fixedPointPair [NeZero D] {σ : Matrix (Fin D) (Fin 
 MERA", with eqs. (10) and (16)). Let the two-site blocked tensor of `A` be injective, let
 `σ ≥ 0` with `Tr σ = 1`, and let `u` be a unitary with `u |0⟩|0⟩ = |ω⟩`. For block length
 `q = 2^{k+1}` and `M ≥ 1` blocks, the approximating state `|φ'_N⟩ = V^{⊗M} |Ω⟩` of eq. (10) is
-exactly the state of the tree-RG MERA with `k + 1` isometry layers.
-
-**Scope restriction (two-site injectivity and chain length):** see the module docstring and
-`docs/paper-gaps/mswc24_tree_mera_scope.tex`. -/
+exactly the state of the tree-RG MERA with `k + 1` isometry layers. -/
 theorem approximatingMPVState_eq_state_treeMERA [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsInjective (blockTensor A 2)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (k M : ℕ) [NeZero M]
@@ -345,7 +350,7 @@ theorem approximatingMPVState_eq_state_treeMERA [NeZero D] (A : MPSTensor d D)
     mpv_approximatingTensor]
 
 /-- **Normal MPS are finite-range MERA with `O(log log(N/ε))` layers, within `ε`**
-(arXiv:2307.01696, paragraph "Connection to MERA", with Lemma 1'(i)). Let `A` be normal, in the
+(arXiv:2307.01696, paragraph "Connection to MERA"). Let `A` be normal, in the
 gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`, `Tr σ = 1` of eq. (5), let `0 < t < 1` bound the
 moduli of the eigenvalues of `E_A` other than `1`, with `ξ = -1/log t`, and let the two-site
 blocked tensor of `A` be injective. Then there is `C > 0` such that for every unitary `u` with
@@ -353,11 +358,10 @@ blocked tensor of `A` be injective. Then there is `C > 0` such that for every un
 `ξ log(C N/ε) ≤ 2^{k+1}`, `N = M 2^{k+1}`, the state of the tree-RG MERA with `k + 1` isometry
 layers has error `1 - |⟨ψ|φ_N⟩| ≤ ε` against the normalized state `|φ_N⟩` of `A`.
 
-The error bound is Lemma 1'(i) (`exists_approximationError_le_mul`) at rate `e^{-q/ξ}`, and the
-MERA state is the approximating state (`approximatingMPVState_eq_state_treeMERA`).
-
-**Scope restriction (two-site injectivity and chain length):** see the module docstring and
-`docs/paper-gaps/mswc24_tree_mera_scope.tex`. -/
+The error bound is `exists_approximationError_le_mul` at `γ = 1/2`, with rate `e^{-q/ξ}`; that
+theorem strengthens Lemma 1'(i) of the source, which is stated for `0 < γ < 1/2` with rate
+`e^{-γq/ξ}` and would give the threshold `(ξ/γ) log(C N/ε)` instead. The MERA state is the
+approximating state (`approximatingMPVState_eq_state_treeMERA`). -/
 theorem exists_state_treeMERA_approximationError_le [NeZero D] (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) (h2 : Kraus.IsInjective (blockTensor A 2))
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
@@ -386,50 +390,83 @@ theorem exists_state_treeMERA_approximationError_le [NeZero D] (A : MPSTensor d 
     push_cast
     ring_nf
   rw [hexp]
-  -- `K M / ε ≤ K N / ε ≤ exp(q/ξ)`.
-  have hlog : Real.log (K * M / ε) ≤ (2 : ℝ) ^ (k + 1) / ξ := by
-    rw [le_div_iff₀ hξ]
-    refine le_trans ?_ ((mul_comm _ _).trans_le hk)
-    refine mul_le_mul_of_nonneg_right (Real.log_le_log (by positivity) ?_) hξ.le
-    gcongr
-    exact le_mul_of_one_le_right (by positivity) hq1
-  have hKM : K * M / ε ≤ Real.exp ((2 : ℝ) ^ (k + 1) / ξ) := by
-    rw [← Real.exp_log (show 0 < K * M / ε by positivity)]
-    exact Real.exp_le_exp.2 hlog
-  calc K * (M * Real.exp (-((2 : ℝ) ^ (k + 1) / ξ)))
-      = K * M / ε * Real.exp (-((2 : ℝ) ^ (k + 1) / ξ)) * ε := by
-        field_simp
-    _ ≤ Real.exp ((2 : ℝ) ^ (k + 1) / ξ) * Real.exp (-((2 : ℝ) ^ (k + 1) / ξ)) * ε := by
-        gcongr
-    _ = ε := by rw [← Real.exp_add, add_neg_cancel, Real.exp_zero, one_mul]
+  -- `log K + log M - log ε = log(K M/ε) ≤ log(K N/ε) ≤ q/ξ`.
+  refine mul_mul_exp_neg_le_of_log_le hK (by positivity) hε ?_
+  rw [← Real.log_mul hK.ne' (by positivity), ← Real.log_div (by positivity) hε.ne',
+    le_div_iff₀ hξ]
+  refine le_trans ?_ ((mul_comm _ _).trans_le hk)
+  refine mul_le_mul_of_nonneg_right (Real.log_le_log (by positivity) ?_) hξ.le
+  gcongr
+  exact le_mul_of_one_le_right (by positivity) hq1
 
 /-- **The number of layers is `O(log log(N/ε))`** (arXiv:2307.01696, paragraph "Connection to
 MERA": "a finite-range MERA with $O(\log \log N)$ layers"). In the setting of
-`exists_state_treeMERA_approximationError_le`, write `x = ξ log(C N/ε)`, `N = M 2^{k+1}`. If
-`k` is the least exponent with `x ≤ 2^{k+1}`, that is, `2^k < x ≤ 2^{k+1}`, then the tree-RG
-MERA with `k + 1` isometry layers has error at most `ε`, and `k < log₂ x`, so the number of
-layers is less than `log₂(ξ log(C N/ε)) + 1`.
-
-**Scope restriction (two-site injectivity and chain length):** see the module docstring and
-`docs/paper-gaps/mswc24_tree_mera_scope.tex`. -/
-theorem exists_state_treeMERA_approximationError_le_of_lt [NeZero D] (A : MPSTensor d D)
+`exists_state_treeMERA_approximationError_le`, for every unitary `u` with `u |0⟩|0⟩ = |ω⟩`, every
+`ε > 0` and every `M ≥ 1` there is `k` such that, with `N = M 2^{k+1}` and
+`x = ξ log(C N/ε)`, the threshold `x ≤ 2^{k+1}` holds, the tree-RG MERA with `k + 1` isometry
+layers has error at most `ε`, and `k ≤ max 0 (log₂ x)`. The exponent `k` is the least one with the
+threshold: the left side of the threshold grows linearly in `k` and the right side exponentially,
+and if `k ≥ 1` the threshold fails at `k - 1`, so `2^k < x`. -/
+theorem exists_state_treeMERA_approximationError_le_and_le_logb [NeZero D] (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) (h2 : Kraus.IsInjective (blockTensor A 2))
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ t) :
     ∃ C : ℝ, 0 < C ∧ ∀ (u : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
       (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ), (∀ p, u p (0, 0) = fixedPointPair σ p) →
-      ∀ ε : ℝ, 0 < ε → ∀ (k M : ℕ) [NeZero M],
-        (2 : ℝ) ^ k < correlationLength (t : ℂ) * Real.log (C * (M * 2 ^ (k + 1)) / ε) →
-        correlationLength (t : ℂ) * Real.log (C * (M * 2 ^ (k + 1)) / ε) ≤ 2 ^ (k + 1) →
-          1 - ‖⟪(treeMERA A h2 k u hu).state M, normalizedMPVState A (M * 2 ^ (k + 1))⟫_ℂ‖ ≤
-              ε ∧
-            (k : ℝ) < Real.logb 2
-              (correlationLength (t : ℂ) * Real.log (C * (M * 2 ^ (k + 1)) / ε)) := by
+      ∀ ε : ℝ, 0 < ε → ∀ (M : ℕ) [NeZero M], ∃ k : ℕ,
+        correlationLength (t : ℂ) * Real.log (C * (M * 2 ^ (k + 1)) / ε) ≤ 2 ^ (k + 1) ∧
+        1 - ‖⟪(treeMERA A h2 k u hu).state M, normalizedMPVState A (M * 2 ^ (k + 1))⟫_ℂ‖ ≤ ε ∧
+        (k : ℝ) ≤ max 0 (Real.logb 2
+          (correlationLength (t : ℂ) * Real.log (C * (M * 2 ^ (k + 1)) / ε))) := by
+  classical
   obtain ⟨C, hC, h⟩ := exists_state_treeMERA_approximationError_le A hN hA h2 hσ htr hfix ht0 ht1
     hlam
-  refine ⟨C, hC, fun u hu hu0 ε hε k M _ hlt hle => ⟨h u hu hu0 ε hε k M hle, ?_⟩⟩
-  rw [Real.lt_logb_iff_rpow_lt one_lt_two ((pow_pos two_pos k).trans hlt), Real.rpow_natCast]
-  exact hlt
+  refine ⟨C, hC, fun u hu hu0 ε hε M _ => ?_⟩
+  have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
+  have hξ : 0 < correlationLength (t : ℂ) :=
+    correlationLength_pos (by rwa [hnorm]) (by rwa [hnorm])
+  set ξ := correlationLength (t : ℂ)
+  have hM0 : (0 : ℝ) < M := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne M)
+  set x : ℕ → ℝ := fun k => ξ * Real.log (C * (M * 2 ^ (k + 1)) / ε) with hx
+  -- `x k = ξ log(C M/ε) + ξ (k + 1) log 2` grows linearly and `2^{k+1}` exponentially.
+  have hxk : ∀ k : ℕ, x k = ξ * Real.log (C * M / ε) + ξ * Real.log 2 * ((k + 1 : ℕ) : ℝ) := by
+    intro k
+    simp only [hx]
+    rw [show C * (M * 2 ^ (k + 1)) / ε = C * M / ε * 2 ^ (k + 1) by ring,
+      Real.log_mul (by positivity) (by positivity), Real.log_pow]
+    push_cast
+    ring
+  have hex : ∃ k, x k ≤ 2 ^ (k + 1) := by
+    have hlim : Filter.Tendsto (fun m : ℕ => ξ * Real.log (C * M / ε) * ((m : ℝ) ^ 0 / 2 ^ m) +
+        ξ * Real.log 2 * ((m : ℝ) ^ 1 / 2 ^ m)) Filter.atTop (nhds 0) := by
+      simpa using ((tendsto_pow_const_div_const_pow_of_one_lt 0 one_lt_two).const_mul
+        (ξ * Real.log (C * M / ε))).add
+          ((tendsto_pow_const_div_const_pow_of_one_lt 1 one_lt_two).const_mul (ξ * Real.log 2))
+    obtain ⟨m, hm1, hm⟩ := ((Filter.eventually_ge_atTop 1).and
+      (hlim.eventually (gt_mem_nhds one_pos))).exists
+    obtain ⟨k, rfl⟩ : ∃ k, m = k + 1 := ⟨m - 1, by omega⟩
+    refine ⟨k, ?_⟩
+    rw [hxk]
+    have h2m : (0 : ℝ) < 2 ^ (k + 1) := by positivity
+    simp only [pow_zero, pow_one] at hm
+    rw [← mul_div_assoc, ← mul_div_assoc, ← add_div, div_lt_one h2m, mul_one] at hm
+    exact_mod_cast hm.le
+  refine ⟨Nat.find hex, Nat.find_spec hex, h u hu hu0 ε hε _ M (Nat.find_spec hex), ?_⟩
+  obtain h0 | ⟨j, hj⟩ : Nat.find hex = 0 ∨ ∃ j, Nat.find hex = j + 1 :=
+    (Nat.eq_zero_or_pos _).imp id fun hpos => ⟨Nat.find hex - 1, by omega⟩
+  · rw [h0, Nat.cast_zero]
+    exact le_max_left _ _
+  · rw [hj]
+    refine le_max_of_le_right ?_
+    have hfail : ¬ x j ≤ 2 ^ (j + 1) := Nat.find_min hex (by omega)
+    have hmono : x j ≤ x (j + 1) := by
+      rw [hxk, hxk]
+      have : 0 ≤ ξ * Real.log 2 := mul_nonneg hξ.le (Real.log_nonneg one_le_two)
+      gcongr
+      omega
+    have hlt : (2 : ℝ) ^ (j + 1) < x (j + 1) := (not_le.1 hfail).trans_le hmono
+    refine (Real.lt_logb_iff_rpow_lt one_lt_two ((pow_pos two_pos _).trans hlt)).2 ?_ |>.le
+    rwa [Real.rpow_natCast]
 
 end MPSPreparation
