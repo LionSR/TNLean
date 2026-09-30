@@ -713,6 +713,9 @@ For the group matrix product operators of arXiv:2203.12563:
   gauge in which the three-cocycle is one on the stabilizer, gives a
   $\mathbb Z_3$ example where it fails for a nonconstant trivializer, and
   states the torsor of solutions for action-tensor gauge classes.
+- `glm23_klein_printed_anomaly_scope.tex` records that for the printed one-qubit
+  $\mathbb Z_2\times\mathbb Z_2$ symmetry only the anomaly sign at $ab$ is
+  formalized; the values at $a$ and $b$ remain open.
 - `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
   $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
   $Z$ on the second qubit, form an exact normal representation whose
