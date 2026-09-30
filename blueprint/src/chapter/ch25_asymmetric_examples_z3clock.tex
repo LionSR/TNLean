@@ -49,6 +49,41 @@ periodic chain of $N>0$ qutrits the clock operators are
     $T_{2,f_V}$ with $f_V(l,i)=2li+2i$.
 \end{definition}
 
+The clock tensor has the shape of the group tensor of
+Definition~\ref{def:asymex_group_cocycle_tensor}: it copies the input $i$ to
+the outgoing bond, weights the pair formed by the incoming bond and the input
+by $\omega^{f(l,i)}$, and applies $X^g$ to the input to give the output.
+
+\begin{center}
+    % Formula: (T_{g,f}^{o,i})_{l,r}=\omega^{f(l,i)}\delta_{o,i+g}\delta_{r,i},
+    % Definition~\ref{def:asymex_z3clock_tensors}.
+    % Ink-to-index map: on the left, the upper leg is the output o, the lower
+    % leg the input i, the west leg the incoming bond l and the east leg the
+    % outgoing bond r. On the right, the two dots are copy tensors, whose legs
+    % all carry one label; the lower dot sends the input i to the outgoing bond
+    % r, the box \omega^f carries the weight \omega^{f(l,i)}, and the box X^g
+    % maps i to the output o=i+g.
+    % Contraction set: on the right, the three internal wires (X^g to the upper
+    % dot, \omega^f to the upper dot, and the vertical wire between the dots).
+    % Boundary signature: (virtual-west=1 | virtual-east=1 | physical-up=1 |
+    % physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[cols=1, bonds=none]
+        \tn[at=(1,1), skin=mpo, size=l,
+            ports={90:physical:$o$, 270:physical:$i$, 180:virtual:$l$, 0:virtual:$r$}]{T_{g,f}}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+        \tn[at=(1,2), name=X, skin=box, ports={90:physical:$o$, 270:physical}]{X^g}
+        \tn[at=(2,1), name=w, skin=box, ports={180:virtual:$l$, 0:physical}]{\omega^f}
+        \tn[at=(2,2), name=c, skin=dot, ports={90:physical, 270:physical, 180:physical}]{}
+        \tn[at=(3,2), name=d, skin=dot, ports={90:physical, 270:physical:$i$, 0:virtual:$r$}]{}
+        \tnwire{X.270}{c.90}
+        \tnwire{w.0}{c.180}
+        \tnwire{c.270}{d.90}
+    \end{tenkz}
+\end{center}
+
 Both tensors use the ordinary trace on rings of $N>0$ sites.
 Theorem~\ref{thm:asymex_z3clock_kernels} identifies their kernels and proves
 unitarity. The multiplication table retains its length-dependent phases
@@ -91,6 +126,43 @@ remains separate from these operator identities.
     periodic operator is the shift by $g$. A permutation matrix times a
     diagonal matrix of unit-modulus phases is unitary.
 \end{proof}
+
+The first relation of the next theorem, $U_N^2=\omega^NV_N$, reads as
+follows on a ring of $N$ sites.
+\begin{center}
+    % Formula: U_N^2=\omega^NV_N (Theorem~\ref{thm:asymex_z3clock_table}), as
+    % the entry (s,t) of both sides.
+    % Ink-to-index map: on the left, both rows are the clock tensor U, the
+    % upper row with output s_k and the lower row with input t_k, and the
+    % vertical wire at site k is the summed intermediate label; on the right,
+    % the single row is the clock tensor V with output s_k and input t_k.
+    % Contraction set: every vertical wire between the rows, every horizontal
+    % virtual bond of each row, and the periodic return bond of each ring.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides; three sites are drawn and the ellipsis
+    % stands for the others.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$s_0$, 270:physical, 180:virtual, 0:virtual}]{U}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$s_1$, 270:physical, 180:virtual, 0:virtual}]{U}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$s_{N-1}$, 270:physical, 180:virtual, 0:virtual}]{U}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$t_0$, 180:virtual, 0:virtual}]{U}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$t_1$, 180:virtual, 0:virtual}]{U}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$t_{N-1}$, 180:virtual, 0:virtual}]{U}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=\;\omega^N$ \quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$s_0$, 270:physical:$t_0$}]{V} &
+        \tn[skin=mpo, ports={90:physical:$s_1$, 270:physical:$t_1$}]{V} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$s_{N-1}$, 270:physical:$t_{N-1}$}]{V}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[Multiplication with length-dependent phases]
     \label{thm:asymex_z3clock_table}

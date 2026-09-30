@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Core.WordGrading
 import TNLean.MPS.ParentHamiltonian.Defs
 
 /-!
@@ -151,11 +152,8 @@ theorem mul_evalWord_of_mul_eq_smul (A : MPSTensor d D)
     (G : Matrix (Fin D) (Fin D) ℂ) (c : ℂ) (hG : ∀ i, G * A i = c • (A i * G)) :
     ∀ w : List (Fin d),
       G * Kraus.evalWord A w = c ^ w.length • (Kraus.evalWord A w * G)
-  | [] => by simp
-  | i :: w => by
-      rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, hG, Matrix.smul_mul, Matrix.mul_assoc,
-        mul_evalWord_of_mul_eq_smul A G c hG w, Matrix.mul_smul, smul_smul,
-        ← Matrix.mul_assoc, List.length_cons, pow_succ']
+  | w => by
+      simpa using mul_evalWord_of_mul_eq_smul_letter A G (fun _ => c) hG w
 
 /-- The configuration with a window replaced, rotated to start at the window, is
 the window followed by the outside sites in cyclic order starting from \(i+L\). -/
