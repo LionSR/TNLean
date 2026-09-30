@@ -822,11 +822,12 @@
         MPSTensor.MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic,
         MPSTensor.IsPeriodic.isSpectrallyPeriodic}
     \leanok
-    \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv}
+    \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv,
+        def:mpv_block_phase_equiv}
     Let $A$ and $B$ be spectrally periodic blocks. If their matrix product
     vectors are proportional by a nonzero scalar at every positive length,
     then $A$ and $B$ are repeated blocks. In particular, this holds when
-    $V_N(B)=\zeta^N V_N(A)$ for a fixed $\zeta\ne0$.
+    $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$ for a fixed $\zeta\ne0$.
     Left-canonical periodic blocks satisfy the spectral-radius-one
     hypothesis automatically.
     This is the single-block case of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
@@ -847,10 +848,10 @@
         MPSTensor.MPVPhaseClassData.not_hetRepeatedBlocks,
         MPSTensor.MPVPhaseClassData.periodic_unitary_match}
     \leanok
-    \uses{def:periodic_tensor}
+    \uses{def:periodic_tensor,def:mpv_phase_class_data}
     Let $A_k$ be a finite family of left-canonical periodic tensors, with
     bond dimensions $D_k$ and periods $m_k$. Partition the family by the
-    relation $V_N(A_l)=\zeta^N V_N(A_k)$ at every positive length for some
+    relation $V^{(N)}(A_l)_\sigma=\zeta^N V^{(N)}(A_k)_\sigma$ at every positive length for some
     $\zeta\ne0$. Choose one representative $r_j$ in each class and enumerate
     its members as $e(j,q)$.
     Distinct representatives are not repeated. Each member has
@@ -882,6 +883,7 @@
     \label{def:periodic_grouped_multiplicities}
     \lean{MPSTensor.MPVPhaseClassData.toSectorDecomposition}
     \leanok
+    \uses{thm:periodic_phase_class_unitary_match}
     Use the representatives $r_j$ and enumeration $e(j,q)$ of
     Theorem~\ref{thm:periodic_phase_class_unitary_match}. Given nonzero
     weights $\mu_k$ and unit-modulus phases $\xi_{j,q}$, let $n_j$ be
@@ -910,7 +912,7 @@
     There is a matrix $Y$ from the grouped bond space to the original bond
     space with $YY^\dagger=I$ and $Y^\dagger Y=I$, satisfying
     $T^i=YP^iY^\dagger$ for every physical index $i$.
-    In particular, $V_N(T)=V_N(P)$ at every positive length.
+    In particular, $V^{(N)}(T)_\sigma=V^{(N)}(P)_\sigma$ at every positive length.
     This gives the grouping of \cite[Section~2.1 and the paragraph after
         Theorem~3.4]{DeLasCuevas2017Irreducible} in a unitary gauge.
 \end{theorem}
@@ -928,8 +930,15 @@
     inverse identities. The same bijection and the equality of matched
     block dimensions give equality of total dimensions.
     The phases have modulus one, so the individual weight moduli are
-    unchanged. In every positive-length product, the intermediate factors
-    $Y^\dagger Y$ cancel; cyclicity of trace gives the vector identity.
+    unchanged. For $N>0$, the factors $Y^\dagger Y=I$ between adjacent
+    letters cancel, and cyclicity of the trace removes the outer $Y$ and
+    $Y^\dagger$:
+    \begin{align}
+        V^{(N)}(T)_\sigma
+         & =\tr\bigl(YP^{\sigma_1}Y^\dagger\cdots YP^{\sigma_N}Y^\dagger\bigr)
+        =\tr\bigl(P^{\sigma_1}\cdots P^{\sigma_N}\bigr)
+        =V^{(N)}(P)_\sigma. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Unit weight moduli before grouping]
@@ -940,7 +949,7 @@
     Let $T^i=\bigoplus_k\mu_k A_k^i$, where the $A_k$ are left-canonical
     periodic blocks and every $\mu_k$ is nonzero. Let $Q$ be a decomposition
     with pairwise non-repeated left-canonical periodic basis blocks and
-    unit-modulus multiplicities. If $V_N(T)=V_N(Q)$ for every positive $N$,
+    unit-modulus multiplicities. If $V^{(N)}(T)=V^{(N)}(Q)$ for every positive $N$,
     then $|\mu_k|=1$ for every $k$.
     This is the normalization consequence needed in the corrected forward
     direction of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}; the
@@ -952,9 +961,15 @@
     \leanok
     \uses{thm:periodic_grouped_unitary,thm:periodic_equalcase_unit_weights}
     Group the blocks of $T$ as in Theorem~\ref{thm:periodic_grouped_unitary}.
-    The resulting decomposition $P$ has the same positive-length vectors
-    as $Q$. The equal-case fundamental theorem matches their multiplicities
-    up to unit-modulus factors, so every multiplicity of $P$ has modulus one.
-    Grouping preserves the modulus of every original weight and enumerates
-    every original block, giving $|\mu_k|=1$.
+    For every $N>0$, the resulting decomposition $P$ satisfies
+    $V^{(N)}(P)=V^{(N)}(T)=V^{(N)}(Q)$.
+    Theorem~\ref{thm:periodic_equalcase_unit_weights} matches the
+    multiplicities of $P$ and $Q$ up to unit-modulus factors. Hence, for every
+    grouped copy,
+    \begin{align}
+        |\mu_{e(j,q)}| & =|\mu'_{j,q}|=1. \notag
+    \end{align}
+    The first equality is the modulus statement of
+    Theorem~\ref{thm:periodic_grouped_unitary}. Since $e$ enumerates every
+    original block, $|\mu_k|=1$ for every $k$.
 \end{proof}
