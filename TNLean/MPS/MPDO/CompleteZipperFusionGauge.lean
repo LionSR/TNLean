@@ -130,7 +130,7 @@ theorem pairGaugeInv_mul_pairGauge (Y : Fus.FusionGauge) (a b : Λ) :
   congr 1
   funext c
   simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
-    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
+    Units.mul_inv, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- `pairGaugeInv` is a right inverse of `pairGauge`. -/
@@ -140,7 +140,7 @@ theorem pairGauge_mul_pairGaugeInv (Y : Fus.FusionGauge) (a b : Λ) :
   congr 1
   funext c
   simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
-    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
+    Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
     Matrix.one_kronecker_one]
 
 /-- The fusion gauges commute with the direct sum of block letters, because they act only on
@@ -258,8 +258,7 @@ theorem rightTreeGaugeInv_mul_rightTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ
   congr 1
   funext e
   simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
-    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
-    Matrix.one_kronecker_one]
+    Units.mul_inv, Matrix.transpose_one, Matrix.one_kronecker_one]
 
 /-- `rightTreeGaugeInv` is a right inverse of `rightTreeGauge`. -/
 theorem rightTreeGauge_mul_rightTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
@@ -268,8 +267,7 @@ theorem rightTreeGauge_mul_rightTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ
   congr 1
   funext e
   simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
-    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
-    Matrix.one_kronecker_one]
+    Units.inv_mul, Matrix.transpose_one, Matrix.one_kronecker_one]
 
 /-- `leftTreeGaugeInv` is a left inverse of `leftTreeGauge`. -/
 theorem leftTreeGaugeInv_mul_leftTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) :
@@ -278,8 +276,7 @@ theorem leftTreeGaugeInv_mul_leftTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) 
   congr 1
   funext e
   simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
-    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
-    Matrix.one_kronecker_one]
+    Units.mul_inv, Matrix.transpose_one, Matrix.one_kronecker_one]
 
 /-- `leftTreeGaugeInv` is a right inverse of `leftTreeGauge`. -/
 theorem leftTreeGauge_mul_leftTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
@@ -288,8 +285,7 @@ theorem leftTreeGauge_mul_leftTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) 
   congr 1
   funext e
   simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
-    Units.mul_inv, Units.inv_mul, Matrix.transpose_one, Matrix.one_mul,
-    Matrix.one_kronecker_one]
+    Units.inv_mul, Matrix.transpose_one, Matrix.one_kronecker_one]
 
 /-- The regauged left-associated synthesis map is the original one followed by the
 left-tree gauge. -/
