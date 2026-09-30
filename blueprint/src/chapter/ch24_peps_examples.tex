@@ -199,10 +199,74 @@ matrix product operator on the virtual level.
     formula.
 \end{proof}
 
-Up to the factor $2^{-N/2}$, the coefficient in
-Theorem~\ref{thm:peps_cluster_state} is that of the state obtained by
-applying controlled-$Z$ gates on all nearest-neighbor bonds to
-$\ket{+}^{\otimes N}$ \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
+\begin{definition}[Graph-state circuit and stabilizers]
+    \label{def:peps_graph_stabilizers}
+    \lean{TNLean.PEPS.graphCircuitSign, TNLean.PEPS.graphFlip,
+        TNLean.PEPS.graphNeighborSign, TNLean.PEPS.graphStabilizer,
+        TNLean.PEPS.clusterBondTarget, TNLean.PEPS.clusterCircuitState,
+        TNLean.PEPS.clusterStabilizer}
+    \leanok
+    Let a finite set of bonds have distinct endpoints $a(e),b(e)$ in a finite
+    vertex set $V$. Parallel bonds are counted with multiplicity. The product
+    of controlled-$Z$ gates has diagonal coefficient
+    $g(\sigma)=\prod_e(-1)^{\sigma_{a(e)}\sigma_{b(e)}}$.
+    The stabilizer $K_v$ flips the qubit at $v$ and applies $Z$ at the opposite
+    endpoint of every incident bond. Thus
+    \begin{align}
+        (K_v\psi)(\sigma)
+         & =\prod_{e:a(e)=v}(-1)^{\sigma_{b(e)}}
+        \prod_{e:b(e)=v}(-1)^{\sigma_{a(e)}}
+        \psi(\sigma\mathbin{\oplus}\mathbf{1}_v).
+    \end{align}
+    On the square torus, take the horizontal and vertical positive bonds;
+    the normalized circuit state has coefficients $2^{-N/2}g(\sigma)$
+    \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[Common graph-stabilizer eigenspace]
+    \label{thm:peps_graph_stabilizer_line}
+    \lean{TNLean.PEPS.graphStabilizer_graphCircuitSign,
+        TNLean.PEPS.graphStabilizer_fixed_iff}
+    \leanok
+    \uses{def:peps_graph_stabilizers}
+    For the loop-free bond family of Definition~\ref{def:peps_graph_stabilizers},
+    $K_v\psi=\psi$ for every $v$ if and only if $\psi=cg$ for some $c\in\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Flipping $v$ changes $g$ by the product of the neighbouring $Z$ signs.
+    Each such sign squares to one, so $K_vg=g$. Conversely, the stabilizer
+    equations imply that $g(\sigma)\psi(\sigma)$ is unchanged by every
+    single-site flip. Changing the sites one at a time reduces every
+    configuration to the all-zero configuration. Hence
+    $g(\sigma)\psi(\sigma)=\psi(0)$ and $\psi(\sigma)=\psi(0)g(\sigma)$.
+\end{proof}
+
+\begin{theorem}[Square-torus cluster circuit and uniqueness]
+    \label{thm:peps_cluster_stabilizer_line}
+    \lean{TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_graphCircuitSign,
+        TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_clusterCircuitState,
+        TNLean.PEPS.clusterStabilizer_apply,
+        TNLean.PEPS.clusterStabilizer_fixed_iff,
+        TNLean.PEPS.stateCoeff_clusterPEPS_ne_zero}
+    \leanok
+    \uses{def:peps_cluster_tensor, def:peps_graph_stabilizers}
+    On a torus with $w,h\ge3$ and $N=wh$, the printed cluster PEPS is
+    $2^{-N/2}$ times the normalized controlled-$Z$ circuit state and is nonzero.
+    Its span is precisely the common $+1$ eigenspace of
+    \begin{align}
+        K_v=X_v Z_{v+(1,0)}Z_{v-(1,0)}Z_{v+(0,1)}Z_{v-(0,1)}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_cluster_state, thm:peps_graph_stabilizer_line}
+    Theorem~\ref{thm:peps_cluster_state} identifies the coefficient with
+    $2^{-N}g(\sigma)$, and its all-zero coefficient is $2^{-N}\ne0$.
+    Each site has one incoming and one outgoing bond in each coordinate
+    direction, giving the displayed Pauli product. Apply
+    Theorem~\ref{thm:peps_graph_stabilizer_line} and absorb the nonzero scalar.
+\end{proof}
 
 \subsection{The CZX model}
 
