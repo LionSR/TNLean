@@ -10,7 +10,7 @@
 \title{Deferred Result: The Translation-Invariant Bond-Dimension Lower Bound
 for the W State}
 \author{}
-\date{2026-06-17, revised 2026-09-26}
+\date{2026-06-17, revised 2026-09-28}
 
 \begin{document}
 \maketitle
@@ -21,11 +21,11 @@ for the W State}
 For $N\geq 1$, define the unnormalized $N$-site W state by
 \begin{align}
     \ket{W_N}
-        &=
-        \ket{10\cdots 0}
-        +\ket{010\cdots 0}
-        +\cdots
-        +\ket{0\cdots 01}.
+     & =
+    \ket{10\cdots 0}
+    +\ket{010\cdots 0}
+    +\cdots
+    +\ket{0\cdots 01}.
     \label{eq:rmp_w_state_ti_bound_w_state}
 \end{align}
 The review presents $\ket{W_N}$ as an open-boundary matrix product state with
@@ -33,18 +33,18 @@ bond dimension $D=2$ \cite[lines~2352--2361]{Cirac2021Matrix}. Its
 site-independent matrices are
 \begin{align}
     A^0
-        &=
-        \begin{pmatrix}
-            1 & 0\\
-            0 & 1
-        \end{pmatrix},
-    \label{eq:rmp_w_state_ti_bound_zero_matrix}\\
+     & =
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & 1
+    \end{pmatrix},
+    \label{eq:rmp_w_state_ti_bound_zero_matrix} \\
     A^1
-        &=
-        \begin{pmatrix}
-            0 & 1\\
-            0 & 0
-        \end{pmatrix}.
+     & =
+    \begin{pmatrix}
+        0 & 1 \\
+        0 & 0
+    \end{pmatrix}.
     \label{eq:rmp_w_state_ti_bound_one_matrix}
 \end{align}
 With boundary covectors $(l|=(0|$ and $|r)=|1)$, these matrices give the
@@ -58,15 +58,15 @@ $N$ \cite[line~2362]{Cirac2021Matrix}. More precisely, it states a bound of
 the form
 \begin{align}
     D^3\log D
-        &=
-        \Omega(N).
+     & =
+    \Omega(N).
     \label{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}
 \end{align}
 Consequently, for every $\delta>0$,
 \begin{align}
     D
-        &=
-        \Omega\left(N^{1/(3+\delta)}\right).
+     & =
+    \Omega\left(N^{1/(3+\delta)}\right).
     \label{eq:rmp_w_state_ti_bound_polynomial_consequence}
 \end{align}
 
@@ -86,26 +86,26 @@ holds, then $D\succeq O(N^{1/3})$. Conjecture~2
 of the canonical form with $L_0=O(D^2)$. The proof runs as follows.
 \begin{enumerate}
     \item Let the canonical form have $b$ pairwise different blocks of sizes
-    $D_1,\ldots,D_b$ and weights $\lambda_j$, so that
-    $\ket{W_N}=\sum_j\lambda_j^N\sum_\sigma
-    \tr(A^j_{\sigma_1}\cdots A^j_{\sigma_N})\ket{\sigma}$.
-    Assume $N/2\geq 3(b-1)(L_0+1)$.
+          $D_1,\ldots,D_b$ and weights $\lambda_j$, so that
+          $\ket{W_N}=\sum_j\lambda_j^N\sum_\sigma
+              \tr(A^j_{\sigma_1}\cdots A^j_{\sigma_N})\ket{\sigma}$.
+          Assume $N/2\geq 3(b-1)(L_0+1)$.
 
     \item Cut the chain into two pieces of lengths $R,R'$, each at least
-    $3(b-1)(L_0+1)$. By the direct-sum lemma
-    \cite[lines~1346--1349]{PerezGarcia2007MPSReps} and condition C1 in each
-    block, the reduced state of the first piece has rank at least
-    $\sum_jD_j^2$.
+          $3(b-1)(L_0+1)$. By the direct-sum lemma
+          \cite[lines~1346--1349]{PerezGarcia2007MPSReps} and condition C1 in each
+          block, the reduced state of the first piece has rank at least
+          $\sum_jD_j^2$.
 
     \item The reduced state of $\ket{W_N}$ across any cut has rank $2$.
-    Hence $\sum_jD_j^2\leq 2$, so there are at most two blocks, each of size
-    $1\times1$.
+          Hence $\sum_jD_j^2\leq 2$, so there are at most two blocks, each of size
+          $1\times1$.
 
     \item The source calls it trivial that this is impossible. Therefore
-    $N/2\leq 3(b-1)(L_0+1)$.
+          $N/2\leq 3(b-1)(L_0+1)$.
 
     \item With $L_0=O(D^2)$ and $b\leq D$ the bound $D\succeq O(N^{1/3})$
-    follows.
+          follows.
 \end{enumerate}
 The review replaces Conjecture~2 by the Wielandt bound $L_0=O(D^2\log D)$ of
 Micha\l{}ek and Shitov, which gives
@@ -122,136 +122,173 @@ $\ket{\phi_{A^j}}$ are pairwise different
 \cite[lines~1329--1330]{PerezGarcia2007MPSReps}: two equal blocks with
 different weights, or two blocks related by a gauge transformation and a
 phase $\omega$ with $\omega^N\neq1$, give different states. Step~5 is
-formalized when the first matrix of every block is invertible. The formal
+formalized when the one-letter span of every block contains a matrix with a
+nonzero eigenvalue; an invertible first matrix is a sufficient special case.
+An unequal-cut argument also sharpens the finite-length estimate. The formal
 results are the following.
 \begin{itemize}
     \item The amplitudes of a canonical form are the weighted sums of the block
-    amplitudes (step~1).\footnote{Formal declarations:
-    \leanid{MPSTensor.PGVWC07CanonicalFormData.trace_evalWord_eq_sum} and
-    \leanid{MPSTensor.PGVWC07CanonicalFormData.mpv_eq_sum}.}
+          amplitudes (step~1).\footnote{Formal declarations:
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.trace_evalWord_eq_sum} and
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.mpv_eq_sum}.}
 
     \item For every length $n\geq\max(L_0,3(b-1)(L_0+1))$ the tuples of block
-    words of length $n$ span the product of the block matrix algebras. The
-    three canonical conditions make every block irreducible.\footnote{Formal
-    declarations:
-    \leanid{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge},
-    \leanid{MPSTensor.PGVWC07CanonicalFormData.isIrreducibleFamily_blocks}, and
-    \leanid{MPSTensor.wordTupleSpanTop_of_le_one}.}
+          words of length $n$ span the product of the block matrix algebras. The
+          three canonical conditions make every block irreducible.\footnote{Formal
+              declarations:
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge},
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.isIrreducibleFamily_blocks}, and
+              \leanid{MPSTensor.wordTupleSpanTop_of_le_one}.}
 
     \item The rank inequality of step~2: if the functions of the first piece
-    obtained by fixing a configuration of the second piece lie in a subspace
-    $V$, then $\sum_jD_j^2\leq\dim V$.\footnote{Formal declaration:
-    \leanid{MPSTensor.sum_sq_dim_le_finrank_of_forall_mem}.}
+          obtained by fixing a configuration of the second piece lie in a subspace
+          $V$, then $\sum_jD_j^2\leq\dim V$.\footnote{Formal declaration:
+              \leanid{MPSTensor.sum_sq_dim_le_finrank_of_forall_mem}.}
 
     \item The cut rank of $\ket{W_N}$ is at most $2$ (step~3): the amplitude
-    of a concatenation $\sigma\tau$ is
-    $u_1(\sigma)u_0(\tau)+u_0(\sigma)u_1(\tau)$, where $u_m$ indicates
-    configurations with $m$ excitations.\footnote{Formal declarations:
-    \leanid{MPSTensor.wIndicator_append},
-    \leanid{MPSTensor.wIndicator_append_mem_span}, and
-    \leanid{MPSTensor.finrank_span_wIndicator_append_le_two}.}
+          of a concatenation $\sigma\tau$ is
+          $u_1(\sigma)u_0(\tau)+u_0(\sigma)u_1(\tau)$, where $u_m$ indicates
+          configurations with $m$ excitations.\footnote{Formal declarations:
+              \leanid{MPSTensor.wIndicator_append},
+              \leanid{MPSTensor.wIndicator_append_mem_span}, and
+              \leanid{MPSTensor.finrank_span_wIndicator_append_le_two}.}
 
     \item The step called trivial (step~4). Let $x_k,y_k$ be the weighted
-    one-site amplitudes of at most two $1\times1$ blocks, so that the
-    amplitude of $1^m0^{N-m}$ is $g_m=\sum_ky_k^mx_k^{N-m}$. If
-    $g_1=c\neq0$ and $g_2=g_3=0$, the identity
-    $x_1x_2g_3-(x_1y_2+x_2y_1)g_2+y_1y_2g_1=0$ gives $y_1y_2=0$. Then
-    $g_1$ and $g_2$ reduce to the terms of the remaining block $k$, and $c\,y_k=y_k^2x_k^{N-1}=x_kg_2=0$, so $y_k=0$ and
-    $g_1=0$, a contradiction.
-    This needs $N\geq3$ for two blocks and $N\geq2$ for one
-    block.\footnote{Formal declaration:
-    \leanid{MPSTensor.not_sum_pow_mul_pow_eq}.}
+          one-site amplitudes of at most two $1\times1$ blocks, so that the
+          amplitude of $1^m0^{N-m}$ is $g_m=\sum_ky_k^mx_k^{N-m}$. If
+          $g_1=c\neq0$ and $g_2=g_3=0$, the identity
+          $x_1x_2g_3-(x_1y_2+x_2y_1)g_2+y_1y_2g_1=0$ gives $y_1y_2=0$. Then
+          $g_1$ and $g_2$ reduce to the terms of the remaining block $k$, and $c\,y_k=y_k^2x_k^{N-1}=x_kg_2=0$, so $y_k=0$ and
+          $g_1=0$, a contradiction.
+          This needs $N\geq3$ for two blocks and $N\geq2$ for one
+          block.\footnote{Formal declaration:
+              \leanid{MPSTensor.not_sum_pow_mul_pow_eq}.}
 
     \item The conclusion:\footnote{Formal declarations:
-    \leanid{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator} and
-    \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator}.}
-    if the periodic vector on $N$ sites is $c\ket{W_N}$ with $c\neq0$, then
-    \begin{align}
-        N
-            &<
-            2\max\bigl(L_0,\,3(b-1)(L_0+1)\bigr).
-        \label{eq:rmp_w_state_ti_bound_conditional}
-    \end{align}
-    The same bound holds for $\sum_jc_j\ket{\phi_{A^j}}=c\ket{W_N}$ with
-    arbitrary nonzero coefficients $c_j$ in place of $\lambda_j^N$, for blocks
-    that satisfy the three conditions of the canonical form.
+              \leanid{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator} and
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator}.}
+          if the periodic vector on $N$ sites is $c\ket{W_N}$ with $c\neq0$, then
+          \begin{align}
+              N
+               & <
+              2\max\bigl(L_0,\,3(b-1)(L_0+1)\bigr).
+              \label{eq:rmp_w_state_ti_bound_conditional}
+          \end{align}
+          The same bound holds for $\sum_jc_j\ket{\phi_{A^j}}=c\ket{W_N}$ with
+          arbitrary nonzero coefficients $c_j$ in place of $\lambda_j^N$, for blocks
+          that satisfy the three conditions of the canonical form.
+
+    \item An unequal-cut refinement. Put $F=\max\{L_0,3(b-1)(L_0+1)\}$.
+          Then
+          \begin{align}
+              N & <\max\{L_0+F,12(b-1)\}.
+              \label{eq:rmp_w_state_ti_bound_asymmetric}
+          \end{align}
+          For $b=0$, the expression $b-1$ is read as zero. If $N\ge L_0+F$,
+          the long side of the cut isolates any single block, while injectivity
+          on the short side gives $D_j^2\le2$. All blocks are therefore scalar
+          and, by unitality, injective at length one. Applying
+          (\ref{eq:rmp_w_state_ti_bound_conditional}) at that length gives
+          $N<2\max\{1,6(b-1)\}$ and proves
+          (\ref{eq:rmp_w_state_ti_bound_asymmetric}). Its threshold is never larger
+          than $2F$, and equals $L_0+F$ for $L_0\ge3$.\footnote{Formal declarations:
+              \leanid{MPSTensor.sq_dim_le_finrank_of_forall_mem},
+              \leanid{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator_asymmetric}, and
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_asymmetric}.}
 
     \item Step~5 when every $A^j_0$ is invertible. The source proves that
-    condition C1 then holds at $L_0=D^2$
-    \cite[lines~2115--2118]{PerezGarcia2007MPSReps}. The formal counterpart
-    is Wolf's bound $D_j^2-k+1$ for a family with an invertible
-    letter \cite{Wolf2012Quantum}, which gives C1 at $L_0=D^2+1$ from C1 at
-    any positive length. With $b\leq D$,
-    (\ref{eq:rmp_w_state_ti_bound_conditional}) becomes
-    $N<2\max\bigl(D^2+1,\,3(D-1)(D^2+2)\bigr)$, that is,
-    $D=\Omega(N^{1/3})$.\footnote{Formal declaration:
-    \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit}.}
+          condition C1 then holds at $L_0=D^2$
+          \cite[lines~2115--2118]{PerezGarcia2007MPSReps}. The formal counterpart
+          is Wolf's bound $D_j^2-k+1$ for a family with an invertible
+          letter \cite{Wolf2012Quantum}, which gives C1 at $L_0=D^2+1$ from C1 at
+          any positive length. With $b\leq D$,
+          (\ref{eq:rmp_w_state_ti_bound_conditional}) becomes
+          $N<2\max\bigl(D^2+1,\,3(D-1)(D^2+2)\bigr)$, that is,
+          $D=\Omega(N^{1/3})$.\footnote{Formal declaration:
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit}.}
+
+    \item The cubic conclusion under a weaker hypothesis. Suppose each
+          block is injective at some positive length and its one-letter span
+          contains $X_j$ with $X_j\phi_j=\mu_j\phi_j$, where $\mu_j\ne0$ and
+          $\phi_j\ne0$. Wolf's nonzero-eigenvalue bound gives injectivity at
+          $D_j^2$ \cite[Theorem~6.9(3)]{Wolf2012Quantum}. With $L=\max\{1,D^2\}$,
+          (\ref{eq:rmp_w_state_ti_bound_asymmetric}) gives
+          \begin{align}
+              N & <\max\bigl\{L+\max\{L,3(D-1)(L+1)\},12(D-1)\bigr\}.
+              \label{eq:rmp_w_state_ti_bound_eigenvalue}
+          \end{align}
+          For $D>0$, $L=D^2$, so $D=\Omega(N^{1/3})$. The maximum with one
+          includes $D=N=0$.\footnote{Formal declaration:
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_nonzero_eigenvalue}.}
 
     \item An explicit bound in $D$ for primitive blocks, weaker than the
-    source's. If the adjoint
-    channel $X\mapsto\sum_iA^{j\dagger}_iXA^j_i$ of every block is primitive,
-    Wolf's general Wielandt bound $L_0\leq(D_j^2-k+1)D_j^2\leq(D^2+1)^2$
-    \cite{Sanz2010Quantum,Wolf2012Quantum} and $b\leq D$ turn
-    (\ref{eq:rmp_w_state_ti_bound_conditional}) into
-    $N<2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr)$, that is,
-    $D=\Omega(N^{1/5})$.\footnote{Formal declaration:
-    \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive}.}
+          source's. If the adjoint
+          channel $X\mapsto\sum_iA^{j\dagger}_iXA^j_i$ of every block is primitive,
+          Wolf's general Wielandt bound $L_0\leq(D_j^2-k+1)D_j^2\leq(D^2+1)^2$
+          \cite{Sanz2010Quantum,Wolf2012Quantum} and $b\leq D$ turn
+          (\ref{eq:rmp_w_state_ti_bound_conditional}) into
+          $N<2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr)$, that is,
+          $D=\Omega(N^{1/5})$.\footnote{Formal declaration:
+              \leanid{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive}.}
 \end{itemize}
 
-\section{Formalized reduction at prime length}
+\section{Formalized reduction when small divisors are absent}
 
-The source removes the peripheral eigenvalues of modulus one by grouping the
-spins into blocks or by taking $N$ prime, and obtains condition C1 from
-condition C2 \cite[lines~2090--2097]{PerezGarcia2007MPSReps}. The second
-device is formalized, with Wolf's general Wielandt bound in place of
-Conjecture~2. Let $A$ be an arbitrary tensor of bond dimension $D$, let $N$
-be prime, and let the periodic vector of $A$ on $N$ sites be $c\ket{W_N}$
-with $c\neq0$. Then
+The source removes peripheral eigenvalues of modulus one by grouping the spins
+into blocks or by taking $N$ prime, and obtains condition C1 from condition C2
+\cite[lines~2090--2097]{PerezGarcia2007MPSReps}. The prime-length reduction
+extends to any $N\geq2$ with no divisor $m$ in the interval $2\leq m\leq D$.
+Let $A$ be an arbitrary tensor of bond dimension $D$, and let its periodic
+vector on $N$ sites be $c\ket{W_N}$ with $c\neq0$. Under this divisor condition,
 \begin{align}
     N
-        &<
-        2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr),
+     & <
+    2\max\bigl((D^2+1)^2,\,3(D-1)((D^2+1)^2+1)\bigr).
     \label{eq:rmp_w_state_ti_bound_prime}
 \end{align}
-that is, $D=\Omega(N^{1/5})$ along the prime lengths.\footnote{Formal
-declarations: \leanid{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime} and
-\leanid{MPSTensor.IsPeriodic.period_le_sq}.} The proof runs as follows.
+The same conclusion holds for every prime $N$, treating $N\leq D$ directly.
+Thus the existing fifth-degree estimate now also applies to composite lengths
+whose prime factors exceed $D$, such as $N=p^2$ for a prime $p>D$.\footnote{Formal
+    declarations:
+    \leanid{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_no_small_divisor},
+    \leanid{MPSTensor.lt_of_mpv_eq_smul_wIndicator_of_prime}, and
+    \leanid{MPSTensor.IsPeriodic.period_le_bondDim}.}
+The proof runs as follows.
 \begin{enumerate}
-    \item For $N\leq D^2$ there is nothing to prove. Otherwise write the
-    periodic vector as $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with unital blocks
-    $A^j$ that have a positive definite fixed point of the dual map and only
-    scalar fixed points (the canonical form of
-    \cite[lines~742--763]{PerezGarcia2007MPSReps}, with at most $D$ blocks in
-    total dimension at most $D$). These conditions make every block
-    irreducible.
+    \item Write the periodic vector as
+          $\sum_j\lambda_j^N\ket{\phi_{A^j}}$ with unital blocks $A^j$ that
+          have a positive definite fixed point of the dual map and only scalar
+          fixed points (the canonical form of
+          \cite[lines~742--763]{PerezGarcia2007MPSReps}). Their positive bond
+          dimensions satisfy $\sum_jD_j\leq D$, so there are at most $D$ blocks.
+          These conditions make every block irreducible.
 
     \item Rescaled and gauged to trace-preserving form, each block is periodic
-    with a period $m_j$. The $m_j$ peripheral eigenvalues are distinct
-    eigenvalues of an endomorphism of $\mathcal{M}_{D_j}$, so
-    $m_j\leq D_j^2\leq D^2<N$.
+          with a period $m_j$. Its cyclic sectors have positive dimensions and
+          resolve the identity on $\C^{D_j}$. Taking traces gives
+          $m_j\leq D_j\leq D$.
 
-    \item If $m_j\neq1$, then $m_j$ does not divide the prime $N$, and the block
-    state vanishes at length $N$ by Theorem~5 of
-    \cite[lines~849--858]{PerezGarcia2007MPSReps}.
+    \item If $m_j\neq1$, then $2\leq m_j\leq D$, so the divisor assumption
+          gives $m_j\nmid N$. The block state vanishes at length $N$ by
+          Theorem~5 of \cite[lines~849--858]{PerezGarcia2007MPSReps}.
 
     \item If $m_j=1$, the block is primitive, and the general quantum Wielandt
-    bound $(D_j^2-k+1)D_j^2\leq(D^2+1)^2$
-    \cite{Sanz2010Quantum,Wolf2012Quantum} gives condition C1 at
-    $L_0=(D^2+1)^2$.
+          bound $(D_j^2-k+1)D_j^2\leq(D^2+1)^2$
+          \cite{Sanz2010Quantum,Wolf2012Quantum} gives condition C1 at
+          $L_0=(D^2+1)^2$.
 
-    \item Group the blocks whose states agree up to a phase power. The class
-    representatives are pairwise not related by a gauge transformation and a
-    phase, and the vector becomes $\sum_jc_j\ket{\phi_{A^j}}$ over the
-    representatives. Dropping the classes with $c_j=0$ or with period other
-    than one leaves at most $D$ blocks, and the coefficient form of
-    (\ref{eq:rmp_w_state_ti_bound_conditional}) gives
-    (\ref{eq:rmp_w_state_ti_bound_prime}).
+    \item Group blocks whose states agree up to a phase power. The class
+          representatives are pairwise not related by a gauge transformation
+          and a phase, and the vector becomes $\sum_jc_j\ket{\phi_{A^j}}$ over
+          these representatives. Dropping classes with $c_j=0$ or period
+          other than one leaves at most $D$ blocks, and the coefficient form
+          of (\ref{eq:rmp_w_state_ti_bound_conditional}) gives
+          (\ref{eq:rmp_w_state_ti_bound_prime}).
 \end{enumerate}
-Step~5 also supplies, at prime length, the distinctness used by the
-direct-sum lemma: the grouping absorbs the blocks whose states differ only by
-a weight or a phase power, which is what separates the source's pairwise
-different block states \cite[lines~1329--1330]{PerezGarcia2007MPSReps} from
-the formal hypothesis.
+Step~5 also supplies the distinctness used by the direct-sum lemma: grouping
+absorbs blocks whose states differ only by a weight or a phase power, which
+separates the source's pairwise different block states
+\cite[lines~1329--1330]{PerezGarcia2007MPSReps} from the formal hypothesis.
 
 \section{Local fix: the single-block threshold}
 
@@ -268,8 +305,8 @@ $3(b-1)(L_0+1)$.
 The step called trivial is false without a lower bound on $N$:
 \begin{align}
     \ket{W_2}
-        &=
-        \tfrac12\bigl((\ket0+\ket1)^{\otimes2}-(\ket0-\ket1)^{\otimes2}\bigr)
+     & =
+    \tfrac12\bigl((\ket0+\ket1)^{\otimes2}-(\ket0-\ket1)^{\otimes2}\bigr)
     \label{eq:rmp_w_state_ti_bound_w_two}
 \end{align}
 is a sum of two translation-invariant product states, that is, of two distinct
@@ -279,24 +316,27 @@ $N\geq 2\cdot3(L_0+1)\geq12$ in its range, where the argument above applies.
 \section{What remains open}
 
 The bound (\ref{eq:rmp_w_state_ti_bound_conditional}) is conditional, and
-the unconditional bound (\ref{eq:rmp_w_state_ti_bound_prime}) holds at prime
-lengths only. Two inputs are missing for
+the bound (\ref{eq:rmp_w_state_ti_bound_prime}) holds for prime lengths
+and for lengths with no divisor between $2$ and $D$. Two inputs are missing for
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and for the source's
 $D\succeq O(N^{1/3})$.
 \begin{itemize}
-    \item Composite lengths. The reduction to a canonical form whose blocks
-    satisfy condition C1 at a controlled length, and to blocks that are
-    pairwise distinct in the sense of the direct-sum lemma, is formalized for
-    prime $N$. For composite $N$ the source's other device, grouping the spins
-    into blocks of the least common multiple of the periods
-    \cite[lines~2094--2096]{PerezGarcia2007MPSReps}, is not formalized; it
-    changes the length to $N/p$ and needs the periods to divide $N$.
+    \item Lengths with a divisor between $2$ and $D$. The reduction to a canonical form whose blocks
+          satisfy condition C1 at a controlled length, and to blocks that are
+          pairwise distinct in the sense of the direct-sum lemma, is formalized for
+          prime $N$ and for $N\geq2$ with no divisor between $2$ and $D$. For the
+          remaining composite lengths, the source's other device, grouping the spins
+          into blocks of the least common multiple of the periods
+          \cite[lines~2094--2096]{PerezGarcia2007MPSReps}, is not formalized; it
+          changes the length to $N/p$ and needs the periods to divide $N$.
 
     \item The explicit Wielandt index $L_0=O(D^2)$ (Conjecture~2) or
-    $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov) for blocks without an
-    invertible matrix. Wolf's general bound $(D^2-k+1)D^2$ is formalized,
-    which yields $D=\Omega(N^{1/5})$; the bound $D^2$ is formalized only when
-    every $A^j_0$ is invertible.
+          $L_0=O(D^2\log D)$ (Micha\l{}ek and Shitov) for blocks without a
+          one-step matrix having a nonzero eigenvalue. Wolf's general bound
+          $(D^2-k+1)D^2$ is formalized, which yields $D=\Omega(N^{1/5})$;
+          the bound $D^2$ is available when each one-letter span contains a matrix
+          with a nonzero eigenvalue, as in
+          (\ref{eq:rmp_w_state_ti_bound_eigenvalue}).
 \end{itemize}
 
 \section{Formalized open-boundary representation}
@@ -306,24 +346,24 @@ covectors, and its open-boundary contraction. For a bit string
 $\sigma=(\sigma_1,\ldots,\sigma_N)$, define the amplitude
 \begin{align}
     \mathcal A_N(\sigma)
-        &=
-        (0|\,A^{\sigma_1}\cdots A^{\sigma_N}\,|1).
+     & =
+    (0|\,A^{\sigma_1}\cdots A^{\sigma_N}\,|1).
     \label{eq:rmp_w_state_ti_bound_open_boundary_amplitude}
 \end{align}
 Let $\mathbf{1}_{\mathrm{wt}(\sigma)=1}$ denote the indicator that
 $\sigma$ has exactly one nonzero entry. The formal result proves
 \begin{align}
     \mathcal A_N(\sigma)
-        &=
-        \mathbf{1}_{\mathrm{wt}(\sigma)=1}.
+     & =
+    \mathbf{1}_{\mathrm{wt}(\sigma)=1}.
     \label{eq:rmp_w_state_ti_bound_single_excitation_indicator}
 \end{align}
 Therefore the open-boundary contraction is exactly the unnormalized state
 $\ket{W_N}$ from (\ref{eq:rmp_w_state_ti_bound_w_state}).\footnote{Formal
-declarations:
-\leanid{MPSTensor.wTensor},
-\leanid{MPSTensor.openState}, and
-\leanid{MPSTensor.wTensor_openState_eq_wIndicator}.}
+    declarations:
+    \leanid{MPSTensor.wTensor},
+    \leanid{MPSTensor.openState}, and
+    \leanid{MPSTensor.wTensor_openState_eq_wIndicator}.}
 
 \section{Formalized periodic statements}
 
@@ -340,10 +380,10 @@ $\ket{10\cdots0}$ then has amplitude $0$ at every length $N>D$, so $B$
 represents no $\ket{W_N}$ with $N>D$. In particular no single tensor
 represents $\ket{W_N}$ for all $N\geq1$, and for $D=1$ no tensor represents
 $\ket{W_N}$ at any single length $N\geq2$.\footnote{Formal declarations:
-\leanid{MPSTensor.mpv_wTensor},
-\leanid{MPSTensor.not_isPeriodicWState_of_bondDim_one},
-\leanid{MPSTensor.not_isPeriodicWState_of_lt}, and
-\leanid{MPSTensor.not_forall_isPeriodicWState}.}
+    \leanid{MPSTensor.mpv_wTensor},
+    \leanid{MPSTensor.not_isPeriodicWState_of_bondDim_one},
+    \leanid{MPSTensor.not_isPeriodicWState_of_lt}, and
+    \leanid{MPSTensor.not_forall_isPeriodicWState}.}
 These statements constrain one tensor across several lengths. The source bound
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) constrains the bond
 dimension at a single length $N$; its formalized conditional core is described
@@ -360,16 +400,20 @@ This note records a deferred result, not a gap in a claimed formalization. The
 open-boundary representation with $D=2$ is fully proved. The core of the
 source proof is formalized as the conditional bound
 (\ref{eq:rmp_w_state_ti_bound_conditional}), with the single-block threshold
-corrected. When every $A^j_0$ is invertible it gives the source's
+corrected and the unequal-cut refinement
+(\ref{eq:rmp_w_state_ti_bound_asymmetric}) proved. When every one-letter
+span contains a matrix with a nonzero eigenvalue, it gives
 $D=\Omega(N^{1/3})$, and with primitive blocks it gives
 $D=\Omega(N^{1/5})$. For an arbitrary tensor at prime length the reduction is
-formalized, which gives the unconditional
+formalized, which gives
 (\ref{eq:rmp_w_state_ti_bound_prime}), $D=\Omega(N^{1/5})$ along the primes.
+The same explicit inequality now holds when $N\geq2$ has no divisor between
+$2$ and $D$, including some composite lengths.
 The review's bound
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and the source's
 unconditional $D\succeq O(N^{1/3})$ remain unformalized: they need the
-explicit $O(D^2)$ or $O(D^2\log D)$ Wielandt index, and composite lengths
-need the reduction by blocking.
+explicit $O(D^2)$ or $O(D^2\log D)$ Wielandt index, and lengths with a
+divisor between $2$ and $D$ still need an additional reduction.
 
 \bibliographystyle{alpha}
 \bibliography{references}

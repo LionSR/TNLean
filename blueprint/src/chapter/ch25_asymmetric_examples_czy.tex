@@ -44,6 +44,30 @@ of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
     $\delta^{ij}=\delta_{i,j}$.
 \end{definition}
 
+The periodic operator $U_N$ of $A_1$ has the matrix coefficients
+$U_N(s,t)=\tr(A_1^{s_0t_0}\cdots A_1^{s_{N-1}t_{N-1}})$, the ordinary
+unnormalized trace:
+\begin{center}
+    % Formula: U_N(s,t)=\tr(A_1^{s_0t_0}\cdots A_1^{s_{N-1}t_{N-1}}), the
+    % cyclic trace expanded in the proof of
+    % Theorem~\ref{thm:asymex_czy_kernel}.
+    % Ink-to-index map: each node is A_1; its upper leg is the output s_n,
+    % its lower leg the input t_n, and the horizontal legs are the bond-two
+    % virtual index \alpha_n.
+    % Contraction set: every horizontal virtual bond, including the return
+    % bond that closes the ring.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N); three sites are drawn and the ellipsis stands for the
+    % others.
+    \tenkzkernel
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$s_0$, 270:physical:$t_0$}]{A_1} &
+        \tn[skin=mpo, ports={90:physical:$s_1$, 270:physical:$t_1$}]{A_1} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$s_{N-1}$, 270:physical:$t_{N-1}$}]{A_1}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Periodic kernel of the CZY operator]
     \label{thm:asymex_czy_kernel}
     \lean{CZYCompression.mpo_czyTensor_apply}
@@ -116,6 +140,71 @@ of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
     The nilpotency is clause~(vi) of Theorem~\ref{thm:asym_multiblock}
     with $|S|+z=4$.
 \end{proof}
+
+In a picture, the compression pair closes the bond of the stacked square
+onto the bond-one identity tensor, letter by letter:
+\begin{center}
+    % Formula: W\widetilde A_0^{ij}V=\delta^{ij}, the one-letter case of
+    % W\widetilde A_0^wV=\delta^w in Theorem~\ref{thm:asymex_czy_compression}.
+    % Ink-to-index map: W is the row vector (0,1,-1,0) and V the column vector
+    % (0,1,0,0)^T on the bond \C^4=\C^2\otimes\C^2 of \widetilde A_0; the
+    % physical legs are the output i and the input j; \delta is the bond-one
+    % tensor \delta^{ij}=\delta_{i,j}.
+    % Contraction set: the two virtual bonds joining W and V to
+    % \widetilde A_0.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=1 |
+    % physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=W, skin=ring, ports={0:virtual}]{W}
+        \tn[at=(1,2), name=A, skin=mpo, size=l,
+            ports={90:physical:$i$, 270:physical:$j$, 180:virtual, 0:virtual}]{\widetilde A_0}
+        \tn[at=(1,3), name=V, skin=ring, ports={180:virtual}]{V}
+        \tnwire{W.0}{A.180} \tnwire{A.0}{V.180}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), skin=mpo, ports={90:physical:$i$, 270:physical:$j$}]{\delta}
+    \end{tenkz}
+\end{center}
+
+The next theorem states that the two stacked copies of $A_1$ contract,
+on every ring of $N\geq1$ sites, to the identity:
+\begin{center}
+    % Formula: U_N^2=\Id (Theorem~\ref{thm:asymex_czy_square_identity}), with
+    % entries \sum_j U_N(i,j)U_N(j,k)=\delta_{i,k}.
+    % Ink-to-index map: on the left, both rows are A_1, the upper row with
+    % output i_n and the lower row with input k_n, and the vertical wire at
+    % site n is the summed intermediate label j_n; on the right, the bare
+    % vertical wires are the identity \delta_{i_n,k_n} at each site.
+    % Contraction set: on the left, every vertical wire between the rows,
+    % every horizontal virtual bond of each row, and the periodic return bond
+    % of each ring; nothing is contracted on the right.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 | physical-up=N |
+    % physical-down=N) on both sides; three sites are drawn and the ellipsis
+    % stands for the others.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+        \tn[at=(1,1), name=a1, skin=mpo, ports={90:physical:$i_0$, 270:physical, 180:virtual, 0:virtual}]{A_1}
+        \tn[at=(1,2), name=a2, skin=mpo, ports={90:physical:$i_1$, 270:physical, 180:virtual, 0:virtual}]{A_1}
+        \tn[at=(1,3), name=a3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(1,4), name=a4, skin=mpo, ports={90:physical:$i_{N-1}$, 270:physical, 180:virtual, 0:virtual}]{A_1}
+        \tn[at=(2,1), name=b1, skin=mpo, ports={90:physical, 270:physical:$k_0$, 180:virtual, 0:virtual}]{A_1}
+        \tn[at=(2,2), name=b2, skin=mpo, ports={90:physical, 270:physical:$k_1$, 180:virtual, 0:virtual}]{A_1}
+        \tn[at=(2,3), name=b3, skin=dots, ports={180:virtual, 0:virtual}]{}
+        \tn[at=(2,4), name=b4, skin=mpo, ports={90:physical, 270:physical:$k_{N-1}$, 180:virtual, 0:virtual}]{A_1}
+        \tnwire{a1.0}{a2.180} \tnwire{a2.0}{a3.180} \tnwire{a3.0}{a4.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{b3.180} \tnwire{b3.0}{b4.180}
+        \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90} \tnwire{a4.270}{b4.90}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none]
+        \tn[at=(1,1), skin=none, ports={90:physical:$i_0$, 270:physical:$k_0$}]{}
+        \tn[at=(1,2), skin=none, ports={90:physical:$i_1$, 270:physical:$k_1$}]{}
+        \tn[at=(1,3), skin=dots]{}
+        \tn[at=(1,4), skin=none, ports={90:physical:$i_{N-1}$, 270:physical:$k_{N-1}$}]{}
+    \end{tenkz}
+\end{center}
 
 \begin{theorem}[The stacked operator is the identity at every positive length]
     \label{thm:asymex_czy_square_identity}
@@ -296,3 +385,39 @@ of the matrices of $B$ along $w$, as in Section~\ref{sec:asymex_czx}.
     \leanok
     Direct multiplication of integer matrices.
 \end{proof}
+
+The identity of Theorem~\ref{thm:asymex_czy_fusion} moves $Y_{0,0}$ from the
+west of two stacked copies of $A_0$ to the east of one copy:
+\begin{center}
+    % Formula: Y_{0,0}\sum_jA_0^{ij}\otimes A_0^{jk}=A_0^{ik}Y_{0,0}
+    % (Theorem~\ref{thm:asymex_czy_fusion}); compare the fusion tensors of
+    % \cite[Appendix~B]{Liu2025Bialgebraic}.
+    % Ink-to-index map: the tall box is Y_{0,0}, a map from \C^3\otimes\C^3 to
+    % \C^3, with its single bond leg on the west and its two product-bond legs
+    % on the east. On the left, the upper A_0 carries the output i, the lower
+    % A_0 the input k, and the vertical wire between them is the summed label
+    % j; on the right, one A_0 carries the output i and the input k.
+    % Contraction set: on the left, the vertical wire j and the two
+    % product-bond legs of Y_{0,0}; on the right, the bond joining A_0 to the
+    % single leg of Y_{0,0}.
+    % Boundary signature: (virtual-west=1 | virtual-east=2 | physical-up=1 |
+    % physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+        \tnfuse[at=(1,1), name=Y, skin=pill]{Y_{0,0}}
+        \tn[at=(1,2), name=u, skin=mpo, ports={90:physical:$i$, 270:physical, 180:virtual, 0:virtual}]{A_0}
+        \tn[at=(2,2), name=d, skin=mpo, ports={90:physical, 270:physical:$k$, 180:virtual, 0:virtual}]{A_0}
+        \tnwire{open w}{Y.180}
+        \tnwire{Y.0@1}{u.180} \tnwire{Y.0@2}{d.180}
+        \tnwire{u.270}{d.90}
+        \tnwire{u.0}{open e} \tnwire{d.0}{open e}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op,op}, cols=2, bonds=none]
+        \tn[at=(1,1), name=a, skin=mpo, ports={90:physical:$i$, 270:physical:$k$, 180:virtual, 0:virtual}]{A_0}
+        \tnfuse[at=(1,2), name=Y, skin=pill]{Y_{0,0}}
+        \tn[at=(2,1), skin=none]{}
+        \tnwire{open w}{a.180} \tnwire{a.0}{Y.180}
+        \tnwire{Y.0@1}{open e} \tnwire{Y.0@2}{open e}
+    \end{tenkz}
+\end{center}

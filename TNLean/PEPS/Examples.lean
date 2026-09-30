@@ -13,6 +13,7 @@ import TNLean.PEPS.Examples.CZX
 import TNLean.PEPS.Examples.CZXSymmetry
 import TNLean.PEPS.Examples.Classical
 import TNLean.PEPS.Examples.Cluster
+import TNLean.PEPS.Examples.ClusterStabilizer
 import TNLean.PEPS.Examples.GHZ
 import TNLean.PEPS.Examples.QuantumDouble
 import TNLean.PEPS.Examples.RVB

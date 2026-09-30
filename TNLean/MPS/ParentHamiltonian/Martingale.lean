@@ -43,6 +43,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicGapFromDivisibleOpen
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicRangeComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.PositiveComparisonGap
+import TNLean.MPS.ParentHamiltonian.Martingale.PrescribedGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapAtC1Range
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapThreshold

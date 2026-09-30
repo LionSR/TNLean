@@ -209,6 +209,64 @@
     idempotence hold block by block.
 \end{proof}
 
+For $N=3$, with appended labels $\beta_1,\beta_2$, the forward identity
+(\ref{eq:rfp_recursive_fusion}) is displayed below on the history block
+whose intermediate label is $\gamma_1$. The inner fusion map fuses the first
+two bonds, and the outer one fuses the result with the third bond; the
+right-hand side is the corresponding block of $Q_3$.
+\begin{tenkzequation}
+    % Formula: W_3 M_{\alpha,(\beta_1,\beta_2)}^{i,j} W_3^\dagger
+    %   = Q_3((M_\gamma^{i,j})_\gamma), on the history block with
+    %   intermediate label gamma_1 appearing in the direct sum of the first
+    %   fusion, where
+    %   W_3 = U_{\gamma_1,\beta_2}(U_{\alpha,\beta_1}\otimes\Id).
+    % Source: the sequential circuit of CPSV16, lines 999--1010, applied
+    %   twice; the pairwise step is the fusion identity drawn after
+    %   Definition of the fusion coisometry family.
+    % Ink-to-index map: the three vertically stacked tensors are
+    %   M_\alpha, M_{\beta_1}, M_{\beta_2}; their two vertical bonds are the
+    %   contracted intermediate physical indices of the product tensor, and
+    %   i, j are its free outer physical indices.  The inner pill fuses the
+    %   first two bond strands; its fused port sits on the first row and
+    %   feeds the outer pill, which fuses it with the third strand.  The
+    %   adjoint pair on the east undoes the same two steps.  Each pill is a
+    %   fusion coisometry onto the nonzero sectors.
+    % Contracted legs: the two vertical bonds and the eight internal
+    %   horizontal bonds.  Open legs: the fused west and east indices and
+    %   the physical legs i, j.
+    % Boundary signature (virtual-west | virtual-east | physical-up |
+    %   physical-down) = (1 | 1 | 1 | 1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,op}, cols=5, bonds=none]
+        \tnfuse[at=(1,1), name=V, skin=pill, wires=3]{U_{\gamma_1,\beta_2}}
+        \tnfuse[at=(1,2), name=U, skin=pill]{U_{\alpha,\beta_1}}
+        \tn[at=(1,3), skin=mpo, size=l, name=A,
+            ports={180:virtual, 0:virtual, 90:physical:$i$, 270:physical}]{M_\alpha}
+        \tn[at=(2,3), skin=mpo, size=l, name=B1,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{M_{\beta_1}}
+        \tn[at=(3,3), skin=mpo, size=l, name=B2,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical:$j$}]{M_{\beta_2}}
+        \tn[at=(3,2), skin=none]{}
+        \tn[at=(3,4), skin=none]{}
+        \tnfuse[at=(1,4), name=Ud, skin=pill]{U_{\alpha,\beta_1}^{\dagger}}
+        \tnfuse[at=(1,5), name=Vd, skin=pill,
+            wires=3]{U_{\gamma_1,\beta_2}^{\dagger}}
+        \tnwire{A.270}{B1.90} \tnwire{B1.270}{B2.90}
+        \tnwire{open w}{V.180}
+        \tnwire{V.0@1}{U.180}
+        \tnwire{V.0@3}{B2.180}
+        \tnwire{U.0@1}{A.180} \tnwire{U.0@2}{B1.180}
+        \tnwire{A.0}{Ud.180@1} \tnwire{B1.0}{Ud.180@2}
+        \tnwire{Ud.0}{Vd.180@1}
+        \tnwire{B2.0}{Vd.180@3}
+        \tnwire{Vd.0}{open e}
+    \end{tenkz}
+    \qquad$=$\qquad
+    \begin{tenkz}[cols=1, west=open, east=open]
+        \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$}]{Q_3}
+    \end{tenkz}
+\end{tenkzequation}
+
 \begin{lemma}[Sitewise change of physical coordinates]%
     \label{lem:mpdo_sitewise_physical_coordinate_congruence}
     \lean{MPOTensor.singleKrausMap_sitewisePhysicalMatrix_mpo}
