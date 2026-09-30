@@ -1165,3 +1165,63 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     The orbit--stabilizer identity gives $|Gx|\,|G_x|=|G|=4$.
     For a transitive action, $Gx=X$.
 \end{proof}
+
+
+\begin{theorem}[L-symbols on a free transitive action]
+    \label{thm:asymex_free_action_l_symbols}
+    \lean{TNLean.Algebra.LSymbol.actionGaugeEquiv_of_bijective_smul,
+        TNLean.Algebra.LSymbol.isCompatible_regular}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    Let $G$ act freely and transitively on a nonempty set $X$.
+    Any two L-symbols $L_1,L_2$ compatible with the same three-cochain
+    $\omega$ are related by an action-tensor gauge, with the fusion gauge
+    fixed to one. If $\omega$ is a three-cocycle, the regular action of $G$
+    on itself admits the compatible solution $L^x_{g,h}=\omega(g,h,x)^{-1}$.
+    This is the trivial-stabilizer case of
+    \cite[Section~4.2]{GarreRubio2023MPOSym}, in the compatibility
+    convention of Definition~\ref{def:mpug_l_symbols}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix $x_0\in X$, and write each $x\in X$ uniquely as $k\cdot x_0$.
+    Set $\gamma_{g,k\cdot x_0}=L_2^{x_0}(g,k)/L_1^{x_0}(g,k)$.
+    Compatibility gives, for $i=1,2$,
+    \begin{align}
+        \label{eq:asymex_free_gauge}
+        L_i^{k\cdot x_0}(g,h)
+        =\frac{L_i^{x_0}(g,hk)L_i^{x_0}(h,k)}
+        {\omega(g,h,k)L_i^{x_0}(gh,k)}.
+    \end{align}
+    Taking the ratio in~(\ref{eq:asymex_free_gauge}) yields
+    $L_1^x(g,h)=\gamma_{gh,x}L_2^x(g,h)/
+        (\gamma_{g,h\cdot x}\gamma_{h,x})$.
+    For the regular action, the cocycle equation directly verifies
+    compatibility of $\omega(g,h,x)^{-1}$.
+\end{proof}
+
+\begin{theorem}[Unique four-block L-symbol class]
+    \label{thm:asymex_klein_four_block_uniqueness}
+    \lean{TNLean.Algebra.LSymbol.exists_regular_actionGaugeEquiv_of_kleinCocycleFamily_one}
+    \leanok
+    \uses{thm:asymex_klein_four_blocks,thm:asymex_free_action_l_symbols}
+    Let $G=\Z_2^2$ act transitively on a nonempty set $X$, and let $L$
+    be compatible with $\omega_{111}$.
+    There is an equivariant bijection $e:G\to X$ under which $L$ is
+    action-gauge equivalent to $L_0^k(g,h)=\omega_{111}(g,h,k)$.
+    Thus there is exactly one compatible L-symbol class, up to equivariant
+    relabeling and action-tensor gauge, and it has four blocks.
+    This is the L-symbol uniqueness assertion of
+    \cite[Section~6]{GarreRubio2023MPOSym} for the $(1,1,1)$ class.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_four_blocks,thm:asymex_free_action_l_symbols}
+    All stabilizers are trivial, so $e(k)=k\cdot x_0$ is an equivariant
+    bijection. Pull back $L$ along $e$ and apply
+    Theorem~\ref{thm:asymex_free_action_l_symbols}.
+    Every value of $\omega_{111}$ is $\pm1$, so its inverse equals itself.
+    The regular solution also proves existence.
+\end{proof}
