@@ -44,3 +44,4 @@ import TNLean.MPS.Core.TracePairing
 import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.Core.TransferPeripheral
 import TNLean.MPS.Core.WordFactor
+import TNLean.MPS.Core.WordGrading
