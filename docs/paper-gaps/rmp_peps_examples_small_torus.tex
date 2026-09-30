@@ -62,23 +62,32 @@ $w,h\ge 3$ the right and up edges of the sites are pairwise distinct and
 exhaust the edge set, and the formal statements hold there:
 \begin{enumerate}
     \item the cluster tensor on a torus of $N=wh$ sites has coefficient
-    $2^{-N}(-1)^{\sum_{\langle u,v\rangle}\sigma_u\sigma_v}$, the sum running
-    over nearest-neighbour bonds;
+          $2^{-N}(-1)^{\sum_{\langle u,v\rangle}\sigma_u\sigma_v}$, the sum running
+          over nearest-neighbour bonds;
     \item the CZX tensor has coefficient $1$ at a configuration in which the
-    four qubits around every plaquette agree, and $0$ otherwise;
+          four qubits around every plaquette agree, and $0$ otherwise;
     \item the AKLT tensor gives the symmetric projector at every site
-    applied to a singlet on every edge;
+          applied to a singlet on every edge;
     \item the RVB tensor gives the sum over nearest-neighbour dimer
-    coverings of the torus of the product of the singlets on the covered
-    edges;
+          coverings of the torus of the product of the singlets on the covered
+          edges;
     \item the classical-model tensor of a nearest-neighbour interaction $h$
-    at inverse temperature $\beta$ has coefficient $e^{-\beta H(\sigma)/2}$,
-    where $H$ sums $h$ over the nearest-neighbour bonds, so its diagonal
-    expectation values are those of the Gibbs state $e^{-\beta H}/Z$.
+          at inverse temperature $\beta$ has coefficient $e^{-\beta H(\sigma)/2}$,
+          where $H$ sums $h$ over the nearest-neighbour bonds, so its diagonal
+          expectation values are those of the Gibbs state $e^{-\beta H}/Z$.
 \end{enumerate}
-The GHZ example is not restricted: its coefficient depends only on whether
-the configuration is constant, and it is proved on every torus with
-$w,h\ge 2$.\footnote{Results: \leanid{TNLean.PEPS.stateCoeff_clusterPEPS},
+The GHZ example does not need the additional restriction $w,h\ge3$:
+its coefficient depends only on whether the configuration is constant,
+and it is proved on every torus with $w,h\ge2$. It still excludes a
+width or height of one, because a simple graph has no self-loops.
+The direct contraction with separate horizontal and vertical bond arrays
+is nevertheless proved to be the GHZ state for every positive $w,h$,
+including self-loops and parallel bonds
+(\leanid{TNLean.PEPS.sum_prod_ghzSiteTensor}). Its on-site permutation
+symmetry and the non-injectivity of its site tensor are also proved without
+a lower bound of two on the lattice sizes. Thus the GHZ statement itself
+has no remaining size gap; only its simple-graph representation excludes
+self-loops.\footnote{Results: \leanid{TNLean.PEPS.stateCoeff_clusterPEPS},
     \leanid{TNLean.PEPS.stateCoeff_czxPEPS},
     \leanid{TNLean.PEPS.stateCoeff_akltPEPS},
     \leanid{TNLean.PEPS.stateCoeff_rvbPEPS},
