@@ -796,3 +796,48 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     cancels the intermediate factors in every word product, giving
     $B^{[p]}=U^\dagger A^{[p]}U=C$.
 \end{proof}
+
+\begin{theorem}[Refining a weighted block sum]
+    \label{thm:periodic_weighted_block_refinement}
+    \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_refinement}
+    \leanok
+    If $A_k$ and $\bigoplus_{a=1}^{n_k}B_{k,a}$ have equal matrix product
+    vectors at every length, then $\bigoplus_k\mu_k A_k$ and
+    $\bigoplus_{k,a}\mu_k B_{k,a}$ do as well, for arbitrary complex
+    weights $\mu_k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Expand the trace of each block-diagonal product. The contribution from
+    $A_k$ is multiplied by $\mu_k^N$ at length $N$; substitute its refined
+    trace sum and enumerate the pairs $(k,a)$ in one finite list.
+\end{proof}
+
+\begin{theorem}[Positive blocking of an irreducible-form presentation]
+    \label{thm:periodic_irreducible_form_blocking}
+    \lean{MPSTensor.IsIrreducibleForm.block,MPSTensor.IsIrreducibleForm.sum_dim_eq}
+    \leanok
+    \uses{def:periodic_tensor}
+    Suppose $A$ has the same matrix product vectors at every length,
+    including zero, as $\bigoplus_k\mu_k A_k$, where $\mu_k>0$ and
+    $A_k$ is left-canonical periodic of period $m_k$.
+    For $p>0$, the blocked tensor $A^{[p]}$ has an irreducible-form
+    presentation indexed by
+    $0\le a<\gcd(m_k,p)$ for each original block $k$.
+    The block indexed by $(k,a)$ has weight $\mu_k^p$ and period
+    $m_k/\gcd(m_k,p)$. The total block dimension equals the bond dimension
+    of $A$. This is the blockwise application of
+    \cite[Lemma~6, proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_prescribed_blocking,thm:periodic_weighted_block_refinement}
+    Apply the prescribed-blocking decomposition separately to each $A_k$.
+    Blocking raises $\mu_k$ to the power $p$, and refinement preserves that
+    weight on every orbit block. The preceding theorem assembles the
+    resulting vector identities. All new weights remain positive.
+    At length zero the matrix product vector is the trace of the identity,
+    so equality at that length gives equality of total dimensions.
+\end{proof}

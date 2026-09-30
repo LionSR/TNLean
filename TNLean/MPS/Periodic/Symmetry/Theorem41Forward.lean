@@ -315,9 +315,11 @@ equality of MPV families.
 This theorem is therefore only the equal-case FT application step. It does not
 prove the full `PeripheralEqualCaseZGaugeOfSameMPV` hypothesis, since that
 hypothesis does not assume irreducible form for `blockTensor A p`. The remaining
-canonicalization work is to prove the missing irreducible-form input for the
-\(p\)-blocked tensor, and then to carry out the construction of
-\(\widetilde A\) from the matrix \(Z\) and the scalars \(c_{j,\alpha}\) in
+canonicalization work is to obtain the initial irreducible-form presentation of
+`A` with the required bond-space data. Given such a presentation, positive
+blocking is supplied by `IsIrreducibleForm.block` in `IrreducibleFormBlocking`.
+The corrected forward argument must still identify the equal-case gauge on the
+original orbit supports and assemble the construction of \(\widetilde A\) from
 arXiv:1708.00029, lines 765--810. -/
 theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
     (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
