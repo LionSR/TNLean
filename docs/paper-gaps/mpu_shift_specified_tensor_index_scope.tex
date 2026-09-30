@@ -36,11 +36,23 @@ index $-\log_2 d$, and the three displayed families
     U_1^{(N)} & = (\Id\otimes\Id)^{\otimes N},   \\
     U_2^{(N)} & = T^{(N)\dagger}\otimes T^{(N)}, \\
     U_3^{(N)} & = T^{(N)}\otimes T^{(N)\dagger}
+    \label{eq:mpu_shift_specified_tensor_index_scope_families}
 \end{align}
 have index zero.
 % Source: paper_v2.tex lines 1980--2001 and 2037--2041, label threeMPU.
 
 \section{Resolution}
+
+Let $E$ be the transfer matrix of a normal tensor with bond dimension $D$,
+and let $(\Phi|$ and $|\rho)$ be its left and right eigenvectors for the
+eigenvalue one, regarded as $D\times D$ matrices. Following
+Ref.~\cite{Cirac2017MPU}, the tensor is in canonical form II when
+$(\Phi|=\sum_{n=1}^D(n,n|$ and $|\rho)=\sum_{n=1}^D\rho_n|n,n)$ with every
+$\rho_n>0$ and $(\Phi|\rho)=1$; that is, $\Phi$ is the identity matrix and
+$\rho$ is a positive diagonal matrix of unit trace. A canonical-form-II
+representative of an MPU tensor is a tensor in this form generating the same
+periodic operators.
+% Source: paper_v2.tex lines 269--281, label Erightleft.
 
 The source-rank calculations are now identified with the public,
 blocking-independent index. The normalized right-shift transfer map is
@@ -72,7 +84,8 @@ The original numerical gap is resolved. The older specified-tensor
 calculations remain useful intermediate results, but the source's public
 index claim no longer depends on treating them as the public index itself.
 The separate assertion that shifts cannot be approximated by short-range
-time evolution is not a consequence established by these numerical theorems.
+time evolution~\cite{Cirac2021Matrix} is not a consequence established by
+these numerical theorems.
 
 \bibliographystyle{alpha}
 \bibliography{references}

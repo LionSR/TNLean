@@ -10768,8 +10768,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₁_index, MPOTensor.shiftExampleU₂_index,
         MPOTensor.shiftExampleU₃_index}
     \leanok
-    \uses{def:mpu_reduced_representative_index, threeMPU}
-    Let $d>0$. The right and left shifts and the three two-spin families satisfy
+    \uses{def:mpu_canonical_form_ii, def:mpu_reduced_representative_index,
+        threeMPU}
+    Let $d>0$. The right shift is in canonical form II in its original bond
+    coordinates, with ambient right fixed matrix $\rho=I/d$. The right and
+    left shifts and the three two-spin families satisfy
     \begin{align}
         \operatorname{ind}(T)        & =\log_2 d,               &
         \operatorname{ind}(T^\sharp) & =-\log_2 d,                \\
