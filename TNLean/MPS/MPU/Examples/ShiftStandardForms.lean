@@ -16,9 +16,9 @@ The supplied gates and half factors realize CPSV17, equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009–2034). The first two swap-transformed
 families realize the gates in `SFu1u3` (lines 2090–2099).
 
-The two blocked families use trace-normalized supplied source factors, with
-both normalization identities proved below. The unblocked third family still
-uses direct half factors; its normalization remains part of #7028.
+The two blocked families use trace-normalized supplied source factors. The
+unblocked third family uses reciprocal square-root scalings of its delta half
+factors. Both normalization identities are proved below for these witnesses.
 -/
 
 open scoped Matrix
@@ -51,18 +51,32 @@ noncomputable def shiftExampleU₁StandardForm (d : ℕ) [NeZero d] :
       Prod.mk.injEq, ite_and, apply_ite]
     split_ifs <;> simp_all
 
+/-- The identity family has isometric half factors, with its scalar bond weight one.
+Source: CPSV17, `Y1Y1X1X1` and `eq:SF_u1_u3`. -/
+theorem shiftExampleU₁StandardForm_normalized (d : ℕ) [NeZero d] :
+    (shiftExampleU₁StandardForm d).X₁.IsIsometry ∧
+      (shiftExampleU₁StandardForm d).X₂.IsIsometry := by
+  simp only [Matrix.IsIsometry]
+  constructor <;> ext r t <;>
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_prod_type] <;>
+    simp [shiftExampleU₁StandardForm, Matrix.one_apply, eq_comm] <;> split_ifs <;> simp
+
 /-- The counterpropagating family has swap gates (CPSV17, `eq:SF_u1_u3`). -/
 noncomputable def shiftExampleU₃StandardForm (d : ℕ) [NeZero d] :
     TwoSiteStandardFormData (shiftExampleU₃ d) (Matrix.swapMatrix d)
       (Matrix.swapMatrix d) := by
   classical
+  let c : ℂ := Real.sqrt d
+  have hc : c ≠ 0 := by
+    dsimp [c]
+    exact_mod_cast (Real.sqrt_pos.2 (Nat.cast_pos.mpr (NeZero.pos d))).ne'
   refine {
     phys_pos := NeZero.pos d
     bond_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     left_pos := NeZero.pos d
     right_pos := NeZero.pos d
-    X₁ := fun i r => if i.2.divNat = r ∧ i.2.modNat = i.1 then 1 else 0
-    X₂ := fun i l => if i.1.divNat = i.2 ∧ i.1.modNat = l then 1 else 0
+    X₁ := fun i r => if i.2.divNat = r ∧ i.2.modNat = i.1 then c else 0
+    X₂ := fun i l => if i.1.divNat = i.2 ∧ i.1.modNat = l then c⁻¹ else 0
     u_unitary := Matrix.swapMatrix_isUnitaryBetween d
     v_unitary := Matrix.swapMatrix_isUnitaryBetween d
     v_apply := ?_
@@ -78,6 +92,35 @@ noncomputable def shiftExampleU₃StandardForm (d : ℕ) [NeZero d] :
       Matrix.single, Matrix.swapMatrix, ite_and, eq_comm]
     split_ifs <;> simp_all
 
+
+/-- The unblocked third family has normalized half factors with trace-one bond weight.
+Source: CPSV17, `Y1Y1X1X1` and `eq:SF_u1_u3`. -/
+theorem shiftExampleU₃StandardForm_normalized (d : ℕ) [NeZero d] :
+    let T := shiftExampleU₃StandardForm d
+    T.X₁ᴴ * sourceWeight (d := d) (shiftPaperWeightSquared d) * T.X₁ = 1 ∧
+      T.X₂.IsIsometry := by
+  have hw : sourceWeight (d := d) (shiftPaperWeightSquared d) =
+      ((d : ℂ)⁻¹ * (d : ℂ)⁻¹) • (1 : Matrix (Fin d × Fin (d * d)) _ ℂ) := by
+    simp [sourceWeight, shiftPaperWeightSquared, shiftPaperWeight, Matrix.kronecker_smul]
+  have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
+  have hs : (Real.sqrt d : ℂ) * (Real.sqrt d : ℂ) = (d : ℂ) := by
+    exact_mod_cast Real.mul_self_sqrt (Nat.cast_nonneg d : (0 : ℝ) ≤ d)
+  constructor
+  · rw [hw, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul]
+    ext r t
+    simp only [Matrix.smul_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+      Fintype.sum_prod_type]
+    simp_rw [← Equiv.sum_comp finProdFinEquiv]
+    simp [shiftExampleU₃StandardForm, Fintype.sum_prod_type, Matrix.one_apply,
+      ite_and, mul_ite, eq_comm]
+    split_ifs <;> simp_all [mul_assoc]
+  · change (shiftExampleU₃StandardForm d).X₂ᴴ * (shiftExampleU₃StandardForm d).X₂ = 1
+    ext r t
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_prod_type]
+    rw [← Equiv.sum_comp finProdFinEquiv]
+    simp [shiftExampleU₃StandardForm, Fintype.sum_prod_type, Matrix.one_apply,
+      ite_and, mul_ite, eq_comm]
+    split_ifs <;> simp_all [Complex.ofReal_sqrt_inv_mul_self, Nat.cast_nonneg]
 
 /-- The first counterpropagating family after two-site blocking, with the
 four-spin gates of CPSV17, equation `eq:uv2_U2`, lines 2021–2026. -/

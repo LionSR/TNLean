@@ -11056,11 +11056,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₂Paper_sourceU_fourSpin_apply,
         MPOTensor.shiftExampleU₂Paper_sourceV_fourSpin_apply,
         MPOTensor.shiftExampleU₃Paper_sourceU_fourSpin_apply,
-        MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply,
-        MPOTensor.shiftExampleU₂BlockedStandardForm,
-        MPOTensor.shiftExampleU₃BlockedStandardForm,
-        MPOTensor.shiftExampleU₂BlockedStandardForm_normalized,
-        MPOTensor.shiftExampleU₃BlockedStandardForm_normalized}
+        MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply}
     \leanok
     \uses{threeMPU, def:mpu_weighted_source_factors}
     For $d>0$, the two counterpropagating shift tensors have source factors
@@ -11072,29 +11068,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         u_3 & = (I\otimes\mathbb S\otimes I)(\mathbb S\otimes\mathbb S),
             & v_3                                                        & = I\otimes\mathbb S\otimes I.
     \end{align}
-    After relabeling the intermediate coordinates, these same factors give
-    standard forms of the two-site blocks of $U_2$ and $U_3$. Their
-    normalizations are $X_1^*(I\otimes\rho)X_1=I$ and $X_2^*X_2=I$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:threeMPU_U2_supplied_source_gates_two,
-        thm:threeMPU_U3_supplied_source_gates_two,
-        thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity}
+        thm:threeMPU_U3_supplied_source_gates_two}
     Starting with the identity-weight source factors, replace
     $X_1,Y_1,Z_1$ by $dX_1,d^{-1}Y_1,dZ_1$, respectively, and leave the
     second cut unchanged. The cut factorizations and right inverses are
     preserved, while the first weighted isometry now uses $d^{-2}I_{d^2}$.
     The source gates scale by $d^{-1}$ and $d$, cancelling the reciprocal
-    factors in the identity-weight formulas. Relabel the intermediate rank
-    coordinates by the displayed pairs of spin indices. The source-factor
-    contraction theorem supplies the open equation, and the permutation
-    matrix identities give both gate unitarities. Relabeling preserves the
-    two normalization identities.
+    factors in the identity-weight formulas.
 \end{proof}
 
 \begin{proposition}[Standard forms of the three shift MPUs]
     \label{prop:threeMPU_standard_forms}
-    \notready
+    \lean{MPOTensor.shiftExampleU₁StandardForm,
+        MPOTensor.shiftExampleU₃StandardForm,
+        MPOTensor.shiftExampleU₂BlockedStandardForm,
+        MPOTensor.shiftExampleU₃BlockedStandardForm,
+        MPOTensor.shiftExampleU₁StandardForm_normalized,
+        MPOTensor.shiftExampleU₃StandardForm_normalized,
+        MPOTensor.shiftExampleU₂BlockedStandardForm_normalized,
+        MPOTensor.shiftExampleU₃BlockedStandardForm_normalized}
+    \leanok
     \uses{threeMPU, def:mpu_supplied_two_site_standard_form}
     Assume $d>0$. The three shift families have standard forms whose
     unitary gates satisfy
@@ -11114,21 +11110,25 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 2002--2042.
 \end{proposition}
 
-\begin{proof}
-    The gate identities and open contractions follow using Kronecker deltas for the half factors, connecting each physical spin
-    to the virtual spin along its shift direction. For the identity family,
-    the half factors are $X_1(i,\gamma;r)=\delta_{i,r}$ and
-    $X_2(\alpha,i;\ell)=\delta_{i,\ell}$. For the unblocked third family,
-    they are
-    $X_1(i,(a,b);r)=\delta_{a,r}\delta_{b,i}$ and
-    $X_2((a,b),i;\ell)=\delta_{a,i}\delta_{b,\ell}$.
-    Contracting the common virtual index gives the identity and swap gates,
-    respectively. For the two-site blocks, the same contractions in the
-    displayed four-spin order give the ordered products above. All gates
-    are permutation matrices and hence unitary. Contracting each unshifted
-    gate with its two half factors recovers the corresponding tensor entries.
-    The identification with trace-normalized source factors remains to be proved;
-    these contractions alone do not establish the normalization asserted above.
+\begin{proof}\leanok
+    \uses{thm:threeMPU_normalized_source_gates,
+        thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity}
+    For the identity family, take
+    $X_1(i,\gamma;r)=\delta_{i,r}$ and
+    $X_2(\alpha,i;\ell)=\delta_{i,\ell}$. For the unblocked third family, take
+    \begin{align}
+        X_1(i,(a,b);r)    & =\sqrt d\,\delta_{a,r}\delta_{b,i},   &
+        X_2((a,b),i;\ell) & =d^{-1/2}\delta_{a,i}\delta_{b,\ell}.
+    \end{align}
+    The reciprocal scalars cancel in both contractions. Summing the Gram
+    entries proves $X_1^*(I\otimes\rho)X_1=I$ and $X_2^*X_2=I$, with
+    $\rho=d^{-2}I_{d^2}$ for the third family and $\rho=1$ for the identity.
+    For the two blocked families, use the trace-normalized source factors
+    of Theorem~\ref{thm:threeMPU_normalized_source_gates}, relabeling the
+    intermediate coordinates by pairs of spin indices. The source-factor
+    contraction theorem gives the open equation, and the four-spin permutation
+    matrices are unitary. The coordinate relabeling preserves both normalization
+    identities.
 \end{proof}
 
 \begin{definition}[Transformation with swaps]

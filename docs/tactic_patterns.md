@@ -2337,12 +2337,12 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** reindex a finite bond sum by `finProdFinEquiv`, expand tensor
   entries, and contract Kronecker deltas with `simp`; finish reordered
   equality tests with `split_ifs` and `simp_all`.
-- **Seen:** the four open-leg and shifted-gate checks of
-  `shiftExampleU₂BlockedStandardForm` and `shiftExampleU₃BlockedStandardForm`
-  in `TNLean/MPS/MPU/Examples/ShiftStandardForms.lean` (2026-09-29).
-- **Decision:** keep the explicit gate-specific expansions while the pattern
-  is confined to one module. If another standard-form example repeats it,
-  first seek a finite-sum lemma rather than a new tactic.
+- **Seen:** the direct identity, unblocked third-family, and swap-transformed
+  witnesses in `TNLean/MPS/MPU/Examples/ShiftStandardForms.lean`.
+- **Decision:** the two blocked families now use normalized source factors and
+  the shared open-contraction theorem instead. Keep the remaining explicit
+  gate-specific expansions while the pattern is confined to one module; if
+  another example repeats it, first seek a finite-sum lemma rather than a tactic.
 
 
 ### Positive local terms with prescribed kernels
