@@ -1120,7 +1120,8 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_cohomologousTo_iff,
         TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_one_isTrivialGaugeClass_comap_iff}
     \leanok
-    \uses{def:asymex_klein_cocycle_family,thm:asymex_klein_cocycle_restrictions}
+    \uses{def:asymex_klein_cocycle_family,thm:asymex_klein_cocycle_restrictions,
+        def:mpug_cohomologous_to,def:mpug_trivial_gauge_class,def:mpug_cochain_restriction}
     The representatives $\omega_{pqr}$ and $\omega_{p'q'r'}$ are cohomologous
     if and only if $(p,q,r)=(p',q',r')$. For every subgroup $H\leq\Z_2^2$,
     the class of $\omega_{111}|_H$ is trivial if and only if $H=\{0\}$.
@@ -1130,7 +1131,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_klein_cocycle_restrictions}
+    \uses{thm:asymex_klein_cocycle_restrictions,thm:mpug_cyclic_invariant_gauge}
     For an element $g$ of order dividing two, the cyclic product
     $\omega(g,0,g)\omega(g,g,g)$ is invariant under multiplication by a
     three-coboundary. Normalization reduces it to $\omega(g,g,g)$.
