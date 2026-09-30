@@ -113,6 +113,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:periodic_sector_rephasing}
     Orthogonality gives $P_u A'^i=c_uP_u A^i=c_uA^iP_{u+1}$.
     Induction on the word length gives the first identity in
     (\ref{eq:periodic_sector_rephasing_words}); summing it over $u$ gives the second.
@@ -131,6 +132,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:periodic_sector_rephasing}
     Put $U=\sum_uc_uP_u$. Orthogonality gives
     $U^\dagger U=\sum_u|c_u|^2P_u=\Id$. Since $A'^i=UA^i$,
     $\sum_i(A'^i)^\dagger A'^i=\sum_i(A^i)^\dagger U^\dagger UA^i=\Id$.
@@ -155,7 +157,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_orbit_phase_products,
+    \uses{def:periodic_sector_rephasing,thm:periodic_orbit_phase_products,
         thm:periodic_sector_rephasing_words,
         thm:periodic_sector_rephasing_left_canonical}
     Since $m/r>0$, each root $c_\alpha$ has modulus one. Apply
