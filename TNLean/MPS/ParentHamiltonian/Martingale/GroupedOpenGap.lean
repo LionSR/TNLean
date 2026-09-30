@@ -13,10 +13,15 @@ The filtration advances by \(p\) sites and the parent interaction has range
 This gives constants one in conditions C1 and C2 and an overlap width of one
 in the grouped index.
 
+Theorem 2.1 has distinct parts: (i) assumes C1--C3 at a single length,
+whereas (ii) assumes C1-prime, C2 and C3-prime and concludes the grouped
+estimate for \(N=l_0 M\). The latter is printed at lines 1131--1136 of
+`References/cond-mat_9410110/main.tex` (theorem `gapestimate`).
+
 ## References
 
 * Nachtergaele, arXiv:cond-mat/9410110, conditions C1-prime and C3-prime,
-  lines 1095--1120, and Theorem 2.1(ii), lines 1130--1139.
+  lines 1095--1120, and Theorem 2.1(ii), lines 1131--1136.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace
@@ -86,7 +91,7 @@ theorem grouped_martingaleDifference_norm_le_of_two_le
 Hamiltonian. Conditions C1 and C2 have constants one; the active grouped
 window has two indices, giving the coefficient \((1-\epsilon\sqrt2)^2\).
 This is the chosen-range specialization of Nachtergaele's Theorem 2.1(ii),
-arXiv:cond-mat/9410110, lines 1130--1139. -/
+arXiv:cond-mat/9410110, lines 1131--1136. -/
 theorem openParentHamiltonianES_norm_gap_of_grouped_c3
     (A : MPSTensor d D) {p M : ℕ} (hp : 0 < p) (hM : 2 ≤ M)
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)

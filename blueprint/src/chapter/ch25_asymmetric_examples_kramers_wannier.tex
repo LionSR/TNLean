@@ -725,9 +725,8 @@ normalization on the spectral radius of a transfer map.
 
 \begin{theorem}[Split compression of the squared duality]
     \label{thm:asymex_kw_compression}
-    % Principal declaration: KWExample.kwSquare_isReduction.
-    \lean{KWExample.kwSquare_compression, KWExample.kwSquare_isReduction,
-        KWExample.kwSquare_left_mul_right_of_ne, KWExample.kwSquare_dim_eq,
+    % Principal declaration: KWExample.kwSquare_dim_eq.
+    \lean{KWExample.kwSquare_compression, KWExample.kwSquare_dim_eq,
         KWExample.kwSquare_remainder_eq_zero}
     \leanok
     \uses{def:asymex_kw, thm:asym_multiblock}
@@ -1082,9 +1081,8 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
 
 \begin{theorem}[The duality on the product state splits]
     \label{thm:asymex_kw_plus}
-    % Principal declaration: KWExample.plus_isReduction.
-    \lean{KWExample.plusCompression, KWExample.plus_isReduction,
-        KWExample.plus_dim_eq, KWExample.plus_remainder_eq_zero,
+    % Principal declaration: KWExample.plus_dim_eq.
+    \lean{KWExample.plusCompression, KWExample.plus_dim_eq, KWExample.plus_remainder_eq_zero,
         KWExample.kwPlus_trace_evalWord_eq_sum}
     \leanok
     \uses{def:asymex_kw_action, thm:asym_multiblock}
@@ -1120,11 +1118,10 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
 
 \begin{theorem}[The duality on the ferromagnetic state does not split]
     \label{thm:asymex_kw_ghz}
-    % Principal declaration: KWExample.kwGHZ_isReduction.
-    \lean{KWExample.kwGHZCompression, KWExample.kwGHZ_isReduction,
-        KWExample.kwGHZ_dim_eq, KWExample.kwGHZ_evalWord_remainder_eq_zero,
-        KWExample.kwGHZRemainder_eq, KWExample.kwGHZ_remainder_mul_remainder,
-        KWExample.kwGHZ_trace_evalWord_eq_two}
+    % Principal declaration: KWExample.kwGHZ_dim_eq.
+    \lean{KWExample.kwGHZCompression, KWExample.kwGHZ_dim_eq,
+        KWExample.kwGHZ_evalWord_remainder_eq_zero, KWExample.kwGHZRemainder_eq,
+        KWExample.kwGHZ_remainder_mul_remainder, KWExample.kwGHZ_trace_evalWord_eq_two}
     \leanok
     \uses{def:asymex_kw_action, thm:asym_multiblock}
     The second action tensor of Definition~\ref{def:asymex_kw_action}
