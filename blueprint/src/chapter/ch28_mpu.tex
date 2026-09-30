@@ -11171,7 +11171,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₃Paper_sourceV_fourSpin_apply}
     \leanok
     \uses{threeMPU, def:mpu_weighted_source_factors,
-        def:mpu_source_uv}
+        def:mpu_source_uv, def:mpu_shift_trace_weight}
     For $d>0$, the two counterpropagating shift tensors have source factors
     with trace-one weight $\rho=d^{-2}\Id_{d^2}$. In the four-spin coordinates
     used above, their source gates are
@@ -11204,7 +11204,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₂BlockedStandardForm,
         MPOTensor.shiftExampleU₃BlockedStandardForm}
     \leanok
-    \uses{threeMPU, def:mpu_supplied_two_site_standard_form}
+    \uses{threeMPU, def:mpu_supplied_two_site_standard_form,
+        def:mpu_shift_trace_weight}
     Assume $d>0$. The three shift families have standard forms whose
     unitary gates satisfy
     \begin{align}
@@ -11363,7 +11364,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleTildeU₁StandardForm_normalized,
         MPOTensor.shiftExampleTildeU₂StandardForm_normalized}
     \leanok
-    \uses{threeMPU2, def:mpu_supplied_two_site_standard_form}
+    \uses{threeMPU2, def:mpu_supplied_two_site_standard_form,
+        def:mpu_shift_trace_weight}
     For $d>0$, the first two transformed families have standard forms
     \begin{align}
         \widetilde u_1 & =\mathbb S,     &
