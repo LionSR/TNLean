@@ -302,7 +302,11 @@ theorem IsMPU.normalizedDiagonal_mul_mem_residualAlgebra_mul_normalizedDiagonal_
     | smul c x _ hx => simp [hx]
   exact hspan _ hA
 
-private theorem diagonal_coeff_prod_eq
+/-- The product of the sitewise Kronecker deltas of two blocked physical indices
+is the Kronecker delta of the blocked indices.
+
+Source: arXiv:1703.09188, equation `sprimeforms`, lines 415--424. -/
+theorem diagonal_coeff_prod_eq
     {N d : ℕ} (I J : Fin (Kraus.blockPhysDim d N)) :
     (∏ k : Fin N, if Kraus.decodeBlock d N I k = Kraus.decodeBlock d N J k
       then (1 : ℂ) else 0) = if I = J then 1 else 0 := by

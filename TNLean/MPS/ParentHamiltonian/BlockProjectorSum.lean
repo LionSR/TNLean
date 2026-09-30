@@ -57,8 +57,7 @@ private theorem norm_inner_sum_starProjection_sub_le
     {u : E} (hu : u ∈ ⨆ i, V i) (z : E) :
     ‖⟪z, (∑ i, (V i).starProjection) u - u⟫_ℂ‖ ≤
       ‖B‖ / (1 - ‖B‖) * ‖(∑ i, (V i).starProjection) z‖ * ‖u‖ := by
-  obtain ⟨v, rfl⟩ := (mem_iSup_finset_iff_exists_sum (s := Finset.univ) V u).mp
-    (by simpa using hu)
+  obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu
   rw [inner_sum_starProjection_sum_sub]
   have htri := norm_sum_offDiagonal_le (fun i j ↦ ⟪(V i).starProjection z, (v j : E)⟫_ℂ)
   have hbound := sum_offDiagonal_norm_inner_le_of_overlapMatrix

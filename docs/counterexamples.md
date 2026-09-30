@@ -326,3 +326,19 @@ mathematical obstruction.
   the norm lower bound on the orthogonal complement of `ker H`.
 - Witness: `H = -Id` satisfies the inequality vacuously for positive `gamma`
   but fails the desired lower-bound conclusion.
+
+### The dimension-only FNW prefactor fails at a prescribed rate
+
+- Location: `TNLean/MPS/ParentHamiltonian/FNWDimensionConstant/Counterexample.lean`
+- Main declaration:
+  `MPSTensor.FNWDimensionConstant.exists_dimensionFour_counterexample`
+- Statement refuted: Nachtergaele's dimension-only prefactor $c=k^2$ bounds
+  the projector defect at every admissible rate from the fixed intersection
+  threshold.
+- Witness: an injective bond-dimension-$4$, physical-dimension-$16$ tensor
+  with a faithful primitive trace-one stationary state. At rate $1/1000$,
+  overlap two, and the coefficient $c=16$, the four-site projector defect is
+  at least $1/16$, which exceeds the proposed geometric bound.
+- Caveat: this does not refute an eventual estimate whose prefactor may
+  depend on the tensor, nor a bound that chooses the rate after fixing the
+  dimension-only prefactor.

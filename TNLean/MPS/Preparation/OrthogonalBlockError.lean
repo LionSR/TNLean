@@ -18,7 +18,8 @@ whose `q`-site states overlap (`docs/paper-gaps/mswc24_block_form_mixed_overlap.
 This file proves the bound for blocks of multiplicity one with positive weights whose `q`-site
 states are orthogonal: for `Aⁱ = ⊕ⱼ μⱼ A_jⁱ` with `μⱼ > 0`, normal blocks `A_j` in the gauge of
 eq. (5), and a common bound `λ₂` on the subleading eigenvalues of their transfer maps, there is
-`C` such that `ε ≤ C y e^{C y}` with `y = (N/q) e^{-γ q/ξ_diag}`, for every block length `q` at
+`C` such that `ε ≤ C y e^{C y}` with `y = M e^{-γ q/ξ_diag}` (`= (N/q) e^{-γ q/ξ_diag}` for
+`q ≥ 1`), for every block length `q` at
 which the blocked tensors of distinct blocks satisfy `B_jᴴ B_{j'} = 0`, and every number of
 blocks `M ≥ 1` (`exists_approximationError_le_blockSum`); in `O`-form, `ε ≤ C y`
 (`exists_approximationError_le_mul_blockSum`).
@@ -314,7 +315,8 @@ transfer map `E_{A_j}`, so that `ξ = -1/log|λ₂|` bounds the correlation leng
 `0 < γ < 1/2`. There is `C > 0` such that for every block length `q` at which the `q`-site
 states of distinct blocks are orthogonal, `B_jᴴ B_{j'} = 0`, and every number of blocks
 `M ≥ 1`, with `N = qM`, `βⱼ = μⱼ^N` (eq. (S4) for `m_j = 1`), the pairs of the `σ_j` embedded
-along `ι_j`, and `y = (N/q) e^{-γ q/ξ}`, the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating
+along `ι_j`, and `y = M e^{-γ q/ξ}` (`= (N/q) e^{-γ q/ξ}` for `q ≥ 1`), the error
+`ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating
 state of eq. (S7) satisfies `ε ≤ C y e^{C y}`.
 
 No condition `q = o(N)` is needed: under the orthogonality the source's off-diagonal term
@@ -352,38 +354,17 @@ theorem exists_approximationError_le_blockSum [NeZero b] (hι : ∀ j, Function.
   have hS₃ : 0 ≤ S₃ := Finset.sum_nonneg fun j _ => by positivity
   set C := 2 * (S₁ + S₂) + S₃ + 1
   refine ⟨C, by positivity, fun q M _ horth => ?_⟩
-  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
-    rw [← Real.exp_nat_mul]; congr 1; ring
+  have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q :=
+    Real.exp_neg_mul_div_eq_pow _ _ q
   rw [hxq]
-  set u := (M : ℝ) * x ^ q
   have hM : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  have hu : 0 ≤ u := by positivity
-  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   set ov := nonNormalApproxOverlap (blockSum Aj ι fun j => (μ j : ℂ)) q M
     (ghzAmplitude fun j => (μ j : ℂ) ^ (M * q)) (fun j => embedPair (ι j) (fixedPointPair (σ j)))
-  have hε1 : 1 - ‖ov‖ ≤ 1 := by linarith [norm_nonneg ov]
-  by_cases hbig : 1 ≤ C * u
-  · exact hε1.trans (hbig.trans (le_mul_of_one_le_right (by positivity) hexp))
-  rw [not_le] at hbig
-  have hx1 : x < 1 := by
-    by_contra h
-    rw [not_lt] at h
-    have : 1 ≤ u := one_le_mul_of_one_le_of_one_le hM (one_le_pow₀ h)
-    have : 1 ≤ C := by linarith
-    nlinarith
-  have hLq : ∀ j, L j ≤ q := fun j => by
-    by_contra h
-    rw [not_le] at h
-    have hxLq : x ^ L j ≤ x ^ q := pow_le_pow_of_le_one hx.le hx1.le h.le
-    have h1 : x ^ L j ≤ u := hxLq.trans (le_mul_of_one_le_left (by positivity) hM)
-    have h2 : 1 ≤ (x ^ L j)⁻¹ * u := by
-      rw [← inv_mul_cancel₀ (by positivity : x ^ L j ≠ 0)]
-      exact mul_le_mul_of_nonneg_left h1 (by positivity)
-    have h3 : (x ^ L j)⁻¹ ≤ S₃ :=
-      Finset.single_le_sum (f := fun j => (x ^ L j)⁻¹) (fun j _ => by positivity)
-        (Finset.mem_univ j)
-    have h4 : (x ^ L j)⁻¹ * u ≤ C * u := mul_le_mul_of_nonneg_right (by linarith) hu
-    linarith
+  refine le_mul_mul_exp_of_forall_le hx (show 1 + S₃ ≤ C by linarith) hM
+    (by linarith [norm_nonneg ov]) fun hx1 hLq _ => ?_
+  set u := (M : ℝ) * x ^ q
+  have hu : 0 ≤ u := by positivity
+  have hexp : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by positivity)
   have hq : q ≠ 0 := fun h => by have := hLq 0; have := hLpos 0; omega
   have hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q) := fun j =>
     (isNBlkInjective_iff_blockTensor_isInjective (Aj j) q).1

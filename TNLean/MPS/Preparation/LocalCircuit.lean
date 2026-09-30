@@ -117,29 +117,34 @@ theorem star_mem_supportedOperators {S : Set (Fin N)} {A : Matrix (Cfg d N) (Cfg
   | add x y _ _ hx hy => rw [star_add]; exact Submodule.add_mem _ hx hy
   | smul c x _ hx => rw [star_smul]; exact Submodule.smul_mem _ _ hx
 
+/-- Two bilinear maps agree on every pair of an operator acting on `S` and an operator acting
+on `S'` once they agree on the pairs of product operators `⊗ᵢ mᵢ`, `⊗ᵢ m'ᵢ` with `mᵢ = 1` off
+`S` and `m'ᵢ = 1` off `S'`. -/
+theorem eq_of_mem_supportedOperators₂ {M : Type*} [AddCommMonoid M] [Module ℂ M]
+    {S S' : Set (Fin N)}
+    (f g : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] M)
+    (h : ∀ m m' : Fin N → Matrix (Fin d) (Fin d) ℂ, (∀ i ∉ S, m i = 1) → (∀ i ∉ S', m' i = 1) →
+      f (finKronecker m) (finKronecker m') = g (finKronecker m) (finKronecker m'))
+    {A B : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d S)
+    (hB : B ∈ supportedOperators d S') : f A B = g A B := by
+  have hgen : ∀ m, (∀ i ∉ S, m i = 1) → f (finKronecker m) B = g (finKronecker m) B :=
+    fun m hm ↦ LinearMap.eqOn_span' (by rintro _ ⟨m', hm', rfl⟩; exact h m m' hm hm') hB
+  exact LinearMap.eqOn_span' (f := f.flip B) (g := g.flip B)
+    (by rintro _ ⟨m, hm, rfl⟩; exact hgen m hm) hA
+
 /-- Operators acting on disjoint sets of sites commute. -/
 theorem commute_of_mem_supportedOperators {S S' : Set (Fin N)} (hSS' : Disjoint S S')
     {A B : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d S)
     (hB : B ∈ supportedOperators d S') : Commute A B := by
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
-    induction hB using Submodule.span_induction with
-    | mem y hy =>
-      obtain ⟨m', hm', rfl⟩ := hy
-      change finKronecker m * finKronecker m' = finKronecker m' * finKronecker m
-      rw [finKronecker_mul, finKronecker_mul]
-      congr 1
-      funext i
-      by_cases hi : i ∈ S
-      · simp [hm' i (Set.disjoint_left.mp hSS' hi)]
-      · simp [hm i hi]
-    | zero => exact Commute.zero_right _
-    | add y z _ _ hy hz => exact hy.add_right hz
-    | smul c y _ hy => exact hy.smul_right c
-  | zero => exact Commute.zero_left _
-  | add x y _ _ hx hy => exact hx.add_left hy
-  | smul c x _ hx => exact hx.smul_left c
+  refine eq_of_mem_supportedOperators₂ (LinearMap.mul ℂ _) (LinearMap.mul ℂ _).flip
+    (fun m m' hm hm' ↦ ?_) hA hB
+  change finKronecker m * finKronecker m' = finKronecker m' * finKronecker m
+  rw [finKronecker_mul, finKronecker_mul]
+  congr 1
+  funext i
+  by_cases hi : i ∈ S
+  · simp [hm' i (Set.disjoint_left.mp hSS' hi)]
+  · simp [hm i hi]
 
 /-! ### Expectations in product vectors -/
 
@@ -190,29 +195,20 @@ theorem expect_productVector_mul {S S' : Set (Fin N)} (hSS' : Disjoint S S')
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S') :
     expect (productVector v) (A * B) * expect (productVector v) 1 =
       expect (productVector v) A * expect (productVector v) B := by
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
-    induction hB using Submodule.span_induction with
-    | mem y hy =>
-      obtain ⟨m', hm', rfl⟩ := hy
-      rw [finKronecker_mul, ← finKronecker_one, expect_productVector_finKronecker,
-        expect_productVector_finKronecker, expect_productVector_finKronecker,
-        expect_productVector_finKronecker, ← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
-      refine Finset.prod_congr rfl fun i _ ↦ ?_
-      by_cases hi : i ∈ S
-      · simp [hm' i (Set.disjoint_left.mp hSS' hi)]
-      · simp [hm i hi, mul_comm]
-    | zero => simp [expect_zero]
-    | add y z _ _ hy hz => rw [Matrix.mul_add, expect_add, expect_add, add_mul, hy, hz, mul_add]
-    | smul c y _ hy =>
-      rw [Matrix.mul_smul, expect_smul, expect_smul, mul_assoc, hy]
-      ring
-  | zero => simp [expect_zero]
-  | add x y _ _ hx hy => rw [Matrix.add_mul, expect_add, expect_add, add_mul, hx, hy, add_mul]
-  | smul c x _ hx =>
-    rw [Matrix.smul_mul, expect_smul, expect_smul, mul_assoc, hx]
-    ring
+  let φ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] ℂ :=
+    { toFun := expect (productVector v), map_add' := expect_add _, map_smul' := expect_smul _ }
+  rw [mul_comm]
+  refine eq_of_mem_supportedOperators₂ (expect (productVector v) 1 • (LinearMap.mul ℂ _).compr₂ φ)
+    ((LinearMap.mul ℂ ℂ).compl₁₂ φ φ) (fun m m' hm hm' ↦ ?_) hA hB
+  change expect (productVector v) 1 * expect (productVector v) (finKronecker m * finKronecker m') =
+    expect (productVector v) (finKronecker m) * expect (productVector v) (finKronecker m')
+  rw [finKronecker_mul, ← finKronecker_one, expect_productVector_finKronecker,
+    expect_productVector_finKronecker, expect_productVector_finKronecker,
+    expect_productVector_finKronecker, ← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
+  refine Finset.prod_congr rfl fun i _ ↦ ?_
+  by_cases hi : i ∈ S
+  · simp [hm' i (Set.disjoint_left.mp hSS' hi), mul_comm]
+  · simp [hm i hi]
 
 /-! ### Neighbourhoods on the ring -/
 

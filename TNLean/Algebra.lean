@@ -8,13 +8,16 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
 
+import TNLean.Algebra.AnticommutingEvenDimension
 import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CStarSqrtHolder
+import TNLean.Algebra.CStarSqrtLipschitz
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CharacterProjector
+import TNLean.Algebra.CharacterProjectorTwirl
 import TNLean.Algebra.CircleCohomology
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CocycleRestriction
@@ -38,6 +41,7 @@ import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
+import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.FlagBlockTriangular
@@ -47,11 +51,13 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
+import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
+import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum
@@ -74,11 +80,14 @@ import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
+import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
 import TNLean.Algebra.RepresentationDelta
+import TNLean.Algebra.RepresentationTensorProduct
 import TNLean.Algebra.RestrictedScalarGauge
 import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.ScalarThreeCocycleCyclicClass
 import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
 import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
@@ -91,7 +100,9 @@ import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
+import TNLean.Algebra.StabilizerCocycleReconstruction
 import TNLean.Algebra.StabilizerTransition
+import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SwapKronecker
@@ -105,6 +116,7 @@ import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryConjugationTransposeSign
+import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryKronecker

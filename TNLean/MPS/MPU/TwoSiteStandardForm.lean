@@ -164,7 +164,7 @@ theorem reindexPhysical_blockTwo_blockTensor_two_mul
   exact reindexPhysical_blockTwo_blockTensor_of_eq U k (2 * k) (Nat.mul_comm 2 k)
 
 /-- A canonical-form-II MPU has a positive simple block of length at most
-`D ^ 4` whose two-site block has the supplied source standard form. Its
+`D * D` whose two-site block has the supplied source standard form. Its
 physical coordinates agree with direct blocking by `2 * k` through the
 displayed equivalence. The source cuts and gates are formed on the same
 length-`k` block, with the fixed matrix recorded by the original datum.
@@ -173,7 +173,7 @@ Source: arXiv:1703.09188, Proposition III.3(ii), Theorem `ThmFund1`, and
 Definition `SF`, lines 378--427 and 563--622. -/
 theorem IsMPUCanonicalFormII.exists_twoSiteStandardFormData_blockTensor
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) :
-    ∃ k : ℕ, 0 < k ∧ k ≤ D ^ 4 ∧
+    ∃ k : ℕ, 0 < k ∧ k ≤ D * D ∧
       IsMPUSimple (MPOTensor.blockTensor U k) ∧
       Nonempty (TwoSiteStandardFormData (blockTwo (MPOTensor.blockTensor U k))
         (sourceU (MPOTensor.blockTensor U k) hU.ρ hU.ρ_posDef)
@@ -182,8 +182,10 @@ theorem IsMPUCanonicalFormII.exists_twoSiteStandardFormData_blockTensor
         (blockTwo (MPOTensor.blockTensor U k)) = MPOTensor.blockTensor U (2 * k) := by
   have : NeZero d := hU.neZero_phys
   have : NeZero D := hU.neZero_bond
-  obtain ⟨k, hk, hkD, hsimple⟩ := hU.isMPU.exists_blockTensor_isMPUSimple
-  refine ⟨k, hk, hkD, hsimple, ?_, reindexPhysical_blockTwo_blockTensor_two_mul U k⟩
-  exact ⟨(hU.blockTensor k hk).twoSiteStandardFormData hsimple⟩
+  have hk : 0 < D * D := Nat.mul_pos (NeZero.pos D) (NeZero.pos D)
+  have hsimple := hU.isMPU.blockTensor_sq_isMPUSimple
+  refine ⟨D * D, hk, le_rfl, hsimple, ?_,
+    reindexPhysical_blockTwo_blockTensor_two_mul U (D * D)⟩
+  exact ⟨(hU.blockTensor (D * D) hk).twoSiteStandardFormData hsimple⟩
 
 end MPOTensor

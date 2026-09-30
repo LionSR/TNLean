@@ -106,6 +106,188 @@ remaining eigenvalues have modulus strictly less than $1$.
     the square root is continuous on positive semidefinite matrices.
 \end{proof}
 
+\begin{theorem}[Scalar lower bound for the square root]
+    \label{thm:ldp_sqrt_scalar_lower_bound}
+    \lean{CFC.algebraMap_sqrt_le_sqrt}
+    \leanok
+    Let $b$ be an element of a C$^*$-algebra and $c\ge0$ a real number with
+    $b\ge c\,\Id$. Then $\sqrt b\ge\sqrt c\,\Id$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The element $\sqrt c\,\Id$ is positive and its square is $c\,\Id\le b$, so
+    operator monotonicity of the square root gives
+    $\sqrt c\,\Id=\sqrt{c\,\Id}\le\sqrt b$.
+\end{proof}
+
+\begin{lemma}[One-sided bounds for the square root above a scalar floor]
+    \label{lem:ldp_sqrt_floor_bounds}
+    \lean{CFC.sq_sqrt_add_algebraMap, CFC.sqrt_sub_sqrt_le_algebraMap_of_le,
+        CFC.sqrt_sub_sqrt_le_algebraMap_of_le'}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra, and let $c,s\ge0$ be
+    real numbers with $b\ge c\,\Id$. Write $\varepsilon=\lVert a-b\rVert$.
+    \begin{enumerate}
+        \item If $\varepsilon\le2s\sqrt c+s^2$, then $\sqrt a-\sqrt b\le s$.
+        \item If $s\le\sqrt c$ and $\varepsilon+s^2\le2s\sqrt c$, then
+              $\sqrt b-\sqrt a\le s$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_scalar_lower_bound}
+    For every real $t$,
+    $(\sqrt b+t)^2=b+2t\sqrt b+t^2$. By
+    Theorem~\ref{thm:ldp_sqrt_scalar_lower_bound}, $\sqrt b\ge\sqrt c$, and
+    $-\varepsilon\le a-b\le\varepsilon$. For the first bound,
+    $(\sqrt b+s)^2\ge b+2s\sqrt c+s^2\ge b+\varepsilon\ge a$. For the second,
+    $\sqrt b-s\ge\sqrt c-s\ge0$ and
+    $(\sqrt b-s)^2\le b-2s\sqrt c+s^2\le a+\varepsilon+s^2-2s\sqrt c\le a$.
+    Operator monotonicity of the square root gives $\sqrt a\le\sqrt b+s$ and
+    $\sqrt b-s\le\sqrt a$.
+\end{proof}
+
+\begin{theorem}[H\"older bound for the square root]
+    \label{thm:ldp_sqrt_holder}
+    \lean{CFC.norm_sqrt_sub_sqrt_le, CFC.sqrt_sub_sqrt_le_algebraMap}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra. Then
+    $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert^{1/2}$.
+    This is the operator inequality quoted from Bhatia in
+    \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_sqrt_floor_bounds}
+    Write $\varepsilon=\lVert a-b\rVert$ and $s=\sqrt\varepsilon$. The first
+    bound of Lemma~\ref{lem:ldp_sqrt_floor_bounds} with $c=0$ gives
+    $\sqrt a-\sqrt b\le s$, since $\varepsilon=s^2$. Exchanging $a$ and $b$
+    gives $\sqrt b-\sqrt a\le s$. Since $\sqrt a-\sqrt b$ is self-adjoint and
+    lies between $-s$ and $s$, its norm is at most $s$.
+\end{proof}
+
+\begin{theorem}[Square root near a positive definite element]
+    \label{thm:ldp_sqrt_lipschitz}
+    \lean{CFC.norm_sqrt_sub_sqrt_le_div}
+    \leanok
+    Let $a,b$ be positive elements of a C$^*$-algebra with $b\ge c\,\Id$ for
+    a real number $c>0$. Then
+    $\lVert\sqrt a-\sqrt b\rVert\le\lVert a-b\rVert/\sqrt c$.
+    For matrices and the Frobenius norm, the corresponding bound with the
+    smallest eigenvalue of $\sqrt b$ in place of $\sqrt c$ is
+    \cite[App.~B3, eqs.~(S27)--(S31)]{Murota2026ExactLogDepth}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_holder, lem:ldp_sqrt_floor_bounds}
+    Write $\varepsilon=\lVert a-b\rVert$. If $\varepsilon>c$, the bound
+    $\lVert\sqrt a-\sqrt b\rVert\le\sqrt\varepsilon$ of
+    Theorem~\ref{thm:ldp_sqrt_holder} suffices, since
+    $\sqrt\varepsilon\le\varepsilon/\sqrt c$. Otherwise let
+    $s=\varepsilon/\sqrt c\le\sqrt c$, so that $2s\sqrt c=2\varepsilon$ and
+    $s^2\le\varepsilon$. Both hypotheses of
+    Lemma~\ref{lem:ldp_sqrt_floor_bounds} hold, so
+    $\sqrt b-s\le\sqrt a\le\sqrt b+s$, that is,
+    $\lVert\sqrt a-\sqrt b\rVert\le s$.
+\end{proof}
+
+\begin{theorem}[Lipschitz constant of the square root at an invertible positive element]
+    \label{thm:ldp_sqrt_lipschitz_constant}
+    \lean{IsStrictlyPositive.exists_norm_sqrt_sub_sqrt_le}
+    \leanok
+    Let $b$ be a positive invertible element of a C$^*$-algebra. There is a
+    real number $K\ge0$ such that
+    $\lVert\sqrt a-\sqrt b\rVert\le K\lVert a-b\rVert$ for every positive
+    element $a$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_lipschitz}
+    If the algebra is zero, take $K=0$. Otherwise the spectrum of $b$ is a
+    compact subset of $(0,\infty)$, so $b\ge c\,\Id$ for some real $c>0$, and
+    Theorem~\ref{thm:ldp_sqrt_lipschitz} gives the bound with
+    $K=1/\sqrt c$.
+\end{proof}
+
+\begin{theorem}[Rate of convergence of the positive part]
+    \label{thm:ldp_positive_part_rate}
+    \lean{MPSTensor.lt_exp_neg_div_correlationLength,
+        MPSTensor.exists_norm_transferMap_pow_sub_le,
+        MPSTensor.exists_norm_gram_blockTensor_sub_le,
+        MPSTensor.exists_norm_polarPos_blockTensor_sub_le}
+    \leanok
+    \uses{def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let
+    $\lambda_2\in\C$ satisfy $\lvert\mu\rvert\le\lvert\lambda_2\rvert$ for every
+    eigenvalue $\mu\ne1$ of $\E_A$, let $\xi$ be the correlation length at
+    $\lambda_2$ of Definition~\ref{def:correlation_length}, and let
+    $0<\gamma<1$. Write $r=e^{-\gamma/\xi}$, where $-\gamma/\xi$ is read as $0$
+    when $\xi=0$; thus $r=\lvert\lambda_2\rvert^{\gamma}$ when $\lambda_2\ne0$,
+    and $r=1$ when $\lambda_2=0$. Then $a<r$ for every real number $a<1$ with
+    $a\le\lvert\lambda_2\rvert$. There are constants $C,K,K'$ depending only
+    on $A$, $\rho$, $\lambda_2$, and $\gamma$ such that
+    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Cr^n\lVert X\rVert$
+    for all $n$ and $X$, and
+    \begin{align*}
+        \lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
+         & \le Kr^q, \\
+        \lVert P_q-P_\infty\rVert
+         & \le K'r^q
+    \end{align*}
+    for all $q$.
+    In \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC} the bound on
+    $P_q-P_\infty$ comes from Theorem~\ref{thm:ldp_sqrt_holder}, which halves
+    the exponent. This gives the rate of
+    \cite[eq.~(34)]{Piroli2021LOCC} and the range $0<\gamma<1/2$ of
+    \cite[Lemma~1 and eq.~(S9)]{Malz2024Preparation}. The Lipschitz bound at
+    the positive definite limit $P_\infty^2$ gives the range $0<\gamma<1$.
+    This step is \cite[App.~B3, eqs.~(S27)--(S32)]{Murota2026ExactLogDepth}
+    for diagonalizable transfer matrices, and eqs.~(S33)--(S38) there extend
+    it to every normal tensor at each correlation length larger than $\xi$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_sqrt_lipschitz_constant}
+    Let $a<1$ with $a\le\lvert\lambda_2\rvert$. If
+    $0<\lvert\lambda_2\rvert<1$, then
+    $r=\lvert\lambda_2\rvert^{\gamma}>\lvert\lambda_2\rvert\ge a$,
+    because $\gamma<1$. Otherwise $\lambda_2=0$ and $r=1$, or
+    $\lvert\lambda_2\rvert\ge1$ and $r=\lvert\lambda_2\rvert^{\gamma}\ge1$;
+    in both cases $r\ge1>a$.
+
+    Write $\E_\infty(X)=\Tr(X)\rho$. The eigenvalues $z$ of
+    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
+    $1$, so $\lvert z\rvert\le\lvert\lambda_2\rvert$, and
+    $\lvert z\rvert<1$ by normality. Taking $a=\lvert z\rvert$ gives
+    $\lvert z\rvert<r$. Hence the spectral radius of
+    $\E_A-\E_\infty$ is less than $r$, and
+    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ gives the first bound for
+    $n\ge1$. For $n=0$ it reads
+    $\lVert X-\E_\infty(X)\rVert\le C\lVert X\rVert$, which holds once
+    $C\ge1+\lVert\E_\infty\rVert$; enlarge $C$ accordingly.
+
+    The transfer map of the $q$-site blocked tensor is $\E_A^{\,q}$, so the
+    entries of $\mathcal B_q^\dagger\mathcal B_q$ are entries of $\E_A^{\,q}$
+    applied to matrix units:
+    $(\mathcal B_q^\dagger\mathcal B_q)_{(\alpha,\beta),(\alpha',\beta')}
+        =\E_A^{\,q}(\ketbra{\beta'}{\beta})_{\alpha'\alpha}$. In the same way
+    $(\rho^{\mathsf T}\otimes\Id)_{(\alpha,\beta),(\alpha',\beta')}
+        =\Tr(\ketbra{\beta'}{\beta})\,\rho_{\alpha'\alpha}$. Hence every entry
+    of $\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id$ is an
+    entry of $\E_A^{\,q}(X)-\Tr(X)\rho$ at a matrix unit $X$, and is at most
+    a fixed multiple of $Cr^q$ by the first bound. Bounding the operator norm
+    by the sum of the moduli of the finitely many entries gives
+    $\lVert P_q^2-P_\infty^2\rVert
+        =\lVert\mathcal B_q^\dagger\mathcal B_q-\rho^{\mathsf T}\otimes\Id\rVert
+        \le Kr^q$. Since
+    $P_\infty^2=\rho^{\mathsf T}\otimes\Id$ is positive definite,
+    Theorem~\ref{thm:ldp_sqrt_lipschitz_constant} gives $L\ge0$ with
+    $\lVert P_q-P_\infty\rVert\le LKr^q$, so $K'=LK$.
+\end{proof}
+%% The source applies ||sqrt X - sqrt Y|| <= ||X - Y||^{1/2}, which halves the
+%% exponent and forces gamma < 1/2. At the positive definite point P_infty^2
+%% the square root is Lipschitz, so no exponent is lost.
+
 \begin{definition}[Approximating state]
     \label{def:ldp_approximating_state}
     \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
@@ -587,7 +769,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
-        lem:ldp_positive_part_converges, def:correlation_length}
+        def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1/2$.
     Then, for $N=qM$,
@@ -606,17 +788,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Write $\E_\infty(X)=\Tr(X)\rho$ and $r=e^{-2\gamma/\xi}$, so that
-    $r=\lvert\lambda_2\rvert^{2\gamma}>\lvert\lambda_2\rvert$ when
-    $0<\lvert\lambda_2\rvert<1$, because $2\gamma<1$. The eigenvalues of
-    $\E_A-\E_\infty$ other than $0$ are eigenvalues of $\E_A$ different from
-    $1$, so the spectral radius of $\E_A-\E_\infty$ is less than $r$, and
-    $\E_A^{\,n}-\E_\infty=(\E_A-\E_\infty)^n$ for $n\ge1$ gives
-    $\lVert\E_A^{\,n}(X)-\Tr(X)\rho\rVert\le Kr^n\lVert X\rVert$. By the
-    rearrangement in the proof of
-    Lemma~\ref{lem:ldp_positive_part_converges},
-    $\lVert P_q^2-P_\infty^2\rVert\le K_1r^q$, and since
-    $\lVert\sqrt X-\sqrt Y\rVert\le\lVert X-Y\rVert^{1/2}$ for $X,Y\ge0$,
+    \uses{thm:ldp_positive_part_rate}
+    By Theorem~\ref{thm:ldp_positive_part_rate},
     $\lVert P_q-P_\infty\rVert\le K_2e^{-\gamma q/\xi}$.
 
     Let $\tau_q$ and $\tau_\infty$ be the transfer matrices of the mixed
@@ -638,28 +811,145 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     bounded because $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ converges to $1$.
 \end{proof}
 
+\begin{theorem}[Block lengths below the injectivity lengths]
+    \label{thm:ldp_injectivity_cutoff}
+    \lean{Real.exp_neg_mul_div_eq_pow,
+        MPSTensor.exp_neg_two_mul_div_correlationLength,
+        lt_one_and_forall_le_of_mul_mul_pow_lt_one, le_mul_mul_exp_of_forall_le}
+    \leanok
+    Let $x=e^{-\gamma/\xi}>0$, so that $e^{-\gamma q/\xi}=x^q$ and
+    $e^{-2\gamma/\xi}=x^2$. Let
+    $L_1,\dots,L_b$ be natural numbers, $C\geq1+\sum_jx^{-L_j}$, $M\geq1$, and
+    $y=Mx^q$. If $Cy<1$, then $x<1$ and $L_j\leq q$ for every $j$. Hence, if
+    $\varepsilon\leq1$ and $\varepsilon\leq Cy\,e^{Cy}$ holds whenever $x<1$,
+    $L_j\leq q$ for every $j$, and $Cy<1$, then $\varepsilon\leq Cy\,e^{Cy}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $x\geq1$, then $y\geq1$ and $Cy\geq1$. If $x<1$ and $L_j>q$, then
+    $x^{L_j}\leq x^q\leq y$, so $Cy\geq x^{-L_j}y\geq1$. When $Cy\geq1$ the
+    bound follows from $\varepsilon\leq1\leq Cy\leq Cy\,e^{Cy}$.
+\end{proof}
+
+\begin{theorem}[Powers of a perturbed idempotent without first-order term]
+    \label{thm:ldp_idempotent_second_order}
+    \lean{IsIdempotentElem.norm_trace_add_pow_sub_le_of_le,
+        IsIdempotentElem.norm_trace_add_pow_sub_le}
+    \leanok
+    Let $e$ be an idempotent of a normed ring, $f=1-e$, and let $Z$ satisfy
+    $eZe=0$ and $\lVert fZe\rVert,\lVert eZf\rVert,\lVert fZf\rVert\le z\le1/2$.
+    Let $\Tr$ be additive with $\Tr(xy)=\Tr(yx)$ and
+    $\lvert\Tr x\rvert\le K\lVert x\rVert$. Then for $M\ge2$,
+    \begin{align}
+        \bigl\lvert\Tr(e+Z)^M-\Tr e\bigr\rvert
+         & \le K\bigl(\lVert e\rVert+3\lVert f\rVert\bigr)\,2Mz^2\,e^{2Mz^2}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Put $T=e+Z$, $W=fZf$, $\beta=\lVert fZe\rVert$, $\beta'=\lVert eZf\rVert$,
+    $\zeta=\lVert W\rVert$, and $\rho=1+\beta\beta'/(1-\zeta)$. For $P\in\{e,f\}$
+    the blocks $x_M=PT^Me$ and $y_M=PT^Mf$ satisfy
+    $x_{M+1}=x_M+y_M\,fZe$ and $y_{M+1}=x_M\,eZf+y_MW$, because $eTe=e$.
+    Induction on $M$ gives $\lVert eT^Me-e\rVert\le\lVert e\rVert(\rho^M-1)$ and
+    $\lVert eT^Mf\rVert\le\lVert e\rVert\beta'\rho^M/(1-\zeta)$, and also
+    $\lVert fT^Me\rVert\le\lVert f\rVert\beta(\rho^M-\zeta^M)/(1-\zeta)$ and
+    $\lVert fT^Mf-fW^M\rVert\le\lVert f\rVert\beta\beta'(\rho^M-\zeta^M)/(1-\zeta)^2$.
+    Since $\Tr x=\Tr(exe)+\Tr(fxf)$, it follows that $\Tr T^M-\Tr e$ is the sum of
+    the traces of $eT^Me-e$, of $fT^Mf-fW^M$, and of $fW^M$, the last of norm at
+    most $\lVert f\rVert\zeta^M\le\lVert f\rVert z^2$. With $z\le1/2$ one has
+    $\rho\le1+2z^2$ and $\beta\beta'/(1-\zeta)^2\le4z^2$, and
+    $(1+2z^2)^M-1\le2Mz^2e^{2Mz^2}$.
+\end{proof}
+
+\begin{theorem}[Overlap of the positive part with the fixed point, to second order]
+    \label{thm:ldp_positive_part_overlap_second_order}
+    \lean{MPSTensor.exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq,
+        MPSTensor.exists_norm_mpvState_sq_sub_norm_mpvOverlap_sq_le,
+        MPSTensor.transferMatrix_fixedPointTensor_mul_mul,
+        MPSTensor.inner_sqrtWeightLM, MPSTensor.exists_norm_map_polarPosTensor_sub_le}
+    \leanok
+    \uses{thm:ldp_idempotent_second_order, thm:ldp_positive_part_rate,
+        def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
+    length $\xi$, and let $0<\gamma<1$. There is $C>0$ such that for all $q$ and
+    all $M\ge2$ with $Cy<1$, where $y=M\,e^{-2\gamma q/\xi}$,
+    \begin{align}
+        1-\bigl\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\bigr\rvert
+         & \le Cy\,e^{Cy}.
+        \notag
+    \end{align}
+    For $M=1$ there is $K$ with
+    $\lVert\phi_1(P_q)\rVert^2
+        -\lvert\bra{\phi_1(P_\infty)}\phi_1(P_q)\rangle\rvert^2\le Ke^{-2\gamma q/\xi}$
+    for all $q$. These bounds are of second order in $e^{-\gamma q/\xi}$.
+    Lemma~\ref{lem:ldp_positive_part_overlap}, the estimate of
+    \cite{Piroli2021LOCC} quoted as \cite[eq.~(S9)]{Malz2024Preparation}, is
+    of first order, and so is the
+    bound of \cite[App.~B4, eq.~(S52)]{Murota2026ExactLogDepth}, which is
+    linear in the residual. The second-order bounds are new here.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_positive_part_rate}, every linear function of the
+    tensor $P_q$ is within $K'e^{-\gamma q/\xi}$ of its value at $P_\infty$. Let
+    $\tau_q$ and $\tau_\infty$ be as in the proof of
+    Lemma~\ref{lem:ldp_positive_part_overlap}, so that the overlap is
+    $\Tr\tau_q^M$. The idempotent $\tau_\infty$ is the transfer matrix of the
+    rank-one map $X\mapsto\Tr(X)\rho$; hence $\tau_\infty\tau_q\tau_\infty
+        =\alpha\tau_\infty$ with
+    $\alpha=\Tr\sum_iP_q^i\rho P_\infty^{i\dagger}=\braket{v_\infty}{v_q}$, where
+    $v_q$ and $v_\infty$ are the vectors $(P^i\sqrt\rho)_i$. Both are unit
+    vectors, because $\E_{P_q}=\E_A^q$ fixes $\rho$ and $\Tr\rho=1$. Hence
+    $1-\lvert\alpha\rvert\le1-\operatorname{Re}\alpha
+        =\tfrac12\lVert v_q-v_\infty\rVert^2=O(e^{-2\gamma q/\xi})$, and
+    $\lvert1-\alpha\rvert\le\lVert v_q-v_\infty\rVert$. Write
+    $\tau_q=\alpha(\tau_\infty+Z)$. Then $\tau_\infty Z\tau_\infty=0$ and
+    $\lVert Z\rVert=O(e^{-\gamma q/\xi})$, so
+    Theorem~\ref{thm:ldp_idempotent_second_order} bounds
+    $\lvert\Tr(\tau_\infty+Z)^M-1\rvert$ by a multiple of $y\,e^{c y}$, and
+    $\lvert\alpha\rvert^M\ge1-M(1-\lvert\alpha\rvert)$ is at least $1$ minus a
+    multiple of $y$.
+    For $M=1$, the vector $\phi_1(P_\infty)$ is a unit vector, and
+    $\lVert u\rVert^2-\lvert\braket wu\rvert^2\le\lVert u-w\rVert^2$ for every
+    unit vector $w$; here
+    $\lVert\phi_1(P_q)-\phi_1(P_\infty)\rVert=O(e^{-\gamma q/\xi})$, since
+    $\phi_1$ is linear in the tensor.
+\end{proof}
+
 \begin{theorem}[Approximation error, normal case]
     \label{thm:ldp_approximation_error_normal}
     \lean{MPSTensor.exists_approximationError_le_mul,
         MPSTensor.exists_approximationError_le, MPSTensor.normalizedMPVState,
-        MPSTensor.approximatingMPVState}
+        MPSTensor.approximatingMPVState,
+        MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le,
+        MPSTensor.one_sub_norm_inner_smul_inv_norm_le_two_mul}
     \leanok
-    \uses{lem:ldp_positive_part_overlap, def:ldp_approximating_state,
+    \uses{thm:ldp_positive_part_overlap_second_order, def:ldp_approximating_state,
         thm:ldpolar_blocked_state, thm:ldpolar_tensor_injective,
-        def:correlation_length}
+        thm:ldp_injectivity_cutoff, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, let $\ket{\phi_N}$ be the
-    normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1/2$. For
+    normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1$. For
     $N=qM$,
     \begin{align}
         \varepsilon(\widetilde\phi_N,\phi_N)
-         & =O\!\left(\frac Nq\,e^{-\gamma q/\xi}\right)
+         & =O\!\left(\frac Nq\,e^{-2\gamma q/\xi}\right)
         \label{eq:ldp_approximation_error_normal}
     \end{align}
-    for $q\ge1$ \cite[Lemma~1 and Lemma~1$'$(i)]{Malz2024Preparation}.
+    for $q\ge1$.
     Explicitly, there is a constant $C>0$ depending only on $A$, $\rho$, and $\gamma$
     such that $\varepsilon(\widetilde\phi_N,\phi_N)\le Cy\,e^{Cy}$ for all $q\ge0$
-    and $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$.
+    and $M\ge1$, where $y=M\,e^{-2\gamma q/\xi}$.
+    The rate $e^{-\gamma q/\xi}$ for $0<\gamma<1/2$ is
+    \cite[Lemma~1, eq.~(17), and Lemma~1$'$(i)]{Malz2024Preparation}, and
+    \cite[App.~B4, eqs.~(S52) and~(S53)]{Murota2026ExactLogDepth} gives the
+    rate $e^{-q/\xi}$. The rate $e^{-2\gamma q/\xi}$ for every $0<\gamma<1$
+    and every normal tensor is new here. Numerically, the error decays as
+    $e^{-\gamma q/\xi}$ with $\gamma\approx2$
+    \cite[Supplemental Material, discussion of Fig.~S1]{Malz2024Preparation},
+    \cite[eq.~(4)]{Wei2026ParallelSequential}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -669,33 +959,164 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     normalized. Since $\ket{\phi_N(A)}=V^{\otimes M}\ket{\phi_M(P_q)}$ by
     Theorem~\ref{thm:ldpolar_blocked_state}, this gives
     $c_N\braket{\widetilde\phi_N}{\phi_N}
-        =\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle$. The triangle inequality
+        =\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle=:a$, and
+    $c_N=\lVert\phi_M(P_q)\rVert$. With $t=\lvert a\rvert/c_N\le1$,
     \begin{align}
-        \varepsilon
-         & \le\bigl\lvert1-c_N\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert\bigr\rvert
-        +\lvert c_N-1\rvert\,\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
+        \varepsilon=1-t\le1-t^2=\frac{c_N^2-\lvert a\rvert^2}{c_N^2},
         \notag
     \end{align}
-    bounds the first term by Lemma~\ref{lem:ldp_positive_part_overlap}. For the
-    second, $\lvert c_N-1\rvert\le\lvert c_N^2-1\rvert
-        =\lvert\Tr\E_A^{\,N}-1\rvert\le Ke^{-2\gamma N/\xi}$, and
-    $e^{-2\gamma N/\xi}\le e^{-\gamma q/\xi}$ because $N\ge q$. The finitely
-    many smaller $q$, and the case $y>1$, are covered by
+    which is at most $2(c_N^2-\lvert a\rvert^2)$ once $c_N^2\ge1/2$. The
+    normalization satisfies $\lvert c_N^2-1\rvert=\lvert\Tr\E_A^{\,N}-1\rvert
+        \le Ke^{-\gamma' N/\xi}$ for every $0<\gamma'<1$; we use it at $\gamma'=\gamma$.
+    For $M=1$, Theorem~\ref{thm:ldp_positive_part_overlap_second_order} bounds
+    $c_N^2-\lvert a\rvert^2$ directly. For $M\ge2$,
+    $c_N^2-\lvert a\rvert^2\le\lvert c_N^2-1\rvert+2\max(0,1-\lvert a\rvert)$,
+    with $\lvert c_N^2-1\rvert\le Ke^{-2\gamma q/\xi}$ because $N\ge2q$, and
+    $1-\lvert a\rvert$ is bounded by
+    Theorem~\ref{thm:ldp_positive_part_overlap_second_order}. The finitely many
+    $q$ below the injectivity length, and the case $Cy\ge1$, are covered by
     $\varepsilon\le1$.
 \end{proof}
 %% The source's proof of Lemma 1'(i) drops the normalization term
-%% |c_N - 1| = O(exp(-N/xi)) using q = o(N). Since N >= q, that term is at most
-%% a constant times exp(-gamma q/xi) <= (N/q) exp(-gamma q/xi), so the
-%% statement above carries no condition relating q and N, as in the source's
-%% statement.
+%% |c_N - 1| = O(exp(-N/xi)) using q = o(N). Here N >= q suffices for M = 1
+%% and N >= 2q for M >= 2, so the statement carries no condition relating q
+%% and N, as in the source's statement.
 
-In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/\gamma\rceil$
-gives $e^{-\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
-for every $\eta>0$. The source takes
-$q=\lceil2\xi(1+\eta)\ln N\rceil$, which corresponds to the endpoint
-$\gamma=1/2$ that the estimate above does not cover; hence the factor
-$1/\gamma$ in the block length here
-(compare \cite[after Lemma~1]{Malz2024Preparation}).
+In particular, when $\xi>0$, the choice $q=\lceil\xi(1+\eta)\ln N/(2\gamma)\rceil$
+gives $e^{-2\gamma q/\xi}\le N^{-(1+\eta)}$ and hence $\varepsilon=O(N^{-\eta})$
+for every $\eta>0$. The choice $q=\lceil2\xi(1+\eta)\ln N\rceil$ of
+\cite[paragraph after Lemma~1]{Malz2024Preparation} corresponds to
+$\gamma=1/4$. Since every $\gamma<1$ is admissible here, the block length can
+be taken shorter by any factor less than four.
+
+The proof of the lower bound in the Supplemental Material of
+\cite{Malz2024Preparation} cuts the chain into blocks ``all of the same size,
+$q_N$, except for the last one, which may be larger''. The approximating state
+and its error extend to blocks of any lengths.
+
+\begin{definition}[Approximating state for blocks of prescribed lengths]
+    \label{def:ldp_block_isometry_state}
+    \lean{MPSTensor.blockIsometryState, MPSTensor.mpvFamily,
+        MPSPreparation.blockOffset, MPSPreparation.blockSite,
+        MPSPreparation.blockCfgEquiv, MPSTensor.blockIndexEquiv}
+    \leanok
+    \uses{def:ldp_approximating_state, thm:ldpolar_tensor_decomposition,
+        def:prep_pair_product_state}
+    Cut the ring of $N$ sites into $M\ge1$ consecutive blocks of lengths
+    $\ell_1,\dots,\ell_M$ with $\sum_k\ell_k=N$, block $k$ consisting of the
+    sites $o_k+1,\dots,o_k+\ell_k$ with $o_k=\sum_{i<k}\ell_i$. Let
+    $\mathcal B_\ell=V_\ell P_\ell$ be the polar decomposition of the
+    $\ell$-site blocked tensor, and let $\omega$ be a vector on
+    $\C^D\otimes\C^D$. The state
+    \begin{align}
+        \ket{\psi_{\ell,\omega}}
+         & =\Bigl(\bigotimes_{k=1}^MV_{\ell_k}\Bigr)
+        \bigotimes_{k=1}^M\ket{\omega}_{R_kL_{k+1}}
+        \label{eq:ldp_block_isometry_state}
+    \end{align}
+    has the coefficient
+    $\sum_c\prod_k\bra{s_k}V_{\ell_k}\ket{c_k}\,\Omega(c)$ at the configuration
+    $s=(s_1,\dots,s_M)$ read block by block, where $c_k=(l_k,r_k)$ and $\Omega$ is
+    the pair product state~(\ref{eq:prep_pair_product}) of $\omega$. If the
+    $q$-site blocked tensor is injective, $\ell_k=q$ for every $k$, and $\omega$
+    is the pair of a fixed point $\sigma\ge0$ with $\Tr\sigma=1$, it is the
+    approximating state of Definition~\ref{def:ldp_approximating_state}.
+\end{definition}
+
+\begin{lemma}[Norm and overlap for blocks of prescribed lengths]
+    \label{lem:ldp_block_isometry_state_overlap}
+    \lean{MPSTensor.sum_star_blockIsometryState,
+        MPSTensor.norm_blockIsometryState,
+        MPSTensor.inner_blockIsometryState_mpvState,
+        MPSTensor.mpv_eq_mpvFamily_blockTensor,
+        MPSTensor.sum_mpvFamily_mul_star_mpv,
+        MPSTensor.mpvFamily_rotatePhysical,
+        MPSPreparation.prod_ofFn_blockSite,
+        Matrix.IsIsometry.sum_star_mul_prod}
+    \leanok
+    \uses{def:ldp_block_isometry_state, thm:ldpolar_tensor_injective,
+        thm:ldpolar_tensor_decomposition, thm:prep_pair_product_norm,
+        thm:prep_mpv_fixed_point_tensor, thm:mpu_transfer_matrix_overlap}
+    Suppose every blocked tensor $\mathcal B_{\ell_k}$ is injective. Then
+    $\braket{\psi_{\ell,\omega}}{\psi_{\ell,\omega}}=\braket\omega\omega^M$, and
+    for the pair $\omega$ of the fixed point
+    \begin{align}
+        \braket{\psi_{\ell,\omega}}{\phi_N(A)}
+         & =\Tr\bigl(\tau_{\ell_1}\tau_{\ell_2}\cdots\tau_{\ell_M}\bigr),
+        \label{eq:ldp_block_isometry_state_overlap}
+    \end{align}
+    where $\tau_\ell$ is the transfer matrix of the mixed transfer map
+    $X\mapsto\sum_iP_\ell^iX(P_\infty^i)^\dagger$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    An ordered product over the sites of the ring is the ordered product over
+    the blocks of the products over their sites, so
+    $\phi_N(A)(s)=\Tr(\mathcal B_{\ell_1}^{s_1}\cdots\mathcal B_{\ell_M}^{s_M})$,
+    and $\mathcal B_{\ell_k}=V_{\ell_k}P_{\ell_k}$ gives
+    $\ket{\phi_N(A)}=(\bigotimes_kV_{\ell_k})\ket{\phi_M(P_{\ell_1},\dots,P_{\ell_M})}$,
+    the periodic state with the tensor $P_{\ell_k}$ at site $k$. Isometries
+    $W_k$, one on each site, preserve inner products:
+    $\sum_s\overline{((\bigotimes_kW_k)\psi)(s)}((\bigotimes_kW_k)\varphi)(s)
+        =\braket\psi\varphi$, since
+    $\sum_{s_k}\overline{(W_k)_{s_ka}}(W_k)_{s_kb}=\delta_{ab}$ factor by factor.
+    This gives the norm by Theorem~\ref{thm:prep_pair_product_norm}, and reduces
+    the overlap to
+    $\sum_u\Tr(P_{\ell_1}^{u_1}\cdots P_{\ell_M}^{u_M})
+        \overline{\Tr(P_\infty^{u_1}\cdots P_\infty^{u_M})}$ by
+    Theorem~\ref{thm:prep_mpv_fixed_point_tensor}. Expanding the trace of
+    $\tau_{\ell_1}\cdots\tau_{\ell_M}$ as a sum over cyclic paths of pairs of
+    bond indices, with
+    $(\tau_\ell)_{(j,i),(l,m)}=\sum_a(P_\ell^a)_{im}\overline{(P_\infty^a)_{jl}}$,
+    and summing the two paths separately gives the same sum, as in
+    Theorem~\ref{thm:mpu_transfer_matrix_overlap}.
+\end{proof}
+
+\begin{theorem}[Approximation error for blocks of unequal lengths]
+    \label{thm:ldp_block_approximation_error}
+    \lean{MPSTensor.exists_blockApproximationError_le_mul,
+        MPSTensor.exists_norm_trace_prod_transferMatrix_sub_one_le,
+        MPSTensor.one_sub_norm_inner_smul_inv_norm_le,
+        norm_prod_range_sub_pow_le_of_isIdempotentElem,
+        prod_range_sub_pow_eq_sum_mul_sub_mul}
+    \leanok
+    \uses{lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
+        def:ldp_block_isometry_state, lem:ldp_block_isometry_state_overlap,
+        def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
+    length $\xi$, and let $0<\gamma<1/2$. There is a constant $C>0$ depending
+    only on $A$, $\rho$, and $\gamma$ such that for every cutting of the ring of
+    $N$ sites into $M\ge1$ blocks of lengths $\ell_k\ge q$ with injective
+    blocked tensors, the state $\ket{\psi_{\ell,\omega}}$ of
+    Definition~\ref{def:ldp_block_isometry_state} with the pair $\omega$ of the
+    fixed point satisfies
+    $\varepsilon(\psi_{\ell,\omega},\phi_N)\le CM\,e^{-\gamma q/\xi}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:ldp_block_isometry_state_overlap} the overlap
+    $\braket{\psi_{\ell,\omega}}{\phi_N(A)}$ is
+    $\Tr(\tau_{\ell_1}\cdots\tau_{\ell_M})$, and $1=\Tr\tau_\infty^M$. As in the
+    proof of Lemma~\ref{lem:ldp_positive_part_overlap},
+    $\lVert\tau_\ell-\tau_\infty\rVert\le K_3e^{-\gamma\ell/\xi}\le\delta$ with
+    $\delta=K_3e^{-\gamma q/\xi}$ for $\ell\ge q$, since
+    $\lvert\lambda_2\rvert<1$. For matrices $X_1,\dots,X_M$ with
+    $\lVert X_k-E\rVert\le\delta$ and $E^2=E$,
+    \begin{align}
+        X_1\cdots X_M-E^M
+         & =\sum_{k=1}^MX_1\cdots X_{k-1}(X_k-E)E^{M-k},
+        \label{eq:ldp_block_telescoping}
+    \end{align}
+    and the induction of Lemma~\ref{lem:ldp_positive_part_overlap}, with
+    $\lVert X_1\cdots X_{k-1}\rVert\le c+\lVert X_1\cdots X_{k-1}-E^{k-1}\rVert$,
+    gives $\lVert X_1\cdots X_M-E^M\rVert\le c((1+c\delta)^M-1)$. So
+    $\lvert\braket{\psi_{\ell,\omega}}{\phi_N(A)}-1\rvert\le Cy\,e^{Cy}$ with
+    $y=Me^{-\gamma q/\xi}$. The triangle inequality of
+    Theorem~\ref{thm:ldp_approximation_error_normal} and
+    $\lvert c_N^2-1\rvert\le Ke^{-2\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
+    $N\ge\ell_1\ge q$, bound $\varepsilon$ by $Cy\,e^{Cy}+Ky$, and
+    $\varepsilon\le1$ covers $y>1$.
+\end{proof}
 
 \section{Depth of the preparation}
 
@@ -766,7 +1187,150 @@ $1/\gamma$ in the block length here
     disjoint sets.
 \end{proof}
 
-The two lemmas above extend from unitary gates to channels, the operations
+\begin{theorem}[Unitaries on a bounded number of sites]
+    \label{thm:ldp_bounded_unitary_two_site_gates}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPairProduct,
+        MPSPreparation.isTwoLevelWord_of_det_eq_one,
+        MPSPreparation.exists_isPairProduct_ctrlOp,
+        MPSPreparation.isPairProduct_embedOp_pairSites}
+    \leanok
+    For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
+    $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
+    two neighbouring sites of the open chain of $n$ sites. This is the step
+    that the unitaries with constant support ``can be further expressed with
+    a low-depth circuit of local gates''
+    \cite[caption of Fig.~1]{Malz2024Preparation}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Dividing by a root of the determinant of order $d^n$, a global phase and
+    hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
+    a unitary as a product of two-level operators, each a real rotation or a
+    diagonal phase on the span of two basis vectors. Write $G_{ab}(g)$ for the
+    operator acting as the $2\times2$ matrix $g$ on the span of the basis vectors
+    $\ket a,\ket b$ and as the identity on their complement, and
+    $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ for the
+    quarter turn. For pairwise distinct $a,b,c$,
+    \begin{align}
+        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q),
+        \label{eq:ldp_two_level_quarter_turn}
+    \end{align}
+    and choosing $c$ to differ from $a$ at one site fewer than $b$ does reduces
+    a two-level operator between configurations differing at several sites to
+    one between configurations differing at one site fewer. Between configurations
+    differing at one site $t$ it is a single-site operation at $t$ controlled by
+    the other sites. Every rotation and every phase of determinant one is a group
+    commutator $g_1g_2g_1^\dagger g_2^\dagger$. Write $C_S(u)$ for the single-site
+    operation $u$ at $t$ controlled by the sites of $S$, with $t\notin S$; for
+    unitaries $v,w$ and a site $s\neq t$,
+    \begin{align}
+        C_{S\cup\{s\}}(vwv^\dagger w^\dagger)
+         & =C_S(v)\,C_{\{s\}}(w)\,C_S(v^\dagger)\,C_{\{s\}}(w^\dagger),
+        \label{eq:ldp_controlled_commutator}
+    \end{align}
+    so a controlled commutator is a product of two operations with one control
+    fewer and two operations on two sites; induction removes the controls. An
+    operation on two distant sites is conjugated to neighbouring sites by SWAP
+    gates.
+\end{proof}
+
+\begin{theorem}[The approximating state in depth $O(q)$]
+    \label{thm:ldp_approximating_state_depth}
+    \uses{def:ldp_local_circuit, def:ldp_approximating_state,
+        def:ldp_block_isometry_state}
+    \lean{MPSPreparation.exists_isPreparedInDepth_blockIsometryState,
+        MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
+        MPSPreparation.blockIsometryState_eq_mulVec,
+        MPSPreparation.approximatingMPVState_eq_blockIsometryState,
+        MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
+        MPSPreparation.IsCircuitOn.finset_noncommProd,
+        MPSPreparation.noncommProd_embedOp_apply}
+    \leanok
+    There is $C$, depending only on $d$ and $D$, such that the following
+    holds. Let $A$ be a tensor, let $\omega$ be a unit vector on
+    $\C^D\otimes\C^D$, and cut the ring of $N\ge1$ sites into $M\ge1$ blocks
+    of lengths $3D\le\ell_k\le L$ for which every blocked tensor is injective.
+    Then the state $\ket{\psi_{\ell,\omega}}$ of
+    Definition~\ref{def:ldp_block_isometry_state} is prepared in depth at
+    most $CL$. In particular, for $\sigma\ge0$ with $\Tr\sigma=1$, a block
+    length $q\ge3D$ for which the $q$-site blocked tensor is injective, and
+    $M\ge1$, the approximating state of
+    Definition~\ref{def:ldp_approximating_state} on $N=Mq$ sites is prepared
+    in depth at most $Cq$. This is the depth count behind
+    \cite[eq.~(1)]{Malz2024Preparation}; it does not choose $q$ in terms of
+    $N$ and $\varepsilon$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_unitary_implementing_isometry,
+        thm:ldp_sequential_factorization,
+        thm:ldp_bounded_unitary_two_site_gates}
+    The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
+    $D\ge1$, injectivity of the blocked tensor gives $D^2\le d^q$, which
+    forces $d=D=1$. In either case $D\le d^D$, so each bond index can be
+    encoded in $D$ sites. Encode the two bond indices
+    of a block in its first and last $D$ sites, and write $\ket{l,0,r}$ for the block with $l$ on the first $D$ sites, $r$
+    on the last $D$ sites, and $\ket0$ elsewhere. A first layer of unitaries,
+    one on the last $D$ sites of each block and the first $D$ sites of the
+    next, sends $\ket{0\cdots0}$ to
+    $\bigotimes_k\ket\omega_{R_kL_{k+1}}\ket0_{C_k}$
+    \cite[eq.~(12)]{Malz2024Preparation}; by
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} it has constant depth.
+    On each block $k$, in parallel, a unitary $U_k$ with
+    $U_k\ket{l,0,r}=V_{\ell_k}\ket{l,r}$ is applied, as in
+    Lemma~\ref{lem:ldp_unitary_implementing_isometry}. SWAP
+    gates move the first $D$ sites next to the last ones in $O(q)$ gates.
+    By Theorem~\ref{thm:ldp_sequential_factorization}, $V_\ell$ is the ordered
+    product of $\ell$ isometries, each from the bond space into the bond space
+    and one site; each is extended to a unitary on the bond register of $2D$
+    sites and one fresh site, and the register moves one site to the left at
+    each step, so the staircase consists of $q-2D$ unitaries on $2D+1$ sites
+    followed by one unitary on the first $2D$ sites
+    \cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}. Each
+    of them has bounded depth by
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, so $U_k$ has depth
+    $O(\ell_k)\le O(L)$, and circuits on disjoint blocks run in the same layers.
+    A configuration contributes to the pair layer applied to $\ket{0\cdots0}$
+    only if it carries a pair on every window and $\ket0$ elsewhere, which
+    identifies the output with~(\ref{eq:ldp_block_isometry_state}).
+\end{proof}
+
+\begin{theorem}[Exact preparation on short chains]
+    \label{thm:ldp_short_chain_preparation}
+    \lean{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState,
+        MPSPreparation.blockIsometryState_normalizedTracePair,
+        MPSPreparation.exists_isPreparedInDepth_of_norm_eq_one,
+        MPSTensor.norm_normalizedMPVState}
+    \leanok
+    \uses{thm:ldp_approximating_state_depth, def:ldp_block_isometry_state,
+        lem:ldp_block_isometry_state_overlap,
+        thm:ldp_bounded_unitary_two_site_gates, def:ldp_local_circuit}
+    There is $C$, depending only on $d$ and $D$, such that for every tensor $A$
+    and every $N\ge3D$ for which the $N$-site blocked tensor is injective and
+    $\ket{\phi_N(A)}\neq0$, the normalized state $\ket{\phi_N}$ is prepared
+    exactly in depth at most $CN$. For $d\ge1$ and every $n_0$ there is $K$ such
+    that every unit vector on a ring of $N$ sites with $2\le N\le n_0$ is
+    prepared in depth at most $K$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $\mathcal B_N=VP$. Then
+    $\phi_N(A)(s)=\Tr\mathcal B_N^s
+        =\sum_{l,r}\bra sV\ket{l,r}\Tr P^{(l,r)}$, so $\ket{\phi_N}$ is the
+    state~(\ref{eq:ldp_block_isometry_state}) of a single block with the pair
+    $\omega(r,l)=\Tr P^{(l,r)}/\lVert\phi_N(A)\rVert$, whose right leg is
+    joined to its own left leg around the ring; $\omega$ is a unit vector
+    because $\ket{\phi_N}$ is, by Lemma~\ref{lem:ldp_block_isometry_state_overlap}.
+    Theorem~\ref{thm:ldp_approximating_state_depth} with $M=1$ and $L=N$ gives
+    the first statement. For the second, a unit vector $\ket\psi$ is the first
+    column of a unitary, which by
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} is a product of at
+    most $K_N$ gates on neighbouring sites; take $K=\sum_{N\le n_0}K_N$.
+\end{proof}
+
+Lemmas~\ref{lem:ldp_light_cone} and~\ref{lem:ldp_light_cone_correlations}
+extend from unitary gates to channels, the operations
 of a local circuit that may add product ancillas and discard them
 \cite{Piroli2021LOCC}.
 
@@ -877,22 +1441,430 @@ of a local circuit that may add product ancillas and discard them
     conclude.
 \end{proof}
 
+Ancillas are attached and discarded site by site, so the operations that
+change the local dimension act on single sites.
+
+\begin{definition}[Onsite channel]
+    \label{def:ldp_onsite_channel}
+    \uses{def:ldp_local_channel_circuit}
+    \lean{Matrix.rectKronecker, MPSPreparation.OnsiteChannel,
+        MPSPreparation.OnsiteChannel.map, MPSPreparation.OnsiteChannel.dual,
+        MPSPreparation.OnsiteChannel.id, MPSPreparation.OnsiteChannel.attach,
+        MPSPreparation.OnsiteChannel.attachZero,
+        MPSPreparation.OnsiteChannel.attach_siteMap_apply,
+        MPSPreparation.OnsiteChannel.discard,
+        MPSPreparation.OnsiteChannel.discard_siteMap_apply}
+    \leanok
+    An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
+    $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
+    $\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. It is the channel
+    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on the ring, with
+    $K_J=\bigotimes_iK_{iJ(i)}$ for every choice $J$ of one index per site;
+    its dual is $A\mapsto\sum_JK_J^\dagger AK_J$. Write
+    $\Phi_i(\sigma)=\sum_jK_{ij}\sigma K_{ij}^\dagger$ for its action at site
+    $i$. Attaching an ancilla of dimension $a$ in the state
+    $\tau=\sum_kw_kw_k^\dagger$ with $\sum_k\|w_k\|^2=1$ is the onsite channel
+    $X\mapsto X\otimes\tau$ from dimension $d$ to dimension $da$, and
+    discarding it is the onsite channel given by the partial trace over the
+    second factor of $\C^d\otimes\C^a$. Ancillas attached to each site and
+    local operations on a site and its ancillas are the free operations of
+    \cite{Piroli2021LOCC}.
+\end{definition}
+
+\begin{lemma}[Onsite channels are product channels]
+    \label{lem:ldp_onsite_channel_properties}
+    \uses{def:ldp_onsite_channel}
+    \lean{MPSPreparation.OnsiteChannel.map_isKrausCPTP,
+        MPSPreparation.OnsiteChannel.map_finKronecker,
+        MPSPreparation.OnsiteChannel.trace_map_mul,
+        MPSPreparation.OnsiteChannel.discard_siteMap_attach_siteMap}
+    \leanok
+    An onsite channel $\Phi$ is trace preserving and completely positive, it
+    maps $\bigotimes_i\sigma_i$ to $\bigotimes_i\Phi_i(\sigma_i)$, it satisfies
+    $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$, and discarding an attached
+    ancilla gives back the original operator.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The operators $K_J$ satisfy
+    $\sum_JK_J^\dagger K_J=\bigotimes_i\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$,
+    so the Kraus form gives complete positivity and trace preservation. Since
+    $K_J$ is a tensor product, $K_J(\bigotimes_i\sigma_i)K_J^\dagger
+        =\bigotimes_iK_{iJ(i)}\sigma_iK_{iJ(i)}^\dagger$, and summing over $J$
+    factorizes site by site. The duality is cyclicity of the trace. Finally,
+    the partial trace of $X\otimes\tau$ is $\Tr(\tau)X=X$.
+\end{proof}
+
+\begin{lemma}[Onsite channels do not spread supports]
+    \label{lem:ldp_onsite_channel_locality}
+    \uses{def:ldp_onsite_channel}
+    \lean{MPSPreparation.OnsiteChannel.dual_mem_supportedOperators,
+        MPSPreparation.OnsiteChannel.dual_mul,
+        MPSPreparation.OnsiteChannel.dual_finKronecker}
+    \leanok
+    Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
+    $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
+    disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$, and
+    $\Phi_i^\dagger(\mathbb 1)=\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. Hence
+    the identity factors off $X$ are kept. For products with disjoint
+    supports, one of $m_i$, $m'_i$ is the identity at each site, so
+    $\Phi_i^\dagger(m_im'_i)=\Phi_i^\dagger(m_i)\Phi_i^\dagger(m'_i)$.
+    Linearity concludes.
+\end{proof}
+
+\begin{definition}[Local channel conversion]
+    \label{def:ldp_local_channel_conversion}
+    \uses{def:ldp_local_channel_circuit, def:ldp_onsite_channel}
+    \lean{MPSPreparation.IsLocalChannelProtocol,
+        MPSPreparation.IsLocalChannelConversion}
+    \leanok
+    A \emph{local channel protocol of depth $T$} is a composition
+    $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
+    channel layers $L_t$ and maps $\Phi_t$, each a composition of finitely
+    many onsite channels, which may change the local dimension; $\Phi_0$
+    contains at least one onsite channel, and $\Phi_t$ for $t\ge1$ may be
+    the identity. A matrix $\rho$ on the chain is
+    \emph{converted in depth $T$} into a matrix $\sigma$, possibly of
+    another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
+    protocol $\Psi$ of depth at most $T$. This is the channel form of the circuits
+    $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC}, with
+    ancillas attached to each site, local operations between the layers and
+    the ancillas traced out at the end, without measurements.
+\end{definition}
+
+\begin{lemma}[Basic properties of local channel conversions]
+    \label{lem:ldp_local_channel_conversion_properties}
+    \uses{def:ldp_local_channel_conversion, def:ldp_local_channel_circuit,
+        lem:ldp_onsite_channel_properties}
+    \lean{MPSPreparation.IsLocalChannelProtocol.isKrausCPTP,
+        MPSPreparation.IsLocalChannelProtocol.channelCircuitMap_comp,
+        MPSPreparation.isLocalChannelConversion_circuit,
+        MPSPreparation.IsChannelPreparedInDepth.exists_isLocalChannelConversion,
+        MPSPreparation.IsLocalChannelConversion.refl,
+        MPSPreparation.IsLocalChannelConversion.mono,
+        MPSPreparation.IsLocalChannelConversion.exists_isKrausCPTP,
+        MPSPreparation.IsLocalChannelConversion.density}
+    \leanok
+    A local channel protocol is trace preserving and completely positive.
+    Attaching ancillas, running a local channel circuit of depth $T$ and
+    discarding is a local channel protocol of depth $T$. Every density matrix
+    is converted into itself in depth $0$, a conversion in depth $T$ is a
+    conversion in every larger depth, a conversion of a density matrix is a
+    density matrix, and a density matrix prepared in depth $T$ by local
+    channels is converted in depth $T$ from a product density.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the protocol: onsite channels are trace preserving and
+    completely positive by Lemma~\ref{lem:ldp_onsite_channel_properties},
+    channel layers are by construction, and both properties are stable under
+    composition. Appending the layers of a circuit of depth $T$ one at a time,
+    each onsite channel keeps the depth and each layer raises it by one; the
+    attaching and discarding channels are onsite. The identity onsite channel
+    gives depth $0$, depth bounds are monotone, and a conversion is realized by
+    a channel, which maps a positive semidefinite matrix of trace one to a
+    positive semidefinite matrix of trace one. A preparation in depth $T$ by
+    local channels starts from a product density and is itself such a
+    protocol.
+\end{proof}
+
+\begin{lemma}[Composition of conversions]
+    \label{lem:ldp_local_channel_conversion_trans}
+    \uses{def:ldp_local_channel_conversion}
+    \lean{MPSPreparation.IsLocalChannelConversion.trans,
+        MPSPreparation.IsLocalChannelProtocol.comp}
+    \leanok
+    If $\rho$ is converted in depth $T_1$ into $\sigma$ and $\sigma$ is
+    converted in depth $T_2$ into $\tau$, then $\rho$ is converted in depth
+    $T_1+T_2$ into $\tau$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The composition $\Psi_2\circ\Psi_1$ of local channel protocols of depths
+    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$. Write
+    $\Psi_2$ as the sequence of its onsite channels and channel layers, and
+    apply them after $\Psi_1$ one at a time: the first onsite channel of
+    $\Psi_2$ becomes a further onsite channel in the last group $\Phi_{T_1}$
+    of $\Psi_1$, each onsite channel keeps the depth, and each of the $T_2$
+    channel layers raises it by one.
+\end{proof}
+
+\begin{lemma}[Light cone of a local channel protocol]
+    \label{lem:ldp_protocol_light_cone}
+    \uses{def:ldp_local_channel_conversion, lem:ldp_onsite_channel_locality,
+        lem:ldp_channel_light_cone, lem:ldp_channel_light_cone_correlations}
+    \lean{MPSPreparation.IsLocalChannelProtocol.exists_dual}
+    \leanok
+    A local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
+    $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
+    on a set of sites $X$ to operators acting on the sites within distance
+    $T$ of $X$, and that satisfies
+    \begin{align}
+        \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
+        \label{eq:ldp_conversion_dual_mul}
+    \end{align}
+    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
+    disjoint. This is the light cone of a depth-$T$ circuit in the proof of
+    \cite[Theorem~1]{Malz2024Preparation}, here with channels and onsite
+    operations.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the protocol. For an onsite channel this is
+    Lemma~\ref{lem:ldp_onsite_channel_locality} with radius $0$; a channel
+    layer adds one to the radius, by Lemma~\ref{lem:ldp_channel_light_cone}
+    for the support and as in the proof of
+    Lemma~\ref{lem:ldp_channel_light_cone_correlations} for
+    (\ref{eq:ldp_conversion_dual_mul}), and an onsite channel keeps it.
+\end{proof}
+
+\begin{lemma}[No connected correlations after a conversion]
+    \label{lem:ldp_local_channel_conversion_correlations}
+    \uses{def:ldp_local_channel_conversion, lem:ldp_protocol_light_cone}
+    \lean{MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion}
+    \leanok
+    Let $\sigma$ be converted in depth $T$ from a product
+    $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
+    $Z'$ act on sets of sites at distance larger than $2T$. Then
+    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$. For pure states prepared
+    from a product state by local unitary circuits this is the necessary
+    condition for preparation by quantum circuits of \cite{Piroli2021LOCC}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\rho=\bigotimes_i\sigma_i$ and $\sigma=\Psi(\rho)$ for a local
+    channel protocol $\Psi$ of depth $T'\le T$, and let $\Psi^\dagger$ be its
+    dual from Lemma~\ref{lem:ldp_protocol_light_cone}, of radius $T'$.
+    If $Z$ and $Z'$ act on sets at distance larger than $2T\ge2T'$, then
+    $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and
+    (\ref{eq:ldp_conversion_dual_mul}) together with the factorization of the
+    product density $\rho$ gives
+    \begin{align}
+        \Tr(\sigma ZZ') & =\Tr\bigl(\rho\,\Psi^\dagger(ZZ')\bigr)
+        =\Tr\bigl(\rho\,\Psi^\dagger(Z)\Psi^\dagger(Z')\bigr) \notag \\
+                        & =\Tr\bigl(\rho\,\Psi^\dagger(Z)\bigr)
+        \Tr\bigl(\rho\,\Psi^\dagger(Z')\bigr)
+        =\Tr(\sigma Z)\Tr(\sigma Z'). \notag
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$]
     \label{thm:ldp_depth_upper_bound}
-    \uses{def:ldp_local_circuit, lem:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization, thm:ldp_tree_factorization,
-        thm:ldp_approximation_error_normal}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPreparedInDepth_le_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_isPreparedInDepth_le_log}
+    \leanok
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
-    for every $N\ge2$ and $0<\varepsilon\le1$, a state $\ket{\psi_N}$ with
+    for every $N\ge2$ and $0<\varepsilon\le1$ for which the periodic state
+    $\ket{\phi_N(A)}$ is nonzero, a state $\ket{\psi_N}$ with
     $\varepsilon(\psi_N,\phi_N)\le\varepsilon$ is prepared in depth at most
-    $c\log(N/\varepsilon)$. This is \cite[eq.~(1)]{Malz2024Preparation}.
+    $c\log(N/\varepsilon)$. If $D\ge1$, there is $N_0$ such that
+    $\ket{\phi_N(A)}\neq0$ for every $N\ge N_0$, so for $N\ge N_0$ the condition can be dropped. This is
+    \cite[eq.~(1)]{Malz2024Preparation}; the source normalizes
+    $\ket{\phi_N}=\ket{\phi_N(A)}/c_N$ with $c_N>0$, and for some normal tensors
+    $\ket{\phi_2(A)}=0$ \cite{gap:mswc24_depth_upper_bound_nonzero_state}.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge, lem:ldp_normalized_state_rescaling,
+        thm:ldp_block_approximation_error, thm:ldp_approximating_state_depth,
+        thm:ldp_short_chain_preparation, lem:ldp_periodic_state_nonzero,
+        lem:ldp_block_isometry_state_overlap, thm:wordspan_blk_inj_succ,
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        thm:gauge_invariance_normal, thm:normality_rescaling_invariance,
+        thm:is_normal_tensor_of_is_normal_left_canonical, thm:eigenvalue_bound,
+        thm:primitive_fixed_point_trace_normalization, thm:transfer_channel}
+    Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
+    Theorem~\ref{thm:ldp_depth_upper_bound_divisible}, with fixed point $\sigma$,
+    a bound $t<1$ on the moduli of the eigenvalues other than $1$, and
+    $r=-\tfrac14\log t$; the error is unchanged by
+    Lemma~\ref{lem:ldp_normalized_state_rescaling}. Let $K$ be the constant of
+    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/4$, so the error
+    is at most $KMe^{-rq}$, and let $L_0$ be a length at which the blocked
+    tensor is injective. Put $a=1/r$, $b=\max(\log K,0)/r+L_0+3D+1$,
+    $Q=a\log(N/\varepsilon)+b$ and $q=\lceil Q\rceil$, so $Q\le q<2Q$ and
+    $Q\le(a+b/\log2)\log(N/\varepsilon)$.
+
+    If $q\le N$, write $N=(M-1)q+q'$ with $M=\lfloor N/q\rfloor$ and
+    $q'=q+(N\bmod q)$, so $q\le q'<2q$, and cut the ring into $M-1$ blocks of
+    length $q$ followed by one of length $q'$, as in the Supplemental Material
+    of \cite{Malz2024Preparation}, proof of Theorem~1. All blocked tensors are
+    injective since $q\ge L_0$, and
+    Theorem~\ref{thm:ldp_block_approximation_error} gives error at most
+    $KMe^{-rq}\le KNe^{-rQ}=Ke^{-rb}\varepsilon\le\varepsilon$. By
+    Theorem~\ref{thm:ldp_approximating_state_depth} with $L=2q$ the depth is at
+    most $2Cq\le4CQ$.
+
+    If $N<q$, then $N<Q$. If $N\ge L_0+3D$, the state $\ket{\phi_N}$ is prepared
+    exactly in depth at most $C'N\le C'Q$ by
+    Theorem~\ref{thm:ldp_short_chain_preparation}; otherwise $N$ is bounded by a
+    constant depending only on $A$, and the same theorem prepares $\ket{\phi_N}$
+    exactly in depth at most $K'\le(K'/\log2)\log(N/\varepsilon)$. In every case
+    the depth is at most
+    $c\log(N/\varepsilon)$ with $c=(4C+C')(a+b/\log2)+K'/\log2$. The second
+    statement follows from Lemma~\ref{lem:ldp_periodic_state_nonzero}.
+\end{proof}
+
+\begin{lemma}[The periodic state does not vanish on long chains]
+    \label{lem:ldp_periodic_state_nonzero}
+    \lean{MPSPreparation.exists_mpvState_ne_zero_of_le}
+    \leanok
+    \uses{thm:normalized_primitive_gauge, thm:ldp_approximation_error_normal}
+    Let $A$ be normal with $D\ge1$. There is $N_0$ such that
+    $\ket{\phi_N(A)}\neq0$ for every $N\ge N_0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    In the gauge~(\ref{eq:ldp_normal_gauge}), which multiplies $\ket{\phi_N(A)}$
+    by a nonzero scalar, $\lVert\phi_N(A)\rVert^2=\Tr\E_A^{\,N}$ differs from $1$
+    by at most $Ke^{-2\gamma N/\xi}$, as in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_normal}, which is less than $1$ for
+    large $N$.
+\end{proof}
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
-%% R_k are realized on groups of ceil(log_d D) sites as in
-%% Lemma lem:ldp_unitary_implementing_isometry; the depth estimate is
-%% unchanged up to constants. The pair layer has constant depth, and the
+%% R_k are realized on groups of D sites, as in
+%% thm:ldp_approximating_state_depth (groups of ceil(log_d D) sites would also
+%% do, but that is not what is formalized); the depth estimate is unchanged
+%% up to constants. The pair layer has constant depth, and the
 %% sequential factorization with SWAP gates has depth O(q). The range
 %% 0 < eps <= 1, N >= 2 keeps log(N/eps) positive.
+
+The following theorem is the case of equal blocks, for chain lengths that a
+block length of order $\log(N/\varepsilon)$ divides, as in the $N/q$ equal
+blocks of \cite[eq.~(10)]{Malz2024Preparation}; it was the first formalized
+case of Theorem~\ref{thm:ldp_depth_upper_bound}
+\cite{gap:mswc24_depth_upper_bound_divisible_length}.
+
+\begin{lemma}[The approximating state is a unit vector]
+    \label{lem:ldp_approximating_state_unit_norm}
+    \lean{MPSTensor.norm_approximatingMPVStateRaw,
+        MPSTensor.norm_approximatingMPVState}
+    \leanok
+    \uses{def:ldp_approximating_state}
+    Let $\sigma\ge0$ with $\Tr\sigma=1$, let the $q$-site blocked tensor
+    $\mathcal B_q$ be injective, and let $M\ge1$. Then
+    $\lVert\phi_M(VP_\infty)\rVert=1$, so the approximating state
+    $\ket{\widetilde\phi_N}$ of Definition~\ref{def:ldp_approximating_state}
+    equals $\ket{\phi_M(VP_\infty)}$ and is a unit vector.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:ldp_approximating_state}
+    The squared norm $\lVert\phi_M(VP_\infty)\rVert^2$ is the sum of the
+    squared moduli of its coefficients, which equals $1$ by the norm identity
+    recorded with Definition~\ref{def:ldp_approximating_state}.
+\end{proof}
+
+\begin{lemma}[Rescaling changes the normalized state by a phase]
+    \label{lem:ldp_normalized_state_rescaling}
+    \lean{MPSPreparation.norm_inner_normalizedMPVState_of_mpv_eq}
+    \leanok
+    Let $A$ and $B$ be tensors with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for
+    some $\zeta\neq0$, and write $\ket{\hat\phi_N(A)}$ for the normalization of
+    $\ket{\phi_N(A)}$ (zero when $\ket{\phi_N(A)}=0$). Then every vector
+    $\ket\psi$ on $N$ sites satisfies
+    $\lvert\braket{\psi}{\hat\phi_N(B)}\rvert=\lvert\braket{\psi}{\hat\phi_N(A)}\rvert$,
+    so the error of $\ket\psi$ is the same against both normalized states.
+\end{lemma}
+\begin{proof}
+    \leanok
+    $\ket{\hat\phi_N(B)}=(\zeta^N/\lvert\zeta^N\rvert)\ket{\hat\phi_N(A)}$,
+    and if $\ket{\phi_N(A)}=0$ both normalized states vanish.
+\end{proof}
+
+\begin{theorem}[Block length $a\log(N/\varepsilon)+b$ for every slope $a>\xi/2$]
+    \label{thm:ldp_depth_upper_bound_slope}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le_of_slope}
+    \leanok
+    There is $C$, depending only on $d$ and $D$, such that the following holds.
+    Let $B$ be a normal tensor in the gauge~(\ref{eq:ldp_normal_gauge}), with a
+    positive definite fixed point $\sigma$ of trace one, and let $A$ be a tensor
+    with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for all $N$ and some
+    $\zeta\neq0$. Let $0<t<1$ bound the moduli of the eigenvalues of $\E_B$ other
+    than $1$, and let $\xi=-1/\log t$. For every $a>\xi/2$ there is $b\ge1$ such
+    that for $0<\varepsilon\le1$, every $N\ge1$ and every $q$ dividing $N$ with
+    $q\ge a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
+    $\varepsilon(\psi,\phi_N(A))\le\varepsilon$ is prepared in depth at most $Cq$.
+    The block length $q=\lceil2\xi(1+\eta)\ln N\rceil$ of
+    \cite[paragraph after Lemma~1]{Malz2024Preparation} has slope $2\xi$, and
+    \cite[App.~B4, eq.~(S54)]{Murota2026ExactLogDepth} takes
+    $q=O(\xi\log(N/\varepsilon))$. The slopes $a>\xi/2$ are new here.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_approximating_state_depth,
+        thm:ldp_approximation_error_normal,
+        thm:wordspan_blk_inj_succ,
+        lem:ldp_normalized_state_rescaling,
+        lem:isNBlkInjective_iff_blockTensor_isInjective,
+        lem:ldp_approximating_state_unit_norm}
+    Since $a>\xi/2$, the number $\gamma=\xi/(2a)$ satisfies $0<\gamma<1$, and
+    Theorem~\ref{thm:ldp_approximation_error_normal} at this $\gamma$ gives $K$
+    with $\varepsilon(\widetilde\phi_N,\phi_N(B))\le K\,(N/q)\,e^{-q/a}$, since
+    $2\gamma/\xi=1/a$. Take $b=a\max(\log K,0)+L_0+3D+1$, with $L_0$ a length at
+    which the blocked tensor is injective. Then $q\ge b$ makes the blocked
+    tensor $\mathcal B_q$ injective by
+    Theorem~\ref{thm:wordspan_blk_inj_succ} and
+    Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective}, and $q\ge3D$.
+    Moreover $q/a\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$,
+    so $K(N/q)e^{-q/a}\le\varepsilon$. The approximating state is a unit vector
+    by Lemma~\ref{lem:ldp_approximating_state_unit_norm}, is prepared in depth at
+    most $Cq$ by Theorem~\ref{thm:ldp_approximating_state_depth}, and has the
+    same error against $\phi_N(A)$ as against $\phi_N(B)$ by
+    Lemma~\ref{lem:ldp_normalized_state_rescaling}.
+\end{proof}
+
+\begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
+    \label{thm:ldp_depth_upper_bound_divisible}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le,
+        MPSPreparation.exists_isPreparedInDepth_le_log_of_dvd}
+    \leanok
+    There is $C$, depending only on $d$ and $D$, such that the following holds.
+    Let $A$ be normal with $D\ge1$. There are $a>0$ and $b\ge1$, depending only
+    on $A$, such that for $0<\varepsilon\le1$, every $N\ge1$ and every $q$
+    dividing $N$ with
+    $q\ge a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$ is prepared in depth at most $Cq$.
+    If moreover $N\ge2$ and $q\le2(a\log(N/\varepsilon)+b)$, for instance
+    $q=\lceil a\log(N/\varepsilon)+b\rceil$ when it divides $N$, the depth is at most
+    $c\log(N/\varepsilon)$ with $c$ depending only on $A$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge, thm:ldp_depth_upper_bound_slope,
+        thm:normality_rescaling_invariance,
+        thm:gauge_invariance_normal,
+        thm:is_normal_tensor_of_is_normal_left_canonical,
+        thm:eigenvalue_bound,
+        thm:primitive_fixed_point_trace_normalization,
+        thm:transfer_channel}
+    A gauge transformation and a rescaling bring $A$ into the
+    gauge~(\ref{eq:ldp_normal_gauge}) by
+    Theorem~\ref{thm:normalized_primitive_gauge}, and the positive definite
+    fixed point $\rho$ it provides is replaced by
+    $\sigma=\rho/\Tr\rho$, still a fixed point of trace one, by
+    Theorem~\ref{thm:primitive_fixed_point_trace_normalization}; they multiply
+    $\ket{\phi_N(A)}$ by a nonzero scalar. The new tensor is normal by
+    Theorems~\ref{thm:normality_rescaling_invariance}
+    and~\ref{thm:gauge_invariance_normal}. By
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical} its transfer
+    map is primitive, so $1$ is its only eigenvalue of modulus $1$. The gauge is
+    left canonical, so the transfer map is a channel by
+    Theorem~\ref{thm:transfer_channel}, and all its eigenvalues have modulus at
+    most $1$ by Theorem~\ref{thm:eigenvalue_bound},
+    and finitely many of them give a bound $0<t<1$ on the
+    moduli of the other eigenvalues. With $\xi=-1/\log t>0$,
+    Theorem~\ref{thm:ldp_depth_upper_bound_slope} at the slope $a=\xi>\xi/2$
+    gives $b\ge1$ and the first statement. For the second statement,
+    $\log(N/\varepsilon)\ge\log2$ gives
+    $Cq\le C(2a+2b/\log2)\log(N/\varepsilon)$.
+\end{proof}
 
 For an operator $X$ on $(\C^d)^{\otimes L}$, let $\E_X\colon\MN{D}\to\MN{D}$ be
 the linear map $Z\mapsto\sum_{w,w'}\bra{w'}X\ket{w}A^wZ(A^{w'})^\dagger$, where
@@ -1190,11 +2162,14 @@ $A$ along $w$.
          & \ge c\,e^{-(s'-1)/\xi}.
         \label{eq:ldp_decaying_correlations}
     \end{align}
-    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. For
-    injective $A$ and $L=1$ this is the correlation estimate of
+    One may take $K=1$ when $\lambda_2$ is real and $K=2$ otherwise. This is a
+    Hermitian variant of the correlation estimate of
     \cite[Lemma~2]{Malz2024Preparation}, with the separation $s$ ranging over
-    windows of $K$ consecutive values; the correction of the source's
-    statement is recorded in~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
+    windows of $K$ consecutive values and the connected correlator. The
+    source's own observables cannot be Hermitian when $\lambda_2$ is not real;
+    for them the bound holds in modulus at every separation, while the printed
+    real inequality fails when $\lambda_2$ is not real or is
+    negative~\cite{gap:mswc24_decaying_correlations_windowed_connected}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1290,16 +2265,40 @@ $A$ along $w$.
 %% injective A with xi > 0, observables O_1, O'_s of norm one such that for
 %% every integer s > 1 and sufficiently large N the one-point functions
 %% vanish exactly (auxform1) and the correlator itself satisfies the real
-%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). Neither the bound
-%% at every s > 1 nor the exact vanishing is justified in general. The
-%% correlator of Hermitian observables is real; for a complex lambda_2 the
-%% source's choice pairs R_2 with its adjoint, the eigenvector for
-%% conj(lambda_2), and the leading part is a multiple of
-%% |lambda_2|^t cos(t theta + phi), which can vanish at individual s. The
-%% statement above therefore asserts the bound in every window of K <= 2
-%% consecutive separations, which the Vandermonde argument proves, and it
-%% uses the connected correlator, since the one-point functions need not
-%% vanish at finite N. It is stated for normal A with observables on L sites
+%% lower bound <O_1 O'_s> >= c e^{-(s-1)/xi} (auxform2). The source's proof
+%% chooses non-Hermitian observables with E_O = |rho><l_2| and
+%% E_O' = |R_2><Tr|, with l_2 a left eigenvector and R_2 an ordinary
+%% eigenvector normalized by l_2(R_2) = 1. That expansion assumes the
+%% transfer map is diagonalizable. The repair for a nontrivial Jordan block
+%% keeps l_2 a left eigenvector and takes R_2 in the generalized eigenspace
+%% with the same normalization. Since l_2(rho) = 0 and Tr R_2 = 0, the one-point
+%% functions vanish exactly at every N >= s (algebraically, not asymptotically),
+%% and the two-point function is exactly lambda_2^{s-2} / Tr E^N, so the
+%% modulus form |<O_1 O'_s>| >= c e^{-(s-1)/xi} holds at every s >= 2. What
+%% fails is the printed real inequality. For complex lambda_2 the correlator
+%% is complex, and its real part is negative for infinitely many s. It also
+%% fails when lambda_2 is real and negative: the correlator has the sign of
+%% lambda_2^{s-2} and is negative at every odd s. The qubit Pauli tensor with
+%% weights q_0 = 1/16 and q_1 = q_2 = q_3 = 5/16 has every nontrivial transfer
+%% eigenvalue equal to -1/4. A
+%% Hermitian reading also fails: for Hermitian observables the
+%% limit correlator is real with leading part a multiple of
+%% |lambda_2|^t cos(t theta + phi), which falls below any c |lambda_2|^{s-1}
+%% infinitely often when theta/pi is irrational. For the injective tensor
+%% A^0 = 1/2, A^1 = diag(1, e^{i psi})/2, A^2 = sigma_x/2, A^3 = sigma_y/2
+%% at gate angle psi = pi/2, so arg(lambda_2) = pi/4. The Hermitian parts of
+%% the source's observables give a
+%% correlator vanishing exactly at s = 4, 8, 12, ... for every N >= s. The
+%% statement above uses Hermitian observables, as the proof of Theorem
+%% thm:ldp_depth_lower_bound needs, and therefore asserts the bound in every
+%% window of K <= 2 consecutive separations, which the Vandermonde argument
+%% proves; the connected correlator makes it independent of the one-point
+%% functions. Remaining issues in the source's proof: Lemma 2 is stated for
+%% injective A but applied to normal A on unblocked sites; diagonalizability
+%% of the transfer map (Jordan blocks) is never addressed; a factor 1/2 is
+%% missing in the trace-distance step; and s = 2T + 1 needs a sharp light
+%% cone. See docs/paper-gaps/mswc24_decaying_correlations_windowed_connected.tex.
+%% It is stated for normal A with observables on L sites
 %% so that Theorem thm:ldp_depth_lower_bound applies at every N; for
 %% injective A and L = 1 it is the source's setting. The gauge
 %% (eq:ldp_normal_gauge) is the one the source's proof uses ("in the main text
@@ -1417,6 +2416,21 @@ $A$ along $w$.
     right side is $N^{-1/2+o(1)}$, so (\ref{eq:ldp_depth_contradiction}) fails
     for all $N$ larger than some $N_0$ determined by $A$ and the sequence
     $(T_N)$. For those $N$, $\varepsilon(\phi_N,\psi_N)>1/2$.
+
+    The argument is quantitative. With the overlap bound $1/2$ replaced by
+    $\eta\in(0,1]$, the constants $C_2$ and $C_3$ grow at most like
+    $\eta^{-1}$. Since $s'\le2T+C$, and the bound below is trivial when
+    $T\ge\xi\ln N/4$, (\ref{eq:ldp_depth_contradiction}) shows that
+    $\lvert\braket{\phi_N}{\psi_N}\rvert\ge\eta$ requires
+    \begin{align}
+        T
+         & \ge\frac\xi4\bigl(\ln N-\ln\ln N\bigr)-\xi\ln\frac1\eta-C_A,
+        \label{eq:ldp_depth_constant}
+    \end{align}
+    with $C_A$ depending only on $A$. The same constant $\xi/4$ in front of
+    $\ln N$ is implicit in the final inequality of the proof in
+    \cite{Malz2024Preparation}, which compares $N/\ln N$ with a multiple of
+    $e^{4T/\xi}$.
 \end{proof}
 %% The source proof applies Lemma 2, stated for injective A, to a normal A.
 %% Here the lemma is stated for normal A with observables on L sites, where
@@ -1430,17 +2444,26 @@ $A$ along $w$.
 %% both states become products of k ~ N/(4q) factors, bounds the fidelity
 %% by (1 - delta)^(k/2), and bounds delta from below with Lemma 2 at the
 %% single separation s = 2T + 1, using the exact vanishing of the
-%% one-point functions. Both of those inputs are unavailable here (see the
-%% comment after Theorem thm:ldp_decaying_correlations), so the proof above
-%% replaces the product-fidelity step by the concentration of averages of
-%% n ~ N/s' translated observables. This concentration argument is not in
-%% the source. It is formalized for a tensor in the gauge
-%% (eq:ldp_normal_gauge) in Theorem thm:ldp_depth_lower_bound_gauge, and the
-%% reduction to the gauge in the first paragraph is Lemma
-%% lem:ldp_normal_gauge_reduction. The formal statement is given twice: for a
-%% tensor normal in the source's sense (irreducible, with the unique largest
-%% eigenvalue 1 of E_A), and for a tensor some blocking of which is injective,
-%% with the correlation length computed from lambda_2/lambda_1.
+%% one-point functions. That vanishing is exact for the source's
+%% non-Hermitian observables, and the source's route is correct once the
+%% real inequality of Lemma 2 is read in modulus, the factor 1/2 is restored
+%% in the trace-distance step, s = 2T + 1 is replaced by a separation larger
+%% than 2T, and the lemma is applied on blocks where normal A spans the
+%% matrix algebra (see the comment after Theorem
+%% thm:ldp_decaying_correlations). The lemma above is stated for Hermitian
+%% observables, so the proof above replaces the product-fidelity step by the
+%% concentration of averages of n ~ N/s' translated observables. Its
+%% constants give the depth bound T >= (xi/4)(ln N - ln ln N) - xi ln(1/eta)
+%% - C_A for overlap eta, recorded after the proof; the same xi/4 is
+%% implicit in the source's final inequality N/ln N > C e^{4T/xi}. This
+%% concentration argument is not in the source. It is formalized for a
+%% tensor in the gauge (eq:ldp_normal_gauge) in Theorem
+%% thm:ldp_depth_lower_bound_gauge, and the reduction to the gauge in the
+%% first paragraph is Lemma lem:ldp_normal_gauge_reduction. The formal
+%% statement is given twice: for a tensor normal in the source's sense
+%% (irreducible, with the unique largest eigenvalue 1 of E_A), and for a
+%% tensor some blocking of which is injective, with the correlation length
+%% computed from lambda_2/lambda_1.
 
 \begin{lemma}[Averages over separated windows]
     \label{lem:ldp_window_averages}
@@ -1830,23 +2853,31 @@ $A$ along $w$.
 
 % **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for a
 % block of multiplicity two; docs/paper-gaps/mswc24_multiplicity_fixed_point.tex.
-% No completion tag on this entry or its proof: the linked declarations
-% compute the overlap and the error for the displayed tensor, but that its
-% blocks are normal and that the tensor is their canonical form (S2) are not
-% formalized, so the refutation of Lemma 1'(ii) on its stated domain is not
-% yet certified.
+% The first linked declaration certifies that the displayed tensor is, after
+% ordering its bond coordinates, the canonical form (S2) of a basis of normal
+% tensors in canonical form II with the weight normalization of the source,
+% so the refutation holds on the domain on which Lemma 1'(ii) is stated.
 \begin{theorem}[The approximating state for a repeated block]
     \label{thm:ldp_approximation_error_repeated_block}
-    \lean{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor,
+    \lean{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock,
+        MPSTensor.isBNTCanonicalForm_repeatedBlockSector,
+        MPSTensor.reindex_toTensor_repeatedBlockSector,
+        MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor,
         MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor,
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis,
         MPSTensor.not_approximationError_le_repeatedBlockTensor}
+    \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
-        def:correlation_length}
+        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
+        def:cpsv_cfii}
     Let $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$,
     the canonical form with the normal block $A_1=(1,0)$ of multiplicity two and
     weights $(1,1)$ and the normal block $A_2=(0,1)$ of multiplicity one, so that
-    $\beta=(2,1)$ and $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$. Place
+    $\beta=(2,1)$ and $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$.
+    The blocks are normal and in canonical form~II, they form a basis of normal
+    tensors whose states become orthogonal as $N\to\infty$, and the weights satisfy $\lvert\mu_{j,k}\rvert\leq1$ with one of
+    modulus one, so $A$ satisfies every hypothesis of
+    \cite[Lemma~1$'$(ii)]{Malz2024Preparation}. Place
     the pair of the first block on its first copy. For every $q\geq1$ and
     $M\geq1$ the approximating state of
     Definition~\ref{def:ldp_non_normal_fixed_point} satisfies
@@ -1867,7 +2898,25 @@ $A$ along $w$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    Each block is one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, so its
+    transfer map is the identity. It is therefore irreducible and normal, and
+    left-canonical with the diagonal positive-definite fixed point $1$, which is
+    the canonical-form~II condition; the pairs below are built from this same
+    fixed point. Its self-overlap is one. The
+    states $\ket{0\cdots0}$ and $\ket{1\cdots1}$ of the blocks are linearly
+    independent for $N\geq1$, and the blocks are not related by a gauge
+    transformation and a phase, since $A_1^1=0\neq A_2^1$. With the bond
+    coordinates ordered as the two copies of $A_1$ followed by the copy of
+    $A_2$, and the weights $(1,1)$ and $1$, the direct sum of the copies is $A$:
+    for $i=0,1$,
+    \begin{align}
+        A^i & =A_1^i\oplus A_1^i\oplus A_2^i
+        =\operatorname{diag}\bigl(A_1^i,A_1^i,A_2^i\bigr).
+        \label{eq:ldp_repeated_block_assembly}
+    \end{align}
+
     For a tensor of diagonal matrices the blocked map factors as $B=CJ^\dagger$,
     where $J\colon\ket e\mapsto\ket{e\,e}$ and the column $e$ of $C$ is the state
     of the diagonal coordinate $e$ on $q$ sites; here these are $\ket{0\cdots0}$
@@ -1890,20 +2939,28 @@ $A$ along $w$.
 
 % **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for two
 % blocks of multiplicity one; docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
-% No completion tag on this entry or its proof, for the same reason as for
-% thm:ldp_approximation_error_repeated_block: the normality of the blocks
-% and the canonical form (S2) of the displayed tensor are not formalized.
+% As for thm:ldp_approximation_error_repeated_block, the first linked
+% declaration certifies the hypotheses of Lemma 1'(ii) for the displayed tensor.
 \begin{theorem}[The approximating state for overlapping blocks]
     \label{thm:ldp_approximation_error_overlapping_blocks}
-    \lean{MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
+    \lean{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_overlappingBlock,
+        MPSTensor.isBNTCanonicalForm_overlappingBlockSector,
+        MPSTensor.reindex_toTensor_overlappingBlockSector,
+        MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
         MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor,
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis,
         MPSTensor.not_approximationError_le_overlappingBlockTensor}
+    \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
-        def:correlation_length}
+        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
+        def:cpsv_cfii}
     Let $A^0=\operatorname{diag}(1,3/5)$ and $A^1=\operatorname{diag}(0,4/5)$,
     the canonical form with the normal blocks $A_1=(1,0)$ and $A_2=(3/5,4/5)$, each
-    of multiplicity one and weight one, so that $\beta=(1,1)$. Put $s=(3/5)^q$,
+    of multiplicity one and weight one, so that $\beta=(1,1)$. The blocks are
+    normal and in canonical form~II and form a basis of normal tensors whose
+    states become orthogonal as $N\to\infty$, so $A$
+    satisfies every hypothesis of \cite[Lemma~1$'$(ii)]{Malz2024Preparation}.
+    Put $s=(3/5)^q$,
     the overlap of the states of the two blocks on $q$ sites,
     $u=\bigl(\sqrt{1+s}+\sqrt{1-s}\bigr)/2$ and
     $v=\bigl(\sqrt{1+s}-\sqrt{1-s}\bigr)/2$. For every $q\geq1$ and $M\geq1$ the
@@ -1925,7 +2982,14 @@ $A$ along $w$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    The hypotheses are checked as in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_repeated_block}: both blocks are
+    one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, their states
+    $\ket{0\cdots0}$ and $(\tfrac35\ket0+\tfrac45\ket1)^{\otimes N}$ are
+    linearly independent for $N\geq1$, and $A_1^1=0\neq A_2^1$.
+
     As in the proof of Theorem~\ref{thm:ldp_approximation_error_repeated_block},
     the Gram matrix of the blocked map on the diagonal coordinates is
     $G=\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)$, whose positive
@@ -1984,11 +3048,13 @@ $A$ along $w$.
         MPSTensor.exists_approximationError_le_blockSum, MPSTensor.blockSum,
         MPSTensor.nonNormalApproxVector_blockSum,
         MPSTensor.norm_nonNormalApproxOverlap_blockSum,
-        MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum}
+        MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum,
+        MPSTensor.one_sub_norm_sum_div_le}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
         lem:ldp_orthogonal_sum_polar, lem:ldp_positive_part_overlap,
-        thm:ldp_approximation_error_normal, def:correlation_length}
+        thm:ldp_approximation_error_normal, thm:ldp_injectivity_cutoff,
+        def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ with $b\geq1$, weights $\mu_j>0$, and
     normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, each placed on its own bond coordinates. Let $\lambda_2$
@@ -2062,3 +3128,5 @@ $A$ along $w$.
     blocks gives the second bound, and the first follows as in
     Theorem~\ref{thm:ldp_approximation_error_normal}, because $\varepsilon\leq1$.
 \end{proof}
+
+\input{chapter/ch32_log_depth_repeated_blocks}

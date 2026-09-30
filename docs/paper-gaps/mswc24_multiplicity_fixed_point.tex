@@ -89,7 +89,7 @@ $\Pi$ is supported on the diagonal pairs. At each site the two legs come from
 neighbouring pairs, so
 \begin{align*}
     V^{\otimes M}\ket{\Omega_1}
-    =2^{-M/2}\sum_{x\in\{0,1\}^M}\prod_{k=1}^MW_{x_kx_{k+1}}\ket{0\cdots0}
+        =2^{-M/2}\sum_{x\in\{0,1\}^M}\prod_{k=1}^MW_{x_kx_{k+1}}\ket{0\cdots0}
     =2^{-M/2}\operatorname{Tr}(W^M)\ket{0\cdots0}.
 \end{align*}
 The eigenvalues $\lambda_1,\lambda_2$ of $W$ satisfy
@@ -124,7 +124,7 @@ $0<\lvert\lambda_2\rvert<1$ bounding the subleading eigenvalues, which here is
 every such $\lambda_2$, so that $e^{-\gamma/\xi_{\mathrm{diag}}}<1$; along $q=M$,
 $N=M^2$, which satisfies $q=o(N)$, the error exceeds
 $C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}\exp\bigl(C(N/q)e^{-\gamma
-q/\xi_{\mathrm{diag}}}\bigr)$ for every constant $C$.\footnote{Formal declarations:
+            q/\xi_{\mathrm{diag}}}\bigr)$ for every constant $C$.\footnote{Formal declarations:
     \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor},
     \leanid{MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor},
     \leanid{MPSTensor.not_approximationError_le_repeatedBlockTensor} in
@@ -132,6 +132,24 @@ q/\xi_{\mathrm{diag}}}\bigr)$ for every constant $C$.\footnote{Formal declaratio
 The positive part and the support projector of the blocked tensor are computed
 from the uniqueness of the positive square root of $B^\dagger B$. The computation
 above for an arbitrary placement of the pair of the first block is not formalized.
+
+The hypotheses of part~(ii) of the lemma are formalized for this tensor. After
+ordering its bond coordinates it is the direct sum (S2) of the copies of a basis
+of normal tensors: both blocks are normal, left-canonical with the diagonal
+positive-definite fixed point $1$ (canonical form~II), have self-overlap one, give
+linearly independent states for every $N\geq1$, are not related by a gauge
+transformation and a phase, and give states that become orthogonal as
+$N\to\infty$; every weight equals one. One theorem collects these
+facts, with canonical form~II stated for the diagonal
+positive-definite fixed point $1$ of each block, the same fixed point from which
+the approximating state in its conclusion is built; it also collects the identification of the pairs (each on the first copy of its block) and of
+the weights $\beta_j$ with those of the canonical form, and the failure of the
+printed bound.\footnote{Formal declarations:
+    \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock},
+    \leanid{MPSTensor.isBNTCanonicalForm_repeatedBlockSector},
+    \leanid{MPSTensor.reindex_toTensor_repeatedBlockSector} and
+    \leanid{MPSTensor.embeddedFixedPointPair_repeatedBlockSector} in
+    \doclink{TNLean/MPS/Preparation/RepeatedBlockCounterexample}.}
 
 The block form (\ref{eq:mswc24_block_form}) also fails when every multiplicity is
 one, as soon as the $q$-site states of distinct blocks are not orthogonal
@@ -147,8 +165,15 @@ must also account for the overlaps of distinct blocks recorded in
 \cite{gap:mswc24_block_form_mixed_overlap}. For multiplicity one, the corrected form of
 (\ref{eq:mswc24_block_form}) for blocks whose $q$-site states are orthogonal and
 the resulting error bound, with no condition $q=o(N)$, are formalized; see
-\cite{gap:mswc24_block_form_mixed_overlap}. For $m_j\geq2$ no corrected
-construction is formalized.
+\cite{gap:mswc24_block_form_mixed_overlap}. For $m_j\geq2$ the corrected
+construction is given in \cite{gap:mswc24_repeated_block_corrected_state}: on the
+copies of block $j$ the positive part is $c_j\,w_jw_j^\dagger\otimes P_j$ with a
+unit vector $w_j$ built from the weights $\mu_{j,k}^q$, and the corrected
+approximating state is $V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j}$,
+with the source's weights $\beta_j$ and an on-site isometry $L_j$ that places
+the pairs of block $j$ on all of its copies at once. For blocks whose $q$-site
+states are orthogonal the corrected block form, the corrected state and the
+error bound are formalized there.
 
 \bibliographystyle{alpha}
 \bibliography{references}

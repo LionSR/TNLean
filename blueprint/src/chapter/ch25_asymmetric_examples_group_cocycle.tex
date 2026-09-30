@@ -249,6 +249,108 @@ The single-site tensors are not injective: their $|G|^2$ physical matrices
 span a space of dimension at most $|G|$. The operator laws above are
 therefore stated directly rather than through an injective representation.
 
+\subsection{Fusion tensors and the inverse cocycle}
+
+The source equips the tensors $\hat T_g$ with explicit fusion tensors and
+states that they realize the inverse cocycle~\cite{GarreRubio2023MPOSym}.
+The bond of $\hat T_g$ carries the input label of the preceding site, so
+along the stacked product $\hat T_g\hat T_h$ the bond pair over a label
+$l$ of $\hat T_{gh}$ is $(hl,l)$.
+
+\begin{definition}[Fusion tensors of the cocycle construction]
+    \label{def:asymex_group_cocycle_fusion_tensors}
+    \lean{MPOTensor.GroupCocycle.pairLabel,
+        MPOTensor.GroupCocycle.fusionV, MPOTensor.GroupCocycle.fusionW,
+        MPOTensor.GroupCocycle.fusionData}
+    \leanok
+    \uses{def:asymex_group_cocycle_tensor, def:mpug_anomaly_three_cochain}
+    For $g,h\in G$ let $F^<_{g,h}$ send the bond pair $(hl,l)$ of
+    $\hat T_g\hat T_h$ to the bond label $l$ of $\hat T_{gh}$ with the
+    factor $\omega(g,h,l)^{-1}$, and vanish on every other bond pair, and
+    let $F^>_{g,h}$ send $l$ to $(hl,l)$ with the factor $\omega(g,h,l)$.
+\end{definition}
+
+\begin{theorem}[The fusion tensors reduce the product]
+    \label{thm:asymex_group_cocycle_fusion}
+    \lean{MPOTensor.GroupCocycle.pairLabel_injective,
+        MPOTensor.GroupCocycle.fusionV_mul_apply,
+        MPOTensor.GroupCocycle.mul_fusionV_apply,
+        MPOTensor.GroupCocycle.fusionV_mul_mulTensor,
+        MPOTensor.GroupCocycle.fusionV_mul_fusionW,
+        MPOTensor.GroupCocycle.isReduction_fusion}
+    \leanok
+    \uses{def:asymex_group_cocycle_fusion_tensors, def:mps_rectangular_reduction,
+        def:mpdo_operator_product, thm:asymex_group_cocycle_mul}
+    If $\omega$ is a three-cocycle, then $F^<_{g,h}F^>_{g,h}=\mathbf 1$ and
+    $F^<_{g,h}\,(\hat T_g\hat T_h)^{ij}=\hat T_{gh}^{ij}\,F^<_{g,h}$ for every
+    pair of physical indices. Hence
+    $F^<_{g,h}\,(\hat T_g\hat T_h)^{\mathbf w}\,F^>_{g,h}=\hat T_{gh}^{\mathbf w}$
+    for every word $\mathbf w$, including the empty word.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both sides of the letter identity vanish unless the output bond pair is
+    $(hj,j)$ and the ket index is $ghj$. On that support the left side is
+    $\omega(g,h,l)^{-1}\omega(g,hj,j^{-1}l)\,\omega(h,j,j^{-1}l)$ and the right
+    side is $\omega(gh,j,j^{-1}l)\,\omega(g,h,j)^{-1}$, which agree by the
+    sitewise cocycle identity in the proof of
+    Theorem~\ref{thm:asymex_group_cocycle_mul}. The word identity follows by
+    moving $F^<_{g,h}$ through the word and using $F^<_{g,h}F^>_{g,h}=\mathbf 1$.
+\end{proof}
+
+\begin{theorem}[The construction carries the inverse cocycle]
+    \label{thm:asymex_group_cocycle_inverse_cocycle}
+    \lean{MPOTensor.GroupCocycle.fusionV_mul_kronId,
+        MPOTensor.GroupCocycle.castMat_family_mul,
+        MPOTensor.GroupCocycle.fusionData_leftV,
+        MPOTensor.GroupCocycle.fusionData_isAssociator,
+        MPOTensor.GroupCocycle.exists_evalWord_tensor_ne_zero,
+        MPOTensor.GroupCocycle.fusionData_omega}
+    \leanok
+    \uses{thm:asymex_group_cocycle_fusion, def:mpug_anomaly_three_cochain,
+        thm:asymex_group_cocycle_kernel}
+    Let $\omega$ be a three-cocycle. For the fusion tensors of
+    Definition~\ref{def:asymex_group_cocycle_fusion_tensors}, the left
+    boundaries of the two fusion trees of $(g,h,k)$ satisfy
+    $V^L=\omega(g,h,k)^{-1}\,V^R$, and the anomaly three-cochain of these
+    fusion tensors is $\omega^{-1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Both boundaries send the triple bond label $(hkx,kx,x)$ to $x$ and vanish
+    elsewhere. Their factors are
+    $\omega(gh,k,x)^{-1}\omega(g,h,kx)^{-1}$ and
+    $\omega(g,hk,x)^{-1}\omega(h,k,x)^{-1}$, whose ratio is $\omega(g,h,k)^{-1}$
+    by the cocycle equation at $(g,h,k,x)$. The scalar is unique because
+    every $\hat T_g$ has nonzero words of every length, its periodic operator
+    being a shift with nonzero phases.
+\end{proof}
+
+\begin{theorem}[The identity member is not normal]
+    \label{thm:asymex_group_cocycle_identity_not_normal}
+    \lean{MPOTensor.GroupCocycle.tensor_one_apply_row,
+        MPOTensor.GroupCocycle.evalWord_tensor_one_apply_row,
+        MPOTensor.GroupCocycle.not_isNormal_tensor_one,
+        MPOTensor.GroupCocycle.not_isNormalRepresentation}
+    \leanok
+    \uses{def:asymex_group_cocycle_tensor, def:normal,
+        def:mpug_anomaly_three_cochain}
+    If $G$ is nontrivial and $\omega$ is normalized, then $\hat T_e$ is not
+    normal. Hence the tensors $\hat T_g$ do not form a representation with
+    normal tensors, and the three-cochain of
+    Theorem~\ref{thm:asymex_group_cocycle_inverse_cocycle} is that of the
+    fusion tensors of Definition~\ref{def:asymex_group_cocycle_fusion_tensors}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every letter of $\hat T_e$ has all rows equal, so every nonempty product
+    of letters does too, while the matrix unit at a diagonal position has
+    distinct rows.
+\end{proof}
+
 \subsection{The group of order two and the decorated CZX operator}
 
 For $G=\Z_2=\{e,s\}$ with the nontrivial cocycle $\omega_1$ of
@@ -544,6 +646,62 @@ class of $\omega$.
     the cyclic invariant of $\omega_j$ is $\zeta^j$, and $\zeta$ is a
     primitive $n$-th root of unity, so the gauge invariance of
     Theorem~\ref{thm:mpug_cyclic_invariant_gauge} separates the classes.
+\end{proof}
+
+\begin{theorem}[The classes of the cyclic cocycles]
+    \label{thm:asymex_group_cocycle_cyclic_classes}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycleSubtype,
+        TNLean.Algebra.ScalarThreeCochain.isPrimitiveRoot_rootOfUnity,
+        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_eq_of_modEq,
+        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_zero,
+        TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_cyclicCocycle_iff,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass_cyclicCocycle_eq_zero_iff,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass_cyclicCocycle_eq_iff,
+        TNLean.Algebra.ScalarThreeCochain.mem_zpowers_ofAdd_one,
+        TNLean.Algebra.ScalarThreeCochain.norm_scalarH2Representation_apply,
+        TNLean.Algebra.ScalarThreeCochain.applyAsHom_ofAdd_one_sub_id,
+        TNLean.Algebra.ScalarThreeCochain.normKerEquivRootsOfUnity,
+        TNLean.Algebra.ScalarThreeCochain.nat_card_groupCohomology_three_cyclic,
+        TNLean.Algebra.ScalarThreeCochain.exists_anomalyClass_cyclicCocycle_eq,
+        TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_cyclicCocycle,
+        TNLean.Algebra.ScalarThreeCochain.ofAdd_one_pow_self,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_of_cyclicInvariant_eq,
+        TNLean.Algebra.ScalarThreeCochain.orderOf_ofAdd_one,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_domainWallPhase_eq,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass_eq_iff_domainWallPhase_eq}
+    \leanok
+    \uses{thm:asymex_group_cocycle_cyclic_domain_wall,
+        thm:mpug_h3_group_cohomology}
+    Let $n>1$. The group $H^3(\Z_n,\C^\times_{\mathrm{triv}})$ has $n$
+    elements and consists of the classes $[\omega_0],\ldots,[\omega_{n-1}]$,
+    with $[\omega_j]=[\omega_{j'}]$ exactly when $j\equiv j'\pmod n$. In
+    particular $[\omega_j]=0$ exactly when $n\mid j$, and every
+    three-cocycle of $\Z_n$ is cohomologous to some $\omega_j$ with
+    $0\leq j<n$. Two three-cocycles $\omega$ and $\eta$ of
+    $\Z_n$ are cohomologous exactly when $P_1(\omega)=P_1(\eta)$, the
+    domain-wall phases at the generator $1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_group_cocycle_cyclic_domain_wall,
+        thm:mpug_h3_group_cohomology,
+        thm:asymex_group_cocycle_domain_wall_phase_gauge}
+    The value $\omega_j(a,b,c)=\zeta^{ja\lfloor(b+c)/n\rfloor}$ depends on $j$
+    only modulo $n$, and $\omega_0=1$. By
+    Theorem~\ref{thm:asymex_group_cocycle_cyclic_domain_wall} the classes of
+    $\omega_j$ and $\omega_{j'}$ differ when $j\not\equiv j'\pmod n$, so
+    $[\omega_0],\ldots,[\omega_{n-1}]$ are $n$ distinct classes. The
+    periodic resolution of the finite cyclic group $\Z_n$ identifies
+    $H^3(\Z_n,A)$ with $\ker N/\operatorname{im}(\rho(1)-1)$, where
+    $N=\sum_{g\in\Z_n}\rho(g)$. For the trivial action on $\C^\times$ one has
+    $\rho(1)-1=0$ and $N(z)=z^n$, so $H^3(\Z_n,\C^\times_{\mathrm{triv}})$ is
+    the group of $n$-th roots of unity and has $n$ elements. Hence the $n$
+    classes of the $\omega_j$ exhaust it. If $\omega\sim\omega_j$ and
+    $\eta\sim\omega_{j'}$ with $P_1(\omega)=P_1(\eta)$, then
+    $\zeta^{-j}=P_1(\omega_j)=P_1(\omega_{j'})=\zeta^{-j'}$, so
+    $j\equiv j'\pmod n$ and $\omega\sim\eta$; the converse is
+    Theorem~\ref{thm:asymex_group_cocycle_domain_wall_phase_gauge}.
 \end{proof}
 
 \subsection{The group \texorpdfstring{$\Z_2\times\Z_2$}{Z2 x Z2}}

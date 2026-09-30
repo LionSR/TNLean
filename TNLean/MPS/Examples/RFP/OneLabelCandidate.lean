@@ -66,9 +66,6 @@ they are verification records, not the source.
 * `P6Compression.oneLabel_trace_evalWord`: the word-trace identity
   `tr(B^w) = (1 + (7/25)^{|w|}) tr(M₀^w)`.
 * `P6Compression.oneLabel_remainder`: the remainder vanishes, so the extension splits.
-* `P6Compression.oneLabel_isReduction`, `P6Compression.oneLabel_mul_right_eq_right_mul`,
-  `P6Compression.oneLabel_left_mul_eq_mul_left`: the compression pair and the sitewise
-  intertwiners of each slot.
 * `P6Compression.oneLabel_dim_eq`: the dimension count `16 = 4 + 4 + 8`.
 * `P6Compression.oneLabelTarget_isNormal`: the target is normal at blocking length one.
 -/
@@ -181,31 +178,6 @@ theorem oneLabel_trace_evalWord (w : List (Fin 16)) (hw : w ≠ []) :
     Fin.sum_univ_two]
   simp only [oneLabelWeights, oneLabelBlocks, Matrix.cons_val_zero, Matrix.cons_val_one, one_pow]
   ring
-
-/-- **Biorthogonal compression onto each weighted slot** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem oneLabel_isReduction (s : {s // s ∈ pairSlots}) :
-    IsReduction oneLabelStacked (oneLabelWeights s.1 • oneLabelBlocks s.1)
-      (oneLabelCompression.left s) (oneLabelCompression.right s) :=
-  oneLabelCompression.isReduction s
-
-/-- Two distinct slots of the one-label candidate are biorthogonal (P5 note,
-Theorem 7.7(iv)). -/
-theorem oneLabel_left_mul_right_of_ne {s t : {s // s ∈ pairSlots}} (h : s ≠ t) :
-    oneLabelCompression.left s * oneLabelCompression.right t = 0 :=
-  oneLabelCompression.left_mul_right_of_ne h
-
-/-- **The sitewise right intertwiner of each slot**: `B^a V_s = V_s (μ_s M₀^a)`
-(`p6_examples_compression_data.md`, §1.3, for the shared gauge). -/
-theorem oneLabel_mul_right_eq_right_mul (a : Fin 16) (s : {s // s ∈ pairSlots}) :
-    oneLabelStacked a * oneLabelCompression.right s =
-      oneLabelCompression.right s * (oneLabelWeights s.1 • oneLabelBlocks s.1) a :=
-  oneLabelCompression.mul_right_eq_right_mul oneLabel_remainder a s
-
-/-- **The sitewise left intertwiner of each slot**: `W_s B^a = (μ_s M₀^a) W_s`. -/
-theorem oneLabel_left_mul_eq_mul_left (a : Fin 16) (s : {s // s ∈ pairSlots}) :
-    oneLabelCompression.left s * oneLabelStacked a =
-      (oneLabelWeights s.1 • oneLabelBlocks s.1) a * oneLabelCompression.left s :=
-  oneLabelCompression.left_mul_eq_mul_left oneLabel_remainder a s
 
 /-- The one-label candidate has eight zero slots. -/
 theorem oneLabel_z_eq : oneLabelCompression.z = 8 := rfl

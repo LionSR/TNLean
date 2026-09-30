@@ -8,7 +8,7 @@
 \date{2026-09-26}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{false-source}{resolved}
 
 \section{What the source states}
 Let $A$ be an injective tensor with transfer map $\mathcal E_A$, in the gauge
@@ -23,7 +23,7 @@ sufficiently large $N$
 \begin{align}
     \bra{\phi_N}\mathcal O_1\ket{\phi_N}
      & =\bra{\phi_N}\mathcal O'_s\ket{\phi_N}=0,
-    \label{eq:mswc24_decaying_correlations_one_point}   \\
+    \label{eq:mswc24_decaying_correlations_one_point} \\
     \bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}
      & \ge c\,e^{-(s-1)/\xi},
     \label{eq:mswc24_decaying_correlations_printed_bound}
@@ -34,33 +34,161 @@ with $c>0$ independent of $s$ and $N$.\footnote{Source traceability: label
     and \path{auxform2} there. No copy of this source is kept in
     \path{Papers/}.}
 
-\section{Why the printed form is corrected}
-Put $P(Z)=\operatorname{Tr}(Z)\,\rho$ and $t=s-L-1$, where the observables act
-on $L$ sites ($L=1$ in the source). For Hermitian observables the limit of the
-correlator as $N\to\infty$ is
+\section{What holds and what fails}
+\paragraph{The source's observables.}
+Let $\ell_2\neq0$ be a linear functional with
+$\ell_2\circ\mathcal E_A=\lambda_2\ell_2$. The proof of Lemma~2 expands the
+transfer powers in ordinary eigenvectors, and therefore assumes that
+$\mathcal E_A$ is diagonalizable. Under that assumption it chooses, by
+injectivity, observables whose one-site maps are the rank-one maps
+\begin{align}
+    \mathcal E_{\mathcal O}(Z)
+     & =\ell_2(Z)\,\rho,
+     &
+    \mathcal E_{\mathcal O'}(Z)
+     & =\operatorname{Tr}(Z)\,R_2,
+    \label{eq:mswc24_decaying_correlations_source_choice}
+\end{align}
+with $R_2$ an eigenvector for $\lambda_2$ normalized so that $\ell_2(R_2)=1$,
+rescaled to norm one. If $\lambda_2$ has a nontrivial Jordan block, every
+left eigenvector of that block vanishes on every right eigenvector of the
+same block. The repair recorded below keeps
+$\ell_2$ a left eigenvector and takes $R_2$ in the generalized eigenspace with
+$\ell_2(R_2)=1$. Since $\ell_2$ is a left eigenvector for $\lambda_2$
+and $\rho$ an eigenvector for $1\neq\lambda_2$, $\ell_2(\rho)=0$; since
+trace preservation makes $\operatorname{Tr}$ a left eigenvector for $1$, it
+vanishes on the generalized eigenspace of $\lambda_2$, so
+$\operatorname{Tr}R_2=0$. Both one-point functions are therefore $0$ at every
+$N\ge s$, the chain lengths on which the site $s$ exists, so
+(\ref{eq:mswc24_decaying_correlations_one_point}) is exact and algebraic, not
+asymptotic. Because $\ell_2\circ\mathcal E_A^{\,s-2}=\lambda_2^{\,s-2}\ell_2$, the
+two-point function is exactly
+\begin{align}
+    \bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}
+     & =\frac{\lambda_2^{\,s-2}}{\operatorname{Tr}\mathcal E_A^{\,N}},
+    \label{eq:mswc24_decaying_correlations_exact}
+\end{align}
+up to the positive constant of the rescaling, and
+$\operatorname{Tr}\mathcal E_A^{\,N}\le D^2$. Hence the modulus form
+\begin{align}
+    \bigl\lvert\bra{\phi_N}\mathcal O_1\mathcal O'_s\ket{\phi_N}\bigr\rvert
+     & \ge c\,e^{-(s-1)/\xi}
+    \label{eq:mswc24_decaying_correlations_modulus}
+\end{align}
+holds for every $s\ge2$ and every $N\ge s$.
+
+\paragraph{The printed real inequality.}
+When $\lambda_2$ is not real, the pair
+(\ref{eq:mswc24_decaying_correlations_source_choice}) cannot be Hermitian:
+a Hermitian observable has a map with
+$\mathcal E_{\mathcal O}(Z^\dagger)=\mathcal E_{\mathcal O}(Z)^\dagger$, whereas
+$R_2^\dagger$ is a generalized eigenvector for $\bar\lambda_2\neq\lambda_2$, so
+$\ell_2(R_2^\dagger)=0\neq\overline{\ell_2(R_2)}$. The correlator
+(\ref{eq:mswc24_decaying_correlations_exact}) is then complex, and the printed
+inequality (\ref{eq:mswc24_decaying_correlations_printed_bound}) is false:
+writing $\lambda_2=\lvert\lambda_2\rvert e^{i\theta}$, the real part is a
+multiple of $\lvert\lambda_2\rvert^{s-2}\cos((s-2)\theta)$, which is negative
+for infinitely many $s$ since $\theta$ is not a multiple of $\pi$; it vanishes
+at some $s$ only for particular $\theta$, such as $\theta=\pi/2$, and never
+for $\theta=\pi/3$.
+
+The printed inequality also fails when $\lambda_2$ is real and negative. Then
+$\mathcal E_A$ preserves Hermitian matrices, so $R_2$ and $\ell_2$ may be
+taken Hermitian and the source's rank-one maps are realized by Hermitian
+observables, but the correlator (\ref{eq:mswc24_decaying_correlations_exact})
+has the sign of $\lambda_2^{\,s-2}$ and is negative at every odd $s$. For
+example, the qubit tensor with Kraus matrices $\sqrt{q_0}\,I$,
+$\sqrt{q_1}\,\sigma_x$, $\sqrt{q_2}\,\sigma_y$, $\sqrt{q_3}\,\sigma_z$,
+where $q_0=1/16$ and $q_1=q_2=q_3=5/16$, is injective, and every nontrivial
+eigenvalue of its transfer map equals $-1/4$. Non-Hermiticity of the source's
+pair is therefore forced only for nonreal $\lambda_2$, while the printed
+inequality fails for every nonreal and every negative $\lambda_2$.
+
+\paragraph{The Hermitian reading.}
+Reading $\mathcal O,\mathcal O'$ as Hermitian does not rescue the printed
+form. Put $P(Z)=\operatorname{Tr}(Z)\,\rho$ and $t=s-L-1$, where the
+observables act on $L$ sites ($L=1$ in the source). For Hermitian observables
+the limit of the connected correlator as $N\to\infty$ is
 \begin{align}
     G_\infty(\mathcal O,\mathcal O';s)
      & =\operatorname{Tr}\Bigl(\mathcal E_{\mathcal O}
     \bigl((\mathcal E_A-P)^{t}\bigl(\mathcal E_{\mathcal O'}(\rho)\bigr)\bigr)\Bigr),
     \label{eq:mswc24_decaying_correlations_limit}
 \end{align}
-which is real. When $\lambda_2$ is not real, $\bar\lambda_2$ is also an
-eigenvalue of $\mathcal E_A$, and the source pairs an eigenvector for
-$\lambda_2$ with its adjoint. Writing $\lambda_2=\lvert\lambda_2\rvert e^{i\theta}$,
-the leading part of (\ref{eq:mswc24_decaying_correlations_limit}) is then
+which is real. When $\lambda_2$ and $\bar\lambda_2$ are the only eigenvalues
+of modulus $\lvert\lambda_2\rvert$ and both are semisimple, its leading part
+is
 \begin{align}
     \lvert\lambda_2\rvert^{t}\bigl(a\,e^{it\theta}+\bar a\,e^{-it\theta}\bigr)
      & =2\lvert a\rvert\,\lvert\lambda_2\rvert^{t}\cos(t\theta+\varphi),
     \label{eq:mswc24_decaying_correlations_cosine}
 \end{align}
-with $a=\lvert a\rvert e^{i\varphi}$. The cosine vanishes, or comes arbitrarily
-close to zero, at individual $t$, so a bound
-(\ref{eq:mswc24_decaying_correlations_printed_bound}) with one constant $c$ at
-every separation $s$ is not supplied by the source's argument. The source's
-proof also gives no reason for the exact vanishing
-(\ref{eq:mswc24_decaying_correlations_one_point}) at finite $N$: the one-point
-functions converge to their limits only up to an error exponentially small in
-$N$.
+with $a=\lvert a\rvert e^{i\varphi}$, and the remainder is smaller by a factor
+tending to zero in $t$. When $\theta/\pi$ is irrational the cosine comes
+arbitrarily close to zero for infinitely many $t$, so for every Hermitian pair
+and every $c>0$ the correlator falls below $c\,e^{-(s-1)/\xi}$ for infinitely
+many $s$. An explicit injective example has $d=4$, $D=2$, and a gate
+angle $\psi$,
+\begin{align}
+    A^0
+     & =\tfrac12\one,
+     &
+    A^1
+     & =\tfrac12\operatorname{diag}(1,e^{i\psi}),
+     &
+    A^2
+     & =\tfrac12\sigma_x,
+     &
+    A^3
+     & =\tfrac12\sigma_y,
+    \label{eq:mswc24_decaying_correlations_example}
+\end{align}
+with $\sum_iA^{i\dagger}A^i=\one$ and transfer spectrum
+$\{1,(1+e^{i\psi})/4,(1+e^{-i\psi})/4,0\}$. Since
+$1+e^{i\psi}=2\cos(\psi/2)\,e^{i\psi/2}$, for $-\pi<\psi<\pi$ the phase
+$\theta=\arg(\lambda_2)$ of (\ref{eq:mswc24_decaying_correlations_cosine}) is
+$\psi/2$. At
+$\psi=\pi/2$ one has $\theta=\pi/4$, so $t\theta$ is an odd multiple of
+$\pi/2$ at $t=2,6,10,\dots$, and the
+Hermitian parts of the source's observables
+(\ref{eq:mswc24_decaying_correlations_source_choice}) have one-point functions
+$0$ and a correlator that vanishes exactly at $s=4,8,12,\dots$ for every $N\ge s$
+and is negative at $s=5,6,7$.
+
+\paragraph{The rest of the proof.}
+The source's Theorem~1 is true, and its proof goes through with the modulus
+form (\ref{eq:mswc24_decaying_correlations_modulus}) for the source's
+pair (\ref{eq:mswc24_decaying_correlations_source_choice}): the lower bound
+on the trace distance comes from the duality
+$\lvert\operatorname{Tr}((\rho_0-\sigma_1)\mathcal Q)\rvert
+    \le\lVert\rho_0-\sigma_1\rVert_1\lVert\mathcal Q\rVert$, which needs no
+Hermiticity, and the minimization that follows uses only moduli. Four further
+points need repair, none of which changes the conclusion.
+\begin{enumerate}
+    \item Lemma~2 is stated for injective $A$ but applied in Theorem~1 to a
+          normal $A$ on unblocked sites. For normal $A$ the map
+          $\mathcal Q\mapsto\mathcal E_{\mathcal Q}$ is onto only for
+          observables on $L$ sites, where products of $L$ matrices span the
+          matrix algebra.
+    \item The proof expands
+          $\mathcal E_A^{\,s-1}=\sum_i\lambda_i^{s-1}\ket{R_i}\bra{L_i}$ and
+          so assumes $\mathcal E_A$ diagonalizable. If $\lambda_2$ has a
+          nontrivial Jordan block, a left eigenvector and a right eigenvector
+          of that block pair to zero.
+          The repair takes $\ell_2$ a left eigenvector and $R_2$ in the
+          generalized eigenspace with $\ell_2(R_2)=1$; then
+          $\ell_2(\mathcal E_A^{\,t}R_2)=\lambda_2^{\,t}$ and still
+          $\operatorname{Tr}R_2=0$.
+    \item The trace-distance bound (display \path{auxbound}) omits a factor
+          $\tfrac12$: the duality above gives
+          $d(\rho_0,\sigma_1)\ge\tfrac12\lvert\widetilde a_{\mathcal Q}
+              -b_{\mathcal Q}\rvert$.
+    \item The choice $s=2T+1$ places the observables at distance exactly
+          $2T$, whereas the source's factorization statement covers distances
+          larger than $2T$; the choice is valid only for a circuit with a
+          sharp light cone. The formal statements require distance larger
+          than $2T$.
+\end{enumerate}
 
 \section{The corrected statement}
 Let $A$ be normal, with products of $L\ge1$ matrices spanning the matrix
@@ -85,21 +213,42 @@ The window of $K$ consecutive separations removes the zeros of
 (\ref{eq:mswc24_decaying_correlations_cosine}): the Vandermonde matrix of the
 distinct unimodular numbers $e^{\pm i\theta}$ is invertible, so of any two
 consecutive values of $a\,e^{it\theta}+\bar a\,e^{-it\theta}$ one has modulus
-at least a fixed $c_0>0$. The connected correlator replaces the exact
-vanishing (\ref{eq:mswc24_decaying_correlations_one_point}). For injective $A$
-and $L=1$ the hypotheses are those of the source.\footnote{Formal declaration:
+at least a fixed $c_0>0$. The statement uses Hermitian observables because
+the proof of Theorem~1 below controls variances of Hermitian operators; for
+such observables the window is necessary, by the example
+(\ref{eq:mswc24_decaying_correlations_example}). The connected correlator
+makes the bound independent of the one-point functions; it does not correct
+the source, whose choice
+(\ref{eq:mswc24_decaying_correlations_source_choice}) makes them vanish
+exactly. For injective $A$ and $L=1$ the hypotheses are those of the source.\footnote{Formal declaration:
     \leanid{MPSTensor.exists_decayingCorrelations} in
     \doclink{TNLean/MPS/Preparation/DecayingCorrelationBound}.}
 
 \section{Verdict}
-The correction is local. Its proof is the source's spectral argument together
-with the Vandermonde bound, and it suffices for the source's Theorem~1: that
-proof needs one separation $s'$ of order $T_N+L$ for each $N$, and moving $s'$
-by at most $K-1\le1$ sites preserves $s'=o(\log N)$ and $N\ge3s'$. The
-remaining deviation in the proof of Theorem~1, which uses the connected
-correlator in place of (\ref{eq:mswc24_decaying_correlations_one_point}), is
-recorded in the comment after that theorem in the blueprint and is not part
-of this note.
+The printed Lemma~2 is false as printed: the qubit tensor above is injective
+and nondegenerate, satisfies the source's hypotheses, and violates the printed
+inequality at every odd $s$. More generally the inequality fails as a real
+inequality when $\lambda_2$ is not real or is negative, and fails for Hermitian
+observables in general. The repair is nevertheless local: the modulus form (\ref{eq:mswc24_decaying_correlations_modulus}) holds
+for the source's own observables, and the source's Theorem~1 is true. The
+formal statement (\ref{eq:mswc24_decaying_correlations_corrected}) is the
+Hermitian variant; its proof is the source's spectral argument together with
+the Vandermonde bound, and it suffices for Theorem~1: that proof needs one
+separation $s'$ of order $T_N+L$ for each $N$, and moving $s'$ by at most
+$K-1\le1$ sites preserves $s'=o(\log N)$ and $N\ge3s'$.
+
+The proof of Theorem~1 in the blueprint replaces the source's product-fidelity
+step by the concentration of averages of translated observables. Tracking its
+constants, a state prepared in depth $T$ with overlap at least $\eta$ with
+$\phi_N$ requires
+\begin{align}
+    T
+     & \ge\frac\xi4\bigl(\ln N-\ln\ln N\bigr)-\xi\ln\frac1\eta-C_A,
+    \label{eq:mswc24_decaying_correlations_depth_constant}
+\end{align}
+with $C_A$ depending only on $A$. The same constant $\xi/4$ is implicit in the
+source's final inequality, which compares $N/\ln N$ with a multiple of
+$e^{4T/\xi}$; only its explicit statement is new.
 
 \bibliographystyle{alpha}
 \bibliography{references}

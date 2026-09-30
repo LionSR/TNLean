@@ -104,19 +104,22 @@ lemma defectProjector_eq :
 
 /-- Bridge: the normalized defect is the normalized average of the representation
 `{1, U_L, U_L†}` of `ℤ/3`. -/
-theorem defectProjector_eq_finiteGroupUnitaryAverage :
-    defectProjector L = finiteGroupUnitaryAverage (operatorRepresentation L) := by
+theorem defectProjector_eq_inv_card_smul_sum :
+    defectProjector L = (Fintype.card (Multiplicative (ZMod 3)) : ℂ)⁻¹ •
+      ∑ g : Multiplicative (ZMod 3), (operatorRepresentation L g : Matrix _ _ ℂ) := by
   have hsum : ∑ g : Multiplicative (ZMod 3), (operatorRepresentation L g : Matrix _ _ ℂ) =
       ∑ a : Fin 3, mpo (repTensor a) L :=
     Fintype.sum_equiv Multiplicative.toAdd _ _ fun _ ↦ rfl
-  rw [finiteGroupUnitaryAverage, hsum, Fin.sum_univ_three, defectProjector, mpo_defectTensor]
+  have hcard : (Fintype.card (Multiplicative (ZMod 3)) : ℂ) = 3 := by
+    simp [Fintype.card_multiplicative, ZMod.card]
+  rw [hcard, hsum, Fin.sum_univ_three, defectProjector, mpo_defectTensor]
   rfl
 
 /-- Project result: the normalized defect is an orthogonal projector: self-adjoint and
 idempotent (`lem:asymex_z3_defect_projector`). -/
 lemma isStarProjection_defectProjector : IsStarProjection (defectProjector L) := by
-  rw [defectProjector_eq_finiteGroupUnitaryAverage]
-  exact isStarProjection_finiteGroupUnitaryAverage _
+  rw [defectProjector_eq_inv_card_smul_sum]
+  exact isStarProjection_inv_card_smul_sum _
 
 /-- `U_L P_L = P_L`: the normalized defect absorbs the forward operator. -/
 theorem mpo_uTensor_mul_defectProjector :

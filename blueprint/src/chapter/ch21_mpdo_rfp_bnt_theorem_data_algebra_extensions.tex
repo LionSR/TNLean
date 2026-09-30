@@ -15,6 +15,53 @@
          & =\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}O_L(M_\gamma),
         \notag
     \end{align}
+    which reads, with each $O_L(M_\alpha)$ drawn as a closed MPO chain,
+    \begin{center}
+        % Formula: O_L(M_\alpha) O_L(M_\beta)
+        %     = \sum_\gamma c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma),
+        % the product law of CPSV16 Theorem 4.14(ii), lines 972--985.
+        % Ink-to-index map: each site carries M_\alpha, M_\beta, or M_\gamma
+        % with its doubled physical index separated into an upper ket leg and
+        % a lower bra leg.  At site \ell on the left, the vertical pairleg
+        % contracts the bra index of M_\alpha with the ket index of M_\beta;
+        % i_\ell and j_\ell remain free.  Each periodic row closes its own
+        % bonds, so the rows are O_L(M_\alpha) and O_L(M_\beta).
+        % Contraction set: all horizontal bonds, both periodic returns, and
+        % the L pairlegs on the left; the horizontal bonds and the periodic
+        % return on the right.  The coefficient c^{(L)}_{\alpha,\beta,\gamma}
+        % is a scalar and the sum over \gamma is a sector sum.
+        % Boundary signatures (virtual-west, virtual-east, physical-up,
+        % physical-down): both sides have semantic signature (0,0,L,L); each
+        % three-site representative emits (0,0,3,3).
+        % The elided column is bare on the left because the frame would mint
+        % a pairleg stub between the two ellipsis cells.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op}, cols=4, west=trace, east=trace,
+                bonds=none]
+            \tn[skin=mpo, size=l, ports={90:physical:$i_1$, 270:physical}]{M_\alpha} &
+            \tn[skin=mpo, size=l, ports={90:physical, 270:physical}]{M_\alpha} &
+            \tn[skin=dots]{} &
+            \tn[skin=mpo, size=l, ports={90:physical:$i_L$, 270:physical}]{M_\alpha} \\
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M_\beta} &
+            \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\beta} &
+            \tn[skin=dots]{} &
+            \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{M_\beta}
+            \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+            \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+            \tnwire{(1,1)}{(2,1)} \tnwire{(1,2)}{(2,2)} \tnwire{(1,4)}{(2,4)}
+            \tnmark[form=bracket]{(2,1) .. (2,4)}{$L\text{ sites}$}
+        \end{tenkz}
+        \quad$=\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}$\quad
+        \begin{tenkz}[cols=4, west=trace, east=trace]
+            \tn[skin=mpo,
+                ports={90:physical:$i_1$, 270:physical:$j_1$}]{M_\gamma} &
+            \tn[skin=mpo, ports={90:physical, 270:physical}]{M_\gamma} &
+            \tn[skin=dots]{} &
+            \tn[skin=mpo,
+                ports={90:physical:$i_L$, 270:physical:$j_L$}]{M_\gamma}
+            \tnmark[form=bracket]{(1,1) .. (1,4)}{$L\text{ sites}$}
+        \end{tenkz}
+    \end{center}
     together with
     \begin{align}
         m_\gamma
@@ -97,6 +144,27 @@
          & =\sum_{a=0}^{D-1}M_\gamma^{(a,a)}.
         \label{eq:rfp_algebra_terminal_transfer}
     \end{align}
+    \begin{center}
+        % Formula: T_\gamma = \sum_{a=0}^{D-1} M_\gamma^{(a,a)},
+        % equation (eq:rfp_algebra_terminal_transfer).
+        % Ink-to-index map: the separated tensor carries the ket index a on
+        % its upper leg and the bra index on its lower leg, both of dimension
+        % D; the west and east wires carry the free bond indices of
+        % M_\gamma, which index the matrix T_\gamma.
+        % Contraction set: the single physical trace joining the upper and
+        % lower legs, which sets the two physical indices equal and sums a.
+        % Boundary signature (both sides): virtual-west=1 | virtual-east=1 |
+        % physical-up=0 | physical-down=0.
+        \tenkzkernel
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open]
+            \tn[skin=box]{T_\gamma}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={wire}, cols=1, west=open, east=open,
+                trace=physical, physical=updown]
+            \tn[skin=mpo]{M_\gamma}
+        \end{tenkz}
+    \end{center}
     Then $T_\gamma\succeq0$. This follows from the chosen decomposition
     and positivity of the one-site operator $\rho^{(1)}(M)$; it does
     not require fusion maps or a renormalization fixed point hypothesis.

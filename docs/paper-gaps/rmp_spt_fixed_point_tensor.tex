@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{SPT Fixed Points: The Printed Tensor Is Not Normal}
+\author{}
+\date{2026-09-27}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{What the source prints}
+In the paragraph ``Symmetry protected topological order'' of
+\cite{Cirac2021Matrix} a representative MPS with zero correlation length is
+constructed from a 2-cocycle $\omega$ and a 1-cocycle $\phi$ of a finite group
+$G$. The physical space is $\mathbb C^G\otimes\mathbb C^G$ with basis
+$\ket{a,b}$, the bond space is $\mathbb C^G$, and the source prints
+\begin{align}
+    A^{ab}_{xy} & =e^{i\alpha(a x)\omega(a,x)+i\beta(b)\phi(b)}\,\delta_{y,ax},
+                &
+    (X_g)_{xy}  & =e^{i\alpha(x)\omega(x,g)}\,\delta_{y,xg}.
+    \label{eq:rmp_spt_fixed_point_printed}
+\end{align}
+Here $\alpha$ and $\beta$ are the source's sign morphisms $G\to\{\pm1\}$
+recording which elements act by time reversal or reflection; for an on-site
+symmetry both are trivial. It states that the relation
+$S_g(A^{ab})=e^{i\phi(g)}X_g^\dagger A^{ab}X_g$ is equivalent to the 2-cocycle
+equation, that the transfer matrix is a rank-one projector, and that for an
+on-site $\mathbb Z_2\times\mathbb Z_2$ symmetry the construction yields the
+cluster state after blocking two sites.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1147--1157.}
+
+\section{The printed tensor is not normal}
+Take the on-site case, $\alpha$ and $\beta$ trivial, and write $\omega$ and
+$\phi$ multiplicatively. Then $A^{ab}=\phi(b)L_a$ with
+$(L_a)_{xy}=\omega(a,x)\delta_{y,ax}$, a twisted left-regular matrix, and
+$X_g$ is a twisted right-regular matrix. A direct computation gives
+\begin{align}
+    (L_aX_g)_{xz}
+     & =\omega(a,x)\,\omega(ax,g)\,\delta_{z,axg},
+     &
+    (X_gL_a)_{xz}
+     & =\omega(x,g)\,\omega(a,xg)\,\delta_{z,axg},
+    \label{eq:rmp_spt_fixed_point_commutation}
+\end{align}
+so $L_aX_g=X_gL_a$ for all $a,g$ exactly when $\omega$ satisfies the 2-cocycle
+equation $\omega(a,x)\omega(ax,g)=\omega(a,xg)\omega(x,g)$.
+This is the equivalence the source states, but it shows that every $X_g$
+commutes with every letter, so $X_g^\dagger A^{ab}X_g=A^{ab}$. For $g\neq1$ the matrix $X_g$ has no nonzero diagonal
+entry and is not a scalar, so it commutes with every product of letters, and no
+space of words is the full matrix algebra: the tensor is not normal once
+$|G|>1$. The transfer map is not of rank one either:
+$\sum_{a,b}A^{ab}MA^{ab\dagger}=|G|\sum_aL_aML_a^\dagger$ sends each $X_g$ to
+$|G|^2X_g$, and the $|G|$ matrices $X_g$ have disjoint supports, so the largest
+eigenvalue $|G|^2$ has multiplicity at least $|G|$. For instance, for
+$G=\mathbb Z_2$ with $\omega$ and $\phi$ trivial the four letters are
+$1,1,\sigma_x,\sigma_x$, which generate a commutative algebra. The printed claims
+thus fail on nondegenerate data, and the note is filed as a false source claim.
+
+\section{The formalized fixed point}
+The claims hold for the dimer fixed point that the paragraph describes. Let
+$\rho$ be a projective representation of $G$ on $\mathbb C^D$, $D\ge1$, with
+factor system $\omega$, and let $\phi$ be a character. Put $W_g=\rho(g^{-1})$ and
+\begin{align}
+    A^{(a,b)} & =D^{-1/2}\ket{a}\bra{b},
+              &
+    U(g)      & =\phi(g)\,W_g^{T}\otimes W_g^{-1}.
+    \label{eq:rmp_spt_fixed_point_formalized}
+\end{align}
+The factor system cancels between the two tensor factors, so $U$ is a linear
+representation, and $\sum_jU(g)_{ij}A^j=\phi(g)\,W_gA^iW_g^{-1}$. The transfer
+map is $M\mapsto D^{-1}\operatorname{tr}(M)\,1$, a rank-one projector, and the
+letters span the full matrix algebra. For $\phi=1$ the tensor has MPV-family
+invariance under $U$, and every virtual representation it induces has a factor
+system cohomologous to $\omega$. Choosing for $\rho$ the twisted regular
+representation on $\mathbb C^G$ gives the dimensions of the printed
+construction. For $G=\mathbb Z_2\times\mathbb Z_2$ and the two-dimensional Pauli
+representation, the tensor is the length-two blocked cluster tensor up to a
+unitary on the physical space.
+
+\section{Formal boundary}
+Only the on-site case is formalized: the actions $\alpha$ and $\beta$ of time
+reversal and reflection on the cocycles are not. The formal construction takes
+a projective representation with factor system $\omega$ as input; that scope
+restriction is recorded separately in
+\cite{gap:rmp_spt_fixed_point_supplied_representation}. The formal construction is
+\leanid{MPSTensor.sptFixedPointTensor} with the action
+\leanid{MPSTensor.sptFixedPointAction}; the cluster comparison is
+\leanid{MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

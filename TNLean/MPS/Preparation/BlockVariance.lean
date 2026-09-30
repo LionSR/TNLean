@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.WindowClustering
 import TNLean.MPS.Preparation.WindowSeparation
 
@@ -29,13 +30,6 @@ open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Operator ComplexO
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- The normalized periodic vector `φ_N = φ_N(A) / ‖φ_N(A)‖` has norm one when `φ_N(A) ≠ 0`
-(arXiv:2307.01696, eq. (TI-MPS2)). -/
-theorem norm_inv_smul_mpvState {A : MPSTensor d D} {N : ℕ} (h : mpvState A N ≠ 0) :
-    ‖((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N‖ = 1 := by
-  rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
-    inv_mul_cancel₀ (norm_ne_zero_iff.mpr h)]
 
 /-- A geometric sum with ratio `0 ≤ r < 1` is at most `1 / (1 - r)`. -/
 theorem sum_range_pow_le {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) (n : ℕ) :
@@ -89,7 +83,7 @@ theorem exists_norm_sub_inner_smul_sq_le_mpv [NeZero D] {A : MPSTensor d D} {L�
     positivity
   intro w Δ n N hw hwΔ hn hne X hX hXM c γ hc
   set χ : MPVSpace d N := ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N
-  have hχ : ‖χ‖ = 1 := norm_inv_smul_mpvState hne
+  have hχ : ‖χ‖ = 1 := norm_normalizedMPVState hne
   have hwin := fun k : Fin n ↦ MPSPreparation.window_lt_and_le (N := N) hw hwΔ.le hn k.isLt
   set Xk : Fin n → Matrix (Cfg d N) (Cfg d N) ℂ := fun k ↦ chainWindowOperator N (k.val * Δ) X
   have hnorm : ∀ k, ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (Xk k)‖ ≤ M := fun k ↦

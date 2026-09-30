@@ -24,6 +24,54 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### virtual-leg cancellation in source-gate contractions — promoted
+- **Pattern:** cancel the adjacent factors $z^\dagger z=I$ between two
+  rectangular matrices, leaving the site-specific Kronecker expansions intact.
+- **Seen:** three occurrences across two files: `transported_source_u_contraction`
+  in `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and `rawU_virtual_cancel`
+  and `rawV_virtual_cancel` in `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
+- **Abstraction:** `Matrix.mul_unitary_adjoint_mul_cancel` in
+  `TNLean/Algebra/UnitaryContraction.lean`.
+- **Notes:** all three sites use the helper. Net Lean line delta: -2, including
+  the helper module and its imports.
+
+### bilinear identities on operators with disjoint supports — promoted
+- **Pattern:** prove an identity `f A B = g A B`, bilinear in operators `A`, `B` acting on
+  sets of sites `S`, `S'`, by nested `Submodule.span_induction` on
+  `A ∈ supportedOperators d S` and `B ∈ supportedOperators d S'`: a product-generator case
+  `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
+  scalar cases.
+- **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
+  and `expect_productVector_mul` in `TNLean/MPS/Preparation/LocalCircuit.lean`,
+  `trace_finKronecker_mul_mul` in `TNLean/MPS/Preparation/LocalChannelCircuit.lean`,
+  and `OnsiteChannel.dual_mul` in
+  `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+- **Abstraction:** `MPSPreparation.eq_of_mem_supportedOperators₂` in
+  `TNLean/MPS/Preparation/LocalCircuit.lean`: two bilinear maps
+  `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
+  generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
+  maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
+  product-generator case after a `change`.
+- **Notes:** all four call sites are refactored (2026-09-28).
+
+### injectivity lengths below the error cutoff — promoted
+- **Pattern:** in an error bound `ε ≤ C u e^{C u}` with `u = M x^q`, dispose of
+  `C u ≥ 1` by `ε ≤ 1`, then derive `x < 1` and `L_j ≤ q` for every injectivity
+  length `L_j` from `C u < 1` and `C ≥ 1 + ∑ⱼ x^{-L_j}`.
+- **Seen:** three occurrences across three files (2026-09-27):
+  `exists_approximationError_le` in `ApproximationError.lean` (one length),
+  `exists_approximationError_le_blockSum` in `OrthogonalBlockError.lean`, and
+  `exists_approximationError_le_repeatedBlockSum` in `RepeatedBlockError.lean`,
+  all under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `le_mul_mul_exp_of_forall_le` (the whole case split, built
+  on `lt_one_and_forall_le_of_mul_mul_pow_lt_one`) and
+  `Real.exp_neg_mul_div_eq_pow` (the rewrite `e^{-γ q/ξ} = (e^{-γ/ξ})^q`), in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`; the single-length site
+  instantiates the index type with `Unit`.
+- **Notes:** all three call sites are refactored. The block-by-block bound
+  `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
+  block-sum files and is a candidate for the same treatment.
+
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
@@ -59,6 +107,25 @@ abstracted — record why, so it is not re-proposed).
   sites are refactored on their respective dependent branches: representative
   index at `008464fc4`, tensor-product index at `86217104a`, and composition
   index at `4a9bbc2f5`. No fourth copy is introduced.
+
+### fixed-range block parent gap from an open-chain kernel identity — promoted
+- **Pattern:** obtain a gapped range `W ≥ 2 * R` for a primitive block sum, then transfer the
+  gap to range `R` through the open-chain kernel identity at `W`; the uniform form then
+  converts the eventual gap into a gap for every chain length with
+  `Filter.Eventually.exists_forall_of_atTop` and `parentHamiltonianES_gap_of_eventual_gap`.
+- **Seen:** the transfer step three times, in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockGapAtC1Range.lean`,
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockGapThreshold.lean`, and
+  `TNLean/MPS/ParentHamiltonian/Martingale/BlockGapAtSimultaneousInjectivity.lean`; the
+  eventual-to-uniform step twice, in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrimitiveBlockUniformGap.lean` and
+  `BlockGapAtSimultaneousInjectivity.lean`.
+- **Abstraction:** `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamiltonianES_eq`
+  and its uniform companion
+  `exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_ker_openParentHamiltonianES_eq`
+  in `PrimitiveBlockGapThreshold.lean`. Both take the primitive block data, a positive range
+  `R`, and `∀ W, R ≤ W → ker (openParentHamiltonianES B R W) = groundSpaceES B W`; each call
+  site supplies only its kernel identity.
 
 ### every list is a `List.ofFn` — promoted
 - **Pattern:**
@@ -1994,6 +2061,17 @@ abstracted — record why, so it is not re-proposed).
   is replaced by one exact application; its previously profiled 31-second
   declaration falls below the 200-millisecond profiler threshold.
 
+### Scalar invariance of the MPU double layer — promoted
+- **Pattern:** expand the double layer of a scalar multiple entrywise and
+  cancel the scalar against its conjugate.
+- **Reuse:** `MPOTensor.physicalAdjointTensor_smul` and
+  `MPOTensor.doubleLayerTensor_smul_of_star_mul_self` reduce this to
+  `mulTensor_smul_smul`. The parity witness specializes the latter at `-1`.
+- **Result:** the parity example no longer splits over physical and bond
+  coordinates. Its identity simplicity proof and the shift identity proof
+  share `MPOTensor.isMPUSimple_idTensor` in `MPS/MPU/Simple.lean`.
+  Net Lean line delta: -6 across the four changed modules.
+
 ### Unit-norm complex scalars are nonzero
 - **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
@@ -2257,6 +2335,35 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Positive local terms with prescribed kernels
+
+For two finite families of positive operators with equal kernels term by
+term, rewrite each kernel of a sum with
+`WeightedPositiveKernel.ker_sum_eq_iInf`, then substitute the pointwise kernel
+equalities. This proves equality of the two total kernels without comparing
+the operators in order.
+
+Occurrences: `BlockGroundSpaceAtInjectivityLength.lean` and
+`CanonicalBlockGroundSpaceAtInjectivityLength.lean`. Both use the existing
+QICLean kernel-of-sum theorem. A further occurrence would justify a direct
+kernel-equality corollary there; no new tactic is needed.
+
+### Scalar-valued norms and equal ambient lengths
+
+When a linear map acts on a Hilbert space indexed by an arithmetic expression,
+rewriting an equality of lengths inside the map can introduce dependent casts.
+First express the entire operator norm as a scalar-valued function of the
+ambient length and interval endpoints. A `change` then exposes ordinary natural
+number arguments, and `rw` transports the scalar expression without transporting
+the underlying Hilbert space explicitly.
+
+Example: `GroupedProjectorEstimate.lean`, in
+`grouped_martingaleDifference_norm_le_of_projector_defect`, uses
+`F N a b : ℝ` for the norm of a suffix projection composed with a difference of
+prefix projections. This permits the active-volume identity and spectator bound
+to be combined using ordinary arithmetic equalities. Candidate helper pattern;
+currently one occurrence, so no general declaration is warranted.
+
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
   projector by the norm of its adjoint, reverse the product, and reverse the
@@ -2294,24 +2401,24 @@ abstracted — record why, so it is not re-proposed).
   requested tolerance among the overlap correction and the individual blocks;
   no new tactic is needed.
 
-### Preserving overlap bounds under finite orthogonal sums — locally factored
+### Preserving overlap bounds under finite orthogonal sums — promoted
 - **Pattern:** expand the inner product over fixed spectator configurations,
   apply the pointwise overlap bound, and finish with finite Cauchy–Schwarz.
 - **Occurrences:** the two nested restrictions to a middle interval in
-  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the hand-written
-  calculation in `norm_inner_overlap_sub_inner_aggregates_le` in
-  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean` (lines 47–92),
-  which runs the same chain `norm_sum_le`, `Finset.sum_le_sum`,
-  `Finset.mul_sum`, `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator
-  configurations.
-- **Status:** private lemmas express the finite orthogonal-sum estimate and
-  its transport along a configuration equivalence. The three boundary-range
-  cases use the same middle-interval theorem. The previously private
+  `TNLean/MPS/ParentHamiltonian/SpectatorOverlap.lean`, and the aggregate
+  estimate `norm_inner_overlap_sub_inner_aggregates_le` in
+  `TNLean/MPS/ParentHamiltonian/FNWOverlapEstimate.lean`, which ran the same
+  chain `norm_sum_le`, `Finset.sum_le_sum`, `Finset.mul_sum`,
+  `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator configurations.
+- **Abstraction:** `Finset.norm_sum_le_mul_sqrt_mul_sqrt` in
+  `TNLean/Algebra/FinsetNormSumCauchySchwarz.lean`: termwise bounds
+  `‖z i‖ ≤ c * a i * b i` with `0 ≤ c` give
+  `‖∑ i ∈ s, z i‖ ≤ c * (√(∑ a i ^ 2) * √(∑ b i ^ 2))`.
+- **Status:** promoted; the fiber bound in `SpectatorOverlap.lean` and the
+  FNW aggregate estimate both close with it. The transport along a
+  configuration equivalence stays private in `SpectatorOverlap.lean`, and the
   three-interval evaluation of the right boundary map is shared with
   `FNWProjectorDefect.lean` through `SpectatorBoundaryCoordinates.lean`.
-  With the occurrence in `FNWOverlapEstimate.lean` the pattern meets the rule
-  of three; promotion means making the finite orthogonal-sum estimate public
-  and rewriting that calculation through it, which needs a Lean build.
 
 ### Lower Gram bounds and off-diagonal pairings — locally factored
 - **Pattern:** turn a lower Gram bound into an upper bound on the Euclidean
@@ -2346,24 +2453,6 @@ abstracted — record why, so it is not re-proposed).
   identity `diag g * M i j * diag g⁻¹ = N i j`; the two `Matrix` lemmas cover diagonal
   inverses on any index type, such as the configuration space of a fusion-rule transfer.
 
-### virtual-leg cancellation in source-gate contractions — candidate
-- **Pattern:** express the two transported source factors as matrices on the
-  contracted virtual coordinate and reduce their product with
-  $z^\dagger z=I$. The entrywise Kronecker expansion then identifies the
-  original source-gate contraction.
-- **Seen:** three occurrences across two files (2026-09-26):
-  `transported_source_u_contraction` in
-  `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and
-  `rawU_virtual_cancel` and `rawV_virtual_cancel` in
-  `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
-- **Abstraction (proposed):** a matrix lemma for cancelling a unitary at one
-  finite contracted coordinate, with the Kronecker entry expansions left to
-  the two source-gate specializations.
-- **Notes:** The first occurrence belongs to the separately reviewed
-  source-factor transport module. The new theorem keeps its two gate
-  identities together rather than reorganizing that module in this PR;
-  promotion should refactor all three sites when those dependent branches
-  are consolidated.
 
 ### Wielandt block-injectivity length below the uniform square bound — candidate
 - **Pattern:**
@@ -2378,7 +2467,7 @@ abstracted — record why, so it is not re-proposed).
   `(m ^ 2 - r + 1) * m ^ 2 ≤ (D ^ 2 + 1) ^ 2` for `m ≤ D`, stated over `ℕ`.
 - **Notes:** promote at a third occurrence, for example a reduction at composite length.
 
-### Decomposing membership in a finite sum of subspaces — candidate
+### Decomposing membership in a finite sum of subspaces — promoted
 - **Pattern:** obtain vectors in the individual subspaces from membership in
   their finite supremum using `Submodule.mem_iSup_finset_iff_exists_sum`, then
   apply a norm or inner-product estimate to their sum.
@@ -2388,14 +2477,13 @@ abstracted — record why, so it is not re-proposed).
   (`TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean`), and the
   private lemma `norm_inner_sum_starProjection_sub_le` in
   `TNLean/MPS/ParentHamiltonian/BlockProjectorSum.lean`.
-- **Abstraction:** a helper lemma turning `y ∈ ⨆ i, V i` over a finite index
-  type directly into a family `v : ∀ i, V i` with `∑ i, (v i : E) = y`,
-  absorbing the `(s := Finset.univ)` instantiation and the `simpa` coercion
-  from the indexed supremum.
-- **Status:** at the rule of three (three occurrences, two files). Promotion
-  is deferred because refactoring the call sites needs a Lean build to
-  verify; promote in the next PR that touches these files with a build
-  available.
+- **Abstraction:** `Submodule.exists_sum_eq_of_mem_iSup` in
+  `TNLean/MPS/ParentHamiltonian/BlockSubspaceOverlap.lean` turns
+  `u ∈ ⨆ i, V i` over a finite index type into a family `v : ∀ i, V i` with
+  `∑ i, (v i : M) = u`, absorbing the `(s := Finset.univ)` instantiation and
+  the `simpa` coercion from the indexed supremum.
+- **Status:** promoted; all three call sites now read
+  `obtain ⟨v, rfl⟩ := exists_sum_eq_of_mem_iSup V hu`.
 
 ### carrying a boundary through one Kronecker factor of a letter sum — candidate
 - **Pattern:** unfold `kronId`/`idKron`, collapse the boundary into the index space of the
@@ -3287,6 +3375,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   beside `MPOTensor.toMPSTensor` in `TNLean/MPS/MPDO/Defs.lean` and refactoring the six sites;
   that rebuild is large enough to deserve its own change.
 
+### canonical form of normalized one-dimensional blocks — candidate
+- **Pattern:** certify `IsBNTCanonicalForm` for a `SectorDecomposition` whose blocks are
+  normalized tensors of bond dimension one with unit weights: linear independence of the block
+  states from `mpv_of_dim_one` evaluated on constant words, `basis_distinct` by
+  `not_gaugePhaseEquiv_of_dim_one` after a `cast_eq`, then `totalDim_*`, bijectivity of the
+  copy coordinates by `sigma_eq_of_copyCoord_eq`, the ordering `(Equiv.ofBijective _ _).symm`,
+  and `reindex_toTensor_*` by `toTensor_copyCoord` / `toTensor_copyCoord_of_ne`.
+- **Seen:** 2 occurrences, `TNLean/MPS/Preparation/RepeatedBlockCounterexample.lean` and
+  `TNLean/MPS/Preparation/OverlappingBlockCounterexample.lean` (recorded 2026-09-27).
+- **Abstraction:** proposed lemma giving `IsBNTCanonicalForm` for a sector decomposition of
+  normalized one-dimensional blocks with unit weights whose letters are pairwise distinguished
+  by their zero patterns.
+- **Notes:** below the rule of three; the two copies differ only in the literals.
+
 ### parent interaction from an explicit symmetric idempotent — candidate
 - **Pattern:** identify a spin-chain local term, shifted and rescaled, with
   `parentInteraction A n`: prove a coordinate formula by `fin_cases` over the window,
@@ -3309,6 +3411,54 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/ParentHamiltonian/ShiftedParentHamiltonian.lean`, and the exchange
   interaction is the operator-family-generic `MPSTensor.spinExchange` of
   `TNLean/MPS/Examples/SpinOperator.lean`.
+
+### endpoint contraction through a physical pairing — candidate
+- **Pattern:** after `ext` and `simp only [leftAct, leftEndpoint, …]` (or the right-endpoint
+  analogue), move the physical sum inside the two virtual sums and regroup the product so
+  that the pairing `∑ c, Â c α β * C c γ δ` appears as a factor:
+
+  ```lean
+  simp only [Finset.sum_mul, Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun α _ ↦ ?_
+  rw [Finset.sum_comm]
+  exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
+  ```
+
+- **Seen:** 4 occurrences in one file, in `leftAct_leftEndpoint`,
+  `leftAct_leftEndpoint_eq_zero`, `rightAct_rightEndpoint` and
+  `rightAct_rightEndpoint_eq_zero`
+  (`TNLean/MPS/Symmetry/MPOSymmetry/DomainWallString.lean`, lines 163, 186, 207 and 227;
+  reported by `scripts/tactic_pattern_scan.py`, recorded 2026-09-27).
+- **Abstraction (proposed):** a lemma rewriting
+  `∑ c, (∑ α, ∑ β, x α β * Â c α β) * y c` as `∑ α, ∑ β, x α β * ∑ c, Â c α β * y c`, or
+  one endpoint lemma parametrized by the value of the pairing, from which the four
+  endpoint theorems follow by `simp`.
+- **Notes:** all occurrences are in one file, below the rule of three (which asks for at
+  least two files). Promote when a second module contracts an endpoint tensor against a
+  physical pairing in the same way.
+
+### canonical local space as the representative block sum — factored
+- **Pattern:** compose `CPSVCanonicalFormData.groundSpace_eq_iSup_representatives` with the
+  symmetric form of `groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) B (by simp) L`.
+- **Seen:** 2 occurrences, in
+  `TNLean/MPS/ParentHamiltonian/CanonicalBlockGroundSpaceAtInjectivityLength.lean` and
+  `TNLean/MPS/ParentHamiltonian/Martingale/CanonicalGapAtSimultaneousInjectivity.lean`.
+- **Abstraction:** `CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives`
+  in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
+  parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
+
+### Transposed Kronecker gauge inverses — candidate
+
+- **Pattern:** reduce block-diagonal inverse products to Kronecker products,
+  combine factors with `Matrix.mul_kronecker_mul` and `Matrix.transpose_mul`,
+  and cancel unit-valued gauges.
+- **Occurrences:** the two pair-gauge inverse identities and four left/right
+  tree-gauge inverse identities in `TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean`.
+- **Count:** six occurrences in one file; the two-file promotion threshold
+  has not been reached.
+- **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
+  second module needs the same cancellation pattern.
 
 ## Rejected
 
