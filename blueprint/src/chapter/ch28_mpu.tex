@@ -6680,8 +6680,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $p$, physical blocking preserves its representative index, while
     physical adjunction reverses its sign:
     \begin{align}
-        \operatorname{ind}(U_p)       & =\operatorname{ind}(U),  \\
-        \operatorname{ind}(U^\dagger) & =-\operatorname{ind}(U).
+        \operatorname{ind}(U_p)      & =\operatorname{ind}(U),  \\
+        \operatorname{ind}(U^\sharp) & =-\operatorname{ind}(U).
     \end{align}
 \end{theorem}
 
@@ -6689,14 +6689,21 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpu_reduced_cfii_representative,
         thm:mpu_reduced_representative_index_invariance,
         prop:mpu_admissible_index_well_defined,
-        thm:mpu_cfii_index_physical_adjoint}
+        thm:mpu_cfii_index_physical_adjoint,
+        thm:mpdo_closed_chain_physical_blocking, def:mpdo_physical_adjoint}
     Choose a reduced canonical-form-II representative $U_{\mathrm{red}}$.
-    Blocking and adjunction preserve equality of the positive-length
+    Under the canonical identification of blocked configurations with
+    concatenated configurations, the periodic operators satisfy
+    \begin{align}
+        (U_p)^{(N)}      & = U^{(Np)},          &
+        (U^\sharp)^{(N)} & = (U^{(N)})^\dagger.
+    \end{align}
+    Hence blocking and adjunction preserve equality of the positive-length
     periodic operators. The respective canonical-form-II index identities
     give
     $\operatorname{ind}((U_{\mathrm{red}})_p)
         =\operatorname{ind}(U_{\mathrm{red}})$ and
-    $\operatorname{ind}(U_{\mathrm{red}}^\dagger)
+    $\operatorname{ind}(U_{\mathrm{red}}^\sharp)
         =-\operatorname{ind}(U_{\mathrm{red}})$.
     Representative independence then gives both displayed identities.
 \end{proof}
