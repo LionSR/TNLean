@@ -484,11 +484,12 @@ remaining eigenvalues have modulus strictly less than $1$.
     \label{thm:ldp_sequential_factorization_general}
     \lean{MPSPreparation.exists_isometric_chain_of_eq_mul}
     \leanok
-    Let $A$ have bond dimension $D$, let $G$ be a $D^2\times D^2$ matrix, and
-    let $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$, $q\ge1$, be an isometry
-    with matrix elements
+    Let $A_1,\dots,A_q$, $q\ge1$, be tensors of bond dimension $D$, one on each
+    site, let $G$ be a $D^2\times D^2$ matrix, and let
+    $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$ be an isometry with matrix
+    elements
     $\bra{i_1\cdots i_q}V\ket{x}
-        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}\,
+        =\sum_{\alpha,\beta}(A_1^{i_1}\cdots A_q^{i_q})_{\alpha\beta}\,
         G_{(\alpha,\beta),x}$.
     Then there are integers $b_0=1$, $b_q=D^2$ and $b_p\le D^2$, and families
     of $b_{p-1}\times b_p$ matrices $X_p^i$, $p=1,\dots,q$, with
@@ -499,10 +500,10 @@ remaining eigenvalues have modulus strictly less than $1$.
     \leanok
     \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
     The matrix elements of $V$ are
-    $\bigl(j^{\mathsf T}(\Id_D\otimes A^{i_1})\cdots(\Id_D\otimes A^{i_q})G\bigr)_x$
+    $\bigl(j^{\mathsf T}(\Id_D\otimes A_1^{i_1})\cdots(\Id_D\otimes A_q^{i_q})G\bigr)_x$
     with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
     Theorem~\ref{thm:ldp_sweep_matrix_remainder} to the row matrix of $j$ and the
-    sites $\Id_D\otimes A^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
+    sites $\Id_D\otimes A_p^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
     remainder $C=RG$ with $V=Q\,C$ in the sense of
     (\ref{eq:ldp_sweep_matrix_remainder}). By
     (\ref{eq:ldp_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
@@ -516,8 +517,12 @@ remaining eigenvalues have modulus strictly less than $1$.
     \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition}
-    Suppose $\mathcal B_q$ is injective, $q\ge1$, and let $V$ be as in
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
+    Let $A_1,\dots,A_q$, $q\ge1$, be tensors of bond dimension $D$, one on each
+    site, suppose their blocked tensor $B$ with
+    $B^{i_1\cdots i_q}=A_1^{i_1}\cdots A_q^{i_q}$ is injective, and let $B=VP$
+    be its polar decomposition as in
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. For equal tensors $A_p=A$,
+    $B$ is the blocked tensor $\mathcal B_q$. There are integers
     $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and matrices
     $W_k^i\in\C^{D'_{k+1}\times D'_k}$ for $k=1,\dots,q$ and $i=1,\dots,d$, with
     \begin{align}
@@ -1253,7 +1258,6 @@ and its error extend to blocks of any lengths.
         def:ldp_block_isometry_state}
     \lean{MPSPreparation.exists_isPreparedInDepth_blockIsometryState,
         MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
-        MPSPreparation.blockIsometryState_eq_mulVec,
         MPSPreparation.approximatingMPVState_eq_blockIsometryState,
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
         MPSPreparation.IsCircuitOn.finset_noncommProd,
@@ -2625,6 +2629,8 @@ $A$ along $w$.
 \end{proof}
 
 \input{chapter/ch32_log_depth_mera}
+
+\input{chapter/ch32_log_depth_inhomogeneous}
 
 \section{Tensors that are not normal}
 

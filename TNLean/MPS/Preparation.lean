@@ -32,6 +32,7 @@ import TNLean.MPS.Preparation.EmbeddedProduct
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.GHZMeasurement
 import TNLean.MPS.Preparation.GivensDecomposition
+import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.LocalChannelCircuit

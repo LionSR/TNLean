@@ -808,6 +808,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_inhomogeneous_scope.tex` records that the preparation of
+  inhomogeneous short-range correlated states (paragraph "Inhomogeneous
+  short-range correlated MPS") is formalized for a ring with a common bond
+  dimension `D`, injective blocked tensors and blocks of at least `3D` sites,
+  with the finite-correlation assumption stated for one ring with error `δ`;
+  open: varying bond dimensions and partial isometries.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
   (paragraph "Connection to MERA") is formalized for tensors whose two-site
