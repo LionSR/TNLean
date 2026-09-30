@@ -214,7 +214,7 @@ For $N=3$, with appended labels $\beta_1,\beta_2$, the forward identity
 whose intermediate label is $\gamma_1$. The inner fusion map fuses the first
 two bonds, and the outer one fuses the result with the third bond; the
 right-hand side is the corresponding block of $Q_3$.
-\begin{center}
+\begin{tenkzequation}
     % Formula: W_3 M_{\alpha,(\beta_1,\beta_2)}^{i,j} W_3^\dagger
     %   = Q_3((M_\gamma^{i,j})_\gamma), on the history block with
     %   intermediate label gamma_1 appearing in the direct sum of the first
@@ -231,7 +231,7 @@ right-hand side is the corresponding block of $Q_3$.
     %   feeds the outer pill, which fuses it with the third strand.  The
     %   adjoint pair on the east undoes the same two steps.  Each pill is a
     %   fusion coisometry onto the nonzero sectors.
-    % Contracted legs: the two vertical bonds and the six internal
+    % Contracted legs: the two vertical bonds and the eight internal
     %   horizontal bonds.  Open legs: the fused west and east indices and
     %   the physical legs i, j.
     % Boundary signature (virtual-west | virtual-east | physical-up |
@@ -265,7 +265,7 @@ right-hand side is the corresponding block of $Q_3$.
     \begin{tenkz}[cols=1, west=open, east=open]
         \tn[skin=mpo, ports={90:physical:$i$, 270:physical:$j$}]{Q_3}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 
 \begin{lemma}[Sitewise change of physical coordinates]%
     \label{lem:mpdo_sitewise_physical_coordinate_congruence}

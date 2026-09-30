@@ -58,7 +58,7 @@ By Theorem~\ref{thm:mpdo_onsite_mpo}, strong on-site symmetry with
 eigenvalue $\lambda_g^{(L)}$ is the following identity of periodic
 contractions, in which the upper row is the bond dimension one tensor with
 entries $(U_g)_{ij}$.
-\begin{center}
+\begin{tenkzequation}
     % Formula: U_g^{\otimes L} rho^{(L)}(M) = lambda_g^{(L)} rho^{(L)}(M).
     % Source: Definition of on-site symmetry above and the preceding theorem,
     %   which identifies U_g^{\otimes L} with the periodic operator of the
@@ -95,7 +95,7 @@ entries $(U_g)_{ij}$.
         \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
         \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical:$j_L$}]{M}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 
 \begin{theorem}[Strong symmetry implies weak symmetry]\label{thm:mpdo_strong_implies_weak}
     \lean{Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose,
@@ -198,7 +198,7 @@ entries $(U_g)_{ij}$.
 The two local conditions of
 Theorem~\ref{thm:mpdo_symmetry_local_conditions} read diagrammatically as
 follows, the first for strong and the second for weak symmetry.
-\begin{center}
+\begin{tenkzequation}
     % Formulas: sum_j (U_g)_{ij} A^{(j,k)} = zeta_g X_g A^{(i,k)} X_g^{-1}
     %   (left pair) and
     %   sum_{j,l} (U_g)_{ij} (V_g)_{kl} A^{(j,l)}
@@ -242,7 +242,7 @@ follows, the first for strong and the second for weak symmetry.
             ports={180:virtual, 0:virtual, 90:physical:$i$, 270:physical:$k$}]{A} &
         \tn[skin=ring, ports={180:virtual, 0:virtual}]{X_g^{-1}}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 
 \begin{theorem}[Strong symmetry with a normal purification]\label{thm:mpdo_strong_symmetry_normal_purification}
     \lean{MPOTensor.spinTwist,

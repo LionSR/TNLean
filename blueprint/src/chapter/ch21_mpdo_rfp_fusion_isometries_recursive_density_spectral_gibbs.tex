@@ -42,7 +42,7 @@
 Closing the horizontal operator leg of $M_\gamma$ produces the terminal bond
 matrix, and the chosen orthonormal eigenbasis expands it as a sum over the
 spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
-\begin{center}
+\begin{tenkzequation}
     % Formula: K_\gamma = \sum_i M_\gamma^{ii}
     %   = \sum_k \lambda_{(\gamma,k)} E_{(\gamma,k)}, the closed horizontal
     %   operator leg of the terminal tensor and the spectral decomposition in
@@ -55,9 +55,15 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     %   sums over i.  The vertical legs are the two bond indices, which remain
     %   open.  In the last panel s=(\gamma,k) and E_s is the rank-one
     %   orthogonal projection onto the k-th eigenvector.
-    % Boundary signature (virtual-west | virtual-east | physical-up |
-    %   physical-down) = (0 | 0 | 1 | 1) on all three panels, the vertical
-    %   legs being the bond legs of the vertical reading.
+    % Port types: tenkz closes a periodic row only through legs typed
+    %   virtual, and a tensor cannot be wired to itself.  The picture is
+    %   therefore typed as a horizontal chain of length one: the legs the
+    %   loop closes (the operator index i of the vertical reading) carry
+    %   the virtual type, and the open vertical legs (the bond indices of
+    %   the vertical reading) carry the physical type.  The drawn network
+    %   is the vertical-reading trace K_\gamma = \sum_i M_\gamma^{ii}.
+    % Boundary signature (as typed): (virtual-west | virtual-east |
+    %   physical-up | physical-down) = (0 | 0 | 1 | 1) on all three panels.
     \tenkzkernel
     \begin{tenkz}[rows={op}, cols=1, boundary=periodic]
         \tn[skin=mpo,
@@ -71,7 +77,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \begin{tenkz}[rows={op}, cols=1]
         \tn[skin=mpo, ports={90:physical, 270:physical}]{E_s}
     \end{tenkz}
-\end{center}
+\end{tenkzequation}
 
 \begin{definition}[Terminal spectral refinement for an RFP MPDO]%
     \label{def:mpdo_terminal_spectral_refinement}
