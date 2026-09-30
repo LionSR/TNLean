@@ -78,6 +78,18 @@
     if $b\le1$, the latter term is zero.
 \end{proof}
 
+\begin{lemma}[Quadratic word-span bound from a nonzero eigenvalue]%
+    \label{lem:w_state_nonzero_eigenvalue_word_span}
+    \lean{Kraus.wordSpan_eq_top_of_mem_wordSpan_one_of_nonzero_eigenvalue}
+    \leanok
+    \uses{def:word_span}
+    Let $B$ be a tensor of bond dimension $D\ge1$ whose exact word spans
+    equal $\MN{D}$ at all sufficiently large lengths. If $S_1(B)$ contains
+    a matrix with a nonzero eigenvalue, then $S_{D^2}(B)=\MN{D}$.
+    This is the nonzero-eigenvalue bound of
+    \cite[Theorem~6.9]{Wolf2012Quantum}, in its word-span form.
+\end{lemma}
+
 \begin{theorem}[Cubic bound from a nonzero one-step eigenvalue]%
     \label{thm:w_state_nonzero_eigenvalue_bound}
     \lean{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_nonzero_eigenvalue}
@@ -100,10 +112,10 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:w_state_asymmetric_bound, thm:wielandt_general}
+    \uses{thm:w_state_asymmetric_bound, lem:w_state_nonzero_eigenvalue_word_span}
     Positive-length injectivity implies full word span at every larger length.
-    The nonzero-eigenvalue case of the quantum Wielandt bound
-    \cite[Theorem~6.9]{Wolf2012Quantum} gives injectivity at $D_j^2$ in each block.
+    Lemma~\ref{lem:w_state_nonzero_eigenvalue_word_span} gives injectivity
+    at $D_j^2$ in each block.
     Since $D_j\le D$, this propagates to the common length $L$.
     Apply Theorem~\ref{thm:w_state_asymmetric_bound} and use $b\le D$.
 \end{proof}
