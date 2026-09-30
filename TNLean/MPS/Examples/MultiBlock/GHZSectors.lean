@@ -30,7 +30,6 @@ supply a sitewise splitting of this upper-triangular representation.
   `{ghzC 0, ghzC 1}`.
 * `MPSTensor.ghzB_trace_evalWord_eq_sum`: the word-trace identity for `ghzB`, specializing
   `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum`.
-* `MPSTensor.ghzSectors_isReduction`: the biorthogonal compression pair for each sector.
 * `MPSTensor.ghzSectors_dim_eq`: the dimension count `4 = 1 + 1 + 2`.
 * `MPSTensor.ghzC0_right_intertwiner_eq_zero`, `MPSTensor.ghzC0_left_intertwiner_eq_zero`: the
   all-zeros sector has no nonzero sitewise intertwiner in either direction.
@@ -141,11 +140,6 @@ theorem ghzB_trace_evalWord_eq_sum (w : List (Fin 2)) (hw : w ≠ []) :
       Matrix.trace (Kraus.evalWord (ghzC 0) w) + Matrix.trace (Kraus.evalWord (ghzC 1) w) := by
   have h := ghzSectors_compression.trace_evalWord_eq_sum w hw
   rwa [Fin.sum_univ_two] at h
-
-/-- **Biorthogonal compression of each GHZ sector out of `ghzB`.** -/
-theorem ghzSectors_isReduction (s : {s // s ∈ GHZS}) :
-    IsReduction ghzB (ghzC s.1) (ghzSectors_compression.left s) (ghzSectors_compression.right s) :=
-  ghzSectors_compression.isReduction s
 
 /-- **The dimension count of Example B**: `4 = 1 + 1 + 2`. -/
 theorem ghzSectors_dim_eq : (4 : ℕ) = ∑ s ∈ GHZS, GHZD s + 2 :=

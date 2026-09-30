@@ -145,9 +145,8 @@ theorem normSq_stateCoeff_classicalPEPS (β : ℝ) (h : Fin q → Fin q → ℝ)
     (σ : TorusVertex width height → Fin q) :
     Complex.normSq (stateCoeff (classicalPEPS width height β h) σ) =
       Real.exp (-(β * classicalEnergy h σ)) := by
-  rw [stateCoeff_classicalPEPS, Complex.normSq_ofReal, ← Real.exp_add]
-  congr 1
-  ring
+  exact Complex.ofReal_inj.mp (by
+    simpa only [Complex.normSq_eq_conj_mul_self] using conj_mul_stateCoeff_classicalPEPS β h σ)
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2483–2494.
 Diagonal expectation values of the classical-model PEPS are Gibbs averages. For the diagonal

@@ -4497,6 +4497,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
     \leanok
     \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
+        thm:primitive_ground_space_gram_eventual_inverse_bound,
         thm:primitive_ground_space_gram_inverse_tendsto, def:mixed_transfer_rect}
     Let $A$ and $B$ be trace-preserving tensors with positive-definite
     fixed matrices $\rho$ and $\sigma$. Suppose their complementary
@@ -4515,12 +4516,14 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
+        thm:primitive_ground_space_gram_eventual_inverse_bound,
         thm:primitive_ground_space_gram_inverse_tendsto}
     By Theorem~\ref{thm:primitive_ground_space_gram_inverse_tendsto}, the
     self-Gram operators $\mathcal K_n(A)$ and $\mathcal K_n(B)$ converge to invertible limits
     $\mathcal K_\infty(A)$ and $\mathcal K_\infty(B)$ determined by $\rho$ and $\sigma$, and
     their inverses converge to $\mathcal K_\infty(A)^{-1}$ and $\mathcal K_\infty(B)^{-1}$.
-    Since the limits are invertible, so are $\mathcal K_n(A)$ and $\mathcal K_n(B)$, and hence
+    By Theorem~\ref{thm:primitive_ground_space_gram_eventual_inverse_bound},
+    $\mathcal K_n(A)$ and $\mathcal K_n(B)$ are eventually invertible, and hence
     $\Gamma_n^{\mathrm{ES}}(A)$ and $\Gamma_n^{\mathrm{ES}}(B)$ are injective, for all
     sufficiently large $n$. By Theorem~\ref{thm:mixed_boundary_gram_decay},
     the coefficient in Theorem~\ref{thm:ground_space_overlap_mixed_gram}
@@ -4544,7 +4547,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
     \leanok
     \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
-        thm:transfer_operator_gap_rect_irr_tp}
+        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
     Let $A$ and $B$ be trace-preserving tensors with positive-definite
     fixed matrices and complementary transfer spectral radii less than one.
     Suppose that, if their bond dimensions agree, they are not gauge-phase
@@ -4560,9 +4563,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{proof}
     \leanok
     \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
-        thm:transfer_operator_gap_rect_irr_tp}
+        thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}
     The positive-definite fixed matrices and complementary gaps imply
-    irreducibility. For equal bond dimensions, inequivalence and
+    irreducibility by Lemma~\ref{lem:irreducible_map_from_primitive}.
+    For equal bond dimensions, inequivalence and
     Theorem~\ref{thm:transfer_operator_gap_irr_tp} give
     $\rho_{\spec}(F_{BA}^{\mathrm{rect}})=\rho_{\spec}(F_{BA})<1$.
     For unequal bond dimensions, a peripheral eigenvector of
