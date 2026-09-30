@@ -50,6 +50,9 @@ overclaim. The product-state, CZX and Kramers–Wannier introductions now put th
 example tensors before general operator or contraction notation, followed by
 boundary data and property links. Chapter 15 now also links the boundary conventions and property results
 for GHZ, AKLT, cluster, Majumdar--Ghosh, W, Kitaev, and CPSV16 Example 3.4.
+The Kitaev tensor also precedes the boundary-state formula, and the
+Majumdar--Ghosh property inventory follows its source tensor. The clock
+section title no longer presupposes the unproved anomaly-class identification.
 The W tensor precedes the general open-boundary definitions; its lower-bound
 proof discussion is unchanged. The CZY, group-cocycle, and clock introductions
 now state the trace boundary and link the proved operator and fusion properties,

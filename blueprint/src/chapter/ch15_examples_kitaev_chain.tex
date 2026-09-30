@@ -7,22 +7,7 @@ neighbouring sites, its ground state is the non-trivial fixed point of the
 topological phase, and it is described by a graded (fermionic) matrix product
 state with bond dimension two and a twist at the boundary
 \cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix},
-\cite{Bultinck2017FermionicMPS}. On a ring of $N$ sites the state is
-\begin{align}
-    \ket\psi
-     & =
-    \sum_{i_1,\ldots,i_N}\tr\bigl(YA^{i_1}A^{i_2}\cdots A^{i_N}\bigr)
-    \ket{i_1}\otimes_g\ket{i_2}\otimes_g\cdots\otimes_g\ket{i_N},
-    \label{eq:kitaev_chain_state}
-\end{align}
-where $\otimes_g$ is the graded tensor product; the state has odd fermion
-parity~\cite[Section~II.B.4]{Cirac2021Matrix}.
-
-\paragraph{Scope.} The results below concern the ordinary contraction of the
-matrices, which gives the coefficients of~(\ref{eq:kitaev_chain_state}) in the
-ordered graded product basis; the graded contraction rules and the graded
-notion of injectivity are outside the scope of these
-results~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
+\cite{Bultinck2017FermionicMPS}.
 
 \begin{definition}[Kitaev-chain tensor and twist]\label{def:kitaev_tensor}
     \lean{MPSTensor.kitaevTensor, MPSTensor.kitaevTwist}
@@ -39,6 +24,23 @@ results~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
     \cite[Appendix~A, ``The Kitaev chain'']{Cirac2021Matrix},
     \cite{Bultinck2017FermionicMPS}.
 \end{definition}
+
+On a ring of $N$ sites the state is
+\begin{align}
+    \ket\psi
+     & =
+    \sum_{i_1,\ldots,i_N}\tr\bigl(YA^{i_1}A^{i_2}\cdots A^{i_N}\bigr)
+    \ket{i_1}\otimes_g\ket{i_2}\otimes_g\cdots\otimes_g\ket{i_N},
+    \label{eq:kitaev_chain_state}
+\end{align}
+where $\otimes_g$ is the graded tensor product; the state has odd fermion
+parity~\cite[Section~II.B.4]{Cirac2021Matrix}.
+
+\paragraph{Scope.} The results below concern the ordinary contraction of the
+matrices, which gives the coefficients of~(\ref{eq:kitaev_chain_state}) in the
+ordered graded product basis; the graded contraction rules and the graded
+notion of injectivity are outside the scope of these
+results~\cite{gap:rmp_kitaev_chain_bosonic_scope}.
 
 The boundary twist enters as $\tr(YA^{i_1}\cdots A^{i_N})$.
 Theorem~\ref{thm:kitaev_amplitudes} and
