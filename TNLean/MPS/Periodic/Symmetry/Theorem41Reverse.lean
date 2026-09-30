@@ -9,8 +9,9 @@ import TNLean.MPS.Periodic.Symmetry.Theorem41Forward
 /-!
 # Theorem 4.1, reverse direction
 
-This module contains the reverse half of Theorem 4.1 in its current conditional
-formalization.
+A root represented by at most the physical dimension's number of Kraus
+operators yields a refinement tensor. The remaining selection problem is
+recorded in `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -24,24 +25,6 @@ section Theorem41Reverse
 variable {d D : ℕ}
 
 
-/-- **Inverse canonicalization hypothesis for the reverse direction of Theorem 4.1.**
-
-This proposition states the analytic content that connects
-`IsPDivisibleChannel (Kraus.transferMap B) p`
-(a channel-level `p`-th-root statement) to the existence of a witness tensor
-`A : MPSTensor d D` whose `p`-blocked transfer map matches that of `B`.
-
-Morally, if `Kraus.transferMap B = (E')^p` for a CPTP map `E'`, one would like to choose a Kraus
-representation `A` of `E'` with exactly `d` Kraus operators. In general the minimum Kraus
-rank of `E'` may exceed `d`, so formalising this step requires a Kraus-rank reduction /
-canonical-form argument (the analogue of left-canonical reduction used for the forward
-direction). The theorem `pRefinementInverseCanonicalization_of_rootKrausRankBound` below
-shows that it is enough to prove a bounded-Kraus-rank statement for the root channel. -/
-def PRefinementInverseCanonicalization (d D p : ℕ) : Prop :=
-  ∀ {B : MPSTensor d D}, IsIrreducibleForm B →
-    IsPDivisibleChannel (Kraus.transferMap B) p →
-    ∃ A : MPSTensor d D, Kraus.transferMap B = Kraus.transferMap (blockTensor A p)
-
 /-- A bounded Kraus-rank witness for a channel root can be expressed as an
 `MPSTensor` with the ambient physical dimension by zero-padding the Kraus family. -/
 theorem exists_tensor_of_hasKrausRankLE
@@ -54,116 +37,14 @@ theorem exists_tensor_of_hasKrausRankLE
   ext X i j
   simpa [Kraus.transferMap_apply] using congrArg (fun M => M i j) (hK X).symm
 
-/-- **Channel-root formulation of blocked-to-root reconstruction.**
-
-This Prop isolates the channel-theoretic core of
-`PeripheralEqualCaseRootFromZGauge`: from a blocked `Z`-gauge witness between
-`C` and `blockTensor A p`, extract a CPTP root `E'` of `Kraus.transferMap C` whose
-Kraus rank is at most the ambient physical dimension `d`. Once such a root is
-available, the tensor-level reconstruction follows by choosing a Kraus family
-with `d` operators.
-
-This hypothesis is refuted by the rescaling counterexample of
-`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`: for \(p \ge 1\) at physical
-and bond dimension one the tensors \(C = A^{[p]} = (\lambda)\) with
-\(\lambda > 1\) are related by the trivial \(Z\)-gauge with \(m = 1\), and
-\(C\) is in irreducible form II, while \(\mathcal E_C(x) = \lambda^2 x\) is
-not trace preserving and so is not a \(p\)-th power of a channel. -/
-def PeripheralEqualCaseRootChannelOfZGauge (d D p : ℕ) : Prop :=
-  ∀ {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D} {m : ℕ},
-    IsIrreducibleForm C →
-    0 < m →
-    ZGaugeEquiv m C (blockTensor A p) →
-      ∃ E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
-        IsChannel E' ∧
-        Kraus.transferMap C = E' ^ p ∧
-        Channel.HasKrausRankLE E' d
-
-/-- **Tensor-level blocked-to-root reconstruction from a bounded channel root.**
-
-If a blocked `Z`-gauge witness yields a CPTP root channel of `Kraus.transferMap C`
-with Kraus rank at most `d`, then one can choose a tensor `A' : MPSTensor d D`
-realizing that root. The channel property forces `A'` to be left-canonical,
-and blocking recovers the transfer map of `C`.
-
-**Unfaithful:** This proof relies on the hypothesis
-`PeripheralEqualCaseRootChannelOfZGauge` and produces
-`PeripheralEqualCaseRootFromZGauge`; both deviate from arXiv:1708.00029,
-lines 765--810, and both are refuted for \(p \ge 1\) at physical and bond dimension one by
-\(C = A^{[p]} = (\lambda)\), \(\lambda > 1\), with the trivial \(Z\)-gauge,
-because the printed forward implication of Theorem 4.1, lines 728--731, omits
-the trace preservation of \(\mathcal E_B\) presupposed by its definition of
-\(p\)-divisibility at lines 717--718. Documented in
-`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. Elimination:
-restate both hypotheses over a block-form tensor with every multiplicity equal
-to one, as described in the marker of `thm_4_1_p_refinement_forward`; tracked
-in the follow-up issue cited by the paper-gap note. -/
-theorem peripheralEqualCaseRootFromZGauge_of_rootChannel
-    (hRoot : PeripheralEqualCaseRootChannelOfZGauge d D p) :
-    PeripheralEqualCaseRootFromZGauge d D p := by
-  intro A C m hC hm hZ
-  obtain ⟨E', hE'chan, hpow, hRank⟩ :=
-    hRoot (A := A) (C := C) (m := m) hC hm hZ
-  obtain ⟨A', hA'⟩ := exists_tensor_of_hasKrausRankLE (d := d) (D := D) hRank
-  refine ⟨A', ?_, ?_⟩
-  · have hK :
-        ∀ X : Matrix (Fin D) (Fin D) ℂ,
-          E' X = ∑ i : Fin d, A' i * X * (A' i)ᴴ := by
-        intro X
-        simpa [Kraus.transferMap_apply] using (congrArg (fun T => T X) hA').symm
-    simpa using kraus_sum_conjTranspose_mul_of_tp A' E' hK hE'chan.tp
-  · calc
-      Kraus.transferMap C = E' ^ p := hpow
-      _ = (Kraus.transferMap A') ^ p := by rw [← hA']
-      _ = Kraus.transferMap (blockTensor A' p) := by rw [transferMap_blockTensor]
-
-/-- A clean root-cardinality hypothesis that isolates the remaining Kraus-rank
-step in the reverse direction of Theorem 4.1. -/
-def PRefinementInverseRootKrausRankBound (d D p : ℕ) : Prop :=
-  ∀ {B : MPSTensor d D}, IsIrreducibleForm B →
-    ∀ {E' : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ},
-      IsChannel E' → Kraus.transferMap B = E' ^ p → Channel.HasKrausRankLE E' d
-
-/-- A bounded-Kraus-rank root hypothesis is enough to recover the existing
-inverse canonicalization hypothesis. -/
-theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
-    (hRoot : PRefinementInverseRootKrausRankBound d D p) :
-    PRefinementInverseCanonicalization d D p := by
-  intro B hB hDivisible
-  rcases hDivisible with ⟨E', hE'chan, hpow⟩
-  have hRank : Channel.HasKrausRankLE E' d := hRoot hB hE'chan hpow
-  obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE (d := d) (D := D) hRank
-  refine ⟨A, ?_⟩
-  calc
-    Kraus.transferMap B = E' ^ p := hpow
-    _ = (Kraus.transferMap A) ^ p := by rw [← hA]
-    _ = Kraus.transferMap (blockTensor A p) := by rw [transferMap_blockTensor]
-
-/-- **Reverse direction of Theorem 4.1 (conditional form).**
-
-Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the inverse
-canonicalization hypothesis `PRefinementInverseCanonicalization` (which states the
-remaining analytic passage from `p`-divisibility of `Kraus.transferMap B` to a compatible
-Kraus-reducible witness). Then `IsPDivisibleChannel (Kraus.transferMap B) p` implies
-`IsPRefinable B p`.
-
-The proof follows the paper (arXiv:1708.00029 Section 4.1, converse paragraph): from the inverse
-canonicalization we obtain `A : MPSTensor d D` with
-`Kraus.transferMap B = Kraus.transferMap (blockTensor A p)`; this matches two Kraus
-representations of the same CP map (`blockTensor A p` with `d^p` operators and `B` with
-`d` operators), so
-Wolf Theorem 2.1(4) (`kraus_isometry_freedom_iff`) supplies an isometry
-`V : Matrix (Fin (d^p)) (Fin d) ℂ` with `Vᴴ V = 1` and
-`blockTensor A p α = ∑_j V α j • B j`. Expanding `coeff (blockTensor A p) (ofFn τ)` with
-the auxiliary `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
-`W`-weighted coefficient identity defining `IsPRefinable B p`. -/
-theorem thm_4_1_p_refinement_reverse
-    (B : MPSTensor d D) (hB : IsIrreducibleForm B)
-    (p : ℕ) (hp : 0 < p)
-    (hInverse : PRefinementInverseCanonicalization d D p)
-    (hDivisible : IsPDivisibleChannel (Kraus.transferMap B) p) :
+/-- Equality with a blocked transfer map gives a refinement isometry.
+No irreducible-form assumption is needed for this Kraus representation step.
+Source: arXiv:1708.00029, Theorem 4.1, converse paragraph, lines 812--818;
+Wolf Theorem 2.1(4). -/
+theorem isPRefinable_of_transferMap_eq_blockTensor
+    (B A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    (hTransferEq : Kraus.transferMap B = Kraus.transferMap (blockTensor A p)) :
     IsPRefinable B p := by
-  obtain ⟨A, hTransferEq⟩ := hInverse hB hDivisible
   classical
   -- `d ≤ d^p = blockPhysDim d p` whenever `p ≥ 1`: the Kraus-rank comparison needed by
   -- Wolf Theorem 2.1(4).
@@ -194,6 +75,24 @@ theorem thm_4_1_p_refinement_reverse
   intro σ _
   rw [Matrix.trace_smul]
   rfl
+
+/-- A selected channel root with at most the physical dimension's number
+of Kraus operators gives a refinement tensor.
+
+**Scope restriction (bounded root):** This proves the converse step of
+arXiv:1708.00029, Theorem 4.1, lines 812--818, when the selected root has
+Kraus rank at most `d`. Existence of such a root from divisibility alone is
+not proved; see `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`. -/
+theorem isPRefinable_of_channel_root_hasKrausRankLE
+    (B : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hpow : Kraus.transferMap B = E ^ p)
+    (hRank : Channel.HasKrausRankLE E d) :
+    IsPRefinable B p := by
+  obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE hRank
+  apply isPRefinable_of_transferMap_eq_blockTensor B A hp
+  rw [transferMap_blockTensor, hA]
+  exact hpow
 
 end Theorem41Reverse
 

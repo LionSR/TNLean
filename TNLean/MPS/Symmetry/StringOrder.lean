@@ -23,7 +23,7 @@ string-order universality theorems that use them.
 
 ## Main definitions
 
-* `MPSTensor.IsSameSPTPhase` — two MPS are in the same SPT phase when their
+* `MPSTensor.IsVirtualCocycleEquivalent` — two MPS have the same virtual label when their
   virtual representation cocycles are cohomologous
 
 ## Main results
@@ -388,8 +388,8 @@ end MainTheorems
 
 /-! ### SPT phase labels and string-order universality
 
-Two injective symmetric MPS tensors are defined to be in the same SPT phase
-when their virtual representation cocycles are cohomologous.  The
+Two symmetric MPS tensors have the same virtual cocycle label when their
+virtual representation cocycles are cohomologous.  The
 classification theorem identifying this label with phase equivalence under
 symmetric gapped paths (Chen–Gu–Wen, arXiv:1008.3745; Schuch–Pérez-García–
 Cirac, arXiv:1010.3732, Section II.F) is not formalized here.
@@ -417,16 +417,15 @@ open TNLean.Algebra
 
 variable {G : Type*} [Group G]
 
-/-- Two MPS tensors with the same on-site symmetry are in the **same SPT phase** if
-there exist virtual representation cocycles that intertwine the respective tensors
-and are cohomologous.
+/-- Two MPS tensors with the same on-site symmetry have the same virtual
+cocycle label if they admit intertwining projective representations with
+cohomologous factor systems.
 
-The cocycle-class label is taken here as the *definition* of SPT-phase
-equality.  Its identification with phase equivalence under symmetric gapped
-paths is the classification theorem of Chen–Gu–Wen (arXiv:1008.3745) and
+Identification of this label with equivalence under symmetric gapped paths
+is the classification theorem of Chen–Gu–Wen (arXiv:1008.3745) and
 Schuch–Pérez-García–Cirac (arXiv:1010.3732, Section II.F), which is not
 formalized in this development. -/
-def IsSameSPTPhase (A B : MPSTensor d D)
+def IsVirtualCocycleEquivalent (A B : MPSTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
   ∃ (ωA ωB : ScalarCocycle G)
     (ρA : ProjectiveRepresentation (D := D) ωA)
@@ -550,7 +549,7 @@ other: both sides hold unconditionally, by the universality of string order
 for injective symmetric tensors.
 
 In particular, existence of string order does not separate SPT phases.
-Tensors in the same SPT phase (`IsSameSPTPhase`) are on-site symmetric, so
+Tensors satisfying `IsVirtualCocycleEquivalent` are on-site symmetric, so
 the equivalence applies to them, but it applies equally to symmetric
 tensors in different phases; the invariant that separates phases is the
 cocycle class, not string order.  The hypotheses are stated as on-site

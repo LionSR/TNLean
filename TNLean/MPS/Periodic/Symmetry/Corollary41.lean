@@ -3,109 +3,46 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
+import TNLean.MPS.Periodic.Symmetry.LiteralSymmetry
+import TNLean.MPS.Symmetry.Defs
 
 /-!
-# Corollary 4.1 for periodic MPS
+# Pointwise symmetry gauges for a periodic block tensor
 
-This module contains conditional reformulations of the physical-symmetry-to-virtual
-\(Z\)-gauge corollary from arXiv:1708.00029, Section 4.2, lines 828--845.
+The single-unitary corollary of arXiv:1708.00029, Section 4.2, lines 834--845,
+can be applied to each element of an on-site symmetry group. This produces
+unitary gauges pointwise; it does not assert a coherent group law for them.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators Matrix.Norms.Operator
 
 namespace MPSTensor
 
-/-! ## Corollary 4.1 — Physical on-site symmetry → virtual `Z`-gauge -/
-
-section Corollary41
-
-variable {d D : ℕ} {G : Type*} [Group G]
-
-/-- The symmetry-twisted tensor (with `U` acting on the physical leg) coincides with the
-physical-index rotation by `U g`. -/
-lemma twistedTensor_eq_rotatePhysical
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
-    twistedTensor A U g = rotatePhysical (U g) A := rfl
-
-/-- **Conditional group-action reformulation of the symmetry corollary.**
-
-Let `A` be in irreducible form II and let `U : G →* Mat_d ℂ` be a representation of a
-group `G` on the physical leg, acting unitarily. If `A` is on-site symmetric under `U`
-(i.e. each twisted tensor `twistedTensor A U g` has the same MPV family as `A`), then
-for each `g ∈ G` there exists a positive period `m_g` and a `Z_{m_g}`-gauge equivalence
-between `A` and `twistedTensor A U g`.
-
-In paper notation, for each `g` there exist matrices `Z_g, Y_g` with `Z_g^{m_g} = 1`,
-`[A^i, Z_g] = 0`, and
-`Z_g · A^i = Y_g · (twistedTensor A U g)^i · Y_g⁻¹`.
-
-**Source comparison.** The source corollary in arXiv:1708.00029, lines 834--845,
-is stated for a single local unitary \(u\). It concludes that there are a diagonal
-unitary \(Z\) and a unitary \(U\) satisfying, for every \(i'\),
-\[
-  \sum_i u^{i',i} A^i = Z U A^{i'} U^\dagger
-\]
-The statement here is not that corollary verbatim: it
-applies the same idea pointwise to a group representation, assumes the periodic equal-case
-Fundamental Theorem (arXiv:1708.00029, lines 643--656) through `PeriodicEqualCaseFT`, and
-records the conclusion in `ZGaugeEquiv` form. The diagonal normalization of \(Z\) and the
-exact displayed source equation are not asserted by this theorem.
-
-The single-`u` specialization is obtained via
-`zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`.
-The projective-representation question (a joint factor system on the family `(Y_g)_{g∈G}`)
-is an external mathematical problem not supplied by arXiv:1708.00029; see
-`MPS/Symmetry/VirtualRepresentation.lean` for the analogous injective construction.
-
-The periodic equal-case FT is taken as an explicit hypothesis `hPeriodicEq` (see file
-header for the rationale and status). -/
-theorem cor_4_1_physical_symmetry_zgauge
-    (A : MPSTensor d D)
-    (hA : IsIrreducibleForm A)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hUnit : ∀ g : G, (U g) * (U g)ᴴ = 1)
-    (hSym : IsOnSiteSymmetric A U)
-    (hPeriodicEq : PeriodicEqualCaseFT d D) :
-    ∀ g : G, ∃ m : ℕ, 0 < m ∧ ZGaugeEquiv m A (twistedTensor A U g) := by
+/-- Each on-site symmetry of a literal irreducible form II has the diagonal
+unitary and unitary bond conjugation of the source symmetry corollary.
+No equal-case fundamental theorem is assumed as an extra hypothesis.
+Source: arXiv:1708.00029, Section 4.2, lines 834--845, equation `eq:symm`,
+applied separately to each group element. -/
+theorem exists_diagonal_unitary_of_irreducibleForm_onSiteSymmetry
+    {d r : ℕ} {dim : Fin r → ℕ} {G : Type*} [Group G]
+    (A : (j : Fin r) → MPSTensor d (dim j))
+    (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
+    (hIrr : ∀ j, Kraus.IsIrreducibleFamily (A j))
+    (hRad : ∀ j, spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin (dim j)) (Fin (dim j)) ℂ))
+        (Kraus.transferMap (A j))) = 1)
+    (hTP : ∀ j, IsLeftCanonical (A j))
+    (u : G →* Matrix (Fin d) (Fin d) ℂ) (hu : ∀ g, (u g)ᴴ * u g = 1)
+    (hSym : IsOnSiteSymmetric (toTensorFromBlocks μ A) u) :
+    ∀ g, ∃ Z U : Matrix (Fin (∑ j, dim j)) (Fin (∑ j, dim j)) ℂ,
+      (∃ z, Z = Matrix.diagonal z) ∧ Matrix.IsUnitaryBetween Z ∧
+      Matrix.IsUnitaryBetween U ∧
+      (∀ i, Z * toTensorFromBlocks μ A i = toTensorFromBlocks μ A i * Z) ∧
+      SameMPV₂ (toTensorFromBlocks μ A) (fun i => Z * toTensorFromBlocks μ A i) ∧
+      ∀ i, twistedTensor (toTensorFromBlocks μ A) u g i =
+        Z * U * toTensorFromBlocks μ A i * Uᴴ := by
   intro g
-  -- Twisting by `U g` is the same as the physical-index rotation by `U g`.
-  have hRotEq : twistedTensor A U g = rotatePhysical (U g) A :=
-    twistedTensor_eq_rotatePhysical A U g
-  -- The rotated tensor is again in irreducible form II (preserved by unitary rotation).
-  have hRot : IsIrreducibleForm (rotatePhysical (U g) A) :=
-    isIrreducibleForm_rotatePhysical A (U g) (hUnit g) hA
-  -- The on-site symmetry hypothesis gives `SameMPV A (rotatePhysical (U g) A)`.
-  have hSame : SameMPV A (rotatePhysical (U g) A) := by
-    have := hSym g
-    rwa [hRotEq] at this
-  -- Apply the periodic equal-case Fundamental Theorem.
-  rcases hPeriodicEq hA hRot hSame with ⟨m, hm_pos, hZGauge⟩
-  exact ⟨m, hm_pos, by rw [hRotEq]; exact hZGauge⟩
-
-/-- **A convenient reformulation of `cor_4_1_physical_symmetry_zgauge`** in the form most
-useful for conditional projective-representation arguments: extract the gauge
-`Y(g)` and matrix `Z(g)` explicitly. -/
-theorem cor_4_1_physical_symmetry_zgauge_explicit
-    (A : MPSTensor d D)
-    (hA : IsIrreducibleForm A)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hUnit : ∀ g : G, (U g) * (U g)ᴴ = 1)
-    (hSym : IsOnSiteSymmetric A U)
-    (hPeriodicEq : PeriodicEqualCaseFT d D) :
-    ∀ g : G, ∃ (m : ℕ) (Y : GL (Fin D) ℂ) (Z : Matrix (Fin D) (Fin D) ℂ),
-      0 < m ∧
-      Z ^ m = 1 ∧
-      (∀ i : Fin d, Z * A i = A i * Z) ∧
-      (∀ i : Fin d,
-        Z * A i =
-          (Y : Matrix (Fin D) (Fin D) ℂ) * twistedTensor A U g i *
-            (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
-  intro g
-  rcases cor_4_1_physical_symmetry_zgauge A hA U hUnit hSym hPeriodicEq g with
-    ⟨m, hm_pos, Y, Z, hZpow, hComm, hRel⟩
-  exact ⟨m, Y, Z, hm_pos, hZpow, hComm, hRel⟩
-
-end Corollary41
+  exact exists_diagonal_unitary_of_irreducibleForm_physical_symmetry
+    A μ hμ hIrr hRad hTP (u g) (hu g) (fun N _ σ => hSym g N σ)
 
 end MPSTensor

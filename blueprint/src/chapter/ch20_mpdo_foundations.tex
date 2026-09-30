@@ -71,6 +71,40 @@
     using associativity of matrix multiplication.
 \end{proof}
 
+\begin{theorem}[Word evaluation after physical blocking]
+    \label{thm:mpo_eval_word_block}
+    \lean{MPOTensor.evalWord_blockTensor_ofFn}
+    \leanok
+    \uses{def:mpo_eval_word, def:mpdo_physical_blocking}
+    Let $M$ be an MPO tensor, let $L\geq0$, and let
+    $\sigma=(I_1,\ldots,I_N)$ and $\tau=(J_1,\ldots,J_N)$ be words in the
+    blocked ket and bra alphabets. Each $I_q$ and $J_q$ represents a word
+    of length $L$ in the original alphabet. If
+    $\widehat\sigma=I_1\cdots I_N$ and
+    $\widehat\tau=J_1\cdots J_N$ denote their flattened words, then
+    \begin{align}
+        (M^{[L]})^{\sigma,\tau}
+         & =M^{\widehat\sigma,\widehat\tau}.
+        \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok\uses{lem:mpo_eval_word_append, def:mpdo_physical_blocking}
+    Induct on $N$. For $N=0$, both word evaluations are the identity.
+    For the induction step, separate the first blocked ket and bra letters
+    $I_1,J_1$. Physical blocking gives
+    $(M^{[L]})^{I_1,J_1}=M^{I_1,J_1}$, and
+    Lemma~\ref{lem:mpo_eval_word_append} gives
+    \begin{align}
+        (M^{[L]})^{I_1\sigma',\,J_1\tau'}
+         & =M^{I_1,J_1}M^{\widehat\sigma',\widehat\tau'}
+          =M^{I_1\widehat\sigma',\,J_1\widehat\tau'}.
+        \notag
+    \end{align}
+    The argument also applies when $L=0$: each decoded block word is empty,
+    and the concatenation identity still has equally long ket and bra prefixes.
+\end{proof}
+
 \begin{lemma}[Trace cyclicity of the closed MPO word]\label{lem:mpo_trace_evalWord_cyclic}
     \lean{MPOTensor.trace_evalWord_cons_eq_append}
     \leanok

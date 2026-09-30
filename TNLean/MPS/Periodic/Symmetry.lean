@@ -8,9 +8,15 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Periodic.Symmetry
 
+import TNLean.MPS.Periodic.Symmetry.CanonicalRefinementPullback
 import TNLean.MPS.Periodic.Symmetry.Corollary41
-import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
+import TNLean.MPS.Periodic.Symmetry.LiteralRefinementForward
+import TNLean.MPS.Periodic.Symmetry.LiteralSymmetry
+import TNLean.MPS.Periodic.Symmetry.RefinementFromInjectiveTransfer
+import TNLean.MPS.Periodic.Symmetry.RefinementFromInvertibleWordSpan
+import TNLean.MPS.Periodic.Symmetry.RefinementNormalizationCounterexample
 import TNLean.MPS.Periodic.Symmetry.Theorem41Bundle
 import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 import TNLean.MPS.Periodic.Symmetry.Theorem41Forward
+import TNLean.MPS.Periodic.Symmetry.Theorem41OneSite
 import TNLean.MPS.Periodic.Symmetry.Theorem41Reverse
