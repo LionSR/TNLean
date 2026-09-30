@@ -199,11 +199,7 @@ theorem exists_isPreparedInDepth_le_log_of_mpvState_ne_zero {D : ℕ} (A : MPSTe
         linarith [le_max_left (Real.log K) 0]
       calc K * (((m + 1 : ℕ) : ℝ) * Real.exp (-(r * q)))
           ≤ K * (N * Real.exp (-(r * q))) := by gcongr
-        _ = Real.exp (Real.log K + Real.log N - r * q) := by
-            rw [Real.exp_sub, Real.exp_add, Real.exp_log hK, Real.exp_log hN0, Real.exp_neg]
-            ring
-        _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
-        _ = ε := Real.exp_log hε
+        _ ≤ ε := mul_mul_exp_neg_le_of_log_le hK hN0 hε hrq
   · -- Short chains: `N < a log(N/ε) + b`, and `|φ_N⟩` is prepared exactly.
     have hNQ : (N : ℝ) < Q := Nat.lt_ceil.mp (not_le.mp hqN)
     have hB0 : mpvState B N ≠ 0 := by

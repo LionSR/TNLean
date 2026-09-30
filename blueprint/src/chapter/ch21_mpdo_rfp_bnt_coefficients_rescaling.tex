@@ -342,6 +342,35 @@
         M_0^{(a,b)} & =A^a\otimes\overline{A^b}.
         \notag
     \end{align}
+    Each letter of $M_0$ is a ket copy of $A$ over a bra copy of
+    $\overline A$ that share no index:
+    \begin{tenkzequation}
+        % Formula: M_0^{(a,b)}=A^a (x) conj(A^b), the display above; the
+        % doubled layer of arXiv:1606.00608, eq. (Psipuri), line 747
+        % (figure MPDO_M=AA), without the ancilla contraction drawn there.
+        % Ink-to-index map: left, the letter of M_0 with the pair (a,b) as
+        % its north and south legs and the doubled bond space on its west
+        % and east legs; right, the ket copy A with physical leg a and the
+        % bra copy conj(A) with physical leg b, each carrying one factor of
+        % the doubled bond on its west and east legs.
+        % Contraction set: none; the two copies are tensored.
+        % Boundary signature: left (virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=1); right, the same with each
+        % virtual side split into its two tensor factors.
+        \tenkzkernel
+        \begin{tenkz}[cols=1, west=open, east=open]
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a$, 270:physical:$b$}]{M_0}
+        \end{tenkz}
+        $ = $
+        \begin{tenkz}[rows={ket,bra}, cols=1, west=open, east=open,
+                bonds=none, size=l]
+            \tn[skin=box, ports={90:physical:$a$, 180:virtual,
+                        0:virtual}]{A} \\
+            \tn[skin=box, ports={270:physical:$b$, 180:virtual,
+                        0:virtual}]{\overline A}
+        \end{tenkz}
+    \end{tenkzequation}
     The positive diagonal multiplicity and coefficient matrices are
     \begin{align}
         \mu_0        & =\begin{pmatrix}\frac{25}{32}\end{pmatrix},
@@ -388,6 +417,83 @@
     $\tr(W^L)=\tr(\chi_{0,0,0}^L)=1+(7/25)^L$.
     Finally, $c^{(1)}_{0,0,0}m_0^2=(32/25)(25/32)^2=m_0$.
 \end{proof}
+
+The square computed in this proof is the following contraction. The two
+middle rings form the self-overlap of the periodic vector of $A$, a closed
+network equal to $\tr(W^L)=\tr(\chi_{0,0,0}^L)$:
+\begin{tenkzequation}
+    % Formula: O_L(M_0)^2=tr(chi_{0,0,0}^L) O_L(M_0), with
+    % O_L(M_0)=|V^{(L)}(A)><V^{(L)}(A)|, from the proof above; the product
+    % law of arXiv:1606.00608, Theorem 4.14(ii), lines 972--985, for the
+    % single label 0.
+    % Ink-to-index map: rows alternate ket copies A and bra copies conj(A);
+    % the open north legs a_r and south legs b_r are the letters (a_r,b_r)
+    % of M_0.  Left, rows 1 and 2 form the first O_L(M_0), rows 3 and 4 the
+    % second; right, one O_L(M_0).
+    % Contraction set: every row is closed by its own periodic return; on
+    % the left, the vertical wires between rows 2 and 3 are the operator
+    % product, which pairs the bra copy of the first factor with the ket
+    % copy of the second.  No index joins rows 1 and 2, or rows 3 and 4.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=3) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={ket,bra,ket,bra}, cols=4, boundary=periodic,
+            bonds=none, size=l]
+        \tn[skin=box, name=k1, ports={90:physical:$a_1$, 180:virtual,
+                    0:virtual}]{A} &
+        \tn[skin=box, name=k2, ports={90:physical:$a_2$, 180:virtual,
+                    0:virtual}]{A} &
+        \tn[skin=dots, name=kd, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, name=kL, ports={90:physical:$a_L$, 180:virtual,
+                    0:virtual}]{A} \\
+        \tn[skin=box, name=p1, ports={270:physical, 180:virtual,
+                    0:virtual}]{\overline A} &
+        \tn[skin=box, name=p2, ports={270:physical, 180:virtual,
+                    0:virtual}]{\overline A} &
+        \tn[skin=dots, name=pd, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, name=pL, ports={270:physical, 180:virtual,
+                    0:virtual}]{\overline A} \\
+        \tn[skin=box, name=q1, ports={90:physical, 180:virtual,
+                    0:virtual}]{A} &
+        \tn[skin=box, name=q2, ports={90:physical, 180:virtual,
+                    0:virtual}]{A} &
+        \tn[skin=dots, name=qd, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, name=qL, ports={90:physical, 180:virtual,
+                    0:virtual}]{A} \\
+        \tn[skin=box, name=b1, ports={270:physical:$b_1$, 180:virtual,
+                    0:virtual}]{\overline A} &
+        \tn[skin=box, name=b2, ports={270:physical:$b_2$, 180:virtual,
+                    0:virtual}]{\overline A} &
+        \tn[skin=dots, name=bd, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, name=bL, ports={270:physical:$b_L$, 180:virtual,
+                    0:virtual}]{\overline A}
+        \tnwire{k1.0}{k2.180} \tnwire{k2.0}{kd.180} \tnwire{kd.0}{kL.180}
+        \tnwire{p1.0}{p2.180} \tnwire{p2.0}{pd.180} \tnwire{pd.0}{pL.180}
+        \tnwire{q1.0}{q2.180} \tnwire{q2.0}{qd.180} \tnwire{qd.0}{qL.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{bd.180} \tnwire{bd.0}{bL.180}
+        \tnwire{p1.270}{q1.90} \tnwire{p2.270}{q2.90} \tnwire{pL.270}{qL.90}
+    \end{tenkz}
+    \quad $=\tr\bigl(\chi_{0,0,0}^{L}\bigr)$ \quad
+    \begin{tenkz}[rows={ket,bra}, cols=4, boundary=periodic, bonds=none,
+            size=l]
+        \tn[skin=box, name=k1, ports={90:physical:$a_1$, 180:virtual,
+                    0:virtual}]{A} &
+        \tn[skin=box, name=k2, ports={90:physical:$a_2$, 180:virtual,
+                    0:virtual}]{A} &
+        \tn[skin=dots, name=kd, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, name=kL, ports={90:physical:$a_L$, 180:virtual,
+                    0:virtual}]{A} \\
+        \tn[skin=box, name=b1, ports={270:physical:$b_1$, 180:virtual,
+                    0:virtual}]{\overline A} &
+        \tn[skin=box, name=b2, ports={270:physical:$b_2$, 180:virtual,
+                    0:virtual}]{\overline A} &
+        \tn[skin=dots, name=bd, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=box, name=bL, ports={270:physical:$b_L$, 180:virtual,
+                    0:virtual}]{\overline A}
+        \tnwire{k1.0}{k2.180} \tnwire{k2.0}{kd.180} \tnwire{kd.0}{kL.180}
+        \tnwire{b1.0}{b2.180} \tnwire{b2.0}{bd.180} \tnwire{bd.0}{bL.180}
+    \end{tenkz}
+\end{tenkzequation}
 
 \begin{remark}[Vertical and horizontal contractions]
     Let $\operatorname{rot}(\operatorname{vertical}(R))$ denote the MPO obtained
