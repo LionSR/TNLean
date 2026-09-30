@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Word
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Analysis.Complex.Circle
+import TNLean.Algebra.FinStepOrbit
 import TNLean.MPS.Core.CanonicalNormalization
 
 /-!
@@ -20,13 +22,18 @@ projector convention `P u * A i = A i * P (u + 1)`.
 * `MPSTensor.mul_evalWord_sectorPhaseTensor`: the phase product in one sector.
 * `MPSTensor.evalWord_sectorPhaseTensor`: the sum over all sectors.
 * `MPSTensor.isLeftCanonical_sectorPhaseTensor`: unit phases preserve left canonicality.
+* `MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases`: prescribed roots on
+  step orbits are realized by a left-canonical rephasing.
 
-The word identities allow arbitrary complex coefficients. Choosing unit phases
-with the prescribed products on step-`p` orbits is a separate part of the
-root construction in Theorem 4.1; it is not assumed or proved here.
+The word identities allow arbitrary complex coefficients. The final existence theorem
+constructs unit phases from the prescribed roots on the step-`p` orbits. Canonicalization
+and the blocked equal-case theorem are separate parts of the root construction in
+Theorem 4.1.
 -/
 
 open scoped BigOperators Matrix
+
+open Fin.NatCast
 
 namespace MPSTensor
 
@@ -103,5 +110,43 @@ theorem isLeftCanonical_sectorPhaseTensor (A : MPSTensor d D)
     rw [heq, Matrix.conjTranspose_mul, Matrix.mul_assoc,
       ← Matrix.mul_assoc (∑ u, c u • P u)ᴴ, hU, Matrix.one_mul]
   simpa only [IsLeftCanonical, Kraus.IsTP, hi] using hA
+
+/-- Redistribute a root of unity on each step orbit into unit phases on the individual
+cyclic sectors, preserving left canonicality and realizing the required blocked tensor.
+Source: arXiv:1708.00029, `eq:Aprime-is-cPA` and its preceding construction. -/
+theorem exists_isLeftCanonical_evalWord_eq_sum_orbit_phases [NeZero m]
+    (A : MPSTensor d D) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (hP : ∀ u v, P u * P v = if u = v then P u else 0)
+    (hHerm : ∀ u, (P u)ᴴ = P u) (hSum : ∑ u, P u = 1)
+    (hShift : ∀ u i, P u * A i = A i * P (u + 1)) (hA : IsLeftCanonical A)
+    (p : ℕ) (c : Fin (m.gcd p) → ℂ) (hc : ∀ a, c a ^ (m / m.gcd p) = 1) :
+    ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧ ∀ w : List (Fin d), w.length = p →
+      Kraus.evalWord A' w = ∑ u,
+        c ((Fin.stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))).symm u).1 •
+          (P u * Kraus.evalWord A w) := by
+  have hq : 0 < m / m.gcd p :=
+    Nat.div_pos (Nat.gcd_le_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
+      (Nat.gcd_pos_of_pos_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
+  let cc : Fin (m.gcd p) → Circle := fun a =>
+    ⟨c a, by
+      simpa [Submonoid.unitSphere] using
+        Complex.norm_eq_one_of_pow_eq_one (hc a) (Nat.ne_of_gt hq)⟩
+  have hcc (a) : cc a ^ (m / m.gcd p) = 1 := by
+    apply Circle.coe_injective
+    change c a ^ (m / m.gcd p) = 1
+    exact hc a
+  obtain ⟨b, hb⟩ := Fin.exists_stepOrbit_phases m p cc hcc
+  refine ⟨sectorPhaseTensor A P (fun u => (b u : ℂ)),
+    isLeftCanonical_sectorPhaseTensor A P _ hP hHerm hSum (fun u => Circle.norm_coe _) hA, ?_⟩
+  intro w hw
+  rw [evalWord_sectorPhaseTensor A P _ hP hSum hShift]
+  apply Finset.sum_congr rfl
+  intro u _
+  congr 1
+  have hp := congrArg Circle.coeHom (hb u)
+  simp only [map_prod] at hp
+  change (∏ k ∈ Finset.range p, (b (u + (↑k : Fin m)) : ℂ)) =
+    c ((Fin.stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))).symm u).1 at hp
+  simpa only [nsmul_one, hw] using hp
 
 end MPSTensor

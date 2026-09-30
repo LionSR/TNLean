@@ -36,12 +36,14 @@
 
 \begin{theorem}[Coordinates for a cyclic step]
     \label{thm:periodic_step_coordinates}
-    \lean{Fin.stepOrbit_bijective, Fin.stepOrbitEquiv}
+    \lean{Fin.stepOrbit_bijective, Fin.stepOrbitEquiv, Fin.stepOrbitEquiv_add_one}
     \leanok
     Let $m>0$, $p\geq0$, and $r=\gcd(m,p)$. Every residue $u$ modulo $m$
     has a unique expression $u=\alpha+pk\pmod m$, with
     $0\leq\alpha<r$ and $0\leq k<m/r$.
-    This is \cite[Lemma~\emph{unique-dec}]{DeLasCuevas2017Irreducible}.
+    Adding $p$ preserves $\alpha$ and adds one to $k$ modulo $m/r$.
+    These are the coordinates used in
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -50,6 +52,34 @@
     representative gives $pk=pk'\pmod m$, hence $k=k'\pmod{m/r}$.
     Their bounds imply $k=k'$. There are $r(m/r)=m$ pairs of coordinates,
     so this injective map to the $m$ residues is also surjective.
+    Since $m$ divides $p(m/r)$, reducing $k+1$ modulo $m/r$ does not
+    change $\alpha+p(k+1)$ modulo $m$.
+\end{proof}
+
+\begin{theorem}[Orbit roots as consecutive products]
+    \label{thm:periodic_orbit_phase_products}
+    \lean{Fin.exists_stepOrbit_phases}
+    \leanok
+    \uses{thm:periodic_step_coordinates}
+    Let $G$ be an abelian group, $m>0$, $p\ge0$, $r=\gcd(m,p)$,
+    and $q=m/r$. Suppose $c_\alpha\in G$ satisfies $c_\alpha^q=1$
+    for every $0\le\alpha<r$. There are $b_u\in G$, indexed modulo
+    $m$, such that
+    \begin{align}
+        \prod_{j=0}^{p-1}b_{u+j} & = c_{\alpha_u}.
+        \label{eq:periodic_orbit_phase_product}
+    \end{align}
+    For $G=U(1)$, these are the local phases in
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_step_coordinates}
+    Put $f_u=c_{\alpha_u}^{k_u}$ and $b_u=f_{u+1}/f_u$.
+    The coordinate shift and $c_\alpha^q=1$ give
+    $f_{u+p}=c_{\alpha_u}f_u$, including when $k_u=q-1$.
+    The product telescopes to $f_{u+p}/f_u=c_{\alpha_u}$,
+    proving~(\ref{eq:periodic_orbit_phase_product}).
 \end{proof}
 
 \begin{definition}[Sector rephasing]
@@ -103,6 +133,37 @@
     Put $U=\sum_uc_uP_u$. Orthogonality gives
     $U^\dagger U=\sum_u|c_u|^2P_u=\Id$. Since $A'^i=UA^i$,
     $\sum_i(A'^i)^\dagger A'^i=\sum_i(A^i)^\dagger U^\dagger UA^i=\Id$.
+\end{proof}
+
+\begin{theorem}[A left-canonical tensor with prescribed orbit phases]
+    \label{thm:periodic_orbit_phase_tensor}
+    \lean{MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases}
+    \leanok
+    \uses{thm:periodic_step_coordinates, def:periodic_sector_rephasing}
+    Let $A$ be left canonical and $m>0$. Suppose the Hermitian projections
+    $P_u$ satisfy $P_uP_v=\delta_{uv}P_u$, $\sum_uP_u=\Id$, and
+    $P_uA^i=A^iP_{u+1}$. Let $p\ge0$, $r=\gcd(m,p)$, and
+    $c_\alpha^{m/r}=1$. There is a left-canonical tensor $A'$ such that,
+    for every word $w$ of length $p$,
+    \begin{align}
+        A'^w & = \sum_u c_{\alpha_u}P_uA^w.
+        \label{eq:periodic_orbit_phase_tensor}
+    \end{align}
+    This is the rephasing identity in
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_orbit_phase_products,
+        thm:periodic_sector_rephasing_words,
+        thm:periodic_sector_rephasing_left_canonical}
+    Since $m/r>0$, each root $c_\alpha$ has modulus one. Apply
+    Theorem~\ref{thm:periodic_orbit_phase_products} in $U(1)$ to obtain
+    unit phases $b_u$, and set $A'^i=\sum_ub_uP_uA^i$.
+    Theorem~\ref{thm:periodic_sector_rephasing_left_canonical} gives left
+    canonicality. Substituting~(\ref{eq:periodic_orbit_phase_product}) into
+    (\ref{eq:periodic_sector_rephasing_words}) gives
+    (\ref{eq:periodic_orbit_phase_tensor}).
 \end{proof}
 
 \begin{theorem}[The tensor $C$ associated to a refinement witness]
