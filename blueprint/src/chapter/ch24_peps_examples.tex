@@ -129,6 +129,13 @@ matrix product operator on the virtual level.
 
 \subsection{The GHZ state}
 
+The two-dimensional GHZ state is a superposition of the $d$ constant
+spin configurations \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
+All bonds are contracted periodically. Separate horizontal and vertical
+assignments of bond indices retain the self-loops and parallel bonds at small lattice sizes.
+The simple-graph representation requires $w,h\ge2$
+\cite{gap:rmp_peps_examples_small_torus}.
+
 \begin{definition}[Two-dimensional GHZ tensor]%
     \label{def:peps_ghz_tensor}
     \lean{TNLean.PEPS.ghzSiteTensor, TNLean.PEPS.ghzPEPS}
@@ -141,13 +148,22 @@ matrix product operator on the virtual level.
 
 \begin{theorem}[The GHZ PEPS is the GHZ state]%
     \label{thm:peps_ghz_state}
-    \lean{TNLean.PEPS.stateCoeff_ghzPEPS}
+    \lean{TNLean.PEPS.sum_prod_ghzSiteTensor, TNLean.PEPS.stateCoeff_ghzPEPS}
     \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff}
-    On every torus with $w,h\ge 2$ the GHZ PEPS generates the unnormalized
-    GHZ state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$: its coefficient at
-    $\sigma$ is $\sum_{i}\prod_{v}\delta_{\sigma(v),i}$
+    \uses{def:peps_ghz_tensor, def:peps_stateCoeff,
+        lem:peps_torus_site_tensor_contraction}
+    On every torus with $w,h\ge1$, the GHZ tensor generates the unnormalized
+    state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$
     \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
+    With horizontal and vertical assignments of bond indices $h_{(x,y)},v_{(x,y)}$ as in
+    Lemma~\ref{lem:peps_torus_site_tensor_contraction}, its coefficient is
+    \begin{align}
+        \sum_{h,v}\prod_{(x,y)}
+        A^{\sigma(x,y)}_{v_{(x,y)},h_{(x,y)},v_{(x,y-1)},h_{(x-1,y)}}
+         & = \sum_i\prod_{(x,y)}\delta_{\sigma(x,y),i}.
+        \label{eq:peps_ghz_periodic_contraction}
+    \end{align}
+    For $w,h\ge2$, the simple-graph GHZ PEPS has the same coefficients.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -159,6 +175,53 @@ matrix product operator on the virtual level.
     Lemma~\ref{lem:peps_torus_shift_const}. Every edge is then labelled by
     that constant, so exactly one virtual configuration contributes when
     $\sigma$ is constant and none otherwise.
+\end{proof}
+
+\begin{theorem}[Non-injectivity of the GHZ PEPS]
+    \label{thm:peps_ghz_not_injective}
+    \lean{TNLean.PEPS.ghzSiteTensor_not_linearIndependent,
+        TNLean.PEPS.ghzPEPS_not_isVertexInjective}
+    \leanok
+    \uses{def:peps_ghz_tensor, def:IsVertexInjective}
+    For $d\ge2$, the four-leg GHZ tensor is not injective.
+    For $d\ge2$ and $w,h\ge2$, the simple-graph GHZ PEPS is not vertex-injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
+    The four-leg basis vector with labels $(0,1,0,0)$ has zero image.
+    In the simple graph, give the right bond at one vertex label $1$
+    and every other incident bond label $0$. The top and right bonds are distinct,
+    so no physical label can agree with both. This virtual basis
+    vector is mapped to zero.
+\end{proof}
+
+\begin{theorem}[On-site permutations and their virtual action]
+    \label{thm:peps_ghz_permutation}
+    \lean{TNLean.PEPS.ghzSiteTensor_perm, TNLean.PEPS.ghzSiteTensor_add,
+        TNLean.PEPS.sum_prod_ghzSiteTensor_perm,
+        TNLean.PEPS.stateCoeff_ghzPEPS_perm, TNLean.PEPS.stateCoeff_ghzPEPS_add}
+    \leanok
+    \uses{def:peps_ghz_tensor, def:peps_stateCoeff, thm:peps_ghz_state}
+    Every permutation $\pi$ of the $d$ labels acts on the GHZ site tensor by
+    \begin{align}
+        A^{\pi(i)}_{\pi(\alpha)\pi(\beta)\pi(\gamma)\pi(\delta)}
+         & = A^i_{\alpha\beta\gamma\delta}.
+    \end{align}
+    For every positive $w,h$, the contraction in
+    (\ref{eq:peps_ghz_periodic_contraction}) is unchanged when $\sigma$
+    is replaced by $\pi\circ\sigma$. For $w,h\ge2$, the simple-graph
+    GHZ PEPS therefore satisfies $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$.
+    In particular, for $d\ge1$ the on-site $\Z_d$ shift is a symmetry,
+    and its virtual action is the same shift on every bond.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_ghz_state}
+    A permutation preserves equality of the five labels in the site
+    tensor. Reindexing the sum over constant configurations in
+    Theorem~\ref{thm:peps_ghz_state} proves the state identity.
+    Take $\pi(i)=i+g$ for the cyclic shift.
 \end{proof}
 
 \subsection{The cluster state}

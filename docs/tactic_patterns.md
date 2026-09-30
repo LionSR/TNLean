@@ -3492,6 +3492,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
 
+### GHZ zero-image non-injectivity witnesses — candidate
+
+- **Pattern:** choose virtual labels forcing one physical label to equal both 0 and 1,
+  then use the resulting zero basis image to disprove injectivity.
+- **Occurrences:** `ghzSiteTensor_not_linearIndependent` and
+  `ghzPEPS_not_isVertexInjective` in `TNLean/PEPS/Examples/GHZ.lean`.
+- **Count:** two occurrences in one file; below the promotion threshold.
+- **Possible abstraction:** a bridge from linear independence of the four-leg
+  site tensor to vertex injectivity of its torus realization, if another example
+  repeats the construction.
+
 ### Transposed Kronecker gauge inverses — candidate
 
 - **Pattern:** reduce block-diagonal inverse products to Kronecker products,
