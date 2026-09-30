@@ -162,11 +162,21 @@ spectral decomposition, and quantitative decay bounds.
 \end{theorem}
 
 \begin{proof}
-    Expand $Z_\rho(X)=X\rho-\tr(X\rho)\rho$ in an eigenbasis of the
-    traceless subspace. Applying $\E_A^n$ multiplies each component by
-    $\lambda_j^n$. Pairing the result with $Y$ under the trace gives the
-    coefficients $c_j$. The fixed-state contribution is exactly the product
-    of the one-point expectations subtracted in the connected correlator.
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part}
+    The matrix $Z_\rho(X)=X\rho-\tr(X\rho)\rho$ is traceless. Expanding it
+    in an eigenbasis $(v_j)$ of the traceless subspace,
+    \begin{align}
+        Z_\rho(X) & =\sum_{j=1}^{D^2-1}\gamma_j(X)\,v_j,
+        \qquad
+        \E_A^n(v_j)=\lambda_j^n v_j .
+    \end{align}
+    By Theorem~\ref{thm:connected_correlator_traceless_reduction},
+    \begin{align}
+        C(X,Y;n)
+         & =\tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right)
+        =\sum_{j=1}^{D^2-1}\gamma_j(X)\,\tr(Y v_j)\,\lambda_j^n,
+    \end{align}
+    so $c_j=\gamma_j(X)\tr(Yv_j)$.
     % The eigenbasis construction is tracked in Issue~\#1447.
 \end{proof}
 
@@ -188,11 +198,20 @@ spectral decomposition, and quantitative decay bounds.
 \end{theorem}
 
 \begin{proof}
-    The matrix $Z_\rho(X)$ is traceless, and its iterates under $\E_A$
-    agree with its iterates under $\E_A-P$. For any rate strictly above
-    the spectral radius, the powers of this complementary map satisfy a
-    geometric norm bound. The trace pairing with $Y$ is a continuous
-    linear functional, so it preserves that bound up to a constant.
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part}
+    The matrix $Z_\rho(X)$ is traceless, so $P(Z_\rho(X))=0$ and
+    $\E_A^n(Z_\rho(X))=(\E_A-P)^n(Z_\rho(X))$. The Gelfand formula yields
+    $\|(\E_A-P)^n\|\le C r^n$ for some constant $C$. By
+    Theorem~\ref{thm:connected_correlator_traceless_reduction} and the
+    Cauchy--Schwarz inequality for Hilbert--Schmidt norms,
+    \begin{align}
+        |C(X,Y;n)|
+         & =\bigl|\tr\!\bigl(Y\,(\E_A-P)^n(Z_\rho(X))\bigr)\bigr|
+        \le \|Y\|\,\|(\E_A-P)^n(Z_\rho(X))\|
+        \le \|Y\|\,C\,r^n\,\|Z_\rho(X)\|,
+    \end{align}
+    which is (\ref{eq:correlations_decay_bound}) with
+    $C_{XY}=\|Y\|\,C\,\|Z_\rho(X)\|+1$.
     In the diagonalizable case the same conclusion at the spectral radius
     follows by bounding the finite eigenbasis expansion term by term.
     % Composing these bounds for the connected correlator is tracked in Issue~\#1447.
