@@ -14,7 +14,8 @@ The three binary parameters and the three order-two restriction signs are those 
 arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex`, lines 1845–1872.
 These are explicit representatives; this module does not claim that they exhaust
 third cohomology or classify the corresponding matrix product operator phases.
-The representatives are pairwise inequivalent, and the all-ones class restricts
+The representatives are pairwise inequivalent. Their restrictions to any subgroup
+are classified by the three diagonal signs; the all-ones class restricts
 trivially only to the trivial subgroup. Compatible L-symbols force each block
 orbit to have four elements.
 
@@ -174,6 +175,68 @@ theorem kleinCocycleFamily_cohomologousTo_iff (p q r p' q' r' : ZMod 2) :
   · rintro ⟨rfl, rfl, rfl⟩
     exact CohomologousTo.refl _
 
+private theorem klein_exponent_eq_zero_of_diagonal (p q r : ZMod 2) (a b c : ZMod 2 × ZMod 2)
+    (ha : p * a.1 + q * a.2 + r * a.1 * a.2 = 0)
+    (hb : p * b.1 + q * b.2 + r * b.1 * b.2 = 0)
+    (hc : p * c.1 + q * c.2 + r * c.1 * c.2 = 0)
+    (hab : p * (a + b).1 + q * (a + b).2 + r * (a + b).1 * (a + b).2 = 0)
+    (hac : p * (a + c).1 + q * (a + c).2 + r * (a + c).1 * (a + c).2 = 0)
+    (hbc : p * (b + c).1 + q * (b + c).2 + r * (b + c).1 * (b + c).2 = 0) :
+    p * a.1 * b.1 * c.1 + q * a.2 * b.2 * c.2 + r * a.1 * b.2 * c.2 = 0 := by
+  fin_cases p <;> fin_cases q <;> fin_cases r <;> revert a b c <;> decide
+
+/-- For any subgroup, the restricted class of a Klein-four representative is
+trivial exactly when every member has positive diagonal sign. This is the
+subgroup test in arXiv:2203.12563, lines 1850–1872, allowing arbitrary fusion gauges. -/
+theorem kleinCocycleFamily_isTrivialGaugeClass_comap_iff (p q r : ZMod 2)
+    (H : Subgroup (Multiplicative (ZMod 2 × ZMod 2))) :
+    IsTrivialGaugeClass (comap H.subtype (kleinCocycleFamily p q r)) ↔
+      ∀ g : H, p * (toAdd g.val).1 + q * (toAdd g.val).2 +
+        r * (toAdd g.val).1 * (toAdd g.val).2 = 0 := by
+  constructor
+  · intro h g
+    have hg2 : g ^ 2 = 1 := by
+      apply Subtype.ext
+      change ofAdd (2 • toAdd g.val) = ofAdd 0
+      congr 1
+      ext <;> simp [show (2 : ZMod 2) = 0 from rfl]
+    have hi := cyclicInvariant_eq_one_of_isTrivialGaugeClass h hg2
+    have hd : kleinCocycleFamily p q r g g g = 1 := by
+      simpa [cyclicInvariant, Finset.prod_range_succ, comap, kleinCocycleFamily] using hi
+    exact (kleinCocycleFamily_restriction_iff p q r _ _).mp
+      ((kleinCocycleFamily_restriction_eq_one_iff p q r _ _).mpr hd)
+  · intro h
+    have he : comap H.subtype (kleinCocycleFamily p q r) = 1 := by
+      funext a b c
+      have hz := klein_exponent_eq_zero_of_diagonal p q r (toAdd a.val) (toAdd b.val) (toAdd c.val)
+        (h a) (h b) (h c) (h (a * b)) (h (a * c)) (h (b * c))
+      simp only [comap, kleinCocycleFamily, Subgroup.subtype_apply, hz,
+        ZMod.val_zero, pow_zero, Pi.one_apply]
+    rw [he]
+    exact CohomologousTo.refl _
+
+/-- The three membership tests determining all eight subgroup-table rows in
+arXiv:2203.12563, lines 1856–1872. A generator with negative diagonal sign
+cannot belong to the subgroup, and these are the only restrictions. -/
+theorem kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators (p q r : ZMod 2)
+    (H : Subgroup (Multiplicative (ZMod 2 × ZMod 2))) :
+    IsTrivialGaugeClass (comap H.subtype (kleinCocycleFamily p q r)) ↔
+      (ofAdd (1, 0) ∈ H → p = 0) ∧ (ofAdd (0, 1) ∈ H → q = 0) ∧
+        (ofAdd (1, 1) ∈ H → p + q + r = 0) := by
+  rw [kleinCocycleFamily_isTrivialGaugeClass_comap_iff]
+  constructor
+  · intro h
+    refine ⟨fun ha ↦ ?_, fun hb ↦ ?_, fun hc ↦ ?_⟩
+    · simpa using h ⟨ofAdd (1, 0), ha⟩
+    · simpa using h ⟨ofAdd (0, 1), hb⟩
+    · simpa using h ⟨ofAdd (1, 1), hc⟩
+  · rintro ⟨ha, hb, hc⟩ ⟨⟨x, y⟩, hg⟩
+    change p * x + q * y + r * x * y = 0
+    change ofAdd (x, y) ∈ H at hg
+    have hcases (z : ZMod 2) : z = 0 ∨ z = 1 := by revert z; decide
+    rcases hcases x with rfl | rfl <;>
+      rcases hcases y with rfl | rfl <;> simp_all
+
 /-- For the last row of arXiv:2203.12563, lines 1870–1888, the restricted
 cohomology class is trivial exactly on the trivial subgroup. -/
 theorem kleinCocycleFamily_one_isTrivialGaugeClass_comap_iff
@@ -184,17 +247,9 @@ theorem kleinCocycleFamily_one_isTrivialGaugeClass_comap_iff
     apply le_antisymm ?_ bot_le
     intro g hg
     change g = 1
-    have hg2 : (⟨g, hg⟩ : H) ^ 2 = 1 := by
-      apply Subtype.ext
-      change ofAdd (2 • toAdd g) = ofAdd 0
-      congr 1
-      ext <;> simp [show (2 : ZMod 2) = 0 from rfl]
-    have hi := cyclicInvariant_eq_one_of_isTrivialGaugeClass h hg2
-    have hd : kleinCocycleFamily 1 1 1 g g g = 1 := by
-      simpa [cyclicInvariant, Finset.prod_range_succ, comap, kleinCocycleFamily] using hi
-    have hz := ((kleinCocycleFamily_restriction_eq_one_iff 1 1 1
-      (toAdd g).1 (toAdd g).2).symm.trans
-      (kleinCocycleFamily_one_restriction_iff (toAdd g).1 (toAdd g).2)).mp hd
+    have hsign := (kleinCocycleFamily_isTrivialGaugeClass_comap_iff 1 1 1 H).mp h ⟨g, hg⟩
+    have hz := (kleinCocycleFamily_one_restriction_iff (toAdd g).1 (toAdd g).2).mp
+      ((kleinCocycleFamily_restriction_iff 1 1 1 (toAdd g).1 (toAdd g).2).mpr hsign)
     exact congrArg ofAdd (Prod.ext hz.1 hz.2)
   · intro h
     have he : comap H.subtype (kleinCocycleFamily 1 1 1) = 1 := by

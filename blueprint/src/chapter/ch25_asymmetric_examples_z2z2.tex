@@ -1130,14 +1130,15 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_klein_cocycle_restrictions}
+    \uses{thm:asymex_klein_cocycle_restrictions,thm:asymex_klein_subgroup_table}
     For an element $g$ of order dividing two, the cyclic product
     $\omega(g,0,g)\omega(g,g,g)$ is invariant under multiplication by a
     three-coboundary. Normalization reduces it to $\omega(g,g,g)$.
     The three signs therefore agree for cohomologous representatives;
     they recover $p$, $q$, and then $r$. Conversely, equal parameters give
     the same cocycle. If the restriction of $\omega_{111}$ to $H$ has
-    trivial class, its diagonal value is $1$ at every $g\in H$.
+    trivial class, Theorem~\ref{thm:asymex_klein_subgroup_table} gives
+    diagonal value $1$ at every $g\in H$.
     The last row has diagonal value $-1$ at every nonzero element, so
     $H=\{0\}$. On the trivial subgroup the cocycle is identically one.
 \end{proof}
@@ -1275,4 +1276,47 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     $\omega_{pqr}(g,g,g)=(-1)^{pu+qv+ruv}$ into
     Theorem~\ref{thm:asymex_l_symbol_normalization}, using $u^2=u$ and
     $v^2=v$ in $\Z_2$.
+\end{proof}
+
+\begin{theorem}[Trivial restrictions of all Klein-four representatives]
+    \label{thm:asymex_klein_subgroup_table}
+    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family}
+    Let $H\leq\Z_2^2$, with $a=(1,0)$ and $b=(0,1)$.
+    The restriction of $\omega_{pqr}$ to $H$ represents the trivial
+    cohomology class if and only if $pu+qv+ruv=0$ for every $(u,v)\in H$.
+    Equivalently, $H$ must avoid precisely the elements in the right column:
+    \begin{center}
+        \begin{tabular}{c|c}
+            $(p,q,r)$ & forbidden elements of $H$ \\
+            \hline
+            $(0,0,0)$ & none                      \\
+            $(1,0,0)$ & $a,ab$                    \\
+            $(0,1,0)$ & $b,ab$                    \\
+            $(1,1,0)$ & $a,b$                     \\
+            $(0,0,1)$ & $ab$                      \\
+            $(0,1,1)$ & $b$                       \\
+            $(1,0,1)$ & $a$                       \\
+            $(1,1,1)$ & $a,b,ab$
+        \end{tabular}
+    \end{center}
+    This gives the subgroup restrictions in
+    \cite[Section~6]{GarreRubio2023MPOSym}, including arbitrary changes
+    of fusion gauge.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_cocycle_restrictions,thm:mpug_cyclic_invariant_gauge}
+    If the restricted class is trivial, its cyclic invariant at every
+    element of $H$ is one. Since each element has square equal to the
+    identity and the representative is normalized, this invariant is
+    $\omega_{pqr}(g,g,g)$; hence $pu+qv+ruv=0$.
+    Conversely, the binary coordinate calculation shows that vanishing
+    at $g,h,k,gh,gk,hk$ forces the exponent in
+    $\omega_{pqr}(g,h,k)$ to vanish. Subgroup closure therefore makes
+    the entire restriction identically one.
+    Testing the identity and the three nonidentity elements gives the table.
 \end{proof}
