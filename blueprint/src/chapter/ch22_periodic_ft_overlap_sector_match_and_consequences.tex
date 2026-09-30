@@ -815,3 +815,65 @@
     Theorem~\ref{thm:repeated_blocks_period_eq} gives $m_j=n_{\pi(j)}$ for every
     matched pair.
 \end{proof}
+
+\begin{theorem}[Proportional periodic blocks]
+    \label{thm:periodic_proportional_single_block}
+    \lean{MPSTensor.hetRepeatedBlocks_of_nonzeroProportionalMPV₂,
+        MPSTensor.MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic,
+        MPSTensor.IsPeriodic.isSpectrallyPeriodic}
+    \leanok
+    \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv}
+    Let $A$ and $B$ be spectrally periodic blocks. If their matrix product
+    vectors are proportional by a nonzero scalar at every positive length,
+    then $A$ and $B$ are repeated blocks. In particular, this holds when
+    $V_N(B)=\zeta^N V_N(A)$ for a fixed $\zeta\ne0$.
+    Left-canonical periodic blocks satisfy the spectral-radius-one
+    hypothesis automatically.
+    This is the single-block case of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_ft_proportional_supplied_periods}
+    Regard each tensor as a one-block decomposition with one copy of
+    weight one. Theorem~\ref{thm:periodic_ft_proportional_supplied_periods}
+    matches the two blocks. A left-canonical tensor defines a
+    trace-preserving completely positive map, whose spectral radius is one.
+\end{proof}
+
+\begin{theorem}[Unitary matching of periodic phase classes]
+    \label{thm:periodic_phase_class_unitary_match}
+    \lean{MPSTensor.exists_unitary_conj_of_isPeriodic_of_hetRepeatedBlocks,
+        MPSTensor.MPVPhaseClassData.not_hetRepeatedBlocks,
+        MPSTensor.MPVPhaseClassData.periodic_unitary_match}
+    \leanok
+    \uses{def:periodic_tensor}
+    Let $A_k$ be a finite family of left-canonical periodic tensors, with
+    bond dimensions $D_k$ and periods $m_k$. Partition the family by the
+    relation $V_N(A_l)=\zeta^N V_N(A_k)$ at every positive length for some
+    $\zeta\ne0$. Choose one representative $r_j$ in each class and enumerate
+    its members as $e(j,q)$.
+    Distinct representatives are not repeated. Each member has
+    $D_{e(j,q)}=D_{r_j}$ and $m_{e(j,q)}=m_{r_j}$, and admits a unitary
+    matrix $U_{j,q}$ and a scalar $\xi_{j,q}$ of modulus one such that
+    \begin{align}
+        \label{eq:periodic_phase_class_unitary}
+        A_{e(j,q)}^i
+        =\xi_{j,q}U_{j,q}A_{r_j}^iU_{j,q}^{\dagger}.
+    \end{align}
+    More generally, any two repeated left-canonical periodic blocks admit
+    such a unitary similarity. These are the blockwise identifications in
+    \cite[Section~2.1 and the paragraph following Theorem~3.4]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_proportional_single_block,thm:repeated_blocks_period_eq,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    Theorem~\ref{thm:periodic_proportional_single_block} makes each member
+    repeated with its representative, giving equal dimensions and periods.
+    Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    replaces the similarity by a unitary matrix while keeping its phase.
+    Repeated representatives would have the same matrix-product-vector
+    phase class, contrary to their choice.
+\end{proof}
