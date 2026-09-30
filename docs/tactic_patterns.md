@@ -2339,6 +2339,9 @@ abstracted — record why, so it is not re-proposed).
   equality tests with `split_ifs` and `simp_all`.
 - **Seen:** the direct identity, unblocked third-family, and swap-transformed
   witnesses in `TNLean/MPS/MPU/Examples/ShiftStandardForms.lean`.
+- **Normalization:** the unblocked third family and transformed second family
+  also evaluate Gram sums after the same bond reindexing, with reciprocal
+  square-root scalings. Both occurrences remain in this one module.
 - **Decision:** the two blocked families now use normalized source factors and
   the shared open-contraction theorem instead. Keep the remaining explicit
   gate-specific expansions while the pattern is confined to one module; if

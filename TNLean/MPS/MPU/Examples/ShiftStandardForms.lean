@@ -307,13 +307,17 @@ noncomputable def shiftExampleTildeU₂StandardForm (d : ℕ) [NeZero d] :
     TwoSiteStandardFormData (shiftExampleTildeU₂ d)
       (1 : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (Matrix.swapMatrix d) := by
   classical
+  let c : ℂ := Real.sqrt d
+  have hc : c ≠ 0 := by
+    dsimp [c]
+    exact_mod_cast (Real.sqrt_pos.2 (Nat.cast_pos.mpr (NeZero.pos d))).ne'
   refine {
     phys_pos := NeZero.pos d
     bond_pos := Nat.mul_pos (NeZero.pos d) (NeZero.pos d)
     left_pos := NeZero.pos d
     right_pos := NeZero.pos d
-    X₁ := fun i r => if i.2.divNat = i.1 ∧ i.2.modNat = r then 1 else 0
-    X₂ := fun i l => if i.1.divNat = l ∧ i.1.modNat = i.2 then 1 else 0
+    X₁ := fun i r => if i.2.divNat = i.1 ∧ i.2.modNat = r then c else 0
+    X₂ := fun i l => if i.1.divNat = l ∧ i.1.modNat = i.2 then c⁻¹ else 0
     u_unitary := ⟨by simp [Matrix.IsIsometry], by simp [Matrix.IsCoisometry]⟩
     v_unitary := Matrix.swapMatrix_isUnitaryBetween d
     v_apply := ?_
@@ -322,11 +326,48 @@ noncomputable def shiftExampleTildeU₂StandardForm (d : ℕ) [NeZero d] :
   · intro i₁ i₂ r l
     rw [← Equiv.sum_comp finProdFinEquiv]
     simp [Matrix.swapMatrix, Fintype.sum_prod_type, ite_and, eq_comm]
+    split_ifs <;> simp_all
   · intro i j α γ
     rw [shiftExampleTildeU₂, ketLeftMul_shiftPhysicalSwap_apply]
     simp [shiftExampleU₂, tensorProduct, rightShiftTensor, leftShiftTensor,
       physicalAdjointTensor, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
       Matrix.single, Matrix.one_apply, Prod.mk.injEq, ite_and, eq_comm]
     split_ifs <;> simp_all
+
+/-- The swap-transformed identity family retains the normalized half factors.
+Source: CPSV17, `SFu1u3`, lines 2090–2099. -/
+theorem shiftExampleTildeU₁StandardForm_normalized (d : ℕ) [NeZero d] :
+    (shiftExampleTildeU₁StandardForm d).X₁.IsIsometry ∧
+      (shiftExampleTildeU₁StandardForm d).X₂.IsIsometry :=
+  shiftExampleU₁StandardForm_normalized d
+
+/-- The swap-transformed second family has normalized half factors with trace-one bond weight.
+Source: CPSV17, `Y1Y1X1X1` and `SFu1u3`, lines 2090–2099. -/
+theorem shiftExampleTildeU₂StandardForm_normalized (d : ℕ) [NeZero d] :
+    let T := shiftExampleTildeU₂StandardForm d
+    T.X₁ᴴ * sourceWeight (d := d) (shiftPaperWeightSquared d) * T.X₁ = 1 ∧
+      T.X₂.IsIsometry := by
+  have hw : sourceWeight (d := d) (shiftPaperWeightSquared d) =
+      ((d : ℂ)⁻¹ * (d : ℂ)⁻¹) • (1 : Matrix (Fin d × Fin (d * d)) _ ℂ) := by
+    simp [sourceWeight, shiftPaperWeightSquared, shiftPaperWeight, Matrix.kronecker_smul]
+  have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
+  have hs : (Real.sqrt d : ℂ) * (Real.sqrt d : ℂ) = (d : ℂ) := by
+    exact_mod_cast Real.mul_self_sqrt (Nat.cast_nonneg d : (0 : ℝ) ≤ d)
+  constructor
+  · rw [hw, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul]
+    ext r t
+    simp only [Matrix.smul_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+      Fintype.sum_prod_type]
+    simp_rw [← Equiv.sum_comp finProdFinEquiv]
+    simp [shiftExampleTildeU₂StandardForm, Fintype.sum_prod_type, Matrix.one_apply,
+      ite_and, mul_ite, eq_comm]
+    split_ifs <;> simp_all [mul_assoc]
+  · change (shiftExampleTildeU₂StandardForm d).X₂ᴴ * (shiftExampleTildeU₂StandardForm d).X₂ = 1
+    ext r t
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Fintype.sum_prod_type]
+    rw [← Equiv.sum_comp finProdFinEquiv]
+    simp [shiftExampleTildeU₂StandardForm, Fintype.sum_prod_type, Matrix.one_apply,
+      ite_and, mul_ite, eq_comm]
+    split_ifs <;> simp_all [Complex.ofReal_sqrt_inv_mul_self, Nat.cast_nonneg]
 
 end MPOTensor

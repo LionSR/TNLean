@@ -11060,22 +11060,22 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{threeMPU, def:mpu_weighted_source_factors}
     For $d>0$, the two counterpropagating shift tensors have source factors
-    with trace-one weight $\rho=d^{-2}I_{d^2}$. In the four-spin coordinates
+    with trace-one weight $\rho=d^{-2}\Id_{d^2}$. In the four-spin coordinates
     used above, their source gates are
     \begin{align}
-        u_2 & = I\otimes\mathbb S\otimes I,
-            & v_2                                                        & = (\mathbb S\otimes\mathbb S)(I\otimes\mathbb S\otimes I), \\
-        u_3 & = (I\otimes\mathbb S\otimes I)(\mathbb S\otimes\mathbb S),
-            & v_3                                                        & = I\otimes\mathbb S\otimes I.
+        u_2 & = \Id\otimes\mathbb S\otimes \Id,
+            & v_2                                                            & = (\mathbb S\otimes\mathbb S)(\Id\otimes\mathbb S\otimes \Id), \\
+        u_3 & = (\Id\otimes\mathbb S\otimes \Id)(\mathbb S\otimes\mathbb S),
+            & v_3                                                            & = \Id\otimes\mathbb S\otimes \Id.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:threeMPU_U2_supplied_source_gates_two,
+    \uses{def:threeMPU_supplied_source_factors, thm:threeMPU_U2_supplied_source_gates_two,
         thm:threeMPU_U3_supplied_source_gates_two}
     Starting with the identity-weight source factors, replace
     $X_1,Y_1,Z_1$ by $dX_1,d^{-1}Y_1,dZ_1$, respectively, and leave the
     second cut unchanged. The cut factorizations and right inverses are
-    preserved, while the first weighted isometry now uses $d^{-2}I_{d^2}$.
+    preserved, while the first weighted isometry now uses $d^{-2}\Id_{d^2}$.
     The source gates scale by $d^{-1}$ and $d$, cancelling the reciprocal
     factors in the identity-weight formulas.
 \end{proof}
@@ -11111,7 +11111,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{proposition}
 
 \begin{proof}\leanok
-    \uses{thm:threeMPU_normalized_source_gates,
+    \uses{def:mpu_source_weight, thm:threeMPU_normalized_source_gates,
         thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity}
     For the identity family, take
     $X_1(i,\gamma;r)=\delta_{i,r}$ and
@@ -11121,14 +11121,27 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         X_2((a,b),i;\ell) & =d^{-1/2}\delta_{a,i}\delta_{b,\ell}.
     \end{align}
     The reciprocal scalars cancel in both contractions. Summing the Gram
-    entries proves $X_1^*(I\otimes\rho)X_1=I$ and $X_2^*X_2=I$, with
-    $\rho=d^{-2}I_{d^2}$ for the third family and $\rho=1$ for the identity.
+    entries proves $X_1^*(\Id\otimes\rho)X_1=\Id$ and $X_2^*X_2=\Id$, with
+    $\rho=d^{-2}\Id_{d^2}$ for the third family and $\rho=1$ for the identity.
     For the two blocked families, use the trace-normalized source factors
     of Theorem~\ref{thm:threeMPU_normalized_source_gates}, relabeling the
-    intermediate coordinates by pairs of spin indices. The source-factor
-    contraction theorem gives the open equation, and the four-spin permutation
-    matrices are unitary. The coordinate relabeling preserves both normalization
-    identities.
+    intermediate coordinates by pairs of spin indices. Write
+    $e_L:\{0,\ldots,d^2-1\}\to L$ and
+    $e_R:\{0,\ldots,d^2-1\}\to R$ for these bijections, obtained by
+    $\ell\leftrightarrow(a,b)$ and $r\leftrightarrow(c,e)$ and the
+    source-factor rank identifications. The open contraction becomes
+    \begin{align}
+        \sum_{p\in L}\sum_{q\in R}
+        X_2(\alpha,i_1;p)u(p,q;j_1,j_2)X_1(i_2,\gamma;q)
+         & =\sum_{\ell=0}^{d^2-1}\sum_{r=0}^{d^2-1}
+        X_2(\alpha,i_1;e_L(\ell))u(e_L(\ell),e_R(r);j_1,j_2)
+        X_1(i_2,\gamma;e_R(r)).
+        \notag
+    \end{align}
+    Thus the source-factor contraction theorem gives the open equation
+    in the displayed coordinates. The four-spin permutation matrices are
+    unitary, and the same bijections preserve both Gram sums and hence
+    both normalization identities.
 \end{proof}
 
 \begin{definition}[Transformation with swaps]
@@ -11233,7 +11246,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{theorem}[Standard forms of the swap-transformed shifts]
     \label{thm:threeMPU2_remaining_formulas}
     \lean{MPOTensor.shiftExampleTildeU₁StandardForm,
-        MPOTensor.shiftExampleTildeU₂StandardForm}
+        MPOTensor.shiftExampleTildeU₂StandardForm,
+        MPOTensor.shiftExampleTildeU₁StandardForm_normalized,
+        MPOTensor.shiftExampleTildeU₂StandardForm_normalized}
     \leanok
     \uses{threeMPU2, def:mpu_supplied_two_site_standard_form}
     For $d>0$, the first two transformed families have standard forms
@@ -11248,15 +11263,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{threeMPU2, prop:threeMPU_standard_forms,
-        def:mpu_supplied_two_site_standard_form}
+        def:mpu_source_weight, def:mpu_supplied_two_site_standard_form}
     The physical swap exchanges the two output indices of each tensor.
     For the first family, retain the identity family's half factors and
     replace its unshifted gate by the swap. For the second family, choose
-    $X_1(i,(a,b);r)=\delta_{a,i}\delta_{b,r}$ and
-    $X_2((a,b),i;\ell)=\delta_{a,\ell}\delta_{b,i}$.
+    $X_1(i,(a,b);r)=\sqrt d\,\delta_{a,i}\delta_{b,r}$ and
+    $X_2((a,b),i;\ell)=d^{-1/2}\delta_{a,\ell}\delta_{b,i}$.
     Their contraction gives the shifted swap gate, while inserting the
     unshifted identity gate recovers the transformed tensor.
-    Both gates are unitary.
+    Both gates are unitary. The reciprocal scalars cancel in the
+    contractions; their Gram sums give the weighted normalization of
+    $X_1$ for $\rho=d^{-2}\Id$ and the isometry of $X_2$.
 \end{proof}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
