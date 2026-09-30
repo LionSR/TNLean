@@ -54,6 +54,49 @@ matrix~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
     one-by-one identity, whose trace is that scalar.
 \end{proof}
 
+By Theorem~\ref{thm:mpdo_onsite_mpo}, strong on-site symmetry with
+eigenvalue $\lambda_g^{(L)}$ is the following identity of periodic
+contractions, in which the upper row is the bond dimension one tensor with
+entries $(U_g)_{ij}$.
+\begin{tenkzequation}
+    % Formula: U_g^{\otimes L} rho^{(L)}(M) = lambda_g^{(L)} rho^{(L)}(M).
+    % Source: Definition of on-site symmetry above and the preceding theorem,
+    %   which identifies U_g^{\otimes L} with the periodic operator of the
+    %   bond dimension one tensor with entries (U_g)_{ij}.
+    % Ink-to-index map: the upper row is that tensor, its closed horizontal
+    %   row the trivial one-dimensional bond; the lower row is M, closed
+    %   periodically.  At site l the vertical bond is the summed index
+    %   joining the column index of U_g to the row index of rho^{(L)}, while
+    %   the row index i_l of the product and its column index j_l remain
+    %   open.  The elided columns contract like the displayed
+    %   ones; the left panel authors its bonds so that the ellipsis column
+    %   carries no vertical stroke.
+    % Boundary signature (virtual-west | virtual-east | physical-up |
+    %   physical-down) = (0 | 0 | L | L) on both sides; each three-site
+    %   representative emits (0 | 0 | 3 | 3).
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=4, west=trace, east=trace, bonds=none]
+        \tn[skin=box, ports={90:physical:$i_1$, 270:physical}]{U_g} &
+        \tn[skin=box, ports={90:physical:$i_2$, 270:physical}]{U_g} &
+        \tn[skin=dots]{} &
+        \tn[skin=box, ports={90:physical:$i_L$, 270:physical}]{U_g} \\
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_1$}]{M} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_2$}]{M} &
+        \tn[skin=dots]{} &
+        \tn[skin=mpo, ports={90:physical, 270:physical:$j_L$}]{M}
+        \tnwire{(1,1)}{(1,2)} \tnwire{(1,2)}{(1,3)} \tnwire{(1,3)}{(1,4)}
+        \tnwire{(2,1)}{(2,2)} \tnwire{(2,2)}{(2,3)} \tnwire{(2,3)}{(2,4)}
+        \tnwire{(1,1)}{(2,1)} \tnwire{(1,2)}{(2,2)} \tnwire{(1,4)}{(2,4)}
+    \end{tenkz}
+    \quad$=\lambda_g^{(L)}$\quad
+    \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$i_1$, 270:physical:$j_1$}]{M} &
+        \tn[skin=mpo, ports={90:physical:$i_2$, 270:physical:$j_2$}]{M} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$i_L$, 270:physical:$j_L$}]{M}
+    \end{tenkz}
+\end{tenkzequation}
+
 \begin{theorem}[Strong symmetry implies weak symmetry]\label{thm:mpdo_strong_implies_weak}
     \lean{Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose,
         Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary,
@@ -151,6 +194,55 @@ matrix~\cite{gap:sun25_mpdo_symmetry_boundary_scope}.
         =|\zeta_g|^{2L}\rho$, and comparing traces gives $|\zeta_g|^{2L}=1$
     whenever $\rho\neq 0$.
 \end{proof}
+
+The two local conditions of
+Theorem~\ref{thm:mpdo_symmetry_local_conditions} read diagrammatically as
+follows, the first for strong and the second for weak symmetry.
+\begin{tenkzequation}
+    % Formulas: sum_j (U_g)_{ij} A^{(j,k)} = zeta_g X_g A^{(i,k)} X_g^{-1}
+    %   (left pair) and
+    %   sum_{j,l} (U_g)_{ij} (V_g)_{kl} A^{(j,l)}
+    %     = zeta_g X_g A^{(i,k)} X_g^{-1}   (right pair).
+    % Source: the local conditions stated in this theorem, the MPDO form of
+    %   the dilation criteria of de Groot, Turzillo and Schuch.
+    % Ink-to-index map: A is the purifying tensor, its upper leg the spin
+    %   index and its lower leg the ancilla index; its horizontal legs are
+    %   the two virtual indices.  U_g sits on the spin leg, and the bond
+    %   between U_g and A is the summed index j.  In the weak condition V_g
+    %   sits on the ancilla leg, and the bond between A and V_g is the summed
+    %   index l.  On each right-hand side the rings X_g and X_g^{-1} act on
+    %   the virtual legs, and zeta_g is a scalar.
+    % Contracted legs: j (and l); open legs: i, k and the two virtual legs.
+    % Boundary signature (virtual-west | virtual-east | physical-up |
+    %   physical-down) = (1 | 1 | 1 | 1) on all four panels.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op}, cols=1]
+        \tn[skin=box, ports={90:physical:$i$, 270:physical}]{U_g} \\
+        \tn[skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical:$k$}]{A}
+    \end{tenkz}
+    \quad$=\zeta_g$\quad
+    \begin{tenkz}[cols=3]
+        \tn[skin=ring, ports={180:virtual, 0:virtual}]{X_g} &
+        \tn[skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical:$i$, 270:physical:$k$}]{A} &
+        \tn[skin=ring, ports={180:virtual, 0:virtual}]{X_g^{-1}}
+    \end{tenkz}
+    \qquad\qquad
+    \begin{tenkz}[rows={op,op,op}, cols=1]
+        \tn[skin=box, ports={90:physical:$i$, 270:physical}]{U_g} \\
+        \tn[skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical, 270:physical}]{A} \\
+        \tn[skin=box, ports={90:physical, 270:physical:$k$}]{V_g}
+    \end{tenkz}
+    \quad$=\zeta_g$\quad
+    \begin{tenkz}[cols=3]
+        \tn[skin=ring, ports={180:virtual, 0:virtual}]{X_g} &
+        \tn[skin=mpo,
+            ports={180:virtual, 0:virtual, 90:physical:$i$, 270:physical:$k$}]{A} &
+        \tn[skin=ring, ports={180:virtual, 0:virtual}]{X_g^{-1}}
+    \end{tenkz}
+\end{tenkzequation}
 
 \begin{theorem}[Strong symmetry with a normal purification]\label{thm:mpdo_strong_symmetry_normal_purification}
     \lean{MPOTensor.spinTwist,
