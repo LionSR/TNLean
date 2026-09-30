@@ -56,8 +56,6 @@ compression theorem.
 
 * `Z3Anomalous.defectSquare_trace_evalWord`, `Z3Anomalous.mpo_defect_mul_defect`: the identity
   `A² = 3A`, at the level of word traces and of periodic operators.
-* `Z3Anomalous.defectSquare_compression`: the
-  nine biorthogonal compression pairs.
 * `Z3Anomalous.defectSquare_dim_eq`: the dimension count `25 = 15 + 10`.
 * `Z3Anomalous.defectSquare_eq_blockDiagonal`: the square is block diagonal over the nine pairs.
 * `Z3Anomalous.defectSquare_evalWord_remainder_eq_zero`,

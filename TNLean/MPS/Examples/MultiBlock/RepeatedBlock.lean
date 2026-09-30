@@ -37,7 +37,6 @@ source.
   `repB` onto the two copies of `repA`.
 * `MPSTensor.repB_trace_evalWord_eq_two_mul`: the word-trace identity for `repB`, specializing
   `MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum`.
-* `MPSTensor.repeatedBlock_compression`: the biorthogonal compression pair for each copy.
 * `MPSTensor.not_gaugeEquiv_directSum_repA`: no invertible gauge conjugates `repB` into the
   direct sum `A ⊕ A`.
 -/

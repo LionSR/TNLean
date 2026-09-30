@@ -34,8 +34,6 @@ slots.
   multi-block trace theorem (`MultiBlockTrace`) with four target slots and three zero slots.
 * `CZXCompression.czxPlusIdentity_trace_evalWord`: the word-trace identity
   `O_L² = (1 + (-1)^L) id + 2 U_L`.
-* `CZXCompression.czxPlusIdentity_compression`: the biorthogonal compression pair of each of
-  the four slots.
 * `CZXCompression.czxPlusIdentity_dim_eq`: the dimension count `9 = 1 + 1 + 2 + 2 + 3`.
 * `CZXCompression.czxPlusIdentity_evalWord_remainder_eq_zero`: the remainder of the
   compression is nilpotent of length seven.

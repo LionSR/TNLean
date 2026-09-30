@@ -86,7 +86,6 @@ exact arithmetic over that ring and then transported to the complex matrices alo
   `O_τ O_τ = O_1 + O_τ`.
 * `FibonacciCompression.fibonacci_fusion_rule`: the same fusion rule as an identity of periodic
   operators at every positive system size.
-* `FibonacciCompression.fibonacci_compression`: the biorthogonal compression pair of each block.
 * `FibonacciCompression.fibonacci_dim_eq`: the dimension count `9 = 2 + 3 + 4`.
 * `FibonacciCompression.fibonacci_remainder_eq_zero`: the remainder vanishes, so the extension
   splits.

@@ -44,7 +44,7 @@ identities of the representation at every positive length: `U U† = U† U = 1`
 
 * `Z3Anomalous.ud_trace_evalWord`, `Z3Anomalous.du_trace_evalWord`: the word-trace form of the
   fusion rules `U U† = 1` and `U† U = 1`.
-* `Z3Anomalous.ud_compression`, `Z3Anomalous.ud_left_eq`, `Z3Anomalous.ud_right_eq` and their
+* `Z3Anomalous.ud_left_eq`, `Z3Anomalous.ud_right_eq` and their
   `du` siblings: the explicit biorthogonal compression pairs.
 * `Z3Anomalous.ud_evalWord_remainder_eq_zero`, `Z3Anomalous.ud_remainder_mul_ne_zero` and their
   `du` siblings: the remainders are nilpotent of order exactly three.
