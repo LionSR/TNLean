@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
+import TNLean.Algebra.KleinCocycleCompleteness
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Exact
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Split
@@ -27,8 +27,8 @@ that of Franco Rubio, Bochniak, Cirac (arXiv:2502.20257), display preceding `eq:
 defined for the full group. For every choice of fusion tensors and every `g`, its cyclic
 invariant `ω(g,e,g) ω(g,g,g)` equals that of `(−1)^{a₁ b₂ c₂}`: `+1` at `x = (1,0)` and
 `y = (0,1)`, and `−1` at `xy = (1,1)`. In a normalized gauge `ω(g,e,g) = 1`, so these are the
-values `(ω_a, ω_b, ω_ab) = (+1, +1, −1)` of the table. In particular the anomaly class is
-nontrivial for every choice of fusion tensors.
+values `(ω_a, ω_b, ω_ab) = (+1, +1, −1)` of the table. The complete Klein classification
+identifies the class with `kleinCocycle` for every choice of fusion tensors.
 
 The cyclic invariant at `f a` is computed on the restriction along a homomorphism
 `f : ℤ₂ →* ℤ₂ × ℤ₂` (`MPOTensor.GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq`).
@@ -41,11 +41,10 @@ trees of the triple product of the generator then agree against every nonempty w
 sign `+1` for `x` and `−1` for `xy`; the restriction to `{e, y}` has bond dimension one and
 trivial three-cochain.
 
-**Scope restriction (detector values):** the statements identify the gauge-invariant values
-`ω(g,e,g) ω(g,g,g)` at the three elements of order two with those of `(−1)^{a₁ b₂ c₂}`. That
-these values separate the eight classes, which would give `CohomologousTo fd.omega kleinCocycle`,
-is stated in the source (the sentence before the table at line 1856) but not formalized here.
-Documented in `docs/paper-gaps/glm23_z2z2_anomaly_detector_scope.tex`.
+**Scope restriction (dressed family):** the class identification concerns the exact dressed
+family `kleinFamily`. It does not assign a class to the original odd-ring projective family,
+or compare its even-ring restriction with the dressed representation. The detector-separation
+step is resolved in `docs/paper-gaps/glm23_z2z2_anomaly_detector_scope.tex`.
 
 ## Main definitions
 
@@ -56,6 +55,7 @@ Documented in `docs/paper-gaps/glm23_z2z2_anomaly_detector_scope.tex`.
 
 ## Main results
 
+* `Z2Z2Condensation.omega_cohomologousTo_kleinCocycle`: every fusion choice has the type-II class.
 * `Z2Z2Condensation.cyclicInvariant_omega_kleinFamily`: for every choice of fusion tensors,
   the cyclic invariant at every `g` equals that of `kleinCocycle`.
 * `Z2Z2Condensation.cyclicInvariant_omega_kleinFamily_x`, `_y`, `_xy`: the values `+1`, `+1`,
@@ -612,8 +612,7 @@ the gauge-invariant product `ω(g,e,g) ω(g,g,g)` equals that of `kleinCocycle`,
 Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1845--1872 (the classes of
 `ℤ₂ × ℤ₂`, detected by `ω(g,g,g)`), for the type-II cocycle of line 1848; the three-cochain is
 that of arXiv:2502.20257, display preceding `eq:3-cocycle`, and the invariance is
-`eq:omegagauge`. Under the scope restriction of the module docstring, the equality of the
-classes is not claimed. -/
+`eq:omegagauge`. -/
 theorem cyclicInvariant_omega_kleinFamily (fd : kleinFamily.FusionData)
     (g : Multiplicative (ZMod 2 × ZMod 2)) :
     ScalarThreeCochain.cyclicInvariant fd.omega g 2 =
@@ -627,13 +626,21 @@ theorem cyclicInvariant_omega_kleinFamily (fd : kleinFamily.FusionData)
   · rw [cyclicInvariant_omega_kleinFamily_xy fd]
     simp [ZMod.val_one]
 
+/-- The exact dressed representation has the mixed type-II anomaly class for every choice
+of fusion tensors. Source: arXiv:2203.12563, lines 1845–1872. The family distinction is
+specified in the module docstring. -/
+theorem omega_cohomologousTo_kleinCocycle (fd : kleinFamily.FusionData) :
+    ScalarThreeCochain.CohomologousTo fd.omega ScalarThreeCochain.kleinCocycle :=
+  (ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq
+    (fd.isCocycle_omega kleinFamily_isNormalRepresentation)
+    ScalarThreeCochain.kleinCocycle_isCocycle).2 (cyclicInvariant_omega_kleinFamily fd)
+
 /-- **The anomalous `ℤ₂ × ℤ₂` symmetry is anomalous**: for every choice of fusion tensors, the
 anomaly three-cocycle of the dressed family is not cohomologous to the trivial one.
 
 Source: arXiv:2502.20257, `eq:omegagauge` and the sentence following it. The detector value
 `−1` at `xy` is that of the type-II class of arXiv:2203.12563,
-`Papers/2203.12563/REsubmission.tex` lines 1845--1872; equality with that class is not claimed,
-under the scope restriction of the module docstring. -/
+`Papers/2203.12563/REsubmission.tex` lines 1845--1872. -/
 theorem not_isTrivialGaugeClass_omega_kleinFamily (fd : kleinFamily.FusionData) :
     ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
   refine ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one
