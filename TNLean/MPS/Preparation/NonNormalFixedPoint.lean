@@ -57,8 +57,8 @@ which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
   `R_k L_{k+1}`, `Ω'` is `∑ⱼ αⱼ ∏ₖ ω_j`.
 * `MPSTensor.pairIsometry`, `MPSTensor.isIsometry_pairIsometry` — `W : |j⟩ ↦ |ω_j⟩` is an
   isometry for orthonormal pairs.
-* `MPSTensor.ghzState` — `|χ_M⟩`; `W^{⊗M}` is `Matrix.tensorPower`, an isometry by
-  `Matrix.IsIsometry.tensorPower`.
+* `MPSTensor.ghzState` — `|χ_M⟩`, with its amplitudes in `MPSTensor.ghzState_apply`;
+  `W^{⊗M}` is `Matrix.tensorPower`, an isometry by `Matrix.IsIsometry.tensorPower`.
 * `MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState` — the GHZ form
   `|Ω'⟩ = W^{⊗M} |χ_M⟩`.
 * `MPSTensor.nonNormalFixedPointState_norm_sq` — `⟨Ω'|Ω'⟩ = 1` when some `βₗ ≠ 0`.
@@ -162,6 +162,18 @@ theorem isIsometry_pairIsometry {ω : Fin b → Fin D × Fin D → ℂ}
 times the product of the coordinates `s k` of the basis vector `|j⟩`. -/
 def ghzState {M : ℕ} (α : Fin b → ℂ) (s : Fin M → Fin b) : ℂ :=
   ∑ j, α j * ∏ k, (Pi.single j 1 : Fin b → ℂ) (s k)
+
+/-- The amplitude of `|χ_M⟩` at `s` is `α (s 0)` if all the values `s k` are equal, and `0`
+otherwise. -/
+theorem ghzState_apply {M : ℕ} [NeZero M] (α : Fin b → ℂ) (s : Fin M → Fin b) :
+    ghzState α s = if ∀ k, s k = s 0 then α (s 0) else 0 := by
+  classical
+  simp only [ghzState, Pi.single_apply, Finset.prod_boole, Finset.mem_univ, true_implies]
+  rw [Finset.sum_eq_single (s 0)]
+  · split_ifs <;> simp
+  · intro j _ hj
+    rw [ite_eq_right fun h => hj (h 0).symm, mul_zero]
+  · simp
 
 /-- The GHZ form of the fixed-point state, arXiv:2307.01696, the paragraph after
 eq. (19): `|Ω'⟩ = W^{⊗M} |χ_M⟩` with `W : |j⟩ ↦ |ω_j⟩`, in the bond coordinates
