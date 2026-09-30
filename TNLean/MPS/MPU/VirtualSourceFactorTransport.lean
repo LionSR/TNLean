@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.MPS.MPU.SourceUV
 import TNLean.MPS.MPU.VirtualSandwich
@@ -45,15 +46,6 @@ private theorem transported_source_u_contraction
       ∑ β : Fin D, Y₂ l (p, β) * Y₁ r (β, q) := by
   let A : Matrix (Fin ℓ[U]) (Fin D) ℂ := fun l β => Y₂ l (p, β)
   let B : Matrix (Fin D) (Fin r[U]) ℂ := fun β r => Y₁ r (β, q)
-  have hmain : ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
-      ((z : Matrix (Fin D) (Fin D) ℂ) * B)) l r = (A * B) l r := by
-    have hz : (z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-        (z : Matrix (Fin D) (Fin D) ℂ) = 1 := z.2.1
-    calc
-      _ = (A * ((z : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-          (z : Matrix (Fin D) (Fin D) ℂ)) * B) l r := by
-        simp only [Matrix.mul_assoc]
-      _ = _ := by rw [hz]; simp
   calc
     _ = ((A * (z : Matrix (Fin D) (Fin D) ℂ)ᴴ) *
         ((z : Matrix (Fin D) (Fin D) ℂ) * B)) l r := by
@@ -69,7 +61,7 @@ private theorem transported_source_u_contraction
           apply Finset.sum_congr rfl
           intro x₁ _
           ring
-    _ = (A * B) l r := hmain
+    _ = (A * B) l r := by rw [Matrix.mul_unitary_adjoint_mul_cancel]
     _ = _ := by rw [Matrix.mul_apply]
 
 /-- A unitary virtual conjugation transports both source-cut factorizations.
@@ -226,18 +218,6 @@ private theorem source_right_gauge_two_coisometry {d D : ℕ}
   simp only [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul,
     Matrix.conjTranspose_one, hz, Matrix.one_mul, Matrix.one_kronecker_one]
 
-private theorem unitary_matrix_isUnit {D : ℕ}
-    (z : Matrix.unitaryGroup (Fin D) ℂ) :
-    IsUnit (z : Matrix (Fin D) (Fin D) ℂ) := by
-  apply (Matrix.isUnit_iff_isUnit_det _).mpr
-  exact Matrix.isUnit_det_of_left_inverse z.2.1
-
-private theorem unitary_adjoint_isUnit {D : ℕ}
-    (z : Matrix.unitaryGroup (Fin D) ℂ) :
-    IsUnit (star (z : Matrix (Fin D) (Fin D) ℂ)) := by
-  apply (Matrix.isUnit_iff_isUnit_det _).mpr
-  exact Matrix.isUnit_det_of_left_inverse z.2.2
-
 /-- A unitary virtual conjugation preserves both source-cut ranks.
 
 Source: CPSV17, arXiv:1703.09188, Proposition IV.5 (lines 786–812). -/
@@ -248,10 +228,10 @@ theorem source_rank_virtual_unitary_sandwich
       (star (z : Matrix (Fin D) (Fin D) ℂ))] = r[U] ∧
     ℓ[virtualSandwich (z : Matrix (Fin D) (Fin D) ℂ) U
       (star (z : Matrix (Fin D) (Fin D) ℂ))] = ℓ[U] := by
-  exact ⟨rightRank_virtualSandwich _ U _ (unitary_matrix_isUnit z)
-    (unitary_adjoint_isUnit z),
-    leftRank_virtualSandwich _ U _ (unitary_matrix_isUnit z)
-    (unitary_adjoint_isUnit z)⟩
+  exact ⟨rightRank_virtualSandwich _ U _ (Unitary.isUnit_coe (U := z))
+    (Unitary.isUnit_coe (U := z)).star,
+    leftRank_virtualSandwich _ U _ (Unitary.isUnit_coe (U := z))
+    (Unitary.isUnit_coe (U := z)).star⟩
 
 /-- The transported factors, reindexed to the source ranks selected for the
 conjugated tensor, give both cut factorizations and right inverses. Their

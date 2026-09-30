@@ -266,21 +266,27 @@ records a restriction: it is the reusable supplied-fixed-pair step, stated for
 an arbitrary positive diagonal weight and an arbitrary stabilization exponent,
 through which \texttt{lemuisometry} is proved. The remaining restricted
 full-support statements include the distinct labels
-\texttt{def:mpu\_admissible\_index},
-\texttt{prop:mpu\_admissible\_index\_well\_defined}, and
-\texttt{lem:mpu\_admissible\_index\_composition}. The tensor-product entry
+\texttt{def:mpu\_admissible\_index} and
+\texttt{prop:mpu\_admissible\_index\_well\_defined}.
+The composition entry \texttt{thm:mpu\_admissible\_index\_composition}
+is unrestricted for positive-dimensional MPUs, through
+\leanid{MPOTensor.IsMPU.index_mulTensor}; no six-block source data are assumed. The tensor-product entry
 \texttt{thm:mpu\_admissible\_index\_tensor} no longer needs full-support
 data: it is stated for factors in canonical form II, and the representative
 entry \texttt{thm:mpu\_representative\_index\_tensor\_product} covers all
 positive-dimensional MPUs.
 
-Chapter~28 now contains thirty-six labelled \texttt{mpu\_admissible} entries.
-Thirty-five are restricted forms of results or definitions in
-Ref.~\cite{Cirac2017MPU}; each has a direct citation or an exact source-line
-locator. The remaining entry,
-\texttt{def:mpu\_admissible\_equivalence\_datum}, is an auxiliary hypothesis
-introduced in the blueprint. It cites the source path arguments motivating its
-conditions but does not attribute the datum itself to the paper.
+Chapter~28 contains thirty-six labelled \texttt{mpu\_admissible} entries.
+Thirty-two retain the scope restrictions described here. Four labels need
+separate classification: \texttt{lem:mpu\_admissible\_source\_u\_isometry}
+is the supplied-fixed-pair result described above;
+\texttt{thm:mpu\_admissible\_index\_composition} is unrestricted for
+positive-dimensional MPUs; \texttt{thm:mpu\_admissible\_index\_tensor}
+is the canonical-form-II case, with its general representative version under
+\texttt{thm:mpu\_representative\_index\_tensor\_product}; and
+\texttt{def:mpu\_admissible\_equivalence\_datum} is an auxiliary hypothesis
+introduced in the blueprint. The last entry cites the source path arguments
+motivating its conditions but does not attribute the datum itself to the paper.
 
 The unrestricted source Fundamental Theorem of MPU remains under
 \texttt{FundamentalMPU} and depends only on the source standard form
