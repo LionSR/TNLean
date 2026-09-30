@@ -6355,6 +6355,35 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
 
+\begin{theorem}[Scalar invariance of the double layer]
+    \label{thm:mpu_double_layer_scalar_invariance}
+    \lean{MPOTensor.physicalAdjointTensor_smul,
+        MPOTensor.doubleLayerTensor_smul_of_star_mul_self}
+    \leanok
+    \uses{def:mpu_double_layer}
+    For any tensor $\mathcal U$ and scalar $c\in\mathbb C$,
+    $(c\mathcal U)^\sharp=\overline c\,\mathcal U^\sharp$.
+    If $\overline c c=1$, the double layers of $c\mathcal U$ and
+    $\mathcal U$ agree.
+\end{theorem}
+\begin{proof}\leanok
+    Conjugation sends $c$ to $\overline c$, and contracting the two
+    layers multiplies their scalars to $\overline c c=1$.
+\end{proof}
+
+\begin{theorem}[Simplicity of the identity tensor]
+    \label{thm:mpu_identity_tensor_simple}
+    \lean{MPOTensor.isMPUSimple_idTensor}
+    \leanok
+    \uses{def:mpu_simple, def:mpo_stacked_layers}
+    For every physical dimension $d$, the bond-one identity tensor
+    $\mathcal I^{ij}=\delta_{ij}$ is simple.
+\end{theorem}
+\begin{proof}\leanok
+    Its double-layer letters are $\delta_{ij}$, so both simplicity
+    identities hold with boundary vectors $a=b=1$.
+\end{proof}
+
 \begin{theorem}[Parity obstruction to an unblocked standard-form converse]
     \label{thm:mpu_standard_form_parity_obstruction}
     \lean{MPOTensor.exists_simple_blockTwo_eq_mpo_three_ne}
@@ -6376,6 +6405,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{proof}\leanok
     \uses{def:mpu_simple, def:mpo_family, def:mpo_stacked_layers,
+        thm:mpu_double_layer_scalar_invariance, thm:mpu_identity_tensor_simple,
         thm:mpdo_block_tensor_scalar_scaling,
         thm:mpdo_mpo_scalar_scaling}
     Let $\mathcal U^{ij}=\delta_{ij}$ on its one-dimensional bond space and
@@ -6845,6 +6875,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \operatorname{ind}(\mathcal U\boxtimes\Id_n)
          & =\operatorname{ind}(\mathcal U).
     \end{align}
+    The bridge to physical identity-ancilla attachment is
+    Theorem~\ref{thm:mpu_physical_ancilla_index}.
     This is the canonical-form-II representative case of the tensoring claim in
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--833.
@@ -6917,6 +6949,43 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     The identity tensor itself is a canonical representative of index zero,
     and the ancilla assertion follows from additivity.
+\end{proof}
+
+\begin{theorem}[Physical identity ancillas and the representative index]
+    \label{thm:mpu_physical_ancilla_index}
+    \lean{MPOTensor.mpo_tensorProduct_identityMPUTensor,
+        MPOTensor.mpo_tensorPhysicalId,
+        MPOTensor.IsMPU.index_tensorPhysicalId}
+    \leanok
+    \uses{def:equivalent-tensors, def:mpu_independent_tensor_product, threeMPU,
+        def:mpu_reduced_representative_index}
+    Let $U$ be a tensor and let $U^{(n)}=U\otimes\Id_n$ denote attachment
+    of an identity ancilla of dimension $n$ at each physical site, keeping
+    the bond dimension fixed. For every chain length $N$, its periodic
+    operator equals that of the independent tensor product with the
+    bond-one identity tensor:
+    \begin{align}
+        (U^{(n)})^{(N)}=(U\boxtimes\Id_n)^{(N)}
+        \cong U^{(N)}\otimes I_{n^N}.
+    \end{align}
+    Here the identification groups the original physical coordinates and
+    the ancilla coordinates separately. If $U$ is a positive-dimensional
+    MPU and $n>0$, then
+    \begin{align}
+        \operatorname{ind}(U^{(n)})=\operatorname{ind}(U).
+    \end{align}
+    % Source: paper_v2.tex, def:equivalent-tensors, lines 706--720;
+    % IndexTh(ii), lines 824--845.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_finite_tensor_product, thm:threeMPU_chain_formulas,
+        thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_representative_index_tensor_product}
+    Both constructions give the displayed Kronecker product in the same
+    sitewise coordinates. Equality of the periodic operators identifies
+    their representative indices, and the bond-one identity factor has
+    index zero.
 \end{proof}
 
 \begin{lemma}[Source ranks under rectangular reduction]
@@ -10751,11 +10820,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     displayed unblocked tensors. It is not the public MPU index
     $\operatorname{ind}$ of Definition~\ref{def:index}, whose definition uses a
     simple blocking and requires independence of that choice.
-    % **Scope restriction (specified tensors):** the source states the public
-    % blocking-independent MPU index, while this theorem computes only the raw
-    % value of each displayed tensor. Documented in
-    % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex; elimination is
-    % tracked by issues #7011 and #5856.
+    The public index values follow in
+    Theorem~\ref{thm:mpu_shift_public_index_values}.
     % Source: paper_v2.tex lines 2037--2041.
 \end{theorem}
 
@@ -10769,6 +10835,44 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     ranks multiply under the independent tensor product, so each of
     $U_1,U_2,U_3$ has equal right and left rank $d^2$. Their logarithmic
     differences therefore vanish.
+\end{proof}
+
+\begin{theorem}[Public indices of the shift examples]
+    \label{thm:mpu_shift_public_index_values}
+    \lean{MPOTensor.rightShiftTensor_exists_canonicalFormII,
+        MPOTensor.rightShiftTensor_index, MPOTensor.leftShiftTensor_index,
+        MPOTensor.shiftExampleU₁_index, MPOTensor.shiftExampleU₂_index,
+        MPOTensor.shiftExampleU₃_index}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_reduced_representative_index,
+        threeMPU}
+    Let $d>0$. The right shift is in canonical form II in its original bond
+    coordinates, with ambient right fixed matrix $\rho=I/d$. The right and
+    left shifts and the three two-spin families satisfy
+    \begin{align}
+        \operatorname{ind}(T)        & =\log_2 d,               &
+        \operatorname{ind}(T^\sharp) & =-\log_2 d,                \\
+        \operatorname{ind}(U_1)      & =\operatorname{ind}(U_2)
+        =\operatorname{ind}(U_3)=0.
+    \end{align}
+    These are the blocking-independent indices of the families in
+    Definition~\ref{threeMPU}, as asserted in \cite{Cirac2017MPU}.
+    % Source: paper_v2.tex lines 2037--2041.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_stabilization_converse,
+        thm:mpu_shift_blocked_source_index_values,
+        prop:mpu_admissible_index_well_defined,
+        thm:mpu_reduced_representative_index_invariance,
+        thm:mpu_representative_index_blocking_adjoint,
+        thm:mpu_representative_index_tensor_product}
+    The normalized transfer map of the right shift sends $X$ to
+    $\operatorname{tr}(X)I/d$. Its positive diagonal fixed matrix $I/d$
+    gives a canonical-form-II presentation. The source-rank computation
+    therefore yields the public index $\log_2 d$. Physical adjunction negates
+    this index, giving the left-shift value. The identity has index zero,
+    and additivity under the tensor product gives all three remaining values.
 \end{proof}
 
 \begin{theorem}[Index of the bond-one identity tensor]
@@ -10867,17 +10971,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The tensors $U_1$, $U_2$, and $U_3$ are simple, and so are the blockings
     of $U_2$ and $U_3$ over $k+1$ sites, because independent tensor products
     of simple tensors are simple. Thus all four values are taken at simple
-    blockings, which is the simplicity requirement of Definition~\ref{def:index};
-    its canonical-form hypothesis is not established for these tensors. None of the values is asserted
-    for an arbitrary tensor generating the same operators; that step needs the
-    canonical form of the shift and its uniqueness. Unequal ranks do not by
+    blockings, which is the simplicity requirement of Definition~\ref{def:index}.
+    The canonical-form construction and representative invariance in
+    Theorem~\ref{thm:mpu_shift_public_index_values} identify these values with
+    the public indices and transport them to any positive-dimensional MPU
+    generating the same periodic operators. Unequal ranks do not by
     themselves exclude a circuit: after blocking, every matrix product unitary,
     the shift included, is a depth-two circuit of nearest-neighbour unitaries
     in its standard form. The statement that the shift is not a finite-depth
     circuit of local gates needs parts (ii)--(iv) of Theorem~\ref{IndexTh}
     together with index zero for one layer of nearest-neighbour gates, and is
     not asserted here.
-    % Scope restriction (specified tensors): documented in
+    % The former specified-tensor restriction is resolved in
     % docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex.
     % Source: paper_v2.tex lines 605--622, 681--704, 1980--2001, 2037--2041, 2308;
     % review TN-Review-main.tex lines 2607--2611.

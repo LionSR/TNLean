@@ -37,6 +37,19 @@ abstracted — record why, so it is not re-proposed).
   without tying it to the threshold `1 / sqrt (l + 1)`.
 - **Notes:** both uses share the original three-case proof; no new tactic is
   needed.
+
+### passing a scalar grading through a matrix word — promoted
+- **Pattern:** move a grading matrix through each letter and multiply the
+  letter-dependent scalars.
+- **Seen:** three occurrences across `MPS/ParentHamiltonian/Basic.lean`,
+  `MPS/Examples/MajumdarGhoshGroundSpace.lean`, and
+  `MPS/Examples/MultiBlock/ParityAmplitudes.lean`.
+- **Abstraction:** `MPSTensor.mul_evalWord_of_mul_eq_smul_letter` in
+  `MPS/Core/WordGrading.lean`; the constant-scalar theorem is a specialization.
+- **Notes:** all three matrix-word inductions now share one proof. The parity
+  example only retains the scalar identity combining occupation signs.
+  The promotion adds 21 Lean lines including the helper module and imports.
+
 ### virtual-leg cancellation in source-gate contractions — promoted
 - **Pattern:** cancel the adjacent factors $z^\dagger z=I$ between two
   rectangular matrices, leaving the site-specific Kronecker expansions intact.
@@ -2074,6 +2087,17 @@ abstracted — record why, so it is not re-proposed).
   is replaced by one exact application; its previously profiled 31-second
   declaration falls below the 200-millisecond profiler threshold.
 
+### Scalar invariance of the MPU double layer — promoted
+- **Pattern:** expand the double layer of a scalar multiple entrywise and
+  cancel the scalar against its conjugate.
+- **Reuse:** `MPOTensor.physicalAdjointTensor_smul` and
+  `MPOTensor.doubleLayerTensor_smul_of_star_mul_self` reduce this to
+  `mulTensor_smul_smul`. The parity witness specializes the latter at `-1`.
+- **Result:** the parity example no longer splits over physical and bond
+  coordinates. Its identity simplicity proof and the shift identity proof
+  share `MPOTensor.isMPUSimple_idTensor` in `MPS/MPU/Simple.lean`.
+  Net Lean line delta: -6 across the four changed modules.
+
 ### Unit-norm complex scalars are nonzero
 - **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
@@ -3467,6 +3491,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** `CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives`
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
+
+### Transposed Kronecker gauge inverses — candidate
+
+- **Pattern:** reduce block-diagonal inverse products to Kronecker products,
+  combine factors with `Matrix.mul_kronecker_mul` and `Matrix.transpose_mul`,
+  and cancel unit-valued gauges.
+- **Occurrences:** the two pair-gauge inverse identities and four left/right
+  tree-gauge inverse identities in `TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean`.
+- **Count:** six occurrences in one file; the two-file promotion threshold
+  has not been reached.
+- **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
+  second module needs the same cancellation pattern.
 
 ## Rejected
 

@@ -70,7 +70,6 @@ equation acts on the bosonic Ising chain.
 * `KWExample.kwSquare_compression`: the multi-block asymmetric compression datum, with `z = 0`.
 * `KWExample.kwSquare_trace_evalWord`: the word-trace identity
   `tr(D~²)^w = 2^{|w|} (tr(T^w) + tr((η T)^w))`.
-* `KWExample.kwSquare_isReduction`: biorthogonal compression onto each of the two slots.
 * `KWExample.kwSquare_dim_eq`: the dimension count `4 = 2 + 2 + 0`.
 * `KWExample.kwSquare_remainder_eq_zero`: the remainder of the compression vanishes identically
   (the extension splits).
@@ -283,7 +282,8 @@ def kwSquareGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace kwSquareBlockDim kwS
     kwSquareGaugeInvMat_mul
 
 /-- The raw conjugated letters `2G B^{s's} G^{-1}` before the factor `1/2` built into the gauge
-is divided out (construction note, §1.3: `G B G^{-1} = diag(2T, 2ηT)`, doubled here since `kwSquareGaugeInt`
+is divided out (construction note, §1.3: `G B G^{-1} = diag(2T, 2ηT)`, doubled here
+since `kwSquareGaugeInt`
 is `2G`). -/
 def kwSquareConjRawInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
   | 0 => !![4, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 4; 0, 0, 0, 0]
@@ -338,7 +338,8 @@ private theorem kwSquare_matched_int (a : Fin 4) (s : Fin 2) (p q : Fin (kwSquar
   revert a
   fin_cases s <;> revert p q <;> decide
 
-/-- **The multi-block asymmetric compression datum of the Kramers–Wannier square** (construction note,
+/-- **The multi-block asymmetric compression datum of the Kramers–Wannier square**
+(construction note,
 Theorem 7.7, clauses (i)–(iii)). There are no zero slots: `D~²` is fully split into `2T` and
 `2ηT`. -/
 def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquareTargets :=
@@ -349,7 +350,8 @@ def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquare
 
 /-! ### Consequences -/
 
-/-- **The word-trace identity `D~² = 2^L (1 + η) T`** at the level of traces (construction note, §1.3). -/
+/-- **The word-trace identity `D~² = 2^L (1 + η) T`** at the level of traces
+(construction note, §1.3). -/
 theorem kwSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord kwSquare w) =
       (2 : ℂ) ^ w.length * (Matrix.trace (Kraus.evalWord shiftTensor.toMPSTensor w) +
@@ -369,17 +371,6 @@ theorem kwSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
     hweighted flipShiftTensor.toMPSTensor
   rw [h, h0, h1]
   ring
-
-/-- **Biorthogonal compression onto each of the two slots** (construction note, Theorem 7.7(iv)–(v)). -/
-theorem kwSquare_isReduction (s : {s // s ∈ kwSquareSlots}) :
-    IsReduction kwSquare (kwSquareTargets s.1) (kwSquare_compression.left s)
-      (kwSquare_compression.right s) :=
-  kwSquare_compression.isReduction s
-
-/-- Two distinct slots are biorthogonal (construction note, Theorem 7.7(iv)). -/
-theorem kwSquare_left_mul_right_of_ne {s t : {s // s ∈ kwSquareSlots}} (h : s ≠ t) :
-    kwSquare_compression.left s * kwSquare_compression.right t = 0 :=
-  kwSquare_compression.left_mul_right_of_ne h
 
 /-- **The dimension count**: `4 = 2 + 2 + 0` (construction note, Theorem 7.7(vii)). -/
 theorem kwSquare_dim_eq : (4 : ℕ) = ∑ s ∈ kwSquareSlots, kwSquareBlockDim s + 0 :=
@@ -454,7 +445,8 @@ theorem kwSquareRight1_eq :
     exact_mod_cast (by decide)
 
 /-- **The remainder of the compression vanishes identically.** The extension is fully split:
-the stacked tensor is gauge equivalent to the direct sum of `2T` and `2ηT` (construction note, §1.3). -/
+the stacked tensor is gauge equivalent to the direct sum of `2T` and `2ηT` (construction
+note, §1.3). -/
 theorem kwSquare_remainder_eq_zero (a : Fin 4) : kwSquare_compression.remainder a = 0 := by
   unfold kwSquare_compression
   exact MultiBlockCompression.remainder_ofRing kwSquare_offDiag_int a

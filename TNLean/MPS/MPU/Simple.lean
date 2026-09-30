@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.OperatorProduct
 import QICLean.Algebra.RankOneSandwich
@@ -56,6 +57,11 @@ Source: arXiv:1703.09188, Section III.A, lines 363--388 and Figures
 noncomputable def doubleLayerTensor (U : MPOTensor d D) : MPOTensor d (D * D) :=
   mulTensor (physicalAdjointTensor U) U
 
+/-- A scalar whose conjugate product is one leaves the double layer unchanged. -/
+theorem doubleLayerTensor_smul_of_star_mul_self (c : ℂ) (U : MPOTensor d D)
+    (hc : star c * c = 1) : doubleLayerTensor (c • U) = doubleLayerTensor U := by
+  simp only [doubleLayerTensor, physicalAdjointTensor_smul, mulTensor_smul_smul, hc, one_smul]
+
 /-- The exact local, canonically reindexed form of the double-layer letter:
 \((W^{ik})_{(β₁,β₂),(α₁,α₂)}\) is obtained from
 \(\sum_j (U^\sharp)^{ij} \otimes U^{jk}\) using `finProdFinEquiv` on both
@@ -107,6 +113,26 @@ def IsMPUSimple (U : MPOTensor d D) : Prop :=
     (∀ i j k l : Fin d,
       doubleLayerTensor U i j * doubleLayerTensor U k l =
         doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l)
+
+/-- The bond-one identity tensor is simple, with both boundary vectors equal to one.
+
+Source: arXiv:1703.09188, Definition III.2, equations `simple1` and `simple2`,
+lines 363--374, specialized to the identity tensor. -/
+theorem isMPUSimple_idTensor (d : ℕ) : IsMPUSimple (idTensor d) := by
+  have hR : Matrix.vecMulVec (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) =
+      1 := by
+    ext x y
+    rw [Subsingleton.elim (α := Fin 1) x y]
+    simp [Matrix.vecMulVec_apply]
+  refine ⟨fun _ ↦ 1, fun _ ↦ 1, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
+  · simp only [dotProduct, Matrix.mulVec, doubleLayerTensor_apply,
+      Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
+      physicalAdjointTensor_apply, idTensor]
+    by_cases h : i = j
+    · subst h
+      simp [Matrix.ite_apply, eq_comm]
+    · simp [Matrix.ite_apply, h, eq_comm]
+  · rw [hR, Matrix.mul_one]
 
 namespace IsMPUSimple
 

@@ -56,8 +56,6 @@ compression theorem.
 
 * `Z3Anomalous.defectSquare_trace_evalWord`, `Z3Anomalous.mpo_defect_mul_defect`: the identity
   `A² = 3A`, at the level of word traces and of periodic operators.
-* `Z3Anomalous.defectSquare_isReduction`, `Z3Anomalous.defectSquare_left_mul_right_of_ne`: the
-  nine biorthogonal compression pairs.
 * `Z3Anomalous.defectSquare_dim_eq`: the dimension count `25 = 15 + 10`.
 * `Z3Anomalous.defectSquare_eq_blockDiagonal`: the square is block diagonal over the nine pairs.
 * `Z3Anomalous.defectSquare_evalWord_remainder_eq_zero`,
@@ -282,17 +280,6 @@ theorem mpo_defect_mul_defect (L : ℕ) (hL : 0 < L) :
     smul_eq_mul]
   exact (defectSquare_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)).trans
     (congrArg (fun t => 3 * t) (defectMPS_trace_evalWord _)).symm
-
-/-- **Biorthogonal compression onto each of the nine slots** (P5 note, Theorem 7.7(iv)–(v)). -/
-theorem defectSquare_isReduction (s : {s // s ∈ squareSlots}) :
-    IsReduction defectSquare (pairTarget s.1) (defectSquare_compression.left s)
-      (defectSquare_compression.right s) :=
-  defectSquare_compression.isReduction s
-
-/-- Two distinct slots of the square are biorthogonal (P5 note, Theorem 7.7(iv)). -/
-theorem defectSquare_left_mul_right_of_ne {s t : {s // s ∈ squareSlots}} (h : s ≠ t) :
-    defectSquare_compression.left s * defectSquare_compression.right t = 0 :=
-  defectSquare_compression.left_mul_right_of_ne h
 
 /-- The nine targets have total bond dimension `3 · (1 + 2 + 2) = 15`. -/
 theorem sum_pairTargetDim : ∑ s ∈ squareSlots, pairTargetDim s = 15 := by decide
