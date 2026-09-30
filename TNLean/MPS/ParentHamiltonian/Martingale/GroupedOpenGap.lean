@@ -13,6 +13,11 @@ The filtration advances by \(p\) sites and the parent interaction has range
 This gives constants one in conditions C1 and C2 and an overlap width of one
 in the grouped index.
 
+Theorem 2.1 has distinct parts: (i) assumes C1--C3 at a single length,
+whereas (ii) assumes C1-prime, C2 and C3-prime and concludes the grouped
+estimate for \(N=l_0 M\). The latter is printed at lines 1131--1136 of
+`References/cond-mat_9410110/main.tex` (theorem `gapestimate`).
+
 ## References
 
 * Nachtergaele, arXiv:cond-mat/9410110, conditions C1-prime and C3-prime,
