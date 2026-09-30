@@ -26,7 +26,9 @@ with weight one, so that `A⁰ = diag(1, 3/5)` and `A¹ = diag(0, 4/5)`. With
 `u = (√(1+s) + √(1-s))/2`, and `v = (√(1+s) - √(1-s))/2`, the overlap of the approximating
 state with the target is `(u^M + v^M) / (1 + s^M)^{1/2}` for all `q, M ≥ 1`
 (`nonNormalApproxOverlap_overlappingBlockTensor`). For `M ≥ 3` the error is at least
-`s²/16 = (9/25)^q/16` (`le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`).
+`s²/16 = (9/25)^q/16` (`le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`), and for
+every `M ≥ 1` it is at most `M s²` (`one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le`):
+the construction converges, at a rate governed by the overlap of the blocks.
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
 canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with both weights
@@ -52,6 +54,9 @@ the approximating state of eq. (S7) even when every multiplicity is one. Documen
 
 * `MPSTensor.overlappingBlockTensor` — the tensor `A⁰ = diag(1, 3/5)`, `A¹ = diag(0, 4/5)`.
 * `MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor` — the overlap, for all `q, M ≥ 1`.
+* `MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`,
+  `MPSTensor.one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le` — the error lies
+  between `(9/25)^q / 16` and `M (9/25)^q`.
 * `MPSTensor.not_approximationError_le_overlappingBlockTensor` — the bound of Lemma 1'(ii)
   fails.
 * `MPSTensor.overlappingBlockSector`, `MPSTensor.isBNTCanonicalForm_overlappingBlockSector`,
@@ -317,6 +322,82 @@ theorem le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ
     rw [show s = (3 / 5 : ℝ) ^ q from rfl, ← pow_mul, mul_comm, pow_mul]; norm_num
   rw [Real.norm_eq_abs, hs2]
   linarith
+
+/-- **The error for overlapping blocks is at most `M (9/25)^q`**: together with
+`le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`, the error of the approximating
+state of arXiv:2307.01696, eq. (S7), for `overlappingBlockTensor` lies between `(9/25)^q / 16`
+(for `M ≥ 3`) and `M (9/25)^q`, so it tends to zero exactly when `(N/q) τ^{2q} → 0`, with
+`τ = 3/5` the eigenvalue of the mixed transfer map of the two blocks. The construction of the
+source converges; the rate `e^{-γ q/ξ_diag}` of Lemma 1'(ii) does not describe it. -/
+theorem one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le {q M : ℕ} (hq : q ≠ 0)
+    (hM : M ≠ 0) :
+    1 - ‖nonNormalApproxOverlap overlappingBlockTensor q M
+        (ghzAmplitude (bntWeight overlappingBlockWeight (M * q)))
+        (fun j => embedPair (fun _ : Fin 1 => j)
+          (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)))‖ ≤ M * (9 / 25 : ℝ) ^ q := by
+  rw [nonNormalApproxOverlap_overlappingBlockTensor hq hM, Complex.norm_real]
+  set s := overlappingBlockOverlap q
+  set u := overlappingBlockU q
+  set v := overlappingBlockV q
+  have hs0 : 0 ≤ s := overlap_nonneg q
+  have hs1 : s ≤ 1 := overlap_le_one q
+  have ha := sq_sqrt_add q
+  have hb := sq_sqrt_sub q
+  have ha0 := Real.sqrt_nonneg (1 + s)
+  have hb0 := Real.sqrt_nonneg (1 - s)
+  have huv := overlappingBlockU_sq_add_overlappingBlockV_sq q
+  have hv0 : 0 ≤ v := by
+    have : Real.sqrt (1 - s) ≤ Real.sqrt (1 + s) := Real.sqrt_le_sqrt (by linarith)
+    simp only [v, overlappingBlockV]; linarith
+  have hu0 : 0 ≤ u := by simp only [u, overlappingBlockU]; positivity
+  have hu1 : u ≤ 1 := by nlinarith [sq_nonneg v]
+  have hs2 : (9 / 25 : ℝ) ^ q = s ^ 2 := by
+    rw [show s = (3 / 5 : ℝ) ^ q from rfl, ← pow_mul, mul_comm, pow_mul]; norm_num
+  have hMr : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 hM
+  rw [Real.norm_eq_abs, hs2]
+  have hden0 : 0 < Real.sqrt (1 + s ^ M) := Real.sqrt_pos.2 (by positivity)
+  rcases Nat.lt_or_ge M 2 with hM1 | hM2
+  · -- One block: `u + v = √(1 + s)`, and the overlap is one.
+    obtain rfl : M = 1 := by omega
+    have huv1 : u + v = Real.sqrt (1 + s) := by
+      simp only [u, v, overlappingBlockU, overlappingBlockV]; ring
+    rw [pow_one, pow_one, pow_one, huv1, div_self (Real.sqrt_pos.2 (by linarith)).ne', abs_one]
+    push_cast
+    nlinarith [sq_nonneg s]
+  · -- `u ≥ 1 - s²/2`, so `u^M ≥ 1 - M s²/2`, and `√(1 + s^M) ≤ 1 + s²/2`.
+    have hab : 1 - s ^ 2 ≤ Real.sqrt (1 + s) * Real.sqrt (1 - s) := by
+      rw [← Real.sqrt_mul (by linarith)]
+      refine Real.le_sqrt_of_sq_le ?_
+      have ht0 : 0 ≤ 1 - s ^ 2 := by nlinarith
+      have ht1 : 1 - s ^ 2 ≤ 1 := by nlinarith
+      nlinarith [mul_le_mul_of_nonneg_left ht1 ht0]
+    have hu2 : u ^ 2 = (1 + Real.sqrt (1 + s) * Real.sqrt (1 - s)) / 2 := by
+      rw [show u = (Real.sqrt (1 + s) + Real.sqrt (1 - s)) / 2 from rfl]
+      linear_combination (ha + hb) / 4
+    have hu2' : 1 - s ^ 2 / 2 ≤ u ^ 2 := by rw [hu2]; linarith
+    have hu : 1 - s ^ 2 / 2 ≤ u := by nlinarith
+    have hbern : 1 + (M : ℝ) * (u - 1) ≤ u ^ M := by
+      have := one_add_mul_le_pow (a := u - 1) (by linarith) M
+      simpa using this
+    have hsM : s ^ M ≤ s ^ 2 := pow_le_pow_of_le_one hs0 hs1 hM2
+    have hden : Real.sqrt (1 + s ^ M) ≤ 1 + s ^ 2 / 2 := by
+      rw [Real.sqrt_le_left (by positivity)]
+      nlinarith [pow_nonneg hs0 M, sq_nonneg (s ^ 2)]
+    have hnum : u ^ M ≤ u ^ M + v ^ M := le_add_of_nonneg_right (pow_nonneg hv0 M)
+    have hq' : 0 ≤ (u ^ M + v ^ M) / Real.sqrt (1 + s ^ M) := by positivity
+    rw [abs_of_nonneg hq']
+    rcases le_or_gt 1 ((M : ℝ) * s ^ 2) with hbig | hsmall
+    · have : 0 ≤ (u ^ M + v ^ M) / Real.sqrt (1 + s ^ M) := hq'
+      linarith
+    · have hpos : 0 ≤ 1 + (M : ℝ) * (u - 1) := by nlinarith
+      have hlow : (1 + (M : ℝ) * (u - 1)) / (1 + s ^ 2 / 2) ≤
+          (u ^ M + v ^ M) / Real.sqrt (1 + s ^ M) :=
+        div_le_div₀ (by positivity) (hbern.trans hnum) hden0 hden
+      have hfrac : 1 - (M : ℝ) * s ^ 2 ≤ (1 + (M : ℝ) * (u - 1)) / (1 + s ^ 2 / 2) := by
+        rw [le_div_iff₀ (by positivity)]
+        nlinarith [mul_le_mul_of_nonneg_left hu (by positivity : (0 : ℝ) ≤ M),
+          sq_nonneg s, mul_nonneg (by positivity : (0 : ℝ) ≤ M) (sq_nonneg s)]
+      linarith
 
 /-- **Lemma 1'(ii) fails for overlapping blocks** (arXiv:2307.01696, Supplemental Material,
 Lemma 1'(ii), eq. (S12)). The transfer maps of the one-dimensional blocks of
