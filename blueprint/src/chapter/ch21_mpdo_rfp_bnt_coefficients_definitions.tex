@@ -30,18 +30,6 @@
     the fixed BNT labels $\alpha$. Their ambient complex vector space,
     equipped with multiplication, may depend on $L$ and is not identified
     with a chosen blocked support algebra.
-    % Formula and source passage: lines 962--967 define O_L(M) as the trace of
-    % the L-fold product. In components this is the equality displayed below.
-    % Ink-to-index after demotion: there is no diagram ink. The multi-indices
-    % \mathbf a and \mathbf b are free horizontal indices; the matrix indices
-    % of the factors \widehat M_alpha^{a_r b_r}=M_alpha^{(a_r,b_r)} are
-    % contracted by the trace.
-    % Contraction set: precisely the cyclic matrix-index contraction encoded by
-    % \tr; no physical index is summed.
-    % Type verdict and boundary signature: the result is an operator on the
-    % length-L horizontal physical space, with components indexed by
-    % (\mathbf a,\mathbf b). An exact displayed formula is preferable here
-    % because the old vertical-closure picture obscured which legs stayed free.
     Write $\widehat M_\alpha^{ab}=M_\alpha^{(a,b)}$ for the vertical reading.
     The vertical indices of the $L$ copies are contracted cyclically, while
     the horizontal legs remain open, as in
@@ -54,6 +42,33 @@
         \widehat M_\alpha^{a_Lb_L}\right).
         \notag
     \end{align}
+    Diagrammatically, with the cyclically contracted matrix index of each
+    copy of $\widehat M_\alpha$ drawn horizontally,
+    \begin{center}
+        % Formula: [O_L(M_alpha)]_{a,b}=tr(\widehat M_alpha^{a_1b_1} ...
+        % \widehat M_alpha^{a_Lb_L}), the display above; source
+        % arXiv:1606.00608, lines 962--967 (figure MPDO_O_L_A_), drawn here
+        % turned by a quarter turn, so the source's vertical closure is the
+        % horizontal ring.
+        % Ink-to-index map: each box is \widehat M_alpha; its west and east
+        % legs are the matrix index of \widehat M_alpha^{ab}, which is the
+        % vertical index of M; its north leg a_r and south leg b_r are the
+        % horizontal indices of the r-th copy, which stay open.
+        % Contraction set: the matrix indices, closed cyclically by the
+        % periodic return (the trace); no a_r or b_r is summed.
+        % Boundary signature: (virtual-west=0 | virtual-east=0 |
+        % physical-up=3 | physical-down=3) for the schematic shown.
+        \tenkzkernel
+        \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_1$, 270:physical:$b_1$}]{\widehat M_\alpha} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_2$, 270:physical:$b_2$}]{\widehat M_\alpha} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_L$, 270:physical:$b_L$}]{\widehat M_\alpha}
+        \end{tenkz}
+    \end{center}
 \end{definition}
 
 \begin{definition}[Product of BNT operators at the same length]%
@@ -72,6 +87,55 @@
         c^{(L)}_{\alpha,\beta,\gamma} O_L(M_\gamma).
         \notag
     \end{align}
+    In the diagram of Definition~\ref{def:mpdo_bnt_label_operator_family},
+    the operator product joins the south legs of the first ring to the north
+    legs of the second, and the identity reads
+    \begin{center}
+        % Formula: O_L(M_alpha)O_L(M_beta)=sum_gamma c^{(L)}_{alpha,beta,gamma}
+        % O_L(M_gamma), the display above; source arXiv:1606.00608,
+        % Theorem 4.14(ii), lines 972--985 (eq:algebra).
+        % Ink-to-index map: the upper ring is O_L(M_alpha) with open north
+        % legs a_r, the lower ring is O_L(M_beta) with open south legs b_r;
+        % the right ring is O_L(M_gamma).  Each ring closes the matrix
+        % indices of its own boxes.
+        % Contraction set: on the left, the vertical wire at each site is the
+        % operator product, summing the south index of the alpha copy
+        % against the north index of the beta copy; the two rings share no
+        % other index.  On the right only the ring closure is summed.
+        % Boundary signature: (virtual-west=0 | virtual-east=0 |
+        % physical-up=3 | physical-down=3) on both sides.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+            \tn[skin=mpo, size=l, name=a1, ports={90:physical:$a_1$,
+                        270:physical, 180:virtual, 0:virtual}]{\widehat M_\alpha} &
+            \tn[skin=mpo, size=l, name=a2, ports={90:physical:$a_2$,
+                        270:physical, 180:virtual, 0:virtual}]{\widehat M_\alpha} &
+            \tn[skin=dots, name=ad, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l, name=aL, ports={90:physical:$a_L$,
+                        270:physical, 180:virtual, 0:virtual}]{\widehat M_\alpha} \\
+            \tn[skin=mpo, size=l, name=b1, ports={90:physical,
+                        270:physical:$b_1$, 180:virtual, 0:virtual}]{\widehat M_\beta} &
+            \tn[skin=mpo, size=l, name=b2, ports={90:physical,
+                        270:physical:$b_2$, 180:virtual, 0:virtual}]{\widehat M_\beta} &
+            \tn[skin=dots, name=bd, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l, name=bL, ports={90:physical,
+                        270:physical:$b_L$, 180:virtual, 0:virtual}]{\widehat M_\beta}
+            \tnwire{a1.0}{a2.180} \tnwire{a2.0}{ad.180} \tnwire{ad.0}{aL.180}
+            \tnwire{b1.0}{b2.180} \tnwire{b2.0}{bd.180} \tnwire{bd.0}{bL.180}
+            \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90}
+            \tnwire{aL.270}{bL.90}
+        \end{tenkz}
+        \quad $=\displaystyle\sum_\gamma c^{(L)}_{\alpha,\beta,\gamma}$ \quad
+        \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_1$, 270:physical:$b_1$}]{\widehat M_\gamma} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_2$, 270:physical:$b_2$}]{\widehat M_\gamma} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_L$, 270:physical:$b_L$}]{\widehat M_\gamma}
+        \end{tenkz}
+    \end{center}
     This is the product identity appearing in
     \cite[Theorem~4.14(ii)]{Cirac2016MPDO_arXiv}, stated independently of
     the blocked-basis multiplication
