@@ -33,6 +33,10 @@ the functions of the first piece obtained by fixing the second piece lie in a su
 * `MPSTensor.wordTupleSpanTop_of_ge_of_isNBlkInjective`,
   `MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge` — the simultaneous product span
   of the blocks beyond the direct-sum length.
+* `MPSTensor.blockTracePairing_range_le_of_forall_mem` — simultaneous spanning on one side
+  places the entire block trace-pairing image in the cut row space.
+* `MPSTensor.sq_dim_le_finrank_of_forall_mem` — the one-block lower bound
+  \(D_j^2\le\dim V\), requiring individual injectivity on the short side only.
 * `MPSTensor.sum_sq_dim_le_finrank_of_forall_mem` — the cut-rank lower bound
   \(\sum_j D_j^2\le\dim V\).
 
@@ -169,6 +173,46 @@ noncomputable def blockTracePairing {r : ℕ} {dim : Fin r → ℕ}
     funext σ
     simp [Matrix.trace_smul, Finset.mul_sum]
 
+/-- The long side of a cut suffices to express every block trace pairing as a
+linear combination of rows of the cut matrix. This is the spanning step in the
+W-state argument of arXiv:quant-ph/0608197, lines 2193--2204; it does not require
+simultaneous injectivity on the short side. -/
+theorem blockTracePairing_range_le_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
+    {R R' : ℕ} (hR' : WordTupleSpanTop A R')
+    (V : Submodule ℂ ((Fin R → Fin d) → ℂ))
+    (hV : ∀ τ : Fin R' → Fin d,
+      (fun σ : Fin R → Fin d => ∑ k, c k *
+        Matrix.trace (Kraus.evalWord (A k) (List.ofFn σ) *
+          Kraus.evalWord (A k) (List.ofFn τ))) ∈ V) :
+    LinearMap.range (blockTracePairing A R) ≤ V := by
+  classical
+  set Ψ := blockTracePairing A R
+  -- The scaled word tuples of length `R'` still span.
+  set T : (Fin R' → Fin d) → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
+    fun τ k => c k • Kraus.evalWord (A k) (List.ofFn τ)
+  have hT : Submodule.span ℂ (Set.range T) = ⊤ := by
+    refine eq_top_iff.mpr fun M _ => ?_
+    have hM : (fun k => (c k)⁻¹ • M k) ∈
+        Submodule.span ℂ (Set.range (wordTuple A R')) := by
+      rw [hR']; exact Submodule.mem_top
+    obtain ⟨a, ha⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hM
+    refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨a, funext fun k => ?_⟩
+    have hk := congrFun ha k
+    simp only [Finset.sum_apply, Pi.smul_apply, wordTuple] at hk
+    simp only [Finset.sum_apply, Pi.smul_apply, T]
+    simp_rw [smul_comm (a _) (c k)]
+    rw [← Finset.smul_sum, hk, smul_smul, mul_inv_cancel₀ (hc k), one_smul]
+  rw [LinearMap.range_eq_map, ← hT, Submodule.map_span, Submodule.span_le]
+  rintro _ ⟨_, ⟨τ, rfl⟩, rfl⟩
+  refine SetLike.mem_coe.mpr ?_
+  convert hV τ using 1
+  funext σ
+  simp only [Ψ, blockTracePairing, LinearMap.coe_mk, AddHom.coe_mk, T, Matrix.smul_mul,
+    Matrix.trace_smul, smul_eq_mul]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [Matrix.trace_mul_comm]
+
 /-- Source: arXiv:quant-ph/0608197, proof of the W-state corollary, lines 2193–2222 (the
 claim that the vectors \(|\Phi_{\alpha,\beta}\rangle\) and \(|\Psi_{\alpha,\beta}\rangle\),
 \((\alpha,\beta)\in S\), are linearly independent, so that the reduced state of the first
@@ -197,34 +241,55 @@ theorem sum_sq_dim_le_finrank_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
     funext k
     exact block_matrices_eq_zero_of_wordTupleSpanTop_trace A hR Δ
       (fun σ => congrFun (LinearMap.mem_ker.mp hΔ) σ) k
-  -- The scaled word tuples of length `R'` still span.
-  set T : (Fin R' → Fin d) → ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :=
-    fun τ k => c k • Kraus.evalWord (A k) (List.ofFn τ)
-  have hT : Submodule.span ℂ (Set.range T) = ⊤ := by
-    refine eq_top_iff.mpr fun M _ => ?_
-    have hM : (fun k => (c k)⁻¹ • M k) ∈
-        Submodule.span ℂ (Set.range (wordTuple A R')) := by
-      rw [hR']; exact Submodule.mem_top
-    obtain ⟨a, ha⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hM
-    refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨a, funext fun k => ?_⟩
-    have hk := congrFun ha k
-    simp only [Finset.sum_apply, Pi.smul_apply, wordTuple] at hk
-    simp only [Finset.sum_apply, Pi.smul_apply, T]
-    simp_rw [smul_comm (a _) (c k)]
-    rw [← Finset.smul_sum, hk, smul_smul, mul_inv_cancel₀ (hc k), one_smul]
-  have hrange : LinearMap.range Ψ ≤ V := by
-    rw [LinearMap.range_eq_map, ← hT, Submodule.map_span, Submodule.span_le]
-    rintro _ ⟨_, ⟨τ, rfl⟩, rfl⟩
-    refine SetLike.mem_coe.mpr ?_
-    convert hV τ using 1
-    funext σ
-    simp only [Ψ, blockTracePairing, LinearMap.coe_mk, AddHom.coe_mk, T, Matrix.smul_mul,
-      Matrix.trace_smul, smul_eq_mul]
-    refine Finset.sum_congr rfl fun k _ => ?_
-    rw [Matrix.trace_mul_comm]
+  have hrange : LinearMap.range Ψ ≤ V :=
+    blockTracePairing_range_le_of_forall_mem A c hc hR' V hV
   calc ∑ k, dim k ^ 2
       = Module.finrank ℂ ((k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ) := by
         rw [Module.finrank_pi_fintype]
+        simp [Module.finrank_matrix, sq]
+    _ = Module.finrank ℂ (LinearMap.range Ψ) := (LinearMap.finrank_range_of_inj hinj).symm
+    _ ≤ Module.finrank ℂ V := Submodule.finrank_mono hrange
+
+/-- A single block gives a cut-rank lower bound when only that block is injective
+on the short side and all blocks span simultaneously on the long side.
+
+This refines the two-sided simultaneous-spanning argument of
+arXiv:quant-ph/0608197, lines 2193--2204. In contrast to the sum-of-squares bound,
+only \(D_j^2\) dimensions must survive on the short side. -/
+theorem sq_dim_le_finrank_of_forall_mem {r : ℕ} {dim : Fin r → ℕ}
+    (A : (k : Fin r) → MPSTensor d (dim k)) (c : Fin r → ℂ) (hc : ∀ k, c k ≠ 0)
+    (j : Fin r) {R R' : ℕ} (hR : Kraus.IsNBlkInjective (A j) R)
+    (hR' : WordTupleSpanTop A R')
+    (V : Submodule ℂ ((Fin R → Fin d) → ℂ))
+    (hV : ∀ τ : Fin R' → Fin d,
+      (fun σ : Fin R → Fin d => ∑ k, c k *
+        Matrix.trace (Kraus.evalWord (A k) (List.ofFn σ) *
+          Kraus.evalWord (A k) (List.ofFn τ))) ∈ V) :
+    dim j ^ 2 ≤ Module.finrank ℂ V := by
+  classical
+  let Ψ := (blockTracePairing A R).comp
+    (LinearMap.single ℂ (fun k ↦ Matrix (Fin (dim k)) (Fin (dim k)) ℂ) j)
+  have hΨ (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) (σ : Fin R → Fin d) :
+      Ψ X σ = Matrix.trace (X * Kraus.evalWord (A j) (List.ofFn σ)) := by
+    change ∑ k, Matrix.trace (Pi.single j X k * Kraus.evalWord (A k) (List.ofFn σ)) = _
+    rw [Finset.sum_eq_single j]
+    all_goals simp_all
+  have hinj : Function.Injective Ψ := by
+    rw [← LinearMap.ker_eq_bot, LinearMap.ker_eq_bot']
+    intro X hX
+    have hφ : Matrix.traceBilinForm (Fin (dim j)) X = 0 := by
+      apply LinearMap.ext_on_range
+        (v := fun σ : Fin R → Fin d ↦ Kraus.evalWord (A j) (List.ofFn σ))
+        (hv := hR.span_eq_top)
+      intro σ
+      simpa [hΨ] using congrFun hX σ
+    exact (Matrix.ext_iff_trace_mul_right (A := X) (B := 0)).2 fun Y ↦ by
+      simpa using congrArg (· Y) hφ
+  have hrange : LinearMap.range Ψ ≤ V :=
+    (LinearMap.range_comp_le_range _ _).trans
+      (blockTracePairing_range_le_of_forall_mem A c hc hR' V hV)
+  calc dim j ^ 2
+      = Module.finrank ℂ (Matrix (Fin (dim j)) (Fin (dim j)) ℂ) := by
         simp [Module.finrank_matrix, sq]
     _ = Module.finrank ℂ (LinearMap.range Ψ) := (LinearMap.finrank_range_of_inj hinj).symm
     _ ≤ Module.finrank ℂ V := Submodule.finrank_mono hrange
