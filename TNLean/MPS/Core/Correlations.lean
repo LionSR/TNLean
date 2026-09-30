@@ -17,8 +17,8 @@ thermodynamic limit.  One-point and two-point observables are expressed
 through the transfer map, and the connected two-point function is obtained
 by subtracting the product of one-point expectations.
 
-The spectral expansion and decay results remain separate proof obligations
-tracked in issue #1447. The source (arXiv:2011.12127 [CPGSV21]) discusses
+The spectral expansion and decay results are not proved in this module.
+The source (arXiv:2011.12127 [CPGSV21]) discusses
 connected correlations in Section II.B.3. A pure exponential expansion
 requires diagonalizability; in general Jordan blocks contribute polynomial
 factors, and a geometric bound uses a rate above the complementary spectral
