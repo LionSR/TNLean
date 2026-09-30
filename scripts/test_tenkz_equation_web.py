@@ -24,8 +24,8 @@ EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3] + [2, 3, 2, 5, 1, 3, 3]
 PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 8,
-    "ch-mpdo.html": 2,
-    "ch-mpdo_rfp.html": 7,
+    "ch-mpdo.html": 4,
+    "ch-mpdo_rfp.html": 10,
 }
 
 
