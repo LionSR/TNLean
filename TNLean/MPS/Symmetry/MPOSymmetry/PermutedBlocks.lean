@@ -52,7 +52,7 @@ namespace MPOTensor
 
 namespace GroupFamily
 
-universe u v
+universe v
 
 variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}
   {X : Type v} [MulAction G X] {D : X → ℕ} {A : (x : X) → MPSTensor d (D x)}

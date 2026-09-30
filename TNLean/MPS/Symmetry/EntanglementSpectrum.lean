@@ -241,7 +241,7 @@ theorem even_finrank_eigenspace_of_anticommuting_gauges
 /-- A virtual gauge of an on-site symmetry is also a virtual gauge of the
 Kronecker-power symmetry of the blocked tensor: if the `g`-twist of `A` is
 `R Aⁱ R⁻¹`, then the `g`-twist of `blockTensor A L` is `R (blockTensor A L)ᴵ R⁻¹`. -/
-theorem twistedTensor_blockTensor_eq_gauge {G : Type} [Monoid G] {A : MPSTensor d D}
+theorem twistedTensor_blockTensor_eq_gauge {G : Type*} [Monoid G] {A : MPSTensor d D}
     {U : G →* Matrix (Fin d) (Fin d) ℂ} {g : G} {R : GL (Fin D) ℂ}
     (hR : ∀ i, twistedTensor A U g i =
       (R : Matrix (Fin D) (Fin D) ℂ) * A i * ((R⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
