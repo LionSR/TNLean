@@ -822,11 +822,12 @@
         MPSTensor.MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic,
         MPSTensor.IsPeriodic.isSpectrallyPeriodic}
     \leanok
-    \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv}
+    \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv,
+        def:mpv_block_phase_equiv}
     Let $A$ and $B$ be spectrally periodic blocks. If their matrix product
     vectors are proportional by a nonzero scalar at every positive length,
     then $A$ and $B$ are repeated blocks. In particular, this holds when
-    $V_N(B)=\zeta^N V_N(A)$ for a fixed $\zeta\ne0$.
+    $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$ for a fixed $\zeta\ne0$.
     Left-canonical periodic blocks satisfy the spectral-radius-one
     hypothesis automatically.
     This is the single-block case of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
@@ -847,10 +848,10 @@
         MPSTensor.MPVPhaseClassData.not_hetRepeatedBlocks,
         MPSTensor.MPVPhaseClassData.periodic_unitary_match}
     \leanok
-    \uses{def:periodic_tensor}
+    \uses{def:periodic_tensor,def:mpv_phase_class_data}
     Let $A_k$ be a finite family of left-canonical periodic tensors, with
     bond dimensions $D_k$ and periods $m_k$. Partition the family by the
-    relation $V_N(A_l)=\zeta^N V_N(A_k)$ at every positive length for some
+    relation $V^{(N)}(A_l)_\sigma=\zeta^N V^{(N)}(A_k)_\sigma$ at every positive length for some
     $\zeta\ne0$. Choose one representative $r_j$ in each class and enumerate
     its members as $e(j,q)$.
     Distinct representatives are not repeated. Each member has
