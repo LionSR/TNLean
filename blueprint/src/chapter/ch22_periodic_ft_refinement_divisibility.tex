@@ -900,6 +900,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_arbitrary_presentation}
     \lean{MPSTensor.exists_periodic_presentation}
     \leanok
+    \uses{def:periodic_tensor}
     Every tensor $A$ of bond dimension $D$ has the same positive-length matrix
     product vectors as $\bigoplus_k\mu_k B_k$, where $\mu_k\ne0$, each $B_k$ is
     left-canonical periodic, and $\sum_k D_k\le D$.
@@ -908,6 +909,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
+    \uses{thm:tp_gauge_arbitrary,thm:spectral_periodic_period_existence}
     Apply the irreducible-block reduction and trace-preserving gauges from
     \cite[Section~2]{DeLasCuevas2017Irreducible}, discarding zero blocks.
     Each retained block is irreducible and trace preserving, hence has spectral
@@ -930,7 +932,8 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 \begin{proof}
     \leanok
     \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
-        thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary}
+        thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary,
+        thm:periodic_ft_equal_case_trace_preserving}
     Decompose each blocked $B_k$ into its prescribed orbits. Every resulting
     block inherits weight $\mu_k^p$. Group repeated blocks and apply the
     multiplicity-bearing equal-case theorem. Matching to the unit-modulus

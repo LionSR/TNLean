@@ -22,6 +22,12 @@ Absorbing the original weight phases into the blocks gives a unit-weight periodi
 presentation without assuming an initial canonical form or empty-word equality.
 This is the normalization step in arXiv:1708.00029, Theorem 4.1, lines 750–756.
 The subsequent orbit-phase matching and root construction are separate steps.
+
+**Scope restriction (positive lengths):** `exists_periodic_presentation` and
+`exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos` assert equality
+of MPVs only at positive lengths, since discarding zero blocks may lower the bond
+dimension. The convention is inherited from `exists_tp_gauge_from_arbitrary` and
+recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 
 open scoped Matrix BigOperators Matrix.Norms.Operator
