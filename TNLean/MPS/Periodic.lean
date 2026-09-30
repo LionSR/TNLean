@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Periodic
 
 import TNLean.MPS.Periodic.Applications
+import TNLean.MPS.Periodic.BlockingSpectrum
 import TNLean.MPS.Periodic.CornerContraction
 import TNLean.MPS.Periodic.CornerTransition
 import TNLean.MPS.Periodic.Defs
