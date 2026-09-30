@@ -219,8 +219,6 @@ private theorem offBlockProj_mul_pairEmbedding (j : Fin b) :
   rwa [Matrix.conjTranspose_mul, h, Matrix.conjTranspose_conjTranspose,
     Matrix.conjTranspose_zero] at this
 
-
-
 /-- `X Q = 0` for `X = ∑ⱼ K_j Y_j K_jᴴ`. -/
 private theorem sum_mul_offBlockProj {γ : Type*}
     (Y : (j : Fin b) → Matrix γ (Fin (Dj j) × Fin (Dj j)) ℂ) :

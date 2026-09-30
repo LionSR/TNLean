@@ -232,7 +232,6 @@ theorem exists_norm_le_of_entry_eq_pow_sub {ι κ : Type*} [Fintype ι] [Fintype
         exact (hent _ _ _).trans (by gcongr; exact hgap n _)
     _ = K₂ * C * ‖Y a b‖ * ‖(Matrix.single a b 1 : Matrix ι κ ℂ)‖ * r ^ n := by ring
 
-
 /-- The entries of `σᵀ ⊗ 1` are those of the rank-one map `X ↦ Tr(X) σ`, rearranged as in
 `conjTranspose_physicalMatrix_mul_apply`. -/
 theorem transpose_kronecker_one_apply (σ : Matrix (Fin D) (Fin D) ℂ) (a b : Fin D × Fin D) :
