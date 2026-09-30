@@ -823,7 +823,7 @@
         MPSTensor.IsPeriodic.isSpectrallyPeriodic}
     \leanok
     \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv,
-        def:mpv_block_phase_equiv}
+        def:mpv_block_phase_equiv,def:periodic_tensor}
     Let $A$ and $B$ be spectrally periodic blocks. If their matrix product
     vectors are proportional by a nonzero scalar at every positive length,
     then $A$ and $B$ are repeated blocks. In particular, this holds when
@@ -852,15 +852,15 @@
     Let $A_k$ be a finite family of left-canonical periodic tensors, with
     bond dimensions $D_k$ and periods $m_k$. Partition the family by the
     relation $V^{(N)}(A_l)_\sigma=\zeta^N V^{(N)}(A_k)_\sigma$ at every positive length for some
-    $\zeta\ne0$. Choose one representative $r_j$ in each class and enumerate
+    $\zeta\ne0$. Choose one representative $\rho_j$ in each class and enumerate
     its members as $e(j,q)$.
     Distinct representatives are not repeated. Each member has
-    $D_{e(j,q)}=D_{r_j}$ and $m_{e(j,q)}=m_{r_j}$, and admits a unitary
+    $D_{e(j,q)}=D_{\rho_j}$ and $m_{e(j,q)}=m_{\rho_j}$, and admits a unitary
     matrix $U_{j,q}$ and a scalar $\xi_{j,q}$ of modulus one such that
     \begin{align}
         \label{eq:periodic_phase_class_unitary}
         A_{e(j,q)}^i
-        =\xi_{j,q}U_{j,q}A_{r_j}^iU_{j,q}^{\dagger}.
+        =\xi_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^{\dagger}.
     \end{align}
     More generally, any two repeated left-canonical periodic blocks admit
     such a unitary similarity. These are the blockwise identifications in
