@@ -325,11 +325,11 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
-      - name: Test asymmetric example physical states and operators
+      - name: Test example physical states and operators
         timeout-minutes: 5
         run: |
           set -e
-          for example in ElementaryStates AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical; do
+          for example in ElementaryStates AnomalousCondensationZ2Z2Unitary Z3AnomalousUnitary KramersWannierPhysical SpinOperator; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
