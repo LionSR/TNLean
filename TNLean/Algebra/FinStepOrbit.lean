@@ -82,8 +82,7 @@ theorem exists_stepOrbit_phases {G : Type*} [CommGroup G] (m p : ℕ) [NeZero m]
       (∏ k ∈ Finset.range p, b (u + (↑k : Fin m))) =
         c ((stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))).symm u).1 := by
   have hq : 0 < m / m.gcd p :=
-    Nat.div_pos (Nat.gcd_le_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
-      (Nat.gcd_pos_of_pos_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
+    Nat.div_gcd_pos_of_pos_left p (Nat.pos_of_ne_zero (NeZero.ne m))
   let : NeZero (m / m.gcd p) := ⟨Nat.ne_of_gt hq⟩
   let e := stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))
   let f : Fin m → G := fun u => c (e.symm u).1 ^ (e.symm u).2.val

@@ -56,6 +56,75 @@
     change $\alpha+p(k+1)$ modulo $m$.
 \end{proof}
 
+\begin{definition}[Projections for a prescribed blocking length]
+    \label{def:periodic_step_orbit_projection}
+    \lean{MPSTensor.stepOrbitProjection}
+    \leanok
+    \uses{thm:periodic_step_coordinates}
+    Let $m>0$, $p\ge0$, $r=\gcd(m,p)$, and let $P_u$ be projections indexed
+    modulo $m$. Set
+    \[
+        Q_\alpha=\sum_{k=0}^{m/r-1}P_{[\alpha+pk]_m},
+        \qquad 0\le\alpha<r.
+    \]
+    These are the grouped projections of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{definition}
+
+\begin{theorem}[Compression to the step orbits]
+    \label{thm:periodic_step_orbit_compression}
+    \lean{MPSTensor.exists_stepOrbit_blockDecomposition,
+        MPSTensor.adjoint_blockTensor_projection}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    Suppose $P_u$ are nonzero orthogonal projections with $\sum_uP_u=\Id_D$,
+    $A$ is left canonical, and $P_uA^i=A^iP_{u+1}$. There are positive integers
+    $D_\alpha$ with $\sum_\alpha D_\alpha=D$, isometries
+    $V_\alpha:\C^{D_\alpha}\to\C^D$, and left-canonical tensors $C_\alpha$
+    such that
+    \[
+        V_\alpha^\dagger V_\alpha=\Id_{D_\alpha},\qquad
+        V_\alpha V_\alpha^\dagger=Q_\alpha,\qquad
+        C_\alpha^I=V_\alpha^\dagger(A^{[p]})^IV_\alpha.
+    \]
+    The tensors $A^{[p]}$ and $\bigoplus_\alpha C_\alpha$ have the same MPV
+    at every length, including zero. The adjoint transfer map satisfies
+    $\E_{A^{[p]}}^*(P_u)=P_{u+p}$, with indices taken modulo $m$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_step_coordinates}
+    The step coordinates partition the original projections, so the $Q_\alpha$
+    are mutually orthogonal nonzero projections summing to $\Id_D$.
+    Iterating $P_uA^i=A^iP_{u+1}$ over a word of length $p$ shifts the
+    projector index by $p$. Multiplying by the adjoint word and summing,
+    left canonicality gives $\E_{A^{[p]}}^*(P_u)=P_{u+p}$.
+    Summing over one orbit therefore shows that
+    $Q_\alpha$ commutes with each letter of $A^{[p]}$.
+    Compress to the ranges of these projections. Their dimensions sum to $D$,
+    and the commuting projection resolution preserves both left canonicality
+    and traces of every word. The empty-word trace gives the same dimension sum.
+\end{proof}
+
+\begin{theorem}[Step-orbit compression of a periodic tensor]
+    \label{thm:periodic_prescribed_blocking_compression}
+    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    If $A$ is periodic of period $m$ and $p\ge0$, there is a family of nonzero
+    cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
+    $P_uA^i=A^iP_{u+1}$ for which the compression conclusions of
+    Theorem~\ref{thm:periodic_step_orbit_compression} hold.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_step_orbit_compression}
+    Take the cyclic spectral projections, with their indices negated to give
+    $P_uA^i=A^iP_{u+1}$. No projection vanishes: the cyclic adjoint-transfer
+    relation would then force all projections to vanish, contradicting their
+    sum being $\Id_D$. Apply Theorem~\ref{thm:periodic_step_orbit_compression}.
+\end{proof}
+
 \begin{theorem}[Orbit roots as consecutive products]
     \label{thm:periodic_orbit_phase_products}
     \lean{Fin.exists_stepOrbit_phases}

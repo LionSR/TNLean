@@ -125,8 +125,7 @@ theorem exists_isLeftCanonical_evalWord_eq_sum_orbit_phases [NeZero m]
         c ((Fin.stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))).symm u).1 •
           (P u * Kraus.evalWord A w) := by
   have hq : 0 < m / m.gcd p :=
-    Nat.div_pos (Nat.gcd_le_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
-      (Nat.gcd_pos_of_pos_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
+    Nat.div_gcd_pos_of_pos_left p (Nat.pos_of_ne_zero (NeZero.ne m))
   let cc : Fin (m.gcd p) → Circle := fun a =>
     ⟨c a, by
       simpa [Submonoid.unitSphere] using

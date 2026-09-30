@@ -24,6 +24,14 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### positivity of the cyclic step-orbit length — promoted
+- **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
+- **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
+  `StepOrbitSectors.lean` (2026-09-29).
+- **Abstraction:** the existing `Nat.div_gcd_pos_of_pos_left p hm` provides the
+  result directly; the phase construction and prescribed-blocking sectors use it.
+- **Notes:** no local theorem or extra positivity hypothesis is needed.
+
 ### bilinear identities on operators with disjoint supports — promoted
 - **Pattern:** prove an identity `f A B = g A B`, bilinear in operators `A`, `B` acting on
   sets of sites `S`, `S'`, by nested `Submodule.span_induction` on
@@ -3585,18 +3593,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   branches close by `omega` alone — and are left as they are.
 
 
-### positivity of the cyclic step-orbit length — candidate
-- **Pattern:** derive `0 < m / m.gcd p` from `0 < m` using
-  `Nat.div_pos (Nat.gcd_le_left p hm) (Nat.gcd_pos_of_pos_left p hm)`.
-- **Seen:** two occurrences in two files (2026-09-29): `Fin.exists_stepOrbit_phases`
-  in `TNLean/Algebra/FinStepOrbit.lean` and
-  `MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases` in
-  `TNLean/MPS/Periodic/SectorPhaseWord.lean`.
-- **Abstraction:** if a third use appears, prefer a lemma about the positive
-  quotient over a tactic; the present proof is two applications of Mathlib lemmas.
-- **Notes:** positivity supplies both the finite cyclic successor and the fact
-  that a complex root of unity has unit modulus. No additional positivity
-  hypothesis belongs in either public theorem.
 
 ## Retired
 
