@@ -2837,7 +2837,13 @@ $A$ along $w$.
     \cite{gap:mswc24_multiplicity_fixed_point,gap:mswc24_block_form_mixed_overlap}.
     For blocks of multiplicity one whose states on $q$ sites are orthogonal it
     holds without the condition $q=o(N)$
-    (Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}).
+    (Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}). For blocks of
+    multiplicity one and weight one whose states overlap, the approximating state
+    converges at the rate obtained by replacing $\xi_{\mathrm{diag}}$ with
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, the larger of the
+    correlation lengths of the blocks and of their mixed transfer maps, again
+    without the condition $q=o(N)$
+    (Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected}).
 \end{theorem}
 %% The direct sum A is not normal, so Lemma lem:ldp_positive_part_overlap
 %% does not apply to it. The source's proof rests on the block form (S5) of
@@ -2948,6 +2954,7 @@ $A$ along $w$.
         MPSTensor.reindex_toTensor_overlappingBlockSector,
         MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
         MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor,
+        MPSTensor.one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le,
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis,
         MPSTensor.not_approximationError_le_overlappingBlockTensor}
     \leanok
@@ -2971,14 +2978,19 @@ $A$ along $w$.
          & =\frac{u^M+v^M}{(1+s^M)^{1/2}},
         \label{eq:ldp_overlapping_blocks_overlap}
     \end{align}
-    and for $M\geq3$ the error is at least $(9/25)^q/16$. The transfer maps of both
+    and for $M\geq3$ the error is at least $(9/25)^q/16$, while for every $M\geq1$
+    it is at most $M(9/25)^q$, so the construction converges whenever
+    $(N/q)(9/25)^q\to0$. The transfer maps of both
     blocks have no eigenvalue other than one, so every $\lambda_2$ bounds their
     subleading eigenvalues. If $r=e^{-\gamma/\xi_{\mathrm{diag}}}<9/25$, then for every
     constant $C$ there is $q\geq3$ such that, with $M=q$, $N=q^2$ and
     $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
     $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$ satisfies
     $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general}) fails even
-    when every multiplicity is one \cite{gap:mswc24_block_form_mixed_overlap}.
+    when every multiplicity is one \cite{gap:mswc24_block_form_mixed_overlap}. What
+    fails is the rate: the error is governed by the overlap $(3/5)^q$ of the blocks,
+    the eigenvalue of their mixed transfer map raised to the power $q$
+    (Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected}).
 \end{theorem}
 
 \begin{proof}
@@ -3003,8 +3015,15 @@ $A$ along $w$.
         u^M+v^M\leq u^3+v^2=1-u^2(1-u)\leq1-\frac{s^2}{16},
     \end{align*}
     because $u^2=\bigl(1+\sqrt{1-s^2}\bigr)/2\geq1/2$ and
-    $1-u\geq(1-u^2)/2\geq s^2/8$. Finally $Cy\,e^{Cy}$ with $y=qr^q$ is eventually
-    below $(9/25)^q/16$, because $q(25r/9)^q\to0$.
+    $1-u\geq(1-u^2)/2\geq s^2/8$. For the upper bound, the overlap is one when
+    $M=1$, since $u+v=\sqrt{1+s}$. For $M\geq2$,
+    $u\geq u^2=\bigl(1+\sqrt{1-s^2}\bigr)/2\geq1-s^2/2$, so $u^M\geq1-Ms^2/2$, and
+    $(1+s^M)^{1/2}\leq1+s^2/2$; when $Ms^2<1$ this gives
+    \begin{align*}
+        \frac{u^M+v^M}{(1+s^M)^{1/2}}\geq\frac{1-Ms^2/2}{1+s^2/2}\geq1-Ms^2,
+    \end{align*}
+    and when $Ms^2\geq1$ the bound $\varepsilon\leq1$ suffices. Finally $Cy\,e^{Cy}$
+    with $y=qr^q$ is eventually below $(9/25)^q/16$, because $q(25r/9)^q\to0$.
 \end{proof}
 
 \begin{lemma}[Polar decomposition of an orthogonal sum]
@@ -3130,3 +3149,4 @@ $A$ along $w$.
 \end{proof}
 
 \input{chapter/ch32_log_depth_repeated_blocks}
+\input{chapter/ch32_log_depth_overlapping_blocks}

@@ -20,7 +20,6 @@ space. The results are:
 * the partial isometry `V^{⊗M}` does not increase norms
   (`sum_norm_sq_tensorPower_mulVec_le`), so the normalization of the approximating state can only
   increase the overlap;
-* the unnormalized overlap is `∑ⱼ αⱼ zⱼ` (`sum_star_nonNormalApproxVector_mul_mpv_blockSum`);
 * the mixed transfer matrix of the limit `P_∞` against `P̃_{j,∞}` is the rank-one idempotent
   `ρ ↦ Tr(Π_j ρ) σ̃_j` (`mixedMapLM_blockSumPosLimit_apply`), so `zⱼ` is `1` up to the telescoping
   error of `‖P - P_∞‖` (`exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le`);
@@ -34,11 +33,14 @@ space. The results are:
 ## Main declarations
 
 * `MPSTensor.embeddedBlockState` — the fixed point `σ̃_j = E_j σ_j E_jᴴ` in the full bond space.
-* `MPSTensor.sum_norm_sq_tensorPower_mulVec_le`
-* `MPSTensor.sum_star_nonNormalApproxVector_mul_mpv_blockSum`
+* `MPSTensor.sum_star_tensorPower_mulVec_mul`, `MPSTensor.sum_norm_sq_tensorPower_mulVec_le` —
+  inner products and norms after a tensor power of a partial isometry.
+* `MPSTensor.embedPair_fixedPointPair` — embedded pairs are the pairs of the embedded fixed points.
 * `MPSTensor.mixedMapLM_blockSumPosLimit_apply`
 * `MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le`
+* `MPSTensor.exists_norm_mpvOverlap_le_of_mixedMapLM` — overlaps of distinct blocks decay.
 * `MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le`
+* `MPSTensor.exp_neg_div_correlationLength_le_one`
 
 ## References
 
@@ -64,7 +66,7 @@ attribute [local instance 1001]
 
 /-- The conjugate transpose of a tensor power is the tensor power of the conjugate transpose:
 `(W^{⊗M})ᴴ = (Wᴴ)^{⊗M}`. -/
-theorem conjTranspose_tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ ℂ) :
+private theorem conjTranspose_tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ ℂ) :
     (tensorPower M W)ᴴ = tensorPower M Wᴴ := by
   ext s t
   simp [tensorPower, conjTranspose_apply, star_prod]
@@ -114,13 +116,13 @@ theorem sum_norm_sq_tensorPower_mulVec_le {n κ : Type*} [Fintype n] [Fintype κ
 /-! ### The fixed points of the blocks in the full bond space -/
 
 /-- A coordinate isometry has real entries: `E_ιᴴ = E_ιᵀ`. -/
-theorem conjTranspose_coordEmbedding {D' : ℕ} (ι : Fin D' → Fin D) :
+private theorem conjTranspose_coordEmbedding {D' : ℕ} (ι : Fin D' → Fin D) :
     (coordEmbedding ι)ᴴ = (coordEmbedding ι)ᵀ := by
   ext a x
   by_cases h : x = ι a <;> simp [coordEmbedding, conjTranspose_apply, h]
 
 /-- The entries of `E_ι X E_ιᴴ`. -/
-theorem coordEmbedding_mul_mul_conjTranspose_apply {D' : ℕ} (ι : Fin D' → Fin D)
+private theorem coordEmbedding_mul_mul_conjTranspose_apply {D' : ℕ} (ι : Fin D' → Fin D)
     (X : Matrix (Fin D') (Fin D') ℂ) (x y : Fin D) :
     (coordEmbedding ι * X * (coordEmbedding ι)ᴴ) x y =
       ∑ a, ∑ c, if x = ι a ∧ y = ι c then X a c else 0 := by
@@ -130,7 +132,7 @@ theorem coordEmbedding_mul_mul_conjTranspose_apply {D' : ℕ} (ι : Fin D' → F
   by_cases h1 : x = ι a <;> by_cases h2 : y = ι c <;> simp [h1, h2]
 
 /-- `(E_ι X E_ιᴴ)_{ι a, ι c} = X_{a c}` for an injective `ι`. -/
-theorem coordEmbedding_mul_mul_conjTranspose_apply_self {D' : ℕ} {ι : Fin D' → Fin D}
+private theorem coordEmbedding_mul_mul_conjTranspose_apply_self {D' : ℕ} {ι : Fin D' → Fin D}
     (hι : Function.Injective ι) (X : Matrix (Fin D') (Fin D') ℂ) (a c : Fin D') :
     (coordEmbedding ι * X * (coordEmbedding ι)ᴴ) (ι a) (ι c) = X a c := by
   rw [coordEmbedding_mul_mul_conjTranspose_apply, Finset.sum_eq_single a, Finset.sum_eq_single c]
@@ -143,7 +145,7 @@ theorem coordEmbedding_mul_mul_conjTranspose_apply_self {D' : ℕ} {ι : Fin D' 
   · simp
 
 /-- `E_ι X E_ιᴴ` vanishes off the range of `ι`. -/
-theorem coordEmbedding_mul_mul_conjTranspose_apply_eq_zero {D' : ℕ} (ι : Fin D' → Fin D)
+private theorem coordEmbedding_mul_mul_conjTranspose_apply_eq_zero {D' : ℕ} (ι : Fin D' → Fin D)
     (X : Matrix (Fin D') (Fin D') ℂ) {x y : Fin D} (h : x ∉ Set.range ι ∨ y ∉ Set.range ι) :
     (coordEmbedding ι * X * (coordEmbedding ι)ᴴ) x y = 0 := by
   rw [coordEmbedding_mul_mul_conjTranspose_apply]
@@ -154,7 +156,7 @@ theorem coordEmbedding_mul_mul_conjTranspose_apply_eq_zero {D' : ℕ} (ι : Fin 
   · exact absurd ⟨c, rfl⟩ h
 
 /-- `√(E σ Eᴴ) = E √σ Eᴴ` for a coordinate isometry `E`. -/
-theorem cfc_sqrt_coordEmbedding_mul_mul {D' : ℕ} {ι : Fin D' → Fin D}
+private theorem cfc_sqrt_coordEmbedding_mul_mul {D' : ℕ} {ι : Fin D' → Fin D}
     (hι : Function.Injective ι) {σ : Matrix (Fin D') (Fin D') ℂ} (hσ : σ.PosSemidef) :
     CFC.sqrt (coordEmbedding ι * σ * (coordEmbedding ι)ᴴ) =
       coordEmbedding ι * CFC.sqrt σ * (coordEmbedding ι)ᴴ := by
@@ -173,12 +175,12 @@ noncomputable def embeddedBlockState {D' : ℕ} (ι : Fin D' → Fin D)
     (σ : Matrix (Fin D') (Fin D') ℂ) : Matrix (Fin D) (Fin D) ℂ :=
   coordEmbedding ι * σ * (coordEmbedding ι)ᴴ
 
-theorem posSemidef_embeddedBlockState {D' : ℕ} (ι : Fin D' → Fin D)
+private theorem posSemidef_embeddedBlockState {D' : ℕ} (ι : Fin D' → Fin D)
     {σ : Matrix (Fin D') (Fin D') ℂ} (hσ : σ.PosSemidef) :
     (embeddedBlockState ι σ).PosSemidef :=
   hσ.mul_mul_conjTranspose_same _
 
-theorem trace_embeddedBlockState {D' : ℕ} {ι : Fin D' → Fin D} (hι : Function.Injective ι)
+private theorem trace_embeddedBlockState {D' : ℕ} {ι : Fin D' → Fin D} (hι : Function.Injective ι)
     (σ : Matrix (Fin D') (Fin D') ℂ) : (embeddedBlockState ι σ).trace = σ.trace := by
   rw [embeddedBlockState, Matrix.trace_mul_comm, ← Matrix.mul_assoc,
     conjTranspose_coordEmbedding_mul_self hι, Matrix.one_mul]
@@ -201,7 +203,7 @@ theorem embedPair_fixedPointPair {D' : ℕ} {ι : Fin D' → Fin D} (hι : Funct
       coordEmbedding_mul_mul_conjTranspose_apply_eq_zero _ _ (not_and_or.1 hp)]
 
 /-- `K (Xᵀ ⊗ 1) Kᴴ = (E X Eᴴ)ᵀ ⊗ (E Eᴴ)` for `K = E ⊗ E`. -/
-theorem pairEmbedding_mul_transpose_kronecker_one_mul {D' : ℕ} (ι : Fin D' → Fin D)
+private theorem pairEmbedding_mul_transpose_kronecker_one_mul {D' : ℕ} (ι : Fin D' → Fin D)
     (X : Matrix (Fin D') (Fin D') ℂ) :
     pairEmbedding ι * (Xᵀ ⊗ₖ (1 : Matrix (Fin D') (Fin D') ℂ)) * (pairEmbedding ι)ᴴ =
       (coordEmbedding ι * X * (coordEmbedding ι)ᴴ)ᵀ ⊗ₖ
@@ -215,7 +217,7 @@ variable {Dj : Fin b → ℕ} {ι : (j : Fin b) → Fin (Dj j) → Fin D}
 
 /-- The limit `P_∞` in terms of the embedded roots: `P_∞ = ∑ⱼ (E_j √σ_j E_jᴴ)ᵀ ⊗ Π_j` with
 `Π_j = E_j E_jᴴ`. -/
-theorem blockSumPosLimit_eq_sum_kronecker
+private theorem blockSumPosLimit_eq_sum_kronecker
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) :
     blockSumPosLimit ι σ = ∑ j, (embeddedBlockState (ι j) (CFC.sqrt (σ j)))ᵀ ⊗ₖ
       (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ) := by
@@ -223,7 +225,7 @@ theorem blockSumPosLimit_eq_sum_kronecker
 
 /-- The entries of `Xᵀ ⊗ Y` read as letters: at the physical pair `(l, r)` the letter is
 `X |l⟩⟨r| Y`. -/
-theorem transpose_kronecker_apply_eq_mul_single_mul (X Y : Matrix (Fin D) (Fin D) ℂ)
+private theorem transpose_kronecker_apply_eq_mul_single_mul (X Y : Matrix (Fin D) (Fin D) ℂ)
     (l r a c : Fin D) :
     (Xᵀ ⊗ₖ Y) (l, r) (a, c) = (X * Matrix.single l r (1 : ℂ) * Y) a c := by
   rw [Matrix.kroneckerMap_apply, Matrix.transpose_apply, Matrix.mul_assoc, Matrix.mul_apply,
@@ -234,7 +236,7 @@ theorem transpose_kronecker_apply_eq_mul_single_mul (X Y : Matrix (Fin D) (Fin D
   · simp
 
 /-- `∑_{(l, r)} |l⟩⟨r| X |r⟩⟨l| = Tr X · 1`. -/
-theorem sum_single_mul_mul_conjTranspose_single (X : Matrix (Fin D) (Fin D) ℂ) :
+private theorem sum_single_mul_mul_conjTranspose_single (X : Matrix (Fin D) (Fin D) ℂ) :
     ∑ i : Fin (D * D), Matrix.single (virtualPairEquiv D i).1 (virtualPairEquiv D i).2 (1 : ℂ) *
         X * (Matrix.single (virtualPairEquiv D i).1 (virtualPairEquiv D i).2 (1 : ℂ))ᴴ =
       X.trace • 1 := by
@@ -259,7 +261,7 @@ variable (hι : ∀ j, Function.Injective (ι j))
 include hι hdisj
 
 /-- The embedded roots `r_j = E_j √σ_j E_jᴴ` multiply as `r_k r_j = δ_{kj} σ̃_j`. -/
-theorem embeddedBlockState_sqrt_mul (hσ : ∀ j, (σ j).PosSemidef) (k j : Fin b) :
+private theorem embeddedBlockState_sqrt_mul (hσ : ∀ j, (σ j).PosSemidef) (k j : Fin b) :
     embeddedBlockState (ι k) (CFC.sqrt (σ k)) * embeddedBlockState (ι j) (CFC.sqrt (σ j)) =
       if k = j then embeddedBlockState (ι j) (σ j) else 0 := by
   unfold embeddedBlockState
@@ -284,7 +286,7 @@ theorem embeddedBlockState_sqrt_mul (hσ : ∀ j, (σ j).PosSemidef) (k j : Fin 
 
 omit hdisj in
 /-- `Tr(Π_j σ̃_j) = Tr σ_j`. -/
-theorem trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState (j : Fin b) :
+private theorem trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState (j : Fin b) :
     (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ * embeddedBlockState (ι j) (σ j)).trace =
       (σ j).trace := by
   rw [← trace_embeddedBlockState (hι j) (σ j), embeddedBlockState]
@@ -349,7 +351,7 @@ theorem mixedMapLM_blockSumPosLimit_apply (hσ : ∀ j, (σ j).PosSemidef) (j : 
 end Limit
 
 /-- A linear map `ρ ↦ Tr(Q ρ) σ` with `Tr(Q σ) = 1` has an idempotent transfer matrix. -/
-theorem isIdempotentElem_transferMatrix_of_apply_eq_trace_smul
+private theorem isIdempotentElem_transferMatrix_of_apply_eq_trace_smul
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     {Q σ : Matrix (Fin D) (Fin D) ℂ} (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ)
     (h1 : (Q * σ).trace = 1) : IsIdempotentElem (transferMatrix T) := by
@@ -360,7 +362,7 @@ theorem isIdempotentElem_transferMatrix_of_apply_eq_trace_smul
     mul_one]
 
 /-- A linear map `ρ ↦ Tr(Q ρ) σ` has transfer matrix of trace `Tr(Q σ)`. -/
-theorem trace_transferMatrix_of_apply_eq_trace_smul [NeZero D]
+private theorem trace_transferMatrix_of_apply_eq_trace_smul [NeZero D]
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
     {Q σ : Matrix (Fin D) (Fin D) ℂ} (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ) :
     (transferMatrix T).trace = (Q * σ).trace := by

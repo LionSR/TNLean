@@ -189,7 +189,7 @@ noncomputable def blockSumPosLimit (ι : (j : Fin b) → Fin (Dj j) → Fin D)
     (pairEmbedding (ι j))ᴴ
 
 /-- The projector `Q = 1 - ∑ⱼ K_j K_jᴴ` onto the bond pairs that do not lie in one block. -/
-noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
+private noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   1 - ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ
 
@@ -202,7 +202,7 @@ variable (hι : ∀ j, Function.Injective (ι j))
 include hι hdisj
 
 /-- `K_jᴴ ∑ₖ K_k Y_k = Y_j` for embeddings with orthogonal ranges. -/
-theorem conjTranspose_pairEmbedding_mul_sum {γ : Type*}
+private theorem conjTranspose_pairEmbedding_mul_sum {γ : Type*}
     (Y : (k : Fin b) → Matrix (Fin (Dj k) × Fin (Dj k)) γ ℂ) (j : Fin b) :
     (pairEmbedding (ι j))ᴴ * ∑ k, pairEmbedding (ι k) * Y k = Y j := by
   rw [Matrix.mul_sum, Finset.sum_eq_single j]
@@ -213,14 +213,14 @@ theorem conjTranspose_pairEmbedding_mul_sum {γ : Type*}
   · simp
 
 /-- `K_jᴴ Q = 0`. -/
-theorem conjTranspose_pairEmbedding_mul_offBlockProj (j : Fin b) :
+private theorem conjTranspose_pairEmbedding_mul_offBlockProj (j : Fin b) :
     (pairEmbedding (ι j))ᴴ * offBlockProj ι = 0 := by
   have h := conjTranspose_pairEmbedding_mul_sum hι hdisj
     (fun k => (pairEmbedding (ι k))ᴴ) j
   rw [offBlockProj, Matrix.mul_sub, Matrix.mul_one, h, sub_self]
 
 /-- `Q K_j = 0`. -/
-theorem offBlockProj_mul_pairEmbedding (j : Fin b) :
+private theorem offBlockProj_mul_pairEmbedding (j : Fin b) :
     offBlockProj ι * pairEmbedding (ι j) = 0 := by
   have h : (offBlockProj ι)ᴴ = offBlockProj ι := by
     simp [offBlockProj, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul]
@@ -231,7 +231,7 @@ theorem offBlockProj_mul_pairEmbedding (j : Fin b) :
 
 
 /-- `X Q = 0` for `X = ∑ⱼ K_j Y_j K_jᴴ`. -/
-theorem sum_mul_offBlockProj {γ : Type*}
+private theorem sum_mul_offBlockProj {γ : Type*}
     (Y : (j : Fin b) → Matrix γ (Fin (Dj j) × Fin (Dj j)) ℂ) :
     (∑ j, Y j * (pairEmbedding (ι j))ᴴ) * offBlockProj ι = 0 := by
   rw [Matrix.sum_mul]
@@ -239,7 +239,7 @@ theorem sum_mul_offBlockProj {γ : Type*}
     Matrix.mul_zero, Finset.sum_const_zero]
 
 /-- `Q X = 0` for `X = ∑ⱼ K_j Y_j`. -/
-theorem offBlockProj_mul_sum {γ : Type*}
+private theorem offBlockProj_mul_sum {γ : Type*}
     (Y : (j : Fin b) → Matrix (Fin (Dj j) × Fin (Dj j)) γ ℂ) :
     offBlockProj ι * ∑ j, pairEmbedding (ι j) * Y j = 0 := by
   rw [Matrix.mul_sum]
@@ -248,11 +248,11 @@ theorem offBlockProj_mul_sum {γ : Type*}
 
 omit hι hdisj in
 /-- `Q` is Hermitian. -/
-theorem isHermitian_offBlockProj : (offBlockProj ι).IsHermitian := by
+private theorem isHermitian_offBlockProj : (offBlockProj ι).IsHermitian := by
   simp [Matrix.IsHermitian, offBlockProj, Matrix.conjTranspose_sum, Matrix.conjTranspose_mul]
 
 /-- `Q` is idempotent. -/
-theorem offBlockProj_mul_self : offBlockProj ι * offBlockProj ι = offBlockProj ι := by
+private theorem offBlockProj_mul_self : offBlockProj ι * offBlockProj ι = offBlockProj ι := by
   have h := sum_mul_offBlockProj hι hdisj (γ := Fin D × Fin D) fun j => pairEmbedding (ι j)
   calc offBlockProj ι * offBlockProj ι =
         (1 - ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ) * offBlockProj ι := rfl
@@ -261,12 +261,12 @@ theorem offBlockProj_mul_self : offBlockProj ι * offBlockProj ι = offBlockProj
     _ = offBlockProj ι := by rw [h, sub_zero]
 
 /-- `Q` is positive semidefinite. -/
-theorem posSemidef_offBlockProj : (offBlockProj ι).PosSemidef := by
+private theorem posSemidef_offBlockProj : (offBlockProj ι).PosSemidef := by
   have h := Matrix.posSemidef_conjTranspose_mul_self (offBlockProj ι)
   rwa [(isHermitian_offBlockProj (ι := ι)).eq, offBlockProj_mul_self hι hdisj] at h
 
 /-- `(∑ⱼ K_j Y_j K_jᴴ)(∑ⱼ K_j Z_j K_jᴴ) = ∑ⱼ K_j Y_j Z_j K_jᴴ`. -/
-theorem sum_pairEmbedding_mul_sum_pairEmbedding
+private theorem sum_pairEmbedding_mul_sum_pairEmbedding
     (Y Z : (j : Fin b) → Matrix (Fin (Dj j) × Fin (Dj j)) (Fin (Dj j) × Fin (Dj j)) ℂ) :
     (∑ j, pairEmbedding (ι j) * Y j * (pairEmbedding (ι j))ᴴ) *
         (∑ j, pairEmbedding (ι j) * Z j * (pairEmbedding (ι j))ᴴ) =
@@ -407,14 +407,14 @@ include hι hdisj
 
 omit hι hdisj in
 /-- `P_∞` is positive semidefinite. -/
-theorem posSemidef_blockSumPosLimit : (blockSumPosLimit ι σ).PosSemidef := by
+private theorem posSemidef_blockSumPosLimit : (blockSumPosLimit ι σ).PosSemidef := by
   refine Matrix.posSemidef_sum _ fun j _ => ?_
   refine Matrix.PosSemidef.mul_mul_conjTranspose_same ?_ _
   exact (Matrix.posSemidef_transpose_iff.2
     (Matrix.nonneg_iff_posSemidef.1 (CFC.sqrt_nonneg (σ j)))).kronecker Matrix.PosSemidef.one
 
 /-- `P_∞² = ∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ`. -/
-theorem blockSumPosLimit_mul_self (hσ : ∀ j, (σ j).PosSemidef) :
+private theorem blockSumPosLimit_mul_self (hσ : ∀ j, (σ j).PosSemidef) :
     blockSumPosLimit ι σ * blockSumPosLimit ι σ = blockSumGramLimit ι σ := by
   rw [blockSumPosLimit, sum_pairEmbedding_mul_sum_pairEmbedding hι hdisj, blockSumGramLimit]
   refine Finset.sum_congr rfl fun j _ => ?_
@@ -422,26 +422,26 @@ theorem blockSumPosLimit_mul_self (hσ : ∀ j, (σ j).PosSemidef) :
     CFC.sqrt_mul_sqrt_self (σ j) (hσ j).nonneg]
 
 /-- `P_∞ Q = 0`. -/
-theorem blockSumPosLimit_mul_offBlockProj : blockSumPosLimit ι σ * offBlockProj ι = 0 := by
+private theorem blockSumPosLimit_mul_offBlockProj : blockSumPosLimit ι σ * offBlockProj ι = 0 := by
   have h := sum_mul_offBlockProj hι hdisj (γ := Fin D × Fin D) fun j => pairEmbedding (ι j) *
     ((CFC.sqrt (σ j))ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ))
   exact h
 
 /-- `Q P_∞ = 0`. -/
-theorem offBlockProj_mul_blockSumPosLimit : offBlockProj ι * blockSumPosLimit ι σ = 0 := by
+private theorem offBlockProj_mul_blockSumPosLimit : offBlockProj ι * blockSumPosLimit ι σ = 0 := by
   have h := offBlockProj_mul_sum hι hdisj (γ := Fin D × Fin D) fun j =>
     ((CFC.sqrt (σ j))ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) * (pairEmbedding (ι j))ᴴ
   simpa only [blockSumPosLimit, Matrix.mul_assoc] using h
 
 omit hι hdisj in
 /-- `∑ⱼ K_j K_jᴴ + Q = 1`. -/
-theorem sum_pairEmbedding_mul_conjTranspose_add_offBlockProj :
+private theorem sum_pairEmbedding_mul_conjTranspose_add_offBlockProj :
     ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ + offBlockProj ι = 1 := by
   rw [offBlockProj, add_sub_cancel]
 
 /-- **Strict positivity of the limit.** If every `σ_j` is positive definite with trace one,
 then `∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ + Q ≥ c` for some `c > 0`. -/
-theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosDef)
+private theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosDef)
     (htr : ∀ j, (σ j).trace = 1) :
     ∃ c : ℝ, 0 < c ∧
       algebraMap ℝ (Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) c ≤

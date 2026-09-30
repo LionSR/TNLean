@@ -163,7 +163,7 @@ variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
   {ι : (j : Fin b) → Fin (Dj j) → Fin D}
 
 /-- The normalized weights of unit weights are `αⱼ = b^{-1/2}`. -/
-theorem ghzAmplitude_one [NeZero b] (j : Fin b) :
+private theorem ghzAmplitude_one [NeZero b] (j : Fin b) :
     ghzAmplitude (fun _ : Fin b => (1 : ℂ)) j = ((Real.sqrt b : ℝ) : ℂ)⁻¹ := by
   simp [ghzAmplitude]
 

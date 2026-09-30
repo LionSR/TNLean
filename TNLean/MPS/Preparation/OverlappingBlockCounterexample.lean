@@ -26,9 +26,10 @@ with weight one, so that `A⁰ = diag(1, 3/5)` and `A¹ = diag(0, 4/5)`. With
 `u = (√(1+s) + √(1-s))/2`, and `v = (√(1+s) - √(1-s))/2`, the overlap of the approximating
 state with the target is `(u^M + v^M) / (1 + s^M)^{1/2}` for all `q, M ≥ 1`
 (`nonNormalApproxOverlap_overlappingBlockTensor`). For `M ≥ 3` the error is at least
-`s²/16 = (9/25)^q/16` (`le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`), and for
-every `M ≥ 1` it is at most `M s²` (`one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le`):
-the construction converges, at a rate governed by the overlap of the blocks.
+`s²/16 = (9/25)^q/16` (`le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`), and
+for every `M ≥ 1` it is at most `M s²`
+(`one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le`): the construction converges,
+at a rate governed by the overlap of the blocks.
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
 canonical form of eq. (S2) of a basis of normal tensors in canonical form II, with both weights
@@ -326,7 +327,7 @@ theorem le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ
 /-- **The error for overlapping blocks is at most `M (9/25)^q`**: together with
 `le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor`, the error of the approximating
 state of arXiv:2307.01696, eq. (S7), for `overlappingBlockTensor` lies between `(9/25)^q / 16`
-(for `M ≥ 3`) and `M (9/25)^q`, so it tends to zero exactly when `(N/q) τ^{2q} → 0`, with
+(for `M ≥ 3`) and `M (9/25)^q`, so it tends to zero whenever `(N/q) τ^{2q} → 0`, with
 `τ = 3/5` the eigenvalue of the mixed transfer map of the two blocks. The construction of the
 source converges; the rate `e^{-γ q/ξ_diag}` of Lemma 1'(ii) does not describe it. -/
 theorem one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le {q M : ℕ} (hq : q ≠ 0)
