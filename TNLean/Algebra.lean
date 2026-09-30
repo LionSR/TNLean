@@ -14,6 +14,7 @@ import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
 import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CStarSqrtHolder
+import TNLean.Algebra.CStarSqrtLipschitz
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.CharacterProjector
 import TNLean.Algebra.CharacterProjectorTwirl
@@ -50,6 +51,7 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
+import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometryUnitaryExtension
@@ -114,6 +116,7 @@ import TNLean.Algebra.UnitaryAdjointKronecker
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryConjugationTransposeSign
+import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryKronecker
