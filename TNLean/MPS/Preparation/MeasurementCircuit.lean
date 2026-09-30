@@ -78,10 +78,10 @@ definition.
 ## Main results
 
 * `MPSPreparation.sum_outcomeProj` — the outcome projections sum to the identity.
-* `MPSPreparation.MeasurementProtocol.Prepares.ne_zero` — a prepared vector is nonzero, so
-  the definition is not vacuous.
+* `MPSPreparation.MeasurementProtocol.IsPreparationOf.ne_zero` — a prepared vector is
+  nonzero, so the definition is not vacuous.
 * `MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`,
-  `MPSPreparation.exists_isPreparedInDepth_of_prepares_of_measured_eq_empty` — without
+  `MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty` — without
   measurements, preparation with measurements is preparation by a local circuit, up to
   single-site unitaries.
 
@@ -214,7 +214,7 @@ outcome of nonzero probability the corrected vector is a scalar multiple of `ψ`
 
 Source: arXiv:2103.13367, paragraph "State transformations with QC and LOCC" (the state
 is prepared "deterministically"). -/
-def Prepares (ψ : Cfg d N → ℂ) : Prop :=
+def IsPreparationOf (ψ : Cfg d N → ℂ) : Prop :=
   productVector P.initial ≠ 0 ∧
     ∀ m, P.postMeasurement m ≠ 0 → ∃ c : ℂ, P.output m = c • ψ
 
@@ -237,7 +237,8 @@ theorem output_ne_zero {m : P.measured → Fin d} (hm : P.postMeasurement m ≠ 
     (finKronecker_mem_unitary (P.correction_mem_unitary m)) h0)
 
 /-- A vector prepared by a protocol is nonzero. -/
-theorem Prepares.ne_zero {ψ : Cfg d N → ℂ} (h : P.Prepares ψ) : ψ ≠ 0 := by
+theorem IsPreparationOf.ne_zero {ψ : Cfg d N → ℂ} (h : P.IsPreparationOf ψ) :
+    ψ ≠ 0 := by
   obtain ⟨m, hm⟩ := P.exists_postMeasurement_ne_zero h.1
   obtain ⟨c, hc⟩ := h.2 m hm
   intro hψ
@@ -250,7 +251,7 @@ protocol whose circuit has at most `T` layers prepares it.
 
 Source: arXiv:2103.13367, Definition "Transformations under QC and LOCC" (`QCcc_ℓ`). -/
 def IsPreparedWithMeasurementsInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
-  ∃ P : MeasurementProtocol d N, P.first.length ≤ T ∧ P.Prepares ψ
+  ∃ P : MeasurementProtocol d N, P.first.length ≤ T ∧ P.IsPreparationOf ψ
 
 /-- **Circuits are protocols without measurements.** A nonzero vector prepared by a local
 circuit of depth `T` is prepared with measurements in depth `T`, measuring no site. -/
@@ -266,9 +267,9 @@ theorem isPreparedWithMeasurementsInDepth_of_isPreparedInDepth {T : ℕ} {ψ : C
 /-- **Protocols without measurements are circuits up to single-site unitaries.** If a protocol
 measuring no site, with at most `T` layers, prepares `ψ`, then some product of single-site
 unitaries takes `ψ` to a vector prepared by a local circuit of depth `T`. -/
-theorem exists_isPreparedInDepth_of_prepares_of_measured_eq_empty {T : ℕ} {ψ : Cfg d N → ℂ}
+theorem exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty {T : ℕ} {ψ : Cfg d N → ℂ}
     (P : MeasurementProtocol d N) (hP : P.measured = ∅) (hT : P.first.length ≤ T)
-    (h : P.Prepares ψ) :
+    (h : P.IsPreparationOf ψ) :
     ∃ u : Fin N → Matrix (Fin d) (Fin d) ℂ, (∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) ∧
       IsPreparedInDepth T (finKronecker u *ᵥ ψ) := by
   obtain ⟨m, hm⟩ := P.exists_postMeasurement_ne_zero h.1

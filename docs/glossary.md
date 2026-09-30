@@ -1319,6 +1319,71 @@ The following notions use different transfer objects and are not interchangeable
   polylogarithmic-depth conversions of the phase equivalence in
   arXiv:2103.13367 are not formalized, nor is blocking of sites.
 
+## Local circuits assisted by measurements
+
+### `MPSPreparation.MeasurementProtocol.IsPreparationOf`
+
+- **Declaration:**
+  `MPSPreparation.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+- **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
+  sites measured in the computational basis, and for every outcome string a
+  unitary at every site) starts from a nonzero product vector, and for every
+  outcome `m` with `P.postMeasurement m ≠ 0` the corrected vector `P.output m`
+  is a scalar multiple of `ψ`.
+- **Source:** arXiv:2103.13367, main text, paragraph "State transformations
+  with QC and LOCC" (the scheme "apply `U ∈ LU` depending on the outcomes of
+  all previous measurements", and deterministic preparation).
+- **Sanctioned bridges:** `MeasurementProtocol.IsPreparationOf.ne_zero` (a
+  prepared vector is nonzero) and
+  `MeasurementProtocol.exists_postMeasurement_ne_zero`.
+- **Caveat:** ancillas are sites of the ring; the measurement is fixed in
+  advance and in the computational basis; the correction is one product of
+  single-site unitaries applied after all the measurements. Each of these
+  restricts the source's scheme, so every such protocol is one of the source.
+
+### `MPSPreparation.IsPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+- **Meaning:** some protocol `P` whose circuit has at most `T` layers
+  satisfies `P.IsPreparationOf ψ`.
+- **Source:** arXiv:2103.13367, Definition "Transformations under QC and
+  LOCC" (the class `QCcc_ℓ`).
+- **Sanctioned bridges:**
+  `MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
+  nonzero vector prepared by a local circuit),
+  `MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
+  (without measurements, preparation by a local circuit up to single-site
+  unitaries), and
+  `MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
+  (GHZ-type states in depth `2`).
+- **Caveat:** the free local unitaries of the source between the layers of the
+  circuit, acting on a site and its ancillas, are counted here as gates, so the
+  depth bounds the source's depth. The light-cone bound of
+  `MPSPreparation.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
+  GHZ-type states, whose connected correlations do not decay, are prepared in
+  depth `2`.
+
+### `MPSPreparation.IsLocalPerm`
+
+- **Declaration:**
+  `MPSPreparation.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Cfg d N)) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/PermutationGates.lean`.
+- **Meaning:** the permutation `σ` of the configurations changes only the
+  sites of `S`, and its new values on `S` depend only on the old values on
+  `S`.
+- **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
+  corrections of the GHZ preparation, generalized to shifts of qudits).
+- **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
+  permutation matrix is a unitary acting on `S`),
+  `MPSPreparation.isLocalPerm_shiftPerm`, and
+  `MPSPreparation.exists_permLayer_op_mulVec` (a layer of such gates on
+  disjoint pairs acts as one permutation of the configurations).
+- **Caveat:** only permutations of the computational basis are covered; a
+  general gate is a `MPSPreparation.Layer` gate.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`

@@ -28,7 +28,7 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
         MPSPreparation.MeasurementProtocol.preMeasurement,
         MPSPreparation.MeasurementProtocol.postMeasurement,
         MPSPreparation.MeasurementProtocol.output,
-        MPSPreparation.MeasurementProtocol.Prepares,
+        MPSPreparation.MeasurementProtocol.IsPreparationOf,
         MPSPreparation.IsPreparedWithMeasurementsInDepth}
     \leanok
     \uses{def:ldp_local_circuit}
@@ -67,7 +67,7 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
         MPSPreparation.MeasurementProtocol.preMeasurement_ne_zero,
         MPSPreparation.MeasurementProtocol.exists_postMeasurement_ne_zero,
         MPSPreparation.MeasurementProtocol.output_ne_zero,
-        MPSPreparation.MeasurementProtocol.Prepares.ne_zero}
+        MPSPreparation.MeasurementProtocol.IsPreparationOf.ne_zero}
     \leanok
     \uses{def:ldp_measurement_preparation}
     The outcome projections satisfy $\sum_mP_m=\mathbb 1$, and a product of
@@ -89,7 +89,7 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
 \begin{lemma}[Protocols without measurements]
     \label{lem:ldp_measurement_unitary_case}
     \lean{MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth,
-        MPSPreparation.exists_isPreparedInDepth_of_prepares_of_measured_eq_empty,
+        MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty,
         MPSTensor.smul_productVector}
     \leanok
     \uses{def:ldp_measurement_preparation, lem:ldp_measurement_outcomes}
