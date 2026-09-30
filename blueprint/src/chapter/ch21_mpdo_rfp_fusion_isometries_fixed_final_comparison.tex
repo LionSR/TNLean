@@ -336,6 +336,68 @@
     intertwining identity of that lemma.
 \end{proof}
 
+In the diagrams below the upper strand carries the multiplicity space and
+the lower strand the bond space $\C^{D_\varepsilon}$; the hypothesis on the
+left forces the factorization on the right.
+\begin{center}
+    % Formula: (1 \otimes M_\varepsilon^{ij}) C = C (1 \otimes
+    %   M_\varepsilon^{ij}) for all i, j, which implies
+    %   C = F \otimes 1_{D_\varepsilon}.
+    % Source: this theorem; it is the injective-block step behind the
+    %   uniqueness of the F-move in Bultinck et al., arXiv:1511.08090,
+    %   lines 269--277.
+    % Ink-to-index map: matrix products read from west to east.  The upper
+    %   row is the multiplicity strand, H^L_\varepsilon on the west and
+    %   H^R_\varepsilon on the east of C; the lower row is the bond strand of
+    %   D_\varepsilon.  The two-strand box is C.  The one-site matrix
+    %   M_\varepsilon^{ij} acts on the bond strand only, with its physical
+    %   legs i, j open; the absence of ink on the upper strand at that site
+    %   is the identity factor.  In the last panel F acts on the upper strand
+    %   and the lower strand carries the identity of D_\varepsilon.
+    % Contracted legs: the bond between M_\varepsilon and C.
+    % Boundary signatures (virtual-west | virtual-east | physical-up |
+    %   physical-down): (2 | 2 | 1 | 1) on both sides of the hypothesis and
+    %   (2 | 2 | 0 | 0) on both sides of the conclusion.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,op}, cols=2, bonds=none]
+        \tn[at=(2,1), skin=mpo, name=M,
+            ports={180:virtual, 0:virtual, 90:physical:$i$,
+                    270:physical:$j$}]{M_\varepsilon}
+        \tn[at=(1,2), skin=box, wires=2, name=C,
+            ports={180:virtual, 0:virtual}]{C}
+        \tnwire{open w}{C.180@1}
+        \tnwire{open w}{M.180}
+        \tnwire{M.0}{C.180@2}
+        \tnwire{C.0@1}{open e} \tnwire{C.0@2}{open e}
+    \end{tenkz}
+    \qquad$=$\qquad
+    \begin{tenkz}[rows={wire,op}, cols=2, bonds=none]
+        \tn[at=(1,1), skin=box, wires=2, name=C,
+            ports={180:virtual, 0:virtual}]{C}
+        \tn[at=(2,2), skin=mpo, name=M,
+            ports={180:virtual, 0:virtual, 90:physical:$i$,
+                    270:physical:$j$}]{M_\varepsilon}
+        \tnwire{open w}{C.180@1} \tnwire{open w}{C.180@2}
+        \tnwire{C.0@1}{open e}
+        \tnwire{C.0@2}{M.180}
+        \tnwire{M.0}{open e}
+    \end{tenkz}
+    \qquad$\Longrightarrow$\qquad
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+        \tn[at=(1,1), skin=box, wires=2, name=C,
+            ports={180:virtual, 0:virtual}]{C}
+        \tnwire{open w}{C.180@1} \tnwire{open w}{C.180@2}
+        \tnwire{C.0@1}{open e} \tnwire{C.0@2}{open e}
+    \end{tenkz}
+    \quad$=$\quad
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+        \tn[at=(1,1), skin=box, name=F, ports={180:virtual, 0:virtual}]{F}
+        \tn[at=(2,1), skin=none, name=n, ports={180:virtual, 0:virtual}]{}
+        \tnwire{open w}{F.180} \tnwire{F.0}{open e}
+        \tnwire{open w}{n.180} \tnwire{n.0}{open e}
+    \end{tenkz}
+\end{center}
+
 \begin{theorem}[Kronecker form and separation at a fixed final label]%
     \label{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}
     \lean{MPOTensor.BNTFusionIsometryFamily.%
