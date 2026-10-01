@@ -1885,6 +1885,32 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     and if $\ket{\phi_N(A)}=0$ both normalized states vanish.
 \end{proof}
 
+\begin{lemma}[The error at block length $q\ge a\log(Mq/\varepsilon)+b_0$]
+    \label{lem:ldp_approximation_error_slope_threshold}
+    \lean{MPSPreparation.exists_approximationError_le_of_slope}
+    \leanok
+    \uses{thm:ldp_approximation_error_normal,
+        lem:ldp_normalized_state_rescaling,
+        lem:ldp_block_length_threshold_error}
+    Let $B$ be a normal tensor in the gauge~(\ref{eq:ldp_normal_gauge}), with a
+    positive definite fixed point $\sigma$ of trace one, and let $A$ be a tensor
+    with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for all $N$ and some
+    $\zeta\neq0$. Let $0<t<1$ bound the moduli of the eigenvalues of $\E_B$ other
+    than $1$, and let $\xi=-1/\log t$. For every $a>\xi/2$ there is $b_0\ge0$
+    such that for $\varepsilon>0$, every $q\ge1$ and every $M\ge1$ with
+    $q\ge a\log(Mq/\varepsilon)+b_0$, the approximating state of $B$ with
+    blocks of $q$ sites on $N=Mq$ sites has error at most $\varepsilon$ against
+    $\ket{\phi_N(A)}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:ldp_approximation_error_normal} at $\gamma=\xi/(2a)<1$
+    gives $K$ with error at most $KMe^{-q/a}$; take $b_0=a\max(\log K,0)$ and
+    apply Lemma~\ref{lem:ldp_block_length_threshold_error}. The error against
+    $\phi_N(A)$ equals that against $\phi_N(B)$ by
+    Lemma~\ref{lem:ldp_normalized_state_rescaling}.
+\end{proof}
+
 \begin{theorem}[Block length $a\log(N/\varepsilon)+b$ for every slope $a>\xi/2$]
     \label{thm:ldp_depth_upper_bound_slope}
     \uses{def:ldp_local_circuit}
@@ -1912,7 +1938,8 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
         lem:ldp_normalized_state_rescaling,
         lem:isNBlkInjective_iff_blockTensor_isInjective,
         lem:ldp_approximating_state_unit_norm,
-        lem:ldp_block_length_threshold_error}
+        lem:ldp_block_length_threshold_error,
+        lem:ldp_approximation_error_slope_threshold}
     Since $a>\xi/2$, the number $\gamma=\xi/(2a)$ satisfies $0<\gamma<1$, and
     Theorem~\ref{thm:ldp_approximation_error_normal} at this $\gamma$ gives $K$
     with $\varepsilon(\widetilde\phi_N,\phi_N(B))\le K\,(N/q)\,e^{-q/a}$, since
@@ -3301,5 +3328,6 @@ $A$ along $w$.
 
 \input{chapter/ch32_log_depth_measurements}
 \input{chapter/ch32_log_depth_teleportation}
+\input{chapter/ch32_log_depth_register_tree}
 
 \input{chapter/ch32_log_depth_long_range}

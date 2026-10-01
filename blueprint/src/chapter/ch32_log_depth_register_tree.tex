@@ -1,0 +1,403 @@
+%% ==================================================
+%% Section: Registers of several sites and the depth O(log log(N/eps))
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eqs. (5),
+%% (10)-(12) and (16), Lemma 1'(i), and paragraph "Tree-RG circuit with
+%% measurements".
+%% ==================================================
+
+\section{Registers of several sites and the depth \texorpdfstring{$O(\log\log(N/\varepsilon))$}{O(log log(N/epsilon))}}
+\label{sec:ldp_register_tree}
+
+In the tree circuit (\ref{eq:ldp_tree_factorization}) a register above the
+lowest level carries $\C^{D^2}$, which is a group of sites once $D^2>d$. This
+section groups the sites into registers of $s$ consecutive sites, teleports a
+register site by site, and applies a layer of unitaries on pairs of distant
+registers in a depth depending only on $s$ and on the number of
+nearest-neighbour gates of each unitary. With $s$ a length at which the blocked
+tensor is injective, the trees of all the blocks prepare the approximating state
+with measurements in depth $O(k)$ for block length $s2^{k+1}$, and Lemma~1'(i)
+of \cite{Malz2024Preparation} gives the depth $O(\log\log(N/\varepsilon))$ of
+the paragraph ``Tree-RG circuit with measurements'' of the source, for chain
+lengths divisible by the block length
+\cite{gap:mswc24_tree_measurement_scope}.
+
+Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
+$N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
+
+\begin{definition}[Register gates]
+    \label{def:ldp_register_gate}
+    \lean{MPSPreparation.RegisterGate, MPSPreparation.RegisterGate.offset,
+        MPSPreparation.RegisterGate.sites,
+        MPSPreparation.RegisterGate.localSites,
+        MPSPreparation.RegisterGate.span, MPSPreparation.RegisterGate.zone,
+        MPSPreparation.RegisterGate.interior, MPSPreparation.RegisterGate.op,
+        MPSPreparation.RegisterGate.localOp,
+        MPSPreparation.RegisterGate.offset_lt,
+        MPSPreparation.RegisterGate.sites_injective,
+        MPSPreparation.RegisterGate.localSites_injective,
+        MPSPreparation.RegisterGate.localSites_succ,
+        MPSPreparation.RegisterGate.sites_mem_span,
+        MPSPreparation.RegisterGate.localSites_mem_span,
+        MPSPreparation.RegisterGate.zone_subset_span,
+        MPSPreparation.RegisterGate.op_mem_unitary,
+        MPSPreparation.RegisterGate.op_mem_supportedOperators,
+        MPSPreparation.RegisterGate.add_eq_add_iff,
+        MPSPreparation.RegisterGate.two_mul_L_lt}
+    \leanok
+    \uses{def:ldp_measurement_rounds}
+    A \emph{register gate} is a unitary $X$ on $2s$ sites together with a site
+    $a$ and $L\ge0$ with $2L+2s\le N$. It acts on the two registers
+    $a,\dots,a+s-1$ and $a+2L+s,\dots,a+2L+2s-1$, the first register on the
+    first $s$ sites of $X$. Its stretch is $a,\dots,a+2L+2s-1$, its interior the
+    $2L$ sites $a+s,\dots,a+s+2L-1$ strictly between the registers, and, for
+    $0\le t\le s$, its zone $t$ the $2L$ sites $a+t,\dots,a+t+2L-1$.
+\end{definition}
+
+\begin{lemma}[Teleporting registers site by site]
+    \label{lem:ldp_register_chains}
+    \lean{MPSPreparation.IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo,
+        MPSPreparation.RegisterGate.there, MPSPreparation.RegisterGate.back,
+        MPSPreparation.RegisterGate.allSites_there_subset,
+        MPSPreparation.RegisterGate.allSites_back_subset,
+        MPSPreparation.RegisterGate.allSites_there_subset_span,
+        MPSPreparation.RegisterGate.allSites_back_subset_span,
+        MPSPreparation.RegisterGate.pairSites_there_subset,
+        MPSPreparation.RegisterGate.pairSites_back_subset,
+        MPSPreparation.RegisterGate.sitePerm_there_apply_of_lt,
+        MPSPreparation.RegisterGate.sitePerm_there_apply_self,
+        MPSPreparation.RegisterGate.sitePerm_back_eq_inv,
+        MPSPreparation.RegisterGate.sitePerm_back_apply_of_lt,
+        MPSPreparation.RegisterGate.sitePerm_back_apply_self,
+        MPSPreparation.RegisterGate.sitePerm_there_notMem_zone,
+        MPSPreparation.RegisterGate.sitePerm_back_notMem_zone,
+        MPSPreparation.RegisterGate.thereAll,
+        MPSPreparation.RegisterGate.backAll,
+        MPSPreparation.RegisterGate.zoneAll,
+        MPSPreparation.RegisterGate.valid_thereAll,
+        MPSPreparation.RegisterGate.valid_backAll,
+        MPSPreparation.RegisterGate.sitePerm_thereAll_apply,
+        MPSPreparation.RegisterGate.sitePerm_backAll_apply,
+        MPSPreparation.RegisterGate.isZeroOn_chainPerm_thereAll,
+        MPSPreparation.RegisterGate.isZeroOn_chainPerm_backAll,
+        MPSPreparation.RegisterGate.pairSites_thereAll_subset,
+        MPSPreparation.RegisterGate.pairSites_backAll_subset,
+        MPSPreparation.RegisterGate.sitePerm_backAll_eq_inv,
+        MPSPreparation.RegisterGate.therePerm,
+        MPSPreparation.RegisterGate.therePerm_apply,
+        MPSPreparation.RegisterGate.therePerm_comp_sites,
+        MPSPreparation.TeleportHop.valid_nil,
+        MPSPreparation.RegisterGate.thereRounds,
+        MPSPreparation.RegisterGate.backRounds,
+        MPSPreparation.RegisterGate.sum_depth_thereRounds,
+        MPSPreparation.RegisterGate.sum_depth_backRounds,
+        MPSPreparation.MeasurementRound.IsImplementationOn.isRoundsImplementationOn,
+        MPSPreparation.RegisterGate.isRoundsImplementationOn_thereRounds,
+        MPSPreparation.RegisterGate.isRoundsImplementationOn_backRounds}
+    \leanok
+    \uses{def:ldp_register_gate, thm:ldp_teleportation_round,
+        lem:ldp_teleportation_chains, lem:ldp_parallel_chains,
+        lem:ldp_site_permutations, lem:ldp_round_implementation_compose}
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches. For
+    $0\le t<s$, the round $t$ teleports, for every gate, the content of the site
+    $a+t$ to $a+2L+t$ along a chain of $L$ hops, in one round of depth $2$. The
+    rounds $t=s-1,\dots,0$, in this order, implement the product $P$ of the
+    transpositions of all the chains on the vectors with $\ket0$ at the
+    interiors of all the gates, and their outputs have $\ket0$ at the zones $0$.
+    The rounds teleporting back, $t=0,\dots,s-1$, in this order, implement
+    $P^{-1}$ on the vectors with $\ket0$ at the zones $0$. The rounds of each
+    direction have total depth $2s$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The chain of the site $a+t$ meets the sites $a+t,\dots,a+t+2L$, and before
+    it the sites $a+t+1,\dots,a+t+2L$ form the zone $t+1$. Starting from $\ket0$
+    at the zone $s$, the interior, the round $t$ moves the content of $a+t$ to
+    $a+t+2L$ and leaves $\ket0$ at the zone $t$, since the permutation of the
+    chain maps the zone $t+1$ together with $a+t$ onto the zone $t$ together
+    with $a+t+2L$. The chains of different gates act on disjoint stretches, so
+    the lists of all the gates are valid
+    (Lemma~\ref{lem:ldp_parallel_chains}), and by
+    Theorem~\ref{thm:ldp_teleportation_round} every round implements the
+    permutation of its chains. Composition
+    (Lemma~\ref{lem:ldp_round_implementation_compose}) gives the claim; the
+    backward rounds run the forward ones in reverse.
+\end{proof}
+
+\begin{theorem}[A layer of register gates in constant depth with measurements]
+    \label{thm:ldp_register_layer}
+    \lean{MPSPreparation.mul_list_prod_mul_of_mul_eq_one,
+        MPSPreparation.RegisterGate.rounds,
+        MPSPreparation.RegisterGate.sum_depth_rounds,
+        MPSPreparation.RegisterGate.localProd,
+        MPSPreparation.RegisterGate.isZeroOn_localProd_mulVec,
+        MPSPreparation.RegisterGate.permMatrix_mul_localProd_mul_permMatrix,
+        MPSPreparation.RegisterGate.isZeroOn_zoneAll_iff,
+        MPSPreparation.RegisterGate.isRoundsImplementationOn_rounds,
+        MPSPreparation.RegisterGate.isCircuitOn_localProd,
+        MPSPreparation.RegisterGate.exists_rounds}
+    \leanok
+    \uses{lem:ldp_register_chains, lem:ldp_round_implementation_compose}
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, each
+    unitary $X$ a product of at most $K$ unitaries on neighbouring sites. Then
+    measurement rounds of total depth $4s+K+2$ implement the product of the
+    gates on the vectors with $\ket0$ at the interiors of all the gates: the
+    first registers are teleported next to the second ones as in
+    Lemma~\ref{lem:ldp_register_chains}, every $X$ is applied to the $2s$
+    consecutive sites $a+2L,\dots,a+2L+2s-1$ by a local circuit of depth $K$,
+    and the first registers are teleported back. The depth depends neither on
+    the distances nor on the number of gates, and no outcome is post-selected.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The unitaries on the consecutive sites act inside the stretches, so they
+    keep $\ket0$ at the zones $0$, and their product $G$ is a local circuit of
+    depth $K$, applied in one round without hops of depth $K+2$. By
+    Lemma~\ref{lem:ldp_register_chains} every output is a multiple of
+    $P^{-1}GP\ket v$. Conjugation by $P$ maps the consecutive sites of every
+    gate back to its two registers, so $P^{-1}GP$ is the product of the gates.
+\end{proof}
+
+\begin{theorem}[Trees of register gates on the blocks]
+    \label{thm:ldp_register_tree_rounds}
+    \lean{MPSPreparation.embedOp_embedOp, MPSPreparation.blockSite_add_natCast,
+        MPSPreparation.blockLayerOp_mul, MPSPreparation.blockLayerOp_one,
+        MPSPreparation.blockLayerOp_eq_list_prod, MPSPreparation.regSpan,
+        MPSPreparation.regOffset, MPSPreparation.mul_sub_two_add_two_mul,
+        MPSPreparation.block_pos, MPSPreparation.regWindow,
+        MPSPreparation.regSpan_eq, MPSPreparation.two_le_regSpan,
+        MPSPreparation.succ_mul_regSpan_le, MPSPreparation.regOffset_lt,
+        MPSPreparation.mul_mul_regSpan_add_lt, MPSPreparation.regWindow_val,
+        MPSPreparation.regWindow_injective,
+        MPSPreparation.mul_mul_add_ne_of_ne,
+        MPSPreparation.regWindow_val_ne_of_interior,
+        MPSPreparation.regWindow_injective₂, MPSPreparation.regLevelOp,
+        MPSPreparation.regTreeOp, MPSPreparation.block_le,
+        MPSPreparation.regGate, MPSPreparation.regLevelGates,
+        MPSPreparation.two_mul_regGate_L, MPSPreparation.regGate_a_add,
+        MPSPreparation.regGate_sites, MPSPreparation.mem_span_regGate,
+        MPSPreparation.mem_interior_regGate,
+        MPSPreparation.blockSite_ne_of_subBlock_ne,
+        MPSPreparation.mem_regLevelGates,
+        MPSPreparation.pairwise_regLevelGates,
+        MPSPreparation.list_prod_map_op_regLevelGates,
+        MPSPreparation.regWindow_val_ne, MPSPreparation.regInteriorFrom,
+        MPSPreparation.regInteriorFrom_succ_subset,
+        MPSPreparation.interior_subset_regInteriorFrom,
+        MPSPreparation.disjoint_range_sites_interior,
+        MPSPreparation.isZeroOn_regInteriorFrom_mulVec,
+        MPSPreparation.regCentralSites,
+        MPSPreparation.regInteriorFrom_zero_subset,
+        MPSPreparation.exists_rounds_regTreeOp_aux,
+        MPSPreparation.exists_rounds_blockLayerOp_regTreeOp}
+    \leanok
+    \uses{thm:ldp_register_layer, lem:ldp_round_implementation_compose}
+    Let $k\ge0$, $q=s2^{k+1}$, and cut the ring of $N=Mq$ sites into $M\ge1$
+    blocks of $q$ sites, each grouped into $2^{k+1}$ registers of $s$
+    consecutive sites. For $0\le j\le k$ and $0\le p<2^j$ the sub-block $p$ of
+    depth $j$ consists of the registers $p2^{k+1-j},\dots,(p+1)2^{k+1-j}-1$, and
+    a unitary $X_{j,p}$ on $2s$ sites acts on its first and its last register.
+    Let $T$ be the product of the depths $k,\dots,0$ of a block, the depth $0$
+    applied first. If every $X_{j,p}$ is a product of at most $K$ unitaries on
+    neighbouring sites, measurement rounds of total depth $(k+1)(4s+K+2)$
+    implement $T$ on every block, $T^{\otimes M}$, on the vectors with $\ket0$
+    at every site of every block other than its first and its last $s$ sites.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The unitaries of depth $j$ of all the blocks are register gates whose
+    stretches are their sub-blocks, which are pairwise disjoint, so
+    Theorem~\ref{thm:ldp_register_layer} applies the depth $j$ in depth
+    $4s+K+2$ on the vectors with $\ket0$ at the sites strictly inside the
+    sub-blocks of depth $j$ between their first and last registers. A unitary
+    of depth $j'<j$ acts on the first and the last register of a sub-block of
+    depth $j'$, which are the first or the last register of a sub-block of
+    depth $j$, so on no site where depth $j$ needs $\ket0$. Induction on the
+    depth and Lemma~\ref{lem:ldp_round_implementation_compose} give the claim.
+\end{proof}
+
+\begin{lemma}[Amplitudes of trees and of layers of placed unitaries]
+    \label{lem:ldp_tree_amplitudes}
+    \lean{MPSTensor.unpair, MPSTensor.two_mul_add_lt_two_pow,
+        MPSTensor.unpair_apply, MPSTensor.unpair_injective,
+        MPSTensor.unpair_surjective, MPSTensor.unpair_bijective,
+        MPSTensor.decodeBlock_blockIndexOfList, MPSTensor.decodeBlock_finCongr,
+        MPSTensor.decodeBlock_pairRegroupEquiv, MPSTensor.treeAmp,
+        MPSTensor.binaryTreeMatrix_apply_unpair, MPSPreparation.placeCfg,
+        MPSPreparation.placeCfg_apply, MPSPreparation.placeCfg_comp,
+        MPSPreparation.placeCfg_apply_of_notMem, MPSPreparation.eq_placeCfg,
+        MPSPreparation.placeCfg_injective, MPSPreparation.injective_window,
+        MPSPreparation.disjoint_range_window,
+        MPSPreparation.list_prod_embedOp_placeCfg,
+        MPSPreparation.mul_apply_extend}
+    \leanok
+    \uses{def:ldp_binary_mera}
+    \begin{enumerate}
+        \item The tree map (\ref{eq:ldp_binary_mera_tree}) with finest layer
+              $W$ and coarser layers $V_0,V_1,\dots$, at $2^{j+1}$ leaves grouped
+              into neighbouring pairs $e_0,\dots,e_{2^j-1}$, is
+              $\sum_{e'}\prod_pW(e_p,e'_p)$ times the tree map of the coarser
+              layers at the outputs $e'$ grouped into pairs in their turn, the
+              sum running over these outputs.
+        \item Let $Y_1,\dots,Y_n$ be unitaries on pairwise disjoint windows of
+              $m$ sites of a chain, with $Y_p\ket{\iota_p(c)}=\sum_e
+                  V_p(e,c)\ket{o_p(e)}$ for injective $\iota_p,o_p$. Then the
+              product of the placed unitaries maps the configuration with
+              $\iota_p(c_p)$ on the window $p$ and $0$ elsewhere to
+              $\sum_e\prod_pV_p(e_p,c_p)$ times the configuration with $o_p(e_p)$
+              on the window $p$ and $0$ elsewhere.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first item is the recursion defining the tree map, with the sum of a
+    matrix product written out. For the second, a placed unitary acts on its
+    window only and the windows are disjoint, so the product factors over the
+    windows; induction on $n$.
+\end{proof}
+
+\begin{theorem}[The tree of registers implements the isometry of a block]
+    \label{thm:ldp_register_tree_isometry}
+    \lean{Matrix.polarIso_submatrix_equiv,
+        MPSPreparation.exists_unitary_apply_eq_extend,
+        MPSPreparation.extUnitary, MPSPreparation.extUnitary_mem_unitary,
+        MPSPreparation.extUnitary_apply, MPSPreparation.append_apply_of_lt,
+        MPSPreparation.append_apply_of_le, MPSPreparation.append_injective,
+        MPSPreparation.regSpan_eq_two_mul, MPSPreparation.regWindow_two_mul,
+        MPSPreparation.regWindow_two_mul_add_one,
+        MPSPreparation.regWindow_two_mul_notMem,
+        MPSPreparation.regWindow_two_mul_add_one_notMem,
+        MPSPreparation.exists_regWindow_eq,
+        MPSPreparation.polarIsoMatrix_blockTensor_blockTensor,
+        MPSPreparation.iteratedBlockIndex_decodeBlockEquiv_symm,
+        MPSPreparation.regInput, MPSPreparation.coarseOutput,
+        MPSPreparation.fineOutput, MPSPreparation.regInput_injective,
+        MPSPreparation.decodeBlock_two_injective,
+        MPSPreparation.coarseOutput_injective,
+        MPSPreparation.fineOutput_bijective, MPSPreparation.regLayer,
+        MPSPreparation.regTreeGate, MPSPreparation.regTreeGate_mem_unitary,
+        MPSPreparation.regTreeGate_apply_of_lt,
+        MPSPreparation.regTreeGate_apply_of_le,
+        MPSPreparation.regRegisterCfg, MPSPreparation.regLeafCfg,
+        MPSPreparation.regRegisterCfg_injective,
+        MPSPreparation.regLeafCfg_bijective, MPSPreparation.regLeafCfg_apply,
+        MPSPreparation.regRegisterCfg_eq_placeCfg,
+        MPSPreparation.placeCfg_regInput_zero,
+        MPSPreparation.prod_fin_two_pow_zero,
+        MPSPreparation.regTreeOp_apply_regRegisterCfg,
+        MPSPreparation.regTreeOp_apply_regLeafCfg,
+        MPSPreparation.regTreeOp_apply_blockInputCfg}
+    \leanok
+    \uses{thm:ldp_tree_factorization, lem:ldp_tree_layers_isometries,
+        lem:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes,
+        thm:ldp_register_tree_rounds, thm:ldpolar_tensor_decomposition}
+    Let $A$ be a tensor whose blocked tensor $\mathcal B$ over $s$ sites has an
+    injective two-site blocked tensor, let $k\ge0$ and $q=s2^{k+1}$, and let
+    $\mathcal B_q=VP$ be the polar decomposition of $A$ blocked over $q$ sites.
+    Let a register of $s$ sites carry the bond legs $\C^D$ through an injective
+    map of $\{0,\dots,D-1\}$ into its configurations, and $\C^{D^2}$ through an
+    injective map of $\{0,\dots,D^2-1\}$ into them. Every layer of the tree
+    circuit (\ref{eq:ldp_tree_factorization}) of $\mathcal B$ is an isometry
+    from one register to two, and extends to a unitary on the two registers of
+    each sub-block of Theorem~\ref{thm:ldp_register_tree_rounds}. The tree $T$
+    of these unitaries satisfies
+    \begin{align*}
+        \bra\tau T\ket{l,0,\dots,0,r}=\bra\tau V\ket{l,r}
+    \end{align*}
+    for every configuration $\tau$ of the block and all bond indices $l,r$,
+    where $\ket{l,0,\dots,0,r}$ carries $l$ on the first and $r$ on the last
+    register.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:ldp_tree_layers_isometries} the layers of the tree circuit
+    of $\mathcal B$ are isometries, and they extend to unitaries
+    (Lemma~\ref{lem:ldp_unitary_implementing_isometry}) from their input
+    register, the other register in $\ket0$, to their two output registers.
+    The unitary of the root reads $l$ and $r$. After the depths $0,\dots,j$ the
+    registers of the sub-blocks of depth $j+1$ carry the outputs of these
+    layers, with the amplitude of the tree of the coarser layers, by the
+    second item of Lemma~\ref{lem:ldp_tree_amplitudes}: the registers written by
+    a unitary of depth $j$ are the first and the last register of the two
+    halves of its sub-block, on which the two unitaries below it act. At the
+    finest depth the block carries the leaves, with the amplitude of the whole
+    tree map, which by the first item and
+    Theorem~\ref{thm:ldp_tree_factorization} is the isometry of the polar
+    decomposition of $\mathcal B$ blocked over $2^{k+1}$ sites, that is, of
+    $A$ blocked over $q$ sites.
+\end{proof}
+
+\begin{theorem}[The approximating state with measurements in depth $O(k)$]
+    \label{thm:ldp_register_tree_approximating_state}
+    \lean{MPSPreparation.isZeroOn_regCentralSites_pairLayerOp_mulVec,
+        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState}
+    \leanok
+    \uses{thm:ldp_register_tree_isometry, thm:ldp_register_tree_rounds,
+        thm:ldp_approximating_state_depth, def:ldp_approximating_state,
+        thm:ldp_bounded_unitary_two_site_gates, thm:ldp_chain_depth,
+        def:ldp_measurement_rounds}
+    For every $s\ge1$ there is $C$, depending only on $d$ and $s$, with the
+    following property. Let $A$ be a tensor whose blocked tensor over $s$ sites
+    is injective, and let $\sigma\ge0$ with $\Tr\sigma=1$. For every $k\ge0$
+    and $M\ge1$, the approximating state of
+    Definition~\ref{def:ldp_approximating_state} with blocks of $q=s2^{k+1}$
+    sites, on $N=Mq$ sites, is prepared with measurement rounds in depth at most
+    $C(k+1)$. No outcome is post-selected.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Injectivity gives $D^2\le d^s$, so a register of $s$ sites carries
+    $\C^{D^2}$ and $\C^D$, and the two-site blocked tensor of the injective
+    blocked tensor is injective. By
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} there is $K$,
+    depending on $d$ and $s$, such that every unitary on $2s$ sites is a
+    product of at most $K$ unitaries on neighbouring sites. A local circuit of
+    depth $K$, applied in one round of depth $K+2$, prepares the pairs
+    $\ket\omega$ of the fixed point on the last register of every block and the
+    first of the next, from the all-$\ket0$ product state; the other sites keep
+    $\ket0$. Theorem~\ref{thm:ldp_register_tree_rounds}, with the unitaries of
+    Theorem~\ref{thm:ldp_register_tree_isometry}, then applies the trees of all
+    the blocks in depth $(k+1)(4s+K+2)$. The output is
+    $T^{\otimes M}\bigotimes\ket\omega=V^{\otimes M}\bigotimes\ket\omega$, the
+    approximating state, as in Theorem~\ref{thm:ldp_approximating_state_depth};
+    the total depth is at most $(2K+4s+4)(k+1)$.
+\end{proof}
+
+\begin{theorem}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$]
+    \label{thm:ldp_loglog_depth}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le,
+        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log}
+    \leanok
+    \uses{thm:ldp_register_tree_approximating_state,
+        lem:ldp_approximation_error_slope_threshold,
+        thm:normalized_primitive_gauge, lem:ldp_normal_gap,
+        lem:ldp_approximating_state_unit_norm,
+        lem:ldp_normalized_state_rescaling}
+    Let $A$ be normal with $D\ge1$. There are $s\ge1$, $C$, $a>0$ and $b\ge1$,
+    depending only on $A$, with the following property. Let $\varepsilon>0$,
+    $N\ge1$ and $k\ge0$ be such that $s2^{k+1}$ divides $N$ and
+    $s2^{k+1}\ge a\log(N/\varepsilon)+b$. Then a unit vector $\ket\psi$ with
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$ is prepared with measurement
+    rounds in depth at most $C(k+1)$. If moreover
+    $s2^{k+1}\le2(a\log(N/\varepsilon)+b)$, then
+    $k\le\log_2(a\log(N/\varepsilon)+b)$, so the depth is at most
+    $C(\log_2(a\log(N/\varepsilon)+b)+1)=O(\log\log(N/\varepsilon))$. This is
+    the depth of the paragraph ``Tree-RG circuit with measurements''
+    of~\cite{Malz2024Preparation} for normal tensors, restricted to the chain
+    lengths divisible by $s2^{k+1}$ for some $k$ in this window, for instance
+    $N=Ms2^K$ with $K$ large \cite{gap:mswc24_tree_measurement_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
+    Theorem~\ref{thm:ldp_depth_upper_bound_divisible}, which multiplies
+    $\ket{\phi_N}$ by a nonzero scalar, let $\xi$ be the correlation length of a
+    bound $t<1$ on the moduli of the subleading eigenvalues, and let $s$ be a
+    length at which the blocked tensor in this gauge is injective. Take $a=\xi$
+    and $b=b_0+1$ with $b_0$ from
+    Lemma~\ref{lem:ldp_approximation_error_slope_threshold}. With $N=Mq$ and
+    $q=s2^{k+1}$, the approximating state with blocks of $q$ sites is a unit
+    vector with error at most $\varepsilon$, prepared in depth at most
+    $C(k+1)$ by Theorem~\ref{thm:ldp_register_tree_approximating_state}. If
+    $s2^{k+1}\le2(a\log(N/\varepsilon)+b)$ then $2^k\le
+        a\log(N/\varepsilon)+b$ since $s\ge1$.
+\end{proof}

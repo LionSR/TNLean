@@ -19,10 +19,10 @@ any length, and two-site gates joining the sites $a$ and $a+2L+1$, on pairwise
 disjoint stretches $\{a,\dots,a+2L+1\}$, are applied in constant depth for
 every $L$. Gates at even separation, or on overlapping stretches, are not
 covered. It deduces that a binary tree of two-site gates with $k$ levels is
-applied with measurements in depth $5k$. Every register here is one site of the ring. The registers of the
-tree circuit carry $\mathbb C^{D^2}$, and the resulting depth
-$O(\log\log(N/\varepsilon))$ for matrix product states is not formalized
-\cite{gap:mswc24_tree_measurement_scope}.
+applied with measurements in depth $5k$. Every register here is one site of
+the ring. The registers of the tree circuit carry $\mathbb C^{D^2}$; registers
+of several sites, and the resulting depth $O(\log\log(N/\varepsilon))$ for
+matrix product states, are the subject of Section~\ref{sec:ldp_register_tree}.
 
 Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
 $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
@@ -535,14 +535,12 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{remark}[The tree circuit of matrix product states]
     \label{rem:ldp_tree_measurements_mps}
-    \uses{thm:ldp_tree_measurements}
+    \uses{thm:ldp_tree_measurements, thm:ldp_loglog_depth}
     In the tree circuit (\ref{eq:ldp_tree_factorization}) a register above
     the lowest level carries $\mathbb C^{D^2}$, which is a group of sites once
-    $D^2>d$. With registers of $r$ consecutive sites, $d^r\ge D^2$, each layer
-    takes a depth bounded in terms of $d$ and $D$, and with the error bound of
-    the approximating state for $q=2^{k+1}\propto\log(N/\varepsilon)$ this
-    would give the depth $O(\log\log(N/\varepsilon))$ of
-    \cite{Malz2024Preparation} for short-range correlated matrix product
-    states. These steps are not formalized
-    \cite{gap:mswc24_tree_measurement_scope}.
+    $D^2>d$. Theorem~\ref{thm:ldp_loglog_depth} takes registers of $s$
+    consecutive sites, $s$ a length at which the blocked tensor is injective,
+    and obtains the depth $O(\log\log(N/\varepsilon))$ of
+    \cite{Malz2024Preparation} for normal tensors and chain lengths divisible by
+    the block length \cite{gap:mswc24_tree_measurement_scope}.
 \end{remark}
