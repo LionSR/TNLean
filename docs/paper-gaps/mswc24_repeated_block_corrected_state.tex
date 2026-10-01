@@ -30,7 +30,10 @@ and no product of nearest-neighbour pairs with the weights $\beta_j$ gives an
 approximation \cite{gap:mswc24_multiplicity_fixed_point}. This note gives the
 corrected block form and the corrected approximating state, and shows that
 part~(ii) of the approximation-error lemma holds for it when the $q$-site states
-of distinct blocks are orthogonal.
+of distinct blocks are orthogonal. When they overlap, it proves the bound at the rate
+of \cite{gap:mswc24_block_form_mixed_overlap} with the factor $\min(1,b)^{-1/2}$,
+$b=\sum_j\lvert\beta_j\rvert^2$, which exceeds one when $b<1$; that open scope
+restriction is recorded in \cite{gap:mswc24_repeated_overlap_small_weight_sum}.
 
 \section{The corrected block form}
 Let $E_{j,k}$ be the isometry placing the copy $k$ of block $j$ in the bond
@@ -231,7 +234,8 @@ $S=\sum_j\overline{\beta_j}z_j$ one has $\lvert S/b-1\rvert\leq b^{-1/2}\sum_j\l
 z_j-\beta_j\rvert$, and the inequality of \cite{gap:mswc24_block_form_mixed_overlap} applied to
 $S/b$ and $\lVert\phi_N(A)\rVert/b^{1/2}$ gives (\ref{eq:mswc24_rc_overlap_bound}).
 
-The factor $\min(1,b)^{-1/2}$ is a scope restriction of the proof, not of the construction. It
+The factor $\min(1,b)^{-1/2}$ is a scope restriction of the proof, not of the construction,
+recorded in \cite{gap:mswc24_repeated_overlap_small_weight_sum}. It
 exceeds one when $b<1$, for instance when the sums $\beta_j=\sum_k\mu_{j,k}^N$ cancel or every
 weight has modulus below one, because the estimates of the $z_j$ are absolute; the source's bound
 has no such factor. The numerical check below shows the error
@@ -276,7 +280,8 @@ ingredients above.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_norm_gram_sum_sub_le} and
     \leanid{Matrix.norm_polarPos_sub_le_sqrt} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockGram}.}
-The bound without the factor $\min(1,b)^{-1/2}$ when $b<1$ is not formalized.
+The bound without the factor $\min(1,b)^{-1/2}$ when $b<1$ is not formalized
+\cite{gap:mswc24_repeated_overlap_small_weight_sum}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

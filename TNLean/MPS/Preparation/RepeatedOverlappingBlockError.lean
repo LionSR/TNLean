@@ -55,7 +55,7 @@ replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented i
 `(min(1, b))^{-1/2}`, which is `1` when `b ≥ 1` and exceeds `1` when `b < 1`, for instance when
 the sums `βⱼ = ∑ₖ μ_{j,k}^N` cancel or when every weight has modulus below `1`; the source's bound
 has no such factor. Documented in
-`docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
+`docs/paper-gaps/mswc24_repeated_overlap_small_weight_sum.tex`.
 
 ## Main declarations
 
@@ -244,28 +244,13 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
           (ghzAmplitude (bntWeight μ (M * q))) (copyIsometry ι μ q) σ‖ ≤
         C * (M * x ^ q) * Real.exp (C * (M * x ^ q)) /
           Real.sqrt (min 1 (∑ j, ‖bntWeight μ (M * q) j‖ ^ 2)) := fun C hC μ q M _ hβ hu => by
-    have hs1 : Real.sqrt (min 1 (∑ j, ‖bntWeight μ (M * q) j‖ ^ 2)) ≤ 1 :=
-      Real.sqrt_le_one.2 (min_le_left _ _)
-    have h1 : 1 ≤ C * (M * x ^ q) := by nlinarith
-    have h2 : 1 ≤ Real.exp (C * (M * x ^ q)) := Real.one_le_exp (by linarith)
-    have h3 : 1 ≤ C * (M * x ^ q) * Real.exp (C * (M * x ^ q)) := by nlinarith
-    have h4 : 1 ≤ C * (M * x ^ q) * Real.exp (C * (M * x ^ q)) /
-        Real.sqrt (min 1 (∑ j, ‖bntWeight μ (M * q) j‖ ^ 2)) := by
-      rcases (Real.sqrt_nonneg (min 1 (∑ j, ‖bntWeight μ (M * q) j‖ ^ 2))).lt_or_eq with hs | hs
-      · rw [le_div_iff₀ hs]; nlinarith
-      · rw [← hs, div_zero]
-        exfalso
-        obtain ⟨l, hl⟩ := Function.ne_iff.1 hβ
-        have hp : 0 < ∑ j, ‖bntWeight μ (M * q) j‖ ^ 2 :=
-          lt_of_lt_of_le (pow_pos (norm_pos_iff.2 hl) 2)
-            (Finset.single_le_sum (f := fun j => ‖bntWeight μ (M * q) j‖ ^ 2)
-              (fun _ _ => by positivity) (Finset.mem_univ l))
-        have : 0 < Real.sqrt (min 1 (∑ j, ‖bntWeight μ (M * q) j‖ ^ 2)) :=
-          Real.sqrt_pos.2 (lt_min one_pos hp)
-        linarith
-    have h5 := norm_nonneg (copyApproxOverlap (repeatedBlockSum Aj ι μ) q M
-      (ghzAmplitude (bntWeight μ (M * q))) (copyIsometry ι μ q) σ)
-    linarith
+    obtain ⟨l, hl⟩ := Function.ne_iff.1 hβ
+    have hp : 0 < ∑ j, ‖bntWeight μ (M * q) j‖ ^ 2 :=
+      lt_of_lt_of_le (pow_pos (norm_pos_iff.2 hl) 2)
+        (Finset.single_le_sum (f := fun j => ‖bntWeight μ (M * q) j‖ ^ 2)
+          (fun _ _ => by positivity) (Finset.mem_univ l))
+    exact one_sub_le_mul_mul_exp_div_of_one_le (norm_nonneg _) hC hu
+      (Real.sqrt_pos.2 (lt_min one_pos hp)) (Real.sqrt_le_one.2 (min_le_left _ _))
   rcases le_or_gt 1 ‖lam₂‖ with hl | hl
   · -- For `|λ₂| ≥ 1` the rate is at least `1` and the bound is trivial.
     have hx1 : 1 ≤ x := by
@@ -410,44 +395,10 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
   have hs : 0 < s := Real.sqrt_pos.2 (lt_min one_pos hbb)
   have hs1 : s ≤ 1 := Real.sqrt_le_one.2 (min_le_left _ _)
   have hsbb : s ≤ Real.sqrt bb := Real.sqrt_le_sqrt (min_le_right _ _)
-  have hzj' : ∀ j, ‖z j - β j‖ ≤ Cz j * u * Real.exp (S * u) := fun j => by
-    refine (hzj j).trans ?_
-    have hCS : Cz j ≤ S :=
-      Finset.single_le_sum (f := Cz) (fun j _ => (hCz j).le) (Finset.mem_univ j)
-    exact mul_le_mul_of_nonneg_left (Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right hCS hu))
-      (mul_nonneg (hCz j).le hu)
-  have hδ : ∑ j, ‖z j - β j‖ ≤ S * u * Real.exp (S * u) := by
-    refine (Finset.sum_le_sum fun j _ => hzj' j).trans_eq ?_
-    rw [← Finset.sum_mul, ← Finset.sum_mul]
-  have hδ' : δ' ≤ S * u * Real.exp (S * u) / s := by
-    simp only [δ']
-    calc (∑ j, ‖z j - β j‖) / Real.sqrt bb ≤ (∑ j, ‖z j - β j‖) / s :=
-          div_le_div_of_nonneg_left (Finset.sum_nonneg fun _ _ => norm_nonneg _) hs hsbb
-      _ ≤ S * u * Real.exp (S * u) / s := by gcongr
-  have hη : Kt * x ^ (M * q) ≤ Kt * u / s := by
-    have h1 : x ^ (M * q) ≤ u := by
-      calc x ^ (M * q) ≤ x ^ q := pow_le_pow_of_le_one hx0.le hx1 (Nat.le_mul_of_pos_left q
-            (Nat.pos_of_ne_zero (NeZero.ne M)))
-        _ ≤ u := le_mul_of_one_le_left (by positivity) hM
-    calc Kt * x ^ (M * q) ≤ Kt * u := mul_le_mul_of_nonneg_left h1 hKt
-      _ ≤ Kt * u / s := le_div_self (by positivity) hs hs1
-  have hexp : 1 ≤ Real.exp ((S + Kt + 1) * u) := Real.one_le_exp (by positivity)
-  have he : Real.exp (S * u) ≤ Real.exp ((S + Kt + 1) * u) :=
-    Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right (by linarith) hu)
-  have hfin : S * u * Real.exp (S * u) + Kt * u ≤
-      (S + Kt + 1) * u * Real.exp ((S + Kt + 1) * u) := by
-    have h1 : S * u * Real.exp (S * u) ≤ S * u * Real.exp ((S + Kt + 1) * u) :=
-      mul_le_mul_of_nonneg_left he (mul_nonneg hS hu)
-    have h2 : Kt * u ≤ Kt * u * Real.exp ((S + Kt + 1) * u) :=
-      le_mul_of_one_le_right (mul_nonneg hKt hu) hexp
-    have h3 : 0 ≤ u * Real.exp ((S + Kt + 1) * u) := by positivity
-    nlinarith
-  calc 1 - ‖copyApproxOverlap A q M (ghzAmplitude β) (copyIsometry ι μ q) σ‖
-      ≤ 1 - t⁻¹ * ‖num‖ := by linarith
-    _ ≤ δ' + Kt * x ^ (M * q) := hmain
-    _ ≤ S * u * Real.exp (S * u) / s + Kt * u / s := add_le_add hδ' hη
-    _ = (S * u * Real.exp (S * u) + Kt * u) / s := by rw [add_div]
-    _ ≤ (S + Kt + 1) * u * Real.exp ((S + Kt + 1) * u) / s := by gcongr
+  have h' : δ' ≤ (∑ j, ‖z j - β j‖) / s :=
+    div_le_div_of_nonneg_left (Finset.sum_nonneg fun _ _ => norm_nonneg _) hs hsbb
+  exact one_sub_le_mul_mul_exp_div_of_sum_le (fun j => (hCz j).le) hzj hKt hx0.le hx1
+    (NeZero.ne M) hs hs1 (by linarith)
 
 /-- For real weights `0 ≤ μ_{j,k} ≤ 1`, one of which equals `1`, the weights `βⱼ = ∑ₖ μ_{j,k}^N`
 satisfy `∑ⱼ |βⱼ|² ≥ 1`. -/
@@ -466,20 +417,13 @@ private theorem one_le_sum_norm_bntWeight_sq {μ : (j : Fin b) → Fin (m j) →
     _ ≤ ∑ j, ‖bntWeight μ N j‖ ^ 2 := Finset.single_le_sum (f := fun j => ‖bntWeight μ N j‖ ^ 2)
         (fun _ _ => by positivity) (Finset.mem_univ j₀)
 
-/-- A complex number `0 ≤ z ≤ 1` has `|z| ≤ 1`. -/
-private theorem norm_le_one_of_nonneg_of_le_one {z : ℂ} (h0 : 0 ≤ z) (h1 : z ≤ 1) : ‖z‖ ≤ 1 := by
-  have him : z.im = 0 := ((Complex.le_def.1 h0).2).symm
-  have hz : z = (z.re : ℂ) := Complex.ext rfl (by simp [him])
-  rw [hz, Complex.norm_real, Real.norm_eq_abs,
-    abs_of_nonneg (by simpa using (Complex.le_def.1 h0).1)]
-  simpa using (Complex.le_def.1 h1).1
-
 /-- **Approximation error for repeated blocks with overlapping states and real weights**
 (arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), for the corrected approximating
 state at the corrected rate). In the setting of
 `exists_approximationError_le_repeatedOverlappingBlockSum`, there is `C > 0` such that for all
-real weights `0 ≤ μ_{j,k} ≤ 1` of which one equals `1` (the normalization of the source, after
-eq. (S2)), every block length `q`, and every number of blocks `M ≥ 1`, the error of the corrected
+real weights `0 ≤ μ_{j,k} ≤ 1` of which one equals `1` (a special case of the normalization of the
+source after eq. (S2), which allows complex weights with `|μ_{j,k}| ≤ 1`, one of modulus one),
+every block length `q`, and every number of blocks `M ≥ 1`, the error of the corrected
 approximating state satisfies `ε ≤ C y e^{C y}` with `y = M e^{-γ q/ξ}`: then `βⱼ ≥ 0` and
 `∑ⱼ |βⱼ|² ≥ 1`. -/
 theorem exists_approximationError_le_repeatedOverlappingBlockSum_of_nonneg
@@ -507,7 +451,11 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum_of_nonneg
   have hβ : bntWeight μ (M * q) ≠ 0 := fun h' => by
     rw [h'] at hb
     norm_num at hb
-  have h' := h μ (fun j k => norm_le_one_of_nonneg_of_le_one (hμ j k).1 (hμ j k).2) q M hβ
+  have hμ1 : ∀ j k, ‖μ j k‖ ≤ 1 := fun j k => by
+    have h1 := (hμ j k).2
+    rw [← Complex.norm_of_nonneg' (hμ j k).1] at h1
+    exact_mod_cast h1
+  have h' := h μ hμ1 q M hβ
   rwa [min_eq_left hb, Real.sqrt_one, div_one] at h'
 
 /-- **Approximation error for repeated blocks with overlapping states and real weights,

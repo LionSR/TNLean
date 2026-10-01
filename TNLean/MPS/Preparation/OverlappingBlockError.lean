@@ -209,6 +209,64 @@ theorem one_sub_norm_div_le_of_norm_sub_le {b : ℝ} (hb : 1 ≤ b) {S : ℂ} {t
     nlinarith [mul_le_mul_of_nonneg_right hwle (by linarith : (0 : ℝ) ≤ 1 - δ - η)]
   linarith
 
+/-- **The trivial range of the error bound.** If `0 ≤ r`, `C ≥ 1`, `u ≥ 1` and `0 < s ≤ 1`, then
+`1 - r ≤ C u e^{C u} / s`. -/
+theorem one_sub_le_mul_mul_exp_div_of_one_le {r C u s : ℝ} (hr : 0 ≤ r) (hC : 1 ≤ C) (hu : 1 ≤ u)
+    (hs : 0 < s) (hs1 : s ≤ 1) : 1 - r ≤ C * u * Real.exp (C * u) / s := by
+  have h1 : 1 ≤ C * u := by nlinarith
+  have h2 : 1 ≤ Real.exp (C * u) := Real.one_le_exp (by linarith)
+  have h3 : 1 ≤ C * u * Real.exp (C * u) / s := by rw [le_div_iff₀ hs]; nlinarith
+  linarith
+
+/-- **The final estimate of the approximation error.** Let `0 ≤ x ≤ 1`, `M ≥ 1`, `u = M x^q`,
+`K ≥ 0`, `0 < s ≤ 1`, and let `e_j ≤ C_j u e^{C_j u}` with `C_j ≥ 0`. If
+`1 - r ≤ (∑ⱼ e_j) / s + K x^{Mq}`, then `1 - r ≤ C u e^{C u} / s` with `C = ∑ⱼ C_j + K + 1`.
+This collects the overlaps of the blocks and the norm of the target in the proof of
+arXiv:2307.01696, Supplemental Material, Lemma 1'(ii). -/
+theorem one_sub_le_mul_mul_exp_div_of_sum_le {ι : Type*} [Fintype ι] {Cz e : ι → ℝ}
+    {K x s r : ℝ} {M q : ℕ} (hCz : ∀ j, 0 ≤ Cz j)
+    (he : ∀ j, e j ≤ Cz j * (M * x ^ q) * Real.exp (Cz j * (M * x ^ q))) (hK : 0 ≤ K)
+    (hx0 : 0 ≤ x) (hx1 : x ≤ 1) (hM : M ≠ 0) (hs : 0 < s) (hs1 : s ≤ 1)
+    (h : 1 - r ≤ (∑ j, e j) / s + K * x ^ (M * q)) :
+    1 - r ≤ (∑ j, Cz j + K + 1) * (M * x ^ q) *
+      Real.exp ((∑ j, Cz j + K + 1) * (M * x ^ q)) / s := by
+  set u : ℝ := M * x ^ q
+  set S := ∑ j, Cz j
+  have hu : 0 ≤ u := by positivity
+  have hS : 0 ≤ S := Finset.sum_nonneg fun j _ => hCz j
+  have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 hM
+  have hδ : ∑ j, e j ≤ S * u * Real.exp (S * u) := by
+    have h' : ∀ j, e j ≤ Cz j * u * Real.exp (S * u) := fun j => by
+      refine (he j).trans ?_
+      have hCS : Cz j ≤ S :=
+        Finset.single_le_sum (f := Cz) (fun j _ => hCz j) (Finset.mem_univ j)
+      exact mul_le_mul_of_nonneg_left (Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right hCS hu))
+        (mul_nonneg (hCz j) hu)
+    refine (Finset.sum_le_sum fun j _ => h' j).trans_eq ?_
+    rw [← Finset.sum_mul, ← Finset.sum_mul]
+  have hη : K * x ^ (M * q) ≤ K * u / s := by
+    have h1 : x ^ (M * q) ≤ u := by
+      calc x ^ (M * q) ≤ x ^ q :=
+            pow_le_pow_of_le_one hx0 hx1 (Nat.le_mul_of_pos_left q (Nat.pos_of_ne_zero hM))
+        _ ≤ u := le_mul_of_one_le_left (by positivity) hM1
+    calc K * x ^ (M * q) ≤ K * u := mul_le_mul_of_nonneg_left h1 hK
+      _ ≤ K * u / s := le_div_self (by positivity) hs hs1
+  have hexp : 1 ≤ Real.exp ((S + K + 1) * u) := Real.one_le_exp (by positivity)
+  have he' : Real.exp (S * u) ≤ Real.exp ((S + K + 1) * u) :=
+    Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right (by linarith) hu)
+  have hfin : S * u * Real.exp (S * u) + K * u ≤ (S + K + 1) * u * Real.exp ((S + K + 1) * u) := by
+    have h1 : S * u * Real.exp (S * u) ≤ S * u * Real.exp ((S + K + 1) * u) :=
+      mul_le_mul_of_nonneg_left he' (mul_nonneg hS hu)
+    have h2 : K * u ≤ K * u * Real.exp ((S + K + 1) * u) :=
+      le_mul_of_one_le_right (mul_nonneg hK hu) hexp
+    have h3 : 0 ≤ u * Real.exp ((S + K + 1) * u) := by positivity
+    nlinarith
+  calc 1 - r ≤ (∑ j, e j) / s + K * x ^ (M * q) := h
+    _ ≤ S * u * Real.exp (S * u) / s + K * u / s :=
+        add_le_add (div_le_div_of_nonneg_right hδ hs.le) hη
+    _ = (S * u * Real.exp (S * u) + K * u) / s := by rw [add_div]
+    _ ≤ _ := by gcongr
+
 /-! ### The approximation error -/
 
 variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
@@ -217,7 +275,8 @@ variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
 /-- **Approximation error for overlapping blocks with weights of different moduli**
 (arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate of the
 module docstring). Let `Aⁱ = ⊕ⱼ wⱼ A_jⁱ` be the direct sum with real weights `0 ≤ wⱼ ≤ 1`, at
-least one of which equals `1` (the normalization of the source, after eq. (S2)), of blocks placed
+least one of which equals `1` (the normalization of the source after eq. (S2), with the phases
+absorbed into the blocks), of blocks placed
 on the bond coordinates `ι_j`. Let every block `A_j` be normal in the gauge
 `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1` (eq. (5)), let `λ₂` bound
 the moduli of the eigenvalues other than `1` of every transfer map `E_{A_j}` and the moduli of all
@@ -268,12 +327,7 @@ theorem exists_approximationError_le_overlappingBlockSum_weight
       1 - ‖nonNormalApproxOverlap (blockSum Aj ι μ) q M (ghzAmplitude fun j => μ j ^ (M * q))
           (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
         C * (M * x ^ q) * Real.exp (C * (M * x ^ q)) := fun C hC q M _ hu => by
-    have h1 : 1 ≤ C * (M * x ^ q) := by nlinarith
-    have h2 : 1 ≤ Real.exp (C * (M * x ^ q)) := Real.one_le_exp (by linarith)
-    have h3 : 0 ≤ ‖nonNormalApproxOverlap (blockSum Aj ι μ) q M
-        (ghzAmplitude fun j => μ j ^ (M * q))
-        (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ := norm_nonneg _
-    nlinarith
+    simpa using one_sub_le_mul_mul_exp_div_of_one_le (norm_nonneg _) hC hu one_pos le_rfl
   rcases le_or_gt 1 ‖lam₂‖ with hl | hl
   · -- For `|λ₂| ≥ 1` the rate is at least `1` and the bound is trivial.
     have hx1 : 1 ≤ x := by
@@ -396,33 +450,10 @@ theorem exists_approximationError_le_overlappingBlockSum_weight
     rw [hnum, norm_mul, norm_inv, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (Real.sqrt_nonneg _), div_eq_inv_mul]
   rw [hnum'] at hmain
-  have hzj' : ∀ j, ‖z j - β j‖ ≤ Cz j * u * Real.exp (S * u) := fun j => by
-    refine (hzj j).trans ?_
-    have hCS : Cz j ≤ S :=
-      Finset.single_le_sum (f := Cz) (fun j _ => (hCz j).le) (Finset.mem_univ j)
-    exact mul_le_mul_of_nonneg_left (Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right hCS hu))
-      (mul_nonneg (hCz j).le hu)
-  have hδ : ∑ j, ‖z j - β j‖ ≤ S * u * Real.exp (S * u) := by
-    refine (Finset.sum_le_sum fun j _ => hzj' j).trans_eq ?_
-    rw [← Finset.sum_mul, ← Finset.sum_mul]
-  have hη : Kt * x ^ (M * q) ≤ Kt * u := by
-    refine mul_le_mul_of_nonneg_left ?_ hKt
-    calc x ^ (M * q) ≤ x ^ q := pow_le_pow_of_le_one hx0.le hx1 (Nat.le_mul_of_pos_left q
-          (Nat.pos_of_ne_zero (NeZero.ne M)))
-      _ ≤ u := le_mul_of_one_le_left (by positivity) hM
-  have hexp : 1 ≤ Real.exp ((S + Kt + 1) * u) := Real.one_le_exp (by positivity)
-  have he : Real.exp (S * u) ≤ Real.exp ((S + Kt + 1) * u) :=
-    Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right (by linarith) hu)
-  calc 1 - ‖nonNormalApproxOverlap A q M α ω‖ ≤ 1 - t⁻¹ * ‖num‖ := by linarith
-    _ ≤ ∑ j, ‖z j - β j‖ + Kt * x ^ (M * q) := hmain
-    _ ≤ S * u * Real.exp (S * u) + Kt * u := add_le_add hδ hη
-    _ ≤ (S + Kt + 1) * u * Real.exp ((S + Kt + 1) * u) := by
-        have h1 : S * u * Real.exp (S * u) ≤ S * u * Real.exp ((S + Kt + 1) * u) :=
-          mul_le_mul_of_nonneg_left he (mul_nonneg hS hu)
-        have h2 : Kt * u ≤ Kt * u * Real.exp ((S + Kt + 1) * u) :=
-          le_mul_of_one_le_right (mul_nonneg hKt hu) hexp
-        have h3 : 0 ≤ u * Real.exp ((S + Kt + 1) * u) := by positivity
-        nlinarith
+  have h := one_sub_le_mul_mul_exp_div_of_sum_le (r := ‖nonNormalApproxOverlap A q M α ω‖)
+    (fun j => (hCz j).le) hzj hKt hx0.le hx1 (NeZero.ne M) one_pos le_rfl
+    (by rw [div_one]; linarith)
+  rwa [div_one] at h
 
 /-- **Approximation error for overlapping blocks with weights of different moduli, `O`-form**
 (arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate): in the

@@ -50,6 +50,8 @@ correlation lengths of the mixed transfer maps, in place of the block form (S5) 
   inner products and norms after a tensor power of a partial isometry.
 * `MPSTensor.embedPair_fixedPointPair` — embedded pairs are the pairs of the embedded fixed points.
 * `MPSTensor.mixedMapLM_blockSumPosLimit_smul_apply`, `MPSTensor.mixedMapLM_blockSumPosLimit_apply`
+* `MPSTensor.exists_norm_mpvOverlap_sub_trace_pow_le` — the telescoping estimate for rectangular
+  mixed transfer maps.
 * `MPSTensor.exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le`,
   `MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le`
 * `MPSTensor.exists_norm_mpvOverlap_le_of_mixedMapLM` — overlaps of distinct blocks decay.
@@ -62,6 +64,10 @@ correlation lengths of the mixed transfer maps, in place of the block form (S5) 
 * [MSWC23] D. Malz, G. Styliaris, Z.-Y. Wei, J. I. Cirac,
   *Preparation of matrix product states with log-depth quantum circuits*,
   arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S7) and the proof of Lemma 1'(ii).
+* [PSC21] L. Piroli, G. Styliaris, J. I. Cirac,
+  *Quantum circuits assisted by local operations and classical communication:
+  transformations and phases of matter*,
+  arXiv:2103.13367, Supplemental Material, eqs. `final_eq` to `finished`.
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -345,27 +351,98 @@ theorem mixedMapLM_blockSumPosLimit_apply (hσ : ∀ j, (σ j).PosSemidef) (j : 
 
 end Limit
 
-/-- A linear map `ρ ↦ Tr(Q ρ) σ` with `Tr(Q σ) = 1` has an idempotent transfer matrix. -/
-private theorem isIdempotentElem_transferMatrix_of_apply_eq_trace_smul
-    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    {Q σ : Matrix (Fin D) (Fin D) ℂ} (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ)
-    (h1 : (Q * σ).trace = 1) : IsIdempotentElem (transferMatrix T) := by
-  rw [IsIdempotentElem, ← transferMatrix_comp]
-  congr 1
-  ext ρ : 1
-  simp only [LinearMap.comp_apply, hT, Matrix.mul_smul, Matrix.trace_smul, h1, smul_eq_mul,
+/-- A linear map `ρ ↦ Tr(Q ρ) σ` with `Tr(Q σ) = 1` is idempotent. -/
+private theorem isIdempotentElem_of_apply_eq_trace_smul
+    {T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)} {Q σ : Matrix (Fin D) (Fin D) ℂ}
+    (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ) (h1 : (Q * σ).trace = 1) : IsIdempotentElem T := by
+  ext1 ρ
+  simp only [Module.End.mul_apply, hT, Matrix.mul_smul, Matrix.trace_smul, h1, smul_eq_mul,
     mul_one]
 
-/-- A linear map `ρ ↦ Tr(Q ρ) σ` has transfer matrix of trace `Tr(Q σ)`. -/
-private theorem trace_transferMatrix_of_apply_eq_trace_smul [NeZero D]
-    {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    {Q σ : Matrix (Fin D) (Fin D) ℂ} (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ) :
-    (transferMatrix T).trace = (Q * σ).trace := by
+/-- A linear map `ρ ↦ Tr(Q ρ) σ` has trace `Tr(Q σ)`. -/
+private theorem trace_of_apply_eq_trace_smul
+    {T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)} {Q σ : Matrix (Fin D) (Fin D) ℂ}
+    (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ) :
+    LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) T = (Q * σ).trace := by
   have e : T = ((Matrix.traceLinearMap (Fin D) ℂ ℂ) ∘ₗ LinearMap.mulLeft ℂ Q).smulRight σ := by
     ext1 ρ
     simp [hT]
-  rw [trace_transferMatrix_eq_linearMap_trace, e, LinearMap.trace_smulRight]
+  rw [e, LinearMap.trace_smulRight]
   simp
+
+/-! ### The telescoping estimate for tensors of different bond dimensions -/
+
+open scoped Matrix.Norms.L2Operator in
+/-- **Telescoping for rectangular mixed transfer maps.** Let `F` be a tensor of bond dimension
+`D₂` with physical dimension `D₂²`, and `c ≥ 0`. There is `C > 0` such that for all matrices
+`G, G'` from the bond pairs of bond dimension `D₁` to the pairs of `D₂` with
+`‖G - G'‖ ≤ δ`, if every power `T'^k` of the mixed transfer map `T'` of the tensor read from `G'`
+against `F` satisfies `‖T'^k ρ‖ ≤ c ‖ρ‖`, then the overlap of the tensor read from `G` with `F`
+on `M` sites is `Tr T'^M` up to `C (M δ) e^{C M δ}`.
+
+arXiv:2103.13367, Supplemental Material, eqs. `final_eq` to `finished`: the telescoping estimate
+`norm_prod_range_sub_pow_le_of_forall_norm_pow_le`, with the overlap the trace of the `M`-th power
+of the mixed transfer map (`trace_mixedMapLM_rect_pow_eq_mpvOverlap`). -/
+theorem exists_norm_mpvOverlap_sub_trace_pow_le {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (F : MPSTensor (D₂ * D₂) D₂) {c : ℝ} (hc : 0 ≤ c) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (G G' : Matrix (Fin D₂ × Fin D₂) (Fin D₁ × Fin D₁) ℂ) (δ : ℝ) (M : ℕ),
+      (∀ (k : ℕ) (ρ : Matrix (Fin D₁) (Fin D₂) ℂ),
+        ‖(Kraus.mixedMapLM (ofPhysicalMatrixLM G') F ^ k) ρ‖ ≤ c * ‖ρ‖) →
+      ‖G - G'‖ ≤ δ →
+      ‖mpvOverlap (ofPhysicalMatrixLM G) F M -
+          LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ)
+            (Kraus.mixedMapLM (ofPhysicalMatrixLM G') F ^ M)‖ ≤
+        C * (M * δ) * Real.exp (C * (M * δ)) := by
+  classical
+  let Φ : Module.End ℂ (Matrix (Fin D₁) (Fin D₂) ℂ) ≃ₐ[ℂ] _ :=
+    Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₂) ℂ)
+  let Ψ : Matrix (Fin D₂ × Fin D₂) (Fin D₁ × Fin D₁) ℂ →ₗ[ℂ]
+      (Matrix (Fin D₁) (Fin D₂) ℂ →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) :=
+    Φ.toLinearMap ∘ₗ mixedMapLMLeft (D₁ := D₁) F ∘ₗ ofPhysicalMatrixLM
+  set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
+  have hK₃ : 0 ≤ K₃ := norm_nonneg _
+  have hΨ : ∀ G, ‖Ψ G‖ ≤ K₃ * ‖G‖ := (LinearMap.toContinuousLinearMap Ψ).le_opNorm
+  let tr : (Matrix (Fin D₁) (Fin D₂) ℂ →L[ℂ] Matrix (Fin D₁) (Fin D₂) ℂ) →ₗ[ℂ] ℂ :=
+    LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ) ∘ₗ Φ.symm.toLinearMap
+  set K₄ := ‖LinearMap.toContinuousLinearMap tr‖
+  have hK₄ : 0 ≤ K₄ := norm_nonneg _
+  have htr : ∀ T, ‖tr T‖ ≤ K₄ * ‖T‖ := (LinearMap.toContinuousLinearMap tr).le_opNorm
+  set C := K₄ * c * (c * K₃) + c * K₃ + 1
+  refine ⟨C, by positivity, fun G G' δ M hpow hG => ?_⟩
+  have hδ : 0 ≤ δ := (norm_nonneg _).trans hG
+  set T := Ψ G
+  set T' := Ψ G'
+  have hT'pow : ∀ k : ℕ, ‖T' ^ k‖ ≤ c := fun k => by
+    refine ContinuousLinearMap.opNorm_le_bound _ hc fun ρ => ?_
+    have h : T' ^ k = Φ (Kraus.mixedMapLM (ofPhysicalMatrixLM G') F ^ k) := by
+      simp only [T', Ψ, LinearMap.comp_apply, AlgEquiv.toLinearMap_apply, map_pow]
+      rfl
+    rw [h]
+    exact hpow k ρ
+  have hdiff : ∀ k : ℕ, ‖(fun _ : ℕ => T) k - T'‖ ≤ K₃ * δ := fun _ => by
+    rw [← map_sub]
+    exact (hΨ _).trans (mul_le_mul_of_nonneg_left hG hK₃)
+  have htel := norm_prod_range_sub_pow_le_of_forall_norm_pow_le hT'pow hdiff M
+  rw [List.map_const', List.length_range, List.prod_replicate] at htel
+  have hover : mpvOverlap (ofPhysicalMatrixLM G) F M -
+      LinearMap.trace ℂ (Matrix (Fin D₁) (Fin D₂) ℂ)
+        (Kraus.mixedMapLM (ofPhysicalMatrixLM G') F ^ M) = tr (T ^ M - T' ^ M) := by
+    rw [map_sub, ← trace_mixedMapLM_rect_pow_eq_mpvOverlap]
+    simp only [tr, T, T', Ψ, LinearMap.comp_apply, AlgEquiv.toLinearMap_apply, ← map_pow,
+      AlgEquiv.symm_apply_apply]
+    rfl
+  have hgeom := one_add_pow_sub_one_le_mul_exp (by positivity : 0 ≤ c * (K₃ * δ)) M
+  have hu : 0 ≤ (M : ℝ) * δ := by positivity
+  calc _ ≤ K₄ * ‖T ^ M - T' ^ M‖ := by rw [hover]; exact htr _
+    _ ≤ K₄ * (c * ((1 + c * (K₃ * δ)) ^ M - 1)) := by gcongr
+    _ ≤ K₄ * (c * (M * (c * (K₃ * δ)) * Real.exp (M * (c * (K₃ * δ))))) := by gcongr
+    _ = K₄ * c * (c * K₃) * (M * δ) * Real.exp (c * K₃ * (M * δ)) := by ring_nf
+    _ ≤ C * (M * δ) * Real.exp (C * (M * δ)) := by
+        have hC1 : K₄ * c * (c * K₃) ≤ C := by
+          simp only [C]; nlinarith [mul_nonneg hc hK₃]
+        have hC2 : c * K₃ ≤ C := by
+          simp only [C]; nlinarith [mul_nonneg (mul_nonneg hK₄ hc) (mul_nonneg hc hK₃)]
+        gcongr
 
 /-! ### The overlap of the positive part with the fixed point of one block -/
 
@@ -378,10 +455,10 @@ written as `∑ₖ K_k ((√(t_k² σ_k))ᵀ ⊗ 1) K_kᴴ`. Then the overlap
 `z = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` with the fixed-point tensor of block `j` placed in the full bond space
 satisfies `|z - t_j^M| ≤ C (M δ) e^{C M δ}`.
 
-The mixed transfer matrix of `P_∞` against `P'_{j,∞}` is `t_j R` with `R` idempotent of trace one
+The mixed transfer map of `P_∞` against `P'_{j,∞}` is `t_j R` with `R` idempotent of trace one
 (`mixedMapLM_blockSumPosLimit_smul_apply`), so its powers are bounded uniformly in `t_j ≤ 1`, and
 the telescoping estimate of arXiv:2103.13367, Supplemental Material, eqs. `final_eq` to
-`finished`, applies (`norm_prod_range_sub_pow_le_of_forall_norm_pow_le`). -/
+`finished`, applies (`exists_norm_mpvOverlap_sub_trace_pow_le`). -/
 theorem exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le
     (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
     {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosSemidef)
@@ -394,70 +471,39 @@ theorem exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le
   have : NeZero (Dj j) := Matrix.neZero_of_trace_eq_one (htr j)
   have : NeZero D := ⟨fun h => by subst h; exact (ι j 0).elim0⟩
   set F := fixedPointTensor (embeddedBlockState (ι j) (σ j))
-  set Ψ := mixedTransferMatrixLeft F
-  set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
-  have hK₃ : 0 ≤ K₃ := norm_nonneg _
-  have hΨ : ∀ G, ‖Ψ G‖ ≤ K₃ * ‖G‖ := (LinearMap.toContinuousLinearMap Ψ).le_opNorm
-  set trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
-  set K₄ := ‖trL‖
-  have hK₄ : 0 ≤ K₄ := norm_nonneg _
-  have htrace : ∀ G, ‖Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ G‖ ≤ K₄ * ‖G‖ := trL.le_opNorm
-  set R := Ψ (blockSumPosLimit ι σ)
+  set R : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    Kraus.mixedMapLM (ofPhysicalMatrixLM (blockSumPosLimit ι σ)) F
   have hR := mixedMapLM_blockSumPosLimit_apply hι hdisj hσ j
   have h1 : (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ *
       embeddedBlockState (ι j) (σ j)).trace = 1 := by
     rw [trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState hι, htr j]
-  have hidem : IsIdempotentElem R := isIdempotentElem_transferMatrix_of_apply_eq_trace_smul hR h1
-  have htr1 : R.trace = 1 := (trace_transferMatrix_of_apply_eq_trace_smul hR).trans h1
-  set c := ‖(1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)‖ + ‖R‖
+  have hidem : IsIdempotentElem R := isIdempotentElem_of_apply_eq_trace_smul hR h1
+  have htr1 : LinearMap.trace ℂ _ R = 1 := (trace_of_apply_eq_trace_smul hR).trans h1
+  set c : ℝ := 1 + ‖LinearMap.toContinuousLinearMap R‖
   have hc : 0 ≤ c := by positivity
-  set C := K₄ * c * (c * K₃) + c * K₃ + 1
-  refine ⟨C, by positivity, fun t ht htj P δ M _ hP => ?_⟩
-  have hδ : 0 ≤ δ := (norm_nonneg _).trans hP
-  set Tinf := Ψ (blockSumPosLimit ι fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k)
-  have hTinf : Tinf = (t j : ℂ) • R := by
-    have hmap : mixedMapLMLeft F
-        (ofPhysicalMatrixLM (blockSumPosLimit ι fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k)) =
-        (t j : ℂ) • mixedMapLMLeft F (ofPhysicalMatrixLM (blockSumPosLimit ι σ)) :=
-      LinearMap.ext fun ρ => by
-        change Kraus.mixedMapLM _ F ρ = (t j : ℂ) • Kraus.mixedMapLM _ F ρ
-        rw [mixedMapLM_blockSumPosLimit_smul_apply hι hdisj hσ t ht, hR]
-    simp only [Tinf, R, Ψ, mixedTransferMatrixLeft, LinearMap.comp_apply, hmap, map_smul]
-  have hpow : ∀ k : ℕ, ‖Tinf ^ k‖ ≤ c := fun k => by
+  obtain ⟨C, hC, hgen⟩ := exists_norm_mpvOverlap_sub_trace_pow_le (D₁ := D) F hc
+  refine ⟨C, hC, fun t ht htj P δ M _ hP => ?_⟩
+  set T := Kraus.mixedMapLM
+    (ofPhysicalMatrixLM (blockSumPosLimit ι fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k)) F
+  have hT : T = (t j : ℂ) • R := by
+    ext1 ρ
+    rw [mixedMapLM_blockSumPosLimit_smul_apply hι hdisj hσ t ht, LinearMap.smul_apply, hR]
+  have hpow : ∀ (k : ℕ) (ρ : Matrix (Fin D) (Fin D) ℂ), ‖(T ^ k) ρ‖ ≤ c * ‖ρ‖ := fun k ρ => by
     rcases k with _ | k
-    · rw [pow_zero]; exact le_add_of_nonneg_right (norm_nonneg _)
-    · rw [hTinf, smul_pow, hidem.pow_succ_eq, norm_smul, norm_pow, Complex.norm_real,
-        Real.norm_eq_abs, abs_of_nonneg (ht j)]
-      exact (mul_le_of_le_one_left (norm_nonneg _) (pow_le_one₀ (ht j) htj)).trans
-        (le_add_of_nonneg_left (norm_nonneg _))
-  set T := Ψ P
-  have hδ' : ∀ k : ℕ, ‖(fun _ : ℕ => T) k - Tinf‖ ≤ K₃ * δ := fun _ => by
-    rw [← map_sub]
-    exact (hΨ _).trans (mul_le_mul_of_nonneg_left hP hK₃)
-  have htel := norm_prod_range_sub_pow_le_of_forall_norm_pow_le hpow hδ' M
-  rw [List.map_const', List.length_range, List.prod_replicate] at htel
-  have hTM : Tinf ^ M = (t j : ℂ) ^ M • R := by
+    · rw [pow_zero, Module.End.one_apply]
+      exact le_mul_of_one_le_left (norm_nonneg _) (le_add_of_nonneg_right (norm_nonneg _))
+    · rw [hT, smul_pow, hidem.pow_succ_eq, LinearMap.smul_apply, norm_smul, norm_pow,
+        Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (ht j)]
+      calc _ ≤ 1 * ‖R ρ‖ := by gcongr; exact pow_le_one₀ (ht j) htj
+        _ ≤ c * ‖ρ‖ := by
+          rw [one_mul]
+          exact ((LinearMap.toContinuousLinearMap R).le_opNorm ρ).trans
+            (mul_le_mul_of_nonneg_right (le_add_of_nonneg_left zero_le_one) (norm_nonneg _))
+  have htrace : LinearMap.trace ℂ _ (T ^ M) = (t j : ℂ) ^ M := by
     obtain ⟨n, hn⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne M)
-    rw [hTinf, smul_pow, hn, hidem.pow_succ_eq]
-  have hover : mpvOverlap (ofPhysicalMatrixLM P) F M - (t j : ℂ) ^ M =
-      Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ (T ^ M - Tinf ^ M) := by
-    rw [map_sub, Matrix.traceLinearMap_apply, Matrix.traceLinearMap_apply, hTM, Matrix.trace_smul,
-      htr1, smul_eq_mul, mul_one, ← trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap]
-    rfl
-  have hy : 0 ≤ c * (K₃ * δ) := by positivity
-  have hgeom := one_add_pow_sub_one_le_mul_exp hy M
-  have hu : 0 ≤ (M : ℝ) * δ := by positivity
-  calc ‖mpvOverlap (ofPhysicalMatrixLM P) F M - (t j : ℂ) ^ M‖
-      ≤ K₄ * ‖T ^ M - Tinf ^ M‖ := by rw [hover]; exact htrace _
-    _ ≤ K₄ * (c * ((1 + c * (K₃ * δ)) ^ M - 1)) := by gcongr
-    _ ≤ K₄ * (c * (M * (c * (K₃ * δ)) * Real.exp (M * (c * (K₃ * δ))))) := by gcongr
-    _ = K₄ * c * (c * K₃) * (M * δ) * Real.exp (c * K₃ * (M * δ)) := by ring_nf
-    _ ≤ C * (M * δ) * Real.exp (C * (M * δ)) := by
-        have hC1 : K₄ * c * (c * K₃) ≤ C := by
-          simp only [C]; nlinarith [mul_nonneg hc hK₃]
-        have hC2 : c * K₃ ≤ C := by
-          simp only [C]; nlinarith [mul_nonneg (mul_nonneg hK₄ hc) (mul_nonneg hc hK₃)]
-        gcongr
+    rw [hT, smul_pow, hn, hidem.pow_succ_eq, map_smul, htr1, smul_eq_mul, mul_one]
+  have h := hgen P _ δ M hpow hP
+  rwa [htrace] at h
 
 variable {Aj : (j : Fin b) → MPSTensor d (Dj j)}
 
