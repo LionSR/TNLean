@@ -476,8 +476,13 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     non-decaying partners and
     Theorem~\ref{thm:periodic_conditional_block_matching} matches the two
     bases, each matched pair carrying a similarity with a unit-modulus scalar
-    $\xi_j$. Left canonicality and irreducibility allow each similarity to
-    be made unitary without changing $\xi_j$. The matched periods agree by
+    $\xi_j$. Since the blocks are left canonical and irreducible,
+    Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    replaces each similarity by a unitary $U_j$ with the same scalar:
+    \begin{align}
+        A_j^i          & =\xi_jU_jB_{\pi(j)}^iU_j^\dagger, \notag \\
+        U_jU_j^\dagger & =\Id_{D_j}. \notag
+    \end{align} The matched periods agree by
     Theorem~\ref{thm:periodic_repeated_blocks_period_eq_tp}. That same $\xi_j$
     relates the matrix-product vectors of the matched pair at every length, so
     Theorem~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
