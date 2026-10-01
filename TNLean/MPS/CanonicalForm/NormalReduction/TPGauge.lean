@@ -523,7 +523,7 @@ theorem exists_tp_gauge_blockwise
           (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
         (∀ k, Kraus.IsIrreducibleFamily (blocks1 k)) ∧
         (∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1) ∧
-        (∀ k, μ1 k ≠ 0) ∧
+        (∀ k, 0 < μ1 k) ∧
         (∀ k, 0 < dim0 k) := by
   classical
   have htp :
@@ -552,7 +552,7 @@ theorem exists_tp_gauge_blockwise
     intro k
     exact GaugeEquiv.sameMPV (hGauge1 k)
   let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
-  obtain ⟨hSame1, hμne1, hDim1⟩ :=
+  obtain ⟨hSame1, _hμne1, hDim1⟩ :=
     gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
   have hIrr1 : ∀ k : Fin r0, Kraus.IsIrreducibleFamily (blocks1 k) := by
     intro k
@@ -578,7 +578,8 @@ theorem exists_tp_gauge_blockwise
       funext i
       simpa [Kraus.tpGauge, c] using hform1 k i
     simpa [hEq, Kraus.tpGauge] using hIrr_gauge
-  exact ⟨μ1, blocks1, hSame1, hIrr1, hLeft1, hμne1, hDim1⟩
+  exact ⟨μ1, blocks1, hSame1, hIrr1, hLeft1, (fun k =>
+    Complex.zero_lt_real.mpr (Real.sqrt_pos.2 (hrpos1 k))), hDim1⟩
 
 /-!
 ## Arbitrary-input blockwise gauge reductions
@@ -668,13 +669,14 @@ lines 201--219, with the canonical-form-II gauge passage at lines 1058--1077
 for the nonzero irreducible blocks.
 
 From any `A : MPSTensor d D`, it produces TP-gauged irreducible blocks
-`blocks k` with nonzero weights `μ k`.
+`blocks k` with positive real weights `μ k`, the square roots of the original
+blocks' spectral radii.
 
 Every nonzero block satisfies:
 * `Kraus.IsIrreducibleFamily`;
 * left-canonical normalization `∑ᵢ (Bᵢ)ᴴ Bᵢ = I`;
 * positive bond dimension;
-* nonzero weight.
+* positive real weight.
 
 At every positive length, `A` has the same MPV as the weighted nonzero-block
 sum, whose total bond dimension is at most `D`.
@@ -695,7 +697,7 @@ theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
       (blocks : (k : Fin r) → MPSTensor d (dim k)),
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
-      (∀ k, μ k ≠ 0) ∧
+      (∀ k, 0 < μ k) ∧
       (∀ k, 0 < dim k) ∧
       SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
       ∑ k : Fin r, dim k ≤ D := by
@@ -706,9 +708,9 @@ theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
   have hSame_refl : SameMPV₂ A_nonzero
       (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
     fun _ _ => rfl
-  obtain ⟨μ, blocks, hSame, hIrr, hLeft, hμNe, hDim⟩ :=
+  obtain ⟨μ, blocks, hSame, hIrr, hLeft, hμPos, hDim⟩ :=
     exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
-  exact ⟨r, dim, μ, blocks, hIrr, hLeft, hμNe, hDim,
+  exact ⟨r, dim, μ, blocks, hIrr, hLeft, hμPos, hDim,
     hPos₀.trans hSame.toSameMPV₂Pos, hBound₀⟩
 
 

@@ -1274,31 +1274,7 @@ identities and the current weighted route.
           and
           \leanid{MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le}.
 
-          The finite-Gram telescope uses
-          \leanid{MPSTensor.reassocTailBoundaryMapES_adjoint_comp_self_eq_fiberwise_groundSpaceGram},
-          \leanid{MPSTensor.inverseGram_reassocTailBoundaryMapES_eq_fiberwise_inverseGram},
-          \leanid{MPSTensor.wholeIncrementLeftFiniteGramCancellation_eq_groundSpaceMapES_adjoint},
-          \leanid{MPSTensor.wholeIncrementTailFiniteGramCancellation_eq_groundSpaceMapES_adjoint},
-          and
-          \leanid{MPSTensor.wholeIncrement_limitingOverlapProduct_eq}.
-          Its correction maps are
-          \leanid{MPSTensor.wholeIncrementTailFiniteGramCorrectionES},
-          \leanid{MPSTensor.wholeIncrementFullInverseGramCorrectionES}, and
-          \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES}. The exact
-          telescopes are
-          \leanid{MPSTensor.wholeIncrement_virtualResidual_eq_centered_sub_gramErrors}
-          and
-          \leanid{MPSTensor.wholeIncrement_injectiveRangeProjector_residual_eq_centered_sub_corrections},
-          the latter using
-          \leanid{MPSTensor.wholeIncrementCenteredProjectorResidualES}. The
-          pseudoinverse estimate is
-          \leanid{MPSTensor.norm_reassocTailBoundaryMapES_comp_inverseGram_le_sqrt}.
-          The correction estimates are
-          \leanid{MPSTensor.wholeIncrementTailFiniteGramCorrectionES_norm_le},
-          \leanid{MPSTensor.wholeIncrementFullInverseGramCorrectionES_norm_le}, and
-          \leanid{MPSTensor.wholeIncrementLeftFiniteGramCorrectionES_norm_le}.
-
-          These finite-Gram results are no longer assembled into a projector-defect
+          The former finite-Gram telescope is no longer assembled into a projector-defect
           estimate. The former inverse-Gram reconstruction of that estimate, whose
           coefficient $Cr^L/(1-cr^L)$ carried an unidentified constant and the
           $D^{3/2}$ reshuffle factor, has been deleted. The whole-increment defect is
