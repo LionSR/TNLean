@@ -321,6 +321,23 @@ theorem exists_abs_norm_mpvState_sq_sub_one_le (A : MPSTensor d D) (hN : Kraus.I
   rw [← Real.norm_eq_abs, ← Complex.norm_real, hc, mul_assoc]
   exact (htrace _).trans (mul_le_mul_of_nonneg_left (hT N) hK₄)
 
+/-- **A gap for a normal tensor.** For a normal left-canonical tensor `A` with `D ≥ 1` there is
+`0 < t < 1` bounding the moduli of the eigenvalues other than `1` of its transfer map
+(arXiv:2307.01696, eq. (5) and the remark after it: the transfer map of a normal tensor in this
+gauge has `1` as its only eigenvalue of modulus `1`). -/
+theorem exists_eigenvalue_norm_le_of_isNormal [NeZero D] (A : MPSTensor d D)
+    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) :
+    ∃ t : ℝ, 0 < t ∧ t < 1 ∧ ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 →
+      ‖μ‖ ≤ t := by
+  have hNT := isNormalTensor_of_isNormal_leftCanonical A hN hA
+  have hCh := Kraus.isChannel_mapLM A hA
+  obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
+    (Module.End.finite_hasEigenvalue (Kraus.transferMap A)) fun μ hμ hne =>
+      lt_of_le_of_ne (hCh.eigenvalue_norm_le_one μ hμ)
+        fun h => hne (hNT.primitive_transfer.unique_peripheral μ hμ h)
+  exact ⟨max (1 - δ) (1 / 2), lt_max_of_lt_right (by norm_num),
+    max_lt (by linarith) (by norm_num), fun μ hμ hne => (hgap μ hμ hne).trans (le_max_left _ _)⟩
+
 /-- The periodic states of a normal tensor in the gauge of `exists_norm_transferMap_pow_sub_le`
 have bounded norms: `c_N² = Tr E_A^N ≤ B` for all `N`. -/
 theorem exists_norm_mpvState_sq_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
@@ -328,23 +345,14 @@ theorem exists_norm_mpvState_sq_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) :
     ∃ B : ℝ, ∀ N : ℕ, ‖mpvState A N‖ ^ 2 ≤ B := by
   have := Matrix.neZero_of_trace_eq_one htr
-  have hNT := isNormalTensor_of_isNormal_leftCanonical A hN hA
-  have hCh := Kraus.isChannel_mapLM A hA
-  obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
-    (Module.End.finite_hasEigenvalue (Kraus.transferMap A)) fun μ hμ hne =>
-      lt_of_le_of_ne (hCh.eigenvalue_norm_le_one μ hμ)
-        fun h => hne (hNT.primitive_transfer.unique_peripheral μ hμ h)
-  set t := max (1 - δ) (1 / 2)
-  have ht0 : 0 < t := lt_max_of_lt_right (by norm_num)
-  have ht1 : t ≤ 1 := max_le (by linarith) (by norm_num)
+  obtain ⟨t, ht0, ht1, hgap⟩ := exists_eigenvalue_norm_le_of_isNormal A hN hA
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
   obtain ⟨K, hK, hc⟩ := exists_abs_norm_mpvState_sq_sub_one_le A hN hA hσ htr hfix
-    (lam₂ := (t : ℂ)) (fun μ hμ hne => by rw [hnorm]; exact (hgap μ hμ hne).trans (le_max_left _ _))
+    (lam₂ := (t : ℂ)) (fun μ hμ hne => by rw [hnorm]; exact hgap μ hμ hne)
     (γ := 1 / 4) (by norm_num) (by norm_num)
   refine ⟨1 + K, fun N => ?_⟩
-  have hx : Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ≤ 1 := by
-    rw [neg_div_correlationLength, hnorm, Real.exp_le_one_iff]
-    exact mul_nonpos_of_nonneg_of_nonpos (by norm_num) (Real.log_nonpos ht0.le ht1)
+  have hx : Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ≤ 1 :=
+    exp_neg_div_correlationLength_le_one (by norm_num) (hnorm.trans_le ht1.le)
   have hpow : (Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ^ 2) ^ N ≤ 1 :=
     pow_le_one₀ (by positivity) (pow_le_one₀ (by positivity) hx)
   have := (abs_le.1 ((hc N).trans (mul_le_of_le_one_right hK hpow))).2

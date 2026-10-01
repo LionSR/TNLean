@@ -75,7 +75,6 @@ import TNLean.MPS.MPDO.BondSimilarity
 import TNLean.MPS.MPDO.BondTwoSingletonBaseModel
 import TNLean.MPS.MPDO.BondTwoSingletonGramBoundary
 import TNLean.MPS.MPDO.BondTwoSingletonPhysicalGauge
-import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVBlockingChannelAmbientCounterexample
@@ -104,10 +103,6 @@ import TNLean.MPS.MPDO.CPSVSharpBlocking
 import TNLean.MPS.MPDO.CPSVTopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.CPSVVerticalBNT
 import TNLean.MPS.MPDO.CPSVVerticalCanonicalForm
-import TNLean.MPS.MPDO.CPSVVerticalDecomposition
-import TNLean.MPS.MPDO.CPSVVerticalProductCornerPositivity
-import TNLean.MPS.MPDO.CPSVVerticalProductFusionDecomposition
-import TNLean.MPS.MPDO.CPSVVerticalProductSpectralFamily
 import TNLean.MPS.MPDO.CZXActionTensors
 import TNLean.MPS.MPDO.CZXComparisonNormalization
 import TNLean.MPS.MPDO.CZXCompletion

@@ -4364,7 +4364,7 @@ space of $(MN)P$.
     \leanok
     \uses{def:mpug_group_representation, def:mpdo_operator_product,
         def:mpo_to_mps, def:mps_rectangular_reduction,
-        def:mpdo_operator_product_associator}
+        def:mpdo_operator_product_associator, def:normal}
     Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
     bond dimension whose doubled-index tensors are normal and whose periodic
     operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
@@ -5425,26 +5425,55 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     no phase.
 \end{proof}
 
+\begin{lemma}[The square of the exchange phase]
+    \label{lem:mpug_domain_wall_exchange_phase_square}
+    \lean{MPOTensor.exists_twoWallMPV_ne_zero,
+        MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_sq_eq_one_of_mpo_mul_self_eq_one}
+    \leanok
+    \uses{thm:mpug_domain_wall_state}
+    Let $g$ carry $e_{AB}$ to $e_{BA}$ with phase $c_{AB}$ and $e_{BA}$ to
+    $e_{AB}$ with phase $c_{BA}$, where $A$ and $B$ are normal, and suppose
+    that $U=O_g$ satisfies $U^2=\mathbf 1$ on the periodic chain of every
+    length. Then $(c_{AB}c_{BA})^2=1$
+    \cite[Section~III.B]{GarreRubioSchuch2024DomainWall}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:mpug_domain_wall_state},
+    $U\ket{\psi(A\text{-}B\text{-}A)}=c_{AB}c_{BA}\ket{\psi(B\text{-}A\text{-}B)}$
+    and $U\ket{\psi(B\text{-}A\text{-}B)}=c_{BA}c_{AB}\ket{\psi(A\text{-}B\text{-}A)}$
+    whenever the regions are long, so $U^2=\mathbf 1$ gives
+    $\ket{\psi(A\text{-}B\text{-}A)}=(c_{AB}c_{BA})^2\ket{\psi(A\text{-}B\text{-}A)}$.
+    The state is nonzero for suitable long regions: the words of a fixed
+    long length span the full matrix algebras of $A$ and $B$, so if every
+    coefficient vanished, then $\operatorname{tr}(Xe_{AB}^iYe_{BA}^j)=0$ for
+    all matrices $X$ and $Y$, and choosing matrix units for $X$ and $Y$
+    gives $e_{AB}^i=0$ or $e_{BA}^j=0$ for every pair of letters.
+\end{proof}
+
 \begin{corollary}[Exchange of two domain-wall strings, printed orientation]
     \label{cor:mpug_domain_wall_string_exchange_printed}
-    \lean{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_of_sq_eq_one}
+    \lean{MPOTensor.isInjective_of_physPairing_eq_one,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one}
     \leanok
-    \uses{thm:mpug_domain_wall_string_exchange}
+    \uses{thm:mpug_domain_wall_string_exchange,
+        lem:mpug_domain_wall_exchange_phase_square}
     In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange},
-    assume in addition that $(c_{AB}c_{BA})^2=1$. Then
+    suppose that $U=O_g$ satisfies $U^2=\mathbf 1$ on the periodic chain of
+    every length. Then
     \begin{align}
         O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}
          & =c_{AB}c_{BA}\,O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A},
         \notag
     \end{align}
     the relation of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
-    The source obtains the hypothesis from $U^2=1$; here it is assumed, not
-    derived~\cite{gap:gs24_domain_wall_exchange_square}.
 \end{corollary}
 
 \begin{proof}\leanok
-    Multiply the identity of Theorem~\ref{thm:mpug_domain_wall_string_exchange}
-    by $c_{AB}c_{BA}$ and use $(c_{AB}c_{BA})^2=1$.
+    The tensors $A$ and $B$ have left inverses, so their matrices span the
+    full matrix algebras and they are normal. Lemma~\ref{lem:mpug_domain_wall_exchange_phase_square}
+    gives $(c_{AB}c_{BA})^2=1$. Multiply the identity of
+    Theorem~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$.
 \end{proof}
 
 \begin{theorem}[Rescaling domain walls]
@@ -9037,7 +9066,9 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \end{enumerate}
     The last two items are the torsor statement of \cite{GarreRubio2023MPOSym}
     for fixed $(G,\omega,H)$, with the fusion gauge held fixed as in the
-    source.
+    source. Here $G$ and $H$ are small groups, whose underlying sets lie in
+    a fixed set-theoretic universe containing $\Z$, in which the group
+    cohomology $H^2(H,\C^\times)$ is formed.
     % Source anchor: arXiv:2203.12563, REsubmission.tex lines 749--761.
 \end{theorem}
 

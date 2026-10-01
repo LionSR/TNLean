@@ -300,6 +300,30 @@ theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     simp only [Equiv.piCongrRight_apply, Pi.map_apply, Equiv.apply_symm_apply]
     rfl
 
+/-- **The state is the output of the two layers**, for one tensor and one pair: if each `U_k`
+implements the isometry `V_k` of the blocked tensor of block `k` on the placed inputs
+`|l, 0 ⋯ 0, r⟩` and `W` prepares the pair `|ω⟩` on a window, then
+`(⊗ₖ V_k) ⊗ₖ |ω⟩ = (⊗ₖ U_k) W^{⊗M} |0 ⋯ 0⟩`. This is
+`MPSPreparation.chainBlockIsometryState_eq_mulVec` for a constant chain and equal pairs.
+
+arXiv:2307.01696, eqs. (10), (11), and (12). -/
+theorem blockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
+    (hr : ∀ k, r₁ + r₁ ≤ ℓ k) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
+    (A : MPSTensor d D) (ω : Fin D × Fin D → ℂ) {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
+    (hU : ∀ k l r τ, U k τ (blockInputCfg hd (ℓ k) dig l r) =
+      polarIsoMatrix (blockTensor A (ℓ k)) ((decodeBlockEquiv d (ℓ k)).symm τ)
+        (finProdFinEquiv (l, r)))
+    {W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
+    (hW : ∀ u, W u (fun _ => ⟨0, hd⟩) =
+      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) ω 0 u)
+    (s : Cfg d N) :
+    blockIsometryState A ω hN s =
+      ((blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ
+        productVector fun _ => Pi.single ⟨0, hd⟩ 1) s := by
+  rw [blockIsometryState_eq_chainBlockIsometryState]
+  exact chainBlockIsometryState_eq_mulVec hd hN hr hdig _ _
+    (fun k => by rw [chainBlockTensor_const]; exact hU k) (fun _ => hW) s
+
 end Layers
 
 /-! ### The depth of the preparation -/

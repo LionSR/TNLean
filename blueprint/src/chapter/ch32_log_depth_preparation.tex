@@ -413,73 +413,6 @@ remaining eigenvalues have modulus strictly less than $1$.
 
 \section{Exact factorizations of the isometry}
 
-\begin{theorem}[Successive decompositions with a matrix remainder]
-    \label{thm:ldp_sweep_matrix_remainder}
-    \lean{MPSPreparation.exists_isometric_chain_mul,
-        MPSPreparation.sum_star_mulVec_dotProduct_of_isIsometryOn,
-        MPSPreparation.sum_star_eval_mulVec_dotProduct}
-    \leanok
-    \uses{def:seqanc_isometry_on, def:seqanc_support}
-    Let $a\le D$, let $R_{-1}\in\MN{D}$ be row-supported below $a$, and let
-    $P_0,\dots,P_{n-1}$ be families of $D\times D$ matrices. Then there are
-    $b_0=a$ and $b_1,\dots,b_n\le D$, families $Q_0,\dots,Q_{n-1}$ such that
-    $Q_p^i$ is row-supported below $b_p$, vanishes on the columns
-    $\beta\ge b_{p+1}$, and $Q_p$ is isometric on its first $b_{p+1}$ columns,
-    and a matrix $R$ row-supported below $b_n$, such that for every
-    configuration $\sigma$
-    \begin{align}
-        R_{-1}\,P^\sigma
-         & =Q^\sigma\,R.
-        \label{eq:ldp_sweep_matrix_remainder}
-    \end{align}
-    Moreover $b_{p+1}\le c$ whenever every $P_p^i$ vanishes on the columns
-    $\gamma\ge c$. If $Q$ is isometric on its first $b$ columns and $v,w$ are
-    supported below $b$, then
-    $\sum_i\langle Q^iv,Q^iw\rangle=\langle v,w\rangle$. Consequently, if
-    $Q_p^i$ is row-supported below $b_p$, $Q_p$ is isometric on its first
-    $b_{p+1}$ columns, and $v,w$ are supported below $b_n$, then
-    \begin{align}
-        \sum_\sigma\langle Q^\sigma v,Q^\sigma w\rangle
-         & =\langle v,w\rangle.
-        \label{eq:ldp_sweep_inner_product}
-    \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
-    By induction on $n$. For $n=0$ take $R=R_{-1}$. Otherwise apply
-    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
-    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
-    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$:
-    \begin{align}
-        R_{-1}P_0^{\sigma_0}P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
-         & =Q_0^{\sigma_0}R_0P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
-        =Q_0^{\sigma_0}Q_1^{\sigma_1}\cdots Q_{n-1}^{\sigma_{n-1}}R.
-        \notag
-    \end{align}
-    For one site, expand
-    \begin{align}
-        \sum_i\langle Q^iv,Q^iw\rangle
-         & =\sum_{\beta,\beta'<b}\overline{v_\beta}w_{\beta'}
-        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}
-        =\sum_{\beta<b}\overline{v_\beta}w_\beta
-        \notag
-    \end{align}
-    by the isometry condition. For the chain, write
-    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
-    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
-    vectors $Q'^{\sigma'}v$ and $Q'^{\sigma'}w$ are supported below $b_1$ by
-    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity for
-    $Q_0$ and the induction hypothesis for $Q'$ give
-    \begin{align}
-        \sum_{\sigma_0,\sigma'}
-        \langle Q_0^{\sigma_0}Q'^{\sigma'}v,Q_0^{\sigma_0}Q'^{\sigma'}w\rangle
-         & =\sum_{\sigma'}\langle Q'^{\sigma'}v,Q'^{\sigma'}w\rangle
-        =\langle v,w\rangle.
-        \notag
-    \end{align}
-\end{proof}
-
 \begin{theorem}[Sequential factorization of a matrix product isometry]
     \label{thm:ldp_sequential_factorization_general}
     \lean{MPSPreparation.exists_isometric_chain_of_eq_mul, MPSPreparation.eval_pairEmbed}
@@ -498,15 +431,15 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation}
     The matrix elements of $V$ are
     $\bigl(j^{\mathsf T}(\Id_D\otimes A_1^{i_1})\cdots(\Id_D\otimes A_q^{i_q})G\bigr)_x$
     with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
-    Theorem~\ref{thm:ldp_sweep_matrix_remainder} to the row matrix of $j$ and the
+    Theorem~\ref{thm:seqanc_sweep_matrix_remainder} to the row matrix of $j$ and the
     sites $\Id_D\otimes A_p^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
     remainder $C=RG$ with $V=Q\,C$ in the sense of
-    (\ref{eq:ldp_sweep_matrix_remainder}). By
-    (\ref{eq:ldp_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
+    (\ref{eq:seqanc_sweep_matrix_remainder}). By
+    (\ref{eq:seqanc_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
     isometry because $V$ is. Absorb $C$ into the last site, $X_q^i=Q_q^iC$ and
     $X_p=Q_p$ for $p<q$; the last site is again isometric,
     $\sum_i C^\dagger(Q_q^i)^\dagger Q_q^iC=C^\dagger C=\Id$.
@@ -848,6 +781,21 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     $KMe^{-x}=e^{\log K+\log M-x}\leq e^{\log\varepsilon}=\varepsilon$.
 \end{proof}
 
+\begin{lemma}[From a block-length threshold to the error]
+    \label{lem:ldp_block_length_threshold_error}
+    \lean{mul_mul_exp_neg_div_le_of_le}
+    \leanok
+    \uses{lem:ldp_log_threshold_error}
+    Let $K,a,\varepsilon>0$, $M,q\geq1$, $b\geq a\max(\log K,0)$, and
+    $a\log(Mq/\varepsilon)+b\leq q$. Then $KMe^{-q/a}\leq\varepsilon$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $\log q\geq0$, $q/a\geq\log M+\log q-\log\varepsilon+\log K\geq
+        \log K+\log M-\log\varepsilon$; apply
+    Lemma~\ref{lem:ldp_log_threshold_error} with $x=q/a$.
+\end{proof}
+
 \begin{theorem}[Powers of a perturbed idempotent without first-order term]
     \label{thm:ldp_idempotent_second_order}
     \lean{IsIdempotentElem.norm_trace_add_pow_sub_le_of_le,
@@ -1148,9 +1096,10 @@ and its error extend to blocks of any lengths.
     neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
     local circuit of depth $T$ applied to a product state.
 
-    The chain is a ring: the neighbouring pairs are $\{k,k+1\}$ with indices
-    modulo $N$, and a circuit whose gates avoid the pair $\{N,1\}$ is a circuit
-    on the open chain. An operator \emph{acts on} a set of sites $X$ if it
+    The chain is a ring with sites $1,\dots,N$: the neighbouring pairs are
+    $\{k,k+1\}$ with indices modulo $N$, and a circuit whose gates avoid the
+    wrap-around pair $\{N,1\}$ is a circuit on the open chain. An operator
+    \emph{acts on} a set of sites $X$ if it
     lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
     $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
     are at distance larger than $s$ if no site of one is within ring distance
@@ -1258,6 +1207,7 @@ and its error extend to blocks of any lengths.
         def:ldp_block_isometry_state}
     \lean{MPSPreparation.exists_isPreparedInDepth_blockIsometryState,
         MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
+        MPSPreparation.blockIsometryState_eq_mulVec,
         MPSPreparation.approximatingMPVState_eq_blockIsometryState,
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
         MPSPreparation.IsCircuitOn.finset_noncommProd,
@@ -1741,6 +1691,149 @@ change the local dimension act on single sites.
     Theorem~\ref{thm:ldp_approximation_error_normal}, which is less than $1$ for
     large $N$.
 \end{proof}
+\begin{lemma}[Inverses and series composition of local circuits]
+    \label{lem:ldp_circuit_inverse_composition}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.Layer.adjoint, MPSPreparation.Layer.adjoint_partialOp,
+        MPSPreparation.Layer.adjoint_op, MPSPreparation.circuitOp_append,
+        MPSPreparation.circuitOp_map_adjoint_reverse,
+        MPSPreparation.IsLocalCircuitOfDepth.mem_unitary,
+        MPSPreparation.IsLocalCircuitOfDepth.star,
+        MPSPreparation.IsLocalCircuitOfDepth.mul}
+    \leanok
+    For a layer $W$ with gates $g_k$, the layer with the gates $g_k^\dagger$
+    on the same pairs implements $W^\dagger$, and the same holds for the
+    product of the gates of $W$ over any subset of its pairs. If a circuit
+    has the layers $W_1,\dots,W_T$, applied in this order, and implements $U$,
+    then the circuit with the layers $W_T^\dagger,\dots,W_1^\dagger$
+    implements $U^\dagger$; the layers of a circuit implementing $U$ followed
+    by those of a circuit implementing $U'$ implement $U'U$. Consequently, a
+    local circuit of depth $T$ is unitary, and its adjoint is a local circuit
+    of depth $T$. If $U$ and $U'$ are local circuits of depths $T$ and $T'$,
+    then $U'U$ is a local circuit of depth $T+T'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $U=W_T\cdots W_1$ with layers $W_k$, then
+    $U^\dagger=W_1^\dagger\cdots W_T^\dagger$, and $W_k^\dagger$ is the layer
+    whose gates are the adjoints of the gates of $W_k$, on the same pairs. The
+    layers of $U'U$ are those of $U$ followed by those of $U'$.
+\end{proof}
+
+\begin{lemma}[Preparation from the all-zero state]
+    \label{lem:ldp_preparation_from_zero}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSTensor.finKronecker_mulVec_productVector,
+        MPSPreparation.exists_mem_unitary_eq_smul_mulVec_single_zero,
+        MPSTensor.productVector_pi_smul,
+        MPSPreparation.exists_productVector_eq_smul_finKronecker_mulVec,
+        MPSPreparation.isLocalCircuitOfDepth_finKronecker,
+        MPSPreparation.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
+    \leanok
+    Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
+    $\mathbb{C}^d$,
+    $(\bigotimes_im_i)(\bigotimes_i\ket{v_i})=\bigotimes_im_i\ket{v_i}$, and
+    $\bigotimes_ic_i\ket{v_i}=(\prod_ic_i)\bigotimes_i\ket{v_i}$ for scalars
+    $c_i$. Every nonzero $x\in\mathbb{C}^d$ equals $c\,u\ket0$ for a unitary
+    $u$ and a scalar $c\neq0$, and every nonzero product vector is a scalar
+    multiple of $(\bigotimes_iu_i)\ket{0\cdots0}$ for one-site unitaries
+    $u_i$. A tensor product $\bigotimes_iu_i$ of one-site unitaries is a
+    local circuit of depth $2$. Every nonzero vector prepared in depth $T$ is a
+    scalar multiple of $U\ket{0\cdots0}$ for a local circuit $U$ of depth
+    $T+2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_circuit_inverse_composition}
+    The first layer applies $u_k\otimes u_{k+1}$ on the pairs $\{k,k+1\}$ with
+    $k$ odd and $k<N$, and the second applies $u_N$ when $N$ is odd. A nonzero
+    product vector $\bigotimes_i\ket{v_i}$ has $v_i\neq0$ for every $i$, and
+    $\ket{v_i}=c_iu_i\ket0$ for a unitary $u_i$ whose first column is
+    $\ket{v_i}/\lVert v_i\rVert$ and $c_i=\lVert v_i\rVert$. Hence
+    $\bigotimes_i\ket{v_i}=(\prod_ic_i)(\bigotimes_iu_i)\ket{0\cdots0}$, and
+    Lemma~\ref{lem:ldp_circuit_inverse_composition} composes the two
+    circuits.
+\end{proof}
+
+\begin{lemma}[Triangle step for the error]
+    \label{lem:ldp_error_triangle}
+    \lean{MPSPreparation.one_sub_norm_inner_le_norm_sub_smul_sq,
+        MPSPreparation.exists_norm_sub_smul_sq_eq,
+        MPSPreparation.one_sub_norm_inner_le_two_mul_add,
+        Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary,
+        Matrix.inner_eq_of_mulVec_eq, Matrix.norm_eq_of_mulVec_eq}
+    \leanok
+    For unit vectors $a$, $b$ in a complex inner product space and every
+    scalar $c$ with $\lvert c\rvert=1$,
+    $\varepsilon(a,b)\le\lVert a-cb\rVert^2/2$, with equality for some such
+    $c$. For unit vectors $x$, $y$, $z$,
+    $\varepsilon(x,z)\le2\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$.
+    A unitary matrix $U$ satisfies
+    $\overline{(Ux)}\cdot(Uy)=\overline{x}\cdot y$ for coordinate vectors
+    $x$, $y$, and so preserves inner products and norms.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For unit vectors $a$, $b$ and $\lvert c\rvert=1$,
+    $\lVert a-cb\rVert^2=2-2\operatorname{Re}(c\braket{a}{b})
+        \ge2\varepsilon(a,b)$, with equality for
+    $c=\overline{\braket{a}{b}}/\lvert\braket{a}{b}\rvert$ (any $c$ if
+    $\braket{a}{b}=0$). Choose $c_1$, $c_2$ attaining equality for $(x,y)$ and
+    $(y,z)$. Then
+    $\lVert x-c_1c_2z\rVert\le\lVert x-c_1y\rVert+\lVert y-c_2z\rVert$, and
+    $(s+t)^2\le2(s^2+t^2)$ gives
+    $2\varepsilon(x,z)\le\lVert x-c_1c_2z\rVert^2
+        \le4\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$.
+\end{proof}
+
+\begin{corollary}[Normal states are transformed into each other in depth $O(\log(N/\varepsilon))$]
+    \label{cor:ldp_normal_states_circuit}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_isLocalCircuitOfDepth_le_log}
+    \leanok
+    Let $A$ and $B$ be normal tensors with the same physical dimension $d$.
+    There is a constant $c$ depending only on $A$ and $B$ such that, for every
+    $N\ge2$ and $0<\varepsilon\le1$ for which $\ket{\phi_N(A)}$ and
+    $\ket{\phi_N(B)}$ are nonzero, some local circuit $U$ of depth at most
+    $c\log(N/\varepsilon)$ satisfies
+    $\varepsilon(U\hat\phi_N(A),\hat\phi_N(B))\le\varepsilon$, where
+    $\hat\phi_N(A)=\ket{\phi_N(A)}/\lVert\phi_N(A)\rVert$ and
+    $\hat\phi_N(B)=\ket{\phi_N(B)}/\lVert\phi_N(B)\rVert$ are the normalized
+    states. If both bond dimensions are at least
+    $1$, there are $c$ and $N_0$ such that the same holds for every
+    $N\ge N_0$ and $0<\varepsilon\le1$ without the nonvanishing condition.
+
+    The paragraph ``Discussion and outlook'' of \cite{Malz2024Preparation}
+    states that its results imply that states in the same phase are
+    transformed into each other by a circuit of logarithmic depth. Normal
+    states lie in the trivial phase of the classification without symmetry;
+    the corollary covers only this case. Non-normal states and phases defined
+    with a symmetry are not treated
+    \cite{gap:mswc24_same_phase_circuit_normal_case}.
+\end{corollary}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_depth_upper_bound, lem:ldp_periodic_state_nonzero,
+        lem:ldp_circuit_inverse_composition, lem:ldp_preparation_from_zero,
+        lem:ldp_error_triangle}
+    By Theorem~\ref{thm:ldp_depth_upper_bound} with error $\varepsilon/4$ and
+    Lemma~\ref{lem:ldp_preparation_from_zero}, there are local circuits $U_A$,
+    $U_B$ and unit vectors $\psi_A=aU_A\ket{0\cdots0}$,
+    $\psi_B=bU_B\ket{0\cdots0}$ with $\varepsilon(\psi_A,\hat\phi_N(A))$ and
+    $\varepsilon(\psi_B,\hat\phi_N(B))$ at most $\varepsilon/4$, of depths
+    $T_A+2$ and $T_B+2$ with $T_A,T_B$ at most a constant times
+    $\log(4N/\varepsilon)\le3\log(N/\varepsilon)$. Put $U=U_BU_A^\dagger$, a
+    local circuit of depth $T_A+T_B+4$ by
+    Lemma~\ref{lem:ldp_circuit_inverse_composition}; the term $4$ is at most
+    $(4/\log2)\log(N/\varepsilon)$. Then $U\psi_A=(a/b)\psi_B$ is a unit
+    vector, and since $U$ is unitary,
+    $\varepsilon(U\hat\phi_N(A),(a/b)\psi_B)=\varepsilon(\hat\phi_N(A),\psi_A)$.
+    Lemma~\ref{lem:ldp_error_triangle} gives
+    $\varepsilon(U\hat\phi_N(A),\hat\phi_N(B))\le2(\varepsilon/4+\varepsilon/4)
+        =\varepsilon$. The second statement follows from
+    Lemma~\ref{lem:ldp_periodic_state_nonzero}.
+\end{proof}
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
 %% R_k are realized on groups of D sites, as in
 %% thm:ldp_approximating_state_depth (groups of ceil(log_d D) sites would also
@@ -1818,7 +1911,8 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
         thm:wordspan_blk_inj_succ,
         lem:ldp_normalized_state_rescaling,
         lem:isNBlkInjective_iff_blockTensor_isInjective,
-        lem:ldp_approximating_state_unit_norm}
+        lem:ldp_approximating_state_unit_norm,
+        lem:ldp_block_length_threshold_error}
     Since $a>\xi/2$, the number $\gamma=\xi/(2a)$ satisfies $0<\gamma<1$, and
     Theorem~\ref{thm:ldp_approximation_error_normal} at this $\gamma$ gives $K$
     with $\varepsilon(\widetilde\phi_N,\phi_N(B))\le K\,(N/q)\,e^{-q/a}$, since
@@ -1833,6 +1927,37 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     most $Cq$ by Theorem~\ref{thm:ldp_approximating_state_depth}, and has the
     same error against $\phi_N(A)$ as against $\phi_N(B)$ by
     Lemma~\ref{lem:ldp_normalized_state_rescaling}.
+\end{proof}
+
+\begin{lemma}[A gap for a normal tensor]
+    \label{lem:ldp_normal_gap}
+    \lean{MPSTensor.exists_eigenvalue_norm_le_of_isNormal}
+    \leanok
+    \uses{thm:is_normal_tensor_of_is_normal_left_canonical, thm:transfer_channel,
+        thm:eigenvalue_bound}
+    For a normal left-canonical tensor $A$ with $D\geq1$ there is $0<t<1$
+    bounding the moduli of the eigenvalues other than $1$ of $\E_A$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The transfer map is a channel whose only eigenvalue of modulus $1$ is $1$, and
+    it has finitely many eigenvalues, so the others are at most $1-\delta$ in
+    modulus for some $\delta>0$; take $t=\max(1-\delta,1/2)$.
+\end{proof}
+
+\begin{lemma}[Depth from the window of block lengths]
+    \label{lem:ldp_depth_log_window}
+    \lean{MPSPreparation.natCast_mul_le_mul_log_of_le_two_mul}
+    \leanok
+    Let $C,q$ be natural numbers, $N\geq2$, $0<\varepsilon\leq1$, $b\geq1$, and
+    $q\leq2(a\log(N/\varepsilon)+b)$. Then
+    $Cq\leq C(2a+2b/\log2)\log(N/\varepsilon)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $N/\varepsilon\geq2$, $\log(N/\varepsilon)\geq\log2$, so
+    $b\leq(b/\log2)\log(N/\varepsilon)$, and
+    $Cq\leq2C(a\log(N/\varepsilon)+b)\leq C(2a+2b/\log2)\log(N/\varepsilon)$.
 \end{proof}
 
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
@@ -1854,6 +1979,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 \begin{proof}
     \leanok
     \uses{thm:normalized_primitive_gauge, thm:ldp_depth_upper_bound_slope,
+        lem:ldp_depth_log_window, lem:ldp_normal_gap,
         thm:normality_rescaling_invariance,
         thm:gauge_invariance_normal,
         thm:is_normal_tensor_of_is_normal_left_canonical,
@@ -1878,7 +2004,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     moduli of the other eigenvalues. With $\xi=-1/\log t>0$,
     Theorem~\ref{thm:ldp_depth_upper_bound_slope} at the slope $a=\xi>\xi/2$
     gives $b\ge1$ and the first statement. For the second statement,
-    $\log(N/\varepsilon)\ge\log2$ gives
+    Lemma~\ref{lem:ldp_depth_log_window} gives
     $Cq\le C(2a+2b/\log2)\log(N/\varepsilon)$.
 \end{proof}
 
@@ -2857,7 +2983,13 @@ $A$ along $w$.
     \cite{gap:mswc24_multiplicity_fixed_point,gap:mswc24_block_form_mixed_overlap}.
     For blocks of multiplicity one whose states on $q$ sites are orthogonal it
     holds without the condition $q=o(N)$
-    (Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}).
+    (Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}). For blocks of
+    multiplicity one and weight one whose states overlap, the approximating state
+    converges at the rate obtained by replacing $\xi_{\mathrm{diag}}$ with
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, the larger of the
+    correlation lengths of the blocks and of their mixed transfer maps, again
+    without the condition $q=o(N)$
+    (Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected}).
 \end{theorem}
 %% The direct sum A is not normal, so Lemma lem:ldp_positive_part_overlap
 %% does not apply to it. The source's proof rests on the block form (S5) of
@@ -2968,6 +3100,7 @@ $A$ along $w$.
         MPSTensor.reindex_toTensor_overlappingBlockSector,
         MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor,
         MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor,
+        MPSTensor.one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le,
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis,
         MPSTensor.not_approximationError_le_overlappingBlockTensor}
     \leanok
@@ -2991,14 +3124,19 @@ $A$ along $w$.
          & =\frac{u^M+v^M}{(1+s^M)^{1/2}},
         \label{eq:ldp_overlapping_blocks_overlap}
     \end{align}
-    and for $M\geq3$ the error is at least $(9/25)^q/16$. The transfer maps of both
+    and for $M\geq3$ the error is at least $(9/25)^q/16$, while for every $M\geq1$
+    it is at most $M(9/25)^q$, so the construction converges whenever
+    $(N/q)(9/25)^q\to0$. The transfer maps of both
     blocks have no eigenvalue other than one, so every $\lambda_2$ bounds their
     subleading eigenvalues. If $r=e^{-\gamma/\xi_{\mathrm{diag}}}<9/25$, then for every
     constant $C$ there is $q\geq3$ such that, with $M=q$, $N=q^2$ and
     $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
     $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$ satisfies
     $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general}) fails even
-    when every multiplicity is one \cite{gap:mswc24_block_form_mixed_overlap}.
+    when every multiplicity is one \cite{gap:mswc24_block_form_mixed_overlap}. What
+    fails is the rate: for $M\geq3$ the error lies between $(9/25)^q/16$ and
+    $M(9/25)^q$, where $9/25=\tau^2$ is the square of the eigenvalue $\tau=3/5$ of
+    the mixed transfer map of the two blocks.
 \end{theorem}
 
 \begin{proof}
@@ -3023,8 +3161,15 @@ $A$ along $w$.
         u^M+v^M\leq u^3+v^2=1-u^2(1-u)\leq1-\frac{s^2}{16},
     \end{align*}
     because $u^2=\bigl(1+\sqrt{1-s^2}\bigr)/2\geq1/2$ and
-    $1-u\geq(1-u^2)/2\geq s^2/8$. Finally $Cy\,e^{Cy}$ with $y=qr^q$ is eventually
-    below $(9/25)^q/16$, because $q(25r/9)^q\to0$.
+    $1-u\geq(1-u^2)/2\geq s^2/8$. For the upper bound, the overlap is one when
+    $M=1$, since $u+v=\sqrt{1+s}$. For $M\geq2$,
+    $u\geq u^2=\bigl(1+\sqrt{1-s^2}\bigr)/2\geq1-s^2/2$, so $u^M\geq1-Ms^2/2$, and
+    $(1+s^M)^{1/2}\leq1+s^2/2$; when $Ms^2<1$ this gives
+    \begin{align*}
+        \frac{u^M+v^M}{(1+s^M)^{1/2}}\geq\frac{1-Ms^2/2}{1+s^2/2}\geq1-Ms^2,
+    \end{align*}
+    and when $Ms^2\geq1$ the bound $\varepsilon\leq1$ suffices. Finally $Cy\,e^{Cy}$
+    with $y=qr^q$ is eventually below $(9/25)^q/16$, because $q(25r/9)^q\to0$.
 \end{proof}
 
 \begin{lemma}[Polar decomposition of an orthogonal sum]
@@ -3150,5 +3295,8 @@ $A$ along $w$.
 \end{proof}
 
 \input{chapter/ch32_log_depth_repeated_blocks}
+\input{chapter/ch32_log_depth_overlapping_blocks}
 
 \input{chapter/ch32_log_depth_measurements}
+
+\input{chapter/ch32_log_depth_long_range}

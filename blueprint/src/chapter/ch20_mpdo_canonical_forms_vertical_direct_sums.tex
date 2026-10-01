@@ -365,7 +365,8 @@
     \caption{The vertically viewed tensor decomposes through complete
         orthogonal physical sectors. Each $V_k$ embeds the irreducible tensor
         $B_k$, while $P_k=V_kV_k^\dagger$ is its reducing range projection. The
-        displayed identity is equivalent, for every vertical letter $v$, to
+        decomposition $U\mathcal K U^\dagger=\bigoplus_\alpha M_\alpha$ is
+        equivalent, for every vertical letter $v$, to
         $\widetilde M_v=\sum_kV_kB_{k,v}V_k^\dagger$.
         This is the iterated invariant-subspace construction in
         \cite[lines~200--219]{Cirac2016MPDO_arXiv}, applied to the reduction in
@@ -1023,7 +1024,6 @@
 \begin{theorem}[BNT-refined horizontal form implies vertical canonical form]
     \label{thm:vertical_cf_of_horizontal_cf}
     \lean{MPOTensor.verticalCF_of_horizontalCF}
-    \lean{MPOTensor.IsHorizontalCF.exists_cpsvVerticalDecomposition}
     \leanok
     \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo}
     A tensor in normalized BNT-refined horizontal form that generates matrix

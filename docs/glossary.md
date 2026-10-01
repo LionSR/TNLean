@@ -761,8 +761,25 @@ model different levels of data and different sources.
   CPSV canonical form. Each proves both inputs from its own grouping and
   Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and
   `MPSTensor.IsCPSVCanonicalForm` is proved or used in either direction, and
-  none may be assumed: the bundle is the only point at which the two surfaces
-  meet, and supplying it from one of them says nothing about the other.
+  none may be assumed: supplying the common grouping properties from one
+  canonical form says nothing about the other.
+- `MPOTensor.HasVerticalBNTProductInputs` in
+  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean` records the grouping properties
+  for both the one-site tensor and its two-site block, together with three
+  properties of the blocked vertical tensor: every invariant orthogonal
+  projection reduces its letters; an irreducible isometric corner with a
+  positive definite eigenmatrix at a positive eigenvalue has no other
+  peripheral eigenvalue of that modulus; and every
+  nonzero corner is detected by a finite-chain sector compression. These are
+  the properties used in CPSV16, Proposition 4.13, lines 1873--1921, and
+  Appendix C.4, lines 2020--2029. The constructors
+  `MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs` and
+  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs` prove them
+  independently under MPDO positivity. They imply the common retained-product
+  spectral and positive fusion constructions; together with positivity and
+  `IsRFPViaTS`, they give `HasBNTFusionTensorClause`. These are intermediate
+  consequences of each canonical form, not additional hypotheses of the
+  source-facing fixed-point theorems.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   the normalized fixed-representative predicate of Appendix C.2: it adds the
   MPDO and nonnilpotent-sector conditions to horizontal canonical form. Its
@@ -1383,6 +1400,29 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
   GHZ-type states, whose connected correlations do not decay, are prepared in
   depth `2`.
+
+### `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementPreparation.lean`.
+- **Meaning:** `ψ = U φ` for a vector `φ` with
+  `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
+  `T₂`, with `T₁ + T₂ ≤ T`.
+- **Source:** arXiv:2307.01696, paragraph "Long-range MPS using measurements"
+  ("First create `|χ_{N/q}⟩`, which can be done in constant depth with
+  measurements ... Subsequently, apply in parallel the isometries `W`");
+  arXiv:2103.13367, paragraph "State transformations with QC and LOCC" ("a
+  more general scheme with multiple rounds of LOCC").
+- **Sanctioned bridges:**
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`
+  (the states `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of blocks with orthogonal blocked
+  states, in depth `O(L)`) and
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`
+  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks).
+- **Caveat:** the circuit `U` is applied after the measurement and its
+  corrections and does not depend on the outcomes; it is one second round of
+  the source's multi-round scheme, with no measurement in it.
 
 ### `MPSPreparation.IsLocalPerm`
 

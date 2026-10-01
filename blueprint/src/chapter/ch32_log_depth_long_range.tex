@@ -1,0 +1,395 @@
+%% ==================================================
+%% Subsection: Long-range MPS using measurements
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), paragraph
+%% "Long-range MPS using measurements", eq. (19) and the paragraph after it;
+%% arXiv:2103.13367 (Piroli, Styliaris, Cirac), Example 1.
+%% Scope restrictions: orthogonal blocks, block lengths dividing N;
+%% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex,
+%% docs/paper-gaps/mswc24_measurement_preparation_scope.tex.
+%% ==================================================
+
+\subsection{Tensors that are not normal, with measurements}
+\label{sec:ldp_long_range_measurements}
+
+For a tensor that is not normal, \cite{Malz2024Preparation} prepares the
+fixed point $\ket{\Omega'}=W^{\otimes N/q}\ket{\chi_{N/q}}$ of
+Theorem~\ref{thm:ldp_ghz_form} by first preparing $\ket{\chi_{N/q}}$ with
+measurements and then applying the isometries
+$W\colon\ket j\mapsto\ket{\omega_j}$ and the isometries of the blocked tensor
+as circuits. With the block length $q\propto\log(N/\varepsilon)$, ``If instead
+measurements are only used for the preparation of $\ket{\chi_{N/q}}$, the depth
+is $O(\log(N/\varepsilon))$''. This subsection proves this for direct sums of
+normal blocks whose $q$-site states are orthogonal and for block lengths
+dividing $N$ \cite{gap:mswc24_measurement_preparation_scope}. On the chain of
+$N$ sites the label of each block is stored in the last sites of the block, and
+the GHZ-type state is prepared in depth $O(q)$; the isometries of the blocked
+tensor take depth $O(q)$ as well.
+
+\begin{definition}[Preparation with measurements and a circuit]
+    \label{def:ldp_measurement_circuit_preparation}
+    \lean{MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth}
+    \leanok
+    \uses{def:ldp_measurement_preparation, def:ldp_local_circuit}
+    A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in
+        depth $T$} if $\ket\psi=U\ket\varphi$ for a vector $\ket\varphi$
+    prepared with measurements in depth $T_1$ and a local circuit $U$ of depth
+    $T_2$, with $T_1+T_2\leq T$. The circuit $U$ does not depend on the
+    outcomes of the measurements.
+\end{definition}
+
+\begin{lemma}[Layers acting on configurations]
+    \label{lem:ldp_configuration_layers}
+    \lean{MPSPreparation.apply_eq_ite_of_mulVec_eq_comp, MPSPreparation.sigmaSite,
+        MPSPreparation.sigmaSite_injective, MPSPreparation.layerCfg,
+        MPSPreparation.layerCfg_apply, MPSPreparation.layerCfg_comp,
+        MPSPreparation.layerCfg_apply_of_forall_ne, MPSPreparation.eq_layerCfg_iff,
+        MPSPreparation.noncommProd_embedOp_mulVec_eq_comp,
+        MPSPreparation.blockLayerOp_mulVec_eq_comp,
+        MPSPreparation.pairLayerOp_mulVec_eq_comp,
+        MPSPreparation.embedOp_mulVec_eq_comp, MPSPreparation.permOp_mulVec,
+        MPSPreparation.embedOp_mulVec_productVector}
+    \leanok
+    \uses{def:ldp_local_circuit, lem:ldp_permutation_layers}
+    Let $X_k$ be operators on pairwise disjoint sets $S_k$ of sites, each
+    acting by a map $f_k$ of the configurations of $S_k$, that is
+    $X_kv=v\circ f_k$ for every vector $v$; then $X_k$ has the entry $1$ at
+    $(u,f_k(u))$ and $0$ elsewhere. The product of the $X_k$ acts by the map
+    $\rho$ with $\rho(x)|_{S_k}=f_k(x|_{S_k})$ for every $k$ and
+    $\rho(x)_i=x_i$ at every site $i$ outside all the $S_k$. A permutation
+    $\tau$ of the sites acts as $v\mapsto v\circ(x\mapsto x\circ\tau)$. If $X$
+    acts on the sites of $S$ and the product vector $\ket\pi$ is $\ket z$ on
+    every site of $S$, then $(X\ket\pi)(y)=X_{y|_S,(z,\dots,z)}\pi'(y)$, where
+    $\ket{\pi'}$ is the product vector with the all-ones vector at the sites
+    of $S$ and the vectors of $\ket\pi$ elsewhere.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Applying $X_k$ to the basis vector $\ket u$ gives the entries. The entry of
+    the product at $(x,y)$ is $\prod_k[y|_{S_k}=f_k(x|_{S_k})]$ when $x$ and
+    $y$ agree outside the $S_k$, and $0$ otherwise; this is $1$ exactly when
+    $y=\rho(x)$. For the product vector, only the configuration $y'$ agreeing
+    with $y$ outside $S$ and equal to $(z,\dots,z)$ on $S$ contributes.
+\end{proof}
+
+\begin{definition}[Registers and the GHZ-type state on them]
+    \label{def:ldp_window_ghz_state}
+    \lean{MPSPreparation.registerSite, MPSPreparation.ancillaSite,
+        MPSPreparation.registerSite_eq, MPSPreparation.ancillaSite_eq,
+        MPSPreparation.pairSite_eq_pairSite_iff, MPSPreparation.registerSite_inj,
+        MPSPreparation.ancillaSite_inj, MPSPreparation.registerSite_ne_ancillaSite,
+        MPSPreparation.registerSite_injective,
+        MPSPreparation.blockSite_eq_ancillaSite, MPSPreparation.windowGHZState,
+        MPSPreparation.registerCfg, MPSPreparation.registerCfg_registerSite,
+        MPSPreparation.registerCfg_of_forall_ne, MPSPreparation.windowInput,
+        MPSPreparation.windowInput_injective,
+        MPSPreparation.registerCfg_comp_pairSite,
+        MPSPreparation.registerCfg_of_forall_pairSite_ne,
+        MPSPreparation.windowGHZState_extend}
+    \leanok
+    \uses{thm:ldp_approximating_state_depth, def:ldp_pair_family_fixed_point}
+    Cut the ring of $N$ sites into $M\geq1$ blocks of lengths
+    $\ell_k\geq2r_1$. The \emph{register} $R_k$ consists of the last $r_1$
+    sites of block $k$, and its \emph{ancilla} of the first $r_1$ sites of
+    block $k+1$, cyclically; together they form the pair window $k$. For a
+    vector $\alpha$ on $(\C^d)^{\otimes r_1}$, the \emph{GHZ-type state on the
+        registers} has the amplitude $\alpha(u)$ at a configuration carrying the
+    same configuration $u$ on every register and $0$ at every other site, and
+    the amplitude $0$ at every other configuration. If the labels $j$ of $b$
+    blocks are encoded injectively as configurations $\delta(j)$ of $r_1$ sites
+    and $\alpha(\delta(j))=\alpha_j$, $\alpha(u)=0$ for every other $u$, it is
+    $\sum_j\alpha_j\ket{x_j}$, where $x_j$ carries $\delta(j)$ on every register
+    and $0$ elsewhere: the state $\ket{\chi_M}$ of
+    Definition~\ref{def:ldp_pair_family_fixed_point}, with the label of each
+    block stored in its register. The configuration $x_j$ carries
+    $(\delta(j),0,\dots,0)$ on every pair window and $0$ outside the windows.
+\end{definition}
+
+\begin{lemma}[A controlled shift between the ends of a block]
+    \label{lem:ldp_block_shift}
+    \lean{MPSPreparation.copyShift, MPSPreparation.blockShift,
+        MPSPreparation.tailShift, MPSPreparation.exists_blockShiftUnitary}
+    \leanok
+    \uses{lem:ldp_configuration_layers, thm:ldp_bounded_unitary_two_site_gates,
+        thm:ldp_approximating_state_depth}
+    Let $r_1\geq1$ and values be taken in $\mathbb Z_d$. There is $C$ such
+    that for every $q\geq3r_1$ some unitary on $q$ sites, a product of at most
+    $Cq$ gates on neighbouring sites, acts by the map of configurations that
+    adds the last $r_1$ sites to the first $r_1$, site by site, and leaves the
+    other sites unchanged.
+\end{lemma}
+\begin{proof}
+    \leanok
+    SWAP gates move the first $r_1$ sites next to the last $r_1$ in at most
+    $2qr_1$ gates; one unitary on the last $2r_1$ sites, of bounded depth by
+    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, adds the second half
+    to the first; and the same SWAP gates move the sites back. By
+    Lemma~\ref{lem:ldp_configuration_layers} the composite acts by the stated
+    map.
+\end{proof}
+
+\begin{theorem}[The GHZ-type state on the registers with measurements]
+    \label{thm:ldp_window_ghz_measurement}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsInDepth_windowGHZState}
+    \leanok
+    \uses{def:ldp_window_ghz_state, def:ldp_measurement_preparation,
+        lem:ldp_configuration_layers, lem:ldp_block_shift,
+        thm:ldp_ghz_measurement}
+    Let $r_1\geq2$. There is $C$ such that for every ring of $N$ sites cut into
+    $M\geq1$ blocks of lengths $3r_1\leq\ell_k\leq L$ and every unit vector
+    $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state on the registers of
+    Definition~\ref{def:ldp_window_ghz_state} is prepared with measurements in
+    depth at most $CL$. This is the preparation of $\ket{\chi_{N/q}}$ in the
+    paragraph ``Long-range MPS using measurements'' of
+    \cite{Malz2024Preparation}, by the construction of
+    \cite[Example~1]{Piroli2021LOCC} for registers of $r_1$ sites; the depth is
+    $O(L)$ rather than constant, because the register of a block and the
+    ancilla at its start are $\ell_k-r_1$ sites apart
+    \cite{gap:mswc24_measurement_preparation_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Start from the product vector with the all-ones vector on the sites of the
+    registers $R_k$, $k\neq0$, and $\ket0$ elsewhere. One unitary on the sites
+    of $R_0$, of bounded depth, sends $\ket{0\cdots0}$ to $\sum_u\alpha(u)\ket u$.
+    One layer of gates on the pair windows adds each register to its ancilla,
+    and on every block the unitary of Lemma~\ref{lem:ldp_block_shift} subtracts
+    the register of the block from the ancilla at its start, which belongs to the
+    register of the previous block. The circuit has depth $O(L)$. Measure every
+    ancilla, with outcomes $m_k\in\mathbb Z_d^{r_1}$, and let
+    $p_k=m_0+\cdots+m_{k-1}$. Correct by adding $m_k$ on the ancilla of $R_k$ and
+    $-p_k$ on $R_k$, site by site. By Lemma~\ref{lem:ldp_configuration_layers},
+    the corrected vector has the amplitude $\alpha(x|_{R_0})$ at a
+    configuration $x$ that is $0$ outside the registers and satisfies
+    $m_k+(x|_{R_{k+1}}-p_{k+1})-(x|_{R_k}-p_k)=0$ for every $k$, cyclically, and
+    the amplitude $0$ elsewhere. These conditions hold exactly when
+    $\sum_km_k=0$ and all the registers of $x$ agree. So every outcome with
+    $\sum_km_k=0$ gives the GHZ-type state, and every other outcome gives the
+    zero vector, which has probability zero.
+\end{proof}
+
+\begin{lemma}[Sequential factorization on the first inputs]
+    \label{lem:ldp_sequential_factorization_first_inputs}
+    \lean{MPSPreparation.exists_isometric_chain_of_eq_mul_of_le,
+        MPSPreparation.polarIsoMatrix_chainBlockTensor_eq_sum,
+        MPSPreparation.polarIsoMatrix_blockTensor_eq_sum}
+    \leanok
+    \uses{thm:ldp_sequential_factorization_general}
+    In Theorem~\ref{thm:ldp_sequential_factorization_general}, let the matrix
+    elements of $V$ have the stated form only for the first $r$ inputs $x$, and let
+    these $r\leq D^2$ columns of $V$ be orthonormal. Then the same conclusion
+    holds with $b_q=r$, for these $r$ inputs. For an injective blocked
+    tensor $B=VP$ of tensors $A_1,\dots,A_q$, one on each site,
+    $V=BP^{-1}$ has the matrix elements
+    $\bra{i_1\cdots i_q}V\ket x=\sum_{\alpha,\beta}
+        (A_1^{i_1}\cdots A_q^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$;
+    for equal tensors $A_p=A$ this reads
+    $\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}
+        (P^{-1})_{(\alpha,\beta),x}$ with $B=\mathcal B_q$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The proof of Theorem~\ref{thm:ldp_sequential_factorization_general} applies
+    to the first $r$ columns of $G$, the others being replaced by zero: the
+    remainder of the sweep has orthonormal first $r$ columns because those of
+    $V$ are, and absorbing it into the last site keeps that site isometric on
+    its first $r$ levels.
+\end{proof}
+
+\begin{theorem}[One block unitary for blocks with orthogonal states]
+    \label{thm:ldp_block_sum_unitary}
+    \lean{MPSPreparation.exists_blockUnitary_of_equiv, MPSPreparation.flatCoord,
+        MPSPreparation.flatCoord_injective, MPSPreparation.flatCoord_ne,
+        MPSPreparation.evalWord_blockSum_flatCoord,
+        MPSPreparation.sum_star_polarIsoMatrix_mul,
+        MPSPreparation.sum_mul_self_le_pow, MPSPreparation.exists_blockSumUnitary}
+    \leanok
+    \uses{lem:ldp_sequential_factorization_first_inputs,
+        thm:ldp_approximating_state_depth, lem:ldp_orthogonal_sum_polar}
+    Let $A_1,\dots,A_b$ be tensors of bond dimensions $D_j$, and place their bond
+    indices side by side, so that the bond index $a$ of block $j$ becomes the
+    index $\iota_j(a)$ among $D_1+\cdots+D_b\geq1$ indices; encode these
+    indices injectively in $r_1\geq1$ sites. There is $C$ such that for every
+    block length $q\geq3r_1$ at which every blocked tensor $B_j=V_jP_j$ is
+    injective and $B_j^\dagger B_{j'}=0$ for $j\neq j'$, some unitary $U$ on $q$
+    sites, a product of at most $Cq$ gates on neighbouring sites, satisfies
+    $U\ket{\iota_j(l),0,\iota_j(r)}=V_j\ket{l,r}$ for all $j$, $l$ and $r$. The
+    columns $V_j\ket{l,r}$ are jointly orthonormal, so
+    $\sum_jD_j^2\leq d^q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The isometries of distinct blocks have orthogonal ranges because
+    $B_j^\dagger B_{j'}=0$, so the map $(j,l,r)\mapsto V_j\ket{l,r}$ has
+    orthonormal columns, and the rank of the matrix of these columns gives
+    $\sum_jD_j^2\leq d^q$. Its matrix elements are those of the direct sum
+    $\bigoplus_jA_j$ with the matrices $P_j^{-1}$ absorbed on the right, by
+    Lemma~\ref{lem:ldp_sequential_factorization_first_inputs}. Ordering the
+    bond pairs so that the pairs $(\iota_j(l),\iota_j(r))$ come first, the
+    lemma factors this map, and the staircase of
+    Theorem~\ref{thm:ldp_approximating_state_depth}, for this ordering, implements
+    it in $O(q)$ gates.
+\end{proof}
+
+\begin{theorem}[The fixed point of orthogonal blocks with measurements]
+    \label{thm:ldp_orthogonal_blocks_measurement}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState_of_encoding,
+        MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState}
+    \leanok
+    \uses{def:ldp_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
+        thm:ldp_block_sum_unitary, def:ldp_block_isometry_state,
+        thm:ldp_approximating_state_depth}
+    For every family of bond dimensions $D_1,\dots,D_b$ there are $C$ and $L_0$
+    such that the following holds. Let $A_j$ be tensors of bond dimensions $D_j$,
+    $\omega_j$ unit vectors on $\C^{D_j}\otimes\C^{D_j}$ and $\alpha$ a unit
+    vector in $\C^b$. Cut the ring of $N$ sites into $M\geq1$ blocks of lengths
+    $L_0\leq\ell_k\leq L$ such that every blocked tensor of every $A_j$ is
+    injective and $B_j^\dagger B_{j'}=0$ for $j\neq j'$ on every block. Then
+    $\sum_j\alpha_j\ket{\psi_{\ell,\omega_j}(A_j)}$, with the states of
+    Definition~\ref{def:ldp_block_isometry_state}, is prepared with
+    measurements and a circuit in depth at most $CL$. This is the preparation of
+    $V^{\otimes N/q}W^{\otimes N/q}\ket{\chi_{N/q}}$ in the paragraph
+    ``Long-range MPS using measurements'' of \cite{Malz2024Preparation}, for
+    blocks with orthogonal states.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Encode the labels and the bond indices in $r_1=b+\sum_jD_j+2$ sites; for
+    $d\geq2$ this is possible since $r_1<d^{r_1}$, and for $d=1$
+    Theorem~\ref{thm:ldp_block_sum_unitary} gives $\sum_jD_j^2\leq1$, so $b\leq1$
+    and $\sum_jD_j\leq1$. Prepare the GHZ-type state on the registers with
+    $\alpha(\delta(j))=\alpha_j$ by Theorem~\ref{thm:ldp_window_ghz_measurement}.
+    The columns $\ket{\omega_j}$, placed on the bond indices of block $j$ and
+    encoded on a pair window, are orthonormal, so one unitary $W$ on a pair
+    window sends $\ket{\delta(j),0}$ to them. Apply $W$ on every window and the
+    unitary of Theorem~\ref{thm:ldp_block_sum_unitary} on every block. By
+    Definition~\ref{def:ldp_window_ghz_state} the GHZ-type state is
+    $\sum_j\alpha_j\ket{x_j}$; the window layer sends $\ket{x_j}$ to the state of
+    a window layer preparing $\ket{\omega_j}$ from $\ket{0\cdots0}$, and the
+    computation of Theorem~\ref{thm:ldp_approximating_state_depth} gives
+    $\ket{\psi_{\ell,\omega_j}(A_j)}$.
+\end{proof}
+
+\begin{theorem}[The corrected approximating state with measurements]
+    \label{thm:ldp_repeated_block_measurement}
+    \lean{MPSPreparation.copyApproxVector_eq_sum,
+        MPSPreparation.sum_norm_sq_copyApproxVector,
+        MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector}
+    \leanok
+    \uses{thm:ldp_orthogonal_blocks_measurement, def:ldp_repeated_block_state,
+        thm:ldp_repeated_block_polar, thm:ldp_approximating_state_depth}
+    There are $C$ and $L_0$, depending only on $d$ and the bond dimensions
+    $D_1,\dots,D_b$, such that the following holds. Let $A$ be the direct sum
+    with multiplicities of Definition~\ref{def:ldp_repeated_block_sum}, let
+    $\sigma_j\geq0$ with $\Tr\sigma_j=1$, let $q\geq L_0$ be a block length at
+    which every blocked tensor of every block is injective and
+    $B_j^\dagger B_{j'}=0$ for $j\neq j'$, let $M\geq1$, and let $\alpha$ be a
+    unit vector. Then the corrected approximating state
+    $V^{\otimes M}\sum_j\alpha_jL_j^{\otimes M}\ket{\Omega_j}$ of
+    Definition~\ref{def:ldp_repeated_block_state}, on $N=Mq$ sites, equals
+    $\sum_j\alpha_j\ket{\psi_{q,\omega_j}(A_j)}$ with $\omega_j$ the pair of
+    $\sigma_j$, is a unit vector, and is prepared with measurements and a
+    circuit in depth at most $Cq$. This is the paragraph ``Long-range MPS using
+    measurements'' of \cite{Malz2024Preparation} for the corrected
+    approximating state, restricted to blocks whose $q$-site states are
+    orthogonal
+    \cite{gap:mswc24_block_form_mixed_overlap,gap:mswc24_repeated_block_corrected_state}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_repeated_block_polar} the corrected approximating
+    state is $\sum_j\alpha_j\ket{\phi_M(V_jP_{j,\infty})}$, and each term is the
+    approximating state of the block $A_j$, which is
+    $\ket{\psi_{q,\omega_j}(A_j)}$ by
+    Theorem~\ref{thm:ldp_approximating_state_depth}. Write
+    $\ket{\psi_j}=\ket{\psi_{q,\omega_j}(A_j)}$. Each $\ket{\psi_j}$ is a unit
+    vector, and for $j\neq j'$ the hypothesis $B_j^\dagger B_{j'}=0$ makes the
+    physical matrices of the approximating tensors of $A_j$ and $A_{j'}$
+    orthogonal, so that the overlap of the two states on $M$ blocks vanishes.
+    Hence $\braket{\psi_j}{\psi_{j'}}=\delta_{jj'}$ and
+    \begin{align}
+        \Bigl\lVert\sum_j\alpha_j\ket{\psi_j}\Bigr\rVert^2
+        =\sum_{j,j'}\overline{\alpha_j}\alpha_{j'}\braket{\psi_j}{\psi_{j'}}
+        =\sum_j\lvert\alpha_j\rvert^2=1.
+        \notag
+    \end{align}
+    Theorem~\ref{thm:ldp_orthogonal_blocks_measurement} with $\ell_k=q$
+    prepares the sum.
+\end{proof}
+
+\begin{lemma}[A common gap for normal blocks]
+    \label{lem:ldp_common_gap}
+    \lean{MPSPreparation.exists_forall_eigenvalue_norm_le}
+    \leanok
+    \uses{lem:ldp_normal_gap}
+    For finitely many normal left-canonical tensors $A_1,\dots,A_b$, $b\geq1$, of
+    positive bond dimensions, there is $0<t<1$ bounding the moduli of the
+    eigenvalues other than $1$ of every transfer map $\E_{A_j}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:ldp_normal_gap} gives such a bound $t_j$ for every block;
+    take $t=\max_jt_j$.
+\end{proof}
+
+\begin{theorem}[Tensors that are not normal, with measurements, in depth
+        $O(\log(N/\varepsilon))$]
+    \label{thm:ldp_long_range_measurement_depth}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum}
+    \leanok
+    \uses{thm:ldp_repeated_block_measurement,
+        thm:ldp_approximation_error_repeated_orthogonal_blocks, lem:ldp_common_gap,
+        thm:ldp_depth_upper_bound_divisible, lem:ldp_depth_log_window,
+        lem:ldp_block_length_threshold_error}
+    Let $A$ be the direct sum with multiplicities of
+    Definition~\ref{def:ldp_repeated_block_sum}, with $b\geq1$ blocks, every
+    block $A_j$ normal in the gauge (\ref{eq:ldp_normal_gauge}) with a positive
+    definite fixed point $\sigma_j$ of trace one. There are $a>0$, $b'\geq1$ and
+    $c$, depending only on $A$, with the following property. Let $N\geq2$,
+    $0<\varepsilon\leq1$, and let $q$ be a block length dividing $N$ with
+    $a\log(N/\varepsilon)+b'\leq q\leq2(a\log(N/\varepsilon)+b')$, at which
+    $B_j^\dagger B_{j'}=0$ for $j\neq j'$, such that the weights
+    $\beta_j=\sum_k\mu_{j,k}^N$ are not all zero. Then a unit vector $\ket\psi$
+    with $\varepsilon(\psi,\phi_N)\leq\varepsilon$ is prepared with measurements
+    and a circuit in depth at most $c\log(N/\varepsilon)$. This is the depth
+    $O(\log(N/\varepsilon))$ of the paragraph ``Long-range MPS using
+    measurements'' of \cite{Malz2024Preparation}, with measurements used only
+    for the GHZ-type state, for the corrected approximating state, restricted to
+    blocks whose $q$-site states are orthogonal and to block lengths dividing $N$
+    \cite{gap:mswc24_measurement_preparation_scope}. Because $q$ must divide $N$
+    and lie in the window above, the statement applies only to chain lengths
+    with a divisor in the window and is vacuous for the others, for instance for
+    every large prime $N$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $t$ be the common gap of Lemma~\ref{lem:ldp_common_gap}, $r=-\tfrac14\log t$,
+    and $K$ the constant of
+    Theorem~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks} at
+    $\gamma=1/4$, so the error of the corrected approximating state with the
+    amplitudes $\alpha_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$ is at most
+    $KMe^{-rq}$. Put $a=1/r$ and $b'=a\max(\log K,0)+L_0+L_1+1$, with $L_0$ the
+    length of Theorem~\ref{thm:ldp_repeated_block_measurement} and $L_1$ the sum
+    of the injectivity lengths of the blocks. Then $q\geq L_0$, every blocked
+    tensor is injective, and the state is prepared in depth at most $Cq$. Since
+    $N=Mq$, $rq=q/a$ and $a\log(N/\varepsilon)+b'\leq q$, the error is at most
+    $\varepsilon$ by Lemma~\ref{lem:ldp_block_length_threshold_error}, and
+    $Cq\leq c\log(N/\varepsilon)$ with $c=C(2a+2b'/\log2)$ by
+    Lemma~\ref{lem:ldp_depth_log_window}.
+\end{proof}
+
+\begin{theorem}[All translation-invariant MPS with measurements]
+    \label{thm:ldp_all_ti_measurement_source}
+    \uses{thm:ldp_long_range_measurement_depth}
+    Every translation-invariant MPS of constant bond dimension, short- or
+    long-range correlated, is prepared with error $\varepsilon$ in depth
+    $O(\log(N/\varepsilon))$ by local circuits assisted by measurements, the
+    measurements being used only for the preparation of the GHZ-type state
+    \cite[paragraph ``Long-range MPS using measurements'']{Malz2024Preparation}.
+    Theorem~\ref{thm:ldp_long_range_measurement_depth} proves this for direct
+    sums of normal blocks whose $q$-site states are orthogonal and for block
+    lengths dividing $N$; the statement for blocks whose states overlap and for
+    all chain lengths is not formalized
+    \cite{gap:mswc24_measurement_preparation_scope}. The same paragraph claims
+    the depth $O(\log\log(N/\varepsilon))$ when the tree-RG circuit is also
+    assisted by measurements; this is not formalized either.
+\end{theorem}

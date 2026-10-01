@@ -58,6 +58,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
   realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
+- `spc11_uniform_gap_injective_scope.tex` (scope restriction) records that the
+  uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, is formalized
+  for continuous compact families of one-site injective tensors with the
+  canonical two-site interaction, while the source's path also covers
+  non-injective normal forms with several blocks.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
   that the formal fixed point takes a projective representation with the given
   factor system as input, whereas the source starts from the 2-cocycle alone; the
@@ -105,6 +110,14 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   dimension, with the constants multiplying, and that in two dimensions only
   the simplification of the left inverse for the left-regular representation
   on the contracted link is formalized (open scope restriction).
+- `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
+  records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
+  operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product
+  tensor is, up to the positive constant of the formal notion of
+  `G`-isometry, the projector onto `𝒮₂`, so it is `1 - hᵢ` rather than the
+  local term `hᵢ` the lemma names (local fix); and that the commutation of
+  the local terms, stated for PEPS, is formalized for matrix product states
+  on rings of at least three sites.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -699,10 +712,6 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   walls and their phases are nonzero and that the local action of the
   symmetry on a domain wall holds against blocked regions of the two ground
   states.
-- `gs24_domain_wall_exchange_square.tex` records that the printed orientation
-  of the exchange of two domain-wall strings is formalized with the square of
-  the exchange phase equal to one as a hypothesis; the source derives it from
-  the symmetry squaring to the identity.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
@@ -814,6 +823,13 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   dimension `D`, injective blocked tensors and blocks of at least `3D` sites,
   with the finite-correlation assumption stated for one ring with error `δ`;
   open: varying bond dimensions and partial isometries.
+- `mswc24_measurement_preparation_scope.tex` records the scope of the
+  preparation with measurements of a tensor that is not normal (paragraph
+  "Long-range MPS using measurements"): orthogonal `q`-site states of distinct
+  blocks, block lengths dividing `N`, and the corrected approximating state; and
+  two readings of the construction, the circuit applied after the measurement
+  and the depth `O(q)`, rather than constant, of the GHZ-type state on the chain
+  of `N` sites; open.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
   (paragraph "Connection to MERA") is formalized for tensors whose two-site

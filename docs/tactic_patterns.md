@@ -110,6 +110,42 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** all three call sites use the helper; each now proves only the
   threshold inequality.
 
+### error from a block-length threshold with a logarithmic offset — promoted
+- **Pattern:** from `a log(M q/ε) + b ≤ q` with `b ≥ a max(log K, 0)`, expand
+  `log(M q/ε)`, discard `a log q ≥ 0`, and pass `log K + log M - log ε ≤ q/a`
+  to `mul_mul_exp_neg_le_of_log_le`.
+- **Seen:** two occurrences across two files (2026-10-01):
+  `DepthLogBound.lean` and `NonNormalMeasurementPreparation.lean`, under
+  `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_div_le_of_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** promoted at two sites because the second copy was verbatim; the
+  remaining threshold steps in `LogDepthPreparation.lean` and `TreeMERA.lean`
+  have different offsets and keep `mul_mul_exp_neg_le_of_log_le`.
+
+### depth from the window of block lengths — promoted
+- **Pattern:** from `q ≤ 2 (a log(N/ε) + b)`, `N ≥ 2`, `0 < ε ≤ 1`, `b ≥ 1`,
+  a `calc` through `log(N/ε) ≥ log 2` giving
+  `C q ≤ C (2a + 2b/log 2) log(N/ε)`.
+- **Seen:** two verbatim occurrences across two files (2026-10-01):
+  `DepthLogBound.lean` and `NonNormalMeasurementPreparation.lean`.
+- **Abstraction:** `MPSPreparation.natCast_mul_le_mul_log_of_le_two_mul` in
+  `TNLean/MPS/Preparation/DepthLogBound.lean`.
+- **Notes:** both call sites are one line.
+
+### gap of the transfer map of a normal tensor — promoted
+- **Pattern:** `uniform_eigenvalue_gap_of_finite_lt_one` with
+  `Kraus.isChannel_mapLM … |>.eigenvalue_norm_le_one` and
+  `primitive_transfer.unique_peripheral`, then `t := max (1 - δ) (1 / 2)`.
+- **Seen:** three occurrences across three files (2026-10-01):
+  `ApproximationError.lean`, `DepthLogBound.lean` and
+  `NonNormalMeasurementPreparation.lean`, under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `MPSTensor.exists_eigenvalue_norm_le_of_isNormal` in
+  `TNLean/MPS/Preparation/ApproximationError.lean`; the family version
+  `MPSPreparation.exists_forall_eigenvalue_norm_le` takes the maximum over the
+  blocks.
+- **Notes:** all three call sites use the helper.
+
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
@@ -2420,6 +2456,30 @@ prefix projections. This permits the active-volume identity and spectator bound
 to be combined using ordinary arithmetic equalities. Candidate helper pattern;
 currently one occurrence, so no general declaration is warranted.
 
+### telescoping trace bound near an idempotent mixed transfer matrix — candidate
+- **Pattern:** bound `‖Tr(T^M) - 1‖` for a mixed transfer matrix `T = Ψ(P)` with
+  `‖T - T_∞‖ ≤ K₃ K₁ x^q`, where `T_∞ = Ψ(P_∞)` is idempotent of trace one: apply
+  `norm_prod_range_sub_pow_le_of_isIdempotentElem` with `c = ‖1‖ + ‖T_∞‖`, rewrite
+  `Tr(T^M) - 1` through `Matrix.traceLinearMap`, then close the chain
+  `K₄ c ((1 + cδ)^M - 1) ≤ … ≤ C u e^{C u}` with `one_add_pow_sub_one_le_mul_exp`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_trace_prod_range_transferMatrix_sub_one_le` in
+  `TNLean/MPS/Preparation/ApproximationError.lean` and
+  `exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+- **Notes:** a third occurrence would justify a lemma taking the idempotent `T_∞`,
+  its trace, and the linear bound `‖T - T_∞‖ ≤ δ` as hypotheses.
+
+### off-diagonal constants chosen with a dummy diagonal value — candidate
+- **Pattern:** `have hoff : ∀ j k, ∃ K, 0 ≤ K ∧ (j ≠ k → ∀ n, ‖f j k n‖ ≤ K * x ^ n)`,
+  proved by `by_cases j = k` with `⟨0, le_rfl, …⟩` on the diagonal, then `choose`, and
+  a split `∑ⱼ ∑ₖ = ∑ⱼ (diagonal + ∑_{k ∈ univ.erase j})` by `Finset.add_sum_erase`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_gram_blockTensor_blockSum_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockGram.lean` and
+  `exists_abs_norm_mpvState_blockSum_sq_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
   projector by the norm of its adjoint, reverse the product, and reverse the
@@ -3527,6 +3587,24 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
   second module needs the same cancellation pattern.
 
+### measurement-assisted GHZ protocol on two site layouts — candidate
+- **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the
+  outcome-consistency lemma, the corrections by outcomes and partial sums, and
+  the product-state bookkeeping.
+- **Seen:** two occurrences (2026-10-01):
+  `TNLean/MPS/Preparation/GHZMeasurement.lean` (interleaved single qudits of
+  an open chain, `forall_succ_eq_iff`, `forall_add_ghzCorrection_eq_iff`) and
+  `TNLean/MPS/Preparation/WindowGHZ.lean` (registers of `r₁` sites inside
+  blocks of a ring, `forall_cyclic_eq_zero_iff`).
+- **Abstraction:** proposed: one protocol over an injective embedding of the
+  system and ancilla sites and a label type `Cfg d r₁`, in an open and a
+  cyclic form, with the outcome-consistency lemma over an additive group
+  indexed by `Fin M`. The partial sums already share `Fin.partialSum`.
+- **Notes:** below the rule of three; the layouts differ in the controlled
+  shift between a register and its ancilla, which spans a block in
+  `WindowGHZ.lean`.
+
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
@@ -3667,6 +3745,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   different shape — the open-lattice memberships need no negation normalization and the
   branches close by `omega` alone — and are left as they are.
 
+
+### positivity of the cyclic step-orbit length — candidate
+- **Pattern:** derive `0 < m / m.gcd p` from `0 < m` using
+  `Nat.div_pos (Nat.gcd_le_left p hm) (Nat.gcd_pos_of_pos_left p hm)`.
+- **Seen:** two occurrences in two files (2026-09-29): `Fin.exists_stepOrbit_phases`
+  in `TNLean/Algebra/FinStepOrbit.lean` and
+  `MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases` in
+  `TNLean/MPS/Periodic/SectorPhaseWord.lean`.
+- **Abstraction:** if a third use appears, prefer a lemma about the positive
+  quotient over a tactic; the present proof is two applications of Mathlib lemmas.
+- **Notes:** positivity supplies both the finite cyclic successor and the fact
+  that a complex root of unity has unit modulus. No additional positivity
+  hypothesis belongs in either public theorem.
 
 ## Retired
 

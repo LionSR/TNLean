@@ -221,7 +221,7 @@ private def ghzOutcome (m : secondBonds (M := M) → Fin b) (n : Fin M) : Fin b 
 
 /-- The prefix sum `pₙ = m₀ + ⋯ + m_{n-1}` of the outcomes. -/
 private def ghzPrefix (m : secondBonds (M := M) → Fin b) (n : Fin M) : Fin b :=
-  ∑ j ∈ Finset.univ.filter (· < n), ghzOutcome m j
+  Fin.partialSum (ghzOutcome m) n.castSucc
 
 /-- The correction, as the configuration it adds: `-pₙ` at the system qudit `n` and `mₙ` at
 the ancilla `n`. The operator it defines is `X^{pₙ}` on the system qudit `n` and `X^{-mₙ}` on
@@ -325,13 +325,7 @@ private theorem ghzPrefix_zero (m : secondBonds (M := M) → Fin b) :
 omit [NeZero M] in
 private theorem ghzPrefix_succ (m : secondBonds (M := M) → Fin b) (n : Fin M)
     (hn : n.val + 1 < M) : ghzPrefix m ⟨n.val + 1, hn⟩ = ghzPrefix m n + ghzOutcome m n := by
-  have : Finset.univ.filter (· < (⟨n.val + 1, hn⟩ : Fin M)) =
-      insert n (Finset.univ.filter (· < n)) := by
-    ext j
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_insert, Fin.lt_def,
-      Fin.ext_iff]
-    omega
-  rw [ghzPrefix, this, Finset.sum_insert (by simp), add_comm]
+  rw [ghzPrefix, show (⟨n.val + 1, hn⟩ : Fin M).castSucc = n.succ from rfl, Fin.partialSum_succ]
   rfl
 
 omit [NeZero M] in
