@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CPSVFigureEight
+import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.CPSVVerticalBNT
+import TNLean.MPS.MPDO.HorizontalBlocking
+import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPDO.VerticalCanonicalFormConstruction
 
 /-!
@@ -14,8 +17,9 @@ The grouped vertical construction of Proposition 4.13 consumes exactly two
 properties of a matrix product density operator: the phase-class grouping of
 its normal vertical sectors with their physical isometries, and the pairwise
 Figure 8 comparison of two positive corners of a common representative. This
-file names that pair of inputs and records that both literal CPSV canonical
-form and normalized BNT-refined horizontal form supply it.
+file names that pair of inputs and the additional blocked-tensor properties
+needed for product decomposition. Both literal CPSV canonical form and
+normalized BNT-refined horizontal form supply them.
 
 The two canonical-form predicates stay independent: each one proves the two
 inputs from its own grouping and Figure 8 theorems, and no implication
@@ -25,6 +29,9 @@ between them is used or asserted.
 
 * `MPOTensor.HasVerticalBNTGroupingInputs`: the grouping and the
   grouped-corner Gram dressing of a matrix product density operator.
+* `MPOTensor.HasVerticalBNTProductInputs`: grouping data at one and two
+  sites, together with blocked projector closure, periodic exclusion, and
+  sector-compression separation.
 
 ## Main results
 
@@ -33,6 +40,9 @@ between them is used or asserted.
   canonical form supplies both inputs.
 * `MPOTensor.HasVerticalBNTGroupingInputs.verticalCF`: the two inputs give
   vertical canonical form.
+* `MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs` and
+  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs`: each canonical
+  form supplies the product inputs directly.
 
 ## References
 
@@ -118,5 +128,81 @@ theorem hasVerticalBNTGroupingInputs (M : MPOTensor d D)
     MPOTensor.HasVerticalBNTGroupingInputs M :=
   ⟨hCanonical.exists_verticalBNTGrouping_with_isometry M hM,
     hCanonical.hasGroupedCornerGramDressing M hM⟩
+
+end MPSTensor.IsCPSVCanonicalForm
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- The grouped vertical data together with the three properties of the
+two-site vertical tensor used in the product decomposition. The separate
+fields keep the source hypotheses visible in each application.
+
+Source: CPSV16, Proposition 4.13, lines 1873--1921, and Appendix C.4,
+lines 2020--2029. -/
+structure HasVerticalBNTProductInputs (M : MPOTensor d D) : Prop where
+  /-- Grouping and comparison of positive vertical corners.
+  Source: CPSV16, Proposition IV.12, equation `UMU-appendix` and the
+  Gram comparison preceding equation `eq3:proof.IV.12`. -/
+  groupingInputs : HasVerticalBNTGroupingInputs M
+  /-- Grouping and pairwise Gram comparison for the two-site tensor, obtained
+  by applying Proposition IV.12 after blocking. Source: CPSV16,
+  Proposition IV.12, equation `UMU-appendix`. -/
+  blockedGroupingInputs : HasVerticalBNTGroupingInputs (blockTwo M)
+  /-- Orthogonal invariant projectors of the two-site vertical tensor are
+  reducing projectors. Source: CPSV16, proof of Proposition IV.12,
+  first paragraph after equation `UMU-appendix`. -/
+  projectorClosure : MPSTensor.HasInvariantProjectorClosure (verticalTensor (blockTwo M))
+  /-- The two-site vertical tensor has no nontrivial periodic vectors.
+  Source: CPSV16, proof of Proposition IV.12, equation `eq2:proof.IV.12`
+  and the preceding paragraph. -/
+  noPeriodicVectors : MPSTensor.HasNoPeriodicVectors (verticalTensor (blockTwo M))
+  /-- A nonzero two-site corner has a nonzero sector compression at some
+  length. Source: CPSV16, proof of Proposition IV.12, paragraph beginning
+  "Since ... CF in the horizontal direction" before equation
+  `eq3:proof.IV.12`. -/
+  sectorCompressionSeparation :
+    ∀ P : Matrix (Fin (d * d)) (Fin (d * d)) ℂ,
+      (∃ v, P * verticalTensor (blockTwo M) v * P ≠ 0) →
+        ∃ N, sectorCompression (blockTwo M) P N ≠ 0
+
+/-- Normalized BNT-refined horizontal form supplies the product inputs.
+
+Source: CPSV16, Proposition 4.13, lines 1873--1921. -/
+theorem IsHorizontalCF.hasVerticalBNTProductInputs (M : MPOTensor d D)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    HasVerticalBNTProductInputs M := by
+  let hTwo := hHorizontal.blockTwo
+  let hMTwo := hM.blockTwo
+  exact ⟨hHorizontal.hasVerticalBNTGroupingInputs M hM,
+    hTwo.hasVerticalBNTGroupingInputs (MPOTensor.blockTwo M) hMTwo,
+    hTwo.hasInvariantProjectorClosure_verticalTensor (MPOTensor.blockTwo M) hMTwo,
+    hasNoPeriodicVectors_verticalTensor_of_horizontalCF (MPOTensor.blockTwo M) hMTwo hTwo,
+    fun P hP ↦ hTwo.exists_sectorCompression_ne_zero_of_corner
+      (MPOTensor.blockTwo M) P hP⟩
+
+end MPOTensor
+
+namespace MPSTensor.IsCPSVCanonicalForm
+
+variable {d D : ℕ}
+
+/-- Literal CPSV canonical form supplies the product inputs independently of
+normalized BNT-refined horizontal form.
+
+Source: CPSV16, Proposition 4.13, lines 1873--1921. -/
+theorem hasVerticalBNTProductInputs (M : MPOTensor d D)
+    (hCanonical : IsCPSVCanonicalForm M.toMPSTensor) (hM : MPOTensor.IsMPDO M) :
+    MPOTensor.HasVerticalBNTProductInputs M := by
+  let hTwo := MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo hCanonical
+  let hMTwo := hM.blockTwo
+  exact ⟨hCanonical.hasVerticalBNTGroupingInputs M hM,
+    hTwo.hasVerticalBNTGroupingInputs (MPOTensor.blockTwo M) hMTwo,
+    hTwo.hasInvariantProjectorClosure_verticalTensor (MPOTensor.blockTwo M) hMTwo,
+    MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm
+      (MPOTensor.blockTwo M) hMTwo hTwo,
+    fun P hP ↦ hTwo.exists_sectorCompression_ne_zero_of_corner
+      (MPOTensor.blockTwo M) P hP⟩
 
 end MPSTensor.IsCPSVCanonicalForm
