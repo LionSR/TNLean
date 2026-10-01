@@ -27,6 +27,12 @@ The subsequent orbit-phase matching and root construction are separate steps.
 of MPVs only at positive lengths, since discarding zero blocks may lower the bond
 dimension. The convention is inherited from `exists_periodic_blockDecomposition`
 and recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+
+**Scope restriction (unit-modulus target weights):** both blocked-comparison
+theorems assume the target multiplicities have modulus one (`hQweight`). This is
+the trace-preservation correction to the forward direction of Theorem 4.1, which
+is false as printed without it; see
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
