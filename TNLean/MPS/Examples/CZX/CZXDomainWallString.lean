@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.CZX.CZXDomainWalls
-import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallString
+import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallStringExchange
 
 /-!
 # CZX: domain-wall strings and their semionic exchange
