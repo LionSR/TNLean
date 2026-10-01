@@ -528,11 +528,6 @@ For the non-periodic MPS Fundamental Theorem background:
 Parent-Hamiltonian notes live here too, but they are not part of the current
 non-periodic FT cleanup loop unless explicitly brought back into scope.
 
-- `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
-  pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
-  printed for a primitive tensor with a defective subleading eigenvalue
-  (explicit counterexample), the diagonalizability hypothesis under which it
-  holds, and the rate correction for the decay bound.
 - `cpgsv21_normal_range_reduction.tex` records the normal parent-Hamiltonian
   range-reduction comparison and the remaining periodic-boundary identity,
   together with the provenance of the minimal-ring cyclic change of cut (a
@@ -803,3 +798,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+
+For the correlation functions of arXiv:2011.12127, Section II.B.3:
+
+- `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
+  pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
+  printed for a primitive tensor with a defective subleading eigenvalue
+  (explicit counterexample), the diagonalizability hypothesis under which it
+  holds, and the rate correction for the decay bound.

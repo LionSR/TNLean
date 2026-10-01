@@ -67,7 +67,7 @@ $Z_\rho(X)=\tfrac12\sigma_y$ and
 which is not a finite sum of pure exponentials. It also exceeds every bound
 $C_{XY}(\varepsilon|\lambda|)^n$ for large $n$.
 
-The same sequence arises from physical observables. Full Kraus rank means
+The same sequence arises from physical operators. Full Kraus rank means
 that the four Kraus operators $A^1,\ldots,A^4$ of $E$ are linearly
 independent, so they span the $2\times2$ matrices. Hence the maps
 $Z\mapsto\sum_{i,j}O_{ij}A^iZ(A^j)^\dagger$, for $O$ a $4\times4$ physical
@@ -83,6 +83,16 @@ at distance $n\ge1$ is
     \label{eq:cpgsv21_correlator_physical_counterexample}
 \end{align}
 which is again not a finite sum of pure exponentials in $n$.
+
+These $O_X$ and $O_Y$ need not be Hermitian. Hermitian observables suffice as
+well. Write $O_X=H_1+iH_2$ and $O_Y=H_3+iH_4$ with $H_k$ Hermitian. The
+connected two-point function is bilinear in the two operators. If it were a
+finite combination of the sequences $\lambda_i^n$ for every pair of Hermitian
+observables, with $\lambda_i$ the eigenvalues of $E$, then the same would hold
+for $O_X$ and $O_Y$. That contradicts
+(\ref{eq:cpgsv21_correlator_physical_counterexample}), so some pair of
+Hermitian observables already has a connected correlator that is not a sum of
+pure exponentials.
 
 \section{Corrected statements}
 
