@@ -100,7 +100,8 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSPreparation.blockIsoVector_smul, MPSPreparation.norm_chainState,
         MPSPreparation.inner_chainBlockIsometryState_normalize}
     \leanok
-    \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective}
+    \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective,
+        def:prep_bond_regrouping}
     Suppose every blocked tensor $B_k$ is injective. Then
     $\langle(\bigotimes_kV_k)x,(\bigotimes_kV_k)y\rangle=\langle x,y\rangle$ for
     all vectors $x,y$ on the $M$ blocks, and
@@ -122,8 +123,12 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     Injectivity makes each $V_k$ an isometry,
     Theorem~\ref{thm:ldpolar_tensor_injective}, so the product
     $\bigotimes_kV_k$ is an isometry. The remaining identities follow from
-    Theorem~\ref{thm:ldp_chain_state_eq_pos}; for the norm of $\ket\Omega$ the
-    pairs are regrouped bond by bond.
+    Theorem~\ref{thm:ldp_chain_state_eq_pos}. For the overlap of the pair
+    products, expanding $\prod_k\langle\omega^k,\omega'^k\rangle$ as a sum
+    over bond configurations $(p_k)_k$ of
+    $\prod_k\overline{\omega^k_{p_k}}\,\omega'^k_{p_k}$ and reindexing along
+    the bond regrouping of Definition~\ref{def:prep_bond_regrouping} gives
+    $\sum_c\overline{\Omega(c)}\,\Omega'(c)$.
 \end{proof}
 
 \begin{definition}[Approximation of the positive parts by pairs]
@@ -196,10 +201,14 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     for the normalized states. In particular, if the chain is approximated by
     pairs with error $\delta$ on the given blocks, some unit vector prepared in
     depth at most $CL$ has error at most $\delta$ against the normalized state
-    $\ket{\phi_N}$. This is the claim of the paragraph ``Inhomogeneous
-    short-range correlated MPS'' of~\cite{Malz2024Preparation} for one ring,
-    which states total depth $O(\log(N/\varepsilon))$ with error
-    $\varepsilon(\Omega,\phi_{\mathrm{pos}})$. The bound $CL$ gives this
+    $\ket{\phi_N}$. This is a scope-restricted variant, for one ring, of the
+    claim of the paragraph ``Inhomogeneous short-range correlated MPS''
+    of~\cite{Malz2024Preparation}, which states total depth
+    $O(\log(N/\varepsilon))$ with error
+    $\varepsilon(\Omega,\phi_{\mathrm{pos}})$. The common bond dimension, the
+    injectivity of the blocked tensors and the lower bound $3D\le\ell_k$ are
+    absent from that statement~\cite{gap:mswc24_inhomogeneous_scope}, and the
+    unrestricted claim is not formalized. The bound $CL$ gives the stated
     depth when $L=O(\log(N/\varepsilon))$; the source's definition fixes
     blocks of length $q=O(\log N)$. The choice of $L$ in terms of $N$ and the
     error is not made here.

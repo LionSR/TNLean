@@ -325,7 +325,12 @@ constant depth (eq. (12)), and each block unitary of eq. (11) is a sequential ci
 MPS" applies the same scheme, "preparing `|Ω⟩` and implementing the isometry", to tensors and
 pairs that depend on the site. Injectivity of a blocked tensor forces `D ≤ d^D`
 (`MPSPreparation.mul_self_le_pow_of_isInjective`), which lets each bond index be encoded in `D`
-sites. -/
+sites.
+
+**Scope restriction (common bond dimension):** the source paragraph "Inhomogeneous short-range
+correlated MPS" allows bond dimension at most `D`, varying along the ring; here every bond has
+dimension `D`, the blocked tensors are injective, and the blocks have length at least `3D`.
+Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. -/
 theorem exists_isPreparedInDepth_chainBlockIsometryState (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
