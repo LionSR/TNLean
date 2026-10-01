@@ -17,9 +17,19 @@ with `α < gcd m p` and `k < m / gcd m p` enumerate the cycle exactly once.
 This is arXiv:1708.00029, `lem:unique-dec`, used to index the cyclic sectors
 in the proof of Theorem 4.1. The same coordinates construct local factors whose
 products over `p` consecutive positions are prescribed roots on these orbits.
+
+**Local fix (orbit wraparound):** the source justifies its telescoping product by
+`k_{u+p} = k_u + 1`, which fails for the largest coordinate `k_u = m / gcd m p - 1`.
+`stepOrbitEquiv_add_one` advances `k` modulo `m / gcd m p`, and
+`exists_stepOrbit_phases` reduces the exponent using `c ^ (m / gcd m p) = 1`; see
+`docs/paper-gaps/dccsp17_orbit_phase_wraparound.tex`.
 -/
 
 open scoped BigOperators
+
+/-- The orbit length `m / gcd m p` of a nonempty cycle is nonzero. -/
+instance Nat.neZero_div_gcd {m p : ℕ} [NeZero m] : NeZero (m / m.gcd p) :=
+  ⟨(Nat.div_gcd_pos_of_pos_left p (Nat.pos_of_ne_zero (NeZero.ne m))).ne'⟩
 
 namespace Fin
 
@@ -57,7 +67,7 @@ noncomputable def stepOrbitEquiv (m p : ℕ) (hm : 0 < m) :
 
 /-- Advancing the orbit coordinate once adds the original step modulo the cycle length.
 Source: arXiv:1708.00029, the calculation following `eq:Aprime-is-cPA`. -/
-theorem stepOrbitEquiv_add_one (m p : ℕ) (hm : 0 < m) [NeZero m] [NeZero (m / m.gcd p)]
+theorem stepOrbitEquiv_add_one (m p : ℕ) (hm : 0 < m) [NeZero m]
     (a : Fin (m.gcd p)) (k : Fin (m / m.gcd p)) :
     Fin.stepOrbitEquiv m p hm (a, k + 1) = Fin.stepOrbitEquiv m p hm (a, k) + (↑p : Fin m) := by
   have hdvd : m ∣ p * (m / m.gcd p) := by
@@ -81,10 +91,6 @@ theorem exists_stepOrbit_phases {G : Type*} [CommGroup G] (m p : ℕ) [NeZero m]
     ∃ b : Fin m → G, ∀ u,
       (∏ k ∈ Finset.range p, b (u + (↑k : Fin m))) =
         c ((stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))).symm u).1 := by
-  have hq : 0 < m / m.gcd p :=
-    Nat.div_pos (Nat.gcd_le_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
-      (Nat.gcd_pos_of_pos_left p (Nat.pos_of_ne_zero (NeZero.ne m)))
-  let : NeZero (m / m.gcd p) := ⟨Nat.ne_of_gt hq⟩
   let e := stepOrbitEquiv m p (Nat.pos_of_ne_zero (NeZero.ne m))
   let f : Fin m → G := fun u => c (e.symm u).1 ^ (e.symm u).2.val
   have hstep (u : Fin m) : f (u + (↑p : Fin m)) = c (e.symm u).1 * f u := by
