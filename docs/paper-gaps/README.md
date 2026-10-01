@@ -832,10 +832,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   measurements (paragraph "Tree-RG circuit with measurements") is formalized
   as a sequence of measurement rounds, with teleportation along chains of hops
   in one round of depth `2`, layers of two-site gates between distant sites in
-  depth `5`, and binary trees of two-site gates with `k` levels in depth `5k`,
-  every register being one site; open: registers of several sites and the
-  identification with the approximating state give the source's depth
-  `O(log log(N/ε))` for matrix product states.
+  depth `5`, and binary trees of two-site gates with `k` levels in depth `5k`;
+  with registers of `s` sites, the approximating state with blocks of
+  `s 2^{k+1}` sites is prepared in depth `C (k + 1)`, which gives the bound
+  `O(log log(N/ε))` for normal tensors when `s 2^{k+1}` divides `N` and
+  `a log(N/ε) + b ≤ s 2^{k+1} ≤ 2 (a log(N/ε) + b)`; open: trees on blocks of
+  unequal lengths, so that every chain length is covered.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with a common bond

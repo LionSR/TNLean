@@ -42,6 +42,7 @@ import TNLean.MPS.Preparation.LocalChannelCircuit
 import TNLean.MPS.Preparation.LocalChannelConversion
 import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.LogDepthPreparation
+import TNLean.MPS.Preparation.LogLogDepthPreparation
 import TNLean.MPS.Preparation.LongRangeGates
 import TNLean.MPS.Preparation.MatrixPolar
 import TNLean.MPS.Preparation.MeasurementCircuit
@@ -67,6 +68,9 @@ import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.ProductStateCircuit
 import TNLean.MPS.Preparation.QuditTeleportation
+import TNLean.MPS.Preparation.RegisterGates
+import TNLean.MPS.Preparation.RegisterTree
+import TNLean.MPS.Preparation.RegisterTreeState
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.RepeatedBlockError
 import TNLean.MPS.Preparation.RepeatedBlockSum
@@ -81,6 +85,7 @@ import TNLean.MPS.Preparation.SiteEmbedding
 import TNLean.MPS.Preparation.Staircase
 import TNLean.MPS.Preparation.TeleportationChains
 import TNLean.MPS.Preparation.TeleportationRound
+import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA
 import TNLean.MPS.Preparation.TreeMeasurement
