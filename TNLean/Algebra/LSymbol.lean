@@ -240,7 +240,8 @@ theorem IsCompatible.apply_left_one {L : LSymbol G X}
 
 /-- The action-tensor gauge `γ_{g,x} = Lˣ_{1,1}`, with trivial fusion gauge, turns
 compatible L-symbols `L` for a normalized three-cochain into `L'` with
-`L'ˣ_{g,1} = L'ˣ_{1,g} = 1`, as asserted in arXiv:2203.12563, lines 1830–1839. -/
+`L'ˣ_{g,1} = L'ˣ_{1,g} = 1`, as asserted in arXiv:2203.12563, lines 716–728, and
+restated for the `ℤ₂` examples at lines 1830–1839. -/
 theorem IsCompatible.isNormalized_gauge {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (hω : ω.IsNormalized) :
     IsNormalized (LSymbol.gauge (fun _ _ ↦ 1) (fun _ x ↦ L x 1 1) L) := by
