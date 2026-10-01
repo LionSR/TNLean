@@ -9,8 +9,6 @@ import TNLean.PEPS.GIsometric
 /-!
 # Commuting parent Hamiltonians of G-isometric matrix product states
 
-# Commuting parent Hamiltonians of G-isometric matrix product states
-
 **Source.** Schuch, Cirac, Pérez-García 2010 (arXiv:1001.3807), Section 6, "Commuting parent
 Hamiltonians", `Papers/1001.3807/paper_v3.tex`:
 

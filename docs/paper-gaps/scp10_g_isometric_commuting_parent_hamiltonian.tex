@@ -18,17 +18,19 @@ straightforward.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 2092--2096.}
 For a $G$-isometric matrix product tensor $A$, on whose bond the
 left-regular representation acts, let
-\[
+\begin{align}
     \mathcal S_2=\Bigl\{\sum_{ij}\operatorname{tr}[A^iA^jX]\,\ket{ij}
         \Bigm| X\Bigr\}.
-\]
+    \label{eq:scp10_s2}
+\end{align}
 The lemma of that section states that the local terms $h_i$ of the parent
 Hamiltonian, ``which project onto the complement of $\mathcal S_2$'', are of
 the form of equation ``eq:iso:ham-proj-from-A'', the two-site operator
-\[
+\begin{align}
     P=\sum_{ijkl}\operatorname{tr}\bigl[A^iA^j(A^kA^l)^\dagger\bigr]
         \ket{ij}\bra{kl}
-\]
+    \label{eq:scp10_projector}
+\end{align}
 drawn in figure ``ham-proj-from-A''. Its proof shows that $P$ is a projector,
 that its range lies in $\mathcal S_2$, that it fixes every vector of
 $\mathcal S_2$, and that it is self-adjoint (figures
@@ -60,9 +62,10 @@ notion of $G$-isometry allows $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$
 with one constant $c>0$ \cite{gap:rmp_peps_quantum_double_g_isometry}; then
 $P=c_2\,\Pi_{\mathcal S_2}$ for the constant $c_2>0$ of the two-site tensor
 $A^iA^j$. The formalization therefore states
-\[
+\begin{align}
     h=1-c_2^{-1}P,
-\]
+    \label{eq:scp10_local_term}
+\end{align}
 together with $(c_2^{-1}P)^2=c_2^{-1}P$, $\operatorname{range}P=\mathcal S_2$
 and $P^\dagger=P$. The last identity holds for every tensor, since the
 matrix entries of $P$ satisfy
@@ -75,20 +78,23 @@ $\mathcal S_2$ that is not self-adjoint, is not formalized.
 With $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$, where $\sigma$ is the
 twirl onto the commutant of the left-regular representation, one has for
 every operator $N$ commuting with every $L_g$
-\[
+\begin{align}
     \sum_b\operatorname{tr}[A^bN]\,(A^b)^\dagger=c\,N .
-\]
+    \label{eq:scp10_isometry_identity}
+\end{align}
 The tensor $A$ is invariant, $L_gA^iL_g^{-1}=A^i$, and since $L_g$ is unitary
-in the basis of group elements so is $A^\dagger$. Every product of the
+in the basis of group elements, $L_g^\dagger=L_{g^{-1}}$, each adjoint
+$(A^i)^\dagger$ also commutes with every $L_g$. Every product of the
 matrices $A^i$ and $(A^i)^\dagger$ therefore commutes with every $L_g$; this
 is the step in which the sum over $g$ of figure ``ham-comm-step1'' drops out.
 The matrix of $(P\otimes1)(1\otimes P)$ is
-\[
+\begin{align}
     \sum_b\operatorname{tr}\bigl[A^{s_0}A^{s_1}(A^{w_0}A^b)^\dagger\bigr]\,
         \operatorname{tr}\bigl[A^bA^{s_2}(A^{w_1}A^{w_2})^\dagger\bigr]
     =c\,\operatorname{tr}\bigl[A^{s_0}A^{s_1}A^{s_2}
         (A^{w_0}A^{w_1}A^{w_2})^\dagger\bigr],
-\]
+    \label{eq:scp10_three_site_entry}
+\end{align}
 and the matrix of $(1\otimes P)(P\otimes1)$ is the same, so both products are
 $c$ times the three-site operator of the same form. The two translated terms
 on any three consecutive sites of a ring commute, and terms with disjoint
