@@ -135,7 +135,9 @@ theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZer
     congr 1
     · simp only [mulVec, dotProduct, tensorPower, of_apply, m]
       refine (Fintype.sum_equiv eD.symm _ _ fun c' => ?_)
-      simp [e, eD, Matrix.submatrix_apply, virtualPairEquiv]
+      simp only [conjTranspose_apply, RCLike.star_def, virtualPairEquiv, Equiv.symm_symm, mpv_eq,
+        coeff_eq, Equiv.piCongrRight_symm_apply, Pi.map_apply, submatrix_apply,
+        Equiv.symm_apply_apply, mul_eq_mul_left_iff, e, eD]
       left
       rfl
     · simp [e, virtualPairEquiv]
