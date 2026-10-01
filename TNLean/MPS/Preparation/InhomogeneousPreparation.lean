@@ -133,16 +133,22 @@ theorem inner_chainBlockIsometryState_normalize {A : MPSChainTensor d D N} (hN :
 
 /-! ### The approximation hypothesis and the preparation -/
 
-/-- **Approximation of the positive parts by pairs**, at a fixed ring: there are unit vectors
-`ω^k` on `ℂ^D ⊗ ℂ^D` whose product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error
-`ε(Ω, φ_pos) = 1 - |⟨Ω|φ_pos⟩| ≤ δ` against the normalized state of the positive parts.
+/-- **Approximation of the positive parts by pairs**, at a fixed ring: the state `φ_pos` of the
+positive parts is nonzero, and there are unit vectors `ω^k` on `ℂ^D ⊗ ℂ^D` whose product
+`|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error `ε(Ω, φ_pos) = 1 - |⟨Ω|φ_pos⟩| ≤ δ` against the
+normalized state of the positive parts.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": a sequence of matrix
 product states has finite correlation length if, after blocking `q = O(log N)` sites, the states
 can be approximated by `|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}` "with an error
-`ε(Ω, φ_pos) → 0` as `N → ∞`". This is the condition for one member of the sequence. -/
+`ε(Ω, φ_pos) → 0` as `N → ∞`". This is the condition for one member of the sequence.
+
+**Local fix (nonzero positive-part state):** the source's error `ε(Ω, φ_pos)` compares `|Ω⟩`
+with the normalized state `φ_pos / ‖φ_pos‖`, which presupposes `φ_pos ≠ 0`; the condition
+`chainPosState A hN ≠ 0` makes this explicit. Documented in
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. -/
 def IsPairApproximable (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) (δ : ℝ) : Prop :=
-  ∃ ω : Fin M → Fin D × Fin D → ℂ, (∀ k, ∑ p, star (ω k p) * ω k p = 1) ∧
+  chainPosState A hN ≠ 0 ∧ ∃ ω : Fin M → Fin D × Fin D → ℂ, (∀ k, ∑ p, star (ω k p) * ω k p = 1) ∧
     1 - ‖⟪pairFamilyVector ω, (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ‖ ≤ δ
 
 /-- **Preparation of an inhomogeneous matrix product state.** There is `C`, depending only on
@@ -189,7 +195,7 @@ theorem exists_isPreparedInDepth_of_isPairApproximable (d D : ℕ) :
           ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧ IsPreparedInDepth (C * L) (fun s => ψ s) ∧
             1 - ‖⟪ψ, (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ‖ ≤ δ := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous d D
-  refine ⟨C, fun ℓ N _ hN A L δ hℓ hL hB ⟨ω, hω, hδ⟩ => ?_⟩
+  refine ⟨C, fun ℓ N _ hN A L δ hℓ hL hB ⟨_, ω, hω, hδ⟩ => ?_⟩
   obtain ⟨hn, hprep, herr⟩ := hC ℓ hN A ω hω L hℓ hL hB
   exact ⟨_, hn, hprep, herr ▸ hδ⟩
 

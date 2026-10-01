@@ -56,6 +56,16 @@ total depth $O(\log(N/\varepsilon))$ is the choice $L=O(\log(N/\varepsilon))$,
 which is not made here; the source's definition fixes blocks of length
 $q=O(\log N)$.
 
+\section{Nonzero state of the positive parts}
+The error $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ compares $\ket\Omega$ with
+the normalized state $\ket{\phi_{\mathrm{pos}}}/\lVert\phi_{\mathrm{pos}}\rVert$,
+which presupposes $\ket{\phi_{\mathrm{pos}}}\neq0$. The formal approximation
+condition\footnote{Formal declaration:
+    \leanid{MPSPreparation.IsPairApproximable}.}
+states $\ket{\phi_{\mathrm{pos}}}\neq0$ explicitly; without it the normalized
+vector would be read as $0$ and the condition would hold for every
+$\delta\ge1$. This is a local fix of the intended reading, not a restriction.
+
 \section{Elimination}
 \begin{enumerate}
     \item \emph{Varying bond dimensions.} Replace the chain of square tensors by
@@ -70,12 +80,15 @@ $q=O(\log N)$.
           $(\bigotimes_k\Pi_k)\ket\Omega$ against $\ket{\phi_{\mathrm{pos}}}$,
           as in the non-normal case of the source.
     \item \emph{Block length.} The bound $3D\le\ell_k$ is needed only by
-          the circuit, not by the state. For a sequence with
-          $q=O(\log N)$ blocks reach length $3D$ once $N\ge N_0$, with $N_0$
-          depending only on $d$, $D$ and the constant in $q$; each of the
-          finitely many rings with $N<N_0$ is prepared exactly by a circuit of
-          depth bounded in terms of $N_0$ and $d$, and the largest of these
-          depths is absorbed into the constant of the depth bound.
+          the circuit, not by the state. The upper bound $q=O(\log N)$ alone
+          allows bounded block lengths, so the sequence-level statement reads
+          the source's blocking as $q_N\ge c\log N$ for some $c>0$, a block
+          length growing with $N$ as in the translation-invariant case. Then
+          $q_N\ge3D$ once $N\ge N_0$, with $N_0$ depending only on $D$ and
+          $c$; each of the finitely many rings with $N<N_0$ is prepared exactly
+          by a circuit of depth bounded in terms of $N_0$ and $d$, and the
+          largest of these depths is absorbed into the constant of the depth
+          bound.
     \item \emph{Sequence-level statement.} State the source's definition of
           finite correlation length for the sequence, with a rate: unit pairs
           with $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta(N,q)$ after

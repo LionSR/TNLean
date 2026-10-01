@@ -150,7 +150,8 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     \leanok
     \uses{def:ldp_chain_pos_state}
     For $\delta\in\R$, the chain is \emph{approximated by pairs with error
-        $\delta$} on the given blocks if there are unit vectors
+        $\delta$} on the given blocks if $\phi_{\mathrm{pos}}\neq0$ and there are
+    unit vectors
     $\omega^1,\dots,\omega^M$ on $\C^D\otimes\C^D$ with
     $1-\lvert\langle\Omega,\phi_{\mathrm{pos}}\rangle\rvert
         /\lVert\phi_{\mathrm{pos}}\rVert\le\delta$. The source defines a sequence of
@@ -158,7 +159,8 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     $q=O(\log N)$ sites, this holds with an error tending to $0$ as
     $N\to\infty$~\cite[paragraph ``Inhomogeneous short-range correlated
         MPS'']{Malz2024Preparation}; the definition here is the condition for
-    one ring.
+    one ring. The condition $\phi_{\mathrm{pos}}\neq0$ is presupposed by the
+    normalized state in the source's error, see~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{definition}
 
 \begin{theorem}[Preparation for site-dependent tensors]

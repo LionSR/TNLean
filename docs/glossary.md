@@ -1450,7 +1450,8 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.IsPairApproximable (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) (δ : ℝ) : Prop`,
   for a ring of `N` sites cut into `M` blocks of lengths `ℓ`.
 - **Defined in:** `TNLean/MPS/Preparation/InhomogeneousPreparation.lean`.
-- **Meaning:** there are unit vectors `ω^k` on `ℂ^D ⊗ ℂ^D` whose product
+- **Meaning:** the state `|φ_pos⟩` of the positive parts is nonzero, and there
+  are unit vectors `ω^k` on `ℂ^D ⊗ ℂ^D` whose product
   `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error `1 - |⟨Ω|φ_pos⟩| ≤ δ` against the
   normalized state `|φ_pos⟩` of the positive parts of the polar decompositions
   of the blocked tensors.
