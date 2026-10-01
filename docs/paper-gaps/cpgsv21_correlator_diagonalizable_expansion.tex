@@ -67,6 +67,23 @@ $Z_\rho(X)=\tfrac12\sigma_y$ and
 which is not a finite sum of pure exponentials. It also exceeds every bound
 $C_{XY}(\varepsilon|\lambda|)^n$ for large $n$.
 
+The same sequence arises from physical observables. Full Kraus rank means
+that the four Kraus operators $A^1,\ldots,A^4$ of $E$ are linearly
+independent, so they span the $2\times2$ matrices. Hence the maps
+$Z\mapsto\sum_{i,j}O_{ij}A^iZ(A^j)^\dagger$, for $O$ a $4\times4$ physical
+operator, exhaust all linear maps of the $2\times2$ matrices. Choose physical
+operators $O_X$ and $O_Y$ whose insertion maps are $Z\mapsto\sigma_yZ$ and
+$Z\mapsto\sigma_xZ$. Because $E$ is trace preserving, its left fixed point is
+the identity. The one-point expectation of $O_X$ is
+$\tr(\sigma_y\rho)=0$, so the connected two-point function of $O_X$ and $O_Y$
+at distance $n\ge1$ is
+\begin{align}
+    \tr\bigl(\sigma_x\,E^{n-1}(\tfrac12\sigma_y)\bigr)
+     & =(n-1)\,\varepsilon^{n-1}\lambda^{n-2},
+    \label{eq:cpgsv21_correlator_physical_counterexample}
+\end{align}
+which is again not a finite sum of pure exponentials in $n$.
+
 \section{Corrected statements}
 
 The blueprint chapter on correlations states the expansion under the explicit
