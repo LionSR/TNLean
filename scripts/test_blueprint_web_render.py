@@ -283,7 +283,13 @@ def _check_pages(base_url: str, names: list[str],
         if asset is None:
             asset = mathjax_cache[url] = _cdn_fetch(url)
         body, content_type = asset
-        route.fulfill(body=body, content_type=content_type)
+        route.fulfill(
+            body=body,
+            content_type=content_type,
+            # MathJax loads its fonts cross-origin from this tree; Chromium
+            # rejects a cross-origin font without this header.
+            headers={"Access-Control-Allow-Origin": "*"},
+        )
 
     typeset = 0
     with sync_playwright() as playwright:
