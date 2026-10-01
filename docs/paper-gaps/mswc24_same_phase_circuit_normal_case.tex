@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Circuits Between States in the Same Phase: the Normal Case}
+\author{}
+\date{2026-10-01}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+The paragraph ``Discussion and outlook'' of~\cite{Malz2024Preparation} states:
+``Our results also imply that MPS in the same phase can be transformed into
+each other using a log-depth circuit''. No proof is given. The results it
+refers to are the preparation of normal states in depth
+$O(\log(N/\varepsilon))$, eq.~(1), and the preparation of all
+translation-invariant states, ``including long-range non-normal ones'', with
+measurements. The main text recalls that ``normal MPS all lie in the
+topologically trivial phase''.
+
+\section{What is formalized}
+Let $A$ and $B$ be normal tensors with the same physical dimension, and
+write $\hat\phi_N(A)=\ket{\phi_N(A)}/\lVert\phi_N(A)\rVert$ for the normalized periodic
+states and
+$\varepsilon(\psi,\phi)=1-\lvert\braket{\psi}{\phi}\rvert$ for the error of
+eq.~(1). There is $c$, depending only on $A$ and $B$, such that for $N\ge2$,
+$0<\varepsilon\le1$ and nonvanishing periodic states, a local circuit $U$ of
+depth at most $c\log(N/\varepsilon)$ satisfies
+$\varepsilon(U\hat\phi_N(A),\hat\phi_N(B))\le\varepsilon$; if both bond dimensions are
+positive, the same holds for all $N\ge N_0$ without the nonvanishing
+condition.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero}
+    and \leanid{MPSPreparation.exists_isLocalCircuitOfDepth_le_log} in
+    \doclink{TNLean/MPS/Preparation/CircuitEquivalence}.}
+The circuit is $U_BU_A^\dagger$, with $U_A$ and $U_B$ the preparations of
+eq.~(1) from the all-zero product state, each with error $\varepsilon/4$. The
+error is not a metric; the proof uses
+$\varepsilon(x,z)\le2\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$ for unit
+vectors, since $2\varepsilon(x,y)$ is the squared distance from $x$ to the
+nearest unit multiple of $y$.
+
+\section{The restriction}
+Only the trivial phase of the classification without symmetry is covered: both
+tensors are normal. Non-normal states are not treated, and nothing is
+claimed about phases defined with a symmetry. Elimination: state and prove the
+non-normal case from the fixed-point form of the non-normal preparation in the
+Supplemental Material of the source.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
