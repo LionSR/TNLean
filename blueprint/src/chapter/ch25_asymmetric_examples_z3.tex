@@ -658,7 +658,7 @@ proved here.
         thm:asymex_z3anomalous_uu_compression,
         thm:asymex_z3anomalous_ud_compression,
         thm:mpug_anomaly_three_cochain_spec, thm:mpug_anomaly_three_cocycle_gauge,
-        thm:mpug_cyclic_invariant_gauge, cor:mpug_anomaly_class}
+        thm:mpug_cyclic_invariant_gauge, def:mpug_anomaly_class}
     The tensors $T_0=\delta$, $T_1=M$, $T_2=M^\dagger$ are normal and
     represent $\Z_3$ exactly on nonempty chains. Choose the fusion tensors
     to be the identity whenever a factor is $T_0$, and the compressions of
@@ -683,6 +683,7 @@ proved here.
 
 \begin{proof}
     \leanok
+    \uses{cor:mpug_anomaly_class}
     Each of the two fusion trees $X$ of $(g,g,g)$ and of $(g,g^2,g)$
     satisfies $XR^aR^b=T^aXR^b$ for all letters $a,b$, with $R$ the triple
     product and $T$ the target tensor, and on single letters the trees
@@ -690,7 +691,9 @@ proved here.
     $\Z[\omega]$ checked letter by letter, and induction on the word gives
     the dressed identities. For $(g,e,g)$ both trees are the fusion tensor
     of $M\otimes M$. The product is invariant under the fusion-tensor gauge
-    action because $g^3=e$, and $\omega^2\neq1$.
+    action because $g^3=e$, and $\omega^2\neq1$. Since the anomaly
+    three-cocycle is not cohomologous to the constant cochain one, its class
+    is nonzero by Corollary~\ref{cor:mpug_anomaly_class}.
 \end{proof}
 
 \begin{theorem}[Orientation of the class]
