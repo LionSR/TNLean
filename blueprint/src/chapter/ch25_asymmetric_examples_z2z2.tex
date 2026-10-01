@@ -969,14 +969,16 @@ $\omega(g,g,g)$ in a normalized gauge at the three elements of order two
 distinguish the eight classes of
 $H^3(\Z_2\times\Z_2,\C^\times)\cong\Z_2^3$, and the type-II class has the
 values $(+1,+1,-1)$ at $x$, $y$ and $xy$. The theorem below states these
-detector values for the dressed representation. The source's statement that
-they separate the classes is not formalized, so the equality of classes with
-$(-1)^{a_1b_2c_2}$ is not
-claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
+detector values for the dressed representation.
+Theorem~\ref{thm:asymex_klein_complete_classification} proves that the three
+products distinguish all cohomology classes. The distinction between the dressed
+representation and the original odd-ring projective family remains as described
+in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
 \begin{theorem}[The anomaly class of the full group]%
     \label{thm:asymex_z2z2_anomaly_class}
-    \lean{Z2Z2Condensation.xHom,
+    \lean{Z2Z2Condensation.omega_cohomologousTo_kleinCocycle,
+        Z2Z2Condensation.xHom,
         Z2Z2Condensation.yHom,
         Z2Z2Condensation.xyHom,
         Z2Z2Condensation.pairFamily,
@@ -995,6 +997,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         Z2Z2Condensation.cyclicInvariant_omega_kleinFamily_xy,
         Z2Z2Condensation.cyclicInvariant_omega_kleinFamily,
         Z2Z2Condensation.not_isTrivialGaugeClass_omega_kleinFamily,
+        Z2Z2Condensation.anomalyClass_omega_kleinFamily_ne_zero,
         Z2Z2Condensation.kxIntTensor,
         Z2Z2Condensation.kxyIntTensor,
         Z2Z2Condensation.kxTensor,
@@ -1030,7 +1033,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         Multiplicative.forall_zmod_two_prod}
     \leanok
     \uses{thm:asymex_z2z2_exact, def:mpug_anomaly_three_cochain,
-        def:mpug_trivial_gauge_class}
+        def:mpug_trivial_gauge_class, def:mpug_h3_group_cohomology}
     Let $\omega$ be the anomaly three-cochain of any choice of fusion
     tensors of the representation $g\mapsto M'_g$ of
     Theorem~\ref{thm:asymex_z2z2_exact}. For every
@@ -1042,14 +1045,18 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \end{align}
     which is the same product for the cocycle $(-1)^{a_1b_2c_2}$. It equals
     $+1$ at $x$ and $y$ and $-1$ at $xy$. In particular $\omega$ is not
-    cohomologous to the constant cochain one.
+    cohomologous to the constant cochain one, so
+    $[\omega]\neq0$ in $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$.
+    Its class is the mixed type-II
+    class $[(-1)^{a_1b_2c_2}]$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_z2z2_split, thm:asymex_z2z2_nonsplit,
         thm:mpug_anomaly_three_cochain_spec, thm:mpug_family_restriction_omega,
-        thm:mpug_cyclic_invariant_gauge, thm:mpug_omega_integer_certificate}
+        thm:mpug_cyclic_invariant_gauge, thm:mpug_omega_integer_certificate,
+        thm:asymex_klein_complete_classification, thm:mpug_h3_group_cohomology}
     Since $g^2=e$, the product $\omega(g,e,g)\,\omega(g,g,g)$ does not
     depend on the fusion tensors and can be computed on the restriction of
     the family along an embedding of $\Z_2$ onto $\{e,g\}$, by
@@ -1072,6 +1079,8 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     letters, and induction on the word gives $\omega(g,g,g)=+1$ for $x$
     and $-1$ for $xy$. The value $-1$ at $xy$ shows that the class is
     nontrivial, by Theorem~\ref{thm:mpug_cyclic_invariant_gauge}.
+    Theorem~\ref{thm:asymex_klein_complete_classification} identifies its
+    class from these three products.
 \end{proof}
 
 \subsection{The eight scalar representatives}
@@ -1446,4 +1455,114 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     all-zero and all-one configurations, giving $U_bz_j=z_{1-j}$.
     Since $v=U_au$, the identities $U_a^2=I$ and $U_bU_a=U_aU_b$ then give $U_av=u$ and $U_bv=v$.
     Linearity proves invariance of both spans.
+\end{proof}
+
+\begin{theorem}[Normalization of scalar three-cocycles]
+    \label{thm:asymex_three_cocycle_normalization}
+    \lean{TNLean.Algebra.ScalarThreeCochain.exists_isNormalized_cohomologousTo}
+    \leanok
+    \uses{def:mpug_three_cocycle,def:mpug_scalar_cochains,def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to}
+    Let $G$ be a small group, whose underlying set lies in a fixed
+    set-theoretic universe. Every three-cocycle $\omega:G^3\to\C^\times$ is cohomologous to a
+    normalized one. One may use the two-cochain
+    $\beta(g,h)=\omega(g,e,e)/\omega(e,e,h)$ and replace $\omega$ by
+    $(d\beta)\omega$, where
+    $d\beta(g,h,k)=\beta(g,hk)\beta(h,k)/(\beta(g,h)\beta(gh,k))$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The cocycle equation gives $\omega(e,e,e)=1$ and
+    \begin{align}
+        \label{eq:asymex_three_cocycle_axes}
+        \omega(g,h,e) & =\frac{\omega(gh,e,e)}{\omega(h,e,e)},       \\
+        \omega(e,g,h) & =\frac{\omega(e,e,gh)}{\omega(e,e,g)},\notag \\
+        \omega(g,e,h) & =\omega(g,e,e)\omega(e,e,h).\notag
+    \end{align}
+    Substitution of (\ref{eq:asymex_three_cocycle_axes}) into $d\beta$
+    makes each identity-axis value of $(d\beta)\omega$ equal to one.
+\end{proof}
+
+\begin{theorem}[Triviality from the Klein diagonal signs]
+    \label{thm:asymex_klein_trivial_diagonal}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_of_klein_diagonal_eq_one}
+    \leanok
+    \uses{def:mpug_three_cocycle,def:mpug_scalar_cochains,def:mpug_trivial_gauge_class}
+    A normalized three-cocycle on $G=\{e,a,b,c=ab\}\cong\Z_2^2$ whose
+    diagonal values $\omega(g,g,g)$ are all one is a coboundary.
+    This is the trivial-class case of the classification in
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $(s_1,s_2,s_3,s_4,s_5,s_6)=
+        (\omega(a,a,b),\omega(a,b,a),\omega(a,b,b),\omega(a,b,c),
+        \omega(b,a,a),\omega(b,a,b))$.
+    Choose $t\in\C^\times$ with $t^2=s_1s_5/s_2$ and define a normalized
+    two-cochain by its values on $\{a,b,c\}^2$:
+    \begin{align}
+        \label{eq:asymex_klein_trivial_gauge}
+        (\beta(g,h))_{g,h\in\{a,b,c\}}
+         & =\begin{pmatrix}
+                ts_4/(s_3s_6)   & 1/s_3 & ts_1s_4/s_6 \\
+                1/(ts_3)        & 1     & s_6/t       \\
+                s_1s_4/(s_2s_6) & 1     & 1
+            \end{pmatrix}.
+    \end{align}
+    The six corresponding values of $d\beta$ are $s_1,\ldots,s_6$.
+    Hence $\eta=\omega/(d\beta)$ has those six values equal to one.
+    Its diagonal values remain one because $g^2=e$ and $\beta$ is normalized.
+    Applying the cocycle equation successively to the remaining triples
+    gives one for all eighteen other nonidentity entries. Thus $\eta=1$
+    and $\omega=d\beta$.
+\end{proof}
+
+\begin{theorem}[Complete classification of Klein three-cocycles]
+    \label{thm:asymex_klein_complete_classification}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cohomologousTo_of_klein_diagonal_eq,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_klein_three_cyclicInvariants,
+        TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_kleinCocycleFamily,
+        TNLean.Algebra.ScalarThreeCochain.existsUnique_cohomologousTo_kleinCocycleFamily,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_add,
+        TNLean.Algebra.ScalarThreeCochain.kleinAnomalyClass,
+        TNLean.Algebra.ScalarThreeCochain.kleinAnomalyClass_bijective,
+        TNLean.Algebra.ScalarThreeCochain.kleinH3Equiv}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,def:mpug_cohomologous_to,
+        def:mpug_h3_group_cohomology,def:mpug_three_cocycle,def:mpug_scalar_cochains}
+    Every three-cocycle on $\Z_2^2$ is cohomologous to exactly one
+    $\omega_{pqr}$. The correspondence $[\omega_{pqr}]\mapsto(p,q,r)$ is
+    an isomorphism $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})\cong\Z_2^3$.
+    Two arbitrary three-cocycles $\omega,\nu$ are cohomologous if and only if
+    \begin{align}
+        \label{eq:asymex_klein_complete_detectors}
+        \omega(g,e,g)\omega(g,g,g) & =\nu(g,e,g)\nu(g,g,g)
+    \end{align}
+    at $g=a,b,c$. For normalized cocycles these products reduce to the
+    diagonal values. This is the classification and detector assertion
+    of \cite[Section~6]{GarreRubio2023MPOSym} with $\C^\times$ coefficients;
+    the source states it for $U(1)$, and the degree-three comparison of the
+    two coefficient groups is not formalized
+    here~\cite{gap:glm23_klein_h3_circle_coefficients}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_three_cocycle_normalization,
+        thm:asymex_klein_trivial_diagonal,thm:asymex_klein_distinct_classes,
+        thm:mpug_cyclic_invariant_gauge,thm:mpug_h3_group_cohomology}
+    Normalize both cocycles. Their quotient has trivial diagonal precisely
+    when their three signs agree, so
+    Theorem~\ref{thm:asymex_klein_trivial_diagonal} proves sufficiency of
+    (\ref{eq:asymex_klein_complete_detectors}). Necessity follows from
+    invariance of the cyclic products under coboundaries.
+    The cocycle equation at $(g,g,g,g)$ makes each normalized diagonal
+    value a sign. If the signs are $(-1)^p,(-1)^q,(-1)^t$, the matching
+    representative is $\omega_{p,q,p+q+t}$.
+    Theorem~\ref{thm:asymex_klein_distinct_classes} proves uniqueness.
+    Finally $\omega_{pqr}\omega_{p'q'r'}=\omega_{p+p',q+q',r+r'}$, so
+    this bijection of cohomology classes is a group isomorphism.
 \end{proof}

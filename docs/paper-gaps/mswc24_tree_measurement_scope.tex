@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Tree Circuit with Measurements: Rounds and Single-Site Registers}
+\author{}
+\date{2026-10-01}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+The paragraph ``Tree-RG circuit with measurements''
+of~\cite{Malz2024Preparation} observes that the isometries of the tree circuit,
+eq.~(16), ``act on a constant number of sites which, although spatially
+separated, can be teleported at neighboring registers with a constant
+overhead'', by ``creating nearest-neighbor entangled pairs, then performing
+simultaneous measurements, and correcting (without postselection) based on the
+measurement outcomes''. Hence ``every isometry in eq.~(16) takes constant time
+using measurement'', the tree circuit has $O(\log\log(N/\varepsilon))$ layers,
+and, with the fixed-point state prepared in constant depth, a short-range
+correlated matrix product state is prepared with measurements in depth
+$O(\log\log(N/\varepsilon))$. The source fixes no model of circuits with
+measurements.
+
+\section{What is formalized}
+\begin{enumerate}
+    \item \emph{The model.} A measurement round is a local circuit, a
+          measurement of some sites in the computational basis, and a product of
+          single-site unitaries chosen from the outcomes; a preparation is a
+          sequence of rounds, the depth being the total number of layers of
+          their circuits. Every round is a protocol of
+          $\mathrm{QCcc}_\ell$ of~\cite{Piroli2021LOCC} of no larger depth;
+          that paper performs a single round and remarks that ``one could also
+          define a more general scheme with multiple rounds of LOCC''. A
+          sequence of rounds is a composition of such transformations. The
+          number of rounds is not bounded: the tree with $k$ levels uses $2k$
+          rounds, whereas in the class $\mathrm{QCcc}^{(k)}_\ell$ of the
+          paragraph ``Phases of matter'' of~\cite{Piroli2021LOCC} the number
+          $k$ of composed transformations does not depend on the system
+          size. Several rounds are needed because a
+          teleported register must be corrected before the next isometry acts on
+          it.
+    \item \emph{Teleportation.} For qudits of any dimension $d$, any number of
+          registers is moved along chains of nearest-neighbour hops of any
+          length, in one round of depth $2$; for every outcome the round acts
+          as $d^{-H}$ times the permutation of sites, $H$ the number of hops.
+    \item \emph{One layer.} Two-site gates on pairwise disjoint stretches
+          $a,\dots,a+2L+1$, with the sites strictly inside each stretch in
+          $\ket0$, are applied in two rounds of total depth $5$, whatever $L$.
+          A gate joins the sites $a$ and $a+2L+1$, at odd separation along the
+          ring; gates at even separation, or on overlapping stretches, are not
+          covered, and the tree needs neither.
+    \item \emph{The tree.} A binary tree of two-site gates with $k$ levels, on the
+          complete blocks of $2^k$ sites and on the complete smaller blocks
+          after them, is applied with measurements in depth $5k$, on the vectors
+          with $\ket0$ strictly inside the complete blocks of every level.
+\end{enumerate}
+The formal statements\footnote{Formal declarations:
+    \leanid{MPSPreparation.TeleportHop.isImplementationOn_round} in
+    \doclink{TNLean/MPS/Preparation/TeleportationRound},
+    \leanid{MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds} in
+    \doclink{TNLean/MPS/Preparation/LongRangeGates}, and
+    \leanid{MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp} in
+    \doclink{TNLean/MPS/Preparation/TreeMeasurement}.}
+are exact, and no outcome is post-selected.
+
+\section{The restriction}
+Every register of the tree above is one site of the ring, of the physical
+dimension $d$, and every node carries a two-site unitary. In eq.~(16) the
+registers above the lowest level carry $\mathbb{C}^{D^2}$, and the isometries
+map $\mathbb{C}^{D^2}$ into $\mathbb{C}^{D^2}\otimes\mathbb{C}^{D^2}$, so a
+register is a group of sites once $D^2>d$. The preparation of the approximating
+state of a matrix product state with measurements in depth
+$O(\log\log(N/\varepsilon))$ is therefore not formalized; the formal statements
+are the constant-depth layers and the depth-$5k$ tree on which it rests.
+
+\section{Elimination}
+\begin{enumerate}
+    \item \emph{Registers of several sites.} Take registers of $r$ consecutive
+          sites with $d^r\ge D^2$. A register is teleported site by site, $r$
+          rounds of depth $2$ for each direction, and a unitary on two adjacent
+          registers is a product of a number of nearest-neighbour gates
+          depending only on $d$ and $r$. A layer of the tree then takes depth
+          bounded by a constant depending on $d$ and $D$.
+    \item \emph{The approximating state.} The layers of eq.~(16) are those of
+          the tree factorization of the blocked isometry, and the tree circuit
+          prepares the approximating state of eq.~(10) for $q=2^{k+1}$ and
+          $N=M2^{k+1}$, as for the multiscale network
+          of~\cite{gap:mswc24_tree_mera_scope}; its two restrictions, two-site
+          injectivity and the chain lengths, carry over.
+    \item \emph{The depth.} With Lemma~1'(i) of the source and
+          $2^{k+1}\ge\xi\log(CN/\varepsilon)$, the error is at most
+          $\varepsilon$ and the depth is a constant times
+          $k+1=O(\log\log(N/\varepsilon))$, plus the constant depth of the
+          fixed-point pairs.
+\end{enumerate}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
