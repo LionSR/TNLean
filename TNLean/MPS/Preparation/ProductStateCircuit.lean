@@ -63,21 +63,22 @@ theorem exists_mem_unitary_eq_smul_mulVec_single_zero (hd : 0 < d) {x : Fin d �
   have hV : V.IsIsometry := by
     ext ⟨⟩ ⟨⟩
     rw [mul_apply, one_apply_eq]
-    simp only [conjTranspose_apply, V, of_apply, star_mul', star_inv₀, Complex.star_def,
-      Complex.conj_ofReal]
-    have : ∀ i, (r : ℂ)⁻¹ * (starRingEnd ℂ) (x i) * ((r : ℂ)⁻¹ * x i) =
-        ((r : ℂ) ^ 2)⁻¹ * (star (x i) * x i) := fun i => by
-      rw [Complex.star_def]; ring
-    simp only [mul_comm _ ((r : ℂ)⁻¹)]
-    rw [Finset.sum_congr rfl fun i _ => this i, ← Finset.mul_sum, hsum]
-    push_cast
-    exact inv_mul_cancel₀ (pow_ne_zero 2 (Complex.ofReal_ne_zero.mpr hr))
+    have hr2 : ((r : ℂ) ^ 2) ≠ 0 := pow_ne_zero 2 (Complex.ofReal_ne_zero.mpr hr)
+    calc ∑ i, Vᴴ () i * V i () = ((r : ℂ) ^ 2)⁻¹ * ∑ i, star (x i) * x i := by
+          rw [Finset.mul_sum]
+          refine Finset.sum_congr rfl fun i _ => ?_
+          simp only [conjTranspose_apply, V, of_apply, star_mul', star_inv₀, Complex.star_def,
+            Complex.conj_ofReal]
+          ring
+      _ = 1 := by rw [hsum]; push_cast; exact inv_mul_cancel₀ hr2
   let emb : Unit ↪ Fin d := ⟨fun _ => ⟨0, hd⟩, fun _ _ _ => rfl⟩
   obtain ⟨U, hU, hUV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
   refine ⟨U, hU, r, Complex.ofReal_ne_zero.mpr hr, funext fun i => ?_⟩
-  rw [mulVec_single_one, Pi.smul_apply, transpose_apply, smul_eq_mul]
+  rw [mulVec_single_one, Pi.smul_apply, smul_eq_mul]
   change x i = (r : ℂ) * U i (emb ())
-  rw [hUV, of_apply, ← mul_assoc, mul_inv_cancel₀ (Complex.ofReal_ne_zero.mpr hr), one_mul]
+  rw [hUV]
+  simp only [V, of_apply]
+  rw [← mul_assoc, mul_inv_cancel₀ (Complex.ofReal_ne_zero.mpr hr), one_mul]
 
 /-- Rescaling every factor of a product vector rescales it by the product of the factors. -/
 theorem productVector_smul (c : Fin N → ℂ) (v : Fin N → Fin d → ℂ) :
@@ -101,8 +102,6 @@ theorem exists_productVector_eq_smul_finKronecker_mulVec (hd : 0 < d)
 /-! ### Tensor products of one-site unitaries -/
 
 section OneSite
-
-variable [NeZero N]
 
 /-- `⊗ᵢ mᵢ` with `mᵢ = u i` on the sites of `P` and `mᵢ = 1` elsewhere. -/
 private noncomputable def siteOp (u : Fin N → Matrix (Fin d) (Fin d) ℂ) (P : Finset (Fin N)) :
@@ -145,7 +144,7 @@ private theorem siteOp_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
 private theorem siteOp_mem_supportedOperators (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
     {P : Finset (Fin N)} {S : Set (Fin N)} (h : (P : Set (Fin N)) ⊆ S) :
     siteOp u P ∈ supportedOperators d S :=
-  finKronecker_mem_supportedOperators fun i hi => if_neg fun hP => hi (h hP)
+  finKronecker_mem_supportedOperators fun _ hi => (ite_eq_right_iff.mpr fun hP => absurd (h hP) hi)
 
 private theorem noncommProd_siteOp (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
     (f : Fin N → Finset (Fin N)) (s : Finset (Fin N))
@@ -160,6 +159,8 @@ private theorem noncommProd_siteOp (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
       ih (hf.subset (by simp)) (hc.mono (by simp)), siteOp_union, Finset.biUnion_insert]
     rw [Finset.disjoint_biUnion_right]
     exact fun i hi => hf (by simp) (by simp [hi]) fun h => ha (h ▸ hi)
+
+variable [NeZero N]
 
 /-- The last site `N - 1` of the ring. -/
 private def lastSite (N : ℕ) [NeZero N] : Fin N := ⟨N - 1, by have := NeZero.pos N; omega⟩
@@ -194,14 +195,15 @@ private noncomputable def evenLayer (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
     (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) : Layer d N where
   bonds := evenBonds N
   gate k := siteOp u {k, k + 1}
-  gate_mem_unitary k _ := siteOp_mem_unitary hu _
+  gate_mem_unitary _ _ := siteOp_mem_unitary hu _
   gate_mem_supportedOperators k _ := siteOp_mem_supportedOperators u (coe_pair_eq_bond k).le
   pairwiseDisjoint _ hk _ hl hkl := disjoint_bond_of_mem_evenBonds hk hl hkl
 
 private theorem evenLayer_op (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
     (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
-    (evenLayer u hu).op = siteOp u (evenSites N) :=
-  noncommProd_siteOp u (fun k => {k, k + 1}) _ (fun _ hk _ hl hkl => by
+    (evenLayer u hu).op = siteOp u (evenSites N) := by
+  unfold Layer.op Layer.partialOp
+  exact noncommProd_siteOp u (fun k => {k, k + 1}) (evenBonds N) (fun _ hk _ hl hkl => by
     rw [Function.onFun, ← Finset.disjoint_coe, coe_pair_eq_bond, coe_pair_eq_bond]
     exact disjoint_bond_of_mem_evenBonds hk hl hkl) _
 
@@ -255,8 +257,9 @@ theorem IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero [NeZer
   obtain ⟨U, hU, v, rfl⟩ := h
   have hv : productVector v ≠ 0 := fun h0 => hψ (by rw [h0, mulVec_zero])
   obtain ⟨u, hu, c, hc⟩ := exists_productVector_eq_smul_finKronecker_mulVec hd hv
-  refine ⟨U * finKronecker u, by rw [add_comm]; exact (isLocalCircuitOfDepth_finKronecker hu).mul hU,
-    c, ?_⟩
+  refine ⟨U * finKronecker u, ?_, c, ?_⟩
+  · rw [add_comm]
+    exact (isLocalCircuitOfDepth_finKronecker hu).mul hU
   rw [hc, mulVec_smul, mulVec_mulVec]
 
 end MPSPreparation
