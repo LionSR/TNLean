@@ -17,8 +17,7 @@ multiplicity copy, and the similarity, which permutes the matched copies and
 applies the blockwise similarity inside each of them.
 
 This module supplies the linear algebra of that assembly. For trace-preserving
-blocks the global similarity is unitary, and matched multiplicities have the
-same moduli.
+blocks the global similarity is unitary.
 
 ## Main declarations
 
