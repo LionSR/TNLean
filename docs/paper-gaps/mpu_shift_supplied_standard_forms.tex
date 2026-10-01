@@ -1,0 +1,74 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Supplied Two-Site Decompositions of the Shift Matrix Product Unitaries}
+\author{}
+\date{2026-10-01}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source statement}
+
+Definition~SF of Ref.~\cite{Cirac2017MPU} defines the standard form of the
+two-site block $\mathcal U_2$ of a simple tensor $\mathcal U$ in canonical
+form~II. Its gates $u$ and $v$ are the unitaries obtained from the source cuts
+of $\mathcal U$.
+% Source: paper_v2.tex lines 603--622, label SF.
+
+For the three shift families of Section~VII, the source says that the gates
+``can be easily derived'' from the figure of the shifted spins and displays
+\begin{align}
+    u_1 & =\Id\otimes\Id, & v_1 & =\Id\otimes\Id, \\
+    u_3 & =\mathbb S,     & v_3 & =\mathbb S,
+\end{align}
+together with the blocked gates $u_2^{(2)},v_2^{(2)},u_3^{(2)},v_3^{(2)}$ of
+the two counterpropagating families. For the swap-transformed families it
+displays $\widetilde u_1=\mathbb S$, $\widetilde v_1=\Id\otimes\Id$,
+$\widetilde u_2=\Id\otimes\Id$, and $\widetilde v_2=\mathbb S$.
+% Source: paper_v2.tex lines 2002--2034 (eq:SF_u1_u3, eq:uv2_U2, eq:uv2_U3)
+% and 2087--2099 (SFu1u3).
+
+\section{Formalized scope}
+
+For each displayed pair of gates, the formalization constructs an explicit
+two-site decomposition with supplied gates. The gates are the displayed
+unitaries, the half factors are normalized, and their open contraction
+recovers the tensor.
+
+For the blocked counterpropagating families, the half factors are pulled back
+from an explicit source-cut factorization with trace-one weight
+$d^{-2}\Id_{d^2}$. The gates are the source gates of that factorization.
+
+For $U_1$, the unblocked $U_3$, $\widetilde U_1$, and $\widetilde U_2$, the
+one-site tensor of physical dimension $d^2$ is read as a pair of spins and
+decomposed directly. These decompositions are not identified with the
+standard form of Definition~SF: the tensor is not presented as the two-site
+block of a simple canonical-form-II tensor, and its gates are not identified
+with the source gates of a source-cut factorization.
+
+The constructions are
+\leanid{MPOTensor.shiftExampleU₁StandardForm},
+\leanid{MPOTensor.shiftExampleU₃StandardForm},
+\leanid{MPOTensor.shiftExampleU₂BlockedStandardForm},
+\leanid{MPOTensor.shiftExampleU₃BlockedStandardForm},
+\leanid{MPOTensor.shiftExampleTildeU₁StandardForm}, and
+\leanid{MPOTensor.shiftExampleTildeU₂StandardForm} in
+\path{TNLean/MPS/MPU/Examples/ShiftStandardForms.lean}.
+
+\section{Elimination plan}
+
+For each unblocked family, present the one-site tensor as the two-site block
+of a simple tensor in canonical form~II, or block it further as done for the
+counterpropagating families. Then identify the supplied gates with the source
+gates of an explicit source-cut factorization of that tensor.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

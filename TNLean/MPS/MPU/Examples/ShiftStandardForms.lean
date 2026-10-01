@@ -10,7 +10,7 @@ import TNLean.MPS.MPU.Examples.ShiftTilde
 import TNLean.MPS.MPU.TwoSiteStandardForm
 
 /-!
-# Explicit standard forms of the shift families
+# Explicit two-site decompositions of the shift families
 
 The supplied gates and half factors realize CPSV17, equations `eq:SF_u1_u3`,
 `eq:uv2_U2`, and `eq:uv2_U3` (lines 2009–2034). The first two swap-transformed
@@ -19,6 +19,16 @@ families realize the gates in `SFu1u3` (lines 2090–2099).
 The two blocked families use trace-normalized supplied source factors. The
 unblocked third family uses reciprocal square-root scalings of its delta half
 factors. Both normalization identities are proved below for these witnesses.
+
+**Scope restriction (supplied decompositions):** `shiftExampleU₁StandardForm`,
+`shiftExampleU₃StandardForm`, `shiftExampleTildeU₁StandardForm`, and
+`shiftExampleTildeU₂StandardForm` read each one-site tensor as a pair of spins
+and decompose it directly. They are two-site decompositions with supplied gates,
+not standard forms in the sense of CPSV17, Definition `SF` (lines 603–622): no
+simple canonical-form-II tensor is exhibited whose two-site block they
+decompose, and their gates are not identified with source gates. Only the two
+blocked witnesses take their half factors and gates from explicit source
+factors. See `docs/paper-gaps/mpu_shift_supplied_standard_forms.tex`.
 -/
 
 open scoped Matrix

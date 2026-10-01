@@ -11193,8 +11193,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     factors in the identity-weight formulas.
 \end{proof}
 
-\begin{theorem}[Standard forms of the three shift MPUs]
-    \label{thm:threeMPU_standard_forms}
+\begin{theorem}[Two-site decompositions of the three shift MPUs]
+    \label{thm:threeMPU_supplied_decompositions}
     \lean{MPOTensor.shiftExampleU₁StandardForm_normalized,
         MPOTensor.shiftExampleU₃StandardForm_normalized,
         MPOTensor.shiftExampleU₂BlockedStandardForm_normalized,
@@ -11206,8 +11206,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{threeMPU, def:mpu_supplied_two_site_standard_form,
         def:mpu_shift_trace_weight}
-    Assume $d>0$. The three shift families have standard forms whose
-    unitary gates satisfy
+    Assume $d>0$. The three shift families have two-site decompositions
+    with supplied gates whose unitary gates satisfy
     \begin{align}
         u_1                          & =\Id\otimes\Id,                  & v_1 & =\Id\otimes\Id, \\
         u_3                          & =\mathbb S,                      & v_3 & =\mathbb S,     \\
@@ -11220,13 +11220,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     The two-site blockings in the last two lines use the physical order
     $((1,2),(3,4))$. These are unitary gates with normalized half factors
-    satisfying the open standard-form equation.
+    satisfying the open standard-form equation. For the two blocked families,
+    the half factors and gates are those of the source factors of
+    Theorem~\ref{thm:threeMPU_normalized_source_gates}. For $U_1$ and the
+    unblocked $U_3$, the one-site tensor is read as a pair of spins and
+    decomposed directly; these decompositions are not identified with the
+    standard form of Definition~\ref{SF}
+    \cite{gap:mpu_shift_supplied_standard_forms}.
     % Source lines: paper_v2.tex 2002--2042.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:mpu_source_weight, thm:threeMPU_normalized_source_gates,
-        thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity}
+        thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity,
+        thm:mpu_swap_matrix_unitary}
     For the identity family, take
     $X_1(i,\gamma;r)=\delta_{i,r}$ and
     $X_2(\alpha,i;\ell)=\delta_{i,\ell}$. For the unblocked third family, take
@@ -11234,6 +11241,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         X_1(i,(a,b);r)    & =\sqrt d\,\delta_{a,r}\delta_{b,i},   &
         X_2((a,b),i;\ell) & =d^{-1/2}\delta_{a,i}\delta_{b,\ell}.
     \end{align}
+    Its gates are the swap, which is unitary by
+    Theorem~\ref{thm:mpu_swap_matrix_unitary}.
     The reciprocal scalars cancel in both contractions. Summing the Gram
     entries proves $X_1^*(\Id\otimes\rho)X_1=\Id$ and $X_2^*X_2=\Id$, with
     $\rho=d^{-2}\Id_{d^2}$ for the third family and $\rho=1$ for the identity.
@@ -11357,8 +11366,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the second action gives the third, which proves the identity.
 \end{proof}
 
-\begin{theorem}[Standard forms of the swap-transformed shifts]
-    \label{thm:threeMPU2_remaining_formulas}
+\begin{theorem}[Two-site decompositions of the swap-transformed shifts]
+    \label{thm:threeMPU2_supplied_decompositions}
     \lean{MPOTensor.shiftExampleTildeU₁StandardForm,
         MPOTensor.shiftExampleTildeU₂StandardForm,
         MPOTensor.shiftExampleTildeU₁StandardForm_normalized,
@@ -11366,19 +11375,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{threeMPU2, def:mpu_supplied_two_site_standard_form,
         def:mpu_shift_trace_weight}
-    For $d>0$, the first two transformed families have standard forms
+    For $d>0$, the first two transformed families have two-site
+    decompositions with supplied gates and normalized half factors, with gates
     \begin{align}
         \widetilde u_1 & =\mathbb S,     &
         \widetilde v_1 & =\Id\otimes\Id,   \\
         \widetilde u_2 & =\Id\otimes\Id, &
         \widetilde v_2 & =\mathbb S.
     \end{align}
+    The one-site tensors are read as pairs of spins and decomposed directly;
+    these decompositions are not identified with the standard form of
+    Definition~\ref{SF} \cite{gap:mpu_shift_supplied_standard_forms}.
     % Source lines: paper_v2.tex 2087--2099.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{threeMPU2, thm:threeMPU_standard_forms,
-        def:mpu_source_weight, def:mpu_supplied_two_site_standard_form}
+    \uses{threeMPU2, thm:threeMPU_supplied_decompositions,
+        def:mpu_source_weight, def:mpu_supplied_two_site_standard_form,
+        thm:mpu_swap_matrix_unitary}
     The physical swap exchanges the two output indices of each tensor.
     For the first family, retain the identity family's half factors and
     replace its unshifted gate by the swap. For the second family, choose
@@ -11401,7 +11415,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     which is the entry of $\widetilde{\mathcal U}_2$ with output
     $(i_1,i_2)$, input $(j_1,j_2)$, and bond indices $\alpha,\gamma$.
-    Both gates are unitary. The reciprocal scalars cancel in the
+    The swap is unitary by Theorem~\ref{thm:mpu_swap_matrix_unitary}, so
+    both gates are unitary. The reciprocal scalars cancel in the
     contractions; their Gram sums give the weighted normalization of
     $X_1$ for $\rho=d^{-2}\Id$ and the isometry of $X_2$.
 \end{proof}

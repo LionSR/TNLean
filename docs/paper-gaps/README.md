@@ -141,6 +141,12 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_shift_supplied_standard_forms.tex` records that the shift-family gates
+  of Section VII are formalized as explicit two-site decompositions with
+  supplied gates and normalized half factors. Only the blocked
+  counterpropagating families take their half factors and gates from an
+  explicit source-cut factorization; the unblocked and swap-transformed
+  decompositions are not identified with Definition SF.
 - `mpu_shift_specified_tensor_index_scope.tex` records the resolved distinction
   between the specified-tensor formulas and the public blocking-independent
   MPU index. `ShiftPublicIndex.lean` constructs the right-shift canonical form
