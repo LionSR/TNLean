@@ -446,38 +446,6 @@ private theorem exists_forall_le_of_forall_lt {P : List (Fin d) → Prop} {M : �
     ∃ N : ℕ, ∀ w : List (Fin d), N ≤ w.length → P w :=
   ⟨M + 1, fun w hw ↦ h w (by omega)⟩
 
-/-- **The L-symbols on the right boundaries.** Against long words, the right boundary of two
-successive actions is `(Lˣ_{g,h})⁻¹` times the right boundary through the fusion tensor. This
-is the right half of the two-sided comparison of reductions onto a normal tensor
-(arXiv:1706.07329v2, Theorem 22, `cornerproblem.tex` lines 3156--3162), with the scalar
-identified with the L-symbol of `MPOTensor.GroupFamily.BlockActionData.lSymbol`. -/
-theorem exists_evalWord_mul_actW_eq (hA : ∀ x, Kraus.IsNormal (A x))
-    (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g h : G) (x : X)
-    (hD : 0 < D (g • h • x)) :
-    ∃ N : ℕ, ∀ w : List (Fin d), N ≤ w.length →
-      Kraus.evalWord (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) w *
-          ad.actW g h x =
-        ((ad.lSymbol fd x g h)⁻¹ : ℂˣ) •
-          (Kraus.evalWord (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) w *
-            ad.fuseW fd g h x) := by
-  have hSame : MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
-      (A (g • h • x)) :=
-    ((hperm g _).mulTensor (hperm h x)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _)
-  obtain ⟨z, -, hz⟩ :=
-    (ad.isReduction_actV g h x).exists_boundary_dressed_proportional_of_nilpotencyLength_le
-      (ad.isReduction_fuseV fd g h x) (hA _) hSame (le_max_left _ _) (le_max_right _ _)
-  obtain ⟨N, hN⟩ := exists_forall_le_of_forall_lt hz
-  have hleft : MPSTensor.IsDressedProportional
-      (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (ad.actV g h x)
-        (ad.fuseV fd g h x) z :=
-    ⟨N, fun w hw ↦ (hN w hw).1⟩
-  have hzL : ((ad.lSymbol fd x g h : ℂˣ) : ℂ) = z :=
-    MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero
-      (isDressedProportional_lSymbol hA hperm x g h) hleft
-      ((ad.isReduction_actV g h x).exists_mul_evalWord_ne_zero (hA _) hD)
-  refine ⟨N, fun w hw ↦ ?_⟩
-  rw [(hN w hw).2, Units.smul_def, Units.val_inv_eq_inv_val, hzL]
-
 variable (ad) in
 /-- **The local action of a group element on a domain wall** (arXiv:2405.00439,
 `eq:localcdef`, `Papers/2405.00439/MPU-DW.tex` lines 714--832, and `eq:localcdefG`, lines
@@ -543,6 +511,154 @@ theorem phase_eq (hA : ∀ x, Kraus.IsNormal (A x)) {c' : ℂ}
   have h₂ := hN' (List.ofFn σ) (List.ofFn σ') i (by simp only [List.length_ofFn]; omega)
     (by simp only [List.length_ofFn]; omega)
   exact smul_left_injective ℂ hne (h₁.symm.trans h₂)
+
+/-- **The group acts on periodic states with two domain walls by the product of the two
+phases** (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 833--838, and
+`U_g |ψ(x,y)⟩ ∝ |ψ(gx,gy)⟩` of line 1894): if `g` carries the domain walls `e` from
+`x` to `y` and `f` from `y` to `x` to `e'` and `f'` with phases `c` and `c'`, then
+`O_g |ψ(x-y-x)⟩ = c c' |ψ(gx-gy-gx)⟩` on every chain with long enough regions. For `ℤ₂` this is
+`U |ψ(A-B-A)⟩ = c_{AB} c_{BA} |ψ(B-A-B)⟩`.
+
+The proof inserts the reduced blocks of both regions into the acted chain
+(arXiv:1706.07329v2, Lemma `B_expand`, `cornerproblem.tex` lines 3993--4005) and closes the
+trace. -/
+theorem mpo_mulVec_twoWallMPV (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
+    {f : Fin d → Matrix (Fin (D y)) (Fin (D x)) ℂ} {f' : Fin d → Matrix (Fin (D y')) (Fin (D x')) ℂ}
+    {c' : ℂ} (he : ad.IsDomainWallAction g hx hy e e' c)
+    (hf : ad.IsDomainWallAction g hy hx f f' c') :
+    ∃ N : ℕ, ∀ k l n : ℕ, N ≤ k → N ≤ l →
+      mpo (F.tensor g) (k + 1 + l + 1 + n) *ᵥ twoWallMPV (A x) e (A y) f =
+        (c * c') • twoWallMPV (A x') e' (A y') f' := by
+  subst hx hy
+  obtain ⟨N₁, H₁⟩ := he.eq
+  obtain ⟨N₂, H₂⟩ := hf.eq
+  have hBx := (ad.isReduction g x).bondDim_isReductionResidualNilpotencyBound
+    ((hperm g x).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
+  have hBy := (ad.isReduction g y).bondDim_isReductionResidualNilpotencyBound
+    ((hperm g y).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
+  set M := N₁ + N₂ + F.bondDim g * D x + F.bondDim g * D y
+  refine ⟨2 * M + 1, fun k l n hk hl ↦ ?_⟩
+  change mpo (F.tensor g) _ *ᵥ (fun τ ↦ (twoWallChain (A x) e (A y) f τ).trace) = _
+  rw [mpo_mulVec_trace]
+  funext τ
+  rw [Pi.smul_apply, eq_append_append_append_append τ, physAct_twoWallChain, twoWallMPV_append,
+    smul_eq_mul]
+  generalize (fun j : Fin k ↦ τ _) = σ₁
+  generalize (fun j : Fin l ↦ τ _) = σ₂
+  generalize (fun j : Fin n ↦ τ _) = σ₃
+  generalize τ (Fin.castAdd n (Fin.castAdd 1 (Fin.castAdd l (Fin.natAdd k 0)))) = i
+  generalize τ (Fin.castAdd n (Fin.natAdd (k + 1 + l) 0)) = j
+  obtain ⟨p, c₀, q, hw, hp, hq, hc₀⟩ :=
+    (List.ofFn σ₃ ++ List.ofFn σ₁).exists_append_append_of_two_mul_lt
+    (M := M) (by simp only [List.length_append, List.length_ofFn]; omega)
+  obtain ⟨p', c₁, q', hv, hp', hq', hc₁⟩ := (List.ofFn σ₂).exists_append_append_of_two_mul_lt
+    (M := M) (by simp only [List.length_ofFn]; omega)
+  have hzA := (ad.isReduction g x).evalWord_mul_reduced_exterior_eq_evalWord_append hBx p c₀ q hc₀
+    (by omega) (by omega)
+  have hzB := (ad.isReduction g y).evalWord_mul_reduced_exterior_eq_evalWord_append hBy p' c₁ q'
+    hc₁ (by omega) (by omega)
+  have r₁ := H₁ q p' i (by omega) (by omega)
+  have r₂ := H₂ q' p j (by omega) (by omega)
+  simp only [castIndex_rfl, Matrix.one_mul, Matrix.mul_one] at r₁ r₂
+  set TA := actTensor (F.tensor g) (A x)
+  set TB := actTensor (F.tensor g) (A y)
+  -- rotate the last region to the front
+  have hrot : ∀ (X : Matrix (Fin (F.bondDim g * D x)) (Fin (F.bondDim g * D x)) ℂ),
+      (Kraus.evalWord TA (List.ofFn σ₁) * X * Kraus.evalWord TA (List.ofFn σ₃)).trace =
+        (Kraus.evalWord TA (List.ofFn σ₃ ++ List.ofFn σ₁) * X).trace := fun X ↦ by
+    rw [Matrix.trace_mul_comm, Kraus.evalWord_append, Matrix.mul_assoc]
+  have hrot' : ∀ (X : Matrix (Fin (D (g • x))) (Fin (D (g • x))) ℂ),
+      (Kraus.evalWord (A (g • x)) (List.ofFn σ₁) * X * Kraus.evalWord (A (g • x))
+        (List.ofFn σ₃)).trace =
+        (Kraus.evalWord (A (g • x)) (List.ofFn σ₃ ++ List.ofFn σ₁) * X).trace := fun X ↦ by
+    rw [Matrix.trace_mul_comm, Kraus.evalWord_append, Matrix.mul_assoc]
+  have lhs := hrot (actRect (F.tensor g) e i * Kraus.evalWord TB (List.ofFn σ₂) *
+    actRect (F.tensor g) f j)
+  have rhs := hrot' (e' i * Kraus.evalWord (A (g • y)) (List.ofFn σ₂) * f' j)
+  simp only [Matrix.mul_assoc] at lhs rhs ⊢
+  rw [lhs, rhs, hw, hv, ← hzA, ← hzB]
+  -- close the trace around the reduced block of the first region
+  have hclose := Matrix.trace_mul_comm (Kraus.evalWord TA p * ad.W g x)
+    (Kraus.evalWord (A (g • x)) c₀ * ad.V g x * Kraus.evalWord TA q * actRect (F.tensor g) e i *
+      Kraus.evalWord TB p' * ad.W g y * Kraus.evalWord (A (g • y)) c₁ * ad.V g y *
+        Kraus.evalWord TB q' * actRect (F.tensor g) f j)
+  simp only [Matrix.mul_assoc] at hclose ⊢
+  rw [hclose]
+  calc _ = (Kraus.evalWord (A (g • x)) c₀ *
+        ((ad.V g x * (Kraus.evalWord TA q * actRect (F.tensor g) e i * Kraus.evalWord TB p') *
+            ad.W g y) *
+          (Kraus.evalWord (A (g • y)) c₁ *
+            (ad.V g y * (Kraus.evalWord TB q' * actRect (F.tensor g) f j * Kraus.evalWord TA p) *
+              ad.W g x)))).trace := by simp only [Matrix.mul_assoc]
+    _ = (Kraus.evalWord (A (g • x)) c₀ *
+        (c • (Kraus.evalWord (A (g • x)) q * e' i * Kraus.evalWord (A (g • y)) p') *
+          (Kraus.evalWord (A (g • y)) c₁ *
+            c' • (Kraus.evalWord (A (g • y)) q' * f' j *
+              Kraus.evalWord (A (g • x)) p)))).trace := by
+        rw [r₁, r₂]
+    _ = _ := by
+        simp only [List.append_assoc, Kraus.evalWord_append, Matrix.smul_mul, Matrix.mul_smul,
+          Matrix.trace_smul, smul_eq_mul, Matrix.mul_assoc]
+        rw [Matrix.trace_mul_comm (Kraus.evalWord (A (g • x)) p)]
+        simp only [Matrix.mul_assoc]
+        ring
+
+end IsDomainWallAction
+
+end BlockActionData
+
+end GroupFamily
+
+/-! ### L-symbol relations for domain walls
+
+L-symbols are indexed by groups in `Type`, the universe of Mathlib's group cohomology. -/
+
+namespace GroupFamily
+
+variable {G : Type} {X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
+  {A : (x : X) → MPSTensor d (D x)}
+
+namespace BlockActionData
+
+variable {fd : FusionData F} {ad : BlockActionData F A}
+
+/-- **The L-symbols on the right boundaries.** Against long words, the right boundary of two
+successive actions is `(Lˣ_{g,h})⁻¹` times the right boundary through the fusion tensor. This
+is the right half of the two-sided comparison of reductions onto a normal tensor
+(arXiv:1706.07329v2, Theorem 22, `cornerproblem.tex` lines 3156--3162), with the scalar
+identified with the L-symbol of `MPOTensor.GroupFamily.BlockActionData.lSymbol`. -/
+theorem exists_evalWord_mul_actW_eq (hA : ∀ x, Kraus.IsNormal (A x))
+    (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g h : G) (x : X)
+    (hD : 0 < D (g • h • x)) :
+    ∃ N : ℕ, ∀ w : List (Fin d), N ≤ w.length →
+      Kraus.evalWord (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) w *
+          ad.actW g h x =
+        ((ad.lSymbol fd x g h)⁻¹ : ℂˣ) •
+          (Kraus.evalWord (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) w *
+            ad.fuseW fd g h x) := by
+  have hSame : MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
+      (A (g • h • x)) :=
+    ((hperm g _).mulTensor (hperm h x)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _)
+  obtain ⟨z, -, hz⟩ :=
+    (ad.isReduction_actV g h x).exists_boundary_dressed_proportional_of_nilpotencyLength_le
+      (ad.isReduction_fuseV fd g h x) (hA _) hSame (le_max_left _ _) (le_max_right _ _)
+  obtain ⟨N, hN⟩ := exists_forall_le_of_forall_lt hz
+  have hleft : MPSTensor.IsDressedProportional
+      (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (ad.actV g h x)
+        (ad.fuseV fd g h x) z :=
+    ⟨N, fun w hw ↦ (hN w hw).1⟩
+  have hzL : ((ad.lSymbol fd x g h : ℂˣ) : ℂ) = z :=
+    MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero
+      (isDressedProportional_lSymbol hA hperm x g h) hleft
+      ((ad.isReduction_actV g h x).exists_mul_evalWord_ne_zero (hA _) hD)
+  refine ⟨N, fun w hw ↦ ?_⟩
+  rw [(hN w hw).2, Units.smul_def, Units.val_inv_eq_inv_val, hzL]
+
+namespace IsDomainWallAction
+
+variable {g h : G} {x y x' y' : X} {hx : g • x = x'} {hy : g • y = y'}
+  {e : Fin d → Matrix (Fin (D x)) (Fin (D y)) ℂ} {e' : Fin d → Matrix (Fin (D x')) (Fin (D y')) ℂ}
+  {c : ℂ}
 
 /-- **Composition of local actions on domain walls** (arXiv:2405.00439,
 `Papers/2405.00439/MPU-DW.tex` lines 1926--1929): if `h` carries the domain wall `e₁` between
@@ -679,97 +795,6 @@ theorem mul_eq (hA : ∀ x, Kraus.IsNormal (A x))
   have hLy := (ad.lSymbol fd y g h).ne_zero
   simp only [Units.val_div_eq_div_val]
   field_simp
-
-/-- **The group acts on periodic states with two domain walls by the product of the two
-phases** (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 833--838, and
-`U_g |ψ(x,y)⟩ ∝ |ψ(gx,gy)⟩` of line 1894): if `g` carries the domain walls `e` from
-`x` to `y` and `f` from `y` to `x` to `e'` and `f'` with phases `c` and `c'`, then
-`O_g |ψ(x-y-x)⟩ = c c' |ψ(gx-gy-gx)⟩` on every chain with long enough regions. For `ℤ₂` this is
-`U |ψ(A-B-A)⟩ = c_{AB} c_{BA} |ψ(B-A-B)⟩`.
-
-The proof inserts the reduced blocks of both regions into the acted chain
-(arXiv:1706.07329v2, Lemma `B_expand`, `cornerproblem.tex` lines 3993--4005) and closes the
-trace. -/
-theorem mpo_mulVec_twoWallMPV (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
-    {f : Fin d → Matrix (Fin (D y)) (Fin (D x)) ℂ} {f' : Fin d → Matrix (Fin (D y')) (Fin (D x')) ℂ}
-    {c' : ℂ} (he : ad.IsDomainWallAction g hx hy e e' c)
-    (hf : ad.IsDomainWallAction g hy hx f f' c') :
-    ∃ N : ℕ, ∀ k l n : ℕ, N ≤ k → N ≤ l →
-      mpo (F.tensor g) (k + 1 + l + 1 + n) *ᵥ twoWallMPV (A x) e (A y) f =
-        (c * c') • twoWallMPV (A x') e' (A y') f' := by
-  subst hx hy
-  obtain ⟨N₁, H₁⟩ := he.eq
-  obtain ⟨N₂, H₂⟩ := hf.eq
-  have hBx := (ad.isReduction g x).bondDim_isReductionResidualNilpotencyBound
-    ((hperm g x).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
-  have hBy := (ad.isReduction g y).bondDim_isReductionResidualNilpotencyBound
-    ((hperm g y).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl _))
-  set M := N₁ + N₂ + F.bondDim g * D x + F.bondDim g * D y
-  refine ⟨2 * M + 1, fun k l n hk hl ↦ ?_⟩
-  change mpo (F.tensor g) _ *ᵥ (fun τ ↦ (twoWallChain (A x) e (A y) f τ).trace) = _
-  rw [mpo_mulVec_trace]
-  funext τ
-  rw [Pi.smul_apply, eq_append_append_append_append τ, physAct_twoWallChain, twoWallMPV_append,
-    smul_eq_mul]
-  generalize (fun j : Fin k ↦ τ _) = σ₁
-  generalize (fun j : Fin l ↦ τ _) = σ₂
-  generalize (fun j : Fin n ↦ τ _) = σ₃
-  generalize τ (Fin.castAdd n (Fin.castAdd 1 (Fin.castAdd l (Fin.natAdd k 0)))) = i
-  generalize τ (Fin.castAdd n (Fin.natAdd (k + 1 + l) 0)) = j
-  obtain ⟨p, c₀, q, hw, hp, hq, hc₀⟩ :=
-    (List.ofFn σ₃ ++ List.ofFn σ₁).exists_append_append_of_two_mul_lt
-    (M := M) (by simp only [List.length_append, List.length_ofFn]; omega)
-  obtain ⟨p', c₁, q', hv, hp', hq', hc₁⟩ := (List.ofFn σ₂).exists_append_append_of_two_mul_lt
-    (M := M) (by simp only [List.length_ofFn]; omega)
-  have hzA := (ad.isReduction g x).evalWord_mul_reduced_exterior_eq_evalWord_append hBx p c₀ q hc₀
-    (by omega) (by omega)
-  have hzB := (ad.isReduction g y).evalWord_mul_reduced_exterior_eq_evalWord_append hBy p' c₁ q'
-    hc₁ (by omega) (by omega)
-  have r₁ := H₁ q p' i (by omega) (by omega)
-  have r₂ := H₂ q' p j (by omega) (by omega)
-  simp only [castIndex_rfl, Matrix.one_mul, Matrix.mul_one] at r₁ r₂
-  set TA := actTensor (F.tensor g) (A x)
-  set TB := actTensor (F.tensor g) (A y)
-  -- rotate the last region to the front
-  have hrot : ∀ (X : Matrix (Fin (F.bondDim g * D x)) (Fin (F.bondDim g * D x)) ℂ),
-      (Kraus.evalWord TA (List.ofFn σ₁) * X * Kraus.evalWord TA (List.ofFn σ₃)).trace =
-        (Kraus.evalWord TA (List.ofFn σ₃ ++ List.ofFn σ₁) * X).trace := fun X ↦ by
-    rw [Matrix.trace_mul_comm, Kraus.evalWord_append, Matrix.mul_assoc]
-  have hrot' : ∀ (X : Matrix (Fin (D (g • x))) (Fin (D (g • x))) ℂ),
-      (Kraus.evalWord (A (g • x)) (List.ofFn σ₁) * X * Kraus.evalWord (A (g • x))
-        (List.ofFn σ₃)).trace =
-        (Kraus.evalWord (A (g • x)) (List.ofFn σ₃ ++ List.ofFn σ₁) * X).trace := fun X ↦ by
-    rw [Matrix.trace_mul_comm, Kraus.evalWord_append, Matrix.mul_assoc]
-  have lhs := hrot (actRect (F.tensor g) e i * Kraus.evalWord TB (List.ofFn σ₂) *
-    actRect (F.tensor g) f j)
-  have rhs := hrot' (e' i * Kraus.evalWord (A (g • y)) (List.ofFn σ₂) * f' j)
-  simp only [Matrix.mul_assoc] at lhs rhs ⊢
-  rw [lhs, rhs, hw, hv, ← hzA, ← hzB]
-  -- close the trace around the reduced block of the first region
-  have hclose := Matrix.trace_mul_comm (Kraus.evalWord TA p * ad.W g x)
-    (Kraus.evalWord (A (g • x)) c₀ * ad.V g x * Kraus.evalWord TA q * actRect (F.tensor g) e i *
-      Kraus.evalWord TB p' * ad.W g y * Kraus.evalWord (A (g • y)) c₁ * ad.V g y *
-        Kraus.evalWord TB q' * actRect (F.tensor g) f j)
-  simp only [Matrix.mul_assoc] at hclose ⊢
-  rw [hclose]
-  calc _ = (Kraus.evalWord (A (g • x)) c₀ *
-        ((ad.V g x * (Kraus.evalWord TA q * actRect (F.tensor g) e i * Kraus.evalWord TB p') *
-            ad.W g y) *
-          (Kraus.evalWord (A (g • y)) c₁ *
-            (ad.V g y * (Kraus.evalWord TB q' * actRect (F.tensor g) f j * Kraus.evalWord TA p) *
-              ad.W g x)))).trace := by simp only [Matrix.mul_assoc]
-    _ = (Kraus.evalWord (A (g • x)) c₀ *
-        (c • (Kraus.evalWord (A (g • x)) q * e' i * Kraus.evalWord (A (g • y)) p') *
-          (Kraus.evalWord (A (g • y)) c₁ *
-            c' • (Kraus.evalWord (A (g • y)) q' * f' j *
-              Kraus.evalWord (A (g • x)) p)))).trace := by
-        rw [r₁, r₂]
-    _ = _ := by
-        simp only [List.append_assoc, Kraus.evalWord_append, Matrix.smul_mul, Matrix.mul_smul,
-          Matrix.trace_smul, smul_eq_mul, Matrix.mul_assoc]
-        rw [Matrix.trace_mul_comm (Kraus.evalWord (A (g • x)) p)]
-        simp only [Matrix.mul_assoc]
-        ring
 
 /-! ### Involutions: the two domain walls of a `ℤ₂` symmetry -/
 

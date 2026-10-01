@@ -35,7 +35,7 @@ namespace MPSTensor
 
 open TNLean.Algebra
 
-variable {d D : ℕ} {G : Type*} [Group G]
+variable {d D : ℕ} {G : Type} [Group G]
 
 /-- **Gauge independence of the cocycle class.**
 
