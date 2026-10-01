@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinOrderedProduct
+import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.MPS.Preparation.Sequential
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
@@ -246,7 +247,7 @@ theorem isDeterministicallyGenerated_of_isTransitionGenerated {ψ : (Fin N → F
     -- The first step acts on `φ_I`; its output lies in `ℂ^D ⊗ |0⟩`.
     let v : Fin 2 → Fin D → ℂ := fun i => rowsAt (W 0) i *ᵥ φI
     have hv : ∑ i, star (v i) ⬝ᵥ v i = 1 := by
-      rw [← hI, ← Matrix.star_mulVec_dotProduct_of_mem_unitaryGroup (hW 0) φI, dotProduct,
+      rw [← hI, ← Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary (hW 0) φI φI, dotProduct,
         Fintype.sum_prod_type, Finset.sum_comm]
       rfl
     have hiso : IsIsometryOn 1 (fun i => colMat (v i)) := by
