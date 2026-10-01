@@ -36,7 +36,7 @@ open CategoryTheory
 
 namespace TNLean.Algebra
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 set_option warn.classDefReducibility false in
 /-- The trivial action of `G` on the circle group. -/
@@ -48,7 +48,7 @@ def Circle.trivialMulDistribMulAction : MulDistribMulAction G Circle where
   smul_mul _ _ _ := rfl
 
 /-- The representation of `G` on the circle group with trivial action. -/
-abbrev circleH2Representation (G : Type*) [Group G] : Rep ℤ G :=
+abbrev circleH2Representation (G : Type) [Group G] : Rep ℤ G :=
   @Rep.ofMulDistribMulAction G Circle _ _
     (Circle.trivialMulDistribMulAction (G := G))
 
@@ -155,7 +155,7 @@ theorem ScalarCocycle.cohomologousTo_circlePhaseInclusion [Finite G]
 
 /-- Inclusion of circle coefficients as a morphism of trivial
 representations. -/
-def circleToComplexUnitsRepHom (G : Type*) [Group G] :
+def circleToComplexUnitsRepHom (G : Type) [Group G] :
     circleH2Representation G ⟶ scalarH2Representation G := by
   apply Rep.ofHom
   refine ⟨Circle.toUnits.toAdditive.toIntLinearMap, ?_⟩
@@ -163,7 +163,7 @@ def circleToComplexUnitsRepHom (G : Type*) [Group G] :
   rfl
 
 /-- Unit phase as a morphism of trivial representations. -/
-def complexUnitsPhaseRepHom (G : Type*) [Group G] :
+def complexUnitsPhaseRepHom (G : Type) [Group G] :
     scalarH2Representation G ⟶ circleH2Representation G := by
   apply Rep.ofHom
   refine ⟨Complex.unitsPhase.toAdditive.toIntLinearMap, ?_⟩
@@ -171,7 +171,7 @@ def complexUnitsPhaseRepHom (G : Type*) [Group G] :
   rfl
 
 /-- Unit phase is a left inverse to inclusion at the representation level. -/
-theorem circleToComplexUnitsRepHom_comp_complexUnitsPhaseRepHom (G : Type*) [Group G] :
+theorem circleToComplexUnitsRepHom_comp_complexUnitsPhaseRepHom (G : Type) [Group G] :
     circleToComplexUnitsRepHom G ≫ complexUnitsPhaseRepHom G =
       𝟙 (circleH2Representation G) := by
   ext z

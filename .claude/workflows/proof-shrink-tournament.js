@@ -202,8 +202,7 @@ and extend: UnionInjectivity.lean vs UnionInjectivityGeneral2.lean (485 shared l
 is live?);
 NormalSquareUnconditionalFundamentalTheorem.lean vs NormalGeneralFundamentalTheorem.lean (the
 general one derives hbond internally, the square capstone still assumes it — does anything
-still need the square-specific route?);
-CoherentFrameInstance.lean vs 2; ThreeBlockResonate vs 2; the edge insertion stack
+still need the square-specific route?); the edge insertion stack
 (InsertionAlgebra.lean etc., 2,126 ln) vs the RegionBlock generalization; superseded BNT
 carriers (IsNormalCanonicalFormBNT, MultiBlock.CanonicalForm). For each: who still imports
 the old route (compute consumers), what migration costs, net deletable lines. Also use git

@@ -17,10 +17,10 @@ the cocycle substitutions listed in the source.
 
 namespace TNLean.Algebra
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 /-- A multiplicative scalar one-cochain on a group. -/
-abbrev ScalarOneCochain (G : Type*) := G → Units ℂ
+abbrev ScalarOneCochain (G : Type) := G → Units ℂ
 
 namespace ScalarOneCochain
 

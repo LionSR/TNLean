@@ -10,7 +10,7 @@ import TNLean.Algebra.StabilizerCocycleReconstruction
 
 For a fixed three-cocycle, compatible scalar L-symbols on a free transitive
 action are related by an action-tensor gauge. This is the trivial-stabilizer
-case of arXiv:2203.12563, Section 4.2, and the uniqueness assertion used in
+case of arXiv:2203.12563, Section 4.1, and the uniqueness assertion used in
 the four-block example of Section 6.
 -/
 
@@ -20,7 +20,7 @@ variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 /-- On a free transitive action, the action gauge relates any two L-symbols
 compatible with the same three-cochain. This is the trivial-stabilizer case
-of arXiv:2203.12563, Section 4.2, lines 740–761. -/
+of arXiv:2203.12563, Section 4.1, lines 740–761. -/
 theorem actionGaugeEquiv_of_bijective_smul
     {L₁ L₂ : LSymbol G X} {ω : ScalarThreeCochain G}
     (h₁ : IsCompatible L₁ ω) (h₂ : IsCompatible L₂ ω)
