@@ -36,6 +36,14 @@ of the source, `Q_p` is the isometry `V_{q-p}` of eq. (14) and `b_p = D'_{q+1-p}
   arXiv:2307.01696, eqs. (13)–(15), and the paragraph "Inhomogeneous short-range
   correlated MPS" for tensors that depend on the site.
 
+**Scope restriction (common bond dimension):** for site-dependent tensors the chain
+`A : MPSChainTensor d D q` of `exists_isometric_chain_of_eq_mul_of_le`,
+`exists_isometric_chain_of_eq_mul`, `polarIsoMatrix_chainBlockTensor_eq_sum` and
+`exists_isometric_chain_polarIsoMatrix` has the same square bond dimension `D` at every site,
+while the source's inhomogeneous states have "bond dimension at most `D`" varying along the
+ring, which needs rectangular site matrices. Documented in
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
 ## References
 
 * Malz, Styliaris, Wei, Cirac, *Preparation of matrix product states with log-depth
@@ -307,11 +315,6 @@ arXiv:2307.01696, eqs. (13)–(15): `V = V_q ⋯ V_1` with isometries
 `C-tilde = V_1`, carrying the input `ℂ^{D²}`, is an isometry by eq. (15). In the notation
 here `Q_p = V_{q-p}` and `b_p = D'_{q+1-p}`. The paragraph "Inhomogeneous short-range
 correlated MPS" applies the same decomposition to tensors that depend on the site.
-
-**Scope restriction (common bond dimension):** for site-dependent tensors the chain
-`A : MPSChainTensor d D q` has the same square bond dimension `D` at every site, while the
-source's inhomogeneous states have "bond dimension at most `D`" varying along the ring, which
-needs rectangular site matrices. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 **Scope restriction (positive block length):** the hypothesis `0 < q` is absent from
 arXiv:2307.01696, eqs. (13)–(15), which state no lower bound on the block length. The

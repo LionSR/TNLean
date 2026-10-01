@@ -121,8 +121,20 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
 \begin{proof}
     \leanok
     Injectivity makes each $V_k$ an isometry,
-    Theorem~\ref{thm:ldpolar_tensor_injective}, so the product
-    $\bigotimes_kV_k$ is an isometry. The remaining identities follow from
+    Theorem~\ref{thm:ldpolar_tensor_injective}, so that
+    $\sum_{s_k}\overline{(V_k)_{s_ka}}(V_k)_{s_kb}=\delta_{ab}$ for the
+    configurations $s_k$ of block $k$ and all inputs $a,b$. Expanding the inner
+    product over the configurations $s=(s_k)_k$ and applying this identity
+    factor by factor gives
+    \begin{align}
+        \sum_s\overline{\Bigl(\Bigl(\bigotimes_kV_k\Bigr)x\Bigr)(s)}
+        \Bigl(\Bigl(\bigotimes_kV_k\Bigr)y\Bigr)(s)
+         & =\sum_{a,b}\overline{x(a)}\,y(b)
+        \prod_k\sum_{s_k}\overline{(V_k)_{s_ka_k}}(V_k)_{s_kb_k}
+        =\sum_a\overline{x(a)}\,y(a).
+        \notag
+    \end{align}
+    The remaining identities follow from
     Theorem~\ref{thm:ldp_chain_state_eq_pos}. For the overlap of the pair
     products, expanding $\prod_k\langle\omega^k,\omega'^k\rangle$ as a sum
     over bond configurations $(p_k)_k$ of

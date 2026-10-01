@@ -316,7 +316,13 @@ def bondRegrouping (N D : ℕ) : (Fin N → Fin D × Fin D) ≃ (Fin N → Fin D
 `ω^k` joins the right space of site `k` to the left space of site `k + 1`, cyclically.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS":
-`|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}`. -/
+`|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}`.
+
+**Scope restriction (common bond dimension):** `pairFamilyState` and its lemmas
+`pairFamilyState_const`, `pairFamilyState_inner` and `pairFamilyState_norm_sq` put every pair
+`ω^k` on the same space `ℂ^D ⊗ ℂ^D`, while the source's inhomogeneous states have "bond
+dimension at most `D`", which may vary along the ring. Documented in
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. -/
 def pairFamilyState {N : ℕ} (ω : Fin N → Fin D × Fin D → ℂ) (c : Fin N → Fin D × Fin D) : ℂ :=
   ∏ k : Fin N, ω k ((c k).2, (c (finRotate N k)).1)
 
