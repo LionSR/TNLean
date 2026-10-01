@@ -324,7 +324,7 @@ identifications, and unitary conjugacies supplied explicitly, so downstream
 coefficient comparisons can reuse the same transport witness.
 
 Source: CPSV16, Appendix C.4, lines 2001--2029. -/
-theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv
+theorem HasVerticalBNTProductInputs.exists_positiveFusionDecomposition_of_unitaryBlockEquiv
     {g₁ g₂ d D : ℕ}
     (dim₁ mult₁ : Fin g₁ → ℕ)
     (weight₁ : (α : Fin g₁) → Fin (mult₁ α) → ℂ)
@@ -361,7 +361,7 @@ theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv
         ((V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ) *
           Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (A₁ i ab) *
           (V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ)ᴴ))
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    (hInputs : HasVerticalBNTProductInputs M) (hM : IsMPDO M) :
     ∃ (chi : DiagonalChiFamily (Fin g₁))
       (U : ∀ α β : Fin g₁,
         Matrix
@@ -384,8 +384,8 @@ theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv
               chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) i j) *
             U α β := by
   classical
-  obtain ⟨R⟩ := exists_retainedProductSpectralFamily
-    dim₁ mult₁ weight₁ A₁ M U₁ hU₁ hReconstruct₁ hHorizontal hM
+  obtain ⟨R⟩ := hInputs.exists_retainedProductSpectralFamily
+    dim₁ mult₁ weight₁ A₁ M U₁ hU₁ hReconstruct₁
   let : ∀ γ, NeZero (dim₂ γ) := fun γ ↦
     ⟨(hBNT₂.blocks_dim_pos γ).ne'⟩
   obtain ⟨C⟩ := R.exists_flatBlockedBNTComparison
@@ -393,11 +393,11 @@ theorem exists_positiveFusionDecomposition_of_unitaryBlockEquiv
   have hNormal₂ : ∀ γ, MPSTensor.IsNormalTensor (A₂ γ) := fun γ ↦
     hBNT₂.blocks_normal γ
   have hActivePos : ∀ j, (0 : ℂ) < R.flatCoefficient j * C.phase j := fun j ↦
-    C.activeCoefficient_mul_phase_pos M hHorizontal hM
+    C.activeCoefficient_mul_phase_pos M hInputs hM
       U₁ hU₁ hReconstruct₁ mult₂ hMult₂ weight₂ hWeight₂
       U₂ hU₂ hReconstruct₂ hNormal₂ j
   choose omega homega hGram _hQ using fun j ↦
-    C.exists_unitaryNormalization M hHorizontal hM
+    C.exists_unitaryNormalization M hInputs hM
       U₁ hU₁ hReconstruct₁ mult₂ hMult₂ weight₂ hWeight₂
       U₂ hU₂ hReconstruct₂ hNormal₂ j
   exact R.exists_bntFusionCoisometryFamily C hMult₁ hWeight₁
@@ -414,7 +414,7 @@ theorem transportedVerticalSector_exists_positiveFusionDecomposition
     {g₁ g₂ d D : ℕ}
     (h : VerticalSectorHypotheses
       (g₁ := g₁) (g₂ := g₂) (d := d) (D := D))
-    (hHorizontal : IsHorizontalCF h.M) (hM : IsMPDO h.M) :
+    (hInputs : HasVerticalBNTProductInputs h.M) (hM : IsMPDO h.M) :
     ∃ (chi : DiagonalChiFamily (Fin g₁))
       (U : ∀ α β : Fin g₁,
         Matrix
@@ -439,10 +439,10 @@ theorem transportedVerticalSector_exists_positiveFusionDecomposition
   classical
   obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=
     transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq h
-  exact exists_positiveFusionDecomposition_of_unitaryBlockEquiv
+  exact hInputs.exists_positiveFusionDecomposition_of_unitaryBlockEquiv
     h.dim₁ h.mult₁ h.weight₁ h.dim₂ h.mult₂ h.weight₂
     h.hMult₁ h.hWeight₁ h.hMult₂ h.hWeight₂ h.M h.A₁ h.A₂ h.hBNT₂
     h.U₁ h.U₂ h.hU₁ h.hU₂ h.hReconstruct₁ h.hReconstruct₂
-    sigma hDim V hLetter hHorizontal hM
+    sigma hDim V hLetter hM
 
 end MPOTensor

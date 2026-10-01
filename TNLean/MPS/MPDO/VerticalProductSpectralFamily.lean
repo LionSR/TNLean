@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.VerticalProductRetainedBlocks
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 
 /-!
 # Spectral families of retained vertical products
@@ -126,12 +127,12 @@ theorem exists_retainedProductSpectralFamily_of_blockTwo
     local_reconstruction := local_reconstruction }⟩
 
 /-- The local spectral decompositions may be chosen simultaneously for every
-retained copy pair of a tensor in normalized BNT-refined horizontal form.
-Empty active families are preserved.
+retained copy pair from the two-site product inputs. Empty active families are
+preserved.
 
 Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
 lines 2020--2029. -/
-theorem exists_retainedProductSpectralFamily
+theorem HasVerticalBNTProductInputs.exists_retainedProductSpectralFamily
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
     (B : (α : Fin g) → MPSTensor (D * D) (dim α))
@@ -142,15 +143,11 @@ theorem exists_retainedProductSpectralFamily
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab =
       Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+    (hInputs : HasVerticalBNTProductInputs M) :
     Nonempty (RetainedProductSpectralFamily dim mult weight B) := by
-  have hHorizontalTwo := hHorizontal.blockTwo
-  have hMTwo := hM.blockTwo
   exact exists_retainedProductSpectralFamily_of_blockTwo
     dim mult weight B M U hU hReconstruct
-    (hHorizontalTwo.hasInvariantProjectorClosure_verticalTensor (blockTwo M) hMTwo)
-    (hasNoPeriodicVectors_verticalTensor_of_horizontalCF
-      (blockTwo M) hMTwo hHorizontalTwo)
+    hInputs.projectorClosure hInputs.noPeriodicVectors
 
 namespace RetainedProductSpectralFamily
 
