@@ -94,6 +94,11 @@ theorem IsPeriodic.period_eq_of_hetRepeatedBlocks
   exact IsPeriodic.period_eq_of_repeatedBlocks hA hB hRep
     hRep.peripheralEigenvalues_transferMap_eq
 
+/-- For repeated periodic blocks with trace-preserving maps, the gauge of
+`def:repeated` can be taken unitary while keeping its scalar.
+Source: arXiv:1708.00029, line 332 ("if two blocks with associated trace-preserving
+CP maps are repeated, then the invertible matrix `Y` in `def:repeated` must be
+unitary"). -/
 private theorem exists_unitary_of_periodic_gaugePhase
     {d D₁ D₂ m n : ℕ} (hD : D₁ = D₂)
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
