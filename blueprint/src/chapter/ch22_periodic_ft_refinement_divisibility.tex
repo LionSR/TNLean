@@ -865,11 +865,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_unitary_resolution}
     \lean{MPSTensor.exists_unitary_toTensorFromBlocks_of_resolution}
     \leanok
+    \uses{def:mpu_dependent_block_inclusion}
     Let $V_a:\mathbb C^{D_a}\to\mathbb C^D$ satisfy
     $\sum_a V_aV_a^\dagger=\mathbf 1$ and $\sum_a D_a=D$.
     If $A^iV_a=V_aB_a^i$ for every $a,i$, then there is a unitary
-    $U:\bigoplus_a\mathbb C^{D_a}\to\mathbb C^D$ with $UE_a=V_a$ and
-    $A^i=U(\bigoplus_a B_a^i)U^\dagger$, where $E_a$ is the coordinate inclusion.
+    $U:\bigoplus_a\mathbb C^{D_a}\to\mathbb C^D$ with $UJ_a=V_a$ and
+    $A^i=U(\bigoplus_a B_a^i)U^\dagger$, where $J_a$ is the block inclusion.
 \end{theorem}
 
 \begin{proof}
@@ -883,16 +884,16 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_unitary_orbit_root}
     \lean{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
     \leanok
-    \uses{def:periodic_tensor,def:periodic_step_orbit_projection,
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection,def:mpu_dependent_block_inclusion,
         thm:periodic_prescribed_blocking_compression}
     Let $A$ be left-canonical periodic of period $m$ and let $p>0$.
     Put $r=\gcd(m,p)$. The prescribed orbit blocks $C_a$, of period $m/r$,
     admit a unitary $U$ such that, with $Q_a$ the step-orbit projections of
-    Definition~\ref{def:periodic_step_orbit_projection} and $E_a$ the
+    Definition~\ref{def:periodic_step_orbit_projection} and $J_a$ the
     coordinate inclusions,
     \begin{align}
         (A^{[p]})^I          & =U\Bigl(\bigoplus_{a=0}^{r-1}C_a^I\Bigr)U^\dagger, \notag \\
-        (UE_a)(UE_a)^\dagger & =Q_a. \notag
+        (UJ_a)(UJ_a)^\dagger & =Q_a. \notag
     \end{align}
     For every choice of $c_a$ with $c_a^{m/r}=1$, there is a left-canonical
     tensor $A'$ with the same physical and bond dimensions as $A$ such that
@@ -910,7 +911,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit
     isometries. Conjugate the diagonal
     matrix with entries $c_a\mathbf 1_{D_a}$ by this unitary to obtain $Z$.
-    Since $UE_a$ is the original orbit isometry,
+    Since $UJ_a$ is the original orbit isometry,
     $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the original cyclic sectors
     gives $A'^{[p]}=ZA^{[p]}$, which is the stated weighted conjugation.
 \end{proof}
@@ -952,7 +953,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
         thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary,
-        thm:periodic_ft_equal_case_trace_preserving}
+        thm:periodic_ft_equal_case_trace_preserving,thm:block_tensor_to_tensor_from_blocks}
     Decompose each blocked $B_k$ into its prescribed orbits. Every resulting
     block inherits weight $\mu_k^p$. Group repeated blocks and apply the
     multiplicity-bearing equal-case theorem. Matching to the unit-modulus
@@ -977,7 +978,8 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_arbitrary_presentation,thm:periodic_blocked_weight_normalization}
+    \uses{thm:periodic_arbitrary_presentation,thm:periodic_blocked_weight_normalization,
+        thm:same_mpv2_pos_block_tensor}
     Take a periodic presentation of $A$ and block it by $p$.
     The preceding theorem gives unit modulus for each original weight and
     the claimed dimension. Absorb each weight into its periodic block;

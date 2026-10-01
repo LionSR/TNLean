@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.StateVectorDecomposition
+import TNLean.MPS.Periodic.BlockingEigenvalues
 import TNLean.MPS.Periodic.BlockingFixedSpace
+import TNLean.MPS.Periodic.StepOrbitSectors
 
 /-!
 # Prescribed blocking of a periodic tensor

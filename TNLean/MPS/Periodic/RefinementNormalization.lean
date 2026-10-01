@@ -28,6 +28,10 @@ The subsequent orbit-phase matching and root construction are separate steps.
 of MPVs only at positive lengths, since discarding zero blocks may lower the bond
 dimension. The convention is inherited from `exists_tp_gauge_from_arbitrary` and
 recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+`exists_periodic_presentation` also returns nonzero complex weights, where
+arXiv:1708.00029, `thm:irr`, lines 250–251, chooses positive square roots; only
+nonvanishing is used downstream, and the unit-weight presentation absorbs the
+phases into the blocks.
 -/
 
 open scoped Matrix BigOperators Matrix.Norms.Operator

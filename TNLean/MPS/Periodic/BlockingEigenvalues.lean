@@ -32,6 +32,8 @@ open Fin.NatCast
 
 namespace MPSTensor
 
+/-- If `f` shifts a cyclic family `v` and `z ^ q = 1`, then `∑ z ^ k • v k` is an
+eigenvector of `f` with eigenvalue `z⁻¹`. -/
 private theorem map_cyclic_sum {M : Type*} [AddCommGroup M] [Module ℂ M]
     {q : ℕ} [NeZero q] (f : M →ₗ[ℂ] M) (v : Fin q → M)
     (hshift : ∀ k, f (v k) = v (k + 1)) (z : ℂ) (hz : z ^ q = 1) :
@@ -51,6 +53,9 @@ private theorem map_cyclic_sum {M : Type*} [AddCommGroup M] [Module ℂ M]
       rw [smul_smul, inv_mul_cancel₀ hz0, one_smul]
     _ = z⁻¹ • ∑ k, z ^ k.val • v k := by rw [h]
 
+/-- Every `q`-th root of unity gives a nonzero eigenvector of the compressed adjoint
+transfer map, namely the Fourier sum of the compressed orbit projections.
+Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, final step. -/
 private theorem hasEigenvalue_adjoint_compressed_stepOrbit
     {d D m n : ℕ} [NeZero m]
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
