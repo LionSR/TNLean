@@ -29,8 +29,8 @@ $r=\ell=d^{2k+2}$, giving the values $\log_2 d$, $-\log_2 d$, $0$, $0$ at every
 blocking. The right and left shifts and all their blockings are simple. Since
 tensor products of simple tensors are simple, so are $U_1$, $U_2$, $U_3$ and all
 blockings of $U_2$ and $U_3$. All four values are therefore values at simple
-blockings, which meets the simplicity requirement of Definition IV.1; its
-canonical-form hypothesis is not established for these tensors. For $d>1$ the
+blockings. The canonical-form-II witness for the right shift and the identification
+with the public indices are proved in `ShiftPublicIndex.lean`. For $d>1$ the
 right and left ranks of every blocked shift differ, so its index value is nonzero.
 
 The review sentence itself is not formalized. The unequal ranks are no
@@ -42,11 +42,9 @@ shift is not a finite-depth circuit of local gates needs Theorem `IndexTh`
 and characterizes equivalence), together with index zero for one layer of
 nearest-neighbour gates. None of these is proved here.
 
-**Scope restriction (specified tensors):** The values are for the displayed
-shift tensors and their blockings. Definition IV.1 defines the index for a
-tensor in canonical form, and the identification of these values with the public
-index of any tensor generating the shift needs the canonical form of the shift
-and the uniqueness of that form. Documented in
+**Scope restriction (specified tensors):** This module computes source-index
+values of the displayed tensors. The public, blocking-independent index values
+are proved in `TNLean.MPS.MPU.Examples.ShiftPublicIndex`, resolving
 `docs/paper-gaps/mpu_shift_specified_tensor_index_scope.tex`.
 
 ## Main results
@@ -512,21 +510,8 @@ letters are $W^{ij}=\delta_{ij}$, and $a=b=1$ are boundary vectors.
 
 Source: arXiv:1703.09188, Definition III.2, lines 363--374, for the tensor of
 $I^{\otimes N}$ in the definition of $U_1$, lines 1990--1993. -/
-theorem identityMPUTensor_isMPUSimple (d : ℕ) : IsMPUSimple (identityMPUTensor d) := by
-  have hR : Matrix.vecMulVec (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) =
-      1 := by
-    ext x y
-    rw [Subsingleton.elim (α := Fin 1) x y]
-    simp [Matrix.vecMulVec_apply]
-  refine ⟨fun _ ↦ 1, fun _ ↦ 1, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
-  · simp only [dotProduct, Matrix.mulVec, doubleLayerTensor_apply, identityMPUTensor,
-      Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
-      physicalAdjointTensor_apply, idTensor]
-    by_cases h : i = j
-    · subst h
-      simp [Matrix.ite_apply, eq_comm]
-    · simp [Matrix.ite_apply, h, eq_comm]
-  · rw [hR, Matrix.mul_one]
+theorem identityMPUTensor_isMPUSimple (d : ℕ) : IsMPUSimple (identityMPUTensor d) :=
+  isMPUSimple_idTensor d
 
 /-- $U_1=I\otimes I$ is simple.
 

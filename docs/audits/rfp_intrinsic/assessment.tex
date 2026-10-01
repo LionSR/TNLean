@@ -1,0 +1,41 @@
+% Build here: latexmk -pdf -outdir=../../../build/audits/rfp_intrinsic assessment.tex
+\documentclass[aps,pra,reprint,nofootinbib,onecolumn]{revtex4-2}
+\input{preamble}
+\usepackage{cleveref}
+
+\begin{document}
+
+\title{Nontrivial fusion and intrinsic length dependence in matrix product density operator fixed points}
+\date{16 September 2026}
+
+\begin{abstract}
+	Length-dependent fusion coefficients can coexist with nonproduct states,
+	nontrivial canonical fusion, and anomalous boundary symmetry. These
+	properties do not, however, establish that the positive weights are
+	inseparable from the fusion intertwiners. We distinguish these questions
+	for finite-group, Ising, Fibonacci, and CZX constructions. Finite-group
+	bond twists admit an exact local circuit separating their weights from
+	the ordered group constraint. For the categorical constructions, a fixed
+	regrouping gives the original Ising or Fibonacci representatives with
+	sector-dependent one-site multiplicities. We determine their canonical
+	normalizations and multiplicity spectra and construct full-space
+	fixed-point channels. Their states are not products of identical
+	independent bonds. Their multiplicity ranks also exclude a common mixed
+	spectator in the displayed sector-preserving one-site decomposition,
+	but do not exclude every bounded-depth separation. The shifted CZX
+	tensor, by contrast, has identical multiplicities in both sectors and
+	separates exactly. Thus existing examples establish length dependence
+	with nontrivial algebra and nonproduct states, but do not yet establish
+	inseparable weight-intertwiner coupling under the stronger local
+	equivalence considered here.
+\end{abstract}
+
+\maketitle
+
+\input{sections/01_scope}
+\input{sections/02_groups}
+\input{sections/03_categories}
+\input{sections/04_anomaly}
+\input{sections/05_frontier}
+\input{bibliography/assessment}
+\end{document}

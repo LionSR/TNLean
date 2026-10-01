@@ -1,0 +1,230 @@
+\section{The tree circuit as a multiscale network}
+\label{sec:ldp_tree_mera}
+
+The paragraph ``Connection to MERA'' of~\cite{Malz2024Preparation} reads the
+tree circuit of Theorem~\ref{thm:ldp_tree_factorization} as a finite-range
+multiscale entanglement renormalization ansatz with $O(\log\log N)$ layers: the
+isometries $V^{(j)}$ are the isometries of the network, and all disentanglers
+are the identity except those of the first layer, which prepare the
+fixed-point state. This section states the network, identifies the
+approximating state with its state, and counts the layers. Throughout, the
+two-site blocked tensor of $A$ is injective and the chain length is
+$N=M2^{k+1}$; both restrictions are recorded
+in~\cite{gap:mswc24_tree_mera_scope}.
+
+\begin{definition}[Binary finite-range network]
+    \label{def:ldp_binary_mera}
+    \lean{MPSTensor.binaryTreeMatrix, MPSPreparation.BinaryMERA,
+        MPSPreparation.BinaryMERA.treeMatrix,
+        MPSPreparation.BinaryMERA.topPair,
+        MPSPreparation.BinaryMERA.amplitude,
+        MPSPreparation.BinaryMERA.state,
+        MPSPreparation.BinaryMERA.state_apply}
+    \leanok
+    \uses{thm:ldp_tree_factorization}
+    Let $n,k\ge0$. A \emph{binary finite-range network} with $k+1$
+    isometry layers consists of a unitary $u$ on $\C^D\otimes\C^D$, isometries
+    $W_0,\dots,W_{k-1}\colon\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ and an isometry
+    $W\colon\C^{D^2}\to\C^n\otimes\C^n$. Its tree map is
+    \begin{align}
+        \mathcal W
+         & =W^{\otimes2^k}\,W_0^{\otimes2^{k-1}}\cdots W_{k-1}
+        \colon\C^{D^2}\to(\C^n)^{\otimes2^{k+1}},
+        \label{eq:ldp_binary_mera_tree}
+    \end{align}
+    where the Kronecker powers act on the regrouping of the $2^{k+1}$ sites
+    into neighbouring pairs, then pairs of pairs, and so on, as in
+    (\ref{eq:ldp_tree_factorization}). On $M$ top sites
+    $\C^{D^2}=L_i\otimes R_i$, and for $D\ge1$, the state of the network on
+    $N=M2^{k+1}$ sites is
+    \begin{align}
+        \mathcal W^{\otimes M}\bigotimes_{i=1}^{M}
+        u_{R_iL_{i+1}}\ket{0}_{R_i}\ket{0}_{L_{i+1}},
+        \label{eq:ldp_binary_mera_state}
+    \end{align}
+    with $L_{M+1}=L_1$. Every isometry maps one site to two neighbouring
+    sites and every unitary acts on two neighbouring legs, so the network has
+    range two and bond dimension $D^2$ in every layer; the disentanglers below
+    the first layer are the identity.
+\end{definition}
+
+\begin{lemma}[The network state is a unit vector]
+    \label{lem:ldp_binary_mera_norm}
+    \lean{MPSTensor.isIsometry_binaryTreeMatrix,
+        MPSPreparation.BinaryMERA.isIsometry_treeMatrix,
+        MPSPreparation.BinaryMERA.sum_star_topPair_mul,
+        MPSPreparation.BinaryMERA.norm_state}
+    \leanok
+    \uses{def:ldp_binary_mera, thm:prep_pair_product_norm}
+    The tree map (\ref{eq:ldp_binary_mera_tree}) of a binary finite-range
+    network is an isometry, and the state (\ref{eq:ldp_binary_mera_state})
+    is a unit vector.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For an isometry $W$ and isometries $\mathcal W_1$, $\mathcal W_2$,
+    \begin{align*}
+        (W^{\otimes m})^\dagger W^{\otimes m}
+         & =(W^\dagger W)^{\otimes m}=1,
+         &
+        (\mathcal W_1\mathcal W_2)^\dagger\mathcal W_1\mathcal W_2
+         & =\mathcal W_2^\dagger(\mathcal W_1^\dagger\mathcal W_1)\mathcal W_2
+        =1,
+    \end{align*}
+    and a regrouping of the sites is a permutation, so induction on $k$ gives
+    $\mathcal W^\dagger\mathcal W=1$.
+    The pair $u\ket0\ket0$ is a unit vector because $u$ is unitary, so the
+    product of pairs is a unit vector
+    (Theorem~\ref{thm:prep_pair_product_norm}), and $\mathcal W^{\otimes M}$
+    preserves its norm.
+\end{proof}
+
+\begin{lemma}[The layers of the tree circuit are isometries]
+    \label{lem:ldp_tree_layers_isometries}
+    \lean{MPSTensor.pairPosTensor, MPSTensor.treeLayers,
+        MPSTensor.binaryTreeMatrix_treeLayers,
+        MPSTensor.isInjective_of_isInjective_rotatePhysical,
+        MPSTensor.isInjective_blockTensor_two,
+        MPSTensor.isInjective_blockTensor_pairPosTensor,
+        MPSTensor.isInjective_blockTensor_iterate_pairPosTensor,
+        MPSTensor.isIsometry_treeLayers}
+    \leanok
+    \uses{thm:ldp_tree_factorization, thm:ldpolar_tensor_injective,
+        thm:block_tensor_rotate_physical}
+    Let the two-site blocked tensor of $A$ be injective, and let $V^{(j)}$ and
+    $T_j$ be as in Theorem~\ref{thm:ldp_tree_factorization}. Then for every
+    $j\ge1$ the two-site blocked tensor of $T_{j-1}$ is injective, so each
+    $V^{(j)}$ is an isometry, and the tree map (\ref{eq:ldp_binary_mera_tree})
+    with $W=V^{(1)}$ and $W_i=V^{(i+2)}$ is the product of the layers in
+    (\ref{eq:ldp_tree_factorization}) for $q=2^{k+1}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If a tensor $Y$ rotated by a matrix $W$ on its physical leg is injective,
+    so is $Y$: the rotated tensor has matrices $(WY)^i=\sum_jW_{ij}Y^j$, so
+    \begin{align*}
+        M_D(\C)=\operatorname{span}\{(WY)^i\}
+        \subseteq\operatorname{span}\{Y^j\}.
+    \end{align*} The two-site blocked tensor of an injective tensor is injective.
+    Blocking $\mathcal B^{(1)}=V^{(1)}P_1$ twice gives $(V^{(1)})^{\otimes2}$
+    applied to $T_1$ blocked twice
+    (Theorem~\ref{thm:block_tensor_rotate_physical}), so the two-site blocked
+    tensor of $T_1$ is injective, and induction on $j$ gives the claim for
+    every $T_{j-1}$. Its isometric factor is an isometry by
+    Theorem~\ref{thm:ldpolar_tensor_injective}. The identification of the
+    tree map with the product of the layers is the recursion defining both.
+\end{proof}
+
+\begin{definition}[The tree network of a tensor]
+    \label{def:ldp_tree_mera}
+    \lean{MPSPreparation.treeMERA}
+    \leanok
+    \uses{def:ldp_binary_mera, lem:ldp_tree_layers_isometries}
+    Let the two-site blocked tensor of $A$ be injective and let $u$ be a unitary
+    on $\C^D\otimes\C^D$. The \emph{tree network} of $A$ with $k+1$ isometry
+    layers is the binary finite-range network with isometries
+    $W=V^{(1)}$, $W_i=V^{(i+2)}$ for $0\le i<k$, and unitary $u$.
+\end{definition}
+
+\begin{lemma}[A unitary preparing the fixed-point pair]
+    \label{lem:ldp_tree_mera_disentangler}
+    \lean{MPSPreparation.exists_disentangler_fixedPointPair}
+    \leanok
+    \uses{def:prep_pair_product_state, thm:prep_pair_norm,
+        lem:ldp_unitary_implementing_isometry}
+    Let $D\ge1$ and let $\rho\ge0$ with $\tr\rho=1$. Then there is a unitary
+    $u$ on $\C^D\otimes\C^D$ with $u\ket0\ket0=\ket\omega$, the pair of the
+    fixed-point state.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The map $V\colon\C\to\C^D\otimes\C^D$, $1\mapsto\ket\omega$, satisfies
+    $V^\dagger V=\langle\omega|\omega\rangle=\tr\rho=1$
+    (Theorem~\ref{thm:prep_pair_norm}), so it is an isometry. An isometry
+    defined on the span of some computational basis vectors extends to a
+    unitary, as in the proof of
+    Lemma~\ref{lem:ldp_unitary_implementing_isometry}; applied to the basis
+    vector $\ket0\ket0$, this gives a unitary $u$ with
+    $u\ket0\ket0=V1=\ket\omega$.
+\end{proof}
+
+\begin{theorem}[The approximating state is a network state]
+    \label{thm:ldp_approximating_state_tree_mera}
+    \lean{MPSPreparation.approximatingMPVState_eq_state_treeMERA}
+    \leanok
+    \uses{def:ldp_tree_mera, def:ldp_approximating_state,
+        thm:ldp_tree_factorization, lem:ldp_approximating_state_unit_norm,
+        lem:ldp_tree_layers_isometries}
+    Let the two-site blocked tensor of $A$ be injective, let $\rho\ge0$ with
+    $\tr\rho=1$, and let $u$ be a unitary with $u\ket0\ket0=\ket\omega$. For
+    $q=2^{k+1}$ and $M\ge1$, the approximating state
+    $\ket{\widetilde\phi_N}=V^{\otimes M}\ket\Omega$ on $N=Mq$ sites
+    (Definition~\ref{def:ldp_approximating_state}) is the state of the tree
+    network of $A$ with $k+1$ isometry layers and unitary $u$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The blocked tensor over $q=2^{k+1}$ sites is injective, so the
+    approximating state is the unnormalized one
+    (Lemma~\ref{lem:ldp_approximating_state_unit_norm}). Its isometry $V$ is
+    the product of the layers by Theorem~\ref{thm:ldp_tree_factorization},
+    hence the tree map by Lemma~\ref{lem:ldp_tree_layers_isometries}, and the
+    pairs $u\ket0\ket0$ are the pairs $\ket\omega$ of $\ket\Omega$.
+\end{proof}
+
+\begin{theorem}[Normal states are networks with $O(\log\log(N/\varepsilon))$ layers]
+    \label{thm:ldp_tree_mera_error}
+    \lean{MPSPreparation.exists_state_treeMERA_approximationError_le,
+        MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
+    \leanok
+    \uses{thm:ldp_approximating_state_tree_mera,
+        thm:ldp_approximation_error_normal, lem:ldp_log_threshold_error,
+        def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let $0<t<1$
+    bound the moduli of the eigenvalues of $\E_A$ other than $1$, with
+    $\xi=-1/\log t$, and let the two-site blocked tensor of $A$ be injective.
+    There is $C>0$ such that for every unitary $u$ with
+    $u\ket0\ket0=\ket\omega$, every $\varepsilon>0$, and every $k\ge0$ and
+    $M\ge1$ with $N=M2^{k+1}$ and
+    \begin{align}
+        x & =\xi\log(CN/\varepsilon)\le2^{k+1},
+        \label{eq:ldp_tree_mera_threshold}
+    \end{align}
+    the state $\ket\psi$ of the tree network of $A$ with $k+1$ isometry layers
+    satisfies $\varepsilon(\psi,\phi_N)\le\varepsilon$. Moreover, for every
+    such $u$, every $\varepsilon>0$ and every $M\ge1$ there is $k\ge0$
+    satisfying (\ref{eq:ldp_tree_mera_threshold}) with
+    $k\le\max(0,\log_2x)$, so the network has at most
+    $\max(0,\log_2(\xi\log(CN/\varepsilon)))+1$ isometry layers. This is
+    the containment of normal translation-invariant matrix product states in
+    finite-range networks with $O(\log\log N)$ layers, within the
+    approximation error, of~\cite[paragraph ``Connection to
+        MERA'']{Malz2024Preparation}, for the chain lengths $N=M2^{k+1}$ with
+    $k$ as above and tensors whose two-site blocked tensor is
+    injective~\cite{gap:mswc24_tree_mera_scope}. It does not cover every
+    fixed $N$ and $\varepsilon$: for $N=2p$ with $p$ odd only $k=0$ is
+    available, and (\ref{eq:ldp_tree_mera_threshold}) fails for small
+    $\varepsilon$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_approximating_state_tree_mera} the network state
+    is the approximating state, and Theorem~\ref{thm:ldp_approximation_error_normal}
+    at $\gamma=1/2$ gives $C>0$ with
+    $\varepsilon(\widetilde\phi_N,\phi_N)\le CMe^{-q/\xi}$. This rate is
+    the strengthening of the first bound of Lemma~1$'$
+    of~\cite{Malz2024Preparation} proved in
+    Theorem~\ref{thm:ldp_approximation_error_normal}; the bound as printed
+    in the source, for $0<\gamma<1/2$ with rate $e^{-\gamma q/\xi}$, gives the
+    threshold $(\xi/\gamma)\log(CN/\varepsilon)$ instead, with the same
+    count of layers up to a constant. From
+    (\ref{eq:ldp_tree_mera_threshold}) and $M\le N$,
+    $\log C+\log M-\log\varepsilon\le q/\xi$, so $CMe^{-q/\xi}\le\varepsilon$
+    by Lemma~\ref{lem:ldp_log_threshold_error}. For the count, write
+    $x_k=\xi\log(CM/\varepsilon)+(k+1)\xi\log2$ for the left side of
+    (\ref{eq:ldp_tree_mera_threshold}). It grows linearly in $k$ while
+    $2^{k+1}$ grows exponentially, so some $k$ satisfies
+    (\ref{eq:ldp_tree_mera_threshold}); let $k$ be the least one. If
+    $k\ge1$, the threshold fails at $k-1$, so
+    $2^k<x_{k-1}\le x_k$ and $k<\log_2x_k$.
+\end{proof}

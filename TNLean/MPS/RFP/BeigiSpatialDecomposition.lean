@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.CommutingOverlappingDecomp
 import TNLean.MPS.ParentHamiltonian.Commuting
-import TNLean.MPS.ParentHamiltonian.Martingale.Transport
+import TNLean.MPS.ParentHamiltonian.MatrixRepresentation
 import TNLean.MPS.RFP.PairLiftCoordinates
 
 /-!
@@ -96,20 +96,6 @@ theorem rightPairLift_toMatrix_reindex_leftAssociated
   ext p q
   simp [appendixBRightPairMatrixAux, Matrix.rightOverlappingLift,
     Matrix.reindex_apply, Matrix.kroneckerMap_apply]
-
-/-- The matrix of the parent interaction agrees with the matrix of its
-Euclidean-space representative in the canonical orthonormal basis. -/
-private theorem parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix
-    (A : MPSTensor d D) (L : ℕ) :
-    LinearMap.toMatrix' (parentInteraction A L) =
-      LinearMap.toMatrix (EuclideanSpace.basisFun (Cfg d L) ℂ).toBasis
-        (EuclideanSpace.basisFun (Cfg d L) ℂ).toBasis
-        (parentInteractionES A L) := by
-  classical
-  ext i j
-  simp [LinearMap.toMatrix'_apply, LinearMap.toMatrix_apply,
-    EuclideanSpace.basisFun_toBasis, PiLp.basisFun_apply,
-    parentInteraction, parentInteractionES]
 
 /-! ### The canonical interaction and its overlapping lifts -/
 

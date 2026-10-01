@@ -132,8 +132,9 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
   classical
   -- Step A: Get TP-gauged irreducible blocks from an arbitrary tensor.
   obtain ⟨r₀, dim₀, μ₀, blocks₀,
-      hIrr₀, hTP₀, hμNe₀, hDim₀, hPos₀, hDimBound₀⟩ :=
+      hIrr₀, hTP₀, hμPos₀, hDim₀, hPos₀, hDimBound₀⟩ :=
     exists_tp_gauge_from_arbitrary (d := d) (D := D) A
+  have hμNe₀ : ∀ k, μ₀ k ≠ 0 := fun k => ne_of_gt (hμPos₀ k)
   -- Step B: Find a common blocking period making all transfer maps primitive.
   obtain ⟨P, hP, hPrim⟩ :=
     exists_common_blocking_all_primitive_of_TP_irr blocks₀ hTP₀ hIrr₀ hDim₀
