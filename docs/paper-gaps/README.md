@@ -63,10 +63,12 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   for continuous compact families of one-site injective tensors with the
   canonical two-site interaction, while the source's path also covers
   non-injective normal forms with several blocks.
-- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
-  that the formal fixed point takes a projective representation with the given
-  factor system as input, whereas the source starts from the 2-cocycle alone; the
-  twisted regular representation on `ℂ^G` would supply it and is not formalized.
+- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
+  records that the formal fixed point takes a projective representation as input,
+  whereas the source starts from the 2-cocycle alone. For finite groups the twisted
+  regular representation on `ℂ^G` supplies a unitary representation whose factor
+  system lies in the class of the cocycle, and the fixed point built from it
+  realizes that class.
 - `rmp_spt_fixed_point_trivial_character.tex` (scope restriction) records that
   the twist identity `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹` is proved for every
   character `φ`, but on-site symmetry and the realization of the class of `ω`
