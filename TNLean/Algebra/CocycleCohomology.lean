@@ -51,7 +51,7 @@ and establishes the `H²(G, ℂˣ)` cohomology class as a well-defined quotient.
 
 namespace TNLean.Algebra
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 variable {D : ℕ}
 
 /-- The cocycle attached to a projective representation. -/
@@ -156,7 +156,7 @@ instance ScalarCocycle.IsCocycle.instSetoid :
     fun h₁₂ h₂₃ => ScalarCocycle.CohomologousTo.trans h₁₂ h₂₃⟩
 
 /-- The second cohomology quotient `H²(G, ℂˣ)` modelled by scalar 2-cocycles. -/
-def H2 (G : Type*) [Group G] :=
+def H2 (G : Type) [Group G] :=
   Quotient (ScalarCocycle.IsCocycle.instSetoid (G := G))
 
 /-- Projective-equivalence at the level of factor-system cohomology classes. -/
@@ -193,8 +193,8 @@ identify the concrete, curried quotient above with Mathlib's degree-two group
 cohomology without introducing another quotient.
 
 Mathlib's low-degree comparison theorems currently place the coefficient ring and
-the acting group in the same universe.  Consequently, the comparison is stated
-for `G : Type`, while the concrete definition `H2` remains universe-polymorphic.
+the acting group in the same universe. Consequently, the cocycle-bearing modules use
+`G : Type` throughout, matching the universe restriction of Mathlib group cohomology.
 -/
 
 set_option warn.classDefReducibility false in
@@ -211,7 +211,7 @@ def ScalarCocycle.trivialMulDistribMulAction : MulDistribMulAction G (Units ℂ)
 
 /-- The representation of `G` on `ℂˣ` with trivial action, used to form
 Mathlib's degree-two scalar group cohomology. -/
-abbrev scalarH2Representation (G : Type*) [Group G] : Rep ℤ G :=
+abbrev scalarH2Representation (G : Type) [Group G] : Rep ℤ G :=
   @Rep.ofMulDistribMulAction G (Units ℂ) _ _
     (ScalarCocycle.trivialMulDistribMulAction (G := G))
 

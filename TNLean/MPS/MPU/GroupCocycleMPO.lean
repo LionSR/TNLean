@@ -80,9 +80,54 @@ open scoped BigOperators Matrix
 
 namespace MPOTensor.GroupCocycle
 
+variable {G : Type*} [Group G] {n : ℕ}
+
+/-! ### Shifts -/
+
+/-- The left-regular shift `L_g |k⟩ = |gk⟩`.
+
+Source: arXiv:2203.12563, lines 2005–2024 and 2070. -/
+def leftShift [DecidableEq G] (g : G) : Matrix G G ℂ :=
+  Matrix.monomial (Equiv.mulLeft g) fun _ ↦ 1
+
+theorem leftShift_apply [DecidableEq G] (g a b : G) :
+    leftShift g a b = if a = g * b then 1 else 0 := rfl
+
+variable (e : G ≃ Fin n)
+
+/-- The left shift by `g` transported to the index `Fin n`. -/
+def siteShift (g : G) : Equiv.Perm (Fin n) :=
+  e.symm.trans ((Equiv.mulLeft g).trans e)
+
+@[simp]
+theorem siteShift_apply (g : G) (j : Fin n) : siteShift e g j = e (g * e.symm j) := rfl
+
+/-- The global left shift `⨂_i L_g` on periodic configurations. -/
+def shift (g : G) (N : ℕ) : Equiv.Perm (Fin N → Fin n) :=
+  Equiv.piCongrRight fun _ ↦ siteShift e g
+
+@[simp]
+theorem shift_apply (g : G) {N : ℕ} (t : Fin N → Fin n) (i : Fin N) :
+    shift e g N t i = e (g * e.symm (t i)) := rfl
+
+theorem shift_mul (g h : G) (N : ℕ) : shift e g N * shift e h N = shift e (g * h) N := by
+  ext t i
+  simp [Equiv.Perm.mul_apply, mul_assoc]
+
+theorem shift_one (N : ℕ) : shift e (1 : G) N = 1 := by
+  ext t i
+  simp
+
+end MPOTensor.GroupCocycle
+
+/-! The gates, tensors, and phases below take a scalar three-cochain, whose group lies in
+`Type`. -/
+
+namespace MPOTensor.GroupCocycle
+
 open TNLean.Algebra
 
-variable {G : Type*} [Group G] {n : ℕ}
+variable {G : Type} [Group G] {n : ℕ}
 
 /-! ### The local gates -/
 
@@ -100,25 +145,9 @@ theorem wGate_one [DecidableEq G] {ω : ScalarThreeCochain G}
     wGate ω 1 = 1 := by
   simp [wGate, hω.1]
 
-/-- The left-regular shift `L_g |k⟩ = |gk⟩`.
-
-Source: arXiv:2203.12563, lines 2005–2024 and 2070. -/
-def leftShift [DecidableEq G] (g : G) : Matrix G G ℂ :=
-  Matrix.monomial (Equiv.mulLeft g) fun _ ↦ 1
-
-theorem leftShift_apply [DecidableEq G] (g a b : G) :
-    leftShift g a b = if a = g * b then 1 else 0 := rfl
-
 /-! ### The tensor -/
 
 variable (e : G ≃ Fin n)
-
-/-- The left shift by `g` transported to the index `Fin n`. -/
-def siteShift (g : G) : Equiv.Perm (Fin n) :=
-  e.symm.trans ((Equiv.mulLeft g).trans e)
-
-@[simp]
-theorem siteShift_apply (g : G) (j : Fin n) : siteShift e g j = e (g * e.symm j) := rfl
 
 /-- The periodic-chain tensor `T̂_g`: the output is `g` times the input `j`, the outgoing
 bond carries the input `j`, and the incoming bond `l` (the input of the previous site)
@@ -144,22 +173,6 @@ def family (ω : ScalarThreeCochain G) : GroupFamily G n where
   tensor := tensor e ω
 
 /-! ### The periodic operator -/
-
-/-- The global left shift `⨂_i L_g` on periodic configurations. -/
-def shift (g : G) (N : ℕ) : Equiv.Perm (Fin N → Fin n) :=
-  Equiv.piCongrRight fun _ ↦ siteShift e g
-
-@[simp]
-theorem shift_apply (g : G) {N : ℕ} (t : Fin N → Fin n) (i : Fin N) :
-    shift e g N t i = e (g * e.symm (t i)) := rfl
-
-theorem shift_mul (g h : G) (N : ℕ) : shift e g N * shift e h N = shift e (g * h) N := by
-  ext t i
-  simp [Equiv.Perm.mul_apply, mul_assoc]
-
-theorem shift_one (N : ℕ) : shift e (1 : G) N = 1 := by
-  ext t i
-  simp
 
 variable {N : ℕ} [NeZero N]
 
@@ -294,7 +307,7 @@ namespace MPOTensor.GroupCocycle
 
 open TNLean.Algebra
 
-variable {G : Type*} [Group G] {n : ℕ} (e : G ≃ Fin n)
+variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- Project result: **`T̂_g` is a matrix product unitary** on every nonempty periodic chain
 when `ω` takes unit-modulus values (see `mpo_tensor_mem_unitaryGroup`). -/

@@ -73,7 +73,7 @@ No finiteness, normalization, or tensor assumption is used.
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 namespace LSymbol
 

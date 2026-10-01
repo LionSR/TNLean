@@ -15,7 +15,7 @@ The canonical local projection and its cyclic translates admit identical
 matrix descriptions in the configuration basis and the Euclidean Hilbert
 space. These identities connect the parent-Hamiltonian gap estimates to
 the matrix formulation of local interactions used in arXiv:1010.3732,
-Sections II.C and II.D.
+Section II.B (`Papers/1010.3732/paper_v3.tex`, lines 357--390).
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -25,7 +25,8 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- The local parent matrix is the matrix of its Euclidean representative
-in the canonical orthonormal basis. Source: arXiv:1010.3732, Section II.D. -/
+in the canonical orthonormal basis. Source: arXiv:1010.3732, Section II.B,
+the local term \(h\) of the parent Hamiltonian. -/
 theorem parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix
     (A : MPSTensor d D) (L : ℕ) :
     LinearMap.toMatrix' (parentInteraction A L) =
@@ -39,7 +40,7 @@ theorem parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix
     parentInteraction, parentInteractionES]
 
 /-- A cyclic parent term is the matrix embedding of its local interaction.
-Source: arXiv:1010.3732, Section II.C.1, the local Hamiltonian sum. -/
+Source: arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
 theorem localTerm_eq_toLin'_embedLocalOperator (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
     localTerm A L N i = Matrix.toLin'
@@ -57,7 +58,7 @@ theorem localTerm_eq_toLin'_embedLocalOperator (A : MPSTensor d D)
     (fun τ ↦ v (replaceWindow L hLN i σ τ))) (extractWindow L i σ)
 
 /-- Euclidean form of the embedded cyclic parent term. Source:
-arXiv:1010.3732, Section II.C.1, the local Hamiltonian sum. -/
+arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
 theorem localTermES_eq_toEuclideanLin_embedLocalOperator (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
     localTermES A L i = Matrix.toEuclideanLin
@@ -68,7 +69,7 @@ theorem localTermES_eq_toEuclideanLin_embedLocalOperator (A : MPSTensor d D)
 
 /-- The full periodic parent Hamiltonian is the Euclidean representative
 of the sum of embedded local parent matrices. Source: arXiv:1010.3732,
-Section II.C.1. -/
+Section II.B, the local Hamiltonian sum. -/
 theorem parentHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator
     (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) :
     parentHamiltonianES A L N = Matrix.toEuclideanLin
@@ -78,7 +79,7 @@ theorem parentHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator
   simp_rw [localTermES_eq_toEuclideanLin_embedLocalOperator A hLN]
 
 /-- The matrix of a canonical parent interaction is an orthogonal projection.
-Source: arXiv:1010.3732, Section II.D, the canonical parent interaction. -/
+Source: arXiv:1010.3732, Section II.B, the choice of the local term as a projector. -/
 theorem parentInteraction_toMatrix'_isStarProjection (A : MPSTensor d D) (L : ℕ) :
     IsStarProjection (LinearMap.toMatrix' (parentInteraction A L)) := by
   rw [parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix]
@@ -87,7 +88,7 @@ theorem parentInteraction_toMatrix'_isStarProjection (A : MPSTensor d D) (L : �
     (LinearMap.toMatrixOrthonormal (EuclideanSpace.basisFun (Cfg d L) ℂ))
 
 /-- Canonical parent interactions have Hilbert-space operator norm at most
-one, as required in arXiv:1010.3732, Section II.C.1. -/
+one, as do the projector local terms of arXiv:1010.3732, Section II.B. -/
 theorem parentInteraction_toMatrix'_norm_le_one (A : MPSTensor d D) (L : ℕ) :
     ‖LinearMap.toMatrix' (parentInteraction A L)‖ ≤ 1 :=
   (parentInteraction_toMatrix'_isStarProjection A L).norm_le _

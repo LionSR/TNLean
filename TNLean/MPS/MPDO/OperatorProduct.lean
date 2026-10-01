@@ -175,8 +175,8 @@ theorem mulTensor_smul_right (b : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D
 \(((\mathbb C^{D_1}\otimes\mathbb C^{D_2})\otimes\mathbb C^{D_3})\) with
 \(\mathbb C^{D_1}\otimes(\mathbb C^{D_2}\otimes\mathbb C^{D_3})\).
 
-Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
-``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+Source: arXiv:1511.08090, Section ``Associativity and the pentagon equation'',
+lines 237--251 of the source. -/
 def mulTensorAssocEquiv (D₁ D₂ D₃ : ℕ) :
     Fin (D₁ * D₂ * D₃) ≃ Fin (D₁ * (D₂ * D₃)) :=
   finProdFinEquiv.symm |>.trans
@@ -188,8 +188,8 @@ def mulTensorAssocEquiv (D₁ D₂ D₃ : ℕ) :
 /-- The permutation matrix of `mulTensorAssocEquiv`, with rows indexed by the
 left-associated bond space and columns by the right-associated bond space.
 
-Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
-``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+Source: arXiv:1511.08090, Section ``Associativity and the pentagon equation'',
+lines 237--251 of the source. -/
 noncomputable def mulTensorAssocMatrix (D₁ D₂ D₃ : ℕ) :
     Matrix (Fin (D₁ * D₂ * D₃)) (Fin (D₁ * (D₂ * D₃))) ℂ :=
   (mulTensorAssocEquiv D₁ D₂ D₃).toPEquiv.toMatrix
@@ -198,8 +198,8 @@ noncomputable def mulTensorAssocMatrix (D₁ D₂ D₃ : ℕ) :
 letter, reindexed by the canonical bond reassociation on both indices, is the
 corresponding left-associated product letter.
 
-Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
-``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+Source: arXiv:1511.08090, Section ``Associativity and the pentagon equation'',
+lines 237--251 of the source. -/
 theorem mulTensor_assoc (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (P : MPOTensor d D₃) (i l : Fin d) :
     mulTensor (mulTensor M N) P i l =
@@ -225,8 +225,8 @@ theorem mulTensor_assoc (M : MPOTensor d D₁) (N : MPOTensor d D₂)
 /-- The product-tensor associator intertwines the letters belonging to the two
 parenthesizations of a triple product.
 
-Source: arXiv:1606.00608, lines 995--999; arXiv:1511.08090, Section
-``Associativity and the pentagon equation'', lines 237--251 of the source. -/
+Source: arXiv:1511.08090, Section ``Associativity and the pentagon equation'',
+lines 237--251 of the source. -/
 theorem mulTensor_mul_assocMatrix (M : MPOTensor d D₁) (N : MPOTensor d D₂)
     (P : MPOTensor d D₃) (i l : Fin d) :
     mulTensor (mulTensor M N) P i l * mulTensorAssocMatrix D₁ D₂ D₃ =

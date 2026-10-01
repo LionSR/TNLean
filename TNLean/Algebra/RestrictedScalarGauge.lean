@@ -26,7 +26,7 @@ constructed here.
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 namespace ScalarCocycle
 
@@ -60,7 +60,7 @@ end ScalarCocycle
 /-- An inverse-normalized fusion scalar `β` satisfying the standing convention
 of arXiv:2502.20257, lines 2050--2053. -/
 @[ext]
-structure RestrictedFusionGauge (G : Type*) [Group G] where
+structure RestrictedFusionGauge (G : Type) [Group G] where
   /-- The scalar fusion gauge `β`. -/
   beta : ScalarCocycle G
   /-- Normalization on the identity axes and inverse pairs. -/
@@ -170,7 +170,7 @@ end ActionTensorGauge
 /-- A restricted scalar gauge bundles an inverse-normalized fusion scalar `β`
 with a normalized action scalar `γ`, as in arXiv:2502.20257, lines 2050--2054. -/
 @[ext]
-structure RestrictedScalarGauge (G X : Type*) [Group G] where
+structure RestrictedScalarGauge (G : Type) (X : Type*) [Group G] where
   /-- The restricted fusion gauge. -/
   fusion : RestrictedFusionGauge G
   /-- The scalar action gauge `γ`. -/

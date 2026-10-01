@@ -54,7 +54,7 @@ namespace TNLean.Algebra.ScalarThreeCochain
 
 section General
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2013–2021 (`Intequiv`).
 The phase `∏_{k=1}^{o(g)} ω⁻¹(g, g^k, g)` acquired by interchanging the domain walls created by

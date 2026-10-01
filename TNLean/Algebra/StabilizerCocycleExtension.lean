@@ -22,7 +22,7 @@ The corrected transition index is explained in
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X] {x₀ : X}
+variable {G : Type} {X : Type*} [Group G] [MulAction G X] {x₀ : X}
 
 private theorem cocycle_transition_identity {Ψ : ScalarCocycle G} (hΨ : Ψ.IsCocycle)
     (a b c u v : G) :
