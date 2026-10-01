@@ -287,9 +287,9 @@ theorem fundamentalTheorem_periodic_equalCase_sectorDecomposition
     exact (U j).prop
 
 /-- Multiplicities matched to unit-modulus multiplicities also have modulus one.
-In particular, nonnegative real multiplicities are then one. This is the
-normalization step in the corrected forward implication of arXiv:1708.00029,
-Theorem 4.1, lines 743–756, allowing the phases introduced when grouping repeated blocks. -/
+This is the normalization step in the corrected forward implication of
+arXiv:1708.00029, Theorem 4.1, lines 743–756, allowing the phases introduced when
+grouping repeated blocks. -/
 theorem weight_norm_eq_one_of_sameMPV₂Pos
     (P Q : SectorDecomposition d)
     (periodP : Fin P.basisCount → ℕ) (periodQ : Fin Q.basisCount → ℕ)
