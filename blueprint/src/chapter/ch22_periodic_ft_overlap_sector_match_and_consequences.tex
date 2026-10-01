@@ -922,8 +922,13 @@
     \uses{thm:periodic_phase_class_unitary_match,thm:coisometry_reconstruction_same_mpv_pos}
     Choose the phases and unitaries of
     Theorem~\ref{thm:periodic_phase_class_unitary_match}. Multiplying
-    (\ref{eq:periodic_phase_class_unitary}) by $\mu_{e(j,q)}$ gives the
-    weighted block identity with weight $\mu'_{j,q}$.
+    (\ref{eq:periodic_phase_class_unitary}) by $\mu_{e(j,q)}$ and using
+    Definition~\ref{def:periodic_grouped_multiplicities} gives
+    \begin{align}
+        \mu_{e(j,q)}A_{e(j,q)}^i
+         & =\mu_{e(j,q)}\xi_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger
+        =\mu'_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger. \notag
+    \end{align}
     The enumeration is a bijection between grouped copies and original
     blocks. Assemble the block unitaries and this permutation into $Y$.
     The block identities give $T^i=YP^iY^\dagger$, and unitarity gives both
