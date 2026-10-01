@@ -26,7 +26,7 @@ variable {d D : ℕ}
 
 /-- The local parent matrix is the matrix of its Euclidean representative
 in the canonical orthonormal basis. Source: arXiv:1010.3732, Section II.B,
-the local term `h` of `eq:mps-def:parentham-def`. -/
+the local term \(h\) of the parent Hamiltonian. -/
 theorem parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix
     (A : MPSTensor d D) (L : ℕ) :
     LinearMap.toMatrix' (parentInteraction A L) =
