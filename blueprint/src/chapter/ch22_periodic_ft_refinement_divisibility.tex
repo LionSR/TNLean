@@ -135,7 +135,7 @@
     \label{thm:periodic_prescribed_blocking_compression}
     \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
     \leanok
-    \uses{thm:periodic_step_orbit_compression}
+    \uses{def:periodic_tensor,thm:periodic_step_orbit_compression}
     If $A$ is periodic of period $m$ and $p\ge0$, there is a family of nonzero
     cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
     $P_uA^i=A^iP_{u+1}$ for which the dimensions $D_\alpha$, isometries
@@ -266,6 +266,7 @@
     \lean{MPSTensor.IsPeriodic.adjoint_pow_fixed_of_pow_fixed,
         MPSTensor.IsPeriodic.adjoint_pow_fixed_iff_gcd}
     \leanok
+    \uses{def:periodic_tensor}
     Let $A$ be periodic of period $m$, let $p>0$, and write
     $F=\E_A^\dagger$ and $r=\gcd(m,p)$. If $F^p(X)=X$, then $F^m(X)=X$.
     Moreover, $F^p(X)=X$ if and only if $F^r(X)=X$.
@@ -285,7 +286,7 @@
     \lean{MPSTensor.sum_adjoint_pow_stepOrbitProjection,
         MPSTensor.IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection}
     \leanok
-    \uses{def:periodic_step_orbit_projection}
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
     Let $A$ be periodic of period $m$, let $p>0$, and put $r=\gcd(m,p)$.
     Suppose $P_u$ are orthogonal projections summing to $\Id_D$ with
     $P_uA^i=A^iP_{u+1}$. Write $F=\E_A^\dagger$ and fix $\alpha<r$.
@@ -311,7 +312,7 @@
     \label{thm:periodic_compressed_irreducible}
     \lean{MPSTensor.IsPeriodic.isIrreducibleFamily_compressed_stepOrbit}
     \leanok
-    \uses{def:periodic_step_orbit_projection}
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
     Let $A$ be periodic of period $m$, let $p>0$, and let $P_u$ be
     orthogonal projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
     Fix $\alpha<\gcd(m,p)$ and an isometry $V$ with
@@ -329,8 +330,8 @@
     $F^p$, where $F=\E_A^\dagger$. The faithful invariant state of $\E_A$
     implies $F^p(L)=L$. Since $Q_\alpha L=L$, fixed-point rigidity
     gives $L=cQ_\alpha$, and compression gives $R=c\Id$.
-    Idempotence forces $R=0$ or $R=\Id$. Irreducibility is preserved
-    when passing between a Kraus family and its adjoint family.
+    Idempotence forces $R=0$ or $R=\Id$. Since $\E_C$ and $\E_C^\dagger$ have
+    the same invariant orthogonal projections, $C$ is irreducible.
 \end{proof}
 
 \begin{theorem}[Orbit roots as consecutive products]
