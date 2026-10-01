@@ -93,6 +93,7 @@ import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.LocalSupport
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale
+import TNLean.MPS.ParentHamiltonian.MatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.MixedBoundaryGram
 import TNLean.MPS.ParentHamiltonian.MixedGram
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
