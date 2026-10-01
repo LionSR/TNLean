@@ -100,7 +100,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   symmetry under every irreducible representation as a pulling-through
   identity, and the coloring superposition as the equal-weight superposition
   of the Gauss-law configurations of trivial holonomy, the only sector the
-  dual network reaches on a torus.
+  dual network reaches on a torus. It also records that stability of
+  `G`-isometry under concatenation (Lemma 6.2) is formalized in one
+  dimension, with the constants multiplying, and that in two dimensions only
+  the simplification of the left inverse for the left-regular representation
+  on the contracted link is formalized (open scope restriction).
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -141,10 +145,12 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
-- `mpu_shift_specified_tensor_index_scope.tex` records that the computed shift
-  formulas are values of the displayed tensors, while the source states the
-  public blocking-independent MPU index. The remaining public construction is
-  tracked by issues #7011 and #5856.
+- `mpu_shift_specified_tensor_index_scope.tex` records the resolved distinction
+  between the specified-tensor formulas and the public blocking-independent
+  MPU index. `ShiftPublicIndex.lean` constructs the right-shift canonical form
+  and proves the public right/left shift indices and the three zero-index
+  examples; representative invariance transports these values to other MPU
+  presentations of the same periodic operators.
 - `mpu_ancilla_three_swap_orientation.tex` records that the literal crossed
   swap labels in Figure `fig:TR-ancilla` agree with $\widetilde U_3$ and differ
   from the claimed $\widetilde U_2$ endpoint when $N\geq3$ and $d\geq2$, and
@@ -693,6 +699,10 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   walls and their phases are nonzero and that the local action of the
   symmetry on a domain wall holds against blocked regions of the two ground
   states.
+- `gs24_domain_wall_exchange_square.tex` records that the printed orientation
+  of the exchange of two domain-wall strings is formalized with the square of
+  the exchange phase equal to one as a hypothesis; the source derives it from
+  the symmetry squaring to the identity.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
@@ -802,3 +812,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
+  of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
+  (paragraph "Connection to MERA") is formalized for tensors whose two-site
+  blocked tensor is injective, so that every layer is an isometry, and for
+  chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
+  a coarser last block remove the two restrictions.

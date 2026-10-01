@@ -36,8 +36,16 @@ There are **two distinct missing bridges**.
 
 ### 1. The equal-case periodic FT is still not available unconditionally
 
+**Historical (superseded 2026-09-30).** This subsection records the state on
+2026-04-21. The conditional theorem it names has since been removed; the equal
+case is now `MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods` in
+`TNLean/MPS/Periodic/IrreducibleFormPeriods.lean`, stated over the source's
+irreducible form (arXiv:1708.00029, `thm:bdequal`, lines 643--693) with neither
+`PeriodicOverlapHypothesis` nor `hPowEq`, and the overlap files listed below no
+longer contain admitted proofs. Bridge 2 below has not been re-audited.
+
 The natural next step is to apply the periodic equal-case fundamental theorem to
-`C` and `blockTensor A p`. However the current repository surface is still:
+`C` and `blockTensor A p`. On 2026-04-21 the repository surface was:
 
 - `MPSTensor.PeriodicEqualCaseFT` in
   `TNLean/MPS/Periodic/Symmetry.lean` — an abstract `Prop` hypothesis;

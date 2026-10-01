@@ -21,10 +21,7 @@ matrix product state with a tensor built from the singlet matrix
     \label{eq:mg_singlet_matrix}
 \end{align}
 whose entry $Y_{ab}$ is the coefficient of $\ket{ab}$ in the singlet
-$\ket{10}-\ket{01}$. The bond-dimension-three representative of the state,
-Definition~\ref{def:majumdar_ghosh_tensor}, is a non-normal, non-injective
-example whose range-three parent Hamiltonian has a two-dimensional ground space
-on even rings of at least four sites.
+$\ket{10}-\ket{01}$.
 
 \begin{definition}[Majumdar--Ghosh tensor of the review]%
     \label{def:majumdar_ghosh_review_tensor}
@@ -46,6 +43,21 @@ on even rings of at least four sites.
     $\widetilde A^i=B^i\otimes Y\in\MN{6}$ on the bond
     $\C^3\otimes\C^2\cong\C^6$, with $Y$ as in~(\ref{eq:mg_singlet_matrix}).
 \end{definition}
+
+The periodic coefficients are traces of products of these matrices.
+The literal reading above and the singlet-bond reading have different
+periodic vectors; their relation and the source ambiguity are recorded in
+\cite{gap:rmp_majumdar_ghosh_tensor_gap} and
+Theorem~\ref{thm:majumdar_ghosh_review_mpv}.
+The singlet-covering state is identified in
+Theorem~\ref{thm:majumdar_ghosh_dimer_superposition}, and its
+bond-dimension-three tensor is left-canonical, non-injective and non-normal
+(Theorems~\ref{thm:majumdar_ghosh_left_canonical},
+\ref{thm:majumdar_ghosh_not_injective} and \ref{thm:majumdar_ghosh_not_normal}).
+Its two-dimensional parent ground space on even rings of at least four
+sites is Theorem~\ref{thm:majumdar_ghosh_ground_space}; the corresponding
+Hamiltonian comparison is Theorem~\ref{thm:majumdar_ghosh_review_hamiltonian}.
+
 
 \begin{theorem}[Coefficients of the review tensor factor]%
     \label{thm:majumdar_ghosh_review_coeff}

@@ -195,6 +195,66 @@
         +\beta^L\,O_L(\widehat M_{f+f'+1}),
         \notag
     \end{align}
+    Drawing each sector with its matrix index horizontal, as in the diagram
+    for Definition~\ref{def:mpdo_bnt_label_same_length_product_form}, the
+    product law reads, with $g=f+f'$ and $\bar g=f+f'+1$,
+    \begin{center}
+        % Formula: O_L(\widehat M_f)O_L(\widehat M_{f'})
+        % =alpha^L O_L(\widehat M_{f+f'})+beta^L O_L(\widehat M_{f+f'+1}),
+        % the display above; the product law of arXiv:1606.00608,
+        % Theorem 4.14(ii), lines 972--985, for the flag sectors.
+        % Ink-to-index map: every box is a rescaled flag sector read
+        % vertically, with its matrix index (the two-qubit space of L and R)
+        % running horizontally; the north legs a_r and south legs b_r are
+        % horizontal bond indices of the twisted dimer.  Upper ring f, lower
+        % ring f', right rings g=f+f' and \bar g=f+f'+1, labels added modulo two.
+        % Contraction set: each ring closes its own matrix indices; on the
+        % left, the vertical wire at each site is the operator product.
+        % Boundary signature: (virtual-west=0 | virtual-east=0 |
+        % physical-up=3 | physical-down=3) for every term.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op}, cols=4, boundary=periodic, bonds=none]
+            \tn[skin=mpo, size=l, name=a1, ports={90:physical:$a_1$,
+                        270:physical, 180:virtual, 0:virtual}]{\widehat M_f} &
+            \tn[skin=mpo, size=l, name=a2, ports={90:physical:$a_2$,
+                        270:physical, 180:virtual, 0:virtual}]{\widehat M_f} &
+            \tn[skin=dots, name=ad, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l, name=aL, ports={90:physical:$a_L$,
+                        270:physical, 180:virtual, 0:virtual}]{\widehat M_f} \\
+            \tn[skin=mpo, size=l, name=b1, ports={90:physical,
+                        270:physical:$b_1$, 180:virtual, 0:virtual}]{\widehat M_{f'}} &
+            \tn[skin=mpo, size=l, name=b2, ports={90:physical,
+                        270:physical:$b_2$, 180:virtual, 0:virtual}]{\widehat M_{f'}} &
+            \tn[skin=dots, name=bd, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l, name=bL, ports={90:physical,
+                        270:physical:$b_L$, 180:virtual, 0:virtual}]{\widehat M_{f'}}
+            \tnwire{a1.0}{a2.180} \tnwire{a2.0}{ad.180} \tnwire{ad.0}{aL.180}
+            \tnwire{b1.0}{b2.180} \tnwire{b2.0}{bd.180} \tnwire{bd.0}{bL.180}
+            \tnwire{a1.270}{b1.90} \tnwire{a2.270}{b2.90}
+            \tnwire{aL.270}{bL.90}
+        \end{tenkz}
+        \\[2ex]
+        $=\alpha^L$\quad
+        \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_1$, 270:physical:$b_1$}]{\widehat M_g} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_2$, 270:physical:$b_2$}]{\widehat M_g} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_L$, 270:physical:$b_L$}]{\widehat M_g}
+        \end{tenkz}
+        \quad$+\,\beta^L$\quad
+        \begin{tenkz}[rows={op}, cols=4, boundary=periodic]
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_1$, 270:physical:$b_1$}]{\widehat M_{\bar g}} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_2$, 270:physical:$b_2$}]{\widehat M_{\bar g}} &
+            \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+            \tn[skin=mpo, size=l,
+                ports={90:physical:$a_L$, 270:physical:$b_L$}]{\widehat M_{\bar g}}
+        \end{tenkz}
+    \end{center}
     where $\alpha=\frac{7}{10}$, $\beta=\frac1{10}$, and the flag values are
     added modulo two. Thus the operators of
     Definition~\ref{def:mpdo_twisted_dimer_flag_sectors} satisfy the
@@ -414,6 +474,46 @@
          & =U^\dagger(\mu\,\widehat M_0^{ab}\oplus\mu\,\widehat M_1^{ab})U.
         \notag
     \end{align}
+    The first identity is the vertical decomposition drawn in
+    \cite[Proposition~4.13, lines~945--959]{Cirac2016MPDO_arXiv}:
+    \begin{tenkzequation}
+        % Formula: U \widetilde M_{ab} U^dagger
+        % = mu \widehat M_0^{ab} (+) mu \widehat M_1^{ab}, the first display
+        % above; source arXiv:1606.00608, Proposition 4.13, eq. (UMU),
+        % lines 945--959 (figure MPDO_UMU), with the one-site
+        % multiplicities equal to one.
+        % Ink-to-index map: the middle box on the left is the twisted dimer
+        % with west leg a and east leg b, the horizontal bond pair; its
+        % vertical legs are the eight-dimensional physical space, which U and
+        % U^dagger map onto the direct sum of the two flag subspaces.  On the
+        % right each box is a rescaled flag sector on its four-dimensional
+        % space, with the same open legs a and b.
+        % Contraction set: on the left, the two vertical wires are the
+        % products U \widetilde M_{ab} and \widetilde M_{ab} U^dagger; no
+        % index is contracted on the right.
+        % Boundary signature: (virtual-west=1 | virtual-east=1 |
+        % physical-up=1 | physical-down=1) for every term.
+        \tenkzkernel
+        \begin{tenkz}[rows={op,op,op}, cols=1, bonds=none]
+            \tn[skin=box, size=l, name=U,
+                ports={90:physical, 270:physical}]{U} \\
+            \tn[skin=mpo, size=l, name=M, ports={90:physical, 270:physical,
+                        180:virtual:$a$, 0:virtual:$b$}]{\widetilde M} \\
+            \tn[skin=box, size=l, name=Ud,
+                ports={90:physical, 270:physical}]{U^\dagger}
+            \tnwire{U.270}{M.90} \tnwire{M.270}{Ud.90}
+        \end{tenkz}
+        $ = \mu$
+        \begin{tenkz}[cols=1]
+            \tn[skin=mpo, size=l, ports={90:physical, 270:physical,
+                        180:virtual:$a$, 0:virtual:$b$}]{\widehat M_0}
+        \end{tenkz}
+        $ \oplus\,\mu$
+        \begin{tenkz}[cols=1]
+            \tn[skin=mpo, size=l, ports={90:physical, 270:physical,
+                        180:virtual:$a$, 0:virtual:$b$}]{\widehat M_1}
+        \end{tenkz}
+    \end{tenkzequation}
     Each flag sector is injective at one site and therefore proportional to
     a normal tensor with spectral radius one. At every positive length $N$,
     the matrix product vector of the vertically viewed tensor is

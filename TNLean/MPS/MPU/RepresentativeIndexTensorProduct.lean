@@ -79,4 +79,19 @@ theorem IsMPU.index_tensorProduct_identityMPUTensor
     _ = hU.index + 0 := congrArg (hU.index + ·) (IsMPU.index_identityMPUTensor n)
     _ = hU.index := add_zero _
 
+/-- Attaching a positive-dimensional physical identity ancilla preserves the
+representative index. CPSV17, `def:equivalent-tensors`, lines 706–720, and
+Theorem `IndexTh` (ii), lines 824–845. -/
+theorem IsMPU.index_tensorPhysicalId
+    {d D : ℕ} [NeZero d] [NeZero D] {U : MPOTensor d D}
+    (hU : IsMPU U) (n : ℕ) [NeZero n] :
+    (hU.tensorPhysicalId n (NeZero.pos n)).index = hU.index := by
+  calc
+    (hU.tensorPhysicalId n (NeZero.pos n)).index =
+        (hU.tensorProduct (identityMPUTensor_isMPU n)).index := by
+      apply IsMPU.index_eq_of_mpo_eq
+      intro N _
+      exact (mpo_tensorProduct_identityMPUTensor U n N).symm
+    _ = hU.index := hU.index_tensorProduct_identityMPUTensor n
+
 end MPOTensor

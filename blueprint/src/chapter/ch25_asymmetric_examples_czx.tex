@@ -13,6 +13,44 @@ decorated representative with additional Pauli $Z$ factors
 in~\cite[Section~III.D]{GarreRubioSchuch2024DomainWall} is a different
 tensor.
 
+\begin{definition}[The CZX matrix product unitary of the review]
+    \label{def:asymex_czx_review_tensor}
+    \lean{CZXCompression.reviewCZXIntTensor, CZXCompression.reviewCZXTensor,
+        CZXCompression.reviewCZXTensor_apply,
+        CZXCompression.reviewCZXTensor_eq_transpose,
+        CZXCompression.printed2017Tensor_eq_smul_reviewCZXTensor}
+    \leanok
+    \uses{def:mpo_tensor, def:asymex_czx_tensors}
+    The CZX tensor of the review~\cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix}
+    is the bond-two tensor $A$, with the output index first:
+    \begin{align}
+        A^{01} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
+        \notag
+    \end{align}
+    \begin{align}
+        A^{10} & =\begin{pmatrix}0&0\\1&-1\end{pmatrix},
+        \notag
+    \end{align}
+    and $A^{00}=A^{11}=0$. Its entries are
+    $A^{ij}_{\alpha\beta}=\delta_{i,1-j}\delta_{\alpha,i}(-1)^{i\beta}$.
+    It is obtained from the bond-two tensor of
+    Definition~\ref{def:asymex_czx_tensors} by transposing every matrix
+    and exchanging the two physical indices: $A^{ij}=(M^{ji})^{\mathsf T}$.
+    The bra-ket form of the same tensor in the review uses normalized
+    virtual vectors and equals $2^{-1/2}A$; its periodic operator is not
+    unitary, and the matrices displayed above are taken as the source
+    tensor~\cite{gap:mpu_czx_tensor_normalization}.
+\end{definition}
+
+For $N>0$, close the virtual indices by the ordinary trace:
+$O_N(A)_{st}=\tr(A^{s_0t_0}\cdots A^{s_{N-1}t_{N-1}})$.
+Theorem~\ref{thm:asymex_czx_review_kernel} gives the periodic kernel
+and its relation to the input-phase convention used below.
+Unitarity, the square and normality are established in
+Theorems~\ref{thm:asymex_czx_review_unitarity}--\ref{thm:asymex_czx_review_normal}.
+The decorated representative has its own anomaly-class statement in
+Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
+
 \subsection{The bond-two tensor and the periodic operator}
 
 On a periodic chain of $N>0$ qubits, the undecorated CZX operator acts on
@@ -246,34 +284,6 @@ canonical form in~\cite[Section~IV]{Cirac2021Matrix}. The presentation
 below uses the review's coordinates. Throughout, the
 first physical index is the output, and for a configuration
 $s\in\{0,1\}^N$ the exponent $q(s)$ is~(\ref{eq:asymex_czx_exponent}).
-
-\begin{definition}[The CZX matrix product unitary of the review]
-    \label{def:asymex_czx_review_tensor}
-    \lean{CZXCompression.reviewCZXIntTensor, CZXCompression.reviewCZXTensor,
-        CZXCompression.reviewCZXTensor_apply,
-        CZXCompression.reviewCZXTensor_eq_transpose,
-        CZXCompression.printed2017Tensor_eq_smul_reviewCZXTensor}
-    \leanok
-    \uses{def:mpo_tensor, def:asymex_czx_tensors}
-    The CZX tensor of the review is the bond-two tensor $A$ with
-    \begin{align}
-        A^{01} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
-        \notag
-    \end{align}
-    \begin{align}
-        A^{10} & =\begin{pmatrix}0&0\\1&-1\end{pmatrix},
-        \notag
-    \end{align}
-    and $A^{00}=A^{11}=0$. Its entries are
-    $A^{ij}_{\alpha\beta}=\delta_{i,1-j}\delta_{\alpha,i}(-1)^{i\beta}$.
-    It is obtained from the bond-two tensor of
-    Definition~\ref{def:asymex_czx_tensors} by transposing every matrix
-    and exchanging the two physical indices: $A^{ij}=(M^{ji})^{\mathsf T}$.
-    The bra-ket form of the same tensor in the review uses normalized
-    virtual vectors and equals $2^{-1/2}A$; its periodic operator is not
-    unitary, and the matrices displayed above are taken as the source
-    tensor~\cite{gap:mpu_czx_tensor_normalization}.
-\end{definition}
 
 \begin{theorem}[Periodic kernel of the review's tensor]
     \label{thm:asymex_czx_review_kernel}
@@ -1399,11 +1409,8 @@ asymmetric fundamental theorem.
 
 \begin{theorem}[Compression of the squared non-simple family]
     \label{thm:asymex_czx_plus_compression}
-    % Principal declaration: CZXCompression.czxPlusIdentity_isReduction.
-    \lean{CZXCompression.czxPlusIdentity_compression,
-        CZXCompression.czxPlusIdentity_isReduction,
-        CZXCompression.czxPlusIdentity_left_mul_right_of_ne,
-        CZXCompression.czxPlusIdentity_dim_eq,
+    % Principal declaration: CZXCompression.czxPlusIdentity_dim_eq.
+    \lean{CZXCompression.czxPlusIdentity_compression, CZXCompression.czxPlusIdentity_dim_eq,
         CZXCompression.czxPlusIdentity_evalWord_remainder_eq_zero}
     \leanok
     \uses{def:asymex_czx_plus, thm:asym_multiblock}

@@ -342,9 +342,8 @@ theorem exists_norm_mpvState_sq_le (A : MPSTensor d D) (hN : Kraus.IsNormal A)
     (lam₂ := (t : ℂ)) (fun μ hμ hne => by rw [hnorm]; exact (hgap μ hμ hne).trans (le_max_left _ _))
     (γ := 1 / 4) (by norm_num) (by norm_num)
   refine ⟨1 + K, fun N => ?_⟩
-  have hx : Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ≤ 1 := by
-    rw [neg_div_correlationLength, hnorm, Real.exp_le_one_iff]
-    exact mul_nonpos_of_nonneg_of_nonpos (by norm_num) (Real.log_nonpos ht0.le ht1)
+  have hx : Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ≤ 1 :=
+    exp_neg_div_correlationLength_le_one (by norm_num) (hnorm.trans_le ht1)
   have hpow : (Real.exp (-(1 / 4) / correlationLength (t : ℂ)) ^ 2) ^ N ≤ 1 :=
     pow_le_one₀ (by positivity) (pow_le_one₀ (by positivity) hx)
   have := (abs_le.1 ((hc N).trans (mul_le_of_le_one_right hK hpow))).2
