@@ -22,8 +22,18 @@ $\mathbb{Z}_2\times\mathbb{Z}_2$'', realizes one of the classes by the
 operators $U_a=\prod_i CZ_{i,i+1}Z_i$, $U_b=\prod_i X_i$, and
 $U_{ab}=U_aU_b$ on a periodic chain, and states: ``In this realization the
 only non-trivial $3$-cocycle element is $\omega(ab,ab,ab)=-1$.''
-In a normalized gauge the three diagonal values determine the class, so the
-statement asserts
+Read entrywise, this is impossible: a normalized cochain whose only value
+different from one is $\omega(ab,ab,ab)=-1$ violates the cocycle equation
+\begin{align}
+    \omega(h,k,l)\,\omega(g,hk,l)\,\omega(g,h,k)
+     & =\omega(gh,k,l)\,\omega(g,h,kl)
+    \label{eq:glm23kleinprinted_cocycle}
+\end{align}
+at $(g,h,k,l)=(a,b,ab,ab)$, where the left side is $1$ and the right side
+is $-1$. The source's preceding paragraph writes $\omega_g=\omega(g,g,g)$ and
+uses these diagonal values to distinguish the classes, so the statement is
+read as a statement about them. In a normalized gauge the three diagonal
+values determine the class, and the statement asserts
 \begin{align}
     \bigl(\omega(a,a,a),\omega(b,b,b),\omega(ab,ab,ab)\bigr)
      & =(+1,+1,-1).

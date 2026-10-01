@@ -21,7 +21,8 @@ of the fusion tensors. A normalized representative has `ω(ab,ab,ab) = -1`, as
 stated in the source.
 
 **Scope restriction (sign at `ab`):** the source states that `ω(ab,ab,ab) = -1` is the only
-nontrivial entry. This module proves the sign at `ab` but not the values `+1` at `a` and `b`.
+nontrivial diagonal value. This module proves the sign at `ab` but not the values `+1` at
+`a` and `b`.
 Documented in `docs/paper-gaps/glm23_klein_printed_anomaly_scope.tex`.
 -/
 
