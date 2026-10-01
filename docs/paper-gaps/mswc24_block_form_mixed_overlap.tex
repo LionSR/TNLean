@@ -5,7 +5,7 @@
 \input{command}
 \title{The Positive Part of a Blocked Tensor with Overlapping Blocks}
 \author{}
-\date{2026-09-30}
+\date{2026-10-01}
 \begin{document}
 \maketitle
 \gapnote{false-source}{wip}
@@ -165,6 +165,54 @@ counterexample and the numerical checks below show the error to be of order
 $(N/q)\tau^{2q}$, of second order in the overlaps, which the argument does not
 capture.
 
+\section{Weights of different moduli}
+Let every block still have multiplicity one, now with weight $\mu_j$. For multiplicity one the
+phase of $\mu_j$ can be absorbed into $A_j$, which stays normal with the same transfer map; the
+weight of block $j$ in (S7) is then $\beta_j=\lvert\mu_j\rvert^N$. So let $0\leq w_j\leq1$ be real
+with $\max_jw_j=1$, the normalization of the source \cite[after eq.~(S2)]{Malz2024Preparation},
+let $A=\bigoplus_jw_jA_j$ and $\beta_j=w_j^N$, and keep the hypotheses of the previous section on
+the blocks, on $\lambda_2$ and on $\gamma$. Then (\ref{eq:mswc24_mixed_corrected}) holds for the
+source's state (S7), with a constant $C$ that does not depend on $q$ or $M$, again for every
+$q\geq1$ and $M\geq1$.
+
+The Lipschitz step of the previous section fails: the limit of the Gram matrices is now
+$G_\infty^{(q)}=\sum_jw_j^{2q}K_j(\sigma_j^T\otimes\mathbf 1)K_j^\dagger$, whose smallest
+eigenvalue on the blocks of weight $w_j<1$ tends to zero as $q$ grows. Three changes repair the
+argument.
+\begin{enumerate}
+    \item Writing $B=\sum_jw_j^qB_jK_j^\dagger$, every block of $B^\dagger B-G_\infty^{(q)}$ is a
+          block of the unit-weight case multiplied by $w_j^qw_{j'}^q\leq1$, so
+          $\lVert B^\dagger B-G_\infty^{(q)}\rVert\leq Ke^{-\gamma'q/\xi}$ for every
+          $0<\gamma'<1$, with $K$ independent of the weights.
+    \item The square root is $\tfrac12$-Hölder on positive semidefinite matrices,
+          $\lVert\sqrt X-\sqrt Y\rVert\leq\lVert X-Y\rVert^{1/2}$, the bound used in
+          \cite[Supplemental Material, eq.~(26)]{Piroli2021LOCC}. With $\gamma'=2\gamma<1$ it gives
+          $\lVert P-P_\infty^{(q)}\rVert\leq K^{1/2}e^{-\gamma q/\xi}$, where
+          $P_\infty^{(q)}=\sum_jw_j^qK_j((\sqrt{\sigma_j})^T\otimes\mathbf 1)K_j^\dagger$. The
+          halving of the exponent is absorbed by the range $0<\gamma<1/2$ of the source.
+    \item The mixed transfer matrix of $P_\infty^{(q)}$ against the fixed-point tensor of block
+          $j$ is $w_j^q$ times the rank-one idempotent $R_j:\rho\mapsto\operatorname{Tr}(\Pi_j\rho)
+              \tilde\sigma_j$ of trace one. Its powers $w_j^{qk}R_j$ are bounded by
+          $\lVert R_j\rVert$, uniformly in $q$, so the telescoping estimate gives
+          $\lvert z_j-w_j^N\rvert\leq C_jye^{C_jy}$.
+\end{enumerate}
+With $S=\sum_j\beta_jz_j$ and $b=\sum_j\beta_j^2\geq1$ one has
+$\lvert S-b\rvert\leq\sum_j\lvert z_j-\beta_j\rvert$, and as before
+$\bigl\lvert\lVert\phi_N(A)\rVert^2-b\bigr\rvert\leq Ke^{-\gamma N/\xi}$; the inequality of the
+previous section gives (\ref{eq:mswc24_mixed_corrected}).
+
+The phase cannot be kept in $\beta_j$: if $\mu_j=\lvert\mu_j\rvert e^{i\theta_j}$, the positive
+part $P$ carries no phases, $V$ carries $e^{iq\theta_j}$ on block $j$, and $V^{\otimes M}$
+multiplies $\ket{\Omega_j}$ by $e^{iN\theta_j}$; with $\beta_j=\mu_j^N$ the state (S7) has block
+coefficients $\lvert\mu_j\rvert^Ne^{2iN\theta_j}$ against $\lvert\mu_j\rvert^Ne^{iN\theta_j}$ in
+the target. For the random blocks of the numerical check below with $\mu=(1,e^{0.9i})$ and
+$M=8$, the error with $\beta_j=\mu_j^N$ is $0.794$, $0.191$, $0.301$ at $q=4,8,12$, against
+$0.355$, $6.53\cdot10^{-2}$, $1.47\cdot10^{-2}$ with $\beta_j=\lvert\mu_j\rvert^N$. The printed
+form $\beta_j=\mu_j^N$ is consistent with the block form (\ref{eq:mswc24_mixed_block_form}),
+which assigns the phase to $P$; since $P$ is positive semidefinite, the reading with
+$\beta_j=\lvert\mu_j\rvert^N$, that is, with the phases absorbed into the blocks, is the one
+adopted here.
+
 \section{What is formalized}
 The overlap (\ref{eq:mswc24_mixed_overlap}) for all $q,M\geq1$, the lower bound
 (\ref{eq:mswc24_mixed_lower_bound}), the upper bound
@@ -210,6 +258,24 @@ and weight one, with its ingredients, is formalized.\footnote{Formal declaration
     \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap}.}
 
+The bound (\ref{eq:mswc24_mixed_corrected}) for weights $0\leq w_j\leq1$ with $\max_jw_j=1$ and
+multiplicity one, with the three ingredients of the previous section, is formalized; the case
+of weight one is derived from it.\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum_weight} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_weight} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockError};
+    \leanid{MPSTensor.gram_blockTensor_blockSum},
+    \leanid{MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le} and
+    \leanid{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_weight_sub_le} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockGram};
+    \leanid{MPSTensor.mixedMapLM_blockSumPosLimit_smul_apply},
+    \leanid{MPSTensor.exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le} and
+    \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_weight_sq_sub_le} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap};
+    \leanid{norm_prod_range_sub_pow_le_of_forall_norm_pow_le} in
+    \doclink{TNLean/Algebra/NormedRingTelescoping}.}
+The phase observation is not formalized.
+
 \section{Numerical check}
 A script evaluates the overlap through $P$, using $V^\dagger B=P$ and the support
 projector of $P$, from the eigendecomposition of $B^\dagger B$.
@@ -223,9 +289,17 @@ projector of $P$, from the eigendecomposition of $B^\dagger B$.
           unit weights, $\varepsilon/(M\tau^{2q})$ is $0.176$, $0.167$, $0.154$, $0.155$ at
           $M=8$ and $q=6,8,10,12$: the error is of order $(N/q)\tau^{2q}$ and tends to
           zero.
-    \item For the same blocks with weights $(1,0.7)$, outside the formalized scope, the
-          error is $3.52\cdot10^{-3}$, $3.45\cdot10^{-4}$, $2.89\cdot10^{-5}$ at $M=8$ and
-          $q=6,8,10$.
+    \item For the same blocks with weights $(1,0.7)$ the error is $3.52\cdot10^{-3}$,
+          $3.45\cdot10^{-4}$, $2.89\cdot10^{-5}$ at $M=8$ and $q=6,8,10$.
+    \item For two other random normal blocks of bond dimension two on $d=2$, with subleading
+          eigenvalues $0.515$ and $0.850$ and mixed spectral radius $\tau=0.757$, so that
+          $\lvert\lambda_2\rvert=0.850$, and weights $(1,w_2)$ with
+          $w_2\in\{1,0.99,0.9,0.7,0.4,0.1\}$, the ratio $\varepsilon/(M\lvert\lambda_2\rvert^q)$
+          stays below $0.14$ for all $M\in\{1,2,4,8\}$ and $q\in\{2,4,\dots,12\}$. For
+          $w_2=0.9$ and $0.7$, $M\geq2$, and $q\geq4$ the error is close to $cM(w_2\tau)^{2q}$
+          with $c$ between $0.4$ and $1.25$; for $w_2=0.4$ and $0.1$ it no longer depends on $w_2$ and is
+          that of the first block alone. Smaller weights make the overlap term smaller, and the
+          constant of (\ref{eq:mswc24_mixed_corrected}) does not grow as $w_2$ decreases.
 \end{itemize}
 
 \section{Elimination}
@@ -255,13 +329,13 @@ physical indices.
 
 The second keeps the source's construction and hypotheses and corrects the rate: it
 is (\ref{eq:mswc24_mixed_corrected}), with the correlation lengths of the mixed
-transfer matrices included in $\xi$. It is formalized for weight one. Three
-extensions are not formalized: weights of different moduli, for which $G_\infty$ is
-not positive definite on the blocks of smaller weight and the Lipschitz step fails;
-blocks with multiplicity combined with overlaps, where the corrected state of
-\cite{gap:mswc24_repeated_block_corrected_state} would replace (S7); and the sharp
-rate $(N/q)\tau^{2q}$, which needs a second-order perturbation bound for the square
-root of $B^\dagger B$ around its block-diagonal part.
+transfer matrices included in $\xi$. It is formalized for multiplicity one and real
+weights $0\leq w_j\leq1$ with $\max_jw_j=1$, which covers weights of different moduli once
+the phases are absorbed into the blocks. Two extensions are not formalized: blocks with
+multiplicity combined with overlaps, where the corrected state of
+\cite{gap:mswc24_repeated_block_corrected_state} would replace (S7); and the sharp rate
+$(N/q)\tau^{2q}$, which needs a second-order perturbation bound for the square root of
+$B^\dagger B$ around its block-diagonal part.
 
 \bibliographystyle{alpha}
 \bibliography{references}
