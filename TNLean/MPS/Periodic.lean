@@ -30,7 +30,7 @@ import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.PeriodBound
 import TNLean.MPS.Periodic.PeriodExistence
-import TNLean.MPS.Periodic.PhaseClassAssembly
+import TNLean.MPS.Periodic.PhaseClassGrouping
 import TNLean.MPS.Periodic.PhaseClasses
 import TNLean.MPS.Periodic.PrescribedBlocking
 import TNLean.MPS.Periodic.ProjectiveRep
