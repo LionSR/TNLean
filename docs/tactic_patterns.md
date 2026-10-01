@@ -24,6 +24,32 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### fixed-volume C3 from a physical open-chain bound — promoted
+- **Pattern:** split a martingale index into `n < l`, `n = l`, and `l < n`;
+  the first two products vanish, while the last is bounded by its physical
+  open-chain representative after adjoining the right spectator sites.
+- **Seen:** the original threshold theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/FixedAmbientMartingaleBound.lean`
+  and the prescribed-gap theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrescribedGap.lean` (2026-09-28).
+- **Abstraction:** `fixedAmbient_martingaleDifference_norm_le_of_openChain`
+  in `FixedAmbientMartingaleBound.lean` retains the chosen nonnegative bound
+  without tying it to the threshold `1 / sqrt (l + 1)`.
+- **Notes:** both uses share the original three-case proof; no new tactic is
+  needed.
+
+### passing a scalar grading through a matrix word — promoted
+- **Pattern:** move a grading matrix through each letter and multiply the
+  letter-dependent scalars.
+- **Seen:** three occurrences across `MPS/ParentHamiltonian/Basic.lean`,
+  `MPS/Examples/MajumdarGhoshGroundSpace.lean`, and
+  `MPS/Examples/MultiBlock/ParityAmplitudes.lean`.
+- **Abstraction:** `MPSTensor.mul_evalWord_of_mul_eq_smul_letter` in
+  `MPS/Core/WordGrading.lean`; the constant-scalar theorem is a specialization.
+- **Notes:** all three matrix-word inductions now share one proof. The parity
+  example only retains the scalar identity combining occupation signs.
+  The promotion adds 21 Lean lines including the helper module and imports.
+
 ### virtual-leg cancellation in source-gate contractions — promoted
 - **Pattern:** cancel the adjacent factors $z^\dagger z=I$ between two
   rectangular matrices, leaving the site-specific Kronecker expansions intact.
@@ -71,6 +97,18 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** all three call sites are refactored. The block-by-block bound
   `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
   block-sum files and is a candidate for the same treatment.
+
+### error from a logarithmic block-length threshold — promoted
+- **Pattern:** close `K * (M * Real.exp (-x)) ≤ ε` from a threshold
+  `log K + log M - log ε ≤ x` by a hand-written `calc` through
+  `Real.exp_log`, `Real.exp_add`/`Real.exp_sub` and `Real.exp_le_exp`.
+- **Seen:** three occurrences across three files (2026-09-30):
+  `DepthLogBound.lean`, `LogDepthPreparation.lean` and `TreeMERA.lean`, all
+  under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_le_of_log_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** all three call sites use the helper; each now proves only the
+  threshold inequality.
 
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
@@ -2335,6 +2373,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### weighted W-state rows across a cut — candidate
+- **Pattern:** rewrite a weighted sum of traces of two word products as a
+  scalar multiple of the W amplitude on the concatenated configuration, then
+  use `wIndicator_append_mem_span` to put the cut row in the two-dimensional
+  span of the vacuum and single-excitation indicators.
+- **Seen:** two occurrences in one file (2026-09-28):
+  `lt_of_sum_mpv_eq_smul_wIndicator` and
+  `lt_of_sum_mpv_eq_smul_wIndicator_asymmetric` in
+  `TNLean/MPS/Examples/WStateCanonicalBound.lean`.
+- **Abstraction:** if another cut-rank application repeats this conversion,
+  state a row-membership lemma taking the weighted W-state identity and the
+  two cut lengths.
+- **Notes:** below the promotion threshold. The shared long-side spanning
+  argument is already extracted as
+  `blockTracePairing_range_le_of_forall_mem` in
+  `TNLean/MPS/ParentHamiltonian/PGVWC07CutRank.lean` and used in both cut-rank
+  estimates.
+
 ### Positive local terms with prescribed kernels
 
 For two finite families of positive operators with equal kernels term by
@@ -2363,6 +2419,30 @@ Example: `GroupedProjectorEstimate.lean`, in
 prefix projections. This permits the active-volume identity and spectator bound
 to be combined using ordinary arithmetic equalities. Candidate helper pattern;
 currently one occurrence, so no general declaration is warranted.
+
+### telescoping trace bound near an idempotent mixed transfer matrix — candidate
+- **Pattern:** bound `‖Tr(T^M) - 1‖` for a mixed transfer matrix `T = Ψ(P)` with
+  `‖T - T_∞‖ ≤ K₃ K₁ x^q`, where `T_∞ = Ψ(P_∞)` is idempotent of trace one: apply
+  `norm_prod_range_sub_pow_le_of_isIdempotentElem` with `c = ‖1‖ + ‖T_∞‖`, rewrite
+  `Tr(T^M) - 1` through `Matrix.traceLinearMap`, then close the chain
+  `K₄ c ((1 + cδ)^M - 1) ≤ … ≤ C u e^{C u}` with `one_add_pow_sub_one_le_mul_exp`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_trace_prod_range_transferMatrix_sub_one_le` in
+  `TNLean/MPS/Preparation/ApproximationError.lean` and
+  `exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+- **Notes:** a third occurrence would justify a lemma taking the idempotent `T_∞`,
+  its trace, and the linear bound `‖T - T_∞‖ ≤ δ` as hypotheses.
+
+### off-diagonal constants chosen with a dummy diagonal value — candidate
+- **Pattern:** `have hoff : ∀ j k, ∃ K, 0 ≤ K ∧ (j ≠ k → ∀ n, ‖f j k n‖ ≤ K * x ^ n)`,
+  proved by `by_cases j = k` with `⟨0, le_rfl, …⟩` on the diagonal, then `choose`, and
+  a split `∑ⱼ ∑ₖ = ∑ⱼ (diagonal + ∑_{k ∈ univ.erase j})` by `Finset.add_sum_erase`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_gram_blockTensor_blockSum_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockGram.lean` and
+  `exists_abs_norm_mpvState_blockSum_sq_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
 
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
@@ -3448,6 +3528,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
 
+### GHZ zero-image non-injectivity witnesses — candidate
+
+- **Pattern:** choose virtual labels forcing one physical label to equal both 0 and 1,
+  then use the resulting zero basis image to disprove injectivity.
+- **Occurrences:** `ghzSiteTensor_not_linearIndependent` and
+  `ghzPEPS_not_isVertexInjective` in `TNLean/PEPS/Examples/GHZ.lean`.
+- **Count:** two occurrences in one file; below the promotion threshold.
+- **Possible abstraction:** a bridge from linear independence of the four-leg
+  site tensor to vertex injectivity of its torus realization, if another example
+  repeats the construction.
+
 ### Transposed Kronecker gauge inverses — candidate
 
 - **Pattern:** reduce block-diagonal inverse products to Kronecker products,
@@ -3600,6 +3691,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   different shape — the open-lattice memberships need no negation normalization and the
   branches close by `omega` alone — and are left as they are.
 
+
+### positivity of the cyclic step-orbit length — candidate
+- **Pattern:** derive `0 < m / m.gcd p` from `0 < m` using
+  `Nat.div_pos (Nat.gcd_le_left p hm) (Nat.gcd_pos_of_pos_left p hm)`.
+- **Seen:** two occurrences in two files (2026-09-29): `Fin.exists_stepOrbit_phases`
+  in `TNLean/Algebra/FinStepOrbit.lean` and
+  `MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases` in
+  `TNLean/MPS/Periodic/SectorPhaseWord.lean`.
+- **Abstraction:** if a third use appears, prefer a lemma about the positive
+  quotient over a tactic; the present proof is two applications of Mathlib lemmas.
+- **Notes:** positivity supplies both the finite cyclic successor and the fact
+  that a complex root of unity has unit modulus. No additional positivity
+  hypothesis belongs in either public theorem.
 
 ## Retired
 

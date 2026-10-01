@@ -487,6 +487,24 @@ normalizations.
   printed notion. Recorded in
   `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
+#### `TNLean.PEPS.IsGIsometricMPS`
+
+- **Declaration:** `TNLean.PEPS.IsGIsometricMPS (A : ι → Module.End ℂ (MonoidAlgebra ℂ G)) : Prop`.
+- **Defined in:** `TNLean/PEPS/GIsometric.lean`.
+- **Meaning:** an MPS tensor with bond space `ℂ[G]` carrying the left-regular
+  representation `L_g`, invariant (`L_g A^i L_g⁻¹ = A^i`), with
+  `𝒫(A†) 𝒫(A) = c σ` for one constant `c > 0`, where `𝒫(A†)|i⟩ = (A^i)†` and
+  `σ` is the twirl onto the commutant.
+- **Source:** arXiv:1001.3807, Definition `def:iso:isopeps` in the form
+  `𝒫(A)⁻¹ = 𝒫(A†)`, `Papers/1001.3807/paper_v3.tex:1668-1700`.
+- **Sanctioned bridges:** `IsGIsometricMPS.isGInjective` (G-injectivity for
+  the conjugation action of the left-regular representation);
+  `IsGIsometricMPS.concatTensor` (Lemma 6.2 in one dimension).
+- **Caveat / paper gap:** the constant `c` is the normalization Local fix of
+  `IsGIsometric`. No bridge to the coordinate-space `IsGIsometric` is stated:
+  the virtual system here is `End ℂ[G]` rather than a coordinate space.
+  Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
 #### `TNLean.PEPS.IsTorusDimerCovering`
 
 - **Declaration:**
@@ -743,8 +761,25 @@ model different levels of data and different sources.
   CPSV canonical form. Each proves both inputs from its own grouping and
   Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and
   `MPSTensor.IsCPSVCanonicalForm` is proved or used in either direction, and
-  none may be assumed: the bundle is the only point at which the two surfaces
-  meet, and supplying it from one of them says nothing about the other.
+  none may be assumed: supplying the common grouping properties from one
+  canonical form says nothing about the other.
+- `MPOTensor.HasVerticalBNTProductInputs` in
+  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean` records the grouping properties
+  for both the one-site tensor and its two-site block, together with three
+  properties of the blocked vertical tensor: every invariant orthogonal
+  projection reduces its letters; an irreducible isometric corner with a
+  positive definite eigenmatrix at a positive eigenvalue has no other
+  peripheral eigenvalue of that modulus; and every
+  nonzero corner is detected by a finite-chain sector compression. These are
+  the properties used in CPSV16, Proposition 4.13, lines 1873--1921, and
+  Appendix C.4, lines 2020--2029. The constructors
+  `MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs` and
+  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs` prove them
+  independently under MPDO positivity. They imply the common retained-product
+  spectral and positive fusion constructions; together with positivity and
+  `IsRFPViaTS`, they give `HasBNTFusionTensorClause`. These are intermediate
+  consequences of each canonical form, not additional hypotheses of the
+  source-facing fixed-point theorems.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   the normalized fixed-representative predicate of Appendix C.2: it adds the
   MPDO and nonnilpotent-sector conditions to horizontal canonical form. Its
@@ -1318,6 +1353,71 @@ The following notions use different transfer objects and are not interchangeable
   `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
   polylogarithmic-depth conversions of the phase equivalence in
   arXiv:2103.13367 are not formalized, nor is blocking of sites.
+
+## Local circuits assisted by measurements
+
+### `MPSPreparation.MeasurementProtocol.IsPreparationOf`
+
+- **Declaration:**
+  `MPSPreparation.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+- **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
+  sites measured in the computational basis, and for every outcome string a
+  unitary at every site) starts from a nonzero product vector, and for every
+  outcome `m` with `P.postMeasurement m ≠ 0` the corrected vector `P.output m`
+  is a scalar multiple of `ψ`.
+- **Source:** arXiv:2103.13367, main text, paragraph "State transformations
+  with QC and LOCC" (the scheme "apply `U ∈ LU` depending on the outcomes of
+  all previous measurements", and deterministic preparation).
+- **Sanctioned bridges:** `MeasurementProtocol.IsPreparationOf.ne_zero` (a
+  prepared vector is nonzero) and
+  `MeasurementProtocol.exists_postMeasurement_ne_zero`.
+- **Caveat:** ancillas are sites of the ring; the measurement is fixed in
+  advance and in the computational basis; the correction is one product of
+  single-site unitaries applied after all the measurements. Each of these
+  restricts the source's scheme, so every such protocol is one of the source.
+
+### `MPSPreparation.IsPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+- **Meaning:** some protocol `P` whose circuit has at most `T` layers
+  satisfies `P.IsPreparationOf ψ`.
+- **Source:** arXiv:2103.13367, Definition "Transformations under QC and
+  LOCC" (the class `QCcc_ℓ`).
+- **Sanctioned bridges:**
+  `MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
+  nonzero vector prepared by a local circuit),
+  `MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
+  (without measurements, preparation by a local circuit up to single-site
+  unitaries), and
+  `MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
+  (GHZ-type states in depth `2`).
+- **Caveat:** the free local unitaries of the source between the layers of the
+  circuit, acting on a site and its ancillas, are counted here as gates, so the
+  depth bounds the source's depth. The light-cone bound of
+  `MPSPreparation.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
+  GHZ-type states, whose connected correlations do not decay, are prepared in
+  depth `2`.
+
+### `MPSPreparation.IsLocalPerm`
+
+- **Declaration:**
+  `MPSPreparation.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Cfg d N)) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/PermutationGates.lean`.
+- **Meaning:** the permutation `σ` of the configurations changes only the
+  sites of `S`, and its new values on `S` depend only on the old values on
+  `S`.
+- **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
+  corrections of the GHZ preparation, generalized to shifts of qudits).
+- **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
+  permutation matrix is a unitary acting on `S`),
+  `MPSPreparation.isLocalPerm_shiftPerm`, and
+  `MPSPreparation.exists_permLayer_op_mulVec` (a layer of such gates on
+  disjoint pairs acts as one permutation of the configurations).
+- **Caveat:** only permutations of the computational basis are covered; a
+  general gate is a `MPSPreparation.Layer` gate.
 
 ## Worked examples
 

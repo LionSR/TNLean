@@ -37,12 +37,14 @@ import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleLowerEndpoint
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenRangeComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
 import TNLean.MPS.ParentHamiltonian.Martingale.ParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicGapFromDivisibleOpen
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicRangeComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.PositiveComparisonGap
+import TNLean.MPS.ParentHamiltonian.Martingale.PrescribedGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapAtC1Range
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapThreshold

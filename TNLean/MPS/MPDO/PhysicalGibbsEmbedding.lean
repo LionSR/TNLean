@@ -36,7 +36,9 @@ def oneSiteOperator (k : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (Fin 1 → Fin d) (Fin 1 → Fin d) ℂ :=
   fun x y ↦ k (x ⟨0, by omega⟩) (y ⟨0, by omega⟩)
 
-private theorem oneSiteOperator_eq_reindexAlgEquiv_symm
+/-- The one-site coordinate operator is matrix reindexing along the unique
+identification of `Fin 1 → Fin d` with `Fin d`. -/
+theorem oneSiteOperator_eq_reindexAlgEquiv_symm
     (A : Matrix (Fin d) (Fin d) ℂ) :
     oneSiteOperator A =
       (Matrix.reindexAlgEquiv ℂ ℂ (Equiv.funUnique (Fin 1) (Fin d))).symm A := by
@@ -260,12 +262,13 @@ theorem exp_embedLocalOperator
     (LinearMap.continuous_of_finiteDimensional
       (embedLocalOperatorAlgHom (d := d) L N hLN i).toLinearMap) A
 
-/-- A heterogeneous tensor product of one matrix at each site. -/
-private noncomputable def sitewiseMatrixFamily
+/-- The tensor product of one matrix at each site, in configuration coordinates. -/
+noncomputable def sitewiseMatrixFamily
     (A : Fin N → Matrix (Fin d) (Fin d) ℂ) : ChainOperator d N :=
   fun σ τ ↦ ∏ n, A n (σ n) (τ n)
 
-private theorem sitewiseMatrixFamily_mul
+/-- Multiplication of tensor products is multiplication at each site. -/
+theorem sitewiseMatrixFamily_mul
     (A B : Fin N → Matrix (Fin d) (Fin d) ℂ) :
     sitewiseMatrixFamily A * sitewiseMatrixFamily B =
       sitewiseMatrixFamily fun n ↦ A n * B n := by
@@ -295,7 +298,9 @@ private def sitewiseMatrixFamilyMonoidHom :
   map_one' := sitewiseMatrixFamily_one
   map_mul' A B := (sitewiseMatrixFamily_mul A B).symm
 
-private theorem sitewiseMatrixFamily_mulSingle
+/-- A one-site matrix embedded at `i` is the tensor product of that matrix
+at `i` and identities at every other site. -/
+theorem sitewiseMatrixFamily_mulSingle
     (hN : 1 ≤ N) (i : Fin N) (A : Matrix (Fin d) (Fin d) ℂ) :
     sitewiseMatrixFamily (Pi.mulSingle i A) =
       embedLocalOperator 1 N hN i (oneSiteOperator A) := by
@@ -372,6 +377,42 @@ theorem embedLocalOperator_one_commute
         MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos j) hqjOffset
     exact hij (hqiEq.symm.trans hqjEq)
 
+/-- The product of one-site embeddings of a matrix is its tensor power in
+configuration coordinates. -/
+theorem prod_embedLocalOperator_one_eq_sitewiseMatrixFamily
+    (hN : 1 ≤ N) (A : Matrix (Fin d) (Fin d) ℂ) :
+    (Finset.univ : Finset (Fin N)).noncommProd
+      (fun i => embedLocalOperator 1 N hN i (oneSiteOperator A))
+      (by
+        intro i _ j _ _
+        exact embedLocalOperator_one_commute hN A i j) =
+      sitewiseMatrixFamily (fun _ : Fin N => A) := by
+  classical
+  let x : Fin N → Matrix (Fin d) (Fin d) ℂ := fun _ => A
+  let g : Fin N → (Fin N → Matrix (Fin d) (Fin d) ℂ) :=
+    fun i => Pi.mulSingle i (x i)
+  have hgcomm :
+      ∀ i ∈ (Finset.univ : Finset (Fin N)),
+        ∀ j ∈ (Finset.univ : Finset (Fin N)), i ≠ j → Commute (g i) (g j) :=
+    fun i _ j _ _ => Pi.mulSingle_apply_commute x i j
+  calc
+    _ = Finset.univ.noncommProd (fun i => sitewiseMatrixFamily (g i))
+        (fun i hi j hj hij =>
+          Commute.map (hgcomm i hi j hj hij) sitewiseMatrixFamilyMonoidHom) :=
+      Finset.noncommProd_congr rfl
+        (fun i _ => (sitewiseMatrixFamily_mulSingle hN i A).symm) _
+    _ = sitewiseMatrixFamily x := by
+      have hmap := Finset.map_noncommProd Finset.univ g hgcomm
+        sitewiseMatrixFamilyMonoidHom
+      calc
+        _ = sitewiseMatrixFamilyMonoidHom
+            (Finset.univ.noncommProd g hgcomm) := hmap.symm
+        _ = sitewiseMatrixFamilyMonoidHom x := by
+          congr 1
+          exact Finset.noncommProd_mulSingle x
+        _ = sitewiseMatrixFamily x := rfl
+    _ = sitewiseMatrixFamily (fun _ : Fin N => A) := rfl
+
 /-- The exponential of a sum of identical one-site energies is their
 sitewise tensor power. -/
 theorem exp_sum_embedLocalOperator_one
@@ -387,50 +428,17 @@ theorem exp_sum_embedLocalOperator_one
         (fun i j ↦ Commute (f i) (f j)) := by
     intro i _ j _ _
     exact embedLocalOperator_one_commute hN A i j
-  let x : Fin N → Matrix (Fin d) (Fin d) ℂ :=
-    fun _ ↦ NormedSpace.exp A
-  let g : Fin N → (Fin N → Matrix (Fin d) (Fin d) ℂ) :=
-    fun i ↦ Pi.mulSingle i (x i)
-  have hgpair :
-      ((Finset.univ : Finset (Fin N)) : Set (Fin N)).Pairwise
-        (fun i j ↦ Commute (g i) (g j)) := by
-    intro i _ j _ _
-    exact Pi.mulSingle_apply_commute x i j
-  have hgcomm :
-      ∀ i ∈ (Finset.univ : Finset (Fin N)),
-        ∀ j ∈ (Finset.univ : Finset (Fin N)), i ≠ j →
-          Commute (g i) (g j) :=
-    fun i hi j hj hij ↦ hgpair hi hj hij
-  have hterm (i : Fin N) :
-      NormedSpace.exp (f i) = sitewiseMatrixFamily (g i) := by
-    calc
-      NormedSpace.exp (f i) =
-          embedLocalOperator 1 N hN i
-            (NormedSpace.exp (oneSiteOperator A)) :=
-        exp_embedLocalOperator 1 N hN i (oneSiteOperator A)
-      _ = embedLocalOperator 1 N hN i
-          (oneSiteOperator (NormedSpace.exp A)) := by
-        rw [exp_oneSiteOperator]
-      _ = sitewiseMatrixFamily (g i) := by
-        exact (sitewiseMatrixFamily_mulSingle hN i (NormedSpace.exp A)).symm
   change NormedSpace.exp (∑ i ∈ Finset.univ, f i) = _
   rw [Matrix.exp_sum_of_commute Finset.univ f hpair]
   calc
     _ = Finset.univ.noncommProd
-        (fun i ↦ sitewiseMatrixFamily (g i))
-        (fun i hi j hj hij ↦
-          Commute.map (hgcomm i hi j hj hij) sitewiseMatrixFamilyMonoidHom) :=
-      Finset.noncommProd_congr rfl (fun i _ ↦ hterm i) _
-    _ = sitewiseMatrixFamily x := by
-      have hmap := Finset.map_noncommProd Finset.univ g hgcomm
-        sitewiseMatrixFamilyMonoidHom
-      calc
-        _ = sitewiseMatrixFamilyMonoidHom
-            (Finset.univ.noncommProd g hgcomm) := hmap.symm
-        _ = sitewiseMatrixFamilyMonoidHom x := by
-          congr 1
-          exact Finset.noncommProd_mulSingle x
-        _ = sitewiseMatrixFamily x := rfl
-    _ = sitewisePhysicalMatrix (NormedSpace.exp A) N := rfl
+        (fun i ↦ embedLocalOperator 1 N hN i
+          (oneSiteOperator (NormedSpace.exp A)))
+        (fun i _ j _ _ ↦
+          embedLocalOperator_one_commute hN (NormedSpace.exp A) i j) :=
+      Finset.noncommProd_congr rfl (fun i _ ↦ by
+        rw [exp_embedLocalOperator, exp_oneSiteOperator]) _
+    _ = sitewisePhysicalMatrix (NormedSpace.exp A) N :=
+      prod_embedLocalOperator_one_eq_sitewiseMatrixFamily hN _
 
 end MPOTensor

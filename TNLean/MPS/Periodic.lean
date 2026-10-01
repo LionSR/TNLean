@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Periodic
 
 import TNLean.MPS.Periodic.Applications
+import TNLean.MPS.Periodic.BlockDecomposition
 import TNLean.MPS.Periodic.CornerContraction
 import TNLean.MPS.Periodic.CornerTransition
 import TNLean.MPS.Periodic.Defs
@@ -30,6 +31,7 @@ import TNLean.MPS.Periodic.SectorContraction
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.Periodic.SectorLift
 import TNLean.MPS.Periodic.SectorNormalization
+import TNLean.MPS.Periodic.SectorPhaseWord
 import TNLean.MPS.Periodic.StateVectorDecomposition
 import TNLean.MPS.Periodic.Symmetry
 import TNLean.MPS.Periodic.ZGauge
