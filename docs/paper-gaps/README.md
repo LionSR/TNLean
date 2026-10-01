@@ -58,6 +58,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
   realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
+- `spc11_uniform_gap_injective_scope.tex` (scope restriction) records that the
+  uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, is formalized
+  for continuous compact families of one-site injective tensors with the
+  canonical two-site interaction, while the source's path also covers
+  non-injective normal forms with several blocks.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
   that the formal fixed point takes a projective representation with the given
   factor system as input, whereas the source starts from the 2-cocycle alone; the
