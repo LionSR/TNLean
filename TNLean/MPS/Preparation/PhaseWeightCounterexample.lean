@@ -17,17 +17,19 @@ positive part of the blocked tensor is `P = ⊕ⱼ diag(μ_{j,1}^q, …, μ_{j,m
 with `βⱼ = ∑ₖ μ_{j,k}^N` (eq. (S4)). Lemma 1'(ii) bounds the error of this state by
 `O((N/q) e^{-γ q/ξ_diag})` for `q = o(N)`.
 
-The positive part is positive semidefinite, so it cannot carry the phases of the weights; they
-sit in the isometry `V`, which already supplies the phase `(μⱼ/|μⱼ|)^N` to the `j`-th block, and
-`βⱼ = μⱼ^N` counts this phase a second time. This file evaluates the construction for the two
-one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, of multiplicity one, with
-weights `1` and `μ`, `|μ| = 1`, so that `A⁰ = diag(1, 0)` and `A¹ = diag(0, μ)`
-(`phaseBlockTensor`). The states of the two blocks are orthogonal for every `q ≥ 1`, so the overlap
-of blocks plays no role. For every block length `q ≥ 1` and every number of blocks `M ≥ 1`, with
-`N = qM`, the overlap of the approximating state with the target is `(1 + conj(μ)^N)/2`
-(`nonNormalApproxOverlap_phaseBlockTensor`), while with `βⱼ = |μⱼ|^N` the approximating state is
-the target itself (`nonNormalApproxOverlap_phaseBlockTensor_norm`). For `μ = -1` and odd `N` the
-approximating state is orthogonal to the target, and the error is `1`
+For blocks of multiplicity one write `μⱼ = |μⱼ| uⱼ`. The blocked tensor is `B = B₀ U`, where `B₀` is
+the blocked tensor for the weights `|μⱼ|` and the diagonal unitary `U` multiplies the bond
+coordinates of block `j` by `uⱼ^q`, so `P = Uᴴ P₀ U` and `V = V₀ U`. The diagonal blocks of `P` are
+those of `P₀` and carry no phase; the isometry `V` already supplies the phase `uⱼ^N` to the `j`-th
+block on `N = qM` sites, and `βⱼ = μⱼ^N` counts this phase a second time. This file evaluates the
+construction for the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, of
+multiplicity one, with weights `1` and `μ`, `|μ| = 1`, so that `A⁰ = diag(1, 0)` and
+`A¹ = diag(0, μ)` (`phaseBlockTensor`). The states of the two blocks are orthogonal for every
+`q ≥ 1`, so the overlap of blocks plays no role. For every block length `q ≥ 1` and every number
+of blocks `M ≥ 1`, with `N = qM`, the overlap of the approximating state with the target is
+`(1 + conj(μ)^N)/2` (`nonNormalApproxOverlap_phaseBlockTensor`), while with `βⱼ = |μⱼ|^N` the
+approximating state is the target itself (`nonNormalApproxOverlap_phaseBlockTensor_norm`). For
+`μ = -1` and odd `N` the approximating state is orthogonal to the target, and the error is `1`
 (`one_sub_norm_nonNormalApproxOverlap_phaseBlockTensor_neg_one`).
 
 The tensor lies in the domain of Lemma 1'(ii): after ordering its bond coordinates it is the
@@ -44,8 +46,8 @@ numbers the approximating state of eq. (S7), with the coefficients `βⱼ = ∑�
 eq. (S4), does not approximate `|φ_N⟩`, and the bound of Lemma 1'(ii) fails, already for
 orthogonal blocks of multiplicity one. The coefficients of eq. (S4) are correct in the expansion
 of eq. (S3); the false steps are the block form of eq. (S5), which places the phase in the
-positive part, and its use in eqs. (S6) and (S7), where `V^{⊗M}` already carries the phase.
-Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+diagonal blocks of the positive part, and its use in eqs. (S6) and (S7), where `V^{⊗M}` already
+carries the phase. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
 

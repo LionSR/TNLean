@@ -201,16 +201,23 @@ $\lvert S-b\rvert\leq\sum_j\lvert z_j-\beta_j\rvert$, and as before
 $\bigl\lvert\lVert\phi_N(A)\rVert^2-b\bigr\rvert\leq Ke^{-\gamma N/\xi}$; the inequality of the
 previous section gives (\ref{eq:mswc24_mixed_corrected}).
 
-The phase cannot be kept in $\beta_j$: if $\mu_j=\lvert\mu_j\rvert e^{i\theta_j}$, the positive
-part $P$ carries no phases, $V$ carries $e^{iq\theta_j}$ on block $j$, and $V^{\otimes M}$
-multiplies $\ket{\Omega_j}$ by $e^{iN\theta_j}$; with $\beta_j=\mu_j^N$ the state (S7) has block
-coefficients $\lvert\mu_j\rvert^Ne^{2iN\theta_j}$ against $\lvert\mu_j\rvert^Ne^{iN\theta_j}$ in
-the target. For the random blocks of the numerical check below with $\mu=(1,e^{0.9i})$ and
+The phase cannot be kept in $\beta_j$. Write $\mu_j=\lvert\mu_j\rvert u_j$ with
+$u_j=e^{i\theta_j}$, let $B_0$ be the blocked map for the weights $\lvert\mu_j\rvert$, and let
+$U$ be the diagonal unitary that multiplies the bond coordinates of block $j$ by $u_j^q$. Then
+$B=B_0U$, so $B^\dagger B=U^\dagger B_0^\dagger B_0U$, $P=U^\dagger P_0U$ and $V=V_0U$. The
+diagonal blocks of $P$ are those of $P_0$ and carry no phase, contrary to
+(\ref{eq:mswc24_mixed_block_form}); only the mixed blocks of $P$, which vanish for orthogonal
+blocks, carry the phases $\overline{u_j}^{\,q}u_{j'}^q$. Since $\ket{\Omega_j}$ lies on the bond
+coordinates of block $j$, $V^{\otimes M}\ket{\Omega_j}=e^{iN\theta_j}V_0^{\otimes M}\ket{\Omega_j}$,
+and with $\beta_j=\mu_j^N$ the state (S7) has the block coefficients
+$\lvert\mu_j\rvert^Ne^{2iN\theta_j}$ relative to $V_0^{\otimes M}\ket{\Omega_j}$, in which the
+phase of the weight appears twice. For the random blocks of the numerical check below with $\mu=(1,e^{0.9i})$ and
 $M=8$, the error with $\beta_j=\mu_j^N$ is $0.794$, $0.191$, $0.301$ at $q=4,8,12$, against
 $0.355$, $6.53\cdot10^{-2}$, $1.47\cdot10^{-2}$ with $\beta_j=\lvert\mu_j\rvert^N$. The printed
 form $\beta_j=\mu_j^N$ is consistent with the block form (\ref{eq:mswc24_mixed_block_form}),
-which assigns the phase to $P$; since $P$ is positive semidefinite, the printed coefficients are
-wrong in (S6) and (S7) (Section~\ref{sec:mswc24_phase_counterexample}), and
+which assigns the phase to the diagonal blocks of $P$. With the printed coefficients (S6) and
+(S7) fail already for orthogonal blocks of multiplicity one
+(Section~\ref{sec:mswc24_phase_counterexample}), and
 $\beta_j=\lvert\mu_j\rvert^N$ is used, with the phases absorbed into the blocks. The
 coefficients $\beta_j=\mu_j^N$ of (S4) remain correct in the expansion (S3) of
 $\ket{\phi_N}$.

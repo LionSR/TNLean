@@ -11,16 +11,27 @@
 
 \subsection{Weights with a phase}\label{sec:ldp_complex_weights}
 
-The positive part of the blocked map is positive semidefinite, so it cannot carry
-the phases of the weights, as the block form
-\cite[eq.~(S5)]{Malz2024Preparation} asserts. For blocks of multiplicity one the
-phases sit in the isometry $V$, which already gives the $j$-th block the phase
-$(\mu_j/\lvert\mu_j\rvert)^N$ on $N=qM$ sites. The coefficients
-$\beta_j=\mu_j^N$ of \cite[eq.~(S4)]{Malz2024Preparation} are correct in the
-expansion \cite[eq.~(S3)]{Malz2024Preparation} of $\ket{\phi_N}$, but under
-$V^{\otimes M}$ in \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} they count this
-phase twice, and the approximating state does not converge
-(Theorem~\ref{thm:ldp_approximation_error_phase_weights}). With
+For blocks of multiplicity one write $\mu_j=\lvert\mu_j\rvert u_j$ with
+$\lvert u_j\rvert=1$. The blocked map is $B=B_0U$, where $B_0$ is the blocked map
+for the weights $\lvert\mu_j\rvert$ and the diagonal unitary $U$ multiplies the
+bond coordinates of block $j$ by $u_j^q$. Hence
+$B^\dagger B=U^\dagger B_0^\dagger B_0U$, and the polar decompositions satisfy
+\begin{align*}
+    P=U^\dagger P_0U,\qquad V=V_0U.
+\end{align*}
+The diagonal blocks of $P$ are those of $P_0$ and do not depend on the phases,
+contrary to the block form \cite[eq.~(S5)]{Malz2024Preparation}; only the mixed
+blocks of $P$, which vanish for orthogonal blocks, carry the phases
+$\overline{u_j}^{\,q}u_{j'}^q$. The product
+$\ket{\Omega_j}=\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$ of the pairs of
+block $j$ lies on the bond coordinates of block $j$, so
+$V^{\otimes M}\ket{\Omega_j}=u_j^NV_0^{\otimes M}\ket{\Omega_j}$ on $N=qM$
+sites. The coefficients $\beta_j=\mu_j^N$ of
+\cite[eq.~(S4)]{Malz2024Preparation} are correct in the expansion
+\cite[eq.~(S3)]{Malz2024Preparation} of $\ket{\phi_N}$, but under
+$V^{\otimes M}$ in \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} they count the
+phase $u_j^N$ twice, and already for orthogonal blocks the approximating state
+does not converge (Theorem~\ref{thm:ldp_approximation_error_phase_weights}). With
 $\beta_j=\lvert\mu_j\rvert^N$ it converges at the rate of
 Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
 (Theorem~\ref{thm:ldp_approximation_error_complex_weights})

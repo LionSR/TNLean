@@ -13,11 +13,15 @@ Malz, Styliaris, Wei, and Cirac (arXiv:2307.01696, Supplemental Material, eqs. (
 a tensor that is not normal as `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` with complex weights
 `|μ_{j,k}| ≤ 1`, at least one of modulus one, and approximate its state on `N = qM` sites by
 `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` with `βⱼ = ∑ₖ μ_{j,k}^N` (eq. (S4)), where `B = V P` is the polar
-decomposition of the `q`-site blocked tensor. The positive part `P` is positive semidefinite, so
-the phases of the weights cannot sit in it, as the block form `⊕ⱼ diag(μ_{j,k}^q) ⊗ P_j` of
-eq. (S5) asserts; they sit in `V`, and `V^{⊗M}` already supplies the phase `(μⱼ/|μⱼ|)^N` to the
-`j`-th block. With `βⱼ = μⱼ^N` this phase is counted twice, and the error does not tend to zero
-(`MPSTensor.nonNormalApproxOverlap_phaseBlockTensor`).
+decomposition of the `q`-site blocked tensor. For blocks of multiplicity one write
+`μⱼ = |μⱼ| uⱼ`. Then `B = B₀ U`, where `B₀` is the blocked tensor for the weights `|μⱼ|` and the
+diagonal unitary `U` multiplies the bond coordinates of block `j` by `uⱼ^q`, so `P = Uᴴ P₀ U`
+and `V = V₀ U`. The diagonal blocks of `P` are those of `P₀` and do not depend on the phases,
+contrary to the block form `⊕ⱼ diag(μ_{j,k}^q) ⊗ P_j` of eq. (S5); only the mixed blocks of `P`,
+which vanish for orthogonal blocks, carry the phases `conj(uⱼ)^q u_{j'}^q`. Since `|Ω_j⟩` lies on
+the bond coordinates of block `j`, `V^{⊗M} |Ω_j⟩ = uⱼ^N V₀^{⊗M} |Ω_j⟩`, and with `βⱼ = μⱼ^N`
+the phase of the weight is counted twice. Already for orthogonal blocks the error then does not
+tend to zero (`MPSTensor.nonNormalApproxOverlap_phaseBlockTensor`).
 
 This file proves the corrected statement for blocks of multiplicity one: with `βⱼ = |μⱼ|^N`
 the error obeys the bound of `exists_approximationError_le_overlappingBlockSum_weight`
@@ -34,10 +38,11 @@ replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented i
 `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 **False source (eqs. (S5)–(S7), complex weights):** for a weight that is not a nonnegative real
-number the block form of eq. (S5) places the phase in the positive part, and eqs. (S6) and (S7)
-take the coefficients `βⱼ = μⱼ^N` of eq. (S4) under `V^{⊗M}`, which already carries the phase.
-These coefficients are correct in the expansion of eq. (S3); in the approximating state of
-eq. (S7) they are replaced by `|μⱼ|^N`. Every block occurs once. Documented in
+number the block form of eq. (S5) places the phase in the diagonal blocks of the positive part,
+and eqs. (S6) and (S7) take the coefficients `βⱼ = μⱼ^N` of eq. (S4) under `V^{⊗M}`, which
+already carries the phase; with these coefficients the bound fails already for orthogonal blocks.
+They are correct in the expansion of eq. (S3); in the approximating state of eq. (S7) they are
+replaced by `|μⱼ|^N`. Every block occurs once. Documented in
 `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
