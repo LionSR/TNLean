@@ -213,6 +213,39 @@ which assigns the phase to $P$; since $P$ is positive semidefinite, the reading 
 $\beta_j=\lvert\mu_j\rvert^N$, that is, with the phases absorbed into the blocks, is the one
 adopted here.
 
+\section{The phase of a weight: a counterexample}
+The doubled phase is a separate failure of (S7), which occurs already for orthogonal blocks of
+multiplicity one. Take $d=2$, the one-dimensional normal blocks $A_1=(1,0)$ and $A_2=(0,1)$, each
+of multiplicity one, with weights $1$ and $\mu$, $\lvert\mu\rvert=1$, so that
+$A^0=\operatorname{diag}(1,0)$ and $A^1=\operatorname{diag}(0,\mu)$ and
+$\ket{\phi_N}\propto\ket{0\cdots0}+\mu^N\ket{1\cdots1}$. The blocks form a basis of normal tensors
+in canonical form~II, and both weights have modulus one. For $q\geq1$ the Gram matrix of the
+blocked map on the diagonal bond coordinates is the identity, so $P=JJ^\dagger$ and $V=BJJ^\dagger$,
+with $J$ the isometry placing the coordinate $e$ on the pair $(e,e)$; $V$ maps the pair of the
+second block to $\mu^q\ket{1\cdots1}$. For coefficients $\alpha$ with
+$\lvert\alpha_1\rvert^2+\lvert\alpha_2\rvert^2=1$ the overlap is
+$(\overline{\alpha_1}+\overline{\alpha_2})/\sqrt2$, so for every $q,M\geq1$
+\begin{align}
+    \braket{\widetilde\phi_N}{\phi_N}=\frac{1+\overline\mu^{\,N}}2
+    \quad\bigl(\beta=(1,\mu^N)\bigr),\qquad
+    \braket{\widetilde\phi_N}{\phi_N}=1
+    \quad\bigl(\beta=(1,\lvert\mu\rvert^N)\bigr).
+    \label{eq:mswc24_phase_overlap}
+\end{align}
+For $\mu=-1$ and odd $N$ the state (S7) is $\propto\ket{0\cdots0}+\ket{1\cdots1}$, orthogonal to
+$\ket{\phi_N}\propto\ket{0\cdots0}-\ket{1\cdots1}$, and $\varepsilon=1$. The transfer maps of the
+blocks have no eigenvalue other than one, so every $\lambda_2$ with $0<\lvert\lambda_2\rvert<1$
+bounds their subleading eigenvalues, and along $q=M$ odd, $N=q^2$, the printed bound
+$C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}\exp(C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}})$ tends to zero
+while $\varepsilon=1$. A script evaluating the overlap from the eigendecomposition of $B^\dagger B$
+reproduces (\ref{eq:mswc24_phase_overlap}) for $\mu\in\{-1,i,e^{0.9i}\}$ and
+$(q,M)\in\{(1,1),(1,3),(2,3),(3,3),(3,5),(5,5)\}$.
+
+The same tensor is the direct sum $A_1\oplus A_2'$ with the block $A_2'=(0,\mu)$ and weights
+$(1,1)$, for which (S4) gives $\beta=(1,1)$ and (S7) is exact: the printed coefficients depend on
+how the phase is split between the block and the weight. The coefficients
+$\beta_j=\lvert\mu_j\rvert^N$ do not.
+
 \section{What is formalized}
 The overlap (\ref{eq:mswc24_mixed_overlap}) for all $q,M\geq1$, the lower bound
 (\ref{eq:mswc24_mixed_lower_bound}), the upper bound
@@ -274,7 +307,23 @@ of weight one is derived from it.\footnote{Formal declarations:
     \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap};
     \leanid{norm_prod_range_sub_pow_le_of_forall_norm_pow_le} in
     \doclink{TNLean/Algebra/NormedRingTelescoping}.}
-The phase observation is not formalized.
+The counterexample (\ref{eq:mswc24_phase_overlap}), with the hypotheses of part~(ii) for it and
+the failure of the printed bound for $\mu=-1$, is formalized.\footnote{Formal declarations:
+    \leanid{MPSTensor.nonNormalApproxOverlap_phaseBlockTensor_of_norm},
+    \leanid{MPSTensor.nonNormalApproxOverlap_phaseBlockTensor},
+    \leanid{MPSTensor.nonNormalApproxOverlap_phaseBlockTensor_norm},
+    \leanid{MPSTensor.one_sub_norm_nonNormalApproxOverlap_phaseBlockTensor_neg_one},
+    \leanid{MPSTensor.not_approximationError_le_phaseBlockTensor},
+    \leanid{MPSTensor.isBNTCanonicalForm_phaseBlockSector} and
+    \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_phaseBlock} in
+    \doclink{TNLean/MPS/Preparation/PhaseWeightCounterexample}.}
+The bound (\ref{eq:mswc24_mixed_corrected}) for complex weights $\lvert\mu_j\rvert\leq1$ with
+$\max_j\lvert\mu_j\rvert=1$, multiplicity one, and $\beta_j=\lvert\mu_j\rvert^N$, obtained by
+absorbing the phases into the blocks, is formalized.\footnote{Formal declarations:
+    \leanid{MPSTensor.blockSum_eq_blockSum_phase},
+    \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum_complexWeight} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight} in
+    \doclink{TNLean/MPS/Preparation/ComplexWeightError}.}
 
 \section{Numerical check}
 A script evaluates the overlap through $P$, using $V^\dagger B=P$ and the support
@@ -327,11 +376,13 @@ repair is formalized.\footnote{Formal declarations:
 The orthogonality holds for instance when distinct blocks use disjoint sets of
 physical indices.
 
-The second keeps the source's construction and hypotheses and corrects the rate: it
+The second keeps the source's hypotheses and construction, apart from the phases of the
+weights, and corrects the rate: it
 is (\ref{eq:mswc24_mixed_corrected}), with the correlation lengths of the mixed
-transfer matrices included in $\xi$. It is formalized for multiplicity one and real
-weights $0\leq w_j\leq1$ with $\max_jw_j=1$, which covers weights of different moduli once
-the phases are absorbed into the blocks. Two extensions are not formalized: blocks with
+transfer matrices included in $\xi$. It is formalized for multiplicity one and complex
+weights $\lvert\mu_j\rvert\leq1$ with $\max_j\lvert\mu_j\rvert=1$, with
+$\beta_j=\lvert\mu_j\rvert^N$ in place of the $\mu_j^N$ of (S4), which the counterexample
+(\ref{eq:mswc24_phase_overlap}) refutes. Two extensions are not formalized: blocks with
 multiplicity combined with overlaps, where the corrected state of
 \cite{gap:mswc24_repeated_block_corrected_state} would replace (S7); and the sharp rate
 $(N/q)\tau^{2q}$, which needs a second-order perturbation bound for the square root of
