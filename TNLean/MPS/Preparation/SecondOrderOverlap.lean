@@ -58,17 +58,17 @@ variable {d D : ℕ}
 
 /-! ### Mixed transfer matrices against the fixed point -/
 
-/-- Reading a `D² × D²` matrix `G` as the tensor with physical dimension `D²` whose `k`-th matrix
-is the `k`-th row of `G`, as a linear map. -/
-noncomputable def ofPhysicalMatrixLM :
-    Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ] MPSTensor (D * D) D where
-  toFun G := ofPhysicalMatrix (G.submatrix (virtualPairEquiv D) id)
+/-- Reading a `D₂² × D²` matrix `G` as the tensor with physical dimension `D₂²` and bond
+dimension `D` whose `k`-th matrix is the `k`-th row of `G`, as a linear map. -/
+noncomputable def ofPhysicalMatrixLM {D₂ : ℕ} :
+    Matrix (Fin D₂ × Fin D₂) (Fin D × Fin D) ℂ →ₗ[ℂ] MPSTensor (D₂ * D₂) D where
+  toFun G := ofPhysicalMatrix (G.submatrix (virtualPairEquiv D₂) id)
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
 /-- The mixed map against a fixed right family, as a linear map in the left family. -/
-noncomputable def mixedMapLMLeft {n : ℕ} (B : MPSTensor n D) :
-    MPSTensor n D →ₗ[ℂ] Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) where
+noncomputable def mixedMapLMLeft {n D₁ : ℕ} (B : MPSTensor n D) :
+    MPSTensor n D₁ →ₗ[ℂ] Module.End ℂ (Matrix (Fin D₁) (Fin D) ℂ) where
   toFun A := Kraus.mixedMapLM A B
   map_add' A A' := LinearMap.ext fun X => by simp [Matrix.add_mul, Finset.sum_add_distrib]
   map_smul' c A := Kraus.mixedMapLM_smul_left c A B

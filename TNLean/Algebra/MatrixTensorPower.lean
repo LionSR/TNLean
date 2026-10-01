@@ -22,9 +22,17 @@ allows different row and column index types, as needed for the isometry
 * `Matrix.tensorPower` — the matrix `W^{⊗M}` with entries `∏ₖ W (p k) (s k)`.
 * `Matrix.tensorPower_mul` — the tensor power is multiplicative.
 * `Matrix.IsIsometry.tensorPower` — the tensor power of an isometry is an isometry.
+* `Matrix.tensorPower_one`, `Matrix.tensorPower_zero` — tensor powers of `1` and `0`.
 * `Matrix.conjTranspose_tensorPower` — `(W^{⊗M})ᴴ = (Wᴴ)^{⊗M}`.
 * `Matrix.sum_star_tensorPower_mulVec_mul`, `Matrix.sum_norm_sq_tensorPower_mulVec_le` —
   inner products and norms after a tensor power of a partial isometry.
+
+## References
+
+* [MSWC23] D. Malz, G. Styliaris, Z.-Y. Wei, J. I. Cirac,
+  *Preparation of matrix product states with log-depth quantum circuits*,
+  arXiv:2307.01696, the paragraph after eq. (19) and Supplemental Material, "Proof of Lemma 1 and
+  extension to non-normal tensors".
 -/
 
 open scoped BigOperators Matrix ComplexOrder
@@ -65,6 +73,22 @@ theorem IsIsometry.tensorPower {ι κ : Type*} [Fintype ι] [DecidableEq κ] (M 
     rw [ite_eq_right_iff.2 fun h' => absurd h' h]
     exact Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right_iff.2 fun h' => absurd h' hk)
 
+/-- The tensor power of the identity is the identity. -/
+theorem tensorPower_one {κ : Type*} [DecidableEq κ] (M : ℕ) :
+    tensorPower M (1 : Matrix κ κ ℂ) = 1 := by
+  ext s t
+  simp only [tensorPower, of_apply, one_apply]
+  rw [Finset.prod_boole]
+  simp only [Finset.mem_univ, true_implies]
+  exact if_congr funext_iff.symm rfl rfl
+
+/-- The tensor power of the zero matrix on `M ≥ 1` sites is zero. -/
+theorem tensorPower_zero {ι κ : Type*} {M : ℕ} (hM : M ≠ 0) :
+    tensorPower M (0 : Matrix ι κ ℂ) = 0 := by
+  ext s t
+  simp only [tensorPower, of_apply, zero_apply]
+  exact Finset.prod_eq_zero (Finset.mem_univ ⟨0, Nat.pos_of_ne_zero hM⟩) rfl
+
 /-! ### Partial isometries on many sites -/
 
 /-- The conjugate transpose of a tensor power is the tensor power of the conjugate transpose:
@@ -74,13 +98,14 @@ theorem conjTranspose_tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ �
   ext s t
   simp [tensorPower, conjTranspose_apply, star_prod]
 
-/-- `⟨W^{⊗M} ψ, W^{⊗M} φ⟩ = ⟨ψ, (Wᴴ W)^{⊗M} φ⟩`. -/
-theorem sum_star_tensorPower_mulVec_mul {n κ : Type*} [Fintype n] [Fintype κ]
-    (W : Matrix n κ ℂ) {M : ℕ} (ψ φ : (Fin M → κ) → ℂ) :
-    ∑ s, star ((tensorPower M W *ᵥ ψ) s) * (tensorPower M W *ᵥ φ) s =
-      ∑ τ, star (ψ τ) * (tensorPower M (Wᴴ * W) *ᵥ φ) τ := by
-  change star (tensorPower M W *ᵥ ψ) ⬝ᵥ (tensorPower M W *ᵥ φ) =
-    star ψ ⬝ᵥ (tensorPower M (Wᴴ * W) *ᵥ φ)
+/-- `⟨W^{⊗M} ψ, W'^{⊗M} φ⟩ = ⟨ψ, (Wᴴ W')^{⊗M} φ⟩`. -/
+theorem sum_star_tensorPower_mulVec_mul {n κ κ' : Type*} [Fintype n] [Fintype κ] [Fintype κ']
+    (W : Matrix n κ ℂ) (W' : Matrix n κ' ℂ) {M : ℕ} (ψ : (Fin M → κ) → ℂ)
+    (φ : (Fin M → κ') → ℂ) :
+    ∑ s, star ((tensorPower M W *ᵥ ψ) s) * (tensorPower M W' *ᵥ φ) s =
+      ∑ τ, star (ψ τ) * (tensorPower M (Wᴴ * W') *ᵥ φ) τ := by
+  change star (tensorPower M W *ᵥ ψ) ⬝ᵥ (tensorPower M W' *ᵥ φ) =
+    star ψ ⬝ᵥ (tensorPower M (Wᴴ * W') *ᵥ φ)
   rw [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, conjTranspose_tensorPower,
     tensorPower_mul]
 
