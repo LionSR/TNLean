@@ -22,7 +22,7 @@ Hamiltonians", `Papers/1001.3807/paper_v3.tex`:
   `𝒮_2 = {∑_{ij} tr[A^i A^j X] |ij⟩}`, are of the form of the operator
   `∑ tr[A^i A^j (A^k A^l)†] |ij⟩⟨kl|` (equation `eq:iso:ham-proj-from-A`). The proof shows that
   this operator is a projector, has range in `𝒮_2`, fixes `𝒮_2` and is self-adjoint;
-* Theorem 6.12 (commuting parent Hamiltonians), lines 2131–2156, figures
+* Theorem 6.12 (commuting parent Hamiltonians), lines 2131–2153, figures
   `figs4/ham-comm-step1.pdf` and `figs4/ham-comm-step2.pdf`: for `G`-isometric PEPS the terms
   `h_i` of the parent Hamiltonian commute. The proof writes the products of the operators on
   sites `1, 2` and `2, 3` as the two sides of `figs4/ham-comm-step1.pdf`, which agree since the
@@ -381,7 +381,7 @@ theorem IsGIsometricMPS.pairLift_groundSpaceFrame_regularMPSTensor (hA : IsGIsom
     exact sum_trace_regularAdjoint_right h hA.invariant s₀ s₁ s₂ w₀ w₁ w₂
 
 /-- Source: arXiv:1001.3807, Theorem 6.12 (commuting parent Hamiltonians),
-`Papers/1001.3807/paper_v3.tex` lines 2131–2156, for an MPS. For a `G`-isometric MPS tensor, the
+`Papers/1001.3807/paper_v3.tex` lines 2131–2153, for an MPS. For a `G`-isometric MPS tensor, the
 two-site terms `h_i` of the parent Hamiltonian commute on every ring of `N ≥ 3` sites. -/
 theorem IsGIsometricMPS.isNNCPH_regularMPSTensor (hA : IsGIsometricMPS A) {N : ℕ}
     (hN : 3 ≤ N) : IsNNCPH (regularMPSTensor A) N := by

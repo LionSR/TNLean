@@ -26,7 +26,7 @@ sites multiply in either order to the same multiple of \(\Gamma_3 \Gamma_3^\dagg
 translated two-site parent terms commute on every ring of at least three sites.
 
 These are the steps of the proofs of Lemma 6.11 and Theorem 6.12 of Schuch, Cirac, and
-Pérez-García (arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2098–2156) that do not use
+Pérez-García (arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2098–2153) that do not use
 `G`-isometry; the `G`-isometric input is supplied in `TNLean.PEPS.GIsometricParentHamiltonian`.
 
 ## Main definitions
