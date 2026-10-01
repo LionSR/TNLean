@@ -66,11 +66,7 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le (A : MPSTensor d D)
   refine ⟨C, hC, fun M _ ℓ q hq => ?_⟩
   set x := Real.exp (-γ / correlationLength lam₂)
   have hx0 : 0 ≤ x := (Real.exp_pos _).le
-  have hx1 : x ≤ 1 := by
-    rw [Real.exp_le_one_iff, neg_div_correlationLength]
-    rcases (norm_nonneg lam₂).eq_or_lt with h | h
-    · rw [← h, Real.log_zero, mul_zero]
-    · exact mul_nonpos_of_nonneg_of_nonpos hγ0.le (Real.log_nonpos h.le hlam₁)
+  have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hlam₁
   set Tinf := transferMatrix (Kraus.mixedMapLM (fixedPointTensor σ) (fixedPointTensor σ))
   set T : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ := fun L =>
     transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A L)) (fixedPointTensor σ))
@@ -121,11 +117,7 @@ theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.Is
   refine ⟨C * Real.exp C + 1, by positivity, fun M _ ℓ N hN q hq hinj => ?_⟩
   set x := Real.exp (-γ / correlationLength lam₂)
   have hx0 : 0 ≤ x := (Real.exp_pos _).le
-  have hx1 : x ≤ 1 := by
-    rw [Real.exp_le_one_iff, neg_div_correlationLength]
-    rcases (norm_nonneg lam₂).eq_or_lt with h | h
-    · rw [← h, Real.log_zero, mul_zero]
-    · exact mul_nonpos_of_nonneg_of_nonpos hγ0.le (Real.log_nonpos h.le hlam₁)
+  have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hlam₁
   have hxq : Real.exp (-γ * q / correlationLength lam₂) = x ^ q := by
     rw [← Real.exp_nat_mul]; congr 1; ring
   have hover' := hover M ℓ q hq

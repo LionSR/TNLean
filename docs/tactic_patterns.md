@@ -24,6 +24,43 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### fixed-volume C3 from a physical open-chain bound — promoted
+- **Pattern:** split a martingale index into `n < l`, `n = l`, and `l < n`;
+  the first two products vanish, while the last is bounded by its physical
+  open-chain representative after adjoining the right spectator sites.
+- **Seen:** the original threshold theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/FixedAmbientMartingaleBound.lean`
+  and the prescribed-gap theorem in
+  `TNLean/MPS/ParentHamiltonian/Martingale/PrescribedGap.lean` (2026-09-28).
+- **Abstraction:** `fixedAmbient_martingaleDifference_norm_le_of_openChain`
+  in `FixedAmbientMartingaleBound.lean` retains the chosen nonnegative bound
+  without tying it to the threshold `1 / sqrt (l + 1)`.
+- **Notes:** both uses share the original three-case proof; no new tactic is
+  needed.
+
+### passing a scalar grading through a matrix word — promoted
+- **Pattern:** move a grading matrix through each letter and multiply the
+  letter-dependent scalars.
+- **Seen:** three occurrences across `MPS/ParentHamiltonian/Basic.lean`,
+  `MPS/Examples/MajumdarGhoshGroundSpace.lean`, and
+  `MPS/Examples/MultiBlock/ParityAmplitudes.lean`.
+- **Abstraction:** `MPSTensor.mul_evalWord_of_mul_eq_smul_letter` in
+  `MPS/Core/WordGrading.lean`; the constant-scalar theorem is a specialization.
+- **Notes:** all three matrix-word inductions now share one proof. The parity
+  example only retains the scalar identity combining occupation signs.
+  The promotion adds 21 Lean lines including the helper module and imports.
+
+### virtual-leg cancellation in source-gate contractions — promoted
+- **Pattern:** cancel the adjacent factors $z^\dagger z=I$ between two
+  rectangular matrices, leaving the site-specific Kronecker expansions intact.
+- **Seen:** three occurrences across two files: `transported_source_u_contraction`
+  in `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and `rawU_virtual_cancel`
+  and `rawV_virtual_cancel` in `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
+- **Abstraction:** `Matrix.mul_unitary_adjoint_mul_cancel` in
+  `TNLean/Algebra/UnitaryContraction.lean`.
+- **Notes:** all three sites use the helper. Net Lean line delta: -2, including
+  the helper module and its imports.
+
 ### bilinear identities on operators with disjoint supports — promoted
 - **Pattern:** prove an identity `f A B = g A B`, bilinear in operators `A`, `B` acting on
   sets of sites `S`, `S'`, by nested `Submodule.span_induction` on
@@ -60,6 +97,18 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** all three call sites are refactored. The block-by-block bound
   `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
   block-sum files and is a candidate for the same treatment.
+
+### error from a logarithmic block-length threshold — promoted
+- **Pattern:** close `K * (M * Real.exp (-x)) ≤ ε` from a threshold
+  `log K + log M - log ε ≤ x` by a hand-written `calc` through
+  `Real.exp_log`, `Real.exp_add`/`Real.exp_sub` and `Real.exp_le_exp`.
+- **Seen:** three occurrences across three files (2026-09-30):
+  `DepthLogBound.lean`, `LogDepthPreparation.lean` and `TreeMERA.lean`, all
+  under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_le_of_log_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** all three call sites use the helper; each now proves only the
+  threshold inequality.
 
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
@@ -2050,6 +2099,17 @@ abstracted — record why, so it is not re-proposed).
   is replaced by one exact application; its previously profiled 31-second
   declaration falls below the 200-millisecond profiler threshold.
 
+### Scalar invariance of the MPU double layer — promoted
+- **Pattern:** expand the double layer of a scalar multiple entrywise and
+  cancel the scalar against its conjugate.
+- **Reuse:** `MPOTensor.physicalAdjointTensor_smul` and
+  `MPOTensor.doubleLayerTensor_smul_of_star_mul_self` reduce this to
+  `mulTensor_smul_smul`. The parity witness specializes the latter at `-1`.
+- **Result:** the parity example no longer splits over physical and bond
+  coordinates. Its identity simplicity proof and the shift identity proof
+  share `MPOTensor.isMPUSimple_idTensor` in `MPS/MPU/Simple.lean`.
+  Net Lean line delta: -6 across the four changed modules.
+
 ### Unit-norm complex scalars are nonzero
 - **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
@@ -2322,6 +2382,23 @@ abstracted — record why, so it is not re-proposed).
   If a second group needs the pattern, prefer a general cocycle determination lemma
   before automating the table elimination.
 
+### weighted W-state rows across a cut — candidate
+- **Pattern:** rewrite a weighted sum of traces of two word products as a
+  scalar multiple of the W amplitude on the concatenated configuration, then
+  use `wIndicator_append_mem_span` to put the cut row in the two-dimensional
+  span of the vacuum and single-excitation indicators.
+- **Seen:** two occurrences in one file (2026-09-28):
+  `lt_of_sum_mpv_eq_smul_wIndicator` and
+  `lt_of_sum_mpv_eq_smul_wIndicator_asymmetric` in
+  `TNLean/MPS/Examples/WStateCanonicalBound.lean`.
+- **Abstraction:** if another cut-rank application repeats this conversion,
+  state a row-membership lemma taking the weighted W-state identity and the
+  two cut lengths.
+- **Notes:** below the promotion threshold. The shared long-side spanning
+  argument is already extracted as
+  `blockTracePairing_range_le_of_forall_mem` in
+  `TNLean/MPS/ParentHamiltonian/PGVWC07CutRank.lean` and used in both cut-rank
+  estimates.
 
 ### Positive local terms with prescribed kernels
 
@@ -2351,6 +2428,30 @@ Example: `GroupedProjectorEstimate.lean`, in
 prefix projections. This permits the active-volume identity and spectator bound
 to be combined using ordinary arithmetic equalities. Candidate helper pattern;
 currently one occurrence, so no general declaration is warranted.
+
+### telescoping trace bound near an idempotent mixed transfer matrix — candidate
+- **Pattern:** bound `‖Tr(T^M) - 1‖` for a mixed transfer matrix `T = Ψ(P)` with
+  `‖T - T_∞‖ ≤ K₃ K₁ x^q`, where `T_∞ = Ψ(P_∞)` is idempotent of trace one: apply
+  `norm_prod_range_sub_pow_le_of_isIdempotentElem` with `c = ‖1‖ + ‖T_∞‖`, rewrite
+  `Tr(T^M) - 1` through `Matrix.traceLinearMap`, then close the chain
+  `K₄ c ((1 + cδ)^M - 1) ≤ … ≤ C u e^{C u}` with `one_add_pow_sub_one_le_mul_exp`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_trace_prod_range_transferMatrix_sub_one_le` in
+  `TNLean/MPS/Preparation/ApproximationError.lean` and
+  `exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+- **Notes:** a third occurrence would justify a lemma taking the idempotent `T_∞`,
+  its trace, and the linear bound `‖T - T_∞‖ ≤ δ` as hypotheses.
+
+### off-diagonal constants chosen with a dummy diagonal value — candidate
+- **Pattern:** `have hoff : ∀ j k, ∃ K, 0 ≤ K ∧ (j ≠ k → ∀ n, ‖f j k n‖ ≤ K * x ^ n)`,
+  proved by `by_cases j = k` with `⟨0, le_rfl, …⟩` on the diagonal, then `choose`, and
+  a split `∑ⱼ ∑ₖ = ∑ⱼ (diagonal + ∑_{k ∈ univ.erase j})` by `Finset.add_sum_erase`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_gram_blockTensor_blockSum_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockGram.lean` and
+  `exists_abs_norm_mpvState_blockSum_sq_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
 
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
@@ -2441,24 +2542,6 @@ currently one occurrence, so no general declaration is warranted.
   identity `diag g * M i j * diag g⁻¹ = N i j`; the two `Matrix` lemmas cover diagonal
   inverses on any index type, such as the configuration space of a fusion-rule transfer.
 
-### virtual-leg cancellation in source-gate contractions — candidate
-- **Pattern:** express the two transported source factors as matrices on the
-  contracted virtual coordinate and reduce their product with
-  $z^\dagger z=I$. The entrywise Kronecker expansion then identifies the
-  original source-gate contraction.
-- **Seen:** three occurrences across two files (2026-09-26):
-  `transported_source_u_contraction` in
-  `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and
-  `rawU_virtual_cancel` and `rawV_virtual_cancel` in
-  `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
-- **Abstraction (proposed):** a matrix lemma for cancelling a unitary at one
-  finite contracted coordinate, with the Kronecker entry expansions left to
-  the two source-gate specializations.
-- **Notes:** The first occurrence belongs to the separately reviewed
-  source-factor transport module. The new theorem keeps its two gate
-  identities together rather than reorganizing that module in this PR;
-  promotion should refactor all three sites when those dependent branches
-  are consolidated.
 
 ### Wielandt block-injectivity length below the uniform square bound — candidate
 - **Pattern:**
@@ -3453,6 +3536,29 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** `CPSVCanonicalFormData.groundSpace_eq_toTensorFromBlocks_representatives`
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
+
+### GHZ zero-image non-injectivity witnesses — candidate
+
+- **Pattern:** choose virtual labels forcing one physical label to equal both 0 and 1,
+  then use the resulting zero basis image to disprove injectivity.
+- **Occurrences:** `ghzSiteTensor_not_linearIndependent` and
+  `ghzPEPS_not_isVertexInjective` in `TNLean/PEPS/Examples/GHZ.lean`.
+- **Count:** two occurrences in one file; below the promotion threshold.
+- **Possible abstraction:** a bridge from linear independence of the four-leg
+  site tensor to vertex injectivity of its torus realization, if another example
+  repeats the construction.
+
+### Transposed Kronecker gauge inverses — candidate
+
+- **Pattern:** reduce block-diagonal inverse products to Kronecker products,
+  combine factors with `Matrix.mul_kronecker_mul` and `Matrix.transpose_mul`,
+  and cancel unit-valued gauges.
+- **Occurrences:** the two pair-gauge inverse identities and four left/right
+  tree-gauge inverse identities in `TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean`.
+- **Count:** six occurrences in one file; the two-file promotion threshold
+  has not been reached.
+- **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
+  second module needs the same cancellation pattern.
 
 ## Rejected
 
