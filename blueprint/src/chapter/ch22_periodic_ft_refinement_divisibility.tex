@@ -765,41 +765,6 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     translationally invariant MPS (\cite{DeLasCuevas2017Irreducible}).
 \end{remark}
 
-\begin{theorem}[Prescribed blocking of a periodic tensor]
-    \label{thm:periodic_prescribed_blocking}
-    \lean{MPSTensor.IsPeriodic.exists_paper_cyclic_projections,
-        MPSTensor.IsPeriodic.exists_periodic_stepOrbit_decomposition}
-    \leanok
-    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
-    Let $A$ be periodic of period $m>0$, and let $p>0$.
-    Set $r=\gcd(m,p)$ and $q=m/r$. There are nonzero cyclic projections
-    $P_u$ with $\sum_uP_u=\Id_D$ and $P_uA^i=A^iP_{u+1}$ and isometries $V_\alpha$ onto their
-    step-orbit sums $Q_\alpha$, for $0\le\alpha<r$, such that
-    $B_\alpha^I=V_\alpha^\dagger(A^{[p]})^IV_\alpha$ is periodic of
-    period $q$. All $r$ blocks have positive bond dimension; their dimensions
-    sum to the bond dimension of $A$; and their direct sum has the same
-    matrix product vectors as $A^{[p]}$ at every length.
-    This is \cite[Lemma~6]{DeLasCuevas2017Irreducible}, with the displayed
-    peripheral-root correction of \cite{gap:dccsp17_blocking_peripheral_roots}.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_irreducible,
-        thm:periodic_compressed_exact_spectrum}
-    Obtain the cyclic projections from periodicity and reverse their cyclic
-    indices to give the stated letter convention. Each cyclic sector has
-    positive dimension $D_u$ and an isometry $W_u$ with $W_uW_u^\dagger=P_u$,
-    so $P_u=0$ would give
-    \begin{align}
-        \Id_{D_u} & =W_u^\dagger W_uW_u^\dagger W_u=W_u^\dagger P_uW_u=0. \notag
-    \end{align}
-    Compress onto each orbit sum. The orbit-compression theorem gives left
-    canonicality, the dimension identity, and equality of matrix product
-    vectors. Each compressed block is irreducible and has exactly the $q$th
-    roots of unity as its peripheral spectrum, hence has period $q$.
-\end{proof}
-
 \begin{theorem}[Absorbing the orbitwise gauge into the root]
     \label{thm:periodic_absorb_orbit_gauge}
     \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action}
@@ -875,26 +840,26 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     The last equality reindexes the double sum by the pairs $(k,a)$.
 \end{proof}
 
-\begin{theorem}[Positive blocking of an irreducible-form presentation]
-    \label{thm:periodic_irreducible_form_blocking}
-    \lean{MPSTensor.IsIrreducibleForm.block,MPSTensor.IsIrreducibleForm.sum_dim_eq}
+\begin{definition}[Positive blocking of an irreducible-form presentation]
+    \label{def:periodic_irreducible_form_blocking}
+    \lean{MPSTensor.IsIrreducibleForm.block}
     \leanok
     \uses{def:periodic_tensor,def:irreducible_form}
     Suppose $A$ has the same matrix product vectors at every length,
     including zero, as $\bigoplus_k\mu_k A_k$, where $\mu_k>0$ and
-    $A_k$ is left-canonical periodic of period $m_k$.
-    For $p>0$, the blocked tensor $A^{[p]}$ has an irreducible-form
-    presentation indexed by
-    $0\le a<\gcd(m_k,p)$ for each original block $k$.
-    The block indexed by $(k,a)$ has weight $\mu_k^p$ and period
-    $m_k/\gcd(m_k,p)$. The total block dimension equals the bond dimension
-    of $A$. This is the blockwise application of
+    $A_k$ is left-canonical periodic of period $m_k$, and let $p>0$.
+    The blocked presentation of $A^{[p]}$ is indexed by the pairs $(k,a)$ with
+    $0\le a<\gcd(m_k,p)$; the block $B_{k,a}$ is the $a$th prescribed orbit
+    block of $A_k^{[p]}$, with weight $\mu_k^p$ and period
+    $m_k/\gcd(m_k,p)$. It is an irreducible-form presentation of $A^{[p]}$.
+    This is the blockwise application of
     \cite[Lemma~6, proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
-\end{theorem}
+\end{definition}
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_prescribed_blocking,thm:periodic_weighted_block_refinement}
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
+        thm:block_tensor_to_tensor_from_blocks}
     Apply the prescribed-blocking decomposition separately to each $A_k$,
     giving blocks $B_{k,a}$ with $0\le a<\gcd(m_k,p)$. Blocking raises
     $\mu_k$ to the power $p$: if $\sigma'$ is the unblocked configuration of
@@ -905,15 +870,28 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         =\sum_k\mu_k^{pN}V^{(pN)}(A_k)_{\sigma'}
         =\sum_k\bigl(\mu_k^p\bigr)^NV^{(N)}\bigl(A_k^{[p]}\bigr)_\sigma. \notag
     \end{align}
-    Refinement preserves the weight $\mu_k^p$ on every orbit block. The preceding theorem assembles the
-    resulting vector identities. All new weights remain positive.
+    Refinement preserves the weight $\mu_k^p$ on every orbit block. The
+    preceding theorem assembles the resulting vector identities. All new
+    weights remain positive.
+\end{proof}
+
+\begin{theorem}[Total dimension of an irreducible-form presentation]
+    \label{thm:periodic_irreducible_form_blocking_dim}
+    \lean{MPSTensor.IsIrreducibleForm.sum_dim_eq}
+    \leanok
+    \uses{def:irreducible_form}
+    If $A$ of bond dimension $D$ has an irreducible-form presentation
+    $\bigoplus_k\mu_kA_k$ with blocks of bond dimensions $D_k$, then
+    $\sum_kD_k=D$. In particular this holds for the blocked presentation of
+    Definition~\ref{def:periodic_irreducible_form_blocking}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
     At length zero every matrix product vector is the trace of the identity,
-    so, writing $D_{k,a}$ for the bond dimension of the block indexed by
-    $(k,a)$,
+    and the presentation has the same vectors as $A$ at length zero, so
     \begin{align}
-        D & =V^{(0)}\bigl(A^{[p]}\bigr)
-        =V^{(0)}\Bigl(\bigoplus_{k,a}\mu_k^pB_{k,a}\Bigr)
-        =\sum_{k,a}D_{k,a}. \notag
+        D & =V^{(0)}(A)=V^{(0)}\Bigl(\bigoplus_k\mu_kA_k\Bigr)=\sum_kD_k. \notag
     \end{align}
 \end{proof}
 
