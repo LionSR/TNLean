@@ -817,6 +817,14 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_tree_measurement_scope.tex` records that the tree circuit with
+  measurements (paragraph "Tree-RG circuit with measurements") is formalized
+  as a sequence of measurement rounds, with teleportation along chains of hops
+  in one round of depth `2`, layers of two-site gates between distant sites in
+  depth `5`, and binary trees of two-site gates with `k` levels in depth `5k`,
+  every register being one site; open: registers of several sites and the
+  identification with the approximating state give the source's depth
+  `O(log log(N/ε))` for matrix product states.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with a common bond
