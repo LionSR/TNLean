@@ -227,6 +227,11 @@ arXiv:2307.01696, eqs. (13)–(15): `V = V_q ⋯ V_1` with isometries
 here `Q_p = V_{q-p}` and `b_p = D'_{q+1-p}`. The paragraph "Inhomogeneous short-range
 correlated MPS" applies the same decomposition to tensors that depend on the site.
 
+**Scope restriction (common bond dimension):** for site-dependent tensors the chain
+`A : MPSChainTensor d D q` has the same square bond dimension `D` at every site, while the
+source's inhomogeneous states have "bond dimension at most `D`" varying along the ring, which
+needs rectangular site matrices. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
 **Scope restriction (positive block length):** the hypothesis `0 < q` is absent from
 arXiv:2307.01696, eqs. (13)–(15), which state no lower bound on the block length. The
 empty block `q = 0` is injective only for `D ≤ 1`; the conclusion holds trivially at

@@ -25,6 +25,15 @@ Cut a ring of `N` sites into `M` blocks of lengths `ℓ 0, …, ℓ (M - 1)`
 proof of Theorem 1, blocks the chain into blocks "all of the same size, `q_N`, except for the last
 one, which may be larger"; the present file allows any lengths.
 
+**Scope restriction (common bond dimension):** the site-dependent declarations
+`MPSTensor.chainBlockTensor`, `MPSTensor.chainBlockIsometryState`,
+`MPSTensor.coeff_eq_mpvFamily_chainBlockTensor`, `MPSTensor.blockIsoVector`,
+`MPSTensor.inner_blockIsoVector` and `MPSTensor.norm_blockIsoVector` model the inhomogeneous
+matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS",
+with the same square bond dimension `D` at every site, while the source allows "bond dimension at
+most `D`" varying along the ring. The translation-invariant declarations of this file are not
+affected. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
 ## Main declarations
 
 * `MPSTensor.mpvFamily` — the periodic state `Tr(B_0^{t_0} ⋯ B_{M-1}^{t_{M-1}})` of a family of
