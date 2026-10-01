@@ -237,6 +237,8 @@ site. -/
 noncomputable def treeMatrix : Matrix (Fin (blockPhysDim n (2 ^ (k + 1)))) (Fin (D * D)) ℂ :=
   binaryTreeMatrix k 𝓜.fineIso 𝓜.coarseIso
 
+/-- The tree map `𝓜.treeMatrix` of the isometry layers of the network is an isometry: a binary
+tree of isometries is an isometry (`isIsometry_binaryTreeMatrix`). -/
 theorem isIsometry_treeMatrix : 𝓜.treeMatrix.IsIsometry :=
   isIsometry_binaryTreeMatrix k 𝓜.isIsometry_fineIso 𝓜.isIsometry_coarseIso
 

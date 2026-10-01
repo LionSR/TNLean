@@ -30,6 +30,19 @@ Throughout, $\ket{\pm} = \tfrac{1}{\sqrt{2}}(\ket{0} \pm \ket{1})$.
     Equivalently, $(A^s)_{\alpha\beta} = \delta_{\alpha s}\,(-1)^{s\beta}/\sqrt{2}$.
 \end{definition}
 
+Close the virtual indices periodically by the trace.
+Theorem~\ref{thm:cluster_cz_construction} identifies this vector with the
+controlled-$Z$ circuit state, including its short-ring convention;
+Lemma~\ref{lem:cluster_review_gauge} relates the two tensor representatives.
+Theorem~\ref{thm:cluster_review_transferred} gives normality, the
+$\Z_2\times\Z_2$ symmetry and its virtual action, string order under the
+stated boundary restriction, and zero correlation length after blocking
+two sites. The nontrivial projective class is
+Theorem~\ref{thm:cluster_nontrivial_spt}; the periodic stabilizer ground
+state for $N\ge3$ is Theorem~\ref{thm:cluster_stabilizer_unique_gs}, using
+the gauge-equivalent representative.
+
+
 \begin{theorem}[Controlled-$Z$ construction of the cluster state]\label{thm:cluster_cz_construction}
     \lean{MPSTensor.clusterTensorRMP_mpv_eq_clusterCZRing,
         MPSTensor.clusterCZRing, MPSTensor.plusProductState,

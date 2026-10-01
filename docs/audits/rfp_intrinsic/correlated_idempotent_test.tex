@@ -1,0 +1,838 @@
+% Build here: latexmk -pdf -outdir=../../../build/audits/rfp_intrinsic correlated_idempotent_test.tex
+\documentclass[aps,pra,reprint,nofootinbib,onecolumn]{revtex4-2}
+\input{preamble}
+\usepackage{cleveref}
+\allowdisplaybreaks
+
+\begin{document}
+\title{Correlated idempotent states and removable length dependence in MPDO fixed points}
+\date{16 September 2026}
+\begin{abstract}
+	Correlated idempotent states with a Haar marginal provide a concrete test of length-dependent matrix product density operator fixed points. For the subgroup
+	$H=\{((a,b),(a,c)):a,b,c\in\Z_2\}$ of
+	$(\Z_2\times\Z_2)^2$, we derive the tensor, its nonproduct density operators, and complete quantum channels satisfying the raw all-boundary fixed-point identities. Its transfer-normalized vertical representatives have length-dependent fusion coefficients, but one fixed positive rescaling makes every nonzero coefficient equal to one. We prove the corresponding exclusion for faithfully represented finite-dimensional Hopf tensors with positive commutant weights. Their vertical tensors form a genuine basis of normal tensors, and their fusion multiplicities are scalar multiples of ordinary representation multiplicities. We explain how the quantum Goursat reconstruction enters this class after inducing the dual representation and restricting to the correct supports. The inherited physical weight need not be central in the reconstructed algebra. The conclusion excludes intrinsic fusion length dependence in this reconstructed Hopf class, not in arbitrary MPDO fixed points or arbitrary quantum hypergroups. The general algebraic hypotheses imply raw channel identities but do not alone ensure positive periodic contractions; that condition is verified separately for the explicit example.
+\end{abstract}
+\maketitle
+
+\section{Question and hypotheses}
+
+All spaces are finite dimensional over $\C$, and all traces are ordinary matrix traces. A quantum channel is a completely positive, trace-preserving linear map on its stated full matrix algebra.
+
+For virtual and physical Hilbert spaces $\mc K$ and $\mc H$, write a matrix product operator tensor and its boundary contractions as
+\begin{align}
+	M      & =\sum_{i,j}M^{ij}\otimes\ket{i}\bra{j},
+	\\
+	M_n(B) & =\sum_{\boldsymbol i,\boldsymbol j}
+	\tr(BM^{i_1j_1}\cdots M^{i_nj_n})
+	\ket{\boldsymbol i}\bra{\boldsymbol j},
+	\qquad B\in\End(\mc K).
+	\label{eq:boundary}
+\end{align}
+We use the mixed-state fixed-point definition in the subsection
+``Renormalization flow and renormalization fixed points'' of
+Ref.~\cite{CPSV}. It requires channels
+\begin{align}
+	\mc T & :\End(\mc H)\longrightarrow\End(\mc H^{\otimes2}),
+	      &
+	\mc S & :\End(\mc H^{\otimes2})\longrightarrow\End(\mc H)
+\end{align}
+such that
+\begin{align}
+	\mc T(M_1(B)) & =M_2(B),
+	              &
+	\mc S(M_2(B)) & =M_1(B)
+	\quad\text{for every }B.
+	\label{eq:rfp}
+\end{align}
+These are identities for raw tensors, including boundary matrices that
+do not generate positive operators. Equality of separately normalized
+periodic states is a weaker statement. An MPDO additionally requires
+positive periodic contractions. The general Hopf result below establishes
+the raw channel identities and fusion structure, with periodic positivity
+stated as a separate condition.
+
+The general characterization theorem in the subsection ``General case''
+of Ref.~\cite{CPSV} associates vertical representatives $M_\alpha$
+with positive diagonal fusion matrices $\chi_{\alpha\beta}^{\gamma}$:
+\begin{align}
+	O_L(M_\alpha)O_L(M_\beta)
+	 & =\sum_\gamma
+	\tr((\chi_{\alpha\beta}^{\gamma})^L)O_L(M_\gamma).
+	\label{eq:fusion}
+\end{align}
+Here vertical concatenation contracts and traces physical matrix
+indices, leaving an operator on $\mc K^{\otimes L}$. An absent fusion
+channel has a zero-dimensional multiplicity space.
+
+The question depends on the scale convention for these representatives.
+For fixed constants $s_\alpha>0$, let $M_\alpha'=s_\alpha M_\alpha$.
+Then
+\begin{align}
+	O_L(M_\alpha') & =s_\alpha^L O_L(M_\alpha),
+	\\
+	(\chi')_{\alpha\beta}^{\gamma}
+	               & =\frac{s_\alpha s_\beta}{s_\gamma}
+	\chi_{\alpha\beta}^{\gamma}.
+	\label{eq:rescale}
+\end{align}
+Dividing the physical multiplicity weight of block $\alpha$ by
+$s_\alpha$ leaves the full tensor unchanged. Such a change generally
+abandons the convention that every representative has transfer spectral
+radius one. We call length dependence removable if a fixed positive
+rescaling of this kind makes all fusion coefficients independent of
+$L$. This is distinct from asking whether the coefficients in the
+transfer-normalized convention depend on $L$.
+
+\subsection{The source construction and its scope}
+
+Let $A$ be a finite-dimensional $C^*$-Hopf algebra, with coproduct
+$\Delta_A$, antipode $S_A$, Haar integral $h_A$, and Haar state
+$\hat h_A$. An idempotent state means a positive unital functional
+that is idempotent under convolution. The direct fixed-point
+proposition in the section ``Fixed points and their algebraic
+structure'' of Ref.~\cite{Goursat} starts with
+\begin{align}
+	\phi            & \in(A\otimes A^{\mathrm{op}})^*,
+	                &
+	\phi*\phi       & =\phi,
+	                &
+	\phi(x\otimes1) & =\hat h_A(x).
+	\label{eq:marginal}
+\end{align}
+For faithful unital $*$-representations $\Phi$ of $A$ and $\Psi$ of
+$A^*$, it constructs
+\begin{align}
+	F_\phi(x)
+	                & =D\,\phi(x\otimes S_A(h_{A(1)}))h_{A(2)},
+	\qquad D=\dim A,
+	\\
+	M_\phi
+	                & =\sum_i\Psi(e^i)\otimes W_A\Phi(F_\phi(e_i)),
+	\label{eq:source-tensor}                                        \\
+	\tr(W_A\Phi(x)) & =\hat h_A(x),
+	\qquad W_A\in\Phi(A).
+\end{align}
+The bases $\{e_i\}$ and $\{e^i\}$ are dual. Sweedler indices include
+summation over coproduct components. The positive operator $W_A$ is
+central in $\Phi(A)$.
+
+The final theorem in the subsection ``Applications to renormalization
+trajectories'' of Ref.~\cite{Goursat} assumes convergence of its noise
+and coarse-graining trajectory. It does not prove convergence for
+arbitrary noise. In contrast, the earlier direct construction starts
+with an idempotent state, and the quantum Goursat theorem applies to
+such a state without a trajectory hypothesis.
+
+The calculation below first treats one correlated state without using
+the reconstruction theorem. We then prove a general statement for
+weighted Hopf tensors and identify the precise source identities that
+put the reconstructed tensors in that class.
+
+\section{A finite-group test}
+
+\subsection{Correlated Haar measure and the tensor}
+
+Use additive notation for $G=\Z_2\times\Z_2$, with all bit sums taken
+modulo two. For $A=\C^G$,
+\begin{align}
+	\Delta_A(\delta_g) & =\sum_{x+y=g}\delta_x\otimes\delta_y,
+	                   &
+	S_A(\delta_g)      & =\delta_g,
+	\\
+	h_A                & =\delta_{(0,0)},
+	                   &
+	\hat h_A(f)        & =\frac14\sum_{g\in G}f(g).
+\end{align}
+The subgroup and its uniform state are
+\begin{align}
+	H                & =\{((a,b),(a,c)):a,b,c\in\Z_2\},
+	                 &
+	|H|              & =8,
+	\\
+	\phi(f\otimes k) & =\frac18\sum_{a,b,c}f(a,b)k(a,c).
+	\label{eq:subgroup}
+\end{align}
+Closure follows because addition preserves equality of the first
+coordinates. Every element is its own inverse. For $z\in G\times G$,
+\begin{align}
+	(\phi*\phi)(\delta_z)
+	 & =\frac1{64}\#\{(u,v)\in H^2:u+v=z\}
+	\\
+	 & =\begin{cases}8/64,&z\in H,\\0,&z\notin H,\end{cases}
+	=\phi(\delta_z).
+\end{align}
+There are eight admissible pairs when $z\in H$, since each $u\in H$
+determines $v=z+u$. Moreover,
+\begin{align}
+	\phi(\delta_{(a,b)}\otimes1)
+	 & =\frac18\sum_c1=\frac14
+	=\hat h_A(\delta_{(a,b)}).
+\end{align}
+Both marginals are uniform, but their product assigns probability
+$1/16$ to each pair, whereas $\phi$ assigns probability $1/8$ or zero.
+Thus the state is correlated.
+
+The relation $\hat h_A(F_\phi(f)k)=\phi(f\otimes k)$ gives
+\begin{align}
+	\frac14F_\phi(\delta_{(a,b)})(x,y)
+	 & =\frac18\delta_{a,x},
+	\\
+	F_\phi(\delta_{(a,b)})
+	 & =\frac12\sum_c\delta_{(a,c)}.
+	\label{eq:Fgroup}
+\end{align}
+In particular, $F_\phi(1)=1$.
+
+Take $\mc H=\mc K=\C^G$, with
+$\Phi(\delta_g)=\ket g\bra g$ and the regular representation
+$\Psi(g)=L(g)$, where $L(g)\ket x=\ket{g+x}$. Then $W_A=\Id/4$.
+Define
+\begin{align}
+	P_a & =\sum_c\ket{a,c}\bra{a,c},
+	    &
+	P   & =\frac12(\Id+L(0,1)),
+	    &
+	T_a & =L(a,0)P.
+\end{align}
+Since $L(0,1)^2=\Id$ and the translations commute,
+\begin{align}
+	P^2    & =\frac14(\Id+2L(0,1)+\Id)=P,
+	\\
+	T_aT_b & =L(a+b,0)P^2=T_{a+b}.
+	\label{eq:Tmult}
+\end{align}
+Substituting \cref{eq:Fgroup} into \cref{eq:source-tensor} yields
+\begin{align}
+	M
+	 & =\frac18\sum_{a,b,c}L(a,b)\otimes\ket{a,c}\bra{a,c}
+	\\
+	 & =\frac18\sum_aL(a,0)(\Id+L(0,1))\otimes P_a
+	=\frac14\sum_aT_a\otimes P_a,
+	\label{eq:explicitM}                                   \\
+	M^{(a,c),(b,d)}
+	 & =\delta_{a,b}\delta_{c,d}\frac14T_a.
+	\label{eq:components}
+\end{align}
+
+The virtual support $P\mc K$ has orthonormal basis
+\begin{align}
+	\ket{\widetilde a}
+	 & =2^{-1/2}(\ket{a,0}+\ket{a,1}).
+\end{align}
+On this support, $T_0$ is the identity and $T_1$ exchanges the basis
+vectors. Both vanish on the orthogonal complement. Replacing $B$ by
+$PBP$ therefore preserves every contraction. The supported
+representation is faithful for $\C[\Z_2]$, not for the original
+$\C G$.
+
+\subsection{Density operators and correlations}
+
+Set $b_a=\tr(BT_a)$. Multiplying the components in
+\cref{eq:components} gives
+\begin{align}
+	M_n(B)
+	 & =4^{-n}\sum_{\boldsymbol a,\boldsymbol c}
+	b_{a_1+\cdots+a_n}
+	\ket{\boldsymbol a,\boldsymbol c}
+	\bra{\boldsymbol a,\boldsymbol c}.
+	\label{eq:rawfamily}
+\end{align}
+There are $2^{n-1}$ first-coordinate strings of either parity and
+$2^n$ second-coordinate strings. Hence
+\begin{align}
+	\tr M_n(B)
+	 & =4^{-n}2^{n-1}2^n(b_0+b_1)
+	=\frac{b_0+b_1}{2}.
+\end{align}
+The family is a density family precisely when $b_0,b_1$ are
+nonnegative real numbers with $b_0+b_1=2$.
+
+For the periodic boundary $B=\Id$, one has
+$\tr T_0=2$ and $\tr T_1=0$. Thus
+\begin{align}
+	\rho_n=M_n(\Id)
+	          & =2\,4^{-n}
+	\sum_{\substack{\boldsymbol a,\boldsymbol c\\
+			a_1+\cdots+a_n=0}}
+	\ket{\boldsymbol a,\boldsymbol c}
+	\bra{\boldsymbol a,\boldsymbol c},
+	\\
+	\tr\rho_n & =2\,4^{-n}2^{n-1}2^n=1.
+\end{align}
+Let $Z\ket a=(-1)^a\ket a$ and $\tau=\Id_2/2$. Grouping the first
+and second qubits separately gives
+\begin{align}
+	\rho_n
+	 & =\left[2^{-n}(\Id_2^{\otimes n}+Z^{\otimes n})\right]
+	\otimes\tau^{\otimes n}.
+	\label{eq:parity}
+\end{align}
+For $n\geq2$, every one-site marginal is $\Id_4/4$, while the
+expectation of $Z^{\otimes n}$ on the first coordinates is one.
+The product of the one-site marginals has expectation zero, so
+$\rho_n$ is nonproduct. The second coordinate is an on-site
+maximally mixed spectator, not a weighted bond dimer.
+
+\subsection{Complete all-boundary channels}
+
+Define Kraus operators, with all indices ranging over $\Z_2$, by
+\begin{align}
+	K_{a,c,x,u,v}
+	 & =\frac1{\sqrt8}
+	\ket{x,u;a+x,v}\bra{a,c},
+	\\
+	J_{a,c,b,d,e}
+	 & =\frac1{\sqrt2}\ket{a+b,e}\bra{a,c;b,d}.
+\end{align}
+The channels are
+\begin{align}
+	\mc T(X) & =\sum_{a,c,x,u,v}K_{a,c,x,u,v}XK_{a,c,x,u,v}^\dagger,
+	\\
+	\mc S(Y) & =\sum_{a,c,b,d,e}J_{a,c,b,d,e}YJ_{a,c,b,d,e}^\dagger.
+\end{align}
+These formulas prove complete positivity on the full input algebras.
+Trace preservation follows from
+\begin{align}
+	\sum K^\dagger K
+	 & =\sum_{a,c}\frac{2^3}{8}\ket{a,c}\bra{a,c}=\Id_4,
+	\\
+	\sum J^\dagger J
+	 & =\sum_{a,c,b,d}\frac22
+	\ket{a,c;b,d}\bra{a,c;b,d}=\Id_{16}.
+\end{align}
+The normalization factors are therefore fixed by the numbers of
+prepared outputs for each input basis vector.
+
+For arbitrary $B$, refinement gives
+\begin{align}
+	\mc T(M_1(B))
+	 & =\frac1{32}\sum_{a,c,x,u,v}b_a
+	\ket{x,u;a+x,v}\bra{x,u;a+x,v}
+	\\
+	 & =\frac1{16}\sum_{x,y,u,v}b_{x+y}
+	\ket{x,u;y,v}\bra{x,u;y,v}
+	=M_2(B).
+\end{align}
+Here the sum over $c$ contributes two and $y=a+x$. Conversely,
+\begin{align}
+	\mc S(M_2(B))
+	 & =\frac1{32}\sum_{a,b,c,d,e}b_{a+b}
+	\ket{a+b,e}\bra{a+b,e}
+	\\
+	 & =\frac1{32}\sum_{t,e}(2\cdot2\cdot2)b_t
+	\ket{t,e}\bra{t,e}
+	=M_1(B).
+\end{align}
+For fixed $t$, there are two pairs $(a,b)$ with $a+b=t$ and four
+choices of $(c,d)$. This proves the raw identities
+\cref{eq:rfp}. Applying the component identities inside any longer
+contraction proves refinement and coarse-graining at every site.
+
+\subsection{Canonical representatives and fusion}
+
+Each physical sector $a$ in \cref{eq:explicitM} contains two identical
+one-dimensional vertical blocks. Set
+\begin{align}
+	B_a   & =2^{-1/2}T_a,
+	      &
+	\mu_a & =(2\sqrt2)^{-1}\Id_2.
+	\label{eq:BNTgroup}
+\end{align}
+The product of the two scale factors is $1/4$, as required by the
+original tensor. The scalar transfer map of $B_a$ is
+\begin{align}
+	z\longmapsto
+	\sum_{r,s}|(B_a)_{rs}|^2z
+	 & =\tr(B_a^\dagger B_a)z
+	=\frac12\tr(P)z=z.
+\end{align}
+Its virtual dimension is one, so it is irreducible and its unique
+transfer eigenvalue is one. Thus $B_a$ is normal.
+
+The vertical closures satisfy
+\begin{align}
+	O_L(B_a) & =2^{-L/2}T_a^{\otimes L},
+	\\
+	\tr((T_0^{\otimes L})^\dagger T_1^{\otimes L})
+	         & =(\tr T_1)^L=0,
+	\\
+	\tr((T_a^{\otimes L})^\dagger T_a^{\otimes L})
+	         & =(\tr P)^L=2^L>0.
+\end{align}
+They are independent for every $L\geq1$. The two tensors are therefore
+an actual vertical basis of normal tensors (BNT), not merely
+generators of an abstract algebra.
+
+Using \cref{eq:Tmult},
+\begin{align}
+	O_L(B_a)O_L(B_b)
+	 & =2^{-L}T_{a+b}^{\otimes L}
+	=2^{-L/2}O_L(B_{a+b}).
+\end{align}
+The only nonzero fusion matrices and coefficients are
+\begin{align}
+	\chi_{ab}^{a+b} & =[\,2^{-1/2}\,],
+	                &
+	c_{ab}^{a+b}(L) & =2^{-L/2}.
+	\label{eq:examplefusion}
+\end{align}
+The physical weights obey the CPSV idempotence condition:
+\begin{align}
+	m_a=\tr\mu_a & =2^{-1/2},
+	\\
+	\sum_{a+b=t}c_{ab}^{t}(1)m_am_b
+	             & =2(2^{-1/2})^3=2^{-1/2}=m_t.
+\end{align}
+
+Now replace $B_a$ by $B_a'=\sqrt2 B_a=T_a$ and $\mu_a$ by
+$\mu_a'=\Id_2/4$. The full tensor is unchanged, while
+\begin{align}
+	(\chi')_{ab}^{a+b}
+	                   & =\frac{\sqrt2\sqrt2}{\sqrt2}[\,2^{-1/2}\,]=[\,1\,],
+	\\
+	O_L(B_a')O_L(B_b') & =O_L(B_{a+b}').
+\end{align}
+The algebra is two dimensional and nontrivial, but its length
+dependence is removable. This rescaling changes neither the
+density family nor the all-boundary channels.
+
+\section{Canonical reduction of the reconstructed tensor}
+
+\subsection{Weighted Hopf tensors}
+
+The following proposition identifies a class for which both the
+all-boundary property and removable fusion length dependence can be
+proved directly.
+
+\begin{proposition}
+	\label{prop:hopf}
+	Let $Q$ be a finite-dimensional $C^*$-Hopf algebra. Let
+	$\psi:Q^*\to\End(\mc K)$ and $\pi:Q\to\End(\mc H)$ be faithful
+	unital $*$-representations. Suppose $W>0$ commutes with $\pi(Q)$ and
+	\begin{align}
+		\tr(W\pi(x)) & =\hat h_Q(x)
+		\qquad(x\in Q).
+		\label{eq:weight}
+	\end{align}
+	For dual bases $\{f_i\},\{f^i\}$, define
+	\begin{align}
+		M & =\sum_i\psi(f^i)\otimes W\pi(f_i).
+		\label{eq:hopftensor}
+	\end{align}
+	Then $M$ satisfies the all-boundary fixed-point identities. Its
+	vertical irreducible representatives are normal after transfer
+	normalization, and their closures are independent at every positive
+	length. There is a fixed positive rescaling for which their fusion
+	matrices are identity matrices on the ordinary representation
+	multiplicity spaces of $Q$.
+\end{proposition}
+
+\begin{proof}
+	We first prove the channel statement. Put
+	\begin{align}
+		\pi_1  & =\pi,
+		       &
+		W_1    & =W,
+		       &
+		E_1(x) & =W\pi(x),
+		\\
+		\pi_2  & =(\pi\otimes\pi)\Delta_Q,
+		       &
+		W_2    & =W\otimes W,
+		       &
+		E_2(x) & =W_2\pi_2(x).
+	\end{align}
+	Both representations are faithful: $\Delta_Q$ is injective by the
+	counit identity, and $\pi\otimes\pi$ is injective.
+	Both weights are positive definite and commute with their respective
+	representations. Haar convolution idempotence gives
+	\begin{align}
+		\tr E_2(x)
+		 & =(\hat h_Q\otimes\hat h_Q)(\Delta_Q(x))
+		=\hat h_Q(x)=\tr E_1(x).
+		\label{eq:equaltraces}
+	\end{align}
+
+	For $j=1,2$, decompose the representation and its commutant weight:
+	\begin{align}
+		\mc H^{\otimes j}
+		         & \cong\bigoplus_{\alpha\in\Irr(Q)}
+		\C^{m_{j\alpha}}\otimes V_\alpha,
+		\\
+		\pi_j(x) & \cong
+		\bigoplus_\alpha\Id_{m_{j\alpha}}\otimes\pi_\alpha(x),
+		         &
+		W_j      & \cong
+		\bigoplus_\alpha R_{j\alpha}\otimes\Id_{d_\alpha}.
+		\label{eq:commutant}
+	\end{align}
+	Here $\Irr(Q)$ indexes inequivalent irreducible representations,
+	$d_\alpha=\dim V_\alpha$, and $R_{j\alpha}>0$.
+	Let $U_j$ implement this unitary decomposition.
+	The Haar character formula and \cref{eq:equaltraces} imply
+	\begin{align}
+		\hat h_Q(x)
+		                 & =\frac1{\dim Q}\sum_\alpha d_\alpha\tr\pi_\alpha(x),
+		\\
+		\tr(R_{j\alpha}) & =t_\alpha,
+		                 &
+		t_\alpha         & =\frac{d_\alpha}{\dim Q}.
+		\label{eq:trweights}
+	\end{align}
+	Indeed, evaluating on the identity of the simple block $\alpha$
+	isolates its coefficient.
+
+	Let $P_{j\alpha}$ project onto sector $\alpha$ in the decomposed
+	space. Define channels to and from the direct-sum matrix algebra by
+	\begin{align}
+		D_j(X)
+		 & =\bigoplus_\alpha
+		\tr_{\C^{m_{j\alpha}}}
+		\left(P_{j\alpha}U_jXU_j^\dagger P_{j\alpha}\right),
+		\\
+		C_j\left(\bigoplus_\alpha Y_\alpha\right)
+		 & =U_j^\dagger
+		\left[\bigoplus_\alpha
+			\frac{R_{j\alpha}}{t_\alpha}\otimes Y_\alpha\right]U_j.
+		\label{eq:generalchannels}
+	\end{align}
+	Compression, partial trace, and preparation of the density matrix
+	$R_{j\alpha}/t_\alpha$ are completely positive. Their traces are
+	\begin{align}
+		\tr D_j(X)
+		 & =\sum_\alpha\tr(P_{j\alpha}U_jXU_j^\dagger P_{j\alpha})
+		=\tr X,
+		\\
+		\tr C_j(Y)
+		 & =\sum_\alpha\frac{\tr R_{j\alpha}}{t_\alpha}\tr Y_\alpha
+		=\tr Y.
+	\end{align}
+	Furthermore,
+	\begin{align}
+		D_j(E_j(x))    & =\bigoplus_\alpha t_\alpha\pi_\alpha(x),
+		\\
+		C_kD_j(E_j(x)) & =E_k(x).
+	\end{align}
+	Thus $\mc T=C_2D_1$ and $\mc S=C_1D_2$ are complete channels
+	intertwining $E_1$ and $E_2$ in both directions.
+
+	To connect this calculation to boundaries, define $x_B\in Q$ by
+	\begin{align}
+		f(x_B) & =\tr(B\psi(f))
+		\qquad(f\in Q^*).
+	\end{align}
+	Duality and multiplication in $Q^*$ give
+	\begin{align}
+		M_1(B) & =E_1(x_B),
+		       &
+		M_2(B) & =(E_1\otimes E_1)(\Delta_Q(x_B))=E_2(x_B).
+	\end{align}
+	This proves \cref{eq:rfp} for every boundary. Iterating the same
+	calculation gives
+	\begin{align}
+		M_n(B) & =W^{\otimes n}\pi^{\otimes n}
+		\bigl(\Delta_Q^{(n-1)}(x_B)\bigr).
+		\label{eq:boundary-positivity}
+	\end{align}
+	Thus $x_B\geq0$ ensures positivity, and
+	$\hat h_Q(x_B)=1$ ensures normalization. Periodic positivity at
+	$B=\Id$ requires the additional condition $x_{\Id}\geq0$; it does
+	not follow from faithfulness of $\psi$.
+	For example, take $Q=\C^{\Z_2}$,
+	$\pi(\delta_a)=\ket a\bra a$, $W=\Id_2/2$, and the faithful
+	representation of $Q^*=\C[\Z_2]$ with
+	$\psi(g)=\diag(1,-1,-1)$ for the nonidentity group element $g$.
+	Then
+	\begin{align}
+		M_1(\Id_3) & =\diag(3/2,-1/2),
+	\end{align}
+	which is not positive. The proposition establishes raw channel and
+	fusion identities; its application as a periodic MPDO requires a
+	separate positivity check. The explicit family in
+	\cref{eq:parity} passes that check at every length.
+
+	For the vertical statement, define the unweighted tensors
+	\begin{align}
+		A_\alpha & =\sum_i\psi(f^i)\otimes\pi_\alpha(f_i).
+		\label{eq:unweighted}
+	\end{align}
+	Then $M$ has vertical decomposition
+	$\bigoplus_\alpha R_{1\alpha}\otimes A_\alpha$, after applying $U_1$.
+	A unitary on each multiplicity space diagonalizes $R_{1\alpha}$.
+
+	We verify normality rather than infer it from the representation
+	labels. For a matrix-entry functional $\omega_{rs}$ on $\End(\mc K)$,
+	put
+	\begin{align}
+		x_{rs} & =\sum_i\omega_{rs}(\psi(f^i))f_i.
+	\end{align}
+	Injectivity of $\psi$ makes its linear transpose surjective, so
+	\begin{align}
+		\operatorname{span}\{x_{rs}\}             & =Q,
+		                                          &
+		\operatorname{span}\{\pi_\alpha(x_{rs})\} & =\End(V_\alpha).
+		\label{eq:fullspan}
+	\end{align}
+	The transfer map of $A_\alpha$ is
+	\begin{align}
+		\mc E_\alpha(X)
+		 & =\sum_{r,s}\pi_\alpha(x_{rs})X\pi_\alpha(x_{rs})^\dagger.
+	\end{align}
+	For $X\geq0$, $X\neq0$, and $v\neq0$,
+	\begin{align}
+		\bra v\mc E_\alpha(X)\ket v
+		 & =\sum_{r,s}
+		\left\|X^{1/2}\pi_\alpha(x_{rs})^\dagger v\right\|^2>0.
+	\end{align}
+	If the sum were zero, \cref{eq:fullspan} would force $X^{1/2}$ to
+	annihilate every vector. The transfer map is therefore strictly
+	positive. The finite-dimensional Perron theorem gives a simple
+	positive spectral radius $r_\alpha$ and no other eigenvalue of that
+	modulus. The normalized tensor is
+	\begin{align}
+		B_\alpha & =s_\alpha A_\alpha,
+		         &
+		s_\alpha & =r_\alpha^{-1/2},
+		\\
+		r_\alpha
+		         & =\operatorname{spr}\left(\sum_{r,s}\pi_\alpha(x_{rs})
+		\otimes\overline{\pi_\alpha(x_{rs})}\right).
+		\label{eq:normalization}
+	\end{align}
+	Its transfer spectral radius is $s_\alpha^2r_\alpha=1$, and
+	\cref{eq:fullspan} also proves irreducibility.
+
+	Let $\vartheta_\alpha(x)=\tr\pi_\alpha(x)$ be the irreducible character.
+	The dual coproduct is defined by
+	$\Delta_{Q^*}(f)(x\otimes y)=f(xy)$. Thus
+	\begin{align}
+		O_L(A_\alpha)
+		 & =\sum_{i_1,\ldots,i_L}
+		\tr\pi_\alpha(f_{i_1}\cdots f_{i_L})
+		\psi(f^{i_1})\otimes\cdots\otimes\psi(f^{i_L})
+		\\
+		 & =\psi^{\otimes L}
+		\left(\Delta_{Q^*}^{(L-1)}(\vartheta_\alpha)\right).
+		\label{eq:characterclosure}
+	\end{align}
+	The characters are independent, since their values on the minimal
+	central block identities are $d_\alpha\delta_{\alpha,\beta}$.
+	The iterated coproduct is injective by the counit identity, and
+	$\psi^{\otimes L}$ is injective. Hence the closures in
+	\cref{eq:characterclosure} are independent for every $L\geq1$.
+	The normalized tensors therefore form a BNT.
+
+	Finally, unitary decomposition of the tensor product representation
+	gives
+	\begin{align}
+		(\pi_\alpha\otimes\pi_\beta)\Delta_Q
+		 & \cong\bigoplus_\gamma
+		\Id_{N_{\alpha\beta}^{\gamma}}\otimes\pi_\gamma,
+		\label{eq:rep-fusion}                                           \\
+		N_{\alpha\beta}^{\gamma}
+		 & =\dim\operatorname{Hom}_Q(V_\gamma,V_\alpha\otimes V_\beta).
+	\end{align}
+	Taking characters and then applying the multiplicative maps
+	$\Delta_{Q^*}^{(L-1)}$ and $\psi^{\otimes L}$ yields
+	\begin{align}
+		\vartheta_\alpha\vartheta_\beta
+		 & =\sum_\gamma N_{\alpha\beta}^{\gamma}\vartheta_\gamma,
+		\\
+		O_L(A_\alpha)O_L(A_\beta)
+		 & =\sum_\gamma N_{\alpha\beta}^{\gamma}O_L(A_\gamma).
+	\end{align}
+	At tensor level, the unitary in \cref{eq:rep-fusion} gives the
+	multiplicity matrix $\Id_{N_{\alpha\beta}^{\gamma}}$.
+	For normalized representatives this becomes
+	\begin{align}
+		\chi_{\alpha\beta}^{\gamma}
+		 & =\frac{s_\alpha s_\beta}{s_\gamma}
+		\Id_{N_{\alpha\beta}^{\gamma}},
+		\\
+		c_{\alpha\beta}^{\gamma}(L)
+		 & =N_{\alpha\beta}^{\gamma}
+		\left(\frac{s_\alpha s_\beta}{s_\gamma}\right)^L.
+		\label{eq:scalarfusion}
+	\end{align}
+	Replacing $B_\alpha$ by $A_\alpha$ removes every scalar
+	simultaneously.
+\end{proof}
+
+\subsection{Weights and physical supports}
+
+Only the trace of each commutant block is fixed by the Haar condition.
+If $W$ is also required to belong to $\pi(Q)$, then
+$R_{1\alpha}=w_\alpha\Id_{m_{1\alpha}}$ and
+\begin{align}
+	m_{1\alpha}w_\alpha & =\frac{d_\alpha}{\dim Q},
+	                    &
+	w_\alpha            & =\frac{d_\alpha}{m_{1\alpha}\dim Q}.
+	\label{eq:centralweight}
+\end{align}
+The constant value $1/\dim Q$ occurs for regular multiplicities
+$m_{1\alpha}=d_\alpha$, not for arbitrary faithful representations.
+
+For a general commutant weight, the eigenvalues of $R_{1\alpha}$
+may differ. They belong to the physical multiplicity weights, not
+to the fusion matrices in \cref{eq:scalarfusion}. This distinction
+is essential in applying the reconstruction.
+
+The channel proof also covers tensors supported on proper physical
+subspaces. If $P_j$ is the support projection in the full $j$-site
+space and $\mc L$ is either supported channel, extend it by
+\begin{align}
+	\mc L_{\mathrm{full}}(X)
+	 & =\mc L(P_jXP_j)+\tr((\Id-P_j)X)\sigma,
+	\label{eq:extension}
+\end{align}
+where $\sigma$ is any density operator in the target space.
+Both terms are completely positive, and their traces add to
+$\tr X$. The tensor-generated operators lie in the supported input,
+so this extension preserves their exact intertwining identities.
+
+\subsection{Typing the quantum Goursat reconstruction}
+
+The quantum Goursat theorem of Ref.~\cite{Goursat} supplies corner
+Hopf algebras $Q_1,Q_2$, projections $\Pi_i$, and a Hopf
+anti-isomorphism $\lambda:Q_1\to Q_2$.
+For the Haar first marginal,
+\begin{align}
+	q_1
+	 & =\frac{\hat h_A(h_{A(1)})h_{A(2)}}{\hat h_A(h_A)}
+	=\frac{D^{-1}1}{D^{-1}}=1.
+\end{align}
+Thus $Q=Q_1=c_{\phi_1}(A)$, where $\phi_1$ is the theorem's auxiliary
+idempotent state, not the marginal $\hat h_A$.
+The theorem's centrality condition makes $\phi_1$ central in $A^*$.
+The left and right slice projections agree, so
+$\Pi=\Pi_1=c_{\phi_1}$ is a surjective unital projection onto $Q$.
+The projection is $*$-preserving. Its coproduct and antipode identities
+in that reconstruction are
+\begin{align}
+	(\Pi\otimes\Pi)\Delta_A & =\Delta_Q\Pi,
+	                        &
+	\Pi S_A                 & =S_Q\Pi.
+	\label{eq:Pi}
+\end{align}
+
+An element $f\in Q^*$ is not automatically an element of $A^*$.
+The induced virtual representation must be defined as
+\begin{align}
+	\psi(f) & =\Psi(\Pi^*f),
+	        &
+	\Pi^*f  & =f\circ\Pi.
+	\label{eq:dualrep}
+\end{align}
+Its multiplication and involution follow from \cref{eq:Pi}:
+\begin{align}
+	(\Pi^*f\,\Pi^*g)(x)
+	 & =(f\otimes g)((\Pi\otimes\Pi)\Delta_A(x))
+	=\Pi^*(fg)(x),
+	\\
+	(\Pi^*f)^*(x)
+	 & =\overline{f(\Pi(S_A(x)^*))}
+	=\overline{f(S_Q(\Pi x)^*)}
+	=\Pi^*(f^*)(x).
+\end{align}
+Surjectivity of $\Pi$ implies injectivity of $\Pi^*$ and hence
+faithfulness of $\psi$. Its unit is a projection,
+\begin{align}
+	P_{\mathrm v}
+	 & =\psi(1_{Q^*})=\Psi(\varepsilon_Q\circ\Pi),
+\end{align}
+which need not equal $\Id_{\mc K}$. Restricting to $P_{\mathrm v}\mc K$
+makes the representation unital without losing faithfulness.
+
+On the physical side, $\lambda$ takes values in $A^{\mathrm{op}}$.
+Its anti-multiplication reverses the opposite multiplication, so
+\begin{align}
+	\pi(x)        & =\Phi(\lambda(x)),
+	              &
+	P_{\mathrm p} & =\Phi(q_2)
+\end{align}
+is a faithful unital representation on $P_{\mathrm p}\mc H$.
+Set $t=\hat h_A(q_2)>0$. The inherited physical weight is
+\begin{align}
+	W & =t^{-1}P_{\mathrm p}W_AP_{\mathrm p}.
+	\label{eq:inherited}
+\end{align}
+It is positive definite on the support and commutes with $\pi(Q)$.
+The normalized Haar restriction and the Hopf anti-isomorphism give
+\begin{align}
+	\tr(W\pi(x))
+	 & =t^{-1}\tr(W_A\Phi(\lambda(x)))
+	=t^{-1}\hat h_A(\lambda(x))
+	=\hat h_Q(x).
+	\label{eq:reconstructedhaar}
+\end{align}
+This proves the weight hypothesis of \cref{prop:hopf}. It does not
+prove $W\in\pi(Q)$, so replacing $W$ by the central weight
+\cref{eq:centralweight} would generally change the tensor.
+
+The basis reduction must also use $\Pi$. For a basis $\{f_j\}$ of
+$Q$ with dual basis $\{f^j\}$,
+\begin{align}
+	\sum_i\Psi(e^i)\otimes W\pi(\Pi(e_i))
+	 & =\sum_{i,j}f^j(\Pi(e_i))\Psi(e^i)\otimes W\pi(f_j)
+	\\
+	 & =\sum_j\Psi(\Pi^*f^j)\otimes W\pi(f_j).
+	\label{eq:typedtensor}
+\end{align}
+The reconstruction formula is $F_\phi=t^{-1}\lambda\Pi$.
+Substitution into \cref{eq:source-tensor} therefore gives exactly
+\cref{eq:typedtensor}. An arbitrary extension of a basis of $Q$
+would not justify dropping the additional basis vectors; the
+projection is what makes this reduction valid.
+
+Consequently the reconstructed tensors, using the stated quantum
+Goursat identities, satisfy \cref{prop:hopf} on their supports.
+The channels in \cref{eq:generalchannels,eq:extension} establish
+the full all-boundary identities independently of the positivity
+of any particular formula proposed for refinement in the source.
+
+\section{Scope of the conclusion}
+
+The subgroup test is a nonproduct all-boundary fixed point with a
+nontrivial two-dimensional vertical algebra. Its transfer-normalized
+BNT has coefficients $2^{-L/2}$. The fixed change
+$B_a\mapsto\sqrt2 B_a$ removes this dependence while preserving the
+raw tensor and its channels. Thus the example answers the
+scale-dependent version of the question positively but does not
+supply intrinsic length dependence. No spectator weighted dimers
+are involved in this calculation.
+
+For the precise Hopf tensor class of \cref{eq:hopftensor},
+\cref{prop:hopf} excludes nonscalar fusion multiplicities and
+intrinsically nonremovable fusion length dependence. Faithfulness
+is used to prove both normality and independence of the actual
+vertical tensors. Positive noncentral commutant weights remain
+physical multiplicity factors and do not obstruct the fixed
+rescaling.
+
+The application to Ref.~\cite{Goursat} uses its quantum Goursat
+reconstruction, specifically the Hopf structure, the intertwining
+identities \cref{eq:Pi}, and the normalized Haar restriction.
+With these source inputs, the induced dual representation, support
+restrictions, inherited weight, and raw tensor equality have been
+checked explicitly. The resulting channel construction proves the
+all-boundary property on the reconstructed operator spaces and
+extends to the ambient matrix algebras.
+
+An already specified idempotent state does not require a convergence
+hypothesis for this assessment. The source's final trajectory theorem
+has a different scope: it identifies limits when its specified
+trajectory converges. Neither that theorem nor the calculations here
+establish convergence for arbitrary initial noise.
+
+Finally, there is no assertion that every CPSV fixed point has the
+form \cref{eq:hopftensor}. Such an extension would require a proof
+that an arbitrary fixed point admits the faithful Hopf representation
+and commutant-weight decomposition used here. A general quantum
+hypergroup also lacks the multiplicative coproduct needed for
+\cref{eq:rep-fusion}. Those missing implications prevent any blanket
+flatness conclusion for either larger class. Within the reconstructed
+Hopf class, however, positive fixed representative rescalings remove
+the fusion length dependence.
+
+\input{bibliography/hopf}
+\end{document}

@@ -2420,6 +2420,30 @@ prefix projections. This permits the active-volume identity and spectator bound
 to be combined using ordinary arithmetic equalities. Candidate helper pattern;
 currently one occurrence, so no general declaration is warranted.
 
+### telescoping trace bound near an idempotent mixed transfer matrix — candidate
+- **Pattern:** bound `‖Tr(T^M) - 1‖` for a mixed transfer matrix `T = Ψ(P)` with
+  `‖T - T_∞‖ ≤ K₃ K₁ x^q`, where `T_∞ = Ψ(P_∞)` is idempotent of trace one: apply
+  `norm_prod_range_sub_pow_le_of_isIdempotentElem` with `c = ‖1‖ + ‖T_∞‖`, rewrite
+  `Tr(T^M) - 1` through `Matrix.traceLinearMap`, then close the chain
+  `K₄ c ((1 + cδ)^M - 1) ≤ … ≤ C u e^{C u}` with `one_add_pow_sub_one_le_mul_exp`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_trace_prod_range_transferMatrix_sub_one_le` in
+  `TNLean/MPS/Preparation/ApproximationError.lean` and
+  `exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+- **Notes:** a third occurrence would justify a lemma taking the idempotent `T_∞`,
+  its trace, and the linear bound `‖T - T_∞‖ ≤ δ` as hypotheses.
+
+### off-diagonal constants chosen with a dummy diagonal value — candidate
+- **Pattern:** `have hoff : ∀ j k, ∃ K, 0 ≤ K ∧ (j ≠ k → ∀ n, ‖f j k n‖ ≤ K * x ^ n)`,
+  proved by `by_cases j = k` with `⟨0, le_rfl, …⟩` on the diagonal, then `choose`, and
+  a split `∑ⱼ ∑ₖ = ∑ⱼ (diagonal + ∑_{k ∈ univ.erase j})` by `Finset.add_sum_erase`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_gram_blockTensor_blockSum_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockGram.lean` and
+  `exists_abs_norm_mpvState_blockSum_sq_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
   projector by the norm of its adjoint, reverse the product, and reverse the
