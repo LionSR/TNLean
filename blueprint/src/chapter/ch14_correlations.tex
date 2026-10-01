@@ -141,15 +141,16 @@ spectral decomposition, and quantitative decay bounds.
 \end{proof}
 
 \section{Spectral expansion and exponential decay}
-% **Local fix (diagonalizable correlator expansion):** the pure-exponential
-% expansion and the rate |lambda_2| of the source hold under diagonalizability
-% of the transfer map on the traceless matrices; see
+% **Scope restriction (diagonalizable correlator expansion):** the source's
+% pure-exponential expansion and rate |lambda_2| are false as printed for a
+% defective transfer map; they are stated here under diagonalizability of the
+% transfer map on the traceless matrices; see
 % docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex.
 
 \begin{theorem}[Sum of exponentials under diagonalizability]%
     \label{thm:correlator_sum_exponentials}
     \uses{def:connected_correlator, def:primitive_mps}
-    Let $\E_A$ be primitive and trace-preserving, with fixed state $\rho$
+    Let $\E_A$ be primitive and trace-preserving, with fixed point $\rho$
     satisfying $\tr\rho=1$. Suppose its restriction to the traceless matrices
     is diagonalizable, with eigenvalues $\lambda_1,\ldots,\lambda_{D^2-1}$,
     counted with multiplicity. For every $X,Y$, there are coefficients
@@ -188,7 +189,7 @@ spectral decomposition, and quantitative decay bounds.
 \begin{theorem}[Exponential decay bound]%
     \label{thm:correlator_exponential_bound}
     \uses{def:connected_correlator, def:primitive_mps}
-    Let $\E_A$ be primitive and trace-preserving, with fixed state $\rho$
+    Let $\E_A$ be primitive and trace-preserving, with fixed point $\rho$
     satisfying $\tr\rho=1$, and put $P(Z)=\tr(Z)\rho$. Write
     $\rho_{\spec}(\E_A-P)$ for the spectral radius of $\E_A-P$.
     For every $r$ with $\rho_{\spec}(\E_A-P)<r<1$ and every $X,Y$, there is a
@@ -206,7 +207,7 @@ spectral decomposition, and quantitative decay bounds.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part}
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part, thm:correlator_sum_exponentials}
     Primitivity gives $\rho_{\spec}(\E_A-P)<1$
     \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
     so such rates $r$ exist.
@@ -242,7 +243,7 @@ spectral decomposition, and quantitative decay bounds.
     is a transfer-map gap condition: all non-leading eigenvalues of $\E_A$ lie
     strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of
     Chapter~\ref{ch:parent_hamiltonian_commuting_and_gap}.
-    The complementary transfer-map gap $\rho(\E_A-P)<1$ is established for
+    The complementary transfer-map gap $\rho_{\spec}(\E_A-P)<1$ is established for
     primitive channels
     (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}).
     The mixed-transfer gap needed for separation of non-equivalent canonical
@@ -287,7 +288,7 @@ spectral decomposition, and quantitative decay bounds.
 
 \section{Quantitative transfer-map gap bounds}
 
-The qualitative bound $\rho(\E_A-P)<1$ for primitive channels
+The qualitative bound $\rho_{\spec}(\E_A-P)<1$ for primitive channels
 \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}
 admits quantitative refinements in terms of geometric constants and decay rates
 for the transfer map $\E_A$.
@@ -321,9 +322,9 @@ for the transfer map $\E_A$.
 \begin{proof}
     \leanok
     Injectivity implies primitivity of the transfer map.
-    The complementary spectral-radius bound $\rho(\E_A-P)<1$ then follows
+    The complementary spectral-radius bound $\rho_{\spec}(\E_A-P)<1$ then follows
     from the primitive transfer-map gap theorem. Choose
-    $r$ with $\rho(\E_A-P)<r<1$. The Gelfand formula yields
+    $r$ with $\rho_{\spec}(\E_A-P)<r<1$. The Gelfand formula yields
     $\|(\E_A-P)^n\|\le Cr^n$ for a suitable constant $C>0$.
     Since $P$ is the fixed-point projection, $\E_A P=P\E_A=P$, and hence
     $\E_A^n-P=(\E_A-P)^n$ for $n\ge 1$. The case $n=0$ is absorbed by
@@ -346,11 +347,11 @@ for the transfer map $\E_A$.
     Traceless matrices lie in $\ker P$, where $P$ is the fixed-point
     projection (\ref{eq:correlations_fixed_point_projection}).
     Since $\E_A-P$ has spectral radius strictly less than~$1$, choose any
-    $r$ with $\rho(\E_A-P)<r<1$. The Gelfand formula then gives exponential
+    $r$ with $\rho_{\spec}(\E_A-P)<r<1$. The Gelfand formula then gives exponential
     decay with $\xi=-1/\log r$. Choosing a rate strictly above the spectral
     radius is necessary in general because a Jordan block at the spectral
     radius can prevent a uniform bound proportional to
-    $\rho(\E_A-P)^n$.
+    $\rho_{\spec}(\E_A-P)^n$.
 \end{theorem}
 
 \begin{proof}
@@ -358,7 +359,7 @@ for the transfer map $\E_A$.
     For traceless $X$, we have $P(X)=0$, so
     $\E_A^n(X)=(\E_A-P)^n(X)$.
     Applying the Gelfand-formula estimate with
-    $\rho(\E_A-P)<r<1$ gives $\|\E_A^n(X)\|\le Cr^n\|X\|$.
+    $\rho_{\spec}(\E_A-P)<r<1$ gives $\|\E_A^n(X)\|\le Cr^n\|X\|$.
     With $\xi=-1/\log r>0$, the identity $r^n=e^{-n/\xi}$ yields
     (\ref{eq:correlations_traceless_decay}).
 \end{proof}
