@@ -185,13 +185,7 @@ theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZ
     have hq' : a * Real.log q ≥ 0 := by positivity
     rw [hlogN] at hq
     nlinarith
-  calc K * (M * Real.exp (-(q / a)))
-      = Real.exp (Real.log K + Real.log M - q / a) := by
-        rw [Real.exp_sub, Real.exp_add, Real.exp_log hK, Real.exp_log (by positivity),
-          Real.exp_neg]
-        ring
-    _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
-    _ = ε := Real.exp_log hε
+  exact mul_mul_exp_neg_le_of_log_le hK (by positivity) hε hrq
 
 /-- **Error `ε` in depth `O(q)` with `q ∝ log(N/ε)`.** There is `C`, depending only on `d` and
 `D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending only on `A`,

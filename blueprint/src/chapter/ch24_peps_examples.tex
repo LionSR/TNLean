@@ -129,6 +129,13 @@ matrix product operator on the virtual level.
 
 \subsection{The GHZ state}
 
+The two-dimensional GHZ state is a superposition of the $d$ constant
+spin configurations \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
+All bonds are contracted periodically. Separate horizontal and vertical
+assignments of bond indices retain the self-loops and parallel bonds at small lattice sizes.
+The simple-graph representation requires $w,h\ge2$
+\cite{gap:rmp_peps_examples_small_torus}.
+
 \begin{definition}[Two-dimensional GHZ tensor]%
     \label{def:peps_ghz_tensor}
     \lean{TNLean.PEPS.ghzSiteTensor, TNLean.PEPS.ghzPEPS}
@@ -141,13 +148,22 @@ matrix product operator on the virtual level.
 
 \begin{theorem}[The GHZ PEPS is the GHZ state]%
     \label{thm:peps_ghz_state}
-    \lean{TNLean.PEPS.stateCoeff_ghzPEPS}
+    \lean{TNLean.PEPS.sum_prod_ghzSiteTensor, TNLean.PEPS.stateCoeff_ghzPEPS}
     \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff}
-    On every torus with $w,h\ge 2$ the GHZ PEPS generates the unnormalized
-    GHZ state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$: its coefficient at
-    $\sigma$ is $\sum_{i}\prod_{v}\delta_{\sigma(v),i}$
+    \uses{def:peps_ghz_tensor, def:peps_stateCoeff,
+        lem:peps_torus_site_tensor_contraction}
+    On every torus with $w,h\ge1$, the GHZ tensor generates the unnormalized
+    state $\sum_{i=0}^{d-1}\ket{i,i,\ldots,i}$
     \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
+    With horizontal and vertical assignments of bond indices $h_{(x,y)},v_{(x,y)}$ as in
+    Lemma~\ref{lem:peps_torus_site_tensor_contraction}, its coefficient is
+    \begin{align}
+        \sum_{h,v}\prod_{(x,y)}
+        A^{\sigma(x,y)}_{v_{(x,y)},h_{(x,y)},v_{(x,y-1)},h_{(x-1,y)}}
+         & = \sum_i\prod_{(x,y)}\delta_{\sigma(x,y),i}.
+        \label{eq:peps_ghz_periodic_contraction}
+    \end{align}
+    For $w,h\ge2$, the simple-graph GHZ PEPS has the same coefficients.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -159,6 +175,53 @@ matrix product operator on the virtual level.
     Lemma~\ref{lem:peps_torus_shift_const}. Every edge is then labelled by
     that constant, so exactly one virtual configuration contributes when
     $\sigma$ is constant and none otherwise.
+\end{proof}
+
+\begin{theorem}[Non-injectivity of the GHZ PEPS]
+    \label{thm:peps_ghz_not_injective}
+    \lean{TNLean.PEPS.ghzSiteTensor_not_linearIndependent,
+        TNLean.PEPS.ghzPEPS_not_isVertexInjective}
+    \leanok
+    \uses{def:peps_ghz_tensor, def:IsVertexInjective}
+    For $d\ge2$, the four-leg GHZ tensor is not injective.
+    For $d\ge2$ and $w,h\ge2$, the simple-graph GHZ PEPS is not vertex-injective.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_site_tensor_contraction}
+    The four-leg basis vector with labels $(0,1,0,0)$ has zero image.
+    In the simple graph, give the right bond at one vertex label $1$
+    and every other incident bond label $0$. The top and right bonds are distinct,
+    so no physical label can agree with both. This virtual basis
+    vector is mapped to zero.
+\end{proof}
+
+\begin{theorem}[On-site permutations and their virtual action]
+    \label{thm:peps_ghz_permutation}
+    \lean{TNLean.PEPS.ghzSiteTensor_perm, TNLean.PEPS.ghzSiteTensor_add,
+        TNLean.PEPS.sum_prod_ghzSiteTensor_perm,
+        TNLean.PEPS.stateCoeff_ghzPEPS_perm, TNLean.PEPS.stateCoeff_ghzPEPS_add}
+    \leanok
+    \uses{def:peps_ghz_tensor, def:peps_stateCoeff, thm:peps_ghz_state}
+    Every permutation $\pi$ of the $d$ labels acts on the GHZ site tensor by
+    \begin{align}
+        A^{\pi(i)}_{\pi(\alpha)\pi(\beta)\pi(\gamma)\pi(\delta)}
+         & = A^i_{\alpha\beta\gamma\delta}.
+    \end{align}
+    For every positive $w,h$, the contraction in
+    (\ref{eq:peps_ghz_periodic_contraction}) is unchanged when $\sigma$
+    is replaced by $\pi\circ\sigma$. For $w,h\ge2$, the simple-graph
+    GHZ PEPS therefore satisfies $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$.
+    In particular, for $d\ge1$ the on-site $\Z_d$ shift is a symmetry,
+    and its virtual action is the same shift on every bond.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_ghz_state}
+    A permutation preserves equality of the five labels in the site
+    tensor. Reindexing the sum over constant configurations in
+    Theorem~\ref{thm:peps_ghz_state} proves the state identity.
+    Take $\pi(i)=i+g$ for the cyclic shift.
 \end{proof}
 
 \subsection{The cluster state}
@@ -199,10 +262,87 @@ matrix product operator on the virtual level.
     formula.
 \end{proof}
 
-Up to the factor $2^{-N/2}$, the coefficient in
-Theorem~\ref{thm:peps_cluster_state} is that of the state obtained by
-applying controlled-$Z$ gates on all nearest-neighbor bonds to
-$\ket{+}^{\otimes N}$ \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
+\begin{definition}[Graph-state circuit and stabilizers]
+    \label{def:peps_graph_stabilizers}
+    \lean{TNLean.PEPS.graphCircuitSign, TNLean.PEPS.graphFlip,
+        TNLean.PEPS.graphNeighborSign, TNLean.PEPS.graphStabilizer,
+        TNLean.PEPS.clusterBondTarget, TNLean.PEPS.clusterCircuitState,
+        TNLean.PEPS.clusterStabilizer}
+    \leanok
+    \uses{def:peps_torus_geometry_translation}
+    Let a finite set of bonds have distinct endpoints $a(e),b(e)$ in a finite
+    vertex set $V$. Parallel bonds are counted with multiplicity. The product
+    of controlled-$Z$ gates has diagonal coefficient
+    $g(\sigma)=\prod_e(-1)^{\sigma_{a(e)}\sigma_{b(e)}}$.
+    The stabilizer $K_v$ flips the qubit at $v$ and applies $Z$ at the opposite
+    endpoint of every incident bond. Thus
+    \begin{align}
+        (K_v\psi)(\sigma)
+         & =\prod_{e:a(e)=v}(-1)^{\sigma_{b(e)}}
+        \prod_{e:b(e)=v}(-1)^{\sigma_{a(e)}}
+        \psi(\sigma\mathbin{\oplus}\mathbf{1}_v).
+    \end{align}
+    On the square torus, take the horizontal and vertical positive bonds;
+    the normalized circuit state has coefficients $2^{-N/2}g(\sigma)$
+    \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[Common graph-stabilizer eigenspace]
+    \label{thm:peps_graph_stabilizer_line}
+    \lean{TNLean.PEPS.graphStabilizer_graphCircuitSign,
+        TNLean.PEPS.graphStabilizer_fixed_iff}
+    \leanok
+    \uses{def:peps_graph_stabilizers}
+    For the loop-free bond family of Definition~\ref{def:peps_graph_stabilizers},
+    $K_v\psi=\psi$ for every $v$ if and only if $\psi=cg$ for some $c\in\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Flipping $v$ multiplies $g$ by the product of the neighbouring $Z$ signs:
+    \begin{align}
+        g(\sigma\mathbin{\oplus}\mathbf{1}_v)=s_v(\sigma)g(\sigma),
+        \qquad
+        s_v(\sigma)=\prod_{e:a(e)=v}(-1)^{\sigma_{b(e)}}
+        \prod_{e:b(e)=v}(-1)^{\sigma_{a(e)}}.
+    \end{align}
+    Since $s_v(\sigma)^2=1$, this gives $K_vg=g$. Conversely,
+    $K_v\psi=\psi$ reads $\psi(\sigma)=s_v(\sigma)\psi(\sigma\mathbin{\oplus}\mathbf{1}_v)$,
+    so
+    \begin{align}
+        g(\sigma\mathbin{\oplus}\mathbf{1}_v)\psi(\sigma\mathbin{\oplus}\mathbf{1}_v)
+        =g(\sigma)\psi(\sigma)
+    \end{align}
+    for every site $v$. Changing the sites one at a time reduces every
+    configuration to the all-zero configuration. Hence
+    $g(\sigma)\psi(\sigma)=\psi(0)$ and $\psi(\sigma)=\psi(0)g(\sigma)$.
+\end{proof}
+
+\begin{theorem}[Square-torus cluster circuit and uniqueness]
+    \label{thm:peps_cluster_stabilizer_line}
+    \lean{TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_graphCircuitSign,
+        TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_clusterCircuitState,
+        TNLean.PEPS.clusterStabilizer_apply,
+        TNLean.PEPS.clusterStabilizer_fixed_iff,
+        TNLean.PEPS.stateCoeff_clusterPEPS_ne_zero}
+    \leanok
+    \uses{def:peps_cluster_tensor, def:peps_graph_stabilizers}
+    On a torus with $w,h\ge3$ and $N=wh$, the printed cluster PEPS is
+    $2^{-N/2}$ times the normalized controlled-$Z$ circuit state and is nonzero.
+    Its span is precisely the common $+1$ eigenspace of
+    \begin{align}
+        K_v=X_v Z_{v+(1,0)}Z_{v-(1,0)}Z_{v+(0,1)}Z_{v-(0,1)}.
+        \label{eq:peps_cluster_stabilizer_pauli}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_cluster_state, thm:peps_graph_stabilizer_line}
+    Theorem~\ref{thm:peps_cluster_state} identifies the coefficient with
+    $2^{-N}g(\sigma)$, and its all-zero coefficient is $2^{-N}\ne0$.
+    Each site has one incoming and one outgoing bond in each coordinate
+    direction, giving (\ref{eq:peps_cluster_stabilizer_pauli}). Apply
+    Theorem~\ref{thm:peps_graph_stabilizer_line} and absorb the nonzero scalar.
+\end{proof}
 
 \subsection{The CZX model}
 
@@ -1205,6 +1345,146 @@ $\mathcal{P}$ from the virtual to the physical system.
         =\frac{1}{|G|}\sum_g\sigma(g)x\otimes\omega$, and pairing $\omega$
     through $M$ gives $\tr M$. By Theorem~\ref{thm:peps_semiregular_trace}
     with $g=h=1$, $\tr\Delta=1$ for semi-regular $\tau$.
+\end{proof}
+
+For a tensor $A$ let $A^\dagger$ be the tensor with complex conjugate entries
+and the roles of the incoming and outgoing legs exchanged, so that
+$\mathcal{P}(A^\dagger)=\mathcal{P}(A)^\dagger$. For a matrix product tensor
+with bond space $\mathbb{C}[G]$, on which the left-regular representation acts
+by $L_g\ket{h}=\ket{gh}$ and the group elements are orthonormal,
+$\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
+\cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+
+\begin{definition}[$G$-isometric matrix product tensor]%
+    \label{def:peps_mps_g_isometric}
+    \lean{TNLean.PEPS.regularAdjoint, TNLean.PEPS.regularAdjoint_mul,
+        TNLean.PEPS.regularAdjoint_smul, TNLean.PEPS.mpsAdjointSiteMap,
+        TNLean.PEPS.mpsAdjointSiteMap_single, TNLean.PEPS.IsGIsometricMPS}
+    \leanok
+    \uses{def:peps_mps_g_injective}
+    A matrix product tensor $A$ with bond space $\mathbb{C}[G]$ is
+    $G$-isometric if $L_gA^iL_g^{-1}=A^i$ for all $g$ and $i$ and
+    $\mathcal{P}(A^\dagger)\mathcal{P}(A)=c\,\sigma$ for one constant $c>0$,
+    where $\sigma$ is the twirl onto the commutant of the left-regular
+    representation. For $c=1$ this is the condition
+    $\mathcal{P}(A)^{-1}=\mathcal{P}(A^\dagger)$ of the source; the constant
+    absorbs the normalization of the tensor
+    \cite[Definition~6.1]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{theorem}[$G$-isometric tensors are $G$-injective]%
+    \label{thm:peps_mps_g_isometric_injective}
+    \lean{TNLean.PEPS.IsGIsometricMPS.isGInjective}
+    \leanok
+    \uses{def:peps_mps_g_isometric, thm:peps_g_injective_left_inverse,
+        thm:peps_mps_g_injective_source_form}
+    A $G$-isometric matrix product tensor is $G$-injective for the left-regular
+    representation, with left inverse $c^{-1}\mathcal{P}(A^\dagger)$
+    \cite[Definition~6.1]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Invariance of $\mathcal{P}(A)$ under conjugation is equivalent to
+    $L_gA^iL_g^{-1}=A^i$, and
+    $c^{-1}\mathcal{P}(A^\dagger)\mathcal{P}(A)=\sigma$; the left-inverse form
+    of $G$-injectivity applies.
+\end{proof}
+
+\begin{lemma}[The left inverse for the regular representation]%
+    \label{lem:peps_regular_left_inverse}
+    \lean{TNLean.PEPS.card_smul_deltaOperator_leftRegular,
+        TNLean.PEPS.concatLeftInverse_leftRegular,
+        TNLean.PEPS.innerContraction_smul,
+        TNLean.PEPS.linkContractionLeftInverse_leftRegular}
+    \leanok
+    \uses{thm:peps_semiregular_trace, thm:peps_mps_g_injective_concatenation,
+        thm:peps_g_injective_concatenation}
+    For the left-regular representation $|G|\,\Delta=\mathbb{1}$. Hence the
+    left inverse of a concatenation $C^{ij}=A^iB^j$ of matrix product tensors
+    built from left inverses $L_A$ and $L_B$ is
+    $L_C\ket{i,j}=(L_B\ket{j})(L_A\ket{i})$, and if the contracted link of two
+    tensors in two dimensions carries the left-regular representation, the left
+    inverse of the contracted tensor applies $L_A\otimes L_B$ and contracts the
+    two ends of the link directly \cite[Lemma~6.2]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_semiregular_trace}, $\Delta=\frac{1}{|G|}\Id$ for
+    the left-regular representation, that is, $|G|\,\Delta=\mathbb{1}$.
+    Substitute this in the two left inverses.
+\end{proof}
+
+\begin{theorem}[Stability of isometry under concatenation in one dimension]%
+    \label{thm:peps_mps_g_isometric_concatenation}
+    \lean{TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap,
+        TNLean.PEPS.IsGIsometricMPS.concatTensor}
+    \leanok
+    \uses{def:peps_mps_g_isometric, lem:peps_regular_left_inverse,
+        thm:peps_mps_g_injective_concatenation}
+    If the matrix product tensors $A$ and $B$ are $G$-isometric, so is
+    $C^{ij}=A^iB^j$: the left inverse built from $\mathcal{P}(A^\dagger)$ and
+    $\mathcal{P}(B^\dagger)$ is $\mathcal{P}(C^\dagger)$, and
+    $\mathcal{P}(C^\dagger)\mathcal{P}(C)=c_Ac_B\,\sigma$. This is the
+    one-dimensional case of the source's lemma, which is stated for the
+    concatenation of PEPS in general and proved in one dimension; in two
+    dimensions only the simplification of the left inverse in
+    Lemma~\ref{lem:peps_regular_left_inverse} is formalized
+    \cite[Lemma~6.2]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_regular_left_inverse} the left inverse built from
+    $c_A^{-1}\mathcal{P}(A^\dagger)$ and $c_B^{-1}\mathcal{P}(B^\dagger)$ sends
+    $\ket{i,j}$ to $(c_Ac_B)^{-1}(B^j)^\dagger(A^i)^\dagger
+        =(c_Ac_B)^{-1}(A^iB^j)^\dagger$, and by
+    Theorem~\ref{thm:peps_mps_g_injective_concatenation} it is a left
+    inverse of $\mathcal{P}(C)$. Invariance of $C$ holds as for
+    $G$-injective tensors.
+\end{proof}
+
+The source shows next that for a $G$-isometric tensor the virtual level,
+restricted to the invariant subspace, and the physical level are related by a
+unitary. Its standing convention is that the physical system of a site is the
+range of $\mathcal{P}(A)$, which can always be arranged by a local isometry
+\cite[Sections~``MPS and PEPS'' and ``Isometric PEPS'']{Schuch2010PEPS}.
+
+\begin{theorem}[Virtual unitaries implementable on the physical level]%
+    \label{thm:peps_g_isometric_virtual_unitaries}
+    \lean{TNLean.PEPS.mem_unitaryGroup_of_dotProduct,
+        TNLean.PEPS.dotProduct_mulVec_of_mem_unitaryGroup,
+        TNLean.PEPS.IsGInjective.leftInverse_mem_invariants_of_surjective,
+        TNLean.PEPS.IsGIsometric.exists_unitary_comp_eq,
+        TNLean.PEPS.IsGIsometric.exists_comp_eq_of_unitary}
+    \leanok
+    \uses{def:peps_g_injective, thm:peps_g_injective_left_inverse}
+    Let $A$ be $G$-isometric with $\mathcal{P}(A)$ onto the physical system.
+    If $V$ is a unitary on the virtual level that commutes with $U_g$ for
+    every $g$, there is a unitary $W$ on the physical system with
+    $W\mathcal{P}(A)=\mathcal{P}(A)V$. Conversely, for every unitary $W$ on the
+    physical system, $V=\mathcal{P}(A)^{-1}W\mathcal{P}(A)$ satisfies
+    $VU_g=U_gV=V$ for every $g$, preserves the inner products of invariant
+    vectors, and $\mathcal{P}(A)V=W\mathcal{P}(A)$
+    \cite[Lemma~6.3]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $L$ be a left inverse with $L\mathcal{P}(A)=\Pi_U$. Since
+    $\mathcal{P}(A)$ is onto, every physical vector is $\mathcal{P}(A)x$ with
+    $x$ invariant, $Ly$ is invariant and $\mathcal{P}(A)Ly=y$. For the first
+    claim let $W=\mathcal{P}(A)VL$. As $V$ commutes with $U_g$, it preserves
+    the invariant subspace and commutes with $\Pi_U$, so
+    $W\mathcal{P}(A)=\mathcal{P}(A)V\Pi_U=\mathcal{P}(A)\Pi_UV=\mathcal{P}(A)V$;
+    and for invariant $x,x'$,
+    $\langle W\mathcal{P}(A)x,W\mathcal{P}(A)x'\rangle
+        =c\langle Vx,Vx'\rangle=c\langle x,x'\rangle
+        =\langle\mathcal{P}(A)x,\mathcal{P}(A)x'\rangle$, so $W$ is unitary.
+    For the converse, $V=LW\mathcal{P}(A)$ satisfies $VU_g=V$ because
+    $\mathcal{P}(A)U_g=\mathcal{P}(A)$, and $U_gV=V$ because $V$ takes
+    invariant values; $\mathcal{P}(A)V=W\mathcal{P}(A)$ because
+    $\mathcal{P}(A)L$ is the identity, and the same computation as before
+    shows that $V$ preserves inner products of invariant vectors.
 \end{proof}
 
 The source asks for a tensor that is $G$-isometric with respect to the

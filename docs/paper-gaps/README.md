@@ -100,7 +100,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   symmetry under every irreducible representation as a pulling-through
   identity, and the coloring superposition as the equal-weight superposition
   of the Gauss-law configurations of trivial holonomy, the only sector the
-  dual network reaches on a torus.
+  dual network reaches on a torus. It also records that stability of
+  `G`-isometry under concatenation (Lemma 6.2) is formalized in one
+  dimension, with the constants multiplying, and that in two dimensions only
+  the simplification of the left inverse for the left-regular representation
+  on the contracted link is formalized (open scope restriction).
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -804,3 +808,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
+  of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
+  (paragraph "Connection to MERA") is formalized for tensors whose two-site
+  blocked tensor is injective, so that every layer is an isometry, and for
+  chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
+  a coarser last block remove the two restrictions.
