@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Periodic.BlockDecomposition
-import TNLean.MPS.Periodic.BlockingDecomposition
 import TNLean.MPS.Periodic.BlockingEigenvalues
 import TNLean.MPS.Periodic.BlockingFixedSpace
 import TNLean.MPS.Periodic.BlockingSpectrum
