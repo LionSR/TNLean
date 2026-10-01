@@ -257,14 +257,16 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
     obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
     exact ⟨W, hW, fun u j => hWV u j⟩
   -- The circuit after the measurement.
-  have hcirc : IsCircuitOn Set.univ (KW + CU * L) (blockLayerOp hN U * pairLayerOp hN hr W) :=
-    (isCircuitOn_pairLayerOp hN hr (hKW W hWu)).mul
+  have hcirc : IsCircuitOn Set.univ (KW + CU * L)
+      (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) :=
+    (isCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu).mul
       (isCircuitOn_blockLayerOp hN (K := CU * L) fun k =>
         (hUpp k).mono (Nat.mul_le_mul_left CU (hL k)))
-  refine ⟨CG * L, KW + CU * L, windowGHZState hN hr α', blockLayerOp hN U * pairLayerOp hN hr W,
+  refine ⟨CG * L, KW + CU * L, windowGHZState hN hr α',
+    blockLayerOp hN U * pairLayerOp hN hr (fun _ => W),
     by nlinarith, hφ, hcirc.isLocalCircuitOfDepth, ?_⟩
   -- The circuit takes each configuration of the GHZ-type state to the state of its block.
-  have hj : ∀ j, (blockLayerOp hN U * pairLayerOp hN hr W) *ᵥ
+  have hj : ∀ j, (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ
       Pi.single (registerCfg hN hr (dig₀ j)) 1 = fun s => blockIsometryState (A j) (ω j) hN s := by
     intro j
     obtain ⟨Wj, -, hWj⟩ := exists_pairUnitary hd (hdig.comp (flatCoord_injective (Dj := Dj) j))
@@ -273,10 +275,10 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
     rw [blockIsometryState_eq_mulVec hd hN hr (hdig.comp (flatCoord_injective (Dj := Dj) j))
       (A j) (ω j) (U := U) (fun k l r τ => hU k j l r τ) (W := Wj) hWj s,
       ← mulVec_mulVec, ← mulVec_mulVec]
-    have key : pairLayerOp hN hr W *ᵥ Pi.single (registerCfg hN hr (dig₀ j)) 1 =
-        pairLayerOp hN hr Wj *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1 := by
+    have key : pairLayerOp hN hr (fun _ => W) *ᵥ Pi.single (registerCfg hN hr (dig₀ j)) 1 =
+        pairLayerOp hN hr (fun _ => Wj) *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1 := by
       funext y
-      rw [pairLayerOp_mulVec_apply hd hN hr Wj y]
+      rw [pairLayerOp_mulVec_apply hd hN hr (fun _ => Wj) y]
       simp only [mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one, mul_zero,
         Finset.sum_ite_eq', Finset.mem_univ, ite_true]
       rw [pairLayerOp_apply]

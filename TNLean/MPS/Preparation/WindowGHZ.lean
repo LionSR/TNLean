@@ -445,12 +445,13 @@ theorem exists_isPreparedWithMeasurementsInDepth_windowGHZState (hr₁ : 2 ≤ r
     have := hℓ 0; have := hL 0; omega
   -- The circuit before the measurement.
   have hcirc : IsCircuitOn Set.univ (KS + KA + CB * L)
-      (blockLayerOp hN Y * pairLayerOp hN hr WA * embedOp e₀ S) := by
+      (blockLayerOp hN Y * pairLayerOp hN hr (fun _ => WA) * embedOp e₀ S) := by
     have h1 : IsCircuitOn Set.univ KS (embedOp e₀ S) := by
       refine ((hKS S hSu).isCircuitOn he₀ fun i j h => ?_).mono_set (Set.subset_univ _)
       rw [he₀def, registerSite_eq, registerSite_eq]
       exact blockSite_succ hN 0 _ _ (by simp; omega)
-    have h2 := isCircuitOn_pairLayerOp hN hr (hKA WA (Equiv.Perm.permMatrix_mem_unitaryGroup _))
+    have h2 := isCircuitOn_pairLayerOp hN hr fun _ =>
+      hKA WA (Equiv.Perm.permMatrix_mem_unitaryGroup _)
     have h3 := isCircuitOn_blockLayerOp hN (K := CB * L) fun k =>
       (hYpp k).mono (Nat.mul_le_mul_left CB (hL k))
     rw [Matrix.mul_assoc]
@@ -505,8 +506,8 @@ theorem exists_isPreparedWithMeasurementsInDepth_windowGHZState (hr₁ : 2 ≤ r
     intro z
     change (circuitOp Ls *ᵥ productVector (ghzInitial hN hr)) z = _
     rw [← hU, ← mulVec_mulVec, ← mulVec_mulVec, blockLayerOp_mulVec_eq_comp hN hY,
-      pairLayerOp_mulVec_eq_comp hN hr (f := copyShift r₁)
-        (fun _ => Matrix.permMatrix_mulVec (copyShift r₁))]
+      pairLayerOp_mulVec_eq_comp hN hr (f := fun _ => copyShift r₁)
+        (fun _ _ => Matrix.permMatrix_mulVec (copyShift r₁))]
     simp only [Function.comp_apply]
     rw [embedOp_mulVec_productVector he₀ S (z := 0) fun j => ?_]
     · have hreg0 : ∀ y : Cfg d N, (layerCfg (pairSite hN hr) (fun _ => copyShift r₁)
