@@ -40,8 +40,11 @@ For a periodic tensor of period $m$, the peripheral spectrum of
 $\mathcal E_A^p$ is exactly the set of $q$-th roots of unity.\footnote{Formal
     declaration: \leanid{MPSTensor.IsPeriodic.peripheral_blockTensor}, in
     \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
-The irreducibility of each compressed block is a separate assertion;
-this note does not certify that remaining part of Lemma~6.
+The same line asserts that each compressed block $C_\alpha$ has the printed
+root set as its peripheral spectrum; with the same correction, that spectrum is
+again the set of $q$-th roots of unity.\footnote{Formal declaration:
+    \leanid{MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq}, in
+    \doclink{TNLean/MPS/Periodic/BlockingEigenvalues.lean}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}
