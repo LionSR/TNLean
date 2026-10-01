@@ -208,7 +208,7 @@ theorem exists_blockShiftUnitary (hr₁ : 1 ≤ r₁) :
     simp only [Function.comp_apply]
     congr 1
     funext p
-    show layerCfg (fun _ : Unit => eL) (fun _ => ⇑(tailShift (d := d) r₁)) (u ∘ τ) (τ p) =
+    change layerCfg (fun _ : Unit => eL) (fun _ => ⇑(tailShift (d := d) r₁)) (u ∘ τ) (τ p) =
       blockShift r₁ q u p
     have hp := hτv p
     by_cases h1 : p.val < r₁

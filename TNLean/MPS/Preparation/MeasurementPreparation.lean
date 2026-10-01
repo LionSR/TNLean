@@ -17,8 +17,9 @@ Ref~\cite{Piroli2021}). Subsequently, apply in parallel the isometries
 depth." The isometries `V` of the blocked tensor then follow, "following the same steps as in the
 tree-RG circuit". The circuit applied after the measurement does not depend on its outcomes.
 
-This file defines this two-stage preparation (`MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth`)
-and proves it for the state `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩_{R_k L_{k+1}}` of a family of tensors
+This file defines this two-stage preparation
+(`MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth`) and proves it for the state
+`∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩_{R_k L_{k+1}}` of a family of tensors
 `A_j` whose blocked tensors are injective and have orthogonal ranges
 (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`), in
 depth `O(L)` for blocks of lengths at most `L`:
@@ -112,7 +113,7 @@ noncomputable def registerCfg (u : Cfg d r₁) : Cfg d N :=
 theorem registerCfg_registerSite (u : Cfg d r₁) (k : Fin M) (i : Fin r₁) :
     registerCfg hN hr u (registerSite hN hr k i) = u i :=
   (show Function.Injective fun q : Fin M × Fin r₁ => registerSite hN hr q.1 q.2 from
-    fun q q' h => Prod.ext ((registerSite_inj hN hr).1 h).1 ((registerSite_inj hN hr).1 h).2
+    fun _ _ h => Prod.ext ((registerSite_inj hN hr).1 h).1 ((registerSite_inj hN hr).1 h).2
     ).extend_apply _ _ (k, i)
 
 theorem registerCfg_of_forall_ne (u : Cfg d r₁) {i : Fin N}

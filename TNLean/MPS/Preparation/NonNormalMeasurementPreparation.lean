@@ -124,6 +124,7 @@ theorem sum_norm_sq_copyApproxVector (hι : ∀ j k, Function.Injective (ι j k)
   simp only [copyApproxVector_repeatedBlockSum hι hdisj hq horth σ M α] at h
   rw [sum_star_sum_mul_sum_of_orthogonal _ _ (fun _ => 1) s s hss] at h
   simp only [mul_one, hα] at h
+  simp only [copyApproxVector_repeatedBlockSum hι hdisj hq horth σ M α]
   exact_mod_cast h
 
 /-- **The corrected approximating state in depth `O(q)` with measurements.** There are `C` and
@@ -155,10 +156,20 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b
             ((blockedConfigEquiv d M q).symm s) := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
   · -- No physical states: the hypotheses are contradictory.
-    refine ⟨0, 1, fun Aj ι _ _ μ σ _ _ q hq _ _ M _ α hα => ?_⟩
+    refine ⟨0, 1, fun Aj ι _ _ μ σ _ htr q hq hB _ M _ α hα => ?_⟩
     exfalso
-    exact (Fin.elim0 ((Classical.arbitrary (Cfg 0 (M * q))) ⟨0, Nat.pos_of_ne_zero
-      (NeZero.ne (M * q))⟩))
+    have hb : 0 < b := by
+      by_contra h
+      obtain rfl : b = 0 := by omega
+      simp at hα
+    have hD := Matrix.neZero_of_trace_eq_one (htr ⟨0, hb⟩)
+    have : IsEmpty (Fin (blockPhysDim 0 q)) := by
+      rw [blockPhysDim_eq_pow, zero_pow (by omega)]; infer_instance
+    have h := hB ⟨0, hb⟩
+    rw [Kraus.IsInjective, Set.range_eq_empty, Submodule.span_empty] at h
+    have h1 : (1 : Matrix (Fin (Dj ⟨0, hb⟩)) (Fin (Dj ⟨0, hb⟩)) ℂ) ∈ (⊥ : Submodule ℂ _) :=
+      h ▸ Submodule.mem_top
+    exact one_ne_zero ((Submodule.mem_bot ℂ).1 h1)
   have : NeZero d := ⟨hd.ne'⟩
   obtain ⟨C, L₀, hC⟩ := exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState
     (d := d) b Dj
@@ -168,7 +179,8 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b
   have hNq : ∑ _ : Fin M, q = M * q := by simp
   have key := hC Aj (fun j => fixedPointPair (σ j))
     (fun j => by rw [fixedPointPair_norm_sq (hσ j), htr j]) α hα (fun _ => q) hNq q
-    (fun _ => le_of_max_le_left hq) (fun _ => le_rfl) (fun j _ => hB j) (fun j j' _ h => horth j j' h)
+    (fun _ => le_of_max_le_left hq) (fun _ => le_rfl) (fun j _ => hB j)
+    (fun j j' _ h => horth j j' h)
   convert key using 2 with s
   exact copyApproxVector_eq_sum hι hdisj hσ htr hq0 hB horth M α hNq s
 
@@ -294,7 +306,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
     (copyIsometry ι μ q) σ ((blockedConfigEquiv d M q).symm s) with hv
   set ψ : MPVSpace d (M * q) := (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm v
   have hψ : (fun s => ψ s) = v := funext fun s => by
-    simp [ψ, EuclideanSpace.equiv, PiLp.toLp_apply]
+    simp [ψ, PiLp.toLp_apply]
   have hsq := sum_norm_sq_copyApproxVector hι hdisj (μ := μ) (fun j => (hσ j).posSemidef) htr
     hq0 hB horth M hα
   have hψn : ‖ψ‖ = 1 := by
@@ -346,7 +358,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
           Real.log ((M * q : ℕ) / ε) + max (Real.log K) 0 + r * (L₀ + Lm + 1) := by
         simp only [hb', ha]; field_simp; ring
       have : 0 ≤ r * (L₀ + Lm + 1) := by positivity
-      rw [hlogN] at h2
+      rw [hlogN] at h1 h2
       linarith [le_max_left (Real.log K) 0]
     exact mul_mul_exp_neg_le_of_log_le hK (by positivity) hε hrq
 

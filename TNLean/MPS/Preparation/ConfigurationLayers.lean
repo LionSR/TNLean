@@ -109,7 +109,7 @@ theorem eq_layerCfg_iff (x y : Cfg d n) :
 include he hdisj in
 /-- **A layer of gates acting by configuration maps.** Gates `X k` placed on pairwise disjoint
 sets of sites `e k`, each acting by a configuration map `f k`, together act by `layerCfg e f`. -/
-theorem noncommProd_embedOp_mulVec_eq_comp [DecidableEq ι]
+theorem noncommProd_embedOp_mulVec_eq_comp
     (X : ∀ k, Matrix (Cfg d (m k)) (Cfg d (m k)) ℂ) (hX : ∀ k v, X k *ᵥ v = v ∘ f k)
     (hcomm : ((Finset.univ : Finset ι) : Set ι).Pairwise
       (Function.onFun Commute fun k => embedOp (e k) (X k))) (v : Cfg d n → ℂ) :

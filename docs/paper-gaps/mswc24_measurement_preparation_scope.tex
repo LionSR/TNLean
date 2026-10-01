@@ -46,7 +46,10 @@ restrictions.\footnote{Formal declarations:
 \begin{enumerate}
     \item The $q$-site states of distinct blocks are orthogonal. Without this the
           block form of the positive part fails
-          \cite{gap:mswc24_block_form_mixed_overlap}.
+          \cite{gap:mswc24_block_form_mixed_overlap}, and the isometry $V$ of the
+          blocked direct sum is no longer the sum of the isometries $V_j$ of the
+          blocks, which is what the block unitary of the formal statement
+          implements.
     \item The block length $q$ divides $N$, so that the chain consists of
           $N/q$ blocks of $q$ sites, as in eq.~(10) of the source. The error
           bound for blocks with multiplicities
@@ -83,9 +86,17 @@ blocked tensor already take depth $O(q)$, the total depth $O(\log(N/\varepsilon)
 is unaffected.
 
 \section{Elimination}
-The first restriction is removed together with the block form of the positive
-part for blocks whose $q$-site states overlap
-\cite{gap:mswc24_block_form_mixed_overlap}. The second is removed by the error
+For blocks of multiplicity one and weight one whose $q$-site states overlap, the
+error of the source's state $V^{\otimes N/q}\sum_j\alpha_j\ket{\Omega_j}$ is
+bounded with the correlation lengths of the mixed transfer matrices included
+\cite{gap:mswc24_block_form_mixed_overlap}. Removing the first restriction in
+that scope needs one unitary on $q$ sites, of depth $O(q)$, that implements the
+isometry $V$ on the bond pairs of the blocks. Its matrix elements are those of
+the direct sum $\bigoplus_jA_j$ with $(B^\dagger B)^{-1/2}$ absorbed on the
+right, so the sequential factorization on the first inputs applies once the
+blocked maps of the blocks have jointly linearly independent columns, which
+holds for large $q$ because $B^\dagger B$ converges to a matrix that is positive
+definite on these pairs. The second is removed by the error
 bound for blocks with multiplicities and a larger last block, along the lines of
 the normal case. Neither restriction affects the depth count, which is proved
 for blocks of arbitrary lengths at most $L$ with depth $O(L)$.

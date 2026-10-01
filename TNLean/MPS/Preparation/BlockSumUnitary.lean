@@ -67,7 +67,7 @@ theorem flatCoord_ne {j j' : Fin b} (h : j ≠ j') (a : Fin (Dj j)) (a' : Fin (D
 /-- **Extending an injection to a bijection.** An injection `g` of `Fin r` into a finite type of
 cardinality `n ≥ r` is the restriction of a bijection `π : Fin n ≃ X` to the first `r`
 elements. -/
-theorem exists_equiv_castLE_eq {X : Type*} [Fintype X] [DecidableEq X] {n r : ℕ}
+theorem exists_equiv_castLE_eq {X : Type*} [Fintype X] {n r : ℕ}
     (hn : Fintype.card X = n) (hr : r ≤ n) {g : Fin r → X} (hg : Function.Injective g) :
     ∃ π : Fin n ≃ X, ∀ x, π (Fin.castLE hr x) = g x := by
   classical
@@ -184,7 +184,8 @@ theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
             (finProdFinEquiv (l, r)) := by
   classical
   let κ := (j : Fin b) × (Fin (Dj j) × Fin (Dj j))
-  let pairOf : κ → Fin (∑ j, Dj j) × Fin (∑ j, Dj j) := fun p => (flatCoord Dj p.1 p.2.1, flatCoord Dj p.1 p.2.2)
+  let pairOf : κ → Fin (∑ j, Dj j) × Fin (∑ j, Dj j) := fun p =>
+    (flatCoord Dj p.1 p.2.1, flatCoord Dj p.1 p.2.2)
   have hpairOf : Function.Injective pairOf := by
     rintro ⟨j, l, r⟩ ⟨j', l', r'⟩ h
     simp only [pairOf, Prod.mk.injEq] at h
@@ -212,16 +213,19 @@ theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
   let Pinv : (j : Fin b) → Matrix (Fin (Dj j * Dj j)) (Fin (Dj j * Dj j)) ℂ := fun j =>
     (Matrix.polarPos (physicalMatrix (blockTensor (A j) (n + 1))))⁻¹.submatrix
       (virtualPairEquiv (Dj j)) (virtualPairEquiv (Dj j))
-  let G : Matrix (Fin ((∑ j, Dj j) * (∑ j, Dj j))) (Fin ((∑ j, Dj j) * (∑ j, Dj j))) ℂ := Matrix.of fun a x =>
-    if h : x.val < r then
-      ∑ c : Fin (Dj (eκ.symm ⟨x, h⟩).1 * Dj (eκ.symm ⟨x, h⟩).1),
-        (if virtualPairEquiv (∑ j, Dj j) a = (flatCoord Dj (eκ.symm ⟨x, h⟩).1 (virtualPairEquiv _ c).1,
-          flatCoord Dj (eκ.symm ⟨x, h⟩).1 (virtualPairEquiv _ c).2) then 1 else 0) *
-        Pinv (eκ.symm ⟨x, h⟩).1 c (finProdFinEquiv (eκ.symm ⟨x, h⟩).2)
-    else 0
+  let G : Matrix (Fin ((∑ j, Dj j) * (∑ j, Dj j))) (Fin ((∑ j, Dj j) * (∑ j, Dj j))) ℂ :=
+    Matrix.of fun a x =>
+      if h : x.val < r then
+        ∑ c : Fin (Dj (eκ.symm ⟨x, h⟩).1 * Dj (eκ.symm ⟨x, h⟩).1),
+          (if virtualPairEquiv (∑ j, Dj j) a =
+              (flatCoord Dj (eκ.symm ⟨x, h⟩).1 (virtualPairEquiv _ c).1,
+                flatCoord Dj (eκ.symm ⟨x, h⟩).1 (virtualPairEquiv _ c).2) then 1 else 0) *
+          Pinv (eκ.symm ⟨x, h⟩).1 c (finProdFinEquiv (eκ.symm ⟨x, h⟩).2)
+      else 0
   have hw : ∀ σ : Fin (n + 1) → Fin d, List.ofFn σ ≠ [] := fun σ => by simp
   have hV : ∀ σ x, x.val < r → V σ x = ∑ a, Kraus.evalWord (blockSum A (flatCoord Dj)
-      fun _ => 1) (List.ofFn σ) (virtualPairEquiv (∑ j, Dj j) a).1 (virtualPairEquiv (∑ j, Dj j) a).2 * G a x := by
+      fun _ => 1) (List.ofFn σ) (virtualPairEquiv (∑ j, Dj j) a).1
+        (virtualPairEquiv (∑ j, Dj j) a).2 * G a x := by
     intro σ x hx
     simp only [V, G, dite_eq_left hx, Matrix.of_apply, Finset.mul_sum]
     rw [Finset.sum_comm]
