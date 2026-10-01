@@ -528,6 +528,10 @@ For the non-periodic MPS Fundamental Theorem background:
 Parent-Hamiltonian notes live here too, but they are not part of the current
 non-periodic FT cleanup loop unless explicitly brought back into scope.
 
+- `cpgsv21_correlator_diagonalizable_expansion.tex` records the
+  diagonalizability hypothesis needed for the pure-exponential correlator
+  expansion of CPGSV21 Section II.B.3, and the rate correction for the decay
+  bound when the transfer map has Jordan blocks.
 - `cpgsv21_normal_range_reduction.tex` records the normal parent-Hamiltonian
   range-reduction comparison and the remaining periodic-boundary identity,
   together with the provenance of the minimal-ring cyclic change of cut (a
