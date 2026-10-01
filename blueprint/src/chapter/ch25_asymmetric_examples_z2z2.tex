@@ -1432,7 +1432,9 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \label{thm:asymex_three_cocycle_normalization}
     \lean{TNLean.Algebra.ScalarThreeCochain.exists_isNormalized_cohomologousTo}
     \leanok
-    Every three-cocycle $\omega:G^3\to\C^\times$ is cohomologous to a
+    \uses{def:mpug_three_cocycle,def:mpug_scalar_cochains,def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to}
+    Let $G$ be a group. Every three-cocycle $\omega:G^3\to\C^\times$ is cohomologous to a
     normalized one. One may use the two-cochain
     $\beta(g,h)=\omega(g,e,e)/\omega(e,e,h)$ and replace $\omega$ by
     $(d\beta)\omega$, where
@@ -1456,6 +1458,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \label{thm:asymex_klein_trivial_diagonal}
     \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_of_klein_diagonal_eq_one}
     \leanok
+    \uses{def:mpug_three_cocycle,def:mpug_scalar_cochains,def:mpug_trivial_gauge_class}
     A normalized three-cocycle on $G=\{e,a,b,c=ab\}\cong\Z_2^2$ whose
     diagonal values $\omega(g,g,g)$ are all one is a coboundary.
     This is the trivial-class case of the classification in
@@ -1498,10 +1501,11 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         TNLean.Algebra.ScalarThreeCochain.kleinAnomalyClass_bijective,
         TNLean.Algebra.ScalarThreeCochain.kleinH3Equiv}
     \leanok
-    \uses{def:asymex_klein_cocycle_family}
+    \uses{def:asymex_klein_cocycle_family,def:mpug_cohomologous_to,
+        def:mpug_h3_group_cohomology}
     Every three-cocycle on $\Z_2^2$ is cohomologous to exactly one
     $\omega_{pqr}$. The correspondence $[\omega_{pqr}]\mapsto(p,q,r)$ is
-    an isomorphism $H^3(\Z_2^2,\C^\times)\cong\Z_2^3$.
+    an isomorphism $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})\cong\Z_2^3$.
     Two arbitrary three-cocycles $\omega,\nu$ are cohomologous if and only if
     \begin{align}
         \label{eq:asymex_klein_complete_detectors}
