@@ -521,6 +521,53 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
         \rho^{(N)}(Q) & =B_N^\dagger\sigma^{\otimes N}B_N.
         \notag
     \end{align}
+    Diagrammatically, the bond state $\sigma$ joins the right qubit of each
+    site to the left qubit of the next one:
+    \begin{center}
+        % Formula: rho^{(N)}(Q)=B_N^dagger sigma^{(x)N} B_N, the display
+        % above (Definition of the mixed-Bell bond dimer).  Not a figure of
+        % arXiv:1606.00608; the example is motivated by lines 995--1010.
+        % Ink-to-index map: upper panel, each wide box is Q at site m with
+        % ket legs l_m, r_m in that order; lower panel, each wide box is sigma
+        % on the incoming bond (r_{m-1}, l_m), with r_0=r_N.  The legs are
+        % labelled by the physical qubits they carry, so the permutation B_N
+        % is the relabelling between the panels.  Each south leg carries
+        % the primed copy (l'_m or r'_m) of the qubit above it; these labels
+        % are omitted because the periodic return of a wide box does not
+        % clear port labels on its slotted south face.
+        % Contraction set: upper panel, the virtual bonds between sites,
+        % closed by the periodic return (the trace over Q); lower panel,
+        % none, the factors sigma being tensored.
+        % Boundary signature: (virtual-west=0 | virtual-east=0 |
+        % physical-up=6 | physical-down=6) on both panels.
+        \tenkzkernel
+        \begin{tenkz}[rows={op}, cols=7, boundary=periodic, size=l]
+            \tn[at=(1,1), skin=mpo, wide=2, ports={90@1:physical:$l_1$,
+                        90@2:physical:$r_1$, 270@1:physical,
+                        270@2:physical}]{Q}
+            \tn[at=(1,3), skin=mpo, wide=2, ports={90@1:physical:$l_2$,
+                        90@2:physical:$r_2$, 270@1:physical,
+                        270@2:physical}]{Q}
+            \tn[at=(1,5), skin=dots, ports={180:virtual, 0:virtual}]{}
+            \tn[at=(1,6), skin=mpo, wide=2, ports={90@1:physical:$l_N$,
+                        90@2:physical:$r_N$, 270@1:physical,
+                        270@2:physical}]{Q}
+        \end{tenkz}
+        \\[2ex]
+        $=$\quad
+        \begin{tenkz}[rows={op}, cols=7, bonds=none, size=l]
+            \tn[at=(1,1), skin=box, wide=2, ports={90@1:physical:$r_N$,
+                        90@2:physical:$l_1$, 270@1:physical,
+                        270@2:physical}]{\sigma}
+            \tn[at=(1,3), skin=box, wide=2, ports={90@1:physical:$r_1$,
+                        90@2:physical:$l_2$, 270@1:physical,
+                        270@2:physical}]{\sigma}
+            \tn[at=(1,5), skin=dots]{}
+            \tn[at=(1,6), skin=box, wide=2, ports={90@1:physical:$r_{N-1}$,
+                        90@2:physical:$l_N$, 270@1:physical,
+                        270@2:physical}]{\sigma}
+        \end{tenkz}
+    \end{center}
     This operator is positive semidefinite and has trace one. In
     particular, $Q$ generates MPDOs. The identity excludes $N=0$, where the
     empty closed operator is $4$ and the empty bond product is $1$.

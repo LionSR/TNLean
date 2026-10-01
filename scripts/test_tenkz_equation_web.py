@@ -20,11 +20,11 @@ from pathlib import Path
 from playwright.sync_api import Page, Route, sync_playwright
 
 
-EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3] + [2, 3, 2, 5, 1, 3, 3]
+EXPECTED_PICTURE_COUNTS = [2] * 8 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3]
 PAGES = ("ch-symmetry.html", "ch-mpdo.html", "ch-mpdo_rfp.html")
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 8,
-    "ch-mpdo.html": 2,
+    "ch-mpdo.html": 4,
     "ch-mpdo_rfp.html": 7,
 }
 
@@ -529,7 +529,13 @@ def main() -> int:
         if asset is None:
             asset = mathjax_cache[url] = _cdn_fetch(url)
         body, content_type = asset
-        route.fulfill(body=body, content_type=content_type)
+        route.fulfill(
+            body=body,
+            content_type=content_type,
+            # MathJax loads its fonts cross-origin from this tree; Chromium
+            # rejects a cross-origin font without this header.
+            headers={"Access-Control-Allow-Origin": "*"},
+        )
 
     collected: list[dict[str, object]] = []
     mobile: list[dict[str, object]] = []

@@ -21,6 +21,8 @@ every `L_j`, so every `q`-site blocked tensor is injective. This file isolates t
 * `lt_one_and_forall_le_of_mul_mul_pow_lt_one` — `C (M x^q) < 1` forces `x < 1` and `L_j ≤ q`.
 * `le_mul_mul_exp_of_forall_le` — the bound `ε ≤ C u e^{C u}` follows from `ε ≤ 1` and from the
   bound in the case `x < 1`, `L_j ≤ q` for every `j`.
+* `mul_mul_exp_neg_le_of_log_le` — `K M e^{-x} ≤ ε` once `x ≥ log K + log M - log ε`, the last
+  step from a logarithmic block-length threshold to the error `ε`.
 -/
 
 open scoped BigOperators
@@ -78,3 +80,16 @@ theorem le_mul_mul_exp_of_forall_le {ι : Type*} [Fintype ι] {x C M ε : ℝ} (
   rw [not_le] at hbig
   obtain ⟨hx1, hLq⟩ := lt_one_and_forall_le_of_mul_mul_pow_lt_one hx hC hM hbig
   exact h hx1 hLq hbig
+
+/-- **From a logarithmic threshold to the error.** For `K, M, ε > 0`, if
+`log K + log M - log ε ≤ x` then `K (M e^{-x}) ≤ ε`. This is the last step of the error bounds
+of the log-depth preparation of arXiv:2307.01696 and of its paragraph "Connection to MERA",
+where `x` is a multiple of the block length. -/
+theorem mul_mul_exp_neg_le_of_log_le {K M ε x : ℝ} (hK : 0 < K) (hM : 0 < M) (hε : 0 < ε)
+    (h : Real.log K + Real.log M - Real.log ε ≤ x) : K * (M * Real.exp (-x)) ≤ ε := by
+  calc K * (M * Real.exp (-x))
+      = Real.exp (Real.log K + Real.log M - x) := by
+        rw [Real.exp_sub, Real.exp_add, Real.exp_log hK, Real.exp_log hM, Real.exp_neg]
+        ring
+    _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
+    _ = ε := Real.exp_log hε
