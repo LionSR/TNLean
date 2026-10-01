@@ -72,19 +72,17 @@ theorem exists_norm_sub_smul_sq_eq {a b : E} (ha : ‖a‖ = 1) (hb : ‖b‖ = 
       ‖a - c • b‖ ^ 2 = 2 * (1 - ‖z‖) := fun c hc hcz => by
     rw [@norm_sub_sq ℂ, norm_smul, hc, ha, hb, inner_smul_right]
     change 1 ^ 2 - 2 * RCLike.re (c * z) + (1 * 1) ^ 2 = _
-    rw [hcz, RCLike.ofReal_re]
+    rw [hcz, RCLike.re_to_complex, Complex.ofReal_re]
     ring
   by_cases hz : z = 0
   · exact ⟨1, norm_one, key 1 norm_one (by simp [hz])⟩
   · have hz' : (‖z‖ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr hz)
-    refine ⟨star z / ‖z‖, ?_, key _ ?_ ?_⟩
-    · rw [norm_div, norm_star, Complex.norm_real, Real.norm_eq_abs, abs_norm,
+    have hc : ‖star z / (‖z‖ : ℂ)‖ = 1 := by
+      rw [norm_div, norm_star, Complex.norm_real, Real.norm_eq_abs, abs_norm,
         div_self (norm_ne_zero_iff.mpr hz)]
-    · rw [norm_div, norm_star, Complex.norm_real, Real.norm_eq_abs, abs_norm,
-        div_self (norm_ne_zero_iff.mpr hz)]
-    · rw [div_mul_eq_mul_div, Complex.star_def, Complex.conj_mul', div_eq_iff hz']
-      push_cast
-      ring
+    refine ⟨star z / ‖z‖, hc, key _ hc ?_⟩
+    rw [div_mul_eq_mul_div, Complex.star_def, Complex.conj_mul', div_eq_iff hz']
+    ring
 
 /-- **The triangle step for the error.** For unit vectors `x`, `y`, `z`,
 `1 - |⟨x|z⟩| ≤ 2 ((1 - |⟨x|y⟩|) + (1 - |⟨y|z⟩|))`. -/
@@ -111,24 +109,24 @@ end Error
 /-! ### Unitaries on the chain -/
 
 /-- A unitary matrix preserves the inner product of the vectors it maps. -/
-theorem inner_eq_of_mulVec_eq {ι : Type*} [Fintype ι] {U : Matrix ι ι ℂ}
+theorem inner_eq_of_mulVec_eq {ι : Type*} [Fintype ι] [DecidableEq ι] {U : Matrix ι ι ℂ}
     (hU : U ∈ unitary (Matrix ι ι ℂ)) {x y x' y' : EuclideanSpace ℂ ι}
     (hx : (fun i => x' i) = U *ᵥ fun i => x i) (hy : (fun i => y' i) = U *ᵥ fun i => y i) :
     ⟪x', y'⟫_ℂ = ⟪x, y⟫_ℂ := by
   rw [EuclideanSpace.inner_eq_star_dotProduct, EuclideanSpace.inner_eq_star_dotProduct]
   change (fun i => y' i) ⬝ᵥ star (fun i => x' i) = (fun i => y i) ⬝ᵥ star (fun i => x i)
   rw [hx, hy, dotProduct_comm, dotProduct_comm _ (star _)]
-  simp only [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, star_eq_conjTranspose]
+  simp only [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec]
   rw [← star_eq_conjTranspose, Unitary.star_mul_self_of_mem hU, one_mulVec]
 
 /-- A unitary matrix preserves the norm of the vector it maps. -/
-theorem norm_eq_of_mulVec_eq {ι : Type*} [Fintype ι] {U : Matrix ι ι ℂ}
+theorem norm_eq_of_mulVec_eq {ι : Type*} [Fintype ι] [DecidableEq ι] {U : Matrix ι ι ℂ}
     (hU : U ∈ unitary (Matrix ι ι ℂ)) {x x' : EuclideanSpace ℂ ι}
     (hx : (fun i => x' i) = U *ᵥ fun i => x i) : ‖x'‖ = ‖x‖ := by
   have h := inner_eq_of_mulVec_eq hU hx hx
   rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
   have h' : ‖x'‖ ^ 2 = ‖x‖ ^ 2 := by exact_mod_cast h
-  exact (pow_left_injective₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero) h'
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp h'
 
 /-! ### Transforming normal MPS into each other -/
 
@@ -182,7 +180,7 @@ theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A 
   have hU : IsLocalCircuitOfDepth U (TA + 2 + (TB + 2)) := hUA.star.mul hUB
   have hUu := hU.mem_unitary
   -- `U` maps `ψA` to the multiple `(a / b) ψB` of `ψB`.
-  have hUA' : UA * star UA = 1 := Unitary.mul_star_self_of_mem hUA.mem_unitary
+  have hUA' : star UA * UA = 1 := Unitary.star_mul_self_of_mem hUA.mem_unitary
   have hUψ : U *ᵥ (fun s => ψA s) = fun s => ((a / b) • ψB) s := by
     have : (fun s => ((a / b) • ψB) s) = (a / b) • fun s => ψB s := rfl
     rw [this, hb, ha, mulVec_smul, mulVec_mulVec, Matrix.mul_assoc, hUA', Matrix.mul_one,
@@ -235,7 +233,7 @@ theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A 
     have h2 : ‖⟪(a / b) • ψB, φB⟫_ℂ‖ = ‖⟪ψB, φB⟫_ℂ‖ := by
       rw [inner_smul_left, norm_mul, Complex.norm_conj, hab, one_mul]
     have htri := one_sub_norm_inner_le_two_mul_add hψn hκ hnB
-    rw [h1, h2, norm_inner_symm] at htri
+    rw [h1, h2, norm_inner_symm φA ψA] at htri
     linarith
 
 /-- **Normal MPS are transformed into each other in depth `O(log(N/ε))`, long chains**
