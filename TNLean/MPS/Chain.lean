@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Chain.AlgebraIsomorphism
 import TNLean.MPS.Chain.AlternatingNetwork
+import TNLean.MPS.Chain.BlockTensor
 import TNLean.MPS.Chain.BlockedChainFT
 import TNLean.MPS.Chain.CrossProductRigidity
 import TNLean.MPS.Chain.CyclicBlockAverage
