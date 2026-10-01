@@ -14,8 +14,9 @@ import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 # The BNT fusion clause from the MPDO renormalization fixed-point condition
 
 This file gives the common construction of the BNT fusion tensor clause from
-one-site and two-site vertical decompositions, and its specialization to an
-MPDO in normalized BNT-refined horizontal form. The transported vertical forms
+one-site and two-site vertical decompositions under grouped product inputs,
+and its specializations to normalized BNT-refined horizontal form and literal
+CPSV canonical form. The transported vertical forms
 give both representations of the blocked closed-chain operator. Eventual
 linear independence of the BNT operators compares their coefficients, and the
 positive power-sum lemma gives the length-one trace-scalar identity.
@@ -27,6 +28,8 @@ positive power-sum lemma gives the length-one trace-scalar identity.
   BNT fusion tensor clause.
 * `HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF` specializes the
   construction to normalized BNT-refined horizontal form.
+* `HasBNTFusionTensorClause.of_isRFPViaTS` specializes it to literal CPSV
+  canonical form.
 
 ## References
 
@@ -388,7 +391,7 @@ theorem of_verticalDecompositions_of_unitaryBlockEquiv
     idempotent := hIdempotent
   }⟩
 
-/-- An MPDO in normalized BNT-refined horizontal form that satisfies the
+/-- An MPDO with grouped vertical product inputs that satisfies the
 Definition 4.1 renormalization fixed-point condition has the active-support
 BNT fusion clause.
 
@@ -401,20 +404,19 @@ remaining length-one idempotent law.
 
 Source: CPSV16, Appendix C.4, lines 1929--2046 of
 `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
-theorem of_isRFPViaTS_of_horizontalCF (M : MPOTensor d D)
-    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+theorem of_isRFPViaTS_of_productInputs (M : MPOTensor d D)
+    (hInputs : HasVerticalBNTProductInputs M) (hM : IsMPDO M)
     (hRFP : IsRFPViaTS M) : HasBNTFusionTensorClause M := by
   classical
-  obtain ⟨D₁⟩ := hHorizontal.exists_cpsvVerticalDecomposition M hM
-  obtain ⟨D₂⟩ := hHorizontal.blockTwo.exists_cpsvVerticalDecomposition
-    (blockTwo M) hM.blockTwo
+  obtain ⟨D₁⟩ := hInputs.groupingInputs.exists_cpsvVerticalDecomposition
+  obtain ⟨D₂⟩ := hInputs.blockedGroupingInputs.exists_cpsvVerticalDecomposition
   obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
   obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=
     transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
       (VerticalSectorHypotheses.ofDecompositions D₁ D₂ T Smap hTCPTP hSCPTP
         hTphys hSphys)
   obtain ⟨chi, U, hChiPos, hU, hFusion, hFusionReconstruction⟩ :=
-    exists_positiveFusionDecomposition_of_unitaryBlockEquiv
+    hInputs.exists_positiveFusionDecomposition_of_unitaryBlockEquiv
       D₁.bondDim D₁.multiplicity D₁.weight
       D₂.bondDim D₂.multiplicity D₂.weight
       D₁.multiplicity_pos D₁.weight_pos
@@ -422,10 +424,41 @@ theorem of_isRFPViaTS_of_horizontalCF (M : MPOTensor d D)
       M D₁.tensor D₂.tensor D₂.isCPSVBNT
       D₁.verticalCoisometry D₂.verticalCoisometry
       D₁.coisometry D₂.coisometry D₁.reconstruction D₂.reconstruction
-      sigma hDim V hLetter hHorizontal hM
+      sigma hDim V hLetter hM
   exact of_verticalDecompositions_of_unitaryBlockEquiv
     D₁ D₂ sigma hDim V hLetter chi U hChiPos hU hFusion
       hFusionReconstruction
+
+/-- Normalized BNT-refined horizontal form and the renormalization fixed-point
+condition imply the active-support BNT fusion clause.
+
+Source: CPSV16, Appendix C.4, lines 1929--2046. -/
+theorem of_isRFPViaTS_of_horizontalCF (M : MPOTensor d D)
+    (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) : HasBNTFusionTensorClause M :=
+  of_isRFPViaTS_of_productInputs M
+    (hHorizontal.hasVerticalBNTProductInputs M hM) hM hRFP
+
+/-- Literal CPSV canonical form and the renormalization fixed-point condition
+imply the active-support BNT fusion clause.
+
+**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
+active family; no unsupported corner is inserted. Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** The fusion map has retained-row
+orientation and is a coisometry onto the active direct sum. Its adjoint gives
+the exact reconstruction. Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
+
+Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, and Appendix C.4,
+lines 1929--2046. -/
+theorem of_isRFPViaTS (M : MPOTensor d D)
+    (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hM : IsMPDO M) (hRFP : IsRFPViaTS M) :
+    HasBNTFusionTensorClause M :=
+  of_isRFPViaTS_of_productInputs M
+    (hCanonical.hasVerticalBNTProductInputs M hM) hM hRFP
 
 end HasBNTFusionTensorClause
 

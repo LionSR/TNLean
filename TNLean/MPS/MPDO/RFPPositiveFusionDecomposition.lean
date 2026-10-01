@@ -18,10 +18,10 @@ positivity.
 
 ## Main results
 
-* `IsHorizontalCF.exists_cpsvVerticalDecomposition`: construction of a
+* `HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition`: construction of a
   vertical canonical decomposition retaining the source
-  basis-of-normal-tensors predicate, from normalized BNT-refined horizontal
-  form and positivity.
+  basis-of-normal-tensors predicate, from phase-class grouping and the
+  grouped-corner Gram comparison.
 * `exists_positiveFusionDecomposition_of_isRFPViaTS`: the BNT-refined positive
   fusion theorem corresponding to CPSV16, Appendix C.4, lines 2020--2029.
 
@@ -212,19 +212,22 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
     reconstruction := hReconstruction
   }⟩
 
-/-- Normalized BNT-refined horizontal form and MPDO positivity furnish a
-vertical decomposition which retains the literal CPSV16 basis predicate.
+/-- Phase-class grouping and the grouped-corner Gram comparison give a vertical
+decomposition retaining the CPSV16 basis of normal tensors.
+
+Literal CPSV canonical form and normalized BNT-refined horizontal form supply
+these assumptions independently.
 
 Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
-theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
-    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
+theorem HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition
+    {M : MPOTensor d D} (h : HasVerticalBNTGroupingInputs M) :
     Nonempty (CPSVVerticalDecomposition M) := by
   classical
   obtain ⟨r, dim, mu, blocks, V, hDimPos, _, hNormal, hIso, _, _, hInterStar,
     _, hReconstruct, hdim, X, zeta, _, _, hXDist, _, _, hSpectralBNT, _, _, _, _,
     hCoeffPos, hGroupedIso, hGroupedOrth, hGroupedInter, _, hGroupedCorner,
     hGroupedReconstruct⟩ :=
-      hHorizontal.exists_verticalBNTGrouping_with_isometry M hM
+      h.grouping
   let C := MPSTensor.mpvPhaseClassData blocks
   have hSame : MPSTensor.SameMPV₂Pos (verticalTensor M)
       (MPSTensor.toTensorFromBlocks (d := D * D) (μ := mu) blocks) :=
@@ -235,7 +238,7 @@ theorem IsHorizontalCF.exists_cpsvVerticalDecomposition
     hSpectralBNT.of_sameMPV₂Pos hSame.symm
   obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
     exists_normalized_grouped_sector_maps_of_dressing blocks
-      (hHorizontal.hasGroupedCornerGramDressing M hM) mu V hDimPos
+      h.gramDressing mu V hDimPos
       hNormal hdim X zeta hXDist hCoeffPos hGroupedIso hGroupedOrth
       hGroupedInter hGroupedCorner hGroupedReconstruct
   have hWReconstructFlat : ∀ ab, verticalTensor M ab =
@@ -309,13 +312,13 @@ theorem exists_positiveFusionDecomposition_of_isRFPViaTS
                 chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) i j) *
               U α β := by
   classical
-  obtain ⟨D₁⟩ := hHorizontal.exists_cpsvVerticalDecomposition M hM
-  obtain ⟨D₂⟩ := hHorizontal.blockTwo.exists_cpsvVerticalDecomposition
-    (blockTwo M) hM.blockTwo
+  obtain ⟨D₁⟩ := (hHorizontal.hasVerticalBNTGroupingInputs M hM).exists_cpsvVerticalDecomposition
+  obtain ⟨D₂⟩ := (hHorizontal.blockTwo.hasVerticalBNTGroupingInputs
+    (blockTwo M) hM.blockTwo).exists_cpsvVerticalDecomposition
   obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
   refine ⟨D₁.labelCount, D₁.bondDim, D₁.tensor, D₁.isCPSVBNT, ?_⟩
   exact transportedVerticalSector_exists_positiveFusionDecomposition
     (VerticalSectorHypotheses.ofDecompositions D₁ D₂ T Smap hTCPTP hSCPTP
-      hTphys hSphys) hHorizontal hM
+      hTphys hSphys) (hHorizontal.hasVerticalBNTProductInputs M hM) hM
 
 end MPOTensor
