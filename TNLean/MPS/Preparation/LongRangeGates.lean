@@ -64,7 +64,6 @@ private theorem perm_apply_mem {π : Equiv.Perm (Fin N)} {S : Set (Fin N)}
   by_contra h
   exact h (by rw [π.injective (hπ _ h)]; exact hi)
 
-
 /-- Conjugating a product by `P` with inverse `Q` conjugates every factor. -/
 private theorem mul_list_prod_mul {n : Type*} [Fintype n] [DecidableEq n]
     {P Q : Matrix n n ℂ} (hQP : Q * P = 1) (hPQ : P * Q = 1) (l : List (Matrix n n ℂ)) :
@@ -95,7 +94,6 @@ theorem mem_allSites_flatMap {ι : Type*} {l : List ι} {f : ι → List (Telepo
   exact ⟨fun ⟨h, ⟨g, hg, hh⟩, hi⟩ => ⟨g, hg, h, hh, hi⟩,
     fun ⟨g, hg, h, hh, hi⟩ => ⟨h, ⟨g, hg, hh⟩, hi⟩⟩
 
-
 theorem mem_pairSites_flatMap {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
     {i : Fin N} : i ∈ pairSites (l.flatMap f) ↔ ∃ g ∈ l, i ∈ pairSites (f g) := by
   induction l with
@@ -104,8 +102,7 @@ theorem mem_pairSites_flatMap {ι : Type*} {l : List ι} {f : ι → List (Telep
 
 theorem chainPerm_append (hs hs' : List (TeleportHop N)) :
     chainPerm (d := d) (hs ++ hs') = chainPerm hs * chainPerm hs' := by
-  rw [chainPerm_eq, chainPerm_eq, chainPerm_eq, sitePerm_append,
-    permMatrix_cfgPerm_mul_permMatrix_cfgPerm]
+  simp only [chainPerm, sitePerm_append, permMatrix_cfgPerm_mul_permMatrix_cfgPerm]
 
 /-- Two hops with disjoint sites can follow each other in a valid list. -/
 theorem after_of_disjoint {h h' : TeleportHop N} (hd : Disjoint h.sites h'.sites) :
@@ -422,7 +419,7 @@ theorem chainPerm_back_mul_localLayer_mul_chainPerm_there :
   have hQP : (cfgPerm (d := d) σ.symm).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ = 1 := by
     rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm, show σ.symm * σ = 1 by ext; simp,
       permMatrix_cfgPerm_one]
-  rw [chainPerm_eq, chainPerm_eq, sitePerm_there_eq_symm hgs, localLayer_op,
+  rw [chainPerm, chainPerm, sitePerm_there_eq_symm hgs, localLayer_op,
     mul_list_prod_mul hQP hPQ, List.map_map]
   refine congrArg List.prod (List.map_congr_left fun g hg => ?_)
   rw [Function.comp_apply, localGate, permMatrix_cfgPerm_mul_embedOp_mul, op]

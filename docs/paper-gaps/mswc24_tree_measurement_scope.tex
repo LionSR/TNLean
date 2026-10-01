@@ -30,12 +30,16 @@ measurements.
           measurement of some sites in the computational basis, and a product of
           single-site unitaries chosen from the outcomes; a preparation is a
           sequence of rounds, the depth being the total number of layers of
-          their circuits. One round is the class $\mathrm{QCcc}_\ell$
-          of~\cite{Piroli2021LOCC}, which performs a single round and remarks
-          that ``one could also define a more general scheme with multiple rounds
-          of LOCC''; a sequence of rounds is a composition of such
-          transformations, as in the class $\mathrm{QCcc}^{(k)}_\ell$ of its
-          paragraph ``Phases of matter''. Several rounds are needed because a
+          their circuits. Every round is a protocol of
+          $\mathrm{QCcc}_\ell$ of~\cite{Piroli2021LOCC} of no larger depth;
+          that paper performs a single round and remarks that ``one could also
+          define a more general scheme with multiple rounds of LOCC''. A
+          sequence of rounds is a composition of such transformations. The
+          number of rounds is not bounded: the tree with $k$ levels uses $2k$
+          rounds, whereas in the class $\mathrm{QCcc}^{(k)}_\ell$ of the
+          paragraph ``Phases of matter'' of~\cite{Piroli2021LOCC} the number
+          $k$ of composed transformations does not depend on the system
+          size. Several rounds are needed because a
           teleported register must be corrected before the next isometry acts on
           it.
     \item \emph{Teleportation.} For qudits of any dimension $d$, any number of

@@ -48,12 +48,17 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     most $T$ such that every nonzero output from $\ket\pi$ is a multiple of
     $\ket\psi$.
 
-    One round is the class $\mathrm{QCcc}_\ell$ of \cite{Piroli2021LOCC}, which
-    performs a single round and notes that ``one could also define a more
-    general scheme with multiple rounds of LOCC''. A sequence of rounds is a
-    composition of such transformations, as in the class
-    $\mathrm{QCcc}^{(k)}_\ell$ of its paragraph ``Phases of matter'', with the
-    depth counted as the total number of layers. Several rounds are needed when
+    Every round is a protocol of $\mathrm{QCcc}_\ell$ of
+    \cite{Piroli2021LOCC} of no larger depth, in the sense of
+    Definition~\ref{def:ldp_measurement_preparation}; that paper performs a
+    single round and notes that ``one could also define a more general scheme
+    with multiple rounds of LOCC''. A sequence of rounds is a composition of
+    such transformations, with the depth counted as the total number of layers.
+    The number of rounds is not bounded: the tree of
+    Theorem~\ref{thm:ldp_tree_measurements} with $k$ levels uses $2k$ rounds,
+    whereas in the class $\mathrm{QCcc}^{(k)}_\ell$ of the paragraph ``Phases
+    of matter'' of \cite{Piroli2021LOCC} the number $k$ of composed
+    transformations does not depend on the system size. Several rounds are needed when
     a correction must precede gates that do not commute with it, as for a
     teleported register on which an isometry acts.
 \end{definition}
@@ -145,14 +150,12 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \begin{lemma}[Fourier and Pauli matrices are unitary]
     \label{lem:ldp_qudit_pauli_unitary}
     \lean{MPSPreparation.isPrimitiveRoot_quditRoot,
-        MPSPreparation.norm_quditRoot_pow,
-        MPSPreparation.star_quditRoot_pow_mul_self,
         MPSPreparation.quditFourier_apply,
         MPSPreparation.quditFourier_mem_unitary,
         MPSPreparation.quditPauli_apply, MPSPreparation.quditPauli_mem_unitary}
     \leanok
     \uses{def:ldp_qudit_pauli}
-    The number $\zeta$ is a primitive $d$-th root of unity, $|\zeta^k|=1$, and
+    The number $\zeta$ is a primitive $d$-th root of unity, and
     $F$ and $X^xZ^z$ are unitary. The entries are
     $(X^xZ^z)_{pq}=\zeta^{zq}$ if $p-x=q$ and $0$ otherwise.
 \end{lemma}
@@ -279,7 +282,10 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         MPSPreparation.TeleportHop.layerOne, MPSPreparation.TeleportHop.layerTwo,
         MPSPreparation.TeleportHop.layerOne_op,
         MPSPreparation.TeleportHop.layerTwo_op,
+        MPSPreparation.TeleportHop.sitePerm,
         MPSPreparation.TeleportHop.chainPerm,
+        MPSPreparation.TeleportHop.chainPerm_nil,
+        MPSPreparation.TeleportHop.chainPerm_cons,
         MPSPreparation.TeleportHop.chainFrame,
         MPSPreparation.TeleportHop.chainPre,
         MPSPreparation.TeleportHop.chainFrame_mem_unitary,
@@ -329,8 +335,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \begin{lemma}[Chains between distant sites]
     \label{lem:ldp_teleportation_chains}
     \lean{MPSPreparation.add_natCast_injective, MPSPreparation.add_natCast_succ,
-        MPSPreparation.add_natCast_ne, MPSPreparation.TeleportHop.sitePerm,
-        MPSPreparation.TeleportHop.chainPerm_eq,
+        MPSPreparation.add_natCast_ne,
         MPSPreparation.TeleportHop.exists_eq_smul_of_mem_outputs_conj,
         MPSPreparation.TeleportHop.chainHop,
         MPSPreparation.TeleportHop.chainHopBack,

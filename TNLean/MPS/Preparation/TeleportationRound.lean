@@ -25,8 +25,9 @@ arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
 ## Main definitions
 
 * `MPSPreparation.layerOfList` — the layer of gates on disjoint pairs given by a list.
-* `MPSPreparation.TeleportHop.Valid`, `MPSPreparation.TeleportHop.pairSites`,
-  `MPSPreparation.TeleportHop.chainPerm`.
+* `MPSPreparation.TeleportHop.Valid`, `MPSPreparation.TeleportHop.pairSites`.
+* `MPSPreparation.TeleportHop.sitePerm`, `MPSPreparation.TeleportHop.chainPerm` — the permutation
+  of sites of a list of hops, and its matrix on configurations.
 * `MPSPreparation.TeleportHop.round`.
 
 ## Main results
@@ -108,7 +109,7 @@ theorem layerOfList_op : (layerOfList l key G hl hu hs).op = (l.map G).prod := b
     exact List.Pairwise.map _ (fun a b h hab =>
       Set.disjoint_left.mp h (key_mem_bond (key a)) (hab ▸ key_mem_bond (key b))) hl
   rw [Layer.op, Layer.partialOp]
-  erw [Finset.noncommProd_toFinset (l.map key) (layerOfListGate l key G) _ hnodup]
+  refine (Finset.noncommProd_toFinset (l.map key) (layerOfListGate l key G) _ hnodup).trans ?_
   rw [List.map_map]
   exact congrArg List.prod (List.map_congr_left fun i hi => layerOfListGate_key l key G hl hi)
 
@@ -240,11 +241,24 @@ theorem layerTwo_op (hs : List (TeleportHop N)) (hv : Valid hs) :
 
 /-! ### Chains of hops before the correction -/
 
-/-- The permutation of sites of a list of hops, as a matrix: the product of the exchanges of
-the sites `c` and `f` of the hops, the most recent leftmost. -/
-noncomputable def chainPerm : List (TeleportHop N) → Matrix (Cfg d N) (Cfg d N) ℂ
+/-- The permutation of sites of a list of hops: the product of the exchanges of the sites `c`
+and `f`, the most recent leftmost. -/
+def sitePerm : List (TeleportHop N) → Equiv.Perm (Fin N)
   | [] => 1
-  | h :: hs => h.swapPerm.permMatrix ℂ * chainPerm hs
+  | h :: hs => Equiv.swap h.c h.f * sitePerm hs
+
+/-- The permutation of sites of a list of hops, as a matrix on configurations. -/
+noncomputable def chainPerm (hs : List (TeleportHop N)) : Matrix (Cfg d N) (Cfg d N) ℂ :=
+  (cfgPerm (sitePerm hs)).permMatrix ℂ
+
+omit [NeZero d] in
+theorem chainPerm_nil : chainPerm (d := d) ([] : List (TeleportHop N)) = 1 :=
+  permMatrix_cfgPerm_one
+
+omit [NeZero d] in
+theorem chainPerm_cons (h : TeleportHop N) (hs : List (TeleportHop N)) :
+    chainPerm (d := d) (h :: hs) = h.swapPerm.permMatrix ℂ * chainPerm hs := by
+  rw [chainPerm, chainPerm, swapPerm, permMatrix_cfgPerm_mul_permMatrix_cfgPerm, sitePerm]
 
 /-- The single-site unitaries left by a list of hops, for the outcome `z`. -/
 noncomputable def chainFrame : List (TeleportHop N) → Cfg d N → Fin N → Matrix (Fin d) (Fin d) ℂ
@@ -332,9 +346,9 @@ theorem _root_.MPSPreparation.IsZeroOn.chainPerm_mulVec {S : Set (Fin N)} {v : C
     {hs : List (TeleportHop N)} (hdisj : Disjoint S (allSites hs)) :
     IsZeroOn S (chainPerm hs *ᵥ v) := by
   induction hs with
-  | nil => simpa [chainPerm] using hS
+  | nil => simpa [chainPerm_nil] using hS
   | cons h hs ih =>
-    rw [chainPerm, ← mulVec_mulVec]
+    rw [chainPerm_cons, ← mulVec_mulVec]
     refine (ih (hdisj.mono_right Set.subset_union_right)).permMatrix_cfgPerm_mulVec
       fun i hi => Equiv.swap_apply_of_ne_of_ne ?_ ?_
     · rintro rfl; exact Set.disjoint_left.mp hdisj hi (Or.inl (Or.inl rfl))
@@ -351,7 +365,7 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
     {v : Cfg d N → ℂ}, IsZeroOn (pairSites hs) v →
     chainPre hs z *ᵥ v = ((d : ℂ) ^ hs.length)⁻¹ •
       (finKronecker (chainFrame hs z) *ᵥ (chainPerm hs *ᵥ v))
-  | [], _, z, v, _ => by simp [chainPre, chainPerm, chainFrame, measuredSites]
+  | [], _, z, v, _ => by simp [chainPre, chainPerm_nil, chainFrame, measuredSites]
   | h :: hs, hv, z, v, hz => by
     have hzhs : IsZeroOn (pairSites hs) v := hz.mono Set.subset_union_right
     have hef : Disjoint ({h.e, h.f} : Set (Fin N)) (allSites hs) :=
@@ -416,7 +430,7 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
       mulVec_smul, mulVec_mulVec (M := h.swapPerm.permMatrix ℂ), hswap, ← mulVec_mulVec,
       mulVec_mulVec (M := finKronecker (h.frame z)), mulVec_mulVec (M := finKronecker _), hframe,
       smul_smul,
-      chainPerm, ← mulVec_mulVec, List.length_cons, pow_succ, mul_inv]
+      chainPerm_cons, ← mulVec_mulVec, List.length_cons, pow_succ, mul_inv]
 
 /-! ### The teleportation round -/
 

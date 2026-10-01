@@ -27,10 +27,12 @@ commute with it, as in the tree-RG circuit with measurements of arXiv:2307.01696
 "Tree-RG circuit with measurements"), where the teleportation of a register is corrected before
 an isometry acts on it. arXiv:2103.13367 performs one round in its definition of `QCcc_ℓ` and
 notes, in the paragraph "State transformations with QC and LOCC", that "one could also define a
-more general scheme with multiple rounds of LOCC"; its paragraph "Phases of matter" composes
-`k` such transformations (`QCcc^{(k)}_ℓ`). The model here is the composition of rounds, each of
-the one-round model of `MPSPreparation.MeasurementProtocol`, with the depth counted as the total
-number of layers.
+more general scheme with multiple rounds of LOCC". The model here is the composition of rounds,
+each of the one-round model of `MPSPreparation.MeasurementProtocol` (so a protocol of `QCcc_ℓ` of
+no larger depth), with the depth counted as the total number of layers. The number of rounds is
+not bounded (the tree of `k` levels uses `2k` rounds), whereas in the class `QCcc^{(k)}_ℓ` of the
+paragraph "Phases of matter" of arXiv:2103.13367 the number `k` of composed transformations does
+not depend on the system size.
 
 A round *implements* a matrix `W` on a set `E` of vectors when for every outcome `m` there is a
 scalar `c` with `V_m P_m U v = c W v` for every `v ∈ E`: whatever the outcome, the round acts on
@@ -122,17 +124,13 @@ theorem exists_kraus_mulVec_ne_zero {v : Cfg d N → ℂ} (hv : v ≠ 0) :
   by_contra h
   have h' : ∀ m, R.kraus m *ᵥ v = 0 := fun m => not_not.mp fun hm => h ⟨m, hm⟩
   have hpost : ∀ m, outcomeProj R.measured m *ᵥ (circuitOp R.circuit *ᵥ v) = 0 := fun m => by
-    have hU := finKronecker_mem_unitary (R.correction_mem_unitary m)
     have := h' m
     rw [kraus, Matrix.mul_assoc, ← mulVec_mulVec, ← mulVec_mulVec] at this
-    rw [← one_mulVec (outcomeProj _ _ *ᵥ _), ← Unitary.star_mul_self_of_mem hU,
-      ← mulVec_mulVec, this, mulVec_zero]
-  have hsum : circuitOp R.circuit *ᵥ v = 0 := by
-    rw [← one_mulVec (circuitOp R.circuit *ᵥ v), ← sum_outcomeProj R.measured, sum_mulVec]
-    exact Finset.sum_eq_zero fun m _ => hpost m
-  refine hv ?_
-  rw [← one_mulVec v, ← Unitary.star_mul_self_of_mem (circuitOp_mem_unitary R.circuit),
-    ← mulVec_mulVec, hsum, mulVec_zero]
+    exact eq_zero_of_mem_unitary_of_mulVec_eq_zero
+      (finKronecker_mem_unitary (R.correction_mem_unitary m)) this
+  refine hv (eq_zero_of_mem_unitary_of_mulVec_eq_zero (circuitOp_mem_unitary R.circuit) ?_)
+  rw [← one_mulVec (circuitOp R.circuit *ᵥ v), ← sum_outcomeProj R.measured, sum_mulVec]
+  exact Finset.sum_eq_zero fun m _ => hpost m
 
 /-! ### Sequences of rounds -/
 
@@ -176,9 +174,10 @@ whose circuits have at most `T` layers in total, applied to a nonzero product ve
 scalar multiple of `ψ` after every sequence of outcomes of nonzero probability.
 
 Source: arXiv:2103.13367, paragraph "State transformations with QC and LOCC" (deterministic
-preparation, and "a more general scheme with multiple rounds of LOCC"), and paragraph "Phases of
-matter" (`QCcc^{(k)}_ℓ`, the composition of `k` such transformations); arXiv:2307.01696,
-paragraph "Tree-RG circuit with measurements". -/
+preparation, and "a more general scheme with multiple rounds of LOCC"); arXiv:2307.01696,
+paragraph "Tree-RG circuit with measurements". Every round is a protocol of `QCcc_ℓ` of no larger
+depth. The number of rounds is not bounded, whereas in the class `QCcc^{(k)}_ℓ` of the paragraph
+"Phases of matter" of arXiv:2103.13367 the number `k` does not depend on the system size. -/
 def IsPreparedWithMeasurementRoundsInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
   ∃ (v : Fin N → Fin d → ℂ) (Rs : List (MeasurementRound d N)),
     (Rs.map MeasurementRound.depth).sum ≤ T ∧ productVector v ≠ 0 ∧

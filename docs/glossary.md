@@ -1430,10 +1430,8 @@ The following notions use different transfer objects and are not interchangeable
   layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
   after every sequence of outcomes of nonzero probability.
 - **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
-  LOCC" (one round, and "a more general scheme with multiple rounds of LOCC")
-  and "Phases of matter" (`QCcc^{(k)}_ℓ`, the composition of `k` such
-  transformations); arXiv:2307.01696, paragraph "Tree-RG circuit with
-  measurements".
+  LOCC" (one round, and "a more general scheme with multiple rounds of
+  LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
 - **Sanctioned bridges:**
   `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
   (one round is a protocol of `MPSPreparation.IsPreparedWithMeasurementsInDepth`),
@@ -1443,6 +1441,11 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the depth counts the layers of all the rounds; measurements,
   classical processing and single-site corrections are free, as in one round.
   The circuit of a later round does not depend on earlier outcomes.
+  Every round is a protocol of `QCcc_ℓ` of no larger depth, but the number of
+  rounds is not bounded (the tree of `k` levels uses `2k` rounds), whereas in
+  the class `QCcc^{(k)}_ℓ` of the paragraph "Phases of matter" of
+  arXiv:2103.13367 the number `k` of composed transformations does not depend
+  on the system size.
 
 ### `MPSPreparation.MeasurementRound.IsRoundsImplementationOn`
 

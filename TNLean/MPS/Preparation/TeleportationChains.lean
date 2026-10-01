@@ -30,7 +30,6 @@ The gates between distant sites built from these chains are in
 
 ## Main definitions
 
-* `MPSPreparation.TeleportHop.sitePerm` — the permutation of sites of a list of hops.
 * `MPSPreparation.TeleportHop.chainHop`, `MPSPreparation.TeleportHop.chainHopBack`,
   `MPSPreparation.TeleportHop.forwardChain`, `MPSPreparation.TeleportHop.backwardChain`.
 
@@ -57,16 +56,6 @@ namespace MPSPreparation
 variable {d N : ℕ}
 
 /-! ### Permutations of sites -/
-
-theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm (Fin N)) :
-    (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ =
-      (cfgPerm (π * σ)).permMatrix ℂ := by
-  rw [← Matrix.permMatrix_mul]
-  congr 1
-
-theorem permMatrix_cfgPerm_one : (cfgPerm (d := d) (1 : Equiv.Perm (Fin N))).permMatrix ℂ = 1 := by
-  have : cfgPerm (d := d) (1 : Equiv.Perm (Fin N)) = 1 := by ext x i; rfl
-  rw [this, Matrix.permMatrix_one]
 
 /-- **Relabelling the sites of an embedded operator.** Conjugating `X` at the sites `e` by the
 permutation of configurations `x ↦ x ∘ σ` places `X` at the sites `σ ∘ e`. -/
@@ -166,22 +155,6 @@ theorem add_natCast_ne (a : Fin N) {j k : ℕ} (hj : j < N) (hk : k < N) (hjk : 
 end Offsets
 
 namespace TeleportHop
-
-/-! ### Permutations of sites of a list of hops -/
-
-/-- The permutation of sites of a list of hops: the product of the exchanges of the sites `c`
-and `f`, the most recent leftmost. -/
-def sitePerm : List (TeleportHop N) → Equiv.Perm (Fin N)
-  | [] => 1
-  | h :: hs => Equiv.swap h.c h.f * sitePerm hs
-
-omit [NeZero d] in
-theorem chainPerm_eq (hs : List (TeleportHop N)) :
-    chainPerm (d := d) hs = (cfgPerm (sitePerm hs)).permMatrix ℂ := by
-  induction hs with
-  | nil => exact permMatrix_cfgPerm_one.symm
-  | cons h hs ih =>
-    rw [chainPerm, ih, swapPerm, permMatrix_cfgPerm_mul_permMatrix_cfgPerm, sitePerm]
 
 /-! ### Two rounds around a layer of gates -/
 

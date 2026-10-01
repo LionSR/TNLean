@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.WeylTwirl
+import QICLean.Channel.ComplementaryWeylTwirl
 import TNLean.Algebra.ComplexSqrt
 import TNLean.MPS.Preparation.MeasurementRounds
 import TNLean.MPS.Preparation.PermutationGates
@@ -47,7 +47,10 @@ is a correction.
 
 ## Main results
 
-* `MPSPreparation.quditFourier_mem_unitary`, `MPSPreparation.quditPauli_mem_unitary`.
+* `MPSPreparation.quditFourier_mem_unitary`, `MPSPreparation.quditPauli_mem_unitary`; the
+  orthogonality of the powers of `ζ` and the unitarity of the diagonal factor are QICLean's
+  `Matrix.sum_rootOfUnity_pow_eq` and `Matrix.weylClock_mem_unitary`, the labels `Fin d` being
+  `ZMod d`.
 * `MPSPreparation.permMatrix_cfgPerm_mul_finKronecker` — moving single-site operators across a
   permutation of sites.
 * `MPSPreparation.TeleportHop.pre_mulVec` — one hop.
@@ -118,12 +121,19 @@ theorem finKronecker_update_one_permMatrix_mulVec (t : Fin N) (σ : Equiv.Perm (
     finKronecker (Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t (σ.permMatrix ℂ)) *ᵥ v =
       fun y => v (Function.update y t (σ (y t))) := by
   classical
+  have h : Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t (σ.permMatrix ℂ) =
+      fun i => (Function.update (1 : Fin N → Equiv.Perm (Fin d)) t σ i).permMatrix ℂ := by
+    funext i
+    by_cases hi : i = t
+    · subst hi; simp
+    · simp [Function.update_of_ne hi]
+  rw [h, finKronecker_permMatrix_mulVec]
   funext y
-  rw [finKronecker_update_one_mulVec_apply, Finset.sum_eq_single (σ (y t))]
-  · simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply]
-  · intro j _ hj
-    simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Ne.symm hj]
-  · simp
+  congr 1
+  funext i
+  by_cases hi : i = t
+  · subst hi; simp
+  · simp [Function.update_of_ne hi]
 
 end SingleSite
 
@@ -138,15 +148,6 @@ noncomputable def quditRoot (d : ℕ) : ℂ := Complex.exp (2 * Real.pi * Comple
 
 theorem isPrimitiveRoot_quditRoot : IsPrimitiveRoot (quditRoot d) d :=
   Complex.isPrimitiveRoot_exp d (NeZero.ne d)
-
-theorem norm_quditRoot_pow (k : ℕ) : ‖quditRoot d ^ k‖ = 1 := by
-  rw [norm_pow, isPrimitiveRoot_quditRoot.norm'_eq_one (NeZero.ne d), one_pow]
-
-theorem star_quditRoot_pow_mul_self (k : ℕ) :
-    star (quditRoot d ^ k) * quditRoot d ^ k = 1 := by
-  rw [Complex.star_def, ← Complex.normSq_eq_conj_mul_self, Complex.normSq_eq_norm_sq,
-    norm_quditRoot_pow]
-  norm_num
 
 /-- The Fourier matrix `F_{ab} = d^{-1/2} ζ^{ab}` on the labels `0, …, d-1`.
 
@@ -163,29 +164,11 @@ theorem quditFourier_apply (a b : Fin d) :
 private theorem sum_quditRoot_pow (a c : Fin d) :
     ∑ b : Fin d, quditRoot d ^ (a.val * b.val) * star (quditRoot d ^ (c.val * b.val)) =
       if a = c then (d : ℂ) else 0 := by
-  have hζ := isPrimitiveRoot_quditRoot (d := d)
-  have hconj : star (quditRoot d) = (quditRoot d)⁻¹ :=
-    Matrix.starRingEnd_eq_inv_of_isPrimitiveRoot hζ
-  have hζ0 : quditRoot d ≠ 0 := hζ.ne_zero (NeZero.ne d)
-  set ξ := quditRoot d ^ a.val * star (quditRoot d) ^ c.val with hξ
-  have hterm : ∀ b : Fin d, quditRoot d ^ (a.val * b.val) * star (quditRoot d ^ (c.val * b.val))
-      = ξ ^ b.val := fun b => by
-    rw [hξ, star_pow, mul_pow, ← pow_mul, ← pow_mul]
-  simp_rw [hterm]
-  rw [Fin.sum_univ_eq_sum_range (fun b => ξ ^ b)]
-  have hξd : ξ ^ d = 1 := by
-    rw [hξ, mul_pow, ← pow_mul, ← pow_mul, mul_comm a.val, mul_comm c.val, pow_mul, pow_mul,
-      hconj, inv_pow, hζ.pow_eq_one, inv_one, one_pow, one_pow, mul_one]
-  have hξ1 : ξ = 1 ↔ a = c := by
-    rw [hξ, hconj, inv_pow, mul_inv_eq_one₀ (pow_ne_zero _ hζ0)]
-    exact ⟨fun h => Fin.ext (hζ.pow_inj a.isLt c.isLt h), fun h => by rw [h]⟩
-  by_cases h : a = c
-  · rw [ite_eq_left h, hξ1.mpr h]
-    simp
-  · rw [ite_eq_right h]
-    have key := geom_sum_mul ξ d
-    rw [hξd, sub_self] at key
-    exact (mul_eq_zero.mp key).resolve_right (sub_ne_zero_of_ne fun h' => h (hξ1.mp h'))
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne d)
+  refine Eq.trans (Finset.sum_congr rfl fun b _ => ?_)
+    (Matrix.sum_rootOfUnity_pow_eq (isPrimitiveRoot_quditRoot (d := n + 1)) a c)
+  rw [mul_comm a.val, mul_comm c.val]
+  rfl
 
 /-- The Fourier matrix is unitary. -/
 theorem quditFourier_mem_unitary : quditFourier d ∈ unitary (Matrix (Fin d) (Fin d) ℂ) := by
@@ -220,12 +203,17 @@ theorem quditPauli_apply (z x p q : Fin d) :
 theorem quditPauli_mem_unitary (z x : Fin d) :
     quditPauli z x ∈ unitary (Matrix (Fin d) (Fin d) ℂ) := by
   refine Submonoid.mul_mem _ (Equiv.Perm.permMatrix_mem_unitaryGroup _) ?_
-  refine Matrix.mem_unitaryGroup_iff.mpr ?_
-  rw [star_eq_conjTranspose, diagonal_conjTranspose, diagonal_mul_diagonal, ← diagonal_one]
-  congr 1
-  funext q
-  rw [Pi.star_apply, mul_comm]
-  exact star_quditRoot_pow_mul_self _
+  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne d)
+  have h := pow_mem (Matrix.weylClock_mem_unitary (isPrimitiveRoot_quditRoot (d := n + 1))) z.val
+  rw [Matrix.weylClock_pow] at h
+  have e : (diagonal fun q : Fin (n + 1) => quditRoot (n + 1) ^ (z.val * q.val)) =
+      diagonal fun q : ZMod (n + 1) => quditRoot (n + 1) ^ (q.val * z.val) := by
+    congr 1
+    funext q
+    rw [mul_comm]
+    rfl
+  rw [e]
+  exact h
 
 end Fourier
 
@@ -268,6 +256,16 @@ def cfgPerm (π : Equiv.Perm (Fin N)) : Equiv.Perm (Cfg d N) where
   right_inv x := by funext i; simp
 
 theorem cfgPerm_apply (π : Equiv.Perm (Fin N)) (x : Cfg d N) : cfgPerm π x = x ∘ π := rfl
+
+theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm (Fin N)) :
+    (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ =
+      (cfgPerm (π * σ)).permMatrix ℂ := by
+  rw [← Matrix.permMatrix_mul]
+  congr 1
+
+theorem permMatrix_cfgPerm_one : (cfgPerm (d := d) (1 : Equiv.Perm (Fin N))).permMatrix ℂ = 1 := by
+  have : cfgPerm (d := d) (1 : Equiv.Perm (Fin N)) = 1 := by ext x i; rfl
+  rw [this, Matrix.permMatrix_one]
 
 /-- **Moving single-site operators across a permutation of sites.** -/
 theorem permMatrix_cfgPerm_mul_finKronecker (π : Equiv.Perm (Fin N))
