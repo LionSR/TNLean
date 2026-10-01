@@ -201,22 +201,6 @@ private theorem transformedGroundBond_block (F : BeigiSectorGraphData A) :
             (1 : Matrix (Fin (F.rightDim ab.2)) (Fin (F.rightDim ab.2)) ℂ) :=
   F.groundProjector_block
 
-private theorem localTerm_eq_toLin'_embedLocalOperator {N : ℕ} (hN : 2 ≤ N)
-    (i : Fin N) :
-    localTerm A 2 N i = Matrix.toLin'
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN i
-        (LinearMap.toMatrix' (parentInteraction A 2))) := by
-  classical
-  apply LinearMap.ext
-  intro v
-  funext σ
-  rw [localTerm_apply_of_le A 2 N hN i, Matrix.toLin'_apply,
-    MPOTensor.embedLocalOperator_mulVec_apply]
-  symm
-  exact congrFun (LinearMap.congr_fun
-    (Matrix.toLin'_toMatrix' (parentInteraction A 2))
-    (fun τ ↦ v (replaceWindow 2 hN i σ τ))) (extractWindow 2 i σ)
-
 private theorem groundBond_eq_one_sub_toMatrix' :
     groundBond A = 1 - LinearMap.toMatrix' (parentInteraction A 2) := by
   classical
