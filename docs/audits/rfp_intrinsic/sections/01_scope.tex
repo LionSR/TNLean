@@ -1,0 +1,243 @@
+\section{Physical question and equivalence conventions}
+\label{sec:intrinsic-question}
+
+A boundary density operator can contain local spectral weights and a
+global constraint. The weights affect entanglement spectra and boundary
+entropies. The constraint can retain information that disappears upon
+tracing even one boundary site. The boundary discussion following the
+general fixed-point characterization of Cirac, P\'erez-Garc\'ia,
+Schuch, and Verstraete (CPSV)~\cite{CPSV} motivates asking whether
+length-dependent matrix product density operator (MPDO) fixed points
+can involve more than weighted dimers.
+
+There are three different questions. Can canonical structure
+coefficients depend on length at a specified physical cut? Can such
+an example have nontrivial fusion and a state that is not an independent
+dimer product? Can its positive weights remain inseparable from its
+intertwiners under a specified class of local operations? The examples
+below answer the first two questions affirmatively. They do not yet
+settle the third under bounded-depth local refactoring.
+
+This distinction matters physically. Stacking a boundary with a trivial
+layer of mixed bonds changes its entanglement spectrum without changing
+the topological order of an associated bulk. Conversely, identifying
+weights in local multiplicity spaces need not produce an independent
+tensor factor. The categorical examples make the latter point explicit.
+
+\subsection{Tensor orientations and physical normalization}
+
+Let $\mc H$ be a finite-dimensional physical site space and
+$\mc V=\C^D$ the horizontal auxiliary space. A tensor is a collection
+$M^{ab}\in\End(\mc H)$, with $a,b=1,\ldots,D$. Define
+\begin{align}
+	\rho_N(M)
+	 & =\sum_{a_1,\ldots,a_N}
+	M^{a_1a_2}\otimes\cdots\otimes M^{a_Na_1},
+	\label{eq:horizontal}            \\
+	(MB)^{ab}
+	 & =\sum_c M^{ac}\otimes B^{cb},
+	\label{eq:concatenation}         \\
+	[O_L(M)]_{\boldsymbol a,\boldsymbol b}
+	 & =\tr_{\mc H}
+	\left(M^{a_1b_1}\cdots M^{a_Lb_L}\right).
+	\label{eq:vertical}
+\end{align}
+Here $N$ counts physical sites, whereas $L$ counts factors in the
+vertical trace. The two readings use the same tensor coefficients,
+without transposition or complex conjugation. Positivity of every
+$\rho_N(M)$ does not imply positivity of $O_L(M)$.
+
+A physical renormalization fixed point (RFP) has completely positive,
+trace-preserving maps, abbreviated CPTP maps,
+\begin{align}
+	\mc T:\End(\mc H)            & \longrightarrow\End(\mc H^{\otimes2}), &
+	\mc S:\End(\mc H^{\otimes2}) & \longrightarrow\End(\mc H),
+	\nonumber                                                               \\
+	\mc T(M^{ab})                & =(MM)^{ab},                            &
+	\mc S((MM)^{ab})             & =M^{ab}.
+	\label{eq:rfp}
+\end{align}
+These are identities for every complex letter, not just for positive
+periodic states. Where canonical form is required, it is established
+separately.
+
+Trace preservation fixes the physical scale. With
+$T_{ab}=\tr(M^{ab})$, one obtains
+\begin{align}
+	T_{ab}
+	 & =\tr\mc T(M^{ab})
+	=\sum_c\tr(M^{ac})\tr(M^{cb})
+	=(T^2)_{ab},                \\
+	\tr\rho_N(M)
+	 & =\tr(T^N)=\tr T=\rank T.
+	\label{eq:physical-scale}
+\end{align}
+For a nonzero positive family, both $M$ and $sM$, with $s>0$, can
+satisfy this necessary condition only if
+$(s^2-s)T=0$, hence $s=1$.
+
+For a tuple $A=(A^u)_u$, define its transfer map by
+\begin{align}
+	\mc E_A(X) & =\sum_uA^uX(A^u)^\dagger.
+\end{align}
+An irreducible, aperiodic tuple with transfer spectral radius $r>0$
+has normal representative $A/\sqrt r$. A basis of normal tensors
+(BNT) contains one representative of each similarity-and-phase class
+in canonical form. Its periodic vectors are independent at all
+sufficiently large lengths. We use unit-transfer normal representatives
+but retain the external coefficients needed at the physical scale.
+Normalizing a representative is not a rescaling of the physical
+tensor.
+
+\subsection{Fusion and the three notions of nontriviality}
+
+A vertical canonical decomposition and its fusion identities have the
+form
+\begin{align}
+	M^{ab}
+	 & =V_1\left(\bigoplus_c\mu_c\otimes A_c^{ab}\right)V_1^\dagger,
+	\label{eq:vcf}                                                   \\
+	(A_aA_b)^{ij}
+	 & =W_{ab}\left(\bigoplus_c\chi_{abc}\otimes A_c^{ij}\right)
+	W_{ab}^\dagger.
+	\label{eq:fusion}
+\end{align}
+The maps $V_1,W_{ab}$ are isometries from the displayed direct sums
+into the corresponding physical spaces. Both identities assert
+vanishing on the orthogonal complements and the absence of cross
+terms. All positive multiplicity operators are restricted to their
+active supports. An absent channel has dimension zero.
+
+The product of vertical closures follows from the definitions:
+\begin{align}
+	[O_L(A)O_L(B)]_{\boldsymbol i,\boldsymbol j}
+	 & =\sum_{\boldsymbol k}
+	\tr\left(\prod_{\ell=1}^LA^{i_\ell k_\ell}\right)
+	\tr\left(\prod_{\ell=1}^LB^{k_\ell j_\ell}\right)
+	\nonumber                                          \\
+	 & =\tr\left[\prod_{\ell=1}^L
+		       \left(\sum_{k_\ell}A^{i_\ell k_\ell}\otimes
+		       B^{k_\ell j_\ell}\right)\right] \\
+	 & =[O_L(AB)]_{\boldsymbol i,\boldsymbol j}.
+\end{align}
+For $\chi=\sum_qx_q\ket q\bra q$, orthogonality gives
+\begin{align}
+	\prod_{\ell=1}^L(\chi\otimes A^{i_\ell j_\ell})
+	 & =\sum_qx_q^L\ket q\bra q\otimes
+	A^{i_1j_1}\cdots A^{i_Lj_L},        \\
+	O_L(\chi\otimes A)
+	 & =\left(\sum_qx_q^L\right)O_L(A).
+\end{align}
+Consequently,
+\begin{align}
+	O_L(A_a)O_L(A_b)
+	           & =\sum_c c_{abc}(L)O_L(A_c), &
+	c_{abc}(L) & =\tr(\chi_{abc}^L).
+	\label{eq:power-law}
+\end{align}
+The power-sum law is universal within the stated CPSV
+characterization. A different physical mechanism would mean
+inseparable weights and intertwiners, not a violation of
+\cref{eq:power-law}.
+
+A compensated representative change is
+\begin{align}
+	A_a'        & =s_aA_a,                       &
+	\mu_a'      & =\mu_a/s_a,                    &
+	\chi_{abc}' & =\frac{s_as_b}{s_c}\chi_{abc},
+	\qquad s_a>0.
+	\label{eq:rescaling}
+\end{align}
+A positive power sum is constant in $L$ only if all its active
+eigenvalues are one, since
+\begin{align}
+	0
+	 & =\sum_qx_q-2\sum_qx_q^2+\sum_qx_q^3
+	=\sum_qx_q(1-x_q)^2.
+	\label{eq:constant-power}
+\end{align}
+Unequal positive eigenvalues within a channel therefore obstruct
+flattening by \cref{eq:rescaling}. For scalar channels
+$\chi_{abc}=\theta_{abc}\Id$, flattening instead requires the
+simultaneous equations $s_as_b\theta_{abc}=s_c$.
+
+We distinguish similarity gauges, compensated representative
+rescalings, fixed regroupings of neighboring subregisters, and
+bounded-depth unitary circuits. The latter have bounded gate range
+and a rule independent of $N$. A length-dependent change of basis
+among the $O_L(A_a)$ is not a fixed tensor transformation.
+
+For the stronger question, a \emph{spectator separation} means an
+all-length factorization, after a specified fixed regrouping and
+bounded-depth unitary circuit, into a weight-independent core and an
+independent product of weighted one-site or bond states. Fixed pure
+ancillas may be added or removed. No symmetry preservation is
+implicit. The unitaries may depend on the chosen weights but not
+on the chain length through a growing range or depth.
+
+This convention excludes arbitrary state-erasing channels. Reversible
+CPTP conversion on a specified family is a different possible
+equivalence relation; no invariance under every such conversion is
+asserted here.
+
+\subsection{A full-space fixed-point certificate}
+
+The following lemma will certify the regrouped tensors without using
+broad equivalences involving commuting Gibbs states or saturation of
+mutual information.
+
+\begin{lemma}[Equal-mass certificate]
+	\label{lem:channels}
+	Suppose the active sector set is nonempty and the one-site and blocked
+	letters have decompositions
+	\begin{align}
+		M^{ab}
+		 & =\sum_{c,q}\eta_{cq}J_{1cq}A_c^{ab}J_{1cq}^\dagger,  \\
+		(MM)^{ab}
+		 & =\sum_{c,q}\zeta_{cq}J_{2cq}A_c^{ab}J_{2cq}^\dagger,
+	\end{align}
+	where $\eta_{cq},\zeta_{cq}>0$, the embeddings have orthogonal
+	ranges, both complements are zero on all letters, and
+	\begin{align}
+		m_c:=\sum_q\eta_{cq}=\sum_q\zeta_{cq}>0.
+		\label{eq:equal-masses}
+	\end{align}
+	Then \cref{eq:rfp} holds with channels on the complete physical spaces.
+\end{lemma}
+
+\begin{proof}
+	Put $\mc H_1=\mc H$, $\mc H_2=\mc H^{\otimes2}$,
+	$P_i=\sum_{c,q}J_{icq}J_{icq}^\dagger$, and
+	$\mc A=\bigoplus_c\End(\mc H_c)$. Choose a density operator
+	$\tau\in\mc A$. Define
+	\begin{align}
+		D_i(X)
+		 & =\bigoplus_c\sum_qJ_{icq}^\dagger XJ_{icq}
+		+\tr((\Id-P_i)X)\tau,                         \\
+		R_1(\oplus_cX_c)
+		 & =\sum_{c,q}\frac{\eta_{cq}}{m_c}
+		J_{1cq}X_cJ_{1cq}^\dagger,                    \\
+		R_2(\oplus_cX_c)
+		 & =\sum_{c,q}\frac{\zeta_{cq}}{m_c}
+		J_{2cq}X_cJ_{2cq}^\dagger.
+		\label{eq:discard-prepare}
+	\end{align}
+	Compression and preparation are completely positive. If
+	$\tau=\sum_tp_t\ket t\bra t$ and $\{\ket z\}$ is an
+	orthonormal basis of $\ker P_i$, the complement branch has Kraus
+	operators $\sqrt{p_t}\ket t\bra z$. Their squared sum is
+	$\sum_{t,z}p_t\ket z\bra z=\Id-P_i$. Thus $D_i$ is trace
+	preserving on the full input space. For each input sector $c$, the
+	squared Kraus sums of $R_1,R_2$ are respectively
+	$\sum_q\eta_{cq}\Id/m_c=\Id$ and
+	$\sum_q\zeta_{cq}\Id/m_c=\Id$.
+
+	On the letters, the complement branches vanish and
+	\begin{align}
+		D_1(M^{ab})
+		 & =\bigoplus_cm_cA_c^{ab}
+		=D_2((MM)^{ab}).
+	\end{align}
+	Therefore $\mc T=R_2D_1$ and $\mc S=R_1D_2$ satisfy
+	\cref{eq:rfp}.
+\end{proof}

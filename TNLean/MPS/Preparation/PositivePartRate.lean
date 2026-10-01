@@ -38,6 +38,7 @@ feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 
 ## Main declarations
 
+* `MPSTensor.exp_neg_div_correlationLength_le_one` — `e^{-γ/ξ} ≤ 1` for `|λ₂| ≤ 1`.
 * `MPSTensor.exists_norm_transferMap_pow_sub_le` — the transfer-map gap.
 * `MPSTensor.exists_norm_polarPos_blockTensor_sub_le` — the rate of `P_q → P_∞`.
 
@@ -80,6 +81,12 @@ theorem exp_neg_two_mul_div_correlationLength (γ : ℝ) (lam₂ : ℂ) :
   congr 1
   push_cast
   ring
+
+/-- `e^{-γ/ξ} ≤ 1` for `|λ₂| ≤ 1` and `γ ≥ 0`. -/
+theorem exp_neg_div_correlationLength_le_one {γ : ℝ} (hγ0 : 0 ≤ γ) {lam₂ : ℂ}
+    (hl : ‖lam₂‖ ≤ 1) : Real.exp (-γ / correlationLength lam₂) ≤ 1 := by
+  rw [neg_div_correlationLength, Real.exp_le_one_iff]
+  exact mul_nonpos_of_nonneg_of_nonpos hγ0 (Real.log_nonpos (norm_nonneg _) hl)
 
 /-- For `0 < γ < 1`, the rate `e^{-γ/ξ} = |λ₂|^γ` strictly exceeds every `a < 1` with
 `a ≤ |λ₂|`. This is where `γ < 1` enters: `|λ₂|^γ > |λ₂|` for `|λ₂| < 1`. -/
@@ -224,7 +231,6 @@ theorem exists_norm_le_of_entry_eq_pow_sub {ι κ : Type*} [Fintype ι] [Fintype
         gcongr
         exact (hent _ _ _).trans (by gcongr; exact hgap n _)
     _ = K₂ * C * ‖Y a b‖ * ‖(Matrix.single a b 1 : Matrix ι κ ℂ)‖ * r ^ n := by ring
-
 
 /-- The entries of `σᵀ ⊗ 1` are those of the rank-one map `X ↦ Tr(X) σ`, rearranged as in
 `conjTranspose_physicalMatrix_mul_apply`. -/
