@@ -1747,9 +1747,16 @@ change the local dimension act on single sites.
         MPSPreparation.IsLocalCircuitOfDepth.star,
         MPSPreparation.IsLocalCircuitOfDepth.mul}
     \leanok
-    A local circuit of depth $T$ is unitary, and its adjoint is a local
-    circuit of depth $T$. If $U$ and $U'$ are local circuits of depths $T$
-    and $T'$, then $U'U$ is a local circuit of depth $T+T'$.
+    For a layer $W$ with gates $g_k$, the layer with the gates $g_k^\dagger$
+    on the same pairs implements $W^\dagger$, and the same holds for the
+    product of the gates of $W$ over any subset of its pairs. If a circuit
+    has the layers $W_1,\dots,W_T$, applied in this order, and implements $U$,
+    then the circuit with the layers $W_T^\dagger,\dots,W_1^\dagger$
+    implements $U^\dagger$; the layers of a circuit implementing $U$ followed
+    by those of a circuit implementing $U'$ implement $U'U$. Consequently, a
+    local circuit of depth $T$ is unitary, and its adjoint is a local circuit
+    of depth $T$. If $U$ and $U'$ are local circuits of depths $T$ and $T'$,
+    then $U'U$ is a local circuit of depth $T+T'$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1762,14 +1769,21 @@ change the local dimension act on single sites.
 \begin{lemma}[Preparation from the all-zero state]
     \label{lem:ldp_preparation_from_zero}
     \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.finKronecker_mulVec_productVector,
+    \lean{MPSTensor.finKronecker_mulVec_productVector,
         MPSPreparation.exists_mem_unitary_eq_smul_mulVec_single_zero,
-        MPSPreparation.productVector_smul,
+        MPSTensor.productVector_pi_smul,
         MPSPreparation.exists_productVector_eq_smul_finKronecker_mulVec,
         MPSPreparation.isLocalCircuitOfDepth_finKronecker,
         MPSPreparation.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
     \leanok
-    Let $d\ge1$. A tensor product $\bigotimes_iu_i$ of one-site unitaries is a
+    Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
+    $\mathbb{C}^d$,
+    $(\bigotimes_im_i)(\bigotimes_i\ket{v_i})=\bigotimes_im_i\ket{v_i}$, and
+    $\bigotimes_ic_i\ket{v_i}=(\prod_ic_i)\bigotimes_i\ket{v_i}$ for scalars
+    $c_i$. Every nonzero $x\in\mathbb{C}^d$ equals $c\,u\ket0$ for a unitary
+    $u$ and a scalar $c\neq0$, and every nonzero product vector is a scalar
+    multiple of $(\bigotimes_iu_i)\ket{0\cdots0}$ for one-site unitaries
+    $u_i$. A tensor product $\bigotimes_iu_i$ of one-site unitaries is a
     local circuit of depth $2$. Every nonzero vector prepared in depth $T$ is a
     scalar multiple of $U\ket{0\cdots0}$ for a local circuit $U$ of depth
     $T+2$.
@@ -1792,11 +1806,17 @@ change the local dimension act on single sites.
     \lean{MPSPreparation.one_sub_norm_inner_le_norm_sub_smul_sq,
         MPSPreparation.exists_norm_sub_smul_sq_eq,
         MPSPreparation.one_sub_norm_inner_le_two_mul_add,
+        Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary,
         Matrix.inner_eq_of_mulVec_eq, Matrix.norm_eq_of_mulVec_eq}
     \leanok
-    For unit vectors $x$, $y$, $z$ in a complex inner product space,
+    For unit vectors $a$, $b$ in a complex inner product space and every
+    scalar $c$ with $\lvert c\rvert=1$,
+    $\varepsilon(a,b)\le\lVert a-cb\rVert^2/2$, with equality for some such
+    $c$. For unit vectors $x$, $y$, $z$,
     $\varepsilon(x,z)\le2\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$.
-    A unitary matrix preserves inner products and norms.
+    A unitary matrix $U$ satisfies
+    $\overline{(Ux)}\cdot(Uy)=\overline{x}\cdot y$ for coordinate vectors
+    $x$, $y$, and so preserves inner products and norms.
 \end{lemma}
 \begin{proof}
     \leanok

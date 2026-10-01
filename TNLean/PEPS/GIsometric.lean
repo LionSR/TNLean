@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.UnitaryGroup
+import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.PEPS.GInjectiveConcatenation
 import TNLean.PEPS.GInjectiveMPS
 
@@ -283,13 +284,6 @@ theorem mem_unitaryGroup_of_dotProduct {n : Type*} [Fintype n] [DecidableEq n]
   simpa [Matrix.star_eq_conjTranspose, Matrix.mulVec_single_one, Matrix.one_apply,
     Pi.single_apply, eq_comm] using hij
 
-/-- A unitary matrix preserves the dot products `star x ⬝ᵥ y`. -/
-theorem dotProduct_mulVec_of_mem_unitaryGroup {n : Type*} [Fintype n] [DecidableEq n]
-    {M : Matrix n n ℂ} (hM : M ∈ Matrix.unitaryGroup n ℂ) (x y : n → ℂ) :
-    star (M *ᵥ x) ⬝ᵥ (M *ᵥ y) = star x ⬝ᵥ y := by
-  rw [Matrix.star_mulVec, ← Matrix.dotProduct_mulVec, Matrix.mulVec_mulVec,
-    ← Matrix.star_eq_conjTranspose, Matrix.mem_unitaryGroup_iff'.1 hM, Matrix.one_mulVec]
-
 variable {G ι κ : Type*} [Group G] [Fintype G] [Fintype ι] [Fintype κ] [DecidableEq ι]
   [DecidableEq κ] {ρ : Representation ℂ G (ι → ℂ)} {T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)}
 
@@ -334,7 +328,7 @@ theorem IsGIsometric.exists_unitary_comp_eq [Finite G] (hT : IsGIsometric ρ T)
     obtain ⟨hy', hTy'⟩ := hT.toIsGInjective.leftInverse_mem_invariants_of_surjective hsurj hL y'
     simp only [← Matrix.toLin'_apply, Matrix.toLin'_toMatrix', LinearMap.comp_apply]
     simp only [Matrix.toLin'_apply]
-    rw [hcT _ (hVinv _ hy) _ (hVinv _ hy'), dotProduct_mulVec_of_mem_unitaryGroup hV,
+    rw [hcT _ (hVinv _ hy) _ (hVinv _ hy'), Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary hV,
       ← hcT _ hy _ hy', hTy, hTy']
   · refine LinearMap.ext fun x => ?_
     have hx : T x = T (ρ.averageMap x) := (apply_averageMap_of_forall_comp_eq hT.invariant x).symm
@@ -373,7 +367,7 @@ theorem IsGIsometric.exists_comp_eq_of_unitary [Finite G] (hT : IsGIsometric ρ 
   · refine mul_left_cancel₀ hc' ?_
     simp only [LinearMap.comp_apply]
     rw [← hcT _ (hLy _).1 _ (hLy _).1, (hLy _).2, (hLy _).2, Matrix.toLin'_apply,
-      Matrix.toLin'_apply, dotProduct_mulVec_of_mem_unitaryGroup hU, hcT _ ‹_› _ ‹_›]
+      Matrix.toLin'_apply, Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary hU, hcT _ ‹_› _ ‹_›]
   · exact LinearMap.ext fun x => (hLy _).2
 
 end VirtualUnitary

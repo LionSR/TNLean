@@ -13,7 +13,6 @@ A vector prepared in depth `T` (`MPSPreparation.IsPreparedInDepth`) is a local c
 some product vector `⊗ᵢ |vᵢ⟩`. This file shows that the product vector can be taken to be the
 all-`|0⟩` state at the cost of two more layers, up to a scalar.
 
-* `MPSPreparation.finKronecker_mulVec_productVector`: `(⊗ᵢ uᵢ) (⊗ᵢ |vᵢ⟩) = ⊗ᵢ uᵢ|vᵢ⟩`.
 * `MPSPreparation.isLocalCircuitOfDepth_finKronecker`: a tensor product `⊗ᵢ uᵢ` of one-site
   unitaries is a local circuit of depth `2`. The first layer carries the gates `u_k ⊗ u_{k+1}` on
   the pairs `{k, k + 1}` with `k` even and `k + 1 < N`; the second carries the remaining one-site
@@ -32,17 +31,6 @@ open scoped BigOperators
 namespace MPSPreparation
 
 variable {d N : ℕ}
-
-/-- A tensor product of one-site operators maps a product vector to the product of the images:
-`(⊗ᵢ mᵢ) (⊗ᵢ |vᵢ⟩) = ⊗ᵢ mᵢ|vᵢ⟩`. -/
-theorem finKronecker_mulVec_productVector (m : Fin N → Matrix (Fin d) (Fin d) ℂ)
-    (v : Fin N → Fin d → ℂ) :
-    finKronecker m *ᵥ productVector v = productVector fun i => m i *ᵥ v i := by
-  funext σ
-  simp only [mulVec, dotProduct, productVector, finKronecker, of_apply]
-  rw [Fintype.prod_sum]
-  refine Finset.sum_congr rfl fun τ _ => ?_
-  rw [Finset.prod_mul_distrib]
 
 /-- A nonzero vector of `ℂ^d` is a nonzero multiple of the image of `|0⟩` under a unitary. -/
 theorem exists_mem_unitary_eq_smul_mulVec_single_zero (hd : 0 < d) {x : Fin d → ℂ}
@@ -80,12 +68,6 @@ theorem exists_mem_unitary_eq_smul_mulVec_single_zero (hd : 0 < d) {x : Fin d �
   simp only [V, of_apply]
   rw [← mul_assoc, mul_inv_cancel₀ (Complex.ofReal_ne_zero.mpr hr), one_mul]
 
-/-- Rescaling every factor of a product vector rescales it by the product of the factors. -/
-theorem productVector_smul (c : Fin N → ℂ) (v : Fin N → Fin d → ℂ) :
-    productVector (fun i => c i • v i) = (∏ i, c i) • productVector v := by
-  funext σ
-  simp [productVector, Finset.prod_mul_distrib]
-
 /-- A nonzero product vector is a multiple of `(⊗ᵢ uᵢ)|0⋯0⟩` for one-site unitaries `uᵢ`. -/
 theorem exists_productVector_eq_smul_finKronecker_mulVec (hd : 0 < d)
     {v : Fin N → Fin d → ℂ} (hv : productVector v ≠ 0) :
@@ -96,7 +78,7 @@ theorem exists_productVector_eq_smul_finKronecker_mulVec (hd : 0 < d)
     Finset.prod_eq_zero (Finset.mem_univ i) (by simp [h]))
   choose u hu c _ hc using fun i => exists_mem_unitary_eq_smul_mulVec_single_zero hd (hvi i)
   refine ⟨u, hu, ∏ i, c i, ?_⟩
-  rw [finKronecker_mulVec_productVector, ← productVector_smul]
+  rw [finKronecker_mulVec_productVector, ← productVector_pi_smul]
   exact congrArg productVector (funext hc)
 
 /-! ### Tensor products of one-site unitaries -/

@@ -9,12 +9,14 @@ import Mathlib.LinearAlgebra.UnitaryGroup
 /-!
 # Unitary matrices preserve inner products of Euclidean vectors
 
-For a unitary complex matrix `U` and Euclidean vectors `x`, `y`, the images `U x` and `U y`
-have the same inner product, and `U x` has the norm of `x`. The images are given as Euclidean
-vectors `x'`, `y'` whose coordinate functions are `U *ᵥ x` and `U *ᵥ y`.
+A unitary complex matrix `U` preserves the dot products `star x ⬝ᵥ y` of coordinate vectors.
+Consequently, for Euclidean vectors `x`, `y`, the images `U x` and `U y` have the same inner
+product, and `U x` has the norm of `x`. The images are given as Euclidean vectors `x'`, `y'`
+whose coordinate functions are `U *ᵥ x` and `U *ᵥ y`.
 
 ## Main results
 
+* `Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary`: `star (U x) ⬝ᵥ U y = star x ⬝ᵥ y`.
 * `Matrix.inner_eq_of_mulVec_eq`: `⟨U x|U y⟩ = ⟨x|y⟩`.
 * `Matrix.norm_eq_of_mulVec_eq`: `‖U x‖ = ‖x‖`.
 -/
@@ -25,6 +27,12 @@ namespace Matrix
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {U : Matrix ι ι ℂ}
 
+/-- A unitary matrix preserves the dot products `star x ⬝ᵥ y`. -/
+theorem star_mulVec_dotProduct_mulVec_of_mem_unitary (hU : U ∈ unitary (Matrix ι ι ℂ))
+    (x y : ι → ℂ) : star (U *ᵥ x) ⬝ᵥ (U *ᵥ y) = star x ⬝ᵥ y := by
+  rw [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, ← star_eq_conjTranspose,
+    Unitary.star_mul_self_of_mem hU, one_mulVec]
+
 /-- A unitary matrix preserves the inner product of the vectors it maps. -/
 theorem inner_eq_of_mulVec_eq (hU : U ∈ unitary (Matrix ι ι ℂ))
     {x y x' y' : EuclideanSpace ℂ ι}
@@ -32,9 +40,8 @@ theorem inner_eq_of_mulVec_eq (hU : U ∈ unitary (Matrix ι ι ℂ))
     ⟪x', y'⟫_ℂ = ⟪x, y⟫_ℂ := by
   rw [EuclideanSpace.inner_eq_star_dotProduct, EuclideanSpace.inner_eq_star_dotProduct]
   change (fun i => y' i) ⬝ᵥ star (fun i => x' i) = (fun i => y i) ⬝ᵥ star (fun i => x i)
-  rw [hx, hy, dotProduct_comm, dotProduct_comm _ (star _)]
-  simp only [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec]
-  rw [← star_eq_conjTranspose, Unitary.star_mul_self_of_mem hU, one_mulVec]
+  rw [hx, hy, dotProduct_comm, dotProduct_comm _ (star _),
+    star_mulVec_dotProduct_mulVec_of_mem_unitary hU]
 
 /-- A unitary matrix preserves the norm of the vector it maps. -/
 theorem norm_eq_of_mulVec_eq (hU : U ∈ unitary (Matrix ι ι ℂ)) {x x' : EuclideanSpace ℂ ι}
