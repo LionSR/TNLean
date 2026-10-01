@@ -1237,8 +1237,9 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Let $L$ be compatible with a normalized three-cochain $\omega$ for an
     action of $G$ on $X$. The action-tensor gauge
     $\gamma_{g,x}=L^x_{e,e}$, with fusion gauge equal to one, makes $L$
-    normalized. For every normalized compatible $L$, every $x\in X$,
-    and every $g\in G$ with $g^2=e$, one has
+    normalized. For every three-cochain $\omega$, every normalized $L$
+    compatible with $\omega$, every $x\in X$, and every $g\in G$ with
+    $g^2=e$, one has
     $L^x_{g,g}=\omega(g,g,g)L^{g\cdot x}_{g,g}$.
     These are the normalization and sign relations used in
     \cite[Section~6]{GarreRubio2023MPOSym}.
@@ -1246,6 +1247,8 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
 \begin{proof}
     \leanok
+    \uses{thm:mpug_l_gauge_preservation,thm:mpug_block_factorization,
+        thm:mpug_relative_block_character}
     Compatibility at $(g,e,e)$ and $(e,e,g)$ gives
     $L^x_{g,e}=L^x_{e,e}/\omega(g,e,e)$ and
     $L^x_{e,g}=\omega(e,e,g)L^{g\cdot x}_{e,e}$. Since $\omega$ is normalized,
