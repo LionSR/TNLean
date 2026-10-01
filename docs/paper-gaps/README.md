@@ -717,8 +717,9 @@ For the group matrix product operators of arXiv:2203.12563:
   $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
   $Z$ on the second qubit, form an exact normal representation whose
   anomaly three-cocycle has the detector values $(+1,+1,-1)$ of the type-II
-  row of the table, and that the separation of the eight classes by these
-  values is not formalized.
+  row of the table. The separation of the eight classes by these values is now
+  formalized, so the anomaly class is the type-II class; the comparison with
+  the original odd-ring or two-site-blocked family remains open.
 
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
