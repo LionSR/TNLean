@@ -28,11 +28,14 @@ factorization of arXiv:2307.01696, eqs. (13)–(15), applies to such a map
 (`MPSPreparation.exists_isometric_chain_of_eq_mul_of_le`), and the staircase of
 `MPSPreparation.exists_blockUnitary_of_equiv` implements the factorized map.
 
+**Scope restriction (orthogonal blocks):** `MPSPreparation.exists_blockSumUnitary` takes the
+orthogonality `B_jᴴ B_{j'} = 0` of the `q`-site states of distinct blocks, which the source does
+not assume; without it the isometry of the blocked direct sum is not the sum of the isometries
+`V_j` of the blocks. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+
 ## Main declarations
 
 * `MPSPreparation.flatCoord` — the place of the bond index `a` of block `j` in `Fin (∑ⱼ Dⱼ)`.
-* `MPSPreparation.exists_equiv_castLE_eq` — an injection of `Fin r` into a finite type of
-  cardinality `n ≥ r` extends to a bijection from `Fin n`.
 * `MPSPreparation.exists_blockSumUnitary` — the block unitary.
 
 ## References
@@ -63,24 +66,6 @@ theorem flatCoord_injective (j : Fin b) : Function.Injective (flatCoord Dj j) :=
 theorem flatCoord_ne {j j' : Fin b} (h : j ≠ j') (a : Fin (Dj j)) (a' : Fin (Dj j')) :
     flatCoord Dj j a ≠ flatCoord Dj j' a' := fun e =>
   h (Sigma.mk.inj (finSigmaFinEquiv.injective e)).1
-
-/-- **Extending an injection to a bijection.** An injection `g` of `Fin r` into a finite type of
-cardinality `n ≥ r` is the restriction of a bijection `π : Fin n ≃ X` to the first `r`
-elements. -/
-theorem exists_equiv_castLE_eq {X : Type*} [Fintype X] {n r : ℕ}
-    (hn : Fintype.card X = n) (hr : r ≤ n) {g : Fin r → X} (hg : Function.Injective g) :
-    ∃ π : Fin n ≃ X, ∀ x, π (Fin.castLE hr x) = g x := by
-  classical
-  let e₀ : Fin n ≃ X := (Fintype.equivFinOfCardEq hn).symm
-  let f : Fin r → X := fun x => e₀ (Fin.castLE hr x)
-  have hf : Function.Injective f := e₀.injective.comp (Fin.castLE_injective hr)
-  let e : {x // x ∈ Set.range f} ≃ {x // x ∈ Set.range g} :=
-    (Equiv.ofInjective f hf).symm.trans (Equiv.ofInjective g hg)
-  refine ⟨e₀.trans (Equiv.extendSubtype e), fun x => ?_⟩
-  rw [Equiv.trans_apply, Equiv.extendSubtype_apply_of_mem e _ ⟨x, rfl⟩]
-  have : (Equiv.ofInjective f hf).symm ⟨f x, ⟨x, rfl⟩⟩ = x :=
-    (Equiv.ofInjective f hf).symm_apply_apply x
-  simp only [e, Equiv.trans_apply, this, Equiv.ofInjective_apply]
 
 /-- An entry of a nonempty word of the direct sum of blocks placed along `flatCoord`, between two
 bond indices of block `j`, is the entry of the word of block `j`. -/
@@ -199,8 +184,20 @@ theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
   have hr : r ≤ (∑ j, Dj j) * (∑ j, Dj j) := by
     have := Fintype.card_le_of_injective pairOf hpairOf
     simpa using this
-  obtain ⟨π, hπ⟩ := exists_equiv_castLE_eq (X := Fin (∑ j, Dj j) × Fin (∑ j, Dj j)) (by simp) hr
-    (g := pairOf ∘ eκ.symm) (hpairOf.comp eκ.symm.injective)
+  -- Extend the injection `pairOf ∘ eκ.symm` on the first `r` inputs to a bijection.
+  obtain ⟨π, hπ⟩ : ∃ π : Fin ((∑ j, Dj j) * (∑ j, Dj j)) ≃ Fin (∑ j, Dj j) × Fin (∑ j, Dj j),
+      ∀ x, π (Fin.castLE hr x) = (pairOf ∘ eκ.symm) x := by
+    set f := Function.extend (Fin.castLE hr) (pairOf ∘ eκ.symm) finProdFinEquiv.symm
+    have hf : ∀ x, f (Fin.castLE hr x) = (pairOf ∘ eκ.symm) x :=
+      (Fin.castLE_injective hr).extend_apply _ _
+    have hinj : Set.InjOn f (Set.range (Fin.castLE hr)) := by
+      rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩ h
+      rw [hf, hf] at h
+      rw [(hpairOf.comp eκ.symm.injective) h]
+    obtain ⟨π, hπ⟩ := Set.MapsTo.exists_equiv_extend_of_card_eq (t := Finset.univ)
+      (by simp) (fun _ _ => Finset.mem_coe.2 (Finset.mem_univ _)) hinj
+    exact ⟨π.trans (Equiv.subtypeUnivEquiv Finset.mem_univ), fun x => by
+      rw [Equiv.trans_apply, Equiv.subtypeUnivEquiv_apply, hπ _ ⟨x, rfl⟩, hf]⟩
   obtain ⟨C, hC⟩ := exists_blockUnitary_of_equiv hd hr₁ hdig hD π
   refine ⟨C, fun A q hq hinj horth => ?_⟩
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩

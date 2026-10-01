@@ -843,6 +843,21 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     $KMe^{-x}=e^{\log K+\log M-x}\leq e^{\log\varepsilon}=\varepsilon$.
 \end{proof}
 
+\begin{lemma}[From a block-length threshold to the error]
+    \label{lem:ldp_block_length_threshold_error}
+    \lean{mul_mul_exp_neg_div_le_of_le}
+    \leanok
+    \uses{lem:ldp_log_threshold_error}
+    Let $K,a,\varepsilon>0$, $M,q\geq1$, $b\geq a\max(\log K,0)$, and
+    $a\log(Mq/\varepsilon)+b\leq q$. Then $KMe^{-q/a}\leq\varepsilon$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $\log q\geq0$, $q/a\geq\log M+\log q-\log\varepsilon+\log K\geq
+        \log K+\log M-\log\varepsilon$; apply
+    Lemma~\ref{lem:ldp_log_threshold_error} with $x=q/a$.
+\end{proof}
+
 \begin{theorem}[Powers of a perturbed idempotent without first-order term]
     \label{thm:ldp_idempotent_second_order}
     \lean{IsIdempotentElem.norm_trace_add_pow_sub_le_of_le,
@@ -1814,7 +1829,8 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
         thm:wordspan_blk_inj_succ,
         lem:ldp_normalized_state_rescaling,
         lem:isNBlkInjective_iff_blockTensor_isInjective,
-        lem:ldp_approximating_state_unit_norm}
+        lem:ldp_approximating_state_unit_norm,
+        lem:ldp_block_length_threshold_error}
     Since $a>\xi/2$, the number $\gamma=\xi/(2a)$ satisfies $0<\gamma<1$, and
     Theorem~\ref{thm:ldp_approximation_error_normal} at this $\gamma$ gives $K$
     with $\varepsilon(\widetilde\phi_N,\phi_N(B))\le K\,(N/q)\,e^{-q/a}$, since
@@ -1829,6 +1845,37 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     most $Cq$ by Theorem~\ref{thm:ldp_approximating_state_depth}, and has the
     same error against $\phi_N(A)$ as against $\phi_N(B)$ by
     Lemma~\ref{lem:ldp_normalized_state_rescaling}.
+\end{proof}
+
+\begin{lemma}[A gap for a normal tensor]
+    \label{lem:ldp_normal_gap}
+    \lean{MPSTensor.exists_eigenvalue_norm_le_of_isNormal}
+    \leanok
+    \uses{thm:is_normal_tensor_of_is_normal_left_canonical, thm:transfer_channel,
+        thm:eigenvalue_bound}
+    For a normal left-canonical tensor $A$ with $D\geq1$ there is $0<t<1$
+    bounding the moduli of the eigenvalues other than $1$ of $\E_A$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The transfer map is a channel whose only eigenvalue of modulus $1$ is $1$, and
+    it has finitely many eigenvalues, so the others are at most $1-\delta$ in
+    modulus for some $\delta>0$; take $t=\max(1-\delta,1/2)$.
+\end{proof}
+
+\begin{lemma}[Depth from the window of block lengths]
+    \label{lem:ldp_depth_log_window}
+    \lean{MPSPreparation.natCast_mul_le_mul_log_of_le_two_mul}
+    \leanok
+    Let $C,q$ be natural numbers, $N\geq2$, $0<\varepsilon\leq1$, $b\geq1$, and
+    $q\leq2(a\log(N/\varepsilon)+b)$. Then
+    $Cq\leq C(2a+2b/\log2)\log(N/\varepsilon)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $N/\varepsilon\geq2$, $\log(N/\varepsilon)\geq\log2$, so
+    $b\leq(b/\log2)\log(N/\varepsilon)$, and
+    $Cq\leq2C(a\log(N/\varepsilon)+b)\leq C(2a+2b/\log2)\log(N/\varepsilon)$.
 \end{proof}
 
 \begin{theorem}[Preparation in depth $O(\log(N/\varepsilon))$, block length dividing $N$]
@@ -1850,6 +1897,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 \begin{proof}
     \leanok
     \uses{thm:normalized_primitive_gauge, thm:ldp_depth_upper_bound_slope,
+        lem:ldp_depth_log_window, lem:ldp_normal_gap,
         thm:normality_rescaling_invariance,
         thm:gauge_invariance_normal,
         thm:is_normal_tensor_of_is_normal_left_canonical,
@@ -1874,7 +1922,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     moduli of the other eigenvalues. With $\xi=-1/\log t>0$,
     Theorem~\ref{thm:ldp_depth_upper_bound_slope} at the slope $a=\xi>\xi/2$
     gives $b\ge1$ and the first statement. For the second statement,
-    $\log(N/\varepsilon)\ge\log2$ gives
+    Lemma~\ref{lem:ldp_depth_log_window} gives
     $Cq\le C(2a+2b/\log2)\log(N/\varepsilon)$.
 \end{proof}
 

@@ -11,7 +11,7 @@ import TNLean.MPS.Preparation.PermutationGates
 import TNLean.MPS.Preparation.UnitaryGates
 
 /-!
-# A GHZ-type state on the pair windows in constant depth with measurements
+# A GHZ-type state on the registers with measurements, in depth `O(L)`
 
 The preparation of the fixed point of a tensor that is not normal in arXiv:2307.01696 (paragraph
 "Long-range MPS using measurements") starts from the GHZ-type state
@@ -40,6 +40,18 @@ protocol they are back in `|0⟩`.
 
 Every outcome of nonzero probability gives exactly the GHZ-type state: the outcomes whose sum
 around the ring is not zero have probability zero.
+
+**Scope restriction (depth on the chain of `N` sites):** the source prepares `|χ_{N/q}⟩` in
+constant depth with measurements; here it is prepared in depth `O(L)` on the chain of `N` sites,
+because the register of a block and the ancilla at its start are `ℓ_k - r₁` sites apart. The total
+depth `O(log(N/ε))` is unaffected, since the isometries of the blocked tensor take depth `O(q)`.
+Documented in `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
+
+The protocol `MPSPreparation.ghzProtocol` of `TNLean.MPS.Preparation.GHZMeasurement` is not
+reused: it acts on interleaved single qudits of an open chain, with one unmeasured last ancilla,
+whereas here every label is a register of `r₁` sites inside a block, the ancillas close the ring,
+and the controlled shift between a register and its ancilla spans a block. The two share the
+partial sums of the outcomes, `Fin.partialSum`.
 
 ## Main declarations
 
@@ -113,14 +125,6 @@ theorem registerSite_ne_ancillaSite (k k' : Fin M) (i i' : Fin r₁) :
 
 theorem registerSite_injective (k : Fin M) : Function.Injective (registerSite hN hr k) :=
   fun _ _ h => ((registerSite_inj hN hr).1 h).2
-
-/-- The sites of the pair window `k` are those of the register `R_k` and of its ancilla. -/
-theorem pairSite_eq_or (k : Fin M) (i : Fin (r₁ + r₁)) :
-    (∃ j, pairSite hN hr k i = registerSite hN hr k j) ∨
-      ∃ j, pairSite hN hr k i = ancillaSite hN hr k j := by
-  by_cases h : i.val < r₁
-  · exact Or.inl ⟨⟨i, h⟩, by rw [registerSite]; congr 1⟩
-  · refine Or.inr ⟨⟨i.val - r₁, by omega⟩, by rw [ancillaSite]; congr 1; ext; simp; omega⟩
 
 /-- The first `r₁` sites of a block are the ancilla of the register of the previous block. -/
 theorem blockSite_eq_ancillaSite (k : Fin M) (p : Fin (ℓ k)) (hp : p.val < r₁) :
@@ -314,7 +318,7 @@ private theorem layerA_of_forall_ne (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + 
 
 /-- The partial sums `p_k = m₀ + ⋯ + m_{k-1}` of a family indexed by the blocks. -/
 private def partialSum {G : Type*} [AddCommMonoid G] (m : Fin M → G) (k : Fin M) : G :=
-  ∑ k' ∈ Finset.univ.filter (· < k), m k'
+  Fin.partialSum m k.castSucc
 
 private theorem partialSum_zero [NeZero M] {G : Type*} [AddCommMonoid G] (m : Fin M → G) :
     partialSum m 0 = 0 := by
@@ -322,24 +326,14 @@ private theorem partialSum_zero [NeZero M] {G : Type*} [AddCommMonoid G] (m : Fi
 
 private theorem partialSum_succ {G : Type*} [AddCommMonoid G] (m : Fin M → G) (k : Fin M)
     (hk : k.val + 1 < M) : partialSum m ⟨k.val + 1, hk⟩ = partialSum m k + m k := by
-  have : Finset.univ.filter (· < (⟨k.val + 1, hk⟩ : Fin M)) =
-      insert k (Finset.univ.filter (· < k)) := by
-    ext j
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_insert, Fin.lt_def,
-      Fin.ext_iff]
-    omega
-  rw [partialSum, this, Finset.sum_insert (by simp), add_comm]
+  rw [partialSum, show (⟨k.val + 1, hk⟩ : Fin M).castSucc = k.succ from rfl,
+    Fin.partialSum_succ]
   rfl
 
 private theorem partialSum_last {G : Type*} [AddCommMonoid G] (m : Fin M → G) (k : Fin M)
     (hk : k.val + 1 = M) : partialSum m k + m k = ∑ k', m k' := by
-  have : (Finset.univ : Finset (Fin M)) = insert k (Finset.univ.filter (· < k)) := by
-    ext j
-    simp only [Finset.mem_univ, Finset.mem_insert, Finset.mem_filter, true_and, true_iff,
-      Fin.lt_def, Fin.ext_iff]
-    omega
-  rw [this, Finset.sum_insert (by simp), add_comm]
-  rfl
+  rw [partialSum, ← Fin.partialSum_succ, show k.succ = Fin.last M from Fin.ext hk]
+  rw [Fin.partialSum, Fin.val_last, List.take_of_length_le (by simp), List.sum_ofFn]
 
 /-- **The consistency conditions around the ring.** For registers `X_k` and outcomes `m_k` with
 partial sums `p_k`, the conditions `m_k + (X_{k+1} - p_{k+1}) - (X_k - p_k) = 0` for every `k`,
@@ -420,7 +414,8 @@ arXiv:2307.01696, paragraph "Long-range MPS using measurements": "First create `
 which can be done in constant depth with measurements (following, e.g., Ref~\cite{Piroli2021})";
 arXiv:2103.13367, Example 1, for registers of `r₁` sites. The depth is `O(L)` rather than
 constant because the register of a block and the ancilla at its start are `ℓ_k - r₁` sites apart
-on the chain; for blocks of length `q` the source counts depth in units of the blocked chain. -/
+on the chain, a scope restriction documented in
+`docs/paper-gaps/mswc24_measurement_preparation_scope.tex`. -/
 theorem exists_isPreparedWithMeasurementsInDepth_windowGHZState (hr₁ : 2 ≤ r₁) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (hr : ∀ k, r₁ + r₁ ≤ ℓ k) (L : ℕ), (∀ k, 3 * r₁ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →

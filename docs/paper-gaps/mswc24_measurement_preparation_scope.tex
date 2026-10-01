@@ -56,6 +56,13 @@ restrictions.\footnote{Formal declarations:
           \cite{gap:mswc24_repeated_block_corrected_state} is proved for equal
           blocks; for normal tensors the analogous restriction was removed with a
           larger last block \cite{gap:mswc24_depth_upper_bound_divisible_length}.
+          Together with the window
+          $a\log(N/\varepsilon)+b'\leq q\leq2(a\log(N/\varepsilon)+b')$, the
+          statement applies only to chain lengths $N$ with a divisor in this
+          window, and it is vacuous for the others, for instance for every
+          large prime $N$. When $N$ is a power of two, such a divisor exists as
+          soon as $a\log(N/\varepsilon)+b'\leq N$, since the window contains a
+          power of two and $b'\geq1$.
     \item The state prepared is the corrected approximating state of
           \cite{gap:mswc24_repeated_block_corrected_state}, which agrees with
           the state of eq.~(S7) when every multiplicity is one and every weight
@@ -78,7 +85,8 @@ and the first $r_1$ sites of the next block serve as the ancilla of Example~1
 of~\cite{Piroli2021LOCC}; this ancilla is $q-r_1$ sites away from the register
 of its own block, and the controlled shift between them is carried out with
 SWAP gates in depth $O(q)$. The formal statement therefore prepares
-$\ket{\chi_{N/q}}$ in depth $O(q)$ rather than in constant depth. Constant depth
+$\ket{\chi_{N/q}}$ in depth $O(q)$ rather than in constant depth, a scope
+restriction of this step. Constant depth
 on the chain of $N$ sites would need the controlled shifts between distant
 sites to be implemented with further measurements, for instance by
 teleportation along pairs of neighbouring sites. Since the isometries of the
@@ -98,8 +106,10 @@ blocked maps of the blocks have jointly linearly independent columns, which
 holds for large $q$ because $B^\dagger B$ converges to a matrix that is positive
 definite on these pairs. The second is removed by the error
 bound for blocks with multiplicities and a larger last block, along the lines of
-the normal case. Neither restriction affects the depth count, which is proved
-for blocks of arbitrary lengths at most $L$ with depth $O(L)$.
+the normal case. The second restriction does not affect the depth count, which
+is proved for blocks of arbitrary lengths at most $L$ with depth $O(L)$. The
+first does: the block unitary of depth $O(L)$ is proved only for orthogonal
+blocks, and its replacement is the unitary implementing $V$ described above.
 
 \bibliographystyle{alpha}
 \bibliography{references}

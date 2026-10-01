@@ -31,6 +31,12 @@ depth `O(L)` for blocks of lengths at most `L`:
 * on every block, one unitary implementing all the isometries `V_{j,k}` at once
   (`MPSPreparation.exists_blockSumUnitary`), of depth `O(L)`.
 
+**Scope restriction (orthogonal blocks):** both preparation theorems of this file, with and
+without a given encoding of the labels, take the orthogonality `B_jᴴ B_{j'} = 0` of the blocked
+states of distinct tensors, which the source does not assume; the block unitary implements the
+isometry of the blocked direct sum only under it. Documented in
+`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+
 ## Main declarations
 
 * `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth` — a state prepared with
@@ -72,30 +78,6 @@ multiple rounds of LOCC". -/
 def IsPreparedWithMeasurementsAndCircuitInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
   ∃ (T₁ T₂ : ℕ) (φ : Cfg d N → ℂ) (U : Matrix (Cfg d N) (Cfg d N) ℂ), T₁ + T₂ ≤ T ∧
     IsPreparedWithMeasurementsInDepth T₁ φ ∧ IsLocalCircuitOfDepth U T₂ ∧ ψ = U *ᵥ φ
-
-theorem IsPreparedWithMeasurementsAndCircuitInDepth.mono {T T' : ℕ} {ψ : Cfg d N → ℂ}
-    (h : IsPreparedWithMeasurementsAndCircuitInDepth T ψ) (hT : T ≤ T') :
-    IsPreparedWithMeasurementsAndCircuitInDepth T' ψ := by
-  obtain ⟨T₁, T₂, φ, U, hT', hφ, hU, rfl⟩ := h
-  exact ⟨T₁, T₂, φ, U, hT'.trans hT, hφ, hU, rfl⟩
-
-/-- A nonzero multiple of a vector prepared with measurements is prepared with measurements by the
-same protocol. -/
-theorem IsPreparedWithMeasurementsInDepth.smul {T : ℕ} {φ : Cfg d N → ℂ}
-    (h : IsPreparedWithMeasurementsInDepth T φ) {c : ℂ} (hc : c ≠ 0) :
-    IsPreparedWithMeasurementsInDepth T (c • φ) := by
-  obtain ⟨P, hT, h0, hP⟩ := h
-  refine ⟨P, hT, h0, fun m hm => ?_⟩
-  obtain ⟨c', hc'⟩ := hP m hm
-  exact ⟨c' * c⁻¹, by rw [hc', smul_smul, mul_assoc, inv_mul_cancel₀ hc, mul_one]⟩
-
-/-- A nonzero multiple of a vector prepared with measurements and a circuit is prepared the same
-way. -/
-theorem IsPreparedWithMeasurementsAndCircuitInDepth.smul {T : ℕ} {ψ : Cfg d N → ℂ}
-    (h : IsPreparedWithMeasurementsAndCircuitInDepth T ψ) {c : ℂ} (hc : c ≠ 0) :
-    IsPreparedWithMeasurementsAndCircuitInDepth T (c • ψ) := by
-  obtain ⟨T₁, T₂, φ, U, hT, hφ, hU, rfl⟩ := h
-  exact ⟨T₁, T₂, c • φ, U, hT, hφ.smul hc, hU, by rw [mulVec_smul]⟩
 
 end TwoStage
 

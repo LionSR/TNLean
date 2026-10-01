@@ -193,22 +193,14 @@ theorem exists_forall_eigenvalue_norm_le [NeZero b] (hN : ∀ j, Kraus.IsNormal 
     (hA : ∀ j, IsLeftCanonical (Aj j)) (hD : ∀ j, NeZero (Dj j)) :
     ∃ t : ℝ, 0 < t ∧ t < 1 ∧ ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
       μ' ≠ 1 → ‖μ'‖ ≤ ‖(t : ℂ)‖ := by
-  have hgap : ∀ j, ∃ δ > 0, ∀ μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
-      μ' ≠ 1 → ‖μ'‖ ≤ 1 - δ := fun j =>
-    uniform_eigenvalue_gap_of_finite_lt_one
-      (Module.End.finite_hasEigenvalue (Kraus.transferMap (Aj j))) fun μ' hμ hne =>
-        lt_of_le_of_ne ((Kraus.isChannel_mapLM (Aj j) (hA j)).eigenvalue_norm_le_one μ' hμ)
-          fun h => hne ((isNormalTensor_of_isNormal_leftCanonical (Aj j) (hN j)
-            (hA j)).primitive_transfer.unique_peripheral μ' hμ h)
-  choose δ hδ hgap using hgap
-  set δ₀ := Finset.univ.inf' Finset.univ_nonempty δ
-  have hδ₀ : 0 < δ₀ := (Finset.lt_inf'_iff _).2 fun j _ => hδ j
-  set t := max (1 - δ₀) (1 / 2)
-  have ht0 : 0 < t := lt_max_of_lt_right (by norm_num)
-  refine ⟨t, ht0, max_lt (by linarith) (by norm_num), fun j μ' hμ hne => ?_⟩
-  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
-  have : δ₀ ≤ δ j := Finset.inf'_le _ (Finset.mem_univ j)
-  exact (hgap j μ' hμ hne).trans ((by linarith : 1 - δ j ≤ 1 - δ₀).trans (le_max_left _ _))
+  choose t ht0 ht1 hgap using fun j =>
+    haveI := hD j
+    exists_eigenvalue_norm_le_of_isNormal (Aj j) (hN j) (hA j)
+  set t₀ := Finset.univ.sup' Finset.univ_nonempty t
+  have ht₀ : 0 < t₀ := (ht0 0).trans_le (Finset.le_sup' t (Finset.mem_univ 0))
+  refine ⟨t₀, ht₀, (Finset.sup'_lt_iff _).2 fun j _ => ht1 j, fun j μ' hμ hne => ?_⟩
+  rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht₀]
+  exact (hgap j μ' hμ hne).trans (Finset.le_sup' t (Finset.mem_univ j))
 
 /-- **Tensors that are not normal, with measurements, in depth `O(log(N/ε))`.** Let
 `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (arXiv:2307.01696, Supplemental Material,
@@ -329,37 +321,14 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
     rw [mul_comm]
     rfl
   refine ⟨ψ, Cp * q, hψn, ?_, by rw [hψ]; exact hprep, ?_⟩
-  · have hbl : b' ≤ b' / Real.log 2 * Real.log (M * q / ε) := by
-      rw [div_mul_eq_mul_div, le_div_iff₀ hl2]
-      exact mul_le_mul_of_nonneg_left (by exact_mod_cast hlog) (zero_le_one.trans hb1)
-    push_cast at hq2 hbl ⊢
-    calc (Cp : ℝ) * q ≤ Cp * (2 * (a * Real.log (M * q / ε) + b')) :=
-          mul_le_mul_of_nonneg_left hq2 (Nat.cast_nonneg _)
-      _ ≤ Cp * ((2 * a + 2 * b' / Real.log 2) * Real.log (M * q / ε)) := by
-          refine mul_le_mul_of_nonneg_left ?_ (Nat.cast_nonneg _)
-          have e : (2 * a + 2 * b' / Real.log 2) * Real.log (M * q / ε) =
-              2 * (a * Real.log (M * q / ε)) + 2 * (b' / Real.log 2 * Real.log (M * q / ε)) := by
-            ring
-          rw [e]
-          linarith
-      _ = _ := by ring
+  · exact natCast_mul_le_mul_log_of_le_two_mul hN2 hε hε1 hb1 hq2
   · rw [hinner]
     refine (herr q M horth hβ).trans ?_
     rw [hexp]
     have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-    have hlogN : Real.log ((M * q : ℕ) / ε) = Real.log M + Real.log q - Real.log ε := by
-      push_cast
-      rw [Real.log_div (by positivity) hε.ne', Real.log_mul (by positivity) (by positivity)]
-    have hlogq : 0 ≤ Real.log q := Real.log_nonneg hq1
-    have hrq : Real.log K + Real.log M - Real.log ε ≤ r * q := by
-      have h1 : r * (a * Real.log ((M * q : ℕ) / ε) + b') ≤ r * q :=
-        mul_le_mul_of_nonneg_left hq hr0.le
-      have h2 : r * (a * Real.log ((M * q : ℕ) / ε) + b') =
-          Real.log ((M * q : ℕ) / ε) + max (Real.log K) 0 + r * (L₀ + Lm + 1) := by
-        simp only [hb', ha]; field_simp; ring
-      have : 0 ≤ r * (L₀ + Lm + 1) := by positivity
-      rw [hlogN] at h1 h2
-      linarith [le_max_left (Real.log K) 0]
-    exact mul_mul_exp_neg_le_of_log_le hK (by positivity) hε hrq
+    rw [show r * (q : ℝ) = q / a by rw [ha, div_div_eq_mul_div, div_one, mul_comm]]
+    push_cast at hq
+    have : (0 : ℝ) ≤ L₀ + Lm + 1 := by positivity
+    exact mul_mul_exp_neg_div_le_of_le hK hM1 hq1 ha0 hε (by linarith) hq
 
 end MPSPreparation
