@@ -27,11 +27,11 @@ namespace TNLean
 namespace Algebra
 
 /-- A concrete multiplicative scalar 2-cochain on a group. -/
-abbrev ScalarCocycle (G : Type*) := G → G → Units ℂ
+abbrev ScalarCocycle (G : Type) := G → G → Units ℂ
 
 section Group
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 variable {D : ℕ}
 
 /-- A matrix-valued projective representation with factor system `ω`. -/

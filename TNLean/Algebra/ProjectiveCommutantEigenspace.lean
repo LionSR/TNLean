@@ -30,7 +30,7 @@ open Module
 
 namespace TNLean.Algebra
 
-variable {G : Type*} [Group G] {D : ℕ}
+variable {G : Type} [Group G] {D : ℕ}
 
 /-- **No one-dimensional eigenspace for a commutant of a non-trivial projective
 representation.**  Source: arXiv:2011.12127, §III.A
