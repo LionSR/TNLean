@@ -31,10 +31,14 @@ to both makes the limit strictly positive, and `√(Bᴴ B + Q) = P + Q` because
 Lipschitz bound of the square root at a strictly positive point
 (`CFC.norm_sqrt_sub_sqrt_le_div`) then transfers the rate of the Gram matrices to `P`.
 
-**Scope restriction (multiplicity one, unit weights):** every block occurs once, with weight
-`μⱼ = 1`. For weights of different moduli the limit of the Gram matrices is not strictly positive
-on the blocks of smaller weight. Documented in
-`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+For weights `|μⱼ| ≤ 1` the Gram estimate holds with the limit `∑ⱼ |μⱼ|^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ`,
+which is not bounded below on the blocks of smaller weight. The Hölder bound
+`‖√a - √b‖ ≤ √‖a - b‖` (`CFC.norm_sqrt_sub_sqrt_le`) replaces the Lipschitz step and gives
+`‖P - P_∞‖ ≤ K e^{-γ q/ξ}` for `0 < γ < 1/2`, with `P_∞ = ∑ⱼ |μⱼ|^q K_j ((√σ_j)ᵀ ⊗ 1) K_jᴴ`.
+
+**Scope restriction (multiplicity one):** every block occurs once. The Lipschitz estimate
+`exists_norm_polarPos_blockTensor_blockSum_sub_le` is stated for unit weights `μⱼ = 1`.
+Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 **Local fix (positive part of overlapping blocks):** the block form (S5) of the positive part,
 false for finite `q` when the blocks overlap, is replaced by the estimate
@@ -49,7 +53,12 @@ maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   `B_jᴴ B_{j'}` decay at that rate.
 * `MPSTensor.blockSumGramLimit`, `MPSTensor.blockSumPosLimit` — the limits
   `∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ` and `∑ⱼ K_j ((√σ_j)ᵀ ⊗ 1) K_jᴴ`.
-* `MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le` — the rate of `P → P_∞`.
+* `MPSTensor.gram_blockTensor_blockSum`, `MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le` —
+  the Gram matrix of the weighted direct sum and its rate.
+* `MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le` — the rate of `P → P_∞` for unit
+  weights, `0 < γ < 1`.
+* `MPSTensor.exists_norm_polarPos_blockTensor_blockSum_weight_sub_le` — the rate for weights
+  `|μⱼ| ≤ 1`, `0 < γ < 1/2`.
 
 ## References
 
@@ -57,6 +66,10 @@ maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   *Preparation of matrix product states with log-depth quantum circuits*,
   arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S5) and the mixed transfer matrices
   `E_{jj'}` of the proof of Lemma 1'(ii).
+* [PSC21] L. Piroli, G. Styliaris, J. I. Cirac,
+  *Quantum circuits assisted by local operations and classical communication:
+  transformations and phases of matter*,
+  arXiv:2103.13367, Supplemental Material, eq. (26) (the Hölder bound for square roots).
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
@@ -282,28 +295,50 @@ theorem physicalMatrix_blockTensor_blockSum_one (hι : ∀ j, Function.Injective
   rw [physicalMatrix_blockTensor_blockSum hι hdisj _ hq]
   simp only [one_pow, one_smul]
 
-/-- The Gram matrix of the blocked direct sum with unit weights is
-`Bᴴ B = ∑ⱼ ∑ₖ K_j (B_jᴴ B_k) K_kᴴ`: its blocks are the mixed Gram matrices of the blocks. -/
-theorem gram_blockTensor_blockSum_one (hι : ∀ j, Function.Injective (ι j))
-    (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') {q : ℕ} (hq : q ≠ 0) :
-    (physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q))ᴴ *
-        physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q) =
-      ∑ j, ∑ k, pairEmbedding (ι j) * ((physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj k) q)) * (pairEmbedding (ι k))ᴴ := by
-  rw [physicalMatrix_blockTensor_blockSum_one hι hdisj hq, Matrix.conjTranspose_sum,
+/-- The Gram matrix of the `q`-site blocked direct sum with weights `μⱼ`, `q ≥ 1`, is
+`Bᴴ B = ∑ⱼ ∑ₖ conj(μⱼ^q) μₖ^q K_j (B_jᴴ B_k) K_kᴴ`: its blocks are the mixed Gram matrices of the
+blocks. -/
+theorem gram_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι j))
+    (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (μ : Fin b → ℂ) {q : ℕ} (hq : q ≠ 0) :
+    (physicalMatrix (blockTensor (blockSum Aj ι μ) q))ᴴ *
+        physicalMatrix (blockTensor (blockSum Aj ι μ) q) =
+      ∑ j, ∑ k, (star (μ j ^ q) * μ k ^ q) • (pairEmbedding (ι j) *
+        ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj k) q)) *
+          (pairEmbedding (ι k))ᴴ) := by
+  rw [physicalMatrix_blockTensor_blockSum hι hdisj _ hq, Matrix.conjTranspose_sum,
     Matrix.sum_mul]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [Matrix.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_
-  simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, Matrix.mul_assoc]
+  simp only [Matrix.conjTranspose_smul, Matrix.conjTranspose_mul,
+    Matrix.conjTranspose_conjTranspose, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+    Matrix.mul_assoc, mul_comm (μ k ^ q)]
+
+/-- The limit of the Gram matrices for the rescaled fixed points `cⱼ σⱼ`:
+`∑ⱼ K_j ((cⱼ σⱼ)ᵀ ⊗ 1) K_jᴴ = ∑ⱼ cⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ`. -/
+private theorem blockSumGramLimit_smul (c : Fin b → ℂ)
+    (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) :
+    blockSumGramLimit ι (fun j => c j • σ j) =
+      ∑ j, c j • (pairEmbedding (ι j) * ((σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) *
+        (pairEmbedding (ι j))ᴴ) := by
+  simp only [blockSumGramLimit, Matrix.transpose_smul, Matrix.smul_kronecker, Matrix.mul_smul,
+    Matrix.smul_mul]
+
+/-- `conj(z^q) z^q = (|z|^q)²`. -/
+private theorem star_pow_mul_pow_eq (z : ℂ) (q : ℕ) :
+    star (z ^ q) * z ^ q = (((‖z‖ ^ q) ^ 2 : ℝ) : ℂ) := by
+  rw [Complex.star_def, Complex.conj_mul', norm_pow]
+  push_cast
+  ring
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Rate of the Gram matrices.** Let the blocks `A_j` be normal in the gauge
 `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1`, and let `λ₂` with
 `|λ₂| < 1` bound the moduli of the eigenvalues other than `1` of every `E_{A_j}` and of all
-eigenvalues of the mixed transfer maps `E_{jj'}` of distinct blocks. For `0 < γ < 1` the Gram
-matrix of the `q`-site blocked direct sum with unit weights satisfies
-`‖Bᴴ B - ∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ‖ ≤ K e^{-γ q/ξ}` for `q ≥ 1`. -/
+eigenvalues of the mixed transfer maps `E_{jj'}` of distinct blocks. For `0 < γ < 1` there is `K`
+such that for all weights `μⱼ` with `|μⱼ| ≤ 1` the Gram matrix of the `q`-site blocked direct sum
+`⊕ⱼ μⱼ A_j` satisfies `‖Bᴴ B - ∑ⱼ |μⱼ|^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ‖ ≤ K e^{-γ q/ξ}` for `q ≥ 1`;
+the limit is written as `∑ⱼ K_j ((|μⱼ|^{2q} σ_j)ᵀ ⊗ 1) K_jᴴ`. -/
 theorem exists_norm_gram_blockTensor_blockSum_sub_le (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -315,10 +350,11 @@ theorem exists_norm_gram_blockTensor_blockSum_sub_le (hι : ∀ j, Function.Inje
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ q : ℕ, q ≠ 0 →
-      ‖(physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q))ᴴ *
-          physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q) -
-        blockSumGramLimit ι σ‖ ≤ K * Real.exp (-γ / correlationLength lam₂) ^ q := by
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ μ : Fin b → ℂ, (∀ j, ‖μ j‖ ≤ 1) → ∀ q : ℕ, q ≠ 0 →
+      ‖(physicalMatrix (blockTensor (blockSum Aj ι μ) q))ᴴ *
+          physicalMatrix (blockTensor (blockSum Aj ι μ) q) -
+        blockSumGramLimit ι (fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j)‖ ≤
+        K * Real.exp (-γ / correlationLength lam₂) ^ q := by
   classical
   have hD : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
   set x := Real.exp (-γ / correlationLength lam₂)
@@ -341,23 +377,36 @@ theorem exists_norm_gram_blockTensor_blockSum_sub_le (hι : ∀ j, Function.Inje
   refine ⟨∑ j, κ j * Kd j + ∑ j, ∑ k, κ' j k * Ko j k,
     add_nonneg (Finset.sum_nonneg fun j _ => mul_nonneg (hκ j) (hKd j))
       (Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => mul_nonneg (hκ' j k) (hKo j k)),
-    fun q hq => ?_⟩
-  have hsplit : (physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q))ᴴ *
-        physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q) - blockSumGramLimit ι σ =
-      ∑ j, pairEmbedding (ι j) * ((physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j) q) - (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j))
-          (Fin (Dj j)) ℂ)) * (pairEmbedding (ι j))ᴴ +
-      ∑ j, ∑ k ∈ Finset.univ.erase j, pairEmbedding (ι j) *
+    fun μ hμ q hq => ?_⟩
+  -- A coefficient of modulus at most one does not increase the norm.
+  have hsm : ∀ (c : ℂ) (X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ), ‖c‖ ≤ 1 →
+      ‖c • X‖ ≤ ‖X‖ := fun c X hc => by
+    rw [norm_smul]; exact mul_le_of_le_one_left (norm_nonneg _) hc
+  have hpow : ∀ j, ‖μ j ^ q‖ ≤ 1 := fun j => by
+    rw [norm_pow]; exact pow_le_one₀ (norm_nonneg _) (hμ j)
+  have hcoef : ∀ j k, ‖star (μ j ^ q) * μ k ^ q‖ ≤ 1 := fun j k => by
+    rw [norm_mul, norm_star]
+    exact (mul_le_mul (hpow j) (hpow k) (norm_nonneg _) zero_le_one).trans_eq (one_mul 1)
+  have hsplit : (physicalMatrix (blockTensor (blockSum Aj ι μ) q))ᴴ *
+        physicalMatrix (blockTensor (blockSum Aj ι μ) q) -
+        blockSumGramLimit ι (fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j) =
+      ∑ j, (star (μ j ^ q) * μ j ^ q) • (pairEmbedding (ι j) *
+        ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj j) q) -
+          (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) * (pairEmbedding (ι j))ᴴ) +
+      ∑ j, ∑ k ∈ Finset.univ.erase j, (star (μ j ^ q) * μ k ^ q) • (pairEmbedding (ι j) *
         ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj k) q)) *
-          (pairEmbedding (ι k))ᴴ := by
-    rw [gram_blockTensor_blockSum_one hι hdisj hq, blockSumGramLimit, ← Finset.sum_sub_distrib,
-      ← Finset.sum_add_distrib]
+          (pairEmbedding (ι k))ᴴ) := by
+    rw [gram_blockTensor_blockSum hι hdisj μ hq, blockSumGramLimit_smul,
+      ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
     refine Finset.sum_congr rfl fun j _ => ?_
-    rw [← Finset.add_sum_erase _ _ (Finset.mem_univ j), Matrix.mul_sub, Matrix.sub_mul]
+    rw [← Finset.add_sum_erase _ _ (Finset.mem_univ j), Matrix.mul_sub, Matrix.sub_mul,
+      smul_sub, ← star_pow_mul_pow_eq]
     abel
   rw [hsplit, add_mul, Finset.sum_mul, Finset.sum_mul]
   refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
   · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
+    refine (hsm _ _ ?_).trans ?_
+    · exact hcoef j j
     calc ‖pairEmbedding (ι j) * ((physicalMatrix (blockTensor (Aj j) q))ᴴ *
             physicalMatrix (blockTensor (Aj j) q) - (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j))
               (Fin (Dj j)) ℂ)) * (pairEmbedding (ι j))ᴴ‖
@@ -375,6 +424,8 @@ theorem exists_norm_gram_blockTensor_blockSum_sub_le (hι : ∀ j, Function.Inje
       (Finset.sum_le_sum_of_subset_of_nonneg (Finset.erase_subset j Finset.univ)
         fun k _ _ => mul_nonneg (mul_nonneg (hκ' j k) (hKo j k)) (pow_nonneg hx q)))
     have hjk : j ≠ k := Ne.symm (Finset.ne_of_mem_erase hk)
+    refine (hsm _ _ ?_).trans ?_
+    · exact hcoef j k
     calc ‖pairEmbedding (ι j) * ((physicalMatrix (blockTensor (Aj j) q))ᴴ *
             physicalMatrix (blockTensor (Aj k) q)) * (pairEmbedding (ι k))ᴴ‖
         ≤ ‖pairEmbedding (ι j)‖ * ‖(physicalMatrix (blockTensor (Aj j) q))ᴴ *
@@ -510,8 +561,13 @@ theorem exists_norm_polarPos_blockTensor_blockSum_sub_le (hι : ∀ j, Function.
     ∃ K : ℝ, 0 ≤ K ∧ ∀ q : ℕ, q ≠ 0 →
       ‖Matrix.polarPos (physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q)) -
         blockSumPosLimit ι σ‖ ≤ K * Real.exp (-γ / correlationLength lam₂) ^ q := by
-  obtain ⟨K, hK, hG⟩ := exists_norm_gram_blockTensor_blockSum_sub_le hι hdisj hN hA hσ htr hfix
-    hl hlam hmix hγ0 hγ
+  obtain ⟨K, hK, hG₀⟩ := exists_norm_gram_blockTensor_blockSum_sub_le hι hdisj hN hA hσ htr
+    hfix hl hlam hmix hγ0 hγ
+  have hG : ∀ q : ℕ, q ≠ 0 →
+      ‖(physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q))ᴴ *
+          physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q) - blockSumGramLimit ι σ‖ ≤
+        K * Real.exp (-γ / correlationLength lam₂) ^ q := fun q hq => by
+    simpa using hG₀ (fun _ => 1) (fun _ => norm_one.le) q hq
   obtain ⟨c, hc, hcb⟩ := exists_pos_algebraMap_le_blockSumGramLimit_add hι hdisj hσ htr
   have hsc : 0 < Real.sqrt c := Real.sqrt_pos.2 hc
   refine ⟨K / Real.sqrt c, by positivity, fun q hq => ?_⟩
@@ -548,5 +604,63 @@ theorem exists_norm_polarPos_blockTensor_blockSum_sub_le (hι : ∀ j, Function.
     _ ≤ K * Real.exp (-γ / correlationLength lam₂) ^ q / Real.sqrt c := by
         gcongr; exact hG q hq
     _ = K / Real.sqrt c * Real.exp (-γ / correlationLength lam₂) ^ q := by ring
+
+open scoped Matrix.Norms.L2Operator in
+/-- **Rate of the positive part for weights of different moduli.** In the setting of
+`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1/2`, there is `K` such that for all
+weights `μⱼ` with `|μⱼ| ≤ 1` the positive part `P` of the `q`-site blocked direct sum
+`⊕ⱼ μⱼ A_j` satisfies `‖P - P_∞‖ ≤ K e^{-γ q/ξ}` for `q ≥ 1`, with
+`P_∞ = ∑ⱼ |μⱼ|^q K_j ((√σ_j)ᵀ ⊗ 1) K_jᴴ`, written as `∑ⱼ K_j ((√(|μⱼ|^{2q} σ_j))ᵀ ⊗ 1) K_jᴴ`.
+
+The limit `P_∞² = ∑ⱼ |μⱼ|^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ` of the Gram matrices is not bounded below on
+the blocks of smaller weight, so the Lipschitz step of
+`exists_norm_polarPos_blockTensor_blockSum_sub_le` does not apply. The Hölder bound
+`‖√a - √b‖ ≤ √‖a - b‖` (`CFC.norm_sqrt_sub_sqrt_le`; arXiv:2103.13367, Supplemental Material,
+eq. (26)) does, and it halves the rate `e^{-2γ q/ξ}` of the Gram matrices, available because
+`2γ < 1`. -/
+theorem exists_norm_polarPos_blockTensor_blockSum_weight_sub_le
+    (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
+    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
+    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
+    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
+    {lam₂ : ℂ} (hl : ‖lam₂‖ < 1)
+    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
+      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
+    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
+      ‖μ'‖ ≤ ‖lam₂‖)
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ μ : Fin b → ℂ, (∀ j, ‖μ j‖ ≤ 1) → ∀ q : ℕ, q ≠ 0 →
+      ‖Matrix.polarPos (physicalMatrix (blockTensor (blockSum Aj ι μ) q)) -
+        blockSumPosLimit ι (fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j)‖ ≤
+        K * Real.exp (-γ / correlationLength lam₂) ^ q := by
+  obtain ⟨K, hK, hG⟩ := exists_norm_gram_blockTensor_blockSum_sub_le hι hdisj hN hA hσ htr hfix
+    hl hlam hmix (by linarith : 0 < 2 * γ) (by linarith : 2 * γ < 1)
+  refine ⟨Real.sqrt K, Real.sqrt_nonneg _, fun μ hμ q hq => ?_⟩
+  set x := Real.exp (-γ / correlationLength lam₂)
+  set B := physicalMatrix (blockTensor (blockSum Aj ι μ) q)
+  set τ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ :=
+    fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j
+  have hτ : ∀ j, (τ j).PosSemidef := fun j =>
+    (hσ j).posSemidef.smul (Complex.zero_le_real.2 (by positivity))
+  have hP := posSemidef_blockSumPosLimit (ι := ι) (σ := τ)
+  have hsq : CFC.sqrt (blockSumGramLimit ι τ) = blockSumPosLimit ι τ :=
+    CFC.sqrt_unique (blockSumPosLimit_mul_self hι hdisj hτ) hP.nonneg
+  have hGnn : 0 ≤ blockSumGramLimit ι τ := by
+    rw [← blockSumPosLimit_mul_self hι hdisj hτ]
+    have h := Matrix.posSemidef_conjTranspose_mul_self (blockSumPosLimit ι τ)
+    rw [hP.isHermitian.eq] at h
+    exact h.nonneg
+  have hhol := CFC.norm_sqrt_sub_sqrt_le (Matrix.posSemidef_conjTranspose_mul_self B).nonneg hGnn
+  rw [hsq] at hhol
+  have hx2 : Real.exp (-(2 * γ) / correlationLength lam₂) ^ q = (x ^ q) ^ 2 := by
+    rw [exp_neg_two_mul_div_correlationLength, ← pow_mul, ← pow_mul, mul_comm]
+  calc ‖Matrix.polarPos B - blockSumPosLimit ι τ‖ ≤ Real.sqrt ‖Bᴴ * B - blockSumGramLimit ι τ‖ :=
+        hhol
+    _ ≤ Real.sqrt (K * (x ^ q) ^ 2) := by
+        gcongr
+        rw [← hx2]
+        exact hG μ hμ q hq
+    _ = Real.sqrt K * x ^ q := by
+        rw [Real.sqrt_mul hK, Real.sqrt_sq (pow_nonneg (Real.exp_pos _).le q)]
 
 end MPSTensor

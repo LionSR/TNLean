@@ -5,7 +5,7 @@
 %% eqs. (S2)-(S12) and Lemma 1'(ii).
 %% Local fix: the rate of Lemma 1'(ii) is corrected by including the
 %% correlation lengths of the mixed transfer maps; scope restriction to
-%% blocks of multiplicity one and weight one;
+%% blocks of multiplicity one with real weights;
 %% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
 %% ==================================================
 
@@ -16,7 +16,7 @@ part of the blocked map is not block diagonal, and the rate of
 \cite[Lemma~1$'$(ii)]{Malz2024Preparation} fails
 (Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}). The construction
 itself still converges. This subsection proves the approximation error for the
-source's approximating state, for blocks of multiplicity one and weight one, at the
+source's approximating state, for blocks of multiplicity one with real weights, at the
 rate set by the larger of the correlation lengths of the blocks and of their mixed
 transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 
@@ -78,25 +78,32 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     \label{lem:ldp_overlapping_positive_part}
     \lean{MPSTensor.blockSumGramLimit, MPSTensor.blockSumPosLimit,
         MPSTensor.physicalMatrix_blockTensor_blockSum_one,
-        MPSTensor.gram_blockTensor_blockSum_one,
+        MPSTensor.gram_blockTensor_blockSum,
         MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le,
         MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le}
     \leanok
     \uses{lem:ldp_mixed_transfer_decay, thm:ldp_positive_part_rate,
         thm:ldp_sqrt_lipschitz, thm:ldp_polar_uniqueness,
         thm:ldp_approximation_error_orthogonal_blocks}
-    Let $A^i=\bigoplus_{j=1}^bA_j^i$ be the direct sum with weights one of blocks
-    $A_j$ of bond dimensions $D_j$, each placed on its own bond coordinates by an
+    Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with weights $\mu_j\in\C$ of
+    blocks $A_j$ of bond dimensions $D_j$, each placed on its own bond coordinates by an
     isometry $E_j$, and put $K_j=E_j\otimes E_j$. Let every $A_j$ be normal in the
     gauge (\ref{eq:ldp_normal_gauge}) with positive definite fixed point $\rho_j$ of
     trace one. Let $\lambda_2\in\C$ with $\lvert\lambda_2\rvert<1$ bound the moduli of
     the eigenvalues other than one of every transfer map $\E_{A_j}$ and the moduli of
     all eigenvalues of the mixed transfer maps $\E_{jj'}$, $j\neq j'$, let $\xi$ be its
     correlation length, and let $0<\gamma<1$. For $q\geq1$ the blocked map of $A$ is
-    $\mathcal B=\sum_j\mathcal B_jK_j^\dagger$, with $\mathcal B_j$ the blocked map of
-    $A_j$, so
-    $\mathcal B^\dagger\mathcal B=\sum_{j,j'}K_j\mathcal B_j^\dagger\mathcal B_{j'}
-        K_{j'}^\dagger$. With
+    $\mathcal B=\sum_j\mu_j^q\mathcal B_jK_j^\dagger$, with $\mathcal B_j$ the blocked map
+    of $A_j$, so
+    $\mathcal B^\dagger\mathcal B=\sum_{j,j'}\overline{\mu_j^q}\mu_{j'}^q
+        K_j\mathcal B_j^\dagger\mathcal B_{j'}K_{j'}^\dagger$. There is $K$ such that for
+    all weights with $\lvert\mu_j\rvert\leq1$ and every $q\geq1$
+    \begin{align*}
+        \Bigl\lVert\mathcal B^\dagger\mathcal B-\sum_j\lvert\mu_j\rvert^{2q}
+        K_j\bigl(\rho_j^{\mathsf T}\otimes\Id\bigr)K_j^\dagger\Bigr\rVert
+        \leq Ke^{-\gamma q/\xi}.
+    \end{align*}
+    For weights one, $\mathcal B=\sum_j\mathcal B_jK_j^\dagger$, and with
     \begin{align*}
         G_\infty=\sum_jK_j\bigl(\rho_j^{\mathsf T}\otimes\Id\bigr)K_j^\dagger,\qquad
         P_\infty=\sum_jK_j\bigl(\sqrt{\rho_j}^{\,\mathsf T}\otimes\Id\bigr)K_j^\dagger,
@@ -115,12 +122,14 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 \begin{proof}
     \leanok
     Every word of $A$ of length $q\geq1$ is the direct sum of the words of the blocks,
-    which gives the form of $\mathcal B$ and of its Gram matrix. The diagonal terms
-    satisfy
+    multiplied by $\mu_j^q$, which gives the form of $\mathcal B$, as in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}, and of its Gram matrix.
+    The diagonal terms, with coefficients $\lvert\mu_j\rvert^{2q}\leq1$, satisfy
     $\lVert\mathcal B_j^\dagger\mathcal B_j-\rho_j^{\mathsf T}\otimes\Id\rVert
         \leq K_je^{-\gamma q/\xi}$ by Theorem~\ref{thm:ldp_positive_part_rate}, and the
     others $\lVert\mathcal B_j^\dagger\mathcal B_{j'}\rVert\leq K_{jj'}e^{-\gamma q/\xi}$
-    by Lemma~\ref{lem:ldp_mixed_transfer_decay}; summing gives the first bound. Let
+    by Lemma~\ref{lem:ldp_mixed_transfer_decay}, with coefficients of modulus at most one;
+    summing gives the first bound. For weights one, let
     $Q=\Id-\sum_jK_jK_j^\dagger$, the projector onto the bond pairs whose two indices
     lie in different blocks or outside all blocks. Then $\mathcal BQ=0$, so
     $PQ=V^\dagger\mathcal BQ=0$ and $QP=0$, whence $(P+Q)^2=\mathcal B^\dagger\mathcal B+Q$;
@@ -136,6 +145,38 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     so Theorem~\ref{thm:ldp_sqrt_lipschitz} gives
     $\lVert P-P_\infty\rVert=\lVert\sqrt{\mathcal B^\dagger\mathcal B+Q}
         -\sqrt{G_\infty+Q}\rVert\leq\lVert\mathcal B^\dagger\mathcal B-G_\infty\rVert/\sqrt c$.
+\end{proof}
+
+\begin{lemma}[Positive part for weights of different moduli]
+    \label{lem:ldp_overlapping_positive_part_weights}
+    \lean{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_weight_sub_le}
+    \leanok
+    \uses{lem:ldp_overlapping_positive_part, thm:ldp_sqrt_holder}
+    In the setting of Lemma~\ref{lem:ldp_overlapping_positive_part}, let
+    $0<\gamma<1/2$. There is $K$ such that for all weights with
+    $\lvert\mu_j\rvert\leq1$ and every $q\geq1$ the positive part $P$ of the blocked map
+    of $A=\bigoplus_j\mu_jA_j$ satisfies
+    \begin{align*}
+        \lVert P-P_\infty^{(q)}\rVert\leq Ke^{-\gamma q/\xi},\qquad
+        P_\infty^{(q)}=\sum_jK_j\Bigl(\sqrt{\lvert\mu_j\rvert^{2q}\rho_j}^{\,\mathsf T}
+        \otimes\Id\Bigr)K_j^\dagger
+        =\sum_j\lvert\mu_j\rvert^qK_j\bigl(\sqrt{\rho_j}^{\,\mathsf T}\otimes\Id\bigr)
+        K_j^\dagger.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The matrix $P_\infty^{(q)}$ is positive semidefinite and its square is
+    $G_\infty^{(q)}=\sum_j\lvert\mu_j\rvert^{2q}K_j(\rho_j^{\mathsf T}\otimes\Id)K_j^\dagger$,
+    so it is the square root of $G_\infty^{(q)}$. Lemma~\ref{lem:ldp_overlapping_positive_part}
+    with $2\gamma<1$ in place of $\gamma$ gives
+    $\lVert\mathcal B^\dagger\mathcal B-G_\infty^{(q)}\rVert\leq K_0e^{-2\gamma q/\xi}$, and
+    Theorem~\ref{thm:ldp_sqrt_holder} gives
+    $\lVert P-P_\infty^{(q)}\rVert\leq\lVert\mathcal B^\dagger\mathcal B-G_\infty^{(q)}\rVert^{1/2}
+        \leq K_0^{1/2}e^{-\gamma q/\xi}$. The Lipschitz step of
+    Lemma~\ref{lem:ldp_overlapping_positive_part} is not available, since $G_\infty^{(q)}$
+    has eigenvalues $\lvert\mu_j\rvert^{2q}$ times those of $\rho_j$, which are not bounded
+    below uniformly in $q$ when $\lvert\mu_j\rvert<1$.
 \end{proof}
 
 \begin{lemma}[Overlaps for overlapping blocks]
@@ -211,18 +252,68 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     bounds the others by $K_{jj'}e^{-\gamma N/\xi}$.
 \end{proof}
 
+\begin{lemma}[Overlaps for weights of different moduli]
+    \label{lem:ldp_overlapping_overlaps_weights}
+    \lean{MPSTensor.mixedMapLM_blockSumPosLimit_smul_apply,
+        MPSTensor.exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le,
+        MPSTensor.exists_abs_norm_mpvState_blockSum_weight_sq_sub_le,
+        norm_prod_range_sub_pow_le_of_forall_norm_pow_le}
+    \leanok
+    \uses{lem:ldp_overlapping_overlaps, lem:ldp_overlapping_positive_part,
+        lem:ldp_positive_part_overlap, lem:ldp_mixed_transfer_decay,
+        thm:ldp_approximation_error_normal}
+    \begin{enumerate}
+        \item In a normed ring, if $\lVert E^k\rVert\leq c$ for every $k\geq0$ and
+              $\lVert X_k-E\rVert\leq\delta$ for every $k$, then
+              $\lVert X_1\cdots X_M-E^M\rVert\leq c((1+c\delta)^M-1)$.
+        \item For blocks placed as in Lemma~\ref{lem:ldp_overlapping_positive_part},
+              positive semidefinite $\rho_k$ and reals $t_k\geq0$, the mixed transfer map
+              of $P_\infty^{t}=\sum_kK_k\bigl(\sqrt{t_k^2\rho_k}^{\,\mathsf T}\otimes\Id\bigr)
+                  K_k^\dagger$ against the fixed-point tensor of $\tilde\rho_j$ is
+              $X\mapsto t_j\Tr(\Pi_jX)\,\tilde\rho_j$.
+        \item For blocks placed as there, positive semidefinite $\rho_k$ of trace one, and
+              a block $j$, there is $C>0$ such that for all reals $t_k\geq0$ with
+              $t_j\leq1$, all $\delta$, all $M\geq1$, and every matrix $P$ on the bond
+              pairs with $\lVert P-P_\infty^{t}\rVert\leq\delta$,
+              \begin{align*}
+                  \bigl\lvert\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}-t_j^M\bigr\rvert
+                  \leq C(M\delta)\,e^{CM\delta}.
+              \end{align*}
+        \item In the setting of Lemma~\ref{lem:ldp_overlapping_positive_part} with
+              $0<\gamma<1/2$, there is $K$ such that for all weights with
+              $\lvert\mu_j\rvert\leq1$ and every $N\geq1$,
+              $\bigl\lvert\lVert\phi_N(A)\rVert^2-\sum_j\lvert\mu_j^N\rvert^2\bigr\rvert
+                  \leq Ke^{-\gamma N/\xi}$ for $A=\bigoplus_j\mu_jA_j$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Part~(1) is the induction in the proof of
+    Lemma~\ref{lem:ldp_positive_part_overlap}, which only uses the bound on the powers of
+    $E$. For part~(2), $\sqrt{t_k^2\rho_k}=t_k\sqrt{\rho_k}$, so the letter of
+    $P_\infty^{t}$ at $(l,r)$ is $\sum_kt_k\sqrt{\tilde\rho_k}\ket l\bra r\Pi_k$, and the
+    computation of Lemma~\ref{lem:ldp_overlapping_overlaps}(4) carries the factor $t_j$.
+    For part~(3), the mixed transfer matrix of $P_\infty^{t}$ is $t_jR_j$ with $R_j$ the
+    idempotent of trace one of Lemma~\ref{lem:ldp_overlapping_overlaps}(4); its powers
+    $t_j^kR_j$, $k\geq1$, have norm at most $\lVert R_j\rVert$, and its $M$-th power has
+    trace $t_j^M$. Part~(1) with $c=\lVert\Id\rVert+\lVert R_j\rVert$ and the bound
+    $\lVert T-T_\infty\rVert\leq K_3\delta$ on the mixed transfer matrices gives the
+    estimate. Part~(4) is the proof of Lemma~\ref{lem:ldp_overlapping_overlaps}(6), with
+    $\lVert\phi_N(A)\rVert^2=\sum_{j,j'}\mu_j^N\overline{\mu_{j'}^N}
+        \braket{\phi_N(A_{j'})}{\phi_N(A_j)}$ and coefficients of modulus at most one.
+\end{proof}
+
 % **Local fix (rate of the overlapping blocks):** the rate of Lemma 1'(ii) of
 % arXiv:2307.01696 is corrected by including the correlation lengths of the
 % mixed transfer maps; scope restriction to multiplicity one and weight one;
+% the case of real weights is thm:ldp_approximation_error_overlapping_weights;
 % docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
 \begin{theorem}[Approximation error for overlapping blocks]
     \label{thm:ldp_approximation_error_overlapping_corrected}
     \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum,
-        MPSTensor.exists_approximationError_le_mul_overlappingBlockSum,
-        MPSTensor.one_sub_norm_div_le_of_norm_sub_le}
+        MPSTensor.exists_approximationError_le_mul_overlappingBlockSum}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, lem:ldp_overlapping_overlaps,
-        lem:ldp_overlapping_positive_part, lem:ldp_mixed_transfer_decay,
+    \uses{def:ldp_non_normal_fixed_point, thm:ldp_approximation_error_overlapping_weights,
         def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^bA_j^i$ with $b\geq1$ be the direct sum with weights one
     of normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}), with positive
@@ -252,22 +343,65 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 \end{theorem}
 \begin{proof}
     \leanok
+    This is the case $w_j=1$ of
+    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}, where $\beta_j=1$ and
+    $\alpha_j=b^{-1/2}$.
+\end{proof}
+
+% **Local fix (rate of the overlapping blocks):** as above, for multiplicity one with real
+% weights; docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
+\begin{theorem}[Approximation error for overlapping blocks with weights]
+    \label{thm:ldp_approximation_error_overlapping_weights}
+    \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum_weight,
+        MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_weight,
+        MPSTensor.one_sub_norm_div_le_of_norm_sub_le}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, lem:ldp_overlapping_overlaps,
+        lem:ldp_overlapping_overlaps_weights, lem:ldp_overlapping_positive_part_weights,
+        lem:ldp_mixed_transfer_decay, def:correlation_length}
+    Let $A^i=\bigoplus_{j=1}^bw_jA_j^i$ be the direct sum with real weights
+    $0\leq w_j\leq1$, at least one equal to one, of normal blocks $A_j$ in the gauge
+    (\ref{eq:ldp_normal_gauge}), with positive definite fixed points $\rho_j$ of trace one,
+    each placed on its own bond coordinates. Let $\lambda_2\in\C$ bound the moduli of the
+    eigenvalues other than one of every transfer map $\E_{A_j}$ and the moduli of all
+    eigenvalues of the mixed transfer maps $\E_{jj'}$, $j\neq j'$, let $\xi$ be its
+    correlation length, and let $0<\gamma<1/2$. Form the approximating state $\widetilde\phi_N$ of
+    Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of the $\rho_j$ on the
+    bond coordinates of their blocks and $\beta_j=w_j^N$. There are constants $C,C'>0$
+    such that for every block length $q$ and every $M\geq1$, with $N=qM$ and
+    $y=Me^{-\gamma q/\xi}$,
+    \begin{align*}
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq C'y
+        \qquad\text{and}\qquad
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
+    \end{align*} This is
+    \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one with weights
+    of possibly different moduli, normalized as in the source so that the largest is
+    one, and with phases absorbed into the blocks, with $\xi_{\mathrm{diag}}$ replaced by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$
+    \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+\begin{proof}
+    \leanok
     If $\lvert\lambda_2\rvert\geq1$, or $q=0$, then $y\geq1$ and the bound holds with
     $C=1$, since $\varepsilon\leq1$. Otherwise let $q\geq1$. By
-    Lemma~\ref{lem:ldp_overlapping_overlaps}(2) the pairs are those of the embedded
-    fixed points $\tilde\rho_j$, so by part~(3), with $\alpha_j=b^{-1/2}$, the
-    unnormalized approximating vector has inner product $S/\sqrt b$ with
-    $\ket{\phi_N(A)}$, where $S=\sum_jz_j$ and
-    $z_j=\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}$. The pairs are
-    orthonormal, so the fixed-point state has norm one, and by part~(1) the vector
-    $V^{\otimes M}\ket{\Omega'}$ has norm at most one; normalizing it can only increase
-    the overlap, so $\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert\geq\lvert S\rvert/(\sqrt b\,t)$
-    with $t=\lVert\phi_N(A)\rVert$. For $b\geq1$, $\lvert S-b\rvert\leq\delta$ and
-    $\lvert t^2-b\rvert\leq\eta$ give $1-\lvert S\rvert/(\sqrt b\,t)\leq\delta+\eta$:
-    this is trivial when $\delta+\eta\geq1$, and otherwise $t>0$,
-    $\lvert S\rvert\geq b-\delta$ and $\sqrt b\,t\leq(b+t^2)/2\leq b+\eta/2$, so
-    $\lvert S\rvert/(\sqrt b\,t)\geq1-\delta-\eta$. Parts~(5) and~(6) give
-    $\delta\leq\sum_jC_jy\,e^{C_jy}$ and
-    $\eta\leq Ke^{-\gamma N/\xi}\leq Ky$, which gives the second bound; the first follows
-    because $\varepsilon\leq1$.
+    Lemma~\ref{lem:ldp_overlapping_overlaps}(2) and~(3), with
+    $\alpha_j=\beta_j/\sqrt b$ and $b=\sum_j\beta_j^2\geq1$, the unnormalized approximating
+    vector has inner product $S/\sqrt b$ with $\ket{\phi_N(A)}$, where
+    $S=\sum_j\beta_jz_j$ and $z_j=\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}$;
+    its norm is at most one, so
+    $\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert\geq\lvert S\rvert/(\sqrt b\,t)$ with
+    $t=\lVert\phi_N(A)\rVert$. Lemma~\ref{lem:ldp_overlapping_positive_part_weights} gives
+    $\lVert P-P_\infty^{t}\rVert\leq Ke^{-\gamma q/\xi}$ with $t_k=w_k^q$, so
+    Lemma~\ref{lem:ldp_overlapping_overlaps_weights}(3) gives
+    $\lvert z_j-w_j^N\rvert\leq C_jy\,e^{C_jy}$ and
+    $\lvert S-b\rvert\leq\sum_j\beta_j\lvert z_j-\beta_j\rvert\leq\sum_jC_jy\,e^{C_jy}$.
+    Lemma~\ref{lem:ldp_overlapping_overlaps_weights}(4) gives
+    $\lvert t^2-b\rvert\leq K'e^{-\gamma N/\xi}\leq K'y$. For $b\geq1$,
+    $\lvert S-b\rvert\leq\delta$ and $\lvert t^2-b\rvert\leq\eta$ give
+    $1-\lvert S\rvert/(\sqrt b\,t)\leq\delta+\eta$: this is trivial when $\delta+\eta\geq1$,
+    and otherwise $t>0$, $\lvert S\rvert\geq b-\delta$ and
+    $\sqrt b\,t\leq(b+t^2)/2\leq b+\eta/2$, so
+    $\lvert S\rvert/(\sqrt b\,t)\geq1-\delta-\eta$. This gives the second bound; the first
+    follows because $\varepsilon\leq1$.
 \end{proof}
