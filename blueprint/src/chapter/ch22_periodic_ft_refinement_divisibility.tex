@@ -966,7 +966,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     \uses{def:periodic_tensor,def:same_mpv2_pos,thm:periodic_prescribed_blocking_compression}
     Let $T=\bigoplus_k\mu_k B_k$, where $\mu_k\ne0$ and the $B_k$ are
-    left-canonical periodic. Suppose that, for $p>0$, $T^{[p]}$ has the same
+    left-canonical periodic tensors of bond dimension $D_k$. Suppose that, for $p>0$, $T^{[p]}$ has the same
     positive-length matrix product vectors as a periodic sector decomposition
     $Q$ with a pairwise non-repeated basis and unit-modulus multiplicities.
     Then $|\mu_k|=1$ for every $k$, and $\sum_k D_k$ equals the total bond
@@ -982,8 +982,13 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     block inherits weight $\mu_k^p$. Group repeated blocks and apply the
     multiplicity-bearing equal-case theorem. Matching to the unit-modulus
     multiplicities of $Q$ gives $|\mu_k|^p=1$, hence $|\mu_k|=1$.
-    The global invertible similarity equates the total bond dimensions;
-    orbit decomposition and grouping both preserve the original total dimension.
+    The equal-case theorem also gives matrices $Y$ and $Y'$ between the bond
+    spaces of the grouped decomposition $P$ and of $Q$ with $YY'=\Id$ and
+    $Y'Y=\Id$, so these square matrices have the same size. Since orbit
+    decomposition and grouping preserve the total dimension,
+    \begin{align}
+        \sum_kD_k & =\dim P=\dim Q. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Unit-weight presentation from a blocked comparison]
