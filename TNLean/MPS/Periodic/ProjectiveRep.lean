@@ -63,7 +63,7 @@ namespace MPSTensor
 
 open TNLean.Algebra
 
-variable {d D : ℕ} {G : Type*} [Group G]
+variable {d D : ℕ} {G : Type} [Group G]
 
 /-! ## Periodic projective-representation rigidity hypothesis -/
 

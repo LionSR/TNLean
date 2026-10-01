@@ -35,7 +35,7 @@ open TNLean.Algebra
 
 namespace TNLean.Algebra.LSymbol
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 /-- **The interchange product of L-symbols is the inverse cyclic invariant.** If `L` is
 compatible with `ω` and `g ^ n = 1`, then

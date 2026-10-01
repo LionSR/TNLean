@@ -148,6 +148,22 @@ theorem exists_isReduction_fuseV (g h : G) : ∃ W, MPSTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.fuseV fd g h) W :=
   ⟨_, ((fd.isReduction g h).actTensor_kronId A).trans (ad.isReduction (g * h))⟩
 
+end ActionData
+
+end GroupFamily
+
+/-! ### The L-symbol
+
+L-symbols are indexed by groups in `Type`, the universe of Mathlib's group cohomology. -/
+
+namespace GroupFamily
+
+variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d} {D : ℕ} {A : MPSTensor d D}
+
+namespace ActionData
+
+variable (fd : FusionData F) (ad : ActionData F A)
+
 open Classical in
 /-- **The L-symbol of a single invariant block**: the nonzero scalar `L(g,h)` with
 `actV g h ~ L(g,h) · fuseV g h` against long words of `(O_g O_h) · A`

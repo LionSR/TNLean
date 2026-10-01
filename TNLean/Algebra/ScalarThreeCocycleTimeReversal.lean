@@ -43,7 +43,7 @@ namespace TNLean.Algebra
 
 open Complex
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 /-! ### Unimodular square roots of phases -/
 

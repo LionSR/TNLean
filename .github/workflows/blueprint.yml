@@ -36,6 +36,7 @@ on:
       - 'scripts/test_badge_colors.py'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_pic.py'
+      - 'scripts/test_blueprint_web_render.py'
   workflow_dispatch:
 
 # Rapid pushes to main only need the newest build; actual Pages deployments

@@ -22,7 +22,7 @@ No normality, finiteness, transitivity, or cocycle normalization is required.
 
 namespace TNLean.Algebra
 
-variable {G K : Type*} [Group G] [Group K]
+variable {G K : Type} [Group G] [Group K]
 
 /-- Pull back a scalar 2-cochain along a group homomorphism. -/
 def ScalarCocycle.pullback (f : K →* G) (ω : ScalarCocycle G) : ScalarCocycle K :=
