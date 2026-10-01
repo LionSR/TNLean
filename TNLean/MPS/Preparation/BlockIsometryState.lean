@@ -29,7 +29,7 @@ one, which may be larger"; the present file allows any lengths.
 The site-dependent declarations apply to the inhomogeneous matrix product states of
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS", which have "bond
 dimension at most `D`" varying along the ring, through their zero-padded chains
-(`MPSPreparation.VaryingBondChain.zeroPad`); the padded blocked tensors are injective only on the
+(`VaryingBondChain.zeroPad`); the padded blocked tensors are at most injective on the
 rectangles of their bonds, and `MPSTensor.inner_blockIsoVector_of_isInjectiveOn` covers that
 case.
 

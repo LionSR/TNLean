@@ -12,15 +12,16 @@ import TNLean.MPS.Preparation.PolarUniqueness
 
 A tensor `B : MPSTensor n D` is *injective on* a set `S` of pairs of bond indices
 (`MPSTensor.IsInjectiveOn`) if its matrices vanish outside the entries `S` and span all matrices
-supported on `S`. For `S` the rectangle `[0, a) × [0, b)` this is injectivity, in the sense of
-the span of its matrices, of a tensor with bond dimensions `a` and `b`, padded with zeros to
-`D × D` matrices.
+supported on `S`. For `S` the rectangle `[0, a) × [0, b)` this may be read as injectivity, in
+the sense of the span of its matrices, of a tensor with bond dimensions `a` and `b` padded with
+zeros to `D × D` matrices; no rectangular tensor is defined here, and that reading is not proved.
 
 For such a tensor the polar decomposition `B = V P` has support projector `Π`, `V†V = Π`, equal
 to the coordinate projector onto `S` (`MPSTensor.polarSupportMatrix_eq_diagonal`): the isometric
-factor `V` is an isometry on the inputs `S` and vanishes on the others. This is the
-partial-isometry case of arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and
-extension to non-normal tensors", where `V†V = Π`, for a projector `Π` onto coordinates.
+factor `V` is an isometry on the inputs `S` and vanishes on the others. In arXiv:2307.01696,
+Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors", the isometry
+satisfies `V†V = Π` with `Π` the projector onto the image of `P`; under injectivity on `S` this
+`Π` is the coordinate projector onto `S`.
 
 ## Main results
 
@@ -105,10 +106,11 @@ namespace MPSTensor
 variable {n D : ℕ}
 
 /-- A tensor is **injective on** a set `S` of pairs of bond indices if its matrices vanish
-outside the entries `S` and span every matrix supported on `S`. For the rectangle
-`S = [0, a) × [0, b)` this says that `B`, read as a tensor with bond dimensions `a` and `b`
-padded with zeros, is injective: its matrices span all `a × b` matrices. For `S` the set of all
-pairs it is `Kraus.IsInjective` (`MPSTensor.isInjectiveOn_univ_iff`).
+outside the entries `S` and span every matrix unit `|α⟩⟨β|` with `(α, β) ∈ S`. For the rectangle
+`S = [0, a) × [0, b)` this may be read as injectivity of `B` viewed as a zero-padded tensor with
+bond dimensions `a` and `b`, whose matrices span all `a × b` matrices; that reading is a gloss,
+not a statement proved here. For `S` the set of all pairs it is `Kraus.IsInjective`
+(`MPSTensor.isInjectiveOn_univ_iff`).
 
 arXiv:2307.01696, footnote to the paragraph "Approximation through the fixed-point state": the
 blocked tensors are assumed injective. -/

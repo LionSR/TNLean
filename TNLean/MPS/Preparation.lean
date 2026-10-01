@@ -88,7 +88,7 @@ import TNLean.MPS.Preparation.TreeMeasurement
 import TNLean.MPS.Preparation.TwoLevel
 import TNLean.MPS.Preparation.UnitaryGates
 import TNLean.MPS.Preparation.VarianceOfAverages
-import TNLean.MPS.Preparation.VaryingBondChain
+import TNLean.MPS.Preparation.VaryingBondBlocks
 import TNLean.MPS.Preparation.WindowClustering
 import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Preparation.WindowGHZ

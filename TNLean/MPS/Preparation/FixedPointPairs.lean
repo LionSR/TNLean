@@ -318,7 +318,7 @@ def bondRegrouping (N D : ℕ) : (Fin N → Fin D × Fin D) ≃ (Fin N → Fin D
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS":
 `|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}`. Pairs on smaller spaces `ℂ^{D_j} ⊗ ℂ^{D_j}`, for
 bond dimensions varying along the ring, enter padded with zeros
-(`MPSPreparation.VaryingBondChain.padPairs`). -/
+(`VaryingBondChain.padPairs`). -/
 def pairFamilyState {N : ℕ} (ω : Fin N → Fin D × Fin D → ℂ) (c : Fin N → Fin D × Fin D) : ℂ :=
   ∏ k : Fin N, ω k ((c k).2, (c (finRotate N k)).1)
 

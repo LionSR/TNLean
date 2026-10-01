@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.DepthUpperBound
-import TNLean.MPS.Preparation.VaryingBondChain
+import TNLean.MPS.Preparation.VaryingBondBlocks
 
 /-!
 # Inhomogeneous short-range correlated matrix product states
@@ -20,13 +20,14 @@ on a set `S_k` of bond pairs, `V_k` is an isometry on `S_k`, `φ_pos` is support
 (`MPSPreparation.inner_chainBlockIsometryState_normalize`).
 
 The source's chains have bond dimensions at most `D`, varying along the ring
-(`MPSPreparation.VaryingBondChain`); padded with zeros they are chains of bond dimension `D` with
-the same state, whose blocked tensors are injective on the rectangles of their bonds when the
-rectangular blocked tensors are injective. The source calls such a chain short-range correlated
+(`VaryingBondChain`); padded with zeros they are chains of bond dimension `D` with
+the same state. For blocks of at least one site, injectivity of the blocked tensors
+(`VaryingBondChain.IsBlockInjective`, stated for the padded chain) makes every padded blocked
+tensor injective on the rectangle of its bonds. The source calls such a chain short-range correlated
 if `|φ_pos⟩` is close to a product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` of pairs, each joining the right
 leg of one block to the left leg of the next. At a fixed ring this is the statement that the
 error `ε(Ω, φ_pos)` is at most `δ` for some unit pairs
-(`MPSPreparation.VaryingBondChain.IsPairApproximable`). The state `(⊗ₖ V_k) |Ω⟩` is prepared
+(`VaryingBondChain.IsPairApproximable`). The state `(⊗ₖ V_k) |Ω⟩` is prepared
 in depth at most `C L` for blocks of lengths at most `L`, with `C` depending only on `d` and
 `D`, and when every blocked tensor is injective its error against `|φ_N⟩` is exactly
 `ε(Ω, φ_pos)` (`MPSPreparation.exists_isPreparedInDepth_inhomogeneous`). The source states a
@@ -158,9 +159,15 @@ theorem inner_chainBlockIsometryState_normalize {A : MPSChainTensor d D N} (hN :
     chainBlockIsometryState, inner_blockIsoVector_of_isInjectiveOn hN hB _ _ fun τ hτ => by
       rw [PiLp.smul_apply, chainPosState_eq_zero hN hB hτ, smul_zero, mul_zero]]
 
+end MPSPreparation
+
 /-! ### Bond dimensions at most `D` -/
 
 namespace VaryingBondChain
+
+open MPSPreparation
+
+variable {d D M N : ℕ} {ℓ : Fin M → ℕ}
 
 /-- The state of the chain is the state of the zero-padded chain. -/
 theorem state_eq_chainState [NeZero N] (A : VaryingBondChain d D N) :
@@ -183,8 +190,9 @@ dimensions at most `D`: the state `φ_pos` of the positive parts of the blocked 
 nonzero, and there are unit vectors `ω^k` on `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k`
 to block `k + 1`, whose product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error
 `ε(Ω, φ_pos) = 1 - |⟨Ω|φ_pos⟩| ≤ δ` against the normalized state of the positive parts. The
-blocked tensors, their positive parts and the pairs are those of the zero-padded chain, which
-carry the rectangular ones in their upper-left corners.
+blocked tensors, their positive parts and the pairs are those of the zero-padded chain; their
+identification with the rectangular objects of the source is not proved (see the paper-gap note
+cited below).
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": a sequence of matrix
 product states "with bond dimension at most `D`" has finite correlation length if, after
@@ -205,6 +213,10 @@ def IsPairApproximable [NeZero N] (A : VaryingBondChain d D N) (hN : ∑ k, ℓ 
         (‖chainPosState (zeroPad A) hN‖ : ℂ)⁻¹ • chainPosState (zeroPad A) hN⟫_ℂ‖ ≤ δ
 
 end VaryingBondChain
+
+namespace MPSPreparation
+
+variable {d D M N : ℕ} {ℓ : Fin M → ℕ}
 
 /-! ### The preparation -/
 

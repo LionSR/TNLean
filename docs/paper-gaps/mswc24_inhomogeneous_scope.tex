@@ -33,9 +33,11 @@ work on a ring of $N$ sites cut into blocks of lengths $\ell_k$, with bond
 dimensions $D_0,\dots,D_{N-1}\le D$ varying along the ring as in the source,
 and assume two things.
 \begin{enumerate}
-    \item Every blocked tensor is injective: its matrices, of size
-          $D_{o_k}\times D_{o_{k+1}}$ for the bonds $o_k$ and $o_{k+1}$ at the
-          ends of block $k$, span all matrices of that size. The source makes
+    \item Every blocked tensor is injective. The formal hypothesis is stated
+          for the zero-padded chain of the next section: its blocked tensor
+          $B_k$ spans every matrix unit $\ket\alpha\bra\beta$ with
+          $\alpha<D_{o_k}$ and $\beta<D_{o_{k+1}}$, for the bonds $o_k$ and
+          $o_{k+1}$ at the ends of block $k$. The source makes
           this assumption for its polar decompositions in the footnote to the
           paragraph ``Approximation through the fixed-point state'' and uses it
           silently here: the identity between the error of
@@ -60,17 +62,22 @@ $q=O(\log N)$.
 \section{Varying bond dimensions by zero padding}
 The rectangular matrices $A_k^i$ of size $D_k\times D_{k+1}$ are padded with
 zeros to $D\times D$ matrices\footnote{Formal declarations:
-    \leanid{MPSPreparation.VaryingBondChain.zeroPad} and
-    \leanid{MPSPreparation.VaryingBondChain.coeff_zeroPad}
-    in \doclink{TNLean/MPS/Preparation/VaryingBondChain}.}.
-The padded chain has the same state. Its blocked tensor $B_k$ is the
-rectangular blocked tensor in the upper-left corner
-$[0,D_{o_k})\times[0,D_{o_{k+1}})$ and vanishes outside, so injectivity of
-the rectangular blocked tensor is injectivity of $B_k$ on that rectangle. The
-polar decomposition of the padded $B_k$ is the padding of the rectangular one:
-$P_k$ is the padded positive part, and the support projector is the coordinate
-projector $\Pi_k$ onto the rectangle, so $V_k$ is an isometry on it and
-vanishes on the other inputs. The pairs $\omega^k$ are padded in the same way,
+    \leanid{VaryingBondChain.zeroPad} and
+    \leanid{VaryingBondChain.coeff_zeroPad}
+    in \doclink{TNLean/MPS/Chain/VaryingBondChain}.}.
+The padded chain has the same state, which is proved. For a block of at least
+one site, its blocked tensor $B_k$ vanishes outside the upper-left corner
+$[0,D_{o_k})\times[0,D_{o_{k+1}})$, which is also proved, and its entries on
+that corner are those of the rectangular blocked tensor. That last
+identification is not formalized: the injectivity hypothesis is stated
+directly for $B_k$, as spanning every matrix unit in the corner, and its
+reading as injectivity of the rectangular blocked tensor is the observation
+just made. For a block of length zero the two readings differ, since $B_k$ is
+then the identity matrix of size $D$; every formal statement using the
+hypothesis assumes blocks of at least one site. Under the hypothesis, the
+support projector of the polar decomposition $B_k=V_kP_k$ is the coordinate
+projector $\Pi_k$ onto the corner, so $V_k$ is an isometry on it and vanishes
+on the other inputs. The pairs $\omega^k$ are padded in the same way,
 and $\ket\Omega$ is supported on the rectangles. The objects
 $\ket{\phi_{\mathrm{pos}}}$, $(\bigotimes_kV_k)\ket\Omega$ and
 $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ of the formal statements are those of
@@ -84,7 +91,7 @@ The error $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ compares $\ket\Omega$ with
 the normalized state $\ket{\phi_{\mathrm{pos}}}/\lVert\phi_{\mathrm{pos}}\rVert$,
 which presupposes $\ket{\phi_{\mathrm{pos}}}\neq0$. The formal approximation
 condition\footnote{Formal declaration:
-    \leanid{MPSPreparation.VaryingBondChain.IsPairApproximable}.}
+    \leanid{VaryingBondChain.IsPairApproximable}.}
 states $\ket{\phi_{\mathrm{pos}}}\neq0$ explicitly; without it the normalized
 vector would be read as $0$ and the condition would hold for every
 $\delta\ge1$. This is a local fix of the intended reading, not a restriction.

@@ -165,18 +165,19 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
 
 \begin{definition}[Chains with bond dimensions at most $D$]
     \label{def:ldp_varying_bond_chain}
-    \lean{MPSPreparation.VaryingBondChain,
-        MPSPreparation.VaryingBondChain.coeff,
-        MPSPreparation.VaryingBondChain.state,
-        MPSPreparation.VaryingBondChain.state_apply,
-        MPSPreparation.VaryingBondChain.zeroPad,
-        MPSPreparation.VaryingBondChain.leftBond,
-        MPSPreparation.VaryingBondChain.rightBond,
-        MPSPreparation.VaryingBondChain.corner,
-        MPSPreparation.VaryingBondChain.blockCorner,
-        MPSPreparation.VaryingBondChain.IsBlockInjective,
-        MPSPreparation.VaryingBondChain.padPair,
-        MPSPreparation.VaryingBondChain.padPairs}
+    \lean{VaryingBondChain,
+        Matrix.zeroPad,
+        VaryingBondChain.coeff,
+        VaryingBondChain.state,
+        VaryingBondChain.state_apply,
+        VaryingBondChain.zeroPad,
+        VaryingBondChain.leftBond,
+        VaryingBondChain.rightBond,
+        VaryingBondChain.corner,
+        VaryingBondChain.blockCorner,
+        VaryingBondChain.IsBlockInjective,
+        VaryingBondChain.padPair,
+        VaryingBondChain.padPairs}
     \leanok
     \uses{def:ldp_chain_block_tensor, def:ldp_chain_pos_state}
     Let $D_1,\dots,D_N\le D$ be the dimensions of the bonds of the ring, the bond
@@ -190,10 +191,17 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     $b_k=a_{k+1}$ be the dimensions of the bonds at the left and right end of
     block $k$, cyclically, and let $R_k$ be the rectangle of pairs
     $(\alpha,\beta)$ with $\alpha<a_k$ and $\beta<b_k$. The blocked tensors are
-    \emph{injective} if, for every $k$, the matrices of the blocked tensor of
-    block $k$, of size $a_k\times b_k$, span all matrices of that size; in terms
-    of the padded chain, its blocked tensor $B_k$ spans every matrix unit
-    $\ket\alpha\bra\beta$ with $(\alpha,\beta)\in R_k$. A pair $\omega^k$ on
+    \emph{injective} if, for every $k$, the blocked tensor $B_k$ of block $k$ of
+    the padded chain spans every matrix unit $\ket\alpha\bra\beta$ with
+    $(\alpha,\beta)\in R_k$. For blocks of at least one site, $B_k$ vanishes
+    outside $R_k$ and its entries on $R_k$ are those of the product of the
+    rectangular matrices along the block, so the condition may be read as the
+    source's injectivity of the rectangular blocked tensor, whose matrices of
+    size $a_k\times b_k$ span all matrices of that size; that identification of
+    the entries on $R_k$ is not part of the formalization, see the section on
+    zero padding in~\cite{gap:mswc24_inhomogeneous_scope}. For a block of
+    length zero the two readings differ, the padded blocked tensor being the
+    identity matrix of size $D$. A pair $\omega^k$ on
     $\C^{b_k}\otimes\C^{b_k}$ is padded with zeros to a vector on
     $\C^D\otimes\C^D$. The states $\ket{\phi_{\mathrm{pos}}}$, $\ket\Omega$ and
     $(\bigotimes_kV_k)\ket\Omega$ of the chain are those of
@@ -203,21 +211,23 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
 
 \begin{theorem}[Zero padding]
     \label{thm:ldp_zero_pad}
-    \lean{MPSPreparation.VaryingBondChain.zeroPad_eq_zero,
-        MPSPreparation.VaryingBondChain.coeff_zeroPad,
-        MPSPreparation.VaryingBondChain.state_eq_chainState_zeroPad,
-        MPSPreparation.VaryingBondChain.state_eq_chainState,
-        MPSPreparation.VaryingBondChain.rightBond_le,
-        MPSPreparation.VaryingBondChain.finRotate_val_eq_mod,
-        MPSPreparation.VaryingBondChain.blockOffset_add_mod,
-        MPSPreparation.VaryingBondChain.eval_eq_zero_of_support,
-        MPSPreparation.VaryingBondChain.blockTensor_eq_zero_of_support,
-        MPSPreparation.VaryingBondChain.chainBlockTensor_zeroPad_eq_zero,
-        MPSPreparation.VaryingBondChain.IsBlockInjective.isInjectiveOn,
-        MPSPreparation.VaryingBondChain.sum_star_padPair_mul,
-        MPSPreparation.VaryingBondChain.sum_star_padPairs_mul_self,
-        MPSPreparation.VaryingBondChain.mem_blockCorner_of_pairFamilyState_ne_zero,
-        MPSPreparation.VaryingBondChain.pairFamilyVector_padPairs_eq_zero}
+    \lean{VaryingBondChain.zeroPad_eq_zero,
+        VaryingBondChain.coeff_zeroPad,
+        VaryingBondChain.state_eq_chainState_zeroPad,
+        VaryingBondChain.state_eq_chainState,
+        VaryingBondChain.rightBond_le,
+        Matrix.zeroPad_apply_of_lt,
+        Matrix.zeroPad_apply_eq_zero,
+        coe_finRotate_mod,
+        MPSPreparation.blockOffset_add_mod,
+        MPSChainTensor.eval_eq_zero_of_support,
+        MPSChainTensor.blockTensor_eq_zero_of_support,
+        VaryingBondChain.chainBlockTensor_zeroPad_eq_zero,
+        VaryingBondChain.IsBlockInjective.isInjectiveOn,
+        VaryingBondChain.sum_star_padPair_mul,
+        VaryingBondChain.sum_star_padPairs_mul_self,
+        VaryingBondChain.mem_blockCorner_of_pairFamilyState_ne_zero,
+        VaryingBondChain.pairFamilyVector_padPairs_eq_zero}
     \leanok
     \uses{def:ldp_varying_bond_chain, def:ldpolar_injective_on}
     On a ring of $N\ge1$ sites the padded chain has the state $\ket{\phi_N}$ of
@@ -230,13 +240,14 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_chain_state_eq_pos}
+    \uses{def:ldp_chain_block_tensor, def:ldp_chain_pos_state}
     The trace of the product of the padded matrices is the sum over cyclic bond
     configurations $g$ of $\prod_k(A_k^{s_k})_{g_kg_{k+1}}$ with padded entries,
     and a term vanishes unless $g_k<D_k$ for every $k$; the remaining terms are
     those of the rectangular trace. A product of padded matrices of sizes
-    $D_{o+1}\times D_{o+2},\dots,D_{o+\ell}\times D_{o+\ell+1}$ vanishes outside
-    ${[0,D_{o+1})}\times{[0,D_{o+\ell+1})}$, its first factor vanishing on the
+    $D_{o+1}\times D_{o+2},\dots,D_{o+\ell}\times D_{o+\ell+1}$ vanishes at
+    every entry $(\alpha,\beta)$ outside the rectangle of pairs with
+    $\alpha<D_{o+1}$ and $\beta<D_{o+\ell+1}$, its first factor vanishing on the
     rows $\alpha\ge D_{o+1}$ and its last on the columns
     $\beta\ge D_{o+\ell+1}$; the bond after the last site of block $k$ is the
     bond at the left end of block $k+1$, cyclically. A padded pair vanishes
@@ -247,7 +258,7 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
 
 \begin{definition}[Approximation of the positive parts by pairs]
     \label{def:ldp_pair_approximable}
-    \lean{MPSPreparation.VaryingBondChain.IsPairApproximable}
+    \lean{VaryingBondChain.IsPairApproximable}
     \leanok
     \uses{def:ldp_varying_bond_chain}
     For $\delta\in\R$, a chain with bond dimensions at most $D$ is
@@ -298,7 +309,7 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     \lean{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn,
         MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState,
         MPSPreparation.chainBlockIsometryState_eq_mulVec,
-        MPSPreparation.exists_equiv_val_lt_card_iff_mem,
+        Finset.exists_equiv_val_lt_card_iff_mem,
         MPSPreparation.exists_pairEquiv_val_lt_card_iff_mem,
         MPSPreparation.isPreparedInDepth_zero_of_le_one}
     \leanok
@@ -341,8 +352,8 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous,
         MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
     \leanok
-    \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner,
-        thm:ldp_zero_pad, def:ldp_pair_approximable}
+    \uses{def:ldp_varying_bond_chain, def:ldp_pair_approximable,
+        def:ldp_local_circuit}
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be a chain with bond dimensions at
@@ -376,6 +387,7 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner, thm:ldp_zero_pad}
     For $D=0$ there is no unit pair. Otherwise every block has a site, and by
     Theorem~\ref{thm:ldp_zero_pad} the padded blocked tensor $B_k$ is
     injective on the rectangle $R_k$, the padded pairs are unit vectors, and

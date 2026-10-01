@@ -16,7 +16,7 @@ into one tensor of physical dimension `d^n`: its matrix at the word `σ` is the 
 
 The inhomogeneous matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous
 short-range correlated MPS", have "bond dimension at most `D`" varying along the ring; padding
-their rectangular matrices with zeros (`MPSPreparation.VaryingBondChain.zeroPad`) gives a chain
+their rectangular matrices with zeros (`VaryingBondChain.zeroPad`) gives a chain
 with the common bond dimension `D` and the same state, to which the blocking here applies.
 
 ## Main declarations
