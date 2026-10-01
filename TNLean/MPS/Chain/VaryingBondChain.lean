@@ -42,6 +42,8 @@ product states "with bond dimension at most `D`", not translation invariant. -/
 structure VaryingBondChain (d D N : ℕ) where
   /-- The dimension of the bond to the left of each site. -/
   bondDim : Fin N → ℕ
+  /-- Every bond dimension is at most `D`: arXiv:2307.01696, paragraph "Inhomogeneous
+  short-range correlated MPS", matrix product states "with bond dimension at most `D`". -/
   bondDim_le : ∀ k, bondDim k ≤ D
   /-- The rectangular matrix of a site and a physical index. -/
   tensor : ∀ k : Fin N, Fin d → Matrix (Fin (bondDim k)) (Fin (bondDim (finRotate N k))) ℂ
