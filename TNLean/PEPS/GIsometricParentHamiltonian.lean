@@ -9,7 +9,78 @@ import TNLean.PEPS.GIsometric
 /-!
 # Commuting parent Hamiltonians of G-isometric matrix product states
 
-DOCSTRING
+# Commuting parent Hamiltonians of G-isometric matrix product states
+
+**Source.** Schuch, Cirac, Pérez-García 2010 (arXiv:1001.3807), Section 6, "Commuting parent
+Hamiltonians", `Papers/1001.3807/paper_v3.tex`:
+
+* lines 2092–2096: the parent Hamiltonians of `G`-isometric PEPS are sums of commuting local
+  terms; the proof is given for MPS, "the generalization to PEPS is straightforward";
+* Lemma 6.11, lines 2098–2125, figures `figs4/ham-proj-from-A.pdf`,
+  `figs4/ham-proj-from-A-is-proj.pdf` and `figs4/ham-proj-from-A-pres-subspace.pdf`: for
+  `G`-isometric MPS, the local terms `h_i`, which project onto the complement of
+  `𝒮_2 = {∑_{ij} tr[A^i A^j X] |ij⟩}`, are of the form of the operator
+  `∑ tr[A^i A^j (A^k A^l)†] |ij⟩⟨kl|` (equation `eq:iso:ham-proj-from-A`). The proof shows that
+  this operator is a projector, has range in `𝒮_2`, fixes `𝒮_2` and is self-adjoint;
+* Theorem 6.12 (commuting parent Hamiltonians), lines 2131–2156, figures
+  `figs4/ham-comm-step1.pdf` and `figs4/ham-comm-step2.pdf`: for `G`-isometric PEPS the terms
+  `h_i` of the parent Hamiltonian commute. The proof writes the products of the operators on
+  sites `1, 2` and `2, 3` as the two sides of `figs4/ham-comm-step1.pdf`, which agree since the
+  sum over `g` of `U_g ⊗ U_g⁻¹` on the virtual level moves from one bond to the other.
+
+**Formalized here.** An MPS tensor `A : Fin d → End ℂ[G]` with the left-regular representation
+on its bond is `G`-isometric in the sense of `IsGIsometricMPS` (Definition 6.1). The parent
+Hamiltonian of the chain is that of the matrix tensor `regularMPSTensor A`, the matrices of the
+`A^i` in the basis of group elements, in which `A†` is the conjugate transpose
+(`regularBondMatrix_regularAdjoint`). The operator of equation `eq:iso:ham-proj-from-A` is
+`MPSTensor.groundSpaceFrame (regularMPSTensor A) 2 = Γ_2 Γ_2†`, with `Γ_2(X) = tr[A^{s₀} A^{s₁} X]`.
+Lemma 6.11 is `IsGIsometricMPS.parentInteraction_regularMPSTensor`: up to a positive factor `c`
+the operator is idempotent with range `𝒮_2`, and the parent interaction is
+`h = 1 - c⁻¹ Γ_2 Γ_2†`; it is self-adjoint by `MPSTensor.groundSpaceFrame_isHermitian`. The
+proof uses the stability of `G`-isometry under concatenation (Lemma 6.2,
+`IsGIsometricMPS.concatTensor`) for the two-site tensor `A^a A^b`. The factor `c` is the
+normalization allowed by `IsGIsometricMPS`, documented in
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+For Theorem 6.12 the key identity is `sum_trace_mul_smul_regularAdjoint`:
+`∑_b tr[A^b N] (A^b)† = c N` for `N` commuting with the left-regular representation. Every
+product of the `A^i` and `(A^i)†` commutes with it (`commute_leftRegular_regularAdjoint`, from
+the unitarity `regularAdjoint_leftRegular`), which is the step at which the sum over `g` of
+`figs4/ham-comm-step1.pdf` drops out. The two products of the lifts of `Γ_2 Γ_2†` to sites
+`1, 2` and `2, 3` are then both `c Γ_3 Γ_3†`
+(`IsGIsometricMPS.pairLift_groundSpaceFrame_regularMPSTensor`), and the parent terms commute on
+every ring of `N ≥ 3` sites (`IsGIsometricMPS.isNNCPH_regularMPSTensor`).
+
+**Local fix (projector onto `𝒮_2`):** Lemma 6.11 names the operator of equation
+`eq:iso:ham-proj-from-A` the local term `h_i`, which projects onto the complement of `𝒮_2`
+(equation `eq:2d:parentham-localterm`, lines 1534–1539), while its proof shows that the operator is
+the projector onto `𝒮_2`; it is `1 - h_i`. Documented in
+`docs/paper-gaps/scp10_g_isometric_commuting_parent_hamiltonian.tex`.
+
+**Scope restriction (MPS):** Theorem 6.12 is stated for PEPS;
+`IsGIsometricMPS.isNNCPH_regularMPSTensor` and
+`IsGIsometricMPS.pairLift_groundSpaceFrame_regularMPSTensor` prove it for MPS, the case in which
+the source writes the proof, on rings of `N ≥ 3` sites. Documented in
+`docs/paper-gaps/scp10_g_isometric_commuting_parent_hamiltonian.tex`.
+
+## Main definitions
+
+* `TNLean.PEPS.regularBondMatrix`: the matrix of an operator on `ℂ[G]` in the basis of group
+  elements.
+* `TNLean.PEPS.regularMPSTensor`: the matrix tensor of `A : Fin d → End ℂ[G]`.
+
+## Main results
+
+* `TNLean.PEPS.regularAdjoint_leftRegular`: `L_g† = L_{g⁻¹}`.
+* `TNLean.PEPS.sum_trace_mul_smul_regularAdjoint`: `∑_b tr[A^b N] (A^b)† = c N` on the commutant.
+* `TNLean.PEPS.IsGIsometricMPS.parentInteraction_regularMPSTensor`: Lemma 6.11.
+* `TNLean.PEPS.IsGIsometricMPS.pairLift_groundSpaceFrame_regularMPSTensor`,
+  `TNLean.PEPS.IsGIsometricMPS.isNNCPH_regularMPSTensor`: Theorem 6.12 for MPS.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap Representation
@@ -31,8 +102,9 @@ theorem regularAdjoint_leftRegular (g : G) :
   rw [regularAdjoint, AlgEquiv.symm_apply_eq]
   ext k h
   simp only [LinearMap.toMatrixAlgEquiv_apply, Matrix.conjTranspose_apply]
-  simp only [MonoidAlgebra.basis]
-  simp
+  simp only [MonoidAlgebra.basis, Basis.coe_ofRepr, MonoidAlgebra.coeffLinearEquiv_symm_apply,
+    MonoidAlgebra.ofCoeff_single, ofMulAction_single, smul_eq_mul,
+    MonoidAlgebra.coeffLinearEquiv_apply, MonoidAlgebra.coeff_single, RCLike.star_def]
   by_cases hk : g * k = h
   · simp [Finsupp.single_apply, hk, inv_mul_eq_iff_eq_mul]
   · simp only [Finsupp.single_apply, hk, ite_false, map_zero]
@@ -132,6 +204,7 @@ theorem regularBondMatrix_regularAdjoint (X : Module.End ℂ (MonoidAlgebra ℂ 
     AlgEquiv.apply_symm_apply, Matrix.conjTranspose_apply]
 
 omit [Group G] [DecidableEq G] in
+/-- The trace of the matrix is the trace of the operator. -/
 theorem trace_regularBondMatrix (X : Module.End ℂ (MonoidAlgebra ℂ G)) :
     (regularBondMatrix X).trace = LinearMap.trace ℂ _ X :=
   (LinearMap.trace_eq_matrix_trace ℂ regularBondBasis X).symm

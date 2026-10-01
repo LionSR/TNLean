@@ -11,16 +11,19 @@ import TNLean.Algebra.FinVecEta
 /-!
 # The frame operator of the local ground space
 
-For an MPS tensor `A` the local ground space `G_n(A)` on `n` sites is the range of the
-boundary parametrization `Γ_n(X)(σ) = tr[A^σ X]`. Its adjoint for the Hilbert--Schmidt inner
-product is `Γ_n† ψ = ∑_τ ψ(τ) (A^τ)†`, and the operator `Γ_n Γ_n†` on the `n`-site space has the
-matrix `tr[A^σ (A^τ)†]`. This operator is Hermitian for every tensor. When
-`Γ_n Γ_n† Γ_n = c Γ_n` for a positive `c`, it is `c` times the orthogonal projector onto
-`G_n(A)`, so the parent interaction is `1 - c⁻¹ Γ_n Γ_n†`.
+For an MPS tensor `A` the local ground space \(G_n(A)\) on `n` sites is the range of the
+boundary parametrization \(\Gamma_n(X)(\sigma) = \operatorname{tr}[A^\sigma X]\). Its adjoint
+for the Hilbert--Schmidt inner product is
+\(\Gamma_n^\dagger \psi = \sum_\tau \psi(\tau) (A^\tau)^\dagger\), and the operator
+\(\Gamma_n \Gamma_n^\dagger\) on the `n`-site space has the matrix
+\(\operatorname{tr}[A^\sigma (A^\tau)^\dagger]\). This operator is Hermitian for every tensor.
+When \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) for a positive `c`, it is `c` times
+the orthogonal projector onto \(G_n(A)\), so the parent interaction is
+\(1 - c^{-1} \Gamma_n \Gamma_n^\dagger\).
 
-On three sites, if the two lifts of `Γ_2 Γ_2†` to the overlapping pairs of sites multiply in
-either order to the same multiple of `Γ_3 Γ_3†`, then the translated two-site parent terms
-commute on every ring of at least three sites.
+On three sites, if the two lifts of \(\Gamma_2 \Gamma_2^\dagger\) to the overlapping pairs of
+sites multiply in either order to the same multiple of \(\Gamma_3 \Gamma_3^\dagger\), then the
+translated two-site parent terms commute on every ring of at least three sites.
 
 These are the steps of the proofs of Lemma 6.11 and Theorem 6.12 of Schuch, Cirac, and
 Pérez-García (arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2098–2156) that do not use
@@ -28,14 +31,17 @@ Pérez-García (arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2098–21
 
 ## Main definitions
 
-* `MPSTensor.groundSpaceMapAdjoint A n`: the map `ψ ↦ ∑_τ ψ(τ) (A^τ)†`.
-* `MPSTensor.groundSpaceFrame A n`: the operator `Γ_n Γ_n†`.
+* `MPSTensor.groundSpaceMapAdjoint A n`: the map
+  \(\psi \mapsto \sum_\tau \psi(\tau) (A^\tau)^\dagger\).
+* `MPSTensor.groundSpaceFrame A n`: the operator \(\Gamma_n \Gamma_n^\dagger\).
 
 ## Main results
 
-* `MPSTensor.groundSpaceFrame_isHermitian`: the matrix of `Γ_n Γ_n†` is Hermitian.
-* `MPSTensor.parentInteraction_eq_one_sub_smul_groundSpaceFrame`: if `Γ_n Γ_n† Γ_n = c Γ_n`
-  with `c > 0`, then the parent interaction is `1 - c⁻¹ Γ_n Γ_n†`.
+* `MPSTensor.groundSpaceFrame_isHermitian`: the matrix of \(\Gamma_n \Gamma_n^\dagger\) is
+  Hermitian.
+* `MPSTensor.parentInteraction_eq_one_sub_smul_groundSpaceFrame`: if
+  \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) with \(c > 0\), then the parent
+  interaction is \(1 - c^{-1} \Gamma_n \Gamma_n^\dagger\).
 * `MPSTensor.isNNCPH_of_pairLift_groundSpaceFrame`: commutation of the two-site parent terms
   on every ring of at least three sites from the three-site identities.
 
@@ -71,7 +77,7 @@ theorem sum_cfg_three (f : Cfg d 3 → M) : ∑ σ, f σ = ∑ a, ∑ b, ∑ c, 
 end Sums
 
 /-- The adjoint of the boundary parametrization `Γ_n` for the Hilbert--Schmidt inner product:
-`ψ ↦ ∑_τ ψ(τ) (A^τ)†`. -/
+\(\psi \mapsto \sum_\tau \psi(\tau) (A^\tau)^\dagger\). -/
 noncomputable def groundSpaceMapAdjoint (A : MPSTensor d D) (n : ℕ) :
     NSiteSpace d n →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   ∑ τ : Cfg d n, (LinearMap.proj τ).smulRight (Kraus.evalWord A (List.ofFn τ))ᴴ
@@ -80,10 +86,11 @@ theorem groundSpaceMapAdjoint_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpa
     groundSpaceMapAdjoint A n ψ = ∑ τ, ψ τ • (Kraus.evalWord A (List.ofFn τ))ᴴ := by
   simp [groundSpaceMapAdjoint]
 
-/-- The operator `Γ_n Γ_n†` on the `n`-site space, with matrix `tr[A^σ (A^τ)†]`. For `n = 2` it
-is the operator of arXiv:1001.3807, equation `eq:iso:ham-proj-from-A`
-(`Papers/1001.3807/paper_v3.tex` lines 2103–2107, figure `figs4/ham-proj-from-A.pdf`), in
-which the tensors `A†` are the adjoint matrices. -/
+/-- The operator \(\Gamma_n \Gamma_n^\dagger\) on the `n`-site space, with matrix
+\(\operatorname{tr}[A^\sigma (A^\tau)^\dagger]\). For \(n = 2\) it is the operator of
+arXiv:1001.3807, equation "eq:iso:ham-proj-from-A" (`Papers/1001.3807/paper_v3.tex`
+lines 2103–2107, figure `figs4/ham-proj-from-A.pdf`), in which the tensors `A†` are the adjoint
+matrices. -/
 noncomputable def groundSpaceFrame (A : MPSTensor d D) (n : ℕ) :
     Module.End ℂ (NSiteSpace d n) :=
   groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n
@@ -94,7 +101,7 @@ theorem groundSpaceFrame_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpace d 
       Matrix.trace (Kraus.evalWord A (List.ofFn σ) * (Kraus.evalWord A (List.ofFn τ))ᴴ) := by
   simp [groundSpaceFrame, groundSpaceMapAdjoint_apply, Matrix.mul_sum, Matrix.trace_sum]
 
-/-- The matrix of `Γ_n Γ_n†` is Hermitian. -/
+/-- The matrix of \(\Gamma_n \Gamma_n^\dagger\) is Hermitian. -/
 theorem groundSpaceFrame_isHermitian (A : MPSTensor d D) (n : ℕ) :
     (LinearMap.toMatrix' (groundSpaceFrame A n)).IsHermitian := by
   classical
@@ -103,7 +110,8 @@ theorem groundSpaceFrame_isHermitian (A : MPSTensor d D) (n : ℕ) :
     Pi.single_apply, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   rw [← Matrix.trace_conjTranspose, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
 
-/-- If `Γ_n Γ_n† Γ_n = c Γ_n` with `c > 0`, then `c⁻¹ Γ_n Γ_n†` is idempotent. -/
+/-- If \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) with \(c \neq 0\), then
+\(c^{-1} \Gamma_n \Gamma_n^\dagger\) is idempotent. -/
 theorem isIdempotentElem_smul_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c : ℂ}
     (hc : c ≠ 0)
     (h : groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n ∘ₗ groundSpaceMap A n =
@@ -116,8 +124,8 @@ theorem isIdempotentElem_smul_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c 
   rw [IsIdempotentElem, smul_mul_smul_comm, h', smul_smul, mul_assoc, inv_mul_cancel₀ hc,
     mul_one]
 
-/-- If `Γ_n Γ_n† Γ_n = c Γ_n` with `c ≠ 0`, then the range of `Γ_n Γ_n†` is the local ground
-space `G_n(A)`. -/
+/-- If \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) with \(c \neq 0\), then the range of
+\(\Gamma_n \Gamma_n^\dagger\) is the local ground space \(G_n(A)\). -/
 theorem range_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c : ℂ} (hc : c ≠ 0)
     (h : groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n ∘ₗ groundSpaceMap A n =
       c • groundSpaceMap A n) :
@@ -130,8 +138,9 @@ theorem range_groundSpaceFrame {A : MPSTensor d D} {n : ℕ} {c : ℂ} (hc : c �
   rw [map_smul, groundSpaceFrame, LinearMap.comp_apply, hX, smul_smul, inv_mul_cancel₀ hc,
     one_smul]
 
-/-- If `Γ_n Γ_n† Γ_n = c Γ_n` with `c > 0`, then `c⁻¹ Γ_n Γ_n†` is the orthogonal projector onto
-the local ground space, so the parent interaction `1 - Π_{G_n(A)}` is `1 - c⁻¹ Γ_n Γ_n†`. -/
+/-- If \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) with \(c > 0\), then
+\(c^{-1} \Gamma_n \Gamma_n^\dagger\) is the orthogonal projector onto the local ground space, so
+the parent interaction \(1 - \Pi_{G_n(A)}\) is \(1 - c^{-1} \Gamma_n \Gamma_n^\dagger\). -/
 theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {n : ℕ}
     {c : ℝ} (hc : 0 < c)
     (h : groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n ∘ₗ groundSpaceMap A n =
@@ -141,7 +150,7 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
   have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hc.ne'
   set P := (c : ℂ)⁻¹ • groundSpaceFrame A n with hP
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
-  -- The Euclidean form of `P` is a symmetric projection with range `G_n(A)`.
+  -- The Euclidean form of `P` is a symmetric projection with range \(G_n(A)\).
   let PES : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n) :=
     e.symm.toLinearMap ∘ₗ P ∘ₗ e.toLinearMap
   have hPES : PES = Matrix.toEuclideanLin (LinearMap.toMatrix' P) := by
@@ -177,31 +186,37 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
 
 /-! ### Three sites -/
 
+/-- The lift to the first pair of sites is linear. -/
 theorem leftPairLift_smul (k : ℂ) (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
     leftPairLift (k • Q) = k • leftPairLift Q := by
   ext ψ σ
   simp
 
+/-- The lift to the second pair of sites is linear. -/
 theorem rightPairLift_smul (k : ℂ) (Q : NSiteSpace d 2 →ₗ[ℂ] NSiteSpace d 2) :
     rightPairLift (k • Q) = k • rightPairLift Q := by
   ext ψ σ
   simp
 
+/-- Replacing the first pair of sites of \((s_0, s_1, s_2)\). -/
 @[simp] theorem replaceAXCfg_vecCons (s₀ s₁ s₂ a b : Fin d) :
     replaceAXCfg ![s₀, s₁, s₂] ![a, b] = ![a, b, s₂] := by
   funext k
   fin_cases k <;> rfl
 
+/-- Replacing the second pair of sites of \((s_0, s_1, s_2)\). -/
 @[simp] theorem replaceXBCfg_vecCons (s₀ s₁ s₂ a b : Fin d) :
     replaceXBCfg ![s₀, s₁, s₂] ![a, b] = ![s₀, a, b] := by
   funext k
   fin_cases k <;> rfl
 
+/-- The first pair of sites of \((s_0, s_1, s_2)\). -/
 @[simp] theorem axPairCfg_vecCons (s₀ s₁ s₂ : Fin d) :
     axPairCfg ![s₀, s₁, s₂] = ![s₀, s₁] := by
   funext k
   fin_cases k <;> rfl
 
+/-- The second pair of sites of \((s_0, s_1, s_2)\). -/
 @[simp] theorem xbPairCfg_vecCons (s₀ s₁ s₂ : Fin d) :
     xbPairCfg ![s₀, s₁, s₂] = ![s₁, s₂] := by
   funext k
@@ -217,9 +232,12 @@ theorem evalWord_ofFn_three (A : MPSTensor d D) (a b c : Fin d) :
     Kraus.evalWord A (List.ofFn ![a, b, c]) = A a * A b * A c := by
   simp [List.ofFn_succ, Matrix.mul_assoc]
 
-/-- The product of the lift of `Γ_2 Γ_2†` to the first pair of sites with its lift to the second
-pair has the matrix `∑_b tr[A^{s₀} A^{s₁} (A^{w₀} A^b)†] tr[A^b A^{s₂} (A^{w₁} A^{w₂})†]`; if this
-sum is `c tr[A^{s₀s₁s₂} (A^{w₀w₁w₂})†]`, the product is `c Γ_3 Γ_3†`. -/
+/-- The product of the lift of \(\Gamma_2 \Gamma_2^\dagger\) to the first pair of sites with its
+lift to the second pair has the matrix \(\sum_b t_b t'_b\), with
+\(t_b = \operatorname{tr}[A^{s_0} A^{s_1} (A^{w_0} A^b)^\dagger]\) and
+\(t'_b = \operatorname{tr}[A^b A^{s_2} (A^{w_1} A^{w_2})^\dagger]\); if this sum is
+\(c \operatorname{tr}[A^{s_0 s_1 s_2} (A^{w_0 w_1 w_2})^\dagger]\), the product is
+\(c \Gamma_3 \Gamma_3^\dagger\). -/
 theorem leftPairLift_mul_rightPairLift_groundSpaceFrame (A : MPSTensor d D) (c : ℂ)
     (h : ∀ s₀ s₁ s₂ w₀ w₁ w₂ : Fin d,
       ∑ b, Matrix.trace (A s₀ * A s₁ * (A w₀ * A b)ᴴ) *
@@ -242,9 +260,12 @@ theorem leftPairLift_mul_rightPairLift_groundSpaceFrame (A : MPSTensor d D) (c :
   rw [mul_left_comm, ← h, Finset.mul_sum]
   exact Finset.sum_congr rfl fun b _ => by ring
 
-/-- The product of the lift of `Γ_2 Γ_2†` to the second pair of sites with its lift to the first
-pair has the matrix `∑_b tr[A^{s₀} A^b (A^{w₀} A^{w₁})†] tr[A^{s₁} A^{s₂} (A^b A^{w₂})†]`; if this
-sum is `c tr[A^{s₀s₁s₂} (A^{w₀w₁w₂})†]`, the product is `c Γ_3 Γ_3†`. -/
+/-- The product of the lift of \(\Gamma_2 \Gamma_2^\dagger\) to the second pair of sites with its
+lift to the first pair has the matrix \(\sum_b t_b t'_b\), with
+\(t_b = \operatorname{tr}[A^{s_0} A^b (A^{w_0} A^{w_1})^\dagger]\) and
+\(t'_b = \operatorname{tr}[A^{s_1} A^{s_2} (A^b A^{w_2})^\dagger]\); if this sum is
+\(c \operatorname{tr}[A^{s_0 s_1 s_2} (A^{w_0 w_1 w_2})^\dagger]\), the product is
+\(c \Gamma_3 \Gamma_3^\dagger\). -/
 theorem rightPairLift_mul_leftPairLift_groundSpaceFrame (A : MPSTensor d D) (c : ℂ)
     (h : ∀ s₀ s₁ s₂ w₀ w₁ w₂ : Fin d,
       ∑ b, Matrix.trace (A s₀ * A b * (A w₀ * A w₁)ᴴ) *
@@ -266,9 +287,9 @@ theorem rightPairLift_mul_leftPairLift_groundSpaceFrame (A : MPSTensor d D) (c :
   rw [mul_left_comm, ← h, Finset.mul_sum]
   exact Finset.sum_congr rfl fun b _ => by ring
 
-/-- If `Γ_2 Γ_2† Γ_2 = c Γ_2` with `c > 0` and the lifts of `Γ_2 Γ_2†` to the two overlapping
-pairs of three sites commute, then the translated two-site parent terms commute on every ring of
-at least three sites. -/
+/-- If \(\Gamma_2 \Gamma_2^\dagger \Gamma_2 = c \Gamma_2\) with \(c > 0\) and the lifts of
+\(\Gamma_2 \Gamma_2^\dagger\) to the two overlapping pairs of three sites commute, then the
+translated two-site parent terms commute on every ring of at least three sites. -/
 theorem isNNCPH_of_pairLift_groundSpaceFrame {A : MPSTensor d D} {c : ℝ} (hc : 0 < c)
     (h : groundSpaceMap A 2 ∘ₗ groundSpaceMapAdjoint A 2 ∘ₗ groundSpaceMap A 2 =
       (c : ℂ) • groundSpaceMap A 2)
