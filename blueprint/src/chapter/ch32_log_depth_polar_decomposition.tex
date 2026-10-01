@@ -326,6 +326,72 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     injective; apply Theorem~\ref{thm:ldpolar_injective} and reindex.
 \end{proof}
 
+\begin{theorem}[Support projector of a matrix supported on a set of columns]
+    \label{thm:ldpolar_support_diagonal}
+    \lean{Matrix.polarSupport_eq_diagonal_of_support}
+    \leanok
+    \uses{def:ldpolar_matrix}
+    Let $S$ be a set of column indices of $M$, let the columns of $M$ outside
+    $S$ vanish, and let $Mx=0$ imply $x=0$ for every vector $x$ supported on
+    $S$. Then $\Pi$ is the coordinate projector $\Pi_S$ onto $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_support, thm:ldpolar_pos}
+    Since $M\Pi_S=M$, the matrix $Q=P(\Id-\Pi_S)$ has
+    $Q^\dagger Q=(\Id-\Pi_S)M^\dagger M(\Id-\Pi_S)=0$, so $Q=0$. As
+    $\Pi=PR$ for some $R$ by Theorem~\ref{thm:ldpolar_support}, and $\Pi$ and $P$ are
+    Hermitian, $\Pi(\Id-\Pi_S)=R^\dagger Q=0$, that is, $\Pi=\Pi\Pi_S$.
+    Conversely, $M\Pi_S(\Id-\Pi)=M(\Id-\Pi)=0$, and every column of
+    $\Pi_S(\Id-\Pi)$ is supported on $S$, so $\Pi_S(\Id-\Pi)=0$. Hence
+    $\Pi=\Pi^\dagger=\Pi_S\Pi=\Pi_S$.
+\end{proof}
+
+\begin{definition}[Injectivity on a set of bond pairs]
+    \label{def:ldpolar_injective_on}
+    \lean{MPSTensor.IsInjectiveOn}
+    \leanok
+    \uses{def:ldpolar_physical_matrix, def:injective}
+    Let $S$ be a set of pairs of bond indices. A tensor $B$ of physical
+    dimension $n$ and bond dimension $D$ is \emph{injective on $S$} if
+    $B^i_{\alpha\beta}=0$ for all $i$ and $(\alpha,\beta)\notin S$, and the
+    matrices $B^i$ span every matrix unit $\ket\alpha\bra\beta$ with
+    $(\alpha,\beta)\in S$. For the rectangle
+    $S=\{(\alpha,\beta):\alpha<a,\ \beta<b\}$ this is injectivity of a tensor
+    with bond dimensions $a$ and $b$ whose matrices are padded with zeros.
+\end{definition}
+
+\begin{theorem}[Polar factors of a tensor injective on a set of bond pairs]
+    \label{thm:ldpolar_tensor_injective_on}
+    \lean{MPSTensor.isInjectiveOn_univ_iff,
+        MPSTensor.IsInjectiveOn.eq_zero_of_mulVec_eq_zero,
+        MPSTensor.polarSupportMatrix_eq_diagonal,
+        MPSTensor.sum_star_polarIsoMatrix_mul, MPSTensor.polarPosTensor_eq_zero,
+        MPSTensor.exists_polarIsoMatrix_eq_sum}
+    \leanok
+    \uses{def:ldpolar_injective_on, def:ldpolar_tensor}
+    A tensor is injective on the set of all bond pairs if and only if it is
+    injective. Let $B$ be injective on $S$. Then $\widehat Bx=0$ implies $x=0$
+    for every vector $x$ supported on $S$, the support projector of $B=VP$ is
+    the coordinate projector $\Pi_S$, so that
+    $\sum_i\overline{V_{ix}}V_{iy}$ is $1$ if $x=y\in S$ and $0$ otherwise,
+    and $P^x=0$ for every pair $x\notin S$. For every tensor $B$ there is a
+    matrix $G$ on the bond pairs with $V_{ix}=\sum_aB^i_aG_{ax}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_support_diagonal, thm:ldpolar_tensor_decomposition,
+        lem:ldp_orthogonal_sum_polar}
+    If $B$ spans all matrix units, its span is the full matrix algebra, and
+    conversely. For $x$ supported on $S$ with $\widehat Bx=0$, the functional
+    $Y\mapsto\sum_{\alpha,\beta}Y_{\alpha\beta}x_{\alpha\beta}$ vanishes on
+    every $B^i$, hence on every matrix unit in $S$, so $x=0$ on $S$. Then
+    Theorem~\ref{thm:ldpolar_support_diagonal} gives $\Pi=\Pi_S$, the column
+    identity is $V^\dagger V=\Pi_S$, and $P^x=\sum_y(\Pi_S)_{xy}P^y=0$ for
+    $x\notin S$ because $\Pi P=P$. Finally $V=\widehat BR$ for some $R$ by
+    Lemma~\ref{lem:ldp_orthogonal_sum_polar}; reindexing gives $G$.
+\end{proof}
+
 \begin{theorem}[Transfer map of the positive part of a blocked tensor]
     \label{thm:ldpolar_blocked_transfer}
     \lean{MPSTensor.transferMap_polarPosTensor_blockTensor}

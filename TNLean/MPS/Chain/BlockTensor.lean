@@ -24,6 +24,10 @@ with the common bond dimension `D` and the same state, to which the blocking her
 * `MPSChainTensor.blockTensor` — the blocked tensor of a site-dependent chain.
 * `MPSChainTensor.blockTensor_const` — for a constant chain it is `MPSTensor.blockTensor`.
 * `MPSChainTensor.eval_eq_prod_ofFn` — the ordered product along a chain as a list product.
+
+## References
+
+* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS".
 -/
 
 open scoped Matrix

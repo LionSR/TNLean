@@ -41,7 +41,8 @@ This file proves these three steps.
 ## References
 
 * arXiv:2307.01696, paragraph "Approximation through the fixed-point state" (eqs. (8) and (9)) and
-  paragraph "Preparing the approximate state" (eqs. (10), (11), and (12)).
+  paragraph "Preparing the approximate state" (eqs. (10), (11), and (12)), and Supplemental
+  Material, "Proof of Lemma 1 and extension to non-normal tensors" and proof of Lemma 1'(i).
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators

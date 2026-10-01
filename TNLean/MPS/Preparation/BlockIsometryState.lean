@@ -54,8 +54,10 @@ case.
 
 ## References
 
-* arXiv:2307.01696, eqs. (9) and (10), the paragraph "Inhomogeneous short-range correlated MPS",
-  and Supplemental Material, proof of Lemma 1'(i) and proof of Theorem 1.
+* arXiv:2307.01696, eqs. (9) and (10), the paragraphs "Approximation through the fixed-point
+  state" and "Inhomogeneous short-range correlated MPS", and Supplemental Material, "Proof of
+  Lemma 1 and extension to non-normal tensors", proof of Lemma 1'(i) and proof of Theorem 1.
+* arXiv:2103.13367, the mixed transfer matrices after eq. `eq:a_tensor`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace

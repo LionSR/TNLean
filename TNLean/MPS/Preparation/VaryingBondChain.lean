@@ -16,12 +16,15 @@ matrices `A_k^i` of size `D_k × D_{k+1}`, the bond `k` being the one to the lef
 the state has coefficients `Tr(A_0^{s_0} ⋯ A_{N-1}^{s_{N-1}})`.
 
 Padding every matrix with zeros to a `D × D` matrix (`MPSPreparation.VaryingBondChain.zeroPad`)
-gives a chain with the common bond dimension `D` and the same state
-(`MPSPreparation.VaryingBondChain.coeff_zeroPad`). Cut the ring into blocks; the blocked tensor
-of block `k` of the padded chain is supported on the rectangle `[0, D_{o_k}) × [0, D_{o_{k+1}})`
-of the bonds at the ends of the block (`MPSPreparation.VaryingBondChain.blockCorner`), and the
-blocked tensor of the rectangular chain is injective exactly when the padded one is injective on
-that rectangle (`MPSPreparation.VaryingBondChain.IsBlockInjective`). Pairs `ω^k` on
+gives a chain with the common bond dimension `D` and, on a ring of `N ≥ 1` sites, the same state
+(`MPSPreparation.VaryingBondChain.coeff_zeroPad`). Cut the ring into blocks; for a block of
+length at least one, the blocked tensor of block `k` of the padded chain vanishes outside the
+rectangle `[0, D_{o_k}) × [0, D_{o_{k+1}})` of the bonds at the ends of the block
+(`MPSPreparation.VaryingBondChain.chainBlockTensor_zeroPad_eq_zero`). Injectivity of the blocked
+tensors (`MPSPreparation.VaryingBondChain.IsBlockInjective`) says that the padded blocked
+matrices span every matrix unit in that rectangle, which is injectivity of the rectangular
+blocked tensor; the padded blocked tensor is then injective on the rectangle
+(`MPSPreparation.VaryingBondChain.IsBlockInjective.isInjectiveOn`). Pairs `ω^k` on
 `ℂ^{D_j} ⊗ ℂ^{D_j}`, for the bond `j` between blocks `k` and `k + 1`, are padded in the same way
 (`MPSPreparation.VaryingBondChain.padPairs`), and their product is supported on the rectangles.
 
@@ -30,7 +33,8 @@ for matrix product states "with bond dimension at most `D`".
 
 ## References
 
-* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS".
+* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS", and the footnote to the
+  paragraph "Approximation through the fixed-point state".
 -/
 
 open scoped BigOperators Matrix

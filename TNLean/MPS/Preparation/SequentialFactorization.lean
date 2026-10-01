@@ -50,7 +50,8 @@ factor on those inputs.
 
 * Malz, Styliaris, Wei, Cirac, *Preparation of matrix product states with log-depth
   quantum circuits*, arXiv:2307.01696, eqs. (13), (14), (15) and the paragraph
-  between them.
+  between them, the paragraph "Inhomogeneous short-range correlated MPS", and Supplemental
+  Material, "Proof of Lemma 1 and extension to non-normal tensors".
 -/
 
 open scoped BigOperators Matrix Kronecker ComplexOrder

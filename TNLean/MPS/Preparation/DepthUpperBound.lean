@@ -42,9 +42,14 @@ with "bond dimension at most `D`" varying along the ring, padded with zeros.
 **Scope restriction (injective blocks of length at least `3D`):** the site-dependent depth bounds
 `MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn` and
 `MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState` assume that every blocked tensor
-is injective (on the rectangle of its bonds) and that every block has length at least `3D`; the
-source paragraph "Inhomogeneous short-range correlated MPS" states neither. Documented in
-`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+is injective, on a set of bond pairs carrying the pairs or on all pairs, and that every block has
+length at least `3D`; the source paragraph "Inhomogeneous short-range correlated MPS" states
+neither. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* arXiv:2307.01696, eqs. (1) and (10)–(12), Fig. 1, the paragraphs "The sequential-RG circuit"
+  and "Inhomogeneous short-range correlated MPS", and Supplemental Material, proof of Theorem 1.
 -/
 
 open Matrix MPSTensor
