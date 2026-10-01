@@ -243,8 +243,8 @@ theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
     have := congrArg Fin.val (eκ.symm.injective h)
     exact Fin.ext this
   obtain ⟨bb, Q, hb0, hbl, -, hrow, -, hisoQ, hVQ⟩ :=
-    exists_isometric_chain_of_eq_mul_of_le (blockSum A (flatCoord Dj) fun _ => 1) n hr G V
-      hV hiso
+    exists_isometric_chain_of_eq_mul_of_le (fun _ => blockSum A (flatCoord Dj) fun _ => 1) hr G V
+      (fun σ x hx => by rw [MPSChainTensor.eval_const]; exact hV σ x hx) hiso
   obtain ⟨U, hUpp, hUQ⟩ := hC (n + 1) hq bb Q hb0 hrow hisoQ
   refine ⟨U, hUpp, fun j l r' τ => ?_⟩
   set x : Fin ((∑ j, Dj j) * (∑ j, Dj j)) := Fin.castLE hr (eκ ⟨j, (l, r')⟩) with hxdef
