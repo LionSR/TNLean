@@ -18,6 +18,9 @@ import TNLean.MPS.Periodic.CornerTransition
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Periodic.EqualCase
 import TNLean.MPS.Periodic.EqualCaseGlobal
+import TNLean.MPS.Periodic.EqualCaseGlobal.Basic
+import TNLean.MPS.Periodic.EqualCaseGlobal.Canonical
+import TNLean.MPS.Periodic.EqualCaseGlobal.IrreducibleForm
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Periodic.IrreducibleFormPeriods
@@ -27,6 +30,7 @@ import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.PeriodBound
 import TNLean.MPS.Periodic.PeriodExistence
+import TNLean.MPS.Periodic.PhaseClasses
 import TNLean.MPS.Periodic.PrescribedBlocking
 import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Periodic.ProportionalOverlap
