@@ -2418,6 +2418,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### finite three-cocycle entry elimination — candidate
+- **Pattern:** specialize the cocycle equation at a concrete quadruple, reduce its group
+  products, and simplify using entries already known to be one.
+- **Seen:** 18 specializations in `eq_one_of_klein_entries`, in
+  `TNLean/Algebra/KleinCocycleCompleteness.lean` (2026-09-30).
+- **Abstraction:** no new tactic yet; these are the entries of one finite calculation.
+  If a second group needs the pattern, prefer a general cocycle determination lemma
+  before automating the table elimination.
+
 ### weighted W-state rows across a cut — candidate
 - **Pattern:** rewrite a weighted sum of traces of two word products as a
   scalar multiple of the W amplitude on the concatenated configuration, then

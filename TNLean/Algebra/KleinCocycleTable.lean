@@ -13,8 +13,9 @@ import Mathlib.GroupTheory.GroupAction.Quotient
 
 The three binary parameters and the three order-two restriction signs are those of
 arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex`, lines 1845–1872.
-These are explicit representatives; this module does not claim that they exhaust
-third cohomology or classify the corresponding matrix product operator phases.
+The completeness of these representatives in third cohomology is proved in
+`TNLean.Algebra.KleinCocycleCompleteness`. The scalar classification alone does not
+construct the corresponding matrix product operator phases.
 The representatives are pairwise inequivalent. Their restrictions to any subgroup
 are classified by the three diagonal signs; the all-ones class restricts
 trivially only to the trivial subgroup. Compatible L-symbols force each block
