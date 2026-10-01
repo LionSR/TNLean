@@ -202,6 +202,45 @@ theorem regWindow_injective {j p : ℕ} (hj : j ≤ k) (hp : p < 2 ^ j) :
   unfold regOffset at h'
   exact Fin.ext (by split_ifs at h' <;> omega)
 
+omit [NeZero s] in
+/-- Sites of distinct sub-blocks of the same length are distinct. -/
+theorem mul_mul_add_ne_of_ne {B p p' o o' : ℕ} (hpp : p ≠ p') (ho : o < s * B)
+    (ho' : o' < s * B) : s * (p * B) + o ≠ s * (p' * B) + o' := by
+  intro h
+  rcases Nat.lt_or_gt_of_ne hpp with hlt | hlt
+  · have := Nat.mul_le_mul_left s (Nat.mul_le_mul_right B hlt)
+    rw [Nat.succ_mul, Nat.mul_add] at this
+    omega
+  · have := Nat.mul_le_mul_left s (Nat.mul_le_mul_right B hlt)
+    rw [Nat.succ_mul, Nat.mul_add] at this
+    omega
+
+omit [NeZero s] in
+/-- A register of depth `j` is not strictly between the two registers of a sub-block of depth
+`j`. -/
+theorem regWindow_val_ne_of_interior {j p p' m : ℕ} (hj : j ≤ k) (t : Fin (s + s))
+    (hm1 : s ≤ m) (hm2 : m + s < s * regSpan k j) :
+    s * (p' * regSpan k j) + regOffset k s j t ≠ s * (p * regSpan k j) + m := by
+  by_cases hpp : p' = p
+  · subst hpp
+    have := mul_sub_two_add_two_mul (s := s) (two_le_regSpan hj)
+    unfold regOffset
+    split_ifs <;> omega
+  · exact mul_mul_add_ne_of_ne hpp (regOffset_lt hj t) (by omega)
+
+/-- The windows of depth `j` are pairwise disjoint and injective. -/
+theorem regWindow_injective₂ {j : ℕ} (hj : j ≤ k) :
+    Function.Injective fun pt : Fin (2 ^ j) × Fin (s + s) => regWindow (s := s) k j pt.1 pt.2 := by
+  rintro ⟨p, t⟩ ⟨p', t'⟩ h
+  have h' := congrArg Fin.val h
+  simp only [regWindow_val hj p.isLt, regWindow_val hj p'.isLt] at h'
+  by_cases hpp : p = p'
+  · subst hpp
+    exact Prod.ext rfl (regWindow_injective hj p.isLt (Fin.ext (by
+      rw [regWindow_val hj p.isLt, regWindow_val hj p.isLt]; omega)))
+  · exact absurd h' (mul_mul_add_ne_of_ne (fun h => hpp (Fin.ext h)) (regOffset_lt hj t)
+      (regOffset_lt hj t'))
+
 /-- The product of the unitaries of depth `j` of a block.
 
 Source: arXiv:2307.01696, eq. (16) (the layer `(V⁽ʲ⁾)^{⊗ ⋯}` of the tree). -/
@@ -318,13 +357,7 @@ theorem blockSite_ne_of_subBlock_ne {j p p' m m' : ℕ} (hj : j ≤ k) (hp : p <
   change s * (p * regSpan k j) + m = s * (p' * regSpan k j) + m' at h'
   rcases hne with hne | hne
   · exact hne rfl
-  rcases Nat.lt_or_gt_of_ne hne with hlt | hlt
-  · have := Nat.mul_le_mul_left s (Nat.mul_le_mul_right (regSpan k j) hlt)
-    rw [Nat.succ_mul, Nat.mul_add] at this
-    omega
-  · have := Nat.mul_le_mul_left s (Nat.mul_le_mul_right (regSpan k j) hlt)
-    rw [Nat.succ_mul, Nat.mul_add] at this
-    omega
+  · exact mul_mul_add_ne_of_ne hne hm hm' h'
 
 theorem mem_regLevelGates {j : ℕ} {g : RegisterGate d N s} (hg : g ∈ regLevelGates X hN j) :
     ∃ b : Fin M, ∃ p < 2 ^ j, g = regGate X hN j b p := by
