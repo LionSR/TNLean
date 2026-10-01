@@ -365,6 +365,32 @@ theorem conj_op_mem_supportedOperators (L : Layer d N) {X : Set (Fin N)}
     (mul_mem_supportedOperators (star_mem_supportedOperators hPX)
       (supportedOperators_mono (subset_neighbourhood X 1) hA)) hPX
 
+/-- The layer of the adjoint gates `gate k†`, on the same pairs. -/
+def adjoint (L : Layer d N) : Layer d N where
+  bonds := L.bonds
+  gate k := star (L.gate k)
+  gate_mem_unitary k hk := Unitary.star_mem (L.gate_mem_unitary k hk)
+  gate_mem_supportedOperators k hk :=
+    star_mem_supportedOperators (L.gate_mem_supportedOperators k hk)
+  pairwiseDisjoint := L.pairwiseDisjoint
+
+theorem adjoint_partialOp (L : Layer d N) (s : Finset (Fin N)) (hs : s ⊆ L.bonds) :
+    L.adjoint.partialOp s hs = star (L.partialOp s hs) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [partialOp]
+  | insert a s ha ih =>
+    have hs' : s ⊆ L.bonds := (Finset.subset_insert a s).trans hs
+    have ih' := ih hs'
+    simp only [partialOp] at ih' ⊢
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha,
+      Finset.noncommProd_insert_of_notMem' _ _ _ _ ha, star_mul, ih']
+    rfl
+
+/-- The adjoint layer implements the adjoint of the layer unitary. -/
+theorem adjoint_op (L : Layer d N) : L.adjoint.op = star L.op :=
+  L.adjoint_partialOp _ _
+
 end Layer
 
 /-- The unitary of a local circuit given by its list of layers, the head of the list being
@@ -381,6 +407,22 @@ theorem circuitOp_mem_unitary (Ls : List (Layer d N)) :
   | nil => exact Submonoid.one_mem _
   | cons L Ls ih => exact Submonoid.mul_mem _ ih L.op_mem_unitary
 
+theorem circuitOp_append (Ls Ls' : List (Layer d N)) :
+    circuitOp (Ls ++ Ls') = circuitOp Ls' * circuitOp Ls := by
+  induction Ls with
+  | nil => simp [circuitOp]
+  | cons L Ls ih => rw [List.cons_append, circuitOp, circuitOp, ih, Matrix.mul_assoc]
+
+/-- Reversing the order of the layers and replacing each gate by its adjoint implements the
+adjoint of the circuit. -/
+theorem circuitOp_map_adjoint_reverse (Ls : List (Layer d N)) :
+    circuitOp (Ls.map Layer.adjoint).reverse = star (circuitOp Ls) := by
+  induction Ls with
+  | nil => simp [circuitOp]
+  | cons L Ls ih =>
+    rw [List.map_cons, List.reverse_cons, circuitOp_append, ih]
+    simp only [circuitOp, Matrix.one_mul, star_mul, Layer.adjoint_op]
+
 /-- A *local circuit of depth `T`* on the ring of `N` sites: a product of `T` layers, each a
 product of unitaries on pairwise disjoint pairs of neighbouring sites.
 
@@ -388,6 +430,32 @@ Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum c
 blueprint `def:ldp_local_circuit`. -/
 def IsLocalCircuitOfDepth (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ) : Prop :=
   ∃ Ls : List (Layer d N), Ls.length = T ∧ U = circuitOp Ls
+
+namespace IsLocalCircuitOfDepth
+
+variable {U U' : Matrix (Cfg d N) (Cfg d N) ℂ} {T T' : ℕ}
+
+theorem mem_unitary (h : IsLocalCircuitOfDepth U T) :
+    U ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+  obtain ⟨Ls, -, rfl⟩ := h
+  exact circuitOp_mem_unitary Ls
+
+/-- **The inverse of a local circuit.** The adjoint of a local circuit of depth `T` is a local
+circuit of depth `T`: its layers are those of `U` in the reverse order, with every gate replaced
+by its adjoint, which acts on the same pair of sites. -/
+theorem star (h : IsLocalCircuitOfDepth U T) : IsLocalCircuitOfDepth (star U) T := by
+  obtain ⟨Ls, rfl, rfl⟩ := h
+  exact ⟨(Ls.map Layer.adjoint).reverse, by simp, (circuitOp_map_adjoint_reverse Ls).symm⟩
+
+/-- **Local circuits in series.** Applying a local circuit of depth `T` and then one of depth
+`T'` is a local circuit of depth `T + T'`. -/
+theorem mul (h : IsLocalCircuitOfDepth U T) (h' : IsLocalCircuitOfDepth U' T') :
+    IsLocalCircuitOfDepth (U' * U) (T + T') := by
+  obtain ⟨Ls, rfl, rfl⟩ := h
+  obtain ⟨Ls', rfl, rfl⟩ := h'
+  exact ⟨Ls ++ Ls', List.length_append, (circuitOp_append Ls Ls').symm⟩
+
+end IsLocalCircuitOfDepth
 
 /-- A vector is *prepared in depth `T`* when it is a local circuit of depth `T` applied to a
 product vector.

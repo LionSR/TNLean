@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinSumPermutation
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallExchange
 
 /-!
@@ -37,9 +38,9 @@ blocks sites, which here is the choice of the physical alphabet.
 The source prints `signphysop` as `O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB}c_{BA}
 O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`; the computation above gives the phase on the other side,
 `O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩ = c_{AB}c_{BA} O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩`, which holds for
-every pair of phases. The two forms agree when `(c_{AB} c_{BA})² = 1`, which the source derives
-from `U² = 1` (lines 837--839); the printed form is proved as a corollary with that relation as
-an explicit hypothesis, whose derivation from `U² = 1` is not formalized here.
+every pair of phases. The two forms agree when `(c_{AB} c_{BA})² = 1`, which follows from
+`U² = 1` as in the source (lines 835--839); the printed form is proved as a corollary under
+`U² = 1`.
 
 **Local fix (nondegenerate domain walls, blocked local action):** the exchange relation
 `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv` is stated for
@@ -67,9 +68,11 @@ The half-chain objects `O^{[i]}_x |ψ_A⟩` and the single-endpoint exchange `eq
 * `MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_left`,
   `MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right`: `eq:DWophys`,
   `O^{[i,j]} |ψ_A⟩ = |ψ(A-B-A)⟩` and `O^{[i,j]} |ψ_B⟩ = |ψ(B-A-B)⟩`.
+* `MPOTensor.isInjective_of_physPairing_eq_one`: a tensor with a left inverse is injective.
 * `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv`: `signphysop`,
   with the phase on the side it is acquired, and
-  `...wallString_mul_wallString_mulVec_mpv_of_sq_eq_one` in the printed orientation.
+  `...wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one` in the printed orientation,
+  under `U² = 1`.
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -93,6 +96,23 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1422--1425 (the l
 def physPairing {a b a' b' : ℕ} (P : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (Q : Fin d → Matrix (Fin a') (Fin b') ℂ) : Matrix (Fin a × Fin b) (Fin a' × Fin b') ℂ :=
   Matrix.of fun αβ γδ ↦ ∑ σ, P σ αβ.1 αβ.2 * Q σ γδ.1 γδ.2
+
+/-- **A tensor with a left inverse is injective**: if `P` is a left inverse of `Q`, then every
+matrix unit is the combination `E_{αβ} = ∑_σ P^σ_{αβ} Q^σ`, so the matrices `Q^σ` span the
+full matrix algebra.
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1422--1425 (the left inverses
+`Â`, `B̂` of the injective tensors `A`, `B`). -/
+theorem isInjective_of_physPairing_eq_one {D : ℕ} {P Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
+    (h : physPairing P Q = 1) : Kraus.IsInjective Q := by
+  refine Submodule.eq_top_of_forall_single_mem _ fun a b ↦ ?_
+  have hab : Matrix.single a b (1 : ℂ) = ∑ σ, P σ a b • Q σ := by
+    ext γ δ
+    have := congrFun (congrFun h (a, b)) (γ, δ)
+    simp only [physPairing, Matrix.of_apply, Matrix.one_apply, Prod.mk.injEq] at this
+    simp only [Matrix.single_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, this]
+  rw [hab]
+  exact Submodule.sum_mem _ fun σ _ ↦ Submodule.smul_mem _ _ (Submodule.subset_span ⟨σ, rfl⟩)
 
 /-- One term of the left endpoint tensor, `(V e Â)^{τσ}_a = ∑_{αβ} Â^σ_{αβ} (e^τ V)_{α,(a,β)}`:
 the input leg `σ` is mapped by the left inverse `Â` to a pair of virtual indices, which are
@@ -529,8 +549,8 @@ multiples of the state with the four domain walls `e_{AB}`, `e_{BA}`, `e_{AB}`, 
 `i₂, i₁, j₁, j₂`: the outer string acting second passes over the walls of the inner one and
 acquires `c_{AB} c_{BA}` (`IsDomainWallAction.pair`), while the inner string acting second meets
 only the `B` region. The source prints the phase on the other side; that form is
-`wallString_mul_wallString_mulVec_mpv_of_sq_eq_one`, under `(c_{AB} c_{BA})² = 1`
-(lines 837--839). -/
+`wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one`, under `U² = 1`
+(lines 835--839). -/
 theorem wallString_mul_wallString_mulVec_mpv
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y)) {cAB cBA : ℂ}
@@ -603,17 +623,19 @@ theorem wallString_mul_wallString_mulVec_mpv
   simp only [Matrix.mul_assoc, Matrix.trace_smul, smul_eq_mul]
 
 /-- **Exchange of two domain-wall strings, in the printed orientation** (arXiv:2405.00439,
-`signphysop`, `Papers/2405.00439/MPU-DW.tex` lines 1667--1672): under the hypothesis
-`(c_{AB} c_{BA})² = 1`,
+`signphysop`, `Papers/2405.00439/MPU-DW.tex` lines 1667--1672): if `U = O_g` squares to the
+identity on every nonempty chain, then
 `O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB} c_{BA} O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`.
-**Scope restriction (exchange phase squared):** the source derives the hypothesis from
-`U² = 1` (lines 837--839); here it is assumed, not derived. Documented in
-`docs/paper-gaps/gs24_domain_wall_exchange_square.tex`. -/
-theorem wallString_mul_wallString_mulVec_mpv_of_sq_eq_one
+The two orientations agree because `(c_{AB} c_{BA})² = 1`, which follows from `U² = 1` as in the
+source (lines 835--839,
+`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_sq_eq_one_of_mpo_mul_self_eq_one`);
+the blocks are normal because they have left inverses. -/
+theorem wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
+    (hU : ∀ L, 0 < L → mpo (F.tensor g) L * mpo (F.tensor g) L = 1)
     (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y)) {cAB cBA : ℂ}
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) (hc : (cAB * cBA) ^ 2 = 1) :
+    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
     ∃ N : ℕ, ∀ (u u' v w' w L : ℕ) (h₁ : u + 1 + u' + 1 + v + 1 + (w' + 1 + w) = L)
       (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
       (ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
@@ -622,6 +644,9 @@ theorem wallString_mul_wallString_mulVec_mpv_of_sq_eq_one
         (cAB * cBA) • ((ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
           ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
             (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
+  have hc := hAB.mul_sq_eq_one_of_mpo_mul_self_eq_one
+    (isInjective_of_physPairing_eq_one hÂ.left_left).isNormal
+    (isInjective_of_physPairing_eq_one hÂ.right_right).isNormal hperm hU hBA
   obtain ⟨N, hN⟩ := ad.wallString_mul_wallString_mulVec_mpv hperm hÂ hAB hBA
   refine ⟨N, fun u u' v w' w L h₁ h₂ hu' hv hw' ↦ ?_⟩
   rw [hN u u' v w' w L h₁ h₂ hu' hv hw', smul_smul, ← sq, hc, one_smul]
