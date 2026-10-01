@@ -278,10 +278,13 @@ terms.
 
 ### 4.1 Periodic overlap and periodic fundamental theorem (issue #82)
 
-`TNLean/MPS/Periodic/FundamentalTheorem.lean` proves conditional block-matching
-and scalar multiplicity results. Its declarations still assume a periodic
-overlap hypothesis, and the equal-case theorem treats one-dimensional
-multiplicity spaces. The source theorem for irreducible forms derives the
+At the time of this audit, `TNLean/MPS/Periodic/FundamentalTheorem.lean`
+proved conditional block-matching and scalar multiplicity results. Its
+declarations assumed a periodic overlap hypothesis, and the equal-case theorem
+treated one-dimensional multiplicity spaces. That conditional equal case has
+since been removed; the multiplicity-bearing equal case with derived periods is
+`MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods` in
+`TNLean/MPS/Periodic/IrreducibleFormPeriods.lean`. The source theorem for irreducible forms derives the
 matching from equality of the multiplicity-bearing MPV families and permits
 general diagonal multiplicity matrices. PGVWC07 Theorem `Th:periodic` also has
 unpackaged finite-ring conclusions: the translated periodic decomposition when

@@ -51,6 +51,9 @@ import TNLean.MPS.Preparation.OrthogonalBlockError
 import TNLean.MPS.Preparation.OrthogonalBlockSum
 import TNLean.MPS.Preparation.OrthogonalSumPolar
 import TNLean.MPS.Preparation.OverlappingBlockCounterexample
+import TNLean.MPS.Preparation.OverlappingBlockError
+import TNLean.MPS.Preparation.OverlappingBlockGram
+import TNLean.MPS.Preparation.OverlappingBlockOverlap
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PairProduct
 import TNLean.MPS.Preparation.PermutationGates
@@ -71,6 +74,7 @@ import TNLean.MPS.Preparation.SiteEmbedding
 import TNLean.MPS.Preparation.Staircase
 import TNLean.MPS.Preparation.TeleportationRound
 import TNLean.MPS.Preparation.TreeFactorization
+import TNLean.MPS.Preparation.TreeMERA
 import TNLean.MPS.Preparation.TwoLevel
 import TNLean.MPS.Preparation.UnitaryGates
 import TNLean.MPS.Preparation.VarianceOfAverages

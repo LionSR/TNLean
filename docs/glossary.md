@@ -487,6 +487,24 @@ normalizations.
   printed notion. Recorded in
   `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
+#### `TNLean.PEPS.IsGIsometricMPS`
+
+- **Declaration:** `TNLean.PEPS.IsGIsometricMPS (A : ι → Module.End ℂ (MonoidAlgebra ℂ G)) : Prop`.
+- **Defined in:** `TNLean/PEPS/GIsometric.lean`.
+- **Meaning:** an MPS tensor with bond space `ℂ[G]` carrying the left-regular
+  representation `L_g`, invariant (`L_g A^i L_g⁻¹ = A^i`), with
+  `𝒫(A†) 𝒫(A) = c σ` for one constant `c > 0`, where `𝒫(A†)|i⟩ = (A^i)†` and
+  `σ` is the twirl onto the commutant.
+- **Source:** arXiv:1001.3807, Definition `def:iso:isopeps` in the form
+  `𝒫(A)⁻¹ = 𝒫(A†)`, `Papers/1001.3807/paper_v3.tex:1668-1700`.
+- **Sanctioned bridges:** `IsGIsometricMPS.isGInjective` (G-injectivity for
+  the conjugation action of the left-regular representation);
+  `IsGIsometricMPS.concatTensor` (Lemma 6.2 in one dimension).
+- **Caveat / paper gap:** the constant `c` is the normalization Local fix of
+  `IsGIsometric`. No bridge to the coordinate-space `IsGIsometric` is stated:
+  the virtual system here is `End ℂ[G]` rather than a coordinate space.
+  Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
 #### `TNLean.PEPS.IsTorusDimerCovering`
 
 - **Declaration:**
