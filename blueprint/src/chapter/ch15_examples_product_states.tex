@@ -5,6 +5,24 @@ Every product state is a matrix product state with bond dimension
 one~\cite[Appendix~A, ``Product states'']{Cirac2021Matrix}. For site-dependent
 local tensors, the matrix product is closed by boundary vectors.
 
+\begin{definition}[Product vector and its tensor]\label{def:product_state_tensor}
+    \lean{MPSTensor.productVector,
+        MPSTensor.productSiteTensor}
+    \leanok
+    \uses{def:mps_tensor}
+    For local vectors $\ket{\phi^s}=\sum_{i}a^{i,[s]}\ket{i}\in\C^d$,
+    $s=1,\ldots,N$, the product vector
+    $\ket{\psi}=\ket{\phi^1}\otimes\cdots\otimes\ket{\phi^N}$ has coefficient
+    $a^{i_1,[1]}\cdots a^{i_N,[N]}$ on $\ket{i_1,\ldots,i_N}$. Its tensor has
+    bond dimension $D=1$: at site $s$ the matrix of physical index $i$ is the
+    $1\times1$ matrix $a^{i,[s]}$.
+\end{definition}
+
+The boundary vectors are the scalars $v_L=v_R=1$.
+Theorem~\ref{thm:product_state_mps} identifies the resulting contraction
+with the product vector; Corollary~\ref{cor:product_state_ti} gives the
+translation-invariant specialization and its periodic closure.
+
 \begin{definition}[Site-dependent open-boundary contraction]\label{def:site_open_coeff}
     \lean{MPSTensor.siteOpenCoeff}
     \leanok
@@ -34,19 +52,6 @@ local tensors, the matrix product is closed by boundary vectors.
     \leanok
     Both sides are $v_L^{\mathsf T}A^{\sigma_1}\cdots A^{\sigma_N}v_R$.
 \end{proof}
-
-\begin{definition}[Product vector and its tensor]\label{def:product_state_tensor}
-    \lean{MPSTensor.productVector,
-        MPSTensor.productSiteTensor}
-    \leanok
-    \uses{def:mps_tensor}
-    For local vectors $\ket{\phi^s}=\sum_{i}a^{i,[s]}\ket{i}\in\C^d$,
-    $s=1,\ldots,N$, the product vector
-    $\ket{\psi}=\ket{\phi^1}\otimes\cdots\otimes\ket{\phi^N}$ has coefficient
-    $a^{i_1,[1]}\cdots a^{i_N,[N]}$ on $\ket{i_1,\ldots,i_N}$. Its tensor has
-    bond dimension $D=1$: at site $s$ the matrix of physical index $i$ is the
-    $1\times1$ matrix $a^{i,[s]}$.
-\end{definition}
 
 \begin{theorem}[Product states are MPS with $D=1$]\label{thm:product_state_mps}
     \lean{MPSTensor.siteOpenCoeff_productSiteTensor}

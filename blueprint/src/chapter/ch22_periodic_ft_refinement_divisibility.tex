@@ -1,3 +1,28 @@
+\begin{theorem}[Positive-weight periodic decomposition]
+    \label{thm:periodic_positive_decomposition}
+    \lean{MPSTensor.exists_periodic_blockDecomposition}
+    \leanok
+    \uses{def:periodic_tensor, def:same_mpv2_pos}
+    Every tensor $A$ admits $r\in\N$ and, for $k=1,\ldots,r$, left-canonical
+    periodic tensors $B_k$ of positive bond dimensions $D_k$ and weights
+    $\mu_k>0$, with $\sum_{k=1}^rD_k\le D$, such that $A$ has the same matrix
+    product vectors at all positive lengths as $\bigoplus_{k=1}^r\mu_k B_k$.
+    No physical sites are blocked
+    \cite[lines~238--271 and~313--320]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:tp_gauge_arbitrary, thm:irreducible_left_canonical_periodic}
+    Theorem~\ref{thm:tp_gauge_arbitrary} gives $A$ the same positive-length
+    matrix product vectors as $\bigoplus_{k=1}^r\mu_kB_k$ with $\mu_k>0$,
+    $\sum_kD_k\le D$, and each $B_k$ irreducible and left-canonical, so
+    $\rho_{\spec}(\E_{B_k})=1$. By
+    Theorem~\ref{thm:irreducible_left_canonical_periodic}, each $B_k$ is
+    $m_k$-periodic, that is,
+    $\operatorname{Spec}_{\mathrm{per}}(\E_{B_k})=\{\mu\in\C:\mu^{m_k}=1\}$
+    for some $m_k\ge1$.
+\end{proof}
+
 \begin{definition}[$p$-divisible CP map]
     \label{def:p_divisible_channel}
     \lean{MPSTensor.IsPDivisibleChannel}
@@ -92,7 +117,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_coordinates}
+    \uses{thm:periodic_step_coordinates,thm:commuting_projection_block_decomp_isometry}
     The step coordinates partition the original projections, so the $Q_\alpha$
     are mutually orthogonal nonzero projections summing to $\Id_D$.
     Iterating $P_uA^i=A^iP_{u+1}$ over a word of length $p$ shifts the
@@ -110,7 +135,7 @@
     \label{thm:periodic_prescribed_blocking_compression}
     \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
     \leanok
-    \uses{thm:periodic_step_orbit_compression}
+    \uses{def:periodic_tensor,thm:periodic_step_orbit_compression}
     If $A$ is periodic of period $m$ and $p\ge0$, there is a family of nonzero
     cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
     $P_uA^i=A^iP_{u+1}$ for which the dimensions $D_\alpha$, isometries
@@ -124,7 +149,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum,thm:periodic_compressed_irreducible}
+    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum,
+        thm:periodic_compressed_irreducible,
+        thm:cyclic_sector_compression_letter_isometry_periodic,
+        lem:periodic_negreindex_shift}
     Take the cyclic spectral projections, with their indices negated to give
     $P_uA^i=A^iP_{u+1}$. No projection vanishes: left canonicality and the
     shift relation give $\E_A^\dagger(P_u)=P_{u+1}$, and $\E_A^\dagger(0)=0$, so
@@ -219,8 +247,8 @@
 \begin{proof}\leanok
     \uses{thm:periodic_blocking_peripheral_roots,thm:periodic_compressed_projection_shift}
     The ambient spectral bound gives one inclusion. For the other, put
-    $R_k=V^\dagger P_{[\alpha+pk]_m}V$. The compressed adjoint map sends
-    $R_k$ to $R_{k+1}$. If $z^q=1$, the sum
+    $R_k=V^\dagger P_{[\alpha+pk]_m}V$. The compressed adjoint map satisfies
+    $\E_C^\dagger(R_k)=R_{k+1}$. If $z^q=1$, the sum
     $X_z=\sum_{k=0}^{q-1}z^kR_k$ therefore satisfies
     $\E_C^\dagger(X_z)=z^{-1}X_z$. It is nonzero: since
     $P_{[\alpha+pk]_m}\le Q_\alpha=VV^\dagger$ and distinct orbit projections
@@ -238,6 +266,7 @@
     \lean{MPSTensor.IsPeriodic.adjoint_pow_fixed_of_pow_fixed,
         MPSTensor.IsPeriodic.adjoint_pow_fixed_iff_gcd}
     \leanok
+    \uses{def:periodic_tensor}
     Let $A$ be periodic of period $m$, let $p>0$, and write
     $F=\E_A^\dagger$ and $r=\gcd(m,p)$. If $F^p(X)=X$, then $F^m(X)=X$.
     Moreover, $F^p(X)=X$ if and only if $F^r(X)=X$.
@@ -257,7 +286,7 @@
     \lean{MPSTensor.sum_adjoint_pow_stepOrbitProjection,
         MPSTensor.IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection}
     \leanok
-    \uses{def:periodic_step_orbit_projection}
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
     Let $A$ be periodic of period $m$, let $p>0$, and put $r=\gcd(m,p)$.
     Suppose $P_u$ are orthogonal projections summing to $\Id_D$ with
     $P_uA^i=A^iP_{u+1}$. Write $F=\E_A^\dagger$ and fix $\alpha<r$.
@@ -283,7 +312,7 @@
     \label{thm:periodic_compressed_irreducible}
     \lean{MPSTensor.IsPeriodic.isIrreducibleFamily_compressed_stepOrbit}
     \leanok
-    \uses{def:periodic_step_orbit_projection}
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
     Let $A$ be periodic of period $m$, let $p>0$, and let $P_u$ be
     orthogonal projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
     Fix $\alpha<\gcd(m,p)$ and an isometry $V$ with
@@ -301,8 +330,8 @@
     $F^p$, where $F=\E_A^\dagger$. The faithful invariant state of $\E_A$
     implies $F^p(L)=L$. Since $Q_\alpha L=L$, fixed-point rigidity
     gives $L=cQ_\alpha$, and compression gives $R=c\Id$.
-    Idempotence forces $R=0$ or $R=\Id$. Irreducibility is preserved
-    when passing between a Kraus family and its adjoint family.
+    Idempotence forces $R=0$ or $R=\Id$. Since $\E_C$ and $\E_C^\dagger$ have
+    the same invariant orthogonal projections, $C$ is irreducible.
 \end{proof}
 
 \begin{theorem}[Orbit roots as consecutive products]
@@ -391,7 +420,7 @@
     \label{thm:periodic_orbit_phase_tensor}
     \lean{MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases}
     \leanok
-    \uses{thm:periodic_step_coordinates, def:periodic_sector_rephasing}
+    \uses{thm:periodic_step_coordinates}
     Let $A$ be left canonical and $m>0$. Suppose the Hermitian projections
     $P_u$ satisfy $P_uP_v=\delta_{uv}P_u$, $\sum_uP_u=\Id$, and
     $P_uA^i=A^iP_{u+1}$. Let $p\ge0$, $r=\gcd(m,p)$, and
@@ -775,9 +804,14 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    Set $B^i=U^\dagger A^iU$. Unitarity preserves left canonicality and
-    cancels the intermediate factors in every word product, giving
-    $B^{[p]}=U^\dagger A^{[p]}U=C$.
+    Set $B^i=U^\dagger A^iU$. Then
+    $\sum_i(B^i)^\dagger B^i=U^\dagger\bigl(\sum_i(A^i)^\dagger A^i\bigr)U=\Id$, and
+    $UU^\dagger=\Id$ cancels the intermediate factors of every word:
+    \begin{align}
+        B^{i_1}\cdots B^{i_p} & =U^\dagger A^{i_1}UU^\dagger A^{i_2}U\cdots U^\dagger A^{i_p}U
+        =U^\dagger A^{i_1}\cdots A^{i_p}U. \notag
+    \end{align}
+    Hence $B^{[p]}=U^\dagger A^{[p]}U=C$.
 \end{proof}
 
 \begin{theorem}[Refining a weighted block sum]
@@ -877,7 +911,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     Concatenate the columns of the $V_a$ to define $U$. The identity resolution
     gives $UU^\dagger=\mathbf 1$, and equality of dimensions makes $U$ unitary.
-    The intertwining identities on every summand give the asserted conjugation.
+    On every summand,
+    \begin{align}
+        A^iUJ_a & =A^iV_a=V_aB_a^i=U\Bigl(\bigoplus_bB_b^i\Bigr)J_a, \notag
+    \end{align}
+    so $A^iU=U(\bigoplus_aB_a^i)$, and multiplying by $U^\dagger$ gives the
+    asserted conjugation.
 \end{proof}
 
 \begin{theorem}[Unitary orbit coordinates and phase-weighted roots]
@@ -909,11 +948,13 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         thm:periodic_absorb_orbit_gauge,
         thm:periodic_prescribed_blocking_compression}
     Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit
-    isometries. Conjugate the diagonal
-    matrix with entries $c_a\mathbf 1_{D_a}$ by this unitary to obtain $Z$.
+    isometries and set $Z=U\bigl(\bigoplus_ac_a\mathbf 1_{D_a}\bigr)U^\dagger$.
     Since $UJ_a$ is the original orbit isometry,
-    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the original cyclic sectors
-    gives $A'^{[p]}=ZA^{[p]}$, which is the stated weighted conjugation.
+    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the
+    original cyclic sectors gives
+    \begin{align}
+        (A'^{[p]})^I & =Z(A^{[p]})^I=U\Bigl(\bigoplus_ac_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Periodic presentation of an arbitrary tensor]

@@ -181,10 +181,12 @@ $\beta\neq0$.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum} in
     \doclink{TNLean/MPS/Preparation/RepeatedBlockError}.} The orthogonality
 restriction is the one recorded in \cite{gap:mswc24_block_form_mixed_overlap},
-where for two overlapping blocks of multiplicity one the error is of order
-$(N/q)\tau^{2q}$, with $\tau$ the eigenvalue of their mixed transfer matrix, which
-the source's rate does not control; the construction here does not change that
-example. The norm of the fixed-point state is not formalized;
+where for two overlapping blocks of multiplicity one the error lies between
+$\tau^{2q}/16$ (for $N/q\geq3$) and $(N/q)\tau^{2q}$, with $\tau$ the eigenvalue of their mixed transfer
+matrix, which the source's rate does not control; the construction here does not
+change that example. For blocks of multiplicity one and weight one whose states
+overlap, that note proves the bound with the correlation lengths of the mixed transfer
+matrices included in the rate. The norm of the fixed-point state is not formalized;
 the overlap normalizes the state after $V^{\otimes M}$.
 
 \bibliographystyle{alpha}

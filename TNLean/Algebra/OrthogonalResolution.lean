@@ -10,6 +10,11 @@ import QICLean.Algebra.OrthogonalProjection
 
 The cyclic-sector calculations in arXiv:1708.00029, Lemma 6, use both the
 equal-index and distinct-index cases of the projection multiplication rule.
+
+The statement is generic matrix analysis and belongs beside
+`orthogonalProjection_mul_eq_zero_of_sum_eq_one` in
+`QICLean/Algebra/OrthogonalProjection.lean`; it is housed here until that library
+is next released and the dependency is bumped.
 -/
 
 open scoped Matrix BigOperators
