@@ -825,6 +825,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_inhomogeneous_scope.tex` records that the preparation of
+  inhomogeneous short-range correlated states (paragraph "Inhomogeneous
+  short-range correlated MPS") is formalized for a ring with a common bond
+  dimension `D`, injective blocked tensors and blocks of at least `3D` sites,
+  with the finite-correlation assumption stated for one ring with error `δ`;
+  open: varying bond dimensions and partial isometries.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"): orthogonal `q`-site states of distinct
