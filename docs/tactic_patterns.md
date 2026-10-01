@@ -3548,6 +3548,30 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
   second module needs the same cancellation pattern.
 
+### root-of-unity powers across a cyclic successor — candidate
+- **Pattern:** simplify `Fin.val_add` and `Fin.val_one'`, then use
+  `pow_eq_pow_mod`, `pow_succ`, and commutativity to prove
+  `z ^ (k + 1).val = z * z ^ k.val` from `z ^ q = 1`.
+- **Seen:** two occurrences in two files: `Fin.exists_stepOrbit_phases` in
+  `TNLean/Algebra/FinStepOrbit.lean` and the private `map_cyclic_sum` in
+  `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
+- **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
+  monoid; below the three-occurrence promotion threshold.
+
+### Unitary transport of left-canonical sums — candidate
+- **Pattern:** expand the conjugate transpose of `U * A i * Uᴴ`, cancel the
+  middle unitary pair, move the outer matrices through the finite sum, and
+  use the original left-canonical identity.
+- **Seen:** two occurrences in two files: the normalization proof in
+  `exists_isLeftCanonical_blockTensor_eq_of_unitary_conj` in
+  `TNLean/MPS/Periodic/SectorPhaseBlocking.lean`, and
+  `leftCanonical_of_unitary_block_intertwining` in
+  `TNLean/MPS/MPU/VirtualUnitaryGauge.lean`.
+- **Abstraction (proposed):** a left-canonical transport lemma for a unitary
+  matrix intertwining two tensor families, if a third occurrence arises.
+- **Notes:** the periodic application uses the inverse unitary orientation.
+  Below the three-occurrence promotion threshold; no custom tactic introduced.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected
@@ -3703,28 +3727,3 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
-
-
-### root-of-unity powers across a cyclic successor — candidate
-- **Pattern:** simplify `Fin.val_add` and `Fin.val_one'`, then use
-  `pow_eq_pow_mod`, `pow_succ`, and commutativity to prove
-  `z ^ (k + 1).val = z * z ^ k.val` from `z ^ q = 1`.
-- **Seen:** two occurrences in two files: `Fin.exists_stepOrbit_phases` in
-  `TNLean/Algebra/FinStepOrbit.lean` and the private `map_cyclic_sum` in
-  `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
-- **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
-  monoid; below the three-occurrence promotion threshold.
-
-### Unitary transport of left-canonical sums — candidate
-- **Pattern:** expand the conjugate transpose of `U * A i * Uᴴ`, cancel the
-  middle unitary pair, move the outer matrices through the finite sum, and
-  use the original left-canonical identity.
-- **Seen:** two occurrences in two files: the normalization proof in
-  `exists_isLeftCanonical_blockTensor_eq_of_unitary_conj` in
-  `TNLean/MPS/Periodic/SectorPhaseBlocking.lean`, and
-  `leftCanonical_of_unitary_block_intertwining` in
-  `TNLean/MPS/MPU/VirtualUnitaryGauge.lean`.
-- **Abstraction (proposed):** a left-canonical transport lemma for a unitary
-  matrix intertwining two tensor families, if a third occurrence arises.
-- **Notes:** the periodic application uses the inverse unitary orientation.
-  Below the three-occurrence promotion threshold; no custom tactic introduced.
