@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.Examples.CZX.CZXDecoratedFusion
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 
 /-!
@@ -37,6 +38,8 @@ of fusion tensors.
   choice of fusion tensors.
 * `CZXCompression.not_isTrivialGaugeClass_omega_czx`: the anomaly class is
   nontrivial for every choice of fusion tensors.
+* `CZXCompression.czxFamily_anomalyClass_ne_zero`: the anomaly class is nonzero
+  in the degree-three group cohomology `H³(ℤ₂, ℂˣ)`.
 -/
 
 noncomputable section
@@ -336,5 +339,15 @@ theorem not_isTrivialGaugeClass_omega_czx (fd : czxFamily.FusionData) :
   intro h
   have := congrArg Units.val h
   norm_num at this
+
+/-- The anomaly class of the decorated CZX representation in the degree-three group
+cohomology `H³(ℤ₂, ℂˣ)` is nonzero.
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1128--1136;
+arXiv:2502.20257, `eq:omegagauge` and the sentence following it. -/
+theorem czxFamily_anomalyClass_ne_zero :
+    czxFamily_isNormalRepresentation.anomalyClass ≠ 0 := fun h ↦
+  not_isTrivialGaugeClass_omega_czx czxFamily_isNormalRepresentation.nonempty_fusionData.some
+    ((GroupFamily.FusionData.isTrivialGaugeClass_omega_iff _ _).2 h)
 
 end CZXCompression
