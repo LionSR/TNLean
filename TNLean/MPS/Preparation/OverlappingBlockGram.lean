@@ -66,6 +66,10 @@ maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   *Preparation of matrix product states with log-depth quantum circuits*,
   arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S5) and the mixed transfer matrices
   `E_{jj'}` of the proof of Lemma 1'(ii).
+* [PSC21] L. Piroli, G. Styliaris, J. I. Cirac,
+  *Quantum circuits assisted by local operations and classical communication:
+  transformations and phases of matter*,
+  arXiv:2103.13367, Supplemental Material, eq. (26) (the Hölder bound for square roots).
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal

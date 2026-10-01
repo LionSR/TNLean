@@ -122,7 +122,8 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 \begin{proof}
     \leanok
     Every word of $A$ of length $q\geq1$ is the direct sum of the words of the blocks,
-    multiplied by $\mu_j^q$, which gives the form of $\mathcal B$ and of its Gram matrix.
+    multiplied by $\mu_j^q$, which gives the form of $\mathcal B$, as in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}, and of its Gram matrix.
     The diagonal terms, with coefficients $\lvert\mu_j\rvert^{2q}\leq1$, satisfy
     $\lVert\mathcal B_j^\dagger\mathcal B_j-\rho_j^{\mathsf T}\otimes\Id\rVert
         \leq K_je^{-\gamma q/\xi}$ by Theorem~\ref{thm:ldp_positive_part_rate}, and the
@@ -259,7 +260,8 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         norm_prod_range_sub_pow_le_of_forall_norm_pow_le}
     \leanok
     \uses{lem:ldp_overlapping_overlaps, lem:ldp_overlapping_positive_part,
-        lem:ldp_mixed_transfer_decay, thm:ldp_approximation_error_normal}
+        lem:ldp_positive_part_overlap, lem:ldp_mixed_transfer_decay,
+        thm:ldp_approximation_error_normal}
     \begin{enumerate}
         \item In a normed ring, if $\lVert E^k\rVert\leq c$ for every $k\geq0$ and
               $\lVert X_k-E\rVert\leq\delta$ for every $k$, then
