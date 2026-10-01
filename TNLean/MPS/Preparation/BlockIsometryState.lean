@@ -26,9 +26,11 @@ proof of Theorem 1, blocks the chain into blocks "all of the same size, `q_N`, e
 one, which may be larger"; the present file allows any lengths.
 
 **Scope restriction (common bond dimension):** the site-dependent declarations
-`MPSTensor.chainBlockTensor`, `MPSTensor.chainBlockIsometryState`,
-`MPSTensor.coeff_eq_mpvFamily_chainBlockTensor`, `MPSTensor.blockIsoVector`,
-`MPSTensor.inner_blockIsoVector` and `MPSTensor.norm_blockIsoVector` model the inhomogeneous
+`MPSTensor.chainBlockTensor`, `MPSTensor.coeff_eq_mpvFamily_chainBlockTensor`,
+`MPSTensor.pairFamilyVector`, `MPSTensor.pairFamilyVector_apply`,
+`MPSTensor.norm_pairFamilyVector`, `MPSTensor.blockIsoVector`, `MPSTensor.blockIsoVector_apply`,
+`MPSTensor.inner_blockIsoVector`, `MPSTensor.norm_blockIsoVector`,
+`MPSTensor.chainBlockIsometryState` and `MPSTensor.chainBlockIsometryState_apply` model the inhomogeneous
 matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS",
 with the same square bond dimension `D` at every site, while the source allows "bond dimension at
 most `D`" varying along the ring. The translation-invariant declarations of this file are not

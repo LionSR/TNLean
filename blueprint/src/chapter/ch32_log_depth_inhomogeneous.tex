@@ -92,16 +92,15 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     $\sum_\tau\prod_k\bra{s_k}V_k\ket{\tau_k}\Tr(P_1^{\tau_1}\cdots P_M^{\tau_M})$.
 \end{proof}
 
-\begin{lemma}[The isometries preserve overlaps]
-    \label{lem:ldp_chain_block_iso_inner}
+\begin{theorem}[The isometries preserve overlaps]
+    \label{thm:ldp_chain_block_iso_inner}
     \lean{MPSTensor.inner_blockIsoVector, MPSTensor.norm_blockIsoVector,
         MPSTensor.pairFamilyState_inner, MPSTensor.pairFamilyState_norm_sq,
         MPSTensor.norm_pairFamilyVector,
         MPSPreparation.blockIsoVector_smul, MPSPreparation.norm_chainState,
         MPSPreparation.inner_chainBlockIsometryState_normalize}
     \leanok
-    \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective,
-        def:prep_bond_regrouping}
+    \uses{def:ldp_chain_pos_state}
     Suppose every blocked tensor $B_k$ is injective. Then
     $\langle(\bigotimes_kV_k)x,(\bigotimes_kV_k)y\rangle=\langle x,y\rangle$ for
     all vectors $x,y$ on the $M$ blocks, and
@@ -117,9 +116,11 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
         \frac{\phi_{\mathrm{pos}}}{\lVert\phi_{\mathrm{pos}}\rVert}\Bigr\rangle.
         \label{eq:ldp_chain_block_iso_inner}
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective,
+        def:prep_bond_regrouping}
     Injectivity makes each $V_k$ an isometry,
     Theorem~\ref{thm:ldpolar_tensor_injective}, so that
     $\sum_{s_k}\overline{(V_k)_{s_ka}}(V_k)_{s_kb}=\delta_{ab}$ for the
@@ -194,7 +195,7 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous,
         MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
     \leanok
-    \uses{thm:ldp_chain_depth, lem:ldp_chain_block_iso_inner,
+    \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner,
         def:ldp_pair_approximable}
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
@@ -230,5 +231,5 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     The depth is Theorem~\ref{thm:ldp_chain_depth}. The norm of $\ket\psi$ is
     $\lVert\Omega\rVert=\prod_k\lVert\omega^k\rVert=1$ and the error identity is
     (\ref{eq:ldp_chain_block_iso_inner}), both by
-    Lemma~\ref{lem:ldp_chain_block_iso_inner}.
+    Theorem~\ref{thm:ldp_chain_block_iso_inner}.
 \end{proof}

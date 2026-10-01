@@ -69,6 +69,23 @@ $q=O(\log N)$.
           $V_k^\dagger V_k=\Pi_k$, and the error becomes that of
           $(\bigotimes_k\Pi_k)\ket\Omega$ against $\ket{\phi_{\mathrm{pos}}}$,
           as in the non-normal case of the source.
+    \item \emph{Block length.} The bound $3D\le\ell_k$ is needed only by
+          the circuit, not by the state. For a sequence with
+          $q=O(\log N)$ blocks reach length $3D$ once $N\ge N_0$, with $N_0$
+          depending only on $d$, $D$ and the constant in $q$; each of the
+          finitely many rings with $N<N_0$ is prepared exactly by a circuit of
+          depth bounded in terms of $N_0$ and $d$, and the largest of these
+          depths is absorbed into the constant of the depth bound.
+    \item \emph{Sequence-level statement.} State the source's definition of
+          finite correlation length for the sequence, with a rate: unit pairs
+          with $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta(N,q)$ after
+          blocking $q$ sites. Choosing the block length $L$ with
+          $\delta(N,L)\le\varepsilon$, which is $L=O(\log(N/\varepsilon))$
+          when $\delta(N,q)$ decays exponentially in $q$ at fixed $N$ up to a
+          factor polynomial in $N$, as in the translation-invariant case, turns
+          the depth bound $CL$ and the error $\delta$ proved for one ring into
+          the source's depth $O(\log(N/\varepsilon))$ with error at most
+          $\varepsilon$.
 \end{enumerate}
 
 \bibliographystyle{alpha}

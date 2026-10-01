@@ -31,6 +31,15 @@ For blocks of equal length `q` and the pair of the fixed point this is the appro
 The Supplemental Material, proof of Theorem 1, lets the last block be larger; the lengths here
 are arbitrary. This is the construction behind eq. (1) of the source; the choice of the block
 lengths and the error bound are not made here.
+
+**Scope restriction (common bond dimension):** the site-dependent declarations
+`MPSPreparation.chainBlockIsometryState_eq_mulVec` and
+`MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState` give every tensor of the chain
+and every pair the same square bond dimension `D`, while the source paragraph "Inhomogeneous
+short-range correlated MPS" allows bond dimension at most `D`, varying along the ring. The depth
+bound `MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState` assumes moreover that the
+blocked tensors are injective and that the blocks have length at least `3D`. Documented in
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 -/
 
 open Matrix MPSTensor
@@ -349,12 +358,7 @@ constant depth (eq. (12)), and each block unitary of eq. (11) is a sequential ci
 MPS" applies the same scheme, "preparing `|Ω⟩` and implementing the isometry", to tensors and
 pairs that depend on the site. Injectivity of a blocked tensor forces `D ≤ d^D`
 (`MPSPreparation.mul_self_le_pow_of_isInjective`), which lets each bond index be encoded in `D`
-sites.
-
-**Scope restriction (common bond dimension):** the source paragraph "Inhomogeneous short-range
-correlated MPS" allows bond dimension at most `D`, varying along the ring; here every bond has
-dimension `D`, the blocked tensors are injective, and the blocks have length at least `3D`.
-Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. -/
+sites. -/
 theorem exists_isPreparedInDepth_chainBlockIsometryState (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
