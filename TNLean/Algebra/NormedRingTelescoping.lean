@@ -12,9 +12,10 @@ import Mathlib.Tactic.Positivity
 /-!
 # Telescoping powers of a perturbed idempotent
 
-In a normed ring, if `E` is idempotent and `X_0, X_1, …` are `δ`-close to `E`, then
-`‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c((1 + cδ)^M - 1)`, where `c` bounds `‖E‖` and `‖1‖`; in particular
-`‖X^M - E^M‖ ≤ c((1 + cδ)^M - 1)`. This is the iteration of
+In a normed ring, if every power of `E` has norm at most `c` and `X_0, X_1, …` are `δ`-close to
+`E`, then `‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c((1 + cδ)^M - 1)`, and in particular
+`‖X^M - E^M‖ ≤ c((1 + cδ)^M - 1)`. For an idempotent `E` it suffices that `c` bound `‖E‖` and
+`‖1‖`. This is the iteration of
 arXiv:2103.13367, Supplemental Material, eqs. `eq:final_eq` to `eq:finished`. The file also
 records the elementary real bounds that turn `(1 + y)^M - 1` into `M y e^{M y}` and a bound of
 the form `C y e^{C y}` into a linear bound.
@@ -23,8 +24,10 @@ the form `C y e^{C y}` into a linear bound.
 
 * `prod_range_sub_pow_eq_sum_mul_sub_mul`, `pow_sub_pow_eq_sum_mul_sub_mul` — the telescoping
   identity, for ordered products and for powers.
+* `norm_prod_range_sub_pow_le_of_forall_norm_pow_le` — the telescoping bound near an element
+  whose powers are bounded.
 * `norm_prod_range_sub_pow_le_of_isIdempotentElem`, `norm_pow_sub_pow_le_of_isIdempotentElem` —
-  the telescoping bound, for ordered products and for powers.
+  the telescoping bound near an idempotent, for ordered products and for powers.
 * `one_add_pow_sub_one_le_mul_exp` — `(1 + y)^M - 1 ≤ M y e^{M y}`.
 * `le_mul_of_le_mul_exp_of_le` — `v ≤ C y e^{C y}` and `v ≤ B` give `v ≤ (C e^C + B) y`.
 -/
@@ -61,24 +64,18 @@ theorem pow_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X E : R) (n : ℕ) 
   simpa [List.map_const', List.prod_replicate] using
     prod_range_sub_pow_eq_sum_mul_sub_mul (fun _ => X) E n
 
-/-- **Telescoping bound for ordered products near an idempotent.** In a normed ring, let `E` be
-idempotent with `‖E‖ ≤ c` and `‖1‖ ≤ c`, and let `‖X_k - E‖ ≤ δ` for every `k`. Then
+/-- **Telescoping bound for ordered products near a power-bounded element.** In a normed ring,
+let `‖E^k‖ ≤ c` for every `k ≥ 0` and `‖X_k - E‖ ≤ δ` for every `k`. Then
 `‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c ((1 + cδ)^M - 1)`.
 
 This is the iteration of arXiv:2103.13367, eqs. `eq:final_eq`, `eq:inequality`,
-`eq:almost_done`, and `eq:finished`, with a different factor at each step: `E^k = E` for
-`k ≥ 1` bounds every factor `E^k` by `c`, and `‖X_0 ⋯ X_{k-1}‖ ≤ c + ‖X_0 ⋯ X_{k-1} - E^k‖`
-feeds the bound back into the telescoping sum. -/
-theorem norm_prod_range_sub_pow_le_of_isIdempotentElem {R : Type*} [NormedRing R] {E : R}
-    (hE : IsIdempotentElem E) {X : ℕ → R} {c δ : ℝ} (hEc : ‖E‖ ≤ c) (h1c : ‖(1 : R)‖ ≤ c)
-    (hδ : ∀ k, ‖X k - E‖ ≤ δ) (M : ℕ) :
+`eq:almost_done`, and `eq:finished`, with a different factor at each step:
+`‖X_0 ⋯ X_{k-1}‖ ≤ c + ‖X_0 ⋯ X_{k-1} - E^k‖` feeds the bound back into the telescoping sum. -/
+theorem norm_prod_range_sub_pow_le_of_forall_norm_pow_le {R : Type*} [NormedRing R] {E : R}
+    {X : ℕ → R} {c δ : ℝ} (hEpow : ∀ k : ℕ, ‖E ^ k‖ ≤ c) (hδ : ∀ k, ‖X k - E‖ ≤ δ) (M : ℕ) :
     ‖((List.range M).map X).prod - E ^ M‖ ≤ c * ((1 + c * δ) ^ M - 1) := by
-  have hc0 : 0 ≤ c := (norm_nonneg _).trans hEc
+  have hc0 : 0 ≤ c := (norm_nonneg _).trans (hEpow 0)
   have hδ0 : 0 ≤ δ := (norm_nonneg _).trans (hδ 0)
-  have hEpow : ∀ k : ℕ, ‖E ^ k‖ ≤ c := fun k => by
-    rcases k with _ | k
-    · simpa using h1c
-    · rw [hE.pow_succ_eq]; exact hEc
   -- The closed form `b n = c ((1 + cδ)^n - 1)` solves `b n = ∑_{k<n} (c + b k) c δ`.
   have hclosed : ∀ n : ℕ, ∑ k ∈ Finset.range n, (c + c * ((1 + c * δ) ^ k - 1)) * δ * c =
       c * ((1 + c * δ) ^ n - 1) := fun n => by
@@ -108,6 +105,21 @@ theorem norm_prod_range_sub_pow_le_of_isIdempotentElem {R : Type*} [NormedRing R
       _ ≤ (c + c * ((1 + c * δ) ^ k - 1)) * δ * c :=
           mul_le_mul (mul_le_mul hXk (hδ k) (norm_nonneg _) ((norm_nonneg _).trans hXk))
             (hEpow _) (norm_nonneg _) (mul_nonneg ((norm_nonneg _).trans hXk) hδ0)
+
+/-- **Telescoping bound for ordered products near an idempotent.** In a normed ring, let `E` be
+idempotent with `‖E‖ ≤ c` and `‖1‖ ≤ c`, and let `‖X_k - E‖ ≤ δ` for every `k`. Then
+`‖X_0 ⋯ X_{M-1} - E^M‖ ≤ c ((1 + cδ)^M - 1)`.
+
+This is `norm_prod_range_sub_pow_le_of_forall_norm_pow_le`: `E^k = E` for `k ≥ 1` bounds every
+factor `E^k` by `c`. -/
+theorem norm_prod_range_sub_pow_le_of_isIdempotentElem {R : Type*} [NormedRing R] {E : R}
+    (hE : IsIdempotentElem E) {X : ℕ → R} {c δ : ℝ} (hEc : ‖E‖ ≤ c) (h1c : ‖(1 : R)‖ ≤ c)
+    (hδ : ∀ k, ‖X k - E‖ ≤ δ) (M : ℕ) :
+    ‖((List.range M).map X).prod - E ^ M‖ ≤ c * ((1 + c * δ) ^ M - 1) := by
+  refine norm_prod_range_sub_pow_le_of_forall_norm_pow_le (fun k => ?_) hδ M
+  rcases k with _ | k
+  · simpa using h1c
+  · rw [hE.pow_succ_eq]; exact hEc
 
 /-- **Telescoping bound for a perturbed idempotent.** In a normed ring, let `E` be idempotent
 with `‖E‖ ≤ c` and `‖1‖ ≤ c`, and let `‖X - E‖ ≤ δ`. Then
