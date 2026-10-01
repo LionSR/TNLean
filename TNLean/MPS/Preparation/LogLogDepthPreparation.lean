@@ -76,6 +76,15 @@ open TeleportHop
 
 section Pairs
 
+/-- An injective tensor of physical dimension `d^q` has `D² ≤ d^q`: its matrices span the
+`D²`-dimensional matrix algebra. -/
+private theorem mul_self_le_pow_of_isInjective {d D q : ℕ} (B : MPSTensor (blockPhysDim d q) D)
+    (h : Kraus.IsInjective B) : D * D ≤ d ^ q := by
+  have h1 := finrank_range_le_card (R := ℂ) B
+  rw [Set.finrank, h, finrank_top, Module.finrank_matrix, Fintype.card_fin, Fintype.card_fin,
+    Module.finrank_self, mul_one] at h1
+  simpa [blockPhysDim_eq_pow] using h1
+
 variable {d s M N : ℕ} [NeZero d] [NeZero N] {k : ℕ}
 
 omit [NeZero N] in
