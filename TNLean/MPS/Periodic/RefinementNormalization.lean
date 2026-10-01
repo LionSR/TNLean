@@ -3,68 +3,37 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.NormalReduction.TPGauge
+import TNLean.MPS.Periodic.BlockDecomposition
 import TNLean.MPS.Periodic.IrreducibleFormBlocking
-import TNLean.MPS.Periodic.PeriodExistence
 import TNLean.MPS.Periodic.PhaseClassAssembly
 import TNLean.MPS.Periodic.PrescribedBlocking
 
 /-!
 # Normalizing a tensor from a unit-weight blocked comparison
 
-Start with an arbitrary tensor, reduce it to nonzero trace-preserving irreducible
-blocks, and derive their periods. If a positive blocking has the same positive-length
-MPVs as a periodic sector decomposition with unit-modulus multiplicities, the
-original block weights have modulus one. The multiplicity-bearing equal-case
-fundamental theorem also recovers the exact total bond dimension.
+Start with the positive-weight periodic decomposition of an arbitrary tensor.
+If a positive blocking has the same positive-length MPVs as a periodic sector
+decomposition with unit-modulus multiplicities, the original block weights have
+modulus one. The multiplicity-bearing equal-case fundamental theorem also
+recovers the exact total bond dimension.
 
 Absorbing the original weight phases into the blocks gives a unit-weight periodic
 presentation without assuming an initial canonical form or empty-word equality.
 This is the normalization step in arXiv:1708.00029, Theorem 4.1, lines 750–756.
 The subsequent orbit-phase matching and root construction are separate steps.
 
-**Scope restriction (positive lengths):** `exists_periodic_presentation` and
-`exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos` assert equality
+**Scope restriction (positive lengths):**
+`exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos` asserts equality
 of MPVs only at positive lengths, since discarding zero blocks may lower the bond
-dimension. The convention is inherited from `exists_tp_gauge_from_arbitrary` and
-recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
-`exists_periodic_presentation` also returns nonzero complex weights, where
-arXiv:1708.00029, `thm:irr`, lines 250–251, chooses positive square roots; only
-nonvanishing is used downstream, and the unit-weight presentation absorbs the
-phases into the blocks.
+dimension. The convention is inherited from `exists_periodic_blockDecomposition`
+and recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator
+open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder
 
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-private theorem exists_period_of_leftCanonical [NeZero D] (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily A) (hTP : IsLeftCanonical A) :
-    ∃ m, IsPeriodic m A := by
-  have hrad := (Kraus.transferMap_isCPMap A).isPositiveMap.spectralRadius_eq_one_of_tracePreserving
-    (Kraus.isTracePreservingMap_mapLM_of_isTP A hTP)
-  obtain ⟨m, hm⟩ := exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one hIrr hrad
-  exact ⟨m, hIrr, hTP, hm.period_pos, hm.peripheral_eq⟩
-
-/-- Every tensor has a positive-length presentation by nonzero complex weights
-and left-canonical periodic blocks, with total bond dimension at most the original.
-This is a consequence of the irreducible-form reduction and normalization in
-arXiv:1708.00029, `thm:irr`, lines 238–275 and 313–332. No equality at length zero
-is asserted, since discarded zero blocks may lower the dimension. -/
-theorem exists_periodic_presentation (A : MPSTensor d D) :
-    ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (B : (k : Fin r) → MPSTensor d (dim k)) (period : Fin r → ℕ),
-      (∀ k, IsPeriodic (period k) (B k)) ∧ (∀ k, μ k ≠ 0) ∧
-      SameMPV₂Pos A (toTensorFromBlocks μ B) ∧ (∑ k, dim k) ≤ D := by
-  obtain ⟨r, dim, μ, B, hIrr, hTP, hμ, hdim, hSame, hbound⟩ :=
-    exists_tp_gauge_from_arbitrary A
-  have hp (k : Fin r) : ∃ m, IsPeriodic m (B k) := by
-    let : NeZero (dim k) := ⟨Nat.ne_of_gt (hdim k)⟩
-    exact exists_period_of_leftCanonical (B k) (hIrr k) (hTP k)
-  choose period hperiod using hp
-  exact ⟨r, dim, μ, B, period, hperiod, hμ, hSame, hbound⟩
 
 section Blocked
 
@@ -165,7 +134,9 @@ theorem exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos
       (∀ k, IsPeriodic (period k) (B k)) ∧
       (∑ k, dim k) = Q.totalDim ∧ (∑ k, dim k) ≤ D ∧
       SameMPV₂Pos A (toTensorFromBlocks (fun _ ↦ 1) B) := by
-  obtain ⟨r, dim, μ, B, period, hper, hμ, hAB, hbound⟩ := exists_periodic_presentation A
+  obtain ⟨r, dim, μ, B, period, hper, hμpos, _, hAB, hbound⟩ :=
+    exists_periodic_blockDecomposition A
+  have hμ (k : Fin r) : μ k ≠ 0 := (hμpos k).ne'
   have hBlock := sameMPV₂Pos_blockTensor A (toTensorFromBlocks μ B) hAB p hp
   obtain ⟨hw, hdim⟩ := weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos
     μ hμ B period hper hp Q periodQ hPerQ hNonRepQ

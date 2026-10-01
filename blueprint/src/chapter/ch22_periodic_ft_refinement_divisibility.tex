@@ -957,26 +957,6 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Periodic presentation of an arbitrary tensor]
-    \label{thm:periodic_arbitrary_presentation}
-    \lean{MPSTensor.exists_periodic_presentation}
-    \leanok
-    \uses{def:periodic_tensor}
-    Every tensor $A$ of bond dimension $D$ has the same positive-length matrix
-    product vectors as $\bigoplus_k\mu_k B_k$, where $\mu_k\ne0$, each $B_k$ is
-    left-canonical periodic, and $\sum_k D_k\le D$.
-    Equality at length zero is not asserted.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:tp_gauge_arbitrary,thm:spectral_periodic_period_existence}
-    Apply the irreducible-block reduction and trace-preserving gauges from
-    \cite[Section~2]{DeLasCuevas2017Irreducible}, discarding zero blocks.
-    Each retained block is irreducible and trace preserving, hence has spectral
-    radius one and a positive period. The reductions do not increase total dimension.
-\end{proof}
-
 \begin{theorem}[Weight and dimension recovery from a blocked comparison]
     \label{thm:periodic_blocked_weight_normalization}
     \lean{MPSTensor.weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos}
@@ -1019,9 +999,10 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_arbitrary_presentation,thm:periodic_blocked_weight_normalization,
+    \uses{thm:periodic_positive_decomposition,thm:periodic_blocked_weight_normalization,
         thm:same_mpv2_pos_block_tensor}
-    Take a periodic presentation of $A$ and block it by $p$.
+    Take the positive-weight periodic decomposition of $A$ from
+    Theorem~\ref{thm:periodic_positive_decomposition} and block it by $p$.
     The preceding theorem gives unit modulus for each original weight and
     the claimed dimension. Absorb each weight into its periodic block;
     a unit-modulus scalar preserves left canonicality and the period.
