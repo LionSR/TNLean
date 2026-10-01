@@ -386,7 +386,7 @@ theorem kleinCocycleFamily_add (p q r p' q' r' : ZMod 2) :
   ring
 
 /-- The order-two cyclic invariant at the identity is always trivial. -/
-private theorem cyclicInvariant_one_of_isCocycle {G : Type*} [Group G] {ω : ScalarThreeCochain G}
+private theorem cyclicInvariant_one_of_isCocycle {G : Type} [Group G] {ω : ScalarThreeCochain G}
     (hw : IsCocycle ω) : cyclicInvariant ω 1 2 = 1 := by
   have he := hw 1 1 1 1
   simp only [one_mul] at he
