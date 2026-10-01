@@ -830,3 +830,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   blocked tensor is injective, so that every layer is an isometry, and for
   chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
   a coarser last block remove the two restrictions.
+
+For the correlation functions of arXiv:2011.12127, Section II.B.3:
+
+- `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
+  pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
+  printed for a primitive tensor with a defective subleading eigenvalue
+  (explicit counterexample), the diagonalizability hypothesis under which it
+  holds, and the rate correction for the decay bound.
