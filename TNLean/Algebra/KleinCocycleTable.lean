@@ -30,6 +30,7 @@ orbit to have four elements.
   when arbitrary fusion gauges are allowed.
 * `kleinCocycleFamily_one_subgroup_iff`: only the trivial subgroup has identically
   one restriction for the all-ones parameter triple.
+* `kleinCocycleFamily_zero_zero_one`: the `(0,0,1)` representative is `kleinCocycle`.
 
 ## References
 
