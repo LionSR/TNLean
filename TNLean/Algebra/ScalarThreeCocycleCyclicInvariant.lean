@@ -47,7 +47,7 @@ namespace TNLean.Algebra
 
 namespace ScalarThreeCochain
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 /-- The cyclic invariant `∏_{k < n} ω(g, g^k, g)` of a scalar three-cochain at an element `g`.
 It is gauge invariant when `g ^ n = 1` (`cyclicInvariant_fusionGauge`). -/
@@ -98,7 +98,7 @@ theorem not_isTrivialGaugeClass_of_cyclicInvariant_ne_one {ω : ScalarThreeCocha
 
 /-! ### Restriction along a homomorphism -/
 
-variable {H : Type*} [Group H]
+variable {H : Type} [Group H]
 
 /-- Restriction of a scalar three-cochain along a group homomorphism `f : H →* G`. -/
 def comap (f : H →* G) (ω : ScalarThreeCochain G) : ScalarThreeCochain H :=
@@ -138,7 +138,7 @@ end ScalarThreeCochain
 
 namespace LSymbol
 
-variable {G X H : Type*} [Group G] [MulAction G X] [Group H]
+variable {G H : Type} {X : Type*} [Group G] [MulAction G X] [Group H]
 
 open ScalarThreeCochain
 
