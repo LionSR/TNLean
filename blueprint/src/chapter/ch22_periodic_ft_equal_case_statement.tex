@@ -360,6 +360,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     $Z=\bigoplus_{j\in J}Z_j\otimes\Id_{D_j}$, one has $Z^L=\Id$,
     $[A^i,Z]=0$ for every $i$, $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an
     invertible $Y$ with $ZA^i=YB^iY^{-1}$ for every $i$.
+    If every $Y_j$ is unitary, then $Y$ is unitary as well.
 
     This establishes the global intertwining relation of
     \cite[lines~689--690]{DeLasCuevas2017Irreducible}, with $Y$ the direct sum
@@ -376,7 +377,13 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     $z_{j,l}$ makes the rescaled entries equal to the matched entries of $B$.
     The matched blocks are therefore related copy by copy, so the two
     direct-sum tensors are related by the permutation of the matched copies
-    followed by the direct sum of the blockwise similarities. For the
+    followed by the direct sum of the blockwise similarities. If every $Y_j$
+    is unitary, then, since each $T_j$ is a permutation matrix,
+    \begin{align}
+        YY^\dagger & =\bigoplus_{j\in J}\bigl(T_jT_j^\dagger\bigr)\otimes\bigl(Y_jY_j^\dagger\bigr)=\Id,
+        \notag
+    \end{align}
+    and likewise $Y^\dagger Y=\Id$. For the
     matrix-product vectors, a copy whose period divides the length contributes
     the factor $z_{j,l}^N=1$, and a copy whose period does not divide the
     length contributes the zero vector by
@@ -436,8 +443,8 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \end{align}
     Writing $Z=\bigoplus_{j\in J}Z_j\otimes\Id_{D_j}$, one has
     $Z^{\operatorname{lcm}_j m_j}=\Id$, $[A^i,Z]=0$ for every $i$,
-    $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is an invertible $Y$ with
-    $ZA^i=YB^iY^{-1}$ for every $i$.
+    $\mc{V}^+(A)=\mc{V}^+(ZA)$, and there is a unitary $Y$ with
+    $ZA^i=YB^iY^\dagger$ for every $i$.
 
     The scalar $\xi_j$ is the same in the two displayed relations: it is the
     scalar of the similarity between the matched blocks, and the entries of
@@ -461,14 +468,21 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
         thm:periodic_repeated_blocks_period_eq_tp,
         thm:periodic_equalcase_coefficient_extraction,
         lem:matched_sector_weight_pow_equiv_period,
-        thm:periodic_equalcase_global_zgauge}
+        thm:periodic_equalcase_global_zgauge,
+        lem:left_canonical_irreducible_same_phase_unitary_gauge}
     Equality of the generated matrix-product vectors is in particular
     proportionality, so
     Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} supplies
     non-decaying partners and
     Theorem~\ref{thm:periodic_conditional_block_matching} matches the two
     bases, each matched pair carrying a similarity with a unit-modulus scalar
-    $\xi_j$. The matched periods agree by
+    $\xi_j$. Since the blocks are left canonical and irreducible,
+    Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    replaces each similarity by a unitary $U_j$ with the same scalar:
+    \begin{align}
+        A_j^i          & =\xi_jU_jB_{\pi(j)}^iU_j^\dagger, \notag \\
+        U_jU_j^\dagger & =\Id_{D_j}. \notag
+    \end{align} The matched periods agree by
     Theorem~\ref{thm:periodic_repeated_blocks_period_eq_tp}. That same $\xi_j$
     relates the matrix-product vectors of the matched pair at every length, so
     Theorem~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
@@ -479,5 +493,26 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     $z_{j,l}=\nu_{\pi(j),\tau_j(l)}/(\xi_j\mu_{j,l})$ are therefore $m_j$-th
     roots of unity; they are collected into the diagonal $Z_j$, and
     Theorem~\ref{thm:periodic_equalcase_global_zgauge} constructs the
-    global $Z$ and the similarity $Y$.
+    global $Z$ and the unitary similarity $Y$.
+\end{proof}
+
+
+\begin{theorem}[Unit-modulus multiplicities under equal matrix-product vectors]
+    \label{thm:periodic_equalcase_unit_weights}
+    \lean{MPSTensor.weight_norm_eq_one_of_sameMPV₂Pos}
+    \leanok
+    \uses{thm:periodic_ft_equal_case_trace_preserving}
+    Under the hypotheses of Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving},
+    if every multiplicity of $B$ has modulus one, then every multiplicity
+    of $A$ has modulus one.
+    This is the multiplicity normalization used in the corrected forward
+    implication of \cite[Theorem~4.1, lines~743--756]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_ft_equal_case_trace_preserving}
+    The matched multiplicities satisfy
+    $z_{j,l}\xi_j\mu_{j,l}=\nu_{\pi(j),\tau_j(l)}$.
+    Since $z_{j,l}^{m_j}=1$ with $m_j>0$ and $|\xi_j|=1$, taking
+    absolute values gives $|\mu_{j,l}|=|\nu_{\pi(j),\tau_j(l)}|=1$.
 \end{proof}
