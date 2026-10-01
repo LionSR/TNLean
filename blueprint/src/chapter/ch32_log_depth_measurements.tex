@@ -63,6 +63,7 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
     \label{lem:ldp_measurement_outcomes}
     \lean{MPSPreparation.outcomeProj_mulVec_apply,
         MPSPreparation.sum_outcomeProj, MPSPreparation.finKronecker_mem_unitary,
+        MPSPreparation.eq_zero_of_mem_unitary_of_mulVec_eq_zero,
         MPSPreparation.MeasurementProtocol.sum_postMeasurement,
         MPSPreparation.MeasurementProtocol.preMeasurement_ne_zero,
         MPSPreparation.MeasurementProtocol.exists_postMeasurement_ne_zero,
@@ -71,7 +72,8 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
     \leanok
     \uses{def:ldp_measurement_preparation}
     The outcome projections satisfy $\sum_mP_m=\mathbb 1$, and a product of
-    unitaries on the sites is unitary. Hence, for a protocol with
+    unitaries on the sites is unitary; a unitary matrix maps only the zero
+    vector to zero. Hence, for a protocol with
     $\ket{\pi}\neq0$, some outcome has $P_mU\ket{\pi}\neq0$, then
     $V_mP_mU\ket{\pi}\neq0$, and every vector that the protocol prepares is
     nonzero.

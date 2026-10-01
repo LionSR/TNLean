@@ -3605,6 +3605,16 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
   second module needs the same cancellation pattern.
 
+### root-of-unity powers across a cyclic successor — candidate
+- **Pattern:** simplify `Fin.val_add` and `Fin.val_one'`, then use
+  `pow_eq_pow_mod`, `pow_succ`, and commutativity to prove
+  `z ^ (k + 1).val = z * z ^ k.val` from `z ^ q = 1`.
+- **Seen:** two occurrences in two files: `Fin.exists_stepOrbit_phases` in
+  `TNLean/Algebra/FinStepOrbit.lean` and the private `map_cyclic_sum` in
+  `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
+- **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
+  monoid; below the three-occurrence promotion threshold.
+
 ### measurement-assisted GHZ protocol on two site layouts — candidate
 - **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the
   outcome-consistency lemma, the corrections by outcomes and partial sums, and
