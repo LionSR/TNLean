@@ -101,6 +101,14 @@ end Pairs
 
 /-! ### The approximating state with measurements -/
 
+/-- Injectivity of the blocked tensor over `s` sites passes to blocks of `s 2^{k+1}` sites. -/
+private theorem isInjective_blockTensor_mul_two_pow {d D s : ℕ} {A : MPSTensor d D}
+    (hA : Kraus.IsInjective (blockTensor A s)) (k : ℕ) :
+    Kraus.IsInjective (blockTensor A (s * 2 ^ (k + 1))) := by
+  have := blockTensor_isInjective_mul_of_blockTensor_isInjective A
+    (m := 2 ^ (k + 1)) (pow_pos two_pos _) hA
+  rwa [mul_comm] at this
+
 /-- **The approximating state is prepared with measurements in depth `O(k)`** (arXiv:2307.01696,
 paragraph "Tree-RG circuit with measurements", with eqs. (10)–(12) and (16)). For every `d ≥ 1`
 and `s ≥ 1` there is `C`, depending only on `d` and `s`, with the following property. Let `A`
@@ -114,15 +122,17 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState (d s
     [NeZero d] [NeZero s] :
     ∃ C : ℕ, ∀ {D : ℕ} (A : MPSTensor d D), Kraus.IsInjective (blockTensor A s) →
       ∀ (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef → σ.trace = 1 →
-        ∀ (k M : ℕ) [NeZero M] [NeZero (M * (s * 2 ^ (k + 1)))],
+        ∀ (k M : ℕ) [NeZero M],
           IsPreparedWithMeasurementRoundsInDepth (C * (k + 1))
             fun x => approximatingMPVState A σ (s * 2 ^ (k + 1)) M x := by
   classical
   have hd : 0 < d := NeZero.pos d
   have hs : 0 < s := NeZero.pos s
   obtain ⟨K, hK⟩ := exists_isPairProduct (n := s + s) hd (by omega)
-  refine ⟨2 * K + 4 * s + 4, fun {D} A hA σ hσ htr k M _ _ => ?_⟩
+  refine ⟨2 * K + 4 * s + 4, fun {D} A hA σ hσ htr k M _ => ?_⟩
   set q := s * 2 ^ (k + 1) with hq
+  have : NeZero (M * q) :=
+    ⟨Nat.mul_ne_zero (NeZero.ne M) (Nat.mul_ne_zero hs.ne' (by positivity))⟩
   have hN : ∑ _ : Fin M, q = M * q := by simp
   have hr : ∀ _ : Fin M, s + s ≤ q := fun _ => by
     have : 2 ≤ 2 ^ (k + 1) := by
@@ -136,10 +146,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState (d s
   obtain ⟨dig⟩ : Nonempty (Fin D ↪ Cfg d s) :=
     Function.Embedding.nonempty_of_card_le (by simpa using (Nat.le_mul_self D).trans hDD)
   have h2 : Kraus.IsInjective (blockTensor (blockTensor A s) 2) := isInjective_blockTensor_two hA
-  have hBq : Kraus.IsInjective (blockTensor A q) := by
-    have := blockTensor_isInjective_mul_of_blockTensor_isInjective A
-      (m := 2 ^ (k + 1)) (pow_pos two_pos _) hA
-    rwa [mul_comm] at this
+  have hBq : Kraus.IsInjective (blockTensor A q) := isInjective_blockTensor_mul_two_pow hA k
   -- The pairs of the fixed point.
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd dig.injective (fixedPointPair σ)
     (by rw [fixedPointPair_norm_sq hσ, htr])
@@ -217,10 +224,8 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le {d D
   rw [mul_comm] at hM
   subst hM
   have : NeZero M := ⟨fun h => NeZero.ne (M * ((L + 1) * 2 ^ (k + 1))) (by rw [h, zero_mul])⟩
-  have hBq : Kraus.IsInjective (blockTensor B ((L + 1) * 2 ^ (k + 1))) := by
-    have := blockTensor_isInjective_mul_of_blockTensor_isInjective B
-      (m := 2 ^ (k + 1)) (pow_pos two_pos _) hBs
-    rwa [mul_comm] at this
+  have hBq : Kraus.IsInjective (blockTensor B ((L + 1) * 2 ^ (k + 1))) :=
+    isInjective_blockTensor_mul_two_pow hBs k
   refine ⟨approximatingMPVState B σ _ M, norm_approximatingMPVState B hBq hσ.posSemidef htr M,
     hC B hBs σ hσ.posSemidef htr k M, herr ε hε _ M (Nat.one_le_iff_ne_zero.2 (by positivity)) ?_⟩
   push_cast at hq ⊢
@@ -232,12 +237,7 @@ correlated MPS with depth `O(log log(N/ε))`"). In the setting of
 `exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le`, if moreover
 `s 2^{k+1} ≤ 2 (a log(N/ε) + b)`, then `k ≤ log₂(a log(N/ε) + b)`: the unit vector `|ψ⟩` with
 error at most `ε` against `|φ_N⟩` is prepared with measurement rounds in depth at most
-`C (k + 1) ≤ C (log₂(a log(N/ε) + b) + 1)`.
-
-**Scope restriction (chain length):** the block length `s 2^{k+1}` divides `N`, so this holds
-for the chain lengths `N` divisible by `s 2^{k+1}` for some `k` with
-`a log(N/ε) + b ≤ s 2^{k+1} ≤ 2 (a log(N/ε) + b)`. Documented in
-`docs/paper-gaps/mswc24_tree_measurement_scope.tex`. -/
+`C (k + 1) ≤ C (log₂(a log(N/ε) + b) + 1)`. -/
 theorem exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     ∃ (s C : ℕ) (a b : ℝ), 1 ≤ s ∧ 0 < a ∧ 1 ≤ b ∧ ∀ ε : ℝ, 0 < ε →

@@ -106,17 +106,17 @@ section Append
 
 variable {d s : ℕ}
 
-theorem append_apply_of_lt (u v : Cfg d s) (t : Fin (s + s)) (h : t.val < s) :
+private theorem append_apply_of_lt (u v : Cfg d s) (t : Fin (s + s)) (h : t.val < s) :
     Fin.append u v t = u ⟨t.val, h⟩ :=
   Fin.append_left u v ⟨t.val, h⟩
 
-theorem append_apply_of_le (u v : Cfg d s) (t : Fin (s + s)) (h : s ≤ t.val) :
+private theorem append_apply_of_le (u v : Cfg d s) (t : Fin (s + s)) (h : s ≤ t.val) :
     Fin.append u v t = v ⟨t.val - s, by omega⟩ := by
   calc Fin.append u v t = Fin.append u v (Fin.natAdd s ⟨t.val - s, by omega⟩) := by
         congr 1; ext; simp only [Fin.val_natAdd]; omega
     _ = _ := Fin.append_right u v _
 
-theorem append_injective {u v u' v' : Cfg d s} (h : Fin.append u v = Fin.append u' v') :
+private theorem append_injective {u v u' v' : Cfg d s} (h : Fin.append u v = Fin.append u' v') :
     u = u' ∧ v = v' := by
   refine ⟨funext fun i => ?_, funext fun i => ?_⟩
   · have := congrFun h (Fin.castAdd s i)
@@ -304,7 +304,7 @@ theorem regInput_injective (hdig : Function.Injective dig) (henc : Function.Inje
   · exact henc (append_injective h).2
 
 omit [NeZero d] in
-theorem decodeBlock_two_injective {β : ℕ} {e e' : Fin (blockPhysDim β 2)}
+private theorem decodeBlock_two_injective {β : ℕ} {e e' : Fin (blockPhysDim β 2)}
     (h0 : decodeBlock β 2 e 0 = decodeBlock β 2 e' 0)
     (h1 : decodeBlock β 2 e 1 = decodeBlock β 2 e' 1) : e = e' := by
   apply (decodeBlockEquiv β 2).injective
@@ -573,7 +573,7 @@ section Tree
 variable {d s D : ℕ} [NeZero d] [NeZero s] {dig : Fin D → Cfg d s} {enc : Fin (D * D) → Cfg d s}
   {B : MPSTensor (blockPhysDim d s) D} {k : ℕ}
 
-theorem prod_fin_two_pow_zero {M : Type*} [CommMonoid M] (f : Fin (2 ^ 0) → M) :
+private theorem prod_fin_two_pow_zero {M : Type*} [CommMonoid M] (f : Fin (2 ^ 0) → M) :
     ∏ p, f p = f 0 :=
   Finset.prod_eq_single 0 (fun b _ hb => absurd (Fin.ext (by have := b.isLt; simp at this; omega))
     hb) (by simp)
@@ -597,7 +597,7 @@ theorem regTreeOp_apply_regRegisterCfg (h2 : Kraus.IsInjective (blockTensor B 2)
     rw [prod_fin_two_pow_zero, treeAmp]
   | j + 1, hk, y => by
     have ih := regTreeOp_apply_regRegisterCfg h2 hdig henc x j (by omega)
-    rw [regTreeOp, mul_apply_extend _ _ _ (regRegisterCfg_injective henc (by omega)) _ ih
+    rw [regTreeOp, Matrix.mul_apply_extend _ _ _ (regRegisterCfg_injective henc (by omega)) _ ih
       (regRegisterCfg_injective henc (by omega))
       (fun e e' => ∏ p, regLayer B (k - 1 - (j + 1)) (e' p) (unpair e p)) ?_ y]
     · congr 1
@@ -634,7 +634,7 @@ theorem regTreeOp_apply_regLeafCfg (h2 : Kraus.IsInjective (blockTensor B 2))
     rw [prod_fin_two_pow_zero, treeAmp]
   | succ k =>
     have ih := regTreeOp_apply_regRegisterCfg (k := k + 1) h2 hdig henc x k (by omega)
-    rw [regTreeOp, mul_apply_extend _ _ _ (regRegisterCfg_injective henc (by omega)) _ ih
+    rw [regTreeOp, Matrix.mul_apply_extend _ _ _ (regRegisterCfg_injective henc (by omega)) _ ih
       regLeafCfg_bijective.1
       (fun e e' => ∏ p, polarIsoMatrix (blockTensor B 2) (e' p) (unpair e p)) ?_ y]
     · congr 1

@@ -8,7 +8,7 @@ import TNLean.MPS.Preparation.Staircase
 import TNLean.MPS.Preparation.TreeMERA
 
 /-!
-# Amplitudes of binary trees of isometries and of layers of placed unitaries
+# Amplitudes of binary trees of isometries and of layers of placed matrices
 
 Two tools for reading the tree-RG circuit of arXiv:2307.01696, eq. (16), as a product of placed
 unitaries.
@@ -19,9 +19,9 @@ unitaries.
   `2^{k+2}` leaves, grouped into `2^{k+1}` neighbouring pairs `e`, is
   `∑_τ ∏_p W(e_p, τ_p) ⋅ (tree of the coarser layers)(τ)`, with `τ` the outputs of the coarser
   layers grouped into pairs in their turn.
-* **A layer of placed unitaries.** If unitaries `Y_p` on pairwise disjoint windows `W_p` act on
-  the inputs `ι_p(c)` as isometries `V_p` with outputs `o_p(e)`, then the product of the placed
-  unitaries maps the configuration carrying `ι_p(c_p)` on the window `p` and `0` elsewhere to
+* **A layer of placed matrices.** If matrices `Y_p` on pairwise disjoint windows `W_p` act on
+  the inputs `ι_p(c)` as matrices `V_p` with injective outputs `o_p(e)`, then the product of the
+  placed matrices maps the configuration carrying `ι_p(c_p)` on the window `p` and `0` elsewhere to
   `∑_e ∏_p V_p(e_p, c_p) |o_p(e_p) on the windows, 0 elsewhere⟩`
   (`MPSPreparation.list_prod_embedOp_placeCfg`).
 
@@ -221,10 +221,10 @@ theorem disjoint_range_window {p p' : ι} (hpp : p ≠ p') :
 
 end Place
 
-/-! ### A layer of placed unitaries -/
+/-! ### A layer of placed matrices -/
 
-/-- **A layer of placed unitaries on placed inputs.** Let `Y p` be unitaries on the pairwise
-disjoint windows `W p` acting on the inputs `ι' p c` as the isometries `V p` with outputs
+/-- **A layer of placed matrices on placed inputs.** Let `Y p` be matrices on the pairwise
+disjoint windows `W p` acting on the inputs `ι' p c` as the matrices `V p` with injective outputs
 `o p b`: `Y p (z, ι' p c) = V p (b, c)` if `z = o p b` and `0` otherwise. Then the product of
 the placed `Y p` applied to the configuration carrying `ι' p (c p)` on the windows and `0`
 elsewhere has the amplitude `∏_p V p (e p) (c p)` at the configuration carrying `o p (e p)` on
@@ -278,7 +278,7 @@ theorem list_prod_embedOp_placeCfg {d m n P : ℕ} [NeZero d] {W : Fin P → Fin
 /-- **Columns along a product.** If the column of `M` at `x₀` is `f` placed by an injective `R`,
 and `G` maps every `R a` to the column `g a` placed by an injective `R'`, then the column of
 `G M` at `x₀` is `b ↦ ∑_a g a b f a` placed by `R'`. -/
-theorem mul_apply_extend {H α β : Type*} [Fintype H] [Fintype α]
+theorem _root_.Matrix.mul_apply_extend {H α β : Type*} [Fintype H] [Fintype α]
     (G M : Matrix H H ℂ) (x₀ : H) {R : α → H} (hR : Function.Injective R) (f : α → ℂ)
     (hM : ∀ y, M y x₀ = Function.extend R f 0 y) {R' : β → H} (hR' : Function.Injective R')
     (g : α → β → ℂ) (hG : ∀ a y, G y (R a) = Function.extend R' (g a) 0 y) (y : H) :

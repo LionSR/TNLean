@@ -17,8 +17,8 @@ nearest-neighbour gates of each unitary. With $s$ a length at which the blocked
 tensor is injective, the trees of all the blocks prepare the approximating state
 with measurements in depth $O(k)$ for block length $s2^{k+1}$, and Lemma~1'(i)
 of \cite{Malz2024Preparation} gives the depth $O(\log\log(N/\varepsilon))$ of
-the paragraph ``Tree-RG circuit with measurements'' of the source, for chain
-lengths divisible by the block length
+the paragraph ``Tree-RG circuit with measurements'' of the source, for the chain
+lengths divisible by $s2^{k+1}$ for some $k$ with $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$
 \cite{gap:mswc24_tree_measurement_scope}.
 
 Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
@@ -45,17 +45,19 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
         MPSPreparation.RegisterGate.two_mul_L_lt}
     \leanok
     \uses{def:ldp_measurement_rounds}
-    A \emph{register gate} is a unitary $X$ on $2s$ sites together with a site
+    A \emph{register gate} is a matrix $X$ on $2s$ sites together with a site
     $a$ and $L\ge0$ with $2L+2s\le N$. It acts on the two registers
     $a,\dots,a+s-1$ and $a+2L+s,\dots,a+2L+2s-1$, the first register on the
     first $s$ sites of $X$. Its stretch is $a,\dots,a+2L+2s-1$, its interior the
     $2L$ sites $a+s,\dots,a+s+2L-1$ strictly between the registers, and, for
-    $0\le t\le s$, its zone $t$ the $2L$ sites $a+t,\dots,a+t+2L-1$.
+    $0\le t\le s$, its zone $t$ the $2L$ sites $a+t,\dots,a+t+2L-1$. The gate
+    acts on the ring as $X$ on its two registers, which is unitary when $X$ is.
 \end{definition}
 
 \begin{lemma}[Teleporting registers site by site]
     \label{lem:ldp_register_chains}
     \lean{MPSPreparation.IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo,
+        Equiv.Perm.apply_mem_of_forall_notMem,
         MPSPreparation.RegisterGate.there, MPSPreparation.RegisterGate.back,
         MPSPreparation.RegisterGate.allSites_there_subset,
         MPSPreparation.RegisterGate.allSites_back_subset,
@@ -125,7 +127,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
 
 \begin{theorem}[A layer of register gates in constant depth with measurements]
     \label{thm:ldp_register_layer}
-    \lean{MPSPreparation.mul_list_prod_mul_of_mul_eq_one,
+    \lean{List.mul_prod_mul_of_mul_eq_one,
         MPSPreparation.RegisterGate.rounds,
         MPSPreparation.RegisterGate.sum_depth_rounds,
         MPSPreparation.RegisterGate.localProd,
@@ -138,7 +140,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     \leanok
     \uses{lem:ldp_register_chains, lem:ldp_round_implementation_compose}
     Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, each
-    unitary $X$ a product of at most $K$ unitaries on neighbouring sites. Then
+    $X$ a product of at most $K$ unitaries on neighbouring sites. Then
     measurement rounds of total depth $4s+K+2$ implement the product of the
     gates on the vectors with $\ket0$ at the interiors of all the gates: the
     first registers are teleported next to the second ones as in
@@ -215,7 +217,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     depth and Lemma~\ref{lem:ldp_round_implementation_compose} give the claim.
 \end{proof}
 
-\begin{lemma}[Amplitudes of trees and of layers of placed unitaries]
+\begin{lemma}[Amplitudes of trees and of layers of placed matrices]
     \label{lem:ldp_tree_amplitudes}
     \lean{MPSTensor.unpair, MPSTensor.two_mul_add_lt_two_pow,
         MPSTensor.unpair_apply, MPSTensor.unpair_injective,
@@ -228,7 +230,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
         MPSPreparation.placeCfg_injective, MPSPreparation.injective_window,
         MPSPreparation.disjoint_range_window,
         MPSPreparation.list_prod_embedOp_placeCfg,
-        MPSPreparation.mul_apply_extend}
+        Matrix.mul_apply_extend}
     \leanok
     \uses{def:ldp_binary_mera}
     \begin{enumerate}
@@ -238,10 +240,10 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
               $\sum_{e'}\prod_pW(e_p,e'_p)$ times the tree map of the coarser
               layers at the outputs $e'$ grouped into pairs in their turn, the
               sum running over these outputs.
-        \item Let $Y_1,\dots,Y_n$ be unitaries on pairwise disjoint windows of
+        \item Let $Y_1,\dots,Y_n$ be matrices on pairwise disjoint windows of
               $m$ sites of a chain, with $Y_p\ket{\iota_p(c)}=\sum_e
-                  V_p(e,c)\ket{o_p(e)}$ for injective $\iota_p,o_p$. Then the
-              product of the placed unitaries maps the configuration with
+                  V_p(e,c)\ket{o_p(e)}$ for injective $o_p$. Then the
+              product of the placed matrices maps the configuration with
               $\iota_p(c_p)$ on the window $p$ and $0$ elsewhere to
               $\sum_e\prod_pV_p(e_p,c_p)$ times the configuration with $o_p(e_p)$
               on the window $p$ and $0$ elsewhere.
@@ -250,7 +252,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
 \begin{proof}
     \leanok
     The first item is the recursion defining the tree map, with the sum of a
-    matrix product written out. For the second, a placed unitary acts on its
+    matrix product written out. For the second, a placed matrix acts on its
     window only and the windows are disjoint, so the product factors over the
     windows; induction on $n$.
 \end{proof}
@@ -260,8 +262,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     \lean{Matrix.polarIso_submatrix_equiv,
         MPSPreparation.exists_unitary_apply_eq_extend,
         MPSPreparation.extUnitary, MPSPreparation.extUnitary_mem_unitary,
-        MPSPreparation.extUnitary_apply, MPSPreparation.append_apply_of_lt,
-        MPSPreparation.append_apply_of_le, MPSPreparation.append_injective,
+        MPSPreparation.extUnitary_apply,
         MPSPreparation.regSpan_eq_two_mul, MPSPreparation.regWindow_two_mul,
         MPSPreparation.regWindow_two_mul_add_one,
         MPSPreparation.regWindow_two_mul_notMem,
@@ -271,7 +272,6 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
         MPSPreparation.iteratedBlockIndex_decodeBlockEquiv_symm,
         MPSPreparation.regInput, MPSPreparation.coarseOutput,
         MPSPreparation.fineOutput, MPSPreparation.regInput_injective,
-        MPSPreparation.decodeBlock_two_injective,
         MPSPreparation.coarseOutput_injective,
         MPSPreparation.fineOutput_bijective, MPSPreparation.regLayer,
         MPSPreparation.regTreeGate, MPSPreparation.regTreeGate_mem_unitary,
@@ -282,7 +282,6 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
         MPSPreparation.regLeafCfg_bijective, MPSPreparation.regLeafCfg_apply,
         MPSPreparation.regRegisterCfg_eq_placeCfg,
         MPSPreparation.placeCfg_regInput_zero,
-        MPSPreparation.prod_fin_two_pow_zero,
         MPSPreparation.regTreeOp_apply_regRegisterCfg,
         MPSPreparation.regTreeOp_apply_regLeafCfg,
         MPSPreparation.regTreeOp_apply_blockInputCfg}

@@ -14,15 +14,17 @@ The isometries of the tree-RG circuit of arXiv:2307.01696, eq. (16), act on regi
 with measurements" teleports such registers "at neighboring registers with a constant
 overhead". This file proves this for a layer of gates on pairs of registers of `s` sites.
 
-A *register gate* (`MPSPreparation.RegisterGate`) is a unitary `X` on `2s` sites acting on the
+A *register gate* (`MPSPreparation.RegisterGate`) is a matrix `X` on `2s` sites acting on the
 two registers `a, …, a + s - 1` and `a + 2L + s, …, a + 2L + 2s - 1` of the ring, with
-`2L + 2s ≤ N`. For a list of register gates whose stretches `a, …, a + 2L + 2s - 1` are pairwise
-disjoint, the measurement rounds `MPSPreparation.RegisterGate.rounds` do the following, in
-parallel for all the gates: teleport the site `a + t` of the first register to `a + 2L + t`
-along a chain of `L` hops, one round of depth `2` for each `t`, from `t = s - 1` down to `t = 0`;
-apply the unitaries `X` to the `2s` consecutive sites `a + 2L, …, a + 2L + 2s - 1` by a local
-circuit; teleport the sites back, one round for each `t`, from `t = 0` up to `t = s - 1`. The
-site `a + t` is moved only after the sites `a + t + 1, …, a + s - 1` of its register, so its
+`2L + 2s ≤ N`; the structure does not require `X` to be unitary, and the gate on the ring is
+unitary when `X` is (`MPSPreparation.RegisterGate.op_mem_unitary`). For a list of register
+gates whose stretches `a, …, a + 2L + 2s - 1` are pairwise disjoint, the measurement rounds
+`MPSPreparation.RegisterGate.rounds` do the following, in parallel for all the gates: teleport
+the site `a + t` of the first register to `a + 2L + t` along a chain of `L` hops, one round of
+depth `2` for each `t`, from `t = s - 1` down to `t = 0`; apply the matrices `X` to the `2s`
+consecutive sites `a + 2L, …, a + 2L + 2s - 1` by a local circuit; teleport the sites back, one
+round for each `t`, from `t = 0` up to `t = s - 1`. The site `a + t` is moved only after the
+sites `a + t + 1, …, a + s - 1` of its register, so its
 chain meets only sites carrying `|0⟩`.
 
 On the vectors with `|0⟩` at the `2L` sites strictly between the two registers of every gate,
@@ -71,23 +73,12 @@ theorem IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo [NeZero d] {S S' : Set (Fin
   by_contra hx
   exact hπ _ hx (by simpa using hy)
 
-omit [NeZero N] in
-/-- Conjugating a product by `P` with inverse `Q` conjugates every factor. -/
-theorem mul_list_prod_mul_of_mul_eq_one {n : Type*} [Fintype n] [DecidableEq n]
-    {P Q : Matrix n n ℂ} (hQP : Q * P = 1) (hPQ : P * Q = 1) (l : List (Matrix n n ℂ)) :
-    P * l.prod * Q = (l.map fun X => P * X * Q).prod := by
-  induction l with
-  | nil => simpa using hPQ
-  | cons X l ih =>
-    rw [List.prod_cons, List.map_cons, List.prod_cons, ← ih]
-    calc P * (X * l.prod) * Q = P * X * (Q * P) * l.prod * Q := by
-          rw [hQP, Matrix.mul_one]; simp only [Matrix.mul_assoc]
-      _ = P * X * Q * (P * l.prod * Q) := by simp only [Matrix.mul_assoc]
-
 /-! ### Register gates -/
 
-/-- A *register gate*: a unitary `X` on `2s` sites acting on the two registers
-`a, …, a + s - 1` and `a + 2L + s, …, a + 2L + 2s - 1` of the ring, with `2L + 2s ≤ N`.
+/-- A *register gate*: a matrix `X` on `2s` sites acting on the two registers
+`a, …, a + s - 1` and `a + 2L + s, …, a + 2L + 2s - 1` of the ring, with `2L + 2s ≤ N`. The
+structure does not require `X` to be unitary: the rounds implement the gate for every matrix
+`X` that is a product of gates on neighbouring sites, and such a product of unitaries is unitary.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" (isometries acting on
 "a constant number of sites which, although spatially separated, can be teleported at
@@ -98,7 +89,7 @@ structure RegisterGate (d N s : ℕ) [NeZero N] where
   /-- The number of hops of the chain teleporting each site of the first register. -/
   L : ℕ
   le : 2 * L + 2 * s ≤ N
-  /-- The unitary on the two registers, the first register on its first `s` sites. -/
+  /-- The matrix on the two registers, the first register on its first `s` sites. -/
   X : Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ
 
 namespace RegisterGate
@@ -334,13 +325,6 @@ theorem sitePerm_backAll_apply {t : ℕ} (ht : t < s) {g : RegisterGate d N s} (
     {i : Fin N} (hi : i ∈ g.span) : sitePerm (backAll gs t) i = sitePerm (g.back t) i :=
   sitePerm_flatMap_apply (fun g _ => g.allSites_back_subset_span ht) hgs hg hi
 
-omit [NeZero N] in
-/-- A permutation fixing every site outside `S` maps `S` into `S`. -/
-private theorem perm_apply_mem {π : Equiv.Perm (Fin N)} {S : Set (Fin N)}
-    (hπ : ∀ i ∉ S, π i = i) {i : Fin N} (hi : i ∈ S) : π i ∈ S := by
-  by_contra h
-  exact h (by rw [π.injective (hπ _ h)]; exact hi)
-
 omit [NeZero s] in
 include hgs in
 private theorem notMem_zoneAll_of_mem_span {t : ℕ} (ht : t ≤ s) {g : RegisterGate d N s}
@@ -364,7 +348,7 @@ theorem isZeroOn_chainPerm_thereAll [NeZero d] {t : ℕ} (ht : t < s) {v : Cfg d
     have hfix : ∀ i ∉ g.span, sitePerm (g.there t) i = i := fun i hi =>
       sitePerm_apply_of_notMem fun hi' => hi (g.allSites_there_subset_span ht hi')
     rw [sitePerm_thereAll_apply hgs ht hg hxg]
-    exact notMem_zoneAll_of_mem_span hgs ht.le hg (perm_apply_mem hfix hxg)
+    exact notMem_zoneAll_of_mem_span hgs ht.le hg (Equiv.Perm.apply_mem_of_forall_notMem hfix hxg)
       (g.sitePerm_there_notMem_zone ht hxg fun h => hx ⟨g, hg, h⟩)
   · simp only [not_exists, not_and] at hxs
     rw [thereAll, sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_there_subset_span ht) hxs]
@@ -383,7 +367,8 @@ theorem isZeroOn_chainPerm_backAll [NeZero d] {t : ℕ} (ht : t < s) {v : Cfg d 
     have hfix : ∀ i ∉ g.span, sitePerm (g.back t) i = i := fun i hi =>
       sitePerm_apply_of_notMem fun hi' => hi (g.allSites_back_subset_span ht hi')
     rw [sitePerm_backAll_apply hgs ht hg hxg]
-    exact notMem_zoneAll_of_mem_span hgs (by omega) hg (perm_apply_mem hfix hxg)
+    exact notMem_zoneAll_of_mem_span hgs (by omega) hg
+      (Equiv.Perm.apply_mem_of_forall_notMem hfix hxg)
       (g.sitePerm_back_notMem_zone ht hxg fun h => hx ⟨g, hg, h⟩)
   · simp only [not_exists, not_and] at hxs
     rw [backAll, sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_back_subset_span ht) hxs]
@@ -411,7 +396,7 @@ theorem sitePerm_backAll_eq_inv {t : ℕ} (ht : t < s) :
   · obtain ⟨g, hg, hi⟩ := hi
     have hfix : ∀ j ∉ g.span, sitePerm (g.back t) j = j := fun j hj =>
       sitePerm_apply_of_notMem fun hj' => hj (g.allSites_back_subset_span ht hj')
-    have hmem := perm_apply_mem hfix hi
+    have hmem := Equiv.Perm.apply_mem_of_forall_notMem hfix hi
     rw [sitePerm_backAll_apply hgs ht hg hi, sitePerm_thereAll_apply hgs ht hg hmem,
       g.sitePerm_back_eq_inv]
     simp
@@ -466,8 +451,6 @@ theorem therePerm_comp_sites {g : RegisterGate d N s} (hg : g ∈ gs) :
 
 /-! ### The rounds -/
 
-theorem _root_.MPSPreparation.TeleportHop.valid_nil : Valid ([] : List (TeleportHop N)) := trivial
-
 variable [NeZero d]
 
 /-- The rounds teleporting the sites `t - 1, …, 0` of the first registers, in this order. -/
@@ -517,16 +500,6 @@ theorem sum_depth_rounds (Ls : List (Layer d N)) :
   rw [rounds, List.map_append, List.sum_append, List.map_cons, List.sum_cons,
     sum_depth_thereRounds, sum_depth_backRounds, depth_round]
   ring
-
-omit [NeZero d] in
-/-- A round implementing a matrix is a sequence of rounds implementing it. -/
-theorem _root_.MPSPreparation.MeasurementRound.IsImplementationOn.isRoundsImplementationOn
-    {R : MeasurementRound d N} {E : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
-    (h : R.IsImplementationOn E W) : MeasurementRound.IsRoundsImplementationOn [R] E W := by
-  intro v hv w hw
-  obtain ⟨c, u, hu, rfl⟩ := h.exists_mem_outputs (Rs := []) hv hw
-  rw [MeasurementRound.outputs_nil, Set.mem_singleton_iff] at hu
-  exact ⟨c, by rw [hu]⟩
 
 omit [NeZero d] in
 /-- The permutation matrix of `therePerm`. -/
@@ -643,7 +616,7 @@ theorem permMatrix_mul_localProd_mul_permMatrix :
     rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm, inv_mul_cancel, permMatrix_cfgPerm_one]
   have hQP : (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm π⁻¹).permMatrix ℂ = 1 := by
     rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm, mul_inv_cancel, permMatrix_cfgPerm_one]
-  rw [localProd, mul_list_prod_mul_of_mul_eq_one hQP hPQ, List.map_map]
+  rw [localProd, List.mul_prod_mul_of_mul_eq_one hQP hPQ, List.map_map]
   refine congrArg List.prod (List.map_congr_left fun g hg => ?_)
   have h := permMatrix_cfgPerm_mul_embedOp_mul (d := d) π⁻¹ g.localSites g.X
   rw [show (π⁻¹).symm = π from rfl] at h
