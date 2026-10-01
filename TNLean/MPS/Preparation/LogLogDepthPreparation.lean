@@ -256,7 +256,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log {d D : ℕ} [N
     push_cast at hq2
     have : (2 : ℝ) ^ (k + 1) ≤ s * 2 ^ (k + 1) :=
       le_mul_of_one_le_left (by positivity) hs1
-    rw [pow_succ] at this
+    rw [pow_succ] at this hq2
     linarith
   rw [Real.le_logb_iff_rpow_le one_lt_two ((pow_pos two_pos k).trans_le h2k), Real.rpow_natCast]
   exact h2k

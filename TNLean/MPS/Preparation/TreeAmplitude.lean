@@ -114,8 +114,8 @@ theorem decodeBlock_pairRegroupEquiv (n j : ℕ) (e : Fin (2 ^ (j + 1)) → Fin 
   simp only [pairRegroupEquiv, Equiv.trans_apply, directIteratedBlockEquiv_apply,
     directToIteratedBlockIndex, decodeBlock_blockIndexOfList, List.get_ofFn, blockWordChunk]
   rw [decodeBlock_finCongr, decodeBlock_decodeBlockEquiv_symm, ← hσ t u]
-  congr 1
-  ring
+  · congr 1
+  · ring
 
 /-! ### The tree, one layer at a time -/
 
@@ -231,7 +231,7 @@ elsewhere has the amplitude `∏_p V p (e p) (c p)` at the configuration carryin
 the windows and `0` elsewhere, and `0` at every other configuration. -/
 theorem list_prod_embedOp_placeCfg {d m n P : ℕ} [NeZero d] {W : Fin P → Fin m → Fin n}
     (hW : Function.Injective fun pt : Fin P × Fin m => W pt.1 pt.2)
-    (Y : Fin P → Matrix (Cfg d m) (Cfg d m) ℂ) {α β : Type*} [Fintype β]
+    (Y : Fin P → Matrix (Cfg d m) (Cfg d m) ℂ) {α β : Type*}
     (ι' : Fin P → α → Cfg d m) (o : Fin P → β → Cfg d m) (ho : ∀ p, Function.Injective (o p))
     (V : Fin P → β → α → ℂ)
     (hY : ∀ p c z, Y p z (ι' p c) = Function.extend (o p) (fun b => V p b c) 0 z)
@@ -278,7 +278,7 @@ theorem list_prod_embedOp_placeCfg {d m n P : ℕ} [NeZero d] {W : Fin P → Fin
 /-- **Columns along a product.** If the column of `M` at `x₀` is `f` placed by an injective `R`,
 and `G` maps every `R a` to the column `g a` placed by an injective `R'`, then the column of
 `G M` at `x₀` is `b ↦ ∑_a g a b f a` placed by `R'`. -/
-theorem mul_apply_extend {H α β : Type*} [Fintype H] [DecidableEq H] [Fintype α]
+theorem mul_apply_extend {H α β : Type*} [Fintype H] [Fintype α]
     (G M : Matrix H H ℂ) (x₀ : H) {R : α → H} (hR : Function.Injective R) (f : α → ℂ)
     (hM : ∀ y, M y x₀ = Function.extend R f 0 y) {R' : β → H} (hR' : Function.Injective R')
     (g : α → β → ℂ) (hG : ∀ a y, G y (R a) = Function.extend R' (g a) 0 y) (y : H) :

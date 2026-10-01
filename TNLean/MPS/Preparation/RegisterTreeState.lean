@@ -661,8 +661,8 @@ theorem regTreeOp_apply_blockInputCfg (A : MPSTensor d D)
     (henc : Function.Injective enc) (l r : Fin D) (τ : Cfg d (s * 2 ^ (k + 1))) :
     regTreeOp (regTreeGate dig enc (blockTensor A s) k) k (k + 1) τ
         (blockInputCfg (Nat.pos_of_ne_zero (NeZero.ne d)) (s * 2 ^ (k + 1)) dig l r) =
-      polarIsoMatrix (blockTensor A (s * 2 ^ (k + 1))) ((decodeBlockEquiv d (s * 2 ^ (k + 1))).symm τ)
-        (finProdFinEquiv (l, r)) := by
+      polarIsoMatrix (blockTensor A (s * 2 ^ (k + 1)))
+        ((decodeBlockEquiv d (s * 2 ^ (k + 1))).symm τ) (finProdFinEquiv (l, r)) := by
   have hx := placeCfg_regInput_zero dig enc (k := k) (finProdFinEquiv (l, r))
   simp only [Equiv.symm_apply_apply] at hx
   rw [← hx, regTreeOp_apply_regLeafCfg h2 hdig henc]

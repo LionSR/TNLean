@@ -390,7 +390,8 @@ theorem isZeroOn_chainPerm_backAll [NeZero d] {t : ℕ} (ht : t < s) {v : Cfg d 
     rintro ⟨g, hg, hxg⟩
     exact hxs g hg (g.zone_subset_span (by omega) hxg)
 
-theorem pairSites_thereAll_subset (t : ℕ) : TeleportHop.pairSites (thereAll gs t) ⊆ zoneAll gs (t + 1) :=
+theorem pairSites_thereAll_subset (t : ℕ) :
+    TeleportHop.pairSites (thereAll gs t) ⊆ zoneAll gs (t + 1) :=
   fun _ hi => by
     obtain ⟨g, hg, hi⟩ := mem_pairSites_flatMap.mp hi
     exact ⟨g, hg, g.pairSites_there_subset t hi⟩
@@ -415,7 +416,8 @@ theorem sitePerm_backAll_eq_inv {t : ℕ} (ht : t < s) :
       g.sitePerm_back_eq_inv]
     simp
   · simp only [not_exists, not_and] at hi
-    rw [thereAll, backAll, sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_back_subset_span ht) hi,
+    rw [thereAll, backAll,
+      sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_back_subset_span ht) hi,
       sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_there_subset_span ht) hi]
 
 /-! ### The composite of the forward chains -/
@@ -550,7 +552,8 @@ theorem isRoundsImplementationOn_thereRounds : ∀ (t : ℕ) (ht : t ≤ s),
     have h₁ := (isImplementationOn_round [] (valid_thereAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
-        v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t)) (circuitOp [] *ᵥ v)} := fun v hv => by
+        v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t)) (circuitOp [] *ᵥ v)} :=
+        fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs (t + 1)) v from hv).mono
         (pairSites_thereAll_subset t)
     have hmap : ∀ v ∈ {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
@@ -589,7 +592,8 @@ theorem isRoundsImplementationOn_backRounds : ∀ (t : ℕ) (ht : t ≤ s),
     have h₁ := (isImplementationOn_round [] (valid_backAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs t) v},
-        v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t)) (circuitOp [] *ᵥ v)} := fun v hv => by
+        v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t)) (circuitOp [] *ᵥ v)} :=
+        fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs t) v from hv).mono
         (pairSites_backAll_subset t)
     refine ⟨?_, fun v hv => ?_⟩
