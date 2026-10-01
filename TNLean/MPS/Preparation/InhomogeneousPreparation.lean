@@ -98,7 +98,7 @@ theorem chainState_eq_blockIsoVector (A : MPSChainTensor d D N) (hN : ∑ k, ℓ
   have h := mpvFamily_rotatePhysical (fun k => polarIsoMatrix (chainBlockTensor A hN k))
     (fun k => polarPosTensor (chainBlockTensor A hN k)) (blockIndexEquiv d hN s)
   simp only [rotatePhysical_polarIsoMatrix_polarPosTensor] at h
-  rw [chainState_apply, coeff_eq_mpvFamily_chainBlockTensor, h, blockIsoVector_apply]
+  rw [chainState_apply, coeff_eq_mpvFamily_chainBlockTensor A hN, h, blockIsoVector_apply]
   simp only [chainPosState_apply]
 
 /-- The isometries on the blocks commute with scalars. -/

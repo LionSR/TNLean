@@ -13,10 +13,10 @@ import TNLean.MPS.Preparation.IsometricChain
 For an injective `q`-site blocked tensor `B` with polar decomposition `B = V P`, the
 isometry `V : ℂ^{D²} → (ℂ^d)^{⊗q}` is `B P⁻¹`. Read site by site, `B P⁻¹` is an
 open-boundary matrix product map with bond space `ℂ^D ⊗ ℂ^D`: the site matrices are
-`1_D ⊗ A_p^i`, where the tensors `A_p` may depend on the site `p`, the left end joins the two bond factors, and `P⁻¹` is absorbed into the
-right end, where the input `|α, β⟩` enters. Successive decompositions from the left
-make every site map an isometry, and the remainder left at the right end is an
-isometry because `V` is. This is arXiv:2307.01696, eqs. (13)–(15).
+`1_D ⊗ A_p^i`, where the tensors `A_p` may depend on the site `p`, the left end joins the two
+bond factors, and `P⁻¹` is absorbed into the right end, where the input `|α, β⟩` enters.
+Successive decompositions from the left make every site map an isometry, and the remainder left
+at the right end is an isometry because `V` is. This is arXiv:2307.01696, eqs. (13)–(15).
 
 The chain is stored as in `TNLean.MPS.Preparation.IsometricChain`: square
 `D² × D²` site matrices `Q_p(i)` together with bond dimensions `b₀, …, b_q`, where
@@ -107,16 +107,16 @@ private theorem star_dotProduct_of_isSupportedBelow_one {D' : ℕ} (hD : 0 < D')
 /-- **Sequential factorization of an isometry given by a matrix product.** Let `V`
 be an isometry from `ℂ^{D²}` to `(ℂ^d)^{⊗(n+1)}` whose matrix elements are
 `⟨σ|V|x⟩ = ∑_{α,β} (A_0^{σ₀} ⋯ A_n^{σ_n})_{αβ} G_{(α,β),x}` for tensors `A_0, …, A_n`,
-which may depend on the site. Then there are bond
-dimensions `b₀ = 1`, `b_{n+1} = D²` and `b₁, …, b_{n+1} ≤ D²`, and site matrices `Q_p`
-vanishing outside the `b_p × b_{p+1}` block and isometric on it, with
+which may depend on the site. Then there are bond dimensions `b₀ = 1`, `b_{n+1} = D²` and
+`b₁, …, b_{n+1} ≤ D²`, and site matrices `Q_p` vanishing outside the `b_p × b_{p+1}` block
+and isometric on it, with
 `⟨σ|V|x⟩ = (Q₀(σ₀) ⋯ Q_n(σ_n))_{0x}`.
 
 arXiv:2307.01696, eqs. (13)–(15): the map is the open-boundary product of the site
 matrices `1_D ⊗ A^i` with the two bond factors joined on the left and `G` absorbed on
 the right (eq. (13)), here with a tensor `A_p` depending on the site as in the paragraph
-"Inhomogeneous short-range correlated MPS"; successive decompositions from the left make every site
-isometric (eq. (14)); and the remainder is an isometry because `V` is, so absorbing
+"Inhomogeneous short-range correlated MPS"; successive decompositions from the left make
+every site isometric (eq. (14)); and the remainder is an isometry because `V` is, so absorbing
 it into the last site keeps that site isometric (eq. (15)). Here `G` plays the role
 of `P⁻¹`. -/
 theorem exists_isometric_chain_of_eq_mul {n : ℕ} (A : MPSChainTensor d D (n + 1))

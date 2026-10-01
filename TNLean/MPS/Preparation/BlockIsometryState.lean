@@ -237,7 +237,6 @@ theorem inner_blockIsometryState_mpvState [NeZero M] [NeZero D] (A : MPSTensor d
     (fun k => isIsometry_polarIsoMatrix_of_isInjective (hB k))]
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
 
-
 /-! ### Site-dependent tensors and pairs -/
 
 /-- The blocked tensor of block `k` of a chain of site-dependent tensors: the tensor
@@ -314,7 +313,7 @@ theorem norm_pairFamilyVector {ω : Fin M → Fin D × Fin D → ℂ}
   simp only [hω, Finset.prod_const_one] at hsum
   rw [← hsum, ← Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm)
     (fun τ : Cfg (D * D) M => star (pairFamilyVector ω τ) * pairFamilyVector ω τ) _
-    fun _ => by simp]
+    fun _ => by simp only [pairFamilyVector_apply]; rfl]
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
 
 /-- **The isometries on the blocks**, `(⊗ₖ V_k) x`, for tensors `B_k` on the blocks of a ring
@@ -361,8 +360,7 @@ theorem norm_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     ‖blockIsoVector B hN x‖ = ‖x‖ := by
   have h := inner_blockIsoVector hN hB x x
   rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
-  exact (pow_left_injective₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero)
-    (by exact_mod_cast h)
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
 
 /-- **The state `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}`** for a chain of site-dependent tensors `A`
 blocked into blocks of lengths `ℓ`, and site-dependent pairs `ω^k`: `V_k` is the isometric
