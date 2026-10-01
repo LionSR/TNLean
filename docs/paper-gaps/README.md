@@ -58,6 +58,11 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   physical action `φ(g) W_gᵀ ⊗ W_g⁻¹`, which for `D ≥ 1`
   realizes the prescribed class and gives the blocked cluster tensor for
   `Z₂ × Z₂`.
+- `spc11_uniform_gap_injective_scope.tex` (scope restriction) records that the
+  uniform parent-Hamiltonian gap of arXiv:1010.3732, Appendix A, is formalized
+  for continuous compact families of one-site injective tensors with the
+  canonical two-site interaction, while the source's path also covers
+  non-injective normal forms with several blocks.
 - `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
   that the formal fixed point takes a projective representation with the given
   factor system as input, whereas the source starts from the 2-cocycle alone; the
@@ -699,10 +704,6 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   walls and their phases are nonzero and that the local action of the
   symmetry on a domain wall holds against blocked regions of the two ground
   states.
-- `gs24_domain_wall_exchange_square.tex` records that the printed orientation
-  of the exchange of two domain-wall strings is formalized with the square of
-  the exchange phase equal to one as a hypothesis; the source derives it from
-  the symmetry squaring to the identity.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
