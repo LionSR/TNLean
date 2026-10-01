@@ -35,13 +35,13 @@ represented by the existing function type `ScalarCocycle G`; its name and
 
 namespace TNLean.Algebra
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 /-- A multiplicative scalar 3-cochain `G × G × G → ℂˣ`.
 
 This is the scalar function denoted by `ω` in arXiv:2502.20257,
 `eq:3-cocycle`. -/
-abbrev ScalarThreeCochain (G : Type*) := G → G → G → Units ℂ
+abbrev ScalarThreeCochain (G : Type) := G → G → G → Units ℂ
 
 namespace ScalarCocycle
 

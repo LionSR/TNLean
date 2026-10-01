@@ -125,6 +125,22 @@ theorem comap_rightV (a b c : H) :
   rw [rightV, Matrix.mul_assoc (F.castMat _) (fd.V _ _), V_mul_idKron_castMat]
   simp only [Matrix.mul_assoc, castMat_mul_castMat_assoc]
 
+end FusionData
+
+end MPOTensor.GroupFamily
+
+/-! ### Restriction of the anomaly three-cochain
+
+Scalar three-cochains are indexed by groups in `Type`. -/
+
+namespace MPOTensor.GroupFamily
+
+variable {G H : Type} [Group G] [Group H] {d : ℕ} {F : GroupFamily G d}
+
+namespace FusionData
+
+variable (fd : FusionData F) (f : H →* G)
+
 /-- **The anomaly three-cochain of restricted fusion tensors is the restriction of the
 anomaly three-cochain**: `ω_H(a,b,c) = ω(f a, f b, f c)`.
 

@@ -190,7 +190,7 @@ projective representation of the symmetry up to nonzero phases,
 `∑ⱼ U(g)ᵢⱼ Aʲ = ζ(g) ρ(g⁻¹) Aⁱ ρ(g⁻¹)⁻¹` (the source's `e^{iφ(g)}`; `ζ = 1` is the
 relation produced by `virtual_rep_of_symmetric_injective`).  If the factor system of
 `ρ` has a non-trivial class, no eigenspace of `Λ` is one-dimensional. -/
-theorem finrank_eigenspace_ne_one_of_isNontrivialClass {G : Type*} [Group G]
+theorem finrank_eigenspace_ne_one_of_isNontrivialClass {G : Type} [Group G]
     {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     (hNorm : Kraus.transferMap A 1 = 1)
     {Λ : Matrix (Fin D) (Fin D) ℂ} (hΛpos : Λ.PosDef)

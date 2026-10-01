@@ -110,6 +110,14 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   dimension, with the constants multiplying, and that in two dimensions only
   the simplification of the left inverse for the left-regular representation
   on the contracted link is formalized (open scope restriction).
+- `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
+  records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
+  operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product
+  tensor is, up to the positive constant of the formal notion of
+  `G`-isometry, the projector onto `𝒮₂`, so it is `1 - hᵢ` rather than the
+  local term `hᵢ` the lemma names (local fix); and that the commutation of
+  the local terms, stated for PEPS, is formalized for matrix product states
+  on rings of at least three sites.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
@@ -816,9 +824,24 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_measurement_preparation_scope.tex` records the scope of the
+  preparation with measurements of a tensor that is not normal (paragraph
+  "Long-range MPS using measurements"): orthogonal `q`-site states of distinct
+  blocks, block lengths dividing `N`, and the corrected approximating state; and
+  two readings of the construction, the circuit applied after the measurement
+  and the depth `O(q)`, rather than constant, of the GHZ-type state on the chain
+  of `N` sites; open.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
   (paragraph "Connection to MERA") is formalized for tensors whose two-site
   blocked tensor is injective, so that every layer is an isometry, and for
   chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
   a coarser last block remove the two restrictions.
+
+For the correlation functions of arXiv:2011.12127, Section II.B.3:
+
+- `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
+  pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
+  printed for a primitive tensor with a defective subleading eigenvalue
+  (explicit counterexample), the diagonalizability hypothesis under which it
+  holds, and the rate correction for the decay bound.
