@@ -839,7 +839,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
-    Set $B^i=U^\dagger A^iU$. Unitarity preserves left canonicality and
-    cancels the intermediate factors in every word product, giving
-    $B^{[p]}=U^\dagger A^{[p]}U=C$.
+    Set $B^i=U^\dagger A^iU$. Then
+    $\sum_i(B^i)^\dagger B^i=U^\dagger\bigl(\sum_i(A^i)^\dagger A^i\bigr)U=\Id$, and
+    $UU^\dagger=\Id$ cancels the intermediate factors of every word:
+    \begin{align}
+        B^{i_1}\cdots B^{i_p} & =U^\dagger A^{i_1}UU^\dagger A^{i_2}U\cdots U^\dagger A^{i_p}U
+        =U^\dagger A^{i_1}\cdots A^{i_p}U. \notag
+    \end{align}
+    Hence $B^{[p]}=U^\dagger A^{[p]}U=C$.
 \end{proof}
