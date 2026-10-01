@@ -18,6 +18,7 @@ import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.CircuitComposition
+import TNLean.MPS.Preparation.CircuitEquivalence
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.ControlledGateProducts
 import TNLean.MPS.Preparation.ControlledGates
@@ -61,6 +62,7 @@ import TNLean.MPS.Preparation.PairProduct
 import TNLean.MPS.Preparation.PermutationGates
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
+import TNLean.MPS.Preparation.ProductStateCircuit
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.RepeatedBlockError
 import TNLean.MPS.Preparation.RepeatedBlockSum
