@@ -101,6 +101,117 @@ private theorem star_dotProduct_of_isSupportedBelow_one {D' : ℕ} (hD : 0 < D')
     simp [hu α this]
   · simp
 
+/-- **Sequential factorization of a matrix product map isometric on its first inputs.** Let
+`V : ℂ^{D²} → (ℂ^d)^{⊗(n+1)}` have matrix elements
+`⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₀} ⋯ A^{σ_n})_{αβ} G_{(α,β),x}` for the inputs `x < r`, and let these
+`r ≤ D²` columns be orthonormal. Then there are bond dimensions `b₀ = 1`, `b_{n+1} = r` and
+`b₁, …, b_{n+1} ≤ D²`, and site matrices `Q_p` vanishing outside the `b_p × b_{p+1}` block and
+isometric on it, with `⟨σ|V|x⟩ = (Q₀(σ₀) ⋯ Q_n(σ_n))_{0x}` for `x < r`.
+
+For `r = D²` this is `exists_isometric_chain_of_eq_mul`, arXiv:2307.01696, eqs. (13)–(15). The
+inputs `x ≥ r` are discarded: the remainder of the sweep is applied only to the first `r`
+columns of `G`, which are orthonormal after the sweep because the columns of `V` are, so
+absorbing it into the last site keeps that site isometric on its first `r` levels. -/
+theorem exists_isometric_chain_of_eq_mul_of_le (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
+    {r : ℕ} (hr : r ≤ D * D) (G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ)
+    (V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ)
+    (hV : ∀ σ x, x.val < r → V σ x = ∑ a, Kraus.evalWord A (List.ofFn σ)
+      (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 * G a x)
+    (hiso : ∀ x y, x.val < r → y.val < r →
+      ∑ σ, star (V σ x) * V σ y = if x = y then 1 else 0) :
+    ∃ (b : Fin (n + 2) → ℕ) (Q : MPSChainTensor d (D * D) (n + 1)),
+      b 0 = 1 ∧ b (Fin.last (n + 1)) = r ∧ (∀ p : Fin (n + 1), b p.succ ≤ D * D) ∧
+      (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
+      (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
+      ∀ σ x, x.val < r → V σ x = eval Q σ ⟨0, x.pos⟩ x := by
+  classical
+  rcases Nat.eq_zero_or_pos D with rfl | hD
+  · refine ⟨fun k => if k = 0 then 1 else r, fun _ _ => 0, by simp,
+      by simp [Fin.ext_iff], fun p => by simpa [Fin.succ_ne_zero] using hr,
+      fun _ _ α => absurd α.pos (by simp), fun _ _ α => absurd α.pos (by simp),
+      fun _ β => absurd β.pos (by simp), fun _ x => absurd x.pos (by simp)⟩
+  have hDD : 0 < D * D := Nat.mul_pos hD hD
+  -- Only the first `r` columns of `G` are kept.
+  set G' : Matrix (Fin (D * D)) (Fin (D * D)) ℂ := Matrix.of fun a x =>
+    if x.val < r then G a x else 0 with hG'
+  -- The open-boundary product of eq. (13), swept from the left (eq. (14)).
+  obtain ⟨b, Q, R, hb0, hbD, -, hrow, hcol, hisoQ, hR, hprod⟩ :=
+    exists_isometric_chain_mul (n + 1) 1 hDD (rowMat (pairJoin D))
+      (isRowSupportedBelow_rowMat _) fun _ i => pairEmbed D (A i)
+  set C := R * G' with hCdef
+  have hC : IsRowSupportedBelow (b (Fin.last (n + 1))) C := hR.mul G'
+  have hCr : ∀ γ x, r ≤ x.val → C γ x = 0 := fun γ x hx => by
+    simp [hCdef, hG', Matrix.mul_apply, show ¬x.val < r by omega]
+  have hjoin : ∀ (σ : Fin (n + 1) → Fin d) a,
+      (rowMat (pairJoin D) * eval (fun _ i => pairEmbed D (A i)) σ) ⟨0, hDD⟩ a =
+      Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 :=
+    fun σ a => by
+      rw [eval_pairEmbed, Matrix.mul_apply]
+      exact (Finset.sum_congr rfl fun j _ => by simp [rowMat]).trans
+        (sum_pairJoin_mul_pairEmbed _ a)
+  have hVC : ∀ σ x, x.val < r → V σ x = (eval Q σ * C) ⟨0, hDD⟩ x := fun σ x hx => by
+    rw [hCdef, ← Matrix.mul_assoc, ← hprod σ, hV σ x hx, Matrix.mul_apply]
+    exact Finset.sum_congr rfl fun a _ => by rw [hjoin, hG', Matrix.of_apply, ite_eq_left hx]
+  -- The first `r` columns of the remainder are orthonormal because those of `V` are
+  -- (eq. (15)).
+  let col : Fin (D * D) → Fin (D * D) → ℂ := fun x β => C β x
+  have hcol_supp : ∀ x, IsSupportedBelow (b (Fin.last (n + 1))) (col x) :=
+    fun x β hβ => hC β x hβ
+  have hCiso : ∀ x y, x.val < r → y.val < r →
+      star (col x) ⬝ᵥ col y = if x = y then 1 else 0 := fun x y hx hy => by
+    rw [← sum_star_eval_mulVec_dotProduct b Q hrow hisoQ _ _ (hcol_supp x) (hcol_supp y),
+      ← hiso x y hx hy]
+    refine Finset.sum_congr rfl fun σ _ => ?_
+    have hsupp := isSupportedBelow_eval_mulVec b Q hrow _ (hcol_supp x) σ
+    rw [hb0] at hsupp
+    rw [star_dotProduct_of_isSupportedBelow_one hDD hsupp, hVC σ x hx, hVC σ y hy]
+    simp [col, Matrix.mul_apply, Matrix.mulVec, dotProduct]
+  -- Absorb the remainder into the last site.
+  let b' : Fin (n + 2) → ℕ := fun k => if k = Fin.last (n + 1) then r else b k
+  let Q' : MPSChainTensor d (D * D) (n + 1) := fun p i =>
+    if p = Fin.last n then Q p i * C else Q p i
+  have hcs : ∀ p : Fin (n + 1), b' p.castSucc = b p.castSucc := fun p => by
+    simp [b', Fin.castSucc_ne_last]
+  have hsc : ∀ p : Fin (n + 1), p ≠ Fin.last n → b' p.succ = b p.succ := fun p hp => by
+    have : p.succ ≠ Fin.last (n + 1) := by
+      rw [← Fin.succ_last]; exact fun h => hp (Fin.succ_injective _ h)
+    simp [b', this]
+  refine ⟨b', Q', ?_, by simp [b'], fun p => ?_, fun p i => ?_, fun p i α β hβ => ?_,
+    fun p => ?_, fun σ x hx => ?_⟩
+  · have : (0 : Fin (n + 2)) ≠ Fin.last (n + 1) := by simp [Fin.ext_iff]
+    simp [b', this, hb0]
+  · by_cases hp : p = Fin.last n
+    · subst hp; simpa [b'] using hr
+    · rw [hsc p hp]; exact hbD _
+  · rw [hcs]; simp only [Q']; split_ifs
+    · exact (hrow p i).mul _
+    · exact hrow p i
+  · by_cases hp : p = Fin.last n
+    · subst hp
+      simp only [b', Fin.succ_last, ite_true] at hβ
+      simp [Q', Matrix.mul_apply, hCr _ β hβ]
+    · rw [hsc p hp] at hβ
+      simp only [Q', hp, ite_false]
+      exact hcol p i α β hβ
+  · by_cases hp : p = Fin.last n
+    · subst hp
+      intro x y hx hy
+      simp only [b', Fin.succ_last, ite_true] at hx hy
+      have h := sum_star_mulVec_dotProduct_of_isIsometryOn (hisoQ (Fin.last n))
+        (v := col x) (w := col y) (by rw [Fin.succ_last]; exact hcol_supp x)
+        (by rw [Fin.succ_last]; exact hcol_supp y)
+      rw [hCiso x y hx hy] at h
+      rw [← h]
+      simp [Q', col, Matrix.mul_apply, Matrix.mulVec, dotProduct]
+    · rw [hsc p hp]
+      simpa [Q', hp] using hisoQ p
+  · rw [hVC σ x hx]
+    have hQ' : (fun p : Fin n => Q' p.castSucc) = fun p => Q p.castSucc := by
+      funext p i; simp [Q', Fin.castSucc_ne_last]
+    rw [eval_succ' Q', hQ', eval_succ' Q]
+    simp only [Q', ite_true, Matrix.mul_assoc]
+
 /-- **Sequential factorization of an isometry given by a matrix product.** Let `V`
 be an isometry from `ℂ^{D²}` to `(ℂ^d)^{⊗(n+1)}` whose matrix elements are
 `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₀} ⋯ A^{σ_n})_{αβ} G_{(α,β),x}`. Then there are bond
@@ -125,84 +236,38 @@ theorem exists_isometric_chain_of_eq_mul (A : Fin d → Matrix (Fin D) (Fin D) �
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
       (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
       ∀ σ x, V σ x = eval Q σ ⟨0, x.pos⟩ x := by
+  obtain ⟨b, Q, h0, hl, hb, hrow, hcol, hiso', hV'⟩ := exists_isometric_chain_of_eq_mul_of_le A n
+    le_rfl G V (fun σ x _ => hV σ x) (fun x y _ _ => hiso x y)
+  exact ⟨b, Q, h0, hl, hb, hrow, hcol, hiso', fun σ x => hV' σ x x.isLt⟩
+
+/-- The isometric factor of an injective blocked tensor `B = V P` is `V = B P⁻¹`, read as a
+matrix product map: `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₁} ⋯ A^{σ_q})_{αβ} (P⁻¹)_{(α,β),x}`
+(arXiv:2307.01696, eq. (13)). -/
+theorem polarIsoMatrix_blockTensor_eq_sum (A : MPSTensor d D) {q : ℕ}
+    (hB : Kraus.IsInjective (blockTensor A q)) (σ : Fin q → Fin d) (x : Fin (D * D)) :
+    MPSTensor.polarIsoMatrix (blockTensor A q) ((decodeBlockEquiv d q).symm σ) x =
+      ∑ a, Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 *
+        ((Matrix.polarPos (MPSTensor.physicalMatrix (blockTensor A q)))⁻¹.submatrix
+          (virtualPairEquiv D) (virtualPairEquiv D)) a x := by
   classical
-  rcases Nat.eq_zero_or_pos D with rfl | hD
-  · refine ⟨fun k => if k = 0 then 1 else 0, fun _ _ => 0, by simp, by simp [Fin.ext_iff],
-      fun p => by simp [Fin.succ_ne_zero], fun _ _ α => absurd α.pos (by simp),
-      fun _ _ α => absurd α.pos (by simp), fun _ β => absurd β.pos (by simp),
-      fun _ x => absurd x.pos (by simp)⟩
-  have hDD : 0 < D * D := Nat.mul_pos hD hD
-  -- The open-boundary product of eq. (13), swept from the left (eq. (14)).
-  obtain ⟨b, Q, R, hb0, hbD, -, hrow, hcol, hisoQ, hR, hprod⟩ :=
-    exists_isometric_chain_mul (n + 1) 1 hDD (rowMat (pairJoin D))
-      (isRowSupportedBelow_rowMat _) fun _ i => pairEmbed D (A i)
-  set C := R * G with hCdef
-  have hC : IsRowSupportedBelow (b (Fin.last (n + 1))) C := hR.mul G
-  have hjoin : ∀ (σ : Fin (n + 1) → Fin d) a,
-      (rowMat (pairJoin D) * eval (fun _ i => pairEmbed D (A i)) σ) ⟨0, hDD⟩ a =
-      Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 :=
-    fun σ a => by
-      rw [eval_pairEmbed, Matrix.mul_apply]
-      exact (Finset.sum_congr rfl fun j _ => by simp [rowMat]).trans
-        (sum_pairJoin_mul_pairEmbed _ a)
-  have hVC : ∀ σ x, V σ x = (eval Q σ * C) ⟨0, hDD⟩ x := fun σ x => by
-    rw [hCdef, ← Matrix.mul_assoc, ← hprod σ, hV σ x, Matrix.mul_apply]
-    exact Finset.sum_congr rfl fun a _ => by rw [hjoin]
-  -- The columns of the remainder are orthonormal because `V` is an isometry (eq. (15)).
-  let col : Fin (D * D) → Fin (D * D) → ℂ := fun x β => C β x
-  have hcol_supp : ∀ x, IsSupportedBelow (b (Fin.last (n + 1))) (col x) :=
-    fun x β hβ => hC β x hβ
-  have hCiso : ∀ x y, star (col x) ⬝ᵥ col y = if x = y then 1 else 0 := fun x y => by
-    rw [← sum_star_eval_mulVec_dotProduct b Q hrow hisoQ _ _ (hcol_supp x) (hcol_supp y),
-      ← hiso x y]
-    refine Finset.sum_congr rfl fun σ _ => ?_
-    have hsupp := isSupportedBelow_eval_mulVec b Q hrow _ (hcol_supp x) σ
-    rw [hb0] at hsupp
-    rw [star_dotProduct_of_isSupportedBelow_one hDD hsupp, hVC, hVC]
-    simp [col, Matrix.mul_apply, Matrix.mulVec, dotProduct]
-  -- Absorb the remainder into the last site.
-  let b' : Fin (n + 2) → ℕ := fun k => if k = Fin.last (n + 1) then D * D else b k
-  let Q' : MPSChainTensor d (D * D) (n + 1) := fun p i =>
-    if p = Fin.last n then Q p i * C else Q p i
-  have hcs : ∀ p : Fin (n + 1), b' p.castSucc = b p.castSucc := fun p => by
-    simp [b', Fin.castSucc_ne_last]
-  have hsc : ∀ p : Fin (n + 1), p ≠ Fin.last n → b' p.succ = b p.succ := fun p hp => by
-    have : p.succ ≠ Fin.last (n + 1) := by
-      rw [← Fin.succ_last]; exact fun h => hp (Fin.succ_injective _ h)
-    simp [b', this]
-  refine ⟨b', Q', ?_, by simp [b'], fun p => ?_, fun p i => ?_, fun p i α β hβ => ?_,
-    fun p => ?_, fun σ x => ?_⟩
-  · have : (0 : Fin (n + 2)) ≠ Fin.last (n + 1) := by simp [Fin.ext_iff]
-    simp [b', this, hb0]
-  · by_cases hp : p = Fin.last n
-    · subst hp; simp [b']
-    · rw [hsc p hp]; exact hbD _
-  · rw [hcs]; simp only [Q']; split_ifs
-    · exact (hrow p i).mul _
-    · exact hrow p i
-  · by_cases hp : p = Fin.last n
-    · subst hp
-      simp only [b', Fin.succ_last, ite_true] at hβ
-      exact absurd β.isLt (not_lt.mpr hβ)
-    · rw [hsc p hp] at hβ
-      simp only [Q', hp, ite_false]
-      exact hcol p i α β hβ
-  · by_cases hp : p = Fin.last n
-    · subst hp
-      intro x y _ _
-      have h := sum_star_mulVec_dotProduct_of_isIsometryOn (hisoQ (Fin.last n))
-        (v := col x) (w := col y) (by rw [Fin.succ_last]; exact hcol_supp x)
-        (by rw [Fin.succ_last]; exact hcol_supp y)
-      rw [hCiso] at h
-      rw [← h]
-      simp [Q', col, Matrix.mul_apply, Matrix.mulVec, dotProduct]
-    · rw [hsc p hp]
-      simpa [Q', hp] using hisoQ p
-  · rw [hVC]
-    have hQ' : (fun p : Fin n => Q' p.castSucc) = fun p => Q p.castSucc := by
-      funext p i; simp [Q', Fin.castSucc_ne_last]
-    rw [eval_succ' Q', hQ', eval_succ' Q]
-    simp only [Q', ite_true, Matrix.mul_assoc]
+  set B := blockTensor A q with hBdef
+  set M := MPSTensor.physicalMatrix B
+  let e := virtualPairEquiv D
+  have hinj := MPSTensor.injective_physicalMatrix_mulVec_of_isInjective hB
+  have hdet : IsUnit (Matrix.polarPos M).det :=
+    (Matrix.isUnit_iff_isUnit_det _).mp (Matrix.posDef_polarPos_of_injective M hinj).isUnit
+  have hVM : Matrix.polarIso M = M * (Matrix.polarPos M)⁻¹ := by
+    calc Matrix.polarIso M
+        = Matrix.polarIso M * Matrix.polarPos M * (Matrix.polarPos M)⁻¹ := by
+          rw [Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hdet, Matrix.mul_one]
+      _ = M * (Matrix.polarPos M)⁻¹ := by rw [Matrix.polarIso_mul_polarPos]
+  have hBσ : B ((decodeBlockEquiv d q).symm σ) = Kraus.evalWord A (List.ofFn σ) := by
+    simp only [hBdef, blockTensor, decodeBlockEquiv, Kraus.blockTensor, Kraus.wordOfBlock,
+      Kraus.decodeBlock_decodeBlockEquiv_symm]
+  change (Matrix.polarIso M) _ (e x) = _
+  rw [hVM, Matrix.mul_apply, ← e.sum_comp]
+  refine Finset.sum_congr rfl fun a _ => ?_
+  simp [M, MPSTensor.physicalMatrix, hBσ, e]
 
 /-- **Sequential factorization of the isometry** of the polar decomposition of an
 injective blocked tensor. Let `A` be a tensor with bond dimension `D`, let `q ≥ 1`,
@@ -237,35 +302,14 @@ theorem exists_isometric_chain_polarIsoMatrix (A : MPSTensor d D) {q : ℕ} (hq 
           eval Q σ ⟨0, x.pos⟩ x := by
   classical
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
-  set B := blockTensor A (n + 1) with hBdef
-  set M := MPSTensor.physicalMatrix B
-  let e := virtualPairEquiv D
-  have hinj := MPSTensor.injective_physicalMatrix_mulVec_of_isInjective hB
-  have hdet : IsUnit (Matrix.polarPos M).det :=
-    (Matrix.isUnit_iff_isUnit_det _).mp (Matrix.posDef_polarPos_of_injective M hinj).isUnit
-  have hVM : Matrix.polarIso M = M * (Matrix.polarPos M)⁻¹ := by
-    calc Matrix.polarIso M
-        = Matrix.polarIso M * Matrix.polarPos M * (Matrix.polarPos M)⁻¹ := by
-          rw [Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hdet, Matrix.mul_one]
-      _ = M * (Matrix.polarPos M)⁻¹ := by rw [Matrix.polarIso_mul_polarPos]
   let V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ := fun σ x =>
-    MPSTensor.polarIsoMatrix B ((decodeBlockEquiv d (n + 1)).symm σ) x
-  have hBσ : ∀ σ, B ((decodeBlockEquiv d (n + 1)).symm σ) =
-      Kraus.evalWord A (List.ofFn σ) := fun σ => by
-    simp only [hBdef, blockTensor, decodeBlockEquiv, Kraus.blockTensor, Kraus.wordOfBlock,
-      Kraus.decodeBlock_decodeBlockEquiv_symm]
-  have hV : ∀ σ x, V σ x = ∑ a, Kraus.evalWord A (List.ofFn σ) (e a).1 (e a).2 *
-      ((Matrix.polarPos M)⁻¹.submatrix e e) a x := fun σ x => by
-    change (Matrix.polarIso M) _ (e x) = _
-    rw [hVM, Matrix.mul_apply, ← e.sum_comp]
-    refine Finset.sum_congr rfl fun a _ => ?_
-    simp [M, MPSTensor.physicalMatrix, hBσ, e]
+    MPSTensor.polarIsoMatrix (blockTensor A (n + 1)) ((decodeBlockEquiv d (n + 1)).symm σ) x
   have hiso : ∀ x y, ∑ σ, star (V σ x) * V σ y = if x = y then 1 else 0 := fun x y => by
     have h := congrFun (congrFun
       (MPSTensor.isIsometry_polarIsoMatrix_of_isInjective hB) x) y
     rw [Matrix.mul_apply, Matrix.one_apply] at h
     rw [← h, ← (decodeBlockEquiv d (n + 1)).symm.sum_comp]
     rfl
-  exact exists_isometric_chain_of_eq_mul A n _ V hV hiso
+  exact exists_isometric_chain_of_eq_mul A n _ V (polarIsoMatrix_blockTensor_eq_sum A hB) hiso
 
 end MPSPreparation

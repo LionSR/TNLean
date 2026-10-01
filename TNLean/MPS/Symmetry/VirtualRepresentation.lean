@@ -58,7 +58,7 @@ section VirtualRep
 
 open TNLean.Algebra
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 /-- Twisting commutes with virtual conjugation. -/
 private lemma twistedTensor_gaugeEquiv

@@ -23,6 +23,7 @@ every `L_j`, so every `q`-site blocked tensor is injective. This file isolates t
   bound in the case `x < 1`, `L_j ≤ q` for every `j`.
 * `mul_mul_exp_neg_le_of_log_le` — `K M e^{-x} ≤ ε` once `x ≥ log K + log M - log ε`, the last
   step from a logarithmic block-length threshold to the error `ε`.
+* `mul_mul_exp_neg_div_le_of_le` — `K M e^{-q/a} ≤ ε` once `q ≥ a log(M q/ε) + a max(log K, 0)`.
 -/
 
 open scoped BigOperators
@@ -93,3 +94,20 @@ theorem mul_mul_exp_neg_le_of_log_le {K M ε x : ℝ} (hK : 0 < K) (hM : 0 < M) 
         ring
     _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
     _ = ε := Real.exp_log hε
+
+/-- **From a block-length threshold to the error.** For `K, a, ε > 0`, `M, q ≥ 1` and
+`b ≥ a max(log K, 0)`, if `a log(M q/ε) + b ≤ q` then `K (M e^{-q/a}) ≤ ε`. This is the last
+step of the error bounds of arXiv:2307.01696 for a block length `q` of `M` blocks with
+`q ≥ a log(N/ε) + b`, `N = M q`. -/
+theorem mul_mul_exp_neg_div_le_of_le {K M q a b ε : ℝ} (hK : 0 < K) (hM : 1 ≤ M) (hq : 1 ≤ q)
+    (ha : 0 < a) (hε : 0 < ε) (hb : a * max (Real.log K) 0 ≤ b)
+    (h : a * Real.log (M * q / ε) + b ≤ q) : K * (M * Real.exp (-(q / a))) ≤ ε := by
+  have hM0 : 0 < M := by linarith
+  have hq0 : 0 < q := by linarith
+  refine mul_mul_exp_neg_le_of_log_le hK hM0 hε ?_
+  rw [Real.log_div (mul_pos hM0 hq0).ne' hε.ne', Real.log_mul hM0.ne' hq0.ne'] at h
+  rw [le_div_iff₀ ha]
+  have hlogq : 0 ≤ a * Real.log q := mul_nonneg ha.le (Real.log_nonneg hq)
+  have hKm : a * Real.log K ≤ a * max (Real.log K) 0 :=
+    mul_le_mul_of_nonneg_left (le_max_left _ _) ha.le
+  nlinarith

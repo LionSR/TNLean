@@ -31,7 +31,7 @@ No finiteness, normality, or tensor assumption is used.
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X] {x₀ : X}
+variable {G : Type} {X : Type*} [Group G] [MulAction G X] {x₀ : X}
 
 namespace StabilizerRepresentatives
 
