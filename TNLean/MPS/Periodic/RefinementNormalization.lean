@@ -29,7 +29,7 @@ dimension. The convention is inherited from `exists_periodic_blockDecomposition`
 and recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
 -/
 
-open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
