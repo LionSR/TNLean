@@ -170,6 +170,7 @@
         MPSTensor.IsPeriodic.peripheral_blockTensor,
         MPSTensor.IsPeriodic.peripheral_compressed_blockTensor}
     \leanok
+    \uses{def:periodic_tensor}
     Let $p>0$. For any tensor $A$, the peripheral eigenvalues of
     $\E_{A^{[p]}}$ are the $p$th powers of those of $\E_A$.
     If $A$ is periodic of period $m$, put $q=m/\gcd(m,p)$. Then
@@ -232,7 +233,8 @@
     Let $A$ be periodic of period $m$, let $p>0$, and put
     $r=\gcd(m,p)$ and $q=m/r$. Suppose $P_u$ are nonzero orthogonal
     projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
-    Fix $\alpha<r$, an isometry $V$ with $VV^\dagger=Q_\alpha$, and set
+    Fix $\alpha<r$, an isometry $V$ with $V^\dagger V=\Id$
+    and $VV^\dagger=Q_\alpha$, and set
     $C^I=V^\dagger(A^{[p]})^IV$. Then
     \begin{align}
         \spec_{\mathrm{per}}(\E_C)
