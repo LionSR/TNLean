@@ -1,3 +1,28 @@
+\begin{theorem}[Positive-weight periodic decomposition]
+    \label{thm:periodic_positive_decomposition}
+    \lean{MPSTensor.exists_periodic_blockDecomposition}
+    \leanok
+    \uses{def:periodic_tensor, def:same_mpv2_pos}
+    Every tensor $A$ admits $r\in\N$ and, for $k=1,\ldots,r$, left-canonical
+    periodic tensors $B_k$ of positive bond dimensions $D_k$ and weights
+    $\mu_k>0$, with $\sum_{k=1}^rD_k\le D$, such that $A$ has the same matrix
+    product vectors at all positive lengths as $\bigoplus_{k=1}^r\mu_k B_k$.
+    No physical sites are blocked
+    \cite[lines~238--271 and~313--320]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:tp_gauge_arbitrary, thm:irreducible_left_canonical_periodic}
+    Theorem~\ref{thm:tp_gauge_arbitrary} gives $A$ the same positive-length
+    matrix product vectors as $\bigoplus_{k=1}^r\mu_kB_k$ with $\mu_k>0$,
+    $\sum_kD_k\le D$, and each $B_k$ irreducible and left-canonical, so
+    $\rho_{\spec}(\E_{B_k})=1$. By
+    Theorem~\ref{thm:irreducible_left_canonical_periodic}, each $B_k$ is
+    $m_k$-periodic, that is,
+    $\operatorname{Spec}_{\mathrm{per}}(\E_{B_k})=\{\mu\in\C:\mu^{m_k}=1\}$
+    for some $m_k\ge1$.
+\end{proof}
+
 \begin{definition}[$p$-divisible CP map]
     \label{def:p_divisible_channel}
     \lean{MPSTensor.IsPDivisibleChannel}
@@ -92,7 +117,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_coordinates}
+    \uses{thm:periodic_step_coordinates,thm:commuting_projection_block_decomp_isometry}
     The step coordinates partition the original projections, so the $Q_\alpha$
     are mutually orthogonal nonzero projections summing to $\Id_D$.
     Iterating $P_uA^i=A^iP_{u+1}$ over a word of length $p$ shifts the
@@ -120,7 +145,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_orbit_compression}
+    \uses{thm:periodic_step_orbit_compression,
+        thm:cyclic_sector_compression_letter_isometry_periodic,lem:periodic_negreindex_shift}
     Take the cyclic spectral projections, with their indices negated to give
     $P_uA^i=A^iP_{u+1}$. No projection vanishes: left canonicality and the
     shift relation give $\E_A^\dagger(P_u)=P_{u+1}$, and $\E_A^\dagger(0)=0$, so
@@ -274,7 +300,7 @@
     \label{thm:periodic_orbit_phase_tensor}
     \lean{MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases}
     \leanok
-    \uses{thm:periodic_step_coordinates, def:periodic_sector_rephasing}
+    \uses{thm:periodic_step_coordinates}
     Let $A$ be left canonical and $m>0$. Suppose the Hermitian projections
     $P_u$ satisfy $P_uP_v=\delta_{uv}P_u$, $\sum_uP_u=\Id$, and
     $P_uA^i=A^iP_{u+1}$. Let $p\ge0$, $r=\gcd(m,p)$, and
