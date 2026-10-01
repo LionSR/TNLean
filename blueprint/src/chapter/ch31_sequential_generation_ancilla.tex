@@ -319,12 +319,16 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
-    Theorem~\ref{thm:ldp_sweep_matrix_remainder} gives the bonds $b_p$, the
-    families $Q_p$ and a matrix $R$ row-supported below $b_n$ with
-    $R_{-1}P^\sigma=Q^\sigma R$ for every $\sigma$. Setting $r'=Rr$, which is
-    supported below $b_n$ by Theorem~\ref{thm:seqanc_support_propagation},
-    yields $R_{-1}P^\sigma r=Q^\sigma Rr=Q^\sigma r'$.
+    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
+    We first find the bonds $b_p$, the families $Q_p$ and a matrix $R$
+    row-supported below $b_n$ with $R_{-1}P^\sigma=Q^\sigma R$ for every
+    $\sigma$, by induction on $n$. For $n=0$ take $R=R_{-1}$. Otherwise apply
+    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
+    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
+    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$. Setting $r'=Rr$,
+    which is supported below $b_n$ by
+    Theorem~\ref{thm:seqanc_support_propagation}, yields
+    $R_{-1}P^\sigma r=Q^\sigma Rr=Q^\sigma r'$.
 \end{proof}
 
 \begin{theorem}[Isometric chains preserve the norm]
@@ -341,11 +345,21 @@ write $Q^\sigma=Q_0^{\sigma_0}\cdots Q_{n-1}^{\sigma_{n-1}}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_sweep_matrix_remainder}
-    Take $w=v$ in the inner-product identities of
-    Theorem~\ref{thm:ldp_sweep_matrix_remainder}: $\sum_i\langle Q^iv,Q^iv\rangle
-        =\langle v,v\rangle$ for one site, and
-    (\ref{eq:ldp_sweep_inner_product}) with $w=v$ for the chain.
+    \uses{thm:seqanc_support_propagation}
+    For one site, expand
+    \begin{align}
+        \sum_i\|Q^iv\|^2
+         & =\sum_{\beta,\beta'<b}\overline{v_\beta}v_{\beta'}
+        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}
+        =\sum_{\beta<b}\lvert v_\beta\rvert^2=\|v\|^2
+        \notag
+    \end{align}
+    by the isometry condition. For the chain, argue by induction on $n$ and
+    write $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
+    $Q_1,\dots,Q_{n-1}$. The vector $Q'^{\sigma'}v$ is supported below $b_1$
+    by Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity
+    for $Q_0$ and the induction hypothesis for $Q'$ give
+    $\sum_\sigma\|Q^\sigma v\|^2=\sum_{\sigma'}\|Q'^{\sigma'}v\|^2=\|v\|^2$.
 \end{proof}
 
 \begin{theorem}[Changing sites outside the used block]

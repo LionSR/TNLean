@@ -1158,9 +1158,10 @@ and its error extend to blocks of any lengths.
     neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
     local circuit of depth $T$ applied to a product state.
 
-    The chain is a ring: the neighbouring pairs are $\{k,k+1\}$ with indices
-    modulo $N$, and a circuit whose gates avoid the pair $\{N,1\}$ is a circuit
-    on the open chain. An operator \emph{acts on} a set of sites $X$ if it
+    The chain is a ring with sites $1,\dots,N$: the neighbouring pairs are
+    $\{k,k+1\}$ with indices modulo $N$, and a circuit whose gates avoid the
+    wrap-around pair $\{N,1\}$ is a circuit on the open chain. An operator
+    \emph{acts on} a set of sites $X$ if it
     lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
     $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
     are at distance larger than $s$ if no site of one is within ring distance
