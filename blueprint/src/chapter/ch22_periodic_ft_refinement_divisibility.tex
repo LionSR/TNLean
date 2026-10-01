@@ -202,7 +202,7 @@
     Fix $\alpha<r$, an isometry $V$ with $VV^\dagger=Q_\alpha$, and set
     $C^I=V^\dagger(A^{[p]})^IV$. Then
     \begin{align}
-        \operatorname{spec}_{\mathrm{per}}(\E_C)
+        \spec_{\mathrm{per}}(\E_C)
          & =\{\lambda\in\C:\lambda^q=1\}.
         \label{eq:periodic_compressed_exact_spectrum}
     \end{align}
@@ -217,8 +217,12 @@
     $R_k=V^\dagger P_{[\alpha+pk]_m}V$. The compressed adjoint map sends
     $R_k$ to $R_{k+1}$. If $z^q=1$, the sum
     $X_z=\sum_{k=0}^{q-1}z^kR_k$ therefore satisfies
-    $\E_C^*(X_z)=z^{-1}X_z$. It is nonzero: expanding by $V$ and then
-    multiplying by $P_\alpha$ leaves exactly $P_\alpha\ne0$.
+    $\E_C^\dagger(X_z)=z^{-1}X_z$. It is nonzero: since
+    $P_{[\alpha+pk]_m}\le Q_\alpha=VV^\dagger$ and distinct orbit projections
+    are orthogonal,
+    \begin{align}
+        VX_zV^\dagger P_\alpha & =\sum_{k=0}^{q-1}z^kP_{[\alpha+pk]_m}P_\alpha=P_\alpha\ne0. \notag
+    \end{align}
     Given $\lambda^q=1$, choose $z=\overline{\lambda}^{-1}$.
     The adjoint has eigenvalue $\overline{\lambda}$, so $\E_C$ has
     eigenvalue $\lambda$. Its modulus is one.
