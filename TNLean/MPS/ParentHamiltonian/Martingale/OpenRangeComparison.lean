@@ -200,7 +200,7 @@ theorem sum_openSuffixParentHamiltonianES_full_window
 
 /-- A positive comparison on one window bounds the longer-range open-chain
 Hamiltonian by the shorter-range one at every volume. Each short-range term
-belongs to at most `W - R + 1` windows. -/
+belongs to at most \(W - R + 1\) windows. -/
 theorem openParentHamiltonianES_comparison_of_local
     (A : MPSTensor d D) {R W N : ℕ} (hR : 0 < R) (hRW : R ≤ W)
     (_hWN : W ≤ N) {κ : ℝ}
