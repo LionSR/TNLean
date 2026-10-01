@@ -72,6 +72,7 @@ import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.ShortChainPreparation
 import TNLean.MPS.Preparation.SiteEmbedding
 import TNLean.MPS.Preparation.Staircase
+import TNLean.MPS.Preparation.TeleportationChains
 import TNLean.MPS.Preparation.TeleportationRound
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA

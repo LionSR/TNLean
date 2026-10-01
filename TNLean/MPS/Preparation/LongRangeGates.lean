@@ -3,43 +3,46 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.TeleportationRound
-import TNLean.MPS.Preparation.CircuitComposition
+import TNLean.MPS.Preparation.TeleportationChains
 
 /-!
-# Gates between distant sites in constant depth with measurements
+# Layers of gates between distant sites in constant depth with measurements
 
-The tree-RG circuit of arXiv:2307.01696, eq. (16), applies isometries to registers that are far
-apart on the chain. The paragraph "Tree-RG circuit with measurements" observes that these
-registers "can be teleported at neighboring registers with a constant overhead", so that
-"every isometry in eq. (16) takes constant time using measurement". This file proves the
-mechanism in the measurement-round model (`MPSPreparation.MeasurementRound`):
+The paragraph "Tree-RG circuit with measurements" of arXiv:2307.01696 observes that the
+isometries of eq. (16) "act on a constant number of sites which, although spatially separated,
+can be teleported at neighboring registers with a constant overhead", so that "every isometry in
+eq. (16) takes constant time using measurement". This file proves this for a whole layer of
+two-site gates on pairwise disjoint stretches of the ring.
 
-* for any valid lists of hops `there` and `back` whose permutations of sites are inverse to
-  each other, and any layer of gates `G` applied between them, the round teleporting along
-  `there`, followed by the round applying `G` and teleporting along `back`, acts on every
-  outcome as `P_back G P_there`, up to a scalar
-  (`MPSPreparation.TeleportHop.exists_eq_smul_of_mem_outputs_conj`); the two rounds have depth
-  `2` and `3`, whatever the distances;
-* for one gate `u` between the sites `a` and `a + 2L + 1`, with the `2L` sites between them in
-  `|0⟩`, the forward chain from `a` to `a + 2L` and the backward chain from `a + 2L` to `a` give
-  exactly the gate `u` at the sites `a`, `a + 2L + 1`, the sites between them left in `|0⟩`
-  (`MPSPreparation.exists_eq_smul_embedOp_of_mem_outputs_longRange`), in total depth `5`.
+A *long-range gate* (`MPSPreparation.LongRangeGate`) is a two-site unitary `u` on the sites `a`
+and `a + 2L + 1` of the ring, with `2L + 1 < N`. For a list of long-range gates whose stretches
+`a, a + 1, …, a + 2L + 1` are pairwise disjoint, two measurement rounds of total depth `5`
+(`MPSPreparation.LongRangeGate.rounds`) do the following, in parallel for all the gates:
+teleport the content of `a` along the forward chain of `L` hops to `a + 2L`; apply `u` to the
+neighbouring pair `{a + 2L, a + 2L + 1}`; teleport the content of `a + 2L` back to `a` along the
+backward chain. On the vectors with `|0⟩` at the `2L` sites strictly between `a` and
+`a + 2L + 1` for every gate, every outcome gives a scalar multiple of the product of the gates
+`u` at the sites `a`, `a + 2L + 1`
+(`MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds`). No outcome is post-selected,
+and the depth does not depend on the distances `2L + 1` nor on the number of gates.
+
+Implementations by sequences of rounds compose
+(`MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`), which gives preparations
+by several such layers.
 
 ## Main definitions
 
-* `MPSPreparation.TeleportHop.sitePerm` — the permutation of sites of a list of hops.
-* `MPSPreparation.TeleportHop.chainHop`, `MPSPreparation.TeleportHop.chainHopBack`,
-  `MPSPreparation.TeleportHop.forwardChain`, `MPSPreparation.TeleportHop.backwardChain`.
-* `MPSPreparation.longRangeRounds` — the two rounds applying a gate between `a` and
-  `a + 2L + 1`.
+* `MPSPreparation.MeasurementRound.IsRoundsImplementationOn` — a sequence of rounds acts as a
+  given matrix on a set of vectors, for every sequence of outcomes, up to a scalar.
+* `MPSPreparation.LongRangeGate`, `MPSPreparation.LongRangeGate.op`.
+* `MPSPreparation.LongRangeGate.rounds` — the two rounds applying a layer of long-range gates.
 
 ## Main results
 
-* `MPSPreparation.permMatrix_cfgPerm_mul_embedOp_mul` — relabelling the sites of an embedded
-  operator.
-* `MPSPreparation.TeleportHop.exists_eq_smul_of_mem_outputs_conj`.
-* `MPSPreparation.exists_eq_smul_embedOp_of_mem_outputs_longRange`.
+* `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`,
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`.
+* `MPSPreparation.LongRangeGate.sum_depth_rounds` — the two rounds have depth `5`.
+* `MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds`.
 
 ## References
 
@@ -52,477 +55,332 @@ open scoped BigOperators
 
 namespace MPSPreparation
 
-variable {d N : ℕ}
+variable {d N : ℕ} [NeZero N]
 
-/-! ### Permutations of sites -/
+/-! ### Sequences of rounds implementing a matrix -/
 
-theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm (Fin N)) :
-    (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ =
-      (cfgPerm (π * σ)).permMatrix ℂ := by
-  rw [← Matrix.permMatrix_mul]
-  congr 1
+namespace MeasurementRound
 
-theorem permMatrix_cfgPerm_one : (cfgPerm (d := d) (1 : Equiv.Perm (Fin N))).permMatrix ℂ = 1 := by
-  have : cfgPerm (d := d) (1 : Equiv.Perm (Fin N)) = 1 := by ext x i; rfl
-  rw [this, Matrix.permMatrix_one]
+theorem mem_outputs_append {Rs Rs' : List (MeasurementRound d N)} {v w : Cfg d N → ℂ} :
+    w ∈ outputs (Rs ++ Rs') v ↔ ∃ u ∈ outputs Rs v, w ∈ outputs Rs' u := by
+  induction Rs generalizing v with
+  | nil => simp
+  | cons R Rs ih =>
+    simp only [List.cons_append, R.mem_outputs_cons, ih]
+    exact ⟨fun ⟨m, u, hu, hw⟩ => ⟨u, ⟨m, hu⟩, hw⟩, fun ⟨u, ⟨m, hu⟩, hw⟩ => ⟨m, u, hu, hw⟩⟩
 
-/-- **Relabelling the sites of an embedded operator.** Conjugating `X` at the sites `e` by the
-permutation of configurations `x ↦ x ∘ σ` places `X` at the sites `σ ∘ e`. -/
-theorem permMatrix_cfgPerm_mul_embedOp_mul {m : ℕ} (σ : Equiv.Perm (Fin N)) (e : Fin m → Fin N)
-    (X : Matrix (Cfg d m) (Cfg d m) ℂ) :
-    (cfgPerm σ).permMatrix ℂ * embedOp e X * (cfgPerm σ.symm).permMatrix ℂ =
-      embedOp (σ ∘ e) X := by
-  classical
-  ext x y
-  simp only [mul_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
-    Option.mem_def, Option.some.injEq, ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-  rw [Finset.sum_eq_single ((cfgPerm σ.symm).symm y), if_pos (Equiv.apply_symm_apply _ _)]
-  rotate_left
-  · intro w _ hw
-    rw [if_neg fun h => hw (by rw [← h, Equiv.symm_apply_apply])]
-  · simp
-  rw [embedOp_apply, embedOp_apply]
-  have hy : (cfgPerm σ.symm).symm y = y ∘ σ := by
-    funext i; simp [cfgPerm]
-  rw [hy]
-  have hag : AgreeOff e (cfgPerm σ x) (y ∘ σ) ↔ AgreeOff (σ ∘ e) x y := by
-    constructor
-    · intro h i hi
-      have := h (σ.symm i) fun j hj => hi j (by rw [Function.comp_apply, hj]; simp)
-      simpa [cfgPerm] using this
-    · intro h i hi
-      exact h (σ i) fun j hj => hi j (σ.injective hj)
-  by_cases h : AgreeOff (σ ∘ e) x y
-  · rw [if_pos (hag.mpr h), if_pos h]; rfl
-  · rw [if_neg (fun h' => h (hag.mp h')), if_neg h]
+/-- The sequence of rounds `Rs` *implements* the matrix `W` on the set `E` of vectors when, for
+every `v ∈ E`, every output of `Rs` from `v` is a scalar multiple of `W v`: whatever the
+outcomes, the rounds act on `E` as `W`, up to a scalar.
 
-variable [NeZero d]
+Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("correcting (without
+postselection) based on the measurement outcomes"). -/
+def IsRoundsImplementationOn (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ))
+    (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop :=
+  ∀ v ∈ E, ∀ w ∈ outputs Rs v, ∃ c : ℂ, w = c • (W *ᵥ v)
 
-/-- Permuting the sites moves the sites carrying `|0⟩`. -/
-theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Set (Fin N)} {v : Cfg d N → ℂ}
-    (h : IsZeroOn S v) (π : Equiv.Perm (Fin N)) :
-    IsZeroOn (π '' S) ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
-  rintro y hy _ ⟨i, hi, rfl⟩
-  rw [permMatrix_mulVec] at hy
-  exact h _ hy i hi
+theorem isRoundsImplementationOn_nil (E : Set (Cfg d N → ℂ)) :
+    IsRoundsImplementationOn ([] : List (MeasurementRound d N)) E 1 := by
+  intro v _ w hw
+  rw [outputs_nil, Set.mem_singleton_iff] at hw
+  exact ⟨1, by rw [hw, one_mulVec, one_smul]⟩
 
-/-- An operator acting on sites outside `S` keeps `|0⟩` at the sites of `S`. -/
-theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Finset (Fin N)} {v : Cfg d N → ℂ}
-    (h : IsZeroOn (S : Set (Fin N)) v) {T : Set (Fin N)} (hST : Disjoint (S : Set (Fin N)) T)
-    {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d T) :
-    IsZeroOn (S : Set (Fin N)) (A *ᵥ v) := by
-  have hP : ∀ u : Cfg d N → ℂ, IsZeroOn (S : Set (Fin N)) u ↔ ctrlProj S 0 *ᵥ u = u := by
-    intro u
-    constructor
-    · intro hu
-      funext x
-      rw [ctrlProj, mulVec_diagonal]
-      by_cases hx : ∀ i ∈ S, x i = (0 : Cfg d N) i
-      · rw [if_pos hx, one_mul]
-      · rw [if_neg hx, zero_mul]
-        by_contra h0
-        exact hx fun i hi => hu x (Ne.symm h0) i hi
-    · intro hu x hx i hi
-      rw [← hu, ctrlProj, mulVec_diagonal] at hx
-      by_contra hne
-      exact hx (by rw [if_neg fun h' => hne (h' i hi), zero_mul])
-  have hc : Commute (ctrlProj S (0 : Cfg d N)) A :=
-    commute_of_mem_supportedOperators hST (ctrlProj_mem_supportedOperators S 0) hA
-  rw [hP] at h ⊢
-  rw [mulVec_mulVec, hc.eq, ← mulVec_mulVec, h]
+theorem IsRoundsImplementationOn.mono {Rs : List (MeasurementRound d N)}
+    {E E' : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (h : IsRoundsImplementationOn Rs E W) (hE : E' ⊆ E) : IsRoundsImplementationOn Rs E' W :=
+  fun v hv => h v (hE hv)
 
-variable [NeZero N]
+/-- **Implementations compose.** If `Rs` implements `W` on `E`, `W` maps `E` into `E'`, and
+`Rs'` implements `W'` on `E'`, then `Rs` followed by `Rs'` implements `W' W` on `E`. -/
+theorem IsRoundsImplementationOn.append {Rs Rs' : List (MeasurementRound d N)}
+    {E E' : Set (Cfg d N → ℂ)} {W W' : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (h : IsRoundsImplementationOn Rs E W) (h' : IsRoundsImplementationOn Rs' E' W')
+    (hE : ∀ v ∈ E, W *ᵥ v ∈ E') : IsRoundsImplementationOn (Rs ++ Rs') E (W' * W) := by
+  intro v hv w hw
+  obtain ⟨u, hu, hw⟩ := mem_outputs_append.mp hw
+  obtain ⟨c, rfl⟩ := h v hv u hu
+  obtain ⟨w', hw', rfl⟩ := mem_outputs_smul c hw
+  obtain ⟨c', rfl⟩ := h' _ (hE v hv) w' hw'
+  exact ⟨c * c', by rw [smul_smul, mulVec_mulVec]⟩
+
+/-- **Preparation from an implementation.** If `Rs` implements `W` on `E` and the nonzero
+product vector `π` lies in `E`, then `W π` is prepared with measurement rounds in the total
+depth of `Rs`. -/
+theorem IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth
+    {Rs : List (MeasurementRound d N)} {E : Set (Cfg d N → ℂ)}
+    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (h : IsRoundsImplementationOn Rs E W)
+    {v : Fin N → Fin d → ℂ} (hv : productVector v ≠ 0) (hvE : productVector v ∈ E) :
+    IsPreparedWithMeasurementRoundsInDepth (Rs.map depth).sum (W *ᵥ productVector v) :=
+  ⟨v, Rs, le_rfl, hv, fun w hw _ => h _ hvE w hw⟩
+
+end MeasurementRound
+
+/-! ### Permutations of sites supported on a set -/
+
+/-- A permutation fixing every site outside `S` maps `S` into `S`. -/
+private theorem perm_apply_mem {π : Equiv.Perm (Fin N)} {S : Set (Fin N)}
+    (hπ : ∀ i ∉ S, π i = i) {i : Fin N} (hi : i ∈ S) : π i ∈ S := by
+  by_contra h
+  exact h (by rw [π.injective (hπ _ h)]; exact hi)
 
 namespace TeleportHop
 
-/-! ### Permutations of sites of a list of hops -/
-
-/-- The permutation of sites of a list of hops: the product of the exchanges of the sites `c`
-and `f`, the most recent leftmost. -/
-def sitePerm : List (TeleportHop N) → Equiv.Perm (Fin N)
-  | [] => 1
-  | h :: hs => Equiv.swap h.c h.f * sitePerm hs
-
-theorem chainPerm_eq (hs : List (TeleportHop N)) :
-    chainPerm (d := d) hs = (cfgPerm (sitePerm hs)).permMatrix ℂ := by
+theorem sitePerm_apply_of_notMem {hs : List (TeleportHop N)} {i : Fin N}
+    (hi : i ∉ allSites hs) : sitePerm hs i = i := by
   induction hs with
-  | nil => exact permMatrix_cfgPerm_one.symm
+  | nil => rfl
   | cons h hs ih =>
-    rw [chainPerm, ih, swapPerm, permMatrix_cfgPerm_mul_permMatrix_cfgPerm, sitePerm]
+    have hi' : i ∉ h.sites := fun h' => hi (Or.inl h')
+    simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff, not_or] at hi'
+    rw [sitePerm, Equiv.Perm.mul_apply, ih fun h' => hi (Or.inr h'),
+      Equiv.swap_apply_of_ne_of_ne hi'.1 hi'.2.2]
 
-/-! ### Two rounds around a layer of gates -/
+theorem mem_allSites_flatMap {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
+    {i : Fin N} : i ∈ allSites (l.flatMap f) ↔ ∃ g ∈ l, i ∈ allSites (f g) := by
+  simp only [mem_allSites, List.mem_flatMap]
+  exact ⟨fun ⟨h, ⟨g, hg, hh⟩, hi⟩ => ⟨g, hg, h, hh, hi⟩,
+    fun ⟨g, hg, h, hh, hi⟩ => ⟨h, ⟨g, hg, hh⟩, hi⟩⟩
 
-/-- **Gates conjugated by teleportation.** Let `there` and `back` be valid lists of hops and `G`
-a layer of gates, and let `v` carry `|0⟩` at the sites `e`, `f` of `there`, with `G P_there v`
-carrying `|0⟩` at the sites `e`, `f` of `back`. Then every output of the round teleporting along
-`there`, followed by the round applying `G` and teleporting along `back`, is a scalar multiple of
-`P_back G P_there v`. The rounds have depth `2` and `3`.
+theorem chainPerm_append (hs hs' : List (TeleportHop N)) :
+    chainPerm (d := d) (hs ++ hs') = chainPerm hs * chainPerm hs' := by
+  rw [chainPerm_eq, chainPerm_eq, chainPerm_eq, sitePerm_append,
+    permMatrix_cfgPerm_mul_permMatrix_cfgPerm]
 
-Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
-theorem exists_eq_smul_of_mem_outputs_conj {there back : List (TeleportHop N)}
-    (hthere : Valid there) (hback : Valid back) (G : Layer d N) {v : Cfg d N → ℂ}
-    (hv : IsZeroOn (pairSites there) v)
-    (hGv : IsZeroOn (pairSites back) (G.op *ᵥ (chainPerm there *ᵥ v)))
-    {w : Cfg d N → ℂ}
-    (hw : w ∈ MeasurementRound.outputs [round [] there hthere, round [G] back hback] v) :
-    ∃ c : ℂ, w = c • ((chainPerm back * G.op * chainPerm there) *ᵥ v) := by
-  have h₁ := isImplementationOn_round (d := d) [] hthere
-  have h₂ := isImplementationOn_round [G] hback
-  obtain ⟨c, u, hu, rfl⟩ := h₁.exists_mem_outputs (by simpa [circuitOp] using hv) hw
-  have hGv' : (chainPerm there * circuitOp []) *ᵥ v ∈
-      {v | IsZeroOn (pairSites back) (circuitOp [G] *ᵥ v)} := by
-    simpa [circuitOp] using hGv
-  obtain ⟨c', u', hu', rfl⟩ := h₂.exists_mem_outputs hGv' hu
-  rw [MeasurementRound.outputs_nil, Set.mem_singleton_iff] at hu'
-  subst hu'
-  refine ⟨c * c', ?_⟩
-  simp [circuitOp, smul_smul, mulVec_mulVec, Matrix.mul_assoc]
+/-- Two hops with disjoint sites can follow each other in a valid list. -/
+theorem after_of_disjoint {h h' : TeleportHop N} (hd : Disjoint h.sites h'.sites) :
+    After h h' := by
+  have hmem : ∀ {i}, i ∈ h.sites → i ∉ h'.sites := fun hi hi' =>
+    Set.disjoint_left.mp hd hi hi'
+  refine ⟨hmem (by simp [sites]), hmem (by simp [sites]), fun he => ?_, fun he => ?_⟩
+  · exact hmem (show h.c ∈ h.sites by simp [sites]) (he ▸ by simp [sites])
+  · exact hmem (show h.c ∈ h.sites by simp [sites]) (he ▸ by simp [sites])
 
-/-! ### The chains between two distant sites -/
+/-- The sites of a hop of a list are sites of the list. -/
+theorem sites_subset_allSites {h : TeleportHop N} {hs : List (TeleportHop N)} (hh : h ∈ hs) :
+    h.sites ⊆ allSites hs := fun _ hi => mem_allSites.mpr ⟨h, hh, hi⟩
 
-section Chains
+/-- **Parallel chains.** Lists of hops whose sites lie in pairwise disjoint sets form a valid
+list when concatenated. -/
+theorem valid_flatMap {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
+    {S : ι → Set (Fin N)} (hf : ∀ g ∈ l, Valid (f g)) (hS : ∀ g ∈ l, allSites (f g) ⊆ S g)
+    (hl : l.Pairwise fun g g' => Disjoint (S g) (S g')) : Valid (l.flatMap f) := by
+  rw [valid_iff_pairwise, List.pairwise_flatMap]
+  refine ⟨fun g hg => valid_iff_pairwise.mp (hf g hg), ?_⟩
+  refine List.Pairwise.imp_of_mem (fun {g g'} hg hg' hd h hh h' hh' => ?_) hl
+  exact after_of_disjoint (hd.mono ((sites_subset_allSites hh).trans (hS g hg))
+    ((sites_subset_allSites hh').trans (hS g' hg')))
 
-open Fin.NatCast
+/-- On the set `S g`, the permutation of sites of parallel chains is that of the chain `f g`. -/
+theorem sitePerm_flatMap_apply {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
+    {S : ι → Set (Fin N)} (hS : ∀ g ∈ l, allSites (f g) ⊆ S g)
+    (hl : l.Pairwise fun g g' => Disjoint (S g) (S g')) {g : ι} (hg : g ∈ l) {i : Fin N}
+    (hi : i ∈ S g) : sitePerm (l.flatMap f) i = sitePerm (f g) i := by
+  induction l with
+  | nil => simp at hg
+  | cons g₀ l ih =>
+    rw [List.pairwise_cons] at hl
+    have hS' : ∀ g ∈ l, allSites (f g) ⊆ S g := fun g hg => hS g (List.mem_cons_of_mem _ hg)
+    rw [List.flatMap_cons, sitePerm_append, Equiv.Perm.mul_apply]
+    rcases List.mem_cons.mp hg with rfl | hg
+    · have hfix : sitePerm (l.flatMap f) i = i := sitePerm_apply_of_notMem fun hi' => by
+        obtain ⟨g', hg', hi'⟩ := mem_allSites_flatMap.mp hi'
+        exact Set.disjoint_left.mp (hl.1 g' hg') hi (hS' g' hg' hi')
+      rw [hfix]
+    · rw [ih hS' hl.2 hg]
+      refine sitePerm_apply_of_notMem fun hi' => ?_
+      have hmem : sitePerm (f g) i ∈ S g :=
+        perm_apply_mem
+          (fun j hj => sitePerm_apply_of_notMem fun hj' => hj (hS' g hg hj')) hi
+      exact Set.disjoint_left.mp (hl.1 g hg) (hS g₀ List.mem_cons_self hi') hmem
 
-private theorem natCast_lt_val {j : ℕ} (hj : j < N) : ((j : Fin N) : ℕ) = j := by
-  rw [Fin.val_natCast, Nat.mod_eq_of_lt hj]
+/-- Off the sets `S g`, the permutation of sites of parallel chains is the identity. -/
+theorem sitePerm_flatMap_apply_of_notMem {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
+    {S : ι → Set (Fin N)} (hS : ∀ g ∈ l, allSites (f g) ⊆ S g) {i : Fin N}
+    (hi : ∀ g ∈ l, i ∉ S g) : sitePerm (l.flatMap f) i = i := by
+  refine sitePerm_apply_of_notMem fun hi' => ?_
+  obtain ⟨g, hg, hi'⟩ := mem_allSites_flatMap.mp hi'
+  exact hi g hg (hS g hg hi')
 
-private theorem add_natCast_injective (a : Fin N) {j k : ℕ} (hj : j < N) (hk : k < N)
-    (h : a + (j : Fin N) = a + (k : Fin N)) : j = k := by
-  have := congrArg Fin.val (add_left_cancel h)
-  rwa [natCast_lt_val hj, natCast_lt_val hk] at this
-
-private theorem add_natCast_succ (a : Fin N) (j : ℕ) :
-    a + (j : Fin N) + 1 = a + ((j + 1 : ℕ) : Fin N) := by
-  rw [add_assoc, Nat.cast_succ]
-
-/-- The forward hop from `a + j` to `a + j + 2`. -/
-def chainHop (a : Fin N) (j : ℕ) (hj : j + 2 < N) : TeleportHop N where
-  c := a + (j : Fin N)
-  e := a + ((j + 1 : ℕ) : Fin N)
-  f := a + ((j + 2 : ℕ) : Fin N)
-  k₁ := a + ((j + 1 : ℕ) : Fin N)
-  k₂ := a + (j : Fin N)
-  bond_k₁ := by rw [bond, add_natCast_succ]
-  bond_k₂ := by rw [bond, add_natCast_succ]
-  c_ne_e h := by have := add_natCast_injective a (by omega) (by omega) h; omega
-  c_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega
-  e_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega
-
-/-- The backward hop from `a + j + 2` to `a + j`. -/
-def chainHopBack (a : Fin N) (j : ℕ) (hj : j + 2 < N) : TeleportHop N where
-  c := a + ((j + 2 : ℕ) : Fin N)
-  e := a + ((j + 1 : ℕ) : Fin N)
-  f := a + (j : Fin N)
-  k₁ := a + (j : Fin N)
-  k₂ := a + ((j + 1 : ℕ) : Fin N)
-  bond_k₁ := by rw [bond, add_natCast_succ, Set.pair_comm]
-  bond_k₂ := by rw [bond, add_natCast_succ, Set.pair_comm]
-  c_ne_e h := by have := add_natCast_injective a (by omega) (by omega) h; omega
-  c_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega
-  e_ne_f h := by have := add_natCast_injective a (by omega) (by omega) h; omega
-
-/-- The forward chain of `L` hops from `a` to `a + 2L`, the most recent hop first. -/
-def forwardChain (a : Fin N) : (L : ℕ) → 2 * L < N → List (TeleportHop N)
-  | 0, _ => []
-  | L + 1, hL => chainHop a (2 * L) (by omega) :: forwardChain a L (by omega)
-
-/-- The backward chain of `L` hops from `a + 2L` to `a`, the most recent hop first. -/
-def backwardChain (a : Fin N) : (L : ℕ) → 2 * L < N → List (TeleportHop N)
-  | 0, _ => []
-  | L + 1, hL => backwardChain a L (by omega) ++ [chainHopBack a (2 * L) (by omega)]
-
-/-- The relation between a hop `h` and an earlier hop `h'` in a valid list. -/
-def After (h h' : TeleportHop N) : Prop :=
-  h.e ∉ h'.sites ∧ h.f ∉ h'.sites ∧ h.c ≠ h'.c ∧ h.c ≠ h'.e
-
-theorem valid_iff_pairwise {hs : List (TeleportHop N)} : Valid hs ↔ hs.Pairwise After := by
-  induction hs with
-  | nil => simp [Valid]
-  | cons h hs ih =>
-    rw [List.pairwise_cons, ← ih]
-    constructor
-    · rintro ⟨hv, he, hf, hc⟩
-      exact ⟨fun h' hh' => ⟨fun hi => he (mem_allSites.mpr ⟨h', hh', hi⟩),
-        fun hi => hf (mem_allSites.mpr ⟨h', hh', hi⟩), (hc h' hh').1, (hc h' hh').2⟩, hv⟩
-    · rintro ⟨hR, hv⟩
-      refine ⟨hv, fun hi => ?_, fun hi => ?_, fun h' hh' => ⟨(hR h' hh').2.2.1, (hR h' hh').2.2.2⟩⟩
-      · obtain ⟨h', hh', hi⟩ := mem_allSites.mp hi; exact (hR h' hh').1 hi
-      · obtain ⟨h', hh', hi⟩ := mem_allSites.mp hi; exact (hR h' hh').2.1 hi
-
-theorem sitePerm_append (hs hs' : List (TeleportHop N)) :
-    sitePerm (hs ++ hs') = sitePerm hs * sitePerm hs' := by
-  induction hs with
-  | nil => simp [sitePerm]
-  | cons h hs ih => rw [List.cons_append, sitePerm, sitePerm, ih, mul_assoc]
-
-theorem pairSites_append (hs hs' : List (TeleportHop N)) :
-    pairSites (hs ++ hs') = pairSites hs ∪ pairSites hs' := by
-  induction hs with
-  | nil => simp [pairSites]
-  | cons h hs ih => rw [List.cons_append, pairSites, pairSites, ih, Set.union_assoc]
-
-theorem mem_forwardChain {a : Fin N} {L : ℕ} {hL : 2 * L < N} {h : TeleportHop N}
-    (hh : h ∈ forwardChain a L hL) : ∃ i < L, ∃ hi, h = chainHop a (2 * i) hi := by
-  induction L with
-  | zero => simp [forwardChain] at hh
-  | succ L ih =>
-    rcases List.mem_cons.mp hh with rfl | hh
-    · exact ⟨L, by omega, _, rfl⟩
-    · obtain ⟨i, hi, hi', rfl⟩ := ih hh
-      exact ⟨i, by omega, hi', rfl⟩
-
-theorem mem_backwardChain {a : Fin N} {L : ℕ} {hL : 2 * L < N} {h : TeleportHop N}
-    (hh : h ∈ backwardChain a L hL) : ∃ i < L, ∃ hi, h = chainHopBack a (2 * i) hi := by
-  induction L with
-  | zero => simp [backwardChain] at hh
-  | succ L ih =>
-    rcases List.mem_append.mp hh with hh | hh
-    · obtain ⟨i, hi, hi', rfl⟩ := ih hh
-      exact ⟨i, by omega, hi', rfl⟩
-    · rw [List.mem_singleton] at hh
-      exact ⟨L, by omega, _, hh⟩
-
-/-- A site `a + j` is not a site `a + k` of a hop when `j ≠ k`, all offsets below `N`. -/
-private theorem add_natCast_ne (a : Fin N) {j k : ℕ} (hj : j < N) (hk : k < N) (hjk : j ≠ k) :
-    a + (j : Fin N) ≠ a + (k : Fin N) := fun h => hjk (add_natCast_injective a hj hk h)
-
-theorem valid_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    Valid (forwardChain a L hL) := by
-  rw [valid_iff_pairwise]
-  induction L with
-  | zero => exact List.Pairwise.nil
-  | succ L ih =>
-    refine List.Pairwise.cons (fun h' hh' => ?_) (ih (by omega))
-    obtain ⟨i, hi, hi', rfl⟩ := mem_forwardChain hh'
-    simp only [After, sites, chainHop, Set.mem_insert_iff, Set.mem_singleton_iff, not_or]
-    refine ⟨⟨?_, ?_, ?_⟩, ⟨?_, ?_, ?_⟩, ?_, ?_⟩ <;>
-      exact add_natCast_ne a (by omega) (by omega) (by omega)
-
-theorem valid_backwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    Valid (backwardChain a L hL) := by
-  rw [valid_iff_pairwise]
-  induction L with
-  | zero => exact List.Pairwise.nil
-  | succ L ih =>
-    refine List.pairwise_append.mpr ⟨ih (by omega), List.pairwise_singleton _ _,
-      fun h' hh' h'' hh'' => ?_⟩
-    obtain ⟨i, hi, hi', rfl⟩ := mem_backwardChain hh'
-    rw [List.mem_singleton] at hh''
-    subst hh''
-    simp only [After, sites, chainHopBack, Set.mem_insert_iff, Set.mem_singleton_iff, not_or]
-    refine ⟨⟨?_, ?_, ?_⟩, ⟨?_, ?_, ?_⟩, ?_, ?_⟩ <;>
-      exact add_natCast_ne a (by omega) (by omega) (by omega)
-
-/-- The forward chain moves `a` to `a + 2L` and fixes the sites `a + j` with `2L < j`. -/
-theorem sitePerm_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    sitePerm (forwardChain a L hL) a = a + ((2 * L : ℕ) : Fin N) ∧
-      ∀ j, 2 * L < j → j < N → sitePerm (forwardChain a L hL) (a + (j : Fin N)) =
-        a + (j : Fin N) := by
-  induction L with
-  | zero => simp [forwardChain, sitePerm]
-  | succ L ih =>
-    obtain ⟨h1, h2⟩ := ih (by omega)
-    simp only [forwardChain, sitePerm, chainHop, Equiv.Perm.mul_apply]
-    refine ⟨?_, fun j hj hjN => ?_⟩
-    · rw [h1, Equiv.swap_apply_left]
-      congr 2
-    · rw [h2 j (by omega) hjN, Equiv.swap_apply_of_ne_of_ne
-        (add_natCast_ne a hjN (by omega) (by omega)) (add_natCast_ne a hjN (by omega) (by omega))]
-
-theorem sitePerm_backwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    sitePerm (backwardChain a L hL) = (sitePerm (forwardChain a L hL))⁻¹ := by
-  induction L with
-  | zero => simp [forwardChain, backwardChain, sitePerm]
-  | succ L ih =>
-    rw [backwardChain, sitePerm_append, ih (by omega), forwardChain]
-    simp only [sitePerm, mul_one, _root_.mul_inv_rev, Equiv.swap_inv]
-    congr 1
-    exact Equiv.swap_comm _ _
-
-/-- The sites `e` and `f` of the forward chain are the sites `a + j`, `1 ≤ j ≤ 2L`. -/
-theorem pairSites_forwardChain_subset (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    pairSites (forwardChain a L hL) ⊆ {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * L ∧ i = a + (j : Fin N)} := by
-  induction L with
-  | zero => simp [forwardChain, pairSites]
-  | succ L ih =>
-    rintro i ((rfl | rfl) | hi)
-    · exact ⟨2 * L + 1, by omega, by omega, rfl⟩
-    · exact ⟨2 * L + 2, by omega, by omega, rfl⟩
-    · obtain ⟨j, hj1, hj2, rfl⟩ := ih (by omega) hi
-      exact ⟨j, hj1, by omega, rfl⟩
-
-/-- The sites `e` and `f` of the backward chain are the sites `a + j`, `j < 2L`. -/
-theorem pairSites_backwardChain_subset (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    pairSites (backwardChain a L hL) ⊆
-      ((Finset.range (2 * L)).image fun j : ℕ => a + (j : Fin N) : Finset (Fin N)) := by
-  induction L with
-  | zero => simp [backwardChain, pairSites]
-  | succ L ih =>
-    rw [backwardChain, pairSites_append]
-    rintro i (hi | ((rfl | rfl) | hi))
-    · obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp (ih (by omega) hi)
-      exact Finset.mem_image.mpr ⟨j, Finset.mem_range.mpr (by simp at hj; omega), rfl⟩
-    · exact Finset.mem_image.mpr ⟨2 * L + 1, Finset.mem_range.mpr (by omega), rfl⟩
-    · exact Finset.mem_image.mpr ⟨2 * L, Finset.mem_range.mpr (by omega), rfl⟩
-    · simp [pairSites] at hi
-
-theorem allSites_forwardChain_subset (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    allSites (forwardChain a L hL) ⊆ {i | ∃ j ≤ 2 * L, i = a + (j : Fin N)} := by
+open Fin.NatCast in
+theorem allSites_backwardChain_subset (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
+    allSites (backwardChain a L hL) ⊆ {i | ∃ j ≤ 2 * L, i = a + (j : Fin N)} := by
   intro i hi
   obtain ⟨h, hh, hi⟩ := mem_allSites.mp hi
-  obtain ⟨k, hk, hk', rfl⟩ := mem_forwardChain hh
-  simp only [sites, chainHop, Set.mem_insert_iff, Set.mem_singleton_iff] at hi
+  obtain ⟨k, hk, hk', rfl⟩ := mem_backwardChain hh
+  simp only [sites, chainHopBack, Set.mem_insert_iff, Set.mem_singleton_iff] at hi
   rcases hi with rfl | rfl | rfl
-  · exact ⟨2 * k, by omega, rfl⟩
-  · exact ⟨2 * k + 1, by omega, rfl⟩
   · exact ⟨2 * k + 2, by omega, rfl⟩
-
-/-- After the forward chain, a vector with `|0⟩` at the sites `a + j`, `1 ≤ j ≤ 2L`, has `|0⟩` at
-the sites `a + j`, `j < 2L`. -/
-theorem isZeroOn_chainPerm_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N)
-    {v : Cfg d N → ℂ} (hv : IsZeroOn {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * L ∧ i = a + (j : Fin N)} v) :
-    IsZeroOn {i | ∃ j < 2 * L, i = a + (j : Fin N)} (chainPerm (forwardChain a L hL) *ᵥ v) := by
-  induction L generalizing v with
-  | zero => intro y _ i ⟨j, hj, _⟩; omega
-  | succ L ih =>
-    have hv' : IsZeroOn {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * L ∧ i = a + (j : Fin N)} v :=
-      hv.mono fun i ⟨j, h1, h2, hi⟩ => ⟨j, h1, by omega, hi⟩
-    have hrest : IsZeroOn {a + ((2 * L + 1 : ℕ) : Fin N), a + ((2 * L + 2 : ℕ) : Fin N)} v :=
-      hv.mono (by rintro i (rfl | rfl) <;> exact ⟨_, by omega, by omega, rfl⟩)
-    have hrest' := hrest.chainPerm_mulVec (hs := forwardChain a L (by omega)) (by
-      rw [Set.disjoint_left]
-      rintro i hi hi'
-      obtain ⟨j, hj, rfl⟩ := allSites_forwardChain_subset a L (by omega) hi'
-      rcases hi with hi | hi
-      · exact add_natCast_ne a (by omega) (by omega) (by omega) hi
-      · exact add_natCast_ne a (by omega) (by omega) (by omega) hi)
-    have hall : IsZeroOn ({i | ∃ j < 2 * L, i = a + (j : Fin N)} ∪
-        {a + ((2 * L + 1 : ℕ) : Fin N), a + ((2 * L + 2 : ℕ) : Fin N)})
-        (chainPerm (forwardChain a L (by omega)) *ᵥ v) :=
-      fun y hy i hi => hi.elim (ih (by omega) hv' y hy i) (hrest' y hy i)
-    rw [forwardChain, chainPerm, ← mulVec_mulVec, swapPerm]
-    refine (hall.permMatrix_cfgPerm_mulVec_image _).mono ?_
-    rintro i ⟨j, hj, rfl⟩
-    simp only [chainHop]
-    rcases Nat.lt_or_ge j (2 * L) with hj' | hj'
-    · refine ⟨a + (j : Fin N), Or.inl ⟨j, hj', rfl⟩, ?_⟩
-      exact Equiv.swap_apply_of_ne_of_ne (add_natCast_ne a (by omega) (by omega) (by omega))
-        (add_natCast_ne a (by omega) (by omega) (by omega))
-    · rcases (show j = 2 * L ∨ j = 2 * L + 1 by omega) with rfl | rfl
-      · exact ⟨_, Or.inr (Or.inr rfl), Equiv.swap_apply_right _ _⟩
-      · refine ⟨a + ((2 * L + 1 : ℕ) : Fin N), Or.inr (Or.inl rfl), ?_⟩
-        exact Equiv.swap_apply_of_ne_of_ne (add_natCast_ne a (by omega) (by omega) (by omega))
-          (add_natCast_ne a (by omega) (by omega) (by omega))
-
-end Chains
+  · exact ⟨2 * k + 1, by omega, rfl⟩
+  · exact ⟨2 * k, by omega, rfl⟩
 
 end TeleportHop
 
-/-! ### A gate between two distant sites -/
+/-! ### Long-range gates -/
 
-section LongRange
+/-- A *long-range gate*: a two-site unitary `u` acting on the sites `a` and `a + 2L + 1` of the
+ring, with `2L + 1 < N`.
+
+Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" (isometries acting on
+"a constant number of sites which, although spatially separated, can be teleported at
+neighboring registers"). -/
+structure LongRangeGate (d N : ℕ) [NeZero N] where
+  /-- The near site of the gate. -/
+  a : Fin N
+  /-- The number of hops of the chain from `a` to `a + 2L`. -/
+  L : ℕ
+  lt : 2 * L + 1 < N
+  /-- The two-site unitary, acting on the sites `a` and `a + 2L + 1`. -/
+  u : Matrix (Cfg d 2) (Cfg d 2) ℂ
+  u_mem_unitary : u ∈ unitary (Matrix (Cfg d 2) (Cfg d 2) ℂ)
+
+namespace LongRangeGate
 
 open Fin.NatCast TeleportHop
+
+variable (g : LongRangeGate d N)
+
+/-- The far site `a + 2L + 1` of the gate. -/
+def far : Fin N := g.a + ((2 * g.L + 1 : ℕ) : Fin N)
+
+/-- The site `a + 2L` to which the content of `a` is teleported, the left site of the
+neighbouring pair `{a + 2L, a + 2L + 1}`. -/
+def near : Fin N := g.a + ((2 * g.L : ℕ) : Fin N)
+
+/-- The stretch `a, a + 1, …, a + 2L + 1` of the gate. -/
+def span : Set (Fin N) := {i | ∃ j ≤ 2 * g.L + 1, i = g.a + (j : Fin N)}
+
+/-- The `2L` sites `a + 1, …, a + 2L` strictly between the two sites of the gate. -/
+def interior : Set (Fin N) := {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * g.L ∧ i = g.a + (j : Fin N)}
+
+/-- The `2L` sites `a, …, a + 2L - 1`, which carry `|0⟩` after the forward chain. -/
+def cleared : Finset (Fin N) := (Finset.range (2 * g.L)).image fun j : ℕ => g.a + (j : Fin N)
+
+/-- The gate on the chain: `u` at the sites `a` and `a + 2L + 1`. -/
+noncomputable def op : Matrix (Cfg d N) (Cfg d N) ℂ := embedOp ![g.a, g.far] g.u
+
+/-- The forward chain of `L` hops from `a` to `a + 2L`. -/
+def there : List (TeleportHop N) := forwardChain g.a g.L (by have := g.lt; omega)
+
+/-- The backward chain of `L` hops from `a + 2L` to `a`. -/
+def back : List (TeleportHop N) := backwardChain g.a g.L (by have := g.lt; omega)
+
+theorem near_ne_far : g.near ≠ g.far :=
+  add_natCast_ne g.a (by have := g.lt; omega) g.lt (by omega)
 
 private theorem pair_injective {k k' : Fin N} (h : k ≠ k') : Function.Injective ![k, k'] := by
   intro i j hij
   fin_cases i <;> fin_cases j <;> simp_all [eq_comm]
 
-/-- The layer with the two-site unitary `u` on the neighbouring pair `{a + 2L, a + 2L + 1}`. -/
-noncomputable def longRangeLayer (a : Fin N) (L : ℕ) (hL : 2 * L + 1 < N)
-    (u : Matrix (Cfg d 2) (Cfg d 2) ℂ) (hu : u ∈ unitary (Matrix (Cfg d 2) (Cfg d 2) ℂ)) :
-    Layer d N :=
-  Layer.single (a + ((2 * L : ℕ) : Fin N))
-    (embedOp ![a + ((2 * L : ℕ) : Fin N), a + ((2 * L + 1 : ℕ) : Fin N)] u)
-    (embedOp_mem_unitary (pair_injective (add_natCast_ne a (by omega) hL (by omega))) hu)
-    (by
-      have := embedOp_mem_supportedOperators (d := d)
-        (pair_injective (add_natCast_ne a (j := 2 * L) (k := 2 * L + 1) (by omega) hL
-          (by omega))) u
-      rw [Matrix.range_cons_cons_empty] at this
-      rwa [bond, add_natCast_succ])
+/-- The gate `u` on the neighbouring pair `{a + 2L, a + 2L + 1}`. -/
+noncomputable def localGate : Matrix (Cfg d N) (Cfg d N) ℂ := embedOp ![g.near, g.far] g.u
 
-/-- The two measurement rounds applying the two-site unitary `u` to the sites `a` and
-`a + 2L + 1`: teleport the content of `a` along the forward chain to `a + 2L`; then apply `u` to
-the neighbouring pair `{a + 2L, a + 2L + 1}` and teleport the content of `a + 2L` back to `a`
-along the backward chain.
+theorem localGate_mem_unitary :
+    g.localGate ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+  embedOp_mem_unitary (pair_injective g.near_ne_far) g.u_mem_unitary
+
+theorem localGate_mem_supportedOperators : g.localGate ∈ supportedOperators d (bond g.near) := by
+  have := embedOp_mem_supportedOperators (d := d) (pair_injective g.near_ne_far) g.u
+  rw [Matrix.range_cons_cons_empty] at this
+  rw [bond, near, add_natCast_succ]
+  exact this
+
+theorem a_mem_span : g.a ∈ g.span := ⟨0, by omega, by simp⟩
+
+theorem far_mem_span : g.far ∈ g.span := ⟨2 * g.L + 1, le_rfl, rfl⟩
+
+theorem bond_near_subset_span : bond g.near ⊆ g.span := by
+  rintro i (rfl | rfl)
+  · exact ⟨2 * g.L, by omega, rfl⟩
+  · rw [near, add_natCast_succ]; exact ⟨2 * g.L + 1, le_rfl, rfl⟩
+
+theorem interior_subset_span : g.interior ⊆ g.span :=
+  fun _ ⟨j, _, hj, hi⟩ => ⟨j, by omega, hi⟩
+
+theorem cleared_subset_span : (g.cleared : Set (Fin N)) ⊆ g.span := by
+  intro i hi
+  obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
+  exact ⟨j, by simp at hj; omega, rfl⟩
+
+theorem allSites_there_subset_span : allSites g.there ⊆ g.span :=
+  (allSites_forwardChain_subset _ _ _).trans fun _ ⟨j, hj, hi⟩ => ⟨j, by omega, hi⟩
+
+theorem allSites_back_subset_span : allSites g.back ⊆ g.span :=
+  (allSites_backwardChain_subset _ _ _).trans fun _ ⟨j, hj, hi⟩ => ⟨j, by omega, hi⟩
+
+theorem disjoint_cleared_bond_near : Disjoint (g.cleared : Set (Fin N)) (bond g.near) := by
+  have hL := g.lt
+  rw [Set.disjoint_left]
+  intro i hi hi'
+  obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
+  have hj := Finset.mem_range.mp hj
+  rw [bond, near, add_natCast_succ] at hi'
+  rcases hi' with hi' | hi'
+  · exact add_natCast_ne g.a (by omega) (by omega) (by omega) hi'
+  · exact add_natCast_ne g.a (by omega) hL (by omega) hi'
+
+theorem sitePerm_back_near : sitePerm g.back g.near = g.a := by
+  rw [back, sitePerm_backwardChain, Equiv.Perm.inv_eq_iff_eq]
+  exact (sitePerm_forwardChain _ _ _).1.symm
+
+theorem sitePerm_back_far : sitePerm g.back g.far = g.far := by
+  rw [back, sitePerm_backwardChain, Equiv.Perm.inv_eq_iff_eq]
+  exact ((sitePerm_forwardChain _ _ _).2 _ (by omega) g.lt).symm
+
+theorem sitePerm_back_sitePerm_there (i : Fin N) :
+    sitePerm g.back (sitePerm g.there i) = i := by
+  rw [back, sitePerm_backwardChain, there]
+  simp
+
+/-! ### Layers of long-range gates -/
+
+variable {g}
+
+section Layer
+
+variable {gs : List (LongRangeGate d N)}
+  (hgs : gs.Pairwise fun g g' => Disjoint g.span g'.span)
+
+include hgs in
+theorem pairwise_disjoint_bond :
+    gs.Pairwise fun g g' => Disjoint (bond g.near) (bond g'.near) :=
+  hgs.imp fun {g g'} h => h.mono g.bond_near_subset_span g'.bond_near_subset_span
+
+/-- The layer of the gates `u` on the neighbouring pairs `{a + 2L, a + 2L + 1}`. -/
+noncomputable def localLayer : Layer d N :=
+  layerOfList gs near localGate (pairwise_disjoint_bond hgs)
+    (fun g _ => g.localGate_mem_unitary) fun g _ => g.localGate_mem_supportedOperators
+
+theorem localLayer_op : (localLayer hgs).op = (gs.map localGate).prod :=
+  layerOfList_op _ _ _ _ _ _
+
+include hgs in
+theorem valid_there : Valid (gs.flatMap there) :=
+  valid_flatMap (fun _ _ => valid_forwardChain _ _ _) (fun g _ => g.allSites_there_subset_span)
+    hgs
+
+include hgs in
+theorem valid_back : Valid (gs.flatMap back) :=
+  valid_flatMap (fun _ _ => valid_backwardChain _ _ _) (fun g _ => g.allSites_back_subset_span)
+    hgs
+
+variable [NeZero d]
+
+/-- The two measurement rounds applying a layer of long-range gates: teleport the content of
+every near site `a` along its forward chain to `a + 2L`; then apply the gates `u` to the
+neighbouring pairs `{a + 2L, a + 2L + 1}` and teleport the content of every `a + 2L` back to `a`
+along the backward chains.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
-noncomputable def longRangeRounds (a : Fin N) (L : ℕ) (hL : 2 * L + 1 < N)
-    (u : Matrix (Cfg d 2) (Cfg d 2) ℂ) (hu : u ∈ unitary (Matrix (Cfg d 2) (Cfg d 2) ℂ)) :
-    List (MeasurementRound d N) :=
-  [round [] (forwardChain a L (by omega)) (valid_forwardChain a L _),
-    round [longRangeLayer a L hL u hu] (backwardChain a L (by omega)) (valid_backwardChain a L _)]
+noncomputable def rounds : List (MeasurementRound d N) :=
+  [round [] (gs.flatMap there) (valid_there hgs),
+    round [localLayer hgs] (gs.flatMap back) (valid_back hgs)]
 
-/-- The two rounds have depth `5` in total, whatever the distance `2L + 1`. -/
-theorem sum_depth_longRangeRounds (a : Fin N) (L : ℕ) (hL : 2 * L + 1 < N)
-    (u : Matrix (Cfg d 2) (Cfg d 2) ℂ) (hu : u ∈ unitary (Matrix (Cfg d 2) (Cfg d 2) ℂ)) :
-    ((longRangeRounds a L hL u hu).map MeasurementRound.depth).sum = 5 := by
-  simp [longRangeRounds, depth_round]
+/-- The two rounds have depth `5` in total, whatever the distances and the number of gates. -/
+theorem sum_depth_rounds : ((rounds (d := d) hgs).map MeasurementRound.depth).sum = 5 := by
+  simp [rounds, depth_round]
 
-/-- **A gate between distant sites in constant depth with measurements.** Let `u` be a two-site
-unitary, `L ≥ 0` and `2L + 1 < N`. For a vector `v` with `|0⟩` at the `2L` sites
-`a + 1, …, a + 2L`, every output of the two rounds `longRangeRounds`, of total depth `5`, is a
-scalar multiple of `u` applied to the sites `a` and `a + 2L + 1` of `v`; the sites between them
-are left in `|0⟩`. No outcome is post-selected.
+end Layer
 
-Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("Isometries ... act on
-a constant number of sites which, although spatially separated, can be teleported at
-neighboring registers with a constant overhead ... Therefore every isometry ... takes constant
-time using measurement"). -/
-theorem exists_eq_smul_embedOp_of_mem_outputs_longRange (a : Fin N) (L : ℕ)
-    (hL : 2 * L + 1 < N) (u : Matrix (Cfg d 2) (Cfg d 2) ℂ)
-    (hu : u ∈ unitary (Matrix (Cfg d 2) (Cfg d 2) ℂ)) {v : Cfg d N → ℂ}
-    (hv : IsZeroOn {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * L ∧ i = a + (j : Fin N)} v) {w : Cfg d N → ℂ}
-    (hw : w ∈ MeasurementRound.outputs (longRangeRounds a L hL u hu) v) :
-    ∃ c : ℂ, w = c • (embedOp ![a, a + ((2 * L + 1 : ℕ) : Fin N)] u *ᵥ v) := by
-  have hL' : 2 * L < N := by omega
-  set F : Finset (Fin N) := (Finset.range (2 * L)).image fun j : ℕ => a + (j : Fin N)
-  have hT : IsZeroOn (F : Set (Fin N)) (chainPerm (forwardChain a L hL') *ᵥ v) :=
-    (isZeroOn_chainPerm_forwardChain a L hL' hv).mono fun i hi => by
-      obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
-      exact ⟨j, Finset.mem_range.mp hj, rfl⟩
-  have hdisj : Disjoint (F : Set (Fin N)) (bond (a + ((2 * L : ℕ) : Fin N))) := by
-    rw [Set.disjoint_left]
-    intro i hi hi'
-    obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
-    have hj := Finset.mem_range.mp hj
-    rw [bond, add_natCast_succ] at hi'
-    rcases hi' with hi' | hi'
-    · exact add_natCast_ne a (by omega) hL' (by omega) hi'
-    · exact add_natCast_ne a (by omega) hL (by omega) hi'
-  have hG := (longRangeLayer (d := d) a L hL u hu).gate_mem_supportedOperators _
-    (Finset.mem_singleton_self _)
-  have hGv : IsZeroOn (TeleportHop.pairSites (backwardChain a L hL'))
-      ((longRangeLayer a L hL u hu).op *ᵥ (chainPerm (forwardChain a L hL') *ᵥ v)) := by
-    refine (IsZeroOn.mulVec_of_mem_supportedOperators hT hdisj ?_).mono
-      (pairSites_backwardChain_subset a L hL')
-    rw [longRangeLayer, Layer.single_op]
-    exact hG
-  obtain ⟨c, hc⟩ := exists_eq_smul_of_mem_outputs_conj (valid_forwardChain a L hL')
-    (valid_backwardChain a L hL') (longRangeLayer a L hL u hu)
-    (hv.mono (pairSites_forwardChain_subset a L hL')) hGv hw
-  refine ⟨c, hc.trans ?_⟩
-  congr 1
-  obtain ⟨hπa, hπb⟩ := sitePerm_forwardChain a L hL'
-  rw [chainPerm_eq, chainPerm_eq, sitePerm_backwardChain, longRangeLayer, Layer.single_op]
-  have hinv : ((sitePerm (forwardChain a L hL'))⁻¹).symm = sitePerm (forwardChain a L hL') := by
-    rw [Equiv.Perm.inv_def, Equiv.symm_symm]
-  have key := permMatrix_cfgPerm_mul_embedOp_mul (d := d) (sitePerm (forwardChain a L hL'))⁻¹
-    ![a + ((2 * L : ℕ) : Fin N), a + ((2 * L + 1 : ℕ) : Fin N)] u
-  rw [hinv] at key
-  rw [key]
-  congr 2
-  funext i
-  fin_cases i
-  · simp only [Fin.zero_eta, Fin.isValue, Function.comp_apply, Matrix.cons_val_zero]
-    rw [Equiv.Perm.inv_eq_iff_eq, hπa]
-  · simp only [Fin.mk_one, Fin.isValue, Function.comp_apply, Matrix.cons_val_one,
-      Matrix.cons_val_zero]
-    rw [Equiv.Perm.inv_eq_iff_eq, hπb _ (by omega) hL]
-
-end LongRange
+end LongRangeGate
 
 end MPSPreparation

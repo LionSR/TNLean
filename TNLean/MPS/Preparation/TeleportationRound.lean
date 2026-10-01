@@ -114,6 +114,17 @@ theorem layerOfList_op : (layerOfList l key G hl hu hs).op = (l.map G).prod := b
 
 end LayerOfList
 
+/-- A product of operators acting on `S` acts on `S`. -/
+theorem list_prod_mem_supportedOperators {S : Set (Fin N)}
+    (l : List (Matrix (Cfg d N) (Cfg d N) ℂ)) (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
+    l.prod ∈ supportedOperators d S := by
+  induction l with
+  | nil => exact one_mem_supportedOperators S
+  | cons A l ih =>
+    rw [List.prod_cons]
+    exact mul_mem_supportedOperators (hl A (List.mem_cons_self ..))
+      (ih fun B hB => hl B (List.mem_cons_of_mem _ hB))
+
 /-! ### Lists of hops -/
 
 namespace TeleportHop
@@ -275,16 +286,6 @@ theorem chainFrame_of_notMem (hs : List (TeleportHop N)) (z : Cfg d N) {i : Fin 
     simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff, not_or] at hi'
     simp only [chainFrame, Function.update_of_ne hi'.1, Function.update_of_ne hi'.2.2,
       ih hrest, h.frame_of_ne z hi'.1 hi'.2.1 hi'.2.2, Pi.one_apply, mul_one]
-
-private theorem list_prod_mem_supportedOperators {S : Set (Fin N)}
-    (l : List (Matrix (Cfg d N) (Cfg d N) ℂ)) (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
-    l.prod ∈ supportedOperators d S := by
-  induction l with
-  | nil => exact one_mem_supportedOperators S
-  | cons A l ih =>
-    rw [List.prod_cons]
-    exact mul_mem_supportedOperators (hl A (List.mem_cons_self ..))
-      (ih fun B hB => hl B (List.mem_cons_of_mem _ hB))
 
 theorem prod_gate₁_mem_supportedOperators (hs : List (TeleportHop N)) :
     (hs.map TeleportHop.gate₁).prod ∈ supportedOperators d (allSites hs) := by
