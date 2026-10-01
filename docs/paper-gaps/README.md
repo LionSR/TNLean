@@ -817,6 +817,13 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_measurement_preparation_scope.tex` records the scope of the
+  preparation with measurements of a tensor that is not normal (paragraph
+  "Long-range MPS using measurements"): orthogonal `q`-site states of distinct
+  blocks, block lengths dividing `N`, and the corrected approximating state; and
+  two readings of the construction, the circuit applied after the measurement
+  and the depth `O(q)`, rather than constant, of the GHZ-type state on the chain
+  of `N` sites; open.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
   (paragraph "Connection to MERA") is formalized for tensors whose two-site
