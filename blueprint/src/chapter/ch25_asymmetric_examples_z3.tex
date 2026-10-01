@@ -85,7 +85,7 @@ Sun~\cite{Sun2025Anomalous}.
          & =\tr(T^{s_0,t_0}\cdots T^{s_{N-1},t_{N-1}}).
         \label{eq:asymex_z3_periodic_kernel}
     \end{align}
-    Set $U_N=O_N(M)$ and $V_N=O_N(M^\dagger)$. The next lemma verifies
+    Set $U_N=O_N(M)$ and $V_N=O_N(M^\dagger)$. Theorem~\ref{thm:asymex_z3_physical_kernels} verifies
     that this definition of $U_N$ gives
     (\ref{eq:asymex_z3anomalous_operator}).
     The contraction below represents $U_L$ on a ring drawn with $L$
@@ -109,6 +109,16 @@ Sun~\cite{Sun2025Anomalous}.
         \end{tenkz}
     \end{center}
 \end{definition}
+
+Theorem~\ref{thm:asymex_z3_physical_kernels} identifies the periodic
+kernels and unitarity. The word-span statements, including injectivity
+after two-site blocking, are in
+Theorem~\ref{thm:asymex_z3anomalous_normal}; the exact group law is in
+Theorem~\ref{thm:asymex_z3anomalous_group_law}. The nontrivial anomaly is
+established by the cyclic invariant in
+Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}. The condensation
+operator satisfies $\mathcal C_N^2=3\mathcal C_N$ for every $N>0$
+(Theorem~\ref{thm:asymex_z3anomalous_defect_square}).
 
 \begin{theorem}[Physical kernels and unitarity]
     \label{thm:asymex_z3_physical_kernels}
@@ -651,13 +661,14 @@ proved here.
         Z3Anomalous.z3FusionData_omega_gen_gen_gen,
         Z3Anomalous.z3FusionData_omega_gen_sq_gen,
         Z3Anomalous.cyclicInvariant_omega_z3,
-        Z3Anomalous.not_isTrivialGaugeClass_omega_z3}
+        Z3Anomalous.not_isTrivialGaugeClass_omega_z3,
+        Z3Anomalous.family_anomalyClass_ne_zero}
     \leanok
     \uses{thm:asymex_z3anomalous_family, thm:asymex_z3anomalous_normal,
         thm:asymex_z3anomalous_uu_compression,
         thm:asymex_z3anomalous_ud_compression,
         thm:mpug_anomaly_three_cochain_spec, thm:mpug_anomaly_three_cocycle_gauge,
-        thm:mpug_cyclic_invariant_gauge}
+        thm:mpug_cyclic_invariant_gauge, def:mpug_anomaly_class}
     The tensors $T_0=\delta$, $T_1=M$, $T_2=M^\dagger$ are normal and
     represent $\Z_3$ exactly on nonempty chains. Choose the fusion tensors
     to be the identity whenever a factor is $T_0$, and the compressions of
@@ -676,11 +687,13 @@ proved here.
     \end{align}
     where $\omega_{\mathrm{an}}$ is the anomaly three-cochain. The same
     product equals $\omega^2$ for every choice of fusion tensors, and the
-    anomaly three-cocycle is not cohomologous to the constant cochain one.
+    anomaly three-cocycle is not cohomologous to the constant cochain one:
+    the anomaly class in $H^3(\Z_3,\C^\times_{\mathrm{triv}})$ is nonzero.
 \end{theorem}
 
 \begin{proof}
     \leanok
+    \uses{cor:mpug_anomaly_class}
     Each of the two fusion trees $X$ of $(g,g,g)$ and of $(g,g^2,g)$
     satisfies $XR^aR^b=T^aXR^b$ for all letters $a,b$, with $R$ the triple
     product and $T$ the target tensor, and on single letters the trees
@@ -688,7 +701,9 @@ proved here.
     $\Z[\omega]$ checked letter by letter, and induction on the word gives
     the dressed identities. For $(g,e,g)$ both trees are the fusion tensor
     of $M\otimes M$. The product is invariant under the fusion-tensor gauge
-    action because $g^3=e$, and $\omega^2\neq1$.
+    action because $g^3=e$, and $\omega^2\neq1$. Since the anomaly
+    three-cocycle is not cohomologous to the constant cochain one, its class
+    is nonzero by Corollary~\ref{cor:mpug_anomaly_class}.
 \end{proof}
 
 \begin{theorem}[Orientation of the class]
