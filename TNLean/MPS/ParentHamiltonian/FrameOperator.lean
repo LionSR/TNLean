@@ -11,13 +11,13 @@ import TNLean.Algebra.FinVecEta
 /-!
 # The frame operator of the local ground space
 
-For an MPS tensor `A` the local ground space \(G_n(A)\) on `n` sites is the range of the
+For an MPS tensor \(A\) the local ground space \(G_n(A)\) on \(n\) sites is the range of the
 boundary parametrization \(\Gamma_n(X)(\sigma) = \operatorname{tr}[A^\sigma X]\). Its adjoint
 for the Hilbert--Schmidt inner product is
 \(\Gamma_n^\dagger \psi = \sum_\tau \psi(\tau) (A^\tau)^\dagger\), and the operator
-\(\Gamma_n \Gamma_n^\dagger\) on the `n`-site space has the matrix
+\(\Gamma_n \Gamma_n^\dagger\) on the \(n\)-site space has the matrix
 \(\operatorname{tr}[A^\sigma (A^\tau)^\dagger]\). This operator is Hermitian for every tensor.
-When \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) for a positive `c`, it is `c` times
+When \(\Gamma_n \Gamma_n^\dagger \Gamma_n = c \Gamma_n\) for a positive \(c\), it is \(c\) times
 the orthogonal projector onto \(G_n(A)\), so the parent interaction is
 \(1 - c^{-1} \Gamma_n \Gamma_n^\dagger\).
 
@@ -27,7 +27,7 @@ translated two-site parent terms commute on every ring of at least three sites.
 
 These are the steps of the proofs of Lemma 6.11 and Theorem 6.12 of Schuch, Cirac, and
 Pérez-García (arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2098–2153) that do not use
-`G`-isometry; the `G`-isometric input is supplied in `TNLean.PEPS.GIsometricParentHamiltonian`.
+\(G\)-isometry; the \(G\)-isometric input is supplied in `TNLean.PEPS.GIsometricParentHamiltonian`.
 
 ## Main definitions
 
@@ -76,7 +76,7 @@ theorem sum_cfg_three (f : Cfg d 3 → M) : ∑ σ, f σ = ∑ a, ∑ b, ∑ c, 
 
 end Sums
 
-/-- The adjoint of the boundary parametrization `Γ_n` for the Hilbert--Schmidt inner product:
+/-- The adjoint of the boundary parametrization \(\Gamma_n\) for the Hilbert--Schmidt inner product:
 \(\psi \mapsto \sum_\tau \psi(\tau) (A^\tau)^\dagger\). -/
 noncomputable def groundSpaceMapAdjoint (A : MPSTensor d D) (n : ℕ) :
     NSiteSpace d n →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
@@ -86,11 +86,11 @@ theorem groundSpaceMapAdjoint_apply (A : MPSTensor d D) (n : ℕ) (ψ : NSiteSpa
     groundSpaceMapAdjoint A n ψ = ∑ τ, ψ τ • (Kraus.evalWord A (List.ofFn τ))ᴴ := by
   simp [groundSpaceMapAdjoint]
 
-/-- The operator \(\Gamma_n \Gamma_n^\dagger\) on the `n`-site space, with matrix
+/-- The operator \(\Gamma_n \Gamma_n^\dagger\) on the \(n\)-site space, with matrix
 \(\operatorname{tr}[A^\sigma (A^\tau)^\dagger]\). For \(n = 2\) it is the operator of
 arXiv:1001.3807, equation "eq:iso:ham-proj-from-A" (`Papers/1001.3807/paper_v3.tex`
-lines 2103–2107, figure `figs4/ham-proj-from-A.pdf`), in which the tensors `A†` are the adjoint
-matrices. -/
+lines 2103–2107, figure `figs4/ham-proj-from-A.pdf`), in which the tensors \(A^\dagger\) are
+the adjoint matrices. -/
 noncomputable def groundSpaceFrame (A : MPSTensor d D) (n : ℕ) :
     Module.End ℂ (NSiteSpace d n) :=
   groundSpaceMap A n ∘ₗ groundSpaceMapAdjoint A n
@@ -150,7 +150,7 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
   have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hc.ne'
   set P := (c : ℂ)⁻¹ • groundSpaceFrame A n with hP
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d n)
-  -- The Euclidean form of `P` is a symmetric projection with range \(G_n(A)\).
+  -- The Euclidean form of \(P\) is a symmetric projection with range \(G_n(A)\).
   let PES : EuclideanSpace ℂ (Cfg d n) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d n) :=
     e.symm.toLinearMap ∘ₗ P ∘ₗ e.toLinearMap
   have hPES : PES = Matrix.toEuclideanLin (LinearMap.toMatrix' P) := by

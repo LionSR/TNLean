@@ -1507,8 +1507,8 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     the operator of \cite[Lemma~6.11]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{lemma}[A multiple of the projector onto the local space]%
-    \label{lem:peps_ground_space_frame_projector}
+\begin{theorem}[A multiple of the projector onto the local space]%
+    \label{thm:peps_ground_space_frame_projector}
     \lean{MPSTensor.groundSpaceFrame_isHermitian,
         MPSTensor.isIdempotentElem_smul_groundSpaceFrame,
         MPSTensor.range_groundSpaceFrame,
@@ -1520,7 +1520,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     $c^{-1}P_{n}$ is idempotent with range $\mathcal{S}_{n}$, so it is the
     orthogonal projector onto $\mathcal{S}_{n}$ and the parent interaction is
     $h=\mathbb{1}-c^{-1}P_{n}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The entries satisfy
@@ -1555,7 +1555,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
         TNLean.PEPS.IsGIsometricMPS.parentInteraction_regularMPSTensor}
     \leanok
     \uses{def:peps_mps_g_isometric, thm:peps_mps_g_isometric_concatenation,
-        lem:peps_ground_space_frame_projector, def:peps_regular_mps_tensor}
+        thm:peps_ground_space_frame_projector, def:peps_regular_mps_tensor}
     Let $A$ be a $G$-isometric matrix product tensor. There is $c>0$ such that
     the operator
     $P_{2}=\sum_{ijkl}\operatorname{tr}[A^{i}A^{j}(A^{k}A^{l})^{\dagger}]
@@ -1576,7 +1576,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
     $\mathcal{P}(C^{\dagger})\mathcal{P}(C)=c\,\sigma$. Since $\mathcal{P}(C)$
     is invariant, $\mathcal{P}(C)\sigma=\mathcal{P}(C)$, and
     $\Gamma_{2}\Gamma_{2}^{\dagger}\Gamma_{2}=\mathcal{P}(C)\mathcal{P}(C^{\dagger})
-        \mathcal{P}(C)=c\,\Gamma_{2}$. Lemma~\ref{lem:peps_ground_space_frame_projector}
+        \mathcal{P}(C)=c\,\Gamma_{2}$. Theorem~\ref{thm:peps_ground_space_frame_projector}
     applies.
 \end{proof}
 
@@ -1616,15 +1616,16 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
         =c\operatorname{tr}[MN]$ for every $M$. The matrices $A^{i}$ commute with
     every $L_{g}$, and so do their adjoints since $L_{g}$ is unitary; so does
     every product of them. The matrix entry of the first product is
-    \[
+    \begin{align}
         \sum_{b}\operatorname{tr}\bigl[A^{s_{0}}A^{s_{1}}(A^{w_{0}}A^{b})^{\dagger}\bigr]
         \operatorname{tr}\bigl[A^{b}A^{s_{2}}(A^{w_{1}}A^{w_{2}})^{\dagger}\bigr],
-    \]
+        \label{eq:peps_mps_g_isometric_three_site_entry}
+    \end{align}
     which by cyclicity of the trace is of this form with
     $M=(A^{w_{0}})^{\dagger}A^{s_{0}}A^{s_{1}}$ and
     $N=A^{s_{2}}(A^{w_{2}})^{\dagger}(A^{w_{1}})^{\dagger}$, so it equals
     $c\operatorname{tr}[A^{s_{0}}A^{s_{1}}A^{s_{2}}
-        (A^{w_{0}}A^{w_{1}}A^{w_{2}})^{\dagger}]$; the second product is treated
+            (A^{w_{0}}A^{w_{1}}A^{w_{2}})^{\dagger}]$; the second product is treated
     in the same way. The sum over $g$ in the twirl drops out because $N$
     commutes with every $L_{g}$, which is the step in which the source moves the
     group action from one bond to the other. By
