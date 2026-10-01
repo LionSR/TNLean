@@ -8,8 +8,8 @@ import TNLean.MPS.Periodic.EqualCaseGlobal.IrreducibleForm
 /-!
 # Global assembly of the equal-case gauge
 
-Import-only entry point for the global assembly of the equal-case multiplicity
-gauge. The linear algebra lives in `EqualCaseGlobal.Basic`, the canonical-form
-assembly in `EqualCaseGlobal.Canonical`, and the irreducible-form assembly in
-`EqualCaseGlobal.IrreducibleForm`.
+This file imports the modules that together give the global assembly of the
+equal-case multiplicity gauge: its linear algebra (`EqualCaseGlobal.Basic`), the
+canonical-form assembly (`EqualCaseGlobal.Canonical`), and the irreducible-form
+assembly (`EqualCaseGlobal.IrreducibleForm`).
 -/

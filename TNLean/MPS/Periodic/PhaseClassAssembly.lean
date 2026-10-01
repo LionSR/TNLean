@@ -127,8 +127,11 @@ original weights have modulus one. Grouping repeated blocks is constructed here,
 not assumed as extra input.
 
 This is the multiplicity normalization step for the corrected forward direction
-of arXiv:1708.00029, Theorem 4.1, lines 743–756. The unit-weight premise is the
-trace-preservation correction documented in
+of arXiv:1708.00029, Theorem 4.1, lines 743–756.
+
+**Scope restriction (unit-modulus target weights):** the premise `hQweight` is the
+trace-preservation correction to the forward direction of Theorem 4.1, which is
+false as printed without it; see
 `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
 theorem weight_norm_eq_one_of_block_sum_sameMPV₂Pos (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (blocks k))
