@@ -1,0 +1,216 @@
+\section{Continuity of the parent-Hamiltonian gap}
+\label{sec:parent_hamiltonian_gap_continuity}
+
+Along a continuous path of tensors, the phase argument of
+\cite[Appendix~A, lines~2475--2580]{Schuch2011Phases} needs a gap of the
+parent Hamiltonians that is uniform both in the path parameter and in the
+chain length. The source obtains it from Nachtergaele's bound, whose
+finite-size input is the gap of the Hamiltonian restricted to a fixed number
+of sites; that gap has a uniform lower bound because the restricted
+Hamiltonian depends continuously on the parameter
+\cite[lines~2575--2578]{Schuch2011Phases}. This section proves the
+continuity step and combines it with Knabe's nearest-neighbor criterion and
+compactness. The results below concern one-site injective tensors and the
+canonical two-site parent interaction, and they are stated with that
+restriction. The source's path also covers non-injective normal forms, which
+are not treated here.
+
+\begin{theorem}[Gap stability under perturbation of operator and kernel projection]
+    \label{thm:kernel_gap_perturbation}
+    \lean{ContinuousLinearMap.kernelGap_perturbation,
+        ContinuousLinearMap.eventually_norm_gap_on_orthogonal}
+    \leanok
+    Let $H,H_0,P,P_0$ be bounded operators on a complex normed space, and
+    suppose $\delta\lVert v-P_0v\rVert\leq\lVert H_0v\rVert$ for all $v$, with
+    $\delta\geq0$, $\lVert H-H_0\rVert\leq\varepsilon$ and
+    $\lVert P-P_0\rVert\leq r$. Then
+    $(\delta(1-r)-\varepsilon)\lVert v\rVert\leq\lVert Hv\rVert$ for every $v$
+    with $Pv=0$. Consequently, if $x\mapsto H_x$ and the orthogonal projection
+    onto a subspace $K_x$ are continuous at $x_0$, $K_{x_0}\subseteq\ker H_{x_0}$,
+    and $\delta\lVert v\rVert\leq\lVert H_{x_0}v\rVert$ on $K_{x_0}^\perp$ with
+    $\delta>0$, then every $\delta'<\delta$ satisfies
+    $\delta'\lVert v\rVert\leq\lVert H_xv\rVert$ on $K_x^\perp$ for all $x$
+    near $x_0$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For $Pv=0$ one has $\lVert P_0v\rVert=\lVert(P-P_0)v\rVert\leq r\lVert v\rVert$
+    and $\lVert H_0v\rVert\leq\lVert Hv\rVert+\varepsilon\lVert v\rVert$;
+    combining these with the hypothesis gives the first claim. For the second,
+    the gap on $K_{x_0}^\perp$ and $K_{x_0}\subseteq\ker H_{x_0}$ give
+    $\delta\lVert v-P_{x_0}v\rVert\leq\lVert H_{x_0}v\rVert$ for all $v$, and
+    one chooses $\varepsilon=(\delta-\delta')/2$ and $r=\varepsilon/\delta$.
+\end{proof}
+
+\begin{theorem}[Continuity of injective range projectors]
+    \label{thm:continuous_injective_range_projector}
+    \lean{ContinuousLinearMap.continuous_injectiveRangeProjector}
+    \leanok
+    Let $T_x\colon E\to F$ be a continuous family of injective bounded maps
+    from a finite-dimensional Hilbert space. Then the orthogonal projection
+    $T_x(T_x^\dagger T_x)^{-1}T_x^\dagger$ onto the range of $T_x$ depends
+    continuously on $x$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The Gram operator $T_x^\dagger T_x$ is invertible and continuous in $x$,
+    and inversion is continuous at invertible elements of a Banach algebra.
+\end{proof}
+
+\begin{theorem}[Continuity of finite-window parent Hamiltonians]
+    \label{thm:continuous_finite_window_parent_hamiltonian}
+    \lean{MPSTensor.continuous_groundSpaceMapES_family,
+        MPSTensor.continuous_groundSpaceES_starProjection_family,
+        MPSTensor.continuous_openParentHamiltonianES_family,
+        MPSTensor.continuous_parentHamiltonianES_family}
+    \leanok
+    \uses{def:ground_space_map_es, def:ground_space_es,
+        def:open_parent_hamiltonian_es, def:parent_hamiltonian_es,
+        thm:continuous_injective_range_projector}
+    Let $x\mapsto A_x$ be a continuous family of tensors. For fixed $L$, the
+    boundary map $X\mapsto\sum_\sigma\operatorname{tr}(A_{x,\sigma}X)\lvert\sigma\rangle$
+    on $L$ sites is continuous in $x$. If every $A_x$ is $L$-block injective,
+    the orthogonal projection onto the local ground space on $L$ sites is
+    continuous in $x$. Hence, for $L\leq N$, the open and periodic parent
+    Hamiltonians with interaction range $L$ on $N$ sites are continuous in $x$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:continuous_injective_range_projector}
+    Each matrix entry of the boundary map is a trace of a fixed product of
+    tensor letters. Block injectivity makes the boundary map injective, and its
+    range is the local ground space, so the previous theorem applies. The
+    Hamiltonians are finite sums of translates of one minus that projection.
+\end{proof}
+
+\begin{theorem}[Local stability of a finite-window gap]
+    \label{thm:open_parent_gap_continuity}
+    \lean{MPSTensor.eventually_openParentHamiltonianES_gap}
+    \leanok
+    \uses{thm:kernel_gap_perturbation,
+        thm:continuous_finite_window_parent_hamiltonian}
+    Let $x\mapsto A_x$ be continuous, $R\leq N$, and suppose every $A_x$ is
+    $R$-block and $N$-block injective. If
+    $\delta\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A_{x_0})v\rVert$ for
+    all $v\perp G_N^{\mathrm{ES}}(A_{x_0})$, with $\delta>0$, then for every
+    $\delta'<\delta$ and every $x$ near $x_0$,
+    $\delta'\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A_x)v\rVert$ for
+    all $v\perp G_N^{\mathrm{ES}}(A_x)$. This is the continuity step of
+    \cite[lines~2575--2578]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kernel_gap_perturbation,
+        thm:continuous_finite_window_parent_hamiltonian}
+    The open parent Hamiltonian annihilates the ground space, and both it and
+    the ground-space projection are continuous in $x$.
+\end{proof}
+
+\begin{theorem}[Strict Knabe windows for injective tensors]
+    \label{thm:injective_strict_knabe_window}
+    \lean{MPSTensor.exists_openParentHamiltonianES_two_uniform_gap_of_isInjective,
+        MPSTensor.exists_strict_openParentHamiltonianES_two_window_of_isInjective}
+    \leanok
+    \uses{thm:primitive_open_parent_hamiltonian_gap,
+        lem:parent-finite-interval-comparison}
+    Let $A$ be a one-site injective tensor of nonzero bond dimension. Then the
+    open-chain Hamiltonian $H^{\mathrm{open}}_{N,2}(A)$ built from the
+    canonical two-site parent interaction has a positive gap above
+    $G_N^{\mathrm{ES}}(A)$, uniform in all sufficiently large $N$. In
+    particular, there are $m\geq2$ and $\gamma$ with $m\gamma>1$ such that
+    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{m+1,2}(A)v\rVert$ for all
+    $v\perp G_{m+1}^{\mathrm{ES}}(A)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_open_parent_hamiltonian_gap,
+        lem:parent-finite-interval-comparison}
+    Gauge $A$ to a primitive tensor with a positive-definite fixed point, which
+    has the same local ground spaces, and take its open-chain gap at some range
+    $W$. Comparing the range-$W$ interaction with the two-site open
+    Hamiltonian on $W$ sites transfers the gap to range two. Since the bound is
+    uniform in $N$, a window of $m+1$ sites with $m\gamma>1$ exists.
+\end{proof}
+
+\begin{theorem}[Gap in a parameter neighborhood]
+    \label{thm:knabe_gap_neighborhood}
+    \lean{MPSTensor.eventually_parentHamiltonianES_gap_of_strict_openGap}
+    \leanok
+    \uses{thm:open_parent_gap_continuity,
+        thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
+    nonzero bond dimension, let $m\geq2$, and suppose
+    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{m+1,2}(A_{x_0})v\rVert$
+    for $v\perp G_{m+1}^{\mathrm{ES}}(A_{x_0})$ with $m\gamma>1$. Then there is
+    $\delta>0$ such that, for all $x$ near $x_0$ and all $N\geq2m$, the
+    periodic parent Hamiltonian $H_{N,2}(A_x)$ satisfies
+    $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ on the orthogonal
+    complement of its kernel.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_gap_continuity,
+        thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Choose $1/m<\gamma'<\gamma$. The strict window persists with $\gamma'$
+    near $x_0$, and Knabe's nearest-neighbor criterion turns it into a periodic
+    gap for every $N\geq2m$ with a constant depending only on $m$ and
+    $\gamma'$.
+\end{proof}
+
+\begin{theorem}[Continuity of short periodic ground lines]
+    \label{thm:periodic_short_gap_continuity}
+    \lean{MPSTensor.exists_uniform_parentHamiltonianES_two_gap_fixed_volume}
+    \leanok
+    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector}
+    Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
+    nonzero bond dimension, let $S$ be a compact parameter set, and let
+    $N\geq2$. Then there is $\delta>0$ such that
+    $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ for all $x\in S$ and
+    all $v$ orthogonal to the kernel of $H_{N,2}(A_x)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector}
+    The kernel of $H_{N,2}(A_x)$ is the line spanned by the nonzero periodic
+    matrix product vector of $A_x$, whose projection is continuous in $x$. The
+    gap at each point therefore persists in a neighborhood, and a finite
+    subcover of $S$ gives one constant.
+\end{proof}
+
+\begin{theorem}[Uniform parent gap on compact parameter sets]
+    \label{thm:compact_parent_gap}
+    \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}
+    \leanok
+    \uses{thm:knabe_gap_neighborhood, thm:injective_strict_knabe_window,
+        thm:periodic_short_gap_continuity}
+    Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
+    nonzero bond dimension, and let $S$ be a compact parameter set. Then there
+    is $\delta>0$ such that, for every $x\in S$ and every $N\geq2$,
+    \begin{align}
+        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert
+        \qquad\text{for all }v\perp\ker H_{N,2}(A_x).
+        \label{eq:compact_parent_gap}
+    \end{align}
+    This is the uniform-gap conclusion of
+    \cite[Appendix~A, lines~2575--2580]{Schuch2011Phases} for one-site
+    injective tensors and the two-site parent interaction.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:knabe_gap_neighborhood, thm:injective_strict_knabe_window,
+        thm:periodic_short_gap_continuity}
+    Every point of $S$ has a strict Knabe window, hence a neighborhood with a
+    common gap bound for all $N$ beyond a threshold. A finite subcover of $S$
+    gives one bound and one threshold. The finitely many shorter rings are
+    handled by the previous theorem, and the minimum of these constants works
+    for every $N\geq2$.
+\end{proof}
