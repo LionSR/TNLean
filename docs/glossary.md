@@ -1442,6 +1442,55 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** only permutations of the computational basis are covered; a
   general gate is a `MPSPreparation.Layer` gate.
 
+### `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
+- **Meaning:** some sequence of measurement rounds (`MPSPreparation.MeasurementRound`:
+  a local circuit, a computational-basis measurement of a set of sites, and
+  outcome-dependent single-site unitaries), whose circuits have at most `T`
+  layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
+  after every sequence of outcomes of nonzero probability.
+- **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
+  LOCC" (one round, and "a more general scheme with multiple rounds of
+  LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
+- **Sanctioned bridges:**
+  `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
+  (one round is a protocol of `MPSPreparation.IsPreparedWithMeasurementsInDepth`),
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
+  and `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` (binary
+  trees of two-site gates with `k` levels in depth `5k`).
+- **Caveat:** the depth counts the layers of all the rounds; measurements,
+  classical processing and single-site corrections are free, as in one round.
+  The circuit of a later round does not depend on earlier outcomes.
+  Every round is a protocol of `QCcc_ℓ` of no larger depth, but the number of
+  rounds is not bounded (the tree of `k` levels uses `2k` rounds), whereas in
+  the class `QCcc^{(k)}_ℓ` of the paragraph "Phases of matter" of
+  arXiv:2103.13367 the number `k` of composed transformations does not depend
+  on the system size.
+
+### `MPSPreparation.MeasurementRound.IsRoundsImplementationOn`
+
+- **Declaration:**
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ)) (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
+- **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
+  scalar multiple of `W v`; the single-round form is
+  `MPSPreparation.MeasurementRound.IsImplementationOn`, which asks for one
+  scalar per outcome.
+- **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
+  ("correcting (without postselection) based on the measurement outcomes").
+- **Sanctioned bridges:**
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`
+  (implementations compose), `MPSPreparation.TeleportHop.isImplementationOn_round`
+  (teleportation along chains of hops in one round of depth `2`),
+  `MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
+  two-site gates between distant sites in depth `5`), and
+  `MPSPreparation.isRoundsImplementationOn_treeRounds`.
+- **Caveat:** the scalar may depend on the outcomes and is not normalized; zero
+  outputs, of probability zero, are allowed.
+
 ## Inhomogeneous short-range correlated chains
 
 ### `MPSPreparation.IsPairApproximable`
