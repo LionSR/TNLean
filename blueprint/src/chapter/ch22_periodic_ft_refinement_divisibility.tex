@@ -822,6 +822,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \label{thm:periodic_weighted_block_refinement}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_refinement}
     \leanok
+    \uses{def:block_diagonal_tensor,def:same_mpv2}
     If $A_k$ and $\bigoplus_{a=0}^{n_k-1}B_{k,a}$ have equal matrix product
     vectors at every length, then $\bigoplus_k\mu_k A_k$ and
     $\bigoplus_{k,a}\mu_k B_{k,a}$ do as well, for arbitrary complex
@@ -830,6 +831,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 
 \begin{proof}
     \leanok
+    \uses{thm:mpv_decomposition}
     Expand the trace of each block-diagonal product and substitute the
     refined vectors of each $A_k$. At every length $N$,
     \begin{align}
