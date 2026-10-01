@@ -244,9 +244,8 @@ theorem kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators (p q r : ZMo
   · rintro ⟨ha, hb, hc⟩ ⟨⟨x, y⟩, hg⟩
     change p * x + q * y + r * x * y = 0
     change ofAdd (x, y) ∈ H at hg
-    have hcases (z : ZMod 2) : z = 0 ∨ z = 1 := by revert z; decide
-    rcases hcases x with rfl | rfl <;>
-      rcases hcases y with rfl | rfl <;> simp_all
+    rcases zmod_two_eq_zero_or_one x with rfl | rfl <;>
+      rcases zmod_two_eq_zero_or_one y with rfl | rfl <;> simp_all
 
 /-- For the last row of arXiv:2203.12563, lines 1870–1888, the restricted
 cohomology class is trivial exactly on the trivial subgroup. -/
