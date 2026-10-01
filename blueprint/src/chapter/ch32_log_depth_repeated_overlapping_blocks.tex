@@ -6,7 +6,7 @@
 %% Local fix: corrected fixed-point state for repeated blocks,
 %% docs/paper-gaps/mswc24_repeated_block_corrected_state.tex; rate including
 %% the mixed transfer maps, docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
-%% Scope restriction: factor min(1, b)^{-1/2} for cancelling weights,
+%% Scope restriction: factor min(1, b)^{-1/2} when b < 1,
 %% docs/paper-gaps/mswc24_repeated_block_corrected_state.tex.
 %% ==================================================
 
@@ -17,8 +17,8 @@ multiplicities whose states on $q$ sites overlap, the corrected approximating st
 of Definition~\ref{def:ldp_repeated_block_state} converges at the rate set by the
 correlation lengths of the blocks and of their mixed transfer maps
 \cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap}.
-The estimates of Section~\ref{sec:ldp_overlapping_blocks} use of the embeddings $K_j$
-only that they are isometries with orthogonal ranges, and apply with the isometries
+The estimates of Section~\ref{sec:ldp_overlapping_blocks} use only that the embeddings
+$K_j$ are isometries with orthogonal ranges, and apply with the isometries
 $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar} in their place.
 
 \begin{lemma}[Shared estimates]
@@ -185,8 +185,8 @@ $L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar} in their place.
     $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$ for every $q$ and $M\geq1$. This is
     \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the corrected state, with
     $\xi_{\mathrm{diag}}$ replaced by $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$
-    and, when the weights $\beta_j$ cancel, with the factor $\min(1,b)^{-1/2}$, which the
-    source does not have \cite{gap:mswc24_repeated_block_corrected_state}. The states of
+    and, when $b<1$, for instance when the weights $\beta_j$ cancel or every weight has
+    modulus below one, with the factor $\min(1,b)^{-1/2}$, which the source does not have \cite{gap:mswc24_repeated_block_corrected_state}. The states of
     distinct blocks need not be orthogonal, and no condition $q=o(N)$ is needed.
 \end{theorem}
 \begin{proof}

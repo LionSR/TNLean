@@ -50,10 +50,11 @@ in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
 replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented in
 `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
-**Scope restriction (cancelling weights):** the bound of
+**Scope restriction (small weight sums):** the bound of
 `exists_approximationError_le_repeatedOverlappingBlockSum` carries the factor
-`(min(1, b))^{-1/2}`, which is `1` unless the sums `βⱼ = ∑ₖ μ_{j,k}^N` of the weights cancel; the
-source's bound has no such factor. Documented in
+`(min(1, b))^{-1/2}`, which is `1` when `b ≥ 1` and exceeds `1` when `b < 1`, for instance when
+the sums `βⱼ = ∑ₖ μ_{j,k}^N` cancel or when every weight has modulus below `1`; the source's bound
+has no such factor. Documented in
 `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
 
 ## Main declarations
@@ -210,8 +211,8 @@ satisfies `ε ≤ C y e^{C y} / (min(1, b))^{1/2}` with `y = M e^{-γ q/ξ}` and
 The `q`-site states of distinct blocks need not be orthogonal, and no condition `q = o(N)` is
 needed. The factor `(min(1, b))^{-1/2}` is `1` when `b ≥ 1`, for instance for real weights in
 `[0, 1]` one of which is `1` (`exists_approximationError_le_repeatedOverlappingBlockSum_of_nonneg`);
-it enters because the estimates of the overlaps `zⱼ` are absolute, while the sums `βⱼ` may
-cancel. -/
+it exceeds `1` when `b < 1`, for instance when the sums `βⱼ` cancel or every weight has modulus
+below `1`, because the estimates of the overlaps `zⱼ` are absolute. -/
 theorem exists_approximationError_le_repeatedOverlappingBlockSum
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')

@@ -334,9 +334,10 @@ weights $0\leq w_j\leq1$ with $\max_jw_j=1$, which covers weights of different m
 the phases are absorbed into the blocks. Blocks with multiplicity combined with overlaps are
 formalized for the corrected state of \cite{gap:mswc24_repeated_block_corrected_state}, which
 replaces (S7), with complex weights of modulus at most one, up to a factor
-$\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$ that is one unless the weights $\beta_j$ cancel, and
-without that factor for real weights in $[0,1]$ one of which is one. Two extensions are not
-formalized: the bound without that factor for cancelling weights, and the sharp rate
+$\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$ that is one when $\sum_j\lvert\beta_j\rvert^2\geq1$,
+and without that factor for real weights in $[0,1]$ one of which is one. Two extensions are not
+formalized: the bound without that factor when $\sum_j\lvert\beta_j\rvert^2<1$, as for cancelling
+weights or weights all of modulus below one, and the sharp rate
 $(N/q)\tau^{2q}$; both need a second-order perturbation bound for the square root of
 $B^\dagger B$ around its block-diagonal part.
 

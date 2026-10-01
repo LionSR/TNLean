@@ -208,8 +208,8 @@ one equals one, $b\geq1$, and this is $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsi
 The proof combines the two arguments. By (\ref{eq:mswc24_rc_blocked}) the blocked map is
 $B=\sum_jc_jB_jL_j^\dagger$ with $c_j\leq m_j^{1/2}$, so the blocks of $B^\dagger B$ are
 $c_jc_{j'}L_jB_j^\dagger B_{j'}L_{j'}^\dagger$, and the Gram estimate of
-\cite{gap:mswc24_block_form_mixed_overlap}, which uses of the embeddings only that they have norm
-at most one, gives $\lVert B^\dagger B-\sum_jc_j^2L_j(\sigma_j^T\otimes\mathbf 1)L_j^\dagger\rVert
+\cite{gap:mswc24_block_form_mixed_overlap}, which uses only that the embeddings have norm at most
+one, gives $\lVert B^\dagger B-\sum_jc_j^2L_j(\sigma_j^T\otimes\mathbf 1)L_j^\dagger\rVert
 \leq Ke^{-2\gamma q/\xi}$. The $\tfrac12$-H\"older bound of the square root gives
 $\lVert P-P_\infty\rVert\leq K'e^{-\gamma q/\xi}$ with
 $P_\infty=\sum_jc_jL_j(\sqrt{\sigma_j}^{\,T}\otimes\mathbf 1)L_j^\dagger$, whose square is the
@@ -232,8 +232,9 @@ z_j-\beta_j\rvert$, and the inequality of \cite{gap:mswc24_block_form_mixed_over
 $S/b$ and $\lVert\phi_N(A)\rVert/b^{1/2}$ gives (\ref{eq:mswc24_rc_overlap_bound}).
 
 The factor $\min(1,b)^{-1/2}$ is a scope restriction of the proof, not of the construction. It
-appears because the estimates of the $z_j$ are absolute while the sums $\beta_j=\sum_k\mu_{j,k}^N$
-may cancel; the source's bound has no such factor. The numerical check below shows the error
+exceeds one when $b<1$, for instance when the sums $\beta_j=\sum_k\mu_{j,k}^N$ cancel or every
+weight has modulus below one, because the estimates of the $z_j$ are absolute; the source's bound
+has no such factor. The numerical check below shows the error
 converging at the same rate when $b$ is exponentially small. Removing the factor needs a
 relative estimate of $z_j$ for blocks of small weight, the second-order perturbation bound for
 the square root of $B^\dagger B$ that \cite{gap:mswc24_block_form_mixed_overlap} lists for the
@@ -275,7 +276,7 @@ ingredients above.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_norm_gram_sum_sub_le} and
     \leanid{Matrix.norm_polarPos_sub_le_sqrt} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockGram}.}
-The bound without the factor $\min(1,b)^{-1/2}$ for cancelling weights is not formalized.
+The bound without the factor $\min(1,b)^{-1/2}$ when $b<1$ is not formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}
