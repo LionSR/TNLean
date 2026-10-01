@@ -1364,8 +1364,8 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Thus $U_a=\prod_i CZ_{i,i+1}Z_i$ and $U_b=\prod_i X_i$, as in
     \cite[Section~6]{GarreRubio2023MPOSym}. Define
     $U_{a^p b^q}=U_a^pU_b^q$ for $p,q\in\{0,1\}$.
-    If $C^{ij}$ is the decorated CZX tensor, the tensors
-    $A^{ij}=C^{i,1-j}$ and $B^{ij}=\delta_{i,1-j}$ have bond dimensions
+    If $\widehat T^{ij}$ is the decorated CZX tensor, the tensors
+    $A^{ij}=\widehat T^{i,1-j}$ and $B^{ij}=\delta_{i,1-j}$ have bond dimensions
     two and one, respectively.
 \end{definition}
 
@@ -1390,7 +1390,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     The diagonal entries of $U_a$ are signs, and the spin flip is an
     involution, so both generators square to the identity and are unitary.
     By Theorem~\ref{thm:asymex_czx_decorated_operator},
-    $O_N(A)(s,t)=O_N(C)(s,\bar t)
+    $O_N(A)(s,t)=O_N(\widehat T)(s,\bar t)
         =\delta_{s,t}(-1)^{\sum_i(s_is_{i+1}+s_i)}=U_a(s,t)$, and
     $O_N(B)(s,t)=\Id(s,\bar t)=\delta_{s,\bar t}=U_b(s,t)$. By (\ref{eq:asymex_klein_spin_generators}), $U_aU_b$ is the
     decorated CZX operator, whose square is $I$. Multiplying
@@ -1439,8 +1439,9 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \uses{thm:asymex_klein_spin_representation}
     The exponent in (\ref{eq:asymex_klein_spin_generators}) is zero on
     the all-zero configuration and $2N$ on the all-one configuration.
-    The spin flip exchanges those configurations and carries no sign, so it
-    fixes the uniform vector: $U_bu=u$. Since $v=U_au$, the identities
-    $U_a^2=I$ and $U_bU_a=U_aU_b$ then give $U_av=u$ and $U_bv=v$.
+    Since $U_b$ permutes configurations by the global flip with no sign, it
+    fixes the uniform vector directly: $U_bu=u$. The same flip exchanges the
+    all-zero and all-one configurations, giving $U_bz_j=z_{1-j}$.
+    Since $v=U_au$, the identities $U_a^2=I$ and $U_bU_a=U_aU_b$ then give $U_av=u$ and $U_bv=v$.
     Linearity proves invariance of both spans.
 \end{proof}
