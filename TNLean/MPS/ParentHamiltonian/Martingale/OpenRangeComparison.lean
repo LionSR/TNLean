@@ -138,7 +138,7 @@ theorem openSuffixParentHamiltonianES_comparison_of_local
       (G := LinearMap.toContinuousLinearMap ((κ : ℂ) • parentInteractionES A W))
       (H := LinearMap.toContinuousLinearMap (openParentHamiltonianES A R W)) hLocal)
 
-/-- Summing all complete suffix windows of length `W` counts every range-`W`
+/-- Summing all complete suffix windows of length \(W\) counts every range-\(W\)
 open-chain parent term exactly once. -/
 theorem sum_openSuffixParentHamiltonianES_full_window
     (A : MPSTensor d D) {W N : ℕ} (hW : 0 < W) :

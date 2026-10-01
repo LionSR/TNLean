@@ -26,7 +26,7 @@ variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
 bound, with an explicit loss. The estimate uses only norms; the application
 to parent Hamiltonians uses orthogonal kernel projections.
 Source: arXiv:1010.3732, Appendix A, finite-window gap continuity. -/
-theorem kernelGap_perturbation
+theorem kernel_gap_perturbation
     (H H₀ P P₀ : E →L[ℂ] E) {δ ε r : ℝ} (hδ : 0 ≤ δ)
     (hgap : ∀ v, δ * ‖v - P₀ v‖ ≤ ‖H₀ v‖)
     (hH : ‖H - H₀‖ ≤ ε) (hP : ‖P - P₀‖ ≤ r)
@@ -69,7 +69,7 @@ theorem norm_gap_sub_starProjection
 operator and the chosen kernel projection vary continuously. The conclusion
 applies to vectors annihilated by that projection. Source: arXiv:1010.3732,
 Appendix A, finite-window gap continuity. -/
-theorem eventually_kernelGap_of_continuousAt
+theorem eventually_kernel_gap_of_continuousAt
     {X : Type*} [TopologicalSpace X] (H P : X → E →L[ℂ] E) {x₀ : X}
     (hH : ContinuousAt H x₀) (hP : ContinuousAt P x₀)
     {δ δ' : ℝ} (hδ : 0 < δ) (hδ' : δ' < δ)
@@ -81,7 +81,7 @@ theorem eventually_kernelGap_of_continuousAt
   filter_upwards [hH.eventually (eventually_norm_sub_lt (H x₀) hε),
     hP.eventually (eventually_norm_sub_lt (P x₀) hr)] with x hxH hxP
   intro v hv
-  have h := kernelGap_perturbation (H x) (H x₀) (P x) (P x₀)
+  have h := kernel_gap_perturbation (H x) (H x₀) (P x) (P x₀)
     hδ.le hgap hxH.le hxP.le v hv
   have heq : δ * (1 - ε / δ) - ε = δ' := by
     dsimp only [ε]
@@ -103,7 +103,7 @@ theorem eventually_norm_gap_on_orthogonal
     {δ δ' : ℝ} (hδ : 0 < δ) (hδ' : δ' < δ)
     (hgap : ∀ v ∈ (K x₀)ᗮ, δ * ‖v‖ ≤ ‖H x₀ v‖) :
     ∀ᶠ x in 𝓝 x₀, ∀ v ∈ (K x)ᗮ, δ' * ‖v‖ ≤ ‖H x v‖ := by
-  have h := eventually_kernelGap_of_continuousAt H (fun x => (K x).starProjection)
+  have h := eventually_kernel_gap_of_continuousAt H (fun x => (K x).starProjection)
     hH hK hδ hδ' (norm_gap_sub_starProjection (H x₀) (K x₀) hker hgap)
   filter_upwards [h] with x hx
   intro v hv

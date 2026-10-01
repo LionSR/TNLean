@@ -13,11 +13,12 @@ continuity step and combines it with Knabe's nearest-neighbor criterion and
 compactness. The results below concern one-site injective tensors and the
 canonical two-site parent interaction, and they are stated with that
 restriction. The source's path also covers non-injective normal forms, which
-are not treated here.
+are not treated here; this scope restriction is recorded in
+\cite{gap:spc11_uniform_gap_injective_scope}.
 
 \begin{theorem}[Gap stability under perturbation of operator and kernel projection]
     \label{thm:kernel_gap_perturbation}
-    \lean{ContinuousLinearMap.kernelGap_perturbation,
+    \lean{ContinuousLinearMap.kernel_gap_perturbation,
         ContinuousLinearMap.eventually_norm_gap_on_orthogonal}
     \leanok
     Let $H,H_0,P,P_0$ be bounded operators on a complex normed space, and
@@ -79,7 +80,11 @@ are not treated here.
 
 \begin{proof}
     \leanok
-    \uses{thm:continuous_injective_range_projector}
+    \uses{thm:continuous_injective_range_projector,
+        thm:ground_space_map_es_single,
+        thm:ground_space_map_es_injective_block,
+        thm:ground_space_map_es_injective_range_projector,
+        lem:local_term_es_average}
     Each matrix entry of the boundary map is a trace of a fixed product of
     tensor letters. Block injectivity makes the boundary map injective, and its
     range is the local ground space, so the previous theorem applies. The
@@ -105,9 +110,38 @@ are not treated here.
 \begin{proof}
     \leanok
     \uses{thm:kernel_gap_perturbation,
-        thm:continuous_finite_window_parent_hamiltonian}
+        thm:continuous_finite_window_parent_hamiltonian,
+        thm:open_ground_space_le_hamiltonian_kernel}
     The open parent Hamiltonian annihilates the ground space, and both it and
     the ground-space projection are continuous in $x$.
+\end{proof}
+
+\begin{lemma}[Comparison of open-chain ranges]
+    \label{lem:open_parent_range_comparison}
+    \lean{MPSTensor.openParentHamiltonianES_comparison_of_local,
+        MPSTensor.openParentHamiltonianES_two_gap_of_long_gap}
+    \leanok
+    \uses{def:open_parent_hamiltonian_es, thm:open_parent_hamiltonian_es_c1}
+    Let $0<R\leq W\leq N$. If
+    $\kappa\,h_W\leq H^{\mathrm{open}}_{W,R}$ for the range-$W$ parent
+    interaction $h_W$ and some $\kappa>0$, then
+    $\kappa H^{\mathrm{open}}_{N,W}\leq(W-R+1)H^{\mathrm{open}}_{N,R}$. For a
+    one-site injective tensor of nonzero bond dimension with $W\geq2$, a gap
+    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,W}v\rVert$ on
+    $(G_N^{\mathrm{ES}})^\perp$ for all $N\geq W$ therefore gives
+    $\frac{\kappa\gamma}{W-1}\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,2}v\rVert$
+    on the same complement for all $N\geq W$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:open_parent_hamiltonian_es_c1,
+        thm:open_parent_hamiltonian_kernel_ground_space,
+        lem:positive_gap_transfer_loewner}
+    Translate the local comparison to every window of $W$ consecutive sites and
+    sum; each range-$R$ term lies in at most $W-R+1$ windows. Both open
+    Hamiltonians have kernel $G_N^{\mathrm{ES}}$, so the operator inequality
+    transfers the gap.
 \end{proof}
 
 \begin{theorem}[Strict Knabe windows for injective tensors]
@@ -116,7 +150,8 @@ are not treated here.
         MPSTensor.exists_strict_openParentHamiltonianES_two_window_of_isInjective}
     \leanok
     \uses{thm:primitive_open_parent_hamiltonian_gap,
-        lem:parent-finite-interval-comparison}
+        lem:parent-finite-interval-comparison,
+        lem:open_parent_range_comparison}
     Let $A$ be a one-site injective tensor of nonzero bond dimension. Then the
     open-chain Hamiltonian $H^{\mathrm{open}}_{N,2}(A)$ built from the
     canonical two-site parent interaction has a positive gap above
@@ -128,8 +163,11 @@ are not treated here.
 
 \begin{proof}
     \leanok
-    \uses{thm:primitive_open_parent_hamiltonian_gap,
-        lem:parent-finite-interval-comparison}
+    \uses{thm:normalized_primitive_gauge,
+        thm:primitive_open_parent_hamiltonian_gap,
+        lem:parent-finite-interval-comparison,
+        lem:open_parent_range_comparison,
+        thm:open_parent_hamiltonian_kernel_ground_space}
     Gauge $A$ to a primitive tensor with a positive-definite fixed point, which
     has the same local ground spaces, and take its open-chain gap at some range
     $W$. Comparing the range-$W$ interaction with the two-site open
@@ -156,18 +194,37 @@ are not treated here.
 \begin{proof}
     \leanok
     \uses{thm:open_parent_gap_continuity,
-        thm:parent_hamiltonian_gap_from_open_knabe_block}
+        thm:parent_hamiltonian_gap_from_open_knabe_block,
+        thm:open_parent_hamiltonian_kernel_ground_space}
     Choose $1/m<\gamma'<\gamma$. The strict window persists with $\gamma'$
     near $x_0$, and Knabe's nearest-neighbor criterion turns it into a periodic
     gap for every $N\geq2m$ with a constant depending only on $m$ and
     $\gamma'$.
 \end{proof}
 
+\begin{lemma}[Uniform bounds from local bounds on a compact set]
+    \label{lem:compact_uniform_pos_nat_bounds}
+    \lean{IsCompact.exists_uniform_pos_nat_bounds}
+    \leanok
+    Let $S$ be a compact subset of a topological space and $P(\delta,N,x)$ a
+    property of a real $\delta$, a natural number $N$ and a point $x$ that is
+    preserved by decreasing $\delta$ and by increasing $N$. If every $x\in S$
+    has $\delta>0$ and $N$ such that $P(\delta,N,y)$ holds for all $y$ near $x$,
+    then one $\delta>0$ and one $N$ satisfy $P(\delta,N,x)$ for all $x\in S$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Take a finite subcover of the neighborhoods, the minimum of the finitely
+    many constants and the maximum of the finitely many thresholds.
+\end{proof}
+
 \begin{theorem}[Continuity of short periodic ground lines]
     \label{thm:periodic_short_gap_continuity}
     \lean{MPSTensor.exists_uniform_parentHamiltonianES_two_gap_fixed_volume}
     \leanok
-    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector}
+    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector,
+        thm:continuous_finite_window_parent_hamiltonian}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
     nonzero bond dimension, let $S$ be a compact parameter set, and let
     $N\geq2$. Then there is $\delta>0$ such that
@@ -177,7 +234,14 @@ are not treated here.
 
 \begin{proof}
     \leanok
-    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector}
+    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector,
+        thm:continuous_finite_window_parent_hamiltonian,
+        lem:compact_uniform_pos_nat_bounds,
+        thm:parent_hamiltonian_fixed_length_gap,
+        thm:parent_ground_space_es_kernel,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        thm:chain_ground_space_eq_mpv_blk,
+        thm:mpv_ne_zero_blk_injective}
     The kernel of $H_{N,2}(A_x)$ is the line spanned by the nonzero periodic
     matrix product vector of $A_x$, whose projection is continuous in $x$. The
     gap at each point therefore persists in a neighborhood, and a finite
@@ -190,7 +254,7 @@ are not treated here.
         MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}
     \leanok
     \uses{thm:knabe_gap_neighborhood, thm:injective_strict_knabe_window,
-        thm:periodic_short_gap_continuity}
+        thm:periodic_short_gap_continuity, lem:compact_uniform_pos_nat_bounds}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
     nonzero bond dimension, and let $S$ be a compact parameter set. Then there
     is $\delta>0$ such that, for every $x\in S$ and every $N\geq2$,
@@ -201,13 +265,15 @@ are not treated here.
     \end{align}
     This is the uniform-gap conclusion of
     \cite[Appendix~A, lines~2575--2580]{Schuch2011Phases} for one-site
-    injective tensors and the two-site parent interaction.
+    injective tensors and the two-site parent interaction; the source also
+    treats non-injective normal forms
+    \cite{gap:spc11_uniform_gap_injective_scope}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:knabe_gap_neighborhood, thm:injective_strict_knabe_window,
-        thm:periodic_short_gap_continuity}
+        thm:periodic_short_gap_continuity, lem:compact_uniform_pos_nat_bounds}
     Every point of $S$ has a strict Knabe window, hence a neighborhood with a
     common gap bound for all $N$ beyond a threshold. A finite subcover of $S$
     gives one bound and one threshold. The finitely many shorter rings are

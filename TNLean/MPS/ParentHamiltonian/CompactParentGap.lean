@@ -19,6 +19,13 @@ Injectivity supplies the pointwise windows. Continuity of the periodic
 ground-state projection handles the finitely many shorter rings, giving
 one positive bound for every chain of at least two sites. This is the
 compactness step in arXiv:1010.3732, Appendix A.
+
+**Scope restriction (one-site injective tensors):** arXiv:1010.3732,
+Appendix A, lines 2475--2580, proves the uniform gap along a path of tensors in
+normal form, possibly with several blocks. The two compact-gap theorems here
+treat continuous families of one-site injective tensors with the canonical
+two-site interaction, replacing Nachtergaele's bound by Knabe's criterion.
+Documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
 open scoped Topology
