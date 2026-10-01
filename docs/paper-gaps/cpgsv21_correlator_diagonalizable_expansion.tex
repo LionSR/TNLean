@@ -31,6 +31,8 @@ $|\lambda_2|$.\footnote{Source location:
 
 \section{The deviation}
 
+Gauge the tensor so that its transfer map is trace preserving with fixed state
+$\rho$; the traceless matrices are then invariant.
 Equation~(\ref{eq:cpgsv21_correlator_pure_exponentials}) holds when the
 transfer map, restricted to the traceless matrices, is diagonalizable. If that
 restriction has a Jordan block $J=\lambda I+N$ of size $k+1$, then
@@ -43,6 +45,27 @@ sequence rather than a sum of pure exponentials. Likewise, a uniform bound $|C(X
 can fail at a defective subleading eigenvalue. A bound $C_{XY}r^n$ still holds
 for every rate $r$ strictly above the spectral radius of the complementary map,
 by the Gelfand formula.
+
+\paragraph{Explicit example.}
+On $2\times2$ matrices, with Pauli matrices $\sigma_x,\sigma_y,\sigma_z$, fix
+$\lambda\neq0$ and let $J$ be the linear map with
+$J(1)=0$, $J(\sigma_x)=\lambda\sigma_x$, $J(\sigma_y)=\sigma_x+\lambda\sigma_y$,
+$J(\sigma_z)=\lambda\sigma_z$. For $\varepsilon>0$ put
+$E(Z)=\tr(Z)\,\tfrac12 1+\varepsilon J(Z)$. At $\varepsilon=0$ the Choi
+matrix of $E$ is a positive multiple of the identity, so for small
+$\varepsilon$ it is positive definite. Then $E$ is completely positive and
+trace preserving with full Kraus rank, hence primitive, with fixed state
+$\rho=\tfrac12 1$, and its Kraus operators define a tensor with $D=2$. On the
+traceless matrices $E=\varepsilon J$ has a Jordan block of size two at
+$\varepsilon\lambda$. For $X=\sigma_y$ and $Y=\sigma_x$ one has
+$Z_\rho(X)=\tfrac12\sigma_y$ and
+\begin{align}
+    C(X,Y;n) & =\tr\bigl(\sigma_x\,E^n(\tfrac12\sigma_y)\bigr)
+    =n\,\varepsilon^n\lambda^{n-1},
+    \notag
+\end{align}
+which is not a finite sum of pure exponentials. It also exceeds every bound
+$C_{XY}(\varepsilon|\lambda|)^n$ for large $n$.
 
 \section{Corrected statements}
 
