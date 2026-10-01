@@ -939,7 +939,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \lean{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
     \leanok
     \uses{def:periodic_tensor,def:periodic_step_orbit_projection,def:mpu_dependent_block_inclusion,
-        thm:periodic_prescribed_blocking}
+        thm:periodic_prescribed_blocking_compression}
     Let $A$ be left-canonical periodic of period $m$ and let $p>0$.
     Put $r=\gcd(m,p)$. The prescribed orbit blocks $C_a$, of period $m/r$,
     admit a unitary $U$ such that, with $Q_a$ the step-orbit projections of
@@ -961,7 +961,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     \uses{thm:periodic_unitary_resolution,thm:periodic_orthogonal_resolution_multiplication,
         thm:periodic_absorb_orbit_gauge,
-        thm:periodic_prescribed_blocking}
+        thm:periodic_prescribed_blocking_compression}
     Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit
     isometries and set $Z=U\bigl(\bigoplus_ac_a\Id_{D_a}\bigr)U^\dagger$.
     Since $UJ_a$ is the original orbit isometry,

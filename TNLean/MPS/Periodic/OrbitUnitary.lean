@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Periodic.BlockingDecomposition
 import TNLean.MPS.Periodic.EqualCaseGlobal.Basic
+import TNLean.MPS.Periodic.PrescribedBlocking
 import TNLean.MPS.Periodic.SectorPhaseBlocking
 import TNLean.MPS.SharedInfra.BlockIsometryAssembly
 
@@ -106,8 +106,8 @@ theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
       ∀ c : Fin (m.gcd p) → ℂ, (∀ a, c a ^ (m / m.gcd p) = 1) →
         ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧
           ∀ i, blockTensor A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
-  obtain ⟨P, dim, B, V, hproj, hsum, _, hshift, _, hdim, hper, _, hiso, hrange, hB⟩ :=
-    hA.exists_periodic_stepOrbit_decomposition A hp
+  obtain ⟨P, dim, B, V, hproj, hsum, _, hshift, _, hdim, _, _, hiso, hrange, hB, hper⟩ :=
+    hA.exists_stepOrbit_blockDecomposition p
   have hinter (a) (i) : blockTensor A p i * V a = V a * B a i := by
     have hPV : stepOrbitProjection P p a * V a = V a := by
       rw [← hrange, Matrix.mul_assoc, hiso, Matrix.mul_one]
@@ -116,7 +116,7 @@ theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
   obtain ⟨U, hco, hU, hinc, hconj⟩ :=
     exists_unitary_toTensorFromBlocks_of_resolution (blockTensor A p) B V
       (by simp only [hrange, sum_stepOrbitProjection, hsum]) hdim hinter
-  refine ⟨P, dim, B, V, U, hproj, hsum, hshift, hdim, hper, hrange,
+  refine ⟨P, dim, B, V, U, hproj, hsum, hshift, hdim, hper hp, hrange,
     hco, hU, hinc, hconj, ?_⟩
   exact fun c hc ↦ exists_root_of_orbit_phase A hA.leftCanonical P hproj hsum hshift p
     dim B V hrange U hU hinc hconj c hc
