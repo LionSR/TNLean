@@ -19,6 +19,79 @@ of~\cite[Appendix~D.1]{Bultinck2017Anyons}. From these data one obtains
 two operators on the chain whose fusion relation and action on periodic
 states reduce to finite matrix computations.
 
+\begin{definition}[The string-net tensors of the source and of the review]
+    \label{def:asymex_fib_gsymbol_tensor}
+    \lean{FibonacciCompression.fibLoopFactor, FibonacciCompression.fibGSymbol,
+        FibonacciCompression.fibBondLetter, FibonacciCompression.fibSiteLetter,
+        FibonacciCompression.fibEdgeTauLetter, FibonacciCompression.fibStringNetTensor,
+        FibonacciCompression.fibStringNetEdgeTau, FibonacciCompression.fibReviewTensor,
+        FibonacciCompression.fibReviewWeight,
+        FibonacciCompression.fibReviewWeightedTensor}
+    \leanok
+    \uses{def:asymex_fib_fsymbols}
+    Let $d_1=1$, $d_\tau=\varphi=(1+\sqrt5)/2$ be the quantum dimensions,
+    and let $N_{ab}^c$ denote the Fibonacci fusion multiplicities.
+    Over $\C$ write $v_a=\sqrt{d_a}$ and $G^{abc}_{def}=v_e^{-1}v_f^{-1}[F^{abc}_d]_e^f$.
+    For a label $f$, the bond letters of the block $f$ are the pairs
+    $(u,l)$ of labels with $N_{ul}^f>0$: the letters $(1,1)$, $(\tau,\tau)$
+    for $f=1$ and $(1,\tau)$, $(\tau,1)$, $(\tau,\tau)$ for $f=\tau$. A
+    physical letter of the source's tensor is a pair $(x,e)$ of a plaquette
+    label and an edge label. The operator tensor
+    of~\cite[Section~6.2 and Appendix~D.1]{Bultinck2017Anyons} is drawn as the
+    crossing of the
+    operator line $f$ with an edge line $e$, with the plaquettes $b$ upper
+    left, $q'$ upper right, $c$ lower left and $q''$ lower right; its
+    entries are
+    \begin{align}
+        \bigl(S_f^{(b,e'),(c,e)}\bigr)_{p,(q',q'')}
+         & =\delta_{e'e}\,\delta_{p,(b,c)}\,
+        G^{q'bc}_{q''ef}\sqrt{v_{q'}v_bv_cv_{q''}},
+        \label{eq:asymex_fib_gsymbol_tensor}
+    \end{align}
+    and its letters at edge label $\tau$ are
+    $S_f^{x'x}=S_f^{(x',\tau),(x,\tau)}$. The periodic operators of $S_f$
+    act on $(\C^4)^{\otimes N}$, one plaquette label and one edge label
+    per site. The configurations whose edge labels are all $\tau$ span a
+    subspace identified with $(\C^2)^{\otimes N}$, and the letters $S_f^{x'x}$ are
+    those of $S_f$ on this subspace. The operator tensor
+    of~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix},
+    at the vertical label $\tau$, has the entries
+    \begin{align}
+        \bigl(R_f^{x'x}\bigr)_{p,(q',q'')}
+         & =\delta_{p,(x',x)}\,\frac{1}{\sqrt{d_{x'}d_{q''}}}\,
+        [F^{f x\tau}_{q'}]_{x'}^{q''},
+        \label{eq:asymex_fib_review_tensor}
+    \end{align}
+    with the $F$-symbols of Definition~\ref{def:asymex_fib_fsymbols} and their
+    selection rule, in place of the selection rule printed in the review.
+    On configurations $x\in\{1,\tau\}^N$ let
+    $W=\operatorname{diag}\prod_k d_{x_k}$, with square roots
+    $W^{\pm1/2}=\operatorname{diag}\prod_k d_{x_k}^{\pm1/2}$, and let $\widetilde R_f$ be
+    the tensor with letters $d_x R_f^{x'x}$.
+\end{definition}
+
+The printed $G$-symbol tensor, including its quantum-dimension factors,
+is given in Definition~\ref{def:asymex_fib_gsymbol_tensor}. Its restriction
+to edge label $\tau$ is related to the two-label blocks by the diagonal
+bond similarity of Theorem~\ref{thm:asymex_fib_gsymbol_similarity}.
+The review uses a different physical normalization; its relation to these
+blocks is the congruence of Theorem~\ref{thm:asymex_fib_review_congruence}.
+
+For every $N>0$, close the bond indices by the ordinary, unnormalized
+trace of the ordered product of local matrices. The first physical
+index is the output and the second is the input.
+
+The word-span certificates are in Theorem~\ref{thm:asymex_fib_normal}.
+The admissibility projector and its action as the fusion unit are
+identified in Lemma~\ref{lem:asymex_fib_vacuum} and
+Theorem~\ref{thm:asymex_fib_unit}. The fusion relation is proved for the
+two-label blocks in Theorem~\ref{thm:asymex_fib_fusion} and for the
+source's blocks on both edge labels in
+Theorem~\ref{thm:asymex_fib_stringnet_fusion}. Commutation with the
+golden-chain Hamiltonian is established for $N\geq2$ in
+Theorem~\ref{thm:asymex_fib_golden_chain}; the regular action on the two
+explicit state tensors is in Theorem~\ref{thm:asymex_fib_state_action}.
+
 The physical space at each site is $\C^2$, with computational labels
 $0$ for the vacuum and $1$ for $\tau$. At system size $N\geq1$, write
 $\mc H_N=(\C^2)^{\otimes N}$ and use the orthonormal basis
@@ -327,54 +400,7 @@ that tensor on both edge labels.
     complex statement follows by the entrywise embedding.
 \end{proof}
 
-\begin{definition}[The string-net tensors of the source and of the review]
-    \label{def:asymex_fib_gsymbol_tensor}
-    \lean{FibonacciCompression.fibLoopFactor, FibonacciCompression.fibGSymbol,
-        FibonacciCompression.fibBondLetter, FibonacciCompression.fibSiteLetter,
-        FibonacciCompression.fibEdgeTauLetter, FibonacciCompression.fibStringNetTensor,
-        FibonacciCompression.fibStringNetEdgeTau, FibonacciCompression.fibReviewTensor,
-        FibonacciCompression.fibReviewWeight,
-        FibonacciCompression.fibReviewWeightedTensor}
-    \leanok
-    \uses{def:asymex_fib_fsymbols}
-    Over $\C$ write $v_a=\sqrt{d_a}$ and $G^{abc}_{def}=v_e^{-1}v_f^{-1}[F^{abc}_d]_e^f$.
-    For a label $f$, the bond letters of the block $f$ are the pairs
-    $(u,l)$ of labels with $N_{ul}^f>0$: the letters $(1,1)$, $(\tau,\tau)$
-    for $f=1$ and $(1,\tau)$, $(\tau,1)$, $(\tau,\tau)$ for $f=\tau$. A
-    physical letter of the source's tensor is a pair $(x,e)$ of a plaquette
-    label and an edge label. The operator tensor
-    of~\cite[Section~6.2 and Appendix~D.1]{Bultinck2017Anyons} is drawn as the
-    crossing of the
-    operator line $f$ with an edge line $e$, with the plaquettes $b$ upper
-    left, $q'$ upper right, $c$ lower left and $q''$ lower right; its
-    entries are
-    \begin{align}
-        \bigl(S_f^{(b,e'),(c,e)}\bigr)_{p,(q',q'')}
-         & =\delta_{e'e}\,\delta_{p,(b,c)}\,
-        G^{q'bc}_{q''ef}\sqrt{v_{q'}v_bv_cv_{q''}},
-        \label{eq:asymex_fib_gsymbol_tensor}
-    \end{align}
-    and its letters at edge label $\tau$ are
-    $S_f^{x'x}=S_f^{(x',\tau),(x,\tau)}$. The periodic operators of $S_f$
-    act on $(\C^4)^{\otimes N}$, one plaquette label and one edge label
-    per site. The configurations whose edge labels are all $\tau$ span a
-    subspace identified with $\mc H_N$, and the letters $S_f^{x'x}$ are
-    those of $S_f$ on this subspace. The operator tensor
-    of~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix},
-    at the vertical label $\tau$, has the entries
-    \begin{align}
-        \bigl(R_f^{x'x}\bigr)_{p,(q',q'')}
-         & =\delta_{p,(x',x)}\,\frac{1}{\sqrt{d_{x'}d_{q''}}}\,
-        [F^{f x\tau}_{q'}]_{x'}^{q''},
-        \label{eq:asymex_fib_review_tensor}
-    \end{align}
-    with the $F$-symbols of Definition~\ref{def:asymex_fib_fsymbols} and their
-    selection rule, in place of the selection rule printed in the review.
-    On configurations $x\in\{1,\tau\}^N$ let
-    $W=\operatorname{diag}\prod_k d_{x_k}$, with square roots
-    $W^{\pm1/2}=\operatorname{diag}\prod_k d_{x_k}^{\pm1/2}$, and let $\widetilde R_f$ be
-    the tensor with letters $d_x R_f^{x'x}$.
-\end{definition}
+
 
 \begin{theorem}[The source's blocks on edge label $\tau$]
     \label{thm:asymex_fib_gsymbol_similarity}
@@ -1197,11 +1223,8 @@ exact computation in the ring of golden integers.
 
 \begin{theorem}[Split compression of the Fibonacci square]
     \label{thm:asymex_fib_compression}
-    % Principal declaration: FibonacciCompression.fibonacci_isReduction.
-    \lean{FibonacciCompression.fibonacci_compression,
-        FibonacciCompression.fibonacci_isReduction,
-        FibonacciCompression.fibonacci_left_mul_right_of_ne,
-        FibonacciCompression.fibonacci_dim_eq,
+    % Principal declaration: FibonacciCompression.fibonacci_dim_eq.
+    \lean{FibonacciCompression.fibonacci_compression, FibonacciCompression.fibonacci_dim_eq,
         FibonacciCompression.fibonacci_evalWord_remainder_eq_zero,
         FibonacciCompression.fibonacci_remainder_eq_zero}
     \leanok

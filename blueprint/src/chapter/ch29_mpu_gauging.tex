@@ -5409,13 +5409,10 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
          & =c_{AB}c_{BA}\,O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}.
         \notag
     \end{align}
-    When $(c_{AB}c_{BA})^2=1$, this is equivalent to the relation
-    $O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}=c_{AB}c_{BA}\,
-        O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A}$ of
-    \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}; for a general
-    product of phases the relation proved here is that relation with
-    $c_{AB}c_{BA}$ replaced by its inverse. The buffer is the
-    blocked form of the local action \cite{gap:gs24_domain_wall_nondegenerate}.
+    The phase stands on the side where it is acquired; the relation printed
+    in \cite[Section~III.F]{GarreRubioSchuch2024DomainWall} has it on the
+    other side. The buffer is the blocked form of the local action
+    \cite{gap:gs24_domain_wall_nondegenerate}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5426,6 +5423,28 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     If the outer string acts first, the inner string acts on the $B$ region
     it created, and Theorem~\ref{thm:mpug_domain_wall_string_creation} gives
     no phase.
+\end{proof}
+
+\begin{corollary}[Exchange of two domain-wall strings, printed orientation]
+    \label{cor:mpug_domain_wall_string_exchange_printed}
+    \lean{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_of_sq_eq_one}
+    \leanok
+    \uses{thm:mpug_domain_wall_string_exchange}
+    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange},
+    assume in addition that $(c_{AB}c_{BA})^2=1$. Then
+    \begin{align}
+        O^{[i_1,j_1]}O^{[i_2,j_2]}\ket{\psi_A}
+         & =c_{AB}c_{BA}\,O^{[i_2,j_2]}O^{[i_1,j_1]}\ket{\psi_A},
+        \notag
+    \end{align}
+    the relation of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
+    The source obtains the hypothesis from $U^2=1$; here it is assumed, not
+    derived~\cite{gap:gs24_domain_wall_exchange_square}.
+\end{corollary}
+
+\begin{proof}\leanok
+    Multiply the identity of Theorem~\ref{thm:mpug_domain_wall_string_exchange}
+    by $c_{AB}c_{BA}$ and use $(c_{AB}c_{BA})^2=1$.
 \end{proof}
 
 \begin{theorem}[Rescaling domain walls]

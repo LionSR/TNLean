@@ -1,0 +1,190 @@
+\section{Finite-group boundary states}
+\label{sec:intrinsic-groups}
+
+Let $G$ be a finite group of order $n$ and identity $e$. Each site
+has registers $L,R,f$ with Hilbert space $\C[G]^{\otimes3}$.
+Define orthonormal bond vectors and positive weights by
+\begin{align}
+	\ket{\phi_b}
+	                & =n^{-1/2}\sum_{r\in G}\ket{r,rb},        &
+	\Pi_b           & =\ket{\phi_b}\bra{\phi_b},                 \\
+	\bra{\phi_b}\ket{\phi_c}
+	                & =n^{-1}\sum_r\delta_{rb,rc}=\delta_{bc}, &
+	\sum_b\lambda_b & =1.
+\end{align}
+The label $b_m$ belongs to $(R_m,L_{m+1})$. The ordered constraint
+is $f_1b_1\cdots f_Nb_N=e$. The family is
+\begin{align}
+	\rho_N^\lambda
+	 & =n^{1-N}
+	\sum_{\substack{\boldsymbol f,\boldsymbol b\\
+			f_1b_1\cdots f_Nb_N=e}}
+	\left(\prod_m\lambda_{b_m}\right)
+	\bigotimes_m\ket{f_m}\bra{f_m}
+	\otimes\bigotimes_m\Pi_{b_m}.
+	\label{eq:group-state}
+\end{align}
+Every term is positive. For fixed $\boldsymbol b$ and
+$f_1,\ldots,f_{N-1}$, there is one allowed $f_N$, so
+\begin{align}
+	\tr\rho_N^\lambda
+	 & =n^{1-N}n^{N-1}
+	\sum_{\boldsymbol b}\prod_m\lambda_{b_m}=1.
+\end{align}
+
+\subsection{An exact local separation}
+
+Let $R_b\ket f=\ket{fb}$ on the flag, and
+$\Pi_\perp=\Id-\sum_b\Pi_b$ on the bond. Define
+\begin{align}
+	U_m
+	 & =\sum_b\Pi_b^{R_mL_{m+1}}\otimes R_b^{f_m}
+	+\Pi_\perp^{R_mL_{m+1}}\otimes\Id_{f_m}.
+	\label{eq:group-gate}
+\end{align}
+Orthogonality gives
+\begin{align}
+	U_m^\dagger U_m
+	 & =\sum_b\Pi_b\otimes R_b^\dagger R_b
+	+\Pi_\perp\otimes\Id
+	=\Id.
+\end{align}
+The gates use disjoint subregisters. They have bounded depth even
+with a site-based schedule, by coloring neighboring bonds.
+
+\begin{proposition}[Finite-group spectator separation]
+	\label{prop:group-separation}
+	For every positive weight vector and every $N\geq1$,
+	\begin{align}
+		U_\partial\rho_N^\lambda U_\partial^\dagger
+		           & =\tau_N^G\otimes
+		\bigotimes_m\left(\sum_b\lambda_b\Pi_b\right), \\
+		U_\partial & =\prod_mU_m,                      \\
+		\tau_N^G
+		           & =n^{1-N}\sum_{g_1\cdots g_N=e}
+		\bigotimes_m\ket{g_m}\bra{g_m}.
+		\label{eq:group-separation}
+	\end{align}
+\end{proposition}
+
+\begin{proof}
+	For each $\boldsymbol b$, set $g_m=f_mb_m$. This is a bijection,
+	and
+	\begin{align}
+		f_1b_1\cdots f_Nb_N=e
+		\quad\Longleftrightarrow\quad
+		g_1\cdots g_N=e.
+	\end{align}
+	The circuit implements this substitution and leaves every bond
+	projector unchanged. The constraint no longer involves
+	$\boldsymbol b$, so the two sums factor. No commutation of group
+	elements is used.
+\end{proof}
+
+The core is nonproduct for $n>1$: at $N=2$, its flags satisfy
+$g_2=g_1^{-1}$ while both marginals are uniform. Thus this family
+contains more than dimers, but all dependence on $\lambda$ is
+spectator dependence.
+
+\subsection{Fixed-cut canonical fusion}
+
+The same family has length-dependent canonical data at the original
+cut. Let $\pi$ range over unitary irreducible representations of $G$,
+with dimension $d_\pi$. There are $d_\pi$ horizontal copies of
+\begin{align}
+	Q_\pi^{(r,s,i),(t,u,j)}
+	 & =\frac1{n^2}\sum_{b,f}\lambda_b[\pi(bf)]_{ij}
+	\ket{rb}\bra{sb}_L\otimes\ket t\bra u_R
+	\otimes\ket f\bra f.
+	\label{eq:group-tensor}
+\end{align}
+Contraction of a bond gives
+\begin{align}
+	\sum_{r,s}\ket r\bra s\otimes\ket{rb}\bra{sb}
+	 & =n\Pi_b.
+\end{align}
+The representation indices give
+$\tr\pi(f_1b_1\cdots f_Nb_N)$. The identity
+$\sum_\pi d_\pi\tr\pi(g)=n\delta_{g,e}$ then produces
+\cref{eq:group-state}, including its normalization.
+
+Let $B_f$ be the restriction to physical flag $f$. Matrix-coefficient
+orthogonality gives
+\begin{align}
+	\sum_\pi d_\pi\sum_{i,j}
+	              [\pi(bf)]_{ij}\overline{[\pi(b'f)]_{ij}}
+	 & =n\delta_{bb'},                                \\
+	\mc E_{B_f}(X)
+	 & =\frac{\sum_b\lambda_b^2}{n^3}\tr(X)\Id_{n^2}.
+\end{align}
+Hence
+\begin{align}
+	\nu^2        & =\frac1n\sum_b\lambda_b^2, &
+	\widehat B_f & =B_f/\nu,                  &
+	\mu_f        & =(\nu).
+\end{align}
+If $K_{c,l}=\lambda_{c^{-1}l}$ is invertible, the horizontal
+blocks are injective and the flag representatives are inequivalent.
+To see the latter, a relation among their one-letter traces implies
+\begin{align}
+	\widehat\lambda(\pi)\sum_fa_f\pi(f) & =0,
+	                                    &
+	\widehat\lambda(\pi)                & =\sum_b\lambda_b\pi(b).
+\end{align}
+Invertibility of every Fourier block gives
+$\sum_fa_f\pi(f)=0$ for every $\pi$, and Fourier inversion gives
+$a_f=0$. A common linear combination of trivial-representation
+letters is $\Id_{n^2}/n^2$, so padding with this combination
+also proves independence of the closures at every $L$.
+At singular $K$, the displayed canonical labels require a new
+reduction.
+
+Inserting $\phi_b$ into the inner bond gives orthogonal isometries
+$J_b$. Concatenation yields
+\begin{align}
+	B_fB_{f'}
+	 & =\sum_b\frac{\lambda_b}{n}J_bB_{fbf'}J_b^\dagger,      \\
+	\widehat B_f\widehat B_{f'}
+	 & =\sum_b\frac{\lambda_b}{n\nu}
+	J_b\widehat B_{fbf'}J_b^\dagger,                          \\
+	c_{ff'g}(L)
+	 & =\left(\frac{\lambda_{f^{-1}gf'^{-1}}}{n\nu}\right)^L.
+	\label{eq:group-fusion}
+\end{align}
+The unused inner-bond subspace is a zero complement. For each
+target $g$ and bond label $b$, there are $n$ input pairs, so
+\begin{align}
+	\sum_{f,f'}m_fm_{f'}\tr\chi_{ff'g}
+	 & =\sum_b n\nu^2\frac{\lambda_b}{n\nu}
+	=\nu=m_g.
+\end{align}
+This verifies the equal-mass certificate. Equivalently, refinement
+prepares an inner bond and two flags with probability $\lambda_b/n$
+conditional on $fbf'=g$; coarse-graining reads $b$ and outputs
+$fbf'$, with any normalized completion on $\Pi_\perp$.
+
+Flattening requires $s_fs_{f'}\theta_b=s_{fbf'}$, where
+$\theta_b=\lambda_b/(n\nu)$. The equations with $b=e$ make
+$t_f=\theta_es_f$ a positive homomorphism:
+\begin{align}
+	t_ft_{f'}                   & =t_{ff'}, &
+	t_e                         & =1,       &
+	t_f^{\operatorname{ord}(f)} & =1.
+\end{align}
+Thus $t_f=1$, and the remaining equations force all $\theta_b$
+to be equal. Nonconstant regular weights therefore resist fixed
+positive representative rescaling, despite
+\cref{prop:group-separation}.
+
+For the phase-Bell $\Z_2$ version, the corresponding gate is
+$\Pi_0\otimes\Id+\Pi_1\otimes X+\Pi_\perp\otimes\Id$.
+It toggles the flag by the Bell label and converts correlated
+parity into independent even parity. An adapted toric-code Schmidt
+cut supplies that parity core; bounded-size purified-dimer clusters
+supply the mixed bonds without changing the bulk phase.
+This boundary statement does not make a Schmidt-coordinate flag
+flip local on the original toric-code region. A single flip leaves
+the even support. A physical implementation can instead use
+additional flags copied from retained cut-edge bits. Such an
+enlarged realization does not establish a local lift through an
+arbitrary PEPS boundary map.

@@ -85,7 +85,7 @@ Sun~\cite{Sun2025Anomalous}.
          & =\tr(T^{s_0,t_0}\cdots T^{s_{N-1},t_{N-1}}).
         \label{eq:asymex_z3_periodic_kernel}
     \end{align}
-    Set $U_N=O_N(M)$ and $V_N=O_N(M^\dagger)$. The next lemma verifies
+    Set $U_N=O_N(M)$ and $V_N=O_N(M^\dagger)$. Theorem~\ref{thm:asymex_z3_physical_kernels} verifies
     that this definition of $U_N$ gives
     (\ref{eq:asymex_z3anomalous_operator}).
     The contraction below represents $U_L$ on a ring drawn with $L$
@@ -109,6 +109,16 @@ Sun~\cite{Sun2025Anomalous}.
         \end{tenkz}
     \end{center}
 \end{definition}
+
+Theorem~\ref{thm:asymex_z3_physical_kernels} identifies the periodic
+kernels and unitarity. The word-span statements, including injectivity
+after two-site blocking, are in
+Theorem~\ref{thm:asymex_z3anomalous_normal}; the exact group law is in
+Theorem~\ref{thm:asymex_z3anomalous_group_law}. The nontrivial anomaly is
+established by the cyclic invariant in
+Theorem~\ref{thm:asymex_z3anomalous_anomaly_class}. The condensation
+operator satisfies $\mathcal C_N^2=3\mathcal C_N$ for every $N>0$
+(Theorem~\ref{thm:asymex_z3anomalous_defect_square}).
 
 \begin{theorem}[Physical kernels and unitarity]
     \label{thm:asymex_z3_physical_kernels}
@@ -296,11 +306,10 @@ fusion rules follow from them.
 
 \begin{theorem}[Compression of \texorpdfstring{$M\cdot M$ and $M^\dagger\cdot M^\dagger$}{the two equal-factor products}]
     \label{thm:asymex_z3anomalous_uu_compression}
-    \lean{Z3Anomalous.uu_compression, Z3Anomalous.uu_isReduction, Z3Anomalous.uu_right_eq,
-        Z3Anomalous.uu_left_eq, Z3Anomalous.uu_dim_eq,
-        Z3Anomalous.uu_evalWord_remainder_eq_zero, Z3Anomalous.uu_remainder_mul_ne_zero,
-        Z3Anomalous.dd_compression, Z3Anomalous.dd_isReduction, Z3Anomalous.dd_right_eq,
-        Z3Anomalous.dd_left_eq, Z3Anomalous.dd_dim_eq,
+    \lean{Z3Anomalous.uu_compression, Z3Anomalous.uu_right_eq, Z3Anomalous.uu_left_eq,
+        Z3Anomalous.uu_dim_eq, Z3Anomalous.uu_evalWord_remainder_eq_zero,
+        Z3Anomalous.uu_remainder_mul_ne_zero, Z3Anomalous.dd_compression,
+        Z3Anomalous.dd_right_eq, Z3Anomalous.dd_left_eq, Z3Anomalous.dd_dim_eq,
         Z3Anomalous.dd_evalWord_remainder_eq_zero, Z3Anomalous.dd_remainder_mul_ne_zero}
     \leanok
     \uses{def:asymex_z3anomalous_tensors, thm:asym_multiblock}
@@ -401,11 +410,10 @@ $U_L^2=O_L(M^\dagger)$:
 
 \begin{theorem}[Compression of \texorpdfstring{$M\cdot M^\dagger$ and $M^\dagger\cdot M$}{the inverse-factor products}]
     \label{thm:asymex_z3anomalous_ud_compression}
-    \lean{Z3Anomalous.ud_compression, Z3Anomalous.ud_isReduction, Z3Anomalous.ud_right_eq,
-        Z3Anomalous.ud_left_eq, Z3Anomalous.ud_dim_eq,
-        Z3Anomalous.ud_evalWord_remainder_eq_zero, Z3Anomalous.ud_remainder_mul_ne_zero,
-        Z3Anomalous.du_compression, Z3Anomalous.du_isReduction, Z3Anomalous.du_right_eq,
-        Z3Anomalous.du_left_eq, Z3Anomalous.du_dim_eq,
+    \lean{Z3Anomalous.ud_compression, Z3Anomalous.ud_right_eq, Z3Anomalous.ud_left_eq,
+        Z3Anomalous.ud_dim_eq, Z3Anomalous.ud_evalWord_remainder_eq_zero,
+        Z3Anomalous.ud_remainder_mul_ne_zero, Z3Anomalous.du_compression,
+        Z3Anomalous.du_right_eq, Z3Anomalous.du_left_eq, Z3Anomalous.du_dim_eq,
         Z3Anomalous.du_evalWord_remainder_eq_zero, Z3Anomalous.du_remainder_mul_ne_zero}
     \leanok
     \uses{def:asymex_z3anomalous_tensors, thm:asym_multiblock}
@@ -982,7 +990,6 @@ targets separately.
     \lean{Z3Anomalous.pairTarget, Z3Anomalous.pairStackMPS,
         Z3Anomalous.defectSquare_eq_blockDiagonal, Z3Anomalous.pairCompression,
         Z3Anomalous.defectSquare_compression, Z3Anomalous.defectSquare_compression_z,
-        Z3Anomalous.defectSquare_isReduction, Z3Anomalous.defectSquare_left_mul_right_of_ne,
         Z3Anomalous.defectSquare_dim_eq, Z3Anomalous.pairCompression_evalWord_remainder_eq_zero,
         Z3Anomalous.defectSquare_evalWord_remainder_eq_zero,
         Z3Anomalous.defectSquare_remainder_mul_ne_zero, Z3Anomalous.sum_pairTargetDim}
