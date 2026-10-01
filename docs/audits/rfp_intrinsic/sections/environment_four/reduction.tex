@@ -1,0 +1,273 @@
+\section{Trace-transfer reduction and the search domain}
+\label{sec:transfer}
+
+\subsection{Trace one and rank-one idempotence}
+
+Use row vectorization,
+\begin{align}
+	\operatorname{vec}(Y) & =\sum_{u,u'}Y_{uu'}\ket{u,u'}.
+\end{align}
+The trace matrix of the letters is
+\begin{align}
+	T_{\alpha\beta} & =\tr M^{\alpha\beta},
+	\nonumber                                   \\
+	T               & =A_0\otimes\overline{A_0}
+	+A_1\otimes\overline{A_1}
+	+C_0\otimes\overline{C_0}
+	+C_1\otimes\overline{C_1}.
+	\label{eq:trace-matrix}
+\end{align}
+It represents the CP map
+\begin{align}
+	\mc E(Y)
+	 & =A_0YA_0^\dagger+A_1YA_1^\dagger
+	+C_0YC_0^\dagger+C_1YC_1^\dagger.
+	\label{eq:transfer-map}
+\end{align}
+Indeed,
+\begin{align}
+	(KYK^\dagger)_{uu'}
+	 & =\sum_{v,v'}K_{uv}Y_{vv'}\overline{K_{u'v'}},
+	\nonumber                                        \\
+	\operatorname{vec}(KYK^\dagger)
+	 & =(K\otimes\overline K)\operatorname{vec}(Y).
+\end{align}
+
+Trace preservation of a refinement map in \cref{eq:rfp} requires
+\begin{align}
+	T_{\alpha\beta}
+	 & =\tr G^{\alpha\beta}
+	=\sum_\gamma
+	\tr M^{\alpha\gamma}\tr M^{\gamma\beta}
+	=(T^2)_{\alpha\beta}.
+	\label{eq:idempotence}
+\end{align}
+Thus the bounded search imposes $T^2=T$. For an idempotent matrix,
+\begin{align}
+	\tr\rho_N(M) & =\tr(T^N)=\tr T=\rank T.
+	\label{eq:trace-one}
+\end{align}
+The additional trace-one hypothesis therefore imposes $\rank T=1$.
+This is a restriction on the physical tensor, not a normalization
+convention. Replacing a nonzero tensor $M$ by $sM$, with $s>0$,
+would require
+\begin{align}
+	(sT)^2=sT
+	\quad\Longrightarrow\quad
+	s^2T=sT
+	\quad\Longrightarrow\quad
+	s=1.
+	\label{eq:no-rescaling}
+\end{align}
+
+Every nonzero positive map with one-dimensional range has the form
+\begin{align}
+	\mc E(Y) & =R\tr(LY),
+	         &
+	R,L      & \geq0.
+	\label{eq:rank-one-map}
+\end{align}
+To see this, choose a positive input with nonzero positive output
+$R$. Positive inputs span the Hermitian matrices, and the complex
+range is one-dimensional, so every output is a scalar multiple of
+$R$. The scalar functional is positive. Trace duality represents it
+as $Y\mapsto\tr(LY)$, where
+$\bra xL\ket x\geq0$ for every $\ket x$, hence $L\geq0$.
+Idempotence then gives
+\begin{align}
+	\mc E^2(Y)
+	        & =R\tr(LR)\tr(LY)=\mc E(Y),
+	        &
+	\tr(LR) & =1.
+	\label{eq:weight-normalization}
+\end{align}
+The replacement $(R,L)\mapsto(tR,t^{-1}L)$ leaves the map unchanged.
+It is only an ambiguity in its factorization.
+
+\subsection{Rank-deficient weights cannot give span five}
+
+The output--input Choi matrix of \cref{eq:rank-one-map} is
+\begin{align}
+	J(\mc E)
+	 & =\sum_{v,v'}\mc E(\ket v\bra{v'})
+	\otimes\ket v\bra{v'}
+	\nonumber                                    \\
+	 & =\sum_{v,v'}RL_{v'v}\otimes\ket v\bra{v'}
+	=R\otimes L^{\mathsf T}.
+	\label{eq:transfer-choi}
+\end{align}
+It is also the sum of the outer products of the four vectorized
+Kraus matrices. Every Kraus vector lies in its support: if a vector
+is in the kernel of this positive sum, the sum of its squared inner
+products with all four Kraus vectors is zero, so each inner product
+is zero.
+
+If $\rank R=1$, every Kraus matrix has a common one-dimensional
+output range and can be written as $\ket r\bra w$.
+Every product $K\otimes\overline{K'}$ then has range in the fixed
+line spanned by $\ket r\otimes\overline{\ket r}$. The space of maps
+from $\C^4$ into a fixed line has dimension four.
+If $\rank L=1$, every Kraus matrix has a common one-dimensional
+input support. Their tensor products vanish on a fixed
+three-dimensional subspace and again span at most four dimensions.
+All physical coordinates in \cref{eq:letters} are linear
+combinations of these products.
+
+\begin{proposition}
+	\label{prop:faithful}
+	For a rank-one trace transfer, full coefficient span five requires
+	$R>0$ and $L>0$. Every rank-deficient input or output weight is
+	excluded, including nonminimal four-Kraus representations of such
+	a transfer.
+\end{proposition}
+
+The same argument explains the prior environment-three exclusion
+in the accepted specification~\cite{Targets}. With three trace
+Kraus matrices, the Choi rank obeys
+$\rank R\,\rank L\leq3$. At least one qubit weight must then have
+rank one, and coefficient span five is impossible. Environment four
+is the first case in which both weights can be faithful.
+
+\subsection{Exhaustive parameterization of the faithful locus}
+
+Apply \cref{eq:virtual-gauge} with $S=L^{1/2}$. The transformed map is
+\begin{align}
+	\mc E'(Y)
+	 & =L^{1/2}\mc E(L^{-1/2}YL^{-1/2})L^{1/2}
+	\nonumber                                  \\
+	 & =L^{1/2}RL^{1/2}
+	\tr(LL^{-1/2}YL^{-1/2})
+	\nonumber                                  \\
+	 & =L^{1/2}RL^{1/2}\tr Y.
+	\label{eq:whitening}
+\end{align}
+The new output weight has trace $\tr(LR)=1$. A unitary virtual
+similarity diagonalizes it. Ordering its eigenvalues gives
+\begin{align}
+	L=\Id_2,\qquad
+	R=\diag(p,1-p),\qquad
+	0<p\leq1/2.
+	\label{eq:normal-form}
+\end{align}
+This is a virtual gauge reduction of the given tensor. No scalar
+rescaling of the physical tensor has occurred.
+
+Write $p_0=p$ and $p_1=1-p$. The matrix units
+$E_{mn}=\ket m\bra n$ give a reference Kraus family
+$K_{mn}=\sqrt{p_m}E_{mn}$, since
+\begin{align}
+	\sum_{m,n}K_{mn}YK_{mn}^\dagger
+	 & =\sum_{m,n}p_mY_{nn}\ket m\bra m
+	\nonumber                           \\
+	 & =R(Y_{00}+Y_{11})=R\tr Y.
+	\label{eq:reference-kraus}
+\end{align}
+Its Choi matrix $R\otimes\Id_2$ has rank four. Every representation
+by four Kraus matrices is therefore minimal and consists of four
+linearly independent matrices.
+
+The unitary freedom of these representations follows directly from
+factorization. Let $Z$ and $Z_0$ have the vectorized Kraus matrices
+of an arbitrary family and the reference family as columns.
+Both are invertible and
+\begin{align}
+	ZZ^\dagger & =Z_0Z_0^\dagger,
+	           &
+	U          & =Z_0^{-1}Z,
+	\nonumber                                          \\
+	UU^\dagger
+	           & =Z_0^{-1}ZZ^\dagger(Z_0^\dagger)^{-1}
+	=\Id_4.
+\end{align}
+Thus $U$ is unitary. Equivalently, all tensors in the faithful
+stratum have representatives
+\begin{align}
+	A_0 & =\sqrt R\,H_0,
+	    &
+	A_1 & =\sqrt R\,H_1,
+	    &
+	C_0 & =\sqrt R\,H_2,
+	    &
+	C_1 & =\sqrt R\,H_3,
+	\label{eq:frame-param}
+\end{align}
+where $H_0,H_1,H_2,H_3$ are a Hilbert--Schmidt orthonormal basis of
+$M_2(\C)$. Their defining conditions and completeness relation are
+\begin{align}
+	\tr(H_a^\dagger H_b)
+	 & =\sum_{u,v}\overline{(H_a)_{uv}}(H_b)_{uv}
+	=\delta_{ab},
+	\nonumber                                     \\
+	\sum_{a=0}^3(H_a)_{uv}\overline{(H_a)_{u'v'}}
+	 & =\delta_{uu'}\delta_{vv'}.
+	\label{eq:frame-equations}
+\end{align}
+
+Modulo the active physical unitary and the scalar Kraus unitary,
+the frame data reduce to the two-plane
+$\mc V=\operatorname{span}\{H_0,H_1\}$.
+Its orthogonal complement determines the scalar coordinates.
+The reduced parameter space is therefore
+\begin{align}
+	\left\{(p,\mc V):
+	0<p\leq1/2,\quad
+	\mc V\in\operatorname{Gr}(2,M_2(\C))\right\}/\mc G_p.
+	\label{eq:parameter-space}
+\end{align}
+Here $\operatorname{Gr}(2,M_2(\C))$ denotes the set of complex
+two-dimensional subspaces, and $\mc G_p$ consists of unitary
+conjugations preserving $R$. For $p<1/2$ these are diagonal
+unitaries in the eigenbasis of $R$; for $p=1/2$ they are all
+qubit unitaries. Central phases act trivially.
+
+There is no additional nonunitary residual virtual similarity in
+this normalization. Under a similarity $S$, the input weight becomes
+$(SS^\dagger)^{-1}$. It can be returned to $\Id_2$ by the scalar
+factorization ambiguity only if $SS^\dagger$ is scalar. The scalar
+factor in $S$ cancels from $SKS^{-1}$, leaving a unitary similarity.
+Thus \cref{eq:parameter-space} is exhaustive modulo precisely the
+gauges stated here. It does not assert a classification under
+arbitrary physical transformations.
+
+\subsection{Coefficient span five is automatic after reduction}
+
+Define the horizontal coordinate matrices
+\begin{align}
+	P_{jk} & =A_j\otimes\overline{A_k},
+	       &
+	Q      & =C_0\otimes\overline{C_0}
+	+C_1\otimes\overline{C_1}.
+	\label{eq:coordinates}
+\end{align}
+The four $P_{jk}$ are independent because $A_0,A_1$ are independent.
+Indeed, dual linear functionals on their two-dimensional span
+extract the coefficient of each tensor product.
+
+The transfer $T$ is not in their span. Define the invertible
+entry-rearrangement map $\mc R$ by
+\begin{align}
+	\mc R(K\otimes\overline{K'})
+	 & =\operatorname{vec}(K)\operatorname{vec}(K')^\dagger.
+\end{align}
+Then
+\begin{align}
+	\mc R(P_{jk})
+	         & =\operatorname{vec}(A_j)\operatorname{vec}(A_k)^\dagger,
+	         &
+	\mc R(T) & =R\otimes\Id_2.
+	\label{eq:reshuffle}
+\end{align}
+Every linear combination of the first four matrices has range in
+$\operatorname{span}\{\operatorname{vec}(A_0),
+	\operatorname{vec}(A_1)\}$ and hence rank at most two.
+The last matrix has rank four. Finally,
+\begin{align}
+	Q & =T-P_{00}-P_{11}.
+	\label{eq:Q}
+\end{align}
+Thus $P_{00},P_{01},P_{10},P_{11},Q$ are independent.
+
+Every point of \cref{eq:parameter-space} consequently has Gram ranks
+$(1,2)$ and coefficient span five. The rank assumptions have not
+been replaced by a genericity condition: they hold throughout the
+faithful reduced domain.

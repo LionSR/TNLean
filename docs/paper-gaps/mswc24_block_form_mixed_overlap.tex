@@ -5,10 +5,10 @@
 \input{command}
 \title{The Positive Part of a Blocked Tensor with Overlapping Blocks}
 \author{}
-\date{2026-09-26}
+\date{2026-09-30}
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{wip}
 
 \section{What the source states}
 Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
@@ -78,6 +78,18 @@ $u^M+v^M\leq u^3+v^2=1-u^2(1-u)\leq1-s^2/16$ for $M\geq3$, so
     \qquad(M\geq3).
     \label{eq:mswc24_mixed_lower_bound}
 \end{align}
+The construction nevertheless converges. For $M=1$ the overlap
+(\ref{eq:mswc24_mixed_overlap}) is one, since $u+v=\sqrt{1+s}$. For $M\geq2$,
+$u\geq u^2=(1+\sqrt{1-s^2})/2\geq1-s^2/2$, so $u^M\geq1-Ms^2/2$ by Bernoulli's
+inequality, and $(1+s^M)^{1/2}\leq1+s^2/2$; hence
+\begin{align}
+    \varepsilon & \leq Ms^2=M\Bigl(\frac9{25}\Bigr)^q
+    \qquad(q,M\geq1).
+    \label{eq:mswc24_mixed_upper_bound}
+\end{align}
+The error of this example therefore lies between $s^2/16$ (for $M\geq3$) and $Ms^2$,
+and it tends to zero whenever $(N/q)\tau^{2q}\to0$ with $\tau=3/5$, for instance when
+$q\geq c\log N$ with $c>1/(2\log(5/3))$.
 
 The transfer maps of one-dimensional blocks are the identity and have no
 eigenvalue other than one. The source defines
@@ -94,16 +106,74 @@ sequence $q=M$, $N=q^2$, which satisfies $q=o(N)$.
 The printed bound $C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}=Cqr^q$ is eventually
 smaller than $(9/25)^q/16$ for every constant $C$, and so is
 $Cqr^q\exp(Cqr^q)$. The error is governed by the overlap $s=\tau^q$ of the blocks,
-with $\tau=3/5$ the eigenvalue of the mixed transfer matrix, and is of order
-$Ms^2=(N/q)\tau^{2q}$, a contribution that the source's estimate does not contain.
+with $\tau=3/5$ the eigenvalue of the mixed transfer matrix: it is at least $s^2/16$
+and at most $Ms^2=(N/q)\tau^{2q}$, and numerically close to $Ms^2/8$, a contribution
+that the source's estimate does not contain. What fails is the rate, not the
+construction.
+
+\section{The construction converges}
+Let every block have multiplicity one and weight one, so that $\beta_j=1$ and
+$\alpha_j=b^{-1/2}$, and let the blocks $A_j$ be normal in the gauge
+$\sum_i(A_j^i)^\dagger A_j^i=\mathbf 1$ with positive definite fixed points
+$\sigma_j$ of trace one. Let $\lambda_2$ bound the moduli of the eigenvalues other than
+one of every transfer matrix $E_{jj}$ and the moduli of all eigenvalues of the mixed
+transfer matrices $E_{jj'}$, $j\neq j'$, so that $\xi=-1/\ln\lvert\lambda_2\rvert$ is at
+least $\xi_{\mathrm{diag}}$ and $\xi_{\mathrm{off\text{-}diag}}$, and let $0<\gamma<1/2$.
+Then there is $C$ with
+\begin{align}
+    \varepsilon\leq Cy\,e^{Cy}\quad\text{and}\quad\varepsilon\leq Cy,\qquad
+    y=\frac Nq\,e^{-\gamma q/\xi},
+    \label{eq:mswc24_mixed_corrected}
+\end{align}
+for every $q\geq1$ and $M\geq1$, for the source's state (S7) itself: the same $V$, the
+same pairs and the same weights. No orthogonality and no condition $q=o(N)$ is needed.
+This is the statement of part~(ii) with $\xi_{\mathrm{diag}}$ replaced by
+$\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$.
+
+The proof replaces the block form (\ref{eq:mswc24_mixed_block_form}) by an estimate.
+With $K_j$ the isometries placing the bond pairs of block $j$, the blocked map is
+$B=\sum_jB_jK_j^\dagger$ and
+$B^\dagger B=\sum_{j,j'}K_jB_j^\dagger B_{j'}K_{j'}^\dagger$. The diagonal blocks satisfy
+$\lVert B_j^\dagger B_j-\sigma_j^T\otimes\mathbf 1\rVert\leq Ke^{-\gamma q/\xi}$ as in the
+normal case, and the off-diagonal blocks are the entries of $E_{j'j}^q$, so
+$\lVert B_j^\dagger B_{j'}\rVert\leq Ke^{-\gamma q/\xi}$. Their common limit
+$G_\infty=\sum_jK_j(\sigma_j^T\otimes\mathbf 1)K_j^\dagger$ vanishes on the bond pairs
+$(a,b)$ with $a$ and $b$ in different blocks, and so does $B^\dagger B$. Adding the
+projector $Q$ onto these pairs makes $G_\infty+Q$ positive definite, and $PQ=0$ gives
+$\sqrt{B^\dagger B+Q}=P+Q$. The square root is Lipschitz at a positive definite point,
+so $\lVert P-P_\infty\rVert\leq Ke^{-\gamma q/\xi}$ with
+$P_\infty=\sum_jK_j((\sqrt{\sigma_j})^T\otimes\mathbf 1)K_j^\dagger$.
+
+Since $V^\dagger B=P$, the overlap of the unnormalized state
+$V^{\otimes M}\sum_j\alpha_j\ket{\Omega_j}$ with $\ket{\phi_N(A)}$ is
+$b^{-1/2}\sum_jz_j$ with $z_j=\braket{\Omega_j}{\phi_M(P)}$, and $V^{\otimes M}$ does not
+increase norms, so normalizing the approximating state only increases the overlap.
+The mixed transfer matrix of $P_\infty$ against the fixed-point tensor of block $j$,
+placed in the full bond space, is $\rho\mapsto\operatorname{Tr}(\Pi_j\rho)\,\tilde\sigma_j$,
+with $\Pi_j$ the projector onto the bond coordinates of block $j$ and
+$\tilde\sigma_j$ the embedded fixed point; it is idempotent with trace one. The
+telescoping estimate of the normal case then gives
+$\lvert z_j-1\rvert\leq Cy\,e^{Cy}$. Finally
+$\lVert\phi_N(A)\rVert^2=\sum_{j,j'}\braket{\phi_N(A_j)}{\phi_N(A_{j'})}$, whose diagonal
+terms are one up to $O(e^{-2\gamma N/\xi})$ and whose other terms are
+$O(e^{-\gamma N/\xi})$. With $S=\sum_jz_j$ and $t=\lVert\phi_N(A)\rVert$, the
+inequality $1-\lvert S\rvert/(\sqrt b\,t)\leq\lvert S-b\rvert+\lvert t^2-b\rvert$ for
+$b\geq1$ gives (\ref{eq:mswc24_mixed_corrected}).
+
+The first-order Lipschitz estimate gives the rate $e^{-\gamma q/\xi}$; the
+counterexample and the numerical checks below show the error to be of order
+$(N/q)\tau^{2q}$, of second order in the overlaps, which the argument does not
+capture.
 
 \section{What is formalized}
 The overlap (\ref{eq:mswc24_mixed_overlap}) for all $q,M\geq1$, the lower bound
-(\ref{eq:mswc24_mixed_lower_bound}), the fact that every $\lambda_2$ bounds the
+(\ref{eq:mswc24_mixed_lower_bound}), the upper bound
+(\ref{eq:mswc24_mixed_upper_bound}), the fact that every $\lambda_2$ bounds the
 subleading eigenvalues of the two blocks, and the failure of the printed bound
 along $q=M$ are formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.nonNormalApproxOverlap_overlappingBlockTensor},
     \leanid{MPSTensor.le_one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor},
+    \leanid{MPSTensor.one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le},
     \leanid{MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis},
     \leanid{MPSTensor.not_approximationError_le_overlappingBlockTensor} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.} The
@@ -127,6 +197,36 @@ bound.\footnote{Formal declarations:
     \leanid{MPSTensor.reindex_toTensor_overlappingBlockSector} and
     \leanid{MPSTensor.embeddedFixedPointPair_overlappingBlockSector} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.}
+
+The corrected bound (\ref{eq:mswc24_mixed_corrected}) for blocks of multiplicity one
+and weight one, with its ingredients, is formalized.\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockError};
+    \leanid{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockGram};
+    \leanid{MPSTensor.mixedMapLM_blockSumPosLimit_apply},
+    \leanid{MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le} and
+    \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap}.}
+
+\section{Numerical check}
+A script evaluates the overlap through $P$, using $V^\dagger B=P$ and the support
+projector of $P$, from the eigendecomposition of $B^\dagger B$.
+\begin{itemize}
+    \item For the counterexample it reproduces (\ref{eq:mswc24_mixed_overlap}), and
+          $\varepsilon$ is $3.324\cdot10^{-2}$, $4.348\cdot10^{-3}$, $5.641\cdot10^{-4}$ at
+          $M=16$ and $q=4,6,8$, against $Ms^2/8=3.359\cdot10^{-2}$, $4.354\cdot10^{-3}$,
+          $5.642\cdot10^{-4}$.
+    \item For two random normal blocks of bond dimension two on $d=2$ with subleading
+          eigenvalues $0.4312$ and $0.4481$ and mixed spectral radius $\tau=0.780$, with
+          unit weights, $\varepsilon/(M\tau^{2q})$ is $0.176$, $0.167$, $0.154$, $0.155$ at
+          $M=8$ and $q=6,8,10,12$: the error is of order $(N/q)\tau^{2q}$ and tends to
+          zero.
+    \item For the same blocks with weights $(1,0.7)$, outside the formalized scope, the
+          error is $3.52\cdot10^{-3}$, $3.45\cdot10^{-4}$, $2.89\cdot10^{-5}$ at $M=8$ and
+          $q=6,8,10$.
+\end{itemize}
 
 \section{Elimination}
 Two statements would repair part~(ii) for multiplicity one. The first adds the
@@ -153,10 +253,15 @@ repair is formalized.\footnote{Formal declarations:
 The orthogonality holds for instance when distinct blocks use disjoint sets of
 physical indices.
 
-The second keeps the source's hypotheses and adds to the rate a term controlled
-by the mixed transfer matrices, of the form $(N/q)\,\tau^{2q}$ suggested by the
-counterexample; it needs a perturbation bound for the square root of $B^\dagger B$
-around its block-diagonal part. It is not formalized.
+The second keeps the source's construction and hypotheses and corrects the rate: it
+is (\ref{eq:mswc24_mixed_corrected}), with the correlation lengths of the mixed
+transfer matrices included in $\xi$. It is formalized for weight one. Three
+extensions are not formalized: weights of different moduli, for which $G_\infty$ is
+not positive definite on the blocks of smaller weight and the Lipschitz step fails;
+blocks with multiplicity combined with overlaps, where the corrected state of
+\cite{gap:mswc24_repeated_block_corrected_state} would replace (S7); and the sharp
+rate $(N/q)\tau^{2q}$, which needs a second-order perturbation bound for the square
+root of $B^\dagger B$ around its block-diagonal part.
 
 \bibliographystyle{alpha}
 \bibliography{references}

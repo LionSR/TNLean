@@ -30,6 +30,64 @@ the weighted Verlinde action on a fusion-tree product state address
 the question of whether the structure coefficients of a renormalization fixed
 point can depend on the chain length~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
 
+\begin{definition}[The Ising string-net tensors of the source]
+    \label{def:asymex_ising_gsymbol_tensor}
+    \lean{IsingTwist.isingLoopFactor, IsingTwist.isingFSymbolZ,
+        IsingTwist.isingFSymbol, IsingTwist.isingGSymbol,
+        IsingTwist.isingBondLetter, IsingTwist.isingStringNetTensor}
+    \leanok
+    \uses{def:asymex_ising_tensors, def:mpo_tensor}
+    The quantum dimensions are $d_1=d_\psi=1$ and $d_\sigma=\sqrt2$;
+    write $N_{ab}^c$ for the Ising fusion multiplicities.
+    Write $v_a=\sqrt{d_a}$ for the Ising labels, so $v_1=v_\psi=1$ and
+    $v_\sigma=2^{1/4}$, and let $F^{abc}_{def}$ be the $F$-symbols
+    of~\cite[Appendix~D.2]{Bultinck2017Anyons}, nonzero only when
+    $N_{ab}^e$, $N_{cd}^e$, $N_{ad}^f$ and $N_{bc}^f$ are positive, with the
+    values $\pm1/\sqrt2$ on $F^{\sigma\sigma\sigma}_{\sigma ef}$, $-1$ on
+    $F^{\psi\sigma\psi}_{\sigma\sigma\sigma}$ and
+    $F^{\sigma\psi\sigma}_{\psi\sigma\sigma}$, and $1$ otherwise. The
+    $G$-symbols are $G^{abc}_{def}=v_e^{-1}v_f^{-1}F^{abc}_{def}$. For a
+    label $f$, a basis element $(x,y)$ of $P_f$ in
+    Definition~\ref{def:asymex_ising_tensors} is read as the pair
+    $(u,l)=(y,x)$ of plaquette labels above and below the operator line; so
+    $P_\psi$ has the bond pairs $[(\psi,1),(1,\psi),(\sigma,\sigma)]$ and
+    $P_\sigma$ has $[(\sigma,1),(\sigma,\psi),(1,\sigma),(\psi,\sigma)]$. The operator tensor
+    of~\cite[Section~6.2 and Appendix~D.1]{Bultinck2017Anyons} is the
+    crossing of the operator line $f$ with an edge line $e$, with the
+    plaquettes $b$ upper left, $a$ upper right, $c$ lower left and $d$
+    lower right. On the fusion-tree labels $k=(b,e,a)$ and $h=(c,e',d)$ its
+    entries are
+    \begin{align}
+        \bigl(S_f^{kh}\bigr)_{p,q}
+         & =\delta_{ee'}\,\delta_{p,(b,c)}\,\delta_{q,(a,d)}\,
+        G^{abc}_{def}\sqrt{v_av_bv_cv_d}.
+        \label{eq:asymex_ising_gsymbol_tensor}
+    \end{align}
+\end{definition}
+
+Definition~\ref{def:asymex_ising_gsymbol_tensor} gives the printed
+$G$-symbol tensor with all quantum-dimension factors. The diagonal bond
+similarity of Theorem~\ref{thm:asymex_ising_gsymbol_similarity} relates it
+to the $F$-symbol blocks used here. The additional factor $\sqrt2$ on the
+$\sigma$ block multiplies its periodic operator by $2^{N/2}$.
+
+For every $N>0$, close the bond indices by the ordinary, unnormalized
+trace of the ordered product of local matrices. The first physical
+index is the output and the second is the input.
+
+The vacuum and fermion kernels are identified in
+Theorem~\ref{thm:asymex_ising_path_operators}; the fermion is a partial
+isometry whose initial space is the admissible-path subspace
+(Corollary~\ref{cor:asymex_ising_fermion_partial_isometry}). The fusion
+identities with the $\sigma$ block are in
+Theorems~\ref{thm:asymex_ising_sigma_fusion}
+and~\ref{thm:asymex_ising_sigma_square}, with the scaling factors retained.
+The word-span certificates are in Theorem~\ref{thm:asymex_ising_normal}.
+For weighted direct sums, the compression and periodic trace formula
+are given in Theorems~\ref{thm:asymex_ising_compression}
+and~\ref{thm:asymex_ising_trace}; the weighted action on the state
+family is in Theorem~\ref{thm:asymex_ising_action_trace}.
+
 The quantum dimensions of $1$, $\psi$, and $\sigma$ are $1,1,\sqrt2$,
 respectively; they are the Perron--Frobenius dimensions of the fusion rules
 below (Example~\ref{ex:mposym_ising_dimension}). For every simple object
@@ -569,40 +627,9 @@ product tensor.
     in~(\ref{eq:asymex_ising_sigma_scale}) gives~(\ref{eq:asymex_ising_sigma_square}).
 \end{proof}
 
-\subsubsection{The source's tensors built from the G-symbols}
+\subsubsection{Bond similarity for the source tensors}
 
-\begin{definition}[The Ising string-net tensors of the source]
-    \label{def:asymex_ising_gsymbol_tensor}
-    \lean{IsingTwist.isingLoopFactor, IsingTwist.isingFSymbolZ,
-        IsingTwist.isingFSymbol, IsingTwist.isingGSymbol,
-        IsingTwist.isingBondLetter, IsingTwist.isingStringNetTensor}
-    \leanok
-    \uses{def:asymex_ising_tensors, def:mpo_tensor}
-    Write $v_a=\sqrt{d_a}$ for the Ising labels, so $v_1=v_\psi=1$ and
-    $v_\sigma=2^{1/4}$, and let $F^{abc}_{def}$ be the $F$-symbols
-    of~\cite[Appendix~D.2]{Bultinck2017Anyons}, nonzero only when
-    $N_{ab}^e$, $N_{cd}^e$, $N_{ad}^f$ and $N_{bc}^f$ are positive, with the
-    values $\pm1/\sqrt2$ on $F^{\sigma\sigma\sigma}_{\sigma ef}$, $-1$ on
-    $F^{\psi\sigma\psi}_{\sigma\sigma\sigma}$ and
-    $F^{\sigma\psi\sigma}_{\psi\sigma\sigma}$, and $1$ otherwise. The
-    $G$-symbols are $G^{abc}_{def}=v_e^{-1}v_f^{-1}F^{abc}_{def}$. For a
-    label $f$, a basis element $(x,y)$ of $P_f$ in
-    Definition~\ref{def:asymex_ising_tensors} is read as the pair
-    $(u,l)=(y,x)$ of plaquette labels above and below the operator line; so
-    $P_\psi$ has the bond pairs $[(\psi,1),(1,\psi),(\sigma,\sigma)]$ and
-    $P_\sigma$ has $[(\sigma,1),(\sigma,\psi),(1,\sigma),(\psi,\sigma)]$. The operator tensor
-    of~\cite[Section~6.2 and Appendix~D.1]{Bultinck2017Anyons} is the
-    crossing of the operator line $f$ with an edge line $e$, with the
-    plaquettes $b$ upper left, $a$ upper right, $c$ lower left and $d$
-    lower right. On the fusion-tree labels $k=(b,e,a)$ and $h=(c,e',d)$ its
-    entries are
-    \begin{align}
-        \bigl(S_f^{kh}\bigr)_{p,q}
-         & =\delta_{ee'}\,\delta_{p,(b,c)}\,\delta_{q,(a,d)}\,
-        G^{abc}_{def}\sqrt{v_av_bv_cv_d}.
-        \label{eq:asymex_ising_gsymbol_tensor}
-    \end{align}
-\end{definition}
+
 
 \begin{theorem}[The source's tensors are bond-similar to the formal tensors]
     \label{thm:asymex_ising_gsymbol_similarity}
