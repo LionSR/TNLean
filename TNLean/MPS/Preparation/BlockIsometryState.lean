@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinKronecker
+import TNLean.MPS.Chain.BlockTensor
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.BlockSites
@@ -24,6 +25,17 @@ Cut a ring of `N` sites into `M` blocks of lengths `ℓ 0, …, ℓ (M - 1)`
 proof of Theorem 1, blocks the chain into blocks "all of the same size, `q_N`, except for the last
 one, which may be larger"; the present file allows any lengths.
 
+**Scope restriction (common bond dimension):** the site-dependent declarations
+`MPSTensor.chainBlockTensor`, `MPSTensor.coeff_eq_mpvFamily_chainBlockTensor`,
+`MPSTensor.pairFamilyVector`, `MPSTensor.pairFamilyVector_apply`,
+`MPSTensor.norm_pairFamilyVector`, `MPSTensor.blockIsoVector`, `MPSTensor.blockIsoVector_apply`,
+`MPSTensor.inner_blockIsoVector`, `MPSTensor.norm_blockIsoVector`,
+`MPSTensor.chainBlockIsometryState` and `MPSTensor.chainBlockIsometryState_apply` model the inhomogeneous
+matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS",
+with the same square bond dimension `D` at every site, while the source allows "bond dimension at
+most `D`" varying along the ring. The translation-invariant declarations of this file are not
+affected. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
 ## Main declarations
 
 * `MPSTensor.mpvFamily` — the periodic state `Tr(B_0^{t_0} ⋯ B_{M-1}^{t_{M-1}})` of a family of
@@ -36,11 +48,15 @@ one, which may be larger"; the present file allows any lengths.
   injective.
 * `MPSTensor.inner_blockIsometryState_mpvState` — for the fixed-point pair,
   `⟨ψ|φ_N(A)⟩ = Tr ∏ₖ τ_k`, with `τ_k` the mixed transfer matrix of `P_k` against `P_∞`.
+* `MPSTensor.chainBlockIsometryState` — the same state for site-dependent tensors and
+  site-dependent pairs, `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}`, arXiv:2307.01696, paragraph
+  "Inhomogeneous short-range correlated MPS"; `MPSTensor.inner_blockIsoVector` — the
+  isometries `⊗ₖ V_k` preserve inner products when every blocked tensor is injective.
 
 ## References
 
-* arXiv:2307.01696, eqs. (9) and (10), and Supplemental Material, proof of Lemma 1'(i) and proof
-  of Theorem 1.
+* arXiv:2307.01696, eqs. (9) and (10), the paragraph "Inhomogeneous short-range correlated MPS",
+  and Supplemental Material, proof of Lemma 1'(i) and proof of Theorem 1.
 -/
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
@@ -175,24 +191,6 @@ theorem sum_star_blockIsometryState (A : MPSTensor d D) (ω : Fin D × Fin D →
     ← pairProductState_norm_sq (N := M) ω]
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _ fun _ => rfl
 
-/-- For a unit vector `ω` and injective blocked tensors, `(⊗ₖ V_k) ⊗ₖ |ω⟩` is a unit vector. -/
-theorem norm_blockIsometryState (A : MPSTensor d D) {ω : Fin D × Fin D → ℂ}
-    (hω : ∑ p, star (ω p) * ω p = 1) {N : ℕ} {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N)
-    (hB : ∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) :
-    ‖blockIsometryState A ω hN‖ = 1 := by
-  have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (blockIsometryState A ω hN)).symm
-  rw [PiLp.inner_apply] at h
-  simp only [RCLike.inner_apply] at h
-  refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (Complex.ofReal_injective ?_)
-  push_cast
-  refine h.trans ?_
-  have hsum := sum_star_blockIsometryState A ω hN hB
-  rw [hω, one_pow] at hsum
-  rw [← hsum]
-  refine Finset.sum_congr rfl fun _ _ => ?_
-  rw [mul_comm]
-  rfl
-
 /-- **Overlap with the periodic state.** If every blocked tensor is injective, the overlap of
 `(⊗ₖ V_k) ⊗ₖ |ω⟩`, with `ω` the pair of the fixed point, with the periodic state of `A` is the
 trace of the ordered product of the mixed transfer matrices `τ_k` of the positive parts `P_k`
@@ -231,5 +229,141 @@ theorem inner_blockIsometryState_mpvState [NeZero M] [NeZero D] (A : MPSTensor d
   rw [Matrix.IsIsometry.sum_star_mul_prod
     (fun k => isIsometry_polarIsoMatrix_of_isInjective (hB k))]
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
+
+/-! ### Site-dependent tensors and pairs -/
+
+/-- The blocked tensor of block `k` of a chain of site-dependent tensors: the tensor
+`B_k` with `B_k^{σ} = A_{o_k}^{σ₀} ⋯ A_{o_k + ℓ_k - 1}^{σ_{ℓ_k - 1}}`.
+
+arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": the tensors after
+"blocking `q`" sites of a matrix product state that is not translation invariant. -/
+noncomputable def chainBlockTensor {N : ℕ} {ℓ : Fin M → ℕ} (A : MPSChainTensor d D N)
+    (hN : ∑ k, ℓ k = N) (k : Fin M) : MPSTensor (blockPhysDim d (ℓ k)) D :=
+  MPSChainTensor.blockTensor fun j => A (blockSite hN k j)
+
+/-- For a constant chain the blocked tensors are those of its tensor. -/
+theorem chainBlockTensor_const (A : MPSTensor d D) {N : ℕ} {ℓ : Fin M → ℕ}
+    (hN : ∑ k, ℓ k = N) (k : Fin M) :
+    chainBlockTensor (fun _ => A) hN k = blockTensor A (ℓ k) :=
+  MPSChainTensor.blockTensor_const A
+
+/-- **Blocking a site-dependent chain.** The periodic state of a chain of site-dependent
+tensors is the periodic state of the family of its blocked tensors. -/
+theorem coeff_eq_mpvFamily_chainBlockTensor {N : ℕ} {ℓ : Fin M → ℕ} (A : MPSChainTensor d D N)
+    (hN : ∑ k, ℓ k = N) (s : Cfg d N) :
+    MPSChainTensor.coeff A s = mpvFamily (chainBlockTensor A hN) (blockIndexEquiv d hN s) := by
+  rw [MPSChainTensor.coeff_eq, MPSChainTensor.eval_eq_prod_ofFn,
+    prod_ofFn_blockSite ℓ hN (fun i => A i (s i)), mpvFamily]
+  congr 2
+  refine List.ofFn_inj.mpr (funext fun k => ?_)
+  rw [blockIndexEquiv_apply, chainBlockTensor, MPSChainTensor.blockTensor_decodeBlockEquiv_symm,
+    MPSChainTensor.eval_eq_prod_ofFn]
+  rfl
+
+/-- The product of site-dependent pairs as a vector on `M` sites of dimension `D²`, the site `k`
+carrying the pair of indices `(l_k, r_k)`. -/
+noncomputable def pairFamilyVector (ω : Fin M → Fin D × Fin D → ℂ) : MPVSpace (D * D) M :=
+  (EuclideanSpace.equiv (ι := Cfg (D * D) M) (𝕜 := ℂ)).symm fun τ =>
+    pairFamilyState ω fun k => finProdFinEquiv.symm (τ k)
+
+@[simp] theorem pairFamilyVector_apply (ω : Fin M → Fin D × Fin D → ℂ) (τ : Cfg (D * D) M) :
+    pairFamilyVector ω τ = pairFamilyState ω fun k => finProdFinEquiv.symm (τ k) := by
+  simp [pairFamilyVector, EuclideanSpace.equiv, PiLp.toLp_apply]
+
+/-- A product of unit pairs is a unit vector. -/
+theorem norm_pairFamilyVector {ω : Fin M → Fin D × Fin D → ℂ}
+    (hω : ∀ k, ∑ p, star (ω k p) * ω k p = 1) : ‖pairFamilyVector ω‖ = 1 := by
+  have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (pairFamilyVector ω)).symm
+  rw [PiLp.inner_apply] at h
+  simp only [RCLike.inner_apply] at h
+  refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (Complex.ofReal_injective ?_)
+  push_cast
+  refine h.trans ?_
+  have hsum := pairFamilyState_norm_sq ω
+  simp only [hω, Finset.prod_const_one] at hsum
+  rw [← hsum, ← Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm)
+    (fun τ : Cfg (D * D) M => star (pairFamilyVector ω τ) * pairFamilyVector ω τ) _
+    fun _ => by simp only [pairFamilyVector_apply]; rfl]
+  exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
+
+/-- **The isometries on the blocks**, `(⊗ₖ V_k) x`, for tensors `B_k` on the blocks of a ring
+cut into blocks of lengths `ℓ`, with `V_k` the isometric factor of the polar decomposition of
+`B_k`, applied to a vector `x` on `M` sites of dimension `D²`.
+
+arXiv:2307.01696, eq. (10) and the paragraph "Inhomogeneous short-range correlated MPS": "the
+isometry" `⊗ᵢ V_i` applied to `|Ω⟩`. -/
+noncomputable def blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
+    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (D * D) M) : MPVSpace d N :=
+  (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s =>
+    ∑ τ : Fin M → Fin (D * D), (∏ k, polarIsoMatrix (B k) (blockIndexEquiv d hN s k) (τ k)) * x τ
+
+@[simp] theorem blockIsoVector_apply {N : ℕ} {ℓ : Fin M → ℕ}
+    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (x : MPVSpace (D * D) M)
+    (s : Cfg d N) :
+    blockIsoVector B hN x s = ∑ τ : Fin M → Fin (D * D),
+      (∏ k, polarIsoMatrix (B k) (blockIndexEquiv d hN s k) (τ k)) * x τ := by
+  simp [blockIsoVector, EuclideanSpace.equiv, PiLp.toLp_apply]
+
+/-- **The isometries preserve inner products.** If every blocked tensor is injective, then
+`⟨(⊗ₖ V_k) x, (⊗ₖ V_k) y⟩ = ⟨x, y⟩`.
+
+arXiv:2307.01696, paragraph "Approximation through the fixed-point state": for injective `B`,
+`V†V = 1`. -/
+theorem inner_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
+    {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
+    (hB : ∀ k, Kraus.IsInjective (B k)) (x y : MPVSpace (D * D) M) :
+    ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
+  classical
+  simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
+  have h := Matrix.IsIsometry.sum_star_mul_prod
+    (fun k => isIsometry_polarIsoMatrix_of_isInjective (hB k)) (fun τ => x τ) (fun τ => y τ)
+  rw [← Fintype.sum_equiv (blockIndexEquiv d hN) _ _ fun _ => rfl] at h
+  simp only [mul_comm (star _)] at h ⊢
+  exact h
+
+/-- The isometries preserve norms: `‖(⊗ₖ V_k) x‖ = ‖x‖` when every blocked tensor is
+injective. -/
+theorem norm_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
+    {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
+    (hB : ∀ k, Kraus.IsInjective (B k)) (x : MPVSpace (D * D) M) :
+    ‖blockIsoVector B hN x‖ = ‖x‖ := by
+  have h := inner_blockIsoVector hN hB x x
+  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
+
+/-- **The state `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}`** for a chain of site-dependent tensors `A`
+blocked into blocks of lengths `ℓ`, and site-dependent pairs `ω^k`: `V_k` is the isometric
+factor of the polar decomposition of the blocked tensor of block `k`.
+
+arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": "preparing `|Ω⟩` and
+implementing the isometry". -/
+noncomputable def chainBlockIsometryState {N : ℕ} {ℓ : Fin M → ℕ} (A : MPSChainTensor d D N)
+    (ω : Fin M → Fin D × Fin D → ℂ) (hN : ∑ k, ℓ k = N) : MPVSpace d N :=
+  blockIsoVector (chainBlockTensor A hN) hN (pairFamilyVector ω)
+
+@[simp] theorem chainBlockIsometryState_apply {N : ℕ} {ℓ : Fin M → ℕ}
+    (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ) (hN : ∑ k, ℓ k = N)
+    (s : Cfg d N) :
+    chainBlockIsometryState A ω hN s = ∑ τ : Fin M → Fin (D * D),
+      (∏ k, polarIsoMatrix (chainBlockTensor A hN k) (blockIndexEquiv d hN s k) (τ k)) *
+        pairFamilyState ω (fun k => finProdFinEquiv.symm (τ k)) := by
+  simp [chainBlockIsometryState]
+
+/-- For a constant chain and equal pairs, the state is `blockIsometryState`. -/
+theorem blockIsometryState_eq_chainBlockIsometryState (A : MPSTensor d D)
+    (ω : Fin D × Fin D → ℂ) {N : ℕ} {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N) :
+    blockIsometryState A ω hN = chainBlockIsometryState (fun _ => A) (fun _ => ω) hN := by
+  ext s
+  simp [chainBlockTensor_const, pairFamilyState_const]
+
+/-- For a unit vector `ω` and injective blocked tensors, `(⊗ₖ V_k) ⊗ₖ |ω⟩` is a unit vector. -/
+theorem norm_blockIsometryState (A : MPSTensor d D) {ω : Fin D × Fin D → ℂ}
+    (hω : ∑ p, star (ω p) * ω p = 1) {N : ℕ} {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N)
+    (hB : ∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) :
+    ‖blockIsometryState A ω hN‖ = 1 := by
+  rw [blockIsometryState_eq_chainBlockIsometryState, chainBlockIsometryState,
+    norm_blockIsoVector hN (fun k => by rw [chainBlockTensor_const]; exact hB k),
+    norm_pairFamilyVector fun _ => hω]
 
 end MPSTensor
