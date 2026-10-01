@@ -33,10 +33,13 @@ $|\lambda_2|$.\footnote{Source location:
 
 Equation~(\ref{eq:cpgsv21_correlator_pure_exponentials}) holds when the
 transfer map, restricted to the traceless matrices, is diagonalizable. If that
-restriction has a Jordan block of size $k+1$ at an eigenvalue $\lambda$, the
-powers $E^n$ contain terms $n^j\lambda^{n-j}$ with $j\le k$, and the correlator
-is in general a sum of such quasi-polynomial terms rather than of pure
-exponentials. Likewise, a uniform bound $|C(X,Y;n)|\le C_{XY}|\lambda_2|^n$
+restriction has a Jordan block $J=\lambda I+N$ of size $k+1$, then
+\begin{align}
+    J^n & =\sum_{j=0}^{\min(k,n)}\binom nj\lambda^{n-j}N^j,
+    \notag
+\end{align}
+and a correlator whose insertions detect $N$ is a polynomial-exponential
+sequence rather than a sum of pure exponentials. Likewise, a uniform bound $|C(X,Y;n)|\le C_{XY}|\lambda_2|^n$
 can fail at a defective subleading eigenvalue. A bound $C_{XY}r^n$ still holds
 for every rate $r$ strictly above the spectral radius of the complementary map,
 by the Gelfand formula.
@@ -46,15 +49,15 @@ by the Gelfand formula.
 The blueprint chapter on correlations states the expansion under the explicit
 hypothesis that the restriction of the transfer map to the traceless matrices
 is diagonalizable, and states the decay bound at every rate $r$ with
-$\operatorname{spr}(E-P)<r<1$, where $P$ is the projection onto the fixed state; the rate $|\lambda_2|$ is recorded only for
+$\rho(E-P)<r<1$, with $\rho$ the spectral radius, where $P$ is the projection onto the fixed state; the rate $|\lambda_2|$ is recorded only for
 the diagonalizable case. Neither statement has a formal declaration yet.
 
 \section{Elimination plan}
 
 Formalize the eigenbasis expansion of the centered insertion in the
 diagonalizable case and the Gelfand-formula bound for the connected correlator.
-The general expansion with polynomial prefactors would supply the
-unqualified form of the source statement.
+The general polynomial-exponential expansion is a corrected replacement for
+the source statement, not a proof of its unqualified pure-exponential form.
 
 \begin{thebibliography}{1}
     \bibitem{Cirac2021Matrix}

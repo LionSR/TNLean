@@ -141,6 +141,10 @@ spectral decomposition, and quantitative decay bounds.
 \end{proof}
 
 \section{Spectral expansion and exponential decay}
+% **Local fix (diagonalizable correlator expansion):** the pure-exponential
+% expansion and the rate |lambda_2| of the source hold under diagonalizability
+% of the transfer map on the traceless matrices; see
+% docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex.
 
 \begin{theorem}[Sum of exponentials under diagonalizability]%
     \label{thm:correlator_sum_exponentials}
@@ -163,7 +167,7 @@ spectral decomposition, and quantitative decay bounds.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part}
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part}
     The matrix $Z_\rho(X)=X\rho-\tr(X\rho)\rho$ is traceless. Expanding it
     in an eigenbasis $(v_j)$ of the traceless subspace,
     \begin{align}
@@ -186,8 +190,8 @@ spectral decomposition, and quantitative decay bounds.
     \uses{def:connected_correlator, def:primitive_mps}
     Let $\E_A$ be primitive and trace-preserving, with fixed state $\rho$
     satisfying $\tr\rho=1$, and put $P(Z)=\tr(Z)\rho$. Write
-    $\operatorname{spr}(\E_A-P)$ for the spectral radius of $\E_A-P$.
-    For every $r$ with $\operatorname{spr}(\E_A-P)<r<1$ and every $X,Y$, there is a
+    $\rho_{\spec}(\E_A-P)$ for the spectral radius of $\E_A-P$.
+    For every $r$ with $\rho_{\spec}(\E_A-P)<r<1$ and every $X,Y$, there is a
     constant $C_{XY}>0$ such that, for all $n\ge0$,
     \begin{align}
         |C(X,Y;n)|
@@ -202,8 +206,8 @@ spectral decomposition, and quantitative decay bounds.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part}
-    Primitivity gives $\operatorname{spr}(\E_A-P)<1$
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part}
+    Primitivity gives $\rho_{\spec}(\E_A-P)<1$
     \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
     so such rates $r$ exist.
     The matrix $Z_\rho(X)$ is traceless, so $P(Z_\rho(X))=0$ and
@@ -219,8 +223,14 @@ spectral decomposition, and quantitative decay bounds.
     \end{align}
     which is (\ref{eq:correlations_decay_bound}) with
     $C_{XY}=\|Y\|\,C\,\|Z_\rho(X)\|+1$.
-    In the diagonalizable case the same conclusion at the spectral radius
-    follows by bounding the finite eigenbasis expansion term by term.
+    In the diagonalizable case, the expansion in the proof of
+    Theorem~\ref{thm:correlator_sum_exponentials} and the triangle inequality give
+    \begin{align}
+        |C(X,Y;n)|
+         & \le\sum_{j=1}^{D^2-1}|\gamma_j(X)\tr(Yv_j)|\,|\lambda_j|^n
+        \le\Bigl(\sum_{j=1}^{D^2-1}|\gamma_j(X)\tr(Yv_j)|\Bigr)
+        \rho_{\spec}(\E_A-P)^n.
+    \end{align}
     % Composing these bounds for the connected correlator is tracked in Issue~\#1447.
 \end{proof}
 
@@ -381,7 +391,7 @@ for the transfer map $\E_A$.
     physical observable insertions reduce to the auxiliary functionals defined
     above. If the hypotheses of
     Theorem~\ref{thm:correlator_exponential_bound} hold, then for every rate
-    $r$ with $\operatorname{spr}(\E_A-P)<r<1$ the corresponding ground-state
+    $r$ with $\rho_{\spec}(\E_A-P)<r<1$ the corresponding ground-state
     correlations decay as $r^n=e^{-n/\xi}$ with finite correlation length
     $\xi=-1/\log r$, the quantity of
     Definition~\ref{def:correlation_length} evaluated at $r$. When $\E_A-P$ is
