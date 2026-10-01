@@ -39,6 +39,7 @@ import TNLean.Algebra.ExponentialSumWindow
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct
+import TNLean.Algebra.FinStepOrbit
 import TNLean.Algebra.FinSumPermutation
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
