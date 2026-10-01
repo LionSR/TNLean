@@ -153,21 +153,6 @@ theorem adjoint_blockTensor_projection (P : Fin m → Matrix (Fin D) (Fin D) ℂ
   simp only [← Matrix.mul_assoc, ← Finset.sum_mul,
     leftCanonical_blockTensor A p hA, Matrix.one_mul]
 
-/-- A p-blocked letter is the sum of its diagonal step-orbit corners.
-Source: arXiv:1708.00029, paragraph following `lem:unique-dec`. -/
-theorem blockTensor_eq_sum_stepOrbit_corners (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
-    (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
-    (A : MPSTensor d D) (hshift : ∀ u i, P u * A i = A i * P (u + 1))
-    (p : ℕ) (i : Fin (blockPhysDim d p)) :
-    blockTensor A p i = ∑ a, stepOrbitProjection P p a * blockTensor A p i *
-      stepOrbitProjection P p a := by
-  have hcorner (a : Fin (m.gcd p)) :
-      stepOrbitProjection P p a * blockTensor A p i * stepOrbitProjection P p a =
-        stepOrbitProjection P p a * blockTensor A p i := by
-    rw [Matrix.mul_assoc, ← stepOrbitProjection_mul_blockTensor P A hshift,
-      ← Matrix.mul_assoc, (stepOrbitProjection_isOrthogonalProjection P hproj hsum p a).2]
-  simp only [hcorner, ← Finset.sum_mul, sum_stepOrbitProjection, hsum, Matrix.one_mul]
-
 /-- Compress the step-orbit corners to nonzero left-canonical blocks without changing any MPV.
 Source: arXiv:1708.00029, Lemma `lem:blocking-arbitrary`, the block construction before
 its final peripheral-spectrum argument. No irreducibility or period conclusion is asserted here. -/
