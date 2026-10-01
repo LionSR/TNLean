@@ -244,6 +244,33 @@
         \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
 \end{proof}
 
+\begin{theorem}[Grouped product inputs give active-sector fusion]%
+    \label{thm:mpdo_grouped_product_inputs_to_bnt_fusion_tensor}
+    \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_productInputs}
+    \leanok
+    \uses{def:mpdo_grouped_vertical_product_inputs, def:is_rfp_via_ts,
+        def:mpdo_bnt_fusion_tensor_clause}
+    Let $M$ generate matrix product density operators, have the grouped
+    vertical product hypotheses, and satisfy the renormalization fixed-point
+    condition. Then $M$ has an active-sector BNT fusion tensor clause. In
+    particular, its positive diagonal fusion matrices obey the length-one
+    multiplicity relation
+    $m_\gamma=\sum_{\alpha,\beta}
+        \tr(\chi_{\alpha,\beta,\gamma})m_\alpha m_\beta$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
+        thm:mpdo_transported_vertical_sector_coefficient_comparison,
+        thm:mpdo_vertical_product_positive_fusion_decomposition,
+        thm:mpdo_paired_vertical_decompositions_fusion}
+    Obtain the one-site and two-site vertical decompositions from the grouped
+    hypotheses. Transport the renormalization maps to compare their normal
+    sectors. The positive product decomposition supplies the fusion matrices
+    and coisometries; the paired-decomposition argument gives the length-one
+    relation.
+\end{proof}
+
 \begin{theorem}[Renormalization fixed points in CF have active-sector fusion]%
     \label{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}
@@ -282,14 +309,9 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_cpsv_vertical_decomposition, thm:mpdo_literal_cpsv_vertical_decomposition_block_two, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_literal_cpsv_vertical_product_positive_fusion_decomposition, thm:mpdo_paired_vertical_decompositions_fusion}
-    Choose the one-site and two-site vertical decompositions obtained from
-    CF. Transporting $T$ and $S$ through them identifies their normal
-    sectors by unitary conjugacies scaled by multiplicity-trace ratios.
-    The positive-fusion decomposition gives the positive diagonal matrices,
-    coisometries, and exact reconstruction on every active product sector.
-    The paired-decomposition theorem then gives the idempotent relation for
-    $m_\alpha=\tr(\mu_\alpha)$.
+    \uses{thm:mpdo_grouped_product_inputs_to_bnt_fusion_tensor}
+    Literal canonical form supplies the grouped vertical product hypotheses;
+    apply the grouped active-sector fusion theorem.
 \end{proof}
 
 \begin{theorem}[Horizontal-form specialization of active-sector fusion]%
@@ -310,13 +332,9 @@
     See \cite{gap:cpgsv17_vertical_cf_grouping}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:vertical_cf_of_horizontal_cf, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_transported_vertical_product_positive_fusion_decomposition, thm:mpdo_paired_vertical_decompositions_fusion}
-    Choose the one-site and two-site vertical canonical decompositions supplied
-    by the normalized BNT-refined horizontal form. The renormalization maps
-    identify their normal sectors and give positive diagonal fusion matrices
-    and fusion coisometries.
-    Apply the paired-decomposition theorem to obtain the idempotent relation
-    for $m_\alpha=\tr(\mu_\alpha)$.
+    \uses{thm:mpdo_grouped_product_inputs_to_bnt_fusion_tensor}
+    Normalized BNT-refined horizontal form supplies the grouped vertical
+    product hypotheses; apply the grouped active-sector fusion theorem.
 \end{proof}
 
 \begin{theorem}[Active-sector fusion implies the algebra relations]%

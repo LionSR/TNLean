@@ -252,6 +252,34 @@
     formed when needed.
 \end{definition}
 
+\begin{definition}[Grouped vertical product hypotheses]
+    \label{def:mpdo_grouped_vertical_product_inputs}
+    \lean{MPOTensor.HasVerticalBNTProductInputs}
+    \lean{MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs}
+    \lean{MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs}
+    \leanok
+    \uses{def:vertical_bnt_grouping_with_isometry, def:grouped_corner_gram_dressing,
+        def:vertical_tensor_mpdo}
+    Let $M^{(2)}$ be the two-site blocking of $M$ and write
+    $A=\widetilde{M^{(2)}}$. The grouped vertical product hypotheses require
+    the phase-class grouping with physical reducing isometries and the
+    pairwise grouped-corner Gram comparison for both $M$ and $M^{(2)}$.
+    They require in addition the following three properties of $A$:
+    \begin{enumerate}
+        \item Every orthogonal projection $P$ satisfying
+        $PA^v=PA^vP$ for all $v$ also satisfies $A^vP=PA^vP$ for all $v$.
+        \item Each irreducible isometric corner $B$ with a positive definite
+        eigenmatrix $\rho$ satisfying $\mathcal E_B(\rho)=r\rho$, $r>0$,
+        has no peripheral eigenvalue other than $r$.
+        \item For every matrix $P$, if $PA^vP\ne0$ for some letter $v$,
+        then its sector compression is nonzero at some finite chain length:
+        $\mathcal C_N(M^{(2)},P)\ne0$ for some $N$.
+    \end{enumerate}
+    Both normalized BNT-refined horizontal form and literal CPSV canonical
+    form, together with positivity of the generated operators, supply these
+    hypotheses independently.
+\end{definition}
+
 \begin{theorem}[Existence and inclusions of retained-product spectral data]
     \label{thm:mpdo_retained_product_spectral_family_exists}
     \lean{MPOTensor.verticalCopyCoordinateEquiv}
@@ -265,7 +293,7 @@
     \lean{MPOTensor.retainedProductBlockInclusion_isometry}
     \lean{MPOTensor.retainedVerticalProductTensor_mul_retainedProductBlockInclusion}
     \lean{MPOTensor.retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor}
-    \lean{MPOTensor.exists_retainedProductSpectralFamily}
+    \lean{MPOTensor.HasVerticalBNTProductInputs.exists_retainedProductSpectralFamily}
     \lean{MPOTensor.RetainedProductSpectralFamily.retainedInclusion}
     \lean{MPOTensor.RetainedProductSpectralFamily.ambientInclusion}
     \lean{MPOTensor.RetainedProductSpectralFamily.retainedInclusion_isometry}
@@ -276,10 +304,10 @@
     \lean{MPOTensor.RetainedProductSpectralFamily.ambient_intertwine_adjoint}
     \lean{MPOTensor.RetainedProductSpectralFamily.ambient_compression}
     \leanok
-    \uses{def:mpdo_retained_product_spectral_family, thm:mpdo_weighted_vertical_product_block_normal_decomposition, thm:mpdo_retained_vertical_product_canonical_hypotheses, lem:matrix_sigma_block_inclusion}
+    \uses{def:mpdo_retained_product_spectral_family, def:mpdo_grouped_vertical_product_inputs, thm:mpdo_weighted_vertical_product_block_normal_decomposition, thm:mpdo_retained_vertical_product_canonical_hypotheses, lem:matrix_sigma_block_inclusion}
     Suppose that the one-site vertical tensor has the stated exact
-    coisometric reconstruction, that $M$ is in normalized BNT-refined
-    horizontal form, and that $M$ generates positive operators. Then simultaneous retained-product
+    coisometric reconstruction, and that $M$ has the grouped vertical product
+    hypotheses. Then simultaneous retained-product
     spectral data exist. In copy coordinates, the assembled vertical tensor
     is the direct sum of the weighted simple blocks. The canonical inclusion
     of each copy is an isometry, intertwines in both directions, and its
@@ -292,7 +320,7 @@
     inclusions intertwine each active weighted corner with the blocked
     vertical tensor in both directions. In particular, if $J_j$ is the
     ambient inclusion of an active corner, then
-    $J_j^\dagger\mathcal V(M^{(2)})^iJ_j=\lambda_jA_j^i$.
+    $J_j^\dagger(\widetilde{M^{(2)}})^iJ_j=\lambda_jA_j^i$.
     These explicit composite inclusions retain the range projections required
     for the sector-weight comparison.
 \end{theorem}
@@ -316,27 +344,6 @@
     an isometric reference corner of the blocked vertical tensor. Transport
     along an equality of bond dimensions preserves its isometry and exact
     compression formula.
-\end{proof}
-
-\begin{theorem}[Retained-product spectra from literal CPSV canonical form]
-    \label{thm:mpdo_literal_cpsv_retained_product_spectral_family}
-    \lean{MPSTensor.IsCPSVCanonicalForm.exists_retainedProductSpectralFamily}
-    \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_retained_product_spectral_family, thm:mpdo_literal_cpsv_positive_blocking, thm:mpdo_vertical_projector_closure_literal_cpsv, thm:mpdo_vertical_no_periodic_vectors_literal_cpsv}
-    Let $M$ generate matrix product density operators, and suppose that its
-    doubled-index MPS tensor is in literal CPSV canonical form. Given an exact
-    coisometric reconstruction of the one-site vertical tensor by a retained
-    direct sum of weighted normal tensors, simultaneous retained-product
-    spectral families exist for all ordered pairs of retained copies. Empty
-    active families are preserved. This is the retained-product decomposition
-    used in \cite[Appendix~C.4, lines~2020--2029]{Cirac2016MPDO_arXiv}.
-\end{theorem}
-
-\begin{proof}\leanok
-    Literal CPSV canonical form passes to the two-site blocking. Proposition
-    4.13 gives invariant-projector closure and excludes nontrivial periodic
-    vectors for its vertical tensor. Apply the retained-product construction
-    to these two properties and the squared coisometric reconstruction.
 \end{proof}
 
 \begin{theorem}[Flattened reconstruction of the retained product]
@@ -495,40 +502,20 @@
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
         activeCoefficient_mul_phase_pos}
     \leanok
-    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_grouped_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
-    Suppose that $M$ is in normalized BNT-refined horizontal form and generates
-    positive operators. Assume exact coisometric reconstructions of its one-site and
+    \uses{def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_grouped_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
+    Suppose that $M$ generates positive operators and has the grouped vertical
+    product hypotheses. Assume
+    exact coisometric reconstructions of its one-site and
     blocked vertical tensors, positive multiplicities and weights for the
     blocked BNT, and normality of its BNT representatives. For every active
     product corner $j$, one has $0<\lambda_j\zeta_j$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Normalized BNT-refined horizontal form separates every nonzero
-    range-projection corner at some finite chain length. Apply
+    The sector-compression separation hypothesis supplies a nonzero
+    finite-chain compression for each active corner. Apply
     Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     with this separation property.
-\end{proof}
-
-\begin{theorem}[Literal positivity of active product coefficients]
-    \label{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos}
-    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-        activeCoefficient_mul_phase_pos_of_cpsvCanonicalForm}
-    \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:cpsv_literal_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
-    Suppose that the doubled-index MPS tensor of $M$ is in literal CPSV
-    canonical form and that $M$ generates matrix product density operators.
-    Assume exact coisometric reconstructions of the one-site and blocked
-    vertical tensors, positive multiplicities and weights for the blocked
-    BNT, and normality of its representatives. For every active product
-    corner $j$, one has $0<\lambda_j\zeta_j$. This is the positivity step of
-    \cite[Appendix~C.4, lines~2025--2029]{Cirac2016MPDO_arXiv}.
-\end{theorem}
-
-\begin{proof}\leanok
-    The literal sector-compression separation theorem supplies the finite
-    chain on which the active corner is nonzero. Apply
-    Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}.
 \end{proof}
 
 \begin{theorem}[Unitary normalization of active product gauges]
@@ -536,9 +523,9 @@
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
         exists_unitaryNormalization}
     \leanok
-    \uses{thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, lem:mpdo_horizontal_cf_block_two, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
+    \uses{def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, lem:mpdo_horizontal_cf_block_two, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
     Under the hypotheses of
-    Theorem~\ref{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos},
+    Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos},
     for every active product corner $j$ there is a real number $\omega_j>0$ such that
     \begin{align}
         X_j^\dagger X_j
@@ -554,41 +541,11 @@
 
 \begin{proof}\leanok
     Apply the Figure~8 comparison to the active corner and the distinguished
-    blocked reference corner. Both coefficients are positive, so horizontal
-    canonicality and positivity identify their Gram-dressed normal tensors.
+    blocked reference corner. Both coefficients are positive, and the
+    two-site Gram comparison identifies their Gram-dressed normal tensors.
     Normal-tensor rigidity then makes $X_j^\dagger X_j$ a positive real
     multiple of the identity. Division by the positive square root gives a
     unitary matrix.
-\end{proof}
-
-\begin{theorem}[Literal unitary normalization of active product gauges]
-    \label{thm:mpdo_literal_cpsv_active_product_gauge_unitary_normalization}
-    \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
-        exists_unitaryNormalization_of_cpsvCanonicalForm}
-    \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos, thm:cpsv_literal_positive_relative_gram_scalar}
-    Under the hypotheses of
-    Theorem~\ref{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos},
-    for every active product corner $j$ there is a real number $\omega_j>0$ such
-    that
-    \begin{align}
-        X_j^\dagger X_j
-         & =\omega_j\Id,
-        \notag                 \\
-        \omega_j^{-1/2}X_j
-         & \in\mathrm{U}(D_j).
-        \notag
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    Compress the blocked vertical tensor to the active corner and to the
-    distinguished blocked reference corner. Their coefficients are positive by
-    Theorem~\ref{thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos}
-    and by positivity of the blocked multiplicity
-    weight. The literal Figure~8 comparison gives
-    $X_j^\dagger X_j=\omega_j\Id$ with $\omega_j>0$; division by
-    $\sqrt{\omega_j}$ gives a unitary matrix.
 \end{proof}
 
 \begin{definition}[Original-label corner family]
@@ -738,11 +695,11 @@
     \label{thm:mpdo_transported_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.transportedVerticalSector_exists_positiveFusionDecomposition}
     \leanok
-    \uses{lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_active_product_gauge_unitary_normalization, thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry, thm:mpdo_normalized_product_corners_to_fusion_coisometry}
+    \uses{def:mpdo_grouped_vertical_product_inputs, lem:cpsv_bnt_block_dimensions_positive, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_active_product_gauge_unitary_normalization, thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry, thm:mpdo_normalized_product_corners_to_fusion_coisometry}
     Under the one-site and two-site vertical basis-of-normal-tensors
     decompositions and the two completely positive, trace-preserving
     physical-closure transport identities, assume that the one-site tensor
-    is in normalized BNT-refined horizontal form and defines a matrix product
+    has grouped vertical product inputs and defines a matrix product
     density operator. Then there are positive diagonal multiplicity matrices
     $\chi_{\alpha,\beta,\gamma}$ and matrices $U_{\alpha,\beta}$ such that
     every diagonal entry is positive and
@@ -785,16 +742,23 @@
     identities.
 \end{proof}
 
-\begin{theorem}[Positive fusion from literal CPSV canonical form]
-    \label{thm:mpdo_literal_cpsv_vertical_product_positive_fusion_decomposition}
-    \lean{MPOTensor.%
-        exists_positiveFusionDecomposition_of_unitaryBlockEquiv_of_cpsvCanonicalForm}
+\begin{theorem}[Positive fusion from grouped vertical product inputs]
+    \label{thm:mpdo_vertical_product_positive_fusion_decomposition}
+    \lean{MPOTensor.HasVerticalBNTProductInputs.%
+        exists_positiveFusionDecomposition_of_unitaryBlockEquiv}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_literal_cpsv_retained_product_spectral_family, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_literal_cpsv_active_product_coefficient_phase_pos, thm:mpdo_literal_cpsv_active_product_gauge_unitary_normalization, thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry, thm:mpdo_normalized_product_corners_to_fusion_coisometry}
-    Let $M$ generate matrix product density operators, and suppose that its
-    doubled-index MPS tensor is in literal CPSV canonical form. Given one-site
-    and two-site vertical canonical decompositions and their trace-ratio
-    unitary sector correspondence, there are positive diagonal matrices
+    \uses{def:mpdo, def:mpdo_grouped_vertical_product_inputs, thm:mpdo_transported_vertical_sector_coefficient_comparison, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_active_product_gauge_unitary_normalization, thm:mpdo_original_corner_family_exists, thm:mpdo_original_corner_family_to_fusion_coisometry, thm:mpdo_normalized_product_corners_to_fusion_coisometry}
+    Let $M$ generate matrix product density operators and have grouped
+    vertical product inputs. Suppose that its one-site and two-site vertical
+    tensors have exact coisometric weighted reconstructions with positive
+    multiplicities and weights, and that the two-site representatives form a
+    basis of normal tensors. Suppose also that a sector bijection $\sigma$
+    identifies the bond dimensions and that, after this identification, the
+    unitary matrices $V_\alpha$ satisfy
+    $A_{2,\sigma(\alpha)}^v=
+        \frac{\tr(\mu_{1,\alpha})}{\tr(\mu_{2,\sigma(\alpha)})}
+        V_\alpha A_{1,\alpha}^vV_\alpha^\dagger$ for every vertical letter
+    $v$. Then there are positive diagonal matrices
     $\chi_{\alpha,\beta,\gamma}$ and matrices $U_{\alpha,\beta}$ such that
     \begin{align}
         U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}
@@ -821,10 +785,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Literal canonical form gives simultaneous spectra for all retained product
-    corners. Compare each active corner with the blocked vertical BNT. Literal
-    sector separation makes its coefficient positive, and the literal
-    Figure~8 comparison normalizes its gauge to a unitary. Transporting these
+    The grouped vertical product hypotheses give simultaneous spectra for all
+    retained product corners. Compare each active corner with the blocked
+    vertical BNT. Sector separation makes its coefficient positive, and the
+    blocked Gram comparison normalizes its gauge to a unitary. Transporting these
     corners through the one-site--two-site sector correspondence gives
     positive original-label corners; their adjoints form the rows of the
     coisometries $U_{\alpha,\beta}$ and yield both displayed identities.
