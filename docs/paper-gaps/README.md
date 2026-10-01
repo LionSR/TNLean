@@ -646,6 +646,10 @@ note.
   argument.
 - `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
   converse implication of Theorem 4.1 uses without proof.
+- `dccsp17_orbit_phase_wraparound.tex` (local correction) records that the
+  telescoping product of local phases in the proof of Theorem 4.1 fails as
+  printed at the wraparound representative `k_u = q - 1`, where
+  `k_{u+p} = 0`, and gives the corrected product.
 
 For the matrix product operator symmetries of arXiv:2203.12563:
 
@@ -732,12 +736,16 @@ For the group matrix product operators of arXiv:2203.12563:
   gauge in which the three-cocycle is one on the stabilizer, gives a
   $\mathbb Z_3$ example where it fails for a nonconstant trivializer, and
   states the torsor of solutions for action-tensor gauge classes.
+- `glm23_klein_h3_circle_coefficients.tex` records that the Klein-four
+  three-cocycle classification is formalized with $\mathbb C^\times$
+  coefficients, while the source states it for $U(1)$.
 - `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
   $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
   $Z$ on the second qubit, form an exact normal representation whose
   anomaly three-cocycle has the detector values $(+1,+1,-1)$ of the type-II
-  row of the table, and that the separation of the eight classes by these
-  values is not formalized.
+  row of the table. The separation of the eight classes by these values is now
+  formalized, so the anomaly class is the type-II class; the comparison with
+  the original odd-ring or two-site-blocked family remains open.
 
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
@@ -844,6 +852,9 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   blocked tensor is injective, so that every layer is an isometry, and for
   chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
   a coarser last block remove the two restrictions.
+- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
+  that the claim that states in the same phase are related by a log-depth
+  circuit is formalized only between two normal tensors.
 
 For the correlation functions of arXiv:2011.12127, Section II.B.3:
 
