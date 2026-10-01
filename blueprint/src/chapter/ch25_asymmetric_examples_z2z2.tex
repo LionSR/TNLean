@@ -1286,7 +1286,8 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff,
         TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators}
     \leanok
-    \uses{def:asymex_klein_cocycle_family}
+    \uses{def:asymex_klein_cocycle_family,def:mpug_cochain_restriction,
+        def:mpug_trivial_gauge_class}
     Let $H\leq\Z_2^2$, with $a=(1,0)$ and $b=(0,1)$.
     The restriction of $\omega_{pqr}$ to $H$ represents the trivial
     cohomology class if and only if $pu+qv+ruv=0$ for every $(u,v)\in H$.
@@ -1316,9 +1317,14 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     element of $H$ is one. Since each element has square equal to the
     identity and the representative is normalized, this invariant is
     $\omega_{pqr}(g,g,g)$; hence $pu+qv+ruv=0$.
-    Conversely, the binary coordinate calculation shows that vanishing
-    at $g,h,k,gh,gk,hk$ forces the exponent in
-    $\omega_{pqr}(g,h,k)$ to vanish. Subgroup closure therefore makes
+    Conversely, write $Q(x)=px_1+qx_2+rx_1x_2$. A check over the finitely
+    many $p,q,r\in\Z_2$ and $g,h,k\in\Z_2^2$ gives
+    \begin{align}
+        Q(g)=Q(h)=Q(k)=Q(g+h)=Q(g+k)=Q(h+k)=0
+        \implies pg_1h_1k_1+qg_2h_2k_2+rg_1h_2k_2=0.
+        \notag
+    \end{align}
+    Subgroup closure therefore makes
     the entire restriction identically one.
     Testing the identity and the three nonidentity elements gives the table.
 \end{proof}

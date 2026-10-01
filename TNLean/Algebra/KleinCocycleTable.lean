@@ -178,6 +178,8 @@ theorem kleinCocycleFamily_cohomologousTo_iff (p q r p' q' r' : ZMod 2) :
   · rintro ⟨rfl, rfl, rfl⟩
     exact CohomologousTo.refl _
 
+/-- Vanishing of the diagonal exponent `Q(x) = p x₁ + q x₂ + r x₁ x₂` at
+`a, b, c, a+b, a+c, b+c` forces the cocycle exponent at `(a,b,c)` to vanish. -/
 private theorem klein_exponent_eq_zero_of_diagonal (p q r : ZMod 2) (a b c : ZMod 2 × ZMod 2)
     (ha : p * a.1 + q * a.2 + r * a.1 * a.2 = 0)
     (hb : p * b.1 + q * b.2 + r * b.1 * b.2 = 0)
