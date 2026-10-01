@@ -1725,6 +1725,126 @@ change the local dimension act on single sites.
     Theorem~\ref{thm:ldp_approximation_error_normal}, which is less than $1$ for
     large $N$.
 \end{proof}
+\begin{lemma}[Inverses and series composition of local circuits]
+    \label{lem:ldp_circuit_inverse_composition}
+    \uses{def:ldp_local_circuit}
+    \lean{MPSPreparation.Layer.adjoint, MPSPreparation.Layer.adjoint_partialOp,
+        MPSPreparation.Layer.adjoint_op, MPSPreparation.circuitOp_append,
+        MPSPreparation.circuitOp_map_adjoint_reverse,
+        MPSPreparation.IsLocalCircuitOfDepth.mem_unitary,
+        MPSPreparation.IsLocalCircuitOfDepth.star,
+        MPSPreparation.IsLocalCircuitOfDepth.mul}
+    \leanok
+    A local circuit of depth $T$ is unitary, and its adjoint is a local
+    circuit of depth $T$. If $U$ and $U'$ are local circuits of depths $T$
+    and $T'$, then $U'U$ is a local circuit of depth $T+T'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $U=W_T\cdots W_1$ with layers $W_k$, then
+    $U^\dagger=W_1^\dagger\cdots W_T^\dagger$, and $W_k^\dagger$ is the layer
+    whose gates are the adjoints of the gates of $W_k$, on the same pairs. The
+    layers of $U'U$ are those of $U$ followed by those of $U'$.
+\end{proof}
+
+\begin{lemma}[Preparation from the all-zero state]
+    \label{lem:ldp_preparation_from_zero}
+    \uses{def:ldp_local_circuit, lem:ldp_circuit_inverse_composition}
+    \lean{MPSPreparation.finKronecker_mulVec_productVector,
+        MPSPreparation.exists_mem_unitary_eq_smul_mulVec_single_zero,
+        MPSPreparation.productVector_smul,
+        MPSPreparation.exists_productVector_eq_smul_finKronecker_mulVec,
+        MPSPreparation.isLocalCircuitOfDepth_finKronecker,
+        MPSPreparation.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
+    \leanok
+    Let $d\ge1$. A tensor product $\bigotimes_iu_i$ of one-site unitaries is a
+    local circuit of depth $2$. Every nonzero vector prepared in depth $T$ is a
+    scalar multiple of $U\ket{0\cdots0}$ for a local circuit $U$ of depth
+    $T+2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first layer applies $u_k\otimes u_{k+1}$ on the pairs $\{k,k+1\}$ with
+    $k$ odd and $k<N$, and the second applies $u_N$ when $N$ is odd. A nonzero
+    product vector $\bigotimes_i\ket{v_i}$ has $v_i\neq0$ for every $i$, and
+    $\ket{v_i}=c_iu_i\ket0$ for a unitary $u_i$ whose first column is
+    $\ket{v_i}/\lVert v_i\rVert$ and $c_i=\lVert v_i\rVert$. Hence
+    $\bigotimes_i\ket{v_i}=(\prod_ic_i)(\bigotimes_iu_i)\ket{0\cdots0}$, and
+    Lemma~\ref{lem:ldp_circuit_inverse_composition} composes the two
+    circuits.
+\end{proof}
+
+\begin{lemma}[Triangle step for the error]
+    \label{lem:ldp_error_triangle}
+    \lean{MPSPreparation.one_sub_norm_inner_le_norm_sub_smul_sq,
+        MPSPreparation.exists_norm_sub_smul_sq_eq,
+        MPSPreparation.one_sub_norm_inner_le_two_mul_add,
+        MPSPreparation.inner_eq_of_mulVec_eq,
+        MPSPreparation.norm_eq_of_mulVec_eq}
+    \leanok
+    For unit vectors $x$, $y$, $z$ in a complex inner product space,
+    $\varepsilon(x,z)\le2\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$.
+    A unitary matrix preserves inner products and norms.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For unit vectors $a$, $b$ and $\lvert c\rvert=1$,
+    $\lVert a-cb\rVert^2=2-2\operatorname{Re}(c\braket{a}{b})
+        \ge2\varepsilon(a,b)$, with equality for
+    $c=\overline{\braket{a}{b}}/\lvert\braket{a}{b}\rvert$ (any $c$ if
+    $\braket{a}{b}=0$). Choose $c_1$, $c_2$ attaining equality for $(x,y)$ and
+    $(y,z)$. Then
+    $\lVert x-c_1c_2z\rVert\le\lVert x-c_1y\rVert+\lVert y-c_2z\rVert$, and
+    $(s+t)^2\le2(s^2+t^2)$ gives
+    $2\varepsilon(x,z)\le\lVert x-c_1c_2z\rVert^2
+        \le4\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$.
+\end{proof}
+
+\begin{corollary}[Normal states are transformed into each other in depth $O(\log(N/\varepsilon))$]
+    \label{cor:ldp_normal_states_circuit}
+    \uses{thm:ldp_depth_upper_bound, lem:ldp_periodic_state_nonzero,
+        lem:ldp_circuit_inverse_composition, lem:ldp_preparation_from_zero,
+        lem:ldp_error_triangle}
+    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_isLocalCircuitOfDepth_le_log}
+    \leanok
+    Let $A$ and $B$ be normal tensors with the same physical dimension $d$.
+    There is a constant $c$ depending only on $A$ and $B$ such that, for every
+    $N\ge2$ and $0<\varepsilon\le1$ for which $\ket{\phi_N(A)}$ and
+    $\ket{\phi_N(B)}$ are nonzero, some local circuit $U$ of depth at most
+    $c\log(N/\varepsilon)$ satisfies
+    $\varepsilon(U\phi_N(A),\phi_N(B))\le\varepsilon$, with $\phi_N(A)$ and
+    $\phi_N(B)$ the normalized states. If both bond dimensions are at least
+    $1$, there are $c$ and $N_0$ such that the same holds for every
+    $N\ge N_0$ and $0<\varepsilon\le1$ without the nonvanishing condition.
+
+    The paragraph ``Discussion and outlook'' of \cite{Malz2024Preparation}
+    states that its results imply that states in the same phase are
+    transformed into each other by a circuit of logarithmic depth. Normal
+    states lie in the trivial phase of the classification without symmetry;
+    the corollary covers only this case. Non-normal states and phases defined
+    with a symmetry are not treated
+    \cite{gap:mswc24_same_phase_circuit_normal_case}.
+\end{corollary}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_depth_upper_bound} with error $\varepsilon/4$ and
+    Lemma~\ref{lem:ldp_preparation_from_zero}, there are local circuits $U_A$,
+    $U_B$ and unit vectors $\psi_A=aU_A\ket{0\cdots0}$,
+    $\psi_B=bU_B\ket{0\cdots0}$ with $\varepsilon(\psi_A,\phi_N(A))$ and
+    $\varepsilon(\psi_B,\phi_N(B))$ at most $\varepsilon/4$, of depths
+    $T_A+2$ and $T_B+2$ with $T_A,T_B$ at most a constant times
+    $\log(4N/\varepsilon)\le3\log(N/\varepsilon)$. Put $U=U_BU_A^\dagger$, a
+    local circuit of depth $T_A+T_B+4$ by
+    Lemma~\ref{lem:ldp_circuit_inverse_composition}; the term $4$ is at most
+    $(4/\log2)\log(N/\varepsilon)$. Then $U\psi_A=(a/b)\psi_B$ is a unit
+    vector, and since $U$ is unitary,
+    $\varepsilon(U\phi_N(A),(a/b)\psi_B)=\varepsilon(\phi_N(A),\psi_A)$.
+    Lemma~\ref{lem:ldp_error_triangle} gives
+    $\varepsilon(U\phi_N(A),\phi_N(B))\le2(\varepsilon/4+\varepsilon/4)
+        =\varepsilon$. The second statement follows from
+    Lemma~\ref{lem:ldp_periodic_state_nonzero}.
+\end{proof}
 %% The source illustrates the circuit with D = d. For general D the legs L_k,
 %% R_k are realized on groups of D sites, as in
 %% thm:ldp_approximating_state_depth (groups of ceil(log_d D) sites would also
