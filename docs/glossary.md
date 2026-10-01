@@ -1401,6 +1401,29 @@ The following notions use different transfer objects and are not interchangeable
   GHZ-type states, whose connected correlations do not decay, are prepared in
   depth `2`.
 
+### `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementPreparation.lean`.
+- **Meaning:** `ψ = U φ` for a vector `φ` with
+  `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
+  `T₂`, with `T₁ + T₂ ≤ T`.
+- **Source:** arXiv:2307.01696, paragraph "Long-range MPS using measurements"
+  ("First create `|χ_{N/q}⟩`, which can be done in constant depth with
+  measurements ... Subsequently, apply in parallel the isometries `W`");
+  arXiv:2103.13367, paragraph "State transformations with QC and LOCC" ("a
+  more general scheme with multiple rounds of LOCC").
+- **Sanctioned bridges:**
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`
+  (the states `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of blocks with orthogonal blocked
+  states, in depth `O(L)`) and
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`
+  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks).
+- **Caveat:** the circuit `U` is applied after the measurement and its
+  corrections and does not depend on the outcomes; it is one second round of
+  the source's multi-round scheme, with no measurement in it.
+
 ### `MPSPreparation.IsLocalPerm`
 
 - **Declaration:**

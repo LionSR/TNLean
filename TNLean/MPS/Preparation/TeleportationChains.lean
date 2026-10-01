@@ -391,7 +391,7 @@ theorem isZeroOn_chainPerm_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N)
         {a + ((2 * L + 1 : ℕ) : Fin N), a + ((2 * L + 2 : ℕ) : Fin N)})
         (chainPerm (forwardChain a L (by omega)) *ᵥ v) :=
       fun y hy i hi => hi.elim (ih (by omega) hv' y hy i) (hrest' y hy i)
-    rw [forwardChain, chainPerm, ← mulVec_mulVec, swapPerm]
+    rw [forwardChain, chainPerm_cons, ← mulVec_mulVec, swapPerm]
     refine (hall.permMatrix_cfgPerm_mulVec_image _).mono ?_
     rintro i ⟨j, hj, rfl⟩
     simp only [chainHop]
