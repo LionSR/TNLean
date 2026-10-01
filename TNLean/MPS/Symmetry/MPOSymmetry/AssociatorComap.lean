@@ -50,7 +50,7 @@ open TNLean.Algebra
 
 namespace MPOTensor.GroupFamily
 
-variable {G H : Type} [Group G] [Group H] {d : ℕ}
+variable {G H : Type*} [Group G] [Group H] {d : ℕ}
 
 /-- **Restriction along a homomorphism**: the family `a ↦ O_{f a}` indexed by `H`. -/
 def comap (F : GroupFamily G d) (f : H →* G) : GroupFamily H d where
@@ -124,6 +124,22 @@ theorem comap_rightV (a b c : H) :
         mulTensorAssocInvMatrix (F.bondDim (f a)) (F.bondDim (f b)) (F.bondDim (f c))) = _
   rw [rightV, Matrix.mul_assoc (F.castMat _) (fd.V _ _), V_mul_idKron_castMat]
   simp only [Matrix.mul_assoc, castMat_mul_castMat_assoc]
+
+end FusionData
+
+end MPOTensor.GroupFamily
+
+/-! ### Restriction of the anomaly three-cochain
+
+Scalar three-cochains are indexed by groups in `Type`. -/
+
+namespace MPOTensor.GroupFamily
+
+variable {G H : Type} [Group G] [Group H] {d : ℕ} {F : GroupFamily G d}
+
+namespace FusionData
+
+variable (fd : FusionData F) (f : H →* G)
 
 /-- **The anomaly three-cochain of restricted fusion tensors is the restriction of the
 anomaly three-cochain**: `ω_H(a,b,c) = ω(f a, f b, f c)`.

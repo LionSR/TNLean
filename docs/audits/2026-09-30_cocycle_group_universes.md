@@ -17,7 +17,12 @@ The original issue's estimate of 13 files predates later consumers. This change
 covers the following 44 files, located by following cocycle/cochain uses and
 reverse imports. Block-label types `X` retain their independent universes.
 Tensor-only group families, permutation actions, on-site twists, and
-G-injectivity definitions keep their existing universe polymorphism. The generic
+G-injectivity definitions keep their existing universe polymorphism in the
+modules that define them, and so do the tensor-level declarations built on
+them: fusion and action data, reduction families, domain-wall actions and
+strings, and the shift helpers of the cocycle MPO. Only declarations that take
+a scalar cochain, an L-symbol, or a cohomology class (and their direct
+consumers) sit in narrower sections with `G : Type`. The generic
 `groupCohomology_π_eq_zero_iff` also retains the shared ring/group universe.
 No definitions, theorem names, proofs, or blueprint declaration tags are removed.
 

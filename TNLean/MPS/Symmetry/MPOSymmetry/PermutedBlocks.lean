@@ -52,9 +52,9 @@ namespace MPOTensor
 
 namespace GroupFamily
 
-universe v
+universe u v
 
-variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}
+variable {d : ℕ} {G : Type u} [Group G] {F : GroupFamily G d}
   {X : Type v} [MulAction G X] {D : X → ℕ} {A : (x : X) → MPSTensor d (D x)}
 
 /-! ### Carried vectors -/
@@ -190,6 +190,23 @@ theorem exists_isReduction_fuseV (g h : G) (x : X) : ∃ W, MPSTensor.IsReductio
   ⟨_, isReduction_castIndex
     (((fd.isReduction g h).actTensor_kronId (A x)).trans (ad.isReduction (g * h) x))
     (mul_smul g h x)⟩
+
+end BlockActionData
+
+end GroupFamily
+
+/-! ### L-symbols of permuted blocks
+
+L-symbols are indexed by groups in `Type`, the universe of Mathlib's group cohomology. -/
+
+namespace GroupFamily
+
+variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}
+  {X : Type v} [MulAction G X] {D : X → ℕ} {A : (x : X) → MPSTensor d (D x)}
+
+namespace BlockActionData
+
+variable (fd : FusionData F) (ad : BlockActionData F A)
 
 open Classical in
 /-- **The L-symbols of permuted blocks**: `Lˣ_{g,h}` is the nonzero scalar with

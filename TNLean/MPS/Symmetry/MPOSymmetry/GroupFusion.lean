@@ -32,7 +32,7 @@ Only the operator law is used; normality of the tensors, the other clause of
 
 namespace MPOTensor.GroupFamily
 
-variable {G : Type} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
+variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 
 /-- **The group fusion rules.** A group family whose periodic operators satisfy
 `O_g O_h = O_{gh}` at every positive length is a fusion algebra with structure constants

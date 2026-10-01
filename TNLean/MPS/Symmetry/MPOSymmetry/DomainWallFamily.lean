@@ -61,7 +61,7 @@ open TNLean.Algebra
 
 namespace MPOTensor.GroupFamily.BlockActionData
 
-variable {d : ℕ} {G : Type} {X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
+variable {d : ℕ} {G X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
   {A : (x : X) → MPSTensor d (D x)}
 
 /-- The local action on domain walls transports along equalities of the target blocks, for a
@@ -98,6 +98,24 @@ theorem phase_ne_zero (hB : ad.IsDomainWallFamily e B) (g : G) (y z : X) : B g y
 /-- The domain walls of a family are nonzero. -/
 theorem ne_zero (hB : ad.IsDomainWallFamily e B) (y z : X) : e y z ≠ 0 :=
   (hB 1 y z).source_ne_zero
+
+end IsDomainWallFamily
+
+end MPOTensor.GroupFamily.BlockActionData
+
+/-! ### L-symbol relations for a family of domain walls
+
+L-symbols are indexed by groups in `Type`, the universe of Mathlib's group cohomology. -/
+
+namespace MPOTensor.GroupFamily.BlockActionData
+
+variable {d : ℕ} {G : Type} {X : Type*} [Group G] {F : GroupFamily G d} [MulAction G X] {D : X → ℕ}
+  {A : (x : X) → MPSTensor d (D x)}
+
+namespace IsDomainWallFamily
+
+variable {ad : BlockActionData F A} {e : (y z : X) → Fin d → Matrix (Fin (D y)) (Fin (D z)) ℂ}
+  {B : G → X → X → ℂ} (fd : FusionData F)
 
 /-- **Fractionalization of the symmetry on a family of domain walls** (arXiv:2405.00439,
 `PentLB`, `Papers/2405.00439/MPU-DW.tex` lines 1928--1933):

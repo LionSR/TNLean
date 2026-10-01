@@ -64,7 +64,7 @@ open Matrix MPOTensor.GroupCocycle
 
 namespace MPSTensor
 
-variable {G : Type} [Group G] [Fintype G] [DecidableEq G] {n : ℕ}
+variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {n : ℕ}
 
 /-! ### The tensor -/
 

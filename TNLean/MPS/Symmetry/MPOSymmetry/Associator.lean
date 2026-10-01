@@ -62,7 +62,9 @@ variable {d : ℕ}
 
 namespace GroupFamily
 
-variable {G : Type} [Group G]
+universe u
+
+variable {G : Type u} [Group G]
 
 variable {F : GroupFamily G d}
 
@@ -268,17 +270,7 @@ def IsAssociator (g h k : G) (z : ℂ) : Prop :=
   MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
     (fd.leftV g h k) (fd.rightV g h k) z
 
-open Classical in
-/-- **The anomaly three-cochain of a choice of fusion tensors**: `ω(g,h,k)` is the
-nonzero scalar comparing the two fusion trees of the triple product
-(`MPOTensor.GroupFamily.FusionData.isAssociator_omega`).  It is set to one if no
-such scalar exists, which does not happen for a normal representation.
-
-Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
-1506--1535. -/
-noncomputable def omega : ScalarThreeCochain G := fun g h k ↦
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ fd.IsAssociator g h k z then Units.mk0 hz.choose hz.choose_spec.1
-  else 1
+section
 
 variable {fd}
 
@@ -291,18 +283,6 @@ theorem _root_.MPOTensor.GroupFamily.IsNormalRepresentation.sameMPV₂Pos_triple
   sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
     simp only [mpo_mulTensor, ← hF.operator_mul _ _ N hN]
 
-/-- `ω(g,h,k)` satisfies the characterizing dressed identity.
-
-Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
-1506--1535. -/
-theorem isAssociator_omega (hF : F.IsNormalRepresentation) (g h k : G) :
-    fd.IsAssociator g h k (fd.omega g h k) := by
-  have hex : ∃ z : ℂ, z ≠ 0 ∧ fd.IsAssociator g h k z :=
-    (fd.isReduction_left g h k).exists_isDressedProportional (fd.isReduction_right g h k)
-      (hF.isNormal _) (hF.sameMPV₂Pos_tripleTensor g h k)
-  simp only [omega, hex, ↓reduceDIte, Units.val_mk0]
-  exact hex.choose_spec.2
-
 /-- The left boundary of the first fusion tree is nonzero against arbitrarily long
 words of the triple product. -/
 theorem exists_leftV_mul_evalWord_ne_zero (hF : F.IsNormalRepresentation) (g h k : G)
@@ -310,13 +290,6 @@ theorem exists_leftV_mul_evalWord_ne_zero (hF : F.IsNormalRepresentation) (g h k
       fd.leftV g h k * Kraus.evalWord (F.tripleTensor g h k).toMPSTensor w ≠ 0 :=
   (fd.isReduction_left g h k).exists_mul_evalWord_ne_zero (hF.isNormal _)
     (F.bondDim_pos _) N
-
-/-- **Uniqueness of `ω(g,h,k)`**: any scalar satisfying the characterizing dressed
-identity is `ω(g,h,k)`. -/
-theorem eq_omega_of_isAssociator (hF : F.IsNormalRepresentation) {g h k : G} {z : ℂ}
-    (hz : fd.IsAssociator g h k z) : z = fd.omega g h k :=
-  MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero hz
-    (isAssociator_omega hF g h k) (exists_leftV_mul_evalWord_ne_zero hF g h k)
 
 /-- Moving a bond identification out of a fusion tensor with a factor on the
 right. -/
@@ -335,6 +308,58 @@ theorem V_mul_idKron_castMat (g : G) {a b : G} (e : a = b) {n : ℕ}
       F.castMat (congrArg (g * ·) e) * (fd.V g a * idKron (F.bondDim g) X) := by
   subst e
   simp
+
+end
+
+end FusionData
+
+end GroupFamily
+
+/-! ### The anomaly three-cochain
+
+Scalar three-cochains are indexed by groups in `Type`, the universe of Mathlib's
+group cohomology, so the declarations below restrict `G` accordingly. -/
+
+namespace GroupFamily
+
+variable {G : Type} [Group G] {F : GroupFamily G d}
+
+namespace FusionData
+
+variable (fd : FusionData F)
+
+open Classical in
+/-- **The anomaly three-cochain of a choice of fusion tensors**: `ω(g,h,k)` is the
+nonzero scalar comparing the two fusion trees of the triple product
+(`MPOTensor.GroupFamily.FusionData.isAssociator_omega`).  It is set to one if no
+such scalar exists, which does not happen for a normal representation.
+
+Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
+1506--1535. -/
+noncomputable def omega : ScalarThreeCochain G := fun g h k ↦
+  if hz : ∃ z : ℂ, z ≠ 0 ∧ fd.IsAssociator g h k z then Units.mk0 hz.choose hz.choose_spec.1
+  else 1
+
+variable {fd}
+
+/-- `ω(g,h,k)` satisfies the characterizing dressed identity.
+
+Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
+1506--1535. -/
+theorem isAssociator_omega (hF : F.IsNormalRepresentation) (g h k : G) :
+    fd.IsAssociator g h k (fd.omega g h k) := by
+  have hex : ∃ z : ℂ, z ≠ 0 ∧ fd.IsAssociator g h k z :=
+    (fd.isReduction_left g h k).exists_isDressedProportional (fd.isReduction_right g h k)
+      (hF.isNormal _) (hF.sameMPV₂Pos_tripleTensor g h k)
+  simp only [omega, hex, ↓reduceDIte, Units.val_mk0]
+  exact hex.choose_spec.2
+
+/-- **Uniqueness of `ω(g,h,k)`**: any scalar satisfying the characterizing dressed
+identity is `ω(g,h,k)`. -/
+theorem eq_omega_of_isAssociator (hF : F.IsNormalRepresentation) {g h k : G} {z : ℂ}
+    (hz : fd.IsAssociator g h k z) : z = fd.omega g h k :=
+  MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero hz
+    (isAssociator_omega hF g h k) (exists_leftV_mul_evalWord_ne_zero hF g h k)
 
 /-- **The anomaly three-cochain is a three-cocycle** (arXiv:2502.20257,
 `eq:3-cocycle`, `main.tex` lines 1536--1540):

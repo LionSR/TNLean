@@ -254,7 +254,9 @@ end EntrySum
 
 namespace GroupFamily
 
-variable {G : Type} [Group G] {F : GroupFamily G d}
+universe u
+
+variable {G : Type u} [Group G] {F : GroupFamily G d}
 
 /-- A group family is **on-site** when every periodic operator is a tensor power of a one-site
 matrix, `U_g = u_g^{⊗ N}` on every nonempty chain.
@@ -323,6 +325,16 @@ theorem isOnSite_of_closed_fusion
     rw [mpo_apply_of_bondOne]
     simp [Matrix.trace_fin_one]
   exact key _ _ (bondDim_eq_one_of_closed_fusion hinj hone hfd g)
+
+end GroupFamily
+
+/-! ### The three-cocycle of closed fusion
+
+Scalar three-cochains are indexed by groups in `Type`. -/
+
+namespace GroupFamily
+
+variable {G : Type} [Group G] {F : GroupFamily G d}
 
 /-- **Closed fusion forces a trivial three-cocycle.** For an injective matrix product operator
 representation of a group with `U_g U_h = U_{gh}`, `U_e = 1`, and closed fusion, the anomaly
