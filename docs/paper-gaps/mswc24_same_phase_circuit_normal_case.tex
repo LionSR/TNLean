@@ -22,12 +22,13 @@ topologically trivial phase''.
 
 \section{What is formalized}
 Let $A$ and $B$ be normal tensors with the same physical dimension, and
-write $\ket{\phi_N}$ for the normalized periodic states and
+write $\hat\phi_N(A)=\ket{\phi_N(A)}/\lVert\phi_N(A)\rVert$ for the normalized periodic
+states and
 $\varepsilon(\psi,\phi)=1-\lvert\braket{\psi}{\phi}\rvert$ for the error of
 eq.~(1). There is $c$, depending only on $A$ and $B$, such that for $N\ge2$,
 $0<\varepsilon\le1$ and nonvanishing periodic states, a local circuit $U$ of
 depth at most $c\log(N/\varepsilon)$ satisfies
-$\varepsilon(U\phi_N(A),\phi_N(B))\le\varepsilon$; if both bond dimensions are
+$\varepsilon(U\hat\phi_N(A),\hat\phi_N(B))\le\varepsilon$; if both bond dimensions are
 positive, the same holds for all $N\ge N_0$ without the nonvanishing
 condition.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero}

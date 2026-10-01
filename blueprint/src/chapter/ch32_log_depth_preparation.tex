@@ -1761,7 +1761,7 @@ change the local dimension act on single sites.
 
 \begin{lemma}[Preparation from the all-zero state]
     \label{lem:ldp_preparation_from_zero}
-    \uses{def:ldp_local_circuit, lem:ldp_circuit_inverse_composition}
+    \uses{def:ldp_local_circuit}
     \lean{MPSPreparation.finKronecker_mulVec_productVector,
         MPSPreparation.exists_mem_unitary_eq_smul_mulVec_single_zero,
         MPSPreparation.productVector_smul,
@@ -1776,6 +1776,7 @@ change the local dimension act on single sites.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{lem:ldp_circuit_inverse_composition}
     The first layer applies $u_k\otimes u_{k+1}$ on the pairs $\{k,k+1\}$ with
     $k$ odd and $k<N$, and the second applies $u_N$ when $N$ is odd. A nonzero
     product vector $\bigotimes_i\ket{v_i}$ has $v_i\neq0$ for every $i$, and
@@ -1791,8 +1792,7 @@ change the local dimension act on single sites.
     \lean{MPSPreparation.one_sub_norm_inner_le_norm_sub_smul_sq,
         MPSPreparation.exists_norm_sub_smul_sq_eq,
         MPSPreparation.one_sub_norm_inner_le_two_mul_add,
-        MPSPreparation.inner_eq_of_mulVec_eq,
-        MPSPreparation.norm_eq_of_mulVec_eq}
+        Matrix.inner_eq_of_mulVec_eq, Matrix.norm_eq_of_mulVec_eq}
     \leanok
     For unit vectors $x$, $y$, $z$ in a complex inner product space,
     $\varepsilon(x,z)\le2\bigl(\varepsilon(x,y)+\varepsilon(y,z)\bigr)$.
@@ -1814,9 +1814,7 @@ change the local dimension act on single sites.
 
 \begin{corollary}[Normal states are transformed into each other in depth $O(\log(N/\varepsilon))$]
     \label{cor:ldp_normal_states_circuit}
-    \uses{thm:ldp_depth_upper_bound, lem:ldp_periodic_state_nonzero,
-        lem:ldp_circuit_inverse_composition, lem:ldp_preparation_from_zero,
-        lem:ldp_error_triangle}
+    \uses{def:ldp_local_circuit}
     \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero,
         MPSPreparation.exists_isLocalCircuitOfDepth_le_log}
     \leanok
@@ -1825,8 +1823,10 @@ change the local dimension act on single sites.
     $N\ge2$ and $0<\varepsilon\le1$ for which $\ket{\phi_N(A)}$ and
     $\ket{\phi_N(B)}$ are nonzero, some local circuit $U$ of depth at most
     $c\log(N/\varepsilon)$ satisfies
-    $\varepsilon(U\phi_N(A),\phi_N(B))\le\varepsilon$, with $\phi_N(A)$ and
-    $\phi_N(B)$ the normalized states. If both bond dimensions are at least
+    $\varepsilon(U\hat\phi_N(A),\hat\phi_N(B))\le\varepsilon$, where
+    $\hat\phi_N(A)=\ket{\phi_N(A)}/\lVert\phi_N(A)\rVert$ and
+    $\hat\phi_N(B)=\ket{\phi_N(B)}/\lVert\phi_N(B)\rVert$ are the normalized
+    states. If both bond dimensions are at least
     $1$, there are $c$ and $N_0$ such that the same holds for every
     $N\ge N_0$ and $0<\varepsilon\le1$ without the nonvanishing condition.
 
@@ -1840,20 +1840,23 @@ change the local dimension act on single sites.
 \end{corollary}
 \begin{proof}
     \leanok
+    \uses{thm:ldp_depth_upper_bound, lem:ldp_periodic_state_nonzero,
+        lem:ldp_circuit_inverse_composition, lem:ldp_preparation_from_zero,
+        lem:ldp_error_triangle}
     By Theorem~\ref{thm:ldp_depth_upper_bound} with error $\varepsilon/4$ and
     Lemma~\ref{lem:ldp_preparation_from_zero}, there are local circuits $U_A$,
     $U_B$ and unit vectors $\psi_A=aU_A\ket{0\cdots0}$,
-    $\psi_B=bU_B\ket{0\cdots0}$ with $\varepsilon(\psi_A,\phi_N(A))$ and
-    $\varepsilon(\psi_B,\phi_N(B))$ at most $\varepsilon/4$, of depths
+    $\psi_B=bU_B\ket{0\cdots0}$ with $\varepsilon(\psi_A,\hat\phi_N(A))$ and
+    $\varepsilon(\psi_B,\hat\phi_N(B))$ at most $\varepsilon/4$, of depths
     $T_A+2$ and $T_B+2$ with $T_A,T_B$ at most a constant times
     $\log(4N/\varepsilon)\le3\log(N/\varepsilon)$. Put $U=U_BU_A^\dagger$, a
     local circuit of depth $T_A+T_B+4$ by
     Lemma~\ref{lem:ldp_circuit_inverse_composition}; the term $4$ is at most
     $(4/\log2)\log(N/\varepsilon)$. Then $U\psi_A=(a/b)\psi_B$ is a unit
     vector, and since $U$ is unitary,
-    $\varepsilon(U\phi_N(A),(a/b)\psi_B)=\varepsilon(\phi_N(A),\psi_A)$.
+    $\varepsilon(U\hat\phi_N(A),(a/b)\psi_B)=\varepsilon(\hat\phi_N(A),\psi_A)$.
     Lemma~\ref{lem:ldp_error_triangle} gives
-    $\varepsilon(U\phi_N(A),\phi_N(B))\le2(\varepsilon/4+\varepsilon/4)
+    $\varepsilon(U\hat\phi_N(A),\hat\phi_N(B))\le2(\varepsilon/4+\varepsilon/4)
         =\varepsilon$. The second statement follows from
     Lemma~\ref{lem:ldp_periodic_state_nonzero}.
 \end{proof}

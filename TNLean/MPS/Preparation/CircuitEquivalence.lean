@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.MPS.Preparation.LogDepthPreparation
 import TNLean.MPS.Preparation.ProductStateCircuit
 
@@ -20,8 +21,10 @@ file treats only the case where both tensors are normal, the trivial phase of th
 without symmetry. Non-normal states are not treated, and nothing is claimed about phases defined
 with a symmetry. Documented in `docs/paper-gaps/mswc24_same_phase_circuit_normal_case.tex`.
 
-If `U_A |0⋯0⟩` approximates `|φ_N(A)⟩` and `U_B |0⋯0⟩` approximates `|φ_N(B)⟩`, up to scalars,
-then `U_B U_A†` maps `|φ_N(A)⟩` close to `|φ_N(B)⟩`. The adjoint of a local circuit is a local
+Write `|φ_N(A)⟩` for the periodic state of `A` and `|φ_N(A)⟩/‖φ_N(A)‖` for its normalization
+when it is nonzero. If `U_A |0⋯0⟩` approximates `|φ_N(A)⟩/‖φ_N(A)‖` and `U_B |0⋯0⟩` approximates
+`|φ_N(B)⟩/‖φ_N(B)‖`, up to scalars, then `U_B U_A†` maps the first normalized state close to the
+second. The adjoint of a local circuit is a local
 circuit of the same depth (`MPSPreparation.IsLocalCircuitOfDepth.star`), depths add in series
 (`MPSPreparation.IsLocalCircuitOfDepth.mul`), and the two product vectors are replaced by
 `|0⋯0⟩` with two more layers each
@@ -37,11 +40,10 @@ from `x` to the closest unit multiple of `y`.
 * `MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero`: for normal tensors
   `A` and `B` with the same physical dimension there is `c`, depending only on `A` and `B`, such
   that for `N ≥ 2`, `0 < ε ≤ 1`, `|φ_N(A)⟩ ≠ 0` and `|φ_N(B)⟩ ≠ 0`, a local circuit of depth at
-  most `c log(N/ε)` maps `|φ_N(A)⟩` to a vector `ψ` with `1 - |⟨ψ|φ_N(B)⟩| ≤ ε`.
+  most `c log(N/ε)` maps `|φ_N(A)⟩/‖φ_N(A)‖` to a vector `ψ` with
+  `1 - |⟨ψ|φ_N(B)⟩|/‖φ_N(B)‖ ≤ ε`.
 * `MPSPreparation.exists_isLocalCircuitOfDepth_le_log`: the same for every `N ≥ N₀`, without the
   conditions `|φ_N(A)⟩ ≠ 0` and `|φ_N(B)⟩ ≠ 0`.
-
-Here `|φ_N(·)⟩` denotes the normalized periodic state.
 -/
 
 open Matrix MPSTensor
@@ -106,28 +108,6 @@ theorem one_sub_norm_inner_le_two_mul_add {x y z : E} (hx : ‖x‖ = 1) (hy : �
 
 end Error
 
-/-! ### Unitaries on the chain -/
-
-/-- A unitary matrix preserves the inner product of the vectors it maps. -/
-theorem inner_eq_of_mulVec_eq {ι : Type*} [Fintype ι] [DecidableEq ι] {U : Matrix ι ι ℂ}
-    (hU : U ∈ unitary (Matrix ι ι ℂ)) {x y x' y' : EuclideanSpace ℂ ι}
-    (hx : (fun i => x' i) = U *ᵥ fun i => x i) (hy : (fun i => y' i) = U *ᵥ fun i => y i) :
-    ⟪x', y'⟫_ℂ = ⟪x, y⟫_ℂ := by
-  rw [EuclideanSpace.inner_eq_star_dotProduct, EuclideanSpace.inner_eq_star_dotProduct]
-  change (fun i => y' i) ⬝ᵥ star (fun i => x' i) = (fun i => y i) ⬝ᵥ star (fun i => x i)
-  rw [hx, hy, dotProduct_comm, dotProduct_comm _ (star _)]
-  simp only [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec]
-  rw [← star_eq_conjTranspose, Unitary.star_mul_self_of_mem hU, one_mulVec]
-
-/-- A unitary matrix preserves the norm of the vector it maps. -/
-theorem norm_eq_of_mulVec_eq {ι : Type*} [Fintype ι] [DecidableEq ι] {U : Matrix ι ι ℂ}
-    (hU : U ∈ unitary (Matrix ι ι ℂ)) {x x' : EuclideanSpace ℂ ι}
-    (hx : (fun i => x' i) = U *ᵥ fun i => x i) : ‖x'‖ = ‖x‖ := by
-  have h := inner_eq_of_mulVec_eq hU hx hx
-  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
-  have h' : ‖x'‖ ^ 2 = ‖x‖ ^ 2 := by exact_mod_cast h
-  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp h'
-
 /-! ### Transforming normal MPS into each other -/
 
 variable {d : ℕ}
@@ -138,13 +118,14 @@ log-depth circuit"; the normal MPS "all lie in the topologically trivial phase",
 eq. (1)). For normal tensors `A` and `B` with the same physical dimension there is `c`, depending
 only on `A` and `B`, with the following property. For every `N ≥ 2` and `0 < ε ≤ 1` such that
 the periodic states `|φ_N(A)⟩` and `|φ_N(B)⟩` do not vanish, some local circuit `U` of depth at
-most `c log(N/ε)` maps the normalized state `|φ_N(A)⟩` to a vector `ψ` with
-`1 - |⟨ψ|φ_N(B)⟩| ≤ ε`.
+most `c log(N/ε)` maps the normalized state `|φ_N(A)⟩/‖φ_N(A)‖` to a vector `ψ` with
+`1 - |⟨ψ|φ_N(B)⟩|/‖φ_N(B)‖ ≤ ε`.
 
-The circuit is `U_B U_A†`, where `U_A |0⋯0⟩` and `U_B |0⋯0⟩` prepare `|φ_N(A)⟩` and `|φ_N(B)⟩`,
-up to scalars, with error `ε/4` by eq. (1) (`exists_isPreparedInDepth_le_log_of_mpvState_ne_zero`).
-The periodic states are assumed nonzero, as in that theorem; see the Local fix
-(nonvanishing periodic state) of `TNLean.MPS.Preparation.LogDepthPreparation`, documented in
+The circuit is `U_B U_A†`, where `U_A |0⋯0⟩` and `U_B |0⋯0⟩` prepare the normalized states
+`|φ_N(A)⟩/‖φ_N(A)‖` and `|φ_N(B)⟩/‖φ_N(B)‖`, up to scalars, with error `ε/4` by eq. (1)
+(`exists_isPreparedInDepth_le_log_of_mpvState_ne_zero`). The periodic states are assumed
+nonzero, as in that theorem; see the Local fix (nonvanishing periodic state) of
+`TNLean.MPS.Preparation.LogDepthPreparation`, documented in
 `docs/paper-gaps/mswc24_depth_upper_bound_nonzero_state.tex`. -/
 theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A : MPSTensor d D)
     (B : MPSTensor d D') (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B) :
@@ -191,7 +172,7 @@ theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A 
   set φB := normalizedMPVState B N
   set ψ : MPVSpace d N := WithLp.toLp 2 (U *ᵥ fun s => φA s)
   have hψ : (fun s => ψ s) = U *ᵥ fun s => φA s := rfl
-  have hχ := norm_eq_of_mulVec_eq hUu hUψ.symm
+  have hχ := Matrix.norm_eq_of_mulVec_eq hUu hUψ.symm
   have hκ : ‖(a / b) • ψB‖ = 1 := hχ.trans hψA
   refine ⟨U, TA + 2 + (TB + 2), hU, ?_, ψ, hψ, ?_⟩
   · -- `log(4N/ε) ≤ 3 log(N/ε)` and `4 ≤ (4 / log 2) log(N/ε)`.
@@ -227,8 +208,8 @@ theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A 
     push_cast
     nlinarith
   · -- The triangle step through `U ψA = (a / b) ψB`.
-    have h1 : ⟪ψ, (a / b) • ψB⟫_ℂ = ⟪φA, ψA⟫_ℂ := inner_eq_of_mulVec_eq hUu hψ hUψ.symm
-    have hψn : ‖ψ‖ = 1 := (norm_eq_of_mulVec_eq hUu hψ).trans hnA
+    have h1 : ⟪ψ, (a / b) • ψB⟫_ℂ = ⟪φA, ψA⟫_ℂ := Matrix.inner_eq_of_mulVec_eq hUu hψ hUψ.symm
+    have hψn : ‖ψ‖ = 1 := (Matrix.norm_eq_of_mulVec_eq hUu hψ).trans hnA
     have hab : ‖a / b‖ = 1 := by rwa [norm_smul, hψB, mul_one] at hκ
     have h2 : ‖⟪(a / b) • ψB, φB⟫_ℂ‖ = ‖⟪ψB, φB⟫_ℂ‖ := by
       rw [inner_smul_left, norm_mul, Complex.norm_conj, hab, one_mul]
@@ -240,8 +221,8 @@ theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A 
 (arXiv:2307.01696, "Discussion and outlook"). For normal tensors `A` and `B` with the same
 physical dimension and bond dimensions at least `1` there are `c` and `N₀`, depending only on `A`
 and `B`, such that for every `N ≥ N₀` and `0 < ε ≤ 1` some local circuit of depth at most
-`c log(N/ε)` maps the normalized state `|φ_N(A)⟩` to a vector `ψ` with
-`1 - |⟨ψ|φ_N(B)⟩| ≤ ε`.
+`c log(N/ε)` maps the normalized state `|φ_N(A)⟩/‖φ_N(A)‖` to a vector `ψ` with
+`1 - |⟨ψ|φ_N(B)⟩|/‖φ_N(B)‖ ≤ ε`.
 
 This is `exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero` together with
 `exists_mpvState_ne_zero_of_le`, as `exists_isPreparedInDepth_le_log` is for eq. (1). -/
