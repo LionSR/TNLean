@@ -731,6 +731,9 @@ For the group matrix product operators of arXiv:2203.12563:
 - `glm23_klein_printed_anomaly_scope.tex` records that for the printed one-qubit
   $\mathbb Z_2\times\mathbb Z_2$ symmetry only the anomaly sign at $ab$ is
   formalized; the values at $a$ and $b$ remain open.
+- `glm23_klein_h3_circle_coefficients.tex` records that the Klein-four
+  three-cocycle classification is formalized with $\mathbb C^\times$
+  coefficients, while the source states it for $U(1)$.
 - `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
   $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
   $Z$ on the second qubit, form an exact normal representation whose
