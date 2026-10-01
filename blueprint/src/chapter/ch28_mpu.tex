@@ -11263,8 +11263,18 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Thus the source-factor contraction theorem gives the open equation
     in the displayed coordinates. The four-spin permutation matrices are
-    unitary, and the same bijections preserve both Gram sums and hence
-    both normalization identities.
+    unitary. The relabeled half factors are
+    $\widehat X_1(i,\gamma;r)=X_1(i,\gamma;e_R(r))$ and
+    $\widehat X_2(\alpha,i;\ell)=X_2(\alpha,i;e_L(\ell))$. Since $e_R$
+    and $e_L$ are injective, the source normalization identities give
+    \begin{align}
+        \bigl(\widehat X_1^*(\Id\otimes\rho)\widehat X_1\bigr)_{r,t}
+         & =\bigl(X_1^*(\Id\otimes\rho)X_1\bigr)_{e_R(r),e_R(t)}
+        =\delta_{e_R(r),e_R(t)}=\delta_{r,t},                    \\
+        \bigl(\widehat X_2^*\widehat X_2\bigr)_{\ell,m}
+         & =\bigl(X_2^*X_2\bigr)_{e_L(\ell),e_L(m)}
+        =\delta_{e_L(\ell),e_L(m)}=\delta_{\ell,m}.
+    \end{align}
 \end{proof}
 
 \begin{definition}[Transformation with swaps]
@@ -11416,9 +11426,16 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     which is the entry of $\widetilde{\mathcal U}_2$ with output
     $(i_1,i_2)$, input $(j_1,j_2)$, and bond indices $\alpha,\gamma$.
     The swap is unitary by Theorem~\ref{thm:mpu_swap_matrix_unitary}, so
-    both gates are unitary. The reciprocal scalars cancel in the
-    contractions; their Gram sums give the weighted normalization of
-    $X_1$ for $\rho=d^{-2}\Id$ and the isometry of $X_2$.
+    both gates are unitary. With $\rho=d^{-2}\Id_{d^2}$, the Gram sums are
+    \begin{align}
+        \bigl(X_1^*(\Id\otimes\rho)X_1\bigr)_{r,r'}
+         & =d^{-2}\sum_{i,a,b}d\,\delta_{a,i}\delta_{b,r}\delta_{b,r'}
+        =\delta_{r,r'},                                                   \\
+        \bigl(X_2^*X_2\bigr)_{\ell,\ell'}
+         & =d^{-1}\sum_{a,b,i}\delta_{a,\ell}\delta_{a,\ell'}\delta_{b,i}
+        =\delta_{\ell,\ell'},
+    \end{align}
+    since $d$ pairs $(i,a)$ satisfy $a=i$ and $d$ pairs $(b,i)$ satisfy $b=i$.
 \end{proof}
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
