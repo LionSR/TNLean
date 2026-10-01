@@ -13,10 +13,13 @@ The isometries of the tree circuit act on registers that are far apart. They
 ``creating nearest-neighbor entangled pairs, then performing simultaneous
 measurements, and correcting (without postselection) based on the measurement
 outcomes'' \cite{Malz2024Preparation}, so that every layer of the tree takes
-constant depth. This section proves this for qudits of any dimension, for any
-number of registers moved at once and across any distances, and deduces that a
-binary tree of two-site gates with $k$ levels is applied with measurements in
-depth $5k$. Every register here is one site of the ring. The registers of the
+constant depth. This section proves this for qudits of any dimension: any
+number of registers is moved at once along chains of nearest-neighbour hops of
+any length, and two-site gates joining the sites $a$ and $a+2L+1$, on pairwise
+disjoint stretches $\{a,\dots,a+2L+1\}$, are applied in constant depth for
+every $L$. Gates at even separation, or on overlapping stretches, are not
+covered. It deduces that a binary tree of two-site gates with $k$ levels is
+applied with measurements in depth $5k$. Every register here is one site of the ring. The registers of the
 tree circuit carry $\mathbb C^{D^2}$, and the resulting depth
 $O(\log\log(N/\varepsilon))$ for matrix product states is not formalized
 \cite{gap:mswc24_tree_measurement_scope}.
@@ -490,8 +493,9 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{theorem}[Binary trees of gates in depth $5k$ with measurements]
     \label{thm:ldp_tree_measurements}
-    \lean{MPSPreparation.blockInterior,
-        MPSPreparation.blockInterior_subset_two_mul, MPSPreparation.treeGate,
+    \lean{MPSPreparation.blockInterior, MPSPreparation.treeInterior,
+        MPSPreparation.treeInterior_mono,
+        MPSPreparation.blockInterior_subset_treeInterior, MPSPreparation.treeGate,
         MPSPreparation.levelGates, MPSPreparation.treeGate_a_val,
         MPSPreparation.treeGate_far_val, MPSPreparation.pairwise_levelGates,
         MPSPreparation.levelOp, MPSPreparation.treeOp,
@@ -506,27 +510,28 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     $\{p2^{i+1},\dots,(p+1)2^{i+1}-1\}$ with $(p+1)2^{i+1}\le N$, a two-site
     unitary $u_{i,p}$ to the two endpoints $p2^{i+1}$ and
     $p2^{i+1}+2^{i+1}-1$ of the block. Let $T_k$ be the product of the levels
-    $0,\dots,k-1$, the level $k-1$ applied first, and let $I_B$ be the set of
-    sites whose residue modulo $B$ lies in $\{1,\dots,B-2\}$. Then $2k$ rounds
-    of total depth $5k$ implement $T_k$ on the vectors with $\ket0$ at the
-    sites of $I_{2^k}$. In particular, for a nonzero product vector $\ket\pi$
-    whose site vectors on $I_{2^k}$ are multiples of $\ket0$, the vector
+    $0,\dots,k-1$, the level $k-1$ applied first. Let $I_B$ be the set of
+    sites $x$ whose residue modulo $B$ lies in $\{1,\dots,B-2\}$ and whose
+    block $\{qB,\dots,(q+1)B-1\}$, $q=\lfloor x/B\rfloor$, satisfies
+    $(q+1)B\le N$, and let $J_k=I_2\cup I_4\cup\dots\cup I_{2^k}$. Then $2k$
+    rounds of total depth $5k$ implement $T_k$ on the vectors with $\ket0$ at
+    the sites of $J_k$. In particular, for a nonzero product vector $\ket\pi$
+    whose site vectors on $J_k$ are multiples of $\ket0$, the vector
     $T_k\ket\pi$ is prepared with measurement rounds in depth $5k$.
 \end{theorem}
 \begin{proof}
     \leanok
     The gate of the block $p$ of level $i$ is a distant gate with $a=p2^{i+1}$
     and $L=2^i-1$. Its stretch is the block, so the stretches of a level are
-    pairwise disjoint, and its interior lies in $I_{2^{i+1}}$. By
-    Theorem~\ref{thm:ldp_long_range_layer} two rounds of depth $5$ implement
-    level $i$ on the vectors with $\ket0$ at $I_{2^{i+1}}$. The gates of
-    level $i$ act on sites with residues $0$ and $2^{i+1}-1$ modulo
-    $2^{i+1}$, hence with residues $0$ and $2^i-1$ modulo $2^i$, outside
-    $I_{2^i}$; and $I_{2^i}\subseteq I_{2^{i+1}}$, because the residue modulo
-    $2^{i+1}$ of a site is $r$ or $r+2^i$, where $r$ is its residue modulo
-    $2^i$. So level $i$ maps the vectors with $\ket0$ at $I_{2^{i+1}}$ to
-    vectors with $\ket0$ at $I_{2^i}$, and Lemma~\ref{lem:ldp_round_implementation_compose}
-    composes the levels by induction over $k$; $I_1$ is empty.
+    pairwise disjoint, and its interior lies in $I_{2^{i+1}}\subseteq J_{i+1}$.
+    By Theorem~\ref{thm:ldp_long_range_layer} two rounds of depth $5$ implement
+    level $i$ on the vectors with $\ket0$ at $J_{i+1}$. The gates of level $i$
+    act on sites $x$ with $x\equiv0$ or $x+1\equiv0$ modulo $2^{i+1}$, hence
+    modulo $2^{j+1}$ for every $j<i$, so on no site of $J_i$; and
+    $J_i\subseteq J_{i+1}$. So level $i$ maps the vectors with $\ket0$ at
+    $J_{i+1}$ to vectors with $\ket0$ at $J_i$, and
+    Lemma~\ref{lem:ldp_round_implementation_compose} composes the levels by
+    induction over $k$; $J_0$ is empty.
 \end{proof}
 
 \begin{remark}[The tree circuit of matrix product states]

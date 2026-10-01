@@ -43,15 +43,19 @@ measurements.
           teleported register must be corrected before the next isometry acts on
           it.
     \item \emph{Teleportation.} For qudits of any dimension $d$, any number of
-          registers is moved along chains of nearest-neighbour hops, across any
-          distances, in one round of depth $2$; for every outcome the round acts
+          registers is moved along chains of nearest-neighbour hops of any
+          length, in one round of depth $2$; for every outcome the round acts
           as $d^{-H}$ times the permutation of sites, $H$ the number of hops.
     \item \emph{One layer.} Two-site gates on pairwise disjoint stretches
           $a,\dots,a+2L+1$, with the sites strictly inside each stretch in
-          $\ket0$, are applied in two rounds of total depth $5$, whatever the
-          distances.
+          $\ket0$, are applied in two rounds of total depth $5$, whatever $L$.
+          A gate joins the sites $a$ and $a+2L+1$, at odd separation along the
+          ring; gates at even separation, or on overlapping stretches, are not
+          covered, and the tree needs neither.
     \item \emph{The tree.} A binary tree of two-site gates with $k$ levels, on the
-          blocks of $2^k$ sites, is applied with measurements in depth $5k$.
+          complete blocks of $2^k$ sites and on the complete smaller blocks
+          after them, is applied with measurements in depth $5k$, on the vectors
+          with $\ket0$ strictly inside the complete blocks of every level.
 \end{enumerate}
 The formal statements\footnote{Formal declarations:
     \leanid{MPSPreparation.TeleportHop.isImplementationOn_round} in

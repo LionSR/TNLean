@@ -462,7 +462,7 @@ theorem depth_round (pre : List (Layer d N)) (hs : List (TeleportHop N)) (hv : V
 the circuit `pre` implements `P U` on the vectors `v` such that `U v` has `|0⟩` at the sites `e`
 and `f` of every hop, `U` the circuit `pre` and `P` the permutation of sites of the hops; for
 every outcome the scalar is `d^{-H}`. With `pre` empty, a register is moved along every chain of
-hops, across any distance, in depth `2`.
+hops, of any length, in depth `2`.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("Isometries ... act on
 a constant number of sites which, although spatially separated, can be teleported at
