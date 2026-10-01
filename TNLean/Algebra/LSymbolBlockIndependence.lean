@@ -54,7 +54,7 @@ for an MPS–MPU pair.
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 namespace LSymbol
 
@@ -142,32 +142,6 @@ theorem IsTrivial.isTrivialEll {L : LSymbol G X}
   intro x a b g
   rw [ell, hL x, hL x]
   simp
-
-/-- Compatibility at `(g,1,1)` gives
-`Lˣ_{g,1} = Lˣ_{1,1} / ω(g,1,1)`.
-This is arXiv:2502.20257, `eq:aux1`. -/
-theorem IsCompatible.apply_right_one {L : LSymbol G X}
-    {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) (g : G) :
-    L x g 1 = L x 1 1 / ω g 1 1 := by
-  have h := hL x g 1 1
-  simp only [mul_one, one_smul] at h
-  calc
-    L x g 1 = (ω g 1 1 * L x g 1 * L x g 1) /
-        (ω g 1 1 * L x g 1) := by simp [div_eq_mul_inv]
-    _ = (L x g 1 * L x 1 1) / (ω g 1 1 * L x g 1) := by rw [← h]
-    _ = L x 1 1 / ω g 1 1 := by
-      (apply Units.ext; push_cast; field_simp)
-
-/-- Compatibility at `(1,1,g)` gives
-`Lˣ_{1,g} = ω(1,1,g) L^{g • x}_{1,1}`.
-This is arXiv:2502.20257, `eq:aux2`. -/
-theorem IsCompatible.apply_left_one {L : LSymbol G X}
-    {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) (g : G) :
-    L x 1 g = ω 1 1 g * L (g • x) 1 1 := by
-  have h := hL x 1 1 g
-  simp only [one_mul] at h
-  apply (mul_right_cancel (b := L x 1 g))
-  simpa [mul_assoc] using h
 
 /-- The block-independent scalar factor, evaluated at a chosen base block. -/
 def blockFactor (L : LSymbol G X) (ω : ScalarThreeCochain G) (x₀ : X)

@@ -119,6 +119,42 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** all three call sites use the helper; each now proves only the
   threshold inequality.
 
+### error from a block-length threshold with a logarithmic offset — promoted
+- **Pattern:** from `a log(M q/ε) + b ≤ q` with `b ≥ a max(log K, 0)`, expand
+  `log(M q/ε)`, discard `a log q ≥ 0`, and pass `log K + log M - log ε ≤ q/a`
+  to `mul_mul_exp_neg_le_of_log_le`.
+- **Seen:** two occurrences across two files (2026-10-01):
+  `DepthLogBound.lean` and `NonNormalMeasurementPreparation.lean`, under
+  `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_div_le_of_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** promoted at two sites because the second copy was verbatim; the
+  remaining threshold steps in `LogDepthPreparation.lean` and `TreeMERA.lean`
+  have different offsets and keep `mul_mul_exp_neg_le_of_log_le`.
+
+### depth from the window of block lengths — promoted
+- **Pattern:** from `q ≤ 2 (a log(N/ε) + b)`, `N ≥ 2`, `0 < ε ≤ 1`, `b ≥ 1`,
+  a `calc` through `log(N/ε) ≥ log 2` giving
+  `C q ≤ C (2a + 2b/log 2) log(N/ε)`.
+- **Seen:** two verbatim occurrences across two files (2026-10-01):
+  `DepthLogBound.lean` and `NonNormalMeasurementPreparation.lean`.
+- **Abstraction:** `MPSPreparation.natCast_mul_le_mul_log_of_le_two_mul` in
+  `TNLean/MPS/Preparation/DepthLogBound.lean`.
+- **Notes:** both call sites are one line.
+
+### gap of the transfer map of a normal tensor — promoted
+- **Pattern:** `uniform_eigenvalue_gap_of_finite_lt_one` with
+  `Kraus.isChannel_mapLM … |>.eigenvalue_norm_le_one` and
+  `primitive_transfer.unique_peripheral`, then `t := max (1 - δ) (1 / 2)`.
+- **Seen:** three occurrences across three files (2026-10-01):
+  `ApproximationError.lean`, `DepthLogBound.lean` and
+  `NonNormalMeasurementPreparation.lean`, under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `MPSTensor.exists_eigenvalue_norm_le_of_isNormal` in
+  `TNLean/MPS/Preparation/ApproximationError.lean`; the family version
+  `MPSPreparation.exists_forall_eigenvalue_norm_le` takes the maximum over the
+  blocks.
+- **Notes:** all three call sites use the helper.
+
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
@@ -3569,6 +3605,24 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
 - **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
   monoid; below the three-occurrence promotion threshold.
+
+### measurement-assisted GHZ protocol on two site layouts — candidate
+- **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the
+  outcome-consistency lemma, the corrections by outcomes and partial sums, and
+  the product-state bookkeeping.
+- **Seen:** two occurrences (2026-10-01):
+  `TNLean/MPS/Preparation/GHZMeasurement.lean` (interleaved single qudits of
+  an open chain, `forall_succ_eq_iff`, `forall_add_ghzCorrection_eq_iff`) and
+  `TNLean/MPS/Preparation/WindowGHZ.lean` (registers of `r₁` sites inside
+  blocks of a ring, `forall_cyclic_eq_zero_iff`).
+- **Abstraction:** proposed: one protocol over an injective embedding of the
+  system and ancilla sites and a label type `Cfg d r₁`, in an open and a
+  cyclic form, with the outcome-consistency lemma over an additive group
+  indexed by `Fin M`. The partial sums already share `Fin.partialSum`.
+- **Notes:** below the rule of three; the layouts differ in the controlled
+  shift between a register and its ancilla, which spans a block in
+  `WindowGHZ.lean`.
+
 
 ## Rejected
 
