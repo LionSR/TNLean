@@ -1486,6 +1486,154 @@ range of $\mathcal{P}(A)$, which can always be arranged by a local isometry
     shows that $V$ preserves inner products of invariant vectors.
 \end{proof}
 
+The parent Hamiltonian of a $G$-isometric matrix product state has commuting
+local terms \cite[Section~``Commuting parent Hamiltonians'']{Schuch2010PEPS}.
+Write $\Gamma_{n}(X)=\sum_{\sigma}\operatorname{tr}[A^{\sigma}X]\ket{\sigma}$ for
+the parametrization of the local space $\mathcal{S}_{n}$ on $n$ sites by
+boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
+
+\begin{definition}[The operator $\Gamma_{n}\Gamma_{n}^{\dagger}$]%
+    \label{def:peps_ground_space_frame}
+    \lean{MPSTensor.groundSpaceMapAdjoint, MPSTensor.groundSpaceMapAdjoint_apply,
+        MPSTensor.groundSpaceFrame, MPSTensor.groundSpaceFrame_apply}
+    \leanok
+    \uses{def:ground_space_parent}
+    For a matrix product tensor $A$, let
+    $\Gamma_{n}^{\dagger}\psi=\sum_{\tau}\psi(\tau)\,(A^{\tau})^{\dagger}$, the
+    adjoint of $\Gamma_{n}$ for the Hilbert--Schmidt inner product, and let
+    $P_{n}=\Gamma_{n}\Gamma_{n}^{\dagger}$, the operator on $n$ sites with matrix
+    entries $\operatorname{tr}[A^{\sigma}(A^{\tau})^{\dagger}]$. For $n=2$ this is
+    the operator of \cite[Lemma~6.11]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[A multiple of the projector onto the local space]%
+    \label{thm:peps_ground_space_frame_projector}
+    \lean{MPSTensor.groundSpaceFrame_isHermitian,
+        MPSTensor.isIdempotentElem_smul_groundSpaceFrame,
+        MPSTensor.range_groundSpaceFrame,
+        MPSTensor.parentInteraction_eq_one_sub_smul_groundSpaceFrame}
+    \leanok
+    \uses{def:peps_ground_space_frame, def:parent_interaction}
+    The matrix of $P_{n}$ is Hermitian. If
+    $\Gamma_{n}\Gamma_{n}^{\dagger}\Gamma_{n}=c\,\Gamma_{n}$ for some $c>0$, then
+    $c^{-1}P_{n}$ is idempotent with range $\mathcal{S}_{n}$, so it is the
+    orthogonal projector onto $\mathcal{S}_{n}$ and the parent interaction is
+    $h=\mathbb{1}-c^{-1}P_{n}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The entries satisfy
+    $\overline{\operatorname{tr}[A^{\tau}(A^{\sigma})^{\dagger}]}
+        =\operatorname{tr}[A^{\sigma}(A^{\tau})^{\dagger}]$. From
+    $\Gamma_{n}\Gamma_{n}^{\dagger}\Gamma_{n}=c\,\Gamma_{n}$ one gets
+    $P_{n}^{2}=c\,P_{n}$, and $P_{n}\Gamma_{n}X=c\,\Gamma_{n}X$ shows that the
+    range of $P_{n}$ is that of $\Gamma_{n}$. A Hermitian idempotent is the
+    orthogonal projector onto its range.
+\end{proof}
+
+\begin{definition}[The matrix tensor of a tensor on $\mathbb{C}\lbrack G\rbrack$]%
+    \label{def:peps_regular_mps_tensor}
+    \lean{TNLean.PEPS.regularBondBasis, TNLean.PEPS.regularBondMatrix,
+        TNLean.PEPS.regularBondMatrix_regularAdjoint,
+        TNLean.PEPS.trace_regularBondMatrix, TNLean.PEPS.regularMPSTensor}
+    \leanok
+    \uses{def:peps_mps_g_isometric}
+    For a matrix product tensor $A$ with bond space $\mathbb{C}[G]$, write each
+    $A^{i}$ as a matrix in the basis of group elements. In this basis the
+    adjoint $(A^{i})^{\dagger}$ is the conjugate transpose, and the parent
+    Hamiltonian of $A$ is that of these matrices.
+\end{definition}
+
+\begin{theorem}[The local terms for $G$-isometric matrix product states]%
+    \label{thm:peps_mps_g_isometric_local_terms}
+    \lean{TNLean.PEPS.regularAdjoint_leftRegular,
+        TNLean.PEPS.commute_leftRegular_regularAdjoint,
+        TNLean.PEPS.trace_regularAdjoint,
+        TNLean.PEPS.sum_trace_concatTensor_mul_trace_regularAdjoint,
+        TNLean.PEPS.IsGIsometricMPS.groundSpaceMap_comp_regularMPSTensor,
+        TNLean.PEPS.IsGIsometricMPS.parentInteraction_regularMPSTensor}
+    \leanok
+    \uses{def:peps_mps_g_isometric, thm:peps_mps_g_isometric_concatenation,
+        thm:peps_ground_space_frame_projector, def:peps_regular_mps_tensor}
+    Let $A$ be a $G$-isometric matrix product tensor. There is $c>0$ such that
+    the operator
+    $P_{2}=\sum_{ijkl}\operatorname{tr}[A^{i}A^{j}(A^{k}A^{l})^{\dagger}]
+        \ket{ij}\bra{kl}$ is $c$ times the orthogonal projector onto
+    $\mathcal{S}_{2}$; the two-site term of the parent Hamiltonian is
+    $h=\mathbb{1}-c^{-1}P_{2}$. The source names $P_{2}$ itself the local term,
+    while its proof shows that $P_{2}$ is the projector onto $\mathcal{S}_{2}$,
+    so $P_{2}$ is $\mathbb{1}-h$ up to the constant
+    \cite[Lemma~6.11]{Schuch2010PEPS},
+    \cite{gap:scp10_g_isometric_commuting_parent_hamiltonian}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The left-regular representation is unitary in the basis of group
+    elements, $L_{g}^{\dagger}=L_{g^{-1}}$. By
+    Theorem~\ref{thm:peps_mps_g_isometric_concatenation} the two-site tensor
+    $C^{ab}=A^{a}A^{b}$ is $G$-isometric with some constant $c$, so
+    $\mathcal{P}(C^{\dagger})\mathcal{P}(C)=c\,\sigma$. Since $\mathcal{P}(C)$
+    is invariant, $\mathcal{P}(C)\sigma=\mathcal{P}(C)$, and
+    $\Gamma_{2}\Gamma_{2}^{\dagger}\Gamma_{2}=\mathcal{P}(C)\mathcal{P}(C^{\dagger})
+        \mathcal{P}(C)=c\,\Gamma_{2}$. Theorem~\ref{thm:peps_ground_space_frame_projector}
+    applies.
+\end{proof}
+
+\begin{theorem}[Commuting parent Hamiltonians for $G$-isometric matrix product states]%
+    \label{thm:peps_mps_g_isometric_commuting}
+    \lean{TNLean.PEPS.sum_trace_mul_smul_regularAdjoint,
+        TNLean.PEPS.sum_trace_mul_regularAdjoint_mul_trace,
+        TNLean.PEPS.commute_leftRegular_of_conj,
+        TNLean.PEPS.sum_trace_regularAdjoint_left,
+        TNLean.PEPS.sum_trace_regularAdjoint_right,
+        MPSTensor.leftPairLift_mul_rightPairLift_groundSpaceFrame,
+        MPSTensor.rightPairLift_mul_leftPairLift_groundSpaceFrame,
+        MPSTensor.isNNCPH_of_pairLift_groundSpaceFrame,
+        TNLean.PEPS.IsGIsometricMPS.pairLift_groundSpaceFrame_regularMPSTensor,
+        TNLean.PEPS.IsGIsometricMPS.isNNCPH_regularMPSTensor}
+    \leanok
+    \uses{thm:peps_mps_g_isometric_local_terms, def:is_nncph,
+        thm:local_term_two_three_ax_xb_lifts,
+        thm:three_site_commutator_chain_transport,
+        lem:nncph_from_adjacent_two_site_commutation}
+    Let $A$ be a $G$-isometric matrix product tensor. On three sites, the
+    products of $P_{2}$ acting on the first two sites with $P_{2}$ acting on the
+    last two, in either order, both equal $c\,P_{3}$ for some $c>0$. Hence on
+    every ring of $N\geq 3$ sites the two-site terms of the parent Hamiltonian
+    commute. The source states this theorem for PEPS and writes its proof for
+    matrix product states; only the matrix product case is formalized, and
+    rings of two sites are not covered
+    \cite[Theorem~6.12]{Schuch2010PEPS},
+    \cite{gap:scp10_g_isometric_commuting_parent_hamiltonian}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\mathcal{P}(A^{\dagger})\mathcal{P}(A)=c\,\sigma$. For an operator $N$
+    commuting with every $L_{g}$ this gives
+    $\sum_{b}\operatorname{tr}[A^{b}N]\,(A^{b})^{\dagger}=c\,N$, hence
+    $\sum_{b}\operatorname{tr}[M(A^{b})^{\dagger}]\operatorname{tr}[A^{b}N]
+        =c\operatorname{tr}[MN]$ for every $M$. The matrices $A^{i}$ commute with
+    every $L_{g}$, and so do their adjoints since $L_{g}$ is unitary; so does
+    every product of them. The matrix entry of the first product is
+    \begin{align}
+        \sum_{b}\operatorname{tr}\bigl[A^{s_{0}}A^{s_{1}}(A^{w_{0}}A^{b})^{\dagger}\bigr]
+        \operatorname{tr}\bigl[A^{b}A^{s_{2}}(A^{w_{1}}A^{w_{2}})^{\dagger}\bigr],
+        \label{eq:peps_mps_g_isometric_three_site_entry}
+    \end{align}
+    which by cyclicity of the trace is of this form with
+    $M=(A^{w_{0}})^{\dagger}A^{s_{0}}A^{s_{1}}$ and
+    $N=A^{s_{2}}(A^{w_{2}})^{\dagger}(A^{w_{1}})^{\dagger}$, so it equals
+    $c\operatorname{tr}[A^{s_{0}}A^{s_{1}}A^{s_{2}}
+            (A^{w_{0}}A^{w_{1}}A^{w_{2}})^{\dagger}]$; the second product is treated
+    in the same way. The sum over $g$ in the twirl drops out because $N$
+    commutes with every $L_{g}$, which is the step in which the source moves the
+    group action from one bond to the other. By
+    Theorem~\ref{thm:peps_mps_g_isometric_local_terms} the local terms are
+    $\mathbb{1}-c_{2}^{-1}P_{2}$, so the two translated terms on three sites
+    commute; the commutation transports to every three consecutive sites of a
+    ring of $N\geq 3$ sites, and terms with disjoint supports commute.
+\end{proof}
+
 The source asks for a tensor that is $G$-isometric with respect to the
 left-regular representation. In the definition above the representation is a
 parameter; the dual quantum-double tensor below is $G$-isometric for its

@@ -37,7 +37,7 @@ positive root. See
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 namespace PositiveUnits
 
