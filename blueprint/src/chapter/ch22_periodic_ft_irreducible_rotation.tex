@@ -100,6 +100,26 @@
     primitive transfer map (the corresponding definition in the companion quantum-channel volume~\cite[``Primitive map'']{QICLean2026Blueprint}).
 \end{definition}
 
+\begin{theorem}[Irreducible left-canonical tensors are periodic]
+    \label{thm:irreducible_left_canonical_periodic}
+    \lean{MPSTensor.exists_isPeriodic_of_irreducible_of_isLeftCanonical}
+    \leanok
+    \uses{def:irreducible_tensor, def:left_canonical_tensor, def:periodic_tensor}
+    Every irreducible left-canonical MPS tensor $A$ of positive bond dimension
+    is $m$-periodic for some $m\ge1$
+    \cite[lines~248--258 and eq.~\emph{unital}]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:spectral_periodic_period_existence}
+    \leanok
+    The transfer map $\E_A$ is positive and trace-preserving on a nonzero
+    matrix space, so $\operatorname{spr}(\E_A)=1$. By
+    Theorem~\ref{thm:spectral_periodic_period_existence},
+    $\operatorname{Spec}_{\mathrm{per}}(\E_A)=\{\mu\in\C:\mu^m=1\}$ for some
+    $m\ge1$, which together with irreducibility and left-canonicity is the
+    definition of an $m$-periodic tensor.
+\end{proof}
+
 \begin{theorem}[Perron normalization of spectrally periodic tensors]
     \label{thm:spectral_periodic_normalization}
     \lean{MPSTensor.IsSpectrallyPeriodic.exists_isPeriodic_tpGauge}
