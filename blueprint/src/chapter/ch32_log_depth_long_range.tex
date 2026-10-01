@@ -295,9 +295,20 @@ tensor take depth $O(q)$ as well.
     state is $\sum_j\alpha_j\ket{\phi_M(V_jP_{j,\infty})}$, and each term is the
     approximating state of the block $A_j$, which is
     $\ket{\psi_{q,\omega_j}(A_j)}$ by
-    Theorem~\ref{thm:ldp_approximating_state_depth}. These are orthonormal, so
-    the sum is a unit vector, and Theorem~\ref{thm:ldp_orthogonal_blocks_measurement}
-    with $\ell_k=q$ prepares it.
+    Theorem~\ref{thm:ldp_approximating_state_depth}. Write
+    $\ket{\psi_j}=\ket{\psi_{q,\omega_j}(A_j)}$. Each $\ket{\psi_j}$ is a unit
+    vector, and for $j\neq j'$ the hypothesis $B_j^\dagger B_{j'}=0$ makes the
+    physical matrices of the approximating tensors of $A_j$ and $A_{j'}$
+    orthogonal, so that the overlap of the two states on $M$ blocks vanishes.
+    Hence $\braket{\psi_j}{\psi_{j'}}=\delta_{jj'}$ and
+    \begin{align}
+        \Bigl\lVert\sum_j\alpha_j\ket{\psi_j}\Bigr\rVert^2
+        =\sum_{j,j'}\overline{\alpha_j}\alpha_{j'}\braket{\psi_j}{\psi_{j'}}
+        =\sum_j\lvert\alpha_j\rvert^2=1.
+        \notag
+    \end{align}
+    Theorem~\ref{thm:ldp_orthogonal_blocks_measurement} with $\ell_k=q$
+    prepares the sum.
 \end{proof}
 
 \begin{lemma}[A common gap for normal blocks]
