@@ -117,7 +117,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_coordinates}
+    \uses{thm:periodic_step_coordinates,thm:commuting_projection_block_decomp_isometry}
     The step coordinates partition the original projections, so the $Q_\alpha$
     are mutually orthogonal nonzero projections summing to $\Id_D$.
     Iterating $P_uA^i=A^iP_{u+1}$ over a word of length $p$ shifts the
@@ -145,7 +145,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_orbit_compression}
+    \uses{thm:periodic_step_orbit_compression,
+        thm:cyclic_sector_compression_letter_isometry_periodic,lem:periodic_negreindex_shift}
     Take the cyclic spectral projections, with their indices negated to give
     $P_uA^i=A^iP_{u+1}$. No projection vanishes: left canonicality and the
     shift relation give $\E_A^\dagger(P_u)=P_{u+1}$, and $\E_A^\dagger(0)=0$, so
