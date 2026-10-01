@@ -65,6 +65,31 @@ section Telescope
 
 variable {m : ℕ} [NeZero m]
 
+/-- The paper-oriented cyclic shift transports an entire word from its starting
+projector to its ending projector.
+Source: arXiv:1708.00029, `eq:Aoffdiag` iterated over a word. -/
+theorem projector_mul_evalWord_eq_evalWord_mul_projector
+    (Q : Fin m → MatrixAlg D) (A : MPSTensor d D)
+    (hshift : ∀ k i, Q k * A i = A i * Q (k + 1))
+    (u : Fin m) (w : List (Fin d)) :
+    Q u * Kraus.evalWord A w = Kraus.evalWord A w * Q (u + w.length • (1 : Fin m)) := by
+  induction w generalizing u with
+  | nil => simp
+  | cons i w ih =>
+      simp only [Kraus.evalWord_cons, List.length_cons, add_smul, one_smul]
+      rw [← Matrix.mul_assoc, hshift u i, Matrix.mul_assoc, ih (u + 1)]
+      have hindex :
+          u + 1 + w.length • (1 : Fin m) =
+            u + (w.length + 1) • (1 : Fin m) := by
+        rw [add_nsmul, one_nsmul]
+        abel
+      rw [hindex]
+      have hindex' :
+          u + (w.length + 1) • (1 : Fin m) =
+            u + (w.length • (1 : Fin m) + 1) := by
+        rw [add_nsmul, one_nsmul]
+      rw [Matrix.mul_assoc, hindex']
+
 /-- **Telescoping of a one-site corner-transition product into a conjugated word.**
 
 Under the *paper* off-diagonal convention `P k * A i = A i * P (k + 1)`
