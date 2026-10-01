@@ -40,6 +40,11 @@ For a periodic tensor of period $m$, the peripheral spectrum of
 $\mathcal E_A^p$ is exactly the set of $q$-th roots of unity.\footnote{Formal
     declaration: \leanid{MPSTensor.IsPeriodic.peripheral_blockTensor}, in
     \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
+The same line asserts that each compressed block $C_\alpha$ has the printed
+root set as its peripheral spectrum; with the same correction, that spectrum is
+again the set of $q$-th roots of unity.\footnote{Formal declaration:
+    \leanid{MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq}, in
+    \doclink{TNLean/MPS/Periodic/BlockingEigenvalues.lean}.}
 The full decomposition derives the cyclic projections, constructs the
 $\gcd(m,p)$ nonzero compressed blocks, and proves irreducibility, left
 canonicality, and exact period $m/\gcd(m,p)$ for each; the isometries, total
