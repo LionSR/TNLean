@@ -48,8 +48,8 @@ are not treated here; this scope restriction is recorded in
     \label{thm:continuous_injective_range_projector}
     \lean{ContinuousLinearMap.continuous_injectiveRangeProjector}
     \leanok
-    Let $T_x\colon E\to F$ be a continuous family of injective bounded maps
-    from a finite-dimensional Hilbert space. Then the orthogonal projection
+    Let $E$ be a finite-dimensional Hilbert space, $F$ a Hilbert space, and
+    $T_x\colon E\to F$ a continuous family of injective bounded maps. Then the orthogonal projection
     $T_x(T_x^\dagger T_x)^{-1}T_x^\dagger$ onto the range of $T_x$ depends
     continuously on $x$.
 \end{theorem}
@@ -169,10 +169,20 @@ are not treated here; this scope restriction is recorded in
         lem:open_parent_range_comparison,
         thm:open_parent_hamiltonian_kernel_ground_space}
     Gauge $A$ to a primitive tensor with a positive-definite fixed point, which
-    has the same local ground spaces, and take its open-chain gap at some range
-    $W$. Comparing the range-$W$ interaction with the two-site open
-    Hamiltonian on $W$ sites transfers the gap to range two. Since the bound is
-    uniform in $N$, a window of $m+1$ sites with $m\gamma>1$ exists.
+    has the same local ground spaces, and take its open-chain gap
+    $\gamma_W\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,W}(A)v\rVert$ at some
+    range $W\geq2$ for all $N\geq W$. The finite-interval comparison gives
+    $\kappa>0$ with $\kappa\,h_W\leq H^{\mathrm{open}}_{W,2}(A)$, and
+    Lemma~\ref{lem:open_parent_range_comparison} with $R=2$ yields, for every
+    $N\geq W$ and every $v\perp G_N^{\mathrm{ES}}(A)$,
+    \begin{align}
+        \frac{\kappa\gamma_W}{W-1}\lVert v\rVert
+         & \leq\lVert H^{\mathrm{open}}_{N,2}(A)v\rVert.
+        \label{eq:injective_two_site_open_gap}
+    \end{align}
+    Writing $\delta=\kappa\gamma_W/(W-1)$, choose $n$ with $n\delta>1$ and put
+    $m=n+W$; then $m\delta>1$ and (\ref{eq:injective_two_site_open_gap}) holds
+    at $N=m+1$.
 \end{proof}
 
 \begin{theorem}[Gap in a parameter neighborhood]
@@ -200,6 +210,37 @@ are not treated here; this scope restriction is recorded in
     near $x_0$, and Knabe's nearest-neighbor criterion turns it into a periodic
     gap for every $N\geq2m$ with a constant depending only on $m$ and
     $\gamma'$.
+\end{proof}
+
+\begin{theorem}[Spectral gap along an ordered interpolation]
+    \label{thm:common_kernel_spectral_gap_interpolation}
+    \lean{Matrix.gap_interpolation_of_le,
+        Matrix.orthogonal_quadratic_gap_of_spectrum_separated,
+        Matrix.spectrum_separated_of_orthogonal_quadratic_gap,
+        Matrix.spectrum_gap_interpolation_of_le,
+        Matrix.spectrum_gap_interpolation_of_le_of_nontrivial_kernel}
+    \leanok
+    If every eigenvalue $z$ of a Hermitian matrix $M$ has $\operatorname{Re}z=0$
+    or $\operatorname{Re}z\geq\delta$, then
+    $\delta\lVert x\rVert^2\leq\operatorname{Re}\langle x,Mx\rangle$ for all
+    $x\perp\ker M$. Conversely, if $M\geq0$ satisfies this quadratic-form bound,
+    then every eigenvalue $z$ of $M$ has $\operatorname{Re}z\geq0$, and
+    $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$.
+    Let $0\leq A\leq B$ be matrices with $\ker A\subseteq\ker B$ and such a
+    gap $\delta$ for $A$, and let $t\geq0$. Then $C_t=A+t(B-A)$ is positive
+    semidefinite, $\ker C_t=\ker A$, and every eigenvalue $z$ of $C_t$
+    satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$. If
+    $\ker A\neq0$, then $0$ is an eigenvalue of every $C_t$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $t(B-A)\geq0$, a vector annihilated by $C_t$ has
+    $\langle x,Ax\rangle=0$, hence $Ax=0$, and conversely $Ax=0$ forces $Bx=0$.
+    On $(\ker A)^\perp$ one has
+    $\langle x,C_tx\rangle\geq\langle x,Ax\rangle\geq\delta\lVert x\rVert^2$. The
+    equivalence with the spectral statement follows by expanding $x$ in an
+    orthonormal eigenbasis of the Hermitian matrix.
 \end{proof}
 
 \begin{lemma}[Uniform bounds from local bounds on a compact set]
@@ -257,10 +298,10 @@ are not treated here; this scope restriction is recorded in
         thm:periodic_short_gap_continuity, lem:compact_uniform_pos_nat_bounds}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
     nonzero bond dimension, and let $S$ be a compact parameter set. Then there
-    is $\delta>0$ such that, for every $x\in S$ and every $N\geq2$,
+    is $\delta>0$ such that, for every $x\in S$, every $N\geq2$ and every
+    $v\perp\ker H_{N,2}(A_x)$,
     \begin{align}
-        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert
-        \qquad\text{for all }v\perp\ker H_{N,2}(A_x).
+        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert.
         \label{eq:compact_parent_gap}
     \end{align}
     This is the uniform-gap conclusion of
