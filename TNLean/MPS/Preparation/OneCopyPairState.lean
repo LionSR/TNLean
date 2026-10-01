@@ -16,8 +16,9 @@ tensor and `|Ω_j⟩` is the product of the pairs of the fixed point of `A_j`. T
 on which copy of block `j` the pairs sit; here they sit on a chosen copy `k_j`.
 
 With these coefficients the state fails twice: for `m_j ≥ 2` already for positive weights
-(`MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor`), and for `m_j = 1` as soon as a weight is
-not a nonnegative real number (`MPSTensor.nonNormalApproxOverlap_phaseBlockTensor`). This file
+(`MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor`), and for `m_j = 1` already for two
+blocks with the weights `1` and `μ ≠ 1` with `|μ| = 1`
+(`MPSTensor.nonNormalApproxOverlap_phaseBlockTensor`). This file
 shows that both failures concern only the coefficients. Write `cⱼ = (∑ₖ |μ_{j,k}|^{2q})^{1/2}` and
 `L_j = ∑ₖ (conj(μ_{j,k}^q) / cⱼ) K_{j,k}` for the copy isometry of
 `TNLean.MPS.Preparation.RepeatedBlockSum`, with `K_{j,k}` the isometry placing the bond pairs of
@@ -46,7 +47,7 @@ coefficients, for any phases of the weights: for blocks whose `q`-site states ar
 **False source (eq. (S7), coefficients):** the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` that eq. (S7) takes
 from eq. (S4) are replaced by `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`. With the printed coefficients the
 bound is false, for `m_j ≥ 2` (`docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`) and for
-a weight that is not a nonnegative real number
+`m_j = 1` with a weight of modulus one that is not one
 (`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`).
 The correction is documented in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
 
@@ -68,8 +69,6 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
 
-* `Matrix.polarIso_mul_eq_zero` — the partial isometry of `M` vanishes on the kernel of `M`.
-* `Matrix.tensorPower_smul` — `(c W)^{⊗M} = c^M W^{⊗M}`.
 * `MPSTensor.oneCopyWeight` — the coefficients `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`.
 * `MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding` —
   `V K_{j,k} = (μ_{j,k}^q / cⱼ) V L_j`.
@@ -90,39 +89,6 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
-
-namespace Matrix
-
-variable {ι κ ρ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
-
-/-- **The partial isometry vanishes on the kernel.** If `M Y = 0`, then `V Y = 0` for the partial
-isometry `V` of the polar decomposition `M = V P`: then `P Y = 0`, so `Π Y = 0` for the support
-projector `Π = V†V` of `P`. -/
-theorem polarIso_mul_eq_zero {M : Matrix ι κ ℂ} {Y : Matrix κ ρ ℂ} (h : M * Y = 0) :
-    polarIso M * Y = 0 := by
-  have hH : (polarPos M)ᴴ = polarPos M := (posSemidef_polarPos M).isHermitian.eq
-  have hP : polarPos M * Y = 0 := by
-    rw [← conjTranspose_mul_self_eq_zero]
-    have : (polarPos M * Y)ᴴ * (polarPos M * Y) = (M * Y)ᴴ * (M * Y) := by
-      simp only [conjTranspose_mul, hH, Matrix.mul_assoc]
-      rw [← Matrix.mul_assoc (polarPos M) (polarPos M) Y, polarPos_mul_polarPos,
-        Matrix.mul_assoc]
-    rw [this, h, Matrix.mul_zero]
-  have hS : polarSupport M * Y = 0 := by
-    obtain ⟨R, hR⟩ := exists_polarPos_mul_eq_polarSupport M
-    rw [← (isHermitian_polarSupport M).eq, ← hR, conjTranspose_mul, hH, Matrix.mul_assoc, hP,
-      Matrix.mul_zero]
-  rw [← conjTranspose_mul_self_eq_zero, conjTranspose_mul, Matrix.mul_assoc,
-    ← Matrix.mul_assoc (polarIso M)ᴴ, conjTranspose_polarIso_mul_polarIso, hS, Matrix.mul_zero]
-
-omit [Fintype ι] [Fintype κ] [DecidableEq κ] in
-/-- The tensor power of a multiple of a matrix: `(c W)^{⊗M} = c^M W^{⊗M}`. -/
-theorem tensorPower_smul (M : ℕ) (c : ℂ) (W : Matrix ι κ ℂ) :
-    tensorPower M (c • W) = c ^ M • tensorPower M W := by
-  ext s t
-  simp [tensorPower, Finset.prod_mul_distrib, Finset.prod_const]
-
-end Matrix
 
 namespace MPSTensor
 
@@ -289,12 +255,6 @@ private theorem ghzAmplitude_eq_ofReal_mul (β : Fin b → ℂ) :
   funext j
   rw [ghzAmplitude, div_eq_mul_inv, mul_comm, Complex.ofReal_inv]
 
-/-- A nonzero vector has a positive squared norm. -/
-private theorem sum_norm_sq_pos {β : Fin b → ℂ} (hβ : β ≠ 0) : 0 < ∑ l, ‖β l‖ ^ 2 := by
-  obtain ⟨l, hl⟩ := Function.ne_iff.1 hβ
-  exact lt_of_lt_of_le (pow_pos (norm_pos_iff.2 hl) 2)
-    (Finset.single_le_sum (f := fun l => ‖β l‖ ^ 2) (fun _ _ => by positivity) (Finset.mem_univ l))
-
 /-- **The overlap with the pairs on one copy.** For the direct sum with multiplicities and nonzero
 weights and `q ≥ 1`, the overlap with the target of the normalized approximating state of
 arXiv:2307.01696, Supplemental Material, eq. (S7), with the pairs of `σ_j` on the copy `k_j` of
@@ -329,8 +289,9 @@ theorem nonNormalApproxOverlap_repeatedBlockSum_oneCopy (hι : ∀ j k, Function
   by_cases hβ : β = 0
   · simp [hβ]
   · rw [copyApproxOverlap_ofReal_mul _ _ _ (inv_pos.2 (Real.sqrt_pos.2
-        (sum_norm_sq_pos (oneCopyWeight_ne_zero k hβ)))),
-      copyApproxOverlap_ofReal_mul _ _ _ (inv_pos.2 (Real.sqrt_pos.2 (sum_norm_sq_pos hβ)))]
+        (sum_norm_sq_pos_of_ne_zero (oneCopyWeight_ne_zero k hβ)))),
+      copyApproxOverlap_ofReal_mul _ _ _
+        (inv_pos.2 (Real.sqrt_pos.2 (sum_norm_sq_pos_of_ne_zero hβ)))]
 
 /-! ### The error bounds -/
 

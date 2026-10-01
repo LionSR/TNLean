@@ -2864,6 +2864,7 @@ $A$ along $w$.
 \begin{definition}[Fixed-point state of a family of pairs]
     \label{def:ldp_pair_family_fixed_point}
     \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
+        MPSTensor.sum_norm_sq_pos_of_ne_zero, MPSTensor.ghzAmplitude_norm_sq,
         MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
         MPSTensor.pairIsometry, MPSTensor.ghzState, Matrix.tensorPower}
     \leanok
@@ -2877,6 +2878,8 @@ $A$ along $w$.
     $V^{\otimes M}\ket{\Omega'}/\lVert V^{\otimes M}\ket{\Omega'}\rVert$, and zero when
     the denominator vanishes. For multiplicity coefficients $\mu_{j,k}$ put
     $\beta_j=\sum_k\mu_{j,k}^N$ and $\alpha^{(N)}_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$.
+    For any $\beta\in\mathbb C^b$ with $\beta\neq0$, $\sum_l\lvert\beta_l\rvert^2>0$ and
+    $\sum_j\lvert\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}\rvert^2=1$.
     Let $W\colon\mathbb C^b\to\mathbb C^D\otimes\mathbb C^D$,
     $\ket{j}\mapsto\ket{\omega_j}$, be the map whose $j$-th column is $\omega_j$,
     let $X^{\otimes M}$ denote the $M$-fold tensor power of a matrix $X$, with entries

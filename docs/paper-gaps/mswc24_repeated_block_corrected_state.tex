@@ -322,8 +322,8 @@ $A^1=\operatorname{diag}(0,0,1)$ of \cite{gap:mswc24_multiplicity_fixed_point},
 $\beta'=(2\cdot2^{M/2},1)$, and the state is exact. The coefficients $\beta'_j$ depend on $q$
 and $M$ separately, not only on $N$. With the printed coefficients $\beta_j$ the state
 (\ref{eq:mswc24_rc_source_state}) fails, for $m_j\geq2$ already with positive weights
-\cite{gap:mswc24_multiplicity_fixed_point}, and for $m_j=1$ as soon as a weight is not a
-nonnegative real number \cite{gap:mswc24_block_form_mixed_overlap}.
+\cite{gap:mswc24_multiplicity_fixed_point}, and for $m_j=1$ already for two blocks with the
+weights $1$ and $\mu\neq1$, $\lvert\mu\rvert=1$ \cite{gap:mswc24_block_form_mixed_overlap}.
 
 \section{Numerical check with phases}
 The script of the previous numerical checks evaluates both constructions for the two random
@@ -341,8 +341,10 @@ $M=5$ and $q=3,5,7,9,11,13$.
           $0.254$, $0.188$.
     \item With the coefficients (\ref{eq:mswc24_rc_one_copy_weight}) the source's state gives
           the errors of the corrected state. Over three sets of weights, $q\in\{1,2,3,5\}$,
-          $M\in\{1,3,4\}$ and both choices of the copy of the first block, the two errors agree
-          to $6\cdot10^{-8}$, and (\ref{eq:mswc24_rc_one_copy}) holds to $10^{-14}$.
+          $M\in\{1,3,4\}$ and every choice of the copies $k_j$, the two errors agree to
+          $6\cdot10^{-8}$, except for the copy of weight $i/2$ in the set
+          $((1,-1,i/2),(0.6))$, where the factor $(c_j/\mu_{j,k_j}^q)^M$ reaches $10^5$ and
+          they agree to $6\cdot10^{-6}$; (\ref{eq:mswc24_rc_one_copy}) holds to $10^{-14}$.
 \end{itemize}
 
 \section{What is formalized with phases}
@@ -354,7 +356,7 @@ whose $q$-site states are orthogonal, $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsi
 at every $q\geq1$ and $M\geq1$ with $\beta\neq0$, and for overlapping blocks the bound
 (\ref{eq:mswc24_rc_overlap_bound}) at every $q\geq1$, with its form for real weights in
 $[0,1]$ one of which is one.\footnote{Formal declarations:
-    \leanid{Matrix.polarIso_mul_eq_zero},
+    \leanid{Matrix.polarIso_mul_eq_zero} in \doclink{TNLean/MPS/Preparation/PolarUniqueness};
     \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding},
     \leanid{MPSTensor.oneCopyWeight},
     \leanid{MPSTensor.oneCopyWeight_of_subsingleton},
