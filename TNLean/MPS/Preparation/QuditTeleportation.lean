@@ -9,13 +9,14 @@ import TNLean.MPS.Preparation.MeasurementRounds
 import TNLean.MPS.Preparation.PermutationGates
 
 /-!
-# Teleportation of qudits in constant depth
+# One teleportation hop for qudits
 
 The paragraph "Tree-RG circuit with measurements" of arXiv:2307.01696 moves the registers of an
 isometry next to each other by teleportation: "creating nearest-neighbor entangled pairs, then
 performing simultaneous measurements, and correcting (without postselection) based on the
-measurement outcomes". This file proves that such a teleportation is one measurement round of
-depth `2`, whatever the distance, and for any number of registers moved in parallel.
+measurement outcomes". This file proves one step of such a teleportation, a hop across two
+sites, for qudits of any dimension `d`. Chains of hops, performed in one round of depth `2`,
+are in `TNLean.MPS.Preparation.TeleportationRound`.
 
 ## One hop
 
@@ -24,53 +25,38 @@ being neighbouring pairs of the ring. With labels in `ℤ_d`, `ζ = e^{2πi/d}`,
 matrix `F = d^{-1/2} (ζ^{ab})_{a,b}`:
 
 * the gate of the first layer on `{e, f}` applies `F` at `e`, then
-  `|a⟩_e |b⟩_f ↦ |a⟩_e |b + a⟩_f`; from `|0⟩_e |0⟩_f` it prepares the maximally entangled pair
-  `d^{-1/2} ∑ⱼ |j⟩_e |j⟩_f`;
-* the gate of the second layer on `{c, e}` applies `|a⟩_c |b⟩_e ↦ |a⟩_c |b - a⟩_e`, then `F`
-  at `c`;
+  `|a⟩_e |b⟩_f ↦ |a⟩_e |b + a⟩_f`; from `|0⟩_e |0⟩_f` it prepares the maximally entangled
+  pair `d^{-1/2} ∑ⱼ |j⟩_e |j⟩_f`;
+* the gate of the second layer on `{c, e}` applies `|a⟩_c |b⟩_e ↦ |a⟩_c |b - a⟩_e`, then
+  `F` at `c`;
 * the sites `c` and `e` are measured in the computational basis.
 
 For the outcomes `z_c`, `z_e`, the content of `c` is found at `f`, acted on by the generalized
-Pauli matrix `X^{z_e} Z^{z_c}`, the measured sites carry `|z_c⟩` and `|z_e⟩`, and the amplitude is
-`1/d` (`MPSPreparation.TeleportHop.pre_mulVec`). The inverse of these single-site unitaries is a
-correction.
-
-## Chains of hops in one round
-
-In a list of hops, the hop `h` comes after the hops `hs` when its sites `e` and `f` are not sites
-of `hs` and its site `c` is not a site `c` or `e` of `hs`; its site `c` may be the site `f` of an
-earlier hop, so that hops form chains `c₀ → f₀ = c₁ → f₁ = c₂ → ⋯`. All the hops are performed
-in one round: the first layers of all hops, the second layers of all hops, one measurement and
-one correction. Pushing the correction of a hop to the end is possible because a single-site
-unitary at the site `c` of a hop reappears, after the hop, at its site `f`; no commutation
-relation of Pauli matrices is needed, the correction being the inverse of the accumulated
-single-site unitaries. On the vectors with `|0⟩` at the sites `e` and `f` of every hop, the round
-acts, for every outcome, as `d^{-H}` times the permutation of sites that moves the content of
-`c` to `f` hop after hop, `H` the number of hops
-(`MPSPreparation.TeleportHop.isImplementationOn_round`).
-In particular a register is moved along a chain of `L` hops, across `2L` sites, in depth `2`.
+Pauli matrix `X^{z_e} Z^{z_c}`, the measured sites carry `|z_c⟩` and `|z_e⟩`, and the amplitude
+is `1/d` (`MPSPreparation.TeleportHop.pre_mulVec`). The inverse of these single-site unitaries
+is a correction.
 
 ## Main definitions
 
 * `MPSPreparation.quditFourier`, `MPSPreparation.quditPauli` — `F` and `X^x Z^z`.
 * `MPSPreparation.IsZeroOn` — a vector with `|0⟩` at the sites of a set.
-* `MPSPreparation.cfgPerm` — the permutation of configurations induced by a permutation of sites.
-* `MPSPreparation.TeleportHop`, `MPSPreparation.TeleportHop.Valid`.
-* `MPSPreparation.TeleportHop.round` — the measurement round of a list of hops, after a given
-  circuit.
+* `MPSPreparation.cfgPerm` — the permutation of configurations induced by a permutation of
+  sites.
+* `MPSPreparation.TeleportHop`, `MPSPreparation.TeleportHop.pre`,
+  `MPSPreparation.TeleportHop.frame`.
 
 ## Main results
 
 * `MPSPreparation.quditFourier_mem_unitary`, `MPSPreparation.quditPauli_mem_unitary`.
+* `MPSPreparation.permMatrix_cfgPerm_mul_finKronecker` — moving single-site operators across a
+  permutation of sites.
 * `MPSPreparation.TeleportHop.pre_mulVec` — one hop.
-* `MPSPreparation.TeleportHop.isImplementationOn_round` — teleportation along chains of hops,
-  in one round of depth `2` after the given circuit.
 
 ## References
 
 * arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), paragraph "Tree-RG circuit with measurements".
-* arXiv:2103.13367 (Piroli, Styliaris, Cirac), Example 2 (teleportation through maximally
-  entangled pairs between neighbouring sites by LOCC).
+* arXiv:2103.13367 (Piroli, Styliaris, Cirac), Example 2 ("Fixed points in 1D": an ancilla is
+  teleported through entangled pairs between neighbouring sites, "which can be done via LOCC").
 -/
 
 open Matrix MPSTensor
@@ -164,7 +150,7 @@ theorem star_quditRoot_pow_mul_self (k : ℕ) :
 
 /-- The Fourier matrix `F_{ab} = d^{-1/2} ζ^{ab}` on the labels `0, …, d-1`.
 
-Source: arXiv:2103.13367, Example 2 (teleportation by LOCC); the measurement in the basis of
+Source: arXiv:2103.13367, Example 2 (teleportation via LOCC); the measurement in the basis of
 maximally entangled pairs is a computational-basis measurement after `F`. -/
 noncomputable def quditFourier (d : ℕ) : Matrix (Fin d) (Fin d) ℂ :=
   of fun a b => ((Real.sqrt d : ℝ) : ℂ)⁻¹ * quditRoot d ^ (a.val * b.val)

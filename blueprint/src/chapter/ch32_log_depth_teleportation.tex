@@ -1,0 +1,539 @@
+%% ==================================================
+%% Section: The tree circuit with measurements
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eq. (16) and
+%% paragraph "Tree-RG circuit with measurements"; arXiv:2103.13367 (Piroli,
+%% Styliaris, Cirac), paragraphs "State transformations with QC and LOCC" and
+%% "Phases of matter", and Example 2.
+%% ==================================================
+
+\section{The tree circuit with measurements}\label{sec:ldp_tree_measurements}
+
+The isometries of the tree circuit act on registers that are far apart. They
+``can be teleported at neighboring registers with a constant overhead'' by
+``creating nearest-neighbor entangled pairs, then performing simultaneous
+measurements, and correcting (without postselection) based on the measurement
+outcomes'' \cite{Malz2024Preparation}, so that every layer of the tree takes
+constant depth. This section proves this for qudits of any dimension, for any
+number of registers moved at once and across any distances, and deduces that a
+binary tree of two-site gates with $k$ levels is applied with measurements in
+depth $5k$. Every register here is one site of the ring. The registers of the
+tree circuit carry $\mathbb C^{D^2}$, and the resulting depth
+$O(\log\log(N/\varepsilon))$ for matrix product states is not formalized
+\cite{gap:mswc24_tree_measurement_scope}.
+
+Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
+$N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
+
+\begin{definition}[Measurement rounds]
+    \label{def:ldp_measurement_rounds}
+    \lean{MPSPreparation.MeasurementRound, MPSPreparation.MeasurementRound.kraus,
+        MPSPreparation.MeasurementRound.depth,
+        MPSPreparation.MeasurementRound.toProtocol,
+        MPSPreparation.MeasurementRound.outputs,
+        MPSPreparation.IsPreparedWithMeasurementRoundsInDepth}
+    \leanok
+    \uses{def:ldp_measurement_preparation}
+    A \emph{measurement round} consists of a local circuit $U$, a set $S$ of
+    sites measured in the computational basis, and for every outcome
+    $m\colon S\to\mathbb Z_d$ unitaries $v_{m,i}$ on the sites $i$, with product
+    $V_m=\bigotimes_{i}v_{m,i}$. Its operator for the outcome $m$ is $V_{m}P_{m}U$,
+    with $P_m$ the outcome projection of
+    Definition~\ref{def:ldp_measurement_preparation}, and its depth is the
+    number of layers of $U$. With a product vector it is a protocol in the sense
+    of that definition. The \emph{outputs} of a sequence of rounds
+    $R_1,\dots,R_n$ from a vector $\ket v$ are the vectors
+    $K_n\cdots K_1\ket v$, with $K_j$ the operator of $R_j$ for some outcome. A
+    vector $\ket\psi$ is \emph{prepared with measurement rounds in depth $T$}
+    if there are a product vector $\ket\pi\neq0$ and rounds of total depth at
+    most $T$ such that every nonzero output from $\ket\pi$ is a multiple of
+    $\ket\psi$.
+
+    One round is the class $\mathrm{QCcc}_\ell$ of \cite{Piroli2021LOCC}, which
+    performs a single round and notes that ``one could also define a more
+    general scheme with multiple rounds of LOCC''. A sequence of rounds is a
+    composition of such transformations, as in the class
+    $\mathrm{QCcc}^{(k)}_\ell$ of its paragraph ``Phases of matter'', with the
+    depth counted as the total number of layers. Several rounds are needed when
+    a correction must precede gates that do not commute with it, as for a
+    teleported register on which an isometry acts.
+\end{definition}
+
+\begin{lemma}[Outputs of rounds]
+    \label{lem:ldp_measurement_rounds_outputs}
+    \lean{MPSPreparation.MeasurementRound.toProtocol_output,
+        MPSPreparation.MeasurementRound.exists_kraus_mulVec_ne_zero,
+        MPSPreparation.MeasurementRound.outputs_nil,
+        MPSPreparation.MeasurementRound.mem_outputs_cons,
+        MPSPreparation.MeasurementRound.mem_outputs_smul,
+        MPSPreparation.MeasurementRound.mem_outputs_append,
+        MPSPreparation.MeasurementRound.exists_mem_outputs_ne_zero,
+        MPSPreparation.IsPreparedWithMeasurementRoundsInDepth.ne_zero,
+        MPSPreparation.IsPreparedWithMeasurementRoundsInDepth.mono,
+        MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth}
+    \leanok
+    \uses{def:ldp_measurement_rounds, lem:ldp_measurement_outcomes}
+    The output of the protocol of a round and a product vector $\ket\pi$ for
+    the outcome $m$ is $V_{m}P_{m}U\ket\pi$. For a nonzero vector some outcome of a
+    round gives a nonzero vector, so a nonzero vector has a nonzero output
+    under every sequence of rounds, and a vector prepared with measurement
+    rounds is nonzero. The outputs of a multiple $c\ket v$ are the multiples by
+    $c$ of the outputs of $\ket v$, and the outputs of a concatenation of two
+    sequences are the outputs of the second sequence from the outputs of the
+    first. A vector prepared with measurements in depth $T$ is prepared with
+    one measurement round in depth $T$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $\sum_{m}P_{m}=\mathbb 1$ and $U$ is unitary, some $P_{m}U\ket v$ is
+    nonzero, and the unitary $V_m$ keeps it nonzero. The other statements
+    follow by induction over the sequence of rounds and from the linearity of
+    the operators.
+\end{proof}
+
+\begin{definition}[Implementation by rounds]
+    \label{def:ldp_round_implementation}
+    \lean{MPSPreparation.MeasurementRound.IsImplementationOn,
+        MPSPreparation.MeasurementRound.IsRoundsImplementationOn}
+    \leanok
+    \uses{def:ldp_measurement_rounds}
+    Let $E$ be a set of vectors and $W$ a matrix. A round \emph{implements}
+    $W$ on $E$ if for every outcome $m$ there is $c\in\mathbb C$ with
+    $V_{m}P_{m}U\ket v=cW\ket v$ for every $\ket v\in E$. A sequence of rounds
+    \emph{implements} $W$ on $E$ if every output from every $\ket v\in E$ is a
+    multiple of $W\ket v$.
+\end{definition}
+
+\begin{lemma}[Implementations compose]
+    \label{lem:ldp_round_implementation_compose}
+    \lean{MPSPreparation.MeasurementRound.IsImplementationOn.exists_mem_outputs,
+        MPSPreparation.MeasurementRound.isRoundsImplementationOn_nil,
+        MPSPreparation.MeasurementRound.IsRoundsImplementationOn.mono,
+        MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append,
+        MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth}
+    \leanok
+    \uses{def:ldp_round_implementation, lem:ldp_measurement_rounds_outputs}
+    If a round $R$ implements $W$ on $E$ and $\ket v\in E$, every output of $R$
+    followed by rounds $R'$ is a multiple of an output of $R'$ from $W\ket v$.
+    The empty sequence implements $\mathbb 1$ on every set, and a sequence
+    implementing $W$ on $E$ implements it on every subset of $E$. If a sequence
+    $\mathcal R$ implements $W$ on $E$, $W$ maps $E$ into $E'$, and a sequence
+    $\mathcal R'$ implements $W'$ on $E'$, then $\mathcal R$ followed by
+    $\mathcal R'$ implements $W'W$ on $E$. If $\mathcal R$ implements $W$ on
+    $E$ and the product vector $\ket\pi\neq0$ lies in $E$, then $W\ket\pi$ is
+    prepared with measurement rounds in the total depth of $\mathcal R$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    An output of the concatenation is an output $\ket w$ of $\mathcal R'$ from
+    an output $c\,W\ket v$ of $\mathcal R$, hence $\ket w=c\ket{w'}$ with
+    $\ket{w'}$ an output of $\mathcal R'$ from $W\ket v\in E'$, and
+    $\ket{w'}=c'\,W'W\ket v$. The last statement is the definition of
+    preparation with measurement rounds.
+\end{proof}
+
+\begin{definition}[Fourier and generalized Pauli matrices]
+    \label{def:ldp_qudit_pauli}
+    \lean{MPSPreparation.quditRoot, MPSPreparation.quditFourier,
+        MPSPreparation.quditPauli}
+    \leanok
+    Let $\zeta=e^{2\pi i/d}$. The Fourier matrix is
+    $F_{ab}=d^{-1/2}\zeta^{ab}$ for $a,b\in\mathbb Z_d$, and for
+    $z,x\in\mathbb Z_d$ the generalized Pauli matrix $X^xZ^z$ maps $\ket q$ to
+    $\zeta^{zq}\ket{q+x}$.
+\end{definition}
+
+\begin{lemma}[Fourier and Pauli matrices are unitary]
+    \label{lem:ldp_qudit_pauli_unitary}
+    \lean{MPSPreparation.isPrimitiveRoot_quditRoot,
+        MPSPreparation.norm_quditRoot_pow,
+        MPSPreparation.star_quditRoot_pow_mul_self,
+        MPSPreparation.quditFourier_apply,
+        MPSPreparation.quditFourier_mem_unitary,
+        MPSPreparation.quditPauli_apply, MPSPreparation.quditPauli_mem_unitary}
+    \leanok
+    \uses{def:ldp_qudit_pauli}
+    The number $\zeta$ is a primitive $d$-th root of unity, $|\zeta^k|=1$, and
+    $F$ and $X^xZ^z$ are unitary. The entries are
+    $(X^xZ^z)_{pq}=\zeta^{zq}$ if $p-x=q$ and $0$ otherwise.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The rows of $F$ are orthonormal because
+    $\sum_b\zeta^{(a-c)b}=d\,[a=c]$, the geometric sum of a $d$-th root of
+    unity $\zeta^{a-c}$ that differs from $1$ unless $a=c$. The matrix $X^xZ^z$
+    is a permutation matrix times a diagonal matrix of unimodular numbers.
+\end{proof}
+
+\begin{lemma}[Single-site operators, permutations of sites and sites in the state zero]
+    \label{lem:ldp_site_permutations}
+    \lean{MPSPreparation.finKronecker_update_one_mulVec_apply,
+        MPSPreparation.finKronecker_update_one_permMatrix_mulVec,
+        MPSPreparation.IsZeroOn, MPSPreparation.IsZeroOn.mono,
+        MPSPreparation.IsZeroOn.smul,
+        MPSPreparation.IsZeroOn.finKronecker_update_one_mulVec,
+        MPSPreparation.cfgPerm, MPSPreparation.cfgPerm_apply,
+        MPSPreparation.permMatrix_cfgPerm_mul_finKronecker,
+        MPSPreparation.IsZeroOn.permMatrix_cfgPerm_mulVec,
+        MPSPreparation.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
+        MPSPreparation.permMatrix_cfgPerm_one,
+        MPSPreparation.permMatrix_cfgPerm_mul_embedOp_mul,
+        MPSPreparation.IsZeroOn.permMatrix_cfgPerm_mulVec_image,
+        MPSPreparation.IsZeroOn.mulVec_of_mem_supportedOperators,
+        MPSPreparation.list_prod_mem_supportedOperators,
+        MPSPreparation.layerOfListGate, MPSPreparation.layerOfListGate_key,
+        MPSPreparation.layerOfList, MPSPreparation.layerOfList_op,
+        MPSPreparation.isZeroOn_productVector}
+    \leanok
+    \uses{def:ldp_local_circuit}
+    A vector $\ket v$ has $\ket0$ at the sites of a set $Z$ if $v(x)=0$ for
+    every configuration $x$ with $x_i\neq0$ for some $i\in Z$. A permutation
+    $\pi$ of the sites acts on vectors by $(P_\pi v)(x)=v(x\circ\pi)$. Then:
+    \begin{enumerate}
+        \item the operator $u$ at the site $t$ maps $\ket v$ to
+              $x\mapsto\sum_{j}u_{x_t,j}\,v(x[t\mapsto j])$, and keeps $\ket0$ at
+              the sites of $Z$ if $t\notin Z$; so does multiplication by a
+              scalar;
+        \item $P_\pi P_\sigma=P_{\pi\sigma}$, $P_\pi(\bigotimes_{i}g_{i})
+                  =(\bigotimes_{i}g_{\pi^{-1}(i)})P_\pi$, and conjugating an operator
+              $X$ placed at the sites $e_1,\dots,e_m$ by $P_\sigma$ places $X$
+              at the sites $\sigma(e_1),\dots,\sigma(e_m)$:
+              $P_\sigma XP_{\sigma^{-1}}$ is $X$ at $\sigma\circ e$;
+        \item if $\ket v$ has $\ket0$ at the sites of $Z$, then $P_\pi\ket v$
+              has $\ket0$ at the sites of $\pi(Z)$, and an operator acting on
+              sites outside $Z$, in particular a product of such operators,
+              keeps $\ket0$ at the sites of $Z$;
+        \item gates on pairwise disjoint neighbouring pairs, given by a list,
+              form a layer whose operator is the product of the gates along the
+              list;
+        \item a product vector whose site vectors at the sites of $Z$ are
+              multiples of $\ket0$ has $\ket0$ at the sites of $Z$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    These are entrywise computations. For the third item, $\ket v$ has $\ket0$
+    on $Z$ exactly when the diagonal projection onto the configurations
+    vanishing on $Z$ fixes $\ket v$, and that projection commutes with an
+    operator acting outside $Z$. The product vector vanishes at $x$ as soon as
+    one factor $\pi_i(x_i)$ with $i\in Z$ and $x_i\neq0$ vanishes.
+\end{proof}
+
+\begin{lemma}[One teleportation hop]
+    \label{lem:ldp_teleport_hop}
+    \lean{MPSPreparation.TeleportHop, MPSPreparation.TeleportHop.gate₁,
+        MPSPreparation.TeleportHop.gate₂,
+        MPSPreparation.TeleportHop.gate₁_mem_unitary,
+        MPSPreparation.TeleportHop.gate₂_mem_unitary,
+        MPSPreparation.TeleportHop.gate₁_mem_supportedOperators,
+        MPSPreparation.TeleportHop.gate₂_mem_supportedOperators,
+        MPSPreparation.TeleportHop.pre, MPSPreparation.TeleportHop.frame,
+        MPSPreparation.TeleportHop.frame_mem_unitary,
+        MPSPreparation.TeleportHop.frame_of_ne,
+        MPSPreparation.TeleportHop.swapPerm,
+        MPSPreparation.TeleportHop.pre_mulVec,
+        MPSPreparation.TeleportHop.pre_mem_supportedOperators}
+    \leanok
+    \uses{def:ldp_qudit_pauli, lem:ldp_qudit_pauli_unitary,
+        lem:ldp_site_permutations, lem:ldp_permutation_layers}
+    A \emph{hop} consists of three distinct sites $c,e,f$ such that $\{e,f\}$
+    and $\{c,e\}$ are neighbouring pairs. Its first gate, on $\{e,f\}$,
+    applies $F$ at $e$ and then $\ket a_e\ket b_f\mapsto\ket a_e\ket{b+a}_f$;
+    its second gate, on $\{c,e\}$, applies
+    $\ket a_c\ket b_e\mapsto\ket a_c\ket{b-a}_e$ and then $F$ at $c$. Both are
+    unitary and act on their pairs. Let $\ket v$ have $\ket0$ at $e$ and $f$,
+    and let $z_c,z_e\in\mathbb Z_d$. Applying the two gates and then the
+    projection onto $\ket{z_c}$ at $c$ and $\ket{z_e}$ at $e$ gives
+    \begin{align*}
+        \frac1d\,\bigl(s_{z_c}\bigr)_c\bigl(s_{z_e}\bigr)_e
+        \bigl(X^{z_e}Z^{z_c}\bigr)_{f}P_{(c\,f)}\ket v,
+    \end{align*}
+    where $s_z\ket q=\ket{q+z}$ and $(c\,f)$ is the transposition of the
+    sites $c$ and $f$. So the content of $c$ is found at $f$, up to the
+    unitary $X^{z_e}Z^{z_c}$, and $c$ and $e$ carry the outcomes. The operator
+    acts on the sites $c,e,f$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    On a vector with $\ket0$ at $e$ and $f$, the Fourier matrix at $e$ gives
+    the amplitude $d^{-1/2}$ to every value $x_e$, and the shift copies it to
+    $f$: this prepares $d^{-1/2}\sum_j\ket{j}_e\ket j_f$. The second gate and
+    the projections compute, configuration by configuration, the amplitude
+    $d^{-1/2}F_{z_c,\,x_f-z_e}$ for the content $x_f-z_e$ moved from $c$ to
+    $f$, which is $d^{-1}\zeta^{z_c(x_f-z_e)}$, the amplitude of the right-hand
+    side. Configurations with $x_c\neq z_c$ or $x_e\neq z_e$ vanish on both
+    sides.
+\end{proof}
+
+\begin{theorem}[Teleportation along chains of hops in one round]
+    \label{thm:ldp_teleportation_round}
+    \lean{MPSPreparation.TeleportHop.sites,
+        MPSPreparation.TeleportHop.allSites,
+        MPSPreparation.TeleportHop.pairSites,
+        MPSPreparation.TeleportHop.measuredSites,
+        MPSPreparation.TeleportHop.Valid,
+        MPSPreparation.TeleportHop.mem_allSites,
+        MPSPreparation.TeleportHop.coe_measuredSites_subset_allSites,
+        MPSPreparation.TeleportHop.disjoint_measuredSites,
+        MPSPreparation.TeleportHop.pairwise_disjoint_one,
+        MPSPreparation.TeleportHop.pairwise_disjoint_two,
+        MPSPreparation.TeleportHop.layerOne, MPSPreparation.TeleportHop.layerTwo,
+        MPSPreparation.TeleportHop.layerOne_op,
+        MPSPreparation.TeleportHop.layerTwo_op,
+        MPSPreparation.TeleportHop.chainPerm,
+        MPSPreparation.TeleportHop.chainFrame,
+        MPSPreparation.TeleportHop.chainPre,
+        MPSPreparation.TeleportHop.chainFrame_mem_unitary,
+        MPSPreparation.TeleportHop.chainFrame_of_notMem,
+        MPSPreparation.TeleportHop.prod_gate₂_mem_supportedOperators,
+        MPSPreparation.TeleportHop.chainPre_cons,
+        MPSPreparation.IsZeroOn.chainPerm_mulVec,
+        MPSPreparation.TeleportHop.chainPre_mulVec,
+        MPSPreparation.TeleportHop.extendOutcome,
+        MPSPreparation.TeleportHop.round, MPSPreparation.TeleportHop.depth_round,
+        MPSPreparation.TeleportHop.isImplementationOn_round}
+    \leanok
+    \uses{lem:ldp_teleport_hop, def:ldp_round_implementation,
+        lem:ldp_site_permutations}
+    A list $h_1,\dots,h_H$ of hops is \emph{valid} if every hop $h_j$ meets the
+    hops $h_{j+1},\dots,h_H$ after it in the list only through its site $c$:
+    its sites $e$ and $f$ are not sites of $h_{j+1},\dots,h_H$, and its site
+    $c$ is not a site $c$ or $e$ of one of them. Its site $c$ may be the site
+    $f$ of one of them, so the hops form chains
+    $c_0\to f_0=c_1\to f_1=\cdots$, the hops after $h_j$ in the list acting
+    before it. For a valid list and a local circuit $U$,
+    the \emph{teleportation round} applies $U$, the first gates of all hops in
+    one layer, the second gates of all hops in one layer, measures the sites
+    $c$ and $e$ of all hops, and corrects by the inverse of the product of the
+    single-site unitaries that the hops leave. Its depth is the depth of $U$
+    plus $2$. It implements $P_{h_1}\cdots P_{h_H}U$, with $P_h$ the
+    transposition of the sites $c$ and $f$ of $h$, on the vectors $\ket v$ such
+    that $U\ket v$ has $\ket0$ at the sites $e$ and $f$ of every hop, with the
+    scalar $d^{-H}$ for every outcome.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The first gates act on pairwise disjoint pairs $\{e,f\}$, and the second
+    gates on pairwise disjoint pairs $\{c,e\}$, so they form two layers. By
+    induction over the list, the projections and the two layers factor into
+    the hops one after the other: the first gate of the head $h$ of the list
+    commutes with the second gates of the other hops because its sites $e,f$
+    are not theirs, and the projections at the sites of the other hops commute
+    with the operator of $h$. Lemma~\ref{lem:ldp_teleport_hop} for $h$ applies
+    because the other hops leave $\ket0$ at $e$ and $f$. A single-site unitary
+    at the site $c$ of $h$, left by another hop whose site $f$ is $c$,
+    reappears at the site $f$ of $h$ after the transposition; so the hops leave
+    a product of single-site unitaries, depending on the outcomes, after
+    $d^{-H}P_{h_1}\cdots P_{h_H}$. The correction is its inverse.
+\end{proof}
+
+\begin{lemma}[Chains between distant sites]
+    \label{lem:ldp_teleportation_chains}
+    \lean{MPSPreparation.add_natCast_injective, MPSPreparation.add_natCast_succ,
+        MPSPreparation.add_natCast_ne, MPSPreparation.TeleportHop.sitePerm,
+        MPSPreparation.TeleportHop.chainPerm_eq,
+        MPSPreparation.TeleportHop.exists_eq_smul_of_mem_outputs_conj,
+        MPSPreparation.TeleportHop.chainHop,
+        MPSPreparation.TeleportHop.chainHopBack,
+        MPSPreparation.TeleportHop.forwardChain,
+        MPSPreparation.TeleportHop.backwardChain,
+        MPSPreparation.TeleportHop.After,
+        MPSPreparation.TeleportHop.valid_iff_pairwise,
+        MPSPreparation.TeleportHop.sitePerm_append,
+        MPSPreparation.TeleportHop.pairSites_append,
+        MPSPreparation.TeleportHop.mem_forwardChain,
+        MPSPreparation.TeleportHop.mem_backwardChain,
+        MPSPreparation.TeleportHop.valid_forwardChain,
+        MPSPreparation.TeleportHop.valid_backwardChain,
+        MPSPreparation.TeleportHop.sitePerm_forwardChain,
+        MPSPreparation.TeleportHop.sitePerm_backwardChain,
+        MPSPreparation.TeleportHop.pairSites_forwardChain_subset,
+        MPSPreparation.TeleportHop.pairSites_backwardChain_subset,
+        MPSPreparation.TeleportHop.allSites_forwardChain_subset,
+        MPSPreparation.TeleportHop.allSites_backwardChain_subset,
+        MPSPreparation.TeleportHop.isZeroOn_chainPerm_forwardChain}
+    \leanok
+    \uses{thm:ldp_teleportation_round, lem:ldp_round_implementation_compose}
+    \begin{enumerate}
+        \item Let $\mathcal T$ and $\mathcal B$ be valid lists of hops and $G$ a
+              layer of gates, and let $P_{\mathcal T}$, $P_{\mathcal B}$ be the
+              products of the transpositions of their hops. If $\ket v$ has
+              $\ket0$ at the sites $e,f$ of $\mathcal T$ and
+              $GP_{\mathcal T}\ket v$ has $\ket0$ at the sites $e,f$ of
+              $\mathcal B$, then every output of the teleportation round of
+              $\mathcal T$, followed by the teleportation round of $\mathcal B$
+              after $G$, is a multiple of $P_{\mathcal B}GP_{\mathcal T}\ket v$.
+              The two rounds have depth $2$ and $3$.
+        \item Let $2L<N$ and let $a$ be a site. The forward chain of the hops
+              $(a+2j,\,a+2j+1,\,a+2j+2)$, $j<L$, and the backward chain of the
+              hops $(a+2j+2,\,a+2j+1,\,a+2j)$, $j<L$, are valid. The product of
+              the transpositions of the forward chain maps $a$ to $a+2L$ and
+              fixes the sites $a+j$ with $2L<j<N$; that of the backward chain is
+              its inverse. The sites $e,f$ of the forward chain lie among
+              $a+1,\dots,a+2L$, those of the backward chain lie among
+              $a,\dots,a+2L-1$, and all sites of both chains among
+              $a,\dots,a+2L$. If $\ket v$ has $\ket0$ at the sites
+              $a+1,\dots,a+2L$, then after the forward chain the sites
+              $a,\dots,a+2L-1$ carry $\ket0$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first item composes two applications of
+    Theorem~\ref{thm:ldp_teleportation_round}. For the second, the sites
+    $a+j$ with $0\le j<N$ are distinct, the transposition of the hop $j$
+    exchanges $a+2j$ and $a+2j+2$, and the hops of the forward chain, applied
+    in the order $j=0,1,\dots$, move the content of $a$ step by step to
+    $a+2L$; each hop moves the $\ket0$ from $a+2j+2$ to $a+2j$, while
+    $a+2j+1$ keeps its $\ket0$.
+\end{proof}
+
+\begin{lemma}[Parallel chains]
+    \label{lem:ldp_parallel_chains}
+    \lean{MPSPreparation.TeleportHop.sitePerm_apply_of_notMem,
+        MPSPreparation.TeleportHop.mem_allSites_flatMap,
+        MPSPreparation.TeleportHop.mem_pairSites_flatMap,
+        MPSPreparation.TeleportHop.chainPerm_append,
+        MPSPreparation.TeleportHop.after_of_disjoint,
+        MPSPreparation.TeleportHop.sites_subset_allSites,
+        MPSPreparation.TeleportHop.valid_flatMap,
+        MPSPreparation.TeleportHop.sitePerm_flatMap_apply,
+        MPSPreparation.TeleportHop.sitePerm_flatMap_apply_of_notMem}
+    \leanok
+    \uses{lem:ldp_teleportation_chains}
+    The product of the transpositions of a list of hops fixes every site that
+    is not a site of the list. Let valid lists of hops $\mathcal L_g$ have
+    their sites in sets $S_g$ that are pairwise disjoint. Then the
+    concatenation of the lists is valid, and the product of its transpositions
+    agrees on $S_g$ with that of $\mathcal L_g$ and fixes every site outside
+    all the $S_g$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Two hops with disjoint sites satisfy the condition of validity in either
+    order. The product of the transpositions of $\mathcal L_g$ fixes the sites
+    outside $S_g$, hence maps $S_g$ into itself, and the products of the other
+    lists fix $S_g$ pointwise.
+\end{proof}
+
+\begin{theorem}[A layer of distant gates in depth five with measurements]
+    \label{thm:ldp_long_range_layer}
+    \lean{MPSPreparation.LongRangeGate, MPSPreparation.LongRangeGate.far,
+        MPSPreparation.LongRangeGate.near, MPSPreparation.LongRangeGate.span,
+        MPSPreparation.LongRangeGate.interior,
+        MPSPreparation.LongRangeGate.cleared, MPSPreparation.LongRangeGate.op,
+        MPSPreparation.LongRangeGate.there, MPSPreparation.LongRangeGate.back,
+        MPSPreparation.LongRangeGate.near_ne_far,
+        MPSPreparation.LongRangeGate.localGate,
+        MPSPreparation.LongRangeGate.localGate_mem_unitary,
+        MPSPreparation.LongRangeGate.localGate_mem_supportedOperators,
+        MPSPreparation.LongRangeGate.a_ne_far,
+        MPSPreparation.LongRangeGate.op_mem_unitary,
+        MPSPreparation.LongRangeGate.op_mem_supportedOperators,
+        MPSPreparation.LongRangeGate.far_mem_span,
+        MPSPreparation.LongRangeGate.bond_near_subset_span,
+        MPSPreparation.LongRangeGate.interior_subset_span,
+        MPSPreparation.LongRangeGate.cleared_subset_span,
+        MPSPreparation.LongRangeGate.allSites_there_subset_span,
+        MPSPreparation.LongRangeGate.allSites_back_subset_span,
+        MPSPreparation.LongRangeGate.disjoint_cleared_bond_near,
+        MPSPreparation.LongRangeGate.sitePerm_back_near,
+        MPSPreparation.LongRangeGate.sitePerm_back_far,
+        MPSPreparation.LongRangeGate.sitePerm_back_sitePerm_there,
+        MPSPreparation.LongRangeGate.pairwise_disjoint_bond,
+        MPSPreparation.LongRangeGate.localLayer,
+        MPSPreparation.LongRangeGate.localLayer_op,
+        MPSPreparation.LongRangeGate.valid_there,
+        MPSPreparation.LongRangeGate.valid_back,
+        MPSPreparation.LongRangeGate.isZeroOn_chainPerm_there,
+        MPSPreparation.LongRangeGate.isZeroOn_localLayer,
+        MPSPreparation.LongRangeGate.sitePerm_there_eq_symm,
+        MPSPreparation.LongRangeGate.chainPerm_back_mul_localLayer_mul_chainPerm_there,
+        MPSPreparation.LongRangeGate.rounds,
+        MPSPreparation.LongRangeGate.sum_depth_rounds,
+        MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds}
+    \leanok
+    \uses{lem:ldp_teleportation_chains, lem:ldp_parallel_chains,
+        lem:ldp_round_implementation_compose}
+    A \emph{distant gate} is a two-site unitary $u$ on the sites $a$ and
+    $a+2L+1$, where $2L+1<N$; its stretch is $a,a+1,\dots,a+2L+1$ and its
+    interior the $2L$ sites $a+1,\dots,a+2L$. Let $g_1,\dots,g_n$ be distant
+    gates with pairwise disjoint stretches. Two measurement rounds of total
+    depth $5$ implement the product of the gates $g_1,\dots,g_n$ on the
+    vectors with $\ket0$ at the interiors of all the gates: the first
+    teleports the content of every site $a$ along its forward chain to
+    $a+2L$; the second applies every $u$ to the neighbouring pair
+    $\{a+2L,a+2L+1\}$ and teleports the content of every $a+2L$ back to $a$
+    along its backward chain. The depth depends neither on the distances nor
+    on the number of gates, and no outcome is post-selected.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:ldp_parallel_chains} the forward chains of all the gates
+    form a valid list, and so do the backward chains, with products of
+    transpositions $P$ and $P^{-1}$: on the stretch of $g$ both agree with the
+    chains of $g$, which are inverse to each other. The forward chains need
+    $\ket0$ at the interiors; afterwards the sites $a,\dots,a+2L-1$ of every
+    gate carry $\ket0$, by Lemma~\ref{lem:ldp_teleportation_chains} for its
+    own chain and since the other chains act on disjoint sites. The gates on
+    the pairs $\{a+2L,a+2L+1\}$ keep these $\ket0$, which the backward chains
+    need. By Lemma~\ref{lem:ldp_teleportation_chains} every output is a
+    multiple of $P^{-1}GP\ket v$, with $G$ the product of the gates on the
+    neighbouring pairs, and $P^{-1}GP$ is the product of the conjugated gates.
+    The conjugate of $u$ at $a+2L,a+2L+1$ is $u$ at $P^{-1}(a+2L)=a$ and
+    $P^{-1}(a+2L+1)=a+2L+1$ by Lemma~\ref{lem:ldp_site_permutations}.
+\end{proof}
+
+\begin{theorem}[Binary trees of gates in depth $5k$ with measurements]
+    \label{thm:ldp_tree_measurements}
+    \lean{MPSPreparation.blockInterior,
+        MPSPreparation.blockInterior_subset_two_mul, MPSPreparation.treeGate,
+        MPSPreparation.levelGates, MPSPreparation.treeGate_a_val,
+        MPSPreparation.treeGate_far_val, MPSPreparation.pairwise_levelGates,
+        MPSPreparation.levelOp, MPSPreparation.treeOp,
+        MPSPreparation.treeRounds, MPSPreparation.sum_depth_treeRounds,
+        MPSPreparation.isZeroOn_levelOp_mulVec,
+        MPSPreparation.interior_subset_blockInterior,
+        MPSPreparation.isRoundsImplementationOn_treeRounds,
+        MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp}
+    \leanok
+    \uses{thm:ldp_long_range_layer, lem:ldp_round_implementation_compose}
+    For $i\ge0$, level $i$ of the tree applies, for every block
+    $\{p2^{i+1},\dots,(p+1)2^{i+1}-1\}$ with $(p+1)2^{i+1}\le N$, a two-site
+    unitary $u_{i,p}$ to the two endpoints $p2^{i+1}$ and
+    $p2^{i+1}+2^{i+1}-1$ of the block. Let $T_k$ be the product of the levels
+    $0,\dots,k-1$, the level $k-1$ applied first, and let $I_B$ be the set of
+    sites whose residue modulo $B$ lies in $\{1,\dots,B-2\}$. Then $2k$ rounds
+    of total depth $5k$ implement $T_k$ on the vectors with $\ket0$ at the
+    sites of $I_{2^k}$. In particular, for a nonzero product vector $\ket\pi$
+    whose site vectors on $I_{2^k}$ are multiples of $\ket0$, the vector
+    $T_k\ket\pi$ is prepared with measurement rounds in depth $5k$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The gate of the block $p$ of level $i$ is a distant gate with $a=p2^{i+1}$
+    and $L=2^i-1$. Its stretch is the block, so the stretches of a level are
+    pairwise disjoint, and its interior lies in $I_{2^{i+1}}$. By
+    Theorem~\ref{thm:ldp_long_range_layer} two rounds of depth $5$ implement
+    level $i$ on the vectors with $\ket0$ at $I_{2^{i+1}}$. The gates of
+    level $i$ act on sites with residues $0$ and $2^{i+1}-1$ modulo
+    $2^{i+1}$, hence with residues $0$ and $2^i-1$ modulo $2^i$, outside
+    $I_{2^i}$; and $I_{2^i}\subseteq I_{2^{i+1}}$, because the residue modulo
+    $2^{i+1}$ of a site is $r$ or $r+2^i$, where $r$ is its residue modulo
+    $2^i$. So level $i$ maps the vectors with $\ket0$ at $I_{2^{i+1}}$ to
+    vectors with $\ket0$ at $I_{2^i}$, and Lemma~\ref{lem:ldp_round_implementation_compose}
+    composes the levels by induction over $k$; $I_1$ is empty.
+\end{proof}
+
+\begin{remark}[The tree circuit of matrix product states]
+    \label{rem:ldp_tree_measurements_mps}
+    \uses{thm:ldp_tree_measurements}
+    In the tree circuit (\ref{eq:ldp_tree_factorization}) a register above
+    the lowest level carries $\mathbb C^{D^2}$, which is a group of sites once
+    $D^2>d$. With registers of $r$ consecutive sites, $d^r\ge D^2$, each layer
+    takes a depth bounded in terms of $d$ and $D$, and with the error bound of
+    the approximating state for $q=2^{k+1}\propto\log(N/\varepsilon)$ this
+    would give the depth $O(\log\log(N/\varepsilon))$ of
+    \cite{Malz2024Preparation} for short-range correlated matrix product
+    states. These steps are not formalized
+    \cite{gap:mswc24_tree_measurement_scope}.
+\end{remark}
