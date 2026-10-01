@@ -7,7 +7,7 @@ import TNLean.MPS.Periodic.PhaseClasses
 import TNLean.MPS.Periodic.EqualCaseGlobal
 
 /-!
-# Unitary assembly of periodic phase classes
+# Unitary grouping of periodic phase classes
 
 Group a weighted family of left-canonical periodic blocks into a non-repeated
 basis, retaining the original copy indices. The phases in the blockwise
