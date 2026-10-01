@@ -78,11 +78,11 @@ theorem permMatrix_cfgPerm_mul_embedOp_mul {m : ℕ} (σ : Equiv.Perm (Fin N)) (
   ext x y
   simp only [mul_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
     Option.mem_def, Option.some.injEq, ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-  rw [Finset.sum_eq_single ((cfgPerm σ.symm).symm y), if_pos (Equiv.apply_symm_apply _ _)]
+    Finset.sum_ite_eq, Finset.mem_univ, ite_true]
+  rw [Finset.sum_eq_single ((cfgPerm σ.symm).symm y), ite_eq_left (Equiv.apply_symm_apply _ _)]
   rotate_left
   · intro w _ hw
-    rw [if_neg fun h => hw (by rw [← h, Equiv.symm_apply_apply])]
+    rw [ite_eq_right fun h => hw (by rw [← h, Equiv.symm_apply_apply])]
   · simp
   rw [embedOp_apply, embedOp_apply]
   have hy : (cfgPerm σ.symm).symm y = y ∘ σ := by
@@ -96,8 +96,8 @@ theorem permMatrix_cfgPerm_mul_embedOp_mul {m : ℕ} (σ : Equiv.Perm (Fin N)) (
     · intro h i hi
       exact h (σ i) fun j hj => hi j (σ.injective hj)
   by_cases h : AgreeOff (σ ∘ e) x y
-  · rw [if_pos (hag.mpr h), if_pos h]; rfl
-  · rw [if_neg (fun h' => h (hag.mp h')), if_neg h]
+  · rw [ite_eq_left (hag.mpr h), ite_eq_left h]; rfl
+  · rw [ite_eq_right (fun h' => h (hag.mp h')), ite_eq_right h]
 
 variable [NeZero d]
 
@@ -120,14 +120,14 @@ private theorem isZeroOn_mulVec_of_finset {S : Finset (Fin N)} {v : Cfg d N → 
       funext x
       rw [ctrlProj, mulVec_diagonal]
       by_cases hx : ∀ i ∈ S, x i = (0 : Cfg d N) i
-      · rw [if_pos hx, one_mul]
-      · rw [if_neg hx, zero_mul]
+      · rw [ite_eq_left hx, one_mul]
+      · rw [ite_eq_right hx, zero_mul]
         by_contra h0
         exact hx fun i hi => hu x (Ne.symm h0) i hi
     · intro hu x hx i hi
       rw [← hu, ctrlProj, mulVec_diagonal] at hx
       by_contra hne
-      exact hx (by rw [if_neg fun h' => hne (h' i hi), zero_mul])
+      exact hx (by rw [ite_eq_right fun h' => hne (h' i hi), zero_mul])
   have hc : Commute (ctrlProj S (0 : Cfg d N)) A :=
     commute_of_mem_supportedOperators hST (ctrlProj_mem_supportedOperators S 0) hA
   rw [hP] at h ⊢

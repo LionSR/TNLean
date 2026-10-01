@@ -35,7 +35,8 @@ number of layers.
 A round *implements* a matrix `W` on a set `E` of vectors when for every outcome `m` there is a
 scalar `c` with `V_m P_m U v = c W v` for every `v ∈ E`: whatever the outcome, the round acts on
 `E` as `W`, up to a scalar independent of the input. Implementations compose along a sequence of
-rounds (`MPSPreparation.MeasurementRound.isPreparedWithMeasurementRoundsInDepth_of_isImplementationOn`).
+rounds
+(`MPSPreparation.MeasurementRound.isPreparedWithMeasurementRoundsInDepth_of_isImplementationOn`).
 
 ## Main definitions
 

@@ -234,7 +234,8 @@ theorem isZeroOn_levelOp_mulVec (i : ℕ) {v : Cfg d N → ℂ}
       have : 2 * (c + 1) - 1 = 2 * c + 1 := by omega
       rw [this]
       ring
-    rw [treeGate_far_val u hu hp, hfar, hc, Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt (by omega)] at hx2
+    rw [treeGate_far_val u hu hp, hfar, hc, Nat.add_mul_mod_self_left,
+      Nat.mod_eq_of_lt (by omega)] at hx2
     omega
 
 omit [NeZero d] in

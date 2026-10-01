@@ -46,7 +46,8 @@ unitary at the site `c` of a hop reappears, after the hop, at its site `f`; no c
 relation of Pauli matrices is needed, the correction being the inverse of the accumulated
 single-site unitaries. On the vectors with `|0⟩` at the sites `e` and `f` of every hop, the round
 acts, for every outcome, as `d^{-H}` times the permutation of sites that moves the content of
-`c` to `f` hop after hop, `H` the number of hops (`MPSPreparation.TeleportHop.isImplementationOn_round`).
+`c` to `f` hop after hop, `H` the number of hops
+(`MPSPreparation.TeleportHop.isImplementationOn_round`).
 In particular a register is moved along a chain of `L` hops, across `2L` sites, in depth `2`.
 
 ## Main definitions
@@ -174,6 +175,7 @@ maximally entangled pairs is a computational-basis measurement after `F`. -/
 noncomputable def quditFourier (d : ℕ) : Matrix (Fin d) (Fin d) ℂ :=
   of fun a b => ((Real.sqrt d : ℝ) : ℂ)⁻¹ * quditRoot d ^ (a.val * b.val)
 
+omit [NeZero d] in
 theorem quditFourier_apply (a b : Fin d) :
     quditFourier d a b = ((Real.sqrt d : ℝ) : ℂ)⁻¹ * quditRoot d ^ (a.val * b.val) :=
   rfl
@@ -267,7 +269,8 @@ theorem IsZeroOn.smul {S : Set (Fin N)} {v : Cfg d N → ℂ} (h : IsZeroOn S v)
 /-- A single-site operator at a site outside `S` keeps `|0⟩` at the sites of `S`. -/
 theorem IsZeroOn.finKronecker_update_one_mulVec {S : Set (Fin N)} {v : Cfg d N → ℂ}
     (h : IsZeroOn S v) {t : Fin N} (ht : t ∉ S) (u : Matrix (Fin d) (Fin d) ℂ) :
-    IsZeroOn S (finKronecker (Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t u) *ᵥ v) := by
+    IsZeroOn S
+      (finKronecker (Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t u) *ᵥ v) := by
   intro y hy i hi
   rw [finKronecker_update_one_mulVec_apply] at hy
   obtain ⟨j, -, hj⟩ := Finset.exists_ne_zero_of_sum_ne_zero hy
@@ -295,13 +298,13 @@ theorem permMatrix_cfgPerm_mul_finKronecker (π : Equiv.Perm (Fin N))
   ext x y
   simp only [mul_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
     Option.mem_def, Option.some.injEq, ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq, Finset.sum_ite_eq', Finset.mem_univ, if_true, finKronecker_apply]
+    Finset.sum_ite_eq, Finset.mem_univ, ite_true, finKronecker_apply]
   rw [Finset.sum_eq_single ((cfgPerm π).symm y)]
-  · simp only [Equiv.apply_symm_apply, if_true]
+  · simp only [Equiv.apply_symm_apply, ite_true]
     refine Fintype.prod_equiv π _ _ fun i => ?_
     simp [cfgPerm]
   · intro z _ hz
-    rw [if_neg fun h => hz (by rw [← h, Equiv.symm_apply_apply])]
+    rw [ite_eq_right fun h => hz (by rw [← h, Equiv.symm_apply_apply])]
   · simp
 
 theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Set (Fin N)} {v : Cfg d N → ℂ}
@@ -456,7 +459,8 @@ noncomputable def pre (z : Cfg d N) : Matrix (Cfg d N) (Cfg d N) ℂ :=
 /-- The single-site unitaries left by one hop: `|z_c⟩` at `c` and `|z_e⟩` at `e`, prepared from
 `|0⟩` by shifts, and `X^{z_e} Z^{z_c}` at `f`. -/
 noncomputable def frame (z : Cfg d N) : Fin N → Matrix (Fin d) (Fin d) ℂ :=
-  Function.update (Function.update (Function.update 1 h.c (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.c))))
+  Function.update (Function.update
+    (Function.update 1 h.c (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.c))))
     h.e (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.e)))) h.f (quditPauli (z h.c) (z h.e))
 
 theorem frame_mem_unitary (z : Cfg d N) (i : Fin N) :
@@ -474,9 +478,6 @@ theorem frame_of_ne (z : Cfg d N) {i : Fin N} (hc : i ≠ h.c) (he : i ≠ h.e) 
 
 /-- The configuration permutation exchanging the sites `c` and `f`. -/
 def swapPerm : Equiv.Perm (Cfg d N) := cfgPerm (Equiv.swap h.c h.f)
-
-private theorem update_eq_of_forall {x y : Cfg d N}
-    (hxy : ∀ i, x i = y i) : x = y := funext hxy
 
 /-- **One hop.** On a vector with `|0⟩` at `e` and `f`, the hop for the outcomes `z_c`, `z_e`
 is `1/d` times the exchange of `c` and `f` followed by the single-site unitaries
@@ -517,7 +518,8 @@ theorem pre_mulVec (z : Cfg d N) {v : Cfg d N → ℂ} (hv : IsZeroOn {h.e, h.f}
   -- The second layer.
   have hG2 : ∀ y, (h.gate₂ *ᵥ (h.gate₁ *ᵥ v)) y =
       quditFourier d (y h.c) (y h.f - y h.e) * s *
-        v (Function.update (Function.update (Function.update y h.c (y h.f - y h.e)) h.e 0) h.f 0) := by
+        v (Function.update (Function.update (Function.update y h.c (y h.f - y h.e)) h.e 0)
+          h.f 0) := by
     intro y
     rw [gate₂, ← mulVec_mulVec, hG1, permMatrix_mulVec, finKronecker_update_one_mulVec_apply,
       Finset.sum_eq_single (y h.f - y h.e)]
@@ -530,11 +532,11 @@ theorem pre_mulVec (z : Cfg d N) {v : Cfg d N → ℂ} (hv : IsZeroOn {h.e, h.f}
     · intro j _ hj
       simp only [Function.comp_apply, shiftPerm_apply]
       rw [hvf, mul_zero, mul_zero]
-      simp only [Function.update_apply, if_neg hef.symm, if_neg hcf.symm,
-        if_neg hce.symm]
+      simp only [Function.update_apply, ite_eq_right hef.symm, ite_eq_right hcf.symm,
+        ite_eq_right hce.symm]
       intro h0
       apply hj
-      simp only [if_true] at h0
+      simp only [ite_true] at h0
       rw [add_neg_eq_zero] at h0
       rw [h0, add_sub_cancel_left]
     · simp
@@ -555,12 +557,13 @@ theorem pre_mulVec (z : Cfg d N) {v : Cfg d N → ℂ} (hv : IsZeroOn {h.e, h.f}
   rw [hL, hG2, Pi.smul_apply, smul_eq_mul, hframe, ← mulVec_mulVec, ← mulVec_mulVec,
     finKronecker_update_one_permMatrix_mulVec, finKronecker_update_one_permMatrix_mulVec]
   simp only [finKronecker_update_one_mulVec_apply, quditPauli_apply, ite_mul, zero_mul,
-    Finset.sum_ite_eq, Finset.mem_univ, if_true, permMatrix_mulVec, Function.comp_apply,
+    Finset.sum_ite_eq, Finset.mem_univ, ite_true, permMatrix_mulVec, Function.comp_apply,
     swapPerm, cfgPerm_apply, Equiv.subRight_apply]
-  simp only [Function.update_apply, if_neg hef.symm, if_neg hcf.symm, if_neg hce.symm]
+  simp only [Function.update_apply, ite_eq_right hef.symm, ite_eq_right hcf.symm,
+    ite_eq_right hce.symm]
   by_cases he : y h.e = z h.e
   · by_cases hc : y h.c = z h.c
-    · rw [if_pos he, if_pos hc, one_mul, one_mul, quditFourier_apply, ← hss, he, hc]
+    · rw [ite_eq_left he, ite_eq_left hc, one_mul, one_mul, quditFourier_apply, ← hss, he, hc]
       have hcfg : Function.update (Function.update (Function.update y h.c (y h.f - z h.e)) h.e 0)
           h.f 0 = Function.update (Function.update (Function.update y h.c (z h.c - z h.c)) h.e
             (z h.e - z h.e)) h.f (y h.f - z h.e) ∘ ⇑(Equiv.swap h.c h.f) := by
@@ -569,13 +572,13 @@ theorem pre_mulVec (z : Cfg d N) {v : Cfg d N → ℂ} (hv : IsZeroOn {h.e, h.f}
         split_ifs <;> simp_all
       rw [hcfg, ← hs]
       ring
-    · rw [if_pos he, if_neg hc, mul_zero, hvf, mul_zero, mul_zero]
+    · rw [ite_eq_left he, ite_eq_right hc, mul_zero, hvf, mul_zero, mul_zero]
       simp only [Function.comp_apply, Equiv.swap_apply_right, Function.update_apply,
-        if_neg hcf, if_neg hce, if_true]
+        ite_eq_right hcf, ite_eq_right hce, ite_true]
       exact sub_ne_zero.mpr hc
-  · rw [if_neg he, hve, mul_zero, mul_zero]
+  · rw [ite_eq_right he, hve, mul_zero, mul_zero]
     simp only [Function.comp_apply, Equiv.swap_apply_of_ne_of_ne hce.symm hef,
-      Function.update_apply, if_neg hef, if_true]
+      Function.update_apply, ite_eq_right hef, ite_true]
     exact sub_ne_zero.mpr he
 
 end TeleportHop

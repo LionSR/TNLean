@@ -73,7 +73,7 @@ include hl in
 theorem layerOfListGate_key {i : ι} (hi : i ∈ l) : layerOfListGate l key G (key i) = G i := by
   classical
   have h : ∃ j ∈ l, key j = key i := ⟨i, hi, rfl⟩
-  rw [layerOfListGate, dif_pos h]
+  rw [layerOfListGate, dite_eq_left h]
   rw [eq_of_key_eq l key hl h.choose_spec.1 hi h.choose_spec.2]
 
 /-- The layer of the gates `G i` on the pairs `{key i, key i + 1}` for `i` in the list `l`, the
@@ -114,6 +114,7 @@ theorem layerOfList_op : (layerOfList l key G hl hu hs).op = (l.map G).prod := b
 
 end LayerOfList
 
+omit [NeZero N] in
 /-- A product of operators acting on `S` acts on `S`. -/
 theorem list_prod_mem_supportedOperators {S : Set (Fin N)}
     (l : List (Matrix (Cfg d N) (Cfg d N) ℂ)) (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
@@ -207,8 +208,10 @@ theorem pairwise_disjoint_one : ∀ {hs : List (TeleportHop N)}, Valid hs →
     refine List.Pairwise.cons (fun h' hh' => ?_) (pairwise_disjoint_one hv)
     rw [h.bond_k₁, h'.bond_k₁, Set.disjoint_left]
     rintro i (rfl | rfl) hi
-    · exact he (mem_allSites.mpr ⟨h', hh', by simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
-    · exact hf (mem_allSites.mpr ⟨h', hh', by simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
+    · exact he (mem_allSites.mpr ⟨h', hh', by
+        simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
+    · exact hf (mem_allSites.mpr ⟨h', hh', by
+        simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
 
 theorem pairwise_disjoint_two : ∀ {hs : List (TeleportHop N)}, Valid hs →
     hs.Pairwise fun h h' => Disjoint (bond h.k₂) (bond h'.k₂)
@@ -220,7 +223,8 @@ theorem pairwise_disjoint_two : ∀ {hs : List (TeleportHop N)}, Valid hs →
     · rcases hi with hi | hi
       · exact (hc h' hh').1 hi
       · exact (hc h' hh').2 hi
-    · exact he (mem_allSites.mpr ⟨h', hh', by simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
+    · exact he (mem_allSites.mpr ⟨h', hh', by
+        simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
 
 variable [NeZero d]
 
@@ -339,7 +343,8 @@ theorem chainPre_cons {h : TeleportHop N} {hs : List (TeleportHop N)} (hv : Vali
           (hs.map TeleportHop.gate₁).prod) := by
         rw [h2.eq]; simp only [Matrix.mul_assoc]
 
-theorem _root_.MPSPreparation.IsZeroOn.chainPerm_mulVec {S : Set (Fin N)} {v : Cfg d N → ℂ} (hS : IsZeroOn S v)
+theorem _root_.MPSPreparation.IsZeroOn.chainPerm_mulVec {S : Set (Fin N)} {v : Cfg d N → ℂ}
+    (hS : IsZeroOn S v)
     {hs : List (TeleportHop N)} (hdisj : Disjoint S (allSites hs)) :
     IsZeroOn S (chainPerm hs *ᵥ v) := by
   induction hs with
@@ -425,7 +430,8 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
     rw [chainPre_cons hv, ← mulVec_mulVec, chainPre_mulVec hv.1 z hzhs, mulVec_smul, hsplit,
       ← mulVec_mulVec, mulVec_mulVec (M := h.pre z), hcomm.eq, ← mulVec_mulVec, h.pre_mulVec z hw',
       mulVec_smul, mulVec_mulVec (M := h.swapPerm.permMatrix ℂ), hswap, ← mulVec_mulVec,
-      mulVec_mulVec (M := finKronecker (h.frame z)), mulVec_mulVec (M := finKronecker _), hframe, smul_smul,
+      mulVec_mulVec (M := finKronecker (h.frame z)), mulVec_mulVec (M := finKronecker _), hframe,
+      smul_smul,
       chainPerm, ← mulVec_mulVec, List.length_cons, pow_succ, mul_inv]
 
 /-! ### The teleportation round -/
