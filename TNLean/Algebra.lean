@@ -23,8 +23,11 @@ import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CocycleRestriction
 import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
+import TNLean.Algebra.CommonKernelGapInterpolation
+import TNLean.Algebra.CommonKernelSpectralGap
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
+import TNLean.Algebra.CompactGapBounds
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
@@ -36,6 +39,7 @@ import TNLean.Algebra.ExponentialSumWindow
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct
+import TNLean.Algebra.FinStepOrbit
 import TNLean.Algebra.FinSumPermutation
 import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
@@ -52,13 +56,17 @@ import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentTracePerturbation
+import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometryUnitaryExtension
+import TNLean.Algebra.KernelGapPerturbation
+import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.LSymbolDomainWall
+import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixCyclicPathSum
@@ -122,4 +130,5 @@ import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.Algebra.UnitaryKroneckerComparison
+import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.Algebra.WordAlgebra

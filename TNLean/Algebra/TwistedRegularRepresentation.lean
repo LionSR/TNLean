@@ -26,7 +26,7 @@ noncomputable section
 
 namespace TNLean.Algebra
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 namespace ScalarCocycle
 

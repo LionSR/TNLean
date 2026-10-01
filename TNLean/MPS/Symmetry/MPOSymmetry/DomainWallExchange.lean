@@ -23,12 +23,17 @@ This file formalizes the tensor-level content of these statements:
 * the local action of a group element on an open chain containing a pair of domain walls is the
   product of the two phases (`IsDomainWallAction.pair`), which is the phase acquired when a
   symmetry string passes over the pair of walls;
+* the square of the exchange phase is one when the symmetry squares to the identity
+  (`IsDomainWallAction.mul_sq_eq_one_of_mpo_mul_self_eq_one`, lines 835--839), using that two
+  nonzero domain walls between normal blocks give a nonzero state `|ψ(A-B-A)⟩`
+  (`exists_twoWallMPV_ne_zero`);
 * rescaling a domain wall rescales its phases (`IsDomainWallAction.smul_source`,
   `IsDomainWallAction.smul_target`), so that for an involution the two phases can be made
   equal to any square root of their product (`IsDomainWallAction.exists_eq_of_mul_self`).
 
 **Local fix (nondegenerate domain walls, blocked local action):** the results of this module,
-`smul_source`, `smul_target`, `exists_eq_of_mul_self` and `pair`, are stated for
+`smul_source`, `smul_target`, `exists_eq_of_mul_self`, `pair` and
+`mul_sq_eq_one_of_mpo_mul_self_eq_one`, are stated for
 `IsDomainWallAction`, whose walls and phase are nonzero and whose local relation holds against
 regions longer than a buffer; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
 
@@ -38,6 +43,9 @@ The truncated string operators `O^{[i,j]}` of `eq:DWophys`, with the endpoint te
 
 ## Main results
 
+* `MPOTensor.exists_twoWallMPV_ne_zero`: a nonzero state with two domain walls.
+* `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_sq_eq_one_of_mpo_mul_self_eq_one`:
+  `(c_{AB} c_{BA})² = 1` from `U² = 1`.
 * `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.pair`: the phase `c c'` of a string
   over a pair of walls.
 * `MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.smul_source`,
@@ -62,6 +70,70 @@ theorem actRect_smul (T : MPOTensor d D₁) (a : ℂ) (e : Fin d → Matrix (Fin
     (i : Fin d) : actRect T (fun j ↦ a • e j) i = a • actRect T e i := by
   simp only [actRect, Matrix.kronecker_smul, ← Finset.smul_sum]
   rfl
+
+/-- **Nonvanishing states with two domain walls.** Between normal tensors, two nonzero domain
+walls give a nonzero periodic state `|ψ(A-B-A)⟩` with arbitrarily long `A` and `B` regions.
+
+The words of a fixed long length span the full matrix algebras of both blocks, so a vanishing
+state would make `tr(X e_i Y f_j)` vanish for all matrices `X`, `Y`, which forces `e_i = 0` or
+`f_j = 0`. -/
+theorem exists_twoWallMPV_ne_zero {D D' : ℕ} (A : MPSTensor d D)
+    (e : Fin d → Matrix (Fin D) (Fin D') ℂ) (B : MPSTensor d D')
+    (f : Fin d → Matrix (Fin D') (Fin D) ℂ) (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B)
+    (he : e ≠ 0) (hf : f ≠ 0) (N : ℕ) :
+    ∃ k l n : ℕ, N ≤ k ∧ N ≤ l ∧
+      ∃ τ : Fin (k + 1 + l + 1 + n) → Fin d, twoWallMPV A e B f τ ≠ 0 := by
+  obtain ⟨L, hL, hinj⟩ := hA
+  obtain ⟨L', hL', hinj'⟩ := hB
+  have hk := MPSTensor.isNBlkInjective_mul_of_isNBlkInjective A (Nat.succ_pos N) hinj
+  have hl := MPSTensor.isNBlkInjective_mul_of_isNBlkInjective B (Nat.succ_pos N) hinj'
+  obtain ⟨i, hi⟩ := Function.ne_iff.mp he
+  obtain ⟨j, hj⟩ := Function.ne_iff.mp hf
+  suffices h : ∃ (σ : Fin ((N + 1) * L) → Fin d) (σ' : Fin ((N + 1) * L') → Fin d),
+      (Kraus.evalWord A (List.ofFn σ) * e i * Kraus.evalWord B (List.ofFn σ') * f j).trace ≠ 0 by
+    obtain ⟨σ, σ', hne⟩ := h
+    refine ⟨(N + 1) * L, (N + 1) * L', 0, by nlinarith, by nlinarith,
+      Fin.append (Fin.append (Fin.append (Fin.append σ ![i]) σ') ![j]) Fin.elim0, ?_⟩
+    rw [twoWallMPV_append]
+    simpa using hne
+  by_contra hcon
+  push Not at hcon
+  have h1 : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (σ' : Fin ((N + 1) * L') → Fin d),
+      (X * e i * Kraus.evalWord B (List.ofFn σ') * f j).trace = 0 := by
+    intro X σ'
+    have hmem : X ∈ Submodule.span ℂ
+        (Set.range fun σ : Fin ((N + 1) * L) → Fin d ↦ Kraus.evalWord A (List.ofFn σ)) := by
+      rw [hk.span_eq_top]
+      exact Submodule.mem_top
+    refine Submodule.span_induction
+      (p := fun M _ ↦ (M * e i * Kraus.evalWord B (List.ofFn σ') * f j).trace = 0)
+      (fun M hM ↦ by obtain ⟨σ, rfl⟩ := hM; exact hcon σ σ') (by simp)
+      (fun M M' _ _ hM hM' ↦ by simp only [Matrix.add_mul, Matrix.trace_add, hM, hM', add_zero])
+      (fun c M _ hM ↦ by simp only [Matrix.smul_mul, Matrix.trace_smul, hM, smul_zero]) hmem
+  have h2 : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (Y : Matrix (Fin D') (Fin D') ℂ),
+      (X * e i * Y * f j).trace = 0 := by
+    intro X Y
+    have hmem : Y ∈ Submodule.span ℂ
+        (Set.range fun σ' : Fin ((N + 1) * L') → Fin d ↦ Kraus.evalWord B (List.ofFn σ')) := by
+      rw [hl.span_eq_top]
+      exact Submodule.mem_top
+    refine Submodule.span_induction (p := fun M _ ↦ (X * e i * M * f j).trace = 0)
+      (fun M hM ↦ by obtain ⟨σ', rfl⟩ := hM; exact h1 X σ') (by simp)
+      (fun M M' _ _ hM hM' ↦ by
+        simp only [Matrix.mul_add, Matrix.add_mul, Matrix.trace_add, hM, hM', add_zero])
+      (fun c M _ hM ↦ by
+        simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.trace_smul, hM, smul_zero]) hmem
+  obtain ⟨a, b, hab⟩ : ∃ a b, e i a b ≠ 0 := by
+    by_contra h0
+    push Not at h0
+    exact hi (Matrix.ext h0)
+  obtain ⟨c, c', hcc⟩ : ∃ c c', f j c c' ≠ 0 := by
+    by_contra h0
+    push Not at h0
+    exact hj (Matrix.ext h0)
+  have h3 := h2 (Matrix.single c' a 1) (Matrix.single b c 1)
+  rw [Matrix.single_mul_mul_single, Matrix.trace_single_mul] at h3
+  exact mul_ne_zero hab hcc (by simpa using h3)
 
 namespace GroupFamily
 
@@ -183,6 +255,42 @@ theorem pair (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {z z
       rw [r₁, r₂, List.append_assoc, Kraus.evalWord_append, Kraus.evalWord_append]
       simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, Matrix.mul_assoc]
       rw [mul_comm c' c]
+
+/-- **The square of the exchange phase of an involution** (arXiv:2405.00439,
+`Papers/2405.00439/MPU-DW.tex` lines 835--839): if `U = O_g` squares to the identity on every
+nonempty chain and `g` exchanges the domain walls `e_{AB}` and `e_{BA}` between the normal
+blocks `x` and `y` with phases `c_{AB}`, `c_{BA}`, then `(c_{AB} c_{BA})² = 1`.
+
+As in the source, `U |ψ(A-B-A)⟩ = c_{AB} c_{BA} |ψ(B-A-B)⟩` and
+`U |ψ(B-A-B)⟩ = c_{BA} c_{AB} |ψ(A-B-A)⟩`
+(`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV`), so applying
+`U` twice multiplies `|ψ(A-B-A)⟩` by `(c_{AB} c_{BA})²`; the state is nonzero on a chain with
+long regions (`MPOTensor.exists_twoWallMPV_ne_zero`). -/
+theorem mul_sq_eq_one_of_mpo_mul_self_eq_one {hxy : g • x = y} {hyx : g • y = x}
+    {eAB : Fin d → Matrix (Fin (D x)) (Fin (D y)) ℂ}
+    {eBA : Fin d → Matrix (Fin (D y)) (Fin (D x)) ℂ} {cAB cBA : ℂ}
+    (hAx : Kraus.IsNormal (A x)) (hAy : Kraus.IsNormal (A y))
+    (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
+    (hU : ∀ L, 0 < L → mpo (F.tensor g) L * mpo (F.tensor g) L = 1)
+    (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
+    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
+    (cAB * cBA) ^ 2 = 1 := by
+  obtain ⟨N₁, H₁⟩ := mpo_mulVec_twoWallMPV hperm hAB hBA
+  obtain ⟨N₂, H₂⟩ := mpo_mulVec_twoWallMPV hperm hBA hAB
+  obtain ⟨k, l, n, hk, hl, τ, hτ⟩ := exists_twoWallMPV_ne_zero (A x) eAB (A y) eBA hAx hAy
+    hAB.source_ne_zero hBA.source_ne_zero (N₁ + N₂)
+  have key : twoWallMPV (A x) eAB (A y) eBA =
+      ((cAB * cBA) * (cBA * cAB)) • twoWallMPV (A x) eAB (A y) eBA (k := k) (l := l) (n := n) := by
+    calc twoWallMPV (A x) eAB (A y) eBA
+        = (mpo (F.tensor g) (k + 1 + l + 1 + n) * mpo (F.tensor g) (k + 1 + l + 1 + n)) *ᵥ
+            twoWallMPV (A x) eAB (A y) eBA := by rw [hU _ (by omega), Matrix.one_mulVec]
+      _ = _ := by
+        rw [← Matrix.mulVec_mulVec, H₁ k l n (by omega) (by omega), Matrix.mulVec_smul,
+          H₂ k l n (by omega) (by omega), smul_smul]
+  have hτ' := congrFun key τ
+  rw [Pi.smul_apply, smul_eq_mul] at hτ'
+  refine mul_right_cancel₀ hτ ?_
+  linear_combination -hτ'
 
 end IsDomainWallAction
 

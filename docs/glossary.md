@@ -761,8 +761,25 @@ model different levels of data and different sources.
   CPSV canonical form. Each proves both inputs from its own grouping and
   Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and
   `MPSTensor.IsCPSVCanonicalForm` is proved or used in either direction, and
-  none may be assumed: the bundle is the only point at which the two surfaces
-  meet, and supplying it from one of them says nothing about the other.
+  none may be assumed: supplying the common grouping properties from one
+  canonical form says nothing about the other.
+- `MPOTensor.HasVerticalBNTProductInputs` in
+  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean` records the grouping properties
+  for both the one-site tensor and its two-site block, together with three
+  properties of the blocked vertical tensor: every invariant orthogonal
+  projection reduces its letters; an irreducible isometric corner with a
+  positive definite eigenmatrix at a positive eigenvalue has no other
+  peripheral eigenvalue of that modulus; and every
+  nonzero corner is detected by a finite-chain sector compression. These are
+  the properties used in CPSV16, Proposition 4.13, lines 1873--1921, and
+  Appendix C.4, lines 2020--2029. The constructors
+  `MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs` and
+  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs` prove them
+  independently under MPDO positivity. They imply the common retained-product
+  spectral and positive fusion constructions; together with positivity and
+  `IsRFPViaTS`, they give `HasBNTFusionTensorClause`. These are intermediate
+  consequences of each canonical form, not additional hypotheses of the
+  source-facing fixed-point theorems.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   the normalized fixed-representative predicate of Appendix C.2: it adds the
   MPDO and nonnilpotent-sector conditions to horizontal canonical form. Its
