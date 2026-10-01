@@ -74,18 +74,18 @@ variable {d D b : ℕ}
 
 /-! ### The overlap after the partial isometry -/
 
-/-- **The overlap after `V^{⊗M}`.** For any tensor `A` and pairs `ω_j` of matrices `σ'_j`, the
-unnormalized approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of arXiv:2307.01696, Supplemental
-Material, eq. (S7), has overlap `∑ⱼ conj(αⱼ) ⟨φ_M(P_{σ'_j})|φ_M(P)⟩` with the periodic state of `A`
-on `N = qM` sites, where `P` is the positive part of the `q`-site blocked tensor and `P_{σ'_j}`
-the fixed-point tensor of `σ'_j`. The source uses `V†V = Π` and `Π P = P`; no injectivity is
-needed. -/
-theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
-    (α : Fin b → ℂ) (σ' : Fin b → Matrix (Fin D) (Fin D) ℂ) :
-    ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
+/-- **The overlap after `V^{⊗M}`.** For any tensor `A` and any vector `F` on the bond pairs of
+`M` sites, `V^{⊗M} F` has overlap `⟨F|φ_M(P)⟩` with the periodic state of `A` on `N = qM`
+sites, where `V P` is the polar decomposition of the `q`-site blocked tensor and `φ_M(P)` is the
+periodic state of the positive part read as a tensor. The source uses `V†V = Π` and `Π P = P`
+(arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
+tensors"); no injectivity is needed. -/
+theorem sum_star_tensorPower_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : ℕ)
+    (F : (Fin M → Fin D × Fin D) → ℂ) :
+    ∑ τ, star ((tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ F) τ) *
         mpv A (blockedConfigEquiv d M q τ) =
-      ∑ j, star (α j) *
-        mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M := by
+      ∑ c, star (F c) *
+        mpv (polarPosTensor (blockTensor A q)) fun k => (virtualPairEquiv D).symm (c k) := by
   set Bq := blockTensor A q
   set V := Matrix.polarIso (physicalMatrix Bq)
   set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
@@ -107,25 +107,68 @@ theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [
     simp only [mulVec, dotProduct, tensorPower, of_apply, m]
     refine (Fintype.sum_equiv e.symm _ _ fun c' => ?_)
     simp [e, polarSupportMatrix, Bq]
+  simp only [hT]
+  rw [sum_star_tensorPower_mulVec_mul, hfixP]
+  rfl
+
+/-- **The overlap after `V^{⊗M}`.** For any tensor `A` and pairs `ω_j` of matrices `σ'_j`, the
+unnormalized approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of arXiv:2307.01696, Supplemental
+Material, eq. (S7), has overlap `∑ⱼ conj(αⱼ) ⟨φ_M(P_{σ'_j})|φ_M(P)⟩` with the periodic state of `A`
+on `N = qM` sites, where `P` is the positive part of the `q`-site blocked tensor and `P_{σ'_j}`
+the fixed-point tensor of `σ'_j` (`sum_star_tensorPower_polarIso_mulVec_mul_mpv`). -/
+theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
+    (α : Fin b → ℂ) (σ' : Fin b → Matrix (Fin D) (Fin D) ℂ) :
+    ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
+        mpv A (blockedConfigEquiv d M q τ) =
+      ∑ j, star (α j) *
+        mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M := by
+  set Bq := blockTensor A q
+  set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
+    Equiv.piCongrRight fun _ => virtualPairEquiv D
+  set m : (Fin M → Fin D × Fin D) → ℂ := fun c => mpv (polarPosTensor Bq) (e.symm c)
   have hpair : ∀ j, ∑ c, star (pairProductState (fixedPointPair (σ' j)) c) * m c =
       mpvOverlap (polarPosTensor Bq) (fixedPointTensor (σ' j)) M := fun j => by
     rw [mpvOverlap]
     refine (Fintype.sum_equiv e.symm _ _ fun c => ?_)
     rw [mpv_fixedPointTensor, mul_comm]
     simp [e, m, virtualPairEquiv]
-  calc ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
-        mpv A (blockedConfigEquiv d M q τ)
-      = ∑ τ, star ((tensorPower M V *ᵥ nonNormalFixedPointState α
-          (fun j => fixedPointPair (σ' j))) τ) * (tensorPower M V *ᵥ m) τ := by
-        simp only [hT]; rfl
-    _ = ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c := by
-        rw [sum_star_tensorPower_mulVec_mul, hfixP]
-    _ = ∑ j, star (α j) * ∑ c, star (pairProductState (fixedPointPair (σ' j)) c) * m c := by
+  rw [nonNormalApproxVector, sum_star_tensorPower_polarIso_mulVec_mul_mpv]
+  change ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c = _
+  calc ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c
+      = ∑ j, star (α j) * ∑ c, star (pairProductState (fixedPointPair (σ' j)) c) * m c := by
         simp only [nonNormalFixedPointState, star_sum, star_mul', Finset.sum_mul,
           Finset.mul_sum]
         rw [Finset.sum_comm]
         exact Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun c _ => by ring
     _ = _ := by simp only [hpair]
+
+/-- **Normalizing a short vector does not decrease an overlap.** If `∑_τ |v_τ|² ≤ 1` and `t ≥ 0`,
+then `t⁻¹ |⟨v|w⟩| ≤ |(‖v‖⁻¹ t⁻¹) ⟨v|w⟩|`: the approximating vector `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` has norm at
+most one because `V^{⊗M}` does not increase norms, so normalizing it can only increase its
+overlap with the target (arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii)). -/
+theorem inv_mul_norm_le_norm_of_sum_norm_sq_le_one {ι : Type*} [Fintype ι] (v w : ι → ℂ)
+    (hv : ∑ τ, ‖v τ‖ ^ 2 ≤ 1) {t : ℝ} (ht : 0 ≤ t) :
+    t⁻¹ * ‖∑ τ, star (v τ) * w τ‖ ≤
+      ‖((Real.sqrt (∑ τ, ‖v τ‖ ^ 2) : ℂ)⁻¹ * (t : ℂ)⁻¹) * ∑ τ, star (v τ) * w τ‖ := by
+  set num := ∑ τ, star (v τ) * w τ
+  rw [norm_mul, norm_mul, norm_inv, norm_inv, Complex.norm_real, Complex.norm_real,
+    Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (Real.sqrt_nonneg _), abs_of_nonneg ht]
+  rcases (Real.sqrt_nonneg (∑ τ, ‖v τ‖ ^ 2)).lt_or_eq with hpos' | hzero
+  · have hle : Real.sqrt (∑ τ, ‖v τ‖ ^ 2) ≤ 1 := Real.sqrt_le_one.mpr hv
+    have h1 : 1 ≤ (Real.sqrt (∑ τ, ‖v τ‖ ^ 2))⁻¹ := one_le_inv₀ hpos' |>.2 hle
+    have h2 : 0 ≤ t⁻¹ * ‖num‖ := by positivity
+    nlinarith
+  · have hv0 : ∀ τ, v τ = 0 := by
+      have hsum : ∑ τ, ‖v τ‖ ^ 2 = 0 := by
+        have := Real.sqrt_eq_zero'.1 hzero.symm
+        linarith [Finset.sum_nonneg fun τ (_ : τ ∈ Finset.univ) => sq_nonneg ‖v τ‖]
+      intro τ
+      have := (Finset.sum_eq_zero_iff_of_nonneg fun τ _ => sq_nonneg ‖v τ‖).1 hsum τ
+        (Finset.mem_univ τ)
+      simpa using this
+    have : num = 0 := Finset.sum_eq_zero fun τ _ => by rw [hv0 τ, star_zero, zero_mul]
+    rw [this, norm_zero, mul_zero]
+    positivity
 
 /-! ### An elementary estimate -/
 
@@ -316,26 +359,7 @@ theorem exists_approximationError_le_overlappingBlockSum_weight
   set t := ‖mpvState A (M * q)‖
   have hov : t⁻¹ * ‖num‖ ≤ ‖nonNormalApproxOverlap A q M α ω‖ := by
     rw [nonNormalApproxOverlap_eq]
-    change t⁻¹ * ‖num‖ ≤ ‖((Real.sqrt (∑ τ, ‖v τ‖ ^ 2) : ℂ)⁻¹ * (t : ℂ)⁻¹) * num‖
-    rw [norm_mul, norm_mul, norm_inv, norm_inv, Complex.norm_real, Complex.norm_real,
-      Real.norm_eq_abs, Real.norm_eq_abs, abs_of_nonneg (Real.sqrt_nonneg _),
-      abs_of_nonneg (norm_nonneg _)]
-    rcases (Real.sqrt_nonneg (∑ τ, ‖v τ‖ ^ 2)).lt_or_eq with hpos' | hzero
-    · have hle : Real.sqrt (∑ τ, ‖v τ‖ ^ 2) ≤ 1 := Real.sqrt_le_one.mpr hvle
-      have h1 : 1 ≤ (Real.sqrt (∑ τ, ‖v τ‖ ^ 2))⁻¹ := one_le_inv₀ hpos' |>.2 hle
-      have h2 : 0 ≤ t⁻¹ * ‖num‖ := by positivity
-      nlinarith
-    · have hv0 : ∀ τ, v τ = 0 := by
-        have hsum : ∑ τ, ‖v τ‖ ^ 2 = 0 := by
-          have := Real.sqrt_eq_zero'.1 hzero.symm
-          linarith [Finset.sum_nonneg fun τ (_ : τ ∈ Finset.univ) => sq_nonneg ‖v τ‖]
-        intro τ
-        have := (Finset.sum_eq_zero_iff_of_nonneg fun τ _ => sq_nonneg ‖v τ‖).1 hsum τ
-          (Finset.mem_univ τ)
-        simpa using this
-      have : num = 0 := Finset.sum_eq_zero fun τ _ => by rw [hv0 τ, star_zero, zero_mul]
-      rw [this, norm_zero, mul_zero]
-      positivity
+    exact inv_mul_norm_le_norm_of_sum_norm_sq_le_one v _ hvle (norm_nonneg _)
   -- The overlaps of the blocks.
   have hzj : ∀ j, ‖z j - β j‖ ≤ Cz j * u * Real.exp (Cz j * u) := fun j => by
     have h := hgen j (fun k => ‖μ k‖ ^ q) (fun k => by positivity)

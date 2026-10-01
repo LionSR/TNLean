@@ -5,7 +5,7 @@
 \input{command}
 \title{A Corrected Approximating State for a Tensor with Repeated Blocks}
 \author{}
-\date{2026-09-27}
+\date{2026-10-01}
 \begin{document}
 \maketitle
 \gapnote{local-correction}{resolved}
@@ -186,8 +186,96 @@ $\tau^{2q}/16$ (for $N/q\geq3$) and $(N/q)\tau^{2q}$, with $\tau$ the eigenvalue
 matrix, which the source's rate does not control; the construction here does not
 change that example. For blocks of multiplicity one and weight one whose states
 overlap, that note proves the bound with the correlation lengths of the mixed transfer
-matrices included in the rate. The norm of the fixed-point state is not formalized;
-the overlap normalizes the state after $V^{\otimes M}$.
+matrices included in the rate. The norm of the fixed-point state is formalized only as the
+bound one after $V^{\otimes M}$; the overlap normalizes the state after $V^{\otimes M}$.
+
+\section{Repeated blocks whose states overlap}
+Drop the orthogonality of the $q$-site states of distinct blocks, let the blocks be normal in
+the gauge $\sum_i(A_j^i)^\dagger A_j^i=\mathbf 1$ with positive definite fixed points
+$\sigma_j$ of trace one, let $\lambda_2$ bound the moduli of the eigenvalues other than one of
+every $E_{jj}$ and of all eigenvalues of the mixed transfer matrices $E_{jj'}$, $j\neq j'$, let
+$\xi=-1/\ln\lvert\lambda_2\rvert$ and $0<\gamma<1/2$, and let $\lvert\mu_{j,k}\rvert\leq1$.
+The corrected state (\ref{eq:mswc24_rc_state}) still converges, at the rate of
+\cite{gap:mswc24_block_form_mixed_overlap}: there is $C$, independent of the weights, with
+\begin{align}
+    \varepsilon\leq\frac{Cy\,e^{Cy}}{\min(1,b)^{1/2}},\qquad y=Me^{-\gamma q/\xi},\qquad
+    b=\sum_j\lvert\beta_j\rvert^2,
+    \label{eq:mswc24_rc_overlap_bound}
+\end{align}
+for every $q\geq0$ and $M\geq1$ with $\beta\neq0$. For real weights $0\leq\mu_{j,k}\leq1$ of which
+one equals one, $b\geq1$, and this is $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsilon\leq C'y$.
+
+The proof combines the two arguments. By (\ref{eq:mswc24_rc_blocked}) the blocked map is
+$B=\sum_jc_jB_jL_j^\dagger$ with $c_j\leq m_j^{1/2}$, so the blocks of $B^\dagger B$ are
+$c_jc_{j'}L_jB_j^\dagger B_{j'}L_{j'}^\dagger$, and the Gram estimate of
+\cite{gap:mswc24_block_form_mixed_overlap}, which uses of the embeddings only that they have norm
+at most one, gives $\lVert B^\dagger B-\sum_jc_j^2L_j(\sigma_j^T\otimes\mathbf 1)L_j^\dagger\rVert
+\leq Ke^{-2\gamma q/\xi}$. The $\tfrac12$-H\"older bound of the square root gives
+$\lVert P-P_\infty\rVert\leq K'e^{-\gamma q/\xi}$ with
+$P_\infty=\sum_jc_jL_j(\sqrt{\sigma_j}^{\,T}\otimes\mathbf 1)L_j^\dagger$, whose square is the
+limit of the Gram matrices since the $L_j$ are isometries with orthogonal ranges. Since
+$V^\dagger B=P$, the overlap of the unnormalized state $V^{\otimes M}\sum_j\alpha_jL_j^{\otimes
+M}\ket{\Omega_j}$ with $\ket{\phi_N(A)}$ is $b^{-1/2}\sum_j\overline{\beta_j}z_j$, with
+$z_j=\braket{\Omega_j}{\phi_M(L_j^\dagger P)}$, where $L_j^\dagger P$ is read as a tensor whose
+physical leg is a bond pair of block $j$. The row $L_j^\dagger P_\infty$ is
+$\sum_k\mu_{j,k}^q(\sqrt{\sigma_j}^{\,T}\otimes\mathbf 1)K_{j,k}^\dagger$, and its mixed transfer
+matrix against the fixed-point tensor of $\sigma_j$ is $\sum_k\mu_{j,k}^qR_k$ with
+$R_k(\rho)=\operatorname{Tr}(E_{j,k}^\dagger\rho)\,E_{j,k}\sigma_j$. The $R_k$ are orthogonal
+idempotents of trace one, so the powers $\sum_k\mu_{j,k}^{qn}R_k$ are bounded uniformly in the
+weights and the $M$-th power has trace $\beta_j$; the telescoping estimate gives
+$\lvert z_j-\beta_j\rvert\leq C_jy\,e^{C_jy}$. The states $L_j^{\otimes M}\ket{\Omega_j}$ are
+orthonormal and $V^{\otimes M}$ does not increase norms, so normalizing the approximating state
+only increases the overlap. Finally $\lvert\lVert\phi_N(A)\rVert^2-b\rvert\leq bK''e^{-\gamma
+N/\xi}$, since every coefficient $\beta_j\overline{\beta_{j'}}$ has modulus at most $b$. With
+$S=\sum_j\overline{\beta_j}z_j$ one has $\lvert S/b-1\rvert\leq b^{-1/2}\sum_j\lvert
+z_j-\beta_j\rvert$, and the inequality of \cite{gap:mswc24_block_form_mixed_overlap} applied to
+$S/b$ and $\lVert\phi_N(A)\rVert/b^{1/2}$ gives (\ref{eq:mswc24_rc_overlap_bound}).
+
+The factor $\min(1,b)^{-1/2}$ is a scope restriction of the proof, not of the construction. It
+appears because the estimates of the $z_j$ are absolute while the sums $\beta_j=\sum_k\mu_{j,k}^N$
+may cancel; the source's bound has no such factor. The numerical check below shows the error
+converging at the same rate when $b$ is exponentially small. Removing the factor needs a
+relative estimate of $z_j$ for blocks of small weight, the second-order perturbation bound for
+the square root of $B^\dagger B$ that \cite{gap:mswc24_block_form_mixed_overlap} lists for the
+sharp rate.
+
+\section{Numerical check with overlaps}
+A script evaluates the corrected state for two random normal blocks of bond dimension two on
+$d=2$, with subleading eigenvalues $0.515$ and $0.850$ and mixed spectral radius $0.757$, so that
+$\lvert\lambda_2\rvert=0.850$, from the eigendecomposition of $B^\dagger B$, using
+$V^\dagger B=P$.
+\begin{itemize}
+    \item For copy weights $(1,0.8e^{0.7i})$ on the first block and $0.9$ on the second, and
+          $M=8$, the error is $0.143$, $7.56\cdot10^{-3}$, $3.95\cdot10^{-4}$ at $q=4,8,12$, and
+          $\varepsilon/(M\lvert\lambda_2\rvert^q)$ is $3.44\cdot10^{-2}$, $3.48\cdot10^{-3}$,
+          $3.49\cdot10^{-4}$.
+    \item For copy weights $(1,1)$ and $1$, and $M=8$, the corrected state gives $0.241$,
+          $3.49\cdot10^{-2}$, $6.75\cdot10^{-3}$ at $q=4,8,12$, while the source's state with
+          the pair on one copy gives $0.701$, $0.499$, $0.458$.
+    \item For copy weights $(1,-1)$ and $0.5$ at odd $N$, where $\beta_1=0$, and $M=5$, the
+          error is $0.424$, $7.54\cdot10^{-2}$, $1.51\cdot10^{-2}$ at $q=5,9,13$, while
+          $b=0.5^{2N}$ is $8.9\cdot10^{-16}$, $8.1\cdot10^{-28}$, $7.3\cdot10^{-40}$.
+\end{itemize}
+The squared norm of the target is computed from
+$\sum_{j,j'}\overline{\beta_j}\beta_{j'}\braket{\phi_N(A_j)}{\phi_N(A_{j'})}$; evaluating it as the
+trace of the $N$-th power of the transfer matrix of $A$ loses all digits when $b$ is small.
+
+\section{What is formalized with overlaps}
+The bound (\ref{eq:mswc24_rc_overlap_bound}), and for real weights in $[0,1]$ one of which is one
+its forms $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsilon\leq C'y$, are formalized, with the
+ingredients above.\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum},
+    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_of_nonneg} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_of_nonneg} in
+    \doclink{TNLean/MPS/Preparation/RepeatedOverlappingBlockError};
+    \leanid{MPSTensor.exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le},
+    \leanid{MPSTensor.mixedMapLM_copyPosLimitRow_apply} and
+    \leanid{MPSTensor.exists_norm_mpvOverlap_sub_bntWeight_le_of_norm_sub_copyPosLimitRow_le} in
+    \doclink{TNLean/MPS/Preparation/RepeatedOverlappingBlockOverlap};
+    \leanid{MPSTensor.exists_norm_gram_sum_sub_le} and
+    \leanid{Matrix.norm_polarPos_sub_le_sqrt} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockGram}.}
+The bound without the factor $\min(1,b)^{-1/2}$ for cancelling weights is not formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}
