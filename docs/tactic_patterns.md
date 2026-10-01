@@ -2495,9 +2495,10 @@ currently one occurrence, so no general declaration is warranted.
 - **Seen:** two occurrences across two files (2026-09-30):
   `exists_norm_trace_prod_range_transferMatrix_sub_one_le` in
   `TNLean/MPS/Preparation/ApproximationError.lean` and
-  `exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le` in
-  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
-- **Notes:** a third occurrence would justify a lemma taking the idempotent `T_∞`,
+  `exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean` (2026-10-01: there `T_∞ = t R` with
+  `R` idempotent, through `norm_prod_range_sub_pow_le_of_forall_norm_pow_le`).
+- **Notes:** a third occurrence would justify a lemma taking the power-bounded `T_∞`,
   its trace, and the linear bound `‖T - T_∞‖ ≤ δ` as hypotheses.
 
 ### off-diagonal constants chosen with a dummy diagonal value — candidate
@@ -2507,7 +2508,7 @@ currently one occurrence, so no general declaration is warranted.
 - **Seen:** two occurrences across two files (2026-09-30):
   `exists_norm_gram_blockTensor_blockSum_sub_le` in
   `TNLean/MPS/Preparation/OverlappingBlockGram.lean` and
-  `exists_abs_norm_mpvState_blockSum_sq_sub_le` in
+  `exists_abs_norm_mpvState_blockSum_weight_sq_sub_le` in
   `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
 
 ### Adjoint reversal of an orthogonal-projector error — candidate
