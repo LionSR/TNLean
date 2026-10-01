@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.BlockDecomposition
 import TNLean.MPS.Periodic.IrreducibleFormBlocking
-import TNLean.MPS.Periodic.PhaseClassAssembly
+import TNLean.MPS.Periodic.PhaseClassGrouping
 import TNLean.MPS.Periodic.PrescribedBlocking
 
 /-!
