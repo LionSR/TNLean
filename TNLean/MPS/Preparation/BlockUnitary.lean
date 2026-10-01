@@ -157,6 +157,59 @@ theorem inputCfg_comp_routePerm (hd : 0 < d) {r₁ q : ℕ} (hq : 3 * r₁ ≤ q
 
 /-! ### The block unitary -/
 
+/-- **The unitary of a block, for any ordering of the input pairs.** Let `D ≤ d^{r₁}` through an
+injective `dig`, `r₁ ≥ 1`, and let `π` enumerate the pairs of bond indices. There is `C` such that
+for every `q ≥ 3 r₁` and every isometric chain `Q₀, …, Q_{q-1}` with `b₀ = 1`, there is a unitary
+`U` on `q` sites, a product of at most `C q` gates on neighbouring sites, with
+`⟨σ| U |l, 0 ⋯ 0, r⟩ = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0,x}` for every input `x < b_q` with
+`π x = (l, r)`.
+
+arXiv:2307.01696, paragraph "The sequential-RG circuit": each block unitary is a staircase of
+the isometries of eq. (14), with SWAP gates bringing its two inputs together, of depth `O(q)`.
+`exists_blockUnitary` is the case `b_q = D²` with the enumeration `finProdFinEquiv`. -/
+theorem exists_blockUnitary_of_equiv (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
+    {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig) (hD : 0 < D)
+    (π : Fin (D * D) ≃ Fin D × Fin D) :
+    ∃ C : ℕ, ∀ q, 3 * r₁ ≤ q → ∀ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
+      b 0 = 1 → (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) →
+      ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ, IsPairProduct d q (C * q) U ∧
+        ∀ x : Fin (D * D), x.val < b (Fin.last q) → ∀ σ,
+          U σ (blockInputCfg hd q dig (π x).1 (π x).2) = eval Q σ ⟨0, Nat.mul_pos hD hD⟩ x := by
+  classical
+  set enc : Fin (D * D) → Cfg d (r₁ + r₁) := fun x => twoCfg dig (π x).1 (π x).2 with henc
+  have hencinj : Function.Injective enc := fun x x' h => by
+    obtain ⟨h1, h2⟩ := twoCfg_injective hdig h
+    exact π.injective (Prod.ext h1 h2)
+  obtain ⟨K₀, K₁, hK⟩ := exists_staircase hd (r := r₁ + r₁) (by omega) (Nat.mul_pos hD hD)
+    hencinj
+  refine ⟨K₀ + K₁ + 2 * r₁, fun q hq b Q hb0 hrow hiso => ?_⟩
+  obtain ⟨U, hU, hUQ⟩ := hK q (by omega) b Q hb0 hrow hiso
+  have hτpp := isPairProduct_permOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
+  have hin := inputCfg_comp_routePerm hd hq dig
+  generalize routePerm q (q - (r₁ + r₁)) r₁ = τ at hτpp hin
+  refine ⟨U * permOp τ, ?_, fun x hx σ => ?_⟩
+  · refine (hU.mul hτpp).mono ?_
+    have h1 : (q - (r₁ + r₁)) * K₁ ≤ q * K₁ := Nat.mul_le_mul_right _ (by omega)
+    have h2 : K₀ ≤ q * K₀ := Nat.le_mul_of_pos_left _ (by omega)
+    have h3 : r₁ * (2 * q) = q * (2 * r₁) := by ring
+    calc K₀ + (q - (r₁ + r₁)) * K₁ + r₁ * (2 * q) ≤ q * K₀ + q * K₁ + q * (2 * r₁) :=
+          Nat.add_le_add (Nat.add_le_add h2 h1) (le_of_eq h3)
+      _ = (K₀ + K₁ + 2 * r₁) * q := by ring
+  · have hin := hin (π x).1 (π x).2
+    rw [mul_apply, Finset.sum_eq_single (inputCfg hd q (twoCfg dig (π x).1 (π x).2))]
+    · rw [permOp, of_apply, ite_eq_left hin.symm, mul_one]
+      exact hUQ x hx σ
+    · intro z _ hz
+      rw [permOp, of_apply, ite_eq_right, mul_zero]
+      intro h
+      apply hz
+      funext p
+      have := congrFun (h.symm.trans hin.symm) (τ.symm p)
+      simp only [Function.comp_apply, Equiv.apply_symm_apply] at this
+      exact this
+    · simp
+
 /-- **The unitary of a block.** Let `D ≤ d^{r₁}` through an injective `dig`, `r₁ ≥ 1`. There is
 `C` such that for every `q ≥ 3 r₁` and every isometric chain `Q₀, …, Q_{q-1}` with bonds
 `b₀ = 1`, `b_q = D²` (as produced by the sequential factorization), there is a unitary `U` on
@@ -174,40 +227,11 @@ theorem exists_blockUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁) {dig 
       ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ, IsPairProduct d q (C * q) U ∧
         ∀ l r σ, U σ (blockInputCfg hd q dig l r) =
           eval Q σ ⟨0, Nat.mul_pos hD hD⟩ (finProdFinEquiv (l, r)) := by
-  classical
-  set enc : Fin (D * D) → Cfg d (r₁ + r₁) := fun x =>
-    twoCfg dig (finProdFinEquiv.symm x).1 (finProdFinEquiv.symm x).2 with henc
-  have hencinj : Function.Injective enc := fun x x' h => by
-    obtain ⟨h1, h2⟩ := twoCfg_injective hdig h
-    exact finProdFinEquiv.symm.injective (Prod.ext h1 h2)
-  obtain ⟨K₀, K₁, hK⟩ := exists_staircase hd (r := r₁ + r₁) (by omega) (Nat.mul_pos hD hD)
-    hencinj
-  refine ⟨K₀ + K₁ + 2 * r₁, fun q hq b Q hb0 hbq hrow hiso => ?_⟩
-  obtain ⟨U, hU, hUQ⟩ := hK q (by omega) b Q hb0 hrow hiso
-  have hτpp := isPairProduct_permOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
-  have hin := inputCfg_comp_routePerm hd hq dig
-  generalize routePerm q (q - (r₁ + r₁)) r₁ = τ at hτpp hin
-  refine ⟨U * permOp τ, ?_, fun l r σ => ?_⟩
-  · refine (hU.mul hτpp).mono ?_
-    have h1 : (q - (r₁ + r₁)) * K₁ ≤ q * K₁ := Nat.mul_le_mul_right _ (by omega)
-    have h2 : K₀ ≤ q * K₀ := Nat.le_mul_of_pos_left _ (by omega)
-    have h3 : r₁ * (2 * q) = q * (2 * r₁) := by ring
-    calc K₀ + (q - (r₁ + r₁)) * K₁ + r₁ * (2 * q) ≤ q * K₀ + q * K₁ + q * (2 * r₁) :=
-          Nat.add_le_add (Nat.add_le_add h2 h1) (le_of_eq h3)
-      _ = (K₀ + K₁ + 2 * r₁) * q := by ring
-  · have hin := hin l r
-    rw [mul_apply, Finset.sum_eq_single (inputCfg hd q (twoCfg dig l r))]
-    · rw [permOp, of_apply, ite_eq_left hin.symm, mul_one, show twoCfg dig l r =
-        enc (finProdFinEquiv (l, r)) by simp only [henc, Equiv.symm_apply_apply]]
-      exact hUQ _ (by rw [hbq]; exact (finProdFinEquiv (l, r)).isLt) σ
-    · intro z _ hz
-      rw [permOp, of_apply, ite_eq_right, mul_zero]
-      intro h
-      apply hz
-      funext p
-      have := congrFun (h.symm.trans hin.symm) (τ.symm p)
-      simp only [Function.comp_apply, Equiv.apply_symm_apply] at this
-      exact this
-    · simp
+  obtain ⟨C, hC⟩ := exists_blockUnitary_of_equiv hd hr₁ hdig hD finProdFinEquiv.symm
+  refine ⟨C, fun q hq b Q hb0 hbq hrow hiso => ?_⟩
+  obtain ⟨U, hU, hUQ⟩ := hC q hq b Q hb0 hrow hiso
+  refine ⟨U, hU, fun l r σ => ?_⟩
+  have := hUQ (finProdFinEquiv (l, r)) (by rw [hbq]; exact (finProdFinEquiv (l, r)).isLt) σ
+  simpa using this
 
 end MPSPreparation

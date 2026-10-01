@@ -67,13 +67,13 @@ No finiteness, normalization, or tensor assumption is used.
 
 ## References
 
-* arXiv:2203.12563, Section 4.2, `Papers/2203.12563/REsubmission.tex` lines 740--761.
+* arXiv:2203.12563, Section 4.1, `Papers/2203.12563/REsubmission.tex` lines 740--761.
 * `docs/paper-gaps/glm23_eq20_fusion_gauge.tex`.
 -/
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 namespace LSymbol
 
