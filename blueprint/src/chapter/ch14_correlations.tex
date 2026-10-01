@@ -141,83 +141,109 @@ spectral decomposition, and quantitative decay bounds.
 \end{proof}
 
 \section{Spectral expansion and exponential decay}
+% **Scope restriction (diagonalizable correlator expansion):** the source's
+% pure-exponential expansion and rate |lambda_2| are false as printed for a
+% defective transfer map; they are stated here under diagonalizability of the
+% transfer map on the traceless matrices; see
+% docs/paper-gaps/cpgsv21_correlator_diagonalizable_expansion.tex.
 
-\begin{theorem}[Sum of exponentials (spectral expansion)]%
+\begin{theorem}[Sum of exponentials under diagonalizability]%
     \label{thm:correlator_sum_exponentials}
-    \lean{MPSTensor.connectedCorrelator_eq_sum}
-    \leanok
     \uses{def:connected_correlator}
-    If coefficients $c_j\in\C$ and eigenvalues $\lambda_j\in\C$, for
-    $j=1,\ldots,D^2-1$, satisfy, for all $n\ge 0$,
+    Let $\E_A$ be trace-preserving, with fixed point $\rho$
+    satisfying $\tr\rho=1$. Suppose its restriction to the traceless matrices
+    is diagonalizable, with eigenvalues $\lambda_1,\ldots,\lambda_{D^2-1}$,
+    counted with multiplicity. For every $X,Y$, there are coefficients
+    $c_j\in\C$ such that, for all $n\ge0$,
     \begin{align}
         C(X,Y;n)
-         & = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n,
+         & = \sum_{j=1}^{D^2-1} c_j\,\lambda_j^n.
         \label{eq:correlations_spectral_expansion}
     \end{align}
-    then the connected correlator equals the stated sum of exponentials.
-    When the subleading spectrum of the transfer map is diagonalizable, the
-    connected correlator expands as a sum of pure exponentials
-    $C(X,Y;n)=\sum_{j=1}^{D^2-1} c_j\,\lambda_j^n$
-    \cite[Section~II.B.3]{Cirac2021Matrix}; Jordan blocks can produce polynomial
-    factors $n^k\lambda^n$ when the transfer map is defective.
+    This is the diagonalizable case of the expansion in
+    \cite[Section~II.B.3]{Cirac2021Matrix}. Without diagonalizability,
+    Jordan blocks can contribute polynomial factors multiplying the
+    exponential terms, so the source's unqualified pure-exponential form
+    needs this hypothesis \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    Given the expansion hypothesis
-    (\ref{eq:correlations_spectral_expansion}), the equality is immediate.
-    Under the corresponding diagonalizability hypothesis, the expansion
-    follows from the spectral decomposition of $\E_A^n$ restricted to the
-    complement of the fixed-point eigenspace. The leading eigenvalue
-    $\lambda_1=1$ contributes
-    $\langle X_0\rangle\langle Y_0\rangle$, which is subtracted in the
-    connected correlator, leaving the sum over subleading eigenvalues.
-    This is the spectral mechanism described in
-    \cite[Section~II.B.3]{Cirac2021Matrix}.
-    % Constructing the eigendecomposition coefficients from $\E_A$
-    % is tracked in Issue~\#1447.
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part}
+    The matrix $Z_\rho(X)=X\rho-\tr(X\rho)\rho$ is traceless. Expanding it
+    in an eigenbasis $(v_j)$ of the traceless subspace,
+    \begin{align}
+        Z_\rho(X)   & =\sum_{j=1}^{D^2-1}\gamma_j(X)\,v_j,
+        \\
+        \E_A^n(v_j) & =\lambda_j^n v_j .
+    \end{align}
+    By Theorem~\ref{thm:connected_correlator_traceless_reduction},
+    \begin{align}
+        C(X,Y;n)
+         & =\tr\!\left(Y\,\E_A^n\bigl(Z_\rho(X)\bigr)\right)
+        =\sum_{j=1}^{D^2-1}\gamma_j(X)\,\tr(Y v_j)\,\lambda_j^n,
+    \end{align}
+    so $c_j=\gamma_j(X)\tr(Yv_j)$.
+    % The eigenbasis construction is tracked in Issue~\#1447.
 \end{proof}
 
 \begin{theorem}[Exponential decay bound]%
     \label{thm:correlator_exponential_bound}
-    \lean{MPSTensor.connectedCorrelator_bound}
-    \leanok
-    \uses{def:connected_correlator}
-    If a constant $C_{XY}\in\R$ and $\lambda_2\in\C$ satisfy, for all
-    $n\ge0$,
+    \uses{def:connected_correlator, def:primitive_mps}
+    Let $\E_A$ be primitive and trace-preserving, with fixed point $\rho$
+    satisfying $\tr\rho=1$, and put $P(Z)=\tr(Z)\rho$. Write
+    $\rho_{\spec}(\E_A-P)$ for the spectral radius of $\E_A-P$.
+    For every $r$ with $\rho_{\spec}(\E_A-P)<r<1$ and every $X,Y$, there is a
+    constant $C_{XY}>0$ such that, for all $n\ge0$,
     \begin{align}
         |C(X,Y;n)|
-         & \le C_{XY}\,|\lambda_2|^n,
+         & \le C_{XY}\,r^n.
         \label{eq:correlations_decay_bound}
     \end{align}
-    then the connected correlator satisfies that exponential decay bound.
-    Combining the spectral expansion with the triangle inequality yields this
-    bound with $|\lambda_2|<1$ whenever the transfer map is primitive or
-    injective \cite[Section~II.B.3]{Cirac2021Matrix}.
+    If the complementary transfer map is diagonalizable, the rate may
+    instead be taken to be its spectral radius, as in the pure-exponential
+    expansion of \cite[Section~II.B.3]{Cirac2021Matrix}; at a defective
+    subleading eigenvalue the source's rate $|\lambda_2|$ needs this
+    qualification \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
 \end{theorem}
 
 \begin{proof}
-    \leanok
-    Given the bound hypothesis (\ref{eq:correlations_decay_bound}), the
-    estimate is immediate.
-    For a pure-exponential expansion, the source
-    \cite[Section~II.B.3]{Cirac2021Matrix} obtains such a bound by applying
-    the triangle inequality and using
-    $|\lambda_j|\le|\lambda_2|$ for all subleading eigenvalues; when the
-    transfer-map gap gives $|\lambda_2|<1$, this is a decaying bound.
-    % Deriving the bound from the eigendecomposition of $\E_A$
-    % is tracked in Issue~\#1447.
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part, thm:correlator_sum_exponentials, def:primitive_mps}
+    Primitivity gives $\rho_{\spec}(\E_A-P)<1$
+    \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
+    so such rates $r$ exist.
+    The matrix $Z_\rho(X)$ is traceless, so $P(Z_\rho(X))=0$ and
+    $\E_A^n(Z_\rho(X))=(\E_A-P)^n(Z_\rho(X))$. The Gelfand formula yields
+    $\|(\E_A-P)^n\|\le C r^n$ for some constant $C$. By
+    Theorem~\ref{thm:connected_correlator_traceless_reduction} and the
+    Cauchy--Schwarz inequality for Hilbert--Schmidt norms,
+    \begin{align}
+        |C(X,Y;n)|
+         & =\bigl|\tr\!\bigl(Y\,(\E_A-P)^n(Z_\rho(X))\bigr)\bigr|
+        \le \|Y\|\,\|(\E_A-P)^n(Z_\rho(X))\|
+        \le \|Y\|\,C\,r^n\,\|Z_\rho(X)\|,
+    \end{align}
+    which is (\ref{eq:correlations_decay_bound}) with
+    $C_{XY}=\|Y\|\,C\,\|Z_\rho(X)\|+1$.
+    In the diagonalizable case, the expansion in the proof of
+    Theorem~\ref{thm:correlator_sum_exponentials} and the triangle inequality give
+    \begin{align}
+        |C(X,Y;n)|
+         & \le\sum_{j=1}^{D^2-1}|\gamma_j(X)\tr(Yv_j)|\,|\lambda_j|^n
+        \le\Bigl(\sum_{j=1}^{D^2-1}|\gamma_j(X)\tr(Yv_j)|\Bigr)
+        \rho_{\spec}(\E_A-P)^n.
+    \end{align}
+    % Composing these bounds for the connected correlator is tracked in Issue~\#1447.
 \end{proof}
 
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
     \uses{thm:correlator_exponential_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
-    The condition $|\lambda_2|<1$ turns the bound in
-    Theorem~\ref{thm:correlator_exponential_bound} into exponential decay. It
+    The rate $r<1$ in Theorem~\ref{thm:correlator_exponential_bound}
+    gives exponential decay. It
     is a transfer-map gap condition: all non-leading eigenvalues of $\E_A$ lie
     strictly inside the unit disk. It is distinct from the Hamiltonian spectral gap of
     Chapter~\ref{ch:parent_hamiltonian_commuting_and_gap}.
-    The complementary transfer-map gap $\rho(\E_A-P)<1$ is established for
+    The complementary transfer-map gap $\rho_{\spec}(\E_A-P)<1$ is established for
     primitive channels
     (the corresponding theorem in the companion quantum-channel volume~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}).
     The mixed-transfer gap needed for separation of non-equivalent canonical
@@ -262,7 +288,7 @@ spectral decomposition, and quantitative decay bounds.
 
 \section{Quantitative transfer-map gap bounds}
 
-The qualitative bound $\rho(\E_A-P)<1$ for primitive channels
+The qualitative bound $\rho_{\spec}(\E_A-P)<1$ for primitive channels
 \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}
 admits quantitative refinements in terms of geometric constants and decay rates
 for the transfer map $\E_A$.
@@ -296,9 +322,9 @@ for the transfer map $\E_A$.
 \begin{proof}
     \leanok
     Injectivity implies primitivity of the transfer map.
-    The complementary spectral-radius bound $\rho(\E_A-P)<1$ then follows
+    The complementary spectral-radius bound $\rho_{\spec}(\E_A-P)<1$ then follows
     from the primitive transfer-map gap theorem. Choose
-    $r$ with $\rho(\E_A-P)<r<1$. The Gelfand formula yields
+    $r$ with $\rho_{\spec}(\E_A-P)<r<1$. The Gelfand formula yields
     $\|(\E_A-P)^n\|\le Cr^n$ for a suitable constant $C>0$.
     Since $P$ is the fixed-point projection, $\E_A P=P\E_A=P$, and hence
     $\E_A^n-P=(\E_A-P)^n$ for $n\ge 1$. The case $n=0$ is absorbed by
@@ -321,11 +347,11 @@ for the transfer map $\E_A$.
     Traceless matrices lie in $\ker P$, where $P$ is the fixed-point
     projection (\ref{eq:correlations_fixed_point_projection}).
     Since $\E_A-P$ has spectral radius strictly less than~$1$, choose any
-    $r$ with $\rho(\E_A-P)<r<1$. The Gelfand formula then gives exponential
+    $r$ with $\rho_{\spec}(\E_A-P)<r<1$. The Gelfand formula then gives exponential
     decay with $\xi=-1/\log r$. Choosing a rate strictly above the spectral
     radius is necessary in general because a Jordan block at the spectral
     radius can prevent a uniform bound proportional to
-    $\rho(\E_A-P)^n$.
+    $\rho_{\spec}(\E_A-P)^n$.
 \end{theorem}
 
 \begin{proof}
@@ -333,7 +359,7 @@ for the transfer map $\E_A$.
     For traceless $X$, we have $P(X)=0$, so
     $\E_A^n(X)=(\E_A-P)^n(X)$.
     Applying the Gelfand-formula estimate with
-    $\rho(\E_A-P)<r<1$ gives $\|\E_A^n(X)\|\le Cr^n\|X\|$.
+    $\rho_{\spec}(\E_A-P)<r<1$ gives $\|\E_A^n(X)\|\le Cr^n\|X\|$.
     With $\xi=-1/\log r>0$, the identity $r^n=e^{-n/\xi}$ yields
     (\ref{eq:correlations_traceless_decay}).
 \end{proof}
@@ -365,6 +391,11 @@ for the transfer map $\E_A$.
     product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and that
     physical observable insertions reduce to the auxiliary functionals defined
     above. If the hypotheses of
-    Theorem~\ref{thm:correlator_exponential_bound} hold, then the corresponding
-    ground-state correlations decay with finite correlation length $\xi$.
+    Theorem~\ref{thm:correlator_exponential_bound} hold, then for every rate
+    $r$ with $\rho_{\spec}(\E_A-P)<r<1$ the corresponding ground-state
+    correlations decay as $r^n=e^{-n/\xi}$ with finite correlation length
+    $\xi=-1/\log r$, the quantity of
+    Definition~\ref{def:correlation_length} evaluated at $r$. When $\E_A-P$ is
+    diagonalizable, one may take $r=|\lambda_2|$, the largest modulus of a
+    subleading eigenvalue, provided $\lambda_2\neq0$.
 \end{remark}

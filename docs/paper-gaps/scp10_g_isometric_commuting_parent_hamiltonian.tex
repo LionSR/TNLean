@@ -1,0 +1,134 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Commuting Parent Hamiltonians of $G$-Isometric Tensors: the Projector and the Scope}
+\author{}
+\date{2026-10-01}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source prints}
+Section~6.4 of \cite{Schuch2010PEPS} shows that the parent Hamiltonians of
+$G$-isometric PEPS are sums of commuting local terms, and announces that the
+proof is given for matrix product states, the generalization to PEPS being
+straightforward.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 2092--2096.}
+For a $G$-isometric matrix product tensor $A$, on whose bond the
+left-regular representation acts, let
+\begin{align}
+    \mathcal S_2=\Bigl\{\sum_{ij}\operatorname{tr}[A^iA^jX]\,\ket{ij}
+        \Bigm| X\Bigr\}.
+    \label{eq:scp10_s2}
+\end{align}
+The lemma of that section states that the local terms $h_i$ of the parent
+Hamiltonian, ``which project onto the complement of $\mathcal S_2$'', are of
+the form of equation ``eq:iso:ham-proj-from-A'', the two-site operator
+\begin{align}
+    P=\sum_{ijkl}\operatorname{tr}\bigl[A^iA^j(A^kA^l)^\dagger\bigr]
+        \ket{ij}\bra{kl}
+    \label{eq:scp10_projector}
+\end{align}
+drawn in figure ``ham-proj-from-A''. Its proof shows that $P$ is a projector,
+that its range lies in $\mathcal S_2$, that it fixes every vector of
+$\mathcal S_2$, and that it is self-adjoint (figures
+``ham-proj-from-A-is-proj'' and ``ham-proj-from-A-pres-subspace'').
+The theorem that follows states that for $G$-isometric PEPS the terms $h_i$
+of the parent Hamiltonian of the two-dimensional parent-Hamiltonian theorem
+commute. Its proof writes the products of the operators $P$ on sites $1,2$
+and $2,3$ as the two sides of figure ``ham-comm-step1'', which are equal
+because the sum over $g$ of the virtual operators $U_g\otimes U_g^{-1}$ can
+be moved from one bond to the other, and closes with ``the same proof applies
+to two dimensions''.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 2098--2153, figures
+    \path{Papers/1001.3807/figs4/ham-proj-from-A.pdf},
+    \path{Papers/1001.3807/figs4/ham-proj-from-A-is-proj.pdf},
+    \path{Papers/1001.3807/figs4/ham-proj-from-A-pres-subspace.pdf},
+    \path{Papers/1001.3807/figs4/ham-comm-step1.pdf} and
+    \path{Papers/1001.3807/figs4/ham-comm-step2.pdf}.}
+
+\section{Local fix: the operator is the projector onto $\mathcal S_2$}
+The local term of the parent Hamiltonian is
+$h=1-\Pi_{\mathcal S}$.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1177--1183 and 1534--1539.}
+The proof of the lemma shows that $P$ is the orthogonal projector onto
+$\mathcal S_2$, not onto its complement, so the operator of
+equation ``eq:iso:ham-proj-from-A'' is $1-h_i$. The commutation theorem is
+unaffected: $h_1$ and $h_2$ commute exactly when $1-h_1$ and $1-h_2$ do.
+In addition the source omits normalizations in diagrams, and the formal
+notion of $G$-isometry allows $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$
+with one constant $c>0$ \cite{gap:rmp_peps_quantum_double_g_isometry}; then
+$P=c_2\,\Pi_{\mathcal S_2}$ for the constant $c_2>0$ of the two-site tensor
+$A^iA^j$. The formalization therefore states
+\begin{align}
+    h=1-c_2^{-1}P,
+    \label{eq:scp10_local_term}
+\end{align}
+together with $(c_2^{-1}P)^2=c_2^{-1}P$, $\operatorname{range}P=\mathcal S_2$
+and $P^\dagger=P$. The last identity holds for every tensor, since the
+matrix entries of $P$ satisfy
+$\overline{\operatorname{tr}[A^kA^l(A^iA^j)^\dagger]}
+    =\operatorname{tr}[A^iA^j(A^kA^l)^\dagger]$. The source's closing remark,
+that with $A^{-1}$ in place of $A^\dagger$ the operator is a projector onto
+$\mathcal S_2$ that is not self-adjoint, is not formalized.
+
+\section{The proof of the commutation}
+With $\mathcal P(A^\dagger)\mathcal P(A)=c\,\sigma$, where $\sigma$ is the
+twirl onto the commutant of the left-regular representation, one has for
+every operator $N$ commuting with every $L_g$
+\begin{align}
+    \sum_b\operatorname{tr}[A^bN]\,(A^b)^\dagger=c\,N .
+    \label{eq:scp10_isometry_identity}
+\end{align}
+The tensor $A$ is invariant, $L_gA^iL_g^{-1}=A^i$, and since $L_g$ is unitary
+in the basis of group elements, $L_g^\dagger=L_{g^{-1}}$, each adjoint
+$(A^i)^\dagger$ also commutes with every $L_g$. Every product of the
+matrices $A^i$ and $(A^i)^\dagger$ therefore commutes with every $L_g$; this
+is the step in which the sum over $g$ of figure ``ham-comm-step1'' drops out.
+The matrix of $(P\otimes1)(1\otimes P)$ is
+\begin{align}
+    \sum_b\operatorname{tr}\bigl[A^{s_0}A^{s_1}(A^{w_0}A^b)^\dagger\bigr]\,
+        \operatorname{tr}\bigl[A^bA^{s_2}(A^{w_1}A^{w_2})^\dagger\bigr]
+    =c\,\operatorname{tr}\bigl[A^{s_0}A^{s_1}A^{s_2}
+        (A^{w_0}A^{w_1}A^{w_2})^\dagger\bigr],
+    \label{eq:scp10_three_site_entry}
+\end{align}
+and the matrix of $(1\otimes P)(P\otimes1)$ is the same, so both products are
+$c$ times the three-site operator of the same form. The two translated terms
+on any three consecutive sites of a ring commute, and terms with disjoint
+supports commute trivially.
+
+\section{Scope}
+The formalization proves the theorem for matrix product states, the case in
+which the source writes the proof, on every ring of $N\ge 3$ sites. Two
+restrictions remain.
+\begin{enumerate}
+    \item \emph{Two dimensions.} The source states the theorem for PEPS. The
+    two-dimensional parent Hamiltonian, with local terms on $2\times2$
+    plaquettes, the operator $P$ for a plaquette, and the stability of
+    $G$-isometry under the two-dimensional concatenation (an open scope
+    restriction recorded in \cite{gap:rmp_peps_quantum_double_g_isometry})
+    are not formalized.
+    \item \emph{Rings of two sites.} On a ring of two sites the two
+    translated terms act on the same pair of sites in opposite orders, and
+    the three-site argument does not apply. The source does not discuss this
+    case.
+\end{enumerate}
+
+\section{Verdict and elimination plan}
+The note is a scope restriction: the commutation theorem, stated for PEPS,
+is formalized for matrix product states on rings of at least three sites;
+the lemma on the form of the local terms, stated for matrix product states,
+is formalized as stated, with the local fix that its operator is $1-h_i$.
+Elimination: formalize the two-dimensional parent Hamiltonian on plaquettes
+and the two-dimensional stability of $G$-isometry under concatenation, and
+run the same computation with the two-site operator replaced by the plaquette
+operator; for the ring of two sites, compute the product of the two terms
+with the transfer identity
+$\sum_b(A^b)^\dagger YA^b=c\,|G|^{-1}\sum_h\operatorname{tr}[L_h^{-1}Y]L_h$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
