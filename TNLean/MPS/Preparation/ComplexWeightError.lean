@@ -52,7 +52,7 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   (`eq:fid_err_gen_non_normal`).
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 open Matrix Complex
 
 namespace MPSTensor
@@ -76,8 +76,8 @@ private theorem hasEigenvalue_of_hasEigenvalue_smul {V : Type*} [AddCommGroup V]
     f.HasEigenvalue (c⁻¹ * μ') := by
   obtain ⟨x, hx⟩ := h.exists_hasEigenvector
   refine Module.End.hasEigenvalue_of_hasEigenvector (x := x) ⟨?_, hx.2⟩
-  rw [Module.End.mem_genEigenspace_one] at hx ⊢
-  have h1 := hx.1
+  rw [Module.End.mem_genEigenspace_one]
+  have h1 := hx.apply_eq_smul
   rw [LinearMap.smul_apply] at h1
   rw [mul_smul, ← h1, smul_smul, inv_mul_cancel₀ hc, one_smul]
 
@@ -130,7 +130,7 @@ theorem exists_approximationError_le_overlappingBlockSum_complexWeight
     mul_ne_zero (hu0 j) ((map_ne_zero _).2 (hu0 j'))
   have hcn : ‖u j * starRingEnd ℂ (u j')‖ = 1 := by
     rw [norm_mul, RCLike.norm_conj, hu1, hu1, one_mul]
-  have h' : (Kraus.mixedMapLM (Aj j) (Aj j')).HasEigenvalue
+  have h' : Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j'))
       ((u j * starRingEnd ℂ (u j'))⁻¹ * μ') := by
     refine hasEigenvalue_of_hasEigenvalue_smul hc ?_
     rw [← Kraus.mixedMapLM_smul]

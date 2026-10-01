@@ -22,7 +22,7 @@ sit in the isometry `V`, which already supplies the phase `(μⱼ/|μⱼ|)^N` to
 `βⱼ = μⱼ^N` counts this phase a second time. This file evaluates the construction for the two
 one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, of multiplicity one, with
 weights `1` and `μ`, `|μ| = 1`, so that `A⁰ = diag(1, 0)` and `A¹ = diag(0, μ)`
-(`phaseBlockTensor`). The states of the two blocks are orthogonal for every `q`, so the overlap
+(`phaseBlockTensor`). The states of the two blocks are orthogonal for every `q ≥ 1`, so the overlap
 of blocks plays no role. For every block length `q ≥ 1` and every number of blocks `M ≥ 1`, with
 `N = qM`, the overlap of the approximating state with the target is `(1 + conj(μ)^N)/2`
 (`nonNormalApproxOverlap_phaseBlockTensor`), while with `βⱼ = |μⱼ|^N` the approximating state is
@@ -114,8 +114,8 @@ theorem ghzAmplitude_one_vec {z : ℂ} (hz : ‖z‖ = 1) :
 the two blocks are orthogonal and normalized. -/
 theorem diagGram_phaseBlockDiag {μ : ℂ} (hμ : ‖μ‖ = 1) {q : ℕ} (hq : q ≠ 0) :
     diagGram (phaseBlockDiag μ) q = 1 := by
-  have h : star μ * μ = 1 := by
-    rw [Complex.star_def, Complex.conj_mul', hμ]; norm_num
+  have h : starRingEnd ℂ μ * μ = 1 := by
+    rw [Complex.conj_mul', hμ]; norm_num
   ext e e'
   fin_cases e <;> fin_cases e' <;>
     simp [diagGram, phaseBlockDiag, Fin.sum_univ_two, zero_pow hq, h]
@@ -152,6 +152,7 @@ theorem nonNormalApproxOverlap_phaseBlockTensor_of_norm {μ : ℂ} (hμ : ‖μ�
   · rw [polarPos_phaseBlockTensor hμ hq]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two]
     simp [zero_pow hM, invSqrtTwo]
+    ring
   · rw [polarSupport_phaseBlockTensor hμ hq]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two]
     have h0 : star (α 0) * α 0 = ((‖α 0‖ ^ 2 : ℝ) : ℂ) := by
@@ -184,8 +185,7 @@ theorem nonNormalApproxOverlap_phaseBlockTensor {μ : ℂ} (hμ : ‖μ‖ = 1) 
     have hs : star invSqrtTwo = invSqrtTwo := star_invSqrtTwo
     rw [hs]
     linear_combination (1 + star μ ^ (M * q)) * invSqrtTwo_mul_self
-  · simp [norm_mul, hμN, invSqrtTwo]
-    rw [div_pow, Real.sq_sqrt (by norm_num)]
+  · simp [hμN, invSqrtTwo]
     norm_num
 
 /-- **With `βⱼ = |μⱼ|^N` the approximating state is exact.** For `|μ| = 1`, the coefficients
@@ -205,7 +205,6 @@ theorem nonNormalApproxOverlap_phaseBlockTensor_norm {μ : ℂ} (hμ : ‖μ‖ 
   · simp only [Fin.isValue, cons_val_zero, cons_val_one, mul_one, star_invSqrtTwo]
     linear_combination 2 * invSqrtTwo_mul_self
   · simp [invSqrtTwo]
-    rw [div_pow, Real.sq_sqrt (by norm_num)]
     norm_num
 
 /-- **For `μ = -1` and odd `N` the error is `1`.** For odd block length `q` and odd number of
@@ -217,8 +216,8 @@ theorem one_sub_norm_nonNormalApproxOverlap_phaseBlockTensor_neg_one {q M : ℕ}
         (ghzAmplitude (bntWeight (m := fun _ => 1) (phaseBlockWeight (-1)) (M * q)))
         (fun j => embedPair (fun _ : Fin 1 => j)
           (fixedPointPair (1 : Matrix (Fin 1) (Fin 1) ℂ)))‖ = 1 := by
-  rw [nonNormalApproxOverlap_phaseBlockTensor (by simp) (Nat.pos_of_odd hq).ne'
-    (Nat.pos_of_odd hM).ne', star_neg, star_one, (hM.mul hq).neg_one_pow]
+  rw [nonNormalApproxOverlap_phaseBlockTensor (by simp) hq.pos.ne'
+    hM.pos.ne', star_neg, star_one, (hM.mul hq).neg_one_pow]
   simp
 
 /-- **Lemma 1'(ii) fails for weights with a phase** (arXiv:2307.01696, Supplemental Material,
@@ -328,7 +327,7 @@ noncomputable def phaseBlockCopyCoord {μ : ℂ} (hμ : μ ≠ 0) :
 eq. (S2). -/
 theorem totalDim_phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) : (phaseBlockSector hμ).totalDim = 2 := by
   have h : (phaseBlockSector hμ).totalCopies = 2 := by
-    simp [SectorDecomposition.totalCopies, SectorDecomposition.copies, Fin.sum_univ_two]
+    simp [SectorDecomposition.totalCopies, SectorDecomposition.copies]
   simp only [SectorDecomposition.totalDim, SectorDecomposition.flatDim, Finset.sum_const,
     Finset.card_univ, Fintype.card_fin, smul_eq_mul, mul_one, h]
 
@@ -343,7 +342,7 @@ theorem bijective_phaseBlockCopyCoord {μ : ℂ} (hμ : μ ≠ 0) :
     | rfl
     | (exfalso
        exact absurd (congrArg Sigma.fst ((phaseBlockSector hμ).sigma_eq_of_copyCoord_eq hxy))
-         (by decide))
+         (by simp))
 
 /-- The ordering of the bond coordinates of the canonical form under which its assembled tensor
 is `phaseBlockTensor μ`: a permutation of the bond basis, which is a gauge transformation. -/
