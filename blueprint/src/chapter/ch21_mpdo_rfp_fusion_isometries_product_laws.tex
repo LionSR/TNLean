@@ -248,7 +248,7 @@
     \label{thm:mpdo_grouped_product_inputs_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_productInputs}
     \leanok
-    \uses{def:mpdo_grouped_vertical_product_inputs, def:is_rfp_via_ts,
+    \uses{def:mpdo, def:mpdo_grouped_vertical_product_inputs, def:is_rfp_via_ts,
         def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ generate matrix product density operators, have the grouped
     vertical product hypotheses, and satisfy the renormalization fixed-point
@@ -262,7 +262,7 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
         thm:mpdo_transported_vertical_sector_coefficient_comparison,
-        thm:mpdo_vertical_product_positive_fusion_decomposition,
+        thm:mpdo_grouped_vertical_product_positive_fusion_decomposition,
         thm:mpdo_paired_vertical_decompositions_fusion}
     Obtain the one-site and two-site vertical decompositions from the grouped
     hypotheses. Transport the renormalization maps to compare their normal

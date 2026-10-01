@@ -259,7 +259,10 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs}
     \leanok
     \uses{def:vertical_bnt_grouping_with_isometry, def:grouped_corner_gram_dressing,
-        def:vertical_tensor_mpdo}
+        def:vertical_tensor_mpdo, def:mpdo_two_site_blocking,
+        def:invariant_projector_closure, def:no_periodic_vectors,
+        def:mpdo_vertical_loops, def:horizontal_cf_mpdo, def:cpsv_canonical_form,
+        def:mpdo}
     Let $M^{(2)}$ be the two-site blocking of $M$ and write
     $A=\widetilde{M^{(2)}}$. The grouped vertical product hypotheses require
     the phase-class grouping with physical reducing isometries and the
@@ -502,7 +505,7 @@
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
         activeCoefficient_mul_phase_pos}
     \leanok
-    \uses{def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_grouped_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
+    \uses{def:mpdo, def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_blocked_reference_corners, thm:mpdo_retained_product_spectral_family_exists, thm:mpdo_grouped_sector_compression_nonzero, thm:mpdo_sector_weight_pos, thm:mpdo_active_product_coefficient_phase_pos_of_sector_separation}
     Suppose that $M$ generates positive operators and has the grouped vertical
     product hypotheses. Assume
     exact coisometric reconstructions of its one-site and
@@ -523,7 +526,7 @@
     \lean{MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison.%
         exists_unitaryNormalization}
     \leanok
-    \uses{def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, lem:mpdo_horizontal_cf_block_two, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
+    \uses{def:mpdo, def:mpdo_grouped_vertical_product_inputs, thm:mpdo_active_product_corner_blocked_bnt_coverage, thm:mpdo_retained_product_spectral_family_exists, lem:mpdo_horizontal_cf_block_two, thm:mpdo_block_two_as_positive_blocking, thm:mpdo_active_product_coefficient_phase_pos, thm:mpdo_blocked_reference_corners, thm:mpdo_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
     Under the hypotheses of
     Theorem~\ref{thm:mpdo_active_product_coefficient_phase_pos},
     for every active product corner $j$ there is a real number $\omega_j>0$ such that
@@ -743,7 +746,7 @@
 \end{proof}
 
 \begin{theorem}[Positive fusion from grouped vertical product inputs]
-    \label{thm:mpdo_vertical_product_positive_fusion_decomposition}
+    \label{thm:mpdo_grouped_vertical_product_positive_fusion_decomposition}
     \lean{MPOTensor.HasVerticalBNTProductInputs.%
         exists_positiveFusionDecomposition_of_unitaryBlockEquiv}
     \leanok
