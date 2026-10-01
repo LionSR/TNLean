@@ -413,73 +413,6 @@ remaining eigenvalues have modulus strictly less than $1$.
 
 \section{Exact factorizations of the isometry}
 
-\begin{theorem}[Successive decompositions with a matrix remainder]
-    \label{thm:ldp_sweep_matrix_remainder}
-    \lean{MPSPreparation.exists_isometric_chain_mul,
-        MPSPreparation.sum_star_mulVec_dotProduct_of_isIsometryOn,
-        MPSPreparation.sum_star_eval_mulVec_dotProduct}
-    \leanok
-    \uses{def:seqanc_isometry_on, def:seqanc_support}
-    Let $a\le D$, let $R_{-1}\in\MN{D}$ be row-supported below $a$, and let
-    $P_0,\dots,P_{n-1}$ be families of $D\times D$ matrices. Then there are
-    $b_0=a$ and $b_1,\dots,b_n\le D$, families $Q_0,\dots,Q_{n-1}$ such that
-    $Q_p^i$ is row-supported below $b_p$, vanishes on the columns
-    $\beta\ge b_{p+1}$, and $Q_p$ is isometric on its first $b_{p+1}$ columns,
-    and a matrix $R$ row-supported below $b_n$, such that for every
-    configuration $\sigma$
-    \begin{align}
-        R_{-1}\,P^\sigma
-         & =Q^\sigma\,R.
-        \label{eq:ldp_sweep_matrix_remainder}
-    \end{align}
-    Moreover $b_{p+1}\le c$ whenever every $P_p^i$ vanishes on the columns
-    $\gamma\ge c$. If $Q$ is isometric on its first $b$ columns and $v,w$ are
-    supported below $b$, then
-    $\sum_i\langle Q^iv,Q^iw\rangle=\langle v,w\rangle$. Consequently, if
-    $Q_p^i$ is row-supported below $b_p$, $Q_p$ is isometric on its first
-    $b_{p+1}$ columns, and $v,w$ are supported below $b_n$, then
-    \begin{align}
-        \sum_\sigma\langle Q^\sigma v,Q^\sigma w\rangle
-         & =\langle v,w\rangle.
-        \label{eq:ldp_sweep_inner_product}
-    \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:seqanc_one_step, thm:seqanc_support_propagation}
-    By induction on $n$. For $n=0$ take $R=R_{-1}$. Otherwise apply
-    Theorem~\ref{thm:seqanc_one_step} to $Y^i=R_{-1}P_0^i$, which gives
-    $Y^i=Q_0^iR_0$ with $R_0$ row-supported below $b_1$, and apply the
-    induction hypothesis to $R_0$ and $P_1,\dots,P_{n-1}$:
-    \begin{align}
-        R_{-1}P_0^{\sigma_0}P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
-         & =Q_0^{\sigma_0}R_0P_1^{\sigma_1}\cdots P_{n-1}^{\sigma_{n-1}}
-        =Q_0^{\sigma_0}Q_1^{\sigma_1}\cdots Q_{n-1}^{\sigma_{n-1}}R.
-        \notag
-    \end{align}
-    For one site, expand
-    \begin{align}
-        \sum_i\langle Q^iv,Q^iw\rangle
-         & =\sum_{\beta,\beta'<b}\overline{v_\beta}w_{\beta'}
-        \sum_{i,\alpha}\overline{Q^i_{\alpha\beta}}Q^i_{\alpha\beta'}
-        =\sum_{\beta<b}\overline{v_\beta}w_\beta
-        \notag
-    \end{align}
-    by the isometry condition. For the chain, write
-    $Q^{\sigma}=Q_0^{\sigma_0}Q'^{\sigma'}$, where $Q'$ is the chain
-    $Q_1,\dots,Q_{n-1}$ and $\sigma'=(\sigma_1,\dots,\sigma_{n-1})$. The
-    vectors $Q'^{\sigma'}v$ and $Q'^{\sigma'}w$ are supported below $b_1$ by
-    Theorem~\ref{thm:seqanc_support_propagation}, so the one-site identity for
-    $Q_0$ and the induction hypothesis for $Q'$ give
-    \begin{align}
-        \sum_{\sigma_0,\sigma'}
-        \langle Q_0^{\sigma_0}Q'^{\sigma'}v,Q_0^{\sigma_0}Q'^{\sigma'}w\rangle
-         & =\sum_{\sigma'}\langle Q'^{\sigma'}v,Q'^{\sigma'}w\rangle
-        =\langle v,w\rangle.
-        \notag
-    \end{align}
-\end{proof}
-
 \begin{theorem}[Sequential factorization of a matrix product isometry]
     \label{thm:ldp_sequential_factorization_general}
     \lean{MPSPreparation.exists_isometric_chain_of_eq_mul}
@@ -497,15 +430,15 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation}
     The matrix elements of $V$ are
     $\bigl(j^{\mathsf T}(\Id_D\otimes A^{i_1})\cdots(\Id_D\otimes A^{i_q})G\bigr)_x$
     with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
-    Theorem~\ref{thm:ldp_sweep_matrix_remainder} to the row matrix of $j$ and the
+    Theorem~\ref{thm:seqanc_sweep_matrix_remainder} to the row matrix of $j$ and the
     sites $\Id_D\otimes A^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
     remainder $C=RG$ with $V=Q\,C$ in the sense of
-    (\ref{eq:ldp_sweep_matrix_remainder}). By
-    (\ref{eq:ldp_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
+    (\ref{eq:seqanc_sweep_matrix_remainder}). By
+    (\ref{eq:seqanc_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
     isometry because $V$ is. Absorb $C$ into the last site, $X_q^i=Q_q^iC$ and
     $X_p=Q_p$ for $p<q$; the last site is again isometric,
     $\sum_i C^\dagger(Q_q^i)^\dagger Q_q^iC=C^\dagger C=\Id$.
@@ -1158,9 +1091,10 @@ and its error extend to blocks of any lengths.
     neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
     local circuit of depth $T$ applied to a product state.
 
-    The chain is a ring: the neighbouring pairs are $\{k,k+1\}$ with indices
-    modulo $N$, and a circuit whose gates avoid the pair $\{N,1\}$ is a circuit
-    on the open chain. An operator \emph{acts on} a set of sites $X$ if it
+    The chain is a ring with sites $1,\dots,N$: the neighbouring pairs are
+    $\{k,k+1\}$ with indices modulo $N$, and a circuit whose gates avoid the
+    wrap-around pair $\{N,1\}$ is a circuit on the open chain. An operator
+    \emph{acts on} a set of sites $X$ if it
     lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
     $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
     are at distance larger than $s$ if no site of one is within ring distance

@@ -16,7 +16,7 @@ the four-block example of Section 6.
 
 namespace TNLean.Algebra.LSymbol
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 /-- On a free transitive action, the action gauge relates any two L-symbols
 compatible with the same three-cochain. This is the trivial-stabilizer case
