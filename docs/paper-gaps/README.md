@@ -704,10 +704,6 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   walls and their phases are nonzero and that the local action of the
   symmetry on a domain wall holds against blocked regions of the two ground
   states.
-- `gs24_domain_wall_exchange_square.tex` records that the printed orientation
-  of the exchange of two domain-wall strings is formalized with the square of
-  the exchange phase equal to one as a hypothesis; the source derives it from
-  the symmetry squaring to the identity.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
