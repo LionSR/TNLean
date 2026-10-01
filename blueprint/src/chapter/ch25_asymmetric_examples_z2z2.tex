@@ -1361,7 +1361,7 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 \begin{definition}[The one-qubit Klein-four symmetry]
     \label{def:asymex_klein_spin_symmetry}
     \lean{KleinSymmetry.generatorA,KleinSymmetry.generatorB,KleinSymmetry.operator,
-        KleinSymmetry.representation,KleinSymmetry.tensorA,KleinSymmetry.tensorB}
+        KleinSymmetry.tensorA,KleinSymmetry.tensorB}
     \leanok
     \uses{def:asymex_czx_decorated_tensor}
     On a periodic chain of $N>0$ qubits, write $\bar t_i=1-t_i$ and set
@@ -1384,11 +1384,13 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         KleinSymmetry.generators_commute,KleinSymmetry.generatorA_mul_generatorB,
         KleinSymmetry.operator_one,KleinSymmetry.operator_mul,
         KleinSymmetry.generatorA_mem_unitaryGroup,KleinSymmetry.generatorB_mem_unitaryGroup,
-        KleinSymmetry.operator_mem_unitaryGroup,KleinSymmetry.mpo_tensorA,KleinSymmetry.mpo_tensorB}
+        KleinSymmetry.operator_mem_unitaryGroup,KleinSymmetry.mpo_tensorA,KleinSymmetry.mpo_tensorB,
+        KleinSymmetry.representation}
     \leanok
     \uses{def:asymex_klein_spin_symmetry}
     At every positive length, $U_a^2=U_b^2=I$ and $U_aU_b=U_bU_a$.
-    Every $U_g$ is unitary, $U_e=I$, and $U_gU_h=U_{gh}$.
+    Every $U_g$ is unitary, $U_e=I$, and $U_gU_h=U_{gh}$, so $g\mapsto U_g$
+    is a representation of $\Z_2\times\Z_2$ on the state space.
     The periodic operators of $A$ and $B$ are $U_a$ and $U_b$.
     Their product is the decorated CZX operator.
 \end{theorem}
