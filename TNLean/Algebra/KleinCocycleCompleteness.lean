@@ -15,7 +15,11 @@ to exactly one of the eight representatives of `kleinCocycleFamily`.
 Their parameters add under multiplication, giving an additive equivalence
 between Mathlib's degree-three cohomology and three copies of `ZMod 2`.
 This proves the classification asserted in arXiv:2203.12563, Section 6,
-`Papers/2203.12563/REsubmission.tex`, lines 1845–1852.
+`Papers/2203.12563/REsubmission.tex`, lines 1845–1852, with `ℂˣ` coefficients.
+
+**Scope restriction (coefficients):** the source classifies `H³(ℤ₂ × ℤ₂, U(1))`. This module
+uses `ℂˣ` coefficients and does not compare the two groups in degree three. Documented in
+`docs/paper-gaps/glm23_klein_h3_circle_coefficients.tex`.
 
 The three order-two cyclic invariants detect cohomology classes without any
 normalization assumption. For normalized cocycles these are the three diagonal
@@ -446,8 +450,8 @@ theorem kleinAnomalyClass_bijective : Function.Bijective kleinAnomalyClass := by
     obtain ⟨p, q, r, he⟩ := exists_cohomologousTo_kleinCocycleFamily ω.2
     exact ⟨(p, q, r), ((cohomologousTo_iff_anomalyClass_eq _ _).1 he).symm⟩
 
-/-- The source isomorphism `H³(ℤ₂ × ℤ₂, ℂˣ) ≃ ℤ₂³`, on Mathlib’s cohomology type
-(arXiv:2203.12563, lines 1845–1852). -/
+/-- The isomorphism `H³(ℤ₂ × ℤ₂, ℂˣ) ≃ ℤ₂³`, on Mathlib’s cohomology type; the source
+states it with `U(1)` coefficients (arXiv:2203.12563, lines 1845–1852). -/
 noncomputable def kleinH3Equiv :
     groupCohomology (scalarH2Representation (Multiplicative (ZMod 2 × ZMod 2))) 3 ≃+
       (ZMod 2 × ZMod 2 × ZMod 2) :=
