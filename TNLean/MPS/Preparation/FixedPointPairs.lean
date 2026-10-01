@@ -79,7 +79,9 @@ before eq. `eq:B_TM`, is the positive semidefinite matrix `√σᵀ ⊗ 1`
 * `MPSTensor.fixedPointPair_norm_sq` — `⟨ω|ω⟩ = Tr ρ = 1`.
 * `MPSTensor.bondRegrouping` — the regrouping of the sites `L_k ⊗ R_k` of a ring
   into the bonds `R_k ⊗ L_{k+1}`.
-* `MPSTensor.pairProductState_inner` — `⟨Ω|Ω'⟩ = ⟨ω|ω'⟩^N`.
+* `MPSTensor.pairFamilyState`, `MPSTensor.pairFamilyState_inner` — the product
+  `⊗ₖ |ω^k⟩_{R_k L_{k+1}}` of site-dependent pairs and `⟨Ω|Ω'⟩ = ∏ₖ ⟨ω^k|ω'^k⟩`.
+* `MPSTensor.pairProductState_inner` — `⟨Ω|Ω'⟩ = ⟨ω|ω'⟩^N`, the case of equal pairs.
 * `MPSTensor.pairProductState_norm_sq`,
   `MPSTensor.pairProductState_fixedPointPair_norm_sq` — `⟨Ω|Ω⟩ = ⟨ω|ω⟩^N = 1`.
 * `MPSTensor.tendsto_transferMap_blockTensor_of_spectralRadius_lt_one`,
@@ -310,6 +312,42 @@ def bondRegrouping (N D : ℕ) : (Fin N → Fin D × Fin D) ≃ (Fin N → Fin D
   left_inv c := by funext k; simp only [Equiv.apply_symm_apply]
   right_inv p := by funext k; simp only [Equiv.symm_apply_apply]
 
+/-- The product `⊗ₖ |ω^k⟩_{R_k L_{k+1}}` of site-dependent pairs on a ring of `N` sites: the pair
+`ω^k` joins the right space of site `k` to the left space of site `k + 1`, cyclically.
+
+arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS":
+`|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}`.
+
+**Scope restriction (common bond dimension):** `pairFamilyState` and its lemmas
+`pairFamilyState_const`, `pairFamilyState_inner` and `pairFamilyState_norm_sq` put every pair
+`ω^k` on the same space `ℂ^D ⊗ ℂ^D`, while the source's inhomogeneous states have "bond
+dimension at most `D`", which may vary along the ring. Documented in
+`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. -/
+def pairFamilyState {N : ℕ} (ω : Fin N → Fin D × Fin D → ℂ) (c : Fin N → Fin D × Fin D) : ℂ :=
+  ∏ k : Fin N, ω k ((c k).2, (c (finRotate N k)).1)
+
+/-- Equal pairs on every bond give the pair product state. -/
+theorem pairFamilyState_const {N : ℕ} (ω : Fin D × Fin D → ℂ) :
+    pairFamilyState (N := N) (fun _ => ω) = pairProductState ω := rfl
+
+/-- Overlaps of products of pairs factorize over the bonds: `⟨Ω|Ω'⟩ = ∏ₖ ⟨ω^k|ω'^k⟩` for
+`|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` and `|Ω'⟩ = ⊗ₖ |ω'^k⟩_{R_k L_{k+1}}` on a ring of `N` sites. -/
+theorem pairFamilyState_inner {N : ℕ} (ω ω' : Fin N → Fin D × Fin D → ℂ) :
+    ∑ c : Fin N → Fin D × Fin D, star (pairFamilyState ω c) * pairFamilyState ω' c =
+      ∏ k, ∑ p, star (ω k p) * ω' k p := by
+  rw [Fintype.prod_sum,
+    ← (bondRegrouping N D).sum_comp (fun x => ∏ i, star (ω i (x i)) * ω' i (x i))]
+  refine Finset.sum_congr rfl fun c _ => ?_
+  rw [pairFamilyState, pairFamilyState, star_prod, ← Finset.prod_mul_distrib]
+  rfl
+
+/-- The norm of a product of pairs is the product of the norms of the pairs:
+`⟨Ω|Ω⟩ = ∏ₖ ⟨ω^k|ω^k⟩`. -/
+theorem pairFamilyState_norm_sq {N : ℕ} (ω : Fin N → Fin D × Fin D → ℂ) :
+    ∑ c : Fin N → Fin D × Fin D, star (pairFamilyState ω c) * pairFamilyState ω c =
+      ∏ k, ∑ p, star (ω k p) * ω k p :=
+  pairFamilyState_inner ω ω
+
 /-- Overlaps of pair-product states factorize over the bonds:
 `⟨Ω|Ω'⟩ = ⟨ω|ω'⟩^N` for `|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` and `|Ω'⟩ = ⊗ᵢ |ω'⟩_{R_i L_{i+1}}`
 on a ring of `N` sites (arXiv:2307.01696, eq. `eq:phi_tilde` and the states `|Ω_j⟩`
@@ -317,11 +355,7 @@ after eq. `eq:app_tidle_phi_1`). -/
 theorem pairProductState_inner {N : ℕ} (ω ω' : Fin D × Fin D → ℂ) :
     ∑ c : Fin N → Fin D × Fin D, star (pairProductState ω c) * pairProductState ω' c =
       (∑ p, star (ω p) * ω' p) ^ N := by
-  rw [← Fin.prod_const, Fintype.prod_sum,
-    ← (bondRegrouping N D).sum_comp (fun x => ∏ i, star (ω (x i)) * ω' (x i))]
-  refine Finset.sum_congr rfl fun c _ => ?_
-  rw [pairProductState, pairProductState, star_prod, ← Finset.prod_mul_distrib]
-  rfl
+  rw [← pairFamilyState_const, ← pairFamilyState_const, pairFamilyState_inner, Fin.prod_const]
 
 /-- The product of pairs is normalized whenever each pair is: `⟨Ω|Ω⟩ = ⟨ω|ω⟩^N`
 for `|Ω⟩ = ⊗ᵢ |ω⟩_{R_i L_{i+1}}` on a ring of `N` sites (arXiv:2307.01696,
