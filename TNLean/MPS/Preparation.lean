@@ -66,6 +66,7 @@ import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PairProduct
 import TNLean.MPS.Preparation.PermutationGates
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
+import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.ProductStateCircuit
