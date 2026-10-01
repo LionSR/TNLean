@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTAlgebraTensorClauseReflectedTarget
-import TNLean.MPS.MPDO.CPSVBNTFusionTensorClauseFromRFP
+import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
 
 /-!
 # The BNT form of the general MPDO renormalization fixed-point theorem
