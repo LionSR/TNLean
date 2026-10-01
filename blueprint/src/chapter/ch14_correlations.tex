@@ -149,8 +149,8 @@ spectral decomposition, and quantitative decay bounds.
 
 \begin{theorem}[Sum of exponentials under diagonalizability]%
     \label{thm:correlator_sum_exponentials}
-    \uses{def:connected_correlator, def:primitive_mps}
-    Let $\E_A$ be primitive and trace-preserving, with fixed point $\rho$
+    \uses{def:connected_correlator}
+    Let $\E_A$ be trace-preserving, with fixed point $\rho$
     satisfying $\tr\rho=1$. Suppose its restriction to the traceless matrices
     is diagonalizable, with eigenvalues $\lambda_1,\ldots,\lambda_{D^2-1}$,
     counted with multiplicity. For every $X,Y$, there are coefficients
@@ -207,7 +207,7 @@ spectral decomposition, and quantitative decay bounds.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part, thm:correlator_sum_exponentials}
+    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part, thm:correlator_sum_exponentials, def:primitive_mps}
     Primitivity gives $\rho_{\spec}(\E_A-P)<1$
     \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
     so such rates $r$ exist.
