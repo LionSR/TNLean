@@ -945,7 +945,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     Concatenate the columns of the $V_a$ to define $U$. The identity resolution
     gives $UU^\dagger=\mathbf 1$, and equality of dimensions makes $U$ unitary.
-    The intertwining identities on every summand give the asserted conjugation.
+    On every summand,
+    \begin{align}
+        A^iUJ_a & =A^iV_a=V_aB_a^i=U\Bigl(\bigoplus_bB_b^i\Bigr)J_a, \notag
+    \end{align}
+    so $A^iU=U(\bigoplus_aB_a^i)$, and multiplying by $U^\dagger$ gives the
+    asserted conjugation.
 \end{proof}
 
 \begin{theorem}[Unitary orbit coordinates and phase-weighted roots]
@@ -976,9 +981,12 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \uses{thm:periodic_unitary_resolution,thm:periodic_orthogonal_resolution_multiplication,
         thm:periodic_absorb_orbit_gauge,
         thm:periodic_prescribed_blocking}
-    Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit isometries. Conjugate the diagonal
-    matrix with entries $c_a\mathbf 1_{D_a}$ by this unitary to obtain $Z$.
+    Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit
+    isometries and set $Z=U\bigl(\bigoplus_ac_a\mathbf 1_{D_a}\bigr)U^\dagger$.
     Since $UJ_a$ is the original orbit isometry,
-    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the original cyclic sectors
-    gives $A'^{[p]}=ZA^{[p]}$, which is the stated weighted conjugation.
+    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the
+    original cyclic sectors gives
+    \begin{align}
+        (A'^{[p]})^I & =Z(A^{[p]})^I=U\Bigl(\bigoplus_ac_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
 \end{proof}
