@@ -170,6 +170,7 @@ tensor take depth $O(q)$ as well.
 \begin{lemma}[Sequential factorization on the first inputs]
     \label{lem:ldp_sequential_factorization_first_inputs}
     \lean{MPSPreparation.exists_isometric_chain_of_eq_mul_of_le,
+        MPSPreparation.polarIsoMatrix_chainBlockTensor_eq_sum,
         MPSPreparation.polarIsoMatrix_blockTensor_eq_sum}
     \leanok
     \uses{thm:ldp_sequential_factorization_general}
@@ -177,9 +178,13 @@ tensor take depth $O(q)$ as well.
     elements of $V$ have the stated form only for the first $r$ inputs $x$, and let
     these $r\leq D^2$ columns of $V$ be orthonormal. Then the same conclusion
     holds with $b_q=r$, for these $r$ inputs. For an injective blocked
-    tensor $B=VP$, $V=BP^{-1}$ has the matrix elements
+    tensor $B=VP$ of tensors $A_1,\dots,A_q$, one on each site,
+    $V=BP^{-1}$ has the matrix elements
     $\bra{i_1\cdots i_q}V\ket x=\sum_{\alpha,\beta}
-        (A^{i_1}\cdots A^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$.
+        (A_1^{i_1}\cdots A_q^{i_q})_{\alpha\beta}(P^{-1})_{(\alpha,\beta),x}$;
+    for equal tensors $A_p=A$ this reads
+    $\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}
+        (P^{-1})_{(\alpha,\beta),x}$ with $B=\mathcal B_q$.
 \end{lemma}
 \begin{proof}
     \leanok
