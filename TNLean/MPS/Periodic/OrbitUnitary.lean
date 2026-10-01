@@ -82,6 +82,7 @@ private theorem exists_root_of_orbit_phase (A : MPSTensor d D) (hA : IsLeftCanon
     ← Matrix.mul_assoc (blockScalarMatrix dim c), blockScalarMatrix_mul_toTensorFromBlocks]
   simp only [mul_one]
 
+omit [NeZero m] in
 /-- The prescribed periodic blocks assemble by one unitary, retaining their orbit
 inclusions. Every family of root-of-unity phases on these same blocks lifts to a
 left-canonical root with the original physical dimension and bond space.
@@ -90,6 +91,7 @@ Source: arXiv:1708.00029, `lem:blocking-arbitrary`, lines 432–456, and
 `eq:ZPA-is-cPA` through `eq:Aprime-is-cPA`, lines 778–807. -/
 theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
     (A : MPSTensor d D) (hA : IsPeriodic m A) {p : ℕ} (hp : 0 < p) :
+    let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
       (dim : Fin (m.gcd p) → ℕ)
       (B : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
@@ -106,6 +108,7 @@ theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
       ∀ c : Fin (m.gcd p) → ℂ, (∀ a, c a ^ (m / m.gcd p) = 1) →
         ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧
           ∀ i, blockTensor A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
+  let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, B, V, hproj, hsum, _, hshift, _, hdim, _, _, hiso, hrange, hB, hper⟩ :=
     hA.exists_stepOrbit_blockDecomposition p
   have hinter (a) (i) : blockTensor A p i * V a = V a * B a i := by
