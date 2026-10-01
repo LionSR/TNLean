@@ -110,6 +110,14 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   dimension, with the constants multiplying, and that in two dimensions only
   the simplification of the left inverse for the left-regular representation
   on the contracted link is formalized (open scope restriction).
+- `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
+  records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
+  operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product
+  tensor is, up to the positive constant of the formal notion of
+  `G`-isometry, the projector onto `𝒮₂`, so it is `1 - hᵢ` rather than the
+  local term `hᵢ` the lemma names (local fix); and that the commutation of
+  the local terms, stated for PEPS, is formalized for matrix product states
+  on rings of at least three sites.
 - `rmp_peps_rvb_bond_vacuum.tex` (local correction) records that the
   printed `2 × 2` singlet matrix of the RVB tensor, extended by zero to the
   bond of dimension three, makes the tensor vanish, and that the formal
