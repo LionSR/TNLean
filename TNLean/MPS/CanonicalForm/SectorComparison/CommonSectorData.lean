@@ -85,11 +85,13 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂Pos
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksA k)) ∧
       (∀ k, HasPrimitiveIrreducibleCyclicSectors (blocksB k)) := by
   obtain ⟨rA, dimA, μA, blocksA,
-      hIrrA, hTPA, hμA, hDimA, hAPos, _hDimBoundA⟩ :=
+      hIrrA, hTPA, hμPosA, hDimA, hAPos, _hDimBoundA⟩ :=
     exists_tp_gauge_from_arbitrary (d := d) (D := D₁) A
   obtain ⟨rB, dimB, μB, blocksB,
-      hIrrB, hTPB, hμB, hDimB, hBPos, _hDimBoundB⟩ :=
+      hIrrB, hTPB, hμPosB, hDimB, hBPos, _hDimBoundB⟩ :=
     exists_tp_gauge_from_arbitrary (d := d) (D := D₂) B
+  have hμA : ∀ k, μA k ≠ 0 := fun k => ne_of_gt (hμPosA k)
+  have hμB : ∀ k, μB k ≠ 0 := fun k => ne_of_gt (hμPosB k)
   -- The two nonzero parts agree at positive length: chain through the common MPV family.
   have hBook : SameMPV₂Pos
       (toTensorFromBlocks (d := d) (μ := μA) blocksA)
