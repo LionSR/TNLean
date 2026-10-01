@@ -29,9 +29,12 @@ The cocycle equation determines all remaining entries from the three signs.
 
 ## Main results
 
+* `isTrivialGaugeClass_of_klein_diagonal_eq_one`: a normalized Klein cocycle with trivial
+  diagonal values has trivial class.
 * `cohomologousTo_of_klein_diagonal_eq`: normalized Klein cocycles with the same three
   diagonal values are cohomologous.
-* `cohomologousTo_iff_klein_cyclicInvariant_eq`: the order-two cyclic invariants detect
+* `cohomologousTo_iff_klein_cyclicInvariant_eq`,
+  `cohomologousTo_iff_klein_three_cyclicInvariants`: the order-two cyclic invariants detect
   cohomology classes.
 * `exists_cohomologousTo_kleinCocycleFamily`,
   `existsUnique_cohomologousTo_kleinCocycleFamily`: every cocycle is cohomologous to exactly
@@ -45,6 +48,13 @@ namespace TNLean.Algebra.ScalarThreeCochain
 local notation "ka" => (Multiplicative.ofAdd (1, 0) : Multiplicative (ZMod 2 × ZMod 2))
 local notation "kb" => (Multiplicative.ofAdd (0, 1) : Multiplicative (ZMod 2 × ZMod 2))
 local notation "kc" => (Multiplicative.ofAdd (1, 1) : Multiplicative (ZMod 2 × ZMod 2))
+
+/-- The four elements of the Klein four-group. -/
+private theorem klein_cases (g : Multiplicative (ZMod 2 × ZMod 2)) :
+    g = 1 ∨ g = ka ∨ g = kb ∨ g = kc := by
+  revert g
+  decide
+
 /-- A normalized Klein cocycle with trivial diagonal values is determined by six entries.
 This is the finite cocycle-equation calculation behind arXiv:2203.12563, lines 1845–1852. -/
 private theorem eq_one_of_klein_entries
@@ -150,14 +160,10 @@ private theorem eq_one_of_klein_entries
     change ω kc kc ka * ω ka kb kb =
       ω ka kb kc * ω ka ka ka * ω kb kc ka at h
     simpa only [h122, h123, h111, h231, one_mul, mul_one] using h
-  have hcases (g : Multiplicative (ZMod 2 × ZMod 2)) :
-      g = 1 ∨ g = ka ∨ g = kb ∨ g = kc := by
-    revert g
-    decide
   funext g h k
-  rcases hcases g with rfl | rfl | rfl | rfl <;>
-    rcases hcases h with rfl | rfl | rfl | rfl <;>
-    rcases hcases k with rfl | rfl | rfl | rfl <;>
+  rcases klein_cases g with rfl | rfl | rfl | rfl <;>
+    rcases klein_cases h with rfl | rfl | rfl | rfl <;>
+    rcases klein_cases k with rfl | rfl | rfl | rfl <;>
     simp only [Pi.one_apply, hn.1, hn.2.1, hn.2.2,
       h111, h112, h113, h121, h122, h123, h131, h132, h133, h211, h212, h213, h221, h222,
       h223, h231, h232, h233, h311, h312, h313, h321, h322, h323, h331, h332, h333]
@@ -339,8 +345,7 @@ private theorem exists_cohomologousTo_kleinCocycleFamily_of_isNormalized
     (kleinCocycleFamily_isCocycle _ _ _)
     (kleinCocycleFamily_isNormalized _ _ _) ?_⟩
   intro g
-  have hcases : g = 1 ∨ g = ka ∨ g = kb ∨ g = kc := by revert g; decide
-  rcases hcases with rfl | rfl | rfl | rfl
+  rcases klein_cases g with rfl | rfl | rfl | rfl
   · rw [hn.1]
     exact ((kleinCocycleFamily_isNormalized _ _ _).1 _ _).symm
   · simpa [kleinCocycleFamily] using hp
@@ -404,8 +409,7 @@ theorem cohomologousTo_iff_klein_three_cyclicInvariants
   · intro h
     exact ⟨h ka, h kb, h kc⟩
   · rintro ⟨ha, hb, hc⟩ g
-    have hcases : g = 1 ∨ g = ka ∨ g = kb ∨ g = kc := by revert g; decide
-    rcases hcases with rfl | rfl | rfl | rfl
+    rcases klein_cases g with rfl | rfl | rfl | rfl
     · rw [cyclicInvariant_one_of_isCocycle hw, cyclicInvariant_one_of_isCocycle hv]
     · exact ha
     · exact hb
