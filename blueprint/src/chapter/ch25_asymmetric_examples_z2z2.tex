@@ -1566,3 +1566,78 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Finally $\omega_{pqr}\omega_{p'q'r'}=\omega_{p+p',q+q',r+r'}$, so
     this bijection of cohomology classes is a group isomorphism.
 \end{proof}
+
+\begin{definition}[The four printed tensors]
+    \label{def:asymex_klein_printed_family}
+    \lean{KleinSymmetry.printedBond,KleinSymmetry.printedTensor,KleinSymmetry.printedFamily}
+    \leanok
+    \uses{def:asymex_klein_spin_symmetry}
+    For $G=\{e,a,b,ab\}$, let $T_e$ be the bond-one identity tensor,
+    $T_a=A$ the diagonal tensor, $T_b=B$ the bond-one spin-flip tensor,
+    and $T_{ab}=\widehat T$ the decorated CZX tensor.
+\end{definition}
+
+\begin{theorem}[Normality and anomaly of the printed symmetry]
+    \label{thm:asymex_klein_printed_anomaly}
+    \lean{KleinSymmetry.tensorA_isNormal,KleinSymmetry.mpo_printedFamily,
+        KleinSymmetry.printedFamily_isNormalRepresentation,
+        KleinSymmetry.diagonalHom,KleinSymmetry.printedFamily_comap_diagonal,
+        KleinSymmetry.cyclicInvariant_omega_printedFamily,
+        KleinSymmetry.not_isTrivialGaugeClass_omega_printedFamily,
+        KleinSymmetry.exists_normalized_omega_printedFamily,
+        KleinSymmetry.anomalyClass_omega_printedFamily_ne_zero}
+    \leanok
+    \uses{def:asymex_klein_printed_family,def:mpug_anomaly_three_cochain,
+        def:mpug_trivial_gauge_class,def:mpug_h3_group_cohomology}
+    For every $N>0$ and $g\in G$, the periodic operator of $T_g$ is the
+    printed operator, $O_N(T_g)=U_g$. The four tensors are normal and form
+    an exact representation on every positive-length periodic chain.
+    For every choice of fusion tensors,
+    the anomaly satisfies
+    \begin{align}
+        \label{eq:asymex_klein_printed_anomaly}
+        \omega(ab,e,ab)\omega(ab,ab,ab) & =-1.
+    \end{align}
+    Its class $[\omega]\in H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$
+    is nonzero and admits a normalized representative $\nu$
+    with $\nu(ab,ab,ab)=-1$. This is the sign at $ab$ only.
+    \cite[Section~6]{GarreRubio2023MPOSym} also asserts, for the diagonal
+    values, that $\omega(a,a,a)=\omega(b,b,b)=1$; these are not determined
+    here~\cite{gap:glm23_klein_printed_anomaly_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_spin_representation,
+        thm:asymex_czx_decorated_normal,
+        thm:asymex_czx_decorated_anomaly_class,
+        thm:mpug_cyclic_invariant_gauge,
+        thm:asymex_three_cocycle_normalization,
+        thm:mpug_h3_group_cohomology,thm:mpug_family_restriction_omega}
+    The equalities $O_N(T_g)=U_g$ are
+    Theorem~\ref{thm:asymex_klein_spin_representation} for $g=a,b,ab$ and
+    the identity tensor for $g=e$. On the physical alphabet
+    $\{0,1\}^2$ let $\varphi(i,j)=(i,1-j)$. Then
+    $A^{\varphi(i,j)}=\widehat T^{ij}$, so $A^{\varphi\circ w}=\widehat T^{w}$ for every
+    word $w$ and
+    $\operatorname{span}\{A^{v}:|v|=n\}\supseteq\operatorname{span}\{\widehat T^{w}:|w|=n\}$.
+    Normality of $\widehat T$ therefore gives normality of the diagonal tensor. The identity and spin-flip
+    tensors have bond dimension one. The operator multiplication law
+    follows from the commuting involutions.
+    Restriction to $\{e,ab\}$ gives exactly the decorated CZX family; let
+    $\omega_{\mathrm{CZX}}$ be the anomaly of its fusion tensors and write
+    $ab$ also for the generator of $\{e,ab\}$. Restricting the fusion
+    tensors (Theorem~\ref{thm:mpug_family_restriction_omega}) and using
+    invariance of the cyclic product under a change of fusion tensors
+    (Theorem~\ref{thm:mpug_cyclic_invariant_gauge}) gives
+    \begin{align}
+        \omega(ab,e,ab)\,\omega(ab,ab,ab)
+         & =\omega_{\mathrm{CZX}}(ab,e,ab)\,\omega_{\mathrm{CZX}}(ab,ab,ab)=-1,
+        \notag
+    \end{align}
+    the last value by Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
+    This proves (\ref{eq:asymex_klein_printed_anomaly}). A trivial class would have
+    cyclic product one, so the gauge class is nontrivial; by
+    Theorem~\ref{thm:mpug_h3_group_cohomology} the class
+    $[\omega]\in H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$ is nonzero. Finally normalization makes $\nu(ab,e,ab)=1$.
+\end{proof}
