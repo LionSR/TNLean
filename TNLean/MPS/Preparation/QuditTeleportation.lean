@@ -139,12 +139,6 @@ theorem finKronecker_update_one_permMatrix_mulVec (t : Fin N) (σ : Equiv.Perm (
     simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Ne.symm hj]
   · simp
 
-/-- The Kronecker product of a family equal to `1` off a set `S` acts on `S`. -/
-theorem finKronecker_mem_supportedOperators_of_eq_one {S : Set (Fin N)}
-    {g : Fin N → Matrix (Fin d) (Fin d) ℂ} (hg : ∀ i ∉ S, g i = 1) :
-    finKronecker g ∈ supportedOperators d S :=
-  finKronecker_mem_supportedOperators hg
-
 end SingleSite
 
 /-! ### The Fourier matrix and the generalized Pauli matrices -/
@@ -344,64 +338,6 @@ structure TeleportHop (N : ℕ) [NeZero N] where
   e_ne_f : e ≠ f
 
 namespace TeleportHop
-
-/-- The forward hop from `c` to `c + 2` on a ring of at least three sites. -/
-def forward (hN : 3 ≤ N) (c : Fin N) : TeleportHop N where
-  c := c
-  e := c + 1
-  f := c + 1 + 1
-  k₁ := c + 1
-  k₂ := c
-  bond_k₁ := rfl
-  bond_k₂ := rfl
-  c_ne_e := by
-    intro h
-    have := congrArg Fin.val h
-    rw [Fin.val_add, Fin.val_one', Nat.mod_eq_of_lt (by omega : 1 < N)] at this
-    rcases Nat.lt_or_ge (c.val + 1) N with hc | hc
-    · rw [Nat.mod_eq_of_lt hc] at this; omega
-    · have : c.val + 1 = N := by have := c.isLt; omega
-      simp_all
-  c_ne_f := by
-    intro h
-    have := congrArg Fin.val h
-    rw [add_assoc, Fin.val_add, Fin.val_add, Fin.val_one', Nat.mod_eq_of_lt (by omega : 1 < N),
-      Nat.mod_eq_of_lt (by omega : 1 + 1 < N)] at this
-    have hc := c.isLt
-    rcases Nat.lt_or_ge (c.val + 2) N with h2 | h2
-    · rw [Nat.mod_eq_of_lt h2] at this; omega
-    · rw [Nat.mod_eq_sub_mod h2, Nat.mod_eq_of_lt (by omega)] at this; omega
-  e_ne_f := by
-    intro h
-    have := congrArg Fin.val h
-    rw [Fin.val_add (c + 1), Fin.val_one', Nat.mod_eq_of_lt (by omega : 1 < N)] at this
-    have hc := (c + 1).isLt
-    rcases Nat.lt_or_ge ((c + 1).val + 1) N with h2 | h2
-    · rw [Nat.mod_eq_of_lt h2] at this; omega
-    · have : (c + 1).val + 1 = N := by omega
-      simp_all
-
-/-- The backward hop from `c` to `c - 2` on a ring of at least three sites. -/
-def backward (hN : 3 ≤ N) (c : Fin N) : TeleportHop N where
-  c := c
-  e := c - 1
-  f := c - 1 - 1
-  k₁ := c - 1 - 1
-  k₂ := c - 1
-  bond_k₁ := by rw [bond, sub_add_cancel, Set.pair_comm]
-  bond_k₂ := by rw [bond, sub_add_cancel, Set.pair_comm]
-  c_ne_e := fun h => (forward hN (c - 1)).c_ne_e (by
-    change c - 1 = c - 1 + 1
-    rw [sub_add_cancel]
-    exact h.symm)
-  c_ne_f := fun h => (forward hN (c - 1 - 1)).c_ne_f (by
-    change c - 1 - 1 = c - 1 - 1 + 1 + 1
-    rw [sub_add_cancel, sub_add_cancel]
-    exact h.symm)
-  e_ne_f := fun h => (forward hN (c - 1 - 1)).c_ne_e (by
-    change c - 1 - 1 = c - 1 - 1 + 1
-    rw [sub_add_cancel]
-    exact h.symm)
 
 variable [NeZero d] (h : TeleportHop N)
 

@@ -27,20 +27,18 @@ backward chain. On the vectors with `|0⟩` at the `2L` sites strictly between `
 and the depth does not depend on the distances `2L + 1` nor on the number of gates.
 
 Implementations by sequences of rounds compose
-(`MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`), which gives preparations
-by several such layers.
+(`MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`), so several such layers are
+applied one after the other (`TNLean.MPS.Preparation.TreeMeasurement`).
 
 ## Main definitions
 
-* `MPSPreparation.MeasurementRound.IsRoundsImplementationOn` — a sequence of rounds acts as a
-  given matrix on a set of vectors, for every sequence of outcomes, up to a scalar.
 * `MPSPreparation.LongRangeGate`, `MPSPreparation.LongRangeGate.op`.
 * `MPSPreparation.LongRangeGate.rounds` — the two rounds applying a layer of long-range gates.
 
 ## Main results
 
-* `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`,
-  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`.
+* `MPSPreparation.TeleportHop.valid_flatMap`, `MPSPreparation.TeleportHop.sitePerm_flatMap_apply`
+  — chains on pairwise disjoint sets of sites run in parallel.
 * `MPSPreparation.LongRangeGate.sum_depth_rounds` — the two rounds have depth `5`.
 * `MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds`.
 
@@ -56,64 +54,6 @@ open scoped BigOperators
 namespace MPSPreparation
 
 variable {d N : ℕ} [NeZero N]
-
-/-! ### Sequences of rounds implementing a matrix -/
-
-namespace MeasurementRound
-
-theorem mem_outputs_append {Rs Rs' : List (MeasurementRound d N)} {v w : Cfg d N → ℂ} :
-    w ∈ outputs (Rs ++ Rs') v ↔ ∃ u ∈ outputs Rs v, w ∈ outputs Rs' u := by
-  induction Rs generalizing v with
-  | nil => simp
-  | cons R Rs ih =>
-    simp only [List.cons_append, R.mem_outputs_cons, ih]
-    exact ⟨fun ⟨m, u, hu, hw⟩ => ⟨u, ⟨m, hu⟩, hw⟩, fun ⟨u, ⟨m, hu⟩, hw⟩ => ⟨m, u, hu, hw⟩⟩
-
-/-- The sequence of rounds `Rs` *implements* the matrix `W` on the set `E` of vectors when, for
-every `v ∈ E`, every output of `Rs` from `v` is a scalar multiple of `W v`: whatever the
-outcomes, the rounds act on `E` as `W`, up to a scalar.
-
-Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("correcting (without
-postselection) based on the measurement outcomes"). -/
-def IsRoundsImplementationOn (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ))
-    (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop :=
-  ∀ v ∈ E, ∀ w ∈ outputs Rs v, ∃ c : ℂ, w = c • (W *ᵥ v)
-
-theorem isRoundsImplementationOn_nil (E : Set (Cfg d N → ℂ)) :
-    IsRoundsImplementationOn ([] : List (MeasurementRound d N)) E 1 := by
-  intro v _ w hw
-  rw [outputs_nil, Set.mem_singleton_iff] at hw
-  exact ⟨1, by rw [hw, one_mulVec, one_smul]⟩
-
-theorem IsRoundsImplementationOn.mono {Rs : List (MeasurementRound d N)}
-    {E E' : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
-    (h : IsRoundsImplementationOn Rs E W) (hE : E' ⊆ E) : IsRoundsImplementationOn Rs E' W :=
-  fun v hv => h v (hE hv)
-
-/-- **Implementations compose.** If `Rs` implements `W` on `E`, `W` maps `E` into `E'`, and
-`Rs'` implements `W'` on `E'`, then `Rs` followed by `Rs'` implements `W' W` on `E`. -/
-theorem IsRoundsImplementationOn.append {Rs Rs' : List (MeasurementRound d N)}
-    {E E' : Set (Cfg d N → ℂ)} {W W' : Matrix (Cfg d N) (Cfg d N) ℂ}
-    (h : IsRoundsImplementationOn Rs E W) (h' : IsRoundsImplementationOn Rs' E' W')
-    (hE : ∀ v ∈ E, W *ᵥ v ∈ E') : IsRoundsImplementationOn (Rs ++ Rs') E (W' * W) := by
-  intro v hv w hw
-  obtain ⟨u, hu, hw⟩ := mem_outputs_append.mp hw
-  obtain ⟨c, rfl⟩ := h v hv u hu
-  obtain ⟨w', hw', rfl⟩ := mem_outputs_smul c hw
-  obtain ⟨c', rfl⟩ := h' _ (hE v hv) w' hw'
-  exact ⟨c * c', by rw [smul_smul, mulVec_mulVec]⟩
-
-/-- **Preparation from an implementation.** If `Rs` implements `W` on `E` and the nonzero
-product vector `π` lies in `E`, then `W π` is prepared with measurement rounds in the total
-depth of `Rs`. -/
-theorem IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth
-    {Rs : List (MeasurementRound d N)} {E : Set (Cfg d N → ℂ)}
-    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (h : IsRoundsImplementationOn Rs E W)
-    {v : Fin N → Fin d → ℂ} (hv : productVector v ≠ 0) (hvE : productVector v ∈ E) :
-    IsPreparedWithMeasurementRoundsInDepth (Rs.map depth).sum (W *ᵥ productVector v) :=
-  ⟨v, Rs, le_rfl, hv, fun w hw _ => h _ hvE w hw⟩
-
-end MeasurementRound
 
 /-! ### Permutations of sites supported on a set -/
 
@@ -320,8 +260,6 @@ theorem op_mem_unitary : g.op ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
 theorem op_mem_supportedOperators : g.op ∈ supportedOperators d {g.a, g.far} := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.a_ne_far) g.u
   rwa [Matrix.range_cons_cons_empty] at this
-
-theorem a_mem_span : g.a ∈ g.span := ⟨0, by omega, by simp⟩
 
 theorem far_mem_span : g.far ∈ g.span := ⟨2 * g.L + 1, le_rfl, rfl⟩
 

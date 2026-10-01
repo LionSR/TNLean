@@ -68,10 +68,6 @@ variable {d N : ℕ}
 `{1, …, B - 2}`. -/
 def blockInterior (N B : ℕ) : Set (Fin N) := {x | 1 ≤ x.val % B ∧ x.val % B + 2 ≤ B}
 
-theorem blockInterior_one : blockInterior N 1 = ∅ := by
-  ext x
-  simp [blockInterior]
-
 /-- The sites strictly inside the blocks of size `c` lie strictly inside the blocks of size
 `2c`. -/
 theorem blockInterior_subset_two_mul (c : ℕ) : blockInterior N c ⊆ blockInterior N (2 * c) := by

@@ -160,15 +160,6 @@ theorem mem_allSites {hs : List (TeleportHop N)} {i : Fin N} :
   | nil => simp [allSites]
   | cons h hs ih => simp [allSites, ih]
 
-theorem pairSites_subset_allSites (hs : List (TeleportHop N)) : pairSites hs ⊆ allSites hs := by
-  induction hs with
-  | nil => exact le_rfl
-  | cons h hs ih =>
-    refine Set.union_subset_union ?_ ih
-    rintro i (rfl | rfl)
-    · exact Or.inr (Or.inl rfl)
-    · exact Or.inr (Or.inr rfl)
-
 theorem coe_measuredSites_subset_allSites (hs : List (TeleportHop N)) :
     (measuredSites hs : Set (Fin N)) ⊆ allSites hs := by
   induction hs with
@@ -290,13 +281,6 @@ theorem chainFrame_of_notMem (hs : List (TeleportHop N)) (z : Cfg d N) {i : Fin 
     simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff, not_or] at hi'
     simp only [chainFrame, Function.update_of_ne hi'.1, Function.update_of_ne hi'.2.2,
       ih hrest, h.frame_of_ne z hi'.1 hi'.2.1 hi'.2.2, Pi.one_apply, mul_one]
-
-theorem prod_gate₁_mem_supportedOperators (hs : List (TeleportHop N)) :
-    (hs.map TeleportHop.gate₁).prod ∈ supportedOperators d (allSites hs) := by
-  refine list_prod_mem_supportedOperators _ fun A hA => ?_
-  obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hA
-  refine supportedOperators_mono ?_ h.gate₁_mem_supportedOperators
-  rintro i (rfl | rfl) <;> exact mem_allSites.mpr ⟨h, hh, by simp [sites]⟩
 
 theorem prod_gate₂_mem_supportedOperators (hs : List (TeleportHop N)) :
     (hs.map TeleportHop.gate₂).prod ∈ supportedOperators d (allSites hs) := by

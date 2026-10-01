@@ -34,16 +34,19 @@ number of layers.
 
 A round *implements* a matrix `W` on a set `E` of vectors when for every outcome `m` there is a
 scalar `c` with `V_m P_m U v = c W v` for every `v ∈ E`: whatever the outcome, the round acts on
-`E` as `W`, up to a scalar independent of the input. Implementations compose along a sequence of
-rounds
-(`MPSPreparation.MeasurementRound.isPreparedWithMeasurementRoundsInDepth_of_isImplementationOn`).
+`E` as `W`, up to a scalar independent of the input. A sequence of rounds implements `W` on `E`
+when every output from `v ∈ E` is a scalar multiple of `W v`
+(`MPSPreparation.MeasurementRound.IsRoundsImplementationOn`). Implementations compose along
+sequences of rounds (`MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`), and an
+implementation applied to a nonzero product vector is a preparation.
 
 ## Main definitions
 
 * `MPSPreparation.MeasurementRound` and `MPSPreparation.MeasurementRound.kraus`.
 * `MPSPreparation.MeasurementRound.outputs` — the vectors reached by a sequence of rounds.
 * `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth`.
-* `MPSPreparation.MeasurementRound.IsImplementationOn`.
+* `MPSPreparation.MeasurementRound.IsImplementationOn`,
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn`.
 
 ## Main results
 
@@ -51,7 +54,9 @@ rounds
   of nonzero probability, so the definition is not vacuous
   (`MPSPreparation.IsPreparedWithMeasurementRoundsInDepth.ne_zero`).
 * `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`.
-* `MPSPreparation.MeasurementRound.isPreparedWithMeasurementRoundsInDepth_of_isImplementationOn`.
+* `MPSPreparation.MeasurementRound.IsImplementationOn.exists_mem_outputs`,
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`,
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`.
 
 ## References
 
@@ -236,22 +241,59 @@ theorem IsImplementationOn.exists_mem_outputs {R : MeasurementRound d N}
   obtain ⟨u, hu, rfl⟩ := mem_outputs_smul c hm
   exact ⟨c, u, hu, rfl⟩
 
-/-- **Preparation from two implementing rounds.** If `R₁` implements `W₁` on `E₁`, `R₂` implements
-`W₂` on `E₂`, the product vector `π` lies in `E₁`, `W₁ π` lies in `E₂`, and `W₂ W₁ π = ψ`, then `ψ`
-is prepared with measurement rounds in depth `depth R₁ + depth R₂`. -/
-theorem isPreparedWithMeasurementRoundsInDepth_of_isImplementationOn
-    {R₁ R₂ : MeasurementRound d N} {E₁ E₂ : Set (Cfg d N → ℂ)}
-    {W₁ W₂ : Matrix (Cfg d N) (Cfg d N) ℂ} (h₁ : R₁.IsImplementationOn E₁ W₁)
-    (h₂ : R₂.IsImplementationOn E₂ W₂) {v : Fin N → Fin d → ℂ} (hv : productVector v ≠ 0)
-    (hv₁ : productVector v ∈ E₁) (hv₂ : W₁ *ᵥ productVector v ∈ E₂) {ψ : Cfg d N → ℂ}
-    (hψ : W₂ *ᵥ (W₁ *ᵥ productVector v) = ψ) :
-    IsPreparedWithMeasurementRoundsInDepth (R₁.depth + R₂.depth) ψ := by
-  refine ⟨v, [R₁, R₂], by simp, hv, fun w hw _ => ?_⟩
-  obtain ⟨c, u, hu, rfl⟩ := h₁.exists_mem_outputs hv₁ hw
-  obtain ⟨c', u', hu', rfl⟩ := h₂.exists_mem_outputs hv₂ hu
-  rw [outputs_nil, Set.mem_singleton_iff] at hu'
-  subst hu'
-  exact ⟨c * c', by rw [hψ, smul_smul]⟩
+/-! ### Sequences of rounds implementing a matrix -/
+
+theorem mem_outputs_append {Rs Rs' : List (MeasurementRound d N)} {v w : Cfg d N → ℂ} :
+    w ∈ outputs (Rs ++ Rs') v ↔ ∃ u ∈ outputs Rs v, w ∈ outputs Rs' u := by
+  induction Rs generalizing v with
+  | nil => simp
+  | cons R Rs ih =>
+    simp only [List.cons_append, R.mem_outputs_cons, ih]
+    exact ⟨fun ⟨m, u, hu, hw⟩ => ⟨u, ⟨m, hu⟩, hw⟩, fun ⟨u, ⟨m, hu⟩, hw⟩ => ⟨m, u, hu, hw⟩⟩
+
+/-- The sequence of rounds `Rs` *implements* the matrix `W` on the set `E` of vectors when, for
+every `v ∈ E`, every output of `Rs` from `v` is a scalar multiple of `W v`: whatever the
+outcomes, the rounds act on `E` as `W`, up to a scalar.
+
+Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("correcting (without
+postselection) based on the measurement outcomes"). -/
+def IsRoundsImplementationOn (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ))
+    (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop :=
+  ∀ v ∈ E, ∀ w ∈ outputs Rs v, ∃ c : ℂ, w = c • (W *ᵥ v)
+
+theorem isRoundsImplementationOn_nil (E : Set (Cfg d N → ℂ)) :
+    IsRoundsImplementationOn ([] : List (MeasurementRound d N)) E 1 := by
+  intro v _ w hw
+  rw [outputs_nil, Set.mem_singleton_iff] at hw
+  exact ⟨1, by rw [hw, one_mulVec, one_smul]⟩
+
+theorem IsRoundsImplementationOn.mono {Rs : List (MeasurementRound d N)}
+    {E E' : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (h : IsRoundsImplementationOn Rs E W) (hE : E' ⊆ E) : IsRoundsImplementationOn Rs E' W :=
+  fun v hv => h v (hE hv)
+
+/-- **Implementations compose.** If `Rs` implements `W` on `E`, `W` maps `E` into `E'`, and
+`Rs'` implements `W'` on `E'`, then `Rs` followed by `Rs'` implements `W' W` on `E`. -/
+theorem IsRoundsImplementationOn.append {Rs Rs' : List (MeasurementRound d N)}
+    {E E' : Set (Cfg d N → ℂ)} {W W' : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (h : IsRoundsImplementationOn Rs E W) (h' : IsRoundsImplementationOn Rs' E' W')
+    (hE : ∀ v ∈ E, W *ᵥ v ∈ E') : IsRoundsImplementationOn (Rs ++ Rs') E (W' * W) := by
+  intro v hv w hw
+  obtain ⟨u, hu, hw⟩ := mem_outputs_append.mp hw
+  obtain ⟨c, rfl⟩ := h v hv u hu
+  obtain ⟨w', hw', rfl⟩ := mem_outputs_smul c hw
+  obtain ⟨c', rfl⟩ := h' _ (hE v hv) w' hw'
+  exact ⟨c * c', by rw [smul_smul, mulVec_mulVec]⟩
+
+/-- **Preparation from an implementation.** If `Rs` implements `W` on `E` and the nonzero
+product vector `π` lies in `E`, then `W π` is prepared with measurement rounds in the total
+depth of `Rs`. -/
+theorem IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth
+    {Rs : List (MeasurementRound d N)} {E : Set (Cfg d N → ℂ)}
+    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (h : IsRoundsImplementationOn Rs E W)
+    {v : Fin N → Fin d → ℂ} (hv : productVector v ≠ 0) (hvE : productVector v ∈ E) :
+    IsPreparedWithMeasurementRoundsInDepth (Rs.map depth).sum (W *ᵥ productVector v) :=
+  ⟨v, Rs, le_rfl, hv, fun w hw _ => h _ hvE w hw⟩
 
 end MeasurementRound
 
