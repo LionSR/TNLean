@@ -177,10 +177,17 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply the unit-phase map $z\mapsto z/|z|$ to a coboundary witness $\lambda$ of
-    $\omega_1\sim\omega_0$.  It is multiplicative, so it carries the coboundary
-    identity to the pointwise phases, and multiplication by a
-    unit-modulus scalar preserves unitarity.
+    Let $\lambda$ witness $\omega_1\sim\omega_0$, so that
+    $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$, and put
+    $\psi_g=\lambda_g/|\lambda_g|$.  The unit-phase map $z\mapsto z/|z|$ is
+    multiplicative, so
+    \begin{align}
+        \frac{\omega_1(g,h)}{|\omega_1(g,h)|}
+         & =\psi_g\psi_h\psi_{gh}^{-1}\,\frac{\omega_0(g,h)}{|\omega_0(g,h)|}.
+        \notag
+    \end{align}
+    Hence $\psi_gV_g^0$ has factor system $\omega_1/|\omega_1|$, and multiplication
+    by a unit-modulus scalar preserves unitarity.
 \end{proof}
 
 \begin{definition}[Direct sum with a common factor system]
@@ -238,11 +245,27 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \begin{proof}\leanok
     Each $\det V_\gamma(g)$ is a continuous nonzero complex path, so it
     has a continuous $D$th root $\beta_\gamma(g)$ on the interval.
-    Dividing $V_\gamma(g)$ by this root gives determinant-one matrices.
-    Their factor system has $D$th power one and depends continuously on
-    $\gamma$, hence is constant. The endpoint factors therefore differ
-    by the coboundary of
-    $g\mapsto\beta_1(g)/\beta_0(g)$.
+    Taking determinants in $V_\gamma(g)V_\gamma(h)=\omega_\gamma(g,h)V_\gamma(gh)$
+    gives $\beta_\gamma(g)^D\beta_\gamma(h)^D=\omega_\gamma(g,h)^D\beta_\gamma(gh)^D$,
+    so the rescaled factor system
+    \begin{align}
+        \eta_\gamma(g,h)
+         & =\omega_\gamma(g,h)\,\frac{\beta_\gamma(gh)}{\beta_\gamma(g)\beta_\gamma(h)}
+         &
+        \eta_\gamma(g,h)^D
+         & =1
+        \notag
+    \end{align}
+    takes values among the $D$th roots of unity.  It depends continuously on
+    $\gamma$, hence is constant, and $\eta_0=\eta_1$ reads
+    \begin{align}
+        \omega_1(g,h)
+         & =\psi(g)\psi(h)\psi(gh)^{-1}\omega_0(g,h),
+         &
+        \psi(g)
+         & =\beta_1(g)/\beta_0(g).
+        \notag
+    \end{align}
 \end{proof}
 
 \subsection{Renormalization fixed points of SPT phases}
@@ -351,7 +374,8 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:spt_fixed_point_class}
+    \uses{thm:spt_fixed_point_class, thm:mpug_twisted_regular_multiplication,
+        thm:mpug_twisted_regular_unitary, thm:mpug_circle_complex_units_h2}
     Let $\bar\omega=\omega/|\omega|$ be the pointwise phase of $\omega$, which is
     cohomologous to $\omega$ because $G$ is finite.
     The twisted left regular matrices $L_g$ of the inverse cocycle
