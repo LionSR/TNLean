@@ -1402,6 +1402,31 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** only permutations of the computational basis are covered; a
   general gate is a `MPSPreparation.Layer` gate.
 
+## Inhomogeneous short-range correlated chains
+
+### `MPSPreparation.IsPairApproximable`
+
+- **Declaration:**
+  `MPSPreparation.IsPairApproximable (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) (δ : ℝ) : Prop`,
+  for a ring of `N` sites cut into `M` blocks of lengths `ℓ`.
+- **Defined in:** `TNLean/MPS/Preparation/InhomogeneousPreparation.lean`.
+- **Meaning:** there are unit vectors `ω^k` on `ℂ^D ⊗ ℂ^D` whose product
+  `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error `1 - |⟨Ω|φ_pos⟩| ≤ δ` against the
+  normalized state `|φ_pos⟩` of the positive parts of the polar decompositions
+  of the blocked tensors.
+- **Source:** arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated
+  MPS" (finite correlation length of a sequence of states), for one member of
+  the sequence.
+- **Sanctioned bridges:**
+  `MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` (preparation
+  in depth at most `C L` with error at most `δ` against the normalized state of
+  the chain, when the blocked tensors are injective and the block lengths lie
+  between `3D` and `L`).
+- **Caveat:** the source's condition is asymptotic, an error tending to `0` as
+  `N → ∞` after blocking `q = O(log N)` sites; the predicate fixes one ring and
+  one cutting into blocks. Every bond has the same dimension `D`; see
+  `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`

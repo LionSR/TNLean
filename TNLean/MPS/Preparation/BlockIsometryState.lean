@@ -180,24 +180,6 @@ theorem sum_star_blockIsometryState (A : MPSTensor d D) (ω : Fin D × Fin D →
     ← pairProductState_norm_sq (N := M) ω]
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _ fun _ => rfl
 
-/-- For a unit vector `ω` and injective blocked tensors, `(⊗ₖ V_k) ⊗ₖ |ω⟩` is a unit vector. -/
-theorem norm_blockIsometryState (A : MPSTensor d D) {ω : Fin D × Fin D → ℂ}
-    (hω : ∑ p, star (ω p) * ω p = 1) {N : ℕ} {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N)
-    (hB : ∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) :
-    ‖blockIsometryState A ω hN‖ = 1 := by
-  have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (blockIsometryState A ω hN)).symm
-  rw [PiLp.inner_apply] at h
-  simp only [RCLike.inner_apply] at h
-  refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (Complex.ofReal_injective ?_)
-  push_cast
-  refine h.trans ?_
-  have hsum := sum_star_blockIsometryState A ω hN hB
-  rw [hω, one_pow] at hsum
-  rw [← hsum]
-  refine Finset.sum_congr rfl fun _ _ => ?_
-  rw [mul_comm]
-  rfl
-
 /-- **Overlap with the periodic state.** If every blocked tensor is injective, the overlap of
 `(⊗ₖ V_k) ⊗ₖ |ω⟩`, with `ω` the pair of the fixed point, with the periodic state of `A` is the
 trace of the ordered product of the mixed transfer matrices `τ_k` of the positive parts `P_k`
@@ -265,29 +247,6 @@ theorem coeff_eq_mpvFamily_chainBlockTensor {N : ℕ} {ℓ : Fin M → ℕ} (A :
   refine List.ofFn_inj.mpr (funext fun k => ?_)
   rw [blockIndexEquiv_apply, chainBlockTensor, MPSChainTensor.blockTensor_decodeBlockEquiv_symm,
     MPSChainTensor.eval_eq_prod_ofFn]
-  rfl
-
-/-- The product `⊗ₖ |ω^k⟩_{R_k L_{k+1}}` of site-dependent pairs on a ring of `N` sites: the pair
-`ω^k` joins the right space of site `k` to the left space of site `k + 1`, cyclically.
-
-arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS":
-`|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}`. -/
-def pairFamilyState {N : ℕ} (ω : Fin N → Fin D × Fin D → ℂ) (c : Fin N → Fin D × Fin D) : ℂ :=
-  ∏ k : Fin N, ω k ((c k).2, (c (finRotate N k)).1)
-
-/-- Equal pairs on every bond give the pair product state. -/
-theorem pairFamilyState_const {N : ℕ} (ω : Fin D × Fin D → ℂ) :
-    pairFamilyState (N := N) (fun _ => ω) = pairProductState ω := rfl
-
-/-- The norm of a product of pairs is the product of the norms of the pairs:
-`⟨Ω|Ω⟩ = ∏ₖ ⟨ω^k|ω^k⟩`. -/
-theorem pairFamilyState_norm_sq {N : ℕ} (ω : Fin N → Fin D × Fin D → ℂ) :
-    ∑ c : Fin N → Fin D × Fin D, star (pairFamilyState ω c) * pairFamilyState ω c =
-      ∏ k, ∑ p, star (ω k p) * ω k p := by
-  rw [Fintype.prod_sum,
-    ← (bondRegrouping N D).sum_comp (fun x => ∏ i, star (ω i (x i)) * ω i (x i))]
-  refine Finset.sum_congr rfl fun c _ => ?_
-  rw [pairFamilyState, star_prod, ← Finset.prod_mul_distrib]
   rfl
 
 /-- The product of site-dependent pairs as a vector on `M` sites of dimension `D²`, the site `k`
@@ -386,5 +345,14 @@ theorem blockIsometryState_eq_chainBlockIsometryState (A : MPSTensor d D)
     blockIsometryState A ω hN = chainBlockIsometryState (fun _ => A) (fun _ => ω) hN := by
   ext s
   simp [chainBlockTensor_const, pairFamilyState_const]
+
+/-- For a unit vector `ω` and injective blocked tensors, `(⊗ₖ V_k) ⊗ₖ |ω⟩` is a unit vector. -/
+theorem norm_blockIsometryState (A : MPSTensor d D) {ω : Fin D × Fin D → ℂ}
+    (hω : ∑ p, star (ω p) * ω p = 1) {N : ℕ} {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N)
+    (hB : ∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) :
+    ‖blockIsometryState A ω hN‖ = 1 := by
+  rw [blockIsometryState_eq_chainBlockIsometryState, chainBlockIsometryState,
+    norm_blockIsoVector hN (fun k => by rw [chainBlockTensor_const]; exact hB k),
+    norm_pairFamilyVector fun _ => hω]
 
 end MPSTensor

@@ -21,11 +21,12 @@ of the next. At a fixed ring this is the statement that the error `ε(Ω, φ_pos
 for some unit pairs (`MPSPreparation.IsPairApproximable`). The state `(⊗ₖ V_k) |Ω⟩` is prepared
 in depth at most `C L` for blocks of lengths at most `L`, with `C` depending only on `d` and
 `D`, and when every blocked tensor is injective its error against `|φ_N⟩` is exactly
-`ε(Ω, φ_pos)` (`MPSPreparation.exists_isPreparedInDepth_inhomogeneous`). Blocks of length
-`q = O(log N)` then give depth `O(log N)`.
+`ε(Ω, φ_pos)` (`MPSPreparation.exists_isPreparedInDepth_inhomogeneous`). The source states a
+total depth `O(log(N/ε))`; the bound `C L` gives this depth when `L = O(log(N/ε))`. Neither the
+choice of the block lengths nor the asymptotic statement is formalized here.
 
 The error is `ε(φ, ψ) = 1 - |⟨φ|ψ⟩|` of normalized vectors, as displayed in arXiv:2307.01696,
-paragraph "The algorithm".
+paragraph "Preliminaries".
 
 **Scope restriction (common bond dimension):** the source takes a sequence of matrix product
 states "with bond dimension at most `D`", which allows the bond dimension to vary along the
@@ -153,8 +154,10 @@ its error against the normalized state `|φ_N⟩` of the chain is the error of `
 `|φ_pos⟩`: `ε(ψ, φ_N) = ε(Ω, φ_pos)`.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": "the preparation scheme
-consists of preparing `|Ω⟩` and implementing the isometry", with "error `ε(Ω, φ_pos)`"; for
-blocks of length `q = O(log N)` the depth is `O(log N)`. -/
+consists of preparing `|Ω⟩` and implementing the isometry", with "error `ε(Ω, φ_pos)`", and
+"the resulting total depth is again `O(log (N/ε))`". The bound `C L` gives this depth when
+`L = O(log(N/ε))`; the source's definition fixes `q = O(log N)`, and the choice of `L` is not
+made here. -/
 theorem exists_isPreparedInDepth_inhomogeneous (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),

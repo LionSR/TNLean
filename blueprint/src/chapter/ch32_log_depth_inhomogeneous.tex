@@ -95,7 +95,8 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
 \begin{lemma}[The isometries preserve overlaps]
     \label{lem:ldp_chain_block_iso_inner}
     \lean{MPSTensor.inner_blockIsoVector, MPSTensor.norm_blockIsoVector,
-        MPSTensor.pairFamilyState_norm_sq, MPSTensor.norm_pairFamilyVector,
+        MPSTensor.pairFamilyState_inner, MPSTensor.pairFamilyState_norm_sq,
+        MPSTensor.norm_pairFamilyVector,
         MPSPreparation.blockIsoVector_smul, MPSPreparation.norm_chainState,
         MPSPreparation.inner_chainBlockIsometryState_normalize}
     \leanok
@@ -103,8 +104,11 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     Suppose every blocked tensor $B_k$ is injective. Then
     $\langle(\bigotimes_kV_k)x,(\bigotimes_kV_k)y\rangle=\langle x,y\rangle$ for
     all vectors $x,y$ on the $M$ blocks, and
-    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$. The norm of
-    $\ket\Omega$ is $\prod_k\lVert\omega^k\rVert$. For all vectors $\omega^k$,
+    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$. For products
+    $\ket\Omega$ and $\ket{\Omega'}$ of pairs $\omega^k$ and $\omega'^k$,
+    $\langle\Omega,\Omega'\rangle=\prod_k\langle\omega^k,\omega'^k\rangle$; in
+    particular the norm of $\ket\Omega$ is $\prod_k\lVert\omega^k\rVert$.
+    For all vectors $\omega^k$,
     \begin{align}
         \Bigl\langle\Bigl(\bigotimes_kV_k\Bigr)\Omega,
         \frac{\phi_N}{\lVert\phi_N\rVert}\Bigr\rangle
@@ -193,10 +197,12 @@ in~\cite{gap:mswc24_inhomogeneous_scope}.
     pairs with error $\delta$ on the given blocks, some unit vector prepared in
     depth at most $CL$ has error at most $\delta$ against the normalized state
     $\ket{\phi_N}$. This is the claim of the paragraph ``Inhomogeneous
-    short-range correlated MPS'' of~\cite{Malz2024Preparation} for one ring:
-    blocks of length $q=O(\log N)$ give depth $O(\log N)$ with error
-    $\varepsilon(\Omega,\phi_{\mathrm{pos}})$. The choice of $q$ in terms of
-    $N$ and the error is not made here.
+    short-range correlated MPS'' of~\cite{Malz2024Preparation} for one ring,
+    which states total depth $O(\log(N/\varepsilon))$ with error
+    $\varepsilon(\Omega,\phi_{\mathrm{pos}})$. The bound $CL$ gives this
+    depth when $L=O(\log(N/\varepsilon))$; the source's definition fixes
+    blocks of length $q=O(\log N)$. The choice of $L$ in terms of $N$ and the
+    error is not made here.
 \end{theorem}
 \begin{proof}
     \leanok

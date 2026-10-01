@@ -38,9 +38,11 @@ things.
           $V_k$ satisfies $V_k^\dagger V_k=\Id_{D^2}$. The source makes this
           assumption for its polar decompositions in the footnote to the
           paragraph ``Approximation through the fixed-point state'' and uses it
-          silently here: the error of $(\bigotimes_kV_k)\ket\Omega$ against
-          $\ket{\phi_N}$ equals $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ only
-          when the $V_k$ are isometries.
+          silently here: the identity between the error of
+          $(\bigotimes_kV_k)\ket\Omega$ against $\ket{\phi_N}$ and
+          $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ is proved when the $V_k$
+          are isometries; for partial isometries the projections $\Pi_k$
+          enter.
     \item Every block has at least $3D$ sites, which the circuit needs to encode
           the two bond indices of a block and run the staircase between them.
           For $q=O(\log N)$ growing with $N$ this holds for large $N$.
@@ -50,7 +52,9 @@ $\omega^k$ have $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta$. The formal
 statements prove depth at most $CL$ for blocks of lengths at most $L$, with $C$
 depending only on $d$ and $D$, and error exactly
 $\varepsilon(\Omega,\phi_{\mathrm{pos}})$, hence at most $\delta$. The source's
-$O(\log(N/\varepsilon))$ is the choice $L=O(\log N)$, which is not made here.
+total depth $O(\log(N/\varepsilon))$ is the choice $L=O(\log(N/\varepsilon))$,
+which is not made here; the source's definition fixes blocks of length
+$q=O(\log N)$.
 
 \section{Elimination}
 \begin{enumerate}
