@@ -3,8 +3,9 @@
 %% Source: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), Supplemental
 %% Material, "Proof of Lemma 1 and extension to non-normal tensors",
 %% eqs. (S2)-(S12) and Lemma 1'(ii).
-%% False source: with weights that are not nonnegative reals, the coefficients
-%% beta_j = mu_j^N of eq. (S4) count the phase of the weight twice;
+%% False source (eqs. (S5)-(S7)): with weights that are not nonnegative reals, the
+%% coefficients beta_j = mu_j^N of eq. (S4), correct in eq. (S3), count the phase of
+%% the weight twice in eqs. (S6) and (S7);
 %% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
 %% ==================================================
 
@@ -14,9 +15,11 @@ The positive part of the blocked map is positive semidefinite, so it cannot carr
 the phases of the weights, as the block form
 \cite[eq.~(S5)]{Malz2024Preparation} asserts. For blocks of multiplicity one the
 phases sit in the isometry $V$, which already gives the $j$-th block the phase
-$(\mu_j/\lvert\mu_j\rvert)^N$ on $N=qM$ sites. With the coefficients
-$\beta_j=\mu_j^N$ of \cite[eq.~(S4)]{Malz2024Preparation} this phase is counted
-twice, and the approximating state does not converge
+$(\mu_j/\lvert\mu_j\rvert)^N$ on $N=qM$ sites. The coefficients
+$\beta_j=\mu_j^N$ of \cite[eq.~(S4)]{Malz2024Preparation} are correct in the
+expansion \cite[eq.~(S3)]{Malz2024Preparation} of $\ket{\phi_N}$, but under
+$V^{\otimes M}$ in \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} they count this
+phase twice, and the approximating state does not converge
 (Theorem~\ref{thm:ldp_approximation_error_phase_weights}). With
 $\beta_j=\lvert\mu_j\rvert^N$ it converges at the rate of
 Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
@@ -46,13 +49,16 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
         MPSTensor.phaseBlockDiag, MPSTensor.phaseBlockWeight,
         MPSTensor.ghzAmplitude_one_vec, MPSTensor.polarPos_phaseBlockTensor,
         MPSTensor.polarSupport_phaseBlockTensor, MPSTensor.coeff_phaseBlockSector,
-        MPSTensor.hasBNTSectorData_phaseBlockSector, MPSTensor.phaseBlockCopyCoord,
+        MPSTensor.repeatedBlockBasisSector,
+        MPSTensor.hasBNTSectorData_repeatedBlockBasisSector,
+        MPSTensor.isBNTCanonicalForm_repeatedBlockBasisSector,
+        MPSTensor.phaseBlockCopyCoord,
         MPSTensor.totalDim_phaseBlockSector, MPSTensor.bijective_phaseBlockCopyCoord,
         MPSTensor.phaseBlockEquiv, MPSTensor.phaseBlockEquiv_symm_apply}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
         def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
-        def:cpsv_cfii, thm:ldp_approximation_error_overlapping_blocks}
+        def:cpsv_cfii}
     Let $\mu\in\C$ with $\lvert\mu\rvert=1$, and let $A^0=\operatorname{diag}(1,0)$
     and $A^1=\operatorname{diag}(0,\mu)$, the direct sum $A_1\oplus\mu A_2$ of the
     one-dimensional normal blocks $A_1=(1,0)$ and $A_2=(0,1)$, each of multiplicity
@@ -92,7 +98,10 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
     Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}: both blocks are
     one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, their states $\ket{0\cdots0}$
     and $\ket{1\cdots1}$ are linearly independent for $N\geq1$, and
-    $A_1^1=0\neq A_2^1$.
+    $A_1^1=0\neq A_2^1$. These checks hold for the blocks $A_1$ and $A_2$ with any
+    multiplicities and any nonzero weights $\lvert\mu_{j,k}\rvert\leq1$, one of modulus
+    one, and are shared with
+    Theorem~\ref{thm:ldp_approximation_error_repeated_block}.
 
     For $q\geq1$ the Gram matrix of the blocked map on the diagonal coordinates is the
     identity, since $\lvert\mu\rvert^{2q}=1$ and the off-diagonal entries are
@@ -109,8 +118,9 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
     $r=e^{-\gamma/\xi_{\mathrm{diag}}}<1$ is eventually below one.
 \end{proof}
 
-% **False source (eq. (S4), complex weights):** beta_j = |mu_j|^N in place of
-% mu_j^N; Local fix of the rate as in thm:ldp_approximation_error_overlapping_weights;
+% **False source (eqs. (S5)-(S7), complex weights):** beta_j = |mu_j|^N in place
+% of the coefficients mu_j^N that eqs. (S6) and (S7) take from eq. (S4); Local
+% fix of the rate as in thm:ldp_approximation_error_overlapping_weights;
 % docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
 \begin{theorem}[Approximation error for complex weights]
     \label{thm:ldp_approximation_error_complex_weights}
@@ -118,8 +128,7 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
         MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight,
         MPSTensor.blockSum_eq_blockSum_phase}
     \leanok
-    \uses{thm:ldp_approximation_error_overlapping_weights,
-        def:ldp_non_normal_fixed_point, def:correlation_length}
+    \uses{def:ldp_non_normal_fixed_point, def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with complex weights
     $\lvert\mu_j\rvert\leq1$, at least one of modulus one, of normal blocks $A_j$ in the
     gauge (\ref{eq:ldp_normal_gauge}), with positive definite fixed points $\rho_j$ of
@@ -137,8 +146,9 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
         \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
     \end{align*}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one,
-    with $\beta_j=\lvert\mu_j\rvert^N$ in place of the $\beta_j=\mu_j^N$ of
-    \cite[eq.~(S4)]{Malz2024Preparation} and with $\xi_{\mathrm{diag}}$ replaced by
+    with $\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\beta_j=\mu_j^N$
+    that \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} take from
+    \cite[eq.~(S4)]{Malz2024Preparation}, and with $\xi_{\mathrm{diag}}$ replaced by
     $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$. With $\beta_j=\mu_j^N$
     the bound is false (Theorem~\ref{thm:ldp_approximation_error_phase_weights})
     \cite{gap:mswc24_block_form_mixed_overlap}.
@@ -146,6 +156,7 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
 
 \begin{proof}
     \leanok
+    \uses{thm:ldp_approximation_error_overlapping_weights}
     Let $u_j=e^{i\arg\mu_j}$, so that $\mu_j=\lvert\mu_j\rvert u_j$ and
     $\lvert u_j\rvert=1$. Then
     $\bigoplus_j\mu_jA_j=\bigoplus_j\lvert\mu_j\rvert(u_jA_j)$. The blocks $u_jA_j$ are

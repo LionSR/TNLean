@@ -33,9 +33,12 @@ transfer map and fixed point, while the mixed transfer maps are multiplied by th
 replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented in
 `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
-**False source (eq. (S4), complex weights):** for a weight that is not a nonnegative real number
-the coefficient `βⱼ = μⱼ^N` of eq. (S4) is replaced by `|μⱼ|^N`; every block occurs once.
-Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+**False source (eqs. (S5)–(S7), complex weights):** for a weight that is not a nonnegative real
+number the block form of eq. (S5) places the phase in the positive part, and eqs. (S6) and (S7)
+take the coefficients `βⱼ = μⱼ^N` of eq. (S4) under `V^{⊗M}`, which already carries the phase.
+These coefficients are correct in the expansion of eq. (S3); in the approximating state of
+eq. (S7) they are replaced by `|μⱼ|^N`. Every block occurs once. Documented in
+`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
 
@@ -83,17 +86,17 @@ private theorem hasEigenvalue_of_hasEigenvalue_smul {V : Type*} [AddCommGroup V]
 
 /-- **Approximation error for overlapping blocks with complex weights** (arXiv:2307.01696,
 Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate, with the coefficients
-`βⱼ = |μⱼ|^N` in place of the `μⱼ^N` of eq. (S4)). Let `Aⁱ = ⊕ⱼ μⱼ A_jⁱ` be the direct sum with
-complex weights `|μⱼ| ≤ 1`, at least one of modulus one (the normalization of the source, after
-eq. (S2)), of blocks placed on the bond coordinates `ι_j`. Let every block `A_j` be normal in
-the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1` (eq. (5)), let
-`λ₂` bound the moduli of the eigenvalues other than `1` of every transfer map `E_{A_j}` and the
-moduli of all eigenvalues of the mixed transfer maps `E_{jj'}(X) = ∑ᵢ A_jⁱ X (A_{j'}ⁱ)†` of
-distinct blocks, so that `ξ = -1/log|λ₂|` bounds `ξ_diag` and `ξ_off-diag`, and let
-`0 < γ < 1/2`. There is `C > 0` such that for every block length `q` and every number of blocks
-`M ≥ 1`, with `N = qM`, the coefficients `βⱼ = |μⱼ|^N`, the pairs of the `σ_j` embedded along
-`ι_j`, and `y = M e^{-γ q/ξ}`, the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating state of
-eq. (S7) satisfies `ε ≤ C y e^{C y}`.
+`βⱼ = |μⱼ|^N` in place of the coefficients `μⱼ^N` that eqs. (S6) and (S7) take from eq. (S4)). Let
+`Aⁱ = ⊕ⱼ μⱼ A_jⁱ` be the direct sum with complex weights `|μⱼ| ≤ 1`, at least one of modulus one
+(the normalization of the source, after eq. (S2)), of blocks placed on the bond coordinates `ι_j`.
+Let every block `A_j` be normal in the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`,
+`Tr σ_j = 1` (eq. (5)), let `λ₂` bound the moduli of the eigenvalues other than `1` of every
+transfer map `E_{A_j}` and the moduli of all eigenvalues of the mixed transfer maps
+`E_{jj'}(X) = ∑ᵢ A_jⁱ X (A_{j'}ⁱ)†` of distinct blocks, so that `ξ = -1/log|λ₂|` bounds `ξ_diag` and
+`ξ_off-diag`, and let `0 < γ < 1/2`. There is `C > 0` such that for every block length `q` and every
+number of blocks `M ≥ 1`, with `N = qM`, the coefficients `βⱼ = |μⱼ|^N`, the pairs of the `σ_j`
+embedded along `ι_j`, and `y = M e^{-γ q/ξ}`, the error `ε = 1 - |⟨φ~_N|φ_N⟩|` of the approximating
+state of eq. (S7) satisfies `ε ≤ C y e^{C y}`.
 
 The proof applies `exists_approximationError_le_overlappingBlockSum_weight` to the blocks
 `uⱼ A_j`, `uⱼ = e^{i arg μⱼ}`, with the weights `|μⱼ|`. -/

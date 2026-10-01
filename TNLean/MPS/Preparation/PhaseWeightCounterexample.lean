@@ -39,10 +39,13 @@ that defines `ξ_diag` holds for every `λ₂`. For `μ = -1` and every `λ₂` 
 along `q = M` odd (`N = q²`, so `q = o(N)`) the error stays `1` while
 `(N/q) e^{-γ q/ξ_diag}` tends to zero (`not_approximationError_le_phaseBlockTensor`).
 
-**False source (eq. (S4), complex weights):** for weights that are not nonnegative real numbers
-the approximating state of eq. (S7) with `βⱼ = ∑ₖ μ_{j,k}^N` does not approximate `|φ_N⟩`, and
-the bound of Lemma 1'(ii) fails, already for orthogonal blocks of multiplicity one. Documented in
-`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+**False source (eqs. (S5)–(S7), complex weights):** for weights that are not nonnegative real
+numbers the approximating state of eq. (S7), with the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` of
+eq. (S4), does not approximate `|φ_N⟩`, and the bound of Lemma 1'(ii) fails, already for
+orthogonal blocks of multiplicity one. The coefficients of eq. (S4) are correct in the expansion
+of eq. (S3); the false steps are the block form of eq. (S5), which places the phase in the
+positive part, and its use in eqs. (S6) and (S7), where `V^{⊗M}` already carries the phase.
+Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
 
@@ -254,68 +257,29 @@ theorem not_approximationError_le_phaseBlockTensor {lam₂ : ℂ} (h0 : 0 < ‖l
 /-- The canonical form of arXiv:2307.01696, eq. (S2), of `phaseBlockTensor μ` for `μ ≠ 0`: the
 basis of the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, each of
 multiplicity one, with weights `μ_{1,1} = 1` and `μ_{2,1} = μ`. -/
-abbrev phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) : SectorDecomposition 2 where
-  basisCount := 2
-  basisDim := fun _ => 1
-  basis := repeatedBlockBasis
-  sectors :=
-    { copies := fun _ => 1
-      copies_pos := fun _ => Nat.one_pos
-      weight := phaseBlockWeight μ
-      weight_ne_zero := fun j _ => by
-        fin_cases j
-        · exact one_ne_zero
-        · exact hμ }
+abbrev phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) : SectorDecomposition 2 :=
+  repeatedBlockBasisSector (fun _ => 1) (fun _ => Nat.one_pos) (phaseBlockWeight μ)
+    (fun j _ => by
+      fin_cases j
+      · exact one_ne_zero
+      · exact hμ)
 
 /-- The coefficients `βⱼ = ∑ₖ μ_{j,k}^N` of the canonical form (arXiv:2307.01696, eq. (S4)). -/
 theorem coeff_phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) (N : ℕ) :
     (phaseBlockSector hμ).coeff N = bntWeight (m := fun _ => 1) (phaseBlockWeight μ) N :=
   rfl
 
-/-- The states `|0⋯0⟩` and `|1⋯1⟩` of the two blocks are linearly independent on every ring of
-`N ≥ 1` sites. This is the basis-of-normal-tensors property of arXiv:2307.01696, eq. (S2). -/
-theorem hasBNTSectorData_phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) :
-    HasBNTSectorData (phaseBlockSector hμ) := by
-  refine ⟨0, fun N hN => ?_⟩
-  rw [Fintype.linearIndependent_iff]
-  intro g hg
-  have hval : ∀ i : Fin 2, ∑ j : Fin 2, g j * repeatedBlockBasis j i 0 0 ^ N = 0 := fun i => by
-    have := congrArg (fun v => v (fun _ : Fin N => i)) hg
-    simpa [-mpv_eq, mpv_of_dim_one, Fin.sum_univ_two] using this
-  have h0 : g 0 = 0 := by
-    simpa [Fin.sum_univ_two, repeatedBlockBasis, zero_pow hN.ne'] using hval 0
-  have h1 : g 1 = 0 := by
-    simpa [Fin.sum_univ_two, repeatedBlockBasis, zero_pow hN.ne'] using hval 1
-  intro j
-  fin_cases j
-  · exact h0
-  · exact h1
-
 /-- **The canonical form of `phaseBlockTensor μ` is a basis of normal tensors** for `|μ| = 1`
 (arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
 self-overlap, their states are linearly independent, they are not related by a gauge
 transformation and a phase, and the weights `1` and `μ` have modulus one. -/
 theorem isBNTCanonicalForm_phaseBlockSector {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    IsBNTCanonicalForm (phaseBlockSector (norm_ne_zero_iff.1 (hμ.trans_ne one_ne_zero))) where
-  basis_dim_pos := fun _ => Nat.one_pos
-  basis_irreducible := fun j => isIrreducibleTensor_of_bondDim_one (repeatedBlockBasis j)
-  basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (repeatedBlockBasis_norm j)
-  basis_normalized_self_overlap := fun j =>
-    tendsto_mpvOverlap_self_of_dim_one _ (repeatedBlockBasis_norm j)
-  bnt_data := hasBNTSectorData_phaseBlockSector _
-  basis_distinct := fun j k hjk h => by
-    have hc : cast (congr_arg (MPSTensor 2) h)
-        ((phaseBlockSector (norm_ne_zero_iff.1 (hμ.trans_ne one_ne_zero))).basis j) =
-        repeatedBlockBasis j :=
-      cast_eq _ _
-    rw [hc]
-    refine not_gaugePhaseEquiv_of_dim_one 1 ?_
-    fin_cases j <;> fin_cases k <;> simp_all [repeatedBlockBasis]
-  weight_norm_le_one := fun j _ => by
-    change ‖(![1, μ] : Fin 2 → ℂ) j‖ ≤ 1
-    fin_cases j <;> simp [hμ]
-  weight_unit_exists := ⟨(0 : Fin 2), ⟨0, Nat.one_pos⟩, by
-    change ‖(![1, μ] : Fin 2 → ℂ) 0‖ = 1; simp⟩
+    IsBNTCanonicalForm (phaseBlockSector (norm_ne_zero_iff.1 (hμ.trans_ne one_ne_zero))) :=
+  isBNTCanonicalForm_repeatedBlockBasisSector _ _ _ _
+    (fun j _ => by
+      change ‖(![1, μ] : Fin 2 → ℂ) j‖ ≤ 1
+      fin_cases j <;> simp [hμ])
+    ⟨(0 : Fin 2), ⟨0, Nat.one_pos⟩, by change ‖(![1, μ] : Fin 2 → ℂ) 0‖ = 1; simp⟩
 
 /-- The bond coordinates of the two blocks in the canonical form. -/
 noncomputable def phaseBlockCopyCoord {μ : ℂ} (hμ : μ ≠ 0) :

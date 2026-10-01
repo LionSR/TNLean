@@ -209,11 +209,13 @@ the target. For the random blocks of the numerical check below with $\mu=(1,e^{0
 $M=8$, the error with $\beta_j=\mu_j^N$ is $0.794$, $0.191$, $0.301$ at $q=4,8,12$, against
 $0.355$, $6.53\cdot10^{-2}$, $1.47\cdot10^{-2}$ with $\beta_j=\lvert\mu_j\rvert^N$. The printed
 form $\beta_j=\mu_j^N$ is consistent with the block form (\ref{eq:mswc24_mixed_block_form}),
-which assigns the phase to $P$; since $P$ is positive semidefinite, the reading with
-$\beta_j=\lvert\mu_j\rvert^N$, that is, with the phases absorbed into the blocks, is the one
-adopted here.
+which assigns the phase to $P$; since $P$ is positive semidefinite, the printed coefficients are
+wrong in (S6) and (S7) (Section~\ref{sec:mswc24_phase_counterexample}), and
+$\beta_j=\lvert\mu_j\rvert^N$ is used, with the phases absorbed into the blocks. The
+coefficients $\beta_j=\mu_j^N$ of (S4) remain correct in the expansion (S3) of
+$\ket{\phi_N}$.
 
-\section{The phase of a weight: a counterexample}
+\section{The phase of a weight: a counterexample}\label{sec:mswc24_phase_counterexample}
 The doubled phase is a separate failure of (S7), which occurs already for orthogonal blocks of
 multiplicity one. Take $d=2$, the one-dimensional normal blocks $A_1=(1,0)$ and $A_2=(0,1)$, each
 of multiplicity one, with weights $1$ and $\mu$, $\lvert\mu\rvert=1$, so that
@@ -381,8 +383,9 @@ weights, and corrects the rate: it
 is (\ref{eq:mswc24_mixed_corrected}), with the correlation lengths of the mixed
 transfer matrices included in $\xi$. It is formalized for multiplicity one and complex
 weights $\lvert\mu_j\rvert\leq1$ with $\max_j\lvert\mu_j\rvert=1$, with
-$\beta_j=\lvert\mu_j\rvert^N$ in place of the $\mu_j^N$ of (S4), which the counterexample
-(\ref{eq:mswc24_phase_overlap}) refutes. Two extensions are not formalized: blocks with
+$\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\mu_j^N$ that (S6) and (S7) take
+from (S4); with those coefficients the counterexample (\ref{eq:mswc24_phase_overlap}) refutes
+(S7). Two extensions are not formalized: blocks with
 multiplicity combined with overlaps, where the corrected state of
 \cite{gap:mswc24_repeated_block_corrected_state} would replace (S7); and the sharp rate
 $(N/q)\tau^{2q}$, which needs a second-order perturbation bound for the square root of
