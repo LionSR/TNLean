@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexPhasePositivity
 import TNLean.MPS.MPDO.VerticalProductCornerComparison
+import TNLean.MPS.MPDO.VerticalBNTGrouping
 
 /-!
 # Positivity and unitary normalization of active product gauges
@@ -121,8 +122,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
     hSectorAct N hne
 
 /-- The scalar multiplying the blocked BNT representative in every active
-product corner is positive for an MPDO in normalized BNT-refined horizontal
-form.
+product corner is positive under the two-site product inputs.
 
 Source: CPSV16, Appendix C.4, lines 2025--2029, using the sector-weight
 positivity argument from Proposition 4.13, lines 1898--1902. -/
@@ -131,7 +131,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
     {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
-    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (M : MPOTensor d D) (hInputs : HasVerticalBNTProductInputs M) (hM : IsMPDO M)
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ)
@@ -155,8 +155,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
     ?_ (U₁ := U₁) hU₁ hReconstruct₁ mult₂ hMult₂ weight₂ hWeight₂
       U₂ hU₂ hReconstruct₂ hNormal₂ j
   intro P hP
-  exact (hHorizontal.blockTwo).exists_sectorCompression_ne_zero_of_corner
-    (blockTwo M) P hP
+  exact hInputs.sectorCompressionSeparation P hP
 
 /-- Every active product gauge has scalar positive Gram matrix and becomes
 unitary after division by the square root of that scalar.
@@ -168,7 +167,7 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
     {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
-    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (M : MPOTensor d D) (hInputs : HasVerticalBNTProductInputs M) (hM : IsMPDO M)
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ)
@@ -206,7 +205,7 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
     (MPSTensor.isNormalTensor_cast_iff (C.dim_eq j) (A₂ (C.label j))).2
       (hNormal₂ (C.label j))
   have hc : (0 : ℂ) < c :=
-    C.activeCoefficient_mul_phase_pos M hHorizontal hM U₁ hU₁ hReconstruct₁
+    C.activeCoefficient_mul_phase_pos M hInputs hM U₁ hU₁ hReconstruct₁
       mult₂ hMult₂ weight₂ hWeight₂ U₂ hU₂ hReconstruct₂ hNormal₂ j
   have hc₀ : (0 : ℂ) < c₀ :=
     hWeight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩
@@ -237,8 +236,8 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
     exact (C.reference_compression M mult₂ hMult₂ weight₂ U₂ hU₂
       hReconstruct₂ j ab).symm
   have hDress :=
-    (hHorizontal.blockTwo).gramDressing_eq_of_two_grouped_corners
-      (blockTwo M) hM.blockTwo A Vact Vref (C.gauge j) 1 c c₀ hc hc₀
+    hInputs.blockedGroupingInputs.gramDressing
+      A Vact Vref (C.gauge j) 1 c c₀ hc hc₀
       hActiveCorner (by
         intro ab
         simpa using hReferenceCorner ab)
