@@ -123,6 +123,19 @@ private theorem perm_apply_mem {π : Equiv.Perm (Fin N)} {S : Set (Fin N)}
   by_contra h
   exact h (by rw [π.injective (hπ _ h)]; exact hi)
 
+
+/-- Conjugating a product by `P` with inverse `Q` conjugates every factor. -/
+private theorem mul_list_prod_mul {n : Type*} [Fintype n] [DecidableEq n]
+    {P Q : Matrix n n ℂ} (hQP : Q * P = 1) (hPQ : P * Q = 1) (l : List (Matrix n n ℂ)) :
+    P * l.prod * Q = (l.map fun X => P * X * Q).prod := by
+  induction l with
+  | nil => simpa using hPQ
+  | cons X l ih =>
+    rw [List.prod_cons, List.map_cons, List.prod_cons, ← ih]
+    calc P * (X * l.prod) * Q = P * X * (Q * P) * l.prod * Q := by
+          rw [hQP, Matrix.mul_one]; simp only [Matrix.mul_assoc]
+      _ = P * X * Q * (P * l.prod * Q) := by simp only [Matrix.mul_assoc]
+
 namespace TeleportHop
 
 theorem sitePerm_apply_of_notMem {hs : List (TeleportHop N)} {i : Fin N}
@@ -140,6 +153,13 @@ theorem mem_allSites_flatMap {ι : Type*} {l : List ι} {f : ι → List (Telepo
   simp only [mem_allSites, List.mem_flatMap]
   exact ⟨fun ⟨h, ⟨g, hg, hh⟩, hi⟩ => ⟨g, hg, h, hh, hi⟩,
     fun ⟨g, hg, h, hh, hi⟩ => ⟨h, ⟨g, hg, hh⟩, hi⟩⟩
+
+
+theorem mem_pairSites_flatMap {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
+    {i : Fin N} : i ∈ pairSites (l.flatMap f) ↔ ∃ g ∈ l, i ∈ pairSites (f g) := by
+  induction l with
+  | nil => simp [pairSites]
+  | cons g l ih => simp [List.flatMap_cons, pairSites_append, ih]
 
 theorem chainPerm_append (hs hs' : List (TeleportHop N)) :
     chainPerm (d := d) (hs ++ hs') = chainPerm hs * chainPerm hs' := by
@@ -350,6 +370,8 @@ noncomputable def localLayer : Layer d N :=
   layerOfList gs near localGate (pairwise_disjoint_bond hgs)
     (fun g _ => g.localGate_mem_unitary) fun g _ => g.localGate_mem_supportedOperators
 
+variable [NeZero d]
+
 theorem localLayer_op : (localLayer hgs).op = (gs.map localGate).prod :=
   layerOfList_op _ _ _ _ _ _
 
@@ -363,7 +385,101 @@ theorem valid_back : Valid (gs.flatMap back) :=
   valid_flatMap (fun _ _ => valid_backwardChain _ _ _) (fun g _ => g.allSites_back_subset_span)
     hgs
 
-variable [NeZero d]
+include hgs in
+/-- After the forward chains, the sites `a, …, a + 2L - 1` of every gate carry `|0⟩`. -/
+theorem isZeroOn_chainPerm_there {v : Cfg d N → ℂ} (hv : ∀ g ∈ gs, IsZeroOn g.interior v) :
+    ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) (chainPerm (gs.flatMap there) *ᵥ v) := by
+  induction gs with
+  | nil => simp
+  | cons g₀ gs ih =>
+    rw [List.pairwise_cons] at hgs
+    have hrest : ∀ g ∈ gs, IsZeroOn g.interior v := fun g hg => hv g (List.mem_cons_of_mem _ hg)
+    rw [List.flatMap_cons, chainPerm_append, ← mulVec_mulVec]
+    have hdisj : ∀ {S : Set (Fin N)}, S ⊆ g₀.span →
+        Disjoint S (allSites (gs.flatMap there)) := by
+      intro S hS
+      rw [Set.disjoint_left]
+      intro i hi hi'
+      obtain ⟨g, hg, hi'⟩ := mem_allSites_flatMap.mp hi'
+      exact Set.disjoint_left.mp (hgs.1 g hg) (hS hi) (g.allSites_there_subset_span hi')
+    intro g hg
+    rcases List.mem_cons.mp hg with rfl | hg
+    · have hw : IsZeroOn g.interior (chainPerm (gs.flatMap there) *ᵥ v) :=
+        (hv g List.mem_cons_self).chainPerm_mulVec (hdisj g.interior_subset_span)
+      refine (isZeroOn_chainPerm_forwardChain _ _ _ hw).mono fun i hi => ?_
+      obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
+      exact ⟨j, Finset.mem_range.mp hj, rfl⟩
+    · refine (ih hgs.2 hrest g hg).chainPerm_mulVec ?_
+      exact (hgs.1 g hg).symm.mono g.cleared_subset_span g₀.allSites_there_subset_span
+
+include hgs in
+/-- The gates on the neighbouring pairs keep `|0⟩` at the sites `a, …, a + 2L - 1` of every
+gate. -/
+theorem isZeroOn_localLayer {w : Cfg d N → ℂ}
+    (hw : ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) w) :
+    ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) ((localLayer hgs).op *ᵥ w) := by
+  have : Std.Symm fun g g' : LongRangeGate d N => Disjoint g.span g'.span :=
+    ⟨fun _ _ h => h.symm⟩
+  intro g hg
+  rw [localLayer_op]
+  refine (hw g hg).mulVec_of_mem_supportedOperators disjoint_compl_right
+    (list_prod_mem_supportedOperators _ fun A hA => ?_)
+  obtain ⟨g', hg', rfl⟩ := List.mem_map.mp hA
+  refine supportedOperators_mono
+    (show bond g'.near ⊆ ((g.cleared : Set (Fin N)))ᶜ from fun i hi hi' => ?_)
+    g'.localGate_mem_supportedOperators
+  by_cases hgg : g = g'
+  · subst hgg
+    exact Set.disjoint_left.mp g.disjoint_cleared_bond_near hi' hi
+  · exact Set.disjoint_left.mp (hgs.forall hg hg' hgg) (g.cleared_subset_span hi')
+      (g'.bond_near_subset_span hi)
+
+omit [NeZero d] in
+include hgs in
+/-- The backward chains invert the forward chains. -/
+theorem sitePerm_there_eq_symm :
+    sitePerm (gs.flatMap there) = (sitePerm (gs.flatMap back)).symm := by
+  refine Equiv.ext fun i => ?_
+  rw [Equiv.eq_symm_apply]
+  by_cases hi : ∃ g ∈ gs, i ∈ g.span
+  · obtain ⟨g, hg, hi⟩ := hi
+    have hmem : sitePerm g.there i ∈ g.span :=
+      perm_apply_mem (fun j hj => sitePerm_apply_of_notMem fun hj' =>
+        hj (g.allSites_there_subset_span hj')) hi
+    rw [sitePerm_flatMap_apply (fun g _ => g.allSites_there_subset_span) hgs hg hi,
+      sitePerm_flatMap_apply (fun g _ => g.allSites_back_subset_span) hgs hg hmem,
+      sitePerm_back_sitePerm_there]
+  · simp only [not_exists, not_and] at hi
+    rw [sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_there_subset_span) hi,
+      sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_back_subset_span) hi]
+
+include hgs in
+/-- **The layer conjugated by the chains.** The backward chains, the gates on the neighbouring
+pairs, and the forward chains compose to the product of the long-range gates. -/
+theorem chainPerm_back_mul_localLayer_mul_chainPerm_there :
+    chainPerm (gs.flatMap back) * (localLayer hgs).op * chainPerm (gs.flatMap there) =
+      (gs.map op).prod := by
+  set σ := sitePerm (gs.flatMap back)
+  have hPQ : (cfgPerm (d := d) σ).permMatrix ℂ * (cfgPerm σ.symm).permMatrix ℂ = 1 := by
+    rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm, show σ * σ.symm = 1 by ext; simp,
+      permMatrix_cfgPerm_one]
+  have hQP : (cfgPerm (d := d) σ.symm).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ = 1 := by
+    rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm, show σ.symm * σ = 1 by ext; simp,
+      permMatrix_cfgPerm_one]
+  rw [chainPerm_eq, chainPerm_eq, sitePerm_there_eq_symm hgs, localLayer_op,
+    mul_list_prod_mul hQP hPQ, List.map_map]
+  refine congrArg List.prod (List.map_congr_left fun g hg => ?_)
+  rw [Function.comp_apply, localGate, permMatrix_cfgPerm_mul_embedOp_mul, op]
+  have hback : ∀ {i}, i ∈ g.span → σ i = sitePerm g.back i := fun hi =>
+    sitePerm_flatMap_apply (fun g _ => g.allSites_back_subset_span) hgs hg hi
+  congr 1
+  funext t
+  fin_cases t
+  · simp only [Fin.zero_eta, Fin.isValue, Function.comp_apply, Matrix.cons_val_zero]
+    rw [hback (g.bond_near_subset_span (Or.inl rfl)), sitePerm_back_near]
+  · simp only [Fin.mk_one, Fin.isValue, Function.comp_apply, Matrix.cons_val_one,
+      Matrix.cons_val_zero]
+    rw [hback g.far_mem_span, sitePerm_back_far]
 
 /-- The two measurement rounds applying a layer of long-range gates: teleport the content of
 every near site `a` along its forward chain to `a + 2L`; then apply the gates `u` to the
@@ -378,6 +494,32 @@ noncomputable def rounds : List (MeasurementRound d N) :=
 /-- The two rounds have depth `5` in total, whatever the distances and the number of gates. -/
 theorem sum_depth_rounds : ((rounds (d := d) hgs).map MeasurementRound.depth).sum = 5 := by
   simp [rounds, depth_round]
+
+/-- **A layer of long-range gates in constant depth with measurements.** For long-range gates
+on pairwise disjoint stretches, the two rounds `rounds`, of total depth `5`, implement the
+product of the gates on the vectors with `|0⟩` at the `2L` sites strictly between the two sites
+of every gate: whatever the outcomes, every output is a scalar multiple of the product of the
+gates `u` at the sites `a`, `a + 2L + 1` applied to the input. No outcome is post-selected.
+
+Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("Isometries ... act on
+a constant number of sites which, although spatially separated, can be teleported at
+neighboring registers with a constant overhead ... Therefore every isometry ... takes constant
+time using measurement"). -/
+theorem isRoundsImplementationOn_rounds :
+    MeasurementRound.IsRoundsImplementationOn (rounds (d := d) hgs)
+      {v | ∀ g ∈ gs, IsZeroOn g.interior v} (gs.map op).prod := by
+  intro v hv w hw
+  have h₁ : IsZeroOn (TeleportHop.pairSites (gs.flatMap there)) v := fun x hx i hi => by
+    obtain ⟨g, hg, hi⟩ := mem_pairSites_flatMap.mp hi
+    exact hv g hg x hx i (pairSites_forwardChain_subset _ _ _ hi)
+  have h₂ : IsZeroOn (TeleportHop.pairSites (gs.flatMap back))
+      ((localLayer hgs).op *ᵥ (chainPerm (gs.flatMap there) *ᵥ v)) := fun x hx i hi => by
+    obtain ⟨g, hg, hi⟩ := mem_pairSites_flatMap.mp hi
+    exact isZeroOn_localLayer hgs (isZeroOn_chainPerm_there hgs hv) g hg x hx i
+      (pairSites_backwardChain_subset _ _ _ hi)
+  obtain ⟨c, hc⟩ := exists_eq_smul_of_mem_outputs_conj (valid_there hgs) (valid_back hgs)
+    (localLayer hgs) h₁ h₂ hw
+  exact ⟨c, by rw [hc, chainPerm_back_mul_localLayer_mul_chainPerm_there]⟩
 
 end Layer
 
