@@ -31,6 +31,8 @@ The proof follows the blocks `P (e + Z)^M e` and `P (e + Z)^M f` of the powers f
 * `IsIdempotentElem.norm_trace_add_pow_sub_le_of_le` — its form for one bound `z ≤ 1/2` on the
   three blocks and `M ≥ 2`:
   `|tr (e + Z)^M - tr e| ≤ K (‖e‖ + 3 ‖f‖) (2 M z²) e^{2 M z²}`.
+* `IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq` — for `T` with `e T e = α e`, `α ≤ 1`
+  real, `‖T - e‖ ≤ δ` and `1 - α ≤ δ²`: `|tr T^M - 1| ≤ C (M δ²) e^{C M δ²}`.
 -/
 
 namespace IsIdempotentElem

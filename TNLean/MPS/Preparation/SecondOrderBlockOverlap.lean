@@ -14,7 +14,8 @@ Let `Aⁱ = ⊕ⱼ A_jⁱ` be the direct sum, with unit weights, of normal block
 `ι_j`, and let `P` be the positive part of the `q`-site blocked tensor. This file proves that the
 overlaps `zⱼ = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` of `P` with the fixed-point tensors `P'_{j,∞}` of the blocks,
 placed in the full bond space, are `1` up to second order in `‖P - P_∞‖`:
-`|zⱼ - 1| ≤ C y e^{C y}` with `y = M e^{-2γ q/ξ}`, for `M ≥ 2` and every `0 < γ < 1`
+`|zⱼ - 1| ≤ C y e^{C y}` with `y = M e^{-2γ q/ξ}`, for every `0 < γ < 1`, `q ≥ 1`, `M ≥ 2` and
+`C y < 1`
 (`exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq`). Here `ξ = -1/log|λ₂|`, where `λ₂`
 bounds the moduli of the eigenvalues other than `1` of the transfer maps `E_{jj}` of the blocks and
 the moduli of all eigenvalues of the mixed transfer maps `E_{jj'}`, `j ≠ j'`.
@@ -46,7 +47,9 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   as a trace, and its reality for Hermitian `P`.
 * `MPSTensor.transferMap_blockSum_embeddedBlockState` — the fixed points of the blocks are fixed
   points of the direct sum.
-* `MPSTensor.mixedTransferMatrixLeft_blockSumPosLimit_mul_mul` — `R_j τ R_j = α R_j`.
+* `MPSTensor.isIdempotentElem_mixedTransferMatrixLeft_blockSumPosLimit`,
+  `MPSTensor.mixedTransferMatrixLeft_blockSumPosLimit_mul_mul` — `R_j` is idempotent with trace
+  one, and `R_j τ R_j = α R_j`.
 * `MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq` — the overlaps of the
   blocks to second order, `M ≥ 2`.
 
@@ -309,18 +312,22 @@ theorem norm_sqrtWeightLM_eq_one {n : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (h�
   exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h')
 
 omit hι hdisj in
-/-- A vector that is the limit, at a geometric rate, of vectors of norm `c` has norm `c`. -/
-theorem norm_eq_of_forall_norm_sub_le_pow {F : Type*} [NormedAddCommGroup F] {v : F}
-    {u : ℕ → F} {c K x : ℝ} (hx0 : 0 ≤ x) (hx1 : x < 1) (hu : ∀ q, q ≠ 0 → ‖u q‖ = c)
+/-- A vector that is the limit, at a geometric rate, of vectors whose norms converge to `c` at a
+geometric rate has norm `c`. -/
+theorem norm_eq_of_forall_abs_norm_sub_le_pow {F : Type*} [NormedAddCommGroup F] {v : F}
+    {u : ℕ → F} {c K K' x : ℝ} (hx0 : 0 ≤ x) (hx1 : x < 1)
+    (hu : ∀ q, q ≠ 0 → |‖u q‖ - c| ≤ K' * x ^ q)
     (hv : ∀ q, q ≠ 0 → ‖u q - v‖ ≤ K * x ^ q) : ‖v‖ = c := by
-  have hlim : Filter.Tendsto (fun q : ℕ => K * x ^ (q + 1)) Filter.atTop (nhds 0) := by
-    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one hx0 hx1).comp (Filter.tendsto_add_atTop_nat 1)
-      |>.const_mul K
+  have hlim : Filter.Tendsto (fun q : ℕ => (K + K') * x ^ (q + 1)) Filter.atTop (nhds 0) := by
+    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one hx0 hx1).comp
+      (Filter.tendsto_add_atTop_nat 1) |>.const_mul (K + K')
   refine eq_of_abs_sub_nonpos (ge_of_tendsto' hlim fun q => ?_)
-  calc |‖v‖ - c| = |‖v‖ - ‖u (q + 1)‖| := by rw [hu _ q.succ_ne_zero]
-    _ ≤ ‖v - u (q + 1)‖ := abs_norm_sub_norm_le _ _
-    _ = ‖u (q + 1) - v‖ := norm_sub_rev _ _
-    _ ≤ K * x ^ (q + 1) := hv _ q.succ_ne_zero
+  calc |‖v‖ - c| ≤ |‖v‖ - ‖u (q + 1)‖| + |‖u (q + 1)‖ - c| := abs_sub_le _ _ _
+    _ ≤ ‖v - u (q + 1)‖ + K' * x ^ (q + 1) :=
+        add_le_add (abs_norm_sub_norm_le _ _) (hu _ q.succ_ne_zero)
+    _ = ‖u (q + 1) - v‖ + K' * x ^ (q + 1) := by rw [norm_sub_rev]
+    _ ≤ K * x ^ (q + 1) + K' * x ^ (q + 1) := by gcongr; exact hv _ q.succ_ne_zero
+    _ = (K + K') * x ^ (q + 1) := by ring
 
 /-! ### The overlaps of the blocks to second order -/
 
@@ -405,7 +412,8 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
         rw [hσ'def, transferMap_blockSum_embeddedBlockState hι hdisj j, hfix j])]
     exact htr'
   have hιinf : ιL Pinf = sqrtWeightLM σ' F := by
-    have hn : ‖ιL Pinf‖ = 1 := norm_eq_of_forall_norm_sub_le_pow hx0 hx1 (fun q _ => hιq q)
+    have hn : ‖ιL Pinf‖ = 1 := norm_eq_of_forall_abs_norm_sub_le_pow (K' := 0) hx0 hx1
+      (fun q _ => by rw [hιq q, sub_self, abs_zero, zero_mul])
       (fun q hq => by
         rw [← map_sub]
         exact (hιL _).trans (by
