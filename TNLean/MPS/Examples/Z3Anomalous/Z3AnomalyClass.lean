@@ -8,6 +8,7 @@ import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousInverseFusion
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUDU
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUUU
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation
+import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
 
 /-!
@@ -39,6 +40,8 @@ three-cochain of arXiv:2502.20257 used here.
 * `Z3Anomalous.cyclicInvariant_omega_z3`: for every choice of fusion tensors,
   the gauge-invariant product is `ω₃²`.
 * `Z3Anomalous.not_isTrivialGaugeClass_omega_z3`.
+* `Z3Anomalous.family_anomalyClass_ne_zero`: the anomaly class is nonzero in
+  the degree-three group cohomology `H³(ℤ₃, ℂˣ)`.
 -/
 
 noncomputable section
@@ -341,5 +344,14 @@ theorem not_isTrivialGaugeClass_omega_z3 (fd : family.FusionData) :
   have := cyclicInvariant_omega_z3 fd
   rw [h, Units.val_one] at this
   exact eisensteinOmega_sq_ne_one this.symm
+
+/-- The anomaly class of the `ℤ₃` representation `{1, U, U†}` in the degree-three
+group cohomology `H³(ℤ₃, ℂˣ)` is nonzero.
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040; arXiv:2502.20257,
+`eq:omegagauge` and the sentence following it. -/
+theorem family_anomalyClass_ne_zero : family_isNormalRepresentation.anomalyClass ≠ 0 :=
+  fun h ↦ not_isTrivialGaugeClass_omega_z3 family_isNormalRepresentation.nonempty_fusionData.some
+    ((GroupFamily.FusionData.isTrivialGaugeClass_omega_iff _ _).2 h)
 
 end Z3Anomalous
