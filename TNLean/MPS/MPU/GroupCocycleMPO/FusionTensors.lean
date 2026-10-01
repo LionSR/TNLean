@@ -60,8 +60,6 @@ open scoped BigOperators Matrix Kronecker
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra MPOTensor.GroupFamily
-
 variable {G : Type*} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- The pair of bond labels `(h l, l)` of the stacked product of `T̂_g` and `T̂_h` that sits
@@ -72,6 +70,14 @@ def pairLabel (h : G) (l : Fin n) : Fin (n * n) :=
 theorem pairLabel_injective (h : G) : Function.Injective (pairLabel e h) := by
   intro l l' hl
   simpa [pairLabel] using congrArg Prod.snd (finProdFinEquiv.injective hl)
+
+end MPOTensor.GroupCocycle
+
+namespace MPOTensor.GroupCocycle
+
+open TNLean.Algebra MPOTensor.GroupFamily
+
+variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- The left fusion tensor `F^<_{g,h}` of equation `ftexam`: it sends the pair label
 `(h l, l)` to the label `l` with the factor `ω(g, h, l)⁻¹`.
