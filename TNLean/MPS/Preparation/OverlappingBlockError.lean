@@ -49,7 +49,10 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
 
-* `MPSTensor.sum_star_nonNormalApproxVector_mul_mpv` — the unnormalized overlap after `V^{⊗M}`.
+* `MPSTensor.sum_star_tensorPower_polarIso_mulVec_mul_mpv`,
+  `MPSTensor.sum_star_nonNormalApproxVector_mul_mpv` — the unnormalized overlap after `V^{⊗M}`.
+* `MPSTensor.inv_mul_norm_le_norm_of_sum_norm_sq_le_one` — normalizing a vector of norm at most
+  one does not decrease an overlap.
 * `MPSTensor.one_sub_norm_div_le_of_norm_sub_le` — the elementary estimate combining the errors.
 * `MPSTensor.exists_approximationError_le_overlappingBlockSum_weight`,
   `MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_weight` — Lemma 1'(ii) for

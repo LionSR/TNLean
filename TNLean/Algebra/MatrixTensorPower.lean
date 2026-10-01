@@ -26,6 +26,13 @@ allows different row and column index types, as needed for the isometry
 * `Matrix.conjTranspose_tensorPower` — `(W^{⊗M})ᴴ = (Wᴴ)^{⊗M}`.
 * `Matrix.sum_star_tensorPower_mulVec_mul`, `Matrix.sum_norm_sq_tensorPower_mulVec_le` —
   inner products and norms after a tensor power of a partial isometry.
+
+## References
+
+* [MSWC23] D. Malz, G. Styliaris, Z.-Y. Wei, J. I. Cirac,
+  *Preparation of matrix product states with log-depth quantum circuits*,
+  arXiv:2307.01696, the paragraph after eq. (19) and Supplemental Material, "Proof of Lemma 1 and
+  extension to non-normal tensors".
 -/
 
 open scoped BigOperators Matrix ComplexOrder

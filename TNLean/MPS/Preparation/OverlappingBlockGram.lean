@@ -51,6 +51,12 @@ maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   mixed transfer map whose eigenvalues are bounded by `|λ₂| < 1`.
 * `MPSTensor.exists_norm_gram_blockTensor_mixed_le` — the off-diagonal Gram blocks
   `B_jᴴ B_{j'}` decay at that rate.
+* `MPSTensor.conjTranspose_mul_sum_of_isometry`,
+  `MPSTensor.sum_mul_conjTranspose_mul_sum_of_isometry` — products along isometries with
+  orthogonal ranges.
+* `Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one` — isometries have norm at most one.
+* `MPSTensor.exists_norm_gram_sum_sub_le` — the rate of the Gram matrix of `∑ⱼ cⱼ B_j L_jᴴ`.
+* `Matrix.norm_polarPos_sub_le_sqrt` — the Hölder bound for positive parts.
 * `MPSTensor.blockSumGramLimit`, `MPSTensor.blockSumPosLimit` — the limits
   `∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ` and `∑ⱼ K_j ((√σ_j)ᵀ ⊗ 1) K_jᴴ`.
 * `MPSTensor.gram_blockTensor_blockSum`, `MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le` —

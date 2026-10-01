@@ -467,7 +467,8 @@ private theorem one_le_sum_norm_bntWeight_sq {μ : (j : Fin b) → Fin (m j) →
 private theorem norm_le_one_of_nonneg_of_le_one {z : ℂ} (h0 : 0 ≤ z) (h1 : z ≤ 1) : ‖z‖ ≤ 1 := by
   have him : z.im = 0 := ((Complex.le_def.1 h0).2).symm
   have hz : z = (z.re : ℂ) := Complex.ext rfl (by simp [him])
-  rw [hz, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (by simpa using (Complex.le_def.1 h0).1)]
+  rw [hz, Complex.norm_real, Real.norm_eq_abs,
+    abs_of_nonneg (by simpa using (Complex.le_def.1 h0).1)]
   simpa using (Complex.le_def.1 h1).1
 
 /-- **Approximation error for repeated blocks with overlapping states and real weights**

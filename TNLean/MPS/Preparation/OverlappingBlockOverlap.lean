@@ -44,6 +44,8 @@ correlation lengths of the mixed transfer maps, in place of the block form (S5) 
 ## Main declarations
 
 * `MPSTensor.embeddedBlockState` — the fixed point `σ'_j = E_j σ_j E_jᴴ` in the full bond space.
+* `MPSTensor.conjTranspose_coordEmbedding`, `MPSTensor.transpose_kronecker_apply_eq_mul_single_mul`
+  — coordinate isometries are real, and letters of `Xᵀ ⊗ Y`.
 * `Matrix.sum_star_tensorPower_mulVec_mul`, `Matrix.sum_norm_sq_tensorPower_mulVec_le` —
   inner products and norms after a tensor power of a partial isometry.
 * `MPSTensor.embedPair_fixedPointPair` — embedded pairs are the pairs of the embedded fixed points.
@@ -51,7 +53,8 @@ correlation lengths of the mixed transfer maps, in place of the block form (S5) 
 * `MPSTensor.exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le`,
   `MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le`
 * `MPSTensor.exists_norm_mpvOverlap_le_of_mixedMapLM` — overlaps of distinct blocks decay.
-* `MPSTensor.exists_abs_norm_mpvState_blockSum_weight_sq_sub_le`,
+* `MPSTensor.exists_abs_sum_norm_sq_sum_mpv_sub_le`,
+  `MPSTensor.exists_abs_norm_mpvState_blockSum_weight_sq_sub_le`,
   `MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le`
 
 ## References

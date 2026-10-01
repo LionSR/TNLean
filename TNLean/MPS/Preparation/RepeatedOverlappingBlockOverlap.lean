@@ -12,9 +12,9 @@ import TNLean.MPS.Preparation.RepeatedBlockSum
 Malz, Styliaris, Wei, and Cirac (arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and
 extension to non-normal tensors") write a tensor that is not normal as
 `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (eq. (S2)). Its `q`-site blocked map is
-`B = ∑ⱼ cⱼ B_j L_jᴴ`, with `cⱼ = (∑ₖ |μ_{j,k}|^{2q})^{1/2}` and the isometries `L_j` that place a bond
-pair on all copies of block `j` (`TNLean.MPS.Preparation.RepeatedBlockSum`). This file proves the
-estimates for the corrected approximating state `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` when the `q`-site
+`B = ∑ⱼ cⱼ B_j L_jᴴ`, with `cⱼ = (∑ₖ |μ_{j,k}|^{2q})^{1/2}` and the isometries `L_j` that place a
+bond pair on all copies of block `j` (`TNLean.MPS.Preparation.RepeatedBlockSum`). This file proves
+the estimates for the corrected approximating state `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` when the `q`-site
 states of distinct blocks overlap:
 
 * the positive part `P` of `B` is close to `P_∞ = ∑ⱼ cⱼ L_j ((√σ_j)ᵀ ⊗ 1) L_jᴴ`,
@@ -375,7 +375,8 @@ private theorem trace_copyFixedProj {D' : ℕ} {ι' : Fin D' → Fin D} (hι' : 
 private theorem sum_smul_copyFixedProj_pow {D' : ℕ} {m' : ℕ} {ι' : Fin m' → Fin D' → Fin D}
     (hι' : ∀ k, Function.Injective (ι' k)) (hdisj' : ∀ k k', k ≠ k' → ∀ a a', ι' k a ≠ ι' k' a')
     {σ : Matrix (Fin D') (Fin D') ℂ} (htr : σ.trace = 1) (a : Fin m' → ℂ) (n : ℕ) :
-    (∑ k, a k • copyFixedProj (ι' k) σ) ^ (n + 1) = ∑ k, a k ^ (n + 1) • copyFixedProj (ι' k) σ := by
+    (∑ k, a k • copyFixedProj (ι' k) σ) ^ (n + 1) =
+      ∑ k, a k ^ (n + 1) • copyFixedProj (ι' k) σ := by
   induction n with
   | zero => simp
   | succ n ih =>
