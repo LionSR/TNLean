@@ -239,7 +239,7 @@
         MPSTensor.IsPeriodic.adjoint_pow_fixed_iff_gcd}
     \leanok
     Let $A$ be periodic of period $m$, let $p>0$, and write
-    $F=\E_A^*$ and $r=\gcd(m,p)$. If $F^p(X)=X$, then $F^m(X)=X$.
+    $F=\E_A^\dagger$ and $r=\gcd(m,p)$. If $F^p(X)=X$, then $F^m(X)=X$.
     Moreover, $F^p(X)=X$ if and only if $F^r(X)=X$.
 \end{theorem}
 
@@ -260,7 +260,7 @@
     \uses{def:periodic_step_orbit_projection}
     Let $A$ be periodic of period $m$, let $p>0$, and put $r=\gcd(m,p)$.
     Suppose $P_u$ are orthogonal projections summing to $\Id_D$ with
-    $P_uA^i=A^iP_{u+1}$. Write $F=\E_A^*$ and fix $\alpha<r$.
+    $P_uA^i=A^iP_{u+1}$. Write $F=\E_A^\dagger$ and fix $\alpha<r$.
     Then $\sum_{j=0}^{r-1}F^j(Q_\alpha)=\Id_D$.
     If $F^p(X)=X$ and $Q_\alpha X=X$, there is $c\in\C$ such that
     $X=cQ_\alpha$.
@@ -296,9 +296,9 @@
 \begin{proof}\leanok
     \uses{thm:periodic_orbit_fixed_rigidity,thm:adjoint_corner_fixed_of_preserved,
         thm:transfer_map_irreducible_of_tensor}
-    Let $R$ be an invariant orthogonal projection for $\E_C^*$.
+    Let $R$ be an invariant orthogonal projection for $\E_C^\dagger$.
     The projection $L=VRV^\dagger$ has invariant corner under
-    $F^p$, where $F=\E_A^*$. The faithful invariant state of $\E_A$
+    $F^p$, where $F=\E_A^\dagger$. The faithful invariant state of $\E_A$
     implies $F^p(L)=L$. Since $Q_\alpha L=L$, fixed-point rigidity
     gives $L=cQ_\alpha$, and compression gives $R=c\Id$.
     Idempotence forces $R=0$ or $R=\Id$. Irreducibility is preserved
