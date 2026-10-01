@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Uniform Parent-Hamiltonian Gaps along Injective Paths Only}
+\author{}
+\date{2026-10-01}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+Appendix~A of \cite{Schuch2011Phases} proves that the family $H_\gamma$ of
+parent Hamiltonians along the path from a matrix product state to its
+isometric form has a spectral gap bounded below uniformly in
+$\gamma\in[0,1]$ and in the chain length. The tensors of the path are in
+normal form, $A_i(\gamma)=\bigoplus_\alpha A_i^\alpha(\gamma)$, possibly with
+several blocks. The argument applies Nachtergaele's bound, controlled by the
+second transfer eigenvalue of each block, by the overlaps of the local spaces
+of different blocks, and by the gap $\Delta_{2p}(\gamma)$ of $H_\gamma$
+restricted to $2p$ sites. The last quantity has a uniform lower bound
+``as the restricted Hamiltonian is continuous in $\gamma$''.\footnote{Source
+    traceability: \path{Papers/1010.3732/paper_v3.tex}, lines 2475--2580; the
+    continuity step is lines 2575--2578.}
+
+\section{What is formalized}
+Let $x\mapsto A_x$ be a continuous family of one-site injective tensors with
+nonzero bond dimension, indexed by a topological space, and let $S$ be a
+compact set of parameters. For the parent Hamiltonian $H_{N,2}(A_x)$ of the
+canonical two-site interaction on a periodic chain of $N$ sites, there is
+$\delta>0$ such that
+\begin{align}
+    \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert
+    \qquad\text{for all }x\in S,\ N\geq2,\ v\perp\ker H_{N,2}(A_x).
+    \label{eq:spc11_uniform_gap_injective_scope_bound}
+\end{align}
+The proof uses the continuity step of the source for finite windows. In
+place of Nachtergaele's bound it uses Knabe's nearest-neighbor criterion
+together with compactness of $S$. Non-injective normal forms with several
+blocks, where the overlaps between blocks enter, are not covered.
+\footnote{Affected formal declarations:
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective} and
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}.}
+
+\section{Elimination plan}
+For a continuous family of tensors in normal form with a fixed number of
+normal blocks, apply the block-diagonal parent-Hamiltonian gap with its
+finite-window input, and show that this input depends continuously on the
+parameter. The ingredients are the second transfer eigenvalues of the blocks
+and the overlaps between the local spaces of different blocks, which stay
+bounded away from one on a compact parameter set. The finite-window
+continuity and compactness steps already formalized then apply without
+change. The injective case
+(\ref{eq:spc11_uniform_gap_injective_scope_bound}) is the case of one block.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
