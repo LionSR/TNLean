@@ -58,7 +58,8 @@ theorem exists_regular_actionGaugeEquiv_of_kleinCocycleFamily_one
 /-- For `g = ofAdd (u, v)`, the diagonal L-symbol relation
 `Lˣ_{g,g} = (-1) ^ (p u + q v + r u v) L^{g • x}_{g,g}` for every row of the Klein-four table
 in arXiv:2203.12563, lines 1856–1886. The type-II row at `(1,1)` gives the
-opposite signs on blocks interchanged by `ab`. -/
+opposite signs on the two blocks it exchanges (`ab` in arXiv:2203.12563,
+line 1886). -/
 theorem apply_self_of_kleinCocycleFamily {X : Type*}
     [MulAction (Multiplicative (ZMod 2 × ZMod 2)) X]
     {L : LSymbol (Multiplicative (ZMod 2 × ZMod 2)) X}
