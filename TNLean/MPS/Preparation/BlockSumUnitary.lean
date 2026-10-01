@@ -134,6 +134,31 @@ theorem sum_star_polarIsoMatrix_mul (A : (j : Fin b) → MPSTensor d (Dj j)) {q 
     rw [ite_eq_right fun h' => hj (Sigma.mk.inj h').1]
     simpa [polarIsoMatrix, virtualPairEquiv] using h
 
+/-- **Counting the bond pairs.** If the blocked tensors of the `A_j` on `q` sites are injective
+and the physical matrices of distinct blocks are orthogonal, the isometries `V_j` have jointly
+orthonormal columns, so `∑ⱼ Dⱼ² ≤ d^q`. -/
+theorem sum_mul_self_le_pow (A : (j : Fin b) → MPSTensor d (Dj j)) {q : ℕ}
+    (hinj : ∀ j, Kraus.IsInjective (blockTensor (A j) q))
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (A j) q))ᴴ *
+      physicalMatrix (blockTensor (A j') q) = 0) :
+    ∑ j, Dj j * Dj j ≤ d ^ q := by
+  classical
+  let κ := (j : Fin b) × (Fin (Dj j) × Fin (Dj j))
+  let V : Matrix (Fin (blockPhysDim d q)) κ ℂ := Matrix.of fun t p =>
+    polarIsoMatrix (blockTensor (A p.1) q) t (finProdFinEquiv p.2)
+  have hV : Vᴴ * V = 1 := by
+    ext p p'
+    rw [Matrix.mul_apply, Matrix.one_apply, ← sum_star_polarIsoMatrix_mul A hinj horth p p',
+      ← (decodeBlockEquiv d q).symm.sum_comp]
+    rfl
+  have hcard : Fintype.card κ = ∑ j, Dj j * Dj j := by simp [κ]
+  have h := Matrix.rank_mul_le_right Vᴴ V
+  rw [hV, Matrix.rank_one] at h
+  have h' := Matrix.rank_le_card_height V
+  have h'' : Fintype.card (Fin (blockPhysDim d q)) = d ^ q := by
+    rw [Fintype.card_fin, blockPhysDim_eq_pow]
+  omega
+
 /-- **One block unitary for several blocks with orthogonal states.** Let the bond indices of all
 blocks, `Fin (∑ⱼ Dⱼ)`, be encoded in `r₁ ≥ 1` sites by an injective `dig`. There is `C` such
 that for all tensors `A_j` and every block length `q ≥ 3 r₁` at which every blocked tensor is

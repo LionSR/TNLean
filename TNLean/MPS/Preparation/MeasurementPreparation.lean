@@ -313,6 +313,76 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
   funext s
   simp only [mulVec_smul, hj, Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
 
+/-- **The fixed-point state of orthogonal blocks with measurements.** For every family of bond
+dimensions `D_j` there are `C` and `L₀` such that for all tensors `A_j`, unit pair vectors `ω_j`,
+unit amplitudes `α`, and every cutting of a chain into `M ≥ 1` blocks of lengths
+`L₀ ≤ ℓ_k ≤ L` at which every blocked tensor is injective and the physical matrices of distinct
+blocks are orthogonal, the state `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩_{R_k L_{k+1}}` is prepared with
+measurements and a circuit in depth at most `C L`.
+
+arXiv:2307.01696, paragraph "Long-range MPS using measurements". The labels of the blocks and the
+bond indices are encoded in `r₁ = b + ∑ⱼ Dⱼ + 2` sites; for `d = 1` such encodings exist because
+the hypotheses force `∑ⱼ Dⱼ² ≤ 1` (`MPSPreparation.sum_mul_self_le_pow`). -/
+theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState
+    (b : ℕ) (Dj : Fin b → ℕ) :
+    ∃ C L₀ : ℕ, ∀ (A : (j : Fin b) → MPSTensor d (Dj j))
+      (ω : (j : Fin b) → Fin (Dj j) × Fin (Dj j) → ℂ), (∀ j, ∑ p, star (ω j p) * ω j p = 1) →
+      ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
+      ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
+        (∀ k, L₀ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
+        (∀ j k, Kraus.IsInjective (blockTensor (A j) (ℓ k))) →
+        (∀ j j' k, j ≠ j' → (physicalMatrix (blockTensor (A j) (ℓ k)))ᴴ *
+          physicalMatrix (blockTensor (A j') (ℓ k)) = 0) →
+        IsPreparedWithMeasurementsAndCircuitInDepth (C * L)
+          (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) := by
+  classical
+  set r₁ := b + ∑ j, Dj j + 2 with hr₁
+  have hcard : ∀ n, Fintype.card (Fin n) ≤ d ^ r₁ → Nonempty (Fin n ↪ Cfg d r₁) := fun n h =>
+    Function.Embedding.nonempty_of_card_le (by simpa using h)
+  -- Every block has a positive bond dimension, and there is a block.
+  have hpos : ∀ (ω : (j : Fin b) → Fin (Dj j) × Fin (Dj j) → ℂ),
+      (∀ j, ∑ p, star (ω j p) * ω j p = 1) → ∀ j, 0 < Dj j := fun ω hω j => by
+    by_contra h
+    have h0 : Dj j = 0 := by omega
+    have := hω j
+    have hE : IsEmpty (Fin (Dj j) × Fin (Dj j)) := by rw [h0]; infer_instance
+    simp at this
+  have hb : ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 → 0 < b := fun α hα => by
+    by_contra h
+    obtain rfl : b = 0 := by omega
+    simp at hα
+  by_cases henc : b ≤ d ^ r₁ ∧ ∑ j, Dj j ≤ d ^ r₁
+  · by_cases hD : 0 < ∑ j, Dj j
+    · obtain ⟨dig⟩ := hcard _ (by simpa using henc.2)
+      obtain ⟨dig₀⟩ := hcard _ (by simpa using henc.1)
+      obtain ⟨C, hC⟩ :=
+        exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState_of_encoding
+          (Dj := Dj) (r₁ := r₁) (by omega) dig.injective dig₀.injective hD
+      exact ⟨C, 3 * r₁, fun A ω hω α hα M _ ℓ N _ hN L hℓ hL hinj horth =>
+        hC A ω hω α hα ℓ hN L hℓ hL hinj horth⟩
+    · refine ⟨0, 0, fun A ω hω α hα _ _ _ _ _ _ _ _ _ _ _ => ?_⟩
+      have := hpos ω hω ⟨0, hb α hα⟩
+      exact absurd (lt_of_lt_of_le this (Finset.single_le_sum (fun j _ => Nat.zero_le (Dj j))
+        (Finset.mem_univ _))) hD
+  · refine ⟨0, 0, fun A ω hω α hα M _ ℓ N _ hN L _ _ hinj horth => ?_⟩
+    exfalso
+    apply henc
+    have hd1 : d = 1 := by
+      by_contra hd
+      have hd2 : 2 ≤ d := by have := NeZero.ne d; omega
+      have h2 : r₁ < d ^ r₁ := (Nat.lt_pow_self (by omega)).trans_le le_rfl
+      exact henc ⟨by omega, by omega⟩
+    subst hd1
+    have h := sum_mul_self_le_pow A (q := ℓ 0) (fun j => hinj j 0) (fun j j' h => horth j j' 0 h)
+    rw [one_pow] at h
+    have hsq : ∑ j, Dj j ≤ ∑ j, Dj j * Dj j :=
+      Finset.sum_le_sum fun j _ => Nat.le_mul_of_pos_left _ (hpos ω hω j)
+    have hcount : b ≤ ∑ j, Dj j := by
+      calc b = ∑ _j : Fin b, 1 := by simp
+        _ ≤ ∑ j, Dj j := Finset.sum_le_sum fun j _ => hpos ω hω j
+    rw [one_pow]
+    omega
+
 end Preparation
 
 end MPSPreparation

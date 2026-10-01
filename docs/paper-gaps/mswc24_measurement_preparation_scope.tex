@@ -1,0 +1,95 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Long-Range Matrix Product States with Measurements: Scope of the Formal Statement}
+\author{}
+\date{2026-10-01}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+The paragraph ``Long-range MPS using measurements'' of~\cite{Malz2024Preparation}
+writes the fixed point of a translation-invariant MPS that is not normal, up to
+an isometry, as
+\begin{align}
+    \ket{\Omega'}
+     & =\sum_{j=1}^b\alpha_j^{(N)}\bigotimes_{i=1}^{N/q}\ket{\omega_j}_{R_iL_{i+1}}
+    =W^{\otimes N/q}\ket{\chi_{N/q}},\qquad
+    \ket{\chi_M}=\sum_{j=1}^b\alpha_j\ket j^{\otimes M},
+    \label{eq:mswc24_meas_fixed_point}
+\end{align}
+with $W\colon\ket j\mapsto\ket{\omega_j}$, and prepares it as follows: ``First
+create $\ket{\chi_{N/q}}$, which can be done in constant depth with
+measurements \ldots\ Subsequently, apply in parallel the isometries $W$ \ldots,
+which also takes constant depth.'' With the approximation of the target by a
+state of the form (\ref{eq:mswc24_meas_fixed_point}) up to local isometries,
+obtained by blocking $q\propto\log(N/\varepsilon)$ sites, it concludes that if
+``measurements are only used for the preparation of $\ket{\chi_{N/q}}$, the
+depth is $O(\log(N/\varepsilon))$'', for all translation-invariant MPS, short-
+or long-range correlated.
+
+\section{The statement formalized}
+Let $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})\otimes A_j^i$
+with normal blocks $A_j$ in the gauge of eq.~(5) of the source and nonzero
+weights. The formal statement prepares, with measurements, a unit vector of
+error at most $\varepsilon$ in depth at most $c\log(N/\varepsilon)$, for
+$N\geq2$, $0<\varepsilon\leq1$, and block lengths $q$ with
+$a\log(N/\varepsilon)+b'\leq q\leq2(a\log(N/\varepsilon)+b')$ under three
+restrictions.\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum}
+    and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector}
+    in \doclink{TNLean/MPS/Preparation/NonNormalMeasurementPreparation}.}
+\begin{enumerate}
+    \item The $q$-site states of distinct blocks are orthogonal. Without this the
+          block form of the positive part fails
+          \cite{gap:mswc24_block_form_mixed_overlap}.
+    \item The block length $q$ divides $N$, so that the chain consists of
+          $N/q$ blocks of $q$ sites, as in eq.~(10) of the source. The error
+          bound for blocks with multiplicities
+          \cite{gap:mswc24_repeated_block_corrected_state} is proved for equal
+          blocks; for normal tensors the analogous restriction was removed with a
+          larger last block \cite{gap:mswc24_depth_upper_bound_divisible_length}.
+    \item The state prepared is the corrected approximating state of
+          \cite{gap:mswc24_repeated_block_corrected_state}, which agrees with
+          the state of eq.~(S7) when every multiplicity is one and every weight
+          is positive.
+\end{enumerate}
+
+\section{Two readings of the construction}
+\paragraph{The circuit after the measurement.}
+The model of preparation with measurements of~\cite{Piroli2021LOCC} applies a
+circuit, then measurements and local corrections. The construction of the
+source applies circuits after the preparation of $\ket{\chi_{N/q}}$. The formal
+statement counts such a preparation as a vector prepared with measurements in
+depth $T_1$, followed by a local circuit of depth $T_2$ that does not depend on
+the outcomes, of total depth $T_1+T_2$.
+
+\paragraph{The depth of the GHZ-type state.}
+The state $\ket{\chi_{N/q}}$ lives on the $N/q$ blocks. On the chain of $N$
+sites, the label of block $k$ is stored in the last $r_1$ sites of the block,
+and the first $r_1$ sites of the next block serve as the ancilla of Example~1
+of~\cite{Piroli2021LOCC}; this ancilla is $q-r_1$ sites away from the register
+of its own block, and the controlled shift between them is carried out with
+SWAP gates in depth $O(q)$. The formal statement therefore prepares
+$\ket{\chi_{N/q}}$ in depth $O(q)$ rather than in constant depth. Constant depth
+on the chain of $N$ sites would need the controlled shifts between distant
+sites to be implemented with further measurements, for instance by
+teleportation along pairs of neighbouring sites. Since the isometries of the
+blocked tensor already take depth $O(q)$, the total depth $O(\log(N/\varepsilon))$
+is unaffected.
+
+\section{Elimination}
+The first restriction is removed together with the block form of the positive
+part for blocks whose $q$-site states overlap
+\cite{gap:mswc24_block_form_mixed_overlap}. The second is removed by the error
+bound for blocks with multiplicities and a larger last block, along the lines of
+the normal case. Neither restriction affects the depth count, which is proved
+for blocks of arbitrary lengths at most $L$ with depth $O(L)$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
