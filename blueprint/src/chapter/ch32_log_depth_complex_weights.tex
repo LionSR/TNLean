@@ -1,0 +1,181 @@
+%% ==================================================
+%% Subsection: Weights with a phase
+%% Source: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), Supplemental
+%% Material, "Proof of Lemma 1 and extension to non-normal tensors",
+%% eqs. (S2)-(S12) and Lemma 1'(ii).
+%% False source (eqs. (S5)-(S7)): with weights that are not nonnegative reals, the
+%% coefficients beta_j = mu_j^N of eq. (S4), correct in eq. (S3), count the phase of
+%% the weight twice in eqs. (S6) and (S7);
+%% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
+%% ==================================================
+
+\subsection{Weights with a phase}\label{sec:ldp_complex_weights}
+
+For blocks of multiplicity one write $\mu_j=\lvert\mu_j\rvert u_j$ with
+$\lvert u_j\rvert=1$. The blocked map is $B=B_0U$, where $B_0$ is the blocked map
+for the weights $\lvert\mu_j\rvert$ and the diagonal unitary $U$ multiplies the
+bond coordinates of block $j$ by $u_j^q$. Hence
+$B^\dagger B=U^\dagger B_0^\dagger B_0U$, and the polar decompositions satisfy
+\begin{align*}
+    P=U^\dagger P_0U,\qquad V=V_0U.
+\end{align*}
+The diagonal blocks of $P$ are those of $P_0$ and do not depend on the phases,
+contrary to the block form \cite[eq.~(S5)]{Malz2024Preparation}; only the mixed
+blocks of $P$, which vanish for orthogonal blocks, carry the phases
+$\overline{u_j}^{\,q}u_{j'}^q$. The product
+$\ket{\Omega_j}=\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$ of the pairs of
+block $j$ lies on the bond coordinates of block $j$, so
+$V^{\otimes M}\ket{\Omega_j}=u_j^NV_0^{\otimes M}\ket{\Omega_j}$ on $N=qM$
+sites. The coefficients $\beta_j=\mu_j^N$ of
+\cite[eq.~(S4)]{Malz2024Preparation} are correct in the expansion
+\cite[eq.~(S3)]{Malz2024Preparation} of $\ket{\phi_N}$, but under
+$V^{\otimes M}$ in \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} they count the
+phase $u_j^N$ twice, and already for orthogonal blocks the approximating state
+does not converge (Theorem~\ref{thm:ldp_approximation_error_phase_weights}). With
+$\beta_j=\lvert\mu_j\rvert^N$ it converges at the rate of
+Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
+(Theorem~\ref{thm:ldp_approximation_error_complex_weights})
+\cite{gap:mswc24_block_form_mixed_overlap}.
+
+% **False source result:** refutes Lemma 1'(ii) of arXiv:2307.01696 for two
+% orthogonal blocks of multiplicity one with weights 1 and -1;
+% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex. As for
+% thm:ldp_approximation_error_repeated_block, the first linked declaration
+% certifies the hypotheses of Lemma 1'(ii) for the displayed tensor.
+\begin{theorem}[The approximating state for weights with a phase]
+    \label{thm:ldp_approximation_error_phase_weights}
+    \lean{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_phaseBlock,
+        MPSTensor.phaseBlockTensor, MPSTensor.phaseBlockSector,
+        MPSTensor.isBNTCanonicalForm_phaseBlockSector,
+        MPSTensor.reindex_toTensor_phaseBlockSector,
+        MPSTensor.embeddedFixedPointPair_phaseBlockSector,
+        MPSTensor.blockSum_phaseBlock,
+        MPSTensor.bntWeight_phaseBlockWeight,
+        MPSTensor.diagGram_phaseBlockDiag,
+        MPSTensor.nonNormalApproxOverlap_phaseBlockTensor_of_norm,
+        MPSTensor.nonNormalApproxOverlap_phaseBlockTensor,
+        MPSTensor.nonNormalApproxOverlap_phaseBlockTensor_norm,
+        MPSTensor.one_sub_norm_nonNormalApproxOverlap_phaseBlockTensor_neg_one,
+        MPSTensor.not_approximationError_le_phaseBlockTensor,
+        MPSTensor.phaseBlockDiag, MPSTensor.phaseBlockWeight,
+        MPSTensor.ghzAmplitude_one_vec, MPSTensor.polarPos_phaseBlockTensor,
+        MPSTensor.polarSupport_phaseBlockTensor, MPSTensor.coeff_phaseBlockSector,
+        MPSTensor.repeatedBlockBasisSector,
+        MPSTensor.hasBNTSectorData_repeatedBlockBasisSector,
+        MPSTensor.isBNTCanonicalForm_repeatedBlockBasisSector,
+        MPSTensor.phaseBlockCopyCoord,
+        MPSTensor.totalDim_phaseBlockSector, MPSTensor.bijective_phaseBlockCopyCoord,
+        MPSTensor.phaseBlockEquiv, MPSTensor.phaseBlockEquiv_symm_apply}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
+        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
+        def:cpsv_cfii}
+    Let $\mu\in\C$ with $\lvert\mu\rvert=1$, and let $A^0=\operatorname{diag}(1,0)$
+    and $A^1=\operatorname{diag}(0,\mu)$, the direct sum $A_1\oplus\mu A_2$ of the
+    one-dimensional normal blocks $A_1=(1,0)$ and $A_2=(0,1)$, each of multiplicity
+    one, with weights $1$ and $\mu$. After ordering its bond coordinates this is the
+    canonical form of a basis of normal tensors in canonical form~II with weights of
+    modulus one, so $A$ satisfies every hypothesis of
+    \cite[Lemma~1$'$(ii)]{Malz2024Preparation}. For every $q\geq1$ and $M\geq1$, with
+    $N=qM$, the approximating state of
+    Definition~\ref{def:ldp_non_normal_fixed_point}, with the pairs of the fixed
+    point $1$ of each block, satisfies
+    \begin{align}
+        \braket{\widetilde\phi_N}{\phi_N}=\frac{1+\overline\mu^{\,N}}2
+        \quad\text{for }\beta=(1,\mu^N),\qquad
+        \braket{\widetilde\phi_N}{\phi_N}=1
+        \quad\text{for }\beta=(1,\lvert\mu\rvert^N)=(1,1).
+        \label{eq:ldp_phase_weights_overlap}
+    \end{align}
+    More generally, for coefficients $\alpha$ with
+    $\lvert\alpha_1\rvert^2+\lvert\alpha_2\rvert^2=1$ the overlap is
+    $(\overline{\alpha_1}+\overline{\alpha_2})/\sqrt2$. For $\mu=-1$ and odd $q$ and
+    $M$ the approximating state with $\beta=(1,\mu^N)$ is orthogonal to $\ket{\phi_N}$,
+    so $\varepsilon(\widetilde\phi_N,\phi_N)=1$. The transfer maps of both blocks have
+    no eigenvalue other than one, so every $\lambda_2$ bounds their subleading
+    eigenvalues. For $\mu=-1$, every $\lambda_2$ with $0<\lvert\lambda_2\rvert<1$, every
+    $\gamma>0$ and every constant $C$ there is an odd $M$ such that, with $q=M$,
+    $N=M^2$ and $y=(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}$,
+    $\varepsilon(\widetilde\phi_N,\phi_N)>Cy\,e^{Cy}$. The sequence $q=M$ satisfies
+    $q=o(N)$, so the bound (\ref{eq:ldp_approximation_error_general}) fails for
+    orthogonal blocks of multiplicity one when a weight is not a nonnegative real
+    number \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    The hypotheses are checked as in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}: both blocks are
+    one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, their states $\ket{0\cdots0}$
+    and $\ket{1\cdots1}$ are linearly independent for $N\geq1$, and
+    $A_1^1=0\neq A_2^1$. These checks hold for the blocks $A_1$ and $A_2$ with any
+    multiplicities and any nonzero weights $\lvert\mu_{j,k}\rvert\leq1$, one of modulus
+    one, and are shared with
+    Theorem~\ref{thm:ldp_approximation_error_repeated_block}.
+
+    For $q\geq1$ the Gram matrix of the blocked map on the diagonal coordinates is the
+    identity, since $\lvert\mu\rvert^{2q}=1$ and the off-diagonal entries are
+    $0^q=0$. So $P$ and the support projector both equal $JJ^\dagger$, where $J$ places
+    a coordinate $e$ on the pair $(e,e)$. As in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}, the overlap of the
+    unnormalized approximating vector with the unnormalized target is
+    $\overline{\alpha_1}+\overline{\alpha_2}$, the vector has squared norm
+    $\lvert\alpha_1\rvert^2+\lvert\alpha_2\rvert^2=1$, and
+    $\lVert\phi_N(A)\rVert^2=2$. For $\beta=(1,\mu^N)$,
+    $\alpha=(1,\mu^N)/\sqrt2$, and for $\beta=(1,1)$, $\alpha=(1,1)/\sqrt2$, which gives
+    (\ref{eq:ldp_phase_weights_overlap}). For $\mu=-1$ and $N$ odd,
+    $1+\overline\mu^{\,N}=0$. Finally $Cy\,e^{Cy}$ with $y=Mr^M$ and
+    $r=e^{-\gamma/\xi_{\mathrm{diag}}}<1$ is eventually below one.
+\end{proof}
+
+% **False source (eqs. (S5)-(S7), complex weights):** beta_j = |mu_j|^N in place
+% of the coefficients mu_j^N that eqs. (S6) and (S7) take from eq. (S4); Local
+% fix of the rate as in thm:ldp_approximation_error_overlapping_weights;
+% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
+\begin{theorem}[Approximation error for complex weights]
+    \label{thm:ldp_approximation_error_complex_weights}
+    \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum_complexWeight,
+        MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight,
+        MPSTensor.blockSum_eq_blockSum_phase}
+    \leanok
+    \uses{def:ldp_non_normal_fixed_point, def:correlation_length}
+    Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with complex weights
+    $\lvert\mu_j\rvert\leq1$, at least one of modulus one, of normal blocks $A_j$ in the
+    gauge (\ref{eq:ldp_normal_gauge}), with positive definite fixed points $\rho_j$ of
+    trace one, each placed on its own bond coordinates. Let $\lambda_2\in\C$ bound the
+    moduli of the eigenvalues other than one of every transfer map $\E_{A_j}$ and the
+    moduli of all eigenvalues of the mixed transfer maps $\E_{jj'}$, $j\neq j'$, let
+    $\xi$ be its correlation length, and let $0<\gamma<1/2$. Form the approximating
+    state $\widetilde\phi_N$ of Definition~\ref{def:ldp_non_normal_fixed_point} with
+    the pairs of the $\rho_j$ on the bond coordinates of their blocks and
+    $\beta_j=\lvert\mu_j\rvert^N$. There are constants $C,C'>0$ such that for every
+    block length $q$ and every $M\geq1$, with $N=qM$ and $y=Me^{-\gamma q/\xi}$,
+    \begin{align*}
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq C'y
+        \qquad\text{and}\qquad
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
+    \end{align*}
+    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one,
+    with $\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\beta_j=\mu_j^N$
+    that \cite[eqs.~(S6) and (S7)]{Malz2024Preparation} take from
+    \cite[eq.~(S4)]{Malz2024Preparation}, and with $\xi_{\mathrm{diag}}$ replaced by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$. With $\beta_j=\mu_j^N$
+    the bound is false (Theorem~\ref{thm:ldp_approximation_error_phase_weights})
+    \cite{gap:mswc24_block_form_mixed_overlap}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_approximation_error_overlapping_weights}
+    Let $u_j=e^{i\arg\mu_j}$, so that $\mu_j=\lvert\mu_j\rvert u_j$ and
+    $\lvert u_j\rvert=1$. Then
+    $\bigoplus_j\mu_jA_j=\bigoplus_j\lvert\mu_j\rvert(u_jA_j)$. The blocks $u_jA_j$ are
+    normal, satisfy the gauge (\ref{eq:ldp_normal_gauge}), and have the transfer maps
+    $\E_{u_jA_j}=\lvert u_j\rvert^2\E_{A_j}=\E_{A_j}$, hence the same fixed points and
+    eigenvalues. Their mixed transfer maps are $u_j\overline{u_{j'}}\,\E_{jj'}$, whose
+    eigenvalues are those of $\E_{jj'}$ multiplied by a number of modulus one.
+    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}, applied to the blocks
+    $u_jA_j$ with the real weights $w_j=\lvert\mu_j\rvert$, gives the bounds with
+    $\beta_j=w_j^N=\lvert\mu_j\rvert^N$.
+\end{proof}

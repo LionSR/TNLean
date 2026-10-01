@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Data.List.Rotate
 import Mathlib.Logic.Equiv.Fin.Rotate
 import QICLean.Analysis.EntropyDecomposition
+import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.NatInterval
 import TNLean.MPS.MPDO.Defs
 
@@ -149,11 +150,6 @@ theorem mpo_submatrix_finRotate_pow (M : MPOTensor d D) (N p : ℕ) :
 end MPOTensor
 
 /-! ## Cyclic shift on configurations -/
-
-/-- `finRotate` advances the value by one modulo `N`. -/
-theorem coe_finRotate_mod {N : ℕ} (i : Fin N) :
-    ((finRotate N) i : ℕ) = (i.val + 1) % N := by
-  simp [Fin.add_def, finRotate_apply]
 
 /-- The value of the `p`-fold cyclic shift is `(i + p) mod N`. -/
 theorem coe_finRotate_pow {N : ℕ} (p : ℕ) (i : Fin N) :

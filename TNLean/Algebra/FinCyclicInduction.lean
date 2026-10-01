@@ -11,8 +11,13 @@ import Mathlib.Logic.Equiv.Fin.Rotate
 
 This file records an induction principle for a nonempty finite cyclic index, the
 reindexing of statements about cyclically adjacent pairs, and the action of one-step
-rotation on nonterminal indices.
+rotation on nonterminal indices and on values modulo the length.
 -/
+
+/-- `finRotate` advances the value by one modulo `N`. -/
+theorem coe_finRotate_mod {N : ℕ} (i : Fin N) :
+    ((finRotate N) i : ℕ) = (i.val + 1) % N := by
+  simp [Fin.add_def, finRotate_apply]
 
 namespace Fin
 
