@@ -8,7 +8,7 @@
 \date{2026-09-27}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{What the sources print}
 Definition~``def:2d-Ug-inj'' of \cite{Schuch2010PEPS} calls a PEPS tensor
@@ -54,7 +54,14 @@ unitary onto its range, and $K/\sqrt{|G|}$ satisfies the printed
 definition. The formal notion of $G$-isometry asks for
 $\langle Kx,Ky\rangle=c\,\langle x,y\rangle$ with one constant $c>0$,
 which the rescaling by $c^{-1/2}$ turns into the printed notion; the
-quantum-double tensor satisfies it with $c=|G|$.
+quantum-double tensor satisfies it with $c=|G|$. For a matrix product
+tensor with the left-regular representation on its bond the formal notion
+is the first form of Definition~``def:iso:isopeps'',
+$\mathcal P(A^\dagger)\mathcal P(A)=c\,\Pi$; under concatenation
+$C^{ij}=A^iB^j$ the constants multiply, $c_C=c_Ac_B$, and for $c_A=c_B=1$
+this is the source's Lemma~``lemma:iso:iso-stable-under-concat''.\footnote{Source
+    traceability: \path{Papers/1001.3807/paper_v3.tex}, lines
+    1704--1716.}
 
 \section{Representations}
 The formal notions of $G$-injectivity and $G$-isometry take the
@@ -64,7 +71,32 @@ quantum-double instance shifts every color by right multiplication,
 $h\mapsto hg$, which leaves the differences $hh'^{-1}$ unchanged also for
 non-abelian $G$. On each leg this is the right-regular representation
 $R_g\ket h=\ket{hg^{-1}}$, and the unitary $\ket h\mapsto\ket{h^{-1}}$ intertwines it with the left-regular
-one. Both are semi-regular.
+one. Both are semi-regular. The one-dimensional notion and the stability
+under concatenation fix the left-regular representation, since their
+proof uses $\Delta=|G|^{-1}\mathbb 1$. The correspondence between
+virtual unitaries commuting with the symmetry and physical unitaries,
+Lemma~``lemma:iso:sym-virt-can-be-done-on-phys'', uses only the isometry
+of $\mathcal P(A)$ on the invariant subspace, and is stated for the
+representation parameter.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1729--1761.}
+
+\section{Scope: concatenation in one dimension}
+Lemma~``lemma:iso:iso-stable-under-concat'' states that $G$-isometry is
+stable under concatenation of PEPS; its proof is written for the
+one-dimensional left inverse of Lemma~4.7.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1688--1689 and 1704--1716.}
+The formalization proves the one-dimensional case for matrix product
+tensors with the left-regular representation on the bond, and for the
+two-dimensional contraction of one link it proves only that, with the
+left-regular representation on that link, the left inverse of the
+contracted tensor is the plain contraction of the left inverses of the
+two factors. It does not state that this contraction is the adjoint of the
+contracted map, because the virtual spaces of the two-dimensional
+concatenation are abstract tensor products without inner products.
+Elimination: equip the virtual and physical spaces of the two-dimensional
+concatenation with inner products for which the left-regular
+representation is unitary, and show that the contraction of adjoints is
+the adjoint of the contraction.
 
 \section{Scope: statements about the whole network}
 Two statements of the review concern the contracted lattice rather than
@@ -123,7 +155,18 @@ holonomy have coefficient $0$. The normalization and the representation
 are local corrections within that restriction and are conventions that
 need no further work. The pulling-through identity of the representation
 operators across the contracted primal network is formalized on the torus.
-No elimination is planned: the unrestricted reading is false on the torus.
+For these torus statements no elimination is planned: the unrestricted
+reading is false on the torus.
+
+The note also records one open scope restriction. Stability of
+$G$-isometry under concatenation is formalized for matrix product tensors,
+and in two dimensions only the simplification of the left inverse for the
+left-regular representation on the contracted link is formalized. The
+elimination plan is the one given in the section on concatenation: equip
+the two-dimensional virtual and physical spaces with inner products for
+which the left-regular representation is unitary, and show that the
+contraction of the adjoints of the two factors is the adjoint of the
+contracted map.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -24,6 +24,18 @@ theorem. These results establish tensor decompositions and periodic trace
 identities for the examples, not a classification of length-dependent fixed
 points.
 
+The density formulas are~(\ref{eq:asymex_R_density}) and
+Theorem~\ref{thm:asymex_T_density}. The channel equations, including
+arbitrary boundary matrices, are proved in
+Theorem~\ref{thm:asymex_physical_rfp}; their necessary physical-trace
+identity is Theorem~\ref{thm:asymex_trace_obstruction}. The one-label
+and dimer word-span certificates are
+Theorems~\ref{thm:asymex_one_label_normal} and~\ref{thm:asymex_dimer_normal},
+with compression and trace identities in
+Theorems~\ref{thm:asymex_one_label_compression},
+\ref{thm:asymex_one_label_trace}, \ref{thm:asymex_dimer_compression},
+and~\ref{thm:asymex_dimer_trace}.
+
 Write $E_{ij}=\ketbra{i}{j}$ and
 $\ket{\Phi_\pm}=(\ket{00}\pm\ket{11})/\sqrt2$, with
 $P_\pm=\ketbra{\Phi_\pm}{\Phi_\pm}$.
@@ -671,12 +683,9 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
 
 \begin{theorem}[Split compression of the one-label fixed point]
     \label{thm:asymex_one_label_compression}
-    % Principal declaration: P6Compression.oneLabel_isReduction.
-    \lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_isReduction,
-        P6Compression.oneLabel_left_mul_right_of_ne, P6Compression.oneLabel_z_eq,
-        P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder,
-        P6Compression.oneLabel_mul_right_eq_right_mul,
-        P6Compression.oneLabel_left_mul_eq_mul_left}
+    % Principal declaration: P6Compression.oneLabel_dim_eq.
+    \lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_z_eq,
+        P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder}
     \leanok
     \uses{def:asymex_one_label, thm:asym_multiblock}
     The stacked tensor $B$ has the block triangular form of

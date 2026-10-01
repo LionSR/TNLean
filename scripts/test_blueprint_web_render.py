@@ -32,14 +32,14 @@ from pathlib import Path
 
 _SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(_SCRIPTS))
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Page, Route, sync_playwright
 
 # The rule deciding what a bracket after a row break means belongs to the
 # renderer. It is read from there rather than restated, so the two cannot
 # come to disagree; the module it lives in imports no renderer of its own.
 from texra_blueprint.texgrammar import (
     CONTROL_WORD, DIMENSION_EXPRESSION, ROW_BREAK_LENGTH)
-from test_tenkz_equation_web import serve
+from test_tenkz_equation_web import _cdn_fetch, _mathjax_bundle, serve
 
 
 # A width at which a phone reads the blueprint, and a width at which a desktop
@@ -264,16 +264,44 @@ def _assert_page_owns_no_sideways_scroll(name: str, width: int, facts: dict) -> 
     assert not facts["escaped"], (name, width, facts["escaped"])
 
 
-def _check_pages(base_url: str, names: list[str]) -> int:
+def _check_pages(base_url: str, names: list[str],
+                 mathjax: tuple[str, bytes, str]) -> int:
     """Open each named page in one browser and return how much was typeset."""
+    mathjax_url, mathjax_body, mathjax_type = mathjax
+    # Every page loads MathJax through a blocking script tag, so a stalled CDN
+    # request stalls DOMContentLoaded.  Serve the bundle, and the extensions it
+    # loads lazily from the same tree, from this process instead.
+    if "/es5/" in mathjax_url:
+        mathjax_glob = mathjax_url.split("/es5/", 1)[0] + "/es5/**"
+    else:
+        mathjax_glob = mathjax_url.rsplit("/", 1)[0] + "/**"
+    mathjax_cache = {mathjax_url: (mathjax_body, mathjax_type)}
+
+    def fulfill_mathjax(route: Route) -> None:
+        url = route.request.url
+        asset = mathjax_cache.get(url)
+        if asset is None:
+            asset = mathjax_cache[url] = _cdn_fetch(url)
+        body, content_type = asset
+        route.fulfill(
+            body=body,
+            content_type=content_type,
+            # MathJax loads its fonts cross-origin from this tree; Chromium
+            # rejects a cross-origin font without this header.
+            headers={"Access-Control-Allow-Origin": "*"},
+        )
+
     typeset = 0
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": MOBILE_WIDTH, "height": 900})
         page.set_default_timeout(120_000)
+        page.route(mathjax_glob, fulfill_mathjax)
         for name in names:
+            # Parsing the largest chapters can itself take minutes on a loaded
+            # runner while the other browsers typeset, as in the equation test.
             page.goto(f"{base_url}/{name}",
-                      wait_until="domcontentloaded", timeout=120_000)
+                      wait_until="domcontentloaded", timeout=300_000)
             # Proofs are folded away by default; a folded proof has no width,
             # so its displays would escape measurement.
             page.add_style_tag(content=".proof_content { display: block !important; }")
@@ -320,16 +348,17 @@ def main() -> int:
     _assert_generated_source(pages)
 
     batches = _balanced_batches(pages, max(1, args.jobs))
+    mathjax = _mathjax_bundle(root)
     with serve(root) as base_url:
         if len(batches) == 1:
-            typeset = _check_pages(base_url, batches[0])
+            typeset = _check_pages(base_url, batches[0], mathjax)
         else:
             # Each worker drives its own browser: the synchronous Playwright
             # API is bound to the thread that started it.  Workers are spawned
             # rather than forked because the server runs on a thread here.
             context = multiprocessing.get_context("spawn")
             with ProcessPoolExecutor(len(batches), mp_context=context) as pool:
-                futures = [pool.submit(_check_pages, base_url, batch)
+                futures = [pool.submit(_check_pages, base_url, batch, mathjax)
                            for batch in batches]
                 typeset = sum(future.result() for future in futures)
 

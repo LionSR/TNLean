@@ -12,6 +12,7 @@ import TNLean.MPS.Examples.MultiBlock.ElementaryStates
 import TNLean.MPS.Examples.MultiBlock.GHZSectors
 import TNLean.MPS.Examples.MultiBlock.JordanBoundary
 import TNLean.MPS.Examples.MultiBlock.OneSlotGauge
+import TNLean.MPS.Examples.MultiBlock.ParityAmplitudes
 import TNLean.MPS.Examples.MultiBlock.ParityGraded
 import TNLean.MPS.Examples.MultiBlock.RepeatedBlock
 import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
