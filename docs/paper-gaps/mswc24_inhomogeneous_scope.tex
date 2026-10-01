@@ -90,15 +90,29 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
           largest of these depths is absorbed into the constant of the depth
           bound.
     \item \emph{Sequence-level statement.} State the source's definition of
-          finite correlation length for the sequence, with a rate: unit pairs
-          with $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta(N,q)$ after
-          blocking $q$ sites. Choosing the block length $L$ with
-          $\delta(N,L)\le\varepsilon$, which is $L=O(\log(N/\varepsilon))$
-          when $\delta(N,q)$ decays exponentially in $q$ at fixed $N$ up to a
-          factor polynomial in $N$, as in the translation-invariant case, turns
-          the depth bound $CL$ and the error $\delta$ proved for one ring into
-          the source's depth $O(\log(N/\varepsilon))$ with error at most
-          $\varepsilon$.
+          finite correlation length for the sequence: unit pairs with
+          $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta_N$ after blocking
+          $q_N$ sites, with $\delta_N\to0$. This removes the restriction to one
+          ring, but it does not give the depth $O(\log(N/\varepsilon))$: the
+          source supplies no rate for $\delta_N$, and the choice of a block
+          length $L$ with error at most $\varepsilon$ and $L=O(\log(N/\varepsilon))$
+          needs one. In the translation-invariant case the rate is proved: the
+          error after blocking $q$ sites of a ring of $N$ sites is
+          $O((N/q)\,e^{-\gamma q/\xi})$ for every $\gamma<1/2$, for one fixed
+          normal tensor, with constants depending on that tensor (\cite{Malz2024Preparation}, Lemma~1 and
+          eq.~(17))\footnote{Formal declaration:
+              \leanid{MPSTensor.exists_approximationError_le_mul}, which proves
+              the faster rate $e^{-2\gamma q/\xi}$ for $\gamma<1$; it gives the
+              homogeneous depth in
+              \path{docs/paper-gaps/mswc24_depth_upper_bound_divisible_length.tex}.}.
+          For the inhomogeneous sequence the tensors change with $N$, and the
+          same choice of $L$ requires a bound
+          $\delta(N,q)\le C\,N^{k}e^{-cq}$ with $C$, $c>0$ and $k$ independent of
+          $N$. The source states no such uniform bound and does not derive one
+          from $\delta_N\to0$. A formal statement with this uniform rate as a
+          hypothesis would be a further scope-restricted theorem, not the
+          source's; with $\delta_N\to0$ alone the sequence-level depth
+          $O(\log(N/\varepsilon))$ remains open.
 \end{enumerate}
 
 \bibliographystyle{alpha}
