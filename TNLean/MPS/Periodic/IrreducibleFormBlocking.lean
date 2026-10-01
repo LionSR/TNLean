@@ -18,6 +18,11 @@ The supplied presentation carries all-length MPV equality, not a literal bond
 similarity. The explicit orbit isometries remain available from
 `IsPeriodic.exists_stepOrbit_blockDecomposition`; the global similarity
 needed for the corrected forward theorem is a separate construction.
+
+**Scope restriction (length, representation, and normalization):** the
+presentations here are values of `IsIrreducibleForm`, a normalized MPV-level
+representation of the source irreducible form that also imposes empty-word
+equality. Documented in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 -/
 
 open scoped BigOperators Matrix
