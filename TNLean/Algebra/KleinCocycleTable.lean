@@ -30,6 +30,7 @@ orbit to have four elements.
   when arbitrary fusion gauges are allowed.
 * `kleinCocycleFamily_one_subgroup_iff`: only the trivial subgroup has identically
   one restriction for the all-ones parameter triple.
+* `kleinCocycleFamily_zero_zero_one`: the `(0,0,1)` representative is `kleinCocycle`.
 
 ## References
 
@@ -110,6 +111,15 @@ theorem kleinCocycleFamily_one_restriction_iff (x y : ZMod 2) :
   revert x y
   decide
 
+/-- The `(1,1,1)` representative has diagonal value one only at the identity
+(arXiv:2203.12563, line 1869). -/
+theorem kleinCocycleFamily_one_diagonal_eq_one {g : Multiplicative (ZMod 2 × ZMod 2)}
+    (hd : kleinCocycleFamily 1 1 1 g g g = 1) : g = 1 := by
+  have hz := ((kleinCocycleFamily_restriction_eq_one_iff 1 1 1
+    (toAdd g).1 (toAdd g).2).symm.trans
+    (kleinCocycleFamily_one_restriction_iff (toAdd g).1 (toAdd g).2)).mp hd
+  exact congrArg ofAdd (Prod.ext hz.1 hz.2)
+
 /-- The last row of the subgroup table in arXiv:2203.12563, line 1869:
 the `(1,1,1)` representative restricts to one only on the trivial subgroup. -/
 theorem kleinCocycleFamily_one_subgroup_iff
@@ -120,11 +130,7 @@ theorem kleinCocycleFamily_one_subgroup_iff
     apply le_antisymm ?_ bot_le
     intro g hg
     change g = 1
-    have hd := ((kleinCocycleFamily_restriction_eq_one_iff 1 1 1
-      (toAdd g).1 (toAdd g).2).symm.trans
-      (kleinCocycleFamily_one_restriction_iff (toAdd g).1 (toAdd g).2)).mp
-        (h ⟨g, hg⟩ ⟨g, hg⟩ ⟨g, hg⟩)
-    exact congrArg ofAdd (Prod.ext hd.1 hd.2)
+    exact kleinCocycleFamily_one_diagonal_eq_one (h ⟨g, hg⟩ ⟨g, hg⟩ ⟨g, hg⟩)
   · rintro rfl a b c
     have ha : (a : Multiplicative (ZMod 2 × ZMod 2)) = 1 := a.property
     rw [ha]
@@ -159,9 +165,8 @@ theorem kleinCocycleFamily_cohomologousTo_iff (p q r p' q' r' : ZMod 2) :
   · intro h
     have hinj : Function.Injective (fun x : ZMod 2 ↦ (-1 : Units ℂ) ^ x.val) := by
       intro x y
-      have hcases (z : ZMod 2) : z = 0 ∨ z = 1 := by revert z; decide
-      rcases hcases x with rfl | rfl <;>
-        rcases hcases y with rfl | rfl <;> norm_num [ZMod.val_one]
+      rcases zmod_two_eq_zero_or_one x with rfl | rfl <;>
+        rcases zmod_two_eq_zero_or_one y with rfl | rfl <;> norm_num [ZMod.val_one]
     have ha := kleinCocycleFamily_diagonal_eq_of_cohomologousTo h (ofAdd (1, 0))
     have hb := kleinCocycleFamily_diagonal_eq_of_cohomologousTo h (ofAdd (0, 1))
     have hc := kleinCocycleFamily_diagonal_eq_of_cohomologousTo h (ofAdd (1, 1))
@@ -191,10 +196,7 @@ theorem kleinCocycleFamily_one_isTrivialGaugeClass_comap_iff
     have hi := cyclicInvariant_eq_one_of_isTrivialGaugeClass h hg2
     have hd : kleinCocycleFamily 1 1 1 g g g = 1 := by
       simpa [cyclicInvariant, Finset.prod_range_succ, comap, kleinCocycleFamily] using hi
-    have hz := ((kleinCocycleFamily_restriction_eq_one_iff 1 1 1
-      (toAdd g).1 (toAdd g).2).symm.trans
-      (kleinCocycleFamily_one_restriction_iff (toAdd g).1 (toAdd g).2)).mp hd
-    exact congrArg ofAdd (Prod.ext hz.1 hz.2)
+    exact kleinCocycleFamily_one_diagonal_eq_one hd
   · intro h
     have he : comap H.subtype (kleinCocycleFamily 1 1 1) = 1 := by
       funext a b c
