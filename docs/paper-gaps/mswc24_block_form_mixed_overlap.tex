@@ -396,7 +396,11 @@ from (S4); with those coefficients the counterexample (\ref{eq:mswc24_phase_over
 \cite{gap:mswc24_repeated_block_corrected_state}, which replaces (S7), with complex weights of
 modulus at most one and the coefficients $\beta_j=\sum_k\mu_{j,k}^N$ of (S4), up to a factor
 $\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$ that is one when $\sum_j\lvert\beta_j\rvert^2\geq1$,
-and without that factor for real weights in $[0,1]$ one of which is one. Two extensions are not
+and without that factor for real weights in $[0,1]$ one of which is one. The state (S7) itself,
+with the pairs of block $j$ on one copy $k_j$, is the corrected state when its coefficients are
+$\beta_j(c_j/\mu_{j,k_j}^q)^M$ with $c_j=(\sum_k\lvert\mu_{j,k}\rvert^{2q})^{1/2}$, which is
+$\lvert\mu_j\rvert^N$ for multiplicity one; with these coefficients the bounds above hold for
+(S7) and weights of any phase \cite{gap:mswc24_repeated_block_corrected_state}. Two extensions are not
 formalized: the bound without that factor when $\sum_j\lvert\beta_j\rvert^2<1$, as for cancelling
 weights or weights all of modulus below one \cite{gap:mswc24_repeated_overlap_small_weight_sum},
 and the sharp rate $(N/q)\tau^{2q}$; both need a second-order perturbation bound for the square

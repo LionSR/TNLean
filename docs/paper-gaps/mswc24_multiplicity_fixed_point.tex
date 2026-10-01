@@ -175,6 +175,17 @@ the pairs of block $j$ on all of its copies at once. For blocks whose $q$-site
 states are orthogonal the corrected block form, the corrected state and the
 error bound are formalized there.
 
+The pairs may also stay on one copy $k_j$ of each block if the weights are
+changed: $V$ sends the pairs on copy $k_j$ to $(\mu_{j,k_j}^q/c_j)^M$ times the
+pairs placed by $L_j$, so the state (\ref{eq:mswc24_approx_state}) with the
+coefficients $\beta_j(c_j/\mu_{j,k_j}^q)^M$ in place of $\beta_j$ is the corrected
+state, for weights of any phase and for blocks whose $q$-site states overlap
+\cite{gap:mswc24_repeated_block_corrected_state}.
+For the counterexample above the coefficients are $(2\cdot2^{M/2},1)$, and the
+state (\ref{eq:mswc24_counterexample_approx}) becomes
+$2\ket{0\cdots0}^{\otimes M}+\ket{1\cdots1}^{\otimes M}$, the target. The identity
+with the corrected state and the resulting error bounds are formalized there.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
