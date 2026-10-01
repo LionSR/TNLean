@@ -8,6 +8,7 @@ import TNLean.MPS.Chain.BlockTensor
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.BlockSites
+import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.Spectral.MPVOverlapTrace
 
 /-!
@@ -25,16 +26,12 @@ Cut a ring of `N` sites into `M` blocks of lengths `ℓ 0, …, ℓ (M - 1)`
 proof of Theorem 1, blocks the chain into blocks "all of the same size, `q_N`, except for the last
 one, which may be larger"; the present file allows any lengths.
 
-**Scope restriction (common bond dimension):** the site-dependent declarations
-`MPSTensor.chainBlockTensor`, `MPSTensor.coeff_eq_mpvFamily_chainBlockTensor`,
-`MPSTensor.pairFamilyVector`, `MPSTensor.pairFamilyVector_apply`,
-`MPSTensor.norm_pairFamilyVector`, `MPSTensor.blockIsoVector`, `MPSTensor.blockIsoVector_apply`,
-`MPSTensor.inner_blockIsoVector`, `MPSTensor.norm_blockIsoVector`,
-`MPSTensor.chainBlockIsometryState` and `MPSTensor.chainBlockIsometryState_apply` model the inhomogeneous
-matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS",
-with the same square bond dimension `D` at every site, while the source allows "bond dimension at
-most `D`" varying along the ring. The translation-invariant declarations of this file are not
-affected. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+The site-dependent declarations apply to the inhomogeneous matrix product states of
+arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS", which have "bond
+dimension at most `D`" varying along the ring, through their zero-padded chains
+(`MPSPreparation.VaryingBondChain.zeroPad`); the padded blocked tensors are injective only on the
+rectangles of their bonds, and `MPSTensor.inner_blockIsoVector_of_isInjectiveOn` covers that
+case.
 
 ## Main declarations
 
@@ -51,7 +48,9 @@ affected. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 * `MPSTensor.chainBlockIsometryState` — the same state for site-dependent tensors and
   site-dependent pairs, `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}`, arXiv:2307.01696, paragraph
   "Inhomogeneous short-range correlated MPS"; `MPSTensor.inner_blockIsoVector` — the
-  isometries `⊗ₖ V_k` preserve inner products when every blocked tensor is injective.
+  isometries `⊗ₖ V_k` preserve inner products when every blocked tensor is injective;
+  `MPSTensor.inner_blockIsoVector_of_isInjectiveOn` — the same for partial isometries on vectors
+  supported where they are isometric.
 
 ## References
 
@@ -305,6 +304,28 @@ noncomputable def blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
       (∏ k, polarIsoMatrix (B k) (blockIndexEquiv d hN s k) (τ k)) * x τ := by
   simp [blockIsoVector, EuclideanSpace.equiv, PiLp.toLp_apply]
 
+/-- **The partial isometries preserve inner products of supported vectors.** If every tensor
+`B_k` is injective on a set `S_k` of bond pairs, so that `V_k†V_k` is the projector onto `S_k`,
+then `⟨(⊗ₖ V_k) x, (⊗ₖ V_k) y⟩ = ⟨x, y⟩` whenever `x^* y` vanishes at every configuration `τ` with
+some `τ_k ∉ S_k`.
+
+arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
+`V†V = Π`. -/
+theorem inner_blockIsoVector_of_isInjectiveOn {N : ℕ} {ℓ : Fin M → ℕ}
+    {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
+    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (B k) (S k))
+    (x y : MPVSpace (D * D) M)
+    (hxy : ∀ τ, (∃ k, virtualPairEquiv D (τ k) ∉ S k) → star (x τ) * y τ = 0) :
+    ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
+  classical
+  simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
+  have h := Matrix.sum_star_mul_prod_of_support (S := fun k => virtualPairEquiv D ⁻¹' S k)
+    (fun k a b => by simpa using sum_star_polarIsoMatrix_mul (hB k) a b)
+    (fun τ => x τ) (fun τ => y τ) hxy
+  rw [← Fintype.sum_equiv (blockIndexEquiv d hN) _ _ fun _ => rfl] at h
+  simp only [mul_comm (star _)] at h ⊢
+  exact h
+
 /-- **The isometries preserve inner products.** If every blocked tensor is injective, then
 `⟨(⊗ₖ V_k) x, (⊗ₖ V_k) y⟩ = ⟨x, y⟩`.
 
@@ -313,24 +334,28 @@ arXiv:2307.01696, paragraph "Approximation through the fixed-point state": for i
 theorem inner_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
     (hB : ∀ k, Kraus.IsInjective (B k)) (x y : MPVSpace (D * D) M) :
-    ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
-  classical
-  simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
-  have h := Matrix.IsIsometry.sum_star_mul_prod
-    (fun k => isIsometry_polarIsoMatrix_of_isInjective (hB k)) (fun τ => x τ) (fun τ => y τ)
-  rw [← Fintype.sum_equiv (blockIndexEquiv d hN) _ _ fun _ => rfl] at h
-  simp only [mul_comm (star _)] at h ⊢
-  exact h
+    ⟪blockIsoVector B hN x, blockIsoVector B hN y⟫_ℂ = ⟪x, y⟫_ℂ :=
+  inner_blockIsoVector_of_isInjectiveOn hN (fun k => isInjectiveOn_univ_iff.mpr (hB k)) x y
+    fun _ ⟨_, hk⟩ => absurd (Set.mem_univ _) hk
+
+/-- The partial isometries preserve the norm of a vector supported on the sets `S_k`. -/
+theorem norm_blockIsoVector_of_isInjectiveOn {N : ℕ} {ℓ : Fin M → ℕ}
+    {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
+    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (B k) (S k))
+    (x : MPVSpace (D * D) M) (hx : ∀ τ, (∃ k, virtualPairEquiv D (τ k) ∉ S k) → x τ = 0) :
+    ‖blockIsoVector B hN x‖ = ‖x‖ := by
+  have h := inner_blockIsoVector_of_isInjectiveOn hN hB x x fun τ hτ => by rw [hx τ hτ, mul_zero]
+  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
 
 /-- The isometries preserve norms: `‖(⊗ₖ V_k) x‖ = ‖x‖` when every blocked tensor is
 injective. -/
 theorem norm_blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
     (hB : ∀ k, Kraus.IsInjective (B k)) (x : MPVSpace (D * D) M) :
-    ‖blockIsoVector B hN x‖ = ‖x‖ := by
-  have h := inner_blockIsoVector hN hB x x
-  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
-  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
+    ‖blockIsoVector B hN x‖ = ‖x‖ :=
+  norm_blockIsoVector_of_isInjectiveOn hN (fun k => isInjectiveOn_univ_iff.mpr (hB k)) x
+    fun _ ⟨_, hk⟩ => absurd (Set.mem_univ _) hk
 
 /-- **The state `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}`** for a chain of site-dependent tensors `A`
 blocked into blocks of lengths `ℓ`, and site-dependent pairs `ω^k`: `V_k` is the isometric

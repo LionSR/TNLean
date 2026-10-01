@@ -79,6 +79,7 @@ import TNLean.MPS.Preparation.SequentialTransition
 import TNLean.MPS.Preparation.ShortChainPreparation
 import TNLean.MPS.Preparation.SiteEmbedding
 import TNLean.MPS.Preparation.Staircase
+import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.MPS.Preparation.TeleportationChains
 import TNLean.MPS.Preparation.TeleportationRound
 import TNLean.MPS.Preparation.TreeFactorization
@@ -87,6 +88,7 @@ import TNLean.MPS.Preparation.TreeMeasurement
 import TNLean.MPS.Preparation.TwoLevel
 import TNLean.MPS.Preparation.UnitaryGates
 import TNLean.MPS.Preparation.VarianceOfAverages
+import TNLean.MPS.Preparation.VaryingBondChain
 import TNLean.MPS.Preparation.WindowClustering
 import TNLean.MPS.Preparation.WindowCorrelator
 import TNLean.MPS.Preparation.WindowGHZ
