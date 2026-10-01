@@ -117,6 +117,7 @@ end MeasurementRound
 
 /-! ### Permutations of sites supported on a set -/
 
+omit [NeZero N] in
 /-- A permutation fixing every site outside `S` maps `S` into `S`. -/
 private theorem perm_apply_mem {π : Equiv.Perm (Fin N)} {S : Set (Fin N)}
     (hπ : ∀ i ∉ S, π i = i) {i : Fin N} (hi : i ∈ S) : π i ∈ S := by
@@ -287,6 +288,7 @@ def back : List (TeleportHop N) := backwardChain g.a g.L (by have := g.lt; omega
 theorem near_ne_far : g.near ≠ g.far :=
   add_natCast_ne g.a (by have := g.lt; omega) g.lt (by omega)
 
+omit [NeZero N] in
 private theorem pair_injective {k k' : Fin N} (h : k ≠ k') : Function.Injective ![k, k'] := by
   intro i j hij
   fin_cases i <;> fin_cases j <;> simp_all [eq_comm]
@@ -303,6 +305,21 @@ theorem localGate_mem_supportedOperators : g.localGate ∈ supportedOperators d 
   rw [Matrix.range_cons_cons_empty] at this
   rw [bond, near, add_natCast_succ]
   exact this
+
+theorem a_ne_far : g.a ≠ g.far := by
+  intro h
+  refine add_natCast_ne g.a (j := 0) (k := 2 * g.L + 1) (by have := g.lt; omega) g.lt
+    (by omega) ?_
+  rw [Nat.cast_zero, add_zero]
+  exact h
+
+theorem op_mem_unitary : g.op ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+  embedOp_mem_unitary (pair_injective g.a_ne_far) g.u_mem_unitary
+
+/-- The gate acts on its two sites `a` and `a + 2L + 1`. -/
+theorem op_mem_supportedOperators : g.op ∈ supportedOperators d {g.a, g.far} := by
+  have := embedOp_mem_supportedOperators (d := d) (pair_injective g.a_ne_far) g.u
+  rwa [Matrix.range_cons_cons_empty] at this
 
 theorem a_mem_span : g.a ∈ g.span := ⟨0, by omega, by simp⟩
 
@@ -370,8 +387,6 @@ noncomputable def localLayer : Layer d N :=
   layerOfList gs near localGate (pairwise_disjoint_bond hgs)
     (fun g _ => g.localGate_mem_unitary) fun g _ => g.localGate_mem_supportedOperators
 
-variable [NeZero d]
-
 theorem localLayer_op : (localLayer hgs).op = (gs.map localGate).prod :=
   layerOfList_op _ _ _ _ _ _
 
@@ -384,6 +399,8 @@ include hgs in
 theorem valid_back : Valid (gs.flatMap back) :=
   valid_flatMap (fun _ _ => valid_backwardChain _ _ _) (fun g _ => g.allSites_back_subset_span)
     hgs
+
+variable [NeZero d]
 
 include hgs in
 /-- After the forward chains, the sites `a, …, a + 2L - 1` of every gate carry `|0⟩`. -/
@@ -453,6 +470,7 @@ theorem sitePerm_there_eq_symm :
     rw [sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_there_subset_span) hi,
       sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_back_subset_span) hi]
 
+omit [NeZero d] in
 include hgs in
 /-- **The layer conjugated by the chains.** The backward chains, the gates on the neighbouring
 pairs, and the forward chains compose to the product of the long-range gates. -/

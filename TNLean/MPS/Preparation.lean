@@ -76,6 +76,7 @@ import TNLean.MPS.Preparation.TeleportationChains
 import TNLean.MPS.Preparation.TeleportationRound
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA
+import TNLean.MPS.Preparation.TreeMeasurement
 import TNLean.MPS.Preparation.TwoLevel
 import TNLean.MPS.Preparation.UnitaryGates
 import TNLean.MPS.Preparation.VarianceOfAverages

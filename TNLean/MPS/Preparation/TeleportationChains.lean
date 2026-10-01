@@ -109,8 +109,7 @@ theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Set (Fin N)} {v : Cfg d N 
   rw [permMatrix_mulVec] at hy
   exact h _ hy i hi
 
-/-- An operator acting on sites outside `S` keeps `|0⟩` at the sites of `S`. -/
-theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Finset (Fin N)} {v : Cfg d N → ℂ}
+private theorem isZeroOn_mulVec_of_finset {S : Finset (Fin N)} {v : Cfg d N → ℂ}
     (h : IsZeroOn (S : Set (Fin N)) v) {T : Set (Fin N)} (hST : Disjoint (S : Set (Fin N)) T)
     {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d T) :
     IsZeroOn (S : Set (Fin N)) (A *ᵥ v) := by
@@ -133,6 +132,15 @@ theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Finset (Fin N)} {v : Cfg 
     commute_of_mem_supportedOperators hST (ctrlProj_mem_supportedOperators S 0) hA
   rw [hP] at h ⊢
   rw [mulVec_mulVec, hc.eq, ← mulVec_mulVec, h]
+
+/-- An operator acting on sites outside `S` keeps `|0⟩` at the sites of `S`. -/
+theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Set (Fin N)} {v : Cfg d N → ℂ}
+    (h : IsZeroOn S v) {T : Set (Fin N)} (hST : Disjoint S T)
+    {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d T) :
+    IsZeroOn S (A *ᵥ v) := by
+  classical
+  simpa using isZeroOn_mulVec_of_finset (S := S.toFinset) (by simpa using h)
+    (by simpa using hST) hA
 
 variable [NeZero N]
 
