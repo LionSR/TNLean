@@ -930,9 +930,15 @@
         =\mu'_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger. \notag
     \end{align}
     The enumeration is a bijection between grouped copies and original
-    blocks. Assemble the block unitaries and this permutation into $Y$.
-    The block identities give $T^i=YP^iY^\dagger$, and unitarity gives both
-    inverse identities. The same bijection and the equality of matched
+    blocks. Let $\Pi$ be the permutation matrix sending the copy $(j,q)$ to the
+    block $e(j,q)$, and set $Y=\Pi\bigl(\bigoplus_{j,q}U_{j,q}\bigr)$. Then
+    \begin{align}
+        YY^\dagger    & =\Pi\Bigl(\bigoplus_{j,q}U_{j,q}U_{j,q}^\dagger\Bigr)\Pi^\dagger=\Id,
+        \notag                                                                                                 \\
+        YP^iY^\dagger & =\Pi\Bigl(\bigoplus_{j,q}\mu'_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger\Bigr)\Pi^\dagger
+        =\bigoplus_k\mu_kA_k^i=T^i, \notag
+    \end{align}
+    and likewise $Y^\dagger Y=\Id$. The same bijection and the equality of matched
     block dimensions give equality of total dimensions.
     The phases have modulus one, so the individual weight moduli are
     unchanged. For $N>0$, the factors $Y^\dagger Y=I$ between adjacent
