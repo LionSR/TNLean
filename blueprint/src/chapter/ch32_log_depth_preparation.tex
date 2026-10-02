@@ -704,7 +704,9 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     \label{lem:ldp_positive_part_overlap}
     \lean{MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le_mul,
         MPSTensor.exists_abs_one_sub_norm_mpvOverlap_polarPosTensor_le,
-        MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le}
+        MPSTensor.exists_norm_mpvOverlap_polarPosTensor_sub_one_le,
+        MPSTensor.exists_norm_trace_prod_range_transferMatrix_sub_one_le,
+        MPSTensor.exists_norm_mpvState_sq_le}
     \leanok
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
         def:correlation_length}
@@ -891,6 +893,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_approximationError_le, MPSTensor.normalizedMPVState,
         MPSTensor.approximatingMPVState,
         MPSTensor.exists_abs_norm_mpvState_sq_sub_one_le,
+        MPSTensor.exists_norm_transferMatrix_pow_sub_le,
         MPSTensor.one_sub_norm_inner_smul_inv_norm_le_two_mul}
     \leanok
     \uses{thm:ldp_positive_part_overlap_second_order, def:ldp_approximating_state,
@@ -3268,6 +3271,7 @@ $A$ along $w$.
         MPSTensor.nonNormalApproxVector_blockSum,
         MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum,
         MPSTensor.mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero,
+        MPSTensor.mpvOverlap_eq_zero,
         MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
