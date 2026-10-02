@@ -5993,6 +5993,39 @@ tensors.
     increase the operator norm.
 \end{proof}
 
+\begin{theorem}[Open-chain gaps on divisible lengths for primitive block sums]
+    \label{thm:primitive_block_sum_open_gap_subsequence}
+    \lean{MPSTensor.%
+        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS}
+    \leanok
+    Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
+    common physical dimension $d\geq1$, positive bond dimensions,
+    and positive-definite invariant matrices. Assume that no two distinct
+    blocks are related by a virtual similarity and a phase. Let
+    $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$, with every $\mu_j\neq0$.
+    For every $R_*\in\mathbb N$, there are $p\geq\max\{1,R_*\}$ and
+    $\gamma>0$ such that
+    \begin{align}
+        \gamma\|v\|\leq
+        \|H^{\mathrm{open}}_{pM,2p}(B)v\|\notag
+    \end{align}
+    for every $M\geq2$ and every
+    $v\perp\ker H^{\mathrm{open}}_{pM,2p}(B)$.
+    This follows from the grouped martingale estimate of
+    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ph_primitive_blocks_open_kernel,
+        thm:ph_block_diagonal_projector_decay,
+        thm:grouped_c3_from_projector_defect,thm:grouped_open_parent_gap}
+    Choose $p$ above $R_*$ and the open-kernel threshold, and sufficiently
+    large that the three-interval projector error is at most $1/2$ for
+    every pair of outer lengths at least $p$. The grouped C3 estimate
+    then holds with $\epsilon=1/2<1/\sqrt2$. The grouped open-chain
+    bound gives $\gamma=(1-\sqrt2/2)^2>0$ at every length $pM$, $M\geq2$.
+\end{proof}
+
 \begin{theorem}[Uniformly gapped interaction ranges for primitive block sums]
     \label{thm:primitive_block_sum_parent_gap}
     \lean{MPSTensor.exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS,
@@ -6017,18 +6050,13 @@ tensors.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ph_primitive_blocks_open_kernel,
-        thm:ph_block_diagonal_projector_decay,
-        thm:grouped_c3_from_projector_defect,
-        thm:grouped_open_parent_gap,thm:periodic_gap_from_divisible_open}
-    Choose $p$ above the prescribed bound and the open-kernel threshold,
-    and sufficiently large that the three-interval projector error is at
-    most $1/2$, uniformly in the two outer lengths. Set $R=2p$.
-    The preceding theorem gives grouped C3 with $\epsilon=1/2$.
-    Since $1/2<1/\sqrt2$, the grouped open-chain estimate gives the
-    positive coefficient $(1-\sqrt2/2)^2$ at every length $pM$
-    with $M\geq2$. The finite-range comparison then supplies a positive
-    periodic gap at every sufficiently large length.
+    \uses{thm:primitive_block_sum_open_gap_subsequence,
+        thm:periodic_gap_from_divisible_open}
+    Choose $p\geq\max\{1,R_*\}$ by
+    Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence} and set $R=2p$.
+    The uniform open-chain gap on lengths $pM$, $M\geq2$, gives a positive
+    periodic gap at every sufficiently large length by
+    Theorem~\ref{thm:periodic_gap_from_divisible_open}.
 \end{proof}
 
 \begin{theorem}[Operator order after adjoining free sites]
@@ -6090,12 +6118,14 @@ tensors.
 \begin{lemma}[Comparison with the kernel projection]
     \label{lem:positive-kernel-projection-comparison}
     \lean{LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker,
+        LinearMap.IsPositive.smul_orthogonal_ker_projection_le_of_norm_gap,
         LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le,
         LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection}
     \leanok
     Let $H$ be a positive operator on a finite-dimensional complex Hilbert
     space. If $P$ is the orthogonal projection onto $(\ker H)^\perp$,
-    then $aP\leq H\leq bP$ for some $a,b>0$.
+    then $aP\leq H\leq bP$ for some $a,b>0$. More precisely, a norm gap
+    $\gamma\geq0$ on $(\ker H)^\perp$ implies $\gamma P\leq H$.
 \end{lemma}
 \begin{proof}\leanok
     The restriction of $H$ to $(\ker H)^\perp$ is injective and thus has
@@ -6811,6 +6841,121 @@ tensors.
     so $\Gamma^{A^i}_S(\Id)=0$, contradicting injectivity of the boundary map.
 \end{proof}
 
+\begin{theorem}[Propagation of a positive-length simultaneous span]
+    \label{thm:block_word_span_propagation}
+    \lean{MPSTensor.wordTupleSpanTop_of_ge}
+    \leanok
+    \uses{def:blockwise_product_word_span}
+    Let $A^0,\ldots,A^{r-1}$ have positive bond dimensions and a common
+    physical dimension. Suppose that their simultaneous length-$S$ word
+    tuples span the product matrix algebra, where $S>0$. Then their word
+    tuples span the same algebra at every length $n\geq S$.
+    This is the propagation of block injectivity used in
+    \cite[Section~IV.C]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:block_injective_of_word_tuple_span,
+        thm:normalized_primitive_gauge,thm:word_tuple_span_gauge_invariance,
+        thm:block_word_span_independent_rescaling,thm:ph_tp_word_span_propagation}
+    Each block is $S$-block injective and hence normal. Rescale and conjugate
+    each block into normalized primitive form. Both operations preserve
+    the simultaneous span at $S$. Trace preservation propagates that span
+    to $n\geq S$. Inverse conjugation and rescaling return the full span
+    to the original family at length $n$.
+\end{proof}
+
+\begin{theorem}[Open ground spaces at a simultaneous injectivity length]
+    \label{thm:block_open_kernel_simultaneous_injectivity}
+    \lean{MPSTensor.%
+        ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
+    Suppose that their simultaneous length-$S$ word tuples span the product
+    matrix algebra, where $S>0$. Set $B=\bigoplus_j\mu_jA^j$, with
+    every $\mu_j\neq0$. For every $S+1\leq R\leq N$,
+    $\ker H^{\mathrm{open}}_{N,R}(B)=G_N^{\mathrm{ES}}(B)$.
+    This sufficient range follows from the inversion and regrowth argument in
+    \cite[Section~IV.C, lines~2114--2129]{Cirac2021Matrix}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:block_word_span_primitive_normalization,
+        thm:ph_tp_word_span_propagation,thm:ph_tp_block_open_ground_space,
+        thm:ph_block_replacement_parent_equality}
+    Normalize the blocks while preserving their simultaneous span at $S$
+    and every component local space. Trace preservation gives the span
+    at all lengths at least $S$, so the open-chain intersection theorem
+    gives the kernel identity for the normalized block sum. The original
+    and normalized sums have equal local spaces at $R$ and $N$; hence
+    their open Hamiltonians and their spaces $G_N^{\mathrm{ES}}$ agree.
+\end{proof}
+
+\begin{theorem}[Open-chain gaps at a prescribed simultaneous injectivity range]
+    \label{thm:block_open_gap_subsequence_simultaneous_injectivity}
+    \lean{MPSTensor.%
+        exists_openParentHamiltonianES_toTensorFromBlocks_gap_subsequence_of_wordTupleSpanTop}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
+    Suppose that their simultaneous length-$S$ word tuples span the product
+    matrix algebra, where $S>0$. Set $B=\bigoplus_j\mu_jA^j$, with
+    every $\mu_j\neq0$, and fix $R\geq S+1$. There are $p>0$, with
+    $R\leq2p$, and $\delta>0$ such that
+    \begin{align}
+        \delta\|v\|\leq\|H^{\mathrm{open}}_{pM,R}(B)v\|\notag
+    \end{align}
+    for every $M\geq2$ and every $v\perp G_{pM}^{\mathrm{ES}}(B)$.
+    This combines the block-injective local spaces of
+    \cite[Section~IV.C]{Cirac2021Matrix} with the martingale estimate of
+    \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:block_word_span_primitive_normalization,
+        thm:block-word-span-separation,
+        thm:primitive_block_sum_open_gap_subsequence,
+        thm:block_open_kernel_simultaneous_injectivity,
+        lem:parent-finite-interval-comparison,lem:open_parent_range_comparison,
+        thm:ph_block_replacement_parent_equality}
+    Normalize the blocks while preserving all local spaces and the span at
+    $S$. The simultaneous span separates the blocks. Choose $p\geq R$
+    and a uniform open-chain gap $\gamma>0$ at range $2p$ on every length
+    $pM$, $M\geq2$. The range-$R$ and range-$2p$ open kernels both equal
+    $G_{pM}^{\mathrm{ES}}$. On the interval of length $2p$, finite-dimensional
+    comparison gives $\kappa h_{2p}\leq H^{\mathrm{open}}_{2p,R}$ with
+    $\kappa>0$. Open-range comparison transfers the gap to
+    $\delta=\kappa\gamma/(2p-R+1)>0$ at range $R$. Equality of all local
+    spaces transports this bound to the original block sum.
+\end{proof}
+
+\begin{theorem}[Strict Knabe intervals at a simultaneous injectivity range]
+    \label{thm:block_strict_knabe_window_simultaneous_injectivity}
+    \lean{MPSTensor.%
+        exists_strict_openParentHamiltonianES_toTensorFromBlocks_window_of_wordTupleSpanTop}
+    \leanok
+    Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
+    Suppose that their simultaneous length-$S$ word tuples span the product
+    matrix algebra, where $S>0$. Set $B=\bigoplus_j\mu_jA^j$, with
+    every $\mu_j\neq0$, and fix $R\geq S+1$. There are $m\geq R$ and
+    $\gamma>0$ such that $(R-1)^2<m\gamma$ and
+    \begin{align}
+        \gamma\|v\|\leq\|H^{\mathrm{open}}_{m+R-1,R}(B)v\|\notag
+    \end{align}
+    for every $v\perp G_{m+R-1}^{\mathrm{ES}}(B)$.
+    The strict inequality is the finite-range threshold of
+    Theorem~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block}; the
+    coefficient is discussed in \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:block_open_gap_subsequence_simultaneous_injectivity}
+    Choose $p>0$ and $\delta>0$ giving the open-chain gap on all lengths
+    $pM$, $M\geq2$. Choose $n\in\mathbb N$ with $(R-1)^2<n\delta$.
+    Set $M=n+2R+2$ and $m=pM+1-R$. Then $m\geq R$, $n\leq m$,
+    and $m+R-1=pM$. Thus $\gamma=\delta$ has both the required gap and
+    $(R-1)^2<m\gamma$.
+\end{proof}
+
 \begin{theorem}[A uniform gap at the simultaneous injectivity range]
     \label{thm:block-parent-uniform-gap-simultaneous-injectivity}
     \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}
@@ -6925,6 +7070,37 @@ tensors.
     representatives, which form a basis of normal tensors for $A$. The
     preceding theorem applies to this fixed choice for every $S$ and every
     $R\geq S+1$.
+\end{proof}
+
+\begin{theorem}[A dimension bound for canonical parent gaps]
+    \label{thm:canonical_parent_gap_bounded_range}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_parentHamiltonianES_uniform_gap_of_three_bondDim_pow_five_le}
+    \leanok
+    Let $A$ be a tensor in canonical form with positive physical dimension
+    and positive bond dimension $D$. For every $R\geq3D^5$, there is
+    $\gamma>0$ such that
+    \begin{align}
+        \gamma\|v\|\leq\|H_{R,N}(A)v\|\notag
+    \end{align}
+    for every $N\in\mathbb N$ and every $v\perp\ker H_{R,N}(A)$.
+    The constant may depend on $A$ and $R$, but not on $N$.
+    This sufficient range combines the blocking estimate of
+    \cite[lines~317--345]{Cirac2016MPDO_arXiv} with the gap assertion of
+    \cite[Section~IV.C]{Cirac2021Matrix}. It need not be optimal; the
+    sharper sufficient condition $R\geq S+1$ is recorded in
+    \cite{gap:cpgsv21_block_parent_interaction_range}. The unrestricted
+    assertion at shorter ranges is false; see
+    \cite{gap:cpgsv21_short_range_parent_gap}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:canonical_bounded_range_ground_space,
+        thm:canonical-decomposition-gap-simultaneous-injectivity}
+    Choose a canonical decomposition. The dimension estimate supplies a
+    simultaneous injectivity length $S>0$ for its distinct normal
+    representatives, with $S+1\leq3D^5\leq R$. The canonical gap at that
+    simultaneous injectivity length gives the assertion.
 \end{proof}
 
 \begin{theorem}[Comparison of positive parent interactions]
@@ -7109,6 +7285,33 @@ tensors.
     for the fixed interaction $h$. The constants depend on $h$ but not on $N$.
 \end{proof}
 
+\begin{theorem}[A dimension bound for fixed positive parent interactions]
+    \label{thm:canonical_positive_parent_gap_bounded_range}
+    \lean{MPSTensor.IsCPSVCanonicalForm.%
+        exists_parentInteraction_uniform_gap_of_three_bondDim_pow_five_le}
+    \leanok
+    Let $A$ be a tensor in canonical form with positive physical dimension
+    and positive bond dimension $D$. Let $R\geq3D^5$ and let $h$ be any
+    fixed positive operator on $R$ sites with $\ker h=G_R(A)$. Then there
+    is $\gamma>0$ such that
+    \begin{align}
+        \gamma\|v\|\leq\|H_N(h)v\|\notag
+    \end{align}
+    for every $N\in\mathbb N$ and every $v\perp\ker H_N(h)$.
+    The constant may depend on $A$, $R$, and $h$, but not on $N$.
+    This is the positive-interaction comparison of
+    \cite[Section~IV.C]{Cirac2021Matrix} at the sufficient dimension
+    bound of \cite[lines~317--345]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:canonical_parent_gap_bounded_range,
+        thm:positive-parent-interaction-uniform-gap}
+    The canonical projector interaction has a uniform positive periodic
+    gap at range $R$. Comparison with the fixed interaction $h$ preserves
+    the kernel and gives a positive gap independent of $N$.
+\end{proof}
+
 \section{Prescribed gaps at sufficiently long interaction ranges}
 
 Write $H_{R,N}$ for the periodic parent Hamiltonian on $N$ sites with
@@ -7145,6 +7348,38 @@ shorter interaction range.
     \end{align}
     Thus $\delta\ge1-\eta>0$, which also verifies the positive-numerator
     hypothesis of the comparison.
+\end{proof}
+
+\begin{theorem}[Combining gaps on two open intervals]
+    \label{thm:open_parent_overlapping_interval_gap}
+    \lean{MPSTensor.openPrefixParentHamiltonianES_le_openParentHamiltonianES,
+        MPSTensor.openSuffixParentHamiltonianES_le_openParentHamiltonianES,
+        MPSTensor.openParentHamiltonianES_norm_gap_of_overlapping_interval_gaps}
+    \leanok
+    Let $H$ be the range-$R$ parent Hamiltonian on an open chain of length
+    $N$, and let $H_L$ and $H_T$ be its interaction sums on a prefix of
+    length $n$ and on a terminal interval of length $W$, respectively.
+    Write $P_L$, $P_T$, and $P$ for their orthogonal ground projections.
+    Suppose $\kappa\geq0$, and suppose both interval Hamiltonians have a
+    norm gap at least $\kappa$ on their respective kernel complements.
+    If $\|P-P_LP_T\|\leq1/2$, then
+    $(\kappa/16)\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
+    The interval interaction sums always satisfy $H_L\leq H$ and
+    $H_T\leq H$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:positive-kernel-projection-comparison}
+    Each interval interaction sum is a subfamily of the positive terms of
+    $H$, so $H_L+H_T\leq2H$. The interval gaps give
+    $\kappa(P_L^\perp+P_T^\perp)\leq H_L+H_T$.
+    For $v\perp\ker H$, the projection defect gives
+    $\|P_LP_Tv\|\leq\|v\|/2$. Decomposing
+    $v=P_LP_Tv+P_LP_T^\perp v+P_L^\perp v$ yields
+    $\|v\|\leq2(\|P_L^\perp v\|+\|P_T^\perp v\|)$.
+    Squaring gives
+    $\|v\|^2\leq8(\|P_L^\perp v\|^2+\|P_T^\perp v\|^2)$.
+    Hence $\kappa\|v\|^2\leq16\langle Hv,v\rangle$.
+    Cauchy--Schwarz and cancellation of $\|v\|$ prove the claim.
 \end{proof}
 
 \begin{theorem}[Prescribed open-chain projector defects]
@@ -7273,4 +7508,80 @@ shorter interaction range.
     primitive representative. The canonical parent Hamiltonians agree
     exactly at every interaction range and every chain length, so the
     prescribed lower bounds transfer unchanged.
+\end{proof}
+
+
+\begin{lemma}[Three normal blocks with the singlet parent interaction]
+    \label{lem:three_normal_blocks_singlet_parent}
+    \lean{MPSTensor.shortRangeHeisenbergBlock,
+        MPSTensor.shortRangeHeisenbergTensor,
+        MPSTensor.wordTupleSpanTop_shortRangeHeisenbergBlock_two,
+        MPSTensor.not_wordTupleSpanTop_shortRangeHeisenbergBlock_one,
+        MPSTensor.shortRangeHeisenbergBlock_normalization,
+        MPSTensor.shortRangeHeisenbergBlock_isNormalTensor,
+        MPSTensor.shortRangeHeisenbergBlock_isNormal,
+        MPSTensor.shortRangeHeisenbergBlock_blocksNotGaugePhaseEquiv,
+        MPSTensor.isCPSVBasisOfNormalTensors_shortRangeHeisenbergTensor,
+        MPSTensor.mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff,
+        MPSTensor.groundSpaceES_shortRangeHeisenbergTensor_two_starProjection,
+        MPSTensor.parentInteractionES_shortRangeHeisenbergTensor_two_apply}
+    \leanok
+    The direct sum of the three bond-one qubit tensors
+    $(1,0)$, $(0,1)$ and $(1/\sqrt2,1/\sqrt2)$, with weights one,
+    has a basis of three normalized, normal, pairwise inequivalent blocks.
+    Its simultaneous injectivity length is exactly two. Its two-site
+    local ground space is $\operatorname{Sym}^2(\mathbb C^2)$, and its
+    canonical parent interaction is the singlet projection
+    $h_2=(I-F)/2$, where $F$ exchanges the two physical sites.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The word tuples for $00$, $11$ and $01$ are
+    $(1,0,1/2)$, $(0,1,1/2)$ and $(0,0,1/2)$, which span
+    $\mathbb C^3$; two one-site words cannot span this space.
+    Each scalar block has transfer normalization one. Simultaneous
+    spanning separates the blocks and gives eventual independence of
+    their periodic vectors. The two-site boundary vectors span
+    $|00\rangle$, $|11\rangle$ and $|++\rangle$, exactly the symmetric
+    subspace. Its orthogonal complement is the singlet line.
+\end{proof}
+
+\begin{theorem}[Failure of the unrestricted parent-Hamiltonian gap assertion]
+    \label{thm:short_range_parent_gap_counterexample}
+    \lean{SpinChain.oneMagnon_edge_sum,
+        ZMod.cycleLaplacian_stdAddChar,
+        ZMod.cycleFourierGap_pos,
+        ZMod.tendsto_cycleFourierGap_zero,
+        MPSTensor.shortRangeHeisenbergMagnon,
+        MPSTensor.shortRangeHeisenbergMagnon_ne_zero,
+        MPSTensor.parentHamiltonianES_shortRangeHeisenbergMagnon,
+        MPSTensor.not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two}
+    \leanok
+    \uses{lem:three_normal_blocks_singlet_parent, def:parent_hamiltonian_es}
+    For the preceding tensor, the periodic range-two parent Hamiltonian
+    has a nonzero eigenvector of eigenvalue
+    $\varepsilon_N=1-\cos(2\pi/N)>0$ for every $N\geq2$.
+    These eigenvalues tend to zero. Consequently there are no
+    $\delta>0$ and $N_0$ such that
+    \[
+        \delta\lVert v\rVert\leq\lVert H_{N,2}v\rVert
+        \qquad(N\geq N_0,\ v\perp\ker H_{N,2}).
+    \]
+    Thus the unrestricted assertion in
+    \cite[Section~IV.C, lines~2183--2187]{Cirac2021Matrix} is false.
+    The sufficient-range theorems remain valid, since this example
+    has $R=S=2$. See \cite{gap:cpgsv21_short_range_parent_gap}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:three_normal_blocks_singlet_parent}
+    On configurations with one down spin the sum of singlet projections
+    acts as $f(j)-(f(j+1)+f(j-1))/2$. The first Fourier character of
+    $\mathbb Z/N\mathbb Z$ is therefore an eigenvector with the stated
+    eigenvalue. Its coefficient at the zero site is one, so it is nonzero.
+    Self-adjointness makes it orthogonal to the kernel. A uniform positive
+    norm bound would give $\delta\leq\varepsilon_N$ for every sufficiently
+    large $N$, contradicting $\varepsilon_N\to0$.
 \end{proof}

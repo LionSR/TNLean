@@ -1,0 +1,539 @@
+\newcommand\doubledx{1.6}
+\newcommand\singledx{1.8}
+\newcommand\identitydx{1}
+\newcommand\stradius{0.6}
+\newcommand\whadx{0.988}
+\newcommand\whady{0.812}
+\newcommand\mthick{}
+\newcommand\mthickt{very thick}
+
+%%%%%%%%%%%%
+\newcommand{\opdot}[3]{
+\begin{scope}[shift={(#1)}]
+	\filldraw[thick, fill=black](0,0) circle[radius=#2];
+	\draw (0,0) node {\scriptsize #3};
+\end{scope}
+}
+
+\newcommand{\op}[3]{
+\begin{scope}[shift={(#1)}]
+	\filldraw[\mthick, fill=white](0,0) circle[radius=#2];
+	\draw (0,0) node {\scriptsize #3};
+\end{scope}
+}
+
+\newcommand{\ops}[4]{
+\begin{scope}[shift={(#1)}]
+	\draw[ \mthick, fill=white, rounded corners=2pt] (-#2,-#3) rectangle (#2,#3);
+	\draw (0,0) node {\scriptsize #4};
+\end{scope}
+}
+
+\newcommand{\opsc}[5]{
+\begin{scope}[shift={(#1)}]
+	\draw[ \mthick, fill=#5, rounded corners=2pt] (-#2,-#3) rectangle (#2,#3);
+	\draw (0,0) node {\scriptsize #4};
+\end{scope}
+}
+
+\newcommand{\TCZ}[2]{
+\begin{scope}[shift={(#1)}]
+\def\disp{0.25};
+        \def\rd{0.15};
+        \def\rt{3.0};
+        \def\rtt{5.5};
+            \draw[Virtual,thick,rounded corners=2pt] (-\disp,\disp) -- (-\rt*\disp,\rt*\disp) -- (-\rtt*\disp,\rt*\disp);
+            \draw[Virtual,thick,rounded corners=2pt] (\disp,\disp) -- (\rt*\disp,\rt*\disp) -- (\rtt*\disp,\rt*\disp);
+            \draw[Virtual,thick,rounded corners=2pt] (-\disp,-\disp) -- (-\rt*\disp,-\rt*\disp) -- (-\rtt*\disp,-\rt*\disp);
+            \draw[Virtual,thick,rounded corners=2pt] (\disp,-\disp) -- (\rt*\disp,-\rt*\disp) -- (\rtt*\disp,-\rt*\disp);
+            \op{(-\disp,\disp)}{\rd}{\scriptsize $X$};
+            \op{(\disp,\disp)}{\rd}{\scriptsize $X$};
+            \op{(-\disp,-\disp)}{\rd}{\scriptsize $X$};
+            \op{(\disp,-\disp)}{\rd}{\scriptsize $X$};
+            \opsc{(2.3*\disp,0)}{0.12}{0.6}{}{lcolor};
+            \opsc{(-2.3*\disp,0)}{0.12}{0.6}{}{lcolor};
+            \ifnum#2=1
+            \opsc{(0,2.3*\disp)}{0.6}{0.12}{}{lcolor};
+            \opsc{(0,-2.3*\disp)}{0.6}{0.12}{}{lcolor};
+            \fi
+            \ifnum#2=2
+            \opsc{(0,2.3*\disp)}{0.6}{0.12}{}{lcolor};
+            \fi
+            \ifnum#2=3
+            \opsc{(0,-2.3*\disp)}{0.6}{0.12}{}{lcolor};
+            \fi
+            % \filldraw[\mthick, fill=white] (2.3*\disp,0) ellipse (0.12 and 0.6);
+            % \filldraw[\mthick, fill=white] (-2.3*\disp,0) ellipse (0.12 and 0.6);
+            % \filldraw[\mthick, fill=white] (0,2.3*\disp) ellipse (0.6 and 0.12);
+            % \filldraw[\mthick, fill=white] (0,-2.3*\disp) ellipse (0.6 and 0.12);
+\end{scope}
+}
+
+
+
+\newcommand{\gate}[2]{
+    \begin{scope}[shift={(#1)}]
+        \draw[ \mthick, fill=whitetensorcolor, rounded corners=2pt] (-\doubledx/2-0.2,0.27) rectangle (\doubledx/2+0.2,-.27); 
+	    \draw (0,0) node {\scriptsize #2};
+    \end{scope}
+        }
+        
+\newcommand{\GcTensor}[6]{
+    \begin{scope}[shift={(#1)}]
+%
+    \ifnum#5=0
+		\draw[Virtual] (-#2,0) -- (#2,0);
+		\draw[] (0,#2) -- (0,-#2);
+    \fi
+%
+    \ifnum#5=-1
+		\draw[Virtual] (0,0) -- (#2,0);
+		\draw[] (0,#2) -- (0,-#2);
+    \fi
+%
+    \ifnum#5=1
+		\draw[Virtual] (-#2,0) -- (0,0);
+		\draw[] (0,#2) -- (0,-#2);
+    \fi
+
+    \ifnum#5=2
+		\draw[Virtual] (-#2,0) -- (#2,0);
+		\draw[] (0,0) -- (0,#2);
+    \fi
+    \ifnum#5=-2
+		\draw[Virtual] (-#2,0) -- (#2,0);
+		\draw[] (0,0) -- (0,-#2);
+    \fi
+
+    \ifnum#5=3
+		\draw[Virtual] (-#2,0) -- (#2,0);
+		\draw[] (0,-#2) -- (0,#2);
+    \fi
+    \ifnum#5=4
+    \fi
+%
+        \draw[fill=#6, rounded corners=2pt,\mthick] (-#3,-#3) rectangle (#3,#3);
+		\draw (0,0) node {\scriptsize #4};
+	\end{scope}
+}
+
+\newcommand{\GTensor}[5]{
+	 \GcTensor{#1}{#2}{#3}{#4}{#5}{tensorcolor};
+}
+
+
+
+\newcommand{\dTensor}[4]{
+    \begin{scope}[shift={(#1)}]
+        \draw[\mthick] (-#2,0) -- (#2,0);
+        \draw[\mthick, fill=diamondcolor] (#3,0) -- (0,#3) -- (-#3,0) -- (0,-#3) -- cycle;
+        \draw (0,0) node {\scriptsize #4};
+    \end{scope}
+}
+
+\newcommand{\dmTensor}[4]{
+    \begin{scope}[shift={(#1)}]
+        \draw[\mthick] (-#2,0) -- (#2,0);
+        \draw[\mthick] (-#2,0) -- (-#2,#2*0.3);
+        \draw[\mthick] (#2,0) -- (#2,#2*0.3);
+        \draw[\mthick, fill=diamondcolor] (#3,0) -- (0,#3) -- (-#3,0) -- (0,-#3) -- cycle;
+        \draw (0,0) node {\scriptsize #4};
+    \end{scope}
+}
+
+
+\newcommand{\uTensor}[6]{
+    \begin{scope}[shift={(#1)}]
+        \draw[\mthick](-#4,-#5) -- (-#4,#5);
+        \draw[\mthick](#4,-#5) -- (#4,#5);
+        \draw[\mthick, fill=lcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+        \draw (0,0) node {\scriptsize #6};
+    \end{scope}
+}
+
+\newcommand{\vTensor}[6]{
+    \begin{scope}[shift={(#1)}]
+        \draw[\mthick](-#4,0) -- (-#4,#5);
+        \draw[\mthick](#4,0) -- (#4,#5);
+        \draw[\mthick, fill=whitetensorcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+        \draw (0,0) node {\scriptsize #6};
+        \draw[\mthick] (0,-#3)--(0,-#5);
+    \end{scope}
+}
+
+\newcommand{\vtTensor}[6]{
+    \begin{scope}[shift={(#1)}]
+    \draw[\mthick](0,#5) -- (0,#3);
+        \draw[\mthick](-#4,0) -- (-#4,-#5);
+        \draw[\mthick](#4,0) -- (#4,-#5);
+        \draw[\mthick, fill=whitetensorcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+        \draw (0,0) node {\scriptsize #6};
+    \end{scope}
+}
+
+
+\newcommand{\xTensor}[5]{
+    \begin{scope}[shift={(#1)}]
+        \draw[Virtual] (-#2,0)--(-#4,0);
+        \draw[\mthick, fill=whitetensorcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+        \draw (0,0) node {\scriptsize #5};
+    \end{scope}
+}
+
+\newcommand{\xtTensor}[5]{
+    \begin{scope}[shift={(#1)}]
+        \draw[\mthick, fill=whitetensorcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+        \draw (0,0) node {\scriptsize #5};
+        \draw[Virtual] (#2,0)--(#4,0);
+    \end{scope}
+}
+
+\newcommand{\xdTensor}[6]{
+    \begin{scope}[shift={(#1)}]
+        \draw[Virtual] (#2,#5)--(#4,#5);
+        \draw[Virtual] (#2,-#5)--(#4,-#5);
+        \draw[\mthick, fill=whitetensorcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+        \draw (0,0) node {\scriptsize #6};
+    \end{scope}
+}
+
+\newcommand{\ATensor}[3]{
+    \GTensor{#1}{1}{.5}{#2}{#3};
+}
+
+% \newcommand{\MTensor}[4]{
+%     \GcTensor{#1}{#2}{#3}{#4}{3}{mpdocolor};
+% }
+
+\newcommand{\MTensor}[4]{
+\begin{scope}[shift={(#1)}]
+    \draw[Virtual] (-#2,0) -- (#2,0);
+    \draw[] (0,-#2) -- (0,#2);
+    \filldraw[\mthick, fill=mpdocolor] (0,0) circle[radius=#3];
+    \draw (0,0) node {\scriptsize #4};
+\end{scope}
+}
+
+\newcommand{\METensor}[2]{
+	\begin{scope}[shift={(#1)}]
+        \MTensor{(0,0)}{1.2}{.6}{#2}
+    \def\dx{.8};
+	\draw [] (0,-1.2) to  [bend right=90] (\dx,-1.2);
+	\draw [] (0,1.2) to  [bend left=90] (\dx,1.2);
+	\draw [] (\dx,1.2) to  (\dx,-1.2);
+	\end{scope}
+}
+
+\newcommand{\MEOTensor}[3]{
+	\begin{scope}[shift={(#1)}]
+        \MTensor{(0,0)}{1.2}{.6}{#2}
+    \def\dx{.8};
+    \def\eh{2.0};
+	\draw [\mthick] (0,-1.2) to  [bend right=90] (\dx,-1.2);
+	\draw [\mthick] (0,\eh) to  [bend left=90] (\dx,\eh);
+	\draw [\mthick] (\dx,\eh) to  (\dx,-1.2);
+    \filldraw[color=black, fill=whitetensorcolor, \mthick] (0,1.4) circle (\stradius);
+    \draw (0,1.4) node {\small #3};
+	\end{scope}
+}
+
+
+\newcommand{\etatensor}[6]{
+    \begin{scope}[shift={(#1)}]
+    \def\ls{1.2};
+    \def\rs{0.8};
+        \draw[-mid, \mthick](-#4*\ls,#3) -- (-#4*\ls,#5);
+        \draw[mid-, \mthick](#4*\ls,#3) -- (#4*\ls,#5);
+        \draw[-mid, \mthick](#4*\rs,#3) -- (#4*\rs,#5);
+        \draw[mid-, \mthick](-#4*\rs,#3) -- (-#4*\rs,#5);
+        \draw[\mthick, fill=lcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+        \draw (0,0) node {\scriptsize #6};
+    \end{scope}
+}
+
+\newcommand{\etaleft}[6]{
+ \begin{scope}[shift={(#1)}]
+    \def\ls{1.2};
+    \def\rs{0.8};
+    \draw[\mthick](-#4*\ls,0) -- (-#4*\ls,#5);
+    \draw[\mthick](-#4*\rs,0) -- (-#4*\rs,#5);
+    \draw[-mid, \mthick](-#4*\ls,#3) -- (-#4*\ls,#5);
+    \draw[mid-, \mthick](-#4*\rs,#3) -- (-#4*\rs,#5);
+     % \draw[fill=lcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+     \fill[lcolor, rounded corners=2pt] (-#2,-#3) rectangle (0, #3);
+        % Draw only three thick edges (left, top, and bottom)
+    \draw[black, \mthick, rounded corners=2pt] 
+        (-#2, 0) -- (-#2, #3) -- (0, #3); % left and top edges
+    \draw[black, \mthick, rounded corners=2pt]
+        (-#2, 0) -- (-#2, -#3) -- (0, -#3); % bottom edge
+    \draw (0,0) node {\scriptsize #6};
+    \end{scope}
+}
+
+\newcommand{\etaright}[6]{
+ \begin{scope}[shift={(#1)}]
+    \def\ls{1.2};
+    \def\rs{0.8};
+    \draw[\mthick](#4*\ls,0) -- (#4*\ls,#5);
+    \draw[\mthick](#4*\rs,0) -- (#4*\rs,#5);
+    \draw[mid-, \mthick](#4*\ls,#3) -- (#4*\ls,#5);
+        \draw[-mid, \mthick](#4*\rs,#3) -- (#4*\rs,#5);
+     % \draw[fill=lcolor, rounded corners=2pt] (-#2,-#3) rectangle (#2, #3);
+     \fill[lcolor, rounded corners=2pt] (0,-#3) rectangle (#2, #3);
+        % Draw only three thick edges (left, top, and bottom)
+    \draw[black, \mthick, rounded corners=2pt] 
+        (#2, 0) -- (#2, #3) -- (0, #3); % left and top edges
+    \draw[black, \mthick, rounded corners=2pt]
+        (#2, 0) -- (#2, -#3) -- (0, -#3); % bottom edge
+    \draw (0,0) node {\scriptsize #6};
+    \end{scope}
+}
+
+
+
+
+\newcommand{\tracetensor}[3]{
+    \begin{scope}[shift={(#1)}]
+    \def\ro{.1};
+    \def\offset{0.08};
+    \def\ls{1.2};
+    \def\rs{0.8};
+    \def\as{0.25};
+    % \draw[gray, very thick](-#2*\rs,-#3) -- (-#2*\rs,#3*\ro-\offset);
+        % \draw[gray, very thick](#2*\ls,-#3) -- (#2*\ls,#3*\ro-\offset*1.5);
+        
+		\draw[\mthickt,rounded corners=4pt](-#2*0.4,-#3) -- (-#2*0.4,#3*\ro)--(#2*0.4,#3*\ro)--(#2*0.4,-#3);
+
+        \draw[-mid,\mthickt](-#2*0.4,-#3)--(-#2*0.4,#3*\ro-\as);
+        \draw[mid-,\mthickt](#2*0.4,-#3)--(#2*0.4,#3*\ro-\as);
+        
+        % \draw[-mid, thick](#2*\rs,-#3) -- (#2*\rs,#3*\ro-\as);
+        % \draw[mid-, thick](#2*\ls,-#3) -- (#2*\ls,#3*\ro-\as);
+        % \draw[mid-, thick](-#2*\rs,-#3) -- (-#2*\rs,#3*\ro-\as);
+        % \draw[-mid, thick](-#2*\ls,-#3) -- (-#2*\ls,#3*\ro-\as);
+        % \draw[very thick](#2*\rs,#3*\ro);
+        % \draw[very thick]--(-#2*\ls,#3*\ro);
+    \end{scope}
+}
+
+
+
+\newcommand{\SingleTrLeft}[1]{
+	\begin{scope}[shift={(#1)}]
+      \draw [Virtual] (0,0) to (\doubledx-0.8,0);
+	   \draw [Virtual] (0,0) to  [bend left=90] (0,0.8);
+	   \draw [Virtual, thick, dotted] (0,0.8) to  (1,0.8);
+	\end{scope}
+}
+
+\newcommand{\SingleDots}[2]{
+	\begin{scope}[shift={(#1)}]
+      \draw [thick, dotted] (-#2/2,0) to (#2/2,0);
+	\end{scope}
+}
+
+
+\newcommand{\SingleTrRight}[1]{
+	\begin{scope}[shift={(#1)}, xscale=-1]
+	   \SingleTrLeft{(0,0)};
+	\end{scope}
+}
+
+
+\newcommand{\bTensor}[2]{
+	\begin{scope}[shift={(#1)}]
+	    \draw [\mthick] (-1,0) to  (1,0);
+		\filldraw[color=black, fill=btensorcolor, \mthick] (0,0) circle (\stradius);
+	\draw (0,0) node {#2};
+	\end{scope}
+}
+
+\newcommand{\SideIdentityTensor}[4]{
+	\begin{scope}[shift={(#1)}]
+ %
+    \ifnum#4=-1
+	   \draw [\mthick] (\doubledx-1,0.8) to  [bend right=90] (\doubledx-1,-0.8);
+    \fi
+%
+    \ifnum#4=-2
+	   \draw [\mthick] (\doubledx-1,0.8) to  [bend right=90] (\doubledx-1,-0.8);
+      \draw [\mthick] (\doubledx-1,0.8) -- (\doubledx-0.5,0.8);
+      \draw [\mthick] (\doubledx-1,-0.8) -- (\doubledx-0.5,-0.8);
+    \fi
+%
+    \ifnum#4=-3
+	   \draw [\mthick] (\doubledx-1,0.8) to  [bend right=90] (\doubledx-1,-0.8);
+      \draw [\mthick] (\doubledx-1,0.8) -- (\doubledx-0.5,0.8);
+      \draw [\mthick] (\doubledx-1,-0.8) -- (\doubledx-0.5,-0.8);
+	\filldraw[color=black, fill=whitetensorcolor, \mthick] (\doubledx-1.4,0) circle (#3);
+	\draw (\doubledx-1.4,0) node {#2};
+    \fi
+%
+    \ifnum#4=1
+	   \draw [\mthick] (-\doubledx+1,0.8) to  [bend left=90] (-\doubledx+1,-0.8);
+    \fi
+%
+    \ifnum#4=2
+	   \draw [\mthick] (-\doubledx+1,0.8) to  [bend left=90] (-\doubledx+1,-0.8);
+      \draw [\mthick] (-\doubledx+1,0.8) -- (-\doubledx+0.5,0.8);
+      \draw [\mthick] (-\doubledx+1,-0.8) -- (-\doubledx+0.5,-0.8);
+    \fi
+%
+    \ifnum#4=3
+	   \draw [\mthick] (-\doubledx+1,0.8) to  [bend left=90] (-\doubledx+1,-0.8);
+      \draw [\mthick] (-\doubledx+1,0.8) -- (-\doubledx+0.5,0.8);
+      \draw [\mthick] (-\doubledx+1,-0.8) -- (-\doubledx+0.5,-0.8);
+	\filldraw[color=black, fill=whitetensorcolor, \mthick] (-\doubledx+1.4,0) circle (#3);
+	\draw (-\doubledx+1.4,0) node {#2};
+    \fi
+\end{scope}
+%
+}
+
+
+
+\newcommand{\blackdot}[5]{
+\begin{scope}[shift={(#1)}]
+\def\tp{0.75};
+\draw[\mthick] (0,0.) -- (0, 0.5);
+    \draw[\mthick] (0,-0.5) -- (0,0);
+    \draw[Virtual, \mthick] (0,0.) -- (-0.5, 0.);
+    \draw[Virtual, \mthick] (0.5,0.) -- (0., 0.);
+    % \draw[Virtual, -mid] (1.129, 0.903) arc[start angle=59.795, end angle=92.135, radius=1.045];
+    \node[symb, symb disk, symb large] at (0,0) {};
+    \draw (0,\tp) node {\small #2};
+    \draw (0,-\tp) node {\small #3};
+    \draw (-\tp,0) node {\small #4};
+    \draw (\tp,0.) node {\small #5};
+\end{scope}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\whaMsymborg}[3]{
+\begin{scope}[shift={(#1)}]
+\filldraw[fill=#3] 
+    (0,0) circle[radius=0.247];
+    \node[anchor=center,scale=0.9] at (0,0) {#2};
+\end{scope}
+}
+
+\newcommand{\whaNsymb}[1]{
+\begin{scope}[shift={(#1)}]
+\filldraw[fill=blue!5] 
+    (0,0) circle[radius=0.247];
+    \node[anchor=center,scale=0.9] at (0,0) {$\wt$};
+\end{scope}
+}
+
+\newcommand{\whaMsymb}[1]{
+\whaMsymborg{#1}{$M$}{whampdocolor}
+}
+
+\newcommand{\whaMorg}[4]{
+\begin{scope}[shift={(#1)}]
+\def\rd{0.247};
+\def\rlen{0.318};
+\ifnum#2=1
+    \draw[-mid] (0, \rd) -- (0, \rd+\rlen);
+    \draw[-mid] (0, -\rd-\rlen) -- (0, -\rd);
+    \draw[Virtual, -mid] (\rd+\rlen, 0) -- (\rd, 0);
+    \draw[Virtual, -mid] (-\rd, 0) -- (-\rd-\rlen, 0);
+\fi
+\ifnum#2=2
+    \draw[-mid] (0, \rd) -- (0, \rd+\rlen);
+    \draw[-mid] (0, -\rd-\rlen) -- (0, -\rd);
+    \draw[Virtual] (\rd+\rlen, 0) -- (\rd, 0);
+    \draw[Virtual] (-\rd, 0) -- (-\rd-\rlen, 0);
+\fi
+\whaMsymborg{(0,0)}{#3}{#4};
+\end{scope}
+}
+
+\newcommand{\whaM}[2]{
+\whaMorg{#1}{#2}{$M$}{whampdocolor};
+}
+
+\newcommand{\whaATensor}[3]{
+\begin{scope}[shift={(#1)}]
+\def\rd{0.247};
+\def\rlen{0.318};
+
+\ifnum#2=1
+\draw[] (0, \rd) -- (0, \rd+\rlen);
+\draw[Virtual] (\rd+\rlen, 0) -- (\rd, 0);
+\draw[Virtual] (-\rd, 0) -- (-\rd-\rlen, 0);
+\fi
+\ifnum#2=3
+\draw[] (0, -\rd) -- (0, -\rd-\rlen);
+\draw[Virtual] (\rd+\rlen, 0) -- (\rd, 0);
+\draw[Virtual] (-\rd, 0) -- (-\rd-\rlen, 0);
+\fi
+\draw[fill=tensorcolor, rounded corners=2pt,\mthick] (-\rd,-\rd) rectangle (\rd,\rd);
+\node[anchor=center] at (0,0) {#3};
+
+\end{scope}
+}
+
+\newcommand{\mpo}[3]{
+\begin{scope}[shift={(#1)}]
+    \def\boxsizex{0.6}
+    \def\boxsizey{0.5}
+    \draw[Virtual] (2.223, 0.564) -- (1.729, 0.564);
+    \draw[Virtual] (2.963, 0.564) -- (2.716, 0.564);
+    \node[Virtual,anchor=center] at (3.212, 0.55) {$\cdots$};
+    \draw[Virtual] (3.704, 0.564) -- (3.457, 0.564);
+    \draw[Virtual] (4.198, 0.564) -- (4.691, 0.564);
+    \draw[Virtual] (1.235, 0.564) arc[start angle=90, end angle=270, radius=0.2] -- (5.185, 0.164) arc[start angle=-90, end angle=90, radius=0.2];
+    \draw[-mid] (1.482, 0.811) -- (1.482, 1.129);
+    \draw[-mid] (2.469, 0.811) -- (2.469, 1.129);
+    \draw[Virtual] (1.482, 0.564) -- (1.244, 0.564);
+    \draw[-mid] (3.951, 0.811) -- (3.951, 1.129);
+    \draw[Virtual] (4.198, 0.564) -- (3.951, 0.564);
+    \draw[bevel, -mid] (1.482, 0) -- (1.482, 0.318);
+    \draw[bevel, -mid] (2.469, 0) -- (2.469, 0.318);
+    \draw[bevel, -mid] (3.951, 0) -- (3.951, 0.318);
+    \whaMsymborg{(1.482, 0.564)}{\small #2}{white};
+    \whaMsymborg{(2.469, 0.564)}{\small #2}{white};
+    \whaMsymborg{(3.951, 0.564)}{\small #2}{white};
+    \filldraw[ultra thin, fill=white] 
+    (4.938-\boxsizex*0.5, 0.564-\boxsizey*0.5) rectangle ++(\boxsizex,\boxsizey);
+    \node[anchor=center] at (4.938, 0.564) {\small #3};
+\end{scope}
+}
+
+\newcommand{\mpotwo}[3]{
+\begin{scope}[shift={(#1)}]
+    \def\boxsizex{0.6}
+    \def\boxsizey{0.5}
+    \draw[Virtual] (2.964, 0.564) -- (1.729, 0.564);
+    \draw[Virtual] (3.209, 0.564) -- (2.716, 0.564);
+    \draw[Virtual] (1.235, 0.564) arc[start angle=90, end angle=270, radius=0.2] -- (3.211, 0.164) arc[start angle=-90, end angle=90, radius=0.2];
+    \draw[-mid] (1.482, 0.811) -- (1.482, 1.129);
+    \draw[-mid] (2.223, 0.811) -- (2.223, 1.129);
+    \draw[Virtual] (1.482, 0.564) -- (1.244, 0.564);
+    \draw[bevel, -mid] (1.482, 0) -- (1.482, 0.318);
+    \draw[bevel, -mid] (2.223, 0) -- (2.223, 0.318);
+    \whaMsymborg{(1.482, 0.564)}{\small #2}{white};
+    \whaMsymborg{(2.223, 0.564)}{\small #2}{white};
+    \filldraw[ultra thin, fill=white] 
+    (2.964-\boxsizex*0.5, 0.564-\boxsizey*0.5) rectangle ++(\boxsizex,\boxsizey);
+    \node[anchor=center] at (2.964, 0.564) {\small #3};
+\end{scope}
+}
+
+\newcommand{\mpoone}[3]{
+\begin{scope}[shift={(#1)}]
+    \def\boxsizex{0.6}
+    \def\boxsizey{0.5}
+    \draw[Virtual] (3.209, 0.564) -- (2.716, 0.564);
+    \draw[Virtual] (2.222, 0.564) arc[start angle=90, end angle=270, radius=0.2] -- (3.457, 0.164) arc[start angle=-90, end angle=90, radius=0.2];
+    \draw[-mid] (2.469, 0.811) -- (2.469, 1.129);
+    \draw[bevel, -mid] (2.469, 0) -- (2.469, 0.318);
+    \whaMsymborg{(2.469, 0.564)}{\small #2}{white};
+    \filldraw[ultra thin, fill=white] 
+    (3.21-\boxsizex*0.5, 0.564-\boxsizey*0.5) rectangle ++(\boxsizex,\boxsizey);
+    \node[anchor=center] at (3.21, 0.564) {\small #3};
+\end{scope}
+}

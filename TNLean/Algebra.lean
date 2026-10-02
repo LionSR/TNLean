@@ -28,10 +28,13 @@ import TNLean.Algebra.CommonKernelSpectralGap
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.CompactGapBounds
+import TNLean.Algebra.CompactKernelGap
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
+import TNLean.Algebra.CycleLaplacianFourier
+import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.ExpectationOverlap
@@ -45,11 +48,14 @@ import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
+import TNLean.Algebra.FiniteIndicatorSum
 import TNLean.Algebra.FinsetEnumeration
 import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.FlagBlockTriangular
+import TNLean.Algebra.FlatDensityEntropy
+import TNLean.Algebra.FlatDensityRenyiEntropy
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
 import TNLean.Algebra.GeneralizeDecide
@@ -84,6 +90,7 @@ import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
+import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
@@ -91,9 +98,11 @@ import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
+import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
 import TNLean.Algebra.RankOneFactorization
+import TNLean.Algebra.RegularRepresentationBlocking
 import TNLean.Algebra.RepresentationDelta
 import TNLean.Algebra.RepresentationTensorProduct
 import TNLean.Algebra.RestrictedScalarGauge
@@ -107,6 +116,7 @@ import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
 import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
 import TNLean.Algebra.ScalarThreeCocycleInversion
 import TNLean.Algebra.ScalarThreeCocycleTimeReversal
+import TNLean.Algebra.SemiRegularEquiv
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.StabilizerCocycleExtension

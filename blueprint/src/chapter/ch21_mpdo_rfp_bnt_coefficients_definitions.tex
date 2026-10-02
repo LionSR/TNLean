@@ -618,3 +618,47 @@
 \begin{proof}\leanok
     The power sums of a family of ones do not depend on the exponent.
 \end{proof}
+
+\begin{theorem}[Three consecutive positive power sums]%
+    \label{thm:positive_power_second_difference}
+    \lean{Real.sum_pow_secondDifference}
+    \lean{Real.eq_one_of_sum_pow_secondDifference_eq_zero}
+    \lean{Complex.eq_one_of_sum_pow_secondDifference_eq_zero}
+    \lean{MPOTensor.DiagonalChiFamily.entry_eq_one_of_tracePowerCoeff_eq_at_three_lengths}
+    \leanok
+    Let $x_0,\ldots,x_{r-1}>0$ and $p_n=\sum_k x_k^n$.
+    For every integer $n\geq0$,
+    \begin{align}
+        p_{n+2}-2p_{n+1}+p_n
+            =\sum_k x_k^n(x_k-1)^2.
+        \label{eq:mpdo_positive_second_difference}
+    \end{align}
+    The second difference vanishes if and only if every $x_k$ equals
+    one. In particular, equality of three consecutive trace powers of
+    a positive diagonal matrix forces that matrix to be the identity.
+\end{theorem}
+\begin{proof}\leanok
+    Expanding the squares gives~(\ref{eq:mpdo_positive_second_difference}).
+    Every summand is nonnegative, and every factor $x_k^n$ is strictly
+    positive. Thus the sum vanishes exactly when all $x_k-1$ vanish.
+\end{proof}
+
+\begin{theorem}[Finite criterion for length independence]%
+    \label{thm:mpdo_finite_length_independence}
+    \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
+        lengthIndependent_iff_coeff_two_three}
+    \leanok
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form, thm:positive_power_second_difference, thm:mpdo_bnt_label_length_independent_of_unit_entries}
+    Suppose the structure coefficients admit a trace-power presentation
+    by positive diagonal matrices. They are length independent if and
+    only if, for every triple of labels,
+    $c^{(2)}_{\alpha,\beta,\gamma}=c^{(1)}_{\alpha,\beta,\gamma}$ and
+    $c^{(3)}_{\alpha,\beta,\gamma}=c^{(1)}_{\alpha,\beta,\gamma}$.
+\end{theorem}
+\begin{proof}\leanok
+    Length independence implies both equalities. Conversely, apply
+    Theorem~\ref{thm:positive_power_second_difference} with $n=1$ to
+    each diagonal matrix. All its entries equal one, so
+    Theorem~\ref{thm:mpdo_bnt_label_length_independent_of_unit_entries}
+    gives length independence.
+\end{proof}

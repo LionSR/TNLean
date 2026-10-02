@@ -1,0 +1,269 @@
+\section{Depth estimates for a merging tree}
+
+The merging construction of \cite{Styliaris2025MPUCircuits} gives numerical
+recurrences for circuit depth. The results below concern those recurrences;
+they do not assert that an arbitrary tensor admits the required circuit
+construction or conditioning bounds.
+
+\begin{theorem}[Product of the conditioning costs]
+    \label{thm:mpu_tree_depth_product}
+    \lean{MPUCircuit.depth_le_prod_conditioning}
+    \leanok
+    Let $T_j,q_j$ be real sequences, let $a\in\mathbb R$ and $C\geq0$, and
+    suppose $q_j\geq1$ for every nonnegative integer $j$. If
+    \begin{align}
+        T_0&\leq a,&
+        T_{j+1}&\leq q_j(2T_j+C2^{j+1}),
+    \end{align}
+    then for every nonnegative integer $L$,
+    \begin{align}
+        T_L&\leq 2^L(a+CL)\prod_{j=0}^{L-1}q_j.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on $L$. The initial case is $T_0\leq a$. At the induction step,
+    use $\prod_{j<L}q_j\geq1$ to bound the additive overhead by
+    $C2^{L+1}\prod_{j<L}q_j$. Multiplication by $q_L\geq0$ gives
+    \begin{align}
+        T_{L+1}
+        &\leq q_L\left(2^{L+1}(a+CL)\prod_{j<L}q_j
+              +C2^{L+1}\prod_{j<L}q_j\right)\\
+        &=2^{L+1}(a+C(L+1))\prod_{j<L+1}q_j.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Polynomial product bound]
+    \label{thm:mpu_tree_depth_polynomial}
+    \lean{MPUCircuit.depth_le_polynomial_of_prod_conditioning}
+    \leanok
+    Under the hypotheses of Theorem~\ref{thm:mpu_tree_depth_product}, suppose
+    also $a\geq0$. Let $L,c$ be nonnegative integers. If
+    $\prod_{j<L}q_j\leq (2^L)^c$, then
+    \begin{align}
+        T_L&\leq (a+CL)(2^L)^{c+1}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_tree_depth_product}
+    Substitute the assumed product bound into the preceding estimate.
+    Its coefficient $2^L(a+CL)$ is nonnegative.
+\end{proof}
+
+\begin{theorem}[Constant conditioning]
+    \label{thm:mpu_tree_depth_constant}
+    \lean{MPUCircuit.depth_le_constant_conditioning}
+    \leanok
+    Let $T_j$ be a real sequence, $a\in\mathbb R$, $C\geq0$, and $q\geq1$.
+    Suppose $T_0\leq a$ and $T_{j+1}\leq q(2T_j+C2^{j+1})$ for every
+    nonnegative integer $j$. Then
+    \begin{align}
+        T_L&\leq (a+CL)(2q)^L.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_tree_depth_product}
+    Apply the product estimate to $q_j=q$ and use $2^Lq^L=(2q)^L$.
+\end{proof}
+
+\begin{theorem}[Linear overhead at unit conditioning]
+    \label{thm:mpu_tree_depth_endpoint}
+    \lean{MPUCircuit.linear_overhead_recurrence}
+    \leanok
+    For every real $C$ and every nonnegative integer $L$,
+    \begin{align}
+        C(L+1)2^{L+1}&=2(CL2^L)+C2^{L+1}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand $2^{L+1}=2\cdot2^L$ and distribute multiplication.
+\end{proof}
+
+For $N=2^L$, the sequence $T_L=CL2^L$ has order $N\log N$ when $C>0$.
+Thus a recurrence with conditioning equal to one need not yield a linear
+estimate. This numerical observation is not a lower bound for implementing
+an MPU.
+
+\subsection{Boundary Gram matrices of a parity rotation}
+
+The factorization $I_A\otimes cI_B+P_A\otimes isP_B$, with Hermitian
+involutions $P_A,P_B$, gives the following two Gram matrices. Their
+algebraic inverse-trace identity is distinct from the identification of all
+admissible boundary states and the infimum defining the conditioning cost.
+
+\begin{definition}[Parity boundary Gram matrices]
+    \label{def:mpu_parity_boundary_grams}
+    \lean{MPUCircuit.parityLeftGram, MPUCircuit.parityRightGram}
+    \leanok
+    For complex numbers $c,s,x,y$, define
+    \begin{align}
+        G_A(x)&=\begin{pmatrix}1&x\\x&1\end{pmatrix},&
+        G_B(c,s,y)&=\begin{pmatrix}c^2&icsy\\-icsy&s^2\end{pmatrix}.
+    \end{align}
+    When the parameters are real, $x,y$ represent the expectations of
+    the two involutions in exterior density operators.
+\end{definition}
+
+\begin{theorem}[Inverse trace of the parity Gram matrices]
+    \label{thm:mpu_parity_inverse_trace}
+    \lean{MPUCircuit.trace_inverse_parityGrams}
+    \leanok
+    For the matrices of Definition~\ref{def:mpu_parity_boundary_grams},
+    \begin{align}
+        \operatorname{tr}\bigl[G_B(c,s,y)^{-1}(G_A(x)^{-1})^T\bigr]
+        &=\frac{c^2+s^2}{c^2s^2(1-x^2)(1-y^2)}.
+    \end{align}
+    The identity holds for arbitrary complex parameters, with the convention
+    that the inverse of a singular matrix and the reciprocal of zero are zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_parity_boundary_grams}
+    Express each inverse as its adjugate divided by its determinant.
+    The determinants are $1-x^2$ and $c^2s^2(1-y^2)$. The mixed
+    off-diagonal contributions to the trace cancel, leaving numerator
+    $c^2+s^2$.
+\end{proof}
+
+\subsection{Interval isometries for product-projection phase gates}
+
+Let $P_j$ be orthogonal projections on the individual sites and $|z|=1$.
+The unitary $I+(z-1)\bigotimes_jP_j$ is a product-projection instance of
+an MPO-projector unitary from \cite{Styliaris2025MPUCircuits}. The following
+boundary frames supply interval isometries directly, without requiring
+realization by exterior density operators.
+
+\begin{definition}[Projection interval maps]
+    \label{def:mpu_projection_interval_maps}
+    \lean{MPUCircuit.projectionPrefixMap, MPUCircuit.projectionInteriorMap, MPUCircuit.projectionSuffixMap}
+    \leanok
+    For a square complex matrix $P$ and a complex number $z$, define
+    \begin{align}
+        V_{\mathrm{pre}}(P)&=\begin{pmatrix}I-P\\P\end{pmatrix},\\
+        V_{\mathrm{int}}(P)&=\begin{pmatrix}I-P/2\\P/2\\-P/2\\P/2\end{pmatrix},\\
+        V_{\mathrm{suf}}(P,z)&=\begin{pmatrix}I+(z-1)P/2\\(z-1)P/2\end{pmatrix}.
+    \end{align}
+    The displayed components are stacked vertically. For the interior map,
+    their order is the lexicographic order of the two bond labels.
+\end{definition}
+
+\begin{theorem}[Normalization of projection interval maps]
+    \label{thm:mpu_projection_interval_isometries}
+    \lean{MPUCircuit.projectionPrefixMap_isIsometry, MPUCircuit.projectionInteriorMap_isIsometry, MPUCircuit.projectionSuffixMap_isIsometry}
+    \leanok
+    If $P$ is an orthogonal projection, the prefix and interior maps of
+    Definition~\ref{def:mpu_projection_interval_maps} are isometries.
+    If also $|z|=1$, the suffix map is an isometry.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_projection_interval_maps}
+    Sum the Gram products of the displayed components, using
+    $P^\dagger=P$ and $P^2=P$. For the prefix and interior maps this gives
+    $I$. For the suffix map, the coefficient of $P$ is
+    \begin{align}
+        \frac{z-1}{2}+\frac{\bar z-1}{2}+\frac{|z-1|^2}{2}
+        &=\frac{|z|^2-1}{2}=0.
+    \end{align}
+\end{proof}
+
+\begin{definition}[Projection boundary frames and merging kernel]
+    \label{def:mpu_projection_boundary_frames}
+    \lean{MPUCircuit.projectionLeftFrame, MPUCircuit.projectionRightFrame, MPUCircuit.projectionMergeKernel}
+    \leanok
+    Define
+    \begin{align}
+        C_L&=\begin{pmatrix}1&1/2\\0&1/2\end{pmatrix},&
+        C_R&=\begin{pmatrix}1&-1\\0&1\end{pmatrix},&
+        K&=\begin{pmatrix}1&-1\\1&1\end{pmatrix}.
+    \end{align}
+    The columns of $C_L,C_R$ are the left and right bond vectors, respectively.
+    The matrix $K$ gives the coefficients of their bilinear contraction.
+\end{definition}
+
+\begin{theorem}[Projection bond contraction]
+    \label{thm:mpu_projection_bond_contraction}
+    \lean{MPUCircuit.projectionMergeKernel_contract_frames, MPUCircuit.projectionMergeKernel_trace_conjTranspose_mul, MPUCircuit.projectionFrames_trace_inverse_grams, MPUCircuit.projectionFrames_isUnit}
+    \leanok
+    The frames in Definition~\ref{def:mpu_projection_boundary_frames} are
+    invertible and obey
+    \begin{align}
+        C_R^T K C_L&=I,\\
+        \operatorname{tr}(K^\dagger K)&=4,\\
+        \operatorname{tr}\bigl[(C_R^\dagger C_R)^{-1}
+                    ((C_L^\dagger C_L)^{-1})^T\bigr]&=4.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpu_projection_boundary_frames}
+    Multiply the two-by-two matrices. Their determinants are
+    $\det C_L=1/2$ and $\det C_R=1$. Evaluate the inverse Gram matrices
+    by their adjugates and determinants.
+\end{proof}
+
+The bond contraction in Theorem~\ref{thm:mpu_projection_bond_contraction}
+identifies matching tensor labels. For adjacent intervals it multiplies
+$P_{jk}$ and $P_{k+1,l}$ by their tensor product, giving $P_{jl}$.
+Its norm is two and is independent of the phase $z$.
+
+\subsection{Finite coefficient alphabets at a cut}
+
+A coefficient matrix at a cut factors through the corresponding MPO bond.
+When its coefficients belong to a finite alphabet, the number of distinct
+residual coefficient functions can be bounded without a smallest-Schmidt-value
+assumption.
+
+\begin{theorem}[Columns distinguishing the rows]
+    \label{thm:mpu_cut_row_separator}
+    \lean{Matrix.exists_row_separating_columns}
+    \leanok
+    Let $M$ be a matrix over a field $K$, indexed by an arbitrary row set
+    $I$ and a finite column set $J$. There is a subset $J_0\subseteq J$ of
+    cardinality $\operatorname{rank}M$ such that two rows of $M$ are equal
+    whenever they agree at every column in $J_0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a basis of the column space among the columns of $M$.
+    Agreement at these columns is preserved under linear combinations,
+    so it implies agreement at every column.
+\end{proof}
+
+\begin{theorem}[Number of finite-alphabet rows]
+    \label{thm:mpu_cut_finite_alphabet_rows}
+    \lean{Matrix.card_range_le_pow_rank, Matrix.card_range_le_pow_of_rank_le}
+    \leanok
+    Let $M$ have an arbitrary row set and a finite column set over a field.
+    Suppose every entry belongs to a finite set $S$. The set of distinct
+    rows is finite and has cardinality at most $|S|^{\operatorname{rank}M}$.
+    If also $S$ is nonempty and $\operatorname{rank}M\leq D$, this number
+    is at most $|S|^D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_cut_row_separator}
+    Restrict each row to the chosen columns. This injects the set of distinct
+    rows into a set of $|S|^{\operatorname{rank}M}$ functions.
+    The rank-bound consequence uses $|S|\geq1$.
+\end{proof}
+
+\begin{theorem}[Finite-alphabet rows from a bond factorization]
+    \label{thm:mpu_cut_bond_row_count}
+    \lean{Matrix.card_range_mul_le_pow, Matrix.card_range_mul_le_two_pow}
+    \leanok
+    Let $A$ and $B$ be matrices over a field with compatible middle index set
+    of cardinality $D$ and a finite column set for $B$. Suppose every entry
+    of $AB$ belongs to a nonempty finite set $S$. The set of distinct rows
+    of $AB$ is finite and has cardinality at most $|S|^D$.
+    In particular, zero-one entries give at most $2^D$ distinct rows.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_cut_finite_alphabet_rows}
+    Use $\operatorname{rank}(AB)\leq\operatorname{rank}A\leq D$.
+    For the zero-one specialization, take $S=\{0,1\}$.
+\end{proof}
