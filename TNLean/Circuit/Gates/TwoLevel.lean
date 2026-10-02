@@ -25,7 +25,7 @@ The file also records the `2 × 2` matrices used: real rotations `rotTwo z`, dia
 open Matrix
 open scoped BigOperators ComplexConjugate
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {ι : Type*} [DecidableEq ι]
 
@@ -196,11 +196,12 @@ theorem rotTwo_sq_eq_commutator {w : ℂ} :
   rw [Matrix.mul_assoc (rotTwo w * phaseTwo), Matrix.mul_assoc (rotTwo w), ← Matrix.mul_assoc
     phaseTwo, h, rotTwo_mul]
 
-/-- The phase `diag(w², (star w)²)` is the group commutator of `diag(w, star w)` and a quarter turn. -/
+/-- The phase `diag(w², (star w)²)` is the group commutator of `diag(w, star w)` and a quarter turn.
+-/
 theorem diagTwo_sq_eq_commutator {w : ℂ} :
     diagTwo (w * w) = diagTwo w * quarterTwo * diagTwo (star w) * quarterTwoᴴ := by
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [diagTwo, quarterTwo, mul_apply, Fin.sum_univ_two, conjTranspose_apply]
 
-end MPSPreparation
+end QuantumCircuit

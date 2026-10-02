@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.TeleportationChains
+import TNLean.Circuit.Teleportation.Chains
 
 /-!
 # Layers of gates between distant sites in constant depth with measurements
@@ -14,20 +14,20 @@ can be teleported at neighboring registers with a constant overhead", so that "e
 eq. (16) takes constant time using measurement". This file proves this for a whole layer of
 two-site gates on pairwise disjoint stretches of the ring.
 
-A *long-range gate* (`MPSPreparation.LongRangeGate`) is a two-site unitary `u` on the sites `a`
+A *long-range gate* (`QuantumCircuit.LongRangeGate`) is a two-site unitary `u` on the sites `a`
 and `a + 2L + 1` of the ring, with `2L + 1 < N`. For a list of long-range gates whose stretches
 `a, a + 1, …, a + 2L + 1` are pairwise disjoint, two measurement rounds of total depth `5`
-(`MPSPreparation.LongRangeGate.rounds`) do the following, in parallel for all the gates:
+(`QuantumCircuit.LongRangeGate.rounds`) do the following, in parallel for all the gates:
 teleport the content of `a` along the forward chain of `L` hops to `a + 2L`; apply `u` to the
 neighbouring pair `{a + 2L, a + 2L + 1}`; teleport the content of `a + 2L` back to `a` along the
 backward chain. On the vectors with `|0⟩` at the `2L` sites strictly between `a` and
 `a + 2L + 1` for every gate, every outcome gives a scalar multiple of the product of the gates
 `u` at the sites `a`, `a + 2L + 1`
-(`MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds`). No outcome is post-selected,
+(`QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds`). No outcome is post-selected,
 and the depth does not depend on the distances `2L + 1` nor on the number of gates.
 
 Implementations by sequences of rounds compose
-(`MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`), so several such layers are
+(`QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append`), so several such layers are
 applied one after the other (`TNLean.MPS.Preparation.TreeMeasurement`).
 
 **Scope restriction (odd separations, disjoint stretches):** a gate joins the sites `a` and
@@ -39,15 +39,15 @@ teleporting spatially separated sites in general. Documented in
 
 ## Main definitions
 
-* `MPSPreparation.LongRangeGate`, `MPSPreparation.LongRangeGate.op`.
-* `MPSPreparation.LongRangeGate.rounds` — the two rounds applying a layer of long-range gates.
+* `QuantumCircuit.LongRangeGate`, `QuantumCircuit.LongRangeGate.op`.
+* `QuantumCircuit.LongRangeGate.rounds` — the two rounds applying a layer of long-range gates.
 
 ## Main results
 
-* `MPSPreparation.TeleportHop.valid_flatMap`, `MPSPreparation.TeleportHop.sitePerm_flatMap_apply`
+* `QuantumCircuit.TeleportHop.valid_flatMap`, `QuantumCircuit.TeleportHop.sitePerm_flatMap_apply`
   — chains on pairwise disjoint sets of sites run in parallel.
-* `MPSPreparation.LongRangeGate.sum_depth_rounds` — the two rounds have depth `5`.
-* `MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds`.
+* `QuantumCircuit.LongRangeGate.sum_depth_rounds` — the two rounds have depth `5`.
+* `QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds`.
 
 ## References
 
@@ -55,10 +55,10 @@ teleporting spatially separated sites in general. Documented in
   measurements".
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ} [NeZero N]
 
@@ -194,8 +194,8 @@ structure LongRangeGate (d N : ℕ) [NeZero N] where
   L : ℕ
   lt : 2 * L + 1 < N
   /-- The two-site unitary, acting on the sites `a` and `a + 2L + 1`. -/
-  u : Matrix (Cfg d 2) (Cfg d 2) ℂ
-  u_mem_unitary : u ∈ unitary (Matrix (Cfg d 2) (Cfg d 2) ℂ)
+  u : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ
+  u_mem_unitary : u ∈ unitary (Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)
 
 namespace LongRangeGate
 
@@ -220,7 +220,7 @@ def interior : Set (Fin N) := {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * g.L ∧ i = g.a 
 def cleared : Finset (Fin N) := (Finset.range (2 * g.L)).image fun j : ℕ => g.a + (j : Fin N)
 
 /-- The gate on the chain: `u` at the sites `a` and `a + 2L + 1`. -/
-noncomputable def op : Matrix (Cfg d N) (Cfg d N) ℂ := embedOp ![g.a, g.far] g.u
+noncomputable def op : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := embedOp ![g.a, g.far] g.u
 
 /-- The forward chain of `L` hops from `a` to `a + 2L`. -/
 def there : List (TeleportHop N) := forwardChain g.a g.L (by have := g.lt; omega)
@@ -237,10 +237,11 @@ private theorem pair_injective {k k' : Fin N} (h : k ≠ k') : Function.Injectiv
   fin_cases i <;> fin_cases j <;> simp_all [eq_comm]
 
 /-- The gate `u` on the neighbouring pair `{a + 2L, a + 2L + 1}`. -/
-noncomputable def localGate : Matrix (Cfg d N) (Cfg d N) ℂ := embedOp ![g.near, g.far] g.u
+noncomputable def localGate : Matrix (Fin N → Fin d)
+    (Fin N → Fin d) ℂ := embedOp ![g.near, g.far] g.u
 
 theorem localGate_mem_unitary :
-    g.localGate ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+    g.localGate ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   embedOp_mem_unitary (pair_injective g.near_ne_far) g.u_mem_unitary
 
 theorem localGate_mem_supportedOperators : g.localGate ∈ supportedOperators d (bond g.near) := by
@@ -256,7 +257,7 @@ theorem a_ne_far : g.a ≠ g.far := by
   rw [Nat.cast_zero, add_zero]
   exact h
 
-theorem op_mem_unitary : g.op ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+theorem op_mem_unitary : g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   embedOp_mem_unitary (pair_injective g.a_ne_far) g.u_mem_unitary
 
 /-- The gate acts on its two sites `a` and `a + 2L + 1`. -/
@@ -345,7 +346,7 @@ variable [NeZero d]
 
 include hgs in
 /-- After the forward chains, the sites `a, …, a + 2L - 1` of every gate carry `|0⟩`. -/
-theorem isZeroOn_chainPerm_there {v : Cfg d N → ℂ} (hv : ∀ g ∈ gs, IsZeroOn g.interior v) :
+theorem isZeroOn_chainPerm_there {v : (Fin N → Fin d) → ℂ} (hv : ∀ g ∈ gs, IsZeroOn g.interior v) :
     ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) (chainPerm (gs.flatMap there) *ᵥ v) := by
   induction gs with
   | nil => simp
@@ -373,7 +374,7 @@ theorem isZeroOn_chainPerm_there {v : Cfg d N → ℂ} (hv : ∀ g ∈ gs, IsZer
 include hgs in
 /-- The gates on the neighbouring pairs keep `|0⟩` at the sites `a, …, a + 2L - 1` of every
 gate. -/
-theorem isZeroOn_localLayer {w : Cfg d N → ℂ}
+theorem isZeroOn_localLayer {w : (Fin N → Fin d) → ℂ}
     (hw : ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) w) :
     ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) ((localLayer hgs).op *ᵥ w) := by
   have : Std.Symm fun g g' : LongRangeGate d N => Disjoint g.span g'.span :=
@@ -484,4 +485,4 @@ end Layer
 
 end LongRangeGate
 
-end MPSPreparation
+end QuantumCircuit
