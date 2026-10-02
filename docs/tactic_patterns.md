@@ -2440,7 +2440,70 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the same virtual matrix implements the covariance at every
   parameter. All three uses now share the conversion to gauge equivalence.
 
+### contracting a two-site bond penalty — promoted
+- **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
+  contract the two exterior identity factors, and evaluate the remaining
+  middle-register sum.
+- **Seen:** three contractions across `BondProductEndpointGroundSpace.lean`,
+  `FixedPointParentIdentification.lean`, and `WeightedMatrixUnitParent.lean`,
+  under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `twoSiteBondInteraction_mulVec_apply` gives the coefficient
+  formula for an arbitrary two-site vector. Its separable specialization
+  `twoSiteBondInteraction_mulVec_separable` and the unit-vector consequence
+  `twoSiteBondPenalty_mulVec_separable` are in `TwoSiteBondContraction.lean`.
+- **Refactoring:** both earlier contractions and the weighted contraction
+  use these lemmas. The two earlier files lose 33 lines in total, while the
+  shared module contributes 87 lines, including documentation and four
+  declarations: net +54 lines. The exterior-index reduction now occurs once.
+- **Notes:** the existing boundary-coefficient formulas remain local; the
+  arbitrary-vector formula also handles the complementary projection without
+  assuming separable coefficients.
+
+### canonical-parent comparison with a normalized bond interaction — promoted
+
+- **Pattern:** compare positive two-site projections, identify the bond
+  Hamiltonian's periodic ground line with the tensor's periodic vector,
+  and apply affine interpolation with common zero modes and endpoint symmetry.
+- **Seen:** the weighted comparison in `MPS/Symmetry/WeightedMatrixUnitParentPath.lean`
+  and the two embedded endpoint comparisons in `MPS/Symmetry/EmbeddedFixedPointParent.lean`.
+- **Abstraction:** `normalizedBondCanonicalParentComparisonPath`, with the
+  periodic-vector comparison in
+  `ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq`
+  and the local comparison in
+  `twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap`.
+- **Notes:** the three constructors share the spectral and symmetry proof.
+  Bond dimension may differ from the dimension of the normalized bond.
+  No injectivity assumption is used in the comparison itself.
+
+### boundary spaces under rectangular physical maps — promoted
+
+- **Pattern:** expand the rotated letters, collect the product of their
+  physical coefficients, and identify the boundary space as the range
+  of the tensor power composed with the original boundary map.
+- **Seen:** the three square-map boundary identities in
+  `MPS/ParentHamiltonian/PhysicalDeformation.lean` and their rectangular
+  counterparts in `MPS/ParentHamiltonian/PhysicalEmbedding.lean`.
+- **Abstraction:** `groundSpaceMap_rotatePhysical_rectangular`,
+  `groundSpace_rotatePhysical_rectangular`, and
+  `groundSpaceES_rotatePhysical_rectangular`.
+- **Notes:** the square-map statements now use these shared results.
+  Neither invertibility nor injectivity is required for boundary transport.
+  Isometric projection transport additionally uses
+  `LinearIsometry.starProjection_map_eq_comp_adjoint`.
+
 ## Candidates
+
+### coordinate restriction at the two bond endpoints — candidate
+
+- **Pattern:** expand a weighted matrix unit, select the occupied summand,
+  and reduce its endpoint weight to the corresponding inverse square root.
+- **Seen:** the two physical embedding identities in
+  `MPS/Symmetry/EmbeddedFixedPointTensor.lean`.
+- **Abstraction:** a general weighted matrix-unit compression lemma if a
+  third use appears in a second module.
+- **Notes:** currently two occurrences in one module. Isometric inclusions,
+  boundary transport, and covariance restriction already use shared lemmas.
+
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,

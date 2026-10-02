@@ -2014,6 +2014,9 @@ involve no boundary.
   rescaling and gauge give a unital representative with identical canonical
   parent interactions, and the unitary virtual covariance is then obtained
   from the symmetry.
+
+  The construction `normalizedBondFixedPointGappedPath` joins the direct-sum
+  fixed points through the normalized interpolating bond.
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
@@ -2023,3 +2026,20 @@ involve no boundary.
   `MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class`
   retains the original cohomology class and supplies one unitary projective
   representation implementing symmetry throughout the polar deformation.
+
+- **Ordered comparison:** `MPSTensor.orderedGappedInteractionPath` constructs
+  affine interpolation of positive interactions of norm at most one when
+  the smaller interaction has a uniform gap and the periodic zero modes
+  are common. Endpoint commutation with the fixed on-site representation
+  suffices for symmetry of the entire path.
+
+- **Weighted canonical endpoints:** `weightedMatrixUnitParentComparisonPath`
+  compares each fixed normalized-bond interaction with the canonical parent
+  of its weighted matrix-unit tensor. The local operator inequality and the
+  shared nonzero periodic ground line hold even when coefficients vanish.
+  `weightedCanonicalFixedPointGappedPath` concatenates the two endpoint
+  comparisons with the continuous bond path. It concerns unitary virtual
+  summands with a common factor system on the common direct-sum physical
+  space; arbitrary isometric tensors still require a separate endpoint
+  identification. Neither construction assumes continuity of the canonical
+  projections as the interpolation parameter varies.
