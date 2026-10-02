@@ -5,12 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinSumPermutation
 import TNLean.PEPS.GIsometric
+import Mathlib.LinearAlgebra.Contraction
 
 /-!
 # DOC
 -/
 
-open Module LinearMap Representation
+open Module LinearMap Representation TensorProduct
 open scoped Matrix Kronecker ComplexOrder
 
 namespace TNLean
@@ -316,6 +317,116 @@ theorem IsGIsometric.linkContractionCoord {σA : Representation ℂ G (α → �
   · exact dotProduct_star_self_eq_zero.1 h
 
 end Link
+
+section Bridge
+
+/-- The element `∑_i e_i^* ⊗ e_i` of `E^* ⊗ E` is the identity of `E`. -/
+theorem dualTensorHom_sum_coord_tmul {E κ : Type*} [AddCommGroup E] [Module ℂ E] [Fintype κ]
+    (d : Basis κ ℂ E) : dualTensorHom ℂ E E (∑ i, d.coord i ⊗ₜ d i) = LinearMap.id := by
+  refine LinearMap.ext fun x => ?_
+  simp only [map_sum, LinearMap.sum_apply, dualTensorHom_apply, Basis.coord_apply,
+    LinearMap.id_apply]
+  exact d.sum_repr x
+
+/-- The link vector in any finite basis: `∑_i e_i^* ⊗ e_i`. -/
+theorem linkVector_eq_sum_basis {E ι : Type*} [AddCommGroup E] [Module ℂ E]
+    [FiniteDimensional ℂ E] [Fintype ι] [DecidableEq ι] (b : Basis ι ℂ E) :
+    (linkVector : Module.Dual ℂ E ⊗[ℂ] E) = ∑ i, b.coord i ⊗ₜ b i := by
+  apply (dualTensorHomEquivOfBasis (N := E) b).injective
+  have hlv : (linkVector : Module.Dual ℂ E ⊗[ℂ] E) =
+      ∑ i, (Basis.ofVectorSpace ℂ E).coord i ⊗ₜ (Basis.ofVectorSpace ℂ E) i := by
+    rw [linkVector, coevaluation_apply_one, map_sum]
+    rfl
+  simp only [dualTensorHomEquivOfBasis_apply]
+  rw [hlv, dualTensorHom_sum_coord_tmul, dualTensorHom_sum_coord_tmul]
+
+variable [Fintype G] [DecidableEq G] {α β κA κB : Type*} [Fintype α] [Fintype β] [DecidableEq α]
+  [DecidableEq β] [Fintype κA] [Fintype κB]
+
+/-- Coordinates of the virtual system `W_A ⊗ ℂ[G]^*` of `A`, with `W_A = ℂ^α` and the dual
+basis of the group elements on the outgoing link: `e_{(a, g)} ↦ e_a ⊗ ⟨g|`. -/
+noncomputable def linkLeftCoord :
+    (α × G → ℂ) →ₗ[ℂ] (α → ℂ) ⊗[ℂ] Module.Dual ℂ (MonoidAlgebra ℂ G) :=
+  (Pi.basisFun ℂ (α × G)).constr ℂ fun p =>
+    Pi.single p.1 1 ⊗ₜ (MonoidAlgebra.basis G ℂ).coord p.2
+
+/-- Coordinates of the virtual system `ℂ[G] ⊗ W_B` of `B`: `e_{(g, b)} ↦ |g⟩ ⊗ e_b`. -/
+noncomputable def linkRightCoord :
+    (G × β → ℂ) →ₗ[ℂ] MonoidAlgebra ℂ G ⊗[ℂ] (β → ℂ) :=
+  (Pi.basisFun ℂ (G × β)).constr ℂ fun p => MonoidAlgebra.basis G ℂ p.1 ⊗ₜ Pi.single p.2 1
+
+/-- Coordinates of `W_A ⊗ W_B`: `e_{(a, b)} ↦ e_a ⊗ e_b`. -/
+noncomputable def pairCoord : (α × β → ℂ) →ₗ[ℂ] (α → ℂ) ⊗[ℂ] (β → ℂ) :=
+  (Pi.basisFun ℂ (α × β)).constr ℂ fun p => Pi.single p.1 1 ⊗ₜ Pi.single p.2 1
+
+omit [Group G] in
+@[simp]
+theorem linkLeftCoord_single (p : α × G) :
+    linkLeftCoord (Pi.single p 1) = Pi.single p.1 1 ⊗ₜ (MonoidAlgebra.basis G ℂ).coord p.2 := by
+  rw [← Pi.basisFun_apply, linkLeftCoord, Basis.constr_basis]
+
+omit [Group G] in
+@[simp]
+theorem linkRightCoord_single (p : G × β) :
+    linkRightCoord (Pi.single p 1) = MonoidAlgebra.basis G ℂ p.1 ⊗ₜ Pi.single p.2 1 := by
+  rw [← Pi.basisFun_apply, linkRightCoord, Basis.constr_basis]
+
+omit [Fintype G] [DecidableEq G] in
+@[simp]
+theorem pairCoord_single (p : α × β) :
+    pairCoord (Pi.single p 1) = Pi.single p.1 1 ⊗ₜ Pi.single p.2 1 := by
+  rw [← Pi.basisFun_apply, pairCoord, Basis.constr_basis]
+
+/-- The coordinates of a product vector, `u ⊗ v ↦ (u_k v_l)_{(k, l)}`. -/
+noncomputable def tensorCoord : (κA → ℂ) ⊗[ℂ] (κB → ℂ) →ₗ[ℂ] (κA × κB → ℂ) :=
+  TensorProduct.lift (LinearMap.mk₂ ℂ (fun u v p => u p.1 * v p.2)
+    (fun _ _ _ => funext fun _ => by simp [add_mul])
+    (fun _ _ _ => funext fun _ => by simp [mul_assoc])
+    (fun _ _ _ => funext fun _ => by simp [mul_add])
+    (fun _ _ _ => funext fun _ => by simp [mul_left_comm]))
+
+omit [Fintype κA] [Fintype κB] in
+@[simp]
+theorem tensorCoord_tmul (u : κA → ℂ) (v : κB → ℂ) (p : κA × κB) :
+    tensorCoord (u ⊗ₜ v) p = u p.1 * v p.2 :=
+  rfl
+
+omit [Fintype κA] [Fintype κB] in
+/-- Bridge: in the bases of group elements on the contracted link and the coordinate bases of
+the remaining legs and the physical systems, the contraction `linkContraction` of Lemma 5.2 is
+`linkContractionCoord`. -/
+theorem tensorCoord_comp_linkContraction_comp_pairCoord
+    (TA : (α → ℂ) ⊗[ℂ] Module.Dual ℂ (MonoidAlgebra ℂ G) →ₗ[ℂ] (κA → ℂ))
+    (TB : MonoidAlgebra ℂ G ⊗[ℂ] (β → ℂ) →ₗ[ℂ] (κB → ℂ)) :
+    tensorCoord ∘ₗ linkContraction TA TB ∘ₗ pairCoord =
+      linkContractionCoord (TA ∘ₗ linkLeftCoord) (TB ∘ₗ linkRightCoord) := by
+  refine (Pi.basisFun ℂ (α × β)).ext fun p => funext fun q => ?_
+  simp only [Pi.basisFun_apply, LinearMap.comp_apply, pairCoord_single, linkContraction_tmul,
+    linkVector_eq_sum_basis (MonoidAlgebra.basis G ℂ), map_sum, TensorProduct.map_tmul,
+    linkContractionCoord, Matrix.toLin'_apply, Matrix.mulVec_single_one, Matrix.col_apply,
+    linkContractionMatrix, Matrix.of_apply, LinearMap.toMatrix'_apply, linkLeftCoord_single,
+    linkRightCoord_single, Finset.sum_apply, tensorCoord_tmul, TensorProduct.mk_apply,
+    LinearMap.flip_apply]
+
+/-- Source: arXiv:1001.3807, Lemma 6.2 (stability of isometry under concatenation),
+`Papers/1001.3807/paper_v3.tex` lines 1704–1716, for the two-dimensional contraction
+`linkContraction` of Lemma 5.2 along one link carrying the left-regular representation. If
+`𝒫(A)` is `G`-isometric for `σ_A ⊗ L` and `𝒫(B)` for `L ⊗ σ_B`, in the coordinates of the bases of
+group elements on the link, with unitary representations on the remaining legs, then the
+contracted tensor is `G`-isometric for `σ_A ⊗ σ_B`, with the factors multiplying. -/
+theorem IsGIsometric.linkContraction {σA : Representation ℂ G (α → ℂ)}
+    {σB : Representation ℂ G (β → ℂ)}
+    (hσA : ∀ g, LinearMap.toMatrix' (σA g) ∈ Matrix.unitaryGroup α ℂ)
+    (hσB : ∀ g, LinearMap.toMatrix' (σB g) ∈ Matrix.unitaryGroup β ℂ)
+    {TA : (α → ℂ) ⊗[ℂ] Module.Dual ℂ (MonoidAlgebra ℂ G) →ₗ[ℂ] (κA → ℂ)}
+    {TB : MonoidAlgebra ℂ G ⊗[ℂ] (β → ℂ) →ₗ[ℂ] (κB → ℂ)}
+    (hA : IsGIsometric (kroneckerRep σA leftRegularFun) (TA ∘ₗ linkLeftCoord))
+    (hB : IsGIsometric (kroneckerRep leftRegularFun σB) (TB ∘ₗ linkRightCoord)) :
+    IsGIsometric (kroneckerRep σA σB) (tensorCoord ∘ₗ PEPS.linkContraction TA TB ∘ₗ pairCoord) := by
+  rw [tensorCoord_comp_linkContraction_comp_pairCoord]
+  exact IsGIsometric.linkContractionCoord hσA hσB hA hB
+
+end Bridge
 
 end PEPS
 end TNLean
