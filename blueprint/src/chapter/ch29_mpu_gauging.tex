@@ -5751,14 +5751,6 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \end{align}
     so the expectation value of the commutator on every normalized state is
     $-1$, although the on-site symmetry $X^{\otimes N}$ has trivial anomaly.
-    The operators $Z_jX^{\otimes[i,j]}$, with $i$ even and $j$ odd, are the
-    truncations of the depth-two circuit for $X^{\otimes N}$ whose first layer
-    applies $X\otimes ZX$ to the pairs $(2k,2k+1)$ and whose second layer
-    applies $Z$ to the odd sites. Hence the expectation value of the commutator
-    of two circuit truncations on a symmetry-broken ground state is not
-    determined by the anomaly, and the detection of the anomaly asserted in
-    \cite[Section~V]{GarreRubioSchuch2024DomainWall} fails for an arbitrary
-    circuit truncation \cite{gap:gs24_truncation_detector_endpoint_dependence}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -5768,6 +5760,26 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $(ZX)^\dagger(ZX)=\mathbf 1$ or $Z^\dagger Z=\mathbf 1$. At every other site
     the factors are $X$ or the identity, and they cancel.
 \end{proof}
+
+\begin{remark}[Circuit truncations with a nontrivial detector]
+    \label{rem:mpug_truncation_detector_circuit}
+    \uses{thm:mpug_truncation_detector_endpoint_dependence}
+    The symmetry $X^{\otimes N}$ on a periodic chain of even length is the
+    depth-two circuit whose first layer applies $X\otimes ZX$ to the pairs
+    $(2k,2k+1)$ and whose second layer applies $Z\otimes\mathbf 1$ to the pairs
+    $(2k+1,2k+2)$, since $Z\cdot ZX=X$. For $i$ even and $j$ odd, dropping the
+    gates not contained in $[i,j]$ leaves both factors on every odd site of
+    $[i,j]$ except $j$, which keeps only $ZX$, so the truncation is
+    $Z_jX^{\otimes[i,j]}$. For $i_2<i_1<j_1<j_2$ of these parities,
+    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} applies.
+    The expectation value of the commutator of two circuit truncations on a
+    symmetry-broken ground state is therefore not determined by the anomaly,
+    and the detection asserted in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall} fails for an arbitrary
+    circuit truncation \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+    The identification of the circuit truncation with $Z_jX^{\otimes[i,j]}$
+    is not formalized.
+\end{remark}
 
 \begin{theorem}[Detection for truncations acting as domain-wall strings]
     \label{thm:mpug_truncation_detector_wall_strings}
@@ -5794,11 +5806,13 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     If moreover $g$ is an involution of a normal representation, then
     $c_{AB}c_{BA}=\omega(g,g,g)\,\omega(g,e,g)$. This is the detection of the
     anomaly of \cite[Section~V]{GarreRubioSchuch2024DomainWall} restricted to
-    truncations that act on $\ket{\psi_A}$ as the domain-wall strings, that is,
-    whose walls on $\ket{\psi_B}$ are the images under $U$ of their walls on
-    $\ket{\psi_A}$. By
-    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} the
-    restriction cannot be dropped
+    unitaries whose two ordered products on $\ket{\psi_A}$ agree with the
+    corresponding products of the domain-wall strings. These identities are
+    expected for truncations whose walls on $\ket{\psi_B}$ are the images under
+    $U$ of their walls on $\ket{\psi_A}$, the property the source's argument
+    uses; that implication is not formalized. By
+    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} some
+    restriction of this kind is needed
     \cite{gap:gs24_truncation_detector_endpoint_dependence}.
 \end{theorem}
 

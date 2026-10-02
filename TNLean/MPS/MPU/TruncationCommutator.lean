@@ -172,7 +172,8 @@ lines 2081--2087. The symmetry `X^{⊗N}` is the depth-two circuit whose first l
 `X ⊗ ZX` to the pairs of sites `(2k, 2k+1)` and whose second layer applies `Z` to every odd site,
 a gate on the pair `(2k+1, 2k+2)`; indeed `Z · ZX = X`. Dropping the gates that are not
 contained in an interval `[i, j]` with `i` even and `j` odd keeps both factors on every odd
-site of `[i, j]` except `j`, which keeps only `ZX`, so the truncation is `Z_j X^{⊗[i,j]}`.
+site of `[i, j]` except `j`, which keeps only `ZX`, so the truncation is `Z_j X^{⊗[i,j]}`; this
+identification of the circuit truncation is not formalized.
 For `i₂ < i₁ < j₁ < j₂` of these parities the hypotheses hold, and the expectation value of the
 commutator on every normalized state is `-1`, not the trivial anomaly `1`
 (`star_dotProduct_groupCommutator_dressed_onSiteTruncation_pauliX`).
