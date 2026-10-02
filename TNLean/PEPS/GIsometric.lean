@@ -59,8 +59,8 @@ invariant subspace, which is where the source says it acts (lines 1722–1728).
 The one-dimensional concatenation theorem is `IsGIsometricMPS.concatTensor`, the case in which
 the source writes its proof. In orthonormal bases of arbitrary virtual and physical spaces, the
 same step is proved in `TNLean.PEPS.GIsometricConcatenation`: the contraction of adjoints is
-the adjoint of the contracted map, and `IsGIsometric.linkContraction_fourLeg` joins two square-lattice tensors
-along one regular virtual bond. The more general `IsGIsometric.linkContraction_basis` allows
+the adjoint of the contracted map, and `IsGIsometric.linkContraction_fourLeg` joins two
+square-lattice tensors along one regular virtual bond. The more general `IsGIsometric.linkContraction_basis` allows
 unitary actions on the remaining legs. The Gram identity for an arbitrary connected
 untwisted regular-bond region, including its internal cycles and normalization factor,
 is proved in `TNLean.PEPS.RegularRegionGram`. The physical entropy of an untwisted
