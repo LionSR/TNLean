@@ -66,6 +66,16 @@ endpoint embeddings in the classification theorem.\footnote{Affected
     declarations: \leanid{MPSTensor.canonicalInjectiveGappedPath} and
     \leanid{MPSTensor.polarGappedInteractionPath}.}
 
+Normalization and unitary virtual covariance are now obtained from the
+original one-site injective on-site symmetric tensor. Perron normalization
+uses only nonzero rescaling and virtual gauge, which preserve all canonical
+parent interactions. The positive definite adjoint fixed point is derived
+from unitality by trace duality, and the virtual gauges are made unitary.
+Thus the path to the isometric parent requires neither an assumed
+normalization nor supplied virtual unitary matrices.\footnote{Affected
+    declaration:
+    \leanid{MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}.}
+
 \section{Elimination plan}
 For a continuous family of tensors in normal form with a fixed number of
 normal blocks, apply the block-diagonal parent-Hamiltonian gap with its

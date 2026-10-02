@@ -2009,6 +2009,11 @@ involve no boundary.
   virtual gauge. The polar construction starts from an injective tensor whose
   covariance is expressed by unitary bond conjugation; it joins its canonical
   parent to the parent of its isometric form on the original physical space.
+  `MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric`
+  derives these data from an on-site symmetric injective tensor: nonzero
+  rescaling and gauge give a unital representative with identical canonical
+  parent interactions, and the unitary virtual covariance is then obtained
+  from the symmetry.
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
