@@ -10,6 +10,11 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.Symmetry.BondInterpolationSymmetry
+import TNLean.MPS.Symmetry.BondProductContinuity
+import TNLean.MPS.Symmetry.BondProductHamiltonianSymmetry
+import TNLean.MPS.Symmetry.BondProductParentHamiltonian
+import TNLean.MPS.Symmetry.BondProductPhysicalParentHamiltonian
+import TNLean.MPS.Symmetry.BondProductPhysicalSymmetry
 import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
