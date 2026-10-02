@@ -974,3 +974,67 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         (A'^{[p]})^I & =Z(A^{[p]})^I=U\Bigl(\bigoplus_ac_aC_a^I\Bigr)U^\dagger. \notag
     \end{align}
 \end{proof}
+
+\begin{theorem}[Weight and dimension recovery from a blocked comparison]
+    \label{thm:periodic_blocked_weight_normalization}
+    \lean{MPSTensor.weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos}
+    \leanok
+    \uses{def:periodic_tensor,def:same_mpv2_pos}
+    Let $T=\bigoplus_k\mu_k B_k$, where $\mu_k\ne0$ and the $B_k$ are
+    left-canonical periodic tensors of bond dimension $D_k$. Suppose that, for $p>0$, $T^{[p]}$ has the same
+    positive-length matrix product vectors as a periodic sector decomposition
+    $Q$ with a pairwise non-repeated basis and unit-modulus multiplicities.
+    Then $|\mu_k|=1$ for every $k$, and $\sum_k D_k$ equals the total bond
+    dimension of $Q$.
+    This is the weight normalization in the corrected forward direction of
+    \cite[Theorem~4.1, lines~750--756]{DeLasCuevas2017Irreducible}; the
+    unit-modulus target is the correction of
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
+        thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary,
+        thm:periodic_ft_equal_case_trace_preserving,thm:block_tensor_to_tensor_from_blocks}
+    Decompose each blocked $B_k$ into its prescribed orbits. Every resulting
+    block inherits weight $\mu_k^p$. Group repeated blocks and apply the
+    multiplicity-bearing equal-case theorem. Matching to the unit-modulus
+    multiplicities of $Q$ gives $|\mu_k|^p=1$, hence $|\mu_k|=1$.
+    The equal-case theorem also gives matrices $Y$ and $Y'$ between the bond
+    spaces of the grouped decomposition $P$ and of $Q$ with $YY'=\Id$ and
+    $Y'Y=\Id$, so these square matrices have the same size. Since orbit
+    decomposition and grouping preserve the total dimension,
+    \begin{align}
+        \sum_kD_k & =\dim P=\dim Q. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Unit-weight presentation from a blocked comparison]
+    \label{thm:periodic_refinement_normalized_presentation}
+    \lean{MPSTensor.exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos}
+    \leanok
+    \uses{def:periodic_tensor,def:same_mpv2_pos}
+    Let $A$ be any tensor of bond dimension $D$. Suppose that, for $p>0$,
+    $A^{[p]}$ has the same positive-length matrix product vectors as a periodic
+    sector decomposition $Q$ with a pairwise non-repeated basis and
+    unit-modulus multiplicities. Then $A$ has the same positive-length matrix
+    product vectors as a unit-weight sum $\bigoplus_k C_k$ of left-canonical
+    periodic tensors. Their total bond dimension equals that of $Q$ and is
+    at most $D$.
+    This is the normalization step of
+    \cite[Theorem~4.1, lines~750--756]{DeLasCuevas2017Irreducible} for an
+    arbitrary input tensor.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_positive_decomposition,thm:periodic_blocked_weight_normalization,
+        thm:same_mpv2_pos_block_tensor}
+    Take the positive-weight periodic decomposition of $A$ from
+    Theorem~\ref{thm:periodic_positive_decomposition} and block it by $p$.
+    The preceding theorem gives unit modulus for each original weight and
+    the claimed dimension. Set $C_k^I=\mu_kB_k^I$; then
+    $\bigoplus_kC_k=\bigoplus_k\mu_kB_k$, and since $|\mu_k|=1$ each $C_k$ is
+    left-canonical periodic with the period of $B_k$.
+\end{proof}

@@ -37,6 +37,7 @@ import TNLean.MPS.Periodic.PhaseClasses
 import TNLean.MPS.Periodic.PrescribedBlocking
 import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Periodic.ProportionalOverlap
+import TNLean.MPS.Periodic.RefinementNormalization
 import TNLean.MPS.Periodic.ScaledNormalization
 import TNLean.MPS.Periodic.SectorContraction
 import TNLean.MPS.Periodic.SectorIrreducibility
