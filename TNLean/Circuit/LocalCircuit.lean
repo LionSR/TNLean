@@ -450,7 +450,7 @@ theorem circuitOp_map_adjoint_reverse (Ls : List (Layer d N)) :
 product of unitaries on pairwise disjoint pairs of neighbouring sites.
 
 Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits");
-blueprint `def:ldp_local_circuit`. -/
+blueprint `def:qc_local_circuit`. -/
 def IsLocalCircuitOfDepth (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (T : ℕ) : Prop :=
   ∃ Ls : List (Layer d N), Ls.length = T ∧ U = circuitOp Ls
 

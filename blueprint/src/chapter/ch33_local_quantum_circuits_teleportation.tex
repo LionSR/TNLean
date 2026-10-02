@@ -1,0 +1,508 @@
+%% ==================================================
+%% Section: Teleportation and long-range gates
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eq. (16) and
+%% paragraph "Tree-RG circuit with measurements"; arXiv:2103.13367 (Piroli,
+%% Styliaris, Cirac), paragraph "State transformations with QC and LOCC" and
+%% Example 2.
+%% ==================================================
+
+\section{Teleportation and long-range gates}
+\label{sec:qc_teleportation}
+
+Registers that are far apart ``can be teleported at neighboring registers with
+a constant overhead'' by ``creating nearest-neighbor entangled pairs, then
+performing simultaneous measurements, and correcting (without postselection)
+based on the measurement outcomes'' \cite{Malz2024Preparation}. This section
+proves this for qudits of any dimension: any number of sites is moved at once
+along chains of nearest-neighbour hops of any length, and two-site gates
+joining the sites $a$ and $a+2L+1$, on pairwise disjoint stretches
+$\{a,\dots,a+2L+1\}$, are applied in constant depth for every $L$. Gates at
+even separation, or on overlapping stretches, are not covered. Registers of
+$s\ge1$ consecutive sites are teleported site by site, and a layer of
+unitaries on pairs of distant registers is applied in a depth depending only
+on $s$ and on the number of gates on neighbouring sites of each unitary.
+
+Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
+$N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
+
+\begin{definition}[Fourier and generalized Pauli matrices]
+    \label{def:qc_qudit_pauli}
+    \lean{QuantumCircuit.quditRoot, QuantumCircuit.quditFourier,
+        QuantumCircuit.quditPauli}
+    \leanok
+    Let $\zeta=e^{2\pi i/d}$. The Fourier matrix is
+    $F_{ab}=d^{-1/2}\zeta^{ab}$ for $a,b\in\mathbb Z_d$, and for
+    $z,x\in\mathbb Z_d$ the generalized Pauli matrix $X^xZ^z$ maps $\ket q$ to
+    $\zeta^{zq}\ket{q+x}$.
+\end{definition}
+
+\begin{lemma}[Fourier and Pauli matrices are unitary]
+    \label{lem:qc_qudit_pauli_unitary}
+    \lean{QuantumCircuit.isPrimitiveRoot_quditRoot,
+        QuantumCircuit.quditFourier_apply,
+        QuantumCircuit.quditFourier_mem_unitary,
+        QuantumCircuit.quditPauli_apply, QuantumCircuit.quditPauli_mem_unitary}
+    \leanok
+    \uses{def:qc_qudit_pauli}
+    The number $\zeta$ is a primitive $d$-th root of unity, and
+    $F$ and $X^xZ^z$ are unitary. The entries are
+    $(X^xZ^z)_{pq}=\zeta^{zq}$ if $p-x=q$ and $0$ otherwise.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The rows of $F$ are orthonormal because
+    $\sum_b\zeta^{(a-c)b}=d\,[a=c]$, the geometric sum of a $d$-th root of
+    unity $\zeta^{a-c}$ that differs from $1$ unless $a=c$. The matrix $X^xZ^z$
+    is a permutation matrix times a diagonal matrix of unimodular numbers.
+\end{proof}
+
+\begin{lemma}[Single-site operators, permutations of sites and sites in the state zero]
+    \label{lem:qc_site_permutations}
+    \lean{QuantumCircuit.finKronecker_update_one_mulVec_apply,
+        QuantumCircuit.finKronecker_update_one_permMatrix_mulVec,
+        QuantumCircuit.IsZeroOn, QuantumCircuit.IsZeroOn.mono,
+        QuantumCircuit.IsZeroOn.smul,
+        QuantumCircuit.IsZeroOn.finKronecker_update_one_mulVec,
+        QuantumCircuit.cfgPerm, QuantumCircuit.cfgPerm_apply,
+        QuantumCircuit.permMatrix_cfgPerm_mul_finKronecker,
+        QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec,
+        QuantumCircuit.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
+        QuantumCircuit.permMatrix_cfgPerm_one,
+        QuantumCircuit.permMatrix_cfgPerm_mul_embedOp_mul,
+        QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec_image,
+        QuantumCircuit.IsZeroOn.mulVec_of_mem_supportedOperators,
+        QuantumCircuit.list_prod_mem_supportedOperators,
+        QuantumCircuit.layerOfListGate, QuantumCircuit.layerOfListGate_key,
+        QuantumCircuit.layerOfList, QuantumCircuit.layerOfList_op}
+    \leanok
+    \uses{def:qc_local_circuit}
+    A vector $\ket v$ has $\ket0$ at the sites of a set $Z$ if $v(x)=0$ for
+    every configuration $x$ with $x_i\neq0$ for some $i\in Z$. A permutation
+    $\pi$ of the sites acts on vectors by $(P_\pi v)(x)=v(x\circ\pi)$. Then:
+    \begin{enumerate}
+        \item the operator $u$ at the site $t$ maps $\ket v$ to
+              $x\mapsto\sum_{j}u_{x_t,j}\,v(x[t\mapsto j])$, and keeps $\ket0$ at
+              the sites of $Z$ if $t\notin Z$; so does multiplication by a
+              scalar;
+        \item $P_\pi P_\sigma=P_{\pi\sigma}$, $P_\pi(\bigotimes_{i}g_{i})
+                  =(\bigotimes_{i}g_{\pi^{-1}(i)})P_\pi$, and conjugating an operator
+              $X$ placed at the sites $e_1,\dots,e_m$ by $P_\sigma$ places $X$
+              at the sites $\sigma(e_1),\dots,\sigma(e_m)$:
+              $P_\sigma XP_{\sigma^{-1}}$ is $X$ at $\sigma\circ e$;
+        \item if $\ket v$ has $\ket0$ at the sites of $Z$, then $P_\pi\ket v$
+              has $\ket0$ at the sites of $\pi(Z)$, and an operator acting on
+              sites outside $Z$, in particular a product of such operators,
+              keeps $\ket0$ at the sites of $Z$;
+        \item gates on pairwise disjoint neighbouring pairs, given by a list,
+              form a layer whose operator is the product of the gates along the
+              list.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    These are entrywise computations. For the third item, $\ket v$ has $\ket0$
+    on $Z$ exactly when the diagonal projection onto the configurations
+    vanishing on $Z$ fixes $\ket v$, and that projection commutes with an
+    operator acting outside $Z$.
+\end{proof}
+
+\begin{lemma}[One teleportation hop]
+    \label{lem:qc_teleport_hop}
+    \lean{QuantumCircuit.TeleportHop, QuantumCircuit.TeleportHop.gate₁,
+        QuantumCircuit.TeleportHop.gate₂,
+        QuantumCircuit.TeleportHop.gate₁_mem_unitary,
+        QuantumCircuit.TeleportHop.gate₂_mem_unitary,
+        QuantumCircuit.TeleportHop.gate₁_mem_supportedOperators,
+        QuantumCircuit.TeleportHop.gate₂_mem_supportedOperators,
+        QuantumCircuit.TeleportHop.pre, QuantumCircuit.TeleportHop.frame,
+        QuantumCircuit.TeleportHop.frame_mem_unitary,
+        QuantumCircuit.TeleportHop.frame_of_ne,
+        QuantumCircuit.TeleportHop.swapPerm,
+        QuantumCircuit.TeleportHop.pre_mulVec,
+        QuantumCircuit.TeleportHop.pre_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_qudit_pauli, lem:qc_qudit_pauli_unitary,
+        lem:qc_site_permutations, lem:qc_permutation_layers}
+    A \emph{hop} consists of three distinct sites $c,e,f$ such that $\{e,f\}$
+    and $\{c,e\}$ are neighbouring pairs. Its first gate, on $\{e,f\}$,
+    applies $F$ at $e$ and then $\ket a_e\ket b_f\mapsto\ket a_e\ket{b+a}_f$;
+    its second gate, on $\{c,e\}$, applies
+    $\ket a_c\ket b_e\mapsto\ket a_c\ket{b-a}_e$ and then $F$ at $c$. Both are
+    unitary and act on their pairs. Let $\ket v$ have $\ket0$ at $e$ and $f$,
+    and let $z_c,z_e\in\mathbb Z_d$. Applying the two gates and then the
+    projection onto $\ket{z_c}$ at $c$ and $\ket{z_e}$ at $e$ gives
+    \begin{align*}
+        \frac1d\,\bigl(s_{z_c}\bigr)_c\bigl(s_{z_e}\bigr)_e
+        \bigl(X^{z_e}Z^{z_c}\bigr)_{f}P_{(c\,f)}\ket v,
+    \end{align*}
+    where $s_z\ket q=\ket{q+z}$ and $(c\,f)$ is the transposition of the
+    sites $c$ and $f$. So the content of $c$ is found at $f$, up to the
+    unitary $X^{z_e}Z^{z_c}$, and $c$ and $e$ carry the outcomes. The operator
+    acts on the sites $c,e,f$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    On a vector with $\ket0$ at $e$ and $f$, the Fourier matrix at $e$ gives
+    the amplitude $d^{-1/2}$ to every value $x_e$, and the shift copies it to
+    $f$: this prepares $d^{-1/2}\sum_j\ket{j}_e\ket j_f$. The second gate and
+    the projections compute, configuration by configuration, the amplitude
+    $d^{-1/2}F_{z_c,\,x_f-z_e}$ for the content $x_f-z_e$ moved from $c$ to
+    $f$, which is $d^{-1}\zeta^{z_c(x_f-z_e)}$, the amplitude of the right-hand
+    side. Configurations with $x_c\neq z_c$ or $x_e\neq z_e$ vanish on both
+    sides.
+\end{proof}
+
+\begin{theorem}[Teleportation along chains of hops in one round]
+    \label{thm:qc_teleportation_round}
+    \lean{QuantumCircuit.TeleportHop.sites,
+        QuantumCircuit.TeleportHop.allSites,
+        QuantumCircuit.TeleportHop.pairSites,
+        QuantumCircuit.TeleportHop.measuredSites,
+        QuantumCircuit.TeleportHop.Valid,
+        QuantumCircuit.TeleportHop.mem_allSites,
+        QuantumCircuit.TeleportHop.coe_measuredSites_subset_allSites,
+        QuantumCircuit.TeleportHop.disjoint_measuredSites,
+        QuantumCircuit.TeleportHop.pairwise_disjoint_one,
+        QuantumCircuit.TeleportHop.pairwise_disjoint_two,
+        QuantumCircuit.TeleportHop.layerOne, QuantumCircuit.TeleportHop.layerTwo,
+        QuantumCircuit.TeleportHop.layerOne_op,
+        QuantumCircuit.TeleportHop.layerTwo_op,
+        QuantumCircuit.TeleportHop.sitePerm,
+        QuantumCircuit.TeleportHop.chainPerm,
+        QuantumCircuit.TeleportHop.chainPerm_nil,
+        QuantumCircuit.TeleportHop.chainPerm_cons,
+        QuantumCircuit.TeleportHop.chainFrame,
+        QuantumCircuit.TeleportHop.chainPre,
+        QuantumCircuit.TeleportHop.chainFrame_mem_unitary,
+        QuantumCircuit.TeleportHop.chainFrame_of_notMem,
+        QuantumCircuit.TeleportHop.prod_gate₂_mem_supportedOperators,
+        QuantumCircuit.TeleportHop.chainPre_cons,
+        QuantumCircuit.IsZeroOn.chainPerm_mulVec,
+        QuantumCircuit.TeleportHop.chainPre_mulVec,
+        QuantumCircuit.TeleportHop.extendOutcome,
+        QuantumCircuit.TeleportHop.round, QuantumCircuit.TeleportHop.depth_round,
+        QuantumCircuit.TeleportHop.isImplementationOn_round}
+    \leanok
+    \uses{lem:qc_teleport_hop, def:qc_round_implementation,
+        lem:qc_site_permutations}
+    A list $h_1,\dots,h_H$ of hops is \emph{valid} if every hop $h_j$ meets the
+    hops $h_{j+1},\dots,h_H$ after it in the list only through its site $c$:
+    its sites $e$ and $f$ are not sites of $h_{j+1},\dots,h_H$, and its site
+    $c$ is not a site $c$ or $e$ of one of them. Its site $c$ may be the site
+    $f$ of one of them, so the hops form chains
+    $c_0\to f_0=c_1\to f_1=\cdots$, the hops after $h_j$ in the list acting
+    before it. For a valid list and a local circuit $U$,
+    the \emph{teleportation round} applies $U$, the first gates of all hops in
+    one layer, the second gates of all hops in one layer, measures the sites
+    $c$ and $e$ of all hops, and corrects by the inverse of the product of the
+    single-site unitaries that the hops leave. Its depth is the depth of $U$
+    plus $2$. It implements $P_{h_1}\cdots P_{h_H}U$, with $P_h$ the
+    transposition of the sites $c$ and $f$ of $h$, on the vectors $\ket v$ such
+    that $U\ket v$ has $\ket0$ at the sites $e$ and $f$ of every hop, with the
+    scalar $d^{-H}$ for every outcome.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The first gates act on pairwise disjoint pairs $\{e,f\}$, and the second
+    gates on pairwise disjoint pairs $\{c,e\}$, so they form two layers. By
+    induction over the list, the projections and the two layers factor into
+    the hops one after the other: the first gate of the head $h$ of the list
+    commutes with the second gates of the other hops because its sites $e,f$
+    are not theirs, and the projections at the sites of the other hops commute
+    with the operator of $h$. Lemma~\ref{lem:qc_teleport_hop} for $h$ applies
+    because the other hops leave $\ket0$ at $e$ and $f$. A single-site unitary
+    at the site $c$ of $h$, left by another hop whose site $f$ is $c$,
+    reappears at the site $f$ of $h$ after the transposition; so the hops leave
+    a product of single-site unitaries, depending on the outcomes, after
+    $d^{-H}P_{h_1}\cdots P_{h_H}$. The correction is its inverse.
+\end{proof}
+
+\begin{lemma}[Chains between distant sites]
+    \label{lem:qc_teleportation_chains}
+    \lean{QuantumCircuit.add_natCast_injective, QuantumCircuit.add_natCast_succ,
+        QuantumCircuit.add_natCast_ne,
+        QuantumCircuit.TeleportHop.exists_eq_smul_of_mem_outputs_conj,
+        QuantumCircuit.TeleportHop.chainHop,
+        QuantumCircuit.TeleportHop.chainHopBack,
+        QuantumCircuit.TeleportHop.forwardChain,
+        QuantumCircuit.TeleportHop.backwardChain,
+        QuantumCircuit.TeleportHop.After,
+        QuantumCircuit.TeleportHop.valid_iff_pairwise,
+        QuantumCircuit.TeleportHop.sitePerm_append,
+        QuantumCircuit.TeleportHop.pairSites_append,
+        QuantumCircuit.TeleportHop.mem_forwardChain,
+        QuantumCircuit.TeleportHop.mem_backwardChain,
+        QuantumCircuit.TeleportHop.valid_forwardChain,
+        QuantumCircuit.TeleportHop.valid_backwardChain,
+        QuantumCircuit.TeleportHop.sitePerm_forwardChain,
+        QuantumCircuit.TeleportHop.sitePerm_backwardChain,
+        QuantumCircuit.TeleportHop.pairSites_forwardChain_subset,
+        QuantumCircuit.TeleportHop.pairSites_backwardChain_subset,
+        QuantumCircuit.TeleportHop.allSites_forwardChain_subset,
+        QuantumCircuit.TeleportHop.allSites_backwardChain_subset,
+        QuantumCircuit.TeleportHop.isZeroOn_chainPerm_forwardChain}
+    \leanok
+    \uses{thm:qc_teleportation_round, lem:qc_round_implementation_compose}
+    \begin{enumerate}
+        \item Let $\mathcal T$ and $\mathcal B$ be valid lists of hops and $G$ a
+              layer of gates, and let $P_{\mathcal T}$, $P_{\mathcal B}$ be the
+              products of the transpositions of their hops. If $\ket v$ has
+              $\ket0$ at the sites $e,f$ of $\mathcal T$ and
+              $GP_{\mathcal T}\ket v$ has $\ket0$ at the sites $e,f$ of
+              $\mathcal B$, then every output of the teleportation round of
+              $\mathcal T$, followed by the teleportation round of $\mathcal B$
+              after $G$, is a multiple of $P_{\mathcal B}GP_{\mathcal T}\ket v$.
+              The two rounds have depth $2$ and $3$.
+        \item Let $2L<N$ and let $a$ be a site. The forward chain of the hops
+              $(a+2j,\,a+2j+1,\,a+2j+2)$, $j<L$, and the backward chain of the
+              hops $(a+2j+2,\,a+2j+1,\,a+2j)$, $j<L$, are valid. The product of
+              the transpositions of the forward chain maps $a$ to $a+2L$ and
+              fixes the sites $a+j$ with $2L<j<N$; that of the backward chain is
+              its inverse. The sites $e,f$ of the forward chain lie among
+              $a+1,\dots,a+2L$, those of the backward chain lie among
+              $a,\dots,a+2L-1$, and all sites of both chains among
+              $a,\dots,a+2L$. If $\ket v$ has $\ket0$ at the sites
+              $a+1,\dots,a+2L$, then after the forward chain the sites
+              $a,\dots,a+2L-1$ carry $\ket0$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first item composes two applications of
+    Theorem~\ref{thm:qc_teleportation_round}. For the second, the sites
+    $a+j$ with $0\le j<N$ are distinct, the transposition of the hop $j$
+    exchanges $a+2j$ and $a+2j+2$, and the hops of the forward chain, applied
+    in the order $j=0,1,\dots$, move the content of $a$ step by step to
+    $a+2L$; each hop moves the $\ket0$ from $a+2j+2$ to $a+2j$, while
+    $a+2j+1$ keeps its $\ket0$.
+\end{proof}
+
+\begin{lemma}[Parallel chains]
+    \label{lem:qc_parallel_chains}
+    \lean{QuantumCircuit.TeleportHop.sitePerm_apply_of_notMem,
+        QuantumCircuit.TeleportHop.mem_allSites_flatMap,
+        QuantumCircuit.TeleportHop.mem_pairSites_flatMap,
+        QuantumCircuit.TeleportHop.chainPerm_append,
+        QuantumCircuit.TeleportHop.after_of_disjoint,
+        QuantumCircuit.TeleportHop.sites_subset_allSites,
+        QuantumCircuit.TeleportHop.valid_flatMap,
+        QuantumCircuit.TeleportHop.sitePerm_flatMap_apply,
+        QuantumCircuit.TeleportHop.sitePerm_flatMap_apply_of_notMem}
+    \leanok
+    \uses{lem:qc_teleportation_chains}
+    The product of the transpositions of a list of hops fixes every site that
+    is not a site of the list. Let valid lists of hops $\mathcal L_g$ have
+    their sites in sets $S_g$ that are pairwise disjoint. Then the
+    concatenation of the lists is valid, and the product of its transpositions
+    agrees on $S_g$ with that of $\mathcal L_g$ and fixes every site outside
+    all the $S_g$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Two hops with disjoint sites satisfy the condition of validity in either
+    order. The product of the transpositions of $\mathcal L_g$ fixes the sites
+    outside $S_g$, hence maps $S_g$ into itself, and the products of the other
+    lists fix $S_g$ pointwise.
+\end{proof}
+
+\begin{theorem}[A layer of distant gates in depth five with measurements]
+    \label{thm:qc_long_range_layer}
+    \lean{QuantumCircuit.LongRangeGate, QuantumCircuit.LongRangeGate.far,
+        QuantumCircuit.LongRangeGate.near, QuantumCircuit.LongRangeGate.span,
+        QuantumCircuit.LongRangeGate.interior,
+        QuantumCircuit.LongRangeGate.cleared, QuantumCircuit.LongRangeGate.op,
+        QuantumCircuit.LongRangeGate.there, QuantumCircuit.LongRangeGate.back,
+        QuantumCircuit.LongRangeGate.near_ne_far,
+        QuantumCircuit.LongRangeGate.localGate,
+        QuantumCircuit.LongRangeGate.localGate_mem_unitary,
+        QuantumCircuit.LongRangeGate.localGate_mem_supportedOperators,
+        QuantumCircuit.LongRangeGate.a_ne_far,
+        QuantumCircuit.LongRangeGate.op_mem_unitary,
+        QuantumCircuit.LongRangeGate.op_mem_supportedOperators,
+        QuantumCircuit.LongRangeGate.far_mem_span,
+        QuantumCircuit.LongRangeGate.bond_near_subset_span,
+        QuantumCircuit.LongRangeGate.interior_subset_span,
+        QuantumCircuit.LongRangeGate.cleared_subset_span,
+        QuantumCircuit.LongRangeGate.allSites_there_subset_span,
+        QuantumCircuit.LongRangeGate.allSites_back_subset_span,
+        QuantumCircuit.LongRangeGate.disjoint_cleared_bond_near,
+        QuantumCircuit.LongRangeGate.sitePerm_back_near,
+        QuantumCircuit.LongRangeGate.sitePerm_back_far,
+        QuantumCircuit.LongRangeGate.sitePerm_back_sitePerm_there,
+        QuantumCircuit.LongRangeGate.pairwise_disjoint_bond,
+        QuantumCircuit.LongRangeGate.localLayer,
+        QuantumCircuit.LongRangeGate.localLayer_op,
+        QuantumCircuit.LongRangeGate.valid_there,
+        QuantumCircuit.LongRangeGate.valid_back,
+        QuantumCircuit.LongRangeGate.isZeroOn_chainPerm_there,
+        QuantumCircuit.LongRangeGate.isZeroOn_localLayer,
+        QuantumCircuit.LongRangeGate.sitePerm_there_eq_symm,
+        QuantumCircuit.LongRangeGate.chainPerm_back_mul_localLayer_mul_chainPerm_there,
+        QuantumCircuit.LongRangeGate.rounds,
+        QuantumCircuit.LongRangeGate.sum_depth_rounds,
+        QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds}
+    \leanok
+    \uses{lem:qc_teleportation_chains, lem:qc_parallel_chains}
+    A \emph{distant gate} is a two-site unitary $u$ on the sites $a$ and
+    $a+2L+1$, where $2L+1<N$; its stretch is $a,a+1,\dots,a+2L+1$ and its
+    interior the $2L$ sites $a+1,\dots,a+2L$. Let $g_1,\dots,g_n$ be distant
+    gates with pairwise disjoint stretches. Two measurement rounds of total
+    depth $5$ implement the product of the gates $g_1,\dots,g_n$ on the
+    vectors with $\ket0$ at the interiors of all the gates: the first
+    teleports the content of every site $a$ along its forward chain to
+    $a+2L$; the second applies every $u$ to the neighbouring pair
+    $\{a+2L,a+2L+1\}$ and teleports the content of every $a+2L$ back to $a$
+    along its backward chain. The depth depends neither on the distances nor
+    on the number of gates, and no outcome is post-selected.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:qc_parallel_chains} the forward chains of all the gates
+    form a valid list, and so do the backward chains, with products of
+    transpositions $P$ and $P^{-1}$: on the stretch of $g$ both agree with the
+    chains of $g$, which are inverse to each other. The forward chains need
+    $\ket0$ at the interiors; afterwards the sites $a,\dots,a+2L-1$ of every
+    gate carry $\ket0$, by Lemma~\ref{lem:qc_teleportation_chains} for its
+    own chain and since the other chains act on disjoint sites. The gates on
+    the pairs $\{a+2L,a+2L+1\}$ keep these $\ket0$, which the backward chains
+    need. By Lemma~\ref{lem:qc_teleportation_chains} every output is a
+    multiple of $P^{-1}GP\ket v$, with $G$ the product of the gates on the
+    neighbouring pairs, and $P^{-1}GP$ is the product of the conjugated gates.
+    The conjugate of $u$ at $a+2L,a+2L+1$ is $u$ at $P^{-1}(a+2L)=a$ and
+    $P^{-1}(a+2L+1)=a+2L+1$ by Lemma~\ref{lem:qc_site_permutations}.
+\end{proof}
+
+\begin{definition}[Register gates]
+    \label{def:qc_register_gate}
+    \lean{QuantumCircuit.RegisterGate, QuantumCircuit.RegisterGate.offset,
+        QuantumCircuit.RegisterGate.sites,
+        QuantumCircuit.RegisterGate.localSites,
+        QuantumCircuit.RegisterGate.span, QuantumCircuit.RegisterGate.zone,
+        QuantumCircuit.RegisterGate.interior, QuantumCircuit.RegisterGate.op,
+        QuantumCircuit.RegisterGate.localOp,
+        QuantumCircuit.RegisterGate.offset_lt,
+        QuantumCircuit.RegisterGate.sites_injective,
+        QuantumCircuit.RegisterGate.localSites_injective,
+        QuantumCircuit.RegisterGate.localSites_succ,
+        QuantumCircuit.RegisterGate.sites_mem_span,
+        QuantumCircuit.RegisterGate.localSites_mem_span,
+        QuantumCircuit.RegisterGate.zone_subset_span,
+        QuantumCircuit.RegisterGate.op_mem_unitary,
+        QuantumCircuit.RegisterGate.op_mem_supportedOperators,
+        QuantumCircuit.RegisterGate.add_eq_add_iff,
+        QuantumCircuit.RegisterGate.two_mul_L_lt}
+    \leanok
+    \uses{def:qc_local_circuit, lem:qc_placed_operators}
+    A \emph{register gate} is a matrix $X$ on $2s$ sites together with a site
+    $a$ and $L\ge0$ with $2L+2s\le N$. It acts on the two registers
+    $a,\dots,a+s-1$ and $a+2L+s,\dots,a+2L+2s-1$, the first register on the
+    first $s$ sites of $X$. Its stretch is $a,\dots,a+2L+2s-1$, its interior the
+    $2L$ sites $a+s,\dots,a+s+2L-1$ strictly between the registers, and, for
+    $0\le t\le s$, its zone $t$ the $2L$ sites $a+t,\dots,a+t+2L-1$. The gate
+    acts on the ring as $X$ on its two registers, which is unitary when $X$ is.
+\end{definition}
+
+\begin{lemma}[Teleporting registers site by site]
+    \label{lem:qc_register_chains}
+    \lean{QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo,
+        Equiv.Perm.apply_mem_of_forall_notMem,
+        QuantumCircuit.RegisterGate.there, QuantumCircuit.RegisterGate.back,
+        QuantumCircuit.RegisterGate.allSites_there_subset,
+        QuantumCircuit.RegisterGate.allSites_back_subset,
+        QuantumCircuit.RegisterGate.allSites_there_subset_span,
+        QuantumCircuit.RegisterGate.allSites_back_subset_span,
+        QuantumCircuit.RegisterGate.pairSites_there_subset,
+        QuantumCircuit.RegisterGate.pairSites_back_subset,
+        QuantumCircuit.RegisterGate.sitePerm_there_apply_of_lt,
+        QuantumCircuit.RegisterGate.sitePerm_there_apply_self,
+        QuantumCircuit.RegisterGate.sitePerm_back_eq_inv,
+        QuantumCircuit.RegisterGate.sitePerm_back_apply_of_lt,
+        QuantumCircuit.RegisterGate.sitePerm_back_apply_self,
+        QuantumCircuit.RegisterGate.sitePerm_there_notMem_zone,
+        QuantumCircuit.RegisterGate.sitePerm_back_notMem_zone,
+        QuantumCircuit.RegisterGate.thereAll,
+        QuantumCircuit.RegisterGate.backAll,
+        QuantumCircuit.RegisterGate.zoneAll,
+        QuantumCircuit.RegisterGate.valid_thereAll,
+        QuantumCircuit.RegisterGate.valid_backAll,
+        QuantumCircuit.RegisterGate.sitePerm_thereAll_apply,
+        QuantumCircuit.RegisterGate.sitePerm_backAll_apply,
+        QuantumCircuit.RegisterGate.isZeroOn_chainPerm_thereAll,
+        QuantumCircuit.RegisterGate.isZeroOn_chainPerm_backAll,
+        QuantumCircuit.RegisterGate.pairSites_thereAll_subset,
+        QuantumCircuit.RegisterGate.pairSites_backAll_subset,
+        QuantumCircuit.RegisterGate.sitePerm_backAll_eq_inv,
+        QuantumCircuit.RegisterGate.therePerm,
+        QuantumCircuit.RegisterGate.therePerm_apply,
+        QuantumCircuit.RegisterGate.therePerm_comp_sites,
+        QuantumCircuit.TeleportHop.valid_nil,
+        QuantumCircuit.RegisterGate.thereRounds,
+        QuantumCircuit.RegisterGate.backRounds,
+        QuantumCircuit.RegisterGate.sum_depth_thereRounds,
+        QuantumCircuit.RegisterGate.sum_depth_backRounds,
+        QuantumCircuit.MeasurementRound.IsImplementationOn.isRoundsImplementationOn,
+        QuantumCircuit.RegisterGate.isRoundsImplementationOn_thereRounds,
+        QuantumCircuit.RegisterGate.isRoundsImplementationOn_backRounds}
+    \leanok
+    \uses{def:qc_register_gate, thm:qc_teleportation_round,
+        lem:qc_teleportation_chains, lem:qc_parallel_chains,
+        lem:qc_site_permutations, lem:qc_round_implementation_compose}
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches. For
+    $0\le t<s$, the round $t$ teleports, for every gate, the content of the site
+    $a+t$ to $a+2L+t$ along a chain of $L$ hops, in one round of depth $2$. The
+    rounds $t=s-1,\dots,0$, in this order, implement the product $P$ of the
+    transpositions of all the chains on the vectors with $\ket0$ at the
+    interiors of all the gates, and their outputs have $\ket0$ at the zones $0$.
+    The rounds teleporting back, $t=0,\dots,s-1$, in this order, implement
+    $P^{-1}$ on the vectors with $\ket0$ at the zones $0$. The rounds of each
+    direction have total depth $2s$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The chain of the site $a+t$ meets the sites $a+t,\dots,a+t+2L$, and before
+    it the sites $a+t+1,\dots,a+t+2L$ form the zone $t+1$. Starting from $\ket0$
+    at the zone $s$, the interior, the round $t$ moves the content of $a+t$ to
+    $a+t+2L$ and leaves $\ket0$ at the zone $t$, since the permutation of the
+    chain maps the zone $t+1$ together with $a+t$ onto the zone $t$ together
+    with $a+t+2L$. The chains of different gates act on disjoint stretches, so
+    the lists of all the gates are valid
+    (Lemma~\ref{lem:qc_parallel_chains}), and by
+    Theorem~\ref{thm:qc_teleportation_round} every round implements the
+    permutation of its chains. Composition
+    (Lemma~\ref{lem:qc_round_implementation_compose}) gives the claim; the
+    backward rounds run the forward ones in reverse.
+\end{proof}
+
+\begin{theorem}[A layer of register gates in constant depth with measurements]
+    \label{thm:qc_register_layer}
+    \lean{List.mul_prod_mul_of_mul_eq_one,
+        QuantumCircuit.RegisterGate.rounds,
+        QuantumCircuit.RegisterGate.sum_depth_rounds,
+        QuantumCircuit.RegisterGate.localProd,
+        QuantumCircuit.RegisterGate.isZeroOn_localProd_mulVec,
+        QuantumCircuit.RegisterGate.permMatrix_mul_localProd_mul_permMatrix,
+        QuantumCircuit.RegisterGate.isZeroOn_zoneAll_iff,
+        QuantumCircuit.RegisterGate.isRoundsImplementationOn_rounds,
+        QuantumCircuit.RegisterGate.isCircuitOn_localProd,
+        QuantumCircuit.RegisterGate.exists_rounds}
+    \leanok
+    \uses{lem:qc_register_chains, lem:qc_round_implementation_compose}
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, each
+    $X$ a product of at most $K$ unitaries on neighbouring sites. Then
+    measurement rounds of total depth $4s+K+2$ implement the product of the
+    gates on the vectors with $\ket0$ at the interiors of all the gates: the
+    first registers are teleported next to the second ones as in
+    Lemma~\ref{lem:qc_register_chains}, every $X$ is applied to the $2s$
+    consecutive sites $a+2L,\dots,a+2L+2s-1$ by a local circuit of depth $K$,
+    and the first registers are teleported back. The depth depends neither on
+    the distances nor on the number of gates, and no outcome is post-selected.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The unitaries on the consecutive sites act inside the stretches, so they
+    keep $\ket0$ at the zones $0$, and their product $G$ is a local circuit of
+    depth $K$, applied in one round without hops of depth $K+2$. By
+    Lemma~\ref{lem:qc_register_chains} every output is a multiple of
+    $P^{-1}GP\ket v$. Conjugation by $P$ maps the consecutive sites of every
+    gate back to its two registers, so $P^{-1}GP$ is the product of the gates.
+\end{proof}

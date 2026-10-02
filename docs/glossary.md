@@ -1057,12 +1057,18 @@ The following notions use different transfer objects and are not interchangeable
   scheme 1 of section "Generation of MPS" and eq. `OBCMPSgen`,
   `Papers/quant-ph_0608197/MPSarchive.tex:1527-1552`.
 - **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`
-  (for `ψ ≠ 0`, equivalent to `∃ c ≠ 0, HasOBCRep D (c • ψ)`), and
+  (for `0 < N` and `0 < D`, equivalent to `HasOBCRep D ψ`),
+  `MPSPreparation.isProbabilisticallyGenerated_iff_cutRank_le` (for `0 < N`,
+  equivalent to all cut ranks being at most `D`),
+  `MPSPreparation.isLeast_isProbabilisticallyGenerated` (the least `D` is the
+  largest cut rank), and
   `MPSPreparation.isDeterministicallyGenerated_iff_isProbabilisticallyGenerated`
   on normalized vectors.
-- **Caveat:** the characterization compares rays: it needs `ψ ≠ 0`, and the
-  scalar `c` matters only at `N = 0`, where every open-boundary coefficient is
-  the empty product `1`. Scheme 3 of Theorem `Thm:seqwith` is
+- **Caveat:** the set equalities are for chains of positive length. At `N = 0`
+  every open-boundary coefficient is the empty product `1`, and only the
+  component theorems `exists_hasOBCRep_of_isProbabilisticallyGenerated` and
+  `isProbabilisticallyGenerated_of_hasOBCRep`, stated up to a nonzero scalar,
+  apply. Scheme 3 of Theorem `Thm:seqwith` is
   `MPSPreparation.IsTransitionGenerated`, and the schemes without an ancilla are
   `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and
   `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`.
@@ -1083,27 +1089,33 @@ The following notions use different transfer objects and are not interchangeable
 - **Source:** arXiv:quant-ph/0608197, scheme 2 of section "Generation of MPS",
   `Papers/quant-ph_0608197/MPSarchive.tex:1527-1554`.
 - **Sanctioned bridges:** `MPSPreparation.isDeterministicallyGenerated_iff`
-  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
+  (for `0 < N`, equivalent to normalization together with `HasOBCRep D ψ`),
+  `MPSPreparation.isDeterministicallyGenerated_iff_cutRank_le` and
+  `MPSPreparation.isLeast_isDeterministicallyGenerated` (the least ancilla
+  dimension is the largest cut rank),
+  `MPSPreparation.isDeterministicallyGenerated_pow_half` (every normalized state
+  of `N ≥ 1` sites, with `D = d^{⌊N/2⌋}`),
   `MPSPreparation.isProbabilisticallyGenerated_of_isDeterministicallyGenerated`,
   and `MPSPreparation.star_dotProduct_self_of_isDeterministicallyGenerated`.
 - **Caveat:** `NeZero d` is part of the definition, because each site starts in
-  $\ket{0}$. Only the two directions of Theorem `Thm:seqwith` for schemes 1 and 2
-  are formalized; minimality of the resources in the successive-decomposition
-  recipe is not.
+  $\ket{0}$.
 
 ### `MPSPreparation.IsTransitionInteraction` and `MPSPreparation.IsTransitionGenerated`
 
 - **Declarations:**
-  `MPSPreparation.IsTransitionInteraction (T : Matrix ((Fin D × Fin 2) × Fin 2) ((Fin D × Fin 2) × Fin 2) ℂ) : Prop`
+  `MPSPreparation.IsTransitionInteraction [NeZero d] (T : Matrix ((Fin D × Fin d) × Fin d) ((Fin D × Fin d) × Fin d) ℂ) : Prop`
   and
-  `MPSPreparation.IsTransitionGenerated (D : ℕ) (ψ : (Fin N → Fin 2) → ℂ) : Prop`.
+  `MPSPreparation.IsTransitionGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
 - **Defined in:** `TNLean/MPS/Preparation/SequentialTransition.lean`.
 - **Meaning:** `IsTransitionInteraction T` says that `T` acts on ancilla
-  `ℂ^D`, tag qubit, and site qubit by
+  `ℂ^D`, tag qudit, and site qudit by
+  $\ket{\varphi}\ket{t}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{t}$ for every
+  tag `t`; for `d = 2` these are the two printed relations
   $\ket{\varphi}\ket{1}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{1}$ and
-  $\ket{\varphi}\ket{0}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{0}$.
+  $\ket{\varphi}\ket{0}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{0}$
+  (`MPSPreparation.isTransitionInteraction_two_iff`).
   `IsTransitionGenerated D ψ` says that there are unitaries `W k` on
-  $\mathbb C^D\otimes\mathbb C^2$ and unit vectors $\varphi_I,\varphi_F$ such
+  $\mathbb C^D\otimes\mathbb C^d$ and unit vectors $\varphi_I,\varphi_F$ such
   that the steps "ancilla unitary, then the fixed interaction", applied to
   $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$, leave the joint state
   $\ket{\varphi_F}\otimes\ket{\psi}$ (`MPSPreparation.transitionJointState`).
@@ -1111,17 +1123,20 @@ The following notions use different transfer objects and are not interchangeable
 - **Source:** arXiv:quant-ph/0608197, scheme 3 (deterministic transition
   schemes) of section "Generation of MPS",
   `Papers/quant-ph_0608197/MPSarchive.tex:1555-1567`; the interaction is the
-  `D`-standard map `T` of arXiv:quant-ph/0501096, eq. `IsofromT`.
+  `D`-standard map `T` of arXiv:quant-ph/0501096, eq. `IsofromT`, extended to
+  qudits as in arXiv:quant-ph/0501096, lines 412--415 of
+  `References/quant-ph_0501096/PhotoMPS.tex`.
 - **Sanctioned bridges:**
   `MPSPreparation.transitionStep_eq_of_isTransitionInteraction` (a step equals
   the fixed interaction after the ancilla unitary, for any `T` satisfying
   `IsTransitionInteraction`), `MPSPreparation.isTransitionGenerated_iff`
-  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
-  `MPSPreparation.isDeterministicallyGenerated_of_isTransitionGenerated`, and
-  `MPSPreparation.isTransitionGenerated_of_isDeterministicallyGenerated`.
-- **Caveat:** the scheme is for qubit chains, `d = 2`. The source does not
-  specify the interaction on site inputs $\ket{1}$, so `IsTransitionInteraction`
-  constrains only site inputs $\ket{0}$, which are the only ones that occur.
+  (for `0 < N`, equivalent to normalization together with `HasOBCRep D ψ`), and
+  `MPSPreparation.isTransitionGenerated_iff_isDeterministicallyGenerated`.
+- **Caveat:** arXiv:quant-ph/0608197 states the scheme for qubit chains,
+  `d = 2`; the predicates are stated for every `d`, as arXiv:quant-ph/0501096
+  allows. The sources do not specify the interaction on site inputs other than
+  $\ket{0}$, so `IsTransitionInteraction` constrains only site inputs
+  $\ket{0}$, which are the only ones that occur.
 
 ### `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`
 
@@ -1143,8 +1158,10 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff` (equivalent to
   `HasOBCRep d ψ`), `MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff`
   (equivalent to normalization together with `HasOBCRep d ψ`), and
-  `MPSPreparation.noAncillaState_eq_eval` (the site matrices
-  $A_{i,\beta\alpha}=\bra{i,\beta}U\ket{\alpha,0}$, `MPSPreparation.pairStep`).
+  `MPSPreparation.noAncillaState_eq_jointState` (the scheme with a
+  `d`-dimensional ancilla for the operations with swapped outputs, read out as
+  the site at position `0`; the induced matrices are
+  $A_{i,\beta\alpha}=\bra{i,\beta}U\ket{\alpha,0}$).
 - **Caveat:** the chain has at least two sites, since the first operation acts
   on sites `1` and `2`; this is a **Local fix** recorded in
   `docs/paper-gaps/pgvwc07_sequential_no_ancilla_two_sites.tex`. The
@@ -1165,13 +1182,22 @@ The following notions use different transfer objects and are not interchangeable
   `Papers/quant-ph_0608197/MPSarchive.tex:419-429`, as used in Theorem
   `Thm:seqwith`, lines 1569--1573.
 - **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`,
-  `MPSPreparation.isDeterministicallyGenerated_iff`, and the left-canonical
-  representations `OBCChainTensor.exists_isometric_coeff_eq` and
-  `OBCChainTensor.exists_isometric_coeff_eq_of_norm` in
-  `TNLean/MPS/Preparation/IsometricChain.lean`.
-- **Caveat:** `D` is a common upper bound, not the least bond dimension. The
-  predicate has no scalar freedom; the sequential-generation theorems apply it
-  to `c • ψ` with `c ≠ 0`.
+  `MPSPreparation.isDeterministicallyGenerated_iff`,
+  `MPSPreparation.hasOBCRep_iff_cutRank_le` (for `0 < N` and `0 < D`, equivalent
+  to all cut ranks `MPSPreparation.cutRank ψ k` being at most `D`),
+  `MPSPreparation.hasOBCRep_pow_half` (every vector on `N ≥ 1` sites, with
+  `D = d^{⌊N/2⌋}`), `MPSPreparation.HasOBCRep.smul` and
+  `MPSPreparation.hasOBCRep_zero` (on chains of positive length the predicate
+  defines a cone), and the left-canonical representations
+  `OBCChainTensor.exists_isometric_coeff_eq`,
+  `OBCChainTensor.exists_isometric_coeff_eq_of_norm`, and
+  `OBCChainTensor.exists_coeff_eq_of_cutRank_le` (bond `k` equal to the cut rank
+  at `k`).
+- **Caveat:** `D` is a common upper bound, not the least bond dimension; the
+  least bond dimension at the cut `k` is `MPSPreparation.cutRank ψ k`
+  (`OBCChainTensor.cutRank_coeff_le`). At `N = 0` the predicate holds only for
+  the vector `1`, so the sequential-generation component theorems apply it to
+  `c • ψ` with `c ≠ 0` to cover that length.
 
 ### `MPSPreparation.IsIsometryOn`, `MPSPreparation.IsSupportedBelow`, and `MPSPreparation.IsRowSupportedBelow`
 
@@ -1203,28 +1229,95 @@ The following notions use different transfer objects and are not interchangeable
   predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
   `OBCChainTensor.ofSupported`.
 
-## Local circuits of two-site gates
+## Quantum circuits
 
-### `QuantumCircuit.supportedOperators`
+The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
+from `TNLean/MPS/`. Its sites are `Fin N`, closed into a ring by addition modulo
+`N`, and its local labels are `Fin d`. The blueprint chapter is
+`ch33_local_quantum_circuits.tex`; the preparation of matrix product states
+in `MPS/Preparation/` uses it.
+
+### Local circuits and two-site gates
+
+#### `QuantumCircuit.supportedOperators`
 
 - **Declaration:**
-  `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] [DecidableEq ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
+  `QuantumCircuit.supportedOperators (d : ℕ) (S : Set (Fin N)) : Submodule ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
-- **Meaning:** the operators acting on the set of sites `S` of a finite set
-  of `d`-level sites `ι`: the complex span of the products
-  `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for `i ∉ S`, that is
-  `M_d^{⊗ S} ⊗ 1`. The chain of `N` sites is `ι = Fin N`.
-- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1
-  (operators acting on sites of the chain).
-- **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
-  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`;
-  `QuantumCircuit.commute_of_mem_supportedOperators` (operators on disjoint
-  sets commute); `QuantumCircuit.embedOp_mem_supportedOperators_image` (a
-  placed operator acts on the image of its support).
-- **Caveat:** no geometry enters; neighbourhoods, layers and light cones are
-  stated for the ring `Fin N`.
+- **Meaning:** the complex span of the product operators
+  `Matrix.finKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
+  `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S`.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
+  operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
+- **Sanctioned bridges:** `QuantumCircuit.supportedOperators_mono`,
+  `QuantumCircuit.one_mem_supportedOperators`,
+  `QuantumCircuit.mul_mem_supportedOperators`,
+  `QuantumCircuit.star_mem_supportedOperators`,
+  `QuantumCircuit.commute_of_mem_supportedOperators` (operators acting on
+  disjoint sets commute), and `QuantumCircuit.embedOp_mem_supportedOperators`
+  (an operator placed by an injective map acts on its range).
+- **Caveat:** membership says nothing about unitarity; for `S = ∅` the
+  submodule consists of the scalar multiples of the identity.
 
-### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
+#### `QuantumCircuit.Layer`
+
+- **Declaration:** `structure QuantumCircuit.Layer (d N : ℕ) [NeZero N]`, with
+  fields `bonds : Finset (Fin N)` (the left sites `k` of the pairs
+  `{k, k + 1}`), `gate : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ`,
+  and the conditions that every gate of a bond is unitary and lies in
+  `supportedOperators d (bond k)`, and that the pairs `bond k` of distinct
+  bonds are disjoint.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** one layer of a local circuit on the ring of `N` sites:
+  unitaries on pairwise disjoint pairs of neighbouring sites. Its operator
+  `Layer.op` is the product of its gates, which commute.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
+  quantum circuits").
+- **Sanctioned bridges:** `Layer.op_mem_unitary`,
+  `Layer.conj_op_mem_supportedOperators` (the light cone of one layer), and
+  `Layer.adjoint` with `Layer.adjoint_op` (the layer of the adjoint gates
+  implements the adjoint).
+- **Caveat:** the pairs are taken modulo `N`, so for `N ≤ 2` they degenerate;
+  a circuit on the open chain is one whose bonds avoid the pair `{N - 1, 0}`.
+
+#### `QuantumCircuit.IsLocalCircuitOfDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsLocalCircuitOfDepth (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (T : ℕ) : Prop`.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** `U = circuitOp Ls` for a list `Ls` of exactly `T` layers, the
+  head of the list applied first.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
+  quantum circuits").
+- **Sanctioned bridges:** `IsLocalCircuitOfDepth.mem_unitary`,
+  `IsLocalCircuitOfDepth.star`, `IsLocalCircuitOfDepth.mul` (depths add),
+  `QuantumCircuit.conj_circuitOp_mem_supportedOperators` (the light cone of
+  radius `T`), `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site
+  unitaries in depth `2`), and `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`.
+- **Caveat:** the depth is exact in the definition; a smaller depth is padded
+  with empty layers, as in `IsCircuitOn.mono`.
+
+#### `QuantumCircuit.IsPreparedInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsPreparedInDepth (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** `ψ = U *ᵥ productVector v` for a local circuit `U` of depth `T`
+  and a product vector `productVector v = ⊗ᵢ vᵢ`.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("a sequence
+  obtained from depth-`T` local quantum circuits applied to product states").
+- **Sanctioned bridges:** `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
+  and `QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth`
+  (vanishing connected correlations of operators at ring distance larger than
+  `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
+  (a nonzero prepared vector is a multiple of a local circuit of depth `T + 2`
+  applied to `|0⋯0⟩`), and
+  `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`.
+- **Caveat:** no normalization is imposed and `ψ` may be zero. The separation
+  `IsSeparatedBy X Y (2 * T)` in the correlation bounds excludes operators at
+  ring distance exactly `2T`.
+
+#### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
 
 - **Declarations:**
   `QuantumCircuit.IsNeighbourGate (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`
@@ -1245,7 +1338,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the chain is open; the ring structure enters only through the
   placement map of `IsPairProduct.isCircuitOn`.
 
-### `QuantumCircuit.Layer.IsIn`
+#### `QuantumCircuit.Layer.IsIn`
 
 - **Declaration:**
   `QuantumCircuit.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
@@ -1262,7 +1355,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the condition is on the bonds of the layer, not on its operator;
   it is the per-layer ingredient of `IsCircuitOn`.
 
-### `QuantumCircuit.IsCircuitOn`
+#### `QuantumCircuit.IsCircuitOn`
 
 - **Declaration:**
   `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
@@ -1279,7 +1372,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
   with empty layers.
 
-### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
+#### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
 
 - **Declarations:**
   `QuantumCircuit.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
@@ -1302,82 +1395,22 @@ The following notions use different transfer objects and are not interchangeable
   `exists_isPairProduct`; statements about circuits should use
   `IsPairProduct` or `IsCircuitOn`.
 
-### `QuantumCircuit.AgreeOff`
+#### `QuantumCircuit.AgreeOff`
 
 - **Declaration:**
-  `QuantumCircuit.AgreeOff {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] (e : κ → ι) (x y : ι → Fin d) : Prop`.
+  `QuantumCircuit.AgreeOff (e : Fin m → Fin n) (x y : Fin n → Fin d) : Prop`.
 - **Defined in:** `TNLean/Circuit/SiteEmbedding.lean`.
-- **Meaning:** the configurations `x` and `y` of the finite set of sites `ι`
-  agree at every site outside the range of `e`; for the chain of `n` sites,
-  `ι = Fin n` and `e : Fin m → Fin n`.
+- **Meaning:** the configurations `x` and `y` of the `n`-site chain agree at
+  every site outside the range of `e`.
 - **Source:** no separate source notion; it describes the entries of the
-  placement `QuantumCircuit.embedOp e X` of an operator on the sites `κ`.
+  placement `QuantumCircuit.embedOp e X` of an operator on `m` sites.
 - **Sanctioned bridges:** `QuantumCircuit.sum_agreeOff` and
   `QuantumCircuit.eq_extend_of_agreeOff` (for injective `e`).
 - **Caveat:** proof-internal vocabulary for the site embedding.
 
-## Local channel conversions
+### Local circuits assisted by measurements
 
-### `QuantumCircuit.IsLocalChannelProtocol`
-
-- **Declaration:**
-  `QuantumCircuit.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop`
-  (an inductive predicate, with the local dimensions `d`, `e` implicit).
-- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
-- **Meaning:** `IsLocalChannelProtocol T Ψ` says that
-  $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$
-  alternates `T` layers `L_t` of local channels on pairs of neighbouring sites
-  of the ring (`QuantumCircuit.ChannelLayer`) with onsite channels $\Phi_t$
-  (`QuantumCircuit.OnsiteChannel d e (Fin N)`), each a tensor product of
-  one-site channels that may change the local dimension; onsite channels
-  `QuantumCircuit.OnsiteChannel d e ι` are defined for any type of sites `ι`. Attaching an ancilla in a fixed state
-  (`OnsiteChannel.attach`) and discarding it (`OnsiteChannel.discard`) are
-  onsite channels.
-- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, main text, paragraph
-  "Quantum circuits and LOCC" (the circuits
-  $V'=U_\ell V_\ell\cdots U_1V_1U_0$ with local operations $U_n$ on each site
-  and its ancillas between the layers $V_n$), with channels in place of
-  unitaries.
-- **Sanctioned bridges:** `IsLocalChannelProtocol.isKrausCPTP` (the map is a
-  channel), `IsLocalChannelProtocol.comp` (protocols compose and depths add),
-  `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
-  circuit of `n` layers adds `n` to the depth), and
-  `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual).
-- **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
-  are free. There are no measurements or classical communication, so this is
-  not the LOCC class of the source.
-
-### `QuantumCircuit.IsLocalChannelConversion`
-
-- **Declaration:**
-  `QuantumCircuit.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
-- **Meaning:** `σ = Ψ ρ` for a map `Ψ` with `IsLocalChannelProtocol T' Ψ` for
-  some `T' ≤ T`.
-- **Source:** arXiv:2103.13367, main text, paragraph "Quantum circuits and
-  LOCC" (circuits with ancillas attached to each site) and paragraph "Phases
-  of matter" (a protocol "where ancillas are traced out at the end, defines a
-  quantum channel"), without measurements or classical communication.
-- **Sanctioned bridges:** `IsLocalChannelConversion.refl` (depth `0`),
-  `IsLocalChannelConversion.mono`, `IsLocalChannelConversion.trans` (depths
-  add), `IsLocalChannelConversion.exists_isKrausCPTP`,
-  `IsLocalChannelConversion.density` (a conversion of a density matrix is a
-  density matrix), `QuantumCircuit.isLocalChannelConversion_circuit` (attach,
-  run a local channel circuit, discard),
-  `QuantumCircuit.IsChannelPreparedInDepth.exists_isLocalChannelConversion`,
-  and `QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion` (vanishing
-  connected correlations beyond ring distance `2T` from a product density).
-- **Caveat:** the relation is directed and not symmetric: a channel need not be
-  undone by another channel. Neither `ρ` nor `σ` is required to be a density
-  matrix; positivity and unit trace of `σ` follow from those of `ρ` by
-  `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
-  polylogarithmic-depth conversions of the phase equivalence in
-  arXiv:2103.13367 are not formalized, nor is blocking of sites.
-
-## Local circuits assisted by measurements
-
-### `QuantumCircuit.MeasurementProtocol.IsPreparationOf`
+#### `QuantumCircuit.MeasurementProtocol.IsPreparationOf`
 
 - **Declaration:**
   `QuantumCircuit.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
@@ -1398,7 +1431,7 @@ The following notions use different transfer objects and are not interchangeable
   single-site unitaries applied after all the measurements. Each of these
   restricts the source's scheme, so every such protocol is one of the source.
 
-### `QuantumCircuit.IsPreparedWithMeasurementsInDepth`
+#### `QuantumCircuit.IsPreparedWithMeasurementsInDepth`
 
 - **Declaration:**
   `QuantumCircuit.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
@@ -1422,7 +1455,7 @@ The following notions use different transfer objects and are not interchangeable
   GHZ-type states, whose connected correlations do not decay, are prepared in
   depth `2`.
 
-### `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`
+#### `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`
 
 - **Declaration:**
   `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
@@ -1449,14 +1482,14 @@ The following notions use different transfer objects and are not interchangeable
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
 
-### `QuantumCircuit.IsLocalPerm`
+#### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalPerm {ι : Type*} [Fintype ι] [DecidableEq ι] (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
+  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop`.
 - **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
-- **Meaning:** the permutation `σ` of the configurations of the finite set of
-  sites `ι` changes only the sites of `S`, and its new values on `S` depend
-  only on the old values on `S`. The chain of `N` sites is `ι = Fin N`.
+- **Meaning:** the permutation `σ` of the configurations changes only the
+  sites of `S`, and its new values on `S` depend only on the old values on
+  `S`.
 - **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
   corrections of the GHZ preparation, generalized to shifts of qudits).
 - **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
@@ -1467,7 +1500,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** only permutations of the computational basis are covered; a
   general gate is a `QuantumCircuit.Layer` gate.
 
-### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
+#### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
 
 - **Declaration:**
   `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
@@ -1495,7 +1528,7 @@ The following notions use different transfer objects and are not interchangeable
   arXiv:2103.13367 the number `k` of composed transformations does not depend
   on the system size.
 
-### `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`
+#### `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`
 
 - **Declaration:**
   `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set ((Fin N → Fin d) → ℂ)) (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
@@ -1515,6 +1548,64 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.isRoundsImplementationOn_treeRounds`.
 - **Caveat:** the scalar may depend on the outcomes and is not normalized; zero
   outputs, of probability zero, are allowed.
+
+### Local channel conversions
+
+#### `QuantumCircuit.IsLocalChannelProtocol`
+
+- **Declaration:**
+  `QuantumCircuit.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop`
+  (an inductive predicate, with the local dimensions `d`, `e` implicit).
+- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
+- **Meaning:** `IsLocalChannelProtocol T Ψ` says that
+  $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$
+  alternates `T` layers `L_t` of local channels on pairs of neighbouring sites
+  of the ring (`QuantumCircuit.ChannelLayer`) with onsite channels $\Phi_t$
+  (`QuantumCircuit.OnsiteChannel`), each a tensor product of one-site channels
+  that may change the local dimension. Attaching an ancilla in a fixed state
+  (`OnsiteChannel.attach`) and discarding it (`OnsiteChannel.discard`) are
+  onsite channels.
+- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, main text, paragraph
+  "Quantum circuits and LOCC" (the circuits
+  $V'=U_\ell V_\ell\cdots U_1V_1U_0$ with local operations $U_n$ on each site
+  and its ancillas between the layers $V_n$), with channels in place of
+  unitaries.
+- **Sanctioned bridges:** `IsLocalChannelProtocol.isKrausCPTP` (the map is a
+  channel), `IsLocalChannelProtocol.comp` (protocols compose and depths add),
+  `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
+  circuit of `n` layers adds `n` to the depth), and
+  `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
+  Heisenberg dual).
+- **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
+  are free. There are no measurements or classical communication, so this is
+  not the LOCC class of the source.
+
+#### `QuantumCircuit.IsLocalChannelConversion`
+
+- **Declaration:**
+  `QuantumCircuit.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
+- **Meaning:** `σ = Ψ ρ` for a map `Ψ` with `IsLocalChannelProtocol T' Ψ` for
+  some `T' ≤ T`.
+- **Source:** arXiv:2103.13367, main text, paragraph "Quantum circuits and
+  LOCC" (circuits with ancillas attached to each site) and paragraph "Phases
+  of matter" (a protocol "where ancillas are traced out at the end, defines a
+  quantum channel"), without measurements or classical communication.
+- **Sanctioned bridges:** `IsLocalChannelConversion.refl` (depth `0`),
+  `IsLocalChannelConversion.mono`, `IsLocalChannelConversion.trans` (depths
+  add), `IsLocalChannelConversion.exists_isKrausCPTP`,
+  `IsLocalChannelConversion.density` (a conversion of a density matrix is a
+  density matrix), `QuantumCircuit.isLocalChannelConversion_circuit` (attach,
+  run a local channel circuit, discard),
+  `QuantumCircuit.IsChannelPreparedInDepth.exists_isLocalChannelConversion`,
+  and `QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion` (vanishing
+  connected correlations beyond ring distance `2T` from a product density).
+- **Caveat:** the relation is directed and not symmetric: a channel need not be
+  undone by another channel. Neither `ρ` nor `σ` is required to be a density
+  matrix; positivity and unit trace of `σ` follow from those of `ρ` by
+  `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
+  polylogarithmic-depth conversions of the phase equivalence in
+  arXiv:2103.13367 are not formalized, nor is blocking of sites.
 
 ## Inhomogeneous short-range correlated chains
 
