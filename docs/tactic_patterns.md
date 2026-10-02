@@ -2430,6 +2430,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### linearity of a recovered bond operation — candidate
+- **Pattern:** apply injectivity of the boundary-insertion map, rewrite the
+  virtual operations by their physical realizations, and use linearity of the
+  physical operation and boundary insertion.
+- **Seen:** two occurrences in
+  `TNLean/PEPS/TorusWindowCrossTensorAlgebra.lean`, in
+  `staircaseCrossTensorVirtualOperation_add` and
+  `staircaseCrossTensorVirtualOperation_smul` (2026-10-02).
+- **Abstraction:** a linear recovery map from realized physical operations,
+  if a third use in another module needs the same argument.
+- **Notes:** the two current proofs use `bondInsertedRegionInsert_injective`
+  and the existing realization identities; no tactic is needed at this count.
+
 ### One-site doubled-alphabet transport — candidate
 - **Pattern:** identify the doubled alphabet of one-site MPO blocking with
   the original ket-bra alphabet, then transport the physical-trace contraction
