@@ -949,6 +949,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 
 \input{chapter/ch32_log_depth_polynomial_accuracy}
 
+\input{chapter/ch32_log_depth_all_length_polynomial_accuracy}
+
 The proof of the lower bound in the Supplemental Material of
 \cite{Malz2024Preparation} cuts the chain into blocks ``all of the same size,
 $q_N$, except for the last one, which may be larger''. The approximating state
@@ -1032,6 +1034,43 @@ and its error extend to blocks of any lengths.
     Theorem~\ref{thm:mpu_transfer_matrix_overlap}.
 \end{proof}
 
+\begin{theorem}[Products of mixed transfer matrices near the fixed point]
+    \label{thm:ldp_variable_mixed_transfer_product}
+    \lean{MPSTensor.exists_norm_trace_prod_range_transferMatrix_sub_one_le}
+    \leanok
+    \uses{thm:ldp_positive_part_rate, def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let
+    $\lambda_2$ bound the moduli of the transfer eigenvalues different from
+    $1$, and let $0<\gamma<1$. Write $P_\infty$ for the fixed-point tensor,
+    $\tau_L$ for the mixed transfer matrix of $P_L$ against $P_\infty$, and
+    $E$ for that of $P_\infty$ against itself. There are constants $K\ge0$
+    and $C>0$ such that
+    \[
+        \lVert\tau_L-E\rVert\le K e^{-\gamma L/\xi}
+    \]
+    for every $L$. Moreover, for every $q$, $M\ge1$, and family of matrices
+    $X_0,\ldots,X_{M-1}$ satisfying
+    $\lVert X_j-E\rVert\le K e^{-\gamma q/\xi}$, one has
+    \[
+        \bigl|\Tr(X_0\cdots X_{M-1})-1\bigr|
+        \le Cy e^{Cy},\qquad y=M e^{-\gamma q/\xi}.
+    \]
+    The full range $0<\gamma<1$ follows from the Lipschitz estimate at the
+    positive definite fixed point
+    \cite[App.~B3, eqs.~(S27)--(S38)]{Murota2026ExactLogDepth}.
+\end{theorem}
+\begin{proof}\leanok
+    Theorem~\ref{thm:ldp_positive_part_rate} gives the first estimate because
+    the mixed transfer matrix is linear in its first tensor. The matrix $E$
+    is idempotent and $\Tr(E)=1$. Expanding the product around $E$ and
+    bounding the successive products gives
+    $\lVert X_0\cdots X_{M-1}-E^M\rVert
+        \le c((1+cK e^{-\gamma q/\xi})^M-1)$.
+    Applying the trace functional and using $e^t-1\le te^t$ for $t\ge0$
+    gives the assertion. This is the telescoping argument of
+    \cite[Supplemental Material, proof of Theorem~1]{Piroli2021LOCC}.
+\end{proof}
+
 \begin{theorem}[Approximation error for blocks of unequal lengths]
     \label{thm:ldp_block_approximation_error}
     \lean{MPSTensor.exists_blockApproximationError_le_mul,
@@ -1040,12 +1079,13 @@ and its error extend to blocks of any lengths.
         norm_prod_range_sub_pow_le_of_isIdempotentElem,
         prod_range_sub_pow_eq_sum_mul_sub_mul}
     \leanok
-    \uses{lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal,
+    \uses{thm:ldp_variable_mixed_transfer_product, thm:ldp_positive_part_rate,
+        thm:ldp_approximation_error_normal,
         def:ldp_block_isometry_state, lem:ldp_block_isometry_state_overlap,
         def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
-    length $\xi$, and let $0<\gamma<1/2$. There is a constant $C>0$ depending
-    only on $A$, $\rho$, and $\gamma$ such that for every cutting of the ring of
+    length $\xi$ at a spectral bound $|\lambda_2|\le1$, and let $0<\gamma<1$. There is a constant $C>0$ depending
+    only on $A$, $\rho$, $\lambda_2$, and $\gamma$ such that for every cutting of the ring of
     $N$ sites into $M\ge1$ blocks of lengths $\ell_k\ge q$ with injective
     blocked tensors, the state $\ket{\psi_{\ell,\omega}}$ of
     Definition~\ref{def:ldp_block_isometry_state} with the pair $\omega$ of the
@@ -1073,8 +1113,9 @@ and its error extend to blocks of any lengths.
     $\lvert\braket{\psi_{\ell,\omega}}{\phi_N(A)}-1\rvert\le Cy\,e^{Cy}$ with
     $y=Me^{-\gamma q/\xi}$. The triangle inequality of
     Theorem~\ref{thm:ldp_approximation_error_normal} and
-    $\lvert c_N^2-1\rvert\le Ke^{-2\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
-    $N\ge\ell_1\ge q$, bound $\varepsilon$ by $Cy\,e^{Cy}+Ky$, and
+    the normalization estimate at rate $\gamma/2$ give
+    $\lvert c_N^2-1\rvert\le Ke^{-\gamma N/\xi}\le Ke^{-\gamma q/\xi}$. Thus, using
+    $N\ge\ell_1\ge q$, these estimates bound $\varepsilon$ by $Cy\,e^{Cy}+Ky$, and
     $\varepsilon\le1$ covers $y>1$.
 \end{proof}
 

@@ -20,11 +20,11 @@ Source: arXiv:2307.01696, p. 4, paragraph following Lemma 1. The stronger second
 estimate supplies the exact coefficient in the displayed block length; substitution into
 the printed first-order estimate alone does not establish it.
 
-**Scope restriction (uniform blocks and positive correlation length):** The theorem assumes
-`ξ > 0` and equal blocks with `N = M q ≥ 2`. It does not assert the estimate for chain lengths
-not divisible by the prescribed block length, or for zero correlation length. These cases
-and their elimination plan are recorded in
-`docs/paper-gaps/mswc24_polynomial_accuracy_uniform_blocks.tex`.
+**Scope restriction (positive correlation length):** These equal-block results assume
+`ξ > 0`. The construction in `TNLean/MPS/Preparation/AllLengthPolynomialAccuracy.lean`
+proves the exact-coefficient bound at every sufficiently large chain length, using unequal
+blocks or exact preparation. Zero correlation length remains outside that construction;
+see `docs/paper-gaps/mswc24_polynomial_accuracy_uniform_blocks.tex`.
 -/
 
 private theorem mul_exp_le_polynomial (a : ℝ) {ξ η : ℝ} (hξ : 0 < ξ) {q M : ℕ}
