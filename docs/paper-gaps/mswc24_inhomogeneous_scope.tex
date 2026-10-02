@@ -3,9 +3,9 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Inhomogeneous Matrix Product States: Injective Blocks and Block Length}
+\title{Inhomogeneous Matrix Product States: Block Length}
 \author{}
-\date{2026-10-01}
+\date{2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -26,38 +26,79 @@ $\varepsilon(\Omega,\phi_{\mathrm{pos}})$.
 
 \section{The restriction adopted}
 The formal statements\footnote{Formal declarations:
-    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous} and
-    \leanid{MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
-    in \doclink{TNLean/MPS/Preparation/InhomogeneousPreparation}.}
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension}
+    and \leanid{MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
+    in \doclink{TNLean/MPS/Preparation/PartialIsometryPreparation}.}
 work on a ring of $N$ sites cut into blocks of lengths $\ell_k$, with bond
 dimensions $D_0,\dots,D_{N-1}\le D$ varying along the ring as in the source,
-and assume two things.
-\begin{enumerate}
-    \item Every blocked tensor is injective. The formal hypothesis is stated
-          for the zero-padded chain of the next section: its blocked tensor
-          $B_k$ spans every matrix unit $\ket\alpha\bra\beta$ with
-          $\alpha<D_{o_k}$ and $\beta<D_{o_{k+1}}$, for the bonds $o_k$ and
-          $o_{k+1}$ at the ends of block $k$. The source makes
-          this assumption for its polar decompositions in the footnote to the
-          paragraph ``Approximation through the fixed-point state'' and uses it
-          silently here: the identity between the error of
-          $(\bigotimes_kV_k)\ket\Omega$ against $\ket{\phi_N}$ and
-          $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ is proved when each $V_k$
-          is an isometry on the bond space of its block; without injectivity
-          the projections $\Pi_k$ onto the ranges of the positive parts enter.
-    \item Every block has at least $3D$ sites, which the circuit needs to encode
-          the two bond indices of a block and run the staircase between them.
-          For $q=O(\log N)$ growing with $N$ this holds for large $N$.
-\end{enumerate}
+and blocked tensors that need not be injective. They assume that every block
+has at least $3D$ sites, which the circuit needs to hold the two bond indices of
+a block in registers of $D$ sites each and to route them together. The first
+statement, with error exactly $\varepsilon(\Omega,\phi_{\mathrm{pos}})$, also
+assumes $D^2\le d^{3D}$, which holds for every $D$ when $d\ge2$. For blocks of
+$q\ge3D\ge1$ sites it follows from the source's requirement $d^q\ge D^2$
+recalled below, since $d^q\ge1$ forces $d\ge1$ and for $d=1$ both conditions
+read $D\le1$; it is therefore no further restriction. The second statement,
+with error at most $\delta$ under the approximation hypothesis, holds for
+every $d$.
+
+The source has no bound $3D$, but it is not silent on the block length. Its
+polar decompositions need ``$q$ large enough that $d^q\geq D^2$'' (footnote to
+the paragraph ``Approximation through the fixed-point state''), and its circuit
+holds the legs $R_i$ and $L_{i+1}$, of dimension $D$ each, on the sites of the
+blocks, with the central sites in $\ket0$ (eq.~(10) and the paragraph
+``Preparing the approximate state''). A block must therefore hold two registers
+of dimension at least $D$, that is, at least $2\lceil\log_dD\rceil$ sites. The
+bound $3D$ is a coarser sufficient condition: each register uses $D$ sites, as
+$D\le d^D$, and a third stretch of $D$ sites leaves room for routing the left
+register next to the right one. For $q=O(\log N)$ growing with $N$ both bounds
+hold for large $N$.
+
 The finite-correlation assumption is stated for one ring: some unit pairs
 $\omega^k$ on $\C^{D_j}\otimes\C^{D_j}$, for the bond $j$ joining block $k$ to
 block $k+1$, have $\varepsilon(\Omega,\phi_{\mathrm{pos}})\le\delta$. The
 formal statements prove depth at most $CL$ for blocks of lengths at most $L$,
-with $C$ depending only on $d$ and $D$, and error exactly
-$\varepsilon(\Omega,\phi_{\mathrm{pos}})$, hence at most $\delta$. The source's
-total depth $O(\log(N/\varepsilon))$ is the choice $L=O(\log(N/\varepsilon))$,
-which is not made here; the source's definition fixes blocks of length
-$q=O(\log N)$.
+with $C$ depending only on $d$ and $D$. The source's total depth
+$O(\log(N/\varepsilon))$ is the choice $L=O(\log(N/\varepsilon))$, which is not
+made here; the source's definition fixes blocks of length $q=O(\log N)$.
+
+\section{Partial isometries}
+Without injectivity the isometric factor $V_k$ of the polar decomposition
+$B_k=V_kP_k$ is a partial isometry, $V_k^\dagger V_k=\Pi_k$ with $\Pi_k$ the
+projector onto the range of $P_k$, as in the Supplemental Material, ``Proof of
+Lemma~1 and extension to non-normal tensors'' of~\cite{Malz2024Preparation}; the
+footnote to the paragraph ``The sequential-RG circuit'' states that the
+derivation of the circuit ``remains valid also for non-injective tensors $B$'',
+with $P^{-1}$ read as the pseudo-inverse. A unitary circuit cannot prepare
+$(\bigotimes_kV_k)\ket\Omega$ itself, whose norm is that of
+$(\bigotimes_k\Pi_k)\ket\Omega$ and may be smaller than $1$. The formal
+statements prepare instead $(\bigotimes_kW_k)\ket\Omega$ for isometries $W_k$
+with $W_k\Pi_k=V_k$, isometric extensions of $V_k$. They agree with $V_k$ on the
+range of $\Pi_k$, and $W_kP_k=V_kP_k=B_k$, so
+$\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$ and the overlap of
+$(\bigotimes_kW_k)\ket\Omega$ with the normalized $\ket{\phi_N}$ is that of
+$\ket\Omega$ with the normalized $\ket{\phi_{\mathrm{pos}}}$. The error is
+therefore exactly $\varepsilon(\Omega,\phi_{\mathrm{pos}})$, the error the
+source states. The block unitary implementing $W_k$ applies, after routing the
+two input registers together, a unitary $T_k^\dagger$ on them whose
+conjugate $T_k$ has its first columns spanning the range of $\Pi_k$, and then
+the staircase of the sequential factorization of $V_kT_k$ on those columns.
+This is a choice of the prepared state, not a restriction: the source names the
+isometry $V_k$ and its circuit, and $W_k$ is the isometry that this circuit
+implements.
+
+When every blocked tensor is injective in the sense of the next section,
+$\Pi_k$ is the coordinate projector onto the rectangle of the bonds of block $k$,
+$\ket\Omega$ lies in the range of $\bigotimes_k\Pi_k$, and
+$(\bigotimes_kW_k)\ket\Omega=(\bigotimes_kV_k)\ket\Omega$; the corresponding
+statements\footnote{Formal declarations:
+    \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous} in
+    \doclink{TNLean/MPS/Preparation/InhomogeneousPreparation}, and
+    \leanid{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn}
+    and \leanid{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState}
+    in \doclink{TNLean/MPS/Preparation/DepthUpperBound}.}
+prepare $(\bigotimes_kV_k)\ket\Omega$ itself and keep the injectivity
+hypothesis, together with the block length $3D$, for that purpose.
 
 \section{Varying bond dimensions by zero padding}
 The rectangular matrices $A_k^i$ of size $D_k\times D_{k+1}$ are padded with
@@ -69,12 +110,12 @@ The padded chain has the same state, which is proved. For a block of at least
 one site, its blocked tensor $B_k$ vanishes outside the upper-left corner
 $[0,D_{o_k})\times[0,D_{o_{k+1}})$, which is also proved, and its entries on
 that corner are those of the rectangular blocked tensor. That last
-identification is not formalized: the injectivity hypothesis is stated
-directly for $B_k$, as spanning every matrix unit in the corner, and its
-reading as injectivity of the rectangular blocked tensor is the observation
-just made. For a block of length zero the two readings differ, since $B_k$ is
-then the identity matrix of size $D$; every formal statement using the
-hypothesis assumes blocks of at least one site. Under the hypothesis, the
+identification is not formalized: the injectivity hypothesis of the statement
+for injective blocked tensors is stated directly for $B_k$, as spanning every
+matrix unit in the corner, and its reading as injectivity of the rectangular
+blocked tensor is the observation just made. For a block of length zero the
+two readings differ, since $B_k$ is then the identity matrix of size $D$; the
+statement using the hypothesis assumes blocks of at least one site. Under the hypothesis, the
 support projector of the polar decomposition $B_k=V_kP_k$ is the coordinate
 projector $\Pi_k$ onto the corner, so $V_k$ is an isometry on it and vanishes
 on the other inputs. The pairs $\omega^k$ are padded in the same way,
@@ -82,9 +123,8 @@ and $\ket\Omega$ is supported on the rectangles. The objects
 $\ket{\phi_{\mathrm{pos}}}$, $(\bigotimes_kV_k)\ket\Omega$ and
 $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ of the formal statements are those of
 the padded chain; they agree with the source's after the zero coordinates are
-dropped. This is the reading adopted, not a restriction: the theorem is stated
-for every chain with bond dimensions at most $D$. The block unitary implements
-$V_k$ only on the rectangle, the only inputs $\ket\Omega$ populates.
+dropped. This is the reading adopted, not a restriction: the theorems are stated
+for every chain with bond dimensions at most $D$.
 
 \section{Nonzero state of the positive parts}
 The error $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ compares $\ket\Omega$ with
@@ -101,15 +141,15 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
     \item \emph{Varying bond dimensions.} Done by zero padding, as described
           above; the earlier restriction to a common bond dimension $D$ is
           removed.
-    \item \emph{Injectivity.} Without it $V_k$ is a partial isometry with
-          $V_k^\dagger V_k=\Pi_k$ for the projector $\Pi_k$ onto the range of
-          $P_k$, and the error becomes that of $(\bigotimes_k\Pi_k)\ket\Omega$
-          against $\ket{\phi_{\mathrm{pos}}}$, as in the non-normal case of the
-          source. The formal statements already treat partial isometries whose
-          $\Pi_k$ is a coordinate projector carrying $\ket\Omega$; a general
-          $\Pi_k$ needs a block unitary implementing $V_k$ on its range.
+    \item \emph{Injectivity.} Done, as described in the section on partial
+          isometries: the block unitary implements an isometric extension
+          $W_k$ of the partial isometry $V_k$, and the error is exactly
+          $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ without injectivity.
     \item \emph{Block length.} The bound $3D\le\ell_k$ is needed only by
-          the circuit, not by the state. The upper bound $q=O(\log N)$ alone
+          the circuit, not by the state. Registers of
+          $\lceil\log_dD\rceil$ sites in place of $D$ sites would lower it to
+          a multiple of $\log_dD$, the order of the source's own requirement
+          $d^q\ge D^2$; this is not done. The upper bound $q=O(\log N)$ alone
           allows bounded block lengths, so the sequence-level statement reads
           the source's blocking as $q_N\ge c\log N$ for some $c>0$, a block
           length growing with $N$ as in the translation-invariant case. Then

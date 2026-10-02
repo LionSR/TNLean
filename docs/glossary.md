@@ -1557,8 +1557,8 @@ The following notions use different transfer objects and are not interchangeable
 - **Sanctioned bridges:**
   `MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` (preparation
   in depth at most `C L` with error at most `δ` against the normalized state of
-  the chain, when the blocked tensors are injective and the block lengths lie
-  between `3D` and `L`).
+  the chain, when the block lengths lie between `3D` and `L`; the blocked
+  tensors need not be injective).
 - **Caveat:** the source's condition is asymptotic, an error tending to `0` as
   `N → ∞` after blocking `q = O(log N)` sites; the predicate fixes one ring and
   one cutting into blocks; see
