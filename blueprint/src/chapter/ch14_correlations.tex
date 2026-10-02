@@ -196,8 +196,8 @@ spectral decomposition, and quantitative decay bounds.
     chosen blocks of lengths $L_1,L_2$, and $n\geq0$ unobserved intermediate
     sites, define
     \[
-      C_{\mathrm{phys}}(X,Y;n)=
-      \tr\!\left(\E_X(\E_A-P)^n
+        C_{\mathrm{phys}}(X,Y;n)=
+        \tr\!\left(\E_X(\E_A-P)^n
         \bigl(\E_Y(\rho)-P(\E_Y(\rho))\bigr)\right).
     \]
     The centering of the inner insertion includes adjacent blocks, $n=0$.
@@ -206,16 +206,16 @@ spectral decomposition, and quantitative decay bounds.
 \begin{lemma}[Physical connected contraction]
     \label{lem:physical_connected_correlator_identity}
     \lean{MPSTensor.physicalConnectedCorrelator_eq_twoPoint_sub,
-      MPSTensor.physicalConnectedCorrelator_eq_compl_pow_of_pos,
-      MPSTensor.limitCorrelator_eq_compl_pow_of_pos}
+        MPSTensor.physicalConnectedCorrelator_eq_compl_pow_of_pos,
+        MPSTensor.limitCorrelator_eq_compl_pow_of_pos}
     \leanok
     \uses{def:physical_connected_correlator}
     Suppose $\E_A$ is trace preserving, $\E_A(\rho)=\rho$, and $\tr\rho=1$.
     Then, for all $n\geq0$,
     \[
-      C_{\mathrm{phys}}(X,Y;n)=
-      \tr\!\left(\E_X\E_A^n(\E_Y(\rho))\right)
-      -\tr(\E_X(\rho))\tr(\E_Y(\rho)).
+        C_{\mathrm{phys}}(X,Y;n)=
+        \tr\!\left(\E_X\E_A^n(\E_Y(\rho))\right)
+        -\tr(\E_X(\rho))\tr(\E_Y(\rho)).
     \]
     For $n\geq1$ this also equals
     $\tr(\E_X(\E_A-P)^n(\E_Y(\rho)))$, including the equal-support
@@ -250,15 +250,15 @@ spectral decomposition, and quantitative decay bounds.
 \begin{theorem}[Physical correlation decay in trace-preserving gauge]%
     \label{thm:correlator_exponential_bound}
     \lean{MPSTensor.exists_physicalConnectedCorrelator_le_geometric,
-      MPSTensor.exists_rate_physicalConnectedCorrelator_le_geometric}
+        MPSTensor.exists_rate_physicalConnectedCorrelator_le_geometric}
     \leanok
     \uses{def:physical_connected_correlator, lem:normal_tensor_complement_gap}
     For any tensor $A$ and matrix $\rho$ of nonzero trace, every rate
     $r>\rho_{\spec}(\E_A-P)$ and every pair of physical operators on independent
     finite supports admit a constant $C_{XY}>0$ such that, for all $n\geq0$,
     \begin{align}
-      |C_{\mathrm{phys}}(X,Y;n)|\leq C_{XY}r^n.
-      \label{eq:correlations_decay_bound}
+        |C_{\mathrm{phys}}(X,Y;n)|\leq C_{XY}r^n.
+        \label{eq:correlations_decay_bound}
     \end{align}
     If $A$ is normal in trace-preserving gauge and $\rho\succeq0$ is a
     normalized fixed state, one can choose a single rate
