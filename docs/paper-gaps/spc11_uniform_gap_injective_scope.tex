@@ -49,15 +49,20 @@ virtual boundaries; its range is the sum of the block ground spaces and
 its injectivity gives a continuous range projection by the inverse-Gram
 formula. This proves continuity of canonical interactions and of the
 finite-volume open and periodic parent Hamiltonians. Nonzero block
-weights do not affect the ground spaces. Joint-boundary injectivity is
-open and persists at larger lengths under trace-preserving normalization.
-For a compact continuous family, pointwise simultaneous word spanning
-therefore gives one common injectivity threshold. In particular, this
+weights do not affect the ground spaces. Joint-boundary injectivity and
+simultaneous word spanning are open and, at a positive initial length,
+persist at all larger lengths without normalization. Thus pointwise
+simultaneous spanning at positive lengths on a compact continuous family
+gives one common positive spanning threshold. Trace preservation also
+allows an initial length of zero by extending the word span by one letter.
+In particular, this
 applies to normalized primitive blocks with positive definite fixed points
 that are pairwise inequivalent under similarity and phase. Continuity of
 the fixed-point matrices is unnecessary. These facts do not yet supply
 the uniform multi-block gap.
 \footnote{Formal declarations:
+    \leanid{MPSTensor.exists_uniform_wordTupleSpanTop_of_compact},
+    \leanid{MPSTensor.wordTupleSpanTop_of_ge_of_pos},
     \leanid{MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS},
     \leanid{MPSTensor.continuous_iSup_groundSpaceES_starProjection_of_injective_family},
     \leanid{MPSTensor.continuous_openParentHamiltonianES_toTensorFromBlocks_family}, and

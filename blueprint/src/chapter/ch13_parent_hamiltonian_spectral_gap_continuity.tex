@@ -423,36 +423,64 @@ unproved; this scope restriction is recorded in
     finite-volume Hamiltonians are finite sums of its fixed embeddings.
 \end{proof}
 
-\begin{lemma}[Openness and propagation of joint-boundary injectivity]
+\begin{lemma}[Openness and positive-length propagation of simultaneous spanning]
     \label{lem:block_ground_space_map_injective_open_propagation}
     \lean{MPSTensor.isOpen_setOf_blockGroundSpaceMapES_injective_family,
-        MPSTensor.blockGroundSpaceMap_injective_succ_of_tracePreserving,
-        MPSTensor.blockGroundSpaceMapES_injective_of_ge_of_tracePreserving}
+        MPSTensor.isOpen_setOf_wordTupleSpanTop_family,
+        MPSTensor.blockGroundSpaceMap_injective_succ_of_pos,
+        MPSTensor.blockGroundSpaceMapES_injective_of_ge_of_pos,
+        MPSTensor.wordTupleSpanTop_of_ge_of_pos}
     \leanok
-    \uses{def:block_ground_space_map}
+    \uses{def:block_ground_space_map, lem:block_ground_space_map_injective}
     For a continuous family of fixed-dimensional blocks, the parameters
-    where $\Gamma_L^{\oplus}$ is injective form an open set. If
-    $\sum_i(A^{j,i})^\dagger A^{j,i}=\Id$ for every $j$, injectivity at
-    length $L$ implies injectivity at every length $n\geq L$.
+    where $\Gamma_L^{\oplus}$ is injective form an open set, as do the
+    parameters where the length-$L$ word tuples span the full product
+    matrix algebra. If $L>0$, either condition implies the corresponding
+    condition at every length $n\geq L$. No normalization is required.
 \end{lemma}
 \begin{proof}
     \leanok
     Injectivity of a bounded map with finite-dimensional domain is open
-    in operator norm. For propagation, if a boundary $(X_j)_j$ gives zero
-    at length $L+1$, then $(A^{j,i}X_j)_j$ gives zero at length $L$ for
-    every letter $i$. Injectivity at $L$ gives $A^{j,i}X_j=0$; multiplying
-    by $(A^{j,i})^\dagger$ and summing over $i$ gives $X_j=0$.
+    in operator norm, and trace duality identifies injectivity with
+    simultaneous spanning. For propagation, a boundary $(X_j)_j$ giving
+    zero at length $L+1$ also gives
+    $\Gamma_L^{\oplus}((A^{j,i}X_j)_j)=0$ for every letter $i$.
+    Injectivity at $L$ gives $A^{j,i}X_j=0$. Every nonempty word therefore
+    annihilates $X_j$, so $\Gamma_L^{\oplus}((X_j)_j)=0$ because $L>0$.
+    Injectivity gives $X_j=0$. Iterate this argument.
 \end{proof}
 
+\begin{theorem}[Common positive spanning length on a compact parameter set]
+    \label{thm:compact_block_word_span}
+    \lean{MPSTensor.exists_uniform_wordTupleSpanTop_of_compact}
+    \leanok
+    \uses{lem:block_ground_space_map_injective_open_propagation,
+        lem:compact_uniform_pos_nat_bounds}
+    Let $S$ be compact and let $x\mapsto A_x^j$ be continuous, with fixed
+    physical and block dimensions. Suppose that for every $x\in S$ there
+    is a positive length $L_x$ at which the simultaneous word products
+    span the full product matrix algebra. Then there is one $L>0$ such
+    that simultaneous spanning holds for every $x\in S$ and every
+    length $n\geq L$. No normalization or positivity of the block
+    dimensions is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Spanning at $L_x$ persists in a neighborhood of $x$ by openness and
+    at all larger lengths by positive-length propagation. A finite
+    subcover of $S$ gives a common positive length by taking the maximum
+    of its finitely many thresholds. If $S$ is empty, any positive length
+    suffices. This supplies the common finite-window choice used in
+    \cite[Appendix~A, lines~2499--2503 and~2575--2578]{Schuch2011Phases}.
+\end{proof}
 
 \begin{theorem}[Common injectivity length on a compact parameter set]
     \label{thm:compact_block_boundary_injectivity}
     \lean{MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanTop,
         MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS}
     \leanok
-    \uses{lem:block_ground_space_map_injective_open_propagation,
-        lem:block_ground_space_map_injective, thm:ph_primitive_blocks_word_span,
-        lem:compact_uniform_pos_nat_bounds}
+    \uses{thm:compact_block_word_span, lem:block_ground_space_map_injective,
+        thm:ph_primitive_blocks_word_span}
     Let $S$ be compact and let $x\mapsto A_x^j$ be continuous, with fixed
     block dimensions. Suppose that every block is trace preserving on $S$
     and that, for each $x\in S$, the simultaneous word products span the
@@ -467,12 +495,11 @@ unproved; this scope restriction is recorded in
 \end{theorem}
 \begin{proof}
     \leanok
-    Pointwise spanning gives an injective boundary map at a suitable
-    length. Openness preserves this injectivity in a neighborhood, and
-    trace preservation propagates it to every larger length. A finite
-    subcover of $S$ gives a common length by taking the maximum of these
-    thresholds. For primitive blocks, simultaneous spanning follows
-    from inequivalence of the blocks.
+    Trace preservation extends simultaneous spanning by one letter,
+    including when the initial length is zero. Apply the preceding
+    theorem to these positive lengths, and use trace duality to obtain
+    joint-boundary injectivity. For primitive blocks, simultaneous spanning
+    follows from inequivalence of the blocks.
 \end{proof}
 
 

@@ -4,18 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CompactGapBounds
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceMapContinuity
+import TNLean.MPS.ParentHamiltonian.BlockBoundaryTraceDuality
+import TNLean.MPS.ParentHamiltonian.BlockWordSpanPropagation
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockWordSpan
 
 /-!
 # A common injectivity length for compact families of tensor blocks
 
-For a continuous family of fixed-size tensor blocks, joint-boundary injectivity
-is open. Under trace-preserving normalization it persists at larger lengths.
-Compactness therefore turns pointwise simultaneous word spanning into one
-common injectivity threshold. Pairwise inequivalent normalized primitive blocks
-satisfy the pointwise spanning hypothesis. Their positive fixed-point matrices
-need not vary continuously.
+For a continuous family of fixed-size tensor blocks, simultaneous word spanning
+is open and persists at larger lengths whenever its initial length is positive.
+Compactness therefore gives one positive spanning threshold without normalization
+assumptions. Trace preservation allows an initial spanning length of zero, and
+pairwise inequivalent normalized primitive blocks satisfy the pointwise spanning
+hypothesis. Their positive fixed-point matrices need not vary continuously.
 
 These results supply a finite-window ingredient in arXiv:1010.3732,
 Appendix A, lines 2499–2503 and 2575–2578. They do not assert a spectral
@@ -28,6 +29,29 @@ namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
 
+/-- Continuous fixed-size block families with positive-length simultaneous spanning at each
+point of a compact set have one positive spanning threshold, valid at every larger length.
+Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
+theorem exists_uniform_wordTupleSpanTop_of_compact
+    {X : Type*} [TopologicalSpace X]
+    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (hA : ∀ j, Continuous fun x => A x j) {K : Set X} (hK : IsCompact K)
+    (hSpan : ∀ x ∈ K, ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop (A x) L) :
+    ∃ L : ℕ, 0 < L ∧ ∀ x ∈ K, ∀ n : ℕ, L ≤ n → WordTupleSpanTop (A x) n := by
+  obtain ⟨_, _, N, hN⟩ := hK.exists_uniform_pos_nat_bounds
+    (fun (_ : ℝ) N x => ∀ n : ℕ, N + 1 ≤ n → WordTupleSpanTop (A x) n)
+    (fun _ h => h)
+    (fun hle h n hn => h n ((Nat.add_le_add_right hle 1).trans hn))
+    (by
+      intro x hx
+      obtain ⟨L, hL, hSpanL⟩ := hSpan x hx
+      have hnear : ∀ᶠ y in 𝓝 x, WordTupleSpanTop (A y) L :=
+        (isOpen_setOf_wordTupleSpanTop_family A hA L).mem_nhds hSpanL
+      refine ⟨1, zero_lt_one, L, hnear.mono ?_⟩
+      intro y hy n hn
+      exact wordTupleSpanTop_of_ge_of_pos (A y) hy hL (by omega))
+  exact ⟨N + 1, Nat.succ_pos N, hN⟩
+
 /-- On a compact parameter set, pointwise simultaneous injectivity has one common threshold.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanTop
@@ -38,22 +62,13 @@ theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanT
     (hSpan : ∀ x ∈ S, ∃ L, WordTupleSpanTop (A x) L) :
     ∃ L : ℕ, ∀ x ∈ S, ∀ n : ℕ, L ≤ n →
       Function.Injective (blockGroundSpaceMapES (A x) n) := by
-  obtain ⟨_, _, L, hL⟩ := hS.exists_uniform_pos_nat_bounds
-    (fun (_ : ℝ) L x => x ∈ S → ∀ n : ℕ, L ≤ n →
-      Function.Injective (blockGroundSpaceMapES (A x) n))
-    (fun _ h => h)
-    (fun hle h hx n hn => h hx n (hle.trans hn))
-    (by
-      intro x hx
-      obtain ⟨L, hL⟩ := hSpan x hx
-      have hInj := blockGroundSpaceMapES_injective_of_wordTupleSpanTop (A x) hL
-      have hnear : ∀ᶠ y in 𝓝 x, Function.Injective (blockGroundSpaceMapES (A y) L) :=
-        (isOpen_setOf_blockGroundSpaceMapES_injective_family A hA L).mem_nhds hInj
-      refine ⟨1, zero_lt_one, L, hnear.mono ?_⟩
-      intro y hy hyS n hn
-      exact blockGroundSpaceMapES_injective_of_ge_of_tracePreserving
-        (A y) hy (hTP y hyS) hn)
-  exact ⟨L, fun x hx => hL x hx hx⟩
+  obtain ⟨L, _, hL⟩ := exists_uniform_wordTupleSpanTop_of_compact A hA hS (by
+    intro x hx
+    obtain ⟨L, hSpanL⟩ := hSpan x hx
+    exact ⟨L + 1, Nat.succ_pos L,
+      wordTupleSpanTop_succ_of_tracePreserving (A x) hSpanL (hTP x hx)⟩)
+  exact ⟨L, fun x hx n hn =>
+    blockGroundSpaceMapES_injective_of_wordTupleSpanTop (A x) (hL x hx n hn)⟩
 
 /-- A compact continuous family of inequivalent normalized primitive blocks admits one common
 joint-boundary injectivity threshold. Fixed-point matrices need not vary continuously.

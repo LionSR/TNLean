@@ -176,35 +176,6 @@ theorem isOpen_setOf_blockGroundSpaceMapES_injective_family
   ContinuousLinearMap.isOpen_injective.preimage
     (continuous_blockGroundSpaceMapES_family A hA L)
 
-/-- For trace-preserving blocks, injectivity of the joint boundary map persists after adjoining
-one physical site.
-Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem blockGroundSpaceMap_injective_succ_of_tracePreserving
-    (A : (j : Fin r) → MPSTensor d (dim j)) {L : ℕ}
-    (hInj : Function.Injective (blockGroundSpaceMap A L))
-    (hTP : ∀ j, ∑ i, (A j i)ᴴ * A j i = 1) :
-    Function.Injective (blockGroundSpaceMap A (L + 1)) := by
-  refine (injective_iff_map_eq_zero _).mpr ?_
-  intro Δ hΔ
-  have hleft (i : Fin d) : blockGroundSpaceMap A L (fun j => A j i * Δ j) = 0 := by
-    ext w
-    have hw := congrFun hΔ (Fin.append w (fun _ : Fin 1 => i))
-    simp only [blockGroundSpaceMap_apply, Finset.sum_apply, groundSpaceMap_apply,
-      Pi.zero_apply, List.ofFn_fin_append, Kraus.evalWord_append] at hw
-    simpa only [blockGroundSpaceMap_apply, Finset.sum_apply, groundSpaceMap_apply,
-      Pi.zero_apply, List.ofFn_succ, List.ofFn_zero,
-      Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one,
-      Matrix.mul_assoc] using hw
-  have hzero (i : Fin d) (j : Fin r) : A j i * Δ j = 0 :=
-    congrFun (hInj ((hleft i).trans (map_zero _).symm)) j
-  funext j
-  calc
-    Δ j = (∑ i, (A j i)ᴴ * A j i) * Δ j := by rw [hTP j, Matrix.one_mul]
-    _ = ∑ i, (A j i)ᴴ * (A j i * Δ j) := by
-      rw [Matrix.sum_mul]
-      simp only [Matrix.mul_assoc]
-    _ = 0 := by simp only [hzero, Matrix.mul_zero, Finset.sum_const_zero]
-
 /-- Hilbert coordinates preserve injectivity of the joint boundary map.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem blockGroundSpaceMapES_injective_iff
@@ -230,16 +201,5 @@ theorem blockGroundSpaceMapES_injective_iff
     apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective
     rw [hEq, hEq] at hxy
     exact hxy
-
-/-- For trace-preserving blocks, joint boundary injectivity persists at every larger length.
-Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem blockGroundSpaceMapES_injective_of_ge_of_tracePreserving
-    (A : (j : Fin r) → MPSTensor d (dim j)) {L n : ℕ}
-    (hInj : Function.Injective (blockGroundSpaceMapES A L))
-    (hTP : ∀ j, ∑ i, (A j i)ᴴ * A j i = 1) (hLn : L ≤ n) :
-    Function.Injective (blockGroundSpaceMapES A n) := by
-  rw [blockGroundSpaceMapES_injective_iff] at hInj ⊢
-  exact Nat.le_induction hInj
-    (fun _ _ h => blockGroundSpaceMap_injective_succ_of_tracePreserving A h hTP) n hLn
 
 end MPSTensor
