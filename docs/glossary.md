@@ -2006,8 +2006,10 @@ involve no boundary.
   common positive spectral gap for every parameter and every length at
   least two. The ground energy may vary, and ground-state degeneracy is allowed.
 - **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
-- **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse` and
-  `SymmetricGappedInteractionPath.trans`.
+- **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse`,
+  `SymmetricGappedInteractionPath.trans`, and
+  `normalizedBondFixedPointGappedPath` (the path between the direct-sum
+  fixed points built from the normalized interpolating bond).
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
