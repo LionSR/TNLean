@@ -11189,8 +11189,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $X_1,Y_1,Z_1$ by $dX_1,d^{-1}Y_1,dZ_1$, respectively, and leave the
     second cut unchanged. The cut factorizations and right inverses are
     preserved, while the first weighted isometry now uses $d^{-2}\Id_{d^2}$.
-    The source gates scale by $d^{-1}$ and $d$, cancelling the reciprocal
-    factors in the identity-weight formulas.
+    Writing $\hat u_k,\hat v_k$ for the identity-weight gates of
+    Theorem~\ref{thm:threeMPU_U2_supplied_source_gates_two} and
+    Theorem~\ref{thm:threeMPU_U3_supplied_source_gates_two}, the source gates
+    rescale as
+    \begin{align}
+        u_k^{(2)} & = d^{-1}\hat u_k, & v_k^{(2)} & = d\,\hat v_k, & k & = 2,3,
+    \end{align}
+    which cancels the scalar factors in those formulas.
 \end{proof}
 
 \begin{theorem}[Two-site decompositions of the three shift MPUs]
