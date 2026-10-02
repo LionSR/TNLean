@@ -317,6 +317,31 @@
     and the subfamily is independent at the length $N=p_Sn$.
 \end{proof}
 
+\begin{theorem}[Spanning by the nonzero periodic basis vectors]
+    \label{thm:periodic_basis_nonzero_spanning}
+    \lean{MPSTensor.SectorDecomposition.mpvState_mem_span_nonzero}
+    \leanok
+    \uses{def:sector_weight_data, lem:paper_decomp_formula}
+    Let $A$ be the tensor of a sector decomposition, with representatives
+    $A_j$ and multiplicity entries $\mu_{j,q}$. At every length $N$, the
+    nonzero vectors among $\{\ket{V_N(A_j)}\}_j$ span $\ket{V_N(A)}$.
+    This proves the spanning assertion in
+    \cite[Proposition~3.3, lines~604--608]{DeLasCuevas2017Irreducible}; this
+    assertion does not require periodicity or normalization of the blocks.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:paper_decomp_formula}
+    The sector decomposition gives
+    \begin{align}
+        \ket{V_N(A)}
+        &=\sum_j\left(\sum_q\mu_{j,q}^{N}\right)\ket{V_N(A_j)}.
+        \label{eq:periodic_nonzero_span}
+    \end{align}
+    Terms whose state vector vanishes contribute zero. Every remaining term
+    belongs to the span of the nonzero state vectors, as does their sum.
+\end{proof}
+
 \begin{remark}[Comparison with the blocking approach]\notready
     \label{rem:periodic_vs_blocking_ft}
     Theorem~\ref{thm:periodic_ft} and the equal-MPV corollary
