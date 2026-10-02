@@ -16,7 +16,8 @@ overlaps `zⱼ = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` of `P` with the fixed-point ten
 placed in the full bond space, are `1` up to second order in `‖P - P_∞‖`:
 `|zⱼ - 1| ≤ C y e^{C y}` with `y = M e^{-2γ q/ξ}`, for every `0 < γ < 1`, `q ≥ 1`, `M ≥ 2` and
 `C y < 1`
-(`exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq`). Here `ξ = -1/log|λ₂|`, where `λ₂`
+(`exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq`; vacuous for `λ₂ = 0`, where the
+convention `ξ = 0` makes `e^{-γ/ξ} = 1`). Here `ξ = -1/log|λ₂|`, where `λ₂`
 bounds the moduli of the eigenvalues other than `1` of the transfer maps `E_{jj}` of the blocks and
 the moduli of all eigenvalues of the mixed transfer maps `E_{jj'}`, `j ≠ j'`.
 
@@ -114,20 +115,6 @@ theorem im_trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor
 variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
   {ι : (j : Fin b) → Fin (Dj j) → Fin D}
 
-/-- `√(E σ Eᴴ) = E √σ Eᴴ` for the coordinate isometry `E` of an injective `ι`. -/
-theorem sqrt_embeddedBlockState {D' : ℕ} {ι : Fin D' → Fin D} (hι : Function.Injective ι)
-    {σ : Matrix (Fin D') (Fin D') ℂ} (hσ : σ.PosSemidef) :
-    CFC.sqrt (embeddedBlockState ι σ) = embeddedBlockState ι (CFC.sqrt σ) := by
-  refine CFC.sqrt_unique ?_ ((Matrix.nonneg_iff_posSemidef.1
-    (CFC.sqrt_nonneg σ)).mul_mul_conjTranspose_same _).nonneg
-  calc coordEmbedding ι * CFC.sqrt σ * (coordEmbedding ι)ᴴ *
-        (coordEmbedding ι * CFC.sqrt σ * (coordEmbedding ι)ᴴ)
-      = coordEmbedding ι * (CFC.sqrt σ * ((coordEmbedding ι)ᴴ * coordEmbedding ι) *
-          CFC.sqrt σ) * (coordEmbedding ι)ᴴ := by simp only [Matrix.mul_assoc]
-    _ = coordEmbedding ι * σ * (coordEmbedding ι)ᴴ := by
-        rw [conjTranspose_coordEmbedding_mul_self hι, Matrix.mul_one,
-          CFC.sqrt_mul_sqrt_self σ hσ.nonneg]
-
 /-- `E X Eᴴ Π = E X Eᴴ` for the projector `Π = E Eᴴ` of an injective `ι`. -/
 theorem embeddedBlockState_mul_coordEmbedding_mul_conjTranspose {D' : ℕ} {ι : Fin D' → Fin D}
     (hι : Function.Injective ι) (X : Matrix (Fin D') (Fin D') ℂ) :
@@ -177,28 +164,6 @@ theorem transferMap_blockSum_embeddedBlockState (hι : ∀ j, Function.Injective
 
 /-! ### The idempotent of the limit -/
 
-/-- A linear map `ρ ↦ Tr(Q ρ) σ` with `Tr(Q σ) = 1` has an idempotent transfer matrix. -/
-theorem isIdempotentElem_transferMatrix_of_eq_trace_smul
-    {R : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    {Q σ : Matrix (Fin D) (Fin D) ℂ} (hR : ∀ ρ, R ρ = (Q * ρ).trace • σ)
-    (h1 : (Q * σ).trace = 1) : IsIdempotentElem (transferMatrix R) := by
-  rw [IsIdempotentElem, ← transferMatrix_comp]
-  congr 1
-  ext ρ : 1
-  simp only [LinearMap.comp_apply, hR, Matrix.mul_smul, Matrix.trace_smul, h1, smul_eq_mul,
-    mul_one]
-
-/-- A linear map `ρ ↦ Tr(Q ρ) σ` has transfer matrix of trace `Tr(Q σ)`. -/
-theorem trace_transferMatrix_of_eq_trace_smul [NeZero D]
-    {R : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    {Q σ : Matrix (Fin D) (Fin D) ℂ} (hR : ∀ ρ, R ρ = (Q * ρ).trace • σ) :
-    (transferMatrix R).trace = (Q * σ).trace := by
-  have e : R = ((Matrix.traceLinearMap (Fin D) ℂ ℂ) ∘ₗ LinearMap.mulLeft ℂ Q).smulRight σ := by
-    ext1 ρ
-    simp [hR]
-  rw [trace_transferMatrix_eq_linearMap_trace, e, LinearMap.trace_smulRight]
-  simp
-
 /-- A linear map `R : ρ ↦ Tr(Q ρ) σ` compresses every linear map `T` to a multiple of itself:
 `R T R = Tr(Q T(σ)) R`, on transfer matrices. -/
 theorem transferMatrix_mul_mul_of_eq_trace_smul
@@ -230,24 +195,6 @@ variable (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' �
   {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ}
 include hι hdisj
 
-/-- The mixed transfer map of the limit `P_∞` against the fixed-point tensor of block `j`, in the
-form `ρ ↦ Tr(Π_j ρ) σ'_j` of `mixedMapLM_blockSumPosLimit_apply`. -/
-private theorem mixedMapLM_blockSumPosLimit_eq (hσ : ∀ j, (σ j).PosSemidef) (j : Fin b) (ρ) :
-    Kraus.mixedMapLM (ofPhysicalMatrixLM (blockSumPosLimit ι σ))
-        (fixedPointTensor (embeddedBlockState (ι j) (σ j))) ρ =
-      (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ * ρ).trace •
-        embeddedBlockState (ι j) (σ j) :=
-  mixedMapLM_blockSumPosLimit_apply hι hdisj hσ j ρ
-
-omit hdisj in
-/-- `Tr(Π_j σ'_j) = 1`. -/
-private theorem trace_proj_mul_embeddedBlockState (htr : ∀ j, (σ j).trace = 1) (j : Fin b) :
-    (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ * embeddedBlockState (ι j) (σ j)).trace =
-      1 := by
-  rw [Matrix.trace_mul_comm, embeddedBlockState_mul_coordEmbedding_mul_conjTranspose (hι j),
-    embeddedBlockState, Matrix.trace_mul_comm, ← Matrix.mul_assoc,
-    conjTranspose_coordEmbedding_mul_self (hι j), Matrix.one_mul, htr j]
-
 /-- **The idempotent of the limit.** The mixed transfer matrix `R_j` of the limit `P_∞` against
 the fixed-point tensor of block `j`, placed in the full bond space, is idempotent with trace one. -/
 theorem isIdempotentElem_mixedTransferMatrixLeft_blockSumPosLimit (hσ : ∀ j, (σ j).PosSemidef)
@@ -258,10 +205,15 @@ theorem isIdempotentElem_mixedTransferMatrixLeft_blockSumPosLimit (hσ : ∀ j, 
       (blockSumPosLimit ι σ)).trace = 1 := by
   have : NeZero (Dj j) := Matrix.neZero_of_trace_eq_one (htr j)
   have : NeZero D := ⟨fun h => by subst h; exact (ι j 0).elim0⟩
-  have hR := mixedMapLM_blockSumPosLimit_eq hι hdisj hσ j
-  exact ⟨isIdempotentElem_transferMatrix_of_eq_trace_smul hR
-      (trace_proj_mul_embeddedBlockState hι htr j),
-    (trace_transferMatrix_of_eq_trace_smul hR).trans (trace_proj_mul_embeddedBlockState hι htr j)⟩
+  have hR := mixedMapLM_blockSumPosLimit_apply hι hdisj hσ j
+  have h1 := (trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState hι j).trans (htr j)
+  refine ⟨?_, ?_⟩
+  · change transferMatrix _ * transferMatrix _ = transferMatrix _
+    rw [← transferMatrix_comp]
+    exact congrArg transferMatrix (isIdempotentElem_of_apply_eq_trace_smul hR h1).eq
+  · change (transferMatrix (Kraus.mixedMapLM (ofPhysicalMatrixLM (blockSumPosLimit ι σ))
+      (fixedPointTensor (embeddedBlockState (ι j) (σ j))))).trace = 1
+    rw [trace_transferMatrix_eq_linearMap_trace, trace_of_apply_eq_trace_smul hR, h1]
 
 /-- **Compression by the idempotent of the limit.** For every `D² × D²` matrix `H`, the mixed
 transfer matrix `τ` of the tensor read from `H` against the fixed-point tensor `P'_{j,∞}` of block
@@ -277,39 +229,17 @@ theorem mixedTransferMatrixLeft_blockSumPosLimit_mul_mul (hσ : ∀ j, (σ j).Po
         (embeddedBlockState (ι j) (σ j))).trace •
       mixedTransferMatrixLeft (fixedPointTensor (embeddedBlockState (ι j) (σ j)))
         (blockSumPosLimit ι σ) := by
-  have hR := mixedMapLM_blockSumPosLimit_eq hι hdisj hσ j
+  have hR := mixedMapLM_blockSumPosLimit_apply hι hdisj hσ j
   have h := transferMatrix_mul_mul_of_eq_trace_smul hR
     (Kraus.mixedMapLM (ofPhysicalMatrixLM H) (fixedPointTensor (embeddedBlockState (ι j) (σ j))))
   have hQ : CFC.sqrt (embeddedBlockState (ι j) (σ j)) *
       (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ) =
         CFC.sqrt (embeddedBlockState (ι j) (σ j)) := by
-    rw [sqrt_embeddedBlockState (hι j) (hσ j),
+    rw [show CFC.sqrt (embeddedBlockState (ι j) (σ j)) = embeddedBlockState (ι j) (CFC.sqrt (σ j))
+      from cfc_sqrt_coordEmbedding_mul_mul (hι j) (hσ j),
       embeddedBlockState_mul_coordEmbedding_mul_conjTranspose (hι j)]
   rw [trace_mul_mixedMapLM_fixedPointTensor hQ] at h
   exact h
-
-omit hι hdisj in
-/-- `‖ι(P_∞)‖ = 1` for the vectors `ι(X) = (Xⁱ √σ)ᵢ` of the fixed-point tensor of a state `σ`. -/
-theorem norm_sqrtWeightLM_fixedPointTensor {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
-    (htr : σ.trace = 1) : ‖sqrtWeightLM σ (fixedPointTensor σ)‖ = 1 := by
-  have h := inner_sqrtWeightLM hσ (fixedPointTensor σ) (fixedPointTensor σ)
-  rw [Kraus.mixedMapLM_self, show Kraus.mapLM (fixedPointTensor σ) σ = σ.trace • σ from
-    transferMap_fixedPointTensor_apply hσ σ, Matrix.trace_smul, htr, one_smul,
-    inner_self_eq_norm_sq_to_K] at h
-  have h' : ((‖sqrtWeightLM σ (fixedPointTensor σ)‖ ^ 2 : ℝ) : ℂ) = 1 := by push_cast; exact h
-  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h')
-
-omit hι hdisj in
-/-- `‖ι(X)‖² = Tr E_X(σ)`, so `‖ι(X)‖ = 1` when `Tr E_X(σ) = 1`. -/
-theorem norm_sqrtWeightLM_eq_one {n : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
-    {X : MPSTensor n D} (hX : (Kraus.transferMap X σ).trace = 1) :
-    ‖sqrtWeightLM σ X‖ = 1 := by
-  have h := inner_sqrtWeightLM hσ X X
-  rw [Kraus.mixedMapLM_self] at h
-  change _ = (Kraus.transferMap X σ).trace at h
-  rw [hX, inner_self_eq_norm_sq_to_K] at h
-  have h' : ((‖sqrtWeightLM σ X‖ ^ 2 : ℝ) : ℂ) = 1 := by push_cast; exact h
-  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h')
 
 omit hι hdisj in
 /-- A vector that is the limit, at a geometric rate, of vectors whose norms converge to `c` at a
@@ -337,6 +267,8 @@ open scoped Matrix.Norms.L2Operator in
 overlap `zⱼ = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` of the positive part `P` of the `q`-site blocked direct sum
 with unit weights with the fixed-point tensor of block `j`, placed in the full bond space, satisfies
 `|zⱼ - 1| ≤ C y e^{C y}` with `y = M x^{2q} = M e^{-2γ q/ξ}`, for `q ≥ 1`, `M ≥ 2` and `C y < 1`.
+The bound has content only for `λ₂ ≠ 0`: for `λ₂ = 0` the convention `correlationLength 0 = 0`
+gives `x = 1`, and `C y < 1` fails for `M ≥ 2`, so the statement is vacuous.
 
 Project result; compare the first-order estimate
 `exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le`, with `y = M e^{-γ q/ξ}`, and
@@ -365,9 +297,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
   have hσs : ∀ k, (σ k).PosSemidef := fun k => (hσ k).posSemidef
   set σ' := embeddedBlockState (ι j) (σ j) with hσ'def
   have hσ' : σ'.PosSemidef := (hσs j).mul_mul_conjTranspose_same _
-  have htr' : σ'.trace = 1 := by
-    rw [hσ'def, embeddedBlockState, Matrix.trace_mul_comm, ← Matrix.mul_assoc,
-      conjTranspose_coordEmbedding_mul_self (hι j), Matrix.one_mul, htr j]
+  have htr' : σ'.trace = 1 := (trace_embeddedBlockState (hι j) (σ j)).trans (htr j)
   set F := fixedPointTensor σ' with hFdef
   set A := blockSum Aj ι fun _ => 1
   set x := Real.exp (-γ / correlationLength lam₂) with hxdef
@@ -420,8 +350,9 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
           rw [mul_assoc]; exact mul_le_mul_of_nonneg_left (hpos q hq) (norm_nonneg _)))
     have hinner : ⟪sqrtWeightLM σ' F, ιL Pinf⟫_ℂ = 1 := by
       change ⟪sqrtWeightLM σ' F, sqrtWeightLM σ' (ofPhysicalMatrixLM Pinf)⟫_ℂ = 1
-      rw [inner_sqrtWeightLM hσ', mixedMapLM_blockSumPosLimit_eq hι hdisj hσs j,
-        Matrix.trace_smul, trace_proj_mul_embeddedBlockState hι htr j, one_smul]
+      rw [inner_sqrtWeightLM hσ', mixedMapLM_blockSumPosLimit_apply hι hdisj hσs j,
+        Matrix.trace_smul, trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState hι j,
+        htr j, one_smul]
       exact htr'
     have h := @norm_sub_sq ℂ _ _ _ _ (ιL Pinf) (sqrtWeightLM σ' F)
     rw [hn, hιF, ← inner_conj_symm, hinner, map_one, RCLike.one_re] at h

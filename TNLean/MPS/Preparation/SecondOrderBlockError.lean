@@ -88,24 +88,6 @@ theorem one_sub_div_le_two_mul_of_sq_sub_sq_le {s t X : ℝ} (hs : 0 ≤ s) (ht0
       nlinarith
     linarith
 
-/-- For a vector `W` with `‖W‖² = c > 0`, `‖u‖² - |⟨W|u⟩|²/c ≤ ‖u - W‖²`: the squared distance
-of `u` from the line through `W` is at most its squared distance from `W`. -/
-theorem norm_sq_sub_norm_inner_sq_div_le {F : Type*} [NormedAddCommGroup F]
-    [InnerProductSpace ℂ F] {W u : F} {c : ℝ} (hc : 0 < c) (hW : ‖W‖ ^ 2 = c) :
-    ‖u‖ ^ 2 - ‖⟪W, u⟫_ℂ‖ ^ 2 / c ≤ ‖u - W‖ ^ 2 := by
-  rw [@norm_sub_sq ℂ, hW]
-  set z := ⟪W, u⟫_ℂ
-  have hre : RCLike.re ⟪u, W⟫_ℂ = z.re := by
-    rw [← inner_conj_symm, RCLike.conj_re]; rfl
-  have hz : ‖z‖ ^ 2 = z.re ^ 2 + z.im ^ 2 := by
-    rw [Complex.sq_norm, Complex.normSq_apply]; ring
-  rw [hre, hz]
-  have key : 0 ≤ ((c - z.re) ^ 2 + z.im ^ 2) / c := by positivity
-  have e : ((c - z.re) ^ 2 + z.im ^ 2) / c = c - 2 * z.re + (z.re ^ 2 + z.im ^ 2) / c := by
-    field_simp
-    ring
-  linarith
-
 /-! ### The norm of the target -/
 
 variable {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}

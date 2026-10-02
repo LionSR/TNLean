@@ -126,7 +126,7 @@ private theorem coordEmbedding_mul_mul_conjTranspose_apply_eq_zero {D' : ℕ} (�
   · exact absurd ⟨c, rfl⟩ h
 
 /-- `√(E σ Eᴴ) = E √σ Eᴴ` for a coordinate isometry `E`. -/
-private theorem cfc_sqrt_coordEmbedding_mul_mul {D' : ℕ} {ι : Fin D' → Fin D}
+theorem cfc_sqrt_coordEmbedding_mul_mul {D' : ℕ} {ι : Fin D' → Fin D}
     (hι : Function.Injective ι) {σ : Matrix (Fin D') (Fin D') ℂ} (hσ : σ.PosSemidef) :
     CFC.sqrt (coordEmbedding ι * σ * (coordEmbedding ι)ᴴ) =
       coordEmbedding ι * CFC.sqrt σ * (coordEmbedding ι)ᴴ := by
@@ -150,7 +150,8 @@ private theorem posSemidef_embeddedBlockState {D' : ℕ} (ι : Fin D' → Fin D)
     (embeddedBlockState ι σ).PosSemidef :=
   hσ.mul_mul_conjTranspose_same _
 
-private theorem trace_embeddedBlockState {D' : ℕ} {ι : Fin D' → Fin D} (hι : Function.Injective ι)
+/-- `Tr(E σ Eᴴ) = Tr σ` for a coordinate isometry `E`. -/
+theorem trace_embeddedBlockState {D' : ℕ} {ι : Fin D' → Fin D} (hι : Function.Injective ι)
     (σ : Matrix (Fin D') (Fin D') ℂ) : (embeddedBlockState ι σ).trace = σ.trace := by
   rw [embeddedBlockState, Matrix.trace_mul_comm, ← Matrix.mul_assoc,
     conjTranspose_coordEmbedding_mul_self hι, Matrix.one_mul]
@@ -266,7 +267,7 @@ private theorem embeddedBlockState_sqrt_mul (hσ : ∀ j, (σ j).PosSemidef) (k 
 
 omit hdisj in
 /-- `Tr(Π_j σ'_j) = Tr σ_j`. -/
-private theorem trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState (j : Fin b) :
+theorem trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState (j : Fin b) :
     (coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ * embeddedBlockState (ι j) (σ j)).trace =
       (σ j).trace := by
   rw [← trace_embeddedBlockState (hι j) (σ j), embeddedBlockState]
@@ -352,7 +353,7 @@ theorem mixedMapLM_blockSumPosLimit_apply (hσ : ∀ j, (σ j).PosSemidef) (j : 
 end Limit
 
 /-- A linear map `ρ ↦ Tr(Q ρ) σ` with `Tr(Q σ) = 1` is idempotent. -/
-private theorem isIdempotentElem_of_apply_eq_trace_smul
+theorem isIdempotentElem_of_apply_eq_trace_smul
     {T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)} {Q σ : Matrix (Fin D) (Fin D) ℂ}
     (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ) (h1 : (Q * σ).trace = 1) : IsIdempotentElem T := by
   ext1 ρ
@@ -360,7 +361,7 @@ private theorem isIdempotentElem_of_apply_eq_trace_smul
     mul_one]
 
 /-- A linear map `ρ ↦ Tr(Q ρ) σ` has trace `Tr(Q σ)`. -/
-private theorem trace_of_apply_eq_trace_smul
+theorem trace_of_apply_eq_trace_smul
     {T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)} {Q σ : Matrix (Fin D) (Fin D) ℂ}
     (hT : ∀ ρ, T ρ = (Q * ρ).trace • σ) :
     LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) T = (Q * σ).trace := by

@@ -56,12 +56,13 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     \label{lem:ldp_overlapping_overlaps_second_order}
     \lean{MPSTensor.trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor,
         MPSTensor.im_trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor,
-        MPSTensor.sqrt_embeddedBlockState,
+        MPSTensor.cfc_sqrt_coordEmbedding_mul_mul, MPSTensor.trace_embeddedBlockState,
+        MPSTensor.trace_coordEmbedding_mul_conjTranspose_mul_embeddedBlockState,
         MPSTensor.embeddedBlockState_mul_coordEmbedding_mul_conjTranspose,
         MPSTensor.blockSum_mul_coordEmbedding,
         MPSTensor.transferMap_blockSum_embeddedBlockState,
-        MPSTensor.isIdempotentElem_transferMatrix_of_eq_trace_smul,
-        MPSTensor.trace_transferMatrix_of_eq_trace_smul,
+        MPSTensor.isIdempotentElem_of_apply_eq_trace_smul,
+        MPSTensor.trace_of_apply_eq_trace_smul,
         MPSTensor.transferMatrix_mul_mul_of_eq_trace_smul,
         MPSTensor.trace_mul_mixedMapLM_fixedPointTensor,
         MPSTensor.isIdempotentElem_mixedTransferMatrixLeft_blockSumPosLimit,
@@ -81,14 +82,15 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
                   =\Tr\bigl(H(\sqrt\sigma^{\,\mathsf T}\otimes\sigma)\bigr)$, which is real
               when $H$ and $\sigma$ are Hermitian.
         \item For an isometry $E$ placing a block, $\sqrt{E\sigma E^\dagger}=E\sqrt\sigma E^\dagger$
-              for $\sigma\ge0$, and $EXE^\dagger\,\Pi=EXE^\dagger$ for $\Pi=EE^\dagger$.
+              for $\sigma\ge0$, $\Tr(E\sigma E^\dagger)=\Tr(\Pi E\sigma E^\dagger)=\Tr\sigma$, and
+              $EXE^\dagger\,\Pi=EXE^\dagger$ for $\Pi=EE^\dagger$.
         \item For blocks placed as in Lemma~\ref{lem:ldp_overlapping_positive_part} with
               weights one, $A^iE_j=E_jA_j^i$, and the transfer map of $A$ satisfies
               $\E_A(E_jXE_j^\dagger)=E_j\E_{A_j}(X)E_j^\dagger$; in particular
               $\tilde\rho_j=E_j\rho_jE_j^\dagger$ is a fixed point of $\E_A$.
-        \item A linear map $R:X\mapsto\Tr(QX)\sigma$ has transfer matrix of trace
-              $\Tr(Q\sigma)$, idempotent when $\Tr(Q\sigma)=1$, and $RTR=\Tr(QT(\sigma))R$
-              for every linear map $T$. If $\sqrt\sigma Q=\sqrt\sigma$, then
+        \item A linear map $R:X\mapsto\Tr(QX)\sigma$ has trace $\Tr(Q\sigma)$ and is
+              idempotent when $\Tr(Q\sigma)=1$, and $RTR=\Tr(QT(\sigma))R$ for every linear
+              map $T$. If $\sqrt\sigma Q=\sqrt\sigma$, then
               $\Tr(QY)=\Tr Y$ for every value $Y$ of a mixed transfer map against
               $P_{\infty,\sigma}$.
         \item The mixed transfer matrix $R_j$ of $P_\infty$ against $P_{\infty,\tilde\rho_j}$ is
@@ -102,7 +104,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
               $\lVert u_q-v\rVert\le Kx^q$ for every $q\ge1$, with $0\le x<1$, then
               $\lVert v\rVert=c$.
         \item In the setting of Lemma~\ref{lem:ldp_overlapping_positive_part} with weights
-              one, for every block $j$ there is $C_j>0$ such that for every $q\ge1$ and
+              one, if $\lambda_2\neq0$, then for every block $j$ there is $C_j>0$ such that for every $q\ge1$ and
               every $M\ge2$ with $C_jy<1$, where $y=Me^{-2\gamma q/\xi}$,
               \begin{align*}
                   \bigl\lvert\braket{\phi_M(P_{\infty,\tilde\rho_j})}{\phi_M(P)}-1\bigr\rvert
@@ -125,7 +127,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
     part~(2). In part~(6), the squared norm of $(X^i\sqrt\sigma)_i$ is $\Tr\E_X(\sigma)$, and
     $\lvert\lVert v\rVert-c\rvert\le(K+K')x^q$ for every $q$.
 
-    For part~(7) let $\iota(X)=(X^i\sqrt{\tilde\rho_j})_i$. By part~(3) and
+    For part~(7), $\lambda_2\neq0$ gives $0<e^{-\gamma/\xi}<1$. Let $\iota(X)=(X^i\sqrt{\tilde\rho_j})_i$. By part~(3) and
     $\E_P=\E_A^q$, $\Tr\E_P(\tilde\rho_j)=1$, so $\iota(P)$ is a unit vector, as is
     $\iota(P_{\infty,\tilde\rho_j})$. The inner product
     $\braket{\iota(P_{\infty,\tilde\rho_j})}{\iota(P_\infty)}$ is the trace of
