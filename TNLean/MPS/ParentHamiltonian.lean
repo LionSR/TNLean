@@ -110,6 +110,7 @@ import TNLean.MPS.ParentHamiltonian.ParentInteractionComparison
 import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
 import TNLean.MPS.ParentHamiltonian.PeriodicShortGapContinuity
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
+import TNLean.MPS.ParentHamiltonian.PhysicalEmbedding
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockSharpOpenGroundSpace

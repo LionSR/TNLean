@@ -60,6 +60,7 @@ import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
+import TNLean.Algebra.IsometricProjection
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.KernelGapPerturbation
 import TNLean.Algebra.KleinCocycleCompleteness

@@ -1082,6 +1082,84 @@ and the regrouping of physical registers into bonds.
     their continuity as the bond coefficients vanish is unnecessary.
 \end{proof}
 
+\begin{theorem}[Boundary spaces under physical embeddings]
+    \label{thm:spt_physical_embedding_boundary}
+    \lean{Matrix.rectKronecker_conjTranspose,
+        Matrix.rectKronecker_conjTranspose_mul_self,
+        MPSTensor.groundSpaceMap_rotatePhysical_rectangular,
+        MPSTensor.groundSpace_rotatePhysical_rectangular,
+        MPSTensor.groundSpaceES_rotatePhysical_rectangular}
+    \leanok
+    \uses{def:physical_rotation, def:ground_space_map, def:ground_space_es}
+    Let $E:\mathbb C^d\to\mathbb C^m$ be a linear map and let
+    $(EA)^i=\sum_jE_{ij}A^j$. Write $T_L=E^{\otimes L}$. Then
+    $\Gamma_L^{EA}(X)=T_L\Gamma_L^A(X)$ and
+    $G_L(EA)=T_LG_L(A)$ for every boundary matrix $X$ and every $L\ge0$.
+    If $E^\dagger E=I$, then $T_L^\dagger T_L=I$.
+    More generally, adjoints distribute over finite tensor products:
+    $(\bigotimes_j E_j)^\dagger=\bigotimes_j E_j^\dagger$.
+    These identities apply to the physical inclusions in
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:physical_rotation_word, def:ground_space_map}
+    Expand each rotated letter in the ordered product. Taking the trace
+    against $X$ gives the boundary-map identity. Taking its range gives
+    the boundary-space identity, including its Hilbert-space realization.
+    Multiplication and adjoints commute with tensor powers, so
+    $T_L^\dagger T_L=(E^\dagger E)^{\otimes L}=I$.
+\end{proof}
+
+\begin{theorem}[Projection onto an isometric image]
+    \label{thm:spt_isometric_image_projection}
+    \lean{LinearIsometry.starProjection_map_eq_comp_adjoint}
+    \leanok
+    Let $T:H\to K$ be an isometry between finite-dimensional Hilbert
+    spaces, let $G\subseteq H$ be a subspace, and denote its orthogonal
+    projection by $P_G$. Then $P_{TG}=TP_GT^\dagger$.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $y\in K$, the vector $TP_GT^\dagger y$ lies in $TG$.
+    For every $x\in G$, the adjoint identity and isometry give
+    $\langle y-TP_GT^\dagger y,Tx\rangle
+        =\langle T^\dagger y-P_GT^\dagger y,x\rangle=0$.
+    These two properties characterize the orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Canonical parents under physical isometries]
+    \label{thm:spt_physical_embedding_parent}
+    \lean{MPSTensor.parentInteractionES_rotatePhysical_isometry,
+        MPSTensor.parentInteractionES_rotatePhysical_isometry_decomposition,
+        MPSTensor.parentInteraction_matrix_rotatePhysical_isometry,
+        MPSTensor.parentInteractionES_rotatePhysical_isometry_apply_of_adjoint_eq_zero}
+    \leanok
+    \uses{thm:spt_physical_embedding_boundary,
+        thm:spt_isometric_image_projection, def:parent_interaction}
+    Suppose $E^\dagger E=I$ and set $T_L=E^{\otimes L}$.
+    The canonical parent projection satisfies
+    \begin{align}
+        h_L(EA)
+         & =I-T_LP_{G_L(A)}T_L^\dagger
+        =T_Lh_L(A)T_L^\dagger+I-T_LT_L^\dagger.
+        \label{eq:spt_physical_embedding_parent}
+    \end{align}
+    The identity holds both as an operator and in the configuration basis.
+    In particular, $T_L^\dagger v=0$ implies $h_L(EA)v=v$.
+    No injectivity assumption on $A$ is needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_physical_embedding_boundary,
+        thm:spt_isometric_image_projection, def:parent_interaction}
+    The embedded boundary space is $T_LG_L(A)$, whose projection is
+    $T_LP_{G_L(A)}T_L^\dagger$. Taking the complementary projection
+    and substituting $h_L(A)=I-P_{G_L(A)}$ proves
+    (\ref{eq:spt_physical_embedding_parent}). Applying its first expression
+    to $v$ with $T_L^\dagger v=0$ gives the last assertion.
+\end{proof}
+
 \begin{definition}[Coordinate inclusions of fixed-point tensors]
     \label{def:spt_coordinate_inclusions}
     \lean{Matrix.coordinateInclusion,
