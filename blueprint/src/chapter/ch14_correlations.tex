@@ -248,7 +248,7 @@ spectral decomposition, and quantitative decay bounds.
 \end{proof}
 
 \begin{theorem}[Physical correlation decay in trace-preserving gauge]%
-    \label{thm:correlator_exponential_bound}
+    \label{thm:physical_correlator_tp_bound}
     \lean{MPSTensor.exists_physicalConnectedCorrelator_le_geometric,
         MPSTensor.exists_rate_physicalConnectedCorrelator_le_geometric}
     \leanok
@@ -265,12 +265,8 @@ spectral decomposition, and quantitative decay bounds.
     $\rho_{\spec}(\E_A-P)<r<1$ for every finite support and every pair of
     observables. Thus the fixed-point infinite-chain connected correlations
     decay exponentially, without a diagonalizability assumption.
-    This proves the decay conclusion of
-    \cite[Section~II.B.3]{Cirac2021Matrix} in trace-preserving gauge.
-    Passing from an arbitrary normal representation to this gauge also
-    requires covariance of the physical insertions under the gauge
-    transformation; that passage remains to be established. The source's
-    pure-exponential expansion needs the Jordan-block correction recorded in
+    The source's pure-exponential expansion needs the Jordan-block
+    correction recorded in
     \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
 \end{theorem}
 \begin{proof}
@@ -447,3 +443,137 @@ for the transfer map $\E_A$.
     diagonalizable, one may take $r=|\lambda_2|$, the largest modulus of a
     subleading eigenvalue, provided $\lambda_2\neq0$.
 \end{remark}
+
+
+\section{Physical correlations in an arbitrary bond basis}
+
+\begin{definition}[Physical connected left-right contraction]
+    \label{def:physical_left_right_correlator}
+    \lean{MPSTensor.physicalLeftRightConnectedCorrelator}
+    \leanok
+    \uses{def:physical_observable_transfer, def:transfer_map}
+    For matrices $\rho^L,\rho^R\in\MN{D}$ and physical operators $X,Y$
+    on independently chosen blocks of lengths $L_1,L_2$, define
+    \begin{align}
+        C_{\rho^L,\rho^R}^{A}(X,Y;n)
+         & =\tr\!\left(\rho^L\E_X\E_A^n(\E_Y(\rho^R))\right)
+        -\tr(\rho^L\E_X(\rho^R))\tr(\rho^L\E_Y(\rho^R)).
+        \label{eq:correlations_left_right}
+    \end{align}
+    When $\rho^L,\rho^R$ are positive fixed matrices of the dual transfer
+    map and the transfer map, respectively, normalized by
+    $\tr(\rho^L\rho^R)=1$, this is the connected infinite-chain
+    physical expectation with $n\geq0$ unobserved intermediate sites.
+    This is the fixed-point contraction of
+    \cite[Section~II.B.3]{Cirac2021Matrix}.
+\end{definition}
+
+\begin{theorem}[Gauge covariance of physical insertions]
+    \label{thm:physical_insertion_gauge}
+    \lean{MPSTensor.physicalObservableTransfer_congruence_of_gauge}
+    \leanok
+    \uses{def:physical_observable_transfer}
+    Suppose $B^i=UA^iU^{-1}$ with $U$ invertible. For every physical
+    operator $O$ on $L$ sites and every $Z\in\MN{D}$,
+    \begin{align}
+        \E_O^B(UZU^\dagger) & =U\E_O^A(Z)U^\dagger.
+        \label{eq:correlations_insertion_gauge}
+    \end{align}
+    This includes $L=0$; no unitarity or normalization is assumed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:eval_word_gauge, def:physical_observable_transfer}
+    Every word satisfies $B^w=UA^wU^{-1}$. Substitute this into the
+    finite word sum defining the insertion and cancel $U^{-1}U$ and
+    $U^\dagger U^{-\dagger}$.
+\end{proof}
+
+\begin{theorem}[Gauge invariance of physical connected correlations]
+    \label{thm:physical_correlator_gauge}
+    \lean{MPSTensor.physicalLeftRightConnectedCorrelator_eq_of_gauge}
+    \leanok
+    \uses{def:physical_left_right_correlator}
+    Suppose $B^i=UA^iU^{-1}$ with $U$ invertible, and put
+    $\widetilde\rho^L=U^{-\dagger}\rho^LU^{-1}$ and
+    $\widetilde\rho^R=U\rho^RU^\dagger$. Then, for every pair of
+    independently supported physical operators and every $n\geq0$,
+    \begin{align}
+        C_{\widetilde\rho^L,\widetilde\rho^R}^{B}(X,Y;n)
+         & =C_{\rho^L,\rho^R}^{A}(X,Y;n).
+        \label{eq:correlations_gauge_invariance}
+    \end{align}
+    The identity does not require stationarity or positivity of the
+    boundary matrices.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_insertion_gauge, lem:ldp_observable_transfer_products,
+        def:physical_left_right_correlator}
+    Insertion of the identity on $n$ sites is $\E_A^n$, so
+    (\ref{eq:correlations_insertion_gauge}) also gives covariance of every
+    transfer power. Apply this and
+    (\ref{eq:correlations_insertion_gauge}) to the two-point and one-point
+    terms. Trace cyclicity gives
+    $\tr(U^{-\dagger}\rho^LZU^\dagger)=\tr(\rho^LZ)$ in each term.
+\end{proof}
+
+\begin{theorem}[Left-right contraction in trace-preserving gauge]
+    \label{thm:physical_left_right_tp}
+    \lean{MPSTensor.physicalLeftRightConnectedCorrelator_one}
+    \leanok
+    \uses{def:physical_left_right_correlator, def:physical_connected_correlator}
+    Suppose $\E_A$ is trace preserving, $\E_A(\rho)=\rho$, and
+    $\tr\rho=1$. For every pair of independently supported physical
+    operators and every $n\geq0$,
+    $C_{\Id,\rho}^{A}(X,Y;n)=C_{\mathrm{phys}}(X,Y;n)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:physical_connected_correlator_identity}
+    Multiplication by $\Id$ leaves each contraction unchanged.
+    Lemma~\ref{lem:physical_connected_correlator_identity} gives the
+    claimed equality at every separation.
+\end{proof}
+
+\begin{theorem}[Physical correlation decay for a normal tensor]
+    \label{thm:correlator_exponential_bound}
+    \lean{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_decay}
+    \leanok
+    \uses{def:nt_cpsv, def:physical_left_right_correlator}
+    Let $A$ be a normal tensor, with leading transfer eigenvalue normalized
+    to one. There are positive definite matrices $\rho^L,\rho^R$ satisfying
+    \begin{align}
+        \E_A^*(\rho^L)    & =\rho^L,
+        \\
+        \E_A(\rho^R)      & =\rho^R,
+        \\
+        \tr(\rho^L\rho^R) & =1,
+    \end{align}
+    and a rate $0<r<1$ such that every pair $X,Y$ of physical operators
+    on independently chosen finite supports admits a constant $C_{XY}>0$
+    with
+    $|C_{\rho^L,\rho^R}^{A}(X,Y;n)|\leq C_{XY}r^n$ for every $n\geq0$.
+    No trace-preserving gauge or diagonalizability hypothesis is imposed.
+    This proves the decay conclusion of
+    \cite[Section~II.B.3]{Cirac2021Matrix} for normal tensors. The more
+    general class whose unique eigenvalue of largest modulus is algebraically
+    simple, with possibly singular fixed matrices, is outside this statement.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_normal_gauge_reduction, thm:physical_correlator_tp_bound,
+        thm:physical_correlator_gauge, thm:physical_left_right_tp}
+    Choose $B^i=UA^iU^{-1}$ in trace-preserving gauge, with a positive
+    definite fixed state $\rho$ of trace one. Set
+    $\rho^L=U^\dagger U$ and $\rho^R=U^{-1}\rho U^{-\dagger}$.
+    Trace preservation of $\E_B$ implies $\E_A^*(\rho^L)=\rho^L$;
+    transfer covariance gives $\E_A(\rho^R)=\rho^R$.
+    Congruence preserves positive definiteness, and trace cyclicity gives
+    $\tr(\rho^L\rho^R)=\tr\rho=1$.
+    Theorem~\ref{thm:physical_correlator_tp_bound} supplies a common
+    rate $r<1$ in the gauge of $B$.
+    Since its left-right contraction with left matrix $\Id$ equals the
+    centered fixed-point correlator, (\ref{eq:correlations_gauge_invariance})
+    transports the bound to $A$ at every separation, including $n=0$.
+\end{proof}
