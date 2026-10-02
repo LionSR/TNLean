@@ -3087,6 +3087,339 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     density to the resulting ambient open neighborhood.
 \end{proof}
 
+\subsection{Uniform rigidity of virtual projective classes}
+
+The following finite-dimensional results provide local class constancy when
+continuous tensor data and exact unitary covariance are given. They apply
+to arbitrary topological parameter spaces, including convergent sequences.
+Their source context is the varying-support discussion of
+\cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}; no continuous
+canonical realization is inferred from a physical spectral gap here.
+
+\begin{definition}[Adjoint action in Hilbert--Schmidt coordinates]
+    \label{def:spc_aux_adjoint_coordinates}
+    \lean{Matrix.conjugationEuclideanCLM}
+    \leanok
+    Let $\mathcal H_D=\MN{D}$ have the Hilbert--Schmidt inner product, and
+    let $e_D:\mathcal H_D\to\C^{D^2}$ be column vectorization. For
+    $V\in\MN{D}$, define the linear operator
+    $\beta_V=e_D\circ(X\mapsto VXV^\dagger)\circ e_D^{-1}$.
+\end{definition}
+
+\begin{theorem}[Evaluation of the adjoint action]
+    \label{thm:spc_aux_adjoint_evaluation}
+    \lean{Matrix.conjugationEuclideanCLM_apply}
+    \leanok
+    \uses{def:spc_aux_adjoint_coordinates}
+    For $V,X\in\MN{D}$, one has
+    $\beta_V(e_DX)=e_D(VXV^\dagger)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spc_aux_adjoint_coordinates}
+    Substitute the definitions of vectorization and the adjoint action.
+\end{proof}
+
+\begin{definition}[Euclidean coefficient operator]
+    \label{def:spc_aux_coefficient_operator}
+    \lean{MPSTensor.coefficientEuclideanMap}
+    \leanok
+    For a tensor $C=\{C^i\}_{i=0}^{d-1}$ with bond dimension $D$, let
+    $\Phi_C:\C^d\to\C^{D^2}$ be the operator with matrix entries
+    $(\Phi_C)_{(a,b),i}=C^i_{b,a}$.
+\end{definition}
+
+\begin{theorem}[Evaluation of the coefficient operator]
+    \label{thm:spc_aux_coefficient_evaluation}
+    \lean{MPSTensor.coefficientEuclideanMap_apply}
+    \leanok
+    \uses{def:spc_aux_coefficient_operator}
+    For $x\in\C^d$, one has
+    $\Phi_Cx=e_D(\sum_i x_i C^i)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spc_aux_coefficient_operator}
+    Each coordinate is $\sum_i C^i_{b,a}x_i$.
+\end{proof}
+
+\begin{theorem}[Continuity of the coefficient operator]
+    \label{thm:spc_aux_coefficient_continuity}
+    \lean{MPSTensor.continuous_coefficientEuclideanMap}
+    \leanok
+    \uses{def:spc_aux_coefficient_operator}
+    For fixed $d,D$, the map $C\mapsto\Phi_C$ is continuous in the
+    operator norm.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spc_aux_coefficient_operator}
+    The map is linear between finite-dimensional complex vector spaces.
+\end{proof}
+
+\begin{theorem}[Surjectivity of the injective coefficient operator]
+    \label{thm:spc_aux_coefficient_surjective}
+    \lean{MPSTensor.coefficientEuclideanMap_surjective_of_isInjective}
+    \leanok
+    \uses{def:spc_aux_coefficient_operator}
+    If $\spn_{\C}\{C^i\}=\MN{D}$, then $\Phi_C$ is surjective.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_coefficient_evaluation}
+    Every matrix is a linear combination of the letters. Apply vectorization
+    to that combination.
+\end{proof}
+
+\begin{definition}[Gram right inverse of the coefficient operator]
+    \label{def:spc_aux_coefficient_inverse}
+    \lean{MPSTensor.coefficientRightInverse}
+    \leanok
+    \uses{def:spc_aux_coefficient_operator}
+    Define $\Psi_C=\Phi_C^\dagger(\Phi_C\Phi_C^\dagger)^{-1}$.
+    Here the inverse is assigned the value zero when the operator is not
+    invertible.
+\end{definition}
+
+\begin{theorem}[Right-inverse identity at an injective tensor]
+    \label{thm:spc_aux_coefficient_inverse_identity}
+    \lean{MPSTensor.coefficientEuclideanMap_comp_rightInverse_of_isInjective}
+    \leanok
+    \uses{def:spc_aux_coefficient_inverse}
+    If $\spn_{\C}\{C^i\}=\MN{D}$, then $\Phi_C\Psi_C=I$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_coefficient_surjective, def:spc_aux_coefficient_inverse}
+    Surjectivity makes $\Phi_C^\dagger$ injective. Thus
+    $\Phi_C\Phi_C^\dagger$ is invertible, and $\Phi_C\Psi_C=I$ by
+    inverse cancellation.
+\end{proof}
+
+\begin{theorem}[Continuity of the Gram right inverse]
+    \label{thm:spc_aux_coefficient_inverse_continuity}
+    \lean{MPSTensor.continuousAt_coefficientRightInverse_of_isInjective}
+    \leanok
+    \uses{def:spc_aux_coefficient_inverse}
+    If $\spn_{\C}\{C^i\}=\MN{D}$, the map $B\mapsto\Psi_B$ is
+    continuous at $B=C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_coefficient_continuity, thm:spc_aux_coefficient_surjective, def:spc_aux_coefficient_inverse}
+    The Gram operator $\Phi_B\Phi_B^\dagger$ is continuous in $B$ and
+    invertible at $C$. Inversion is continuous at invertible operators,
+    so its product with $\Phi_B^\dagger$ is continuous at $C$.
+\end{proof}
+
+\begin{theorem}[Coefficient form of exact covariance]
+    \label{thm:spc_aux_coefficient_covariance}
+    \lean{MPSTensor.coefficientEuclideanMap_covariance}
+    \leanok
+    \uses{def:spc_aux_adjoint_coordinates, def:spc_aux_coefficient_operator}
+    Let $U\in\MN{d}$ and $V\in\MN{D}$ satisfy
+    $\sum_j U_{ij}C^j=VC^iV^\dagger$ for every $i$. Then
+    $\Phi_C U^{\mathsf T}=\beta_V\Phi_C$.
+    Neither matrix is required to be unitary or invertible.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_coefficient_evaluation, thm:spc_aux_adjoint_evaluation}
+    For $x\in\C^d$, expand the two sums to obtain
+    \begin{align}
+        \sum_j (U^{\mathsf T}x)_j C^j
+         & =\sum_i x_i\sum_j U_{ij}C^j
+        =V\Bigl(\sum_i x_iC^i\Bigr)V^\dagger.\notag
+    \end{align}
+    Apply vectorization.
+\end{proof}
+
+\begin{theorem}[Adjoint action determined by the physical action]
+    \label{thm:spc_aux_adjoint_coefficient_formula}
+    \lean{MPSTensor.conjugationEuclideanCLM_eq_coefficients_of_isInjective}
+    \leanok
+    \uses{def:spc_aux_adjoint_coordinates, def:spc_aux_coefficient_inverse}
+    Suppose $C$ is one-site injective and
+    $\sum_j U_{ij}C^j=VC^iV^\dagger$ for every $i$, with
+    $U\in\MN{d}$ and $V\in\MN{D}$ arbitrary. Then
+    $\beta_V=\Phi_C U^{\mathsf T}\Psi_C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_coefficient_covariance, thm:spc_aux_coefficient_inverse_identity}
+    Multiply the coefficient covariance identity on the right by
+    $\Psi_C$ and use $\Phi_C\Psi_C=I$.
+\end{proof}
+
+\begin{theorem}[Uniform adjoint estimate near an injective tensor]
+    \label{thm:spc_aux_uniform_adjoint_estimate}
+    \lean{MPSTensor.eventually_uniform_conjugationEuclideanCLM_of_covariance}
+    \leanok
+    \uses{def:spc_aux_adjoint_coordinates, def:spc_aux_coefficient_operator}
+    Let $C_0$ be one-site injective, let $\mathcal I$ be an arbitrary set,
+    and let $U_g\in\mathrm U(d)$ and $V_g^0\in\MN{D}$ satisfy
+    $\sum_j(U_g)_{ij}C_0^j=V_g^0C_0^i(V_g^0)^\dagger$ for all $g,i$.
+    For every $\varepsilon>0$ there is a neighborhood of $C_0$ such that,
+    for each tensor $C$ in that neighborhood, every $g\in\mathcal I$ and
+    every $V\in\MN{D}$ satisfying
+    $\sum_j(U_g)_{ij}C^j=VC^iV^\dagger$ obey
+    $\|\beta_V-\beta_{V_g^0}\|<\varepsilon$.
+    No continuity or unitarity of the virtual matrices is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_coefficient_continuity, thm:spc_aux_coefficient_inverse_continuity, thm:spc_aux_coefficient_surjective, thm:spc_aux_coefficient_covariance, thm:spc_aux_adjoint_coefficient_formula}
+    Nearby Gram operators remain invertible. Exact covariance gives
+    $\beta_V=\Phi_CU_g^{\mathsf T}\Psi_C$ there. Since
+    $\|U_g^{\mathsf T}\|\leq1$, the difference has the bound
+    \begin{align}
+        \|\Phi_CU_g^{\mathsf T}\Psi_C-
+        \Phi_{C_0}U_g^{\mathsf T}\Psi_{C_0}\|
+         & \leq \|\Phi_C-\Phi_{C_0}\|\,\|\Psi_C\|
+        +\|\Phi_{C_0}\|\,\|\Psi_C-\Psi_{C_0}\|.\notag
+    \end{align}
+    Continuity of the coefficient operator and its right inverse makes
+    this bound uniformly smaller than $\varepsilon$.
+\end{proof}
+
+\begin{theorem}[Cancellation of a unitary projective factor]
+    \label{thm:spc_aux_unitary_factor_cancel}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.factor_mul_star_eq_one_of_unitary}
+    \leanok
+    \uses{def:projective_rep}
+    Let $\rho:G\to\mathrm{GL}(D,\C)$ be a projective representation
+    with factor $\omega$, where $D>0$. If every $\rho(g)$ is unitary,
+    then $\omega(g,h)\overline{\omega(g,h)}=1$ for every $g,h$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_unitary_factor_alignment}
+    Unitary projective factors have modulus one. Hence
+    $\omega(g,h)\overline{\omega(g,h)}=|\omega(g,h)|^2=1$.
+\end{proof}
+
+\begin{definition}[Projective action on the intertwiner space]
+    \label{def:spc_aux_projective_hom_action}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix}
+    \leanok
+    \uses{def:projective_rep}
+    For projective representations $\rho_0:G\to\mathrm{GL}(D_0,\C)$
+    and $\rho_1:G\to\mathrm{GL}(D_1,\C)$, set
+    $S_g=\overline{\rho_0(g)}\otimes\rho_1(g)$ on
+    $\C^{D_0}\otimes\C^{D_1}$. Under column vectorization this is
+    $X\mapsto\rho_1(g)X\rho_0(g)^\dagger$ on rectangular matrices.
+\end{definition}
+
+\begin{theorem}[Unitarity on the intertwiner space]
+    \label{thm:spc_aux_projective_hom_unitary}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_mem_unitaryGroup}
+    \leanok
+    \uses{def:spc_aux_projective_hom_action}
+    If all matrices of $\rho_0$ and $\rho_1$ are unitary, then every
+    $S_g$ is unitary. The dimensions $D_0,D_1$ may be zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spc_aux_projective_hom_action}
+    Entrywise conjugation preserves unitarity, as does the tensor product.
+\end{proof}
+
+\begin{theorem}[Multiplication on the intertwiner space]
+    \label{thm:spc_aux_projective_hom_product}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_mul}
+    \leanok
+    \uses{def:spc_aux_projective_hom_action}
+    If $\rho_a$ has factor $\omega_a$, then
+    $S_gS_h=\overline{\omega_0(g,h)}\omega_1(g,h)S_{gh}$ for all $g,h$.
+    Unitarity is not required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spc_aux_projective_hom_action}
+    Use multiplicativity of entrywise conjugation and
+    $(A\otimes B)(C\otimes D)=AC\otimes BD$, then substitute the two
+    projective multiplication laws.
+\end{proof}
+
+\begin{theorem}[Exact composition of conjugations on intertwiners]
+    \label{thm:spc_aux_projective_hom_conjugation}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_conjugation_mul}
+    \leanok
+    \uses{def:spc_aux_projective_hom_action}
+    Suppose $D_0,D_1>0$ and both projective representations are unitary.
+    For every $g,h\in G$ and matrix $M$ on the intertwiner space,
+    $S_g(S_hMS_h^\dagger)S_g^\dagger=S_{gh}MS_{gh}^\dagger$.
+    The two factor systems need not agree.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_projective_hom_product, thm:spc_aux_unitary_factor_cancel}
+    Substitute $S_gS_h=\lambda_{g,h}S_{gh}$, where
+    $\lambda_{g,h}=\overline{\omega_0(g,h)}\omega_1(g,h)$.
+    The scalar cancels because $\lambda_{g,h}\overline{\lambda_{g,h}}=1$.
+\end{proof}
+
+\begin{theorem}[Uniform rigidity of a unitary projective class]
+    \label{thm:spc_aux_uniform_projective_rigidity}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.exists_uniform_adjoint_rigidity_radius}
+    \leanok
+    \uses{def:spc_aux_adjoint_coordinates, def:projective_rep, def:cohomologous_to}
+    For every $D>0$ there is $\delta_D>0$ such that the following holds
+    for any group $G$. Let $\rho_0,\rho_1$ be unitary projective
+    representations on $\C^D$, with factors $\omega_0,\omega_1$.
+    If $\|\beta_{\rho_1(g)}-\beta_{\rho_0(g)}\|<\delta_D$ for every $g$,
+    then $\omega_1$ is cohomologous to $\omega_0$.
+    No topology on $G$ or continuity of either representation is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spc_aux_projective_hom_action, thm:spc_aux_projective_hom_unitary, thm:spc_aux_projective_hom_conjugation, thm:spt_local_spectral_support, thm:spt_virtual_class_gauge_preparation}
+    Let $J_0$ span the normalized vectorization of the identity matrix
+    and let $P_0=J_0J_0^\dagger$. The linear rearrangement of matrix entries
+    which takes an adjoint operator to its rank-one Choi matrix shows that
+    uniformly close adjoint actions give uniformly close conjugates
+    $S_gP_0S_g^\dagger$. The operators $S_g$ are unitary and their
+    conjugations compose exactly. In the closed convex hull of the orbit
+    of $P_0$, the unique least-norm element $R$ is therefore fixed by every
+    conjugation. It is Hermitian and remains close to $P_0$.
+
+    Choose the radius so that the spectral line of $R$ continuing the
+    range of $P_0$ has a unit vector $J$ whose decoded matrix $W$ is
+    invertible. Every $S_g$ preserves this line, giving
+    $\rho_1(g)W=c(g)W\rho_0(g)$. Invertibility implies $c(g)\neq0$.
+    Comparing multiplication at $g,h$ gives
+    $\omega_1(g,h)=c(g)c(h)c(gh)^{-1}\omega_0(g,h)$, as required.
+\end{proof}
+
+\begin{theorem}[Local constancy from continuous tensors and exact covariance]
+    \label{thm:spc_aux_local_tensor_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_exact_unitary_covariance}
+    \leanok
+    \uses{def:projective_rep, def:cohomologous_to}
+    Let $T$ be a topological space, let $t_0\in T$, and let
+    $C:T\to(\MN{D})^d$ be continuous at $t_0$, with $D>0$ and $C(t_0)$
+    one-site injective. Fix a group $G$ and matrices $U_g\in\mathrm U(d)$.
+    For each $t$, let $\rho_t$ be a unitary projective representation with
+    factor $\omega_t$, and suppose
+    \begin{align}
+        \sum_j(U_g)_{ij}C^j(t)
+         & =\rho_t(g^{-1})C^i(t)\rho_t(g^{-1})^\dagger.\notag
+    \end{align}
+    Then $\omega_t$ is cohomologous to $\omega_{t_0}$ throughout some
+    neighborhood of $t_0$. No continuity of $\rho_t$ or $\omega_t$,
+    injectivity away from $t_0$, or connectedness of $T$ is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_uniform_adjoint_estimate, thm:spc_aux_uniform_projective_rigidity}
+    Use the uniform adjoint estimate at $C(t_0)$ with tolerance
+    $\delta_D$, and pull its tensor neighborhood back along $C$.
+    Reindex by $g^{-1}$ to obtain
+    $\|\beta_{\rho_t(g)}-\beta_{\rho_{t_0}(g)}\|<\delta_D$ for every $g$.
+    Apply uniform projective rigidity at each parameter in that neighborhood.
+\end{proof}
+
+
 \begin{theorem}[Endpoint cohomology for a supplied unital family]
     \label{thm:spt_unital_supported_path_class}
     \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points,

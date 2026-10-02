@@ -4087,6 +4087,21 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 
 
+### unitary adjoint identities in matrix coordinates — candidate
+
+- **Pattern:** Extract `Uᴴ * U = 1` or `U * Uᴴ = 1` from membership in the
+  unitary group, then reassociate a matrix product to cancel adjacent factors.
+- **Occurrences:** Four extractions in
+  `TNLean/MPS/Symmetry/UniformProjectiveRigidity.lean`, in the unitary
+  conjugation norm, orbit-to-intertwiner, and Choi orbit arguments.
+- **Existing results:** Mathlib `Matrix.mem_unitaryGroup_iff` and its primed
+  form supply the identities. The promoted
+  `Matrix.mul_unitary_adjoint_mul_cancel` in `Algebra/UnitaryContraction.lean`
+  handles the rectangular contraction when its statement applies.
+- **Decision:** The occurrences lie in one file, below the two-file promotion
+  threshold. No new tactic or theorem is needed; further uses should first
+  consult the existing identities and contraction lemma.
+
 ## Retired
 
 ### block_words — retired

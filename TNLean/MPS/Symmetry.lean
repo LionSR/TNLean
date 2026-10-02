@@ -62,10 +62,12 @@ import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.InvertibleProjectivePathInvariance
 import TNLean.MPS.Symmetry.IsometricParentInteraction
 import TNLean.MPS.Symmetry.LocalInvariantCompression
+import TNLean.MPS.Symmetry.LocalProjectiveClassStability
 import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.LocalVirtualGauge
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
+import TNLean.MPS.Symmetry.NearbyInjectiveAdjointActions
 import TNLean.MPS.Symmetry.NormalizedBondLocalSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
@@ -92,6 +94,7 @@ import TNLean.MPS.Symmetry.PreparedPolarGappedPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectiveDirectSumInclusions
 import TNLean.MPS.Symmetry.ProjectiveGaugeTransport
+import TNLean.MPS.Symmetry.ProjectiveHomConjugation
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
 import TNLean.MPS.Symmetry.SPTFixedPoint
@@ -108,6 +111,7 @@ import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.TimeReversalIndex
 import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
+import TNLean.MPS.Symmetry.UniformProjectiveRigidity
 import TNLean.MPS.Symmetry.UnitModulusProjectiveFactor
 import TNLean.MPS.Symmetry.UnitalSupportedPathInvariance
 import TNLean.MPS.Symmetry.UnitaryVirtualGauge
