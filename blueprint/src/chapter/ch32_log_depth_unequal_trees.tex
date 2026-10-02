@@ -16,7 +16,8 @@ of Theorem~1, cuts a chain of any length into blocks ``all of the same size,
 $q_N$, except for the last one, which may be larger''. This section places trees
 on blocks of any length, with leaves of unequal widths, and obtains the depth
 $O(\log\log(N/\varepsilon))$ of the paragraph ``Tree-RG circuit with
-measurements'' of the source for every chain length
+measurements'' of the source for normal tensors $A$ and every chain length
+$N\ge2$ with $\ket{\phi_N(A)}\neq0$, which holds for all large $N$
 \cite{gap:mswc24_tree_measurement_scope}.
 
 Throughout, $d\ge1$, $s\ge1$, the sites of a block of $n$ sites are
@@ -127,7 +128,7 @@ configurations of the $n$ sites.
     \label{thm:ldp_unequal_tree_rounds}
     \lean{MPSPreparation.treeLevelOp, MPSPreparation.treeLevelsOp,
         MPSPreparation.treeLeafOp, MPSPreparation.treeLevelsOp_succ',
-        MPSPreparation.le_of_mem_block, MPSPreparation.treeRegGate,
+        MPSPreparation.treeRegGate,
         MPSPreparation.two_mul_treeRegGate_L,
         MPSPreparation.treeRegGate_a_add, MPSPreparation.treeRegGate_sites,
         MPSPreparation.mem_span_treeRegGate,

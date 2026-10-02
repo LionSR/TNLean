@@ -125,26 +125,6 @@ theorem leafLen_balancedWidths_le {h L c : ℕ} (hL : L ≤ 2 ^ (h + 1) * c) (p 
     omega
   · exact hw.trans (by omega)
 
-/-! ### The pairs on blocks of unequal lengths -/
-
-/-- The layer of pairs applied to the all-`|0⟩` state leaves `|0⟩` at every site of every block
-other than its first and its last `s` sites. -/
-theorem isZeroOn_pairLayerOp_mulVec_productVector {d s M N : ℕ} [NeZero d] {ℓ : Fin M → ℕ}
-    (hN : ∑ b, ℓ b = N) (hr : ∀ b, s + s ≤ ℓ b)
-    (W : Fin M → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) :
-    IsZeroOn {x | ∃ b y, s ≤ y.val ∧ y.val + s < ℓ b ∧ x = blockSite hN b y}
-      (pairLayerOp hN hr W *ᵥ productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1) := by
-  intro x hx i hi
-  rw [pairLayerOp_mulVec_apply] at hx
-  split_ifs at hx with h
-  · obtain ⟨b, y, hy1, hy2, rfl⟩ := hi
-    have hx0 := h (blockSite hN b y) fun b' j hj => by
-      have := (blockSite_mem_pairSite hN hr b y).mp ⟨b', j, hj⟩
-      omega
-    rw [hx0]
-    exact Fin.ext (by simp)
-  · exact absurd rfl hx
-
 /-! ### The input of a block on the registers of its root -/
 
 section Root
@@ -198,14 +178,6 @@ theorem blockInputCfg_eq_placeCfg (hT : IsTreeLayout h s n w)
 end Root
 
 /-! ### The preparation -/
-
-/-- An injective tensor with physical dimension `d^m` has `D² ≤ d^m`. -/
-theorem mul_self_le_pow_of_isInjective_blockTensor {d D m : ℕ} {A : MPSTensor d D}
-    (h : Kraus.IsInjective (blockTensor A m)) : D * D ≤ d ^ m := by
-  have h1 := finrank_range_le_card (R := ℂ) (blockTensor A m)
-  rw [Set.finrank, h, finrank_top, Module.finrank_matrix, Fintype.card_fin, Fintype.card_fin,
-    Module.finrank_self, mul_one] at h1
-  simpa [blockPhysDim_eq_pow] using h1
 
 /-- `D² ≤ d^s` with `s ≥ 2` gives `D ≤ d^{s-1}`: a leg fits in `s - 1` sites. -/
 theorem le_pow_sub_one_of_mul_self_le {d D s : ℕ} (hs : 2 ≤ s) (hd : 0 < d)

@@ -41,7 +41,8 @@ the isometries `V_{ℓ_{j,p}}` of these nodes (`MPSPreparation.treeLevelsOp_appl
 
 ## References
 
-* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eqs. (11) and (16).
+* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eqs. (11) and (16), and paragraph "Tree-RG
+  circuit with measurements".
 -/
 
 open Matrix MPSTensor

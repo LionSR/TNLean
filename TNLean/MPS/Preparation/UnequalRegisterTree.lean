@@ -481,11 +481,6 @@ variable {d h s M N : ℕ} [NeZero s] [NeZero N] {ℓ : Fin M → ℕ} (hN : ∑
   {w : Fin M → ℕ → ℕ} (hT : ∀ b, IsTreeLayout h s (ℓ b) (w b))
   (X : Fin M → ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ)
 
-omit [NeZero s] [NeZero N] in
-theorem le_of_mem_block (hN : ∑ b, ℓ b = N) (b : Fin M) : ℓ b ≤ N := by
-  rw [← hN]
-  exact Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ b)
-
 /-- The unitary of the node `p` of depth `j` of the block `b`, as a register gate on the ring.
 
 Source: arXiv:2307.01696, eq. (16) and paragraph "Tree-RG circuit with measurements". -/
@@ -499,7 +494,7 @@ def treeRegGate (j : ℕ) (b : Fin M) (p : ℕ) (hj : j ≤ h) (hp : p < 2 ^ j) 
   le := by
     have := nodeStart_add_le (hT b) (by omega) hp
     have := nodeStop_le_n (hT b) (by omega) hp
-    have := le_of_mem_block hN b
+    have : ℓ b ≤ N := hN ▸ Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ b)
     omega
   X := X b j p
 

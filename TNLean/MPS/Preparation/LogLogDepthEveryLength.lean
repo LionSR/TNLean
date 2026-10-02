@@ -47,7 +47,7 @@ holds for every `N ≥ N₀`. Documented in
 
 ## References
 
-* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eqs. (5), (10)–(12) and (16), Lemma 1 and
+* arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eqs. (1), (5), (10)–(12) and (16), Lemma 1 and
   Lemma 1'(i), the paragraph "Tree-RG circuit with measurements", and Supplemental Material,
   proof of Theorem 1.
 -/
