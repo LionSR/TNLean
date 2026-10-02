@@ -126,7 +126,8 @@ change the local dimension act on single sites.
 
 \begin{definition}[Onsite channel]
     \label{def:qc_onsite_channel}
-    \lean{Matrix.rectKronecker, QuantumCircuit.OnsiteChannel,
+    \lean{Matrix.rectKronecker, Matrix.rectKronecker_one,
+        QuantumCircuit.OnsiteChannel,
         QuantumCircuit.OnsiteChannel.map, QuantumCircuit.OnsiteChannel.dual,
         QuantumCircuit.OnsiteChannel.id, QuantumCircuit.OnsiteChannel.attach,
         QuantumCircuit.OnsiteChannel.attachZero,
@@ -137,7 +138,8 @@ change the local dimension act on single sites.
     An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
     $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
     $\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. It is the channel
-    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on the ring, with
+    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on any finite set of sites, such as
+    the ring, with
     $K_J=\bigotimes_iK_{iJ(i)}$ for every choice $J$ of one index per site;
     its dual is $A\mapsto\sum_JK_J^\dagger AK_J$. Write
     $\Phi_i(\sigma)=\sum_jK_{ij}\sigma K_{ij}^\dagger$ for its action at site
@@ -154,6 +156,7 @@ change the local dimension act on single sites.
     \label{lem:qc_onsite_channel_properties}
     \uses{def:qc_onsite_channel}
     \lean{QuantumCircuit.OnsiteChannel.map_isKrausCPTP,
+        QuantumCircuit.OnsiteChannel.map_rectKronecker,
         QuantumCircuit.OnsiteChannel.map_finKronecker,
         QuantumCircuit.OnsiteChannel.trace_map_mul,
         QuantumCircuit.OnsiteChannel.discard_siteMap_attach_siteMap}
@@ -179,11 +182,17 @@ change the local dimension act on single sites.
     \uses{def:qc_onsite_channel}
     \lean{QuantumCircuit.OnsiteChannel.dual_mem_supportedOperators,
         QuantumCircuit.OnsiteChannel.dual_mul,
-        QuantumCircuit.OnsiteChannel.dual_finKronecker}
+        QuantumCircuit.OnsiteChannel.dual_rectKronecker,
+        QuantumCircuit.OnsiteChannel.dual_finKronecker,
+        QuantumCircuit.rectangularKrausMap_rectKronecker_rectKronecker}
     \leanok
     Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
     $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
     disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
+    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$: for
+    any operators $K_{ij}\colon\C^d\to\C^e$, the map
+    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ with $K_J=\bigotimes_iK_{iJ(i)}$
+    sends $\bigotimes_im_i$ to $\bigotimes_i\sum_jK_{ij}m_iK_{ij}^\dagger$.
 \end{lemma}
 \begin{proof}
     \leanok
