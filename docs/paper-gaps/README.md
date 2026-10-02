@@ -781,7 +781,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   canonical form has multiplicity `m_j ≥ 2`, the block form of the positive part
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
-  tends to `1/√5` for every blocking length.
+  tends to `1/√5` for every blocking length. The failure lies in the coefficients:
+  with the pairs of block `j` on one copy `k_j` and `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`
+  in place of `βⱼ`, the state of eq. (S7) is the corrected state and satisfies
+  part (ii) of the approximation-error lemma for all nonzero complex weights, also
+  for blocks whose `q`-site states overlap, at the rate of
+  `mswc24_block_form_mixed_overlap.tex`.
 - `mswc24_block_form_mixed_overlap.tex` records that the block form of the
   positive part in eq. (S5) also fails when every multiplicity is one, because
   `B†B` couples distinct blocks through the overlaps of their `q`-site states,
@@ -799,13 +804,15 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   with the source's weights. For blocks whose `q`-site states are orthogonal,
   part (ii) of the approximation-error lemma is proved for it with arbitrary
   multiplicities and complex weights; for blocks whose states overlap it is
-  proved at the corrected rate with the factor `min(1, b)^{-1/2}`; numerical
-  checks on the counterexamples are recorded.
-- `mswc24_repeated_overlap_small_weight_sum.tex` is an open scope restriction:
-  for repeated blocks whose `q`-site states overlap, the bound for the corrected
-  state carries the factor `min(1, b)^{-1/2}` with `b = ∑ⱼ |βⱼ|²`, which exceeds
-  one when `b < 1`, for instance when the sums `βⱼ` cancel; the source's bound has
-  no such factor. Real weights in `[0, 1]` one of which is `1` give `b ≥ 1`.
+  proved at the corrected rate for all nonzero complex weights, with constants
+  independent of the weights; numerical checks on the counterexamples are
+  recorded.
+- `mswc24_repeated_overlap_small_weight_sum.tex` is a resolved scope restriction:
+  for repeated blocks whose `q`-site states overlap, an earlier bound for the
+  corrected state carried the factor `min(1, b)^{-1/2}` with `b = ∑ⱼ |βⱼ|²`. An
+  estimate of the positive part relative to the block weights, from a Sylvester
+  equation, removes it: `ε ≤ C y e^{C y}` and `ε ≤ C' y` hold for all nonzero
+  complex weights, with constants independent of the weights.
 - `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
   false-source note for Lemma 2 of the Supplemental Material. It records that
   the lemma holds in modulus for the source's

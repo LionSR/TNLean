@@ -21,8 +21,8 @@ nonzero complex weights (`exists_approximationError_le_repeatedOverlappingBlockS
 
 The overlaps `zⱼ = ⟨Ω_j|φ_M(L_jᴴ P)⟩` are estimated relative to the weights. The tensor read from
 `L_jᴴ P` is the direct sum over the copies `(j', k)` of the tensors read from the blocks
-`L_jᴴ P C⁻¹ L_{j'}` with the weights `μ_{j',k}^q` (`ofPhysicalMatrixLM_conjTranspose_copyIsometry_mul_polarPos`),
-so
+`L_jᴴ P C⁻¹ L_{j'}` with the weights `μ_{j',k}^q`
+(`ofPhysicalMatrixLM_conjTranspose_copyIsometry_mul_polarPos`), so
 
   `zⱼ = ∑_{j'} β_{j'} w_{jj'}`,  `w_{jj'} = ⟨Ω_j|φ_M(L_jᴴ P C⁻¹ L_{j'})⟩`
 

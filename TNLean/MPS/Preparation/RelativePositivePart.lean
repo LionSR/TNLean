@@ -11,7 +11,7 @@ import TNLean.MPS.Preparation.RepeatedOverlappingBlockOverlap
 
 Malz, Styliaris, Wei, and Cirac (arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S7)) write a
 tensor that is not normal as `Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ`. Its `q`-site blocked
-map is `B = ∑ⱼ cⱼ B_j L_jᴴ = B̃ C`, with `B̃ = ∑ⱼ B_j L_jᴴ`, `C = ∑ⱼ cⱼ L_j L_jᴴ`, the copy norms
+map is `B = ∑ⱼ cⱼ B_j L_jᴴ = B₀ C`, with `B₀ = ∑ⱼ B_j L_jᴴ`, `C = ∑ⱼ cⱼ L_j L_jᴴ`, the copy norms
 `cⱼ = (∑ₖ |μ_{j,k}|^{2q})^{1/2}`, and the copy isometries `L_j`
 (`TNLean.MPS.Preparation.RepeatedBlockSum`). The positive part `P` of `B` is close to
 `P_∞ = ∑ⱼ cⱼ L_j ((√σ_j)ᵀ ⊗ 1) L_jᴴ` in absolute terms
@@ -21,26 +21,34 @@ relative to each weight:
   `‖(P - P_∞) C⁻¹‖ ≤ K e^{-γ q/ξ}`,  `C⁻¹ = ∑ⱼ cⱼ⁻¹ L_j L_jᴴ`,
 
 for `0 < γ < 1` and all `q` beyond a threshold, uniformly in the weights, which may be arbitrarily
-small and need not satisfy `|μ_{j,k}| ≤ 1`
-(`exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_mul_le`). Hence the blocks
-`L_jᴴ P L_{j'} / c_{j'}` are `δ_{jj'} ((√σ_j)ᵀ ⊗ 1)` up to `K e^{-γ q/ξ}`
-(`exists_norm_relativeRow_sub_le`).
+small and need not satisfy `|μ_{j,k}| ≤ 1`; hence the blocks `L_jᴴ P L_{j'} / c_{j'}` are
+`δ_{jj'} ((√σ_j)ᵀ ⊗ 1)` up to `K e^{-γ q/ξ}` (both in `exists_norm_relativeRow_sub_le`).
 
 The proof: `X = (P - P_∞) C⁻¹` solves the Sylvester equation `P X + X P_∞ = C Δ Π` with
-`Δ = B̃ᴴ B̃ - ∑ⱼ L_j (σ_jᵀ ⊗ 1) L_jᴴ` and `Π = ∑ⱼ L_j L_jᴴ`, and `P² = C B̃ᴴ B̃ C ≥ (λ/2) C²` once
+`Δ = B₀ᴴ B₀ - ∑ⱼ L_j (σ_jᵀ ⊗ 1) L_jᴴ` and `Π = ∑ⱼ L_j L_jᴴ`, and `P² = C B₀ᴴ B₀ C ≥ (λ/2) C²` once
 `‖Δ‖ ≤ λ/2`, where `λ > 0` bounds every `σ_jᵀ ⊗ 1` from below
 (`norm_polarPos_sub_mul_sum_le`); the entrywise bound for such Sylvester equations
 (`Matrix.norm_le_of_mul_add_mul_eq_mul`) and the Gram estimate `exists_norm_gram_sum_sub_le` at unit
 weights finish the proof. Unlike the absolute estimate, this one does not pass through the Hölder
-bound of the square root, because `B̃ᴴ B̃` is bounded below on the range of `C`.
+bound of the square root, because `B₀ᴴ B₀` is bounded below on the range of `C`.
+
+**Local fix (corrected block form):** the limit `P_∞` is the corrected block form of the positive
+part, of rank one in the copy index, in place of the block form of eq. (S5). Documented in
+`docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
+
+**Local fix (rate of the overlapping blocks):** the rate includes the correlation lengths of the
+mixed transfer maps of distinct blocks, in place of the rate `e^{-γ q/ξ_diag}` of the source.
+Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 ## Main declarations
 
-* `MPSTensor.norm_polarPos_sub_mul_sum_le` — the relative bound for `B = B̃ C`.
+* `MPSTensor.norm_polarPos_sub_mul_sum_le` — the relative bound for `B = B₀ C`.
 * `MPSTensor.copyScaleInv`, `MPSTensor.relativeRow`, `MPSTensor.relativeRowLimit` — `C⁻¹`, the
   blocks `L_jᴴ P C⁻¹ L_{j'}` and their limits.
-* `MPSTensor.exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_mul_le`,
-  `MPSTensor.exists_norm_relativeRow_sub_le` — the rate for blocks with multiplicities.
+* `MPSTensor.relativeRowLimit_self`, `MPSTensor.relativeRowLimit_of_ne` — the limits are
+  `(√σ_j)ᵀ ⊗ 1` on the diagonal and `0` off it.
+* `MPSTensor.exists_norm_relativeRow_sub_le` — the relative rate for blocks with
+  multiplicities.
 
 ## References
 
@@ -80,6 +88,7 @@ private theorem conjTranspose_isoSum (F : (j : Fin b) → Matrix (κ j) (κ j) �
   simp only [isoSum, conjTranspose_sum, conjTranspose_mul, conjTranspose_conjTranspose,
     Matrix.mul_assoc]
 
+set_option linter.unusedFintypeInType false in
 omit [∀ j, DecidableEq (κ j)] [DecidableEq n] in
 private theorem posSemidef_isoSum {F : (j : Fin b) → Matrix (κ j) (κ j) ℂ}
     (hF : ∀ j, (F j).PosSemidef) : (isoSum L F).PosSemidef :=
@@ -108,11 +117,11 @@ private theorem norm_le_one_of_isHermitian_of_mul_self {Q : Matrix n n ℂ} (hQ 
 open scoped Matrix.Norms.L2Operator in
 /-- **The positive part relative to the block weights.** Let `L_j` be isometries with orthogonal
 ranges, `cⱼ > 0`, `C = ∑ⱼ cⱼ L_j L_jᴴ` and `C⁻¹ = ∑ⱼ cⱼ⁻¹ L_j L_jᴴ`, let `h_j ≥ 0` with
-`h_j² = g_j ≥ λ > 0`, and let `M = B̃ C`. If `Δ = B̃ᴴ B̃ - ∑ⱼ L_j g_j L_jᴴ` has `‖Δ‖ ≤ λ/2`, then
+`h_j² = g_j ≥ λ > 0`, and let `M = B₀ C`. If `Δ = B₀ᴴ B₀ - ∑ⱼ L_j g_j L_jᴴ` has `‖Δ‖ ≤ λ/2`, then
 the positive part `P` of `M` satisfies `‖(P - S) C⁻¹‖ ≤ n² (λ/2)^{-1/2} ‖Δ‖` with
 `S = ∑ⱼ cⱼ L_j h_j L_jᴴ`, in dimension `n`: the bound does not depend on the weights `cⱼ`.
 
-`X = (P - S) C⁻¹` solves `P X + X S = C Δ Π` with `Π = C C⁻¹`, and `P² = C B̃ᴴ B̃ C ≥ (λ/2) C²`;
+`X = (P - S) C⁻¹` solves `P X + X S = C Δ Π` with `Π = C C⁻¹`, and `P² = C B₀ᴴ B₀ C ≥ (λ/2) C²`;
 `Matrix.norm_le_of_mul_add_mul_eq_mul` applies. -/
 theorem norm_polarPos_sub_mul_sum_le (hiso : ∀ j, (L j)ᴴ * L j = 1)
     (horth : ∀ j k, j ≠ k → (L j)ᴴ * L k = 0) {c : Fin b → ℝ} (hc : ∀ j, 0 < c j)
@@ -129,7 +138,8 @@ theorem norm_polarPos_sub_mul_sum_le (hiso : ∀ j, (L j)ᴴ * L j = 1)
   have hc0 : ∀ j, (c j : ℂ) ≠ 0 := fun j => Complex.ofReal_ne_zero.2 (hc j).ne'
   have hreal : ∀ j, star (c j : ℂ) = c j := fun j => Complex.conj_ofReal _
   rw [← isoSum_smul_one (L := L) fun j => (c j : ℂ)] at hM
-  rw [← isoSum_smul_one (L := L) fun j => ((c j : ℂ))⁻¹, ← isoSum_smul (L := L) (fun j => (c j : ℂ)) h]
+  rw [← isoSum_smul_one (L := L) fun j => ((c j : ℂ))⁻¹,
+    ← isoSum_smul (L := L) (fun j => (c j : ℂ)) h]
   change ‖(polarPos M - isoSum L fun j => (c j : ℂ) • h j) *
       (isoSum L fun j => ((c j : ℂ))⁻¹ • (1 : Matrix (κ j) (κ j) ℂ))‖ ≤
     _ * (_ * ‖Btᴴ * Bt - isoSum L g‖)
