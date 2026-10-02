@@ -709,7 +709,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
     \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
         def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
-    length $\xi$, and let $0<\gamma<1/2$.
+    length $\xi$, and let $0<\gamma<1$.
     Then, for $N=qM$,
     \begin{align}
         \Bigl\lvert1-\bigl\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\bigr\rvert\Bigr\rvert
@@ -717,7 +717,9 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         \label{eq:ldp_positive_part_overlap}
     \end{align}
     for $q\ge1$ \cite[Supplemental Material, eq.~(S29)]{Piroli2021LOCC}, quoted as
-    \cite[eq.~(S9)]{Malz2024Preparation}. Explicitly, there is a constant $C>0$
+    \cite[eq.~(S9)]{Malz2024Preparation}. The sources state this for
+    $0<\gamma<1/2$; the range $0<\gamma<1$ follows from the Lipschitz bound of
+    Theorem~\ref{thm:ldp_positive_part_rate}. Explicitly, there is a constant $C>0$
     depending only on $A$, $\rho$, and $\gamma$ such that
     $\bigl\lvert1-\lvert\bra{\phi_M(P_\infty)}\phi_M(P_q)\rangle\rvert\bigr\rvert
         \le Cy\,e^{Cy}$ for all $q\ge0$ and $M\ge1$, where $y=M\,e^{-\gamma q/\xi}$.
@@ -1049,7 +1051,7 @@ and its error extend to blocks of any lengths.
         def:ldp_block_isometry_state, lem:ldp_block_isometry_state_overlap,
         def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
-    length $\xi$, and let $0<\gamma<1/2$. There is a constant $C>0$ depending
+    length $\xi$, and let $0<\gamma<1$. There is a constant $C>0$ depending
     only on $A$, $\rho$, and $\gamma$ such that for every cutting of the ring of
     $N$ sites into $M\ge1$ blocks of lengths $\ell_k\ge q$ with injective
     blocked tensors, the state $\ket{\psi_{\ell,\omega}}$ of
@@ -1078,7 +1080,7 @@ and its error extend to blocks of any lengths.
     $\lvert\braket{\psi_{\ell,\omega}}{\phi_N(A)}-1\rvert\le Cy\,e^{Cy}$ with
     $y=Me^{-\gamma q/\xi}$. The triangle inequality of
     Theorem~\ref{thm:ldp_approximation_error_normal} and
-    $\lvert c_N^2-1\rvert\le Ke^{-2\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
+    $\lvert c_N^2-1\rvert\le Ke^{-\gamma N/\xi}\le Ke^{-\gamma q/\xi}$, using
     $N\ge\ell_1\ge q$, bound $\varepsilon$ by $Cy\,e^{Cy}+Ky$, and
     $\varepsilon\le1$ covers $y>1$.
 \end{proof}
@@ -3264,24 +3266,23 @@ $A$ along $w$.
     \lean{MPSTensor.exists_approximationError_le_mul_blockSum,
         MPSTensor.exists_approximationError_le_blockSum, MPSTensor.blockSum,
         MPSTensor.nonNormalApproxVector_blockSum,
-        MPSTensor.norm_nonNormalApproxOverlap_blockSum,
         MPSTensor.physicalMatrix_blockTensor_blockSum, MPSTensor.mpv_blockSum,
-        MPSTensor.one_sub_norm_sum_div_le}
+        MPSTensor.mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero,
+        MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
-        lem:ldp_orthogonal_sum_polar, lem:ldp_positive_part_overlap,
-        thm:ldp_approximation_error_normal, thm:ldp_injectivity_cutoff,
-        def:correlation_length}
+        lem:ldp_orthogonal_sum_polar, lem:ldp_mixed_transfer_decay,
+        thm:ldp_approximation_error_overlapping_weights, def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ with $b\geq1$, weights $\mu_j>0$, and
     normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, each placed on its own bond coordinates. Let $\lambda_2$
     bound the moduli of the eigenvalues other than one of every transfer map
     $\E_{A_j}$, so that its correlation length $\xi$ bounds every $\xi_j$, and
-    let $0<\gamma<1/2$. Form the approximating state $\widetilde\phi_N$ of
+    let $0<\gamma<1$. Form the approximating state $\widetilde\phi_N$ of
     Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of the
     $\rho_j$ on the bond coordinates of their blocks and $\beta_j=\mu_j^N$.
-    There is $C>0$ such that for every block length $q$ at which the $q$-site
-    states of distinct blocks are orthogonal,
+    There is $C>0$ such that for all weights $\mu_j>0$, every block length $q$
+    at which the $q$-site states of distinct blocks are orthogonal,
     $\sum_{i_1,\dots,i_q}\overline{(A_j^{i_1}\cdots A_j^{i_q})_{ab}}\,
         (A_{j'}^{i_1}\cdots A_{j'}^{i_q})_{a'b'}=0$ for $j\neq j'$ and all
     $a,b,a',b'$, and every $M\geq1$, with $N=qM$ and
@@ -3293,7 +3294,8 @@ $A$ along $w$.
         \label{eq:ldp_approximation_error_orthogonal_blocks}
     \end{align}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} restricted to
-    multiplicity one and to blocks whose $q$-site states are orthogonal. For
+    multiplicity one and to blocks whose $q$-site states are orthogonal, for
+    $0<\gamma<1$ in place of $0<\gamma<1/2$. For
     multiplicity one the phase of $\mu_j$ can be absorbed into $A_j$, which
     stays normal with the same transfer map, so the condition $\mu_j>0$ only
     fixes this presentation. The orthogonality is an added hypothesis: without
@@ -3304,46 +3306,17 @@ $A$ along $w$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Let $B_j$ be the $q$-site blocked map of $A_j$, with polar decomposition
-    $B_j=V_jP_j$, and $K_j$ the isometry placing the bond pairs of block $j$.
-    For $q\geq1$ every word of $A$ of length $q$ is the direct sum of the
-    words of the blocks, so the blocked map of $A$ is
-    $B=\sum_j\mu_j^qB_jK_j^\dagger$, and
-    Lemma~\ref{lem:ldp_orthogonal_sum_polar} gives $V=\sum_jV_jK_j^\dagger$.
-    The pair of block $j$ is $K_j^{\otimes M}$ applied to the product of the
-    pairs of $\rho_j$, and $VK_j=V_j$, so
-    $V^{\otimes M}\ket{\Omega'}=\sum_j\alpha_j\ket{s_j}$ with
-    $\ket{s_j}=\ket{\phi_M(V_jP_{j,\infty})}$, while
-    $\ket{\phi_N(A)}=\sum_j\mu_j^N\ket{t_j}$ with
-    $\ket{t_j}=\ket{\phi_N(A_j)}$. The tensors generating $s_j$, $t_j$, $s_{j'}$
-    and $t_{j'}$ have mixed transfer maps equal to zero for $j\neq j'$, because
-    $B_j^\dagger B_{j'}=0$ and hence $V_j^\dagger B_{j'}=V_j^\dagger V_{j'}=0$;
-    so all cross overlaps vanish.
-
-    Let $q$ be at least the injectivity lengths of all blocks; the smaller $q$
-    are covered by $\varepsilon\leq1$ once $C$ is large. Then
-    $\braket{s_j}{s_j}=1$, $\braket{s_j}{t_j}=z_j$ with
-    $z_j=\bra{\phi_M(P_{j,\infty})}\phi_M(P_{j,q})\rangle$, and
-    $\braket{t_j}{t_j}=c_j=\Tr\E_{A_j}^{\,N}$. With $p_j=\mu_j^{2N}$ this gives
-    \begin{align*}
-        \lvert\braket{\widetilde\phi_N}{\phi_N}\rvert
-        =\frac{\bigl\lvert\sum_jp_jz_j\bigr\rvert}
-        {\bigl(\sum_jp_j\bigr)^{1/2}\bigl(\sum_jp_jc_j\bigr)^{1/2}}.
-    \end{align*}
-    For weights $w_j=p_j/\sum_lp_l$ put $a=\sum_jw_jz_j$ and
-    $s^2=\sum_jw_jc_j$. Then $\lvert a-1\rvert\leq\sum_j\lvert z_j-1\rvert$ and
-    $\lvert s^2-1\rvert\leq\sum_j\lvert c_j-1\rvert=:\eta$. If $\eta>1/2$ then
-    $\varepsilon\leq1<2\eta$. Otherwise $s\geq1/2$ and
-    $\varepsilon=(s-\lvert a\rvert)/s\leq2\bigl(\lvert s-1\rvert+\lvert a-1\rvert\bigr)$,
-    so in both cases
-    $\varepsilon\leq2\sum_j\bigl(\lvert z_j-1\rvert+\lvert c_j-1\rvert\bigr)$.
-    The proof of Lemma~\ref{lem:ldp_positive_part_overlap} bounds
-    $\lvert z_j-1\rvert$ itself, not only $\bigl\lvert1-\lvert z_j\rvert\bigr\rvert$,
-    by $C_jy\,e^{C_jy}$, and the proof of
-    Theorem~\ref{thm:ldp_approximation_error_normal} gives
-    $\lvert c_j-1\rvert\leq K_je^{-2\gamma N/\xi}\leq K_jy$. Summing over the
-    blocks gives the second bound, and the first follows as in
-    Theorem~\ref{thm:ldp_approximation_error_normal}, because $\varepsilon\leq1$.
+    If the $q$-site states of distinct blocks are orthogonal for no $q$, there is
+    nothing to prove. Otherwise let them be orthogonal at $q_0$, and let $B_j$ be
+    the $q_0$-site blocked map of $A_j$. The entries of the mixed transfer map
+    $Z\mapsto\sum_iB_j^iZ(B_{j'}^i)^\dagger$ are sums
+    $\sum_iB_j^{i}{}_{ab}\overline{B_{j'}^{i}{}_{a'b'}}$, the complex conjugates of
+    the entries of $B_{j'}^\dagger B_j=0$, so this map vanishes. It is
+    $\E_{jj'}^{\,q_0}$, so $\E_{jj'}$ is nilpotent and all its eigenvalues are
+    zero. Hence $\lambda_2$ also bounds the moduli of the eigenvalues of the mixed
+    transfer maps, and Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
+    with $w_j=\mu_j$ gives both bounds, with a constant that does not depend on the
+    weights.
 \end{proof}
 
 \input{chapter/ch32_log_depth_repeated_blocks}

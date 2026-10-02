@@ -581,7 +581,7 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
         (fun _ _ => Finset.sum_nonneg fun _ _ => (hCz _ _).le) (Finset.mem_univ j))
   have hCs0 : 0 ≤ Cs := Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => (hCz _ _).le
   obtain ⟨Kt, hKt, hnorm⟩ := exists_abs_sum_norm_sq_sum_mpv_sub_le hN hA hσ htr hfix hl hlam
-    hmix hγ0 hγ
+    hmix hγ0 (by linarith)
   set C' := (b : ℝ) ^ 2 * Cs + Cs + Kt + 1
   have hC' : 1 ≤ C' := by have : 0 ≤ (b : ℝ) ^ 2 * Cs := by positivity
                           linarith

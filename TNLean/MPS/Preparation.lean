@@ -14,13 +14,13 @@ import TNLean.MPS.Preparation.BlockApproximationError
 import TNLean.MPS.Preparation.BlockGateUnitary
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.BlockSites
+import TNLean.MPS.Preparation.BlockSumError
 import TNLean.MPS.Preparation.BlockSumUnitary
 import TNLean.MPS.Preparation.BlockUnitary
 import TNLean.MPS.Preparation.BlockVariance
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.CircuitComposition
 import TNLean.MPS.Preparation.CircuitEquivalence
-import TNLean.MPS.Preparation.ComplexWeightError
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.ControlledGateProducts
 import TNLean.MPS.Preparation.ControlledGates
@@ -59,7 +59,6 @@ import TNLean.MPS.Preparation.NormalGauge
 import TNLean.MPS.Preparation.ObservableTransferBound
 import TNLean.MPS.Preparation.OneCopyPairState
 import TNLean.MPS.Preparation.OneDimensionalBlocks
-import TNLean.MPS.Preparation.OrthogonalBlockError
 import TNLean.MPS.Preparation.OrthogonalBlockSum
 import TNLean.MPS.Preparation.OrthogonalSumPolar
 import TNLean.MPS.Preparation.OverlappingBlockCounterexample
