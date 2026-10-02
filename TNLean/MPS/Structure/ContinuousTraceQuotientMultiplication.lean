@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixGramLeftInverse
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Topology.Instances.Matrix
@@ -51,20 +52,7 @@ theorem continuous_traceQuotientProductCoordinates
     (hInj : ∀ t, Function.Injective (G t * F).mulVec) :
     Continuous fun t => traceQuotientProductCoordinates (G t) F (R t) := by
   have hC : Continuous fun t => G t * F := hG.matrix_mul continuous_const
-  have hGram : Continuous fun t => (G t * F)ᴴ * (G t * F) :=
-    hC.matrix_conjTranspose.matrix_mul hC
-  have hInv : Continuous fun t => ((G t * F)ᴴ * (G t * F))⁻¹ := by
-    apply continuous_iff_continuousAt.mpr
-    intro t
-    have hUnit := (Matrix.PosDef.conjTranspose_mul_self _ (hInj t)).isUnit
-    have hUnitDet := (Matrix.isUnit_iff_isUnit_det _).mp hUnit
-    obtain ⟨u, hu⟩ := hUnitDet
-    have hDetInv : ContinuousAt Ring.inverse ((G t * F)ᴴ * (G t * F)).det := by
-      rw [← hu]
-      exact NormedRing.inverse_continuousAt u
-    exact (continuousAt_matrix_inv _ hDetInv).comp'
-      (f := fun s : T => (G s * F)ᴴ * (G s * F)) hGram.continuousAt
-  exact (hInv.matrix_mul hC.matrix_conjTranspose).matrix_mul hR
+  exact (continuous_gramLeftInverse _ hC hInj).matrix_mul hR
 
 /-- A rank-r matrix admits a fixed section on which it is injective. -/
 theorem exists_fixedSection_of_rank {d r : ℕ}

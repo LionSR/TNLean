@@ -289,16 +289,19 @@ theorem MPSTensor.exists_local_continuous_canonicalNormalization_of_isInjective
       (fun t => (hdata t).2.2.2.2.2.1) p₀
       (adjointFixedSpace_finrank_eq_one_of_unital_injective
         (B p₀) hB₀ (hdata p₀).2.2.2.2.2.1)
-  obtain ⟨u, huopen, hu⟩ := isOpen_induced_iff.mp hqopen
-  have ht₀u : t₀ ∈ u := by simpa only [← hu, Set.mem_preimage, p₀] using hp₀
-  let j : ↥(s ∩ u) → s := fun t => ⟨t.val, t.property.1⟩
-  have hjq : ∀ t, j t ∈ q := fun t => by
-    simpa only [← hu, Set.mem_preimage, j] using t.property.2
-  let k : ↥(s ∩ u) → q := fun t => ⟨j t, hjq t⟩
+  let w : Set S := Subtype.val '' q
+  have hSub : w ⊆ s := by
+    rintro t ⟨p, _, rfl⟩
+    exact p.property
+  let j : w → s := fun t => ⟨t.val, hSub t.property⟩
+  have hjq : ∀ t, j t ∈ q := by
+    rintro ⟨t, ⟨p, hp, rfl⟩⟩
+    exact hp
+  let k : w → q := fun t => ⟨j t, hjq t⟩
   have hjcont : Continuous j :=
-    continuous_subtype_val.subtype_mk (fun t => t.property.1)
+    continuous_subtype_val.subtype_mk (fun t => hSub t.property)
   have hkcont : Continuous k := hjcont.subtype_mk hjq
-  refine ⟨s ∩ u, hsopen.inter huopen, ⟨ht₀, ht₀u⟩,
+  refine ⟨w, hsopen.isOpenMap_subtype_val q hqopen, ⟨p₀, hp₀, rfl⟩,
     B ∘ j, ρ ∘ j, r ∘ j, σ ∘ k,
     hB.comp hjcont, hρ.comp hjcont, hr.comp hjcont, hσcont.comp hkcont, ?_⟩
   exact fun t => ⟨hdata (j t), hσdata (k t)⟩

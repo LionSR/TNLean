@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixBilinearCoordinates
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Topology.Instances.Matrix
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.Matrix.BilinearForm
-import Mathlib.Algebra.Group.InjSurj
 import TNLean.MPS.Structure.TraceQuotientTripleContinuity
 
 /-!
@@ -21,8 +21,7 @@ point, left multiplication by its unit stays invertible; applying its inverse
 to the base unit recovers the nearby units continuously. No continuous choice
 of a minimal tensor, normalization scalar, or algebra identification is used.
 
-**Scope restriction (constant minimal dimension):** This is an auxiliary
-finite-dimensional construction for arXiv:1010.3732,
+This is an auxiliary finite-dimensional construction for arXiv:1010.3732,
 Section II.F.2, lines 953–993. It does not infer constant minimal dimension from
 a physical gap or construct a continuous realization at a change of dimension;
 see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
@@ -65,12 +64,10 @@ private theorem exists_local_continuous_unit
     have hInv : Continuous fun t : S => (M t)⁻¹ := by
       apply continuous_iff_continuousAt.mpr
       intro t
-      obtain ⟨u, hu⟩ := (Matrix.isUnit_iff_isUnit_det _).mp t.property
-      have hDet : ContinuousAt Ring.inverse (M t).det := by
-        rw [← hu]
-        exact NormedRing.inverse_continuousAt u
-      exact (continuousAt_matrix_inv _ hDet).comp'
-        (f := fun s : S => M s) (hM.comp continuous_subtype_val).continuousAt
+      obtain ⟨u, hu⟩ := t.property
+      have hAt : ContinuousAt Ring.inverse (M t) := hu ▸ NormedRing.inverse_continuousAt u
+      simpa only [Function.comp_def, Matrix.nonsing_inv_eq_ringInverse] using
+        hAt.comp' (f := fun s : S => M s) (hM.comp continuous_subtype_val).continuousAt
     exact hInv.matrix_mulVec continuous_const
   · intro t ht
     obtain ⟨e, heL, heR⟩ := hUnits t
@@ -85,14 +82,6 @@ end LinearMap
 
 namespace Matrix
 
-private theorem bilinearCoordinates_apply {r : ℕ}
-    (M : Matrix (Fin r) (Fin r × Fin r) ℂ) (x y : Fin r → ℂ) :
-    Matrix.toLinearMap₂' ℂ (Matrix.of fun a b => fun i => M i (a, b)) x y =
-      M *ᵥ (fun ij => x ij.1 * y ij.2) := by
-  rw [Matrix.toLinearMap₂'_apply (R := ℂ)]
-  ext i
-  simp only [Matrix.mulVec, dotProduct, Fintype.sum_prod_type, Finset.sum_apply,
-    Pi.smul_apply, smul_eq_mul, Matrix.of_apply, mul_assoc, mul_comm]
 
 private theorem exists_local_continuous_unit_of_matrixAlgebra
     {T : Type*} [TopologicalSpace T] {r : ℕ}
@@ -115,13 +104,13 @@ private theorem exists_local_continuous_unit_of_matrixAlgebra
     let : MulOneClass (Fin r → ℂ) := E.injective.mulOneClass E
       (E.apply_symm_apply 1) (fun x y => by
         change E (μ t x y) = E x * E y
-        simpa only [μ, bilinearCoordinates_apply] using hE x y)
+        simpa only [μ, toLinearMap₂'_apply_mulVec_prod] using hE x y)
     exact ⟨E.symm 1, one_mul, mul_one⟩
   obtain ⟨u₀, hu₀, _⟩ := hUnits t₀
   have hLeft : Continuous fun t => LinearMap.toMatrix' (μ t u₀) := by
     apply continuous_matrix
     intro i j
-    simpa only [LinearMap.toMatrix'_apply, μ, bilinearCoordinates_apply,
+    simpa only [LinearMap.toMatrix'_apply, μ, toLinearMap₂'_apply_mulVec_prod,
       Function.comp_def] using
       (continuous_apply i).comp (hM.matrix_mulVec (continuous_const
         (y := fun ij : Fin r × Fin r => u₀ ij.1 * (Pi.single j (1 : ℂ) : Fin r → ℂ) ij.2)))
@@ -129,8 +118,8 @@ private theorem exists_local_continuous_unit_of_matrixAlgebra
     LinearMap.exists_local_continuous_unit μ hUnits t₀ u₀ hu₀ hLeft
   refine ⟨S, fun t => (LinearMap.toMatrix' (μ t u₀))⁻¹ *ᵥ u₀, hS, ht₀, hCont, ?_⟩
   intro t ht x
-  exact ⟨(bilinearCoordinates_apply _ _ _).symm.trans ((hUnit t ht).1 x),
-    (bilinearCoordinates_apply _ _ _).symm.trans ((hUnit t ht).2 x)⟩
+  exact ⟨(toLinearMap₂'_apply_mulVec_prod _ _ _).symm.trans ((hUnit t ht).1 x),
+    (toLinearMap₂'_apply_mulVec_prod _ _ _).symm.trans ((hUnit t ht).2 x)⟩
 
 end Matrix
 
