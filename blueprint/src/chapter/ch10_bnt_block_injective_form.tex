@@ -178,12 +178,14 @@ span after blocking.
 \begin{theorem}[Sharp simultaneous span under a total-dimension bound]
     \label{thm:cpsv_bnt_sharp_span_ambient_cap}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
+        exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five,
+        MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_positive_wordTupleSpanTop_le_three_cap_pow_five}
     \leanok
     \uses{def:bnt_cpsv, def:blockwise_product_word_span}
     Let $(A_j)_{j=1}^{g}$ be a basis of normal tensors with bond dimensions
     $D_j$. If $K>0$ and $\sum_jD_j\leq K$, then there is a positive integer
-    $L\leq3K^5$ such that
+    $L$ with $L+1\leq3K^5$, in particular $L\leq3K^5$, such that
     \begin{align}
         \spn_{\C}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=L\}
          & =\prod_{j=1}^{g}\MN{D_j}.
@@ -208,7 +210,9 @@ span after blocking.
     \end{align}
     Positivity of the $D_j$ gives
     $g=\sum_j1\leq\sum_jD_j\leq K$, and hence
-    $L\leq3(K-1)(K^4+1)\leq3K^5$.
+    $L+1\leq3(K-1)(K^4+1)+1\leq3K^5$, because
+    $(K-1)(K^4+1)=(K-1)K^4+K-1<K^5$. In the cases $g=0$ and $g=1$ the bound
+    $L+1\leq3K^5$ holds since $K\geq1$.
 \end{proof}
 
 % Source anchors: CPSV16 lines 219--225 and 265--301.
