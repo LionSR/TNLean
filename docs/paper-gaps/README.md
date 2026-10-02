@@ -862,10 +862,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   of `N` sites; open.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
-  (paragraph "Connection to MERA") is formalized for tensors whose two-site
-  blocked tensor is injective, so that every layer is an isometry, and for
-  chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
-  a coarser last block remove the two restrictions.
+  (paragraph "Connection to MERA") was first formalized for tensors whose
+  two-site blocked tensor is injective and chain lengths `N = M 2^{k+1}`;
+  finest isometries writing registers of `s` sites, with the tensor blocked
+  over `s` sites injective, cover every normal tensor for the chain lengths
+  `N = M s 2^{k+1}`; open: trees on leaves of unequal widths for every chain
+  length.
 - `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
   that the claim that states in the same phase are related by a log-depth
   circuit is formalized only between two normal tensors.

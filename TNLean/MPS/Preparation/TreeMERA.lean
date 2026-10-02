@@ -57,11 +57,12 @@ class is therefore a subclass of the finite-range MERA with `k + 2` layers.
 `approximatingMPVState_eq_state_treeMERA`, `exists_state_treeMERA_approximationError_le` and
 `exists_state_treeMERA_approximationError_le_and_le_logb` (and the definition `treeMERA`) assume
 that the two-site blocked tensor is injective, so that every layer `V⁽ʲ⁾` is an isometry, as in
-the source, whose eq. (16) starts from a blocked tensor and calls the layers isometries; a normal
-tensor satisfies this after blocking a number of sites independent of `N`. The chain length is
+the source, whose eq. (16) starts from a blocked tensor and calls the layers isometries.
+`TNLean.MPS.Preparation.TreeMERARegisters` applies `treeMERA` to the tensor blocked over `s`
+sites, with registers of `s` sites, and covers every normal tensor. The chain length is
 `N = M 2^{k+1}`: the layer count holds for the chain lengths `M 2^{k+1}` with `k` given by the
-threshold, not for every fixed `N` and `ε` (for `N = 2p` with `p` odd only `k = 0` is
-available). Documented in `docs/paper-gaps/mswc24_tree_mera_scope.tex`.
+threshold, not for every fixed `N` and `ε` (for `N = 2p` with `p` odd only `k = 0` is available).
+Documented in `docs/paper-gaps/mswc24_tree_mera_scope.tex`.
 
 ## References
 

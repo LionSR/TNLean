@@ -5,7 +5,7 @@
 \input{command}
 \title{The Tree Circuit as a Multiscale Network: Two-Site Injectivity and Chain Length}
 \author{}
-\date{2026-09-30}
+\date{2026-09-30; two-site injectivity resolved 2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -29,8 +29,8 @@ polar decomposition of a two-site blocked map; it is an isometry exactly when
 that map is injective. For $d^2<D^2$ the lowest layer, a map from $\mathbb{C}^{D^2}$ to
 $(\mathbb{C}^d)^{\otimes2}$, cannot be an isometry at all.
 
-\section{The restriction adopted}
-The formal statements\footnote{Formal declarations:
+\section{The restrictions formerly adopted}
+The first formal statements\footnote{Formal declarations:
     \leanid{MPSPreparation.approximatingMPVState_eq_state_treeMERA},
     \leanid{MPSPreparation.exists_state_treeMERA_approximationError_le}, and
     \leanid{MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
@@ -52,32 +52,59 @@ is at most $\varepsilon$ once $2^{k+1}\ge\xi\log(CN/\varepsilon)$, with
 $\xi=-1/\log t$ for a bound $0<t<1$ on the moduli of the subleading
 eigenvalues of the transfer map and $C$ depending on $A$ and $t$. For every
 number $M$ of blocks such a $k$ exists, and the least one satisfies
-$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$, which is the source's
-$O(\log\log(N/\varepsilon))$ count along the chain lengths $N=M2^{k+1}$ so
-obtained. For a fixed chain length and accuracy the count is not proved: for
-$N=2p$ with $p$ odd only $k=0$ is available, and the threshold fails once
-$\varepsilon$ is small; this is the second restriction below.
+$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$. These statements remain, as
+the case of injective two-site blocked tensors.
 
-\section{Elimination}
-\begin{enumerate}
-    \item \emph{Two-site injectivity.} A normal tensor has an injectivity length
-          $L_0$ independent of $N$. The tensor $A$ blocked over $L_0$ sites has
-          an injective one-site, hence two-site, blocked tensor, is again normal,
-          and generates $\ket{\phi_{NL_0}}$ from $\ket{\phi_N}$ of the blocked
-          tensor after the regrouping of sites. Applying the statements to it
-          gives networks on sites of dimension $d^{L_0}$, a constant, which is
-          what the source's picture, starting from a blocked tensor, shows.
-          What remains is to transport the gauge data (left-canonical form, the
-          fixed point $\sigma$ and the bound on the subleading eigenvalues,
-          raised to the power $L_0$) to the blocked tensor.
-    \item \emph{Chain length.} The unequal blocks of the depth bound for every
-          chain length (the note on divisible lengths) let the last block have
-          length $q'$ with $q\le q'<2q$. A complete binary tree has $2^{k+1}$
-          leaves, so the last block needs either one extra isometry layer
-          $\mathbb{C}^{D^2}\to(\mathbb{C}^d)^{\otimes r}$ with $r\le 3$ at its lowest level, or a
-          network whose last site is coarser; either extends the definition of
-          the network and is left open.
-\end{enumerate}
+\section{Resolution of the injectivity restriction}
+The finest isometries of the network now write \emph{registers} of $s$ sites,
+where $A$ blocked over $s$ sites is injective, as in the source's picture,
+which starts from a blocked tensor.\footnote{Formal declarations:
+    \leanid{MPSPreparation.BinaryMERA.registerState},
+    \leanid{MPSPreparation.approximatingMPVState_eq_registerState_treeMERA},
+    \leanid{MPSPreparation.exists_registerState_treeMERA_approximationError_le},
+    \leanid{MPSPreparation.exists_registerState_treeMERA_approximationError_le_and_le_logb},
+    and
+    \leanid{MPSPreparation.exists_binaryMERA_registerState_approximationError_le}
+    in \doclink{TNLean/MPS/Preparation/TreeMERARegisters}.}
+Let $B$ be $A$ blocked over $s$ sites. The two-site blocked tensor of $B$ is
+$A$ blocked over $2s$ sites, which is injective, so the network of $B$ is
+defined, with finest isometry $\mathbb{C}^{D^2}\to\mathbb{C}^{d^s}\otimes\mathbb{C}^{d^s}$. Blocking $B$
+over $2^{k+1}$ sites is blocking $A$ over $q=s2^{k+1}$ sites, read through the
+grouping of the sites into registers, so the state of the network of $B$, read
+on the $N=Ms2^{k+1}$ sites, is the approximating state of eq.~(10) of $A$ itself
+with block length $q$. The approximation error of $A$ applies directly, so no
+gauge data need to be transported to $B$: there is $C>0$, independent of $s$,
+such that the error is at most $\varepsilon$ once
+$s2^{k+1}\ge\xi\log(CN/\varepsilon)$, and the least such $k$ satisfies
+$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$.
+
+For an arbitrary normal tensor $A$ with $D\ge1$, the gauge of eq.~(5) is
+reached by a gauge transformation and a rescaling, which changes the
+normalized state by a phase only, and the blocked tensors of the gauged tensor
+are injective from some length $L$ on. Hence there are $s_0\ge1$, $\xi>0$ and
+$C>0$ such that for every $s\ge s_0$, every $\varepsilon>0$ and every $M\ge1$
+some network with sites of dimension $d^s$ and $k+1$ isometry layers,
+$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$, has error at most
+$\varepsilon$ against $\ket{\phi_N}$, $N=Ms2^{k+1}$. Every normal tensor is
+covered.
+
+\section{The remaining restriction: the chain length}
+The chain length is $N=Ms2^{k+1}$ with $k$ given by the threshold: the network
+consists of $M$ complete binary trees on equal registers. The layer count holds
+along the chain lengths so obtained, not for every fixed $N$ and $\varepsilon$
+with registers of bounded length: for $N=2p$ with $p$ odd only $k=0$ is
+available, so the threshold forces $s\ge\xi\log(CN/\varepsilon)/2$, and the
+dimension $d^s$ of the sites of the network grows with $N/\varepsilon$.
+
+\section{Elimination plan}
+The unequal blocks of the depth bound for every chain length (the note on
+divisible lengths) let the last block have length $q'$ with $q\le q'<2q$, and
+the trees on leaves of unequal widths of the preparation with measurements (the
+note on the tree circuit with measurements) cut a block of any length into
+$2^{h+1}$ leaves of at least $2s$ sites. A network whose trees have leaves of
+unequal widths, with finest isometries from $\mathbb{C}^{D^2}$ to the sites of a leaf,
+would cover every $N$; it is not translation invariant at the finest level,
+and it extends the definition of the network. This is left open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
