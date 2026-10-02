@@ -8,7 +8,64 @@ import TNLean.PEPS.GIsometric
 import Mathlib.LinearAlgebra.Contraction
 
 /-!
-# DOC
+# Stability of G-isometry under the two-dimensional link contraction
+
+**Source.** Schuch, Cirac, Pérez-García 2010 (arXiv:1001.3807), `Papers/1001.3807/paper_v3.tex`:
+
+* Definition 6.1 (`def:iso:isopeps`), lines 1692–1700: a `G`-injective PEPS is `G`-isometric if
+  `U_g = L_g` is the left-regular representation, `L_g|h⟩ = |gh⟩`, and `𝒫(A)⁻¹ = 𝒫(A†)`;
+* Lemma 6.2 (`lemma:iso:iso-stable-under-concat`), lines 1704–1716: `G`-isometry is stable under
+  concatenation. The proof: for `U_g = L_g`, `Δ = |G|⁻¹ 𝟙`, so the left inverse of the
+  concatenated tensor, built in equation `eq:noninj:linv` and, in two dimensions, in figure
+  `figs3/ab-inv.pdf` of Lemma 5.2 (lines 1319–1344), is the contraction of the adjoints of the
+  two factors, which is the adjoint of the contraction.
+
+**Formalized here.** The two-dimensional concatenation is the contraction of one link of two
+tensors (`TNLean.PEPS.linkContraction`, Lemma 5.2): the right leg of `A`, with virtual system
+`W_A ⊗ ℂ[G]^*`, is contracted with the left leg of `B`, with virtual system `ℂ[G] ⊗ W_B`. In the
+coordinates of the group elements on the link and of coordinate bases `ℂ^α`, `ℂ^β` of the
+remaining legs and of the physical systems (`linkLeftCoord`, `linkRightCoord`, `pairCoord`,
+`tensorCoord`), the contraction is `linkContractionCoord`,
+`C_{(k, l), (a, b)} = ∑_g A_{k, (a, g)} B_{l, (g, b)}`
+(`tensorCoord_comp_linkContraction_comp_pairCoord`). In these coordinates the representations
+`σ_A ⊗ L^*` and `L ⊗ σ_B` of the two virtual systems are the Kronecker representations
+`σ_A ⊗ L` and `L ⊗ σ_B` of `kroneckerRep`, with `L = leftRegularFun` the left-regular
+representation on `ℂ^G` (`linkLeftCoord_comp_kroneckerRep`, `linkRightCoord_comp_kroneckerRep`,
+`coeff_leftRegular`), and `G`-isometry is `TNLean.PEPS.IsGIsometric`, with its positive factor.
+
+For a unitary representation, `G`-isometry is `𝒫(A)† 𝒫(A) = c_A Π`
+(`conjTranspose_toMatrix'_mul_toMatrix'`). The Gram matrix of the contraction is the
+contraction of the two Gram matrices; on the link the two group elements `g`, `h` of the two
+projectors meet in `∑_{k, k'} (L_g)_{k k'} (L_h)_{k k'} = |G| δ_{g, h}`, which is the step
+`Δ = |G|⁻¹ 𝟙` of the source, so `𝒫(C)† 𝒫(C) = c_A c_B Π`
+(`conjTranspose_linkContractionMatrix_mul_eq`). Hence the left inverse of `𝒫(C)` is
+`(c_A c_B)⁻¹ 𝒫(C)†` (`toLin'_conjTranspose_comp_linkContractionCoord`), and Lemma 6.2 in two
+dimensions is `IsGIsometric.linkContraction`, with the factors multiplying.
+
+The representations `σ_A`, `σ_B` of the remaining legs are required to be unitary. In the
+source every leg of a `G`-isometric tensor carries the left-regular representation or its
+contragredient, both unitary, so this is implied by the source's hypotheses; the theorem is
+stated for any unitary representations on these legs.
+
+## Main definitions
+
+* `TNLean.PEPS.leftRegularFun`: the left-regular representation on `ℂ^G`.
+* `TNLean.PEPS.kroneckerRep`: the tensor product of two representations on coordinate spaces.
+* `TNLean.PEPS.linkContractionCoord`: the contraction of one link in coordinates.
+
+## Main results
+
+* `TNLean.PEPS.conjTranspose_toMatrix'_mul_toMatrix'`: `𝒫(A)† 𝒫(A) = c Π`.
+* `TNLean.PEPS.conjTranspose_linkContractionMatrix_mul_eq`: `𝒫(C)† 𝒫(C) = c_A c_B Π`.
+* `TNLean.PEPS.IsGIsometric.linkContractionCoord`, `TNLean.PEPS.IsGIsometric.linkContraction`:
+  Lemma 6.2 in two dimensions.
+* `TNLean.PEPS.tensorCoord_comp_linkContraction_comp_pairCoord`: the coordinate form of
+  `linkContraction`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open Module LinearMap Representation TensorProduct
@@ -107,7 +164,7 @@ theorem star_averageMap_dotProduct {ρ : Representation ℂ G (ι → ℂ)}
     (hρ : ∀ g, LinearMap.toMatrix' (ρ g) ∈ Matrix.unitaryGroup ι ℂ) (u w : ι → ℂ) :
     star (ρ.averageMap u) ⬝ᵥ w = star u ⬝ᵥ ρ.averageMap w := by
   have hg : ∀ g, star (ρ g u) ⬝ᵥ w = star u ⬝ᵥ ρ g⁻¹ w := fun g => by
-    have h := dotProduct_mulVec_of_mem_unitaryGroup (hρ g) u (ρ g⁻¹ w)
+    have h := Matrix.star_mulVec_dotProduct_mulVec_of_mem_unitary (hρ g) u (ρ g⁻¹ w)
     simp only [← Matrix.toLin'_apply, Matrix.toLin'_toMatrix'] at h
     rw [← h, ← Module.End.mul_apply, ← map_mul, mul_inv_cancel, map_one, Module.End.one_apply]
   rw [averageMap_apply_eq_sum, averageMap_apply_eq_sum, star_smul, smul_dotProduct,
@@ -129,7 +186,8 @@ theorem conjTranspose_toMatrix'_mul_toMatrix' {ρ : Representation ℂ G (ι →
   ext i j
   have key : star (T (Pi.single i 1)) ⬝ᵥ T (Pi.single j 1) =
       c * ρ.averageMap (Pi.single j 1) i := by
-    rw [← apply_averageMap_of_forall_comp_eq hinv, ← apply_averageMap_of_forall_comp_eq hinv (Pi.single j 1),
+    rw [← apply_averageMap_of_forall_comp_eq hinv,
+      ← apply_averageMap_of_forall_comp_eq hinv (Pi.single j 1),
       hc _ (ρ.averageMap_invariant _) _ (ρ.averageMap_invariant _),
       star_averageMap_dotProduct hρ, averageMap_id _ _ (ρ.averageMap_invariant _)]
     simp [dotProduct, Pi.single_apply]
@@ -358,8 +416,9 @@ theorem dualTensorHom_sum_coord_tmul {E κ : Type*} [AddCommGroup E] [Module ℂ
 
 /-- The link vector in any finite basis: `∑_i e_i^* ⊗ e_i`. -/
 theorem linkVector_eq_sum_basis {E ι : Type*} [AddCommGroup E] [Module ℂ E]
-    [FiniteDimensional ℂ E] [Fintype ι] [DecidableEq ι] (b : Basis ι ℂ E) :
+    [FiniteDimensional ℂ E] [Fintype ι] (b : Basis ι ℂ E) :
     (linkVector : Module.Dual ℂ E ⊗[ℂ] E) = ∑ i, b.coord i ⊗ₜ b i := by
+  classical
   apply (dualTensorHomEquivOfBasis (N := E) b).injective
   have hlv : (linkVector : Module.Dual ℂ E ⊗[ℂ] E) =
       ∑ i, (Basis.ofVectorSpace ℂ E).coord i ⊗ₜ (Basis.ofVectorSpace ℂ E) i := by
@@ -492,7 +551,8 @@ theorem linkRightCoord_comp_kroneckerRep (σB : Representation ℂ G (β → ℂ
       σB g (Pi.single p.2 1) := by
     funext b''
     simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
-  have h3 : MonoidAlgebra.basis G ℂ (g * p.1) = leftRegular ℂ G g (MonoidAlgebra.basis G ℂ p.1) := by
+  have h3 : MonoidAlgebra.basis G ℂ (g * p.1) =
+      leftRegular ℂ G g (MonoidAlgebra.basis G ℂ p.1) := by
     simp [MonoidAlgebra.basis_apply, ofMulAction_single, smul_eq_mul]
   simp only [Pi.basisFun_apply, LinearMap.comp_apply, linkRightCoord_single, tprod_apply,
     TensorProduct.map_tmul, h1, map_sum, map_smul, ← h3, ← h2, TensorProduct.tmul_sum,
@@ -517,7 +577,8 @@ theorem pairCoord_comp_kroneckerRep (σA : Representation ℂ G (α → ℂ))
     simp
   have h2 : ∀ (ρ : Representation ℂ G (α → ℂ)) (a : α),
       (∑ a', LinearMap.toMatrix' (ρ g) a' a • Pi.single a' (1 : ℂ)) = ρ g (Pi.single a 1) :=
-    fun ρ a => funext fun a'' => by simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
+    fun ρ a => funext fun a'' => by
+      simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
   have h2' : (∑ b', LinearMap.toMatrix' (σB g) b' p.2 • Pi.single b' (1 : ℂ)) =
       σB g (Pi.single p.2 1) :=
     funext fun b'' => by simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
