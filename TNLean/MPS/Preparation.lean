@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Preparation
 
+import TNLean.MPS.Preparation.AllLengthPolynomialAccuracy
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.BlockApproximationError

@@ -120,19 +120,21 @@ open scoped Matrix.Norms.L2Operator in
 /-- **Telescoping bound for products of mixed transfer matrices.** In the setting of
 `exists_norm_polarPos_blockTensor_sub_le`, write `τ_L` for the mixed transfer matrix of the
 positive part `P_L` of the `L`-site blocked tensor against the fixed-point tensor `P_∞`, and
-`τ_∞` for that of `P_∞` against itself. There are `K ≥ 0` and `C > 0` such that
+`τ_∞` for that of `P_∞` against itself. For `0 < γ < 1`, there are `K ≥ 0` and `C > 0` such that
 `‖τ_L - τ_∞‖ ≤ K e^{-γ L/ξ}` for every `L`, and every family of matrices `X j` with
 `‖X j - τ_∞‖ ≤ K e^{-γ q/ξ}` satisfies `|Tr(X_0 ⋯ X_{M-1}) - 1| ≤ C y e^{C y}` for `M ≥ 1`,
 with `y = M e^{-γ q/ξ}`.
 
 arXiv:2103.13367, Supplemental Material, "Proof of Theorem MPS_classification", eqs.
 `final_eq` to `finished`: `τ_∞` is idempotent with `Tr τ_∞^M = 1`, and the telescoping estimate
-bounds the distance of the product from `τ_∞^M`. -/
+bounds the distance of the product from `τ_∞^M`. The full rate range follows from the
+Lipschitz estimate `exists_norm_polarPos_blockTensor_sub_le`, whose source is
+arXiv:2606.24475, Appendix B3, eqs. (S27)–(S38). -/
 theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d D)
     (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K C : ℝ, 0 ≤ K ∧ 0 < C ∧
       (∀ L : ℕ, ‖transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A L))
           (fixedPointTensor σ)) -
@@ -147,7 +149,7 @@ theorem exists_norm_trace_prod_range_transferMatrix_sub_one_le (A : MPSTensor d 
             Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K₁, hK₁, hpos⟩ :=
-    exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 (by linarith)
+    exists_norm_polarPos_blockTensor_sub_le A hN hA hσ htr hfix hlam hγ0 hγ
   set Ψ := mixedTransferMatrixLeft (fixedPointTensor σ)
   set K₃ := ‖LinearMap.toContinuousLinearMap Ψ‖
   have hK₃ : 0 ≤ K₃ := norm_nonneg _
@@ -225,7 +227,8 @@ theorem exists_norm_mpvOverlap_polarPosTensor_sub_one_le (A : MPSTensor d D)
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨K, C, -, hC, hδ, h⟩ :=
-    exists_norm_trace_prod_range_transferMatrix_sub_one_le A hN hA hσ htr hfix hlam hγ0 hγ
+    exists_norm_trace_prod_range_transferMatrix_sub_one_le A hN hA hσ htr hfix hlam
+      hγ0 (by linarith)
   refine ⟨C, hC, fun q M _ => ?_⟩
   have := h q M _ fun _ => hδ q
   rwa [List.map_const', List.length_range, List.prod_replicate,
