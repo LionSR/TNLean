@@ -19,7 +19,8 @@
 
 Section~II.B.3 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete~\cite{Cirac2021Matrix}
 notes that the transfer matrix $E$ need not be Hermitian and ``may have some
-Jordan blocks'', and assumes only that the leading eigenvalue is simple.
+Jordan blocks'', and assumes a unique eigenvalue of largest modulus which
+is algebraically simple.
 It then states that a connected correlator at distance $n$ has the form
 \begin{align}
     C(X,Y;n) & =\sum_{i=2}^{D^2} c_{XY}(i)\,\lambda_i^n,
@@ -31,8 +32,8 @@ $|\lambda_2|$.\footnote{Source location:
 
 \section{The deviation}
 
-Gauge the tensor so that its transfer map is trace preserving with fixed state
-$\rho$; the traceless matrices are then invariant.
+In trace-preserving gauge with fixed state $\rho$, the traceless matrices
+are invariant.
 Equation~(\ref{eq:cpgsv21_correlator_pure_exponentials}) holds when the
 transfer map, restricted to the traceless matrices, is diagonalizable. If that
 restriction has a Jordan block $J=\lambda I+N$ of size $k+1$, then
@@ -113,39 +114,41 @@ finite nilpotent transient.
 
 The blueprint chapter on correlations states the expansion under the explicit
 hypothesis that the restriction of the transfer map to the traceless matrices
-is diagonalizable, and states the decay bound at every rate $r$ with
-$\operatorname{spr}(E-P)<r<1$, with $\operatorname{spr}$ the spectral radius, where $P$ is the projection onto the fixed state; the rate $|\lambda_2|$ is recorded only for
-the diagonalizable case. The physical connected-correlation bound is
-formalized in trace-preserving gauge for independent finite supports and all
-distances. Normality and
-trace preservation imply the complementary spectral gap, so no gap
-certificate or diagonalizability hypothesis is supplied separately. The
-eigenbasis expansion remains unformalized.
+is diagonalizable. It states the decay bound at every rate $r$ with
+$\operatorname{spr}(E-P)<r<1$, where $P$ is the projection onto the fixed state.
+Normality and trace preservation imply this complementary spectral gap; no
+gap certificate or diagonalizability hypothesis is supplied separately.
+The eigenbasis expansion remains unformalized.
 
-\paragraph{Remaining gauge scope.}
-The normality-based gap and decay results assume
-$\sum_i(A^i)^\dagger A^i=I$ and a normalized positive fixed state. The source
-normalizes the leading eigenvalue but does not impose this gauge explicitly.
-For a general normal representative, the existence of a trace-preserving
-normal gauge is already proved, in
-\leanid{MPSTensor.IsNormalTensor.exists_tpGauge} and
-\leanid{MPSTensor.IsNormalTensor.exists_normalGauge}. To obtain the source's
-arbitrary-gauge physical statement, one must additionally prove covariance
-of the inserted transfer maps and of their left-right fixed-point
-contraction under the gauge transformation. Finite periodic state gauge
-invariance alone does not provide this infinite-chain contraction identity.
-Thus the unrestricted transport remains unformalized; the proved decay
-statement is explicitly in trace-preserving gauge.
+\paragraph{Gauge covariance.}
+Physical insertions and the connected left-right contraction are now gauge
+covariant, by
+\leanid{MPSTensor.physicalObservableTransfer_congruence_of_gauge} and
+\leanid{MPSTensor.physicalLeftRightConnectedCorrelator_eq_of_gauge}.
+For a normal tensor, a trace-preserving gauge $B^i=UA^iU^{-1}$ with fixed
+state $\rho$ of trace one gives positive definite fixed matrices
+$\rho^L=U^\dagger U$ and $\rho^R=U^{-1}\rho U^{-\dagger}$, with
+$\tr(\rho^L\rho^R)=1$. The theorem
+\leanid{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_decay}
+proves exponential decay in the original representation on independent
+finite supports at all separations, including adjacent blocks.
+
+\paragraph{Remaining normality scope.}
+The source also considers tensors whose unique eigenvalue of largest modulus
+is algebraically simple and whose fixed matrices may be singular. The
+arbitrary-gauge decay theorem is presently proved for normal tensors, with
+leading eigenvalue one. Extending it to singular fixed matrices requires the
+complementary spectral projection directly, rather than an invertible
+Perron gauge.
 
 \section{Elimination plan}
 
-Prove covariance of the physical insertion maps and the connected
-left-right fixed-point contraction, then use the existing normal-gauge
-existence theorems to remove the trace-preserving-gauge restriction.
-Formalize the eigenbasis expansion of the centered insertion in the
-diagonalizable case. The general Jordan expansion, including the finite
-nilpotent transient, is a corrected replacement for the source statement,
-not a proof of its unqualified pure-exponential form.
+Formalize the diagonalizable eigenbasis expansion and the corrected Jordan
+expansion, including finite nilpotent transients. The latter replaces the
+source's false pure-exponential formula. For the broader class with a unique,
+algebraically simple eigenvalue of largest modulus, construct the left-right
+spectral projection and prove decay on its complement without an invertible
+Perron gauge.
 
 \begin{thebibliography}{1}
     \bibitem{Cirac2021Matrix}

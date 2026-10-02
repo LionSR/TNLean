@@ -2430,6 +2430,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### Physical insertion congruence and identity insertions — candidate
+- **Pattern:** a finite physical insertion transforms by congruence under a
+  bond similarity; insertion of the identity on `n` sites gives the same
+  covariance for the `n`th transfer power.
+- **Seen:** the insertion and connected-contraction proofs in
+  `TNLean/MPS/SharedInfra/PhysicalObservableGauge.lean` (2026-10-02).
+- **Reuse:** `MPSTensor.physicalObservableTransfer_congruence_of_gauge`
+  proves the word-sum calculation once. The transfer-power identity follows
+  from the existing `MPSTensor.physicalObservableTransfer_one`, and the
+  connected contraction uses these equations with trace cyclicity.
+- **Notes:** the arbitrary-gauge decay proof transports the already proved
+  trace-preserving contraction instead of repeating complementary powers and
+  fixed-point projection calculations. No custom tactic is needed.
+
+
 ### centering physical insertions carried by transfer eigenvectors — candidate
 - **Pattern:** trace preservation and a transfer eigenvalue different from one
   imply that the eigenvector is traceless; the fixed-state projection then
