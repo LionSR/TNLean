@@ -20,7 +20,8 @@ as circuits. With the block length $q\propto\log(N/\varepsilon)$, ``If instead
 measurements are only used for the preparation of $\ket{\chi_{N/q}}$, the depth
 is $O(\log(N/\varepsilon))$''. This subsection proves this for direct sums of
 normal blocks whose $q$-site states are orthogonal and for block lengths
-dividing $N$ \cite{gap:mswc24_measurement_preparation_scope}. On the chain of
+dividing $N$ \cite{gap:mswc24_measurement_preparation_scope};
+Section~\ref{sec:ldp_overlapping_measurements} removes both restrictions. On the chain of
 $N$ sites the label of each block is stored in the last sites of the block, and
 the GHZ-type state is prepared in depth $O(q)$; the isometries of the blocked
 tensor take depth $O(q)$ as well.
@@ -379,7 +380,7 @@ tensor take depth $O(q)$ as well.
 
 \begin{theorem}[All translation-invariant MPS with measurements]
     \label{thm:ldp_all_ti_measurement_source}
-    \uses{thm:ldp_long_range_measurement_depth}
+    \uses{thm:ldp_long_range_measurement_depth, thm:ldp_overlapping_measurement_depth}
     Every translation-invariant MPS of constant bond dimension, short- or
     long-range correlated, is prepared with error $\varepsilon$ in depth
     $O(\log(N/\varepsilon))$ by local circuits assisted by measurements, the
@@ -387,8 +388,14 @@ tensor take depth $O(q)$ as well.
     \cite[paragraph ``Long-range MPS using measurements'']{Malz2024Preparation}.
     Theorem~\ref{thm:ldp_long_range_measurement_depth} proves this for direct
     sums of normal blocks whose $q$-site states are orthogonal and for block
-    lengths dividing $N$; the statement for blocks whose states overlap and for
-    all chain lengths is not formalized
+    lengths dividing $N$. Theorem~\ref{thm:ldp_overlapping_measurement_depth}
+    proves it for direct sums of normal blocks in the canonical form
+    \cite[eq.~(S2)]{Malz2024Preparation} whose $q$-site states may overlap,
+    with every multiplicity and every nonzero complex weight, and for every
+    chain length $N\geq2$ at which $\ket{\phi_N(A)}\neq0$, with the mixed
+    transfer maps of distinct blocks of spectral radius below one, the
+    isometries of the direct sum with weights one, and the GHZ-type state
+    prepared in depth $O(q)$ rather than in constant depth
     \cite{gap:mswc24_measurement_preparation_scope}. The same paragraph claims
     the depth $O(\log\log(N/\varepsilon))$ when the tree-RG circuit is also
     assisted by measurements; for normal tensors and the chain lengths
