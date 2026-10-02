@@ -2043,3 +2043,52 @@ involve no boundary.
   space; arbitrary isometric tensors still require a separate endpoint
   identification. Neither construction assumes continuity of the canonical
   projections as the interpolation parameter varies.
+
+### Independent symmetric phases within exact MPS families
+
+- **Declarations:** `MPSTensor.ExactMPSGroundPath`,
+  `MPSTensor.IsSameExactMPSGappedPhase`, and `MPSTensor.SamePositiveMpvRay`.
+- **Defined in:** `TNLean/MPS/Symmetry/ExactMPSGappedPhase.lean`.
+- **Meaning:** the endpoint tensors are blocked by one common positive length
+  and included isometrically, with their whole physical spaces as orthogonal
+  summands, into a common unitary representation. Each blocked endpoint
+  action may be multiplied by a
+  unit-modulus character. An independent symmetric gapped interaction path
+  joins their canonical two-site parents. A continuous finite-dimensional
+  tensor family represents the unique periodic ground lines for every
+  $N\ge2$, and has a positive-dimensional one-site injective representative
+  of its positive-length vector rays at every parameter. The representative's
+  bond dimension may vary; the ambient tensor dimension stays fixed.
+- **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453, and
+  Section II.F.2, lines 930–954. This is the continuous exact MPS regime;
+  it does not describe every symmetric gapped Hamiltonian path.
+- **Sanctioned bridges:** parameter reversal proves symmetry of the phase
+  condition. `MPSTensor.isSameExactMPSGappedPhase_of_isInjective_cohomologous`
+  constructs the phase condition for one-site injective tensors with exact
+  physical symmetries and cohomologous actual invertible virtual factors.
+  It derives orthogonal physical inclusions and an exact MPS ground
+  realization of the full polar and fixed-point path. Unitary virtual
+  actions are obtained by preparation rather than assumed.
+  `MPSTensor.IsSameExactMPSGappedPhase.of_smul_gaugeEquiv` preserves the
+  condition under nonzero scalar rescaling and invertible bond conjugation.
+  `MPSTensor.cohomologousTo_of_continuous_isOnSiteSymmetric_tensorPath`
+  derives endpoint cohomology for a continuous one-site injective tensor path
+  of fixed positive bond dimension and exact symmetry, without a supplied
+  virtual path or a finiteness assumption on the group.
+  `TNLean.Algebra.ProjectiveRepresentation.exists_unitary_compression`
+  preserves the factor system on a supplied invariant nonzero bond subspace.
+  `MPSTensor.ExactMPSGroundPath.exists_rephasing_endpoint_cohomology_of_isInjective`
+  proves the physical converse when the continuous ambient tensors are all
+  one-site injective: it derives a common scalar character from the ground
+  lines, removes it from the physical action, and compares arbitrary endpoint
+  projective representatives. Exact tensor symmetry is a conclusion here.
+  `MPSTensor.ExactMPSGroundPath.exists_exact_symmetry` derives the common
+  physical character and exact rephased symmetry without fixing the minimal
+  bond dimension. This removes scalar rephasing from the remaining
+  varying-dimension problem.
+- **Caveat:** the relation contains no virtual representation, factor system,
+  or continuous canonical bond data. Its general converse remains open:
+  continuous balanced canonical data and the surviving invariant bond subspace
+  must be derived from the physical gap when minimal bond dimensions change.
+  The obstruction to using raw tensor continuity alone is documented in
+  `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.

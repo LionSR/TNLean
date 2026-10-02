@@ -7,6 +7,7 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.TwistedRegularProjective
+import TNLean.Algebra.UnitaryGeneralLinearInverse
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.VirtualRepresentation
@@ -124,7 +125,10 @@ lemma star_sptScale_mul_sptScale : star (sptScale D) * sptScale D = (D : ℂ)⁻
   rw [sptScale, star_inv₀, Complex.star_def, Complex.conj_ofReal,
     Complex.ofReal_sqrt_inv_mul_self _ (Nat.cast_nonneg D), Complex.ofReal_natCast]
 
-private lemma sptScale_ne_zero [NeZero D] : sptScale D ≠ 0 := by
+/-- The matrix-unit normalization is nonzero at positive bond dimension.
+Source: arXiv:2011.12127, Section III.A, lines 1149–1150 in
+Papers/2011.12127/TN-Review-main.tex. -/
+lemma sptScale_ne_zero [NeZero D] : sptScale D ≠ 0 := by
   refine inv_ne_zero (Complex.ofReal_ne_zero.mpr ((Real.sqrt_ne_zero').mpr ?_))
   exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
 
@@ -389,14 +393,12 @@ theorem sptFixedPointAction_mem_unitaryGroup (ρ : ProjectiveRepresentation (D :
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup (Fin D) ℂ) (g : G) :
     sptFixedPointAction ρ 1 g ∈ Matrix.unitaryGroup (Fin (D * D)) ℂ := by
   have hW := hρ g⁻¹
-  have hinv : (((sptGauge ρ g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
-      star (sptGauge ρ g : Matrix (Fin D) (Fin D) ℂ) := by
-    rw [Matrix.coe_units_inv]
-    exact Matrix.inv_eq_left_inv (Matrix.mem_unitaryGroup_iff'.mp hW)
+  have hinv := Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup
+    (sptGauge ρ g) hW
   simp only [sptFixedPointAction, MonoidHom.coe_mk, OneHom.coe_mk, MonoidHom.one_apply,
     one_smul, Matrix.coe_reindexAlgEquiv]
   apply Matrix.reindex_mem_unitaryGroup
-  rw [sptKron, hinv]
+  rw [sptKron, hinv, ← Matrix.star_eq_conjTranspose]
   exact Matrix.kronecker_mem_unitary (Matrix.transpose_mem_unitaryGroup_iff.mpr hW)
     (Unitary.star_mem hW)
 

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.WeightedMatrixUnitParent
 import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.FixedPointGappedPathWitness
-import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
+import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.GappedInteractionPathComposition
 
 /-!
@@ -83,9 +83,8 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     hker ?_ ?_ ?_ ?_
   case refine_4 =>
     intro N hN g
-    refine Commute.sum_left _ _ _ fun i _ =>
-      embedLocalOperator_commute_onSiteTensorPow
-        (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) 2 hN i _
+    exact interactionHamiltonian_commute_onSiteTensorPow
+      (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) _ hN
         (parentInteraction_matrix_commute_onSiteTensorPow _ _
           (sptFixedPointAction_mem_unitaryGroup _
             (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g)) g) (hCov g) 2)

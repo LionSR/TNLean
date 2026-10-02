@@ -88,11 +88,20 @@ noncomputable def embeddedPolarGappedInteractionPath
       (LinearMap.toMatrix' (parentInteraction
         (rotatePhysical E (polarIsometricTensor A)) 2))
       (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) 2)) := by
-  simpa only [polarDeformation_zero, polarDeformation_one] using
-    embeddedCanonicalInjectiveGappedPath U V E hE hInt (polarDeformation A)
+  let P := embeddedCanonicalInjectiveGappedPath U V E hE hInt (polarDeformation A)
       (continuous_polarDeformation A).continuousOn
       (fun _ hγ => isInjective_polarDeformation hA hγ)
       (fun γ _ g => gaugeEquiv_polarDeformation_of_unitary_covariance hA
         (U g) (X g) (SetLike.coe_mem _) (SetLike.coe_mem _) (hCov g) γ)
+  exact {
+    interaction γ := LinearMap.toMatrix'
+      (parentInteraction (rotatePhysical E (polarDeformation A γ)) 2)
+    interaction_zero := by rw [polarDeformation_zero]
+    interaction_one := by rw [polarDeformation_one]
+    hermitian := P.hermitian
+    norm_le_one := P.norm_le_one
+    continuous := P.continuous
+    gap := P.gap
+    symmetric := P.symmetric }
 
 end MPSTensor

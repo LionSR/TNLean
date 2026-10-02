@@ -57,6 +57,28 @@ of the virtual projective representation.
     space; the map $M$ may be rectangular.
 \end{definition}
 
+\begin{theorem}[Physical-matrix covariance from the tensor letters]
+    \label{thm:spt_physical_matrix_covariance}
+    \lean{MPSTensor.physicalMatrix_mul_left_right,
+        MPSTensor.physicalMatrix_covariance_of_rotatePhysical,
+        MPSTensor.physicalMatrix_mul_eq_sptKron_of_unitary_covariance}
+    \leanok
+    \uses{def:ldpolar_physical_matrix}
+    If the letters transform by $A^i\mapsto XA^iY$, their physical
+    matrix transforms by $M\mapsto M(X^T\otimes Y)$. Thus physical
+    covariance $\sum_j U_{ij}A^j=XA^iY$ gives
+    $UM=M(X^T\otimes Y)$. For unitary $X$ and $Y=X^\dagger$ this is
+    the bond action $X^T\otimes X^{-1}$. The physical matrix $U$ need
+    not be unitary for this algebraic implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:ldpolar_physical_matrix_rotate}
+    Expand the two virtual indices in each letter product and collect
+    them in the tensor product. Physical rotation is multiplication
+    of $M$ on its left. Finally use $X^{-1}=X^\dagger$ for unitary $X$.
+\end{proof}
+
 \begin{theorem}[Injectivity and symmetry along the polar deformation]
     \label{thm:spt_polar_deformation}
     \lean{MPSTensor.isInjective_of_leftInverse_physicalMatrix,
@@ -67,7 +89,6 @@ of the virtual projective representation.
         MPSTensor.polarPos_commute_of_unitary_covariance,
         MPSTensor.polarIso_covariance_of_isInjective,
         MPSTensor.polarDeformation_covariance,
-        MPSTensor.physicalMatrix_mul_left_right,
         MPSTensor.rotatePhysical_polarDeformation_of_unitary_covariance,
         MPSTensor.gaugeEquiv_polarDeformation_of_unitary_covariance}
     \leanok
@@ -82,6 +103,7 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:spt_physical_matrix_covariance}
     Injectivity gives $V^*V=I$ and $P>0$. Every $P_\gamma$ is positive
     definite, so $P_\gamma^{-1}V^*$ is a left inverse of $M_\gamma$.
     Its rows express every matrix unit as a linear combination of the
@@ -98,8 +120,7 @@ of the virtual projective representation.
     \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation,
         MPSTensor.parentInteractionES_polarDeformation_commute_onSiteTensorPow}
     \leanok
-    \uses{thm:spt_polar_deformation, thm:compact_parent_gap,
-        thm:spt_parent_hamiltonian_symmetry}
+
     Let $A$ be one-site injective with $D>0$, and let $H_{N,2}(A_\gamma)$
     be its canonical two-site periodic parent Hamiltonian. There is
     $\delta>0$ such that, for every $\gamma\in[0,1]$, every $N\geq2$, and
@@ -117,6 +138,9 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:spt_polar_deformation,
+        thm:compact_parent_gap,
+        thm:spt_parent_hamiltonian_symmetry}
     The preceding theorem gives a continuous injective family on the compact
     interval $[0,1]$. The compact-family parent-gap theorem applies to this
     family. Covariance by bond conjugation gives gauge equivalence under
@@ -130,8 +154,7 @@ of the virtual projective representation.
         MPSTensor.interactionHamiltonian_parent_spectrum_gap,
         MPSTensor.canonicalInjectiveGappedPath}
     \leanok
-    \uses{def:spt_common_space_gapped_path, thm:compact_parent_gap,
-        thm:spt_parent_hamiltonian_symmetry}
+    \uses{def:spt_common_space_gapped_path}
     Let $\gamma\mapsto A_\gamma$ be a continuous path of one-site injective
     tensors on fixed physical and bond spaces, with $D>0$. Fix a unitary
     on-site representation $U$ such that, for every $\gamma\in[0,1]$ and
@@ -146,6 +169,8 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:compact_parent_gap,
+        thm:spt_parent_hamiltonian_symmetry}
     The injective local ground-space projections vary continuously, so their
     complementary projections do as well. Their norms are at most one.
     Compactness gives a uniform norm gap above the kernel. Positivity of
@@ -157,11 +182,11 @@ of the virtual projective representation.
     commute with the physical symmetry.
 \end{proof}
 
-\begin{theorem}[Symmetric gapped path to the isometric parent]
-    \label{thm:spt_polar_gapped_interaction_path}
+\begin{definition}[Symmetric gapped path to the isometric parent]
+    \label{def:spt_polar_gapped_interaction_path}
     \lean{MPSTensor.polarGappedInteractionPath}
     \leanok
-    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
+
     Let $A$ be one-site injective with $D>0$, let $U$ be a unitary on-site
     representation, and suppose the tensor covariance is expressed by
     unitary bond conjugation. The canonical two-site parent interactions
@@ -170,9 +195,11 @@ of the virtual projective representation.
     representation $U$ throughout
     \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
     No equality between the physical dimension and $D^2$ is required.
-\end{theorem}
+\end{definition}
 
 \begin{proof}\leanok
+    \uses{thm:spt_canonical_injective_gapped_path,
+        thm:spt_polar_deformation}
     Apply the preceding construction to the injective polar path. The
     endpoint identities give the canonical parents of $W$ and $A$; unitary
     bond-conjugation covariance is preserved by the entire interpolation.
@@ -327,6 +354,401 @@ of the virtual projective representation.
     to identify the initial tensor.
 \end{proof}
 
+\begin{definition}[Three-sector coordinates for the common physical space]
+	\label{def:spt_physical_spectator_coordinates}
+	\lean{Matrix.physicalSpectatorEquiv,
+		Matrix.physicalSpectatorEquiv_active,
+		Matrix.physicalSpectatorEquiv_left,
+		Matrix.physicalSpectatorEquiv_right}
+	\leanok
+	The space $\C^{K^2}\oplus\C^{d_0}\oplus\C^{d_1}$ has three
+	sectors with left dimensions $(K,d_0,d_1)$ and right dimensions
+	$(K,1,1)$. Within the first sector, the pair $(r,l)$ is enumerated
+	in physical order $(l,r)$. The other two sectors occupy the
+	middle and final summands. These are auxiliary coordinates for
+	the enlarged physical space in
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{definition}[Sector-decomposed neighboring interactions]
+	\label{def:spt_sector_bond_interaction}
+	\lean{MPSTensor.sectorBondInteraction,
+		Matrix.physicalSpectatorEdgeInteraction,
+		MPSTensor.physicalSpectatorBondInteraction}
+	\leanok
+	\uses{def:spt_physical_spectator_coordinates}
+	In a decomposition $H=\bigoplus_q(H_{q,r}\otimes H_{q,l})$,
+	prescribe a neighboring matrix $\eta_{q,h}$ on
+	$H_{q,r}\otimes H_{h,l}$. The two-site interaction is the direct
+	sum of $I_{q,l}\otimes\eta_{q,h}\otimes I_{h,r}$, expressed in
+	the original physical coordinates.
+	For the three-sector common physical space, choose
+	$\eta_{0,0}=B$ and $\eta_{q,h}=I$ for every other pair.
+	The active pair then carries the independent virtual bond, while
+	a neighboring pair meeting either additional physical sector
+	carries the identity penalty. These are auxiliary interactions
+	for \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{theorem}[Projections, commutation, and spectral separation of sector bonds]
+	\label{thm:spt_sector_bond_gap}
+	\lean{Matrix.isStarProjection_reindex,
+		MPSTensor.bondMatrixEquiv_symm_isSymmetricProjection,
+		MPSTensor.sectorBondInteraction_isStarProjection,
+		MPSTensor.sectorBondInteraction_translate_commute,
+		MPSTensor.sectorBondInteraction_spectrum_gap_one,
+		Matrix.physicalSpectatorEdgeInteraction_isStarProjection,
+		MPSTensor.physicalSpectatorBondInteraction_isStarProjection,
+		MPSTensor.physicalSpectatorBondInteraction_translate_commute,
+		MPSTensor.physicalSpectatorBondInteraction_spectrum_gap_one,
+		MPSTensor.interactionHamiltonian_quadratic_gap_of_commuting_projection,
+		MPSTensor.interactionHamiltonian_spectrum_gap_one_of_commuting_projection}
+	\leanok
+	\uses{def:spt_sector_bond_interaction}
+	If every $\eta_{q,h}$ is an orthogonal projection, so is the
+	two-site interaction. All its periodic translates commute,
+	including on a two-site ring. For every $N\ge2$, their sum
+	$H_N$ satisfies $H_N^2\ge H_N$ and has spectrum contained in
+	$\{0\}\cup[1,\infty)$. Thus, if it has a zero mode, its
+	gap above the ground space is at least one.
+	In particular, this applies to the three-sector interaction
+	whenever $B$ is an orthogonal projection.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:spt_sector_bond_interaction}
+	Tensoring with identities, taking direct sums, and changing
+	finite coordinates preserve self-adjointness and idempotence.
+	The corresponding Euclidean linear operators are symmetric projections.
+	For each cyclic sector configuration, neighboring terms act on
+	the independent edge factors $(r_n,l_{n+1})$ and therefore commute.
+	Products of commuting orthogonal projections are positive, so
+	expanding the square of their sum gives $H_N^2\ge H_N$.
+	A nonnegative eigenvalue then satisfies $\lambda^2\ge\lambda$,
+	hence is zero or at least one.
+\end{proof}
+
+\begin{definition}[Isometric extension with an unused-state penalty]
+	\label{def:spt_isometric_interaction_extension}
+	\lean{MPSTensor.isometricInteractionExtension}
+	\leanok
+	Let $E:H\to H'$ be a one-site isometry and put $T=E\otimes E$.
+	For a two-site interaction $h$, define
+	\begin{align}
+		h'=I-T(I-h)T^\dagger
+		=ThT^\dagger+I-TT^\dagger.
+		\notag
+	\end{align}
+	This gives energy one on the orthogonal complement of the included
+	two-site space, as in the physical embedding construction of
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{theorem}[Local symmetry of the normalized bond interaction]
+	\label{thm:spt_normalized_bond_local_symmetry}
+	\lean{MPOTensor.embedLocalOperator_full_zero,
+		MPSTensor.normalizedBondInteraction_commute_onSite}
+	\leanok
+
+	For two unitary projective bond representations with the same factor
+	system, each normalized bond interaction commutes with the two-site
+	physical action of their direct sum. This holds at every interpolation
+	parameter. In addition, embedding an interaction over an entire
+	nonempty ring with origin at the first site leaves it unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_bond_interpolation_symmetry}
+	The normalized bond vector is fixed by the direct-sum bond action.
+	Its penalty therefore commutes with the action. Conjugation by the
+	incoming-bond permutation gives the physical action and interaction;
+	the full-window embedding at the origin is the identity.
+\end{proof}
+
+\begin{theorem}[The actual spectator interaction is the isometric extension]
+	\label{thm:spt_spectator_bond_transport}
+	\lean{MPSTensor.commonFixedPointInclusion_eq_coordinateInclusion,
+		MPSTensor.physicalSpectatorBondInteraction_eq_isometricInteractionExtension}
+	\leanok
+	\uses{def:spt_isometric_interaction_extension, def:spt_sector_bond_interaction}
+	Let $Q:\C^{K^2}\to\C^{K^2}\oplus\C^{d_0}\oplus\C^{d_1}$
+	be the inclusion of the first summand. For any matrix $B$ on the
+	neighboring virtual pair, the three-sector interaction equals
+	$I-(Q\otimes Q)(I-h_B)(Q\otimes Q)^\dagger$, where
+	$h_B$ is the independent-bond interaction on the active physical space.
+	No positivity or projection assumption on $B$ is required.
+	This identifies the actual coordinates of the unused-state penalty
+	in \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	Regroup the two physical sites by their sector pair. The included
+	complement $I-h_B$ occupies only the active pair. Every other sector
+	has zero complement and hence identity interaction. Changing back
+	to the original physical coordinates gives the stated equality.
+\end{proof}
+
+\begin{theorem}[Periodic intertwining and zero modes under isometric extension]
+	\label{thm:spt_isometric_interaction_zero_modes}
+	\lean{MPSTensor.embedLocalOperator_isometry_intertwiner,
+		MPSTensor.embed_isometricInteractionExtension_intertwiner,
+		MPSTensor.interactionHamiltonian_isometricInteractionExtension_intertwiner,
+		MPSTensor.isometricInteractionExtension_zero_mode,
+		MPSTensor.isometricInteractionExtension_zero_mem_spectrum}
+	\leanok
+	\uses{def:spt_isometric_interaction_extension}
+	Let $h$ be Hermitian and $N\ge2$. With $E_N=E^{\otimes N}$,
+	the periodic sums of $h$ and its extension satisfy
+	$H'_NE_N=E_NH_N$.
+	The same identity holds for each local translate; it also holds
+	for the raw local conjugation $ThT^\dagger$ on the included chain.
+	Every nonzero zero mode $\psi$ of $H_N$ therefore gives a nonzero
+	zero mode $E_N\psi$ of $H'_N$, so zero belongs to its spectrum.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{def:spt_isometric_interaction_extension}
+	The isometric local conjugation agrees with the original term on
+	the included chain. Its complement penalty vanishes there.
+	Summing over all translates gives the Hamiltonian identity.
+	Finally, $E_N^\dagger E_N=I$ preserves nonvanishing.
+\end{proof}
+
+\begin{theorem}[Canonical parents and order under isometric extension]
+	\label{thm:spt_isometric_parent_interaction}
+	\lean{MPSTensor.isometricInteractionExtension_mono,
+		MPSTensor.parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension}
+	\leanok
+	\uses{def:spt_isometric_interaction_extension}
+	Let $E$ be a physical isometry. The canonical two-site parent
+	of $EA$ is exactly the isometric interaction extension of the
+	canonical parent of $A$. Moreover, extension preserves local
+	operator inequalities: $h\le k$ implies $h'\le k'$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_physical_embedding_parent}
+	The canonical-parent decomposition under a physical isometry
+	reads $h_{EA}=Th_AT^\dagger+I-TT^\dagger$, which is the extension
+	formula. The difference $k'-h'=T(k-h)T^\dagger$ is positive
+	whenever $k-h$ is positive.
+\end{proof}
+
+\begin{theorem}[Exact ground-space transport for commuting projections]
+	\label{thm:spt_isometric_interaction_ground_space}
+	\lean{Matrix.range_toEuclideanLin_singleKrausMap_of_isometry,
+		MPSTensor.interactionHamiltonian_ker_eq_range_groundProduct,
+		MPSTensor.isometricInteractionExtension_isStarProjection,
+		MPSTensor.isometricInteractionExtension_groundProduct,
+		MPSTensor.isometricInteractionExtension_ker_eq_map,
+		MPSTensor.isometricInteractionExtension_ker_eq_span}
+	\leanok
+	\uses{def:spt_isometric_interaction_extension}
+	Let $h$ be an orthogonal projection and $E$ a one-site isometry.
+	Its extension $h'$ is an orthogonal projection.
+	Suppose the periodic translates of $h$ commute, and those of
+	$h'$ also commute, on a ring of length $N\ge2$.
+	Then, with $E_N=E^{\otimes N}$,
+	\begin{align}
+		\ker H'_N=E_N(\ker H_N).
+		\notag
+	\end{align}
+	In particular, a prescribed ground space $\operatorname{span}\{\psi\}$
+	is transported to $\operatorname{span}\{E_N\psi\}$.
+	The unused-state penalty introduces no additional zero modes.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:mpdo_isometric_commuting_bond_product}
+	For commuting orthogonal projections, the kernel of their sum
+	is the range of the product of their complementary projections.
+	Since $I-h'=T(I-h)T^\dagger$, the complete enlarged product
+	is $E_N$ times the original product times $E_N^\dagger$.
+	An isometric conjugation maps a matrix range onto its isometric
+	image, so the two kernel identities give the claim.
+\end{proof}
+
+\begin{theorem}[Normalized fixed-point frame and its covariance]
+	\label{thm:spt_normalized_fixed_point_frame}
+	\lean{MPSTensor.rotatePhysical_sptFixedPointTensor_eq_ofPhysicalMatrix,
+		MPSTensor.intertwiner_of_rotatePhysical_sptFixedPointTensor_covariance}
+	\leanok
+	\uses{def:spt_fixed_point_tensor}
+	Let $D>0$, $c=D^{-1/2}$, and $J:\C^{D^2}\to H$ be linear.
+	The normalized matrix-unit tensor embedded by $J$ has physical
+	matrix $cJ$. If its physical covariance is induced by virtual
+	multiplication $B^i\mapsto XB^iY$, then
+	\begin{align}
+		UJ=J(X^T\otimes Y).
+		\notag
+	\end{align}
+	This identifies the convenient fixed-point basis in
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	Each letter is $c\sum_{a,b}J_{i,(a,b)}|a\rangle\langle b|$,
+	so its physical matrix is $cJ$. Physical covariance therefore
+	gives $U(cJ)=(cJ)(X^T\otimes Y)$. Cancel $c\ne0$.
+\end{proof}
+
+\begin{theorem}[Canonical parent at the embedded polar endpoint]
+	\label{thm:spt_polar_fixed_point_parent}
+	\lean{MPSTensor.sptScale_smul_polarFrameEmbedding_polar_endpoint,
+		MPSTensor.parentInteraction_polarFrameEmbedding_polar_endpoint}
+	\leanok
+
+	Let $A$ be one-site injective of bond dimension $D>0$ and
+	let $E$ be its frame embedding with target $J$.
+	Multiplying the embedded isometric polar tensor by $D^{-1/2}$
+	gives the normalized matrix-unit tensor in the frame $(J,0)$.
+	Hence the two tensors have the same canonical parent interaction
+	at every length. This is the injective single-block identification
+	in \cite[Sections~II.C and II.F.2]{Schuch2011Phases}; the
+	restriction is documented in \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_frame_embedding,
+        thm:spt_normalized_fixed_point_frame}
+	The identity $EF=(J,0)$ identifies the physical matrices.
+	Multiplication by a nonzero scalar preserves every boundary space
+	and therefore its orthogonal complement projection.
+\end{proof}
+
+\begin{theorem}[Covariance of the two fixed-point coordinate frames]
+	\label{thm:spt_fixed_point_coordinate_frames}
+	\lean{MPSTensor.sptPhysicalEmbedding_left_intertwiner,
+		MPSTensor.sptPhysicalEmbedding_right_intertwiner}
+	\leanok
+	\uses{def:spt_projective_direct_sum}
+	Let $V^0,V^1$ be projective representations with the same factor
+	system on spaces of positive dimensions $D_0,D_1$, and put
+	$V=V^0\oplus V^1$. The coordinate inclusions $J_0,J_1$ of their
+	virtual-pair spaces into $\C^{(D_0+D_1)^2}$ intertwine the
+	corresponding pair actions with the common fixed-point physical
+	action induced by $V$. The scalar character is taken to be trivial,
+	as recorded in \cite{gap:rmp_spt_fixed_point_trivial_character}.
+	This is the coordinate form of the joint symmetry in
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_normalized_fixed_point_frame}
+	The embedded normalized fixed-point tensors have virtual covariance
+	on their respective summands. Their physical matrices are nonzero
+	scalar multiples of $J_0$ and $J_1$, so the frame-covariance identity
+	gives both intertwining identities.
+\end{proof}
+
+\begin{definition}[Common physical action and endpoint embeddings]
+	\label{def:spt_common_physical_endpoints}
+	\lean{MPSTensor.physicalSumInclusion, MPSTensor.physicalSumInclusion_mul,
+		MPSTensor.commonPhysicalAction, MPSTensor.commonSptPhysicalAction,
+		MPSTensor.commonPhysicalEmbeddingLeft,
+		MPSTensor.commonPhysicalEmbeddingRight,
+		MPSTensor.commonFixedPointInclusion}
+	\leanok
+	\uses{def:spt_frame_embedding, def:spt_projective_direct_sum}
+	Put $K=D_0+D_1$ and let $J_j:\C^{D_j^2}\to\C^{K^2}$ be the
+	two coordinate inclusions. On
+	$H=\C^{K^2}\oplus\C^{d_0}\oplus\C^{d_1}$, take the action
+	$(V\oplus U_0)\oplus U_1$, where $V$ is the fixed-point pair
+	action of the virtual direct sum, with trivial scalar character.
+	Write $P_{m,d}:\C^m\to\C^m\oplus\C^d$ for the first-summand
+	inclusion; thus $P_{m,d}W=(W,0)$.
+	If $F_j$ is the isometric polar factor of a one-site injective
+	tensor $A_j$, define
+	\begin{align}
+		E_0v & =(J_0F_0^\dagger v,(I-F_0F_0^\dagger)v,0),       &
+		E_1v & =(J_1F_1^\dagger v,0,(I-F_1F_1^\dagger)v),\notag   \\
+		Qw   & =(w,0,0).\notag
+	\end{align}
+	These retain the original physical complements in the common-space
+	construction of \cite[Section~II.F.2]{Schuch2011Phases}.
+	The injective and character restrictions are recorded in
+	\cite{gap:spc11_uniform_gap_injective_scope} and
+	\cite{gap:rmp_spt_fixed_point_trivial_character}.
+\end{definition}
+
+\begin{theorem}[Isometry and symmetry of the common embeddings]
+	\label{thm:spt_common_physical_endpoints}
+	\lean{MPSTensor.physicalSumInclusion_isometry,
+		MPSTensor.physicalSumInclusion_intertwiner,
+		MPSTensor.commonFixedPointInclusion_isometry,
+		MPSTensor.commonFixedPointInclusion_intertwiner,
+		MPSTensor.commonPhysicalEmbeddingLeft_isometry,
+		MPSTensor.commonPhysicalEmbeddingRight_isometry,
+		MPSTensor.commonPhysicalEmbeddingLeft_intertwiner,
+		MPSTensor.commonPhysicalEmbeddingRight_intertwiner,
+		Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup}
+	\leanok
+	\uses{def:spt_common_physical_endpoints}
+	The maps $E_0,E_1,Q$ are isometries. Assume the virtual matrices
+	are unitary and each $A_j$ has covariance under its original
+	on-site action $U_j$ and the corresponding virtual action.
+	Then the common action intertwines $E_j$ with $U_j$ and $Q$ with $V$.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_frame_embedding,
+        thm:spt_fixed_point_coordinate_frames}
+	First-summand inclusion is isometric and intertwines a unitary
+	action with its direct sum. Apply the frame-embedding theorem to
+	each $F_j,J_j$ and retain the additional zero summand.
+	The coordinate-frame identities give the required target covariance.
+	A unitary virtual matrix has its adjoint as its general linear
+	inverse, so both descriptions of the pair action agree.
+\end{proof}
+
+\begin{theorem}[Polar endpoints in the common physical space]
+	\label{thm:spt_common_physical_polar_endpoints}
+	\lean{MPSTensor.commonPhysicalEmbeddingLeft_mul_polarIsoMatrix,
+		MPSTensor.commonPhysicalEmbeddingRight_mul_polarIsoMatrix,
+		MPSTensor.sptScale_smul_commonPhysicalEmbeddingLeft_polar_endpoint,
+		MPSTensor.sptScale_smul_commonPhysicalEmbeddingRight_polar_endpoint,
+		MPSTensor.parentInteraction_commonPhysicalEmbeddingLeft_polar_endpoint,
+		MPSTensor.parentInteraction_commonPhysicalEmbeddingRight_polar_endpoint}
+	\leanok
+	\uses{def:spt_common_physical_endpoints}
+	For $j=0,1$, the frame identity is $E_jF_j=QJ_j$.
+	The embedded isometric polar tensor, multiplied by $D_j^{-1/2}$,
+	is therefore the normalized matrix-unit tensor in the frame $QJ_j$.
+	Their canonical parent interactions agree at every length.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_frame_embedding,
+        thm:spt_polar_fixed_point_parent}
+	The complement term vanishes on $F_j$. The remaining component
+	is $J_j$, followed by the zero physical summands.
+	Use the normalized fixed-point frame identity and invariance of
+	boundary spaces under nonzero scalar multiplication.
+\end{proof}
+
+\begin{definition}[The two common-space polar parent paths]
+	\label{def:spt_common_physical_polar_paths}
+	\lean{MPSTensor.commonPhysicalLeftPolarGappedPath,
+		MPSTensor.commonPhysicalRightPolarGappedPath}
+	\leanok
+	\uses{thm:spt_common_physical_endpoints,
+		thm:spt_common_physical_polar_endpoints, def:spt_embedded_injective_path}
+	Under the hypotheses of the common-embedding theorem, each
+	canonical two-site parent of $E_jA_j$ is joined to the canonical
+	parent of the normalized matrix-unit tensor in the frame $QJ_j$
+	by a symmetric gapped path under the same common physical action.
+	The gap is positive uniformly in the parameter and every ring
+	length $N\ge2$; the local interaction has norm at most one.
+\end{definition}
+
+\begin{proof}\leanok
+	\uses{thm:spt_common_physical_endpoints,
+		thm:spt_common_physical_polar_endpoints, def:spt_embedded_injective_path}
+	Embed each polar deformation by its fixed physical isometry.
+	Its intertwining identity transports symmetry, and the exact polar
+	endpoint identifies the normalized fixed-point canonical parent.
+\end{proof}
+
 \begin{theorem}[Unitary virtual covariance from unital normalization]
     \label{thm:spt_unitary_virtual_covariance_unital}
     \lean{MPSTensor.exists_posDef_adjoint_fixedPoint_of_isInjective_unital,
@@ -365,9 +787,7 @@ of the virtual projective representation.
     \lean{MPSTensor.exists_unital_parent_representative_of_isInjective,
         MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}
     \leanok
-    \uses{thm:spt_unitary_virtual_covariance_unital,
-        thm:spt_polar_gapped_interaction_path, def:injective,
-        lem:on_site_symmetric_smul_gauge}
+    \uses{def:injective}
     Let $A$ be one-site injective with $D>0$, and let a fixed unitary
     on-site representation $U$ preserve every periodic MPS vector of $A$.
     There are an injective unital tensor $B$, a nonzero scalar $c$, and
@@ -383,6 +803,9 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:spt_unitary_virtual_covariance_unital,
+        def:spt_polar_gapped_interaction_path,
+        lem:on_site_symmetric_smul_gauge}
     Perron normalization gives $B$ by nonzero rescaling and virtual gauge.
     Both operations preserve the local MPS spaces, hence all canonical
     parent interactions; they also preserve on-site symmetry and
@@ -420,9 +843,7 @@ of the virtual projective representation.
         MPSTensor.cohomologousTo_polarIsometricTensor_of_isInjective_unital,
         MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class}
     \leanok
-    \uses{lem:projective_rep_from_virtual_covariance,
-        thm:spt_virtual_class_gauge_preparation,
-        thm:spt_prepared_polar_gapped_path, thm:cocycle_gauge_independence}
+
     Let $A$ be one-site injective with $D>0$, with exact on-site symmetry
     under a fixed unitary representation $U$. Choose any virtual
     projective representation for $A$, with factor system $\omega_A$.
@@ -438,6 +859,10 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:projective_rep_from_virtual_covariance,
+        thm:spt_virtual_class_gauge_preparation,
+        thm:spt_prepared_polar_gapped_path,
+        thm:cocycle_gauge_independence}
     Choose unitary virtual covariance for $B$ and assemble these same
     matrices into a projective representation. Polar covariance preserves
     the matrices throughout the deformation, hence also their factor
@@ -477,10 +902,19 @@ of the virtual projective representation.
         U_g\mc P & =\mc P(V_g\otimes\overline{V_g}).
         \notag
     \end{align}
-    Along any continuous symmetric MPS path quantified in the theorem, the
-    tensor and its induced virtual action $V_g$ vary continuously. The
-    cohomology class is discrete, so it cannot change along that path. This
-    proves necessity within the MPS/parent-Hamiltonian framework.
+	On an interval where the minimal injective bond dimension is fixed,
+	continuous tensors with exact symmetry admit continuous virtual gauges
+	by Theorem~\ref{thm:spt_tensor_path_class_invariance}. Their factor
+	systems have constant cohomology class by the determinant argument.
+	Symmetry of a unique ground-state line initially gives a scalar action;
+	its character must first be removed by a fixed physical phase gauge.
+	Changes of minimal bond dimension require an additional step: derive
+	continuous balanced canonical data from the physical gap and restrict
+	the virtual action to the invariant bond subspace surviving the limit.
+	The algebraic restriction is
+	Theorem~\ref{thm:spt_invariant_bond_compression}, but the required
+	continuity implication remains unformalized
+	\cite{gap:spc11_spt_interpolation_upper_range}.
 
     Conversely, let the endpoint isometric forms have virtual actions
     $V_g^0$ and $V_g^1$ in the same cohomology class.  Embed their bond spaces
@@ -510,7 +944,8 @@ of the virtual projective representation.
     action $\widehat U^{\mathrm{path}}$ a linear representation.  Conjugating
     back by the endpoint isometries gives the common direct-sum physical
     representation and the required symmetric gapped path.
-    % General endpoint embeddings and the converse classification remain open.
+	% Actual endpoint embeddings and the exactly covariant injective interaction path are proved.
+	% The unrestricted varying-support converse remains open.
     % The injective polar deformation is proved separately above.
 \end{proof}
 
@@ -629,24 +1064,1009 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $(V_g^0(V_g^0)^*)\oplus(V_g^1(V_g^1)^*)=I_{D_0}\oplus I_{D_1}$.
 \end{proof}
 
+\begin{theorem}[Local continuous conjugators from matrix units]
+	\label{thm:spt_local_matrix_conjugator}
+	\lean{Matrix.matrixUnitConjugator, Matrix.matrixUnitConjugator_eq_smul,
+		Matrix.matrixUnitConjugator_intertwines,
+		Matrix.exists_continuous_local_matrixConjugator}
+	\leanok
+	Let $\alpha_t$ be a family of inner actions on $M_D(\C)$,
+	with $D>0$, such that $t\mapsto\alpha_t(M)$ is continuous
+	for every $M$. Suppose $\alpha_{t_0}=\operatorname{Ad}X_0$
+	with $X_0$ invertible. Fix $a\in\{1,\ldots,D\}$ and set
+	\begin{align}
+		X(t)_{ij}=(\alpha_t(E_{ja})X_0)_{ia}.
+		\notag
+	\end{align}
+	Then $X$ is continuous, $X(t_0)=X_0$, and
+	$\alpha_t(M)X(t)=X(t)M$. It is invertible in a neighborhood
+	of $t_0$. This is an auxiliary local construction for
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	If $\alpha_t=\operatorname{Ad}Y$, matrix-unit multiplication gives
+	$X(t)=(Y^{-1}X_0)_{aa}Y$. This proves the intertwining identity,
+	and gives $X(t_0)=X_0$. Continuity follows entrywise from the
+	formula. Its determinant is nonzero near $t_0$.
+\end{proof}
+
+\begin{theorem}[Continuous inverse coefficients of an injective tensor]
+	\label{thm:spt_continuous_inverse_coefficients}
+	\lean{MPSTensor.coefficientInverseMatrix,
+		MPSTensor.physicalMatrix_transpose_mul_coefficientInverseMatrix,
+		MPSTensor.continuous_coefficientInverseMatrix_family,
+		MPSTensor.coefficientInverseMatrix_reconstruct,
+		MPSTensor.virtualActionOfTensors, MPSTensor.virtualActionOfTensors_eq_conj,
+		MPSTensor.continuous_virtualActionOfTensors_family}
+	\leanok
+	Let $P$ be the physical matrix of a one-site injective tensor $A$.
+	Then $P^\dagger P$ is positive definite, and
+	\begin{align}
+		C_A=((P^\dagger P)^{-1}P^\dagger)^T,
+		\qquad P^T C_A=I.
+		\notag
+	\end{align}
+	Thus $C_A$ expands every virtual matrix in the tensor letters.
+	It depends continuously on a continuous injective family.
+	Replacing the letters of $A$ by gauge-equivalent letters of $B$
+	in this expansion defines their virtual conjugation action,
+	also continuously. This supplies the inverse of the injective
+	tensor map used in \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	Injectivity gives full column rank of $P$, so $P^\dagger P$ is
+	positive definite. Transpose the left-inverse identity to obtain
+	$P^TC_A=I$. Inversion is continuous on invertible matrices.
+	If $B^i=YA^iY^{-1}$, the coefficient expansion of $M$ becomes
+	$YMY^{-1}$ after replacing the letters.
+\end{proof}
+
+\begin{theorem}[Local virtual gauges from an exact tensor symmetry]
+	\label{thm:spt_local_virtual_gauge}
+	\lean{MPSTensor.exists_continuous_local_gauge_of_gaugeEquiv,
+		MPSTensor.exists_continuous_local_virtualGauge_of_isOnSiteSymmetric}
+	\leanok
+
+	A continuous pair of pointwise gauge-equivalent one-site injective
+	tensor families of fixed positive bond dimension admits locally
+	continuous invertible bond gauges near any prescribed initial gauge.
+	In particular, if a continuous injective family has exact on-site
+	symmetry, then for each group element its virtual symmetry matrix
+	can be chosen continuously and invertibly near each parameter.
+	No continuous virtual family is assumed.
+	This is the local, fixed-dimension step of
+	\cite[Section~II.F.2]{Schuch2011Phases}; interval gluing and changes
+	of minimal bond dimension remain separate steps, as recorded in
+	\cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_local_matrix_conjugator,
+        thm:spt_continuous_inverse_coefficients}
+	Construct the continuous inner action from inverse tensor
+	coefficients, then apply the matrix-unit conjugator formula.
+	Exact on-site symmetry gives pointwise gauge equivalence by the
+	injective fundamental theorem, so the argument applies to each twist.
+\end{proof}
+
+\begin{theorem}[Continuous gauges on an interval]
+	\label{thm:spt_global_virtual_gauge}
+	\lean{MPSTensor.gauge_covariance_of_invertible_intertwiner,
+		MPSTensor.exists_units_smul_of_invertible_intertwiners,
+		MPSTensor.exists_continuous_gauge_on_unitInterval}
+	\leanok
+
+	Let $A_t,B_t$, $t\in[0,1]$, be continuous, pointwise
+	gauge-equivalent tensor families of the same positive bond dimension,
+	with $A_t$ one-site injective. Given an invertible initial gauge $X_0$,
+	there is a continuous family of invertible matrices $X_t$ with that
+	initial value and $B_t^iX_t=X_tA_t^i$ for every $t,i$.
+	This proves the interval lifting of the local construction in
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_local_virtual_gauge}
+	The neighborhoods where local gauges are invertible cover the
+	interval. Choose a finite subdivision subordinate to this cover.
+	At each junction, injectivity implies that the two invertible
+	gauges differ by a nonzero scalar. Rescale the next gauge by that
+	constant and glue the continuous pieces. The same scalar matching
+	gives the prescribed initial gauge.
+\end{proof}
+
+\begin{theorem}[A constant character on continuous invariant ground lines]
+	\label{thm:spt_ground_line_character}
+	\lean{Matrix.mul_rankOne_idempotent_eq_trace_smul,
+		Matrix.trace_mul_mem_spectrum_of_rankOne_idempotent_commute,
+		Matrix.trace_mul_constant_of_continuous_rankOne_idempotent,
+		Matrix.exists_character_of_rankOne_idempotent_commute,
+		Matrix.exists_constant_character_of_continuous_rankOne_idempotent}
+	\leanok
+	Let $P_t$ be a continuous family of rank-one idempotents on a
+	finite-dimensional complex space, with parameter in a connected
+	space. Suppose each $P_t$ commutes with a fixed unitary representation
+	$U$ of a group $G$. There is one unit-modulus character $\chi$ such that
+	$U_gP_t=\chi(g)P_t$ for every $g,t$.
+	No finiteness assumption on $G$ is needed. Orthogonal projections
+	onto unique ground-state lines are a special case, provided their
+	continuity has been established. This is an ingredient for the phase
+	gauges allowed in \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	A matrix $X$ commuting with a rank-one idempotent $P$ satisfies
+	$XP=\operatorname{tr}(XP)P$. This scalar belongs to the finite
+	spectrum of $X$. For fixed $U_g$, its trace against $P_t$ varies
+	continuously and hence is constant on the connected parameter space.
+	The representation law and $P_t\ne0$ give the character law.
+	Unitarity puts each scalar on the unit circle.
+\end{proof}
+
+\begin{theorem}[A one-site character from chain lengths two and three]
+	\label{thm:spt_character_from_positive_lengths}
+	\lean{MPSTensor.mpv_blockTensor_eq_smul_of_mpv_eq_smul_from_two,
+		MPSTensor.eq_pow_div_of_mpv_eq_smul_from_two,
+		MPSTensor.exists_character_pow_of_mpv_eq_smul_from_two,
+		MPSTensor.exists_character_sameMPV_smul_of_mpv_eq_smul_from_two}
+	\leanok
+	\uses{def:injective}
+	Let $B$ be one-site injective with positive bond dimension and suppose
+	$\psi_N(A)=c_N\psi_N(B)$ for every $N\ge2$, with $|c_N|=1$.
+	Then $c_N=(c_3/c_2)^N$ for every $N\ge2$.
+	If the coefficients arise from group characters $c_N(g)$, the ratio
+	$\chi(g)=c_3(g)/c_2(g)$ is a unit-modulus character, and
+	$c_N(g)=\chi(g)^N$.
+	When $A(g)$ and $B$ have the same bond dimension, the tensors
+	$\chi(g)B$ and $A(g)$ have equal periodic vectors at all lengths,
+	including length one. This supplies the one-site phase gauge in
+	\cite[Appendix~B]{Schuch2011Phases} from rings of length at least two.
+\end{theorem}
+
+\begin{proof}\leanok
+	For each $L\ge2$, block into words of length $L$. Every positive
+	blocked length corresponds to an original length at least two.
+	The injective proportionality theorem gives $c_{NL}=c_L^N$.
+	Comparing $2N$ and $3N$ in the two orders gives
+	$c_N^2=c_2^N$ and $c_N^3=c_3^N$. Division yields the claimed ratio.
+	The character law follows from those of $c_2,c_3$.
+	In equal bond dimension, injectivity extends the rephased agreement
+	from lengths at least two to every length.
+\end{proof}
+
+\begin{theorem}[Removing a physical symmetry character]
+	\label{thm:spt_physical_character_twist}
+	\lean{MPSTensor.physicalCharacterTwist,
+		MPSTensor.physicalCharacterTwist_apply,
+		MPSTensor.physicalCharacterUntwist,
+		MPSTensor.physicalCharacterUntwist_apply,
+		MPSTensor.twistedTensor_physicalCharacterTwist,
+		MPSTensor.twistedTensor_physicalCharacterUntwist,
+		MPSTensor.isOnSiteSymmetric_physicalCharacterUntwist}
+	\leanok
+	Multiplying an on-site unitary representation $U_g$ by a unit-modulus
+	character $\chi(g)$ gives another unitary representation.
+	Tensor twisting then acquires the scalar $\chi(g)$.
+	Consequently, if the twisted periodic vectors of $A$ equal those of
+	$\chi(g)A$ at every length, replacing $U_g$ by $\chi(g)^{-1}U_g$
+	makes the symmetry exact at every length.
+	This is the physical phase-gauge change allowed in
+	\cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	Scalars commute with the matrix action, and the character law gives
+	multiplicativity. Unit modulus preserves unitarity. Pulling the scalar
+	out of the physical sum scales the tensor, and hence scales its
+	length-$N$ vector by $\chi(g)^N$. The inverse character cancels it.
+\end{proof}
+
+\begin{theorem}[Orthogonal original endpoint spaces in the common representation]
+    \label{thm:spt_common_physical_endpoint_orthogonality}
+    \lean{MPSTensor.commonPhysicalEmbeddingLeft_conjTranspose_mul_right_eq_zero}
+    \leanok
+
+    The prescribed common physical embeddings of the two original tensor
+    spaces have orthogonal ranges. This holds for arbitrary original
+    tensors, without injectivity or symmetry assumptions, and supplies
+    the orthogonal endpoint summands required by
+    \cite[Section~II.C.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_endpoints}
+    The two active coordinate frames occupy disjoint bond blocks.
+    Their retained orthogonal complements occupy the two separate
+    original physical summands. The mixed adjoint product therefore
+    reduces to the zero mixed product of the active frames.
+\end{proof}
+
+\begin{theorem}[A gapped fixed-point path retaining the original physical spaces]
+	\label{thm:spt_common_physical_fixed_point_path}
+	\lean{Matrix.commute_singleKrausMap_of_unitary_intertwiner,
+		MPSTensor.isometricInteractionExtension_commute_onSiteTensorPow,
+		MPSTensor.normalizedBondInteraction_translate_commute,
+		MPSTensor.commonPhysicalNormalizedBondInteraction,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_isStarProjection,
+		MPSTensor.continuous_commonPhysicalNormalizedBondInteraction,
+		MPSTensor.isometricInteractionExtension_ker_le_of_ker_le,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_zero_mem_spectrum,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_le_parent,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_translate_commute,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_spectrum_gap_one,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace,
+		MPSTensor.toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_ker_le_parent,
+		MPSTensor.commonPhysicalParentInteraction_commute_onSite,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_commute_onSiteTensorPow,
+		MPSTensor.commonPhysicalNormalizedBondInteraction_commute_onSite,
+		MPSTensor.commonPhysicalNormalizedBondGappedPath,
+		MPSTensor.commonPhysicalBondCanonicalParentComparisonPath,
+		MPSTensor.commonPhysicalLeftParentComparisonPath,
+		MPSTensor.commonPhysicalRightParentComparisonPath,
+		MPSTensor.commonPhysicalCanonicalFixedPointGappedPath}
+	\leanok
+
+	Let two positive-dimensional unitary virtual representations have the
+	same factor system. In the common physical representation consisting
+	of their direct-sum adjoint action and the two original physical
+	representations, the normalized bond interpolation gives a continuous
+	symmetric interaction path. Each periodic Hamiltonian, at every length
+	$N\ge2$, has ground energy zero, gap at least one, and ground space equal
+	to the periodic MPS line of the included weighted matrix-unit tensor.
+	The unused physical states have energy one. Symmetric affine comparisons
+	join its endpoints to the canonical two-site parents of the two included
+	fixed-point tensors. This realizes the common-space construction in
+	\cite[Section~II.F.2]{Schuch2011Phases} for the stated two-site setting.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_endpoints,
+        thm:spt_spectator_bond_transport,
+        thm:spt_normalized_bond_local_symmetry}
+	The enlarged local term is
+	$I-Q^{\otimes2}(I-h)Q^{\otimes2\dagger}$, where $Q$ includes the active
+	physical summand. Resolving each site into the active summand and its
+	orthogonal complement shows that the translated projections commute.
+	Their sum has spectrum in $\{0\}\cup[1,\infty)$, and its kernel is the
+	included old ground line. Physical covariance gives symmetry.
+	The ordered affine comparisons preserve the common zero modes and a
+	uniform positive gap; concatenate them with the bond interpolation.
+\end{proof}
+
+\begin{theorem}[The common-space bond path has an independent exact MPS realization]
+	\label{thm:spt_common_physical_fixed_point_ground_path}
+	\lean{MPSTensor.normalizedBondInterpolationMatrix_diagonal_ne_zero,
+		MPSTensor.weightedMatrixUnitInterpolation_isInjective,
+		MPSTensor.mpv_weightedMatrixUnitInterpolation_ne_zero,
+		MPSTensor.mpv_rotatePhysical_isometry_ne_zero,
+		MPSTensor.commonPhysicalWeightedMatrixUnitInterpolation_injective_representative,
+		MPSTensor.exactMPSGroundPath_commonPhysicalNormalizedBondInteraction,
+		MPSTensor.commonPhysicalNormalizedBondExactMPSGroundPath}
+	\leanok
+	\uses{def:spt_exact_mps_gapped_phase}
+	For positive endpoint bond dimensions, the included weighted
+	matrix-unit interpolation is a continuous exact MPS realization of
+	the common-space normalized bond path. Its periodic vectors are
+	nonzero at every positive length. At each interior parameter the
+	tensor is one-site injective on the full direct-sum bond space; at
+	the endpoints it has the corresponding smaller injective
+	representative with the same positive-length periodic rays.
+	Its finite-chain ground eigenspaces are precisely those periodic
+	MPS lines. The ground-state certificate itself requires no
+	virtual representation; symmetry is supplied by the physical path.
+	This verifies the exact MPS interpolation in
+	\cite[Section~II.F.2]{Schuch2011Phases} in the stated setting.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_fixed_point_path}
+	Every weighted matrix-unit coefficient is nonzero in the interior,
+	so its letters span the full matrix algebra. At an endpoint, the
+	surviving corner is the smaller fixed-point tensor. A diagonal word
+	has nonzero trace, giving nonvanishing at every positive length;
+	an isometric physical inclusion preserves this property.
+	The previously computed kernel is exactly the included MPS line,
+	with least energy zero.
+\end{proof}
+
+\begin{theorem}[Local on-site commutation gives periodic symmetry]
+	\label{thm:spt_interaction_hamiltonian_symmetry}
+	\lean{MPSTensor.interactionHamiltonian_commute_onSiteTensorPow}
+	\leanok
+	If a two-site interaction commutes with the tensor square of an
+	on-site matrix, then its translation-invariant periodic Hamiltonian
+	commutes with the full tensor power at every chain length at least
+	two. Unitarity is not needed for this algebraic identity.
+\end{theorem}
+
+\begin{proof}\leanok
+	Each embedded interaction term has the asserted commutation
+	identity. Summing over its translates gives the result.
+\end{proof}
+
+\begin{theorem}[Aligning actual unitary virtual factors]
+	\label{thm:spt_unitary_factor_alignment}
+	\lean{TNLean.Algebra.ProjectiveRepresentation.norm_factor_eq_one_of_unitary,
+		TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq_of_unitary,
+		TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_unitary_cohomologous}
+	\leanok
+	A unitary projective representation on a nonzero finite-dimensional
+	space has a unit-modulus factor system. Two such representations with
+	cohomologous factor systems can therefore be rephased by unit-circle
+	scalars to have precisely the same factor system, preserving unitarity
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+	Take operator norms in the projective multiplication law. Both unitary
+	factors have norm one, so the scalar factor does also. Apply the
+	unit-circle representative of the cohomology relation to rephase the
+	second virtual representation.
+\end{proof}
+
+\begin{theorem}[Physical character changes preserve the same gapped path]
+	\label{thm:spt_character_gapped_path}
+	\lean{Matrix.finKronecker_const_smul,
+		MPSTensor.SymmetricGappedInteractionPath.physicalCharacterTwist,
+		MPSTensor.ExactMPSGroundPath.physicalCharacterTwist}
+	\leanok
+	\uses{def:spt_exact_mps_gapped_phase}
+	Multiplying the physical representation by a unit-modulus character
+	preserves the same symmetric gapped interaction path and the same
+	exact MPS ground realization. Both the Hamiltonians and their ground
+	spaces are unchanged. This is the physical phase-gauge freedom of
+	\cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_physical_character_twist}
+	The length-$N$ physical action is multiplied by $\chi(g)^N$.
+	Scalar multiplication preserves commutation with the Hamiltonian.
+	Every other condition concerns the same interactions and tensor family.
+\end{proof}
+
+\begin{theorem}[Exact MPS ground lines along a canonical injective path]
+	\label{thm:spt_canonical_injective_ground_path}
+	\lean{MPSTensor.interactionHamiltonian_parent_groundSpace_eq_span_mpv,
+		MPSTensor.exactMPSGroundPath_of_canonicalInjective}
+	\leanok
+	\uses{def:spt_exact_mps_gapped_phase}
+	A continuous one-site injective tensor family of fixed positive bond
+	dimension certifies the exact MPS ground lines of any physical path
+	whose local interactions are its canonical two-site parents.
+	At every periodic length at least two the parent kernel is precisely
+	the MPS line, with least energy zero. The periodic vectors are also
+	nonzero at length one. No additional virtual data are required by
+	this ground-state certificate.
+\end{theorem}
+
+\begin{proof}\leanok
+	One-site injectivity gives nonvanishing at each positive length.
+	The periodic parent-ground-space theorem identifies the kernel
+	with the range of the scalar-to-state map, hence the MPS line.
+	Positivity gives the least energy zero. Use the given tensor family
+	itself as the pointwise injective representative.
+\end{proof}
+
+\begin{definition}[Supported isometric bond lifts]
+    \label{def:spt_supported_bond_lift}
+    \lean{MPSTensor.isometricBondEmbedding, MPSTensor.supportedBondLift}
+    \leanok
+    Let $V:\C^D\to\C^E$ be an isometry, let $A_\gamma$ be a tensor
+    family, and let $T$ be a tensor on $\C^E$. The isometric bond
+    inclusion of $A$ has letters $VA^iV^\dagger$. The supported lift
+    with prescribed initial tensor $T$ has letters
+    \[
+        B_\gamma^i=VA_\gamma^iV^\dagger
+            +T^i-VA_0^iV^\dagger.
+    \]
+\end{definition}
+
+\begin{theorem}[Supported bond lifts preserve the exact ground realization]
+    \label{thm:spt_supported_bond_lift}
+    \lean{MPSTensor.mpv_isometricBondEmbedding,
+        MPSTensor.continuous_isometricBondEmbedding,
+        MPSTensor.supportedBondLift_zero,
+        MPSTensor.supportedBondLift_intertwine,
+        MPSTensor.supportedBondLift_rowSupport,
+        MPSTensor.supportedBondLift_samePositiveMpvRay,
+        MPSTensor.continuousOn_supportedBondLift,
+        MPSTensor.ExactMPSGroundPath.of_supported_isometric_bond_intertwiner,
+        MPSTensor.ExactMPSGroundPath.supportedBondLift}
+    \leanok
+    \uses{def:spt_supported_bond_lift, def:spt_exact_mps_gapped_phase}
+    Suppose $T^iV=VA_0^i$ and $VV^\dagger T^i=T^i$ for every letter.
+    The supported lift satisfies $B_0=T$, depends continuously on a
+    continuous family $A_\gamma$, and has exactly the same periodic
+    vectors as $A_\gamma$ at every positive length. Consequently it
+    preserves an exact MPS ground realization of the same physical path,
+    including its pointwise injective representatives.
+\end{theorem}
+
+\begin{proof}\leanok
+    The correction annihilates $V$ on its right and is supported on
+    the range of $V$ on its left. Thus $B_\gamma^iV=VA_\gamma^i$
+    and $VV^\dagger B_\gamma^i=B_\gamma^i$. Multiplying along any
+    nonempty word and taking the trace gives the original periodic
+    vector. The correction is constant in the parameter, so continuity
+    is preserved. All ground-line conditions concern these same vectors.
+\end{proof}
+
+\begin{theorem}[Exact ground lines through the canonical fixed-point comparisons]
+	\label{thm:spt_common_physical_canonical_ground_path}
+	\lean{MPSTensor.interactionHamiltonian_affine_ker_eq_of_order,
+		MPSTensor.ExactMPSGroundPath.of_ordered_affine,
+		MPSTensor.commonPhysicalBondCanonicalParentComparisonExactMPSGroundPath,
+		MPSTensor.commonPhysicalLeftParentComparisonExactMPSGroundPath,
+		MPSTensor.commonPhysicalRightParentComparisonExactMPSGroundPath,
+		MPSTensor.ExactMPSGroundPath.trans_tensor_zero,
+		MPSTensor.ExactMPSGroundPath.trans_tensor_one,
+		MPSTensor.commonPhysicalCanonicalFixedPointExactMPSGroundPath,
+		MPSTensor.commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_zero,
+		MPSTensor.commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_one}
+	\leanok
+
+	The symmetric gapped path between the canonical parents of the two
+	included fixed-point tensors has an independent exact MPS ground
+	realization. Its initial and final tensors are precisely the included
+	weighted endpoint tensors. The affine parent comparisons use the
+	constant ground tensor at the corresponding endpoint.
+	More generally, an ordered affine comparison between positive
+	Hamiltonians with the same zero modes preserves that ground line.
+	This certifies the parent comparisons in
+	\cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_fixed_point_ground_path,
+        def:spt_exact_ground_path_concatenation}
+	If $0\le A\le B$ and $\ker A\subseteq\ker B$, positivity implies
+	equality of the two kernels. Every ordered affine combination has
+	the same kernel and least energy zero. Keep its MPS tensor constant.
+	At the two joins these tensors agree literally with the endpoint
+	tensors of the bond interpolation. Concatenate the three exact
+	ground realizations; the endpoint equations follow from their
+	common parameterization.
+\end{proof}
+
+\begin{theorem}[Cohomologous unitary factors give an actual common-space path]
+	\label{thm:spt_common_physical_injective_path}
+	\lean{MPSTensor.commonPhysicalInjectiveGappedPath,
+		MPSTensor.rotatePhysical_covariance_of_circle_rephase,
+		MPSTensor.exists_commonPhysicalInjectiveGappedPath_of_cohomologous}
+	\leanok
+
+	Let two one-site injective tensors of positive bond dimension have
+	unitary physical representations and unitary virtual projective
+	representations giving their adjoint tensor covariances. If the
+	actual virtual factor systems are cohomologous, then the canonical
+	two-site parents of their prescribed common physical images are
+	joined by a symmetric uniformly gapped interaction path.
+	The embeddings retain both entire original physical spaces.
+	No chosen cochain or additional target intertwiner is an assumption.
+	This is the one-site injective, exactly covariant construction from
+	\cite[Section~II.F.2]{Schuch2011Phases}. The independent exact MPS
+	ground realization is constructed in
+	Definition~\ref{def:spt_common_physical_injective_ground_path}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_polar_endpoints,
+        thm:spt_common_physical_fixed_point_path,
+        thm:spt_unitary_factor_alignment}
+	A unit-circle rephasing aligns the actual factors and cancels out
+	of adjoint tensor covariance. The two common physical polar paths
+	therefore reach the prescribed included fixed-point tensors.
+	Join their canonical parents by the common-space fixed-point path,
+	reverse the first polar path, and concatenate.
+\end{proof}
+
+\begin{definition}[Concatenating exact MPS ground realizations]
+	\label{def:spt_exact_ground_path_concatenation}
+	\lean{MPSTensor.ExactMPSGroundPath.trans}
+	\leanok
+	\uses{def:spt_exact_mps_gapped_phase}
+	Two consecutive physical interaction paths with exact MPS ground
+	realizations can be concatenated when their ambient bond dimensions
+	agree and their endpoint tensors coincide under that identification.
+	The resulting continuous tensor path realizes the ground lines of
+	the concatenated physical interaction path.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_space_path_concatenation}
+	Use the first tensor family on the first half of the interval and
+	the second on the second half, with the same affine parameter changes
+	as the physical path. Endpoint equality gives continuity at the join.
+	Injective representatives, nonvanishing, and the ground-line identity
+	follow from the corresponding half of the path.
+\end{proof}
+
+\begin{theorem}[One-site paths give the independent exact MPS phase condition]
+    \label{thm:spt_exact_phase_one_site_path}
+    \lean{MPSTensor.blockKron_one_eq_submatrix,
+        MPSTensor.rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one,
+        MPSTensor.isSameExactMPSGappedPhase_of_oneSite_path}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Suppose the full endpoint physical representations have orthogonal
+    isometric inclusions in a common physical representation, intertwining
+    the on-site actions. A symmetric gapped path between their included
+    canonical parents, with an exact MPS ground realization whose endpoint
+    vector lines are the included endpoint lines, proves the independent
+    exact MPS phase condition with blocking length one and trivial
+    endpoint characters.
+\end{theorem}
+
+\begin{proof}\leanok
+    Identify a one-letter word with its single physical index. The blocked
+    action is the original action under this identification, and inclusion
+    of the blocked tensor gives exactly the original included tensor.
+    Isometry, orthogonality, and covariance are preserved by the same
+    reindexing. The supplied path and ground realization therefore give
+    all the required data.
+\end{proof}
+
+\begin{theorem}[Unitary preparation of an actual virtual implementation]
+    \label{thm:spt_exact_phase_unitary_preparation}
+    \lean{MPSTensor.rotatePhysical_covariance_of_unitary_virtual_action,
+        MPSTensor.exists_unitary_covariant_preparation_with_virtual_class}
+    \leanok
+    Let an injective tensor of positive bond dimension have an actual
+    invertible virtual projective implementation of its exact physical
+    symmetry. A nonzero scalar rescaling and a bond change of basis give
+    an injective tensor with a unitary virtual implementation in the
+    same cohomology class. Its physical covariance is adjoint conjugation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_prepared_polar_virtual_class}
+    The actual virtual implementation gives invariance of every periodic
+    vector. Apply the prepared polar construction preserving its virtual
+    class. At its injective endpoint the virtual matrices are unitary;
+    their inverses are therefore their adjoints.
+\end{proof}
+
+\begin{definition}[Three-stage exact ground realization]
+    \label{def:spt_exact_ground_reverse_three_stage}
+    \lean{MPSTensor.ExactMPSGroundPath.reverseTransTrans}
+    \leanok
+    \uses{def:spt_exact_ground_path_concatenation}
+    Three exact MPS ground realizations with a common ambient bond
+    dimension can be joined after reversing the first path, provided
+    their tensors agree at the two joins. This gives the continuous
+    ground realization of the same three-stage physical path.
+\end{definition}
+
+\begin{theorem}[Dimensions and endpoints of exact ground concatenation]
+    \label{thm:spt_exact_ground_three_stage_endpoints}
+    \lean{MPSTensor.ExactMPSGroundPath.trans_bondDimension,
+        MPSTensor.ExactMPSGroundPath.reverseTransTrans_tensor_zero,
+        MPSTensor.ExactMPSGroundPath.reverseTransTrans_tensor_one}
+    \leanok
+    \uses{def:spt_exact_ground_reverse_three_stage}
+    Concatenation retains the common ambient bond dimension. The initial
+    tensor of the three-stage realization is the final tensor of the
+    first, unreversed family, and its final tensor is the final tensor
+    of the third family.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_canonical_ground_path}
+    Apply the endpoint identities for two successive concatenations;
+    reversal exchanges the endpoints of the first family.
+\end{proof}
+
+\begin{definition}[Exact polar ground families in the common bond space]
+    \label{def:spt_common_physical_polar_ground_paths}
+    \lean{MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath,
+        MPSTensor.commonPhysicalRightPolarExactMPSGroundPath}
+    \leanok
+    \uses{def:spt_common_physical_polar_paths, def:spt_supported_bond_lift}
+    The two common-space polar parent paths have exact MPS ground
+    realizations in the common bond space of dimension $D_0+D_1$.
+    For endpoint $j$, include the scaled polar tensor family by the
+    corresponding coordinate isometry and take its supported lift
+    with initial tensor the included weighted fixed-point endpoint.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_canonical_injective_ground_path,
+        thm:spt_supported_bond_lift,
+        thm:spt_common_physical_polar_endpoints}
+    The small-bond polar tensors are continuous and one-site injective,
+    and their canonical parents are the prescribed physical interactions.
+    The weighted endpoint satisfies the bond intertwining and row-support
+    identities. Its supported lift preserves all positive-length
+    periodic vectors and therefore the same exact ground realization.
+\end{proof}
+
+\begin{theorem}[Exact endpoints of the common polar ground families]
+    \label{thm:spt_common_physical_polar_ground_endpoints}
+    \lean{MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath_tensor_zero,
+        MPSTensor.commonPhysicalRightPolarExactMPSGroundPath_tensor_zero,
+        MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath_samePositiveMpvRay_one,
+        MPSTensor.commonPhysicalRightPolarExactMPSGroundPath_samePositiveMpvRay_one}
+    \leanok
+    \uses{def:spt_common_physical_polar_ground_paths}
+    At parameter zero, each polar ground family is exactly the included
+    weighted fixed-point tensor. At parameter one, its positive-length
+    periodic vector lines are those of the corresponding included
+    original tensor. Thus both fixed-point joins are exact tensor
+    identities, while the original endpoints have the required vector
+    lines.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_supported_bond_lift}
+    A supported lift has its prescribed initial tensor. At the other
+    endpoint its bond intertwiner preserves every nonempty word trace;
+    the fixed nonzero normalization changes only the vector line.
+\end{proof}
+
+\begin{definition}[Exact MPS realization of the full common-space path]
+    \label{def:spt_common_physical_injective_ground_path}
+    \lean{MPSTensor.commonPhysicalInjectiveExactMPSGroundPath}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    For two one-site injective tensors of positive bond dimension with
+    unitary physical and virtual actions giving exact adjoint covariance
+    and the same virtual factor system, the constructed common-space
+    path has a continuous exact MPS ground realization. It joins the
+    two included endpoint vector lines through the polar deformations
+    and the canonical fixed-point comparisons.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_supported_bond_lift,
+        thm:spt_common_physical_polar_ground_endpoints,
+        thm:spt_common_physical_canonical_ground_path,
+        thm:spt_common_physical_injective_path,
+        def:spt_exact_ground_reverse_three_stage}
+    The supported bond lifts preserve the polar periodic vectors and
+    give exactly the weighted fixed-point endpoint tensors. They
+    therefore join the canonical fixed-point ground realization.
+    Reverse the first polar family and concatenate the three families
+    with the same parameter changes as the physical path.
+\end{proof}
+
+\begin{theorem}[Cohomologous actual virtual factors give the independent exact MPS phase]
+    \label{thm:spt_exact_phase_forward}
+    \lean{MPSTensor.isSameExactMPSGappedPhase_of_unitary_common_factor,
+        MPSTensor.isSameExactMPSGappedPhase_of_unitary_cohomologous,
+        MPSTensor.isSameExactMPSGappedPhase_of_isInjective_cohomologous}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Let $A_0,A_1$ be one-site injective tensors of positive bond dimension
+    with unitary physical actions. Suppose actual invertible virtual
+    projective representations implement their exact tensor symmetries.
+    If their factor systems are cohomologous, the tensors satisfy the
+    independent exact MPS phase condition. The whole endpoint physical
+    spaces have orthogonal isometric images in the constructed common
+    physical representation. No virtual family or physical path is
+    assumed. This proves the forward construction of
+    \cite[Section~II.F.2]{Schuch2011Phases} in the stated one-site,
+    trivial-character setting.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spt_common_physical_injective_ground_path,
+        thm:spt_common_physical_endpoint_orthogonality,
+        thm:spt_exact_phase_one_site_path,
+        thm:spt_unitary_factor_alignment,
+        thm:spt_exact_phase_unitary_preparation,
+        thm:spt_exact_phase_gauge_invariance}
+    For unitary virtual actions with a common factor, use the constructed
+    common-space path and its exact ground realization. The physical
+    inclusions are isometric, orthogonal, and intertwine the original
+    endpoint actions. One-site blocking gives the phase condition.
+    A unit-circle rephasing aligns cohomologous unitary factors without
+    changing their adjoint covariance. For general invertible virtual
+    actions, prepare both endpoints with unitary virtual actions in
+    the same classes, apply the unitary construction, and transfer
+    the phase condition back by gauge invariance.
+\end{proof}
+
+\begin{theorem}[Chain characters from an independent physical path]
+	\label{thm:spt_physical_path_chain_character}
+	\lean{Matrix.eigenvector_of_mem_span_singleton,
+		Matrix.eigenvalue_constant_of_continuous_invariant_line,
+		Matrix.exists_constant_character_of_continuous_invariant_line,
+		MPSTensor.mem_span_mpv_of_commute_ground_line,
+		MPSTensor.ExactMPSGroundPath.exists_chain_character,
+		MPSTensor.ExactMPSGroundPath.exists_chain_character_mpv}
+	\leanok
+	\uses{def:spt_exact_mps_gapped_phase}
+	For an independent exact MPS ground-state path and every $N\ge2$,
+	there is one unit-modulus character $c_N$ such that the physical
+	symmetry acts on every length-$N$ ground vector by $c_N(g)$,
+	independently of the path parameter. The ambient tensors need not
+	be injective, and their minimal bond dimensions may change.
+\end{theorem}
+
+\begin{proof}\leanok
+	The nonzero periodic vectors depend continuously on the raw tensors.
+	Commutation with the Hamiltonian preserves its unique ground line.
+	The eigenvalue on this line depends continuously on the vector and
+	belongs to the fixed finite symmetry spectrum; it is therefore
+	constant. Multiplication of symmetry operators gives the character
+	law, and unitarity gives unit modulus.
+\end{proof}
+
+\begin{theorem}[A common physical character with varying minimal dimension]
+	\label{thm:spt_varying_bond_physical_character}
+	\lean{LinearMap.map_eq_smul_of_span_singleton_eq,
+		MPSTensor.mpv_twistedTensor_eq_finKronecker_mulVec,
+		MPSTensor.SamePositiveMpvRay.symmetry_eigenvalue,
+		MPSTensor.ExactMPSGroundPath.exists_single_character,
+		MPSTensor.ExactMPSGroundPath.exists_exact_symmetry}
+	\leanok
+
+	An independent exact MPS ground-state path has one unit-modulus
+	character $\chi$ such that its physical symmetry acts on every
+	positive-length periodic vector by $\chi(g)^N$. Rephasing the physical
+	representation by $\chi^{-1}$ makes every ambient tensor exactly
+	symmetric, even when its minimal injective bond dimension varies.
+	No continuous choice of minimal tensors is assumed.
+	This removes the scalar character in the varying-dimension argument
+	of \cite[Appendices~B and~C]{Schuch2011Phases}; continuity of the
+	canonical virtual support remains to be established.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_physical_path_chain_character,
+        thm:spt_character_from_positive_lengths,
+        thm:spt_physical_character_twist}
+	Equality of nonzero vector rays transfers symmetry eigenvalues to
+	each pointwise minimal injective representative. The characters
+	$c_2$ and $c_3$ of the fixed finite-chain ground lines are independent
+	of the path parameter. The ratio $c_3/c_2$ determines the same one-site
+	character for each minimal representative, irrespective of dimension.
+	The fundamental theorem supplies its length-one symmetry as well.
+	Transfer these identities back through equality of periodic rays,
+	and remove the common character from the physical action.
+\end{proof}
+
+\begin{theorem}[The physical converse with a fixed injective realization]
+	\label{thm:spt_fixed_bond_physical_converse}
+	\lean{MPSTensor.ExactMPSGroundPath.exists_single_character_of_isInjective,
+		MPSTensor.ExactMPSGroundPath.exists_exact_symmetry_of_isInjective,
+		MPSTensor.ExactMPSGroundPath.exists_continuous_virtual_data_of_isInjective,
+		MPSTensor.ExactMPSGroundPath.exists_rephasing_endpoint_cohomology_of_isInjective}
+	\leanok
+
+	Suppose an independent exact MPS ground-state path has a continuous
+	ambient tensor realization that is one-site injective at every
+	parameter. Then one fixed unit-modulus physical character makes
+	the entire family exactly symmetric. Continuous invertible virtual
+	projective matrices and continuous factor systems follow, and the
+	endpoint factor systems are cohomologous. The endpoint classes agree
+	for any representatives of that common rephased symmetry.
+	Neither exact tensor symmetry nor a virtual path is an assumption.
+	The fixed injective realization is the scope restriction; the
+	varying-support converse remains open
+	\cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_physical_path_chain_character,
+        thm:spt_character_from_positive_lengths,
+        thm:spt_physical_character_twist,
+        thm:spt_tensor_path_class_invariance}
+	The chain characters are independent of the path parameter.
+	Their ratio $c_3/c_2$ supplies one site character for every tensor.
+	Remove it from the physical action, lift the resulting exact tensor
+	symmetry to continuous virtual matrices, and apply the determinant
+	argument. Gauge uniqueness compares arbitrary endpoint choices.
+\end{proof}
+
+\begin{definition}[Schmidt coefficient matrix of the two-site ring]
+    \label{def:spt_two_site_schmidt_matrix}
+    \lean{MPSTensor.twoSiteSchmidtMatrix}
+    \leanok
+    The coefficient matrix across the one-site cut of the periodic
+    two-site MPS is $C_2(A)_{ij}=\operatorname{tr}(A^iA^j)$.
+\end{definition}
+
+\begin{theorem}[Minimal bond dimension is locally bounded below]
+    \label{thm:spt_minimal_bond_dimension_lower_bound}
+    \lean{MPSTensor.rank_twoSiteSchmidtMatrix_of_isInjective,
+        MPSTensor.twoSiteSchmidtMatrix_apply_eq_mpv,
+        MPSTensor.continuous_twoSiteSchmidtMatrix,
+        MPSTensor.SamePositiveMpvRay.rank_twoSiteSchmidtMatrix_eq,
+        MPSTensor.ExactMPSGroundPath.eventually_minimalBondDimension_ge}
+    \leanok
+    \uses{def:spt_two_site_schmidt_matrix, def:spt_exact_mps_gapped_phase}
+    A one-site injective tensor of bond dimension $D$ has
+    $\operatorname{rank}C_2(A)=D^2$. Along a continuous exact MPS ground
+    realization, suppose an injective representative at $t_0$ has
+    positive bond dimension $D_0$. In a neighborhood of $t_0$ in the
+    parameter interval, every injective representative of the same
+    positive-length periodic vector lines has bond dimension at least
+    $D_0$. This proves the local dimension-direction assertion in
+    \cite[Section~II.F.2, lines~1059--1068]{Schuch2011Phases}.
+    It uses the two-site vector and its continuity, and does not derive
+    a surviving single-bond projective subspace from the physical gap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:ldpolar_injective_physical}
+    With $M$ the physical matrix and $W$ the swap of its two virtual
+    indices, $C_2=MWM^T$. Injectivity gives a left inverse of $M$,
+    so multiplication by that inverse and its transpose recovers $W$.
+    The two rank inequalities therefore give rank $D^2$.
+    Nonzero ray equality rescales $C_2$ by a nonzero scalar and preserves
+    its rank. The coefficient matrix depends continuously on the
+    ground tensor, and matrix rank is lower semicontinuous. Hence nearby
+    representative dimensions satisfy $D^2\ge D_0^2$, or $D\ge D_0$.
+\end{proof}
+
+\begin{theorem}[Local continuous coordinates for a fixed-rank support]
+	\label{thm:spt_continuous_projection_frame}
+	\lean{Matrix.continuous_polarPos_family,
+		Matrix.polarIso_eq_mul_inv_polarPos_of_injective,
+		Matrix.continuous_polarIso_family_of_injective,
+		Matrix.exists_open_projected_frame_injective,
+		Matrix.exists_local_continuous_isometric_projected_frame,
+		Matrix.range_eq_of_isometric_frame_of_rank_eq,
+		Matrix.frame_mul_conjTranspose_eq_of_rank_eq,
+		Matrix.exists_local_continuous_projection_frame}
+	\leanok
+	Let $P(t)$ be a continuous family of orthogonal projections of rank $r$,
+	and let $J_0$ be an isometric frame with $J_0J_0^\dagger=P(t_0)$.
+	Near $t_0$, the polar isometry $J(t)$ of $P(t)J_0$ depends continuously
+	on $t$ and satisfies $J(t)^\dagger J(t)=I$ and
+	$J(t)J(t)^\dagger=P(t)$. The positive polar factor is continuous for
+	every continuous rectangular matrix family; its polar isometry is
+	continuous wherever the matrices are injective.
+	These are auxiliary ingredients for the support argument in
+	\cite[Appendix~C]{Schuch2011Phases}. Continuity and fixed rank of $P$
+	are hypotheses here; deriving the relevant canonical supports from
+	the physical gap remains open
+	\cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+	The Gram matrix of $P(t)J_0$ equals the identity at $t_0$ and remains
+	invertible nearby. Continuous functional calculus gives continuity
+	of its positive square root, and inversion is continuous on the
+	invertible matrices. Thus the polar isometry is continuous.
+	Its range lies in that of $P(t)$ and has the same dimension, so the
+	two orthogonal range projections coincide.
+\end{proof}
+
+\begin{theorem}[Continuous separated spectral corners]
+	\label{thm:spt_continuous_spectral_corner}
+	\lean{Matrix.spectralCornerRamp,
+		Matrix.continuous_spectralCornerRamp,
+		Matrix.spectralCornerRamp_eq_zero_of_le,
+		Matrix.spectralCornerRamp_eq_one_of_le,
+		Matrix.spectralCorner,
+		Matrix.isHermitian_spectralCorner,
+		Matrix.spectralCorner_mul_self,
+		Matrix.continuous_spectralCorner_family,
+		Matrix.spectralCorner_eq_cfc_highIndicator,
+		Matrix.commute_spectralCorner_of_commute,
+		Matrix.unitary_conj_spectralCorner_eq,
+		Matrix.isLocallyConstant_rank_of_continuous_projection_family,
+		Matrix.isLocallyConstant_rank_spectralCorner_family}
+	\leanok
+	Let $A(t)$ be a continuous Hermitian matrix family and let $a<b$.
+	Suppose every spectrum is contained in
+	$(-\infty,a]\cup[b,\infty)$. A continuous scalar function equal to
+	zero below $a$ and one above $b$ gives, by functional calculus, the
+	orthogonal spectral projection $P(t)$ onto the part above the cutoff.
+	This projection is continuous and has locally constant rank.
+	Every operator commuting with $A(t)$ commutes with $P(t)$; conjugation
+	by a commuting unitary fixes the corner projection.
+	The full density rank may change below the cutoff.
+	These facts provide auxiliary separated supports for the argument in
+	\cite[Appendix~C]{Schuch2011Phases}; continuity and spectral separation
+	of the relevant density remain explicit hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+	The continuous ramp equals the spectral indicator on every spectrum,
+	so its functional calculus is Hermitian and idempotent.
+	Continuous functional calculus gives continuity, commutation, and
+	invariance under a commuting unitary. The trace of an idempotent
+	equals its integer rank. Its continuous trace therefore makes the
+	rank locally constant.
+\end{proof}
+
+\begin{theorem}[Continuous invariant compression preserves the factor]
+	\label{thm:spt_continuous_invariant_compression}
+	\lean{TNLean.Algebra.ProjectiveRepresentation.exists_local_continuous_unitary_compression,
+		TNLean.Algebra.ProjectiveRepresentation.continuous_factor_family}
+	\leanok
+
+	Suppose unitary projective matrices, continuous in the parameter for
+	each group element, act
+	on one fixed ambient space, and commutes with a continuous fixed-rank
+	family of orthogonal projections of nonzero rank. Near a prescribed
+	parameter, continuous isometric frames give continuous unitary
+	compressed projective matrices with exactly the original factor system.
+	A family of invertible projective matrices, continuous in the parameter
+	for each group element, on a positive
+	fixed dimension also has continuous scalar factors.
+	The continuous ambient representation and projections are explicit
+	auxiliary hypotheses for the argument in
+	\cite[Appendix~C]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_continuous_projection_frame,
+        thm:spt_invariant_bond_compression}
+	With $J(t)J(t)^\dagger=P(t)$, compress by
+	$J(t)^\dagger V_g(t)J(t)$. Invariance inserts the projection between
+	products, preserving the projective multiplication law and unitarity.
+	Matrix multiplication gives continuity. To recover the scalar factor,
+	take one diagonal entry of
+	$V_gV_h\operatorname{adj}(V_{gh})$ and divide by
+	$\det(V_{gh})$, which never vanishes.
+\end{proof}
+
+\begin{theorem}[Cohomology from a continuous injective tensor path]
+	\label{thm:spt_tensor_path_class_invariance}
+	\lean{MPSTensor.exists_continuous_virtualGauge_of_isOnSiteSymmetric,
+		MPSTensor.exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric,
+		MPSTensor.cohomologousTo_of_continuous_isOnSiteSymmetric_tensorPath}
+	\leanok
+
+	Let $A_t$ be a continuous family of one-site injective tensors
+	of fixed positive bond dimension, with exact on-site symmetry
+	under the same action of a group $G$.
+	Its virtual symmetry matrices can be chosen invertibly and
+	continuously in $t$, separately for each $g\in G$.
+	They give projective representations whose factor systems depend
+	continuously on $t$ for each pair $g,h$.
+	Any virtual representatives of the endpoint tensors have
+	cohomologous factor systems. No continuous virtual family is an
+	input, and no finiteness assumption on $G$ is needed.
+	This is the fixed-dimension, exact-symmetry part of
+	\cite[Section~II.F.2]{Schuch2011Phases}; varying minimal support and
+	extraction of continuous tensors from an independent ground-state
+	path remain open, as recorded in
+	\cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+	\uses{thm:spt_global_virtual_gauge,
+        thm:spt_virtual_path_class_invariance}
+	Apply interval lifting separately to each symmetry twist.
+	Uniqueness of the injective bond gauge up to scalar gives the
+	projective multiplication law, using inverse-group indexing for
+	the virtual action. An entry of the product with an adjugate
+	gives continuous factor systems. The determinant argument proves
+	their endpoint cohomology, and gauge uniqueness identifies that
+	class with any prescribed endpoint representatives.
+\end{proof}
+
 \begin{theorem}[Cohomology along a fixed-dimension virtual path]
     \label{thm:spt_virtual_path_class_invariance}
     \lean{MPSTensor.continuous_rootOfUnity_path_const,
         MPSTensor.exists_continuous_pow_root_path,
         MPSTensor.continuous_projectiveFactor_of_unitaryMatrixPath,
+		MPSTensor.continuous_projectiveFactor_of_invertibleMatrixPath,
         MPSTensor.projectiveFactor_endpoints_cohomologous_of_det_path,
-        MPSTensor.unitary_projectivePath_factor_endpoints_cohomologous}
+		MPSTensor.unitary_projectivePath_factor_endpoints_cohomologous,
+		MPSTensor.invertible_projectivePath_factor_endpoints_cohomologous}
     \leanok
     \uses{def:cohomologous_to}
     Let $G$ be any group and $D>0$. Suppose matrices
-    $V_\gamma(g)\in\mathrm U(D)$ depend continuously on
+	$V_\gamma(g)\in\mathrm{GL}_D(\C)$ depend continuously on
     $\gamma\in[0,1]$ for each $g\in G$ and obey
     $V_\gamma(g)V_\gamma(h)=\omega_\gamma(g,h)V_\gamma(gh)$.
     Then $\omega_0$ and $\omega_1$ are cohomologous as
-    $\C^\times$-valued factor systems. This theorem assumes the
-    virtual path; obtaining it from a smooth symmetric MPS
-    parent-Hamiltonian path, including changes of bond dimension,
-    is a separate step in the classification theorem
+	$\C^\times$-valued factor systems. In particular, this holds for
+	unitary virtual matrices. This theorem assumes the
+	virtual path; extracting compatible continuous tensors from an
+	independent exact MPS ground-state path, including changes of
+	bond dimension, is a separate step in the classification theorem
     \cite[Section~II.F.2, lines~930--946]{Schuch2011Phases}.
 \end{theorem}
 
@@ -674,6 +2094,32 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
          & =\beta_1(g)/\beta_0(g).
         \notag
     \end{align}
+\end{proof}
+
+\begin{theorem}[Restriction to an invariant bond subspace]
+	\label{thm:spt_invariant_bond_compression}
+	\lean{Matrix.isometry_compression_mul_of_commute,
+		Matrix.isometry_compression_mem_unitaryGroup,
+		TNLean.Algebra.ProjectiveRepresentation.exists_unitary_compression}
+	\leanok
+	\uses{def:projective_rep}
+	Let $V_g$ be a unitary projective representation on $\C^D$ with
+	factor system $\omega$, and let $J:\C^r\to\C^D$ be an isometry,
+	where $r>0$. Suppose $V_g$ commutes with $JJ^\dagger$ for every $g$.
+	Then $J^\dagger V_gJ$ is a unitary projective representation with
+	exactly the same factor system $\omega$.
+	This is the algebraic restriction in
+	\cite[Appendix~C]{Schuch2011Phases}. The invariant bond subspace
+	is supplied here; deriving it continuously from the physical gap
+	remains a separate problem, recorded in
+	\cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+	Invariance and $J^\dagger J=I$ give
+	$(J^\dagger XJ)(J^\dagger YJ)=J^\dagger XYJ$ whenever
+	$X$ preserves the included subspace. Apply this identity to $V_g,V_h$
+	for the projective law, and to $V_g,V_g^\dagger$ for unitarity.
 \end{proof}
 
 \subsection{Renormalization fixed points of SPT phases}
@@ -713,7 +2159,7 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
 
 \begin{theorem}[The SPT fixed point has zero correlation length]
     \label{thm:spt_fixed_point_transfer}
-    \lean{MPSTensor.transferMap_sptFixedPointTensor, MPSTensor.star_sptScale_mul_sptScale, MPSTensor.sptFixedPointTensor_isTransferIdempotent, MPSTensor.finrank_range_transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isInjective, MPSTensor.sptFixedPointTensor_isNormal, MPSTensor.sum_smul_sptFixedPointTensor_apply, MPSTensor.eq_of_sum_smul_sptFixedPointTensor_eq}
+	\lean{MPSTensor.transferMap_sptFixedPointTensor, MPSTensor.star_sptScale_mul_sptScale, MPSTensor.sptScale_ne_zero, MPSTensor.sptFixedPointTensor_isTransferIdempotent, MPSTensor.finrank_range_transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isInjective, MPSTensor.sptFixedPointTensor_isNormal, MPSTensor.sum_smul_sptFixedPointTensor_apply, MPSTensor.eq_of_sum_smul_sptFixedPointTensor_eq}
     \leanok
     \uses{def:spt_fixed_point_tensor, def:transfer_map, def:injective}
     Let $D\geq1$.  The transfer map of the SPT fixed-point tensor is
@@ -828,6 +2274,85 @@ and the regrouping of physical registers into bonds.
     this definition.  No condition on virtual cocycles enters it.
 \end{definition}
 
+\begin{definition}[Independent phase condition for exact MPS ground states]
+	\label{def:spt_exact_mps_gapped_phase}
+	\lean{MPSTensor.SamePositiveMpvRay,
+		MPSTensor.ExactMPSGroundPath,
+		MPSTensor.IsSameExactMPSGappedPhase}
+	\leanok
+	\uses{def:spt_common_space_gapped_path}
+	Two tensors satisfy the continuous exact MPS phase condition if,
+	after a common positive blocking length, their whole physical spaces
+	admit isometric inclusions as orthogonal summands of one common physical
+	representation, as required in \cite[Section~II.C.2]{Schuch2011Phases}.
+	Multiplication of each blocked endpoint action by a unit-modulus
+	character is allowed. The inclusions intertwine these actions with
+	the common action, and the included canonical two-site parents are
+	joined by a symmetric gapped interaction path.
+
+	Along that path a continuous tensor family of some fixed finite
+	ambient bond dimension represents the unique least-energy line at
+	every ring length $N\ge2$. Its periodic vectors are nonzero at every
+	positive length. At each parameter its positive-length vector lines
+	have a one-site injective representative of positive bond dimension
+	bounded by the ambient dimension; this dimension may vary.
+	The endpoint vector lines agree with those of the included tensors.
+
+	This describes the continuous exact MPS regime of
+	\cite[Section~II.F.2]{Schuch2011Phases}. It assumes no virtual action,
+	factor system, or continuous canonical bond data. The classification
+	implication, including changes of minimal bond dimension, remains
+	open as recorded in \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{definition}
+
+\begin{theorem}[Elementary properties of MPS rays and path reversal]
+	\label{thm:spt_exact_mps_path_reversal}
+	\lean{MPSTensor.SamePositiveMpvRay.refl,
+		MPSTensor.SamePositiveMpvRay.symm,
+		MPSTensor.SamePositiveMpvRay.trans,
+		MPSTensor.ExactMPSGroundPath.reverse,
+		MPSTensor.IsSameExactMPSGappedPhase.symm}
+	\leanok
+	\uses{def:spt_exact_mps_gapped_phase}
+	Equality of positive-length MPS vector lines is reflexive, symmetric,
+	and transitive. Reversing an interaction path and its exact MPS
+	realization preserves all its ground-line conditions. In particular,
+	the independent exact MPS phase condition is symmetric.
+\end{theorem}
+
+\begin{proof}\leanok
+	The first claims are properties of equality of subspaces. For reversal,
+	compose both families with $\gamma\mapsto1-\gamma$.
+\end{proof}
+
+\begin{theorem}[Gauge preparation preserves the exact MPS phase condition]
+    \label{thm:spt_exact_phase_gauge_invariance}
+    \lean{MPSTensor.blockTensor_smul,
+        MPSTensor.GaugeEquiv.rotatePhysical,
+        MPSTensor.rotatePhysical_smul,
+        MPSTensor.samePositiveMpvRay_of_smul_gaugeEquiv,
+        MPSTensor.parentInteraction_matrix_rotatePhysical_eq_of_smul_gaugeEquiv,
+        MPSTensor.IsSameExactMPSGappedPhase.of_smul_gaugeEquiv}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Suppose that $B_j$ is related to $c_j A_j$ by an invertible bond
+    change of basis, where $c_j\ne0$, for $j=0,1$. If $B_0$ and $B_1$
+    satisfy the exact MPS phase condition for the endpoint physical
+    representations, then so do $A_0$ and $A_1$. The same blocking,
+    characters, orthogonal physical inclusions, interaction path, and
+    continuous ground-state family give the conclusion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Blocking raises each scalar to the blocking length and preserves
+    bond conjugation. Physical inclusion commutes with both operations.
+    Invertible bond conjugation preserves the periodic vector, while
+    nonzero scalar rescaling preserves its line and every local
+    ground space. Thus the included canonical parents agree and the
+    endpoint vector lines agree. These are the only endpoint data
+    needed by the phase condition.
+\end{proof}
+
 \begin{theorem}[Reversal of a symmetric gapped path]
     \label{thm:spt_common_space_path_reversal}
     \lean{MPSTensor.SymmetricGappedInteractionPath.reverse}
@@ -914,12 +2439,11 @@ and the regrouping of physical registers into bonds.
     their sum.
 \end{proof}
 
-\begin{theorem}[Ordered interactions with common periodic ground spaces]
-    \label{thm:spt_ordered_interaction_path}
+\begin{definition}[Ordered interactions with common periodic ground spaces]
+    \label{def:spt_ordered_interaction_path}
     \lean{MPSTensor.orderedGappedInteractionPath}
     \leanok
-    \uses{def:spt_common_space_gapped_path, thm:spt_periodic_hamiltonian_order,
-        thm:common_kernel_spectral_gap_interpolation}
+    \uses{def:spt_common_space_gapped_path}
     Let $a,b$ be positive two-site interactions on one physical space,
     of operator norm at most one, with $a\leq b$. Suppose that for every
     periodic length $N\geq2$ their Hamiltonians $H_N(a)$ and $H_N(b)$
@@ -934,9 +2458,11 @@ and the regrouping of physical registers into bonds.
     at least $\delta$. This comparison applies to independent-bond and
     canonical parent interactions in the fixed-point construction
     \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{definition}
 
 \begin{proof}\leanok
+    \uses{thm:spt_periodic_hamiltonian_order,
+        thm:common_kernel_spectral_gap_interpolation}
     The periodic Hamiltonian satisfies
     $H_N(h_\gamma)=H_N(a)+\gamma(H_N(b)-H_N(a))$. The added term is positive
     and annihilates the original ground space, so the kernel and the
@@ -1467,7 +2993,7 @@ and the regrouping of physical registers into bonds.
         MPSTensor.weightedCanonicalFixedPointGappedPath}
     \leanok
     \uses{thm:spt_weighted_matrix_unit_parent_comparison,
-        thm:spt_ordered_interaction_path, thm:spt_direct_sum_fixed_point_path,
+        def:spt_ordered_interaction_path, thm:spt_direct_sum_fixed_point_path,
         thm:spt_parent_hamiltonian_symmetry, thm:spt_common_space_path_concatenation}
     Suppose the two virtual summands carry unitary projective
     representations with the same factor system. Let $h_t$ be the bond
@@ -1697,7 +3223,7 @@ and the regrouping of physical registers into bonds.
         MPSTensor.normalizedBondCanonicalParentComparisonPath}
     \leanok
     \uses{thm:spt_weighted_matrix_unit_parent_comparison,
-        thm:spt_isometric_bond_restriction, thm:spt_ordered_interaction_path,
+        thm:spt_isometric_bond_restriction, def:spt_ordered_interaction_path,
         thm:spt_parent_hamiltonian_symmetry}
     Let $h_t$ be the normalized independent-bond interaction and let
     $B$ have its physical alphabet. If $h_t$ annihilates $G_2(B)$,
