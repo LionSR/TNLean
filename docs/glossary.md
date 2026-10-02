@@ -1208,9 +1208,9 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
 
 - **Declarations:**
-  `QuantumCircuit.IsNeighbourGate (Z : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`
+  `QuantumCircuit.IsNeighbourGate (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`
   and
-  `QuantumCircuit.IsPairProduct (d n K : ℕ) (X : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`.
+  `QuantumCircuit.IsPairProduct (d n K : ℕ) (X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/PairProduct.lean`.
 - **Meaning:** `IsNeighbourGate Z` says that `Z` is unitary and acts on two
   neighbouring sites `{p, p + 1}` of the open chain of `n` sites.
@@ -1246,7 +1246,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsCircuitOn`
 
 - **Declaration:**
-  `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
+  `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Composition.lean`.
 - **Meaning:** `U` is the operator of a list of exactly `T` layers of the ring,
   each of whose gates acts inside the set of sites `R`.
@@ -1286,7 +1286,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.AgreeOff`
 
 - **Declaration:**
-  `QuantumCircuit.AgreeOff (e : Fin m → Fin n) (x y : Cfg d n) : Prop`.
+  `QuantumCircuit.AgreeOff (e : Fin m → Fin n) (x y : Fin n → Fin d) : Prop`.
 - **Defined in:** `TNLean/Circuit/SiteEmbedding.lean`.
 - **Meaning:** the configurations `x` and `y` of the `n`-site chain agree at
   every site outside the range of `e`.
@@ -1301,7 +1301,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsLocalChannelProtocol`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ) → Prop`
+  `QuantumCircuit.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop`
   (an inductive predicate, with the local dimensions `d`, `e` implicit).
 - **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
 - **Meaning:** `IsLocalChannelProtocol T Ψ` says that
@@ -1330,7 +1330,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsLocalChannelConversion`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) (σ : Matrix (Cfg d' N) (Cfg d' N) ℂ) : Prop`.
+  `QuantumCircuit.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
 - **Meaning:** `σ = Ψ ρ` for a map `Ψ` with `IsLocalChannelProtocol T' Ψ` for
   some `T' ≤ T`.
@@ -1359,7 +1359,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.MeasurementProtocol.IsPreparationOf`
 
 - **Declaration:**
-  `QuantumCircuit.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : Cfg d N → ℂ) : Prop`.
+  `QuantumCircuit.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
 - **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
   sites measured in the computational basis, and for every outcome string a
@@ -1380,7 +1380,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsPreparedWithMeasurementsInDepth`
 
 - **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+  `QuantumCircuit.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
 - **Meaning:** some protocol `P` whose circuit has at most `T` layers
   satisfies `P.IsPreparationOf ψ`.
@@ -1404,8 +1404,8 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`
 
 - **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/MeasurementPreparation.lean`.
+  `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
 - **Meaning:** `ψ = U φ` for a vector `φ` with
   `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
   `T₂`, with `T₁ + T₂ ≤ T`.
@@ -1431,7 +1431,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Cfg d N)) : Prop`.
+  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop`.
 - **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
@@ -1449,7 +1449,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
 
 - **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+  `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
 - **Meaning:** some sequence of measurement rounds (`QuantumCircuit.MeasurementRound`:
   a local circuit, a computational-basis measurement of a set of sites, and
@@ -1477,7 +1477,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`
 
 - **Declaration:**
-  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ)) (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set ((Fin N → Fin d) → ℂ)) (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
 - **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
 - **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
   scalar multiple of `W v`; the single-round form is
