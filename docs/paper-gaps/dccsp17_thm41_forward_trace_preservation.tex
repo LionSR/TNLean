@@ -170,13 +170,20 @@ equal to one, the structure already used by the formal equal-case
 theorem,\footnote{The equal-case theorem is
     \leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm} in
     \path{TNLean/MPS/Periodic/EqualCaseGlobal.lean}.} and then to follow the
-printed argument. Its ingredients without a formal counterpart are the
-blocking lemma for a periodic block,
-\path{Papers/1708.00029/main.tex:432--446}, the cyclic projector structure of
-a periodic block, \path{Papers/1708.00029/main.tex:335--341}, the unique
-decomposition of residues, \path{Papers/1708.00029/main.tex:446--450}, and
-the redistribution of the root-of-unity factors across the sites,
-\path{Papers/1708.00029/main.tex:765--806}. The restatement is tracked in
+printed argument. The single-block ingredients now have formal counterparts:
+\leanid{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
+constructs the prescribed periodic blocks and their cyclic projections;
+\leanid{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action}
+redistributes the orbit phases; and
+\leanid{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_unitary_conj}
+performs the final unitary conjugation. These correspond to
+\path{Papers/1708.00029/main.tex:432--456} and
+\path{Papers/1708.00029/main.tex:765--810}.
+The remaining construction must assemble these results over the full
+multiplicity-bearing decomposition, identify the equal-case gauge on the
+original orbit supports, and obtain the corrected forward implication from
+its stated input hypotheses. The single-block results do not discharge that
+construction by themselves. The restatement is tracked in
 \href{https://github.com/LionSR/TNLean/issues/7762}{issue \#7762}, a child
 of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}. Until
 that restatement lands, every formal theorem whose proof consumes a refuted
