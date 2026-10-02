@@ -1991,3 +1991,20 @@ involve no boundary.
   definition; they are phases, multiplicative in `g`, and equal to $1$ at the
   identity only under unitarity and $\rho^{(L)}\neq 0$
   (`IsStrongOnSiteSymmetry.norm_eq_one`, `.map_mul`, `.map_one`).
+
+### `MPSTensor.SymmetricGappedInteractionPath`
+
+- **Declaration:** `SymmetricGappedInteractionPath U h₀ h₁`.
+- **Defined in:** `TNLean/MPS/Symmetry/GappedInteractionPath.lean`.
+- **Meaning:** a continuous path of Hermitian two-site interactions of
+  operator norm at most one, with prescribed endpoints, whose periodic
+  Hamiltonians commute with the fixed on-site unitary symmetry and have a
+  common positive spectral gap for every parameter and every length at
+  least two. The ground energy may vary, and ground-state degeneracy is allowed.
+- **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
+- **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse` and
+  `SymmetricGappedInteractionPath.trans`.
+- **Caveat:** this describes a path on a common physical space. Endpoint
+  blocking and symmetry-preserving embeddings are separate mathematical
+  operations. It does not impose an MPS description of intermediate ground
+  spaces, which is required for the source's converse classification argument.

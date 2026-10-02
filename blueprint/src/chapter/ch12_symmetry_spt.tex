@@ -386,6 +386,277 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     $\bar\omega$, hence to $\omega$.
 \end{proof}
 
+\subsection{Symmetric gapped paths and bond regrouping}
+\label{sec:spt_symmetric_gapped_paths}
+
+The phase relation of \cite[Sections~II.C.1--2]{Schuch2011Phases} is defined by
+paths of local interactions, after the endpoint systems have been blocked and
+embedded into a common physical space.  The interpolation in the proof of
+Theorem~\ref{thm:spt_classification} uses commuting parent Hamiltonians built
+from independent bonds \cite[Sections~II.D.2 and~II.F.2]{Schuch2011Phases}.  This
+subsection records the path condition, the bond interpolation and its symmetry,
+and the regrouping of physical registers into bonds.
+
+\begin{definition}[Symmetric gapped paths on a common physical space]
+    \label{def:spt_common_space_gapped_path}
+    \lean{MPSTensor.interactionHamiltonian, MPSTensor.SymmetricGappedInteractionPath}
+    \leanok
+    Fix a unitary representation $U:G\to\mathrm U(d)$ and two
+    two-site interactions $h_0,h_1$.  A symmetric gapped path between them
+    on this common physical space consists of Hermitian interactions
+    $h_\gamma$, $0\le\gamma\le1$, with the prescribed endpoints, such that:
+    \begin{enumerate}
+        \item $\|h_\gamma\|_{\mathrm{op}}\le1$;
+        \item $\gamma\mapsto h_\gamma$ is continuous;
+        \item for every periodic chain of length $N\ge2$, the Hamiltonian
+            $H_N(\gamma)=\sum_i h_\gamma(i,i+1)$ commutes with $U_g^{\otimes N}$;
+        \item there is a $\delta>0$, independent of $N$ and $\gamma$, such
+            that every spectral value of $H_N(\gamma)$ above its least spectral
+            value $E_N(\gamma)$ is at least $E_N(\gamma)+\delta$.
+    \end{enumerate}
+    Ground-state degeneracy is allowed.  This is the common-space path
+    condition of~\cite[Sections~II.C.1--2, lines~407--453]{Schuch2011Phases};
+    the choice of endpoint blocking and symmetry-compatible embeddings precedes
+    this definition.  No condition on virtual cocycles enters it.
+\end{definition}
+
+\begin{theorem}[Reversal of a symmetric gapped path]
+    \label{thm:spt_common_space_path_reversal}
+    \lean{MPSTensor.SymmetricGappedInteractionPath.reverse}
+    \leanok
+    \uses{def:spt_common_space_gapped_path}
+    If $h_\gamma$ is a symmetric gapped path from $h_0$ to $h_1$, then
+    $h_{1-\gamma}$ is such a path from $h_1$ to $h_0$, with the same gap bound.
+\end{theorem}
+
+\begin{proof}\leanok
+    The change of parameter $\gamma\mapsto1-\gamma$ is a continuous
+    bijection of the unit interval and exchanges its endpoints.
+\end{proof}
+
+\begin{theorem}[Concatenation of symmetric gapped paths]
+    \label{thm:spt_common_space_path_concatenation}
+    \lean{MPSTensor.SymmetricGappedInteractionPath.toPath,
+        MPSTensor.SymmetricGappedInteractionPath.concatenatedInteraction,
+        MPSTensor.SymmetricGappedInteractionPath.concatenatedInteraction_mem,
+        MPSTensor.SymmetricGappedInteractionPath.trans}
+    \leanok
+    \uses{def:spt_common_space_gapped_path}
+    Suppose symmetric gapped paths connect $h_0$ to $h_1$ and $h_1$
+    to $h_2$ on the same physical space with the same on-site action.
+    There is then a symmetric gapped path from $h_0$ to $h_2$.
+    If the original gap bounds are $\delta_0,\delta_1>0$, the
+    concatenated path has gap bound $\min\{\delta_0,\delta_1\}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Traverse the first path on the first half of the interval and
+    the second on the second half.  Their common endpoint ensures
+    continuity.  Every interaction belongs to one of the original
+    paths, so the norm bound, symmetry, and stated gap bound follow.
+\end{proof}
+
+\begin{theorem}[Order and interpolation of periodic Hamiltonians]
+    \label{thm:spt_periodic_hamiltonian_order}
+    \lean{MPSTensor.interactionHamiltonian_add_smul_sub,
+        MPSTensor.interactionHamiltonian_posSemidef,
+        MPSTensor.interactionHamiltonian_mono}
+    \leanok
+    \uses{def:spt_common_space_gapped_path}
+    For a two-site interaction $h$, let $H_N(h)$ be the sum of its
+    translates on the periodic chain of length $N\ge2$.
+    If $h\ge0$, then $H_N(h)\ge0$; if $h\le k$, then
+    $H_N(h)\le H_N(k)$.  For every real $t$,
+    $H_N(h+t(k-h))=H_N(h)+t(H_N(k)-H_N(h))$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Embedding an interaction into a cyclic window is a linear map
+    preserving positivity.  Sum these identities and inequalities over
+    the cyclic positions.
+\end{proof}
+
+\begin{theorem}[Symmetry of canonical parent Hamiltonians]
+    \label{thm:spt_parent_hamiltonian_symmetry}
+    \lean{MPSTensor.onSiteTensorPow_conjTranspose_mul_self,
+        MPSTensor.groundSpaceES_invariant_of_gauge_covariance,
+        MPSTensor.parentInteractionES_commute_onSiteTensorPow,
+        MPSTensor.onSiteTensorPow_reindex_windowComplement,
+        MPSTensor.embedLocalOperator_commute_onSiteTensorPow,
+        MPSTensor.parentInteractionES_eq_toEuclideanLin_parentMatrix,
+        MPSTensor.parentInteraction_matrix_commute_onSiteTensorPow,
+        MPSTensor.localTermES_commute_onSiteTensorPow,
+        MPSTensor.parentHamiltonianES_commute_onSiteTensorPow}
+    \leanok
+    \uses{def:gauge_equiv, def:physical_rotation, def:parent_interaction,
+        def:parent_hamiltonian_es}
+    Let $U$ be a unitary on the physical space, and suppose the physical
+    rotation of $A$ by $U$ is gauge equivalent to $A$.  The canonical
+    parent interaction of range $L$ commutes with $U^{\otimes L}$.
+    For every $N\geq L$, the periodic parent Hamiltonian commutes
+    with $U^{\otimes N}$ \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Gauge changes preserve the open-boundary MPS space.  Physical rotation
+    carries this space to its image under the tensor power of $U$.
+    The resulting invariant subspace has an orthogonal projection that
+    commutes with that unitary.  Each cyclic translate of its complementary
+    projection therefore commutes with the global tensor power, as does
+    their sum.
+\end{proof}
+
+\begin{theorem}[A continuous unit bond interpolation]
+    \label{thm:spt_normalized_bond_interpolation}
+    \lean{MPSTensor.bondInterpolationWeight,
+        MPSTensor.bondInterpolationMatrix,
+        MPSTensor.continuous_bondInterpolationMatrix,
+        MPSTensor.bondInterpolationMatrix_ne_zero,
+        MPSTensor.bondInterpolationSquaredNorm,
+        MPSTensor.bondInterpolationMatrix_sum_normSq,
+        MPSTensor.bondInterpolationSquaredNorm_pos,
+        MPSTensor.normalizedBondInterpolationMatrix,
+        MPSTensor.normalizedBondInterpolationMatrix_ne_zero,
+        MPSTensor.normalizedBondInterpolationMatrix_sum_normSq,
+        MPSTensor.normalizedBondInterpolationMatrix_zero_apply,
+        MPSTensor.normalizedBondInterpolationMatrix_one_apply,
+        MPSTensor.continuous_normalizedBondInterpolationMatrix}
+    \leanok
+    Let $D_0,D_1>0$, and let the two direct-sum bond spaces have these
+    dimensions.  Write $W(\gamma)$ for the coefficient matrix of
+    \begin{align}
+        |\omega(\gamma)\rangle
+          &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle
+            +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
+            \notag
+    \end{align}
+    For every real $\gamma$ this matrix is nonzero, and it depends
+    continuously on $\gamma$.  Dividing by
+    $\sqrt{D_0(1-\gamma)^2+D_1\gamma^2}$ gives the coefficient matrix
+    $\widehat W(\gamma)$ of a continuous unit vector.  At the two endpoints,
+    only the first and second diagonal blocks, respectively, remain.  The
+    second summation range follows the correction recorded in
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two blocks have disjoint support, so the squared norm of the
+    coefficient matrix is $D_0(1-\gamma)^2+D_1\gamma^2$.  This is positive
+    for every real $\gamma$ when $D_0,D_1>0$.  The entries and the positive
+    normalization factor vary continuously with $\gamma$.
+\end{proof}
+
+\begin{theorem}[Symmetry of the interpolating bond]
+    \label{thm:spt_bond_interpolation_symmetry}
+    \lean{MPSTensor.bondInterpolationMatrix_eq_fromBlocks,
+        MPSTensor.bondInterpolationMatrix_commute_directSum,
+        MPSTensor.bondInterpolationMatrix_conjugate_directSum,
+        MPSTensor.normalizedBondInterpolationMatrix_conjugate_directSum}
+    \leanok
+    \uses{def:spt_projective_direct_sum, thm:spt_projective_direct_sum_unitary,
+        thm:spt_normalized_bond_interpolation}
+    Let $V^0,V^1$ be unitary projective representations with a common
+    factor system, and put $V_g=V_g^0\oplus V_g^1$.  For the bond coefficient
+    matrices $W(\gamma)$ and $\widehat W(\gamma)$ of
+    Theorem~\ref{thm:spt_normalized_bond_interpolation},
+    \begin{align}
+        V_gW(\gamma)V_g^* &= W(\gamma), &
+        V_g\widehat W(\gamma)V_g^* &= \widehat W(\gamma).
+        \notag
+    \end{align}
+    These are the coefficient-matrix identities expressing invariance of
+    the bond vector under $V_g\otimes\overline{V_g}$
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The matrix $W(\gamma)$ is scalar on each of the two summands, so it
+    commutes with $V_g$.  Unitarity gives the first identity, and scalar
+    normalization gives the second.
+\end{proof}
+
+\begin{definition}[Incoming-bond coordinates]
+    \label{def:spt_incoming_bond_coordinates}
+    \lean{MPSTensor.incomingBondEquiv, MPSTensor.incomingBondPerm}
+    \leanok
+    Let each site of a cyclic chain carry two registers of dimension $D$.
+    For a configuration $s=((L_i,R_i))_i$, define
+    \begin{align}
+        e_N(s)_i &= (R_{i-1},L_i).
+        \notag
+    \end{align}
+    The inverse recovers $(L_i,R_i)=((b_i)_2,(b_{i+1})_1)$.
+    Pair coordinates may equivalently be enumerated by an alphabet of
+    size $D^2$.  These are the independent-bond coordinates
+    of~\cite[Section~II.D.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{theorem}[Unitarity of bond regrouping]
+    \label{thm:spt_incoming_bond_unitary}
+    \lean{MPSTensor.incomingBondPerm_mem_unitaryGroup}
+    \leanok
+    \uses{def:spt_incoming_bond_coordinates}
+    The matrix $P_N$ defined by $(P_N)_{s,b}=\delta_{e_N(s),b}$ is unitary.
+    Thus it takes a bond-coordinate wavefunction to the corresponding
+    physical-coordinate wavefunction by composition with $e_N$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The map $e_N$ permutes the configuration basis.
+\end{proof}
+
+\begin{theorem}[Locality after bond regrouping]
+    \label{thm:spt_incoming_bond_locality}
+    \lean{MPSTensor.incomingBondPerm_conj_local_apply}
+    \leanok
+    \uses{def:spt_incoming_bond_coordinates, thm:spt_incoming_bond_unitary}
+    Let $N>0$ and let $K_i$ act as a matrix $K$ on incoming bond $i$
+    and as the identity on every other bond.  Then
+    $P_NK_iP_N^\dagger$ acts on the registers $(R_{i-1},L_i)$ and as
+    the identity on all other registers.  More precisely, its matrix
+    entries between physical configurations $s,t$ are
+    \begin{align}
+        (P_NK_iP_N^\dagger)_{s,t}
+        &=K_{e_N(s)_i,e_N(t)_i}
+          \prod_{j\ne i}\delta_{e_N(s)_j,e_N(t)_j}.
+          \notag
+    \end{align}
+    Hence every one-bond interaction becomes a nearest-neighbor physical
+    interaction (a one-site interaction when $N=1$).
+\end{theorem}
+
+\begin{proof}\leanok
+    Conjugation by a permutation matrix replaces the row and column
+    configurations by their incoming-bond coordinates.  The tensor-product
+    formula for $K_i$ gives the displayed entries.
+\end{proof}
+
+\begin{theorem}[Symmetry under bond regrouping]
+    \label{thm:spt_bond_regrouping_symmetry}
+    \lean{MPSTensor.incomingBondPerm_conj_registerAction,
+        MPSTensor.incomingBondPerm_conj_sptFixedPointAction}
+    \leanok
+    \uses{def:spt_incoming_bond_coordinates, thm:spt_incoming_bond_unitary,
+        def:spt_fixed_point_tensor}
+    For matrices $L,R$ on a register of dimension $D$,
+    \begin{align}
+        P_N(R\otimes L)^{\otimes N}P_N^\dagger
+          &=(L\otimes R)^{\otimes N}.
+          \notag
+    \end{align}
+    In particular, for the physical action
+    $U(g)=W_g^{\mathsf T}\otimes W_g^{-1}$ of the SPT fixed-point tensor with
+    trivial character (Definition~\ref{def:spt_fixed_point_tensor}), the
+    incoming-bond action is $W_g^{-1}\otimes W_g^{\mathsf T}$
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The matrix entries are products of left-register and right-register
+    entries.  Regrouping shifts the latter factors by one cyclic site;
+    this permutation does not change their product.
+\end{proof}
+
 \subsection{Degeneracy of the entanglement spectrum}
 \label{sec:spt_entanglement_spectrum}
 
