@@ -260,9 +260,12 @@ theorem bondProductParentHamiltonian_groundSpace
     (bondPenaltyAtLin_isSymmetricProjection η hη hN)
     (bondPenaltyAtLin_commute η hN)
 
-/-- The ground projection is the rank-one projection onto the product
-bond vector. Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
-theorem bondProductParentHamiltonian_groundProjector
+/-- The ordered product of the complements `1 - h_i` of the local penalties
+is the rank-one operator `|η^{⊗N}⟩⟨η^{⊗N}|` built from the product bond
+vector. For a unit bond vector this is the ground projection; the identity
+itself holds for every `η`. Source: arXiv:1010.3732, Sections II.D.2 and
+II.F.2. -/
+theorem listProd_one_sub_bondPenaltyAtLin_eq_rankOne
     (η : Fin q → ℂ) (hN : 1 ≤ N) :
     (List.ofFn fun i : Fin N =>
       (1 : EuclideanSpace ℂ (Fin N → Fin q) →ₗ[ℂ]
@@ -341,7 +344,7 @@ theorem bondProductParentHamiltonian_groundSpace_eq_span
     LinearMap.ker (bondProductParentHamiltonianLin η hN) =
       Submodule.span ℂ {bondProductState η N} := by
   rw [← bondProductParentHamiltonian_groundSpace η hη hN,
-    bondProductParentHamiltonian_groundProjector]
+    listProd_one_sub_bondPenaltyAtLin_eq_rankOne]
   rw [InnerProductSpace.toLinearMap_rankOne]
   apply LinearMap.range_smulRight_apply
   intro hzero
