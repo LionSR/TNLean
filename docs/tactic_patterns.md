@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### bilinear extension from spanning tensor letters — promoted
+- **Pattern:** extend an identity on pairs of tensor letters first in one
+  matrix argument and then in the other.
+- **Seen:** four successive single-argument extensions in the two proofs
+  `MPS/Structure/LinearExtension.lean` and
+  `MPS/Structure/FiniteRingTraceAlgebra.lean` (2026-10-02).
+- **Abstraction:** Mathlib's `LinearMap.mul`, `LinearMap.compr₂`,
+  `LinearMap.compl₁₂`, and two nested `LinearMap.ext_on_range` calls express
+  the identity as equality of bundled bilinear maps.
+- **Notes:** both proofs use the existing Mathlib operations. No new tactic
+  or helper theorem is needed; the original theorem signatures are unchanged.
+
+
 ### physical-matrix covariance from tensor letters — promoted
 - **Pattern:** rewrite the physical rotation as left multiplication of
   the physical matrix, then vectorize the two bond factors; for a unitary
