@@ -39,7 +39,9 @@ contraction of the two Gram matrices; on the link the two group elements `g`, `h
 projectors meet in `∑_{k, k'} (L_g)_{k k'} (L_h)_{k k'} = |G| δ_{g, h}`, which is the step
 `Δ = |G|⁻¹ 𝟙` of the source, so `𝒫(C)† 𝒫(C) = c_A c_B Π`
 (`conjTranspose_linkContractionMatrix_mul_eq`). Hence the left inverse of `𝒫(C)` is
-`(c_A c_B)⁻¹ 𝒫(C)†` (`toLin'_conjTranspose_comp_linkContractionCoord`), and Lemma 6.2 in two
+`(c_A c_B)⁻¹ 𝒫(C)†` (`toLin'_conjTranspose_comp_linkContractionCoord`), where `𝒫(C)†` is the
+contraction of the adjoints of the two factors (`conjTranspose_linkContractionMatrix`), and
+Lemma 6.2 in two
 dimensions is `IsGIsometric.linkContraction`, with the factors multiplying.
 
 The representations `σ_A`, `σ_B` of the remaining legs are required to be unitary. In the
@@ -212,6 +214,17 @@ noncomputable def linkContractionCoord (TA : (α × G → ℂ) →ₗ[ℂ] (κA 
     (TB : (G × β → ℂ) →ₗ[ℂ] (κB → ℂ)) : (α × β → ℂ) →ₗ[ℂ] (κA × κB → ℂ) :=
   Matrix.toLin' (linkContractionMatrix (LinearMap.toMatrix' TA) (LinearMap.toMatrix' TB))
 
+omit [Group G] [DecidableEq G] [Fintype α] [Fintype β] [DecidableEq α]
+  [DecidableEq β] [Fintype κA] [Fintype κB] in
+/-- The adjoint of the contraction is the contraction of the adjoints:
+`(C†)_{(a, b), (k, l)} = ∑_g (A†)_{(a, g), k} (B†)_{(g, b), l}`. -/
+theorem conjTranspose_linkContractionMatrix (MA : Matrix κA (α × G) ℂ)
+    (MB : Matrix κB (G × β) ℂ) :
+    (linkContractionMatrix MA MB)ᴴ =
+      Matrix.of fun p k => ∑ g, MAᴴ (p.1, g) k.1 * MBᴴ (g, p.2) k.2 := by
+  ext p k
+  simp [linkContractionMatrix, Matrix.conjTranspose_apply, star_sum, star_mul', mul_comm]
+
 omit [Group G] [DecidableEq G] [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β] in
 /-- The Gram matrix of the contraction is the contraction of the two Gram matrices. -/
 theorem conjTranspose_linkContractionMatrix_mul (MA : Matrix κA (α × G) ℂ)
@@ -347,8 +360,8 @@ theorem star_linkContractionCoord_dotProduct {σA : Representation ℂ G (α →
 /-- Source: arXiv:1001.3807, proof of Lemma 6.2, `Papers/1001.3807/paper_v3.tex`
 lines 1709–1713. Under the hypotheses of `star_linkContractionCoord_dotProduct`, the left inverse
 of the contracted tensor is its adjoint: `𝒫(C)† 𝒫(C) = c_A c_B Π`, so
-`𝒫(C)⁻¹ = (c_A c_B)⁻¹ 𝒫(C)†`, the adjoint of the contraction being the contraction of the
-adjoints. -/
+`𝒫(C)⁻¹ = (c_A c_B)⁻¹ 𝒫(C)†`, where `𝒫(C)†` is the contraction of the adjoints of the two
+factors (`conjTranspose_linkContractionMatrix`). -/
 theorem toLin'_conjTranspose_comp_linkContractionCoord [DecidableEq κA] [DecidableEq κB]
     {σA : Representation ℂ G (α → ℂ)}
     {σB : Representation ℂ G (β → ℂ)}

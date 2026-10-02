@@ -1464,6 +1464,7 @@ dual basis.
         TNLean.PEPS.conjTranspose_toMatrix'_mul_toMatrix',
         TNLean.PEPS.linkContractionMatrix, TNLean.PEPS.linkContractionCoord,
         TNLean.PEPS.conjTranspose_linkContractionMatrix_mul,
+        TNLean.PEPS.conjTranspose_linkContractionMatrix,
         TNLean.PEPS.toMatrix'_averageMap,
         TNLean.PEPS.conjTranspose_linkContractionMatrix_mul_eq,
         TNLean.PEPS.linkContractionCoord_comp_kroneckerRep,
@@ -1513,7 +1514,10 @@ dual basis.
     projector $\Pi$ of $\sigma_{A}\otimes\sigma_{B}$. Hence
     $\langle\mathcal{P}(C)x,\mathcal{P}(C)y\rangle=c_{A}c_{B}\langle x,y\rangle$
     for invariant $x,y$, which also gives injectivity on the invariant
-    subspace. Invariance of $C$ holds because the actions on the contracted
+    subspace. Entrywise,
+    $\mathcal{P}(C)^{\dagger}_{(a,b),(k,l)}
+        =\sum_{g}\mathcal{P}(A)^{\dagger}_{(a,g),k}\mathcal{P}(B)^{\dagger}_{(g,b),l}$,
+    so $\mathcal{P}(C)^{\dagger}$ is the contraction of the adjoints. Invariance of $C$ holds because the actions on the contracted
     link cancel, as in Theorem~\ref{thm:peps_g_injective_concatenation}.
 \end{proof}
 
