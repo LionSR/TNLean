@@ -23,10 +23,12 @@ import TNLean.MPS.Periodic.EqualCaseGlobal.Canonical
 import TNLean.MPS.Periodic.EqualCaseGlobal.IrreducibleForm
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.GlobalGauge
+import TNLean.MPS.Periodic.IrreducibleFormBlocking
 import TNLean.MPS.Periodic.IrreducibleFormPeriods
 import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 import TNLean.MPS.Periodic.Normalization
 import TNLean.MPS.Periodic.NormalizedSelfOverlap
+import TNLean.MPS.Periodic.OrbitUnitary
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.PeriodBound
 import TNLean.MPS.Periodic.PeriodExistence

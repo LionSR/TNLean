@@ -97,8 +97,21 @@ gapped Hamiltonian paths.
 
 The formal predicate \leanid{MPSTensor.IsSameSPTPhase} records equality of the
 virtual cocycle labels; it does not construct the interpolation. The blueprint
-classification theorem remains marked \path{notready}. No \Lean{} declaration
-implements this path or depends on the corrected summation range.
+classification theorem remains marked \path{notready}.
+
+The corrected bond vector is defined by
+\leanid{MPSTensor.bondInterpolationWeight} and
+\leanid{MPSTensor.bondInterpolationMatrix}. The declarations
+\leanid{MPSTensor.normalizedBondInterpolationMatrix},
+\leanid{MPSTensor.normalizedBondInterpolationMatrix_sum_normSq}, and
+\leanid{MPSTensor.continuous_normalizedBondInterpolationMatrix} establish
+its normalization and continuity for positive endpoint bond dimensions.
+The blueprint theorem \path{thm:spt_normalized_bond_interpolation} records
+these results with \path{leanok}; they depend on the corrected second-block
+range. The definition
+\leanid{MPSTensor.SymmetricGappedInteractionPath} states the independent
+Hamiltonian-path conditions, but constructing such a path from this bond
+interpolation and proving its uniform spectral gap remain open.
 
 \section{Verdict}
 

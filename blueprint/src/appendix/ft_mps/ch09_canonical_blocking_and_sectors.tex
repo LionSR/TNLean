@@ -294,6 +294,27 @@ through its own period agrees with the directly $p$-blocked block.
     generation of the same MPV family at every length.
 \end{lemma}
 
+\begin{theorem}[Blocking a weighted block-sum presentation]%
+    \label{thm:block_tensor_of_same_mpv_to_tensor_from_blocks}
+    \lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks}\leanok
+    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2}
+    If $A$ generates the same MPV family as $\bigoplus_k\mu_kB_k$ at every
+    length, then for every $p\ge0$ the blocked tensor $A^{[p]}$ generates the
+    same MPV family as $\bigoplus_k\mu_k^pB_k^{[p]}$ at every length.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpv_block,thm:mpv_decomposition}
+    For a blocked configuration $\sigma$ of length $N$ with unblocked
+    configuration $\sigma'$ of length $pN$,
+    \begin{align}
+        V^{(N)}\bigl(A^{[p]}\bigr)_\sigma
+         & =V^{(pN)}(A)_{\sigma'}
+        =\sum_k\mu_k^{pN}V^{(pN)}(B_k)_{\sigma'}
+        =\sum_k\bigl(\mu_k^p\bigr)^NV^{(N)}\bigl(B_k^{[p]}\bigr)_\sigma. \notag
+    \end{align}
+\end{proof}
+
 \begin{lemma}[Positive-length equality survives blocking]%
     \label{thm:same_mpv2_pos_block_tensor}
     \lean{MPSTensor.sameMPV₂Pos_blockTensor}\leanok
