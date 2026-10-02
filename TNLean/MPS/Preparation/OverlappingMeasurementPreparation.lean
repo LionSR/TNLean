@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.NonNormalMeasurementPreparation
 import TNLean.MPS.Preparation.OverlappingBlockStates
 import TNLean.MPS.Preparation.ShortChainPreparation
@@ -291,12 +292,6 @@ private theorem blockIsoVector_sum_smul {D M N : ℕ} {ℓ : Fin M → ℕ} {κ 
     Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun τ _ => by ring
-
-/-- The isometries on the blocks commute with scalars. -/
-private theorem blockIsoVector_smul {D M N : ℕ} {ℓ : Fin M → ℕ}
-    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (c : ℂ)
-    (x : MPVSpace (D * D) M) : blockIsoVector B hN (c • x) = c • blockIsoVector B hN x := by
-  simpa using blockIsoVector_sum_smul B hN (fun _ : Unit => c) fun _ => x
 
 /-- **A chain of one block.** Let the blocked direct sum with unit weights, cut into one block of
 `N` sites, be injective on the bond pairs of the blocks, and let `|φ⟩ = ∑ⱼ βⱼ |φ_N(A_j)⟩ ≠ 0`.

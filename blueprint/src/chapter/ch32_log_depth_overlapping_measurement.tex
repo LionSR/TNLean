@@ -70,9 +70,11 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     $Q=\Id-\sum_jK_jK_j^\dagger$ and $G_\infty$ be as in
     Lemma~\ref{lem:ldp_overlapping_positive_part}; that lemma gives $c>0$ with
     $G_\infty+Q\geq c\Id$ and
-    $\lVert\mathcal B^\dagger\mathcal B-G_\infty\rVert\leq Ke^{-\ell/(2\xi)}$.
+    $\lVert\mathcal B^\dagger\mathcal B-G_\infty\rVert\leq Ke^{-\ell/(2\xi_t)}$,
+    where $\xi_t$ is the correlation length at $t=\max(\lvert\lambda_2\rvert,1/2)$,
+    which satisfies $0<t<1$ and bounds the same eigenvalues as $\lvert\lambda_2\rvert$.
     The matrices of the blocked tensor vanish outside $S$, and $Qx=0$ for $x$
-    supported on $S$. For $\ell$ with $Ke^{-\ell/(2\xi)}<c$ and such $x$ with
+    supported on $S$. For $\ell$ with $Ke^{-\ell/(2\xi_t)}<c$ and such $x$ with
     $\mathcal Bx=0$,
     \begin{align*}
         0=x^\dagger(\mathcal B^\dagger\mathcal B+Q)x
@@ -192,7 +194,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
         \textstyle\bigotimes_k\omega_j\Bigm|\frac{\phi}{\lVert\phi\rVert}\Bigr\rangle\Bigr\rvert
         \leq CMe^{-\gamma q/\xi}.
     \end{align*}
-    The constant does not depend on the weights. For the canonical form
+    Here $-\gamma q/\xi$ is read as $0$ when $\xi=0$, that is when
+    $\lambda_2=0$; the bound then gives no decay in $q$. The constant does not
+    depend on the weights. For the canonical form
     $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})\otimes A_j^i$
     of \cite[eq.~(S2)]{Malz2024Preparation}, $\ket{\phi_N(A)}$ is $\ket\phi$
     with $\beta_j=\sum_k\mu_{j,k}^N$, so this bounds the error for every
@@ -209,7 +213,8 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
 \end{theorem}
 \begin{proof}
     \leanok
-    If $\lvert\lambda_2\rvert\geq1$ or $q=0$, then $Me^{-\gamma q/\xi}\geq1$ and
+    If $\lambda_2=0$, $\lvert\lambda_2\rvert\geq1$ or $q=0$, then
+    $Me^{-\gamma q/\xi}\geq1$ and
     the bound holds with $C=1$. Otherwise write $w=\sum_l\lvert\beta_l\rvert^2$
     and $\ket{\psi}=\sum_j\alpha_j\ket{\psi_j}$. By
     Lemma~\ref{lem:ldp_overlapping_block_states}(2),
@@ -235,8 +240,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \leanok
     \uses{def:ldp_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
         thm:ldp_block_sum_unitary, thm:ldp_sequential_factorization_on,
-        def:ldp_block_isometry_state, thm:ldp_orthogonal_blocks_measurement,
-        lem:ldp_measurement_unitary_case}
+        def:ldp_block_isometry_state, lem:ldp_measurement_unitary_case}
     For $d\geq2$, every bond dimension $D$ and every number $b$ of labels, there
     are $C$ and $L_0$ such that the following holds. Let $A$ be a tensor of bond
     dimension $D$, $S$ a set of bond pairs, $\omega_1,\dots,\omega_b$
@@ -357,7 +361,8 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     of depth $O(N)=O(\log(N/\varepsilon))$ by Theorem~\ref{thm:ldp_chain_depth}.
     If $N<L_{\min}$, it is prepared in bounded depth by
     Theorem~\ref{thm:ldp_short_chain_preparation}. For the second statement,
-    $\lvert\lVert\phi_N(A)\rVert^2/w-1\rvert\leq Ke^{-N/(4\xi)}$ with
+    $\lvert\lVert\phi_N(A)\rVert^2/w-1\rvert\leq Ke^{-N/(4\xi_t)}$, with
+    $\xi_t$ the correlation length at $t$ and
     $w=\sum_j\lvert\beta_j\rvert^2$ by
     Lemma~\ref{lem:ldp_shared_overlap_estimates}(6), which is below one for
     large $N$.

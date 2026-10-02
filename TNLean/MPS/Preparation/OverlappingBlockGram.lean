@@ -198,7 +198,9 @@ noncomputable def blockSumPosLimit (ι : (j : Fin b) → Fin (Dj j) → Fin D)
   ∑ j, pairEmbedding (ι j) * ((CFC.sqrt (σ j))ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) *
     (pairEmbedding (ι j))ᴴ
 
-/-- The projector `Q = 1 - ∑ⱼ K_j K_jᴴ` onto the bond pairs that do not lie in one block. -/
+/-- The matrix `Q = 1 - ∑ⱼ K_j K_jᴴ`. When every `ι_j` is injective and distinct `ι_j` have
+disjoint ranges, it is the orthogonal projector onto the bond pairs that do not lie in one block,
+as proved below under these hypotheses; for arbitrary embeddings it need not be a projector. -/
 noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   1 - ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ
@@ -556,8 +558,9 @@ private theorem sum_pairEmbedding_mul_conjTranspose_add_offBlockProj :
     ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ + offBlockProj ι = 1 := by
   rw [offBlockProj, add_sub_cancel]
 
-/-- **Strict positivity of the limit.** If every `σ_j` is positive definite with trace one,
-then `∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ + Q ≥ c` for some `c > 0`. -/
+/-- **Strict positivity of the limit.** If every `ι_j` is injective, distinct `ι_j` have
+disjoint ranges, and every `σ_j` is positive definite with trace one, then
+`∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ + Q ≥ c` for some `c > 0`. -/
 theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosDef)
     (htr : ∀ j, (σ j).trace = 1) :
     ∃ c : ℝ, 0 < c ∧
