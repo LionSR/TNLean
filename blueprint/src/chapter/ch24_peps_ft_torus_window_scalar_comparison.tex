@@ -1,0 +1,265 @@
+\subsection{Corner comparison at the minimal torus sizes}
+\label{subsec:peps_window_scalar_comparison}
+
+\begin{definition}[Injective cyclic windows]%
+    \label{def:peps_normal_arc_windows}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses}
+    \leanok
+    For a family $\mathcal I$ of regions in the $w\times h$ torus, the
+    $L\times K$ cyclic-window hypothesis means that
+    $\mathcal R(s;L,K)\in\mathcal I$ for every starting vertex $s$.
+    Here $\mathcal R(s;a,b)$ is the cyclic rectangle of side lengths $a,b$
+    starting at $s$. For a tensor, $\mathcal I$ is its family of injective
+    regions. This is the window hypothesis in the normal TI PEPS
+    corollary of~\cite{Molnar2018NormalPEPS}.
+\end{definition}
+
+\begin{theorem}[Enlarging an injective cyclic window]%
+    \label{thm:peps_arc_rectangle_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.arcRectangle_injective}
+    \leanok
+    Let $\mathcal I$ be closed under finite nonempty unions and satisfy
+    the $L\times K$ cyclic-window hypothesis, where $L,K>0$.
+    If $L\leq a\leq w$ and $K\leq b\leq h$, then
+    $\mathcal R(s;a,b)\in\mathcal I$ for every $s$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_normal_arc_windows, lem:peps_regionInjectivityUnionClosure_finite}
+    The enlarged rectangle is the union of its $L\times K$ windows whose
+    starting displacements range over
+    $\{0,\ldots,a-L\}\times\{0,\ldots,b-K\}$. This index set is nonempty.
+    Apply closure under finite unions.
+\end{proof}
+
+\begin{theorem}[Complement of a cyclic rectangle]%
+    \label{thm:peps_arc_rectangle_complement}
+    \lean{TNLean.PEPS.compl_torusArcRectangle}
+    \leanok
+    For $a<w$ and $b<h$, the complement of $\mathcal R(s;a,b)$ is
+    \begin{align}
+        \mathcal R(s;a,b)^c
+         & =\mathcal R((s_1+a,s_2);w-a,h)
+        \cup\mathcal R((s_1,s_2+b);a,h-b).
+        \label{eq:peps_arc_complement}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    A vertex outside the rectangle either has its first coordinate
+    outside the cyclic interval of length $a$, or has its first coordinate
+    inside that interval and its second coordinate outside the interval
+    of length $b$. These are precisely the two rectangles
+    in~(\ref{eq:peps_arc_complement}).
+\end{proof}
+
+\begin{definition}[The two corner comparison regions]%
+    \label{def:peps_window_corner_regions}
+    \lean{TNLean.PEPS.windowCornerRectangle}
+    \lean{TNLean.PEPS.windowCornerRegion}
+    \lean{TNLean.PEPS.windowCornerVertex}
+    \leanok
+    Write $[a,b)$ for the vertices whose chosen coordinate values lie
+    between $a$ and $b-1$. Define
+    \begin{align}
+        S   & =[L,2L+1)\times[K,2K+1),\notag            \\
+        R   & =\bigl([L+1,2L+1)\times[K,2K+1)\bigr)
+        \cup\bigl([L,2L+1)\times[K+1,2K+1)\bigr),\notag \\
+        v_0 & =(L,K).
+        \label{eq:peps_window_corner_regions}
+    \end{align}
+    These are the one-site comparison regions in the final argument of
+    \cite[proof of Theorem~3]{Molnar2018NormalPEPS}, with arbitrary positive
+    window lengths.
+\end{definition}
+
+\begin{theorem}[Restoring the omitted corner]%
+    \label{thm:peps_window_corner_geometry}
+    \lean{TNLean.PEPS.mem_windowCornerRegion}
+    \lean{TNLean.PEPS.eq_windowCornerVertex_iff}
+    \lean{TNLean.PEPS.windowCornerVertex_notMem}
+    \lean{TNLean.PEPS.insert_windowCornerVertex_windowCornerRegion}
+    \lean{TNLean.PEPS.compl_windowCornerRegion_eq_union}
+    \leanok
+    Membership in $R$ is given by the two coordinate conditions
+    in~(\ref{eq:peps_window_corner_regions}).
+    If $2L+1\leq w$ and $2K+1\leq h$, then a vertex is $v_0$ exactly when
+    its coordinate values are $(L,K)$; furthermore $v_0\notin R$ and
+    $R\cup\{v_0\}=S$.
+    For $L,K>0$, the complement identity is
+    \begin{align}
+        R^c=S^c\cup\bigl([1,L+1)\times[1,K+1)\bigr).
+        \label{eq:peps_window_corner_complement}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_window_corner_regions}
+    The coordinate inequalities defining $R$ leave out exactly $(L,K)$
+    from $S$. The rectangle added in~(\ref{eq:peps_window_corner_complement})
+    intersects $S$ only at this corner; every other point of that rectangle
+    lies in $S^c$. Expanding the coordinate inequalities proves all assertions.
+\end{proof}
+
+\begin{theorem}[Injectivity of the corner regions and their complements]%
+    \label{thm:peps_window_corner_injectivity}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowCornerRegion_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowCornerRectangle_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.compl_windowCornerRectangle_injective}
+    \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.compl_windowCornerRegion_injective}
+    \leanok
+    Let $\mathcal I$ be closed under finite nonempty unions and satisfy
+    the $L\times K$ cyclic-window hypothesis. If $L,K>0$,
+    $2L+1\leq w$ and $2K+1\leq h$, then $R,S,R^c,S^c\in\mathcal I$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_arc_rectangle_injective, thm:peps_arc_rectangle_complement,
+        thm:peps_window_corner_geometry}
+    The two rectangles defining $R$ have side lengths $L\times(K+1)$
+    and $(L+1)\times K$; $S$ has side lengths $(L+1)\times(K+1)$.
+    Each contains a full window. Formula~(\ref{eq:peps_arc_complement})
+    writes $S^c$ as two cyclic rectangles of side lengths
+    $(w-L-1)\times h$ and $(L+1)\times(h-K-1)$.
+    The size bounds give $w-L-1\geq L$ and $h-K-1\geq K$, so these
+    rectangles also contain full windows. Finally apply
+    (\ref{eq:peps_window_corner_complement}) and union closure to $R^c$.
+\end{proof}
+
+\begin{theorem}[Boundary edges of the corner regions]%
+    \label{thm:peps_window_corner_boundary}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_windowCornerRegion}
+    \lean{TNLean.PEPS.isRegionBoundaryEdge_windowCornerRectangle}
+    \leanok
+    If $w,h>1$, $K>0$, $2L+1\leq w$ and $2K+1\leq h$,
+    the upward edge from $(L,K)$ crosses $R$, and the upward edge
+    from $(L,K-1)$ crosses $S$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_window_corner_geometry}
+    The first edge starts outside $R$ and ends at $(L,K+1)\in R$.
+    The second starts below $S$ and ends at $(L,K)\in S$.
+    The size bounds ensure that neither edge crosses a coordinate seam.
+\end{proof}
+
+\begin{theorem}[Injectivity under identification of coordinates]%
+    \label{thm:peps_region_injective_identification}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_transport}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_translate}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_reindexTensor}
+    \leanok
+    If $\phi$ is a graph isomorphism, the transported tensor is injective
+    on $\phi(R)$ exactly when the original tensor is injective on $R$.
+    Replacing bond dimensions by equal dimensions also preserves injectivity
+    on $R$. For a translation-invariant tensor, every translated region
+    has the same injectivity property.
+\end{theorem}
+\begin{proof}\leanok
+    The boundary and physical configurations are identified by bijections.
+    The corresponding blocked tensor families therefore differ by invertible
+    linear changes of coordinates, which preserve linear independence.
+\end{proof}
+
+\begin{theorem}[Block proportionality from absorbed edge identities]%
+    \label{thm:peps_block_proportional_absorbed}
+    \lean{TNLean.PEPS.twoBlockProportional_of_edgeAbsorbed}
+    \leanok
+    Let $A,B$ be tensors on a finite graph with matched bond dimensions,
+    and put $C=X\cdot B$ for an invertible edge gauge family $X$.
+    Suppose $A$ and $C$ are injective on both $Q$ and $Q^c$, the boundary
+    of $Q$ is nonempty, and
+    $C_A(e,M;\sigma)=C_C(e,M;\sigma)$ for every edge, inserted matrix
+    and global physical configuration. Then $A_Q=c_Q C_Q$ for some
+    $c_Q\ne0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_twoInjectiveTensorInsertionComparison}
+    The bare-edge equality gives equality of the region-inserted coefficients
+    on each boundary edge of $Q$. The injective two-block comparison gives
+    reciprocal nonzero proportionalities on $Q$ and $Q^c$; retain the first.
+\end{proof}
+
+\begin{theorem}[Translation preserves the block proportionality scalar]%
+    \label{thm:peps_block_proportional_translate}
+    \lean{TNLean.PEPS.twoBlockScalarProportional_translate}
+    \leanok
+    Let $w,h>1$, let $A,B$ be translation invariant on the torus with
+    matched bond dimensions, and let $X$ be a translation-covariant
+    invertible edge gauge family. Put $C=X\cdot B$.
+    If $A_Q=c C_Q$, then $A_{tQ}=c C_{tQ}$ for every translation $t$.
+\end{theorem}
+\begin{proof}\leanok
+    Translation gives bijections of the boundary and physical configurations.
+    Translation invariance of $A,B$ and covariance of $X$ identify their
+    blocked weights under these bijections, retaining the same factor $c$.
+\end{proof}
+
+\begin{theorem}[A common scalar from a translated one-site comparison]%
+    \label{thm:peps_translated_scalar_comparison}
+    \lean{TNLean.PEPS.component_eq_gaugeVertex_of_translatedProportional}
+    \leanok
+    Under the translation and gauge hypotheses of
+    Theorem~\ref{thm:peps_block_proportional_translate}, assume positive bond
+    dimensions of $A$, injectivity of $B$ on $Q$, and $v_0\notin Q$.
+    If $A_Q=c_Q C_Q$ and
+    $A_{Q\cup\{v_0\}}=c_S C_{Q\cup\{v_0\}}$, where $c_Q\ne0$,
+    then $A_v=(c_S/c_Q)C_v$ at every vertex $v$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_block_proportional_translate,
+        thm:peps_region_injective_identification,
+        thm:peps_regionBlockedTensorInjective_applyGauge,
+        cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
+    Choose the translation $t(v_0)=v$. The two block proportionalities
+    transfer to $tQ$ and $tQ\cup\{v\}$ with the same $c_Q,c_S$.
+    Injectivity of $B$ transfers to $tQ$ and is preserved by the gauge
+    and the identification of bond dimensions. The inserted-site
+    scalar comparison therefore gives $A_v=(c_S/c_Q)C_v$.
+\end{proof}
+
+\begin{theorem}[The volume power of a common site scalar]%
+    \label{thm:peps_common_scalar_volume}
+    \lean{TNLean.PEPS.lambda_pow_card_torus_eq_one}
+    \leanok
+    Let $w,h>1$, and suppose $A,B$ generate the same torus state, have
+    matched bond dimensions, and have positive bond dimensions for $A$.
+    Suppose $A$ is injective on $Q$ and $Q^c$ for some $Q$.
+    If an invertible edge gauge family $X$ satisfies
+    $A_v=\lambda(X\cdot B)_v$ at every vertex, then $\lambda^{wh}=1$.
+\end{theorem}
+\begin{proof}\leanok
+    Injectivity on $Q$ and $Q^c$ gives a nonzero state coefficient.
+    Gauge cancellation preserves the closed state, while multiplying each
+    site tensor by $\lambda$ multiplies it by $\lambda^{wh}$.
+    Equality of the states therefore gives $\lambda^{wh}=1$.
+\end{proof}
+
+\begin{theorem}[Scalar normalization from injective windows and absorbed gauges]%
+    \label{thm:peps_window_absorbed_scalar}
+    \lean{TNLean.PEPS.exists_scalar_of_normalArcWindows_absorbedGauge}
+    \leanok
+    Let $A,B$ be translation-invariant tensors on a $w\times h$ torus,
+    with positive matched bond dimensions, generating the same state.
+    Suppose every cyclic $L\times K$ window is injective for each tensor,
+    where $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$.
+    Let $X$ be an invertible translation-covariant edge gauge family for which
+    $C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma)$ for all edges, matrices and
+    global physical configurations. Then there is $\lambda\in\mathbb C$ such that
+    \begin{align}
+        A_v          & =\lambda(X\cdot B)_v,\notag \\
+        \lambda^{wh} & =1.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,
+        thm:peps_window_corner_injectivity, thm:peps_window_corner_geometry,
+        thm:peps_window_corner_boundary, thm:peps_region_injective_identification,
+        thm:peps_regionBlockedTensorInjective_applyGauge,
+        thm:peps_block_proportional_absorbed, thm:peps_translated_scalar_comparison,
+        thm:peps_common_scalar_volume}
+    Positive bonds give union closure of injectivity for both tensors.
+    Thus $R,S,R^c,S^c$ from~(\ref{eq:peps_window_corner_regions}) are injective.
+    Gauge transformation and identification of bond dimensions preserve these
+    facts for $X\cdot B$. Both comparison regions have boundary edges,
+    so the absorbed identities give $A_R=c_R(X\cdot B)_R$ and
+    $A_S=c_S(X\cdot B)_S$ with $c_R\ne0$.
+    Since $S=R\cup\{v_0\}$, translation of this comparison yields the same
+    ratio $\lambda=c_S/c_R$ at every site. The volume-power theorem gives
+    $\lambda^{wh}=1$.
+\end{proof}

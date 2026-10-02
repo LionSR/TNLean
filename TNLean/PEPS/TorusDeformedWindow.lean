@@ -254,7 +254,7 @@ theorem horizontalUnion_insert_eq_of_deformedState_eq
     C₁ = C₂ :=
   deformedRegionState_insert_eq_of_complementInjective (G := torusGraph width height) B
     (torusArcRectangle s (L + 1) K)
-    (h.regionBlockedTensorInjective_horizontalUnionComplement hUB hL hK hxw hyh s)
+    (h.regionBlockedTensorInjective_horizontalUnionComplement hUB (by omega) (by omega) hxw hyh s)
     C₁ C₂ hstate
 
 /-- **Consecutive-window comparison, vertical slide.**
@@ -284,7 +284,7 @@ theorem verticalUnion_insert_eq_of_deformedState_eq
     C₁ = C₂ :=
   deformedRegionState_insert_eq_of_complementInjective (G := torusGraph width height) B
     (torusArcRectangle s L (K + 1))
-    (h.regionBlockedTensorInjective_verticalUnionComplement hUB hL hK hxw hyh s)
+    (h.regionBlockedTensorInjective_verticalUnionComplement hUB (by omega) (by omega) hxw hyh s)
     C₁ C₂ hstate
 
 end NormalTorusArcWindowInjectivityHypotheses

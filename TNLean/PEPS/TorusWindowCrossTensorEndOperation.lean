@@ -25,12 +25,10 @@ ordinary multiplication after passing to `O₃ᵀ`.  Choosing the globally uniqu
 configuration is selected in this argument, and no bond-dimension identification or gauge is
 constructed.
 
-**Scope restriction (displayed horizontal staircase, `L, K ≥ 2`):** The result is stated for the
-non-wrapping horizontal staircase coordinates supported by the present boundary-geometry API.
-It assumes `L, K ≥ 2`, so the displayed windows straddle the highlighted edge; the paper treats
-`L = K = 2` in its sketch and leaves the cases `L = 1` or `K = 1` unaddressed.  This clarification
-and the rotation/translation assembly needed for the full two-dimensional corollary are recorded
-in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
+The extraction is written in displayed non-wrapping horizontal staircase coordinates.
+It requires only positive window lengths. Coordinate exchange and translation supply
+both edge orientations in the full torus theorem. The derivation is recorded in
+`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 ## References
 
@@ -379,7 +377,7 @@ theorem existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameStat
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X : Matrix
@@ -519,7 +517,7 @@ noncomputable def staircaseCrossTensorVirtualOperation
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X : Matrix
@@ -554,7 +552,7 @@ theorem staircaseCrossTensorVirtualOperation_spec
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X : Matrix
@@ -623,7 +621,7 @@ theorem staircaseCrossTensorVirtualOperation_mul
     (hAB : SameState A B)
     (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
     (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+    (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (X Y : Matrix

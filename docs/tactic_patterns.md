@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### injectivity under translations of a torus region — promoted
+- **Pattern:** transport blocked-region injectivity along a torus translation,
+  then replace the transported tensor by the original translation-invariant tensor.
+- **Seen:** four uses in `TorusWitnessTranslate.lean`,
+  `TorusTranslatedScalarComparison.lean`, and `TorusWindowGaugeUniqueness.lean`.
+- **Abstraction:** the existing `regionBlockedTensorInjective_translate` now lives in
+  `TorusTranslationInvariant.lean`, so the witness, scalar and uniqueness arguments
+  can use it without importing the later torus Fundamental Theorem.
+- **Notes:** the statement and proof are unchanged. Four duplicated uses are replaced;
+  the move has no line cost, consumer proofs lose five lines, and the necessary
+  `RegionTransport` import adds one line (net Lean line delta: -4).
+
+
+### propagation of two PEPS reference witnesses — promoted
+- **Pattern:** translate horizontal and vertical coefficient witnesses to every edge,
+  absorb their boundary gauges, and prove covariance by composition of translations.
+- **Seen:** the rectangle construction in `PEPS/TorusCovariantAbsorbedFamily.lean`
+  and the normal-window construction in `PEPS/TorusArcWindowGaugeExistence.lean`.
+- **Abstraction:** `exists_torusCovariantAbsorbedGaugeFamily_of_edgeReferenceWitnesses`
+  in `PEPS/TorusReferenceAbsorbedFamily.lean` accepts arbitrary witnessing regions.
+- **Notes:** both constructions use the same proof; the rectangle module loses
+  139 lines while retaining its theorem statement.
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and

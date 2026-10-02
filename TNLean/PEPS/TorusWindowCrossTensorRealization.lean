@@ -13,12 +13,10 @@ The left staircase operation realizes a bond insertion for every boundary config
 The globally quantified cross-tensor end relation gives the same realization on the second
 tensor. Addition and complex scalar multiplication commute with these physical operations.
 
-**Scope restriction (displayed horizontal staircase):** The staircase declarations use the
-non-wrapping horizontal coordinates of `TorusWindowCrossTensorEndOperation`. The cross-tensor
-assignment assumes `L, K ≥ 2`; the smaller windows and the rotation/translation assembly for the
-full two-dimensional theorem remain recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. The generic region statements have no such
-restriction.
+The staircase declarations use displayed non-wrapping horizontal coordinates and positive
+window lengths. Coordinate exchange and translation give the corresponding assignments on
+all torus edges. The generic region statements have no coordinate restriction.
+The derivation is recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 Source: arXiv:1804.04964, the algebra assignment at lines 563--582 and the two-dimensional
 end-window comparison at lines 2368--2444 of `Papers/1804.04964/paper_normal.tex`.
@@ -170,7 +168,7 @@ variable (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvari
 variable (hAB : SameState A B)
 variable (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
 variable (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-variable (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+variable (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
 variable (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
 variable (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
 
