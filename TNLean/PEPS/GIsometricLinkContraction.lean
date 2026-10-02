@@ -286,6 +286,34 @@ theorem star_linkContractionCoord_dotProduct {σA : Representation ℂ G (α →
     ← Matrix.dotProduct_mulVec, Matrix.mulVec_mulVec, hG,
     Matrix.smul_mulVec, LinearMap.toMatrix'_mulVec, dotProduct_smul, smul_eq_mul]
 
+/-- Source: arXiv:1001.3807, proof of Lemma 6.2, `Papers/1001.3807/paper_v3.tex`
+lines 1709–1713. Under the hypotheses of `star_linkContractionCoord_dotProduct`, the left inverse
+of the contracted tensor is its adjoint: `𝒫(C)† 𝒫(C) = c_A c_B Π`, so
+`𝒫(C)⁻¹ = (c_A c_B)⁻¹ 𝒫(C)†`, the adjoint of the contraction being the contraction of the
+adjoints. -/
+theorem toLin'_conjTranspose_comp_linkContractionCoord [DecidableEq κA] [DecidableEq κB]
+    {σA : Representation ℂ G (α → ℂ)}
+    {σB : Representation ℂ G (β → ℂ)}
+    (hσA : ∀ g, LinearMap.toMatrix' (σA g) ∈ Matrix.unitaryGroup α ℂ)
+    (hσB : ∀ g, LinearMap.toMatrix' (σB g) ∈ Matrix.unitaryGroup β ℂ)
+    {TA : (α × G → ℂ) →ₗ[ℂ] (κA → ℂ)} {TB : (G × β → ℂ) →ₗ[ℂ] (κB → ℂ)}
+    (hAinv : ∀ g, TA ∘ₗ kroneckerRep σA leftRegularFun g = TA)
+    (hBinv : ∀ g, TB ∘ₗ kroneckerRep leftRegularFun σB g = TB) {cA cB : ℂ}
+    (hcA : ∀ x ∈ (kroneckerRep σA leftRegularFun).invariants,
+      ∀ y ∈ (kroneckerRep σA leftRegularFun).invariants, star (TA x) ⬝ᵥ TA y = cA * (star x ⬝ᵥ y))
+    (hcB : ∀ x ∈ (kroneckerRep leftRegularFun σB).invariants,
+      ∀ y ∈ (kroneckerRep leftRegularFun σB).invariants, star (TB x) ⬝ᵥ TB y = cB * (star x ⬝ᵥ y)) :
+    Matrix.toLin' (linkContractionMatrix (LinearMap.toMatrix' TA) (LinearMap.toMatrix' TB))ᴴ ∘ₗ
+        linkContractionCoord TA TB = (cA * cB) • (kroneckerRep σA σB).averageMap := by
+  have hGA := conjTranspose_toMatrix'_mul_toMatrix'
+    (toMatrix'_kroneckerRep_mem_unitaryGroup hσA toMatrix'_leftRegularFun_mem_unitaryGroup)
+    hAinv hcA
+  have hGB := conjTranspose_toMatrix'_mul_toMatrix'
+    (toMatrix'_kroneckerRep_mem_unitaryGroup toMatrix'_leftRegularFun_mem_unitaryGroup hσB)
+    hBinv hcB
+  rw [linkContractionCoord, ← Matrix.toLin'_mul, conjTranspose_linkContractionMatrix_mul_eq hGA hGB,
+    map_smul, Matrix.toLin'_toMatrix']
+
 /-- Source: arXiv:1001.3807, Lemma 6.2 (stability of isometry under concatenation),
 `Papers/1001.3807/paper_v3.tex` lines 1704–1716, for the contraction of one link of two PEPS
 tensors. If `𝒫(A)` is `G`-isometric for `σ_A ⊗ L` and `𝒫(B)` for `L ⊗ σ_B`, with the
@@ -391,7 +419,7 @@ theorem tensorCoord_tmul (u : κA → ℂ) (v : κB → ℂ) (p : κA × κB) :
     tensorCoord (u ⊗ₜ v) p = u p.1 * v p.2 :=
   rfl
 
-omit [Fintype κA] [Fintype κB] in
+omit [Group G] [Fintype κA] [Fintype κB] in
 /-- Bridge: in the bases of group elements on the contracted link and the coordinate bases of
 the remaining legs and the physical systems, the contraction `linkContraction` of Lemma 5.2 is
 `linkContractionCoord`. -/
@@ -407,6 +435,98 @@ theorem tensorCoord_comp_linkContraction_comp_pairCoord
     linkContractionMatrix, Matrix.of_apply, LinearMap.toMatrix'_apply, linkLeftCoord_single,
     linkRightCoord_single, Finset.sum_apply, tensorCoord_tmul, TensorProduct.mk_apply,
     LinearMap.flip_apply]
+
+omit [Fintype κA] [Fintype κB] in
+/-- Bridge: in the coordinates `linkLeftCoord`, the representation `σ_A ⊗ L^*` of the virtual
+system `W_A ⊗ ℂ[G]^*` of `A` (`U_g⁻¹` leaving the contracted leg) is `σ_A ⊗ L`: the
+contragredient of a permutation representation has the same matrices in the dual basis. -/
+theorem linkLeftCoord_comp_kroneckerRep (σA : Representation ℂ G (α → ℂ)) (g : G) :
+    linkLeftCoord ∘ₗ kroneckerRep σA leftRegularFun g =
+      (σA.tprod (leftRegular ℂ G).dual) g ∘ₗ linkLeftCoord := by
+  refine (Pi.basisFun ℂ (α × G)).ext fun p => ?_
+  have h1 : kroneckerRep σA leftRegularFun g (Pi.single p 1) =
+      ∑ a', LinearMap.toMatrix' (σA g) a' p.1 • Pi.single (a', g * p.2) (1 : ℂ) := by
+    funext q
+    rw [← LinearMap.toMatrix'_mulVec, toMatrix'_kroneckerRep, Matrix.mulVec_single_one,
+      Finset.sum_apply]
+    simp only [Matrix.col_apply, Matrix.kroneckerMap_apply, toMatrix'_leftRegularFun,
+      Pi.smul_apply, Pi.single_apply, Prod.ext_iff, smul_eq_mul, mul_ite, mul_one, mul_zero]
+    by_cases hq : g * p.2 = q.2
+    · simp [hq, eq_comm]
+    · simp [hq, Ne.symm hq]
+  have h2 : (∑ a', LinearMap.toMatrix' (σA g) a' p.1 • Pi.single a' (1 : ℂ)) =
+      σA g (Pi.single p.1 1) := by
+    funext a''
+    simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
+  have h3 : (MonoidAlgebra.basis G ℂ).coord (g * p.2) =
+      Dual.transpose (R := ℂ) (leftRegular ℂ G g⁻¹) ((MonoidAlgebra.basis G ℂ).coord p.2) := by
+    refine (MonoidAlgebra.basis G ℂ).ext fun k => ?_
+    simp only [Dual.transpose_apply, LinearMap.comp_apply, Basis.coord_apply,
+      MonoidAlgebra.basis_apply]
+    simp only [MonoidAlgebra.basis, MonoidAlgebra.coeffLinearEquiv_apply,
+      ofMulAction_single, smul_eq_mul, MonoidAlgebra.coeff_single, Finsupp.single_apply,
+      inv_mul_eq_iff_eq_mul]
+  simp only [Pi.basisFun_apply, LinearMap.comp_apply, linkLeftCoord_single, tprod_apply,
+    TensorProduct.map_tmul, dual_apply, h1, map_sum, map_smul, linkLeftCoord_single, ← h3, ← h2,
+    TensorProduct.sum_tmul, TensorProduct.smul_tmul']
+
+omit [Fintype κA] [Fintype κB] [DecidableEq α] in
+/-- Bridge: in the coordinates `linkRightCoord`, the representation `L ⊗ σ_B` of the virtual
+system `ℂ[G] ⊗ W_B` of `B` (`U_g` entering the contracted leg) is `L ⊗ σ_B`. -/
+theorem linkRightCoord_comp_kroneckerRep (σB : Representation ℂ G (β → ℂ)) (g : G) :
+    linkRightCoord ∘ₗ kroneckerRep leftRegularFun σB g =
+      ((leftRegular ℂ G).tprod σB) g ∘ₗ linkRightCoord := by
+  refine (Pi.basisFun ℂ (G × β)).ext fun p => ?_
+  have h1 : kroneckerRep leftRegularFun σB g (Pi.single p 1) =
+      ∑ b', LinearMap.toMatrix' (σB g) b' p.2 • Pi.single (g * p.1, b') (1 : ℂ) := by
+    funext q
+    rw [← LinearMap.toMatrix'_mulVec, toMatrix'_kroneckerRep, Matrix.mulVec_single_one,
+      Finset.sum_apply]
+    simp only [Matrix.col_apply, Matrix.kroneckerMap_apply, toMatrix'_leftRegularFun,
+      Pi.smul_apply, Pi.single_apply, Prod.ext_iff, smul_eq_mul, mul_ite, mul_one, mul_zero,
+      ite_mul, one_mul, zero_mul]
+    by_cases hq : g * p.1 = q.1
+    · simp [hq, eq_comm]
+    · simp [hq, Ne.symm hq]
+  have h2 : (∑ b', LinearMap.toMatrix' (σB g) b' p.2 • Pi.single b' (1 : ℂ)) =
+      σB g (Pi.single p.2 1) := by
+    funext b''
+    simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
+  have h3 : MonoidAlgebra.basis G ℂ (g * p.1) = leftRegular ℂ G g (MonoidAlgebra.basis G ℂ p.1) := by
+    simp [MonoidAlgebra.basis_apply, ofMulAction_single, smul_eq_mul]
+  simp only [Pi.basisFun_apply, LinearMap.comp_apply, linkRightCoord_single, tprod_apply,
+    TensorProduct.map_tmul, h1, map_sum, map_smul, ← h3, ← h2, TensorProduct.tmul_sum,
+    TensorProduct.tmul_smul]
+
+omit [Fintype G] [Fintype κA] [Fintype κB] [DecidableEq G] in
+/-- Bridge: in the coordinates `pairCoord`, the representation `σ_A ⊗ σ_B` of the virtual system
+`W_A ⊗ W_B` of the contracted tensor is the Kronecker representation. -/
+theorem pairCoord_comp_kroneckerRep (σA : Representation ℂ G (α → ℂ))
+    (σB : Representation ℂ G (β → ℂ)) (g : G) :
+    pairCoord ∘ₗ kroneckerRep σA σB g = (σA.tprod σB) g ∘ₗ pairCoord := by
+  refine (Pi.basisFun ℂ (α × β)).ext fun p => ?_
+  have h1 : kroneckerRep σA σB g (Pi.single p 1) =
+      ∑ a', ∑ b', (LinearMap.toMatrix' (σA g) a' p.1 * LinearMap.toMatrix' (σB g) b' p.2) •
+        Pi.single (a', b') (1 : ℂ) := by
+    funext q
+    rw [← LinearMap.toMatrix'_mulVec, toMatrix'_kroneckerRep, Matrix.mulVec_single_one,
+      Finset.sum_apply]
+    simp only [Matrix.col_apply, Matrix.kroneckerMap_apply, Finset.sum_apply, Pi.smul_apply,
+      Pi.single_apply, Prod.ext_iff, smul_eq_mul, mul_ite, mul_one, mul_zero]
+    rw [Finset.sum_eq_single q.1 (fun a _ ha => by simp [Ne.symm ha]) (by simp)]
+    simp
+  have h2 : ∀ (ρ : Representation ℂ G (α → ℂ)) (a : α),
+      (∑ a', LinearMap.toMatrix' (ρ g) a' a • Pi.single a' (1 : ℂ)) = ρ g (Pi.single a 1) :=
+    fun ρ a => funext fun a'' => by simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
+  have h2' : (∑ b', LinearMap.toMatrix' (σB g) b' p.2 • Pi.single b' (1 : ℂ)) =
+      σB g (Pi.single p.2 1) :=
+    funext fun b'' => by simp [Finset.sum_apply, Pi.single_apply, LinearMap.toMatrix'_apply]
+  simp only [Pi.basisFun_apply, LinearMap.comp_apply, pairCoord_single, tprod_apply,
+    TensorProduct.map_tmul, h1, map_sum, map_smul, ← h2, ← h2', TensorProduct.sum_tmul,
+    TensorProduct.tmul_sum, TensorProduct.smul_tmul', TensorProduct.tmul_smul]
+  simp only [Finset.smul_sum, ← TensorProduct.smul_tmul', smul_smul]
+  rw [Finset.sum_comm]
+  exact Finset.sum_congr rfl fun _ _ => Finset.sum_congr rfl fun _ _ => by rw [mul_comm]
 
 /-- Source: arXiv:1001.3807, Lemma 6.2 (stability of isometry under concatenation),
 `Papers/1001.3807/paper_v3.tex` lines 1704–1716, for the two-dimensional contraction
