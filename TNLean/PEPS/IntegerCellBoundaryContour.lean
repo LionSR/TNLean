@@ -586,7 +586,7 @@ private theorem dartExterior_next_reachable {A : Finset (ℤ × ℤ)} (d : Bound
         abel
       have h₂ : (integerExteriorCollarGraph A).Adj (dartExterior (nextDart d)) c :=
         collar_adj_of_normal (dartExterior (nextDart d)) c d.1.1 (dart_occupied d)
-          hnear (near_diagonal d.1.1 d.1.2) d.1.2 he' 
+          hnear (near_diagonal d.1.1 d.1.2) d.1.2 he'
       exact h₁.reachable.trans h₂.symm.reachable
 
 private theorem dartExterior_reachable {A : Finset (ℤ × ℤ)}
