@@ -1092,9 +1092,9 @@ and its error extend to blocks of any lengths.
 
 \begin{definition}[Local circuit of depth $T$]
     \label{def:ldp_local_circuit}
-    \lean{MPSPreparation.IsLocalCircuitOfDepth, MPSPreparation.IsPreparedInDepth,
-        MPSPreparation.Layer, MPSPreparation.circuitOp,
-        MPSPreparation.supportedOperators}
+    \lean{QuantumCircuit.IsLocalCircuitOfDepth, QuantumCircuit.IsPreparedInDepth,
+        QuantumCircuit.Layer, QuantumCircuit.circuitOp,
+        QuantumCircuit.supportedOperators}
     \leanok
     A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
     $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
@@ -1114,7 +1114,7 @@ and its error extend to blocks of any lengths.
 \begin{lemma}[Light cone of a local circuit]
     \label{lem:ldp_light_cone}
     \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.conj_circuitOp_mem_supportedOperators}
+    \lean{QuantumCircuit.conj_circuitOp_mem_supportedOperators}
     \leanok
     Let $U$ be a local circuit of depth $T$ and let $Z$ act on a set of sites
     $X$. Then $U^\dagger ZU$ acts on the sites within ring distance $T$ of $X$.
@@ -1133,8 +1133,8 @@ and its error extend to blocks of any lengths.
 \begin{lemma}[No connected correlations beyond the light cone]
     \label{lem:ldp_light_cone_correlations}
     \uses{lem:ldp_light_cone}
-    \lean{MPSPreparation.expect_mul_eq_of_isPreparedInDepth,
-        MPSPreparation.expect_mul_mul_expect_one_of_isPreparedInDepth}
+    \lean{QuantumCircuit.expect_mul_eq_of_isPreparedInDepth,
+        QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth}
     \leanok
     Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
     act on sets of sites at distance larger than $2T$. Then
@@ -1161,10 +1161,10 @@ and its error extend to blocks of any lengths.
 \begin{theorem}[Unitaries on a bounded number of sites]
     \label{thm:ldp_bounded_unitary_two_site_gates}
     \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.exists_isPairProduct,
-        MPSPreparation.isTwoLevelWord_of_det_eq_one,
-        MPSPreparation.exists_isPairProduct_ctrlOp,
-        MPSPreparation.isPairProduct_embedOp_pairSites}
+    \lean{QuantumCircuit.exists_isPairProduct,
+        QuantumCircuit.isTwoLevelWord_of_det_eq_one,
+        QuantumCircuit.exists_isPairProduct_ctrlOp,
+        QuantumCircuit.isPairProduct_embedOp_pairSites}
     \leanok
     For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
     $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
@@ -1215,8 +1215,8 @@ and its error extend to blocks of any lengths.
         MPSPreparation.blockIsometryState_eq_mulVec,
         MPSPreparation.approximatingMPVState_eq_blockIsometryState,
         MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase,
-        MPSPreparation.IsCircuitOn.finset_noncommProd,
-        MPSPreparation.noncommProd_embedOp_apply}
+        QuantumCircuit.IsCircuitOn.finset_noncommProd,
+        QuantumCircuit.noncommProd_embedOp_apply}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Let $A$ be a tensor, let $\omega$ be a unit vector on
@@ -1308,10 +1308,10 @@ of a local circuit that may add product ancillas and discard them
 \begin{definition}[Local channel circuit of depth $T$]
     \label{def:ldp_local_channel_circuit}
     \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.ChannelLayer, MPSPreparation.ChannelLayer.map,
-        MPSPreparation.ChannelLayer.dual, MPSPreparation.channelCircuitMap,
-        MPSPreparation.channelCircuitDual,
-        MPSPreparation.IsChannelPreparedInDepth}
+    \lean{QuantumCircuit.ChannelLayer, QuantumCircuit.ChannelLayer.map,
+        QuantumCircuit.ChannelLayer.dual, QuantumCircuit.channelCircuitMap,
+        QuantumCircuit.channelCircuitDual,
+        QuantumCircuit.IsChannelPreparedInDepth}
     \leanok
     A \emph{channel on the pair} $\{k,k+1\}$ is a map
     $\rho\mapsto\sum_jK_j\rho K_j^\dagger$ on density matrices of the ring,
@@ -1331,9 +1331,9 @@ of a local circuit that may add product ancillas and discard them
 \begin{lemma}[Duality and complete positivity of local channel circuits]
     \label{lem:ldp_local_channel_circuit_properties}
     \uses{def:ldp_local_channel_circuit, def:ldp_local_circuit}
-    \lean{MPSPreparation.channelCircuitMap_isKrausCPTP,
-        MPSPreparation.trace_channelCircuitMap_mul,
-        MPSPreparation.channelCircuitMap_map_toChannelLayer}
+    \lean{QuantumCircuit.channelCircuitMap_isKrausCPTP,
+        QuantumCircuit.trace_channelCircuitMap_mul,
+        QuantumCircuit.channelCircuitMap_map_toChannelLayer}
     \leanok
     Let $\Phi$ be a local channel circuit. Then
     \begin{align}
@@ -1359,8 +1359,8 @@ of a local circuit that may add product ancillas and discard them
 \begin{lemma}[Light cone of a local channel circuit]
     \label{lem:ldp_channel_light_cone}
     \uses{def:ldp_local_channel_circuit}
-    \lean{MPSPreparation.channelCircuitDual_mem_supportedOperators,
-        MPSPreparation.ChannelLayer.dual_mem_supportedOperators}
+    \lean{QuantumCircuit.channelCircuitDual_mem_supportedOperators,
+        QuantumCircuit.ChannelLayer.dual_mem_supportedOperators}
     \leanok
     Let $\Phi$ be a local channel circuit of depth $T$ and let $Z$ act on a
     set of sites $X$. Then $\Phi^\dagger(Z)$ acts on the sites within ring
@@ -1380,10 +1380,10 @@ of a local circuit that may add product ancillas and discard them
 \begin{lemma}[No connected correlations beyond the light cone of channels]
     \label{lem:ldp_channel_light_cone_correlations}
     \uses{lem:ldp_channel_light_cone, lem:ldp_local_channel_circuit_properties}
-    \lean{MPSPreparation.trace_mul_mul_eq_of_isChannelPreparedInDepth,
-        MPSPreparation.channelCircuitDual_mul,
-        MPSPreparation.ChannelLayer.dual_mul,
-        MPSPreparation.trace_finKronecker_mul_mul}
+    \lean{QuantumCircuit.trace_mul_mul_eq_of_isChannelPreparedInDepth,
+        QuantumCircuit.channelCircuitDual_mul,
+        QuantumCircuit.ChannelLayer.dual_mul,
+        QuantumCircuit.trace_finKronecker_mul_mul}
     \leanok
     Let $\rho$ be prepared in depth $T$ by local channels, and let $Z$, $Z'$
     act on sets of sites at distance larger than $2T$. Then
@@ -1418,13 +1418,13 @@ change the local dimension act on single sites.
 \begin{definition}[Onsite channel]
     \label{def:ldp_onsite_channel}
     \uses{def:ldp_local_channel_circuit}
-    \lean{Matrix.rectKronecker, MPSPreparation.OnsiteChannel,
-        MPSPreparation.OnsiteChannel.map, MPSPreparation.OnsiteChannel.dual,
-        MPSPreparation.OnsiteChannel.id, MPSPreparation.OnsiteChannel.attach,
-        MPSPreparation.OnsiteChannel.attachZero,
-        MPSPreparation.OnsiteChannel.attach_siteMap_apply,
-        MPSPreparation.OnsiteChannel.discard,
-        MPSPreparation.OnsiteChannel.discard_siteMap_apply}
+    \lean{Matrix.rectKronecker, QuantumCircuit.OnsiteChannel,
+        QuantumCircuit.OnsiteChannel.map, QuantumCircuit.OnsiteChannel.dual,
+        QuantumCircuit.OnsiteChannel.id, QuantumCircuit.OnsiteChannel.attach,
+        QuantumCircuit.OnsiteChannel.attachZero,
+        QuantumCircuit.OnsiteChannel.attach_siteMap_apply,
+        QuantumCircuit.OnsiteChannel.discard,
+        QuantumCircuit.OnsiteChannel.discard_siteMap_apply}
     \leanok
     An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
     $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
@@ -1445,10 +1445,10 @@ change the local dimension act on single sites.
 \begin{lemma}[Onsite channels are product channels]
     \label{lem:ldp_onsite_channel_properties}
     \uses{def:ldp_onsite_channel}
-    \lean{MPSPreparation.OnsiteChannel.map_isKrausCPTP,
-        MPSPreparation.OnsiteChannel.map_finKronecker,
-        MPSPreparation.OnsiteChannel.trace_map_mul,
-        MPSPreparation.OnsiteChannel.discard_siteMap_attach_siteMap}
+    \lean{QuantumCircuit.OnsiteChannel.map_isKrausCPTP,
+        QuantumCircuit.OnsiteChannel.map_finKronecker,
+        QuantumCircuit.OnsiteChannel.trace_map_mul,
+        QuantumCircuit.OnsiteChannel.discard_siteMap_attach_siteMap}
     \leanok
     An onsite channel $\Phi$ is trace preserving and completely positive, it
     maps $\bigotimes_i\sigma_i$ to $\bigotimes_i\Phi_i(\sigma_i)$, it satisfies
@@ -1469,9 +1469,9 @@ change the local dimension act on single sites.
 \begin{lemma}[Onsite channels do not spread supports]
     \label{lem:ldp_onsite_channel_locality}
     \uses{def:ldp_onsite_channel}
-    \lean{MPSPreparation.OnsiteChannel.dual_mem_supportedOperators,
-        MPSPreparation.OnsiteChannel.dual_mul,
-        MPSPreparation.OnsiteChannel.dual_finKronecker}
+    \lean{QuantumCircuit.OnsiteChannel.dual_mem_supportedOperators,
+        QuantumCircuit.OnsiteChannel.dual_mul,
+        QuantumCircuit.OnsiteChannel.dual_finKronecker}
     \leanok
     Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
     $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
@@ -1490,8 +1490,8 @@ change the local dimension act on single sites.
 \begin{definition}[Local channel conversion]
     \label{def:ldp_local_channel_conversion}
     \uses{def:ldp_local_channel_circuit, def:ldp_onsite_channel}
-    \lean{MPSPreparation.IsLocalChannelProtocol,
-        MPSPreparation.IsLocalChannelConversion}
+    \lean{QuantumCircuit.IsLocalChannelProtocol,
+        QuantumCircuit.IsLocalChannelConversion}
     \leanok
     A \emph{local channel protocol of depth $T$} is a composition
     $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
@@ -1511,14 +1511,14 @@ change the local dimension act on single sites.
     \label{lem:ldp_local_channel_conversion_properties}
     \uses{def:ldp_local_channel_conversion, def:ldp_local_channel_circuit,
         lem:ldp_onsite_channel_properties}
-    \lean{MPSPreparation.IsLocalChannelProtocol.isKrausCPTP,
-        MPSPreparation.IsLocalChannelProtocol.channelCircuitMap_comp,
-        MPSPreparation.isLocalChannelConversion_circuit,
-        MPSPreparation.IsChannelPreparedInDepth.exists_isLocalChannelConversion,
-        MPSPreparation.IsLocalChannelConversion.refl,
-        MPSPreparation.IsLocalChannelConversion.mono,
-        MPSPreparation.IsLocalChannelConversion.exists_isKrausCPTP,
-        MPSPreparation.IsLocalChannelConversion.density}
+    \lean{QuantumCircuit.IsLocalChannelProtocol.isKrausCPTP,
+        QuantumCircuit.IsLocalChannelProtocol.channelCircuitMap_comp,
+        QuantumCircuit.isLocalChannelConversion_circuit,
+        QuantumCircuit.IsChannelPreparedInDepth.exists_isLocalChannelConversion,
+        QuantumCircuit.IsLocalChannelConversion.refl,
+        QuantumCircuit.IsLocalChannelConversion.mono,
+        QuantumCircuit.IsLocalChannelConversion.exists_isKrausCPTP,
+        QuantumCircuit.IsLocalChannelConversion.density}
     \leanok
     A local channel protocol is trace preserving and completely positive.
     Attaching ancillas, running a local channel circuit of depth $T$ and
@@ -1546,8 +1546,8 @@ change the local dimension act on single sites.
 \begin{lemma}[Composition of conversions]
     \label{lem:ldp_local_channel_conversion_trans}
     \uses{def:ldp_local_channel_conversion}
-    \lean{MPSPreparation.IsLocalChannelConversion.trans,
-        MPSPreparation.IsLocalChannelProtocol.comp}
+    \lean{QuantumCircuit.IsLocalChannelConversion.trans,
+        QuantumCircuit.IsLocalChannelProtocol.comp}
     \leanok
     If $\rho$ is converted in depth $T_1$ into $\sigma$ and $\sigma$ is
     converted in depth $T_2$ into $\tau$, then $\rho$ is converted in depth
@@ -1568,7 +1568,7 @@ change the local dimension act on single sites.
     \label{lem:ldp_protocol_light_cone}
     \uses{def:ldp_local_channel_conversion, lem:ldp_onsite_channel_locality,
         lem:ldp_channel_light_cone, lem:ldp_channel_light_cone_correlations}
-    \lean{MPSPreparation.IsLocalChannelProtocol.exists_dual}
+    \lean{QuantumCircuit.IsLocalChannelProtocol.exists_dual}
     \leanok
     A local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
     $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
@@ -1596,7 +1596,7 @@ change the local dimension act on single sites.
 \begin{lemma}[No connected correlations after a conversion]
     \label{lem:ldp_local_channel_conversion_correlations}
     \uses{def:ldp_local_channel_conversion, lem:ldp_protocol_light_cone}
-    \lean{MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion}
+    \lean{QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion}
     \leanok
     Let $\sigma$ be converted in depth $T$ from a product
     $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
@@ -1699,12 +1699,12 @@ change the local dimension act on single sites.
 \begin{lemma}[Inverses and series composition of local circuits]
     \label{lem:ldp_circuit_inverse_composition}
     \uses{def:ldp_local_circuit}
-    \lean{MPSPreparation.Layer.adjoint, MPSPreparation.Layer.adjoint_partialOp,
-        MPSPreparation.Layer.adjoint_op, MPSPreparation.circuitOp_append,
-        MPSPreparation.circuitOp_map_adjoint_reverse,
-        MPSPreparation.IsLocalCircuitOfDepth.mem_unitary,
-        MPSPreparation.IsLocalCircuitOfDepth.star,
-        MPSPreparation.IsLocalCircuitOfDepth.mul}
+    \lean{QuantumCircuit.Layer.adjoint, QuantumCircuit.Layer.adjoint_partialOp,
+        QuantumCircuit.Layer.adjoint_op, QuantumCircuit.circuitOp_append,
+        QuantumCircuit.circuitOp_map_adjoint_reverse,
+        QuantumCircuit.IsLocalCircuitOfDepth.mem_unitary,
+        QuantumCircuit.IsLocalCircuitOfDepth.star,
+        QuantumCircuit.IsLocalCircuitOfDepth.mul}
     \leanok
     For a layer $W$ with gates $g_k$, the layer with the gates $g_k^\dagger$
     on the same pairs implements $W^\dagger$, and the same holds for the
@@ -1728,12 +1728,12 @@ change the local dimension act on single sites.
 \begin{lemma}[Preparation from the all-zero state]
     \label{lem:ldp_preparation_from_zero}
     \uses{def:ldp_local_circuit}
-    \lean{MPSTensor.finKronecker_mulVec_productVector,
-        MPSPreparation.exists_mem_unitary_eq_smul_mulVec_single_zero,
-        MPSTensor.productVector_pi_smul,
-        MPSPreparation.exists_productVector_eq_smul_finKronecker_mulVec,
-        MPSPreparation.isLocalCircuitOfDepth_finKronecker,
-        MPSPreparation.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
+    \lean{QuantumCircuit.finKronecker_mulVec_productVector,
+        Matrix.exists_mem_unitary_eq_smul_mulVec_single_zero,
+        QuantumCircuit.productVector_pi_smul,
+        QuantumCircuit.exists_productVector_eq_smul_finKronecker_mulVec,
+        QuantumCircuit.isLocalCircuitOfDepth_finKronecker,
+        QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
     \leanok
     Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
     $\mathbb{C}^d$,
@@ -2877,7 +2877,7 @@ $A$ along $w$.
     \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
         MPSTensor.sum_norm_sq_pos_of_ne_zero, MPSTensor.ghzAmplitude_norm_sq,
         MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
-        MPSTensor.pairIsometry, MPSTensor.ghzState, Matrix.tensorPower}
+        MPSTensor.pairIsometry, QuantumCircuit.ghzState, Matrix.tensorPower}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition}
     Let $\omega_1,\dots,\omega_b\in\mathbb C^D\otimes\mathbb C^D$ be any vectors,

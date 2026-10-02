@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinKronecker
-import TNLean.MPS.Overlap.Basic
 
 /-!
 # Product vectors
@@ -14,14 +13,14 @@ of `N` sites, written in the computational basis as a function on configurations
 
 ## Main definitions
 
-* `MPSTensor.productVector` : the product vector $\bigotimes_s\lvert\phi^s\rangle$.
+* `QuantumCircuit.productVector` : the product vector $\bigotimes_s\lvert\phi^s\rangle$.
 
 ## Main results
 
-* `MPSTensor.smul_productVector` : a scalar multiple of a product vector is a product vector.
-* `MPSTensor.productVector_pi_smul` : rescaling every factor rescales the product vector by
+* `QuantumCircuit.smul_productVector` : a scalar multiple of a product vector is a product vector.
+* `QuantumCircuit.productVector_pi_smul` : rescaling every factor rescales the product vector by
   the product of the scalars.
-* `MPSTensor.finKronecker_mulVec_productVector` : `(⊗ᵢ mᵢ) (⊗ᵢ |vᵢ⟩) = ⊗ᵢ mᵢ|vᵢ⟩`.
+* `QuantumCircuit.finKronecker_mulVec_productVector` : `(⊗ᵢ mᵢ) (⊗ᵢ |vᵢ⟩) = ⊗ᵢ mᵢ|vᵢ⟩`.
 
 ## References
 
@@ -31,7 +30,7 @@ of `N` sites, written in the computational basis as a function on configurations
 
 open scoped Matrix
 
-namespace MPSTensor
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
@@ -39,7 +38,7 @@ variable {d N : ℕ}
 $\lvert\phi^1\rangle\otimes\cdots\otimes\lvert\phi^N\rangle$, with
 $\lvert\phi^s\rangle=\sum_i\phi^s_i\lvert i\rangle$, in the computational basis: its
 coefficient on $\lvert i_1,\dots,i_N\rangle$ is $\phi^1_{i_1}\cdots\phi^N_{i_N}$. -/
-def productVector (φ : Fin N → Fin d → ℂ) : Cfg d N → ℂ :=
+def productVector (φ : Fin N → Fin d → ℂ) : (Fin N → Fin d) → ℂ :=
   fun σ => ∏ s, φ s (σ s)
 
 /-- A scalar multiple of a product vector is a product vector: the scalar is absorbed into
@@ -73,4 +72,4 @@ theorem finKronecker_mulVec_productVector (m : Fin N → Matrix (Fin d) (Fin d) 
   refine Finset.sum_congr rfl fun τ _ => ?_
   rw [Finset.prod_mul_distrib]
 
-end MPSTensor
+end QuantumCircuit

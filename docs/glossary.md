@@ -1205,13 +1205,13 @@ The following notions use different transfer objects and are not interchangeable
 
 ## Local circuits of two-site gates
 
-### `MPSPreparation.IsNeighbourGate` and `MPSPreparation.IsPairProduct`
+### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
 
 - **Declarations:**
-  `MPSPreparation.IsNeighbourGate (Z : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`
+  `QuantumCircuit.IsNeighbourGate (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`
   and
-  `MPSPreparation.IsPairProduct (d n K : ℕ) (X : Matrix (Cfg d n) (Cfg d n) ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/PairProduct.lean`.
+  `QuantumCircuit.IsPairProduct (d n K : ℕ) (X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/PairProduct.lean`.
 - **Meaning:** `IsNeighbourGate Z` says that `Z` is unitary and acts on two
   neighbouring sites `{p, p + 1}` of the open chain of `n` sites.
   `IsPairProduct d n K X` says that `X` is a product of at most `K` such gates.
@@ -1219,18 +1219,18 @@ The following notions use different transfer objects and are not interchangeable
   Theorem 1 (local circuits of two-site gates) and the caption of Fig. 1
   (unitaries with constant support "can be further expressed with a low-depth
   circuit of local gates").
-- **Sanctioned bridges:** `MPSPreparation.exists_isPairProduct` (for `0 < d`
+- **Sanctioned bridges:** `QuantumCircuit.exists_isPairProduct` (for `0 < d`
   and `2 ≤ n`, one bound `K` covers every unitary on `n` sites), and
-  `MPSPreparation.IsPairProduct.isCircuitOn`, which places such a product on
+  `QuantumCircuit.IsPairProduct.isCircuitOn`, which places such a product on
   consecutive sites of the ring as a local circuit of depth `K`.
 - **Caveat:** the chain is open; the ring structure enters only through the
   placement map of `IsPairProduct.isCircuitOn`.
 
-### `MPSPreparation.Layer.IsIn`
+### `QuantumCircuit.Layer.IsIn`
 
 - **Declaration:**
-  `MPSPreparation.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/CircuitComposition.lean`.
+  `QuantumCircuit.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Composition.lean`.
 - **Meaning:** every gate of the layer `L` acts on a bond `{k, k+1}` contained
   in the set of sites `R`.
 - **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit", where
@@ -1243,31 +1243,31 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the condition is on the bonds of the layer, not on its operator;
   it is the per-layer ingredient of `IsCircuitOn`.
 
-### `MPSPreparation.IsCircuitOn`
+### `QuantumCircuit.IsCircuitOn`
 
 - **Declaration:**
-  `MPSPreparation.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/CircuitComposition.lean`.
+  `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Composition.lean`.
 - **Meaning:** `U` is the operator of a list of exactly `T` layers of the ring,
   each of whose gates acts inside the set of sites `R`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
   quantum circuits"), restricted to gates inside `R` as in the parallel
   application of block unitaries in the paragraph "The sequential-RG circuit".
-- **Sanctioned bridges:** `MPSPreparation.IsCircuitOn.isLocalCircuitOfDepth`
+- **Sanctioned bridges:** `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`
   forgets the support; `IsCircuitOn.mul` composes in series (depths add), and
   `IsCircuitOn.par` runs two circuits of the same depth on disjoint sets of
   sites in parallel.
 - **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
   with empty layers.
 
-### `MPSPreparation.IsSpecialTwo`, `MPSPreparation.IsTwoLevelWord`, and `MPSPreparation.FixesOutside`
+### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
 
 - **Declarations:**
-  `MPSPreparation.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
-  `MPSPreparation.IsTwoLevelWord (K : ℕ) (X : Matrix ι ι ℂ) : Prop`, and
-  `MPSPreparation.FixesOutside (T : Finset ι) (X : Matrix ι ι ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/ControlledGateProducts.lean`
-  (`IsSpecialTwo`) and `TNLean/MPS/Preparation/GivensDecomposition.lean`.
+  `QuantumCircuit.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
+  `QuantumCircuit.IsTwoLevelWord (K : ℕ) (X : Matrix ι ι ℂ) : Prop`, and
+  `QuantumCircuit.FixesOutside (T : Finset ι) (X : Matrix ι ι ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Gates/ControlledProducts.lean`
+  (`IsSpecialTwo`) and `TNLean/Circuit/Gates/Givens.lean`.
 - **Meaning:** `IsSpecialTwo g` says that `g` is a real rotation `rotTwo z` or
   a diagonal phase `diagTwo ν` with `‖z‖ = ‖ν‖ = 1`. `IsTwoLevelWord K X` says
   that `X` is a product of at most `K` two-level operators `twoLevel a b g` with
@@ -1276,39 +1276,39 @@ The following notions use different transfer objects and are not interchangeable
   basis vectors outside `T` and preserves the span of `T`.
 - **Source:** no separate source notion; these are the intermediate steps of
   the Givens elimination behind the caption of Fig. 1 of arXiv:2307.01696.
-- **Sanctioned bridges:** `MPSPreparation.isTwoLevelWord_of_det_eq_one` (every
+- **Sanctioned bridges:** `QuantumCircuit.isTwoLevelWord_of_det_eq_one` (every
   unitary of determinant one is a two-level word of bounded length) and
-  `MPSPreparation.isTwoLevelWord_of_fixesOutside`.
+  `QuantumCircuit.isTwoLevelWord_of_fixesOutside`.
 - **Caveat:** these predicates are proof-internal vocabulary for
   `exists_isPairProduct`; statements about circuits should use
   `IsPairProduct` or `IsCircuitOn`.
 
-### `MPSPreparation.AgreeOff`
+### `QuantumCircuit.AgreeOff`
 
 - **Declaration:**
-  `MPSPreparation.AgreeOff (e : Fin m → Fin n) (x y : Cfg d n) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/SiteEmbedding.lean`.
+  `QuantumCircuit.AgreeOff (e : Fin m → Fin n) (x y : Fin n → Fin d) : Prop`.
+- **Defined in:** `TNLean/Circuit/SiteEmbedding.lean`.
 - **Meaning:** the configurations `x` and `y` of the `n`-site chain agree at
   every site outside the range of `e`.
 - **Source:** no separate source notion; it describes the entries of the
-  placement `MPSPreparation.embedOp e X` of an operator on `m` sites.
-- **Sanctioned bridges:** `MPSPreparation.sum_agreeOff` and
-  `MPSPreparation.eq_extend_of_agreeOff` (for injective `e`).
+  placement `QuantumCircuit.embedOp e X` of an operator on `m` sites.
+- **Sanctioned bridges:** `QuantumCircuit.sum_agreeOff` and
+  `QuantumCircuit.eq_extend_of_agreeOff` (for injective `e`).
 - **Caveat:** proof-internal vocabulary for the site embedding.
 
 ## Local channel conversions
 
-### `MPSPreparation.IsLocalChannelProtocol`
+### `QuantumCircuit.IsLocalChannelProtocol`
 
 - **Declaration:**
-  `MPSPreparation.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ) → Prop`
+  `QuantumCircuit.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop`
   (an inductive predicate, with the local dimensions `d`, `e` implicit).
-- **Defined in:** `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
 - **Meaning:** `IsLocalChannelProtocol T Ψ` says that
   $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$
   alternates `T` layers `L_t` of local channels on pairs of neighbouring sites
-  of the ring (`MPSPreparation.ChannelLayer`) with onsite channels $\Phi_t$
-  (`MPSPreparation.OnsiteChannel`), each a tensor product of one-site channels
+  of the ring (`QuantumCircuit.ChannelLayer`) with onsite channels $\Phi_t$
+  (`QuantumCircuit.OnsiteChannel`), each a tensor product of one-site channels
   that may change the local dimension. Attaching an ancilla in a fixed state
   (`OnsiteChannel.attach`) and discarding it (`OnsiteChannel.discard`) are
   onsite channels.
@@ -1327,11 +1327,11 @@ The following notions use different transfer objects and are not interchangeable
   are free. There are no measurements or classical communication, so this is
   not the LOCC class of the source.
 
-### `MPSPreparation.IsLocalChannelConversion`
+### `QuantumCircuit.IsLocalChannelConversion`
 
 - **Declaration:**
-  `MPSPreparation.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) (σ : Matrix (Cfg d' N) (Cfg d' N) ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/LocalChannelConversion.lean`.
+  `QuantumCircuit.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
 - **Meaning:** `σ = Ψ ρ` for a map `Ψ` with `IsLocalChannelProtocol T' Ψ` for
   some `T' ≤ T`.
 - **Source:** arXiv:2103.13367, main text, paragraph "Quantum circuits and
@@ -1342,10 +1342,10 @@ The following notions use different transfer objects and are not interchangeable
   `IsLocalChannelConversion.mono`, `IsLocalChannelConversion.trans` (depths
   add), `IsLocalChannelConversion.exists_isKrausCPTP`,
   `IsLocalChannelConversion.density` (a conversion of a density matrix is a
-  density matrix), `MPSPreparation.isLocalChannelConversion_circuit` (attach,
+  density matrix), `QuantumCircuit.isLocalChannelConversion_circuit` (attach,
   run a local channel circuit, discard),
-  `MPSPreparation.IsChannelPreparedInDepth.exists_isLocalChannelConversion`,
-  and `MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion` (vanishing
+  `QuantumCircuit.IsChannelPreparedInDepth.exists_isLocalChannelConversion`,
+  and `QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion` (vanishing
   connected correlations beyond ring distance `2T` from a product density).
 - **Caveat:** the relation is directed and not symmetric: a channel need not be
   undone by another channel. Neither `ρ` nor `σ` is required to be a density
@@ -1356,11 +1356,11 @@ The following notions use different transfer objects and are not interchangeable
 
 ## Local circuits assisted by measurements
 
-### `MPSPreparation.MeasurementProtocol.IsPreparationOf`
+### `QuantumCircuit.MeasurementProtocol.IsPreparationOf`
 
 - **Declaration:**
-  `MPSPreparation.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : Cfg d N → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+  `QuantumCircuit.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
 - **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
   sites measured in the computational basis, and for every outcome string a
   unitary at every site) starts from a nonzero product vector, and for every
@@ -1377,35 +1377,35 @@ The following notions use different transfer objects and are not interchangeable
   single-site unitaries applied after all the measurements. Each of these
   restricts the source's scheme, so every such protocol is one of the source.
 
-### `MPSPreparation.IsPreparedWithMeasurementsInDepth`
+### `QuantumCircuit.IsPreparedWithMeasurementsInDepth`
 
 - **Declaration:**
-  `MPSPreparation.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+  `QuantumCircuit.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
 - **Meaning:** some protocol `P` whose circuit has at most `T` layers
   satisfies `P.IsPreparationOf ψ`.
 - **Source:** arXiv:2103.13367, Definition "Transformations under QC and
   LOCC" (the class `QCcc_ℓ`).
 - **Sanctioned bridges:**
-  `MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
+  `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
   nonzero vector prepared by a local circuit),
-  `MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
+  `QuantumCircuit.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
   (without measurements, preparation by a local circuit up to single-site
   unitaries), and
-  `MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
+  `QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
   (GHZ-type states in depth `2`).
 - **Caveat:** the free local unitaries of the source between the layers of the
   circuit, acting on a site and its ancillas, are counted here as gates, so the
   depth bounds the source's depth. The light-cone bound of
-  `MPSPreparation.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
+  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
   GHZ-type states, whose connected correlations do not decay, are prepared in
   depth `2`.
 
-### `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth`
+### `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`
 
 - **Declaration:**
-  `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/MeasurementPreparation.lean`.
+  `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
 - **Meaning:** `ψ = U φ` for a vector `φ` with
   `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
   `T₂`, with `T₁ + T₂ ≤ T`.
@@ -1428,11 +1428,11 @@ The following notions use different transfer objects and are not interchangeable
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
 
-### `MPSPreparation.IsLocalPerm`
+### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
-  `MPSPreparation.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Cfg d N)) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/PermutationGates.lean`.
+  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
   `S`.
@@ -1440,18 +1440,18 @@ The following notions use different transfer objects and are not interchangeable
   corrections of the GHZ preparation, generalized to shifts of qudits).
 - **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
   permutation matrix is a unitary acting on `S`),
-  `MPSPreparation.isLocalPerm_shiftPerm`, and
-  `MPSPreparation.exists_permLayer_op_mulVec` (a layer of such gates on
+  `QuantumCircuit.isLocalPerm_shiftPerm`, and
+  `QuantumCircuit.exists_permLayer_op_mulVec` (a layer of such gates on
   disjoint pairs acts as one permutation of the configurations).
 - **Caveat:** only permutations of the computational basis are covered; a
-  general gate is a `MPSPreparation.Layer` gate.
+  general gate is a `QuantumCircuit.Layer` gate.
 
-### `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth`
+### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
 
 - **Declaration:**
-  `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
-- **Meaning:** some sequence of measurement rounds (`MPSPreparation.MeasurementRound`:
+  `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
+- **Meaning:** some sequence of measurement rounds (`QuantumCircuit.MeasurementRound`:
   a local circuit, a computational-basis measurement of a set of sites, and
   outcome-dependent single-site unitaries), whose circuits have at most `T`
   layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
@@ -1460,9 +1460,9 @@ The following notions use different transfer objects and are not interchangeable
   LOCC" (one round, and "a more general scheme with multiple rounds of
   LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
 - **Sanctioned bridges:**
-  `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
-  (one round is a protocol of `MPSPreparation.IsPreparedWithMeasurementsInDepth`),
-  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
+  `QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
+  (one round is a protocol of `QuantumCircuit.IsPreparedWithMeasurementsInDepth`),
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
   and `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` (binary
   trees of two-site gates with `k` levels in depth `5k`).
 - **Caveat:** the depth counts the layers of all the rounds; measurements,
@@ -1474,22 +1474,22 @@ The following notions use different transfer objects and are not interchangeable
   arXiv:2103.13367 the number `k` of composed transformations does not depend
   on the system size.
 
-### `MPSPreparation.MeasurementRound.IsRoundsImplementationOn`
+### `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`
 
 - **Declaration:**
-  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ)) (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set ((Fin N → Fin d) → ℂ)) (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
 - **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
   scalar multiple of `W v`; the single-round form is
-  `MPSPreparation.MeasurementRound.IsImplementationOn`, which asks for one
+  `QuantumCircuit.MeasurementRound.IsImplementationOn`, which asks for one
   scalar per outcome.
 - **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
   ("correcting (without postselection) based on the measurement outcomes").
 - **Sanctioned bridges:**
-  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`
-  (implementations compose), `MPSPreparation.TeleportHop.isImplementationOn_round`
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append`
+  (implementations compose), `QuantumCircuit.TeleportHop.isImplementationOn_round`
   (teleportation along chains of hops in one round of depth `2`),
-  `MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
+  `QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
   two-site gates between distant sites in depth `5`), and
   `MPSPreparation.isRoundsImplementationOn_treeRounds`.
 - **Caveat:** the scalar may depend on the outcomes and is not normalized; zero

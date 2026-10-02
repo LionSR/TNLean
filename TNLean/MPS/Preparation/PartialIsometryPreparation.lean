@@ -62,6 +62,7 @@ fixed-point state") implies for blocks of `q ≥ 3D ≥ 1` sites, and which hold
 open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 

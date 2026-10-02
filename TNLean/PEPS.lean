@@ -47,6 +47,7 @@ import TNLean.PEPS.GInjectiveMPS
 import TNLean.PEPS.GInjectiveMPSIntersection
 import TNLean.PEPS.GInjectiveMPSParentHamiltonian
 import TNLean.PEPS.GIsometric
+import TNLean.PEPS.GIsometricLinkContraction
 import TNLean.PEPS.GIsometricParentHamiltonian
 import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
 import TNLean.PEPS.IdentityInsertion

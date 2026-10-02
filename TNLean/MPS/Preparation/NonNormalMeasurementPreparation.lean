@@ -67,6 +67,7 @@ multiplicity `m_j ≥ 2`. Documented in `docs/paper-gaps/mswc24_repeated_block_c
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open QuantumCircuit
 
 namespace MPSPreparation
 
