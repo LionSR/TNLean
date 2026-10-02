@@ -36,6 +36,7 @@ import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
 import TNLean.MPS.Symmetry.ContinuousInvariantCompression
 import TNLean.MPS.Symmetry.ContinuousProjectionFrame
 import TNLean.MPS.Symmetry.ContinuousSpectralCorner
+import TNLean.MPS.Symmetry.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
@@ -59,6 +60,8 @@ import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.InvertibleProjectivePathInvariance
 import TNLean.MPS.Symmetry.IsometricParentInteraction
+import TNLean.MPS.Symmetry.LocalInvariantCompression
+import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.LocalVirtualGauge
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
@@ -75,6 +78,7 @@ import TNLean.MPS.Symmetry.PhysicalSchmidtSupport
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondExtension
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondTransport
 import TNLean.MPS.Symmetry.PhysicalSpectatorCoordinates
+import TNLean.MPS.Symmetry.PointwiseInvariantCompression
 import TNLean.MPS.Symmetry.PolarDeformation
 import TNLean.MPS.Symmetry.PolarDeformationGap
 import TNLean.MPS.Symmetry.PolarFixedPointEmbedding
@@ -91,14 +95,18 @@ import TNLean.MPS.Symmetry.ProjectiveRephasing
 import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
 import TNLean.MPS.Symmetry.SpinHalfObstruction
+import TNLean.MPS.Symmetry.StationaryDensitySymmetry
+import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Symmetry.StringOrderDefs
+import TNLean.MPS.Symmetry.SupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.TimeReversalIndex
 import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
 import TNLean.MPS.Symmetry.UnitModulusProjectiveFactor
+import TNLean.MPS.Symmetry.UnitalSupportedPathInvariance
 import TNLean.MPS.Symmetry.UnitaryVirtualGauge
 import TNLean.MPS.Symmetry.VaryingBondPhysicalCharacter
 import TNLean.MPS.Symmetry.VaryingSupportPhaseInvariance

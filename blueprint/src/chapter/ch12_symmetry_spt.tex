@@ -2138,6 +2138,298 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     for the projective law, and to $V_g,V_g^\dagger$ for unitarity.
 \end{proof}
 
+\begin{theorem}[Spectral corners retaining the base support]
+    \label{thm:spt_local_spectral_support}
+    \lean{Matrix.eventually_spectral_separation_of_continuousAt,
+        Matrix.exists_positive_spectral_cutoffs,
+        Matrix.spectralCorner_eq_supportProj_of_nonzero_spectrum_separation,
+        Matrix.exists_open_constantRank_spectralCorner,
+        Matrix.exists_local_continuous_spectral_frame,
+        Matrix.supportProj_mul_spectralCorner}
+    \leanok
+    Let $\sigma(t)$ be a continuous Hermitian matrix family, with
+    $\sigma(t_0)\geq 0$, and let $J_0$ be an isometric frame of its support.
+    There are $0<a<b$ and a neighborhood of $t_0$ on which the spectral
+    projection $P(t)$ onto the eigenvalues above the cutoffs has constant
+    rank and satisfies $P(t_0)=\operatorname{supp}\sigma(t_0)$.
+    The polar isometry $J(t)$ of $P(t)J_0$ is continuous there, with
+    $J(t_0)=J_0$, $J(t)^\dagger J(t)=I$, and
+    $J(t)J(t)^\dagger=P(t)$.
+    When $\sigma(t)\geq0$, the cutoff always satisfies
+    $\operatorname{supp}\sigma(t)\,P(t)=P(t)$, whether or not its spectrum
+    is separated at that parameter.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_continuous_spectral_corner,
+        thm:spt_continuous_projection_frame}
+    The real spectrum at $t_0$ is finite, so its nonzero positive values
+    have a positive lower bound. Choose both cutoffs below that bound.
+    Upper hemicontinuity of the spectrum preserves the intervening gap
+    nearby. Functional calculus gives a continuous orthogonal projection,
+    whose integer rank is locally constant. Apply the continuous-frame
+    construction to this projection. At $t_0$, $P(t_0)J_0=J_0$, whose
+    polar isometry is $J_0$ itself. The cutoff vanishes at zero, so its
+    range lies in the support of every positive semidefinite matrix.
+\end{proof}
+
+\begin{definition}[Individual matrix extension along an isometry]
+    \label{def:spt_supported_matrix_extension}
+    \lean{Matrix.isometryExtendByIdentity}
+    \leanok
+    For an isometry $K:\C^D\to\C^k$ and a matrix $X\in\MN{D}$, set
+    $\widetilde X=KXK^\dagger+(I-KK^\dagger)$.
+\end{definition}
+
+\begin{theorem}[Comparison of supported bond frames]
+    \label{thm:spt_supported_frame_comparison}
+    \lean{Matrix.isometryExtendByIdentity_mul_isometry,
+        Matrix.isometry_conjTranspose_mul_isometryExtendByIdentity,
+        Matrix.isometry_reconstruct_of_supportProj,
+        Matrix.commute_isometryExtendByIdentity_of_commute_compression,
+        Matrix.isometry_absorption_of_projector_absorption,
+        Matrix.isIsometry_conjTranspose_mul_of_absorption,
+        Matrix.isometry_double_compression_eq_of_absorption,
+        Matrix.commute_compression_of_commute_isometryExtendByIdentity,
+        Matrix.supportFrame_dimension_pos_of_trace_one}
+    \leanok
+    \uses{def:spt_supported_matrix_extension}
+    Let $K:\C^D\to\C^k$ be isometric. Then
+    $\widetilde X K=KX$ and $K^\dagger\widetilde X=XK^\dagger$.
+    If $\sigma\geq0$ has support $KK^\dagger$, then
+    $\sigma=K(K^\dagger\sigma K)K^\dagger$; commutation of $X$ with
+    $K^\dagger\sigma K$ implies commutation of $\widetilde X$ with $\sigma$.
+    If $J:\C^r\to\C^k$ is isometric and $KK^\dagger J=J$, then
+    $K^\dagger J$ is isometric and
+    $(K^\dagger J)^\dagger(K^\dagger M K)(K^\dagger J)=J^\dagger M J$.
+    The absorption $KK^\dagger JJ^\dagger=JJ^\dagger$ already implies
+    $KK^\dagger J=J$.
+    An operator $P$ commuting with $\widetilde X$ has compression
+    $K^\dagger P K$ commuting with $X$.
+    Finally, $\tr\sigma=1$ forces $D>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Multiply the defining matrix extension by $K$ and $K^\dagger$ and
+    use $K^\dagger K=I$. The support projection absorbs $\sigma$ on
+    both sides, giving the reconstruction identity. The same identities
+    prove the commutation and nested-compression assertions.
+    Multiplication of $KK^\dagger JJ^\dagger=JJ^\dagger$ by $J$ gives
+    frame absorption. If $D=0$, the support is zero and hence
+    $\sigma=0$, contradicting its trace.
+\end{proof}
+
+\begin{theorem}[Local cohomology for a continuous supported density]
+    \label{thm:spt_supported_density_class_invariance}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuous_supported_density}
+    \leanok
+    \uses{def:projective_rep}
+    For $t\in[0,1]$, let $B(t)$ be a continuous tensor family of fixed
+    bond dimension $k$, and let $\sigma(t)$ be a continuous positive semidefinite matrix
+    family of trace one. Choose pointwise isometric support frames
+    $K(t):\C^{D(t)}\to\C^k$ and put
+    $A^i(t)=K(t)^\dagger B^i(t)K(t)$.
+    Suppose the actual unitary virtual actions of $A(t)$ implement a
+    fixed exact physical symmetry and commute with
+    $K(t)^\dagger\sigma(t)K(t)$.
+    If $A(t_0)$ is one-site injective, the virtual factor systems at
+    $t$ and $t_0$ are cohomologous for all sufficiently nearby $t$.
+    The dimensions $D(t)$, support frames and virtual actions need no
+    continuity, and no projective action is required on the complementary
+    bond space.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_local_spectral_support,
+        thm:spt_supported_frame_comparison,
+        thm:spt_local_invariant_compression}
+    Retain the separated spectral corner whose base value is the full
+    support of $\sigma(t_0)$, and extend $K(t_0)$ to its continuous
+    isometric frame $J(t)$. This corner lies in the support of
+    $\sigma(t)$ and is invariant under each individually extended virtual
+    matrix. Thus $K(t)^\dagger J(t)$ is an invariant isometric frame in
+    the actual minimal bond space. Its compression is the continuous
+    tensor $J(t)^\dagger B(t)J(t)$, which equals $A(t_0)$ at the base.
+    Apply local cohomology invariance under pointwise compression.
+\end{proof}
+
+\begin{theorem}[Cohomology under pointwise invariant compression]
+    \label{thm:spt_pointwise_invariant_compression}
+    \lean{Matrix.isometry_compression_conj_of_commute,
+        MPSTensor.cohomologousTo_of_continuous_injective_pointwise_compression}
+    \leanok
+    \uses{def:projective_rep}
+    Let $A(t)$ have bond dimension $D(t)$, and let $V_g(t)$ be a unitary
+    projective representation with factor $\omega_t$ implementing exact
+    covariance for a fixed physical action. Let
+    $J(t):\C^r\to\C^{D(t)}$ be isometric, where $r>0$, and suppose
+    $V_g(t)$ commutes with $J(t)J(t)^\dagger$.
+    If $C^i(t)=J(t)^\dagger A^i(t)J(t)$ is continuous and one-site
+    injective for $0\leq t\leq1$, then $\omega_1$ and $\omega_0$ are
+    cohomologous. No continuity of $D(t)$, $A(t)$, $J(t)$ or $V_g(t)$
+    is required, and the tensor letters need not preserve the included
+    bond subspace.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_invariant_bond_compression,
+        thm:spt_tensor_path_class_invariance}
+    Commutation with $JJ^\dagger$ gives
+    $J^\dagger X=(J^\dagger XJ)J^\dagger$ and
+    $X^\dagger J=J(J^\dagger XJ)^\dagger$. Hence conjugation descends
+    to the compressed tensors. The compressed virtual representation
+    has exactly the factor $\omega_t$. Apply cohomology invariance for
+    continuous injective tensor families to $C(t)$.
+\end{proof}
+
+\begin{theorem}[Local cohomology under invariant compression]
+    \label{thm:spt_local_invariant_compression}
+    \lean{MPSTensor.eventually_isInjective_of_continuousAt,
+        Set.Icc.eventually_forall_convexComb,
+        MPSTensor.eventually_cohomologousTo_of_continuousOn_pointwise_compression,
+        MPSTensor.eventually_cohomologousTo_of_continuous_pointwise_compression,
+        MPSTensor.eventually_cohomologousTo_of_continuousOn_invariant_compression}
+    \leanok
+    Under the pointwise compression assumptions, it suffices that $C(t)$
+    be continuous on a neighborhood of $t_0$ and injective at $t_0$.
+    Then $\omega_t$ and $\omega_{t_0}$ are cohomologous for all
+    sufficiently nearby $t$. For a fixed ambient bond space,
+    continuity of $A(t)$ and $J(t)$ on that neighborhood implies the
+    required continuity of $C(t)=J(t)^\dagger A(t)J(t)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_pointwise_invariant_compression}
+    The Gram matrix of the one-site physical coefficient matrix is
+    invertible at $t_0$ and remains invertible nearby. Thus injectivity
+    persists locally. Every sufficiently short affine subinterval
+    issuing from $t_0$ remains in this neighborhood. Reparametrize it
+    by $[0,1]$ and apply the pointwise compression theorem.
+\end{proof}
+
+\begin{theorem}[Symmetry of a unique stationary matrix]
+    \label{thm:spt_unique_stationary_symmetry}
+    \lean{MPSTensor.adjointMap_rotatePhysical_eq_of_unitary,
+        MPSTensor.adjointMap_conj_of_unitary_covariance,
+        MPSTensor.commute_stationaryMatrix_of_unitary_covariance,
+        MPSTensor.virtualAction_commute_stationaryMatrix_of_unique}
+    \leanok
+    Suppose a unitary physical action satisfies
+    $\sum_j u_{ij}A^j=XA^iX^\dagger$, where $X$ is unitary.
+    If the adjoint transfer map has a unique trace-one stationary
+    matrix $\sigma$, then $X\sigma=\sigma X$.
+    This conclusion requires neither invertibility nor positivity of
+    $\sigma$. In particular, it applies to a singular stationary density.
+\end{theorem}
+
+\begin{proof}\leanok
+    Unitary physical rotation leaves the adjoint transfer map unchanged.
+    Covariance consequently gives
+    $\mathcal E^*(XZX^\dagger)=X\mathcal E^*(Z)X^\dagger$.
+    Thus $X\sigma X^\dagger$ is another trace-one stationary matrix.
+    Uniqueness gives $X\sigma X^\dagger=\sigma$, which is equivalent
+    to commutation with $X$.
+\end{proof}
+
+\begin{theorem}[Stationary density under support compression]
+    \label{thm:spt_stationary_density_compression}
+    \lean{MPSTensor.stationaryMatrix_compression_unique}
+    \leanok
+    Suppose $\sigma\geq0$ is the unique trace-one stationary matrix
+    of the adjoint transfer map of $B$. For an isometric support frame
+    $K$, put $A^i=K^\dagger B^iK$. Then $K^\dagger\sigma K$ is the
+    unique trace-one stationary matrix of the adjoint transfer map of $A$.
+    No unitality assumption is needed for this implication.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_supported_frame_comparison}
+    Stationarity makes the support of $\sigma$ invariant under each
+    adjoint letter of $B$. The adjoint transfer map therefore intertwines
+    expansion $Z\mapsto KZK^\dagger$ with the compressed transfer map.
+    Compression preserves stationarity, and cyclicity of trace preserves
+    normalization. A trace-one stationary matrix for $A$ expands to one
+    for $B$; uniqueness and $K^\dagger K=I$ give the claim.
+\end{proof}
+
+\begin{theorem}[Local cohomology from unique stationary bond data]
+    \label{thm:spt_local_unique_stationary_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuousOn_unique_stationary_density,
+        MPSTensor.eventually_cohomologousTo_of_continuous_unique_stationary_density,
+        MPSTensor.eventually_cohomologousTo_of_continuous_unital_supported_family}
+    \leanok
+    For $t\in[0,1]$, let $B(t)$ be continuous of fixed bond dimension
+    and let $\sigma(t)\geq0$ be trace-one and adjoint stationary.
+    Let the actual minimal tensors be support compressions of $B(t)$,
+    with unitary projective actions implementing a fixed exact physical
+    symmetry. Suppose the compressed tensor at $t_0$ is one-site injective.
+    If $\sigma$ is continuous and unique among trace-one stationary
+    matrices on an open neighborhood of $t_0$, then the virtual factors
+    at nearby $t$ are cohomologous to the factor at $t_0$.
+    Alternatively, it suffices that $B(t)$ be unital and that its adjoint
+    fixed space at $t_0$ have complex dimension one. In this case density
+    continuity and local uniqueness follow automatically. Neither case
+    assumes continuity of the minimal support frames or virtual actions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_stationary_density_compression,
+        thm:spt_unique_stationary_symmetry,
+        thm:spt_local_stationary_density,
+        thm:spt_supported_density_class_invariance}
+    Compression preserves stationary uniqueness. Exact physical covariance
+    then forces each actual virtual action to commute with the compressed
+    density. Apply the spectral-corner argument on the open neighborhood.
+    In the unital case, first construct the local unique continuous
+    density and identify the given pointwise stationary choice with it.
+\end{proof}
+
+\begin{theorem}[Local continuity of a normalized stationary density]
+    \label{thm:spt_local_stationary_density}
+    \lean{MPSTensor.exists_local_continuous_adjointStationaryDensity_of_unital,
+        MPSTensor.exists_open_continuousOn_stationaryDensity_of_unital}
+    \leanok
+    Let $B(t)$ be a continuous family of unital tensors of positive,
+    fixed bond dimension. Suppose the adjoint transfer map at $t_0$
+    has a one-dimensional fixed space over $\C$. Then there is an open
+    neighborhood of $t_0$ on which it has a unique trace-one stationary
+    matrix $\sigma(t)$. This matrix is positive semidefinite and continuous;
+    its rank may change. Consequently any pointwise choice of trace-one
+    stationary matrices agrees with this family and is continuous there.
+\end{theorem}
+
+\begin{proof}\leanok
+    Write $\mathcal E_t^*$ for the adjoint transfer map and choose a
+    trace-one matrix $\tau$. The linear operator
+    $F_t(X)=X-\mathcal E_t^*(X)+\tr(X)\tau$ is invertible at $t_0$:
+    trace preservation makes every vector in its kernel traceless, and
+    the one-dimensional stationary space then forces that vector to vanish.
+    Invertibility persists nearby, and $\sigma(t)=F_t^{-1}(\tau)$ is
+    continuous. Its trace is one and it is stationary. Existence of a
+    positive stationary state for a trace-preserving positive map
+    identifies it with that state. The same inverse proves uniqueness.
+\end{proof}
+
+\begin{theorem}[Endpoint cohomology for a supplied unital family]
+    \label{thm:spt_unital_supported_path_class}
+    \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points,
+        MPSTensor.cohomologousTo_of_continuous_unital_supported_family}
+    \leanok
+    In the unital case of the preceding local theorem, suppose the ambient
+    adjoint fixed space has complex dimension one and every minimal support
+    compression is one-site injective at every parameter in $[0,1]$.
+    Then the endpoint virtual factors are cohomologous. More generally,
+    a scalar cohomology class that is locally constant on a preconnected
+    parameter space is constant throughout that space.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_local_unique_stationary_class}
+    Local constancy gives a locally constant map into the quotient by
+    scalar cohomology. Such a map is constant on a preconnected space.
+    Apply this to the unit interval and its two endpoints.
+\end{proof}
+
 \subsection{Renormalization fixed points of SPT phases}
 \label{sec:spt_fixed_points}
 

@@ -272,6 +272,49 @@ in these results is in the path parameter separately for each group element;
 continuity of the factors is separately for each fixed pair. No joint
 continuity in a topological group variable is asserted.
 
+The restriction argument is now also proved for supplied continuous
+ambient tensors $B(t)$ and continuous positive trace-one bond densities
+$\sigma(t)$. Pointwise support frames identify the minimal tensors as
+$A^i(t)=K(t)^\dagger B^i(t)K(t)$. A separated spectral corner retains
+the full support at the base parameter and admits a continuous isometric
+frame nearby. Restricting the actual unitary virtual actions to that
+frame preserves their factors exactly. This proves local cohomology
+invariance when the compressed density commutes with those actions and
+the minimal tensor is injective at the base. Neither the minimal
+dimensions nor the chosen support frames or virtual matrices need be
+continuous. No projective representation on the complementary bond space
+is assumed.
+
+For a continuous unital tensor family, a one-dimensional adjoint fixed
+space at the base parameter gives a local continuous positive trace-one
+stationary density, unique among all trace-one fixed matrices. The proof
+augments $I-\mathcal E^*$ by the trace normalization to obtain an
+invertible linear map, then uses continuity of its inverse. Positivity
+follows by identification with a stationary state. Uniqueness descends
+through support compression and forces the actual virtual actions to
+commute with the compressed density. Thus the declaration
+\leanid{MPSTensor.eventually_cohomologousTo_of_continuous_unital_supported_family}
+proves local constancy of the virtual class with injectivity only at the
+base parameter. The pointwise normalized stationary density is not
+assumed continuous. These results remove several auxiliary continuity
+and invariance assumptions once the continuous unital bond family is
+available. They do not construct that
+family from the independent physical exact MPS path and its uniform gap;
+this remains the analytic question required for the general converse.
+
+The required realization need not be obtainable by gauging the supplied
+ambient tensor. For example, let $a$ be a normalized one-site vector and
+put $B^i=a_iI_2$. At every positive length $N$, the periodic MPS vector is
+$2a^{\otimes N}$, so its ray agrees with the bond-one product tensor.
+The adjoint transfer map of $B$ is the identity on $M_2(\C)$ and hence has
+a four-dimensional fixed space. Every invertible bond conjugation leaves
+these scalar letters unchanged. This redundant realization can accompany
+a constant, uniformly gapped product-state parent Hamiltonian. Thus the
+physical gap cannot force a simple adjoint fixed space for the particular
+ambient realization recorded in the path. The missing theorem must choose
+a new continuous unital realization of the same ground-state rays, rather
+than assert that every supplied realization admits such a gauge.
+
 \section{Verdict}
 
 Replacing the upper limit $D_1$ in
