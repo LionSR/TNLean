@@ -5733,6 +5733,98 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     identity.
 \end{proof}
 
+\begin{theorem}[The detector depends on the endpoints of the truncations]
+    \label{thm:mpug_truncation_detector_endpoint_dependence}
+    \lean{Matrix.finKronecker_ite_smul_one,
+        Matrix.dressed_onSiteTruncation_conjTranspose_mul_self,
+        Matrix.groupCommutator_dressed_onSiteTruncation_pauliX,
+        Matrix.star_dotProduct_groupCommutator_dressed_onSiteTruncation_pauliX}
+    \leanok
+    Let $X$ and $Z$ be the Pauli matrices, and for sets of sites $S_1$, $S_2$
+    of a chain and sites $j_1\in S_2$, $j_2\notin S_1$ with $j_1\neq j_2$ put
+    $U_1=Z_{j_1}X^{S_1}$ and $U_2=Z_{j_2}X^{S_2}$. Then $U_1$ and $U_2$ are
+    unitary and
+    \begin{align}
+        U_2^\dagger U_1^\dagger U_2U_1
+         & =-\mathbf 1,
+        \notag
+    \end{align}
+    so the expectation value of the commutator on every normalized state is
+    $-1$, although the on-site symmetry $X^{\otimes N}$ has trivial anomaly.
+\end{theorem}
+
+\begin{proof}\leanok
+    The four operators are tensor products over the sites. At $j_1$ the
+    product of the four factors is $X(XZ)X(ZX)=ZXZX=-\mathbf 1$ if $j_1\in S_1$,
+    and $XZXZ=-\mathbf 1$ otherwise. At $j_2$ only $U_2$ acts, and the product is
+    $(ZX)^\dagger(ZX)=\mathbf 1$ or $Z^\dagger Z=\mathbf 1$. At every other site
+    the factors are $X$ or the identity, and they cancel.
+\end{proof}
+
+\begin{remark}[Circuit truncations with a nontrivial detector]
+    \label{rem:mpug_truncation_detector_circuit}
+    \uses{thm:mpug_truncation_detector_endpoint_dependence}
+    The symmetry $X^{\otimes N}$ on a periodic chain of even length is the
+    depth-two circuit whose first layer applies $X\otimes ZX$ to the pairs
+    $(2k,2k+1)$ and whose second layer applies $Z\otimes\mathbf 1$ to the pairs
+    $(2k+1,2k+2)$, since $Z\cdot ZX=X$. For $i$ even and $j$ odd, dropping the
+    gates not contained in $[i,j]$ leaves both factors on every odd site of
+    $[i,j]$ except $j$, which keeps only $ZX$, so the truncation is
+    $Z_jX^{\otimes[i,j]}$. For $i_2<i_1<j_1<j_2$ of these parities,
+    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} applies.
+    The expectation value of the commutator of two circuit truncations on a
+    symmetry-broken ground state is therefore not determined by the anomaly,
+    and the detection asserted in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall} fails for an arbitrary
+    circuit truncation \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+    The identification of the circuit truncation with $Z_jX^{\otimes[i,j]}$
+    is not formalized.
+\end{remark}
+
+\begin{theorem}[Detection for truncations acting as domain-wall strings]
+    \label{thm:mpug_truncation_detector_wall_strings}
+    \lean{MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_of_wallString,
+        MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_eq_omega}
+    \leanok
+    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
+        thm:mpug_domain_wall_involution}
+    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange}, let
+    $O_1=O^{[i_1,j_1]}$ and $O_2=O^{[i_2,j_2]}$ be domain-wall strings on
+    sites $i_2<i_1<j_1<j_2$ whose three inner regions are longer than a fixed
+    buffer, and let $U_1$ and $U_2$ be unitary operators with
+    \begin{align}
+        U_2U_1\ket{\psi_A} & =O_2O_1\ket{\psi_A}, &
+        U_1U_2\ket{\psi_A} & =O_1O_2\ket{\psi_A}.
+        \notag
+    \end{align}
+    Then
+    \begin{align}
+        \bra{\psi_A}U_2^\dagger U_1^\dagger U_2U_1\ket{\psi_A}
+         & =c_{AB}c_{BA}\braket{\psi_A}{\psi_A}.
+        \notag
+    \end{align}
+    If moreover $g$ is an involution of a normal representation, then
+    $c_{AB}c_{BA}=\omega(g,g,g)\,\omega(g,e,g)$. This is the detection of the
+    anomaly of \cite[Section~V]{GarreRubioSchuch2024DomainWall} restricted to
+    unitaries whose two ordered products on $\ket{\psi_A}$ agree with the
+    corresponding products of the domain-wall strings. These identities are
+    expected for truncations whose walls on $\ket{\psi_B}$ are the images under
+    $U$ of their walls on $\ket{\psi_A}$, the property the source's argument
+    uses; that implication is not formalized. By
+    Theorem~\ref{thm:mpug_truncation_detector_endpoint_dependence} some
+    restriction of this kind is needed
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
+        thm:mpug_domain_wall_involution}
+    By Theorem~\ref{thm:mpug_domain_wall_string_exchange} and the hypotheses,
+    $U_2U_1\ket{\psi_A}=c_{AB}c_{BA}\,U_1U_2\ket{\psi_A}$, and
+    Lemma~\ref{lem:mpug_truncation_commutator} gives the first identity. The
+    second is Theorem~\ref{thm:mpug_domain_wall_involution}.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]

@@ -19,8 +19,8 @@ expands as a sum over choice functions.
 
 ## Main results
 
-* `Matrix.finKronecker_mul`, `Matrix.finKronecker_one`, `Matrix.finKronecker_conjTranspose`,
-  `Matrix.finKronecker_transpose`.
+* `Matrix.finKronecker_mul`, `Matrix.finKronecker_one`, `Matrix.finKronecker_ite_smul_one`,
+  `Matrix.finKronecker_conjTranspose`, `Matrix.finKronecker_transpose`.
 * `Matrix.rectKronecker_mul`, `Matrix.rectKronecker_one`, `Matrix.rectKronecker_conjTranspose`,
   `Matrix.sum_rectKronecker` for the product `Matrix.rectKronecker` of rectangular matrices.
 * `Matrix.finKronecker_diagonal`, `Matrix.finKronecker_conjTranspose_mul_self`.
@@ -68,6 +68,20 @@ theorem finKronecker_transpose (A : (k : Fin N) → Matrix (α k) (α k) ℂ) :
     (finKronecker A)ᵀ = finKronecker fun k => (A k)ᵀ := by
   ext x y
   simp [finKronecker_apply]
+
+/-- A finite Kronecker product with the factor `c • 1` at one site and the identity elsewhere
+is the scalar `c`. -/
+theorem finKronecker_ite_smul_one [∀ k, DecidableEq (α k)] (j : Fin N) (c : ℂ) :
+    finKronecker (fun k => if k = j then c • (1 : Matrix (α k) (α k) ℂ) else 1) = c • 1 := by
+  have h : (fun k => if k = j then c • (1 : Matrix (α k) (α k) ℂ) else 1) =
+      fun k => (if k = j then c else 1) • (1 : Matrix (α k) (α k) ℂ) := by
+    funext k
+    split_ifs <;> simp
+  ext x y
+  conv_rhs => rw [← finKronecker_one (α := α)]
+  rw [h]
+  simp only [finKronecker_apply, smul_apply, smul_eq_mul, Finset.prod_mul_distrib,
+    Fintype.prod_ite_eq']
 
 end Family
 
