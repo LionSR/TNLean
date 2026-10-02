@@ -135,6 +135,15 @@ The boundary convention is the ordinary, unnormalized trace:
 \end{align}
 There are no open boundary vectors.
 
+Theorem~\ref{thm:asymex_z2z2_normal} establishes the word spans, with
+one-site injectivity for the bond-one tensors and two-site injectivity
+for the bond-two tensors. The multiplication phases are retained in
+Theorem~\ref{thm:asymex_z2z2_fusion}. The dressed exact representation
+is given in Theorem~\ref{thm:asymex_z2z2_exact}, and its nontrivial
+anomaly detectors in Theorem~\ref{thm:asymex_z2z2_anomaly_class}.
+These detector values concern the dressed family; they do not identify
+the full cohomology class of the original family.
+
 \begin{center}
     \tenkzkernel
     % Formula: M_g^{(o,i)}[\alpha,\beta] for g in {e,x,y,xy}, one periodic
@@ -960,14 +969,16 @@ $\omega(g,g,g)$ in a normalized gauge at the three elements of order two
 distinguish the eight classes of
 $H^3(\Z_2\times\Z_2,\C^\times)\cong\Z_2^3$, and the type-II class has the
 values $(+1,+1,-1)$ at $x$, $y$ and $xy$. The theorem below states these
-detector values for the dressed representation. The source's statement that
-they separate the classes is not formalized, so the equality of classes with
-$(-1)^{a_1b_2c_2}$ is not
-claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
+detector values for the dressed representation.
+Theorem~\ref{thm:asymex_klein_complete_classification} proves that the three
+products distinguish all cohomology classes. The distinction between the dressed
+representation and the original odd-ring projective family remains as described
+in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 
 \begin{theorem}[The anomaly class of the full group]%
     \label{thm:asymex_z2z2_anomaly_class}
-    \lean{Z2Z2Condensation.xHom,
+    \lean{Z2Z2Condensation.omega_cohomologousTo_kleinCocycle,
+        Z2Z2Condensation.xHom,
         Z2Z2Condensation.yHom,
         Z2Z2Condensation.xyHom,
         Z2Z2Condensation.pairFamily,
@@ -986,6 +997,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         Z2Z2Condensation.cyclicInvariant_omega_kleinFamily_xy,
         Z2Z2Condensation.cyclicInvariant_omega_kleinFamily,
         Z2Z2Condensation.not_isTrivialGaugeClass_omega_kleinFamily,
+        Z2Z2Condensation.anomalyClass_omega_kleinFamily_ne_zero,
         Z2Z2Condensation.kxIntTensor,
         Z2Z2Condensation.kxyIntTensor,
         Z2Z2Condensation.kxTensor,
@@ -1021,7 +1033,7 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
         Multiplicative.forall_zmod_two_prod}
     \leanok
     \uses{thm:asymex_z2z2_exact, def:mpug_anomaly_three_cochain,
-        def:mpug_trivial_gauge_class}
+        def:mpug_trivial_gauge_class, def:mpug_h3_group_cohomology}
     Let $\omega$ be the anomaly three-cochain of any choice of fusion
     tensors of the representation $g\mapsto M'_g$ of
     Theorem~\ref{thm:asymex_z2z2_exact}. For every
@@ -1033,14 +1045,18 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \end{align}
     which is the same product for the cocycle $(-1)^{a_1b_2c_2}$. It equals
     $+1$ at $x$ and $y$ and $-1$ at $xy$. In particular $\omega$ is not
-    cohomologous to the constant cochain one.
+    cohomologous to the constant cochain one, so
+    $[\omega]\neq0$ in $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$.
+    Its class is the mixed type-II
+    class $[(-1)^{a_1b_2c_2}]$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_z2z2_split, thm:asymex_z2z2_nonsplit,
         thm:mpug_anomaly_three_cochain_spec, thm:mpug_family_restriction_omega,
-        thm:mpug_cyclic_invariant_gauge, thm:mpug_omega_integer_certificate}
+        thm:mpug_cyclic_invariant_gauge, thm:mpug_omega_integer_certificate,
+        thm:asymex_klein_complete_classification, thm:mpug_h3_group_cohomology}
     Since $g^2=e$, the product $\omega(g,e,g)\,\omega(g,g,g)$ does not
     depend on the fusion tensors and can be computed on the restriction of
     the family along an embedding of $\Z_2$ onto $\{e,g\}$, by
@@ -1063,4 +1079,565 @@ claimed~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     letters, and induction on the word gives $\omega(g,g,g)=+1$ for $x$
     and $-1$ for $xy$. The value $-1$ at $xy$ shows that the class is
     nontrivial, by Theorem~\ref{thm:mpug_cyclic_invariant_gauge}.
+    Theorem~\ref{thm:asymex_klein_complete_classification} identifies its
+    class from these three products.
+\end{proof}
+
+\subsection{The eight scalar representatives}
+
+\begin{definition}[Klein-four cocycle representatives]
+    \label{def:asymex_klein_cocycle_family}
+    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For $p,q,r\in\Z_2$ and $a,b,c\in\Z_2^2$, set
+    \begin{align}
+        \omega_{pqr}(a,b,c)
+        =(-1)^{p a_1b_1c_1+q a_2b_2c_2+r a_1b_2c_2}.
+    \end{align}
+    These are the representatives in the $\Z_2\times\Z_2$ table
+    of~\cite[Section~6]{GarreRubio2023MPOSym}. The exponent is evaluated in $\Z_2$.
+\end{definition}
+
+\begin{theorem}[Cocycle equation and restriction signs]
+    \label{thm:asymex_klein_cocycle_restrictions}
+    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isCocycle,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isNormalized,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_signs,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_restriction_iff,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_one_subgroup_iff,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_zero_zero_one}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,def:mpug_scalar_cochains,def:mpug_three_cocycle,
+        def:asymex_group_cocycle_klein}
+    Each $\omega_{pqr}$ is a normalized three-cocycle. At
+    $a=(1,0)$, $b=(0,1)$, and $a+b=(1,1)$ its diagonal values are
+    \begin{align}
+        \bigl(\omega_{pqr}(a,a,a),\omega_{pqr}(b,b,b),
+        \omega_{pqr}(a+b,a+b,a+b)\bigr)
+        =\bigl((-1)^p,(-1)^q,(-1)^{p+q+r}\bigr).
+    \end{align}
+    Its restriction to the subgroup generated by $(x,y)$ is identically one
+    if and only if $px+qy+rxy=0$ in $\Z_2$. In particular, for every subgroup
+    $H\leq\Z_2\times\Z_2$, $\omega_{111}|_H=1$ if and only if $H=\{0\}$.
+    The representative $\omega_{001}$ is the cocycle
+    $(-1)^{a_1b_2c_2}$ of Definition~\ref{def:asymex_group_cocycle_klein}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family}
+    The exponent is additive in each argument, which gives the cocycle equation,
+    and vanishes if any argument is zero. Substitution gives the three signs.
+    On the subgroup generated by $g=(x,y)$, normalization leaves only the value
+    at $(g,g,g)$ to check. Since $x^2=x$ and $y^2=y$, this value is
+    $(-1)^{px+qy+rxy}$. For $p=q=r=1$, the exponent is nonzero at every
+    nonzero $g$. Hence any subgroup on which the restriction is one contains
+    only zero.
+\end{proof}
+
+
+\begin{theorem}[Distinct Klein-four classes and the last-row restriction]
+    \label{thm:asymex_klein_distinct_classes}
+    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_diagonal_eq_of_cohomologousTo,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_cohomologousTo_iff,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_one_isTrivialGaugeClass_comap_iff}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,thm:asymex_klein_cocycle_restrictions,
+        def:mpug_cohomologous_to,def:mpug_trivial_gauge_class,def:mpug_cochain_restriction}
+    The representatives $\omega_{pqr}$ and $\omega_{p'q'r'}$ are cohomologous
+    if and only if $(p,q,r)=(p',q',r')$. For every subgroup $H\leq\Z_2^2$,
+    the class of $\omega_{111}|_H$ is trivial if and only if $H=\{0\}$.
+    These are the distinction of the eight representatives and the last-row
+    subgroup assertion in~\cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_cocycle_restrictions,thm:asymex_klein_subgroup_table,
+        thm:mpug_cyclic_invariant_gauge,thm:mpug_cohomologous_to_equivalence}
+    For an element $g$ of order dividing two, the cyclic product
+    $\omega(g,0,g)\omega(g,g,g)$ is invariant under multiplication by a
+    three-coboundary. Normalization reduces it to $\omega(g,g,g)$.
+    The three signs therefore agree for cohomologous representatives;
+    they recover $p$, $q$, and then $r$. Conversely, equal parameters give
+    the same cocycle. If the restriction of $\omega_{111}$ to $H$ has
+    trivial class, Theorem~\ref{thm:asymex_klein_subgroup_table} gives
+    diagonal value $1$ at every $g\in H$.
+    The last row has diagonal value $-1$ at every nonzero element, so
+    $H=\{0\}$. On the trivial subgroup the cocycle is identically one.
+\end{proof}
+
+
+\begin{theorem}[Four-block orbits for the last Klein-four class]
+    \label{thm:asymex_klein_four_blocks}
+    \lean{TNLean.Algebra.LSymbol.stabilizer_eq_bot_of_kleinCocycleFamily_one,
+        TNLean.Algebra.LSymbol.card_orbit_of_kleinCocycleFamily_one,
+        TNLean.Algebra.LSymbol.card_of_kleinCocycleFamily_one}
+    \leanok
+    \uses{def:mpug_l_symbols,def:asymex_klein_cocycle_family}
+    Let $G=\Z_2^2$ act on a set $X$, and let $L$ be compatible with
+    $\omega_{111}$. For each $x\in X$, the stabilizer $G_x$ is trivial
+    and $|Gx|=4$. In particular, if $X$ is nonempty and the action is
+    transitive, then $|X|=4$. This gives the block count for the last
+    class in~\cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpug_fixed_block_trivializes,thm:asymex_klein_distinct_classes}
+    Compatibility implies $\omega_{111}|_{G_x}=d(L^x|_{G_x})$.
+    Thus the restricted class is trivial and $G_x=\{0\}$.
+    The orbit--stabilizer identity gives $|Gx|\,|G_x|=|G|=4$.
+    For a transitive action, $Gx=X$.
+\end{proof}
+
+
+\begin{theorem}[L-symbols on a free transitive action]
+    \label{thm:asymex_free_action_l_symbols}
+    \lean{TNLean.Algebra.LSymbol.actionGaugeEquiv_of_bijective_smul,
+        TNLean.Algebra.LSymbol.isCompatible_regular}
+    \leanok
+    \uses{def:mpug_l_symbols,def:mpug_l_gauge,def:mpug_three_cocycle}
+    Let $G$ act freely and transitively on a nonempty set $X$.
+    Any two L-symbols $L_1,L_2$ compatible with the same three-cochain
+    $\omega$ are related by an action-tensor gauge, with the fusion gauge
+    fixed to one. If $\omega$ is a three-cocycle, the regular action of $G$
+    on itself admits the compatible solution $L^x_{g,h}=\omega(g,h,x)^{-1}$.
+    This is the trivial-stabilizer case of
+    \cite[Section~4.1]{GarreRubio2023MPOSym}, in the compatibility
+    convention of Definition~\ref{def:mpug_l_symbols}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Fix $x_0\in X$, and write each $x\in X$ uniquely as $k\cdot x_0$.
+    Set $\gamma_{g,k\cdot x_0}=L_2^{x_0}(g,k)/L_1^{x_0}(g,k)$.
+    Compatibility gives, for $i=1,2$,
+    \begin{align}
+        \label{eq:asymex_free_gauge}
+        L_i^{k\cdot x_0}(g,h)
+        =\frac{L_i^{x_0}(g,hk)L_i^{x_0}(h,k)}
+        {\omega(g,h,k)L_i^{x_0}(gh,k)}.
+    \end{align}
+    Taking the ratio in~(\ref{eq:asymex_free_gauge}) yields
+    $L_1^x(g,h)=\gamma_{gh,x}L_2^x(g,h)/
+        (\gamma_{g,h\cdot x}\gamma_{h,x})$.
+    For the regular action, the cocycle equation directly verifies
+    compatibility of $\omega(g,h,x)^{-1}$.
+\end{proof}
+
+\begin{theorem}[Unique four-block L-symbol class]
+    \label{thm:asymex_klein_four_block_uniqueness}
+    \lean{TNLean.Algebra.LSymbol.exists_regular_actionGaugeEquiv_of_kleinCocycleFamily_one}
+    \leanok
+    \uses{thm:asymex_klein_four_blocks,thm:asymex_free_action_l_symbols,
+        def:mpug_l_gauge,def:asymex_klein_cocycle_family,def:mpug_three_cocycle}
+    Let $G=\Z_2^2$ act transitively on a nonempty set $X$, and let $L$
+    be compatible with $\omega_{111}$.
+    There is an equivariant bijection $e:G\to X$ under which $L$ is
+    action-gauge equivalent to $L_0^k(g,h)=\omega_{111}(g,h,k)$.
+    Thus there is exactly one compatible L-symbol class, up to equivariant
+    relabeling and action-tensor gauge, and it has four blocks.
+    This is the L-symbol uniqueness assertion of
+    \cite[Section~6]{GarreRubio2023MPOSym} for the $(1,1,1)$ class.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_four_blocks,thm:asymex_free_action_l_symbols,
+        thm:asymex_klein_cocycle_restrictions}
+    All stabilizers are trivial, so $e(k)=k\cdot x_0$ is an equivariant
+    bijection. Pull back $L$ along $e$ and apply
+    Theorem~\ref{thm:asymex_free_action_l_symbols}.
+    Every value of $\omega_{111}$ is $\pm1$, so its inverse equals itself.
+    The regular solution also proves existence.
+\end{proof}
+
+\begin{theorem}[Normalization and involution signs]
+    \label{thm:asymex_l_symbol_normalization}
+    \lean{TNLean.Algebra.LSymbol.IsCompatible.isNormalized_gauge,
+        TNLean.Algebra.LSymbol.IsCompatible.apply_involution}
+    \leanok
+    \uses{def:mpug_l_symbols,def:mpug_l_gauge,def:mpug_l_normalized}
+    Let $L$ be compatible with a normalized three-cochain $\omega$ for an
+    action of $G$ on $X$. The action-tensor gauge
+    $\gamma_{g,x}=L^x_{e,e}$, with fusion gauge equal to one, makes $L$
+    normalized. For every three-cochain $\omega$, every normalized $L$
+    compatible with $\omega$, every $x\in X$, and every $g\in G$ with
+    $g^2=e$, one has
+    $L^x_{g,g}=\omega(g,g,g)L^{g\cdot x}_{g,g}$.
+    These are the normalization and sign relations used in
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpug_l_gauge_preservation,thm:mpug_block_factorization,
+        thm:mpug_relative_block_character}
+    Compatibility at $(g,e,e)$ and $(e,e,g)$ gives
+    $L^x_{g,e}=L^x_{e,e}/\omega(g,e,e)$ and
+    $L^x_{e,g}=\omega(e,e,g)L^{g\cdot x}_{e,e}$. Since $\omega$ is normalized,
+    these are $L^x_{g,e}=L^x_{e,e}$ and $L^x_{e,g}=L^{g\cdot x}_{e,e}$.
+    The gauge formula then makes both identity-axis values equal to one.
+    Compatibility at $(g,g,g)$ reduces to the stated sign relation.
+\end{proof}
+
+\begin{theorem}[Diagonal L-symbols for the Klein-four representatives]
+    \label{thm:asymex_klein_l_symbol_signs}
+    \lean{TNLean.Algebra.LSymbol.apply_self_of_kleinCocycleFamily}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,def:mpug_l_symbols,def:mpug_l_normalized}
+    Let $L$ be normalized and compatible with $\omega_{pqr}$, with
+    $p,q,r\in\Z_2$. For $g=(u,v)\in\Z_2^2$ and every block $x$,
+    \begin{align}
+        \label{eq:asymex_klein_l_sign}
+        L^x_{g,g}=(-1)^{pu+qv+ruv}L^{g\cdot x}_{g,g}.
+    \end{align}
+    In particular, for the type-II representative $\omega_{001}$ and
+    $c=(1,1)$, one has $L^x_{c,c}=-L^{c\cdot x}_{c,c}$.
+    If $c$ exchanges two blocks $x,y$, this is
+    $L^x_{c,c}=-L^y_{c,c}$, the relation for the element $ab$ in
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_l_symbol_normalization,def:asymex_klein_cocycle_family}
+    Every element of $\Z_2^2$ squares to the identity. Substitute
+    $\omega_{pqr}(g,g,g)=(-1)^{pu+qv+ruv}$ into
+    Theorem~\ref{thm:asymex_l_symbol_normalization}, using $u^2=u$ and
+    $v^2=v$ in $\Z_2$.
+\end{proof}
+
+\begin{theorem}[Trivial restrictions of all Klein-four representatives]
+    \label{thm:asymex_klein_subgroup_table}
+    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_isTrivialGaugeClass_comap_iff_generators}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,def:mpug_cochain_restriction,
+        def:mpug_trivial_gauge_class}
+    Let $H\leq\Z_2^2$, with $a=(1,0)$ and $b=(0,1)$.
+    The restriction of $\omega_{pqr}$ to $H$ represents the trivial
+    cohomology class if and only if $pu+qv+ruv=0$ for every $(u,v)\in H$.
+    Equivalently, $H$ must avoid precisely the elements in the right column:
+    \begin{center}
+        \begin{tabular}{c@{\qquad}c}
+            $(p,q,r)$ & forbidden elements of $H$ \\[2pt]
+            $(0,0,0)$ & none                      \\
+            $(1,0,0)$ & $a,ab$                    \\
+            $(0,1,0)$ & $b,ab$                    \\
+            $(1,1,0)$ & $a,b$                     \\
+            $(0,0,1)$ & $ab$                      \\
+            $(0,1,1)$ & $b$                       \\
+            $(1,0,1)$ & $a$                       \\
+            $(1,1,1)$ & $a,b,ab$
+        \end{tabular}
+    \end{center}
+    This gives the subgroup restrictions in
+    \cite[Section~6]{GarreRubio2023MPOSym}, including arbitrary changes
+    of fusion gauge.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_cocycle_restrictions,thm:mpug_cyclic_invariant_gauge}
+    If the restricted class is trivial, its cyclic invariant at every
+    element of $H$ is one. Since each element has square equal to the
+    identity and the representative is normalized, this invariant is
+    $\omega_{pqr}(g,g,g)$; hence $pu+qv+ruv=0$.
+    Conversely, write $Q(x)=px_1+qx_2+rx_1x_2$. A check over the finitely
+    many $p,q,r\in\Z_2$ and $g,h,k\in\Z_2^2$ gives
+    \begin{align}
+        Q(g)=Q(h)=Q(k)=Q(g+h)=Q(g+k)=Q(h+k)=0
+        \implies pg_1h_1k_1+qg_2h_2k_2+rg_1h_2k_2=0.
+        \notag
+    \end{align}
+    Subgroup closure therefore makes
+    the entire restriction identically one.
+    Testing the identity and the three nonidentity elements gives the table.
+\end{proof}
+
+\begin{definition}[The one-qubit Klein-four symmetry]
+    \label{def:asymex_klein_spin_symmetry}
+    \lean{KleinSymmetry.generatorA,KleinSymmetry.generatorB,KleinSymmetry.operator,
+        KleinSymmetry.tensorA,KleinSymmetry.tensorB}
+    \leanok
+    \uses{def:asymex_czx_decorated_tensor}
+    On a periodic chain of $N>0$ qubits, write $\bar t_i=1-t_i$ and set
+    \begin{align}
+        \label{eq:asymex_klein_spin_generators}
+        U_a\ket{t} & =(-1)^{\sum_i(t_it_{i+1}+t_i)}\ket{t}, \\
+        U_b\ket{t} & =\ket{\bar t}.\notag
+    \end{align}
+    Thus $U_a=\prod_i CZ_{i,i+1}Z_i$ and $U_b=\prod_i X_i$, as in
+    \cite[Section~6]{GarreRubio2023MPOSym}. Define
+    $U_{a^p b^q}=U_a^pU_b^q$ for $p,q\in\{0,1\}$.
+    If $\widehat T^{ij}$ is the decorated CZX tensor, the tensors
+    $A^{ij}=\widehat T^{i,1-j}$ and $B^{ij}=\delta_{i,1-j}$ have bond dimensions
+    two and one, respectively.
+\end{definition}
+
+\begin{theorem}[The printed Klein-four representation]
+    \label{thm:asymex_klein_spin_representation}
+    \lean{KleinSymmetry.generatorA_mul_self,KleinSymmetry.generatorB_mul_self,
+        KleinSymmetry.generators_commute,KleinSymmetry.generatorA_mul_generatorB,
+        KleinSymmetry.operator_one,KleinSymmetry.operator_mul,
+        KleinSymmetry.generatorA_mem_unitaryGroup,KleinSymmetry.generatorB_mem_unitaryGroup,
+        KleinSymmetry.operator_mem_unitaryGroup,KleinSymmetry.mpo_tensorA,KleinSymmetry.mpo_tensorB,
+        KleinSymmetry.representation}
+    \leanok
+    \uses{def:asymex_klein_spin_symmetry}
+    At every positive length, $U_a^2=U_b^2=I$ and $U_aU_b=U_bU_a$.
+    Every $U_g$ is unitary, $U_e=I$, and $U_gU_h=U_{gh}$, so $g\mapsto U_g$
+    is a representation of $\Z_2\times\Z_2$ on the state space.
+    The periodic operators of $A$ and $B$ are $U_a$ and $U_b$.
+    Their product is the decorated CZX operator.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_czx_decorated_operator}
+    The diagonal entries of $U_a$ are signs, and the spin flip is an
+    involution, so both generators square to the identity and are unitary.
+    By Theorem~\ref{thm:asymex_czx_decorated_operator},
+    $O_N(A)(s,t)=O_N(\widehat T)(s,\bar t)
+        =\delta_{s,t}(-1)^{\sum_i(s_is_{i+1}+s_i)}=U_a(s,t)$, and
+    $O_N(B)(s,t)=\Id(s,\bar t)=\delta_{s,\bar t}=U_b(s,t)$. By (\ref{eq:asymex_klein_spin_generators}), $U_aU_b$ is the
+    decorated CZX operator, whose square is $I$. Multiplying
+    $(U_aU_b)^2=I$ on the left by $U_a$ and on the right by $U_b$ proves
+    commutation. The multiplication law follows by adding exponents
+    modulo two.
+\end{proof}
+
+\begin{definition}[The two invariant state spaces]
+    \label{def:asymex_klein_spin_spaces}
+    \lean{KleinSymmetry.constantSpinSpace,KleinSymmetry.clusterPairSpace}
+    \leanok
+    \uses{def:asymex_klein_spin_symmetry}
+    Put $z_0=\ket{0}^{\otimes N}$, $z_1=\ket{1}^{\otimes N}$,
+    $u=\sum_t\ket{t}$, and $v=U_au$. The two spaces of
+    \cite[Section~6]{GarreRubio2023MPOSym} are
+    $S_z=\operatorname{span}\{z_0,z_1\}$ and
+    $S_c=\operatorname{span}\{u,v\}$.
+    Multiplying $u$ and $v$ by $2^{-N/2}$ gives the normalized uniform
+    and cluster-like vectors used there, without changing $S_c$.
+\end{definition}
+
+\begin{theorem}[Action on the two state pairs]
+    \label{thm:asymex_klein_spin_spaces}
+    \lean{KleinSymmetry.generatorA_mulVec_constantBasis,
+        KleinSymmetry.generatorB_mulVec_constantBasis,KleinSymmetry.generatorB_mulVec_const,
+        KleinSymmetry.generatorA_mulVec_cluster,KleinSymmetry.generatorB_mulVec_cluster,
+        KleinSymmetry.generators_preserve_constantSpinSpace,
+        KleinSymmetry.generators_preserve_clusterPairSpace}
+    \leanok
+    \uses{def:asymex_klein_spin_spaces}
+    Both $S_z$ and $S_c$ are invariant under $U_a$ and $U_b$. More precisely,
+    for $j\in\{0,1\}$,
+    \begin{align}
+        \label{eq:asymex_klein_spin_actions}
+        U_a z_j & =z_j,           \\
+        U_b z_j & =z_{1-j},\notag \\
+        U_a v   & =u,\notag       \\
+        U_b u   & =u,\notag       \\
+        U_b v   & =v.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_spin_representation}
+    The exponent in (\ref{eq:asymex_klein_spin_generators}) is zero on
+    the all-zero configuration and $2N$ on the all-one configuration.
+    Since $U_b$ permutes configurations by the global flip with no sign, it
+    fixes the uniform vector directly: $U_bu=u$. The same flip exchanges the
+    all-zero and all-one configurations, giving $U_bz_j=z_{1-j}$.
+    Since $v=U_au$, the identities $U_a^2=I$ and $U_bU_a=U_aU_b$ then give $U_av=u$ and $U_bv=v$.
+    Linearity proves invariance of both spans.
+\end{proof}
+
+\begin{theorem}[Normalization of scalar three-cocycles]
+    \label{thm:asymex_three_cocycle_normalization}
+    \lean{TNLean.Algebra.ScalarThreeCochain.exists_isNormalized_cohomologousTo}
+    \leanok
+    \uses{def:mpug_three_cocycle,def:mpug_scalar_cochains,def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to}
+    Let $G$ be a small group, whose underlying set lies in a fixed
+    set-theoretic universe. Every three-cocycle $\omega:G^3\to\C^\times$ is cohomologous to a
+    normalized one. One may use the two-cochain
+    $\beta(g,h)=\omega(g,e,e)/\omega(e,e,h)$ and replace $\omega$ by
+    $(d\beta)\omega$, where
+    $d\beta(g,h,k)=\beta(g,hk)\beta(h,k)/(\beta(g,h)\beta(gh,k))$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The cocycle equation gives $\omega(e,e,e)=1$ and
+    \begin{align}
+        \label{eq:asymex_three_cocycle_axes}
+        \omega(g,h,e) & =\frac{\omega(gh,e,e)}{\omega(h,e,e)},       \\
+        \omega(e,g,h) & =\frac{\omega(e,e,gh)}{\omega(e,e,g)},\notag \\
+        \omega(g,e,h) & =\omega(g,e,e)\omega(e,e,h).\notag
+    \end{align}
+    Substitution of (\ref{eq:asymex_three_cocycle_axes}) into $d\beta$
+    makes each identity-axis value of $(d\beta)\omega$ equal to one.
+\end{proof}
+
+\begin{theorem}[Triviality from the Klein diagonal signs]
+    \label{thm:asymex_klein_trivial_diagonal}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_of_klein_diagonal_eq_one}
+    \leanok
+    \uses{def:mpug_three_cocycle,def:mpug_scalar_cochains,def:mpug_trivial_gauge_class}
+    A normalized three-cocycle on $G=\{e,a,b,c=ab\}\cong\Z_2^2$ whose
+    diagonal values $\omega(g,g,g)$ are all one is a coboundary.
+    This is the trivial-class case of the classification in
+    \cite[Section~6]{GarreRubio2023MPOSym}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $(s_1,s_2,s_3,s_4,s_5,s_6)=
+        (\omega(a,a,b),\omega(a,b,a),\omega(a,b,b),\omega(a,b,c),
+        \omega(b,a,a),\omega(b,a,b))$.
+    Choose $t\in\C^\times$ with $t^2=s_1s_5/s_2$ and define a normalized
+    two-cochain by its values on $\{a,b,c\}^2$:
+    \begin{align}
+        \label{eq:asymex_klein_trivial_gauge}
+        (\beta(g,h))_{g,h\in\{a,b,c\}}
+         & =\begin{pmatrix}
+                ts_4/(s_3s_6)   & 1/s_3 & ts_1s_4/s_6 \\
+                1/(ts_3)        & 1     & s_6/t       \\
+                s_1s_4/(s_2s_6) & 1     & 1
+            \end{pmatrix}.
+    \end{align}
+    The six corresponding values of $d\beta$ are $s_1,\ldots,s_6$.
+    Hence $\eta=\omega/(d\beta)$ has those six values equal to one.
+    Its diagonal values remain one because $g^2=e$ and $\beta$ is normalized.
+    Applying the cocycle equation successively to the remaining triples
+    gives one for all eighteen other nonidentity entries. Thus $\eta=1$
+    and $\omega=d\beta$.
+\end{proof}
+
+\begin{theorem}[Complete classification of Klein three-cocycles]
+    \label{thm:asymex_klein_complete_classification}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cohomologousTo_of_klein_diagonal_eq,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_klein_three_cyclicInvariants,
+        TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_kleinCocycleFamily,
+        TNLean.Algebra.ScalarThreeCochain.existsUnique_cohomologousTo_kleinCocycleFamily,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycleFamily_add,
+        TNLean.Algebra.ScalarThreeCochain.kleinAnomalyClass,
+        TNLean.Algebra.ScalarThreeCochain.kleinAnomalyClass_bijective,
+        TNLean.Algebra.ScalarThreeCochain.kleinH3Equiv}
+    \leanok
+    \uses{def:asymex_klein_cocycle_family,def:mpug_cohomologous_to,
+        def:mpug_h3_group_cohomology,def:mpug_three_cocycle,def:mpug_scalar_cochains}
+    Every three-cocycle on $\Z_2^2$ is cohomologous to exactly one
+    $\omega_{pqr}$. The correspondence $[\omega_{pqr}]\mapsto(p,q,r)$ is
+    an isomorphism $H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})\cong\Z_2^3$.
+    Two arbitrary three-cocycles $\omega,\nu$ are cohomologous if and only if
+    \begin{align}
+        \label{eq:asymex_klein_complete_detectors}
+        \omega(g,e,g)\omega(g,g,g) & =\nu(g,e,g)\nu(g,g,g)
+    \end{align}
+    at $g=a,b,c$. For normalized cocycles these products reduce to the
+    diagonal values. This is the classification and detector assertion
+    of \cite[Section~6]{GarreRubio2023MPOSym} with $\C^\times$ coefficients;
+    the source states it for $U(1)$, and the degree-three comparison of the
+    two coefficient groups is not formalized
+    here~\cite{gap:glm23_klein_h3_circle_coefficients}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_three_cocycle_normalization,
+        thm:asymex_klein_trivial_diagonal,thm:asymex_klein_distinct_classes,
+        thm:mpug_cyclic_invariant_gauge,thm:mpug_h3_group_cohomology}
+    Normalize both cocycles. Their quotient has trivial diagonal precisely
+    when their three signs agree, so
+    Theorem~\ref{thm:asymex_klein_trivial_diagonal} proves sufficiency of
+    (\ref{eq:asymex_klein_complete_detectors}). Necessity follows from
+    invariance of the cyclic products under coboundaries.
+    The cocycle equation at $(g,g,g,g)$ makes each normalized diagonal
+    value a sign. If the signs are $(-1)^p,(-1)^q,(-1)^t$, the matching
+    representative is $\omega_{p,q,p+q+t}$.
+    Theorem~\ref{thm:asymex_klein_distinct_classes} proves uniqueness.
+    Finally $\omega_{pqr}\omega_{p'q'r'}=\omega_{p+p',q+q',r+r'}$, so
+    this bijection of cohomology classes is a group isomorphism.
+\end{proof}
+
+\begin{definition}[The four printed tensors]
+    \label{def:asymex_klein_printed_family}
+    \lean{KleinSymmetry.printedBond,KleinSymmetry.printedTensor,KleinSymmetry.printedFamily}
+    \leanok
+    \uses{def:asymex_klein_spin_symmetry}
+    For $G=\{e,a,b,ab\}$, let $T_e$ be the bond-one identity tensor,
+    $T_a=A$ the diagonal tensor, $T_b=B$ the bond-one spin-flip tensor,
+    and $T_{ab}=\widehat T$ the decorated CZX tensor.
+\end{definition}
+
+\begin{theorem}[Normality and anomaly of the printed symmetry]
+    \label{thm:asymex_klein_printed_anomaly}
+    \lean{KleinSymmetry.tensorA_isNormal,KleinSymmetry.mpo_printedFamily,
+        KleinSymmetry.printedFamily_isNormalRepresentation,
+        KleinSymmetry.diagonalHom,KleinSymmetry.printedFamily_comap_diagonal,
+        KleinSymmetry.cyclicInvariant_omega_printedFamily,
+        KleinSymmetry.not_isTrivialGaugeClass_omega_printedFamily,
+        KleinSymmetry.exists_normalized_omega_printedFamily,
+        KleinSymmetry.anomalyClass_omega_printedFamily_ne_zero}
+    \leanok
+    \uses{def:asymex_klein_printed_family,def:mpug_anomaly_three_cochain,
+        def:mpug_trivial_gauge_class,def:mpug_h3_group_cohomology}
+    For every $N>0$ and $g\in G$, the periodic operator of $T_g$ is the
+    printed operator, $O_N(T_g)=U_g$. The four tensors are normal and form
+    an exact representation on every positive-length periodic chain.
+    For every choice of fusion tensors,
+    the anomaly satisfies
+    \begin{align}
+        \label{eq:asymex_klein_printed_anomaly}
+        \omega(ab,e,ab)\omega(ab,ab,ab) & =-1.
+    \end{align}
+    Its class $[\omega]\in H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$
+    is nonzero and admits a normalized representative $\nu$
+    with $\nu(ab,ab,ab)=-1$. This is the sign at $ab$ only.
+    \cite[Section~6]{GarreRubio2023MPOSym} also asserts, for the diagonal
+    values, that $\omega(a,a,a)=\omega(b,b,b)=1$; these are not determined
+    here~\cite{gap:glm23_klein_printed_anomaly_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_klein_spin_representation,
+        thm:asymex_czx_decorated_normal,
+        thm:asymex_czx_decorated_anomaly_class,
+        thm:mpug_cyclic_invariant_gauge,
+        thm:asymex_three_cocycle_normalization,
+        thm:mpug_h3_group_cohomology,thm:mpug_family_restriction_omega}
+    The equalities $O_N(T_g)=U_g$ are
+    Theorem~\ref{thm:asymex_klein_spin_representation} for $g=a,b,ab$ and
+    the identity tensor for $g=e$. On the physical alphabet
+    $\{0,1\}^2$ let $\varphi(i,j)=(i,1-j)$. Then
+    $A^{\varphi(i,j)}=\widehat T^{ij}$, so $A^{\varphi\circ w}=\widehat T^{w}$ for every
+    word $w$ and
+    $\operatorname{span}\{A^{v}:|v|=n\}\supseteq\operatorname{span}\{\widehat T^{w}:|w|=n\}$.
+    Normality of $\widehat T$ therefore gives normality of the diagonal tensor. The identity and spin-flip
+    tensors have bond dimension one. The operator multiplication law
+    follows from the commuting involutions.
+    Restriction to $\{e,ab\}$ gives exactly the decorated CZX family; let
+    $\omega_{\mathrm{CZX}}$ be the anomaly of its fusion tensors and write
+    $ab$ also for the generator of $\{e,ab\}$. Restricting the fusion
+    tensors (Theorem~\ref{thm:mpug_family_restriction_omega}) and using
+    invariance of the cyclic product under a change of fusion tensors
+    (Theorem~\ref{thm:mpug_cyclic_invariant_gauge}) gives
+    \begin{align}
+        \omega(ab,e,ab)\,\omega(ab,ab,ab)
+         & =\omega_{\mathrm{CZX}}(ab,e,ab)\,\omega_{\mathrm{CZX}}(ab,ab,ab)=-1,
+        \notag
+    \end{align}
+    the last value by Theorem~\ref{thm:asymex_czx_decorated_anomaly_class}.
+    This proves (\ref{eq:asymex_klein_printed_anomaly}). A trivial class would have
+    cyclic product one, so the gauge class is nontrivial; by
+    Theorem~\ref{thm:mpug_h3_group_cohomology} the class
+    $[\omega]\in H^3(\Z_2\times\Z_2,\C^\times_{\mathrm{triv}})$ is nonzero. Finally normalization makes $\nu(ab,e,ab)=1$.
 \end{proof}

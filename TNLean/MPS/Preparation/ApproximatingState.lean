@@ -41,7 +41,8 @@ This file proves these three steps.
 ## References
 
 * arXiv:2307.01696, paragraph "Approximation through the fixed-point state" (eqs. (8) and (9)) and
-  paragraph "Preparing the approximate state" (eqs. (10), (11), and (12)).
+  paragraph "Preparing the approximate state" (eqs. (10), (11), and (12)), and Supplemental
+  Material, "Proof of Lemma 1 and extension to non-normal tensors" and proof of Lemma 1'(i).
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
@@ -49,34 +50,37 @@ open Filter Topology
 
 namespace Matrix
 
-/-- Isometries `W_k : ℂ^κ → ℂ^{n_k}`, one on each of `M` sites, preserve inner products:
-`⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ⟨ψ, φ⟩`.
+/-- **Partial isometries on the sites preserve inner products of supported vectors.** Let
+`W_k : ℂ^κ → ℂ^{n_k}`, one on each of `M` sites, have orthonormal columns on a set `S_k` of
+inputs and zero columns outside, `W_k† W_k = Π_{S_k}`. If `ψ^* φ` vanishes at every
+configuration `τ` with some `τ_k ∉ S_k`, then `⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ⟨ψ, φ⟩`.
 
-arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries on
-the blocks do not change norms or overlaps. The target spaces may differ from site to site, as
-for blocks of different lengths. -/
-theorem IsIsometry.sum_star_mul_prod {M : ℕ} {n : Fin M → Type*} [∀ k, Fintype (n k)]
-    {κ : Type*} [Fintype κ] [DecidableEq κ] {W : ∀ k, Matrix (n k) κ ℂ}
-    (hW : ∀ k, (W k).IsIsometry) (ψ φ : (Fin M → κ) → ℂ) :
+arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
+the partial isometries `V_k` with `V_k†V_k = Π_k`. -/
+theorem sum_star_mul_prod_of_support {M : ℕ} {n : Fin M → Type*} [∀ k, Fintype (n k)]
+    {κ : Type*} [Fintype κ] [DecidableEq κ] {W : ∀ k, Matrix (n k) κ ℂ} {S : Fin M → Set κ}
+    [∀ k, DecidablePred (· ∈ S k)]
+    (hW : ∀ k a b, ∑ i, star (W k i a) * W k i b = if a = b ∧ a ∈ S k then 1 else 0)
+    (ψ φ : (Fin M → κ) → ℂ) (hψφ : ∀ τ, (∃ k, τ k ∉ S k) → star (ψ τ) * φ τ = 0) :
     ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
         ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ =
       ∑ τ, star (ψ τ) * φ τ := by
   classical
-  have hcol : ∀ j (a b : κ), ∑ i, star (W j i a) * W j i b = if a = b then 1 else 0 :=
-    fun j a b => by
-      have h := congrFun (congrFun (hW j) a) b
-      rw [Matrix.mul_apply, Matrix.one_apply] at h
-      simpa [Matrix.conjTranspose_apply] using h
   have hprod : ∀ τ τ' : Fin M → κ,
       ∑ s : ∀ k, n k, ∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j)) =
-        if τ = τ' then 1 else 0 := fun τ τ' => by
+        if τ = τ' ∧ ∀ j, τ j ∈ S j then 1 else 0 := fun τ τ' => by
     rw [← Fintype.prod_sum (fun j i => star (W j i (τ j)) * W j i (τ' j))]
-    simp only [hcol]
-    by_cases h : τ = τ'
-    · subst h; simp
-    · obtain ⟨j, hj⟩ := Function.ne_iff.mp h
-      rw [ite_eq_right_iff.2 fun h' => absurd h' h]
-      exact Finset.prod_eq_zero (Finset.mem_univ j) (ite_eq_right_iff.2 fun h' => absurd h' hj)
+    simp only [hW]
+    by_cases h : τ = τ' ∧ ∀ j, τ j ∈ S j
+    · obtain ⟨rfl, hS⟩ := h
+      simp [hS]
+    · rw [ite_eq_right h]
+      have : ∃ j, ¬(τ j = τ' j ∧ τ j ∈ S j) := by
+        by_contra hall
+        push Not at hall
+        exact h ⟨funext fun j => (hall j).1, fun j => (hall j).2⟩
+      obtain ⟨j, hj⟩ := this
+      exact Finset.prod_eq_zero (Finset.mem_univ j) (ite_eq_right hj)
   calc ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
         ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ
       = ∑ s : ∀ k, n k, ∑ τ, ∑ τ', (∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j))) *
@@ -93,8 +97,32 @@ theorem IsIsometry.sum_star_mul_prod {M : ℕ} {n : Fin M → Type*} [∀ k, Fin
         rw [Finset.sum_comm]
         exact Finset.sum_congr rfl fun τ _ => Finset.sum_comm
     _ = ∑ τ, star (ψ τ) * φ τ := by
-        simp only [hprod, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ,
-          ite_true]
+        simp only [hprod, ite_mul, one_mul, zero_mul]
+        refine Finset.sum_congr rfl fun τ _ => ?_
+        by_cases hS : ∀ j, τ j ∈ S j
+        · simp [hS]
+        · rw [hψφ τ (not_forall.mp hS),
+            Finset.sum_eq_zero fun τ' _ => ite_eq_right fun h => hS h.2]
+
+/-- Isometries `W_k : ℂ^κ → ℂ^{n_k}`, one on each of `M` sites, preserve inner products:
+`⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ⟨ψ, φ⟩`.
+
+arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries on
+the blocks do not change norms or overlaps. The target spaces may differ from site to site, as
+for blocks of different lengths. This is `Matrix.sum_star_mul_prod_of_support` with every input
+kept. -/
+theorem IsIsometry.sum_star_mul_prod {M : ℕ} {n : Fin M → Type*} [∀ k, Fintype (n k)]
+    {κ : Type*} [Fintype κ] [DecidableEq κ] {W : ∀ k, Matrix (n k) κ ℂ}
+    (hW : ∀ k, (W k).IsIsometry) (ψ φ : (Fin M → κ) → ℂ) :
+    ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
+        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ =
+      ∑ τ, star (ψ τ) * φ τ := by
+  classical
+  refine sum_star_mul_prod_of_support (S := fun _ => Set.univ) (fun j a b => ?_) ψ φ
+    fun τ ⟨k, hk⟩ => absurd (Set.mem_univ _) hk
+  have h := congrFun (congrFun (hW j) a) b
+  rw [Matrix.mul_apply, Matrix.one_apply] at h
+  simpa [Matrix.conjTranspose_apply] using h
 
 /-- An isometry `W : ℂ^κ → ℂ^n` applied on every site preserves inner products of vectors on
 `M` sites: `⟨W^{⊗M} ψ, W^{⊗M} φ⟩ = ⟨ψ, φ⟩`; in particular `‖W^{⊗M} ψ‖² = ‖ψ‖²`.
@@ -116,6 +144,20 @@ namespace MPSTensor
 
 variable {d n D : ℕ}
 
+/-- The mixed Gram matrix `Xᴴ Y` of the physical matrices of two tensors is a rearrangement of
+their mixed transfer map: `(Xᴴ Y)_{(α,β),(α',β')} = E_{YX}(|β'⟩⟨β|)_{α' α}`. -/
+theorem conjTranspose_physicalMatrix_mul_physicalMatrix_apply {n D₁ D₂ : ℕ}
+    (X : MPSTensor n D₁) (Y : MPSTensor n D₂) (a : Fin D₁ × Fin D₁) (b : Fin D₂ × Fin D₂) :
+    ((physicalMatrix X)ᴴ * physicalMatrix Y) a b =
+      Kraus.mixedMapLM Y X (Matrix.single b.2 a.2 1) b.1 a.1 := by
+  rw [Kraus.mixedMapLM_apply, Matrix.sum_apply, Matrix.mul_apply]
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [Matrix.mul_apply, Finset.sum_eq_single a.2]
+  · simp [physicalMatrix, Matrix.mul_apply, Matrix.single_apply, mul_comm]
+  · intro y _ hy
+    simp [Matrix.mul_apply, Ne.symm hy]
+  · simp
+
 /-- The Gram matrix `Bᴴ B` of the physical matrix of a tensor is a rearrangement of its transfer
 map: `(Bᴴ B)_{(α,β),(α',β')} = E_B(|β'⟩⟨β|)_{α' α}`.
 
@@ -123,13 +165,7 @@ arXiv:2307.01696, eq. (8): `E_B` is `P† P = B† B` with legs regrouped. -/
 theorem conjTranspose_physicalMatrix_mul_apply (B : MPSTensor n D) (a b : Fin D × Fin D) :
     ((physicalMatrix B)ᴴ * physicalMatrix B) a b =
       Kraus.transferMap B (Matrix.single b.2 a.2 1) b.1 a.1 := by
-  rw [Kraus.transferMap_apply, Matrix.sum_apply, Matrix.mul_apply]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Matrix.mul_apply, Finset.sum_eq_single a.2]
-  · simp [physicalMatrix, Matrix.mul_apply, Matrix.single_apply, mul_comm]
-  · intro y _ hy
-    simp [Matrix.mul_apply, Ne.symm hy]
-  · simp
+  rw [conjTranspose_physicalMatrix_mul_physicalMatrix_apply, Kraus.mixedMapLM_self]
 
 /-- If the transfer maps of a family of tensors converge to `X ↦ Tr(X) σ`, their Gram matrices
 converge to `σᵀ ⊗ 1`.

@@ -1,0 +1,119 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{./command}
+
+\title{Pure-Exponential Correlator Expansion and Jordan Blocks in CPGSV21}
+\author{}
+\date{2026-10-01}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{Source statement}
+
+Section~II.B.3 of Cirac--P\'erez-Garc\'ia--Schuch--Verstraete~\cite{Cirac2021Matrix}
+notes that the transfer matrix $E$ need not be Hermitian and ``may have some
+Jordan blocks'', and assumes only that the leading eigenvalue is simple.
+It then states that a connected correlator at distance $n$ has the form
+\begin{align}
+    C(X,Y;n) & =\sum_{i=2}^{D^2} c_{XY}(i)\,\lambda_i^n,
+    \label{eq:cpgsv21_correlator_pure_exponentials}
+\end{align}
+a sum of $D^2-1$ pure exponentials, with decay rate set by
+$|\lambda_2|$.\footnote{Source location:
+\path{Papers/2011.12127/TN-Review-main.tex}:433--440.}
+
+\section{The deviation}
+
+Gauge the tensor so that its transfer map is trace preserving with fixed state
+$\rho$; the traceless matrices are then invariant.
+Equation~(\ref{eq:cpgsv21_correlator_pure_exponentials}) holds when the
+transfer map, restricted to the traceless matrices, is diagonalizable. If that
+restriction has a Jordan block $J=\lambda I+N$ of size $k+1$, then
+\begin{align}
+    J^n & =\sum_{j=0}^{\min(k,n)}\binom nj\lambda^{n-j}N^j,
+    \label{eq:cpgsv21_correlator_jordan_power}
+\end{align}
+and a correlator whose insertions detect $N$ is a polynomial-exponential
+sequence rather than a sum of pure exponentials. Likewise, a uniform bound $|C(X,Y;n)|\le C_{XY}|\lambda_2|^n$
+can fail at a defective subleading eigenvalue. A bound $C_{XY}r^n$ still holds
+for every rate $r$ strictly above the spectral radius of the complementary map,
+by the Gelfand formula.
+
+\paragraph{Explicit example.}
+On $2\times2$ matrices, with Pauli matrices $\sigma_x,\sigma_y,\sigma_z$, fix
+a real $\lambda\neq0$ and let $J$ be the linear map with
+$J(1)=0$, $J(\sigma_x)=\lambda\sigma_x$, $J(\sigma_y)=\sigma_x+\lambda\sigma_y$,
+$J(\sigma_z)=\lambda\sigma_z$. For $\varepsilon>0$ put
+$E(Z)=\tr(Z)\,\tfrac12 1+\varepsilon J(Z)$. At $\varepsilon=0$ the Choi
+matrix of $E$ is a positive multiple of the identity, so for small
+$\varepsilon$ it is positive definite. Then $E$ is completely positive and
+trace preserving with full Kraus rank, hence primitive, with fixed state
+$\rho=\tfrac12 1$, and its Kraus operators define a tensor with $D=2$. On the
+traceless matrices $E=\varepsilon J$ has a Jordan block of size two at
+$\varepsilon\lambda$. For $X=\sigma_y$ and $Y=\sigma_x$ one has
+$Z_\rho(X)=\tfrac12\sigma_y$ and
+\begin{align}
+    C(X,Y;n) & =\tr\bigl(\sigma_x\,E^n(\tfrac12\sigma_y)\bigr)
+    =n\,\varepsilon^n\lambda^{n-1},
+    \label{eq:cpgsv21_correlator_explicit_counterexample}
+\end{align}
+which is not a finite sum of pure exponentials. It also exceeds every bound
+$C_{XY}(\varepsilon|\lambda|)^n$ for large $n$.
+
+The same sequence arises from physical operators. Full Kraus rank means
+that the four Kraus operators $A^1,\ldots,A^4$ of $E$ are linearly
+independent, so they span the $2\times2$ matrices. Hence the maps
+$Z\mapsto\sum_{i,j}O_{ij}A^iZ(A^j)^\dagger$, for $O$ a $4\times4$ physical
+operator, exhaust all linear maps of the $2\times2$ matrices. Choose physical
+operators $O_X$ and $O_Y$ whose insertion maps are $Z\mapsto\sigma_yZ$ and
+$Z\mapsto\sigma_xZ$. Because $E$ is trace preserving, its left fixed point is
+the identity. The one-point expectation of $O_X$ is
+$\tr(\sigma_y\rho)=0$, so the connected two-point function of $O_X$ and $O_Y$
+at distance $n\ge1$ is
+\begin{align}
+    \tr\bigl(\sigma_x\,E^{n-1}(\tfrac12\sigma_y)\bigr)
+     & =(n-1)\,\varepsilon^{n-1}\lambda^{n-2},
+    \label{eq:cpgsv21_correlator_physical_counterexample}
+\end{align}
+which is again not a finite sum of pure exponentials in $n$.
+
+These $O_X$ and $O_Y$ need not be Hermitian. Hermitian observables suffice as
+well. Write $O_X=H_1+iH_2$ and $O_Y=H_3+iH_4$ with $H_k$ Hermitian. The
+connected two-point function is bilinear in the two operators. If it were a
+finite combination of the sequences $\lambda_i^n$ for every pair of Hermitian
+observables, with $\lambda_i$ the eigenvalues of $E$, then the same would hold
+for $O_X$ and $O_Y$. That contradicts
+(\ref{eq:cpgsv21_correlator_physical_counterexample}), so some pair of
+Hermitian observables already has a connected correlator that is not a sum of
+pure exponentials.
+
+\section{Corrected statements}
+
+The blueprint chapter on correlations states the expansion under the explicit
+hypothesis that the restriction of the transfer map to the traceless matrices
+is diagonalizable, and states the decay bound at every rate $r$ with
+$\operatorname{spr}(E-P)<r<1$, with $\operatorname{spr}$ the spectral radius, where $P$ is the projection onto the fixed state; the rate $|\lambda_2|$ is recorded only for
+the diagonalizable case. Neither statement has a formal declaration yet.
+
+\section{Elimination plan}
+
+Formalize the eigenbasis expansion of the centered insertion in the
+diagonalizable case and the Gelfand-formula bound for the connected correlator.
+The general polynomial-exponential expansion is a corrected replacement for
+the source statement, not a proof of its unqualified pure-exponential form.
+
+\begin{thebibliography}{1}
+    \bibitem{Cirac2021Matrix}
+    J.~I. Cirac, D.~P\'erez-Garc\'ia, N.~Schuch, and F.~Verstraete.
+    \newblock Matrix product states and projected entangled pair states: Concepts, symmetries, theorems.
+    \newblock {\em Rev. Mod. Phys.}, 93:045003, 2021.
+\end{thebibliography}
+
+\end{document}

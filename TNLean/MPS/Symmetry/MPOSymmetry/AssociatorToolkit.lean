@@ -333,19 +333,7 @@ namespace MPOTensor.GroupFamily
 
 variable {G : Type*} [Group G] {d : ℕ}
 
-/-! ### Trivial values of the anomaly three-cochain -/
-
-/-- If the two fusion trees of a triple coincide, the anomaly three-cochain is one there.
-
-Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
-theorem FusionData.omega_eq_one_of_leftV_eq_rightV {F : GroupFamily G d} {fd : F.FusionData}
-    (hF : F.IsNormalRepresentation) {g h k : G} (hLR : fd.leftV g h k = fd.rightV g h k) :
-    fd.omega g h k = 1 := by
-  have h1 : fd.IsAssociator g h k 1 := by
-    unfold FusionData.IsAssociator
-    rw [hLR]
-    exact MPSTensor.IsDressedProportional.refl _ _
-  exact Units.ext (by rw [← FusionData.eq_omega_of_isAssociator hF h1, Units.val_one])
+/-! ### Bond-one families -/
 
 /-- The family of bond-one tensors `g ↦ T g`. -/
 abbrev ofBondOne (T : G → MPOTensor d 1) : GroupFamily G d where
@@ -361,6 +349,26 @@ def FusionData.ofBondOne (T : G → MPOTensor d 1)
   V _ _ := (1 : Matrix (Fin 1) (Fin 1) ℂ)
   W _ _ := (1 : Matrix (Fin 1) (Fin 1) ℂ)
   isReduction g h := MPSTensor.isReduction_one_one_of_eq (hT g h)
+
+end MPOTensor.GroupFamily
+
+namespace MPOTensor.GroupFamily
+
+variable {G : Type} [Group G] {d : ℕ}
+
+/-! ### Trivial values of the anomaly three-cochain -/
+
+/-- If the two fusion trees of a triple coincide, the anomaly three-cochain is one there.
+
+Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
+theorem FusionData.omega_eq_one_of_leftV_eq_rightV {F : GroupFamily G d} {fd : F.FusionData}
+    (hF : F.IsNormalRepresentation) {g h k : G} (hLR : fd.leftV g h k = fd.rightV g h k) :
+    fd.omega g h k = 1 := by
+  have h1 : fd.IsAssociator g h k 1 := by
+    unfold FusionData.IsAssociator
+    rw [hLR]
+    exact MPSTensor.IsDressedProportional.refl _ _
+  exact Units.ext (by rw [← FusionData.eq_omega_of_isAssociator hF h1, Units.val_one])
 
 /-- **The anomaly three-cochain of the bond-one fusion tensors is trivial**: all fusion trees
 are the one-by-one identity.

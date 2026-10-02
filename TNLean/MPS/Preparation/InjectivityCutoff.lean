@@ -21,6 +21,9 @@ every `L_j`, so every `q`-site blocked tensor is injective. This file isolates t
 * `lt_one_and_forall_le_of_mul_mul_pow_lt_one` — `C (M x^q) < 1` forces `x < 1` and `L_j ≤ q`.
 * `le_mul_mul_exp_of_forall_le` — the bound `ε ≤ C u e^{C u}` follows from `ε ≤ 1` and from the
   bound in the case `x < 1`, `L_j ≤ q` for every `j`.
+* `mul_mul_exp_neg_le_of_log_le` — `K M e^{-x} ≤ ε` once `x ≥ log K + log M - log ε`, the last
+  step from a logarithmic block-length threshold to the error `ε`.
+* `mul_mul_exp_neg_div_le_of_le` — `K M e^{-q/a} ≤ ε` once `q ≥ a log(M q/ε) + a max(log K, 0)`.
 -/
 
 open scoped BigOperators
@@ -78,3 +81,33 @@ theorem le_mul_mul_exp_of_forall_le {ι : Type*} [Fintype ι] {x C M ε : ℝ} (
   rw [not_le] at hbig
   obtain ⟨hx1, hLq⟩ := lt_one_and_forall_le_of_mul_mul_pow_lt_one hx hC hM hbig
   exact h hx1 hLq hbig
+
+/-- **From a logarithmic threshold to the error.** For `K, M, ε > 0`, if
+`log K + log M - log ε ≤ x` then `K (M e^{-x}) ≤ ε`. This is the last step of the error bounds
+of the log-depth preparation of arXiv:2307.01696 and of its paragraph "Connection to MERA",
+where `x` is a multiple of the block length. -/
+theorem mul_mul_exp_neg_le_of_log_le {K M ε x : ℝ} (hK : 0 < K) (hM : 0 < M) (hε : 0 < ε)
+    (h : Real.log K + Real.log M - Real.log ε ≤ x) : K * (M * Real.exp (-x)) ≤ ε := by
+  calc K * (M * Real.exp (-x))
+      = Real.exp (Real.log K + Real.log M - x) := by
+        rw [Real.exp_sub, Real.exp_add, Real.exp_log hK, Real.exp_log hM, Real.exp_neg]
+        ring
+    _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
+    _ = ε := Real.exp_log hε
+
+/-- **From a block-length threshold to the error.** For `K, a, ε > 0`, `M, q ≥ 1` and
+`b ≥ a max(log K, 0)`, if `a log(M q/ε) + b ≤ q` then `K (M e^{-q/a}) ≤ ε`. This is the last
+step of the error bounds of arXiv:2307.01696 for a block length `q` of `M` blocks with
+`q ≥ a log(N/ε) + b`, `N = M q`. -/
+theorem mul_mul_exp_neg_div_le_of_le {K M q a b ε : ℝ} (hK : 0 < K) (hM : 1 ≤ M) (hq : 1 ≤ q)
+    (ha : 0 < a) (hε : 0 < ε) (hb : a * max (Real.log K) 0 ≤ b)
+    (h : a * Real.log (M * q / ε) + b ≤ q) : K * (M * Real.exp (-(q / a))) ≤ ε := by
+  have hM0 : 0 < M := by linarith
+  have hq0 : 0 < q := by linarith
+  refine mul_mul_exp_neg_le_of_log_le hK hM0 hε ?_
+  rw [Real.log_div (mul_pos hM0 hq0).ne' hε.ne', Real.log_mul hM0.ne' hq0.ne'] at h
+  rw [le_div_iff₀ ha]
+  have hlogq : 0 ≤ a * Real.log q := mul_nonneg ha.le (Real.log_nonneg hq)
+  have hKm : a * Real.log K ≤ a * max (Real.log K) 0 :=
+    mul_le_mul_of_nonneg_left (le_max_left _ _) ha.le
+  nlinarith

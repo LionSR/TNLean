@@ -237,7 +237,7 @@ theorem eq_of_sum_smul_sptFixedPointTensor_eq [NeZero D] {c c' : Fin (D * D) →
 
 section Symmetry
 
-variable {G : Type*} [Group G] {ω : ScalarCocycle G}
+variable {G : Type} [Group G] {ω : ScalarCocycle G}
 
 /-- The virtual gauge `W_g = ρ(g⁻¹)` of the physical symmetry `g`.  Source:
 arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` lines 1152–1155), the

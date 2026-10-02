@@ -16,6 +16,10 @@ length `q ∝ log(N/ε)` chosen after Lemma 1 of the source ("it follows that
 $q = O (\log (N / \epsilon))$"), for chains whose length is a multiple of the block length, as
 for the `N/q` equal blocks of eq. (10).
 
+* `MPSPreparation.exists_approximationError_le_of_slope`: for every slope `a > ξ/2` there is
+  `b₀ ≥ 0` such that the approximating state of eq. (10) has error at most `ε` once the block
+  length satisfies `q ≥ a log(Mq/ε) + b₀`; it is shared with the preparation with measurements
+  of `TNLean.MPS.Preparation.LogLogDepthPreparation`.
 * `MPSPreparation.exists_isPreparedInDepth_approximationError_le_of_slope`: the preparation below
   holds with every slope `a > ξ/2`, where `ξ = -1/log t` is the correlation length at a bound
   `t < 1` on the moduli of the transfer eigenvalues other than `1` in the gauge of eq. (5).
@@ -84,22 +88,54 @@ theorem exists_normalGaugeData {D : ℕ} [NeZero D] {A : MPSTensor d D}
     isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
   have hLC : IsLeftCanonical B := hP.norm
   have hPσ := hP.smul_inv_trace hρ
-  have hNT := isNormalTensor_of_isNormal_leftCanonical B hNB hLC
-  have hCh := Kraus.isChannel_mapLM B hLC
-  obtain ⟨δ, hδ, hgap⟩ := uniform_eigenvalue_gap_of_finite_lt_one
-    (Module.End.finite_hasEigenvalue (Kraus.transferMap B)) fun μ hμ hne =>
-      lt_of_le_of_ne (hCh.eigenvalue_norm_le_one μ hμ)
-        fun h => hne (hNT.primitive_transfer.unique_peripheral μ hμ h)
-  set t := max (1 - δ) (1 / 2)
-  have ht0 : 0 < t := lt_max_of_lt_right (by norm_num)
-  have ht1 : t < 1 := max_lt (by linarith) (by norm_num)
+  obtain ⟨t, ht0, ht1, hgap⟩ := exists_eigenvalue_norm_le_of_isNormal B hNB hLC
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
   obtain ⟨L, hLpos, hL⟩ := hNB
   refine ⟨B, ζ, (Matrix.trace ρ)⁻¹ • ρ, t, L, hζ, hmpv, ⟨L, hLpos, hL⟩, hLC,
     hρ.inv_trace_smul, Matrix.trace_inv_trace_smul (ne_of_gt hρ.trace_pos),
     hPσ.fixedPoint_is_fixed, ht0, ht1, fun μ hμ hne => ?_, hnorm, fun n hn =>
       (isNBlkInjective_iff_blockTensor_isInjective B n).1 (isNBlkInjective_of_le hLpos hL hn)⟩
-  rw [hnorm]; exact (hgap μ hμ hne).trans (le_max_left _ _)
+  rw [hnorm]; exact hgap μ hμ hne
+
+/-- **The error at block length `q ≥ a log(Mq/ε) + b₀` for every slope `a > ξ/2`.** Let `B` be a
+normal left-canonical tensor with a positive definite fixed point `σ` of trace one, with
+`|φ_N(B)⟩ = ζ^N |φ_N(A)⟩` for some `ζ ≠ 0`, and let `0 < t < 1` bound the moduli of the
+eigenvalues of its transfer map other than `1`, with correlation length `ξ = -1/log t`. Then for
+every `a > ξ/2` there is `b₀ ≥ 0` such that for `ε > 0`, every block length `q ≥ 1` and every
+number of blocks `M ≥ 1` with `q ≥ a log(Mq/ε) + b₀`, the approximating state `|φ'_N⟩` of
+eq. (10) for `B` on `N = Mq` sites has error `1 - |⟨φ'_N|φ_N(A)⟩| ≤ ε`.
+
+Project result: the rate `2γ/ξ` with `γ = ξ/(2a) < 1` of `exists_approximationError_le_mul`,
+which strengthens Lemma 1'(i) of arXiv:2307.01696. -/
+theorem exists_approximationError_le_of_slope {D : ℕ} {A B : MPSTensor d D} {ζ : ℂ}
+    {σ : Matrix (Fin D) (Fin D) ℂ} {t : ℝ} (hζ : ζ ≠ 0)
+    (hmpv : ∀ (N : ℕ) (s : Fin N → Fin d), mpv B s = ζ ^ N * mpv A s)
+    (hNB : Kraus.IsNormal B) (hLC : IsLeftCanonical B) (hσ : σ.PosDef) (htr : σ.trace = 1)
+    (hfix : Kraus.transferMap B σ = σ) (ht0 : 0 < t) (ht1 : t < 1)
+    (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap B) μ → μ ≠ 1 → ‖μ‖ ≤ t)
+    {a : ℝ} (ha : correlationLength t / 2 < a) :
+    ∃ b₀ : ℝ, 0 ≤ b₀ ∧ ∀ ε : ℝ, 0 < ε → ∀ (q M : ℕ) [NeZero M], 1 ≤ q →
+      a * Real.log (M * q / ε) + b₀ ≤ q →
+        1 - ‖⟪approximatingMPVState B σ q M, normalizedMPVState A (M * q)⟫_ℂ‖ ≤ ε := by
+  have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
+  have hξ : 0 < correlationLength (t : ℂ) :=
+    correlationLength_pos (by rwa [hnorm]) (by rwa [hnorm])
+  have ha0 : 0 < a := by linarith
+  -- Lemma 1'(i) at rate `2γ/ξ` with `γ = ξ/(2a) < 1`.
+  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul B hNB hLC hσ htr hfix
+    (lam₂ := (t : ℂ)) (fun μ hμ hne => (hlam μ hμ hne).trans_eq hnorm.symm)
+    (γ := correlationLength (t : ℂ) / (2 * a)) (by positivity)
+    ((div_lt_one (by positivity)).2 (by linarith))
+  have hexp : ∀ q : ℕ, Real.exp (-(2 * (correlationLength (t : ℂ) / (2 * a))) * q /
+      correlationLength (t : ℂ)) = Real.exp (-(q / a)) := fun q => by
+    congr 1
+    field_simp
+  refine ⟨a * max (Real.log K) 0, by positivity, fun ε hε q M _ hq1 hq => ?_⟩
+  rw [← norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv (M * q))]
+  refine (herr q M).trans ?_
+  rw [hexp]
+  have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
+  exact mul_mul_exp_neg_div_le_of_le hK hM1 (by exact_mod_cast hq1) ha0 hε le_rfl hq
 
 /-- **Block length `a log(N/ε) + b` for every slope `a > ξ/2`.** There is `C`, depending only on
 `d` and `D`, with the following property. Let `B` be a normal left-canonical tensor with a
@@ -110,7 +146,7 @@ such that for `0 < ε ≤ 1` and every block length `q` dividing `N ≥ 1` with
 `q ≥ a log(N/ε) + b`, some unit vector `|ψ⟩` on `N` sites with
 `ε(ψ, φ_N(A)) = 1 - |⟨ψ|φ_N(A)⟩| ≤ ε` is prepared from a product state in depth at most `C q`.
 `exists_normalGaugeData` provides such data for every normal `A`, with some admissible bound
-`t ≥ 1/2`. Any `t` in `(0, 1)` that bounds these moduli is admissible, so when the largest of
+`t`. Any `t` in `(0, 1)` that bounds these moduli is admissible, so when the largest of
 them is positive, `t` may be taken equal to it and `ξ` is then the correlation length of `B`.
 
 Project result. arXiv:2307.01696, in the paragraph after Lemma 1, takes
@@ -137,61 +173,31 @@ theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZ
   have hξ : 0 < correlationLength (t : ℂ) :=
     correlationLength_pos (by rwa [hnorm]) (by rwa [hnorm])
   have ha0 : 0 < a := by linarith
+  obtain ⟨b₀, hb₀, herr⟩ := exists_approximationError_le_of_slope hζ hmpv hNB hLC hσ htr hfix
+    ht0 ht1 hlam ha
   obtain ⟨L, hLpos, hL⟩ := hNB
   have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := fun n hn =>
     (isNBlkInjective_iff_blockTensor_isInjective B n).1 (isNBlkInjective_of_le hLpos hL hn)
-  -- Lemma 1'(i) at rate `2γ/ξ` with `γ = ξ/(2a) < 1`.
-  obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul B ⟨L, hLpos, hL⟩ hLC hσ htr hfix
-    (lam₂ := (t : ℂ)) (fun μ hμ hne => (hlam μ hμ hne).trans_eq hnorm.symm)
-    (γ := correlationLength (t : ℂ) / (2 * a)) (by positivity)
-    ((div_lt_one (by positivity)).2 (by linarith))
-  have hexp : ∀ q : ℕ, Real.exp (-(2 * (correlationLength (t : ℂ) / (2 * a))) * q /
-      correlationLength (t : ℂ)) = Real.exp (-(q / a)) := fun q => by
-    congr 1
-    field_simp
-  refine ⟨a * max (Real.log K) 0 + L + 3 * D + 1, le_add_of_nonneg_left (by positivity),
-    fun ε hε hε1 N q _ hqN hq => ?_⟩
+  refine ⟨b₀ + L + 3 * D + 1, by linarith, fun ε hε hε1 N q _ hqN hq => ?_⟩
   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne N)
   have hlog0 : 0 ≤ Real.log (N / ε) :=
     Real.log_nonneg ((one_le_div hε).2 (hε1.trans hN1))
-  have hbq : a * max (Real.log K) 0 + L + 3 * D + 1 ≤ q := by
+  have hbq : b₀ + L + 3 * D + 1 ≤ q := by
     have : 0 ≤ a * Real.log (N / ε) := by positivity
     linarith
-  have hmax : 0 ≤ a * max (Real.log K) 0 := by positivity
   have hLq : L ≤ q := by exact_mod_cast (show (L : ℝ) ≤ q by linarith)
   have h3D : 3 * D ≤ q := by exact_mod_cast (show ((3 * D : ℕ) : ℝ) ≤ q by push_cast; linarith)
-  have hq1 : (1 : ℝ) ≤ q := by linarith
+  have hq1 : 1 ≤ q := by exact_mod_cast (show (1 : ℝ) ≤ q by linarith)
   obtain ⟨M, hM⟩ := hqN
   rw [mul_comm] at hM
   subst hM
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
   have hB : Kraus.IsInjective (blockTensor B q) := hinj q hLq
   refine ⟨approximatingMPVState B σ q M, norm_approximatingMPVState B hB hσ.posSemidef htr M,
-    hC B σ hσ.posSemidef htr q h3D hB M, ?_⟩
-  rw [← norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv (M * q))]
-  refine (herr q M).trans ?_
-  rw [hexp]
-  -- `K M e^{-q/a} ≤ ε` from `q ≥ a (log K + log(Mq/ε)) ≥ a (log K + log(M/ε))`.
-  have hM1 : (1 : ℝ) ≤ M := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne M)
-  have hlogN : Real.log ((M * q : ℕ) / ε) = Real.log M + Real.log q - Real.log ε := by
-    push_cast
-    rw [Real.log_div (by positivity) hε.ne', Real.log_mul (by positivity) (by positivity)]
-  have hlogq : 0 ≤ Real.log q := Real.log_nonneg hq1
-  have hrq : Real.log K + Real.log M - Real.log ε ≤ q / a := by
-    rw [le_div_iff₀ ha0]
-    have : (0 : ℝ) ≤ L + 3 * D + 1 := by positivity
-    have hKm : a * Real.log K ≤ a * max (Real.log K) 0 :=
-      mul_le_mul_of_nonneg_left (le_max_left _ _) ha0.le
-    have hq' : a * Real.log q ≥ 0 := by positivity
-    rw [hlogN] at hq
-    nlinarith
-  calc K * (M * Real.exp (-(q / a)))
-      = Real.exp (Real.log K + Real.log M - q / a) := by
-        rw [Real.exp_sub, Real.exp_add, Real.exp_log hK, Real.exp_log (by positivity),
-          Real.exp_neg]
-        ring
-    _ ≤ Real.exp (Real.log ε) := Real.exp_le_exp.2 (by linarith)
-    _ = ε := Real.exp_log hε
+    hC B σ hσ.posSemidef htr q h3D hB M, herr ε hε q M hq1 ?_⟩
+  push_cast at hq
+  have : (0 : ℝ) ≤ L + 3 * D + 1 := by positivity
+  linarith
 
 /-- **Error `ε` in depth `O(q)` with `q ∝ log(N/ε)`.** There is `C`, depending only on `d` and
 `D`, such that for every normal tensor `A` there are `a > 0` and `b ≥ 1`, depending only on `A`,
@@ -222,6 +228,32 @@ theorem exists_isPreparedInDepth_approximationError_le (d D : ℕ) [NeZero D] :
     (fun μ hμ hne => (hlam μ hμ hne).trans_eq hnorm) _ (half_lt_self hξ)
   exact ⟨_, b, hξ, hb, h⟩
 
+/-- **From `q ≤ 2 (a log(N/ε) + b)` to depth `O(log(N/ε))`.** For `N ≥ 2`, `0 < ε ≤ 1` and
+`b ≥ 1`, a block length `q ≤ 2 (a log(N/ε) + b)` gives `C q ≤ C (2a + 2b/log 2) log(N/ε)`,
+because `log(N/ε) ≥ log 2`. This is the last step from a depth `C q` to the depth
+`O(log(N/ε))` of arXiv:2307.01696, eq. (1). -/
+theorem natCast_mul_le_mul_log_of_le_two_mul {C N q : ℕ} {a b ε : ℝ} (hN : 2 ≤ N) (hε : 0 < ε)
+    (hε1 : ε ≤ 1) (hb : 1 ≤ b) (hq : (q : ℝ) ≤ 2 * (a * Real.log (N / ε) + b)) :
+    ((C * q : ℕ) : ℝ) ≤ C * (2 * a + 2 * b / Real.log 2) * Real.log (N / ε) := by
+  have hl2 : 0 < Real.log 2 := Real.log_pos one_lt_two
+  have hl : Real.log 2 ≤ Real.log (N / ε) := by
+    refine Real.log_le_log two_pos ?_
+    have : (2 : ℝ) ≤ N := by exact_mod_cast hN
+    exact this.trans (le_div_self (by positivity) hε hε1)
+  have hbl : b ≤ b / Real.log 2 * Real.log (N / ε) := by
+    rw [div_mul_eq_mul_div, le_div_iff₀ hl2]
+    exact mul_le_mul_of_nonneg_left hl (zero_le_one.trans hb)
+  push_cast
+  calc (C : ℝ) * q ≤ C * (2 * (a * Real.log (N / ε) + b)) :=
+        mul_le_mul_of_nonneg_left hq (Nat.cast_nonneg _)
+    _ ≤ C * ((2 * a + 2 * b / Real.log 2) * Real.log (N / ε)) := by
+        refine mul_le_mul_of_nonneg_left ?_ (Nat.cast_nonneg _)
+        have e : (2 * a + 2 * b / Real.log 2) * Real.log (N / ε) =
+            2 * (a * Real.log (N / ε)) + 2 * (b / Real.log 2 * Real.log (N / ε)) := by ring
+        rw [e]
+        linarith
+    _ = _ := by ring
+
 /-- **Preparation in depth `O(log(N/ε))` with equal blocks**, arXiv:2307.01696, eq. (1), for
 block lengths dividing the chain length. For every normal tensor `A` there are `a > 0`, `b ≥ 1`
 and `c`, depending only on `A`, with the following property. For `N ≥ 2`, `0 < ε ≤ 1`, and a
@@ -243,26 +275,8 @@ theorem exists_isPreparedInDepth_le_log_of_dvd {D : ℕ} [NeZero D] (A : MPSTens
             IsPreparedInDepth T (fun s => ψ s) ∧ 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_approximationError_le d D
   obtain ⟨a, b, ha, hb, h⟩ := hC A hA
-  have hl2 : 0 < Real.log 2 := Real.log_pos one_lt_two
   refine ⟨a, b, C * (2 * a + 2 * b / Real.log 2), ha, hb, fun ε hε hε1 N q _ hN hqN hq hq2 => ?_⟩
   obtain ⟨ψ, hψ, hprep, herr⟩ := h ε hε hε1 N q hqN hq
-  refine ⟨ψ, C * q, hψ, ?_, hprep, herr⟩
-  have hl : Real.log 2 ≤ Real.log (N / ε) := by
-    refine Real.log_le_log two_pos ?_
-    have : (2 : ℝ) ≤ N := by exact_mod_cast hN
-    exact this.trans (le_div_self (by positivity) hε hε1)
-  have hbl : b ≤ b / Real.log 2 * Real.log (N / ε) := by
-    rw [div_mul_eq_mul_div, le_div_iff₀ hl2]
-    exact mul_le_mul_of_nonneg_left hl (zero_le_one.trans hb)
-  push_cast
-  calc (C : ℝ) * q ≤ C * (2 * (a * Real.log (N / ε) + b)) :=
-        mul_le_mul_of_nonneg_left hq2 (Nat.cast_nonneg _)
-    _ ≤ C * ((2 * a + 2 * b / Real.log 2) * Real.log (N / ε)) := by
-        refine mul_le_mul_of_nonneg_left ?_ (Nat.cast_nonneg _)
-        have e : (2 * a + 2 * b / Real.log 2) * Real.log (N / ε) =
-            2 * (a * Real.log (N / ε)) + 2 * (b / Real.log 2 * Real.log (N / ε)) := by ring
-        rw [e]
-        linarith
-    _ = _ := by ring
+  exact ⟨ψ, C * q, hψ, natCast_mul_le_mul_log_of_le_two_mul hN hε hε1 hb hq2, hprep, herr⟩
 
 end MPSPreparation

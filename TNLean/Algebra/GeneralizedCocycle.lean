@@ -52,13 +52,13 @@ gives `det X^{h • x}_g det Xˣ_h`. See
 
 namespace TNLean.Algebra
 
-variable {G X : Type*} [Group G] [MulAction G X]
+variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 /-- Block-dependent scalar three-cochains `fˣ_{g,h,k}` for an action of `G` on `X`. -/
-abbrev GeneralizedThreeCochain (G X : Type*) := X → G → G → G → Units ℂ
+abbrev GeneralizedThreeCochain (G : Type) (X : Type*) := X → G → G → G → Units ℂ
 
 /-- Block-dependent scalar four-cochains `fˣ_{g,h,k,l}` for an action of `G` on `X`. -/
-abbrev GeneralizedFourCochain (G X : Type*) := X → G → G → G → G → Units ℂ
+abbrev GeneralizedFourCochain (G : Type) (X : Type*) := X → G → G → G → G → Units ℂ
 
 namespace ActionTensorGauge
 

@@ -487,6 +487,24 @@ normalizations.
   printed notion. Recorded in
   `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 
+#### `TNLean.PEPS.IsGIsometricMPS`
+
+- **Declaration:** `TNLean.PEPS.IsGIsometricMPS (A : ι → Module.End ℂ (MonoidAlgebra ℂ G)) : Prop`.
+- **Defined in:** `TNLean/PEPS/GIsometric.lean`.
+- **Meaning:** an MPS tensor with bond space `ℂ[G]` carrying the left-regular
+  representation `L_g`, invariant (`L_g A^i L_g⁻¹ = A^i`), with
+  `𝒫(A†) 𝒫(A) = c σ` for one constant `c > 0`, where `𝒫(A†)|i⟩ = (A^i)†` and
+  `σ` is the twirl onto the commutant.
+- **Source:** arXiv:1001.3807, Definition `def:iso:isopeps` in the form
+  `𝒫(A)⁻¹ = 𝒫(A†)`, `Papers/1001.3807/paper_v3.tex:1668-1700`.
+- **Sanctioned bridges:** `IsGIsometricMPS.isGInjective` (G-injectivity for
+  the conjugation action of the left-regular representation);
+  `IsGIsometricMPS.concatTensor` (Lemma 6.2 in one dimension).
+- **Caveat / paper gap:** the constant `c` is the normalization Local fix of
+  `IsGIsometric`. No bridge to the coordinate-space `IsGIsometric` is stated:
+  the virtual system here is `End ℂ[G]` rather than a coordinate space.
+  Recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
 #### `TNLean.PEPS.IsTorusDimerCovering`
 
 - **Declaration:**
@@ -743,8 +761,25 @@ model different levels of data and different sources.
   CPSV canonical form. Each proves both inputs from its own grouping and
   Figure 8 theorems. No implication between `MPOTensor.IsHorizontalCF` and
   `MPSTensor.IsCPSVCanonicalForm` is proved or used in either direction, and
-  none may be assumed: the bundle is the only point at which the two surfaces
-  meet, and supplying it from one of them says nothing about the other.
+  none may be assumed: supplying the common grouping properties from one
+  canonical form says nothing about the other.
+- `MPOTensor.HasVerticalBNTProductInputs` in
+  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean` records the grouping properties
+  for both the one-site tensor and its two-site block, together with three
+  properties of the blocked vertical tensor: every invariant orthogonal
+  projection reduces its letters; an irreducible isometric corner with a
+  positive definite eigenmatrix at a positive eigenvalue has no other
+  peripheral eigenvalue of that modulus; and every
+  nonzero corner is detected by a finite-chain sector compression. These are
+  the properties used in CPSV16, Proposition 4.13, lines 1873--1921, and
+  Appendix C.4, lines 2020--2029. The constructors
+  `MPOTensor.IsHorizontalCF.hasVerticalBNTProductInputs` and
+  `MPSTensor.IsCPSVCanonicalForm.hasVerticalBNTProductInputs` prove them
+  independently under MPDO positivity. They imply the common retained-product
+  spectral and positive fusion constructions; together with positivity and
+  `IsRFPViaTS`, they give `HasBNTFusionTensorClause`. These are intermediate
+  consequences of each canonical form, not additional hypotheses of the
+  source-facing fixed-point theorems.
 - `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
   the normalized fixed-representative predicate of Appendix C.2: it adds the
   MPDO and nonnilpotent-sector conditions to horizontal canonical form. Its
@@ -1318,6 +1353,216 @@ The following notions use different transfer objects and are not interchangeable
   `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
   polylogarithmic-depth conversions of the phase equivalence in
   arXiv:2103.13367 are not formalized, nor is blocking of sites.
+
+## Local circuits assisted by measurements
+
+### `MPSPreparation.MeasurementProtocol.IsPreparationOf`
+
+- **Declaration:**
+  `MPSPreparation.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+- **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
+  sites measured in the computational basis, and for every outcome string a
+  unitary at every site) starts from a nonzero product vector, and for every
+  outcome `m` with `P.postMeasurement m ≠ 0` the corrected vector `P.output m`
+  is a scalar multiple of `ψ`.
+- **Source:** arXiv:2103.13367, main text, paragraph "State transformations
+  with QC and LOCC" (the scheme "apply `U ∈ LU` depending on the outcomes of
+  all previous measurements", and deterministic preparation).
+- **Sanctioned bridges:** `MeasurementProtocol.IsPreparationOf.ne_zero` (a
+  prepared vector is nonzero) and
+  `MeasurementProtocol.exists_postMeasurement_ne_zero`.
+- **Caveat:** ancillas are sites of the ring; the measurement is fixed in
+  advance and in the computational basis; the correction is one product of
+  single-site unitaries applied after all the measurements. Each of these
+  restricts the source's scheme, so every such protocol is one of the source.
+
+### `MPSPreparation.IsPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementCircuit.lean`.
+- **Meaning:** some protocol `P` whose circuit has at most `T` layers
+  satisfies `P.IsPreparationOf ψ`.
+- **Source:** arXiv:2103.13367, Definition "Transformations under QC and
+  LOCC" (the class `QCcc_ℓ`).
+- **Sanctioned bridges:**
+  `MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
+  nonzero vector prepared by a local circuit),
+  `MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
+  (without measurements, preparation by a local circuit up to single-site
+  unitaries), and
+  `MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
+  (GHZ-type states in depth `2`).
+- **Caveat:** the free local unitaries of the source between the layers of the
+  circuit, acting on a site and its ancillas, are counted here as gates, so the
+  depth bounds the source's depth. The light-cone bound of
+  `MPSPreparation.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
+  GHZ-type states, whose connected correlations do not decay, are prepared in
+  depth `2`.
+
+### `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementPreparation.lean`.
+- **Meaning:** `ψ = U φ` for a vector `φ` with
+  `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
+  `T₂`, with `T₁ + T₂ ≤ T`.
+- **Source:** arXiv:2307.01696, paragraph "Long-range MPS using measurements"
+  ("First create `|χ_{N/q}⟩`, which can be done in constant depth with
+  measurements ... Subsequently, apply in parallel the isometries `W`");
+  arXiv:2103.13367, paragraph "State transformations with QC and LOCC" ("a
+  more general scheme with multiple rounds of LOCC").
+- **Sanctioned bridges:**
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`
+  (the states `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of blocks with orthogonal blocked
+  states, in depth `O(L)`) and
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`
+  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks).
+- **Caveat:** the circuit `U` is applied after the measurement and its
+  corrections and does not depend on the outcomes; it is one second round of
+  the source's multi-round scheme, with no measurement in it.
+
+### `MPSPreparation.IsLocalPerm`
+
+- **Declaration:**
+  `MPSPreparation.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Cfg d N)) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/PermutationGates.lean`.
+- **Meaning:** the permutation `σ` of the configurations changes only the
+  sites of `S`, and its new values on `S` depend only on the old values on
+  `S`.
+- **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
+  corrections of the GHZ preparation, generalized to shifts of qudits).
+- **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
+  permutation matrix is a unitary acting on `S`),
+  `MPSPreparation.isLocalPerm_shiftPerm`, and
+  `MPSPreparation.exists_permLayer_op_mulVec` (a layer of such gates on
+  disjoint pairs acts as one permutation of the configurations).
+- **Caveat:** only permutations of the computational basis are covered; a
+  general gate is a `MPSPreparation.Layer` gate.
+
+### `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
+- **Meaning:** some sequence of measurement rounds (`MPSPreparation.MeasurementRound`:
+  a local circuit, a computational-basis measurement of a set of sites, and
+  outcome-dependent single-site unitaries), whose circuits have at most `T`
+  layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
+  after every sequence of outcomes of nonzero probability.
+- **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
+  LOCC" (one round, and "a more general scheme with multiple rounds of
+  LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
+- **Sanctioned bridges:**
+  `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
+  (one round is a protocol of `MPSPreparation.IsPreparedWithMeasurementsInDepth`),
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
+  and `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` (binary
+  trees of two-site gates with `k` levels in depth `5k`).
+- **Caveat:** the depth counts the layers of all the rounds; measurements,
+  classical processing and single-site corrections are free, as in one round.
+  The circuit of a later round does not depend on earlier outcomes.
+  Every round is a protocol of `QCcc_ℓ` of no larger depth, but the number of
+  rounds is not bounded (the tree of `k` levels uses `2k` rounds), whereas in
+  the class `QCcc^{(k)}_ℓ` of the paragraph "Phases of matter" of
+  arXiv:2103.13367 the number `k` of composed transformations does not depend
+  on the system size.
+
+### `MPSPreparation.MeasurementRound.IsRoundsImplementationOn`
+
+- **Declaration:**
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ)) (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
+- **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
+  scalar multiple of `W v`; the single-round form is
+  `MPSPreparation.MeasurementRound.IsImplementationOn`, which asks for one
+  scalar per outcome.
+- **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
+  ("correcting (without postselection) based on the measurement outcomes").
+- **Sanctioned bridges:**
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`
+  (implementations compose), `MPSPreparation.TeleportHop.isImplementationOn_round`
+  (teleportation along chains of hops in one round of depth `2`),
+  `MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
+  two-site gates between distant sites in depth `5`), and
+  `MPSPreparation.isRoundsImplementationOn_treeRounds`.
+- **Caveat:** the scalar may depend on the outcomes and is not normalized; zero
+  outputs, of probability zero, are allowed.
+
+## Inhomogeneous short-range correlated chains
+
+### `MPSTensor.IsInjectiveOn`
+
+- **Declaration:**
+  `MPSTensor.IsInjectiveOn (B : MPSTensor n D) (S : Set (Fin D × Fin D)) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SupportedPolar.lean`.
+- **Meaning:** every matrix `B^i` vanishes at the entries outside `S`, and the
+  matrices `B^i` span every matrix unit `|α⟩⟨β|` with `(α, β) ∈ S`.
+- **Source:** arXiv:2307.01696, footnote to the paragraph "Approximation
+  through the fixed-point state" (the blocked tensors are assumed injective),
+  applied to zero-padded blocked tensors of chains with bond dimensions at
+  most `D`.
+- **Sanctioned bridges:** `MPSTensor.isInjectiveOn_univ_iff` (for `S` the set
+  of all pairs it is `Kraus.IsInjective`), `MPSTensor.polarSupportMatrix_eq_diagonal`
+  (the support projector of `B = V P` is the coordinate projector onto `S`),
+  `MPSTensor.sum_star_polarIsoMatrix_mul`, `MPSTensor.polarPosTensor_eq_zero`.
+- **Caveat:** for a rectangle `S = [0, a) × [0, b)` the predicate may be read as
+  injectivity of a zero-padded tensor with bond dimensions `a` and `b`; no
+  rectangular tensor is defined and that reading is not proved.
+
+### `VaryingBondChain.IsBlockInjective`
+
+- **Declaration:**
+  `VaryingBondChain.IsBlockInjective (A : VaryingBondChain d D N) (hN : ∑ k, ℓ k = N) : Prop`,
+  for a ring of `N ≥ 1` sites with bond dimensions at most `D`, cut into `M`
+  blocks of lengths `ℓ`.
+- **Defined in:** `TNLean/MPS/Preparation/VaryingBondBlocks.lean`.
+- **Meaning:** for every block `k`, the blocked tensor of block `k` of the
+  zero-padded chain (`VaryingBondChain.zeroPad`) spans every matrix unit
+  `|α⟩⟨β|` with `α < D_{o_k}` and `β < D_{o_{k+1}}`, the dimensions of the bonds
+  at the ends of the block.
+- **Source:** arXiv:2307.01696, footnote to the paragraph "Approximation
+  through the fixed-point state" (the blocked tensors are assumed injective),
+  for the chains of the paragraph "Inhomogeneous short-range correlated MPS".
+- **Sanctioned bridges:** `VaryingBondChain.IsBlockInjective.isInjectiveOn`
+  (for blocks of at least one site, each padded blocked tensor is
+  `MPSTensor.IsInjectiveOn` its rectangle).
+- **Caveat:** the source's condition concerns the rectangular blocked tensor;
+  the identification of the corner of the padded blocked tensor with the
+  rectangular product is not proved. For a block of length zero the padded
+  blocked tensor is the identity `1_D`, and the predicate differs from the
+  rectangular reading; every theorem using it assumes blocks of at least one
+  site. See `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+### `VaryingBondChain.IsPairApproximable`
+
+- **Declaration:**
+  `VaryingBondChain.IsPairApproximable (A : VaryingBondChain d D N) (hN : ∑ k, ℓ k = N) (δ : ℝ) : Prop`,
+  for a ring of `N ≥ 1` sites with bond dimensions at most `D`, cut into `M`
+  blocks of lengths `ℓ`.
+- **Defined in:** `TNLean/MPS/Preparation/InhomogeneousPreparation.lean`.
+- **Meaning:** the state `|φ_pos⟩` of the positive parts is nonzero, and there
+  are unit vectors `ω^k` on `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k`
+  to block `k + 1`, whose product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error
+  `1 - |⟨Ω|φ_pos⟩| ≤ δ` against the normalized state `|φ_pos⟩` of the positive
+  parts of the polar decompositions of the blocked tensors. The blocked
+  tensors, positive parts and pairs are those of the chain padded with zeros
+  to bond dimension `D` (`VaryingBondChain.zeroPad`,
+  `VaryingBondChain.padPairs`).
+- **Source:** arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated
+  MPS" (finite correlation length of a sequence of states "with bond dimension
+  at most `D`"), for one member of the sequence.
+- **Sanctioned bridges:**
+  `MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` (preparation
+  in depth at most `C L` with error at most `δ` against the normalized state of
+  the chain, when the blocked tensors are injective and the block lengths lie
+  between `3D` and `L`).
+- **Caveat:** the source's condition is asymptotic, an error tending to `0` as
+  `N → ∞` after blocking `q = O(log N)` sites; the predicate fixes one ring and
+  one cutting into blocks; see
+  `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 ## Worked examples
 

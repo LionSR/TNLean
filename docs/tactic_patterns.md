@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### positivity of the cyclic step-orbit length — promoted
+- **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
+- **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
+  `StepOrbitSectors.lean` (2026-09-29).
+- **Abstraction:** the core Lean theorem `Nat.div_gcd_pos_of_pos_left p hm`
+  (`Init/Data/Nat/Gcd.lean`) provides the result directly; the phase
+  construction and prescribed-blocking sectors use it.
+- **Notes:** no local theorem or extra positivity hypothesis is needed.
+
 ### fixed-volume C3 from a physical open-chain bound — promoted
 - **Pattern:** split a martingale index into `n < l`, `n = l`, and `l < n`;
   the first two products vanish, while the last is bounded by its physical
@@ -97,6 +106,54 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** all three call sites are refactored. The block-by-block bound
   `C₁ u e^{S₁ u} + K₅ u` that follows is still duplicated between the two
   block-sum files and is a candidate for the same treatment.
+
+### error from a logarithmic block-length threshold — promoted
+- **Pattern:** close `K * (M * Real.exp (-x)) ≤ ε` from a threshold
+  `log K + log M - log ε ≤ x` by a hand-written `calc` through
+  `Real.exp_log`, `Real.exp_add`/`Real.exp_sub` and `Real.exp_le_exp`.
+- **Seen:** three occurrences across three files (2026-09-30):
+  `DepthLogBound.lean`, `LogDepthPreparation.lean` and `TreeMERA.lean`, all
+  under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_le_of_log_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** all three call sites use the helper; each now proves only the
+  threshold inequality.
+
+### error from a block-length threshold with a logarithmic offset — promoted
+- **Pattern:** from `a log(M q/ε) + b ≤ q` with `b ≥ a max(log K, 0)`, expand
+  `log(M q/ε)`, discard `a log q ≥ 0`, and pass `log K + log M - log ε ≤ q/a`
+  to `mul_mul_exp_neg_le_of_log_le`.
+- **Seen:** two occurrences across two files (2026-10-01):
+  `DepthLogBound.lean` and `NonNormalMeasurementPreparation.lean`, under
+  `TNLean/MPS/Preparation/`.
+- **Abstraction:** `mul_mul_exp_neg_div_le_of_le` in
+  `TNLean/MPS/Preparation/InjectivityCutoff.lean`.
+- **Notes:** promoted at two sites because the second copy was verbatim; the
+  remaining threshold steps in `LogDepthPreparation.lean` and `TreeMERA.lean`
+  have different offsets and keep `mul_mul_exp_neg_le_of_log_le`.
+
+### depth from the window of block lengths — promoted
+- **Pattern:** from `q ≤ 2 (a log(N/ε) + b)`, `N ≥ 2`, `0 < ε ≤ 1`, `b ≥ 1`,
+  a `calc` through `log(N/ε) ≥ log 2` giving
+  `C q ≤ C (2a + 2b/log 2) log(N/ε)`.
+- **Seen:** two verbatim occurrences across two files (2026-10-01):
+  `DepthLogBound.lean` and `NonNormalMeasurementPreparation.lean`.
+- **Abstraction:** `MPSPreparation.natCast_mul_le_mul_log_of_le_two_mul` in
+  `TNLean/MPS/Preparation/DepthLogBound.lean`.
+- **Notes:** both call sites are one line.
+
+### gap of the transfer map of a normal tensor — promoted
+- **Pattern:** `uniform_eigenvalue_gap_of_finite_lt_one` with
+  `Kraus.isChannel_mapLM … |>.eigenvalue_norm_le_one` and
+  `primitive_transfer.unique_peripheral`, then `t := max (1 - δ) (1 / 2)`.
+- **Seen:** three occurrences across three files (2026-10-01):
+  `ApproximationError.lean`, `DepthLogBound.lean` and
+  `NonNormalMeasurementPreparation.lean`, under `TNLean/MPS/Preparation/`.
+- **Abstraction:** `MPSTensor.exists_eigenvalue_norm_le_of_isNormal` in
+  `TNLean/MPS/Preparation/ApproximationError.lean`; the family version
+  `MPSPreparation.exists_forall_eigenvalue_norm_le` takes the maximum over the
+  blocks.
+- **Notes:** all three call sites use the helper.
 
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
@@ -2397,6 +2454,16 @@ abstracted — record why, so it is not re-proposed).
   gate-specific expansions while the pattern is confined to one module; if
   another example repeats it, first seek a finite-sum lemma rather than a tactic.
 
+
+### finite three-cocycle entry elimination — candidate
+- **Pattern:** specialize the cocycle equation at a concrete quadruple, reduce its group
+  products, and simplify using entries already known to be one.
+- **Seen:** 18 specializations in `eq_one_of_klein_entries`, in
+  `TNLean/Algebra/KleinCocycleCompleteness.lean` (2026-09-30).
+- **Abstraction:** no new tactic yet; these are the entries of one finite calculation.
+  If a second group needs the pattern, prefer a general cocycle determination lemma
+  before automating the table elimination.
+
 ### weighted W-state rows across a cut — candidate
 - **Pattern:** rewrite a weighted sum of traces of two word products as a
   scalar multiple of the W amplitude on the concatenated configuration, then
@@ -2443,6 +2510,48 @@ Example: `GroupedProjectorEstimate.lean`, in
 prefix projections. This permits the active-volume identity and spectator bound
 to be combined using ordinary arithmetic equalities. Candidate helper pattern;
 currently one occurrence, so no general declaration is warranted.
+
+### telescoping trace bound near an idempotent mixed transfer matrix — candidate
+- **Pattern:** bound `‖Tr(T^M) - 1‖` for a mixed transfer matrix `T = Ψ(P)` with
+  `‖T - T_∞‖ ≤ K₃ K₁ x^q`, where `T_∞ = Ψ(P_∞)` is idempotent of trace one: apply
+  `norm_prod_range_sub_pow_le_of_isIdempotentElem` with `c = ‖1‖ + ‖T_∞‖`, rewrite
+  `Tr(T^M) - 1` through `Matrix.traceLinearMap`, then close the chain
+  `K₄ c ((1 + cδ)^M - 1) ≤ … ≤ C u e^{C u}` with `one_add_pow_sub_one_le_mul_exp`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_trace_prod_range_transferMatrix_sub_one_le` in
+  `TNLean/MPS/Preparation/ApproximationError.lean` and
+  `exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean` (2026-10-01: there `T_∞ = t R` with
+  `R` idempotent, through `norm_prod_range_sub_pow_le_of_forall_norm_pow_le`).
+- **Notes:** a third occurrence would justify a lemma taking the power-bounded `T_∞`,
+  its trace, and the linear bound `‖T - T_∞‖ ≤ δ` as hypotheses.
+
+### off-diagonal constants chosen with a dummy diagonal value — candidate
+- **Pattern:** `have hoff : ∀ j k, ∃ K, 0 ≤ K ∧ (j ≠ k → ∀ n, ‖f j k n‖ ≤ K * x ^ n)`,
+  proved by `by_cases j = k` with `⟨0, le_rfl, …⟩` on the diagonal, then `choose`, and
+  a split `∑ⱼ ∑ₖ = ∑ⱼ (diagonal + ∑_{k ∈ univ.erase j})` by `Finset.add_sum_erase`.
+- **Seen:** two occurrences across two files (2026-09-30):
+  `exists_norm_gram_blockTensor_blockSum_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockGram.lean` and
+  `exists_abs_norm_mpvState_blockSum_weight_sq_sub_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+
+### second-order trace bound for an element compressed by an idempotent — candidate
+- **Pattern:** for `T` with `e T e = α e`, `e` idempotent of trace one, `‖T - e‖ ≤ δ` and
+  `1 - α` (or `1 - ‖α‖`) at most a multiple of `δ²`: put `Z = α⁻¹ T - e`, prove `e Z e = 0`,
+  `T = α (e + Z)` and `‖Z‖ ≤ c₄ δ`, bound the blocks of `Z` by `z = c₅ (c₄ δ) c₅` with
+  `c₅ = ‖e‖ + ‖1 - e‖`, apply `IsIdempotentElem.norm_trace_add_pow_sub_le_of_le`, and absorb
+  `α^M` through `one_add_mul_le_pow`, with constants `zc = c₅⁴ c₄²` and
+  `E₀ = K (‖e‖ + 3 ‖1 - e‖)`.
+- **Seen:** two occurrences across two files (2026-10-02):
+  `exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq` in
+  `TNLean/MPS/Preparation/SecondOrderOverlap.lean` (complex `α`, conclusion on
+  `1 - ‖tr T^M‖`) and `IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq` in
+  `TNLean/Algebra/IdempotentTracePerturbation.lean` (real `α ≤ 1`, conclusion on
+  `‖tr T^M - 1‖`).
+- **Notes:** the second is the abstracted form for real `α`. Generalizing it to complex `α`
+  with `‖α‖ ≤ 1`, `1 - ‖α‖ ≤ δ²` and `‖1 - α‖ ≤ δ`, concluding on `1 - ‖tr T^M‖`, would let
+  the normal case call it and remove the first copy.
 
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
@@ -3528,6 +3637,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   in `CanonicalBlockGroundSpaceAtInjectivityLength.lean`, the first file that needs it. The
   parent-Hamiltonian identity then follows from `parentHamiltonianES_eq_of_groundSpace_eq`.
 
+### GHZ zero-image non-injectivity witnesses — candidate
+
+- **Pattern:** choose virtual labels forcing one physical label to equal both 0 and 1,
+  then use the resulting zero basis image to disprove injectivity.
+- **Occurrences:** `ghzSiteTensor_not_linearIndependent` and
+  `ghzPEPS_not_isVertexInjective` in `TNLean/PEPS/Examples/GHZ.lean`.
+- **Count:** two occurrences in one file; below the promotion threshold.
+- **Possible abstraction:** a bridge from linear independence of the four-leg
+  site tensor to vertex injectivity of its torus realization, if another example
+  repeats the construction.
+
 ### Transposed Kronecker gauge inverses — candidate
 
 - **Pattern:** reduce block-diagonal inverse products to Kronecker products,
@@ -3539,6 +3659,34 @@ spectral split → block extraction → MPV calculation → strict bounds
   has not been reached.
 - **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
   second module needs the same cancellation pattern.
+
+### root-of-unity powers across a cyclic successor — candidate
+- **Pattern:** simplify `Fin.val_add` and `Fin.val_one'`, then use
+  `pow_eq_pow_mod`, `pow_succ`, and commutativity to prove
+  `z ^ (k + 1).val = z * z ^ k.val` from `z ^ q = 1`.
+- **Seen:** two occurrences in two files: `Fin.exists_stepOrbit_phases` in
+  `TNLean/Algebra/FinStepOrbit.lean` and the private `map_cyclic_sum` in
+  `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
+- **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
+  monoid; below the three-occurrence promotion threshold.
+
+### measurement-assisted GHZ protocol on two site layouts — candidate
+- **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the
+  outcome-consistency lemma, the corrections by outcomes and partial sums, and
+  the product-state bookkeeping.
+- **Seen:** two occurrences (2026-10-01):
+  `TNLean/MPS/Preparation/GHZMeasurement.lean` (interleaved single qudits of
+  an open chain, `forall_succ_eq_iff`, `forall_add_ghzCorrection_eq_iff`) and
+  `TNLean/MPS/Preparation/WindowGHZ.lean` (registers of `r₁` sites inside
+  blocks of a ring, `forall_cyclic_eq_zero_iff`).
+- **Abstraction:** proposed: one protocol over an injective embedding of the
+  system and ancilla sites and a label type `Cfg d r₁`, in an open and a
+  cyclic form, with the outcome-consistency lemma over an additive group
+  indexed by `Fin M`. The partial sums already share `Fin.partialSum`.
+- **Notes:** below the rule of three; the layouts differ in the controlled
+  shift between a register and its ancilla, which spans a block in
+  `WindowGHZ.lean`.
+
 
 ## Rejected
 
@@ -3679,6 +3827,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
   different shape — the open-lattice memberships need no negation normalization and the
   branches close by `omega` alone — and are left as they are.
+
 
 
 ## Retired

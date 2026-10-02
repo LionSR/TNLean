@@ -26,17 +26,22 @@ represented by the existing function type `ScalarCocycle G`; its name and
 * `ScalarThreeCochain.fusionGauge`: the scalar fusion-tensor gauge action.
 * `ScalarThreeCochain.CohomologousTo`: equality up to a fusion gauge.
 * `ScalarThreeCochain.IsTrivialGaugeClass`: triviality of the scalar gauge class.
+
+## Main results
+
+* `ScalarThreeCochain.exists_isNormalized_cohomologousTo`: every scalar 3-cocycle has a
+  normalized representative.
 -/
 
 namespace TNLean.Algebra
 
-variable {G : Type*} [Group G]
+variable {G : Type} [Group G]
 
 /-- A multiplicative scalar 3-cochain `G × G × G → ℂˣ`.
 
 This is the scalar function denoted by `ω` in arXiv:2502.20257,
 `eq:3-cocycle`. -/
-abbrev ScalarThreeCochain (G : Type*) := G → G → G → Units ℂ
+abbrev ScalarThreeCochain (G : Type) := G → G → G → Units ℂ
 
 namespace ScalarCocycle
 
@@ -211,6 +216,57 @@ end CohomologousTo
 the constant cochain one. -/
 def IsTrivialGaugeClass (ω : ScalarThreeCochain G) : Prop :=
   CohomologousTo ω (fun _ _ _ => 1)
+
+/-- Every scalar three-cocycle admits a normalized representative. The explicit gauge
+is `β(g,h) = ω(g,1,1) / ω(1,1,h)`, giving the normalization used in
+arXiv:2203.12563, Section 6, and arXiv:2502.20257, `eq:triv_omegas`. -/
+theorem exists_isNormalized_cohomologousTo {ω : ScalarThreeCochain G}
+    (hw : IsCocycle ω) : ∃ ν, IsCocycle ν ∧ IsNormalized ν ∧ CohomologousTo ν ω := by
+  have hlast (g h : G) : ω g h 1 = ω (g * h) 1 1 / ω h 1 1 := by
+    have he := hw g h 1 1
+    simp only [mul_one] at he
+    rw [mul_comm (ω (g * h) 1 1) (ω g h 1), mul_assoc] at he
+    exact eq_div_iff_mul_eq'.2 (mul_left_cancel he).symm
+  have hfirst (g h : G) : ω 1 g h = ω 1 1 (g * h) / ω 1 1 g := by
+    have he := hw 1 1 g h
+    simp only [mul_one, one_mul] at he
+    rw [mul_comm (ω 1 1 g) (ω 1 g h), mul_assoc] at he
+    apply eq_div_iff_mul_eq'.2
+    simpa only [mul_comm (ω 1 1 g) (ω 1 g h)] using (mul_left_cancel he).symm
+  have hmid (g h : G) : ω g 1 h = ω g 1 1 * ω 1 1 h := by
+    have he := hw g 1 1 h
+    simp only [mul_one, one_mul] at he
+    rw [mul_comm (ω g 1 1) (ω g 1 h), mul_assoc] at he
+    exact mul_left_cancel he
+  have h0 : ω 1 1 1 = 1 := by
+    have he : ω 1 1 1 * 1 = ω 1 1 1 * ω 1 1 1 := by
+      simpa only [mul_one] using hmid 1 1
+    exact (mul_left_cancel he).symm
+  let β : ScalarCocycle G := fun g h ↦ ω g 1 1 / ω 1 1 h
+  refine ⟨fusionGauge β ω, hw.fusionGauge β, ?_, ⟨β, rfl⟩⟩
+  constructor
+  · intro g h
+    dsimp [fusionGauge, coboundary, β]
+    rw [hfirst g h]
+    simp only [one_mul, h0]
+    apply Units.ext
+    push_cast
+    field_simp
+  · constructor
+    · intro g h
+      dsimp [fusionGauge, coboundary, β]
+      rw [hmid g h]
+      simp only [one_mul, mul_one, h0]
+      apply Units.ext
+      push_cast
+      field_simp
+    · intro g h
+      dsimp [fusionGauge, coboundary, β]
+      rw [hlast g h]
+      simp only [mul_one, h0]
+      apply Units.ext
+      push_cast
+      field_simp
 
 end ScalarThreeCochain
 

@@ -145,12 +145,6 @@ theorem circuitOp_mem_supportedOperators {R : Set (Fin N)} :
       (circuitOp_mem_supportedOperators Ls fun L' hL' => h L' (List.mem_cons_of_mem _ hL'))
       (Layer.op_mem_supportedOperators (h L List.mem_cons_self))
 
-theorem circuitOp_append (Ls Ls' : List (Layer d N)) :
-    circuitOp (Ls ++ Ls') = circuitOp Ls' * circuitOp Ls := by
-  induction Ls with
-  | nil => simp [circuitOp]
-  | cons L Ls ih => rw [List.cons_append, circuitOp, circuitOp, ih, Matrix.mul_assoc]
-
 /-- `U` is a local circuit of depth `T` all of whose gates act inside the set of sites `R`.
 
 Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits"),

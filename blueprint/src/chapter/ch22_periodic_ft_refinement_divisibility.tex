@@ -1,3 +1,28 @@
+\begin{theorem}[Positive-weight periodic decomposition]
+    \label{thm:periodic_positive_decomposition}
+    \lean{MPSTensor.exists_periodic_blockDecomposition}
+    \leanok
+    \uses{def:periodic_tensor, def:same_mpv2_pos}
+    Every tensor $A$ admits $r\in\N$ and, for $k=1,\ldots,r$, left-canonical
+    periodic tensors $B_k$ of positive bond dimensions $D_k$ and weights
+    $\mu_k>0$, with $\sum_{k=1}^rD_k\le D$, such that $A$ has the same matrix
+    product vectors at all positive lengths as $\bigoplus_{k=1}^r\mu_k B_k$.
+    No physical sites are blocked
+    \cite[lines~238--271 and~313--320]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:tp_gauge_arbitrary, thm:irreducible_left_canonical_periodic}
+    Theorem~\ref{thm:tp_gauge_arbitrary} gives $A$ the same positive-length
+    matrix product vectors as $\bigoplus_{k=1}^r\mu_kB_k$ with $\mu_k>0$,
+    $\sum_kD_k\le D$, and each $B_k$ irreducible and left-canonical, so
+    $\rho_{\spec}(\E_{B_k})=1$. By
+    Theorem~\ref{thm:irreducible_left_canonical_periodic}, each $B_k$ is
+    $m_k$-periodic, that is,
+    $\operatorname{Spec}_{\mathrm{per}}(\E_{B_k})=\{\mu\in\C:\mu^{m_k}=1\}$
+    for some $m_k\ge1$.
+\end{proof}
+
 \begin{definition}[$p$-divisible CP map]
     \label{def:p_divisible_channel}
     \lean{MPSTensor.IsPDivisibleChannel}
@@ -33,6 +58,398 @@
     for every $N \in \N$ and every
     $\tau \in \{0,\ldots,d^p-1\}^N$.
 \end{definition}
+
+\begin{theorem}[Coordinates for a cyclic step]
+    \label{thm:periodic_step_coordinates}
+    \lean{Fin.stepOrbit_bijective, Fin.stepOrbitEquiv, Fin.stepOrbitEquiv_add_one}
+    \leanok
+    Let $m>0$, $p\geq0$, and $r=\gcd(m,p)$. Every residue $u$ modulo $m$
+    has a unique expression $u=\alpha+pk\pmod m$, with
+    $0\leq\alpha<r$ and $0\leq k<m/r$.
+    Adding $p$ preserves $\alpha$ and adds one to $k$ modulo $m/r$.
+    These are the coordinates used in
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    If two such expressions agree modulo $m$, reduction modulo $r$
+    identifies their representatives $\alpha$. Cancelling that common
+    representative gives $pk=pk'\pmod m$, hence $k=k'\pmod{m/r}$.
+    Their bounds imply $k=k'$. There are $r(m/r)=m$ pairs of coordinates,
+    so this injective map to the $m$ residues is also surjective.
+    Since $m$ divides $p(m/r)$, reducing $k+1$ modulo $m/r$ does not
+    change $\alpha+p(k+1)$ modulo $m$.
+\end{proof}
+
+\begin{definition}[Projections for a prescribed blocking length]
+    \label{def:periodic_step_orbit_projection}
+    \lean{MPSTensor.stepOrbitProjection}
+    \leanok
+    \uses{thm:periodic_step_coordinates}
+    Let $m>0$, $p\ge0$, $r=\gcd(m,p)$, and let $P_u$ be projections indexed
+    modulo $m$. For $0\le\alpha<r$, set
+    \begin{align}
+        Q_\alpha & =\sum_{k=0}^{m/r-1}P_{[\alpha+pk]_m}. \notag
+    \end{align}
+    These are the grouped projections of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{definition}
+
+\begin{theorem}[Compression to the step orbits]
+    \label{thm:periodic_step_orbit_compression}
+    \lean{MPSTensor.exists_stepOrbit_blockDecomposition,
+        MPSTensor.adjoint_blockTensor_projection}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    Suppose $P_u$ are nonzero orthogonal projections with $\sum_uP_u=\Id_D$,
+    $A$ is left canonical, and $P_uA^i=A^iP_{u+1}$. There are positive integers
+    $D_\alpha$ with $\sum_\alpha D_\alpha=D$, isometries
+    $V_\alpha:\C^{D_\alpha}\to\C^D$, and left-canonical tensors $C_\alpha$
+    such that
+    \begin{align}
+        V_\alpha^\dagger V_\alpha & =\Id_{D_\alpha}, \notag                      \\
+        V_\alpha V_\alpha^\dagger & =Q_\alpha, \notag                            \\
+        C_\alpha^I                & =V_\alpha^\dagger(A^{[p]})^IV_\alpha. \notag
+    \end{align}
+    The tensors $A^{[p]}$ and $\bigoplus_\alpha C_\alpha$ have the same MPV
+    at every length, including zero. The adjoint transfer map satisfies
+    $\E_{A^{[p]}}^\dagger(P_u)=P_{u+p}$, with indices taken modulo $m$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_step_coordinates,thm:commuting_projection_block_decomp_isometry}
+    The step coordinates partition the original projections, so the $Q_\alpha$
+    are mutually orthogonal nonzero projections summing to $\Id_D$.
+    Iterating $P_uA^i=A^iP_{u+1}$ over a word of length $p$ shifts the
+    projector index by $p$. Multiplying by the adjoint word and summing,
+    left canonicality gives $\E_{A^{[p]}}^\dagger(P_u)=P_{u+p}$.
+    Iterating the shift relation gives $P_u(A^{[p]})^I=(A^{[p]})^IP_{u+p}$.
+    Since $u\mapsto u+p$ permutes the orbit of $\alpha$, summing over that
+    orbit gives $Q_\alpha(A^{[p]})^I=(A^{[p]})^IQ_\alpha$.
+    Compress to the ranges of these projections. Their dimensions sum to $D$,
+    and the commuting projection resolution preserves both left canonicality
+    and traces of every word. The empty-word trace gives the same dimension sum.
+\end{proof}
+
+\begin{theorem}[Step-orbit compression of a periodic tensor]
+    \label{thm:periodic_prescribed_blocking_compression}
+    \lean{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
+    \leanok
+    \uses{def:periodic_tensor,thm:periodic_step_orbit_compression}
+    If $A$ is periodic of period $m$ and $p\ge0$, there is a family of nonzero
+    cyclic projections $P_u$ with $\sum_uP_u=\Id_D$ and
+    $P_uA^i=A^iP_{u+1}$ for which the dimensions $D_\alpha$, isometries
+    $V_\alpha$, and left-canonical tensors $C_\alpha$ of
+    Theorem~\ref{thm:periodic_step_orbit_compression} exist, with the same
+    identities and the same MPV at every length, including zero. If $p>0$,
+    every resulting block satisfies $\spec_{\mathrm{per}}(\E_{C_\alpha})=\{z\in\C:z^{m/\gcd(m,p)}=1\}$
+    and is periodic of period $m/\gcd(m,p)$.
+    This is the prescribed-blocking conclusion of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum,
+        thm:periodic_compressed_irreducible,
+        thm:cyclic_sector_compression_letter_isometry_periodic,
+        lem:periodic_negreindex_shift}
+    Take the cyclic spectral projections, with their indices negated to give
+    $P_uA^i=A^iP_{u+1}$. No projection vanishes: left canonicality and the
+    shift relation give $\E_A^\dagger(P_u)=P_{u+1}$, and $\E_A^\dagger(0)=0$, so
+    $P_u=0$ would give $P_{u+1}=0$ and hence, around the cycle,
+    $\Id_D=\sum_vP_v=0$. Apply Theorem~\ref{thm:periodic_step_orbit_compression}.
+    For $p>0$, Theorem~\ref{thm:periodic_compressed_exact_spectrum} identifies
+    each block's peripheral spectrum, and
+    Theorem~\ref{thm:periodic_compressed_irreducible} gives irreducibility.
+    Together with left canonicality, these prove periodicity.
+\end{proof}
+
+\begin{theorem}[Peripheral roots after positive blocking]
+    \label{thm:periodic_blocking_peripheral_roots}
+    \lean{MPSTensor.peripheralEigenvalues_blockTensor,
+        MPSTensor.IsPeriodic.peripheral_blockTensor,
+        MPSTensor.IsPeriodic.peripheral_compressed_blockTensor}
+    \leanok
+    \uses{def:periodic_tensor}
+    Let $p>0$. For any tensor $A$, the peripheral eigenvalues of
+    $\E_{A^{[p]}}$ are the $p$th powers of those of $\E_A$.
+    If $A$ is periodic of period $m$, put $q=m/\gcd(m,p)$. Then
+    \begin{align}
+        \spec_{\mathrm{per}}(\E_{A^{[p]}})
+         & =\{z\in\C:z^q=1\}.
+        \label{eq:periodic_blocking_roots}
+    \end{align}
+    Moreover, if $V^\dagger V=\Id_n$, $VV^\dagger$ commutes with every
+    letter of $A^{[p]}$, and $C^I=V^\dagger(A^{[p]})^IV$, every peripheral
+    eigenvalue of $\E_C$ satisfies $z^q=1$.
+    This is the ambient spectral calculation in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}, with the missing power in
+    the printed root set corrected as in~\cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:transfer_map_corner_intertwine}
+    Spectral mapping for $\E_A^p$ gives the first assertion: a complex number
+    has unit modulus if and only if its positive $p$th power does.
+    A primitive $m$th root raised to the $p$th power has order $q$, giving
+    (\ref{eq:periodic_blocking_roots}). For compression,
+    $(A^{[p]})^IV=VC^I$, so
+    $\E_{A^{[p]}}(VXV^\dagger)=V\E_C(X)V^\dagger$.
+    The isometry makes $X\mapsto VXV^\dagger$ injective; hence every
+    eigenvalue of $\E_C$ is an eigenvalue of $\E_{A^{[p]}}$.
+\end{proof}
+
+\begin{theorem}[Cyclic motion of compressed projections]
+    \label{thm:periodic_compressed_projection_shift}
+    \lean{MPSTensor.adjoint_compressed_blockTensor_projection}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    Suppose $P_u$ are orthogonal projections summing to $\Id_D$, $A$ is
+    left canonical, and $P_uA^i=A^iP_{u+1}$. Let $p\ge0$, fix an orbit
+    $\alpha$, and suppose $VV^\dagger=Q_\alpha$ and
+    $C^I=V^\dagger(A^{[p]})^IV$. For $u=[\alpha+pk]_m$,
+    \begin{align}
+        \E_C^\dagger(V^\dagger P_uV) & =V^\dagger P_{u+p}V.
+        \label{eq:periodic_compressed_projection_shift}
+    \end{align}
+    This is the compressed form of the final display in the proof of
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_step_orbit_compression}
+    Orthogonality gives $Q_\alpha P_u=P_uQ_\alpha=P_u$. Therefore
+    $V(V^\dagger P_uV)V^\dagger=P_u$. Expanding the compressed adjoint map
+    yields $\E_C^\dagger(Y)=V^\dagger\E_{A^{[p]}}^\dagger(VYV^\dagger)V$.
+    Apply this identity to $Y=V^\dagger P_uV$ and use
+    $\E_{A^{[p]}}^\dagger(P_u)=P_{u+p}$.
+\end{proof}
+
+\begin{theorem}[Exact peripheral spectrum of each orbit block]
+    \label{thm:periodic_compressed_exact_spectrum}
+    \lean{MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq}
+    \leanok
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
+    Let $A$ be periodic of period $m$, let $p>0$, and put
+    $r=\gcd(m,p)$ and $q=m/r$. Suppose $P_u$ are nonzero orthogonal
+    projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
+    Fix $\alpha<r$, an isometry $V$ with $V^\dagger V=\Id$
+    and $VV^\dagger=Q_\alpha$, and set
+    $C^I=V^\dagger(A^{[p]})^IV$. Then
+    \begin{align}
+        \spec_{\mathrm{per}}(\E_C)
+         & =\{\lambda\in\C:\lambda^q=1\}.
+        \label{eq:periodic_compressed_exact_spectrum}
+    \end{align}
+    This is the spectral-set assertion in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}, with the root notation
+    corrected as in~\cite{gap:dccsp17_blocking_peripheral_roots}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_blocking_peripheral_roots,thm:periodic_compressed_projection_shift,
+        thm:periodic_step_orbit_compression}
+    The ambient spectral bound gives one inclusion. For the other, put
+    $R_k=V^\dagger P_{[\alpha+pk]_m}V$. The compressed adjoint map satisfies
+    $\E_C^\dagger(R_k)=R_{k+1}$. If $z^q=1$, the sum
+    $X_z=\sum_{k=0}^{q-1}z^kR_k$ therefore satisfies
+    $\E_C^\dagger(X_z)=z^{-1}X_z$. It is nonzero: since
+    $P_{[\alpha+pk]_m}\le Q_\alpha=VV^\dagger$ and distinct orbit projections
+    are orthogonal,
+    \begin{align}
+        VX_zV^\dagger P_\alpha & =\sum_{k=0}^{q-1}z^kP_{[\alpha+pk]_m}P_\alpha=P_\alpha\ne0. \notag
+    \end{align}
+    Given $\lambda^q=1$, choose $z=\overline{\lambda}^{-1}$.
+    The adjoint has eigenvalue $\overline{\lambda}$, so $\E_C$ has
+    eigenvalue $\lambda$. Its modulus is one.
+\end{proof}
+
+\begin{theorem}[Fixed spaces of positive adjoint powers]
+    \label{thm:periodic_adjoint_fixed_gcd}
+    \lean{MPSTensor.IsPeriodic.adjoint_pow_fixed_of_pow_fixed,
+        MPSTensor.IsPeriodic.adjoint_pow_fixed_iff_gcd}
+    \leanok
+    \uses{def:periodic_tensor}
+    Let $A$ be periodic of period $m$, let $p>0$, and write
+    $F=\E_A^\dagger$ and $r=\gcd(m,p)$. If $F^p(X)=X$, then $F^m(X)=X$.
+    Moreover, $F^p(X)=X$ if and only if $F^r(X)=X$.
+\end{theorem}
+
+\begin{proof}\leanok
+    On $S=\ker(F^p-1)$, the restriction of $F$ is annihilated by the
+    separable polynomial $t^p-1$, and hence is diagonalizable.
+    Each eigenvalue has modulus one and therefore is an $m$th root
+    of unity. Thus $F^m$ is the identity on $S$.
+    A point of periods $m$ and $p$ also has period $r$; conversely,
+    $r\mid p$ gives the other implication.
+\end{proof}
+
+\begin{theorem}[Fixed-point rigidity on one orbit of sectors]
+    \label{thm:periodic_orbit_fixed_rigidity}
+    \lean{MPSTensor.sum_adjoint_pow_stepOrbitProjection,
+        MPSTensor.IsPeriodic.adjoint_pow_fixed_eq_smul_stepOrbitProjection}
+    \leanok
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
+    Let $A$ be periodic of period $m$, let $p>0$, and put $r=\gcd(m,p)$.
+    Suppose $P_u$ are orthogonal projections summing to $\Id_D$ with
+    $P_uA^i=A^iP_{u+1}$. Write $F=\E_A^\dagger$ and fix $\alpha<r$.
+    Then $\sum_{j=0}^{r-1}F^j(Q_\alpha)=\Id_D$.
+    If $F^p(X)=X$ and $Q_\alpha X=X$, there is $c\in\C$ such that
+    $X=cQ_\alpha$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates,
+        thm:transfer_map_irreducible_of_tensor}
+    The projections $R_j=F^j(Q_\alpha)$, for $0\le j<r$, are pairwise
+    orthogonal and sum to $\Id_D$, since their cyclic-sector indices
+    partition $\Z_m$. The letter relation gives
+    $F(P_uY)=P_{u+1}F(Y)$, so $R_jF^j(X)=F^j(X)$.
+    By Theorem~\ref{thm:periodic_adjoint_fixed_gcd}, $F^r(X)=X$.
+    Thus $S=\sum_{j=0}^{r-1}F^j(X)$ is fixed by the irreducible unital
+    map $F$, and $S=c\Id_D$. Orthogonality gives
+    $Q_\alpha S=X=cQ_\alpha$.
+\end{proof}
+
+\begin{theorem}[Irreducibility of each compressed orbit block]
+    \label{thm:periodic_compressed_irreducible}
+    \lean{MPSTensor.IsPeriodic.isIrreducibleFamily_compressed_stepOrbit}
+    \leanok
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection}
+    Let $A$ be periodic of period $m$, let $p>0$, and let $P_u$ be
+    orthogonal projections summing to $\Id_D$ with $P_uA^i=A^iP_{u+1}$.
+    Fix $\alpha<\gcd(m,p)$ and an isometry $V$ with
+    $VV^\dagger=Q_\alpha$. The compressed tensor
+    $C^I=V^\dagger(A^{[p]})^IV$ is irreducible.
+    This supplies the irreducibility assertion in
+    \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_orbit_fixed_rigidity,thm:adjoint_corner_fixed_of_preserved,
+        thm:transfer_map_irreducible_of_tensor}
+    Let $R$ be an invariant orthogonal projection for $\E_C^\dagger$.
+    The projection $L=VRV^\dagger$ has invariant corner under
+    $F^p$, where $F=\E_A^\dagger$. The faithful invariant state of $\E_A$
+    implies $F^p(L)=L$. Since $Q_\alpha L=L$, fixed-point rigidity
+    gives $L=cQ_\alpha$, and compression gives $R=c\Id$.
+    Idempotence forces $R=0$ or $R=\Id$. Since $\E_C$ and $\E_C^\dagger$ have
+    the same invariant orthogonal projections, $C$ is irreducible.
+\end{proof}
+
+\begin{theorem}[Orbit roots as consecutive products]
+    \label{thm:periodic_orbit_phase_products}
+    \lean{Fin.exists_stepOrbit_phases}
+    \leanok
+    \uses{thm:periodic_step_coordinates}
+    Let $G$ be an abelian group, $m>0$, $p\ge0$, $r=\gcd(m,p)$,
+    and $q=m/r$. Suppose $c_\alpha\in G$ satisfies $c_\alpha^q=1$
+    for every $0\le\alpha<r$. There are $b_u\in G$, indexed modulo
+    $m$, such that, writing $u=\alpha_u+pk_u$ for the coordinates of
+    Theorem~\ref{thm:periodic_step_coordinates},
+    \begin{align}
+        \prod_{j=0}^{p-1}b_{u+j} & = c_{\alpha_u}.
+        \label{eq:periodic_orbit_phase_product}
+    \end{align}
+    For $G=U(1)$, these are the local phases in
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}, with the
+    wraparound of $k_u$ handled as in~\cite{gap:dccsp17_orbit_phase_wraparound}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_step_coordinates}
+    Put $f_u=c_{\alpha_u}^{k_u}$ and $b_u=f_{u+1}/f_u$.
+    The coordinate shift and $c_\alpha^q=1$ give
+    $f_{u+p}=c_{\alpha_u}f_u$, including when $k_u=q-1$.
+    The product telescopes to $f_{u+p}/f_u=c_{\alpha_u}$,
+    proving~(\ref{eq:periodic_orbit_phase_product}).
+\end{proof}
+
+\begin{definition}[Sector rephasing]
+    \label{def:periodic_sector_rephasing}
+    \lean{MPSTensor.sectorPhaseTensor}
+    \leanok
+    Let $A$ be an MPS tensor, let $P_0,\ldots,P_{m-1}\in\MD$, and let
+    $c_0,\ldots,c_{m-1}\in\C$. Define $A'^i=\sum_u c_u P_u A^i$, as in
+    \cite[before eq.~\emph{Aprime-is-cPA}]{DeLasCuevas2017Irreducible}.
+\end{definition}
+
+\begin{theorem}[Products of sector-rephased letters]
+    \label{thm:periodic_sector_rephasing_words}
+    \lean{MPSTensor.mul_sectorPhaseTensor,
+        MPSTensor.mul_evalWord_sectorPhaseTensor,
+        MPSTensor.evalWord_sectorPhaseTensor}
+    \leanok
+    \uses{def:periodic_sector_rephasing}
+    Suppose $m\geq1$, $P_uP_v=\delta_{uv}P_u$, $\sum_u P_u=\Id$, and
+    $P_uA^i=A^iP_{u+1}$, with sector indices read modulo $m$.
+    For a word $w=(i_1,\ldots,i_n)$, write $A^w=A^{i_1}\cdots A^{i_n}$.
+    Then
+    \begin{align}
+        P_u A'^w & = \left(\prod_{k=0}^{n-1}c_{u+k}\right)P_u A^w, \notag \\
+        A'^w     & = \sum_u\left(\prod_{k=0}^{n-1}c_{u+k}\right)P_u A^w.
+        \label{eq:periodic_sector_rephasing_words}
+    \end{align}
+    The empty word has product $\Id$. The case $n=p$ is the first equality of
+    \cite[eq.~\emph{Aprime-is-cPA}]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:periodic_sector_rephasing}
+    Orthogonality gives $P_u A'^i=c_uP_u A^i=c_uA^iP_{u+1}$.
+    Induction on the word length gives the first identity in
+    (\ref{eq:periodic_sector_rephasing_words}); summing it over $u$ gives the second.
+\end{proof}
+
+\begin{theorem}[Left canonicality under sector rephasing]
+    \label{thm:periodic_sector_rephasing_left_canonical}
+    \lean{MPSTensor.isLeftCanonical_sectorPhaseTensor}
+    \leanok
+    \uses{def:periodic_sector_rephasing}
+    Suppose $P_u^\dagger=P_u$, $P_uP_v=\delta_{uv}P_u$,
+    $\sum_uP_u=\Id$, and $|c_u|=1$. If $A$ is left canonical, then
+    $A'^i=\sum_uc_uP_uA^i$ is left canonical as well. Thus the rephasing
+    in the proof of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}
+    keeps a left-canonical block trace preserving.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:periodic_sector_rephasing}
+    Put $U=\sum_uc_uP_u$. Orthogonality gives
+    $U^\dagger U=\sum_u|c_u|^2P_u=\Id$. Since $A'^i=UA^i$,
+    $\sum_i(A'^i)^\dagger A'^i=\sum_i(A^i)^\dagger U^\dagger UA^i=\Id$.
+\end{proof}
+
+\begin{theorem}[A left-canonical tensor with prescribed orbit phases]
+    \label{thm:periodic_orbit_phase_tensor}
+    \lean{MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases}
+    \leanok
+    \uses{thm:periodic_step_coordinates}
+    Let $A$ be left canonical and $m>0$. Suppose the Hermitian projections
+    $P_u$ satisfy $P_uP_v=\delta_{uv}P_u$, $\sum_uP_u=\Id$, and
+    $P_uA^i=A^iP_{u+1}$. Let $p\ge0$, $r=\gcd(m,p)$, and
+    $c_\alpha^{m/r}=1$. There is a left-canonical tensor $A'$ such that,
+    for every word $w$ of length $p$,
+    \begin{align}
+        A'^w & = \sum_u c_{\alpha_u}P_uA^w.
+        \label{eq:periodic_orbit_phase_tensor}
+    \end{align}
+    This is the rephasing identity in
+    \cite[proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:periodic_sector_rephasing,thm:periodic_orbit_phase_products,
+        thm:periodic_sector_rephasing_words,
+        thm:periodic_sector_rephasing_left_canonical}
+    Since $m/r>0$, each root $c_\alpha$ has modulus one. Apply
+    Theorem~\ref{thm:periodic_orbit_phase_products} in $U(1)$ to obtain
+    unit phases $b_u$, and set $A'^i=\sum_ub_uP_uA^i$.
+    Theorem~\ref{thm:periodic_sector_rephasing_left_canonical} gives left
+    canonicality. Substituting~(\ref{eq:periodic_orbit_phase_product}) into
+    (\ref{eq:periodic_sector_rephasing_words}) gives
+    (\ref{eq:periodic_orbit_phase_tensor}).
+\end{proof}
 
 \begin{theorem}[The tensor $C$ associated to a refinement witness]
     \label{thm:p_refinement_pullback_irreducible_form}

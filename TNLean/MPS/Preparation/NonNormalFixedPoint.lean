@@ -51,14 +51,16 @@ which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
 
 * `MPSTensor.bntWeight` — the weights `βⱼ = ∑ₖ μ_{j,k}^N` of eq. (S4).
 * `MPSTensor.ghzAmplitude` — the normalized weights `αⱼ^{(N)}` of eq. (19).
+* `MPSTensor.sum_norm_sq_pos_of_ne_zero`, `MPSTensor.ghzAmplitude_norm_sq` — for `β ≠ 0`,
+  `∑ₗ |βₗ|² > 0` and `∑ⱼ |αⱼ^{(N)}|² = 1`.
 * `MPSTensor.nonNormalFixedPointState` — the state `|Ω'⟩` of eq. (19), on a ring of `M`
   sites with legs `L_k ⊗ R_k`.
 * `MPSTensor.nonNormalFixedPointState_bondRegrouping_symm` — in the bond coordinates
   `R_k L_{k+1}`, `Ω'` is `∑ⱼ αⱼ ∏ₖ ω_j`.
 * `MPSTensor.pairIsometry`, `MPSTensor.isIsometry_pairIsometry` — `W : |j⟩ ↦ |ω_j⟩` is an
   isometry for orthonormal pairs.
-* `MPSTensor.ghzState` — `|χ_M⟩`; `W^{⊗M}` is `Matrix.tensorPower`, an isometry by
-  `Matrix.IsIsometry.tensorPower`.
+* `MPSTensor.ghzState` — `|χ_M⟩`, with its amplitudes in `MPSTensor.ghzState_apply`;
+  `W^{⊗M}` is `Matrix.tensorPower`, an isometry by `Matrix.IsIsometry.tensorPower`.
 * `MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState` — the GHZ form
   `|Ω'⟩ = W^{⊗M} |χ_M⟩`.
 * `MPSTensor.nonNormalFixedPointState_norm_sq` — `⟨Ω'|Ω'⟩ = 1` when some `βₗ ≠ 0`.
@@ -94,18 +96,20 @@ display following eq. (S7), which gives the coefficients of eq. (19). -/
 noncomputable def ghzAmplitude (β : Fin b → ℂ) (j : Fin b) : ℂ :=
   β j / (Real.sqrt (∑ l, ‖β l‖ ^ 2) : ℂ)
 
+/-- A nonzero vector of weights has a positive squared norm: `∑ₗ |βₗ|² > 0` when `β ≠ 0`, so the
+normalization of `ghzAmplitude` divides by a positive number. -/
+theorem sum_norm_sq_pos_of_ne_zero {β : Fin b → ℂ} (hβ : β ≠ 0) : 0 < ∑ l, ‖β l‖ ^ 2 := by
+  obtain ⟨l, hl⟩ := Function.ne_iff.1 hβ
+  exact lt_of_lt_of_le (pow_pos (norm_pos_iff.2 hl) 2)
+    (Finset.single_le_sum (f := fun l => ‖β l‖ ^ 2) (fun _ _ => by positivity) (Finset.mem_univ l))
+
 /-- The normalized weights are a unit vector as soon as some weight is nonzero:
 `∑ⱼ |αⱼ^{(N)}|² = 1` (arXiv:2307.01696, the display following eq. (S7)). -/
 theorem ghzAmplitude_norm_sq {β : Fin b → ℂ} (hβ : β ≠ 0) :
     ∑ j, star (ghzAmplitude β j) * ghzAmplitude β j = 1 := by
   set s : ℝ := ∑ l, ‖β l‖ ^ 2
   have hs0 : 0 ≤ s := Finset.sum_nonneg fun _ _ => by positivity
-  have hs : s ≠ 0 := by
-    obtain ⟨l, hl⟩ := Function.ne_iff.1 hβ
-    have hpos : 0 < ‖β l‖ ^ 2 := pow_pos (norm_pos_iff.2 hl) 2
-    exact (lt_of_lt_of_le hpos
-      (Finset.single_le_sum (f := fun l => ‖β l‖ ^ 2) (fun _ _ => by positivity)
-        (Finset.mem_univ l))).ne'
+  have hs : s ≠ 0 := (sum_norm_sq_pos_of_ne_zero hβ).ne'
   have hterm : ∀ j, star (ghzAmplitude β j) * ghzAmplitude β j =
       ((‖β j‖ ^ 2 / s : ℝ) : ℂ) := by
     intro j
@@ -162,6 +166,18 @@ theorem isIsometry_pairIsometry {ω : Fin b → Fin D × Fin D → ℂ}
 times the product of the coordinates `s k` of the basis vector `|j⟩`. -/
 def ghzState {M : ℕ} (α : Fin b → ℂ) (s : Fin M → Fin b) : ℂ :=
   ∑ j, α j * ∏ k, (Pi.single j 1 : Fin b → ℂ) (s k)
+
+/-- The amplitude of `|χ_M⟩` at `s` is `α (s 0)` if all the values `s k` are equal, and `0`
+otherwise. -/
+theorem ghzState_apply {M : ℕ} [NeZero M] (α : Fin b → ℂ) (s : Fin M → Fin b) :
+    ghzState α s = if ∀ k, s k = s 0 then α (s 0) else 0 := by
+  classical
+  simp only [ghzState, Pi.single_apply, Finset.prod_boole, Finset.mem_univ, true_implies]
+  rw [Finset.sum_eq_single (s 0)]
+  · split_ifs <;> simp
+  · intro j _ hj
+    rw [ite_eq_right fun h => hj (h 0).symm, mul_zero]
+  · simp
 
 /-- The GHZ form of the fixed-point state, arXiv:2307.01696, the paragraph after
 eq. (19): `|Ω'⟩ = W^{⊗M} |χ_M⟩` with `W : |j⟩ ↦ |ω_j⟩`, in the bond coordinates

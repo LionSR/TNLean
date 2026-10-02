@@ -35,6 +35,8 @@ import TNLean.MPS.Examples.GHZParentHamiltonian
 import TNLean.MPS.Examples.GHZQudit
 import TNLean.MPS.Examples.Ising
 import TNLean.MPS.Examples.KitaevChain
+import TNLean.MPS.Examples.KleinSymmetry
+import TNLean.MPS.Examples.KleinSymmetryAnomaly
 import TNLean.MPS.Examples.KramersWannier
 import TNLean.MPS.Examples.MPDOSymmetry
 import TNLean.MPS.Examples.MajumdarGhosh
