@@ -68,7 +68,33 @@ and `TwistedDimerBondRFP.lean`. The construction provenance is preserved in
 The more general finite-group separation is treated in
 `rfp_intrinsic/sections/02_groups.tex`.
 
-## Disposition of the broad assertion
+The exact mixed-Bell bond factor is simple in the sense of Definition 4.7.
+The theorem `MPOTensor.TwistedDimer.sigmaDimer_isSimple`, in
+`TwistedDimerBondSimple.lean`, supplies one normal representative, obtained
+by multiplying its matrix-unit tensor by \(4\sqrt2/5\). The representative's
+physical-trace transfer has trace \(4\sqrt2/5\ne0\), which excludes
+nilpotency. This establishes simplicity of the bond factor without asserting
+an on-site tensor factorization of the original twisted dimer.
+
+## Disposition of the original tensor-product assertion
+
+Condition N3 in the original construction asserted that the tensor is not a
+tensor product of a length-independent fixed point and a simple
+length-dependent fixed point. That assertion is withdrawn as a property of
+this example. The retained claims are the channel equations, non-simplicity
+of the coupled tensor, its displayed canonical decomposition and fusion law,
+and the obstruction to positive rescaling of its two specified normal
+representatives.
+
+The [preserved construction excerpts](2026-09-05_twisted_dimer_unitary_factorization.md)
+identify the reason: the proposed N3 argument compares only a particular
+one-generator factorization with two coefficients in a specified basis.
+It supplies neither a general exclusion of simple factors with several
+blocks nor an equivalence between tensor factorization and that coefficient
+comparison. The permitted changes of coordinates and blocking operations
+were not specified. Thus the original tensor-product sentence has no
+established interpretation under which it can be retained as a theorem of
+the construction.
 
 The assertion that these weights cannot be separated into an independent
 bond factor is withdrawn when neighboring-register regrouping and these
@@ -77,14 +103,13 @@ factorization of the actual density operators, at every positive length.
 Thus failure of simplicity and the obstruction to rescaling normal
 representatives do not establish non-factorization under those operations.
 
-The construction does not claim non-factorization under a narrower class
-consisting only of on-site physical unitaries and virtual similarities.
-Such a class changes the mathematical question, and the existing operator
-identity neither proves nor disproves the corresponding tensor statement.
-There is no general non-factorization theorem to attach to this example.
-A future theorem about that narrower relation must specify the permitted
-factors and whether blocking is allowed. It must not be presented as a
-consequence of the coefficient-rescaling obstruction.
+A separate question may restrict the permitted changes to on-site physical
+unitaries and virtual similarities. The existing operator identity neither
+proves nor disproves that tensor statement. Such a question must first
+specify the permitted factors and whether blocking is allowed; it is not
+retained as an unproved property of this example. In particular, the
+coefficient-rescaling obstruction supplies no general non-factorization
+conclusion.
 
 ## One tensor-power construction
 

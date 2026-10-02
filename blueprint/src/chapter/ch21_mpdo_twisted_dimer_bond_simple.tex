@@ -1,0 +1,78 @@
+\begin{definition}[The normalized mixed-Bell representative]%
+    \label{def:mpdo_dimer_bond_normal_rep}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerNormalizingScalar,
+        MPOTensor.TwistedDimer.sigmaDimerNormalizingScalar_ne_zero,
+        MPOTensor.TwistedDimer.sigmaDimerBasis}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_bond_tensor}
+    For the mixed-Bell tensor $Q$, put $c=4\sqrt2/5$ and
+    $A=cQ$, viewed as a tensor over the sixteen-letter ket-bra alphabet.
+\end{definition}
+
+\begin{theorem}[One-site injectivity of the mixed-Bell factor]%
+    \label{thm:mpdo_dimer_bond_injective}
+    \lean{MPOTensor.TwistedDimer.sigmaDimer_isInjective,
+        MPOTensor.TwistedDimer.sigmaDimer_sum_conjTranspose_mul}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_bond_tensor, def:injective}
+    The sixteen matrices $Q^{ij}$ span $\MN{4}$ and satisfy
+    $\sum_{i,j}(Q^{ij})^\dagger Q^{ij}=(25/32)\Id$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_twisted_dimer_bond_tensor}
+    Each matrix unit $E_{(l,l'),(r,r')}$ is a nonzero scalar multiple
+    of $Q^{(l,r),(l',r')}$, since every entry of $C$ is nonzero.
+    Summing the adjoint squares gives the stated scalar identity:
+    the coefficient at each diagonal matrix unit is
+    $2(1/2)^2+2(3/8)^2=25/32$.
+\end{proof}
+
+\begin{lemma}[Normality and trace of the mixed-Bell representative]%
+    \label{lem:mpdo_dimer_bond_normal_rep}
+    \lean{MPOTensor.TwistedDimer.sigmaDimerBasis_isLeftCanonical,
+        MPOTensor.TwistedDimer.sigmaDimerBasis_isNormalTensor,
+        MPOTensor.TwistedDimer.sigmaDimerBasis_trace_physTransfer}
+    \leanok
+    \uses{def:mpdo_dimer_bond_normal_rep, thm:mpdo_dimer_bond_injective,
+        thm:mpdo_twisted_dimer_bond_product, def:mpdo_doubled_phys_trace_transfer,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    The representative $A$ is left-canonical and normal.
+    Its physical-trace transfer $\mathcal B_A=\sum_i A^{ii}$ satisfies
+    $\tr\mathcal B_A=c\ne0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_dimer_bond_normal_rep, thm:mpdo_dimer_bond_injective,
+        thm:mpdo_twisted_dimer_bond_product,
+        thm:is_normal_tensor_of_is_normal_left_canonical}
+    The adjoint-square sum of $A$ is $c^2(25/32)\Id=\Id$.
+    Nonzero scalar multiplication preserves injectivity, so
+    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
+    gives normality. The one-site density operator of $Q$ has trace one;
+    hence $\tr\mathcal B_A=c\tr\mathcal B_Q=c$.
+\end{proof}
+
+\begin{theorem}[Simplicity of the exact mixed-Bell factor]%
+    \label{thm:mpdo_dimer_bond_simple}
+    \lean{MPOTensor.TwistedDimer.sigmaDimer_isSimple}
+    \leanok
+    \uses{def:mpdo_simple_tensor, lem:mpdo_dimer_bond_normal_rep,
+        thm:mpdo_twisted_dimer_bond_product, thm:cpsv_normal_separated_eventually_li}
+    The tensor $Q$ is simple in the sense of
+    \cite[Definition~4.7]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpdo_dimer_bond_normal_rep, lem:mpdo_dimer_bond_normal_rep,
+        thm:mpdo_twisted_dimer_bond_product,
+        thm:cpsv_normal_separated_eventually_li}
+    After one-site blocking, relabel the ket-bra alphabet and use the
+    single representative $A$, with one copy of weight $c^{-1}$.
+    The scalar word law recovers the positive-length matrix product
+    vectors of $Q$. The singleton normal family is eventually linearly
+    independent by Theorem~\ref{thm:cpsv_normal_separated_eventually_li}.
+    A nilpotent complex matrix has zero trace, whereas
+    $\tr\mathcal B_A=c\ne0$. Thus the only representative has
+    nonnilpotent physical-trace transfer, as required.
+\end{proof}
