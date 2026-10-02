@@ -150,6 +150,124 @@ of the virtual projective representation.
     representation cocycle (Theorem~\ref{thm:spt_classification}).
 \end{remark}
 
+\subsection{Virtual actions along symmetric paths}
+\label{sec:spt_virtual_path_algebra}
+
+The interpolation in the proof of Theorem~\ref{thm:spt_classification} first
+rephases the two endpoint virtual actions to a common factor system and then forms
+their direct sum; necessity rests on the discreteness of the class along a
+continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
+
+\begin{theorem}[Unitary rephasing of cohomologous virtual actions]
+    \label{thm:spt_unitary_rephasing}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.rephase,
+        TNLean.Algebra.circleScalar_mem_unitaryGroup,
+        TNLean.Algebra.ProjectiveRepresentation.rephase_mem_unitaryGroup,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous}
+    \leanok
+    \uses{def:projective_rep, def:cohomologous_to}
+    Multiplying each matrix $V_g$ of a projective representation with factor system
+    $\omega$ by a scalar $\lambda_g\neq0$ gives a projective representation with
+    factor system $\lambda_g\lambda_h\lambda_{gh}^{-1}\omega(g,h)$.  Consequently, let
+    $V^0$ be a unitary projective representation whose factor system is the
+    pointwise phase $\omega_0/|\omega_0|$.  If $\omega_1$ is cohomologous to
+    $\omega_0$, then multiplying each $V_g^0$ by a unit-modulus scalar gives a unitary
+    projective representation with factor system $\omega_1/|\omega_1|$
+    \cite[Section~II.F.2, lines~886--921]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Let $\lambda$ witness $\omega_1\sim\omega_0$, so that
+    $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$, and put
+    $\psi_g=\lambda_g/|\lambda_g|$.  The unit-phase map $z\mapsto z/|z|$ is
+    multiplicative, so
+    \begin{align}
+        \frac{\omega_1(g,h)}{|\omega_1(g,h)|}
+         & =\psi_g\psi_h\psi_{gh}^{-1}\,\frac{\omega_0(g,h)}{|\omega_0(g,h)|}.
+        \notag
+    \end{align}
+    Hence $\psi_gV_g^0$ has factor system $\omega_1/|\omega_1|$, and multiplication
+    by a unit-modulus scalar preserves unitarity.
+\end{proof}
+
+\begin{definition}[Direct sum with a common factor system]
+    \label{def:spt_projective_direct_sum}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.directSum}
+    \leanok
+    \uses{def:projective_rep}
+    Let $V^0$ and $V^1$ be projective representations on
+    $\C^{D_0}$ and $\C^{D_1}$ with the same factor system $\omega$.
+    Their direct sum is the projective representation on
+    $\C^{D_0+D_1}$ given by
+    \begin{align}
+        V_g    & =V_g^0\oplus V_g^1, &
+        V_gV_h & =\omega(g,h)V_{gh}.
+        \notag
+    \end{align}
+    This is the virtual direct sum in the symmetric interpolation
+    of~\cite[Section~II.F.2, lines~909--921]{Schuch2011Phases}.
+\end{definition}
+
+\begin{theorem}[Unitarity of the virtual direct sum]
+    \label{thm:spt_projective_direct_sum_unitary}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.directSum_mem_unitaryGroup}
+    \leanok
+    \uses{def:spt_projective_direct_sum}
+    If $V_g^0$ and $V_g^1$ are unitary, then $V_g^0\oplus V_g^1$ is unitary.
+\end{theorem}
+
+\begin{proof}\leanok
+    The product with its adjoint is
+    $(V_g^0(V_g^0)^*)\oplus(V_g^1(V_g^1)^*)=I_{D_0}\oplus I_{D_1}$.
+\end{proof}
+
+\begin{theorem}[Cohomology along a fixed-dimension virtual path]
+    \label{thm:spt_virtual_path_class_invariance}
+    \lean{MPSTensor.continuous_rootOfUnity_path_const,
+        MPSTensor.exists_continuous_pow_root_path,
+        MPSTensor.continuous_projectiveFactor_of_unitaryMatrixPath,
+        MPSTensor.projectiveFactor_endpoints_cohomologous_of_det_path,
+        MPSTensor.unitary_projectivePath_factor_endpoints_cohomologous}
+    \leanok
+    \uses{def:cohomologous_to}
+    Let $G$ be any group and $D>0$. Suppose matrices
+    $V_\gamma(g)\in\mathrm U(D)$ depend continuously on
+    $\gamma\in[0,1]$ for each $g\in G$ and obey
+    $V_\gamma(g)V_\gamma(h)=\omega_\gamma(g,h)V_\gamma(gh)$.
+    Then $\omega_0$ and $\omega_1$ are cohomologous as
+    $\C^\times$-valued factor systems. This theorem assumes the
+    virtual path; obtaining it from a smooth symmetric MPS
+    parent-Hamiltonian path, including changes of bond dimension,
+    is a separate step in the classification theorem
+    \cite[Section~II.F.2, lines~930--946]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each $\det V_\gamma(g)$ is a continuous nonzero complex path, so it
+    has a continuous $D$th root $\beta_\gamma(g)$ on the interval.
+    Taking determinants in $V_\gamma(g)V_\gamma(h)=\omega_\gamma(g,h)V_\gamma(gh)$
+    gives $\beta_\gamma(g)^D\beta_\gamma(h)^D=\omega_\gamma(g,h)^D\beta_\gamma(gh)^D$,
+    so the rescaled factor system
+    \begin{align}
+        \eta_\gamma(g,h)
+         & =\omega_\gamma(g,h)\,\frac{\beta_\gamma(gh)}{\beta_\gamma(g)\beta_\gamma(h)}
+         &
+        \eta_\gamma(g,h)^D
+         & =1
+        \notag
+    \end{align}
+    takes values among the $D$th roots of unity.  It depends continuously on
+    $\gamma$, hence is constant, and $\eta_0=\eta_1$ reads
+    \begin{align}
+        \omega_1(g,h)
+         & =\psi(g)\psi(h)\psi(gh)^{-1}\omega_0(g,h),
+         &
+        \psi(g)
+         & =\beta_1(g)/\beta_0(g).
+        \notag
+    \end{align}
+\end{proof}
+
 \subsection{Renormalization fixed points of SPT phases}
 \label{sec:spt_fixed_points}
 
@@ -158,11 +276,12 @@ from the cocycle data \cite[Section~III.A]{Cirac2021Matrix}.  The tensor printed
 the source commutes with its own gauges and, for a nontrivial group, is not normal;
 the construction below
 is the dimer fixed point that the printed claims describe
-\cite{gap:rmp_spt_fixed_point_tensor}.  The source starts from a 2-cocycle alone;
-the results below take a projective representation with that factor system as
-given, and the existence of such a representation for a finite group, for
-instance the twisted regular representation on $\C^G$, is outside their scope
-\cite{gap:rmp_spt_fixed_point_supplied_representation}.  The source's symmetry
+\cite{gap:rmp_spt_fixed_point_tensor}.  The source starts from a 2-cocycle alone.
+Most results below take a projective representation with that factor system as
+given; for a finite group, the twisted regular representation on $\C^G$ supplies
+one whose factor system lies in the class of the cocycle
+(Theorem~\ref{thm:spt_fixed_point_from_cocycle},
+\cite{gap:rmp_spt_fixed_point_supplied_representation}).  The source's symmetry
 carries the phase of a 1-cocycle; the symmetry and class results below are
 stated for the trivial character \cite{gap:rmp_spt_fixed_point_trivial_character}.
 The source's symmetry group may also contain time-reversal and reflection
@@ -227,6 +346,44 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     virtual representation cohomologous to $\rho$.  The tensor is injective, so
     Theorem~\ref{thm:virtual_rep_injective} also produces a virtual representation
     directly, and its factor system is then cohomologous to $\omega$.
+\end{proof}
+
+\begin{theorem}[The SPT fixed point of a cocycle class]
+    \label{thm:spt_fixed_point_from_cocycle}
+    \lean{TNLean.Algebra.ScalarCocycle.inverse,
+        TNLean.Algebra.ScalarCocycle.inverse_isCocycle,
+        TNLean.Algebra.ScalarCocycle.inverse_circlePhaseInclusion,
+        TNLean.Algebra.ScalarCocycle.twistedLeftRegularGL,
+        TNLean.Algebra.ScalarCocycle.twistedLeftRegularGL_mul,
+        TNLean.Algebra.ScalarCocycle.twistedLeftRegularProjective,
+        TNLean.Algebra.ScalarCocycle.twistedLeftRegularProjective_mem_unitaryGroup,
+        TNLean.Algebra.ScalarCocycle.regularProjectiveForClass,
+        TNLean.Algebra.ScalarCocycle.regularProjectiveForClass_mem_unitaryGroup,
+        MPSTensor.sptFixedPointAction_mem_unitaryGroup,
+        MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle}
+    \leanok
+    \uses{thm:spt_fixed_point_class, thm:mpug_twisted_regular_multiplication,
+        thm:mpug_twisted_regular_unitary, thm:mpug_circle_complex_units_h2}
+    Let $G$ be a finite group and $\omega$ a 2-cocycle.  There is a unitary
+    projective representation $\rho$ of $G$ on $\C^G$ whose factor system is
+    cohomologous to $\omega$.  With $\phi=1$ and $D=|G|$, the physical action $U$ of
+    Definition~\ref{def:spt_fixed_point_tensor} is unitary, the SPT fixed-point
+    tensor has MPV-family invariance under $U$, and every virtual projective
+    representation of this symmetry has a factor system cohomologous to $\omega$
+    \cite[Section~III.A]{Cirac2021Matrix}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_fixed_point_class, thm:mpug_twisted_regular_multiplication,
+        thm:mpug_twisted_regular_unitary, thm:mpug_circle_complex_units_h2}
+    Let $\bar\omega=\omega/|\omega|$ be the pointwise phase of $\omega$, which is
+    cohomologous to $\omega$ because $G$ is finite.
+    The twisted left regular matrices $L_g$ of the inverse cocycle
+    $\bar\omega^{-1}$ are unitary and satisfy $L_gL_h=\bar\omega(g,h)L_{gh}$.  When
+    $\rho$ is unitary, $W_g^{-1}=W_g^{\dagger}$, so $U(g)=W_g^{T}\otimes W_g^{\dagger}$ is
+    a tensor product of unitaries.  Theorem~\ref{thm:spt_fixed_point_class} gives the
+    symmetry and shows that every virtual factor system is cohomologous to
+    $\bar\omega$, hence to $\omega$.
 \end{proof}
 
 \subsection{Degeneracy of the entanglement spectrum}

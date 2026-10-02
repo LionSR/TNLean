@@ -12,12 +12,14 @@ import TNLean.MPS.MPU.Examples.CZXNormalizationAudit
 import TNLean.MPS.MPU.Examples.Shift
 import TNLean.MPS.MPU.Examples.ShiftBlockedIndex
 import TNLean.MPS.MPU.Examples.ShiftIndex
+import TNLean.MPS.MPU.Examples.ShiftNormalizedSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftPaperSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftPublicIndex
 import TNLean.MPS.MPU.Examples.ShiftSourceBlockedFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceFactors
 import TNLean.MPS.MPU.Examples.ShiftSourceGateFormulas
 import TNLean.MPS.MPU.Examples.ShiftSourceRanks
+import TNLean.MPS.MPU.Examples.ShiftStandardForms
 import TNLean.MPS.MPU.Examples.ShiftSwap
 import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
 import TNLean.MPS.MPU.Examples.ShiftSymmetryPaths
