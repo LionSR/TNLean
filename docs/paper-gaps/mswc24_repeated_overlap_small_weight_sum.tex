@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Repeated Overlapping Blocks with a Small Weight Sum}
+\author{}
+\date{2026-10-01}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
+    \otimes A_j^i$ with normal $A_j$ \cite[eq.~(S2)]{Malz2024Preparation}. The source
+assumes ``Without loss of generality we assume $| \mu_{j,k} | \le 1$ with at least one
+of them having magnitude exactly one'' \cite[after eq.~(S2)]{Malz2024Preparation}, puts
+$\beta_j=\sum_k\mu_{j,k}^N$ \cite[eq.~(S4)]{Malz2024Preparation}, and bounds the error
+$\varepsilon=1-\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert$ of its approximating state
+by $O\bigl((N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}\bigr)$
+\cite[Lemma~1$'$(ii)]{Malz2024Preparation}, with no factor depending on the weights.
+
+\section{What is formalized}
+For blocks with multiplicities whose $q$-site states may overlap, the corrected
+approximating state of \cite{gap:mswc24_repeated_block_corrected_state} satisfies, at the
+rate of \cite{gap:mswc24_block_form_mixed_overlap}, for all complex weights with
+$\lvert\mu_{j,k}\rvert\leq1$, every $q\geq0$ and $M\geq1$ with $\beta\neq0$,
+\begin{align*}
+    \varepsilon\leq\frac{Cy\,e^{Cy}}{\min(1,b)^{1/2}},\qquad y=Me^{-\gamma q/\xi},\qquad
+    b=\sum_j\lvert\beta_j\rvert^2,
+\end{align*}
+with $C$ independent of the weights; the proof is in
+\cite{gap:mswc24_repeated_block_corrected_state}. For real weights $0\leq\mu_{j,k}\leq1$
+of which one equals one, every $\beta_j\geq0$ and $b\geq1$, and the factor is one. This
+is a special case of the source's normalization, which allows complex weights.
+
+\section{The restriction}
+Within the source's normalization $b<1$ can occur: for copy weights $(1,-1)$ at odd $N$
+the sum $\beta_j$ of that block vanishes, and $b$ is then the contribution of the other
+blocks, which may be exponentially small in $N$. The factor $\min(1,b)^{-1/2}$ then
+exceeds one. It comes from the proof, not from the construction: the overlaps
+$z_j$ of the positive part with the fixed-point tensors of the blocks are estimated in
+absolute terms, $\lvert z_j-\beta_j\rvert\leq C_jy\,e^{C_jy}$, and dividing by
+$b^{1/2}$ to normalize loses the factor. The numerical check of
+\cite{gap:mswc24_repeated_block_corrected_state} shows the error converging at the same
+rate for copy weights $(1,-1)$ and $0.5$ at odd $N$, where $b=0.5^{2N}$.
+
+\section{Elimination}
+Removing the factor needs a relative estimate of $z_j$ for blocks of small weight,
+$\lvert z_j-\beta_j\rvert\leq\lvert\beta_j\rvert\,C_jy\,e^{C_jy}$ up to terms controlled
+by $b$, which is the second-order perturbation bound for the square root of
+$B^\dagger B$ that \cite{gap:mswc24_block_form_mixed_overlap} lists for the sharp rate.
+Until then the bound without the factor is not formalized when $b<1$.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

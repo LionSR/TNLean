@@ -392,10 +392,15 @@ transfer matrices included in $\xi$. It is formalized for multiplicity one and c
 weights $\lvert\mu_j\rvert\leq1$ with $\max_j\lvert\mu_j\rvert=1$, with
 $\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\mu_j^N$ that (S6) and (S7) take
 from (S4); with those coefficients the counterexample (\ref{eq:mswc24_phase_overlap}) refutes
-(S7). Two extensions are not formalized: blocks with
-multiplicity combined with overlaps, where the corrected state of
-\cite{gap:mswc24_repeated_block_corrected_state} would replace (S7); and the sharp rate
-$(N/q)\tau^{2q}$, which needs a second-order perturbation bound for the square root of
+(S7). Blocks with multiplicity combined with overlaps are formalized for the corrected state of
+\cite{gap:mswc24_repeated_block_corrected_state}, which replaces (S7), with complex weights of
+modulus at most one and the coefficients $\beta_j=\sum_k\mu_{j,k}^N$ of (S4), up to a factor
+$\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$ that is one when $\sum_j\lvert\beta_j\rvert^2\geq1$,
+and without that factor for real weights in $[0,1]$ one of which is one. Two extensions are not
+formalized: the bound without that factor when $\sum_j\lvert\beta_j\rvert^2<1$, as for cancelling
+weights or weights all of modulus below one \cite{gap:mswc24_repeated_overlap_small_weight_sum},
+and the sharp rate $(N/q)\tau^{2q}$; both need a second-order perturbation bound for the square
+root of
 $B^\dagger B$ around its block-diagonal part.
 
 \bibliographystyle{alpha}
