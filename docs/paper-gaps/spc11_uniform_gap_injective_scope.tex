@@ -43,6 +43,18 @@ blocks, where the overlaps between blocks enter, are not covered.
     \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective} and
     \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}.}
 
+The same bound now applies to the polar path of a one-site injective
+tensor. Writing its physical matrix as $M=VP$, the path
+$M_\gamma=V((1-\gamma)I+\gamma P)$ is continuous and injective in the
+original physical space, even when $M$ is rectangular. The positive
+factor stays invertible throughout the interval. Unitary physical and
+virtual covariance is preserved, and the canonical parent interactions
+retain the on-site symmetry. This gives the one-site injective case of
+the isometric deformation in Section~II.C; it does not establish the
+several-block case or the endpoint embeddings in the classification
+theorem.\footnote{Affected declaration:
+    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation}.}
+
 \section{Elimination plan}
 For a continuous family of tensors in normal form with a fixed number of
 normal blocks, apply the block-diagonal parent-Hamiltonian gap with its

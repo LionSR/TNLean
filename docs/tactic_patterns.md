@@ -3881,3 +3881,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+### a left inverse of the physical matrix gives injectivity — candidate
+- **Pattern:** express each matrix unit as a sum of tensor letters using a
+  row of a left inverse, then apply `Submodule.eq_top_of_forall_single_mem`.
+- **Seen:** `isInjective_of_leftInverse_physicalMatrix` and its use in
+  `isInjective_polarDeformation`, in `MPS/Symmetry/PolarDeformation.lean`
+  (2026-10-02).
+- **Abstraction:** the helper `isInjective_of_leftInverse_physicalMatrix`
+  retains an arbitrary rectangular physical map and its supplied left inverse.
+- **Notes:** the existing promoted matrix-unit span theorem supplies the
+  final step. No new tactic is needed.

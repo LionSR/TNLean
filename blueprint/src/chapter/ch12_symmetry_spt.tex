@@ -37,6 +37,91 @@ of the virtual projective representation.
     (Theorem~\ref{thm:mpug_circle_complex_units_h2}).
 \end{remark}
 
+\begin{definition}[Polar deformation in the original physical space]
+    \label{def:spt_polar_deformation}
+    \lean{MPSTensor.polarIsometricTensor, MPSTensor.polarDeformationPos,
+        MPSTensor.polarDeformation}
+    \leanok
+    \uses{def:ldpolar_physical_matrix, thm:ldpolar_decomposition}
+    Let $M:\C^{D^2}\to\C^d$ be the physical map of a tensor $A$, and
+    write $M=VP$ for its right polar decomposition. Define $W$ by its
+    physical map $V$, and define $A_\gamma$ by
+    \begin{align}
+        M_\gamma & =V\bigl((1-\gamma)I+\gamma P\bigr),
+        \qquad 0\leq\gamma\leq1.
+        \notag
+    \end{align}
+    This is the polar interpolation of
+    \cite[Section~II.C, eq.~\texttt{eq:1d-iso:polardec}]{Schuch2011Phases},
+    expressed in right polar factors. It stays in the original physical
+    space; the map $M$ may be rectangular.
+\end{definition}
+
+\begin{theorem}[Injectivity and symmetry along the polar deformation]
+    \label{thm:spt_polar_deformation}
+    \lean{MPSTensor.isInjective_of_leftInverse_physicalMatrix,
+        MPSTensor.posDef_polarDeformationPos,
+        MPSTensor.isInjective_polarDeformation,
+        MPSTensor.polarDeformation_zero, MPSTensor.polarDeformation_one,
+        MPSTensor.continuous_polarDeformation,
+        MPSTensor.polarPos_commute_of_unitary_covariance,
+        MPSTensor.polarIso_covariance_of_isInjective,
+        MPSTensor.polarDeformation_covariance,
+        MPSTensor.physicalMatrix_mul_left_right,
+        MPSTensor.rotatePhysical_polarDeformation_of_unitary_covariance}
+    \leanok
+    \uses{def:spt_polar_deformation, def:injective}
+    Suppose $A$ is one-site injective. Then $P_\gamma=(1-\gamma)I+\gamma P$
+    is positive definite, $A_\gamma$ is injective, and the path is continuous,
+    with $A_0=W$ and $A_1=A$. If unitaries $U$ and $K$ satisfy $UM=MK$,
+    then $P$ commutes with $K$, $UV=VK$, and $UM_\gamma=M_\gamma K$.
+    In particular, if $U$ acts on $A$ by conjugation with a unitary bond
+    matrix $X$, it acts on every $A_\gamma$ by the same conjugation
+    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Injectivity gives $V^*V=I$ and $P>0$. Every $P_\gamma$ is positive
+    definite, so $P_\gamma^{-1}V^*$ is a left inverse of $M_\gamma$.
+    Its rows express every matrix unit as a linear combination of the
+    tensor letters, proving injectivity. Continuity and the endpoint
+    identities follow from the affine formula. Unitary covariance gives
+    $[M^*M,K]=0$; functional calculus gives $[P,K]=0$. Cancellation of
+    the invertible factor $P$ gives $UV=VK$, and hence the covariance
+    of the entire path. For bond conjugation, $K=X^T\otimes X^*$.
+\end{proof}
+
+\begin{theorem}[Uniform parent gap along an injective polar deformation]
+    \label{thm:spt_polar_deformation_gap}
+    \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation,
+        MPSTensor.parentInteractionES_polarDeformation_commute_onSiteTensorPow}
+    \leanok
+    \uses{thm:spt_polar_deformation, thm:compact_parent_gap,
+        thm:spt_parent_hamiltonian_symmetry}
+    Let $A$ be one-site injective with $D>0$, and let $H_{N,2}(A_\gamma)$
+    be its canonical two-site periodic parent Hamiltonian. There is
+    $\delta>0$ such that, for every $\gamma\in[0,1]$, every $N\geq2$, and
+    every $v\perp\ker H_{N,2}(A_\gamma)$,
+    \begin{align}
+        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_\gamma)v\rVert.
+        \notag
+    \end{align}
+    Under the unitary bond-conjugation covariance of the preceding theorem,
+    each canonical range-$L$ parent interaction commutes with $U^{\otimes L}$.
+    This is the one-site injective case of the polar-deformation argument
+    in \cite[Section~II.C and Appendix~A]{Schuch2011Phases}; the source
+    also treats normal forms with several blocks
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The preceding theorem gives a continuous injective family on the compact
+    interval $[0,1]$. The compact-family parent-gap theorem applies to this
+    family. Covariance by bond conjugation gives gauge equivalence under
+    physical rotation, so the canonical parent interactions commute with
+    the physical tensor powers.
+\end{proof}
+
 \begin{theorem}[Classification along symmetric MPS parent-Hamiltonian paths]
     \label{thm:spt_classification}
     \notready
@@ -102,8 +187,8 @@ of the virtual projective representation.
     action $\widehat U^{\mathrm{path}}$ a linear representation.  Conjugating
     back by the endpoint isometries gives the common direct-sum physical
     representation and the required symmetric gapped path.
-    % The Hamiltonian-path and isometric-form bridges are not yet represented
-    % by Lean declarations; the \notready marker records that status.
+    % General endpoint embeddings and the converse classification remain open.
+    % The injective polar deformation is proved separately above.
 \end{proof}
 
 \begin{theorem}[Virtual-boundary nondecay for injective MPV-symmetric tensors]%
