@@ -30,6 +30,7 @@ import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.PeriodBound
 import TNLean.MPS.Periodic.PeriodExistence
+import TNLean.MPS.Periodic.PhaseClassGrouping
 import TNLean.MPS.Periodic.PhaseClasses
 import TNLean.MPS.Periodic.PrescribedBlocking
 import TNLean.MPS.Periodic.ProjectiveRep
@@ -39,6 +40,7 @@ import TNLean.MPS.Periodic.SectorContraction
 import TNLean.MPS.Periodic.SectorIrreducibility
 import TNLean.MPS.Periodic.SectorLift
 import TNLean.MPS.Periodic.SectorNormalization
+import TNLean.MPS.Periodic.SectorPhaseBlocking
 import TNLean.MPS.Periodic.SectorPhaseWord
 import TNLean.MPS.Periodic.StateVectorDecomposition
 import TNLean.MPS.Periodic.StepOrbitSectors
