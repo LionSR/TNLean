@@ -118,17 +118,6 @@ theorem commute_leftRegular_regularAdjoint {X : Module.End ℂ (MonoidAlgebra �
   rw [regularAdjoint_mul, regularAdjoint_mul, regularAdjoint_leftRegular, inv_inv] at h
   exact h.symm
 
-omit [Group G] in
-/-- The trace of the adjoint is the complex conjugate of the trace. -/
-theorem trace_regularAdjoint (X : Module.End ℂ (MonoidAlgebra ℂ G)) :
-    LinearMap.trace ℂ _ (regularAdjoint X) = star (LinearMap.trace ℂ _ X) := by
-  rw [LinearMap.trace_eq_matrix_trace ℂ (MonoidAlgebra.basis G ℂ),
-    LinearMap.trace_eq_matrix_trace ℂ (MonoidAlgebra.basis G ℂ), ← Matrix.trace_conjTranspose]
-  have h : ∀ f : Module.End ℂ (MonoidAlgebra ℂ G), LinearMap.toMatrix (MonoidAlgebra.basis G ℂ)
-      (MonoidAlgebra.basis G ℂ) f = LinearMap.toMatrixAlgEquiv (MonoidAlgebra.basis G ℂ) f :=
-    fun _ => rfl
-  simp only [h, regularAdjoint, AlgEquiv.apply_symm_apply]
-
 omit [Fintype G] [DecidableEq G] in
 /-- An operator with `L_g X L_g⁻¹ = X` commutes with `L_g`. -/
 theorem commute_leftRegular_of_conj {X : Module.End ℂ (MonoidAlgebra ℂ G)} {g : G}
