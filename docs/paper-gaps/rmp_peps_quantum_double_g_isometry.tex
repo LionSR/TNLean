@@ -643,6 +643,28 @@ repeated-multiplicity counterparts. The identification of the
 fourth-root-weighted site tensor with those bond sums is a further
 statement; it is not assumed in this isometry calculation.
 
+\section{The fourth-root weight and the group-order normalization}
+The bond-dimension reduction of Section~7 assigns the operator
+$\Theta=\bigoplus_i d_i^{1/4}I_{d_i}$ to the multiplicity-one
+representation and writes $\Theta^4=\Delta$.
+Source traceability is \path{Papers/1001.3807/paper_v3.tex},
+lines 2962--2977. The explicit definition in Lemma~4.4, however, is
+\begin{align}
+    \Delta=\frac{1}{|G|}\bigoplus_i\frac{d_i}{m_i}
+        I_{d_i}\otimes I_{m_i},
+\end{align}
+at lines 970--976. Thus, for general occurring multiplicities, the
+operator with block weights $(d_i/m_i)^{1/4}$ satisfies
+\begin{align}
+    \Theta^4=|G|\Delta.
+\end{align}
+For the multiplicity-one representation, these weights are exactly
+$d_i^{1/4}$ as printed in Section~7. The missing factor is consistent
+with the source's convention of suppressing global normalization
+constants in diagrams, stated near line 936. The formal statement
+retains the group-order factor. This local correction is independent
+of the lattice geometry.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all

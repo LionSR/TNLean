@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 import Mathlib.RepresentationTheory.Invariants
-import TNLean.Algebra.CharacterProjector
+import TNLean.Algebra.CharacterProjectorWeighted
 
 /-!
 # Group averaging, the operator `Δ`, and semi-regular representations
@@ -174,18 +174,8 @@ theorem deltaOperator_apply_of_mem (S : Subrepresentation ρ) [S.toRepresentatio
       (S.toRepresentation.character 1 /
         (characterMultiplicity ρ S.toRepresentation.character * Nat.card G)) • v := by
   classical
-  have hχ : ∀ χ ∈ irreducibleCharacterFinset ρ, (χ 1 / characterMultiplicity ρ χ) •
-      charProjector ρ χ v =
-        if S.toRepresentation.character = χ then
-          (χ 1 / characterMultiplicity ρ χ) • v else 0 := by
-    intro χ hχ
-    obtain ⟨S', hS', rfl⟩ := (mem_irreducibleCharacterFinset ρ).1 hχ
-    rw [charProjector_apply_of_mem ρ S'.toRepresentation S hv]
-    split_ifs <;> simp
-  rw [deltaOperator, LinearMap.smul_apply, LinearMap.sum_apply]
-  simp only [LinearMap.smul_apply]
-  rw [Finset.sum_congr rfl hχ, Finset.sum_ite_eq,
-    ite_eq_left ((mem_irreducibleCharacterFinset ρ).2 ⟨S, inferInstance, rfl⟩), smul_smul]
+  rw [deltaOperator, LinearMap.smul_apply,
+    sum_smul_charProjector_apply_of_mem ρ _ S hv, smul_smul]
   congr 1
   field_simp
 

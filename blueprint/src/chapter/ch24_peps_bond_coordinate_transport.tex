@@ -1,0 +1,48 @@
+\begin{lemma}[Isometric changes of the two bond coordinates]%
+    \label{lem:peps_bond_coordinate_transport}
+    \lean{TNLean.PEPS.bondCoordinateMatrix,
+        TNLean.PEPS.bondCoordinateMatrix_isIsometry,
+        TNLean.PEPS.bondCoordinateMatrix_mulVec}
+    \leanok
+    Let $Q:\mathbb C^I\to\mathbb C^O$ be an isometry. On a physical
+    bond, the matrix $Q\otimes\overline Q$ is an isometry and carries
+    the vector of entries of $X$ to the vector of entries of $QXQ^\dagger$.
+    This is the coordinate transport needed to express the irreducible
+    blocks of \cite[Section~7]{Schuch2010PEPS} in the original regular basis.
+\end{lemma}
+
+\begin{proof}\leanok
+    Entrywise conjugation preserves the isometry identity. The Kronecker
+    product of the resulting two isometries is an isometry. Expanding one
+    matrix entry gives the stated action on the bond vector.
+\end{proof}
+
+\begin{theorem}[Coordinate transport of the actual averaging-site state]%
+    \label{thm:peps_torus_bond_coordinate_transport}
+    \lean{TNLean.PEPS.physicalProductMap_bondCoordinateMatrix_averagingSite,
+        TNLean.PEPS.physicalProductMap_bondCoordinateMatrix_orthonormalBasis}
+    \leanok
+    \uses{lem:peps_bond_coordinate_transport,
+        thm:peps_torus_multiplicity_bond_state}
+    Let $U$ and $U'$ be matrix representations related by
+    $U'(g)=QU(g)Q^\dagger$. Write $K_U$ and $K_{U'}$ for their actual
+    normalized averaging-site torus states, and $\mathcal B$ for physical
+    bond regrouping. The product physical map satisfies
+    \begin{align}
+        (Q\otimes\overline Q)^{\otimes 2N}\mathcal B K_U
+            =\mathcal B K_{U'}.
+    \end{align}
+    In particular, for any two orthonormal bases of one representation,
+    the corresponding change of coordinates gives this identity and an
+    isometric map on each physical bond. Both sides are the actual
+    contractions; their equality is derived.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand each actual regrouped state as a coherent sum over the vertex
+    group labels. On every bond factor the preceding matrix-entry identity
+    gives $QU(g)Q^\dagger=U'(g)$. The product map acts independently on
+    the bond factors. For orthonormal bases, their change-of-basis matrix
+    is an isometry, its adjoint is the inverse change of coordinates, and
+    the representation matrices obey the displayed conjugation identity.
+\end{proof}

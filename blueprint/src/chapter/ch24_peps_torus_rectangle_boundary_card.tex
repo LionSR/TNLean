@@ -1,0 +1,64 @@
+\begin{lemma}[The crossing bonds of a native torus rectangle]%
+    \label{lem:peps_torus_rectangle_boundary_card}
+    \lean{TNLean.PEPS.card_horizontal_boundary_torusRectangle,
+        TNLean.PEPS.card_vertical_boundary_torusRectangle,
+        TNLean.PEPS.card_regionBoundaryEdge_torusRectangle,
+        TNLean.PEPS.card_regionBoundaryEdge_torusSquare}
+    \leanok
+    \uses{def:peps_torus_geometry_translation,
+        def:peps_torus_rectangular_grid}
+    Suppose the native square torus has periods $W,H\geq3$. Let $R$
+    be the coordinate rectangle
+    \[
+        [x_0,x_0+w)\times[y_0,y_0+h),
+        \qquad w,h>0,
+    \]
+    with $x_0+w\leq W$, $y_0+h\leq H$, $w<W$, and $h<H$.
+    Then there are $2h$ horizontal and $2w$ vertical crossing bonds,
+    and hence
+    \[
+        |\partial R|=2w+2h.
+    \]
+    In particular a bounded square of side length $L$ has $4L$
+    crossing bonds. The coordinate intervals may start at zero or
+    end at their torus periods; the formula includes the cyclic seam
+    bonds in these cases. These are the actual lattice bonds used in
+    the rectangular boundary construction of
+    \cite[Theorem~6.9]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    For a cyclic coordinate interval $[s,s+\ell)$ shorter than its
+    period $N$, membership changes between $a$ and $a+1$ at precisely
+    two origins. Their coordinate values are $s+\ell-1$ and $s-1$,
+    where the latter is read as $N-1$ if $s=0$.
+    The two origins are distinct because $0<\ell<N$.
+    A horizontal bond crosses the rectangle exactly when its first
+    coordinate is one of these two origins and its second coordinate
+    lies in the vertical interval. This gives $2h$ bonds. The vertical
+    argument gives $2w$ bonds. On a torus with both periods at least
+    three, right and up bonds enumerate the graph edges bijectively,
+    so these two counts add without multiplicity.
+\end{proof}
+
+\begin{lemma}[A perimeter bound including full bands and empty rectangles]%
+    \label{lem:peps_torus_rectangle_boundary_card_le}
+    \lean{TNLean.PEPS.card_regionBoundaryEdge_torusRectangle_le}
+    \leanok
+    \uses{def:peps_torus_geometry_translation,
+        def:peps_torus_rectangular_grid}
+    On a native square torus with periods $W,H\geq3$, every bounded
+    coordinate rectangle of side lengths $w,h\geq0$ satisfies
+    $|\partial R|\leq2w+2h$. No strict upper bound on either side
+    length is required; empty rectangles and full coordinate bands
+    are included.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_rectangle_boundary_card}
+    A zero side length gives the empty rectangle. A side length equal
+    to its torus period produces no crossing bond in that coordinate
+    direction. In every other case, the horizontal crossing count is
+    $2h$ and the vertical crossing count is $2w$. The two directional
+    bounds add to the stated perimeter bound.
+\end{proof}

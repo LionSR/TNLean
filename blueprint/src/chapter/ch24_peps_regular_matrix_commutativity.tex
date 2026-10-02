@@ -1,0 +1,31 @@
+\begin{theorem}[Strict reduction in regular matrix coordinates]%
+    \label{thm:peps_regular_matrix_commutativity}
+    \lean{TNLean.PEPS.exists_dimension_gt_one_iff_not_isMulCommutative_of_regular_intertwiner,
+        TNLean.PEPS.sum_dimensions_lt_card_iff_not_isMulCommutative_of_regular_intertwiner}
+    \leanok
+    \uses{thm:peps_regular_fourier_matrix}
+    Let $G$ be finite, let $D_i$ be irreducible complex matrix
+    representations of positive dimensions $d_i$, and suppose that
+    \begin{align}
+        U_{\mathrm{reg}}(g)
+            =Q\left(\bigoplus_iD_i(g)\otimes I_{d_i}\right)Q^\dagger
+            \qquad(g\in G).
+    \end{align}
+    Then some $d_i>1$ if and only if $G$ is noncommutative.
+    If also $Q^\dagger Q=I$, then
+    \begin{align}
+        \sum_i d_i<|G|
+            \quad\Longleftrightarrow\quad G\text{ is noncommutative}.
+    \end{align}
+    These are mathematical consequences of the finite-group construction
+    in \cite[Section~7]{Schuch2010PEPS}; no lattice geometry is involved.
+\end{theorem}
+\begin{proof}\leanok
+    If $G$ is commutative, Schur's lemma makes every irreducible
+    representation one-dimensional. Conversely, when all $d_i=1$,
+    each block commutes. The displayed identities imply that the
+    regular matrices commute, and their faithfulness gives $gh=hg$.
+    In the isometric case, $|G|=\sum_i d_i^2$; positivity of the
+    dimensions then gives the strict inequality precisely when
+    some $d_i>1$.
+\end{proof}

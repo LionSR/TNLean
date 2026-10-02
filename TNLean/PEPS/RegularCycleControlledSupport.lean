@@ -192,6 +192,20 @@ theorem regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation
   rw [regularRegionVertexTranslationMatrix_apply]
   simp only [funext_iff, Pi.smul_apply, smul_eq_mul]
 
+/-- Commutation with every independent vertex translation implies commutation
+with the actual product of local regular averaging projectors.
+Source: SCP10, accessible invariant physical systems, lines 1765–1820. -/
+theorem commute_regionLocalProjector_of_vertexTranslation (R : Finset V)
+    (U : Matrix (RegionHalfEdgeConfig (Γ := Γ) G R)
+      (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ)
+    (hcomm : ∀ ℓ : {v : V // v ∈ R} → G,
+      Commute U (regularRegionVertexTranslationMatrix (Γ := Γ) R ℓ)) :
+    Commute U (regionPhysicalProductMatrix R
+      (fun v => regularLegProjector (G := G) (IncidentEdge Γ v))) := by
+  rw [regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation]
+  apply Commute.smul_right
+  exact Commute.sum_right Finset.univ _ _ (fun ℓ _ => hcomm ℓ)
+
 /-- The actual free-word controlled matrix commutes with the genuine product
 of local invariant projectors. Source: SCP10, lines 1765–1820 and 1935–1990.
 No group-valued equivariance or physical surjectivity hypothesis is required. -/
@@ -205,14 +219,8 @@ theorem regularCycleControlledBoundaryMatrix_commute_localProjector (R : Finset 
         (fun z f => FreeGroup.lift z (regularRegionCycleWord R T (p f))))
       (regionPhysicalProductMatrix R
         (fun v => regularLegProjector (G := G) (IncidentEdge Γ v))) := by
-  change _ * _ = _ * _
-  rw [regionPhysicalProductMatrix_regularLegProjector_eq_sum_vertexTranslation]
-  simp only [Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul]
-  congr 1
-  apply Finset.sum_congr rfl
-  intro ℓ _
-  exact (regularCycleControlledBoundaryMatrix_commute_vertexTranslation R T hT htree o
-    v w p ℓ).eq
+  exact commute_regionLocalProjector_of_vertexTranslation R _ (fun ℓ =>
+    regularCycleControlledBoundaryMatrix_commute_vertexTranslation R T hT htree o v w p ℓ)
 
 /-- The actual free-word controlled operation preserves the range of the
 product local averaging projector, the genuine locally invariant physical

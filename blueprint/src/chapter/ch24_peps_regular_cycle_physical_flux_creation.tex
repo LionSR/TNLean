@@ -1,0 +1,13 @@
+\begin{lemma}[A commutation criterion for the actual local projector]%
+    \label{lem:peps_regular_projector_commutation}
+    \lean{TNLean.PEPS.commute_regionLocalProjector_of_vertexTranslation}
+    \leanok
+    \uses{thm:peps_cycle_controlled_local_support}
+    An operator on the actual regional half-edge space which commutes with
+    every independent vertex translation commutes with the product of the
+    local regular invariant projectors.
+\end{lemma}
+\begin{proof}\leanok
+    The product projector is the scalar average of all independent vertex
+    translations. Commutation passes through that finite sum and its scalar.
+\end{proof}
