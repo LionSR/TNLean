@@ -2416,25 +2416,26 @@ abstracted — record why, so it is not re-proposed).
 
 ---
 
-## Candidates
-
-### contracting a two-site bond penalty — candidate
+### contracting a two-site bond penalty — promoted
 - **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
-  expand the two exterior identity factors, and contract their Kronecker
-  deltas before evaluating the remaining interior sum.
-- **Seen:** two occurrences across two files:
-  `BondProductEndpointGroundSpace.lean` in
-  `twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor`, and
-  `FixedPointParentIdentification.lean` in
-  `one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor`, both under
-  `TNLean/MPS/Symmetry/`.
-- **Abstraction:** if a third calculation needs this reduction, prove the
-  general coefficient formula for `(twoSiteBondInteraction K).mulVec f`, with
-  arbitrary bond matrix `K` and two-site vector `f`.
-- **Notes:** below the rule of three. The present calculation gives the
-  complementary projection explicitly and already identifies its range
-  without further coordinate expansion.
+  contract the two exterior identity factors, and evaluate the remaining
+  middle-register sum.
+- **Seen:** three contractions across `BondProductEndpointGroundSpace.lean`,
+  `FixedPointParentIdentification.lean`, and `WeightedMatrixUnitParent.lean`,
+  under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `twoSiteBondInteraction_mulVec_apply` gives the coefficient
+  formula for an arbitrary two-site vector. Its separable specialization
+  `twoSiteBondInteraction_mulVec_separable` and the unit-vector consequence
+  `twoSiteBondPenalty_mulVec_separable` are in `TwoSiteBondContraction.lean`.
+- **Refactoring:** both earlier contractions and the weighted contraction
+  use these lemmas. The two earlier files lose 33 lines in total, while the
+  shared module contributes 87 lines, including documentation and four
+  declarations: net +54 lines. The exterior-index reduction now occurs once.
+- **Notes:** the existing boundary-coefficient formulas remain local; the
+  arbitrary-vector formula also handles the complementary projection without
+  assuming separable coefficients.
 
+## Candidates
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
