@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.MatrixSingleSpan
+import TNLean.Algebra.TwistedRegularProjective
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.VirtualRepresentation
@@ -41,13 +42,14 @@ transfer map is not of rank one for nontrivial `G`.  The construction here is th
 dimer fixed point that the printed claims describe; documented in
 `docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`.
 
-**Scope restriction (supplied projective representation):** the source starts from a
-2-cocycle `ω` alone, while the symmetry results here (`sptFixedPointAction`,
-`twistedTensor_sptFixedPointTensor`, `sptFixedPointTensor_isOnSiteSymmetric`,
-`cohomologousTo_of_sptFixedPointTensor`, `exists_virtualRep_sptFixedPointTensor`) take a
-projective representation `ρ` with factor system `ω` as input; the transfer, injectivity
-and normality results do not involve `ρ`. The existence of such a `ρ` for finite `G`, for
-instance the twisted regular representation on `ℂ^G`, is not formalized; documented in
+**From a cocycle alone.** The source starts from a 2-cocycle `ω`, while
+`sptFixedPointAction`, `twistedTensor_sptFixedPointTensor`,
+`sptFixedPointTensor_isOnSiteSymmetric`, `cohomologousTo_of_sptFixedPointTensor` and
+`exists_virtualRep_sptFixedPointTensor` take a projective representation `ρ` as input.
+For finite `G`, `exists_unitary_sptFixedPoint_of_isCocycle` supplies `ρ` from `ω`: the
+twisted regular representation on `ℂ^G` is unitary, with factor system the pointwise
+phase `ω / |ω|`, which is cohomologous to `ω`, and the resulting fixed point realizes that class.
+The earlier restriction to a supplied representation is recorded as resolved in
 `docs/paper-gaps/rmp_spt_fixed_point_supplied_representation.tex`.
 
 **Scope restriction (trivial character):** the source's symmetry
@@ -84,6 +86,8 @@ reversal and reflection are not represented. Documented in
 * `MPSTensor.sptFixedPointTensor_isOnSiteSymmetric`
 * `MPSTensor.cohomologousTo_of_sptFixedPointTensor`
 * `MPSTensor.exists_virtualRep_sptFixedPointTensor`
+* `MPSTensor.sptFixedPointAction_mem_unitaryGroup`
+* `MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle`
 
 ## References
 
@@ -112,9 +116,9 @@ Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` lines 
 with the local fix of the module docstring (`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
 abbrev sptScale (D : ℕ) : ℂ := ((Real.sqrt D : ℂ))⁻¹
 
-/-- The normalization of the letters: `star c * c = D⁻¹` for `c = D^{-1/2}`, the scale of the letters
-`D^{-1/2} |a⟩⟨b|` in arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
-lines 1149–1150), with the local fix of the module docstring
+/-- The normalization of the letters: `star c * c = D⁻¹` for `c = D^{-1/2}`, the scale of the
+letters `D^{-1/2} |a⟩⟨b|` in arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1150), with the local fix of the module docstring
 (`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
 lemma star_sptScale_mul_sptScale : star (sptScale D) * sptScale D = (D : ℂ)⁻¹ := by
   rw [sptScale, star_inv₀, Complex.star_def, Complex.conj_ofReal,
@@ -375,6 +379,63 @@ theorem exists_virtualRep_sptFixedPointTensor [NeZero D]
   obtain ⟨ω', ρ', hρ'⟩ := virtual_rep_of_symmetric_injective _
     sptFixedPointTensor_isInjective _ (sptFixedPointTensor_isOnSiteSymmetric ρ)
   exact ⟨ω', ρ', hρ', cohomologousTo_of_sptFixedPointTensor ρ ρ' hρ'⟩
+
+/-- **A unitary virtual action gives a unitary physical action.**  For the trivial
+character, `U(g) = W_gᵀ ⊗ W_g⁻¹` is unitary whenever the virtual matrices are, since then
+`W_g⁻¹ = W_g†`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1152–1157), where the gauges `X_g` are
+unitary. -/
+theorem sptFixedPointAction_mem_unitaryGroup (ρ : ProjectiveRepresentation (D := D) ω)
+    (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup (Fin D) ℂ) (g : G) :
+    sptFixedPointAction ρ 1 g ∈ Matrix.unitaryGroup (Fin (D * D)) ℂ := by
+  have hW := hρ g⁻¹
+  have hinv : (((sptGauge ρ g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      star (sptGauge ρ g : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [Matrix.coe_units_inv]
+    exact Matrix.inv_eq_left_inv (Matrix.mem_unitaryGroup_iff'.mp hW)
+  simp only [sptFixedPointAction, MonoidHom.coe_mk, OneHom.coe_mk, MonoidHom.one_apply,
+    one_smul, Matrix.coe_reindexAlgEquiv]
+  apply Matrix.reindex_mem_unitaryGroup
+  rw [sptKron, hinv]
+  exact Matrix.kronecker_mem_unitary (Matrix.transpose_mem_unitaryGroup_iff.mpr hW)
+    (Unitary.star_mem hW)
+
+/-- **The SPT fixed point of a cocycle class of a finite group.**  Every scalar
+2-cocycle `ω` of a finite group has a unitary projective representation on `ℂ^G` whose
+factor system is cohomologous to `ω`, namely the twisted regular representation of the
+inverse of its pointwise phase
+(`TNLean.Algebra.ScalarCocycle.regularProjectiveForClass`).  With this representation the
+fixed-point tensor of bond dimension `|G|` is symmetric under a unitary physical action,
+and every virtual projective representation of that symmetry has a factor system
+cohomologous to `ω`.  The tensor is injective by `sptFixedPointTensor_isInjective`.
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+lines 1147–1157), the fixed point built "starting from any solution of the 1- and
+2-cocycle condition", for the trivial character (scope restriction of the module
+docstring). -/
+theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : ω.IsCocycle) :
+    ∃ (η : ScalarCocycle G) (ρ : ProjectiveRepresentation (D := Fintype.card G) η),
+      η.CohomologousTo ω ∧
+      (∀ g, (ρ.X g : Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (Fintype.card G)) ℂ) ∧
+      (∀ g, sptFixedPointAction ρ 1 g ∈
+        Matrix.unitaryGroup (Fin (Fintype.card G * Fintype.card G)) ℂ) ∧
+      IsOnSiteSymmetric (sptFixedPointTensor (Fintype.card G)) (sptFixedPointAction ρ 1) ∧
+      ∀ {ω' : ScalarCocycle G} (ρ' : ProjectiveRepresentation (D := Fintype.card G) ω'),
+        (∀ g i, twistedTensor (sptFixedPointTensor (Fintype.card G))
+            (sptFixedPointAction ρ 1) g i =
+          (ρ'.X (g⁻¹) : Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) *
+            sptFixedPointTensor (Fintype.card G) i *
+            (((ρ'.X (g⁻¹))⁻¹ : GL (Fin (Fintype.card G)) ℂ) :
+              Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ)) →
+        ω'.CohomologousTo ω := by
+  classical
+  have : NeZero (Fintype.card G) := ⟨Fintype.card_ne_zero⟩
+  have hη : ω.circlePhaseInclusion.CohomologousTo ω :=
+    (ScalarCocycle.cohomologousTo_circlePhaseInclusion hω).symm
+  have hu := ω.regularProjectiveForClass_mem_unitaryGroup hω
+  exact ⟨_, ω.regularProjectiveForClass hω, hη, hu,
+    sptFixedPointAction_mem_unitaryGroup _ hu, sptFixedPointTensor_isOnSiteSymmetric _,
+    fun ρ' hρ' => (cohomologousTo_of_sptFixedPointTensor _ ρ' hρ').trans hη⟩
 
 end Symmetry
 

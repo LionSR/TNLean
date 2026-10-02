@@ -121,6 +121,7 @@ import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
 import TNLean.Algebra.TraceInvariantSubmodule
+import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitaryAdjointKronecker
