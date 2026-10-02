@@ -199,7 +199,7 @@ noncomputable def blockSumPosLimit (ι : (j : Fin b) → Fin (Dj j) → Fin D)
     (pairEmbedding (ι j))ᴴ
 
 /-- The projector `Q = 1 - ∑ⱼ K_j K_jᴴ` onto the bond pairs that do not lie in one block. -/
-private noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
+noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   1 - ∑ j, pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ
 
@@ -558,7 +558,7 @@ private theorem sum_pairEmbedding_mul_conjTranspose_add_offBlockProj :
 
 /-- **Strict positivity of the limit.** If every `σ_j` is positive definite with trace one,
 then `∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ + Q ≥ c` for some `c > 0`. -/
-private theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosDef)
+theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ j).PosDef)
     (htr : ∀ j, (σ j).trace = 1) :
     ∃ c : ℝ, 0 < c ∧
       algebraMap ℝ (Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) c ≤
