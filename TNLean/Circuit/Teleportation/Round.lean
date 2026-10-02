@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.QuditTeleportation
+import TNLean.Circuit.Teleportation.Hop
 
 /-!
 # Teleportation along chains of hops in one round
 
-A list of hops (`MPSPreparation.TeleportHop`), the most recent first, is *valid* when every hop
+A list of hops (`QuantumCircuit.TeleportHop`), the most recent first, is *valid* when every hop
 `h` meets the hops `hs` before it only through its site `c`, which may be the site `f` of an
 earlier hop: the sites `e` and `f` of `h` are not sites of `hs`, and its site `c` is not a site
 `c` or `e` of `hs`. The hops then form chains `c₀ → f₀ = c₁ → f₁ = c₂ → ⋯`, any number of them.
@@ -18,32 +18,32 @@ layers of all hops at once, the second layers of all hops at once, measures the 
 of every hop, and corrects by the inverse of the single-site unitaries that the hops leave. On
 the vectors with `|0⟩` at the sites `e` and `f` of every hop after the given circuit, it acts, for
 every outcome, as `d^{-H}` times the permutation of sites `S_{h_1} ⋯ S_{h_H}`, `S_h` exchanging the
-sites `c` and `f` of `h` (`MPSPreparation.TeleportHop.isImplementationOn_round`). The two layers
+sites `c` and `f` of `h` (`QuantumCircuit.TeleportHop.isImplementationOn_round`). The two layers
 have depth `2` whatever the lengths of the chains: this is the constant-depth teleportation of
 arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
 
 ## Main definitions
 
-* `MPSPreparation.layerOfList` — the layer of gates on disjoint pairs given by a list.
-* `MPSPreparation.TeleportHop.Valid`, `MPSPreparation.TeleportHop.pairSites`.
-* `MPSPreparation.TeleportHop.sitePerm`, `MPSPreparation.TeleportHop.chainPerm` — the permutation
+* `QuantumCircuit.layerOfList` — the layer of gates on disjoint pairs given by a list.
+* `QuantumCircuit.TeleportHop.Valid`, `QuantumCircuit.TeleportHop.pairSites`.
+* `QuantumCircuit.TeleportHop.sitePerm`, `QuantumCircuit.TeleportHop.chainPerm` — the permutation
   of sites of a list of hops, and its matrix on configurations.
-* `MPSPreparation.TeleportHop.round`.
+* `QuantumCircuit.TeleportHop.round`.
 
 ## Main results
 
-* `MPSPreparation.TeleportHop.chainPre_mulVec` — the chains of hops before the correction.
-* `MPSPreparation.TeleportHop.isImplementationOn_round`.
+* `QuantumCircuit.TeleportHop.chainPre_mulVec` — the chains of hops before the correction.
+* `QuantumCircuit.TeleportHop.isImplementationOn_round`.
 
 ## References
 
 * arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), paragraph "Tree-RG circuit with measurements".
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ} [NeZero N]
 
@@ -51,9 +51,10 @@ variable {d N : ℕ} [NeZero N]
 
 section LayerOfList
 
-variable {ι : Type*} (l : List ι) (key : ι → Fin N) (G : ι → Matrix (Cfg d N) (Cfg d N) ℂ)
+variable {ι : Type*} (l : List ι) (key : ι → Fin N)
+  (G : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
   (hl : l.Pairwise fun i j => Disjoint (bond (key i)) (bond (key j)))
-  (hu : ∀ i ∈ l, G i ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ))
+  (hu : ∀ i ∈ l, G i ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
   (hs : ∀ i ∈ l, G i ∈ supportedOperators d (bond (key i)))
 
 private theorem key_mem_bond (k : Fin N) : k ∈ bond k := Or.inl rfl
@@ -66,7 +67,7 @@ private theorem eq_of_key_eq {i j : ι} (hi : i ∈ l) (hj : j ∈ l) (h : key i
   exact Set.disjoint_left.mp (hl.forall hi hj hne) (key_mem_bond (key i)) (h ▸ key_mem_bond _)
 
 /-- The gate of `layerOfList` on the pair `{k, k + 1}`. -/
-noncomputable def layerOfListGate (k : Fin N) : Matrix (Cfg d N) (Cfg d N) ℂ := by
+noncomputable def layerOfListGate (k : Fin N) : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := by
   classical
   exact if h : ∃ i ∈ l, key i = k then G h.choose else 1
 
@@ -118,7 +119,8 @@ end LayerOfList
 omit [NeZero N] in
 /-- A product of operators acting on `S` acts on `S`. -/
 theorem list_prod_mem_supportedOperators {S : Set (Fin N)}
-    (l : List (Matrix (Cfg d N) (Cfg d N) ℂ)) (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
+    (l : List (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
+    (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
     l.prod ∈ supportedOperators d S := by
   induction l with
   | nil => exact one_mem_supportedOperators S
@@ -250,7 +252,8 @@ def sitePerm : List (TeleportHop N) → Equiv.Perm (Fin N)
   | h :: hs => Equiv.swap h.c h.f * sitePerm hs
 
 /-- The permutation of sites of a list of hops, as a matrix on configurations. -/
-noncomputable def chainPerm (hs : List (TeleportHop N)) : Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def chainPerm (hs : List (TeleportHop N)) : Matrix (Fin N → Fin d)
+    (Fin N → Fin d) ℂ :=
   (cfgPerm (sitePerm hs)).permMatrix ℂ
 
 omit [NeZero d] in
@@ -263,18 +266,19 @@ theorem chainPerm_cons (h : TeleportHop N) (hs : List (TeleportHop N)) :
   rw [chainPerm, chainPerm, swapPerm, permMatrix_cfgPerm_mul_permMatrix_cfgPerm, sitePerm]
 
 /-- The single-site unitaries left by a list of hops, for the outcome `z`. -/
-noncomputable def chainFrame : List (TeleportHop N) → Cfg d N → Fin N → Matrix (Fin d) (Fin d) ℂ
+noncomputable def chainFrame : List (TeleportHop N) → (Fin N → Fin d) → Fin N → Matrix (Fin d)
+    (Fin d) ℂ
   | [], _ => fun _ => 1
   | h :: hs, z => fun i => Function.update (chainFrame hs z) h.c 1 i * h.frame z i *
       Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) h.f (chainFrame hs z h.c) i
 
 /-- The operator of a list of hops before the correction, for the outcome `z`. -/
-noncomputable def chainPre (hs : List (TeleportHop N)) (z : Cfg d N) :
-    Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def chainPre (hs : List (TeleportHop N)) (z : Fin N → Fin d) :
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   ctrlProj (measuredSites hs) z * (hs.map TeleportHop.gate₂).prod *
     (hs.map TeleportHop.gate₁).prod
 
-theorem chainFrame_mem_unitary (hs : List (TeleportHop N)) (z : Cfg d N) (i : Fin N) :
+theorem chainFrame_mem_unitary (hs : List (TeleportHop N)) (z : Fin N → Fin d) (i : Fin N) :
     chainFrame hs z i ∈ unitary (Matrix (Fin d) (Fin d) ℂ) := by
   induction hs generalizing i with
   | nil => exact one_mem _
@@ -287,7 +291,7 @@ theorem chainFrame_mem_unitary (hs : List (TeleportHop N)) (z : Cfg d N) (i : Fi
       · exact ih _
       · exact one_mem _
 
-theorem chainFrame_of_notMem (hs : List (TeleportHop N)) (z : Cfg d N) {i : Fin N}
+theorem chainFrame_of_notMem (hs : List (TeleportHop N)) (z : Fin N → Fin d) {i : Fin N}
     (hi : i ∉ allSites hs) : chainFrame hs z i = 1 := by
   induction hs with
   | nil => rfl
@@ -305,7 +309,7 @@ theorem prod_gate₂_mem_supportedOperators (hs : List (TeleportHop N)) :
   refine supportedOperators_mono ?_ h.gate₂_mem_supportedOperators
   rintro i (rfl | rfl) <;> exact mem_allSites.mpr ⟨h, hh, by simp [sites]⟩
 
-theorem pre_mem_supportedOperators (h : TeleportHop N) (z : Cfg d N) :
+theorem pre_mem_supportedOperators (h : TeleportHop N) (z : Fin N → Fin d) :
     h.pre z ∈ supportedOperators d h.sites := by
   have hc : ({h.c} : Set (Fin N)) ⊆ h.sites := by simp [sites]
   have he : ({h.e} : Set (Fin N)) ⊆ h.sites := by simp [sites]
@@ -320,7 +324,7 @@ theorem pre_mem_supportedOperators (h : TeleportHop N) (z : Cfg d N) :
 
 /-- One more hop factors off the operator of a valid list. -/
 theorem chainPre_cons {h : TeleportHop N} {hs : List (TeleportHop N)} (hv : Valid (h :: hs))
-    (z : Cfg d N) : chainPre (h :: hs) z = h.pre z * chainPre hs z := by
+    (z : Fin N → Fin d) : chainPre (h :: hs) z = h.pre z * chainPre hs z := by
   have hdisj : Disjoint ({h.e, h.f} : Set (Fin N)) (allSites hs) := by
     rw [Set.disjoint_left]
     rintro i (rfl | rfl)
@@ -343,7 +347,7 @@ theorem chainPre_cons {h : TeleportHop N} {hs : List (TeleportHop N)} (hv : Vali
           (hs.map TeleportHop.gate₁).prod) := by
         rw [h2.eq]; simp only [Matrix.mul_assoc]
 
-theorem _root_.MPSPreparation.IsZeroOn.chainPerm_mulVec {S : Set (Fin N)} {v : Cfg d N → ℂ}
+theorem _root_.QuantumCircuit.IsZeroOn.chainPerm_mulVec {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
     (hS : IsZeroOn S v)
     {hs : List (TeleportHop N)} (hdisj : Disjoint S (allSites hs)) :
     IsZeroOn S (chainPerm hs *ᵥ v) := by
@@ -363,8 +367,8 @@ theorem _root_.MPSPreparation.IsZeroOn.chainPerm_mulVec {S : Set (Fin N)} {v : C
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("performing
 simultaneous measurements"). -/
-theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z : Cfg d N)
-    {v : Cfg d N → ℂ}, IsZeroOn (pairSites hs) v →
+theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z : Fin N → Fin d)
+    {v : (Fin N → Fin d) → ℂ}, IsZeroOn (pairSites hs) v →
     chainPre hs z *ᵥ v = ((d : ℂ) ^ hs.length)⁻¹ •
       (finKronecker (chainFrame hs z) *ᵥ (chainPerm hs *ᵥ v))
   | [], _, z, v, _ => by simp [chainPre, chainPerm_nil, chainFrame, measuredSites]
@@ -437,7 +441,7 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
 /-! ### The teleportation round -/
 
 /-- The outcome string `m` on the sites of `S`, extended by `0` to a configuration. -/
-def extendOutcome (S : Finset (Fin N)) (m : S → Fin d) : Cfg d N :=
+def extendOutcome (S : Finset (Fin N)) (m : S → Fin d) : Fin N → Fin d :=
   fun i => if hi : i ∈ S then m ⟨i, hi⟩ else 0
 
 /-- The *teleportation round* of a valid list of hops after the circuit `pre`: the circuit `pre`,
@@ -497,4 +501,4 @@ theorem isImplementationOn_round (pre : List (Layer d N)) {hs : List (TeleportHo
 
 end TeleportHop
 
-end MPSPreparation
+end QuantumCircuit

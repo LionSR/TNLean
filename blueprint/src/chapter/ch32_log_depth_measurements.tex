@@ -23,13 +23,13 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
 
 \begin{definition}[Preparation with measurements]
     \label{def:ldp_measurement_preparation}
-    \lean{MPSPreparation.outcomeProj, MPSPreparation.outcomeProj_eq_ctrlProj,
-        MPSPreparation.MeasurementProtocol,
-        MPSPreparation.MeasurementProtocol.preMeasurement,
-        MPSPreparation.MeasurementProtocol.postMeasurement,
-        MPSPreparation.MeasurementProtocol.output,
-        MPSPreparation.MeasurementProtocol.IsPreparationOf,
-        MPSPreparation.IsPreparedWithMeasurementsInDepth}
+    \lean{QuantumCircuit.outcomeProj, QuantumCircuit.outcomeProj_eq_ctrlProj,
+        QuantumCircuit.MeasurementProtocol,
+        QuantumCircuit.MeasurementProtocol.preMeasurement,
+        QuantumCircuit.MeasurementProtocol.postMeasurement,
+        QuantumCircuit.MeasurementProtocol.output,
+        QuantumCircuit.MeasurementProtocol.IsPreparationOf,
+        QuantumCircuit.IsPreparedWithMeasurementsInDepth}
     \leanok
     \uses{def:ldp_local_circuit}
     The local labels are $\{0,\dots,d-1\}$. For a set $S$ of sites of the
@@ -61,14 +61,14 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
 
 \begin{lemma}[Outcomes of nonzero probability]
     \label{lem:ldp_measurement_outcomes}
-    \lean{MPSPreparation.outcomeProj_mulVec_apply,
-        MPSPreparation.sum_outcomeProj, MPSPreparation.finKronecker_mem_unitary,
-        MPSPreparation.eq_zero_of_mem_unitary_of_mulVec_eq_zero,
-        MPSPreparation.MeasurementProtocol.sum_postMeasurement,
-        MPSPreparation.MeasurementProtocol.preMeasurement_ne_zero,
-        MPSPreparation.MeasurementProtocol.exists_postMeasurement_ne_zero,
-        MPSPreparation.MeasurementProtocol.output_ne_zero,
-        MPSPreparation.MeasurementProtocol.IsPreparationOf.ne_zero}
+    \lean{QuantumCircuit.outcomeProj_mulVec_apply,
+        QuantumCircuit.sum_outcomeProj, Matrix.finKronecker_mem_unitary,
+        Matrix.eq_zero_of_mem_unitary_of_mulVec_eq_zero,
+        QuantumCircuit.MeasurementProtocol.sum_postMeasurement,
+        QuantumCircuit.MeasurementProtocol.preMeasurement_ne_zero,
+        QuantumCircuit.MeasurementProtocol.exists_postMeasurement_ne_zero,
+        QuantumCircuit.MeasurementProtocol.output_ne_zero,
+        QuantumCircuit.MeasurementProtocol.IsPreparationOf.ne_zero}
     \leanok
     \uses{def:ldp_measurement_preparation}
     The outcome projections satisfy $\sum_mP_m=\mathbb 1$, and a product of
@@ -90,9 +90,9 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
 
 \begin{lemma}[Protocols without measurements]
     \label{lem:ldp_measurement_unitary_case}
-    \lean{MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth,
-        MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty,
-        MPSTensor.smul_productVector}
+    \lean{QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth,
+        QuantumCircuit.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty,
+        QuantumCircuit.smul_productVector}
     \leanok
     \uses{def:ldp_measurement_preparation, lem:ldp_measurement_outcomes}
     A nonzero vector prepared in depth $T$ is prepared with measurements in
@@ -114,13 +114,13 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
 
 \begin{lemma}[Layers of permutation gates]
     \label{lem:ldp_permutation_layers}
-    \lean{MPSPreparation.IsLocalPerm,
-        MPSPreparation.IsLocalPerm.permMatrix_mem_supportedOperators,
-        MPSPreparation.shiftPerm, MPSPreparation.shiftPerm_apply,
-        MPSPreparation.isLocalPerm_shiftPerm, MPSPreparation.permLayer,
-        MPSPreparation.exists_permLayer_op_mulVec,
-        MPSPreparation.exists_shiftLayer_op_mulVec,
-        MPSPreparation.finKronecker_permMatrix_mulVec}
+    \lean{QuantumCircuit.IsLocalPerm,
+        QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators,
+        QuantumCircuit.shiftPerm, QuantumCircuit.shiftPerm_apply,
+        QuantumCircuit.isLocalPerm_shiftPerm, QuantumCircuit.permLayer,
+        QuantumCircuit.exists_permLayer_op_mulVec,
+        QuantumCircuit.exists_shiftLayer_op_mulVec,
+        Matrix.finKronecker_permMatrix_mulVec}
     \leanok
     \uses{def:ldp_local_circuit}
     Let $\sigma$ be a permutation of the configurations of the ring that
@@ -154,10 +154,10 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
 
 \begin{theorem}[GHZ-type states in constant depth with measurements]
     \label{thm:ldp_ghz_measurement}
-    \lean{MPSPreparation.site, MPSPreparation.withZeroAncillas,
-        MPSPreparation.ghzInitial, MPSPreparation.ghzProtocol,
-        MPSTensor.ghzState_apply, MPSPreparation.ghzProtocol_output,
-        MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState}
+    \lean{QuantumCircuit.ghzSite, QuantumCircuit.withZeroAncillas,
+        QuantumCircuit.ghzInitial, QuantumCircuit.ghzProtocol,
+        QuantumCircuit.ghzState_apply, QuantumCircuit.ghzProtocol_output,
+        QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState}
     \leanok
     \uses{def:ldp_measurement_preparation, lem:ldp_permutation_layers,
         def:ldp_pair_family_fixed_point}
