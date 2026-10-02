@@ -2006,6 +2006,10 @@ involve no boundary.
   `SymmetricGappedInteractionPath.trans`, and
   `normalizedBondFixedPointGappedPath` (the path between the direct-sum
   fixed points built from the normalized interpolating bond).
+  `exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint`
+  supplies a path on a common physical space after rephasing unitary
+  virtual actions with cohomologous factor systems. The first fixed-point
+  physical action is preserved.
 - **Caveat:** this describes a path on a common physical space. Endpoint
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground

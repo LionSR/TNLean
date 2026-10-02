@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### scalar cancellation in the fixed-point physical action — promoted
+- **Pattern:** replace an invertible virtual matrix by a nonzero scalar
+  multiple in `Wᵀ ⊗ W⁻¹`; the scalar and its reciprocal cancel.
+- **Seen:** three uses across two files: the identity and multiplication
+  proofs of `sptFixedPointAction` in `SPTFixedPoint.lean`, and
+  `sptFixedPointAction_eq_of_forall_eq_smul` in
+  `CohomologousFixedPointPath.lean`, under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `MPSTensor.sptKron_eq_of_eq_smul` was already the private
+  helper for the first two uses. It is now public and serves the third use.
+- **Notes:** no new cancellation proof or tactic is needed.
+
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
