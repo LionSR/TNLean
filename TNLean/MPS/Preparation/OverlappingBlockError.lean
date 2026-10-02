@@ -144,37 +144,29 @@ theorem inv_mul_norm_le_norm_of_sum_norm_sq_le_one {ι : Type*} [Fintype ι] (v 
 
 /-! ### An elementary estimate -/
 
-/-- If `‖S - b‖ ≤ δ` and `|t² - b| ≤ η` with `b ≥ 1` and `t ≥ 0`, then
-`1 - ‖S‖ / (√b t) ≤ δ + η`. This combines the overlap `S = ∑ⱼ zⱼ` and the norm `t = ‖φ_N‖` in the
-triangle inequality of arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii). -/
-theorem one_sub_norm_div_le_of_norm_sub_le {b : ℝ} (hb : 1 ≤ b) {S : ℂ} {t δ η : ℝ}
-    (ht : 0 ≤ t) (hS : ‖S - b‖ ≤ δ) (hT : |t ^ 2 - b| ≤ η) :
-    1 - t⁻¹ * (‖S‖ / Real.sqrt b) ≤ δ + η := by
+/-- If `‖S - 1‖ ≤ δ` and `|t² - 1| ≤ η` with `t ≥ 0`, then `1 - ‖S‖ / t ≤ δ + η`. This combines
+the normalized overlap `S` and the normalized norm `t` in the triangle inequality of
+arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii). -/
+theorem one_sub_norm_div_le_of_norm_sub_le {S : ℂ} {t δ η : ℝ} (ht : 0 ≤ t)
+    (hS : ‖S - 1‖ ≤ δ) (hT : |t ^ 2 - 1| ≤ η) : 1 - ‖S‖ / t ≤ δ + η := by
   have hδ : 0 ≤ δ := (norm_nonneg _).trans hS
   have hη : 0 ≤ η := (abs_nonneg _).trans hT
-  have hnn : 0 ≤ t⁻¹ * (‖S‖ / Real.sqrt b) := by positivity
+  have hnn : 0 ≤ ‖S‖ / t := by positivity
   rcases le_or_gt 1 (δ + η) with h | h
   · linarith
-  have hsb : 0 < Real.sqrt b := Real.sqrt_pos.2 (by linarith)
-  have hsb2 : Real.sqrt b ^ 2 = b := Real.sq_sqrt (by linarith)
   have ht2 := abs_le.1 hT
   have htpos : 0 < t := by
     rcases ht.lt_or_eq with h' | h'
     · exact h'
     · rw [← h'] at ht2; nlinarith [ht2.1]
-  have hS' : b - δ ≤ ‖S‖ := by
-    have := norm_sub_norm_le (b : ℂ) S
-    rw [norm_sub_rev, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith)] at this
+  have hS' : 1 - δ ≤ ‖S‖ := by
+    have := norm_sub_norm_le (1 : ℂ) S
+    rw [norm_sub_rev, norm_one] at this
     linarith
-  set w := Real.sqrt b * t
-  have hw : 0 < w := mul_pos hsb htpos
-  have hw2 : 2 * w ≤ b + t ^ 2 := by nlinarith [sq_nonneg (Real.sqrt b - t)]
-  have hwle : w ≤ b + η / 2 := by linarith [ht2.2]
-  have heq : t⁻¹ * (‖S‖ / Real.sqrt b) = ‖S‖ / w := by
-    simp only [w]; field_simp
-  rw [heq]
-  have : 1 - δ - η ≤ ‖S‖ / w := by
-    rw [le_div_iff₀ hw]
+  have hw2 : 2 * t ≤ 1 + t ^ 2 := by nlinarith [sq_nonneg (1 - t)]
+  have hwle : t ≤ 1 + η / 2 := by linarith [ht2.2]
+  have : 1 - δ - η ≤ ‖S‖ / t := by
+    rw [le_div_iff₀ htpos]
     nlinarith [mul_le_mul_of_nonneg_right hwle (by linarith : (0 : ℝ) ≤ 1 - δ - η)]
   linarith
 

@@ -519,7 +519,7 @@ open scoped Matrix.Norms.L2Operator in
 (arXiv:2307.01696, eq. (5)), placed on the bond coordinates `ι_j`, let `λ₂` bound the moduli of
 the eigenvalues other than `1` of every transfer map `E_{A_j}` and of all eigenvalues of the mixed
 transfer maps `E_{jj'}`, `j ≠ j'`, with correlation length `ξ = -1/log|λ₂|`, and let
-`0 < γ < 1/2`. There is `C > 0` such that the following holds for all weights `βⱼ`, not all
+`0 < γ < 1`. There is `C > 0` such that the following holds for all weights `βⱼ`, not all
 zero, and every cutting of a ring of `N` sites into `M ≥ 1` blocks of lengths `ℓ_k ≥ q` at which
 the blocked direct sum with unit weights is injective on the bond pairs of the blocks. With
 `αⱼ = βⱼ / (∑ₗ |βₗ|²)^{1/2}`, `ω_j` the pair of `σ_j` placed along `ι_j`, `V_k` the isometric
@@ -534,7 +534,8 @@ the direct sum with unit weights. The constant does not depend on the weights, a
 factor `(min(1, ∑ⱼ |βⱼ|²))^{-1/2}`: the overlap is `∑_{j,j'} conj(βⱼ) β_{j'} z_{jj'}` divided by
 `(∑ₗ |βₗ|²)^{1/2}`, with `|z_{jj'} - δ_{jj'}| ≤ C y e^{C y}`
 (`exists_norm_trace_prod_blockPosTensor_sub_le`), and the squared norm of `|φ⟩` is
-`∑ⱼ |βⱼ|²` up to a relative error (`exists_abs_sum_norm_sq_sum_mpv_sub_le`). -/
+`∑ⱼ |βⱼ|²` up to a relative error (`exists_abs_sum_norm_sq_sum_mpv_sub_le`). The source states
+the bound for `0 < γ < 1/2`; the range `γ < 1` is a project result. -/
 theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -544,7 +545,7 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
-    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ β : Fin b → ℂ, β ≠ 0 → ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ}
       (hNs : ∑ k, ℓ k = N) (q : ℕ), (∀ k, q ≤ ℓ k) →
       (∀ k, IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))
@@ -572,7 +573,7 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
   have hx0 : 0 ≤ x := (Real.exp_pos _).le
   have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hl.le
   have hz := fun j j' => exists_norm_trace_prod_blockPosTensor_sub_le (Aj := Aj) hι hdisj hN hA hσ
-    htr hfix hl hlam hmix hγ0 (by linarith) j j'
+    htr hfix hl hlam hmix hγ0 hγ j j'
   choose Cz hCz hzb using hz
   set Cs := ∑ j, ∑ j', Cz j j'
   have hCs : ∀ j j', Cz j j' ≤ Cs := fun j j' =>
@@ -581,7 +582,7 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
         (fun _ _ => Finset.sum_nonneg fun _ _ => (hCz _ _).le) (Finset.mem_univ j))
   have hCs0 : 0 ≤ Cs := Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => (hCz _ _).le
   obtain ⟨Kt, hKt, hnorm⟩ := exists_abs_sum_norm_sq_sum_mpv_sub_le hN hA hσ htr hfix hl hlam
-    hmix hγ0 (by linarith)
+    hmix hγ0 hγ
   set C' := (b : ℝ) ^ 2 * Cs + Cs + Kt + 1
   have hC' : 1 ≤ C' := by have : 0 ≤ (b : ℝ) ^ 2 * Cs := by positivity
                           linarith
@@ -676,11 +677,12 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
           calc x ^ N ≤ x ^ q := pow_le_pow_of_le_one hx0 hx1 hqN
             _ ≤ u := le_mul_of_one_le_left (by positivity) hM
       _ = Kt * u * bb := by ring
-  have hmain := one_sub_norm_div_le_of_norm_sub_le (b := 1) le_rfl
+  have hmain := one_sub_norm_div_le_of_norm_sub_le
     (div_nonneg (norm_nonneg φ) hsb.le) (by simpa using hSbb) (by simpa using ht)
-  have hkey : (t / sb)⁻¹ * (‖S / (bb : ℂ)‖ / Real.sqrt 1) =
+  rw [div_eq_inv_mul] at hmain
+  have hkey : (t / sb)⁻¹ * ‖S / (bb : ℂ)‖ =
       ‖⟪ψ, ((t : ℂ)⁻¹) • φ⟫_ℂ‖ := by
-    rw [inner_smul_right, hinner, Real.sqrt_one, div_one, norm_mul, norm_mul, norm_inv, norm_inv,
+    rw [inner_smul_right, hinner, norm_mul, norm_mul, norm_inv, norm_inv,
       Complex.norm_real, Complex.norm_real, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos hsb,
       abs_of_nonneg (norm_nonneg φ), norm_div, Complex.norm_real, Real.norm_eq_abs,
       abs_of_pos hbb, inv_div]

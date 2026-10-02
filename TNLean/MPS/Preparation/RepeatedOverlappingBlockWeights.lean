@@ -476,10 +476,11 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
       field_simp
     rw [he, abs_div, abs_of_pos hbb, div_le_iff₀ hbb]
     linarith [h]
-  have hmain := one_sub_norm_div_le_of_norm_sub_le (b := 1) le_rfl
+  have hmain := one_sub_norm_div_le_of_norm_sub_le
     (div_nonneg (norm_nonneg _) hsb.le) (by simpa using hSz) (by simpa using ht2)
-  have hkey : (t / Real.sqrt bb)⁻¹ * (‖Sz / (bb : ℂ)‖ / Real.sqrt 1) = t⁻¹ * ‖num‖ := by
-    rw [hnum, Real.sqrt_one, div_one, norm_mul, norm_div, norm_inv, Complex.norm_real,
+  rw [div_eq_inv_mul] at hmain
+  have hkey : (t / Real.sqrt bb)⁻¹ * ‖Sz / (bb : ℂ)‖ = t⁻¹ * ‖num‖ := by
+    rw [hnum, norm_mul, norm_div, norm_inv, Complex.norm_real,
       Complex.norm_real, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos hsb, abs_of_pos hbb,
       inv_div]
     rcases eq_or_ne t 0 with ht | ht

@@ -51,6 +51,15 @@ pairs on one copy and the coefficients `β'ⱼ`; for multiplicity one the coeffi
 `e^{-γ q/ξ_diag}` of the source is replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`.
 Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
+**Scope restriction (orthogonal blocks):** `exists_approximationError_le_repeatedBlockSum`,
+`exists_approximationError_le_mul_repeatedBlockSum`,
+`exists_approximationError_le_repeatedBlockSum_oneCopy`,
+`exists_approximationError_le_mul_repeatedBlockSum_oneCopy`, `exists_approximationError_le_blockSum`
+and `exists_approximationError_le_mul_blockSum` assume that the `q`-site states of distinct blocks
+are orthogonal, `B_jᴴ B_{j'} = 0`, a hypothesis the source does not state. The other bounds of this
+file replace it by the bound `λ₂` on the eigenvalues of the mixed transfer maps. Documented in
+`docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
+
 ## Main declarations
 
 * `MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero` — orthogonal
