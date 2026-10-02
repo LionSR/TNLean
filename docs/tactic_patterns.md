@@ -3912,3 +3912,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   steps rather than remove duplication.
 - **Counts:** declarations 2 → 0; annotations 18 → 0; invocations 0 → 0;
   proof-body lines changed 0.
+
+### finite block coordinates with zero complements — candidate
+- **Pattern:** split active and zero block labels, decide the active label,
+  derive the coordinate bounds with `omega`, and simplify the block inclusions
+  and projections before proving the scalar entry identity.
+- **Seen:** three coordinate cases in
+  `TNLean/MPS/Examples/Ising/IsingThreeObjectGauge.lean` (2026-10-02).
+- **Abstraction:** a coordinate lemma for regrouping active direct sums with
+  one-dimensional zero complements, if a second example requires the same
+  construction.
+- **Notes:** bounds should be supplied before simplifying dependent matrix
+  indices; exhaustive enumeration of all bond-coordinate pairs is unnecessary.

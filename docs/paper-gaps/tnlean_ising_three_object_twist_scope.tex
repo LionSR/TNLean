@@ -38,7 +38,15 @@ four weighted normal blocks, namely $5\widehat A_\sigma$,
 $3\widehat A_\sigma$, $2\sqrt2 A_1$, and $2\sqrt2 A_\psi$.
 Asymmetric compression gives $40=4+4+3+3+26$, with twenty-six
 one-dimensional zero diagonal blocks in an upper-triangular presentation.
-The formal statement does not assert that the off-diagonal remainder vanishes.
+An explicit change of auxiliary coordinates strengthens this to a block-diagonal
+presentation. It is the direct sum of the twenty-four-dimensional gauge for
+the two abelian bond objects and the sixteen-dimensional gauge for
+$\sigma\otimes\sigma$. The inverse of the latter is half its transpose.
+After separating the four active blocks from the twenty-six zero coordinates,
+the off-diagonal remainder vanishes. The left projection and right inclusion
+intertwine every letter with its weighted target. This statement concerns
+this explicit choice; the compression obtained only from the trace theorem
+need not be the same choice.
 
 The three-term coefficient $5^L+3^L+2^L$ for a single $\sigma$ target,
 and the three-slot compression requested in issue 7833, are not the
@@ -96,6 +104,12 @@ The local result is in
 \leanid{IsingTwist.isingBondObjectThree_trace_evalWord},
 \leanid{IsingTwist.isingBondObjectThree_compression_exists}, and
 \leanid{IsingTwist.isingBondObjectThree_z_eq}.
+The explicit split compression is in
+\path{TNLean/MPS/Examples/Ising/IsingThreeObjectGauge.lean}:
+\leanid{IsingTwist.isingThreeSplitCompression},
+\leanid{IsingTwist.isingBondObjectThree_split_remainder},
+\leanid{IsingTwist.isingBondObjectThree_mul_right_eq_right_mul}, and
+\leanid{IsingTwist.isingBondObjectThree_left_mul_eq_mul_left}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
