@@ -64,24 +64,23 @@ variable {d N : ℕ} [NeZero N]
 
 /-! ### Permutations of sites supported on a set -/
 
-omit [NeZero N] in
-/-- A permutation fixing every site outside `S` maps `S` into `S`. -/
-private theorem perm_apply_mem {π : Equiv.Perm (Fin N)} {S : Set (Fin N)}
-    (hπ : ∀ i ∉ S, π i = i) {i : Fin N} (hi : i ∈ S) : π i ∈ S := by
+/-- A permutation fixing every point outside `S` maps `S` into `S`. -/
+theorem _root_.Equiv.Perm.apply_mem_of_forall_notMem {α : Type*} {π : Equiv.Perm α}
+    {S : Set α} (hπ : ∀ i ∉ S, π i = i) {i : α} (hi : i ∈ S) : π i ∈ S := by
   by_contra h
   exact h (by rw [π.injective (hπ _ h)]; exact hi)
 
 /-- Conjugating a product by `P` with inverse `Q` conjugates every factor. -/
-private theorem mul_list_prod_mul {n : Type*} [Fintype n] [DecidableEq n]
-    {P Q : Matrix n n ℂ} (hQP : Q * P = 1) (hPQ : P * Q = 1) (l : List (Matrix n n ℂ)) :
+theorem _root_.List.mul_prod_mul_of_mul_eq_one {M : Type*} [Monoid M] {P Q : M}
+    (hQP : Q * P = 1) (hPQ : P * Q = 1) (l : List M) :
     P * l.prod * Q = (l.map fun X => P * X * Q).prod := by
   induction l with
   | nil => simpa using hPQ
   | cons X l ih =>
     rw [List.prod_cons, List.map_cons, List.prod_cons, ← ih]
     calc P * (X * l.prod) * Q = P * X * (Q * P) * l.prod * Q := by
-          rw [hQP, Matrix.mul_one]; simp only [Matrix.mul_assoc]
-      _ = P * X * Q * (P * l.prod * Q) := by simp only [Matrix.mul_assoc]
+          rw [hQP, mul_one]; simp only [mul_assoc]
+      _ = P * X * Q * (P * l.prod * Q) := by simp only [mul_assoc]
 
 namespace TeleportHop
 
@@ -154,7 +153,7 @@ theorem sitePerm_flatMap_apply {ι : Type*} {l : List ι} {f : ι → List (Tele
     · rw [ih hS' hl.2 hg]
       refine sitePerm_apply_of_notMem fun hi' => ?_
       have hmem : sitePerm (f g) i ∈ S g :=
-        perm_apply_mem
+        Equiv.Perm.apply_mem_of_forall_notMem
           (fun j hj => sitePerm_apply_of_notMem fun hj' => hj (hS' g hg hj')) hi
       exact Set.disjoint_left.mp (hl.1 g hg) (hS g₀ List.mem_cons_self hi') hmem
 
@@ -403,7 +402,7 @@ theorem sitePerm_there_eq_symm :
   by_cases hi : ∃ g ∈ gs, i ∈ g.span
   · obtain ⟨g, hg, hi⟩ := hi
     have hmem : sitePerm g.there i ∈ g.span :=
-      perm_apply_mem (fun j hj => sitePerm_apply_of_notMem fun hj' =>
+      Equiv.Perm.apply_mem_of_forall_notMem (fun j hj => sitePerm_apply_of_notMem fun hj' =>
         hj (g.allSites_there_subset_span hj')) hi
     rw [sitePerm_flatMap_apply (fun g _ => g.allSites_there_subset_span) hgs hg hi,
       sitePerm_flatMap_apply (fun g _ => g.allSites_back_subset_span) hgs hg hmem,
@@ -427,7 +426,7 @@ theorem chainPerm_back_mul_localLayer_mul_chainPerm_there :
     rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm, show σ.symm * σ = 1 by ext; simp,
       permMatrix_cfgPerm_one]
   rw [chainPerm, chainPerm, sitePerm_there_eq_symm hgs, localLayer_op,
-    mul_list_prod_mul hQP hPQ, List.map_map]
+    List.mul_prod_mul_of_mul_eq_one hQP hPQ, List.map_map]
   refine congrArg List.prod (List.map_congr_left fun g hg => ?_)
   rw [Function.comp_apply, localGate, permMatrix_cfgPerm_mul_embedOp_mul, op]
   have hback : ∀ {i}, i ∈ g.span → σ i = sitePerm g.back i := fun hi =>

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.DepthUpperBound
+import TNLean.MPS.Preparation.VaryingBondBlocks
 
 /-!
 # Inhomogeneous short-range correlated matrix product states
@@ -13,12 +14,20 @@ A chain `A` of site-dependent tensors with bond dimension `D` on a ring of `N` s
 decomposition `B_k = V_k P_k`. The positive parts `P_k` are tensors of physical dimension `D²`
 and bond dimension `D`, and generate the state `|φ_pos⟩` on the `M` blocks
 (`MPSPreparation.chainPosState`). The state of the chain is exactly
-`|φ_N⟩ = (⊗ₖ V_k) |φ_pos⟩` (`MPSPreparation.chainState_eq_blockIsoVector`).
+`|φ_N⟩ = (⊗ₖ V_k) |φ_pos⟩` (`MPSPreparation.chainState_eq_blockIsoVector`). If `B_k` is injective
+on a set `S_k` of bond pairs, `V_k` is an isometry on `S_k`, `φ_pos` is supported on the sets
+`S_k`, and `⟨(⊗ₖ V_k) Ω, φ_N⟩ = ⟨Ω, φ_pos⟩` for the normalized states
+(`MPSPreparation.inner_chainBlockIsometryState_normalize`).
 
-The source calls such a chain short-range correlated if `|φ_pos⟩` is close to a product
-`|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` of pairs, each joining the right leg of one block to the left leg
-of the next. At a fixed ring this is the statement that the error `ε(Ω, φ_pos)` is at most `δ`
-for some unit pairs (`MPSPreparation.IsPairApproximable`). The state `(⊗ₖ V_k) |Ω⟩` is prepared
+The source's chains have bond dimensions at most `D`, varying along the ring
+(`VaryingBondChain`); padded with zeros they are chains of bond dimension `D` with
+the same state. For blocks of at least one site, injectivity of the blocked tensors
+(`VaryingBondChain.IsBlockInjective`, stated for the padded chain) makes every padded blocked
+tensor injective on the rectangle of its bonds. The source calls such a chain short-range correlated
+if `|φ_pos⟩` is close to a product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` of pairs, each joining the right
+leg of one block to the left leg of the next. At a fixed ring this is the statement that the
+error `ε(Ω, φ_pos)` is at most `δ` for some unit pairs
+(`VaryingBondChain.IsPairApproximable`). The state `(⊗ₖ V_k) |Ω⟩` is prepared
 in depth at most `C L` for blocks of lengths at most `L`, with `C` depending only on `d` and
 `D`, and when every blocked tensor is injective its error against `|φ_N⟩` is exactly
 `ε(Ω, φ_pos)` (`MPSPreparation.exists_isPreparedInDepth_inhomogeneous`). The source states a
@@ -28,12 +37,13 @@ choice of the block lengths nor the asymptotic statement is formalized here.
 The error is `ε(φ, ψ) = 1 - |⟨φ|ψ⟩|` of normalized vectors, as displayed in arXiv:2307.01696,
 paragraph "Preliminaries".
 
-**Scope restriction (common bond dimension):** the source takes a sequence of matrix product
-states "with bond dimension at most `D`", which allows the bond dimension to vary along the
-ring; here every bond has the same dimension `D`. The blocked tensors are also assumed injective,
-which the source assumes for its polar decompositions (arXiv:2307.01696, the footnote to the
-paragraph "Approximation through the fixed-point state"), and of lengths at least `3D`, which the
-construction of the circuit needs. Documented in
+**Scope restriction (injective blocks of length at least `3D`):** the preparation theorems
+`MPSPreparation.exists_isPreparedInDepth_inhomogeneous` and
+`MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` assume that the blocked tensors
+are injective, which the source assumes for its polar decompositions (arXiv:2307.01696, the
+footnote to the paragraph "Approximation through the fixed-point state"), and of lengths at least
+`3D`, which the construction of the circuit needs. The bond dimensions are those of the source,
+at most `D` and varying along the ring. Documented in
 `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 ## Main results
@@ -48,7 +58,9 @@ construction of the circuit needs. Documented in
 
 ## References
 
-* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS" and eq. `eq:phi_pos`.
+* arXiv:2307.01696, paragraphs "Preliminaries", "Approximation through the fixed-point state"
+  (with its footnote) and "Inhomogeneous short-range correlated MPS", eq. `eq:phi_pos`, and
+  Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors".
 -/
 
 open Matrix MPSTensor
@@ -110,54 +122,114 @@ theorem blockIsoVector_smul {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (h
   simp only [blockIsoVector_apply, PiLp.smul_apply, smul_eq_mul, Finset.mul_sum]
   exact Finset.sum_congr rfl fun _ _ => mul_left_comm _ _ _
 
-/-- The norm of the state is the norm of the state of the positive parts when every blocked
-tensor is injective. -/
-theorem norm_chainState {A : MPSChainTensor d D N} (hN : ∑ k, ℓ k = N)
-    (hB : ∀ k, Kraus.IsInjective (chainBlockTensor A hN k)) :
-    ‖chainState A‖ = ‖chainPosState A hN‖ := by
-  rw [chainState_eq_blockIsoVector A hN, norm_blockIsoVector hN hB]
+/-- The state of the positive parts has no component outside the sets `S_k` when every blocked
+tensor `B_k` is injective on `S_k`: the positive part `P_k` vanishes outside `S_k`. -/
+theorem chainPosState_eq_zero {A : MPSChainTensor d D N} (hN : ∑ k, ℓ k = N)
+    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (chainBlockTensor A hN k) (S k))
+    {τ : Cfg (D * D) M} (hτ : ∃ k, virtualPairEquiv D (τ k) ∉ S k) : chainPosState A hN τ = 0 := by
+  obtain ⟨k, hk⟩ := hτ
+  rw [chainPosState_apply, mpvFamily]
+  have h0 : (List.ofFn fun j => polarPosTensor (chainBlockTensor A hN j) (τ j)).prod = 0 :=
+    List.prod_eq_zero (List.mem_ofFn.mpr ⟨k, polarPosTensor_eq_zero (hB k) hk⟩)
+  rw [h0, Matrix.trace_zero]
 
-/-- **The isometries preserve the overlap.** If every blocked tensor is injective, then for
-every family of pairs, `⟨(⊗ₖ V_k) Ω, φ_N⟩ = ⟨Ω, φ_pos⟩`, where `φ_N` and `φ_pos` are the
-normalized states.
+/-- The norm of the state is the norm of the state of the positive parts when every blocked
+tensor `B_k` is injective on a set `S_k` of bond pairs. -/
+theorem norm_chainState {A : MPSChainTensor d D N} (hN : ∑ k, ℓ k = N)
+    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (chainBlockTensor A hN k) (S k)) :
+    ‖chainState A‖ = ‖chainPosState A hN‖ := by
+  rw [chainState_eq_blockIsoVector A hN,
+    norm_blockIsoVector_of_isInjectiveOn hN hB _ fun τ hτ => chainPosState_eq_zero hN hB hτ]
+
+/-- **The isometries preserve the overlap.** If every blocked tensor `B_k` is injective on a set
+`S_k` of bond pairs, then for every family of pairs, `⟨(⊗ₖ V_k) Ω, φ_N⟩ = ⟨Ω, φ_pos⟩`, where
+`φ_N` and `φ_pos` are the normalized states.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": the scheme has "error
-`ε(Ω, φ_pos)`"; injectivity gives `V_k† V_k = 1`, as assumed in the footnote to the paragraph
+`ε(Ω, φ_pos)`"; here `V_k†V_k` is the projector onto `S_k` (Supplemental Material, "Proof of
+Lemma 1 and extension to non-normal tensors"), and `φ_pos` lies in its range. For `S_k` the set
+of all pairs, injectivity gives `V_k† V_k = 1`, as assumed in the footnote to the paragraph
 "Approximation through the fixed-point state". -/
 theorem inner_chainBlockIsometryState_normalize {A : MPSChainTensor d D N} (hN : ∑ k, ℓ k = N)
-    (hB : ∀ k, Kraus.IsInjective (chainBlockTensor A hN k)) (ω : Fin M → Fin D × Fin D → ℂ) :
+    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (chainBlockTensor A hN k) (S k))
+    (ω : Fin M → Fin D × Fin D → ℂ) :
     ⟪chainBlockIsometryState A ω hN, (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ =
       ⟪pairFamilyVector ω, (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ := by
   rw [norm_chainState hN hB, chainState_eq_blockIsoVector A hN, ← blockIsoVector_smul,
-    chainBlockIsometryState, inner_blockIsoVector hN hB]
+    chainBlockIsometryState, inner_blockIsoVector_of_isInjectiveOn hN hB _ _ fun τ hτ => by
+      rw [PiLp.smul_apply, chainPosState_eq_zero hN hB hτ, smul_zero, mul_zero]]
 
-/-! ### The approximation hypothesis and the preparation -/
+end MPSPreparation
 
-/-- **Approximation of the positive parts by pairs**, at a fixed ring: the state `φ_pos` of the
-positive parts is nonzero, and there are unit vectors `ω^k` on `ℂ^D ⊗ ℂ^D` whose product
-`|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error `ε(Ω, φ_pos) = 1 - |⟨Ω|φ_pos⟩| ≤ δ` against the
-normalized state of the positive parts.
+/-! ### Bond dimensions at most `D` -/
+
+namespace VaryingBondChain
+
+open MPSPreparation
+
+variable {d D M N : ℕ} {ℓ : Fin M → ℕ}
+
+/-- The state of the chain is the state of the zero-padded chain. -/
+theorem state_eq_chainState [NeZero N] (A : VaryingBondChain d D N) :
+    state A = chainState (zeroPad A) := by
+  ext s
+  rw [state_eq_chainState_zeroPad, chainState_apply]
+
+/-- The padded pairs form a vector supported on the rectangles of the blocks. -/
+theorem pairFamilyVector_padPairs_eq_zero [NeZero N] (A : VaryingBondChain d D N)
+    (ω : ∀ k, Fin (rightBond A ℓ k) × Fin (rightBond A ℓ k) → ℂ) {τ : Cfg (D * D) M}
+    (hτ : ∃ k, virtualPairEquiv D (τ k) ∉ blockCorner A ℓ k) :
+    pairFamilyVector (padPairs A ℓ ω) τ = 0 := by
+  by_contra h
+  obtain ⟨k, hk⟩ := hτ
+  rw [pairFamilyVector_apply] at h
+  exact hk (mem_blockCorner_of_pairFamilyState_ne_zero A ℓ ω h k)
+
+/-- **Approximation of the positive parts by pairs**, at a fixed ring, for a chain of bond
+dimensions at most `D`: the state `φ_pos` of the positive parts of the blocked tensors is
+nonzero, and there are unit vectors `ω^k` on `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k`
+to block `k + 1`, whose product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error
+`ε(Ω, φ_pos) = 1 - |⟨Ω|φ_pos⟩| ≤ δ` against the normalized state of the positive parts. The
+blocked tensors, their positive parts and the pairs are those of the zero-padded chain; their
+identification with the rectangular objects of the source is not proved (see the paper-gap note
+cited below).
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": a sequence of matrix
-product states has finite correlation length if, after blocking `q = O(log N)` sites, the states
-can be approximated by `|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}` "with an error
-`ε(Ω, φ_pos) → 0` as `N → ∞`". This is the condition for one member of the sequence.
+product states "with bond dimension at most `D`" has finite correlation length if, after
+blocking `q = O(log N)` sites, the states can be approximated by
+`|Ω⟩ = ⊗_{i=1}^{N/q} |ω^i⟩_{R_i L_{i+1}}` "with an error `ε(Ω, φ_pos) → 0` as `N → ∞`". This is
+the condition for one member of the sequence.
 
 **Local fix (nonzero positive-part state):** the source's error `ε(Ω, φ_pos)` compares `|Ω⟩`
 with the normalized state `φ_pos / ‖φ_pos‖`, which presupposes `φ_pos ≠ 0`; the condition
-`chainPosState A hN ≠ 0` makes this explicit. Documented in
+`chainPosState (zeroPad A) hN ≠ 0` makes this explicit. Documented in
 `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`. -/
-def IsPairApproximable (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) (δ : ℝ) : Prop :=
-  chainPosState A hN ≠ 0 ∧ ∃ ω : Fin M → Fin D × Fin D → ℂ, (∀ k, ∑ p, star (ω k p) * ω k p = 1) ∧
-    1 - ‖⟪pairFamilyVector ω, (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ‖ ≤ δ
+def IsPairApproximable [NeZero N] (A : VaryingBondChain d D N) (hN : ∑ k, ℓ k = N)
+    (δ : ℝ) : Prop :=
+  chainPosState (zeroPad A) hN ≠ 0 ∧
+    ∃ ω : ∀ k, Fin (rightBond A ℓ k) × Fin (rightBond A ℓ k) → ℂ,
+      (∀ k, ∑ p, star (ω k p) * ω k p = 1) ∧
+      1 - ‖⟪pairFamilyVector (padPairs A ℓ ω),
+        (‖chainPosState (zeroPad A) hN‖ : ℂ)⁻¹ • chainPosState (zeroPad A) hN⟫_ℂ‖ ≤ δ
 
+end VaryingBondChain
+
+namespace MPSPreparation
+
+variable {d D M N : ℕ} {ℓ : Fin M → ℕ}
+
+/-! ### The preparation -/
+
+open VaryingBondChain in
 /-- **Preparation of an inhomogeneous matrix product state.** There is `C`, depending only on
 `d` and `D`, such that the following holds. Cut a ring of `N ≥ 1` sites into `M ≥ 1` blocks of
-lengths `3D ≤ ℓ k ≤ L`, let `A` be a chain of site-dependent tensors of bond dimension `D` whose
-blocked tensors are all injective, and let `ω^k` be unit vectors on `ℂ^D ⊗ ℂ^D`. Then
+lengths `3D ≤ ℓ k ≤ L`, let `A` be a chain of site-dependent tensors with bond dimensions
+`D_0, …, D_{N-1}` at most `D` whose blocked tensors are all injective, and let `ω^k` be unit
+vectors on `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k` to block `k + 1`. Then
 `|ψ⟩ = (⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is a unit vector prepared in depth at most `C L`, and
 its error against the normalized state `|φ_N⟩` of the chain is the error of `|Ω⟩` against
-`|φ_pos⟩`: `ε(ψ, φ_N) = ε(Ω, φ_pos)`.
+`|φ_pos⟩`: `ε(ψ, φ_N) = ε(Ω, φ_pos)`. The isometries, positive parts and pairs are those of the
+zero-padded chain; `V_k` is then a partial isometry, an isometry on the rectangle of the block.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": "the preparation scheme
 consists of preparing `|Ω⟩` and implementing the isometry", with "error `ε(Ω, φ_pos)`", and
@@ -166,34 +238,60 @@ consists of preparing `|Ω⟩` and implementing the isometry", with "error `ε(�
 made here. -/
 theorem exists_isPreparedInDepth_inhomogeneous (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
-      (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
+      (A : VaryingBondChain d D N) (ω : ∀ k, Fin (rightBond A ℓ k) × Fin (rightBond A ℓ k) → ℂ),
       (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ,
-        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (chainBlockTensor A hN k)) →
-          ‖chainBlockIsometryState A ω hN‖ = 1 ∧
-          IsPreparedInDepth (C * L) (fun s => chainBlockIsometryState A ω hN s) ∧
-          1 - ‖⟪chainBlockIsometryState A ω hN, (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ‖ =
-            1 - ‖⟪pairFamilyVector ω, (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ‖ := by
-  obtain ⟨C, hC⟩ := exists_isPreparedInDepth_chainBlockIsometryState d D
-  refine ⟨C, fun ℓ N _ hN A ω hω L hℓ hL hB => ⟨?_, hC ℓ hN A ω hω L hℓ hL hB, ?_⟩⟩
-  · rw [chainBlockIsometryState, norm_blockIsoVector hN hB, norm_pairFamilyVector hω]
-  · rw [inner_chainBlockIsometryState_normalize hN hB]
+        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsBlockInjective A hN →
+          ‖chainBlockIsometryState (zeroPad A) (padPairs A ℓ ω) hN‖ = 1 ∧
+          IsPreparedInDepth (C * L)
+            (fun s => chainBlockIsometryState (zeroPad A) (padPairs A ℓ ω) hN s) ∧
+          1 - ‖⟪chainBlockIsometryState (zeroPad A) (padPairs A ℓ ω) hN,
+              (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ =
+            1 - ‖⟪pairFamilyVector (padPairs A ℓ ω),
+              (‖chainPosState (zeroPad A) hN‖ : ℂ)⁻¹ • chainPosState (zeroPad A) hN⟫_ℂ‖ := by
+  classical
+  obtain ⟨C, hC⟩ := exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn d D
+  refine ⟨C, fun {M} _ ℓ N _ hN A ω hω L hℓ hL hB => ?_⟩
+  have hD : 0 < D := by
+    rcases Nat.eq_zero_or_pos D with hD | hD
+    · set k₀ : Fin M := ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩
+      have h0 := hω k₀
+      have hr : rightBond A ℓ k₀ = 0 := Nat.le_zero.mp (hD ▸ rightBond_le A ℓ k₀)
+      have : IsEmpty (Fin (rightBond A ℓ k₀) × Fin (rightBond A ℓ k₀)) :=
+        ⟨fun p => (Fin.cast hr p.1).elim0⟩
+      rw [Finset.univ_eq_empty, Finset.sum_empty] at h0
+      exact absurd h0 zero_ne_one
+    · exact hD
+  have hℓ0 : ∀ k, 0 < ℓ k := fun k => by have := hℓ k; omega
+  have hinj := hB.isInjectiveOn hℓ0
+  set S : Fin M → Finset (Fin D × Fin D) := fun k => Finset.univ.filter (· ∈ blockCorner A ℓ k)
+  have hS : ∀ k, (S k : Set (Fin D × Fin D)) = blockCorner A ℓ k := fun k => by ext; simp [S]
+  have hΩ : ∀ {τ : Cfg (D * D) M}, (∃ k, virtualPairEquiv D (τ k) ∉ blockCorner A ℓ k) →
+      pairFamilyVector (padPairs A ℓ ω) τ = 0 := fun hτ => pairFamilyVector_padPairs_eq_zero A ω hτ
+  refine ⟨?_, ?_, ?_⟩
+  · rw [chainBlockIsometryState, norm_blockIsoVector_of_isInjectiveOn hN hinj _ fun τ hτ => hΩ hτ,
+      norm_pairFamilyVector (sum_star_padPairs_mul_self A ℓ hω)]
+  · exact hC ℓ hN (zeroPad A) S (padPairs A ℓ ω) (sum_star_padPairs_mul_self A ℓ hω)
+      (fun c hc k => by simpa [S] using mem_blockCorner_of_pairFamilyState_ne_zero A ℓ ω hc k)
+      L hℓ hL fun k => by rw [hS]; exact hinj k
+  · rw [state_eq_chainState, inner_chainBlockIsometryState_normalize hN hinj]
 
+open VaryingBondChain in
 /-- **Preparation under the approximation hypothesis.** There is `C`, depending only on `d` and
 `D`, such that if a ring of `N ≥ 1` sites is cut into `M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`,
-the chain `A` has injective blocked tensors, and its positive parts are approximated by pairs
-with error at most `δ`, then some unit vector `|ψ⟩` prepared in depth at most `C L` has error
-`ε(ψ, φ_N) ≤ δ` against the normalized state of the chain.
+the chain `A` with bond dimensions at most `D` has injective blocked tensors, and its positive
+parts are approximated by pairs with error at most `δ`, then some unit vector `|ψ⟩` prepared in
+depth at most `C L` has error `ε(ψ, φ_N) ≤ δ` against the normalized state of the chain.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": "If the finite
 correlation assumption is satisfied, then the preparation scheme consists of preparing `|Ω⟩`
 and implementing the isometry". -/
 theorem exists_isPreparedInDepth_of_isPairApproximable (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
-      (A : MPSChainTensor d D N) (L : ℕ) (δ : ℝ),
-        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (chainBlockTensor A hN k)) →
+      (A : VaryingBondChain d D N) (L : ℕ) (δ : ℝ),
+        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsBlockInjective A hN →
           IsPairApproximable A hN δ →
           ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧ IsPreparedInDepth (C * L) (fun s => ψ s) ∧
-            1 - ‖⟪ψ, (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ‖ ≤ δ := by
+            1 - ‖⟪ψ, (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ ≤ δ := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous d D
   refine ⟨C, fun ℓ N _ hN A L δ hℓ hL hB ⟨_, ω, hω, hδ⟩ => ?_⟩
   obtain ⟨hn, hprep, herr⟩ := hC ℓ hN A ω hω L hℓ hL hB
