@@ -1,0 +1,90 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Exchange of Domain-Wall Endpoints on Glued Half-Chains}
+\author{}
+\date{2026-10-01}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Let $U$ be a matrix product unitary of order two exchanging the injective
+ground states $\lvert\psi_A\rangle$ and $\lvert\psi_B\rangle$, let $e_{AB}$ and
+$e_{BA}$ be domain walls on which $U$ acts with the phases $c_{AB}$ and
+$c_{BA}$, and let $O^{[i,j]}$ be the string of $U$ on the sites $i,\dots,j$
+whose two open virtual legs are closed by the endpoint tensors built from left
+inverses of the ground-state tensors \cite{GarreRubioSchuch2024DomainWall}.
+Ref.~\cite{GarreRubioSchuch2024DomainWall} cuts such a string in the middle
+and obtains the half-chain operator $O^{[i]}_x$: the left endpoint at $i$
+followed by the tensors of $U$, with the bond of the operator string fixed to
+the value $x$ at a cut on the right. It proves, for $i>j$,
+\begin{align}
+    O^{[j]}_x\,O^{[i]}_y\,\lvert\psi_A\rangle
+        &= c_{AB}\,O^{[i]}_x\,O^{[j]}_y\,\lvert\psi_A\rangle,
+    \label{eq:gs24hs_open_exchange}
+\end{align}
+as an identity between half-chain objects with the two open legs $x$ and $y$,
+and remarks that such an object must be glued with the other half of a string
+to give a state.\footnote{Source traceability:
+\path{Papers/2405.00439/MPU-DW.tex}, lines 1427--1659; the remark on gluing is
+at line 1489.}
+
+\section{The formal statement}
+
+The formalization glues both sides of (\ref{eq:gs24hs_open_exchange}) with
+right endpoints at two sites $r_1\neq r_2$ to the right of $i$, the leg $x$
+being closed at $r_1$ and the leg $y$ at $r_2$. The relation becomes an
+identity of periodic states,
+\begin{align}
+    O^{[j,r_1]}\,O^{[i,r_2]}\,\lvert\psi_A\rangle
+        &= c_{AB}\,O^{[i,r_1]}\,O^{[j,r_2]}\,\lvert\psi_A\rangle,
+    \label{eq:gs24hs_glued_exchange}
+\end{align}
+and it is proved for both orders of $r_1$ and $r_2$, whenever the regions
+between the four endpoints are longer than the buffer of the local
+action.\footnote{Formal declarations:
+\leanid{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far},
+\leanid{MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near}.
+The buffer is recorded in Ref.~\cite{gap:gs24_domain_wall_nondegenerate}.}
+For $r_2<r_1$ the left side is $c_{AB}c_{BA}$ times the periodic state with the
+domain walls $e_{AB},e_{BA},e_{AB},e_{BA}$ at $j,i,r_2,r_1$, and the right
+side is $c_{BA}$ times the same state; for $r_1<r_2$ the two sides are $c_{AB}$
+and $1$ times the state with these walls at $j,i,r_1,r_2$.
+
+\section{Comparison}
+
+Equation (\ref{eq:gs24hs_glued_exchange}) follows from
+(\ref{eq:gs24hs_open_exchange}) by contracting both sides with the same right
+halves, so it is a consequence of the source statement; the converse does not
+follow, since only right halves of domain-wall strings are contracted. The
+open-leg identity (\ref{eq:gs24hs_open_exchange}) uses in addition the
+fixed-point form of the action tensors, which writes $m+1$ sites of $U$ acting
+on $A$ as one acted site, the right action tensor, $m-1$ sites of $B$, the
+left action tensor and one acted site. The formal action tensors satisfy
+only the reduction of $m$ acted sites to $B^m$ between the two action tensors,
+so the half-chain objects are not available with open legs.
+
+\textbf{Verdict: open scope restriction.} Equation
+(\ref{eq:gs24hs_glued_exchange}) is the formalized content of the
+single-endpoint exchange. The open-leg identity
+(\ref{eq:gs24hs_open_exchange}) needs the fixed-point decomposition of the
+acted chain as an additional property of the action tensors.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
