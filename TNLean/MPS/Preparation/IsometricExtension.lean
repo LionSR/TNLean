@@ -203,8 +203,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
       ext i y
       rw [hΛ, mul_diagonal, mul_diagonal, of_apply]
       split_ifs with hy
-      · rw [hZ y (by rw [hbl]; exact hy), ← hVQ (dec i) y hy]
-        simp [dec, V, B]
+      · rw [hZ y (by rw [hbl]; exact hy), ← hVQ (dec i) y hy, Equiv.symm_apply_apply]
       · simp
     rw [hWZ, Matrix.mul_assoc, hTE, ← Matrix.mul_assoc, hZΛ, Matrix.mul_assoc,
       Unitary.mul_star_self_of_mem hT, Matrix.mul_one]
