@@ -1531,18 +1531,18 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
         % Right virtual leg of A pairs with the left virtual leg of B.
         % Six virtual legs remain open; physical labels i,j are fixed.
         % Boundary signature: (V,P)=(6,0).
-\tenkzkernel
-\begin{tenkz}[rows={wire},cols=2,bonds=none]
-  \tn[at=(1,1),skin=box,name=A,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{A^i}
-  \tn[at=(1,2),skin=box,name=B,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{B^j}
-  \tnwire{open w}{A.180}
-  \tnwire{A.0}{B.180}
-  \tnwire{B.0}{open e}
-  \tnwire{open n}{A.90}
-  \tnwire{open n}{B.90}
-  \tnwire{A.270}{open s}
-  \tnwire{B.270}{open s}
-\end{tenkz}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire},cols=2,bonds=none]
+            \tn[at=(1,1),skin=box,name=A,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{A^i}
+            \tn[at=(1,2),skin=box,name=B,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{B^j}
+            \tnwire{open w}{A.180}
+            \tnwire{A.0}{B.180}
+            \tnwire{B.0}{open e}
+            \tnwire{open n}{A.90}
+            \tnwire{open n}{B.90}
+            \tnwire{A.270}{open s}
+            \tnwire{B.270}{open s}
+        \end{tenkz}
     \end{center}
 \end{theorem}
 
@@ -1588,7 +1588,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
 
 \begin{proof}\leanok
     The inverse change of coordinates is $(a,(c_i)_i)\mapsto
-    (a,(a^{-1}c_i)_i)$. Thus simultaneous multiplication by $g$ sends
+        (a,(a^{-1}c_i)_i)$. Thus simultaneous multiplication by $g$ sends
     $(a,(ab_i)_i)$ to $(ga,(gab_i)_i)$, and in relative coordinates only
     the first label changes. The permutation matrices are unitary, and
     the matrix of a product permutation is the Kronecker product of the
@@ -2105,7 +2105,7 @@ operators.
     \[
         \prod_{i\in I}\sum_{j\in J_i}\mathbf1_{P_i(j)}
         =\sum_{f\in\prod_{i\in I}J_i}
-            \mathbf1_{\{P_i(f_i)\text{ for every }i\in I\}}.
+        \mathbf1_{\{P_i(f_i)\text{ for every }i\in I\}}.
     \]
     Thus multiplying the separate numbers of admissible choices counts
     the admissible simultaneous choices.
@@ -2136,12 +2136,12 @@ operators.
     Define the canonical open-region coefficient matrix by
     \begin{align}
         B_R(\alpha,\theta)
-          &=\sum_{\substack{\eta\in G^{E_R}\\
-                           \eta|_{\partial R}=\theta}}
-               \prod_{v\in R}P_v(\alpha_v,\eta|_{E_v})\notag\\
-          &=\kappa^{-|R|}\sum_{\eta\in G^{E_R}}\sum_{q\in G^R}
-               \mathbf1_{\{\eta|_{\partial R}=\theta\}}
-               \mathbf1_{\{\alpha_v=q_v\eta|_{E_v}\ (v\in R)\}}.
+         & =\sum_{\substack{\eta\in G^{E_R}                    \\
+                \eta|_{\partial R}=\theta}}
+        \prod_{v\in R}P_v(\alpha_v,\eta|_{E_v})\notag          \\
+         & =\kappa^{-|R|}\sum_{\eta\in G^{E_R}}\sum_{q\in G^R}
+        \mathbf1_{\{\eta|_{\partial R}=\theta\}}
+        \mathbf1_{\{\alpha_v=q_v\eta|_{E_v}\ (v\in R)\}}.
         \label{eq:peps_projector_region}
     \end{align}
     Every internal bond is summed once, and no exterior bond label
@@ -2170,9 +2170,9 @@ operators.
     $L_v=c_v^{-1}A_v^\dagger$, one has
     \begin{align}
         \left(\bigotimes_{v\in R}L_v\right)T_R(\theta)
-           &=B_R(\theta),\notag\\
+         & =B_R(\theta),\notag \\
         \left(\bigotimes_{v\in R}A_v\right)B_R(\theta)
-           &=T_R(\theta).
+         & =T_R(\theta).
         \label{eq:peps_region_accessibility}
     \end{align}
     The reverse identity needs only the local invariance of the
@@ -2226,7 +2226,7 @@ operators.
     \[
         (F_R T_R)(\tau,\mu)=
         \sum_{\eta:\eta|_{\partial R}=\mu}
-            \prod_{v\in R}\sum_s F_v(\tau_v,s)A_v(s,\eta|_v).
+        \prod_{v\in R}\sum_s F_v(\tau_v,s)A_v(s,\eta|_v).
     \]
     This is the physical operation on a block used in
     \cite[\S6.1, accessible virtual coordinates]{Schuch2010PEPS}.
@@ -2259,7 +2259,7 @@ operators.
     $(U_gf)(\eta)=f(g^{-1}\eta)$, and its invariant projector has entries
     \[
         P_v(\eta,\theta)=\frac1{|G|}\sum_{g\in G}
-            \mathbf 1_{\{\eta=g\theta\}}.
+        \mathbf 1_{\{\eta=g\theta\}}.
     \]
     The local Gram kernel is
     $\sum_s\overline{a_v(\eta;s)}a_v(\theta;s)$.
@@ -2274,8 +2274,8 @@ operators.
     If $A_v$ is $G$-isometric, there is $c_v>0$ such that
     \[
         \sum_s\overline{a_v(\eta;s)}a_v(\theta;s)
-            =\frac{c_v}{|G|}\sum_{g\in G}
-                \mathbf 1_{\{\eta=g\theta\}}.
+        =\frac{c_v}{|G|}\sum_{g\in G}
+        \mathbf 1_{\{\eta=g\theta\}}.
     \]
     Its coefficients are invariant under simultaneous left translation;
     this invariance already follows from $G$-injectivity.
@@ -2304,7 +2304,7 @@ operators.
     with crossing labels $\mu,\nu$ of
     \[
         \prod_{v\in R}\sum_s
-            \overline{a_v(\eta|_{E_v};s)}a_v(\theta|_{E_v};s).
+        \overline{a_v(\eta|_{E_v};s)}a_v(\theta|_{E_v};s).
     \]
     This identity requires no isometry assumption.
 \end{lemma}
@@ -2379,7 +2379,7 @@ operators.
     \[
         T_R^\dagger T_R=\kappa_R P_{\partial R},\qquad
         \kappa_R=\left(\prod_{v\in R}c_v\right)
-            \frac{|G|^{I_R+1}}{|G|^{V_R}}.
+        \frac{|G|^{I_R+1}}{|G|^{V_R}}.
     \]
     The boundary may be empty. In particular, positive local Gram
     factors give an isometry on the invariant boundary space after
@@ -2410,7 +2410,7 @@ operators.
     satisfies $UP=PU$, then there is a unitary $W$ on the original
     physical region satisfying
     \begin{align}
-        WT&=TU.
+        WT & =TU.
     \end{align}
     No surjectivity of the site maps is required. This auxiliary
     form of physical accessibility extends the operation to any unused
@@ -2422,7 +2422,7 @@ operators.
     site by site, so $T^\dagger T=cP$, where $c=\prod_{v\in R}c_v$.
     Hence
     \begin{align}
-        (TU)^\dagger(TU)&=cU^\dagger PU=cP=T^\dagger T.
+        (TU)^\dagger(TU) & =cU^\dagger PU=cP=T^\dagger T.
     \end{align}
     Equal Gram matrices define an isometry between the two ranges.
     Extend it to a unitary on the finite-dimensional physical space.
@@ -2456,17 +2456,17 @@ operators.
     $y\in G^{\partial R}$, $a\in G^I$, normalized vertex labels $r$,
     and $z\in G^{I\setminus T}$. The reconstruction is
     \begin{align}
-        \alpha_{v,e}&=r_vy_e
-            &&(e\in\partial R,\ v\in R),
-            \label{eq:peps_region_boundary_coordinates}\\
-        \alpha_{u,e}&=r_ua_e
-            &&(e=(u,v)\in I),\notag\\
-        \alpha_{v,e}&=
-            \begin{cases}
-                r_va_e,&e\in T,\\
-                r_vz_ea_e,&e\in I\setminus T.
-            \end{cases}
-            \label{eq:peps_region_internal_coordinates}
+        \alpha_{v,e} & =r_vy_e
+                     &         & (e\in\partial R,\ v\in R),
+        \label{eq:peps_region_boundary_coordinates}         \\
+        \alpha_{u,e} & =r_ua_e
+                     &         & (e=(u,v)\in I),\notag      \\
+        \alpha_{v,e} & =
+        \begin{cases}
+            r_va_e,    & e\in T,            \\
+            r_vz_ea_e, & e\in I\setminus T.
+        \end{cases}
+        \label{eq:peps_region_internal_coordinates}
     \end{align}
     This is a reversible change of regular basis labels associated with
     the accessible virtual systems and blocking operations in
@@ -2507,8 +2507,8 @@ operators.
     The actual open-region coefficient matrix $M_R$ satisfies
     \begin{align}
         M_R\bigl(\alpha(y,a,r,z),\theta\bigr)
-          &= |G|^{1-|R|}P_{\partial R}(y,\theta)
-               \mathbf 1_{\{z=1\}}.
+         & = |G|^{1-|R|}P_{\partial R}(y,\theta)
+        \mathbf 1_{\{z=1\}}.
         \label{eq:peps_region_projector_coordinates}
     \end{align}
     No nonempty-boundary assumption is required.
@@ -2552,7 +2552,7 @@ operators.
     positive factor is
     \[
         c_R=\left(\prod_{v\in R}c_v\right)
-            |G|^{I_R+1-|R|},
+        |G|^{I_R+1-|R|},
     \]
     where $I_R$ is the number of internal edges. This includes blocks with
     internal cycles and blocks with no crossing bonds. It is the actual
@@ -2601,10 +2601,10 @@ operators.
     $\alpha'_{v,e}=k_v^{-1}\alpha_{v,e}$. Crossing labels have the
     reversible transport
     \begin{align}
-        \theta'_e&=
+        \theta'_e & =
         \begin{cases}
-            k_s^{-1}\theta_e,&s\in R,\ t\notin R,\\
-            k_t^{-1}u_e\theta_e,&s\notin R,\ t\in R.
+            k_s^{-1}\theta_e,    & s\in R,\ t\notin R, \\
+            k_t^{-1}u_e\theta_e, & s\notin R,\ t\in R.
         \end{cases}
         \label{eq:peps_tree_boundary_transport}
     \end{align}
@@ -2711,8 +2711,8 @@ operators.
     be the image of the native vertex coordinates. Define the closed
     cell and the realized region by
     \begin{align}
-        Q_v&=p_v+\pi([-1/2,1/2]^2),&
-        X_R&=\bigcup_{v\in R}Q_v.
+        Q_v & =p_v+\pi([-1/2,1/2]^2), &
+        X_R & =\bigcup_{v\in R}Q_v.
     \end{align}
     The cells and their finite union are compact, and $X_R$ is locally
     path connected. Every native site in $R$ lies in $X_R$. The paths
@@ -2767,15 +2767,15 @@ operators.
     Let $F:X_R\to\mathbb R^2$ be a continuous lift of the inclusion
     into the real torus. On every native cell,
     \begin{align}
-        F(p_v+\pi(d))&=F(p_v)+d,
-        &d&\in[-1/2,1/2]^2.
+        F(p_v+\pi(d)) & =F(p_v)+d,
+                      & d          & \in[-1/2,1/2]^2.
     \end{align}
     The lift is a closed embedding. There are integer site coordinates
     $L(v)=F(p_v)$ which project to the original native vertices and
     preserve every internal unit step, and
     \begin{align}
-        F(X_R)&=P_L:=\bigcup_{v\in R}
-            \bigl(L(v)+[-1/2,1/2]^2\bigr).
+        F(X_R) & =P_L:=\bigcup_{v\in R}
+        \bigl(L(v)+[-1/2,1/2]^2\bigr).
     \end{align}
     Thus $F$ induces a homeomorphism from the actual torus cell union
     to this finite planar cell union.
@@ -2818,12 +2818,12 @@ operators.
     $\delta_j=(j_1w,j_2H)$. Two plane points have the same projection
     exactly when their difference is some $\delta_j$, and
     \begin{align}
-        \pi^{-1}(X_R)&=\bigcup_{j\in\mathbb Z^2}(P_L+\delta_j).
+        \pi^{-1}(X_R) & =\bigcup_{j\in\mathbb Z^2}(P_L+\delta_j).
     \end{align}
     If $j\ne0$, then
     \begin{align}
-        F(X_R)\cap\bigl(F(X_R)+\delta_j\bigr)&=\varnothing,\\
-        P_L\cap(P_L+\delta_j)&=\varnothing.
+        F(X_R)\cap\bigl(F(X_R)+\delta_j\bigr) & =\varnothing, \\
+        P_L\cap(P_L+\delta_j)                 & =\varnothing.
     \end{align}
     In particular, individual closed cells in distinct period copies
     cannot meet, even along a side or at a corner. If the actual cell
@@ -2877,7 +2877,7 @@ operators.
         thm:peps_torus_region_planar_lift}
     For a finite set $A\subset\mathbb Z^2$, put
     \begin{align}
-        P_A&=\bigcup_{a\in A}\bigl(a+[-1/2,1/2]^2\bigr).
+        P_A & =\bigcup_{a\in A}\bigl(a+[-1/2,1/2]^2\bigr).
     \end{align}
     This union is locally path connected. If $P_A$ is simply connected,
     every component of $\mathbb Z^2\setminus A$ under horizontal and
@@ -3083,8 +3083,8 @@ operators.
     Put $E=[-3/4,3/4]^2$, and let $P_j=P+(wj_1,Hj_2)$ be its period
     copies. Then
     \begin{align}
-        (P+E)\cap P_j&=\varnothing\qquad(j\neq0),\\
-        \pi\bigl((P+E)\setminus P\bigr)&\subseteq X_R^c.
+        (P+E)\cap P_j                   & =\varnothing\qquad(j\neq0), \\
+        \pi\bigl((P+E)\setminus P\bigr) & \subseteq X_R^c.
     \end{align}
     Here addition of sets is Minkowski addition. If $X_R$ is simply
     connected and contains a native site, there is an integer unit-step
@@ -3120,8 +3120,8 @@ operators.
     Let the torus periods $w,H$ be at least three. For $a\in\mathbb Z^2$,
     put
     \begin{align}
-        D(a)&=\left(\left\lfloor a_1/w\right\rfloor,
-            \left\lfloor a_2/H\right\rfloor\right).
+        D(a) & =\left(\left\lfloor a_1/w\right\rfloor,
+        \left\lfloor a_2/H\right\rfloor\right).
     \end{align}
     If $a,b$ differ by one horizontal or vertical unit step, then the
     oriented crossing pair of their projected native edge is $D(b)-D(a)$.
@@ -3150,15 +3150,15 @@ operators.
     An edge from $v\in R$ to $t\notin R$ lifts to a unit step from
     $L(v)$ to an integer point $b$ projecting to $t$, with
     \begin{align}
-        b&\in (P+[-3/4,3/4]^2)\setminus P,\\
-        N([v,t])&=D(b)-D(L(v)).
+        b        & \in (P+[-3/4,3/4]^2)\setminus P, \\
+        N([v,t]) & =D(b)-D(L(v)).
     \end{align}
     More generally, let $p:v_0\to v$ be any native region walk, and
     let $t_0,t$ be exterior neighbors of its endpoints. There are lifted
     exterior integer endpoints $b_0,b$ in the same collar, projecting
     to $t_0,t$, such that
     \begin{align}
-        N([t_0,v_0]*p*[v,t])&=D(b)-D(b_0).
+        N([t_0,v_0]*p*[v,t]) & =D(b)-D(b_0).
     \end{align}
     Concatenation is written in traversal order. This supplies the
     endpoints and winding pair required in the complement argument of
@@ -3191,10 +3191,10 @@ operators.
     $Q:v\to t$ in the induced native complement with crossing numbers
     \begin{align}
         N(Q)=\left(
-          \left\lfloor\frac{b_1}{w}\right\rfloor
-            -\left\lfloor\frac{a_1}{w}\right\rfloor,
-          \left\lfloor\frac{b_2}{H}\right\rfloor
-            -\left\lfloor\frac{a_2}{H}\right\rfloor
+        \left\lfloor\frac{b_1}{w}\right\rfloor
+        -\left\lfloor\frac{a_1}{w}\right\rfloor,
+        \left\lfloor\frac{b_2}{H}\right\rfloor
+        -\left\lfloor\frac{a_2}{H}\right\rfloor
         \right).
     \end{align}
     Thus the lattice walk has the prescribed lifted endpoint displacement.
@@ -3244,15 +3244,15 @@ operators.
     when $j+1\equiv0\pmod n$, and otherwise stays unchanged. For commuting $g,h\in G$,
     define
     \begin{align}
-        k_v&=h^{\lfloor L_x(v)/w\rfloor}
-            g^{-\lfloor L_y(v)/H\rfloor}.
+        k_v & =h^{\lfloor L_x(v)/w\rfloor}
+        g^{-\lfloor L_y(v)/H\rfloor}.
     \end{align}
     On a native rightward step the gauge changes by left multiplication
     by $h$ precisely at the horizontal seam; on an upward step it
     changes by left multiplication by $g^{-1}$ precisely at the vertical
     seam. For every internal edge, ordered from $s$ to $t$,
     \begin{align}
-        k_tk_s^{-1}&=u_e,\qquad k_t^{-1}u_ek_s=1,
+        k_tk_s^{-1} & =u_e,\qquad k_t^{-1}u_ek_s=1,
     \end{align}
     where the native closure assignment is $h^{-1}$ on a horizontal
     seam edge, $g$ on a vertical seam edge, and the identity elsewhere.
@@ -3297,9 +3297,9 @@ operators.
     coordinates $\alpha(y,a,r,z)$, the actual twisted canonical matrix satisfies
     \begin{align}
         M_R^u\bigl(\alpha(y,a,r,z),\theta\bigr)
-          &= |G|^{-|R|}\sum_{x\in G}
-             \mathbf 1_{\{y=x\theta'\}}
-             \mathbf 1_{\{z_e=x\omega_ex^{-1}\ (e\in I\setminus T)\}}.
+         & = |G|^{-|R|}\sum_{x\in G}
+        \mathbf 1_{\{y=x\theta'\}}
+        \mathbf 1_{\{z_e=x\omega_ex^{-1}\ (e\in I\setminus T)\}}.
         \label{eq:peps_twisted_projector_coordinates}
     \end{align}
     The reference labels $a$ and rooted vertex labels $r$ do not affect
@@ -3344,9 +3344,9 @@ operators.
     labels normalized at the root. The actual canonical matrices obey
     \begin{align}
         \bigl((M_R^u)^\dagger M_R^w\bigr)(\theta,\vartheta)
-          &= |G|^{-2|R|}N\sum_{x,t\in G}
-             \mathbf 1_{\{x b_u(\theta)=t b_w(\vartheta)\}}
-             \mathbf 1_{\{x\omega^ux^{-1}=t\omega^wt^{-1}\}}.
+         & = |G|^{-2|R|}N\sum_{x,t\in G}
+        \mathbf 1_{\{x b_u(\theta)=t b_w(\vartheta)\}}
+        \mathbf 1_{\{x\omega^ux^{-1}=t\omega^wt^{-1}\}}.
         \label{eq:peps_twisted_projector_cross_gram}
     \end{align}
     In particular, if no $s\in G$ satisfies
@@ -3390,7 +3390,7 @@ operators.
     crossing configuration $\theta'$ of
     (\ref{eq:peps_tree_boundary_transport}), the actual physical columns satisfy
     \begin{align}
-        T_R^u(\theta)&=T_R^{\widetilde u}(\theta').
+        T_R^u(\theta) & =T_R^{\widetilde u}(\theta').
     \end{align}
     If every internal residual is the identity, this reduces to
     $T_R^u(\theta)=T_R(\theta')$ for the original untwisted region.
@@ -3459,14 +3459,14 @@ operators.
     If the original sites have simultaneous regular invariance, the actual
     ordered coefficient matrices satisfy
     \begin{align}
-        M_R^u(\sigma,x)&=M_R^{\widetilde u}(\sigma,F(x)).
+        M_R^u(\sigma,x) & =M_R^{\widetilde u}(\sigma,F(x)).
     \end{align}
     Suppose further that $R$ is connected, the sites are $G$-isometric,
     and every internal residual $k_t^{-1}u_ek_s$ is the identity.
     Then $M_R^u(\sigma,x)=M_R(\sigma,F(x))$ and there is a positive
     scalar $c_R$ such that
     \begin{align}
-        (M_R^u)^\dagger M_R^u&=c_R\Pi_{\partial R}^{k,u}.
+        (M_R^u)^\dagger M_R^u & =c_R\Pi_{\partial R}^{k,u}.
     \end{align}
     If the boundary contains $b>0$ bonds, the actual matrix has rank
     $|G|^{b-1}$. The Gram statement allows an empty boundary and derives the block Gram
@@ -3506,12 +3506,12 @@ operators.
     commute. For the actual region matrix $M_R^{g,h}$ of the native
     closure, the explicit lift gauge $k$ gives
     \begin{align}
-        M_R^{g,h}(\sigma,x)&=M_R(\sigma,F_{g,h}(x)).
+        M_R^{g,h}(\sigma,x) & =M_R(\sigma,F_{g,h}(x)).
     \end{align}
     If $R$ is connected, there is a positive scalar $c_R$ such that
     \begin{align}
         (M_R^{g,h})^\dagger M_R^{g,h}
-            &=c_R\Pi_{\partial R}^{k,u(g,h)}.
+         & =c_R\Pi_{\partial R}^{k,u(g,h)}.
     \end{align}
     When the boundary has $b>0$ bonds,
     $\operatorname{rank}M_R^{g,h}=|G|^{b-1}$.
@@ -3548,7 +3548,7 @@ operators.
     For a commuting closure pair $g,h$ and a numbering of its $b>0$
     crossing bonds, the actual twisted open-region coefficient matrix satisfies
     \begin{align}
-        \operatorname{rank}M_R^{g,h}&=|G|^{b-1}.
+        \operatorname{rank}M_R^{g,h} & =|G|^{b-1}.
     \end{align}
     No arithmetic lift, residual-flatness condition, or block Gram
     identity is supplied. Geometric simple connectedness and native
@@ -3623,9 +3623,9 @@ operators.
     traversal order; the empty walk has product one. If $p:v\to w$
     and $q:w\to z$, and if $u'_e=k_t^{-1}u_ek_s$, then
     \begin{align}
-        H(u,pq)&=H(u,q)H(u,p),\\
-        H(u,p^{-1})&=H(u,p)^{-1},\\
-        H(u',p)&=k_w^{-1}H(u,p)k_v.
+        H(u,pq)     & =H(u,q)H(u,p),      \\
+        H(u,p^{-1}) & =H(u,p)^{-1},       \\
+        H(u',p)     & =k_w^{-1}H(u,p)k_v.
         \label{eq:peps_walk_gauge}
     \end{align}
     In particular a closed-walk holonomy transforms by conjugation at
@@ -3708,10 +3708,10 @@ operators.
     its ambient seam crossing numbers are
     \begin{align}
         N(p)=\left(
-            \left\lfloor\frac{L_1(t)}{W}\right\rfloor
-                -\left\lfloor\frac{L_1(v)}{W}\right\rfloor,
-            \left\lfloor\frac{L_2(t)}{H}\right\rfloor
-                -\left\lfloor\frac{L_2(v)}{H}\right\rfloor
+        \left\lfloor\frac{L_1(t)}{W}\right\rfloor
+        -\left\lfloor\frac{L_1(v)}{W}\right\rfloor,
+        \left\lfloor\frac{L_2(t)}{H}\right\rfloor
+        -\left\lfloor\frac{L_2(v)}{H}\right\rfloor
         \right).
         \label{eq:peps_region_deck_winding}
     \end{align}
@@ -3769,10 +3769,10 @@ operators.
     Its reduced assignment is precisely identity on the tree and
     $\omega_e$ on $C$. For $p:v\to w$ one therefore has
     \begin{align}
-        \operatorname{ev}_{\omega}W_T(p)&=k_w^{-1}H(u,p)k_v,\\
-        H(u,p)&=k_w\operatorname{ev}_{\omega}W_T(p)k_v^{-1},\\
+        \operatorname{ev}_{\omega}W_T(p) & =k_w^{-1}H(u,p)k_v,                           \\
+        H(u,p)                           & =k_w\operatorname{ev}_{\omega}W_T(p)k_v^{-1}, \\
         \operatorname{ev}_{xzx^{-1}}W_T(p)
-            &=x\operatorname{ev}_zW_T(p)x^{-1}.
+                                         & =x\operatorname{ev}_zW_T(p)x^{-1}.
     \end{align}
     For a loop based at $o$, normalization gives
     $\operatorname{ev}_{\omega}W_T(p)=H(u,p)$.
@@ -3819,9 +3819,9 @@ operators.
     coefficients satisfy
     \begin{align}
         (U_WM_R^u)\bigl(\alpha(y,a,r,z),\theta\bigr)
-          &=|G|^{-|R|}\sum_{x\in G}
-             \mathbf 1_{\{y=W(z)^{-1}x b_u(\theta)\}}
-             \mathbf 1_{\{z=x\omega x^{-1}\}}.
+         & =|G|^{-|R|}\sum_{x\in G}
+        \mathbf 1_{\{y=W(z)^{-1}x b_u(\theta)\}}
+        \mathbf 1_{\{z=x\omega x^{-1}\}}.
         \label{eq:peps_cycle_controlled_coefficients}
     \end{align}
     The cycle constraint is retained without any assumption on the
@@ -3855,7 +3855,7 @@ operators.
     Fix a reference crossing bond $f_0$ and an actual walk $p_f$ entirely
     in the induced graph on $S$ for each crossing bond $f$. Assume
     \begin{align}
-        \operatorname{ev}_{\omega_S}W_T(p_f)&=m_fm_{f_0}^{-1}.
+        \operatorname{ev}_{\omega_S}W_T(p_f) & =m_fm_{f_0}^{-1}.
         \label{eq:peps_control_relative_walks}
     \end{align}
     Define $W(z)_f=\operatorname{ev}_zW_T(p_f)$. With the complementary
@@ -3863,9 +3863,9 @@ operators.
     satisfy
     \begin{align}
         (U_WM_S^u)\bigl(\alpha_S(y,a,r,z),F_R^{-1}\theta\bigr)
-          &=|G|^{-|S|}\sum_{x\in G}
-             \mathbf 1_{\{y_f=xm_{f_0}\theta_f\ (f\in\partial S)\}}
-             \mathbf 1_{\{z=x\omega_S x^{-1}\}}.
+         & =|G|^{-|S|}\sum_{x\in G}
+        \mathbf 1_{\{y_f=xm_{f_0}\theta_f\ (f\in\partial S)\}}
+        \mathbf 1_{\{z=x\omega_S x^{-1}\}}.
         \label{eq:peps_control_common_transport}
     \end{align}
     Here $\theta_f$ denotes the label on the corresponding crossing bond
@@ -3880,8 +3880,8 @@ operators.
     is $M(\theta)_f=m_f\theta_f$. On the cycle support, conjugation
     of the constructed words gives
     \begin{align}
-        W(x\omega_S x^{-1})_f&=xm_fm_{f_0}^{-1}x^{-1},\\
-        W(z)_f^{-1}xm_f\theta_f&=xm_{f_0}\theta_f.
+        W(x\omega_S x^{-1})_f   & =xm_fm_{f_0}^{-1}x^{-1}, \\
+        W(z)_f^{-1}xm_f\theta_f & =xm_{f_0}\theta_f.
         \label{eq:peps_control_relative_cancellation}
     \end{align}
     Substituting~(\ref{eq:peps_control_relative_cancellation}) into
@@ -3904,7 +3904,7 @@ operators.
     $F_R^{-1}\theta$, put $x=t a^{-1}m_{f_0}^{-1}$. Its coefficient is
     \begin{align}
         |G|^{-|S|}\mathbf 1_{\{d=r\}}
-            \mathbf 1_{\{z=x\omega_Sx^{-1}\}}.
+        \mathbf 1_{\{z=x\omega_Sx^{-1}\}}.
     \end{align}
     The normalized boundary factor is
     $|G|^{-n/2}\mathbf 1_{\{d=r\}}$.
@@ -3955,8 +3955,8 @@ operators.
     coefficient is
     \begin{align}
         |G|^{-|R|-|S|}\mathbf 1_{\{d_R=d_S\}}
-            \mathbf 1_{\{z_R=\mathbf 1\}}
-            \sum_{x\in G}\mathbf 1_{\{z_S=x\omega_Sx^{-1}\}}.
+        \mathbf 1_{\{z_R=\mathbf 1\}}
+        \sum_{x\in G}\mathbf 1_{\{z_S=x\omega_Sx^{-1}\}}.
         \label{eq:peps_controlled_canonical_cut_factor}
     \end{align}
     In particular neither reference boundary label nor the common
@@ -3971,9 +3971,9 @@ operators.
     the coherent cut sum has the exact factorization
     \begin{align}
         \Omega_{|G|^n}(d_R,d_S)\,\phi_R\,
-          \biggl(|G|^{n/2}\sqrt{N_R}\,|G|^{-|R|-|S|}
-            \sum_i\lambda_i\sum_{x\in G}
-              \mathbf 1_{\{z_S=x\omega_{S,i}x^{-1}\}}\biggr).
+        \biggl(|G|^{n/2}\sqrt{N_R}\,|G|^{-|R|-|S|}
+        \sum_i\lambda_i\sum_{x\in G}
+        \mathbf 1_{\{z_S=x\omega_{S,i}x^{-1}\}}\biggr).
     \end{align}
     Both normalized factors are fixed before the sector family and
     its coefficients; all sector dependence is on the complementary
@@ -4020,16 +4020,16 @@ operators.
     the actual canonical cut contractions
     \begin{align}
         K_i(\alpha,\beta)
-          &=\sum_{\theta}
-              M_R^{g_i,h_i}(\alpha,\theta)
-              (UM_S^{g_i,h_i})(\beta,\theta),
+         & =\sum_{\theta}
+        M_R^{g_i,h_i}(\alpha,\theta)
+        (UM_S^{g_i,h_i})(\beta,\theta),
     \end{align}
     where the same native crossing edges are reread on the two sides.
     In the fixed spanning-tree and relative boundary coordinates,
     their coherent sum is
     \begin{align}
         \sum_i\lambda_i K_i
-          &=\Omega_{|G|^n}\otimes\phi_R\otimes\chi_{\lambda},
+         & =\Omega_{|G|^n}\otimes\phi_R\otimes\chi_{\lambda},
     \end{align}
     with the same normalized maximally entangled factor and the same
     normalized region ancillary vector as in
@@ -4037,9 +4037,9 @@ operators.
     The remaining complementary coefficient is
     \begin{align}
         \chi_{\lambda}(z_S)
-          &=|G|^{n/2}\sqrt{N_R}\,|G|^{-|R|-|S|}
-              \sum_i\lambda_i\sum_{x\in G}
-                \mathbf 1_{\{z_S=x\omega_{S,i}x^{-1}\}}.
+         & =|G|^{n/2}\sqrt{N_R}\,|G|^{-|R|-|S|}
+        \sum_i\lambda_i\sum_{x\in G}
+        \mathbf 1_{\{z_S=x\omega_{S,i}x^{-1}\}}.
     \end{align}
     Thus no group-valued flatness, relative-word identity, mixed Gram
     formula, or tensor factorization is supplied as a hypothesis.
@@ -4093,7 +4093,7 @@ operators.
     $\rho_\phi^2=|D|^{-1}\rho_\phi$. Moreover,
     \[
         K_{\phi,\chi}K_{\phi,\chi}^\dagger
-          =\|\chi\|^2\rho_\phi.
+        =\|\chi\|^2\rho_\phi.
     \]
     These identities persist under bijective changes of physical coordinates.
     A unitary acting on the complementary indices leaves the reduced matrix
@@ -4164,7 +4164,7 @@ operators.
     coefficients, satisfies
     \[
         C_\lambda C_\lambda^\dagger
-          =\operatorname{tr}(C_\lambda C_\lambda^\dagger)\rho_R^0.
+        =\operatorname{tr}(C_\lambda C_\lambda^\dagger)\rho_R^0.
     \]
     If $C_\lambda\ne0$, its trace is positive and its normalized reduced
     density equals $\rho_R^0$. Consequently its rank is $|G|^n$, its
@@ -4211,8 +4211,8 @@ operators.
     If $f$ joins $v_f\in R$ to $w_f\in S$, write $D_f$ for its actual
     directed bond transport from $v_f$ to $w_f$. Then
     \begin{align}
-        M(\theta)_f&=m_f\theta_f,
-        &m_f&=k_S(w_f)^{-1}D_fk_R(v_f).
+        M(\theta)_f & =m_f\theta_f,
+                    & m_f           & =k_S(w_f)^{-1}D_fk_R(v_f).
     \end{align}
     Thus $D_f=u_f$ when the region endpoint is the smaller endpoint,
     and $D_f=u_f^{-1}$ when it is the larger endpoint.
@@ -4223,7 +4223,7 @@ operators.
     to $v_f$, crossing to $w_f$, and following the complementary tree
     back to its root. Its holonomy is
     \begin{align}
-        H(u,p_f)&=m_fm_{f_0}^{-1}.
+        H(u,p_f) & =m_fm_{f_0}^{-1}.
     \end{align}
     The construction and identity permit arbitrary bond operators.
     Inclusion of an induced-region walk in the ambient graph preserves
@@ -4265,15 +4265,15 @@ operators.
     Theorem~\ref{thm:peps_regular_boundary_route} from these endpoints.
     For arbitrary native bond operators its holonomy is
     \begin{align}
-        H(u,q_f)&=m_fm_{f_0}^{-1},
-        &m_f&=(F_S\circ F_R^{-1})(\mathbf 1)_f.
+        H(u,q_f) & =m_fm_{f_0}^{-1},
+                 & m_f               & =(F_S\circ F_R^{-1})(\mathbf 1)_f.
     \end{align}
 
     Suppose actual loops $p_f$ in the induced complementary graph,
     based at its normalized root, have been chosen independently of the
     closure labels. Assume their ambient seam crossing numbers satisfy
     \begin{align}
-        \operatorname{wind}(p_f)&=\operatorname{wind}(q_f).
+        \operatorname{wind}(p_f) & =\operatorname{wind}(q_f).
     \end{align}
     For every commuting pair $g,h$, let $u^{g,h}$ be the actual native
     closure assignment, $\omega_S^{g,h}$ its complementary tree residuals,
@@ -4281,7 +4281,7 @@ operators.
     complementary walk words satisfy
     \begin{align}
         \operatorname{ev}_{\omega_S^{g,h}}W_{T_S}(p_f)
-            &=m_f^{g,h}(m_{f_0}^{g,h})^{-1}.
+         & =m_f^{g,h}(m_{f_0}^{g,h})^{-1}.
     \end{align}
     Thus the same words give the relative identity simultaneously for
     all commuting closure pairs. This is a geometry-to-group identity
@@ -4323,11 +4323,11 @@ operators.
     For every commuting pair and every complementary physical coordinate
     $(y,a,r,z)$, the actual coefficient formula is
     \begin{align}
-        &(U B_S^{g,h})\bigl(\alpha(y,a,r,z),
-                     (F_R^{g,h})^{-1}\theta\bigr)\\
-        &\qquad=|G|^{-|S|}\sum_{x\in G}
-            \mathbf 1_{\{y_f=xm_{f_0}^{g,h}\theta_f\ \text{for every }f\}}
-            \mathbf 1_{\{z=x\omega_S^{g,h}x^{-1}\}}.
+         & (U B_S^{g,h})\bigl(\alpha(y,a,r,z),
+        (F_R^{g,h})^{-1}\theta\bigr)           \\
+         & \qquad=|G|^{-|S|}\sum_{x\in G}
+        \mathbf 1_{\{y_f=xm_{f_0}^{g,h}\theta_f\ \text{for every }f\}}
+        \mathbf 1_{\{z=x\omega_S^{g,h}x^{-1}\}}.
     \end{align}
     Thus the relative crossing multipliers are removed by one common
     complementary operation, while the reference multiplier and actual
@@ -4371,10 +4371,10 @@ operators.
     translations $\lambda_v$ of its actual physical half-edge labels
     transform the spanning-tree coordinates by
     \begin{align}
-        (y,a,r,z)&\longmapsto
+        (y,a,r,z) & \longmapsto
         \bigl(\lambda_oy,\lambda_oa,
-            (\lambda_vr_v\lambda_o^{-1})_v,
-            \lambda_oz\lambda_o^{-1}\bigr).
+        (\lambda_vr_v\lambda_o^{-1})_v,
+        \lambda_oz\lambda_o^{-1}\bigr).
     \end{align}
     Reconstructing these coordinates gives precisely the original
     half-edge labels multiplied on the left by $\lambda_v$ at vertex $v$.
@@ -4383,9 +4383,9 @@ operators.
     This matrix commutes with every independent vertex translation.
     Their finite average is the actual product local invariant projector
     \begin{align}
-        P&=\bigotimes_{v\in R}P_v
-          =|G|^{-|R|}\sum_{\lambda\in G^R}L_\lambda,
-        &UP&=PU.
+        P & =\bigotimes_{v\in R}P_v
+        =|G|^{-|R|}\sum_{\lambda\in G^R}L_\lambda,
+          & UP                      & =PU.
     \end{align}
     In particular $U$ maps the genuine local invariant support
     $\operatorname{range}P$ into itself.
@@ -4394,7 +4394,7 @@ operators.
     there exists a unitary $W$ on their physical region such that
     \begin{align}
         W\Bigl(\bigotimes_{v\in R}A_v\Bigr)
-            &=\Bigl(\bigotimes_{v\in R}A_v\Bigr)U.
+         & =\Bigl(\bigotimes_{v\in R}A_v\Bigr)U.
     \end{align}
     The fixed words and their physical implementation are chosen without
     closure labels. No equivariance premise on an arbitrary control
@@ -4434,28 +4434,28 @@ operators.
     projector regions over their common crossing labels:
     \begin{align}
         C_u(\alpha,\beta)
-            &=\sum_\theta B_R^u(\alpha,\theta)
-                B_{R^c}^u(\beta,\theta).
+         & =\sum_\theta B_R^u(\alpha,\theta)
+        B_{R^c}^u(\beta,\theta).
     \end{align}
     Here the complement reads the same crossing edge under its native
     boundary identification. Write $P_R=\bigotimes_{v\in R}P_v$ and
     $T_R=\bigotimes_{v\in R}A_v$ for the original local projector and
     physical maps. The actual physical coefficient matrix $M_u$ satisfies
     \begin{align}
-        P_R C_u&=C_u,& C_uP_{R^c}^{\mathsf T}&=C_u,&
-        M_u&=T_R C_uT_{R^c}^{\mathsf T}.
+        P_R C_u & =C_u,                        & C_uP_{R^c}^{\mathsf T} & =C_u, &
+        M_u     & =T_R C_uT_{R^c}^{\mathsf T}.
     \end{align}
     If the local maps are regular $G$-isometric, choose their derived
     positive product Gram factors $c_R,c_{R^c}$. For every finite coherent
     sum $C=\sum_i\mu_iC_{u_i}$ and $M=\sum_i\mu_iM_{u_i}$, put
     $\tau_C=CC^\dagger$ and $\tau_M=MM^\dagger$. Then
     \begin{align}
-        \tau_M&=c_{R^c}T_R\tau_CT_R^\dagger,&
+        \tau_M & =c_{R^c}T_R\tau_CT_R^\dagger,       &
         \operatorname{tr}\tau_M
-            &=c_Rc_{R^c}\operatorname{tr}\tau_C,\\
+               & =c_Rc_{R^c}\operatorname{tr}\tau_C,   \\
         (\operatorname{tr}\tau_M)^{-1}\tau_M
-            &=c_R^{-1}T_R
-                \bigl((\operatorname{tr}\tau_C)^{-1}\tau_C\bigr)T_R^\dagger.
+               & =c_R^{-1}T_R
+        \bigl((\operatorname{tr}\tau_C)^{-1}\tau_C\bigr)T_R^\dagger.
     \end{align}
     The inverse is read as zero when its argument is zero. For a nonzero
     state, the last identity is the transfer of normalized reduced density.
@@ -4490,8 +4490,8 @@ operators.
     $\operatorname{rank}\widehat\rho=\operatorname{rank}\rho$.
     If $\rho^2=r^{-1}\rho$, then
     \begin{align}
-        \widehat\rho^2&=r^{-1}\widehat\rho,&
-        S(\widehat\rho)&=\log r.
+        \widehat\rho^2  & =r^{-1}\widehat\rho, &
+        S(\widehat\rho) & =\log r.
     \end{align}
     This auxiliary finite-dimensional calculation expresses physical
     accessibility on the invariant support in
@@ -4504,7 +4504,7 @@ operators.
     Positivity follows by conjugation and positive scaling; cyclicity of
     trace gives trace one. Moreover
     \begin{align}
-        T^\dagger\widehat\rho T&=c\rho.
+        T^\dagger\widehat\rho T & =c\rho.
     \end{align}
     Applying the rank inequality to each physical image yields equality
     of ranks. Inserting $T^\dagger T$ between the two densities proves
@@ -4531,11 +4531,11 @@ operators.
     For every finite family of commuting pairs $(g_i,h_i)$ and every
     nonzero coherent closure superposition with actual cut matrix $M$,
     \begin{align}
-        \frac{MM^\dagger}{\operatorname{tr}(MM^\dagger)}&=\rho_R,&
-        \rho_R&\geq0,&\operatorname{tr}\rho_R&=1,\\
-        \operatorname{rank}\rho_R&=|G|^{b-1},&
-        \rho_R^2&=|G|^{-(b-1)}\rho_R,&
-        S(\rho_R)&=(b-1)\log|G|.
+        \frac{MM^\dagger}{\operatorname{tr}(MM^\dagger)} & =\rho_R,             &
+        \rho_R                                           & \geq0,               & \operatorname{tr}\rho_R & =1, \\
+        \operatorname{rank}\rho_R                        & =|G|^{b-1},          &
+        \rho_R^2                                         & =|G|^{-(b-1)}\rho_R, &
+        S(\rho_R)                                        & =(b-1)\log|G|.
     \end{align}
     For every nonnegative finite Rényi order $\alpha$, including order
     zero and the von Neumann value at order one,
@@ -4560,7 +4560,7 @@ operators.
     Its fixed normalized density $\rho_R^0$ is supported on $P_R$, so
     the physical density is the fixed matrix
     \begin{align}
-        \rho_R&=c_R^{-1}T_R\rho_R^0T_R^\dagger.
+        \rho_R & =c_R^{-1}T_R\rho_R^0T_R^\dagger.
     \end{align}
     The supported physical density theorem transfers positivity, trace,
     rank, and the flat spectrum. The spectral entropy calculation gives
@@ -4591,14 +4591,14 @@ operators.
     commuting closure labels $g,h$, the actual canonical tensor satisfies
     \begin{align}
         B_R^{g,h}(y,a,r,z;\theta)
-          &=B_R(y,a,r,z;F_{g,h}(\theta)),
+         & =B_R(y,a,r,z;F_{g,h}(\theta)),
     \end{align}
     where $F_{g,h}$ is the native transported crossing configuration.
     In particular, there are a positive constant $\gamma$ and one
     normalized vector $\phi(a,r,z)$, independent of $g,h$, such that
     \begin{align}
         B_R^{g,h}(y,a,r,z;\theta)
-          &=\gamma\Pi_{\partial R}(y,F_{g,h}(\theta))\phi(a,r,z).
+         & =\gamma\Pi_{\partial R}(y,F_{g,h}(\theta))\phi(a,r,z).
     \end{align}
     This is an auxiliary lifted-region form of the blocking and
     boundary-coordinate calculations in \cite[\S6.2--6.3]{Schuch2010PEPS}.
@@ -4661,7 +4661,7 @@ operators.
     In a nonempty connected region, $V_R\leq I_R+1$. Thus
     \[
         \frac{|G|^{I_R+1}}{|G|^{V_R}}
-            =|G|^{I_R+1-V_R}.
+        =|G|^{I_R+1-V_R}.
     \]
     The exponent is the cycle rank. For a tree it vanishes, so that
     the region Gram factor is just the product of the local factors.
@@ -4717,7 +4717,7 @@ operators.
     coefficients
     \[
         \Psi(a,c)=\sum_{z\in G}\prod_{i=0}^{b-1}\delta_{a_i,zc_i}
-          =|G|P_{a,c}.
+        =|G|P_{a,c}.
     \]
     Its normalized coefficient matrix is $C=P/\sqrt r$, and its reduced
     density operator is $\rho=P/r$. These are the virtual vectors used
@@ -4791,7 +4791,7 @@ operators.
     For a positive density $\rho$ and $\alpha>0$, $\alpha\ne1$, define
     \[
         S_\alpha(\rho)=(1-\alpha)^{-1}
-          \log\operatorname{tr}(\rho^\alpha),
+        \log\operatorname{tr}(\rho^\alpha),
     \]
     where the real power is defined spectrally. Set $S_1(\rho)=S(\rho)$
     and $S_0(\rho)=\log\operatorname{rank}\rho$.
@@ -4906,7 +4906,7 @@ operators.
     subspace. The normalized bipartite vector with coefficient matrix
     \[
         \widehat M C\widehat N^{\mathsf T}
-          =\frac{MPN^{\mathsf T}}{\sqrt{c_A}\sqrt{c_B}\sqrt r}
+        =\frac{MPN^{\mathsf T}}{\sqrt{c_A}\sqrt{c_B}\sqrt r}
     \]
     has reduced von Neumann entropy $n\log|G|$.
     For the actual cut maps of
@@ -5040,29 +5040,29 @@ operators.
     % U_g on the two vertical returns. The physical indices are fixed.
     % Every port is contracted; resulting boundary signature is (V,P)=(0,0).
     % Crossing curves share no index unless they meet at a tensor.
-\tenkzkernel
-\begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
-  \tn[at=(2,2), skin=box, name=NW, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
-  \tn[at=(2,3), skin=box, name=NE, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
-  \tn[at=(3,2), skin=box, name=SW, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
-  \tn[at=(3,3), skin=box, name=SE, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
-  \tn[at=(2,1), skin=box, name=H1, ports={0:virtual,180:virtual}]{U_h}
-  \tn[at=(3,4), skin=box, name=H2, ports={0:virtual,180:virtual}]{U_h}
-  \tn[at=(1,2), skin=box, name=G1, ports={90:virtual,270:virtual}]{U_g}
-  \tn[at=(4,3), skin=box, name=G2, ports={90:virtual,270:virtual}]{U_g}
-  \tnwire{NW.0}{NE.180}
-  \tnwire{SW.0}{SE.180}
-  \tnwire{NW.270}{SW.90}
-  \tnwire{NE.270}{SE.90}
-  \tnwire{H1.0}{NW.180}
-  \tnwire[route=arc]{NE.0}{H1.180}
-  \tnwire{SE.0}{H2.180}
-  \tnwire[route=arc]{H2.0}{SW.180}
-  \tnwire{G1.270}{NW.90}
-  \tnwire[route=arc]{SW.270}{G1.90}
-  \tnwire{SE.270}{G2.90}
-  \tnwire[route=arc]{G2.270}{NE.90}
-\end{tenkz}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+        \tn[at=(2,2), skin=box, name=NW, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(2,3), skin=box, name=NE, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(3,2), skin=box, name=SW, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(3,3), skin=box, name=SE, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(2,1), skin=box, name=H1, ports={0:virtual,180:virtual}]{U_h}
+        \tn[at=(3,4), skin=box, name=H2, ports={0:virtual,180:virtual}]{U_h}
+        \tn[at=(1,2), skin=box, name=G1, ports={90:virtual,270:virtual}]{U_g}
+        \tn[at=(4,3), skin=box, name=G2, ports={90:virtual,270:virtual}]{U_g}
+        \tnwire{NW.0}{NE.180}
+        \tnwire{SW.0}{SE.180}
+        \tnwire{NW.270}{SW.90}
+        \tnwire{NE.270}{SE.90}
+        \tnwire{H1.0}{NW.180}
+        \tnwire[route=arc]{NE.0}{H1.180}
+        \tnwire{SE.0}{H2.180}
+        \tnwire[route=arc]{H2.0}{SW.180}
+        \tnwire{G1.270}{NW.90}
+        \tnwire[route=arc]{SW.270}{G1.90}
+        \tnwire{SE.270}{G2.90}
+        \tnwire[route=arc]{G2.270}{NE.90}
+    \end{tenkz}
 \end{center}
 
 
@@ -5186,7 +5186,7 @@ operators.
     translation of its four virtual labels. There is $c>0$ such that
     \[
         \sum_s\overline{A_s(\eta)}A_s(\theta)
-          =\frac{c}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
+        =\frac{c}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
     \]
     The factor $c$ records the normalization of the site tensor.
 \end{lemma}
@@ -5232,8 +5232,8 @@ operators.
     \[
         \sum_{\beta,\gamma}\overline{W_A(\beta)}W_B(\gamma)
         \prod_v\left(\sum_s
-          \overline{A_{v,s}(\eta_v(\beta))}
-          B_{v,s}(\eta_v(\gamma))\right).
+        \overline{A_{v,s}(\eta_v(\beta))}
+        B_{v,s}(\eta_v(\gamma))\right).
     \]
     For permutation bonds, the head label is the permutation of the
     tail label. Hence one free label per bond suffices in each network.
@@ -5318,7 +5318,7 @@ operators.
     \[
         \langle\psi_{g,h},\psi_{g',h'}\rangle
         =\left(\prod_v c_v\right)|G|^N
-          \#\{x\in G:hx=xh',\ gx=xg'\}.
+        \#\{x\in G:hx=xh',\ gx=xg'\}.
     \]
     For a uniform tensor the prefactor is $c^N|G|^N$. Neither closure
     pair is required to commute.
@@ -5394,24 +5394,24 @@ operators.
     finite-dimensional complex vector space $E$. Define
     \begin{align}
         \Omega_{g,h}
-            &=\sum_{x\in G}U_{xhx^{-1}}\otimes U_{xgx^{-1}},
-            \label{eq:peps_pair_operator_sum}\\
+         & =\sum_{x\in G}U_{xhx^{-1}}\otimes U_{xgx^{-1}},
+        \label{eq:peps_pair_operator_sum}                  \\
         \Phi_{g,h}(A\otimes B)
-            &=\tr[U_{h^{-1}}A\Delta]\,
-                \tr[U_{g^{-1}}B\Delta].
-            \label{eq:peps_pair_operator_dual}
+         & =\tr[U_{h^{-1}}A\Delta]\,
+        \tr[U_{g^{-1}}B\Delta].
+        \label{eq:peps_pair_operator_dual}
     \end{align}
     The operator $\Omega_{g,h}$ depends only on the simultaneous-conjugacy
     class $C$ of $(g,h)$; denote it by $\Omega_C$. The family
     $(\Omega_C)_C$ is linearly independent. The detecting functionals satisfy
     \begin{align}
         \Phi_{g,h}(\Omega_{g',h'})
-            &=\bigl|\{x\in G:
-                g=xg'x^{-1},\ h=xh'x^{-1}\}\bigr|,
-            \label{eq:peps_pair_operator_count}\\
+         & =\bigl|\{x\in G:
+        g=xg'x^{-1},\ h=xh'x^{-1}\}\bigr|,
+        \label{eq:peps_pair_operator_count} \\
         \Phi_{g,h}(\Omega_{g,h})
-            &=|Z_G(g)\cap Z_G(h)|>0.
-            \label{eq:peps_pair_operator_diagonal}
+         & =|Z_G(g)\cap Z_G(h)|>0.
+        \label{eq:peps_pair_operator_diagonal}
     \end{align}
     In a coordinate basis, the corresponding matrices
     $\sum_x U_{xhx^{-1}}\otimes_{\mathrm K}U_{xgx^{-1}}$ are likewise
@@ -5454,7 +5454,7 @@ operators.
     site set $\Lambda$ has coefficients
     \[
         (F^{\otimes\Lambda})_{\tau,\sigma}
-            =\prod_{v\in\Lambda}F_{\tau(v),\sigma(v)}.
+        =\prod_{v\in\Lambda}F_{\tau(v),\sigma(v)}.
     \]
     The transformed site tensor is
     $(FA)^q_{t,r,b,l}=\sum_s F_{q,s}A^s_{t,r,b,l}$.
@@ -5472,7 +5472,7 @@ operators.
     with $F$ and preserves every virtual bond operator. In particular,
     \[
         F^{\otimes\Lambda}\ket{\mathcal M(A\mid g,h)}
-            =\ket{\mathcal M(FA\mid g,h)}.
+        =\ket{\mathcal M(FA\mid g,h)}.
     \]
     The identity holds for arbitrary torus bond operators, with no
     invariance or injectivity hypothesis. It is the physical inverse
@@ -5500,7 +5500,7 @@ operators.
     configuration coordinates. Then
     \[
         C_R(F^{\otimes\Lambda}\psi)
-          =F^{\otimes R}C_R(\psi)(F^{\otimes R^c})^{\mathsf T}.
+        =F^{\otimes R}C_R(\psi)(F^{\otimes R^c})^{\mathsf T}.
     \]
     Consequently its rank cannot increase. If physical product maps
     send $\psi$ to $\phi$ and $\phi$ back to $\psi$, their Schmidt
@@ -5535,57 +5535,57 @@ operators.
 \end{proof}
 
 \begin{lemma}\label{lem:peps_torus_nonseam_connectivity}
-\lean{TNLean.PEPS.IsTorusNonseamCompatible,
-  TNLean.PEPS.IsTorusNonseamCompatible.eq_origin}
-\leanok
-\uses{def:peps_torus_regular_coordinates}
-Let $q:\mathbb Z_w\times\mathbb Z_h\to X$ be labels in any set $X$, where $w,h>0$.
-Suppose that $q_{x+1,y}=q_{x,y}$ whenever $x+1\ne0$, and
-$q_{x,y}=q_{x,y+1}$ whenever $y+1\ne0$. Then $q_{x,y}=q_{0,0}$ at every vertex.
-This is the synchronization away from the closure seams used in
-\cite[Theorem~5.9]{Schuch2010PEPS}.
+    \lean{TNLean.PEPS.IsTorusNonseamCompatible,
+        TNLean.PEPS.IsTorusNonseamCompatible.eq_origin}
+    \leanok
+    \uses{def:peps_torus_regular_coordinates}
+    Let $q:\mathbb Z_w\times\mathbb Z_h\to X$ be labels in any set $X$, where $w,h>0$.
+    Suppose that $q_{x+1,y}=q_{x,y}$ whenever $x+1\ne0$, and
+    $q_{x,y}=q_{x,y+1}$ whenever $y+1\ne0$. Then $q_{x,y}=q_{0,0}$ at every vertex.
+    This is the synchronization away from the closure seams used in
+    \cite[Theorem~5.9]{Schuch2010PEPS}.
 \end{lemma}
 \begin{proof}\leanok
-Induct along the representatives $0,\ldots,w-1$ in the horizontal direction,
-then along $0,\ldots,h-1$ in the vertical direction. Neither induction crosses
-a closure seam. The same argument includes a circumference of one.
+    Induct along the representatives $0,\ldots,w-1$ in the horizontal direction,
+    then along $0,\ldots,h-1$ in the vertical direction. Neither induction crosses
+    a closure seam. The same argument includes a circumference of one.
 \end{proof}
 
 \begin{lemma}\label{lem:peps_torus_projector_expansion}
-\lean{TNLean.PEPS.torusBondSiteLabelsEquiv,
-  TNLean.PEPS.torusBondNetwork_single,
-  TNLean.PEPS.torusBondNetwork_sum,
-  TNLean.PEPS.torusBondNetwork_mul,
-  TNLean.PEPS.torusDress_single,
-  TNLean.PEPS.torusBondNetwork_averagingSite}
-\leanok
-\uses{def:peps_torus_regular_coordinates,def:peps_regular_averaging_site,
-  lem:peps_torus_bond_network_gauge}
-Let $U$ be a finite-dimensional representation of a finite group $G$, and let
-$\Pi$ be the four-leg averaging projector. Write $e(v)$ and $n(v)$ for the
-neighbours east and north of $v$, and let $s_v=(t_v,r_v,b_v,l_v)$ denote the
-physical basis label of the projector site. For arbitrary bond operators
-$O^H_v,O^V_v$, set
-\[
- H_v(q)=U_{q_{e(v)}}O^H_vU_{q_v^{-1}},\qquad
- V_v(q)=U_{q_v}O^V_vU_{q_{n(v)}^{-1}}.
-\]
-The actual torus contraction of the projector sites has coefficient
-\[
- \Psi_\Pi(s)=|G|^{-N}\sum_{q:\mathbb Z_w\times\mathbb Z_h\to G}
-   \prod_v H_v(q)_{l_{e(v)},r_v}\,V_v(q)_{t_v,b_{n(v)}},
- \qquad N=wh.
-\]
-No semi-regularity or unitarity assumption is required for this identity.
-It is the expansion of the projector contraction in
-\cite[Theorem~5.9]{Schuch2010PEPS}.
+    \lean{TNLean.PEPS.torusBondSiteLabelsEquiv,
+        TNLean.PEPS.torusBondNetwork_single,
+        TNLean.PEPS.torusBondNetwork_sum,
+        TNLean.PEPS.torusBondNetwork_mul,
+        TNLean.PEPS.torusDress_single,
+        TNLean.PEPS.torusBondNetwork_averagingSite}
+    \leanok
+    \uses{def:peps_torus_regular_coordinates,def:peps_regular_averaging_site,
+        lem:peps_torus_bond_network_gauge}
+    Let $U$ be a finite-dimensional representation of a finite group $G$, and let
+    $\Pi$ be the four-leg averaging projector. Write $e(v)$ and $n(v)$ for the
+    neighbours east and north of $v$, and let $s_v=(t_v,r_v,b_v,l_v)$ denote the
+    physical basis label of the projector site. For arbitrary bond operators
+    $O^H_v,O^V_v$, set
+    \[
+        H_v(q)=U_{q_{e(v)}}O^H_vU_{q_v^{-1}},\qquad
+        V_v(q)=U_{q_v}O^V_vU_{q_{n(v)}^{-1}}.
+    \]
+    The actual torus contraction of the projector sites has coefficient
+    \[
+        \Psi_\Pi(s)=|G|^{-N}\sum_{q:\mathbb Z_w\times\mathbb Z_h\to G}
+        \prod_v H_v(q)_{l_{e(v)},r_v}\,V_v(q)_{t_v,b_{n(v)}},
+        \qquad N=wh.
+    \]
+    No semi-regularity or unitarity assumption is required for this identity.
+    It is the expansion of the projector contraction in
+    \cite[Theorem~5.9]{Schuch2010PEPS}.
 \end{lemma}
 \begin{proof}\leanok
-The bond-end indices are in bijection with the four indices read at the sites.
-For identity sites, the Kronecker deltas leave the product of the bond entries.
-Expand the group average independently at every vertex. Finite distributivity
-gives a sum over vertex labels and the factor $|G|^{-N}$. Absorbing each
-four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
+    The bond-end indices are in bijection with the four indices read at the sites.
+    For identity sites, the Kronecker deltas leave the product of the bond entries.
+    Expand the group average independently at every vertex. Finite distributivity
+    gives a sum over vertex labels and the factor $|G|^{-N}$. Absorbing each
+    four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
 \end{proof}
 
 \begin{theorem}[Extracting the torus closure operators]%
@@ -5623,8 +5623,8 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     independent of $g,h$, such that
     \begin{align}
         E\ket{\mathcal M(A_0\mid g,h)}
-          =|G|^{-|\Lambda|}\sum_{x\in G}
-            U_{xhx^{-1}}\otimes U_{xgx^{-1}}.
+        =|G|^{-|\Lambda|}\sum_{x\in G}
+        U_{xhx^{-1}}\otimes U_{xgx^{-1}}.
         \label{eq:peps_projector_extraction}
     \end{align}
     Here the tensor product is written in the product basis, with the
@@ -5649,9 +5649,9 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     define
     \begin{align}
         (Ef)_{(i,k),(j,l)}
-          =\sum_\beta f(\mathcal A(\beta))\prod_{v\in\Lambda}
-             \kappa^h_v(E_{\beta_v^{hH},\beta_v^{hT}})
-             \kappa^v_v(E_{\beta_v^{vH},\beta_v^{vT}}),
+        =\sum_\beta f(\mathcal A(\beta))\prod_{v\in\Lambda}
+        \kappa^h_v(E_{\beta_v^{hH},\beta_v^{hT}})
+        \kappa^v_v(E_{\beta_v^{vH},\beta_v^{vT}}),
     \end{align}
     where $\mathcal A(\beta)$ is the four-leg configuration read from
     the bond ends, in top, right, bottom, left order. Finite distributivity
@@ -5682,8 +5682,8 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     representation. Take the physical basis to be $V^4$ and define $A_0$ by
     \begin{align}
         (A_0)^s_{t,r,b,l}
-            &=\frac1{|G|}\sum_{q\in G}(R_q)_{s,(t,r,b,l)},\\
-        \mathcal P(A_0)&=\Pi=\frac1{|G|}\sum_{q\in G}R_q.
+                        & =\frac1{|G|}\sum_{q\in G}(R_q)_{s,(t,r,b,l)}, \\
+        \mathcal P(A_0) & =\Pi=\frac1{|G|}\sum_{q\in G}R_q.
         \label{eq:peps_averaging_site}
     \end{align}
     Then $\Pi R_q=\Pi$ and $\Pi$ is the identity on invariant vectors,
@@ -5719,10 +5719,10 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     $L$ with $LT=\Pi$ such that, for every closure pair,
     \begin{align}
         L^{\otimes\Lambda}\ket{\mathcal M(A\mid g,h)}
-            &=\ket{\mathcal M(A_0\mid g,h)},
-        \label{eq:peps_projector_closure_forward}\\
+         & =\ket{\mathcal M(A_0\mid g,h)},
+        \label{eq:peps_projector_closure_forward} \\
         T^{\otimes\Lambda}\ket{\mathcal M(A_0\mid g,h)}
-            &=\ket{\mathcal M(A\mid g,h)}.
+         & =\ket{\mathcal M(A\mid g,h)}.
         \label{eq:peps_projector_closure_reverse}
     \end{align}
     The reverse identity requires only virtual invariance of $A$.
@@ -5830,7 +5830,7 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     With $N$ the number of vertices, the explicit extraction $E$ gives
     \begin{align}
         E L^{\otimes\Lambda}\ket{\mathcal M(A\mid C)}
-            &=|G|^{-N}\Omega_C.
+         & =|G|^{-N}\Omega_C.
         \label{eq:peps_semiregular_closure_extraction}
     \end{align}
     Thus $|G|^N E L^{\otimes\Lambda}$ sends any proposed linear
@@ -5855,7 +5855,7 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     \[
         A^u_{v,s}(\eta)=A_{v,s}(\eta^u),\qquad
         \eta^u_e=
-        \begin{cases}u_e\eta_e,&v=t(e),\\ \eta_e,&v=s(e).
+        \begin{cases}u_e\eta_e, & v=t(e), \\ \eta_e,&v=s(e).
         \end{cases}
     \]
     Contracting the internal bonds with a fixed crossing configuration
@@ -5874,12 +5874,12 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     crossing bonds, define
     \begin{align*}
         B_R^u(\alpha,\theta)
-          &=\sum_{\substack{\eta\in G^{E_R}\\
-                           \eta|_{\partial R}=\theta}}
-                \prod_{v\in R}P_v(\alpha_v,\eta^u|_{E_v})\\
-          &=\kappa^{-|R|}\sum_{\eta\in G^{E_R}}\sum_{q\in G^R}
-                \mathbf1_{\{\eta|_{\partial R}=\theta\}}
-                \mathbf1_{\{\alpha_v=q_v\eta^u|_{E_v}\ (v\in R)\}}.
+         & =\sum_{\substack{\eta\in G^{E_R}                    \\
+                \eta|_{\partial R}=\theta}}
+        \prod_{v\in R}P_v(\alpha_v,\eta^u|_{E_v})              \\
+         & =\kappa^{-|R|}\sum_{\eta\in G^{E_R}}\sum_{q\in G^R}
+        \mathbf1_{\{\eta|_{\partial R}=\theta\}}
+        \mathbf1_{\{\alpha_v=q_v\eta^u|_{E_v}\ (v\in R)\}}.
     \end{align*}
     Here the half-edge modification $\eta^u$ is that of
     Definition~\ref{def:peps_regular_twisted_region}. Identity insertions
@@ -6042,15 +6042,15 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
         F_{u,w}=\{x\in G:u_ex=xw_e\text{ for every internal bond }e\},
         \qquad
         \kappa_R=\left(\prod_{v\in R}c_v\right)
-                   \frac{|G|^{I_R+1}}{|G|^{|R|}}.
+        \frac{|G|^{I_R+1}}{|G|^{|R|}}.
     \]
     The actual maps satisfy
     \[
         (T_R^u)^\dagger T_R^w
-          =\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},
+        =\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},
         \qquad
         P(T_R^u)^\dagger T_R^wP
-          =\kappa_R\frac{|F_{u,w}|}{|G|}P.
+        =\kappa_R\frac{|F_{u,w}|}{|G|}P.
     \]
     These are auxiliary finite-region identities with identity operators
     on crossing bonds. The general torus cut of
@@ -6247,9 +6247,9 @@ four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ above.
     \[
         u_e=
         \begin{cases}
-            h^{-1},&e\text{ is a horizontal wrap bond},\\
-            g,&e\text{ is a vertical wrap bond},\\
-            1,&\text{otherwise}.
+            h^{-1}, & e\text{ is a horizontal wrap bond}, \\
+            g,      & e\text{ is a vertical wrap bond},   \\
+            1,      & \text{otherwise}.
         \end{cases}
     \]
     Its coefficient vector across any region cut is the actual twisted
