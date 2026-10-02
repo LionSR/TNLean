@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.PairProduct
-import TNLean.MPS.Preparation.TwoLevel
+import TNLean.Circuit.PairProduct
+import TNLean.Circuit.Gates.TwoLevel
 
 /-!
 # Controlled single-site operations
@@ -17,7 +17,7 @@ two-site gates:
 
 * in any ring, for commuting idempotents `p₁`, `p₂` and invertible `v`, `w` commuting with
   them, `C(p₁ p₂, v w v⁻¹ w⁻¹) = C(p₁, v) C(p₂, w) C(p₁, v⁻¹) C(p₂, w⁻¹)`
-  (`MPSPreparation.ctrlElem_commutator`), which lowers the number of control sites by one;
+  (`QuantumCircuit.ctrlElem_commutator`), which lowers the number of control sites by one;
 * the projections, single-site operators, and controlled operators on the chain, with their
   supports and unitarity.
 
@@ -26,10 +26,10 @@ step "can be further expressed with a low-depth circuit of local gates" of arXiv
 (caption of Fig. 1 and paragraph "The sequential-RG circuit").
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 /-! ### Controlled elements of a ring -/
 
@@ -128,22 +128,22 @@ variable {d n : ℕ}
 
 Source: arXiv:2307.01696, paragraph "The sequential-RG circuit" (gates with constant support
 decomposed into local gates). -/
-def ctrlProj (S : Finset (Fin n)) (c : Cfg d n) : Matrix (Cfg d n) (Cfg d n) ℂ :=
+def ctrlProj (S : Finset (Fin n)) (c : Fin n → Fin d) : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ :=
   diagonal fun x => if ∀ i ∈ S, x i = c i then 1 else 0
 
-theorem isIdempotentElem_ctrlProj (S : Finset (Fin n)) (c : Cfg d n) :
+theorem isIdempotentElem_ctrlProj (S : Finset (Fin n)) (c : Fin n → Fin d) :
     IsIdempotentElem (ctrlProj S c) := by
   unfold IsIdempotentElem ctrlProj
   rw [diagonal_mul_diagonal]
   congr 1; funext x; split_ifs <;> simp
 
-theorem commute_ctrlProj (S S' : Finset (Fin n)) (c c' : Cfg d n) :
+theorem commute_ctrlProj (S S' : Finset (Fin n)) (c c' : Fin n → Fin d) :
     Commute (ctrlProj S c) (ctrlProj S' c') := by
   unfold Commute SemiconjBy ctrlProj
   rw [diagonal_mul_diagonal, diagonal_mul_diagonal]
   congr 1; funext x; ring
 
-theorem ctrlProj_insert {s : Fin n} (S : Finset (Fin n)) (c : Cfg d n) :
+theorem ctrlProj_insert {s : Fin n} (S : Finset (Fin n)) (c : Fin n → Fin d) :
     ctrlProj (insert s S) c = ctrlProj S c * ctrlProj {s} c := by
   unfold ctrlProj
   rw [diagonal_mul_diagonal]
@@ -151,16 +151,16 @@ theorem ctrlProj_insert {s : Fin n} (S : Finset (Fin n)) (c : Cfg d n) :
   simp only [Finset.mem_insert, Finset.mem_singleton, forall_eq_or_imp, forall_eq]
   by_cases h1 : x s = c s <;> by_cases h2 : ∀ i ∈ S, x i = c i <;> simp [h1, h2]
 
-@[simp] theorem ctrlProj_empty (c : Cfg d n) : ctrlProj ∅ c = 1 := by
+@[simp] theorem ctrlProj_empty (c : Fin n → Fin d) : ctrlProj ∅ c = 1 := by
   simp [ctrlProj]
 
-theorem ctrlProj_conjTranspose (S : Finset (Fin n)) (c : Cfg d n) :
+theorem ctrlProj_conjTranspose (S : Finset (Fin n)) (c : Fin n → Fin d) :
     (ctrlProj S c)ᴴ = ctrlProj S c := by
   unfold ctrlProj
   rw [diagonal_conjTranspose]
   congr 1; funext x; simp only [Pi.star_apply]; split_ifs <;> simp
 
-theorem ctrlProj_mem_supportedOperators (S : Finset (Fin n)) (c : Cfg d n) :
+theorem ctrlProj_mem_supportedOperators (S : Finset (Fin n)) (c : Fin n → Fin d) :
     ctrlProj S c ∈ supportedOperators d (S : Set (Fin n)) := by
   classical
   have : ctrlProj S c = finKronecker fun i =>
@@ -188,7 +188,7 @@ theorem ctrlProj_mem_supportedOperators (S : Finset (Fin n)) (c : Cfg d n) :
 
 Source: arXiv:2307.01696, main text before Theorem 1 (local gates). -/
 noncomputable def siteOp (t : Fin n) (u : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Cfg d n) (Cfg d n) ℂ :=
+    Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ :=
   embedOp ![t] (u.submatrix (Equiv.funUnique (Fin 1) (Fin d)) (Equiv.funUnique (Fin 1) (Fin d)))
 
 theorem siteSites_injective (t : Fin n) : Function.Injective ![t] := by
@@ -211,7 +211,7 @@ theorem siteOp_star (t : Fin n) (u : Matrix (Fin d) (Fin d) ℂ) :
 
 theorem siteOp_mem_unitary (t : Fin n) {u : Matrix (Fin d) (Fin d) ℂ}
     (hu : u ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
-    siteOp t u ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+    siteOp t u ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
   rw [Unitary.mem_iff] at hu ⊢
   rw [siteOp_star, siteOp_mul, siteOp_mul, hu.1, hu.2, siteOp_one]
   exact ⟨rfl, rfl⟩
@@ -223,7 +223,7 @@ theorem siteOp_mem_supportedOperators (t : Fin n) (u : Matrix (Fin d) (Fin d) �
   rwa [Matrix.range_cons, Matrix.range_empty, Set.union_empty] at this
 
 theorem siteOp_diagonal (t : Fin n) (f : Fin d → ℂ) :
-    siteOp t (diagonal f) = diagonal fun x : Cfg d n => f (x t) := by
+    siteOp t (diagonal f) = diagonal fun x : (Fin n → Fin d) => f (x t) := by
   ext x y
   simp only [siteOp, embedOp_apply, submatrix_apply, Function.comp_apply,
     Equiv.funUnique_apply]
@@ -250,42 +250,42 @@ theorem siteOp_diagonal (t : Fin n) (f : Fin d → ℂ) :
 
 Source: arXiv:2307.01696, paragraph "The sequential-RG circuit" (gates with constant support
 decomposed into local gates). -/
-noncomputable def ctrlOp (S : Finset (Fin n)) (c : Cfg d n) (t : Fin n)
-    (u : Matrix (Fin d) (Fin d) ℂ) : Matrix (Cfg d n) (Cfg d n) ℂ :=
+noncomputable def ctrlOp (S : Finset (Fin n)) (c : Fin n → Fin d) (t : Fin n)
+    (u : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ :=
   ctrlElem (ctrlProj S c) (siteOp t u)
 
-theorem commute_ctrlProj_siteOp {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Cfg d n)
+theorem commute_ctrlProj_siteOp {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Fin n → Fin d)
     (u : Matrix (Fin d) (Fin d) ℂ) : Commute (ctrlProj S c) (siteOp t u) :=
   commute_of_mem_supportedOperators (Set.disjoint_singleton_right.mpr (by simpa using ht))
     (ctrlProj_mem_supportedOperators S c) (siteOp_mem_supportedOperators t u)
 
-@[simp] theorem ctrlOp_empty (c : Cfg d n) (t : Fin n) (u : Matrix (Fin d) (Fin d) ℂ) :
+@[simp] theorem ctrlOp_empty (c : Fin n → Fin d) (t : Fin n) (u : Matrix (Fin d) (Fin d) ℂ) :
     ctrlOp ∅ c t u = siteOp t u := by
   simp [ctrlOp, ctrlElem]
 
-theorem ctrlOp_mul {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Cfg d n)
+theorem ctrlOp_mul {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Fin n → Fin d)
     (u v : Matrix (Fin d) (Fin d) ℂ) : ctrlOp S c t u * ctrlOp S c t v = ctrlOp S c t (u * v) := by
   rw [ctrlOp, ctrlOp, ctrlElem_mul (isIdempotentElem_ctrlProj S c)
     (commute_ctrlProj_siteOp ht c u), siteOp_mul, ctrlOp]
 
-theorem ctrlOp_one (S : Finset (Fin n)) (c : Cfg d n) (t : Fin n) : ctrlOp S c t 1 = 1 := by
+theorem ctrlOp_one (S : Finset (Fin n)) (c : Fin n → Fin d) (t : Fin n) : ctrlOp S c t 1 = 1 := by
   rw [ctrlOp, siteOp_one, ctrlElem_one]
 
-theorem ctrlOp_star {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Cfg d n)
+theorem ctrlOp_star {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Fin n → Fin d)
     (u : Matrix (Fin d) (Fin d) ℂ) : star (ctrlOp S c t u) = ctrlOp S c t (star u) := by
   have hc := commute_ctrlProj_siteOp ht c u
   have hp : star (ctrlProj S c) = ctrlProj S c := ctrlProj_conjTranspose S c
   rw [ctrlOp, ctrlOp, ctrlElem, ctrlElem, star_add, star_mul, star_sub, star_one, hp,
     siteOp_star, (commute_ctrlProj_siteOp ht c (star u)).eq]
 
-theorem ctrlOp_mem_unitary {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Cfg d n)
+theorem ctrlOp_mem_unitary {S : Finset (Fin n)} {t : Fin n} (ht : t ∉ S) (c : Fin n → Fin d)
     {u : Matrix (Fin d) (Fin d) ℂ} (hu : u ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
-    ctrlOp S c t u ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+    ctrlOp S c t u ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
   rw [Unitary.mem_iff] at hu ⊢
   rw [ctrlOp_star ht, ctrlOp_mul ht, ctrlOp_mul ht, hu.1, hu.2, ctrlOp_one]
   exact ⟨rfl, rfl⟩
 
-theorem ctrlOp_mem_supportedOperators (S : Finset (Fin n)) (c : Cfg d n) (t : Fin n)
+theorem ctrlOp_mem_supportedOperators (S : Finset (Fin n)) (c : Fin n → Fin d) (t : Fin n)
     (u : Matrix (Fin d) (Fin d) ℂ) :
     ctrlOp S c t u ∈ supportedOperators d (insert t (S : Set (Fin n))) := by
   have hp := supportedOperators_mono (Set.subset_insert t (S : Set (Fin n)))
@@ -299,7 +299,7 @@ theorem ctrlOp_mem_supportedOperators (S : Finset (Fin n)) (c : Cfg d n) (t : Fi
 /-- **Controlled commutator on the chain.** Removing one control site `s` from the controls of
 a commutator `v w v† w†` at the site `t`. -/
 theorem ctrlOp_insert_commutator {S : Finset (Fin n)} {s t : Fin n} (ht : t ∉ S)
-    (hst : s ≠ t) (c : Cfg d n) {v w : Matrix (Fin d) (Fin d) ℂ}
+    (hst : s ≠ t) (c : Fin n → Fin d) {v w : Matrix (Fin d) (Fin d) ℂ}
     (hv : v ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) (hw : w ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
     ctrlOp (insert s S) c t (v * w * star v * star w) =
       ctrlOp S c t v * ctrlOp {s} c t w * ctrlOp S c t (star v) * ctrlOp {s} c t (star w) := by
@@ -315,11 +315,11 @@ theorem ctrlOp_insert_commutator {S : Finset (Fin n)} {s t : Fin n} (ht : t ∉ 
   · rw [siteOp_mul, Unitary.mul_star_self_of_mem hw, siteOp_one]
 
 /-- A controlled diagonal operator is diagonal. -/
-theorem ctrlOp_diagonal (S : Finset (Fin n)) (c : Cfg d n) (t : Fin n) (f : Fin d → ℂ) :
+theorem ctrlOp_diagonal (S : Finset (Fin n)) (c : Fin n → Fin d) (t : Fin n) (f : Fin d → ℂ) :
     ctrlOp S c t (diagonal f) =
-      diagonal fun x : Cfg d n => if ∀ i ∈ S, x i = c i then f (x t) else 1 := by
+      diagonal fun x : (Fin n → Fin d) => if ∀ i ∈ S, x i = c i then f (x t) else 1 := by
   rw [ctrlOp, ctrlElem, siteOp_diagonal, ctrlProj, diagonal_mul_diagonal, ← diagonal_one,
     diagonal_sub, diagonal_add]
   congr 1; funext x; split_ifs <;> simp
 
-end MPSPreparation
+end QuantumCircuit
