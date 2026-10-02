@@ -1,12 +1,20 @@
 # The twisted dimer: length dependence and factorization
 
 The construction in [issue #7611](https://github.com/LionSR/TNLean/issues/7611)
-answers the question following Theorem 4.14 of arXiv:1606.00608: structure
-coefficients of a renormalization fixed point can depend on circumference.
-The tensor is a construction of this project, rather than an example printed
-in that paper. This note distinguishes its established properties from the
+is motivated by the question following Theorem 4.14 of arXiv:1606.00608:
+can structure coefficients of a renormalization fixed point depend on
+circumference? The tensor is a construction of this project, rather than an
+example printed in that paper. It satisfies the channel fixed-point equations
+and has an attached coefficient family that depends on circumference.
+This note distinguishes these established properties from the
 additional non-factorization assertion investigated in
 [issue #7751](https://github.com/LionSR/TNLean/issues/7751).
+
+The channel equations are the predicate `IsRFPViaTS`; they do not assert the
+source's separate global unit-weight canonical convention. No such canonical
+classification of the twisted dimer is established here. The normalization
+issue is recorded in the companion library's
+[canonical-weight note](https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf).
 
 Let \(\Pi_\pm\) be the projectors onto the Bell vectors
 \((|00\rangle\pm|11\rangle)/\sqrt2\), and put
