@@ -8,8 +8,11 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS
 
+import TNLean.PEPS.BasisRepresentation
 import TNLean.PEPS.Blocking
 import TNLean.PEPS.BlockingDataEdgeGauge
+import TNLean.PEPS.BoundaryIsometry
+import TNLean.PEPS.BoundaryNormalization
 import TNLean.PEPS.CoherentFrameInstance
 import TNLean.PEPS.ConfigurationCalculus
 import TNLean.PEPS.CycleArcRegion
@@ -35,6 +38,7 @@ import TNLean.PEPS.EdgeMiddlePhysical
 import TNLean.PEPS.EdgeScalarSolve
 import TNLean.PEPS.Examples
 import TNLean.PEPS.FiniteKernelDescent
+import TNLean.PEPS.FixedBoundaryFactorDensity
 import TNLean.PEPS.FundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
 import TNLean.PEPS.FundamentalTheorem.GaugeAction
@@ -43,10 +47,14 @@ import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
 import TNLean.PEPS.GInjective
 import TNLean.PEPS.GInjectiveConcatenation
+import TNLean.PEPS.GInjectiveCutRange
 import TNLean.PEPS.GInjectiveMPS
 import TNLean.PEPS.GInjectiveMPSIntersection
 import TNLean.PEPS.GInjectiveMPSParentHamiltonian
+import TNLean.PEPS.GInjectiveRangeEquivalence
+import TNLean.PEPS.GInjectiveVirtualComparison
 import TNLean.PEPS.GIsometric
+import TNLean.PEPS.GIsometricConcatenation
 import TNLean.PEPS.GIsometricLinkContraction
 import TNLean.PEPS.GIsometricParentHamiltonian
 import TNLean.PEPS.GaugeConsistencyConnectivityCounterexample
@@ -85,12 +93,20 @@ import TNLean.PEPS.NormalSquareUnconditionalFundamentalTheorem
 import TNLean.PEPS.OnSiteOperator
 import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples
+import TNLean.PEPS.PureCutLocalEquivalence
 import TNLean.PEPS.RegionBlock
 import TNLean.PEPS.RegionComplementComparison
 import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.RegionTransport
 import TNLean.PEPS.RegionTransportData
 import TNLean.PEPS.RegionTransportInsertion
+import TNLean.PEPS.RegularBoundary
+import TNLean.PEPS.RegularBoundaryEntropy
+import TNLean.PEPS.RegularBoundaryGibbsSupport
+import TNLean.PEPS.RegularBoundaryState
+import TNLean.PEPS.RegularBoundaryTransporter
+import TNLean.PEPS.RegularBoundaryUntwisting
+import TNLean.PEPS.SemiRegularBondIsometry
 import TNLean.PEPS.SingletonRegion
 import TNLean.PEPS.SquareLatticeBoundaryMPO
 import TNLean.PEPS.SquareLatticeBoundaryPositivity
