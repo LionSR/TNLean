@@ -25,6 +25,7 @@ the product of the layers of its tree circuit with the isometry of the blocked t
 * `Matrix.polarPos_eq_of_mul_self_eq`, `Matrix.polarSupport_eq_of_range_eq` — the positive part
   and the support projector are determined by a positive square root of `Mᴴ M` and by its range.
 * `Matrix.exists_polarIso_eq_mul` — the partial isometry is `V = M R` for some `R`.
+* `Matrix.polarIso_mul_eq_zero` — the partial isometry of `M` vanishes on the kernel of `M`.
 * `Matrix.conjTranspose_polarIso_mul_eq_zero`,
   `Matrix.conjTranspose_polarIso_mul_polarIso_eq_zero` — orthogonality `Mᴴ M' = 0` passes to
   the partial isometries.
@@ -215,6 +216,26 @@ theorem exists_polarIso_eq_mul (M : Matrix ι κ ℂ) : ∃ R : Matrix κ κ ℂ
     mul_eq_self_of_conjTranspose_mul_self_eq (conjTranspose_polarIso_mul_polarIso M)
       (isHermitian_polarSupport M) (polarSupport_mul_polarSupport M)
   rw [← hV, ← hR, ← Matrix.mul_assoc, polarIso_mul_polarPos]
+
+/-- **The partial isometry vanishes on the kernel.** If `M Y = 0`, then `V Y = 0` for the partial
+isometry `V` of the polar decomposition `M = V P`: then `P Y = 0`, so `Π Y = 0` for the support
+projector `Π = V†V` of `P`. -/
+theorem polarIso_mul_eq_zero {ρ : Type*} {M : Matrix ι κ ℂ} {Y : Matrix κ ρ ℂ} (h : M * Y = 0) :
+    polarIso M * Y = 0 := by
+  have hH : (polarPos M)ᴴ = polarPos M := (posSemidef_polarPos M).isHermitian.eq
+  have hP : polarPos M * Y = 0 := by
+    rw [← conjTranspose_mul_self_eq_zero]
+    have : (polarPos M * Y)ᴴ * (polarPos M * Y) = (M * Y)ᴴ * (M * Y) := by
+      simp only [conjTranspose_mul, hH, Matrix.mul_assoc]
+      rw [← Matrix.mul_assoc (polarPos M) (polarPos M) Y, polarPos_mul_polarPos,
+        Matrix.mul_assoc]
+    rw [this, h, Matrix.mul_zero]
+  have hS : polarSupport M * Y = 0 := by
+    obtain ⟨R, hR⟩ := exists_polarPos_mul_eq_polarSupport M
+    rw [← (isHermitian_polarSupport M).eq, ← hR, conjTranspose_mul, hH, Matrix.mul_assoc, hP,
+      Matrix.mul_zero]
+  rw [← conjTranspose_mul_self_eq_zero, conjTranspose_mul, Matrix.mul_assoc,
+    ← Matrix.mul_assoc (polarIso M)ᴴ, conjTranspose_polarIso_mul_polarIso, hS, Matrix.mul_zero]
 
 variable {κ' : Type*} [Fintype κ'] [DecidableEq κ']
 

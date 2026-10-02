@@ -415,13 +415,14 @@ remaining eigenvalues have modulus strictly less than $1$.
 
 \begin{theorem}[Sequential factorization of a matrix product isometry]
     \label{thm:ldp_sequential_factorization_general}
-    \lean{MPSPreparation.exists_isometric_chain_of_eq_mul}
+    \lean{MPSPreparation.exists_isometric_chain_of_eq_mul, MPSPreparation.eval_pairEmbed}
     \leanok
-    Let $A$ have bond dimension $D$, let $G$ be a $D^2\times D^2$ matrix, and
-    let $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$, $q\ge1$, be an isometry
-    with matrix elements
+    Let $A_1,\dots,A_q$, $q\ge1$, be tensors of bond dimension $D$, one on each
+    site, let $G$ be a $D^2\times D^2$ matrix, and let
+    $V\colon\C^D\otimes\C^D\to(\C^d)^{\otimes q}$ be an isometry with matrix
+    elements
     $\bra{i_1\cdots i_q}V\ket{x}
-        =\sum_{\alpha,\beta}(A^{i_1}\cdots A^{i_q})_{\alpha\beta}\,
+        =\sum_{\alpha,\beta}(A_1^{i_1}\cdots A_q^{i_q})_{\alpha\beta}\,
         G_{(\alpha,\beta),x}$.
     Then there are integers $b_0=1$, $b_q=D^2$ and $b_p\le D^2$, and families
     of $b_{p-1}\times b_p$ matrices $X_p^i$, $p=1,\dots,q$, with
@@ -432,10 +433,10 @@ remaining eigenvalues have modulus strictly less than $1$.
     \leanok
     \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation}
     The matrix elements of $V$ are
-    $\bigl(j^{\mathsf T}(\Id_D\otimes A^{i_1})\cdots(\Id_D\otimes A^{i_q})G\bigr)_x$
+    $\bigl(j^{\mathsf T}(\Id_D\otimes A_1^{i_1})\cdots(\Id_D\otimes A_q^{i_q})G\bigr)_x$
     with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Apply
     Theorem~\ref{thm:seqanc_sweep_matrix_remainder} to the row matrix of $j$ and the
-    sites $\Id_D\otimes A^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
+    sites $\Id_D\otimes A_p^i$; this gives isometric sites $Q_1,\dots,Q_q$ and a
     remainder $C=RG$ with $V=Q\,C$ in the sense of
     (\ref{eq:seqanc_sweep_matrix_remainder}). By
     (\ref{eq:seqanc_sweep_inner_product}), $V^\dagger V=C^\dagger C$, so $C$ is an
@@ -449,8 +450,12 @@ remaining eigenvalues have modulus strictly less than $1$.
     \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition}
-    Suppose $\mathcal B_q$ is injective, $q\ge1$, and let $V$ be as in
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}. There are integers
+    Let $A_1,\dots,A_q$, $q\ge1$, be tensors of bond dimension $D$, one on each
+    site, suppose their blocked tensor $B$ with
+    $B^{i_1\cdots i_q}=A_1^{i_1}\cdots A_q^{i_q}$ is injective, and let $B=VP$
+    be its polar decomposition as in
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. For equal tensors $A_p=A$,
+    $B$ is the blocked tensor $\mathcal B_q$. There are integers
     $D'_1=D^2$, $D'_{q+1}=1$, and $D'_k\le D^2$, and matrices
     $W_k^i\in\C^{D'_{k+1}\times D'_k}$ for $k=1,\dots,q$ and $i=1,\dots,d$, with
     \begin{align}
@@ -1880,6 +1885,32 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     and if $\ket{\phi_N(A)}=0$ both normalized states vanish.
 \end{proof}
 
+\begin{lemma}[The error at block length $q\ge a\log(Mq/\varepsilon)+b_0$]
+    \label{lem:ldp_approximation_error_slope_threshold}
+    \lean{MPSPreparation.exists_approximationError_le_of_slope}
+    \leanok
+    \uses{thm:ldp_approximation_error_normal,
+        lem:ldp_normalized_state_rescaling,
+        lem:ldp_block_length_threshold_error}
+    Let $B$ be a normal tensor in the gauge~(\ref{eq:ldp_normal_gauge}), with a
+    positive definite fixed point $\sigma$ of trace one, and let $A$ be a tensor
+    with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for all $N$ and some
+    $\zeta\neq0$. Let $0<t<1$ bound the moduli of the eigenvalues of $\E_B$ other
+    than $1$, and let $\xi=-1/\log t$. For every $a>\xi/2$ there is $b_0\ge0$
+    such that for $\varepsilon>0$, every $q\ge1$ and every $M\ge1$ with
+    $q\ge a\log(Mq/\varepsilon)+b_0$, the approximating state of $B$ with
+    blocks of $q$ sites on $N=Mq$ sites has error at most $\varepsilon$ against
+    $\ket{\phi_N(A)}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:ldp_approximation_error_normal} at $\gamma=\xi/(2a)<1$
+    gives $K$ with error at most $KMe^{-q/a}$; take $b_0=a\max(\log K,0)$ and
+    apply Lemma~\ref{lem:ldp_block_length_threshold_error}. The error against
+    $\phi_N(A)$ equals that against $\phi_N(B)$ by
+    Lemma~\ref{lem:ldp_normalized_state_rescaling}.
+\end{proof}
+
 \begin{theorem}[Block length $a\log(N/\varepsilon)+b$ for every slope $a>\xi/2$]
     \label{thm:ldp_depth_upper_bound_slope}
     \uses{def:ldp_local_circuit}
@@ -1907,7 +1938,8 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
         lem:ldp_normalized_state_rescaling,
         lem:isNBlkInjective_iff_blockTensor_isInjective,
         lem:ldp_approximating_state_unit_norm,
-        lem:ldp_block_length_threshold_error}
+        lem:ldp_block_length_threshold_error,
+        lem:ldp_approximation_error_slope_threshold}
     Since $a>\xi/2$, the number $\gamma=\xi/(2a)$ satisfies $0<\gamma<1$, and
     Theorem~\ref{thm:ldp_approximation_error_normal} at this $\gamma$ gives $K$
     with $\varepsilon(\widetilde\phi_N,\phi_N(B))\le K\,(N/q)\,e^{-q/a}$, since
@@ -1959,7 +1991,8 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     \label{thm:ldp_depth_upper_bound_divisible}
     \uses{def:ldp_local_circuit}
     \lean{MPSPreparation.exists_isPreparedInDepth_approximationError_le,
-        MPSPreparation.exists_isPreparedInDepth_le_log_of_dvd}
+        MPSPreparation.exists_isPreparedInDepth_le_log_of_dvd,
+        MPSPreparation.exists_normalGaugeData}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following holds.
     Let $A$ be normal with $D\ge1$. There are $a>0$ and $b\ge1$, depending only
@@ -2751,6 +2784,8 @@ $A$ along $w$.
 
 \input{chapter/ch32_log_depth_mera}
 
+\input{chapter/ch32_log_depth_inhomogeneous}
+
 \section{Tensors that are not normal}
 
 \begin{definition}[Fixed point of a basis of normal tensors]
@@ -2785,7 +2820,20 @@ $A$ along $w$.
     $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$ the
     overlap with $\ket{\phi_N}\propto2\ket{0\cdots0}+\ket{1\cdots1}$ tends to
     $1/\sqrt5$ as $M\to\infty$, for every $q$
-    \cite{gap:mswc24_multiplicity_fixed_point}.
+    \cite{gap:mswc24_multiplicity_fixed_point}. With the pairs of each block on
+    one of its copies and the coefficients of
+    Definition~\ref{def:ldp_one_copy_weight} in place of $\beta_j$, the
+    construction converges (Lemma~\ref{lem:ldp_one_copy_state} and
+    Theorem~\ref{thm:ldp_approximation_error_one_copy})
+    \cite{gap:mswc24_repeated_block_corrected_state}.
+
+    When a weight is not a nonnegative real number, the coefficients
+    $\beta_j=\mu_j^N$ count its phase twice, since $V$ already carries it. For
+    $A^0=\operatorname{diag}(1,0)$ and $A^1=\operatorname{diag}(0,-1)$ and odd $N$
+    the approximating state is orthogonal to $\ket{\phi_N}$; for multiplicity one the
+    coefficients $\beta_j=\lvert\mu_j\rvert^N$ repair the construction
+    (Section~\ref{sec:ldp_complex_weights})
+    \cite{gap:mswc24_block_form_mixed_overlap}.
 \end{definition}
 
 \begin{definition}[Fixed-point state of a sector decomposition]
@@ -2817,6 +2865,7 @@ $A$ along $w$.
 \begin{definition}[Fixed-point state of a family of pairs]
     \label{def:ldp_pair_family_fixed_point}
     \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
+        MPSTensor.sum_norm_sq_pos_of_ne_zero, MPSTensor.ghzAmplitude_norm_sq,
         MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
         MPSTensor.pairIsometry, MPSTensor.ghzState, Matrix.tensorPower}
     \leanok
@@ -2830,6 +2879,8 @@ $A$ along $w$.
     $V^{\otimes M}\ket{\Omega'}/\lVert V^{\otimes M}\ket{\Omega'}\rVert$, and zero when
     the denominator vanishes. For multiplicity coefficients $\mu_{j,k}$ put
     $\beta_j=\sum_k\mu_{j,k}^N$ and $\alpha^{(N)}_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$.
+    For any $\beta\in\mathbb C^b$ with $\beta\neq0$, $\sum_l\lvert\beta_l\rvert^2>0$ and
+    $\sum_j\lvert\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}\rvert^2=1$.
     Let $W\colon\mathbb C^b\to\mathbb C^D\otimes\mathbb C^D$,
     $\ket{j}\mapsto\ket{\omega_j}$, be the map whose $j$-th column is $\omega_j$,
     let $X^{\otimes M}$ denote the $M$-fold tensor power of a matrix $X$, with entries
@@ -2977,12 +3028,14 @@ $A$ along $w$.
     For blocks of multiplicity one whose states on $q$ sites are orthogonal it
     holds without the condition $q=o(N)$
     (Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}). For blocks of
-    multiplicity one and weight one whose states overlap, the approximating state
+    multiplicity one with real weights $0\leq w_j\leq1$, the largest equal to one,
+    whose states overlap, the approximating state with $\beta_j=w_j^N$
     converges at the rate obtained by replacing $\xi_{\mathrm{diag}}$ with
     $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, the larger of the
     correlation lengths of the blocks and of their mixed transfer maps, again
     without the condition $q=o(N)$
-    (Theorem~\ref{thm:ldp_approximation_error_overlapping_corrected}).
+    (Theorems~\ref{thm:ldp_approximation_error_overlapping_corrected}
+    and~\ref{thm:ldp_approximation_error_overlapping_weights}).
 \end{theorem}
 %% The direct sum A is not normal, so Lemma lem:ldp_positive_part_overlap
 %% does not apply to it. The source's proof rests on the block form (S5) of
@@ -3006,6 +3059,7 @@ $A$ along $w$.
     \label{thm:ldp_approximation_error_repeated_block}
     \lean{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_repeatedBlock,
         MPSTensor.isBNTCanonicalForm_repeatedBlockSector,
+        MPSTensor.repeatedBlockSector, MPSTensor.coeff_repeatedBlockSector,
         MPSTensor.reindex_toTensor_repeatedBlockSector,
         MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor,
         MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor,
@@ -3289,7 +3343,13 @@ $A$ along $w$.
 
 \input{chapter/ch32_log_depth_repeated_blocks}
 \input{chapter/ch32_log_depth_overlapping_blocks}
+\input{chapter/ch32_log_depth_repeated_overlapping_blocks}
+\input{chapter/ch32_log_depth_complex_weights}
+\input{chapter/ch32_log_depth_second_order_overlap}
 
 \input{chapter/ch32_log_depth_measurements}
+\input{chapter/ch32_log_depth_teleportation}
+\input{chapter/ch32_log_depth_register_tree}
+\input{chapter/ch32_log_depth_unequal_trees}
 
 \input{chapter/ch32_log_depth_long_range}

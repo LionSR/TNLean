@@ -41,6 +41,14 @@ The sequential factorization is stated for block lengths $q\geq1$ and injective
 $\mathcal B_q$.\footnote{Formal declaration:
     \leanid{MPSPreparation.exists_isometric_chain_polarIsoMatrix} in
     \doclink{TNLean/MPS/Preparation/SequentialFactorization}.}
+The same bound $q\geq1$ is assumed by the variant for a blocked map injective on
+a set $S$ of bond pairs, whose isometric factor is factored on the inputs of
+$S$, with last bond $D'_1=\lvert S\rvert$.\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn}
+    in the same module.}
+At $q=0$ the map $\Id_D$ vanishes outside $S$ and spans the matrix units in $S$
+only when $D=0$ and $S$ is empty, or $D=1$ and $S$ is the one pair; the
+conclusion requires $\lvert S\rvert=1$ and fails in the first case.
 For every $q\geq1$ the conclusion is exactly
 (\ref{eq:mswc24_sequential_product}) in matrix product form, with no further
 hypothesis. Elimination: replace $q\geq1$ by a positive bond dimension $D\geq1$,
