@@ -1928,7 +1928,10 @@ involve no boundary.
   endpoint tensors of `eq:defEndT`, with orthogonal supports at the renormalization fixed point).
 - **Sanctioned bridges:** `BlockActionData.wallString_mulVec_mpv_left` and
   `BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`).
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`), and
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far` and
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near` (`eq:z2int`, glued
+  half-chains), the last three in `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallStringExchange.lean`.
 
 ## Symmetries of matrix product density operators
 

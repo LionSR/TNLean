@@ -23,33 +23,15 @@ where `Â`, `B̂` are left inverses of the injective tensors `A`, `B` with separ
 left action tensor `V_B` is written as `W_B` with a hat); the right
 end is built in the same way from `W_B e_{BA} Â + W_A e_{AB} B̂`. On `|ψ_A⟩` the first terms act
 and the string creates the state `|ψ(A-B-A)⟩` of `DWopmps`; on `|ψ_B⟩` the second terms act
-and it creates `|ψ(B-A-B)⟩`. For two strings on sites `i₂ < i₁ < j₁ < j₂`, the two orders
-differ by `c_{AB} c_{BA} = ω` (`signphysop`, lines 1667--1672): when the outer string acts
-second it passes over the two walls created by the inner string and acquires both phases of
-`eq:localcdef`, while the inner string acting second meets only the `B` region created by the
-outer one.
+and it creates `|ψ(B-A-B)⟩`. Products of two strings, the exchange relation `signphysop` and
+the single-endpoint exchange `eq:z2int`, are compared in
+`TNLean/MPS/Symmetry/MPOSymmetry/DomainWallStringExchange.lean`.
 
 The string operator of this file acts on the periodic chain of `L = k + 1 + l + 1 + n` sites,
 with endpoints at the sites `k` and `k + 1 + l` (counted from zero) and the bulk `U` tensor on
 the `l` sites between them. The endpoint tensors act on one site, as in the source at the
 renormalization fixed point (lines 1358 and 1422--1425); away from the fixed point the source
 blocks sites, which here is the choice of the physical alphabet.
-
-The source prints `signphysop` as `O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB}c_{BA}
-O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`; the computation above gives the phase on the other side,
-`O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩ = c_{AB}c_{BA} O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩`, which holds for
-every pair of phases. The two forms agree when `(c_{AB} c_{BA})² = 1`, which follows from
-`U² = 1` as in the source (lines 835--839); the printed form is proved as a corollary under
-`U² = 1`.
-
-**Local fix (nondegenerate domain walls, blocked local action):** the exchange relation
-`MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv` is stated for
-`IsDomainWallAction`, whose walls and phase are nonzero and whose local relation holds against
-regions longer than a buffer, so the regions between the four walls are long; documented in
-`docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
-
-The half-chain objects `O^{[i]}_x |ψ_A⟩` and the single-endpoint exchange `eq:z2int` (lines
-1427--1659) are not formalized.
 
 ## Main definitions
 
@@ -69,10 +51,6 @@ The half-chain objects `O^{[i]}_x |ψ_A⟩` and the single-endpoint exchange `eq
   `MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right`: `eq:DWophys`,
   `O^{[i,j]} |ψ_A⟩ = |ψ(A-B-A)⟩` and `O^{[i,j]} |ψ_B⟩ = |ψ(B-A-B)⟩`.
 * `MPOTensor.isInjective_of_physPairing_eq_one`: a tensor with a left inverse is injective.
-* `MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv`: `signphysop`,
-  with the phase on the side it is acquired, and
-  `...wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one` in the printed orientation,
-  under `U² = 1`.
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -536,120 +514,6 @@ theorem wallString_mulVec_mpv_right (hÂ : IsSeparatingLeftInverse Âx Ây (A x)
   rw [show wallSplit k l n (p, a, μ, b, q) = Fin.append (Fin.append (Fin.append (Fin.append p ![a])
     μ) ![b]) q from rfl, twoWallMPV_append, ← hr]
   simp only [Matrix.mul_assoc]
-
-/-- **Exchange of two domain-wall strings** (arXiv:2405.00439, `signphysop`,
-`Papers/2405.00439/MPU-DW.tex` lines 1667--1672): for strings on sites `i₂ < i₁ < j₁ < j₂`,
-here `O^{[i₂,j₂]}` with endpoints at `u` and `u + 1 + u' + 1 + v + 1 + w'` and
-`O^{[i₁,j₁]}` with endpoints at `u + 1 + u'` and `u + 1 + u' + 1 + v`,
-
-`O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩ = c_{AB} c_{BA} O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩`
-
-whenever the three regions between the walls are longer than a fixed buffer. Both sides are
-multiples of the state with the four domain walls `e_{AB}`, `e_{BA}`, `e_{AB}`, `e_{BA}` at
-`i₂, i₁, j₁, j₂`: the outer string acting second passes over the walls of the inner one and
-acquires `c_{AB} c_{BA}` (`IsDomainWallAction.pair`), while the inner string acting second meets
-only the `B` region. The source prints the phase on the other side; that form is
-`wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one`, under `U² = 1`
-(lines 835--839). -/
-theorem wallString_mul_wallString_mulVec_mpv
-    (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
-    (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y)) {cAB cBA : ℂ}
-    (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
-    ∃ N : ℕ, ∀ (u u' v w' w L : ℕ) (h₁ : u + 1 + u' + 1 + v + 1 + (w' + 1 + w) = L)
-      (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
-      (ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
-          ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
-        (cAB * cBA) • ((ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
-          ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
-  obtain ⟨N, hN⟩ := BlockActionData.IsDomainWallAction.pair hperm hAB hBA
-  refine ⟨N, fun u u' v w' w L h₁ h₂ hu' hv hw' ↦ ?_⟩
-  rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, wallString_mulVec_mpv_left ad hÂ h₁,
-    wallString_mulVec_mpv_left ad hÂ h₂]
-  funext τ
-  obtain ⟨⟨p, a, μ, b, q⟩, rfl⟩ := (wallConfig h₂).surjective τ
-  obtain ⟨⟨μ₁, i, ν, j, μ₃⟩, rfl⟩ := (wallSplit u' v w').surjective μ
-  -- the outer string passes over the two walls created by the inner one
-  have hψ₁ : ∀ p a μ b q, twoWallMPV (A x) eAB (A y) eBA (wallConfig h₂ (p, a, μ, b, q) ∘
-      Fin.cast h₁) = (Kraus.evalWord (A x) (List.ofFn p) * A x a *
-        twoWallChain (A x) eAB (A y) eBA μ * A x b * Kraus.evalWord (A x) (List.ofFn q)).trace := by
-    intro p a μ b q
-    obtain ⟨⟨μ₁, i, ν, j, μ₃⟩, rfl⟩ := (wallSplit u' v w').surjective μ
-    rw [← wallConfig_resplit h₁ h₂, wallConfig_comp_cast]
-    rw [show ∀ s, wallSplit (d := d) u' v w' s = Fin.append (Fin.append (Fin.append
-      (Fin.append s.1 ![s.2.1]) s.2.2.1) ![s.2.2.2.1]) s.2.2.2.2 from fun _ ↦ rfl,
-      show ∀ s, wallSplit (d := d) (u + 1 + u') v (w' + 1 + w) s = Fin.append (Fin.append
-        (Fin.append (Fin.append s.1 ![s.2.1]) s.2.2.1) ![s.2.2.2.1]) s.2.2.2.2 from fun _ ↦ rfl,
-      twoWallMPV_append, twoWallChain_append]
-    simp only [List.ofFn_fin_append]
-    simp [Kraus.evalWord_append, Kraus.evalWord_cons, Matrix.mul_assoc]
-  rw [wallString, stringOperator_mulVec_trace _ _ _ h₂
-    (fun p ↦ Kraus.evalWord (A x) (List.ofFn p)) (A x) (twoWallChain (A x) eAB (A y) eBA) (A x)
-    (fun q ↦ Kraus.evalWord (A x) (List.ofFn q)) _ hψ₁, leftAct_wallLeftEndpoint_left ad hÂ,
-    rightAct_wallRightEndpoint_left ad hÂ,
-    show wallSplit (d := d) u' v w' (μ₁, i, ν, j, μ₃) = Fin.append (Fin.append (Fin.append
-      (Fin.append μ₁ ![i]) ν) ![j]) μ₃ from rfl, physAct_twoWallChain]
-  have hpair := hN (List.ofFn μ₁) (List.ofFn ν) (List.ofFn μ₃) i j (by simpa using hu')
-    (by simpa using hv) (by simpa using hw')
-  have key := congrArg (fun M ↦ Kraus.evalWord (A x) (List.ofFn p) * eAB a * M *
-    (eBA b * Kraus.evalWord (A x) (List.ofFn q))) hpair
-  simp only [Matrix.mul_assoc, Matrix.mul_smul, Matrix.smul_mul] at key
-  simp only [Matrix.mul_assoc]
-  rw [key]
-  -- the inner string acts on the `B` region created by the outer one
-  have hψ₂ : ∀ P' a' ν' b' Q', twoWallMPV (A x) eAB (A y) eBA
-      (wallConfig h₁ (P', a', ν', b', Q') ∘ Fin.cast h₂) =
-        (wallChain (A x) eAB (A y) P' * A y a' * Kraus.evalWord (A y) (List.ofFn ν') * A y b' *
-          wallChain (A y) eBA (A x) Q').trace := by
-    intro P' a' ν' b' Q'
-    rw [eq_append_append P', eq_append_append Q', wallConfig_resplit h₁ h₂, wallConfig_comp_cast,
-      show ∀ s, wallSplit (d := d) u' v w' s = Fin.append (Fin.append (Fin.append
-      (Fin.append s.1 ![s.2.1]) s.2.2.1) ![s.2.2.2.1]) s.2.2.2.2 from fun _ ↦ rfl,
-      show ∀ s, wallSplit (d := d) u (u' + 1 + v + 1 + w') w s = Fin.append (Fin.append
-        (Fin.append (Fin.append s.1 ![s.2.1]) s.2.2.1) ![s.2.2.2.1]) s.2.2.2.2 from fun _ ↦ rfl,
-      twoWallMPV_append, wallChain_append, wallChain_append]
-    simp only [List.ofFn_fin_append]
-    simp [Kraus.evalWord_append, Kraus.evalWord_cons, Matrix.mul_assoc]
-  rw [Pi.smul_apply, show Fin.append (Fin.append (Fin.append (Fin.append μ₁ ![i]) ν) ![j]) μ₃ =
-    wallSplit u' v w' (μ₁, i, ν, j, μ₃) from rfl, ← wallConfig_resplit h₁ h₂, wallString,
-    stringOperator_mulVec_trace _ _ _ h₁
-    (wallChain (A x) eAB (A y)) (A y) (fun ν ↦ Kraus.evalWord (A y) (List.ofFn ν)) (A y)
-    (wallChain (A y) eBA (A x)) _ hψ₂, leftAct_wallLeftEndpoint_right ad hÂ,
-    rightAct_wallRightEndpoint_right ad hÂ, physAct_evalWord, wallChain_append, wallChain_append]
-  have hr := (isReduction_castIndex (ad.isReduction g y) hyx).evalWord (List.ofFn ν)
-  rw [← hr]
-  simp only [Matrix.mul_assoc, Matrix.trace_smul, smul_eq_mul]
-
-/-- **Exchange of two domain-wall strings, in the printed orientation** (arXiv:2405.00439,
-`signphysop`, `Papers/2405.00439/MPU-DW.tex` lines 1667--1672): if `U = O_g` squares to the
-identity on every nonempty chain, then
-`O^{[i₁,j₁]} O^{[i₂,j₂]} |ψ_A⟩ = c_{AB} c_{BA} O^{[i₂,j₂]} O^{[i₁,j₁]} |ψ_A⟩`.
-The two orientations agree because `(c_{AB} c_{BA})² = 1`, which follows from `U² = 1` as in the
-source (lines 835--839,
-`MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mul_sq_eq_one_of_mpo_mul_self_eq_one`);
-the blocks are normal because they have left inverses. -/
-theorem wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one
-    (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
-    (hU : ∀ L, 0 < L → mpo (F.tensor g) L * mpo (F.tensor g) L = 1)
-    (hÂ : IsSeparatingLeftInverse Âx Ây (A x) (A y)) {cAB cBA : ℂ}
-    (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
-    (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
-    ∃ N : ℕ, ∀ (u u' v w' w L : ℕ) (h₁ : u + 1 + u' + 1 + v + 1 + (w' + 1 + w) = L)
-      (h₂ : u + 1 + (u' + 1 + v + 1 + w') + 1 + w = L), N ≤ u' → N ≤ v → N ≤ w' →
-      (ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁ *
-          ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂) *ᵥ
-          (fun σ ↦ MPSTensor.mpv (A x) σ) =
-        (cAB * cBA) • ((ad.wallString g hxy hyx Âx Ây eAB eBA u (u' + 1 + v + 1 + w') w h₂ *
-          ad.wallString g hxy hyx Âx Ây eAB eBA (u + 1 + u') v (w' + 1 + w) h₁) *ᵥ
-            (fun σ ↦ MPSTensor.mpv (A x) σ)) := by
-  have hc := hAB.mul_sq_eq_one_of_mpo_mul_self_eq_one
-    (isInjective_of_physPairing_eq_one hÂ.left_left).isNormal
-    (isInjective_of_physPairing_eq_one hÂ.right_right).isNormal hperm hU hBA
-  obtain ⟨N, hN⟩ := ad.wallString_mul_wallString_mulVec_mpv hperm hÂ hAB hBA
-  refine ⟨N, fun u u' v w' w L h₁ h₂ hu' hv hw' ↦ ?_⟩
-  rw [hN u u' v w' w L h₁ h₂ hu' hv hw', smul_smul, ← sq, hc, one_smul]
 
 end BlockActionData
 

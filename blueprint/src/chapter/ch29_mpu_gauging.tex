@@ -5398,6 +5398,12 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \label{thm:mpug_domain_wall_string_exchange}
     \lean{MPOTensor.wallConfig_resplit,
         MPOTensor.twoWallChain_append,
+        MPOTensor.wallConfig_eq_wallConfig,
+        MPOTensor.twoWallMPV_wallConfig_comp_cast,
+        MPOTensor.fourWallCoeff,
+        MPOTensor.exists_wallConfig_wallSplit,
+        MPOTensor.GroupFamily.BlockActionData.wallString_outer_mul_inner_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_inner_mul_outer_mulVec_mpv_apply,
         MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv}
     \leanok
     \uses{thm:mpug_domain_wall_string_creation, thm:mpug_domain_wall_pair}
@@ -5474,6 +5480,44 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     full matrix algebras and they are normal. Lemma~\ref{lem:mpug_domain_wall_exchange_phase_square}
     gives $(c_{AB}c_{BA})^2=1$. Multiply the identity of
     Theorem~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$.
+\end{proof}
+
+\begin{theorem}[Exchange of two left endpoints of domain-wall strings]
+    \label{thm:mpug_domain_wall_endpoint_exchange}
+    \lean{MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_right_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_left_mulVec_mpv_apply,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far,
+        MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near}
+    \leanok
+    \uses{thm:mpug_domain_wall_string_exchange}
+    In the setting of Theorem~\ref{thm:mpug_domain_wall_string_exchange},
+    let $j<i$ and let $r_1\neq r_2$ be two sites to the right of $i$. If the
+    regions between the four sites $j,i,r_1,r_2$ are longer than a fixed
+    buffer, then
+    \begin{align}
+        O^{[j,r_1]}O^{[i,r_2]}\ket{\psi_A}
+         & =c_{AB}\,O^{[i,r_1]}O^{[j,r_2]}\ket{\psi_A}.
+        \notag
+    \end{align}
+    This is the exchange of two left endpoints
+    $O^{[j]}_xO^{[i]}_y\ket{\psi_A}=c_{AB}\,O^{[i]}_xO^{[j]}_y\ket{\psi_A}$
+    of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}, with the
+    half-chain operators glued with the right endpoints of their strings at
+    $r_1$ and $r_2$; the identity of half-chain objects with open legs is not
+    formalized \cite{gap:gs24_domain_wall_half_string_gluing}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every side is a multiple of the state with the domain walls $e_{AB}$,
+    $e_{BA}$, $e_{AB}$, $e_{BA}$ at the four sites in increasing order. For
+    $r_2<r_1$ the left side is a nested pair whose outer string acts second,
+    with phase $c_{AB}c_{BA}$ by
+    Theorem~\ref{thm:mpug_domain_wall_string_exchange}; on the right side the
+    string on $[i,r_1]$ starts in the $B$ region, passes over the domain wall
+    $e_{BA}$ at $r_2$ and ends in the $A$ region, so the local action gives
+    $c_{BA}$. For $r_1<r_2$ the string on $[j,r_1]$ on the left side passes
+    over the domain wall $e_{AB}$ at $i$, with phase $c_{AB}$, and the right
+    side is a nested pair whose inner string acts second, with no phase.
 \end{proof}
 
 \begin{theorem}[Rescaling domain walls]

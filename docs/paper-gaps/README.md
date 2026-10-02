@@ -722,6 +722,11 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   walls and their phases are nonzero and that the local action of the
   symmetry on a domain wall holds against blocked regions of the two ground
   states.
+- `gs24_domain_wall_half_string_gluing.tex` (scope restriction) records that
+  the exchange of two left endpoints of domain-wall strings is proved for the
+  half-chain operators glued with right endpoints of strings, not as an
+  identity of half-chain objects with open legs, which needs the fixed-point
+  form of the action tensors.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
