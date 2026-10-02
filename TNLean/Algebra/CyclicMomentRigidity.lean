@@ -16,9 +16,11 @@ four-point contraction forces the remaining product component to vanish.
 The algebraic proof uses a linear functional faithful on adjoint squares; no
 finite-dimensionality or traciality is needed for this implication.
 
-Source: `Notes/OpenProblemsTN/followup/2026_10_02_finite_asymmetric_tests/`;
-`reflected_four_point_rigidity.tex`, Theorem 1. This is a separate finite-moment
-criterion, not a restatement of the fundamental theorem in arXiv:2204.05940.
+The argument is self-contained: expanding `τA (star e * e)` for the defect
+`e = V x * V y - V (x * y)` and rewriting each of the four terms by one of the
+moment hypotheses shows that the expansion vanishes. This is a separate
+finite-moment criterion, not a restatement of the fundamental theorem in
+arXiv:2204.05940.
 -/
 
 namespace LinearMap

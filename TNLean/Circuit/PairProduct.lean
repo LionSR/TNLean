@@ -153,7 +153,7 @@ theorem exists_embedOp_eq_of_mem_supportedOperators {e : Fin m → Fin n}
   | mem x hx =>
     obtain ⟨A, hA, rfl⟩ := hx
     refine ⟨finKronecker (A ∘ e), ?_⟩
-    rw [embedOp_finKronecker he]
+    rw [← rectKronecker_eq_finKronecker, embedOp_rectKronecker he]
     congr 1
     funext i
     by_cases h : ∃ j, e j = i

@@ -117,6 +117,37 @@ theorem coeff_eq_zero_of_bondDim_eq_zero (A : OBCChainTensor d D N)
     ⟨fun α => Fin.elim0 (hk ▸ α k)⟩
   simp [coeff]
 
+/-- The open chain whose matrices at the site `q` are multiplied by `c`, all other site
+matrices and all bond dimensions being unchanged. -/
+def smulSite (A : OBCChainTensor d D N) (q : Fin N) (c : ℂ) : OBCChainTensor d D N where
+  bondDim := A.bondDim
+  bondDim_le := A.bondDim_le
+  left_dim := A.left_dim
+  right_dim := A.right_dim
+  tensor p i := if p = q then c • A.tensor p i else A.tensor p i
+
+/-- Scaling the matrices of one site multiplies every coefficient by the same scalar, since the
+coefficient is a product over the sites. -/
+theorem coeff_smulSite (A : OBCChainTensor d D N) (q : Fin N) (c : ℂ) :
+    (A.smulSite q c).coeff = c • A.coeff := by
+  classical
+  funext σ
+  simp only [coeff, Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
+  refine Finset.sum_congr rfl fun α _ => ?_
+  calc ∏ p, (A.smulSite q c).tensor p (σ p) (α p.castSucc) (α p.succ)
+      = ∏ p, (if p = q then c else 1) * A.tensor p (σ p) (α p.castSucc) (α p.succ) :=
+        Finset.prod_congr rfl fun p _ => by
+          by_cases hp : p = q
+          · rw [ite_eq_left hp]
+            exact congrFun (congrFun (ite_eq_left hp : (if p = q then c • A.tensor p (σ p)
+              else A.tensor p (σ p)) = _) _) _
+          · rw [ite_eq_right hp, one_mul]
+            exact congrFun (congrFun (ite_eq_right hp : (if p = q then c • A.tensor p (σ p)
+              else A.tensor p (σ p)) = _) _) _
+    _ = c * ∏ p, A.tensor p (σ p) (α p.castSucc) (α p.succ) := by
+        rw [Finset.prod_mul_distrib, Finset.prod_ite_eq' Finset.univ q (fun _ => c)]
+        simp
+
 end OBCChainTensor
 
 namespace MPSChainTensor
