@@ -123,8 +123,8 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
         Matrix.finKronecker_permMatrix_mulVec}
     \leanok
     \uses{def:ldp_local_circuit}
-    Let $\sigma$ be a permutation of the configurations of the ring that
-    changes only the sites of a set $X$, the new values at these sites
+    Let $\sigma$ be a permutation of the configurations of a finite set of
+    sites, such as the ring, that changes only the sites of a set $X$, the new values at these sites
     depending only on the old values there. Its permutation matrix $P_\sigma$,
     $(P_\sigma v)(x)=v(\sigma x)$, is a unitary acting on $X$. Examples are the
     shift $x\mapsto x+f(x)e_t$ at a site $t\in X$, with values in
@@ -132,7 +132,8 @@ state prepared by a local circuit of depth $T$ vanish beyond distance $2T$.
     $\sigma_k$, $k\in K$, are such permutations for pairwise disjoint
     pairs $\{k,k+1\}$, the layer of the gates $P_{\sigma_k}$ acts as
     $v\mapsto v\circ\rho$, where $\rho(x)$ agrees with $\sigma_k(x)$ on the
-    pair $\{k,k+1\}$ and with $x$ off all the pairs. For shifts
+    pair $\{k,k+1\}$ and with $x$ off all the pairs; here the sites form the
+    ring. For shifts
     $\sigma_k\colon x\mapsto x+f_k(x)e_{t_k}$ this reads
     $\rho(x)_{t_k}=x_{t_k}+f_k(x)$, and $\rho(x)_i=x_i$ at every site $i$
     that is none of the $t_k$. Finally, for permutations $\tau_i$ of the

@@ -42,25 +42,25 @@ open scoped BigOperators
 
 namespace QuantumCircuit
 
-variable {d N : ℕ}
+variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The permutation `σ` of the configurations changes only the sites of `S`, and the new values
 at the sites of `S` depend only on the old values at the sites of `S`. -/
-def IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop :=
+def IsLocalPerm (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop :=
   (∀ x, ∀ i ∉ S, σ x i = x i) ∧
     ∀ x y, (∀ j ∈ S, x j = y j) → ∀ i ∈ S, σ x i = σ y i
 
-private theorem permMatrix_cfg_apply (σ : Equiv.Perm (Fin N → Fin d)) (x y : Fin N → Fin d) :
+private theorem permMatrix_cfg_apply (σ : Equiv.Perm (ι → Fin d)) (x y : ι → Fin d) :
     σ.permMatrix ℂ x y = if σ x = y then 1 else 0 := by
   simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
 
 /-- The permutation matrix of a permutation changing and reading only the sites of `S` acts
 on `S`. -/
-theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set (Fin N)}
-    {σ : Equiv.Perm (Fin N → Fin d)} (h : IsLocalPerm S σ) :
+theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set ι}
+    {σ : Equiv.Perm (ι → Fin d)} (h : IsLocalPerm S σ) :
     σ.permMatrix ℂ ∈ supportedOperators d S := by
   classical
-  let e : Fin (Fintype.card S) → Fin N := fun j => ((Fintype.equivFin S).symm j : Fin N)
+  let e : Fin (Fintype.card S) → ι := fun j => ((Fintype.equivFin S).symm j : ι)
   have he : Function.Injective e :=
     Subtype.val_injective.comp (Fintype.equivFin S).symm.injective
   have hmem : ∀ i, i ∈ S ↔ ∃ j, e j = i := fun i => by
@@ -71,7 +71,7 @@ theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set (Fin N)}
       exact ((Fintype.equivFin S).symm j).prop
   have hrange : Set.range e = S := Set.ext fun i => (hmem i).symm
   let X : Matrix (Fin (Fintype.card S) → Fin d) (Fin (Fintype.card S) → Fin d) ℂ :=
-    of fun u w => if ∃ x : Fin N → Fin d, x ∘ e = u ∧ σ x ∘ e = w then 1 else 0
+    of fun u w => if ∃ x : ι → Fin d, x ∘ e = u ∧ σ x ∘ e = w then 1 else 0
   have hX : σ.permMatrix ℂ = embedOp e X := by
     ext x y
     rw [permMatrix_cfg_apply, embedOp_apply]
@@ -81,7 +81,7 @@ theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set (Fin N)}
       have hag : AgreeOff e x (σ x) := fun i hi =>
         (h.1 x i fun hiS => by obtain ⟨j, hj⟩ := (hmem i).mp hiS; exact hi j hj).symm
       simp only [hag, ite_true,
-        show ∃ x' : Fin N → Fin d, x' ∘ e = x ∘ e ∧ σ x' ∘ e = σ x ∘ e from ⟨x, rfl, rfl⟩]
+        show ∃ x' : ι → Fin d, x' ∘ e = x ∘ e ∧ σ x' ∘ e = σ x ∘ e from ⟨x, rfl, rfl⟩]
     · simp only [hxy, ite_false]
       split_ifs with hag hex
       · exfalso
@@ -110,20 +110,20 @@ variable [NeZero d]
 
 /-- The permutation `x ↦ x + f(x) e_t` adding the value `f x` to the site `t`, where `f` does
 not read the site `t`. -/
-def shiftPerm (t : Fin N) (f : (Fin N → Fin d) → Fin d)
-    (hf : ∀ x c, f (Function.update x t c) = f x) : Equiv.Perm (Fin N → Fin d) where
+def shiftPerm (t : ι) (f : (ι → Fin d) → Fin d)
+    (hf : ∀ x c, f (Function.update x t c) = f x) : Equiv.Perm (ι → Fin d) where
   toFun x := Function.update x t (x t + f x)
   invFun x := Function.update x t (x t - f x)
   left_inv x := by simp [hf]
   right_inv x := by simp [hf]
 
-theorem shiftPerm_apply (t : Fin N) (f : (Fin N → Fin d) → Fin d)
-    (hf : ∀ x c, f (Function.update x t c) = f x) (x : Fin N → Fin d) :
+theorem shiftPerm_apply (t : ι) (f : (ι → Fin d) → Fin d)
+    (hf : ∀ x c, f (Function.update x t c) = f x) (x : ι → Fin d) :
     shiftPerm t f hf x = Function.update x t (x t + f x) :=
   rfl
 
-theorem isLocalPerm_shiftPerm {S : Set (Fin N)} {t : Fin N} (ht : t ∈ S)
-    (f : (Fin N → Fin d) → Fin d)
+theorem isLocalPerm_shiftPerm {S : Set ι} {t : ι} (ht : t ∈ S)
+    (f : (ι → Fin d) → Fin d)
     (hf : ∀ x c, f (Function.update x t c) = f x)
     (hfS : ∀ x y, (∀ j ∈ S, x j = y j) → f x = f y) : IsLocalPerm S (shiftPerm t f hf) := by
   refine ⟨fun x i hi => ?_, fun x y hxy i hi => ?_⟩
@@ -139,7 +139,7 @@ end Shift
 
 section Layer
 
-variable [NeZero N]
+variable {N : ℕ} [NeZero N]
 
 /-- The layer of permutation gates `τ k` on the pairwise disjoint neighbouring pairs
 `{k, k + 1}`, `k ∈ K`. -/
@@ -232,7 +232,7 @@ end Layer
 /-- **Single-site permutations.** The Kronecker product of the permutation matrices of
 permutations `σ i` of the labels of the sites `i` acts on vectors as `v ↦ v ∘ σ`, where `σ`
 applies `σ i` at every site `i`. -/
-theorem _root_.Matrix.finKronecker_permMatrix_mulVec (σ : Fin N → Equiv.Perm (Fin d))
+theorem _root_.Matrix.finKronecker_permMatrix_mulVec {N : ℕ} (σ : Fin N → Equiv.Perm (Fin d))
     (v : (Fin N → Fin d) → ℂ) :
     finKronecker (fun i => (σ i).permMatrix ℂ) *ᵥ v = fun x => v fun i => σ i (x i) := by
   classical

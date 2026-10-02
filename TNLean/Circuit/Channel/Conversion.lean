@@ -8,11 +8,11 @@ import TNLean.Circuit.Channel.Layer
 /-!
 # Onsite channels and local channel conversions
 
-An onsite channel between local dimensions `d` and `e` on a chain of `N` sites is a tensor
-product `⊗ᵢ Φᵢ` of channels `Φᵢ : M_d → M_e`, one per site. Attaching an ancilla in a fixed
-state at every site and discarding the ancilla of every site are onsite channels. A *local
-channel conversion* of depth `T` alternates onsite channels with `T` layers of local channels
-on pairs of neighbouring sites,
+An onsite channel between local dimensions `d` and `e` on a finite set of sites `ι`, such as
+the chain `Fin N`, is a tensor product `⊗ᵢ Φᵢ` of channels `Φᵢ : M_d → M_e`, one per site.
+Attaching an ancilla in a fixed state at every site and discarding the ancilla of every site
+are onsite channels. A *local channel conversion* of depth `T` alternates onsite channels with
+`T` layers of local channels on pairs of neighbouring sites,
 `Φ_T ∘ L_T ∘ Φ_{T-1} ∘ ⋯ ∘ L_1 ∘ Φ_0`, where the local dimension may change at each onsite
 channel. This is the channel form of the circuits `V' = U_ℓ V_ℓ ⋯ U_1 V_1 U_0` of
 arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC", with ancillas attached to
@@ -55,8 +55,9 @@ choice functions `J`.
 
 ## Main results
 
-* `QuantumCircuit.OnsiteChannel.map_isKrausCPTP`, `QuantumCircuit.OnsiteChannel.map_finKronecker`
-  — onsite channels are channels and map product operators to product operators.
+* `QuantumCircuit.OnsiteChannel.map_isKrausCPTP`,
+  `QuantumCircuit.OnsiteChannel.map_rectKronecker` — onsite channels are channels and map
+  product operators to product operators.
 * `QuantumCircuit.OnsiteChannel.dual_mem_supportedOperators`,
   `QuantumCircuit.OnsiteChannel.dual_mul` — Heisenberg locality of onsite channels.
 * `QuantumCircuit.IsLocalChannelProtocol.isKrausCPTP` — a conversion map is a channel.
@@ -88,26 +89,36 @@ open scoped BigOperators ComplexOrder
 
 namespace QuantumCircuit
 
-variable {d e f N : ℕ}
+variable {d e f : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-! ### Rectangular product operators -/
 
 /-- The Kraus map whose Kraus operators are the products `⊗ᵢ K_{i J(i)}` maps a product
 operator `⊗ᵢ mᵢ` to the product `⊗ᵢ ∑ⱼ Kᵢⱼ mᵢ Kᵢⱼ†`. -/
-theorem rectangularKrausMap_rectKronecker_finKronecker {r : Fin N → ℕ}
-    (K : (i : Fin N) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ)
-    (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    rectangularKrausMap (fun J : (i : Fin N) → Fin (r i) ↦ rectKronecker fun i ↦ K i (J i))
-        (finKronecker m) =
-      finKronecker fun i ↦ rectangularKrausMap (K i) (m i) := by
+theorem rectangularKrausMap_rectKronecker_rectKronecker {r : ι → ℕ}
+    (K : (i : ι) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ)
+    (m : ι → Matrix (Fin d) (Fin d) ℂ) :
+    rectangularKrausMap (fun J : (i : ι) → Fin (r i) ↦ rectKronecker fun i ↦ K i (J i))
+        (rectKronecker m) =
+      rectKronecker fun i ↦ rectangularKrausMap (K i) (m i) := by
   change ∑ J, _ * _ * _ = _
-  simp only [rectKronecker_conjTranspose, ← rectKronecker_eq_finKronecker, rectKronecker_mul]
+  simp only [rectKronecker_conjTranspose, rectKronecker_mul]
   exact sum_rectKronecker fun i j ↦ K i j * m i * (K i j)ᴴ
+
+/-- The chain form of `rectangularKrausMap_rectKronecker_rectKronecker`, for the sites
+`Fin N`. -/
+theorem rectangularKrausMap_rectKronecker_finKronecker {N : ℕ} {r : Fin N → ℕ}
+    (K : (i : ι) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ)
+    (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
+    rectangularKrausMap (fun J : (i : ι) → Fin (r i) ↦ rectKronecker fun i ↦ K i (J i))
+        (finKronecker m) =
+      finKronecker fun i ↦ rectangularKrausMap (K i) (m i) :=
+  rectangularKrausMap_rectKronecker_rectKronecker K m
 
 /-! ### Onsite channels -/
 
-/-- An *onsite channel* from `d`-level to `e`-level sites on a chain of `N` sites: at each site
-`i` a channel `M_d → M_e` given by Kraus operators `kraus i j : e × d` with
+/-- An *onsite channel* from `d`-level to `e`-level sites on a finite set of sites `ι`: at each
+site `i` a channel `M_d → M_e` given by Kraus operators `kraus i j : e × d` with
 `∑ⱼ (kraus i j)† (kraus i j) = 1`. On the chain it acts as the tensor product of these
 channels.
 
@@ -115,73 +126,85 @@ Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (loca
 `U = ⊗ᵢ uᵢ` acting on each site and its ancillas, with ancillas "initialized in a product
 state"), with channels in place of unitaries so that attaching and discarding ancillas are
 included. -/
-structure OnsiteChannel (d e N : ℕ) where
+structure OnsiteChannel (d e : ℕ) (ι : Type*) where
   /-- The number of Kraus operators of the channel at site `i`. -/
-  r : Fin N → ℕ
+  r : ι → ℕ
   /-- The Kraus operators of the channel at site `i`. -/
-  kraus : (i : Fin N) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ
+  kraus : (i : ι) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ
   sum_kraus : ∀ i, ∑ j, (kraus i j)ᴴ * kraus i j = 1
 
 namespace OnsiteChannel
 
 /-- The channel `M_d → M_e` at site `i`. -/
-noncomputable def siteMap (Φ : OnsiteChannel d e N) (i : Fin N) :
+noncomputable def siteMap (Φ : OnsiteChannel d e ι) (i : ι) :
     Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] Matrix (Fin e) (Fin e) ℂ :=
   rectangularKrausMap (Φ.kraus i)
 
 /-- The Heisenberg dual `M_e → M_d` of the channel at site `i`. -/
-noncomputable def siteDual (Φ : OnsiteChannel d e N) (i : Fin N) :
+noncomputable def siteDual (Φ : OnsiteChannel d e ι) (i : ι) :
     Matrix (Fin e) (Fin e) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ :=
   rectangularKrausMap fun j ↦ (Φ.kraus i j)ᴴ
 
 /-- The Kraus operator `⊗ᵢ K_{i J(i)}` of an onsite channel on the chain, for a choice
 function `J` of one Kraus index per site. -/
-def krausOp (Φ : OnsiteChannel d e N) (J : (i : Fin N) → Fin (Φ.r i)) :
-    Matrix (Fin N → Fin e) (Fin N → Fin d) ℂ :=
+def krausOp (Φ : OnsiteChannel d e ι) (J : (i : ι) → Fin (Φ.r i)) :
+    Matrix (ι → Fin e) (ι → Fin d) ℂ :=
   rectKronecker fun i ↦ Φ.kraus i (J i)
 
 /-- The map of an onsite channel on density matrices of the chain.
 
 Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (local operations
 on each site and its ancillas). -/
-noncomputable def map (Φ : OnsiteChannel d e N) :
-    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ :=
+noncomputable def map (Φ : OnsiteChannel d e ι) :
+    Matrix (ι → Fin d) (ι → Fin d) ℂ →ₗ[ℂ] Matrix (ι → Fin e) (ι → Fin e) ℂ :=
   rectangularKrausMap Φ.krausOp
 
 /-- The Heisenberg dual of an onsite channel. -/
-noncomputable def dual (Φ : OnsiteChannel d e N) :
-    Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
+noncomputable def dual (Φ : OnsiteChannel d e ι) :
+    Matrix (ι → Fin e) (ι → Fin e) ℂ →ₗ[ℂ] Matrix (ι → Fin d) (ι → Fin d) ℂ :=
   rectangularKrausMap fun J ↦ (Φ.krausOp J)ᴴ
 
-theorem sum_krausOp (Φ : OnsiteChannel d e N) :
+theorem sum_krausOp (Φ : OnsiteChannel d e ι) :
     ∑ J, (Φ.krausOp J)ᴴ * Φ.krausOp J = 1 := by
   simp only [krausOp, rectKronecker_conjTranspose, rectKronecker_mul]
   rw [sum_rectKronecker fun i j ↦ (Φ.kraus i j)ᴴ * Φ.kraus i j]
-  simp only [Φ.sum_kraus, rectKronecker_eq_finKronecker, finKronecker_one]
+  simp only [Φ.sum_kraus, rectKronecker_one]
 
 /-- An onsite channel is trace-preserving and completely positive. -/
-theorem map_isKrausCPTP (Φ : OnsiteChannel d e N) : IsKrausCPTP Φ.map :=
+theorem map_isKrausCPTP (Φ : OnsiteChannel d e ι) : IsKrausCPTP Φ.map :=
   rectangularKrausMap_isKrausCPTP _ Φ.sum_krausOp
 
 /-- An onsite channel maps the product operator `⊗ᵢ σᵢ` to `⊗ᵢ Φᵢ(σᵢ)`. -/
-theorem map_finKronecker (Φ : OnsiteChannel d e N) (σ : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    Φ.map (finKronecker σ) = finKronecker fun i ↦ Φ.siteMap i (σ i) :=
-  rectangularKrausMap_rectKronecker_finKronecker Φ.kraus σ
+theorem map_rectKronecker (Φ : OnsiteChannel d e ι) (σ : ι → Matrix (Fin d) (Fin d) ℂ) :
+    Φ.map (rectKronecker σ) = rectKronecker fun i ↦ Φ.siteMap i (σ i) :=
+  rectangularKrausMap_rectKronecker_rectKronecker Φ.kraus σ
 
 /-- The dual of an onsite channel maps the product operator `⊗ᵢ mᵢ` to `⊗ᵢ Φᵢ†(mᵢ)`. -/
-theorem dual_finKronecker (Φ : OnsiteChannel d e N) (m : Fin N → Matrix (Fin e) (Fin e) ℂ) :
-    Φ.dual (finKronecker m) = finKronecker fun i ↦ Φ.siteDual i (m i) := by
+theorem dual_rectKronecker (Φ : OnsiteChannel d e ι) (m : ι → Matrix (Fin e) (Fin e) ℂ) :
+    Φ.dual (rectKronecker m) = rectKronecker fun i ↦ Φ.siteDual i (m i) := by
   simp only [dual, krausOp, rectKronecker_conjTranspose]
-  exact rectangularKrausMap_rectKronecker_finKronecker (fun i j ↦ (Φ.kraus i j)ᴴ) m
+  exact rectangularKrausMap_rectKronecker_rectKronecker (fun i j ↦ (Φ.kraus i j)ᴴ) m
+
+/-- The chain form of `map_rectKronecker`, for the sites `Fin N`. -/
+theorem map_finKronecker {N : ℕ} (Φ : OnsiteChannel d e (Fin N))
+    (σ : Fin N → Matrix (Fin d) (Fin d) ℂ) :
+    Φ.map (finKronecker σ) = finKronecker fun i ↦ Φ.siteMap i (σ i) :=
+  Φ.map_rectKronecker σ
+
+/-- The chain form of `dual_rectKronecker`, for the sites `Fin N`. -/
+theorem dual_finKronecker {N : ℕ} (Φ : OnsiteChannel d e (Fin N))
+    (m : Fin N → Matrix (Fin e) (Fin e) ℂ) :
+    Φ.dual (finKronecker m) = finKronecker fun i ↦ Φ.siteDual i (m i) :=
+  Φ.dual_rectKronecker m
 
 /-- The dual of a channel is unital. -/
-theorem siteDual_one (Φ : OnsiteChannel d e N) (i : Fin N) : Φ.siteDual i 1 = 1 := by
+theorem siteDual_one (Φ : OnsiteChannel d e ι) (i : ι) : Φ.siteDual i 1 = 1 := by
   change ∑ j, (Φ.kraus i j)ᴴ * 1 * (Φ.kraus i j)ᴴᴴ = 1
   simpa only [conjTranspose_conjTranspose, Matrix.mul_one] using Φ.sum_kraus i
 
 /-- Schrödinger–Heisenberg duality for an onsite channel: `tr(Φ(ρ) A) = tr(ρ Φ†(A))`. -/
-theorem trace_map_mul (Φ : OnsiteChannel d e N) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
-    (A : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) : trace (Φ.map ρ * A) = trace (ρ * Φ.dual A) :=
+theorem trace_map_mul (Φ : OnsiteChannel d e ι) (ρ : Matrix (ι → Fin d) (ι → Fin d) ℂ)
+    (A : Matrix (ι → Fin e) (ι → Fin e) ℂ) : trace (Φ.map ρ * A) = trace (ρ * Φ.dual A) :=
   trace_rectangularKrausMap_mul _ ρ A
 
 /-- **Heisenberg locality of onsite channels.** The dual of an onsite channel maps an operator
@@ -190,26 +213,26 @@ spread supports.
 
 Source: arXiv:2103.13367, Supplemental Material, proof of the area law ("`U_n ∈ LU`, so it
 does not increase" the entanglement across a cut), in the Heisenberg picture. -/
-theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e N) {X : Set (Fin N)}
-    {A : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ} (hA : A ∈ supportedOperators e X) :
+theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Set ι}
+    {A : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ supportedOperators e X) :
     Φ.dual A ∈ supportedOperators d X := by
   refine (Submodule.span_le (p := (supportedOperators d X).comap Φ.dual)).mpr ?_ hA
   rintro _ ⟨m, hm, rfl⟩
-  rw [SetLike.mem_coe, Submodule.mem_comap, dual_finKronecker]
-  exact finKronecker_mem_supportedOperators fun i hi ↦ by rw [hm i hi, siteDual_one]
+  rw [SetLike.mem_coe, Submodule.mem_comap, dual_rectKronecker]
+  exact rectKronecker_mem_supportedOperators fun i hi ↦ by rw [hm i hi, siteDual_one]
 
 /-- The dual of an onsite channel is multiplicative on operators acting on disjoint sets of
 sites. -/
-theorem dual_mul (Φ : OnsiteChannel d e N) {X Y : Set (Fin N)} (hXY : Disjoint X Y)
-    {A B : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ} (hA : A ∈ supportedOperators e X)
+theorem dual_mul (Φ : OnsiteChannel d e ι) {X Y : Set ι} (hXY : Disjoint X Y)
+    {A B : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ supportedOperators e X)
     (hB : B ∈ supportedOperators e Y) : Φ.dual (A * B) = Φ.dual A * Φ.dual B := by
   have key := eq_of_mem_supportedOperators₂
-    ((LinearMap.mul ℂ (Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ)).compr₂ Φ.dual)
-    ((LinearMap.mul ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)).compl₁₂ Φ.dual Φ.dual)
+    ((LinearMap.mul ℂ (Matrix (ι → Fin e) (ι → Fin e) ℂ)).compr₂ Φ.dual)
+    ((LinearMap.mul ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)).compl₁₂ Φ.dual Φ.dual)
     (fun m m' hm hm' ↦ by
       simp only [LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply']
-      rw [finKronecker_mul, dual_finKronecker, dual_finKronecker, dual_finKronecker,
-        finKronecker_mul]
+      rw [rectKronecker_mul, dual_rectKronecker, dual_rectKronecker, dual_rectKronecker,
+        rectKronecker_mul]
       congr 1
       funext i
       by_cases hi : i ∈ X
@@ -220,16 +243,17 @@ theorem dual_mul (Φ : OnsiteChannel d e N) {X Y : Set (Fin N)} (hXY : Disjoint 
 /-! ### Identity, attaching and discarding ancillas -/
 
 /-- The identity onsite channel, with the single Kraus operator `1` at every site. -/
-def id (d N : ℕ) : OnsiteChannel d d N where
+def id (d : ℕ) (ι : Type*) : OnsiteChannel d d ι where
   r _ := 1
   kraus _ _ := 1
   sum_kraus _ := by simp
 
-theorem id_map (d N : ℕ) : (OnsiteChannel.id d N).map = LinearMap.id := by
+theorem id_map (d : ℕ) (ι : Type*) [Fintype ι] [DecidableEq ι] :
+    (OnsiteChannel.id d ι).map = LinearMap.id := by
   refine LinearMap.ext fun X ↦ ?_
-  change ∑ _ : (i : Fin N) → Fin 1, rectKronecker (fun _ ↦ (1 : Matrix (Fin d) (Fin d) ℂ)) * X *
+  change ∑ _ : (i : ι) → Fin 1, rectKronecker (fun _ ↦ (1 : Matrix (Fin d) (Fin d) ℂ)) * X *
     (rectKronecker fun _ ↦ 1)ᴴ = X
-  simp [rectKronecker_eq_finKronecker]
+  simp
 
 /-- The Kraus operator `x ↦ x ⊗ v` of attaching an ancilla vector `v : Fin a → ℂ` to a
 `d`-level site, the pair `(x, b)` being encoded as `finProdFinEquiv (x, b)`. -/
@@ -256,8 +280,8 @@ theorem conjTranspose_ancillaKraus_mul {a : ℕ} (v : Fin a → ℂ) :
 
 Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" ("adding ancillas
 (initialized in a product state) … to each lattice site"). -/
-noncomputable def attach (d N : ℕ) {a s : ℕ} (w : Fin s → Fin a → ℂ)
-    (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) : OnsiteChannel d (d * a) N where
+noncomputable def attach (d : ℕ) (ι : Type*) {a s : ℕ} (w : Fin s → Fin a → ℂ)
+    (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) : OnsiteChannel d (d * a) ι where
   r _ := s
   kraus _ k := ancillaKraus d (w k)
   sum_kraus _ := by
@@ -265,9 +289,9 @@ noncomputable def attach (d N : ℕ) {a s : ℕ} (w : Fin s → Fin a → ℂ)
 
 /-- Attaching an ancilla maps `X` to `X ⊗ τ` with `τ = ∑ₖ wₖ wₖ†`. -/
 theorem attach_siteMap_apply {a s : ℕ} (w : Fin s → Fin a → ℂ)
-    (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) (i : Fin N) (X : Matrix (Fin d) (Fin d) ℂ)
+    (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) (i : ι) (X : Matrix (Fin d) (Fin d) ℂ)
     (x y : Fin d) (b c : Fin a) :
-    (attach d N w hw).siteMap i X (finProdFinEquiv (x, b)) (finProdFinEquiv (y, c)) =
+    (attach d ι w hw).siteMap i X (finProdFinEquiv (x, b)) (finProdFinEquiv (y, c)) =
       X x y * ∑ k, w k b * star (w k c) := by
   change (∑ k, ancillaKraus d (w k) * X * (ancillaKraus d (w k))ᴴ :
     Matrix (Fin (d * a)) (Fin (d * a)) ℂ) _ _ = _
@@ -278,8 +302,8 @@ theorem attach_siteMap_apply {a s : ℕ} (w : Fin s → Fin a → ℂ)
   ring
 
 /-- Attaching the ancilla state `|0⟩` at every site. -/
-noncomputable def attachZero (d a N : ℕ) [NeZero a] : OnsiteChannel d (d * a) N :=
-  attach d N (fun _ : Fin 1 ↦ Pi.single 0 1) (by simp)
+noncomputable def attachZero (d a : ℕ) (ι : Type*) [NeZero a] : OnsiteChannel d (d * a) ι :=
+  attach d ι (fun _ : Fin 1 ↦ Pi.single 0 1) (by simp)
 
 /-- The Kraus operator `x ⊗ b ↦ x`, for a fixed ancilla level `b`, of discarding an `a`-level
 ancilla. -/
@@ -290,7 +314,7 @@ def discardKraus (d : ℕ) {a : ℕ} (b : Fin a) : Matrix (Fin d) (Fin (d * a)) 
 
 Source: arXiv:2103.13367, main text, paragraph "Phases of matter" (protocols "where ancillas
 are traced out at the end"). -/
-def discard (d a N : ℕ) : OnsiteChannel (d * a) d N where
+def discard (d a : ℕ) (ι : Type*) : OnsiteChannel (d * a) d ι where
   r _ := a
   kraus _ b := discardKraus d b
   sum_kraus _ := by
@@ -305,9 +329,9 @@ def discard (d a N : ℕ) : OnsiteChannel (d * a) d N where
     exact if_congr eq_comm rfl rfl
 
 /-- Discarding the ancilla is the partial trace `Y ↦ ∑_b Y_{(x, b), (y, b)}`. -/
-theorem discard_siteMap_apply {a : ℕ} (i : Fin N) (Y : Matrix (Fin (d * a)) (Fin (d * a)) ℂ)
+theorem discard_siteMap_apply {a : ℕ} (i : ι) (Y : Matrix (Fin (d * a)) (Fin (d * a)) ℂ)
     (x y : Fin d) :
-    (discard d a N).siteMap i Y x y =
+    (discard d a ι).siteMap i Y x y =
       ∑ b, Y (finProdFinEquiv (x, b)) (finProdFinEquiv (y, b)) := by
   change (∑ b : Fin a, discardKraus d b * Y * (discardKraus d b)ᴴ :
     Matrix (Fin d) (Fin d) ℂ) x y = _
@@ -317,8 +341,8 @@ theorem discard_siteMap_apply {a : ℕ} (i : Fin N) (Y : Matrix (Fin (d * a)) (F
 
 /-- Discarding an attached ancilla gives back the one-site operator. -/
 theorem discard_siteMap_attach_siteMap {a s : ℕ} (w : Fin s → Fin a → ℂ)
-    (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) (i : Fin N) (X : Matrix (Fin d) (Fin d) ℂ) :
-    (discard d a N).siteMap i ((attach d N w hw).siteMap i X) = X := by
+    (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) (i : ι) (X : Matrix (Fin d) (Fin d) ℂ) :
+    (discard d a ι).siteMap i ((attach d ι w hw).siteMap i X) = X := by
   ext x y
   simp only [discard_siteMap_apply, attach_siteMap_apply, ← Finset.mul_sum]
   rw [Finset.sum_comm]
@@ -336,7 +360,7 @@ section Ring
 
 open Fin.CommRing
 
-variable [NeZero N]
+variable {N : ℕ} [NeZero N]
 
 /-- The maps `Φ_T ∘ L_T ∘ Φ_{T-1} ∘ ⋯ ∘ L_1 ∘ Φ_0` alternating onsite channels `Φ_t`, which may
 change the local dimension, with `T` layers `L_t` of local channels on pairs of neighbouring
@@ -350,7 +374,7 @@ inductive IsLocalChannelProtocol :
     {d e : ℕ} → ℕ →
     (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop
   /-- An onsite channel is a protocol without layers. -/
-  | onsite {d e : ℕ} (Φ : OnsiteChannel d e N) : IsLocalChannelProtocol 0 Φ.map
+  | onsite {d e : ℕ} (Φ : OnsiteChannel d e (Fin N)) : IsLocalChannelProtocol 0 Φ.map
   /-- A layer of local channels applied after a protocol adds one to its depth. -/
   | layer {d e T : ℕ}
     {Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
@@ -359,7 +383,7 @@ inductive IsLocalChannelProtocol :
   /-- An onsite channel applied after a protocol keeps its depth. -/
   | onsite_comp {d e f T : ℕ}
       {Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
-      (hΨ : IsLocalChannelProtocol T Ψ) (Φ : OnsiteChannel e f N) :
+      (hΨ : IsLocalChannelProtocol T Ψ) (Φ : OnsiteChannel e f (Fin N)) :
       IsLocalChannelProtocol T (Φ.map ∘ₗ Ψ)
 
 namespace IsLocalChannelProtocol
@@ -464,7 +488,8 @@ variable {d' d'' : ℕ}
 
 /-- Every matrix is converted into itself in depth `0`. -/
 theorem refl (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : IsLocalChannelConversion 0 ρ ρ :=
-  ⟨0, le_rfl, _, .onsite (OnsiteChannel.id d N), by rw [OnsiteChannel.id_map, LinearMap.id_apply]⟩
+  ⟨0, le_rfl, _, .onsite (OnsiteChannel.id d (Fin N)),
+    by rw [OnsiteChannel.id_map, LinearMap.id_apply]⟩
 
 theorem mono {T T' : ℕ} {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
@@ -509,8 +534,8 @@ depth `T`.
 
 Source: arXiv:2103.13367, main text, paragraph "Phases of matter" ("a given preparation
 protocol … (where ancillas are traced out at the end), defines a quantum channel"). -/
-theorem isLocalChannelConversion_circuit {d' T : ℕ} (In : OnsiteChannel d e N)
-    (Ls : List (ChannelLayer e N)) (hLs : Ls.length ≤ T) (Out : OnsiteChannel e d' N)
+theorem isLocalChannelConversion_circuit {d' T : ℕ} (In : OnsiteChannel d e (Fin N))
+    (Ls : List (ChannelLayer e N)) (hLs : Ls.length ≤ T) (Out : OnsiteChannel e d' (Fin N))
     (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     IsLocalChannelConversion T ρ (Out.map (channelCircuitMap Ls (In.map ρ))) := by
   exact ⟨0 + Ls.length, by omega, _,
@@ -524,8 +549,9 @@ theorem IsChannelPreparedInDepth.exists_isLocalChannelConversion {T : ℕ}
       IsLocalChannelConversion T (finKronecker σ) ρ := by
   obtain ⟨Ls, rfl, σ, hσ, rfl⟩ := h
   refine ⟨σ, hσ, ?_⟩
-  simpa [OnsiteChannel.id_map] using isLocalChannelConversion_circuit (OnsiteChannel.id d N) Ls
-    le_rfl (OnsiteChannel.id d N) (finKronecker σ)
+  simpa [OnsiteChannel.id_map] using
+    isLocalChannelConversion_circuit (OnsiteChannel.id d (Fin N)) Ls
+    le_rfl (OnsiteChannel.id d (Fin N)) (finKronecker σ)
 
 /-- **Vanishing connected correlations beyond distance `2T`.** If a density matrix `σ` is
 converted in depth `T` from a product density `⊗ᵢ σᵢ`, then for operators `A`, `B` acting on

@@ -1089,7 +1089,9 @@ and its error extend to blocks of any lengths.
     \label{def:ldp_local_circuit}
     \lean{QuantumCircuit.IsLocalCircuitOfDepth, QuantumCircuit.IsPreparedInDepth,
         QuantumCircuit.Layer, QuantumCircuit.circuitOp,
-        QuantumCircuit.supportedOperators}
+        QuantumCircuit.supportedOperators,
+        QuantumCircuit.rectKronecker_mem_supportedOperators,
+        QuantumCircuit.embedOp_rectKronecker}
     \leanok
     A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
     $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
@@ -1104,6 +1106,15 @@ and its error extend to blocks of any lengths.
     $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
     are at distance larger than $s$ if no site of one is within ring distance
     $s$ of a site of the other.
+
+    Acting on a set of sites needs no geometry: for any finite set of sites
+    $I$ and $X\subseteq I$, an operator on $(\C^d)^{\otimes I}$ acts on $X$ if
+    it lies in the span of the products $\bigotimes_{i\in I}m_i$ with
+    $m_i=\mathbb 1$ for $i\notin X$. An injective map $e\colon K\to I$ of
+    finite sets places an operator $Z$ on $(\C^d)^{\otimes K}$ as the
+    operator $Z\otimes\mathbb 1$ on $(\C^d)^{\otimes I}$, which acts on
+    $e(K)$; placing a product $\bigotimes_{j\in K}m_j$ gives the product
+    with $m_j$ at the site $e(j)$ and $\mathbb 1$ off $e(K)$.
 \end{definition}
 
 \begin{lemma}[Light cone of a local circuit]
@@ -1129,14 +1140,21 @@ and its error extend to blocks of any lengths.
     \label{lem:ldp_light_cone_correlations}
     \uses{lem:ldp_light_cone}
     \lean{QuantumCircuit.expect_mul_eq_of_isPreparedInDepth,
-        QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth}
+        QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth,
+        QuantumCircuit.expect_productVector_rectKronecker,
+        QuantumCircuit.expect_productVector_mul}
     \leanok
     Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
     act on sets of sites at distance larger than $2T$. Then
     $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
     This is the statement in the proof of
     \cite[Theorem~1]{Malz2024Preparation} that every connected correlation of
-    such operators vanishes.
+    such operators vanishes. Its two ingredients on product vectors hold for
+    any finite set of sites: the expectation of $\bigotimes_im_i$ in
+    $\ket\pi=\bigotimes_i\ket{v_i}$ is $\prod_i\bra{v_i}m_i\ket{v_i}$, and
+    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
+        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
+    disjoint sets of sites.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1413,7 +1431,7 @@ change the local dimension act on single sites.
 \begin{definition}[Onsite channel]
     \label{def:ldp_onsite_channel}
     \uses{def:ldp_local_channel_circuit}
-    \lean{Matrix.rectKronecker, QuantumCircuit.OnsiteChannel,
+    \lean{Matrix.rectKronecker, Matrix.rectKronecker_one, QuantumCircuit.OnsiteChannel,
         QuantumCircuit.OnsiteChannel.map, QuantumCircuit.OnsiteChannel.dual,
         QuantumCircuit.OnsiteChannel.id, QuantumCircuit.OnsiteChannel.attach,
         QuantumCircuit.OnsiteChannel.attachZero,
@@ -1424,7 +1442,8 @@ change the local dimension act on single sites.
     An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
     $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
     $\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. It is the channel
-    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on the ring, with
+    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on any finite set of sites, such as
+    the ring, with
     $K_J=\bigotimes_iK_{iJ(i)}$ for every choice $J$ of one index per site;
     its dual is $A\mapsto\sum_JK_J^\dagger AK_J$. Write
     $\Phi_i(\sigma)=\sum_jK_{ij}\sigma K_{ij}^\dagger$ for its action at site
@@ -1441,6 +1460,7 @@ change the local dimension act on single sites.
     \label{lem:ldp_onsite_channel_properties}
     \uses{def:ldp_onsite_channel}
     \lean{QuantumCircuit.OnsiteChannel.map_isKrausCPTP,
+        QuantumCircuit.OnsiteChannel.map_rectKronecker,
         QuantumCircuit.OnsiteChannel.map_finKronecker,
         QuantumCircuit.OnsiteChannel.trace_map_mul,
         QuantumCircuit.OnsiteChannel.discard_siteMap_attach_siteMap}
@@ -1466,11 +1486,17 @@ change the local dimension act on single sites.
     \uses{def:ldp_onsite_channel}
     \lean{QuantumCircuit.OnsiteChannel.dual_mem_supportedOperators,
         QuantumCircuit.OnsiteChannel.dual_mul,
-        QuantumCircuit.OnsiteChannel.dual_finKronecker}
+        QuantumCircuit.OnsiteChannel.dual_rectKronecker,
+        QuantumCircuit.OnsiteChannel.dual_finKronecker,
+        QuantumCircuit.rectangularKrausMap_rectKronecker_rectKronecker}
     \leanok
     Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
     $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
     disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
+    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$: for
+    any operators $K_{ij}\colon\C^d\to\C^e$, the map
+    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ with $K_J=\bigotimes_iK_{iJ(i)}$
+    sends $\bigotimes_im_i$ to $\bigotimes_i\sum_jK_{ij}m_iK_{ij}^\dagger$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1723,7 +1749,8 @@ change the local dimension act on single sites.
 \begin{lemma}[Preparation from the all-zero state]
     \label{lem:ldp_preparation_from_zero}
     \uses{def:ldp_local_circuit}
-    \lean{QuantumCircuit.finKronecker_mulVec_productVector,
+    \lean{QuantumCircuit.rectKronecker_mulVec_productVector,
+        QuantumCircuit.finKronecker_mulVec_productVector,
         Matrix.exists_mem_unitary_eq_smul_mulVec_single_zero,
         QuantumCircuit.productVector_pi_smul,
         QuantumCircuit.exists_productVector_eq_smul_finKronecker_mulVec,
@@ -1731,7 +1758,7 @@ change the local dimension act on single sites.
         QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
     \leanok
     Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
-    $\mathbb{C}^d$,
+    $\mathbb{C}^d$ on any finite set of sites,
     $(\bigotimes_im_i)(\bigotimes_i\ket{v_i})=\bigotimes_im_i\ket{v_i}$, and
     $\bigotimes_ic_i\ket{v_i}=(\prod_ic_i)\bigotimes_i\ket{v_i}$ for scalars
     $c_i$. Every nonzero $x\in\mathbb{C}^d$ equals $c\,u\ket0$ for a unitary

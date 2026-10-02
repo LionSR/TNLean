@@ -178,6 +178,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.IsZeroOn.smul,
         QuantumCircuit.IsZeroOn.finKronecker_update_one_mulVec,
         QuantumCircuit.cfgPerm, QuantumCircuit.cfgPerm_apply,
+        QuantumCircuit.permMatrix_cfgPerm_mul_rectKronecker,
         QuantumCircuit.permMatrix_cfgPerm_mul_finKronecker,
         QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec,
         QuantumCircuit.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
@@ -193,7 +194,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \uses{def:ldp_local_circuit}
     A vector $\ket v$ has $\ket0$ at the sites of a set $Z$ if $v(x)=0$ for
     every configuration $x$ with $x_i\neq0$ for some $i\in Z$. A permutation
-    $\pi$ of the sites acts on vectors by $(P_\pi v)(x)=v(x\circ\pi)$. Then:
+    $\pi$ of the sites acts on vectors by $(P_\pi v)(x)=v(x\circ\pi)$. These
+    two notions, the products $P_\pi P_\sigma$, the relation
+    $P_\pi(\bigotimes_{i}g_{i})=(\bigotimes_{i}g_{\pi^{-1}(i)})P_\pi$ and the
+    first half of the third item below hold for any finite set of sites; the
+    other statements are for the ring. Then:
     \begin{enumerate}
         \item the operator $u$ at the site $t$ maps $\ket v$ to
               $x\mapsto\sum_{j}u_{x_t,j}\,v(x[t\mapsto j])$, and keeps $\ket0$ at

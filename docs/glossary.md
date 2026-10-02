@@ -1205,6 +1205,25 @@ The following notions use different transfer objects and are not interchangeable
 
 ## Local circuits of two-site gates
 
+### `QuantumCircuit.supportedOperators`
+
+- **Declaration:**
+  `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] [DecidableEq ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** the operators acting on the set of sites `S` of a finite set
+  of `d`-level sites `ι`: the complex span of the products
+  `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for `i ∉ S`, that is
+  `M_d^{⊗ S} ⊗ 1`. The chain of `N` sites is `ι = Fin N`.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1
+  (operators acting on sites of the chain).
+- **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
+  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`;
+  `QuantumCircuit.commute_of_mem_supportedOperators` (operators on disjoint
+  sets commute); `QuantumCircuit.embedOp_mem_supportedOperators_image` (a
+  placed operator acts on the image of its support).
+- **Caveat:** no geometry enters; neighbourhoods, layers and light cones are
+  stated for the ring `Fin N`.
+
 ### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
 
 - **Declarations:**
@@ -1286,12 +1305,13 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.AgreeOff`
 
 - **Declaration:**
-  `QuantumCircuit.AgreeOff (e : Fin m → Fin n) (x y : Fin n → Fin d) : Prop`.
+  `QuantumCircuit.AgreeOff {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] (e : κ → ι) (x y : ι → Fin d) : Prop`.
 - **Defined in:** `TNLean/Circuit/SiteEmbedding.lean`.
-- **Meaning:** the configurations `x` and `y` of the `n`-site chain agree at
-  every site outside the range of `e`.
+- **Meaning:** the configurations `x` and `y` of the finite set of sites `ι`
+  agree at every site outside the range of `e`; for the chain of `n` sites,
+  `ι = Fin n` and `e : Fin m → Fin n`.
 - **Source:** no separate source notion; it describes the entries of the
-  placement `QuantumCircuit.embedOp e X` of an operator on `m` sites.
+  placement `QuantumCircuit.embedOp e X` of an operator on the sites `κ`.
 - **Sanctioned bridges:** `QuantumCircuit.sum_agreeOff` and
   `QuantumCircuit.eq_extend_of_agreeOff` (for injective `e`).
 - **Caveat:** proof-internal vocabulary for the site embedding.
@@ -1308,8 +1328,9 @@ The following notions use different transfer objects and are not interchangeable
   $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$
   alternates `T` layers `L_t` of local channels on pairs of neighbouring sites
   of the ring (`QuantumCircuit.ChannelLayer`) with onsite channels $\Phi_t$
-  (`QuantumCircuit.OnsiteChannel`), each a tensor product of one-site channels
-  that may change the local dimension. Attaching an ancilla in a fixed state
+  (`QuantumCircuit.OnsiteChannel d e (Fin N)`), each a tensor product of
+  one-site channels that may change the local dimension; onsite channels
+  `QuantumCircuit.OnsiteChannel d e ι` are defined for any type of sites `ι`. Attaching an ancilla in a fixed state
   (`OnsiteChannel.attach`) and discarding it (`OnsiteChannel.discard`) are
   onsite channels.
 - **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, main text, paragraph
@@ -1431,11 +1452,11 @@ The following notions use different transfer objects and are not interchangeable
 ### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop`.
+  `QuantumCircuit.IsLocalPerm {ι : Type*} [Fintype ι] [DecidableEq ι] (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
 - **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
-- **Meaning:** the permutation `σ` of the configurations changes only the
-  sites of `S`, and its new values on `S` depend only on the old values on
-  `S`.
+- **Meaning:** the permutation `σ` of the configurations of the finite set of
+  sites `ι` changes only the sites of `S`, and its new values on `S` depend
+  only on the old values on `S`. The chain of `N` sites is `ι = Fin N`.
 - **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
   corrections of the GHZ preparation, generalized to shifts of qudits).
 - **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
