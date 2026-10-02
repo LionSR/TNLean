@@ -176,7 +176,11 @@ constructs the prescribed periodic blocks and their cyclic projections;
 \leanid{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action}
 redistributes the orbit phases; and
 \leanid{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_unitary_conj}
-performs the final unitary conjugation. These correspond to
+performs the final unitary conjugation.
+Moreover, \leanid{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
+assembles the orbit isometries into one unitary retaining their original
+inclusions, and transports every admissible orbit phase through those same
+coordinates to a left-canonical blocked root. These correspond to
 \path{Papers/1708.00029/main.tex:432--456} and
 \path{Papers/1708.00029/main.tex:765--810}.
 The remaining construction must assemble these results over the full

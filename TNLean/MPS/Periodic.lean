@@ -28,6 +28,7 @@ import TNLean.MPS.Periodic.IrreducibleFormPeriods
 import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 import TNLean.MPS.Periodic.Normalization
 import TNLean.MPS.Periodic.NormalizedSelfOverlap
+import TNLean.MPS.Periodic.OrbitUnitary
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.PeriodBound
 import TNLean.MPS.Periodic.PeriodExistence

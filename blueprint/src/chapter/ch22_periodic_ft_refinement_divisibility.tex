@@ -897,3 +897,80 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         D & =V^{(0)}(A)=V^{(0)}\Bigl(\bigoplus_k\mu_kA_k\Bigr)=\sum_kD_k. \notag
     \end{align}
 \end{proof}
+
+
+\begin{theorem}[Multiplication of an orthogonal resolution]
+    \label{thm:periodic_orthogonal_resolution_multiplication}
+    \lean{orthogonalProjection_mul_eq_ite_of_sum_eq_one}
+    \leanok
+    If orthogonal projections $P_u$ satisfy $\sum_u P_u=\Id$, then
+    $P_uP_v=\delta_{uv}P_u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each projection is idempotent, $P_u^2=P_u$, and distinct projections in an
+    orthogonal resolution have orthogonal ranges, $P_uP_v=0$ for $u\ne v$.
+\end{proof}
+
+\begin{theorem}[Unitary assembly of a resolution]
+    \label{thm:periodic_unitary_resolution}
+    \lean{MPSTensor.exists_unitary_toTensorFromBlocks_of_resolution}
+    \leanok
+    \uses{def:mpu_dependent_block_inclusion}
+    Let $V_a:\C^{D_a}\to\C^D$ satisfy
+    $\sum_a V_aV_a^\dagger=\Id$ and $\sum_a D_a=D$.
+    If $A^iV_a=V_aB_a^i$ for every $a,i$, then there is a unitary
+    $U:\bigoplus_a\C^{D_a}\to\C^D$ with $UJ_a=V_a$ and
+    $A^i=U(\bigoplus_a B_a^i)U^\dagger$, where $J_a$ is the block inclusion.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_dependent_block_inclusion_identities}
+    Concatenate the columns of the $V_a$ to define $U$. The identity resolution
+    gives $UU^\dagger=\Id$, and equality of dimensions makes $U$ unitary.
+    On every summand,
+    \begin{align}
+        A^iUJ_a & =A^iV_a=V_aB_a^i=U\Bigl(\bigoplus_bB_b^i\Bigr)J_a, \notag
+    \end{align}
+    so $A^iU=U(\bigoplus_aB_a^i)$, and multiplying by $U^\dagger$ gives the
+    asserted conjugation.
+\end{proof}
+
+\begin{theorem}[Unitary orbit coordinates and phase-weighted roots]
+    \label{thm:periodic_unitary_orbit_root}
+    \lean{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
+    \leanok
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection,def:mpu_dependent_block_inclusion}
+    Let $A$ be left-canonical periodic of period $m$ and let $p>0$.
+    Put $r=\gcd(m,p)$. The prescribed orbit blocks $C_a$, of period $m/r$,
+    admit a unitary $U$ such that, with $Q_a$ the step-orbit projections of
+    Definition~\ref{def:periodic_step_orbit_projection} and $J_a$ the
+    coordinate inclusions,
+    \begin{align}
+        (A^{[p]})^I          & =U\Bigl(\bigoplus_{a=0}^{r-1}C_a^I\Bigr)U^\dagger, \notag \\
+        (UJ_a)(UJ_a)^\dagger & =Q_a. \notag
+    \end{align}
+    For every choice of $c_a$ with $c_a^{m/r}=1$, there is a left-canonical
+    tensor $A'$ with the same physical and bond dimensions as $A$ such that
+    \begin{align}
+        (A'^{[p]})^I & =U\Bigl(\bigoplus_{a=0}^{r-1}c_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
+    The unitary and orbit blocks are chosen independently of the phases.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_unitary_resolution,thm:periodic_orthogonal_resolution_multiplication,
+        thm:periodic_absorb_orbit_gauge,
+        thm:periodic_prescribed_blocking_compression}
+    Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit
+    isometries and set $Z=U\bigl(\bigoplus_ac_a\Id_{D_a}\bigr)U^\dagger$.
+    Since $UJ_a$ is the original orbit isometry,
+    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the
+    original cyclic sectors gives
+    \begin{align}
+        (A'^{[p]})^I & =Z(A^{[p]})^I=U\Bigl(\bigoplus_ac_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
+\end{proof}
