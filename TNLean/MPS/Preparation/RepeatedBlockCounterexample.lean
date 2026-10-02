@@ -312,28 +312,26 @@ theorem not_approximationError_le_repeatedBlockTensor {lam₂ : ℂ} (h0 : 0 < �
 
 /-! ## The tensor satisfies the hypotheses of Lemma 1'(ii) -/
 
-/-- The canonical form of arXiv:2307.01696, eq. (S2), of `repeatedBlockTensor`: the basis of
-the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, with multiplicities
-`m = (2, 1)` and every weight `μ_{j,k} = 1`. -/
-abbrev repeatedBlockSector : SectorDecomposition 2 where
+/-- The canonical form of arXiv:2307.01696, eq. (S2), with the basis of the two one-dimensional
+normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, multiplicities `m_j ≥ 1`, and nonzero weights
+`μ_{j,k}`. -/
+abbrev repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : ∀ j, 0 < m j)
+    (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) : SectorDecomposition 2 where
   basisCount := 2
   basisDim := fun _ => 1
   basis := repeatedBlockBasis
   sectors :=
-    { copies := repeatedBlockMult
-      copies_pos := fun j => by fin_cases j <;> simp [repeatedBlockMult]
-      weight := repeatedBlockWeight
-      weight_ne_zero := fun _ _ => one_ne_zero }
-
-/-- The coefficients `βⱼ = ∑ₖ μ_{j,k}^N` of the canonical form (arXiv:2307.01696, eq. (S4)). -/
-theorem coeff_repeatedBlockSector (N : ℕ) :
-    repeatedBlockSector.coeff N = bntWeight repeatedBlockWeight N :=
-  rfl
+    { copies := m
+      copies_pos := hm
+      weight := μ
+      weight_ne_zero := hμ }
 
 /-- The states of the two blocks are linearly independent on every ring of `N ≥ 1` sites: they
 are `|0⋯0⟩` and `|1⋯1⟩`. This is the basis-of-normal-tensors property of arXiv:2307.01696,
-eq. (S2). -/
-theorem hasBNTSectorData_repeatedBlockSector : HasBNTSectorData repeatedBlockSector := by
+eq. (S2), for every choice of multiplicities and weights. -/
+theorem hasBNTSectorData_repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : ∀ j, 0 < m j)
+    (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) :
+    HasBNTSectorData (repeatedBlockBasisSector m hm μ hμ) := by
   refine ⟨0, fun N hN => ?_⟩
   rw [Fintype.linearIndependent_iff]
   intro g hg
@@ -349,28 +347,52 @@ theorem hasBNTSectorData_repeatedBlockSector : HasBNTSectorData repeatedBlockSec
   · exact h0
   · exact h1
 
-/-- **The canonical form of `repeatedBlockTensor` is a basis of normal tensors**
-(arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
-self-overlap, their states are linearly independent, they are not related by a gauge
-transformation and a phase, every weight has `|μ_{j,k}| ≤ 1`, and one has `|μ_{j,k}| = 1`. -/
-theorem isBNTCanonicalForm_repeatedBlockSector : IsBNTCanonicalForm repeatedBlockSector where
+/-- **The canonical form with the blocks `(1, 0)` and `(0, 1)` is a basis of normal tensors**
+(arXiv:2307.01696, eq. (S2)) whenever every weight has `|μ_{j,k}| ≤ 1` and one has
+`|μ_{j,k}| = 1`: the blocks are irreducible, left-canonical, with normalized self-overlap, their
+states are linearly independent, and they are not related by a gauge transformation and a
+phase. -/
+theorem isBNTCanonicalForm_repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : ∀ j, 0 < m j)
+    (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) (hle : ∀ j k, ‖μ j k‖ ≤ 1)
+    (hone : ∃ j k, ‖μ j k‖ = 1) :
+    IsBNTCanonicalForm (repeatedBlockBasisSector m hm μ hμ) where
   basis_dim_pos := fun _ => Nat.one_pos
   basis_irreducible := fun j => isIrreducibleTensor_of_bondDim_one (repeatedBlockBasis j)
   basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (repeatedBlockBasis_norm j)
   basis_normalized_self_overlap := fun j =>
     tendsto_mpvOverlap_self_of_dim_one _ (repeatedBlockBasis_norm j)
-  bnt_data := hasBNTSectorData_repeatedBlockSector
+  bnt_data := hasBNTSectorData_repeatedBlockBasisSector m hm μ hμ
   basis_distinct := fun j k hjk h => by
-    have hc : cast (congr_arg (MPSTensor 2) h) (repeatedBlockSector.basis j) =
+    have hc : cast (congr_arg (MPSTensor 2) h) ((repeatedBlockBasisSector m hm μ hμ).basis j) =
         repeatedBlockBasis j :=
       cast_eq _ _
     rw [hc]
     refine not_gaugePhaseEquiv_of_dim_one 1 ?_
     fin_cases j <;> fin_cases k <;> simp_all [repeatedBlockBasis]
-  weight_norm_le_one := fun _ _ => by
-    change ‖(1 : ℂ)‖ ≤ 1
-    simp
-  weight_unit_exists := ⟨(0 : Fin 2), ⟨0, by decide⟩, by change ‖(1 : ℂ)‖ = 1; simp⟩
+  weight_norm_le_one := hle
+  weight_unit_exists := hone
+
+/-- The canonical form of arXiv:2307.01696, eq. (S2), of `repeatedBlockTensor`: the basis of
+the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, with multiplicities
+`m = (2, 1)` and every weight `μ_{j,k} = 1`. -/
+abbrev repeatedBlockSector : SectorDecomposition 2 :=
+  repeatedBlockBasisSector repeatedBlockMult
+    (fun j => by fin_cases j <;> simp [repeatedBlockMult]) repeatedBlockWeight
+    (fun _ _ => one_ne_zero)
+
+/-- The coefficients `βⱼ = ∑ₖ μ_{j,k}^N` of the canonical form (arXiv:2307.01696, eq. (S4)). -/
+theorem coeff_repeatedBlockSector (N : ℕ) :
+    repeatedBlockSector.coeff N = bntWeight repeatedBlockWeight N :=
+  rfl
+
+/-- **The canonical form of `repeatedBlockTensor` is a basis of normal tensors**
+(arXiv:2307.01696, eq. (S2)): the blocks are irreducible, left-canonical, with normalized
+self-overlap, their states are linearly independent, they are not related by a gauge
+transformation and a phase, every weight has `|μ_{j,k}| ≤ 1`, and one has `|μ_{j,k}| = 1`. -/
+theorem isBNTCanonicalForm_repeatedBlockSector : IsBNTCanonicalForm repeatedBlockSector :=
+  isBNTCanonicalForm_repeatedBlockBasisSector _ _ _ _
+    (fun _ _ => by change ‖(1 : ℂ)‖ ≤ 1; simp)
+    ⟨(0 : Fin 2), ⟨0, by decide⟩, by change ‖(1 : ℂ)‖ = 1; simp⟩
 
 /-- The bond coordinates of the three copies in the canonical form: the two copies of the first
 block, then the copy of the second. -/

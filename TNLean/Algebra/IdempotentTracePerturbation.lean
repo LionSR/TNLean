@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.Complex.Basic
 import TNLean.Algebra.NormedRingTelescoping
 
 /-!
@@ -30,6 +31,8 @@ The proof follows the blocks `P (e + Z)^M e` and `P (e + Z)^M f` of the powers f
 * `IsIdempotentElem.norm_trace_add_pow_sub_le_of_le` — its form for one bound `z ≤ 1/2` on the
   three blocks and `M ≥ 2`:
   `|tr (e + Z)^M - tr e| ≤ K (‖e‖ + 3 ‖f‖) (2 M z²) e^{2 M z²}`.
+* `IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq` — for `T` with `e T e = α e`, `α ≤ 1`
+  real, `‖T - e‖ ≤ δ` and `1 - α ≤ δ²`: `|tr T^M - 1| ≤ C (M δ²) e^{C M δ²}`.
 -/
 
 namespace IsIdempotentElem
@@ -337,5 +340,120 @@ theorem norm_trace_add_pow_sub_le_of_le (he : IsIdempotentElem e) (hZ : e * Z * 
         ‖1 - e‖ * (z * z / (1 - z) ^ 2 * ((1 + z * z / (1 - z)) ^ M - z ^ M) + z ^ M))
       ≤ K * ((‖e‖ + 3 * ‖1 - e‖) * (y * Real.exp y)) := by gcongr
     _ = K * (‖e‖ + 3 * ‖1 - e‖) * y * Real.exp y := by ring
+
+/-- **Trace of the powers of an element compressed by an idempotent to a real multiple of it.**
+Let `e` be an idempotent of a normed `ℂ`-algebra with `tr e = 1`, for a trace `tr` bounded by
+`K ‖·‖`. There is `C > 0` such that every `T` with `e T e = α e` for a real `α ≤ 1`,
+`‖T - e‖ ≤ δ`, and `1 - α ≤ δ²` satisfies `‖tr T^M - 1‖ ≤ C (M δ²) e^{C M δ²}` for `M ≥ 2`
+and `C M δ² < 1`.
+
+Project result. The compression coefficient `α` enters to second order by hypothesis, and
+`T = α (e + Z)` with `e Z e = 0`, so `norm_trace_add_pow_sub_le_of_le` bounds `tr (e + Z)^M`
+to second order; `1 - α^M ≤ M (1 - α)`. -/
+theorem exists_norm_trace_pow_sub_one_le_sq {A : Type*} [NormedRing A] [NormedAlgebra ℂ A]
+    {e : A} (he : IsIdempotentElem e) {tr : A →ₗ[ℂ] ℂ} (htr : ∀ x y, tr (x * y) = tr (y * x))
+    {K : ℝ} (hK0 : 0 ≤ K) (hK : ∀ x, ‖tr x‖ ≤ K * ‖x‖) (he1 : tr e = 1) :
+    ∃ C : ℝ, 0 < C ∧ ∀ (T : A) (α δ : ℝ) (M : ℕ), 2 ≤ M → e * T * e = (α : ℂ) • e →
+      ‖T - e‖ ≤ δ → α ≤ 1 → 1 - α ≤ δ ^ 2 → C * (M * δ ^ 2) < 1 →
+      ‖tr (T ^ M) - 1‖ ≤ C * (M * δ ^ 2) * Real.exp (C * (M * δ ^ 2)) := by
+  set c₅ := ‖e‖ + ‖1 - e‖
+  set c₄ := 2 * (1 + ‖e‖)
+  set zc := c₅ ^ 4 * c₄ ^ 2
+  set E₀ := K * (‖e‖ + 3 * ‖1 - e‖)
+  have hzc : 0 ≤ zc := by positivity
+  have hE₀ : 0 ≤ E₀ := by positivity
+  set C := 4 + 4 * zc + 2 * E₀ * zc
+  have hC0 : 0 ≤ 2 * E₀ * zc := by positivity
+  refine ⟨C, by positivity, fun T α δ M hM2 heT hT hα1 hα hsmall => ?_⟩
+  have hδ0 : 0 ≤ δ := (norm_nonneg _).trans hT
+  have hM : (1 : ℝ) ≤ M := by exact_mod_cast (show 1 ≤ M by omega)
+  set y := (M : ℝ) * δ ^ 2 with hydef
+  have hy0 : 0 ≤ y := by positivity
+  have hδy : δ ^ 2 ≤ y := le_mul_of_one_le_left (sq_nonneg _) hM
+  have hy4 : 4 * y < 1 := lt_of_le_of_lt (mul_le_mul_of_nonneg_right (by
+    simp only [C]; linarith) hy0) hsmall
+  have hδ1 : δ ≤ 1 := by nlinarith
+  have hα0 : 3 / 4 ≤ α := by nlinarith
+  have hαne : (α : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 (by linarith)
+  -- `T = α (e + Z)` with `e Z e = 0`.
+  set Z := (α : ℂ)⁻¹ • T - e with hZdef
+  have hZ : e * Z * e = 0 := by
+    rw [hZdef, mul_sub, sub_mul, mul_smul_comm, smul_mul_assoc, heT, smul_smul,
+      inv_mul_cancel₀ hαne, one_smul, he.eq, he.eq, sub_self]
+  have hTZ : T = (α : ℂ) • (e + Z) := by
+    rw [hZdef, add_sub_cancel, smul_smul, mul_inv_cancel₀ hαne, one_smul]
+  have hZn : ‖Z‖ ≤ c₄ * δ := by
+    have h : Z = (α : ℂ)⁻¹ • ((T - e) + ((1 - α : ℝ) : ℂ) • e) := by
+      rw [hZdef, smul_add, smul_sub, smul_smul, Complex.ofReal_sub, Complex.ofReal_one, mul_sub,
+        mul_one, inv_mul_cancel₀ hαne, sub_smul, one_smul]
+      abel
+    rw [h, norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (by linarith)]
+    have h1 : ‖(T - e) + ((1 - α : ℝ) : ℂ) • e‖ ≤ δ + δ * ‖e‖ := by
+      refine (norm_add_le _ _).trans (add_le_add hT ?_)
+      rw [norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (by linarith)]
+      exact mul_le_mul_of_nonneg_right (by nlinarith) (norm_nonneg _)
+    have h2 : α⁻¹ ≤ 2 := by
+      rw [inv_le_comm₀ (by linarith) (by norm_num)]; linarith
+    calc α⁻¹ * ‖(T - e) + ((1 - α : ℝ) : ℂ) • e‖ ≤ 2 * (δ + δ * ‖e‖) :=
+          mul_le_mul h2 h1 (norm_nonneg _) (by norm_num)
+      _ = c₄ * δ := by simp only [c₄]; ring
+  -- The blocks of `Z` are bounded by `z = c₅² c₄ δ`, and `z ≤ 1/2`.
+  set z := c₅ * (c₄ * δ) * c₅ with hzdef
+  have hblock : ∀ a b : A, ‖a‖ ≤ c₅ → ‖b‖ ≤ c₅ → ‖a * Z * b‖ ≤ z := fun a b ha hb =>
+    (norm_mul_le _ _).trans (mul_le_mul ((norm_mul_le _ _).trans (mul_le_mul ha hZn
+      (norm_nonneg _) (by positivity))) hb (norm_nonneg _) (by positivity))
+  have ht₁ : ‖e‖ ≤ c₅ := le_add_of_nonneg_right (norm_nonneg _)
+  have ht₂ : ‖1 - e‖ ≤ c₅ := le_add_of_nonneg_left (norm_nonneg _)
+  have hz2 : z ^ 2 = zc * δ ^ 2 := by simp only [z, zc]; ring
+  have hz0 : 0 ≤ z := by positivity
+  have hz : z ≤ 1 / 2 := by
+    have h1 : zc * δ ^ 2 ≤ zc * y := mul_le_mul_of_nonneg_left hδy hzc
+    have h0 : 4 * zc * y < 1 := lt_of_le_of_lt (mul_le_mul_of_nonneg_right (by
+      simp only [C]; linarith) hy0) hsmall
+    have h2 : z ^ 2 < (1 / 2) ^ 2 := by rw [hz2]; linarith only [h1, h0]
+    exact (pow_lt_pow_iff_left₀ hz0 (by norm_num) two_ne_zero).1 h2 |>.le
+  have hpert := norm_trace_add_pow_sub_le_of_le he hZ (tr := tr.toAddMonoidHom) htr hK0 hK
+    (hblock _ _ ht₂ ht₁) (hblock _ _ ht₁ ht₂) (hblock _ _ ht₂ ht₂) hz hM2
+  simp only [LinearMap.toAddMonoidHom_coe, he1] at hpert
+  have hMz : (M : ℝ) * (2 * z ^ 2) = 2 * zc * y := by rw [hz2, hydef]; ring
+  rw [hMz] at hpert
+  -- `tr T^M - 1 = α^M (tr (e + Z)^M - 1) + (α^M - 1)`.
+  have hsplit : tr (T ^ M) - 1 = (α : ℂ) ^ M * (tr ((e + Z) ^ M) - 1) + ((α : ℂ) ^ M - 1) := by
+    rw [hTZ, smul_pow, map_smul, smul_eq_mul]; ring
+  have hαM : ‖(α : ℂ) ^ M‖ ≤ 1 := by
+    rw [norm_pow, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (by linarith)]
+    exact pow_le_one₀ (by linarith) hα1
+  have hαM1 : ‖(α : ℂ) ^ M - 1‖ ≤ y := by
+    have hB := one_add_mul_le_pow (show (-2 : ℝ) ≤ α - 1 by linarith) M
+    rw [add_sub_cancel] at hB
+    have hle : α ^ M ≤ 1 := pow_le_one₀ (by linarith) hα1
+    rw [← Complex.ofReal_pow, ← Complex.ofReal_one, ← Complex.ofReal_sub, Complex.norm_real,
+      Real.norm_eq_abs, abs_of_nonpos (by linarith)]
+    have : (M : ℝ) * (1 - α) ≤ y := by
+      rw [hydef]; exact mul_le_mul_of_nonneg_left hα (by positivity)
+    linarith
+  have hexp : 1 ≤ Real.exp (C * y) := Real.one_le_exp (by positivity)
+  have hexp' : Real.exp (2 * zc * y) ≤ Real.exp (C * y) :=
+    Real.exp_le_exp.2 (mul_le_mul_of_nonneg_right (by simp only [C]; linarith) hy0)
+  rw [hsplit]
+  calc ‖(α : ℂ) ^ M * (tr ((e + Z) ^ M) - 1) + ((α : ℂ) ^ M - 1)‖
+      ≤ 1 * (E₀ * (2 * zc * y) * Real.exp (2 * zc * y)) + y := by
+        refine (norm_add_le _ _).trans (add_le_add ?_ hαM1)
+        rw [norm_mul]
+        exact mul_le_mul hαM hpert (norm_nonneg _) zero_le_one
+    _ ≤ C * y * Real.exp (C * y) := by
+        have h1 : E₀ * (2 * zc * y) * Real.exp (2 * zc * y) ≤
+            2 * E₀ * zc * y * Real.exp (C * y) := by
+          rw [show E₀ * (2 * zc * y) = 2 * E₀ * zc * y by ring]
+          exact mul_le_mul_of_nonneg_left hexp' (by positivity)
+        have h2 : y ≤ 4 * y * Real.exp (C * y) := by
+          have := mul_le_mul_of_nonneg_left hexp (show 0 ≤ 4 * y by positivity)
+          linarith
+        have h3 : (2 * E₀ * zc + 4) * y * Real.exp (C * y) ≤ C * y * Real.exp (C * y) :=
+          mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right (by simp only [C]; linarith)
+            hy0) (by positivity)
+        have h4 : (2 * E₀ * zc + 4) * y * Real.exp (C * y) =
+            2 * E₀ * zc * y * Real.exp (C * y) + 4 * y * Real.exp (C * y) := by ring
+        linarith
 
 end IsIdempotentElem

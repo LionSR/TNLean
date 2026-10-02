@@ -1442,6 +1442,128 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** only permutations of the computational basis are covered; a
   general gate is a `MPSPreparation.Layer` gate.
 
+### `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth`
+
+- **Declaration:**
+  `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : Cfg d N → ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
+- **Meaning:** some sequence of measurement rounds (`MPSPreparation.MeasurementRound`:
+  a local circuit, a computational-basis measurement of a set of sites, and
+  outcome-dependent single-site unitaries), whose circuits have at most `T`
+  layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
+  after every sequence of outcomes of nonzero probability.
+- **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
+  LOCC" (one round, and "a more general scheme with multiple rounds of
+  LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
+- **Sanctioned bridges:**
+  `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
+  (one round is a protocol of `MPSPreparation.IsPreparedWithMeasurementsInDepth`),
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
+  and `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` (binary
+  trees of two-site gates with `k` levels in depth `5k`).
+- **Caveat:** the depth counts the layers of all the rounds; measurements,
+  classical processing and single-site corrections are free, as in one round.
+  The circuit of a later round does not depend on earlier outcomes.
+  Every round is a protocol of `QCcc_ℓ` of no larger depth, but the number of
+  rounds is not bounded (the tree of `k` levels uses `2k` rounds), whereas in
+  the class `QCcc^{(k)}_ℓ` of the paragraph "Phases of matter" of
+  arXiv:2103.13367 the number `k` of composed transformations does not depend
+  on the system size.
+
+### `MPSPreparation.MeasurementRound.IsRoundsImplementationOn`
+
+- **Declaration:**
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ)) (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/MeasurementRounds.lean`.
+- **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
+  scalar multiple of `W v`; the single-round form is
+  `MPSPreparation.MeasurementRound.IsImplementationOn`, which asks for one
+  scalar per outcome.
+- **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
+  ("correcting (without postselection) based on the measurement outcomes").
+- **Sanctioned bridges:**
+  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`
+  (implementations compose), `MPSPreparation.TeleportHop.isImplementationOn_round`
+  (teleportation along chains of hops in one round of depth `2`),
+  `MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
+  two-site gates between distant sites in depth `5`), and
+  `MPSPreparation.isRoundsImplementationOn_treeRounds`.
+- **Caveat:** the scalar may depend on the outcomes and is not normalized; zero
+  outputs, of probability zero, are allowed.
+
+## Inhomogeneous short-range correlated chains
+
+### `MPSTensor.IsInjectiveOn`
+
+- **Declaration:**
+  `MPSTensor.IsInjectiveOn (B : MPSTensor n D) (S : Set (Fin D × Fin D)) : Prop`.
+- **Defined in:** `TNLean/MPS/Preparation/SupportedPolar.lean`.
+- **Meaning:** every matrix `B^i` vanishes at the entries outside `S`, and the
+  matrices `B^i` span every matrix unit `|α⟩⟨β|` with `(α, β) ∈ S`.
+- **Source:** arXiv:2307.01696, footnote to the paragraph "Approximation
+  through the fixed-point state" (the blocked tensors are assumed injective),
+  applied to zero-padded blocked tensors of chains with bond dimensions at
+  most `D`.
+- **Sanctioned bridges:** `MPSTensor.isInjectiveOn_univ_iff` (for `S` the set
+  of all pairs it is `Kraus.IsInjective`), `MPSTensor.polarSupportMatrix_eq_diagonal`
+  (the support projector of `B = V P` is the coordinate projector onto `S`),
+  `MPSTensor.sum_star_polarIsoMatrix_mul`, `MPSTensor.polarPosTensor_eq_zero`.
+- **Caveat:** for a rectangle `S = [0, a) × [0, b)` the predicate may be read as
+  injectivity of a zero-padded tensor with bond dimensions `a` and `b`; no
+  rectangular tensor is defined and that reading is not proved.
+
+### `VaryingBondChain.IsBlockInjective`
+
+- **Declaration:**
+  `VaryingBondChain.IsBlockInjective (A : VaryingBondChain d D N) (hN : ∑ k, ℓ k = N) : Prop`,
+  for a ring of `N ≥ 1` sites with bond dimensions at most `D`, cut into `M`
+  blocks of lengths `ℓ`.
+- **Defined in:** `TNLean/MPS/Preparation/VaryingBondBlocks.lean`.
+- **Meaning:** for every block `k`, the blocked tensor of block `k` of the
+  zero-padded chain (`VaryingBondChain.zeroPad`) spans every matrix unit
+  `|α⟩⟨β|` with `α < D_{o_k}` and `β < D_{o_{k+1}}`, the dimensions of the bonds
+  at the ends of the block.
+- **Source:** arXiv:2307.01696, footnote to the paragraph "Approximation
+  through the fixed-point state" (the blocked tensors are assumed injective),
+  for the chains of the paragraph "Inhomogeneous short-range correlated MPS".
+- **Sanctioned bridges:** `VaryingBondChain.IsBlockInjective.isInjectiveOn`
+  (for blocks of at least one site, each padded blocked tensor is
+  `MPSTensor.IsInjectiveOn` its rectangle).
+- **Caveat:** the source's condition concerns the rectangular blocked tensor;
+  the identification of the corner of the padded blocked tensor with the
+  rectangular product is not proved. For a block of length zero the padded
+  blocked tensor is the identity `1_D`, and the predicate differs from the
+  rectangular reading; every theorem using it assumes blocks of at least one
+  site. See `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+### `VaryingBondChain.IsPairApproximable`
+
+- **Declaration:**
+  `VaryingBondChain.IsPairApproximable (A : VaryingBondChain d D N) (hN : ∑ k, ℓ k = N) (δ : ℝ) : Prop`,
+  for a ring of `N ≥ 1` sites with bond dimensions at most `D`, cut into `M`
+  blocks of lengths `ℓ`.
+- **Defined in:** `TNLean/MPS/Preparation/InhomogeneousPreparation.lean`.
+- **Meaning:** the state `|φ_pos⟩` of the positive parts is nonzero, and there
+  are unit vectors `ω^k` on `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k`
+  to block `k + 1`, whose product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error
+  `1 - |⟨Ω|φ_pos⟩| ≤ δ` against the normalized state `|φ_pos⟩` of the positive
+  parts of the polar decompositions of the blocked tensors. The blocked
+  tensors, positive parts and pairs are those of the chain padded with zeros
+  to bond dimension `D` (`VaryingBondChain.zeroPad`,
+  `VaryingBondChain.padPairs`).
+- **Source:** arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated
+  MPS" (finite correlation length of a sequence of states "with bond dimension
+  at most `D`"), for one member of the sequence.
+- **Sanctioned bridges:**
+  `MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` (preparation
+  in depth at most `C L` with error at most `δ` against the normalized state of
+  the chain, when the blocked tensors are injective and the block lengths lie
+  between `3D` and `L`).
+- **Caveat:** the source's condition is asymptotic, an error tending to `0` as
+  `N → ∞` after blocking `q = O(log N)` sites; the predicate fixes one ring and
+  one cutting into blocks; see
+  `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`

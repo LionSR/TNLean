@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### positivity of the cyclic step-orbit length — promoted
+- **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
+- **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
+  `StepOrbitSectors.lean` (2026-09-29).
+- **Abstraction:** the core Lean theorem `Nat.div_gcd_pos_of_pos_left p hm`
+  (`Init/Data/Nat/Gcd.lean`) provides the result directly; the phase
+  construction and prescribed-blocking sectors use it.
+- **Notes:** no local theorem or extra positivity hypothesis is needed.
+
 ### fixed-volume C3 from a physical open-chain bound — promoted
 - **Pattern:** split a martingale index into `n < l`, `n = l`, and `l < n`;
   the first two products vanish, while the last is bounded by its physical
@@ -2409,6 +2418,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### finite three-cocycle entry elimination — candidate
+- **Pattern:** specialize the cocycle equation at a concrete quadruple, reduce its group
+  products, and simplify using entries already known to be one.
+- **Seen:** 18 specializations in `eq_one_of_klein_entries`, in
+  `TNLean/Algebra/KleinCocycleCompleteness.lean` (2026-09-30).
+- **Abstraction:** no new tactic yet; these are the entries of one finite calculation.
+  If a second group needs the pattern, prefer a general cocycle determination lemma
+  before automating the table elimination.
+
 ### weighted W-state rows across a cut — candidate
 - **Pattern:** rewrite a weighted sum of traces of two word products as a
   scalar multiple of the W amplitude on the concatenated configuration, then
@@ -2465,9 +2483,10 @@ currently one occurrence, so no general declaration is warranted.
 - **Seen:** two occurrences across two files (2026-09-30):
   `exists_norm_trace_prod_range_transferMatrix_sub_one_le` in
   `TNLean/MPS/Preparation/ApproximationError.lean` and
-  `exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le` in
-  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
-- **Notes:** a third occurrence would justify a lemma taking the idempotent `T_∞`,
+  `exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le` in
+  `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean` (2026-10-01: there `T_∞ = t R` with
+  `R` idempotent, through `norm_prod_range_sub_pow_le_of_forall_norm_pow_le`).
+- **Notes:** a third occurrence would justify a lemma taking the power-bounded `T_∞`,
   its trace, and the linear bound `‖T - T_∞‖ ≤ δ` as hypotheses.
 
 ### off-diagonal constants chosen with a dummy diagonal value — candidate
@@ -2477,8 +2496,25 @@ currently one occurrence, so no general declaration is warranted.
 - **Seen:** two occurrences across two files (2026-09-30):
   `exists_norm_gram_blockTensor_blockSum_sub_le` in
   `TNLean/MPS/Preparation/OverlappingBlockGram.lean` and
-  `exists_abs_norm_mpvState_blockSum_sq_sub_le` in
+  `exists_abs_norm_mpvState_blockSum_weight_sq_sub_le` in
   `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
+
+### second-order trace bound for an element compressed by an idempotent — candidate
+- **Pattern:** for `T` with `e T e = α e`, `e` idempotent of trace one, `‖T - e‖ ≤ δ` and
+  `1 - α` (or `1 - ‖α‖`) at most a multiple of `δ²`: put `Z = α⁻¹ T - e`, prove `e Z e = 0`,
+  `T = α (e + Z)` and `‖Z‖ ≤ c₄ δ`, bound the blocks of `Z` by `z = c₅ (c₄ δ) c₅` with
+  `c₅ = ‖e‖ + ‖1 - e‖`, apply `IsIdempotentElem.norm_trace_add_pow_sub_le_of_le`, and absorb
+  `α^M` through `one_add_mul_le_pow`, with constants `zc = c₅⁴ c₄²` and
+  `E₀ = K (‖e‖ + 3 ‖1 - e‖)`.
+- **Seen:** two occurrences across two files (2026-10-02):
+  `exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq` in
+  `TNLean/MPS/Preparation/SecondOrderOverlap.lean` (complex `α`, conclusion on
+  `1 - ‖tr T^M‖`) and `IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq` in
+  `TNLean/Algebra/IdempotentTracePerturbation.lean` (real `α ≤ 1`, conclusion on
+  `‖tr T^M - 1‖`).
+- **Notes:** the second is the abstracted form for real `α`. Generalizing it to complex `α`
+  with `‖α‖ ≤ 1`, `1 - ‖α‖ ≤ δ²` and `‖1 - α‖ ≤ δ`, concluding on `1 - ‖tr T^M‖`, would let
+  the normal case call it and remove the first copy.
 
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
@@ -3587,6 +3623,16 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Possible abstraction:** a transposed Kronecker inverse-pair lemma if a
   second module needs the same cancellation pattern.
 
+### root-of-unity powers across a cyclic successor — candidate
+- **Pattern:** simplify `Fin.val_add` and `Fin.val_one'`, then use
+  `pow_eq_pow_mod`, `pow_succ`, and commutativity to prove
+  `z ^ (k + 1).val = z * z ^ k.val` from `z ^ q = 1`.
+- **Seen:** two occurrences in two files: `Fin.exists_stepOrbit_phases` in
+  `TNLean/Algebra/FinStepOrbit.lean` and the private `map_cyclic_sum` in
+  `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
+- **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
+  monoid; below the three-occurrence promotion threshold.
+
 ### measurement-assisted GHZ protocol on two site layouts — candidate
 - **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the
   outcome-consistency lemma, the corrections by outcomes and partial sums, and
@@ -3746,18 +3792,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   branches close by `omega` alone — and are left as they are.
 
 
-### positivity of the cyclic step-orbit length — candidate
-- **Pattern:** derive `0 < m / m.gcd p` from `0 < m` using
-  `Nat.div_pos (Nat.gcd_le_left p hm) (Nat.gcd_pos_of_pos_left p hm)`.
-- **Seen:** two occurrences in two files (2026-09-29): `Fin.exists_stepOrbit_phases`
-  in `TNLean/Algebra/FinStepOrbit.lean` and
-  `MPSTensor.exists_isLeftCanonical_evalWord_eq_sum_orbit_phases` in
-  `TNLean/MPS/Periodic/SectorPhaseWord.lean`.
-- **Abstraction:** if a third use appears, prefer a lemma about the positive
-  quotient over a tactic; the present proof is two applications of Mathlib lemmas.
-- **Notes:** positivity supplies both the finite cyclic successor and the fact
-  that a complex root of unity has unit modulus. No additional positivity
-  hypothesis belongs in either public theorem.
 
 ## Retired
 
