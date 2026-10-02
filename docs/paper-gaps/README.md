@@ -544,13 +544,18 @@ For the non-periodic MPS Fundamental Theorem background:
   `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of the
   successive decompositions, the formalized "minimal resources" (bond dimensions
   equal to the cut ranks, least ancilla dimension equal to the largest cut rank,
-  and the bound `d^{⌊N/2⌋}` for every state), that the exact-dimension reading
-  of the printed size is false for product states, and that the gauge conditions
-  of the completeness theorem are not formalized.
+  and the bound `d^{⌊N/2⌋}` for every state), that the printed size is not
+  minimal for product states, and that the gauge conditions of the completeness
+  theorem are not formalized.
 - `pgvwc07_sequential_no_ancilla_two_sites.tex` records that the sequential
   scheme without an ancilla presupposes two sites, since its first operation
   acts on sites 1 and 2, that the literal one-site reading of the theorem is
   false, and that the formal statements are for chains of length at least two.
+- `pgvwc07_sequential_with_ancilla_positive_length.tex` records that the
+  theorem on sequential generation with an ancilla fails on the empty chain and,
+  for the probabilistic scheme, for a zero-dimensional ancilla, and that the
+  formal set equalities are for chains of at least one site and, in the
+  probabilistic case, ancillas of dimension at least one.
 - `spwc10_wielandt_one_step_subspace.tex` records the local proof boundary for the
   quantum Wielandt inequality.
 - `cpsv16_zero_tail_length_zero_decomposition.tex` explains why stating the

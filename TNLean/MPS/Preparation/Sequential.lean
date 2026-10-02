@@ -62,8 +62,20 @@ open-boundary coefficient is the empty product `1`; the component theorems
 `isDeterministicallyGenerated_of_hasOBCRep`, stated up to a nonzero scalar,
 cover that length as well.
 
-The deterministic transition scheme (scheme 3, `d = 2`, a fixed interaction) is
-in `TNLean.MPS.Preparation.SequentialTransition`, and the theorem on sequential
+**Local fix (N ≥ 1, D ≥ 1):** `isProbabilisticallyGenerated_iff` and
+`isDeterministicallyGenerated_iff` are stated for chains of positive length, and
+the probabilistic one also for an ancilla of positive dimension. Theorem
+`Thm:seqwith` of arXiv:quant-ph/0608197 (lines 1569--1573) carries neither bound.
+On the empty chain the only open-boundary coefficient is the empty product `1`,
+while the probabilistic scheme generates every scalar; with `D = 0` the
+probabilistic scheme generates only the zero vector, which has no open-boundary
+representation. Documented in
+`docs/paper-gaps/pgvwc07_sequential_with_ancilla_positive_length.tex`
+(https://sirui-lu.com/TNLean/paper-gaps/pgvwc07_sequential_with_ancilla_positive_length.pdf).
+
+The deterministic transition scheme (scheme 3, a fixed interaction), stated for
+sites `ℂ^d` with a tag qudit and containing the source's `d = 2` case, is in
+`TNLean.MPS.Preparation.SequentialTransition`, and the theorem on sequential
 generation without ancilla (lines 1580--1616) is in
 `TNLean.MPS.Preparation.SequentialNoAncilla`.
 

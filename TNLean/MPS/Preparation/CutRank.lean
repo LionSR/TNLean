@@ -13,7 +13,10 @@ For a vector `ψ` on `N` sites and a cut `k ≤ N`, the cut matrix
 `(σ, τ) ↦ ψ(σ τ)` has rows indexed by the configurations `σ` of the first `k`
 sites and columns indexed by the configurations `τ` of the remaining `N - k`
 sites. Its rank is the Schmidt rank of `ψ` across the cut, the rank of the
-reduced density operator `ρ_k` of arXiv:quant-ph/0608197, lines 456--458.
+reduced density operator `ρ_k` of arXiv:quant-ph/0608197, lines 456--458. In the
+bipartite language of QICLean, `cutRank ψ k` is `Matrix.schmidtRank` of the vector
+`(σ, τ) ↦ ψ(σ τ)` on the product of the two configuration spaces; the chain-indexed
+form is kept here because the cut moves along the chain.
 
 ## Main definitions
 
@@ -177,9 +180,10 @@ private theorem prod_ofFn_apply_eq_zero : ∀ (m : ℕ) (f : Fin m → Matrix (F
 bond `k` has dimension at least the cut rank at `k`: the cut matrix factors through the bond
 space at `k`.
 
-This is the lower half of "any state for which `max_m rank(ρ_m) ≤ D` can be written as a MPS of
-bond dimension `D`" and of the "minimal resources" of the recipe, arXiv:quant-ph/0608197,
-lines 452 and 1574--1577. -/
+This is the converse of the item "any state for which `max_m rank(ρ_m) ≤ D` can be written as a
+MPS of bond dimension `D`" of arXiv:quant-ph/0608197 (lines 456--458), which the source does not
+state; together with that item it gives the "minimal resources" of the recipe (lines
+1574--1577). -/
 theorem cutRank_coeff_le (B : OBCChainTensor d D N) (k : Fin (N + 1)) :
     cutRank B.coeff k ≤ B.bondDim k := by
   classical

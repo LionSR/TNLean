@@ -640,9 +640,10 @@ $2\min[D,2^k]\times\min[D,2^{k+1}]$. According to \cite[Section~5.1]{PerezGarcia
 the proof of the characterization by open-boundary representations also
 provides a recipe for the generation of any given state with minimal resources.
 The entries of this section give upper bounds on the bond dimensions of the
-representation produced by the decompositions of a given representation. Read
-as an exact dimension, the printed size fails for low-rank states, since a
-product state has a representation with all bond dimensions one; the minimal
+representation produced by the decompositions of a given representation. The
+printed size is not minimal for low-rank states, since a product state has a
+representation with all bond dimensions one, although unused virtual
+directions can always be added to reach the printed size; the minimal
 bond dimensions are the cut ranks of Section~\ref{sec:seqanc_cut_ranks}
 \cite{gap:ssvcw05_sequential_bond_upper_bound_scope}. In the present labelling
 the decompositions start at site $0$, and the bound concerns the bond $k$
@@ -942,7 +943,10 @@ of the state attain these ranks.
     product $1$, and Theorems~\ref{thm:seqanc_generated_obc}
     and~\ref{thm:seqanc_obc_generated} hold up to the scalar $c$. An ancilla
     of dimension $D=0$ generates only the zero vector, which has no
-    open-boundary representation with bond dimension at most $0$.
+    open-boundary representation with bond dimension at most $0$. The
+    equalities of sets are therefore stated for $N\ge1$, and for the
+    probabilistic scheme also for
+    $D\ge1$~\cite{gap:pgvwc07_sequential_with_ancilla_positive_length}.
 \end{remark}
 
 \begin{theorem}[Unitaries induce isometric operations]
@@ -1096,8 +1100,10 @@ of the state attain these ranks.
 
 \begin{definition}[Deterministic transition scheme]
     \label{def:seqanc_transition}
-    \lean{MPSPreparation.IsTransitionInteraction,
-        MPSPreparation.transitionStep, MPSPreparation.IsTransitionGenerated}
+    \lean{MPSPreparation.ancillaTagSiteVec,
+        MPSPreparation.IsTransitionInteraction,
+        MPSPreparation.transitionStep, MPSPreparation.transitionJointState,
+        MPSPreparation.IsTransitionGenerated}
     \leanok
     \uses{def:seqanc_deterministic}
     Let $d\ge 1$ and let the ancilla be $\C^D\otimes\C^d$, the second factor
@@ -1123,6 +1129,9 @@ of the state attain these ranks.
         S_i(W)_{x,y}=\delta_{x_2,0}\,W_{(x_1,i),y}.
         \label{eq:seqanc_transition_step}
     \end{align}
+    After the steps with unitaries $W^{[1]},\dots,W^{[N]}$, the ancilla
+    component of the joint state at the configuration $i_N\cdots i_1$ is
+    $S_{i_N}(W^{[N]})\cdots S_{i_1}(W^{[1]})\ket{\varphi_I}$.
 \end{definition}
 
 \begin{theorem}[The interaction for qubits]

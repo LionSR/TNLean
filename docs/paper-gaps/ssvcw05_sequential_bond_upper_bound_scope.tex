@@ -68,11 +68,15 @@ formalized on chains of $N\ge 1$ sites.
 
 \section{Readings that are not formalized}
 
-The first quoted sentence, read as asserting that the dimension is exactly
-$2\min[D,2^k]\times\min[D,2^{k+1}]$, is false for low-rank states: a product
-state has $\operatorname{rank}_k\psi=1$ at every cut, so a representation with
-all bond dimensions one exists, whereas $\min[D,2^k]=2$ for $D\ge2$ and
-$k\ge1$. Only the upper-bound reading is formalized.
+The printed size $2\min[D,2^k]\times\min[D,2^{k+1}]$ is not the minimal size
+for low-rank states: a product state has $\operatorname{rank}_k\psi=1$ at every
+cut, so a representation with all bond dimensions one exists, whereas
+$\min[D,2^k]\ge2$ for $D\ge2$ and $k\ge1$. A representation of the printed
+size still exists, since unused virtual directions can be added to a smaller
+one, so the sentence is not refuted when read as asserting that isometries of
+exactly that size can be chosen; it is only not minimal. Only the upper-bound
+reading is formalized, and the minimal sizes are the cut ranks of the previous
+section.
 
 A single pass of the decompositions over a given representation need not reach
 the cut ranks: if a bond direction of the given representation is annihilated
@@ -90,7 +94,7 @@ $D\le d^{\lfloor N/2\rfloor}$ is.
 
 \section{Elimination plan}
 
-The restrictions above concern a false literal reading and the canonical
+The restrictions above concern the minimality of the printed size and the canonical
 gauge of the completeness theorem. The latter is formalized by diagonalizing
 the reduced density operators $\rho_m$ in the representation of item 2 and
 rescaling the bond bases by the square roots of their eigenvalues.
