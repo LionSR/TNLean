@@ -5,7 +5,7 @@
 \input{command}
 \title{Uniform Parent-Hamiltonian Gaps along Injective Paths Only}
 \author{}
-\date{2026-10-01}
+\date{2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -42,6 +42,26 @@ blocks, where the overlaps between blocks enter, are not covered.
 \footnote{Affected formal declarations:
     \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective} and
     \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}.}
+
+The finite-window continuity input is also established for several blocks,
+provided the joint boundary map is injective at a common length. The joint boundary map uses only diagonal
+virtual boundaries; its range is the sum of the block ground spaces and
+its injectivity gives a continuous range projection by the inverse-Gram
+formula. This proves continuity of canonical interactions and of the
+finite-volume open and periodic parent Hamiltonians. Nonzero block
+weights do not affect the ground spaces. Joint-boundary injectivity is
+open and persists at larger lengths under trace-preserving normalization.
+For a compact continuous family, pointwise simultaneous word spanning
+therefore gives one common injectivity threshold. In particular, this
+applies to normalized primitive blocks with positive definite fixed points
+that are pairwise inequivalent under similarity and phase. Continuity of
+the fixed-point matrices is unnecessary. These facts do not yet supply
+the uniform multi-block gap.
+\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS},
+    \leanid{MPSTensor.continuous_iSup_groundSpaceES_starProjection_family},
+    \leanid{MPSTensor.continuous_openParentHamiltonianES_toTensorFromBlocks_family}, and
+    \leanid{MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_family}.}
 
 \section{Elimination plan}
 For a continuous family of tensors in normal form with a fixed number of

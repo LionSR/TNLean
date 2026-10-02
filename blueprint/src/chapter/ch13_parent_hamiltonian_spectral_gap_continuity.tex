@@ -10,10 +10,11 @@ of sites; that gap has a uniform lower bound because the restricted
 Hamiltonian depends continuously on the parameter
 \cite[lines~2575--2578]{Schuch2011Phases}. This section proves the
 continuity step and combines it with Knabe's nearest-neighbor criterion and
-compactness. The results below concern one-site injective tensors and the
-canonical two-site parent interaction, and they are stated with that
-restriction. The source's path also covers non-injective normal forms, which
-are not treated here; this scope restriction is recorded in
+compactness. The uniform-gap results below concern one-site injective tensors and the
+canonical two-site parent interaction. Finite-window continuity for several
+blocks is also proved, under a common simultaneous injectivity condition.
+The uniform-gap theorem for the source's non-injective normal forms remains
+unproved; this scope restriction is recorded in
 \cite{gap:spc11_uniform_gap_injective_scope}.
 
 \begin{theorem}[Gap stability under perturbation of operator and kernel projection]
@@ -320,4 +321,127 @@ are not treated here; this scope restriction is recorded in
     gives one bound and one threshold. The finitely many shorter rings are
     handled by the previous theorem, and the minimum of these constants works
     for every $N\geq2$.
+\end{proof}
+
+\begin{definition}[Joint boundary map for several blocks]
+    \label{def:block_ground_space_map}
+    \lean{MPSTensor.blockBoundaryEquiv, MPSTensor.blockGroundSpaceMap,
+        MPSTensor.blockGroundSpaceMapES, MPSTensor.blockGroundSpaceMap_apply,
+        MPSTensor.range_blockGroundSpaceMap, MPSTensor.range_blockGroundSpaceMapES,
+        MPSTensor.blockGroundSpaceMapES_injective_iff}
+    \leanok
+    \uses{def:ground_space_map_es, def:ground_space_es}
+    Let $A^j$ be a finite family of tensors with fixed physical dimension and
+    virtual dimensions $D_j$. On the diagonal virtual boundary space define
+    \begin{align}
+        \Gamma_L^{\oplus}((X_j)_j)(\sigma)
+         & =\sum_j\tr\bigl(A^{j,\sigma_1}\cdots A^{j,\sigma_L}X_j\bigr).
+        \label{eq:block_ground_space_map}
+    \end{align}
+    Equip the domain with the direct sum of the Hilbert--Schmidt inner
+    products and the codomain with the usual configuration inner product.
+    Its range is $\sum_jG_L(A^j)$.
+\end{definition}
+
+\begin{lemma}[Simultaneous injectivity of the joint boundary map]
+    \label{lem:block_ground_space_map_injective}
+    \lean{MPSTensor.blockGroundSpaceMap_injective_of_wordTupleSpanTop,
+        MPSTensor.blockGroundSpaceMapES_injective_of_wordTupleSpanTop}
+    \leanok
+    \uses{def:block_ground_space_map, def:blockwise_product_word_span}
+    If the tuples of length-$L$ word products span
+    $\prod_j\operatorname{Mat}_{D_j}(\mathbb C)$, then
+    $\Gamma_L^{\oplus}$ is injective.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $\Gamma_L^{\oplus}((X_j)_j)=0$, the trace pairing with $(X_j)_j$
+    vanishes on every word tuple and hence on the entire product algebra.
+    Nondegeneracy of the matrix trace pairing gives $X_j=0$ for every $j$.
+\end{proof}
+
+\begin{theorem}[Continuity of finite-window parents with several blocks]
+    \label{thm:continuous_block_finite_window_parent_hamiltonian}
+    \lean{MPSTensor.continuous_blockGroundSpaceMapES_family,
+        MPSTensor.continuous_iSup_groundSpaceES_starProjection_family,
+        MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_family,
+        MPSTensor.continuous_parentInteractionES_toTensorFromBlocks_family,
+        MPSTensor.continuous_openParentHamiltonianES_toTensorFromBlocks_family,
+        MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_family,
+        MPSTensor.continuous_localTermES_of_parentInteractionES_family,
+        MPSTensor.continuous_openParentHamiltonianES_of_parentInteractionES_family,
+        MPSTensor.continuous_parentHamiltonianES_of_parentInteractionES_family}
+    \leanok
+    \uses{def:block_ground_space_map, lem:block_ground_space_map_injective,
+        thm:continuous_injective_range_projector, thm:block_sum_local_ground_space,
+        def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
+    Let $x\mapsto A_x^j$ be continuous for every block $j$, with fixed
+    physical and virtual dimensions, and suppose that the joint boundary
+    map at length $L$ is injective for every parameter $x$. For arbitrary nowhere-zero weights $\mu_j(x)$, set
+    $B_x=\bigoplus_j\mu_j(x)A_x^j$. Then the projector onto $G_L(B_x)$
+    and the canonical interaction $h_L(B_x)$ depend continuously on $x$.
+    At every fixed volume $N\geq L$, the corresponding open and periodic
+    parent Hamiltonians are continuous as well. Continuity of the weights
+    is unnecessary.
+    These are the finite-window continuity inputs in
+    \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each entry of the joint boundary map is a sum of traces of finite
+    products of continuous tensor letters. The joint map is injective,
+    so its range projection is continuous by the inverse-Gram formula.
+    Nonzero weights do not change the sum of the block ground spaces.
+    The canonical interaction is the complementary projection, and the
+    finite-volume Hamiltonians are finite sums of its fixed embeddings.
+\end{proof}
+
+\begin{lemma}[Openness and propagation of joint-boundary injectivity]
+    \label{lem:block_ground_space_map_injective_open_propagation}
+    \lean{MPSTensor.isOpen_setOf_blockGroundSpaceMapES_injective_family,
+        MPSTensor.blockGroundSpaceMap_injective_succ_of_tracePreserving,
+        MPSTensor.blockGroundSpaceMapES_injective_of_ge_of_tracePreserving}
+    \leanok
+    \uses{def:block_ground_space_map}
+    For a continuous family of fixed-dimensional blocks, the parameters
+    where $\Gamma_L^{\oplus}$ is injective form an open set. If
+    $\sum_i(A^{j,i})^\dagger A^{j,i}=\Id$ for every $j$, injectivity at
+    length $L$ implies injectivity at every length $n\geq L$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Injectivity of a bounded map with finite-dimensional domain is open
+    in operator norm. For propagation, if a boundary $(X_j)_j$ gives zero
+    at length $L+1$, then $(A^{j,i}X_j)_j$ gives zero at length $L$ for
+    every letter $i$. Injectivity at $L$ gives $A^{j,i}X_j=0$; multiplying
+    by $(A^{j,i})^\dagger$ and summing over $i$ gives $X_j=0$.
+\end{proof}
+
+
+\begin{theorem}[Common injectivity length on a compact parameter set]
+    \label{thm:compact_block_boundary_injectivity}
+    \lean{MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanTop,
+        MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS}
+    \leanok
+    \uses{lem:block_ground_space_map_injective_open_propagation,
+        lem:block_ground_space_map_injective, thm:ph_primitive_blocks_word_span}
+    Let $S$ be compact and let $x\mapsto A_x^j$ be continuous, with fixed
+    block dimensions. Suppose that every block is trace preserving on $S$
+    and that, for each $x\in S$, the simultaneous word products span the
+    full product matrix algebra at some length. Then there is one $L$
+    such that $\Gamma_n^{\oplus}(A_x)$ is injective for all $x\in S$ and
+    all $n\geq L$.
+    In particular, the spanning hypothesis holds for normalized primitive
+    blocks with positive definite fixed points that are pairwise
+    inequivalent under similarity and phase. No continuity of the
+    fixed-point matrices is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Pointwise spanning gives an injective boundary map at a suitable
+    length. Openness preserves this injectivity in a neighborhood, and
+    trace preservation propagates it to every larger length. A finite
+    subcover of $S$ gives a common length by taking the maximum of these
+    thresholds. For primitive blocks, simultaneous spanning follows
+    from inequivalence of the blocks.
 \end{proof}

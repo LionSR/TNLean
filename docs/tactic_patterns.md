@@ -2428,6 +2428,21 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
   table. All three consumers use it; no custom tactic is needed.
 
+### finite-volume continuity from the local interaction — promoted
+- **Pattern:** express a translated parent term as the finite average of
+  restriction–interaction–adjoint products, prove each product continuous,
+  and sum the terms over the chain.
+- **Seen:** the injective-family and direct-sum-family continuity theorems in
+  `MPS/ParentHamiltonian/GroundSpaceMapContinuity.lean` and
+  `MPS/ParentHamiltonian/BlockGroundSpaceMapContinuity.lean` (2026-10-02).
+- **Abstraction:** `continuous_localTermES_of_parentInteractionES_family`,
+  `continuous_openParentHamiltonianES_of_parentInteractionES_family`, and
+  `continuous_parentHamiltonianES_of_parentInteractionES_family` take
+  continuity of the canonical interaction as their analytic input.
+- **Notes:** both tensor-family arguments use the same finite-volume proof;
+  the injectivity and simultaneous-word-span conditions are confined to
+  the construction of the local projector.
+
 ## Candidates
 
 ### One-site doubled-alphabet transport — candidate
