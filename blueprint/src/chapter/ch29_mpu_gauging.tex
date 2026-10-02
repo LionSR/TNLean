@@ -5630,6 +5630,65 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         =\omega(g,g,g)\,\omega(g,e,g)\ket{\psi(B\text{-}A\text{-}B)}$.
 \end{proof}
 
+\subsection{Detecting the anomaly with truncated symmetries}
+
+\begin{lemma}[The commutator of two unitaries on a vector]
+    \label{lem:mpug_truncation_commutator}
+    \lean{Matrix.groupCommutator,
+        Matrix.groupCommutator_mulVec_eq_smul,
+        Matrix.star_dotProduct_groupCommutator_mulVec}
+    \leanok
+    Let $U_1$ and $U_2$ be unitary, let $\psi$ be a vector and $c$ a scalar
+    with $U_2U_1\psi=c\,U_1U_2\psi$. Then
+    \begin{align}
+        U_2^\dagger U_1^\dagger U_2U_1\psi
+         & =c\,\psi,
+         &
+        \langle\psi|\,U_2^\dagger U_1^\dagger U_2U_1\,|\psi\rangle
+         & =c\,\langle\psi|\psi\rangle.
+        \notag
+    \end{align}
+    For two truncations $U_1=U^{[i_1,j_1]}$ and $U_2=U^{[i_2,j_2]}$ of a
+    symmetry whose exchange relation on a ground state has the phase
+    $c=\omega$, this is the last step of the detection of the anomaly in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall}: the expectation value of
+    the commutator measures the exchange phase.
+\end{lemma}
+
+\begin{proof}\leanok
+    Substitute the exchange relation, then cancel $U_1^\dagger U_1$ and
+    $U_2^\dagger U_2$.
+\end{proof}
+
+\begin{theorem}[Truncations of an on-site symmetry]
+    \label{thm:mpug_onsite_truncation_commutator}
+    \lean{Matrix.onSiteTruncation,
+        Matrix.onSiteTruncation_univ,
+        Matrix.onSiteTruncation_conjTranspose_mul_self,
+        Matrix.groupCommutator_onSiteTruncation,
+        Matrix.star_dotProduct_groupCommutator_onSiteTruncation_mulVec}
+    \leanok
+    Let $u$ satisfy $u^\dagger u=\mathbf 1$ and, for a set $S$ of sites of a
+    chain, let $U^S=\bigotimes_{i\in S}u^{[i]}$ act by $u$ on the sites of $S$
+    and by the identity elsewhere. For any two sets $S_1$ and $S_2$,
+    \begin{align}
+        (U^{S_2})^\dagger(U^{S_1})^\dagger U^{S_2}U^{S_1}
+         & =\mathbf 1,
+        \notag
+    \end{align}
+    so the expectation value of the commutator on every normalized state is
+    $1$, as for the trivial anomaly of on-site symmetries
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The four operators are tensor products over the sites. On a site in both
+    sets the product of the four factors is
+    $u^\dagger u^\dagger uu=\mathbf 1$, on a site in one set it is
+    $u^\dagger u=\mathbf 1$, and elsewhere all four factors are the
+    identity.
+\end{proof}
+
 \subsection{Normalization of the first source factor}
 
 \begin{theorem}[The raw first-cut contraction]
