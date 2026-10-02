@@ -9,8 +9,8 @@ import Mathlib.Data.Fintype.Card
 /-!
 # Cut rows with coefficients in a finite alphabet
 
-A rank-`r` matrix whose entries lie in a set of `m` scalars has at most
-`m ^ r` distinct rows. Choose `r` columns spanning its column space;
+A rank-`r` matrix whose entries lie in a finite set `S` of scalars has at most
+`S.card ^ r` distinct rows. Choose `r` columns spanning its column space;
 restriction to these columns distinguishes its rows.
 
 For a permutation MPU, every coefficient is zero or one. Factoring a cut
@@ -56,7 +56,8 @@ theorem exists_row_separating_columns [Fintype n] (M : Matrix m n K) :
     · exact fun x y _ _ hx hy => congrArg₂ (· + ·) hx hy
     · exact fun c x _ hx => congrArg (c * ·) hx
 
-/-- A finite alphabet of `m` entries permits at most `m ^ rank` distinct rows. -/
+/-- If every entry of `M` lies in the finite set `S`, then `M` has finitely many distinct rows,
+and at most `S.card ^ M.rank` of them. -/
 theorem card_range_le_pow_rank [Fintype n] (M : Matrix m n K) (S : Finset K)
     (hM : ∀ i j, M i j ∈ S) : (Set.range M).Finite ∧ Nat.card (Set.range M) ≤ S.card ^ M.rank := by
   classical
