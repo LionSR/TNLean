@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.CircuitComposition
-import TNLean.MPS.Preparation.ControlledGates
+import TNLean.Circuit.Composition
+import TNLean.Circuit.Gates.Controlled
 
 /-!
 # Local circuits assisted by measurements
@@ -33,14 +33,14 @@ without fixing a model and without citing arXiv:2103.13367; that paper cites
 arXiv:2103.13367 for the constant-depth preparation of GHZ-like states (paragraph
 "Long-range MPS using measurements" and the paragraph after eq. (19)).
 
-This differs from the relation `MPSPreparation.IsLocalChannelConversion`
-(`TNLean.MPS.Preparation.LocalChannelConversion`), which models the circuits of arXiv:2307.01696
+This differs from the relation `QuantumCircuit.IsLocalChannelConversion`
+(`TNLean.Circuit.Channel.Conversion`), which models the circuits of arXiv:2307.01696
 with ancillas and local operations but without measurements and without classical
 communication: there every step is a local channel, and connected correlations beyond the
 light cone vanish (`trace_mul_mul_eq_of_isLocalChannelConversion`). Global classical
 communication breaks this light cone, which is why GHZ-type states, whose connected
 correlations do not decay, can be prepared in constant depth with measurements
-(`TNLean.MPS.Preparation.GHZMeasurement`).
+(`TNLean.Circuit.Measurement.GHZ`).
 
 ## Conventions
 
@@ -68,20 +68,22 @@ definition.
 
 ## Main definitions
 
-* `MPSPreparation.outcomeProj` — the projection onto an outcome of a computational-basis
+* `QuantumCircuit.outcomeProj` — the projection onto an outcome of a computational-basis
   measurement of a set of sites.
-* `MPSPreparation.MeasurementProtocol` — product vector, circuit, measured sites, and
+* `QuantumCircuit.MeasurementProtocol` — product vector, circuit, measured sites, and
   outcome-dependent single-site corrections.
-* `MPSPreparation.IsPreparedWithMeasurementsInDepth` — preparation with measurements in
+* `QuantumCircuit.IsPreparedWithMeasurementsInDepth` — preparation with measurements in
   depth `T`.
+* `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth` — preparation with measurements
+  in depth `T₁`, followed by a local circuit of depth `T₂`, with `T₁ + T₂ ≤ T`.
 
 ## Main results
 
-* `MPSPreparation.sum_outcomeProj` — the outcome projections sum to the identity.
-* `MPSPreparation.MeasurementProtocol.IsPreparationOf.ne_zero` — a prepared vector is
+* `QuantumCircuit.sum_outcomeProj` — the outcome projections sum to the identity.
+* `QuantumCircuit.MeasurementProtocol.IsPreparationOf.ne_zero` — a prepared vector is
   nonzero, so the definition is not vacuous.
-* `MPSPreparation.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`,
-  `MPSPreparation.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty` — without
+* `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`,
+  `QuantumCircuit.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty` — without
   measurements, preparation with measurements is preparation by a local circuit, up to
   single-site unitaries.
 
@@ -94,26 +96,26 @@ definition.
   measurements" and "Long-range MPS using measurements".
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
 /-- The projection onto the outcome `m` of a measurement of the sites `S` in the
 computational basis: the diagonal projection onto the configurations agreeing with `m`
-on `S`. It is `MPSPreparation.ctrlProj S c` for every configuration `c` extending `m`
-(`MPSPreparation.outcomeProj_eq_ctrlProj`); the outcome is indexed by `S → Fin d` so that
+on `S`. It is `QuantumCircuit.ctrlProj S c` for every configuration `c` extending `m`
+(`QuantumCircuit.outcomeProj_eq_ctrlProj`); the outcome is indexed by `S → Fin d` so that
 the outcomes of the measurement are the strings on `S`.
 
 Source: arXiv:2103.13367, paragraph "Quantum circuits and LOCC" ("local (orthogonal)
 measurements"). -/
 noncomputable def outcomeProj (S : Finset (Fin N)) (m : S → Fin d) :
-    Matrix (Cfg d N) (Cfg d N) ℂ :=
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   diagonal fun x => if ∀ i : S, x i = m i then 1 else 0
 
-theorem outcomeProj_eq_ctrlProj (S : Finset (Fin N)) (m : S → Fin d) (c : Cfg d N)
+theorem outcomeProj_eq_ctrlProj (S : Finset (Fin N)) (m : S → Fin d) (c : Fin N → Fin d)
     (hc : ∀ i : S, c i = m i) : outcomeProj S m = ctrlProj S c := by
   unfold outcomeProj ctrlProj
   congr 1
@@ -122,8 +124,8 @@ theorem outcomeProj_eq_ctrlProj (S : Finset (Fin N)) (m : S → Fin d) (c : Cfg 
   · rw [h ⟨i, hi⟩, hc ⟨i, hi⟩]
   · rw [h i i.2, hc i]
 
-theorem outcomeProj_mulVec_apply (S : Finset (Fin N)) (m : S → Fin d) (v : Cfg d N → ℂ)
-    (x : Cfg d N) :
+theorem outcomeProj_mulVec_apply (S : Finset (Fin N)) (m : S → Fin d) (v : (Fin N → Fin d) → ℂ)
+    (x : Fin N → Fin d) :
     (outcomeProj S m *ᵥ v) x = if ∀ i : S, x i = m i then v x else 0 := by
   simp [outcomeProj, mulVec_diagonal]
 
@@ -131,7 +133,8 @@ theorem outcomeProj_mulVec_apply (S : Finset (Fin N)) (m : S → Fin d) (v : Cfg
 theorem sum_outcomeProj (S : Finset (Fin N)) :
     ∑ m : S → Fin d, outcomeProj S m = 1 := by
   classical
-  have h : ∀ x : Cfg d N, ∑ m : S → Fin d, (if ∀ i : S, x i = m i then (1 : ℂ) else 0) = 1 := by
+  have h : ∀ x : Fin N → Fin d, ∑ m : S → Fin d,
+    (if ∀ i : S, x i = m i then (1 : ℂ) else 0) = 1 := by
     intro x
     have hiff : ∀ m : S → Fin d, (∀ i : S, x i = m i) ↔ (fun i : S => x i) = m := fun m =>
       ⟨fun h => funext h, fun h i => congrFun h i⟩
@@ -147,22 +150,23 @@ theorem sum_outcomeProj (S : Finset (Fin N)) :
 
 /-- Measuring no site leaves every vector unchanged. -/
 private theorem outcomeProj_mulVec_of_isEmpty {S : Finset (Fin N)} [IsEmpty S] (m : S → Fin d)
-    (v : Cfg d N → ℂ) : outcomeProj S m *ᵥ v = v := by
+    (v : (Fin N → Fin d) → ℂ) : outcomeProj S m *ᵥ v = v := by
   funext x
   rw [outcomeProj_mulVec_apply]
   exact ite_eq_left fun i => isEmptyElim i
 
 /-- A product of single-site unitaries is unitary. -/
-theorem finKronecker_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
+theorem _root_.Matrix.finKronecker_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
     (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
-    finKronecker u ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+    finKronecker u ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
   rw [Unitary.mem_iff, star_eq_conjTranspose, finKronecker_conjTranspose, finKronecker_mul,
     finKronecker_mul]
   simp only [← star_eq_conjTranspose, Unitary.star_mul_self_of_mem (hu _),
     Unitary.mul_star_self_of_mem (hu _), finKronecker_one, and_self]
 
 /-- A unitary matrix maps only the zero vector to zero. -/
-theorem eq_zero_of_mem_unitary_of_mulVec_eq_zero {n : Type*} [Fintype n] [DecidableEq n]
+theorem _root_.Matrix.eq_zero_of_mem_unitary_of_mulVec_eq_zero {n : Type*} [Fintype n]
+    [DecidableEq n]
     {U : Matrix n n ℂ} (hU : U ∈ unitary (Matrix n n ℂ)) {v : n → ℂ} (h : U *ᵥ v = 0) :
     v = 0 := by
   rw [← one_mulVec v, ← Unitary.star_mul_self_of_mem hU, ← mulVec_mulVec, h, mulVec_zero]
@@ -197,17 +201,17 @@ namespace MeasurementProtocol
 variable (P : MeasurementProtocol d N)
 
 /-- The vector before the measurement: the first circuit applied to the product vector. -/
-noncomputable def preMeasurement : Cfg d N → ℂ :=
+noncomputable def preMeasurement : (Fin N → Fin d) → ℂ :=
   circuitOp P.first *ᵥ productVector P.initial
 
 /-- The unnormalized vector after the outcome `m`; its squared norm is the probability of `m`
 times that of the product vector. -/
-noncomputable def postMeasurement (m : P.measured → Fin d) : Cfg d N → ℂ :=
+noncomputable def postMeasurement (m : P.measured → Fin d) : (Fin N → Fin d) → ℂ :=
   outcomeProj P.measured m *ᵥ P.preMeasurement
 
 /-- The vector after the outcome `m` and its correction, the product of the unitaries
 `P.correction m i` over the sites `i`. -/
-noncomputable def output (m : P.measured → Fin d) : Cfg d N → ℂ :=
+noncomputable def output (m : P.measured → Fin d) : (Fin N → Fin d) → ℂ :=
   finKronecker (P.correction m) *ᵥ P.postMeasurement m
 
 /-- The protocol prepares `ψ`: it starts from a nonzero product vector, and after every
@@ -215,7 +219,7 @@ outcome of nonzero probability the corrected vector is a scalar multiple of `ψ`
 
 Source: arXiv:2103.13367, paragraph "State transformations with QC and LOCC" (the state
 is prepared "deterministically"). -/
-def IsPreparationOf (ψ : Cfg d N → ℂ) : Prop :=
+def IsPreparationOf (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   productVector P.initial ≠ 0 ∧
     ∀ m, P.postMeasurement m ≠ 0 → ∃ c : ℂ, P.output m = c • ψ
 
@@ -238,7 +242,7 @@ theorem output_ne_zero {m : P.measured → Fin d} (hm : P.postMeasurement m ≠ 
     (finKronecker_mem_unitary (P.correction_mem_unitary m)) h0)
 
 /-- A vector prepared by a protocol is nonzero. -/
-theorem IsPreparationOf.ne_zero {ψ : Cfg d N → ℂ} (h : P.IsPreparationOf ψ) :
+theorem IsPreparationOf.ne_zero {ψ : (Fin N → Fin d) → ℂ} (h : P.IsPreparationOf ψ) :
     ψ ≠ 0 := by
   obtain ⟨m, hm⟩ := P.exists_postMeasurement_ne_zero h.1
   obtain ⟨c, hc⟩ := h.2 m hm
@@ -251,12 +255,12 @@ end MeasurementProtocol
 protocol whose circuit has at most `T` layers prepares it.
 
 Source: arXiv:2103.13367, Definition "Transformations under QC and LOCC" (`QCcc_ℓ`). -/
-def IsPreparedWithMeasurementsInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
+def IsPreparedWithMeasurementsInDepth (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ P : MeasurementProtocol d N, P.first.length ≤ T ∧ P.IsPreparationOf ψ
 
 /-- **Circuits are protocols without measurements.** A nonzero vector prepared by a local
 circuit of depth `T` is prepared with measurements in depth `T`, measuring no site. -/
-theorem isPreparedWithMeasurementsInDepth_of_isPreparedInDepth {T : ℕ} {ψ : Cfg d N → ℂ}
+theorem isPreparedWithMeasurementsInDepth_of_isPreparedInDepth {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
     (hψ : IsPreparedInDepth T ψ) (hψ0 : ψ ≠ 0) : IsPreparedWithMeasurementsInDepth T ψ := by
   obtain ⟨U, ⟨Ls, hl, rfl⟩, v, rfl⟩ := hψ
   refine ⟨⟨v, Ls, ∅, fun _ _ => 1, fun _ _ => one_mem _⟩, hl.le,
@@ -268,7 +272,8 @@ theorem isPreparedWithMeasurementsInDepth_of_isPreparedInDepth {T : ℕ} {ψ : C
 /-- **Protocols without measurements are circuits up to single-site unitaries.** If a protocol
 measuring no site, with at most `T` layers, prepares `ψ`, then some product of single-site
 unitaries takes `ψ` to a vector prepared by a local circuit of depth `T`. -/
-theorem exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty {T : ℕ} {ψ : Cfg d N → ℂ}
+theorem exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty {T : ℕ}
+    {ψ : (Fin N → Fin d) → ℂ}
     (P : MeasurementProtocol d N) (hP : P.measured = ∅) (hT : P.first.length ≤ T)
     (h : P.IsPreparationOf ψ) :
     ∃ u : Fin N → Matrix (Fin d) (Fin d) ℂ, (∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) ∧
@@ -296,4 +301,21 @@ theorem exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty {T : �
   rw [hstar, one_mulVec]
   rfl
 
-end MPSPreparation
+/-! ### Preparation with measurements followed by a circuit -/
+
+/-- A vector `ψ` is *prepared with measurements and a circuit in depth `T`* when `ψ = U φ` for a
+vector `φ` prepared with measurements in depth `T₁` and a local circuit `U` of depth `T₂`, with
+`T₁ + T₂ ≤ T`. The circuit `U` is applied after the measurement and its corrections, and does not
+depend on the outcomes.
+
+Source: arXiv:2307.01696, paragraph "Long-range MPS using measurements" ("First create
+`|χ_{N/q}⟩`, which can be done in constant depth with measurements ... Subsequently, apply in
+parallel the isometries `W`"); arXiv:2103.13367, paragraph "State transformations with QC and
+LOCC", where a protocol is followed by further operations in "a more general scheme with
+multiple rounds of LOCC". -/
+def IsPreparedWithMeasurementsAndCircuitInDepth (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
+  ∃ (T₁ T₂ : ℕ) (φ : (Fin N → Fin d) → ℂ)
+    (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ), T₁ + T₂ ≤ T ∧
+    IsPreparedWithMeasurementsInDepth T₁ φ ∧ IsLocalCircuitOfDepth U T₂ ∧ ψ = U *ᵥ φ
+
+end QuantumCircuit

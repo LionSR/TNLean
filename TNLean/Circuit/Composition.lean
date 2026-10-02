@@ -3,33 +3,35 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.PairProduct
+import TNLean.Circuit.PairProduct
 
 /-!
 # Composing local circuits in series and in parallel
 
-A local circuit of depth `T` on the ring of `N` sites (`MPSPreparation.IsLocalCircuitOfDepth`)
+A local circuit of depth `T` on the ring of `N` sites (`QuantumCircuit.IsLocalCircuitOfDepth`)
 is a product of `T` layers of gates on disjoint neighbouring pairs. This file records the local
-circuits whose gates all act inside a set of sites `R` (`MPSPreparation.IsCircuitOn`) and
+circuits whose gates all act inside a set of sites `R` (`QuantumCircuit.IsCircuitOn`) and
 proves the two ways of composing them used in the preparation of arXiv:2307.01696:
 
-* in series, depths add (`MPSPreparation.IsCircuitOn.mul`);
+* in series, depths add (`QuantumCircuit.IsCircuitOn.mul`);
 * in parallel, circuits of the same depth `T` acting inside pairwise disjoint sets of sites
   run in the same layers, so their product has depth `T`
-  (`MPSPreparation.IsCircuitOn.finset_noncommProd`); circuits of different depths are first
-  padded to the largest depth with `MPSPreparation.IsCircuitOn.mono`.
+  (`QuantumCircuit.IsCircuitOn.finset_noncommProd`); circuits of different depths are first
+  padded to the largest depth with `QuantumCircuit.IsCircuitOn.mono`.
 
 A product of `K` gates on neighbouring sites of a block of consecutive sites is a circuit of
-depth `K` inside that block (`MPSPreparation.IsPairProduct.isCircuitOn`). These are the steps
+depth `K` inside that block (`QuantumCircuit.IsPairProduct.isCircuitOn`), and such products
+placed on pairwise disjoint blocks form a circuit of depth `K`
+(`QuantumCircuit.isCircuitOn_list_prod_embedOp`). These are the steps
 behind the depth count of arXiv:2307.01696: the unitaries `U_i` of eq. (10) act on disjoint
 blocks, and each "can be implemented in `T=O(q)`" (paragraph before "The sequential-RG
 circuit").
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ} [NeZero N]
 
@@ -60,8 +62,9 @@ theorem empty_isIn (R : Set (Fin N)) : (empty : Layer d N).IsIn R := by
   simp [IsIn, empty]
 
 /-- The layer with the single gate `Z` on the pair `{k, k + 1}`. -/
-def single (k : Fin N) (Z : Matrix (Cfg d N) (Cfg d N) ℂ)
-    (hZu : Z ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ)) (hZ : Z ∈ supportedOperators d (bond k)) :
+def single (k : Fin N) (Z : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (hZu : Z ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
+    (hZ : Z ∈ supportedOperators d (bond k)) :
     Layer d N where
   bonds := {k}
   gate := fun _ => Z
@@ -70,13 +73,15 @@ def single (k : Fin N) (Z : Matrix (Cfg d N) (Cfg d N) ℂ)
     rw [Finset.mem_singleton.mp hl]; exact hZ
   pairwiseDisjoint := by simp
 
-theorem single_op (k : Fin N) (Z : Matrix (Cfg d N) (Cfg d N) ℂ)
-    (hZu : Z ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ)) (hZ : Z ∈ supportedOperators d (bond k)) :
+theorem single_op (k : Fin N) (Z : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (hZu : Z ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
+    (hZ : Z ∈ supportedOperators d (bond k)) :
     (single k Z hZu hZ).op = Z := by
   simp [op, partialOp, single]
 
-theorem single_isIn (k : Fin N) (Z : Matrix (Cfg d N) (Cfg d N) ℂ)
-    (hZu : Z ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ)) (hZ : Z ∈ supportedOperators d (bond k))
+theorem single_isIn (k : Fin N) (Z : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (hZu : Z ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
+    (hZ : Z ∈ supportedOperators d (bond k))
     {R : Set (Fin N)} (hR : bond k ⊆ R) : (single k Z hZu hZ).IsIn R := by
   intro l hl
   rw [show l = k from Finset.mem_singleton.mp hl]
@@ -150,12 +155,12 @@ theorem circuitOp_mem_supportedOperators {R : Set (Fin N)} :
 Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits"),
 restricted to gates inside `R` as in the parallel application of the block unitaries in the
 paragraph "The sequential-RG circuit". -/
-def IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop :=
+def IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop :=
   ∃ Ls : List (Layer d N), Ls.length = T ∧ (∀ L ∈ Ls, L.IsIn R) ∧ U = circuitOp Ls
 
 namespace IsCircuitOn
 
-variable {R R' : Set (Fin N)} {T T' : ℕ} {U U' : Matrix (Cfg d N) (Cfg d N) ℂ}
+variable {R R' : Set (Fin N)} {T T' : ℕ} {U U' : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
 
 theorem isLocalCircuitOfDepth (h : IsCircuitOn R T U) : IsLocalCircuitOfDepth U T := by
   obtain ⟨Ls, hl, -, rfl⟩ := h
@@ -165,7 +170,8 @@ theorem mem_supportedOperators (h : IsCircuitOn R T U) : U ∈ supportedOperator
   obtain ⟨Ls, -, hR, rfl⟩ := h
   exact circuitOp_mem_supportedOperators Ls hR
 
-theorem mem_unitary (h : IsCircuitOn R T U) : U ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+theorem mem_unitary (h : IsCircuitOn R T U) : U ∈ unitary
+    (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
   obtain ⟨Ls, -, -, rfl⟩ := h
   exact circuitOp_mem_unitary Ls
 
@@ -194,8 +200,9 @@ theorem mono (h : IsCircuitOn R T U) (hT : T ≤ T') : IsCircuitOn R T' U := by
   simpa using h.mul (one (d := d) R k)
 
 /-- A single gate on a neighbouring pair inside `R`. -/
-theorem single {k : Fin N} {Z : Matrix (Cfg d N) (Cfg d N) ℂ}
-    (hZu : Z ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ)) (hZ : Z ∈ supportedOperators d (bond k))
+theorem single {k : Fin N} {Z : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    (hZu : Z ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
+    (hZ : Z ∈ supportedOperators d (bond k))
     (hR : bond k ⊆ R) : IsCircuitOn R 1 Z :=
   ⟨[Layer.single k Z hZu hZ], rfl, by simpa using Layer.single_isIn k Z hZu hZ hR, by
     simp [circuitOp, Layer.single_op]⟩
@@ -233,7 +240,8 @@ private theorem zip_union :
 
 /-- Circuits in parallel: two circuits of depth `T` acting inside disjoint sets of sites
 run in the same `T` layers. -/
-theorem par {R₁ R₂ : Set (Fin N)} (hR : Disjoint R₁ R₂) {U₁ U₂ : Matrix (Cfg d N) (Cfg d N) ℂ}
+theorem par {R₁ R₂ : Set (Fin N)} (hR : Disjoint R₁ R₂)
+    {U₁ U₂ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (h₁ : IsCircuitOn R₁ T U₁) (h₂ : IsCircuitOn R₂ T U₂) :
     IsCircuitOn (R₁ ∪ R₂) T (U₁ * U₂) := by
   obtain ⟨Ls₁, hl₁, hLs₁, rfl⟩ := h₁
@@ -244,7 +252,7 @@ theorem par {R₁ R₂ : Set (Fin N)} (hR : Disjoint R₁ R₂) {U₁ U₂ : Mat
 /-- Circuits in parallel: a family of circuits of depth `T` acting inside pairwise disjoint
 sets of sites is a circuit of depth `T`. -/
 theorem finset_noncommProd {ι : Type*} (s : Finset ι) (R : ι → Set (Fin N))
-    (hR : (s : Set ι).PairwiseDisjoint R) (U : ι → Matrix (Cfg d N) (Cfg d N) ℂ)
+    (hR : (s : Set ι).PairwiseDisjoint R) (U : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : ∀ i ∈ s, IsCircuitOn (R i) T (U i))
     (hcomm : (s : Set ι).Pairwise (Function.onFun Commute U)) :
     IsCircuitOn (⋃ i ∈ s, R i) T (s.noncommProd U hcomm) := by
@@ -269,8 +277,8 @@ gates on neighbouring sites of the open chain, placed by `e`, is a local circuit
 whose gates act inside the range of `e`. -/
 theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Function.Injective e)
     (hsucc : ∀ i j : Fin m, j.val = i.val + 1 → e j = e i + 1)
-    {X : Matrix (Cfg d m) (Cfg d m) ℂ} (hX : IsPairProduct d m K X) :
-    IsCircuitOn (Set.range e) K (MPSPreparation.embedOp e X) := by
+    {X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ} (hX : IsPairProduct d m K X) :
+    IsCircuitOn (Set.range e) K (QuantumCircuit.embedOp e X) := by
   obtain ⟨l, hl, hg, rfl⟩ := hX
   refine IsCircuitOn.mono ?_ hl
   clear hl
@@ -278,7 +286,7 @@ theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Functi
   | nil => simpa using IsCircuitOn.one (d := d) (Set.range e) 0
   | cons Z l ih =>
     obtain ⟨hZu, p, p', hp, hZ⟩ := hg Z List.mem_cons_self
-    have hZ' : MPSPreparation.embedOp e Z ∈ supportedOperators d (bond (e p)) := by
+    have hZ' : QuantumCircuit.embedOp e Z ∈ supportedOperators d (bond (e p)) := by
       have := embedOp_mem_supportedOperators_image he hZ
       rwa [Set.image_pair, hsucc p p' hp] at this
     have h1 := IsCircuitOn.single (embedOp_mem_unitary he hZu) hZ'
@@ -290,4 +298,30 @@ theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Functi
     rw [List.prod_cons, ← embedOp_mul he, List.length_cons]
     exact h2.mul h1
 
-end MPSPreparation
+/-- A product of pair products placed on pairwise disjoint windows of consecutive sites is a
+local circuit of depth `K`. -/
+theorem isCircuitOn_list_prod_embedOp {ι : Type*} {m : ι → ℕ} {K : ℕ}
+    (e : ∀ i, Fin (m i) → Fin N) (Y : ∀ i, Matrix (Fin (m i) → Fin d) (Fin (m i) → Fin d) ℂ)
+    (he : ∀ i, Function.Injective (e i))
+    (hsucc : ∀ i (a a' : Fin (m i)), a'.val = a.val + 1 → e i a' = e i a + 1)
+    (hY : ∀ i, IsPairProduct d (m i) K (Y i)) :
+    ∀ l : List ι, l.Pairwise (fun i i' => Disjoint (Set.range (e i)) (Set.range (e i'))) →
+      IsCircuitOn {x | ∃ i ∈ l, x ∈ Set.range (e i)} K
+        ((l.map fun i => embedOp (e i) (Y i)).prod)
+  | [], _ => by
+    simpa using IsCircuitOn.one (d := d) ({x | ∃ i ∈ ([] : List ι), x ∈ Set.range (e i)}) K
+  | i :: l, hl => by
+    rw [List.pairwise_cons] at hl
+    have h₁ := (hY i).isCircuitOn (he i) (hsucc i)
+    have h₂ := isCircuitOn_list_prod_embedOp e Y he hsucc hY l hl.2
+    have hdisj : Disjoint (Set.range (e i)) {x | ∃ i' ∈ l, x ∈ Set.range (e i')} := by
+      rw [Set.disjoint_left]
+      rintro x hx ⟨i', hi', hx'⟩
+      exact Set.disjoint_left.mp (hl.1 i' hi') hx hx'
+    rw [List.map_cons, List.prod_cons]
+    refine (h₁.par hdisj h₂).mono_set fun x hx => ?_
+    rcases hx with hx | ⟨i', hi', hx⟩
+    · exact ⟨i, List.mem_cons_self, hx⟩
+    · exact ⟨i', List.mem_cons_of_mem _ hi', hx⟩
+
+end QuantumCircuit

@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.ComplementaryWeylTwirl
 import TNLean.Algebra.ComplexSqrt
-import TNLean.MPS.Preparation.MeasurementRounds
-import TNLean.MPS.Preparation.PermutationGates
+import TNLean.Circuit.Measurement.Rounds
+import TNLean.Circuit.Gates.Permutation
 
 /-!
 # One teleportation hop for qudits
@@ -16,7 +16,7 @@ isometry next to each other by teleportation: "creating nearest-neighbor entangl
 performing simultaneous measurements, and correcting (without postselection) based on the
 measurement outcomes". This file proves one step of such a teleportation, a hop across two
 sites, for qudits of any dimension `d`. Chains of hops, performed in one round of depth `2`,
-are in `TNLean.MPS.Preparation.TeleportationRound`.
+are in `TNLean.Circuit.Teleportation.Round`.
 
 ## One hop
 
@@ -33,27 +33,27 @@ matrix `F = d^{-1/2} (ζ^{ab})_{a,b}`:
 
 For the outcomes `z_c`, `z_e`, the content of `c` is found at `f`, acted on by the generalized
 Pauli matrix `X^{z_e} Z^{z_c}`, the measured sites carry `|z_c⟩` and `|z_e⟩`, and the amplitude
-is `1/d` (`MPSPreparation.TeleportHop.pre_mulVec`). The inverse of these single-site unitaries
+is `1/d` (`QuantumCircuit.TeleportHop.pre_mulVec`). The inverse of these single-site unitaries
 is a correction.
 
 ## Main definitions
 
-* `MPSPreparation.quditFourier`, `MPSPreparation.quditPauli` — `F` and `X^x Z^z`.
-* `MPSPreparation.IsZeroOn` — a vector with `|0⟩` at the sites of a set.
-* `MPSPreparation.cfgPerm` — the permutation of configurations induced by a permutation of
+* `QuantumCircuit.quditFourier`, `QuantumCircuit.quditPauli` — `F` and `X^x Z^z`.
+* `QuantumCircuit.IsZeroOn` — a vector with `|0⟩` at the sites of a set.
+* `QuantumCircuit.cfgPerm` — the permutation of configurations induced by a permutation of
   sites.
-* `MPSPreparation.TeleportHop`, `MPSPreparation.TeleportHop.pre`,
-  `MPSPreparation.TeleportHop.frame`.
+* `QuantumCircuit.TeleportHop`, `QuantumCircuit.TeleportHop.pre`,
+  `QuantumCircuit.TeleportHop.frame`.
 
 ## Main results
 
-* `MPSPreparation.quditFourier_mem_unitary`, `MPSPreparation.quditPauli_mem_unitary`; the
+* `QuantumCircuit.quditFourier_mem_unitary`, `QuantumCircuit.quditPauli_mem_unitary`; the
   orthogonality of the powers of `ζ` and the unitarity of the diagonal factor are QICLean's
   `Matrix.sum_rootOfUnity_pow_eq` and `Matrix.weylClock_mem_unitary`, the labels `Fin d` being
   `ZMod d`.
-* `MPSPreparation.permMatrix_cfgPerm_mul_finKronecker` — moving single-site operators across a
+* `QuantumCircuit.permMatrix_cfgPerm_mul_finKronecker` — moving single-site operators across a
   permutation of sites.
-* `MPSPreparation.TeleportHop.pre_mulVec` — one hop.
+* `QuantumCircuit.TeleportHop.pre_mulVec` — one hop.
 
 ## References
 
@@ -62,10 +62,10 @@ is a correction.
   teleported through entangled pairs between neighbouring sites, "which can be done via LOCC").
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
@@ -75,7 +75,7 @@ section SingleSite
 
 /-- The single-site family: `u` at the site `t` and the identity elsewhere. -/
 private theorem finKronecker_update_one_apply (t : Fin N) (u : Matrix (Fin d) (Fin d) ℂ)
-    (y x : Cfg d N) :
+    (y x : Fin N → Fin d) :
     finKronecker (Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t u) y x =
       if x = Function.update y t (x t) then u (y t) (x t) else 0 := by
   classical
@@ -98,7 +98,7 @@ private theorem finKronecker_update_one_apply (t : Fin N) (u : Matrix (Fin d) (F
 /-- **A single-site operator on a vector.** The operator `u` at the site `t` maps `v` to
 `y ↦ ∑ⱼ u_{y_t, j} v(y[t ↦ j])`. -/
 theorem finKronecker_update_one_mulVec_apply (t : Fin N) (u : Matrix (Fin d) (Fin d) ℂ)
-    (v : Cfg d N → ℂ) (y : Cfg d N) :
+    (v : (Fin N → Fin d) → ℂ) (y : Fin N → Fin d) :
     (finKronecker (Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t u) *ᵥ v) y =
       ∑ j, u (y t) j * v (Function.update y t j) := by
   classical
@@ -117,7 +117,7 @@ theorem finKronecker_update_one_mulVec_apply (t : Fin N) (u : Matrix (Fin d) (Fi
 
 /-- A permutation of the labels at the site `t` acts on a vector by moving the label at `t`. -/
 theorem finKronecker_update_one_permMatrix_mulVec (t : Fin N) (σ : Equiv.Perm (Fin d))
-    (v : Cfg d N → ℂ) :
+    (v : (Fin N → Fin d) → ℂ) :
     finKronecker (Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t (σ.permMatrix ℂ)) *ᵥ v =
       fun y => v (Function.update y t (σ (y t))) := by
   classical
@@ -225,17 +225,17 @@ variable [NeZero d]
 
 /-- The vector `v` has `|0⟩` at the sites of `S`: it vanishes at every configuration with a
 nonzero label at a site of `S`. -/
-def IsZeroOn (S : Set (Fin N)) (v : Cfg d N → ℂ) : Prop :=
+def IsZeroOn (S : Set (Fin N)) (v : (Fin N → Fin d) → ℂ) : Prop :=
   ∀ x, v x ≠ 0 → ∀ i ∈ S, x i = 0
 
-theorem IsZeroOn.mono {S S' : Set (Fin N)} {v : Cfg d N → ℂ} (h : IsZeroOn S' v)
+theorem IsZeroOn.mono {S S' : Set (Fin N)} {v : (Fin N → Fin d) → ℂ} (h : IsZeroOn S' v)
     (hS : S ⊆ S') : IsZeroOn S v := fun x hx i hi => h x hx i (hS hi)
 
-theorem IsZeroOn.smul {S : Set (Fin N)} {v : Cfg d N → ℂ} (h : IsZeroOn S v) (c : ℂ) :
+theorem IsZeroOn.smul {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ} (h : IsZeroOn S v) (c : ℂ) :
     IsZeroOn S (c • v) := fun x hx => h x fun h0 => hx (by simp [h0])
 
 /-- A single-site operator at a site outside `S` keeps `|0⟩` at the sites of `S`. -/
-theorem IsZeroOn.finKronecker_update_one_mulVec {S : Set (Fin N)} {v : Cfg d N → ℂ}
+theorem IsZeroOn.finKronecker_update_one_mulVec {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
     (h : IsZeroOn S v) {t : Fin N} (ht : t ∉ S) (u : Matrix (Fin d) (Fin d) ℂ) :
     IsZeroOn S
       (finKronecker (Function.update (1 : Fin N → Matrix (Fin d) (Fin d) ℂ) t u) *ᵥ v) := by
@@ -249,13 +249,13 @@ end Sites
 
 /-- The permutation `x ↦ x ∘ π` of the configurations induced by a permutation `π` of the
 sites. -/
-def cfgPerm (π : Equiv.Perm (Fin N)) : Equiv.Perm (Cfg d N) where
+def cfgPerm (π : Equiv.Perm (Fin N)) : Equiv.Perm (Fin N → Fin d) where
   toFun x := x ∘ π
   invFun x := x ∘ π.symm
   left_inv x := by funext i; simp
   right_inv x := by funext i; simp
 
-theorem cfgPerm_apply (π : Equiv.Perm (Fin N)) (x : Cfg d N) : cfgPerm π x = x ∘ π := rfl
+theorem cfgPerm_apply (π : Equiv.Perm (Fin N)) (x : Fin N → Fin d) : cfgPerm π x = x ∘ π := rfl
 
 theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm (Fin N)) :
     (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ =
@@ -285,7 +285,7 @@ theorem permMatrix_cfgPerm_mul_finKronecker (π : Equiv.Perm (Fin N))
     rw [ite_eq_right fun h => hz (by rw [← h, Equiv.symm_apply_apply])]
   · simp
 
-theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Set (Fin N)} {v : Cfg d N → ℂ}
+theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
     (h : IsZeroOn S v) {π : Equiv.Perm (Fin N)} (hπ : ∀ i ∈ S, π i = i) :
     IsZeroOn S ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
   intro y hy i hi
@@ -327,26 +327,26 @@ variable [NeZero d] (h : TeleportHop N)
 
 /-- The gate of the first layer, on `{e, f}`: `F` at `e`, then `|a⟩_e |b⟩_f ↦ |a⟩_e |b + a⟩_f`,
 which acts on vectors as `v ↦ v(x[f ↦ x_f - x_e])`. -/
-noncomputable def gate₁ : Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def gate₁ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   (shiftPerm h.f (fun x => -x h.e) fun x c => by
     rw [Function.update_of_ne h.e_ne_f]).permMatrix ℂ *
     finKronecker (Function.update 1 h.e (quditFourier d))
 
 /-- The gate of the second layer, on `{c, e}`: `|a⟩_c |b⟩_e ↦ |a⟩_c |b - a⟩_e`, acting on vectors
 as `v ↦ v(x[e ↦ x_e + x_c])`, then `F` at `c`. -/
-noncomputable def gate₂ : Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def gate₂ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   finKronecker (Function.update 1 h.c (quditFourier d)) *
     (shiftPerm h.e (fun x => x h.c) fun x c => by
       rw [Function.update_of_ne h.c_ne_e]).permMatrix ℂ
 
-theorem gate₁_mem_unitary : h.gate₁ (d := d) ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+theorem gate₁_mem_unitary : h.gate₁ (d := d) ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   Submonoid.mul_mem _ (Equiv.Perm.permMatrix_mem_unitaryGroup _)
     (finKronecker_mem_unitary fun i => by
       by_cases hi : i = h.e
       · subst hi; rw [Function.update_self]; exact quditFourier_mem_unitary
       · rw [Function.update_of_ne hi]; exact one_mem _)
 
-theorem gate₂_mem_unitary : h.gate₂ (d := d) ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+theorem gate₂_mem_unitary : h.gate₂ (d := d) ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   Submonoid.mul_mem _
     (finKronecker_mem_unitary fun i => by
       by_cases hi : i = h.c
@@ -373,17 +373,17 @@ theorem gate₂_mem_supportedOperators :
 
 /-- The operator of one hop before the correction, for the outcomes `z_c` and `z_e`: the two gates
 followed by the projections onto `|z_c⟩` at `c` and `|z_e⟩` at `e`. -/
-noncomputable def pre (z : Cfg d N) : Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def pre (z : Fin N → Fin d) : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   ctrlProj {h.e} z * ctrlProj {h.c} z * h.gate₂ * h.gate₁
 
 /-- The single-site unitaries left by one hop: `|z_c⟩` at `c` and `|z_e⟩` at `e`, prepared from
 `|0⟩` by shifts, and `X^{z_e} Z^{z_c}` at `f`. -/
-noncomputable def frame (z : Cfg d N) : Fin N → Matrix (Fin d) (Fin d) ℂ :=
+noncomputable def frame (z : Fin N → Fin d) : Fin N → Matrix (Fin d) (Fin d) ℂ :=
   Function.update (Function.update
     (Function.update 1 h.c (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.c))))
     h.e (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.e)))) h.f (quditPauli (z h.c) (z h.e))
 
-theorem frame_mem_unitary (z : Cfg d N) (i : Fin N) :
+theorem frame_mem_unitary (z : Fin N → Fin d) (i : Fin N) :
     h.frame z i ∈ unitary (Matrix (Fin d) (Fin d) ℂ) := by
   simp only [frame, Function.update_apply]
   split_ifs
@@ -392,12 +392,12 @@ theorem frame_mem_unitary (z : Cfg d N) (i : Fin N) :
   · exact Equiv.Perm.permMatrix_mem_unitaryGroup _
   · exact one_mem _
 
-theorem frame_of_ne (z : Cfg d N) {i : Fin N} (hc : i ≠ h.c) (he : i ≠ h.e) (hf : i ≠ h.f) :
+theorem frame_of_ne (z : Fin N → Fin d) {i : Fin N} (hc : i ≠ h.c) (he : i ≠ h.e) (hf : i ≠ h.f) :
     h.frame z i = 1 := by
   simp [frame, Function.update_of_ne, hc, he, hf]
 
 /-- The configuration permutation exchanging the sites `c` and `f`. -/
-def swapPerm : Equiv.Perm (Cfg d N) := cfgPerm (Equiv.swap h.c h.f)
+def swapPerm : Equiv.Perm (Fin N → Fin d) := cfgPerm (Equiv.swap h.c h.f)
 
 /-- **One hop.** On a vector with `|0⟩` at `e` and `f`, the hop for the outcomes `z_c`, `z_e`
 is `1/d` times the exchange of `c` and `f` followed by the single-site unitaries
@@ -405,7 +405,7 @@ is `1/d` times the exchange of `c` and `f` followed by the single-site unitaries
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" (teleportation through a
 nearest-neighbour entangled pair). -/
-theorem pre_mulVec (z : Cfg d N) {v : Cfg d N → ℂ} (hv : IsZeroOn {h.e, h.f} v) :
+theorem pre_mulVec (z : Fin N → Fin d) {v : (Fin N → Fin d) → ℂ} (hv : IsZeroOn {h.e, h.f} v) :
     h.pre z *ᵥ v = (d : ℂ)⁻¹ •
       (finKronecker (h.frame z) *ᵥ (h.swapPerm.permMatrix ℂ *ᵥ v)) := by
   classical
@@ -503,4 +503,4 @@ theorem pre_mulVec (z : Cfg d N) {v : Cfg d N → ℂ} (hv : IsZeroOn {h.e, h.f}
 
 end TeleportHop
 
-end MPSPreparation
+end QuantumCircuit

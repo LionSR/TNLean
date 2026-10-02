@@ -4,35 +4,35 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.InformationTheory.Hamming
-import TNLean.MPS.Preparation.GivensDecomposition
+import TNLean.Circuit.Gates.Givens
 
 /-!
 # Unitaries on a constant number of sites as products of two-site gates
 
 Every unitary on an open chain of `n ≥ 2` sites of local dimension `d ≥ 1` is a product of
 at most `K` unitary gates, each acting on two neighbouring sites, where `K` depends only on
-`d` and `n` (`MPSPreparation.exists_isPairProduct`).
+`d` and `n` (`QuantumCircuit.exists_isPairProduct`).
 
 The proof combines three steps:
 
 * a two-level rotation between configurations differing at one site is a controlled
-  single-site operation (`MPSPreparation.twoLevel_update_eq_ctrlOp`), hence a product of
-  two-site gates (`MPSPreparation.exists_isPairProduct_ctrlOp`);
+  single-site operation (`QuantumCircuit.twoLevel_update_eq_ctrlOp`), hence a product of
+  two-site gates (`QuantumCircuit.exists_isPairProduct_ctrlOp`);
 * a two-level rotation between configurations `a`, `b` differing at more sites is conjugated
   to one between `a` and a configuration `c` closer to `a` by a two-level quarter turn on
-  the pair `{c, b}` (`MPSPreparation.twoLevel_conj_quarterTwo`);
+  the pair `{c, b}` (`QuantumCircuit.twoLevel_conj_quarterTwo`);
 * the Givens decomposition writes a special unitary as a product of two-level rotations
-  (`MPSPreparation.isTwoLevelWord_of_det_eq_one`), and a global phase is a single-site gate.
+  (`QuantumCircuit.isTwoLevelWord_of_det_eq_one`), and a global phase is a single-site gate.
 
 This is the step "can be further expressed with a low-depth circuit of local gates" of
 arXiv:2307.01696 (caption of Fig. 1), for the unitaries with constant support of the
 paragraph "The sequential-RG circuit".
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators ComplexConjugate
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 /-! ### Moving a two-level rotation by a quarter turn -/
 
@@ -76,17 +76,17 @@ variable {d n : ℕ}
 `K` such that every two-level rotation or phase between two distinct configurations of the
 chain of `n` sites is a product of at most `K` gates on neighbouring sites. -/
 theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
-    ∃ K, ∀ a b : Cfg d n, a ≠ b → ∀ g, IsSpecialTwo g →
+    ∃ K, ∀ a b : Fin n → Fin d, a ≠ b → ∀ g, IsSpecialTwo g →
       IsPairProduct d n K (twoLevel a b g) := by
   obtain ⟨K₁, hK₁⟩ := exists_isPairProduct_ctrlOp hd hn n
   -- configurations differing at exactly one site
-  have hone : ∀ (a : Cfg d n) (t : Fin n) (β : Fin d), β ≠ a t → ∀ g, IsSpecialTwo g →
+  have hone : ∀ (a : Fin n → Fin d) (t : Fin n) (β : Fin d), β ≠ a t → ∀ g, IsSpecialTwo g →
       IsPairProduct d n K₁ (twoLevel a (Function.update a t β) g) := by
     intro a t β hβ g hg
     rw [twoLevel_update_eq_ctrlOp a t hβ g]
     exact hK₁ _ ((Finset.card_le_univ _).trans (by simp)) t (by simp) a (a t) β
       (Ne.symm hβ) g hg
-  have key : ∀ h : ℕ, ∀ a b : Cfg d n, hammingDist a b = h + 1 → ∀ g, IsSpecialTwo g →
+  have key : ∀ h : ℕ, ∀ a b : Fin n → Fin d, hammingDist a b = h + 1 → ∀ g, IsSpecialTwo g →
       IsPairProduct d n ((2 * h + 1) * K₁) (twoLevel a b g) := by
     intro h
     induction h with
@@ -151,8 +151,9 @@ theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
 /-- A global phase `μ • 1` with `|μ| = 1` is a product of at most `2n` gates on neighbouring
 sites. -/
 theorem isPairProduct_smul_one (hd : 0 < d) (hn : 2 ≤ n) {μ : ℂ} (hμ : ‖μ‖ = 1) :
-    IsPairProduct d n (2 * n) (μ • (1 : Matrix (Cfg d n) (Cfg d n) ℂ)) := by
-  have hu : μ • (1 : Matrix (Cfg d n) (Cfg d n) ℂ) ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+    IsPairProduct d n (2 * n) (μ • (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ)) := by
+  have hu : μ • (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) ∈ unitary
+    (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
     rw [Unitary.mem_iff, star_smul, star_one, smul_mul_smul_comm, smul_mul_smul_comm,
       Matrix.one_mul, Complex.star_def, Complex.conj_mul', Complex.mul_conj', hμ]
     simp
@@ -166,10 +167,11 @@ gates, each acting on two neighbouring sites.
 arXiv:2307.01696, caption of Fig. 1: the unitaries with constant support "can be further
 expressed with a low-depth circuit of local gates". -/
 theorem exists_isPairProduct (hd : 0 < d) (hn : 2 ≤ n) :
-    ∃ K, ∀ X : Matrix (Cfg d n) (Cfg d n) ℂ, X ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ) →
+    ∃ K, ∀ X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ, X ∈ unitary
+    (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) →
       IsPairProduct d n K X := by
   obtain ⟨K₂, hK₂⟩ := exists_isPairProduct_twoLevel hd hn
-  set m := Fintype.card (Cfg d n)
+  set m := Fintype.card (Fin n → Fin d)
   have hm : 0 < m := Fintype.card_pos_iff.mpr ⟨fun _ => ⟨0, hd⟩⟩
   refine ⟨2 * n + 3 * m * m * K₂, fun X hX => ?_⟩
   obtain ⟨μ, hμ⟩ := IsAlgClosed.exists_pow_nat_eq X.det hm
@@ -184,9 +186,9 @@ theorem exists_isPairProduct (hd : 0 < d) (hn : 2 ≤ n) :
     exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) hm.ne').mp h
   have hμ0 : μ ≠ 0 := fun h => by simp [h] at hμn
   set X' := μ⁻¹ • X with hX'
-  have hX'u : X' ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+  have hX'u : X' ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
     have hu := isPairProduct_smul_one (d := d) hd hn (μ := μ⁻¹) (by simp [hμn])
-    have : X' = (μ⁻¹ • (1 : Matrix (Cfg d n) (Cfg d n) ℂ)) * X := by
+    have : X' = (μ⁻¹ • (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ)) * X := by
       rw [hX', smul_mul_assoc, Matrix.one_mul]
     rw [this]
     exact Submonoid.mul_mem _ hu.mem_unitary hX
@@ -201,11 +203,11 @@ theorem exists_isPairProduct (hd : 0 < d) (hn : 2 ≤ n) :
         obtain ⟨p, hp, rfl⟩ := List.mem_map.mp hY
         exact hK₂ _ _ (hlg p hp).1 _ (hlg p hp).2)
     simpa using this
-  have hXeq : X = (μ • (1 : Matrix (Cfg d n) (Cfg d n) ℂ)) * X' := by
+  have hXeq : X = (μ • (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ)) * X' := by
     rw [hX', smul_mul_assoc, Matrix.one_mul, smul_smul, mul_inv_cancel₀ hμ0, one_smul]
   rw [hXeq, hlX]
   refine ((isPairProduct_smul_one hd hn hμn).mul hprod).mono ?_
   have : l.length * K₂ ≤ 3 * m * m * K₂ := Nat.mul_le_mul_right _ hl
   omega
 
-end MPSPreparation
+end QuantumCircuit
