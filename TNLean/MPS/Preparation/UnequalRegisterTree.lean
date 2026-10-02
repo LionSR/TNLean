@@ -38,7 +38,8 @@ The widths are even, so the two registers of a node are `2L` sites apart for som
 unitary of a node is a register gate (`MPSPreparation.treeRegGate`). As for the trees of equal
 blocks, the registers of the coarser depths are not strictly between the two registers of a
 finer node, so the depths `0, …, h` of the trees of all the blocks of a ring are applied one
-after the other, each in depth `4s + K + 2` (`MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp`),
+after the other, each in depth `4s + K + 2`
+(`MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp`),
 and the leaves of all the blocks by one local circuit
 (`MPSPreparation.isCircuitOn_blockLayerOp_treeLeafOp`).
 
@@ -647,17 +648,16 @@ theorem registerLayersOp_treeLevelGates :
       list_prod_map_op_treeLevelGates (by omega), ← blockLayerOp_mul]
     simp only [treeLevelsOp, zero_add]
 
-/-- The sites of the blocks other than their first `s` sites and the last `s` sites of their
-leaves. -/
+/-- The sites `s, …, o - s - 1` of every block, `o` the number of sites of its leaves. -/
 def treeCentralSites (h s : ℕ) (hN : ∑ b, ℓ b = N) (w : Fin M → ℕ → ℕ) : Set (Fin N) :=
   {x | ∃ b y, s ≤ y.val ∧ y.val + s < leafOffset (w b) (2 ^ (h + 1)) ∧ x = blockSite hN b y}
 
 /-- **The depths `0, …, h` of the trees of all the blocks in depth `(h + 1)(4s + K + 2)` with
 measurements.** If every unitary `X b j p` of the nodes is a product of at most `K` gates on
 neighbouring sites, some sequence of measurement rounds of total depth `(h + 1)(4s + K + 2)`
-implements the depths `0, …, h` of the trees of all the blocks on the vectors with `|0⟩` at every
-site of every block other than its first `s` sites and the last `s` sites of its leaves: whatever
-the outcomes, every output is a scalar multiple of the product of the unitaries applied to the
+implements the depths `0, …, h` of the trees of all the blocks on the vectors with `|0⟩` at the
+sites `s, …, o - s - 1` of every block, `o` the number of sites of its leaves: whatever the
+outcomes, every output is a scalar multiple of the product of the unitaries applied to the
 input.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("every isometry in

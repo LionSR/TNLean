@@ -85,7 +85,8 @@ private theorem natCast_mul_succ_le_mul_log {C h : ℕ} {a b X : ℝ} (ha : 0 < 
       _ ≤ κ / Real.log (1 + Real.log 2) * Real.log (X + 1) := by gcongr
   have hb2 : Real.logb 2 (X + 1) = 1 / Real.log 2 * Real.log (X + 1) := by
     rw [Real.logb]; ring
-  have hsucc : (h : ℝ) + 1 ≤ (κ / Real.log (1 + Real.log 2) + 1 / Real.log 2) * Real.log (X + 1) := by
+  have hsucc : (h : ℝ) + 1 ≤
+      (κ / Real.log (1 + Real.log 2) + 1 / Real.log 2) * Real.log (X + 1) := by
     simp only [κ] at hκμ ⊢
     nlinarith
   push_cast

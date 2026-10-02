@@ -463,7 +463,8 @@ theorem treeLevelsOp_apply_nodeCfg (hinj : ∀ m, s ≤ m → Kraus.IsInjective 
       treeLevelsOp hT (treeNodeGate A ι₀ enc) (j + 1) k) τ c * v) fun _ => mul_zero _]
     simp_rw [placeCfg_coarseOutput_eq_nodeCfg hT ι₀ enc hjh, ih]
     -- regroup the nodes of depth `j + 1` along their parents
-    simp_rw [prod_fin_two_pow_succ, ← Finset.prod_mul_distrib, unpair_two_mul, unpair_two_mul_add_one]
+    simp_rw [prod_fin_two_pow_succ, ← Finset.prod_mul_distrib, unpair_two_mul,
+      unpair_two_mul_add_one]
     rw [← Fintype.prod_sum (fun (p : Fin (2 ^ j)) (b : Fin (blockPhysDim (D * D) 2)) =>
       cfgPolarIso A (nodeLen h n w (j + 1) (2 * p)) (segCfg hT (j + 1) (2 * p) τ)
           (decodeBlock (D * D) 2 b 0) *

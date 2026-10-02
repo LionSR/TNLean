@@ -44,12 +44,12 @@ are injective. With the error bound of Lemma 1'(i) at a slope `a > ξ/2`
 `k ≤ log₂(a log(N/ε) + b)` and the depth `C (k + 1)` is `O(log log(N/ε))`
 (`MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log`).
 
-**Scope restriction (chain length):** the block length `q = s 2^{k+1}` divides `N`, so that the
-`N/q` blocks of eq. (10) all have length `q` and every tree is complete. The preparation and the
-depth bound hold for the chain lengths `N` divisible by `s 2^{k+1}` for some `k` in the window
-`a log(N/ε) + b ≤ s 2^{k+1} ≤ 2 (a log(N/ε) + b)`, for example `N = M s 2^K` with `K` large; for
-other chain lengths the trees of unequal blocks are not formalized. Documented in
-`docs/paper-gaps/mswc24_tree_measurement_scope.tex`.
+The blocks here all have length `q = s 2^{k+1}`, which divides `N`, and every tree is complete:
+the theorems of this file hold for the chain lengths `N` divisible by `s 2^{k+1}` for some `k` in
+the window `a log(N/ε) + b ≤ s 2^{k+1} ≤ 2 (a log(N/ε) + b)`. Every chain length `N ≥ 2`, with
+blocks of unequal lengths as in the Supplemental Material, proof of Theorem 1, and trees on
+leaves of unequal widths, is treated by
+`MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero`.
 
 ## Main results
 

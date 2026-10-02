@@ -292,7 +292,8 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd hdig ω hω
   obtain ⟨Ls, hLs, -, hLsW⟩ := isCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
   -- the depths `0, …, h` of the trees
-  obtain ⟨Rs, hRs, hRsE⟩ := exists_rounds_blockLayerOp_treeLevelsOp (hN := hN) (hT := hT) (X := X) (K := K)
+  obtain ⟨Rs, hRs, hRsE⟩ := exists_rounds_blockLayerOp_treeLevelsOp (hN := hN) (hT := hT)
+    (X := X) (K := K)
     fun b j p => hK _ (treeNodeGate_mem_unitary A (ι₀ b) enc j p)
   -- the leaves
   obtain ⟨Ll, hLl, -, hLlU⟩ := isCircuitOn_blockLayerOp_treeLeafOp (hN := hN) (hT := hT) U

@@ -1,0 +1,331 @@
+%% ==================================================
+%% Section: Trees on blocks of any length and the depth O(log log(N/eps))
+%% for every chain length
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eqs. (5),
+%% (10)-(12) and (16), Lemma 1 and Lemma 1'(i), paragraph "Tree-RG circuit
+%% with measurements", and Supplemental Material, proof of Theorem 1.
+%% ==================================================
+
+\section{Trees on blocks of any length}
+\label{sec:ldp_unequal_trees}
+
+The trees of Section~\ref{sec:ldp_register_tree} cover blocks of $s2^{k+1}$
+sites, so they prepare the approximating state only for chain lengths divisible
+by $s2^{k+1}$. The Supplemental Material of~\cite{Malz2024Preparation}, proof
+of Theorem~1, cuts a chain of any length into blocks ``all of the same size,
+$q_N$, except for the last one, which may be larger''. This section places trees
+on blocks of any length, with leaves of unequal widths, and obtains the depth
+$O(\log\log(N/\varepsilon))$ of the paragraph ``Tree-RG circuit with
+measurements'' of the source for every chain length
+\cite{gap:mswc24_tree_measurement_scope}.
+
+Throughout, $d\ge1$, $s\ge1$, the sites of a block of $n$ sites are
+$\{0,\dots,n-1\}$, and for a tensor $A$ we write $\mathcal B_n=V_nP_n$ for the
+polar decomposition of $A$ blocked over $n$ sites, with $V_n$ read on the
+configurations of the $n$ sites.
+
+\begin{lemma}[The isometry of a block of unequal halves]
+    \label{lem:ldp_polar_merge}
+    \lean{MPSPreparation.pairProductTensor, MPSPreparation.cfgPolarIso,
+        MPSPreparation.mergeIso, MPSPreparation.isIsometry_cfgPolarIso,
+        MPSPreparation.blockTensor_add_apply,
+        MPSPreparation.cfgPolarIso_append, MPSPreparation.cfgPolarIso_split,
+        MPSPreparation.isInjective_pairProductTensor,
+        MPSPreparation.isIsometry_mergeIso}
+    \leanok
+    \uses{thm:ldp_polar_uniqueness, thm:ldpolar_tensor_decomposition,
+        thm:ldpolar_tensor_injective}
+    Let $A$ be a tensor whose blocked tensors over $n_1$ and over $n_2$ sites are
+    injective, and let $W:\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ be the partial
+    isometry of the polar decomposition of the tensor
+    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two neighbouring sites. Then
+    \begin{align}
+        V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W.
+        \label{eq:ldp_polar_merge}
+    \end{align}
+    If the blocked tensor over $n_1+n_2$ sites is injective, so is the tensor
+    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$, and $W$ is an isometry.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\mathcal B_{n_i}^{\tau}=\sum_y\bra\tau V_{n_i}\ket yP_{n_i}^y$. Then
+    $\mathcal B_{n_1+n_2}^{\tau_1\tau_2}
+        =\mathcal B_{n_1}^{\tau_1}\mathcal B_{n_2}^{\tau_2}$ is
+    $(V_{n_1}\otimes V_{n_2})WQ$, with $Q$ the positive part of the tensor of
+    the positive parts. The map $(V_{n_1}\otimes V_{n_2})W$ is a partial isometry
+    with initial projector the support projector of $Q$, since
+    $V_{n_1}\otimes V_{n_2}$ is an isometry, and uniqueness of the polar
+    decomposition (Theorem~\ref{thm:ldp_polar_uniqueness}) identifies it with
+    $V_{n_1+n_2}$. The matrices $\mathcal B_{n_1+n_2}^{\tau}$ are combinations of
+    the products $P_{n_1}^aP_{n_2}^b$, so these span the full matrix algebra when
+    the former do.
+\end{proof}
+
+\begin{theorem}[Layers of register gates one after the other]
+    \label{thm:ldp_register_layers}
+    \lean{MPSPreparation.registerLayersOp,
+        MPSPreparation.exists_rounds_registerLayersOp}
+    \leanok
+    \uses{thm:ldp_register_layer, lem:ldp_round_implementation_compose}
+    Let $G_0,\dots,G_{m-1}$ be lists of register gates, the gates of each list
+    with pairwise disjoint stretches, such that no register of a gate of $G_{j'}$
+    lies in the interior of a gate of $G_j$ for $j'<j$, and every matrix of a
+    gate a product of at most $K$ unitaries on neighbouring sites. Then
+    measurement rounds of total depth $m(4s+K+2)$ implement the product of the
+    gates of $G_{m-1},\dots,G_0$, the list $G_0$ applied first, on the vectors
+    with $\ket0$ at the interiors of all the gates.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_register_layer} each list is applied in depth
+    $4s+K+2$ on the vectors with $\ket0$ at the interiors of its gates. The
+    gates of $G_{j'}$ act on their registers only, which lie outside the
+    interiors of the later lists, so they keep $\ket0$ there. Induction on the
+    number of lists and Lemma~\ref{lem:ldp_round_implementation_compose}.
+\end{proof}
+
+\begin{definition}[Tree layout of a block]
+    \label{def:ldp_tree_layout}
+    \lean{MPSPreparation.leafOffset, MPSPreparation.leafOffset_succ,
+        MPSPreparation.leafOffset_mono, MPSPreparation.leafOffset_add_le,
+        MPSPreparation.even_leafOffset_sub, MPSPreparation.IsTreeLayout,
+        MPSPreparation.IsTreeLayout.pos, MPSPreparation.nodeLeaves,
+        MPSPreparation.nodeStart, MPSPreparation.nodeStop,
+        MPSPreparation.nodeLeaves_pos, MPSPreparation.nodeLeaves_eq_two_mul,
+        MPSPreparation.succ_mul_nodeLeaves_le, MPSPreparation.nodeStart_add_le,
+        MPSPreparation.nodeStop_le, MPSPreparation.nodeStop_le_n,
+        MPSPreparation.even_nodeStop_sub, MPSPreparation.nodeStop_le_nodeStart,
+        MPSPreparation.nodeStart_two_mul,
+        MPSPreparation.nodeStop_two_mul_add_one, MPSPreparation.nodeStop_two_mul,
+        MPSPreparation.nodeOffset, MPSPreparation.nodeOffset_lt,
+        MPSPreparation.nodeStart_le_nodeOffset,
+        MPSPreparation.exists_nodeOffset_eq,
+        MPSPreparation.nodeOffset_notMem_interior, MPSPreparation.nodeWindow,
+        MPSPreparation.nodeWindow_val, MPSPreparation.nodeWindow_injective₂,
+        MPSPreparation.nodeLen, MPSPreparation.leafLen,
+        MPSPreparation.leafLen_eq, MPSPreparation.leafOffset_add_leafLen,
+        MPSPreparation.two_mul_le_leafLen, MPSPreparation.leafWindow,
+        MPSPreparation.leafWindow_val, MPSPreparation.leafWindow_injective,
+        MPSPreparation.disjoint_range_leafWindow,
+        MPSPreparation.exists_leafWindow_eq, MPSPreparation.leafWindow_succ}
+    \leanok
+    A \emph{tree layout} of a block of $n$ sites with $h+1$ coarse depths is a
+    sequence of $2^{h+1}$ even widths $w_0,w_1,\dots$, each at least $2s$, with
+    $o_{2^{h+1}}\le n$, where $o_m=w_0+\cdots+w_{m-1}$. The leaf $i$ covers the
+    sites $o_i,\dots,o_{i+1}-1$, the last leaf also the sites $o_{2^{h+1}},\dots,
+        n-1$. For $0\le j\le h+1$ and $0\le p<2^j$, the node $p$ of depth $j$
+    covers the leaves $p2^{h+1-j},\dots,(p+1)2^{h+1-j}-1$; its two registers are
+    the sites $o_{p2^{h+1-j}},\dots,o_{p2^{h+1-j}}+s-1$ and the $s$ sites before
+    $o_{(p+1)2^{h+1-j}}$. The registers of a node are an even number of sites
+    apart, and they are the first register of its first half and the last
+    register of its second half. A register of a node of depth $j'$ is a
+    register of a node of every depth $j\ge j'$, and no register of a node of
+    depth $j$ lies strictly between the two registers of a node of depth $j$.
+\end{definition}
+
+\begin{theorem}[Trees on blocks of any length with measurements]
+    \label{thm:ldp_unequal_tree_rounds}
+    \lean{MPSPreparation.treeLevelOp, MPSPreparation.treeLevelsOp,
+        MPSPreparation.treeLeafOp, MPSPreparation.treeLevelsOp_succ',
+        MPSPreparation.le_of_mem_block, MPSPreparation.treeRegGate,
+        MPSPreparation.two_mul_treeRegGate_L,
+        MPSPreparation.treeRegGate_a_add, MPSPreparation.treeRegGate_sites,
+        MPSPreparation.mem_span_treeRegGate,
+        MPSPreparation.mem_interior_treeRegGate,
+        MPSPreparation.treeLevelGates, MPSPreparation.mem_treeLevelGates,
+        MPSPreparation.pairwise_treeLevelGates,
+        MPSPreparation.disjoint_range_sites_interior_treeLevelGates,
+        MPSPreparation.list_prod_map_op_treeLevelGates,
+        MPSPreparation.registerLayersOp_treeLevelGates,
+        MPSPreparation.treeCentralSites,
+        MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp,
+        MPSPreparation.isCircuitOn_list_prod_embedOp,
+        MPSPreparation.isCircuitOn_blockLayerOp_treeLeafOp}
+    \leanok
+    \uses{def:ldp_tree_layout, thm:ldp_register_layers,
+        thm:ldp_register_tree_rounds, def:ldp_local_circuit}
+    Cut a ring into blocks, each with a tree layout with $h+1$ coarse depths, and
+    let a unitary $X_{j,p}$ on $2s$ sites act on the two registers of the node
+    $p$ of depth $j\le h$ of every block. If every $X_{j,p}$ is a product of at
+    most $K$ unitaries on neighbouring sites, measurement rounds of total depth
+    $(h+1)(4s+K+2)$ implement the depths $0,\dots,h$ of the trees of all the
+    blocks, the depth $0$ applied first, on the vectors with $\ket0$ at the
+    sites $s,\dots,o_{2^{h+1}}-s-1$ of every block, $o_{2^{h+1}}$ the number of
+    sites of its leaves. If moreover every leaf carries a product of at most $K'$
+    unitaries on neighbouring sites of the leaf, the leaves of all the blocks
+    form a local circuit of depth $K'$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The unitary of a node is a register gate whose stretch is the node, without
+    the sites after the leaves; the nodes of one depth are pairwise disjoint.
+    By Definition~\ref{def:ldp_tree_layout} a register of a coarser depth is
+    never strictly between the two registers of a finer node, so
+    Theorem~\ref{thm:ldp_register_layers} applies the depths one after the
+    other. The leaves are pairwise disjoint windows of consecutive sites, so
+    their unitaries act in parallel.
+\end{proof}
+
+\begin{theorem}[The tree of a block of any length implements its isometry]
+    \label{thm:ldp_unequal_tree_isometry}
+    \lean{MPSPreparation.treeInput, MPSPreparation.treeInput_injective,
+        MPSPreparation.nodeCfg, MPSPreparation.segCfg,
+        MPSPreparation.leafRegWindow, MPSPreparation.leafRegWindow_val,
+        MPSPreparation.leafRegWindow_injective₂, MPSPreparation.leafInput,
+        MPSPreparation.leafInput_injective, MPSPreparation.treeNodeGate,
+        MPSPreparation.treeLeafGate, MPSPreparation.treeBlockOp,
+        MPSPreparation.treeNodeGate_mem_unitary,
+        MPSPreparation.treeLeafGate_mem_unitary,
+        MPSPreparation.nodeLen_two_mul_add, MPSPreparation.two_mul_le_nodeLen,
+        MPSPreparation.placeCfg_coarseOutput_eq_nodeCfg,
+        MPSPreparation.nodeCfg_comp_leafWindow,
+        MPSPreparation.treeLeafOp_apply_nodeCfg,
+        MPSPreparation.treeLevelsOp_apply_nodeCfg,
+        MPSPreparation.treeBlockOp_apply}
+    \leanok
+    \uses{lem:ldp_polar_merge, def:ldp_tree_layout,
+        lem:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes,
+        thm:ldp_register_tree_isometry}
+    Let $A$ be a tensor whose blocked tensors over $m\ge s$ sites are injective,
+    let a register of $s$ sites carry $\C^{D^2}$ through an injective map of
+    $\{0,\dots,D^2-1\}$ into its configurations, and let a block of $n$ sites
+    carry a tree layout. Let the node $p$ of depth $j$ cover $\ell_{j,p}$ sites.
+    The unitary of a node of depth $j\le h$ extends the isometry $W$ of
+    Lemma~\ref{lem:ldp_polar_merge} joining its two halves, from its input to
+    its two registers; the input of the root is placed on its two registers by
+    a given injective map, and below the root the input is a register on the
+    first register of an even node and on the last register of an odd one, the
+    other in $\ket0$. The unitary of a leaf of $\ell$ sites extends $V_\ell$ from
+    its input to all its configurations. The tree $T$ of these unitaries, the
+    depths $0,\dots,h$ applied first and the leaves last, satisfies
+    \begin{align*}
+        \bra\tau T\ket{\iota_0(x)}=\bra\tau V_n\ket x
+    \end{align*}
+    for every configuration $\tau$ of the block, with $\iota_0(x)$ the input
+    $x$ on the two registers of the root and $\ket0$ elsewhere.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By induction from the leaves: after the leaves and the depths $h,\dots,j$,
+    the amplitude of $\tau$ on the inputs $x_p$ of the nodes of depth $j$ is
+    $\prod_p\bra{\tau_{j,p}}V_{\ell_{j,p}}\ket{x_p}$, with $\tau_{j,p}$ the part
+    of $\tau$ on the node. At the leaves this is the definition of their
+    unitaries, since the leaves cover the block. A unitary of depth $j$ maps its
+    input to its two registers with the amplitudes of $W$, and the registers it
+    writes are the inputs of the two nodes below it, by the second item of
+    Lemma~\ref{lem:ldp_tree_amplitudes}; summing over these inputs and
+    applying~(\ref{eq:ldp_polar_merge}) at every node gives the claim for
+    depth $j$. The root covers the block.
+\end{proof}
+
+\begin{lemma}[Leaves of a block of any length]
+    \label{lem:ldp_balanced_widths}
+    \lean{MPSPreparation.balancedWidths,
+        MPSPreparation.leafOffset_balancedWidths,
+        MPSPreparation.leafOffset_balancedWidths_self,
+        MPSPreparation.isTreeLayout_balancedWidths,
+        MPSPreparation.le_leafOffset_balancedWidths_add_one,
+        MPSPreparation.leafLen_balancedWidths_le}
+    \leanok
+    \uses{def:ldp_tree_layout}
+    Let $L\ge2^{h+2}s$. The widths $w_i=2\lfloor\lfloor L/2\rfloor/2^{h+1}\rfloor$,
+    increased by $2$ for the first $\lfloor L/2\rfloor\bmod2^{h+1}$ leaves, are a
+    tree layout of a block of $L$ sites with $h+1$ coarse depths, whose leaves
+    cover all the sites but at most one. If $L\le2^{h+1}c$, every leaf has at most
+    $c+3$ sites.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The widths sum to $2\lfloor L/2\rfloor$, and
+    $\lfloor\lfloor L/2\rfloor/2^{h+1}\rfloor\ge s$. If $L\le2^{h+1}c$, then
+    $2\lfloor\lfloor L/2\rfloor/2^{h+1}\rfloor\le c$; the last leaf has one more
+    site when $L$ is odd.
+\end{proof}
+
+\begin{theorem}[The state of blocks of unequal lengths with measurements]
+    \label{thm:ldp_unequal_blocks_measurements}
+    \lean{MPSPreparation.isZeroOn_pairLayerOp_mulVec_productVector,
+        MPSPreparation.blockInputCfg_eq_placeCfg,
+        MPSPreparation.mul_self_le_pow_of_isInjective_blockTensor,
+        MPSPreparation.le_pow_sub_one_of_mul_self_le,
+        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState}
+    \leanok
+    \uses{thm:ldp_unequal_tree_isometry, thm:ldp_unequal_tree_rounds,
+        lem:ldp_balanced_widths, def:ldp_block_isometry_state,
+        thm:ldp_approximating_state_depth,
+        thm:ldp_bounded_unitary_two_site_gates, def:ldp_measurement_rounds,
+        lem:ldp_round_implementation_compose}
+    For every $s\ge2$ and $c$ there is $C$, depending only on $d$, $s$ and $c$,
+    with the following property. Let $A$ be a tensor whose blocked tensors over
+    $m\ge s$ sites are injective, and $\omega$ a unit vector on the pair space.
+    For every $h\ge0$ and every cutting of a ring into $M\ge1$ blocks of lengths
+    $2^{h+2}s\le\ell_k\le2^{h+1}c$, the state~(\ref{eq:ldp_block_isometry_state})
+    of these blocks with the pair $\omega$ is prepared with measurement rounds in
+    depth at most $C(h+1)$. No outcome is post-selected.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Injectivity over $s$ sites gives $D^2\le d^s$, hence $D\le d^{s-1}$ since
+    $s\ge2$, so a leg of a pair is written on the first $s-1$ sites of a
+    register, the last site in $\ket0$, and a register carries $\C^{D^2}$. Cut
+    every block into leaves as in Lemma~\ref{lem:ldp_balanced_widths}. The input
+    $\ket{l,0,\dots,0,r}$ of a block, with $l$ on its first and $r$ on its last
+    $s$ sites, lies on the two registers of its root: when the length is odd,
+    the last site of the block lies after the leaves, and it carries the last
+    site of the leg $r$, which is $\ket0$. A local circuit of bounded depth,
+    applied in one round, prepares the pairs from the all-$\ket0$ product
+    state; Theorem~\ref{thm:ldp_unequal_tree_rounds} applies the depths
+    $0,\dots,h$ of the trees with the unitaries of
+    Theorem~\ref{thm:ldp_unequal_tree_isometry}; and a local circuit of
+    bounded depth, by Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates} for
+    the boundedly many lengths of the leaves, applies the leaves in one round.
+    The output is the state of the blocks as in
+    Theorem~\ref{thm:ldp_approximating_state_depth}.
+\end{proof}
+
+\begin{theorem}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$, every chain length]
+    \label{thm:ldp_loglog_depth_every_length}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
+    \leanok
+    \uses{def:ldp_measurement_rounds}
+    Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,
+    for every $N\ge2$ and $0<\varepsilon\le1$ for which the periodic state
+    $\ket{\phi_N(A)}$ is nonzero, a unit vector $\ket\psi$ with
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$ is prepared with measurement rounds
+    in depth at most $c\log(\log(N/\varepsilon)+1)$, which is
+    $O(\log\log(N/\varepsilon))$. No outcome is post-selected. If $D\ge1$, there
+    is $N_0$ such that the condition $\ket{\phi_N(A)}\neq0$ holds for every
+    $N\ge N_0$. This is the depth of the paragraph ``Tree-RG circuit with
+    measurements'' of~\cite{Malz2024Preparation} for normal tensors; the source
+    normalizes $\ket{\phi_N}$, which presupposes $\ket{\phi_N(A)}\neq0$
+    \cite{gap:mswc24_depth_upper_bound_nonzero_state}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_unequal_blocks_measurements,
+        thm:ldp_block_approximation_error, thm:ldp_short_chain_preparation,
+        thm:normalized_primitive_gauge, lem:ldp_normalized_state_rescaling,
+        lem:ldp_periodic_state_nonzero,
+        lem:ldp_approximating_state_unit_norm,
+        lem:ldp_measurement_rounds_outputs, lem:ldp_measurement_unitary_case}
+    Bring $A$ into the gauge~(\ref{eq:ldp_normal_gauge}), which multiplies
+    $\ket{\phi_N}$ by a nonzero scalar, with a bound $t<1$ on the moduli of the
+    subleading eigenvalues, $r=-\tfrac14\log t$, and an injectivity length $L$;
+    put $s=L+2$, $a=1/r$, $b=\max(\log K,0)/r+4s+1$ with $K$ the constant of
+    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/4$, and
+    $q=\lceil a\log(N/\varepsilon)+b\rceil\ge4s$. If $q\le N$, write
+    $N=(M-1)q+q'$ with $q\le q'<2q$; the state of these blocks with the pair of
+    the fixed point has error at most $KMe^{-rq}\le\varepsilon$ by
+    Theorem~\ref{thm:ldp_block_approximation_error}, and with
+    $2^{h+2}s\le q<2^{h+3}s$ it is prepared in depth $C(h+1)$ by
+    Theorem~\ref{thm:ldp_unequal_blocks_measurements} with $c=8s$. If
+    $4s\le N<q$, the chain is one block, and by
+    Theorem~\ref{thm:ldp_short_chain_preparation} $\ket{\phi_N}$ is the state of
+    this block with the pair $\omega\propto P\ket{\mathbb 1}$, prepared in depth
+    $C(h+1)$ with $2^{h+2}s\le N<2^{h+3}s$. If $N<4s$, $\ket{\phi_N}$ is prepared
+    by a local circuit of bounded depth. In each case $2^h\le
+        a\log(N/\varepsilon)+b+1\le(a+b+1)(\log(N/\varepsilon)+1)$, and
+    $\log(\log(N/\varepsilon)+1)\ge\log(1+\log2)>0$, so the depth is at most a
+    constant times $\log(\log(N/\varepsilon)+1)$.
+\end{proof}
