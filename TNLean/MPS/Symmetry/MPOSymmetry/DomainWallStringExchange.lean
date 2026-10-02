@@ -21,9 +21,9 @@ the symmetry-broken ground state `|ψ_A⟩`. Two products are compared in this f
   `O^{[j]}_x O^{[i]}_y |ψ_A⟩ = c_{AB} O^{[i]}_x O^{[j]}_y |ψ_A⟩`.
 
   The two sides differ only in which left endpoint carries which label at the right cut, and the
-  source notes that the open legs `x`, `y` are left untouched (lines 1453--1458). Here the
+  source notes that the open legs `x`, `y` are left untouched (line 1492). Here the
   half-chain operators are glued back with the other halves of their strings, as the source
-  requires to obtain a state (lines 1501--1505): the labels `x` and `y` are the bonds closed by
+  requires to obtain a state (line 1489): the labels `x` and `y` are the bonds closed by
   right endpoints at the sites `r₁` and `r₂`, both to the right of `i`, so that the relation reads
 
   `O^{[j,r₁]} O^{[i,r₂]} |ψ_A⟩ = c_{AB} O^{[i,r₁]} O^{[j,r₂]} |ψ_A⟩`.

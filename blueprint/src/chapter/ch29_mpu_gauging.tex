@@ -5475,6 +5475,13 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     the relation of \cite[Section~III.F]{GarreRubioSchuch2024DomainWall}.
 \end{corollary}
 
+\begin{proof}\leanok
+    The tensors $A$ and $B$ have left inverses, so their matrices span the
+    full matrix algebras and they are normal. Lemma~\ref{lem:mpug_domain_wall_exchange_phase_square}
+    gives $(c_{AB}c_{BA})^2=1$. Multiply the identity of
+    Theorem~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$.
+\end{proof}
+
 \begin{theorem}[Exchange of two left endpoints of domain-wall strings]
     \label{thm:mpug_domain_wall_endpoint_exchange}
     \lean{MPOTensor.GroupFamily.BlockActionData.wallString_cross_over_right_mulVec_mpv_apply,
@@ -5511,13 +5518,6 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     $c_{BA}$. For $r_1<r_2$ the string on $[j,r_1]$ on the left side passes
     over the domain wall $e_{AB}$ at $i$, with phase $c_{AB}$, and the right
     side is a nested pair whose inner string acts second, with no phase.
-\end{proof}
-
-\begin{proof}\leanok
-    The tensors $A$ and $B$ have left inverses, so their matrices span the
-    full matrix algebras and they are normal. Lemma~\ref{lem:mpug_domain_wall_exchange_phase_square}
-    gives $(c_{AB}c_{BA})^2=1$. Multiply the identity of
-    Theorem~\ref{thm:mpug_domain_wall_string_exchange} by $c_{AB}c_{BA}$.
 \end{proof}
 
 \begin{theorem}[Rescaling domain walls]
