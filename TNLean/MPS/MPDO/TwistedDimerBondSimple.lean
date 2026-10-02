@@ -43,6 +43,15 @@ fixed-point assertion is made for the rescaled tensor.
 * `sigmaDimer_isInjective`: one-site injectivity of the exact mixed-Bell factor.
 * `sigmaDimerBasis_isNormalTensor`: its normalized normal representative.
 * `sigmaDimer_isSimple`: simplicity of the original, trace-one factor.
+
+## References
+
+* Cirac, Pérez-García, Schuch and Verstraete,
+  *Matrix product density operators: Renormalization fixed points and boundary theories*,
+  arXiv:1606.00608, lines 224–235 (normal representatives), Definition 4.7,
+  lines 815–822 (simplicity), and lines 995–1010 (the motivating question).
+* Project construction provenance:
+  `docs/audits/2026-09-05_twisted_dimer_unitary_factorization.md`.
 -/
 
 open scoped Matrix BigOperators
