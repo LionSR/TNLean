@@ -2018,3 +2018,8 @@ involve no boundary.
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
   spaces, which is required for the source's converse classification argument.
+
+- **Virtual class of the prepared path:**
+  `MPSTensor.exists_prepared_polarGappedInteractionPath_with_virtual_class`
+  retains the original cohomology class and supplies one unitary projective
+  representation implementing symmetry throughout the polar deformation.
