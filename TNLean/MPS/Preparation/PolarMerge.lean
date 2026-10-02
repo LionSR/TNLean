@@ -81,6 +81,16 @@ noncomputable def mergeIso (A : MPSTensor d D) (n₁ n₂ : ℕ) :
   polarIsoMatrix (pairProductTensor (polarPosTensor (blockTensor A n₁))
     (polarPosTensor (blockTensor A n₂)))
 
+/-- For an injective blocked tensor, `V_n` is an isometry. -/
+theorem isIsometry_cfgPolarIso (A : MPSTensor d D) {n : ℕ}
+    (h : Kraus.IsInjective (blockTensor A n)) : (cfgPolarIso A n).IsIsometry := by
+  have hV := isIsometry_polarIsoMatrix_of_isInjective h
+  have he : cfgPolarIso A n =
+      (polarIsoMatrix (blockTensor A n)).submatrix (decodeBlockEquiv d n).symm id := rfl
+  rw [Matrix.IsIsometry, he, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv,
+    show (polarIsoMatrix (blockTensor A n))ᴴ * polarIsoMatrix (blockTensor A n) = 1 from hV,
+    Matrix.submatrix_id_id]
+
 /-! ### Blocking two halves -/
 
 /-- A block of `n₁ + n₂` sites carries the product of the blocked tensors of its halves. -/

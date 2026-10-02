@@ -332,7 +332,7 @@ theorem nodeWindow_injective₂ (hT : IsTreeLayout h s n w) {j : ℕ} (hj : j �
     · have := nodeStop_le_nodeStart (h := h) (w := w) (j := j) hlt; omega
   subst hpp
   refine Prod.ext rfl (Fin.ext ?_)
-  show t.val = t'.val
+  change t.val = t'.val
   have := t.isLt; have := t'.isLt
   unfold nodeOffset at he'
   split_ifs at he' <;> omega
@@ -426,7 +426,7 @@ theorem exists_leafWindow_eq (hT : IsTreeLayout h s n w) (y : Fin n) :
       rw [leafOffset_succ] at this
       omega
   · rw [leafWindow_val hT hP.1]
-    show leafOffset w P + (y.val - leafOffset w P) = y.val
+    change leafOffset w P + (y.val - leafOffset w P) = y.val
     omega
 
 /-- Consecutive sites of a leaf are consecutive sites of the block. -/
@@ -721,7 +721,7 @@ theorem isCircuitOn_blockLayerOp_treeLeafOp {K : ℕ}
   refine (IsCircuitOn.finset_noncommProd Finset.univ (fun b => Set.range (blockSite hN b))
     (fun b _ b' _ h' => disjoint_range_blockSite hN h') _ (fun b _ => ?_) _).mono_set
       (Set.subset_univ _)
-  show IsCircuitOn _ K (embedOp (blockSite hN b) (treeLeafOp (hT b) (U b)))
+  change IsCircuitOn _ K (embedOp (blockSite hN b) (treeLeafOp (hT b) (U b)))
   rw [treeLeafOp, embedOp_list_prod (blockSite_injective hN b), List.map_map]
   have hcomp : (embedOp (blockSite hN b) ∘ fun p : Fin (2 ^ (h + 1)) =>
       embedOp (leafWindow (hT b) p) (U b p)) =
