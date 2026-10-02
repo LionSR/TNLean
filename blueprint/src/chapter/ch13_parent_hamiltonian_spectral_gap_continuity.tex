@@ -65,6 +65,8 @@ unproved; this scope restriction is recorded in
     \label{thm:continuous_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_groundSpaceMapES_family,
         MPSTensor.continuous_groundSpaceES_starProjection_family,
+        MPSTensor.continuous_parentInteractionES_family,
+        MPSTensor.continuous_localTermES_family,
         MPSTensor.continuous_openParentHamiltonianES_family,
         MPSTensor.continuous_parentHamiltonianES_family}
     \leanok
@@ -326,7 +328,8 @@ unproved; this scope restriction is recorded in
 \begin{definition}[Joint boundary map for several blocks]
     \label{def:block_ground_space_map}
     \lean{MPSTensor.blockBoundaryEquiv, MPSTensor.blockGroundSpaceMap,
-        MPSTensor.blockGroundSpaceMapES, MPSTensor.blockGroundSpaceMap_apply,
+        MPSTensor.blockGroundSpaceMapES, MPSTensor.blockGroundSpaceMapES_apply,
+        MPSTensor.blockGroundSpaceMap_apply,
         MPSTensor.range_blockGroundSpaceMap, MPSTensor.range_blockGroundSpaceMapES,
         MPSTensor.blockGroundSpaceMapES_injective_iff}
     \leanok
@@ -343,14 +346,37 @@ unproved; this scope restriction is recorded in
     Its range is $\sum_jG_L(A^j)$.
 \end{definition}
 
+\begin{lemma}[Trace duality for a finite family of matrices]
+    \label{lem:matrix_family_trace_duality}
+    \lean{Matrix.exists_trace_representation,
+        Matrix.exists_family_trace_representation,
+        Matrix.family_submodule_eq_top_of_trace_separating}
+    \leanok
+    Every complex linear functional on $\prod_j\operatorname{Mat}_{D_j}(\mathbb C)$
+    has the form $M\mapsto\sum_j\tr(\Delta_jM_j)$ for some family
+    $\Delta$. Consequently, a linear subspace $W$ is the whole
+    product algebra if the only family satisfying
+    $\sum_j\tr(\Delta_jM_j)=0$ for every $M\in W$ is the zero family.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The matrix trace pairing is nondegenerate. Apply its isomorphism with
+    the dual space to the restriction of the functional to each summand.
+    A proper subspace has a nonzero linear functional vanishing on it,
+    so the asserted separation condition excludes every proper subspace.
+\end{proof}
+
 \begin{lemma}[Simultaneous injectivity of the joint boundary map]
     \label{lem:block_ground_space_map_injective}
     \lean{MPSTensor.blockGroundSpaceMap_injective_of_wordTupleSpanTop,
-        MPSTensor.blockGroundSpaceMapES_injective_of_wordTupleSpanTop}
+        MPSTensor.blockGroundSpaceMapES_injective_of_wordTupleSpanTop,
+        MPSTensor.wordTupleSpanTop_of_blockGroundSpaceMap_injective,
+        MPSTensor.wordTupleSpanTop_iff_blockGroundSpaceMapES_injective}
     \leanok
-    \uses{def:block_ground_space_map, def:blockwise_product_word_span}
-    If the tuples of length-$L$ word products span
-    $\prod_j\operatorname{Mat}_{D_j}(\mathbb C)$, then
+    \uses{def:block_ground_space_map, def:blockwise_product_word_span,
+        lem:matrix_family_trace_duality}
+    The tuples of length-$L$ word products span
+    $\prod_j\operatorname{Mat}_{D_j}(\mathbb C)$ if and only if
     $\Gamma_L^{\oplus}$ is injective.
 \end{lemma}
 \begin{proof}
@@ -358,23 +384,24 @@ unproved; this scope restriction is recorded in
     If $\Gamma_L^{\oplus}((X_j)_j)=0$, the trace pairing with $(X_j)_j$
     vanishes on every word tuple and hence on the entire product algebra.
     Nondegeneracy of the matrix trace pairing gives $X_j=0$ for every $j$.
+    Conversely, injectivity implies that the only trace pairing vanishing
+    on the word span is zero. The preceding duality lemma then gives the
+    full product span.
 \end{proof}
 
 \begin{theorem}[Continuity of finite-window parents with several blocks]
     \label{thm:continuous_block_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_blockGroundSpaceMapES_family,
-        MPSTensor.continuous_iSup_groundSpaceES_starProjection_family,
-        MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_family,
+        MPSTensor.continuous_iSup_groundSpaceES_starProjection_of_injective_family,
+        MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family,
         MPSTensor.continuous_parentInteractionES_toTensorFromBlocks_family,
         MPSTensor.continuous_openParentHamiltonianES_toTensorFromBlocks_family,
-        MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_family,
-        MPSTensor.continuous_localTermES_of_parentInteractionES_family,
-        MPSTensor.continuous_openParentHamiltonianES_of_parentInteractionES_family,
-        MPSTensor.continuous_parentHamiltonianES_of_parentInteractionES_family}
+        MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_family}
     \leanok
     \uses{def:block_ground_space_map, lem:block_ground_space_map_injective,
         thm:continuous_injective_range_projector, thm:block_sum_local_ground_space,
-        def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
+        def:open_parent_hamiltonian_es, def:parent_hamiltonian_es,
+        thm:finite_window_continuity_from_ground_projection}
     Let $x\mapsto A_x^j$ be continuous for every block $j$, with fixed
     physical and virtual dimensions, and suppose that the joint boundary
     map at length $L$ is injective for every parameter $x$. For arbitrary nowhere-zero weights $\mu_j(x)$, set
@@ -446,4 +473,60 @@ unproved; this scope restriction is recorded in
     subcover of $S$ gives a common length by taking the maximum of these
     thresholds. For primitive blocks, simultaneous spanning follows
     from inequivalence of the blocks.
+\end{proof}
+
+
+\begin{theorem}[Finite-volume continuity from the local projection]
+    \label{thm:finite_window_continuity_from_ground_projection}
+    \lean{MPSTensor.continuous_parentInteractionES_family_of_groundProjection,
+        MPSTensor.continuous_localTermES_family_of_groundProjection,
+        MPSTensor.continuous_openParentHamiltonianES_family_of_groundProjection,
+        MPSTensor.continuous_parentHamiltonianES_family_of_groundProjection}
+    \leanok
+    \uses{def:ground_space_es, def:open_parent_hamiltonian_es,
+        def:parent_hamiltonian_es}
+    Suppose that the orthogonal projection onto $G_L(A_x)$ is continuous
+    in $x$. Then its complementary canonical interaction is continuous.
+    For each fixed $N\geq L$, every translated local term and the open
+    and periodic parent Hamiltonians are continuous as well.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Subtract the local projection from the identity. Its fixed embeddings
+    into the chain are continuous, and so are their finite sums.
+\end{proof}
+
+\begin{lemma}[Continuity of fixed-window block overlaps]
+    \label{lem:continuous_fixed_window_block_overlap}
+    \lean{MPSTensor.continuous_norm_groundSpaceES_overlap_family}
+    \leanok
+    \uses{thm:continuous_finite_window_parent_hamiltonian}
+    Let $x\mapsto A_x^j$ be continuous and injective after blocking $L$
+    sites for every $x$ and $j$. For each pair of blocks $i,j$, the norm
+    $\|P_{G_L(A_x^i)}P_{G_L(A_x^j)}\|$ is continuous in $x$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Both projections are continuous in operator norm, as are their
+    product and its norm.
+\end{proof}
+
+
+\begin{lemma}[Projection continuity from simultaneous word spanning]
+    \label{lem:block_ground_space_projector_continuity_span}
+    \lean{MPSTensor.continuous_iSup_groundSpaceES_starProjection_family,
+        MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_family}
+    \leanok
+    \uses{lem:block_ground_space_map_injective,
+        thm:continuous_block_finite_window_parent_hamiltonian}
+    Let $x\mapsto A_x^j$ be continuous, with fixed block dimensions, and
+    suppose that their length-$L$ word tuples span the product matrix
+    algebra for every $x$. Then the projection onto $\sum_jG_L(A_x^j)$
+    is continuous. The same holds for the ground space of any weighted
+    block sum with nowhere-zero weights.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Simultaneous word spanning implies injectivity of the joint boundary
+    map, so the continuity theorem applies.
 \end{proof}

@@ -1873,14 +1873,19 @@ abstracted — record why, so it is not re-proposed).
   criteria now reduce to generator membership facts. Public theorem statements and
   trace-pairing order are unchanged.
 - **Update (2026-09-19):** the representation step is no longer proved from matrix
-  units. `exists_trace_repr` is now the inverse of the linear equivalence with the
+  units. `Matrix.exists_trace_representation` is now the inverse of the linear equivalence with the
   dual space induced by the nondegenerate trace form
   (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
   `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
   three-line consequences of it. The separation step itself still runs by hand,
   because no nondegeneracy statement exists yet for the pi-indexed or product trace
-  form; once one does, `matrix_pi_span_top_of_trace_separating` and
+  form; once one does, `Matrix.family_submodule_eq_top_of_trace_separating` and
   `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
+- **Update (2026-10-02):** the ordinary representation, finite-family
+  representation, and family span criterion are public in
+  `MPS/SharedInfra/MatrixFamilyTracePairing.lean`. The MPDO criteria and
+  the prescribed-length converse for the joint parent boundary map reuse
+  these proofs. No parallel product bilinear form is needed.
 - **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
   vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
   the trace functional: `pair_trace_zero_on_span` in
@@ -2435,10 +2440,11 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** the injective-family and direct-sum-family continuity theorems in
   `MPS/ParentHamiltonian/GroundSpaceMapContinuity.lean` and
   `MPS/ParentHamiltonian/BlockGroundSpaceMapContinuity.lean` (2026-10-02).
-- **Abstraction:** `continuous_localTermES_of_parentInteractionES_family`,
-  `continuous_openParentHamiltonianES_of_parentInteractionES_family`, and
-  `continuous_parentHamiltonianES_of_parentInteractionES_family` take
-  continuity of the canonical interaction as their analytic input.
+- **Abstraction:** `continuous_parentInteractionES_family_of_groundProjection`,
+  `continuous_localTermES_family_of_groundProjection`,
+  `continuous_openParentHamiltonianES_family_of_groundProjection`, and
+  `continuous_parentHamiltonianES_family_of_groundProjection` take
+  continuity of the local ground-space projection as their analytic input.
 - **Notes:** both tensor-family arguments use the same finite-volume proof;
   the injectivity and simultaneous-word-span conditions are confined to
   the construction of the local projector.

@@ -3,9 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.GroundSpaceMapContinuity
-import TNLean.MPS.ParentHamiltonian.BlockSumIntervalSpaces
-import TNLean.MPS.SharedInfra.WordTupleGauge
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceContinuity
 
 /-!
 # Continuity of ground spaces for several tensor blocks
@@ -53,16 +51,6 @@ noncomputable def blockGroundSpaceMap
   LinearMap.lsum ℂ (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
     (fun j => groundSpaceMap (A j) L)
 
-/-- The joint boundary map with Hilbert–Schmidt coordinates on the diagonal virtual boundaries.
-Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-noncomputable def blockGroundSpaceMapES
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
-    EuclideanSpace ℂ ((j : Fin r) × (Fin (dim j) × Fin (dim j))) →L[ℂ]
-      EuclideanSpace ℂ (Cfg d L) :=
-  LinearMap.toContinuousLinearMap <|
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap.comp
-      ((blockGroundSpaceMap A L).comp blockBoundaryEquiv.toLinearMap)
-
 /-- The joint boundary map is the sum of the individual block boundary maps.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 @[simp]
@@ -88,15 +76,6 @@ theorem range_blockGroundSpaceMap
       (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
       (fun j => groundSpaceMap (A j) L) j X
 
-/-- The Hilbert realization has the sum of the physical block ground spaces as its range.
-Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem range_blockGroundSpaceMapES
-    (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
-    (blockGroundSpaceMapES A L).range = ⨆ j, groundSpaceES (A j) L := by
-  simp only [blockGroundSpaceMapES, LinearMap.coe_toContinuousLinearMap,
-    LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
-    range_blockGroundSpaceMap, Submodule.map_iSup, groundSpaceES]
-
 /-- A full simultaneous word span separates all diagonal virtual boundaries by trace pairing.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
 theorem blockGroundSpaceMap_injective_of_wordTupleSpanTop
@@ -113,37 +92,10 @@ theorem blockGroundSpaceMap_injective_of_wordTupleSpanTop
   simp_rw [Matrix.trace_mul_comm (Δ _) (Kraus.evalWord _ _)]
   exact hw
 
-/-- A full simultaneous word span makes the joint Hilbert boundary map injective.
-Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem blockGroundSpaceMapES_injective_of_wordTupleSpanTop
-    {A : (j : Fin r) → MPSTensor d (dim j)} {L : ℕ}
-    (hSpan : WordTupleSpanTop A L) : Function.Injective (blockGroundSpaceMapES A L) := by
-  exact (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
-    ((blockGroundSpaceMap_injective_of_wordTupleSpanTop hSpan).comp
-      blockBoundaryEquiv.injective)
-
-/-- The joint boundary map varies continuously with a fixed finite family of tensor blocks.
-Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_blockGroundSpaceMapES_family
-    {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
-    (hA : ∀ j, Continuous fun x => A x j) (L : ℕ) :
-    Continuous fun x => blockGroundSpaceMapES (A x) L := by
-  apply continuous_clm_apply.2
-  intro y
-  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toContinuousLinearEquiv.continuous.comp
-  simp only [LinearMap.comp_apply, blockGroundSpaceMap_apply]
-  apply continuous_finsetSum _
-  intro j _
-  exact continuous_pi fun σ => by
-    simpa only [groundSpaceMap_apply] using
-      ((continuous_evalWord_family (fun x => A x j) (hA j) (List.ofFn σ)).matrix_mul
-        (continuous_const (y := (blockBoundaryEquiv (dim := dim)).toLinearMap y j))).matrix_trace
-
 /-- At a common simultaneous injectivity length, the projector onto the sum of the block ground
 spaces is continuous.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_iSup_groundSpaceES_starProjection_family
+theorem continuous_iSup_groundSpaceES_starProjection_of_injective_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
@@ -158,7 +110,7 @@ theorem continuous_iSup_groundSpaceES_starProjection_family
 /-- The ground-space projector of a weighted block sum is continuous when the block family is
 continuous and simultaneously injective. Nonzero weights need not vary continuously.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j)
@@ -167,7 +119,7 @@ theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     Continuous fun x =>
       (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L).starProjection := by
   simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup _ _ (hμ _) L] using
-    continuous_iSup_groundSpaceES_starProjection_family A hA L hInj
+    continuous_iSup_groundSpaceES_starProjection_of_injective_family A hA L hInj
 
 /-- The canonical parent interaction of a weighted block sum varies continuously at a common
 simultaneous injectivity length.
@@ -179,17 +131,10 @@ theorem continuous_parentInteractionES_toTensorFromBlocks_family
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x => LinearMap.toContinuousLinearMap
-      (parentInteractionES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L) := by
-  have hP := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
-    A hA μ hμ L hInj
-  have hDiff : Continuous fun x =>
-      (1 : EuclideanSpace ℂ (Cfg d L) →L[ℂ] EuclideanSpace ℂ (Cfg d L)) -
-        (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L).starProjection :=
-    continuous_const.sub hP
-  convert hDiff using 1
-  ext x v
-  simp only [parentInteractionES, Submodule.starProjection_orthogonal]
-  rfl
+      (parentInteractionES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L) :=
+  continuous_parentInteractionES_family_of_groundProjection _ L
+    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+      A hA μ hμ L hInj)
 
 /-- The open-chain parent Hamiltonian of a weighted block sum is continuous at fixed range and
 volume.
@@ -202,8 +147,9 @@ theorem continuous_openParentHamiltonianES_toTensorFromBlocks_family
     (hLN : L ≤ N) (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x => LinearMap.toContinuousLinearMap
       (openParentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L N) :=
-  continuous_openParentHamiltonianES_of_parentInteractionES_family _ hLN
-    (continuous_parentInteractionES_toTensorFromBlocks_family A hA μ hμ L hInj)
+  continuous_openParentHamiltonianES_family_of_groundProjection _ hLN
+    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+      A hA μ hμ L hInj)
 
 /-- The periodic parent Hamiltonian of a weighted block sum is continuous at fixed range and volume.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
@@ -215,8 +161,9 @@ theorem continuous_parentHamiltonianES_toTensorFromBlocks_family
     (hLN : L ≤ N) (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x => LinearMap.toContinuousLinearMap
       (parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L N) :=
-  continuous_parentHamiltonianES_of_parentInteractionES_family _ hLN
-    (continuous_parentInteractionES_toTensorFromBlocks_family A hA μ hμ L hInj)
+  continuous_parentHamiltonianES_family_of_groundProjection _ hLN
+    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+      A hA μ hμ L hInj)
 
 /-- Injectivity of the joint boundary map at a fixed length is an open condition on a continuous
 block family.
@@ -264,18 +211,25 @@ theorem blockGroundSpaceMapES_injective_iff
     (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
     Function.Injective (blockGroundSpaceMapES A L) ↔
       Function.Injective (blockGroundSpaceMap A L) := by
+  have hEq (v) : blockGroundSpaceMapES A L v =
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+        (blockGroundSpaceMap A L (blockBoundaryEquiv v)) := by
+    ext σ
+    simp only [blockGroundSpaceMapES_apply, WithLp.coe_symm_linearEquiv,
+      PiLp.toLp_apply, blockGroundSpaceMap_apply, Finset.sum_apply]
+    rfl
   constructor
   · intro h X Y hXY
     apply blockBoundaryEquiv.symm.injective
     apply h
-    change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
-        (blockGroundSpaceMap A L (blockBoundaryEquiv (blockBoundaryEquiv.symm X))) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
-        (blockGroundSpaceMap A L (blockBoundaryEquiv (blockBoundaryEquiv.symm Y)))
+    rw [hEq, hEq]
     simp only [LinearEquiv.apply_symm_apply, hXY]
-  · intro h
-    exact (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective.comp
-      (h.comp blockBoundaryEquiv.injective)
+  · intro h x y hxy
+    apply blockBoundaryEquiv.injective
+    apply h
+    apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.injective
+    rw [hEq, hEq] at hxy
+    exact hxy
 
 /-- For trace-preserving blocks, joint boundary injectivity persists at every larger length.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/

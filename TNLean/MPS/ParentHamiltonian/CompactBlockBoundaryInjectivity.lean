@@ -46,7 +46,7 @@ theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanT
     (by
       intro x hx
       obtain ⟨L, hL⟩ := hSpan x hx
-      have hInj := blockGroundSpaceMapES_injective_of_wordTupleSpanTop hL
+      have hInj := blockGroundSpaceMapES_injective_of_wordTupleSpanTop (A x) hL
       have hnear : ∀ᶠ y in 𝓝 x, Function.Injective (blockGroundSpaceMapES (A y) L) :=
         (isOpen_setOf_blockGroundSpaceMapES_injective_family A hA L).mem_nhds hInj
       refine ⟨1, zero_lt_one, L, hnear.mono ?_⟩
