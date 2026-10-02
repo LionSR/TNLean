@@ -52,7 +52,7 @@ is at most $\varepsilon$ once $2^{k+1}\ge\xi\log(CN/\varepsilon)$, with
 $\xi=-1/\log t$ for a bound $0<t<1$ on the moduli of the subleading
 eigenvalues of the transfer map and $C$ depending on $A$ and $t$. For every
 number $M$ of blocks such a $k$ exists, and the least one satisfies
-$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$. These statements remain, as
+$k\le\log_2\max(1,\xi\log(CN/\varepsilon))$. These statements remain, as
 the case of injective two-site blocked tensors.
 
 \section{Resolution of the injectivity restriction}
@@ -76,7 +76,7 @@ with block length $q$. The approximation error of $A$ applies directly, so no
 gauge data need to be transported to $B$: there is $C>0$, independent of $s$,
 such that the error is at most $\varepsilon$ once
 $s2^{k+1}\ge\xi\log(CN/\varepsilon)$, and the least such $k$ satisfies
-$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$.
+$k\le\log_2\max(1,\xi\log(CN/\varepsilon))$.
 
 For an arbitrary normal tensor $A$ with $D\ge1$, the gauge of eq.~(5) is
 reached by a gauge transformation and a rescaling, which changes the
@@ -84,7 +84,7 @@ normalized state by a phase only, and the blocked tensors of the gauged tensor
 are injective from some length $L$ on. Hence there are $s_0\ge1$, $\xi>0$ and
 $C>0$ such that for every $s\ge s_0$, every $\varepsilon>0$ and every $M\ge1$
 some network with sites of dimension $d^s$ and $k+1$ isometry layers,
-$k\le\max(0,\log_2(\xi\log(CN/\varepsilon)))$, has error at most
+$k\le\log_2\max(1,\xi\log(CN/\varepsilon))$, has error at most
 $\varepsilon$ against $\ket{\phi_N}$, $N=Ms2^{k+1}$. Every normal tensor is
 covered.
 
@@ -100,11 +100,12 @@ dimension $d^s$ of the sites of the network grows with $N/\varepsilon$.
 The unequal blocks of the depth bound for every chain length (the note on
 divisible lengths) let the last block have length $q'$ with $q\le q'<2q$, and
 the trees on leaves of unequal widths of the preparation with measurements (the
-note on the tree circuit with measurements) cut a block of any length into
-$2^{h+1}$ leaves of at least $2s$ sites. A network whose trees have leaves of
-unequal widths, with finest isometries from $\mathbb{C}^{D^2}$ to the sites of a leaf,
-would cover every $N$; it is not translation invariant at the finest level,
-and it extends the definition of the network. This is left open.
+note on the tree circuit with measurements) cut, for every $h\ge0$, a block of
+$\ell\ge2^{h+2}s$ sites into $2^{h+1}$ leaves of at least $2s$ sites. A network
+whose trees have leaves of unequal widths, with finest isometries from
+$\mathbb{C}^{D^2}$ to the sites of a leaf, would cover every $N$; it is not
+translation invariant at the finest level, and it extends the definition of the
+network. This is left open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
