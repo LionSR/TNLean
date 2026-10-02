@@ -19,7 +19,12 @@
 
 The gap theorem in Ref.~\cite[Section~IV.C, Gaps]{Cirac2021Matrix},
 local source lines~2183--2187, asserts a uniform positive gap for MPS
-parent Hamiltonians, including those of block-injective tensors.
+parent Hamiltonians, including those of block-injective tensors. The
+assertion has no interaction-range qualifier and is false at shorter ranges;
+the explicit canonical counterexample is documented in
+\path{docs/paper-gaps/cpgsv21_short_range_parent_gap.tex}. This note resolves
+the comparison at the sufficient ranges below, without narrowing the
+source definition of a parent interaction.
 For at least two canonical blocks, Ref.~\cite[Theorem~12]{PerezGarcia2007MPSReps}
 gives the explicit interaction condition
 \begin{align}
@@ -173,6 +178,17 @@ No larger C1 length is substituted during this step. The formalized conclusion
 is consequently a uniform periodic gap over every chain length at each range in
 (\ref{eq:block_range_source_bound}), with no normalization hypothesis on the
 original blocks. The earlier chosen-range restriction is resolved.
+
+\section{An automatic sufficient range}
+
+For a canonical tensor of positive bond dimension $D$, quantum Wielandt and
+block separation supply $S>0$ with $S+1\leq3D^5$ for its distinct normal
+representatives. Thus every range $R\geq3D^5$ has a positive periodic gap
+uniform over all chain lengths, with no separately supplied simultaneous
+span. The same conclusion holds for every fixed positive parent interaction
+at that range. This is a sufficient dimension bound; it does not replace the
+smaller admissible threshold $S+1$ when $S$ is known. The declarations are in
+\path{TNLean/MPS/ParentHamiltonian/Martingale/CanonicalGapAtBoundedRange.lean}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

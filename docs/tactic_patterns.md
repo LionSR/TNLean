@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### compact finite-volume kernel gaps — promoted
+- **Pattern:** obtain a positive lower norm bound on a finite-dimensional
+  kernel complement at each parameter, preserve half of it in a neighborhood
+  using continuity of the operator and its kernel projection, and pass to a
+  finite subcover of a compact parameter set.
+- **Seen:** the finite-volume argument in
+  `TNLean/MPS/ParentHamiltonian/PeriodicShortGapContinuity.lean` and the
+  fixed-injectivity-length extension in
+  `TNLean/MPS/ParentHamiltonian/CompactNormalParentGap.lean`, the multiblock
+  fixed-volume theorem in `BlockPeriodicGroundSpaceContinuity.lean`, and the
+  local positive-interaction comparison in `CompactParentInteractionGap.lean`
+  (2026-10-02).
+- **Abstraction:**
+  `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
+  `TNLean/Algebra/CompactKernelGap.lean`.
+- **Notes:** the bound follows from finite dimensionality; positivity,
+  self-adjointness, and a supplied pointwise gap are unnecessary.
+
+
 ### positivity of the cyclic step-orbit length — promoted
 - **Pattern:** derive `0 < m / m.gcd p` from `0 < m`.
 - **Seen:** four uses across `FinStepOrbit.lean`, `SectorPhaseWord.lean`, and
@@ -2445,6 +2464,20 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the generic form also avoids unfolding the concrete four-level
   matrix-unit tensor during alphabet comparison. The count remains below
   the rule-of-three threshold.
+
+### positive interaction subfamilies — candidate (2026-10-02)
+
+- **Pattern:** Express an interval interaction sum as a filtered sum, then
+  apply `Finset.sum_le_sum_of_subset_of_nonneg` and
+  `LinearMap.nonneg_iff_isPositive` to bound it by the full interaction sum.
+- **Seen:** two instances in
+  `ParentHamiltonian/Martingale/OverlappingIntervalGap.lean`, for the prefix
+  and terminal interval Hamiltonians.
+- **Abstraction:** Mathlib already supplies the finite-sum comparison. If
+  more interval shapes require this argument, isolate the common positive
+  subfamily comparison rather than repeating the filter conversion.
+- **Notes:** Both occurrences are in one module; no new tactic is needed.
+
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,

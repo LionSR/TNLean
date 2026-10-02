@@ -1192,6 +1192,38 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     kernels therefore preserves the ground space.
 \end{proof}
 
+\begin{theorem}[A bounded range including the minimal periodic ring]
+    \label{thm:canonical_bounded_range_ground_space}
+    \lean{MPSTensor.CPSVCanonicalFormData.%
+        exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five,
+        MPSTensor.CPSVCanonicalFormData.%
+        ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le,
+        MPSTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range}
+    \leanok
+    \uses{def:cpsv_canonical_form, def:bnt_cpsv}
+    Let $A$ be a canonical tensor with positive physical dimension and
+    positive bond dimension $D$. There are distinct normal representatives
+    $(A_j)_j$ and a positive integer $R\leq3D^5$ such that, for every
+    $R\leq L\leq N$, every collection of positive operators $H_i$ with the
+    same kernels as the canonical range-$L$ parent terms satisfies
+    \[
+        \ker\Bigl(\sum_iH_i\Bigr)
+        =\operatorname{span}\{V^{(N)}(A_j):j\}.
+    \]
+    The equality includes $N=L=R$, and in particular holds at
+    $N=L=3D^5$ for the canonical parent Hamiltonian. Repeated copies of
+    the normal representatives are allowed in $A$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:cpsv_bnt_sharp_span_ambient_cap,
+        thm:ph_canonical_block_closure}
+    The representative bond dimensions sum to at most $D$. The simultaneous
+    span estimate supplies $S>0$ with $S+1\leq3D^5$. Take $R=S+1$ and apply
+    periodic closure for canonical tensors at every $R\leq L\leq N$.
+\end{proof}
+
 \begin{theorem}[Local spaces of canonical representatives]
     \label{thm:ph_canonical_representative_local_spaces}
     \lean{MPSTensor.CPSVCanonicalFormData.groundSpace_eq_iSup_representatives}
