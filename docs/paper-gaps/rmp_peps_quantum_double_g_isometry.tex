@@ -5,7 +5,7 @@
 \input{command}
 \title{Quantum-Double PEPS: Normalization, Representations and Scope}
 \author{}
-\date{2026-10-02}
+\date{2026-10-03}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{resolved}
@@ -63,6 +63,39 @@ this is the source's Lemma~``lemma:iso:iso-stable-under-concat''.\footnote{Sourc
     traceability: \path{Papers/1001.3807/paper_v3.tex}, lines
     1704--1716.}
 
+\subsection{The primal toric-code tensor}
+For the primal tensor in Appendix~A of \cite{Cirac2021Matrix}, specialize to
+$G=\mathbb Z_2$ and write the group operation additively. Its map $P$ from
+the four virtual legs to the four physical edge spins is
+\begin{align}
+    (Px)(g_1,g_2,g_3,g_4)
+    &=x(g_1+g_2,\ g_2+g_3,\ g_4+g_3,\ g_1+g_4).
+\end{align}
+Let $Z\ket a=(-1)^a\ket a$ and $S=Z^{\otimes4}$ on the virtual legs.
+The invariant subspace of the representation of $\mathbb Z_2$ generated
+by $S$ consists of vectors supported on even virtual configurations
+$t+r+b+l=0$. Each such configuration has exactly two physical preimages
+under the displayed label map, whereas odd configurations have none.
+Consequently,
+\begin{align}
+    PS&=P,&
+    P^\dagger P&=2\Pi_{\mathrm{even}},&
+    \Pi_{\mathrm{even}}&=\frac{I+S}{2}.
+    \label{eq:rmp_peps_toric_primal_gram}
+\end{align}
+Thus $P$ is injective on the invariant subspace and satisfies
+$\langle Px,Py\rangle=2\langle x,y\rangle$ there; $P/\sqrt2$ is
+an isometry onto its range. This is a local $\mathbb Z_2$ consequence
+of the displayed primal tensor, with its character representation
+on the virtual legs. The general-group primal symmetry is discussed
+below.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2451--2465,
+    equation \texttt{eq:app:tcode-rep-primal}. Formal declarations in
+    \path{TNLean/PEPS/Examples/ToricCodePrimal.lean}:
+    \leanid{TNLean.PEPS.toricCodePrimalVirtualRep_generator},
+    \leanid{TNLean.PEPS.toricCodePrimalMatrix_conjTranspose_mul_self},
+    and \leanid{TNLean.PEPS.isGIsometric_toricCodePrimalTensor}.}
+
 \section{Representations}
 The formal notions of $G$-injectivity and $G$-isometry take the
 representation as a parameter and do not require it to be semi-regular
@@ -119,7 +152,10 @@ one tensor.
 \begin{enumerate}
     \item The primal tensor's virtual symmetry under every irreducible
     representation $\pi$ is formalized as the single-tensor identity
-    $A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=A_{t,r,b,l}\,\mathbb 1$
+    \[
+        A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}
+        =A_{t,r,b,l}\,\mathbb 1
+    \]
     for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support,
     and for the contracted network on the torus: the virtual string that
     multiplies $\pi(g)$ for each bond with label $g$ it crosses can be
