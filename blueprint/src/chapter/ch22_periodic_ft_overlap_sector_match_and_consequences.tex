@@ -879,6 +879,37 @@
     phase class, contrary to their choice.
 \end{proof}
 
+\begin{theorem}[Global similarity between matched block sums]
+    \label{thm:periodic_matched_blocks_global_similarity}
+    \lean{MPSTensor.toTensorFromBlocks_conj_of_matched_blocks}
+    \leanok
+    \uses{def:block_diagonal_tensor}
+    Let $e$ be a bijection between the blocks of $\bigoplus_k\mu_kA_k$ and of
+    $\bigoplus_t\mu'_tB_t$ with $D_k=D'_{e(k)}$, and suppose
+    $\mu_kA_k^i=\mu'_{e(k)}X_{e(k)}B_{e(k)}^iX_{e(k)}^{-1}$ for invertible
+    $X_t$. Then there are matrices $Y$ and $Y'$ with $YY'=\Id$, $Y'Y=\Id$, and
+    \begin{align}
+        \bigoplus_k\mu_kA_k^i & =Y\Bigl(\bigoplus_t\mu'_tB_t^i\Bigr)Y'. \notag
+    \end{align}
+    If every $X_t$ is unitary, then $Y'=Y^\dagger$. This is the matrix
+    $Y=\bigoplus_jT_j\otimes Y_j$ of
+    \cite[line~690]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Let $\Pi$ be the permutation matrix carrying the summand $t=e(k)$ of
+    $\bigoplus_t$ to the summand $k$ of $\bigoplus_k$, and set
+    $Y=\Pi\bigl(\bigoplus_tX_t\bigr)$ and
+    $Y'=\bigl(\bigoplus_tX_t^{-1}\bigr)\Pi^\dagger$. Then $YY'=Y'Y=\Id$, and
+    \begin{align}
+        Y\Bigl(\bigoplus_t\mu'_tB_t^i\Bigr)Y'
+         & =\Pi\Bigl(\bigoplus_t\mu'_tX_tB_t^iX_t^{-1}\Bigr)\Pi^\dagger
+        =\bigoplus_k\mu_kA_k^i. \notag
+    \end{align}
+    For unitary $X_t$, $X_t^{-1}=X_t^\dagger$, so $Y'=Y^\dagger$.
+\end{proof}
+
 \begin{definition}[Multiplicities grouped by phase class]
     \label{def:periodic_grouped_multiplicities}
     \lean{MPSTensor.MPVPhaseClassData.toSectorDecomposition}
@@ -902,7 +933,8 @@
     \label{thm:periodic_grouped_unitary}
     \lean{MPSTensor.MPVPhaseClassData.exists_unitary_sectorDecomposition}
     \leanok
-    \uses{def:periodic_grouped_multiplicities,def:periodic_tensor,def:same_mpv2_pos}
+    \uses{def:periodic_grouped_multiplicities,def:periodic_tensor,def:same_mpv2_pos,
+        def:block_diagonal_tensor}
     Let $A_k$ be left-canonical periodic blocks and let every $\mu_k$ be
     nonzero. Set $T^i=\bigoplus_k\mu_k A_k^i$.
     There are phases $\xi_{j,q}$ in
@@ -920,7 +952,8 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_phase_class_unitary_match,thm:coisometry_reconstruction_same_mpv_pos}
+    \uses{thm:periodic_phase_class_unitary_match,thm:coisometry_reconstruction_same_mpv_pos,
+        thm:periodic_matched_blocks_global_similarity}
     Choose the phases and unitaries of
     Theorem~\ref{thm:periodic_phase_class_unitary_match}. Multiplying
     (\ref{eq:periodic_phase_class_unitary}) by $\mu_{e(j,q)}$ and using
@@ -947,8 +980,8 @@
     $Y^\dagger$:
     \begin{align}
         V^{(N)}(T)_\sigma
-         & =\tr\bigl(YP^{\sigma_1}Y^\dagger\cdots YP^{\sigma_N}Y^\dagger\bigr)
-        =\tr\bigl(P^{\sigma_1}\cdots P^{\sigma_N}\bigr)
+         & =\tr\bigl(YP^{\sigma_0}Y^\dagger\cdots YP^{\sigma_{N-1}}Y^\dagger\bigr)
+        =\tr\bigl(P^{\sigma_0}\cdots P^{\sigma_{N-1}}\bigr)
         =V^{(N)}(P)_\sigma. \notag
     \end{align}
 \end{proof}
@@ -957,7 +990,7 @@
     \label{thm:periodic_ungrouped_weight_moduli}
     \lean{MPSTensor.weight_norm_eq_one_of_block_sum_sameMPV₂Pos}
     \leanok
-    \uses{def:periodic_tensor,def:same_mpv2_pos}
+    \uses{def:periodic_tensor,def:same_mpv2_pos,def:block_diagonal_tensor}
     Let $T^i=\bigoplus_k\mu_k A_k^i$, where the $A_k$ are left-canonical
     periodic blocks and every $\mu_k$ is nonzero. Let $Q$ be a decomposition
     with pairwise non-repeated left-canonical periodic basis blocks and

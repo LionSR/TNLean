@@ -14,17 +14,20 @@ into one tensor of physical dimension `d^n`: its matrix at the word `σ` is the 
 `A₀^{σ₀} ⋯ A_{n-1}^{σ_{n-1}}`. For a constant chain this is the blocked tensor
 `MPSTensor.blockTensor A n`.
 
-**Scope restriction (common bond dimension):** applied to the inhomogeneous matrix product
-states of arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS", which have
-"bond dimension at most `D`" varying along the ring, `MPSChainTensor.blockTensor` takes every
-site with the same square bond dimension `D`. Documented in
-`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+The inhomogeneous matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous
+short-range correlated MPS", have "bond dimension at most `D`" varying along the ring; padding
+their rectangular matrices with zeros (`VaryingBondChain.zeroPad`) gives a chain
+with the common bond dimension `D` and the same state, to which the blocking here applies.
 
 ## Main declarations
 
 * `MPSChainTensor.blockTensor` — the blocked tensor of a site-dependent chain.
 * `MPSChainTensor.blockTensor_const` — for a constant chain it is `MPSTensor.blockTensor`.
 * `MPSChainTensor.eval_eq_prod_ofFn` — the ordered product along a chain as a list product.
+
+## References
+
+* arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS".
 -/
 
 open scoped Matrix

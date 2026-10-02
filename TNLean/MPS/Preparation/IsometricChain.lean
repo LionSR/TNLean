@@ -592,7 +592,7 @@ theorem coeff_eq_eval_zeroPad (B : OBCChainTensor d D N) (σ : Fin N → Fin d) 
     · intro α _ hα
       have hrow : IsRowSupportedBelow 1 (zeroPad B 0 (σ 0)) := by
         intro a b ha
-        simp [zeroPad, B.left_dim, show ¬ a.val < 1 by omega]
+        simp [zeroPad, Matrix.zeroPad, B.left_dim, show ¬ a.val < 1 by omega]
       rw [Matrix.diag_apply, eval_succ]
       exact (hrow.mul _) α α (Nat.one_le_iff_ne_zero.mpr fun h => hα (Fin.ext h))
     · simp
@@ -619,10 +619,10 @@ theorem zeroPad_ofSupported (b : Fin (N + 1) → ℕ) (hb : ∀ k, b k ≤ D) (h
   ext α β
   by_cases hα : α.val < b p.castSucc
   · by_cases hβ : β.val < b p.succ
-    · simp only [zeroPad]
+    · simp only [zeroPad, Matrix.zeroPad]
       exact (dite_eq_left hα).trans ((dite_eq_left hβ).trans rfl)
-    · simp [zeroPad, ofSupported, hα, hβ, hcol p i α β (not_lt.mp hβ)]
-  · simp [zeroPad, ofSupported, hα, hrow p i α β (not_lt.mp hα)]
+    · simp [zeroPad, Matrix.zeroPad, ofSupported, hα, hβ, hcol p i α β (not_lt.mp hβ)]
+  · simp [zeroPad, Matrix.zeroPad, ofSupported, hα, hrow p i α β (not_lt.mp hα)]
 
 /-- A site of `ofSupported` whose square matrices are isometric on the block
 satisfies `∑_i A_i^† A_i = 1`. -/
@@ -740,7 +740,7 @@ theorem exists_isometric_chain_coeff {n : ℕ} (B : OBCChainTensor d D (n + 1)) 
     refine Fin.cases ?_ (fun p => ?_) k
     · rw [hb0, B.left_dim]
     · refine hbc p _ fun i α γ hγ => ?_
-      simp [zeroPad, not_lt.mpr hγ]
+      simp [zeroPad, Matrix.zeroPad, not_lt.mpr hγ]
   have hout : ∀ τ, eval Q τ *ᵥ r' = (c * B.coeff τ) • basisVecZero D := fun τ => by
     have hsupp := isSupportedBelow_eval_mulVec b Q hrow r' hr' τ
     rw [hb0] at hsupp

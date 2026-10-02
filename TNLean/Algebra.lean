@@ -45,6 +45,7 @@ import TNLean.Algebra.FinTupleEquiv
 import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupUnitaryAverage
+import TNLean.Algebra.FinsetEnumeration
 import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum
 import TNLean.Algebra.FixedPointFreeInvolutionSign

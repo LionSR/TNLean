@@ -266,6 +266,15 @@ theorem isRoundsImplementationOn_nil (E : Set (Cfg d N → ℂ)) :
   rw [outputs_nil, Set.mem_singleton_iff] at hw
   exact ⟨1, by rw [hw, one_mulVec, one_smul]⟩
 
+/-- A round implementing a matrix is a sequence of rounds implementing it. -/
+theorem IsImplementationOn.isRoundsImplementationOn {R : MeasurementRound d N}
+    {E : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (h : R.IsImplementationOn E W) : IsRoundsImplementationOn [R] E W := by
+  intro v hv w hw
+  obtain ⟨c, u, hu, rfl⟩ := h.exists_mem_outputs (Rs := []) hv hw
+  rw [outputs_nil, Set.mem_singleton_iff] at hu
+  exact ⟨c, by rw [hu]⟩
+
 theorem IsRoundsImplementationOn.mono {Rs : List (MeasurementRound d N)}
     {E E' : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
     (h : IsRoundsImplementationOn Rs E W) (hE : E' ⊆ E) : IsRoundsImplementationOn Rs E' W :=

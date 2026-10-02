@@ -2511,6 +2511,23 @@ currently one occurrence, so no general declaration is warranted.
   `exists_abs_norm_mpvState_blockSum_weight_sq_sub_le` in
   `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean`.
 
+### second-order trace bound for an element compressed by an idempotent — candidate
+- **Pattern:** for `T` with `e T e = α e`, `e` idempotent of trace one, `‖T - e‖ ≤ δ` and
+  `1 - α` (or `1 - ‖α‖`) at most a multiple of `δ²`: put `Z = α⁻¹ T - e`, prove `e Z e = 0`,
+  `T = α (e + Z)` and `‖Z‖ ≤ c₄ δ`, bound the blocks of `Z` by `z = c₅ (c₄ δ) c₅` with
+  `c₅ = ‖e‖ + ‖1 - e‖`, apply `IsIdempotentElem.norm_trace_add_pow_sub_le_of_le`, and absorb
+  `α^M` through `one_add_mul_le_pow`, with constants `zc = c₅⁴ c₄²` and
+  `E₀ = K (‖e‖ + 3 ‖1 - e‖)`.
+- **Seen:** two occurrences across two files (2026-10-02):
+  `exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq` in
+  `TNLean/MPS/Preparation/SecondOrderOverlap.lean` (complex `α`, conclusion on
+  `1 - ‖tr T^M‖`) and `IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq` in
+  `TNLean/Algebra/IdempotentTracePerturbation.lean` (real `α ≤ 1`, conclusion on
+  `‖tr T^M - 1‖`).
+- **Notes:** the second is the abstracted form for real `α`. Generalizing it to complex `α`
+  with `‖α‖ ≤ 1`, `1 - ‖α‖ ≤ δ²` and `‖1 - α‖ ≤ δ`, concluding on `1 - ‖tr T^M‖`, would let
+  the normal case call it and remove the first copy.
+
 ### Adjoint reversal of an orthogonal-projector error — candidate
 - **Pattern:** replace the norm of a projector product minus a self-adjoint
   projector by the norm of its adjoint, reverse the product, and reverse the

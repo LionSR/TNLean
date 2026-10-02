@@ -18,6 +18,11 @@ left canonicality, as in lines 807–810.
 These results take the displayed orbit action as input. They do not construct
 the periodic decomposition of a blocked tensor or its equal-case multiplicity
 gauge; those are the preceding steps of the corrected forward theorem.
+
+**Local fix (orbit wraparound):** the local phases come from
+`Fin.exists_stepOrbit_phases`, which advances the orbit coordinate modulo
+`m / gcd m p`; the source's `k_{u+p} = k_u + 1` (lines 801–804) fails at the
+largest coordinate. See `docs/paper-gaps/dccsp17_orbit_phase_wraparound.tex`.
 -/
 
 open scoped BigOperators Matrix

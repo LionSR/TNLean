@@ -1052,6 +1052,24 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 - **First PR**: the whole change in one pull request, root build over the
   ≈44 importers, checkdecls.
 
+## D18. One-site long-range gates and register gates kept as two layer stacks  —  duplication, impact 3/10, effort 4/10
+- **Status**: open (recorded in the review of #8492)
+- **Evidence**: `MPSPreparation.RegisterGate` at `s = 1`
+  (`MPS/Preparation/RegisterGates.lean`) is the same object as
+  `MPSPreparation.LongRangeGate` (`MPS/Preparation/LongRangeGates.lean`): a
+  gate on the sites `a` and `a + 2L + 1`, with the same stretch, interior and
+  zone, applied by a forward chain, a local gate and a backward chain. Both
+  files carry the layer machinery (all-gate chain lists, site-permutation
+  lemmas, the conjugation identity). The depths differ: `LongRangeGate` merges
+  the local gate into the backward round and has depth `5`, while
+  `RegisterGate` applies it in a round of its own and has depth `4s + K + 2`.
+- **Remediation**: derive the one-site layer of `LongRangeGates` (and its use
+  in `TreeMeasurement`) from `RegisterGate` at `s = 1`, after merging the local
+  circuit into the last forward or first backward round so that the `s = 1`
+  depth matches.
+- **First PR**: merge the local round into the backward rounds of
+  `RegisterGate.rounds`, then restate `LongRangeGate.rounds` through it.
+
 ## Honorable mentions (ranks 11-12)
 
 - **D11 (plumbing tax)** — 486 `finCongr`/`Fin.cast` sites in 91 files;
