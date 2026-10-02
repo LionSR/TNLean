@@ -3702,6 +3702,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   `WindowGHZ.lean`.
 
 
+### Scalar word-trace identities for Ising compression — candidate
+
+- **Pattern:** introduce a local identity
+  `trace (evalWord (c • A) w) = c ^ w.length * trace (evalWord A w)`
+  by `Kraus.evalWord_smul`, `Matrix.trace_smul`, and `smul_eq_mul`, then
+  use it to simplify the traces of the weighted target family.
+- **Seen:** the local `hs` in `IsingWeightedTwist.lean` and `hscale` in
+  `IsingThreeObjectTwist.lean` (2026-10-02).
+- **Abstraction (proposed):** a word-trace form of the existing scalar word
+  evaluation lemma, in QICLean beside `Kraus.evalWord_smul` if another
+  development needs the same statement.
+- **Notes:** two occurrences in two files, below the promotion threshold.
+  The three-object calculation also needs simplification of the finite
+  dependent dimensions before rewriting the trace expressions.
+
 ## Rejected
 
 ### scalar-unit equality by coercion and field cancellation — rejected

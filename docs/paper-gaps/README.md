@@ -38,6 +38,13 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   unit laws derived from it fail there as well, and that the empty chain is
   excluded as a degenerate reading.
 
+For the project Ising bond-object twist motivated by arXiv:1606.00608:
+
+- `ising_three_object_twist_scope.tex` records the four channels of the
+  forty-dimensional local product and distinguishes this compression from
+  the unformalized literal round-45B boundary tensors of dimensions
+  forty-eight and sixty-four.
+
 For the Kitaev chain of arXiv:2011.12127, Appendix A:
 
 - `rmp_kitaev_chain_bosonic_scope.tex` records that the review and
