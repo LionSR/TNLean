@@ -252,26 +252,24 @@ theorem isCircuitOn_pairLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) (hr : ∀ k, 
       (hW k).isCircuitOn (pairSite_injective hN hr k) fun i j h => pairSite_succ hN hr k i j h)
       _).mono_set (Set.subset_univ _)
 
-/-- **The state is the output of the two layers.** If each `U_k` implements the isometry `V_k`
-of the blocked tensor of block `k` on the placed inputs `|l, 0 ⋯ 0, r⟩` and `W_k` prepares the
-pair `|ω^k⟩` on the window `k`, then `(⊗ₖ V_k) ⊗ₖ |ω^k⟩ = (⊗ₖ U_k) (⊗ₖ W_k) |0 ⋯ 0⟩`. The
-tensors of the chain `A` may depend on the site.
+/-- **The state is the output of the two layers**, for any matrices on the blocks. If each `U_k`
+implements a matrix `X_k : ℂ^{D²} → ℂ^{d^{ℓ k}}` on the placed inputs `|l, 0 ⋯ 0, r⟩` and `W_k`
+prepares the pair `|ω^k⟩` on the window `k`, then `(⊗ₖ X_k) ⊗ₖ |ω^k⟩ = (⊗ₖ U_k) (⊗ₖ W_k) |0 ⋯ 0⟩`.
 
 arXiv:2307.01696, eqs. (10), (11), and (12), and the paragraph "Inhomogeneous short-range
 correlated MPS". -/
-theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
+theorem blockMatVector_pairFamilyVector_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     (hr : ∀ k, r₁ + r₁ ≤ ℓ k) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
-    (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ)
-    {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
+    (X : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ)
+    (ω : Fin M → Fin D × Fin D → ℂ) {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
     (hU : ∀ c : Fin M → Fin D × Fin D, pairFamilyState ω c ≠ 0 → ∀ k τ,
       U k τ (blockInputCfg hd (ℓ k) dig (c k).1 (c k).2) =
-        polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
-          (finProdFinEquiv (c k)))
+        X k ((decodeBlockEquiv d (ℓ k)).symm τ) (finProdFinEquiv (c k)))
     {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
     (hW : ∀ k u, W k u (fun _ => ⟨0, hd⟩) =
       Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u)
     (s : Cfg d N) :
-    chainBlockIsometryState A ω hN s =
+    blockMatVector X hN (pairFamilyVector ω) s =
       ((blockLayerOp hN U * pairLayerOp hN hr W) *ᵥ
         productVector fun _ => Pi.single ⟨0, hd⟩ 1) s := by
   classical
@@ -304,8 +302,8 @@ theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     Finset.sum_image fun c _ c' _ h => siteCfg_injective hd hN hr hdig h]
   -- the value at a configuration carrying the pairs
   have hval : ∀ c : Fin M → Fin D × Fin D, g (siteCfg hd hN dig c) =
-      (∏ k, polarIsoMatrix (chainBlockTensor A hN k) (blockIndexEquiv d hN s k)
-        (finProdFinEquiv (c k))) * pairFamilyState ω c := fun c => by
+      (∏ k, X k (blockIndexEquiv d hN s k) (finProdFinEquiv (c k))) * pairFamilyState ω c := by
+    intro c
     have hext : ∀ k a b, Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0
         (twoCfg dig a b) = ω k (a, b) := fun k a b => hs.extend_apply _ _ (a, b)
     simp only [hg, pairLayerOp_mulVec_apply,
@@ -319,10 +317,36 @@ theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     have : siteCfg hd hN dig c ∘ blockSite hN k = blockInputCfg hd (ℓ k) dig (c k).1 (c k).2 :=
       funext fun j => siteCfg_blockSite hd hN dig c k j
     rw [this, hU c hc, blockIndexEquiv_apply]
-  simp_rw [hval, chainBlockIsometryState_apply]
+  simp_rw [hval, blockMatVector_apply, pairFamilyVector_apply]
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _ fun τ => by
     simp only [Equiv.piCongrRight_apply, Pi.map_apply, Equiv.apply_symm_apply]
     rfl
+
+/-- **The state is the output of the two layers.** If each `U_k` implements the isometry `V_k`
+of the blocked tensor of block `k` on the placed inputs `|l, 0 ⋯ 0, r⟩` and `W_k` prepares the
+pair `|ω^k⟩` on the window `k`, then `(⊗ₖ V_k) ⊗ₖ |ω^k⟩ = (⊗ₖ U_k) (⊗ₖ W_k) |0 ⋯ 0⟩`. The
+tensors of the chain `A` may depend on the site. This is
+`MPSPreparation.blockMatVector_pairFamilyVector_eq_mulVec` for the isometric factors.
+
+arXiv:2307.01696, eqs. (10), (11), and (12), and the paragraph "Inhomogeneous short-range
+correlated MPS". -/
+theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
+    (hr : ∀ k, r₁ + r₁ ≤ ℓ k) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
+    (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ)
+    {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
+    (hU : ∀ c : Fin M → Fin D × Fin D, pairFamilyState ω c ≠ 0 → ∀ k τ,
+      U k τ (blockInputCfg hd (ℓ k) dig (c k).1 (c k).2) =
+        polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
+          (finProdFinEquiv (c k)))
+    {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
+    (hW : ∀ k u, W k u (fun _ => ⟨0, hd⟩) =
+      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u)
+    (s : Cfg d N) :
+    chainBlockIsometryState A ω hN s =
+      ((blockLayerOp hN U * pairLayerOp hN hr W) *ᵥ
+        productVector fun _ => Pi.single ⟨0, hd⟩ 1) s := by
+  rw [chainBlockIsometryState, blockIsoVector_eq_blockMatVector]
+  exact blockMatVector_pairFamilyVector_eq_mulVec hd hN hr hdig _ ω hU hW s
 
 /-- **The state is the output of the two layers**, for one tensor and one pair: if each `U_k`
 implements the isometry `V_k` of the blocked tensor of block `k` on the placed inputs

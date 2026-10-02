@@ -275,26 +275,4 @@ theorem exists_isPreparedInDepth_inhomogeneous (d D : ℕ) :
       L hℓ hL fun k => by rw [hS]; exact hinj k
   · rw [state_eq_chainState, inner_chainBlockIsometryState_normalize hN hinj]
 
-open VaryingBondChain in
-/-- **Preparation under the approximation hypothesis.** There is `C`, depending only on `d` and
-`D`, such that if a ring of `N ≥ 1` sites is cut into `M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`,
-the chain `A` with bond dimensions at most `D` has injective blocked tensors, and its positive
-parts are approximated by pairs with error at most `δ`, then some unit vector `|ψ⟩` prepared in
-depth at most `C L` has error `ε(ψ, φ_N) ≤ δ` against the normalized state of the chain.
-
-arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": "If the finite
-correlation assumption is satisfied, then the preparation scheme consists of preparing `|Ω⟩`
-and implementing the isometry". -/
-theorem exists_isPreparedInDepth_of_isPairApproximable (d D : ℕ) :
-    ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
-      (A : VaryingBondChain d D N) (L : ℕ) (δ : ℝ),
-        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsBlockInjective A hN →
-          IsPairApproximable A hN δ →
-          ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧ IsPreparedInDepth (C * L) (fun s => ψ s) ∧
-            1 - ‖⟪ψ, (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ ≤ δ := by
-  obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous d D
-  refine ⟨C, fun ℓ N _ hN A L δ hℓ hL hB ⟨_, ω, hω, hδ⟩ => ?_⟩
-  obtain ⟨hn, hprep, herr⟩ := hC ℓ hN A ω hω L hℓ hL hB
-  exact ⟨_, hn, hprep, herr ▸ hδ⟩
-
 end MPSPreparation
