@@ -180,11 +180,13 @@ span after blocking.
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five,
         MPSTensor.IsCPSVBasisOfNormalTensors.%
-        exists_positive_wordTupleSpanTop_le_three_cap_pow_five}
+        exists_positive_wordTupleSpanTop_le_three_cap_pow_five,
+        MPSTensor.exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor}
     \leanok
     \uses{def:bnt_cpsv, def:blockwise_product_word_span}
     Let $(A_j)_{j=1}^{g}$ be a basis of normal tensors with bond dimensions
-    $D_j$. If $K>0$ and $\sum_jD_j\leq K$, then there is a positive integer
+    $D_j$, or more generally pairwise inequivalent normalized normal tensors.
+    If $K>0$ and $\sum_jD_j\leq K$, then there is a positive integer
     $L$ with $L+1\leq3K^5$, in particular $L\leq3K^5$, such that
     \begin{align}
         \spn_{\C}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=L\}
