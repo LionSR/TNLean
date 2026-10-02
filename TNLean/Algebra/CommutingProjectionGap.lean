@@ -23,7 +23,7 @@ namespace Matrix
 Source: arXiv:1010.3732, Section II.F.2, the commuting parent Hamiltonian
 following `eq:sym:omega-gamma`. -/
 theorem sum_square_sub_posSemidef_of_isStarProjection
-    {ι n : Type*} [Fintype n] [DecidableEq n]
+    {ι n : Type*} [Fintype n]
     (P : ι → Matrix n n ℂ) (s : Finset ι)
     (hP : ∀ i, IsStarProjection (P i))
     (hcomm : ∀ i j, Commute (P i) (P j)) :
