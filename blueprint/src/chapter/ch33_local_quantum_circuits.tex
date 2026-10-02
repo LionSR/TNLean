@@ -1,0 +1,332 @@
+%% ==================================================
+%% Chapter: Local quantum circuits
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), main text before
+%% Theorem 1, the caption of Fig. 1, the paragraphs "The sequential-RG
+%% circuit", "Tree-RG circuit with measurements", "Preparations using
+%% measurements" and "Long-range MPS using measurements", and the proof of
+%% Theorem 1 in the Supplemental Material; arXiv:2103.13367 (Piroli,
+%% Styliaris, Cirac), paragraphs "Quantum circuits and LOCC" and "State
+%% transformations with QC and LOCC", Definition "Transformations under QC
+%% and LOCC", and Examples 1 and 2.
+%% ==================================================
+
+\chapter{Local Quantum Circuits}
+\label{ch:local_quantum_circuits}
+
+A chain of $N$ sites of local dimension $d$ carries $(\C^d)^{\otimes N}$, with
+the computational basis labelled by the configurations of the chain. A local
+circuit is a product of layers of unitaries on disjoint pairs of neighbouring
+sites of the chain closed into a ring \cite{Malz2024Preparation}. A circuit of
+depth $T$ enlarges the set of sites on which an operator acts by at most $T$
+sites on each side, so a state that it prepares from a product state has no
+connected correlations beyond distance $2T$, and every unitary on a bounded
+number of sites is a product of a bounded number of gates on neighbouring
+sites. Measurements in the computational basis, followed by corrections on
+single sites chosen from all the outcomes \cite{Piroli2021LOCC}, prepare
+GHZ-type states in constant depth, teleport sites along chains of neighbouring
+pairs, and apply gates on pairs of distant sites or of distant registers in
+constant depth. Circuits of channels on neighbouring pairs, with ancillas
+attached and discarded site by site, obey the same light cone.
+Chapter~\ref{ch:log_depth_preparation} applies these results to the
+preparation of matrix product states.
+
+\section{Operators on sets of sites and local circuits}
+\label{sec:qc_local_circuits}
+
+\begin{definition}[Local circuit of depth $T$]
+    \label{def:qc_local_circuit}
+    \lean{QuantumCircuit.IsLocalCircuitOfDepth, QuantumCircuit.IsPreparedInDepth,
+        QuantumCircuit.Layer, QuantumCircuit.circuitOp,
+        QuantumCircuit.supportedOperators}
+    \leanok
+    A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
+    $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
+    neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
+    local circuit of depth $T$ applied to a product state.
+
+    The chain is a ring with sites $1,\dots,N$: the neighbouring pairs are
+    $\{k,k+1\}$ with indices modulo $N$, and a circuit whose gates avoid the
+    wrap-around pair $\{N,1\}$ is a circuit on the open chain. An operator
+    \emph{acts on} a set of sites $X$ if it
+    lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
+    $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
+    are at distance larger than $s$ if no site of one is within ring distance
+    $s$ of a site of the other.
+\end{definition}
+
+\begin{lemma}[Light cone of a local circuit]
+    \label{lem:qc_light_cone}
+    \uses{def:qc_local_circuit}
+    \lean{QuantumCircuit.conj_circuitOp_mem_supportedOperators}
+    \leanok
+    Let $U$ be a local circuit of depth $T$ and let $Z$ act on a set of sites
+    $X$. Then $U^\dagger ZU$ acts on the sites within ring distance $T$ of $X$.
+    This is the finite light cone of \cite[Theorem~1]{Malz2024Preparation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the layers it suffices to treat one layer $W$. Split its
+    gates into those whose pair meets $X$, with product $G$, and the others,
+    with product $H$. The gates commute, so $W=HG$. The operator $H$ is unitary
+    and acts on the complement of $X$, so it commutes with $Z$ and
+    $W^\dagger ZW=G^\dagger ZG$. The pairs of $G$ lie within distance $1$ of
+    $X$, and products and adjoints of operators acting on a set act on it.
+\end{proof}
+
+\begin{lemma}[No connected correlations beyond the light cone]
+    \label{lem:qc_light_cone_correlations}
+    \uses{lem:qc_light_cone}
+    \lean{QuantumCircuit.expect_mul_eq_of_isPreparedInDepth,
+        QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth}
+    \leanok
+    Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
+    act on sets of sites at distance larger than $2T$. Then
+    $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
+    This is the statement in the proof of
+    \cite[Theorem~1]{Malz2024Preparation} that every connected correlation of
+    such operators vanishes.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\ket{\psi}=U\ket{\pi}$ with $\ket{\pi}=\bigotimes_i\ket{v_i}$. Since
+    $UU^\dagger=\mathbb 1$,
+    $\bra{\psi}ZZ'\ket{\psi}=\bra{\pi}(U^\dagger ZU)(U^\dagger Z'U)\ket{\pi}$,
+    and by Lemma~\ref{lem:qc_light_cone} the two factors act on disjoint sets
+    of sites. For products $\bigotimes_i m_i$ and $\bigotimes_i m'_i$ with
+    disjoint supports the expectation in $\ket{\pi}$ is
+    $\prod_i\bra{v_i}m_im'_i\ket{v_i}$, and at each site one of $m_i$, $m'_i$
+    is the identity; bilinearity then gives
+    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
+        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
+    disjoint sets.
+\end{proof}
+
+\begin{lemma}[Inverses and series composition of local circuits]
+    \label{lem:qc_circuit_inverse_composition}
+    \uses{def:qc_local_circuit}
+    \lean{QuantumCircuit.Layer.adjoint, QuantumCircuit.Layer.adjoint_partialOp,
+        QuantumCircuit.Layer.adjoint_op, QuantumCircuit.circuitOp_append,
+        QuantumCircuit.circuitOp_map_adjoint_reverse,
+        QuantumCircuit.IsLocalCircuitOfDepth.mem_unitary,
+        QuantumCircuit.IsLocalCircuitOfDepth.star,
+        QuantumCircuit.IsLocalCircuitOfDepth.mul}
+    \leanok
+    For a layer $W$ with gates $g_k$, the layer with the gates $g_k^\dagger$
+    on the same pairs implements $W^\dagger$, and the same holds for the
+    product of the gates of $W$ over any subset of its pairs. If a circuit
+    has the layers $W_1,\dots,W_T$, applied in this order, and implements $U$,
+    then the circuit with the layers $W_T^\dagger,\dots,W_1^\dagger$
+    implements $U^\dagger$; the layers of a circuit implementing $U$ followed
+    by those of a circuit implementing $U'$ implement $U'U$. Consequently, a
+    local circuit of depth $T$ is unitary, and its adjoint is a local circuit
+    of depth $T$. If $U$ and $U'$ are local circuits of depths $T$ and $T'$,
+    then $U'U$ is a local circuit of depth $T+T'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $U=W_T\cdots W_1$ with layers $W_k$, then
+    $U^\dagger=W_1^\dagger\cdots W_T^\dagger$, and $W_k^\dagger$ is the layer
+    whose gates are the adjoints of the gates of $W_k$, on the same pairs. The
+    layers of $U'U$ are those of $U$ followed by those of $U'$.
+\end{proof}
+
+\begin{lemma}[Preparation from the all-zero state]
+    \label{lem:qc_preparation_from_zero}
+    \uses{def:qc_local_circuit}
+    \lean{QuantumCircuit.finKronecker_mulVec_productVector,
+        Matrix.exists_mem_unitary_eq_smul_mulVec_single_zero,
+        QuantumCircuit.productVector_pi_smul,
+        QuantumCircuit.exists_productVector_eq_smul_finKronecker_mulVec,
+        QuantumCircuit.isLocalCircuitOfDepth_finKronecker,
+        QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
+    \leanok
+    Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
+    $\mathbb{C}^d$,
+    $(\bigotimes_im_i)(\bigotimes_i\ket{v_i})=\bigotimes_im_i\ket{v_i}$, and
+    $\bigotimes_ic_i\ket{v_i}=(\prod_ic_i)\bigotimes_i\ket{v_i}$ for scalars
+    $c_i$. Every nonzero $x\in\mathbb{C}^d$ equals $c\,u\ket0$ for a unitary
+    $u$ and a scalar $c\neq0$, and every nonzero product vector is a scalar
+    multiple of $(\bigotimes_iu_i)\ket{0\cdots0}$ for one-site unitaries
+    $u_i$. A tensor product $\bigotimes_iu_i$ of one-site unitaries is a
+    local circuit of depth $2$. Every nonzero vector prepared in depth $T$ is a
+    scalar multiple of $U\ket{0\cdots0}$ for a local circuit $U$ of depth
+    $T+2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:qc_circuit_inverse_composition}
+    The first layer applies $u_k\otimes u_{k+1}$ on the pairs $\{k,k+1\}$ with
+    $k$ odd and $k<N$, and the second applies $u_N$ when $N$ is odd. A nonzero
+    product vector $\bigotimes_i\ket{v_i}$ has $v_i\neq0$ for every $i$, and
+    $\ket{v_i}=c_iu_i\ket0$ for a unitary $u_i$ whose first column is
+    $\ket{v_i}/\lVert v_i\rVert$ and $c_i=\lVert v_i\rVert$. Hence
+    $\bigotimes_i\ket{v_i}=(\prod_ic_i)(\bigotimes_iu_i)\ket{0\cdots0}$, and
+    Lemma~\ref{lem:qc_circuit_inverse_composition} composes the two
+    circuits.
+\end{proof}
+
+\begin{lemma}[Operators placed on sets of sites]
+    \label{lem:qc_placed_operators}
+    \lean{QuantumCircuit.embedOp, QuantumCircuit.embedOp_embedOp,
+        QuantumCircuit.commute_embedOp_of_disjoint,
+        QuantumCircuit.noncommProd_embedOp_apply}
+    \leanok
+    \uses{def:qc_local_circuit}
+    For a map $e$ from the $m$ sites of a chain into the $n$ sites of another
+    chain and an operator $X$ on $(\C^d)^{\otimes m}$, the operator $X$
+    \emph{placed by} $e$ has the matrix element $X_{x\circ e,\,y\circ e}$ at
+    the pair of configurations $(x,y)$ if $x$ and $y$ agree at every site
+    outside the range of $e$, and $0$ otherwise; for injective $e$ it is $X$
+    acting on the sites $e(1),\dots,e(m)$ and the identity on the other sites.
+    For an injective map $f$, placing by $f$ the operator $X$ placed by $e$
+    places $X$ by $f\circ e$. Operators placed by injective maps with disjoint
+    ranges commute. If $e_k$, $k\in K$, are injective maps with pairwise
+    disjoint ranges and $X_k$ are operators on the corresponding chains, the
+    product of the operators $X_k$ placed by $e_k$ has the matrix element
+    $\prod_{k\in K}(X_k)_{x\circ e_k,\,y\circ e_k}$ at $(x,y)$ if $x$ and $y$
+    agree at every site outside all the ranges, and $0$ otherwise.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A configuration $x$ agrees with $y$ outside the range of $f\circ e$
+    exactly when it agrees with $y$ outside the range of $f$ and $x\circ f$
+    agrees with $y\circ f$ outside the range of $e$. Placed operators with
+    disjoint ranges act on disjoint sets of sites, hence commute. The product
+    formula follows by induction on $K$: the sum over intermediate
+    configurations in the matrix product has a single nonzero term, the
+    configuration agreeing with the output on the range of the new map and
+    with the input elsewhere.
+\end{proof}
+
+\begin{lemma}[Products of matrices placed on disjoint windows]
+    \label{lem:qc_placed_configurations}
+    \lean{QuantumCircuit.placeCfg, QuantumCircuit.placeCfg_apply,
+        QuantumCircuit.placeCfg_comp, QuantumCircuit.placeCfg_apply_of_notMem,
+        QuantumCircuit.eq_placeCfg, QuantumCircuit.placeCfg_injective,
+        QuantumCircuit.injective_window, QuantumCircuit.disjoint_range_window,
+        QuantumCircuit.list_prod_embedOp_placeCfg, Matrix.mul_apply_extend}
+    \leanok
+    \uses{lem:qc_placed_operators}
+    Let $d\ge1$, and let $W_1,\dots,W_n$ be windows of $m$ sites of a chain,
+    that is maps from $\{1,\dots,m\}$ into the sites such that
+    $(p,t)\mapsto W_p(t)$ is injective; then every $W_p$ is injective and the
+    ranges of distinct windows are disjoint. For configurations $c_p$ of $m$
+    sites, the configuration with $c_p$ on the windows carries $c_p(t)$ at
+    $W_p(t)$ and $0$ at every other site. It depends injectively on
+    $(c_1,\dots,c_n)$, and every configuration with $0$ outside the windows is
+    the configuration with its own restrictions on the windows.
+    \begin{enumerate}
+        \item Let $Y_1,\dots,Y_n$ be matrices on $m$ sites with
+              $Y_p\ket{\iota_p(c)}=\sum_eV_p(e,c)\ket{o_p(e)}$ for injective
+              maps $o_p$. Then the product of the matrices $Y_p$ placed by the
+              windows maps the configuration with $\iota_p(c_p)$ on the windows
+              to $\sum_e\prod_pV_p(e_p,c_p)$ times the configuration with
+              $o_p(e_p)$ on the windows.
+        \item Let $R$ and $R'$ be injective maps into the basis of a space. If
+              $M\ket{x_0}=\sum_af(a)\ket{R(a)}$ and
+              $G\ket{R(a)}=\sum_bg(a,b)\ket{R'(b)}$ for every $a$, then
+              $GM\ket{x_0}=\sum_b\bigl(\sum_ag(a,b)f(a)\bigr)\ket{R'(b)}$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The statements on configurations are evaluations of the definition. For
+    the first item, the placed matrices act on disjoint windows, so by
+    Lemma~\ref{lem:qc_placed_operators} the matrix element of their product is
+    the product over the windows of the matrix elements of the $Y_p$, and it
+    vanishes unless the output configuration is $0$ outside the windows. The
+    second item is the matrix product written out.
+\end{proof}
+
+\begin{lemma}[Circuits inside sets of sites, in series and in parallel]
+    \label{lem:qc_parallel_circuits}
+    \lean{QuantumCircuit.Layer.IsIn, QuantumCircuit.IsCircuitOn,
+        QuantumCircuit.IsCircuitOn.mul, QuantumCircuit.IsCircuitOn.finset_noncommProd,
+        QuantumCircuit.IsPairProduct.isCircuitOn,
+        QuantumCircuit.isCircuitOn_list_prod_embedOp}
+    \leanok
+    \uses{def:qc_local_circuit, lem:qc_circuit_inverse_composition,
+        lem:qc_placed_operators}
+    A layer acts \emph{inside} a set of sites $R$ if each of its pairs is
+    contained in $R$, and $U$ is a \emph{local circuit of depth $T$ inside
+        $R$} if it is implemented by $T$ layers acting inside $R$. If $U$ and
+    $U'$ are local circuits inside $R$ of depths $T$ and $T'$, then $U'U$ is a
+    local circuit inside $R$ of depth $T+T'$. If $U_i$, $i\in I$ for a finite
+    set $I$, are pairwise commuting local circuits of depth $T$ inside
+    pairwise disjoint sets $R_i$, then their product is a local circuit of
+    depth $T$ inside $\bigcup_{i\in I}R_i$. Let $e$ be an injective map from
+    the sites of an open chain of $m$ sites into the ring with
+    $e(j+1)=e(j)+1$. If $X$ is a product of at most $K$ unitaries, each acting
+    on two neighbouring sites of the open chain, then $X$ placed by $e$ is a
+    local circuit of depth $K$ inside the range of $e$. For a list of such
+    maps $e_i$ with pairwise disjoint ranges and such products $X_i$, the
+    product of the $X_i$ placed by $e_i$ is a local circuit of depth $K$
+    inside the union of the ranges.
+\end{lemma}
+\begin{proof}
+    \leanok
+    In series the layers of $U$ are followed by those of $U'$
+    (Lemma~\ref{lem:qc_circuit_inverse_composition}). In parallel, by
+    induction on $I$, the layers of two circuits of depth $T$ inside disjoint
+    sets are merged one by one: the union of two layers acting inside disjoint
+    sets is a layer, and the circuit inside one set commutes with every layer
+    inside the other. A product of $K$ gates on neighbouring sites of the open
+    chain, placed by $e$, is the circuit whose $j$-th layer is the $j$-th gate
+    placed by $e$, padded with empty layers; the products on disjoint ranges
+    then run in parallel.
+\end{proof}
+
+\section{Two-site gates suffice}
+\label{sec:qc_two_site_gates}
+
+\begin{theorem}[Unitaries on a bounded number of sites]
+    \label{thm:qc_bounded_unitary_two_site_gates}
+    \uses{def:qc_local_circuit}
+    \lean{QuantumCircuit.exists_isPairProduct,
+        QuantumCircuit.isTwoLevelWord_of_det_eq_one,
+        QuantumCircuit.exists_isPairProduct_ctrlOp,
+        QuantumCircuit.isPairProduct_embedOp_pairSites}
+    \leanok
+    For $d\ge1$ and $n\ge2$ there is $K$ such that every unitary on
+    $(\C^d)^{\otimes n}$ is a product of at most $K$ unitaries, each acting on
+    two neighbouring sites of the open chain of $n$ sites. This is the step
+    that the unitaries with constant support ``can be further expressed with
+    a low-depth circuit of local gates''
+    \cite[caption of Fig.~1]{Malz2024Preparation}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Dividing by a root of the determinant of order $d^n$, a global phase and
+    hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
+    a unitary as a product of two-level operators, each a real rotation or a
+    diagonal phase on the span of two basis vectors. Write $G_{ab}(g)$ for the
+    operator acting as the $2\times2$ matrix $g$ on the span of the basis vectors
+    $\ket a,\ket b$ and as the identity on their complement, and
+    $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ for the
+    quarter turn. For pairwise distinct $a,b,c$,
+    \begin{align}
+        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q),
+        \label{eq:qc_two_level_quarter_turn}
+    \end{align}
+    and choosing $c$ to differ from $a$ at one site fewer than $b$ does reduces
+    a two-level operator between configurations differing at several sites to
+    one between configurations differing at one site fewer. Between configurations
+    differing at one site $t$ it is a single-site operation at $t$ controlled by
+    the other sites. Every rotation and every phase of determinant one is a group
+    commutator $g_1g_2g_1^\dagger g_2^\dagger$. Write $C_S(u)$ for the single-site
+    operation $u$ at $t$ controlled by the sites of $S$, with $t\notin S$; for
+    unitaries $v,w$ and a site $s\neq t$,
+    \begin{align}
+        C_{S\cup\{s\}}(vwv^\dagger w^\dagger)
+         & =C_S(v)\,C_{\{s\}}(w)\,C_S(v^\dagger)\,C_{\{s\}}(w^\dagger),
+        \label{eq:qc_controlled_commutator}
+    \end{align}
+    so a controlled commutator is a product of two operations with one control
+    fewer and two operations on two sites; induction removes the controls. An
+    operation on two distant sites is conjugated to neighbouring sites by SWAP
+    gates.
+\end{proof}
+
+\input{chapter/ch33_local_quantum_circuits_measurements}
+\input{chapter/ch33_local_quantum_circuits_teleportation}
+\input{chapter/ch33_local_quantum_circuits_channels}

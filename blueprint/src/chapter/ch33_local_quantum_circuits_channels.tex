@@ -1,0 +1,333 @@
+%% ==================================================
+%% Section: Local channel circuits and conversions
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), proof of
+%% Theorem 1 in the Supplemental Material; arXiv:2103.13367 (Piroli,
+%% Styliaris, Cirac), paragraphs "Quantum circuits and LOCC" and "State
+%% transformations with QC and LOCC".
+%% ==================================================
+
+\section{Local channel circuits and conversions}
+\label{sec:qc_channels}
+
+Lemmas~\ref{lem:qc_light_cone} and~\ref{lem:qc_light_cone_correlations}
+extend from unitary gates to channels, the operations
+of a local circuit that may add product ancillas and discard them
+\cite{Piroli2021LOCC}.
+
+\begin{definition}[Local channel circuit of depth $T$]
+    \label{def:qc_local_channel_circuit}
+    \uses{def:qc_local_circuit}
+    \lean{QuantumCircuit.ChannelLayer, QuantumCircuit.ChannelLayer.map,
+        QuantumCircuit.ChannelLayer.dual, QuantumCircuit.channelCircuitMap,
+        QuantumCircuit.channelCircuitDual,
+        QuantumCircuit.IsChannelPreparedInDepth}
+    \leanok
+    A \emph{channel on the pair} $\{k,k+1\}$ is a map
+    $\rho\mapsto\sum_jK_j\rho K_j^\dagger$ on density matrices of the ring,
+    where each $K_j$ is an operator on the whole ring acting trivially off
+    $\{k,k+1\}$ and
+    $\sum_jK_j^\dagger K_j=\mathbb 1$. A \emph{channel layer} is a composition
+    of channels on disjoint pairs, and a
+    \emph{local channel circuit of depth $T$} is a composition
+    $\Phi=\Phi_T\circ\dots\circ\Phi_1$ of $T$ channel layers.
+    Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$
+    replaces each channel on a pair by $A\mapsto\sum_jK_j^\dagger AK_j$. A
+    density matrix is \emph{prepared in depth $T$ by local channels} if it
+    equals $\Phi(\bigotimes_i\sigma_i)$ for a local channel circuit $\Phi$ of
+    depth $T$ and density matrices $\sigma_i$ on single sites.
+\end{definition}
+
+\begin{lemma}[Duality and complete positivity of local channel circuits]
+    \label{lem:qc_local_channel_circuit_properties}
+    \uses{def:qc_local_channel_circuit, def:qc_local_circuit}
+    \lean{QuantumCircuit.channelCircuitMap_isKrausCPTP,
+        QuantumCircuit.trace_channelCircuitMap_mul,
+        QuantumCircuit.channelCircuitMap_map_toChannelLayer}
+    \leanok
+    Let $\Phi$ be a local channel circuit. Then
+    \begin{align}
+        \Tr(\Phi(\rho)A) & =\Tr(\rho\,\Phi^\dagger(A))
+        \label{eq:qc_channel_circuit_duality}
+    \end{align}
+    for all operators $\rho$ and $A$ on the ring, and $\Phi$ is trace
+    preserving and completely positive. A local circuit $U$ of depth $T$ is
+    the local channel circuit $\rho\mapsto U\rho U^\dagger$ of depth $T$ with
+    one operator per channel.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For one channel on a pair,
+    $\Tr\bigl(\sum_jK_j\rho K_j^\dagger A\bigr)
+        =\Tr\bigl(\rho\sum_jK_j^\dagger AK_j\bigr)$ by cyclicity of the
+    trace, and $\sum_jK_j^\dagger K_j=\mathbb 1$ makes it trace preserving
+    and completely positive. Both properties pass to compositions, hence to
+    layers and circuits. A gate $G$ on a pair is the channel with the single
+    operator $G$.
+\end{proof}
+
+\begin{lemma}[Light cone of a local channel circuit]
+    \label{lem:qc_channel_light_cone}
+    \uses{def:qc_local_channel_circuit}
+    \lean{QuantumCircuit.channelCircuitDual_mem_supportedOperators,
+        QuantumCircuit.ChannelLayer.dual_mem_supportedOperators}
+    \leanok
+    Let $\Phi$ be a local channel circuit of depth $T$ and let $Z$ act on a
+    set of sites $X$. Then $\Phi^\dagger(Z)$ acts on the sites within ring
+    distance $T$ of $X$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the layers it suffices to treat one layer. The dual of a
+    channel on a pair disjoint from $X$ fixes $Z$: its operators commute with
+    $Z$, so $\sum_jK_j^\dagger ZK_j=\sum_jK_j^\dagger K_jZ=Z$. The dual of a
+    channel on a pair meeting $X$ maps operators acting on the sites within
+    distance $1$ of $X$ to such operators, since that set contains the pair.
+    The channels of a layer commute, so the dual of the layer is the dual of
+    the channels meeting $X$ applied after the dual of the others.
+\end{proof}
+
+\begin{lemma}[No connected correlations beyond the light cone of channels]
+    \label{lem:qc_channel_light_cone_correlations}
+    \uses{lem:qc_channel_light_cone, lem:qc_local_channel_circuit_properties}
+    \lean{QuantumCircuit.trace_mul_mul_eq_of_isChannelPreparedInDepth,
+        QuantumCircuit.channelCircuitDual_mul,
+        QuantumCircuit.ChannelLayer.dual_mul,
+        QuantumCircuit.trace_finKronecker_mul_mul}
+    \leanok
+    Let $\rho$ be prepared in depth $T$ by local channels, and let $Z$, $Z'$
+    act on sets of sites at distance larger than $2T$. Then
+    $\Tr(\rho ZZ')
+        =\Tr(\rho Z)\Tr(\rho Z')$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The dual of a channel is not multiplicative, but the dual of one layer is
+    multiplicative on operators $Z$, $Z'$ acting on sets $X$, $Y$ whose
+    neighbourhoods of radius $1$ are disjoint. Indeed, no pair of the layer
+    meets both $X$ and $Y$. If a channel acts off a set on which an operator
+    $B$ acts, then its dual $\Psi$ satisfies $\Psi(AB)=\Psi(A)B$ and
+    $\Psi(BA)=B\Psi(A)$. Writing the dual of the layer as the dual of the
+    channels meeting $X$ after the dual of the others, and using
+    Lemma~\ref{lem:qc_channel_light_cone} for the latter applied to $Z'$,
+    one obtains the dual of $ZZ'$ as the product of the duals. By induction
+    on the layers, $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$, and
+    the two factors act on disjoint sets. For a product density
+    $\sigma=\bigotimes_i\sigma_i$ of trace one and products
+    $\bigotimes_im_i$, $\bigotimes_im'_i$ with disjoint supports,
+    $\Tr(\sigma\bigotimes_im_im'_i)
+        =\prod_i\Tr(\sigma_im_im'_i)$, and at each site one of
+    $m_i$, $m'_i$ is the identity; bilinearity and the duality
+    $\Tr(\Phi(\sigma)A)=\Tr(\sigma\Phi^\dagger(A))$
+    conclude.
+\end{proof}
+
+Ancillas are attached and discarded site by site, so the operations that
+change the local dimension act on single sites.
+
+\begin{definition}[Onsite channel]
+    \label{def:qc_onsite_channel}
+    \uses{def:qc_local_channel_circuit}
+    \lean{Matrix.rectKronecker, QuantumCircuit.OnsiteChannel,
+        QuantumCircuit.OnsiteChannel.map, QuantumCircuit.OnsiteChannel.dual,
+        QuantumCircuit.OnsiteChannel.id, QuantumCircuit.OnsiteChannel.attach,
+        QuantumCircuit.OnsiteChannel.attachZero,
+        QuantumCircuit.OnsiteChannel.attach_siteMap_apply,
+        QuantumCircuit.OnsiteChannel.discard,
+        QuantumCircuit.OnsiteChannel.discard_siteMap_apply}
+    \leanok
+    An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
+    $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
+    $\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. It is the channel
+    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on the ring, with
+    $K_J=\bigotimes_iK_{iJ(i)}$ for every choice $J$ of one index per site;
+    its dual is $A\mapsto\sum_JK_J^\dagger AK_J$. Write
+    $\Phi_i(\sigma)=\sum_jK_{ij}\sigma K_{ij}^\dagger$ for its action at site
+    $i$. Attaching an ancilla of dimension $a$ in the state
+    $\tau=\sum_kw_kw_k^\dagger$ with $\sum_k\|w_k\|^2=1$ is the onsite channel
+    $X\mapsto X\otimes\tau$ from dimension $d$ to dimension $da$, and
+    discarding it is the onsite channel given by the partial trace over the
+    second factor of $\C^d\otimes\C^a$. Ancillas attached to each site and
+    local operations on a site and its ancillas are the free operations of
+    \cite{Piroli2021LOCC}.
+\end{definition}
+
+\begin{lemma}[Onsite channels are product channels]
+    \label{lem:qc_onsite_channel_properties}
+    \uses{def:qc_onsite_channel}
+    \lean{QuantumCircuit.OnsiteChannel.map_isKrausCPTP,
+        QuantumCircuit.OnsiteChannel.map_finKronecker,
+        QuantumCircuit.OnsiteChannel.trace_map_mul,
+        QuantumCircuit.OnsiteChannel.discard_siteMap_attach_siteMap}
+    \leanok
+    An onsite channel $\Phi$ is trace preserving and completely positive, it
+    maps $\bigotimes_i\sigma_i$ to $\bigotimes_i\Phi_i(\sigma_i)$, it satisfies
+    $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$, and discarding an attached
+    ancilla gives back the original operator.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The operators $K_J$ satisfy
+    $\sum_JK_J^\dagger K_J=\bigotimes_i\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$,
+    so the Kraus form gives complete positivity and trace preservation. Since
+    $K_J$ is a tensor product, $K_J(\bigotimes_i\sigma_i)K_J^\dagger
+        =\bigotimes_iK_{iJ(i)}\sigma_iK_{iJ(i)}^\dagger$, and summing over $J$
+    factorizes site by site. The duality is cyclicity of the trace. Finally,
+    the partial trace of $X\otimes\tau$ is $\Tr(\tau)X=X$.
+\end{proof}
+
+\begin{lemma}[Onsite channels do not spread supports]
+    \label{lem:qc_onsite_channel_locality}
+    \uses{def:qc_onsite_channel}
+    \lean{QuantumCircuit.OnsiteChannel.dual_mem_supportedOperators,
+        QuantumCircuit.OnsiteChannel.dual_mul,
+        QuantumCircuit.OnsiteChannel.dual_finKronecker}
+    \leanok
+    Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
+    $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
+    disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$, and
+    $\Phi_i^\dagger(\mathbb 1)=\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. Hence
+    the identity factors off $X$ are kept. For products with disjoint
+    supports, one of $m_i$, $m'_i$ is the identity at each site, so
+    $\Phi_i^\dagger(m_im'_i)=\Phi_i^\dagger(m_i)\Phi_i^\dagger(m'_i)$.
+    Linearity concludes.
+\end{proof}
+
+\begin{definition}[Local channel conversion]
+    \label{def:qc_local_channel_conversion}
+    \uses{def:qc_local_channel_circuit, def:qc_onsite_channel}
+    \lean{QuantumCircuit.IsLocalChannelProtocol,
+        QuantumCircuit.IsLocalChannelConversion}
+    \leanok
+    A \emph{local channel protocol of depth $T$} is a composition
+    $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
+    channel layers $L_t$ and maps $\Phi_t$, each a composition of finitely
+    many onsite channels, which may change the local dimension; $\Phi_0$
+    contains at least one onsite channel, and $\Phi_t$ for $t\ge1$ may be
+    the identity. A matrix $\rho$ on the chain is
+    \emph{converted in depth $T$} into a matrix $\sigma$, possibly of
+    another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
+    protocol $\Psi$ of depth at most $T$. This is the channel form of the circuits
+    $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC}, with
+    ancillas attached to each site, local operations between the layers and
+    the ancillas traced out at the end, without measurements.
+\end{definition}
+
+\begin{lemma}[Basic properties of local channel conversions]
+    \label{lem:qc_local_channel_conversion_properties}
+    \uses{def:qc_local_channel_conversion, def:qc_local_channel_circuit,
+        lem:qc_onsite_channel_properties}
+    \lean{QuantumCircuit.IsLocalChannelProtocol.isKrausCPTP,
+        QuantumCircuit.IsLocalChannelProtocol.channelCircuitMap_comp,
+        QuantumCircuit.isLocalChannelConversion_circuit,
+        QuantumCircuit.IsChannelPreparedInDepth.exists_isLocalChannelConversion,
+        QuantumCircuit.IsLocalChannelConversion.refl,
+        QuantumCircuit.IsLocalChannelConversion.mono,
+        QuantumCircuit.IsLocalChannelConversion.exists_isKrausCPTP,
+        QuantumCircuit.IsLocalChannelConversion.density}
+    \leanok
+    A local channel protocol is trace preserving and completely positive.
+    Attaching ancillas, running a local channel circuit of depth $T$ and
+    discarding is a local channel protocol of depth $T$. Every density matrix
+    is converted into itself in depth $0$, a conversion in depth $T$ is a
+    conversion in every larger depth, a conversion of a density matrix is a
+    density matrix, and a density matrix prepared in depth $T$ by local
+    channels is converted in depth $T$ from a product density.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the protocol: onsite channels are trace preserving and
+    completely positive by Lemma~\ref{lem:qc_onsite_channel_properties},
+    channel layers are by construction, and both properties are stable under
+    composition. Appending the layers of a circuit of depth $T$ one at a time,
+    each onsite channel keeps the depth and each layer raises it by one; the
+    attaching and discarding channels are onsite. The identity onsite channel
+    gives depth $0$, depth bounds are monotone, and a conversion is realized by
+    a channel, which maps a positive semidefinite matrix of trace one to a
+    positive semidefinite matrix of trace one. A preparation in depth $T$ by
+    local channels starts from a product density and is itself such a
+    protocol.
+\end{proof}
+
+\begin{lemma}[Composition of conversions]
+    \label{lem:qc_local_channel_conversion_trans}
+    \uses{def:qc_local_channel_conversion}
+    \lean{QuantumCircuit.IsLocalChannelConversion.trans,
+        QuantumCircuit.IsLocalChannelProtocol.comp}
+    \leanok
+    If $\rho$ is converted in depth $T_1$ into $\sigma$ and $\sigma$ is
+    converted in depth $T_2$ into $\tau$, then $\rho$ is converted in depth
+    $T_1+T_2$ into $\tau$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The composition $\Psi_2\circ\Psi_1$ of local channel protocols of depths
+    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$. Write
+    $\Psi_2$ as the sequence of its onsite channels and channel layers, and
+    apply them after $\Psi_1$ one at a time: the first onsite channel of
+    $\Psi_2$ becomes a further onsite channel in the last group $\Phi_{T_1}$
+    of $\Psi_1$, each onsite channel keeps the depth, and each of the $T_2$
+    channel layers raises it by one.
+\end{proof}
+
+\begin{lemma}[Light cone of a local channel protocol]
+    \label{lem:qc_protocol_light_cone}
+    \uses{def:qc_local_channel_conversion, lem:qc_onsite_channel_locality,
+        lem:qc_channel_light_cone, lem:qc_channel_light_cone_correlations}
+    \lean{QuantumCircuit.IsLocalChannelProtocol.exists_dual}
+    \leanok
+    A local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
+    $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
+    on a set of sites $X$ to operators acting on the sites within distance
+    $T$ of $X$, and that satisfies
+    \begin{align}
+        \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
+        \label{eq:qc_conversion_dual_mul}
+    \end{align}
+    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
+    disjoint. This is the light cone of a depth-$T$ circuit in the proof of
+    \cite[Theorem~1]{Malz2024Preparation}, here with channels and onsite
+    operations.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By induction on the protocol. For an onsite channel this is
+    Lemma~\ref{lem:qc_onsite_channel_locality} with radius $0$; a channel
+    layer adds one to the radius, by Lemma~\ref{lem:qc_channel_light_cone}
+    for the support and as in the proof of
+    Lemma~\ref{lem:qc_channel_light_cone_correlations} for
+    (\ref{eq:qc_conversion_dual_mul}), and an onsite channel keeps it.
+\end{proof}
+
+\begin{lemma}[No connected correlations after a conversion]
+    \label{lem:qc_local_channel_conversion_correlations}
+    \uses{def:qc_local_channel_conversion, lem:qc_protocol_light_cone}
+    \lean{QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion}
+    \leanok
+    Let $\sigma$ be converted in depth $T$ from a product
+    $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
+    $Z'$ act on sets of sites at distance larger than $2T$. Then
+    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$. For pure states prepared
+    from a product state by local unitary circuits this is the necessary
+    condition for preparation by quantum circuits of \cite{Piroli2021LOCC}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\rho=\bigotimes_i\sigma_i$ and $\sigma=\Psi(\rho)$ for a local
+    channel protocol $\Psi$ of depth $T'\le T$, and let $\Psi^\dagger$ be its
+    dual from Lemma~\ref{lem:qc_protocol_light_cone}, of radius $T'$.
+    If $Z$ and $Z'$ act on sets at distance larger than $2T\ge2T'$, then
+    $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and
+    (\ref{eq:qc_conversion_dual_mul}) together with the factorization of the
+    product density $\rho$ gives
+    \begin{align}
+        \Tr(\sigma ZZ') & =\Tr\bigl(\rho\,\Psi^\dagger(ZZ')\bigr)
+        =\Tr\bigl(\rho\,\Psi^\dagger(Z)\Psi^\dagger(Z')\bigr) \notag \\
+                        & =\Tr\bigl(\rho\,\Psi^\dagger(Z)\bigr)
+        \Tr\bigl(\rho\,\Psi^\dagger(Z')\bigr)
+        =\Tr(\sigma Z)\Tr(\sigma Z'). \notag
+    \end{align}
+\end{proof}

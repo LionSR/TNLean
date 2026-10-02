@@ -26,52 +26,6 @@ $N$ sites the label of each block is stored in the last sites of the block, and
 the GHZ-type state is prepared in depth $O(q)$; the isometries of the blocked
 tensor take depth $O(q)$ as well.
 
-\begin{definition}[Preparation with measurements and a circuit]
-    \label{def:ldp_measurement_circuit_preparation}
-    \lean{QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth}
-    \leanok
-    \uses{def:ldp_measurement_preparation, def:ldp_local_circuit}
-    A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in
-        depth $T$} if $\ket\psi=U\ket\varphi$ for a vector $\ket\varphi$
-    prepared with measurements in depth $T_1$ and a local circuit $U$ of depth
-    $T_2$, with $T_1+T_2\leq T$. The circuit $U$ does not depend on the
-    outcomes of the measurements.
-\end{definition}
-
-\begin{lemma}[Layers acting on configurations]
-    \label{lem:ldp_configuration_layers}
-    \lean{QuantumCircuit.apply_eq_ite_of_mulVec_eq_comp, QuantumCircuit.sigmaSite,
-        QuantumCircuit.sigmaSite_injective, QuantumCircuit.layerCfg,
-        QuantumCircuit.layerCfg_apply, QuantumCircuit.layerCfg_comp,
-        QuantumCircuit.layerCfg_apply_of_forall_ne, QuantumCircuit.eq_layerCfg_iff,
-        QuantumCircuit.noncommProd_embedOp_mulVec_eq_comp,
-        MPSPreparation.blockLayerOp_mulVec_eq_comp,
-        MPSPreparation.pairLayerOp_mulVec_eq_comp,
-        QuantumCircuit.embedOp_mulVec_eq_comp, QuantumCircuit.permOp_mulVec,
-        QuantumCircuit.embedOp_mulVec_productVector}
-    \leanok
-    \uses{def:ldp_local_circuit, lem:ldp_permutation_layers}
-    Let $X_k$ be operators on pairwise disjoint sets $S_k$ of sites, each
-    acting by a map $f_k$ of the configurations of $S_k$, that is
-    $X_kv=v\circ f_k$ for every vector $v$; then $X_k$ has the entry $1$ at
-    $(u,f_k(u))$ and $0$ elsewhere. The product of the $X_k$ acts by the map
-    $\rho$ with $\rho(x)|_{S_k}=f_k(x|_{S_k})$ for every $k$ and
-    $\rho(x)_i=x_i$ at every site $i$ outside all the $S_k$. A permutation
-    $\tau$ of the sites acts as $v\mapsto v\circ(x\mapsto x\circ\tau)$. If $X$
-    acts on the sites of $S$ and the product vector $\ket\pi$ is $\ket z$ on
-    every site of $S$, then $(X\ket\pi)(y)=X_{y|_S,(z,\dots,z)}\pi'(y)$, where
-    $\ket{\pi'}$ is the product vector with the all-ones vector at the sites
-    of $S$ and the vectors of $\ket\pi$ elsewhere.
-\end{lemma}
-\begin{proof}
-    \leanok
-    Applying $X_k$ to the basis vector $\ket u$ gives the entries. The entry of
-    the product at $(x,y)$ is $\prod_k[y|_{S_k}=f_k(x|_{S_k})]$ when $x$ and
-    $y$ agree outside the $S_k$, and $0$ otherwise; this is $1$ exactly when
-    $y=\rho(x)$. For the product vector, only the configuration $y'$ agreeing
-    with $y$ outside $S$ and equal to $(z,\dots,z)$ on $S$ contributes.
-\end{proof}
-
 \begin{definition}[Registers and the GHZ-type state on them]
     \label{def:ldp_window_ghz_state}
     \lean{MPSPreparation.registerSite, MPSPreparation.ancillaSite,
@@ -105,12 +59,35 @@ tensor take depth $O(q)$ as well.
     $(\delta(j),0,\dots,0)$ on every pair window and $0$ outside the windows.
 \end{definition}
 
+\begin{lemma}[Block and window layers acting on configurations]
+    \label{lem:ldp_block_layers_configurations}
+    \lean{MPSPreparation.blockLayerOp_mulVec_eq_comp,
+        MPSPreparation.pairLayerOp_mulVec_eq_comp}
+    \leanok
+    \uses{lem:qc_configuration_layers, def:ldp_window_ghz_state,
+        thm:ldp_approximating_state_depth}
+    Cut the ring of $N$ sites into $M$ blocks of lengths $\ell_k$. If operators
+    $U_k$ on the $\ell_k$ sites of the blocks act by maps $f_k$ of the
+    configurations of the blocks, $U_k(v)=v\circ f_k$, then the layer of the
+    $U_k$ on the blocks acts by the map changing the configuration of every
+    block $k$ by $f_k$ and keeping no other site. If $\ell_k\geq2r_1$ and
+    operators $W_k$ on $2r_1$ sites act by maps $f_k$, the layer of the $W_k$
+    on the pair windows of Definition~\ref{def:ldp_window_ghz_state} acts by
+    the map changing the configuration of every pair window $k$ by $f_k$ and
+    keeping the other sites.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The blocks are pairwise disjoint, and so are the pair windows; this is
+    Lemma~\ref{lem:qc_configuration_layers}.
+\end{proof}
+
 \begin{lemma}[A controlled shift between the ends of a block]
     \label{lem:ldp_block_shift}
     \lean{MPSPreparation.copyShift, MPSPreparation.blockShift,
         MPSPreparation.tailShift, MPSPreparation.exists_blockShiftUnitary}
     \leanok
-    \uses{lem:ldp_configuration_layers, thm:ldp_bounded_unitary_two_site_gates,
+    \uses{lem:qc_configuration_layers, thm:qc_bounded_unitary_two_site_gates,
         thm:ldp_approximating_state_depth}
     Let $r_1\geq1$ and values be taken in $\mathbb Z_d$. There is $C$ such
     that for every $q\geq3r_1$ some unitary on $q$ sites, a product of at most
@@ -122,9 +99,9 @@ tensor take depth $O(q)$ as well.
     \leanok
     SWAP gates move the first $r_1$ sites next to the last $r_1$ in at most
     $2qr_1$ gates; one unitary on the last $2r_1$ sites, of bounded depth by
-    Theorem~\ref{thm:ldp_bounded_unitary_two_site_gates}, adds the second half
+    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, adds the second half
     to the first; and the same SWAP gates move the sites back. By
-    Lemma~\ref{lem:ldp_configuration_layers} the composite acts by the stated
+    Lemma~\ref{lem:qc_configuration_layers} the composite acts by the stated
     map.
 \end{proof}
 
@@ -132,9 +109,9 @@ tensor take depth $O(q)$ as well.
     \label{thm:ldp_window_ghz_measurement}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsInDepth_windowGHZState}
     \leanok
-    \uses{def:ldp_window_ghz_state, def:ldp_measurement_preparation,
-        lem:ldp_configuration_layers, lem:ldp_block_shift,
-        thm:ldp_ghz_measurement}
+    \uses{def:ldp_window_ghz_state, def:qc_measurement_preparation,
+        lem:qc_configuration_layers, lem:ldp_block_layers_configurations,
+        lem:ldp_block_shift, thm:qc_ghz_measurement}
     Let $r_1\geq2$. There is $C$ such that for every ring of $N$ sites cut into
     $M\geq1$ blocks of lengths $3r_1\leq\ell_k\leq L$ and every unit vector
     $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state on the registers of
@@ -158,7 +135,7 @@ tensor take depth $O(q)$ as well.
     register of the previous block. The circuit has depth $O(L)$. Measure every
     ancilla, with outcomes $m_k\in\mathbb Z_d^{r_1}$, and let
     $p_k=m_0+\cdots+m_{k-1}$. Correct by adding $m_k$ on the ancilla of $R_k$ and
-    $-p_k$ on $R_k$, site by site. By Lemma~\ref{lem:ldp_configuration_layers},
+    $-p_k$ on $R_k$, site by site. By Lemma~\ref{lem:qc_configuration_layers},
     the corrected vector has the amplitude $\alpha(x|_{R_0})$ at a
     configuration $x$ that is $0$ outside the registers and satisfies
     $m_k+(x|_{R_{k+1}}-p_{k+1})-(x|_{R_k}-p_k)=0$ for every $k$, cyclically, and
@@ -236,7 +213,7 @@ tensor take depth $O(q)$ as well.
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState_of_encoding,
         MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState}
     \leanok
-    \uses{def:ldp_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
+    \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
         thm:ldp_block_sum_unitary, def:ldp_block_isometry_state,
         thm:ldp_approximating_state_depth}
     For every family of bond dimensions $D_1,\dots,D_b$ there are $C$ and $L_0$

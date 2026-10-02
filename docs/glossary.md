@@ -1203,9 +1203,95 @@ The following notions use different transfer objects and are not interchangeable
   predicates on `MPSTensor` is stated; the rectangular condition is recovered only through
   `OBCChainTensor.ofSupported`.
 
-## Local circuits of two-site gates
+## Quantum circuits
 
-### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
+The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
+from `TNLean/MPS/`. Its sites are `Fin N`, closed into a ring by addition modulo
+`N`, and its local labels are `Fin d`. The blueprint chapter is
+`ch33_local_quantum_circuits.tex`; the preparation of matrix product states
+in `MPS/Preparation/` uses it.
+
+### Local circuits and two-site gates
+
+#### `QuantumCircuit.supportedOperators`
+
+- **Declaration:**
+  `QuantumCircuit.supportedOperators (d : ℕ) (S : Set (Fin N)) : Submodule ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)`.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** the complex span of the product operators
+  `Matrix.finKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
+  `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S`.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
+  operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
+- **Sanctioned bridges:** `QuantumCircuit.supportedOperators_mono`,
+  `QuantumCircuit.one_mem_supportedOperators`,
+  `QuantumCircuit.mul_mem_supportedOperators`,
+  `QuantumCircuit.star_mem_supportedOperators`,
+  `QuantumCircuit.commute_of_mem_supportedOperators` (operators acting on
+  disjoint sets commute), and `QuantumCircuit.embedOp_mem_supportedOperators`
+  (an operator placed by an injective map acts on its range).
+- **Caveat:** membership says nothing about unitarity; for `S = ∅` the
+  submodule consists of the scalar multiples of the identity.
+
+#### `QuantumCircuit.Layer`
+
+- **Declaration:** `structure QuantumCircuit.Layer (d N : ℕ) [NeZero N]`, with
+  fields `bonds : Finset (Fin N)` (the left sites `k` of the pairs
+  `{k, k + 1}`), `gate : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ`,
+  and the conditions that every gate of a bond is unitary and lies in
+  `supportedOperators d (bond k)`, and that the pairs `bond k` of distinct
+  bonds are disjoint.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** one layer of a local circuit on the ring of `N` sites:
+  unitaries on pairwise disjoint pairs of neighbouring sites. Its operator
+  `Layer.op` is the product of its gates, which commute.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
+  quantum circuits").
+- **Sanctioned bridges:** `Layer.op_mem_unitary`,
+  `Layer.conj_op_mem_supportedOperators` (the light cone of one layer), and
+  `Layer.adjoint` with `Layer.adjoint_op` (the layer of the adjoint gates
+  implements the adjoint).
+- **Caveat:** the pairs are taken modulo `N`, so for `N ≤ 2` they degenerate;
+  a circuit on the open chain is one whose bonds avoid the pair `{N - 1, 0}`.
+
+#### `QuantumCircuit.IsLocalCircuitOfDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsLocalCircuitOfDepth (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (T : ℕ) : Prop`.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** `U = circuitOp Ls` for a list `Ls` of exactly `T` layers, the
+  head of the list applied first.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
+  quantum circuits").
+- **Sanctioned bridges:** `IsLocalCircuitOfDepth.mem_unitary`,
+  `IsLocalCircuitOfDepth.star`, `IsLocalCircuitOfDepth.mul` (depths add),
+  `QuantumCircuit.conj_circuitOp_mem_supportedOperators` (the light cone of
+  radius `T`), `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site
+  unitaries in depth `2`), and `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth`.
+- **Caveat:** the depth is exact in the definition; a smaller depth is padded
+  with empty layers, as in `IsCircuitOn.mono`.
+
+#### `QuantumCircuit.IsPreparedInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsPreparedInDepth (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Meaning:** `ψ = U *ᵥ productVector v` for a local circuit `U` of depth `T`
+  and a product vector `productVector v = ⊗ᵢ vᵢ`.
+- **Source:** arXiv:2307.01696, main text before Theorem 1 ("a sequence
+  obtained from depth-`T` local quantum circuits applied to product states").
+- **Sanctioned bridges:** `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
+  and `QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth`
+  (vanishing connected correlations of operators at ring distance larger than
+  `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
+  (a nonzero prepared vector is a multiple of a local circuit of depth `T + 2`
+  applied to `|0⋯0⟩`), and
+  `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`.
+- **Caveat:** no normalization is imposed and `ψ` may be zero. The separation
+  `IsSeparatedBy X Y (2 * T)` in the correlation bounds excludes operators at
+  ring distance exactly `2T`.
+
+#### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
 
 - **Declarations:**
   `QuantumCircuit.IsNeighbourGate (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`
@@ -1226,7 +1312,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the chain is open; the ring structure enters only through the
   placement map of `IsPairProduct.isCircuitOn`.
 
-### `QuantumCircuit.Layer.IsIn`
+#### `QuantumCircuit.Layer.IsIn`
 
 - **Declaration:**
   `QuantumCircuit.Layer.IsIn (L : Layer d N) (R : Set (Fin N)) : Prop`.
@@ -1243,7 +1329,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the condition is on the bonds of the layer, not on its operator;
   it is the per-layer ingredient of `IsCircuitOn`.
 
-### `QuantumCircuit.IsCircuitOn`
+#### `QuantumCircuit.IsCircuitOn`
 
 - **Declaration:**
   `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
@@ -1260,7 +1346,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Caveat:** the depth is exact in the definition; `IsCircuitOn.mono` pads it
   with empty layers.
 
-### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
+#### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
 
 - **Declarations:**
   `QuantumCircuit.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
@@ -1283,7 +1369,7 @@ The following notions use different transfer objects and are not interchangeable
   `exists_isPairProduct`; statements about circuits should use
   `IsPairProduct` or `IsCircuitOn`.
 
-### `QuantumCircuit.AgreeOff`
+#### `QuantumCircuit.AgreeOff`
 
 - **Declaration:**
   `QuantumCircuit.AgreeOff (e : Fin m → Fin n) (x y : Fin n → Fin d) : Prop`.
@@ -1296,9 +1382,150 @@ The following notions use different transfer objects and are not interchangeable
   `QuantumCircuit.eq_extend_of_agreeOff` (for injective `e`).
 - **Caveat:** proof-internal vocabulary for the site embedding.
 
-## Local channel conversions
+### Local circuits assisted by measurements
 
-### `QuantumCircuit.IsLocalChannelProtocol`
+#### `QuantumCircuit.MeasurementProtocol.IsPreparationOf`
+
+- **Declaration:**
+  `QuantumCircuit.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
+- **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
+  sites measured in the computational basis, and for every outcome string a
+  unitary at every site) starts from a nonzero product vector, and for every
+  outcome `m` with `P.postMeasurement m ≠ 0` the corrected vector `P.output m`
+  is a scalar multiple of `ψ`.
+- **Source:** arXiv:2103.13367, main text, paragraph "State transformations
+  with QC and LOCC" (the scheme "apply `U ∈ LU` depending on the outcomes of
+  all previous measurements", and deterministic preparation).
+- **Sanctioned bridges:** `MeasurementProtocol.IsPreparationOf.ne_zero` (a
+  prepared vector is nonzero) and
+  `MeasurementProtocol.exists_postMeasurement_ne_zero`.
+- **Caveat:** ancillas are sites of the ring; the measurement is fixed in
+  advance and in the computational basis; the correction is one product of
+  single-site unitaries applied after all the measurements. Each of these
+  restricts the source's scheme, so every such protocol is one of the source.
+
+#### `QuantumCircuit.IsPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
+- **Meaning:** some protocol `P` whose circuit has at most `T` layers
+  satisfies `P.IsPreparationOf ψ`.
+- **Source:** arXiv:2103.13367, Definition "Transformations under QC and
+  LOCC" (the class `QCcc_ℓ`).
+- **Sanctioned bridges:**
+  `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
+  nonzero vector prepared by a local circuit),
+  `QuantumCircuit.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
+  (without measurements, preparation by a local circuit up to single-site
+  unitaries), and
+  `QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
+  (GHZ-type states in depth `2`).
+- **Caveat:** the free local unitaries of the source between the layers of the
+  circuit, acting on a site and its ancillas, are counted here as gates, so the
+  depth bounds the source's depth. The light-cone bound of
+  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
+  GHZ-type states, whose connected correlations do not decay, are prepared in
+  depth `2`.
+
+#### `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
+- **Meaning:** `ψ = U φ` for a vector `φ` with
+  `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
+  `T₂`, with `T₁ + T₂ ≤ T`.
+- **Source:** arXiv:2307.01696, paragraph "Long-range MPS using measurements"
+  ("First create `|χ_{N/q}⟩`, which can be done in constant depth with
+  measurements ... Subsequently, apply in parallel the isometries `W`");
+  arXiv:2103.13367, paragraph "State transformations with QC and LOCC" ("a
+  more general scheme with multiple rounds of LOCC").
+- **Sanctioned bridges:**
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`
+  (the states `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of blocks with orthogonal blocked
+  states, in depth `O(L)`) and
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`
+  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks with
+  orthogonal blocked states and block lengths dividing `N`), and
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`
+  (the same for blocks whose states may overlap, every multiplicity, every
+  nonzero complex weight and every `N ≥ 2` with `|φ_N(A)⟩ ≠ 0`).
+- **Caveat:** the circuit `U` is applied after the measurement and its
+  corrections and does not depend on the outcomes; it is one second round of
+  the source's multi-round scheme, with no measurement in it.
+
+#### `QuantumCircuit.IsLocalPerm`
+
+- **Declaration:**
+  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
+- **Meaning:** the permutation `σ` of the configurations changes only the
+  sites of `S`, and its new values on `S` depend only on the old values on
+  `S`.
+- **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
+  corrections of the GHZ preparation, generalized to shifts of qudits).
+- **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
+  permutation matrix is a unitary acting on `S`),
+  `QuantumCircuit.isLocalPerm_shiftPerm`, and
+  `QuantumCircuit.exists_permLayer_op_mulVec` (a layer of such gates on
+  disjoint pairs acts as one permutation of the configurations).
+- **Caveat:** only permutations of the computational basis are covered; a
+  general gate is a `QuantumCircuit.Layer` gate.
+
+#### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
+- **Meaning:** some sequence of measurement rounds (`QuantumCircuit.MeasurementRound`:
+  a local circuit, a computational-basis measurement of a set of sites, and
+  outcome-dependent single-site unitaries), whose circuits have at most `T`
+  layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
+  after every sequence of outcomes of nonzero probability.
+- **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
+  LOCC" (one round, and "a more general scheme with multiple rounds of
+  LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
+- **Sanctioned bridges:**
+  `QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
+  (one round is a protocol of `QuantumCircuit.IsPreparedWithMeasurementsInDepth`),
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
+  and `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` (binary
+  trees of two-site gates with `k` levels in depth `5k`).
+- **Caveat:** the depth counts the layers of all the rounds; measurements,
+  classical processing and single-site corrections are free, as in one round.
+  The circuit of a later round does not depend on earlier outcomes.
+  Every round is a protocol of `QCcc_ℓ` of no larger depth, but the number of
+  rounds is not bounded (the tree of `k` levels uses `2k` rounds), whereas in
+  the class `QCcc^{(k)}_ℓ` of the paragraph "Phases of matter" of
+  arXiv:2103.13367 the number `k` of composed transformations does not depend
+  on the system size.
+
+#### `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`
+
+- **Declaration:**
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set ((Fin N → Fin d) → ℂ)) (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
+- **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
+  scalar multiple of `W v`; the single-round form is
+  `QuantumCircuit.MeasurementRound.IsImplementationOn`, which asks for one
+  scalar per outcome.
+- **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
+  ("correcting (without postselection) based on the measurement outcomes").
+- **Sanctioned bridges:**
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append`
+  (implementations compose), `QuantumCircuit.TeleportHop.isImplementationOn_round`
+  (teleportation along chains of hops in one round of depth `2`),
+  `QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
+  two-site gates between distant sites in depth `5`), and
+  `MPSPreparation.isRoundsImplementationOn_treeRounds`.
+- **Caveat:** the scalar may depend on the outcomes and is not normalized; zero
+  outputs, of probability zero, are allowed.
+
+### Local channel conversions
+
+#### `QuantumCircuit.IsLocalChannelProtocol`
 
 - **Declaration:**
   `QuantumCircuit.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop`
@@ -1327,7 +1554,7 @@ The following notions use different transfer objects and are not interchangeable
   are free. There are no measurements or classical communication, so this is
   not the LOCC class of the source.
 
-### `QuantumCircuit.IsLocalChannelConversion`
+#### `QuantumCircuit.IsLocalChannelConversion`
 
 - **Declaration:**
   `QuantumCircuit.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ) : Prop`.
@@ -1353,147 +1580,6 @@ The following notions use different transfer objects and are not interchangeable
   `IsLocalChannelConversion.density`. Conversions are exact; the approximate,
   polylogarithmic-depth conversions of the phase equivalence in
   arXiv:2103.13367 are not formalized, nor is blocking of sites.
-
-## Local circuits assisted by measurements
-
-### `QuantumCircuit.MeasurementProtocol.IsPreparationOf`
-
-- **Declaration:**
-  `QuantumCircuit.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
-- **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
-  sites measured in the computational basis, and for every outcome string a
-  unitary at every site) starts from a nonzero product vector, and for every
-  outcome `m` with `P.postMeasurement m ≠ 0` the corrected vector `P.output m`
-  is a scalar multiple of `ψ`.
-- **Source:** arXiv:2103.13367, main text, paragraph "State transformations
-  with QC and LOCC" (the scheme "apply `U ∈ LU` depending on the outcomes of
-  all previous measurements", and deterministic preparation).
-- **Sanctioned bridges:** `MeasurementProtocol.IsPreparationOf.ne_zero` (a
-  prepared vector is nonzero) and
-  `MeasurementProtocol.exists_postMeasurement_ne_zero`.
-- **Caveat:** ancillas are sites of the ring; the measurement is fixed in
-  advance and in the computational basis; the correction is one product of
-  single-site unitaries applied after all the measurements. Each of these
-  restricts the source's scheme, so every such protocol is one of the source.
-
-### `QuantumCircuit.IsPreparedWithMeasurementsInDepth`
-
-- **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
-- **Meaning:** some protocol `P` whose circuit has at most `T` layers
-  satisfies `P.IsPreparationOf ψ`.
-- **Source:** arXiv:2103.13367, Definition "Transformations under QC and
-  LOCC" (the class `QCcc_ℓ`).
-- **Sanctioned bridges:**
-  `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
-  nonzero vector prepared by a local circuit),
-  `QuantumCircuit.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
-  (without measurements, preparation by a local circuit up to single-site
-  unitaries), and
-  `QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
-  (GHZ-type states in depth `2`).
-- **Caveat:** the free local unitaries of the source between the layers of the
-  circuit, acting on a site and its ancillas, are counted here as gates, so the
-  depth bounds the source's depth. The light-cone bound of
-  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
-  GHZ-type states, whose connected correlations do not decay, are prepared in
-  depth `2`.
-
-### `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`
-
-- **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
-- **Meaning:** `ψ = U φ` for a vector `φ` with
-  `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
-  `T₂`, with `T₁ + T₂ ≤ T`.
-- **Source:** arXiv:2307.01696, paragraph "Long-range MPS using measurements"
-  ("First create `|χ_{N/q}⟩`, which can be done in constant depth with
-  measurements ... Subsequently, apply in parallel the isometries `W`");
-  arXiv:2103.13367, paragraph "State transformations with QC and LOCC" ("a
-  more general scheme with multiple rounds of LOCC").
-- **Sanctioned bridges:**
-  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`
-  (the states `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of blocks with orthogonal blocked
-  states, in depth `O(L)`) and
-  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`
-  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks with
-  orthogonal blocked states and block lengths dividing `N`), and
-  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`
-  (the same for blocks whose states may overlap, every multiplicity, every
-  nonzero complex weight and every `N ≥ 2` with `|φ_N(A)⟩ ≠ 0`).
-- **Caveat:** the circuit `U` is applied after the measurement and its
-  corrections and does not depend on the outcomes; it is one second round of
-  the source's multi-round scheme, with no measurement in it.
-
-### `QuantumCircuit.IsLocalPerm`
-
-- **Declaration:**
-  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop`.
-- **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
-- **Meaning:** the permutation `σ` of the configurations changes only the
-  sites of `S`, and its new values on `S` depend only on the old values on
-  `S`.
-- **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
-  corrections of the GHZ preparation, generalized to shifts of qudits).
-- **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
-  permutation matrix is a unitary acting on `S`),
-  `QuantumCircuit.isLocalPerm_shiftPerm`, and
-  `QuantumCircuit.exists_permLayer_op_mulVec` (a layer of such gates on
-  disjoint pairs acts as one permutation of the configurations).
-- **Caveat:** only permutations of the computational basis are covered; a
-  general gate is a `QuantumCircuit.Layer` gate.
-
-### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
-
-- **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
-- **Meaning:** some sequence of measurement rounds (`QuantumCircuit.MeasurementRound`:
-  a local circuit, a computational-basis measurement of a set of sites, and
-  outcome-dependent single-site unitaries), whose circuits have at most `T`
-  layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
-  after every sequence of outcomes of nonzero probability.
-- **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
-  LOCC" (one round, and "a more general scheme with multiple rounds of
-  LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
-- **Sanctioned bridges:**
-  `QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
-  (one round is a protocol of `QuantumCircuit.IsPreparedWithMeasurementsInDepth`),
-  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
-  and `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` (binary
-  trees of two-site gates with `k` levels in depth `5k`).
-- **Caveat:** the depth counts the layers of all the rounds; measurements,
-  classical processing and single-site corrections are free, as in one round.
-  The circuit of a later round does not depend on earlier outcomes.
-  Every round is a protocol of `QCcc_ℓ` of no larger depth, but the number of
-  rounds is not bounded (the tree of `k` levels uses `2k` rounds), whereas in
-  the class `QCcc^{(k)}_ℓ` of the paragraph "Phases of matter" of
-  arXiv:2103.13367 the number `k` of composed transformations does not depend
-  on the system size.
-
-### `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`
-
-- **Declaration:**
-  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set ((Fin N → Fin d) → ℂ)) (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
-- **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
-  scalar multiple of `W v`; the single-round form is
-  `QuantumCircuit.MeasurementRound.IsImplementationOn`, which asks for one
-  scalar per outcome.
-- **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
-  ("correcting (without postselection) based on the measurement outcomes").
-- **Sanctioned bridges:**
-  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append`
-  (implementations compose), `QuantumCircuit.TeleportHop.isImplementationOn_round`
-  (teleportation along chains of hops in one round of depth `2`),
-  `QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
-  two-site gates between distant sites in depth `5`), and
-  `MPSPreparation.isRoundsImplementationOn_treeRounds`.
-- **Caveat:** the scalar may depend on the outcomes and is not normalized; zero
-  outputs, of probability zero, are allowed.
 
 ## Inhomogeneous short-range correlated chains
 
