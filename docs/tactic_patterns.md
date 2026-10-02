@@ -2416,6 +2416,18 @@ abstracted — record why, so it is not re-proposed).
 
 ---
 
+### Orthogonal-resolution multiplication table — promoted
+- **Pattern:** split equality of two indices; use idempotence in the equal
+  case and `orthogonalProjection_mul_eq_zero_of_sum_eq_one` otherwise.
+- **Seen:** three occurrences in `stepOrbitProjection_mul_original`,
+  `hasEigenvalue_adjoint_compressed_stepOrbit`, and the private
+  `exists_root_of_orbit_phase`, in `StepOrbitSectors.lean`,
+  `BlockingEigenvalues.lean`, and `OrbitUnitary.lean` under
+  `TNLean/MPS/Periodic/` (2026-09-30).
+- **Abstraction:** `orthogonalProjection_mul_eq_ite_of_sum_eq_one` in
+  `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
+  table. All three consumers use it; no custom tactic is needed.
+
 ## Candidates
 
 ### relabeling normalized source factors into a standard form — candidate
@@ -3684,6 +3696,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the periodic application uses the inverse unitary orientation.
   Below the three-occurrence promotion threshold; no custom tactic introduced.
 
+### Selecting and flattening prescribed orbit blocks — candidate
+- **Pattern:** choose the prescribed periodic decomposition separately for each
+  original block, flatten `(original block, orbit)` with `finSigmaFinEquiv`,
+  and transport the weighted MPV identity through that enumeration.
+- **Seen:** two occurrences in `IsIrreducibleForm.block` in
+  `TNLean/MPS/Periodic/IrreducibleFormBlocking.lean` and
+  `weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos` in
+  `TNLean/MPS/Periodic/RefinementNormalization.lean` (2026-09-30).
+- **Abstraction (proposed):** a family-level decomposition lemma returning
+  the chosen blocks and dimension identities if a third consumer appears.
+  The shared weighted-sum refinement is already a separate theorem.
+
 ### measurement-assisted GHZ protocol on two site layouts — candidate
 - **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the
   outcome-consistency lemma, the corrections by outcomes and partial sums, and
@@ -3701,6 +3725,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   shift between a register and its ancilla, which spans a block in
   `WindowGHZ.lean`.
 
+
+### Scalar word-trace identities for Ising compression — candidate
+
+- **Pattern:** introduce a local identity
+  `trace (evalWord (c • A) w) = c ^ w.length * trace (evalWord A w)`
+  by `Kraus.evalWord_smul`, `Matrix.trace_smul`, and `smul_eq_mul`, then
+  use it to simplify the traces of the weighted target family.
+- **Seen:** the local `hs` in `IsingWeightedTwist.lean` and `hscale` in
+  `IsingThreeObjectTwist.lean` (2026-10-02).
+- **Abstraction (proposed):** a word-trace form of the existing scalar word
+  evaluation lemma, in QICLean beside `Kraus.evalWord_smul` if another
+  development needs the same statement.
+- **Notes:** two occurrences in two files, below the promotion threshold.
+  The three-object calculation also needs simplification of the finite
+  dependent dimensions before rewriting the trace expressions.
 
 ## Rejected
 

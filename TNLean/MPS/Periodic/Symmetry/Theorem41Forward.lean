@@ -314,10 +314,12 @@ equality of MPV families.
 
 This theorem is therefore only the equal-case FT application step. It does not
 prove the full `PeripheralEqualCaseZGaugeOfSameMPV` hypothesis, since that
-hypothesis does not assume irreducible form for `blockTensor A p`. The remaining
-canonicalization work is to obtain the initial irreducible-form presentation of
-`A` with the required bond-space data. Given such a presentation, positive
-blocking is supplied by `IsIrreducibleForm.block` in `IrreducibleFormBlocking`.
+hypothesis does not assume irreducible form for `blockTensor A p`. The
+corrected forward argument instead uses the positive-length unit-weight presentation
+of an arbitrary `A` supplied by
+`exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos` in
+`RefinementNormalization`; that theorem recovers the target bond dimension from
+multiplicity matching. It does not establish the all-length premise used here.
 The corrected forward argument must still identify the equal-case gauge on the
 original orbit supports and assemble the construction of \(\widetilde A\) from
 arXiv:1708.00029, lines 765--810. -/
