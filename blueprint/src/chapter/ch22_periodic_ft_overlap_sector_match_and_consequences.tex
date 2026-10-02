@@ -321,7 +321,7 @@
     \label{thm:periodic_basis_nonzero_spanning}
     \lean{MPSTensor.SectorDecomposition.mpvState_mem_span_nonzero}
     \leanok
-    \uses{def:sector_weight_data, lem:paper_decomp_formula}
+    \uses{def:sector_weight_data}
     Let $A$ be the tensor of a sector decomposition, with representatives
     $A_j$ and multiplicity entries $\mu_{j,q}$. At every length $N$, the
     nonzero vectors among $\{\ket{V_N(A_j)}\}_j$ span $\ket{V_N(A)}$.
@@ -335,7 +335,7 @@
     The sector decomposition gives
     \begin{align}
         \ket{V_N(A)}
-        &=\sum_j\left(\sum_q\mu_{j,q}^{N}\right)\ket{V_N(A_j)}.
+         & =\sum_j\left(\sum_q\mu_{j,q}^{N}\right)\ket{V_N(A_j)}.
         \label{eq:periodic_nonzero_span}
     \end{align}
     Terms whose state vector vanishes contribute zero. Every remaining term
