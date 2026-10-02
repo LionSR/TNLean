@@ -185,8 +185,8 @@ $d\ge1$.
     single round and notes that ``one could also define a more general scheme
     with multiple rounds of LOCC''. A sequence of rounds is a composition of
     such transformations, with the depth counted as the total number of layers.
-    The number of rounds is not bounded: the tree of
-    Theorem~\ref{thm:ldp_tree_measurements} with $k$ levels uses $2k$ rounds,
+    The number of rounds is not bounded: the tree circuit of
+    Chapter~\ref{ch:log_depth_preparation} with $k$ levels uses $2k$ rounds,
     whereas in the class $\mathrm{QCcc}^{(k)}_\ell$ of the paragraph ``Phases
     of matter'' of \cite{Piroli2021LOCC} the number $k$ of composed
     transformations does not depend on the system size. Several rounds are needed when
@@ -315,7 +315,7 @@ $d\ge1$.
     \label{def:qc_ghz_state}
     \lean{QuantumCircuit.ghzState, QuantumCircuit.ghzState_apply}
     \leanok
-    Let $b\geq1$, $M\geq0$ and $\alpha\in\mathbb C^b$. The \emph{GHZ-type
+    Let $b,M\geq0$ and $\alpha\in\mathbb C^b$. The \emph{GHZ-type
         state} on $M$ sites of dimension $b$ is
     $\ket{\chi_M}=\sum_{i=0}^{b-1}\alpha_i\ket{i}^{\otimes M}$. For $M\geq1$
     and the sites numbered $0,\dots,M-1$, its amplitude at a configuration $s$
