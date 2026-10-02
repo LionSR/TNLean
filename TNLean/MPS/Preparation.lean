@@ -54,6 +54,7 @@ import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.NonNormalMeasurementPreparation
 import TNLean.MPS.Preparation.NormalGauge
 import TNLean.MPS.Preparation.ObservableTransferBound
+import TNLean.MPS.Preparation.OneCopyPairState
 import TNLean.MPS.Preparation.OneDimensionalBlocks
 import TNLean.MPS.Preparation.OrthogonalBlockError
 import TNLean.MPS.Preparation.OrthogonalBlockSum
