@@ -57,6 +57,7 @@ import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentTracePerturbation
+import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
@@ -65,6 +66,7 @@ import TNLean.Algebra.KernelGapPerturbation
 import TNLean.Algebra.KleinCocycleCompleteness
 import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable
+import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.LSymbolDomainWall
