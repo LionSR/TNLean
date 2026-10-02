@@ -105,6 +105,7 @@ import TNLean.PEPS.OpenRegionContraction
 import TNLean.PEPS.PairConjugacy
 import TNLean.PEPS.PairConjugacyCentralizer
 import TNLean.PEPS.PairConjugacyOperators
+import TNLean.PEPS.ParentHamiltonian
 import TNLean.PEPS.PhysicalProductCut
 import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples

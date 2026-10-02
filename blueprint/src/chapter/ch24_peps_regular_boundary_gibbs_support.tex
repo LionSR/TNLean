@@ -1,0 +1,62 @@
+\section{Boundary support and Gibbs operators}%
+\label{sec:peps_regular_boundary_gibbs_support}
+
+The bulk--boundary conjecture in \cite{Cirac2019OpenProblems} asks
+whether a gap of the parent Hamiltonian is equivalent to a short-range
+Gibbs representation of the virtual boundary states. The following
+finite-dimensional results concern the support of such states. They
+do not assert locality or a uniform gap.
+
+\begin{theorem}[Full-space obstruction for a regular boundary]%
+    \label{thm:peps_regular_boundary_gibbs_obstruction}
+    \lean{TNLean.PEPS.rank_regularBoundaryDensity_lt_card,
+        TNLean.PEPS.not_isUnit_regularBoundaryDensity,
+        TNLean.PEPS.regularBoundaryDensity_ne_exp,
+        TNLean.PEPS.IsGInjective.rank_regularBoundaryGram,
+        TNLean.PEPS.IsGInjective.regularBoundaryGram_ne_exp}
+    \leanok
+    \uses{thm:peps_g_injective_invariants_range}
+    Let $G$ be a finite group with $|G|>1$, and let a regular
+    virtual boundary have $b\geq1$ legs. Its normalized density
+    $\rho=P_G/|G|^{b-1}$ has rank $|G|^{b-1}<|G|^b$.
+    In particular, it is not invertible and cannot equal $e^H$
+    for any finite matrix $H$ on the full boundary space.
+    More generally, if $T$ is a regular $G$-injective open map,
+    its virtual Gram operator $T^\dagger T$ has the same rank
+    and cannot be such an exponential.
+\end{theorem}
+
+\begin{proof}\leanok
+    The rank of $\rho$ is the dimension of the invariant boundary
+    space. The rank of $T^\dagger T$ equals the rank of $T$,
+    which is also that dimension by $G$-injectivity. Since
+    $|G|>1$, both ranks are strictly smaller than the full
+    boundary dimension. Every matrix exponential is invertible,
+    its inverse being the exponential of the negative matrix.
+\end{proof}
+
+\begin{theorem}[Gibbs representation on the invariant support]%
+    \label{thm:peps_regular_boundary_supported_gibbs}
+    \lean{TNLean.PEPS.regularBoundarySupportedDensity,
+        TNLean.PEPS.regularBoundarySupportedHamiltonian,
+        TNLean.PEPS.regularBoundarySupportedDensity_mulVec,
+        TNLean.PEPS.regularBoundarySupportedDensity_eq_exp}
+    \leanok
+    \uses{thm:peps_regular_boundary_gibbs_obstruction}
+    In relative boundary coordinates the restriction of $\rho$
+    to its invariant support is
+    \[
+        \rho_{\mathrm{supp}}=|G|^{-(b-1)}I=e^{-H_{\mathrm{supp}}},
+        \qquad H_{\mathrm{supp}}=\log(|G|^{b-1})I.
+    \]
+    This is a statement on the invariant support, whose dimension
+    is $|G|^{b-1}$. It imposes no interaction decomposition on the
+    original $b$ virtual legs.
+\end{theorem}
+
+\begin{proof}\leanok
+    The averaging projector fixes invariant vectors, so the
+    density acts on this space by $|G|^{-(b-1)}$. The exponential
+    of the scalar diagonal matrix $-\log(|G|^{b-1})I$ has precisely
+    that scalar on each diagonal entry.
+\end{proof}
