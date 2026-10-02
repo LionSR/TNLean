@@ -189,8 +189,7 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
 %% Scope restriction (orthogonal blocks) and Local fix (rate of the overlapping
 %% blocks), as for thm:ldp_approximation_error_repeated_orthogonal_blocks and
 %% thm:ldp_approximation_error_repeated_overlapping;
-%% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex and
-%% docs/paper-gaps/mswc24_repeated_overlap_small_weight_sum.tex.
+%% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
 %% ==================================================
 
 \subsubsection{Copies with weights of different phases}
@@ -292,14 +291,14 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
 
 % **False source (eq. (S7), coefficients):** beta'_j in place of beta_j;
 % Scope restriction (orthogonal blocks) for the first two declarations; Local fix
-% of the rate and Scope restriction (small weight sums) for the last two;
+% of the rate for the last two;
 % docs/paper-gaps/mswc24_repeated_block_corrected_state.tex.
 \begin{theorem}[Approximation error with the pairs on one copy]
     \label{thm:ldp_approximation_error_one_copy}
     \lean{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy,
         MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy,
         MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy,
-        MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonneg}
+        MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy}
     \leanok
     \uses{lem:ldp_one_copy_state, def:ldp_one_copy_weight,
         thm:ldp_approximation_error_repeated_orthogonal_blocks,
@@ -311,7 +310,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of $\rho_j$ on the
     copies $k_j$ and the coefficients $\beta'_j$ of
     Definition~\ref{def:ldp_one_copy_weight} in place of $\beta_j$. Put
-    $y=Me^{-\gamma q/\xi}$ and $b=\sum_j\lvert\beta_j\rvert^2$.
+    $y=Me^{-\gamma q/\xi}$.
     \begin{enumerate}
         \item Let $\lambda_2$ bound the moduli of the eigenvalues other than one of every
               transfer map $\E_{A_j}$, with correlation length $\xi$. There are
@@ -320,12 +319,11 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
               $\beta\neq0$, $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$ and
               $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$.
         \item Let $\lambda_2$ moreover bound the moduli of all eigenvalues of the mixed
-              transfer maps $\E_{jj'}$, $j\neq j'$. There is $C>0$ such that for all
-              weights with $\lvert\mu_{j,k}\rvert\leq1$, every choice of the copies
-              $k_j$, every $q\geq1$ and every $M\geq1$ with $\beta\neq0$,
-              $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}/\min(1,b)^{1/2}$; for
-              real weights $0\leq\mu_{j,k}\leq1$, one of which is one,
-              $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$.
+              transfer maps $\E_{jj'}$, $j\neq j'$. There are $C,C'>0$ such that for all
+              nonzero complex weights, every choice of the copies $k_j$, every $q\geq1$
+              and every $M\geq1$ with $\beta\neq0$,
+              $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$ and
+              $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$.
     \end{enumerate}
     This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the source's construction
     with the coefficients $\beta'_j$ in place of the coefficients $\beta_j$ that

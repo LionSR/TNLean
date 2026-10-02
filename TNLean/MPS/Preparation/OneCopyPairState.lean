@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.RepeatedOverlappingBlockError
+import TNLean.MPS.Preparation.RepeatedOverlappingBlockWeights
 
 /-!
 # The approximating state with the pairs on one copy
@@ -42,7 +42,8 @@ coefficients, for any phases of the weights: for blocks whose `q`-site states ar
 (`exists_approximationError_le_repeatedBlockSum_oneCopy`,
 `exists_approximationError_le_mul_repeatedBlockSum_oneCopy`) and for overlapping blocks
 (`exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy`,
-`exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonneg`).
+`exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy`), with a constant that does
+not depend on the weights.
 
 **False source (eq. (S7), coefficients):** the coefficients `βⱼ = ∑ₖ μ_{j,k}^N` that eq. (S7) takes
 from eq. (S4) are replaced by `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`. With the printed coefficients the
@@ -58,14 +59,9 @@ distinct blocks are orthogonal. Documented in
 
 **Local fix (rate of the overlapping blocks):** in
 `exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy` and
-`exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonneg` the rate
+`exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy` the rate
 `e^{-γ q/ξ_diag}` of the source is replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`.
 Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
-
-**Scope restriction (small weight sums):** the bound of
-`exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy` carries the factor
-`(min(1, b))^{-1/2}` with `b = ∑ⱼ |βⱼ|²`, which the source does not have. Documented in
-`docs/paper-gaps/mswc24_repeated_overlap_small_weight_sum.tex`.
 
 ## Main declarations
 
@@ -361,11 +357,10 @@ theorem exists_approximationError_le_mul_repeatedBlockSum_oneCopy [NeZero b]
 Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate, with the coefficients `β'ⱼ`
 in place of the coefficients `βⱼ` of eq. (S7)). In the setting of
 `MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum`, there is `C > 0`, independent
-of the weights, such that for all complex weights with `|μ_{j,k}| ≤ 1`, every choice of copies
-`k_j`, every block length `q ≥ 1` and every number of blocks `M ≥ 1` with `βⱼ = ∑ₖ μ_{j,k}^N` not
-all zero, the error of the approximating state with the pairs of `σ_j` on the copy `k_j` and the
-coefficients `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M` satisfies `ε ≤ C y e^{C y} / (min(1, b))^{1/2}` with
-`y = M e^{-γ q/ξ}` and `b = ∑ⱼ |βⱼ|²`. -/
+of the weights, such that for all nonzero complex weights, every choice of copies `k_j`, every
+block length `q ≥ 1` and every number of blocks `M ≥ 1` with `βⱼ = ∑ₖ μ_{j,k}^N` not all zero, the
+error of the approximating state with the pairs of `σ_j` on the copy `k_j` and the coefficients
+`β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M` satisfies `ε ≤ C y e^{C y}` with `y = M e^{-γ q/ξ}`. -/
 theorem exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
@@ -378,29 +373,25 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ μ : CopyWeights b m, (∀ j k, ‖μ j k‖ ≤ 1) →
-      ∀ (k : (j : Fin b) → Fin (m j)) (q M : ℕ) [NeZero M], q ≠ 0 →
-      bntWeight μ (M * q) ≠ 0 →
+    ∃ C : ℝ, 0 < C ∧ ∀ (μ : CopyWeights b m) (k : (j : Fin b) → Fin (m j)) (q M : ℕ) [NeZero M],
+      q ≠ 0 → bntWeight μ (M * q) ≠ 0 →
       1 - ‖nonNormalApproxOverlap (repeatedBlockSum Aj ι μ) q M
           (ghzAmplitude (oneCopyWeight μ k q M))
           (fun j => embedPair (ι j (k j)) (fixedPointPair (σ j)))‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
-            Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) /
-          Real.sqrt (min 1 (∑ j, ‖bntWeight μ (M * q) j‖ ^ 2)) := by
+            Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   obtain ⟨C, hC, h⟩ := exists_approximationError_le_repeatedOverlappingBlockSum hι hdisj hN hA
     hσ htr hfix hlam hmix hγ0 hγ
-  refine ⟨C, hC, fun μ hμ k q M _ hq hβ => ?_⟩
+  refine ⟨C, hC, fun μ k q M _ hq hβ => ?_⟩
   rw [nonNormalApproxOverlap_repeatedBlockSum_oneCopy hι hdisj μ hq]
-  exact h μ hμ q M hβ
+  exact h μ q M hβ
 
-/-- **Approximation error with the pairs on one copy, for overlapping blocks and real weights**
+/-- **Approximation error with the pairs on one copy, for overlapping blocks, `O`-form**
 (arXiv:2307.01696, Supplemental Material, Lemma 1'(ii), eq. (S12), at the corrected rate, with the
-coefficients `β'ⱼ`). In the setting of
-`exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy`, there is `C > 0` such that for
-all real weights `0 ≤ μ_{j,k} ≤ 1` of which one equals `1`, every choice of copies `k_j`, every
-block length `q ≥ 1` and every number of blocks `M ≥ 1`, `ε ≤ C y e^{C y}` with
-`y = M e^{-γ q/ξ}`. -/
-theorem exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonneg
+coefficients `β'ⱼ`): in the setting of
+`exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy`, there is `C` with
+`ε ≤ C M e^{-γ q/ξ}`, which is `C (N/q) e^{-γ q/ξ}`, for all nonzero complex weights. -/
+theorem exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -412,17 +403,16 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonn
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ μ : CopyWeights b m, (∀ j k, 0 ≤ μ j k ∧ μ j k ≤ 1) →
-      (∃ j k, μ j k = 1) → ∀ (k : (j : Fin b) → Fin (m j)) (q M : ℕ) [NeZero M], q ≠ 0 →
+    ∃ C : ℝ, 0 < C ∧ ∀ (μ : CopyWeights b m) (k : (j : Fin b) → Fin (m j)) (q M : ℕ) [NeZero M],
+      q ≠ 0 → bntWeight μ (M * q) ≠ 0 →
       1 - ‖nonNormalApproxOverlap (repeatedBlockSum Aj ι μ) q M
           (ghzAmplitude (oneCopyWeight μ k q M))
           (fun j => embedPair (ι j (k j)) (fixedPointPair (σ j)))‖ ≤
-        C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
-          Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
-  obtain ⟨C, hC, h⟩ := exists_approximationError_le_repeatedOverlappingBlockSum_of_nonneg hι hdisj
-    hN hA hσ htr hfix hlam hmix hγ0 hγ
-  refine ⟨C, hC, fun μ hμ hμ1 k q M _ hq => ?_⟩
+        C * (M * Real.exp (-γ * q / correlationLength lam₂)) := by
+  obtain ⟨C, hC, h⟩ := exists_approximationError_le_mul_repeatedOverlappingBlockSum hι hdisj hN hA
+    hσ htr hfix hlam hmix hγ0 hγ
+  refine ⟨C, hC, fun μ k q M _ hq hβ => ?_⟩
   rw [nonNormalApproxOverlap_repeatedBlockSum_oneCopy hι hdisj μ hq]
-  exact h μ hμ hμ1 q M
+  exact h μ q M hβ
 
 end MPSTensor
