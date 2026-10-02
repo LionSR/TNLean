@@ -1,0 +1,110 @@
+\section{Nesting of regional PEPS ground spaces}%
+\label{sec:peps_region_ground_space_nesting}
+
+The regional contraction with arbitrary boundary conditions of
+\cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines 2003--2011,
+implies a compatibility between nested regions. No injectivity or
+nonzero bond dimensions are needed.
+
+\begin{theorem}[Separation of nested incident labels]%
+    \label{thm:peps_nested_incident_labels}
+    \lean{TNLean.PEPS.isRegionIncidentEdge_of_subset,
+        TNLean.PEPS.RegionRemainderConfig,
+        TNLean.PEPS.regionIncidentConfigEquivNested,
+        TNLean.PEPS.sum_mul_openRegionWeight}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    Let $R\subseteq S$, and write $E_R,E_S$ for their incident
+    edges. Then $E_R\subseteq E_S$, and assignments on $E_S$
+    split uniquely into assignments on $E_R$ and $E_S\setminus E_R$.
+    For any coefficient $f$ on the crossing-bond labels of $R$,
+    contraction against its open tensor satisfies
+    \begin{align}
+        \sum_{\mu_R} f(\mu_R)\psi_{R,\mu_R}(\sigma_R)
+          &=\sum_{\eta_R}f(\eta_R|_{\partial R})
+             \prod_{v\in R} A_v(\eta_R,\sigma_R(v)).
+        \label{eq:peps_nested_boundary_sum}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Restriction gives the decomposition of assignments; its inverse
+    joins the two assignments on their disjoint edge sets.
+    Expand the open tensor in
+    (\ref{eq:peps_nested_boundary_sum}), interchange the finite
+    sums, and retain the unique boundary label
+    $\mu_R=\eta_R|_{\partial R}$.
+\end{proof}
+
+\begin{definition}[Physical slice of a nested region]%
+    \label{def:peps_subregion_slice}
+    \lean{TNLean.PEPS.subregionSliceMap,
+        TNLean.PEPS.regionComplementConfigOfSubset,
+        TNLean.PEPS.regionSliceMap_eq_subregionSliceMap_comp}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    For $R\subseteq S$ and fixed physical labels $\tau$ on $R^c$,
+    let $Q_{R,S,\tau}$ send a vector $\phi_S$ on $S$ to the vector
+    $\sigma_R\mapsto\phi_S(\sigma_R,\tau|_{S\setminus R})$.
+    Fixing all complementary labels of $R$ factors as fixing the
+    labels on $S^c$ and then applying $Q_{R,S,\tau}$.
+\end{definition}
+
+\begin{theorem}[Nesting of regional ground spaces]%
+    \label{thm:peps_region_ground_space_nested}
+    \lean{TNLean.PEPS.openRegionWeight_nested_slice_mem_regionGroundSpace,
+        TNLean.PEPS.regionGroundSpace_nested}
+    \leanok
+    \uses{def:peps_region_ground_space,def:peps_subregion_slice}
+    If $R\subseteq S$, then every $\phi_S\in\mathcal G_S$ and
+    every complementary physical configuration $\tau$ satisfy
+    $Q_{R,S,\tau}\phi_S\in\mathcal G_R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_nested_incident_labels}
+    It suffices to consider a boundary-labelled tensor
+    $\psi_{S,\mu_S}$. Separate the incident labels into
+    $\eta_R$ on $E_R$ and $\zeta$ on $E_S\setminus E_R$.
+    Tensor factors at vertices in $S\setminus R$ and the boundary
+    constraint on $S$ depend on $\eta_R$ only through its
+    crossing labels $\mu_R$. Equation
+    (\ref{eq:peps_nested_boundary_sum}) therefore gives
+    \begin{align}
+        Q_{R,S,\tau}\psi_{S,\mu_S}
+          &=\sum_{\zeta,\mu_R}
+              c_{\mu_S,\zeta,\mu_R}(\tau)\psi_{R,\mu_R},
+        \label{eq:peps_nested_contraction}
+    \end{align}
+    where each coefficient is the product of the tensor factors
+    on $S\setminus R$ when the assembled boundary labels agree
+    with $\mu_S$, and is zero otherwise. The right side belongs
+    to $\mathcal G_R$. Linear combinations give the assertion
+    for every $\phi_S\in\mathcal G_S$.
+\end{proof}
+
+\begin{theorem}[Monotonicity of common regional conditions]%
+    \label{thm:peps_parent_regions_monotonicity}
+    \lean{TNLean.PEPS.regionParentGroundSpace_le_of_regions_covered,
+        TNLean.PEPS.regionParentGroundSpace_antitone_regions,
+        TNLean.PEPS.ker_regionParentHamiltonian_le_of_regions_covered}
+    \leanok
+    \uses{def:peps_region_parent_hamiltonian}
+    Let $(R_i)_{i\in I}$ and $(S_j)_{j\in J}$ be collections of
+    regions such that each $R_i$ is contained in some $S_j$.
+    Then the common regional ground space for $(S_j)$ is contained
+    in that for $(R_i)$. In particular, for finite collections,
+    any positive parent Hamiltonians built from these regions
+    satisfy $\ker H_S\subseteq\ker H_R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_ground_space_nested,
+        def:peps_subregion_slice,thm:peps_region_parent_common_kernel}
+    For each $R_i$, choose a containing $S_j$. A vector satisfying
+    the $S_j$ condition has every complementary slice in
+    $\mathcal G_{S_j}$. Apply the nesting theorem and the
+    factorization of physical slices to obtain the $R_i$
+    condition. The parent-kernel statement follows from the
+    characterization by common regional conditions.
+\end{proof}

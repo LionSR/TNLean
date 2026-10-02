@@ -1,0 +1,81 @@
+\section{Regional conditions after the site inverses}%
+\label{sec:peps_vertex_inverse_region_slice}
+
+\begin{lemma}[Slicing a product of site maps]%
+    \label{lem:peps_dependent_region_slice_product}
+    \lean{TNLean.PEPS.assembleDependentRegionConfig,
+        TNLean.PEPS.globalDependentPhysicalMap,
+        TNLean.PEPS.dependentRegionSlice,
+        TNLean.PEPS.globalDependentPhysicalMap_apply,
+        TNLean.PEPS.dependentPhysicalProduct_assembleRegion,
+        TNLean.PEPS.dependentRegionSlice_globalDependentPhysicalMap}
+    \leanok
+    \uses{def:peps_injective_vertex_coordinates}
+    Let $R$ be any region of a finite graph and let
+    $F_v:\mathbb C^d\to\mathcal Q_v$ be local maps, whose output
+    spaces may depend on $v$. For an outside output configuration
+    $\tau$, the $R$-slice of $(\bigotimes_vF_v)\psi$ is
+    \[
+        \sum_\beta
+          \left(\prod_{v\notin R}F_v(\tau_v,\beta_v)\right)
+          \left(\bigotimes_{v\in R}F_v\right)\psi_\beta,
+    \]
+    where $\beta$ ranges over outside physical configurations and
+    $\psi_\beta$ denotes the corresponding physical $R$-slice.
+    This is a finite contraction identity; it does not require
+    injectivity or an inner product on the output spaces.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the product map in physical configurations. Split each
+    configuration into its coordinates in $R$ and its coordinates
+    outside $R$, and factor the product of the local coefficients.
+    Sum first over the coordinates in $R$.
+\end{proof}
+
+\begin{definition}[Common virtual regional conditions]%
+    \label{def:peps_vertex_virtual_parent_ground_space}
+    \lean{TNLean.PEPS.vertexVirtualParentGroundSpace,
+        TNLean.PEPS.mem_vertexVirtualParentGroundSpace_iff}
+    \leanok
+    \uses{def:peps_injective_vertex_coordinates}
+    For any tensor on a finite graph and any family of regions
+    $(R_i)_i$, let $\mathcal K_{\mathrm{virt}}$ consist of the independent
+    virtual vectors whose $R_i$-slices belong to the actual virtual
+    bond range $\mathcal B_{R_i}$, for every $i$ and every outside
+    virtual configuration. This definition requires no injectivity.
+\end{definition}
+
+\begin{theorem}[Physical regional conditions imply virtual bond conditions]%
+    \label{thm:peps_vertex_inverse_region_slice}
+    \lean{TNLean.PEPS.globalDependentPhysicalMap_localLeftInverse,
+        TNLean.PEPS.regionVertexLeftInverse_mem_regionVirtualBondMap_range,
+        TNLean.PEPS.dependentRegionSlice_globalVertexLeftInverse_mem,
+        TNLean.PEPS.globalVertexLeftInverse_mem_vertexVirtualParentGroundSpace}
+    \leanok
+    \uses{lem:peps_dependent_region_slice_product,
+        thm:peps_injective_vertex_reconstruction,
+        def:peps_vertex_virtual_parent_ground_space}
+    Suppose every site map is injective, with chosen left inverses
+    $L_v$, and write $L_A=\bigotimes_vL_v$.
+    For a region $R$, let $\mathcal B_R$ be the image of the actual
+    virtual bond contraction map, with the crossing bond coordinates
+    free. If every physical $R$-slice of $\psi$ belongs to the
+    regional PEPS space, then every virtual $R$-slice of $L_A\psi$
+    belongs to $\mathcal B_R$.
+    The implication holds simultaneously for any family of regions.
+    No reconstruction identity or virtual support condition is assumed.
+    This is the site-inverse step of the virtual-pair argument in
+    \cite[Section~IV.C.1]{Cirac2021Matrix}; the identification of the
+    common virtual conditions with the globally paired bond space
+    is a separate assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    The regional product inverse sends the regional physical space
+    into $\mathcal B_R$, since composing it with the actual regional
+    open-boundary map gives the virtual bond contraction map.
+    Apply the slicing identity with $F_v=L_v$.
+    Every summand lies in the subspace $\mathcal B_R$, and hence so
+    does their linear combination.
+\end{proof}

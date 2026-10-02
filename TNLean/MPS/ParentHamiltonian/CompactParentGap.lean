@@ -25,7 +25,11 @@ Appendix A, lines 2475--2580, proves the uniform gap along a path of tensors in
 normal form, possibly with several blocks. The two compact-gap theorems here
 treat continuous families of one-site injective tensors with the canonical
 two-site interaction, replacing Nachtergaele's bound by Knabe's criterion.
-Documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
+The normal-family and multiblock extensions are proved separately in
+`CompactNormalParentGap.lean` and `CompactBlockParentGap.lean`; continuous
+positive interactions are treated in `CompactParentInteractionGap.lean`.
+The earlier restriction and its resolution are documented in
+`docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
 open scoped Topology
@@ -45,14 +49,9 @@ theorem exists_uniform_parentHamiltonianES_gap_of_strict_openWindows
     ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ x ∈ S, ∀ N : ℕ, N₀ ≤ N →
       ∀ v ∈ (LinearMap.ker (parentHamiltonianES (A x) 2 N))ᗮ,
         δ * ‖v‖ ≤ ‖parentHamiltonianES (A x) 2 N v‖ := by
-  apply hS.exists_uniform_pos_nat_bounds
-    (fun δ N₀ x => ∀ N : ℕ, N₀ ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES (A x) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES (A x) 2 N v‖)
-  · intro δ δ' N₀ x hle hgap N hN v hv
-    exact (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap N hN v hv)
-  · intro δ N₀ N₁ x hle hgap N hN
-    exact hgap N (hle.trans hN)
+  apply hS.exists_uniform_norm_lower_bound_on_tail
+    (fun x N v => parentHamiltonianES (A x) 2 N v)
+    (fun x N => ↑((LinearMap.ker (parentHamiltonianES (A x) 2 N))ᗮ))
   · intro x hx
     obtain ⟨m, hm, γ, hnum, hgap⟩ := hWindows x hx
     obtain ⟨δ, hδ, hnear⟩ :=

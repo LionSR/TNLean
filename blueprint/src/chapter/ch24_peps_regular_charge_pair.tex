@@ -1,0 +1,69 @@
+\begin{definition}[The accessible two-register charge-pair operator]
+    \label{def:peps_regular_charge_pair}
+    \lean{TNLean.PEPS.regularChargePairCoefficient,
+      TNLean.PEPS.regularChargePairOperator,
+      TNLean.PEPS.normalizedRegularChargePairCoefficient}
+    \leanok
+    Let $G$ be a finite group, $\chi:G\to\mathbb C$, and $p\in G$.
+    On the two group registers, define the diagonal operator
+    \[
+        \Pi(\chi,p)|g,h\rangle=\chi(ph^{-1}g)|g,h\rangle.
+    \]
+    Its coefficient vector is $v_{\chi,p}(g,h)=\chi(ph^{-1}g)$;
+    put $\widehat v_{\chi,p}=|G|^{-1}v_{\chi,p}$.
+    This is the accessible operator of
+    \cite[charge-pair creation]{Schuch2010PEPS}, lines 2505--2535.
+    The identities below concern the two registers; an original-spin
+    creation operation requires a separate physical contraction comparison.
+\end{definition}
+
+\begin{theorem}[Simultaneous-translation invariance of the actual charge pair]
+    \label{thm:peps_regular_charge_pair_invariance}
+    \lean{TNLean.PEPS.regularChargePairCoefficient_left_invariant,
+      TNLean.PEPS.regularChargePairOperator_commute,
+      TNLean.PEPS.regularChargePairOperator_conjugation}
+    \leanok
+    \uses{def:peps_regular_charge_pair}
+    For every $x,g,h\in G$ and every coefficient function $\chi$,
+    \[
+        v_{\chi,p}(xg,xh)=v_{\chi,p}(g,h).
+    \]
+    If $U_x$ is the left-regular permutation matrix, then
+    \[
+        [U_x\otimes U_x,\Pi(\chi,p)]=0,
+        \qquad
+        (U_x\otimes U_x)\Pi(\chi,p)(U_x\otimes U_x)^*
+          =\Pi(\chi,p).
+    \]
+    No invariance premise on $\chi$ is needed.
+\end{theorem}
+\begin{proof}\leanok
+    The relative coordinate satisfies $(xh)^{-1}(xg)=h^{-1}g$.
+    Thus the diagonal entries are unchanged by the simultaneous permutation.
+    The permutation matrix is unitary, giving the conjugation identity.
+\end{proof}
+
+\begin{theorem}[Normalization and the nontrivial-charge orthogonality]
+    \label{thm:peps_regular_charge_pair_normalization}
+    \lean{TNLean.PEPS.regularChargePairCoefficient_normSq,
+      TNLean.PEPS.normalizedRegularChargePairCoefficient_normSq,
+      TNLean.PEPS.normalizedRegularChargePairCoefficient_orthogonal_uniform}
+    \leanok
+    \uses{def:peps_regular_charge_pair,
+      thm:peps_translated_character_inner_product}
+    If $\chi$ is the character of a unitary irreducible representation, then
+    \[
+        \|v_{\chi,p}\|^2=|G|^2,
+        \qquad \|\widehat v_{\chi,p}\|^2=1.
+    \]
+    If this irreducible character is nontrivial, the normalized vector is
+    orthogonal to the normalized uniform vector
+    $\Omega(g,h)=|G|^{-1}$. This latter orthogonality needs only
+    irreducibility and nontriviality, without unitarity of the representation.
+\end{theorem}
+\begin{proof}\leanok
+    For each fixed $h$, translated character orthogonality gives squared
+    norm $|G|$ upon summing over $g$. Summing over $h$ gives $|G|^2$.
+    The nontrivial character has zero pairing with the trivial character
+    for every translation, so its pairing with the uniform pair vector vanishes.
+\end{proof}

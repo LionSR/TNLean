@@ -1,0 +1,7 @@
+__pycache__/
+*.aux
+*.log
+*.out
+*.synctex.gz
+.env
+code/external/*/

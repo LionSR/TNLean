@@ -1,0 +1,38 @@
+\section{Normalized local physical form}%
+\label{sec:peps_g_injective_physical_normal_form}
+
+\begin{theorem}[Normalized invariant-space form]%
+    \label{thm:peps_g_injective_normalized_physical_form}
+    \lean{TNLean.PEPS.IsGInjective.exists_normalized_isGIsometric_physicalEquiv}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let a finite group $G$ act linearly on a finite-dimensional
+    complex Hilbert space $\mathcal V$, and let
+    $T:\mathcal V\to\mathcal P$ be $G$-injective, where
+    $\mathcal P$ is a finite-dimensional complex Hilbert space.
+    There exists an invertible physical map
+    $F:\mathcal P\to\mathcal P$ such that $FT$ is invariant and
+    \[
+        \langle FTx,FTy\rangle=\langle x,y\rangle
+        \qquad(x,y\in\mathcal V^G).
+    \]
+    In particular, for the regular virtual representation this is
+    a normalized $G$-isometric tensor, with normalization factor one.
+    This local consequence of \cite[Definition~5.1 and the definition
+    of $G$-isometric PEPS]{Schuch2010PEPS} concerns an invertible
+    physical transformation; it asserts no equality of closed states.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_ambient_physical_comparison,
+        thm:peps_g_injective_invariants_range}
+    The invariant virtual space and the physical range have equal
+    dimensions. Choose orthonormal bases to obtain an isometric
+    isomorphism $J:\mathcal V^G\to\operatorname{ran}T$.
+    If $P_G=|G|^{-1}\sum_g\rho(g)$ is group averaging, define
+    $S=JP_G$, with values included in $\mathcal P$.
+    Averaging is invariant and restricts to the identity on
+    $\mathcal V^G$. Thus $S$ is $G$-injective and preserves
+    inner products there. The ambient physical comparison gives
+    an invertible $F$ satisfying $FT=S$.
+\end{proof}

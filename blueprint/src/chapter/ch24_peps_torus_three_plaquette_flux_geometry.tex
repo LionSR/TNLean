@@ -1,0 +1,57 @@
+\begin{definition}[Literal transports on the three selected vertical bonds]%
+    \label{def:peps_torus_three_plaquette_flux_assignment}
+    \lean{TNLean.PEPS.torusThreePlaquetteFluxAssignment,
+        TNLean.PEPS.torusThreePlaquetteFluxAssignment_eq_treeCycleAssignment,
+        TNLean.PEPS.torusThreePlaquetteFluxAssignment_up_transport}
+    \leanok
+    \uses{thm:peps_three_plaquette_geometry}
+    In the actual translated three-plaquette strip, prescribe upward
+    transports $t_0,t_1,t_2$ on its first three vertical bonds. The rightmost
+    vertical bond and all other bonds carry the identity.
+    In the native ordered convention, the three selected coefficients are
+    $k_y(t_i)$, where
+    \begin{align}
+        k_y(t)=
+        \begin{cases}
+            t,&\operatorname{val}(y)<\operatorname{val}(y+1),\\
+            t^{-1},&\text{otherwise}.
+        \end{cases}
+    \end{align}
+    This literal assignment is exactly the tree-cycle assignment with
+    residual $k_y(t_i)$ on $e_i$, and identity on every other non-tree bond.
+    Thus a single orientation flag treats all three chords, including
+    at the vertical seam. This construction is auxiliary to the adjacent
+    fluxes in \cite[braiding passage]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Actual three-plaquette and surrounding holonomies]%
+    \label{thm:peps_torus_three_plaquette_flux_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusThreePlaquetteFluxAssignment,
+        TNLean.PEPS.torusThreePlaquette_rightPairWalk_mem_region}
+    \leanok
+    \uses{def:peps_torus_three_plaquette_flux_assignment,
+        def:peps_torus_plaquette_flux_geometry,
+        def:peps_torus_joint_flux_geometry}
+    The actual counterclockwise left, middle, and right plaquette walks
+    have holonomies
+    \begin{align}
+        (a,b,c)=(t_0^{-1}t_1,\ t_1^{-1}t_2,\ t_2^{-1}).
+    \end{align}
+    The six-step outer walk surrounding the middle and right plaquettes
+    has holonomy $t_1^{-1}=bc$. Every site visited by this walk belongs
+    to the actual eight-site strip. These formulas hold at every translated
+    position under horizontal period at least five and vertical period at
+    least three, including both seams.
+    They concern an explicit finite coordinate geometry; an identification
+    of a corresponding physical operation with a string-crossing braid is
+    not asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    Directed upward transport at the four columns is respectively
+    $t_0,t_1,t_2,1$. All horizontal transports are the identity, and reversal
+    inverts the directed transport. Substitution in the reverse-ordered
+    walk products gives the three plaquette formulas and the surrounding
+    value $t_1^{-1}$. The six vertices of the latter walk occupy labels
+    $1$ through $6$ of the eight-site numbering, proving containment.
+\end{proof}

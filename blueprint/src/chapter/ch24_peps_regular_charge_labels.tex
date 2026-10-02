@@ -1,0 +1,33 @@
+\begin{theorem}[Charge labels derived from the regular representation]
+    \label{thm:peps_regular_charge_labels}
+    \lean{TNLean.PEPS.leftRegularEuclidean_adjoint,
+      TNLean.PEPS.character_mem_regularChargeLabels,
+      TNLean.PEPS.exists_unitary_irreducible_regularChargeLabel,
+      TNLean.PEPS.regularChargeMatrix_normSq_of_mem_irreducibleCharacterFinset,
+      TNLean.PEPS.regularChargeDetectorMatrix_other_of_mem_irreducibleCharacterFinset}
+    \leanok
+    \uses{thm:peps_unitary_character_adjoint,
+      thm:peps_regular_charge_detector_matrix_eigenvectors}
+    Let $G$ be a finite group and let $C$ be the finite set of irreducible
+    characters occurring in its regular representation on $\ell^2(G)$.
+    Every finite-dimensional irreducible complex representation has character
+    in $C$. For each $\chi\in C$, an actual irreducible subrepresentation
+    of $\ell^2(G)$ has character $\chi$ and inverse adjoints.
+    No unitary realization of the character is supplied as a hypothesis.
+    Consequently,
+    \[
+        \|A_\chi(p;x,y)\|^2=|G|,
+        \qquad D_\chi A_\psi(p;x,y)=0\quad(\psi\in C,\ \psi\ne\chi).
+    \]
+    These are the group-derived charge labels and coefficient identities used
+    in \cite[charge detection]{Schuch2010PEPS}, lines 2464--2486.
+\end{theorem}
+\begin{proof}\leanok
+    The regular permutation matrices are unitary. Their invariant subspaces
+    inherit inverse adjoints, so every occurring irreducible character has
+    the required unitary representative. Every irreducible representation
+    admits a nonzero intertwining map into the regular representation; its
+    image gives an occurring irreducible subrepresentation. Apply the proved
+    normalization and distinct-charge projection identities to these
+    representatives.
+\end{proof}

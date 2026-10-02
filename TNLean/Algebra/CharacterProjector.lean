@@ -192,6 +192,19 @@ theorem _root_.DirectSum.IsInternal.linearMap_ext {ι : Type*} [DecidableEq ι]
   exact Submodule.iSup_induction N (motive := fun v => f v = g v) hv hfg (by simp)
     fun v w hv hw => by simp [hv, hw]
 
+/-- Endomorphisms agreeing on every irreducible subrepresentation are equal.
+Source: Maschke's decomposition underlying SCP10, Lemma 4.4, lines 983–1005. -/
+theorem linearMap_ext_on_irreducible (ρ : Representation k G V)
+    {f g : Module.End k V}
+    (hfg : ∀ S : Subrepresentation ρ, S.toRepresentation.IsIrreducible →
+      ∀ v ∈ S, f v = g v) : f = g := by
+  classical
+  obtain ⟨s, hsA, hs⟩ := exists_isInternal_isAtom ρ
+  apply hs.linearMap_ext
+  intro S v hv
+  exact hfg S.1 (Subrepresentation.isIrreducible_toRepresentation_of_isAtom
+    (hsA S.1 S.2)) v hv
+
 end Decomposition
 
 section Characters
@@ -449,17 +462,17 @@ characters of `ρ` sum to the identity, `∑_i P_i = 𝟙`. -/
 theorem sum_charProjector_irreducibleCharacters :
     ∑ χ ∈ irreducibleCharacterFinset ρ, charProjector ρ χ = 1 := by
   classical
-  obtain ⟨s, hsA, hs⟩ := exists_isInternal_isAtom ρ
-  refine hs.linearMap_ext fun S v hv => ?_
-  have := Subrepresentation.isIrreducible_toRepresentation_of_isAtom (hsA S.1 S.2)
+  apply linearMap_ext_on_irreducible ρ
+  intro S hS v hv
+  let := hS
   rw [LinearMap.sum_apply, Module.End.one_apply]
   have hχ : ∀ χ ∈ irreducibleCharacterFinset ρ, charProjector ρ χ v =
-      if S.1.toRepresentation.character = χ then v else 0 := by
+      if S.toRepresentation.character = χ then v else 0 := by
     intro χ hχ
     obtain ⟨S', hS', rfl⟩ := (mem_irreducibleCharacterFinset ρ).1 hχ
-    exact charProjector_apply_of_mem ρ S'.toRepresentation S.1 hv
+    exact charProjector_apply_of_mem ρ S'.toRepresentation S hv
   rw [Finset.sum_congr rfl hχ, Finset.sum_ite_eq]
-  rw [ite_eq_left ((mem_irreducibleCharacterFinset ρ).2 ⟨S.1, this, rfl⟩)]
+  rw [ite_eq_left ((mem_irreducibleCharacterFinset ρ).2 ⟨S, hS, rfl⟩)]
 
 /-- Source: arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 1026–1028 (the proof of
 Lemma `lemma:noninj:semireg-trace-ug-delta`), in the form `tr[U_k P_i] = m_i χ_i(k)`: the trace

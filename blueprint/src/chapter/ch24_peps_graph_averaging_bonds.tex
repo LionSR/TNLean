@@ -1,0 +1,137 @@
+\begin{definition}[Actual incidence contraction]%
+    \label{def:peps_graph_bond_contraction}
+    \lean{TNLean.PEPS.graphBondNetwork}
+    \leanok
+    Let $\Gamma$ be a finite simple graph with an ordered vertex set $\mathcal V$,
+    let $X$ be a finite virtual alphabet, and let $P_v$ be the physical alphabet
+    at vertex $v$. For local coefficients $a_v:X^{E(v)}\times P_v\to\mathbb C$,
+    define the actual contracted coefficient
+    \begin{align}
+        \Psi_a(\sigma)=\sum_{\eta:E(\Gamma)\to X}
+            \prod_{v\in\mathcal V}a_v(\eta|_{E(v)},\sigma_v).
+    \end{align}
+    Physical alphabets may depend on the vertex; no auxiliary tensor structure
+    or assumed coefficient identity is needed.
+\end{definition}
+
+\begin{theorem}[Uniformly numbered tensor coefficients]%
+    \label{thm:peps_graph_bond_contraction_tensor}
+    \lean{TNLean.PEPS.stateCoeff_groupBondTensor_eq_graphBondNetwork}
+    \leanok
+    \uses{def:peps_graph_bond_contraction}
+    When all physical alphabets are $\{0,\ldots,d-1\}$, numbering the virtual
+    alphabet identifies this contraction with the original tensor coefficient.
+\end{theorem}
+\begin{proof}\leanok
+    Reindex the virtual summation by the product of the alphabet numberings.
+\end{proof}
+
+\begin{definition}[Regrouping physical coordinates by bonds]%
+    \label{def:peps_graph_physical_bond_coordinates}
+    \lean{TNLean.PEPS.graphSiteBondEndpointEquiv,
+        TNLean.PEPS.graphBondRegrouping,
+        TNLean.PEPS.graphBondRegroupingIsometry}
+    \leanok
+    Orient every edge from its smaller endpoint $t(e)$ to its larger endpoint
+    $h(e)$. The site coordinates $\sigma_v:E(v)\to X$ are equivalently the bond
+    pairs $\beta_e=(\sigma_{h(e)}(e),\sigma_{t(e)}(e))$.
+    This bijection induces a linear equivalence of coefficient spaces and its
+    corresponding Hilbert-space coordinate isometry.
+\end{definition}
+
+\begin{theorem}[Exact endpoint coordinates and overlap preservation]%
+    \label{thm:peps_graph_physical_bond_coordinates}
+    \lean{TNLean.PEPS.graphSiteBondEndpointEquiv_symm_tail,
+        TNLean.PEPS.graphSiteBondEndpointEquiv_symm_head,
+        TNLean.PEPS.graphBondRegrouping_apply,
+        TNLean.PEPS.graphBondRegrouping_dotProduct}
+    \leanok
+    \uses{def:peps_graph_physical_bond_coordinates}
+    Recovering the site coordinates reads the second endpoint coordinate at
+    each tail and the first at each head. Regrouping evaluates the original
+    coefficient at these recovered coordinates and preserves every inner product.
+\end{theorem}
+\begin{proof}\leanok
+    Each half-edge occurs once in the endpoint pairs. Reindex the finite inner
+    product by this bijection.
+\end{proof}
+
+\begin{definition}[Oriented averaging sites and virtual weights]%
+    \label{def:peps_graph_weighted_averaging_site}
+    \lean{TNLean.PEPS.graphAveragingSite,
+        TNLean.PEPS.graphDress,
+        TNLean.PEPS.graphDressedAveragingSite,
+        TNLean.PEPS.graphThetaWeightedAveragingSite}
+    \leanok
+    \uses{def:peps_graph_bond_contraction,def:peps_representation_theta}
+    Let $G$ be finite and $U$ a matrix representation on $\mathbb C^X$.
+    The local averaging site is $|G|^{-1}\sum_g$ of the product of
+    $U(g)$ at head legs and $U(g^{-1})^{\mathsf T}$ at tail legs.
+    Inserting a matrix $W$ on every virtual leg means summing the original
+    site coefficient against the product of its oriented endpoint entries.
+    Apply this insertion to the averaging site to obtain the dressed tensor;
+    taking $W=\Theta$ gives the fourth-root-weighted tensor.
+    These are the finite-graph local contractions underlying
+    \cite[Section~7]{Schuch2010PEPS}, with normalized site averages.
+\end{definition}
+
+\begin{theorem}[Actual weighted graph coefficients]%
+    \label{thm:peps_graph_weighted_averaging_coherent}
+    \lean{TNLean.PEPS.graphDress_one,
+        TNLean.PEPS.graphDress_averagingSite,
+        TNLean.PEPS.graphBondRegrouping_dressedAveragingSite_coherent,
+        TNLean.PEPS.graphBondRegrouping_averagingSite_coherent,
+        TNLean.PEPS.graphBondRegrouping_thetaWeightedAveragingSite_coherent}
+    \leanok
+    \uses{def:peps_graph_weighted_averaging_site,
+        thm:peps_graph_physical_bond_coordinates}
+    Identity virtual weights leave every site unchanged. If $W$ commutes with
+    every $U(g)$, the actual dressed graph state, regrouped by physical bonds, is
+    \begin{align}
+        \Psi_{U,W}(\beta)=|G|^{-|\mathcal V|}
+          \sum_{q:\mathcal V\to G}\prod_{e\in E(\Gamma)}
+          [W^2U(q_{h(e)}q_{t(e)}^{-1})]_{\beta_e^1,\beta_e^2}.
+    \end{align}
+    This includes $W=I$ and the actual fourth-root operator $W=\Theta$.
+    No connectedness, valence, or topological assumption is required.
+\end{theorem}
+\begin{proof}\leanok
+    Expand the local convolution to obtain $WU(g^{-1})$ on tail legs and
+    $U(g)W$ on head legs. Expand the site averages into one group label per
+    vertex and regroup the half-edge product into its endpoint factors.
+    The remaining virtual summation factors by edges. Each edge contraction
+    gives $U(q_h)W^2U(q_t^{-1})=W^2U(q_hq_t^{-1})$.
+    For $W=\Theta$, commutation follows from the character-projector definition.
+\end{proof}
+
+\begin{theorem}[Actual finite-graph multiplicity restoration]%
+    \label{thm:peps_graph_multiplicity_bond_state}
+    \lean{TNLean.PEPS.graphBondRegrouping_blockFourthRootWeight}
+    \leanok
+    \uses{thm:peps_coherent_multiplicity_transport,
+        thm:peps_graph_weighted_averaging_coherent,
+        thm:peps_torus_block_multiplicity_state}
+    Let $D_i$ be matrix representations of positive dimensions $d_i$, and set
+    $U=\bigoplus_iD_i$ and $W=\bigoplus_i d_i^{1/4}I$.
+    The actual dressed graph state has matching-sector support on every
+    physical bond. The product of the multiplicity-restoring maps
+    \begin{align}
+        |i;k,l\rangle\longmapsto d_i^{-1/2}
+            \sum_{m=1}^{d_i}|i;k,m\rangle\langle i;l,m|
+    \end{align}
+    sends this state to the actual averaging-site graph state for
+    $\bigoplus_i(D_i\otimes I_{d_i})$.
+    Support and the state equality are conclusions, not hypotheses.
+    This is the finite-simple-graph bond calculation of
+    \cite[Section~7]{Schuch2010PEPS}; group-derived Fourier choices and
+    full-domain physical isometries are separate consequences.
+\end{theorem}
+\begin{proof}\leanok
+    The two endpoint weights give
+    $W^2U(g)=\bigoplus_i\sqrt{d_i}\,D_i(g)$.
+    Matching-sector inclusion reconstructs each factor of the actual coherent
+    state. The normalized multiplicity map sends this weighted factor to
+    $\bigoplus_i(D_i(g)\otimes I_{d_i})$.
+    A product physical map acts separately on every factor of every coherent
+    summand, giving the asserted actual state.
+\end{proof}

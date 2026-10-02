@@ -1,0 +1,91 @@
+\section{Parent spaces determined by the physical ray}%
+\label{sec:peps_regular_state_parent_rigidity}
+
+\begin{lemma}[Reduced states under rescaling]%
+    \label{lem:peps_reduced_density_physical_ray}
+    \lean{TNLean.PEPS.regionReducedDensity_of_stateCoeff_smul,
+        TNLean.PEPS.range_regionReducedDensity_of_stateCoeff_smul,
+        TNLean.PEPS.rank_regionReducedDensity_of_stateCoeff_smul,
+        TNLean.PEPS.normalizedRegionReducedDensity_of_stateCoeff_smul}
+    \leanok
+    Suppose two finite-graph PEPS vectors satisfy
+    $|\Psi_B\rangle=c|\Psi_A\rangle$ with $c\ne0$. For every
+    region $R$, their unnormalized reduced densities satisfy
+    $\rho_R(B)=|c|^2\rho_R(A)$. Their reduced supports and ranks
+    agree, and their normalized reduced densities are equal.
+\end{lemma}
+
+\begin{proof}\leanok
+    The outer product scales by $c\overline c$, and partial trace
+    is linear. Multiplication by a nonzero scalar preserves the
+    range and rank. Dividing by the trace cancels the same scalar.
+    The zero-vector convention also respects this identity.
+\end{proof}
+
+\begin{lemma}[Parent operators determined by local spaces]%
+    \label{lem:peps_parent_operators_local_spaces}
+    \lean{TNLean.PEPS.isRegionParentInteraction_iff_of_regionGroundSpace_eq,
+        TNLean.PEPS.canonicalRegionParentInteraction_eq_of_regionGroundSpace_eq,
+        TNLean.PEPS.regionParentGroundSpace_eq_of_regionGroundSpace_eq,
+        TNLean.PEPS.canonical_regionParentHamiltonian_eq_of_regionGroundSpace_eq}
+    \leanok
+    If two tensor families have equal regional spaces on every
+    region in a prescribed collection, they have the same
+    admissible positive parent interactions and the same
+    canonical local projectors on those regions. Their common
+    parent ground spaces agree. For a finite collection, the
+    canonical sums of local projectors are equal as operators.
+\end{lemma}
+
+\begin{proof}\leanok
+    A parent interaction is characterized by positivity and its
+    regional kernel, and the canonical projector is determined
+    by that kernel. The common ground space is the intersection
+    of the corresponding slice conditions. Summing equal lifted
+    projectors gives equal canonical Hamiltonians.
+\end{proof}
+
+\begin{theorem}[Regular parent spaces are intrinsic to the physical ray]%
+    \label{thm:peps_regular_parent_spaces_physical_ray}
+    \lean{TNLean.PEPS.regionGroundSpace_eq_of_stateCoeff_smul_regular_connected,
+        TNLean.PEPS.regionParentGroundSpace_eq_of_stateCoeff_smul_regular_connected}
+    \leanok
+    \uses{lem:peps_reduced_density_physical_ray,
+        lem:peps_parent_operators_local_spaces,
+        lem:peps_regular_ginjective_cut_range,
+        thm:peps_regular_region_support}
+    Let a finite ambient graph be connected. Suppose two regular
+    group-injective tensor families have proportional closed
+    vectors with nonzero proportionality scalar. Their finite
+    virtual groups may differ. Across any cut with both induced
+    sides connected, their regional PEPS spaces agree. Their
+    common parent ground spaces therefore agree for any family
+    of such cuts.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each regional PEPS space is the support of the corresponding
+    physical reduced density. The rescaling lemma identifies
+    these supports. Equality of the common ground spaces then
+    follows from equality of all regional conditions.
+\end{proof}
+
+\begin{theorem}[The physical ray determines the regular group order]%
+    \label{thm:peps_regular_group_order_physical_ray}
+    \lean{TNLean.PEPS.card_group_eq_of_stateCoeff_smul_regular_connected_cut}
+    \leanok
+    \uses{lem:peps_reduced_density_physical_ray,
+        lem:peps_regular_ginjective_cut_range,
+        thm:peps_regular_region_support}
+    Suppose two regular group-injective descriptions have
+    proportional closed vectors with nonzero scalar. If a cut
+    has connected induced sides and $b\geq2$ crossing edges,
+    the two virtual groups $G$ and $H$ have equal order.
+    This assertion does not identify their multiplication laws.
+\end{theorem}
+
+\begin{proof}\leanok
+    Their reduced ranks agree, while the regular cut-rank formula
+    gives $|G|^{b-1}=|H|^{b-1}$. Since $b-1>0$, the power map
+    on natural numbers is injective, and $|G|=|H|$ follows.
+\end{proof}

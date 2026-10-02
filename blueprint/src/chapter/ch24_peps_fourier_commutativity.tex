@@ -1,0 +1,44 @@
+\begin{theorem}[Fourier dimensions and commutativity]
+    \label{thm:peps_fourier_commutativity}
+    \lean{TNLean.PEPS.exists_dimension_gt_one_iff_not_mul_comm_of_fourier,
+        TNLean.PEPS.sum_dimensions_lt_card_iff_not_mul_comm_of_fourier}
+    \leanok
+    \uses{thm:peps_regular_unitary_fourier,
+        thm:peps_fourier_bond_dimensions}
+    In an actual regular Fourier decomposition
+    $L_g\cong\bigoplus_iD_i(g)\otimes I_{d_i}$, with every $D_i$
+    irreducible and $d_i>0$, some $d_i>1$ if and only if $G$ is
+    noncommutative. Equivalently, $\sum_i d_i<|G|$ if and only if
+    $G$ is noncommutative. This is a consequence of the representation
+    construction in \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    For a commutative group, Schur's lemma over $\mathbb C$ makes every
+    finite-dimensional irreducible representation one-dimensional.
+    Conversely, if every $d_i=1$, the Fourier blocks commute.
+    The Fourier basis then gives $L_gL_h=L_hL_g$, and faithfulness of
+    the regular representation implies $gh=hg$.
+    Finally, $\sum_i d_i<\sum_i d_i^2=|G|$ holds exactly when some
+    positive $d_i$ exceeds one.
+\end{proof}
+
+\begin{theorem}[Strict reduction for the smallest semi-regular representation]
+    \label{thm:peps_smallest_semiregular_strict_dimension}
+    \lean{TNLean.PEPS.exists_smallestSemiRegular_dimension_strict_iff_not_mul_comm}
+    \leanok
+    \uses{thm:peps_regular_minimal_representation,
+        thm:peps_semiregular_dimension_bound,
+        thm:peps_fourier_commutativity}
+    Every finite group determines a unitary semi-regular representation
+    $U_{\min}=\bigoplus_iD_i$ whose dimension is at most that of any
+    finite-dimensional complex semi-regular representation.
+    Moreover, $\dim U_{\min}<|G|$ if and only if $G$ is noncommutative.
+    Thus strict virtual dimension reduction in the construction of
+    \cite[Section~7]{Schuch2010PEPS} is characterized by
+    noncommutativity of the group.
+\end{theorem}
+\begin{proof}\leanok
+    Choose the representation from the actual regular Fourier decomposition.
+    The universal dimension comparison proves minimality, and the Fourier
+    commutativity criterion proves the strict inequality assertion.
+\end{proof}

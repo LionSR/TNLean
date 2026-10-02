@@ -1,0 +1,33 @@
+\begin{theorem}[Horizontal movement in a common tree background]
+\label{thm:peps_gauged_horizontal_flux_move}
+\lean{
+TNLean.PEPS.IsGIsometric.exists_unitary_torusGaugedHorizontalFluxMove,
+TNLean.PEPS.torusGaugedHorizontalFluxAssignment,
+TNLean.PEPS.torusGaugedHorizontalFluxAssignment_one
+}
+\leanok
+On a regular torus with horizontal period at least four and vertical period
+at least three, let $R$ be the translated six-site horizontal two-plaquette
+block. Reconstruct both internal assignments from the same vertex labels
+$k$ and the single-bond or two-bond insertion of $g$. There is one unitary
+$W$ on the original spins in $R$, chosen before $k$, $g$, all boundary
+configurations and all common exterior and crossing operators, which sends
+the single insertion to the two-bond insertion. Its adjoint effects the
+reverse movement. The identity extension outside $R$ gives the corresponding
+identity of actual closed contractions. Both periodic seams are included.
+
+This is a finite-torus common-background specialization of the local movement
+construction in SCP10, Theorem~6.16, and its accessible-coordinate argument
+(local source lines 1765--1920 and 2271--2305). It does not identify different
+crossing presentations or establish the prescribed four-endpoint braid;
+see \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\uses{thm:peps_regular_gauged_cycle_permutation}
+\end{theorem}
+\begin{proof}\leanok
+Use the actual translated induced graph, its fixed spanning path, and its two
+native vertical chords. The two-cycle permutation extends the first chord
+label to the second. The shared vertex labels give the same boundary
+reindexing on both sides. The original-spin operation therefore acts on all
+boundary columns, and the actual cut expansion gives the closed-state
+identity. Unitarity yields the reverse action.
+\end{proof}

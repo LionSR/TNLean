@@ -1,0 +1,88 @@
+\section{Ground spaces of heterogeneous open strips}%
+\label{sec:peps_g_injective_strip_parent_ground_space}
+
+\begin{definition}[Adjacent-pair conditions on an open strip]%
+    \label{def:peps_g_injective_strip_parent_space}
+    \lean{TNLean.PEPS.StripBlock,
+        TNLean.PEPS.stripConfig,
+        TNLean.PEPS.stripTensor,
+        TNLean.PEPS.stripFirstPairSlice,
+        TNLean.PEPS.stripTailSlice,
+        TNLean.PEPS.stripParentGroundSpace,
+        TNLean.PEPS.mem_stripParentGroundSpace_cons_cons_cons_iff}
+    \leanok
+    A strip consists of an ordered list of tensor blocks
+    $A_1,\ldots,A_n$ on a common finite-dimensional virtual space
+    $\mathcal V$. Each block has its own finite physical alphabet
+    $I_r$, and a physical configuration is $(i_1,\ldots,i_n)$.
+    Its full boundary map is
+    \[
+        \mathcal P(A_1\cdots A_n)X
+           =\bigl(\operatorname{tr}
+               [A_1^{i_1}\cdots A_n^{i_n}X]\bigr)_{i_1,\ldots,i_n}.
+    \]
+    The common adjacent-pair space $\mathcal K_n$ consists of all
+    physical vectors such that, after fixing every physical index
+    outside a pair $r,r+1$, the remaining two-block vector belongs
+    to $\operatorname{ran}\mathcal P(A_rA_{r+1})$.
+    Equivalently, impose the first-pair condition on every remaining
+    configuration and then impose the same adjacent conditions on
+    every first-index-fixed tail. For $n=2$ there is just one pair
+    condition; for $n\le1$ there are no conditions.
+    These are the actual local parent conditions used in the
+    intersection iteration of \cite[Theorem~4.11]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Heterogeneous open-strip ground space]%
+    \label{thm:peps_g_injective_strip_parent_space}
+    \lean{TNLean.PEPS.isGInjective_stripTensor,
+        TNLean.PEPS.stripParentGroundSpace_eq_range}
+    \leanok
+    \uses{def:peps_g_injective_strip_parent_space,def:peps_mps_g_injective}
+    Let a finite group act on $\mathcal V$ through a common
+    representation $\rho$. Suppose every block is $G$-injective
+    and $n\ge2$. Then
+    \[
+        \mathcal K_n=\operatorname{ran}\mathcal P(A_1\cdots A_n).
+    \]
+    No equality of local intersections is a hypothesis. The blocks
+    and their physical alphabets may vary along the strip.
+    This is the open-boundary intersection iteration in
+    \cite[Theorems~4.11 and~5.4]{Schuch2010PEPS}. A PEPS graph
+    application additionally requires identifying its regional
+    contractions with these operator-valued strip tensors.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_strip_intersection,
+        thm:peps_mps_g_injective_concatenation}
+    For two blocks, the statement is the single pair condition.
+    For a longer strip, apply induction to every first-index-fixed
+    tail. The common conditions then become the first-pair space
+    intersected with the full tail boundary space. Block the
+    nonempty suffix after the second site into a tensor $C$.
+    Concatenation makes $C$ $G$-injective. The three-block
+    intersection theorem for $A_1,A_2,C$ gives precisely the
+    full-strip boundary range.
+\end{proof}
+
+\begin{corollary}[Unique invariant boundary and ground-space dimension]%
+    \label{cor:peps_g_injective_strip_parent_boundary}
+    \lean{TNLean.PEPS.existsUnique_invariant_boundary_of_mem_stripParentGroundSpace,
+        TNLean.PEPS.finrank_stripParentGroundSpace}
+    \leanok
+    \uses{thm:peps_g_injective_strip_parent_space}
+    Under the preceding hypotheses, each vector in $\mathcal K_n$
+    is produced by a unique invariant virtual boundary operator.
+    Moreover
+    \[
+        \dim\mathcal K_n=\dim\operatorname{End}(\mathcal V)^G.
+    \]
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_invariants_range}
+    The full strip tensor is $G$-injective by concatenation. Its
+    boundary map identifies the invariant virtual operator space
+    with its range, which is the common adjacent-pair space.
+\end{proof}

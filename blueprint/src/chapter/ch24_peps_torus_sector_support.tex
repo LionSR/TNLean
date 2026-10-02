@@ -1,0 +1,40 @@
+\begin{theorem}[Interior support of coherent regular torus closures]%
+    \label{thm:peps_regular_torus_sector_interior_support}
+    \lean{TNLean.PEPS.range_torusClosureSuperpositionCut_le_regionGroundSpace_interior_rectangle,
+        TNLean.PEPS.IsGInjective.range_torusClosureSuperpositionCut_eq_regionGroundSpace_interior_rectangle,
+        TNLean.PEPS.IsGInjective.range_torusClosureReducedDensity_eq_regionGroundSpace_interior_rectangle}
+    \leanok
+    \uses{thm:peps_torus_closure_interior_parent_constraints,
+        thm:peps_regular_torus_rectangle_entropy_bound}
+    Let a native four-leg regular $G$-injective tensor be placed on a
+    square torus with both periods at least three. Let
+    $\Psi=\sum_i\mu_i\Psi_{g_i,h_i}$ be a nonzero coherent sum of
+    closure vectors, where $g_i h_i=h_i g_i$ for every $i$.
+    Let $R$ be a positive coordinate rectangle whose starting
+    coordinates are positive and whose ending coordinates are
+    strictly below the torus periods. Then the physical coefficient
+    matrix across $R$ has range exactly the original regional
+    ground space $\mathcal G_R$. Equivalently, the actual reduced
+    density of $\Psi$ satisfies
+    \[
+        \operatorname{ran}\rho_R=\mathcal G_R.
+    \]
+    This is an interior support consequence of
+    \cite[Theorem~5.5 and Corollary~6.10]{Schuch2010PEPS}; it does
+    not classify the full torus parent-Hamiltonian ground space.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_closure_interior_parent_constraints,
+        lem:peps_torus_rectangle_boundary_card,
+        thm:peps_regular_region_dimension}
+    Every complementary physical slice of $\Psi$ lies in
+    $\mathcal G_R$, so the coefficient range is contained in that
+    space. The simply connected regular Schmidt-rank theorem gives
+    rank $|G|^{|\partial R|-1}$ for the nonzero coherent sum.
+    The connected open-region contraction has precisely the same
+    dimension. Inclusion and equality of dimensions therefore give
+    equality of the two spaces. The reduced density is the product
+    of the coefficient matrix and its adjoint, which has the same
+    range as the coefficient matrix.
+\end{proof}

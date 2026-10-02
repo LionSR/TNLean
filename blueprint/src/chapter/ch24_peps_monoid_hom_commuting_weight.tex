@@ -1,0 +1,19 @@
+\begin{theorem}[Combining commuting representation weights]%
+    \label{thm:peps_monoid_hom_commuting_weight}
+    \lean{MonoidHom.mul_commuting_pow_mul,
+        MonoidHom.mul_weight_mul_weight_mul}
+    \leanok
+    Let $U$ be a monoid homomorphism and let $W$ commute with every $U(a)$.
+    Then, for $n\geq 0$,
+    \begin{align}
+        U(a)W^nU(b)&=W^nU(ab),\\
+        (U(a)W)(WU(b))&=W^2U(ab).
+    \end{align}
+    This is the endpoint-weight calculation used in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Move $W^n$ past $U(a)$ and use $U(a)U(b)=U(ab)$.
+    The second identity is the case $n=2$ after associating the products.
+\end{proof}

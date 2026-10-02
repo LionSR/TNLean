@@ -108,6 +108,19 @@ theorem IsPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
     simp
   exact hOne.1 (Subsingleton.elim _ _)
 
+/-- A normalized periodic tensor has nonzero physical dimension. An empty
+physical alphabet would make the left-canonical sum zero, whereas its bond
+dimension is nonzero.
+
+Source: arXiv:1708.00029, Section 2.1, left-canonical normalization. -/
+theorem IsPeriodic.physDim_ne_zero {m : ℕ} {A : MPSTensor d D}
+    (hA : IsPeriodic m A) : d ≠ 0 := by
+  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  intro hd
+  subst d
+  have h := hA.leftCanonical
+  simp [IsLeftCanonical, Kraus.IsTP] at h
+
 /-- Repeated blocks: gauge equivalence up to a unit-modulus phase. -/
 def RepeatedBlocks (A B : MPSTensor d D) : Prop :=
   ∃ (ξ : ℂ) (Y : GL (Fin D) ℂ), ‖ξ‖ = 1 ∧

@@ -1,0 +1,31 @@
+\begin{theorem}[A composed two-step physical endpoint route]
+    \label{thm:peps_two_step_string_physical_route}
+    \lean{TNLean.PEPS.torusSweptStringRightStep_extension_initial,TNLean.PEPS.IsGIsometric.exists_unitary_torusTwoStepStringRoute}
+    \leanok
+    Let the native torus periods satisfy $w\ge8$, $H\ge7$, and let the
+    original site tensor be regular $G$-isometric. Denote the actual closed
+    states of the initial, rightward-moved, and subsequently upward-moved
+    assignments by $\psi_0(g,h),\psi_1(g,h),\psi_2(g,h)$.
+    There exist original-spin unitaries $W_1,W_2$ on the respective six-site
+    tiles, chosen before every $g,h\in G$, whose extensions $T_1,T_2$ by the
+    identity satisfy
+    \begin{align}
+        T_1\psi_0(g,h)&=\psi_1(g,h), &
+        T_2\psi_1(g,h)&=\psi_2(g,h), &
+        (T_2T_1)\psi_0(g,h)&=\psi_2(g,h).
+    \end{align}
+    Each extension and their product are unitary. The intermediate bond
+    assignment is the literal one-bond update of the initial assignment, with
+    the common exterior retained. This is an auxiliary two-step part of
+    \cite[Section~6.6]{Schuch2010PEPS}; it does not assert the full braid or
+    the partner-reunion operation.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_initial_string_right_physical_step,thm:peps_second_string_physical_crossing}
+    The bond changed by the rightward step is internal to its actual tile, so
+    extending the rightward assignment by the initial exterior gives exactly
+    the literal intermediate assignment. Select the two regional unitaries
+    before the labels and apply their closed-state identities successively.
+    The product remains unitary.
+\end{proof}

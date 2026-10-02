@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/IVCEknXnv7fJLRClcEKwjxILTAg</id>
+  <title>arXiv Query: search_query=&amp;id_list=2509.03600&amp;start=0&amp;max_results=10</title>
+  <updated>2026-10-02T10:48:28Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2509.03600" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2509.03600v1</id>
+    <title>Trading Mathematical for Physical Simplicity: Bialgebraic Structures in Matrix Product Operator Symmetries</title>
+    <updated>2025-09-03T18:01:22Z</updated>
+    <link href="https://arxiv.org/abs/2509.03600v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2509.03600v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Despite recent advances in the lattice representation theory of (generalized) symmetries, many simple quantum spin chains of physical interest are not included in the rigid framework of fusion categories and weak Hopf algebras. We demonstrate that this problem can be overcome by relaxing the requirements on the underlying algebraic structure, and show that general matrix product operator symmetries are described by a pre-bialgebra. As a guiding example, we focus on the anomalous $\mathbb Z_2$ symmetry of the XX model, which manifests the mixed anomaly between its $U(1)$ momentum and winding symmetry. We show how this anomaly is embedded into the non-semisimple corepresentation category, providing a novel mechanism for realizing such anomalous symmetries on the lattice. Additionally, the representation category which describes the renormalization properties is semisimple and semi-monoidal, which provides a new class of mixed state renormalization fixed points. Finally, we show that up to a quantum channel, this anomalous $\mathbb Z_2$ symmetry is equivalent to a more conventional MPO symmetry obtained on the boundary of a double semion model. In this way, our work provides a bridge between well-understood topological defect symmetries and those that arise in more realistic models.</summary>
+    <category term="quant-ph" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cond-mat.str-el" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="hep-lat" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-09-03T18:01:22Z</published>
+    <arxiv:comment>15 pages</arxiv:comment>
+    <arxiv:primary_category term="quant-ph"/>
+    <author>
+      <name>Yuhan Liu</name>
+    </author>
+    <author>
+      <name>Andras Molnar</name>
+    </author>
+    <author>
+      <name>Xiao-Qi Sun</name>
+    </author>
+    <author>
+      <name>Frank Verstraete</name>
+    </author>
+    <author>
+      <name>Kohtaro Kato</name>
+    </author>
+    <author>
+      <name>Laurens Lootens</name>
+    </author>
+  </entry>
+</feed>
