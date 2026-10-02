@@ -145,7 +145,8 @@ noncomputable def blockPosTensor {n : ℕ} (ι : (j : Fin b) → Fin (Dj j) → 
 
 /-- The blocked tensor of block `j` alone, placed along `ι_j`, is that of the direct sum with
 unit weights followed by `K_j K_jᴴ`, for `q ≥ 1`. -/
-theorem physicalMatrix_blockTensor_blockSum_single (hι : ∀ j, Function.Injective (ι j))
+private theorem physicalMatrix_blockTensor_blockSum_single
+    (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (j : Fin b) {q : ℕ} (hq : q ≠ 0) :
     physicalMatrix (blockTensor (blockSum Aj ι (Pi.single j 1)) q) =
       physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q) *
@@ -341,8 +342,10 @@ theorem norm_sum_smul_blockIsometryState (hι : ∀ j, Function.Injective (ι j)
 
 /-- `P_∞ K_{j'} K_{j'}ᴴ` is the limit `P_∞` of the weights `t = e_{j'}`, which keeps only the
 block `j'`. -/
-theorem blockSumPosLimit_mul_pairEmbedding (hι : ∀ j, Function.Injective (ι j))
-    (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)
+private theorem blockSumPosLimit_mul_pairEmbedding
+    (hι : ∀ j, Function.Injective (ι j))
+    (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
+    (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)
     (j' : Fin b) :
     blockSumPosLimit ι σ * (pairEmbedding (ι j') * (pairEmbedding (ι j'))ᴴ) =
       blockSumPosLimit ι (fun k => ((((Pi.single j' 1 : Fin b → ℝ) k ^ 2 : ℝ)) : ℂ) • σ k) := by
@@ -588,10 +591,11 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
   have hu : 0 ≤ u := by positivity
   set ψ := ∑ j, ghzAmplitude β j • blockIsometryState (blockSum Aj ι fun _ => 1)
     (embedPair (ι j) (fixedPointPair (σ j))) hNs
-  have hle1 : 1 - ‖⟪ψ, ((‖φ‖ : ℂ)⁻¹) • φ⟫_ℂ‖ ≤ 1 := by linarith [norm_nonneg ⟪ψ, ((‖φ‖ : ℂ)⁻¹) • φ⟫_ℂ]
+  have hle1 : 1 - ‖⟪ψ, ((‖φ‖ : ℂ)⁻¹) • φ⟫_ℂ‖ ≤ 1 := by
+    linarith [norm_nonneg ⟪ψ, ((‖φ‖ : ℂ)⁻¹) • φ⟫_ℂ]
   rcases Nat.eq_zero_or_pos q with rfl | hq
   · exact htriv _ (by nlinarith [Real.exp_pos C', Real.add_one_le_exp C']) M 0
-      (by simp [u, hM]) _
+      (by simp [hM]) _
   -- The overlaps of the blocks.
   have hℓ0 : ∀ k, ℓ k ≠ 0 := fun k => by have := hℓ k; omega
   set z : Fin b → Fin b → ℂ := fun j j' => ⟪blockIsometryState (blockSum Aj ι fun _ => 1)

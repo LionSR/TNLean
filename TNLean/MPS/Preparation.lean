@@ -66,6 +66,7 @@ import TNLean.MPS.Preparation.OverlappingBlockGram
 import TNLean.MPS.Preparation.OverlappingBlockInjectivity
 import TNLean.MPS.Preparation.OverlappingBlockOverlap
 import TNLean.MPS.Preparation.OverlappingBlockStates
+import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PairProduct
 import TNLean.MPS.Preparation.PermutationGates

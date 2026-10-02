@@ -109,7 +109,8 @@ theorem isInjectiveOn_of_eq_zero_of_mulVec_eq_zero {n : ℕ} {B : MPSTensor n D}
 variable {Aj : (j : Fin b) → MPSTensor d (Dj j)} {ι : (j : Fin b) → Fin (Dj j) → Fin D}
 
 /-- The matrices of the blocked direct sum vanish outside the bond pairs of the blocks. -/
-theorem blockTensor_blockSum_apply_eq_zero (hι : ∀ j, Function.Injective (ι j))
+private theorem blockTensor_blockSum_apply_eq_zero
+    (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (μ : Fin b → ℂ) {q : ℕ} (hq : q ≠ 0)
     (i : Fin (blockPhysDim d q)) {p : Fin D × Fin D} (hp : p ∉ blockPairs ι) :
     blockTensor (blockSum Aj ι μ) q i p.1 p.2 = 0 := by
@@ -123,7 +124,8 @@ theorem blockTensor_blockSum_apply_eq_zero (hι : ∀ j, Function.Injective (ι 
 
 /-- A vector supported on the bond pairs of the blocks is annihilated by the projector `Q` onto
 the other pairs. -/
-theorem offBlockProj_mulVec_eq_zero (hι : ∀ j, Function.Injective (ι j))
+private theorem offBlockProj_mulVec_eq_zero
+    (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') {x : Fin D × Fin D → ℂ}
     (hx : ∀ p, p ∉ blockPairs ι → x p = 0) : (offBlockProj ι).mulVec x = 0 := by
   classical
