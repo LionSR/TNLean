@@ -35,11 +35,11 @@ blocks of all its levels (`MPSPreparation.treeInterior`,
 `MPSPreparation.isRoundsImplementationOn_treeRounds`). No divisibility of `N` is assumed: only
 complete blocks carry gates, and the sites of an incomplete block need no `|0⟩` on its account.
 
-**Scope restriction (single-site registers):** every register of the tree is one site of
-dimension `d` and every node carries a two-site unitary, whereas in arXiv:2307.01696, eq. (16), a
-register above the lowest level carries `ℂ^{D²}`; the resulting preparation of matrix product
-states in depth `O(log log(N/ε))` is not formalized. Documented in
-`docs/paper-gaps/mswc24_tree_measurement_scope.tex`.
+Every register of this tree is one site of dimension `d` and every node carries a two-site
+unitary, whereas in arXiv:2307.01696, eq. (16), a register above the lowest level carries
+`ℂ^{D²}`. Registers of several sites are the subject of `TNLean.MPS.Preparation.RegisterGates`
+and `TNLean.MPS.Preparation.RegisterTree`, and the preparation of matrix product states in depth
+`O(log log(N/ε))` of `TNLean.MPS.Preparation.LogLogDepthPreparation`.
 
 ## Main definitions
 

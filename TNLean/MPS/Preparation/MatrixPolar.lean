@@ -181,6 +181,15 @@ Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors". -
 theorem polarIso_mul_polarPos (M : Matrix ι κ ℂ) : polarIso M * polarPos M = M := by
   rw [polarIso, Matrix.mul_assoc, polarPosInv_mul_polarPos, mul_polarSupport]
 
+/-- Relabelling the rows of `M` by a bijection relabels the rows of its partial isometry: the
+Gram matrix `Mᴴ M`, hence the positive part, does not change. -/
+theorem polarIso_submatrix_equiv {ι' : Type*} [Fintype ι'] (M : Matrix ι κ ℂ) (e : ι' ≃ ι) :
+    polarIso (M.submatrix e id) = (polarIso M).submatrix e id := by
+  have h : (M.submatrix e id)ᴴ * M.submatrix e id = Mᴴ * M := by
+    rw [conjTranspose_submatrix, submatrix_mul_equiv _ _ id e id, submatrix_id_id]
+  ext i j
+  simp only [polarIso, polarPosInv, h, mul_apply, submatrix_apply, id]
+
 /-- **Polar decomposition**, partial-isometry relation: `Vᴴ * V = Π`.
 
 arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal

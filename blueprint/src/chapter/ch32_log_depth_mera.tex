@@ -7,9 +7,14 @@ multiscale entanglement renormalization ansatz with $O(\log\log N)$ layers: the
 isometries $V^{(j)}$ are the isometries of the network, and all disentanglers
 are the identity except those of the first layer, which prepare the
 fixed-point state. This section states the network, identifies the
-approximating state with its state, and counts the layers. Throughout, the
-two-site blocked tensor of $A$ is injective and the chain length is
-$N=M2^{k+1}$; both restrictions are recorded
+approximating state with its state, and counts the layers. Up to
+Theorem~\ref{thm:ldp_tree_mera_error} the two-site blocked tensor of $A$ is
+injective and the chain length is $N=M2^{k+1}$. From
+Definition~\ref{def:ldp_register_mera} on, the finest isometries write
+registers of $s$ sites, where $A$ blocked over $s$ sites is injective; this
+removes the first restriction, and every normal tensor is covered for the
+chain lengths $N=Ms2^{k+1}$ (Theorem~\ref{thm:ldp_normal_mps_mera}). The
+remaining restriction on the chain length is recorded
 in~\cite{gap:mswc24_tree_mera_scope}.
 
 \begin{definition}[Binary finite-range network]
@@ -172,14 +177,46 @@ in~\cite{gap:mswc24_tree_mera_scope}.
     pairs $u\ket0\ket0$ are the pairs $\ket\omega$ of $\ket\Omega$.
 \end{proof}
 
-\begin{theorem}[Normal states are networks with $O(\log\log(N/\varepsilon))$ layers]
+\begin{lemma}[From the threshold of the network to the error]
+    \label{lem:ldp_mera_threshold_error}
+    \lean{MPSPreparation.mul_mul_exp_neg_div_le_of_mul_log_le}
+    \leanok
+    \uses{lem:ldp_log_threshold_error}
+    Let $K,\xi,\varepsilon>0$, $M,q\ge1$, and
+    $\xi\log(KMq/\varepsilon)\le q$. Then $KMe^{-q/\xi}\le\varepsilon$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $M\le Mq$, $\log K+\log M-\log\varepsilon\le\log(KMq/\varepsilon)
+        \le q/\xi$; apply Lemma~\ref{lem:ldp_log_threshold_error} with
+    $x=q/\xi$.
+\end{proof}
+
+\begin{lemma}[The least number of layers with the threshold]
+    \label{lem:ldp_mera_least_layers}
+    \lean{MPSPreparation.exists_mul_log_le_mul_two_pow_and_le_logb}
+    \leanok
+    Let $\xi,C,M,\varepsilon>0$ and $s\ge1$. There is $k\ge0$ with
+    $x_k\le s2^{k+1}$ and $k\le\log_2\max(1,x_k)$, where
+    $x_k=\xi\log(CMs2^{k+1}/\varepsilon)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $x_k=\xi\log(CMs/\varepsilon)+(k+1)\xi\log2$. It grows linearly in
+    $k$ while $s2^{k+1}\ge2^{k+1}$ grows exponentially, so some $k$ satisfies
+    $x_k\le s2^{k+1}$; let $k$ be the least one. If $k\ge1$, the inequality
+    fails at $k-1$, so $1\le2^k\le s2^k<x_{k-1}\le x_k$ and $k<\log_2x_k$. If
+    $k=0$, the bound holds since $\log_2\max(1,x_0)\ge0$.
+\end{proof}
+
+\begin{theorem}[Networks with $O(\log\log(N/\varepsilon))$ layers, two-site injectivity]
     \label{thm:ldp_tree_mera_error}
     \lean{MPSPreparation.exists_state_treeMERA_approximationError_le,
         MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
     \leanok
     \uses{thm:ldp_approximating_state_tree_mera,
-        thm:ldp_approximation_error_normal, lem:ldp_log_threshold_error,
-        def:correlation_length}
+        thm:ldp_approximation_error_normal, lem:ldp_mera_threshold_error,
+        lem:ldp_mera_least_layers, def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let $0<t<1$
     bound the moduli of the eigenvalues of $\E_A$ other than $1$, with
     $\xi=-1/\log t$, and let the two-site blocked tensor of $A$ be injective.
@@ -194,17 +231,12 @@ in~\cite{gap:mswc24_tree_mera_scope}.
     satisfies $\varepsilon(\psi,\phi_N)\le\varepsilon$. Moreover, for every
     such $u$, every $\varepsilon>0$ and every $M\ge1$ there is $k\ge0$
     satisfying (\ref{eq:ldp_tree_mera_threshold}) with
-    $k\le\max(0,\log_2x)$, so the network has at most
-    $\max(0,\log_2(\xi\log(CN/\varepsilon)))+1$ isometry layers. This is
-    the containment of normal translation-invariant matrix product states in
-    finite-range networks with $O(\log\log N)$ layers, within the
-    approximation error, of~\cite[paragraph ``Connection to
-        MERA'']{Malz2024Preparation}, for the chain lengths $N=M2^{k+1}$ with
-    $k$ as above and tensors whose two-site blocked tensor is
-    injective~\cite{gap:mswc24_tree_mera_scope}. It does not cover every
+    $k\le\log_2\max(1,x)$, so the network has at most
+    $\log_2\max(1,\xi\log(CN/\varepsilon))+1$ isometry layers. Theorem~\ref{thm:ldp_register_mera_error} removes the
+    injectivity hypothesis with registers of $s$ sites. Neither covers every
     fixed $N$ and $\varepsilon$: for $N=2p$ with $p$ odd only $k=0$ is
     available, and (\ref{eq:ldp_tree_mera_threshold}) fails for small
-    $\varepsilon$.
+    $\varepsilon$~\cite{gap:mswc24_tree_mera_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -218,13 +250,144 @@ in~\cite{gap:mswc24_tree_mera_scope}.
     in the source, for $0<\gamma<1/2$ with rate $e^{-\gamma q/\xi}$, gives the
     threshold $(\xi/\gamma)\log(CN/\varepsilon)$ instead, with the same
     count of layers up to a constant. From
-    (\ref{eq:ldp_tree_mera_threshold}) and $M\le N$,
-    $\log C+\log M-\log\varepsilon\le q/\xi$, so $CMe^{-q/\xi}\le\varepsilon$
-    by Lemma~\ref{lem:ldp_log_threshold_error}. For the count, write
-    $x_k=\xi\log(CM/\varepsilon)+(k+1)\xi\log2$ for the left side of
-    (\ref{eq:ldp_tree_mera_threshold}). It grows linearly in $k$ while
-    $2^{k+1}$ grows exponentially, so some $k$ satisfies
-    (\ref{eq:ldp_tree_mera_threshold}); let $k$ be the least one. If
-    $k\ge1$, the threshold fails at $k-1$, so
-    $2^k<x_{k-1}\le x_k$ and $k<\log_2x_k$.
+    (\ref{eq:ldp_tree_mera_threshold}),
+    $CMe^{-q/\xi}\le\varepsilon$ by Lemma~\ref{lem:ldp_mera_threshold_error}.
+    The count is Lemma~\ref{lem:ldp_mera_least_layers} with $s=1$.
+\end{proof}
+
+\begin{definition}[The network state on registers]
+    \label{def:ldp_register_mera}
+    \lean{MPSPreparation.registerCfgEquiv,
+        MPSPreparation.BinaryMERA.registerState,
+        MPSPreparation.BinaryMERA.registerState_apply}
+    \leanok
+    \uses{def:ldp_binary_mera}
+    Let $s\ge1$. A binary finite-range network with sites of dimension $d^s$
+    has its finest isometry $W\colon\C^{D^2}\to\C^{d^s}\otimes\C^{d^s}$, which
+    maps one site to two neighbouring \emph{registers} of $s$ sites of
+    dimension $d$. Its state on $M2^{k+1}$ registers
+    (\ref{eq:ldp_binary_mera_state}), read on the $N=Ms2^{k+1}$ sites by
+    splitting every register into its $s$ sites, is its \emph{state on
+        registers}.
+\end{definition}
+
+\begin{lemma}[The network state on registers is a unit vector]
+    \label{lem:ldp_register_mera_norm}
+    \lean{MPSPreparation.BinaryMERA.norm_registerState}
+    \leanok
+    \uses{def:ldp_register_mera, lem:ldp_binary_mera_norm}
+    The state on registers of a binary finite-range network with sites of
+    dimension $d^s$ is a unit vector.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Splitting the registers into sites permutes the coordinates, so it
+    preserves the norm, and the network state is a unit vector by
+    Lemma~\ref{lem:ldp_binary_mera_norm}.
+\end{proof}
+
+\begin{theorem}[The approximating state is a network state on registers]
+    \label{thm:ldp_approximating_state_register_mera}
+    \lean{MPSPreparation.approximatingMPVState_eq_registerState_treeMERA}
+    \leanok
+    \uses{def:ldp_register_mera, def:ldp_tree_mera,
+        def:ldp_approximating_state, lem:ldp_approximating_state_unit_norm,
+        thm:ldp_tree_factorization, lem:ldp_tree_layers_isometries,
+        thm:ldp_register_tree_isometry}
+    Let $A$ blocked over $s$ sites be injective, let $\rho\ge0$ with
+    $\tr\rho=1$, and let $u$ be a unitary with $u\ket0\ket0=\ket\omega$. For
+    $q=s2^{k+1}$ and $M\ge1$, the approximating state
+    $\ket{\widetilde\phi_N}=V^{\otimes M}\ket\Omega$ on $N=Mq$ sites
+    (Definition~\ref{def:ldp_approximating_state}) is the state on registers
+    of the tree network, with $k+1$ isometry layers and unitary $u$, of the
+    tensor $B$ obtained by blocking $A$ over $s$ sites.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The two-site blocked tensor of $B$ is $A$ blocked over $2s$ sites, which
+    is injective, so the tree network of $B$ is defined, and $A$ blocked over
+    $q$ sites is injective, so the approximating state is the unnormalized
+    one (Lemma~\ref{lem:ldp_approximating_state_unit_norm}). The tree map of
+    the network of $B$ is the product of the layers by
+    Lemma~\ref{lem:ldp_tree_layers_isometries}, hence the isometric factor of
+    $B$ blocked over $2^{k+1}$ sites by
+    Theorem~\ref{thm:ldp_tree_factorization}. Blocking $B$ over $2^{k+1}$ sites is blocking $A$ over $q$ sites,
+    read through the grouping of the $q$ sites into registers, so the
+    isometric factors agree after the splitting of the registers
+    (Theorem~\ref{thm:ldp_register_tree_isometry}), and the pairs
+    $u\ket0\ket0$ are the pairs $\ket\omega$ of $\ket\Omega$.
+\end{proof}
+
+\begin{theorem}[Network states on registers within $\varepsilon$]
+    \label{thm:ldp_register_mera_error}
+    \lean{MPSPreparation.exists_registerState_treeMERA_approximationError_le,
+        MPSPreparation.exists_registerState_treeMERA_approximationError_le_and_le_logb}
+    \leanok
+    \uses{thm:ldp_approximating_state_register_mera,
+        thm:ldp_approximation_error_normal, lem:ldp_mera_threshold_error,
+        lem:ldp_mera_least_layers, def:correlation_length}
+    Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), and let
+    $0<t<1$ bound the moduli of the eigenvalues of $\E_A$ other than $1$,
+    with $\xi=-1/\log t$. There is $C>0$ such that for every $s\ge1$ with $A$
+    blocked over $s$ sites injective, every unitary $u$ with
+    $u\ket0\ket0=\ket\omega$, every $\varepsilon>0$, and every $k\ge0$ and
+    $M\ge1$ with $N=Ms2^{k+1}$ and
+    \begin{align}
+        x & =\xi\log(CN/\varepsilon)\le s2^{k+1},
+        \label{eq:ldp_register_mera_threshold}
+    \end{align}
+    the state on registers $\ket\psi$ of the tree network, with $k+1$
+    isometry layers, of $A$ blocked over $s$ sites satisfies
+    $\varepsilon(\psi,\phi_N)\le\varepsilon$. Moreover, for every such $s$
+    and $u$, every $\varepsilon>0$ and every $M\ge1$ there is $k\ge0$
+    satisfying (\ref{eq:ldp_register_mera_threshold}) with
+    $k\le\log_2\max(1,x)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Theorem~\ref{thm:ldp_approximating_state_register_mera} the network
+    state is the approximating state with $q=s2^{k+1}$, and the proof of
+    Theorem~\ref{thm:ldp_tree_mera_error} applies with $2^{k+1}$ replaced by
+    $q$: Theorem~\ref{thm:ldp_approximation_error_normal} at $\gamma=1/2$
+    gives $C$, which does not depend on $s$, with
+    $\varepsilon(\widetilde\phi_N,\phi_N)\le CMe^{-q/\xi}\le\varepsilon$ by
+    Lemma~\ref{lem:ldp_mera_threshold_error}. The count is
+    Lemma~\ref{lem:ldp_mera_least_layers}.
+\end{proof}
+
+\begin{theorem}[Normal states as networks, restricted chain lengths]
+    \label{thm:ldp_normal_mps_mera}
+    \lean{MPSPreparation.exists_binaryMERA_registerState_approximationError_le}
+    \leanok
+    \uses{thm:ldp_register_mera_error, thm:ldp_depth_upper_bound_divisible,
+        lem:ldp_tree_mera_disentangler,
+        lem:ldp_normalized_state_rescaling}
+    Let $A$ be a normal tensor with $D\ge1$. There are $s_0\ge1$, $\xi>0$
+    and $C>0$ such that for every $s\ge s_0$, every $\varepsilon>0$ and every
+    $M\ge1$ there are $k\ge0$ and a binary finite-range network with sites of
+    dimension $d^s$ and $k+1$ isometry layers with
+    $k\le\log_2\max(1,\xi\log(CN/\varepsilon))$, $N=Ms2^{k+1}$, whose state
+    on registers $\ket\psi$ satisfies $\varepsilon(\psi,\phi_N)\le\varepsilon$
+    against the normalized state $\ket{\phi_N}$ of $A$. This is a scope
+    restriction, to the chain lengths $N=Ms2^{k+1}$ with $k$ as above, of the
+    containment of normal translation-invariant matrix product states in
+    finite-range networks with $O(\log\log N)$ layers, within the
+    approximation error, of~\cite[paragraph ``Connection to
+        MERA'']{Malz2024Preparation}. The containment for every fixed $N$ and
+    $\varepsilon$ is not formalized~\cite{gap:mswc24_tree_mera_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The normal tensor $A$ has a gauge-equivalent rescaling $B$ in the
+    gauge~(\ref{eq:ldp_normal_gauge}), with
+    $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$, a bound $t<1$ on the subleading
+    eigenvalues of $\E_B$, and a length $L$ from which on the blocked
+    tensors of $B$ are injective
+    (Theorem~\ref{thm:ldp_depth_upper_bound_divisible}). Take $s_0=L+1$ and
+    a unitary $u$ preparing the pair of the fixed point of $\E_B$
+    (Lemma~\ref{lem:ldp_tree_mera_disentangler}). For $s\ge s_0$,
+    Theorem~\ref{thm:ldp_register_mera_error} applied to $B$ gives $k$ and
+    the tree network of $B$ blocked over $s$ sites, and the error against
+    the normalized state of $B$ equals the error against that of $A$
+    (Lemma~\ref{lem:ldp_normalized_state_rescaling}).
 \end{proof}

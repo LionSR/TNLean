@@ -1,0 +1,138 @@
+%% ==================================================
+%% Subsection: Repeated blocks whose states overlap
+%% Source: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), Supplemental
+%% Material, "Proof of Lemma 1 and extension to non-normal tensors",
+%% eqs. (S2)-(S12) and Lemma 1'(ii).
+%% Local fix: corrected fixed-point state for repeated blocks,
+%% docs/paper-gaps/mswc24_repeated_block_corrected_state.tex; rate including
+%% the mixed transfer maps, docs/paper-gaps/mswc24_block_form_mixed_overlap.tex.
+%% Scope restriction: factor min(1, b)^{-1/2} when b < 1,
+%% docs/paper-gaps/mswc24_repeated_overlap_small_weight_sum.tex.
+%% ==================================================
+
+\subsection{Repeated blocks whose states overlap}\label{sec:ldp_repeated_overlapping_blocks}
+
+The two corrections of the preceding subsections combine: for blocks with
+multiplicities whose states on $q$ sites overlap, the corrected approximating state
+of Definition~\ref{def:ldp_repeated_block_state} converges at the rate set by the
+correlation lengths of the blocks and of their mixed transfer maps
+\cite{gap:mswc24_repeated_block_corrected_state,gap:mswc24_block_form_mixed_overlap}.
+The estimates of Lemma~\ref{lem:ldp_shared_overlap_estimates} use only that the
+embeddings are isometries with orthogonal ranges, and apply with the isometries
+$L_j$ of Theorem~\ref{thm:ldp_repeated_block_polar}.
+
+\begin{lemma}[Positive part and overlaps for repeated overlapping blocks]
+    \label{lem:ldp_repeated_overlapping_overlaps}
+    \lean{MPSTensor.copyPosLimitRow, MPSTensor.copyPosLimit,
+        MPSTensor.conjTranspose_copyIsometry_mul_copyPosLimit,
+        MPSTensor.posSemidef_copyPosLimit, MPSTensor.copyPosLimit_mul_self,
+        MPSTensor.exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le,
+        MPSTensor.mixedMapLM_copyPosLimitRow_apply,
+        MPSTensor.exists_norm_mpvOverlap_sub_bntWeight_le_of_norm_sub_copyPosLimitRow_le,
+        MPSTensor.sum_star_copyApproxVector_mul_mpv,
+        MPSTensor.sum_norm_sq_copyApproxVector_le}
+    \leanok
+    \uses{lem:ldp_shared_overlap_estimates, thm:ldp_repeated_block_polar,
+        def:ldp_repeated_block_state, lem:ldp_overlapping_overlaps_weights,
+        def:prep_fixed_point_tensor}
+    With the notation of Theorem~\ref{thm:ldp_repeated_block_polar}, let the blocks be
+    as in Lemma~\ref{lem:ldp_overlapping_positive_part}, with $c_j$ and $L_j$ the norms
+    and isometries of the copies on $q$ sites, and put
+    \begin{align*}
+        P_\infty=\sum_jc_jL_j\bigl(\sqrt{\rho_j}^{\,\mathsf T}\otimes\Id\bigr)L_j^\dagger,
+        \qquad
+        L_j^\dagger P_\infty=\sum_k\mu_{j,k}^q\bigl(\sqrt{\rho_j}^{\,\mathsf T}\otimes\Id\bigr)
+        K_{j,k}^\dagger.
+    \end{align*}
+    \begin{enumerate}
+        \item $P_\infty$ is positive semidefinite, its square is
+              $\sum_jc_j^2L_j(\rho_j^{\mathsf T}\otimes\Id)L_j^\dagger$, and for
+              $0<\gamma<1/2$ there is $K$ such that for all weights with
+              $\lvert\mu_{j,k}\rvert\leq1$ and every $q\geq1$ the positive part $P$ of the
+              blocked map satisfies $\lVert P-P_\infty\rVert\leq Ke^{-\gamma q/\xi}$.
+        \item The mixed transfer map of $L_j^\dagger P_\infty$, read as a tensor whose
+              physical leg is a bond pair of block $j$, against the fixed-point tensor
+              of $\rho_j$ is $X\mapsto\sum_k\mu_{j,k}^q\Tr(E_{j,k}^\dagger X)\,E_{j,k}\rho_j$.
+        \item For a block $j$ with at least one copy there is $C_j>0$ such that for all
+              weights with $\lvert\mu_{j,k}\rvert\leq1$, all $q$, $\delta$, $M\geq1$ and
+              every $G$ with $\lVert G-L_j^\dagger P_\infty\rVert\leq\delta$, the overlap
+              of $G$ with the fixed-point tensor of $\rho_j$ on $M$ sites is
+              $\beta_j=\sum_k\mu_{j,k}^{qM}$ up to $C_j(M\delta)\,e^{C_jM\delta}$.
+        \item The unnormalized corrected state has inner product
+              $\sum_j\overline{\alpha_j}\braket{\phi_M(P_{\infty,\rho_j})}
+                  {\phi_M(L_j^\dagger P)}$ with $\ket{\phi_N(A)}$, and for isometries
+              $L_j$ with orthogonal ranges, $\beta\neq0$ and
+              $\alpha_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$ it has norm at most one.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Part~(1): $c_jL_j^\dagger=\sum_k\mu_{j,k}^qK_{j,k}^\dagger$ and
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(1) give the form of $L_j^\dagger P_\infty$
+    and of $P_\infty^2$; Lemma~\ref{lem:ldp_shared_overlap_estimates}(4) with
+    $c_j\leq(\sum_lm_l)^{1/2}$ and $2\gamma$ in place of $\gamma$, and
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(5), give the rate. Part~(2): the letter of
+    $(\sqrt\rho^{\,\mathsf T}\otimes\Id)K^\dagger$ at $(l,r)$ is
+    $E\sqrt\rho\ket l\bra rE^\dagger$, and $\E_{P_{\infty,\rho}}(Y)=\Tr(Y)\rho$. Part~(3): the maps
+    $R_k(X)=\Tr(E_{j,k}^\dagger X)E_{j,k}\rho_j$ satisfy $R_kR_{k'}=\delta_{kk'}R_k$ and
+    $\Tr R_k=1$, so $(\sum_k\mu_{j,k}^qR_k)^n=\sum_k\mu_{j,k}^{qn}R_k$ for $n\geq1$ has norm
+    at most $\sum_k\lVert R_k\rVert$ and its $M$-th power has trace $\beta_j$;
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(8) applies. Part~(4) follows from
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(7),
+    $\braket{L_j^{\otimes M}\Omega_j}{\psi}=\braket{\Omega_j}{(L_j^\dagger)^{\otimes M}\psi}$,
+    and the orthonormality of the states $L_j^{\otimes M}\ket{\Omega_j}$.
+\end{proof}
+
+\begin{theorem}[Approximation error for repeated overlapping blocks]
+    \label{thm:ldp_approximation_error_repeated_overlapping}
+    \lean{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum,
+        MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_of_nonneg,
+        MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_of_nonneg}
+    \leanok
+    \uses{lem:ldp_repeated_overlapping_overlaps, lem:ldp_shared_overlap_estimates,
+        def:ldp_repeated_block_state, thm:ldp_approximation_error_overlapping_weights,
+        def:correlation_length}
+    With the notation of Theorem~\ref{thm:ldp_repeated_block_polar}, let the blocks $A_j$
+    be normal in the gauge (\ref{eq:ldp_normal_gauge}) with positive definite fixed points
+    $\rho_j$ of trace one, let $\lambda_2\in\C$ bound the moduli of the eigenvalues other
+    than one of every transfer map $\E_{A_j}$ and the moduli of all eigenvalues of the
+    mixed transfer maps $\E_{jj'}$, $j\neq j'$, let $\xi$ be its correlation length, and
+    let $0<\gamma<1/2$. There is $C>0$ such that for all weights with
+    $\lvert\mu_{j,k}\rvert\leq1$, every block length $q$ and every $M\geq1$ with $N=qM$
+    and $(\beta_1,\dots,\beta_b)\neq0$, the corrected approximating state of
+    Definition~\ref{def:ldp_repeated_block_state} satisfies, with $y=Me^{-\gamma q/\xi}$
+    and $b=\sum_j\lvert\beta_j\rvert^2$,
+    \begin{align*}
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq\frac{Cy\,e^{Cy}}{\min(1,b)^{1/2}}.
+    \end{align*}
+    For real weights $0\leq\mu_{j,k}\leq1$, one of which is one, there are $C,C'>0$ with
+    $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$ and
+    $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$ for every $q$ and $M\geq1$. This is
+    \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the corrected state, with
+    $\xi_{\mathrm{diag}}$ replaced by $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$
+    and, when $b<1$, for instance when the weights $\beta_j$ cancel or every weight has
+    modulus below one, with the factor $\min(1,b)^{-1/2}$, which the source does not have \cite{gap:mswc24_repeated_overlap_small_weight_sum}. The states of
+    distinct blocks need not be orthogonal, and no condition $q=o(N)$ is needed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $\lvert\lambda_2\rvert\geq1$ or $q=0$, then $y\geq1$ and $\varepsilon\leq1$ gives the
+    bound. Otherwise, by Lemma~\ref{lem:ldp_repeated_overlapping_overlaps}(4) the
+    unnormalized corrected state has inner product $S/\sqrt b$ with
+    $\ket{\phi_N(A)}=\sum_j\beta_j\ket{\phi_N(A_j)}$, where $S=\sum_j\overline{\beta_j}z_j$
+    and $z_j=\braket{\phi_M(P_{\infty,\rho_j})}{\phi_M(L_j^\dagger P)}$, and it has norm at
+    most one, so $\lvert\braket{\widetilde\phi_N}{\phi_N}\rvert\geq\lvert S\rvert/(\sqrt bt)$
+    with $t=\lVert\phi_N(A)\rVert$. Parts~(1) and~(3) of that lemma, with
+    $\lVert L_j^\dagger P-L_j^\dagger P_\infty\rVert\leq\lVert P-P_\infty\rVert$, give
+    $\lvert z_j-\beta_j\rvert\leq C_jy\,e^{C_jy}$, and since $\lvert\beta_j\rvert\leq\sqrt b$,
+    $\lvert S/b-1\rvert\leq b^{-1/2}\sum_jC_jy\,e^{C_jy}$.
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(6) with $R=\sqrt b$ gives
+    $\lvert t^2/b-1\rvert\leq Ke^{-\gamma N/\xi}\leq Ky$. The inequality in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}, applied to $S/b$ and
+    $t/\sqrt b$, gives $\varepsilon\leq b^{-1/2}\sum_jC_jy\,e^{C_jy}+Ky$; since
+    $b^{-1/2}\leq s^{-1}$ with $s=\min(1,b)^{1/2}\leq1$, the second elementary inequality
+    in the proof of Theorem~\ref{thm:ldp_approximation_error_overlapping_weights} gives the
+    bound, and the first one gives it when $y\geq1$. For real
+    weights in $[0,1]$ with $\mu_{j_0,k_0}=1$, every $\beta_j\geq0$ and
+    $\beta_{j_0}\geq1$, so $b\geq1$; the $O$-form follows because $\varepsilon\leq1$.
+\end{proof}
