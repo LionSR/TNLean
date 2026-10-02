@@ -1,0 +1,74 @@
+\begin{theorem}[Polynomial accuracy at a prescribed exponential rate]%
+    \label{thm:ldp_polynomial_accuracy_of_rate}
+    \lean{MPSTensor.exists_approximationError_le_polynomial_of_rate}
+    \leanok
+    Let $A$ be a normal tensor in the gauge $\sum_i(A^i)^\dagger A^i=\Id$,
+    with a positive definite fixed matrix $\rho$ satisfying
+    $\E_A(\rho)=\rho$ and $\Tr\rho=1$.
+    Let $\lambda_2$ bound the moduli of the transfer eigenvalues other than
+    $1$, assume $\xi=-1/\log|\lambda_2|>0$, and fix $0<\gamma<1/2$.
+    There is a constant $C_\gamma>0$, independent of $\eta,q,M$, such
+    that for every $\eta>0$ and every uniform decomposition $N=Mq\geq2$,
+    \begin{align}
+        q & =\left\lceil\frac{\xi(1+\eta)\log N}{\gamma}\right\rceil
+        \quad\Longrightarrow\quad
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq C_\gamma N^{-\eta}.
+        \label{eq:ldp_polynomial_prescribed_rate}
+    \end{align}
+    This is a polynomial-accuracy corollary of the exponential approximation
+    estimate of~\cite{Malz2024Preparation}. The uniform-blocking and
+    positive-correlation-length scope is recorded
+    in~\cite{gap:mswc24_polynomial_accuracy_uniform_blocks}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_approximation_error_normal}
+    Apply the second-order estimate at rate $\gamma/2$ to obtain
+    $\varepsilon\leq C_\gamma M e^{-\gamma q/\xi}$.
+    The ceiling condition gives $\gamma q\geq\xi(1+\eta)\log N$.
+    Since $q\geq1$ and $M\leq N$,
+    $C_\gamma M e^{-\gamma q/\xi}\leq C_\gamma N e^{-(1+\eta)\log N}
+        =C_\gamma N^{-\eta}$.
+\end{proof}
+
+\begin{theorem}[Polynomial approximation accuracy under uniform blocking]%
+    \label{thm:ldp_polynomial_accuracy_uniform_blocks}
+    \lean{MPSTensor.exists_approximationError_le_polynomial_of_uniformBlocks}
+    \leanok
+    Let $A$ be a normal tensor in the gauge $\sum_i(A^i)^\dagger A^i=\Id$,
+    with a positive definite fixed matrix $\rho$ satisfying
+    $\E_A(\rho)=\rho$ and $\Tr\rho=1$.
+    Let $\lambda_2$ bound the moduli of the transfer eigenvalues other than
+    $1$, and assume $\xi=-1/\log|\lambda_2|>0$.
+    There is a constant $C>0$ such that for every $\eta>0$ and every
+    uniform decomposition $N=Mq\geq2$ with
+    \begin{align}
+        q & =\left\lceil2\xi(1+\eta)\log N\right\rceil,
+        \label{eq:ldp_polynomial_block_length}
+    \end{align}
+    the fixed-point approximation satisfies
+    \begin{align}
+        \varepsilon(\widetilde\phi_N,\phi_N) & \leq C N^{-\eta}.
+        \label{eq:ldp_polynomial_uniform_accuracy}
+    \end{align}
+    The constant is independent of $\eta,q,M$.
+    This is the uniform-blocking, positive-correlation-length case of
+    the paragraph following Lemma~1 of~\cite{Malz2024Preparation};
+    the other chain lengths and zero correlation length are discussed
+    in~\cite{gap:mswc24_polynomial_accuracy_uniform_blocks}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ldp_approximation_error_normal}
+    Apply the second-order approximation estimate at the fixed rate
+    $\gamma=1/4$, obtaining $\varepsilon\leq C M e^{-q/(2\xi)}$.
+    Formula~(\ref{eq:ldp_polynomial_block_length}) gives
+    $q\geq2\xi(1+\eta)\log N$. Since $N=Mq\geq2$, one has
+    $q\geq1$ and $M\leq N$. Thus
+    \begin{align}
+        C M e^{-q/(2\xi)}
+         & \leq C N e^{-(1+\eta)\log N}=C N^{-\eta}.
+        \notag
+    \end{align}
+    This proves~(\ref{eq:ldp_polynomial_uniform_accuracy}).
+    The second-order rate is the justification for the exact coefficient
+    in~(\ref{eq:ldp_polynomial_block_length}).
+\end{proof}
