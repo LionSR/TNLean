@@ -98,6 +98,7 @@ import TNLean.MPS.Preparation.TeleportationRound
 import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA
+import TNLean.MPS.Preparation.TreeMERARegisters
 import TNLean.MPS.Preparation.TreeMeasurement
 import TNLean.MPS.Preparation.TwoLevel
 import TNLean.MPS.Preparation.UnequalRegisterTree
