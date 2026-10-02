@@ -161,7 +161,8 @@ theorem finKronecker_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
   simp only [← star_eq_conjTranspose, Unitary.star_mul_self_of_mem (hu _),
     Unitary.mul_star_self_of_mem (hu _), finKronecker_one, and_self]
 
-private theorem eq_zero_of_mem_unitary_of_mulVec_eq_zero {n : Type*} [Fintype n] [DecidableEq n]
+/-- A unitary matrix maps only the zero vector to zero. -/
+theorem eq_zero_of_mem_unitary_of_mulVec_eq_zero {n : Type*} [Fintype n] [DecidableEq n]
     {U : Matrix n n ℂ} (hU : U ∈ unitary (Matrix n n ℂ)) {v : n → ℂ} (h : U *ᵥ v = 0) :
     v = 0 := by
   rw [← one_mulVec v, ← Unitary.star_mul_self_of_mem hU, ← mulVec_mulVec, h, mulVec_zero]

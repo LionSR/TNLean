@@ -28,6 +28,11 @@ attach these scalars to a matrix product unitary.
   compatibility is multiplicative.
 * `LSymbol.gauge_one_mul`, `LSymbol.IsCompatible.gauge_one`: action-tensor gauges with trivial
   fusion gauge.
+* `LSymbol.IsCompatible.apply_right_one`, `LSymbol.IsCompatible.apply_left_one`: the values
+  with one identity argument.
+* `LSymbol.IsCompatible.isNormalized_gauge`: an action-tensor gauge normalizes compatible
+  L-symbols.
+* `LSymbol.IsCompatible.apply_involution`: the diagonal relation for an involution.
 -/
 
 namespace TNLean.Algebra
@@ -206,6 +211,51 @@ theorem IsNormalized.gauge {L : LSymbol G X} (hL : IsNormalized L)
   apply (isNormalized_gauge_iff β γ L).2
   exact ⟨fun x g => by simp [hβ.2, hL.1, hγ x],
     fun x g => by simp [hβ.1, hL.2, hγ (g • x)]⟩
+
+/-- Compatibility at `(g,1,1)` gives
+`Lˣ_{g,1} = Lˣ_{1,1} / ω(g,1,1)`.
+This is arXiv:2502.20257, `eq:aux1`. -/
+theorem IsCompatible.apply_right_one {L : LSymbol G X}
+    {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) (g : G) :
+    L x g 1 = L x 1 1 / ω g 1 1 := by
+  have h := hL x g 1 1
+  simp only [mul_one, one_smul] at h
+  calc
+    L x g 1 = (ω g 1 1 * L x g 1 * L x g 1) /
+        (ω g 1 1 * L x g 1) := by simp [div_eq_mul_inv]
+    _ = (L x g 1 * L x 1 1) / (ω g 1 1 * L x g 1) := by rw [← h]
+    _ = L x 1 1 / ω g 1 1 := by
+      (apply Units.ext; push_cast; field_simp)
+
+/-- Compatibility at `(1,1,g)` gives
+`Lˣ_{1,g} = ω(1,1,g) L^{g • x}_{1,1}`.
+This is arXiv:2502.20257, `eq:aux2`. -/
+theorem IsCompatible.apply_left_one {L : LSymbol G X}
+    {ω : ScalarThreeCochain G} (hL : IsCompatible L ω) (x : X) (g : G) :
+    L x 1 g = ω 1 1 g * L (g • x) 1 1 := by
+  have h := hL x 1 1 g
+  simp only [one_mul] at h
+  apply (mul_right_cancel (b := L x 1 g))
+  simpa [mul_assoc] using h
+
+/-- The action-tensor gauge `γ_{g,x} = Lˣ_{1,1}`, with trivial fusion gauge, turns
+compatible L-symbols `L` for a normalized three-cochain into `L'` with
+`L'ˣ_{g,1} = L'ˣ_{1,g} = 1`, as asserted in arXiv:2203.12563, lines 716–728, and
+restated for the `ℤ₂` examples at lines 1830–1839. -/
+theorem IsCompatible.isNormalized_gauge {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (hω : ω.IsNormalized) :
+    IsNormalized (LSymbol.gauge (fun _ _ ↦ 1) (fun _ x ↦ L x 1 1) L) := by
+  apply (isNormalized_gauge_iff _ _ _).2
+  exact ⟨fun x g ↦ by simpa [hω.2.2] using hL.apply_right_one x g,
+    fun x g ↦ by simpa [hω.1] using hL.apply_left_one x g⟩
+
+/-- For an involution `g` and normalized compatible L-symbols,
+`Lˣ_{g,g} = ω(g,g,g) L^{g • x}_{g,g}`. This gives the sign relations of
+arXiv:2203.12563, lines 1830–1839 and 1886. -/
+theorem IsCompatible.apply_involution {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (hn : IsNormalized L) (x : X) {g : G}
+    (hg : g * g = 1) : L x g g = ω g g g * L (g • x) g g := by
+  simpa only [hg, hn.1, hn.2, one_mul, mul_one] using hL x g g g
 
 end LSymbol
 

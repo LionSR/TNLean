@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.Chain.BlockTensor
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.IsometricChain
+import TNLean.MPS.Preparation.SupportedPolar
 
 /-!
 # Sequential factorization of the isometry of a blocked tensor
@@ -12,10 +14,10 @@ import TNLean.MPS.Preparation.IsometricChain
 For an injective `q`-site blocked tensor `B` with polar decomposition `B = V P`, the
 isometry `V : ℂ^{D²} → (ℂ^d)^{⊗q}` is `B P⁻¹`. Read site by site, `B P⁻¹` is an
 open-boundary matrix product map with bond space `ℂ^D ⊗ ℂ^D`: the site matrices are
-`1_D ⊗ A^i`, the left end joins the two bond factors, and `P⁻¹` is absorbed into the
-right end, where the input `|α, β⟩` enters. Successive decompositions from the left
-make every site map an isometry, and the remainder left at the right end is an
-isometry because `V` is. This is arXiv:2307.01696, eqs. (13)–(15).
+`1_D ⊗ A_p^i`, where the tensors `A_p` may depend on the site `p`, the left end joins the two
+bond factors, and `P⁻¹` is absorbed into the right end, where the input `|α, β⟩` enters.
+Successive decompositions from the left make every site map an isometry, and the remainder left
+at the right end is an isometry because `V` is. This is arXiv:2307.01696, eqs. (13)–(15).
 
 The chain is stored as in `TNLean.MPS.Preparation.IsometricChain`: square
 `D² × D²` site matrices `Q_p(i)` together with bond dimensions `b₀, …, b_q`, where
@@ -28,16 +30,37 @@ of the source, `Q_p` is the isometry `V_{q-p}` of eq. (14) and `b_p = D'_{q+1-p}
 ## Main results
 
 * `MPSPreparation.exists_isometric_chain_of_eq_mul` — the factorization for any
-  isometry of the form `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₁} ⋯ A^{σ_q})_{αβ} G_{(α,β),x}`.
+  isometry of the form `⟨σ|V|x⟩ = ∑_{α,β} (A_1^{σ₁} ⋯ A_q^{σ_q})_{αβ} G_{(α,β),x}`.
+* `MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` — the factorization
+  of the isometric factor of a blocked tensor injective on a set of bond pairs, on the inputs of
+  that set.
 * `MPSPreparation.exists_isometric_chain_polarIsoMatrix` — the isometric factor of
-  the polar decomposition of an injective blocked tensor factors into `q`
-  isometries with bonds `b₁, …, b_q` at most `D²`, arXiv:2307.01696, eqs. (13)–(15).
+  the polar decomposition of an injective blocked tensor of a chain of site-dependent
+  tensors factors into `q` isometries with bonds `b₁, …, b_q` at most `D²`,
+  arXiv:2307.01696, eqs. (13)–(15), and the paragraph "Inhomogeneous short-range
+  correlated MPS" for tensors that depend on the site.
+
+For the source's inhomogeneous states with "bond dimension at most `D`" varying along the
+ring, the chain is padded with zeros (`VaryingBondChain.zeroPad`); its blocked
+tensors are then injective only on the rectangle of their bonds, and
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` factorizes the isometric
+factor on those inputs.
+
+**Scope restriction (positive block length):** the hypothesis `0 < q` of
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix` and
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` is absent from
+arXiv:2307.01696, eqs. (13)–(15), which state no lower bound on the block length. The empty
+block `q = 0` is injective, or injective on a set `S` of bond pairs, only for `D ≤ 1`; the
+conclusion holds trivially at `D = 1` and fails at `D = 0`, where `b₀ = 1` and `b₀ = D²`, or
+`b₀ = |S| = 0`, name the same bond. Documented in
+`docs/paper-gaps/mswc24_sequential_factorization_positive_block_length.tex`.
 
 ## References
 
 * Malz, Styliaris, Wei, Cirac, *Preparation of matrix product states with log-depth
   quantum circuits*, arXiv:2307.01696, eqs. (13), (14), (15) and the paragraph
-  between them.
+  between them, the paragraph "Inhomogeneous short-range correlated MPS", and Supplemental
+  Material, "Proof of Lemma 1 and extension to non-normal tensors".
 -/
 
 open scoped BigOperators Matrix Kronecker ComplexOrder
@@ -64,15 +87,15 @@ noncomputable def pairEmbed (D : ℕ) :
   map_mul' X Y := by
     rw [Matrix.submatrix_mul_equiv, ← Matrix.mul_kronecker_mul, Matrix.one_mul]
 
-/-- The ordered product of the embedded letters along a word is the embedding of the
+/-- The ordered product of the embedded letters along a chain is the embedding of the
 ordered product of the letters. -/
-theorem eval_pairEmbed (A : Fin d → Matrix (Fin D) (Fin D) ℂ) :
-    ∀ {n : ℕ} (σ : Fin n → Fin d),
-      eval (fun _ i => pairEmbed D (A i)) σ = pairEmbed D (Kraus.evalWord A (List.ofFn σ))
-  | 0, σ => by simp
-  | n + 1, σ => by
-    rw [eval_succ, eval_pairEmbed A (fun k => σ k.succ), List.ofFn_succ,
-      Kraus.evalWord_cons, map_mul]
+theorem eval_pairEmbed :
+    ∀ {n : ℕ} (A : MPSChainTensor d D n) (σ : Fin n → Fin d),
+      eval (fun p i => pairEmbed D (A p i)) σ = pairEmbed D (eval A σ)
+  | 0, A, σ => by simp
+  | n + 1, A, σ => by
+    rw [eval_succ, eval_pairEmbed (fun p => A p.succ) (fun k => σ k.succ), eval_succ A,
+      map_mul]
 
 /-- The vector `∑_γ |γ⟩ ⊗ |γ⟩` of the pair space, which joins the two bond factors at
 the left end of the matrix product map of arXiv:2307.01696, eq. (13). -/
@@ -103,19 +126,21 @@ private theorem star_dotProduct_of_isSupportedBelow_one {D' : ℕ} (hD : 0 < D')
 
 /-- **Sequential factorization of a matrix product map isometric on its first inputs.** Let
 `V : ℂ^{D²} → (ℂ^d)^{⊗(n+1)}` have matrix elements
-`⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₀} ⋯ A^{σ_n})_{αβ} G_{(α,β),x}` for the inputs `x < r`, and let these
+`⟨σ|V|x⟩ = ∑_{α,β} (A_0^{σ₀} ⋯ A_n^{σ_n})_{αβ} G_{(α,β),x}` for the inputs `x < r`, for tensors
+`A_0, …, A_n` which may depend on the site, and let these
 `r ≤ D²` columns be orthonormal. Then there are bond dimensions `b₀ = 1`, `b_{n+1} = r` and
 `b₁, …, b_{n+1} ≤ D²`, and site matrices `Q_p` vanishing outside the `b_p × b_{p+1}` block and
 isometric on it, with `⟨σ|V|x⟩ = (Q₀(σ₀) ⋯ Q_n(σ_n))_{0x}` for `x < r`.
 
-For `r = D²` this is `exists_isometric_chain_of_eq_mul`, arXiv:2307.01696, eqs. (13)–(15). The
+For `r = D²` this is `exists_isometric_chain_of_eq_mul`, arXiv:2307.01696, eqs. (13)–(15), with
+site-dependent tensors as in the paragraph "Inhomogeneous short-range correlated MPS". The
 inputs `x ≥ r` are discarded: the remainder of the sweep is applied only to the first `r`
 columns of `G`, which are orthonormal after the sweep because the columns of `V` are, so
 absorbing it into the last site keeps that site isometric on its first `r` levels. -/
-theorem exists_isometric_chain_of_eq_mul_of_le (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
+theorem exists_isometric_chain_of_eq_mul_of_le {n : ℕ} (A : MPSChainTensor d D (n + 1))
     {r : ℕ} (hr : r ≤ D * D) (G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ)
     (V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ)
-    (hV : ∀ σ x, x.val < r → V σ x = ∑ a, Kraus.evalWord A (List.ofFn σ)
+    (hV : ∀ σ x, x.val < r → V σ x = ∑ a, eval A σ
       (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 * G a x)
     (hiso : ∀ x y, x.val < r → y.val < r →
       ∑ σ, star (V σ x) * V σ y = if x = y then 1 else 0) :
@@ -138,14 +163,14 @@ theorem exists_isometric_chain_of_eq_mul_of_le (A : Fin d → Matrix (Fin D) (Fi
   -- The open-boundary product of eq. (13), swept from the left (eq. (14)).
   obtain ⟨b, Q, R, hb0, hbD, -, hrow, hcol, hisoQ, hR, hprod⟩ :=
     exists_isometric_chain_mul (n + 1) 1 hDD (rowMat (pairJoin D))
-      (isRowSupportedBelow_rowMat _) fun _ i => pairEmbed D (A i)
+      (isRowSupportedBelow_rowMat _) fun p i => pairEmbed D (A p i)
   set C := R * G' with hCdef
   have hC : IsRowSupportedBelow (b (Fin.last (n + 1))) C := hR.mul G'
   have hCr : ∀ γ x, r ≤ x.val → C γ x = 0 := fun γ x hx => by
     simp [hCdef, hG', Matrix.mul_apply, show ¬x.val < r by omega]
   have hjoin : ∀ (σ : Fin (n + 1) → Fin d) a,
-      (rowMat (pairJoin D) * eval (fun _ i => pairEmbed D (A i)) σ) ⟨0, hDD⟩ a =
-      Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 :=
+      (rowMat (pairJoin D) * eval (fun p i => pairEmbed D (A p i)) σ) ⟨0, hDD⟩ a =
+      eval A σ (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 :=
     fun σ a => by
       rw [eval_pairEmbed, Matrix.mul_apply]
       exact (Finset.sum_congr rfl fun j _ => by simp [rowMat]).trans
@@ -214,20 +239,22 @@ theorem exists_isometric_chain_of_eq_mul_of_le (A : Fin d → Matrix (Fin D) (Fi
 
 /-- **Sequential factorization of an isometry given by a matrix product.** Let `V`
 be an isometry from `ℂ^{D²}` to `(ℂ^d)^{⊗(n+1)}` whose matrix elements are
-`⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₀} ⋯ A^{σ_n})_{αβ} G_{(α,β),x}`. Then there are bond
-dimensions `b₀ = 1`, `b_{n+1} = D²` and `b₁, …, b_{n+1} ≤ D²`, and site matrices `Q_p`
-vanishing outside the `b_p × b_{p+1}` block and isometric on it, with
+`⟨σ|V|x⟩ = ∑_{α,β} (A_0^{σ₀} ⋯ A_n^{σ_n})_{αβ} G_{(α,β),x}` for tensors `A_0, …, A_n`,
+which may depend on the site. Then there are bond dimensions `b₀ = 1`, `b_{n+1} = D²` and
+`b₁, …, b_{n+1} ≤ D²`, and site matrices `Q_p` vanishing outside the `b_p × b_{p+1}` block
+and isometric on it, with
 `⟨σ|V|x⟩ = (Q₀(σ₀) ⋯ Q_n(σ_n))_{0x}`.
 
 arXiv:2307.01696, eqs. (13)–(15): the map is the open-boundary product of the site
 matrices `1_D ⊗ A^i` with the two bond factors joined on the left and `G` absorbed on
-the right (eq. (13)); successive decompositions from the left make every site
-isometric (eq. (14)); and the remainder is an isometry because `V` is, so absorbing
+the right (eq. (13)), here with a tensor `A_p` depending on the site as in the paragraph
+"Inhomogeneous short-range correlated MPS"; successive decompositions from the left make
+every site isometric (eq. (14)); and the remainder is an isometry because `V` is, so absorbing
 it into the last site keeps that site isometric (eq. (15)). Here `G` plays the role
 of `P⁻¹`. -/
-theorem exists_isometric_chain_of_eq_mul (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (n : ℕ)
+theorem exists_isometric_chain_of_eq_mul {n : ℕ} (A : MPSChainTensor d D (n + 1))
     (G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ) (V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ)
-    (hV : ∀ σ x, V σ x = ∑ a, Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1
+    (hV : ∀ σ x, V σ x = ∑ a, eval A σ (virtualPairEquiv D a).1
       (virtualPairEquiv D a).2 * G a x)
     (hiso : ∀ x y, ∑ σ, star (V σ x) * V σ y = if x = y then 1 else 0) :
     ∃ (b : Fin (n + 2) → ℕ) (Q : MPSChainTensor d (D * D) (n + 1)),
@@ -236,21 +263,24 @@ theorem exists_isometric_chain_of_eq_mul (A : Fin d → Matrix (Fin D) (Fin D) �
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
       (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
       ∀ σ x, V σ x = eval Q σ ⟨0, x.pos⟩ x := by
-  obtain ⟨b, Q, h0, hl, hb, hrow, hcol, hiso', hV'⟩ := exists_isometric_chain_of_eq_mul_of_le A n
+  obtain ⟨b, Q, h0, hl, hb, hrow, hcol, hiso', hV'⟩ := exists_isometric_chain_of_eq_mul_of_le A
     le_rfl G V (fun σ x _ => hV σ x) (fun x y _ _ => hiso x y)
   exact ⟨b, Q, h0, hl, hb, hrow, hcol, hiso', fun σ x => hV' σ x x.isLt⟩
 
-/-- The isometric factor of an injective blocked tensor `B = V P` is `V = B P⁻¹`, read as a
-matrix product map: `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₁} ⋯ A^{σ_q})_{αβ} (P⁻¹)_{(α,β),x}`
-(arXiv:2307.01696, eq. (13)). -/
-theorem polarIsoMatrix_blockTensor_eq_sum (A : MPSTensor d D) {q : ℕ}
-    (hB : Kraus.IsInjective (blockTensor A q)) (σ : Fin q → Fin d) (x : Fin (D * D)) :
-    MPSTensor.polarIsoMatrix (blockTensor A q) ((decodeBlockEquiv d q).symm σ) x =
-      ∑ a, Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 *
-        ((Matrix.polarPos (MPSTensor.physicalMatrix (blockTensor A q)))⁻¹.submatrix
+/-- The isometric factor of an injective blocked tensor `B = V P` of a chain of site-dependent
+tensors `A₀, …, A_{q-1}` is `V = B P⁻¹`, read as a matrix product map:
+`⟨σ|V|x⟩ = ∑_{α,β} (A_0^{σ₁} ⋯ A_{q-1}^{σ_q})_{αβ} (P⁻¹)_{(α,β),x}` (arXiv:2307.01696, eq. (13),
+and the paragraph "Inhomogeneous short-range correlated MPS" for tensors that depend on the
+site). -/
+theorem polarIsoMatrix_chainBlockTensor_eq_sum {q : ℕ} (A : MPSChainTensor d D q)
+    (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) (σ : Fin q → Fin d)
+    (x : Fin (D * D)) :
+    MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) ((decodeBlockEquiv d q).symm σ) x =
+      ∑ a, eval A σ (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 *
+        ((Matrix.polarPos (MPSTensor.physicalMatrix (MPSChainTensor.blockTensor A)))⁻¹.submatrix
           (virtualPairEquiv D) (virtualPairEquiv D)) a x := by
   classical
-  set B := blockTensor A q with hBdef
+  set B := MPSChainTensor.blockTensor A with hBdef
   set M := MPSTensor.physicalMatrix B
   let e := virtualPairEquiv D
   have hinj := MPSTensor.injective_physicalMatrix_mulVec_of_isInjective hB
@@ -261,55 +291,108 @@ theorem polarIsoMatrix_blockTensor_eq_sum (A : MPSTensor d D) {q : ℕ}
         = Matrix.polarIso M * Matrix.polarPos M * (Matrix.polarPos M)⁻¹ := by
           rw [Matrix.mul_assoc, Matrix.mul_nonsing_inv _ hdet, Matrix.mul_one]
       _ = M * (Matrix.polarPos M)⁻¹ := by rw [Matrix.polarIso_mul_polarPos]
-  have hBσ : B ((decodeBlockEquiv d q).symm σ) = Kraus.evalWord A (List.ofFn σ) := by
-    simp only [hBdef, blockTensor, decodeBlockEquiv, Kraus.blockTensor, Kraus.wordOfBlock,
-      Kraus.decodeBlock_decodeBlockEquiv_symm]
   change (Matrix.polarIso M) _ (e x) = _
   rw [hVM, Matrix.mul_apply, ← e.sum_comp]
   refine Finset.sum_congr rfl fun a _ => ?_
-  simp [M, MPSTensor.physicalMatrix, hBσ, e]
+  simp [M, MPSTensor.physicalMatrix, hBdef, e]
+
+/-- The isometric factor of an injective blocked tensor `B = V P` is `V = B P⁻¹`, read as a
+matrix product map: `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₁} ⋯ A^{σ_q})_{αβ} (P⁻¹)_{(α,β),x}`
+(arXiv:2307.01696, eq. (13)). This is `polarIsoMatrix_chainBlockTensor_eq_sum` for the constant
+chain. -/
+theorem polarIsoMatrix_blockTensor_eq_sum (A : MPSTensor d D) {q : ℕ}
+    (hB : Kraus.IsInjective (blockTensor A q)) (σ : Fin q → Fin d) (x : Fin (D * D)) :
+    MPSTensor.polarIsoMatrix (blockTensor A q) ((decodeBlockEquiv d q).symm σ) x =
+      ∑ a, Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 *
+        ((Matrix.polarPos (MPSTensor.physicalMatrix (blockTensor A q)))⁻¹.submatrix
+          (virtualPairEquiv D) (virtualPairEquiv D)) a x := by
+  have h := polarIsoMatrix_chainBlockTensor_eq_sum (fun _ : Fin q => A)
+    (by rwa [MPSChainTensor.blockTensor_const]) σ x
+  simpa only [MPSChainTensor.blockTensor_const, MPSChainTensor.eval_const] using h
+
+/-- **Sequential factorization of the isometric factor of a blocked tensor injective on a set
+of bond pairs.** Let `A₀, …, A_{q-1}` be tensors with bond dimension `D`, one on each site,
+`q ≥ 1`, and let the blocked tensor `B` be injective on a set `S` of bond pairs, so that the
+isometric factor `V` of `B = V P` is an isometry on the inputs `S` and vanishes on the others
+(`MPSTensor.sum_star_polarIsoMatrix_mul`). Let `π` enumerate the bond pairs with the pairs of
+`S` first. Then there are bond dimensions `b₀ = 1`, `b_q = |S|` and `b₁, …, b_q ≤ D²`, and site
+matrices `Q_p`, vanishing outside the `b_p × b_{p+1}` block and isometric on it, such that
+`⟨σ| V |π x⟩ = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0x}` for every input `x < |S|`.
+
+arXiv:2307.01696, eqs. (13)–(15), and the paragraph "Inhomogeneous short-range correlated MPS"
+for tensors that depend on the site; here `V = B G` for a matrix `G` on the bond pairs
+(`MPSTensor.exists_polarIsoMatrix_eq_sum`), which is `P⁻¹` for an injective tensor, and only the
+inputs in `S` are kept, as in `exists_isometric_chain_of_eq_mul_of_le`. For `S` the set of all
+pairs this is `exists_isometric_chain_polarIsoMatrix`. -/
+theorem exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn {q : ℕ}
+    (A : MPSChainTensor d D q) (hq : 0 < q) {S : Finset (Fin D × Fin D)}
+    (hB : MPSTensor.IsInjectiveOn (MPSChainTensor.blockTensor A) (S : Set (Fin D × Fin D)))
+    (π : Fin (D * D) ≃ Fin D × Fin D) (hπ : ∀ x, x.val < S.card ↔ π x ∈ S) :
+    ∃ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
+      b 0 = 1 ∧ b (Fin.last q) = S.card ∧ (∀ p : Fin q, b p.succ ≤ D * D) ∧
+      (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
+      (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
+      ∀ (σ : Fin q → Fin d) (x : Fin (D * D)), x.val < S.card →
+        MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A)
+            ((decodeBlockEquiv d q).symm σ) ((virtualPairEquiv D).symm (π x)) =
+          eval Q σ ⟨0, x.pos⟩ x := by
+  classical
+  obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
+  obtain ⟨G, hG⟩ := MPSTensor.exists_polarIsoMatrix_eq_sum (MPSChainTensor.blockTensor A)
+  let V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ := fun σ x =>
+    MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) ((decodeBlockEquiv d (n + 1)).symm σ)
+      ((virtualPairEquiv D).symm (π x))
+  have hcard : S.card ≤ D * D := by simpa using S.card_le_univ
+  refine exists_isometric_chain_of_eq_mul_of_le A hcard
+    (Matrix.of fun a x => G a ((virtualPairEquiv D).symm (π x))) V (fun σ x _ => ?_)
+    (fun x y hx _ => ?_)
+  · simp only [V, hG, MPSChainTensor.blockTensor_decodeBlockEquiv_symm, Matrix.of_apply]
+  · have h := MPSTensor.sum_star_polarIsoMatrix_mul hB ((virtualPairEquiv D).symm (π x))
+      ((virtualPairEquiv D).symm (π y))
+    rw [← (decodeBlockEquiv d (n + 1)).symm.sum_comp] at h
+    simp only [V]
+    rw [h]
+    have hS := (hπ x).mp hx
+    by_cases hxy : x = y
+    · subst hxy; simp [hS]
+    · simp [hxy]
 
 /-- **Sequential factorization of the isometry** of the polar decomposition of an
-injective blocked tensor. Let `A` be a tensor with bond dimension `D`, let `q ≥ 1`,
-and suppose the `q`-site blocked tensor `B` is injective, so that its polar
-decomposition `B = V P` has an isometry `V : ℂ^{D²} → (ℂ^d)^{⊗q}`. Then there are
-bond dimensions `b₀ = 1`, `b_q = D²`, and `b₁, …, b_q ≤ D²`, and site matrices `Q_p`,
-vanishing outside the `b_p × b_{p+1}` block, whose site maps
+injective blocked tensor. Let `A₀, …, A_{q-1}` be tensors with bond dimension `D`, one on
+each site, let `q ≥ 1`, and suppose the blocked tensor `B` of the chain is injective, so
+that its polar decomposition `B = V P` has an isometry `V : ℂ^{D²} → (ℂ^d)^{⊗q}`. Then
+there are bond dimensions `b₀ = 1`, `b_q = D²`, and `b₁, …, b_q ≤ D²`, and site matrices
+`Q_p`, vanishing outside the `b_p × b_{p+1}` block, whose site maps
 `ℂ^{b_{p+1}} → ℂ^{b_p} ⊗ ℂ^d` are isometries, such that
 `⟨σ₁ ⋯ σ_q| V |x⟩ = (Q₀(σ₁) ⋯ Q_{q-1}(σ_q))_{0x}` for every configuration and every
 input `x` of `ℂ^{D²}`. Equivalently, `V` is the ordered composition of the `q`
-isometries, each acting on one site and the bond to its left.
+isometries, each acting on one site and the bond to its left. For a constant chain the
+blocked tensor is `blockTensor A q` (`MPSChainTensor.blockTensor_const`).
 
 arXiv:2307.01696, eqs. (13)–(15): `V = V_q ⋯ V_1` with isometries
 `V_i : ℂ^{D'_i} → ℂ^{d D'_{i+1}}`, `D'_i ≤ D²`, `D'_{q+1} = 1`, where the last factor
 `C-tilde = V_1`, carrying the input `ℂ^{D²}`, is an isometry by eq. (15). In the notation
-here `Q_p = V_{q-p}` and `b_p = D'_{q+1-p}`.
-
-**Scope restriction (positive block length):** the hypothesis `0 < q` is absent from
-arXiv:2307.01696, eqs. (13)–(15), which state no lower bound on the block length. The
-empty block `q = 0` is injective only for `D ≤ 1`; the conclusion holds trivially at
-`D = 1` and fails at `D = 0`, where `b₀ = 1` and `b₀ = D²` name the same bond. Documented in
-`docs/paper-gaps/mswc24_sequential_factorization_positive_block_length.tex`. -/
-theorem exists_isometric_chain_polarIsoMatrix (A : MPSTensor d D) {q : ℕ} (hq : 0 < q)
-    (hB : Kraus.IsInjective (blockTensor A q)) :
+here `Q_p = V_{q-p}` and `b_p = D'_{q+1-p}`. The paragraph "Inhomogeneous short-range
+correlated MPS" applies the same decomposition to tensors that depend on the site. -/
+theorem exists_isometric_chain_polarIsoMatrix {q : ℕ} (A : MPSChainTensor d D q) (hq : 0 < q)
+    (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) :
     ∃ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
       b 0 = 1 ∧ b (Fin.last q) = D * D ∧ (∀ p : Fin q, b p.succ ≤ D * D) ∧
       (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
       (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
       ∀ (σ : Fin q → Fin d) (x : Fin (D * D)),
-        MPSTensor.polarIsoMatrix (blockTensor A q) ((decodeBlockEquiv d q).symm σ) x =
+        MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A)
+            ((decodeBlockEquiv d q).symm σ) x =
           eval Q σ ⟨0, x.pos⟩ x := by
   classical
-  obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
-  let V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ := fun σ x =>
-    MPSTensor.polarIsoMatrix (blockTensor A (n + 1)) ((decodeBlockEquiv d (n + 1)).symm σ) x
-  have hiso : ∀ x y, ∑ σ, star (V σ x) * V σ y = if x = y then 1 else 0 := fun x y => by
-    have h := congrFun (congrFun
-      (MPSTensor.isIsometry_polarIsoMatrix_of_isInjective hB) x) y
-    rw [Matrix.mul_apply, Matrix.one_apply] at h
-    rw [← h, ← (decodeBlockEquiv d (n + 1)).symm.sum_comp]
-    rfl
-  exact exists_isometric_chain_of_eq_mul A n _ V (polarIsoMatrix_blockTensor_eq_sum A hB) hiso
+  have hc : (Finset.univ : Finset (Fin D × Fin D)).card = D * D := by simp
+  obtain ⟨b, Q, h0, hl, hb, hrow, hcol, hiso, hV⟩ :=
+    exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn A hq (S := Finset.univ)
+      (by simpa using MPSTensor.isInjectiveOn_univ_iff.mpr hB) (virtualPairEquiv D)
+      (fun x => by simp [hc, x.isLt])
+  exact ⟨b, Q, h0, hl.trans hc, hb, hrow, hcol, hiso, fun σ x => by
+    simpa using hV σ x (by rw [hc]; exact x.isLt)⟩
 
 end MPSPreparation

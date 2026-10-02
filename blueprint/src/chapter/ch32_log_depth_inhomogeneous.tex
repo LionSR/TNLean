@@ -1,0 +1,400 @@
+\section{Inhomogeneous short-range correlated states}
+\label{sec:ldp_inhomogeneous}
+
+The paragraph ``Inhomogeneous short-range correlated MPS''
+of~\cite{Malz2024Preparation} extends the preparation to matrix product states
+that are not translation invariant. After blocking, the positive parts of the
+polar decompositions of the blocked tensors generate a state
+$\ket{\phi_{\mathrm{pos}}}$~\cite[eq.~(18)]{Malz2024Preparation}; if it is close
+to a product of nearest-neighbour pairs $\ket\Omega$, then preparing $\ket\Omega$
+and applying the isometries of the polar decompositions prepares the state
+with error $\varepsilon(\Omega,\phi_{\mathrm{pos}})$. This section proves the
+exact identity behind the scheme and the depth and error of the prepared
+state. The bond dimensions are at most $D$ and may vary along the ring, as in
+the source; padding the matrices with zeros reduces them to a common bond
+dimension $D$, at the cost of blocked tensors that are injective only on the
+rectangle of the bonds at the ends of their block. The preparation theorem
+assumes that every blocked tensor is injective and that every block has at
+least $3D$ sites; the source assumes injectivity for its polar
+decompositions in the footnote to the paragraph ``Approximation through the
+fixed-point state''. The restrictions are recorded
+in~\cite{gap:mswc24_inhomogeneous_scope}.
+
+\begin{definition}[Blocked tensors of an inhomogeneous chain]
+    \label{def:ldp_chain_block_tensor}
+    \lean{MPSChainTensor.blockTensor,
+        MPSChainTensor.blockTensor_decodeBlockEquiv_symm,
+        MPSChainTensor.blockTensor_const, MPSChainTensor.eval_eq_prod_ofFn,
+        MPSChainTensor.eval_const, MPSTensor.chainBlockTensor,
+        MPSTensor.chainBlockTensor_const, MPSPreparation.chainState,
+        MPSPreparation.chainState_apply}
+    \leanok
+    \uses{def:ldp_block_isometry_state}
+    Let $A_1,\dots,A_N$ be tensors of physical dimension $d$ and bond dimension
+    $D$, one on each site of a ring of $N$ sites, and let
+    $\ket{\phi_N}=\sum_s\Tr(A_1^{s_1}\cdots A_N^{s_N})\ket s$ be their state.
+    Cut the ring into $M\ge1$ consecutive blocks of lengths
+    $\ell_1,\dots,\ell_M$ as in Definition~\ref{def:ldp_block_isometry_state}.
+    The blocked tensor $B_k$ of block $k$ has physical dimension $d^{\ell_k}$ and
+    the matrices
+    $B_k^{s_{o_k+1}\cdots s_{o_k+\ell_k}}=A_{o_k+1}^{s_{o_k+1}}\cdots
+        A_{o_k+\ell_k}^{s_{o_k+\ell_k}}$. When all tensors are equal to $A$, it is
+    the $\ell_k$-site blocked tensor $\mathcal B_{\ell_k}$ of $A$.
+\end{definition}
+
+\begin{definition}[State of the positive parts and the block isometries]
+    \label{def:ldp_chain_pos_state}
+    \lean{MPSPreparation.chainPosState, MPSPreparation.chainPosState_apply,
+        MPSTensor.blockIsoVector, MPSTensor.blockIsoVector_apply,
+        MPSTensor.pairFamilyState, MPSTensor.pairFamilyState_const,
+        MPSTensor.pairFamilyVector, MPSTensor.pairFamilyVector_apply,
+        MPSTensor.chainBlockIsometryState,
+        MPSTensor.chainBlockIsometryState_apply,
+        MPSTensor.blockIsometryState_eq_chainBlockIsometryState}
+    \leanok
+    \uses{def:ldp_chain_block_tensor, thm:ldpolar_tensor_decomposition,
+        def:prep_pair_product_state}
+    Let $B_k=V_kP_k$ be the polar decompositions of the blocked tensors of
+    Definition~\ref{def:ldp_chain_block_tensor}, with $P_k$ read as a tensor of
+    physical dimension $D^2$ and bond dimension $D$ as in
+    Theorem~\ref{thm:ldpolar_tensor_decomposition}. The state of the positive
+    parts on the $M$ blocks is
+    \begin{align}
+        \ket{\phi_{\mathrm{pos}}}
+         & =\sum_{\tau}\Tr\bigl(P_1^{\tau_1}\cdots P_M^{\tau_M}\bigr)
+        \ket{\tau_1\cdots\tau_M},
+        \label{eq:ldp_chain_pos_state}
+    \end{align}
+    the state of \cite[eq.~(18)]{Malz2024Preparation}. For vectors
+    $\omega^1,\dots,\omega^M$ on $\C^D\otimes\C^D$ let
+    $\ket\Omega=\bigotimes_{k=1}^M\ket{\omega^k}_{R_kL_{k+1}}$, the pair
+    $\omega^k$ joining the right leg of block $k$ to the left leg of block
+    $k+1$, cyclically; when all $\omega^k$ are equal to $\omega$ it is the pair
+    product state of Definition~\ref{def:prep_pair_product_state}. The state
+    $(\bigotimes_kV_k)\ket\Omega$ has the coefficient
+    $\sum_c\prod_k\bra{s_k}V_k\ket{c_k}\,\Omega(c)$ at the configuration $s$
+    read block by block; for equal tensors and equal pairs it is the state
+    $\ket{\psi_{\ell,\omega}}$ of Definition~\ref{def:ldp_block_isometry_state}.
+\end{definition}
+
+\begin{theorem}[The state is the isometries applied to the positive parts]
+    \label{thm:ldp_chain_state_eq_pos}
+    \lean{MPSTensor.coeff_eq_mpvFamily_chainBlockTensor,
+        MPSPreparation.chainState_eq_blockIsoVector}
+    \leanok
+    \uses{def:ldp_chain_pos_state}
+    For every cutting of the ring into blocks,
+    $\ket{\phi_N}=(\bigotimes_{k=1}^MV_k)\ket{\phi_{\mathrm{pos}}}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The coefficient of $\ket{\phi_N}$ at $s$ is
+    $\Tr(B_1^{s_1}\cdots B_M^{s_M})$ with $s_k$ the configuration of block $k$.
+    Substituting $B_k^{s_k}=\sum_{\tau_k}\bra{s_k}V_k\ket{\tau_k}P_k^{\tau_k}$
+    and expanding the product gives
+    $\sum_\tau\prod_k\bra{s_k}V_k\ket{\tau_k}\Tr(P_1^{\tau_1}\cdots P_M^{\tau_M})$.
+\end{proof}
+
+\begin{theorem}[The isometries preserve overlaps]
+    \label{thm:ldp_chain_block_iso_inner}
+    \lean{MPSTensor.inner_blockIsoVector, MPSTensor.norm_blockIsoVector,
+        MPSTensor.inner_blockIsoVector_of_isInjectiveOn,
+        MPSTensor.norm_blockIsoVector_of_isInjectiveOn,
+        Matrix.sum_star_mul_prod_of_support,
+        MPSTensor.pairFamilyState_inner, MPSTensor.pairFamilyState_norm_sq,
+        MPSTensor.norm_pairFamilyVector,
+        MPSPreparation.blockIsoVector_smul, MPSPreparation.chainPosState_eq_zero,
+        MPSPreparation.norm_chainState,
+        MPSPreparation.inner_chainBlockIsometryState_normalize}
+    \leanok
+    \uses{def:ldp_chain_pos_state, def:ldpolar_injective_on}
+    Suppose every blocked tensor $B_k$ is injective on a set $S_k$ of bond
+    pairs, as in Definition~\ref{def:ldpolar_injective_on}. Then
+    $\langle(\bigotimes_kV_k)x,(\bigotimes_kV_k)y\rangle=\langle x,y\rangle$
+    for all vectors $x,y$ on the $M$ blocks such that
+    $\overline{x(a)}\,y(a)=0$ whenever $a_k\notin S_k$ for some $k$; if every
+    $B_k$ is injective, this holds for all $x,y$. More generally, for
+    matrices $W_k$ with $\sum_i\overline{(W_k)_{ia}}(W_k)_{ib}=1$ if
+    $a=b\in S_k$ and $0$ otherwise, the same identity holds with $W_k$ in place
+    of $V_k$. The state $\ket{\phi_{\mathrm{pos}}}$ vanishes at every $a$ with
+    some $a_k\notin S_k$, and
+    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$. For products
+    $\ket\Omega$ and $\ket{\Omega'}$ of pairs $\omega^k$ and $\omega'^k$,
+    $\langle\Omega,\Omega'\rangle=\prod_k\langle\omega^k,\omega'^k\rangle$; in
+    particular the norm of $\ket\Omega$ is $\prod_k\lVert\omega^k\rVert$.
+    For all vectors $\omega^k$,
+    \begin{align}
+        \Bigl\langle\Bigl(\bigotimes_kV_k\Bigr)\Omega,
+        \frac{\phi_N}{\lVert\phi_N\rVert}\Bigr\rangle
+         & =\Bigl\langle\Omega,
+        \frac{\phi_{\mathrm{pos}}}{\lVert\phi_{\mathrm{pos}}\rVert}\Bigr\rangle.
+        \label{eq:ldp_chain_block_iso_inner}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective_on,
+        def:prep_bond_regrouping}
+    By Theorem~\ref{thm:ldpolar_tensor_injective_on},
+    $\sum_{s_k}\overline{(V_k)_{s_ka}}(V_k)_{s_kb}$ is $1$ if $a=b\in S_k$ and
+    $0$ otherwise, for the configurations $s_k$ of block $k$; for injective
+    $B_k$ the set $S_k$ contains all pairs. Expanding the inner product over
+    the configurations $s=(s_k)_k$ and applying this identity factor by factor
+    gives
+    \begin{align}
+        \sum_s\overline{\Bigl(\Bigl(\bigotimes_kV_k\Bigr)x\Bigr)(s)}
+        \Bigl(\Bigl(\bigotimes_kV_k\Bigr)y\Bigr)(s)
+         & =\sum_{a,b}\overline{x(a)}\,y(b)
+        \prod_k\sum_{s_k}\overline{(V_k)_{s_ka_k}}(V_k)_{s_kb_k}
+        =\sum_{a\in\prod_kS_k}\overline{x(a)}\,y(a),
+        \notag
+    \end{align}
+    which is $\langle x,y\rangle$ under the hypothesis on $x$ and $y$. The
+    positive part $P_k$ vanishes outside $S_k$ by
+    Theorem~\ref{thm:ldpolar_tensor_injective_on}, so
+    $\ket{\phi_{\mathrm{pos}}}$ vanishes at every $a$ with some $a_k\notin S_k$,
+    and the remaining identities follow from
+    Theorem~\ref{thm:ldp_chain_state_eq_pos} with $y=\phi_{\mathrm{pos}}$. For
+    the overlap of the pair products, expanding
+    $\prod_k\langle\omega^k,\omega'^k\rangle$ as a sum over bond
+    configurations $(p_k)_k$ of $\prod_k\overline{\omega^k_{p_k}}\,\omega'^k_{p_k}$
+    and reindexing along the bond regrouping of
+    Definition~\ref{def:prep_bond_regrouping} gives
+    $\sum_c\overline{\Omega(c)}\,\Omega'(c)$.
+\end{proof}
+
+\begin{definition}[Chains with bond dimensions at most $D$]
+    \label{def:ldp_varying_bond_chain}
+    \lean{VaryingBondChain,
+        Matrix.zeroPad,
+        VaryingBondChain.coeff,
+        VaryingBondChain.state,
+        VaryingBondChain.state_apply,
+        VaryingBondChain.zeroPad,
+        VaryingBondChain.leftBond,
+        VaryingBondChain.rightBond,
+        VaryingBondChain.corner,
+        VaryingBondChain.blockCorner,
+        VaryingBondChain.IsBlockInjective,
+        VaryingBondChain.padPair,
+        VaryingBondChain.padPairs}
+    \leanok
+    \uses{def:ldp_chain_block_tensor, def:ldp_chain_pos_state}
+    Let $D_1,\dots,D_N\le D$ be the dimensions of the bonds of the ring, the bond
+    $k$ joining site $k-1$ to site $k$, cyclically, and let site $k$ carry
+    matrices $A_k^i$ of size $D_k\times D_{k+1}$. The state of the chain is
+    $\ket{\phi_N}=\sum_s\Tr(A_1^{s_1}\cdots A_N^{s_N})\ket s$, the setting of
+    the paragraph ``Inhomogeneous short-range correlated MPS''
+    of~\cite{Malz2024Preparation}. Padding every $A_k^i$ with zeros to a
+    $D\times D$ matrix gives a chain of bond dimension $D$. For blocks as in
+    Definition~\ref{def:ldp_chain_block_tensor}, let $a_k=D_{o_k+1}$ and
+    $b_k=a_{k+1}$ be the dimensions of the bonds at the left and right end of
+    block $k$, cyclically, and let $R_k$ be the rectangle of pairs
+    $(\alpha,\beta)$ with $\alpha<a_k$ and $\beta<b_k$. The blocked tensors are
+    \emph{injective} if, for every $k$, the blocked tensor $B_k$ of block $k$ of
+    the padded chain spans every matrix unit $\ket\alpha\bra\beta$ with
+    $(\alpha,\beta)\in R_k$. For blocks of at least one site, $B_k$ vanishes
+    outside $R_k$ and its entries on $R_k$ are those of the product of the
+    rectangular matrices along the block, so the condition may be read as the
+    source's injectivity of the rectangular blocked tensor, whose matrices of
+    size $a_k\times b_k$ span all matrices of that size; that identification of
+    the entries on $R_k$ is not part of the formalization, see the section on
+    zero padding in~\cite{gap:mswc24_inhomogeneous_scope}. For a block of
+    length zero the two readings differ, the padded blocked tensor being the
+    identity matrix of size $D$. A pair $\omega^k$ on
+    $\C^{b_k}\otimes\C^{b_k}$ is padded with zeros to a vector on
+    $\C^D\otimes\C^D$. The states $\ket{\phi_{\mathrm{pos}}}$, $\ket\Omega$ and
+    $(\bigotimes_kV_k)\ket\Omega$ of the chain are those of
+    Definition~\ref{def:ldp_chain_pos_state} for the padded chain and the
+    padded pairs.
+\end{definition}
+
+\begin{theorem}[Zero padding]
+    \label{thm:ldp_zero_pad}
+    \lean{VaryingBondChain.zeroPad_eq_zero,
+        VaryingBondChain.coeff_zeroPad,
+        VaryingBondChain.state_eq_chainState_zeroPad,
+        VaryingBondChain.state_eq_chainState,
+        VaryingBondChain.rightBond_le,
+        Matrix.zeroPad_apply_of_lt,
+        Matrix.zeroPad_apply_eq_zero,
+        coe_finRotate_mod,
+        MPSPreparation.blockOffset_add_mod,
+        MPSChainTensor.eval_eq_zero_of_support,
+        MPSChainTensor.blockTensor_eq_zero_of_support,
+        VaryingBondChain.chainBlockTensor_zeroPad_eq_zero,
+        VaryingBondChain.IsBlockInjective.isInjectiveOn,
+        VaryingBondChain.sum_star_padPair_mul,
+        VaryingBondChain.sum_star_padPairs_mul_self,
+        VaryingBondChain.mem_blockCorner_of_pairFamilyState_ne_zero,
+        VaryingBondChain.pairFamilyVector_padPairs_eq_zero}
+    \leanok
+    \uses{def:ldp_varying_bond_chain, def:ldpolar_injective_on}
+    On a ring of $N\ge1$ sites the padded chain has the state $\ket{\phi_N}$ of
+    the chain. If every block has at least one site, the blocked tensor $B_k$
+    of the padded chain vanishes outside $R_k$; if moreover the blocked tensors
+    are injective, $B_k$ is injective on $R_k$. Padding preserves inner
+    products of pairs, so padded unit pairs are unit vectors, and the product
+    $\ket\Omega$ of padded pairs vanishes at every bond configuration $c$ with
+    some $c_k\notin R_k$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:ldp_chain_block_tensor, def:ldp_chain_pos_state}
+    The trace of the product of the padded matrices is the sum over cyclic bond
+    configurations $g$ of $\prod_k(A_k^{s_k})_{g_kg_{k+1}}$ with padded entries,
+    and a term vanishes unless $g_k<D_k$ for every $k$; the remaining terms are
+    those of the rectangular trace. A product of padded matrices of sizes
+    $D_{o+1}\times D_{o+2},\dots,D_{o+\ell}\times D_{o+\ell+1}$ vanishes at
+    every entry $(\alpha,\beta)$ outside the rectangle of pairs with
+    $\alpha<D_{o+1}$ and $\beta<D_{o+\ell+1}$, its first factor vanishing on the
+    rows $\alpha\ge D_{o+1}$ and its last on the columns
+    $\beta\ge D_{o+\ell+1}$; the bond after the last site of block $k$ is the
+    bond at the left end of block $k+1$, cyclically. A padded pair vanishes
+    outside the square of its bond, and the pair $\omega^k$ joins the right
+    index of block $k$, of dimension $b_k$, to the left index of block $k+1$,
+    of dimension $a_{k+1}=b_k$.
+\end{proof}
+
+\begin{definition}[Approximation of the positive parts by pairs]
+    \label{def:ldp_pair_approximable}
+    \lean{VaryingBondChain.IsPairApproximable}
+    \leanok
+    \uses{def:ldp_varying_bond_chain}
+    For $\delta\in\R$, a chain with bond dimensions at most $D$ is
+    \emph{approximated by pairs with error $\delta$} on the given blocks if
+    $\phi_{\mathrm{pos}}\neq0$ and there are unit vectors $\omega^k$ on
+    $\C^{b_k}\otimes\C^{b_k}$ with
+    $1-\lvert\langle\Omega,\phi_{\mathrm{pos}}\rangle\rvert
+        /\lVert\phi_{\mathrm{pos}}\rVert\le\delta$, the states being those of
+    the padded chain and the padded pairs. The source defines a sequence of
+    matrix product states with bond dimension at most $D$ to have finite
+    correlation length if, after blocking $q=O(\log N)$ sites, this holds with
+    an error tending to $0$ as $N\to\infty$~\cite[paragraph ``Inhomogeneous
+        short-range correlated MPS'']{Malz2024Preparation}; the definition here
+    is the condition for one ring. The condition $\phi_{\mathrm{pos}}\neq0$ is
+    presupposed by the normalized state in the source's error,
+    see~\cite{gap:mswc24_inhomogeneous_scope}.
+\end{definition}
+
+\begin{theorem}[Sequential factorization on a set of bond pairs]
+    \label{thm:ldp_sequential_factorization_on}
+    \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn}
+    \leanok
+    \uses{def:ldpolar_injective_on}
+    Let $A_1,\dots,A_q$, $q\ge1$, be tensors of bond dimension $D$, one on each
+    site, let their blocked tensor $B=VP$ be injective on a set $S$ of bond
+    pairs, and let $\pi$ enumerate the bond pairs with the elements of $S$
+    first, so that $\pi(x)\in S$ exactly for $x<\lvert S\rvert$. There are
+    integers $b_0=1$, $b_q=\lvert S\rvert$ and $b_p\le D^2$, and families of
+    $b_{p-1}\times b_p$ matrices $X_p^i$ with $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$
+    for every $p$, such that
+    $\bra{i_1\cdots i_q}V\ket{\pi(x)}=(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ for every
+    $x<\lvert S\rvert$. For $S$ the set of all pairs this is
+    Theorem~\ref{thm:ldp_sequential_factorization}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_tensor_injective_on,
+        lem:ldp_sequential_factorization_first_inputs}
+    By Theorem~\ref{thm:ldpolar_tensor_injective_on}, $V=BG$ for a matrix $G$
+    on the bond pairs, and the columns $V\ket{\pi(x)}$, $x<\lvert S\rvert$, are
+    orthonormal. Reorder the inputs by $\pi$ and apply
+    Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} with
+    $r=\lvert S\rvert$.
+\end{proof}
+
+\begin{theorem}[Preparation for site-dependent tensors]
+    \label{thm:ldp_chain_depth}
+    \lean{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn,
+        MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState,
+        MPSPreparation.chainBlockIsometryState_eq_mulVec,
+        Finset.exists_equiv_val_lt_card_iff_mem,
+        MPSPreparation.exists_pairEquiv_val_lt_card_iff_mem,
+        MPSPreparation.isPreparedInDepth_zero_of_le_one}
+    \leanok
+    \uses{def:ldp_chain_pos_state, def:ldp_local_circuit, def:ldpolar_injective_on}
+    There is $C$, depending only on $d$ and $D$, such that the following
+    holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
+    $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be tensors of bond dimension $D$
+    whose blocked tensor $B_k$ is injective on a set $S_k$ of bond pairs for
+    every $k$, and let $\omega^k$ be unit vectors on $\C^D\otimes\C^D$ whose
+    product $\ket\Omega$ vanishes at every bond configuration $c$ with some
+    $c_k\notin S_k$. Then $(\bigotimes_kV_k)\ket\Omega$ is prepared in depth at
+    most $CL$. In particular this holds when every $B_k$ is injective, for all
+    unit vectors $\omega^k$. A finite set has an enumeration listing the
+    elements of a given subset first, and for $d\le1$ every vector on a ring of
+    $N\ge1$ sites is prepared in depth $0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_unitary_implementing_isometry,
+        thm:ldp_sequential_factorization_on,
+        thm:ldp_block_sum_unitary,
+        thm:ldp_bounded_unitary_two_site_gates}
+    For $d\le1$ there is at most one configuration, and a product vector
+    carries any amplitude on it. For $D=0$ there is no unit pair. Otherwise
+    $d\ge2$, so $D\le d^D$, and each bond index is encoded in $D$ sites. The
+    circuit of the proof of Theorem~\ref{thm:ldp_approximating_state_depth}
+    applies with one change: the first layer prepares the pair $\omega^k$ on
+    the window joining block $k$ to block $k+1$, one unitary per window, and on
+    block $k$ the unitary of Theorem~\ref{thm:ldp_block_sum_unitary},
+    built from the sequential factorization of
+    Theorem~\ref{thm:ldp_sequential_factorization_on} with an enumeration
+    listing $S_k$ first, implements $V_k$ on the inputs in $S_k$, the only ones
+    $\ket\Omega$ populates. The depth of that unitary is bounded by a constant
+    times $\ell_k$, the constant being the largest over the finitely many
+    enumerations of the bond pairs.
+\end{proof}
+
+\begin{theorem}[Preparation of inhomogeneous short-range correlated states]
+    \label{thm:ldp_inhomogeneous}
+    \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous,
+        MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
+    \leanok
+    \uses{def:ldp_varying_bond_chain, def:ldp_pair_approximable,
+        def:ldp_local_circuit}
+    There is $C$, depending only on $d$ and $D$, such that the following
+    holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
+    $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be a chain with bond dimensions at
+    most $D$ whose blocked tensors are all injective, and let $\omega^k$ be
+    unit vectors on $\C^{b_k}\otimes\C^{b_k}$, as in
+    Definition~\ref{def:ldp_varying_bond_chain}. Then
+    $\ket\psi=(\bigotimes_kV_k)\ket\Omega$ is a unit vector prepared in depth
+    at most $CL$, and
+    \begin{align}
+        1-\frac{\lvert\langle\psi,\phi_N\rangle\rvert}{\lVert\phi_N\rVert}
+         & =1-\frac{\lvert\langle\Omega,\phi_{\mathrm{pos}}\rangle\rvert}
+        {\lVert\phi_{\mathrm{pos}}\rVert},
+        \label{eq:ldp_inhomogeneous_error}
+    \end{align}
+    that is, $\varepsilon(\psi,\phi_N)=\varepsilon(\Omega,\phi_{\mathrm{pos}})$
+    for the normalized states. In particular, if the chain is approximated by
+    pairs with error $\delta$ on the given blocks, some unit vector prepared in
+    depth at most $CL$ has error at most $\delta$ against the normalized state
+    $\ket{\phi_N}$. This is a scope-restricted variant, for one ring, of the
+    claim of the paragraph ``Inhomogeneous short-range correlated MPS''
+    of~\cite{Malz2024Preparation}, which states total depth
+    $O(\log(N/\varepsilon))$ with error
+    $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ for matrix product states with
+    bond dimension at most $D$. The injectivity of the blocked tensors and the
+    lower bound $3D\le\ell_k$ are absent from that
+    statement~\cite{gap:mswc24_inhomogeneous_scope}, and the unrestricted claim
+    is not formalized. The bound $CL$ gives the stated depth when
+    $L=O(\log(N/\varepsilon))$; the source's definition fixes blocks of length
+    $q=O(\log N)$. The choice of $L$ in terms of $N$ and the error is not made
+    here.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner, thm:ldp_zero_pad}
+    For $D=0$ there is no unit pair. Otherwise every block has a site, and by
+    Theorem~\ref{thm:ldp_zero_pad} the padded blocked tensor $B_k$ is
+    injective on the rectangle $R_k$, the padded pairs are unit vectors, and
+    $\ket\Omega$ vanishes outside $\prod_kR_k$. The depth is
+    Theorem~\ref{thm:ldp_chain_depth} with $S_k=R_k$. The norm of $\ket\psi$ is
+    $\lVert\Omega\rVert=\prod_k\lVert\omega^k\rVert=1$ and the error identity is
+    (\ref{eq:ldp_inhomogeneous_error}) by
+    Theorem~\ref{thm:ldp_chain_block_iso_inner}, since the padded chain has the
+    state $\ket{\phi_N}$ by Theorem~\ref{thm:ldp_zero_pad}.
+\end{proof}
