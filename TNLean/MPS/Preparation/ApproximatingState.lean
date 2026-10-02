@@ -50,6 +50,38 @@ open Filter Topology
 
 namespace Matrix
 
+/-- **Inner products after matrices on the sites.** For matrices `W_k : ℂ^κ → ℂ^{n_k}`, one on
+each of `M` sites, `⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ∑_{τ, τ'} (∏ₖ (W_k† W_k)_{τ_k τ'_k}) ψ(τ)^* φ(τ')`.
+
+arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors":
+the Gram matrices `V_k†V_k` of the isometric factors. -/
+theorem sum_star_mul_prod_eq_sum_conjTranspose_mul {M : ℕ} {n : Fin M → Type*}
+    [∀ k, Fintype (n k)] {κ : Type*} [Fintype κ] (W : ∀ k, Matrix (n k) κ ℂ)
+    (ψ φ : (Fin M → κ) → ℂ) :
+    ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
+        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ =
+      ∑ τ, ∑ τ', (∏ j, ((W j)ᴴ * W j) (τ j) (τ' j)) * (star (ψ τ) * φ τ') := by
+  classical
+  calc ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
+        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ
+      = ∑ s : ∀ k, n k, ∑ τ, ∑ τ', (∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j))) *
+          (star (ψ τ) * φ τ') := by
+        refine Finset.sum_congr rfl fun s _ => ?_
+        simp only [star_sum, star_mul, star_prod, Finset.sum_mul, Finset.mul_sum]
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun τ' _ => ?_
+        rw [Finset.prod_mul_distrib]
+        ring
+    _ = ∑ τ, ∑ τ', (∑ s : ∀ k, n k, ∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j))) *
+          (star (ψ τ) * φ τ') := by
+        simp only [Finset.sum_mul]
+        rw [Finset.sum_comm]
+        exact Finset.sum_congr rfl fun τ _ => Finset.sum_comm
+    _ = _ := by
+        refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun τ' _ => ?_
+        rw [← Fintype.prod_sum (fun j i => star (W j i (τ j)) * W j i (τ' j))]
+        simp only [mul_apply, conjTranspose_apply]
+
 /-- **Partial isometries on the sites preserve inner products of supported vectors.** Let
 `W_k : ℂ^κ → ℂ^{n_k}`, one on each of `M` sites, have orthonormal columns on a set `S_k` of
 inputs and zero columns outside, `W_k† W_k = Π_{S_k}`. If `ψ^* φ` vanishes at every
@@ -66,11 +98,9 @@ theorem sum_star_mul_prod_of_support {M : ℕ} {n : Fin M → Type*} [∀ k, Fin
         ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ =
       ∑ τ, star (ψ τ) * φ τ := by
   classical
-  have hprod : ∀ τ τ' : Fin M → κ,
-      ∑ s : ∀ k, n k, ∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j)) =
-        if τ = τ' ∧ ∀ j, τ j ∈ S j then 1 else 0 := fun τ τ' => by
-    rw [← Fintype.prod_sum (fun j i => star (W j i (τ j)) * W j i (τ' j))]
-    simp only [hW]
+  have hprod : ∀ τ τ' : Fin M → κ, ∏ j, ((W j)ᴴ * W j) (τ j) (τ' j) =
+      if τ = τ' ∧ ∀ j, τ j ∈ S j then 1 else 0 := fun τ τ' => by
+    simp only [mul_apply, conjTranspose_apply, hW]
     by_cases h : τ = τ' ∧ ∀ j, τ j ∈ S j
     · obtain ⟨rfl, hS⟩ := h
       simp [hS]
@@ -81,28 +111,13 @@ theorem sum_star_mul_prod_of_support {M : ℕ} {n : Fin M → Type*} [∀ k, Fin
         exact h ⟨funext fun j => (hall j).1, fun j => (hall j).2⟩
       obtain ⟨j, hj⟩ := this
       exact Finset.prod_eq_zero (Finset.mem_univ j) (ite_eq_right hj)
-  calc ∑ s : ∀ k, n k, star (∑ τ, (∏ j, W j (s j) (τ j)) * ψ τ) *
-        ∑ τ, (∏ j, W j (s j) (τ j)) * φ τ
-      = ∑ s : ∀ k, n k, ∑ τ, ∑ τ', (∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j))) *
-          (star (ψ τ) * φ τ') := by
-        refine Finset.sum_congr rfl fun s _ => ?_
-        simp only [star_sum, star_mul, star_prod, Finset.sum_mul, Finset.mul_sum]
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun τ' _ => ?_
-        rw [Finset.prod_mul_distrib]
-        ring
-    _ = ∑ τ, ∑ τ', (∑ s : ∀ k, n k, ∏ j, (star (W j (s j) (τ j)) * W j (s j) (τ' j))) *
-          (star (ψ τ) * φ τ') := by
-        simp only [Finset.sum_mul]
-        rw [Finset.sum_comm]
-        exact Finset.sum_congr rfl fun τ _ => Finset.sum_comm
-    _ = ∑ τ, star (ψ τ) * φ τ := by
-        simp only [hprod, ite_mul, one_mul, zero_mul]
-        refine Finset.sum_congr rfl fun τ _ => ?_
-        by_cases hS : ∀ j, τ j ∈ S j
-        · simp [hS]
-        · rw [hψφ τ (not_forall.mp hS),
-            Finset.sum_eq_zero fun τ' _ => ite_eq_right fun h => hS h.2]
+  rw [sum_star_mul_prod_eq_sum_conjTranspose_mul]
+  simp only [hprod, ite_mul, one_mul, zero_mul]
+  refine Finset.sum_congr rfl fun τ _ => ?_
+  by_cases hS : ∀ j, τ j ∈ S j
+  · simp [hS]
+  · rw [hψφ τ (not_forall.mp hS),
+      Finset.sum_eq_zero fun τ' _ => ite_eq_right fun h => hS h.2]
 
 /-- Isometries `W_k : ℂ^κ → ℂ^{n_k}`, one on each of `M` sites, preserve inner products:
 `⟨(⊗ₖ W_k) ψ, (⊗ₖ W_k) φ⟩ = ⟨ψ, φ⟩`.

@@ -306,6 +306,59 @@ noncomputable def blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
       (∏ k, polarIsoMatrix (B k) (blockIndexEquiv d hN s k) (τ k)) * x τ := by
   simp [blockIsoVector, EuclideanSpace.equiv, PiLp.toLp_apply]
 
+/-- **Matrices on the blocks**, `(⊗ₖ W_k) x`, for matrices `W_k : ℂ^{D²} → ℂ^{d^{ℓ k}}` on the
+blocks of a ring cut into blocks of lengths `ℓ`, applied to a vector `x` on `M` sites of
+dimension `D²`. For `W_k` the isometric factor of the polar decomposition of a tensor `B_k` this
+is `blockIsoVector` (`MPSTensor.blockIsoVector_eq_blockMatVector`); for a tensor that is not
+injective, an isometry `W_k` with `W_k Π_k = V_k` extends the partial isometry `V_k`.
+
+arXiv:2307.01696, eq. (10) and the paragraph "Inhomogeneous short-range correlated MPS": the
+isometries on the blocks applied to `|Ω⟩`. -/
+noncomputable def blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    (W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (D * D) M) : MPVSpace d N :=
+  (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm fun s =>
+    ∑ τ : Fin M → Fin (D * D), (∏ k, W k (blockIndexEquiv d hN s k) (τ k)) * x τ
+
+@[simp] theorem blockMatVector_apply {N : ℕ} {ℓ : Fin M → ℕ}
+    (W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (D * D) M) (s : Cfg d N) :
+    blockMatVector W hN x s = ∑ τ : Fin M → Fin (D * D),
+      (∏ k, W k (blockIndexEquiv d hN s k) (τ k)) * x τ := by
+  simp [blockMatVector, EuclideanSpace.equiv, PiLp.toLp_apply]
+
+/-- The isometric factors on the blocks are the matrices `V_k` on the blocks. -/
+theorem blockIsoVector_eq_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (x : MPVSpace (D * D) M) :
+    blockIsoVector B hN x = blockMatVector (fun k => polarIsoMatrix (B k)) hN x := by
+  ext s
+  simp
+
+/-- **Isometries on the blocks preserve inner products**: if every `W_k` is an isometry, then
+`⟨(⊗ₖ W_k) x, (⊗ₖ W_k) y⟩ = ⟨x, y⟩`.
+
+arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries on
+the blocks do not change norms or overlaps. -/
+theorem inner_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ} (hN : ∑ k, ℓ k = N)
+    (hW : ∀ k, (W k).IsIsometry) (x y : MPVSpace (D * D) M) :
+    ⟪blockMatVector W hN x, blockMatVector W hN y⟫_ℂ = ⟪x, y⟫_ℂ := by
+  classical
+  simp only [PiLp.inner_apply, RCLike.inner_apply, blockMatVector_apply]
+  have h := Matrix.IsIsometry.sum_star_mul_prod hW (fun τ => x τ) (fun τ => y τ)
+  rw [← Fintype.sum_equiv (blockIndexEquiv d hN) _ _ fun _ => rfl] at h
+  simp only [mul_comm (star _)] at h ⊢
+  exact h
+
+/-- Isometries on the blocks preserve norms: `‖(⊗ₖ W_k) x‖ = ‖x‖`. -/
+theorem norm_blockMatVector {N : ℕ} {ℓ : Fin M → ℕ}
+    {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ} (hN : ∑ k, ℓ k = N)
+    (hW : ∀ k, (W k).IsIsometry) (x : MPVSpace (D * D) M) :
+    ‖blockMatVector W hN x‖ = ‖x‖ := by
+  have h := inner_blockMatVector hN hW x x
+  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at h
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h)
+
 /-- **The partial isometries preserve inner products of supported vectors.** If every tensor
 `B_k` is injective on a set `S_k` of bond pairs, so that `V_k†V_k` is the projector onto `S_k`,
 then `⟨(⊗ₖ V_k) x, (⊗ₖ V_k) y⟩ = ⟨x, y⟩` whenever `x^* y` vanishes at every configuration `τ` with

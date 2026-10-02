@@ -1557,8 +1557,8 @@ The following notions use different transfer objects and are not interchangeable
 - **Sanctioned bridges:**
   `MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` (preparation
   in depth at most `C L` with error at most `δ` against the normalized state of
-  the chain, when the blocked tensors are injective and the block lengths lie
-  between `3D` and `L`).
+  the chain, when the block lengths lie between `3D` and `L`; the blocked
+  tensors need not be injective).
 - **Caveat:** the source's condition is asymptotic, an error tending to `0` as
   `N → ∞` after blocking `q = O(log N)` sites; the predicate fixes one ring and
   one cutting into blocks; see
@@ -1928,7 +1928,10 @@ involve no boundary.
   endpoint tensors of `eq:defEndT`, with orthogonal supports at the renormalization fixed point).
 - **Sanctioned bridges:** `BlockActionData.wallString_mulVec_mpv_left` and
   `BlockActionData.wallString_mulVec_mpv_right` (`eq:DWophys`),
-  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`).
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`), and
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far` and
+  `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near` (`eq:z2int`, glued
+  half-chains), the last three in `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallStringExchange.lean`.
 
 ## Symmetries of matrix product density operators
 
