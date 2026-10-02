@@ -1,0 +1,135 @@
+\begin{definition}[The actual correlated two-bond charge insertion]
+    \label{def:peps_regular_correlated_charge_column}
+    \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix,
+      TNLean.PEPS.regularChargePairOpenRegionMatrix}
+    \leanok
+    \uses{def:peps_regular_charge_pair, def:peps_regular_projector_open_region}
+    Let $R$ be a finite region of an ordered simple graph, let $e_0,e_1$
+    be internal bonds, and let $A_v$ be the original site coefficients.
+    For a physical configuration $s$ and crossing labels $\theta$, put
+    \[
+        C_{\chi,p}(s,\theta)
+          =\sum_{\eta|_{\partial R}=\theta}
+             \chi(p\eta_{e_1}^{-1}\eta_{e_0})
+             \prod_{v\in R} A_v(\eta|_v,s_v).
+    \]
+    Replacing $A_v$ by the local regular averaging projectors gives the
+    canonical column $B_{\chi,p}$. This is a single correlated weight on
+    two bonds, as in \cite[charge-pair creation]{Schuch2010PEPS},
+    lines 2505--2558.
+\end{definition}
+
+\begin{theorem}[The correlated weight in actual tree coordinates]
+    \label{thm:peps_regular_correlated_charge_coordinates}
+    \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix_coordinates,
+      TNLean.PEPS.regularChargePairOpenRegionMatrix_eq_image,
+      TNLean.PEPS.regularChargePairOpenRegionMatrix_one_eq_openRegionWeight}
+    \leanok
+    \uses{def:peps_regular_correlated_charge_column,
+      thm:peps_regular_region_projector_coordinates}
+    Choose a spanning tree of the induced region and a root. In its actual
+    coordinates $c=(y,a,r,z)$,
+    \[
+        B_{\chi,p}(c,\theta)
+           =\chi(pa_{e_1}^{-1}a_{e_0}) B_{1,1}(c,\theta).
+    \]
+    If every original site is regular $G$-injective, its product physical
+    map $T_R$ satisfies $T_R B_{\chi,p}=C_{\chi,p}$. In particular,
+    $C_{1,1}$ is the original open-region contraction.
+\end{theorem}
+\begin{proof}\leanok
+    A nonzero product of local projectors supplies compatible vertex
+    translations. Tree synchronization writes them as $q_v=r_v x$.
+    Thus $a_e=x\eta_e$, and the common $x$ cancels from the relative
+    coordinate. The physical identity follows from $T_vP_v=T_v$ at each
+    site and the literal contraction sum.
+\end{proof}
+
+\begin{definition}[A unitary on two internal reference labels]
+    \label{def:peps_regular_charge_reference_matrix}
+    \lean{TNLean.PEPS.regularRegionChargeReferenceMatrix}
+    \leanok
+    \uses{thm:peps_regular_correlated_charge_coordinates}
+    For distinct internal bonds $e_0,e_1$, split the two references
+    $(a_{e_0},a_{e_1})$ from all other tree coordinates. A matrix $Q$ on
+    these two group registers acts as $Q\otimes I$ in this decomposition.
+    Transport this operation through the actual physical coordinate
+    permutation to obtain $U_R(Q)$.
+\end{definition}
+
+\begin{theorem}[Boundary-uniform preparation on the original spins]
+    \label{thm:peps_regular_physical_charge_pair_creation}
+    \lean{
+      TNLean.PEPS.exists_unitary_regularChargeReferencePreparation,
+      TNLean.PEPS.regularRegionChargeReferenceMatrix_mem_unitaryGroup,
+      TNLean.PEPS.regularRegionChargeReferenceMatrix_commute_vertexTranslation,
+      TNLean.PEPS.regularRegionChargeReferenceMatrix_commute_localProjector,
+      TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec,
+      TNLean.PEPS.exists_unitary_regularPhysicalChargePairCreation}
+    \leanok
+    \uses{def:peps_regular_charge_reference_matrix,
+      thm:peps_regular_charge_pair_normalization,
+      thm:peps_regular_charge_labels,
+      lem:peps_unitary_vector_swap,lem:peps_permutation_matrix_commutation}
+    For a unitary irreducible character $\chi$ and $p\in G$, there is a
+    unitary $Q$ commuting with simultaneous left translation such that
+    \[
+        Q\bigl(|G|^{-1}\mathbf1\bigr)(a,b)
+           =|G|^{-1}\chi(pb^{-1}a).
+    \]
+    The resulting $U_R(Q)$ is unitary and commutes with every independent
+    vertex translation, hence with the product of local averaging projectors.
+    It sends $B_{1,1}(\cdot,\theta)$ to $B_{\chi,p}(\cdot,\theta)$ for every
+    $\theta$.
+
+    Suppose now that the original sites are regular $G$-isometric and
+    that $\chi$ is an actual irreducible character of the regular
+    representation. There is one original-spin unitary $W$, chosen before
+    all crossing configurations, such that
+    \[
+        W C_{1,1}(\cdot,\theta)=C_{\chi,p}(\cdot,\theta)
+        \qquad\text{for every }\theta.
+    \]
+    This is an auxiliary finite-region realization of the construction in
+    \cite[charge-pair creation]{Schuch2010PEPS}, lines 2505--2558.
+\end{theorem}
+\begin{proof}\leanok
+    The normalized uniform and charge vectors have equal norm. The identity
+    handles the trivial character; otherwise their orthogonality supplies
+    a unitary exchange. Both vectors are fixed by simultaneous translation,
+    so this exchange commutes with that action. Invariance of matrix entries
+    under a permutation implies commutation with its permutation matrix.
+    The actual tree-coordinate transformation then proves commutation with
+    every vertex action. Finally, the local isometry assumptions derive
+    $T_R^*T_R=c_RP_R$ with $c_R>0$. The resulting supported unitary extends
+    to a unitary on the original physical region, with $WT_R=T_RU_R(Q)$.
+    Apply this equality to the actual canonical boundary columns.
+\end{proof}
+
+\begin{theorem}[Actual six-spin charge-pair preparation]
+    \label{thm:peps_torus_physical_charge_pair_creation}
+    \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusPhysicalChargePairCreation}
+    \leanok
+    \uses{thm:peps_regular_physical_charge_pair_creation}
+    Let a finite torus have horizontal period at least three and vertical
+    period at least four. Let its original four-leg tensor be regular
+    $G$-isometric. At every translated two-column, three-row block,
+    the four vertical bonds and the outer horizontal bond form the
+    five-edge tree. The two remaining horizontal chords are $e_0,e_1$.
+    For every regular irreducible character $\chi$ and $p\in G$, one unitary
+    on these six original spins sends the unmodified open contraction to
+    $C_{\chi,p}$, uniformly in all crossing labels.
+
+    The two horizontal chords are the top and middle references in the
+    source diagram after reversing its vertical drawing axis. Native bond
+    labels and sorting are retained even when the block crosses a seam.
+    This proves the stated finite-torus regular specialization of the
+    six-spin preparation; it makes no parent-Hamiltonian or ground-space
+    identification.
+\end{theorem}
+\begin{proof}\leanok
+    The translated induced block supplies its tree, root and two distinct
+    chords. Transport the original four-leg local isometry to its incident
+    coordinates and apply the preceding preparation theorem. The literal
+    unweighted column is the actual original open-region contraction.
+\end{proof}

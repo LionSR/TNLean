@@ -1,0 +1,75 @@
+\begin{theorem}[Common physical density with geometrically derived exterior walks]%
+    \label{thm:peps_torus_simply_connected_physical_density}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_torus_physical_cut_density,
+        thm:peps_torus_simply_connected_boundary_loops,
+        thm:peps_torus_simply_connected_complement}
+    Work on a native torus with both dimensions at least three and
+    an original regular $G$-isometric site map. Assume the actual
+    closed-cell realization $X_R$ is simply connected and the induced
+    occupied graph is connected. Let $b$ be the number of crossing
+    bonds. There exists one physical reduced density
+    $\rho_R$ for every nonzero coherent superposition of commuting
+    torus closures, with coefficient matrix $M$. It satisfies
+    \begin{align}
+        \frac{MM^\dagger}{\operatorname{tr}(MM^\dagger)}&=\rho_R,&
+        \rho_R&\geq0,&\operatorname{tr}\rho_R&=1,\\
+        \operatorname{rank}\rho_R&=|G|^{b-1},&
+        \rho_R^2&=|G|^{-(b-1)}\rho_R,\\
+        S(\rho_R)&=(b-1)\log|G|,&
+        S_\alpha(\rho_R)&=(b-1)\log|G|.
+        \label{eq:peps_simply_connected_density}
+    \end{align}
+    The R\'enyi formula holds for every nonnegative finite order,
+    including zero and the von Neumann value at one.
+    The exterior walks, spanning trees, roots, and boundary enumeration
+    are derived internally. This is a specialization of
+    \cite[Theorem~6.9]{Schuch2010PEPS} to regular native tori with
+    periods at least three. Occupied graph connectivity expresses
+    the connected block in the source, lines 1931--1933 and
+    1349--1354; simple connectedness of the closed-cell union alone
+    does not force four-neighbor connectivity of the occupied sites.
+\end{theorem}
+
+\begin{proof}\leanok
+    The induced complement graph is connected. Choose spanning trees
+    and roots in both regions and enumerate the nonempty boundary.
+    The simply connected planar lift and its exterior collar provide
+    complementary boundary loops with the winding of the two-tree
+    boundary routes. Applying
+    \ref{thm:peps_torus_physical_cut_density} to these derived loops
+    gives (\ref{eq:peps_simply_connected_density}).
+\end{proof}
+
+\begin{theorem}[Physical local equivalence with geometrically derived exterior walks]%
+    \label{thm:peps_torus_simply_connected_physical_local_equivalence}
+    \lean{TNLean.PEPS.IsGIsometric.torusPhysicalCut_local_equivalence_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_torus_physical_local_equivalence,
+        thm:peps_torus_simply_connected_boundary_loops,
+        thm:peps_torus_simply_connected_complement}
+    Under the hypotheses of
+    \ref{thm:peps_torus_simply_connected_physical_density}, let $A$ and
+    $B$ be the physical coefficient matrices of any two nonzero
+    coherent superpositions of commuting torus closures.
+    Every operator $O$ on the occupied physical region has equal
+    normalized expectation in these states. There exists a unitary
+    $U$ on the complementary physical factor satisfying
+    \begin{align}
+        \widehat B&=\widehat A U^{\mathsf T},&
+        \operatorname{tr}(O\widehat B\widehat B^\dagger)
+            &=\operatorname{tr}(O\widehat A\widehat A^\dagger).
+        \label{eq:peps_simply_connected_local_equivalence}
+    \end{align}
+    This is a specialization of
+    \cite[Theorem~6.7 and Corollary~6.8]{Schuch2010PEPS} to connected
+    simply connected regions of regular native tori with periods at
+    least three. The width-one stripe construction is separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    Derive the complementary winding loops from the actual simple
+    connectedness and apply
+    \ref{thm:peps_torus_physical_local_equivalence}.
+\end{proof}

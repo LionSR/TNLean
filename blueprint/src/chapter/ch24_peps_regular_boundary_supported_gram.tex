@@ -1,0 +1,75 @@
+\begin{definition}[Normalized invariant boundary coordinates]%
+    \label{def:peps_regular_boundary_support_embedding}
+    \lean{TNLean.PEPS.regularBoundarySupportEmbedding,
+        TNLean.PEPS.regularBoundarySupportEmbedding_apply,
+        TNLean.PEPS.regularBoundaryRestrictedMap,
+        TNLean.PEPS.regularBoundarySupportedGram,
+        TNLean.PEPS.regularBoundaryGramHamiltonian}
+    \leanok
+    For $b=n+1$ regular boundary legs, let $r\in G^n$ denote
+    relative coordinates. Define the boundary embedding
+    \[
+        U|r\rangle=|G|^{-1/2}
+            \sum_{g\in G}|g,gr_1,\ldots,gr_n\rangle.
+    \]
+    For an open map $T$, write $C=TU$ and
+    $Q=C^\dagger C$. Its supported boundary Hamiltonian is
+    $H=-\log Q$, with the logarithm defined by spectral calculus
+    and the value at a zero eigenvalue set to zero. For
+    $G$-injective $T$, the operator $Q$ is positive definite
+    and this is the usual spectral logarithm.
+    The logarithm gives the inverse relation below when $T$ is
+    $G$-injective.
+\end{definition}
+
+\begin{theorem}[The invariant boundary support]%
+    \label{thm:peps_regular_boundary_support_embedding}
+    \lean{TNLean.PEPS.regularBoundarySupportEmbedding_mem_invariants,
+        TNLean.PEPS.regularBoundarySupportEmbedding_conjTranspose_mul,
+        TNLean.PEPS.regularBoundarySupportEmbedding_mul_conjTranspose}
+    \leanok
+    \uses{def:peps_regular_boundary_support_embedding}
+    The embedding $U$ is an isometry onto the invariant boundary:
+    \[
+        U^\dagger U=I,\qquad UU^\dagger=P_G.
+    \]
+\end{theorem}
+
+\begin{proof}\leanok
+    Distinct relative configurations give disjoint translation
+    orbits, each of cardinality $|G|$. Their normalized orbit sums
+    are therefore orthonormal. The matrix entries of $UU^\dagger$
+    are $|G|^{-1}$ for configurations in the same orbit and zero
+    otherwise, which are precisely the entries of $P_G$.
+\end{proof}
+
+\begin{theorem}[A finite supported Gibbs representation]%
+    \label{thm:peps_regular_boundary_supported_gram_gibbs}
+    \lean{TNLean.PEPS.IsGInjective.injective_regularBoundaryRestrictedMap,
+        TNLean.PEPS.IsGInjective.regularBoundarySupportedGram_posDef,
+        TNLean.PEPS.regularBoundaryGramHamiltonian_isHermitian,
+        TNLean.PEPS.IsGInjective.regularBoundarySupportedGram_eq_exp,
+        TNLean.PEPS.regularBoundarySupportedGram_eq_compression,
+        TNLean.PEPS.IsGInjective.regularBoundaryGram_eq_support_compression,
+        TNLean.PEPS.IsGInjective.regularBoundaryGram_eq_compressed_exp}
+    \leanok
+    \uses{thm:peps_regular_boundary_support_embedding}
+    If $T$ is regular $G$-injective, then $C=TU$ is injective,
+    $Q=C^\dagger C$ is positive definite, and the supported
+    boundary Hamiltonian is Hermitian with
+    \[
+        Q=e^{-H},\qquad T^\dagger T=Ue^{-H}U^\dagger.
+    \]
+    This establishes a finite Gibbs representation on the invariant
+    support. It does not assert short-range interactions among
+    the original virtual legs.
+\end{theorem}
+
+\begin{proof}\leanok
+    The embedding takes values in the invariant subspace, where
+    $T$ is injective. Hence $C$ is injective, and
+    $\langle x,Qx\rangle=\|Cx\|^2>0$ for $x\ne0$.
+    The spectral logarithm of a positive definite Hermitian
+    operator is Hermitian, and its exponential equals the
+    original operator.
+\end{proof}

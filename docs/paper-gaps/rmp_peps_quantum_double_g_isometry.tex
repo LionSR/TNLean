@@ -5,7 +5,7 @@
 \input{command}
 \title{Quantum-Double PEPS: Normalization, Representations and Scope}
 \author{}
-\date{2026-09-27}
+\date{2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -80,23 +80,479 @@ of $\mathcal P(A)$ on the invariant subspace, and is stated for the
 representation parameter.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 1729--1761.}
 
-\section{Scope: concatenation in one dimension}
+\section{Concatenation in one and two dimensions}
 Lemma~``lemma:iso:iso-stable-under-concat'' states that $G$-isometry is
 stable under concatenation of PEPS; its proof is written for the
 one-dimensional left inverse of Lemma~4.7.\footnote{Source traceability:
     \path{Papers/1001.3807/paper_v3.tex}, lines 1688--1689 and 1704--1716.}
-The formalization proves the one-dimensional case for matrix product
-tensors with the left-regular representation on the bond, and for the
-two-dimensional contraction of one link it proves only that, with the
-left-regular representation on that link, the left inverse of the
-contracted tensor is the plain contraction of the left inverses of the
-two factors. It does not state that this contraction is the adjoint of the
-contracted map, because the virtual spaces of the two-dimensional
-concatenation are abstract tensor products without inner products.
-Elimination: equip the virtual and physical spaces of the two-dimensional
-concatenation with inner products for which the left-regular
-representation is unitary, and show that the contraction of adjoints is
-the adjoint of the contraction.
+The one-dimensional case and the elementary two-dimensional contraction
+of one regular bond are formalized. For the latter, use
+orthonormal bases on the remaining virtual and physical spaces and the
+group basis of $\mathbb C[G]$ on the contracted leg, with its dual basis
+on the other end. The coefficients of the contracted map are
+\begin{align}
+    C_{(i,j),(a,b)}=\sum_{k\in G}A_{i,(a,k)}B_{j,(k,b)}.
+\end{align}
+Complex conjugation gives the adjoint by contracting the adjoints of
+$A$ and $B$. Since $\Delta=|G|^{-1}\mathbb 1$, the previously constructed
+left inverse is $(c_Ac_B)^{-1}C^\dagger$, and hence
+$C^\dagger C=c_Ac_B\Pi$. The square-lattice statement has four regular
+virtual legs at each input site; unitarity of the two remaining
+three-leg actions follows from tensor-product and dual unitarity.
+The same argument applies to two tensors with arbitrary unitary actions
+on the remaining virtual spaces, joined along one regular bond. This resolves the
+previous one-dimensional scope restriction, tracked in issue~\#8448.
+The untwisted contraction of an arbitrary nonempty connected finite
+region is also formalized, including regions containing closed virtual
+cycles. If $V_R$ and $I_R$ count its vertices and internal edges, and
+$A_v^\dagger A_v=c_v\Pi_v$, its genuine open tensor satisfies
+\begin{align}
+    T_R^\dagger T_R
+      =\left(\prod_{v\in R}c_v\right)
+        \frac{|G|^{I_R+1}}{|G|^{V_R}}\Pi_{\partial R}.
+\end{align}
+The bonds are unnormalized, and no group operators are inserted on
+them. Expanding the local Gram identities yields a group label at
+each vertex. Equality along every internal edge and connectedness
+make these labels one common translation. Each internal label remains
+free, contributing one factor $|G|$; the remaining boundary average
+is $|G|\Pi_{\partial R}$. The boundary may be empty.
+
+The actual block also satisfies the defining invariant-subspace isometry
+relation, with the positive factor displayed above. Its accessible physical
+coordinates are obtained explicitly. Applying the local map
+$c_v^{-1}A_v^\dagger$ at every vertex turns the original open contraction
+into the open contraction $B_R$ of the averaging projectors $\Pi_v$.
+Applying the original $A_v$ to these projector coordinates recovers the
+original contraction, since $A_v\Pi_v=A_v$. These are identities of
+the original finite sums, for arbitrary finite regions. They do not
+assert that the two rectangular maps are inverse on unused physical
+subspaces.
+
+For a connected region, choose a spanning tree and a root. There is a
+reversible change from its physical half-edge labels to boundary labels
+$y$, one reference label $a_e$ per internal edge, normalized vertex
+labels $r_v$ with $r_o=1$, and one residual label $z_e$ per edge outside
+the tree. In these coordinates the actual canonical block is
+\begin{align}
+ B_R(y,a,r,z;\theta)
+   =|G|^{1-|R|}\Pi_{\partial R}(y,\theta)
+     \mathbf 1_{\{z_e=1\text{ for all }e\notin T\}}.
+\end{align}
+Thus the reference and normalized vertex labels give uniform factors,
+while the residual cycle labels give fixed identity factors. This
+factorization is derived from the internal-bond summation, without
+assuming a block decomposition. It gives an explicit form of the
+accessible-coordinate and blocking arguments of
+\cite{Schuch2010PEPS}.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1765--1920.}
+
+The same coefficient formula proves $G$-injectivity of a connected
+regular block from local $G$-injectivity alone. Choose local inverses
+$L_vA_v=\Pi_v$ and apply their product to the actual block. In the
+canonical coordinates, the row with $a_e=r_v=z_e=1$ is the nonzero
+multiple $|G|^{1-|R|}\Pi_{\partial R}$. It therefore recovers every
+invariant boundary vector. This proves the regular-representation
+connected-region consequence of Lemma~5.2 and the following
+observation of \cite{Schuch2010PEPS}, including internal cycles and an
+empty boundary. The general semi-regular connected-region conclusion
+is not asserted by this argument.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1318--1358.}
+
+For arbitrary inserted bond operators $u_e$, the same physical maps
+relate the actual open tensor to the canonical contraction
+$B_R^u(\alpha,\theta)$ in both directions. A normalized tree gauge
+$k_o=1$, $k_hk_t^{-1}=u_e$ on tree edges, makes the corresponding
+residual operators $\omega_e=k_h^{-1}u_ek_t$ equal to the identity on
+the tree. The residual operators on the other internal edges remain
+unrestricted. The transported boundary label is
+$k_v^{-1}\theta_e$ at a tail endpoint and
+$k_v^{-1}u_e\theta_e$ at a head endpoint. These are actual
+coordinate identities; they do not assert that arbitrary internal
+twists preserve the untwisted boundary projector or its rank.
+
+In spanning-tree coordinates, the twisted canonical coefficient is
+\begin{align}
+ B_R^u(y,a,r,z;\theta)
+ = |G|^{-|R|}\sum_{x\in G}
+   \mathbf 1_{\{y=x\theta'\}}
+   \mathbf 1_{\{z_e=x\omega_e x^{-1}\text{ for all }e\notin T\}}.
+\end{align}
+The internal reference and normalized vertex coordinates remain free.
+This identity includes arbitrary crossing operators, and follows from a
+bijection between compatible internal labelings and the surviving
+common translations $x$.
+
+More generally, an arbitrary vertex gauge changes the actual open
+tensor to the tensor with internal operators $k_t^{-1}u_ek_s$ and
+transported crossing labels. If all these internal residuals are
+identities, its ordered matrix has the form $T_R^u=T_RF$, where $F$ is
+the boundary basis permutation. Local regular isometry and connectedness
+then give
+\begin{align}
+ (T_R^u)^\dagger T_R^u
+   =c_R F^\dagger\Pi_{\partial R}F,\qquad c_R>0.
+\end{align}
+The transported projector has rank and trace $|G|^{|\partial R|-1}$
+for a nonempty boundary. The residual-flatness condition here is an
+explicit hypothesis; it is not a substitute for the source's geometric
+disk condition. On the closed lattice, the same endpoint gauge change
+leaves the original physical vector exactly unchanged, without any
+isometry assumption, by local regular invariance and reindexing the
+summed bond labels.
+
+For a native torus region with circumferences $w,H\geq3$, a supplied
+integer lift $L:R\to\mathbb Z^2$ is required to project to each original
+vertex and to preserve every internal rightward and upward unit step.
+These are arithmetic equations independent of the group. For commuting
+closure labels, the explicit gauge
+\begin{align}
+ k_v=h^{\lfloor L_x(v)/w\rfloor}
+      g^{-\lfloor L_y(v)/H\rfloor}
+\end{align}
+has the native closure operator as its gradient on every internal edge,
+including seam edges. Thus identity residuals, the positive transported
+Gram formula, and the boundary rank follow without an additional
+group-valued flatness hypothesis. Normalizing this gauge at the root
+identifies it with the spanning-tree gauge. The actual canonical tensor
+then has the same normalized internal ancillary vector in every commuting
+sector; only its transported boundary configuration depends on the sector.
+
+The supplied lift does not define a disk: some annular regions also
+admit lifts. Conversely, a filled plaquette is a disk whose induced
+vertex graph has a cycle, so acyclicity of that graph would impose the
+wrong geometric restriction. A native region is realized as the finite
+union of closed unit cells centered at its sites on the continuous torus.
+This union is compact and locally path connected: the finite coproduct
+of its compact convex squares maps onto it by a closed quotient map.
+Every internal native unit-edge path lies in the two endpoint cells,
+including across a periodic seam. If the realization is simply
+connected, the two additive-circle covering maps give a continuous
+lift to the real plane. Its values at native sites are integers, and
+uniqueness of path lifts gives exactly the required integer unit-step
+equations. Thus no arithmetic lift is an additional hypothesis in
+this simply connected case.
+
+The continuous lift is a closed embedding. On each native cell, it is
+translation of the closed unit square by the lifted integer site, and
+its image is exactly the finite union of these planar squares. Thus
+the original torus cell domain is homeomorphic to this actual planar
+cell union. This identifies the domain for an exterior path argument;
+it does not supply such a path.
+
+For a graph-connected native region with simply connected cell
+realization, local regular isometry and commuting closure labels
+therefore imply that its actual open-region matrix has rank
+$|G|^{|\partial R|-1}$ whenever the boundary is nonempty. Graph
+connectivity remains explicit: cells touching only at diagonal points
+can be connected as a geometric union without connecting the native
+induced graph. This auxiliary rank statement concerns one closure
+state; it is not the source's full disk entropy theorem. The source's
+complement-only controlled permutations must then remove the
+sector-dependent boundary transports simultaneously. Separate
+single-sector Gram identities do not establish a common reduced density
+operator for coherent superpositions.
+
+The untwisted region Gram formula is the identity-operator case of these
+calculations. For arbitrary twisted open regions, the cycle and crossing
+compatibility constraints remain essential. The actual torus overlap
+calculation below retains the noncontractible closure operators, and
+does not justify discarding those constraints on an arbitrary open region.
+The residual small-period torus and stripe restrictions, together with the
+remaining source results, are tracked in issue~\#8271.
+
+\section{Actual torus closure overlaps}
+The regular $G$-isometric torus closure vectors are contracted with the
+horizontal $h$-seam and the downward-oriented vertical $g$-seam of
+\cite[equation~``eq:2d:peps-with-ug-uh'']{Schuch2010PEPS}. For $N$ sites,
+allowing site-dependent normalization $c_v>0$, their overlap is
+\begin{align}
+    \langle\psi_{g,h},\psi_{g',h'}\rangle
+      =\left(\prod_v c_v\right)|G|^N
+        \#\{x\in G:hx=xh',\ gx=xg'\}.
+\end{align}
+This identity is derived from the actual tensor contraction. The local
+Gram averages contribute $|G|^{-N}$; the two families of free bond
+labels contribute $|G|^{2N}$. Every vertex translation is constant off
+the seams, and the seam equations are the two displayed intertwining
+conditions. The proof includes tori with a circumference of one.
+
+For a self-overlap the count is $|Z_G(g)\cap Z_G(h)|>0$, since it
+contains the identity. Different pair-conjugacy classes give orthogonal
+nonzero vectors. Consequently the family indexed by all pair-conjugacy
+classes is linearly independent, as is its commuting subfamily.
+Noncommuting closures are not asserted to be ground states.
+
+The isometry assumption is now removed for regular virtual representations.
+Let $T=\mathcal P(A)$ and let $L$ be the local inverse furnished by
+$G$-injectivity, so that $LT=\Pi$. Applying $L$ at every physical site
+sends the actual closure vector of $A$ to that of the canonical site
+map $\Pi$. The latter is $G$-isometric, with factor one, so its
+class-indexed closures are linearly independent. Applying the same
+physical product map to a linear relation proves independence of the
+original closures. In particular the commuting family satisfies the
+regular-representation independence assertion in
+\cite[Theorem~5.9]{Schuch2010PEPS}, with no isometry or physical
+surjectivity hypothesis. The auxiliary extension to all pair classes
+still makes no ground-state assertion.
+
+Conversely, applying $T$ at every physical site to a projector closure
+recovers the original closure, since $T\Pi=T$. These two rectangular
+physical maps recover the corresponding actual vectors; they need not
+be inverses on the full physical spaces. A physical product map changes
+the coefficient matrix across any partition by
+$C\mapsto F_R C F_{R^c}^{\mathsf T}$, so its rank cannot increase.
+Recovery in both directions therefore preserves the Schmidt rank.
+This is the local deformation argument required in
+\cite[Corollary~6.10]{Schuch2010PEPS}; it does not yet supply the
+source's boundary-rank formula on arbitrary contractible regions.
+
+Independence is now also established for general semi-regular virtual
+representations. After the same local inverse operation, expanding the
+actual projector contraction gives one group label $q_v$ per vertex.
+On every bond away from the seams, the weighted trace pairing with
+$\Delta$ gives $\delta_{q_v,q_{v'}}$. Thus all vertex labels coincide.
+On each seam retain one operator, and contract the remaining seam
+operators with the sum of the trace-dual functionals, which takes value
+one on every $U_g$. The resulting linear map $E$ satisfies
+\[
+ E\psi^\Pi_{g,h}=|G|^{-N}
+   \sum_{x\in G}U_{xhx^{-1}}\otimes U_{xgx^{-1}}.
+\]
+These operator sums are independent when indexed by pair-conjugacy
+classes: the tensor product of the two trace-dual functionals vanishes
+on different classes and gives $|Z_G(g)\cap Z_G(h)|>0$ on its own class.
+Since $|G|^{-N}\ne0$, the actual closure vectors are independent.
+This proves the independence component of
+\cite[Theorem~5.9]{Schuch2010PEPS}, with its semi-regular hypothesis,
+without a local isometry or a contracted-region Gram hypothesis.
+The construction includes noncommuting pairs as an auxiliary extension
+and tori of circumference one. Ground-space membership and spanning
+remain separate steps.
+
+\section{Scope of the physical entropy calculation}
+The normalized actual finite-graph PEPS has entropy
+$S(\rho_R)=(\partial R-1)\log|G|$, rank $|G|^{\partial R-1}$,
+and a flat reduced spectrum when every local tensor is
+$G$-isometric in its regular group coordinates, the induced graphs on
+$R$ and its complement are nonempty and connected, the boundary is
+nonempty, and the contraction has no inserted bond operators.
+The two region Gram identities are derived from the local isometries;
+they are not additional hypotheses. Their positive factors give an
+explicit positive normalization of the actual coefficient vector.
+
+Theorem~6.9 of \cite{Schuch2010PEPS} concerns the torus states with
+$(g,h)$-closures, including their superpositions. The finite untwisted
+statement above is therefore a restriction, not the formalization of
+that source theorem. The local controlled permutation
+$(a,b,c)\mapsto(cb^{-1}a,b,c)$ and its inverse have been established,
+including the cancellation of a twist $t$ when $c=tb$. Accessible
+coordinates, exact twisted coefficients and mixed Gram matrices, and
+the factorization on supplied integer-lifted regions are established above.
+Simple connectedness of the cell realization now yields the geometric
+lift and eliminates the region's internal cycle operators. The remaining boundary transport
+must be removed by one operation on the complement, independent of the
+closure sector.
+
+The complement's spanning-tree coordinates provide a concrete route.
+Write its cycle tuple as $z=x\omega x^{-1}$ on the support of the
+actual coefficient. Let $m_f$ be the combined transport on crossing
+bond $f$, and fix a reference bond $f_0$. The actual two boundary
+equivalences compose as $F_S\circ F_R^{-1}$, and their multiplier is
+$m_f=k_S(w_f)^{-1}D_fk_R(v_f)$, where $v_f\in R$, $w_f\in S$, and
+$D_f$ transports from $v_f$ to $w_f$. The actual closed route from
+the complementary root through $f_0$ backwards, the region tree,
+$f$ forwards, and the complementary tree back to the root has
+holonomy $m_fm_{f_0}^{-1}$. This identity is established for arbitrary
+bond operators; the route passes through $R$.
+
+For each actual induced complementary walk, assigning free generators
+to the non-tree edges constructs a word whose evaluation at $\omega$
+is its reduced holonomy. At the normalized root it is its original
+holonomy. Simultaneous conjugation of the tuple conjugates the word's
+evaluation. The required geometric step is to replace the route through
+$R$ by a complementary loop with the same torus seam crossing numbers.
+For actual commuting closure operators, a walk with crossing numbers
+$(n,m)$ has holonomy $h^n(g^{-1})^m$, so equality of these numbers
+gives equality of the required transports. Inside an integer-lifted
+region, the crossing numbers are the differences of the endpoint
+integer deck coordinates. Simple connectedness of the actual cell
+domain derives the lift and hence makes those numbers independent of
+the interior path with fixed endpoints.
+
+The exterior loop with the required numbers is now constructed from the
+actual simply connected cell domain. The full plane preimage of the region
+is the union of integer-period translates of its planar lift; distinct copies
+are disjoint even at sides and corners. The exterior collar of radius $3/4$
+projects wholly outside the actual torus region. Each native crossing edge
+supplies an exterior integer center in that collar, and the difference of
+the two exterior deck coordinates is exactly the winding pair of the
+interior boundary route.
+
+The collar paths are derived rather than assumed. Simple connectedness
+excludes finite four-neighbor components of missing integer cells. A finite
+box then shows that the entire missing-cell lattice is connected. The
+occupied-square contact graph is also connected, retaining shared corners.
+Orient each exposed cell edge and give the finite set of these edges its
+boundary-successor permutation. For a successor-invariant weight, the finite
+horizontal-ray potential is constant on missing cells and on occupied cells;
+its jump across an exposed edge is that edge's weight. Taking the indicator
+of one successor cycle shows that every exposed edge belongs to that cycle.
+Each successor transition yields an exterior four-neighbor walk supported
+by a common occupied square, and every nearby missing center joins such an
+exposed edge. Thus the safe exterior graph is connected. Its straight edge
+segments lie entirely in the genuine collar, giving the required continuous
+paths. Lattice-path approximation projects these paths to actual
+induced-complement walks with their exact deck-coordinate differences as
+crossing numbers. Appending the two complementary tree paths gives the
+fixed root loops for all boundary routes, independently of every
+closure label. No condition on group holonomies replaces the geometry.
+
+The occupied connectivity condition must be distinguished from simple
+connectedness of the closed-cell realization. Two squares meeting only at
+a corner have a contractible union but no occupied four-neighbor path.
+The source asks for a contiguous block of spins (lines 1931--1933), and its
+blocking construction concerns an already connected block (lines 1349--1354).
+Accordingly, the contiguous-region statement uses connectivity of the
+actual induced occupied graph. This is the source's block condition;
+it is not inferred from the topological hypothesis. The contour and collar
+arguments themselves allow corner contacts.
+
+The constructed loop word evaluates to
+$m_fm_{f_0}^{-1}$. Evaluating this word on $z$ then gives
+$W_f(z)=x m_fm_{f_0}^{-1}x^{-1}$. The single controlled permutation
+$y_f\mapsto W_f(z)^{-1}y_f$, leaving the cycle coordinates fixed,
+turns $y_f=xm_f\theta_f$ into $x m_{f_0}\theta_f$ at every crossing
+bond. Its reversible coordinate permutation and unitary matrix on
+the native physical half-edge space are established, as is its exact
+action on the actual twisted canonical coefficient sum. The resulting
+common-transport formula at the reindexed boundary input is established.
+For fixed actual complementary loops with the prescribed geometric
+crossing numbers, the relative-word identity is now derived for every
+commuting closure pair. The resulting unitary is chosen before the
+closure labels; it depends only on complement coordinates and those
+fixed walks, whose existence follows from the geometric argument above.
+The common remaining translation is separated by the boundary reference
+coordinates in the actual canonical cut contraction. Its exact coefficient
+formula factors every coherent finite sector sum into the same normalized
+maximally entangled relative-boundary vector, the same normalized region
+ancillary vector, and a complementary cycle-orbit amplitude. All dependence
+on the reference crossing multiplier cancels in the boundary sum.
+Region cycle residuals and relative-word identities are explicit premises
+of the finite-graph formula; the torus specialization derives them from
+the geometric lift and constructed complementary winding loops.
+
+A canonical unitary
+commuting with the product of the local invariant projectors is proved
+to have a unitary implementation on the original physical region,
+without requiring surjectivity of the site maps. Its product Gram
+identity is derived from local isometry. For actual walk-word controls,
+the commutation identity is also proved: independent vertex translations
+act on the cycle labels by conjugation by the root translation, and
+evaluation of a free-group word respects that conjugation. Hence the
+controlled permutation commutes with each vertex translation and with
+their average, the actual product of local invariant projectors. It
+preserves the supported canonical physical space and has a unitary
+implementation on the original physical region.
+The resulting common reduced matrix is now computed in the native canonical
+half-edge coordinates. For every coherent sum $C$, it satisfies
+$CC^\dagger=\operatorname{tr}(CC^\dagger)\rho_R^0$, with $\rho_R^0$ fixed
+before the closure labels and coefficients. The actual original physical cut
+is the image of $C$ under the two products of local site maps; their positive
+Gram factors and canonical support identities are derived from local isometry.
+Normalizing therefore gives one fixed density on the original physical region
+for every nonzero coherent commuting-closure sum. Its rank is $|G|^{b-1}$,
+its nonzero spectrum is flat, and every finite nonnegative R\'enyi entropy is
+$(b-1)\log|G|$. The positive-order calculation uses the genuine spectral trace
+of a real power, with the rank convention at zero and von Neumann entropy at
+one. For a contiguous block with actually simply connected closed-cell realization,
+the induced complement is connected. Indeed, every complementary component
+has a crossing bond to the nonempty occupied region, and the collar argument
+joins all exterior crossing endpoints. The two spanning trees, their roots,
+the boundary numbering, and the winding loops can therefore be chosen within
+the proof. The common-density and entropy statements require none of these
+choices as hypotheses.
+
+The regular-torus statements retain periods at least three. Periods one or two
+require a model retaining multiple bonds between the same sites and self-bonds;
+the simple-graph statements do not cover them. The operation on the two
+width-one coordinate-zero stripes is established for actual coherent closure
+states: their complementary rectangle projects injectively from a compact
+convex planar rectangle, so the common-density theorem gives a physical
+complementary unitary relating any two normalized states. Identification
+with the entire two-dimensional parent-Hamiltonian ground space remains
+separate. This is
+the general-coordinate form of the controlled operation in
+equation~``eq:iso:tweezer-duplicate-operation'', leading to
+equation~``eq:iso:block-disent-decomposition'' and the common reduced
+state for commuting closure superpositions.\footnote{Source traceability:
+    \path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2027--2072.}
+
+\section{Superpositions with complementary twists}
+The Gram calculation now includes actual group operators on internal
+bonds. For assignments $u,w$ that are the identity on crossing bonds,
+suppose their common identity bonds contain a connected spanning
+subgraph of the region. The local translations are then constant.
+Let $\kappa_R$ be the untwisted region factor and put
+\[
+    F_{u,w}=\{x\in G:u_ex=xw_e\text{ for every internal bond }e\}.
+\]
+Then the actual cross-Gram operator satisfies
+\begin{align}
+    (T_R^u)^\dagger T_R^w
+      &=\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},\\
+    P(T_R^u)^\dagger T_R^wP
+      &=\kappa_R\frac{|F_{u,w}|}{|G|}P.
+\end{align}
+The second identity uses only that every common translation acts as
+the identity on the invariant boundary.
+
+Consequently, let the original region $D$ be connected, and consider
+any finite family of twists supported entirely inside $D^c$, with a
+common connected spanning subgraph of identity bonds in $D^c$.
+Every nonzero superposition of their actual PEPS contractions has the
+same normalized reduced density on $D$:
+\begin{align}
+    \rho_D=\frac{1}{c_D|G|^{b-1}}T_DPT_D^\dagger,
+    \qquad T_D^\dagger T_D=c_DP,\quad c_D>0.
+\end{align}
+Its rank is $|G|^{b-1}$ and its nonzero spectrum is flat, so its
+von Neumann entropy is $(b-1)\log|G|$. The region and mixed Gram
+identities are derived from local regular isometry. Positivity of the
+combined complementary Gram factor follows from nonvanishing of the
+actual superposition, with no extra condition on its coefficients.
+
+This removes the absence-of-twists restriction for this finite-cut
+setting. It still requires the twists to avoid every edge incident to
+$D$. The native torus closure states are now identified with these
+twisted finite-graph contractions. On a torus of width and height at
+least three, a positive-size coordinate rectangle strictly inside the
+fundamental domain has connected interior and connected complement
+even after removing the closure seams. The seams have no edge incident
+to the rectangle. Thus local regular isometry alone gives the same
+reduced density, rank, flat spectrum, and entropy for every nonzero
+superposition of native closures on such a rectangle. The boundary
+count and these connectivity conditions are proved from the coordinate
+bounds, rather than supplied as additional hypotheses. This restricted
+calculation permits noncommuting closure pairs as well.
+
+Commuting closure seams may also be placed at arbitrary rows and columns:
+local virtual invariance removes the corresponding vertex changes of
+basis, while commutation preserves the transverse closure. This deformation
+identity is established for the actual torus contraction, without
+isometry or semi-regularity. The geometry-derived common-density theorem covers contiguous actually
+simply connected regions meeting either closure seam, for commuting
+closure families on native tori of periods at least three.
+
+For a regular $G$-injective tensor the original site map and a local
+inverse give two-way maps between the actual closure superposition and
+the regular averaging-projector superposition. These maps preserve
+Schmidt rank across the physical cut. The normalized reduced density
+therefore has rank $|G|^{\partial D-1}$, and its genuine zero-order
+R\'enyi entropy is $(\partial D-1)\log|G|$. This proves the regular
+native-torus version of Corollary~6.10 on the same contiguous simply
+connected regions. Only rank is preserved by these local maps;
+flat spectrum is the additional isometric conclusion.
 
 \section{Scope: statements about the whole network}
 Two statements of the review concern the contracted lattice rather than
@@ -104,7 +560,10 @@ one tensor.
 \begin{enumerate}
     \item The primal tensor's virtual symmetry under every irreducible
     representation $\pi$ is formalized as the single-tensor identity
-    $A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=A_{t,r,b,l}\,\mathbb 1$
+    \[
+        A_{t,r,b,l}\,\pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}
+          =A_{t,r,b,l}\,\mathbb 1
+    \]
     for every entry, which follows from $trb^{-1}l^{-1}=1$ on the support,
     and for the contracted network on the torus: the virtual string that
     multiplies $\pi(g)$ for each bond with label $g$ it crosses can be
@@ -146,6 +605,555 @@ one tensor.
     the whole state of the network.
 \end{enumerate}
 
+\section{Flux detection on a connected block}
+Fix a spanning tree of a connected regular block and one non-tree
+internal edge. Its exposed cycle coordinate is conjugate to the residual
+of the actual inserted group operators. The diagonal projections onto
+its conjugacy classes commute with the product local averaging
+projector. Through the original local $G$-isometric maps $A$, they give
+physical projections $Q_C=c^{-1}AD_CA^\dagger$.
+An additional projection $I-\sum_C Q_C$ completes the measurement on
+the whole physical Hilbert space and annihilates every actual twisted
+block column. The outcome on a nonzero column is exactly the conjugacy
+class of the derived residual. Thus the conjugacy calculation in the
+proof of Theorem~6.15 is established for a chosen cycle in an actual
+connected block. More generally, the same construction detects the
+conjugacy class of the holonomy of any actual closed walk in the block.
+
+On a regular torus whose periods are at least three, the literal
+four-step plaquette walk has four physical sites, including at either
+periodic seam. Its induced region is connected, so the construction
+gives a complete projective measurement on those four original spins.
+For every actual inserted bond assignment, each open-block column and
+the actual global coefficient matrix have the outcome given by the class
+of the plaquette holonomy. In particular, putting directed transport $g$
+on any of the four sides and the identity on the other bonds gives
+holonomy $g$. One fixed measurement detects $[g]$ for all four
+attachments, including at the periodic seams. The factorization across
+the cut is derived from the PEPS contraction. Different measured classes
+give orthogonal coefficient matrices. No state-membership or equal-Gram
+hypothesis is supplied.
+
+The actual contracted state is nonzero for every inserted bond assignment
+under local regular $G$-injectivity. In canonical coordinates, choose the
+physical half-edge labels induced by that assignment from the identity
+edge labels. The identity vertex gauge then contributes to a positive
+finite count. The local inverses transfer this genuine nonzero coefficient
+to the original tensor. This argument needs neither graph connectivity
+nor a connected untwisted subgraph. Arbitrary-string deformation and
+identification with excited states of the parent Hamiltonian remain
+separate assertions.
+
+
+The elementary flux movement in Theorem~6.16 is also established in the
+regular finite-torus setting at every translated position, including both
+periodic seams. In the six-site rectangle
+$R=\{0,1,2\}\times\{0,1\}$ and its translates, choose the five-edge spanning path around
+the lower, right, and upper sides. Its two omitted internal bonds are
+the leftmost and middle upward vertical bonds. Let $u_g$ insert $g$ on
+the leftmost bond, and let $u'_g$ insert $g$ on both bonds, with the
+identity on all other internal bonds. For horizontal period at least four
+and vertical period at least three, the actual induced graph has exactly
+these seven internal bonds; the period bounds exclude additional wrapping
+bonds.
+
+For every four-leg tensor that is $G$-isometric for the regular action,
+there is one unitary $W$ on the six original physical spins such that
+$W\Psi_R(u_g,\theta)=\Psi_R(u'_g,\theta)$ for every $g$ and every
+crossing configuration $\theta$. The graph, spanning tree, and coordinate
+transport are derived from this rectangle. In tree coordinates, the
+operation sends $z_1\mapsto z_0z_1$. At a vertical seam, the ordered
+edge coefficient is inverted so that the directed upward transport remains
+$g$; the literal counterclockwise walks still have the displayed holonomies.
+Its commutation with the genuine product averaging projector yields the
+physical unitary through the local $G$-isometric maps.
+For counterclockwise plaquette walks, with successive transports
+multiplying on the left, the actual holonomies change from
+$(g^{-1},1)$ to $(1,g^{-1})$. No commutativity of $G$ is required.
+
+More generally, the same construction works for any connected region
+with a specified spanning tree and two distinct internal non-tree bonds.
+Its identity extension to the complementary spins acts on the actual
+whole-network contraction. One unitary works for every flux label and
+arbitrary common exterior and crossing bond operators. The cut
+factorization and crossing-label transport follow from the contraction
+itself. These results prove the regular elementary movement and its
+global contraction consequence. The source's unrestricted geometry and
+its identification of the resulting states as excitations remain open
+parts of the larger statement.
+
+The normalized accessible-register step of Theorem~6.17 is also
+established. For $g\in G$, put $c_g=|C_G(g)|$ and $\kappa=|G|$.
+The printed conjugacy amplitudes
+\begin{align}
+    \alpha_g(t)=\sum_{z\in G}\mathbf 1_{t=zgz^{-1}},
+    \qquad \beta_g(a,b)=\alpha_g(ab^{-1})
+\end{align}
+have squared norms $\kappa c_g$ and $\kappa^2c_g$, respectively.
+The centralizer multiplicity must be retained: the source sums over
+conjugating elements, not once over distinct conjugates. Consequently a
+unitary sends the diagonal pair $\sum_r|r,r\rangle$ to
+\begin{align}
+    (\kappa c_g)^{-1/2}\sum_{s,z}|zgz^{-1}s,s\rangle.
+\end{align}
+The scalar is the local normalization correction to
+\path{eq:anyons:make-chargeless-fluxon}, lines 2304--2340; it is
+consistent with the source's convention of suppressing global factors.
+A reflection exchanges $\delta_1$ with the normalized conjugacy vector
+and commutes with every conjugation permutation. Applying it to the
+relative register $ab^{-1}$ leaves the unknown reference register $b$
+unchanged. For the trivial class it is the identity. The operator depends
+on the chosen target class; one fixed unitary cannot send the same initial
+vector to different target classes. These finite Hilbert-space identities
+are implemented on actual regional contractions. Choose a spanning tree in a connected finite region and an
+internal bond outside the tree. In the genuine tree coordinates, the
+conjugation-equivariant creation matrix acts on that cycle register and
+commutes with every independent vertex translation. It therefore commutes
+with the product of local regular invariant projectors. For arbitrary
+original tensors which are locally regular $G$-isometric, the induced
+original-spin unitary $W_g$ sends each internally untwisted boundary column
+to $(\kappa c_g)^{-1/2}$ times the sum of actual columns with $zgz^{-1}$
+on the chosen bond. It is chosen before every boundary label.
+
+Its complementary identity extension is globally unitary. An actual cut
+expansion and one common boundary transport prove the corresponding sum
+identity for the globally contracted states, uniformly in arbitrary common
+exterior and crossing operators. No state equality, equal-Gram condition,
+or independent physical-support hypothesis is assumed. These chosen-cycle
+regional and global statements do not identify an excitation of the parent
+Hamiltonian.
+
+The concrete creation geometry is also derived at every translated
+two-plaquette position on tori of horizontal period at least four and vertical
+period at least three. The shared upward edge is the middle chord of the
+derived six-site tree. A directed insertion $h$ gives literal
+counterclockwise plaquette holonomies $(h,h^{-1})$. At a vertical seam the
+ordered operator is inverted; inversion commutes with conjugation and
+$C_G(g^{-1})=C_G(g)$, so the normalization is unchanged. For each requested
+class, an original six-spin unitary creates the normalized sum of the actual
+$zgz^{-1}$ insertions uniformly in the boundary columns. A globally unitary
+six-spin identity extension has the same actual coherent-sum action uniformly
+in common exterior and crossing operators. These establish the regular
+finite-torus contraction operation of Theorem~6.17; the parent-Hamiltonian
+interpretation and unrestricted geometry remain separate.
+
+The accessible coordinates also give a fixed controlled conjugation.
+For two distinct cycle bonds $e_0,e_1$, let
+\begin{align}
+    (\Phi z)_{e_1}=z_{e_0}z_{e_1}z_{e_0}^{-1},
+    \qquad (\Phi z)_e=z_e\quad(e\ne e_1).
+\end{align}
+Its inverse conjugates by $z_{e_0}^{-1}$, since the controlling label is
+retained. More generally, every permutation of the cycle-label family
+which commutes with simultaneous conjugation transports the actual
+canonical block columns and commutes with the independent vertex
+translations. Local $G$-isometry therefore gives one original-spin unitary
+before all inserted cycle labels and all crossing configurations are
+chosen. The same unitary, extended by the complementary identity, acts
+on the actual global contraction for arbitrary common exterior and
+crossing operators. In particular it implements $\omega\mapsto\Phi\omega$.
+This establishes the controlled-conjugation operation underlying
+\path{eq:anyons:fluxon-braiding-lazy}, lines 2360--2388. Identifying this
+operation with the prescribed native string crossing remains separate.
+No anyon braid or parent-Hamiltonian conclusion is asserted by this
+two-coordinate auxiliary operation.
+
+An auxiliary double exchange includes the algebraic backreaction on the
+controlling flux. For three directed vertical labels $t_0,t_1,t_2$, use
+the plaquette coordinates
+\begin{align}
+    a=t_0^{-1}t_1,\qquad b=t_1^{-1}t_2,\qquad c=t_2^{-1}.
+\end{align}
+The exchange $H(a,b)=(aba^{-1},a)$, applied twice, gives
+\begin{align}
+    (a,b,c)\longmapsto
+       (abab^{-1}a^{-1},\ aba^{-1},\ c).
+\end{align}
+The first two entries are conjugate to $a,b$, respectively, and still
+multiply to $ab$. Thus the surrounding product $abc$ is preserved.
+At $(a,b,c)=(g,h,h^{-1})$, the last two entries multiply to
+$ghg^{-1}h^{-1}$, while the first becomes
+$ghgh^{-1}g^{-1}$. The corresponding permutation of accessible cycle
+coordinates commutes with simultaneous conjugation. A common orientation
+flag accounts for the inversion of ordered vertical operators at a seam.
+One original-spin unitary implements the resulting permutation on both
+actual regional columns and actual global states, before all inserted
+labels, boundary configurations, and common exterior operators are chosen.
+These algebraic and physical contraction statements do not yet identify
+the prescribed native string routing of a braid.
+
+The native joint measurement discussed in lines 2380--2415 is established
+on every translated two-plaquette region, with horizontal period at least
+four and vertical period at least three. Prescribe directed upward
+transports $(ab)^{-1}$ and $b^{-1}$ on the left and shared vertical bonds,
+and the identity elsewhere. The literal counterclockwise walks have
+holonomies $a$, $b$, and $ab$ on the left plaquette, right plaquette, and
+surrounding six-edge loop, respectively. All endpoint order reversals at
+periodic seams are derived. One complete projective measurement on the
+six original $G$-isometric spins, chosen before $a,b$, all crossing labels,
+and all common exterior operators, detects $C[ab]$ both on every actual
+open column and on the globally contracted cut matrix. This proves the
+joint-detection operation without interpreting the vectors as
+parent-Hamiltonian excitations or identifying a braid.
+
+The double exchange also has a literal eight-spin realization on every
+translated four-column, two-row strip, with horizontal period at least
+five and vertical period at least three. The three directed transports
+change by
+\begin{align}
+    (t_0,t_1,t_2)\longmapsto
+        (t_0,\ t_2t_0^{-1}t_1t_2^{-1}t_0,\ t_2).
+\end{align}
+One unitary $W$ and one complete projective measurement $(Q_C)$ can be
+chosen before every transport triple, boundary configuration $\theta$,
+and common exterior and crossing assignment $u$. The unitary acts on
+the actual original-spin columns and its identity extension acts on the
+actual global states. For the actual physical cut matrix $M$, the same
+witnesses satisfy
+\begin{align}
+    Q_CW\Psi_R(t,\theta)
+        &=\mathbf1_{C=C[aba^{-1}c]}W\Psi_R(t,\theta),\\
+    Q_CWM(t,u)&=\mathbf1_{C=C[aba^{-1}c]}WM(t,u).
+\end{align}
+The measurement is derived from the actual closed walk surrounding the
+middle and right plaquettes. At $(a,b,c)=(g,h,h^{-1})$, it therefore
+detects $C[ghg^{-1}h^{-1}]$. Both seams are included. This completes the
+joint measurement after the constructed double exchange; identification
+with the prescribed physical string motion remains separate.
+
+The same elementary motion is now derived on a vertically adjacent pair of
+plaquettes, with horizontal period at least three and vertical period at
+least four. It includes both seams and either direction: one six-spin
+unitary moves upward, and its adjoint moves downward. The unitary also
+works before any common vertex gauge is chosen, with the actual internal
+operators reconstructed from that gauge and with literal common crossing
+and exterior operators retained. It treats a passing string whenever both internal assignments have this
+common-gauge reconstruction; deriving that reconstruction for the
+prescribed braiding route remains separate.
+
+The virtual deformation in \cite[Section~6.6]{Schuch2010PEPS}, local
+source lines 2361--2386, now has a literal finite-torus realization with
+four distinct partner fluxes. In the order $(A_2,A_1,B_1,B_2)$, their
+actual clockwise loop holonomies are initially
+$(g^{-1},g,h,h^{-1})$, and after either displayed sweep they are
+$(g^{-1},g,ghg^{-1},h^{-1})$. The two partner paths must also be retained.
+For the fixed native path from $A_2$ to $A_1$, transport remains $g^{-1}$;
+for the fixed native path from $B_1$ to $B_2$, transport changes from $1$
+to $g^{-1}$. A partner loop transported to the first base point has
+holonomy $H(p)^{-1}H(\ell)H(p)$. Consequently the transported $B_2$
+flux becomes $gh^{-1}g^{-1}$, and the actual joint walk that traverses
+this transported loop before the $B_1$ loop still has holonomy
+$(ghg^{-1})(gh^{-1}g^{-1})=1$. These checked equalities describe a gauge
+presentation of the same closed coefficient vector, including changed
+crossing bonds. They do not by themselves establish the physical braid
+or its prescribed reunion measurement. The remaining task is to relate
+the actual physical string-motion sequence and its specified partner
+routes to the virtual presentation, retaining the effect on the other
+pair described in source lines 2403--2415.
+
+
+The first rightward step of the prescribed endpoint route also has a literal
+original-spin realization. Starting from the two-string presentation above,
+only the upward transport at relative position $(2,1)$ changes from $g$ to
+$gh$. One six-site unitary, chosen before $g,h$ and every boundary label,
+implements this change. The clockwise fluxes at bases $(1,1)$ and $(2,1)$
+change from $(h,1)$ to $(1,h)$. For this output, the next upward move changes
+only the middle rightward transport to $gh^{-1}g^{-1}$. Its own six-site
+unitary is likewise independent of the fluxes and boundary labels. All
+continuing partner bonds are retained. These elementary physical operations
+do not yet establish the complete routed braid and the prescribed reunion
+measurement.
+
+The complete twelve-step endpoint path now has a literal ordered-bond
+calculation. Every target vacancy is derived from the preceding assignment.
+For the prescribed partner connectors, the joint $A$ loop is
+$hgh^{-1}g^{-1}$, while the joint $B$ reunion loop is
+$h(ghg^{-1}h^{-1})h^{-1}$. The latter therefore has the conjugacy class
+of the commutator and is trivial exactly when $g$ and $h$ commute.
+Every elementary move now has a fixed six-spin original-site unitary
+acting on arbitrary actual inputs with a vacant target. Their chronological
+product is unitary and carries the actual initial state to the actual final
+state, before the flux labels are chosen. A complete projective measurement
+on the six reunion spins is also chosen independently of those labels. On
+the whole transformed state and on its actual physical cut, it selects the
+commutator class. The construction assumes regular local $G$-isometry and
+torus periods at least eight and seven, with all translations and both
+seams included. The partner transports are essential and cannot be replaced
+by a comparison of the moving based flux alone. Partner annihilation and
+the unrestricted source geometry remain separate.
+
+\section{Regular charge coordinates}
+For a coefficient function $\chi:G\to\mathbb C$, define
+\[
+ A_\chi(p;x,y)_{r,s}
+   =\mathbf1_{s=yx^{-1}r}\,\chi(px^{-1}r).
+\]
+This is the actual character-weighted bond coefficient with unknown
+independent endpoint translations $x,y$. The span of these matrices over
+all $p,x,y$ is invariant under independent left translations of the two
+registers. Its orthogonal projection therefore commutes with both
+translations. For unitary irreducible $\chi$, every matrix has squared norm
+$|G|$; distinct irreducible characters give orthogonal spans. The projection
+has eigenvalue one on the selected charge and zero on every distinct
+irreducible charge, uniformly in the internal and endpoint labels.
+
+The finite-graph contraction with diagonal character insertions is also
+proved directly: it is the normalized vertex average of products of these
+literal matrices. Conjugation of the insertion
+$D_{\chi,p}=\operatorname{diag}(g\mapsto\chi(pg))$ by a regular flux operator
+satisfies $U_kD_{\chi,p}U_{k^{-1}}=D_{\chi,pk^{-1}}$. This is the virtual
+coefficient identity in the charge--flux braiding argument, not the physical
+braid itself.
+
+For charge-pair creation, the four-register vector is
+\[
+ |G|^{-1}\mathbf1_{a=c}\mathbf1_{b=d}\chi(pb^{-1}a).
+\]
+A unitary irreducible character gives a unit vector. The initial vector is
+the two uniform diagonal pairs, and an explicit unitary carries it to the
+charged vector. Every irreducible complex character occurs in the finite set of actual
+regular charge labels. Its unitary irreducible representative is derived
+from an invariant subspace of the regular Hilbert space. Thus the charge
+normalization and orthogonality need no separately supplied unitary witness.
+
+The literal character-weighted shared-bond contraction of two original
+regular $G$-isometric sites is also established, for arbitrary finite
+incident-leg sets and a selected shared leg at each site. One complete
+physical projective measurement is chosen before all charge labels,
+internal parameters, and remaining boundary configurations. Its charge
+outcomes have the selected-charge and inequivalent-charge actions above;
+the additional outcome is the orthogonal complement of the physical image.
+The product Gram identity is derived from local $G$-isometry. When each
+site has a remaining leg, every irreducible charge column is nonzero;
+this assertion is local and does not assert nonvanishing after an arbitrary
+closed contraction.
+
+These statements formalize the auxiliary finite-leg charge-detection
+argument in \cite[Section~6.6]{Schuch2010PEPS}, lines 2464--2486.
+The literal charge-pair creation operation is now established on the
+six original spins of every translated two-column, three-row block, with
+horizontal period at least three and vertical period at least four. Its
+single correlated internal weight is $\chi(p\eta_1^{-1}\eta_0)$, not a
+product of separate one-bond characters. A reference-coordinate unitary
+commutes with the actual local product projector; local $G$-isometry derives
+the Gram identity and carries it to one original-spin unitary before every
+crossing configuration. The irreducible charge representative is derived
+from the finite group. Native sorting and both seams are retained.
+The physical readout of the two created charges, the native two-spin
+detector specialization, and the mixed charge--flux route remain separate.
+
+
+\section{The semi-regular bond isometry}
+For each irreducible block, the map
+$X_i\mapsto m_i^{-1/2}X_i\otimes I_{m_i}$ preserves the
+Hilbert--Schmidt inner product. Taking the regular multiplicity
+$m_i=d_i$ carries the weighted block
+$\sqrt{d_i}D^i(gh^{-1})$ to $D^i(gh^{-1})\otimes I_{d_i}$,
+exactly as in Section~7. The coefficient map and its product over any
+finite family of bonds are isometries, and the product map carries
+arbitrary coherent sums of the weighted bond products to their
+repeated-multiplicity counterparts.
+
+The actual torus contraction of the averaging site weighted by
+$\Theta$ on each virtual leg is also computed. Moving the weights from
+the endpoints gives $\Theta^2$ on each bond, and expansion of the
+group averages gives a coherent sum over vertex labels of products of
+these weighted relative representation matrices. Its normalization is
+$|G|^{-N}$, with $N$ the number of sites. On a multiplicity-one
+irreducible sector, $\Theta^2$ acts by $\sqrt{d_i}$. This establishes
+the native site-to-weighted-bond identity without assuming a coefficient
+or Gram identity. Identifying the resulting sector coordinates with the
+regular representation and assembling the full physical equivalence
+is a further statement; it is not assumed in the bond isometry.
+For a supplied internal multiplicity-one irreducible decomposition,
+a common linear coordinate equivalence now gives both the blocks
+$D_i(g)$ and the actual weighted blocks $\sqrt{d_i}D_i(g)$.
+Applying the bond map to these actual weighted blocks gives
+$D_i(g)\otimes I_{d_i}$. These coordinates are not asserted to be
+unitary. A separate Hilbert-space statement now assembles orthonormal
+sector bases into one global orthonormal basis and proves the same actual
+weighted-block and multiplicity-restoration identities there. The
+orthogonality of invariant irreducible sectors with distinct characters
+is derived from the self-adjoint character projectors of a unitary
+representation.
+
+The actual four physical coordinates at every torus site are now
+regrouped into the two endpoints of each horizontal and vertical bond.
+This coordinate permutation is a Hilbert-space isometry, including at
+the periodic seams. Let $E_V$ include the matching irreducible sectors
+into the full endpoint-pair space, and let $J$ restore the multiplicities
+in those sectors. The full physical bond operator
+$F=E_{V'}JE_V^\dagger$ satisfies
+$F^\dagger F=E_VE_V^\dagger$. Thus it preserves inner products on its
+initial matching-sector subspace.
+
+For an orthogonal decomposition with multiplicity one, the regrouped torus
+state lies in the tensor product of the matching sector subspaces.
+The product of the bond maps carries it to the torus state
+of the averaging site for $\bigoplus_iD_i\otimes I_{d_i}$.
+Both contractions have the factor $|G|^{-N}$.
+Neither its support nor a coefficient or Gram identity is supplied as
+a hypothesis. The complete contraction is therefore established in
+this decomposed setting.
+
+The representation data are now also derived from the finite group alone.
+An orthonormal Fourier basis of the actual left-regular representation gives
+pairwise inequivalent unitary irreducible blocks $D_i$, each repeated $d_i$
+times. Their single-copy sum is semi-regular, with character multiplicity one
+in every sector. Its dimension $\sum_i d_i$ is at most the dimension of every
+finite-dimensional complex semi-regular representation; no unitarity
+assumption on a comparison representation is needed.
+
+The explicit fourth-root dressing is invertible and commutes with the virtual
+representation. Consequently the actual tensor $H$ is $G$-injective. The
+matching-sector bond operator extends to an isometry on the entire endpoint-pair
+space. Composing its bondwise product with the Fourier change of coordinates
+gives an isometry carrying the actual weighted torus state to the actual
+left-regular averaging-site state. It preserves all physical inner products.
+No representation enumeration, Fourier basis, support condition, state equality,
+or Gram identity is assumed in this final finite-torus existence theorem.
+The same dimensions satisfy $|G|=\sum_i d_i^2$ and
+$\sum_i d_i\leq |G|$, with strict inequality exactly when some $d_i>1$.
+Equivalently, the reduction is strict exactly when $G$ is noncommutative.
+With normalized averaging sites and unnormalized virtual bonds, both actual
+states have squared norm $|G|^{N+1}$, where $N$ is the number of torus sites.
+In particular they are nonzero. The group-derived physical equivalence and
+dimension comparison can be chosen with these exact norm conclusions for
+the same representation and isometry.
+
+The Section~7 state equivalence is also established for closed contractions
+on every finite simple graph. At each vertex the averaging tensor has one
+virtual and one physical coordinate for each incident edge, and the
+fourth-root weight is inserted on each virtual leg. A finite-group-derived
+multiplicity-one representation, of least dimension among all
+finite-dimensional complex semi-regular representations, gives a nonzero
+weighted state. A product of full-domain isometries on disjoint physical
+bond-endpoint pairs carries this actual state to the actual regular state
+and preserves every physical inner product. For degree-four lattices this
+is the four-leg construction of the paper. Disconnected graphs, isolated
+vertices, and the empty graph are allowed. The nonzero regular coefficient
+counts vertex labels constant across every edge; the constant identity
+labeling contributes even without a connectivity assumption.
+
+The same bondwise construction also treats arbitrary group-valued
+insertions in these closed graph contractions. Orient every bond from
+tail to head and insert $U(u_e)$, so that for the regular representation
+the head label is $u_e$ times the tail label. The contraction with an
+arbitrary matrix $K_e$ on each bond is computed by summing independent
+head and tail virtual labels. After averaging and physical regrouping,
+its bond factor is $U(q_h)WK_eWU(q_t^{-1})$. When $K_e=U(u_e)$ and $W$
+commutes with the representation, the actual state is
+\begin{align}
+    \Psi_{U,W,u}(\beta)
+       =|G|^{-|V|}\sum_{q:V\to G}
+         \prod_e[W^2U(q_hu_eq_t^{-1})]_{\beta_{h,e},\beta_{t,e}}.
+\end{align}
+In the chosen Fourier blocks with $W=\Theta$, every factor remains in
+the matching-sector space and has coefficient
+$\sqrt{d_i}D_i(q_hu_eq_t^{-1})$. Hence one full-domain extension of
+multiplicity restoration, followed by the Fourier change of coordinates,
+can be chosen before all edge assignments $u$ and satisfies
+\begin{align}
+    \mathcal T\Psi_{U,\Theta,u}=\Psi_{L,I,u}
+       \qquad\text{for every }u:E(\Gamma)\to G.
+\end{align}
+It preserves all physical inner products and, by linearity, every finite
+coherent superposition of these states. No compatibility among the
+inserted group elements is required. The isometry conclusion is for
+representation insertions and their coherent sums; the arbitrary-matrix
+coefficient formula alone gives no such conclusion for matrices mixing
+inequivalent sectors. These are auxiliary inserted-state consequences
+of the Section~7 construction on finite simple graphs.
+
+This graph statement does not include open virtual boundary legs with
+general boundary tensors, parallel bonds, self-loops, or infinite
+contractions. At lower-valence vertices it uses the natural incidence
+averaging tensor, rather than leaving unspecified legs of a four-leg
+tensor. The separate torus theorem includes positive small periods with
+their native multiple bonds. These are precisely stated geometric
+specializations; neither is labelled as the unrestricted geometric
+statement, and neither identifies parent-Hamiltonian ground spaces.
+
+An extension to every regular open-boundary state is not a consequence
+of this closed state equivalence, and in general is impossible. For an
+actual connected regular $G$-injective region with $b>0$ crossing bonds,
+the complete boundary image has dimension $|G|^{b-1}$. If a candidate
+block has boundary domain $B$ with $|B|<|G|^{b-1}$, no linear physical
+map $L$ can make its image contain the complete regular boundary image:
+\begin{align}
+    \operatorname{im}A_R\subseteq\operatorname{im}(LM)
+    \quad\Longrightarrow\quad
+    |G|^{b-1}\leq\operatorname{rank}(LM)\leq|B|.
+\end{align}
+The regular rank is derived from connected-region $G$-injectivity, rather
+than assumed. On a native two-site rectangle of a torus with both periods
+at least three, the six actual crossing bonds give the numerical
+obstruction $4^6=4096<7776=6^5$ for a group of order six and four boundary
+coordinates per leg. This specialization assumes no irreducible-character
+table. Section~7 does not assert complete open-boundary image containment;
+the obstruction therefore records a limit of the proposed generalization,
+not an error in the paper. Open contraction identities must retain their
+actual boundary spaces and any specified transport between those spaces.
+
+The weighted averaging construction is computed on these actual open
+regions, retaining arbitrary prescribed virtual crossing labels $\theta$.
+Let $U$ be a finite-dimensional matrix representation and let $W$ commute
+with every $U(g)$. Regroup the physical incidence labels into internal
+tail and head labels $\beta_t,\beta_h$, and one physical crossing label
+$\beta_e$ per boundary bond. Expanding the normalized site averages gives
+\begin{align}
+    |G|^{-|R|}\sum_{q:R\to G}
+      \prod_{e\text{ internal}}
+        \bigl[W^2U(q_hq_t^{-1})\bigr]_{\beta_h,\beta_t}
+      \prod_{e\text{ crossing}} B_e(q,\theta,\beta),
+\end{align}
+where
+\begin{align}
+    B_e(q,\theta,\beta)=
+    \begin{cases}
+        [WU(q_t^{-1})]_{\theta_e,\beta_e},&t\in R,\ h\notin R,\\
+        [U(q_h)W]_{\beta_e,\theta_e},&t\notin R,\ h\in R.
+    \end{cases}
+\end{align}
+Each internal virtual label is summed exactly once; each crossing bond
+retains only its endpoint in $R$. The coordinate bijection and this
+formula are derived from the native incidence contraction. Finite physical
+enumerations identify the same expression with the numbered open-region
+coefficient of the original tensor family. In particular, the crossing
+weights are not replaced by internal $W^2$ factors, and no boundary-state
+equivalence is assumed.
+
+For noncommutative groups of order six the minimal dimension in this
+construction is exactly four. Indeed, the positive irreducible dimensions
+have square-sum six and at least one exceeds one. That dimension must be
+two; the remaining square-sum is two, giving two dimensions equal to one.
+The actual group-derived multiplicity-one unitary representation therefore
+has dimension four, and every finite-dimensional semi-regular complex
+representation has dimension at least four. No character table or
+classification of groups of order six is assumed.
+
+\section{The fourth-root weight and the group-order normalization}
+The bond-dimension reduction of Section~7 assigns the operator
+$\Theta=\bigoplus_i d_i^{1/4}I_{d_i}$ to the multiplicity-one
+representation and writes $\Theta^4=\Delta$.
+Source traceability is \path{Papers/1001.3807/paper_v3.tex},
+lines 2962--2977. The explicit definition in Lemma~4.4, however, is
+\begin{align}
+    \Delta=\frac{1}{|G|}\bigoplus_i\frac{d_i}{m_i}
+        I_{d_i}\otimes I_{m_i},
+\end{align}
+at lines 970--976. Thus, for general occurring multiplicities, the
+operator with block weights $(d_i/m_i)^{1/4}$ satisfies
+\begin{align}
+    \Theta^4=|G|\Delta.
+\end{align}
+For the multiplicity-one representation, these weights are exactly
+$d_i^{1/4}$ as printed in Section~7. The missing factor is consistent
+with the source's convention of suppressing global normalization
+constants in diagrams, stated near line 936. The formal statement
+retains the group-order factor. This local correction is independent
+of the lattice geometry.
+
 \section{Verdict and elimination plan}
 The note is a scope restriction: the review's identification of the
 contracted dual network with the equal-weight superposition of all
@@ -158,15 +1166,53 @@ operators across the contracted primal network is formalized on the torus.
 For these torus statements no elimination is planned: the unrestricted
 reading is false on the torus.
 
-The note also records one open scope restriction. Stability of
-$G$-isometry under concatenation is formalized for matrix product tensors,
-and in two dimensions only the simplification of the left inverse for the
-left-regular representation on the contracted link is formalized. The
-elimination plan is the one given in the section on concatenation: equip
-the two-dimensional virtual and physical spaces with inner products for
-which the left-regular representation is unitary, and show that the
-contraction of the adjoints of the two factors is the adjoint of the
-contracted map.
+The former restriction of the elementary isometry concatenation step to
+matrix product tensors is resolved. The two-dimensional proof identifies the
+contracted adjoints with the adjoint of the contracted map and establishes
+the isometry identity for four-leg square-lattice tensors. The argument
+also covers unitary actions on the remaining virtual spaces, with one
+contracted regular bond. The connected-region Gram calculation extends
+the untwisted result to multiple bonds and closed cycles. The torus closure overlaps and independence of their regular isometric
+class vectors are established. For contiguous regions with actually simply
+connected closed-cell realization on tori of periods at least three, every
+nonzero coherent superposition of commuting closures has the same physical
+reduced density, flat rank $|G|^{\partial D-1}$, and every finite nonnegative
+R\'enyi entropy $(\partial D-1)\log|G|$. Cuts may cross either closure seam;
+the exterior loops and accessible-coordinate factorization are derived.
+The union of the two coordinate-zero width-one stripes supports a physical
+unitary relating any two normalized coherent closure states. For regular
+$G$-injective tensors, two-way local maps give the same boundary rank and
+zero-order R\'enyi entropy, without an isometric hypothesis. The regular elementary flux movement is established by one unitary on
+six original spins, uniformly in the flux and crossing labels, and its
+global extension permits arbitrary common exterior operators. The normalized
+coherent creation of an opposite adjacent flux pair is also established at
+every translated six-site position, with both seams included. The
+Section~7 bond reduction is established for actual finite-torus states and
+closed contractions on arbitrary finite simple graphs: the representation
+and full-domain physical isometry are derived from the group,
+the reduced dimension is universally minimal among semi-regular
+representations, and it is strictly smaller than the regular dimension
+exactly for noncommutative groups, and is four for every noncommutative group
+of order six. The minimal representation and this physical isometry can be chosen
+simultaneously from the finite group before all inserted bond labels and
+physical coefficient vectors. One fixed physical bond isometry also carries every
+closed simple-graph state with group-valued bond insertions and their finite
+coherent sums to the corresponding regular state. Actual weighted open-region
+coefficients are now derived with all crossing labels and endpoint weights retained. The corresponding complete
+regular boundary image cannot in general be recovered from a smaller boundary
+domain; universal open-boundary image containment is not asserted by the source.
+One fixed six-spin measurement detects the joint class $C[ab]$, and accessible
+cycle permutations have fixed original-spin unitaries for both regional columns
+and global states. The auxiliary double exchange includes the algebraic
+backreaction and preserves the surrounding product. One fixed eight-spin
+unitary and complete measurement give the actual joint class
+$C[aba^{-1}c]$ after this constructed operation, including the commutator
+class at $(g,h,h^{-1})$. Identification with the prescribed native string
+routing remains separate. General multiple-edge
+geometries, infinite contractions, smaller-period models in the entropy and
+flux statements, and identification with the full parent-Hamiltonian ground
+space and excited states also remain separate. These source results are
+tracked in issue~\#8271.
 
 \bibliographystyle{alpha}
 \bibliography{references}

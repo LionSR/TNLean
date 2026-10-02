@@ -1,0 +1,60 @@
+\begin{theorem}[A fixed two-cycle operation on an actual regular block]%
+    \label{thm:peps_regular_two_cycle_flux_move}
+    \lean{TNLean.PEPS.regularTreeCycleAssignment,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_treeCycleAssignment_coordinates,
+        TNLean.PEPS.regularTwoCycleMove,
+        TNLean.PEPS.regularTwoCycleMove_conjugation,
+        TNLean.PEPS.regularTwoCycleMove_single,
+        TNLean.PEPS.regularRegionTwoCycleMove,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_twoCycleMove,
+        TNLean.PEPS.regularRegionTwoCyclePhysicalMove,
+        TNLean.PEPS.regularRegionTwoCyclePhysicalMove_matrix_mem_unitaryGroup,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_twoCyclePhysicalMove,
+        TNLean.PEPS.exists_unitary_regularTwoCycleFluxMove}
+    \leanok
+    \uses{lem:peps_regular_region_coordinates,
+        lem:peps_regular_region_tree_gauge,
+        thm:peps_regular_twisted_projector_coordinates,
+        lem:peps_regular_boundary_untwisting}
+    Let $R$ be a finite graph region, choose a spanning tree $T$ and root,
+    and choose two distinct internal bonds $e_0,e_1$ outside $T$.
+    For cycle operators $\omega_e\in G$, define the bond assignment
+    $u_\omega$ to equal $\omega_e$ on the internal bonds outside the tree
+    and the identity on every other bond, including crossing bonds.
+    In the actual canonical contraction, tree coordinates give
+    \begin{align}
+        M_R(u_\omega)_{(y,a,r,z),\theta}
+          =|G|^{-|R|}\sum_{x\in G}
+            \mathbf 1_{\{y=x\theta,\ z_e=x\omega_ex^{-1}\}}.
+    \end{align}
+    The fixed permutation $\Phi$ retaining $y,a,r$ and all other cycle coordinates,
+    and replacing $z_{e_1}$ by $z_{e_0}z_{e_1}$, commutes with simultaneous
+    conjugation. It is the controlled tweezer operation with one reference label
+    fixed to the identity. Transport it through the actual coordinate bijection
+    to a unitary $Q$ on the physical space of the half-edge labels. Then
+    \begin{align}
+        Q M_R(u_\omega)_{\cdot,\theta}
+            &=M_R(u_{\Phi\omega})_{\cdot,\theta}
+            \qquad\text{for every }\omega,\theta.
+    \end{align}
+    In particular, the same $Q$ sends the assignment equal to $g$ on $e_0$
+    and the identity elsewhere to the assignment equal to $g$ on $e_0,e_1$
+    and the identity elsewhere, uniformly in $g$ and every boundary column.
+    This auxiliary actual contraction identity underlies the flux-moving
+    operation in \cite[Theorem~6.16]{Schuch2010PEPS}.
+    The six-vertex lattice realization and transport to arbitrary original
+    $G$-isometric physical tensors remain separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    The bond assignment is the identity on the tree, so uniqueness of the
+    root-normalized tree gauge makes that gauge the identity. The residuals
+    are exactly $\omega$, and crossing labels acquire no transport.
+    The actual twisted contraction formula therefore gives the displayed sum.
+    For each common group label $x$, multiplication satisfies
+    $(xz_{e_0}x^{-1})(xz_{e_1}x^{-1})=x(z_{e_0}z_{e_1})x^{-1}$.
+    Hence the fixed permutation intertwines every summand without changing
+    its boundary condition. Conjugating by the coordinate bijection
+    gives a permutation of physical basis states and therefore a unitary
+    on the entire canonical physical space.
+\end{proof}

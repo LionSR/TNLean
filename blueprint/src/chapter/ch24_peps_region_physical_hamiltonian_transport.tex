@@ -1,0 +1,76 @@
+\section{Unitary physical transport of parent Hamiltonians}%
+\label{sec:peps_region_physical_hamiltonian_transport}
+
+\begin{definition}[Physical product matrix]%
+    \label{def:peps_global_physical_matrix}
+    \lean{TNLean.PEPS.globalPhysicalMatrix,TNLean.PEPS.globalPhysicalMatrix_apply}
+    \leanok
+    \uses{def:peps_global_physical_map}
+    The matrix of the full product physical map is
+    $(F_V)_{\tau\sigma}=\prod_{v\in V}(F_v)_{\tau_v\sigma_v}$.
+\end{definition}
+
+\begin{theorem}[Extension of local intertwining identities]%
+    \label{thm:peps_region_physical_intertwining}
+    \lean{TNLean.PEPS.regionSliceMap_ext,
+        TNLean.PEPS.regionSliceMap_regionLocalTerm,
+        TNLean.PEPS.globalPhysicalMap_regionLocalTerm,
+        TNLean.PEPS.globalPhysicalMap_regionParentHamiltonian,
+        TNLean.PEPS.globalPhysicalMatrix_regionParentHamiltonian}
+    \leanok
+    \uses{def:peps_global_physical_matrix,def:peps_region_parent_hamiltonian}
+    Suppose the regional interactions $h_i$ and $k_i$ satisfy
+    $k_iF_{R_i}=F_{R_i}h_i$ for every region in a finite family.
+    Their extensions to the full graph satisfy
+    $\widehat{k_i}F_V=F_V\widehat{h_i}$, and their full Hamiltonian
+    sums satisfy $KF_V=F_VH$.
+    These identities require neither positivity of the interactions
+    nor invertibility of the physical maps.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_global_physical_map_slice}
+    On a fixed complementary slice, a regional extension acts by its
+    local interaction matrix. The slice of $F_V\psi$ is a linear
+    combination of $F_{R_i}\psi_\beta$.
+    Applying $k_iF_{R_i}=F_{R_i}h_i$ to each summand proves the
+    intertwining identity on every slice, hence on the full vector.
+    Summing the identities gives the full Hamiltonian identity.
+\end{proof}
+
+\begin{theorem}[Unitary physical conjugation]%
+    \label{thm:peps_region_physical_unitary_conjugation}
+    \lean{TNLean.PEPS.regionPhysicalProductMatrix_isUnitaryBetween,
+        TNLean.PEPS.globalPhysicalMatrix_isUnitaryBetween,
+        TNLean.PEPS.toMatrix_regionPhysicalEquiv_symm,
+        TNLean.PEPS.deformedRegionInteraction_eq_unitary_conj,
+        TNLean.PEPS.regionParentHamiltonian_physicalDeform_unitary,
+        TNLean.PEPS.charpoly_regionParentHamiltonian_physicalDeform_unitary,
+        TNLean.PEPS.spectrum_regionParentHamiltonian_physicalDeform_unitary}
+    \leanok
+    \uses{def:peps_deformed_region_interaction,def:peps_global_physical_matrix}
+    If every $F_v$ is unitary, then every regional product $F_R$ and
+    the full product $F_V$ are unitary.
+    For any finite family of regional interaction matrices,
+    their inverse-adjoint transports satisfy
+    \begin{align}
+        h_i^F&=F_{R_i}h_iF_{R_i}^\dagger,\\
+        H^F&=F_VHF_V^\dagger.
+    \end{align}
+    Consequently $H^F$ and $H$ have equal characteristic polynomials
+    and equal spectra, with the same eigenvalue multiplicities.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_region_physical_intertwining}
+    Product composition and adjoint identities give
+    $F_R^\dagger F_R=F_RF_R^\dagger=\Id$ from the corresponding
+    vertex identities, and likewise for $F_V$.
+    Thus $F_R^{-1}=F_R^\dagger$, giving the local conjugation formula.
+    The local identity $h_i^FF_{R_i}=F_{R_i}h_i$ gives
+    $H^FF_V=F_VH$. Multiplication by $F_V^\dagger$ gives the full
+    conjugation formula. Equality of characteristic polynomials
+    follows by exchanging the two factors of the rectangular product
+    $(F_VH)F_V^\dagger$, using equality of the physical dimensions.
+    The spectra are the roots of these characteristic polynomials.
+\end{proof}

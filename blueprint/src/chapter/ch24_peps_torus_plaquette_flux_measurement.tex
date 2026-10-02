@@ -1,0 +1,211 @@
+\begin{definition}[The native plaquette walk and its physical sites]%
+    \label{def:peps_torus_plaquette_flux_geometry}
+    \lean{TNLean.PEPS.torusPlaquetteWalk,
+        TNLean.PEPS.torusPlaquetteRegion,
+        TNLean.PEPS.torusPlaquetteRegion_card}
+    \leanok
+    On a native torus whose two periods are at least three, let
+    $v=(x,y)$. Define the plaquette walk $p_v$ and its physical region
+    $R_v$ by
+    \begin{align}
+        p_v&:\ (x,y)\longrightarrow(x+1,y)
+            \longrightarrow(x+1,y+1)\longrightarrow(x,y+1)
+            \longrightarrow(x,y),\\
+        R_v&=\{(x,y),(x+1,y),(x+1,y+1),(x,y+1)\},& |R_v|&=4.
+        \label{eq:peps_plaquette_flux_walk}
+    \end{align}
+    Coordinates are periodic, so this definition includes plaquettes
+    crossing either seam. It is the four-site region used in
+    \cite[proof of Theorem~6.15]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{definition}[A one-bond regular flux string]%
+    \label{def:peps_torus_plaquette_flux_insertion}
+    \lean{TNLean.PEPS.torusPlaquetteFluxInsertion,
+        TNLean.PEPS.regularWalkHolonomy_torusPlaquetteFluxInsertion}
+    \leanok
+    \uses{def:peps_torus_plaquette_flux_geometry,
+        thm:peps_regular_walk_holonomy}
+    For $g\in G$, put directed transport $g$ on the first side of $p_v$
+    and identity transport on every other bond. In the ordered-edge
+    convention, the distinguished bond therefore carries $g$ when
+    its orientation agrees with the walk and $g^{-1}$ otherwise.
+    Denote this actual assignment by $u^{v,g}$. Its plaquette holonomy is
+    \begin{align}
+        \operatorname{Hol}_{u^{v,g}}(p_v)&=g.
+        \label{eq:peps_plaquette_flux_holonomy}
+    \end{align}
+    This is the one-bond open regular string of
+    \cite[Section~6.5 and proof of Theorem~6.15]{Schuch2010PEPS}.
+\end{definition}
+\begin{proof}\leanok
+    The three other sides of the plaquette have at least one endpoint
+    with vertical coordinate $y+1$, whereas both endpoints of the
+    distinguished side have coordinate $y$. Hence their ordered edges
+    are different. Their transports are the identity, and the
+    orientation convention gives transport $g$ on the first step.
+    The reverse-ordered product along the four steps is therefore $g$.
+\end{proof}
+
+\begin{theorem}[Four-site measurement of native plaquette holonomy]%
+    \label{thm:peps_torus_plaquette_holonomy_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_physicalMeasurement,
+        TNLean.PEPS.IsGIsometric.exists_torusPlaquette_holonomy_cutMeasurement}
+    \leanok
+    \uses{def:peps_torus_plaquette_flux_geometry,
+        thm:peps_closed_walk_class_physical_measurement,
+        thm:peps_regular_boundary_route,
+        lem:peps_regular_torus_incident_isometry,
+        thm:peps_regular_open_region_projector}
+    Let the two torus periods be at least three and let the original
+    local tensor be regular $G$-isometric for a finite group $G$.
+    At every vertex $v$, there is a single complete projective
+    measurement $(Q_C)_C$, with one additional outcome $Q_\perp$, on
+    the four original physical spins in $R_v$.
+    Every operator is Hermitian and positive semidefinite, the operators
+    satisfy $Q_iQ_j=\delta_{ij}Q_i$, and their sum is the identity.
+    For every actual inserted bond assignment $u$ and every crossing
+    configuration $\theta$, its twisted open-block column satisfies
+    \begin{align}
+        Q_C\psi_{u,\theta}
+            &=\mathbf1_{\{[\operatorname{Hol}_u(p_v)]=C\}}\psi_{u,\theta},&
+        Q_\perp\psi_{u,\theta}&=0.
+        \label{eq:peps_plaquette_holonomy_measurement}
+    \end{align}
+    The same operators act on the actual globally contracted coefficient
+    matrix $M_u$ across $R_v$ by
+    \begin{align}
+        Q_CM_u&=\mathbf1_{\{[\operatorname{Hol}_u(p_v)]=C\}}M_u,&
+        Q_\perp M_u&=0.
+        \label{eq:peps_plaquette_arbitrary_closed_measurement}
+    \end{align}
+    This is the native regular torus version of the local conjugacy
+    calculation in \cite[proof of Theorem~6.15]{Schuch2010PEPS}; see
+    \cite{gap:rmp_peps_quantum_double_g_isometry} for its scope.
+\end{theorem}
+\begin{proof}\leanok
+    The induced graph on the support of an actual walk is connected.
+    Apply Theorem~\ref{thm:peps_closed_walk_class_physical_measurement}
+    to $p_v$ in this induced graph. Inclusion of the induced walk in
+    the ambient torus recovers $p_v$ and preserves its holonomy.
+    Incident-edge coordinates preserve the original regular
+    $G$-isometry, so the resulting operators act on the original four
+    physical spins. All spanning-tree choices are made within this
+    construction. Factoring the global coefficient matrix into its open
+    block and complementary open block transfers the same eigenvalue
+    from every open-block column to the contracted matrix.
+\end{proof}
+
+\begin{theorem}[Detection of a native one-bond flux string]%
+    \label{thm:peps_torus_plaquette_flux_class_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_fluxClass_measurement,
+        TNLean.PEPS.IsGIsometric.exists_torusPlaquette_fluxClass_cutMeasurement}
+    \leanok
+    \uses{thm:peps_torus_plaquette_holonomy_measurement,
+        def:peps_torus_plaquette_flux_insertion,
+        thm:peps_regular_open_region_projector}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement}, one
+    fixed complete projective measurement on the four spins of $R_v$
+    detects the class $[g]$ of every one-bond flux string $u^{v,g}$.
+    Its extra outcome annihilates every such actual open-block column.
+    If $M_{v,g}$ is the physical coefficient matrix of the globally
+    contracted inserted torus PEPS across the cut $R_v$, then
+    \begin{align}
+        Q_CM_{v,g}&=\mathbf1_{\{[g]=C\}}M_{v,g},&
+        Q_\perp M_{v,g}&=0.
+        \label{eq:peps_plaquette_flux_closed_measurement}
+    \end{align}
+    Thus the measurement detects $[g]$ with certainty on every nonzero
+    such contracted state. This is the explicit one-bond string
+    specialization of \cite[Theorem~6.15]{Schuch2010PEPS} on native
+    regular tori of periods at least three.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute (\ref{eq:peps_plaquette_flux_holonomy}) into
+    (\ref{eq:peps_plaquette_holonomy_measurement}). Factor the actual
+    global coefficient matrix across the cut into its open block and
+    complementary open block. Each column of the former has the same
+    measured class $[g]$, so left multiplication by $Q_C$ multiplies
+    the contracted matrix by $\mathbf1_{\{[g]=C\}}$.
+\end{proof}
+
+\begin{definition}[Flux strings attached to each plaquette side]%
+    \label{def:peps_torus_plaquette_all_sides_insertion}
+    \lean{TNLean.PEPS.torusPlaquetteSide,
+        TNLean.PEPS.torusPlaquetteSideInsertion,
+        TNLean.PEPS.regularWalkHolonomy_torusPlaquetteSideInsertion}
+    \leanok
+    \uses{def:peps_torus_plaquette_flux_geometry,
+        thm:peps_regular_walk_holonomy}
+    Enumerate the oriented sides of $p_v$ by $i=0,1,2,3$ in traversal
+    order. For $g\in G$, let $u^{v,i,g}$ put directed transport $g$
+    on side $i$ and identity transport on all other bonds. The ordered
+    bond receives $g$ or $g^{-1}$ according to its orientation. Then
+    \begin{align}
+        \operatorname{Hol}_{u^{v,i,g}}(p_v)&=g.
+        \label{eq:peps_plaquette_all_sides_holonomy}
+    \end{align}
+    This realizes the four attachment directions in the final paragraph
+    of \cite[proof of Theorem~6.15]{Schuch2010PEPS}.
+\end{definition}
+\begin{proof}\leanok
+    Opposite horizontal sides have distinct vertical coordinates, and
+    opposite vertical sides have distinct horizontal coordinates.
+    Adjacent sides also have distinct ordered endpoint pairs. Hence
+    all four bonds are different. Exactly one factor in the actual
+    four-step holonomy is $g$, and the other three are the identity.
+\end{proof}
+
+\begin{theorem}[A single flux measurement for all four attachment directions]%
+    \label{thm:peps_torus_plaquette_all_sides_measurement}
+    \lean{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_allSides_cutMeasurement}
+    \leanok
+    \uses{thm:peps_torus_plaquette_holonomy_measurement,
+        def:peps_torus_plaquette_all_sides_insertion}
+    On native regular tori with both periods at least three, one fixed
+    complete positive projective measurement on the four spins in $R_v$
+    detects the class of every explicitly constructed string
+    $u^{v,i,g}$, for all four attachment sides and all $g\in G$.
+    Writing $M_{v,i,g}$ for its actual globally contracted coefficient
+    matrix, one has
+    \begin{align}
+        Q_CM_{v,i,g}&=\mathbf1_{\{[g]=C\}}M_{v,i,g},&
+        Q_\perp M_{v,i,g}&=0.
+        \label{eq:peps_plaquette_all_sides_measurement}
+    \end{align}
+    The operators are independent of both $i$ and $g$. This is the
+    explicit four-direction specialization of the final observation in
+    \cite[proof of Theorem~6.15]{Schuch2010PEPS}; it does not assert
+    identification with a parent-Hamiltonian excitation space.
+\end{theorem}
+\begin{proof}\leanok
+    Substitute (\ref{eq:peps_plaquette_all_sides_holonomy}) into
+    (\ref{eq:peps_plaquette_arbitrary_closed_measurement}).
+\end{proof}
+
+\begin{corollary}[Orthogonality of distinct measured plaquette classes]%
+    \label{cor:peps_torus_plaquette_class_orthogonality}
+    \lean{TNLean.PEPS.IsGIsometric.torusPlaquette_cutMatrix_orthogonal_of_class_ne}
+    \leanok
+    \uses{thm:peps_torus_plaquette_holonomy_measurement}
+    Under the regular native torus hypotheses of
+    Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement}, let
+    $u,w$ be two actual bond assignments. If their holonomies around
+    $p_v$ have distinct conjugacy classes, then their globally contracted
+    coefficient matrices satisfy
+    \begin{align}
+        M_u^\dagger M_w&=0.
+        \label{eq:peps_plaquette_class_orthogonality}
+    \end{align}
+    Thus every physical coefficient column of one is orthogonal to every
+    coefficient column of the other, without a normalization hypothesis.
+    This is a consequence of the local class measurement in
+    \cite[Theorem~6.15]{Schuch2010PEPS}.
+\end{corollary}
+\begin{proof}\leanok
+    Let $Q$ be the measurement projector for the class of
+    $\operatorname{Hol}_u(p_v)$. Then $QM_u=M_u$ and $QM_w=0$.
+    Since $Q$ is Hermitian,
+    $M_u^\dagger M_w=M_u^\dagger Q M_w=0$.
+\end{proof}

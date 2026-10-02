@@ -1,0 +1,79 @@
+\section{The physical image of the Bell product}%
+\label{sec:peps_vertex_bond_state}
+
+The global virtual-pair construction of
+\cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines 2017--2044,
+sends the independent Bell product through the site tensor maps.
+The following identities retain the actual graph contraction and
+include isolated vertices and zero-dimensional bonds.
+
+\begin{definition}[The product site map in bond coordinates]%
+    \label{def:peps_product_site_map_bonds}
+    \lean{TNLean.PEPS.fullRegionVertexTensorMapEdgePairs}
+    \leanok
+    \uses{thm:peps_vertex_bond_coordinates,
+        def:peps_injective_vertex_coordinates}
+    Let $F$ be the product of all site tensor maps, expressed on its
+    domain in the independent endpoint-pair coordinates of the edges.
+    Its codomain is the physical coefficient space on the full vertex
+    region.
+\end{definition}
+
+\begin{theorem}[The closed state and the full-region range]%
+    \label{thm:peps_bell_product_physical_image}
+    \lean{TNLean.PEPS.fullRegionVertexTensorMapEdgePairs_virtualBondProduct,
+        TNLean.PEPS.map_virtualBondGroundSpace_fullRegionVertexTensorMapEdgePairs}
+    \leanok
+    \uses{def:peps_product_site_map_bonds,
+        thm:peps_full_virtual_bond_product,
+        thm:peps_virtual_bond_ground_space,
+        thm:peps_full_region_range}
+    Write $\psi$ for the actual closed PEPS vector and $\Omega$ for
+    the product of virtual Bell vectors. Then, in full-region physical
+    coordinates,
+    \[
+        F\Omega=\psi,\qquad
+        F(\mathcal G_{\mathrm{Bell}})=\mathcal G_V
+          =\operatorname{span}\{\psi\}.
+    \]
+    Neither identity requires site injectivity or positive bond
+    dimensions.
+\end{theorem}
+
+\begin{proof}\leanok
+    The full-region virtual contraction is exactly $\Omega$ in
+    endpoint-pair coordinates. Applying the product site map gives
+    the full-region open coefficient vector, which equals the closed
+    state because no boundary edges remain. The common Bell space
+    is the span of $\Omega$, and linear maps preserve spans.
+\end{proof}
+
+\begin{theorem}[Injective physical reconstruction and nonvanishing]%
+    \label{thm:peps_bell_product_injective_image}
+    \lean{TNLean.PEPS.fullRegionVertexTensorMapEdgePairs_injective,
+        TNLean.PEPS.comap_regionGroundSpace_fullRegionVertexTensorMapEdgePairs,
+        TNLean.PEPS.stateCoeff_ne_zero_iff_bondDim_pos_of_isVertexInjective}
+    \leanok
+    \uses{thm:peps_bell_product_physical_image,
+        thm:peps_injective_vertex_reconstruction,
+        thm:peps_virtual_bond_ground_space}
+    If every ordinary site tensor map is injective, then $F$ is
+    injective and
+    \[
+        F^{-1}(\mathcal G_V)=\mathcal G_{\mathrm{Bell}},\qquad
+        \psi\ne0\quad\Longleftrightarrow\quad D_e>0
+                \text{ for every edge }e.
+    \]
+    These assertions concern the global state and the full-region
+    range. They do not yet identify the ground space of a parent
+    built from smaller regions.
+\end{theorem}
+
+\begin{proof}\leanok
+    Tensor the site left inverses and transport them to the
+    endpoint-pair coordinates. This gives an inverse on the image
+    of $F$. The inverse-image assertion follows from injectivity.
+    By $F\Omega=\psi$, nonvanishing is equivalent to that of
+    $\Omega$, which holds precisely when every bond dimension is
+    positive.
+\end{proof}

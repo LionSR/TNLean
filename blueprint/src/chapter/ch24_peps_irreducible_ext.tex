@@ -1,0 +1,16 @@
+\begin{theorem}[Equality on irreducible summands]
+    \label{thm:peps_irreducible_ext}
+    \lean{Representation.linearMap_ext_on_irreducible}
+    \leanok
+    \uses{thm:peps_isotypic_projectors}
+    Let $\rho$ be a finite-dimensional representation of a finite group
+    over a field in which $|G|$ is nonzero. Two endomorphisms are equal
+    if they agree on every irreducible subrepresentation of $\rho$.
+    This is the decomposition principle behind the block calculations
+    in \cite[Lemma~4.4]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Maschke's theorem expresses the representation space as an internal
+    direct sum of irreducible subrepresentations. Agreement on these
+    summands implies agreement on their span, which is the whole space.
+\end{proof}

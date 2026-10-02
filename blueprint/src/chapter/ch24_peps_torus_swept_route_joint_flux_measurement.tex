@@ -1,0 +1,43 @@
+\begin{definition}[Actual reunion measurement region]%
+    \label{def:peps_torus_swept_route_reunion_region}
+    \lean{TNLean.PEPS.torusSweptRouteReunionRegion}
+    \leanok
+    \uses{def:peps_torus_swept_route_partner_walks}
+    On a torus with periods at least eight and seven, take the translated
+    six-site two-plaquette block whose lower-left site is $(0,-2)$
+    relative to the translation vertex. It contains the actual final
+    B reunion connector and both partner loops.
+\end{definition}
+
+\begin{theorem}[Original-spin measurement of the derived reunion class]%
+    \label{thm:peps_torus_swept_route_joint_flux_measurement}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptRoute_jointClass_trivial_iff,
+        TNLean.PEPS.IsGIsometric.exists_torusSweptRouteReunion_physicalMeasurement}
+    \leanok
+    \uses{def:peps_torus_swept_route_reunion_region,
+        thm:peps_torus_swept_route_reunion_holonomy,
+        thm:peps_regular_inserted_walk_holonomy,
+        thm:peps_closed_walk_class_physical_measurement,
+        thm:peps_physical_cut_column_action}
+    Let every original site tensor be regular G-isometric.
+    There is one complete orthogonal projective measurement on the six
+    original spins, chosen before both flux labels and all crossing,
+    exterior and boundary data, whose conjugacy-class outcome on every
+    actual final-route boundary column is the class of
+    $ghg^{-1}h^{-1}$. The same eigenaction holds on the actual physical
+    cut coefficient matrix. The identity-class outcome occurs precisely
+    when $g$ and $h$ commute.
+    The additional outcome is the orthogonal complement of the physical
+    block image and annihilates these columns.
+    This is an auxiliary finite-torus measurement for
+    \cite[\S6.6, local lines 2387--2415]{Schuch2010PEPS}; implementation of
+    the preceding twelve physical steps is a separate statement.
+\end{theorem}
+
+\begin{proof}\leanok
+    Restrict the actual reunion walk to its six-site induced graph and
+    apply the closed-walk class measurement there. Arbitrary crossing
+    and exterior operators do not alter its holonomy. The derived joint
+    holonomy is conjugate to the displayed commutator. The all-boundary
+    column action gives the physical cut action by finite contraction.
+\end{proof}

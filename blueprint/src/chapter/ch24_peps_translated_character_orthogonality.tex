@@ -1,0 +1,62 @@
+\begin{theorem}[Arbitrarily translated irreducible character pairings]
+    \label{thm:peps_translated_character_pairing}
+    \lean{Representation.sum_character_inv_mul_character_translate,
+      Representation.sum_character_inv_mul_character_translate_eq_zero}
+    \leanok
+    \uses{thm:peps_isotypic_projectors}
+    Let $G$ be a finite group, and let $\sigma,\tau$ be finite-dimensional
+    irreducible complex representations. Write $d_\sigma=\dim\sigma$.
+    For all $a,b\in G$,
+    \[
+      \sum_{g\in G}\chi_\sigma((ag)^{-1})\chi_\tau(bg)
+      =\begin{cases}
+        \dfrac{|G|}{d_\sigma}\chi_\tau(ba^{-1}),&\sigma\cong\tau,\\
+        0,&\sigma\not\cong\tau.
+      \end{cases}
+    \]
+    In particular, if $\chi_\sigma\ne\chi_\tau$, every such translated pairing
+    vanishes. This is an auxiliary group identity for
+    \cite[charge-detection proof]{Schuch2010PEPS}, lines 2464--2486;
+    it makes no assertion about a measurement on the original spins.
+\end{theorem}
+\begin{proof}\leanok
+    Change variables from $g$ to $ag$. Apply character-weighted Schur
+    orthogonality to $\sum_g\chi_\sigma(g^{-1})\tau(g)$, multiply by
+    $\tau(ba^{-1})$, and take the trace. The sum is $|G|/d_\sigma$ times the
+    identity when the irreducible representations are equivalent, and zero
+    otherwise. Equality of irreducible characters is equivalent to equivalence
+    of their representations.
+\end{proof}
+
+\begin{theorem}[Translated charge-vector orthogonality and normalization]
+    \label{thm:peps_translated_character_inner_product}
+    \lean{Representation.sum_star_character_mul_character_translate,
+      Representation.sum_star_character_mul_character_translate_eq_zero,
+      Representation.sum_star_character_mul_character_self}
+    \leanok
+    \uses{thm:peps_translated_character_pairing,
+      thm:peps_unitary_character_adjoint}
+    Under the preceding hypotheses, suppose $\sigma$ is unitary. Then
+    \[
+      \sum_{g\in G}\overline{\chi_\sigma(ag)}\chi_\tau(bg)
+      =\begin{cases}
+        \dfrac{|G|}{d_\sigma}\chi_\tau(ba^{-1}),&\sigma\cong\tau,\\
+        0,&\sigma\not\cong\tau.
+      \end{cases}
+    \]
+    Thus distinct irreducible characters give orthogonal translated vectors,
+    independently of $a$ and $b$. Each translated vector of one unitary
+    irreducible representation has squared norm
+    \[
+        \sum_{g\in G}|\chi_\sigma(ag)|^2=|G|.
+    \]
+    These are the auxiliary character relations used in
+    \cite[charge-detection proof]{Schuch2010PEPS}, lines 2464--2486.
+    Vectors belonging to the same irreducible representation need not be
+    orthogonal for different translations.
+\end{theorem}
+\begin{proof}\leanok
+    Replace the conjugated character by its value at the inverse group
+    element. For the norm, put $\tau=\sigma$ and $b=a$; the factor
+    $\chi_\sigma(1)=d_\sigma$ cancels the irreducible dimension.
+\end{proof}

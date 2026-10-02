@@ -1,0 +1,37 @@
+\begin{theorem}[Restriction to the physical support]%
+    \label{thm:peps_physical_support_section}
+    \lean{TNLean.PEPS.exists_physicalSupport_section,
+        TNLean.PEPS.physicalSupport_section_unique,
+        TNLean.PEPS.exists_physicalSupport_isometry_section}
+    \leanok
+    Let $T:W\to H$ be a linear tensor map between Hilbert spaces, with
+    $W$ finite-dimensional. Write $H_T=\operatorname{ran}T$ and let
+    $\widetilde T:W\to H_T$ be the same map with its codomain restricted.
+    The inclusion $I:H_T\to H$ is an isometry and
+    $I\widetilde T=T$. There is a unique linear map $L:H_T\to W$ with
+    \begin{align}
+        \widetilde TL&=\mathrm{id}_{H_T},
+        &\operatorname{ran}L&=(\ker T)^\perp.
+    \end{align}
+    It satisfies
+    \begin{align}
+        L\widetilde T=\mathrm{id}_W-P_{\ker T}
+            =P_{(\ker T)^\perp}.
+    \end{align}
+    This is the physical-support reduction of
+    \cite[Observation~2.4]{Schuch2010PEPS}, stated using the intrinsic
+    initial virtual space. The existence of $L$ requires only a vector
+    space structure on the physical codomain.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose any right inverse $L_0$ of $\widetilde T$ and set
+    $L=(\mathrm{id}_W-P_{\ker T})L_0$. Since $T$ vanishes on its kernel,
+    $\widetilde TL=\mathrm{id}_{H_T}$. For any $x\in W$,
+    $x-L_0\widetilde Tx\in\ker T$. Orthogonal projection then gives
+    $L\widetilde Tx=x-P_{\ker T}x$, and the range of $L$ is
+    $(\ker T)^\perp$. Any two sections with range in this orthogonal
+    complement differ by a vector in both $\ker T$ and $(\ker T)^\perp$,
+    and hence are equal. The inclusion of a Hilbert subspace preserves
+    its inherited inner product.
+\end{proof}

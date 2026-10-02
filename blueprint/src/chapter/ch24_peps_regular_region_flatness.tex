@@ -1,0 +1,61 @@
+\begin{theorem}[Local regular parent constraints force trivial holonomy]%
+    \label{thm:peps_regular_region_parent_flatness}
+    \lean{TNLean.PEPS.regionGroundSpace_regularTwisted_eq_of_internalGaugeFlat,
+        TNLean.PEPS.regionPhysicalMap_mem_regularProjectorTwistedRange,
+        TNLean.PEPS.regionPhysicalMap_leftInverse_on_regularGroundSpace,
+        TNLean.PEPS.regularProjectorOpenRegionRange_apply_eq_zero_of_cycle_ne_one,
+        TNLean.PEPS.regionPhysicalMap_apply_eq_zero_of_mem_regularGroundSpace_of_cycle_ne_one,
+        TNLean.PEPS.regionPhysicalMap_slice_apply_eq_zero_of_parent_annihilates,
+        TNLean.PEPS.disjoint_regularProjectorRegion_ranges_of_cycleResidual_ne_one,
+        TNLean.PEPS.disjoint_regionGroundSpace_regularTwisted_of_cycleResidual_ne_one,
+        TNLean.PEPS.regularWalkHolonomy_eq_one_of_mem_regionGroundSpace_of_mem_twisted,
+        TNLean.PEPS.regularWalkHolonomy_eq_one_of_regionParent_annihilates_twistedState}
+    \leanok
+    \uses{def:peps_region_ground_space, def:peps_region_parent_interaction}
+    Consider a finite graph with site-dependent regular $G$-injective
+    tensors. Let $R$ induce a connected graph, and insert regular
+    bond operators $u_e$ at their ordered heads. If an internal
+    closed walk has nonidentity holonomy, the original regional
+    ground space and the inserted regional ground space have zero
+    intersection. More generally, a nonidentity spanning-tree cycle
+    residual already forces this separation.
+
+    Every regional ground vector, exposed by a local $G$-injective
+    inverse, vanishes at half-edge coordinates whose cycle labels
+    are not all the identity. In particular, this holds for every
+    complementary slice of an arbitrary vector satisfying an
+    original regional parent constraint. No inserted-bond
+    representation of that vector is assumed.
+
+    Consequently, if a nonzero inserted global PEPS vector is
+    annihilated by an original regional parent term on $R$, every
+    internal closed-walk holonomy in $R$ is the identity.
+    If a vertex gauge removes all internal inserted operators,
+    the original and inserted regional ground spaces coincide:
+    crossing operators only relabel the boundary condition.
+    This last assertion requires only coefficient invariance.
+    No $G$-isometry is assumed. This is a necessary local implication
+    in the closure argument of \cite[Theorem~5.5]{Schuch2010PEPS};
+    it does not assert that every parent-kernel vector admits an
+    inserted-bond description.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply a local $G$-injective inverse at every vertex of $R$.
+    This exposes the canonical regular half-edge coordinates, and
+    applying the original local coefficient maps restores each
+    regional ground vector. In spanning-tree coordinates, the
+    uninserted contraction is supported on identity cycle labels.
+    The inserted contraction is supported on simultaneous
+    conjugates of its cycle residuals. A nonidentity residual makes
+    these supports disjoint. Since the local coordinate map has a
+    left inverse on the regional ground spaces, their physical
+    intersection is also zero.
+
+    A common nonzero regional vector therefore forces all residuals
+    to be the identity. Evaluating the actual closed-walk word at
+    these residuals gives identity holonomy. Finally choose a
+    nonzero physical slice of the inserted global vector. It belongs
+    to the inserted regional ground space by contraction, and to
+    the original one by the original parent constraint.
+\end{proof}

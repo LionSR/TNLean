@@ -1,0 +1,39 @@
+\begin{theorem}[Connected complement of a contiguous simply connected block]%
+    \label{thm:peps_torus_simply_connected_complement}
+    \lean{TNLean.PEPS.torusGraph_compl_connected_of_isSimplyConnected,
+        TNLean.PEPS.nonempty_torusRegionBoundaryEdge_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_torus_integer_cell_lift,
+        thm:peps_integer_exterior_collar_paths,
+        thm:peps_integer_boundary_contour_connected}
+    Let both torus circumferences be at least three. Let $R$ be a finite
+    set of sites whose induced nearest-neighbour graph is connected and
+    whose actual closed-cell realization is simply connected. Then the
+    induced graph on the complementary sites is connected, and at least
+    one bond crosses between $R$ and its complement.
+
+    Consequently, spanning trees and roots on both sides of the cut,
+    and a numbering of the crossing bonds by $n+1$ labels, may be chosen
+    without further hypotheses. Occupied graph connectivity is distinct
+    from simple connectedness of the closed-cell union: cells meeting
+    only at a corner need not be connected by lattice bonds. This is the
+    contiguous-block geometry used in Section~6.3 of
+    \cite{Schuch2010PEPS}, rather than a claim that every simply connected
+    closed-cell subset is a contiguous block.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_integer_cell_lift,
+        thm:peps_integer_exterior_collar_paths,
+        thm:peps_integer_boundary_contour_connected}
+    Lift the occupied region to a simply connected finite integer-cell
+    union whose exterior collar projects outside the region. The exposed
+    contour joins its nearby missing centres within the safe exterior
+    graph. These joins yield complementary lattice walks between all
+    outside endpoints of crossing bonds. Every complementary site has
+    a walk to an occupied site in the full torus graph; its first crossing
+    joins it, within the complement, to such an endpoint. Hence all
+    complementary sites are connected. The collar also supplies a
+    complementary site, so a walk from an occupied site crosses at least
+    one boundary bond.
+\end{proof}

@@ -1,0 +1,53 @@
+\begin{definition}[Positive transport through an injective region map]%
+    \label{def:peps_injective_region_parent_transport}
+    \lean{TNLean.PEPS.injectiveRegionParentTransport}
+    \leanok
+    \uses{def:peps_injective_vertex_coordinates}
+    Let $F_R$ be the product of injective site maps and let $L_R$ be the
+    product of their left inverses. For a positive virtual interaction $H$,
+    define
+    \[
+        \widetilde H_R=L_R^\dagger H L_R
+            +(I-F_RL_R)^\dagger(I-F_RL_R).
+    \]
+    The second summand constrains a physical ground vector to the image
+    of the product site map. This is a regional consequence of the
+    inverse-adjoint deformation argument in
+    \cite[Section IV.C.1]{Cirac2021Matrix}. For rectangular site maps,
+    the bare printed interaction leaves unused physical directions in
+    its kernel; the correction is recorded in
+    \cite{gap:cpgsv21_injective_parent_reconstruction}.
+\end{definition}
+
+\begin{theorem}[Exact kernel under injective physical transport]%
+    \label{thm:peps_injective_region_parent_transport}
+    \lean{TNLean.PEPS.injectiveRegionParentTransport_posSemidef,
+        TNLean.PEPS.injectiveRegionParentTransport_mulVec_eq_zero_iff,
+        TNLean.PEPS.ker_injectiveRegionParentTransport,
+        TNLean.PEPS.isRegionParentInteraction_injectiveRegionParentTransport}
+    \leanok
+    \uses{def:peps_injective_region_parent_transport,
+        thm:peps_injective_vertex_reconstruction,def:peps_region_parent_interaction}
+    The transported interaction is positive and satisfies
+    \[
+        \ker\widetilde H_R=F_R(\ker H).
+    \]
+    Equivalently, $\widetilde H_R\psi=0$ precisely when
+    $HL_R\psi=0$ and $F_RL_R\psi=\psi$.
+    In particular, if $\ker H$ is the genuine virtual regional bond
+    space, then $\widetilde H_R$ is a parent interaction with kernel
+    $\mathcal G_R$. The site maps may be rectangular. The reconstruction
+    penalty acts on the entire region $R$; the assertion does not
+    establish locality of a sum of edge interactions.
+\end{theorem}
+
+\begin{proof}\leanok
+    Both summands are positive. A vector in the kernel of their sum
+    therefore lies in the kernel of each summand. Since
+    $L_RF_R=I$, the adjoint $L_R^\dagger$ is injective, so the first
+    condition is equivalent to $HL_R\psi=0$. The kernel of the second
+    summand is the kernel of $I-F_RL_R$. Thus every physical ground
+    vector is the image of a virtual ground vector, and conversely.
+    The regional factorization $T_R=F_RB_R$ identifies the transported
+    virtual bond range with $\mathcal G_R$.
+\end{proof}

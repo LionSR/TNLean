@@ -178,7 +178,10 @@ coordinates in cyclic order. -/
   rw [Equiv.piCongrLeft_apply_apply]
   rfl
 
-private theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
+/-- Replacing coordinates inside a subwindow of the active block leaves the spectator
+configuration unchanged. This is the finite-interval geometry in Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12). -/
+theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
     (hWN : W ≤ N) (s : Fin N) (q : Fin W)
     (hqR : q.val + R ≤ W) (ω : Cfg d R) (σ : Cfg d W)
     (τ : Cfg d (N - W)) :
@@ -304,7 +307,10 @@ private theorem cyclicCfg_join_cyclicActiveBlock {N W R : ℕ}
     rw [dite_eq_right hnot]
     exact cyclicActiveBlockConfigEquiv_symm_apply_spectator hWN s σ τ r
 
-private theorem extractWindow_join_cyclicActiveBlock {N W R : ℕ}
+/-- Restricting a joined active-block configuration to a subwindow agrees with
+restriction inside the active block. Source: Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12). -/
+theorem extractWindow_join_cyclicActiveBlock {N W R : ℕ}
     (hWN : W ≤ N) (s : Fin N) (q : Fin W) (hqR : q.val + R ≤ W)
     (σ : Cfg d W) (τ : Cfg d (N - W)) :
     extractWindow R (cyclicForwardSite s q.val)

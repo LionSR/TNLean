@@ -1,0 +1,68 @@
+\begin{theorem}[The Fourier and single-copy bond dimensions]%
+    \label{thm:peps_fourier_bond_dimensions}
+    \lean{TNLean.PEPS.card_eq_sum_sq_of_fourierBasis,
+        TNLean.PEPS.bondDimensions_of_fourierBasis}
+    \leanok
+    \uses{thm:peps_regular_unitary_fourier}
+    Suppose the regular virtual space has an orthonormal basis indexed by
+    $\{(i,a,u):1\le a,u\le d_i\}$. Then
+    $|G|=\sum_i d_i^2$. If every $d_i$ is positive, the dimension of
+    the single-copy virtual space is
+    \begin{align}
+        D_{\mathrm{single}}=\left|\bigsqcup_i\{1,\ldots,d_i\}\right|
+            =\sum_i d_i\le |G|.
+        \label{eq:peps_single_copy_bond_dimension}
+    \end{align}
+    Moreover, $D_{\mathrm{single}}<|G|$ if and only if some $d_i>1$.
+    These are the dimension formulas in
+    \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Count the orthonormal basis: sector $i$ has $d_i$ row labels and
+    $d_i$ multiplicity labels. The single-copy space has $d_i$ labels
+    in that sector. Positivity gives $d_i\le d_i^2$, with strict
+    inequality exactly when $d_i>1$. Sum these inequalities; if no
+    sector has dimension greater than one, every $d_i=1$ and the two
+    sums agree.
+\end{proof}
+
+\begin{theorem}[Bond dimensions of the actual finite-torus physical equivalence]%
+    \label{thm:peps_torus_multiplicity_one_bond_dimensions}
+    \lean{TNLean.PEPS.exists_isometric_multiplicityOneSemiRegular_torusState_bondDimensions}
+    \leanok
+    \uses{thm:peps_torus_multiplicity_one_semiregular_equivalence,
+        thm:peps_fourier_bond_dimensions,
+        thm:peps_semiregular_dimension_bound,
+        thm:peps_weighted_torus_norm}
+    For every finite group and every torus with positive periods, the
+    multiplicity-one semi-regular representation, actual weighted torus
+    state, and ambient local physical isometry of the finite-torus
+    equivalence theorem can be chosen with
+    \begin{align}
+        D_{\mathrm{regular}}=|G|&=\sum_i d_i^2,\\
+        D_{\mathrm{single}}&=\sum_i d_i\le |G|.
+    \end{align}
+    The same virtual space has smallest dimension among all complex
+    finite-dimensional semi-regular representations: every such representation
+    $\sigma$ on $H$ satisfies $D_{\mathrm{single}}\le\dim H$.
+    The actual weighted state is nonzero and has squared norm $|G|^{N+1}$,
+    where $N$ is the number of torus sites.
+    The reduction is strict if and only if some $d_i>1$. All irreducible
+    representations, their dimensions, and the physical transformation
+    are obtained from the group, with no supplied enumeration or Fourier
+    decomposition. This is the dimension statement for the finite-torus
+    realization of \cite[Section~7]{Schuch2010PEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    Take the actual physical-equivalence witnesses. Their Fourier matrix
+    satisfies $Q^\dagger Q=I$, and the regular intertwining identity
+    at the group identity gives $QQ^\dagger=I$. Thus its two coordinate
+    sets have the same cardinality, giving $|G|=\sum_i d_i^2$.
+    Count the single-copy labels and apply the positive dimension
+    inequalities in (\ref{eq:peps_single_copy_bond_dimension}).
+    Finally, the chosen sectors are irreducible and have distinct characters.
+    Their direct sum therefore has dimension at most that of every
+    semi-regular representation, by the distinct irreducible dimension bound.
+    The same physical isometry transfers the exact regular-state norm and
+    nonvanishing to the chosen weighted state.
+\end{proof}

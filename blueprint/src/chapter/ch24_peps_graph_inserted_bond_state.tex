@@ -1,0 +1,84 @@
+\begin{definition}[Actual closed contractions with inserted bond matrices]%
+    \label{def:peps_graph_inserted_bond_state}
+    \lean{TNLean.PEPS.graphInsertedBondNetwork}
+    \leanok
+    \uses{def:peps_graph_bond_contraction}
+    Let $\Gamma$ be a finite simple graph with ordered endpoints, let $X$ be
+    a finite virtual alphabet, and let $P_v$ be a physical alphabet at each
+    vertex. For site coefficients $A_v$ and matrices $K_e$, define
+    \begin{align}
+        \Psi_K(\sigma)
+        =\sum_{\zeta:E(\Gamma)\to X\times X}
+          \left(\prod_e(K_e)_{\zeta_{h,e},\zeta_{t,e}}\right)
+          \prod_v A_v(\zeta|_v,\sigma_v).
+    \end{align}
+    Here $\zeta|_v$ reads the head or tail label at the actual incidence.
+    Thus each bond matrix has row at the head and column at the tail.
+    This is an auxiliary inserted-bond extension of the closed contraction
+    calculation in \cite[Section~7]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{theorem}[Identity and regular insertions in the actual contraction]%
+    \label{thm:peps_graph_inserted_bond_recovery}
+    \lean{TNLean.PEPS.graphInsertedBondNetwork_one,
+        TNLean.PEPS.graphInsertedBondNetwork_leftRegular_eq_labels,
+        TNLean.PEPS.graphInsertedBondNetwork_leftRegular_eq_twisted,
+        TNLean.PEPS.graphInsertedBondNetwork_leftRegular_eq_stateCoeff}
+    \leanok
+    \uses{def:peps_graph_inserted_bond_state}
+    When every $K_e=I$, the contraction is the ordinary closed graph
+    contraction. For $X=G$ and $K_e=L(u_e)$, where $L$ is the left-regular
+    representation, it is exactly the ordinary contraction with the head
+    label changed from $\eta_e$ to $u_e\eta_e$ and the tail label retained.
+    This equality holds for vertex-dependent physical alphabets. For uniform
+    numbered alphabets it is exactly the original twisted tensor-network
+    coefficient, with the existing oriented regular insertion convention of
+    \cite[Section~6.4]{Schuch2010PEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The identity matrix constrains the two endpoint labels to agree.
+    The regular matrix instead imposes $\zeta_{h,e}=u_e\zeta_{t,e}$.
+    Summing the constrained head labels leaves precisely the ordinary
+    tail-label sum and the stated site coefficients.
+\end{proof}
+
+\begin{theorem}[Weighted averaging contractions with arbitrary bond insertions]%
+    \label{thm:peps_graph_inserted_averaging_bond_state}
+    \lean{TNLean.PEPS.graphInsertedBondNetwork_dressedAveragingSite,
+        TNLean.PEPS.graphInsertedBondNetwork_dressedAveragingSite_group,
+        TNLean.PEPS.graphInsertedBondNetwork_averagingSite_group}
+    \leanok
+    \uses{def:peps_graph_inserted_bond_state,
+        thm:peps_monoid_hom_commuting_weight}
+    Let $G$ be finite and $U$ a matrix representation on $\mathbb C^X$.
+    Dress the averaging site by the same virtual matrix $W$ on each leg.
+    Regroup the physical labels into head-tail bond pairs $\beta_e$. Then
+    \begin{align}
+        \Psi_{U,W,K}(\beta)
+        =|G|^{-|V|}\sum_{q:V\to G}
+          \prod_e
+          [U(q_h)WK_eWU(q_t^{-1})]_{\beta_{h,e},\beta_{t,e}}.
+    \end{align}
+    This identity holds for arbitrary $W$ and $K_e$.
+    If $W$ commutes with every $U(g)$ and $K_e=U(u_e)$, it becomes
+    \begin{align}
+        \Psi_{U,W,u}(\beta)
+        =|G|^{-|V|}\sum_{q:V\to G}
+          \prod_e[W^2U(q_hu_eq_t^{-1})]_{\beta_{h,e},\beta_{t,e}}.
+    \end{align}
+    Taking $W=I$ gives the ordinary averaging-site contraction.
+    No connectedness or compatibility among the group insertions is required.
+    These finite-simple-graph coefficient identities extend the calculation in
+    \cite[Section~7]{Schuch2010PEPS}; the normalized site convention is recorded
+    in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    No physical isometry for arbitrary $K_e$ is asserted.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the independent local averages and regroup the incidence products
+    by edges. The two independent virtual endpoint sums multiply
+    $U(q_h)W$, $K_e$, and $WU(q_t^{-1})$ in that order.
+    For representation insertions, commute the weights and combine the
+    representation factors to obtain $W^2U(q_hu_eq_t^{-1})$.
+\end{proof}

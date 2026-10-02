@@ -1,0 +1,67 @@
+\section{Local operators on the invariant boundary}%
+\label{sec:peps_regular_boundary_local_algebra}
+
+The invariant boundary of \cite[Theorem~6.9]{Schuch2010PEPS},
+local source lines 2043--2076, imposes a constraint on which
+operators on the original boundary legs can act on its support.
+The following auxiliary classification concerns that constraint.
+It gives no estimate on the spatial decay of a boundary Hamiltonian.
+
+\begin{theorem}[The local algebra compatible with invariant support]%
+    \label{thm:peps_regular_boundary_local_algebra}
+    \lean{TNLean.PEPS.regularBoundaryLocalMap,
+        TNLean.PEPS.regularBoundaryLocalMap_preserves_invariants_iff,
+        TNLean.PEPS.regularLeg_commute_iff_entries,
+        TNLean.PEPS.regularBoundaryLocalMap_preserves_invariants_iff_commute}
+    \leanok
+    \uses{thm:peps_regular_boundary_invariants}
+    Let $I,J$ be disjoint finite sets of regular boundary legs,
+    with $J\ne\varnothing$. Let $\mathcal H_I=\mathbb C^{G^I}$
+    and $\mathcal H_J=\mathbb C^{G^J}$, and let $L_I(g)$ and
+    $L_J(g)$ be the simultaneous left translations.
+    For every linear operator $A$ on $\mathcal H_I$, the following
+    conditions are equivalent:
+    \begin{enumerate}
+        \item $A\otimes I$ preserves the invariant subspace of
+            $L_I\otimes L_J$;
+        \item $A L_I(g)=L_I(g)A$ for every $g\in G$;
+        \item $A(ga,gc)=A(a,c)$ for every $g\in G$ and $a,c\in G^I$.
+    \end{enumerate}
+    Self-adjointness of $A$ is not required.
+\end{theorem}
+
+\begin{proof}\leanok
+    For $c\in G^I$, the vector
+    \[
+        v_c=\sum_{g\in G}|gc\rangle\otimes|g,\ldots,g\rangle
+    \]
+    is globally invariant. The coefficient of
+    $(A\otimes I)v_c$ at $(a,(g,\ldots,g))$ is $A(a,gc)$:
+    the nonempty complementary set distinguishes the common
+    translation $g$. If this image is invariant, comparison of
+    its coefficients at $(a,(1,\ldots,1))$ and
+    $(ga,(g,\ldots,g))$ gives $A(ga,gc)=A(a,c)$.
+    Conversely, this matrix identity and a change of summation
+    variable show that $A\otimes I$ preserves every invariant
+    vector. Comparing the two compositions on coordinate vectors
+    identifies the same matrix identity with commutation.
+\end{proof}
+
+\begin{corollary}[A local matrix-unit obstruction]%
+    \label{cor:peps_regular_boundary_local_matrix_unit}
+    \lean{TNLean.PEPS.not_regularBoundaryLocalMap_single_preserves_invariants}
+    \leanok
+    \uses{thm:peps_regular_boundary_local_algebra}
+    Suppose $G$ is nontrivial and both $I,J$ are nonempty.
+    The projector $|1,\ldots,1\rangle\langle1,\ldots,1|$
+    on the selected legs, extended by the complementary identity,
+    does not preserve the global invariant space.
+    Thus the full matrix algebra on a nonempty proper subset
+    of the original boundary legs does not restrict to that space.
+\end{corollary}
+
+\begin{proof}\leanok
+    Choose $g\ne1$. The projector has diagonal entry one at the
+    identity configuration and zero at its common translate by $g$.
+    Apply the preceding classification.
+\end{proof}

@@ -1,0 +1,44 @@
+\begin{theorem}[Four partner fluxes in the actual swept presentations]%
+    \label{thm:peps_torus_swept_string_endpoint_holonomy}
+    \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial,
+        TNLean.PEPS.torusSweptPatchEndpoint_mem_sweptStringVertices,
+        TNLean.PEPS.regularWalkHolonomy_torusSweptStringOperators}
+    \leanok
+    \uses{def:peps_torus_swept_string_assignment,
+        def:peps_torus_swept_patch_endpoint_geometry,
+        def:peps_torus_swept_patch_endpoint_walks,
+        thm:peps_regular_walk_holonomy}
+    Let $w\geq7$ and $H\geq6$. Complete the displayed patch by the
+    four actual clockwise plaquette loops based at
+    \begin{align}
+        A_2&=(x-1,y+1),& A_1&=(x+3,y+1),\\
+        B_1&=(x+1,y+1),& B_2&=(x+1,y-2).
+    \end{align}
+    For the literal initial assignment their holonomies, in this order,
+    are $(g^{-1},g,h,h^{-1})$.
+    Among these four base vertices, precisely $B_1$ lies in either
+    swept set $S_1$ or $S_2$. For either swept assignment the actual
+    clockwise holonomies are
+    $(g^{-1},g,ghg^{-1},h^{-1})$.
+    These are auxiliary finite-torus identities for the virtual
+    string-deformation figure in \cite[Section~6.6]{Schuch2010PEPS},
+    following the string-motion equation, lines 2361--2386.
+    % Source label: eq:anyons:fluxon-braiding-lazy.
+    They do not identify the prescribed physical braid.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_swept_string_transport,
+        thm:peps_zmod_small_difference,
+        thm:peps_torus_swept_patch_endpoint_geometry,
+        def:peps_torus_swept_patch_endpoint_walks,
+        thm:peps_torus_plaquette_holonomy,thm:peps_regular_walk_holonomy}
+    For a clockwise plaquette loop, multiply its four directed
+    transports in reverse traversal order. Substituting the actual
+    right and up tables yields the four initial values.
+    The period bounds distinguish every required integer offset,
+    proving that only $B_1$ belongs to either sweep.
+    Closed-loop gauge covariance is
+    $H(u^{(j)},p)=k_{\rm base}^{-1}H(u^{(0)},p)k_{\rm base}$.
+    Hence only the loop at $B_1$ is conjugated, by $g$.
+\end{proof}
