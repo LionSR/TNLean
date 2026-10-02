@@ -9,9 +9,13 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Structure
 
 import TNLean.MPS.Structure.BlockPermutation
+import TNLean.MPS.Structure.ContinuousTraceQuotientMultiplication
+import TNLean.MPS.Structure.ContinuousTraceQuotientUnit
 import TNLean.MPS.Structure.FiniteRingTraceAlgebra
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
 import TNLean.MPS.Structure.InvariantSubspaceDecomp.Basic
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import TNLean.MPS.Structure.PrimitivityBridge
+import TNLean.MPS.Structure.TraceQuotientAlgebraRecovery
+import TNLean.MPS.Structure.TraceQuotientTripleContinuity

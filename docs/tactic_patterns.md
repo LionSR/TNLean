@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Associativity and units from an injective multiplicative map — promoted
+- **Pattern:** transfer associativity and the two unit identities through a
+  bijective coordinate identification with a matrix algebra.
+- **Seen:** the associative product in
+  `TNLean/MPS/Structure/TraceQuotientAlgebraRecovery.lean` and both unit
+  identities in `TNLean/MPS/Structure/ContinuousTraceQuotientUnit.lean`.
+- **Abstraction:** install the coordinate product as a local `Mul` and the
+  recorded unit as a local `One`. Use Mathlib's
+  `Function.Injective.semigroup` and `Function.Injective.mulOneClass`, then
+  `mul_assoc`, `one_mul`, and `mul_one`. No additional transport lemma is needed.
+- **Refactor:** these three identities use the existing Mathlib transfers.
+
 ### bilinear extension from spanning tensor letters — promoted
 - **Pattern:** extend an identity on pairs of tensor letters first in one
   matrix argument and then in the other.
@@ -4097,3 +4109,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   coefficients when possible; a matrix conjugation linear equivalence may
   contain the common cancellation when a scalar action is also present.
 - **Notes:** both occurrences are in one module, below the promotion threshold.
+
+### Inversion of continuous matrix families on their unit locus — candidate
+- **Pattern:** turn an invertible matrix into a unit, apply continuity of scalar
+  inverse to its determinant, and compose `continuousAt_matrix_inv` with the
+  continuous matrix family.
+- **Seen:** `continuous_traceQuotientProductCoordinates` in
+  `TNLean/MPS/Structure/ContinuousTraceQuotientMultiplication.lean` and the
+  private local-unit argument in
+  `TNLean/MPS/Structure/ContinuousTraceQuotientUnit.lean`.
+- **Possible simplification:** use `nonsing_inv_eq_ringInverse` and Mathlib's
+  `NormedRing.inverse_continuousAt` directly on the matrix unit, as in
+  `continuous_polarIso_family_of_injective`. These two determinant-based
+  occurrences are below the promotion threshold.

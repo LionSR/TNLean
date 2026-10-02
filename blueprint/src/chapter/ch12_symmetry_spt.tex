@@ -1977,6 +1977,196 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     by its nonzero $N$th power. The zero-dimensional case is immediate.
 \end{proof}
 
+\begin{definition}[Coordinates for the trace-quotient product]
+    \label{def:spt_trace_quotient_product_coordinates}
+    \lean{Matrix.traceQuotientProductCoordinates}
+    \leanok
+    Let $G\in M_d(\C)$ be the complex-bilinear two-site trace form,
+    let $F:\C^r\to\C^d$ be a coefficient section, and put $C=GF$.
+    For contracted three-site columns $R:\C^{r\times r}\to\C^d$, set
+    \[
+        M=(C^\dagger C)^{-1}C^\dagger R,
+        \qquad
+        \mu(x,y)=M(x_a y_b)_{(a,b)}.
+    \]
+    The positive Hermitian matrix $C^\dagger C$ serves to invert the
+    section. No positivity of the bilinear trace form $G$ is assumed.
+\end{definition}
+
+\begin{theorem}[A fixed section of a constant-rank trace form]
+    \label{thm:spt_trace_quotient_fixed_section}
+    \lean{Matrix.exists_fixedSection_of_rank,
+        Matrix.exists_open_fixedSection_range}
+    \leanok
+    Let $G(t)$ be a continuous matrix family of constant rank $r$.
+    At any base point $t_0$ there is a coefficient section $F$ such
+    that $G(t_0)F$ is injective. For this fixed $F$, there is an open
+    neighborhood $S$ of $t_0$ on which $G(t)F$ remains injective and
+    has the same range as $G(t)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose coordinates on the range of $G(t_0)$ and lift them through
+    $G(t_0)$. The Hermitian Gram matrix of the resulting section is
+    invertible. Invertibility persists on an open neighborhood.
+    The section range is contained in the full range and both have
+    dimension $r$, so they coincide there.
+\end{proof}
+
+
+
+\begin{theorem}[Continuous multiplication coefficients at constant rank]
+    \label{thm:spt_trace_quotient_continuous_product}
+    \lean{Matrix.continuous_traceQuotientProductCoordinates,
+        Matrix.exists_open_continuous_traceQuotientProductCoordinates,
+        Matrix.exists_local_continuous_traceQuotientProductCoordinates}
+    \leanok
+    \uses{def:spt_trace_quotient_product_coordinates,
+        thm:spt_trace_quotient_fixed_section}
+    Suppose $G(t)$ has constant rank $r$, and for each fixed section
+    $F$ the contracted columns $R_F(t)$ depend continuously on $t$.
+    Then $F$ can be chosen so that the multiplication coefficients
+    $(C(t)^\dagger C(t))^{-1}C(t)^\dagger R_F(t)$ are continuous on
+    an open neighborhood of the base point. The conclusion includes
+    the section and its open neighborhood.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the preceding fixed section. Its Gram matrix is positive
+    definite throughout the neighborhood. Matrix inversion and
+    multiplication are continuous there.
+\end{proof}
+
+\begin{definition}[Contracted three-site trace columns]
+    \label{def:spt_trace_quotient_triple_columns}
+    \lean{Matrix.traceQuotientTripleColumns}
+    \leanok
+    For an ambient tensor $B$ and a coefficient section $F$, define
+    \[
+        R_F(B)_{j,(a,b)}
+        =\tr\left[
+            \left(\sum_i F_{ia}B^i\right)
+            \left(\sum_k F_{kb}B^k\right)B^j
+            \right].
+    \]
+\end{definition}
+
+\begin{theorem}[Contraction of finite-ring trace data]
+    \label{thm:spt_trace_quotient_contraction}
+    \lean{Matrix.traceQuotientSection_pair,
+        Matrix.traceQuotientSection_triple,
+        Matrix.traceQuotientProductColumns_triple,
+        Matrix.continuous_traceQuotientTripleColumns}
+    \leanok
+    \uses{def:spt_trace_quotient_triple_columns}
+    Write $Qx=\sum_i(Fx)_i A^i$ and
+    $\Phi_A(X)=(\tr(XA^j))_j$.
+    If the two- and three-site traces of $B$ are proportional to those
+    of $A$, with constants $\alpha_2,\alpha_3$, then
+    \[
+        GFx=\alpha_2\Phi_A(Qx),
+        \qquad
+        R_F(B)(x_a y_b)_{(a,b)}
+        =\alpha_3\Phi_A(Qx\,Qy).
+    \]
+    The contracted columns depend continuously on a continuous ambient
+    tensor family in a fixed bond dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the coefficient sums and use bilinearity and trilinearity
+    of the trace expressions. Continuity follows from the finite sums
+    and matrix products in their defining formula.
+\end{proof}
+
+\begin{theorem}[Recovery of the minimal matrix algebra]
+    \label{thm:spt_trace_quotient_matrix_algebra_recovery}
+    \lean{Matrix.traceQuotientProductCoordinates_recover,
+        Matrix.exists_linearEquiv_traceQuotientSection,
+        Matrix.traceQuotientProductCoordinates_algebraRecovery,
+        Matrix.traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq}
+    \leanok
+    \uses{def:spt_trace_quotient_product_coordinates,
+        thm:spt_trace_quotient_contraction}
+    Suppose $r=D^2$, $GF$ is injective, and the preceding trace
+    proportionalities hold with $\alpha_2\alpha_3\ne0$.
+    Then $Q:\C^r\to M_D(\C)$ is a linear isomorphism and
+    \[
+        Q\mu(x,y)=\frac{\alpha_3}{\alpha_2}Qx\,Qy.
+    \]
+    Consequently $E=(\alpha_3/\alpha_2)Q$ identifies $\mu$ with
+    matrix multiplication, and $\mu$ is associative.
+    The minimal tensor and the identification are used only pointwise;
+    neither is assumed continuous. Together with the preceding
+    continuity result, this gives continuous multiplication coefficients
+    at constant trace rank. Choosing continuous tensor matrices,
+    particularly through a change of rank, remains a separate step in
+    the reconstruction proposed in
+    \cite[Section~II.F.2, lines~953--993]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Injectivity of $GF$ implies injectivity of $Q$; the dimension
+    equality gives surjectivity. The left inverse
+    $(C^\dagger C)^{-1}C^\dagger$ cancels $C$ in the contracted
+    three-site identity. Rescaling $Q$ by $\alpha_3/\alpha_2$ makes
+    the resulting identification multiplicative. Associativity follows
+    from associativity of matrix multiplication and injectivity of $E$.
+\end{proof}
+
+\begin{theorem}[Local continuous algebra from a raw tensor family]
+    \label{thm:spt_trace_quotient_continuous_algebra}
+    \lean{Matrix.exists_local_continuous_traceQuotientAlgebra}
+    \leanok
+    \uses{thm:spt_trace_quotient_continuous_product,
+        thm:spt_trace_quotient_matrix_algebra_recovery}
+    Let $B(t)$ be continuous in a fixed ambient bond dimension.
+    Suppose at each parameter it has a one-site injective representative
+    $A(t)$ whose two- and three-site traces are proportional to those
+    of $B(t)$ by nonzero constants $\alpha_2(t),\alpha_3(t)$.
+    Assume $D(t)^2=r$ is independent of $t$.
+    No continuity of $A(t)$ or the proportionality constants is required.
+    Near any base point, there is a fixed coefficient section for which
+    the multiplication coefficients are continuous and the product is
+    associative. At each parameter its normalized identification with
+    $M_{D(t)}(\C)$ is
+    \[
+        E_t x=\frac{\alpha_3(t)}{\alpha_2(t)}
+        \sum_i(Fx)_iA^i(t).
+    \]
+    This constant-dimension assertion does not construct a continuous
+    tensor realization through a change of rank
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The coefficient map of $A(t)$ is surjective, and its trace-pairing
+    map is injective. Their composition, multiplied by the nonzero
+    scalar $\alpha_2(t)$, therefore has rank $D(t)^2=r$.
+    Apply the continuous-section construction and the pointwise
+    matrix-algebra recovery on the resulting neighborhood.
+\end{proof}
+
+\begin{theorem}[A continuous unit for the local trace quotient]
+    \label{thm:spt_trace_quotient_continuous_unit}
+    \lean{Matrix.exists_local_continuous_traceQuotientUnit}
+    \leanok
+    \uses{thm:spt_trace_quotient_continuous_algebra}
+    Under the hypotheses of the preceding theorem, the section and
+    neighborhood can be chosen so that the quotient product also has
+    a continuous two-sided unit $u(t)$. The same pointwise normalized
+    identifications with the minimal matrix algebra remain available.
+    No continuous unit is supplied as a hypothesis.
+\end{theorem}
+
+\begin{proof}\leanok
+    At the base point choose the unit $u_0$ using its matrix-algebra
+    identification. Left multiplication $L_t(u_0)$ is the identity at
+    the base point, and is invertible on a smaller open neighborhood.
+    Define $u(t)=L_t(u_0)^{-1}u_0$. Any pointwise two-sided unit satisfies
+    $L_t(u_0)u(t)=u_0$ and hence equals this continuous choice.
+\end{proof}
+
 \begin{definition}[Repeated bond copies of a product tensor]
     \label{def:spt_repeated_product_tensor}
     \lean{MPSTensor.repeatedProductTensor}
