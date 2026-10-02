@@ -33,6 +33,17 @@ tensors of bond dimensions forty-eight and sixty-four. The distinction and
 the remaining full-tensor proof are recorded in
 `docs/paper-gaps/tnlean_ising_three_object_twist_scope.tex`. No vanishing-remainder
 claim is made for the compression chosen here.
+
+## References
+
+* Bultinck, Mariën, Williamson, Şahinoğlu, Haegeman and Verstraete,
+  *Anyons and matrix product operator algebras*, arXiv:1511.08090,
+  Appendix D.2 (the Ising fusion data).
+* Cirac, Pérez-García, Schuch and Verstraete,
+  *Matrix product density operators: Renormalization fixed points and boundary theories*,
+  arXiv:1606.00608, Theorem 4.14 and the question following it, lines 995–1010
+  (the motivation for the project construction).
+* Project construction record: `Notes/OpenProblemsTN/checks/asym_ising_action_data.md`, §1.4.
 -/
 
 open scoped Matrix Kronecker
