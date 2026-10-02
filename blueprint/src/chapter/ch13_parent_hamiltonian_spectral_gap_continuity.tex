@@ -10,10 +10,12 @@ of sites; that gap has a uniform lower bound because the restricted
 Hamiltonian depends continuously on the parameter
 \cite[lines~2575--2578]{Schuch2011Phases}. This section proves the
 continuity step and combines it with Knabe's nearest-neighbor criterion and
-compactness. The results below concern one-site injective tensors and the
-canonical two-site parent interaction, and they are stated with that
-restriction. The source's path also covers non-injective normal forms, which
-are not treated here; this scope restriction is recorded in
+compactness. The single-block results apply to normal tensors with a common
+injectivity length $p$, at every fixed interaction range $R>p$.
+Quantum Wielandt supplies $p=D^4$ from normality alone. The sharper
+one-site injective result has range two. The source's path also covers
+normal forms with several blocks; the scope of the compact-gap conclusions
+is recorded in
 \cite{gap:spc11_uniform_gap_injective_scope}.
 
 \begin{theorem}[Gap stability under perturbation of operator and kernel projection]
@@ -42,6 +44,36 @@ are not treated here; this scope restriction is recorded in
     the gap on $K_{x_0}^\perp$ and $K_{x_0}\subseteq\ker H_{x_0}$ give
     $\delta\lVert v-P_{x_0}v\rVert\leq\lVert H_{x_0}v\rVert$ for all $v$, and
     one chooses $\varepsilon=(\delta-\delta')/2$ and $r=\varepsilon/\delta$.
+\end{proof}
+
+\begin{theorem}[Open-chain gaps at every sufficient range]
+    \label{thm:normal_open_gap_every_sufficient_range}
+    \lean{MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective_all_lengths,
+        MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective_of_lt,
+        MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNormal_of_le,
+        MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNormal_all_lengths}
+    \leanok
+    \uses{lem:open_parent_range_comparison,
+        thm:open_parent_hamiltonian_kernel_ground_space}
+    Let $A$ be injective at a length $p>0$, and let $R>p$. There is
+    $\delta>0$ such that
+    \[
+        \delta\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A)v\rVert
+        \qquad(N\geq R,\ v\perp\ker H^{\mathrm{open}}_{N,R}(A)).
+    \]
+    In particular, for a normal tensor of bond dimension $D>0$, every
+    fixed $R\geq D^4+1$ has this property. No normalization is required.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:open_parent_range_comparison,
+        thm:open_parent_hamiltonian_kernel_ground_space}
+    Injectivity propagates to length $R-1$. The long-chain martingale
+    estimate and range comparison give a positive gap at range $R$.
+    The exact open kernel identity and finite dimensionality handle the
+    finitely many shorter admissible chains. Quantum Wielandt supplies
+    $p=D^4$ for a normal tensor.
 \end{proof}
 
 \begin{theorem}[Continuity of injective range projectors]
@@ -119,6 +151,8 @@ are not treated here; this scope restriction is recorded in
 \begin{lemma}[Comparison of open-chain ranges]
     \label{lem:open_parent_range_comparison}
     \lean{MPSTensor.openParentHamiltonianES_comparison_of_local,
+        MPSTensor.openParentHamiltonianES_gap_of_long_gap_at_length,
+        MPSTensor.openParentHamiltonianES_gap_of_long_gap,
         MPSTensor.openParentHamiltonianES_two_gap_of_long_gap}
     \leanok
     \uses{def:open_parent_hamiltonian_es, thm:open_parent_hamiltonian_es_c1}
@@ -126,11 +160,13 @@ are not treated here; this scope restriction is recorded in
     $\kappa\,h_W\leq H^{\mathrm{open}}_{W,R}$ for the range-$W$ parent
     interaction $h_W$ and some $\kappa>0$, then
     $\kappa H^{\mathrm{open}}_{N,W}\leq(W-R+1)H^{\mathrm{open}}_{N,R}$. For a
-    one-site injective tensor of nonzero bond dimension with $W\geq2$, a gap
+    tensor for which both open kernels equal $G_N^{\mathrm{ES}}$, a gap
     $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,W}v\rVert$ on
-    $(G_N^{\mathrm{ES}})^\perp$ for all $N\geq W$ therefore gives
-    $\frac{\kappa\gamma}{W-1}\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,2}v\rVert$
-    on the same complement for all $N\geq W$.
+    $(G_N^{\mathrm{ES}})^\perp$ gives
+    $\frac{\kappa\gamma}{W-R+1}\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}v\rVert$
+    on the same complement. The assertion may be used at one volume or
+    uniformly over every $N\geq W$. For a one-site injective tensor with
+    $R=2$ and $W\geq2$, the kernel hypotheses hold automatically.
 \end{lemma}
 
 \begin{proof}
@@ -260,11 +296,34 @@ are not treated here; this scope restriction is recorded in
     many constants and the maximum of the finitely many thresholds.
 \end{proof}
 
+\begin{theorem}[Uniform finite-dimensional kernel gap]
+    \label{thm:compact_kernel_gap}
+    \lean{ContinuousLinearMap.exists_uniform_norm_gap_of_compact}
+    \leanok
+    \uses{thm:kernel_gap_perturbation, lem:compact_uniform_pos_nat_bounds}
+    Let $E$ be a finite-dimensional complex Hilbert space, let
+    $x\mapsto H_x\colon E\to E$ be continuous, and suppose the orthogonal
+    projections onto $\ker H_x$ are continuous in $x$. For every compact
+    parameter set $S$, there is $\delta>0$ such that
+    $\delta\lVert v\rVert\leq\lVert H_xv\rVert$ for every $x\in S$ and
+    $v\perp\ker H_x$. No positivity or self-adjointness is required.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:kernel_gap_perturbation, lem:compact_uniform_pos_nat_bounds}
+    The restriction of $H_x$ to $(\ker H_x)^\perp$ is injective, so finite
+    dimensionality gives a positive lower norm bound at each parameter.
+    Half of that bound persists in a neighborhood by continuity of the
+    operator and its kernel projection. A finite subcover of $S$ gives one
+    positive bound for all parameters.
+\end{proof}
+
 \begin{theorem}[Continuity of short periodic ground lines]
     \label{thm:periodic_short_gap_continuity}
     \lean{MPSTensor.exists_uniform_parentHamiltonianES_two_gap_fixed_volume}
     \leanok
-    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector,
+    \uses{thm:compact_kernel_gap, thm:continuous_injective_range_projector,
         thm:continuous_finite_window_parent_hamiltonian}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
     nonzero bond dimension, let $S$ be a compact parameter set, and let
@@ -275,7 +334,7 @@ are not treated here; this scope restriction is recorded in
 
 \begin{proof}
     \leanok
-    \uses{thm:kernel_gap_perturbation, thm:continuous_injective_range_projector,
+    \uses{thm:compact_kernel_gap, thm:continuous_injective_range_projector,
         thm:continuous_finite_window_parent_hamiltonian,
         lem:compact_uniform_pos_nat_bounds,
         thm:parent_hamiltonian_fixed_length_gap,
@@ -321,3 +380,176 @@ are not treated here; this scope restriction is recorded in
     handled by the previous theorem, and the minimum of these constants works
     for every $N\geq2$.
 \end{proof}
+
+\begin{theorem}[Compact normal families at a fixed interaction range]
+    \label{thm:compact_normal_parent_gap}
+    \lean{MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective,
+        MPSTensor.exists_strict_openParentHamiltonianES_window_of_isNBlkInjective,
+        MPSTensor.eventually_parentHamiltonianES_gap_of_strict_openGap_of_isNBlkInjective,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective_all_lengths,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_fixed_volume_of_isNBlkInjective,
+        MPSTensor.isNBlkInjective_pow_four_of_isNormal,
+        MPSTensor.periodicMpvLineMap_injective_of_isNBlkInjective,
+        MPSTensor.ker_parentHamiltonianES_eq_range_periodicMpvLineMap_of_isNBlkInjective,
+        MPSTensor.continuous_parentHamiltonianES_kernelProjection_family_of_isNBlkInjective,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_all_lengths,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective_at_range,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_at_range}
+    \leanok
+    \uses{thm:compact_kernel_gap, lem:open_parent_range_comparison,
+        thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Let $x\mapsto A_x$ be continuous with nonzero fixed bond dimension,
+    and let $S$ be compact. Suppose every $A_x$ is injective after the same
+    positive length $p$. For every fixed interaction range $R>p$, there is
+    $\delta>0$ such that
+    \[
+        \delta\lVert v\rVert\leq\lVert H_{N,R}(A_x)v\rVert
+        \qquad(x\in S,\ N\geq R,\ v\perp\ker H_{N,R}(A_x)).
+    \]
+    If each $A_x$ is merely normal, the same assertion holds at the
+    ranges $R\geq D^4+1$. No gap estimate or normalized gauge is
+    supplied as a hypothesis.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:normalized_primitive_gauge,
+        thm:primitive_open_parent_hamiltonian_gap,
+        lem:open_parent_range_comparison,
+        thm:open_parent_gap_continuity,
+        thm:parent_hamiltonian_gap_from_open_knabe_block,
+        lem:compact_uniform_pos_nat_bounds, thm:compact_kernel_gap,
+        thm:chain_ground_space_eq_mpv_blk,
+        thm:exact_pow_four_block_injectivity_normal_left_canonical}
+    A pointwise primitive gauge supplies an open-chain gap at a long range.
+    The finite-interval comparison transfers it to range $p+1$. Choosing
+    a sufficiently long window makes the finite-range Knabe inequality
+    strict. This inequality persists near each parameter, and a finite
+    subcover gives a uniform gap for all sufficiently long rings.
+    The shorter rings have the line generated by their nonzero periodic
+    matrix product vector as kernel. Its projection is continuous, so
+    compactness supplies positive bounds for those finitely many lengths.
+    For a normal tensor, quantum Wielandt gives injectivity at $D^4$ after
+    a primitive gauge; gauge invariance gives the same length for the
+    original tensor. For a larger prescribed range $R>p$, injectivity
+    propagates to length $R-1$, and the same argument applies.
+\end{proof}
+
+
+\begin{theorem}[Continuity for several normal blocks]
+    \label{thm:block_ground_space_continuity}
+    \lean{MPSTensor.blockGroundSpaceMapES,
+        MPSTensor.blockGroundSpaceMapES_apply,
+        MPSTensor.continuous_blockGroundSpaceMapES_family,
+        MPSTensor.blockGroundSpaceMapES_injective_of_wordTupleSpanTop,
+        MPSTensor.range_blockGroundSpaceMapES,
+        MPSTensor.continuous_iSup_groundSpaceES_starProjection_family,
+        MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_family,
+        MPSTensor.continuous_norm_groundSpaceES_overlap_family,
+        MPSTensor.blockPeriodicMpvMapES,
+        MPSTensor.blockPeriodicMpvMapES_apply,
+        MPSTensor.blockPeriodicMpvMapES_eq_blockGroundSpaceMapES,
+        MPSTensor.continuous_blockPeriodicMpvMapES_family,
+        MPSTensor.ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES,
+        MPSTensor.blockPeriodicMpvMapES_injective_of_wordTupleSpanTop,
+        MPSTensor.range_blockPeriodicMpvMapES,
+        MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family,
+        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_fixed_volume_of_wordTupleSpanTop}
+    \leanok
+    \uses{thm:compact_kernel_gap}
+    Let $x\mapsto(A_x^j)_j$ be a continuous family of blocks whose
+    length-$S$ word tuples span the product of their matrix algebras,
+    with $S>0$. The projection onto the sum of the local block spaces
+    is continuous at every length at least $S$. For the weighted block
+    sum, the periodic kernel projection is continuous whenever
+    $S+1\leq R\leq N$. Nonzero block weights may vary arbitrarily.
+    Thus each such fixed volume has a positive gap uniform on any compact
+    parameter set. The overlaps of two local block spaces are also
+    continuous at any common injectivity length.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:compact_kernel_gap}
+    The joint boundary map has fixed domain, is injective, and has range
+    equal to the sum of the local block spaces. Its range projection
+    therefore depends continuously on the parameter. Restricting the
+    boundary matrices to scalar multiples of the identity gives the
+    injective map onto the periodic ground space. The kernel identity
+    then gives continuity of the periodic kernel projection. Compactness
+    yields a common positive finite-volume gap.
+\end{proof}
+
+\begin{theorem}[Compact families of several normal blocks]
+    \label{thm:compact_block_parent_gap}
+    \lean{MPSTensor.eventually_parentHamiltonianES_toTensorFromBlocks_gap_of_strict_openGap,
+        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact,
+        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths,
+        MPSTensor.exists_uniform_block_parentHamiltonianES_gap_of_compact_isNormalTensor}
+    \leanok
+    \uses{thm:block_ground_space_continuity,
+        thm:cpsv_bnt_sharp_span_ambient_cap, thm:block_word_span_propagation,
+        thm:block_strict_knabe_window_simultaneous_injectivity,
+        thm:parent_hamiltonian_gap_from_open_knabe_block}
+    Under the preceding simultaneous spanning hypothesis, fix
+    $R\geq S+1$. On a compact parameter set there is $\delta>0$ such
+    that the canonical periodic parent Hamiltonian of the weighted block
+    sum satisfies
+    \[
+        \delta\lVert v\rVert\leq\lVert H_{N,R}(x)v\rVert
+        \qquad(N\geq R,\ v\perp\ker H_{N,R}(x)).
+    \]
+    In particular, for pairwise inequivalent normalized normal blocks of
+    dimensions $D_j>0$, one may choose any
+    $R\geq3\max(\sum_jD_j,1)^5$. The simultaneous spanning length
+    is then derived from the dimensions.
+    This includes the two-site interaction of the initially blocked path
+    in \cite[Appendix~A]{Schuch2011Phases}; see
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:block_ground_space_continuity,
+        thm:cpsv_bnt_sharp_span_ambient_cap, thm:block_word_span_propagation,
+        thm:block_strict_knabe_window_simultaneous_injectivity,
+        thm:parent_hamiltonian_gap_from_open_knabe_block}
+    The open-chain multiblock gap gives a strict finite-range Knabe window
+    at each parameter. Continuity preserves the strict inequality in a
+    neighborhood. A finite subcover gives a common gap for all sufficiently
+    long rings. The preceding fixed-volume result handles the finitely
+    many remaining lengths, including $N=R$. For normalized normal blocks,
+    the simultaneous word-span bound supplies a common length
+    $S=3\max(\sum_jD_j,1)^5-1$.
+\end{proof}
+
+\begin{theorem}[Continuous positive parent interactions]
+    \label{thm:compact_positive_parent_interaction_gap}
+    \lean{MPSTensor.exists_uniform_pos_parentInteractionES_le_of_compact,
+        MPSTensor.exists_uniform_periodicInteractionHamiltonianES_gap_of_compact_canonical_gap,
+        MPSTensor.exists_uniform_parentInteraction_gap_of_compact_isNormal,
+        MPSTensor.exists_uniform_block_parentInteraction_gap_of_compact,
+        MPSTensor.exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range}
+    \leanok
+    \uses{thm:compact_kernel_gap, thm:compact_normal_parent_gap,
+        thm:compact_block_parent_gap}
+    Suppose the local ground-space projection and a positive parent
+    interaction $h_x$ depend continuously on $x$, with the same local
+    kernel. On a compact parameter set there is $\kappa>0$ such that
+    $h_x\geq\kappa P_{G_R(x)^\perp}$. Consequently every canonical
+    periodic gap uniform in the parameter and chain length transfers to
+    the chosen interactions. This applies, in particular, to compact
+    normal families at every fixed range $R\geq D^4+1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:compact_kernel_gap}
+    Compactness gives a common positive local gap away from the kernel.
+    Positivity turns it into the stated order bound. Translation and
+    summation preserve this comparison. A pointwise upper comparison
+    identifies the periodic kernels, and the lower comparison transfers
+    the canonical gap with factor $\kappa$.
+\end{proof}
+

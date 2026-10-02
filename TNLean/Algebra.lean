@@ -28,6 +28,7 @@ import TNLean.Algebra.CommonKernelSpectralGap
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.CompactGapBounds
+import TNLean.Algebra.CompactKernelGap
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
