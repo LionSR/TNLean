@@ -567,10 +567,7 @@ remaining eigenvalues have modulus strictly less than $1$.
     support projector of $M$, and $W$ is the partial isometry of the polar
     decomposition of $M$. In particular, every positive semidefinite $Q$ with
     $Q^2=M^\dagger M$ is the positive part of $M$, and every orthogonal projector
-    with the range of that positive part is the support projector. This is the
-    step needed to identify the layers of
-    \cite[eq.~(16)]{Malz2024Preparation} with the isometry of the blocked
-    tensor, which the source asserts (``to the same effect'') without proof.
+    with the range of that positive part is the support projector.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -592,9 +589,10 @@ remaining eigenvalues have modulus strictly less than $1$.
         MPSTensor.conjTranspose_blockKron_polarIsoMatrix_mul_self,
         MPSTensor.conjTranspose_treeIsoMatrix_mul_self,
         MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
-        MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor}
+        MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor,
+        MPSTensor.polarSupportMatrix_blockTensor_eq_treeSupportMatrix}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_polar_uniqueness}
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_tensor_rotate}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
     decomposition of the two-site blocked map of $T_{j-1}$, with
     $V^{(j)\dagger}V^{(j)}=\Pi_j$ the support projector of $P_j$, and let $T_j$
@@ -611,9 +609,10 @@ remaining eigenvalues have modulus strictly less than $1$.
     act on the regrouping of the $q$ sites into $2^{k-1}$ neighbouring pairs,
     then pairs of pairs, and so on. Each layer
     $\bigl(V^{(j)}\bigr)^{\otimes m}$ is a partial isometry with initial
-    projector $\Pi_j^{\otimes m}$. The product of the
-    layers is a partial isometry with initial space the range of $P_k$, so by
-    uniqueness of the polar decomposition it equals $V$ and $P_k=P_q$. The
+    projector $\Pi_j^{\otimes m}$. The product of the layers equals $V$, the
+    positive part $P_k$ equals $P_q$, and the support projector of $P_k$ is the
+    support projector of $\mathcal B_q$, so the product of the layers is a
+    partial isometry with initial space the range of $P_k$. The
     factorization (\ref{eq:ldp_tree_factorization}) is
     \cite[eq.~(16)]{Malz2024Preparation}, where the tree is said to act ``to the
     same effect'' as blocking directly; the identification with the polar
@@ -675,13 +674,17 @@ remaining eigenvalues have modulus strictly less than $1$.
     $(A_{W'})_W=A_{WW'}$
     (Lemma~\ref{lem:physical_rotation_mul}), so induction on $k$ gives
     (\ref{eq:ldp_tree_factorization}).
-    The range of the two-site blocked map of $T_{j}$ lies in
-    $\operatorname{ran}P_{j}\otimes\operatorname{ran}P_{j}$, because
-    $\Pi_j$ fixes the tensor of $P_j$; so $\Pi_j^{\otimes2^{k-j}}$ fixes the
-    product of the later layers, and the product of all layers is a partial
-    isometry with initial projector the support projector of $P_k$.
-    Theorem~\ref{thm:ldp_polar_uniqueness} then identifies it with $V$ and $P_k$
-    with $P_q$.
+    For the polar factors, write the block of $2^{k}$ sites as the first layer
+    $K=\bigl(V^{(1)}\bigr)^{\otimes2^{k-1}}$ applied to the tensor $T_1$ blocked
+    over $2^{k-1}$ sites, regrouped along neighbouring pairs. The range of that
+    blocked tensor lies in $(\operatorname{ran}P_1)^{\otimes2^{k-1}}$, because
+    $\Pi_1$ fixes the tensor of $P_1$, so $K^\dagger K=\Pi_1^{\otimes2^{k-1}}$
+    fixes it. By Theorem~\ref{thm:ldpolar_tensor_rotate}, the isometric factor of
+    the block is $K$ times the isometric factor of $T_1$ blocked over $2^{k-1}$
+    sites, and the positive parts and the support projectors agree, also after
+    the regrouping. Induction on $k$ gives the identification with $V$, $P_q$
+    and the support projector of $\mathcal B_q$, and $V^\dagger V=\Pi$ gives
+    the initial projector of the product of the layers.
 \end{proof}
 
 \section{Approximation error}

@@ -34,6 +34,10 @@ of the source, `Q_p` is the isometry `V_{q-p}` of eq. (14) and `b_p = D'_{q+1-p}
 * `MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` — the factorization
   of the isometric factor of a blocked tensor injective on a set of bond pairs, on the inputs of
   that set.
+* `MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary` — the factorization of the
+  partial isometry of any blocked tensor, with no injectivity, after a unitary `T` that puts the
+  range of the support projector on the first `r` inputs (the footnote to "The sequential-RG
+  circuit", with `P⁻¹` the pseudo-inverse).
 * `MPSPreparation.exists_isometric_chain_polarIsoMatrix` — the isometric factor of
   the polar decomposition of an injective blocked tensor of a chain of site-dependent
   tensors factors into `q` isometries with bonds `b₁, …, b_q` at most `D²`,
@@ -394,5 +398,71 @@ theorem exists_isometric_chain_polarIsoMatrix {q : ℕ} (A : MPSChainTensor d D 
       (fun x => by simp [hc, x.isLt])
   exact ⟨b, Q, h0, hl.trans hc, hb, hrow, hcol, hiso, fun σ x => by
     simpa using hV σ x (by rw [hc]; exact x.isLt)⟩
+
+/-- **Sequential factorization of the partial isometry of any blocked tensor.** Let
+`A₀, …, A_{q-1}` be tensors with bond dimension `D`, one on each site, `q ≥ 1`, with no
+injectivity assumed, and let `B = V P` be the polar decomposition of the blocked tensor, with
+`V†V = Π`. Let `T` be a unitary on `ℂ^{D²}` whose first `r` columns span the range of `Π`:
+`Π T = T diag(1, …, 1, 0, …, 0)` with `r` ones. Then `V T` vanishes on the inputs `x ≥ r`, and
+there are bond dimensions `b₀ = 1`, `b_q = r` and `b₁, …, b_q ≤ D²`, and site matrices `Q_p`,
+vanishing outside the `b_p × b_{p+1}` block and isometric on it, such that
+`⟨σ| V T |x⟩ = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0x}` for every input `x < r`.
+
+arXiv:2307.01696, footnote to the paragraph "The sequential-RG circuit": the derivation of
+eqs. (13)–(15) "remains valid also for non-injective tensors `B`. In that case `P⁻¹` is
+understood as pseudo-inverse." Here `V = B G` for a matrix `G` on the bond pairs
+(`MPSTensor.exists_polarIsoMatrix_eq_sum`), and the first `r` columns of `V T` are orthonormal
+because `(V T)† (V T) = T† Π T` is the diagonal projector. -/
+theorem exists_isometric_chain_polarIsoMatrix_mul_unitary {q : ℕ} (A : MPSChainTensor d D q)
+    (hq : 0 < q) {r : ℕ} (hr : r ≤ D * D) {T : Matrix (Fin (D * D)) (Fin (D * D)) ℂ}
+    (hT : T ∈ unitary (Matrix (Fin (D * D)) (Fin (D * D)) ℂ))
+    (hET : MPSTensor.polarSupportMatrix (MPSChainTensor.blockTensor A) * T =
+      T * Matrix.diagonal fun y => if y.val < r then 1 else 0) :
+    ∃ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
+      b 0 = 1 ∧ b (Fin.last q) = r ∧ (∀ p : Fin q, b p.succ ≤ D * D) ∧
+      (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
+      (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
+      (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
+      (∀ (σ : Fin q → Fin d) (x : Fin (D * D)), x.val < r →
+        (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * T)
+            ((decodeBlockEquiv d q).symm σ) x = eval Q σ ⟨0, x.pos⟩ x) ∧
+      ∀ (σ : Fin q → Fin d) (x : Fin (D * D)), r ≤ x.val →
+        (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * T)
+          ((decodeBlockEquiv d q).symm σ) x = 0 := by
+  classical
+  obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
+  set B := MPSChainTensor.blockTensor A with hBdef
+  set V := MPSTensor.polarIsoMatrix B with hV
+  set dec := decodeBlockEquiv d (n + 1)
+  have hgram : (V * T)ᴴ * (V * T) = Matrix.diagonal fun y => if y.val < r then 1 else 0 := by
+    rw [Matrix.conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ,
+      MPSTensor.conjTranspose_polarIsoMatrix_mul_polarIsoMatrix, hET, ← Matrix.mul_assoc,
+      ← Matrix.star_eq_conjTranspose, Unitary.star_mul_self_of_mem hT, Matrix.one_mul]
+  have hcol : ∀ x y, ∑ σ, star ((V * T) (dec.symm σ) x) * (V * T) (dec.symm σ) y =
+      if x = y then (if x.val < r then 1 else 0) else 0 := fun x y => by
+    have h := congrFun (congrFun hgram x) y
+    rw [Matrix.mul_apply, ← dec.symm.sum_comp, Matrix.diagonal_apply] at h
+    simpa only [Matrix.conjTranspose_apply] using h
+  obtain ⟨G₀, hG₀⟩ := MPSTensor.exists_polarIsoMatrix_eq_sum B
+  obtain ⟨b, Q, hb0, hbl, hb, hrow, hcolQ, hiso, hVQ⟩ :=
+    exists_isometric_chain_of_eq_mul_of_le A hr (G₀ * T) (fun σ y => (V * T) (dec.symm σ) y)
+      (fun σ y _ => by
+        simp only [Matrix.mul_apply, Finset.mul_sum]
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun j _ => ?_
+        rw [hV, hG₀, Finset.sum_mul]
+        refine Finset.sum_congr rfl fun a _ => ?_
+        rw [hBdef, MPSChainTensor.blockTensor_decodeBlockEquiv_symm, mul_assoc])
+      (fun x y hx _ => by
+        rw [hcol x y]
+        split_ifs <;> simp_all)
+  refine ⟨b, Q, hb0, hbl, hb, hrow, hcolQ, hiso, hVQ, fun σ x hx => ?_⟩
+  have h := hcol x x
+  simp only [↓reduceIte, show ¬ x.val < r by omega] at h
+  have hz := (Finset.sum_eq_zero_iff_of_nonneg fun σ _ => star_mul_self_nonneg
+    ((V * T) (dec.symm σ) x)).mp h σ (Finset.mem_univ _)
+  rcases mul_eq_zero.mp hz with h' | h'
+  · exact star_eq_zero.mp h'
+  · exact h'
 
 end MPSPreparation

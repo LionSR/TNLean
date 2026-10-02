@@ -31,35 +31,44 @@ configurations of the $n$ sites.
         MPSPreparation.mergeIso, MPSPreparation.isIsometry_cfgPolarIso,
         MPSPreparation.blockTensor_add_apply,
         MPSPreparation.cfgPolarIso_append, MPSPreparation.cfgPolarIso_split,
+        MPSPreparation.polarPosTensor_blockTensor_add,
+        MPSPreparation.pairProductTensor_self, MPSPreparation.mergeIso_self,
         MPSPreparation.isInjective_pairProductTensor,
         MPSPreparation.isIsometry_mergeIso}
     \leanok
-    \uses{thm:ldp_polar_uniqueness, thm:ldpolar_tensor_decomposition,
+    \uses{thm:ldpolar_tensor_rotate, thm:ldpolar_tensor_decomposition,
         thm:ldpolar_tensor_injective}
-    Let $A$ be a tensor whose blocked tensors over $n_1$ and over $n_2$ sites are
-    injective, and let $W:\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ be the partial
-    isometry of the polar decomposition of the tensor
-    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two neighbouring sites. Then
+    Let $A$ be a tensor, $n_1,n_2\ge0$, and let
+    $W:\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ be the partial isometry of the polar
+    decomposition of the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two
+    neighbouring sites. Then
     \begin{align}
-        V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W.
+        V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W,
         \label{eq:ldp_polar_merge}
     \end{align}
-    If the blocked tensor over $n_1+n_2$ sites is injective, so is the tensor
-    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$, and $W$ is an isometry.
+    and $P_{n_1+n_2}$ is the positive part of the tensor
+    $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$. No injectivity is assumed, as in the
+    footnote of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}.
+    For $n_1=n_2=n$ the tensor $(a,b)\mapsto P_n^aP_n^b$ is the two-site blocked
+    tensor of $P_n$, so $W$ is the layer of the tree of
+    \cite[eq.~(16)]{Malz2024Preparation}. If the blocked tensor over $n_1+n_2$
+    sites is injective, so is the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$, and
+    $W$ is an isometry.
 \end{lemma}
 \begin{proof}
     \leanok
     Write $\mathcal B_{n_i}^{\tau}=\sum_y\bra\tau V_{n_i}\ket yP_{n_i}^y$. Then
     $\mathcal B_{n_1+n_2}^{\tau_1\tau_2}
-        =\mathcal B_{n_1}^{\tau_1}\mathcal B_{n_2}^{\tau_2}$ is
-    $(V_{n_1}\otimes V_{n_2})WQ$, with $Q$ the positive part of the tensor of
-    the positive parts. The map $(V_{n_1}\otimes V_{n_2})W$ is a partial isometry
-    with initial projector the support projector of $Q$, since
-    $V_{n_1}\otimes V_{n_2}$ is an isometry, and uniqueness of the polar
-    decomposition (Theorem~\ref{thm:ldp_polar_uniqueness}) identifies it with
-    $V_{n_1+n_2}$. The matrices $\mathcal B_{n_1+n_2}^{\tau}$ are combinations of
-    the products $P_{n_1}^aP_{n_2}^b$, so these span the full matrix algebra when
-    the former do.
+        =\mathcal B_{n_1}^{\tau_1}\mathcal B_{n_2}^{\tau_2}$, so
+    $\mathcal B_{n_1+n_2}$ is the tensor $C$ of the positive parts rotated by
+    $K=V_{n_1}\otimes V_{n_2}$. Here
+    $K^\dagger K=\Pi_{n_1}\otimes\Pi_{n_2}$, and $\Pi_{n_i}$ fixes the tensor of
+    $P_{n_i}$, so $K^\dagger K$ fixes $C$. By
+    Theorem~\ref{thm:ldpolar_tensor_rotate}, $V_{n_1+n_2}=KW$ and $C$ has the
+    positive part of $\mathcal B_{n_1+n_2}$. The matrices
+    $\mathcal B_{n_1+n_2}^{\tau}$ are combinations of the products
+    $P_{n_1}^aP_{n_2}^b$, so these span the full matrix algebra when the former
+    do.
 \end{proof}
 
 \begin{theorem}[Layers of register gates one after the other]

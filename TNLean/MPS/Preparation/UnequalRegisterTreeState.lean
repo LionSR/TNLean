@@ -478,8 +478,7 @@ theorem treeLevelsOp_apply_nodeCfg (hinj : ∀ m, s ≤ m → Kraus.IsInjective 
     have hp2 : 2 * p.val + 1 < 2 ^ (j + 1) := by have := p.isLt; rw [pow_succ]; omega
     have hn₁ := two_mul_le_nodeLen hT (by omega : j + 1 ≤ h + 1) hp1
     have hn₂ := two_mul_le_nodeLen hT (by omega : j + 1 ≤ h + 1) hp2
-    rw [cfgPolarIso_split A (nodeLen_two_mul_add hT hjh p.isLt) (hinj _ (by omega))
-      (hinj _ (by omega))]
+    rw [cfgPolarIso_split A (nodeLen_two_mul_add hT hjh p.isLt)]
     refine Finset.sum_congr rfl fun e _ => ?_
     have e1 := nodeStart_two_mul (w := w) hjh p.val
     have e3 := nodeStop_two_mul (h := h) (w := w) j p.val
