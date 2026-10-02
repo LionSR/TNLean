@@ -38,7 +38,7 @@ disjoint sets (`OnsiteChannel.dual_mul`).
 The local dimension of a site carrying `a` ancilla levels next to a `d`-level system is
 `d * a`, with the pair `(x, b) : Fin d × Fin a` encoded as `finProdFinEquiv (x, b)`. An onsite
 channel is given by rectangular Kraus operators `Kᵢⱼ : e × d` at each site `i` with
-`∑ⱼ Kᵢⱼ† Kᵢⱼ = 1`; its Kraus operators on the chain are the products `⊗ᵢ K_{i J(i)}` over
+`∑ⱼ Kᵢⱼ† Kᵢⱼ = 1`; its Kraus operators on the sites are the products `⊗ᵢ K_{i J(i)}` over
 choice functions `J`.
 
 ## Main definitions
@@ -119,7 +119,7 @@ theorem rectangularKrausMap_rectKronecker_finKronecker {N : ℕ} {r : Fin N → 
 
 /-- An *onsite channel* from `d`-level to `e`-level sites on a finite set of sites `ι`: at each
 site `i` a channel `M_d → M_e` given by Kraus operators `kraus i j : e × d` with
-`∑ⱼ (kraus i j)† (kraus i j) = 1`. On the chain it acts as the tensor product of these
+`∑ⱼ (kraus i j)† (kraus i j) = 1`. On the sites `ι` it acts as the tensor product of these
 channels.
 
 Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (local operations
@@ -145,13 +145,13 @@ noncomputable def siteDual (Φ : OnsiteChannel d e ι) (i : ι) :
     Matrix (Fin e) (Fin e) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ :=
   rectangularKrausMap fun j ↦ (Φ.kraus i j)ᴴ
 
-/-- The Kraus operator `⊗ᵢ K_{i J(i)}` of an onsite channel on the chain, for a choice
+/-- The Kraus operator `⊗ᵢ K_{i J(i)}` of an onsite channel on the sites `ι`, for a choice
 function `J` of one Kraus index per site. -/
 def krausOp (Φ : OnsiteChannel d e ι) (J : (i : ι) → Fin (Φ.r i)) :
     Matrix (ι → Fin e) (ι → Fin d) ℂ :=
   rectKronecker fun i ↦ Φ.kraus i (J i)
 
-/-- The map of an onsite channel on density matrices of the chain.
+/-- The map of an onsite channel on density matrices of the sites `ι`.
 
 Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (local operations
 on each site and its ancillas). -/

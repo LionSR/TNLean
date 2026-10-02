@@ -37,9 +37,10 @@ namespace QuantumCircuit
 variable {d : ℕ} {ι : Type*} [Fintype ι]
 
 /-- Source: arXiv:2011.12127, lines 2330–2333. The product vector
-$\lvert\phi^1\rangle\otimes\cdots\otimes\lvert\phi^N\rangle$, with
+$\bigotimes_{s\in\iota}\lvert\phi^s\rangle$ over the sites `ι`, with
 $\lvert\phi^s\rangle=\sum_i\phi^s_i\lvert i\rangle$, in the computational basis: its
-coefficient on $\lvert i_1,\dots,i_N\rangle$ is $\phi^1_{i_1}\cdots\phi^N_{i_N}$. -/
+coefficient on the configuration $\sigma$ is $\prod_s\phi^s_{\sigma(s)}$. For `ι = Fin N` this
+is $\lvert\phi^1\rangle\otimes\cdots\otimes\lvert\phi^N\rangle$. -/
 def productVector (φ : ι → Fin d → ℂ) : (ι → Fin d) → ℂ :=
   fun σ => ∏ s, φ s (σ s)
 

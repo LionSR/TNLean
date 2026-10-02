@@ -114,7 +114,6 @@ theorem rectKronecker_mul [Fintype κ] [DecidableEq ν] (K : ν → Matrix ι κ
 /-- The product of identities over a finite set of sites is the identity. -/
 @[simp] theorem rectKronecker_one [DecidableEq ι] :
     rectKronecker (fun _ : ν ↦ (1 : Matrix ι ι ℂ)) = 1 := by
-  classical
   ext x y
   simp only [rectKronecker_apply]
   by_cases hxy : x = y

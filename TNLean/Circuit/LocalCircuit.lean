@@ -82,6 +82,7 @@ def supportedOperators (d : ℕ) (S : Set ι) :
     (∀ i ∉ S, m i = 1) ∧ A = rectKronecker m}
 
 omit [DecidableEq ι] in
+/-- A product operator `⊗ᵢ mᵢ` acts on `S` when `mᵢ = 1` for every site `i ∉ S`. -/
 theorem rectKronecker_mem_supportedOperators {S : Set ι}
     {m : ι → Matrix (Fin d) (Fin d) ℂ} (hm : ∀ i ∉ S, m i = 1) :
     rectKronecker m ∈ supportedOperators d S :=
@@ -162,7 +163,7 @@ theorem commute_of_mem_supportedOperators {S S' : Set ι} (hSS' : Disjoint S S')
 
 /-! ### Expectations in product vectors -/
 
-/-- The expectation `⟨ψ|A|ψ⟩` of an operator on the chain, without normalization.
+/-- The expectation `⟨ψ|A|ψ⟩` of an operator on the sites `ι`, without normalization.
 
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1
 (`b_Q = ⟨ψ|Q|ψ⟩`). -/
@@ -192,6 +193,8 @@ theorem expect_mulVec (U A : Matrix (ι → Fin d) (ι → Fin d) ℂ) (ψ : (ι
   simp only [expect, star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, star_eq_conjTranspose,
     Matrix.mul_assoc]
 
+/-- The expectation of a product operator `⊗ᵢ mᵢ` in a product vector `⊗ᵢ |vᵢ⟩` is
+`∏ᵢ ⟨vᵢ|mᵢ|vᵢ⟩`. -/
 theorem expect_productVector_rectKronecker (v : ι → Fin d → ℂ)
     (m : ι → Matrix (Fin d) (Fin d) ℂ) :
     expect (productVector v) (rectKronecker m) = ∏ i, star (v i) ⬝ᵥ (m i *ᵥ v i) := by
