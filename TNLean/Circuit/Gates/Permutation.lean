@@ -9,7 +9,7 @@ import TNLean.Circuit.Composition
 /-!
 # Gates permuting the computational basis
 
-A permutation `σ` of the configurations of the chain acts on vectors by its permutation
+A permutation `σ` of the configurations of a finite set of sites acts on vectors by its permutation
 matrix, `(P_σ v)(x) = v (σ x)`. When `σ` changes only the sites of a set `S`, by a rule that
 reads only the sites of `S`, the permutation matrix is a unitary acting on `S`
 (`QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators`). A layer of such gates on

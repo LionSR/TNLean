@@ -261,6 +261,7 @@ def cfgPerm (π : Equiv.Perm ι) : Equiv.Perm (ι → Fin d) where
   left_inv x := by funext i; simp
   right_inv x := by funext i; simp
 
+omit [Fintype ι] [DecidableEq ι] in
 theorem cfgPerm_apply (π : Equiv.Perm ι) (x : ι → Fin d) : cfgPerm π x = x ∘ π := rfl
 
 theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm ι) :
@@ -269,6 +270,7 @@ theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm ι) :
   rw [← Matrix.permMatrix_mul]
   congr 1
 
+omit [DecidableEq ι] in
 theorem permMatrix_cfgPerm_one : (cfgPerm (d := d) (1 : Equiv.Perm ι)).permMatrix ℂ = 1 := by
   have : cfgPerm (d := d) (1 : Equiv.Perm ι) = 1 := by ext x i; rfl
   rw [this, Matrix.permMatrix_one]
@@ -373,7 +375,8 @@ theorem gate₁_mem_supportedOperators :
     h.gate₁ (d := d) ∈ supportedOperators d ({h.e, h.f} : Set (Fin N)) := by
   refine mul_mem_supportedOperators
     (IsLocalPerm.permMatrix_mem_supportedOperators
-      (isLocalPerm_shiftPerm (Or.inr rfl) _ _ fun x y hxy => by rw [hxy h.e (Or.inl rfl)]))
+      (isLocalPerm_shiftPerm (ι := Fin N) (Or.inr rfl) _ _ fun x y hxy => by
+        rw [hxy h.e (Or.inl rfl)]))
     (finKronecker_mem_supportedOperators fun i hi => ?_)
   rw [Function.update_of_ne fun h' => hi (Or.inl h')]
   rfl
@@ -382,7 +385,8 @@ theorem gate₂_mem_supportedOperators :
     h.gate₂ (d := d) ∈ supportedOperators d ({h.c, h.e} : Set (Fin N)) := by
   refine mul_mem_supportedOperators (finKronecker_mem_supportedOperators fun i hi => ?_)
     (IsLocalPerm.permMatrix_mem_supportedOperators
-      (isLocalPerm_shiftPerm (Or.inr rfl) _ _ fun x y hxy => by rw [hxy h.c (Or.inl rfl)]))
+      (isLocalPerm_shiftPerm (ι := Fin N) (Or.inr rfl) _ _ fun x y hxy => by
+        rw [hxy h.c (Or.inl rfl)]))
   rw [Function.update_of_ne fun h' => hi (Or.inl h')]
   rfl
 

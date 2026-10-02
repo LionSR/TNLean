@@ -6,11 +6,11 @@ Authors: TNLean contributors
 import TNLean.Circuit.LocalCircuit
 
 /-!
-# Operators on a subset of the sites of a chain
+# Operators on a subset of the sites
 
-An injective map `e : κ → ι` places a finite set of sites `κ` among the sites `ι` of a chain;
+An injective map `e : κ → ι` places a finite set of sites `κ` among a finite set of sites `ι`;
 on a chain of `n` sites, `e : Fin m → Fin n` places `m` sites. An operator `X` on the placed
-sites acts on the whole chain as `X ⊗ 1`, the identity acting on the sites outside the range
+sites acts on all the sites as `X ⊗ 1`, the identity acting on the sites outside the range
 of `e`. This file defines this operator, `embedOp e X`, and
 proves that `X ↦ X ⊗ 1` is a unital, multiplicative, `*`-preserving linear map whose values
 act on the placed sites.
@@ -22,7 +22,7 @@ unitary `X` on a constant number `m` of sites, applied at the sites `e 0, …, e
 ## Main definitions
 
 * `QuantumCircuit.AgreeOff` — two configurations agree off the range of `e`.
-* `QuantumCircuit.embedOp` — the operator `X ⊗ 1` on the chain.
+* `QuantumCircuit.embedOp` — the operator `X ⊗ 1` on all the sites.
 * `QuantumCircuit.inputCfg` — the configuration carrying a given configuration on the last
   sites and `0` elsewhere.
 
@@ -47,7 +47,7 @@ namespace QuantumCircuit
 
 variable {d : ℕ} {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
 
-/-- Two configurations of the chain agree at every site outside the range of `e`. -/
+/-- Two configurations of the sites `ι` agree at every site outside the range of `e`. -/
 def AgreeOff (e : κ → ι) (x y : ι → Fin d) : Prop :=
   ∀ i, (∀ j, e j ≠ i) → x i = y i
 
@@ -209,7 +209,7 @@ theorem embedOp_finKronecker {m n : ℕ} {e : Fin m → Fin n} (he : Function.In
   embedOp_rectKronecker he A
 
 omit [DecidableEq ι] in
-/-- Every operator on the chain acts on the set of all sites. -/
+/-- Every operator acts on the set of all sites. -/
 theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
     X ∈ supportedOperators d (Set.univ : Set ι) := by
   classical
@@ -231,8 +231,8 @@ theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) �
   exact Submodule.smul_mem _ _ (rectKronecker_mem_supportedOperators fun i hi => absurd trivial hi)
 
 omit [DecidableEq κ] in
-/-- An operator acting on the sites `S` of the placed chain acts, as `X ⊗ 1`, on the sites
-`e '' S` of the chain. -/
+/-- An operator acting on the sites `S` of the placed sites acts, as `X ⊗ 1`, on the sites
+`e '' S`. -/
 theorem embedOp_mem_supportedOperators_image {e : κ → ι} (he : Function.Injective e)
     {S : Set κ} {X : Matrix (κ → Fin d) (κ → Fin d) ℂ}
     (hX : X ∈ supportedOperators d S) :
@@ -286,7 +286,7 @@ theorem embedOp_embedOp {ι' : Type*} [Fintype ι'] [DecidableEq ι'] {f : ι �
     simp only [h₁, h₃, ↓reduceIte]
 
 
-/-- A placed operator on all sites of the chain, in their order, is the operator itself. -/
+/-- An operator placed on all the sites, in their order, is the operator itself. -/
 theorem embedOp_id (X : Matrix (ι → Fin d) (ι → Fin d) ℂ) : embedOp id X = X := by
   ext x y
   rw [embedOp_apply, ite_eq_left (show AgreeOff id x y from fun i hi => absurd rfl (hi i))]

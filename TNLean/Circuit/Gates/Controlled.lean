@@ -18,8 +18,8 @@ two-site gates:
 * in any ring, for commuting idempotents `p₁`, `p₂` and invertible `v`, `w` commuting with
   them, `C(p₁ p₂, v w v⁻¹ w⁻¹) = C(p₁, v) C(p₂, w) C(p₁, v⁻¹) C(p₂, w⁻¹)`
   (`QuantumCircuit.ctrlElem_commutator`), which lowers the number of control sites by one;
-* the projections, single-site operators, and controlled operators on the chain, with their
-  supports and unitarity.
+* the projections, single-site operators, and controlled operators on a finite set of sites,
+  with their supports and unitarity.
 
 The decomposition of gates acting on a constant number of sites into two-site gates is the
 step "can be further expressed with a low-depth circuit of local gates" of arXiv:2307.01696
@@ -120,7 +120,7 @@ theorem ctrlElem_commutator {p₁ p₂ v v' w w' : R} (hp₁ : IsIdempotentElem 
 
 end Ring
 
-/-! ### Projections, single-site operators, and controlled operators on a chain -/
+/-! ### Projections, single-site operators, and controlled operators on sites -/
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
@@ -297,7 +297,7 @@ theorem ctrlOp_mem_supportedOperators (S : Finset ι) (c : ι → Fin d) (t : ι
   exact Submodule.add_mem _ (mul_mem_supportedOperators hp hs)
     (Submodule.sub_mem _ (one_mem_supportedOperators _) hp)
 
-/-- **Controlled commutator on the chain.** Removing one control site `s` from the controls of
+/-- **Controlled commutator on the sites.** Removing one control site `s` from the controls of
 a commutator `v w v† w†` at the site `t`. -/
 theorem ctrlOp_insert_commutator {S : Finset ι} {s t : ι} (ht : t ∉ S)
     (hst : s ≠ t) (c : ι → Fin d) {v w : Matrix (Fin d) (Fin d) ℂ}
