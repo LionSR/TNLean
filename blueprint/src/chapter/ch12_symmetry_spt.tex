@@ -2654,8 +2654,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         MPSTensor.eventually_cohomologousTo_of_continuous_unique_stationary_density,
         MPSTensor.eventually_cohomologousTo_of_continuous_unital_supported_family}
     \leanok
-    For $t\in[0,1]$, let $B(t)$ be continuous of fixed bond dimension
-    and let $\sigma(t)\geq0$ be trace-one and adjoint stationary.
+    Let $T$ be a topological space and let $B(t)$, $t\in T$, be a
+    continuous tensor family of fixed bond dimension. Let
+    $\sigma(t)\geq0$ be trace-one and adjoint stationary.
     Let the actual minimal tensors be support compressions of $B(t)$,
     with unitary projective actions implementing a fixed exact physical
     symmetry. Suppose the compressed tensor at $t_0$ is one-site injective.
@@ -3451,6 +3452,76 @@ canonical realization is inferred from a physical spectral gap here.
     Reindex by $g^{-1}$ to obtain
     $\|\beta_{\rho_t(g)}-\beta_{\rho_{t_0}(g)}\|<\delta_D$ for every $g$.
     Apply uniform projective rigidity at each parameter in that neighborhood.
+\end{proof}
+
+
+\begin{theorem}[Local class constancy from stationary support data]
+    \label{thm:spc_aux_topological_stationary_support_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_unital_supported_family}
+    \leanok
+    \uses{def:projective_rep, def:cohomologous_to, def:transfer_map}
+    Let $T$ be a topological space and $t_0\in T$. Let $B(t)$ be a unital
+    tensor family of fixed physical dimension $d$ and ambient bond
+    dimension $k$, continuous at $t_0$. Suppose that for every $t$ there
+    are a positive semidefinite matrix $\sigma_t$, a dimension $D_t$,
+    and an isometry $K_t:\C^{D_t}\to\C^k$ satisfying
+    \begin{align}
+        \tr\sigma_t                   & =1,                                   &
+        \mathcal E_{B(t)}^*(\sigma_t) & =\sigma_t,                            &
+        K_tK_t^\dagger                & =\operatorname{supp}(\sigma_t).\notag
+    \end{align}
+    Put $A_t^i=K_t^\dagger B(t)^iK_t$. Let $U_g$ be a fixed unitary
+    physical representation, and let $V_{t,g}$ be unitary projective
+    representations on $\C^{D_t}$, with factor systems $\omega_t$, such that
+    \begin{align}
+        \sum_j(U_g)_{ij}A_t^j
+         & =V_{t,g^{-1}}A_t^iV_{t,g^{-1}}^\dagger.\notag
+    \end{align}
+    If $A_{t_0}$ is one-site injective and
+    $\dim\ker(I-\mathcal E_{B(t_0)}^*)=1$, then
+    $[\omega_t]=[\omega_{t_0}]$ for all $t$ in some neighborhood of $t_0$.
+    The stationary matrices, full support frames, and virtual
+    representations are not required to be continuous. The ambient
+    tensors and their supported covariance are supplied assumptions;
+    this statement does not construct them from a physical gap.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_local_stationary_density,
+        thm:spt_local_spectral_support,
+        thm:spt_supported_frame_comparison,
+        thm:spt_stationary_density_compression,
+        thm:spt_unique_stationary_symmetry,
+        thm:spt_invariant_bond_compression,
+        thm:spc_aux_local_tensor_class}
+    Refine the topology of $T$ by the topology induced by $B$.
+    Then $B$ is continuous everywhere, and continuity at $t_0$ implies
+    that the neighborhood filter at $t_0$ is unchanged. It therefore
+    suffices to prove the assertion in this finer topology.
+
+    The normalized stationary equation is invertible near $t_0$.
+    Uniqueness identifies the given matrices $\sigma_t$ with the
+    continuous normalized stationary branch there. Choose positive
+    spectral cutoffs retaining exactly the support of $\sigma_{t_0}$.
+    The resulting spectral projections have a continuous isometric
+    frame $J_t:\C^{D_{t_0}}\to\C^k$, with $J_{t_0}=K_{t_0}$.
+
+    Uniqueness of the normalized stationary matrix on the full support
+    implies that every $V_{t,g}$ commutes with
+    $K_t^\dagger\sigma_tK_t$. Extending each such matrix by the identity
+    on the orthogonal complement shows that it preserves the selected
+    ambient spectral corner. This extension is used individually;
+    no projective representation on the ambient complement is needed.
+    Since the corner is contained in the full support, $K_t^\dagger J_t$
+    is an invariant isometry. Restriction along this isometry retains
+    the factor system $\omega_t$ and gives exact unitary covariance for
+    $C_t^i=J_t^\dagger B(t)^iJ_t$. The tensor letters need not preserve
+    the corner for this covariance identity.
+
+    The family $C_t$ is continuous near $t_0$, and
+    $C_{t_0}=A_{t_0}$ is injective. Local rigidity under exact unitary
+    covariance gives the required equality of cohomology classes.
+    Transfer back through the unchanged neighborhood filter at $t_0$.
 \end{proof}
 
 
