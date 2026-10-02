@@ -2086,6 +2086,21 @@ involve no boundary.
   physical character and exact rephased symmetry without fixing the minimal
   bond dimension. This removes scalar rephasing from the remaining
   varying-dimension problem.
+  `MPSTensor.eventually_cohomologousTo_of_continuous_unital_supported_family`
+  proves local cohomology invariance for a supplied continuous unital ambient
+  tensor family with one-dimensional adjoint fixed space at the base parameter.
+  Its pointwise normalized stationary densities need no continuity assumption:
+  `MPSTensor.exists_open_continuousOn_stationaryDensity_of_unital` derives local
+  continuity and uniqueness. Actual virtual actions commute with the compressed
+  stationary density by uniqueness. Minimal support dimensions may vary;
+  support frames and virtual actions need no continuity, and no projective
+  action on the complementary bond space is required. Injectivity is required
+  only at the base parameter. The more general
+  `MPSTensor.eventually_cohomologousTo_of_continuousOn_unique_stationary_density`
+  uses supplied continuous locally unique stationary data without unitality.
+  `MPSTensor.cohomologousTo_of_continuous_unital_supported_family` gives endpoint
+  cohomology equivalence when the fixed-space and injectivity assumptions hold
+  at every parameter; preconnectedness extends the local conclusion.
 - **Caveat:** the relation contains no virtual representation, factor system,
   or continuous canonical bond data. Its general converse remains open:
   continuous balanced canonical data and the surviving invariant bond subspace
