@@ -186,53 +186,102 @@ spectral decomposition, and quantitative decay bounds.
     % The eigenbasis construction is tracked in Issue~\#1447.
 \end{proof}
 
-\begin{theorem}[Exponential decay bound]%
-    \label{thm:correlator_exponential_bound}
-    \uses{def:connected_correlator, def:primitive_mps}
-    Let $\E_A$ be primitive and trace-preserving, with fixed point $\rho$
-    satisfying $\tr\rho=1$, and put $P(Z)=\tr(Z)\rho$. Write
-    $\rho_{\spec}(\E_A-P)$ for the spectral radius of $\E_A-P$.
-    For every $r$ with $\rho_{\spec}(\E_A-P)<r<1$ and every $X,Y$, there is a
-    constant $C_{XY}>0$ such that, for all $n\ge0$,
-    \begin{align}
-        |C(X,Y;n)|
-         & \le C_{XY}\,r^n.
-        \label{eq:correlations_decay_bound}
-    \end{align}
-    If the complementary transfer map is diagonalizable, the rate may
-    instead be taken to be its spectral radius, as in the pure-exponential
-    expansion of \cite[Section~II.B.3]{Cirac2021Matrix}; at a defective
-    subleading eigenvalue the source's rate $|\lambda_2|$ needs this
-    qualification \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
-\end{theorem}
+\begin{definition}[Physical connected fixed-point correlator]
+    \label{def:physical_connected_correlator}
+    \lean{MPSTensor.physicalConnectedCorrelator}
+    \leanok
+    \uses{def:physical_observable_transfer, def:transfer_map}
+    Let $\rho\in\MN{D}$ have nonzero trace, and set
+    $P(Z)=\tr(Z)\rho/\tr\rho$. For physical operators $X,Y$ on independently
+    chosen blocks of lengths $L_1,L_2$, and $n\geq0$ unobserved intermediate
+    sites, define
+    \[
+      C_{\mathrm{phys}}(X,Y;n)=
+      \tr\!\left(\E_X(\E_A-P)^n
+        \bigl(\E_Y(\rho)-P(\E_Y(\rho))\bigr)\right).
+    \]
+    The centering of the inner insertion includes adjacent blocks, $n=0$.
+\end{definition}
 
+\begin{lemma}[Physical connected contraction]
+    \label{lem:physical_connected_correlator_identity}
+    \lean{MPSTensor.physicalConnectedCorrelator_eq_twoPoint_sub,
+      MPSTensor.physicalConnectedCorrelator_eq_compl_pow_of_pos,
+      MPSTensor.limitCorrelator_eq_compl_pow_of_pos}
+    \leanok
+    \uses{def:physical_connected_correlator}
+    Suppose $\E_A$ is trace preserving, $\E_A(\rho)=\rho$, and $\tr\rho=1$.
+    Then, for all $n\geq0$,
+    \[
+      C_{\mathrm{phys}}(X,Y;n)=
+      \tr\!\left(\E_X\E_A^n(\E_Y(\rho))\right)
+      -\tr(\E_X(\rho))\tr(\E_Y(\rho)).
+    \]
+    For $n\geq1$ this also equals
+    $\tr(\E_X(\E_A-P)^n(\E_Y(\rho)))$, including the equal-support
+    specialization used in preparation estimates.
+\end{lemma}
 \begin{proof}
-    \uses{thm:connected_correlator_traceless_reduction, lem:trace_correlator_traceless_part, def:correlator_traceless_part, thm:correlator_sum_exponentials, def:primitive_mps}
-    Primitivity gives $\rho_{\spec}(\E_A-P)<1$
-    \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
-    so such rates $r$ exist.
-    The matrix $Z_\rho(X)$ is traceless, so $P(Z_\rho(X))=0$ and
-    $\E_A^n(Z_\rho(X))=(\E_A-P)^n(Z_\rho(X))$. The Gelfand formula yields
-    $\|(\E_A-P)^n\|\le C r^n$ for some constant $C$. By
-    Theorem~\ref{thm:connected_correlator_traceless_reduction} and the
-    Cauchy--Schwarz inequality for Hilbert--Schmidt norms,
+    \leanok
+    Trace preservation and stationarity give $P\E_A=\E_AP=P$ and $P^2=P$.
+    Induction yields
+    $(\E_A-P)^n(Z-PZ)=\E_A^nZ-PZ$ at every $n\geq0$.
+    Taking $Z=\E_Y(\rho)$ proves the first identity. For $n\geq1$,
+    $\E_A^n=P+(\E_A-P)^n$, which proves the second.
+\end{proof}
+
+\begin{lemma}[Complementary gap in trace-preserving gauge]
+    \label{lem:normal_tensor_complement_gap}
+    \lean{MPSTensor.normalTensor_complement_spectralRadius_lt_one}
+    \leanok
+    \uses{def:nt_cpsv, def:transfer_map}
+    Let $A$ be normal in trace-preserving gauge, and let $\rho\succeq0$ satisfy
+    $\E_A(\rho)=\rho$ and $\tr\rho=1$. Then
+    $\rho_{\spec}(\E_A-P)<1$, where $P(Z)=\tr(Z)\rho$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Normality supplies irreducibility and peripheral spectrum $\{1\}$.
+    The complementary transfer-map gap for irreducible primitive channels
+    applies to the nonzero positive fixed state
+    \cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint}.
+\end{proof}
+
+\begin{theorem}[Physical correlation decay in trace-preserving gauge]%
+    \label{thm:correlator_exponential_bound}
+    \lean{MPSTensor.exists_physicalConnectedCorrelator_le_geometric,
+      MPSTensor.exists_rate_physicalConnectedCorrelator_le_geometric}
+    \leanok
+    \uses{def:physical_connected_correlator, lem:normal_tensor_complement_gap}
+    For any tensor $A$ and matrix $\rho$ of nonzero trace, every rate
+    $r>\rho_{\spec}(\E_A-P)$ and every pair of physical operators on independent
+    finite supports admit a constant $C_{XY}>0$ such that, for all $n\geq0$,
     \begin{align}
-        |C(X,Y;n)|
-         & =\bigl|\tr\!\bigl(Y\,(\E_A-P)^n(Z_\rho(X))\bigr)\bigr|
-        \le \|Y\|\,\|(\E_A-P)^n(Z_\rho(X))\|
-        \le \|Y\|\,C\,r^n\,\|Z_\rho(X)\|,
+      |C_{\mathrm{phys}}(X,Y;n)|\leq C_{XY}r^n.
+      \label{eq:correlations_decay_bound}
     \end{align}
-    which is (\ref{eq:correlations_decay_bound}) with
-    $C_{XY}=\|Y\|\,C\,\|Z_\rho(X)\|+1$.
-    In the diagonalizable case, the expansion in the proof of
-    Theorem~\ref{thm:correlator_sum_exponentials} and the triangle inequality give
-    \begin{align}
-        |C(X,Y;n)|
-         & \le\sum_{j=1}^{D^2-1}|\gamma_j(X)\tr(Yv_j)|\,|\lambda_j|^n
-        \le\Bigl(\sum_{j=1}^{D^2-1}|\gamma_j(X)\tr(Yv_j)|\Bigr)
-        \rho_{\spec}(\E_A-P)^n.
-    \end{align}
-    % Composing these bounds for the connected correlator is tracked in Issue~\#1447.
+    If $A$ is normal in trace-preserving gauge and $\rho\succeq0$ is a
+    normalized fixed state, one can choose a single rate
+    $\rho_{\spec}(\E_A-P)<r<1$ for every finite support and every pair of
+    observables. Thus the fixed-point infinite-chain connected correlations
+    decay exponentially, without a diagonalizability assumption.
+    This proves the decay conclusion of
+    \cite[Section~II.B.3]{Cirac2021Matrix} in trace-preserving gauge.
+    Passing from an arbitrary normal representation to this gauge also
+    requires covariance of the physical insertions under the gauge
+    transformation; that passage remains to be established. The source's
+    pure-exponential expansion needs the Jordan-block correction recorded in
+    \cite{gap:cpgsv21_correlator_diagonalizable_expansion}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Put $T=\E_A-P$ and $Z=\E_Y(\rho)-P(\E_Y(\rho))$.
+    The Gelfand formula gives a constant $C>0$ such that
+    $\|T^nZ\|\leq Cr^n\|Z\|$ at every $n\geq0$.
+    The linear functional $W\mapsto\tr(\E_X(W))$ on the finite-dimensional
+    matrix space has a bound $|\tr(\E_X(W))|\leq M_X\|W\|$ with $M_X>0$.
+    Hence $C_{XY}=M_XC\|Z\|+1$ proves the estimate.
+    Lemma~\ref{lem:normal_tensor_complement_gap} permits the choice $r<1$.
 \end{proof}
 
 \begin{remark}[Transfer-map spectral hypothesis]%
@@ -388,9 +437,8 @@ for the transfer map $\E_A$.
     \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates, def:correlation_length, thm:correlator_exponential_bound}
     Suppose that the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
     (Definition~\ref{def:parent_hamiltonian}) whose ground state is the matrix
-    product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and that
-    physical observable insertions reduce to the auxiliary functionals defined
-    above. If the hypotheses of
+    product vector (Lemma~\ref{lem:parent_hamiltonian_annihilates}), and
+    consider its fixed-point infinite-chain state. If the hypotheses of
     Theorem~\ref{thm:correlator_exponential_bound} hold, then for every rate
     $r$ with $\rho_{\spec}(\E_A-P)<r<1$ the corresponding ground-state
     correlations decay as $r^n=e^{-n/\xi}$ with finite correlation length
