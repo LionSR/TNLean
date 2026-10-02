@@ -36,7 +36,7 @@ claim is made for the compression chosen here.
 
 ## References
 
-* Bultinck, Mariën, Williamson, Şahinoğlu, Haegeman and Verstraete,
+* Bultinck, Mariën, Williamson, Sahinoglu, Haegeman and Verstraete,
   *Anyons and matrix product operator algebras*, arXiv:1511.08090,
   Appendix D.2 (the Ising fusion data).
 * Cirac, Pérez-García, Schuch and Verstraete,
