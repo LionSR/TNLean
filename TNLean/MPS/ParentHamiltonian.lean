@@ -99,8 +99,10 @@ import TNLean.MPS.ParentHamiltonian.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSpanning
 import TNLean.MPS.ParentHamiltonian.HalfChainSchmidt
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
+import TNLean.MPS.ParentHamiltonian.IsometricDeformation
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.KnabeGapNeighborhood
+import TNLean.MPS.ParentHamiltonian.LeftPolar
 import TNLean.MPS.ParentHamiltonian.LocalSupport
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale
@@ -116,7 +118,9 @@ import TNLean.MPS.ParentHamiltonian.PGVWCCDEIdentities
 import TNLean.MPS.ParentHamiltonian.ParentInteractionComparison
 import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
 import TNLean.MPS.ParentHamiltonian.PeriodicShortGapContinuity
+import TNLean.MPS.ParentHamiltonian.PhysicalActionWordTupleSpan
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
+import TNLean.MPS.ParentHamiltonian.PositivePhysicalDeformationGap
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockSharpOpenGroundSpace
@@ -125,6 +129,9 @@ import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
 import TNLean.MPS.ParentHamiltonian.ProjectorCancellation
 import TNLean.MPS.ParentHamiltonian.RestrictTransport
 import TNLean.MPS.ParentHamiltonian.ShiftedParentHamiltonian
+import TNLean.MPS.ParentHamiltonian.ShortRangeHeisenbergGap
+import TNLean.MPS.ParentHamiltonian.ShortRangeHeisenbergTensor
+import TNLean.MPS.ParentHamiltonian.SingletChain
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundary
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram

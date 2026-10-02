@@ -33,6 +33,7 @@ import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConstantTracePowers
+import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.ExpectationOverlap
@@ -88,6 +89,7 @@ import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
+import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution

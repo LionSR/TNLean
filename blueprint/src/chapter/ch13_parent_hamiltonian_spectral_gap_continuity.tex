@@ -553,3 +553,176 @@ is recorded in
     the canonical gap with factor $\kappa$.
 \end{proof}
 
+
+\begin{theorem}[Invertible changes of the physical space]
+    \label{thm:physical_action_joint_span_compact_gap}
+    \lean{MPSTensor.span_wordTuple_rotatePhysical_le,
+        MPSTensor.span_wordTuple_rotatePhysical_eq_of_leftInverse,
+        MPSTensor.wordTupleSpanTop_rotatePhysical_iff,
+        MPSTensor.continuous_rotatePhysical_family,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_physicalAction}
+    \leanok
+    \uses{thm:compact_block_parent_gap}
+    Let $(A^j)_j$ have simultaneous spanning length $S>0$. An invertible
+    change $M$ of the physical space preserves this spanning property.
+    More generally, a rectangular change with a left inverse preserves
+    the joint word span. If $x\mapsto M_x$ is continuous and invertible,
+    then on a compact parameter set the weighted block sums of
+    $(M_xA^j)_j$ have a uniform periodic parent gap at every fixed
+    $R\geq S+1$, for all $N\geq R$. All block weights are nonzero.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:compact_block_parent_gap}
+    Expanding each transformed word as a linear combination of original
+    words gives one span inclusion. Applying a left inverse gives the
+    reverse inclusion. Continuity of the transformed letters and the
+    compact-family gap theorem give the assertion.
+\end{proof}
+
+\begin{theorem}[Uniform gap along the positive affine deformation]
+    \label{thm:positive_affine_physical_deformation_gap}
+    \lean{MPSTensor.positivePhysicalDeformation,
+        MPSTensor.positivePhysicalDeformation_posDef,
+        MPSTensor.positivePhysicalDeformation_zero,
+        MPSTensor.positivePhysicalDeformation_one,
+        MPSTensor.continuous_positivePhysicalDeformation,
+        MPSTensor.positivePhysicalDeformation_isUnit,
+        MPSTensor.exists_uniform_parentHamiltonianES_gap_positivePhysicalDeformation,
+        MPSTensor.positiveDeformedParentInteractionES,
+        MPSTensor.isParentInteraction_positiveDeformedParentInteractionES,
+        MPSTensor.positiveDeformedParentInteractionES_eq,
+        MPSTensor.continuous_deformedInteraction_positivePhysicalDeformation,
+        MPSTensor.exists_uniform_positiveDeformedParentInteractionES_gap}
+    \leanok
+    \uses{thm:physical_action_joint_span_compact_gap,
+        thm:compact_positive_parent_interaction_gap}
+    On the retained physical space let $Q>0$ and let $(A^j)_j$ be
+    simultaneously one-site injective. Set
+    $Q_\gamma=\gamma Q+(1-\gamma)I$ for $0\leq\gamma\leq1$.
+    Both the canonical two-site parent Hamiltonians of $(Q_\gamma A^j)_j$
+    and the periodic Hamiltonians obtained from
+    \[
+        h_\gamma=(Q_\gamma^{-1})^{\otimes2}
+            h_0 (Q_\gamma^{-1})^{\otimes2},
+    \]
+    where $h_0$ is the initial canonical parent projection, have a
+    positive gap uniform in $\gamma$ and every $N\geq2$.
+    The positive factor is supplied on the retained physical space.
+    This is the deformation in
+    \cite[lines~589--594 and~610--625, Appendix~A]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:physical_action_joint_span_compact_gap,
+        thm:compact_positive_parent_interaction_gap}
+    The affine path is positive definite, continuous, and invertible.
+    Its endpoints are $I$ and $Q$. Joint one-site injectivity persists,
+    so the preceding theorem gives the canonical gap. Inversion and
+    tensor powers are continuous. The conjugated interactions are
+    positive and have exactly the transformed local ground spaces as
+    kernels. Compact positive-interaction comparison then transfers
+    the canonical gap to the displayed interactions.
+\end{proof}
+
+\begin{theorem}[Left polar decomposition on the physical support]
+    \label{thm:parent_left_polar_support}
+    \lean{Matrix.polarPosExtension, Matrix.posDef_polarPosExtension,
+        Matrix.leftPolarPos, Matrix.leftPolarIso, Matrix.posDef_leftPolarPos,
+        Matrix.leftPolarIso_mul_conjTranspose,
+        Matrix.leftPolarPos_mul_leftPolarIso,
+        Matrix.range_leftPolarIso_finalProjection}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    Let $P:\C^k\to\C^d$ be a linear map, let $E$ be the orthogonal
+    projection onto $\operatorname{ran}P$, and set
+    $Q=(PP^\dagger)^{1/2}+I-E$. There is a partial isometry $W$ such
+    that $Q>0$, $P=QW$, and $WW^\dagger=E$.
+    On the retained physical space this is the polar decomposition of
+    \cite[lines~579--584]{Schuch2011Phases}; the identity extension acts
+    only on the orthogonal complement.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    Write $P^\dagger=VS$ in polar form, with $V^\dagger V=E$,
+    $ES=S$, and $\operatorname{ran}E=\operatorname{ran}S$.
+    The matrix $S+I-E$ is positive semidefinite. If it annihilates $x$,
+    multiplying by $E$ gives $Sx=0$. Since $E$ factors through $S$
+    and both are Hermitian, $Ex=0$, and the original equation gives
+    $x=0$. Thus $Q=S+I-E$ is positive definite.
+    Set $W=V^\dagger$. The identities $VE=V$ and $VS=P^\dagger$
+    give $QW=SV^\dagger=P$. Finally, $EP=P$ gives
+    $\operatorname{ran}P\subseteq\operatorname{ran}E$, while
+    $PV=S$ and $E=SR$ for some $R$ give the reverse inclusion.
+\end{proof}
+
+\begin{theorem}[Constructed isometric deformation and its uniform gap]
+    \label{thm:constructed_isometric_deformation_gap}
+    \lean{MPSTensor.blockPhysicalMatrix, MPSTensor.leftPolarBlocks,
+        MPSTensor.leftPolarPhysicalFactor,
+        MPSTensor.leftPolarPhysicalFactor_posDef,
+        MPSTensor.rotatePhysical_leftPolarPhysicalFactor_leftPolarBlocks,
+        MPSTensor.wordTupleSpanTop_leftPolarBlocks_iff,
+        MPSTensor.blockPhysicalMatrix_leftPolarBlocks,
+        MPSTensor.blockPhysicalMatrix_leftPolarBlocks_mul_conjTranspose,
+        MPSTensor.isometricDeformationBlocks,
+        MPSTensor.isometricDeformationBlocks_zero,
+        MPSTensor.isometricDeformationBlocks_one,
+        MPSTensor.continuous_isometricDeformationBlocks,
+        MPSTensor.wordTupleSpanTop_isometricDeformationBlocks_iff,
+        MPSTensor.isometricDeformationInteractionES,
+        MPSTensor.continuous_isometricDeformationInteractionES,
+        MPSTensor.isParentInteraction_isometricDeformationInteractionES,
+        MPSTensor.exists_uniform_isometricDeformation_parent_gap,
+        MPSTensor.exists_uniform_isometricDeformation_interaction_gap,
+        MPSTensor.exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor}
+    \leanok
+    \uses{thm:parent_left_polar_support,
+        thm:positive_affine_physical_deformation_gap,
+        thm:cpsv_bnt_sharp_span_ambient_cap}
+    Let $(A^j)_j$ be simultaneously one-site injective blocks of positive
+    bond dimensions. Define the joint physical map by
+    $P_{i,(j,a,b)}=A^j_i(a,b)$ and write $P=QW$ as in
+    Theorem~\ref{thm:parent_left_polar_support}. Reading the columns of
+    $W$ as block matrices $W^j_i$, set
+    $A^j_i(\gamma)=\sum_l(Q_\gamma)_{il}W^j_l$, where
+    $Q_\gamma=\gamma Q+(1-\gamma)I$.
+    This continuous path has endpoints $W^j$ and $A^j$, preserves
+    simultaneous spanning at every length, and has coisometric initial
+    physical map on $\operatorname{ran}P$.
+
+    Both its canonical two-site parent Hamiltonians and the positive
+    interactions $h_\gamma=(Q_\gamma^{-1})^{\otimes2}
+    h_0(Q_\gamma^{-1})^{\otimes2}$ have a positive periodic gap uniform
+    in $\gamma\in[0,1]$ and all $N\geq2$. Here $h_0$ is the canonical
+    two-site parent projection of the unweighted block sum of $(W^j)_j$.
+    The interactions are continuous and have exactly the deformed local
+    ground spaces as their kernels.
+
+    For pairwise inequivalent normal blocks, there is a positive initial
+    blocking length $L$ satisfying
+    $L+1\leq3\max(\sum_jD_j,1)^5$, after which the constructed path
+    has the canonical uniform gap just stated. The path construction
+    and gap assertion are those of
+    \cite[lines~575--625, Appendix~A]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:parent_left_polar_support,
+        thm:physical_action_joint_span_compact_gap,
+        thm:positive_affine_physical_deformation_gap,
+        thm:cpsv_bnt_sharp_span_ambient_cap,
+        thm:cpsv_bnt_blocked_simultaneous_span}
+    The left polar factorization gives $A^j=QW^j$. Since $Q$ is
+    invertible, the original and polar blocks have the same joint word
+    spans. The affine positive path therefore preserves those spans
+    and has the asserted endpoints. Theorem~\ref{thm:positive_affine_physical_deformation_gap}
+    gives both uniform gaps and the interaction properties.
+    For normal blocks, the simultaneous span bound supplies $L$;
+    length-$L$ evaluations become one-letter evaluations after blocking.
+\end{proof}
