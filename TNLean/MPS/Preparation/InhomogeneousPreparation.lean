@@ -51,6 +51,7 @@ varying along the ring. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scop
 ## Main results
 
 * `MPSPreparation.chainState_eq_blockIsoVector` — `|φ_N⟩ = (⊗ₖ V_k) |φ_pos⟩`.
+* `MPSPreparation.norm_chainState_eq` — `‖φ_N‖ = ‖φ_pos‖` for every chain.
 * `MPSPreparation.inner_chainBlockIsometryState_normalize` — the isometries preserve the
   overlap: `⟨(⊗ₖ V_k) Ω, φ_N⟩ = ⟨Ω, φ_pos⟩` for the normalized states.
 * `MPSPreparation.exists_isPreparedInDepth_inhomogeneous` — preparation in depth `O(L)` with
@@ -133,13 +134,43 @@ theorem chainPosState_eq_zero {A : MPSChainTensor d D N} (hN : ∑ k, ℓ k = N)
     List.prod_eq_zero (List.mem_ofFn.mpr ⟨k, polarPosTensor_eq_zero (hB k) hk⟩)
   rw [h0, Matrix.trace_zero]
 
-/-- The norm of the state is the norm of the state of the positive parts when every blocked
-tensor `B_k` is injective on a set `S_k` of bond pairs. -/
-theorem norm_chainState {A : MPSChainTensor d D N} (hN : ∑ k, ℓ k = N)
-    {S : Fin M → Set (Fin D × Fin D)} (hB : ∀ k, IsInjectiveOn (chainBlockTensor A hN k) (S k)) :
+/-- **The norm of the state is the norm of the state of the positive parts**, for every chain
+and every cutting into blocks: `‖φ_N‖ = ‖φ_pos‖`. The isometric factors are partial isometries,
+`V_k†V_k = Π_k`, and `|φ_pos⟩` is fixed by `⊗ₖ Π_k` because `Π_k P_k = P_k`.
+
+arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
+tensors": `V†V = Π` with `Π` the projector onto the image of `P`. -/
+theorem norm_chainState_eq (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) :
     ‖chainState A‖ = ‖chainPosState A hN‖ := by
-  rw [chainState_eq_blockIsoVector A hN,
-    norm_blockIsoVector_of_isInjectiveOn hN hB _ fun τ hτ => chainPosState_eq_zero hN hB hτ]
+  classical
+  -- `⊗ₖ Π_k` fixes `φ_pos`
+  have hfix : ∀ τ, ∑ τ', (∏ j, polarSupportMatrix (chainBlockTensor A hN j) (τ j) (τ' j)) *
+      chainPosState A hN τ' = chainPosState A hN τ := fun τ => by
+    have h := mpvFamily_rotatePhysical (fun k => polarSupportMatrix (chainBlockTensor A hN k))
+      (fun k => polarPosTensor (chainBlockTensor A hN k)) τ
+    simp only [rotatePhysical_polarSupportMatrix] at h
+    simp only [chainPosState_apply]
+    exact h.symm
+  have key : ⟪chainState A, chainState A⟫_ℂ = ⟪chainPosState A hN, chainPosState A hN⟫_ℂ := by
+    rw [chainState_eq_blockIsoVector A hN]
+    simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
+    rw [Fintype.sum_equiv (blockIndexEquiv d hN) _ (fun s => star (∑ τ,
+      (∏ j, polarIsoMatrix (chainBlockTensor A hN j) (s j) (τ j)) * chainPosState A hN τ) *
+      ∑ τ, (∏ j, polarIsoMatrix (chainBlockTensor A hN j) (s j) (τ j)) * chainPosState A hN τ)
+      fun s => by rw [mul_comm]; rfl,
+      Matrix.sum_star_mul_prod_eq_sum_conjTranspose_mul]
+    simp only [conjTranspose_polarIsoMatrix_mul_polarIsoMatrix]
+    refine Finset.sum_congr rfl fun τ _ => ?_
+    calc _ = star (chainPosState A hN τ) * ∑ τ',
+          (∏ j, polarSupportMatrix (chainBlockTensor A hN j) (τ j) (τ' j)) *
+            chainPosState A hN τ' := by
+          rw [Finset.mul_sum]
+          exact Finset.sum_congr rfl fun _ _ => by ring
+      _ = _ := by
+          rw [hfix τ]
+          exact mul_comm _ _
+  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at key
+  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast key)
 
 /-- **The isometries preserve the overlap.** If every blocked tensor `B_k` is injective on a set
 `S_k` of bond pairs, then for every family of pairs, `⟨(⊗ₖ V_k) Ω, φ_N⟩ = ⟨Ω, φ_pos⟩`, where
@@ -155,7 +186,7 @@ theorem inner_chainBlockIsometryState_normalize {A : MPSChainTensor d D N} (hN :
     (ω : Fin M → Fin D × Fin D → ℂ) :
     ⟪chainBlockIsometryState A ω hN, (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ =
       ⟪pairFamilyVector ω, (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ := by
-  rw [norm_chainState hN hB, chainState_eq_blockIsoVector A hN, ← blockIsoVector_smul,
+  rw [norm_chainState_eq A hN, chainState_eq_blockIsoVector A hN, ← blockIsoVector_smul,
     chainBlockIsometryState, inner_blockIsoVector_of_isInjectiveOn hN hB _ _ fun τ hτ => by
       rw [PiLp.smul_apply, chainPosState_eq_zero hN hB hτ, smul_zero, mul_zero]]
 

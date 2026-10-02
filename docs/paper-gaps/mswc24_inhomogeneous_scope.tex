@@ -35,9 +35,12 @@ and blocked tensors that need not be injective. They assume that every block
 has at least $3D$ sites, which the circuit needs to hold the two bond indices of
 a block in registers of $D$ sites each and to route them together. The first
 statement, with error exactly $\varepsilon(\Omega,\phi_{\mathrm{pos}})$, also
-assumes $d\ge2$; for $d=1$ an isometry from $\C^{D^2}$ to $(\C^d)^{\otimes q}$
-exists only for $D\le1$. The second statement, with error at most $\delta$
-under the approximation hypothesis, holds for every $d$.
+assumes $D^2\le d^{3D}$, which holds for every $D$ when $d\ge2$. For blocks of
+$q\ge3D\ge1$ sites it follows from the source's requirement $d^q\ge D^2$
+recalled below, since $d^q\ge1$ forces $d\ge1$ and for $d=1$ both conditions
+read $D\le1$; it is therefore no further restriction. The second statement,
+with error at most $\delta$ under the approximation hypothesis, holds for
+every $d$.
 
 The source has no bound $3D$, but it is not silent on the block length. Its
 polar decompositions need ``$q$ large enough that $d^q\geq D^2$'' (footnote to
@@ -110,9 +113,9 @@ that corner are those of the rectangular blocked tensor. That last
 identification is not formalized: the injectivity hypothesis of the statement
 for injective blocked tensors is stated directly for $B_k$, as spanning every
 matrix unit in the corner, and its reading as injectivity of the rectangular
-blocked tensor is the observation just made. For a block of length zero the two readings differ, since $B_k$ is
-then the identity matrix of size $D$; the statement using the
-hypothesis assumes blocks of at least one site. Under the hypothesis, the
+blocked tensor is the observation just made. For a block of length zero the
+two readings differ, since $B_k$ is then the identity matrix of size $D$; the
+statement using the hypothesis assumes blocks of at least one site. Under the hypothesis, the
 support projector of the polar decomposition $B_k=V_kP_k$ is the coordinate
 projector $\Pi_k$ onto the corner, so $V_k$ is an isometry on it and vanishes
 on the other inputs. The pairs $\omega^k$ are padded in the same way,

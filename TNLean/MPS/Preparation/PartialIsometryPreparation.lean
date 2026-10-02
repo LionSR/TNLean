@@ -27,24 +27,23 @@ isometry, `|φ_N⟩ = (⊗ₖ W_k) |φ_pos⟩` and the isometries preserve the o
 (`MPSPreparation.inner_blockMatVector_chainState_normalize`), so the prepared state
 `(⊗ₖ W_k) |Ω⟩` has error exactly `ε(Ω, φ_pos)` against `|φ_N⟩`, with no injectivity
 (`MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension`,
-`MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable`). On the inputs that `Ω`
-populates in the range of `⊗ₖ Π_k` the state agrees with `(⊗ₖ V_k)|Ω⟩`.
+`MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable`). Since `W_k Π_k = V_k`,
+`(⊗ₖ W_k)(⊗ₖ Π_k)|Ω⟩ = (⊗ₖ V_k)|Ω⟩`.
 
 **Scope restriction (blocks of length at least `3D`):** the preparation theorems
 `MPSPreparation.exists_isPreparedInDepth_blockMatVector`,
 `MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension` and
 `MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` assume blocks of at least `3D`
 sites, which the circuit needs to hold the two bond indices of a block in registers of `D` sites
-and route them together; the first two also assume physical dimension `d ≥ 2`, which an
-isometric extension `ℂ^{D²} → ℂ^{d^{ℓ k}}` needs for `D ≥ 2`. The source requires
+and route them together. The first two also assume `D² ≤ d^{3D}`, which the source's requirement
 `d^q ≥ D²` for its polar decompositions (footnote to the paragraph "Approximation through the
-fixed-point state") and holds the legs `R_i`, `L_{i+1}` of dimension `D` on the sites of the
-blocks (eq. `eq:phi_tilde`), but states no bound `3D`. Documented in
+fixed-point state") implies for blocks of `q ≥ 3D ≥ 1` sites, and which holds for every `D` when
+`d ≥ 2`. The source holds the legs `R_i`, `L_{i+1}` of dimension `D` on the sites of the blocks
+(eq. `eq:phi_tilde`), but states no bound `3D`. Documented in
 `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 ## Main results
 
-* `MPSPreparation.norm_chainState_eq` — `‖φ_N‖ = ‖φ_pos‖` for every chain.
 * `MPSPreparation.inner_blockMatVector_chainState_normalize` — isometric extensions preserve the
   overlap.
 * `MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension` — preparation in
@@ -102,68 +101,11 @@ theorem chainState_eq_blockMatVector {A : MPSChainTensor d D N} (hN : ∑ k, ℓ
   rw [chainState_apply, coeff_eq_mpvFamily_chainBlockTensor A hN, h, blockMatVector_apply]
   simp only [chainPosState_apply]
 
-/-- **The norm of the state is the norm of the state of the positive parts**, for every chain
-and every cutting into blocks: `‖φ_N‖ = ‖φ_pos‖`. The isometric factors are partial isometries,
-`V_k†V_k = Π_k`, and `|φ_pos⟩` is fixed by `⊗ₖ Π_k` because `Π_k P_k = P_k`.
-
-arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
-tensors": `V†V = Π` with `Π` the projector onto the image of `P`. -/
-theorem norm_chainState_eq (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) :
-    ‖chainState A‖ = ‖chainPosState A hN‖ := by
-  classical
-  set V : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ :=
-    fun k => polarIsoMatrix (chainBlockTensor A hN k)
-  set E : Fin M → Matrix (Fin (D * D)) (Fin (D * D)) ℂ :=
-    fun k => polarSupportMatrix (chainBlockTensor A hN k)
-  set φ : (Fin M → Fin (D * D)) → ℂ := fun τ => chainPosState A hN τ
-  -- `⊗ₖ Π_k` fixes `φ_pos`
-  have hfix : ∀ τ, ∑ τ', (∏ j, E j (τ j) (τ' j)) * φ τ' = φ τ := fun τ => by
-    have h := mpvFamily_rotatePhysical E (fun k => polarPosTensor (chainBlockTensor A hN k)) τ
-    simp only [E, rotatePhysical_polarSupportMatrix] at h
-    simp only [φ, chainPosState_apply]
-    exact h.symm
-  have hsq : ∑ s : ∀ k, Fin (blockPhysDim d (ℓ k)), star (∑ τ, (∏ j, V j (s j) (τ j)) * φ τ) *
-      ∑ τ, (∏ j, V j (s j) (τ j)) * φ τ = ∑ τ, star (φ τ) * φ τ := by
-    calc _ = ∑ s : ∀ k, Fin (blockPhysDim d (ℓ k)), ∑ τ, ∑ τ',
-          (∏ j, (star (V j (s j) (τ j)) * V j (s j) (τ' j))) * (star (φ τ) * φ τ') := by
-          refine Finset.sum_congr rfl fun s _ => ?_
-          simp only [star_sum, star_mul, star_prod, Finset.sum_mul, Finset.mul_sum]
-          rw [Finset.sum_comm]
-          refine Finset.sum_congr rfl fun τ _ => Finset.sum_congr rfl fun τ' _ => ?_
-          rw [Finset.prod_mul_distrib]
-          ring
-      _ = ∑ τ, ∑ τ', (∏ j, E j (τ j) (τ' j)) * (star (φ τ) * φ τ') := by
-          rw [Finset.sum_comm]
-          refine Finset.sum_congr rfl fun τ _ => ?_
-          rw [Finset.sum_comm]
-          refine Finset.sum_congr rfl fun τ' _ => ?_
-          rw [← Finset.sum_mul, ← Fintype.prod_sum fun j i => star (V j i (τ j)) * V j i (τ' j)]
-          congr 1
-          refine Finset.prod_congr rfl fun j _ => ?_
-          have h := congrFun (congrFun
-            (conjTranspose_polarIsoMatrix_mul_polarIsoMatrix (chainBlockTensor A hN j)) (τ j))
-            (τ' j)
-          rw [mul_apply] at h
-          simp only [conjTranspose_apply] at h
-          exact h
-      _ = ∑ τ, star (φ τ) * φ τ := by
-          refine Finset.sum_congr rfl fun τ _ => ?_
-          rw [← hfix τ, Finset.mul_sum]
-          refine Finset.sum_congr rfl fun τ' _ => ?_
-          rw [hfix τ]
-          ring
-  have key : ⟪chainState A, chainState A⟫_ℂ = ⟪chainPosState A hN, chainPosState A hN⟫_ℂ := by
-    rw [chainState_eq_blockIsoVector A hN]
-    simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
-    rw [Fintype.sum_equiv (blockIndexEquiv d hN) _ (fun s => star (∑ τ, (∏ j, V j (s j) (τ j)) *
-      φ τ) * ∑ τ, (∏ j, V j (s j) (τ j)) * φ τ) fun s => by rw [mul_comm]; rfl, hsq]
-    exact Finset.sum_congr rfl fun τ _ => mul_comm _ _
-  rw [inner_self_eq_norm_sq_to_K, inner_self_eq_norm_sq_to_K] at key
-  exact (pow_left_inj₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast key)
-
 /-- **Isometric extensions preserve the overlap.** If every `W_k` is an isometry with
 `W_k Π_k = V_k`, then for every family of pairs, `⟨(⊗ₖ W_k) Ω, φ_N⟩ = ⟨Ω, φ_pos⟩`, where `φ_N`
-and `φ_pos` are the normalized states. No injectivity is assumed.
+and `φ_pos` are the normalized states. The identity holds for every chain, with the convention
+`0⁻¹ = 0`; it is an identity of overlaps with normalized states when `φ_pos ≠ 0`, equivalently
+`φ_N ≠ 0`. No injectivity is assumed.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": the scheme has "error
 `ε(Ω, φ_pos)`"; Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors",
@@ -180,18 +122,39 @@ theorem inner_blockMatVector_chainState_normalize {A : MPSChainTensor d D N}
 
 /-! ### The preparation -/
 
-/-- **Preparation in depth `O(L)` with isometric extensions.** There is `C`, depending only on
-`d ≥ 2` and `D`, such that the following holds. Cut a ring of `N ≥ 1` sites into `M ≥ 1` blocks
-of lengths `3D ≤ ℓ k ≤ L`, let `A` be a chain of site-dependent tensors of bond dimension `D`,
-and let `ω^k` be unit vectors on the pair space. Then there are isometries
-`W_k : ℂ^{D²} → ℂ^{d^{ℓ k}}` with `W_k Π_k = V_k` for the polar decompositions `B_k = V_k P_k`
-of the blocked tensors such that `(⊗ₖ W_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is prepared in depth at most
-`C L` from a product state. No injectivity is assumed.
+/-- If `D² ≤ d^{3D}` and `D ≥ 1`, then `d ≥ 1` and `D ≤ d^D`: for `d = 1` the hypothesis forces
+`D = 1`, and for `d ≥ 2` the bound `D < 2^D` gives it. -/
+private theorem pos_and_le_pow_of_mul_le_pow {d D : ℕ} (hD : 0 < D) (hdD : D * D ≤ d ^ (3 * D)) :
+    0 < d ∧ D ≤ d ^ D := by
+  rcases Nat.lt_trichotomy d 1 with h | rfl | h
+  · obtain rfl : d = 0 := by omega
+    rw [zero_pow (by omega)] at hdD
+    have := Nat.mul_pos hD hD
+    omega
+  · refine ⟨one_pos, ?_⟩
+    rw [one_pow] at hdD ⊢
+    nlinarith
+  · exact ⟨by omega, Nat.lt_two_pow_self.le.trans (Nat.pow_le_pow_left h D)⟩
+
+/-- For `d ≥ 2`, `D² ≤ d^{3D}`. -/
+private theorem mul_le_pow_of_two_le {d : ℕ} (hd : 2 ≤ d) (D : ℕ) : D * D ≤ d ^ (3 * D) := by
+  have h : D ≤ d ^ D := Nat.lt_two_pow_self.le.trans (Nat.pow_le_pow_left hd D)
+  calc D * D ≤ d ^ D * d ^ D := Nat.mul_le_mul h h
+    _ = d ^ (2 * D) := by rw [← pow_add]; ring_nf
+    _ ≤ d ^ (3 * D) := Nat.pow_le_pow_right (by omega) (by omega)
+
+/-- **Preparation in depth `O(L)` with isometric extensions.** Let `D² ≤ d^{3D}`. There is `C`,
+depending only on `d` and `D`, such that the following holds. Cut a ring of `N ≥ 1` sites into
+`M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`, let `A` be a chain of site-dependent tensors of bond
+dimension `D`, and let `ω^k` be unit vectors on the pair space. Then there are isometries
+`W_k : ℂ^{D²} → ℂ^{d^{ℓ k}}` with `W_k Π_k = V_k` for the polar decompositions `B_k = V_k P_k` of
+the blocked tensors such that `(⊗ₖ W_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is prepared in depth at most `C L`
+from a product state. No injectivity is assumed.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit", its footnote (the derivation holds "also
 for non-injective tensors `B`") and Fig. 1, and the paragraph "Inhomogeneous short-range
 correlated MPS". -/
-theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hd : 2 ≤ d) :
+theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hdD : D * D ≤ d ^ (3 * D)) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
       (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ, (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
@@ -206,8 +169,7 @@ theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hd : 2 ≤ d) :
     refine ⟨0, fun {M} _ ℓ N _ hN A ω hω L _ _ =>
       absurd (hω ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩) ?_⟩
     simp
-  have hd0 : 0 < d := by omega
-  have hDd : D ≤ d ^ D := Nat.lt_two_pow_self.le.trans (Nat.pow_le_pow_left hd D)
+  obtain ⟨hd0, hDd⟩ := pos_and_le_pow_of_mul_le_pow hD hdD
   obtain ⟨dig⟩ : Nonempty (Fin D ↪ Cfg d D) :=
     Function.Embedding.nonempty_of_card_le (by simpa using hDd)
   have hdig : Function.Injective dig := dig.injective
@@ -232,22 +194,26 @@ theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hd : 2 ≤ d) :
       (fun c _ k τ => hUX k _ _ τ) hWp s
 
 open VaryingBondChain in
-/-- **Preparation of an inhomogeneous matrix product state without injectivity.** There is `C`,
-depending only on `d ≥ 2` and `D`, such that the following holds. Cut a ring of `N ≥ 1` sites
-into `M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`, let `A` be a chain of site-dependent tensors with
-bond dimensions `D_0, …, D_{N-1}` at most `D`, and let `ω^k` be unit vectors on
+/-- **Preparation of an inhomogeneous matrix product state without injectivity.** Let `D² ≤ d^{3D}`.
+There is `C`, depending only on `d` and `D`, such that the following holds. Cut a ring of `N ≥ 1`
+sites into `M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`, let `A` be a chain of site-dependent tensors
+with bond dimensions `D_0, …, D_{N-1}` at most `D`, and let `ω^k` be unit vectors on
 `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k` to block `k + 1`. Then there are isometries
-`W_k` with `W_k Π_k = V_k` for the polar decompositions `B_k = V_k P_k` of the blocked tensors
-such that `|ψ⟩ = (⊗ₖ W_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is a unit vector prepared in depth at most
-`C L`, with error against the normalized state `|φ_N⟩` of the chain equal to the error of
-`|Ω⟩` against `|φ_pos⟩`: `ε(ψ, φ_N) = ε(Ω, φ_pos)`. The blocked tensors, their polar factors and
-the pairs are those of the zero-padded chain.
+`W_k` with `W_k Π_k = V_k` for the polar decompositions `B_k = V_k P_k` of the blocked tensors such
+that `|ψ⟩ = (⊗ₖ W_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is a unit vector prepared in depth at most `C L`, with
+error against the normalized state `|φ_N⟩` of the chain equal to the error of `|Ω⟩` against
+`|φ_pos⟩`: `ε(ψ, φ_N) = ε(Ω, φ_pos)` when `φ_pos ≠ 0`. The identity of the overlaps holds for every
+chain, with the convention `0⁻¹ = 0`. The blocked tensors, their polar factors and the pairs are
+those of the zero-padded chain.
 
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": "the preparation scheme
 consists of preparing `|Ω⟩` and implementing the isometry", with "error `ε(Ω, φ_pos)`", and
 "the resulting total depth is again `O(log (N/ε))`". The bound `C L` gives this depth when
-`L = O(log(N/ε))`; the choice of `L` is not made here. -/
-theorem exists_isPreparedInDepth_inhomogeneous_isometricExtension (d D : ℕ) (hd : 2 ≤ d) :
+`L = O(log(N/ε))`; the choice of `L` is not made here. The hypothesis `D² ≤ d^{3D}` follows from
+the source's requirement `d^q ≥ D²` (footnote to the paragraph "Approximation through the
+fixed-point state") for blocks of `q ≥ 3D ≥ 1` sites. -/
+theorem exists_isPreparedInDepth_inhomogeneous_isometricExtension (d D : ℕ)
+    (hdD : D * D ≤ d ^ (3 * D)) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : VaryingBondChain d D N) (ω : ∀ k, Fin (rightBond A ℓ k) × Fin (rightBond A ℓ k) → ℂ),
       (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ, (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
@@ -262,7 +228,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_isometricExtension (d D : ℕ) (h
               (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ =
             1 - ‖⟪pairFamilyVector (padPairs A ℓ ω),
               (‖chainPosState (zeroPad A) hN‖ : ℂ)⁻¹ • chainPosState (zeroPad A) hN⟫_ℂ‖ := by
-  obtain ⟨C, hC⟩ := exists_isPreparedInDepth_blockMatVector d D hd
+  obtain ⟨C, hC⟩ := exists_isPreparedInDepth_blockMatVector d D hdD
   refine ⟨C, fun {M} _ ℓ N _ hN A ω hω L hℓ hL => ?_⟩
   obtain ⟨W, hWi, hW, hprep⟩ := hC ℓ hN (zeroPad A) (padPairs A ℓ ω)
     (sum_star_padPairs_mul_self A ℓ hω) L hℓ hL
@@ -307,7 +273,8 @@ theorem exists_isPreparedInDepth_of_isPairApproximable (d D : ℕ) :
     rw [hu, norm_pairFamilyVector (sum_star_padPairs_mul_self A ℓ hω), mul_one] at hle
     norm_num
     linarith
-  · obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous_isometricExtension d D hd2
+  · obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous_isometricExtension d D
+      (mul_le_pow_of_two_le hd2 D)
     refine ⟨C, fun ℓ N _ hN A L δ hℓ hL ⟨_, ω, hω, hδ⟩ => ?_⟩
     obtain ⟨W, -, -, hn, hprep, herr⟩ := hC ℓ hN A ω hω L hℓ hL
     exact ⟨_, hn, hprep, herr ▸ hδ⟩

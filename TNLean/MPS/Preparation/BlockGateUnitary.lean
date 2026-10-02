@@ -84,13 +84,12 @@ theorem extend_inputCfg (hd : 0 < d) {n' n : ℕ} (hn : n' ≤ n) (w u : Cfg d n
   · rw [Function.extend_apply' _ _ _ fun ⟨i, hi⟩ => hp (by rw [← hi]; simp), inputCfg,
       inputCfg, dite_eq_right hp, dite_eq_right hp]
 
-/-- **The unitary of a block after a unitary on its input pair.** Let `D ≤ d^{r₁}` through an
-injective `dig`, `r₁ ≥ 1`, and let `π` enumerate the pairs of bond indices. There is `C` such
-that for every `q ≥ 3 r₁`, every isometric chain `Q₀, …, Q_{q-1}` with `b₀ = 1` and every unitary
-`G` on `ℂ^{D²}`, there are a unitary `U` on `q` sites, a product of at most `C q` gates on
-neighbouring sites, and amplitudes `Z(σ, y)` with
-`Z(σ, y) = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0y}` for `y < b_q` and
-`⟨σ| U |l, 0 ⋯ 0, r⟩ = ∑_y Z(σ, y) G_{yx}` for `π x = (l, r)`.
+/-- **The unitary of a block after a unitary on its input pair.** Let `D ≥ 1`, let `D ≤ d^{r₁}`
+through an injective `dig`, `r₁ ≥ 1`, and let `π` enumerate the pairs of bond indices. There is `C`
+such that for every `q ≥ 3 r₁`, every isometric chain `Q₀, …, Q_{q-1}` with `b₀ = 1` and every
+unitary `G` on `ℂ^{D²}`, there are a unitary `U` on `q` sites, a product of at most `C q` gates on
+neighbouring sites, and amplitudes `Z(σ, y)` with `Z(σ, y) = (Q₀(σ₀) ⋯ Q_{q-1}(σ_{q-1}))_{0y}` for
+`y < b_q` and `⟨σ| U |l, 0 ⋯ 0, r⟩ = ∑_y Z(σ, y) G_{yx}` for `π x = (l, r)`.
 
 arXiv:2307.01696, paragraph "The sequential-RG circuit": each block unitary is a staircase of
 the isometries of eq. (14), with SWAP gates bringing its two inputs together, of depth `O(q)`;

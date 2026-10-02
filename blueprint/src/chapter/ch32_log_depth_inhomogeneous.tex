@@ -17,9 +17,12 @@ $V_k$ of a blocked tensor is then a partial isometry with
 $V_k^\dagger V_k=\Pi_k$, and the block unitary implements an isometry $W_k$
 with $W_k\Pi_k=V_k$, an isometric extension of $V_k$, as the source's footnote
 to the paragraph ``The sequential-RG circuit'' indicates. The preparation
-theorems assume that every block has at least $3D$ sites. The source requires
-$d^q\ge D^2$ for its polar decompositions and holds the two legs of a block,
-of dimension $D$ each, on its sites, but states no bound $3D$. The restriction
+theorems assume that every block has at least $3D$ sites, and those with
+isometric extensions and error exactly $\varepsilon(\Omega,\phi_{\mathrm{pos}})$
+also assume $D^2\le d^{3D}$, which holds for every $D$ when $d\ge2$. The source
+requires $d^q\ge D^2$ for its polar decompositions, which implies
+$D^2\le d^{3D}$ for blocks of $q\ge3D\ge1$ sites, and holds the two legs of a
+block, of dimension $D$ each, on its sites, but states no bound $3D$. The restriction
 is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
 
 \begin{definition}[Blocked tensors of an inhomogeneous chain]
@@ -102,14 +105,26 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \lean{MPSTensor.inner_blockIsoVector, MPSTensor.norm_blockIsoVector,
         MPSTensor.inner_blockIsoVector_of_isInjectiveOn,
         MPSTensor.norm_blockIsoVector_of_isInjectiveOn,
+        Matrix.sum_star_mul_prod_eq_sum_conjTranspose_mul,
         Matrix.sum_star_mul_prod_of_support,
         MPSTensor.pairFamilyState_inner, MPSTensor.pairFamilyState_norm_sq,
         MPSTensor.norm_pairFamilyVector,
         MPSPreparation.blockIsoVector_smul, MPSPreparation.chainPosState_eq_zero,
-        MPSPreparation.norm_chainState,
+        MPSPreparation.norm_chainState_eq,
         MPSPreparation.inner_chainBlockIsometryState_normalize}
     \leanok
     \uses{def:ldp_chain_pos_state, def:ldpolar_injective_on}
+    For matrices $W_k$ from $\C^m$ to $\C^{n_k}$, one on each of $M$ sites,
+    and vectors $x,y$ on $(\C^m)^{\otimes M}$,
+    \begin{align}
+        \Bigl\langle\Bigl(\bigotimes_kW_k\Bigr)x,
+        \Bigl(\bigotimes_kW_k\Bigr)y\Bigr\rangle
+         & =\sum_{a,b}\overline{x(a)}\,y(b)\prod_k(W_k^\dagger W_k)_{a_kb_k}.
+        \label{eq:ldp_chain_block_gram}
+    \end{align}
+    For every chain and every cutting into blocks,
+    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$; no injectivity is
+    assumed.
     Suppose every blocked tensor $B_k$ is injective on a set $S_k$ of bond
     pairs, as in Definition~\ref{def:ldpolar_injective_on}. Then
     $\langle(\bigotimes_kV_k)x,(\bigotimes_kV_k)y\rangle=\langle x,y\rangle$
@@ -119,8 +134,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     matrices $W_k$ with $\sum_i\overline{(W_k)_{ia}}(W_k)_{ib}=1$ if
     $a=b\in S_k$ and $0$ otherwise, the same identity holds with $W_k$ in place
     of $V_k$. The state $\ket{\phi_{\mathrm{pos}}}$ vanishes at every $a$ with
-    some $a_k\notin S_k$, and
-    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$. For products
+    some $a_k\notin S_k$. For products
     $\ket\Omega$ and $\ket{\Omega'}$ of pairs $\omega^k$ and $\omega'^k$,
     $\langle\Omega,\Omega'\rangle=\prod_k\langle\omega^k,\omega'^k\rangle$; in
     particular the norm of $\ket\Omega$ is $\prod_k\lVert\omega^k\rVert$.
@@ -132,11 +146,27 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         \frac{\phi_{\mathrm{pos}}}{\lVert\phi_{\mathrm{pos}}\rVert}\Bigr\rangle.
         \label{eq:ldp_chain_block_iso_inner}
     \end{align}
+    Here a vector $x/\lVert x\rVert$ with $x=0$ is read as $0$, so the identity
+    holds for every chain, and it is an identity of overlaps with normalized
+    states when $\phi_{\mathrm{pos}}\ne0$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective_on,
-        def:prep_bond_regrouping}
+        thm:ldpolar_tensor_decomposition,
+        lem:ldp_block_isometry_state_overlap, def:prep_bond_regrouping}
+    Expanding both vectors and summing over the configurations $s=(s_k)_k$
+    factor by factor gives (\ref{eq:ldp_chain_block_gram}), since
+    $\sum_{s_k}\overline{(W_k)_{s_ka}}(W_k)_{s_kb}=(W_k^\dagger W_k)_{ab}$. For
+    the norm, $\ket{\phi_N}=(\bigotimes_kV_k)\ket{\phi_{\mathrm{pos}}}$ by
+    Theorem~\ref{thm:ldp_chain_state_eq_pos}, and
+    $V_k^\dagger V_k=\Pi_k$ by Theorem~\ref{thm:ldpolar_tensor_decomposition};
+    by (\ref{eq:ldp_chain_block_gram}) the squared norm of $\ket{\phi_N}$ is
+    $\sum_{a,b}\overline{\phi_{\mathrm{pos}}(a)}\phi_{\mathrm{pos}}(b)
+        \prod_k(\Pi_k)_{a_kb_k}$, and
+    $\sum_b\prod_k(\Pi_k)_{a_kb_k}\phi_{\mathrm{pos}}(b)=\phi_{\mathrm{pos}}(a)$
+    because $\sum_l(\Pi_k)_{jl}P_k^l=P_k^j$, expanding the trace as in
+    Lemma~\ref{lem:ldp_block_isometry_state_overlap}.
     By Theorem~\ref{thm:ldpolar_tensor_injective_on},
     $\sum_{s_k}\overline{(V_k)_{s_ka}}(V_k)_{s_kb}$ is $1$ if $a=b\in S_k$ and
     $0$ otherwise, for the configurations $s_k$ of block $k$; for injective
@@ -378,7 +408,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \leanok
     \uses{thm:ldp_block_sum_unitary, thm:ldp_bounded_unitary_two_site_gates,
         lem:ldp_unitary_implementing_isometry}
-    Encode the bond indices injectively in $r_1\ge1$ sites, let $\pi$
+    Let $D\ge1$, encode the bond indices injectively in $r_1\ge1$ sites, let $\pi$
     enumerate the bond pairs, and let $Q_1,\dots,Q_q$ be an isometric chain
     with $b_0=1$, as in Theorem~\ref{thm:ldp_block_sum_unitary}. There is $C$,
     independent of $q\ge3r_1$, of the chain and of $G$, such that for every
@@ -439,18 +469,14 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         MPSTensor.inner_blockMatVector, MPSTensor.norm_blockMatVector,
         MPSPreparation.blockMatVector_smul,
         MPSPreparation.chainState_eq_blockMatVector,
-        MPSPreparation.norm_chainState_eq,
         MPSPreparation.inner_blockMatVector_chainState_normalize}
     \leanok
-    \uses{def:ldp_chain_pos_state, thm:ldp_chain_state_eq_pos,
-        lem:ldp_projector_basis}
+    \uses{def:ldp_chain_pos_state, thm:ldp_chain_state_eq_pos}
     For matrices $W_k$ from $\C^{D^2}$ to the sites of block $k$, let
     $(\bigotimes_kW_k)x$ have the coefficient $\sum_a\prod_k\bra{s_k}W_k\ket{a_k}x(a)$
     at the configuration $s$ read block by block; for $W_k=V_k$ it is the
     vector of Definition~\ref{def:ldp_chain_pos_state}. If every $W_k$ is an
-    isometry, $\bigotimes_kW_k$ preserves inner products and norms. For every
-    chain and every cutting into blocks,
-    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$. If
+    isometry, $\bigotimes_kW_k$ preserves inner products and norms. If
     $W_k\Pi_k=V_k$ for every $k$, then
     $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$, and if moreover
     every $W_k$ is an isometry, then for all vectors $\omega^k$
@@ -458,26 +484,26 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         \Bigl\langle\Bigl(\bigotimes_kW_k\Bigr)\Omega,
         \frac{\phi_N}{\lVert\phi_N\rVert}\Bigr\rangle
          & =\Bigl\langle\Omega,
-        \frac{\phi_{\mathrm{pos}}}{\lVert\phi_{\mathrm{pos}}\rVert}\Bigr\rangle.
+        \frac{\phi_{\mathrm{pos}}}{\lVert\phi_{\mathrm{pos}}\rVert}\Bigr\rangle,
         \label{eq:ldp_isometric_extension_overlap}
     \end{align}
+    with the reading of $x/\lVert x\rVert$ for $x=0$ as in
+    Theorem~\ref{thm:ldp_chain_block_iso_inner}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_chain_block_iso_inner}
-    Inner products are preserved as in
-    Theorem~\ref{thm:ldp_chain_block_iso_inner}, with $W_k^\dagger W_k=1$. By
-    Theorem~\ref{thm:ldp_chain_state_eq_pos},
-    $\ket{\phi_N}=(\bigotimes_kV_k)\ket{\phi_{\mathrm{pos}}}$; expanding the
-    squared norm gives
-    $\sum_{a,b}\overline{\phi_{\mathrm{pos}}(a)}\phi_{\mathrm{pos}}(b)
-        \prod_k(V_k^\dagger V_k)_{a_kb_k}$, and
-    $\sum_b\prod_k(\Pi_k)_{a_kb_k}\phi_{\mathrm{pos}}(b)=\phi_{\mathrm{pos}}(a)$
-    because $\Pi_kP_k=P_k$. If $W_k\Pi_k=V_k$, then
+    \uses{lem:ldp_block_isometry_state_overlap,
+        thm:ldpolar_tensor_decomposition, thm:ldp_chain_block_iso_inner}
+    Expanding the inner product over the configurations read block by block,
+    $\sum_{s_k}\overline{(W_k)_{s_ka}}(W_k)_{s_kb}=\delta_{ab}$ factor by factor
+    gives $\langle x,y\rangle$, as in
+    Lemma~\ref{lem:ldp_block_isometry_state_overlap}. If $W_k\Pi_k=V_k$, then
     $W_kP_k=W_k\Pi_kP_k=V_kP_k=B_k$, and expanding the trace as in
     Theorem~\ref{thm:ldp_chain_state_eq_pos} gives
-    $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$; with the norm
-    identity this gives (\ref{eq:ldp_isometric_extension_overlap}).
+    $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$; with
+    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert$ from
+    Theorem~\ref{thm:ldp_chain_block_iso_inner} and the preservation of inner
+    products this gives (\ref{eq:ldp_isometric_extension_overlap}).
 \end{proof}
 
 \begin{theorem}[Preparation with isometric extensions]
@@ -487,8 +513,8 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \leanok
     \uses{thm:ldp_isometric_extension_unitary,
         thm:ldp_isometric_extension_overlap, thm:ldp_chain_depth}
-    There is $C$, depending only on $d\ge2$ and $D$, such that the following
-    holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
+    Let $D^2\le d^{3D}$. There is $C$, depending only on $d$ and $D$, such that
+    the following holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be tensors of bond dimension $D$,
     and let $\omega^k$ be unit vectors on $\C^D\otimes\C^D$. Then there are
     isometries $W_k$ with $W_k\Pi_k=V_k$ for the polar decompositions
@@ -498,8 +524,9 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
-    For $D=0$ there is no unit pair. Otherwise $D\le d^D$ and each bond index is
-    encoded in $D$ sites. The circuit of
+    For $D=0$ there is no unit pair. Otherwise $D^2\le d^{3D}$ gives $d\ge1$ and
+    $D\le d^D$: for $d=1$ it forces $D=1$, and for $d\ge2$ one has $D<2^D$.
+    Each bond index is encoded in $D$ sites. The circuit of
     Theorem~\ref{thm:ldp_chain_depth} applies with the unitary of
     Theorem~\ref{thm:ldp_isometric_extension_unitary} on every block, which
     implements $W_k$ on all inputs $\ket{l,0,r}$; the state of the two layers
@@ -514,8 +541,8 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \leanok
     \uses{def:ldp_varying_bond_chain, def:ldp_pair_approximable,
         def:ldp_local_circuit, thm:ldp_isometric_extension_depth}
-    There is $C$, depending only on $d\ge2$ and $D$, such that the following
-    holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
+    Let $D^2\le d^{3D}$. There is $C$, depending only on $d$ and $D$, such that
+    the following holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be a chain with bond dimensions at
     most $D$, and let $\omega^k$ be unit vectors on $\C^{b_k}\otimes\C^{b_k}$, as
     in Definition~\ref{def:ldp_varying_bond_chain}. Then there are isometries
@@ -530,7 +557,10 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
         \label{eq:ldp_inhomogeneous_error}
     \end{align}
     that is, $\varepsilon(\psi,\phi_N)=\varepsilon(\Omega,\phi_{\mathrm{pos}})$
-    for the normalized states. For every $d$, with $C$ depending only on $d$
+    for the normalized states when $\phi_{\mathrm{pos}}\ne0$; with the
+    reading of $x/\lVert x\rVert$ for $x=0$ as in
+    Theorem~\ref{thm:ldp_chain_block_iso_inner}, the identity of the overlaps
+    holds for every chain. For every $d$, with $C$ depending only on $d$
     and $D$: if the chain is approximated by pairs with error $\delta$ on the
     given blocks, some unit vector prepared in depth at most $CL$ has error at
     most $\delta$ against the normalized state $\ket{\phi_N}$. No injectivity
@@ -541,24 +571,26 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     $\varepsilon(\Omega,\phi_{\mathrm{pos}})$ for matrix product states with
     bond dimension at most $D$. The lower bound $3D\le\ell_k$ is absent from
     that statement~\cite{gap:mswc24_inhomogeneous_scope}, and the unrestricted
-    claim is not formalized. The bound $CL$ gives the stated depth when
-    $L=O(\log(N/\varepsilon))$; the source's definition fixes blocks of length
-    $q=O(\log N)$. The choice of $L$ in terms of $N$ and the error is not made
-    here.
+    claim is not formalized. The hypothesis $D^2\le d^{3D}$ follows from the
+    source's requirement $d^q\ge D^2$ for blocks of $q\ge3D\ge1$ sites. The
+    bound $CL$ gives the stated depth when $L=O(\log(N/\varepsilon))$; the
+    source's definition fixes blocks of length $q=O(\log N)$. The choice of
+    $L$ in terms of $N$ and the error is not made here.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:ldp_zero_pad, thm:ldp_isometric_extension_overlap,
-        thm:ldp_chain_depth}
+        thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner}
     The padded pairs are unit vectors by Theorem~\ref{thm:ldp_zero_pad}, and
     Theorem~\ref{thm:ldp_isometric_extension_depth} for the padded chain gives
     the isometries and the depth. The norm of $\ket\psi$ is
     $\lVert\Omega\rVert=1$, and the error identity is
     (\ref{eq:ldp_isometric_extension_overlap}), since the padded chain has the
-    state $\ket{\phi_N}$. Under the approximation hypothesis with $d\ge2$, the
-    error is at most $\delta$. For $d\le1$ the ring has at most one
-    configuration; $\phi_N\ne0$ because
-    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert\ne0$, the normalized
+    state $\ket{\phi_N}$. Under the approximation hypothesis with $d\ge2$, which
+    gives $D^2\le d^{3D}$, the error is at most $\delta$. For $d\le1$ the ring
+    has at most one configuration; $\phi_N\ne0$ because
+    $\lVert\phi_N\rVert=\lVert\phi_{\mathrm{pos}}\rVert\ne0$ by
+    Theorem~\ref{thm:ldp_chain_block_iso_inner}, the normalized
     state $\phi_N/\lVert\phi_N\rVert$ is prepared in depth $0$ by
     Theorem~\ref{thm:ldp_chain_depth}, and its error is $0\le\delta$ by the
     Cauchy--Schwarz inequality.
