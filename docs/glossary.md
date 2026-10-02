@@ -2010,3 +2010,9 @@ involve no boundary.
   blocking and symmetry-preserving embeddings are separate mathematical
   operations. It does not impose an MPS description of intermediate ground
   spaces, which is required for the source's converse classification argument.
+
+- **Ordered comparison:** `MPSTensor.orderedGappedInteractionPath` constructs
+  affine interpolation of positive interactions of norm at most one when
+  the smaller interaction has a uniform gap and the periodic zero modes
+  are common. Endpoint commutation with the fixed on-site representation
+  suffices for symmetry of the entire path.
