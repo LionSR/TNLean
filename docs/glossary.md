@@ -1939,6 +1939,23 @@ involve no boundary.
 
 ## Symmetries of matrix product density operators
 
+### `MPOTensor.IsMPDOWithBoundary` and `MPOTensor.commutingBoundaryAlgebra`
+
+- **Declarations:** `MPOTensor.IsMPDOWithBoundary M X : Prop` and
+  `MPOTensor.commutingBoundaryAlgebra M`.
+- **Defined in:** `TNLean/MPS/MPDO/Boundary.lean`.
+- **Meaning:** the operator with entries
+  $\operatorname{tr}(X M^{i_1j_1}\cdots M^{i_Lj_L})$ is positive semidefinite
+  at every positive length. The commuting boundaries form the complex
+  subalgebra centralizing every tensor letter.
+- **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:175–182`.
+- **Sanctioned bridges:** `MPOTensor.mem_commutingBoundaryAlgebra_iff`,
+  `MPOTensor.commute_evalWord_of_mem_commutingBoundaryAlgebra`, and
+  `MPOTensor.isMPDOWithBoundary_one_iff`.
+- **Caveat:** positivity and membership of the commuting-boundary algebra
+  are stated separately. At identity boundary the positivity predicate
+  is the ordinary MPDO predicate.
+
 ### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
 
 - **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop` and
@@ -1957,27 +1974,31 @@ involve no boundary.
 
 ### `MPOTensor.IsStrongMPOSymmetry` and `MPOTensor.IsWeakMPOSymmetry`
 
-- **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M c : Prop` and
-  `MPOTensor.IsWeakMPOSymmetry O M : Prop`.
+- **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M X c : Prop` and
+  `MPOTensor.IsWeakMPOSymmetry O M X : Prop`.
 - **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
 - **Meaning:** the periodic operators $O_a^{(L)}$ of a family of matrix
   product operators satisfy $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$
   (strong) or $[O_a^{(L)},\rho^{(L)}]=0$ (weak) for every label and every
-  positive length, where $\rho^{(L)}$ is the periodic operator of `M`.
+  positive length, where $\rho^{(L)}=\rho^{(L)}(X,M)$ is the
+  boundary-weighted periodic operator. Source-admissible `X` belongs to
+  `MPOTensor.commutingBoundaryAlgebra M`, the centralizer of the letters.
 - **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
 - **Sanctioned bridges:** `MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry`,
   `MPOTensor.IsStrongMPOSymmetry.isFusionCharacter`, and
   `MPOTensor.isStrongMPOSymmetry_iff_purification`.
 - **Caveat:** more general than the source, where the $O_a$ are normal matrix
   product operators forming a fusion algebra (lines 125–137) and $\rho$ is
-  positive; results add these hypotheses where they use them. Boundary
-  conditions other than the identity are out of scope, recorded in
-  `docs/paper-gaps/sun25_mpdo_symmetry_boundary_scope.tex`.
+  positive; results add these hypotheses where they use them. Commutation
+  of `X` with the letters does not imply positivity; this is the separate
+  predicate `MPOTensor.IsMPDOWithBoundary M X`. The arbitrary-boundary
+  purification theorem uses an actual global purification, rather than
+  assuming that `X` factors on a doubled virtual space.
 
 ### `MPOTensor.IsStrongOnSiteSymmetry` and `MPOTensor.IsWeakOnSiteSymmetry`
 
-- **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M U c : Prop` and
-  `MPOTensor.IsWeakOnSiteSymmetry M U : Prop`, for a monoid homomorphism
+- **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M X U c : Prop` and
+  `MPOTensor.IsWeakOnSiteSymmetry M X U : Prop`, for a monoid homomorphism
   `U : G →* Matrix (Fin d) (Fin d) ℂ`.
 - **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
 - **Meaning:** the MPO-family predicates above for the on-site family
@@ -1986,11 +2007,13 @@ involve no boundary.
   eigenvalue-one strong form $U\rho=\rho$ and the weak form $[U,\rho]=0$ are
   arXiv:2603.28349, line 362.
 - **Sanctioned bridges:**
-  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` (weak
-  symmetry as on-site symmetry of the vectorized state under $U\otimes\bar U$,
-  for unitary $U$), `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor`,
-  and `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor` (normal
-  purifications).
+  `MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor`
+  characterize the boundary-weighted vectorized state. At identity boundary,
+  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor` give ordinary periodic
+  vector identities; `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor`
+  characterizes normal periodic local purifications, also at identity boundary.
 - **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the
   definition; they are phases, multiplicative in `g`, and equal to $1$ at the
   identity only under unitarity and $\rho^{(L)}\neq 0$
