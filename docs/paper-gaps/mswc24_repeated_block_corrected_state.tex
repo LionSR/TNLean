@@ -240,9 +240,10 @@ exceeds one when $b<1$, for instance when the sums $\beta_j=\sum_k\mu_{j,k}^N$ c
 weight has modulus below one, because the estimates of the $z_j$ are absolute; the source's bound
 has no such factor. The numerical check below shows the error
 converging at the same rate when $b$ is exponentially small. Removing the factor needs a
-relative estimate of $z_j$ for blocks of small weight, the second-order perturbation bound for
-the square root of $B^\dagger B$ that \cite{gap:mswc24_block_form_mixed_overlap} lists for the
-sharp rate.
+relative estimate of $z_j$ for blocks of small weight, uniformly in the weights. The
+second-order estimate of $z_j$ that \cite{gap:mswc24_block_form_mixed_overlap} proves for blocks
+of multiplicity one and weight one, which gives the sharp rate $(N/q)e^{-2\gamma q/\xi}$ there,
+is absolute and does not supply it.
 
 \section{Numerical check with overlaps}
 A script evaluates the corrected state for two random normal blocks of bond dimension two on
