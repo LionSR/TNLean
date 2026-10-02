@@ -4,6 +4,40 @@ The physical renormalization of matrix product density operators rests on
 channel extensions, projector-controlled positive sums, and physical closures of
 virtual contractions.
 
+\begin{theorem}[Multiplicativity from reflected short contractions]
+    \label{thm:reflected_short_contractions_multiplicative}
+    \lean{LinearMap.map_mul_of_reflected_moments}
+    \leanok
+    Let $A,B$ be complex algebras with involutions, and let
+    $V:B\to A$ be complex linear and preserve the involutions.
+    Let $\tau_A:A\to\C$ and $\tau_B:B\to\C$ be complex linear,
+    with $\tau_A(a^*a)=0$ implying $a=0$.
+    Suppose, for every $x,y,z\in B$, that
+    \begin{align*}
+        \tau_A(Vx\,Vy)             & =\tau_B(xy),       \\
+        \tau_A(Vx\,Vy\,Vz)         & =\tau_B(xyz),      \\
+        \tau_A((Vy)^*(Vx)^*Vx\,Vy) & =\tau_B(y^*x^*xy).
+    \end{align*}
+    Then $V(xy)=Vx\,Vy$ for every $x,y\in B$.
+    No finite-dimensionality, positivity, traciality, or unitality of
+    $V$ is required beyond the stated quadratic faithfulness.
+\end{theorem}
+\begin{proof}\leanok
+    Put $d=Vx\,Vy-V(xy)$. Expanding $\tau_A(d^*d)$ gives four
+    terms. The reflected four-point identity evaluates the first,
+    the three-point identity evaluates the two cross terms, and
+    the two-point identity evaluates the last. After preserving
+    involutions and associating products, their values are all
+    $\tau_B(y^*x^*xy)$, with coefficients $1,-1,-1,1$.
+    Hence $\tau_A(d^*d)=0$, and quadratic faithfulness gives $d=0$.
+\end{proof}
+
+This is a finite-moment criterion for an already specified involution
+on the compared algebras. In a boundary reconstruction, preservation
+of the oriented involution must be proved separately before applying
+the criterion; preservation of the physical adjoint alone does not
+supply it.
+
 
 % The concrete dependent-sum equivalences for T_0, S_0, T_2, and S_2 are
 % stated in ch21_mpdo_rfp_simple_local_normalized_preparations.tex after the eta preparations.
@@ -765,6 +799,25 @@ leaving the remaining sites unchanged.
          & =\rho^{(N+1)}(M).
         \notag
     \end{align}
+\end{proof}
+
+\begin{theorem}[One-site positivity at a renormalization fixed point]
+    \label{thm:mpdo_rfp_one_site_positivity}
+    \lean{MPOTensor.IsRFPViaTS.isMPDO_of_mpo_one_posSemidef}
+    \lean{MPOTensor.IsRFPViaTS.isMPDO_iff_mpo_one_posSemidef}
+    \leanok
+    \uses{def:mpdo, def:is_rfp_via_ts, thm:mpdo_global_renormalization_maps}
+    Suppose that the one-site and two-site closures of $M$ are related
+    by the two channels of Definition~\ref{def:is_rfp_via_ts}.
+    Then $\rho^{(N)}(M)\succeq0$ at every positive length if and only
+    if $\rho^{(1)}(M)\succeq0$.
+\end{theorem}
+\begin{proof}\leanok
+    One direction follows by taking $N=1$. For the other, apply the
+    localized refinement channel repeatedly. By
+    Theorem~\ref{thm:mpdo_global_renormalization_maps}, it sends
+    $\rho^{(N)}(M)$ to $\rho^{(N+1)}(M)$, and complete positivity
+    preserves each matrix inequality.
 \end{proof}
 
 \section{Pure-state recovery inside the MPO formalism}

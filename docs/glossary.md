@@ -1232,8 +1232,12 @@ The following notions use different transfer objects and are not interchangeable
 ## Quantum circuits
 
 The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
-from `TNLean/MPS/`. Its sites are `Fin N`, closed into a ring by addition modulo
-`N`, and its local labels are `Fin d`. The blueprint chapter is
+from `TNLean/MPS/`. Its local labels are `Fin d`. The notions that involve no
+geometry (operators acting on a set of sites, expectations, product vectors,
+placed operators, permutations of configurations and of sites, onsite
+channels) are stated for any finite type of sites `ι`; layers, circuits,
+neighbourhoods and light cones use the sites `Fin N`, closed into a ring by
+addition modulo `N`. The blueprint chapter is
 `ch33_local_quantum_circuits.tex`; the preparation of matrix product states
 in `MPS/Preparation/` uses it.
 
@@ -1242,14 +1246,18 @@ in `MPS/Preparation/` uses it.
 #### `QuantumCircuit.supportedOperators`
 
 - **Declaration:**
-  `QuantumCircuit.supportedOperators (d : ℕ) (S : Set (Fin N)) : Submodule ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)`.
+  `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
 - **Meaning:** the complex span of the product operators
-  `Matrix.finKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
-  `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S`.
+  `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
+  `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S` of a finite type
+  of `d`-level sites `ι`. The chain of `N` sites is `ι = Fin N`, where
+  `Matrix.rectKronecker m` is `Matrix.finKronecker m`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
-- **Sanctioned bridges:** `QuantumCircuit.supportedOperators_mono`,
+- **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
+  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`,
+  `QuantumCircuit.supportedOperators_mono`,
   `QuantumCircuit.one_mem_supportedOperators`,
   `QuantumCircuit.mul_mem_supportedOperators`,
   `QuantumCircuit.star_mem_supportedOperators`,
@@ -1398,12 +1406,12 @@ in `MPS/Preparation/` uses it.
 #### `QuantumCircuit.AgreeOff`
 
 - **Declaration:**
-  `QuantumCircuit.AgreeOff (e : Fin m → Fin n) (x y : Fin n → Fin d) : Prop`.
+  `QuantumCircuit.AgreeOff {ι κ : Type*} (e : κ → ι) (x y : ι → Fin d) : Prop`.
 - **Defined in:** `TNLean/Circuit/SiteEmbedding.lean`.
-- **Meaning:** the configurations `x` and `y` of the `n`-site chain agree at
-  every site outside the range of `e`.
+- **Meaning:** the configurations `x` and `y` of the sites `ι` agree at every
+  site outside the range of `e`; for chains, `e : Fin m → Fin n`.
 - **Source:** no separate source notion; it describes the entries of the
-  placement `QuantumCircuit.embedOp e X` of an operator on `m` sites.
+  placement `QuantumCircuit.embedOp e X` of an operator on the sites `κ`.
 - **Sanctioned bridges:** `QuantumCircuit.sum_agreeOff` and
   `QuantumCircuit.eq_extend_of_agreeOff` (for injective `e`).
 - **Caveat:** proof-internal vocabulary for the site embedding.
@@ -1485,7 +1493,7 @@ in `MPS/Preparation/` uses it.
 #### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop`.
+  `QuantumCircuit.IsLocalPerm {ι : Type*} (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
 - **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
@@ -1561,8 +1569,9 @@ in `MPS/Preparation/` uses it.
   $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$
   alternates `T` layers `L_t` of local channels on pairs of neighbouring sites
   of the ring (`QuantumCircuit.ChannelLayer`) with onsite channels $\Phi_t$
-  (`QuantumCircuit.OnsiteChannel`), each a tensor product of one-site channels
-  that may change the local dimension. Attaching an ancilla in a fixed state
+  (`QuantumCircuit.OnsiteChannel d e (Fin N)`), each a tensor product of
+  one-site channels that may change the local dimension; onsite channels
+  `QuantumCircuit.OnsiteChannel d e ι` are defined for any type of sites `ι`. Attaching an ancilla in a fixed state
   (`OnsiteChannel.attach`) and discarding it (`OnsiteChannel.discard`) are
   onsite channels.
 - **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, main text, paragraph

@@ -37,7 +37,8 @@ preparation of matrix product states.
     \label{def:qc_local_circuit}
     \lean{QuantumCircuit.IsLocalCircuitOfDepth, QuantumCircuit.IsPreparedInDepth,
         QuantumCircuit.Layer, QuantumCircuit.circuitOp,
-        QuantumCircuit.supportedOperators}
+        QuantumCircuit.supportedOperators,
+        QuantumCircuit.rectKronecker_mem_supportedOperators}
     \leanok
     A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
     $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
@@ -52,6 +53,12 @@ preparation of matrix product states.
     $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$. Two sets of sites
     are at distance larger than $s$ if no site of one is within ring distance
     $s$ of a site of the other.
+
+    Acting on a set of sites needs no geometry: for any finite set of sites
+    $I$ and $X\subseteq I$, an operator on $(\C^d)^{\otimes I}$ acts on $X$ if
+    it lies in the span of the products $\bigotimes_{i\in I}m_i$ with
+    $m_i=\mathbb 1$ for $i\notin X$. The chain of $N$ sites is the case
+    $I=\{1,\dots,N\}$.
 \end{definition}
 
 \begin{lemma}[Light cone of a local circuit]
@@ -77,7 +84,9 @@ preparation of matrix product states.
     \label{lem:qc_light_cone_correlations}
     \uses{lem:qc_light_cone}
     \lean{QuantumCircuit.expect_mul_eq_of_isPreparedInDepth,
-        QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth}
+        QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth,
+        QuantumCircuit.expect_productVector_rectKronecker,
+        QuantumCircuit.expect_productVector_mul}
     \leanok
     Let $\ket{\psi}$ be a unit vector prepared in depth $T$, and let $Z$, $Z'$
     act on sets of sites at distance larger than $2T$. Then
@@ -88,7 +97,12 @@ preparation of matrix product states.
         =\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
     This is the statement in the proof of
     \cite[Theorem~1]{Malz2024Preparation} that every connected correlation of
-    such operators vanishes.
+    such operators vanishes. Its two ingredients on product vectors hold for
+    any finite set of sites: the expectation of $\bigotimes_im_i$ in
+    $\ket\pi=\bigotimes_i\ket{v_i}$ is $\prod_i\bra{v_i}m_i\ket{v_i}$, and
+    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
+        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
+    disjoint sets of sites.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -137,7 +151,8 @@ preparation of matrix product states.
 \begin{lemma}[Preparation from the all-zero state]
     \label{lem:qc_preparation_from_zero}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.finKronecker_mulVec_productVector,
+    \lean{QuantumCircuit.rectKronecker_mulVec_productVector,
+        QuantumCircuit.finKronecker_mulVec_productVector,
         Matrix.exists_mem_unitary_eq_smul_mulVec_single_zero,
         QuantumCircuit.productVector_pi_smul,
         QuantumCircuit.exists_productVector_eq_smul_finKronecker_mulVec,
@@ -145,7 +160,7 @@ preparation of matrix product states.
         QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
     \leanok
     Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
-    $\mathbb{C}^d$,
+    $\mathbb{C}^d$ on any finite set of sites,
     $(\bigotimes_im_i)(\bigotimes_i\ket{v_i})=\bigotimes_im_i\ket{v_i}$, and
     $\bigotimes_ic_i\ket{v_i}=(\prod_ic_i)\bigotimes_i\ket{v_i}$ for scalars
     $c_i$. Every nonzero $x\in\mathbb{C}^d$ equals $c\,u\ket0$ for a unitary
@@ -172,6 +187,7 @@ preparation of matrix product states.
 \begin{lemma}[Operators placed on sets of sites]
     \label{lem:qc_placed_operators}
     \lean{QuantumCircuit.embedOp, QuantumCircuit.embedOp_embedOp,
+        QuantumCircuit.embedOp_rectKronecker,
         QuantumCircuit.commute_embedOp_of_disjoint,
         QuantumCircuit.noncommProd_embedOp_apply}
     \leanok
@@ -182,13 +198,17 @@ preparation of matrix product states.
     the pair of configurations $(x,y)$ if $x$ and $y$ agree at every site
     outside the range of $e$, and $0$ otherwise; for injective $e$ it is $X$
     acting on the sites $e(1),\dots,e(m)$ and the identity on the other sites.
-    For an injective map $f$, placing by $f$ the operator $X$ placed by $e$
-    places $X$ by $f\circ e$. Operators placed by injective maps with disjoint
-    ranges commute. If $e_k$, $k\in K$, are injective maps with pairwise
-    disjoint ranges and $X_k$ are operators on the corresponding chains, the
-    product of the operators $X_k$ placed by $e_k$ has the matrix element
-    $\prod_{k\in K}(X_k)_{x\circ e_k,\,y\circ e_k}$ at $(x,y)$ if $x$ and $y$
-    agree at every site outside all the ranges, and $0$ otherwise.
+    Placement is defined in the same way for a map $e\colon J\to I$ of any
+    finite sets of sites; for injective $e$, placing a product
+    $\bigotimes_{j\in J}m_j$ gives the product with $m_j$ at the site $e(j)$
+    and $\mathbb 1$ off $e(J)$. For an injective map $f$, placing by $f$ the
+    operator $X$ placed by $e$ places $X$ by $f\circ e$. Operators placed by
+    injective maps between chains with disjoint ranges commute. If $e_k$, $k\in K$, are
+    injective maps with pairwise disjoint ranges and $X_k$ are operators on
+    the corresponding chains, the product of the operators $X_k$ placed by
+    $e_k$ has the matrix element $\prod_{k\in K}(X_k)_{x\circ e_k,\,y\circ
+            e_k}$ at $(x,y)$ if $x$ and $y$ agree at every site outside all the
+    ranges, and $0$ otherwise.
 \end{lemma}
 \begin{proof}
     \leanok

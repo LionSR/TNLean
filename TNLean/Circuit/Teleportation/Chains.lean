@@ -53,14 +53,14 @@ open scoped BigOperators
 
 namespace QuantumCircuit
 
-variable {d N : ℕ}
+variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-! ### Permutations of sites -/
 
 /-- **Relabelling the sites of an embedded operator.** Conjugating `X` at the sites `e` by the
 permutation of configurations `x ↦ x ∘ σ` places `X` at the sites `σ ∘ e`. -/
-theorem permMatrix_cfgPerm_mul_embedOp_mul {m : ℕ} (σ : Equiv.Perm (Fin N)) (e : Fin m → Fin N)
-    (X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
+theorem permMatrix_cfgPerm_mul_embedOp_mul {κ : Type*} [Fintype κ]
+    (σ : Equiv.Perm ι) (e : κ → ι) (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
     (cfgPerm σ).permMatrix ℂ * embedOp e X * (cfgPerm σ.symm).permMatrix ℂ =
       embedOp (σ ∘ e) X := by
   classical
@@ -91,24 +91,24 @@ theorem permMatrix_cfgPerm_mul_embedOp_mul {m : ℕ} (σ : Equiv.Perm (Fin N)) (
 variable [NeZero d]
 
 /-- Permuting the sites moves the sites carrying `|0⟩`. -/
-theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
-    (h : IsZeroOn S v) (π : Equiv.Perm (Fin N)) :
+theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Set ι} {v : (ι → Fin d) → ℂ}
+    (h : IsZeroOn S v) (π : Equiv.Perm ι) :
     IsZeroOn (π '' S) ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
   rintro y hy _ ⟨i, hi, rfl⟩
   rw [permMatrix_mulVec] at hy
   exact h _ hy i hi
 
-private theorem isZeroOn_mulVec_of_finset {S : Finset (Fin N)} {v : (Fin N → Fin d) → ℂ}
-    (h : IsZeroOn (S : Set (Fin N)) v) {T : Set (Fin N)} (hST : Disjoint (S : Set (Fin N)) T)
-    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
-    IsZeroOn (S : Set (Fin N)) (A *ᵥ v) := by
-  have hP : ∀ u : (Fin N → Fin d) → ℂ, IsZeroOn (S : Set (Fin N)) u ↔ ctrlProj S 0 *ᵥ u = u := by
+private theorem isZeroOn_mulVec_of_finset {S : Finset ι} {v : (ι → Fin d) → ℂ}
+    (h : IsZeroOn (S : Set ι) v) {T : Set ι} (hST : Disjoint (S : Set ι) T)
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
+    IsZeroOn (S : Set ι) (A *ᵥ v) := by
+  have hP : ∀ u : (ι → Fin d) → ℂ, IsZeroOn (S : Set ι) u ↔ ctrlProj S 0 *ᵥ u = u := by
     intro u
     constructor
     · intro hu
       funext x
       rw [ctrlProj, mulVec_diagonal]
-      by_cases hx : ∀ i ∈ S, x i = (0 : Fin N → Fin d) i
+      by_cases hx : ∀ i ∈ S, x i = (0 : ι → Fin d) i
       · rw [ite_eq_left hx, one_mul]
       · rw [ite_eq_right hx, zero_mul]
         by_contra h0
@@ -117,21 +117,21 @@ private theorem isZeroOn_mulVec_of_finset {S : Finset (Fin N)} {v : (Fin N → F
       rw [← hu, ctrlProj, mulVec_diagonal] at hx
       by_contra hne
       exact hx (by rw [ite_eq_right fun h' => hne (h' i hi), zero_mul])
-  have hc : Commute (ctrlProj S (0 : Fin N → Fin d)) A :=
+  have hc : Commute (ctrlProj S (0 : ι → Fin d)) A :=
     commute_of_mem_supportedOperators hST (ctrlProj_mem_supportedOperators S 0) hA
   rw [hP] at h ⊢
   rw [mulVec_mulVec, hc.eq, ← mulVec_mulVec, h]
 
 /-- An operator acting on sites outside `S` keeps `|0⟩` at the sites of `S`. -/
-theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
-    (h : IsZeroOn S v) {T : Set (Fin N)} (hST : Disjoint S T)
-    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
+theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Set ι} {v : (ι → Fin d) → ℂ}
+    (h : IsZeroOn S v) {T : Set ι} (hST : Disjoint S T)
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
     IsZeroOn S (A *ᵥ v) := by
   classical
   simpa using isZeroOn_mulVec_of_finset (S := S.toFinset) (by simpa using h)
     (by simpa using hST) hA
 
-variable [NeZero N]
+variable {N : ℕ} [NeZero N]
 
 /-! ### The sites `a + j` -/
 
