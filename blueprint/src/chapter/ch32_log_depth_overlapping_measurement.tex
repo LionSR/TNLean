@@ -1,0 +1,369 @@
+%% ==================================================
+%% Subsection: Overlapping blocks with measurements, for every chain length
+%% Sources: arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), paragraph
+%% "Long-range MPS using measurements", Supplemental Material, eqs. (S2)-(S7),
+%% Lemma 1'(ii) and the proof of Theorem 1; arXiv:2103.13367 (Piroli,
+%% Styliaris, Cirac), Example 1 and Supplemental Material, eqs. final_eq to
+%% finished.
+%% Local fixes: isometry of the unweighted direct sum, rate of the overlapping
+%% blocks, nonvanishing periodic state;
+%% docs/paper-gaps/mswc24_measurement_preparation_scope.tex,
+%% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex,
+%% docs/paper-gaps/mswc24_depth_upper_bound_nonzero_state.tex.
+%% Scope restriction: depth O(q) of the GHZ-type state;
+%% docs/paper-gaps/mswc24_measurement_preparation_scope.tex.
+%% ==================================================
+
+\subsection{Overlapping blocks with measurements, for every chain length}
+\label{sec:ldp_overlapping_measurements}
+
+The preparation of Theorem~\ref{thm:ldp_long_range_measurement_depth} applies
+the isometry of the blocked tensor of every block separately, which needs the
+$q$-site states of distinct blocks to be orthogonal, and cuts the chain into
+equal blocks. This subsection removes both restrictions. It applies, on every
+block, the isometric factor $V$ of the polar decomposition of the blocked map of
+the direct sum $\bigoplus_jA_j$ with weights one and one copy of each block. For
+large block lengths this map is injective on the bond pairs of the blocks even
+when their states overlap, so $V$ is an isometry there, and the weights of the
+canonical form enter only through the amplitudes of the GHZ-type state. The
+chain is cut into blocks ``all of the same size, $q_N$, except for the last one,
+which may be larger'', as in the proof of Theorem~1 of
+\cite{Malz2024Preparation}. The bound on the error is relative to the norm of
+the weights, so no factor $\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$ enters
+\cite{gap:mswc24_measurement_preparation_scope}.
+
+Throughout, $A_1,\dots,A_b$ are normal tensors in the gauge
+(\ref{eq:ldp_normal_gauge}) with positive definite fixed points $\rho_j$ of trace
+one, placed on disjoint bond coordinates by isometries $E_j$, $K_j=E_j\otimes
+    E_j$, and $\lambda_2\in\C$ bounds the moduli of the eigenvalues other than one of
+every transfer map $\E_{A_j}$ and the moduli of all eigenvalues of the mixed
+transfer maps $\E_{jj'}$, $j\neq j'$, with correlation length $\xi$. For a block
+length $\ell$, $\mathcal B^{(\ell)}=V^{(\ell)}P^{(\ell)}$ is the polar
+decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
+
+\begin{lemma}[Injectivity on the bond pairs of the blocks]
+    \label{lem:ldp_overlapping_block_injectivity}
+    \lean{MPSTensor.blockPairs, MPSTensor.mem_blockPairs, MPSTensor.offBlockProj,
+        MPSTensor.exists_pos_algebraMap_le_blockSumGramLimit_add,
+        MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero,
+        MPSTensor.exists_isInjectiveOn_blockTensor_blockSum}
+    \leanok
+    \uses{lem:ldp_overlapping_positive_part, def:ldpolar_injective_on}
+    Let $S$ be the set of bond pairs $(E_ja,E_jc)$ whose two indices lie in the
+    same block.
+    \begin{enumerate}
+        \item If the matrices of a tensor $B$ vanish outside a set $S$ of bond
+              pairs and $\mathcal Bx=0$ has no solution $x\neq0$ supported on
+              $S$, then $B$ is injective on $S$.
+        \item With $|\lambda_2|<1$ there is $L_0$ such that for every $\ell\geq
+                  L_0$ the $\ell$-site blocked tensor of $\bigoplus_jA_j$ is
+              injective on $S$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    For part~(1), if a matrix unit $\ket\alpha\bra\beta$ with $(\alpha,\beta)\in
+        S$ were not in the span of the matrices of $B$, a linear functional $f$
+    vanishing on that span but not on $\ket\alpha\bra\beta$ would give the vector
+    $x_p=f(\ket{p_1}\bra{p_2})$ for $p\in S$, and $x_p=0$ otherwise, with
+    $\mathcal Bx=0$ and $x\neq0$. For part~(2), let
+    $Q=\Id-\sum_jK_jK_j^\dagger$ and $G_\infty$ be as in
+    Lemma~\ref{lem:ldp_overlapping_positive_part}; that lemma gives $c>0$ with
+    $G_\infty+Q\geq c\Id$ and
+    $\lVert\mathcal B^\dagger\mathcal B-G_\infty\rVert\leq Ke^{-\ell/(2\xi_t)}$,
+    where $\xi_t$ is the correlation length at $t=\max(\lvert\lambda_2\rvert,1/2)$,
+    which satisfies $0<t<1$ and bounds the same eigenvalues as $\lvert\lambda_2\rvert$.
+    The matrices of the blocked tensor vanish outside $S$, and $Qx=0$ for $x$
+    supported on $S$. For $\ell$ with $Ke^{-\ell/(2\xi_t)}<c$ and such $x$ with
+    $\mathcal Bx=0$,
+    \begin{align*}
+        0=x^\dagger(\mathcal B^\dagger\mathcal B+Q)x
+        \geq\bigl(c-\lVert\mathcal B^\dagger\mathcal B-G_\infty\rVert\bigr)
+        x^\dagger x,
+    \end{align*}
+    so $x=0$, and part~(1) applies.
+\end{proof}
+
+\begin{lemma}[The states of the blocks through the isometries of the direct sum]
+    \label{lem:ldp_overlapping_block_states}
+    \lean{MPSTensor.blockPosTensor, MPSTensor.blockTensor_blockSum_single,
+        MPSTensor.mpvState_eq_blockIsoVector,
+        MPSTensor.mem_blockPairs_of_pairProductState_embedPair_ne_zero,
+        MPSTensor.blockIsometryState_eq_blockIsoVector,
+        MPSTensor.inner_blockIsometryState_embedPair_mpvState,
+        MPSTensor.inner_blockIsometryState_embedPair,
+        MPSTensor.norm_sum_smul_blockIsometryState}
+    \leanok
+    \uses{lem:ldp_overlapping_block_injectivity, def:ldp_block_isometry_state,
+        def:ldp_chain_pos_state, thm:ldp_chain_block_iso_inner,
+        lem:ldp_overlapping_overlaps}
+    Cut a ring of $N\geq1$ sites into $M\geq1$ blocks of lengths $\ell_k\geq1$,
+    and let $\omega_j$ be the pair of $\rho_j$ placed along $E_j$.
+    \begin{enumerate}
+        \item The $\ell$-site blocked map of $A_j$, placed along $E_j$, is
+              $V^{(\ell)}P^{(\ell)}K_jK_j^\dagger$, so
+              $\ket{\phi_N(A_j)}=\bigl(\bigotimes_kV^{(\ell_k)}\bigr)
+                  \ket{\phi_M(P^{(\ell_k)}K_jK_j^\dagger)}$, where the second
+              factor is the periodic state of the family of tensors
+              $P^{(\ell_k)}K_jK_j^\dagger$ on the blocks.
+        \item If every blocked map $\mathcal B^{(\ell_k)}$ is injective on the
+              bond pairs of the blocks, then the states
+              $\ket{\psi_j}=\bigl(\bigotimes_kV^{(\ell_k)}\bigr)
+                  \bigotimes_k\ket{\omega_j}$ are orthonormal, so
+              $\sum_j\alpha_j\ket{\psi_j}$ is a unit vector for every unit vector
+              $\alpha$, and
+              $z_{jj'}=\braket{\psi_j}{\phi_N(A_{j'})}$ is the trace of the
+              ordered product over the blocks of the mixed transfer matrices of
+              $P^{(\ell_k)}K_{j'}K_{j'}^\dagger$ against the fixed-point tensor
+              of $E_j\rho_jE_j^\dagger$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    For part~(1), the blocked map of $A_j$ placed along $E_j$ is
+    $\mathcal B_jK_j^\dagger$, and that of the direct sum is
+    $\sum_{j'}\mathcal B_{j'}K_{j'}^\dagger$; since
+    $K_{j'}^\dagger K_j=\delta_{jj'}\Id$, the first is the second followed by
+    $K_jK_j^\dagger$. Every word of length $N$ is a product of the blocked
+    words. For part~(2), the product of the pairs $\omega_j$ vanishes on every
+    configuration of bond pairs leaving the pairs of the blocks, and on these
+    $V^{(\ell_k)}$ is an isometry, so the inner products are those of the
+    products of pairs, which are $\delta_{jj'}$ because the $\omega_j$ are unit
+    vectors on disjoint coordinates. The same isometry property and part~(1)
+    give $z_{jj'}$ as the overlap of $\bigotimes_k\ket{\omega_j}$ with the
+    periodic state of the family $P^{(\ell_k)}K_{j'}K_{j'}^\dagger$, which is the
+    stated trace by Lemma~\ref{lem:ldp_overlapping_overlaps}(1).
+\end{proof}
+
+\begin{lemma}[The overlaps of the blocks near the limit]
+    \label{lem:ldp_overlapping_block_overlaps_limit}
+    \lean{Matrix.exists_norm_trace_prod_ofFn_sub_trace_pow_le,
+        MPSTensor.mixedMapLM_blockSumPosLimit_mul_apply,
+        MPSTensor.exists_norm_trace_prod_blockPosTensor_sub_le}
+    \leanok
+    \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_positive_part,
+        lem:ldp_overlapping_overlaps_weights, lem:ldp_shared_overlap_estimates}
+    \begin{enumerate}
+        \item For a finite index set there is $K\geq0$ such that for every
+              matrix $E$ whose powers have norm at most $c$ and all matrices
+              $X_0,\dots,X_{M-1}$ within $\delta$ of $E$,
+              $\lvert\Tr(X_0\cdots X_{M-1})-\Tr E^M\rvert\leq Kc^2(M\delta)
+                  e^{cM\delta}$.
+        \item The mixed transfer map of $P_\infty K_{j'}K_{j'}^\dagger$ against
+              the fixed-point tensor of $E_j\rho_jE_j^\dagger$ is
+              $X\mapsto\Tr(E_jE_j^\dagger X)\,E_j\rho_jE_j^\dagger$ for $j=j'$
+              and zero for $j\neq j'$.
+        \item With $|\lambda_2|<1$ and $0<\gamma<1$, for all $j,j'$ there is
+              $C>0$ such that for every cut into $M\geq1$ blocks of lengths
+              $\ell_k\geq q\geq1$, with $y=Me^{-\gamma q/\xi}$, the trace
+              $z_{jj'}$ of Lemma~\ref{lem:ldp_overlapping_block_states}(2)
+              satisfies $\lvert z_{jj'}-\delta_{jj'}\rvert\leq Cy\,e^{Cy}$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Part~(1) is the telescoping estimate of
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(8) for a product of different
+    matrices, followed by the bound on the trace; it follows the argument of
+    \cite[Supplemental Material]{Piroli2021LOCC}. Part~(2) is
+    Lemma~\ref{lem:ldp_overlapping_overlaps_weights}(1) with $t=e_{j'}$, since
+    $P_\infty K_{j'}K_{j'}^\dagger$ is the limit for these weights. For
+    part~(3), the limit $E$ of the mixed transfer matrices is, by part~(2), an
+    idempotent of trace one for $j=j'$ and zero otherwise, so its powers are
+    bounded and $\Tr E^M=\delta_{jj'}$. By
+    Lemma~\ref{lem:ldp_overlapping_positive_part},
+    $\lVert P^{(\ell_k)}-P_\infty\rVert\leq K'e^{-\gamma\ell_k/\xi}\leq
+        K'e^{-\gamma q/\xi}$, and part~(1) applies.
+\end{proof}
+
+\begin{theorem}[Error for overlapping blocks of unequal lengths and all weights]
+    \label{thm:ldp_overlapping_unequal_blocks_error}
+    \lean{MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le}
+    \leanok
+    \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_block_overlaps_limit,
+        lem:ldp_shared_overlap_estimates, thm:ldp_approximation_error_overlapping_weights,
+        def:correlation_length}
+    Let $0<\gamma<1/2$. There is $C>0$ such that the following holds for all
+    weights $\beta\in\C^b\setminus\{0\}$ and every cut of a ring of $N$ sites
+    into $M\geq1$ blocks of lengths $\ell_k\geq q$ at which every blocked map
+    $\mathcal B^{(\ell_k)}$ is injective on the bond pairs of the blocks. With
+    $\alpha_j=\beta_j/(\sum_l\lvert\beta_l\rvert^2)^{1/2}$ and
+    $\ket\phi=\sum_j\beta_j\ket{\phi_N(A_j)}$,
+    \begin{align*}
+        1-\Bigl\lvert\Bigl\langle\sum_j\alpha_j\bigl(\textstyle\bigotimes_kV^{(\ell_k)}\bigr)
+        \textstyle\bigotimes_k\omega_j\Bigm|\frac{\phi}{\lVert\phi\rVert}\Bigr\rangle\Bigr\rvert
+        \leq CMe^{-\gamma q/\xi}.
+    \end{align*}
+    Here $-\gamma q/\xi$ is read as $0$ when $\xi=0$, that is when
+    $\lambda_2=0$; the bound then gives no decay in $q$. The constant does not
+    depend on the weights. For the canonical form
+    $A^i=\bigoplus_j\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})\otimes A_j^i$
+    of \cite[eq.~(S2)]{Malz2024Preparation}, $\ket{\phi_N(A)}$ is $\ket\phi$
+    with $\beta_j=\sum_k\mu_{j,k}^N$, so this bounds the error for every
+    multiplicity and every complex weight. This is
+    \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the state of the paragraph
+    ``Long-range MPS using measurements'', with blocks of unequal lengths, with
+    $\xi_{\mathrm{diag}}$ replaced by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$
+    \cite{gap:mswc24_block_form_mixed_overlap}, and with the isometries of the
+    direct sum with weights one in place of that of the blocked map of $A$
+    \cite{gap:mswc24_measurement_preparation_scope}. Unlike
+    Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping}, it has no
+    factor $\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $\lambda_2=0$, $\lvert\lambda_2\rvert\geq1$ or $q=0$, then
+    $Me^{-\gamma q/\xi}\geq1$ and
+    the bound holds with $C=1$. Otherwise write $w=\sum_l\lvert\beta_l\rvert^2$
+    and $\ket{\psi}=\sum_j\alpha_j\ket{\psi_j}$. By
+    Lemma~\ref{lem:ldp_overlapping_block_states}(2),
+    $\braket\psi\phi=w^{-1/2}S$ with
+    $S=\sum_{j,j'}\overline{\beta_j}\beta_{j'}z_{jj'}$. Since
+    $\lvert\beta_j\beta_{j'}\rvert\leq w$,
+    Lemma~\ref{lem:ldp_overlapping_block_overlaps_limit}(3) gives
+    $\lvert S/w-1\rvert\leq b^2C_0y\,e^{C_0y}$, a bound relative to $w$, with
+    $y=Me^{-\gamma q/\xi}$.
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(6) with $R=\sqrt w$ gives
+    $\lvert\lVert\phi\rVert^2/w-1\rvert\leq Ke^{-\gamma N/\xi}\leq Ky$. The
+    inequality in the proof of
+    Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}, applied to
+    $S/w$ and $\lVert\phi\rVert/\sqrt w$, and the two elementary inequalities
+    there with $s=1$ give the bound.
+\end{proof}
+
+\begin{theorem}[The state of a tensor injective on a set of bond pairs, with
+        measurements]
+    \label{thm:ldp_injective_on_measurement}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn,
+        MPSPreparation.isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth}
+    \leanok
+    \uses{def:ldp_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
+        thm:ldp_block_sum_unitary, thm:ldp_sequential_factorization_on,
+        def:ldp_block_isometry_state, lem:ldp_measurement_unitary_case}
+    For $d\geq2$, every bond dimension $D$ and every number $b$ of labels, there
+    are $C$ and $L_0$ such that the following holds. Let $A$ be a tensor of bond
+    dimension $D$, $S$ a set of bond pairs, $\omega_1,\dots,\omega_b$
+    orthonormal pairs whose products vanish on every configuration of bond pairs
+    leaving $S$, and $\alpha$ a unit vector. Cut the ring of $N$ sites into
+    $M\geq1$ blocks of lengths $L_0\leq\ell_k\leq L$ at which every blocked
+    tensor of $A$ is injective on $S$. Then
+    $\sum_j\alpha_j\bigl(\bigotimes_kV^{(\ell_k)}\bigr)\bigotimes_k\ket{\omega_j}$
+    is prepared with measurements and a circuit in depth at most $CL$. A
+    nonzero vector prepared by a local circuit of depth $T$ is prepared with
+    measurements and a circuit in depth $T$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    As in the proof of Theorem~\ref{thm:ldp_orthogonal_blocks_measurement},
+    encode the labels and the bond indices in $r_1=b+D+2$ sites, prepare the
+    GHZ-type state with amplitudes $\alpha$ on the registers by
+    Theorem~\ref{thm:ldp_window_ghz_measurement}, and apply on every pair window
+    one unitary sending the encoded label $j$ to $\ket{\omega_j}$. On every block
+    apply the unitary of Theorem~\ref{thm:ldp_block_sum_unitary} for an ordering
+    of the bond pairs in which those of $S$ come first; by
+    Theorem~\ref{thm:ldp_sequential_factorization_on} it implements the
+    isometric factor $V^{(\ell_k)}$ on the pairs of $S$, which suffices because
+    the products of the pairs are supported there. For the second statement, the
+    measurement stage measures no site and the circuit after it is empty, by
+    Lemma~\ref{lem:ldp_measurement_unitary_case}.
+\end{proof}
+
+\begin{lemma}[A chain of one block]
+    \label{lem:ldp_overlapping_one_block_chain}
+    \lean{MPSPreparation.exists_blockIsometryState_eq_smul}
+    \leanok
+    \uses{lem:ldp_overlapping_block_states, thm:ldpolar_tensor_injective_on,
+        thm:ldp_chain_block_iso_inner}
+    Let the $N$-site blocked map of $\bigoplus_jA_j$ be injective on the bond
+    pairs of the blocks, and let $\ket\phi=\sum_j\beta_j\ket{\phi_N(A_j)}\neq0$.
+    Then $\ket\phi/\lVert\phi\rVert=V^{(N)}\ket\omega$ for a unit pair $\omega$
+    supported on the bond pairs of the blocks.
+\end{lemma}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:ldp_overlapping_block_states}(1) with one block,
+    $\ket\phi=V^{(N)}\ket Y$ with
+    $Y=\sum_j\beta_j\Tr\bigl(P^{(N)}K_jK_j^\dagger\bigr)$, and the rows of
+    $P^{(N)}$ at bond pairs outside the blocks vanish by
+    Theorem~\ref{thm:ldpolar_tensor_injective_on}, so $Y$ is supported on the
+    bond pairs of the blocks. There $V^{(N)}$ is an isometry, so
+    $\lVert\phi\rVert=\lVert Y\rVert$ and $\omega=Y/\lVert Y\rVert$.
+\end{proof}
+
+\begin{lemma}[A common rate for the blocks and their mixed transfer maps]
+    \label{lem:ldp_common_mixed_gap}
+    \lean{MPSPreparation.exists_forall_eigenvalue_norm_le_of_mixed}
+    \leanok
+    \uses{lem:ldp_common_gap}
+    For finitely many normal left-canonical tensors $A_1,\dots,A_b$, $b\geq1$, of
+    positive bond dimensions, whose mixed transfer maps $\E_{jj'}$, $j\neq j'$,
+    have all eigenvalues of modulus below one, there is $0<t<1$ bounding the
+    moduli of the eigenvalues other than one of every $\E_{A_j}$ and of all
+    eigenvalues of every $\E_{jj'}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Lemma~\ref{lem:ldp_common_gap} bounds the transfer maps. Each $\E_{jj'}$ has
+    finitely many eigenvalues, all of modulus below one, so their largest
+    modulus $t_{jj'}$ is below one; take the maximum of these bounds.
+\end{proof}
+
+\begin{theorem}[Every translation-invariant MPS with measurements, in depth
+        $O(\log(N/\varepsilon))$]
+    \label{thm:ldp_overlapping_measurement_depth}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_mpvState_repeatedBlockSum_ne_zero,
+        MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log}
+    \leanok
+    \uses{thm:ldp_injective_on_measurement, thm:ldp_overlapping_unequal_blocks_error,
+        lem:ldp_overlapping_block_injectivity, lem:ldp_overlapping_one_block_chain,
+        lem:ldp_common_mixed_gap, def:ldp_repeated_block_sum,
+        thm:ldp_chain_depth, thm:ldp_short_chain_preparation,
+        lem:ldp_log_threshold_error, lem:ldp_shared_overlap_estimates}
+    Let $A$ be the direct sum with multiplicities of
+    Definition~\ref{def:ldp_repeated_block_sum}, with nonzero complex weights,
+    every block $A_j$ normal in the gauge (\ref{eq:ldp_normal_gauge}) with a
+    positive definite fixed point $\rho_j$ of trace one, and let the mixed
+    transfer maps $\E_{jj'}$, $j\neq j'$, have all eigenvalues of modulus below
+    one. There is $c$, depending only on $A$, such that for every $N\geq2$ and
+    $0<\varepsilon\leq1$ at which $\ket{\phi_N(A)}\neq0$, a unit vector
+    $\ket\psi$ with $\varepsilon(\psi,\phi_N)\leq\varepsilon$ is prepared with
+    measurements and a circuit in depth at most $c\log(N/\varepsilon)$. There is
+    $N_0$ such that $\ket{\phi_N(A)}\neq0$ for every $N\geq N_0$ at which the
+    weights $\beta_j=\sum_k\mu_{j,k}^N$ are not all zero, so the same holds for
+    these $N$. This is the depth $O(\log(N/\varepsilon))$ of the paragraph
+    ``Long-range MPS using measurements'' of \cite{Malz2024Preparation}, with
+    measurements used only for the GHZ-type state, for blocks whose $q$-site
+    states may overlap, every multiplicity, every nonzero complex weight and
+    every chain length, under the readings recorded in
+    \cite{gap:mswc24_measurement_preparation_scope,gap:mswc24_block_form_mixed_overlap,gap:mswc24_depth_upper_bound_nonzero_state}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Let $t$ be the rate of Lemma~\ref{lem:ldp_common_mixed_gap},
+    $r=-\tfrac14\log t$, $K$ the constant of
+    Theorem~\ref{thm:ldp_overlapping_unequal_blocks_error} at $\gamma=1/4$, and
+    $L_{\min}$ larger than the lengths of
+    Lemma~\ref{lem:ldp_overlapping_block_injectivity}(2) and
+    Theorem~\ref{thm:ldp_injective_on_measurement}. Put
+    $Q=a\log(N/\varepsilon)+b'$ with $a=1/r$ and
+    $b'=\max(\log K,0)/r+L_{\min}$, and $q=\lceil Q\rceil$. If $q\leq N$, cut the
+    chain into $\lfloor N/q\rfloor-1$ blocks of length $q$ and one of length
+    $q+(N\bmod q)<2q$. Every blocked map is injective on the bond pairs of the
+    blocks, the state of Theorem~\ref{thm:ldp_overlapping_unequal_blocks_error}
+    has error at most $KNe^{-rq}\leq\varepsilon$ by
+    Lemma~\ref{lem:ldp_log_threshold_error}, and it is prepared in depth
+    $O(q)=O(\log(N/\varepsilon))$ by
+    Theorem~\ref{thm:ldp_injective_on_measurement}. If $L_{\min}\leq N<q$, the
+    normalized target itself is $V^{(N)}\ket\omega$ by
+    Lemma~\ref{lem:ldp_overlapping_one_block_chain} and is prepared by a circuit
+    of depth $O(N)=O(\log(N/\varepsilon))$ by Theorem~\ref{thm:ldp_chain_depth}.
+    If $N<L_{\min}$, it is prepared in bounded depth by
+    Theorem~\ref{thm:ldp_short_chain_preparation}. For the second statement,
+    $\lvert\lVert\phi_N(A)\rVert^2/w-1\rvert\leq Ke^{-N/(4\xi_t)}$, with
+    $\xi_t$ the correlation length at $t$ and
+    $w=\sum_j\lvert\beta_j\rvert^2$ by
+    Lemma~\ref{lem:ldp_shared_overlap_estimates}(6), which is below one for
+    large $N$.
+\end{proof}

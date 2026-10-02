@@ -59,6 +59,23 @@
     $\tau \in \{0,\ldots,d^p-1\}^N$.
 \end{definition}
 
+\begin{theorem}[The one-site boundary of refinement and divisibility]
+    \label{lem:periodic_refinement_one_site}
+    \lean{MPSTensor.isPRefinable_one, MPSTensor.isPDivisibleChannel_one_iff}
+    \leanok
+    \uses{def:p_refinable, def:p_divisible_channel}
+    Every tensor is $1$-refinable. A linear map is $1$-divisible if and only
+    if it is a channel. Thus, at $p=1$, the forward implication of the
+    printed Theorem~4.1 requires trace preservation of $\E_B$; see
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    One-site blocking only permutes the physical labels. Use the associated
+    permutation matrix for the refinement isometry. The channel assertion
+    follows because the first power of a linear map is the map itself.
+\end{proof}
+
 \begin{theorem}[Coordinates for a cyclic step]
     \label{thm:periodic_step_coordinates}
     \lean{Fin.stepOrbit_bijective, Fin.stepOrbitEquiv, Fin.stepOrbitEquiv_add_one}
@@ -702,6 +719,31 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     while its transfer map is not trace preserving.
 \end{remark}
 
+\begin{theorem}[A refinable positive-weight tensor without a channel square root]
+    \label{thm:periodic_refinement_normalization_counterexample}
+    \lean{MPSTensor.refinementScalarCounterexample,
+        MPSTensor.refinement_normalization_counterexample}
+    \leanok
+    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    Let the physical and bond dimensions both be one, and take $B=(4)$.
+    The tensor $B$ is literally the period-one normalized block $(1)$
+    with positive weight $4$. It is $2$-refinable with root $A=(2)$,
+    but its transfer map $\E_B(x)=16x$ is not $2$-divisible as a channel.
+    This contradicts the forward implication of the printed
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}; see
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:bond_dimension_one_identity_transfer_normal,
+        thm:periodic_refinement_from_blocked_transfer}
+    The block $(1)$ has identity transfer map and period one.
+    Since $A^{[2]}=B$, equality of the blocked and target transfer maps
+    gives a refinement isometry. If $\E_B=\mathcal F^2$ for a channel
+    $\mathcal F$, then $\E_B$ preserves trace. This contradicts
+    $\tr \E_B(1)=16\ne 1$.
+\end{proof}
+
 \begin{definition}[Blocked-to-root channel-root hypothesis from $Z$-gauge]
     \label{def:peripheral_equalcase_root_channel_from_zgauge}
     \lean{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge}
@@ -731,6 +773,24 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     $\E_C = \E_{A'^{[p]}}$ by the blocking formula.
 \end{proof}
 
+\begin{theorem}[Refinement from a blocked transfer identity]
+    \label{thm:periodic_refinement_from_blocked_transfer}
+    \lean{MPSTensor.isPRefinable_of_transferMap_eq_blockTensor}
+    \leanok
+    \uses{def:p_refinable}
+    Let $A$ and $B$ have the same one-site physical and bond
+    dimensions, and let $p>0$. If
+    $\mathcal E_B=\mathcal E_{A^{[p]}}$, then $B$ is $p$-refinable.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two tensors give Kraus representations of the same completely
+    positive map, of respective sizes $d^p$ and $d$. Since $d\le d^p$,
+    isometric freedom of Kraus representations gives
+    $A^{[p],\alpha}=\sum_j W_{\alpha j}B^j$ with $W^*W=I$.
+    Expanding products and taking traces gives the refinement identity.
+\end{proof}
+
 \begin{theorem}[Transfer-map $p$-divisibility implies $p$-refinability]%
     \label{thm:thm_4_1_p_refinement_reverse}
     \lean{MPSTensor.thm_4_1_p_refinement_reverse}
@@ -744,6 +804,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:periodic_refinement_from_blocked_transfer}
     From the reverse transfer-map root hypothesis, extract $A$ with
     $\E_B = \E_{A^{[p]}}$. This matches two finite Kraus
     families of the same completely positive map: the blocked family $A^{[p]}$
@@ -757,6 +818,231 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     $V$-weighted sum over length-$N$ words of $B$ required by
     Definition~\ref{def:p_refinable}, exhibiting $V$ as the isometry $W$ in the
     statement of $p$-refinability.
+\end{proof}
+
+\begin{theorem}[Irreducibility and period constraints on a refinement root]
+    \label{thm:periodic_irreducible_root_constraints}
+    \lean{MPSTensor.isIrreducibleFamily_of_blockTensor,
+        MPSTensor.isIrreducibleFamily_of_transferMap_eq_blockTensor,
+        MPSTensor.IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor}
+    \leanok
+    \uses{def:blocked_tensor, def:periodic_tensor}
+    Let $A$ be a tensor and let $p\geq0$. If its blocked tensor
+    $A^{(p)}$ is irreducible, then $A$ is irreducible. In particular,
+    this holds if $\mathcal E_A^p=\mathcal E_B$ for an irreducible
+    tensor $B$, even when $A$ and $B$ have different physical dimensions.
+    If moreover $A$ is periodic of period $m$, then $\gcd(m,p)=1$.
+    These are necessary conditions for the converse construction in
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:periodic_step_orbit_projection}
+    A subspace invariant under every $A^i$ is invariant under every
+    product of $p$ letters. Equality of transfer maps preserves
+    irreducibility. For the period assertion, blocking gives
+    $\gcd(m,p)$ nonzero orthogonal orbit projections, each commuting
+    with every blocked letter. Irreducibility forces each projection
+    to be the identity. Orthogonality then permits only one orbit.
+\end{proof}
+
+\begin{theorem}[A supplied channel root of larger Kraus rank]
+    \label{thm:periodic_supplied_root_rank_obstruction}
+    \lean{MPSTensor.CyclicResetCounterexample.root,
+        MPSTensor.CyclicResetCounterexample.square,
+        MPSTensor.CyclicResetCounterexample.choiRank_root,
+        MPSTensor.CyclicResetCounterexample.choiRank_square,
+        MPSTensor.CyclicResetCounterexample.root_isTP,
+        MPSTensor.CyclicResetCounterexample.square_isTP,
+        MPSTensor.CyclicResetCounterexample.root_isChannel,
+        MPSTensor.CyclicResetCounterexample.square_isChannel,
+        MPSTensor.CyclicResetCounterexample.transferMap_square_eq_pow,
+        MPSTensor.CyclicResetCounterexample.square_isIrreducibleFamily,
+        MPSTensor.CyclicResetCounterexample.root_isIrreducibleFamily,
+        MPSTensor.supplied_root_rank_counterexample}
+    \leanok
+    \uses{def:irreducible_form, def:periodic_tensor, def:p_divisible_channel}
+    Decompose $\mathbb C^7$ into five sectors of dimensions
+    $(1,2,2,1,1)$. Let $\mathcal F$ discard all off-diagonal sector
+    blocks and send the diagonal block in sector $i$ to its trace
+    times the normalized identity in sector $i+1$, with indices modulo five.
+    Both $\mathcal F$ and $\mathcal F^2$ are irreducible channels.
+    Their Kraus ranks are ten and nine, respectively. A minimal nine-letter tensor
+    $B$ for $\mathcal F^2$ is trace preserving and periodic, and is
+    a one-block irreducible form with weight one. Thus $\mathcal E_B$
+    is $2$-divisible, but the supplied root $\mathcal F$ has no Kraus
+    representation on $B$'s nine-letter physical alphabet.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:irreducible_left_canonical_periodic, thm:periodic_choi_rank_kraus_span}
+    The Kraus matrices for $\mathcal F$ are the matrix units between
+    consecutive sectors, divided by the square root of the output-sector
+    dimension. They are linearly independent. The analogous two-step
+    family represents $\mathcal F^2$, and its matrices are also linearly
+    independent. The two ranks are therefore
+    $2+4+2+1+1=10$ and $2+2+2+1+2=9$.
+    Summing the squared Kraus matrices gives the identity in each input
+    sector. The two-step matrix units propagate a nonzero invariant
+    subspace through all five sectors, so $B$ is irreducible.
+    Trace preservation gives spectral radius one, and the peripheral
+    structure theorem supplies its positive period.
+\end{proof}
+
+\begin{remark}
+    The theorem bounds no alternative root of $\mathcal E_B$.
+    It rules out obtaining the required physical dimension merely by
+    changing the Kraus representation of an arbitrary supplied root;
+    selecting a different root remains possible. See
+    \cite{gap:dccsp17_root_kraus_rank_thm41}.
+\end{remark}
+
+\begin{theorem}[Refinement from a root with bounded Kraus rank]
+    \label{thm:periodic_refinement_from_bounded_root}
+    \lean{MPSTensor.isPRefinable_of_channel_root_hasKrausRankLE}
+    \leanok
+    \uses{def:p_refinable}
+    Let $B$ have physical dimension $d$, let $p>0$, and suppose
+    $\mathcal E_B=\mathcal F^p$, where $\mathcal F$ has a Kraus
+    representation with at most $d$ operators. Then $B$ is $p$-refinable.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_refinement_from_blocked_transfer}
+    Pad a Kraus family for $\mathcal F$ with zeros to obtain a
+    $d$-letter tensor $A$. Then
+    $\mathcal E_{A^{[p]}}=\mathcal F^p=\mathcal E_B$; apply
+    Theorem~\ref{thm:periodic_refinement_from_blocked_transfer}.
+\end{proof}
+
+\begin{theorem}[Choi rank and the Kraus span]
+    \label{thm:periodic_choi_rank_kraus_span}
+    \lean{Channel.choiRank_mapLM_eq_finrank_span,
+        Channel.choiRank_mapLM_eq_finrank_wordSpan_one}
+    \leanok
+    Let $\mathcal F(X)=\sum_a A^aX(A^a)^*$, and let
+    $S=\spn_{\C}\{A^a\}_a$. The Choi rank of $\mathcal F$ is
+    $\dim_{\C}S$, including when the bond space is zero dimensional.
+\end{theorem}
+
+\begin{proof}\leanok
+    In positive bond dimension, let $C$ have columns equal to the
+    vectorized Kraus operators, multiplied by the common nonzero
+    normalization of the Choi matrix. That matrix is $CC^*$, whose rank
+    is the rank of $C$. Vectorization preserves the dimension of the
+    Kraus span. In dimension zero, both ranks are zero.
+\end{proof}
+
+\begin{theorem}[Rank under an injective positive map]
+    \label{thm:periodic_injective_positive_rank}
+    \lean{Matrix.rank_le_rank_map_of_injective_positive,
+        Matrix.rank_le_rank_map_of_injective_positive_fintype}
+    \leanok
+    Let $\Phi:M_D(\C)\to M_D(\C)$ be an injective positive linear map.
+    If $A\ge0$, then $\operatorname{rank}A\le\operatorname{rank}\Phi(A)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The positive matrices bounded above by a positive multiple of $A$
+    span the matrix algebra on its support. Positivity carries this span
+    into the analogous span for $\Phi(A)$. Their complex dimensions are
+    $(\operatorname{rank}A)^2$ and $(\operatorname{rank}\Phi(A))^2$,
+    respectively, so injectivity gives the inequality.
+\end{proof}
+
+\begin{theorem}[Choi rank under injective composition]
+    \label{thm:periodic_injective_composition_choi_rank}
+    \lean{Channel.choiRank_le_comp_of_injective,
+        Channel.choiRank_le_pow_of_injective}
+    \leanok
+    Let $\mathcal F$ and $\mathcal G$ be completely positive maps on
+    $M_D(\C)$, and suppose $\mathcal F$ is injective. Then
+    $\operatorname{rank}C_{\mathcal G}\le
+        \operatorname{rank}C_{\mathcal F\circ\mathcal G}$.
+    Consequently $\operatorname{rank}C_{\mathcal F}\le
+        \operatorname{rank}C_{\mathcal F^p}$ for every $p>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_injective_positive_rank}
+    Apply Theorem~\ref{thm:periodic_injective_positive_rank} to the
+    injective positive map $\mathcal F\otimes\mathrm{id}$ and the
+    positive Choi matrix $C_{\mathcal G}$. The image is
+    $C_{\mathcal F\circ\mathcal G}$. Iteration gives the power inequality.
+\end{proof}
+
+\begin{theorem}[Refinement for an invertible transfer map]
+    \label{thm:periodic_refinement_injective_transfer}
+    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_injective}
+    \leanok
+    \uses{def:p_refinable, def:p_divisible_channel}
+    Let $B$ have physical dimension $d$ and an invertible transfer map,
+    and let $p>0$. If $\mathcal E_B$ is $p$-divisible as a channel,
+    then $B$ is $p$-refinable.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_injective_composition_choi_rank, thm:periodic_refinement_from_bounded_root}
+    Choose a channel root $\mathcal F$ with $\mathcal F^p=\mathcal E_B$.
+    It is invertible, so the preceding theorem gives
+    $\operatorname{rank}C_{\mathcal F}\le
+        \operatorname{rank}C_{\mathcal E_B}\le d$.
+    Apply Theorem~\ref{thm:periodic_refinement_from_bounded_root}.
+\end{proof}
+
+\begin{remark}
+    This proves the converse of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} for invertible transfer
+    maps without a canonical-form assumption. The corresponding assertion
+    for singular transfer maps remains unresolved; see
+    \cite{gap:dccsp17_root_kraus_rank_thm41}.
+\end{remark}
+
+\begin{theorem}[Word-span dimension under invertible multiplication]
+    \label{thm:periodic_root_word_span_dimension}
+    \lean{Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_pred,
+        Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_one}
+    \leanok
+    Let $S$ be the span of a finite family of square matrices, and let
+    $S^q$ denote the span of products of exactly $q$ members, with
+    $S^0=\C I$. If $p>0$ and $S^{p-1}$ contains an invertible matrix,
+    then $\dim S\le\dim S^p$. In particular, the inequality holds
+    whenever $S$ contains an invertible matrix.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $K\in S^{p-1}$ is invertible, the injective linear map
+    $X\mapsto KX$ sends $S$ into $S^p$. For the final assertion,
+    take the $(p-1)$st power of an invertible member of $S$.
+\end{proof}
+
+\begin{theorem}[Refinement from an invertible root word span]
+    \label{thm:periodic_refinement_invertible_root_word_span}
+    \lean{MPSTensor.choiRank_transferMap_le_of_isUnit_mem_root_wordSpan_pred,
+        MPSTensor.isPRefinable_of_root_isUnit_mem_wordSpan_pred}
+    \leanok
+    \uses{def:p_refinable}
+    Let $B$ have physical dimension $d$, and let $A$ have the same
+    bond dimension but any finite physical dimension. Suppose $p>0$
+    and $\mathcal E_B=(\mathcal E_A)^p$. If the span of products of
+    $p-1$ letters of $A$ contains an invertible matrix, then
+    $\operatorname{rank}_{\mathrm{Choi}}\mathcal E_A\le
+        \operatorname{rank}_{\mathrm{Choi}}\mathcal E_B\le d$,
+    and $B$ is $p$-refinable.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_choi_rank_kraus_span, thm:periodic_root_word_span_dimension, thm:periodic_refinement_from_bounded_root}
+    If $S$ is the Kraus span of $A$, the preceding two theorems give
+    \begin{align}
+        \operatorname{rank}_{\mathrm{Choi}}\mathcal E_A
+         & =\dim S\le\dim S^p
+        =\operatorname{rank}_{\mathrm{Choi}}\mathcal E_B\le d.
+        \notag
+    \end{align}
+    A completely positive map has a Kraus representation with as many
+    operators as its Choi rank. Apply
+    Theorem~\ref{thm:periodic_refinement_from_bounded_root}.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready
@@ -816,4 +1102,225 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         =U^\dagger A^{i_1}\cdots A^{i_p}U. \notag
     \end{align}
     Hence $B^{[p]}=U^\dagger A^{[p]}U=C$.
+\end{proof}
+
+\begin{theorem}[Refining a weighted block sum]
+    \label{thm:periodic_weighted_block_refinement}
+    \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_refinement}
+    \leanok
+    \uses{def:block_diagonal_tensor,def:same_mpv2}
+    If $A_k$ and $\bigoplus_{a=0}^{n_k-1}B_{k,a}$ have equal matrix product
+    vectors at every length, then $\bigoplus_k\mu_k A_k$ and
+    $\bigoplus_{k,a}\mu_k B_{k,a}$ do as well, for arbitrary complex
+    weights $\mu_k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpv_decomposition}
+    Expand the trace of each block-diagonal product and substitute the
+    refined vectors of each $A_k$. At every length $N$,
+    \begin{align}
+        V^{(N)}\Bigl(\bigoplus_k\mu_kA_k\Bigr)_\sigma
+         & =\sum_k\mu_k^NV^{(N)}(A_k)_\sigma
+        =\sum_k\sum_{a=0}^{n_k-1}\mu_k^NV^{(N)}(B_{k,a})_\sigma
+        =V^{(N)}\Bigl(\bigoplus_{k,a}\mu_kB_{k,a}\Bigr)_\sigma. \notag
+    \end{align}
+    The last equality reindexes the double sum by the pairs $(k,a)$.
+\end{proof}
+
+\begin{definition}[Positive blocking of an irreducible-form presentation]
+    \label{def:periodic_irreducible_form_blocking}
+    \lean{MPSTensor.IsIrreducibleForm.block}
+    \leanok
+    \uses{def:periodic_tensor,def:irreducible_form,def:blocked_tensor}
+    Suppose $A$ has the same matrix product vectors at every length,
+    including zero, as $\bigoplus_k\mu_k A_k$, where $\mu_k>0$ and
+    $A_k$ is left-canonical periodic of period $m_k$, and let $p>0$.
+    The blocked presentation of $A^{[p]}$ is indexed by the pairs $(k,a)$ with
+    $0\le a<\gcd(m_k,p)$; the block $B_{k,a}$ is the $a$th prescribed orbit
+    block of $A_k^{[p]}$, with weight $\mu_k^p$ and period
+    $m_k/\gcd(m_k,p)$. It is an irreducible-form presentation of $A^{[p]}$.
+    This is the blockwise application of
+    \cite[Lemma~6, proof of Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{definition}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
+        thm:block_tensor_of_same_mpv_to_tensor_from_blocks}
+    Apply the prescribed-blocking decomposition separately to each $A_k$,
+    giving blocks $B_{k,a}$ with $0\le a<\gcd(m_k,p)$. Blocking raises
+    $\mu_k$ to the power $p$: if $\sigma'$ is the unblocked configuration of
+    length $pN$ underlying a blocked configuration $\sigma$ of length $N$, then
+    \begin{align}
+        V^{(N)}\bigl(A^{[p]}\bigr)_\sigma
+         & =V^{(pN)}(A)_{\sigma'}
+        =\sum_k\mu_k^{pN}V^{(pN)}(A_k)_{\sigma'}
+        =\sum_k\bigl(\mu_k^p\bigr)^NV^{(N)}\bigl(A_k^{[p]}\bigr)_\sigma. \notag
+    \end{align}
+    Refinement preserves the weight $\mu_k^p$ on every orbit block. The
+    preceding theorem assembles the resulting vector identities. All new
+    weights remain positive.
+\end{proof}
+
+\begin{theorem}[Total dimension of an irreducible-form presentation]
+    \label{thm:periodic_irreducible_form_blocking_dim}
+    \lean{MPSTensor.IsIrreducibleForm.sum_dim_eq}
+    \leanok
+    \uses{def:irreducible_form}
+    If $A$ of bond dimension $D$ has an irreducible-form presentation
+    $\bigoplus_k\mu_kA_k$ with blocks of bond dimensions $D_k$, then
+    $\sum_kD_k=D$. In particular this holds for the blocked presentation of
+    Definition~\ref{def:periodic_irreducible_form_blocking}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    At length zero every matrix product vector is the trace of the identity,
+    and the presentation has the same vectors as $A$ at length zero, so
+    \begin{align}
+        D & =V^{(0)}(A)=V^{(0)}\Bigl(\bigoplus_k\mu_kA_k\Bigr)=\sum_kD_k. \notag
+    \end{align}
+\end{proof}
+
+
+\begin{theorem}[Multiplication of an orthogonal resolution]
+    \label{thm:periodic_orthogonal_resolution_multiplication}
+    \lean{orthogonalProjection_mul_eq_ite_of_sum_eq_one}
+    \leanok
+    If orthogonal projections $P_u$ satisfy $\sum_u P_u=\Id$, then
+    $P_uP_v=\delta_{uv}P_u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Each projection is idempotent, $P_u^2=P_u$, and distinct projections in an
+    orthogonal resolution have orthogonal ranges, $P_uP_v=0$ for $u\ne v$.
+\end{proof}
+
+\begin{theorem}[Unitary assembly of a resolution]
+    \label{thm:periodic_unitary_resolution}
+    \lean{MPSTensor.exists_unitary_toTensorFromBlocks_of_resolution}
+    \leanok
+    \uses{def:mpu_dependent_block_inclusion}
+    Let $V_a:\C^{D_a}\to\C^D$ satisfy
+    $\sum_a V_aV_a^\dagger=\Id$ and $\sum_a D_a=D$.
+    If $A^iV_a=V_aB_a^i$ for every $a,i$, then there is a unitary
+    $U:\bigoplus_a\C^{D_a}\to\C^D$ with $UJ_a=V_a$ and
+    $A^i=U(\bigoplus_a B_a^i)U^\dagger$, where $J_a$ is the block inclusion.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpu_dependent_block_inclusion_identities}
+    Concatenate the columns of the $V_a$ to define $U$. The identity resolution
+    gives $UU^\dagger=\Id$, and equality of dimensions makes $U$ unitary.
+    On every summand,
+    \begin{align}
+        A^iUJ_a & =A^iV_a=V_aB_a^i=U\Bigl(\bigoplus_bB_b^i\Bigr)J_a, \notag
+    \end{align}
+    so $A^iU=U(\bigoplus_aB_a^i)$, and multiplying by $U^\dagger$ gives the
+    asserted conjugation.
+\end{proof}
+
+\begin{theorem}[Unitary orbit coordinates and phase-weighted roots]
+    \label{thm:periodic_unitary_orbit_root}
+    \lean{MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition}
+    \leanok
+    \uses{def:periodic_tensor,def:periodic_step_orbit_projection,def:mpu_dependent_block_inclusion}
+    Let $A$ be left-canonical periodic of period $m$ and let $p>0$.
+    Put $r=\gcd(m,p)$. The prescribed orbit blocks $C_a$, of period $m/r$,
+    admit a unitary $U$ such that, with $Q_a$ the step-orbit projections of
+    Definition~\ref{def:periodic_step_orbit_projection} and $J_a$ the
+    coordinate inclusions,
+    \begin{align}
+        (A^{[p]})^I          & =U\Bigl(\bigoplus_{a=0}^{r-1}C_a^I\Bigr)U^\dagger, \notag \\
+        (UJ_a)(UJ_a)^\dagger & =Q_a. \notag
+    \end{align}
+    For every choice of $c_a$ with $c_a^{m/r}=1$, there is a left-canonical
+    tensor $A'$ with the same physical and bond dimensions as $A$ such that
+    \begin{align}
+        (A'^{[p]})^I & =U\Bigl(\bigoplus_{a=0}^{r-1}c_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
+    The unitary and orbit blocks are chosen independently of the phases.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_unitary_resolution,thm:periodic_orthogonal_resolution_multiplication,
+        thm:periodic_absorb_orbit_gauge,
+        thm:periodic_prescribed_blocking_compression}
+    Apply Theorem~\ref{thm:periodic_unitary_resolution} to the orbit
+    isometries and set $Z=U\bigl(\bigoplus_ac_a\Id_{D_a}\bigr)U^\dagger$.
+    Since $UJ_a$ is the original orbit isometry,
+    $ZQ_a(A^{[p]})^I=c_aQ_a(A^{[p]})^I$. Absorbing these phases into the
+    original cyclic sectors gives
+    \begin{align}
+        (A'^{[p]})^I & =Z(A^{[p]})^I=U\Bigl(\bigoplus_ac_aC_a^I\Bigr)U^\dagger. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Weight and dimension recovery from a blocked comparison]
+    \label{thm:periodic_blocked_weight_normalization}
+    \lean{MPSTensor.weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos}
+    \leanok
+    \uses{def:periodic_tensor,def:same_mpv2_pos}
+    Let $T=\bigoplus_k\mu_k B_k$, where $\mu_k\ne0$ and the $B_k$ are
+    left-canonical periodic tensors of bond dimension $D_k$. Suppose that, for $p>0$, $T^{[p]}$ has the same
+    positive-length matrix product vectors as a periodic sector decomposition
+    $Q$ with a pairwise non-repeated basis and unit-modulus multiplicities.
+    Then $|\mu_k|=1$ for every $k$, and $\sum_k D_k$ equals the total bond
+    dimension of $Q$.
+    This is the weight normalization in the corrected forward direction of
+    \cite[Theorem~4.1, lines~750--756]{DeLasCuevas2017Irreducible}; the
+    unit-modulus target is the correction of
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
+        thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary,
+        thm:periodic_ft_equal_case_trace_preserving,thm:block_tensor_to_tensor_from_blocks}
+    Decompose each blocked $B_k$ into its prescribed orbits. Every resulting
+    block inherits weight $\mu_k^p$. Group repeated blocks and apply the
+    multiplicity-bearing equal-case theorem. Matching to the unit-modulus
+    multiplicities of $Q$ gives $|\mu_k|^p=1$, hence $|\mu_k|=1$.
+    The equal-case theorem also gives matrices $Y$ and $Y'$ between the bond
+    spaces of the grouped decomposition $P$ and of $Q$ with $YY'=\Id$ and
+    $Y'Y=\Id$, so these square matrices have the same size. Since orbit
+    decomposition and grouping preserve the total dimension,
+    \begin{align}
+        \sum_kD_k & =\dim P=\dim Q. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Unit-weight presentation from a blocked comparison]
+    \label{thm:periodic_refinement_normalized_presentation}
+    \lean{MPSTensor.exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos}
+    \leanok
+    \uses{def:periodic_tensor,def:same_mpv2_pos}
+    Let $A$ be any tensor of bond dimension $D$. Suppose that, for $p>0$,
+    $A^{[p]}$ has the same positive-length matrix product vectors as a periodic
+    sector decomposition $Q$ with a pairwise non-repeated basis and
+    unit-modulus multiplicities. Then $A$ has the same positive-length matrix
+    product vectors as a unit-weight sum $\bigoplus_k C_k$ of left-canonical
+    periodic tensors. Their total bond dimension equals that of $Q$ and is
+    at most $D$.
+    This is the normalization step of
+    \cite[Theorem~4.1, lines~750--756]{DeLasCuevas2017Irreducible} for an
+    arbitrary input tensor.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_positive_decomposition,thm:periodic_blocked_weight_normalization,
+        thm:same_mpv2_pos_block_tensor}
+    Take the positive-weight periodic decomposition of $A$ from
+    Theorem~\ref{thm:periodic_positive_decomposition} and block it by $p$.
+    The preceding theorem gives unit modulus for each original weight and
+    the claimed dimension. Set $C_k^I=\mu_kB_k^I$; then
+    $\bigoplus_kC_k=\bigoplus_k\mu_kB_k$, and since $|\mu_k|=1$ each $C_k$ is
+    left-canonical periodic with the period of $B_k$.
 \end{proof}

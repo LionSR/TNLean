@@ -28,6 +28,11 @@ blocks (eq. (S2)), with the corrected approximating state
   vector with error at most `ε` is prepared with measurements in depth `O(log(N/ε))`
   (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`).
 
+Both scope restrictions below are removed, for blocks whose states may overlap and for every
+chain length, by
+`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`,
+which prepares a different approximating state.
+
 **Scope restriction (orthogonal blocks):** both results take, at the block length `q`, the
 orthogonality `B_jᴴ B_{j'} = 0` of the `q`-site states of distinct blocks, which the source does
 not assume. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.

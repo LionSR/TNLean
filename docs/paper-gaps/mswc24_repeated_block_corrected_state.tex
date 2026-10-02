@@ -5,7 +5,7 @@
 \input{command}
 \title{A Corrected Approximating State for a Tensor with Repeated Blocks}
 \author{}
-\date{2026-10-01}
+\date{2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{local-correction}{resolved}
@@ -31,9 +31,8 @@ approximation \cite{gap:mswc24_multiplicity_fixed_point}. This note gives the
 corrected block form and the corrected approximating state, and shows that
 part~(ii) of the approximation-error lemma holds for it when the $q$-site states
 of distinct blocks are orthogonal. When they overlap, it proves the bound at the rate
-of \cite{gap:mswc24_block_form_mixed_overlap} with the factor $\min(1,b)^{-1/2}$,
-$b=\sum_j\lvert\beta_j\rvert^2$, which exceeds one when $b<1$; that open scope
-restriction is recorded in \cite{gap:mswc24_repeated_overlap_small_weight_sum}.
+of \cite{gap:mswc24_block_form_mixed_overlap}, for all nonzero complex weights and with a
+constant independent of the weights \cite{gap:mswc24_repeated_overlap_small_weight_sum}.
 
 \section{The corrected block form}
 Let $E_{j,k}$ be the isometry placing the copy $k$ of block $j$ in the bond
@@ -197,16 +196,18 @@ Drop the orthogonality of the $q$-site states of distinct blocks, let the blocks
 the gauge $\sum_i(A_j^i)^\dagger A_j^i=\mathbf 1$ with positive definite fixed points
 $\sigma_j$ of trace one, let $\lambda_2$ bound the moduli of the eigenvalues other than one of
 every $E_{jj}$ and of all eigenvalues of the mixed transfer matrices $E_{jj'}$, $j\neq j'$, let
-$\xi=-1/\ln\lvert\lambda_2\rvert$ and $0<\gamma<1/2$, and let $\lvert\mu_{j,k}\rvert\leq1$.
-The corrected state (\ref{eq:mswc24_rc_state}) still converges, at the rate of
-\cite{gap:mswc24_block_form_mixed_overlap}: there is $C$, independent of the weights, with
+$\xi=-1/\ln\lvert\lambda_2\rvert$ and $0<\gamma<1/2$. The corrected state
+(\ref{eq:mswc24_rc_state}) still converges, at the rate of
+\cite{gap:mswc24_block_form_mixed_overlap}: there are $C,C'$, independent of the weights, with
 \begin{align}
-    \varepsilon\leq\frac{Cy\,e^{Cy}}{\min(1,b)^{1/2}},\qquad y=Me^{-\gamma q/\xi},\qquad
-    b=\sum_j\lvert\beta_j\rvert^2,
+    \varepsilon\leq Cy\,e^{Cy},\qquad\varepsilon\leq C'y,\qquad y=Me^{-\gamma q/\xi},
     \label{eq:mswc24_rc_overlap_bound}
 \end{align}
-for every $q\geq0$ and $M\geq1$ with $\beta\neq0$. For real weights $0\leq\mu_{j,k}\leq1$ of which
-one equals one, $b\geq1$, and this is $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsilon\leq C'y$.
+for all nonzero complex weights, every $q\geq0$ and $M\geq1$ with $\beta\neq0$. The proof below
+first gives the weaker bound $\varepsilon\leq Cy\,e^{Cy}/\min(1,b)^{1/2}$, $b=\sum_j\lvert
+\beta_j\rvert^2$, for $\lvert\mu_{j,k}\rvert\leq1$; the relative estimate of
+\cite{gap:mswc24_repeated_overlap_small_weight_sum} removes the factor and the condition on the
+weights.
 
 The proof combines the two arguments. By (\ref{eq:mswc24_rc_blocked}) the blocked map is
 $B=\sum_jc_jB_jL_j^\dagger$ with $c_j\leq m_j^{1/2}$, so the blocks of $B^\dagger B$ are
@@ -232,18 +233,17 @@ only increases the overlap. Finally $\lvert\lVert\phi_N(A)\rVert^2-b\rvert\leq b
 N/\xi}$, since every coefficient $\beta_j\overline{\beta_{j'}}$ has modulus at most $b$. With
 $S=\sum_j\overline{\beta_j}z_j$ one has $\lvert S/b-1\rvert\leq b^{-1/2}\sum_j\lvert
 z_j-\beta_j\rvert$, and the inequality of \cite{gap:mswc24_block_form_mixed_overlap} applied to
-$S/b$ and $\lVert\phi_N(A)\rVert/b^{1/2}$ gives (\ref{eq:mswc24_rc_overlap_bound}).
+$S/b$ and $\lVert\phi_N(A)\rVert/b^{1/2}$ gives the weaker bound.
 
-The factor $\min(1,b)^{-1/2}$ is a scope restriction of the proof, not of the construction,
-recorded in \cite{gap:mswc24_repeated_overlap_small_weight_sum}. It
-exceeds one when $b<1$, for instance when the sums $\beta_j=\sum_k\mu_{j,k}^N$ cancel or every
-weight has modulus below one, because the estimates of the $z_j$ are absolute; the source's bound
-has no such factor. The numerical check below shows the error
-converging at the same rate when $b$ is exponentially small. Removing the factor needs a
-relative estimate of $z_j$ for blocks of small weight, uniformly in the weights. The
-second-order estimate of $z_j$ that \cite{gap:mswc24_block_form_mixed_overlap} proves for blocks
-of multiplicity one and weight one, which gives the sharp rate $(N/q)e^{-2\gamma q/\xi}$ there,
-is absolute and does not supply it.
+That bound exceeds (\ref{eq:mswc24_rc_overlap_bound}) by the factor $\min(1,b)^{-1/2}$ when
+$b<1$, for instance when the sums $\beta_j=\sum_k\mu_{j,k}^N$ cancel or every weight has modulus
+below one, because the estimates of the $z_j$ are absolute. The relative estimate of
+\cite{gap:mswc24_repeated_overlap_small_weight_sum} writes $z_j=\sum_{j'}\beta_{j'}w_{jj'}$ with
+$w_{jj'}=\delta_{jj'}$ up to $C_{jj'}y\,e^{C_{jj'}y}$, uniformly in the weights, from the bound
+$\lVert(P-P_\infty)C^{-1}\rVert\leq Ke^{-\gamma q/\xi}$ with $C=\sum_jc_jL_jL_j^\dagger$; then
+$\lvert S/b-1\rvert\leq\sum_{j,j'}C_{jj'}y\,e^{C_{jj'}y}$ with no factor, and
+(\ref{eq:mswc24_rc_overlap_bound}) follows. The numerical check below shows the error
+converging at the same rate when $b$ is exponentially small.
 
 \section{Numerical check with overlaps}
 A script evaluates the corrected state for two random normal blocks of bond dimension two on
@@ -267,12 +267,14 @@ $\sum_{j,j'}\overline{\beta_j}\beta_{j'}\braket{\phi_N(A_j)}{\phi_N(A_{j'})}$; e
 trace of the $N$-th power of the transfer matrix of $A$ loses all digits when $b$ is small.
 
 \section{What is formalized with overlaps}
-The bound (\ref{eq:mswc24_rc_overlap_bound}), and for real weights in $[0,1]$ one of which is one
-its forms $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsilon\leq C'y$, are formalized, with the
-ingredients above.\footnote{Formal declarations:
-    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum},
-    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_of_nonneg} and
-    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_of_nonneg} in
+The bound (\ref{eq:mswc24_rc_overlap_bound}), for all nonzero complex weights with constants
+independent of the weights, is formalized, with the ingredients above and the relative estimate
+of \cite{gap:mswc24_repeated_overlap_small_weight_sum}.\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum} in
+    \doclink{TNLean/MPS/Preparation/RepeatedOverlappingBlockWeights};
+    \leanid{MPSTensor.sum_star_copyApproxVector_mul_mpv} and
+    \leanid{MPSTensor.sum_norm_sq_copyApproxVector_le} in
     \doclink{TNLean/MPS/Preparation/RepeatedOverlappingBlockError};
     \leanid{MPSTensor.exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le},
     \leanid{MPSTensor.mixedMapLM_copyPosLimitRow_apply} and
@@ -281,8 +283,7 @@ ingredients above.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_norm_gram_sum_sub_le} and
     \leanid{Matrix.norm_polarPos_sub_le_sqrt} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockGram}.}
-The bound without the factor $\min(1,b)^{-1/2}$ when $b<1$ is not formalized
-\cite{gap:mswc24_repeated_overlap_small_weight_sum}.
+The weaker bound with the factor $\min(1,b)^{-1/2}$ is not formalized separately.
 
 \section{Copies with weights of different phases}\label{sec:mswc24_rc_phases}
 When a block has several copies whose weights have different phases, the phases cannot be
@@ -355,8 +356,8 @@ $\beta'_j=\lvert\mu_j\rvert^N$ for a block with one copy, and the error bounds f
 state with these coefficients are formalized, for complex weights of any phase: for blocks
 whose $q$-site states are orthogonal, $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsilon\leq C'y$
 at every $q\geq1$ and $M\geq1$ with $\beta\neq0$, and for overlapping blocks the bound
-(\ref{eq:mswc24_rc_overlap_bound}) at every $q\geq1$, with its form for real weights in
-$[0,1]$ one of which is one.\footnote{Formal declarations:
+(\ref{eq:mswc24_rc_overlap_bound}) at every $q\geq1$, for all nonzero weights with constants
+independent of the weights.\footnote{Formal declarations:
     \leanid{Matrix.polarIso_mul_eq_zero} in \doclink{TNLean/MPS/Preparation/PolarUniqueness};
     \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding},
     \leanid{MPSTensor.oneCopyWeight},
@@ -365,7 +366,7 @@ $[0,1]$ one of which is one.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy},
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy},
     \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy} and
-    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonneg}
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy}
     in \doclink{TNLean/MPS/Preparation/OneCopyPairState}.} The failure of the coefficients
 $\sum_k\lvert\mu_{j,k}\rvert^N$ and $c_j^M$ is checked numerically and not formalized.
 

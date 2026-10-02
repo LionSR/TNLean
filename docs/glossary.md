@@ -1419,7 +1419,11 @@ The following notions use different transfer objects and are not interchangeable
   (the states `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of blocks with orthogonal blocked
   states, in depth `O(L)`) and
   `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`
-  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks).
+  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks with
+  orthogonal blocked states and block lengths dividing `N`), and
+  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`
+  (the same for blocks whose states may overlap, every multiplicity, every
+  nonzero complex weight and every `N ≥ 2` with `|φ_N(A)⟩ ≠ 0`).
 - **Caveat:** the circuit `U` is applied after the measurement and its
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
@@ -1991,3 +1995,22 @@ involve no boundary.
   definition; they are phases, multiplicative in `g`, and equal to $1$ at the
   identity only under unitarity and $\rho^{(L)}\neq 0$
   (`IsStrongOnSiteSymmetry.norm_eq_one`, `.map_mul`, `.map_one`).
+
+### `MPSTensor.SymmetricGappedInteractionPath`
+
+- **Declaration:** `SymmetricGappedInteractionPath U h₀ h₁`.
+- **Defined in:** `TNLean/MPS/Symmetry/GappedInteractionPath.lean`.
+- **Meaning:** a continuous path of Hermitian two-site interactions of
+  operator norm at most one, with prescribed endpoints, whose periodic
+  Hamiltonians commute with the fixed on-site unitary symmetry and have a
+  common positive spectral gap for every parameter and every length at
+  least two. The ground energy may vary, and ground-state degeneracy is allowed.
+- **Source:** arXiv:1010.3732, Sections II.C.1–2, lines 407–453.
+- **Sanctioned constructions:** `SymmetricGappedInteractionPath.reverse`,
+  `SymmetricGappedInteractionPath.trans`, and
+  `normalizedBondFixedPointGappedPath` (the path between the direct-sum
+  fixed points built from the normalized interpolating bond).
+- **Caveat:** this describes a path on a common physical space. Endpoint
+  blocking and symmetry-preserving embeddings are separate mathematical
+  operations. It does not impose an MPS description of intermediate ground
+  spaces, which is required for the source's converse classification argument.

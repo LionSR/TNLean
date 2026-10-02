@@ -65,7 +65,10 @@ import TNLean.MPS.Preparation.OrthogonalSumPolar
 import TNLean.MPS.Preparation.OverlappingBlockCounterexample
 import TNLean.MPS.Preparation.OverlappingBlockError
 import TNLean.MPS.Preparation.OverlappingBlockGram
+import TNLean.MPS.Preparation.OverlappingBlockInjectivity
 import TNLean.MPS.Preparation.OverlappingBlockOverlap
+import TNLean.MPS.Preparation.OverlappingBlockStates
+import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PairProduct
 import TNLean.MPS.Preparation.PartialIsometryPreparation
@@ -79,11 +82,13 @@ import TNLean.MPS.Preparation.QuditTeleportation
 import TNLean.MPS.Preparation.RegisterGates
 import TNLean.MPS.Preparation.RegisterTree
 import TNLean.MPS.Preparation.RegisterTreeState
+import TNLean.MPS.Preparation.RelativePositivePart
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.RepeatedBlockError
 import TNLean.MPS.Preparation.RepeatedBlockSum
 import TNLean.MPS.Preparation.RepeatedOverlappingBlockError
 import TNLean.MPS.Preparation.RepeatedOverlappingBlockOverlap
+import TNLean.MPS.Preparation.RepeatedOverlappingBlockWeights
 import TNLean.MPS.Preparation.SecondOrderBlockError
 import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap

@@ -57,6 +57,7 @@ import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentTracePerturbation
+import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
@@ -65,6 +66,7 @@ import TNLean.Algebra.KernelGapPerturbation
 import TNLean.Algebra.KleinCocycleCompleteness
 import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable
+import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolBlockIndependence
 import TNLean.Algebra.LSymbolDomainWall
@@ -75,6 +77,7 @@ import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
+import TNLean.Algebra.MatrixSylvesterBound
 import TNLean.Algebra.MatrixTensorPower
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
@@ -86,6 +89,7 @@ import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrthogonalKernelGap
+import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiSigmaEquiv

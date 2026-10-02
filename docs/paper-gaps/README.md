@@ -38,6 +38,13 @@ For the Fibonacci string-net example of arXiv:1511.08090:
   unit laws derived from it fail there as well, and that the empty chain is
   excluded as a degenerate reading.
 
+For the project Ising bond-object twist motivated by arXiv:1606.00608:
+
+- `tnlean_ising_three_object_twist_scope.tex` records the four channels of the
+  forty-dimensional local product and distinguishes this compression from
+  the unformalized literal round-45B boundary tensors of dimensions
+  forty-eight and sixty-four.
+
 For the Kitaev chain of arXiv:2011.12127, Appendix A:
 
 - `rmp_kitaev_chain_bosonic_scope.tex` records that the review and
@@ -794,7 +801,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   canonical form has multiplicity `m_j ≥ 2`, the block form of the positive part
   in eq. (S5) fails and the state `V^{⊗M} ∑ⱼ βⱼ |Ω_j⟩` of eq. (S7) does not
   approximate `|φ_N⟩`: for `A⁰ = diag(1, 1, 0)`, `A¹ = diag(0, 0, 1)` the overlap
-  tends to `1/√5` for every blocking length.
+  tends to `1/√5` for every blocking length. The failure lies in the coefficients:
+  with the pairs of block `j` on one copy `k_j` and `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`
+  in place of `βⱼ`, the state of eq. (S7) is the corrected state and satisfies
+  part (ii) of the approximation-error lemma for all nonzero complex weights, also
+  for blocks whose `q`-site states overlap, at the rate of
+  `mswc24_block_form_mixed_overlap.tex`.
 - `mswc24_block_form_mixed_overlap.tex` records that the block form of the
   positive part in eq. (S5) also fails when every multiplicity is one, because
   `B†B` couples distinct blocks through the overlaps of their `q`-site states,
@@ -812,13 +824,15 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   with the source's weights. For blocks whose `q`-site states are orthogonal,
   part (ii) of the approximation-error lemma is proved for it with arbitrary
   multiplicities and complex weights; for blocks whose states overlap it is
-  proved at the corrected rate with the factor `min(1, b)^{-1/2}`; numerical
-  checks on the counterexamples are recorded.
-- `mswc24_repeated_overlap_small_weight_sum.tex` is an open scope restriction:
-  for repeated blocks whose `q`-site states overlap, the bound for the corrected
-  state carries the factor `min(1, b)^{-1/2}` with `b = ∑ⱼ |βⱼ|²`, which exceeds
-  one when `b < 1`, for instance when the sums `βⱼ` cancel; the source's bound has
-  no such factor. Real weights in `[0, 1]` one of which is `1` give `b ≥ 1`.
+  proved at the corrected rate for all nonzero complex weights, with constants
+  independent of the weights; numerical checks on the counterexamples are
+  recorded.
+- `mswc24_repeated_overlap_small_weight_sum.tex` is a resolved scope restriction:
+  for repeated blocks whose `q`-site states overlap, an earlier bound for the
+  corrected state carried the factor `min(1, b)^{-1/2}` with `b = ∑ⱼ |βⱼ|²`. An
+  estimate of the positive part relative to the block weights, from a Sylvester
+  equation, removes it: `ε ≤ C y e^{C y}` and `ε ≤ C' y` hold for all nonzero
+  complex weights, with constants independent of the weights.
 - `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
   false-source note for Lemma 2 of the Supplemental Material. It records that
   the lemma holds in modulus for the source's
@@ -872,11 +886,18 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   sequence-level statement.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
-  "Long-range MPS using measurements"): orthogonal `q`-site states of distinct
-  blocks, block lengths dividing `N`, and the corrected approximating state; and
-  two readings of the construction, the circuit applied after the measurement
-  and the depth `O(q)`, rather than constant, of the GHZ-type state on the chain
-  of `N` sites; open.
+  "Long-range MPS using measurements"). The first formal statement takes
+  orthogonal `q`-site states of distinct blocks, block lengths dividing `N`, and
+  the corrected approximating state. The second removes these restrictions: it
+  prepares every direct sum of normal blocks in the canonical form (S2), with
+  overlapping `q`-site states, every multiplicity and every nonzero complex
+  weight, for every `N ≥ 2` at which the periodic state is nonzero, with blocks
+  of equal length except a larger last one, using the isometries of the direct
+  sum with weights one, so that its error bound has no factor
+  `min(1, ∑ⱼ |βⱼ|²)^{-1/2}`. The note also records two readings of the
+  construction, the circuit applied after the measurement and the depth `O(q)`,
+  rather than constant, of the GHZ-type state on the chain of `N` sites, which
+  remains open.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
   (paragraph "Connection to MERA") was first formalized for tensors whose

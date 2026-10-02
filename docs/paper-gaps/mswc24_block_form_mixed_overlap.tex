@@ -471,24 +471,22 @@ weights $\lvert\mu_j\rvert\leq1$ with $\max_j\lvert\mu_j\rvert=1$, with
 $\beta_j=\lvert\mu_j\rvert^N$ in place of the coefficients $\mu_j^N$ that (S6) and (S7) take
 from (S4); with those coefficients the counterexample (\ref{eq:mswc24_phase_overlap}) refutes
 (S7). Blocks with multiplicity combined with overlaps are formalized for the corrected state of
-\cite{gap:mswc24_repeated_block_corrected_state}, which replaces (S7), with complex weights of
-modulus at most one and the coefficients $\beta_j=\sum_k\mu_{j,k}^N$ of (S4), up to a factor
-$\min(1,\sum_j\lvert\beta_j\rvert^2)^{-1/2}$ that is one when $\sum_j\lvert\beta_j\rvert^2\geq1$,
-and without that factor for real weights in $[0,1]$ one of which is one. The state (S7) itself,
-with the pairs of block $j$ on one copy $k_j$, is the corrected state when its coefficients are
-$\beta_j(c_j/\mu_{j,k_j}^q)^M$ with $c_j=(\sum_k\lvert\mu_{j,k}\rvert^{2q})^{1/2}$, which is
+\cite{gap:mswc24_repeated_block_corrected_state}, which replaces (S7), for all nonzero complex
+weights and the coefficients $\beta_j=\sum_k\mu_{j,k}^N$ of (S4), with constants independent of the
+weights: the sums $\beta_j$ may cancel and $\sum_j\lvert\beta_j\rvert^2$ may be arbitrarily small
+\cite{gap:mswc24_repeated_overlap_small_weight_sum}. The proof estimates the positive part relative
+to the weights of the blocks, $\lVert(P-P_\infty)C^{-1}\rVert\leq Ke^{-\gamma q/\xi}$ with
+$C=\sum_jc_jL_jL_j^\dagger$, from a Sylvester equation for $(P-P_\infty)C^{-1}$. The state (S7)
+itself, with the pairs of block $j$ on one copy $k_j$, is the corrected state when its coefficients
+are $\beta_j(c_j/\mu_{j,k_j}^q)^M$ with $c_j=(\sum_k\lvert\mu_{j,k}\rvert^{2q})^{1/2}$, which is
 $\lvert\mu_j\rvert^N$ for multiplicity one; with these coefficients the bounds above hold for
 (S7) and weights of any phase \cite{gap:mswc24_repeated_block_corrected_state}. For multiplicity
 one and weight one the rate is also formalized at second order,
-(\ref{eq:mswc24_mixed_second_order}), which is sharp up to $\gamma<1$. Two extensions are not
-formalized: the bound without that factor when $\sum_j\lvert\beta_j\rvert^2<1$, as for cancelling
-weights or weights all of modulus below one \cite{gap:mswc24_repeated_overlap_small_weight_sum};
-and the second-order rate for weights of different moduli and for blocks with multiplicity.
-Both need the second-order estimate of the overlap $z_j$ relative to the weight of block $j$,
-uniformly in the weights: the Gram matrices converge to a limit that is not bounded below on
-the blocks of smaller weight, so neither the Lipschitz bound of the square root nor the unit
-vectors $\iota(P)$ of the second-order argument above are available. The numerical check above
-suggests that the relative estimate holds.
+(\ref{eq:mswc24_mixed_second_order}), which is sharp up to $\gamma<1$. The second-order rate for
+weights of different moduli and for blocks with multiplicity is not formalized: the second-order
+argument above uses the Lipschitz bound of the square root and the unit vectors $\iota(P)$, and
+for blocks of smaller weight the Gram matrices converge to a limit that is not bounded below on
+those blocks.
 
 \bibliographystyle{alpha}
 \bibliography{references}
