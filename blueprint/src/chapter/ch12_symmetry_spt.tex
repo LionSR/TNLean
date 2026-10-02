@@ -783,6 +783,169 @@ and the regrouping of physical registers into bonds.
     carries the commutation relation to physical coordinates.
 \end{proof}
 
+\begin{theorem}[Spectral gap of the physical bond parent Hamiltonian]
+    \label{thm:spt_physical_bond_parent_spectrum}
+    \lean{MPSTensor.physicalBondProductParentHamiltonian_posSemidef,
+        MPSTensor.physicalBondProductParentHamiltonian_spectrum_gap_one,
+        MPSTensor.normalizedPhysicalBondInterpolation_parent_spectrum_gap_one}
+    \leanok
+    \uses{thm:spt_physical_bond_parent_gap}
+    For every unit bond vector, and in particular for
+    $\widehat\omega(\gamma)$ with $D_0,D_1>0$, the physical parent
+    Hamiltonian $P_NH_N(\gamma)P_N^*$ is positive semidefinite for every
+    $N>0$. Its spectrum contains $0$, and every spectral value $z$
+    satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The Hamiltonian is a unitary conjugate of a sum of orthogonal
+    projections, hence positive semidefinite. Its nonzero kernel gives the
+    spectral value $0$. For a unit eigenvector with eigenvalue $\lambda$,
+    the quadratic-form inequality of
+    Theorem~\ref{thm:spt_physical_bond_parent_gap} reads
+    $\lambda\leq\lambda^2$; with $\lambda\geq0$ this forces $\lambda=0$ or
+    $\lambda\geq1$.
+\end{proof}
+
+\begin{theorem}[Two-site interaction for the bond parent Hamiltonian]
+    \label{thm:spt_two_site_bond_interaction}
+    \lean{MPSTensor.twoSiteBondInteraction_isStarProjection,
+        MPSTensor.twoSiteBondInteraction_norm_le_one,
+        MPSTensor.embed_twoSiteBondInteraction_eq_conj,
+        MPSTensor.interactionHamiltonian_twoSiteBondPenalty}
+    \leanok
+    \uses{thm:spt_incoming_bond_locality, thm:spt_physical_bond_parent_gap}
+    For a bond matrix $K$, let $h(K)$ act as $K$ on the middle
+    registers $(R_0,L_1)$ of two sites, with identity on the exterior
+    registers. If $K$ is an orthogonal projection, so is $h(K)$, and
+    its Hilbert-space operator norm is at most one. For every $N\geq2$,
+    \begin{align}
+        \sum_{i=0}^{N-1}h(I-|\eta\rangle\langle\eta|)_{i,i+1}
+        &=P_N H_N(\eta)P_N^*.
+        \notag
+    \end{align}
+    Here the indices are cyclic and $H_N(\eta)$ is the sum of the
+    independent-bond penalties
+    \cite[Section~II.D.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two-site operator is a reordering of
+    $I\otimes K\otimes I$. Its translate at $i$ is the conjugate
+    under $P_N$ of the independent-bond term at $i+1$. Summing and
+    reindexing by the cyclic successor gives the identity.
+\end{proof}
+
+\begin{theorem}[Symmetric gapped path between the direct-sum fixed points]
+    \label{thm:spt_direct_sum_fixed_point_path}
+    \lean{MPSTensor.sptFixedPointUnitaryAction,
+        MPSTensor.normalizedBondFixedPointGappedPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path,
+        thm:spt_two_site_bond_interaction,
+        thm:spt_physical_bond_parent_spectrum,
+        thm:spt_physical_bond_parent_symmetry}
+    Let $D_0,D_1>0$, and let $V^{(0)}$ and $V^{(1)}$ be unitary
+    projective representations with the same factor system. Set
+    $D=D_0+D_1$ and let $U$ be the unitary physical action of the SPT
+    fixed-point tensor of $V^{(0)}\oplus V^{(1)}$ with trivial
+    character. If $\widehat\omega(\gamma)$ is the normalized
+    interpolating bond, define the two-site interaction to be the
+    identity on the outer registers and
+    $1-|\widehat\omega(\gamma)\rangle
+       \langle\widehat\omega(\gamma)|$
+    on the bond joining the sites. Then these interactions form a
+    symmetric gapped path on the common physical space of dimension
+    $D^2$. Their operator norms are at most one, and the gap above the
+    unique ground line is at least one for every $N\ge2$ and every
+    $\gamma\in[0,1]$ \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each local interaction is an orthogonal projection and depends
+    continuously on the normalized bond vector. The sum of its
+    translates is the physical-coordinate independent-bond parent
+    Hamiltonian. Its spectrum has zero as the ground value and no
+    values strictly between zero and one. The direct-sum action fixes
+    the bond vector, so the full Hamiltonian commutes with
+    $U_g^{\otimes N}$ for every $g$.
+\end{proof}
+
+\begin{theorem}[Weighted matrix-unit MPS as a product of bonds]
+    \label{thm:spt_weighted_matrix_unit_bond_product}
+    \lean{MPSTensor.mpv_weightedMatrixUnitInterpolation_eq_incomingBondProduct,
+        MPSTensor.mpv_weightedMatrixUnitInterpolation_zero,
+        MPSTensor.mpv_weightedMatrixUnitInterpolation_one,
+        MPSTensor.continuous_weightedMatrixUnitInterpolation,
+        MPSTensor.weightedMatrixUnitInterpolation_isOnSiteSymmetric}
+    \leanok
+    \uses{thm:spt_normalized_bond_interpolation,
+        def:spt_incoming_bond_coordinates,
+        thm:spt_bond_interpolation_symmetry}
+    Let $N>0$ and $D=D_0+D_1$. Define an MPS tensor with physical
+    letters $(a,b)$ by
+    $A_\gamma^{(a,b)}=\widehat W(\gamma)_{aa}|a\rangle\langle b|$.
+    For a cyclic physical configuration $s=((L_i,R_i))_i$, its matrix
+    product coefficient equals the product of the incoming-bond
+    amplitudes:
+    \begin{align}
+        \operatorname{tr}\!\left(\prod_{i=1}^N
+            A_\gamma^{(L_i,R_i)}\right)
+          &=\prod_{i=1}^N
+            \widehat W(\gamma)_{R_{i-1},L_i}.
+            \notag
+    \end{align}
+    At $\gamma=0,1$ this identifies the positive-length physical states
+    with the embedded endpoint bond-product states, with every nonzero
+    incoming bond coefficient equal to $D_p^{-1/2}$ in endpoint block $p$.
+    The path of tensors is continuous and symmetric under the physical
+    action of the SPT fixed-point tensor of $V^{(0)}\oplus V^{(1)}$ with
+    trivial character, which does not depend on $\gamma$
+    \cite[Section~II.F.2]{Schuch2011Phases}. The tensor itself
+    may have letters with cross-block indices at an endpoint; the cyclic
+    coefficient identity is the relevant endpoint statement.
+\end{theorem}
+
+\begin{proof}\leanok
+    The trace of a cyclic product of matrix units vanishes unless each
+    column index equals the next row index. On that support, it is the
+    product of the diagonal weights. Regrouping the cyclic indices gives
+    the displayed product of bond coefficients. The diagonal weight
+    matrix commutes with the direct-sum virtual action, so the symmetry
+    relation of the matrix units passes to $A_\gamma$.
+\end{proof}
+
+\begin{theorem}[Two-site fixed-point vectors lie in the bond kernel]
+    \label{thm:spt_fixed_point_two_site_bond_kernel}
+    \lean{MPSTensor.matrixUnitBondVector,
+        MPSTensor.matrixUnitBondVector_sum_normSq,
+        MPSTensor.groundSpaceMap_sptFixedPointTensor_two_apply,
+        MPSTensor.twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor}
+    \leanok
+    \uses{thm:spt_two_site_bond_interaction, def:spt_fixed_point_tensor}
+    Let $D>0$, let $A^{(a,b)}=D^{-1/2}|a\rangle\langle b|$ be the SPT
+    fixed-point tensor, and set
+    $\eta=D^{-1/2}\sum_{a=1}^D|a,a\rangle$. Then $\|\eta\|=1$.
+    For every boundary matrix $X$, the two-site open-boundary vector
+    $\Psi_X$ has coefficients
+    $\Psi_X(a,b,c,d)=D^{-1}\delta_{bc}X_{da}$ and is annihilated by
+    the interaction $h(I-|\eta\rangle\langle\eta|)$ acting on
+    the middle registers. This bond interaction is bounded above by
+    the canonical two-site parent interaction of $A$
+    \cite[Section~II.D.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Multiplication of two letters gives
+    $A^{(a,b)}A^{(c,d)}=D^{-1}\delta_{bc}|a\rangle\langle d|$.
+    Taking the trace against $X$ gives the coefficient formula.
+    The middle-register vector is $\sum_b|b,b\rangle=\sqrt D\,\eta$,
+    which lies in the kernel of $I-|\eta\rangle\langle\eta|$.
+    Both interactions are orthogonal projections. The inclusion of
+    their kernels therefore gives the asserted operator inequality.
+\end{proof}
+
 \subsection{Degeneracy of the entanglement spectrum}
 \label{sec:spt_entanglement_spectrum}
 
