@@ -269,117 +269,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
 \end{proof}
 
-\subsection{Uniform gap in independent-bond coordinates}
-\label{sec:spt_independent_bond_gap}
-
-The bond interpolation in Section~II.F.2 of~\cite{Schuch2011Phases}
-has a commuting parent Hamiltonian. The following estimate gives a lower
-bound independent of both the interpolation parameter and the chain length,
-once the one-bond interaction is an orthogonal projection.
-
-\begin{lemma}[Gap of a sum of commuting projections]
-    \label{lem:spt_commuting_projection_gap}
-    \lean{Matrix.sum_square_sub_posSemidef_of_isStarProjection,
-        Matrix.spectrum_separated_of_square_sub_posSemidef,
-        Matrix.spectrum_sum_separated_of_isStarProjection}
-    \leanok
-    Let $P_1,\ldots,P_m$ be pairwise commuting orthogonal projections on a
-    finite-dimensional complex Hilbert space, and put $H=\sum_iP_i$.
-    Then $H^2\ge H\ge0$ and
-    \begin{align}
-        \operatorname{spec}(H) & \subseteq\{0\}\cup[1,\infty).
-        \notag
-    \end{align}
-    The same spectral inclusion holds for any Hermitian matrix satisfying
-    $H\ge0$ and $H^2\ge H$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Each product $P_iP_j$ is an orthogonal projection, hence positive.
-    Since $P_i^2=P_i$, expansion gives
-    \begin{align}
-        H^2-H & =\sum_{i\ne j}P_iP_j\ge0.
-        \notag
-    \end{align}
-    For a unit eigenvector with eigenvalue $\lambda$, positivity of $H$
-    and $H^2-H$ gives $\lambda\ge0$ and $\lambda^2-\lambda\ge0$.
-    Thus either $\lambda=0$ or $\lambda\ge1$.
-\end{proof}
-
-\begin{lemma}[Uniform gap of an independent-bond Hamiltonian]
-    \label{lem:spt_independent_bond_gap}
-    \lean{MPSTensor.independentBondHamiltonian,
-        MPSTensor.independentBondHamiltonian_spectrum_gap,
-        MPSTensor.independentBondHamiltonian_mul_complement,
-        MPSTensor.independentBondHamiltonian_zero_mem_spectrum}
-    \leanok
-    Let $K$ be an orthogonal projection on $\C^d$. For $N\ge1$, let $K_i$
-    act by $K$ on bond $i$ and by the identity on the remaining bonds,
-    and define $H_N(K)=\sum_iK_i$. Then
-    \begin{align}
-        \operatorname{spec}(H_N(K)) & \subseteq\{0\}\cup[1,\infty), &
-        H_N(K)(I-K)^{\otimes N}     & =0.
-        \notag
-    \end{align}
-    If $K\ne I$, then $0\in\operatorname{spec}(H_N(K))$; consequently
-    the ground energy is zero and the gap above the ground eigenspace is
-    at least one, uniformly in $N$. This is the spectral estimate for the
-    commuting parent Hamiltonian following the bond interpolation
-    in~\cite[Section~II.F.2, lines~899--906]{Schuch2011Phases}.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:spt_commuting_projection_gap}
-    The embedded projections commute because they act on separate bonds,
-    so Lemma~\ref{lem:spt_commuting_projection_gap} gives the spectral
-    inclusion. Since $K(I-K)=0$, each summand annihilates
-    $(I-K)^{\otimes N}$. If $K\ne I$, choose a nonzero entry $q_{ab}$ of
-    $q=I-K$. The entry of $q^{\otimes N}$ between the constant configurations
-    $a$ and $b$ is $q_{ab}^N\ne0$. Thus $q^{\otimes N}$ has nonzero range
-    contained in the kernel of $H_N(K)$, which proves the remaining claim.
-\end{proof}
-
-\begin{definition}[Interaction of a normalized bond vector]
-    \label{def:spt_bond_vector_interaction}
-    \lean{MPSTensor.bondVectorInteraction}
-    \leanok
-    For a vector $w\in\C^d$, define
-    \begin{align}
-        K(w) & =I-|w\rangle\langle w|.
-        \notag
-    \end{align}
-    When $\|w\|=1$, this is the one-bond parent interaction
-    of~\cite[Section~II.D.2]{Schuch2011Phases}.
-\end{definition}
-
-\begin{lemma}[Parent interaction and gap of a unit bond]
-    \label{lem:spt_unit_bond_interaction}
-    \lean{MPSTensor.bondVectorInteraction_isStarProjection,
-        MPSTensor.bondVectorInteraction_mulVec,
-        MPSTensor.bondVectorInteraction_ne_one,
-        MPSTensor.bondVectorInteraction_norm_le_one,
-        MPSTensor.continuous_bondVectorInteraction,
-        MPSTensor.bondVectorInteraction_independentBond_gap}
-    \leanok
-    \uses{def:spt_bond_vector_interaction}
-    The map $w\mapsto K(w)$ is continuous. For $\|w\|=1$, the matrix
-    $K(w)$ is an orthogonal projection with $K(w)w=0$, $K(w)\ne I$,
-    and $\|K(w)\|_{\mathrm{op}}\le1$.
-    At every positive chain length, $H_N(K(w))$ has ground energy zero
-    and a gap of at least one above its ground eigenspace.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:spt_independent_bond_gap}
-    Since $\langle w,w\rangle=1$, the operator $|w\rangle\langle w|$
-    is an orthogonal projection and fixes $w$. Its complement is an
-    orthogonal projection of norm at most one, annihilates the nonzero
-    vector $w$, and therefore differs from the identity. Each entry of
-    $K(w)$ depends polynomially on the coordinates of $w$ and their
-    conjugates, proving continuity. Apply
-    Lemma~\ref{lem:spt_independent_bond_gap} for the gap assertion.
-\end{proof}
-
 \subsection{Renormalization fixed points of SPT phases}
 \label{sec:spt_fixed_points}
 
@@ -687,42 +576,6 @@ and the regrouping of physical registers into bonds.
     normalization gives the second.
 \end{proof}
 
-\begin{lemma}[Uniform gap along the normalized bond interpolation]
-    \label{lem:spt_bond_interpolation_uniform_gap}
-    \lean{MPSTensor.bondInterpolationVector,
-        MPSTensor.bondInterpolationVector_norm,
-        MPSTensor.continuous_bondInterpolationVector,
-        MPSTensor.bondInterpolationInteraction,
-        MPSTensor.bondInterpolationInteraction_uniform_gap}
-    \leanok
-    \uses{thm:spt_normalized_bond_interpolation,
-        def:spt_bond_vector_interaction}
-    Let $D_0,D_1>0$, and normalize the corrected interpolating bond of
-    Theorem~\ref{thm:spt_normalized_bond_interpolation} to obtain
-    $\widehat\omega(\gamma)$. Put
-    $K_\gamma=I-|\widehat\omega(\gamma)\rangle\langle\widehat\omega(\gamma)|$.
-    For every real $\gamma$, this is an orthogonal projection with
-    $\|K_\gamma\|_{\mathrm{op}}\le1$, and $\gamma\mapsto K_\gamma$ is continuous.
-    For every $N\ge1$,
-    \begin{align}
-        0                                  & \in\operatorname{spec}(H_N(K_\gamma)), &
-        \operatorname{spec}(H_N(K_\gamma)) & \subseteq\{0\}\cup[1,\infty).
-        \notag
-    \end{align}
-    Thus the independent-bond Hamiltonians have a uniform gap of at least
-    one throughout the interpolation, including its two endpoints
-    \cite[Section~II.F.2, lines~899--906]{Schuch2011Phases}.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:spt_normalized_bond_interpolation, lem:spt_unit_bond_interaction}
-    Enumerating the two bond coordinates by one product index preserves
-    the sum of squared moduli. The normalized coefficient matrix therefore
-    gives a continuous unit vector in the bond Hilbert space. Apply
-    Lemma~\ref{lem:spt_unit_bond_interaction} at each parameter; its gap
-    bound is independent of the vector and of the chain length.
-\end{proof}
-
 \begin{definition}[Incoming-bond coordinates]
     \label{def:spt_incoming_bond_coordinates}
     \lean{MPSTensor.incomingBondEquiv, MPSTensor.incomingBondPerm}
@@ -868,6 +721,41 @@ and the regrouping of physical registers into bonds.
     coefficient and a conjugate coefficient. Both depend continuously
     on $\gamma$. Embedding in the finite chain and summing preserve
     continuity.
+\end{proof}
+
+\begin{lemma}[Spectral gap in independent-bond coordinates]
+    \label{lem:spt_independent_bond_gap}
+    \lean{MPSTensor.bondPenalty_norm_le_one,
+        MPSTensor.bondProductParentHamiltonian_posSemidef,
+        MPSTensor.bondProductParentHamiltonian_spectrum_gap_one,
+        MPSTensor.normalizedBondInterpolation_parent_uniform_gap}
+    \leanok
+    \uses{thm:spt_bond_product_parent_gap, thm:spt_bond_parent_continuity}
+    Let $\eta$ be a unit bond vector and $N\geq1$. The local penalty
+    $1-|\eta\rangle\langle\eta|$ has operator norm at most one, and the
+    independent-bond Hamiltonian $H_N(\eta)$ is positive semidefinite with
+    \begin{align}
+        0                              & \in\operatorname{spec}(H_N(\eta)), &
+        \operatorname{spec}(H_N(\eta)) & \subseteq\{0\}\cup[1,\infty).
+        \notag
+    \end{align}
+    For $D_0,D_1>0$ and the normalized interpolating bond
+    $\widehat\omega(\gamma)$, the penalty depends continuously on
+    $\gamma$, and these statements hold for every real $\gamma$ and every
+    $N\geq1$, including both endpoints
+    \cite[Section~II.F.2, lines~899--906]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The penalty is an orthogonal projection, so its norm is at most one,
+    and $H_N(\eta)$ is a sum of orthogonal projections. Its kernel is the
+    nonzero line spanned by $\eta^{\otimes N}$, which gives the spectral
+    value $0$. For a unit eigenvector with eigenvalue $\lambda$, the
+    inequality $H_N(\eta)^2\geq H_N(\eta)$ of
+    Theorem~\ref{thm:spt_bond_product_parent_gap} gives
+    $\lambda\leq\lambda^2$; with $\lambda\geq0$ this forces $\lambda=0$ or
+    $\lambda\geq1$. Continuity along the interpolation is
+    Theorem~\ref{thm:spt_bond_parent_continuity}.
 \end{proof}
 
 \begin{theorem}[Physical parent Hamiltonian of the interpolating bonds]

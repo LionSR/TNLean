@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Symmetry
 
 import TNLean.MPS.Symmetry.BondInterpolation
-import TNLean.MPS.Symmetry.BondInterpolationInteraction
 import TNLean.MPS.Symmetry.BondInterpolationSymmetry
 import TNLean.MPS.Symmetry.BondProductContinuity
 import TNLean.MPS.Symmetry.BondProductEndpointGroundSpace
@@ -21,7 +20,6 @@ import TNLean.MPS.Symmetry.BondProductSpectralGap
 import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
-import TNLean.MPS.Symmetry.BondVectorInteraction
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.EntanglementSpectrum

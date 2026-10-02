@@ -25,7 +25,6 @@ import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
 import TNLean.Algebra.CommonKernelGapInterpolation
 import TNLean.Algebra.CommonKernelSpectralGap
-import TNLean.Algebra.CommutingProjectionGap
 import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.CompactGapBounds
