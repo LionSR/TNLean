@@ -3420,6 +3420,372 @@ canonical realization is inferred from a physical spectral gap here.
 \end{proof}
 
 
+\subsection{Compact limits and transient periodic components}
+
+The following auxiliary results apply when a uniform bound below one on
+nonunit transfer eigenvalues is given. They permit a limiting stationary
+density to lose rank, and control the periodic contribution of the
+complementary corner. The derivation of this transfer bound from a physical
+Hamiltonian gap remains separate
+\cite{gap:spc11_spt_interpolation_upper_range}.
+
+
+\begin{theorem}[Compactness of unital tensors]
+    \label{thm:spc_aux_compact_unital_tensors}
+    \lean{MPSTensor.isCompact_setOf_isUnital}
+    \leanok
+    \uses{def:mps_tensor}
+    For fixed $d,D\geq 0$, the set of tensors $A=(A^i)_{i=1}^d$ satisfying
+    $\sum_i A^i(A^i)^\dagger=I_D$ is compact in the topology of their
+    matrix entries. No injectivity or stationary-density assumption is needed.
+\end{theorem}
+
+\begin{proof}\leanok
+    The normalization condition is closed. Its diagonal entries give
+    $\sum_{i,c}|A^i_{ac}|^2=1$, so every matrix entry has modulus at most
+    one. The set is therefore a closed subset of a finite product of
+    compact complex unit discs.
+\end{proof}
+
+\begin{theorem}[A common stationary subsequence]
+    \label{thm:spc_aux_unital_stationary_subsequence}
+    \lean{MPSTensor.exists_subsequence_unital_stationary_limit}
+    \leanok
+    \uses{def:transfer_map}
+    Let $A_n$ be unital tensors of fixed physical dimension $d$ and bond
+    dimension $D$. Suppose that $\sigma_n\geq 0$, $\tr\sigma_n=1$, and
+    $\mathcal E_{A_n}^*(\sigma_n)=\sigma_n$, where
+    $\mathcal E_A^*(X)=\sum_i(A^i)^\dagger X A^i$.
+    There exist a strictly increasing sequence of indices $n_k$, a unital
+    tensor $B$, and a density matrix $\tau$ such that
+    $A_{n_k}\to B$, $\sigma_{n_k}\to\tau$, and
+    $\mathcal E_B^*(\tau)=\tau$. The rank of $\tau$ may be smaller than
+    the ranks of the matrices $\sigma_n$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_compact_unital_tensors}
+    Take a convergent subsequence in the product of the compact set of
+    unital tensors and the compact set of density matrices. Matrix
+    multiplication and adjoints are continuous, so stationarity passes
+    to the limit.
+\end{proof}
+
+\begin{theorem}[Convergence on a fixed invariant quotient]
+    \label{thm:spc_aux_quotient_operator_limit}
+    \lean{Submodule.tendsto_toMatrix_mapQ_of_tendsto}
+    \leanok
+    Let $V$ be a finite-dimensional complex normed space, let
+    $f_n\to f_\infty$ in operator norm, and let $W\subseteq V$ be invariant
+    under every $f_n$ and under $f_\infty$. In any fixed basis of $V/W$,
+    the matrices of the induced quotient operators converge to the
+    matrix of the quotient operator induced by $f_\infty$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose a representative in $V$ of each quotient basis vector. Each
+    matrix entry is a fixed linear functional applied to the image of
+    one representative under the operator. These functionals are
+    continuous in finite dimension, so their values converge.
+\end{proof}
+
+\begin{theorem}[Stability of a fixed line under spectral contraction]
+    \label{thm:spc_aux_fixed_line_limit}
+    \lean{ContinuousLinearMap.eigenspace_one_limit_eq_span_of_uniform_spectrum_bound}
+    \leanok
+    Let $f_n\to f_\infty$ in operator norm on a finite-dimensional complex
+    normed space $V$. Suppose $v\neq 0$, $f_n v=v$ for every $n$, and the
+    eigenvalue $1$ has algebraic multiplicity one for every $f_n$.
+    If there exists $q<1$ such that every eigenvalue $\lambda\neq 1$ of
+    every $f_n$ satisfies $|\lambda|\leq q$, then
+    $\ker(f_\infty-I)=\spn_{\C}\{v\}$.
+    The common spectral bound is an assumption of this statement.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_quotient_operator_limit}
+    Continuity gives $f_\infty v=v$. Put $W=\spn_{\C}\{v\}$ and let
+    $Q_n,Q_\infty$ denote the induced operators on $V/W$, in one fixed
+    basis. Algebraic simplicity removes exactly the eigenvalue $1$
+    when passing from $f_n$ to $Q_n$. Thus all eigenvalues of $Q_n$ have
+    modulus at most $q$. If $m=\dim(V/W)$, the characteristic polynomial
+    gives
+    \begin{align}
+        |\det(I-Q_n)|
+         & =\prod_{j=1}^m|1-\lambda_j(Q_n)|
+        \geq(1-q)^m>0.\notag
+    \end{align}
+    Quotient coordinates and determinants converge, so $I-Q_\infty$ is
+    invertible. Every fixed vector of $f_\infty$ therefore has zero
+    image in $V/W$, proving the assertion. No diagonalizability is used.
+\end{proof}
+
+\begin{theorem}[A nontrivial spectral bound in the limit]
+    \label{thm:spc_aux_nontrivial_spectrum_limit}
+    \lean{ContinuousLinearMap.spectrum_limit_norm_le_of_uniform_nontrivial_bound}
+    \leanok
+    Let $f_n\to f_\infty$ in operator norm on a finite-dimensional complex
+    normed space. Suppose $v\neq 0$, $f_n v=v$ for every $n$, and the
+    eigenvalue $1$ has algebraic multiplicity one for every $f_n$.
+    Let $q\in\mathbb R$ satisfy $|\lambda|\leq q$ for every eigenvalue
+    $\lambda\neq 1$ of every $f_n$. Then every eigenvalue
+    $\lambda\neq 1$ of $f_\infty$ also satisfies $|\lambda|\leq q$.
+    Neither $q<1$ nor algebraic simplicity of $1$ at the limit is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_quotient_operator_limit}
+    Pass to the fixed quotient by $\spn_{\C}\{v\}$, as in the preceding
+    fixed-line argument. Its operators $Q_n$ have all eigenvalues in
+    the closed disc of radius $q$. For $|z|>q$, their characteristic
+    polynomials give
+    \begin{align}
+        |\det(zI-Q_n)|\geq(|z|-q)^{\dim(V/\spn_{\C}\{v\})}>0.\notag
+    \end{align}
+    This lower bound survives the limit, so $z$ is absent from the
+    quotient spectrum of $f_\infty$. An eigenvector of $f_\infty$ with
+    eigenvalue different from $1$ has nonzero image in this quotient.
+    Its eigenvalue therefore lies in the closed disc as asserted.
+\end{proof}
+
+\begin{theorem}[Equality of nonzero limiting periodic lines]
+    \label{thm:spc_aux_periodic_line_limit}
+    \lean{MPSTensor.mpv_span_eq_of_tendsto}
+    \leanok
+    \uses{def:mpv}
+    Fix a physical dimension $d$, bond dimensions $D,E$, and a length
+    $N\geq 0$. Let $A_x\to A$ and $B_x\to B$ along a nontrivial filter,
+    with bond dimensions $D$ and $E$, respectively. Suppose that,
+    eventually along this filter,
+    $\spn_{\C}\{\ket{V^{(N)}(A_x)}\}
+        =\spn_{\C}\{\ket{V^{(N)}(B_x)}\}$.
+    If both limiting periodic vectors are nonzero, then
+    $\spn_{\C}\{\ket{V^{(N)}(A)}\}
+        =\spn_{\C}\{\ket{V^{(N)}(B)}\}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:eval_word}
+    Periodic-vector coordinates are traces of finite products, hence
+    are continuous in the tensor entries. Equality of the two lines
+    forces all two-by-two minors of the pair of coordinate vectors to
+    vanish. These identities pass to the limit. Choosing a nonzero
+    coordinate of the first limiting vector shows that the second is
+    a scalar multiple of it; nonvanishing of the second vector makes
+    that scalar nonzero.
+\end{proof}
+
+
+\begin{theorem}[Deviation of the periodic MPS norm]
+    \label{thm:spt_compact_periodic_norm_deviation}
+    \lean{MPSTensor.abs_norm_mpvState_sq_sub_one_le_of_transfer_spectrum}
+    \leanok
+    Let $A$ have physical dimension $d$ and bond dimension $D>0$.
+    Suppose that $\E_A(\Id)=\Id$ and $\dim\ker(\E_A-\Id)=1$.
+    Let $q\in\R$ satisfy $|\lambda|\leq q$ for every transfer eigenvalue
+    $\lambda\ne1$. Then every integer $N\geq0$ satisfies
+    \begin{align}
+        \bigl|\|\ket{V^{(N)}(A)}\|^2-1\bigr|
+         & \leq (D^2-1)q^N.
+        \label{eq:spt_compact_norm_deviation}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:overlap_trace}
+    The peripheral Jordan-block theorem for positive unital maps
+    \cite[Proposition~6.2]{Wolf2012Quantum} makes the characteristic root
+    $1$ algebraically simple. Set $W=\MN{D}/\C\Id$ and let
+    $\overline{\E}_A$ be the induced endomorphism. Its spectrum is contained
+    in $\operatorname{spec}(\E_A)\setminus\{1\}$, and
+    $\operatorname{Tr}(\E_A^N)=1+\operatorname{Tr}(\overline{\E}_A^N)$.
+    Spectral mapping and the characteristic-polynomial trace identity give
+    $|\operatorname{Tr}(\overline{\E}_A^N)|\leq(\dim W)q^N$,
+    with eigenvalues counted according to algebraic multiplicity.
+    The periodic overlap identity gives
+    $\|\ket{V^{(N)}(A)}\|^2=\operatorname{Tr}(\E_A^N)$.
+\end{proof}
+
+\begin{theorem}[Lower bound for the periodic MPS norm]
+    \label{thm:spt_compact_periodic_norm_lower}
+    \lean{MPSTensor.one_sub_le_norm_mpvState_sq_of_transfer_spectrum}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:spt_compact_periodic_norm_deviation}, every integer
+    $N\geq0$ satisfies
+    $1-(D^2-1)q^N\leq\|\ket{V^{(N)}(A)}\|^2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spt_compact_periodic_norm_deviation}
+    Take the lower half of the absolute-value bound
+    (\ref{eq:spt_compact_norm_deviation}).
+\end{proof}
+
+\begin{theorem}[A uniform lower bound on sufficiently long rings]
+    \label{thm:spt_compact_uniform_long_norm}
+    \lean{MPSTensor.exists_uniform_norm_mpvState_sq_lowerBound_of_transfer_spectrum}
+    \leanok
+    Let $\{A_t:t\in T\}$ be an arbitrary family of tensors with common
+    dimensions $d$ and $D>0$. Suppose that every $\E_{A_t}$ is unital,
+    has a one-dimensional fixed space, and has all eigenvalues other than
+    $1$ of modulus at most a common $q$ with $0\leq q<1$.
+    There exists an integer $L>0$ such that
+    $\|\ket{V^{(N)}(A_t)}\|^2\geq\tfrac12$ for every $t\in T$ and
+    every integer $N\geq L$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spt_compact_periodic_norm_lower}
+    Choose $L>0$ such that $(D^2-1)q^N<\tfrac12$ whenever $N\geq L$,
+    and apply the preceding lower bound to each $A_t$.
+\end{proof}
+
+\begin{theorem}[Uniform nonvanishing after physical blocking]
+    \label{thm:spt_compact_uniform_blocking_nonzero}
+    \lean{MPSTensor.exists_uniform_blocking_mpvState_ne_zero_of_transfer_spectrum}
+    \leanok
+    Under the hypotheses of Theorem~\ref{thm:spt_compact_uniform_long_norm},
+    there exists an integer $L>0$ such that every $t\in T$ and every
+    integer $N>0$ satisfy
+    $\|\ket{V^{(N)}(A_t^{[L]})}\|^2\geq\tfrac12$ and
+    $\ket{V^{(N)}(A_t^{[L]})}\ne0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spt_compact_uniform_long_norm}
+    Physical blocking gives $\E_{A_t^{[L]}}=\E_{A_t}^L$, hence the
+    transfer-trace identity identifies the squared blocked norm at length
+    $N$ with the original squared norm at length $LN\geq L$.
+    Its positive lower bound implies nonvanishing.
+\end{proof}
+
+\begin{theorem}[Transfer spectrum of a complementary diagonal corner]
+    \label{thm:spt_compact_transient_corner_spectrum}
+    \lean{MPSTensor.spectrum_transferMap_transientCorner_norm_le}
+    \leanok
+    Let $A$ have dimensions $d$ and $D>0$, with $\E_A$ unital and
+    $\dim\ker(\E_A-\Id)=1$. Let $P$ be a nonzero orthogonal projection
+    such that $P A^i(\Id-P)=0$ for each physical index $i$.
+    Put $R^i=(\Id-P)A^i(\Id-P)$. Suppose that $q\geq0$ and that
+    every eigenvalue of $\E_A$ other than $1$ has modulus at most $q$.
+    Then every eigenvalue of $\E_R$ has modulus at most $q$.
+\end{theorem}
+\begin{proof}\leanok
+    Set $Q=\Id-P$. If $\E_R(X)=\lambda X$ with $\lambda\ne0$,
+    then $QXQ=X$, since the range of $\E_R$ lies in the $Q$-corner.
+    The triangular condition gives $\E_A(X)=\E_R(X)$, so $\lambda$
+    belongs to the ambient transfer spectrum. If $\lambda=1$, then
+    $X=c\Id$ because the ambient fixed space is one-dimensional.
+    The support identity forces $cQ=c\Id$, contradicting $P\ne0$
+    and $X\ne0$. Thus $\lambda\ne1$; the zero eigenvalue obeys the
+    bound because $q\geq0$. The corner decomposition is the one used in
+    \cite[proof of the TI canonical-form theorem]{PerezGarcia2007Matrix}.
+\end{proof}
+
+\begin{theorem}[Decay of the complementary periodic contribution]
+    \label{thm:spt_compact_transient_mpv_decay}
+    \lean{MPSTensor.norm_mpvState_transientCorner_tendsto_zero_of_transfer_spectrum}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:spt_compact_transient_corner_spectrum}, suppose also
+    that $q<1$. Then $\|\ket{V^{(N)}(R)}\|\longrightarrow0$ as
+    $N\longrightarrow\infty$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:spt_compact_transient_corner_spectrum}
+    The spectral bound gives $r(\E_R)<1$, so the transfer-trace overlap
+    decay theorem gives $O_{RR}(N)\to0$. Since
+    $O_{RR}(N)=\|\ket{V^{(N)}(R)}\|^2$, continuity of the square root
+    gives the result.
+\end{proof}
+
+\begin{theorem}[Vanishing overlap of a periodic remainder]
+    \label{thm:spc_aux_overlap_remainder_zero}
+    \lean{MPSTensor.mpvOverlap_sub_tendsto_zero_of_eventual_decomposition}
+    \leanok
+    \uses{def:mpv_state, def:mpv_overlap}
+    Let $A,B,C,R$ be tensors with the same physical dimension and arbitrary
+    finite bond dimensions. Suppose there is $M\in\R$ such that
+    $\|\ket{V^{(N)}(A)}\|\leq M$ for all sufficiently large $N$, and suppose
+    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(C)}+\ket{V^{(N)}(R)}$ for all sufficiently large $N$.
+    If $\|\ket{V^{(N)}(R)}\|\to0$, then
+    $O_{AB}(N)-O_{AC}(N)\to0$.
+    This is an auxiliary asymptotic statement for the varying-support
+    argument of \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:overlap_eq_inner, def:mpv_inner, def:mpv_state}
+    The decomposition and conjugate-linearity of the second argument of
+    the overlap give $O_{AB}(N)-O_{AC}(N)=O_{AR}(N)$ whenever the
+    decomposition holds. Cauchy--Schwarz therefore yields
+    \begin{align}
+        |O_{AB}(N)-O_{AC}(N)|
+         & \leq \|\ket{V^{(N)}(A)}\|\,\|\ket{V^{(N)}(R)}\|
+        \leq M\|\ket{V^{(N)}(R)}\|.\notag
+    \end{align}
+    The last expression tends to zero. The squeeze theorem proves the
+    asserted complex limit.
+\end{proof}
+
+\begin{theorem}[Preservation of a unit overlap modulus]
+    \label{thm:spc_aux_retained_overlap_one}
+    \lean{MPSTensor.mpvOverlap_norm_tendsto_one_of_eventual_decomposition}
+    \leanok
+    \uses{def:mpv_state, def:mpv_overlap}
+    Let $A,B,C,R$ have the same physical dimension and arbitrary finite
+    bond dimensions. Suppose $\|\ket{V^{(N)}(A)}\|\leq M$ eventually
+    for some $M\in\R$, and
+    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(C)}+\ket{V^{(N)}(R)}$ eventually.
+    Assume $\|\ket{V^{(N)}(R)}\|\to0$.
+    Convergence $|O_{AB}(N)|\to1$ then implies $|O_{AC}(N)|\to1$.
+    Neither positivity nor a relation between the bond dimensions is
+    required; the decomposition need not hold at length zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spc_aux_overlap_remainder_zero}
+    The reverse triangle inequality gives
+    \begin{align}
+        \bigl||O_{AB}(N)|-|O_{AC}(N)|\bigr|
+         & \leq|O_{AB}(N)-O_{AC}(N)|.\notag
+    \end{align}
+    The right-hand side tends to zero by
+    Theorem~\ref{thm:spc_aux_overlap_remainder_zero}; hence the two overlap
+    moduli have the same limit.
+\end{proof}
+
+\begin{theorem}[Irreducibility of a uniquely stationary support compression]
+    \label{thm:spc_aux_supported_compression_irreducible}
+    \lean{MPSTensor.isIrreducibleMap_of_unital_support_compression}
+    \leanok
+    Let $B$ be a tensor with bond dimension $k$, and suppose
+    $\sigma\geq0$, $\tr\sigma=1$, and $\mathcal E_B^*(\sigma)=\sigma$.
+    Suppose $\sigma$ is the unique trace-one matrix fixed by
+    $\mathcal E_B^*$, with uniqueness among all such complex matrices,
+    not merely positive semidefinite ones.
+    Let $K:\C^D\to\C^k$ be an isometry with $D>0$ and
+    $KK^\dagger=\operatorname{supp}\sigma$, and put
+    $A^i=K^\dagger B^iK$. If $A$ is unital, then its primal transfer
+    map $\mathcal E_A$ is irreducible.
+    This is an auxiliary preparation result for
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, using the
+    channel criterion of \cite[Theorem~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:spt_stationary_density_compression}
+    Compression to the entire support makes
+    $\rho=K^\dagger\sigma K$ positive definite. Stationary support
+    compression preserves its fixed-point equation, trace one, and
+    uniqueness among all trace-one fixed matrices.
+    Unitality of $A$ makes $\mathcal E_A^*$ a quantum channel.
+    If $Z$ is any fixed matrix of that channel, then
+    $Z+(1-\tr Z)\rho$ is a trace-one fixed matrix. Uniqueness gives
+    $Z+(1-\tr Z)\rho=\rho$, hence $Z=(\tr Z)\rho$.
+    A channel with a faithful fixed point and a one-dimensional fixed
+    space is irreducible. Finally, irreducibility of a positive matrix
+    map is equivalent to irreducibility of its trace adjoint, so
+    $\mathcal E_A$ is irreducible as well.
+\end{proof}
+
 \begin{theorem}[Endpoint cohomology for a supplied unital family]
     \label{thm:spt_unital_supported_path_class}
     \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points,
