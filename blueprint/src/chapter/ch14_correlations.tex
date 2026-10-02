@@ -562,10 +562,12 @@ for the transfer map $\E_A$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:ldp_normal_gauge_reduction, thm:physical_correlator_tp_bound,
-        thm:physical_correlator_gauge, thm:physical_left_right_tp}
+    \uses{lem:ldp_normal_gauge_reduction, thm:cpsv_normal_tensor_gauge_transport,
+        thm:physical_correlator_tp_bound, thm:physical_correlator_gauge,
+        thm:physical_left_right_tp}
     Choose $B^i=UA^iU^{-1}$ in trace-preserving gauge, with a positive
-    definite fixed state $\rho$ of trace one. Set
+    definite fixed state $\rho$ of trace one. Gauge invariance of normality
+    implies that $B$ is normal. Set
     $\rho^L=U^\dagger U$ and $\rho^R=U^{-1}\rho U^{-\dagger}$.
     Trace preservation of $\E_B$ implies $\E_A^*(\rho^L)=\rho^L$;
     transfer covariance gives $\E_A(\rho^R)=\rho^R$.

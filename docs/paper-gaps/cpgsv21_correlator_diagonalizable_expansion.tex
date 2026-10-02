@@ -121,22 +121,17 @@ gap certificate or diagonalizability hypothesis is supplied separately.
 The eigenbasis expansion remains unformalized.
 
 \paragraph{Gauge covariance.}
-For an arbitrary normal representative, physical connected correlations are
-now treated using positive left and right fixed matrices normalized by
-$\tr(\rho^L\rho^R)=1$. The insertion covariance theorem
-\leanid{MPSTensor.physicalObservableTransfer_congruence_of_gauge} and the
-connected-contraction identity
-\leanid{MPSTensor.physicalLeftRightConnectedCorrelator_eq_of_gauge}
-remove the trace-preserving-gauge restriction from the normal-tensor decay
-statement. Indeed, the existing gauge construction
-\leanid{MPSTensor.IsNormalTensor.exists_normalGauge} gives
-$B^i=UA^iU^{-1}$ in trace-preserving gauge with a positive definite fixed
-state $\rho$ of trace one. The matrices
-$\rho^L=U^\dagger U$ and $\rho^R=U^{-1}\rho U^{-\dagger}$ are positive
-definite fixed matrices in the original representation. The theorem
+Physical insertions and the connected left-right contraction are now gauge
+covariant, by
+\leanid{MPSTensor.physicalObservableTransfer_congruence_of_gauge} and
+\leanid{MPSTensor.physicalLeftRightConnectedCorrelator_eq_of_gauge}.
+For a normal tensor, a trace-preserving gauge $B^i=UA^iU^{-1}$ with fixed
+state $\rho$ of trace one gives positive definite fixed matrices
+$\rho^L=U^\dagger U$ and $\rho^R=U^{-1}\rho U^{-\dagger}$, with
+$\tr(\rho^L\rho^R)=1$. The theorem
 \leanid{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_decay}
-then proves exponential decay on independent finite supports at all
-separations, including adjacent blocks.
+proves exponential decay in the original representation on independent
+finite supports at all separations, including adjacent blocks.
 
 \paragraph{Remaining normality scope.}
 The source also considers tensors whose unique eigenvalue of largest modulus
