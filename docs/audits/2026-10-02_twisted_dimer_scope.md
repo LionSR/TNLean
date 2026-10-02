@@ -68,6 +68,14 @@ and `TwistedDimerBondRFP.lean`. The construction provenance is preserved in
 The more general finite-group separation is treated in
 `rfp_intrinsic/sections/02_groups.tex`.
 
+The exact mixed-Bell bond factor is simple in the sense of Definition 4.7.
+The theorem `MPOTensor.TwistedDimer.sigmaDimer_isSimple`, in
+`TwistedDimerBondSimple.lean`, supplies one normal representative, obtained
+by multiplying its matrix-unit tensor by \(4\sqrt2/5\). The representative's
+physical-trace transfer has trace \(4\sqrt2/5\ne0\), which excludes
+nilpotency. This establishes simplicity of the bond factor without asserting
+an on-site tensor factorization of the original twisted dimer.
+
 ## Disposition of the broad assertion
 
 The assertion that these weights cannot be separated into an independent
