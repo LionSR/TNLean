@@ -68,6 +68,12 @@ import TNLean.PEPS.InjectiveRegionContraction
 import TNLean.PEPS.InsertionAlgebra
 import TNLean.PEPS.InsertionCoefficientRealization
 import TNLean.PEPS.InsertionRealization
+import TNLean.PEPS.IntegerCellBoundaryContour
+import TNLean.PEPS.IntegerCellContactConnectivity
+import TNLean.PEPS.IntegerCellExteriorCollar
+import TNLean.PEPS.IntegerCellNoHoles
+import TNLean.PEPS.IntegerContourRayPotential
+import TNLean.PEPS.IntegerExteriorConnectivity
 import TNLean.PEPS.IsoTransport
 import TNLean.PEPS.LocalGauge
 import TNLean.PEPS.NormalAbsorbedFamily
@@ -114,6 +120,7 @@ import TNLean.PEPS.RegularBondCounting
 import TNLean.PEPS.RegularBoundary
 import TNLean.PEPS.RegularBoundaryEntropy
 import TNLean.PEPS.RegularBoundaryGibbsSupport
+import TNLean.PEPS.RegularBoundaryRoute
 import TNLean.PEPS.RegularBoundaryState
 import TNLean.PEPS.RegularBoundaryTransporter
 import TNLean.PEPS.RegularBoundaryUntwisting
@@ -131,6 +138,7 @@ import TNLean.PEPS.RegularProjectorTwistedRegion
 import TNLean.PEPS.RegularRegionConnectivity
 import TNLean.PEPS.RegularRegionCoordinates
 import TNLean.PEPS.RegularRegionCounting
+import TNLean.PEPS.RegularRegionCycleHolonomy
 import TNLean.PEPS.RegularRegionCycleRank
 import TNLean.PEPS.RegularRegionEntropy
 import TNLean.PEPS.RegularRegionGaugeBoundary
@@ -159,6 +167,7 @@ import TNLean.PEPS.RegularTwistedRegionCrossGramCoordinates
 import TNLean.PEPS.RegularTwistedRegionEntropy
 import TNLean.PEPS.RegularTwistedRegionGram
 import TNLean.PEPS.RegularTwistedRegionProjectorCoordinates
+import TNLean.PEPS.RegularWalkHolonomy
 import TNLean.PEPS.SemiRegularBondIsometry
 import TNLean.PEPS.SingletonRegion
 import TNLean.PEPS.SquareLatticeBoundaryMPO
@@ -177,10 +186,12 @@ import TNLean.PEPS.TorusEdgeBlockingCrossing
 import TNLean.PEPS.TorusEdgeBlockingRegion
 import TNLean.PEPS.TorusEdgeGauge
 import TNLean.PEPS.TorusEdgeGaugeCovariance
+import TNLean.PEPS.TorusExteriorPathApproximation
 import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.TorusGaugeUniqueness
 import TNLean.PEPS.TorusGaugedWeightCovariance
+import TNLean.PEPS.TorusIntegerStepWinding
 import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusParallelSection
@@ -193,12 +204,14 @@ import TNLean.PEPS.TorusRectangleRealization
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleRegion
 import TNLean.PEPS.TorusRegionExteriorCollar
+import TNLean.PEPS.TorusRegionIntegerCellLift
 import TNLean.PEPS.TorusRegionLiftCoordinates
 import TNLean.PEPS.TorusRegionLiftGauge
 import TNLean.PEPS.TorusRegionLiftGram
 import TNLean.PEPS.TorusRegionLiftRealization
 import TNLean.PEPS.TorusRegionPeriodicLift
 import TNLean.PEPS.TorusRegionRealization
+import TNLean.PEPS.TorusRegionWalkWinding
 import TNLean.PEPS.TorusRowColumnReductionObstruction
 import TNLean.PEPS.TorusSimplyConnectedRegionRank
 import TNLean.PEPS.TorusSiteTensor
@@ -207,6 +220,7 @@ import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
 import TNLean.PEPS.TorusUnconditionalFundamentalTheorem
 import TNLean.PEPS.TorusVirtualString
+import TNLean.PEPS.TorusWalkWinding
 import TNLean.PEPS.TorusWindowBondLocal
 import TNLean.PEPS.TorusWindowBondTransport
 import TNLean.PEPS.TorusWindowBondUniform
