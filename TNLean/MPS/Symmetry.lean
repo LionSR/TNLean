@@ -8,14 +8,23 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Symmetry
 
+import TNLean.MPS.Symmetry.BondInterpolation
+import TNLean.MPS.Symmetry.BondInterpolationSymmetry
+import TNLean.MPS.Symmetry.BondRegrouping
+import TNLean.MPS.Symmetry.BondRegroupingLocality
+import TNLean.MPS.Symmetry.BondRegroupingSymmetry
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.GInjective
+import TNLean.MPS.Symmetry.GappedInteractionPath
+import TNLean.MPS.Symmetry.GappedInteractionPathComposition
 import TNLean.MPS.Symmetry.GaugeUniqueness
+import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
+import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing

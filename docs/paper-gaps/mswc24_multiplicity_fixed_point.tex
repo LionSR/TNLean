@@ -5,10 +5,10 @@
 \input{command}
 \title{The Fixed-Point State of a Tensor with Repeated Blocks}
 \author{}
-\date{2026-09-26}
+\date{2026-10-02}
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{What the source states}
 Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
@@ -158,33 +158,80 @@ therefore does not give a version of part~(ii) of the lemma; restricting also to
 blocks whose $q$-site states are orthogonal does.
 
 \section{Elimination}
-A correct statement for repeated blocks must replace $\sum_j\beta_j\ket{\Omega_j}$
-by the fixed point of the actual positive part, whose restriction to the copies of
-block $j$ has rank one in the copy index, and carry the weights through $V$. It
-must also account for the overlaps of distinct blocks recorded in
-\cite{gap:mswc24_block_form_mixed_overlap}. For multiplicity one, the corrected form of
-(\ref{eq:mswc24_block_form}) for blocks whose $q$-site states are orthogonal and
-the resulting error bound, with no condition $q=o(N)$, are formalized; see
-\cite{gap:mswc24_block_form_mixed_overlap}. For $m_j\geq2$ the corrected
-construction is given in \cite{gap:mswc24_repeated_block_corrected_state}: on the
-copies of block $j$ the positive part is $c_j\,w_jw_j^\dagger\otimes P_j$ with a
-unit vector $w_j$ built from the weights $\mu_{j,k}^q$, and the corrected
-approximating state is $V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j}$,
-with the source's weights $\beta_j$ and an on-site isometry $L_j$ that places
-the pairs of block $j$ on all of its copies at once. For blocks whose $q$-site
-states are orthogonal the corrected block form, the corrected state and the
-error bound are formalized there.
+The printed claim stays false: with the coefficients $\beta_j$ of
+(\ref{eq:mswc24_approx_state}) the error does not tend to zero for the tensor of the
+counterexample. The failure lies in the coefficients, not in the pairs. A correct statement
+for repeated blocks may replace $\sum_j\beta_j\ket{\Omega_j}$ by the fixed point of the actual
+positive part, whose restriction to the copies of block $j$ has rank one in the copy index:
+on the copies of block $j$ the positive part is close to $c_j\,w_jw_j^\dagger\otimes P_j$ with
+$c_j=(\sum_k\lvert\mu_{j,k}\rvert^{2q})^{1/2}$ and a unit vector $w_j$ built from the weights
+$\mu_{j,k}^q$, and the corrected approximating state is
+$V^{\otimes M}\sum_j\beta_jL_j^{\otimes M}\ket{\Omega_j}$, with the source's weights
+$\beta_j$ and an on-site isometry $L_j$ that places the pairs of block $j$ on all of its
+copies at once \cite{gap:mswc24_repeated_block_corrected_state}. When the $q$-site states of
+distinct blocks overlap, the rate must also include the correlation lengths of the mixed
+transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 
-The pairs may also stay on one copy $k_j$ of each block if the weights are
-changed: $V$ sends the pairs on copy $k_j$ to $(\mu_{j,k_j}^q/c_j)^M$ times the
-pairs placed by $L_j$, so the state (\ref{eq:mswc24_approx_state}) with the
-coefficients $\beta_j(c_j/\mu_{j,k_j}^q)^M$ in place of $\beta_j$ is the corrected
-state, for weights of any phase and for blocks whose $q$-site states overlap
-\cite{gap:mswc24_repeated_block_corrected_state}.
-For the counterexample above the coefficients are $(2\cdot2^{M/2},1)$, and the
-state (\ref{eq:mswc24_counterexample_approx}) becomes
-$2\ket{0\cdots0}^{\otimes M}+\ket{1\cdots1}^{\otimes M}$, the target. The identity
-with the corrected state and the resulting error bounds are formalized there.
+\section{The source's state with corrected coefficients}
+The source's construction itself, with the pairs of block $j$ on one copy $k_j$, converges
+once its coefficients are changed. Let $K_{j,k}$ place the bond pairs of copy $k$ of block
+$j$. The blocked map is $B=\sum_jc_jB_jL_j^\dagger$ with
+$L_j=\sum_k(\overline{\mu_{j,k}^q}/c_j)K_{j,k}$, so
+$BK_{j,k}=\mu_{j,k}^qB_j=(\mu_{j,k}^q/c_j)BL_j$, and since the partial isometry $V$
+vanishes on the kernel of $B$,
+\begin{align*}
+    VK_{j,k}=\frac{\mu_{j,k}^q}{c_j}\,VL_j .
+\end{align*}
+Hence $V^{\otimes M}$ sends the pairs on copy $k_j$ to $(\mu_{j,k_j}^q/c_j)^M$ times the
+pairs placed by $L_j$, and the state (\ref{eq:mswc24_approx_state}) with the coefficients
+\begin{align*}
+    \beta'_j=\beta_j\Bigl(\frac{c_j}{\mu_{j,k_j}^q}\Bigr)^M
+\end{align*}
+in place of $\beta_j$ is a positive multiple of the corrected state, for weights of any
+phase and with no orthogonality of the blocks. It therefore has the same error. For the
+counterexample above the coefficients are $(2\cdot2^{M/2},1)$, and the state
+(\ref{eq:mswc24_counterexample_approx}) becomes
+$2\ket{0\cdots0}^{\otimes M}+\ket{1\cdots1}^{\otimes M}$, the target. For a block of
+multiplicity one, $\beta'_j=\lvert\mu_{j,k_j}\rvert^N$.
+
+Let the blocks be normal in the gauge $\sum_i(A_j^i)^\dagger A_j^i=\mathbf 1$ with positive
+definite fixed points $\sigma_j$ of trace one, from which the pairs are built, let
+$\lambda_2$ bound the moduli of the eigenvalues other than one of every transfer matrix of a
+block and of all eigenvalues of the mixed transfer matrices of distinct blocks, let
+$\xi=-1/\ln\lvert\lambda_2\rvert$, and let $0<\gamma<1/2$. There are $C,C'>0$, independent
+of the weights, such that for all nonzero complex weights, every choice of the copies $k_j$,
+every $q\geq1$ and every $M\geq1$ with $\beta\neq0$, the source's state with the
+coefficients $\beta'_j$ satisfies
+\begin{align*}
+    \varepsilon\leq Cy\,e^{Cy},\qquad\varepsilon\leq C'y,\qquad y=Me^{-\gamma q/\xi}.
+\end{align*}
+This is part~(ii) of the lemma for the source's construction with the coefficients
+$\beta'_j$, with $\xi_{\mathrm{diag}}$ replaced by
+$\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$
+\cite{gap:mswc24_block_form_mixed_overlap}, and with no factor depending on the weights
+\cite{gap:mswc24_repeated_overlap_small_weight_sum}. When the $q$-site states of distinct
+blocks are orthogonal at the length $q$, the same bounds hold for fixed weights with
+$\lambda_2$ bounding only the eigenvalues of the transfer matrices of the blocks, with
+constants that may depend on the weights.
+
+\section{What is formalized of the elimination}
+The coefficients $\beta'_j$, the identity $VK_{j,k}=(\mu_{j,k}^q/c_j)VL_j$, the identification
+of the source's state with the coefficients $\beta'_j$ with the corrected state, the equality
+of their overlaps with the target, and the error bounds above, for blocks whose $q$-site
+states are orthogonal and for blocks whose states overlap, are
+formalized.\footnote{Formal declarations:
+    \leanid{MPSTensor.oneCopyWeight},
+    \leanid{MPSTensor.oneCopyWeight_of_subsingleton},
+    \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding},
+    \leanid{MPSTensor.nonNormalApproxVector_repeatedBlockSum_oneCopy},
+    \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy},
+    \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy},
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy},
+    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy} and
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy} in
+    \doclink{TNLean/MPS/Preparation/OneCopyPairState}.}
+The evaluation of the corrected coefficients on the counterexample above is not formalized
+separately; it is a special case of the identity with the corrected state.
 
 \bibliographystyle{alpha}
 \bibliography{references}
