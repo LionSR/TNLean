@@ -13,9 +13,10 @@ import Mathlib.Basic.Complex.BigOperators
 For positive eigenvalues of an MPDO fusion matrix, three consecutive power sums
 detect length independence. The second difference is a sum of weighted squares.
 
-Source: arXiv:1606.00608, the question following Theorem 4.14; the moment
-identities in `Notes/OpenProblemsTN/followup/asymmetric_mpoa/spectral_search_scout.tex`,
-equation `eq:log-convex`.
+Source: arXiv:1606.00608, the question following Theorem 4.14. The moment
+identities are elementary and proved here directly: the second difference
+`p (n + 2) - 2 p (n + 1) + p n` of the power sums `p n = ∑ i, x i ^ n` equals
+`∑ i, x i ^ n * (x i - 1) ^ 2`.
 -/
 
 open scoped BigOperators
