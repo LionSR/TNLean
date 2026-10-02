@@ -79,6 +79,8 @@ import TNLean.MPS.Preparation.RepeatedBlockError
 import TNLean.MPS.Preparation.RepeatedBlockSum
 import TNLean.MPS.Preparation.RepeatedOverlappingBlockError
 import TNLean.MPS.Preparation.RepeatedOverlappingBlockOverlap
+import TNLean.MPS.Preparation.SecondOrderBlockError
+import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap
 import TNLean.MPS.Preparation.Sequential
 import TNLean.MPS.Preparation.SequentialFactorization

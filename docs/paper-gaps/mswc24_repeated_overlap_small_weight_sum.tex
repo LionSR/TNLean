@@ -48,9 +48,12 @@ rate for copy weights $(1,-1)$ and $0.5$ at odd $N$, where $b=0.5^{2N}$.
 \section{Elimination}
 Removing the factor needs a relative estimate of $z_j$ for blocks of small weight,
 $\lvert z_j-\beta_j\rvert\leq\lvert\beta_j\rvert\,C_jy\,e^{C_jy}$ up to terms controlled
-by $b$, which is the second-order perturbation bound for the square root of
-$B^\dagger B$ that \cite{gap:mswc24_block_form_mixed_overlap} lists for the sharp rate.
-Until then the bound without the factor is not formalized when $b<1$.
+by $b$. The second-order estimate of $z_j$ that
+\cite{gap:mswc24_block_form_mixed_overlap} proves for blocks of multiplicity one and weight one
+does not give it: it uses that the Gram matrices of the blocked map converge to a limit bounded
+below, and that the vectors $(P^i\sqrt{\tilde\sigma_j})_i$ have norm one, and both fail for blocks
+of small weight. Until a relative estimate is proved, uniformly in the weights, the bound without
+the factor is not formalized when $b<1$.
 
 \bibliographystyle{alpha}
 \bibliography{references}
