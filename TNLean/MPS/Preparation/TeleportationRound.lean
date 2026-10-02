@@ -155,6 +155,8 @@ def Valid : List (TeleportHop N) → Prop
   | [] => True
   | h :: hs => Valid hs ∧ h.e ∉ allSites hs ∧ h.f ∉ allSites hs ∧ ∀ h' ∈ hs, h.c ≠ h'.c ∧ h.c ≠ h'.e
 
+theorem valid_nil : Valid ([] : List (TeleportHop N)) := trivial
+
 theorem mem_allSites {hs : List (TeleportHop N)} {i : Fin N} :
     i ∈ allSites hs ↔ ∃ h ∈ hs, i ∈ h.sites := by
   induction hs with

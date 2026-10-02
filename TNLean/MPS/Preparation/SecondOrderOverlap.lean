@@ -31,6 +31,8 @@ the residual.
 * `MPSTensor.isIdempotentElem_transferMatrix_fixedPointTensor`,
   `MPSTensor.mpvOverlap_fixedPointTensor_self` — `τ_∞` is idempotent and `φ_M(P_∞)` is a unit
   vector.
+* `MPSTensor.norm_sqrtWeightLM_eq_one`, `MPSTensor.norm_sqrtWeightLM_fixedPointTensor` — the
+  vectors `(Xⁱ √σ)ᵢ` of norm one.
 * `MPSTensor.exists_norm_map_polarPosTensor_sub_le` — linear images of `P_q` converge to those of
   `P_∞` at rate `e^{-γ q/ξ}`.
 * `MPSTensor.exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq` — the overlap to second order,
@@ -58,17 +60,17 @@ variable {d D : ℕ}
 
 /-! ### Mixed transfer matrices against the fixed point -/
 
-/-- Reading a `D² × D²` matrix `G` as the tensor with physical dimension `D²` whose `k`-th matrix
-is the `k`-th row of `G`, as a linear map. -/
-noncomputable def ofPhysicalMatrixLM :
-    Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ] MPSTensor (D * D) D where
-  toFun G := ofPhysicalMatrix (G.submatrix (virtualPairEquiv D) id)
+/-- Reading a `D₂² × D²` matrix `G` as the tensor with physical dimension `D₂²` and bond
+dimension `D` whose `k`-th matrix is the `k`-th row of `G`, as a linear map. -/
+noncomputable def ofPhysicalMatrixLM {D₂ : ℕ} :
+    Matrix (Fin D₂ × Fin D₂) (Fin D × Fin D) ℂ →ₗ[ℂ] MPSTensor (D₂ * D₂) D where
+  toFun G := ofPhysicalMatrix (G.submatrix (virtualPairEquiv D₂) id)
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
 /-- The mixed map against a fixed right family, as a linear map in the left family. -/
-noncomputable def mixedMapLMLeft {n : ℕ} (B : MPSTensor n D) :
-    MPSTensor n D →ₗ[ℂ] Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) where
+noncomputable def mixedMapLMLeft {n D₁ : ℕ} (B : MPSTensor n D) :
+    MPSTensor n D₁ →ₗ[ℂ] Module.End ℂ (Matrix (Fin D₁) (Fin D) ℂ) where
   toFun A := Kraus.mixedMapLM A B
   map_add' A A' := LinearMap.ext fun X => by simp [Matrix.add_mul, Finset.sum_add_distrib]
   map_smul' c A := Kraus.mixedMapLM_smul_left c A B
@@ -180,6 +182,23 @@ theorem inner_sqrtWeightLM {n : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ
     Finset.sum_congr rfl fun b _ => ?_
   rw [starRingEnd_apply, mul_comm]
 
+/-- `‖(Xⁱ √σ)ᵢ‖² = Tr E_X(σ)`, so `‖(Xⁱ √σ)ᵢ‖ = 1` when `Tr E_X(σ) = 1`. -/
+theorem norm_sqrtWeightLM_eq_one {n : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
+    {X : MPSTensor n D} (hX : (Kraus.transferMap X σ).trace = 1) :
+    ‖sqrtWeightLM σ X‖ = 1 := by
+  have h := inner_sqrtWeightLM hσ X X
+  rw [Kraus.mixedMapLM_self] at h
+  change _ = (Kraus.transferMap X σ).trace at h
+  rw [hX, inner_self_eq_norm_sq_to_K] at h
+  have h' : ((‖sqrtWeightLM σ X‖ ^ 2 : ℝ) : ℂ) = 1 := by push_cast; exact h
+  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h')
+
+/-- `‖(P_∞ⁱ √σ)ᵢ‖ = 1` for the fixed-point tensor `P_∞` of a state `σ`. -/
+theorem norm_sqrtWeightLM_fixedPointTensor {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
+    (htr : σ.trace = 1) : ‖sqrtWeightLM σ (fixedPointTensor σ)‖ = 1 :=
+  norm_sqrtWeightLM_eq_one hσ (by
+    rw [transferMap_fixedPointTensor_apply hσ σ, Matrix.trace_smul, htr, one_smul])
+
 /-- The one-site periodic state `X ↦ φ_1(X)`, with coefficients `Tr Xⁱ`, as a linear map. -/
 noncomputable def mpvStateOneLM {n : ℕ} : MPSTensor n D →ₗ[ℂ] MPVSpace n 1 where
   toFun X := mpvState X 1
@@ -188,15 +207,30 @@ noncomputable def mpvStateOneLM {n : ℕ} : MPSTensor n D →ₗ[ℂ] MPVSpace n
   map_smul' c X := by
     ext s; simp [mpvState_apply, coeff_eq, List.ofFn_succ, Matrix.trace_smul]
 
+/-- For a vector `W` with `‖W‖² = c > 0`, `‖u‖² - |⟨W|u⟩|²/c ≤ ‖u - W‖²`: the squared distance
+of `u` from the line through `W` is at most its squared distance from `W`. -/
+theorem norm_sq_sub_norm_inner_sq_div_le {F : Type*} [NormedAddCommGroup F]
+    [InnerProductSpace ℂ F] {W u : F} {c : ℝ} (hc : 0 < c) (hW : ‖W‖ ^ 2 = c) :
+    ‖u‖ ^ 2 - ‖⟪W, u⟫_ℂ‖ ^ 2 / c ≤ ‖u - W‖ ^ 2 := by
+  rw [@norm_sub_sq ℂ, hW]
+  set z := ⟪W, u⟫_ℂ
+  have hre : RCLike.re ⟪u, W⟫_ℂ = z.re := by
+    rw [← inner_conj_symm, RCLike.conj_re]; rfl
+  have hz : ‖z‖ ^ 2 = z.re ^ 2 + z.im ^ 2 := by
+    rw [Complex.sq_norm, Complex.normSq_apply]; ring
+  rw [hre, hz]
+  have key : 0 ≤ ((c - z.re) ^ 2 + z.im ^ 2) / c := by positivity
+  have e : ((c - z.re) ^ 2 + z.im ^ 2) / c = c - 2 * z.re + (z.re ^ 2 + z.im ^ 2) / c := by
+    field_simp
+    ring
+  linarith
+
 /-- For a unit vector `w`, `‖u‖² - |⟨w|u⟩|² ≤ ‖u - w‖²`. The squared distance of `u` from the
 line through `w` is at most its squared distance from `w`. -/
 theorem norm_sq_sub_norm_inner_sq_le {F : Type*} [NormedAddCommGroup F]
     [InnerProductSpace ℂ F] {w u : F} (hw : ‖w‖ = 1) :
     ‖u‖ ^ 2 - ‖⟪w, u⟫_ℂ‖ ^ 2 ≤ ‖u - w‖ ^ 2 := by
-  rw [@norm_sub_sq ℂ, hw]
-  have h1 : RCLike.re ⟪u, w⟫_ℂ ≤ ‖⟪w, u⟫_ℂ‖ := by
-    rw [← inner_conj_symm, RCLike.conj_re]; exact RCLike.re_le_norm _
-  nlinarith [sq_nonneg (1 - ‖⟪w, u⟫_ℂ‖)]
+  simpa using norm_sq_sub_norm_inner_sq_div_le (u := u) one_pos (by rw [hw, one_pow])
 
 /-! ### The overlap to second order -/
 
@@ -248,12 +282,6 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
   have hfinf : (Kraus.mixedMapLM (fixedPointTensor σ) (fixedPointTensor σ) σ).trace = 1 := by
     rw [Kraus.mixedMapLM_self, show Kraus.mapLM (fixedPointTensor σ) σ = σ.trace • σ from
       transferMap_fixedPointTensor_apply hσ.posSemidef σ, Matrix.trace_smul, htr, one_smul]
-  have hnorm1 : ∀ X : MPSTensor (D * D) D, (Kraus.mixedMapLM X X σ).trace = 1 →
-      ‖sqrtWeightLM σ X‖ = 1 := fun X hX => by
-    have h := inner_sqrtWeightLM hσ.posSemidef X X
-    rw [hX, inner_self_eq_norm_sq_to_K] at h
-    have h' : ((‖sqrtWeightLM σ X‖ ^ 2 : ℝ) : ℂ) = 1 := by push_cast; exact h
-    exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (by exact_mod_cast h')
   -- The constants.
   set t₁ := ‖τ‖
   set t₂ := ‖(1 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) - τ‖
@@ -285,10 +313,9 @@ theorem exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq (A : MPSTensor d D)
   set α := (Kraus.mixedMapLM Pq (fixedPointTensor σ) σ).trace with hαdef
   have hTτ : ‖T - τ‖ ≤ Kt * δ := hT q
   have hιd : ‖sqrtWeightLM σ Pq - sqrtWeightLM σ (fixedPointTensor σ)‖ ≤ Kι * δ := hι q
-  have hιi := hnorm1 _ hfinf
+  have hιi := norm_sqrtWeightLM_fixedPointTensor hσ.posSemidef htr
   have hιq : ‖sqrtWeightLM σ Pq‖ = 1 := by
-    refine hnorm1 _ ?_
-    rw [Kraus.mixedMapLM_self, hPq]
+    refine norm_sqrtWeightLM_eq_one hσ.posSemidef ?_
     change (Kraus.transferMap (polarPosTensor (blockTensor A q)) σ).trace = 1
     rw [transferMap_polarPosTensor_blockTensor, Module.End.pow_apply,
       Function.iterate_fixed hfix, htr]

@@ -183,6 +183,15 @@ theorem finRotate_val (k : Fin M) :
   · subst h; simp
   · rw [ite_eq_right h, ite_eq_right (fun h' => h (Fin.ext (by simp; omega)))]
 
+/-- The site after the last site of block `k` starts block `k + 1`, cyclically:
+`o_k + ℓ_k ≡ o_{k+1} (mod N)`. -/
+theorem blockOffset_add_mod (hN : ∑ k, ℓ k = N) (k : Fin M) :
+    (blockOffset ℓ k.val + ℓ k) % N = blockOffset ℓ (finRotate M k).val % N := by
+  rw [← blockOffset_succ, finRotate_val]
+  split_ifs with hkM
+  · rw [hkM, blockOffset_of_le ℓ le_rfl, hN, Nat.mod_self, blockOffset_zero, Nat.zero_mod]
+  · rfl
+
 /-- The site after the last site of a block is the first site of the next block, cyclically. -/
 theorem blockSite_finRotate [NeZero N] (hN : ∑ k, ℓ k = N) (k : Fin M) (j : Fin (ℓ k))
     (hj : j.val + 1 = ℓ k) (j' : Fin (ℓ (finRotate M k))) (hj' : j'.val = 0) :

@@ -20,5 +20,6 @@ import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Chain.SiteIndependent
 import TNLean.MPS.Chain.TensorEquality
 import TNLean.MPS.Chain.TranslationInvariance
+import TNLean.MPS.Chain.VaryingBondChain
 import TNLean.MPS.Chain.VaryingBondOBC
 import TNLean.MPS.Chain.VirtualInsertion

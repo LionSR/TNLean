@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.FinsetEnumeration
 import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.PairLayer
@@ -32,14 +33,24 @@ The Supplemental Material, proof of Theorem 1, lets the last block be larger; th
 are arbitrary. This is the construction behind eq. (1) of the source; the choice of the block
 lengths and the error bound are not made here.
 
-**Scope restriction (common bond dimension):** the site-dependent declarations
-`MPSPreparation.chainBlockIsometryState_eq_mulVec` and
-`MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState` give every tensor of the chain
-and every pair the same square bond dimension `D`, while the source paragraph "Inhomogeneous
-short-range correlated MPS" allows bond dimension at most `D`, varying along the ring. The depth
-bound `MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState` assumes moreover that the
-blocked tensors are injective and that the blocks have length at least `3D`. Documented in
-`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+For site-dependent tensors the blocked tensor of block `k` need only be injective on a set
+`S_k` of bond pairs that carries the pairs
+(`MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn`): its
+isometric factor is then a partial isometry, and the block unitary implements it on the inputs
+`S_k`. This covers the chains of the source paragraph "Inhomogeneous short-range correlated MPS",
+with "bond dimension at most `D`" varying along the ring, padded with zeros.
+
+**Scope restriction (injective blocks of length at least `3D`):** the site-dependent depth bounds
+`MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn` and
+`MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState` assume that every blocked tensor
+is injective, on a set of bond pairs carrying the pairs or on all pairs, and that every block has
+length at least `3D`; the source paragraph "Inhomogeneous short-range correlated MPS" states
+neither. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+
+## References
+
+* arXiv:2307.01696, eqs. (1) and (10)–(12), Fig. 1, the paragraphs "The sequential-RG circuit"
+  and "Inhomogeneous short-range correlated MPS", and Supplemental Material, proof of Theorem 1.
 -/
 
 open Matrix MPSTensor
@@ -252,9 +263,10 @@ theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     (hr : ∀ k, r₁ + r₁ ≤ ℓ k) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
     (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ)
     {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
-    (hU : ∀ k l r τ, U k τ (blockInputCfg hd (ℓ k) dig l r) =
-      polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
-        (finProdFinEquiv (l, r)))
+    (hU : ∀ c : Fin M → Fin D × Fin D, pairFamilyState ω c ≠ 0 → ∀ k τ,
+      U k τ (blockInputCfg hd (ℓ k) dig (c k).1 (c k).2) =
+        polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
+          (finProdFinEquiv (c k)))
     {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
     (hW : ∀ k u, W k u (fun _ => ⟨0, hd⟩) =
       Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u)
@@ -299,11 +311,14 @@ theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     simp only [hg, pairLayerOp_mulVec_apply,
       ite_eq_left fun i hi => siteCfg_of_not_mem_pairSite hd hN hr dig c hi,
       siteCfg_comp_pairSite hd hN hr dig c, hW, hext, blockLayerOp_apply]
+    change _ * pairFamilyState ω c = _
+    by_cases hc : pairFamilyState ω c = 0
+    · rw [hc, mul_zero, mul_zero]
     congr 1
     refine Finset.prod_congr rfl fun k _ => ?_
     have : siteCfg hd hN dig c ∘ blockSite hN k = blockInputCfg hd (ℓ k) dig (c k).1 (c k).2 :=
       funext fun j => siteCfg_blockSite hd hN dig c k j
-    rw [this, hU, blockIndexEquiv_apply]
+    rw [this, hU c hc, blockIndexEquiv_apply]
   simp_rw [hval, chainBlockIsometryState_apply]
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _ fun τ => by
     simp only [Equiv.piCongrRight_apply, Pi.map_apply, Equiv.apply_symm_apply]
@@ -331,82 +346,95 @@ theorem blockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
         productVector fun _ => Pi.single ⟨0, hd⟩ 1) s := by
   rw [blockIsometryState_eq_chainBlockIsometryState]
   exact chainBlockIsometryState_eq_mulVec hd hN hr hdig _ _
-    (fun k => by rw [chainBlockTensor_const]; exact hU k) (fun _ => hW) s
+    (fun c _ k τ => by rw [chainBlockTensor_const]; exact hU k _ _ τ) (fun _ => hW) s
 
 end Layers
 
 /-! ### The depth of the preparation -/
 
-/-- An injective tensor of physical dimension `d^q` has `D² ≤ d^q`. -/
-theorem mul_self_le_pow_of_isInjective {q : ℕ} (B : MPSTensor (blockPhysDim d q) D)
-    (h : Kraus.IsInjective B) : D * D ≤ d ^ q := by
-  have h1 := finrank_range_le_card (R := ℂ) B
-  rw [Set.finrank, h, finrank_top, Module.finrank_matrix, Fintype.card_fin, Fintype.card_fin,
-    Module.finrank_self, mul_one] at h1
-  simpa [blockPhysDim_eq_pow] using h1
+/-- An enumeration of the bond pairs listing the elements of `S` first. -/
+theorem exists_pairEquiv_val_lt_card_iff_mem (S : Finset (Fin D × Fin D)) :
+    ∃ π : Fin (D * D) ≃ Fin D × Fin D, ∀ x, x.val < S.card ↔ π x ∈ S := by
+  obtain ⟨π, hπ⟩ := Finset.exists_equiv_val_lt_card_iff_mem S
+  have h : D * D = Fintype.card (Fin D × Fin D) := by simp
+  exact ⟨(finCongr h).trans π, fun x => hπ (finCongr h x)⟩
 
-/-- **Preparation in depth `O(L)` for blocks of lengths at most `L`, site-dependent tensors.**
-There is `C`, depending only on `d` and `D`, such that for every cutting of a ring of `N ≥ 1`
-sites into `M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`, every chain `A` of site-dependent tensors of
-bond dimension `D` on the ring for which every blocked tensor is injective, and all unit vectors
-`ω^k` on the pair space, the state `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is prepared in depth at most
-`C L` from a product state.
+/-- For physical dimension `d ≤ 1` every vector on a ring of `N ≥ 1` sites is prepared in depth
+`0`: there is at most one configuration, and a product vector carries any amplitude on it. -/
+theorem isPreparedInDepth_zero_of_le_one [NeZero N] (hd : d ≤ 1) (ψ : Cfg d N → ℂ) :
+    IsPreparedInDepth 0 ψ := by
+  classical
+  have h0 : 0 < N := Nat.pos_of_ne_zero (NeZero.ne N)
+  have hsub : Subsingleton (Fin d) := ⟨fun a b => Fin.ext (by omega)⟩
+  refine ⟨1, ⟨[], rfl, rfl⟩, fun i a => if i.val = 0 then ψ (fun _ => a) else 1,
+    funext fun s => ?_⟩
+  rw [Matrix.one_mulVec, productVector, Finset.prod_eq_single ⟨0, h0⟩
+    (fun i _ hi => by rw [ite_eq_right fun h => hi (Fin.ext h)]) (by simp)]
+  simp only [ite_true]
+  exact congrArg ψ (funext fun _ => Subsingleton.elim _ _)
 
-arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the pairs are prepared in
-constant depth (eq. (12)), and each block unitary of eq. (11) is a sequential circuit of depth
-`O(ℓ k)` applied to all blocks in parallel; the paragraph "Inhomogeneous short-range correlated
-MPS" applies the same scheme, "preparing `|Ω⟩` and implementing the isometry", to tensors and
-pairs that depend on the site. Injectivity of a blocked tensor forces `D ≤ d^D`
-(`MPSPreparation.mul_self_le_pow_of_isInjective`), which lets each bond index be encoded in `D`
-sites. -/
-theorem exists_isPreparedInDepth_chainBlockIsometryState (d D : ℕ) :
+/-- **Preparation in depth `O(L)` for blocked tensors injective on sets of bond pairs.** There is
+`C`, depending only on `d` and `D`, such that the following holds. Cut a ring of `N ≥ 1` sites
+into `M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`, let `A` be a chain of site-dependent tensors of
+bond dimension `D` whose blocked tensor of block `k` is injective on a set `S_k` of bond pairs,
+and let `ω^k` be unit vectors on the pair space whose product `Ω` vanishes on every bond
+configuration `c` with some `c_k ∉ S_k`. Then `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is prepared in
+depth at most `C L` from a product state.
+
+arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1, with the isometric factors
+`V_k` partial isometries with `V_k†V_k` the projector onto `S_k`: the unitary on block `k`
+implements `V_k` on the inputs in `S_k`, the only ones `Ω` populates. For a chain of bond
+dimensions at most `D` padded with zeros, `S_k` is the rectangle of the bonds at the ends of
+block `k`. -/
+theorem exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
-      (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
-      (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ,
-        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (chainBlockTensor A hN k)) →
+      (A : MPSChainTensor d D N) (S : Fin M → Finset (Fin D × Fin D))
+      (ω : Fin M → Fin D × Fin D → ℂ), (∀ k, ∑ p, star (ω k p) * ω k p = 1) →
+      (∀ c, pairFamilyState ω c ≠ 0 → ∀ k, c k ∈ S k) → ∀ L : ℕ,
+        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
+        (∀ k, IsInjectiveOn (chainBlockTensor A hN k) (S k : Set (Fin D × Fin D))) →
           IsPreparedInDepth (C * L) fun s => chainBlockIsometryState A ω hN s := by
   classical
+  rcases Nat.lt_or_ge d 2 with hd1 | hd2
+  · refine ⟨0, fun {M} _ ℓ N _ hN A _ ω _ _ L _ _ _ => ?_⟩
+    rw [zero_mul]
+    exact isPreparedInDepth_zero_of_le_one (by omega) _
   rcases Nat.eq_zero_or_pos D with rfl | hD
-  · -- no bond: the state vanishes
-    refine ⟨0, fun {M} _ ℓ N _ hN A ω _ L _ _ _ =>
-      ⟨1, ⟨[], by simp, rfl⟩, fun _ _ => 0, funext fun s => ?_⟩⟩
-    have hN' : Nonempty (Fin N) := ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne _)⟩⟩
-    have hM' : IsEmpty (Fin M → Fin (0 * 0)) := by
-      rw [isEmpty_fun]; exact ⟨⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne _)⟩⟩, by simp⟩
-    simp [productVector, mulVec, dotProduct, zero_pow (NeZero.ne N)]
-  by_cases hDd : D ≤ d ^ D
-  swap
-  · refine ⟨0, fun {M} _ ℓ N _ hN A _ _ _ hq _ hinj => absurd
-      (mul_self_le_pow_of_isInjective _ (hinj ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩)) ?_⟩
-    have hq1 : 1 ≤ ℓ ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩ := by
-      have := hq ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩; omega
-    rcases Nat.lt_or_ge d 2 with hd | hd
-    · interval_cases d
-      · rw [zero_pow (by omega)]; exact Nat.not_le.mpr (Nat.mul_pos hD hD)
-      · rw [one_pow] at hDd ⊢
-        nlinarith
-    · exact absurd (Nat.lt_pow_self hd).le hDd
-  have hd : 0 < d := by
-    rcases Nat.eq_zero_or_pos d with rfl | h
-    · rw [zero_pow (by omega)] at hDd; omega
-    · exact h
+  · -- no unit pair on the zero space
+    refine ⟨0, fun {M} _ ℓ N _ hN A _ ω hω _ L _ _ _ =>
+      absurd (hω ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩) ?_⟩
+    simp
+  have hd : 0 < d := by omega
+  have hDd : D ≤ d ^ D := Nat.lt_two_pow_self.le.trans (Nat.pow_le_pow_left hd2 D)
   obtain ⟨dig⟩ : Nonempty (Fin D ↪ Cfg d D) :=
     Function.Embedding.nonempty_of_card_le (by simpa using hDd)
   have hdig : Function.Injective dig := dig.injective
-  obtain ⟨Cb, hCb⟩ := exists_blockUnitary hd (r₁ := D) (by omega) hdig hD
+  choose Cπ hCπ using fun π : Fin (D * D) ≃ Fin D × Fin D =>
+    exists_blockUnitary_of_equiv hd (r₁ := D) (by omega) hdig hD π
   obtain ⟨Kw, hKw⟩ := exists_isPairProduct (n := D + D) hd (by omega)
-  refine ⟨Cb + Kw, fun {M} _ ℓ N _ hN A ω hω L hℓ hL hinj => ?_⟩
+  set Cb := Finset.univ.sup Cπ with hCb
+  refine ⟨Cb + Kw, fun {M} _ ℓ N _ hN A S ω hω hωS L hℓ hL hinj => ?_⟩
   choose W hWu hW using fun k => exists_pairUnitary hd hdig (ω k) (hω k)
   have hr : ∀ k, D + D ≤ ℓ k := fun k => by have := hℓ k; omega
   have hUk : ∀ k, ∃ U : Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ,
-      IsPairProduct d (ℓ k) (Cb * ℓ k) U ∧ ∀ l r τ, U τ (blockInputCfg hd (ℓ k) dig l r) =
-        polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
-          (finProdFinEquiv (l, r)) := fun k => by
+      IsPairProduct d (ℓ k) (Cb * ℓ k) U ∧ ∀ l r τ, (l, r) ∈ S k →
+        U τ (blockInputCfg hd (ℓ k) dig l r) =
+          polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
+            (finProdFinEquiv (l, r)) := fun k => by
+    obtain ⟨π, hπ⟩ := exists_pairEquiv_val_lt_card_iff_mem (S k)
     obtain ⟨b, Q, hb0, hbq, -, hrow, -, hiso, hVQ⟩ :=
-      exists_isometric_chain_polarIsoMatrix (fun j => A (blockSite hN k j))
-        (by have := hℓ k; omega) (hinj k)
-    obtain ⟨U, hUpp, hUQ⟩ := hCb (ℓ k) (hℓ k) b Q hb0 hbq hrow hiso
-    exact ⟨U, hUpp, fun l r τ => by rw [hUQ]; exact (hVQ τ _).symm⟩
+      exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn (fun j => A (blockSite hN k j))
+        (by have := hℓ k; omega) (hinj k) π hπ
+    obtain ⟨U, hUpp, hUQ⟩ := hCπ π (ℓ k) (hℓ k) b Q hb0 hrow hiso
+    refine ⟨U, hUpp.mono (Nat.mul_le_mul_right _ (Finset.le_sup (Finset.mem_univ π))),
+      fun l r τ hlr => ?_⟩
+    have hx : (π.symm (l, r)).val < (S k).card :=
+      (hπ (π.symm (l, r))).mpr (by rw [Equiv.apply_symm_apply]; exact hlr)
+    have h1 := hUQ (π.symm (l, r)) (by rw [hbq]; exact hx) τ
+    have h2 := hVQ τ (π.symm (l, r)) hx
+    simp only [Equiv.apply_symm_apply] at h1 h2
+    rw [h1, ← h2]
+    rfl
   choose U hUpp hU using hUk
   have hL1 : 1 ≤ L := by
     have := hℓ ⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩
@@ -420,7 +448,33 @@ theorem exists_isPreparedInDepth_chainBlockIsometryState (d D : ℕ) :
     refine (hc.mono ?_).isLocalCircuitOfDepth
     have : Kw ≤ Kw * L := Nat.le_mul_of_pos_right _ hL1
     nlinarith
-  · exact chainBlockIsometryState_eq_mulVec hd hN hr hdig A ω hU hW s
+  · exact chainBlockIsometryState_eq_mulVec hd hN hr hdig A ω
+      (fun c hc k τ => hU k _ _ τ (hωS c hc k)) hW s
+
+/-- **Preparation in depth `O(L)` for blocks of lengths at most `L`, site-dependent tensors.**
+There is `C`, depending only on `d` and `D`, such that for every cutting of a ring of `N ≥ 1`
+sites into `M ≥ 1` blocks of lengths `3D ≤ ℓ k ≤ L`, every chain `A` of site-dependent tensors of
+bond dimension `D` on the ring for which every blocked tensor is injective, and all unit vectors
+`ω^k` on the pair space, the state `(⊗ₖ V_k) ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` is prepared in depth at most
+`C L` from a product state.
+
+arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1: the pairs are prepared in
+constant depth (eq. (12)), and each block unitary of eq. (11) is a sequential circuit of depth
+`O(ℓ k)` applied to all blocks in parallel; the paragraph "Inhomogeneous short-range correlated
+MPS" applies the same scheme, "preparing `|Ω⟩` and implementing the isometry", to tensors and
+pairs that depend on the site. This is
+`MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn` with every
+`S_k` the set of all bond pairs. -/
+theorem exists_isPreparedInDepth_chainBlockIsometryState (d D : ℕ) :
+    ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
+      (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
+      (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ,
+        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (chainBlockTensor A hN k)) →
+          IsPreparedInDepth (C * L) fun s => chainBlockIsometryState A ω hN s := by
+  obtain ⟨C, hC⟩ := exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn d D
+  exact ⟨C, fun ℓ N _ hN A ω hω L hℓ hL hinj => hC ℓ hN A (fun _ => Finset.univ) ω hω
+    (fun _ _ _ => Finset.mem_univ _) L hℓ hL fun k => by
+      simpa using isInjectiveOn_univ_iff.mpr (hinj k)⟩
 
 /-- **Preparation in depth `O(L)` for blocks of lengths at most `L`.** There is `C`, depending
 only on `d` and `D`, such that for every tensor `A`, every unit vector `ω` on the pair space,
