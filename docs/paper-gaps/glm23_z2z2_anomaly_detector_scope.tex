@@ -7,13 +7,13 @@
 \input{command}
 
 \title{The Anomaly Class of the Two-Qubit $\mathbb{Z}_2\times\mathbb{Z}_2$
-Tensors: Detector Values}
+Tensors: From Detector Values to the Class}
 \author{}
-\date{2026-09-26}
+\date{2026-09-30}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{wip}
 
 \section{The target statement}
 
@@ -75,41 +75,45 @@ action of the fusion tensors because $g^2=e$, and in a normalized gauge it is
 $\omega(g,g,g)$. So these are the values \eqref{eq:glm23z2z2_type_two_detectors}
 of the table. In particular the anomaly class of
 the full group is nontrivial.\footnote{Formal declarations:
-\leanid{Z2Z2Condensation.kleinFamily\_isNormalRepresentation} in
-\doclink{TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Exact},
-and \leanid{Z2Z2Condensation.cyclicInvariant\_omega\_kleinFamily} and
-\leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_kleinFamily} in
-\doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.}
+    \leanid{Z2Z2Condensation.kleinFamily\_isNormalRepresentation} in
+    \doclink{TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Exact},
+    and \leanid{Z2Z2Condensation.cyclicInvariant\_omega\_kleinFamily} and
+    \leanid{Z2Z2Condensation.not\_isTrivialGaugeClass\_omega\_kleinFamily} in
+    \doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.}
 The values are computed on the three subgroups of order two, by restricting
 the family and its fusion tensors along the three embeddings of
 $\mathbb{Z}_2$. The undressed projective family is given no anomaly class,
 and the sources give it none.
 
-\section{Missing piece and elimination plan}
+\section{Resolution of detector separation}
 
-The formalization identifies the three detector values with those of the
-type-II cocycle. It does not identify the classes. The missing step is the
-algebraic statement of the source that the detector values separate the
-eight classes of $H^3(\mathbb{Z}_2\times\mathbb{Z}_2,\mathbb{C}^\times)$:
-for three-cocycles $\omega,\eta$ of $\mathbb{Z}_2\times\mathbb{Z}_2$,
-\begin{align}
-    \omega(g,e,g)\,\omega(g,g,g)
-     & =\eta(g,e,g)\,\eta(g,g,g)
-    \quad\text{for } g=(1,0),(0,1),(1,1)
-    \notag\\
-    \Longrightarrow\quad
-    [\omega] & =[\eta].
-    \label{eq:glm23z2z2_detector_separation}
-\end{align} With that lemma, the formalized equality of detector values
-gives that the anomaly three-cocycle is cohomologous to
-$(-1)^{a_1b_2c_2}$ for every choice of fusion tensors. The lemma needs a
-normalization of three-cocycles by coboundaries and square roots in
-$\mathbb{C}^\times$. It is independent of the tensors.
+The detector-separation step is now proved for arbitrary three-cocycles,
+without a normalization hypothesis. Two three-cocycles have the same class
+if and only if the three products
+$\omega(g,e,g)\omega(g,g,g)$ agree at the nonidentity elements.
+Every class has a unique representative $\omega_{pqr}$, and their parameters
+add under multiplication. This gives
+$H^3(\mathbb{Z}_2\times\mathbb{Z}_2,\mathbb{C}^{\times})\cong\mathbb{Z}_2^3$.
+The proof normalizes an arbitrary cocycle by a coboundary, then uses one
+square root in $\mathbb{C}^{\times}$ to fix six entries; the cocycle equation
+and the three diagonal signs determine the remaining entries.\footnote{
+    \leanid{TNLean.Algebra.ScalarThreeCochain.cohomologousTo\_iff\_klein\_three\_cyclicInvariants},
+    \leanid{TNLean.Algebra.ScalarThreeCochain.existsUnique\_cohomologousTo\_kleinCocycleFamily},
+    and \leanid{TNLean.Algebra.ScalarThreeCochain.kleinH3Equiv} in
+    \doclink{TNLean/Algebra/KleinCocycleCompleteness}.}
 
-\textbf{Verdict: open scope restriction.} The formalized results are correct
-for the full group. They state the detector values of the table for the
-exact dressed representation, and the equality of classes awaits the
-separation lemma.
+Applied to \eqref{eq:glm23z2z2_detector_identity}, this proves
+$[\omega]=[\omega_{\mathrm{II}}]$ for every choice of fusion tensors of the
+exact dressed representation.\footnote{
+    \leanid{Z2Z2Condensation.omega\_cohomologousTo\_kleinCocycle} in
+    \doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.}
+
+\textbf{Verdict: detector separation resolved; the family comparison is still open.}
+The conclusion concerns the exact dressed family $M'_g$. It does not assign
+an anomaly class to the original odd-ring projective family, nor establish
+transport to the even-ring or two-site-blocked original family. That family
+comparison remains outside this result, as tracked by issue \#8041, so the
+restriction stays live until it is settled.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -1,0 +1,69 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Klein Three-Cocycles: Circle and Nonzero-Complex Coefficients}
+\author{}
+\date{2026-10-01}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Ref.~\cite{GarreRubio2023MPOSym}, subsection ``MPO algebras representing
+$\mathbb{Z}_2\times\mathbb{Z}_2$'', states
+\begin{align}
+    H^3(\mathbb{Z}_2\times\mathbb{Z}_2,U(1)) & \cong\mathbb{Z}_2^3,
+    \label{eq:glm23kleinh3_source}
+\end{align}
+with eight explicit representatives, and that the three diagonal values
+$\omega(g,g,g)$, $g\neq e$, of a normalized cocycle distinguish the classes.
+Here $U(1)$ carries the trivial action.
+
+\section{What is formalized}
+
+The formal classification uses the multiplicative group $\mathbb{C}^\times$
+with the trivial action. Every three-cocycle
+$\omega:(\mathbb{Z}_2\times\mathbb{Z}_2)^3\to\mathbb{C}^\times$ is cohomologous,
+through a $\mathbb{C}^\times$-valued two-cochain, to exactly one of the eight
+representatives, and
+\begin{align}
+    H^3(\mathbb{Z}_2\times\mathbb{Z}_2,\mathbb{C}^\times) & \cong\mathbb{Z}_2^3.
+    \label{eq:glm23kleinh3_complex}
+\end{align}
+Two cocycles are cohomologous exactly when their three order-two cyclic
+invariants $\omega(g,e,g)\,\omega(g,g,g)$ agree.\footnote{
+    \leanid{TNLean.Algebra.ScalarThreeCochain.existsUnique\_cohomologousTo\_kleinCocycleFamily},
+    \leanid{TNLean.Algebra.ScalarThreeCochain.cohomologousTo\_iff\_klein\_three\_cyclicInvariants},
+    and \leanid{TNLean.Algebra.ScalarThreeCochain.kleinH3Equiv} in
+    \doclink{TNLean/Algebra/KleinCocycleCompleteness}.}
+
+\section{Missing piece and elimination plan}
+
+The comparison of~\eqref{eq:glm23kleinh3_source}
+with~\eqref{eq:glm23kleinh3_complex} is not formalized in degree three; the
+existing circle comparison covers degree two. Two routes close it.
+First, the proof restricts to circle values: for a $U(1)$-valued cocycle the
+normalizing two-cochain $\beta(g,h)=\omega(g,e,e)/\omega(e,e,h)$, the square
+root used in the six-entry gauge, and the resulting two-cochain all take
+values in $U(1)$, and the eight representatives are $\pm1$-valued. The cyclic
+invariants are unchanged by any $\mathbb{C}^\times$-valued coboundary, so they
+also separate the $U(1)$ classes. Second, the general comparison
+$H^3(G,U(1))\cong H^3(G,\mathbb{C}^\times)$ for finite $G$ follows from
+$\mathbb{C}^\times\cong U(1)\times\mathbb{R}_{>0}$, since the uniquely
+divisible group $\mathbb{R}_{>0}$ has vanishing positive-degree cohomology
+for finite groups.
+
+\textbf{Verdict: scope restriction.} The classification is formalized with
+$\mathbb{C}^\times$ coefficients; the circle-valued statement is not.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

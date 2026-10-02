@@ -149,14 +149,15 @@ theorem blockLayerOp_mulVec_eq_comp (hN : ∑ k, ℓ k = N)
   noncommProd_embedOp_mulVec_eq_comp (blockSite_injective hN)
     (fun _ _ h => disjoint_range_blockSite hN h) f U hU _ v
 
-/-- The layer of a gate `W` on every pair window, acting by a configuration map `f`, acts by the
-configuration map changing each window by `f`. -/
+/-- The layer of gates `W_k` on the pair windows, acting by configuration maps `f k`, acts by
+the configuration map changing each window `k` by `f k`. -/
 theorem pairLayerOp_mulVec_eq_comp (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
-    {W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ} {f : Cfg d (r₁ + r₁) → Cfg d (r₁ + r₁)}
-    (hW : ∀ v, W *ᵥ v = v ∘ f) (v : Cfg d N → ℂ) :
-    pairLayerOp hN hr W *ᵥ v = v ∘ layerCfg (pairSite hN hr) fun _ => f :=
+    {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
+    {f : Fin M → Cfg d (r₁ + r₁) → Cfg d (r₁ + r₁)}
+    (hW : ∀ k v, W k *ᵥ v = v ∘ f k) (v : Cfg d N → ℂ) :
+    pairLayerOp hN hr W *ᵥ v = v ∘ layerCfg (pairSite hN hr) f :=
   noncommProd_embedOp_mulVec_eq_comp (m := fun _ => r₁ + r₁) (pairSite_injective hN hr)
-    (fun _ _ h => disjoint_range_pairSite hN hr h) (fun _ => f) (fun _ => W) (fun _ => hW) _ v
+    (fun _ _ h => disjoint_range_pairSite hN hr h) f W hW _ v
 
 /-! ### Single gates -/
 

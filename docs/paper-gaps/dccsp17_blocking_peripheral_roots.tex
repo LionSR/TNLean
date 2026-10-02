@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Peripheral Roots after Blocking a Periodic Tensor}
+\author{}
+\date{2026-09-30}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed expression}
+The proof of Lemma~6 in~\cite{DeLasCuevas2017Irreducible}, at
+\path{Papers/1708.00029/main.tex:451}, writes the peripheral spectrum
+of $\mathcal E_A^p$ as $\{\omega^l:0\leq l<m/r\}$, where
+$\omega=e^{2\pi i/m}$ and $r=\gcd(m,p)$. The exponent is missing the
+factor $p$. Throughout this calculation $m,p>0$.
+
+\section{Correction}
+Put $q=m/r$. Spectral mapping gives
+\begin{align}
+    \operatorname{spec}_{\mathrm{per}}(\mathcal E_A^p)
+     & =\{\lambda^p:\lambda^m=1\}
+    =\{\omega^{pl}:0\leq l<q\}
+    =\{z\in\mathbb C:z^q=1\}.
+    \label{eq:dccsp17_blocking_peripheral_roots_corrected_spectrum}
+\end{align}
+In (\ref{eq:dccsp17_blocking_peripheral_roots_corrected_spectrum}), $\omega^p$ has order $m/\gcd(m,p)$. For example, when
+$m=4$ and $p=2$, the printed set is $\{1,i\}$ whereas the correct set
+is $\{1,-1\}$. This is a correction to the displayed description of the
+roots, not a change to the period $m/r$ asserted in the lemma.
+
+\section{Formal statement}
+The spectral mapping identity holds for every tensor and every positive
+blocking length.\footnote{Formal declaration:
+    \leanid{MPSTensor.peripheralEigenvalues_blockTensor}, in
+    \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
+For a periodic tensor of period $m$, the peripheral spectrum of
+$\mathcal E_A^p$ is exactly the set of $q$-th roots of unity.\footnote{Formal
+    declaration: \leanid{MPSTensor.IsPeriodic.peripheral_blockTensor}, in
+    \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
+The same line asserts that each compressed block $C_\alpha$ has the printed
+root set as its peripheral spectrum; with the same correction, that spectrum is
+again the set of $q$-th roots of unity.\footnote{Formal declaration:
+    \leanid{MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq}, in
+    \doclink{TNLean/MPS/Periodic/BlockingEigenvalues.lean}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

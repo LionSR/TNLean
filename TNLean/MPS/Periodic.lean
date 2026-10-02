@@ -10,11 +10,17 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Periodic.Applications
 import TNLean.MPS.Periodic.BlockDecomposition
+import TNLean.MPS.Periodic.BlockingEigenvalues
+import TNLean.MPS.Periodic.BlockingFixedSpace
+import TNLean.MPS.Periodic.BlockingSpectrum
 import TNLean.MPS.Periodic.CornerContraction
 import TNLean.MPS.Periodic.CornerTransition
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Periodic.EqualCase
 import TNLean.MPS.Periodic.EqualCaseGlobal
+import TNLean.MPS.Periodic.EqualCaseGlobal.Basic
+import TNLean.MPS.Periodic.EqualCaseGlobal.Canonical
+import TNLean.MPS.Periodic.EqualCaseGlobal.IrreducibleForm
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Periodic.IrreducibleFormPeriods
@@ -24,6 +30,8 @@ import TNLean.MPS.Periodic.NormalizedSelfOverlap
 import TNLean.MPS.Periodic.Overlap
 import TNLean.MPS.Periodic.PeriodBound
 import TNLean.MPS.Periodic.PeriodExistence
+import TNLean.MPS.Periodic.PhaseClasses
+import TNLean.MPS.Periodic.PrescribedBlocking
 import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Periodic.ProportionalOverlap
 import TNLean.MPS.Periodic.ScaledNormalization
@@ -33,5 +41,6 @@ import TNLean.MPS.Periodic.SectorLift
 import TNLean.MPS.Periodic.SectorNormalization
 import TNLean.MPS.Periodic.SectorPhaseWord
 import TNLean.MPS.Periodic.StateVectorDecomposition
+import TNLean.MPS.Periodic.StepOrbitSectors
 import TNLean.MPS.Periodic.Symmetry
 import TNLean.MPS.Periodic.ZGauge

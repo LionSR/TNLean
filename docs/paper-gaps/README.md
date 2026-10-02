@@ -648,6 +648,10 @@ note.
   argument.
 - `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
   converse implication of Theorem 4.1 uses without proof.
+- `dccsp17_orbit_phase_wraparound.tex` (local correction) records that the
+  telescoping product of local phases in the proof of Theorem 4.1 fails as
+  printed at the wraparound representative `k_u = q - 1`, where
+  `k_{u+p} = 0`, and gives the corrected product.
 
 For the matrix product operator symmetries of arXiv:2203.12563:
 
@@ -734,12 +738,19 @@ For the group matrix product operators of arXiv:2203.12563:
   gauge in which the three-cocycle is one on the stabilizer, gives a
   $\mathbb Z_3$ example where it fails for a nonconstant trivializer, and
   states the torsor of solutions for action-tensor gauge classes.
+- `glm23_klein_printed_anomaly_scope.tex` records that for the printed one-qubit
+  $\mathbb Z_2\times\mathbb Z_2$ symmetry only the anomaly sign at $ab$ is
+  formalized; the values at $a$ and $b$ remain open.
+- `glm23_klein_h3_circle_coefficients.tex` records that the Klein-four
+  three-cocycle classification is formalized with $\mathbb C^\times$
+  coefficients, while the source states it for $U(1)$.
 - `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
   $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
   $Z$ on the second qubit, form an exact normal representation whose
   anomaly three-cocycle has the detector values $(+1,+1,-1)$ of the type-II
-  row of the table, and that the separation of the eight classes by these
-  values is not formalized.
+  row of the table. The separation of the eight classes by these values is now
+  formalized, so the anomaly class is the type-II class; the comparison with
+  the original odd-ring or two-site-blocked family remains open.
 
 For the AKLT example of arXiv:2011.12127, Appendix A:
 
@@ -789,8 +800,14 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   index, and the corrected approximating state `V^{⊗M} ∑ⱼ βⱼ L_j^{⊗M} |Ω_j⟩`
   with the source's weights. For blocks whose `q`-site states are orthogonal,
   part (ii) of the approximation-error lemma is proved for it with arbitrary
-  multiplicities and complex weights; numerical checks on the counterexamples
-  are recorded.
+  multiplicities and complex weights; for blocks whose states overlap it is
+  proved at the corrected rate with the factor `min(1, b)^{-1/2}`; numerical
+  checks on the counterexamples are recorded.
+- `mswc24_repeated_overlap_small_weight_sum.tex` is an open scope restriction:
+  for repeated blocks whose `q`-site states overlap, the bound for the corrected
+  state carries the factor `min(1, b)^{-1/2}` with `b = ∑ⱼ |βⱼ|²`, which exceeds
+  one when `b < 1`, for instance when the sums `βⱼ` cancel; the source's bound has
+  no such factor. Real weights in `[0, 1]` one of which is `1` give `b ≥ 1`.
 - `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
   false-source note for Lemma 2 of the Supplemental Material. It records that
   the lemma holds in modulus for the source's
@@ -819,6 +836,25 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   state of eq. (1) presupposes `|φ_N(A)⟩ ≠ 0`, gives a normal tensor with
   `|φ_2(A)⟩ = 0`, and records that the formal statement assumes nonvanishing,
   which holds for every `N ≥ N₀`.
+- `mswc24_tree_measurement_scope.tex` records that the tree circuit with
+  measurements (paragraph "Tree-RG circuit with measurements") is formalized
+  as a sequence of measurement rounds, with teleportation along chains of hops
+  in one round of depth `2`, layers of two-site gates between distant sites in
+  depth `5`, and binary trees of two-site gates with `k` levels in depth `5k`;
+  with registers of `s` sites, the approximating state with blocks of
+  `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
+  unequal widths remove the former restriction to chain lengths divisible by
+  `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
+  chain length; open: two-site gates between distant sites only at odd
+  separation, on disjoint stretches, which the trees do not need.
+- `mswc24_inhomogeneous_scope.tex` records that the preparation of
+  inhomogeneous short-range correlated states (paragraph "Inhomogeneous
+  short-range correlated MPS") is formalized for a ring with bond dimensions
+  at most `D`, varying along the ring and handled by zero padding; the
+  remaining restrictions are injective blocked tensors and blocks of at least
+  `3D` sites, with the finite-correlation assumption stated for one ring with
+  error `δ`; open: partial isometries without injectivity and the
+  sequence-level statement.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"): orthogonal `q`-site states of distinct
@@ -828,7 +864,20 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   of `N` sites; open.
 - `mswc24_tree_mera_scope.tex` records that the reading of the tree circuit
   of eq. (16) as a finite-range MERA with `O(log log(N/ε))` layers
-  (paragraph "Connection to MERA") is formalized for tensors whose two-site
-  blocked tensor is injective, so that every layer is an isometry, and for
-  chain lengths `N = M 2^{k+1}`; open: blocking by the injectivity length and
-  a coarser last block remove the two restrictions.
+  (paragraph "Connection to MERA") was first formalized for tensors whose
+  two-site blocked tensor is injective and chain lengths `N = M 2^{k+1}`;
+  finest isometries writing registers of `s` sites, with the tensor blocked
+  over `s` sites injective, cover every normal tensor for the chain lengths
+  `N = M s 2^{k+1}`; open: trees on leaves of unequal widths for every chain
+  length.
+- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
+  that the claim that states in the same phase are related by a log-depth
+  circuit is formalized only between two normal tensors.
+
+For the correlation functions of arXiv:2011.12127, Section II.B.3:
+
+- `cpgsv21_correlator_diagonalizable_expansion.tex` records that the
+  pure-exponential correlator expansion of CPGSV21 Section II.B.3 is false as
+  printed for a primitive tensor with a defective subleading eigenvalue
+  (explicit counterexample), the diagonalizability hypothesis under which it
+  holds, and the rate correction for the decay bound.
