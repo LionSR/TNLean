@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.LocalChannelCircuit
+import TNLean.Circuit.Channel.Layer
 
 /-!
 # Onsite channels and local channel conversions
@@ -43,28 +43,28 @@ choice functions `J`.
 
 ## Main definitions
 
-* `MPSPreparation.OnsiteChannel` — an onsite channel between two local dimensions, with its
+* `QuantumCircuit.OnsiteChannel` — an onsite channel between two local dimensions, with its
   map `OnsiteChannel.map` and Heisenberg dual `OnsiteChannel.dual`.
-* `MPSPreparation.OnsiteChannel.id`, `MPSPreparation.OnsiteChannel.attach`,
-  `MPSPreparation.OnsiteChannel.attachZero`, `MPSPreparation.OnsiteChannel.discard` — the
+* `QuantumCircuit.OnsiteChannel.id`, `QuantumCircuit.OnsiteChannel.attach`,
+  `QuantumCircuit.OnsiteChannel.attachZero`, `QuantumCircuit.OnsiteChannel.discard` — the
   identity, attaching an ancilla in a fixed state, and discarding the ancilla.
-* `MPSPreparation.IsLocalChannelProtocol` — maps of the form
+* `QuantumCircuit.IsLocalChannelProtocol` — maps of the form
   `Φ_T ∘ L_T ∘ ⋯ ∘ L_1 ∘ Φ_0` with `T` channel layers `L_t`.
-* `MPSPreparation.IsLocalChannelConversion` — conversion of one matrix into another by such
+* `QuantumCircuit.IsLocalChannelConversion` — conversion of one matrix into another by such
   a map of depth at most `T`; a conversion of a density matrix is a density matrix.
 
 ## Main results
 
-* `MPSPreparation.OnsiteChannel.map_isKrausCPTP`, `MPSPreparation.OnsiteChannel.map_finKronecker`
+* `QuantumCircuit.OnsiteChannel.map_isKrausCPTP`, `QuantumCircuit.OnsiteChannel.map_finKronecker`
   — onsite channels are channels and map product operators to product operators.
-* `MPSPreparation.OnsiteChannel.dual_mem_supportedOperators`,
-  `MPSPreparation.OnsiteChannel.dual_mul` — Heisenberg locality of onsite channels.
-* `MPSPreparation.IsLocalChannelProtocol.isKrausCPTP` — a conversion map is a channel.
-* `MPSPreparation.IsLocalChannelConversion.refl`, `MPSPreparation.IsLocalChannelConversion.trans`
+* `QuantumCircuit.OnsiteChannel.dual_mem_supportedOperators`,
+  `QuantumCircuit.OnsiteChannel.dual_mul` — Heisenberg locality of onsite channels.
+* `QuantumCircuit.IsLocalChannelProtocol.isKrausCPTP` — a conversion map is a channel.
+* `QuantumCircuit.IsLocalChannelConversion.refl`, `QuantumCircuit.IsLocalChannelConversion.trans`
   — reflexivity at depth `0` and composition with additive depth.
-* `MPSPreparation.isLocalChannelConversion_circuit` — attaching ancillas, running a local
+* `QuantumCircuit.isLocalChannelConversion_circuit` — attaching ancillas, running a local
   channel circuit of depth `T` and discarding is a conversion of depth `T`.
-* `MPSPreparation.trace_mul_mul_eq_of_isLocalChannelConversion` — vanishing connected
+* `QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion` — vanishing connected
   correlations beyond distance `2T` for densities converted from product densities.
 
 ## Follow-ups
@@ -83,10 +83,10 @@ the LOCC part of arXiv:2103.13367, are not treated here.
 * arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), main text before Theorem 1 (local circuits).
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators ComplexOrder
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d e f N : ℕ}
 
@@ -137,7 +137,7 @@ noncomputable def siteDual (Φ : OnsiteChannel d e N) (i : Fin N) :
 /-- The Kraus operator `⊗ᵢ K_{i J(i)}` of an onsite channel on the chain, for a choice
 function `J` of one Kraus index per site. -/
 def krausOp (Φ : OnsiteChannel d e N) (J : (i : Fin N) → Fin (Φ.r i)) :
-    Matrix (Cfg e N) (Cfg d N) ℂ :=
+    Matrix (Fin N → Fin e) (Fin N → Fin d) ℂ :=
   rectKronecker fun i ↦ Φ.kraus i (J i)
 
 /-- The map of an onsite channel on density matrices of the chain.
@@ -145,12 +145,12 @@ def krausOp (Φ : OnsiteChannel d e N) (J : (i : Fin N) → Fin (Φ.r i)) :
 Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (local operations
 on each site and its ancillas). -/
 noncomputable def map (Φ : OnsiteChannel d e N) :
-    Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ :=
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ :=
   rectangularKrausMap Φ.krausOp
 
 /-- The Heisenberg dual of an onsite channel. -/
 noncomputable def dual (Φ : OnsiteChannel d e N) :
-    Matrix (Cfg e N) (Cfg e N) ℂ →ₗ[ℂ] Matrix (Cfg d N) (Cfg d N) ℂ :=
+    Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   rectangularKrausMap fun J ↦ (Φ.krausOp J)ᴴ
 
 theorem sum_krausOp (Φ : OnsiteChannel d e N) :
@@ -180,8 +180,8 @@ theorem siteDual_one (Φ : OnsiteChannel d e N) (i : Fin N) : Φ.siteDual i 1 = 
   simpa only [conjTranspose_conjTranspose, Matrix.mul_one] using Φ.sum_kraus i
 
 /-- Schrödinger–Heisenberg duality for an onsite channel: `tr(Φ(ρ) A) = tr(ρ Φ†(A))`. -/
-theorem trace_map_mul (Φ : OnsiteChannel d e N) (ρ : Matrix (Cfg d N) (Cfg d N) ℂ)
-    (A : Matrix (Cfg e N) (Cfg e N) ℂ) : trace (Φ.map ρ * A) = trace (ρ * Φ.dual A) :=
+theorem trace_map_mul (Φ : OnsiteChannel d e N) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (A : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) : trace (Φ.map ρ * A) = trace (ρ * Φ.dual A) :=
   trace_rectangularKrausMap_mul _ ρ A
 
 /-- **Heisenberg locality of onsite channels.** The dual of an onsite channel maps an operator
@@ -191,7 +191,7 @@ spread supports.
 Source: arXiv:2103.13367, Supplemental Material, proof of the area law ("`U_n ∈ LU`, so it
 does not increase" the entanglement across a cut), in the Heisenberg picture. -/
 theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e N) {X : Set (Fin N)}
-    {A : Matrix (Cfg e N) (Cfg e N) ℂ} (hA : A ∈ supportedOperators e X) :
+    {A : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ} (hA : A ∈ supportedOperators e X) :
     Φ.dual A ∈ supportedOperators d X := by
   refine (Submodule.span_le (p := (supportedOperators d X).comap Φ.dual)).mpr ?_ hA
   rintro _ ⟨m, hm, rfl⟩
@@ -201,11 +201,11 @@ theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e N) {X : Set (Fin N)}
 /-- The dual of an onsite channel is multiplicative on operators acting on disjoint sets of
 sites. -/
 theorem dual_mul (Φ : OnsiteChannel d e N) {X Y : Set (Fin N)} (hXY : Disjoint X Y)
-    {A B : Matrix (Cfg e N) (Cfg e N) ℂ} (hA : A ∈ supportedOperators e X)
+    {A B : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ} (hA : A ∈ supportedOperators e X)
     (hB : B ∈ supportedOperators e Y) : Φ.dual (A * B) = Φ.dual A * Φ.dual B := by
   have key := eq_of_mem_supportedOperators₂
-    ((LinearMap.mul ℂ (Matrix (Cfg e N) (Cfg e N) ℂ)).compr₂ Φ.dual)
-    ((LinearMap.mul ℂ (Matrix (Cfg d N) (Cfg d N) ℂ)).compl₁₂ Φ.dual Φ.dual)
+    ((LinearMap.mul ℂ (Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ)).compr₂ Φ.dual)
+    ((LinearMap.mul ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)).compl₁₂ Φ.dual Φ.dual)
     (fun m m' hm hm' ↦ by
       simp only [LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply']
       rw [finKronecker_mul, dual_finKronecker, dual_finKronecker, dual_finKronecker,
@@ -347,16 +347,18 @@ Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC": the 
 between the layers `V_n`, here with channels in place of unitaries and without measurements;
 attaching and discarding ancillas are onsite channels. -/
 inductive IsLocalChannelProtocol :
-    {d e : ℕ} → ℕ → (Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ) → Prop
+    {d e : ℕ} → ℕ →
+    (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop
   /-- An onsite channel is a protocol without layers. -/
   | onsite {d e : ℕ} (Φ : OnsiteChannel d e N) : IsLocalChannelProtocol 0 Φ.map
   /-- A layer of local channels applied after a protocol adds one to its depth. -/
-  | layer {d e T : ℕ} {Ψ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ}
+  | layer {d e T : ℕ}
+    {Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
       (hΨ : IsLocalChannelProtocol T Ψ) (L : ChannelLayer e N) :
       IsLocalChannelProtocol (T + 1) (L.map ∘ₗ Ψ)
   /-- An onsite channel applied after a protocol keeps its depth. -/
   | onsite_comp {d e f T : ℕ}
-      {Ψ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ}
+      {Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
       (hΨ : IsLocalChannelProtocol T Ψ) (Φ : OnsiteChannel e f N) :
       IsLocalChannelProtocol T (Φ.map ∘ₗ Ψ)
 
@@ -364,7 +366,7 @@ namespace IsLocalChannelProtocol
 
 /-- A local channel protocol is trace-preserving and completely positive. -/
 theorem isKrausCPTP {T : ℕ}
-    {Ψ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ}
+    {Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
     (h : IsLocalChannelProtocol T Ψ) : IsKrausCPTP Ψ := by
   induction h with
   | onsite Φ => exact Φ.map_isKrausCPTP
@@ -373,8 +375,8 @@ theorem isKrausCPTP {T : ℕ}
 
 /-- Protocols compose, and their depths add. -/
 theorem comp {T₁ T₂ : ℕ}
-    {Ψ₁ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ}
-    {Ψ₂ : Matrix (Cfg e N) (Cfg e N) ℂ →ₗ[ℂ] Matrix (Cfg f N) (Cfg f N) ℂ}
+    {Ψ₁ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
+    {Ψ₂ : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ] Matrix (Fin N → Fin f) (Fin N → Fin f) ℂ}
     (h₁ : IsLocalChannelProtocol T₁ Ψ₁) (h₂ : IsLocalChannelProtocol T₂ Ψ₂) :
     IsLocalChannelProtocol (T₁ + T₂) (Ψ₂ ∘ₗ Ψ₁) := by
   induction h₂ with
@@ -385,7 +387,7 @@ theorem comp {T₁ T₂ : ℕ}
 /-- Applying a local channel circuit after a protocol adds its number of layers to the
 depth. -/
 theorem channelCircuitMap_comp {T : ℕ}
-    {Ψ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ}
+    {Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
     (h : IsLocalChannelProtocol T Ψ) (Ls : List (ChannelLayer e N)) :
     IsLocalChannelProtocol (T + Ls.length) (channelCircuitMap Ls ∘ₗ Ψ) := by
   induction Ls generalizing T Ψ with
@@ -403,9 +405,9 @@ distance `T` of `X`, and is multiplicative on operators acting on sets whose
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the light cone of a
 depth-`T` circuit), here with channels and onsite operations. -/
 theorem exists_dual {T : ℕ}
-    {Ψ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg e N) (Cfg e N) ℂ}
+    {Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ}
     (h : IsLocalChannelProtocol T Ψ) :
-    ∃ Ψ' : Matrix (Cfg e N) (Cfg e N) ℂ →ₗ[ℂ] Matrix (Cfg d N) (Cfg d N) ℂ,
+    ∃ Ψ' : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ,
       (∀ ρ A, trace (Ψ ρ * A) = trace (ρ * Ψ' A)) ∧
       (∀ X : Set (Fin N), ∀ A ∈ supportedOperators e X,
         Ψ' A ∈ supportedOperators d (neighbourhood X T)) ∧
@@ -450,9 +452,10 @@ Source: arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (circ
 `V' = U_ℓ V_ℓ ⋯ U_1 V_1 U_0` with ancillas) and paragraph "Phases of matter" (a protocol
 "where ancillas are traced out at the end, defines a quantum channel"), without measurements
 or classical communication. -/
-def IsLocalChannelConversion {d' : ℕ} (T : ℕ) (ρ : Matrix (Cfg d N) (Cfg d N) ℂ)
-    (σ : Matrix (Cfg d' N) (Cfg d' N) ℂ) : Prop :=
-  ∃ T' ≤ T, ∃ Ψ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg d' N) (Cfg d' N) ℂ,
+def IsLocalChannelConversion {d' : ℕ} (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ) : Prop :=
+  ∃ T' ≤ T, ∃ Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d')
+    (Fin N → Fin d') ℂ,
     IsLocalChannelProtocol T' Ψ ∧ Ψ ρ = σ
 
 namespace IsLocalChannelConversion
@@ -460,10 +463,11 @@ namespace IsLocalChannelConversion
 variable {d' d'' : ℕ}
 
 /-- Every matrix is converted into itself in depth `0`. -/
-theorem refl (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) : IsLocalChannelConversion 0 ρ ρ :=
+theorem refl (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : IsLocalChannelConversion 0 ρ ρ :=
   ⟨0, le_rfl, _, .onsite (OnsiteChannel.id d N), by rw [OnsiteChannel.id_map, LinearMap.id_apply]⟩
 
-theorem mono {T T' : ℕ} {ρ : Matrix (Cfg d N) (Cfg d N) ℂ} {σ : Matrix (Cfg d' N) (Cfg d' N) ℂ}
+theorem mono {T T' : ℕ} {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
     (h : IsLocalChannelConversion T ρ σ) (hT : T ≤ T') : IsLocalChannelConversion T' ρ σ := by
   obtain ⟨T₀, hT₀, Ψ, hΨ, rfl⟩ := h
   exact ⟨T₀, hT₀.trans hT, Ψ, hΨ, rfl⟩
@@ -473,8 +477,9 @@ depth `T₂` converts `ρ` into `τ` in depth `T₁ + T₂`.
 
 Source: arXiv:2103.13367, main text, paragraph "Phases of matter" (composing transformations
 requires adding their depths). -/
-theorem trans {T₁ T₂ : ℕ} {ρ : Matrix (Cfg d N) (Cfg d N) ℂ}
-    {σ : Matrix (Cfg d' N) (Cfg d' N) ℂ} {τ : Matrix (Cfg d'' N) (Cfg d'' N) ℂ}
+theorem trans {T₁ T₂ : ℕ} {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
+    {τ : Matrix (Fin N → Fin d'') (Fin N → Fin d'') ℂ}
     (h₁ : IsLocalChannelConversion T₁ ρ σ) (h₂ : IsLocalChannelConversion T₂ σ τ) :
     IsLocalChannelConversion (T₁ + T₂) ρ τ := by
   obtain ⟨S₁, hS₁, Ψ₁, hΨ₁, rfl⟩ := h₁
@@ -482,16 +487,16 @@ theorem trans {T₁ T₂ : ℕ} {ρ : Matrix (Cfg d N) (Cfg d N) ℂ}
   exact ⟨S₁ + S₂, add_le_add hS₁ hS₂, _, hΨ₁.comp hΨ₂, rfl⟩
 
 /-- A conversion is realized by a trace-preserving completely positive map. -/
-theorem exists_isKrausCPTP {T : ℕ} {ρ : Matrix (Cfg d N) (Cfg d N) ℂ}
-    {σ : Matrix (Cfg d' N) (Cfg d' N) ℂ} (h : IsLocalChannelConversion T ρ σ) :
-    ∃ Ψ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg d' N) (Cfg d' N) ℂ,
+theorem exists_isKrausCPTP {T : ℕ} {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ} (h : IsLocalChannelConversion T ρ σ) :
+    ∃ Ψ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ,
       IsKrausCPTP Ψ ∧ Ψ ρ = σ := by
   obtain ⟨_, -, Ψ, hΨ, rfl⟩ := h
   exact ⟨Ψ, hΨ.isKrausCPTP, rfl⟩
 
 /-- A conversion maps density matrices to density matrices. -/
-theorem density {T : ℕ} {ρ : Matrix (Cfg d N) (Cfg d N) ℂ}
-    {σ : Matrix (Cfg d' N) (Cfg d' N) ℂ} (h : IsLocalChannelConversion T ρ σ)
+theorem density {T : ℕ} {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ} (h : IsLocalChannelConversion T ρ σ)
     (hρ : ρ.PosSemidef ∧ trace ρ = 1) : σ.PosSemidef ∧ trace σ = 1 := by
   obtain ⟨Ψ, hΨ, rfl⟩ := h.exists_isKrausCPTP
   exact ⟨hΨ.map_posSemidef hρ.1, (hΨ.trace_map ρ).trans hρ.2⟩
@@ -506,7 +511,7 @@ Source: arXiv:2103.13367, main text, paragraph "Phases of matter" ("a given prep
 protocol … (where ancillas are traced out at the end), defines a quantum channel"). -/
 theorem isLocalChannelConversion_circuit {d' T : ℕ} (In : OnsiteChannel d e N)
     (Ls : List (ChannelLayer e N)) (hLs : Ls.length ≤ T) (Out : OnsiteChannel e d' N)
-    (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) :
+    (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     IsLocalChannelConversion T ρ (Out.map (channelCircuitMap Ls (In.map ρ))) := by
   exact ⟨0 + Ls.length, by omega, _,
     ((IsLocalChannelProtocol.onsite In).channelCircuitMap_comp Ls).onsite_comp Out, rfl⟩
@@ -514,7 +519,7 @@ theorem isLocalChannelConversion_circuit {d' T : ℕ} (In : OnsiteChannel d e N)
 /-- A density matrix prepared from a product density by a local channel circuit of depth `T`
 is converted from that product density in depth `T`. -/
 theorem IsChannelPreparedInDepth.exists_isLocalChannelConversion {T : ℕ}
-    {ρ : Matrix (Cfg d N) (Cfg d N) ℂ} (h : IsChannelPreparedInDepth T ρ) :
+    {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (h : IsChannelPreparedInDepth T ρ) :
     ∃ σ : Fin N → Matrix (Fin d) (Fin d) ℂ, (∀ i, (σ i).PosSemidef ∧ trace (σ i) = 1) ∧
       IsLocalChannelConversion T (finKronecker σ) ρ := by
   obtain ⟨Ls, rfl, σ, hσ, rfl⟩ := h
@@ -531,8 +536,10 @@ stated there for pure states prepared from `|0⟩^{⊗M}` by unitary circuits of
 for product densities, local channels, ancillas and discarding, without measurements. -/
 theorem trace_mul_mul_eq_of_isLocalChannelConversion {d' T : ℕ}
     {σ₀ : Fin N → Matrix (Fin d) (Fin d) ℂ} (hσ₀ : ∀ i, trace (σ₀ i) = 1)
-    {σ : Matrix (Cfg d' N) (Cfg d' N) ℂ} (h : IsLocalChannelConversion T (finKronecker σ₀) σ)
-    {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T)) {A B : Matrix (Cfg d' N) (Cfg d' N) ℂ}
+    {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
+    (h : IsLocalChannelConversion T (finKronecker σ₀) σ)
+    {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
+    {A B : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
     (hA : A ∈ supportedOperators d' X) (hB : B ∈ supportedOperators d' Y) :
     trace (σ * (A * B)) = trace (σ * A) * trace (σ * B) := by
   obtain ⟨T', hT', Ψ, hΨ, rfl⟩ := h
@@ -546,4 +553,4 @@ theorem trace_mul_mul_eq_of_isLocalChannelConversion {d' T : ℕ}
 
 end Ring
 
-end MPSPreparation
+end QuantumCircuit

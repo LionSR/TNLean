@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.Preparation.ConfigurationLayers
-import TNLean.MPS.Preparation.MeasurementCircuit
-import TNLean.MPS.Preparation.PermutationGates
-import TNLean.MPS.Preparation.UnitaryGates
+import TNLean.Circuit.Measurement.Protocol
+import TNLean.Circuit.Gates.Permutation
+import TNLean.Circuit.Gates.TwoSiteUniversality
 
 /-!
 # A GHZ-type state on the registers with measurements, in depth `O(L)`
@@ -47,7 +47,7 @@ because the register of a block and the ancilla at its start are `ℓ_k - r₁` 
 depth `O(log(N/ε))` is unaffected, since the isometries of the blocked tensor take depth `O(q)`.
 Documented in `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
 
-The protocol `MPSPreparation.ghzProtocol` of `TNLean.MPS.Preparation.GHZMeasurement` is not
+The protocol `QuantumCircuit.ghzProtocol` of `TNLean.Circuit.Measurement.GHZ` is not
 reused: it acts on interleaved single qudits of an open chain, with one unmeasured last ancilla,
 whereas here every label is a register of `r₁` sites inside a block, the ancillas close the ring,
 and the controlled shift between a register and its ancilla spans a block. The two share the
@@ -70,6 +70,7 @@ partial sums of the outcomes, `Fin.partialSum`.
 
 open Matrix MPSTensor
 open scoped BigOperators
+open QuantumCircuit
 
 namespace MPSPreparation
 

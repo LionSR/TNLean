@@ -3,9 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.MeasurementCircuit
-import TNLean.MPS.Preparation.NonNormalFixedPoint
-import TNLean.MPS.Preparation.PermutationGates
+import TNLean.Circuit.Measurement.Protocol
+import TNLean.Circuit.Gates.Permutation
 
 /-!
 # GHZ-type states in constant depth with measurements
@@ -13,14 +12,14 @@ import TNLean.MPS.Preparation.PermutationGates
 The GHZ-type state `|χ_M⟩ = ∑ᵢ αᵢ |i⟩^{⊗M}` of `M` qudits of dimension `b` has connected
 correlations that do not decay with distance, while those of a state prepared by a local
 circuit of depth `T` vanish beyond distance `2T`
-(`MPSPreparation.expect_mul_eq_of_isPreparedInDepth`); arXiv:2103.13367, Example 1, uses
+(`QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`); arXiv:2103.13367, Example 1, uses
 this to show that the GHZ state needs a depth growing with the system size. With
 measurements it is prepared in constant depth: arXiv:2307.01696, paragraph "Long-range MPS using
 measurements", states that "the creation of GHZ-like states `|χ_M⟩ = ∑_{i=1}^b αᵢ |i⟩^{⊗M}`
 becomes possible in only constant depth", citing among others arXiv:2103.13367, whose
 Example 1 gives the preparation for qubits. This file proves it for every dimension `b ≥ 1`
 and every nonzero `α`, with depth `2` for every `M`, the depth of that example
-(`MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`).
+(`QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`).
 
 ## The protocol
 
@@ -50,14 +49,16 @@ has the same probability, and every outcome gives exactly `|χ_M⟩`: no outcome
 
 ## Main definitions
 
-* `MPSPreparation.withZeroAncillas` — a state of the system qudits, with every ancilla in
+* `QuantumCircuit.ghzState` — the state `|χ_M⟩`, with its amplitudes in
+  `QuantumCircuit.ghzState_apply`.
+* `QuantumCircuit.withZeroAncillas` — a state of the system qudits, with every ancilla in
   `|0⟩`, as a state of the ring of `2M` sites.
-* `MPSPreparation.ghzProtocol` — the protocol above.
+* `QuantumCircuit.ghzProtocol` — the protocol above.
 
 ## Main results
 
-* `MPSPreparation.ghzProtocol_output` — every outcome gives `|χ_M⟩`.
-* `MPSPreparation.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`.
+* `QuantumCircuit.ghzProtocol_output` — every outcome gives `|χ_M⟩`.
+* `QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`.
 
 ## References
 
@@ -66,10 +67,36 @@ has the same probability, and every outcome gives exactly `|χ_M⟩`: no outcome
 * arXiv:2103.13367 (Piroli, Styliaris, Cirac), Example 1 ("The GHZ and `W` states").
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
+
+/-! ### The GHZ-type state -/
+
+section State
+
+variable {b : ℕ}
+
+/-- The GHZ-like state `|χ_M⟩ = ∑ⱼ αⱼ |j⟩^{⊗M}` on `M` sites of dimension `b`
+(arXiv:2307.01696, the paragraph after eq. (19)): its amplitude at `s` is `∑ⱼ αⱼ`
+times the product of the coordinates `s k` of the basis vector `|j⟩`. -/
+def ghzState {M : ℕ} (α : Fin b → ℂ) (s : Fin M → Fin b) : ℂ :=
+  ∑ j, α j * ∏ k, (Pi.single j 1 : Fin b → ℂ) (s k)
+
+/-- The amplitude of `|χ_M⟩` at `s` is `α (s 0)` if all the values `s k` are equal, and `0`
+otherwise. -/
+theorem ghzState_apply {M : ℕ} [NeZero M] (α : Fin b → ℂ) (s : Fin M → Fin b) :
+    ghzState α s = if ∀ k, s k = s 0 then α (s 0) else 0 := by
+  classical
+  simp only [ghzState, Pi.single_apply, Finset.prod_boole, Finset.mem_univ, true_implies]
+  rw [Finset.sum_eq_single (s 0)]
+  · split_ifs <;> simp
+  · intro j _ hj
+    rw [ite_eq_right fun h => hj (h 0).symm, mul_zero]
+  · simp
+
+end State
 
 variable {b M : ℕ} [NeZero b]
 
@@ -77,38 +104,38 @@ variable {b M : ℕ} [NeZero b]
 
 /-- The site of the ring of `2M` sites carrying the system qudit `n` (`r = 0`) or the ancilla
 `n` (`r = 1`): the site `2n + r`. -/
-def site (n : Fin M) (r : Fin 2) : Fin (M * 2) :=
+def ghzSite (n : Fin M) (r : Fin 2) : Fin (M * 2) :=
   finProdFinEquiv (n, r)
 
-private theorem site_val (n : Fin M) (r : Fin 2) : (site n r).val = r.val + 2 * n.val :=
+private theorem ghzSite_val (n : Fin M) (r : Fin 2) : (ghzSite n r).val = r.val + 2 * n.val :=
   rfl
 
-private theorem site_injective {n n' : Fin M} {r r' : Fin 2} (h : site n r = site n' r') :
+private theorem ghzSite_injective {n n' : Fin M} {r r' : Fin 2} (h : ghzSite n r = ghzSite n' r') :
     n = n' ∧ r = r' := by
-  simpa [site] using h
+  simpa [ghzSite] using h
 
 /-- The state `ψ` of the `M` system qudits, with every ancilla in `|0⟩`, as a state of the
 ring of `2M` sites.
 
 Source: arXiv:2103.13367, paragraph "Quantum circuits and LOCC" (ancillas initialized in a
 product state) and Example 1. -/
-def withZeroAncillas (ψ : Cfg b M → ℂ) : Cfg b (M * 2) → ℂ := fun x =>
-  ψ (fun n => x (site n 0)) * ∏ n, if x (site n 1) = 0 then 1 else 0
+def withZeroAncillas (ψ : (Fin M → Fin b) → ℂ) : (Fin (M * 2) → Fin b) → ℂ := fun x =>
+  ψ (fun n => x (ghzSite n 0)) * ∏ n, if x (ghzSite n 1) = 0 then 1 else 0
 
 section Ring
 
 variable [NeZero M]
 
-private theorem site_zero_add_one (n : Fin M) : site n 0 + 1 = site n 1 := by
+private theorem ghzSite_zero_add_one (n : Fin M) : ghzSite n 0 + 1 = ghzSite n 1 := by
   ext
-  rw [Fin.val_add_one_of_lt' (by rw [site_val]; omega), site_val, site_val]
+  rw [Fin.val_add_one_of_lt' (by rw [ghzSite_val]; omega), ghzSite_val, ghzSite_val]
   simp only [Fin.val_zero, Fin.val_one]
   omega
 
-private theorem site_one_add_one (n : Fin M) (h : n.val + 1 < M) :
-    site n 1 + 1 = site ⟨n.val + 1, h⟩ 0 := by
+private theorem ghzSite_one_add_one (n : Fin M) (h : n.val + 1 < M) :
+    ghzSite n 1 + 1 = ghzSite ⟨n.val + 1, h⟩ 0 := by
   ext
-  rw [Fin.val_add_one_of_lt' (by rw [site_val]; omega), site_val, site_val]
+  rw [Fin.val_add_one_of_lt' (by rw [ghzSite_val]; omega), ghzSite_val, ghzSite_val]
   simp only [Fin.val_zero, Fin.val_one]
   omega
 
@@ -122,32 +149,33 @@ private theorem add_one_ne_self (k : Fin (M * 2)) : k + 1 ≠ k := by
   · have : k.val + 1 = M * 2 := by have := k.isLt; omega
     simp_all
 
-private theorem bond_site_zero (n : Fin M) : bond (site n 0) = {site n 0, site n 1} := by
-  rw [bond, site_zero_add_one]
+private theorem bond_ghzSite_zero (n : Fin M) : bond (ghzSite n 0) =
+    {ghzSite n 0, ghzSite n 1} := by
+  rw [bond, ghzSite_zero_add_one]
 
-private theorem bond_site_one (n : Fin M) (h : n.val + 1 < M) :
-    bond (site n 1) = {site n 1, site ⟨n.val + 1, h⟩ 0} := by
-  rw [bond, site_one_add_one n h]
+private theorem bond_ghzSite_one (n : Fin M) (h : n.val + 1 < M) :
+    bond (ghzSite n 1) = {ghzSite n 1, ghzSite ⟨n.val + 1, h⟩ 0} := by
+  rw [bond, ghzSite_one_add_one n h]
 
 /-! ### The layers -/
 
 /-- The left sites `2n` of the pairs `{2n, 2n + 1}` of the first layer, `n < M - 1`. -/
 private def firstBonds : Finset (Fin (M * 2)) :=
-  (Finset.univ.filter fun n : Fin M => n.val + 1 < M).image fun n => site n 0
+  (Finset.univ.filter fun n : Fin M => n.val + 1 < M).image fun n => ghzSite n 0
 
 /-- The left sites `2n + 1` of the pairs `{2n + 1, 2n + 2}` of the second layer, `n < M - 1`;
 these are also the measured ancillas. -/
 private def secondBonds : Finset (Fin (M * 2)) :=
-  (Finset.univ.filter fun n : Fin M => n.val + 1 < M).image fun n => site n 1
+  (Finset.univ.filter fun n : Fin M => n.val + 1 < M).image fun n => ghzSite n 1
 
 omit [NeZero b] [NeZero M] in
 private theorem mem_firstBonds {k : Fin (M * 2)} :
-    k ∈ firstBonds ↔ ∃ n : Fin M, n.val + 1 < M ∧ site n 0 = k := by
+    k ∈ firstBonds ↔ ∃ n : Fin M, n.val + 1 < M ∧ ghzSite n 0 = k := by
   simp [firstBonds]
 
 omit [NeZero b] [NeZero M] in
 private theorem mem_secondBonds {k : Fin (M * 2)} :
-    k ∈ secondBonds ↔ ∃ n : Fin M, n.val + 1 < M ∧ site n 1 = k := by
+    k ∈ secondBonds ↔ ∃ n : Fin M, n.val + 1 < M ∧ ghzSite n 1 = k := by
   simp [secondBonds]
 
 private theorem firstBonds_pairwiseDisjoint :
@@ -157,8 +185,8 @@ private theorem firstBonds_pairwiseDisjoint :
   obtain ⟨n', -, rfl⟩ := mem_firstBonds.mp hk'
   have hn : n ≠ n' := fun h => hkk' (h ▸ rfl)
   change Disjoint (bond _) (bond _)
-  rw [bond_site_zero, bond_site_zero, Set.disjoint_left]
-  rintro i (rfl | rfl) (h | h) <;> exact hn (site_injective h).1
+  rw [bond_ghzSite_zero, bond_ghzSite_zero, Set.disjoint_left]
+  rintro i (rfl | rfl) (h | h) <;> exact hn (ghzSite_injective h).1
 
 private theorem secondBonds_pairwiseDisjoint :
     ((secondBonds : Finset (Fin (M * 2))) : Set (Fin (M * 2))).PairwiseDisjoint bond := by
@@ -167,31 +195,31 @@ private theorem secondBonds_pairwiseDisjoint :
   obtain ⟨n', hn1', rfl⟩ := mem_secondBonds.mp hk'
   have hn : n ≠ n' := fun h => hkk' (h ▸ rfl)
   change Disjoint (bond _) (bond _)
-  rw [bond_site_one n hn1, bond_site_one n' hn1', Set.disjoint_left]
+  rw [bond_ghzSite_one n hn1, bond_ghzSite_one n' hn1', Set.disjoint_left]
   rintro i (rfl | rfl) (h | h)
-  · exact hn (site_injective h).1
-  · exact absurd (site_injective h).2 (by decide)
-  · exact absurd (site_injective h).2 (by decide)
-  · exact hn (Fin.ext (by have := congrArg Fin.val (site_injective h).1; simp at this; omega))
+  · exact hn (ghzSite_injective h).1
+  · exact absurd (ghzSite_injective h).2 (by decide)
+  · exact absurd (ghzSite_injective h).2 (by decide)
+  · exact hn (Fin.ext (by have := congrArg Fin.val (ghzSite_injective h).1; simp at this; omega))
 
 omit [NeZero b] in
-private theorem firstShift_aux (k : Fin (M * 2)) (x : Cfg b (M * 2)) (c : Fin b) :
+private theorem firstShift_aux (k : Fin (M * 2)) (x : Fin (M * 2) → Fin b) (c : Fin b) :
     -Function.update x (k + 1) c k = -x k := by
   rw [Function.update_of_ne (add_one_ne_self k).symm]
 
 omit [NeZero b] in
-private theorem secondShift_aux (k : Fin (M * 2)) (x : Cfg b (M * 2)) (c : Fin b) :
+private theorem secondShift_aux (k : Fin (M * 2)) (x : Fin (M * 2) → Fin b) (c : Fin b) :
     Function.update x k c (k + 1) = x (k + 1) := by
   rw [Function.update_of_ne (add_one_ne_self k)]
 
 /-- The gates of the first layer: `|k⟩|a⟩ ↦ |k⟩|a + k⟩` on `{2n, 2n + 1}`, written through its
 action `x ↦ x - x_{2n} e_{2n+1}` on configurations. -/
-private def firstShift (k : Fin (M * 2)) : Equiv.Perm (Cfg b (M * 2)) :=
+private def firstShift (k : Fin (M * 2)) : Equiv.Perm (Fin (M * 2) → Fin b) :=
   shiftPerm (k + 1) (fun x => -x k) (firstShift_aux k)
 
 /-- The gates of the second layer: `|a⟩|k⟩ ↦ |a - k⟩|k⟩` on `{2n + 1, 2n + 2}`, written through
 its action `x ↦ x + x_{2n+2} e_{2n+1}` on configurations. -/
-private def secondShift (k : Fin (M * 2)) : Equiv.Perm (Cfg b (M * 2)) :=
+private def secondShift (k : Fin (M * 2)) : Equiv.Perm (Fin (M * 2) → Fin b) :=
   shiftPerm k (fun x => x (k + 1)) (secondShift_aux k)
 
 private theorem isLocalPerm_firstShift (k : Fin (M * 2)) :
@@ -217,7 +245,7 @@ private noncomputable def secondLayer : Layer b (M * 2) :=
 /-- The outcome `mₙ` at the ancilla `n`, and `0` for the last ancilla, which is not
 measured. -/
 private def ghzOutcome (m : secondBonds (M := M) → Fin b) (n : Fin M) : Fin b :=
-  if h : site n 1 ∈ secondBonds then m ⟨site n 1, h⟩ else 0
+  if h : ghzSite n 1 ∈ secondBonds then m ⟨ghzSite n 1, h⟩ else 0
 
 /-- The prefix sum `pₙ = m₀ + ⋯ + m_{n-1}` of the outcomes. -/
 private def ghzPrefix (m : secondBonds (M := M) → Fin b) (n : Fin M) : Fin b :=
@@ -226,19 +254,19 @@ private def ghzPrefix (m : secondBonds (M := M) → Fin b) (n : Fin M) : Fin b :
 /-- The correction, as the configuration it adds: `-pₙ` at the system qudit `n` and `mₙ` at
 the ancilla `n`. The operator it defines is `X^{pₙ}` on the system qudit `n` and `X^{-mₙ}` on
 the ancilla `n`. -/
-private def ghzCorrection (m : secondBonds (M := M) → Fin b) : Cfg b (M * 2) :=
+private def ghzCorrection (m : secondBonds (M := M) → Fin b) : Fin (M * 2) → Fin b :=
   fun j => if (finProdFinEquiv.symm j).2 = 0 then -ghzPrefix m (finProdFinEquiv.symm j).1
     else ghzOutcome m (finProdFinEquiv.symm j).1
 
 omit [NeZero M] in
-private theorem ghzCorrection_site_zero (m : secondBonds (M := M) → Fin b)
-    (n : Fin M) : ghzCorrection m (site n 0) = -ghzPrefix m n := by
-  simp [ghzCorrection, site]
+private theorem ghzCorrection_ghzSite_zero (m : secondBonds (M := M) → Fin b)
+    (n : Fin M) : ghzCorrection m (ghzSite n 0) = -ghzPrefix m n := by
+  simp [ghzCorrection, ghzSite]
 
 omit [NeZero M] in
-private theorem ghzCorrection_site_one (m : secondBonds (M := M) → Fin b)
-    (n : Fin M) : ghzCorrection m (site n 1) = ghzOutcome m n := by
-  simp [ghzCorrection, site]
+private theorem ghzCorrection_ghzSite_one (m : secondBonds (M := M) → Fin b)
+    (n : Fin M) : ghzCorrection m (ghzSite n 1) = ghzOutcome m n := by
+  simp [ghzCorrection, ghzSite]
 
 /-- The correction at the site `j` for the outcome `m`: the shift `|a⟩ ↦ |a - δⱼ⟩` by the
 value `δⱼ` of `ghzCorrection m`, that is `X^{pₙ}` at the system qudit `n` and `X^{-mₙ}` at the
@@ -250,7 +278,7 @@ private noncomputable def correctionUnitary (m : secondBonds (M := M) → Fin b)
 /-- The product state of the protocol: `∑ᵢ αᵢ |i⟩` at the first system qudit, `∑ᵢ |i⟩` at
 the other system qudits, and `|0⟩` at the ancillas. -/
 def ghzInitial (α : Fin b → ℂ) : Fin (M * 2) → Fin b → ℂ := fun j =>
-  if j = site 0 0 then α
+  if j = ghzSite 0 0 then α
   else if (finProdFinEquiv.symm j).2 = 0 then fun _ => 1 else Pi.single 0 1
 
 /-- The measurement-assisted preparation of the GHZ-type state: two layers of controlled
@@ -268,53 +296,53 @@ noncomputable def ghzProtocol (α : Fin b → ℂ) : MeasurementProtocol b (M * 
 /-! ### The action of the protocol -/
 
 omit [NeZero b] [NeZero M] in
-private theorem exists_site (j : Fin (M * 2)) : ∃ n r, site n r = j :=
+private theorem exists_ghzSite (j : Fin (M * 2)) : ∃ n r, ghzSite n r = j :=
   ⟨(finProdFinEquiv.symm j).1, (finProdFinEquiv.symm j).2, finProdFinEquiv.apply_symm_apply j⟩
 
-private theorem exists_firstLayer_op_mulVec : ∃ P : Cfg b (M * 2) → Cfg b (M * 2),
+private theorem exists_firstLayer_op_mulVec : ∃ P : (Fin (M * 2) → Fin b) → (Fin (M * 2) → Fin b),
     (∀ v, (firstLayer (b := b) (M := M)).op *ᵥ v = v ∘ P) ∧
-    (∀ x (n : Fin M), n.val + 1 < M → P x (site n 1) = x (site n 1) - x (site n 0)) ∧
-    (∀ x (n : Fin M), P x (site n 0) = x (site n 0)) ∧
-    ∀ x (n : Fin M), n.val + 1 = M → P x (site n 1) = x (site n 1) := by
+    (∀ x (n : Fin M), n.val + 1 < M → P x (ghzSite n 1) = x (ghzSite n 1) - x (ghzSite n 0)) ∧
+    (∀ x (n : Fin M), P x (ghzSite n 0) = x (ghzSite n 0)) ∧
+    ∀ x (n : Fin M), n.val + 1 = M → P x (ghzSite n 1) = x (ghzSite n 1) := by
   obtain ⟨P, hv, h1, h2⟩ := exists_shiftLayer_op_mulVec (d := b) firstBonds
     firstBonds_pairwiseDisjoint (fun k : Fin (M * 2) => k + 1)
-    (fun (k : Fin (M * 2)) (x : Cfg b (M * 2)) => -x k) firstShift_aux
+    (fun (k : Fin (M * 2)) (x : Fin (M * 2) → Fin b) => -x k) firstShift_aux
     fun k _ => isLocalPerm_firstShift k
   refine ⟨P, hv, fun x n hn => ?_, fun x n => ?_, fun x n hn => ?_⟩
-  · have := h1 x (site n 0) (mem_firstBonds.mpr ⟨n, hn, rfl⟩) (Or.inr rfl)
-    rwa [site_zero_add_one, ← sub_eq_add_neg] at this
+  · have := h1 x (ghzSite n 0) (mem_firstBonds.mpr ⟨n, hn, rfl⟩) (Or.inr rfl)
+    rwa [ghzSite_zero_add_one, ← sub_eq_add_neg] at this
   · refine h2 x _ fun k hk => ?_
     obtain ⟨n', -, rfl⟩ := mem_firstBonds.mp hk
-    rw [site_zero_add_one]
-    exact fun h => absurd (site_injective h).2 (by decide)
+    rw [ghzSite_zero_add_one]
+    exact fun h => absurd (ghzSite_injective h).2 (by decide)
   · refine h2 x _ fun k hk => ?_
     obtain ⟨n', hn', rfl⟩ := mem_firstBonds.mp hk
-    rw [site_zero_add_one]
+    rw [ghzSite_zero_add_one]
     intro h
-    have := (site_injective h).1
+    have := (ghzSite_injective h).1
     subst this
     omega
 
-private theorem exists_secondLayer_op_mulVec : ∃ P : Cfg b (M * 2) → Cfg b (M * 2),
+private theorem exists_secondLayer_op_mulVec : ∃ P : (Fin (M * 2) → Fin b) → (Fin (M * 2) → Fin b),
     (∀ v, (secondLayer (b := b) (M := M)).op *ᵥ v = v ∘ P) ∧
     (∀ x (n : Fin M) (hn : n.val + 1 < M),
-      P x (site n 1) = x (site n 1) + x (site ⟨n.val + 1, hn⟩ 0)) ∧
-    (∀ x (n : Fin M), P x (site n 0) = x (site n 0)) ∧
-    ∀ x (n : Fin M), n.val + 1 = M → P x (site n 1) = x (site n 1) := by
+      P x (ghzSite n 1) = x (ghzSite n 1) + x (ghzSite ⟨n.val + 1, hn⟩ 0)) ∧
+    (∀ x (n : Fin M), P x (ghzSite n 0) = x (ghzSite n 0)) ∧
+    ∀ x (n : Fin M), n.val + 1 = M → P x (ghzSite n 1) = x (ghzSite n 1) := by
   obtain ⟨P, hv, h1, h2⟩ := exists_shiftLayer_op_mulVec (d := b) secondBonds
     secondBonds_pairwiseDisjoint (fun k : Fin (M * 2) => k)
-    (fun (k : Fin (M * 2)) (x : Cfg b (M * 2)) => x (k + 1)) secondShift_aux
+    (fun (k : Fin (M * 2)) (x : Fin (M * 2) → Fin b) => x (k + 1)) secondShift_aux
     fun k _ => isLocalPerm_secondShift k
   refine ⟨P, hv, fun x n hn => ?_, fun x n => ?_, fun x n hn => ?_⟩
-  · have := h1 x (site n 1) (mem_secondBonds.mpr ⟨n, hn, rfl⟩) (Or.inl rfl)
-    rwa [site_one_add_one n hn] at this
+  · have := h1 x (ghzSite n 1) (mem_secondBonds.mpr ⟨n, hn, rfl⟩) (Or.inl rfl)
+    rwa [ghzSite_one_add_one n hn] at this
   · refine h2 x _ fun k hk => ?_
     obtain ⟨n', -, rfl⟩ := mem_secondBonds.mp hk
-    exact fun h => absurd (site_injective h).2 (by decide)
+    exact fun h => absurd (ghzSite_injective h).2 (by decide)
   · refine h2 x _ fun k hk => ?_
     obtain ⟨n', hn', rfl⟩ := mem_secondBonds.mp hk
     intro h
-    have := (site_injective h).1
+    have := (ghzSite_injective h).1
     subst this
     omega
 
@@ -333,37 +361,37 @@ private theorem ghzOutcome_of_not_lt (m : secondBonds (M := M) → Fin b) (n : F
     (hn : ¬n.val + 1 < M) : ghzOutcome m n = 0 := by
   refine dite_eq_right fun h => hn ?_
   obtain ⟨n', hn', h'⟩ := mem_secondBonds.mp h
-  rw [← (site_injective h').1]
+  rw [← (ghzSite_injective h').1]
   exact hn'
 
 omit [NeZero M] in
 /-- The condition of the outcome `m` on the corrected configuration `x + δ` is that every
 measured ancilla of `x` is `0`. -/
 private theorem forall_add_ghzCorrection_eq_iff (m : secondBonds (M := M) → Fin b)
-    (x : Cfg b (M * 2)) :
+    (x : Fin (M * 2) → Fin b) :
     (∀ i : secondBonds (M := M), (x + ghzCorrection m) i = m i) ↔
-      ∀ n : Fin M, n.val + 1 < M → x (site n 1) = 0 := by
+      ∀ n : Fin M, n.val + 1 < M → x (ghzSite n 1) = 0 := by
   constructor
   · intro h n hn
-    have hi : site n 1 ∈ secondBonds := mem_secondBonds.mpr ⟨n, hn, rfl⟩
+    have hi : ghzSite n 1 ∈ secondBonds := mem_secondBonds.mpr ⟨n, hn, rfl⟩
     have := h ⟨_, hi⟩
-    rwa [Pi.add_apply, ghzCorrection_site_one, ghzOutcome, dite_eq_left hi, add_eq_right] at this
+    rwa [Pi.add_apply, ghzCorrection_ghzSite_one, ghzOutcome, dite_eq_left hi, add_eq_right] at this
   · rintro h ⟨i, hi⟩
     obtain ⟨n, hn, rfl⟩ := mem_secondBonds.mp hi
-    rw [Pi.add_apply, ghzCorrection_site_one, ghzOutcome, dite_eq_left hi, h n hn, zero_add]
+    rw [Pi.add_apply, ghzCorrection_ghzSite_one, ghzOutcome, dite_eq_left hi, h n hn, zero_add]
 
-private theorem productVector_ghzInitial (α : Fin b → ℂ) (y : Cfg b (M * 2)) :
+private theorem productVector_ghzInitial (α : Fin b → ℂ) (y : Fin (M * 2) → Fin b) :
     productVector (ghzInitial α) y =
-      α (y (site 0 0)) * ∏ n, if y (site n 1) = 0 then 1 else 0 := by
+      α (y (ghzSite 0 0)) * ∏ n, if y (ghzSite n 1) = 0 then 1 else 0 := by
   classical
-  have h1 : ∀ n : Fin M, ghzInitial α (site n 1) = Pi.single 0 1 := fun n => by
-    rw [ghzInitial, ite_eq_right fun h => absurd (site_injective h).2 (by decide)]
-    simp [site]
-  have h0 : ∀ n : Fin M, n ≠ 0 → ghzInitial α (site n 0) = fun _ => 1 := fun n hn => by
-    rw [ghzInitial, ite_eq_right fun h => hn (site_injective h).1]
-    simp [site]
+  have h1 : ∀ n : Fin M, ghzInitial α (ghzSite n 1) = Pi.single 0 1 := fun n => by
+    rw [ghzInitial, ite_eq_right fun h => absurd (ghzSite_injective h).2 (by decide)]
+    simp [ghzSite]
+  have h0 : ∀ n : Fin M, n ≠ 0 → ghzInitial α (ghzSite n 0) = fun _ => 1 := fun n hn => by
+    rw [ghzInitial, ite_eq_right fun h => hn (ghzSite_injective h).1]
+    simp [ghzSite]
   rw [productVector, ← Fintype.prod_equiv finProdFinEquiv
-    (fun q => ghzInitial α (site q.1 q.2) (y (site q.1 q.2))) _ fun _ => rfl,
+    (fun q => ghzInitial α (ghzSite q.1 q.2) (y (ghzSite q.1 q.2))) _ fun _ => rfl,
     Fintype.prod_prod_type]
   simp only [Fin.prod_univ_two, Finset.prod_mul_distrib, h1, Pi.single_apply]
   congr 1
@@ -402,22 +430,22 @@ private theorem ghzProtocol_output_aux (α : Fin b → ℂ) (m : secondBonds (M 
   dsimp only
   rw [outcomeProj_mulVec_apply]
   simp only [forall_add_ghzCorrection_eq_iff]
-  rw [productVector_ghzInitial, withZeroAncillas, MPSTensor.ghzState_apply]
-  set s : Fin M → Fin b := fun n => x (site n 0) with hs
+  rw [productVector_ghzInitial, withZeroAncillas, QuantumCircuit.ghzState_apply]
+  set s : Fin M → Fin b := fun n => x (ghzSite n 0) with hs
   set z := x + ghzCorrection m
-  have hz0 : ∀ n, z (site n 0) = s n - ghzPrefix m n := fun n => by
-    simp [z, ghzCorrection_site_zero, sub_eq_add_neg, s]
-  have hz1 : ∀ n, z (site n 1) = x (site n 1) + ghzOutcome m n := fun n => by
-    simp [z, ghzCorrection_site_one]
-  have hy0 : PA (PB z) (site 0 0) = s 0 := by
+  have hz0 : ∀ n, z (ghzSite n 0) = s n - ghzPrefix m n := fun n => by
+    simp [z, ghzCorrection_ghzSite_zero, sub_eq_add_neg, s]
+  have hz1 : ∀ n, z (ghzSite n 1) = x (ghzSite n 1) + ghzOutcome m n := fun n => by
+    simp [z, ghzCorrection_ghzSite_one]
+  have hy0 : PA (PB z) (ghzSite 0 0) = s 0 := by
     rw [hA0, hB0, hz0, ghzPrefix_zero, sub_zero]
   rw [hy0]
-  by_cases hmeas : ∀ n : Fin M, n.val + 1 < M → x (site n 1) = 0
+  by_cases hmeas : ∀ n : Fin M, n.val + 1 < M → x (ghzSite n 1) = 0
   · rw [ite_eq_left hmeas]
-    have hy : ∀ n, PA (PB z) (site n 1) = 0 ↔
-        (∀ hn : n.val + 1 < M, s ⟨n.val + 1, hn⟩ = s n) ∧ x (site n 1) = 0 := fun n => by
+    have hy : ∀ n, PA (PB z) (ghzSite n 1) = 0 ↔
+        (∀ hn : n.val + 1 < M, s ⟨n.val + 1, hn⟩ = s n) ∧ x (ghzSite n 1) = 0 := fun n => by
       by_cases hn : n.val + 1 < M
-      · have hval : PA (PB z) (site n 1) = s ⟨n.val + 1, hn⟩ - s n := by
+      · have hval : PA (PB z) (ghzSite n 1) = s ⟨n.val + 1, hn⟩ - s n := by
           rw [hA1 _ n hn, hB1 _ n hn, hB0, hz1, hz0, hz0, ghzPrefix_succ m n hn, hmeas n hn]
           abel
         rw [hval, sub_eq_zero]
@@ -426,12 +454,12 @@ private theorem ghzProtocol_output_aux (α : Fin b → ℂ) (m : secondBonds (M 
         simp [hn]
     simp only [Finset.prod_boole, Finset.mem_univ, true_implies, hy]
     have hiff : (∀ n : Fin M, (∀ hn : n.val + 1 < M, s ⟨n.val + 1, hn⟩ = s n) ∧
-        x (site n 1) = 0) ↔
-        (∀ n : Fin M, x (site n 0) = x (site 0 0)) ∧ ∀ n : Fin M, x (site n 1) = 0 := by
+        x (ghzSite n 1) = 0) ↔
+        (∀ n : Fin M, x (ghzSite n 0) = x (ghzSite 0 0)) ∧ ∀ n : Fin M, x (ghzSite n 1) = 0 := by
       rw [forall_and, forall_succ_eq_iff]
     simp only [hiff]
-    by_cases hc1 : ∀ n : Fin M, x (site n 0) = x (site 0 0) <;>
-      by_cases hc2 : ∀ n : Fin M, x (site n 1) = 0 <;> simp [hc1, hc2, s]
+    by_cases hc1 : ∀ n : Fin M, x (ghzSite n 0) = x (ghzSite 0 0) <;>
+      by_cases hc2 : ∀ n : Fin M, x (ghzSite n 1) = 0 <;> simp [hc1, hc2, s]
   · rw [ite_eq_right hmeas]
     push Not at hmeas
     obtain ⟨n, -, hn⟩ := hmeas
@@ -466,12 +494,12 @@ theorem isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState (α : Fin b 
   obtain ⟨i, hi⟩ := Function.ne_iff.mp hα
   intro h0
   change productVector (ghzInitial α) = 0 at h0
-  have := congrFun h0 (fun j => if j = site 0 0 then i else 0)
+  have := congrFun h0 (fun j => if j = ghzSite 0 0 then i else 0)
   rw [productVector_ghzInitial] at this
-  have hne : ∀ n : Fin M, site n 1 ≠ site 0 0 := fun n h =>
-    absurd (site_injective h).2 (by decide)
+  have hne : ∀ n : Fin M, ghzSite n 1 ≠ ghzSite 0 0 := fun n h =>
+    absurd (ghzSite_injective h).2 (by decide)
   exact hi (by simpa [hne] using this)
 
 end Ring
 
-end MPSPreparation
+end QuantumCircuit
