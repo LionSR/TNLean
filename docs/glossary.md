@@ -1057,12 +1057,18 @@ The following notions use different transfer objects and are not interchangeable
   scheme 1 of section "Generation of MPS" and eq. `OBCMPSgen`,
   `Papers/quant-ph_0608197/MPSarchive.tex:1527-1552`.
 - **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`
-  (for `ψ ≠ 0`, equivalent to `∃ c ≠ 0, HasOBCRep D (c • ψ)`), and
+  (for `0 < N` and `0 < D`, equivalent to `HasOBCRep D ψ`),
+  `MPSPreparation.isProbabilisticallyGenerated_iff_cutRank_le` (for `0 < N`,
+  equivalent to all cut ranks being at most `D`),
+  `MPSPreparation.isLeast_isProbabilisticallyGenerated` (the least `D` is the
+  largest cut rank), and
   `MPSPreparation.isDeterministicallyGenerated_iff_isProbabilisticallyGenerated`
   on normalized vectors.
-- **Caveat:** the characterization compares rays: it needs `ψ ≠ 0`, and the
-  scalar `c` matters only at `N = 0`, where every open-boundary coefficient is
-  the empty product `1`. Scheme 3 of Theorem `Thm:seqwith` is
+- **Caveat:** the set equalities are for chains of positive length. At `N = 0`
+  every open-boundary coefficient is the empty product `1`, and only the
+  component theorems `exists_hasOBCRep_of_isProbabilisticallyGenerated` and
+  `isProbabilisticallyGenerated_of_hasOBCRep`, stated up to a nonzero scalar,
+  apply. Scheme 3 of Theorem `Thm:seqwith` is
   `MPSPreparation.IsTransitionGenerated`, and the schemes without an ancilla are
   `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and
   `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`.
@@ -1083,27 +1089,33 @@ The following notions use different transfer objects and are not interchangeable
 - **Source:** arXiv:quant-ph/0608197, scheme 2 of section "Generation of MPS",
   `Papers/quant-ph_0608197/MPSarchive.tex:1527-1554`.
 - **Sanctioned bridges:** `MPSPreparation.isDeterministicallyGenerated_iff`
-  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
+  (for `0 < N`, equivalent to normalization together with `HasOBCRep D ψ`),
+  `MPSPreparation.isDeterministicallyGenerated_iff_cutRank_le` and
+  `MPSPreparation.isLeast_isDeterministicallyGenerated` (the least ancilla
+  dimension is the largest cut rank),
+  `MPSPreparation.isDeterministicallyGenerated_pow_half` (every normalized state
+  of `N ≥ 1` sites, with `D = d^{⌊N/2⌋}`),
   `MPSPreparation.isProbabilisticallyGenerated_of_isDeterministicallyGenerated`,
   and `MPSPreparation.star_dotProduct_self_of_isDeterministicallyGenerated`.
 - **Caveat:** `NeZero d` is part of the definition, because each site starts in
-  $\ket{0}$. Only the two directions of Theorem `Thm:seqwith` for schemes 1 and 2
-  are formalized; minimality of the resources in the successive-decomposition
-  recipe is not.
+  $\ket{0}$.
 
 ### `MPSPreparation.IsTransitionInteraction` and `MPSPreparation.IsTransitionGenerated`
 
 - **Declarations:**
-  `MPSPreparation.IsTransitionInteraction (T : Matrix ((Fin D × Fin 2) × Fin 2) ((Fin D × Fin 2) × Fin 2) ℂ) : Prop`
+  `MPSPreparation.IsTransitionInteraction [NeZero d] (T : Matrix ((Fin D × Fin d) × Fin d) ((Fin D × Fin d) × Fin d) ℂ) : Prop`
   and
-  `MPSPreparation.IsTransitionGenerated (D : ℕ) (ψ : (Fin N → Fin 2) → ℂ) : Prop`.
+  `MPSPreparation.IsTransitionGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
 - **Defined in:** `TNLean/MPS/Preparation/SequentialTransition.lean`.
 - **Meaning:** `IsTransitionInteraction T` says that `T` acts on ancilla
-  `ℂ^D`, tag qubit, and site qubit by
+  `ℂ^D`, tag qudit, and site qudit by
+  $\ket{\varphi}\ket{t}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{t}$ for every
+  tag `t`; for `d = 2` these are the two printed relations
   $\ket{\varphi}\ket{1}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{1}$ and
-  $\ket{\varphi}\ket{0}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{0}$.
+  $\ket{\varphi}\ket{0}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{0}$
+  (`MPSPreparation.isTransitionInteraction_two_iff`).
   `IsTransitionGenerated D ψ` says that there are unitaries `W k` on
-  $\mathbb C^D\otimes\mathbb C^2$ and unit vectors $\varphi_I,\varphi_F$ such
+  $\mathbb C^D\otimes\mathbb C^d$ and unit vectors $\varphi_I,\varphi_F$ such
   that the steps "ancilla unitary, then the fixed interaction", applied to
   $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$, leave the joint state
   $\ket{\varphi_F}\otimes\ket{\psi}$ (`MPSPreparation.transitionJointState`).
@@ -1111,17 +1123,20 @@ The following notions use different transfer objects and are not interchangeable
 - **Source:** arXiv:quant-ph/0608197, scheme 3 (deterministic transition
   schemes) of section "Generation of MPS",
   `Papers/quant-ph_0608197/MPSarchive.tex:1555-1567`; the interaction is the
-  `D`-standard map `T` of arXiv:quant-ph/0501096, eq. `IsofromT`.
+  `D`-standard map `T` of arXiv:quant-ph/0501096, eq. `IsofromT`, extended to
+  qudits as in arXiv:quant-ph/0501096, lines 412--415 of
+  `References/quant-ph_0501096/PhotoMPS.tex`.
 - **Sanctioned bridges:**
   `MPSPreparation.transitionStep_eq_of_isTransitionInteraction` (a step equals
   the fixed interaction after the ancilla unitary, for any `T` satisfying
   `IsTransitionInteraction`), `MPSPreparation.isTransitionGenerated_iff`
-  (equivalent to normalization together with `∃ c ≠ 0, HasOBCRep D (c • ψ)`),
-  `MPSPreparation.isDeterministicallyGenerated_of_isTransitionGenerated`, and
-  `MPSPreparation.isTransitionGenerated_of_isDeterministicallyGenerated`.
-- **Caveat:** the scheme is for qubit chains, `d = 2`. The source does not
-  specify the interaction on site inputs $\ket{1}$, so `IsTransitionInteraction`
-  constrains only site inputs $\ket{0}$, which are the only ones that occur.
+  (for `0 < N`, equivalent to normalization together with `HasOBCRep D ψ`), and
+  `MPSPreparation.isTransitionGenerated_iff_isDeterministicallyGenerated`.
+- **Caveat:** arXiv:quant-ph/0608197 states the scheme for qubit chains,
+  `d = 2`; the predicates are stated for every `d`, as arXiv:quant-ph/0501096
+  allows. The sources do not specify the interaction on site inputs other than
+  $\ket{0}$, so `IsTransitionInteraction` constrains only site inputs
+  $\ket{0}$, which are the only ones that occur.
 
 ### `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla` and `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla`
 
@@ -1143,8 +1158,10 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.isProbabilisticallyGeneratedWithoutAncilla_iff` (equivalent to
   `HasOBCRep d ψ`), `MPSPreparation.isDeterministicallyGeneratedWithoutAncilla_iff`
   (equivalent to normalization together with `HasOBCRep d ψ`), and
-  `MPSPreparation.noAncillaState_eq_eval` (the site matrices
-  $A_{i,\beta\alpha}=\bra{i,\beta}U\ket{\alpha,0}$, `MPSPreparation.pairStep`).
+  `MPSPreparation.noAncillaState_eq_jointState` (the scheme with a
+  `d`-dimensional ancilla for the operations with swapped outputs, read out as
+  the site at position `0`; the induced matrices are
+  $A_{i,\beta\alpha}=\bra{i,\beta}U\ket{\alpha,0}$).
 - **Caveat:** the chain has at least two sites, since the first operation acts
   on sites `1` and `2`; this is a **Local fix** recorded in
   `docs/paper-gaps/pgvwc07_sequential_no_ancilla_two_sites.tex`. The
@@ -1165,13 +1182,22 @@ The following notions use different transfer objects and are not interchangeable
   `Papers/quant-ph_0608197/MPSarchive.tex:419-429`, as used in Theorem
   `Thm:seqwith`, lines 1569--1573.
 - **Sanctioned bridges:** `MPSPreparation.isProbabilisticallyGenerated_iff`,
-  `MPSPreparation.isDeterministicallyGenerated_iff`, and the left-canonical
-  representations `OBCChainTensor.exists_isometric_coeff_eq` and
-  `OBCChainTensor.exists_isometric_coeff_eq_of_norm` in
-  `TNLean/MPS/Preparation/IsometricChain.lean`.
-- **Caveat:** `D` is a common upper bound, not the least bond dimension. The
-  predicate has no scalar freedom; the sequential-generation theorems apply it
-  to `c • ψ` with `c ≠ 0`.
+  `MPSPreparation.isDeterministicallyGenerated_iff`,
+  `MPSPreparation.hasOBCRep_iff_cutRank_le` (for `0 < N` and `0 < D`, equivalent
+  to all cut ranks `MPSPreparation.cutRank ψ k` being at most `D`),
+  `MPSPreparation.hasOBCRep_pow_half` (every vector on `N ≥ 1` sites, with
+  `D = d^{⌊N/2⌋}`), `MPSPreparation.HasOBCRep.smul` and
+  `MPSPreparation.hasOBCRep_zero` (on chains of positive length the predicate
+  defines a cone), and the left-canonical representations
+  `OBCChainTensor.exists_isometric_coeff_eq`,
+  `OBCChainTensor.exists_isometric_coeff_eq_of_norm`, and
+  `OBCChainTensor.exists_coeff_eq_of_cutRank_le` (bond `k` equal to the cut rank
+  at `k`).
+- **Caveat:** `D` is a common upper bound, not the least bond dimension; the
+  least bond dimension at the cut `k` is `MPSPreparation.cutRank ψ k`
+  (`OBCChainTensor.cutRank_coeff_le`). At `N = 0` the predicate holds only for
+  the vector `1`, so the sequential-generation component theorems apply it to
+  `c • ψ` with `c ≠ 0` to cover that length.
 
 ### `MPSPreparation.IsIsometryOn`, `MPSPreparation.IsSupportedBelow`, and `MPSPreparation.IsRowSupportedBelow`
 
