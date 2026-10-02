@@ -21,6 +21,7 @@ allows different row and column index types, as needed for the isometry
 
 * `Matrix.tensorPower` — the matrix `W^{⊗M}` with entries `∏ₖ W (p k) (s k)`.
 * `Matrix.tensorPower_mul` — the tensor power is multiplicative.
+* `Matrix.tensorPower_smul` — `(c W)^{⊗M} = c^M W^{⊗M}`.
 * `Matrix.IsIsometry.tensorPower` — the tensor power of an isometry is an isometry.
 * `Matrix.tensorPower_one`, `Matrix.tensorPower_zero` — tensor powers of `1` and `0`.
 * `Matrix.conjTranspose_tensorPower` — `(W^{⊗M})ᴴ = (Wᴴ)^{⊗M}`.
@@ -54,6 +55,12 @@ theorem tensorPower_mul {ι₁ ι₂ ι₃ : Type*} [Fintype ι₂] (M : ℕ) (X
   simp only [mul_apply, tensorPower, of_apply]
   rw [Fintype.prod_sum]
   exact Finset.sum_congr rfl fun τ _ => (Finset.prod_mul_distrib).symm
+
+/-- The tensor power of a multiple of a matrix: `(c W)^{⊗M} = c^M W^{⊗M}`. -/
+theorem tensorPower_smul {ι κ : Type*} (M : ℕ) (c : ℂ) (W : Matrix ι κ ℂ) :
+    tensorPower M (c • W) = c ^ M • tensorPower M W := by
+  ext s t
+  simp [tensorPower, Finset.prod_mul_distrib, Finset.prod_const]
 
 /-- The tensor power of an isometry is an isometry, so `W^{⊗M}` in arXiv:2307.01696,
 the paragraph after eq. (19), is an isometry from `(ℂ^b)^{⊗M}` to the bonds. -/

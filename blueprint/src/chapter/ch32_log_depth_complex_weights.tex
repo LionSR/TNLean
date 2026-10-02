@@ -179,3 +179,169 @@ Theorem~\ref{thm:ldp_approximation_error_overlapping_weights}
     $u_jA_j$ with the real weights $w_j=\lvert\mu_j\rvert$, gives the bounds with
     $\beta_j=w_j^N=\lvert\mu_j\rvert^N$.
 \end{proof}
+
+%% ==================================================
+%% Copies with weights of different phases.
+%% False source (eq. (S7), coefficients): with the pairs of each block on one
+%% of its copies, the coefficients beta_j of eq. (S4) are replaced by
+%% beta_j (c_j / mu_{j,k_j}^q)^M;
+%% docs/paper-gaps/mswc24_repeated_block_corrected_state.tex.
+%% Scope restriction (orthogonal blocks) and Local fix (rate of the overlapping
+%% blocks), as for thm:ldp_approximation_error_repeated_orthogonal_blocks and
+%% thm:ldp_approximation_error_repeated_overlapping;
+%% docs/paper-gaps/mswc24_block_form_mixed_overlap.tex and
+%% docs/paper-gaps/mswc24_repeated_overlap_small_weight_sum.tex.
+%% ==================================================
+
+\subsubsection{Copies with weights of different phases}
+\label{sec:ldp_copy_phases}
+
+When a block has several copies whose weights have different phases, the phases
+cannot be moved into the block. For the corrected state of
+Definition~\ref{def:ldp_repeated_block_state} the coefficients are those of
+\cite[eq.~(S4)]{Malz2024Preparation}, $\beta_j=\sum_k\mu_{j,k}^N$, because the
+isometry $L_j$ of Definition~\ref{def:ldp_repeated_block_sum} carries the phases
+$\overline{\mu_{j,k}^q}/c_j$ of the copies:
+Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+and~\ref{thm:ldp_approximation_error_repeated_overlapping} hold for complex weights.
+Neither $\sum_k\lvert\mu_{j,k}\rvert^N$, the coefficient of
+Theorem~\ref{thm:ldp_approximation_error_complex_weights} for one copy, nor $c_j^M$
+works in their place \cite{gap:mswc24_repeated_block_corrected_state}. The
+source's construction itself, with the pairs of each block on one of its copies,
+converges once its coefficients are changed: the partial isometry $V$ sends the
+pairs placed on one copy to a multiple of the pairs placed by $L_j$.
+
+\begin{definition}[Coefficients for the pairs on one copy]
+    \label{def:ldp_one_copy_weight}
+    \lean{MPSTensor.oneCopyWeight, MPSTensor.oneCopyWeight_of_subsingleton,
+        MPSTensor.oneCopyWeight_ne_zero}
+    \leanok
+    \uses{def:ldp_repeated_block_sum, thm:ldp_repeated_block_polar}
+    With the notation of Definition~\ref{def:ldp_repeated_block_sum}, choose a copy
+    $k_j$ of every block $j$, and let $N=qM$. The coefficient of block $j$ is
+    \begin{align*}
+        \beta'_j=\beta_j\Bigl(\frac{c_j}{\mu_{j,k_j}^q}\Bigr)^M,\qquad
+        \beta_j=\sum_k\mu_{j,k}^N.
+    \end{align*}
+    If block $j$ has the single copy $k_j$, then
+    $\beta'_j=\lvert\mu_{j,k_j}\rvert^N$, the coefficient of
+    Theorem~\ref{thm:ldp_approximation_error_complex_weights}. Since the weights are
+    nonzero, $\beta'\neq0$ whenever $\beta\neq0$.
+\end{definition}
+
+\begin{lemma}[The pairs on one copy]
+    \label{lem:ldp_one_copy_state}
+    \lean{Matrix.polarIso_mul_eq_zero, Matrix.tensorPower_smul,
+        MPSTensor.conjTranspose_copyIsometry_mul_pairEmbedding,
+        MPSTensor.conjTranspose_copyIsometry_mul_pairEmbedding_eq_zero,
+        MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding,
+        MPSTensor.nonNormalApproxVector_repeatedBlockSum_oneCopy,
+        MPSTensor.copyApproxOverlap_ofReal_mul,
+        MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy}
+    \leanok
+    \uses{def:ldp_one_copy_weight, def:ldp_repeated_block_state,
+        def:ldp_pair_family_fixed_point, thm:ldpolar_decomposition}
+    Let $A$ be the direct sum with multiplicities of
+    Definition~\ref{def:ldp_repeated_block_sum}, let $q\geq1$, and let $B=VP$ be the
+    polar decomposition of its blocked map. The states of distinct blocks need not be
+    orthogonal.
+    \begin{enumerate}
+        \item If $MY=0$ for a matrix $M$ with $M=WQ$ the polar decomposition of
+              Theorem~\ref{thm:ldpolar_decomposition}, so that $W^\dagger W$ is the support
+              projector of $Q$, then $WY=0$.
+        \item $L_j^\dagger K_{j,k}=(\mu_{j,k}^q/c_j)\mathbf 1$, and
+              $L_{j'}^\dagger K_{j,k}=0$ for $j'\neq j$.
+        \item $VK_{j,k}=(\mu_{j,k}^q/c_j)\,VL_j$.
+        \item For any matrices $\sigma_j$ and coefficients $\alpha_j$, with
+              $\ket{\Omega_j}$ the product of the pairs of $\sigma_j$ over $M$ sites,
+              \begin{align*}
+                  V^{\otimes M}\sum_j\alpha_jK_{j,k_j}^{\otimes M}\ket{\Omega_j}
+                  =V^{\otimes M}\sum_j\alpha_j\Bigl(\frac{\mu_{j,k_j}^q}{c_j}\Bigr)^M
+                  L_j^{\otimes M}\ket{\Omega_j}.
+              \end{align*}
+        \item Multiplying all coefficients of the corrected state by one $t>0$ does not
+              change its overlap with $\ket{\phi_N}$.
+        \item The approximating state of Definition~\ref{def:ldp_non_normal_fixed_point}
+              with the pairs of $\sigma_j$ on the copies $k_j$ and the coefficients
+              $\beta'_j$ in place of $\beta_j$ has the same overlap with
+              $\ket{\phi_N}$ as the corrected state of
+              Definition~\ref{def:ldp_repeated_block_state} with the coefficients
+              $\beta_j$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    (1) From $MY=0$, $(QY)^\dagger QY=Y^\dagger M^\dagger MY=0$, so $QY=0$. The support
+    projector of $Q$ is $\Pi=QR=R^\dagger Q$ for some $R$, so $\Pi Y=0$, and
+    $(WY)^\dagger WY=Y^\dagger\Pi Y=0$.
+    (2) $L_{j'}^\dagger K_{j,k}=\sum_{k'}(\mu_{j',k'}^q/c_{j'})K_{j',k'}^\dagger K_{j,k}$,
+    and $K_{j',k'}^\dagger K_{j,k}$ is the identity for the same copy and zero otherwise.
+    (3) By Theorem~\ref{thm:ldp_repeated_block_polar} and~(2),
+    $BK_{j,k}=\sum_{j'}c_{j'}B_{j'}L_{j'}^\dagger K_{j,k}=\mu_{j,k}^qB_j$ and
+    $BL_j=c_jB_j$, so $B(K_{j,k}-(\mu_{j,k}^q/c_j)L_j)=0$, and~(1) applies.
+    (4) By~(3),
+    $V^{\otimes M}K_{j,k_j}^{\otimes M}=(VK_{j,k_j})^{\otimes M}
+        =(\mu_{j,k_j}^q/c_j)^M(VL_j)^{\otimes M}$.
+    (5) The vector after $V^{\otimes M}$ is multiplied by $t$, and the overlap is
+    normalized.
+    (6) With $\alpha'_j=\beta'_j/(\sum_l\lvert\beta'_l\rvert^2)^{1/2}$, part~(4) turns the
+    state into the corrected state with the coefficients
+    $\alpha'_j(\mu_{j,k_j}^q/c_j)^M=\beta_j/(\sum_l\lvert\beta'_l\rvert^2)^{1/2}$, a positive
+    multiple of $\beta_j$, and~(5) applies; if $\beta=0$ both states vanish.
+\end{proof}
+
+% **False source (eq. (S7), coefficients):** beta'_j in place of beta_j;
+% Scope restriction (orthogonal blocks) for the first two declarations; Local fix
+% of the rate and Scope restriction (small weight sums) for the last two;
+% docs/paper-gaps/mswc24_repeated_block_corrected_state.tex.
+\begin{theorem}[Approximation error with the pairs on one copy]
+    \label{thm:ldp_approximation_error_one_copy}
+    \lean{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy,
+        MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy,
+        MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy,
+        MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonneg}
+    \leanok
+    \uses{lem:ldp_one_copy_state, def:ldp_one_copy_weight,
+        thm:ldp_approximation_error_repeated_orthogonal_blocks,
+        thm:ldp_approximation_error_repeated_overlapping, def:correlation_length}
+    Let $A$ be the direct sum with multiplicities of
+    Definition~\ref{def:ldp_repeated_block_sum}, with normal blocks $A_j$ in the gauge
+    (\ref{eq:ldp_normal_gauge}) and positive definite fixed points $\rho_j$ of trace one,
+    let $0<\gamma<1/2$, and let $\widetilde\phi_N$ be the approximating state of
+    Definition~\ref{def:ldp_non_normal_fixed_point} with the pairs of $\rho_j$ on the
+    copies $k_j$ and the coefficients $\beta'_j$ of
+    Definition~\ref{def:ldp_one_copy_weight} in place of $\beta_j$. Put
+    $y=Me^{-\gamma q/\xi}$ and $b=\sum_j\lvert\beta_j\rvert^2$.
+    \begin{enumerate}
+        \item Let $\lambda_2$ bound the moduli of the eigenvalues other than one of every
+              transfer map $\E_{A_j}$, with correlation length $\xi$. There are
+              $C,C'>0$ such that for every block length $q\geq1$ at which the $q$-site
+              states of distinct blocks are orthogonal and every $M\geq1$ with
+              $\beta\neq0$, $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$ and
+              $\varepsilon(\widetilde\phi_N,\phi_N)\leq C'y$.
+        \item Let $\lambda_2$ moreover bound the moduli of all eigenvalues of the mixed
+              transfer maps $\E_{jj'}$, $j\neq j'$. There is $C>0$ such that for all
+              weights with $\lvert\mu_{j,k}\rvert\leq1$, every choice of the copies
+              $k_j$, every $q\geq1$ and every $M\geq1$ with $\beta\neq0$,
+              $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}/\min(1,b)^{1/2}$; for
+              real weights $0\leq\mu_{j,k}\leq1$, one of which is one,
+              $\varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}$.
+    \end{enumerate}
+    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for the source's construction
+    with the coefficients $\beta'_j$ in place of the coefficients $\beta_j$ that
+    \cite[eq.~(S7)]{Malz2024Preparation} takes from
+    \cite[eq.~(S4)]{Malz2024Preparation}, for weights of any phase, in the scopes of
+    Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+    and~\ref{thm:ldp_approximation_error_repeated_overlapping}. With the coefficients
+    $\beta_j$ the bound is false
+    (Theorems~\ref{thm:ldp_approximation_error_repeated_block}
+    and~\ref{thm:ldp_approximation_error_phase_weights})
+    \cite{gap:mswc24_repeated_block_corrected_state}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:ldp_one_copy_state}(6) the overlap is that of the corrected state
+    with the coefficients $\beta_j$, which
+    Theorems~\ref{thm:ldp_approximation_error_repeated_orthogonal_blocks}
+    and~\ref{thm:ldp_approximation_error_repeated_overlapping} bound.
+\end{proof}

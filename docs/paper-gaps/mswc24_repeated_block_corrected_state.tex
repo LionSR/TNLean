@@ -284,6 +284,91 @@ ingredients above.\footnote{Formal declarations:
 The bound without the factor $\min(1,b)^{-1/2}$ when $b<1$ is not formalized
 \cite{gap:mswc24_repeated_overlap_small_weight_sum}.
 
+\section{Copies with weights of different phases}\label{sec:mswc24_rc_phases}
+When a block has several copies whose weights have different phases, the phases cannot be
+moved into the block as for multiplicity one \cite{gap:mswc24_block_form_mixed_overlap}, and
+the question is which coefficients the approximating state needs. For the corrected state
+(\ref{eq:mswc24_rc_state}) they are the coefficients $\beta_j=\sum_k\mu_{j,k}^N$ of the
+source: the isometry $L_j$ carries the phases $\overline{\mu_{j,k}^q}/c_j$ of the copies, and
+the bounds of the previous sections hold for complex weights. The sums
+$\sum_k\lvert\mu_{j,k}\rvert^N$, which give the coefficient $\lvert\mu_j\rvert^N$ of
+multiplicity one, and the copy norms $c_j^M$ do not work in their place. Take $d=2$, the
+block $A_1=(1,0)$ with copy weights $(1,-1)$ and the block $A_2=(0,1)$ with weight one. For
+odd $N$, $\beta=(0,1)$ and $\ket{\phi_N}\propto\ket{1\cdots1}$, and the corrected state with
+the coefficients $(2,1)$ is proportional to $2\ket{0\cdots0}+\ket{1\cdots1}$, so
+$\varepsilon=1-1/\sqrt5$ for every odd $q$ and $M$.
+
+The source's construction, with the pairs of block $j$ on one copy $k_j$, also converges once
+its coefficients are changed. For $q\geq1$ the blocked map is $B=\sum_jc_jB_jL_j^\dagger$
+by (\ref{eq:mswc24_rc_blocked}), and $L_{j'}^\dagger K_{j,k}=\delta_{jj'}(\mu_{j,k}^q/c_j)$,
+so $BK_{j,k}=\mu_{j,k}^qB_j=(\mu_{j,k}^q/c_j)BL_j$. The partial isometry $V$ vanishes on the
+kernel of $B$: if $BY=0$ then $PY=0$, hence $\Pi Y=0$ for the support projector $\Pi$ of
+$P$, and $VY=V\Pi Y=0$. Therefore
+\begin{align}
+    VK_{j,k}=\frac{\mu_{j,k}^q}{c_j}\,VL_j,
+    \label{eq:mswc24_rc_one_copy}
+\end{align}
+for blocks whose $q$-site states overlap as well, and
+$V^{\otimes M}K_{j,k_j}^{\otimes M}\ket{\Omega_j}=(\mu_{j,k_j}^q/c_j)^MV^{\otimes M}
+    L_j^{\otimes M}\ket{\Omega_j}$. The source's state (\ref{eq:mswc24_rc_source_state}) with
+the pairs on the copies $k_j$ and the coefficients
+\begin{align}
+    \beta'_j=\beta_j\Bigl(\frac{c_j}{\mu_{j,k_j}^q}\Bigr)^M
+    \label{eq:mswc24_rc_one_copy_weight}
+\end{align}
+is the corrected state (\ref{eq:mswc24_rc_state}). For $m_j=1$, $c_j=\lvert\mu_j\rvert^q$ and
+$\beta'_j=\lvert\mu_j\rvert^N$, the coefficient that repairs (S7) for multiplicity one
+\cite{gap:mswc24_block_form_mixed_overlap}; for the tensor $A^0=\operatorname{diag}(1,1,0)$,
+$A^1=\operatorname{diag}(0,0,1)$ of \cite{gap:mswc24_multiplicity_fixed_point},
+$\beta'=(2\cdot2^{M/2},1)$, and the state is exact. The coefficients $\beta'_j$ depend on $q$
+and $M$ separately, not only on $N$. With the printed coefficients $\beta_j$ the state
+(\ref{eq:mswc24_rc_source_state}) fails, for $m_j\geq2$ already with positive weights
+\cite{gap:mswc24_multiplicity_fixed_point}, and for $m_j=1$ already for two blocks with the
+weights $1$ and $\mu\neq1$, $\lvert\mu\rvert=1$ \cite{gap:mswc24_block_form_mixed_overlap}.
+
+\section{Numerical check with phases}
+The script of the previous numerical checks evaluates both constructions for the two random
+blocks used there, with copy weights $(1,e^{i})$ on the first block and $1$ on the second, at
+$M=5$ and $q=3,5,7,9,11,13$.
+\begin{itemize}
+    \item The corrected state with $\beta_j=\sum_k\mu_{j,k}^N$ gives $0.477$, $9.75\cdot10^{-2}$,
+          $9.74\cdot10^{-2}$, $1.67\cdot10^{-2}$, $9.35\cdot10^{-3}$, $6.94\cdot10^{-3}$.
+    \item The corrected state with $\sum_k\lvert\mu_{j,k}\rvert^N$ gives $0.538$,
+          $9.77\cdot10^{-2}$, $0.440$, $3.83\cdot10^{-2}$, $7.30\cdot10^{-2}$, $0.187$, and with
+          $c_j^M$ it gives $0.549$, $0.114$, $0.558$, $7.73\cdot10^{-2}$, $0.122$, $0.261$.
+    \item The source's state with the pairs on the first copy gives, with
+          $\beta_j=\sum_k\mu_{j,k}^N$, $0.614$, $0.403$, $0.159$, $0.295$, $0.258$, $0.177$,
+          and with $\sum_k\lvert\mu_{j,k}\rvert^N$, $0.609$, $0.403$, $0.195$, $0.291$,
+          $0.254$, $0.188$.
+    \item With the coefficients (\ref{eq:mswc24_rc_one_copy_weight}) the source's state gives
+          the errors of the corrected state. Over three sets of weights, $q\in\{1,2,3,5\}$,
+          $M\in\{1,3,4\}$ and every choice of the copies $k_j$, the two errors agree to
+          $6\cdot10^{-8}$, except for the copy of weight $i/2$ in the set
+          $((1,-1,i/2),(0.6))$, where the factor $(c_j/\mu_{j,k_j}^q)^M$ reaches $10^5$ and
+          they agree to $6\cdot10^{-6}$; (\ref{eq:mswc24_rc_one_copy}) holds to $10^{-14}$.
+\end{itemize}
+
+\section{What is formalized with phases}
+The identity (\ref{eq:mswc24_rc_one_copy}), the equality of the overlaps of the source's state
+with the coefficients (\ref{eq:mswc24_rc_one_copy_weight}) and of the corrected state, the value
+$\beta'_j=\lvert\mu_j\rvert^N$ for a block with one copy, and the error bounds for the source's
+state with these coefficients are formalized, for complex weights of any phase: for blocks
+whose $q$-site states are orthogonal, $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsilon\leq C'y$
+at every $q\geq1$ and $M\geq1$ with $\beta\neq0$, and for overlapping blocks the bound
+(\ref{eq:mswc24_rc_overlap_bound}) at every $q\geq1$, with its form for real weights in
+$[0,1]$ one of which is one.\footnote{Formal declarations:
+    \leanid{Matrix.polarIso_mul_eq_zero} in \doclink{TNLean/MPS/Preparation/PolarUniqueness};
+    \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding},
+    \leanid{MPSTensor.oneCopyWeight},
+    \leanid{MPSTensor.oneCopyWeight_of_subsingleton},
+    \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy},
+    \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy},
+    \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy},
+    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy} and
+    \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy_of_nonneg}
+    in \doclink{TNLean/MPS/Preparation/OneCopyPairState}.} The failure of the coefficients
+$\sum_k\lvert\mu_{j,k}\rvert^N$ and $c_j^M$ is checked numerically and not formalized.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}
