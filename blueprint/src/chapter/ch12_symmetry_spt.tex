@@ -409,10 +409,10 @@ and the regrouping of physical registers into bonds.
         \item $\|h_\gamma\|_{\mathrm{op}}\le1$;
         \item $\gamma\mapsto h_\gamma$ is continuous;
         \item for every periodic chain of length $N\ge2$, the Hamiltonian
-            $H_N(\gamma)=\sum_i h_\gamma(i,i+1)$ commutes with $U_g^{\otimes N}$;
+              $H_N(\gamma)=\sum_i h_\gamma(i,i+1)$ commutes with $U_g^{\otimes N}$;
         \item there is a $\delta>0$, independent of $N$ and $\gamma$, such
-            that every spectral value of $H_N(\gamma)$ above its least spectral
-            value $E_N(\gamma)$ is at least $E_N(\gamma)+\delta$.
+              that every spectral value of $H_N(\gamma)$ above its least spectral
+              value $E_N(\gamma)$ is at least $E_N(\gamma)+\delta$.
     \end{enumerate}
     Ground-state degeneracy is allowed.  This is the common-space path
     condition of~\cite[Sections~II.C.1--2, lines~407--453]{Schuch2011Phases};
@@ -526,9 +526,9 @@ and the regrouping of physical registers into bonds.
     dimensions.  Write $W(\gamma)$ for the coefficient matrix of
     \begin{align}
         |\omega(\gamma)\rangle
-          &=(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle
-            +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
-            \notag
+         & =(1-\gamma)\sum_{i=1}^{D_0}|i,i\rangle
+        +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
+        \notag
     \end{align}
     For every real $\gamma$ this matrix is nonzero, and it depends
     continuously on $\gamma$.  Dividing by
@@ -560,8 +560,8 @@ and the regrouping of physical registers into bonds.
     matrices $W(\gamma)$ and $\widehat W(\gamma)$ of
     Theorem~\ref{thm:spt_normalized_bond_interpolation},
     \begin{align}
-        V_gW(\gamma)V_g^* &= W(\gamma), &
-        V_g\widehat W(\gamma)V_g^* &= \widehat W(\gamma).
+        V_gW(\gamma)V_g^*          & = W(\gamma),          &
+        V_g\widehat W(\gamma)V_g^* & = \widehat W(\gamma).
         \notag
     \end{align}
     These are the coefficient-matrix identities expressing invariance of
@@ -582,7 +582,7 @@ and the regrouping of physical registers into bonds.
     Let each site of a cyclic chain carry two registers of dimension $D$.
     For a configuration $s=((L_i,R_i))_i$, define
     \begin{align}
-        e_N(s)_i &= (R_{i-1},L_i).
+        e_N(s)_i & = (R_{i-1},L_i).
         \notag
     \end{align}
     The inverse recovers $(L_i,R_i)=((b_i)_2,(b_{i+1})_1)$.
@@ -609,7 +609,7 @@ and the regrouping of physical registers into bonds.
     \label{thm:spt_incoming_bond_locality}
     \lean{MPSTensor.incomingBondPerm_conj_local_apply}
     \leanok
-    \uses{def:spt_incoming_bond_coordinates, thm:spt_incoming_bond_unitary}
+    \uses{def:spt_incoming_bond_coordinates}
     Let $N>0$ and let $K_i$ act as a matrix $K$ on incoming bond $i$
     and as the identity on every other bond.  Then
     $P_NK_iP_N^\dagger$ acts on the registers $(R_{i-1},L_i)$ and as
@@ -617,9 +617,9 @@ and the regrouping of physical registers into bonds.
     entries between physical configurations $s,t$ are
     \begin{align}
         (P_NK_iP_N^\dagger)_{s,t}
-        &=K_{e_N(s)_i,e_N(t)_i}
-          \prod_{j\ne i}\delta_{e_N(s)_j,e_N(t)_j}.
-          \notag
+         & =K_{e_N(s)_i,e_N(t)_i}
+        \prod_{j\ne i}\delta_{e_N(s)_j,e_N(t)_j}.
+        \notag
     \end{align}
     Hence every one-bond interaction becomes a nearest-neighbor physical
     interaction (a one-site interaction when $N=1$).
@@ -636,13 +636,13 @@ and the regrouping of physical registers into bonds.
     \lean{MPSTensor.incomingBondPerm_conj_registerAction,
         MPSTensor.incomingBondPerm_conj_sptFixedPointAction}
     \leanok
-    \uses{def:spt_incoming_bond_coordinates, thm:spt_incoming_bond_unitary,
+    \uses{def:spt_incoming_bond_coordinates,
         def:spt_fixed_point_tensor}
     For matrices $L,R$ on a register of dimension $D$,
     \begin{align}
         P_N(R\otimes L)^{\otimes N}P_N^\dagger
-          &=(L\otimes R)^{\otimes N}.
-          \notag
+         & =(L\otimes R)^{\otimes N}.
+        \notag
     \end{align}
     In particular, for the physical action
     $U(g)=W_g^{\mathsf T}\otimes W_g^{-1}$ of the SPT fixed-point tensor with
