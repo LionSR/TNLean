@@ -66,5 +66,3 @@ theorem exists_nonzero_two_three_trace_scalars_of_samePositiveMpvRay
       using h₃ ![i, j, k]
 
 end MPSTensor
-
-#print axioms MPSTensor.exists_nonzero_two_three_trace_scalars_of_samePositiveMpvRay
