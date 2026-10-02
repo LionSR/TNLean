@@ -16,6 +16,7 @@ import TNLean.MPS.Symmetry.BondRegroupingSymmetry
 import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.GInjective
 import TNLean.MPS.Symmetry.GappedInteractionPath

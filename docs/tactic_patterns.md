@@ -2428,6 +2428,18 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
   table. All three consumers use it; no custom tactic is needed.
 
+### gauge covariance along the polar deformation — promoted
+
+- **Pattern:** regard a unitary bond matrix as an invertible matrix and
+  apply the preserved polar covariance letter by letter.
+- **Seen:** the parent-symmetry proof in `MPS/Symmetry/PolarDeformationGap.lean`
+  and the path constructors in `MPS/Symmetry/PolarGappedInteractionPath.lean`
+  and `MPS/Symmetry/EmbeddedInjectiveGappedPath.lean`.
+- **Abstraction:** `gaugeEquiv_polarDeformation_of_unitary_covariance`
+  in `MPS/Symmetry/PolarDeformation.lean`.
+- **Notes:** the same virtual matrix implements the covariance at every
+  parameter. All three uses now share the conversion to gauge equivalence.
+
 ## Candidates
 
 ### relabeling normalized source factors into a standard form — candidate

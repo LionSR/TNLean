@@ -53,11 +53,7 @@ theorem parentInteractionES_polarDeformation_commute_onSiteTensorPow
     (hCov : rotatePhysical U A = fun i => X * A i * Xᴴ) (γ : ℝ) (L : ℕ) :
     Commute (parentInteractionES (polarDeformation A γ) L)
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) := by
-  let Xgl : GL (Fin D) ℂ :=
-    ⟨X, Xᴴ, (Matrix.mem_unitaryGroup_iff).mp hX,
-      (Matrix.mem_unitaryGroup_iff').mp hX⟩
-  apply parentInteractionES_commute_onSiteTensorPow _ U hU
-  refine ⟨Xgl, fun i => ?_⟩
-  exact congrFun (rotatePhysical_polarDeformation_of_unitary_covariance hA U X hU hX hCov γ) i
+  exact parentInteractionES_commute_onSiteTensorPow _ U hU
+    (gaugeEquiv_polarDeformation_of_unitary_covariance hA U X hU hX hCov γ) L
 
 end MPSTensor

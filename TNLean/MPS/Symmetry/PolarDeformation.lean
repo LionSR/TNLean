@@ -222,4 +222,19 @@ theorem rotatePhysical_polarDeformation_of_unitary_covariance
   rw [physicalMatrix_rotatePhysical, physicalMatrix_mul_left_right]
   exact polarDeformation_covariance hA U _ hU hK hCovM γ
 
+/-- The same virtual unitary gives gauge covariance at every point of
+the polar deformation. Source: arXiv:1010.3732, Section II.C,
+“Isometric form and symmetries”. -/
+theorem gaugeEquiv_polarDeformation_of_unitary_covariance
+    {A : MPSTensor d D} (hA : Kraus.IsInjective A)
+    (U : Matrix (Fin d) (Fin d) ℂ) (X : Matrix (Fin D) (Fin D) ℂ)
+    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ)
+    (hCov : rotatePhysical U A = fun i => X * A i * Xᴴ) (γ : ℝ) :
+    GaugeEquiv (polarDeformation A γ) (rotatePhysical U (polarDeformation A γ)) := by
+  refine ⟨⟨X, Xᴴ, (Matrix.mem_unitaryGroup_iff).mp hX,
+    (Matrix.mem_unitaryGroup_iff').mp hX⟩, fun i => ?_⟩
+  exact congrFun (rotatePhysical_polarDeformation_of_unitary_covariance
+    hA U X hU hX hCov γ) i
+
 end MPSTensor
