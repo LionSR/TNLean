@@ -183,6 +183,8 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     tensors are not required.
 \end{definition}
 
+\input{chapter/ch29_mpu_group_index}
+
 \begin{theorem}[Group fusion rules]
     \label{thm:mpug_group_fusion_rules}
     \lean{MPOTensor.GroupFamily.isMPOFusionAlgebra,
@@ -263,9 +265,8 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     $\bigl(U_g^{(N)}\bigr)^{\operatorname{ord}(g)}=U_e^{(N)}=\Id$.
 \end{proof}
 
-% Tracking boundary: these entries cover only finite order of the periodic
-% operators. Issue #7318 remains open for public-index vanishing, the
-% rank-product input r l = d^2, and the final rank equality r = l = d.
+% The index vanishing and source-leg equality for simple injective families
+% are proved in chapter/ch29_mpu_group_index.tex.
 
 \begin{theorem}[Product-tensor operator identity]
     \label{thm:mpug_product_tensor_operator}
