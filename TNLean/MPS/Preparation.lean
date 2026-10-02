@@ -76,6 +76,8 @@ import TNLean.MPS.Preparation.RegisterTreeState
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.RepeatedBlockError
 import TNLean.MPS.Preparation.RepeatedBlockSum
+import TNLean.MPS.Preparation.RepeatedOverlappingBlockError
+import TNLean.MPS.Preparation.RepeatedOverlappingBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderBlockError
 import TNLean.MPS.Preparation.SecondOrderBlockOverlap
 import TNLean.MPS.Preparation.SecondOrderOverlap

@@ -51,6 +51,12 @@ maps. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
   mixed transfer map whose eigenvalues are bounded by `|λ₂| < 1`.
 * `MPSTensor.exists_norm_gram_blockTensor_mixed_le` — the off-diagonal Gram blocks
   `B_jᴴ B_{j'}` decay at that rate.
+* `MPSTensor.conjTranspose_mul_sum_of_isometry`,
+  `MPSTensor.sum_mul_conjTranspose_mul_sum_of_isometry` — products along isometries with
+  orthogonal ranges.
+* `Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one` — isometries have norm at most one.
+* `MPSTensor.exists_norm_gram_sum_sub_le` — the rate of the Gram matrix of `∑ⱼ cⱼ B_j L_jᴴ`.
+* `Matrix.norm_polarPos_sub_le_sqrt` — the Hölder bound for positive parts.
 * `MPSTensor.blockSumGramLimit`, `MPSTensor.blockSumPosLimit` — the limits
   `∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ` and `∑ⱼ K_j ((√σ_j)ᵀ ⊗ 1) K_jᴴ`.
 * `MPSTensor.gram_blockTensor_blockSum`, `MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le` —
@@ -199,6 +205,39 @@ private noncomputable def offBlockProj (ι : (j : Fin b) → Fin (Dj j) → Fin 
 
 variable {ι : (j : Fin b) → Fin (Dj j) → Fin D}
 
+/-! ### Isometries with orthogonal ranges -/
+
+section OrthogonalIsometries
+
+variable {κ : Fin b → Type*} [∀ j, Fintype (κ j)] {n : Type*} [Fintype n]
+  {L : (j : Fin b) → Matrix n (κ j) ℂ}
+
+/-- `L_jᴴ ∑ₖ L_k Y_k = Y_j` for isometries `L_k` with orthogonal ranges. -/
+theorem conjTranspose_mul_sum_of_isometry [∀ j, DecidableEq (κ j)] {γ : Type*}
+    (hiso : ∀ j, (L j)ᴴ * L j = 1) (horth : ∀ j k, j ≠ k → (L j)ᴴ * L k = 0)
+    (Y : (k : Fin b) → Matrix (κ k) γ ℂ) (j : Fin b) :
+    (L j)ᴴ * ∑ k, L k * Y k = Y j := by
+  rw [Matrix.mul_sum, Finset.sum_eq_single j]
+  · rw [← Matrix.mul_assoc, hiso j, Matrix.one_mul]
+  · intro k _ hk
+    rw [← Matrix.mul_assoc, horth j k (Ne.symm hk), Matrix.zero_mul]
+  · simp
+
+/-- `(∑ⱼ L_j Y_j L_jᴴ)(∑ⱼ L_j Z_j L_jᴴ) = ∑ⱼ L_j Y_j Z_j L_jᴴ` for isometries `L_j` with
+orthogonal ranges. -/
+theorem sum_mul_conjTranspose_mul_sum_of_isometry [∀ j, DecidableEq (κ j)]
+    (hiso : ∀ j, (L j)ᴴ * L j = 1) (horth : ∀ j k, j ≠ k → (L j)ᴴ * L k = 0)
+    (Y Z : (j : Fin b) → Matrix (κ j) (κ j) ℂ) :
+    (∑ j, L j * Y j * (L j)ᴴ) * (∑ j, L j * Z j * (L j)ᴴ) =
+      ∑ j, L j * (Y j * Z j) * (L j)ᴴ := by
+  rw [Matrix.sum_mul]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  have h := conjTranspose_mul_sum_of_isometry hiso horth (fun k => Z k * (L k)ᴴ) j
+  simp only [Matrix.mul_assoc] at h ⊢
+  rw [h]
+
+end OrthogonalIsometries
+
 section Projector
 
 variable (hι : ∀ j, Function.Injective (ι j))
@@ -208,13 +247,9 @@ include hι hdisj
 /-- `K_jᴴ ∑ₖ K_k Y_k = Y_j` for embeddings with orthogonal ranges. -/
 private theorem conjTranspose_pairEmbedding_mul_sum {γ : Type*}
     (Y : (k : Fin b) → Matrix (Fin (Dj k) × Fin (Dj k)) γ ℂ) (j : Fin b) :
-    (pairEmbedding (ι j))ᴴ * ∑ k, pairEmbedding (ι k) * Y k = Y j := by
-  rw [Matrix.mul_sum, Finset.sum_eq_single j]
-  · rw [← Matrix.mul_assoc, conjTranspose_pairEmbedding_mul_self (hι j), Matrix.one_mul]
-  · intro k _ hk
-    rw [← Matrix.mul_assoc, conjTranspose_pairEmbedding_mul_eq_zero (hdisj j k (Ne.symm hk)),
-      Matrix.zero_mul]
-  · simp
+    (pairEmbedding (ι j))ᴴ * ∑ k, pairEmbedding (ι k) * Y k = Y j :=
+  conjTranspose_mul_sum_of_isometry (fun j => conjTranspose_pairEmbedding_mul_self (hι j))
+    (fun j k h => conjTranspose_pairEmbedding_mul_eq_zero (hdisj j k h)) Y j
 
 /-- `K_jᴴ Q = 0`. -/
 private theorem conjTranspose_pairEmbedding_mul_offBlockProj (j : Fin b) :
@@ -272,13 +307,9 @@ private theorem sum_pairEmbedding_mul_sum_pairEmbedding
     (Y Z : (j : Fin b) → Matrix (Fin (Dj j) × Fin (Dj j)) (Fin (Dj j) × Fin (Dj j)) ℂ) :
     (∑ j, pairEmbedding (ι j) * Y j * (pairEmbedding (ι j))ᴴ) *
         (∑ j, pairEmbedding (ι j) * Z j * (pairEmbedding (ι j))ᴴ) =
-      ∑ j, pairEmbedding (ι j) * (Y j * Z j) * (pairEmbedding (ι j))ᴴ := by
-  rw [Matrix.sum_mul]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  have h := conjTranspose_pairEmbedding_mul_sum hι hdisj
-    (fun k => Z k * (pairEmbedding (ι k))ᴴ) j
-  simp only [Matrix.mul_assoc] at h ⊢
-  rw [h]
+      ∑ j, pairEmbedding (ι j) * (Y j * Z j) * (pairEmbedding (ι j))ᴴ :=
+  sum_mul_conjTranspose_mul_sum_of_isometry (fun j => conjTranspose_pairEmbedding_mul_self (hι j))
+    (fun j k h => conjTranspose_pairEmbedding_mul_eq_zero (hdisj j k h)) Y Z
 
 end Projector
 
@@ -324,12 +355,128 @@ private theorem blockSumGramLimit_smul (c : Fin b → ℂ)
   simp only [blockSumGramLimit, Matrix.transpose_smul, Matrix.smul_kronecker, Matrix.mul_smul,
     Matrix.smul_mul]
 
-/-- `conj(z^q) z^q = (|z|^q)²`. -/
-private theorem star_pow_mul_pow_eq (z : ℂ) (q : ℕ) :
-    star (z ^ q) * z ^ q = (((‖z‖ ^ q) ^ 2 : ℝ) : ℂ) := by
-  rw [Complex.star_def, Complex.conj_mul', norm_pow]
-  push_cast
-  ring
+open scoped Matrix.Norms.L2Operator in
+/-- A matrix with `Lᴴ L = 1` has operator norm at most one. -/
+theorem _root_.Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one {m n : Type*}
+    [Fintype m] [Fintype n] [DecidableEq n] {L : Matrix m n ℂ} (h : Lᴴ * L = 1) : ‖L‖ ≤ 1 := by
+  have h1 : ‖(1 : Matrix n n ℂ)‖ ≤ 1 := by
+    rw [← Matrix.diagonal_one, Matrix.l2_opNorm_diagonal]
+    exact (pi_norm_le_iff_of_nonneg zero_le_one).2 fun _ => by simp
+  have h2 : ‖L‖ * ‖L‖ ≤ 1 := by rw [← Matrix.l2_opNorm_conjTranspose_mul_self, h]; exact h1
+  nlinarith [norm_nonneg L]
+
+open scoped Matrix.Norms.L2Operator in
+/-- **Rate of the Gram matrices of a sum along embeddings.** Let the blocks `A_j` be normal in
+the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1`, and let `λ₂`
+with `|λ₂| < 1` bound the moduli of the eigenvalues other than `1` of every `E_{A_j}` and of all
+eigenvalues of the mixed transfer maps `E_{jj'}` of distinct blocks. For `0 < γ < 1` there is
+`K` such that for all `R`, all coefficients `cⱼ` with `|cⱼ| ≤ R` and all matrices `L_j` with
+`‖L_j‖ ≤ 1`, the matrix `B = ∑ⱼ cⱼ B_j L_jᴴ`, with `B_j` the physical matrix of the `q`-site
+blocked tensor of `A_j`, satisfies
+`‖Bᴴ B - ∑ⱼ |cⱼ|² L_j (σ_jᵀ ⊗ 1) L_jᴴ‖ ≤ R² K e^{-γ q/ξ}` for every `q`.
+
+The blocks of `Bᴴ B` are `conj(cⱼ) c_k L_j (B_jᴴ B_k) L_kᴴ`: the diagonal ones are `σ_jᵀ ⊗ 1` up
+to the normal case (`exists_norm_gram_blockTensor_sub_le`), and the others decay at the rate of
+the mixed transfer maps (`exists_norm_gram_blockTensor_mixed_le`; arXiv:2307.01696,
+Supplemental Material, proof of Lemma 1'(ii)). For the blocked direct sum `L_j = K_j` and
+`cⱼ = μⱼ^q`; for blocks with multiplicities `L_j` is the isometry placing a bond pair on all
+copies of block `j` (`MPSTensor.copyIsometry`). -/
+theorem exists_norm_gram_sum_sub_le
+    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
+    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
+    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
+    {lam₂ : ℂ} (hl : ‖lam₂‖ < 1)
+    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
+      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
+    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
+      ‖μ'‖ ≤ ‖lam₂‖)
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ (R : ℝ) (c : Fin b → ℂ)
+      (L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ),
+      (∀ j, ‖c j‖ ≤ R) → (∀ j, ‖L j‖ ≤ 1) → ∀ q : ℕ,
+      ‖(∑ j, c j • (physicalMatrix (blockTensor (Aj j) q) * (L j)ᴴ))ᴴ *
+          ∑ j, c j • (physicalMatrix (blockTensor (Aj j) q) * (L j)ᴴ) -
+        ∑ j, ((‖c j‖ ^ 2 : ℝ) : ℂ) • (L j *
+          ((σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) * (L j)ᴴ)‖ ≤
+        R ^ 2 * K * Real.exp (-γ / correlationLength lam₂) ^ q := by
+  classical
+  have hD : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
+  set x := Real.exp (-γ / correlationLength lam₂)
+  choose Kd hKd hdiag using fun j => exists_norm_gram_blockTensor_sub_le (Aj j) (hN j) (hA j)
+    (hσ j) (htr j) (hfix j) (hlam j) hγ0 hγ
+  have hoff : ∀ j k, ∃ K : ℝ, 0 ≤ K ∧ (j ≠ k → ∀ q : ℕ,
+      ‖(physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj k) q)‖ ≤
+        K * x ^ q) := fun j k => by
+    by_cases hjk : j = k
+    · exact ⟨0, le_rfl, fun h => absurd hjk h⟩
+    · obtain ⟨K, hK, h⟩ := exists_norm_gram_blockTensor_mixed_le (Aj j) (Aj k) hl
+        (hmix k j (Ne.symm hjk)) hγ0 hγ
+      exact ⟨K, hK, fun _ => h⟩
+  choose Ko hKo hoffb using hoff
+  have hx : 0 ≤ x := (Real.exp_pos _).le
+  refine ⟨∑ j, Kd j + ∑ j, ∑ k, Ko j k,
+    add_nonneg (Finset.sum_nonneg fun j _ => hKd j)
+      (Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => hKo j k),
+    fun R c L hc hL q => ?_⟩
+  set G : (j k : Fin b) → Matrix (Fin (Dj j) × Fin (Dj j)) (Fin (Dj k) × Fin (Dj k)) ℂ :=
+    fun j k => (physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj k) q)
+  have hcoef : ∀ j k, ‖star (c j) * c k‖ ≤ R ^ 2 := fun j k => by
+    rw [norm_mul, norm_star, sq]
+    exact mul_le_mul (hc j) (hc k) (norm_nonneg _) ((norm_nonneg _).trans (hc j))
+  -- A term `a • (L_j X L_kᴴ)` with `|a| ≤ R²` has norm at most `R² ‖X‖`.
+  have hterm : ∀ (j k : Fin b) (a : ℂ) (X : Matrix (Fin (Dj j) × Fin (Dj j))
+      (Fin (Dj k) × Fin (Dj k)) ℂ), ‖a‖ ≤ R ^ 2 →
+      ‖a • (L j * X * (L k)ᴴ)‖ ≤ R ^ 2 * ‖X‖ := fun j k a X ha => by
+    rw [norm_smul]
+    refine mul_le_mul ha ?_ (norm_nonneg _) (sq_nonneg R)
+    calc ‖L j * X * (L k)ᴴ‖ ≤ ‖L j‖ * ‖X‖ * ‖(L k)ᴴ‖ :=
+          (Matrix.l2_opNorm_mul _ _).trans (by gcongr; exact Matrix.l2_opNorm_mul _ _)
+      _ ≤ 1 * ‖X‖ * 1 := by
+          rw [Matrix.l2_opNorm_conjTranspose]
+          gcongr
+          exacts [hL j, hL k]
+      _ = ‖X‖ := by ring
+  have hsplit : (∑ j, c j • (physicalMatrix (blockTensor (Aj j) q) * (L j)ᴴ))ᴴ *
+        ∑ j, c j • (physicalMatrix (blockTensor (Aj j) q) * (L j)ᴴ) -
+        ∑ j, ((‖c j‖ ^ 2 : ℝ) : ℂ) • (L j *
+          ((σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) * (L j)ᴴ) =
+      ∑ j, (star (c j) * c j) • (L j *
+        (G j j - (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) * (L j)ᴴ) +
+      ∑ j, ∑ k ∈ Finset.univ.erase j, (star (c j) * c k) • (L j * G j k * (L k)ᴴ) := by
+    have hprod : ∀ j k, (c j • (physicalMatrix (blockTensor (Aj j) q) * (L j)ᴴ))ᴴ *
+        (c k • (physicalMatrix (blockTensor (Aj k) q) * (L k)ᴴ)) =
+          (star (c j) * c k) • (L j * G j k * (L k)ᴴ) := fun j k => by
+      simp only [G, Matrix.conjTranspose_smul, Matrix.conjTranspose_mul,
+        Matrix.conjTranspose_conjTranspose, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+        Matrix.mul_assoc, mul_comm (c k)]
+    have hnorm : ∀ j, ((‖c j‖ ^ 2 : ℝ) : ℂ) = star (c j) * c j := fun j => by
+      rw [Complex.star_def, Complex.conj_mul']
+      push_cast
+      ring
+    rw [Matrix.conjTranspose_sum, Matrix.sum_mul, ← Finset.sum_sub_distrib,
+      ← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun j _ => ?_
+    rw [Matrix.mul_sum, ← Finset.add_sum_erase _ _ (Finset.mem_univ j), hprod, hnorm,
+      Matrix.mul_sub, Matrix.sub_mul, smul_sub]
+    simp only [hprod]
+    abel
+  rw [hsplit, mul_add, add_mul, Finset.mul_sum, Finset.sum_mul, Finset.mul_sum,
+    Finset.sum_mul]
+  refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
+  · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
+    refine (hterm j j _ _ (hcoef j j)).trans ?_
+    calc R ^ 2 * ‖G j j - (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)‖
+        ≤ R ^ 2 * (Kd j * x ^ q) := by gcongr; exact hdiag j q
+      _ = R ^ 2 * Kd j * x ^ q := by ring
+  · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
+    rw [Finset.mul_sum, Finset.sum_mul]
+    refine (norm_sum_le _ _).trans ((Finset.sum_le_sum fun k hk => ?_).trans
+      (Finset.sum_le_sum_of_subset_of_nonneg (Finset.erase_subset j Finset.univ)
+        fun k _ _ => mul_nonneg (mul_nonneg (sq_nonneg R) (hKo j k)) (pow_nonneg hx q)))
+    refine (hterm j k _ _ (hcoef j k)).trans ?_
+    calc R ^ 2 * ‖G j k‖ ≤ R ^ 2 * (Ko j k * x ^ q) := by
+          gcongr; exact hoffb j k (Ne.symm (Finset.ne_of_mem_erase hk)) q
+      _ = R ^ 2 * Ko j k * x ^ q := by ring
 
 open scoped Matrix.Norms.L2Operator in
 /-- **Rate of the Gram matrices.** Let the blocks `A_j` be normal in the gauge
@@ -338,7 +485,8 @@ open scoped Matrix.Norms.L2Operator in
 eigenvalues of the mixed transfer maps `E_{jj'}` of distinct blocks. For `0 < γ < 1` there is `K`
 such that for all weights `μⱼ` with `|μⱼ| ≤ 1` the Gram matrix of the `q`-site blocked direct sum
 `⊕ⱼ μⱼ A_j` satisfies `‖Bᴴ B - ∑ⱼ |μⱼ|^{2q} K_j (σ_jᵀ ⊗ 1) K_jᴴ‖ ≤ K e^{-γ q/ξ}` for `q ≥ 1`;
-the limit is written as `∑ⱼ K_j ((|μⱼ|^{2q} σ_j)ᵀ ⊗ 1) K_jᴴ`. -/
+the limit is written as `∑ⱼ K_j ((|μⱼ|^{2q} σ_j)ᵀ ⊗ 1) K_jᴴ`. This is
+`exists_norm_gram_sum_sub_le` with `L_j = K_j` and `cⱼ = μⱼ^q`. -/
 theorem exists_norm_gram_blockTensor_blockSum_sub_le (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -355,86 +503,15 @@ theorem exists_norm_gram_blockTensor_blockSum_sub_le (hι : ∀ j, Function.Inje
           physicalMatrix (blockTensor (blockSum Aj ι μ) q) -
         blockSumGramLimit ι (fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j)‖ ≤
         K * Real.exp (-γ / correlationLength lam₂) ^ q := by
-  classical
-  have hD : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
-  set x := Real.exp (-γ / correlationLength lam₂)
-  choose Kd hKd hdiag using fun j => exists_norm_gram_blockTensor_sub_le (Aj j) (hN j) (hA j)
-    (hσ j) (htr j) (hfix j) (hlam j) hγ0 hγ
-  have hoff : ∀ j k, ∃ K : ℝ, 0 ≤ K ∧ (j ≠ k → ∀ q : ℕ,
-      ‖(physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj k) q)‖ ≤
-        K * x ^ q) := fun j k => by
-    by_cases hjk : j = k
-    · exact ⟨0, le_rfl, fun h => absurd hjk h⟩
-    · obtain ⟨K, hK, h⟩ := exists_norm_gram_blockTensor_mixed_le (Aj j) (Aj k) hl
-        (hmix k j (Ne.symm hjk)) hγ0 hγ
-      exact ⟨K, hK, fun _ => h⟩
-  choose Ko hKo hoffb using hoff
-  set κ : Fin b → ℝ := fun j => ‖pairEmbedding (ι j)‖ * ‖(pairEmbedding (ι j))ᴴ‖
-  set κ' : Fin b → Fin b → ℝ := fun j k => ‖pairEmbedding (ι j)‖ * ‖(pairEmbedding (ι k))ᴴ‖
-  have hκ : ∀ j, 0 ≤ κ j := fun j => mul_nonneg (norm_nonneg _) (norm_nonneg _)
-  have hκ' : ∀ j k, 0 ≤ κ' j k := fun j k => mul_nonneg (norm_nonneg _) (norm_nonneg _)
-  have hx : 0 ≤ x := (Real.exp_pos _).le
-  refine ⟨∑ j, κ j * Kd j + ∑ j, ∑ k, κ' j k * Ko j k,
-    add_nonneg (Finset.sum_nonneg fun j _ => mul_nonneg (hκ j) (hKd j))
-      (Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => mul_nonneg (hκ' j k) (hKo j k)),
-    fun μ hμ q hq => ?_⟩
-  -- A coefficient of modulus at most one does not increase the norm.
-  have hsm : ∀ (c : ℂ) (X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ), ‖c‖ ≤ 1 →
-      ‖c • X‖ ≤ ‖X‖ := fun c X hc => by
-    rw [norm_smul]; exact mul_le_of_le_one_left (norm_nonneg _) hc
-  have hpow : ∀ j, ‖μ j ^ q‖ ≤ 1 := fun j => by
-    rw [norm_pow]; exact pow_le_one₀ (norm_nonneg _) (hμ j)
-  have hcoef : ∀ j k, ‖star (μ j ^ q) * μ k ^ q‖ ≤ 1 := fun j k => by
-    rw [norm_mul, norm_star]
-    exact (mul_le_mul (hpow j) (hpow k) (norm_nonneg _) zero_le_one).trans_eq (one_mul 1)
-  have hsplit : (physicalMatrix (blockTensor (blockSum Aj ι μ) q))ᴴ *
-        physicalMatrix (blockTensor (blockSum Aj ι μ) q) -
-        blockSumGramLimit ι (fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j) =
-      ∑ j, (star (μ j ^ q) * μ j ^ q) • (pairEmbedding (ι j) *
-        ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj j) q) -
-          (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) * (pairEmbedding (ι j))ᴴ) +
-      ∑ j, ∑ k ∈ Finset.univ.erase j, (star (μ j ^ q) * μ k ^ q) • (pairEmbedding (ι j) *
-        ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj k) q)) *
-          (pairEmbedding (ι k))ᴴ) := by
-    rw [gram_blockTensor_blockSum hι hdisj μ hq, blockSumGramLimit_smul,
-      ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [← Finset.add_sum_erase _ _ (Finset.mem_univ j), Matrix.mul_sub, Matrix.sub_mul,
-      smul_sub, ← star_pow_mul_pow_eq]
-    abel
-  rw [hsplit, add_mul, Finset.sum_mul, Finset.sum_mul]
-  refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
-  · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
-    refine (hsm _ _ ?_).trans ?_
-    · exact hcoef j j
-    calc ‖pairEmbedding (ι j) * ((physicalMatrix (blockTensor (Aj j) q))ᴴ *
-            physicalMatrix (blockTensor (Aj j) q) - (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j))
-              (Fin (Dj j)) ℂ)) * (pairEmbedding (ι j))ᴴ‖
-        ≤ ‖pairEmbedding (ι j)‖ * ‖(physicalMatrix (blockTensor (Aj j) q))ᴴ *
-            physicalMatrix (blockTensor (Aj j) q) - (σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j))
-              (Fin (Dj j)) ℂ)‖ * ‖(pairEmbedding (ι j))ᴴ‖ :=
-          (Matrix.l2_opNorm_mul _ _).trans (by gcongr; exact Matrix.l2_opNorm_mul _ _)
-      _ ≤ ‖pairEmbedding (ι j)‖ * (Kd j * x ^ q) * ‖(pairEmbedding (ι j))ᴴ‖ :=
-          mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left (hdiag j q) (norm_nonneg _))
-            (norm_nonneg _)
-      _ = κ j * Kd j * x ^ q := by simp only [κ]; ring
-  · refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun j _ => ?_)
-    rw [Finset.sum_mul]
-    refine (norm_sum_le _ _).trans ((Finset.sum_le_sum fun k hk => ?_).trans
-      (Finset.sum_le_sum_of_subset_of_nonneg (Finset.erase_subset j Finset.univ)
-        fun k _ _ => mul_nonneg (mul_nonneg (hκ' j k) (hKo j k)) (pow_nonneg hx q)))
-    have hjk : j ≠ k := Ne.symm (Finset.ne_of_mem_erase hk)
-    refine (hsm _ _ ?_).trans ?_
-    · exact hcoef j k
-    calc ‖pairEmbedding (ι j) * ((physicalMatrix (blockTensor (Aj j) q))ᴴ *
-            physicalMatrix (blockTensor (Aj k) q)) * (pairEmbedding (ι k))ᴴ‖
-        ≤ ‖pairEmbedding (ι j)‖ * ‖(physicalMatrix (blockTensor (Aj j) q))ᴴ *
-            physicalMatrix (blockTensor (Aj k) q)‖ * ‖(pairEmbedding (ι k))ᴴ‖ :=
-          (Matrix.l2_opNorm_mul _ _).trans (by gcongr; exact Matrix.l2_opNorm_mul _ _)
-      _ ≤ ‖pairEmbedding (ι j)‖ * (Ko j k * x ^ q) * ‖(pairEmbedding (ι k))ᴴ‖ :=
-          mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left (hoffb j k hjk q) (norm_nonneg _))
-            (norm_nonneg _)
-      _ = κ' j k * Ko j k * x ^ q := by simp only [κ']; ring
+  obtain ⟨K, hK, h⟩ := exists_norm_gram_sum_sub_le (D := D) hN hA hσ htr hfix hl hlam hmix hγ0 hγ
+  refine ⟨K, hK, fun μ hμ q hq => ?_⟩
+  have h' := h 1 (fun j => μ j ^ q) (fun j => pairEmbedding (ι j))
+    (fun j => by rw [norm_pow]; exact pow_le_one₀ (norm_nonneg _) (hμ j))
+    (fun j => Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one
+      (conjTranspose_pairEmbedding_mul_self (hι j))) q
+  rw [one_pow, one_mul] at h'
+  rw [physicalMatrix_blockTensor_blockSum hι hdisj _ hq, blockSumGramLimit_smul]
+  simpa only [norm_pow] using h'
 
 /-! ### The limits -/
 
@@ -535,6 +612,21 @@ private theorem exists_pos_algebraMap_le_blockSumGramLimit_add (hσ : ∀ j, (σ
   · exact (posSemidef_offBlockProj hι hdisj).smul (sub_nonneg.2 hc₀1)
 
 end Limits
+
+open scoped Matrix.Norms.L2Operator in
+/-- **Hölder bound for positive parts.** For every matrix `B` and every positive semidefinite
+`P`, `‖(Bᴴ B)^{1/2} - P‖ ≤ ‖Bᴴ B - P²‖^{1/2}`: the bound `‖√a - √b‖ ≤ √‖a - b‖`
+(`CFC.norm_sqrt_sub_sqrt_le`; arXiv:2103.13367, Supplemental Material, eq. (26)) at `b = P²`. -/
+theorem _root_.Matrix.norm_polarPos_sub_le_sqrt {m n : Type*} [Fintype m] [Fintype n]
+    [DecidableEq n] (B : Matrix m n ℂ) {P : Matrix n n ℂ} (hP : P.PosSemidef) :
+    ‖Matrix.polarPos B - P‖ ≤ Real.sqrt ‖Bᴴ * B - P * P‖ := by
+  have hsq : CFC.sqrt (P * P) = P := CFC.sqrt_unique rfl hP.nonneg
+  have hnn : 0 ≤ P * P := by
+    have h := Matrix.posSemidef_conjTranspose_mul_self P
+    rw [hP.isHermitian.eq] at h
+    exact h.nonneg
+  have h := CFC.norm_sqrt_sub_sqrt_le (Matrix.posSemidef_conjTranspose_mul_self B).nonneg hnn
+  rwa [hsq] at h
 
 /-! ### The rate of the positive part -/
 
@@ -642,16 +734,8 @@ theorem exists_norm_polarPos_blockTensor_blockSum_weight_sub_le
     fun j => (((‖μ j‖ ^ q) ^ 2 : ℝ) : ℂ) • σ j
   have hτ : ∀ j, (τ j).PosSemidef := fun j =>
     (hσ j).posSemidef.smul (Complex.zero_le_real.2 (by positivity))
-  have hP := posSemidef_blockSumPosLimit (ι := ι) (σ := τ)
-  have hsq : CFC.sqrt (blockSumGramLimit ι τ) = blockSumPosLimit ι τ :=
-    CFC.sqrt_unique (blockSumPosLimit_mul_self hι hdisj hτ) hP.nonneg
-  have hGnn : 0 ≤ blockSumGramLimit ι τ := by
-    rw [← blockSumPosLimit_mul_self hι hdisj hτ]
-    have h := Matrix.posSemidef_conjTranspose_mul_self (blockSumPosLimit ι τ)
-    rw [hP.isHermitian.eq] at h
-    exact h.nonneg
-  have hhol := CFC.norm_sqrt_sub_sqrt_le (Matrix.posSemidef_conjTranspose_mul_self B).nonneg hGnn
-  rw [hsq] at hhol
+  have hhol := Matrix.norm_polarPos_sub_le_sqrt B (posSemidef_blockSumPosLimit (ι := ι) (σ := τ))
+  rw [blockSumPosLimit_mul_self hι hdisj hτ] at hhol
   have hx2 : Real.exp (-(2 * γ) / correlationLength lam₂) ^ q = (x ^ q) ^ 2 := by
     rw [exp_neg_two_mul_div_correlationLength, ← pow_mul, ← pow_mul, mul_comm]
   calc ‖Matrix.polarPos B - blockSumPosLimit ι τ‖ ≤ Real.sqrt ‖Bᴴ * B - blockSumGramLimit ι τ‖ :=

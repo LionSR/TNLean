@@ -798,8 +798,14 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   index, and the corrected approximating state `V^{⊗M} ∑ⱼ βⱼ L_j^{⊗M} |Ω_j⟩`
   with the source's weights. For blocks whose `q`-site states are orthogonal,
   part (ii) of the approximation-error lemma is proved for it with arbitrary
-  multiplicities and complex weights; numerical checks on the counterexamples
-  are recorded.
+  multiplicities and complex weights; for blocks whose states overlap it is
+  proved at the corrected rate with the factor `min(1, b)^{-1/2}`; numerical
+  checks on the counterexamples are recorded.
+- `mswc24_repeated_overlap_small_weight_sum.tex` is an open scope restriction:
+  for repeated blocks whose `q`-site states overlap, the bound for the corrected
+  state carries the factor `min(1, b)^{-1/2}` with `b = ∑ⱼ |βⱼ|²`, which exceeds
+  one when `b < 1`, for instance when the sums `βⱼ` cancel; the source's bound has
+  no such factor. Real weights in `[0, 1]` one of which is `1` give `b ≥ 1`.
 - `mswc24_decaying_correlations_windowed_connected.tex` is the resolved
   false-source note for Lemma 2 of the Supplemental Material. It records that
   the lemma holds in modulus for the source's
