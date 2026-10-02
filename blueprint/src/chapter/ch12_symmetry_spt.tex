@@ -2708,6 +2708,90 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     identifies it with that state. The same inverse proves uniqueness.
 \end{proof}
 
+\begin{theorem}[Continuous normalized Perron data]
+    \label{thm:spt_continuous_right_perron_data}
+    \lean{MPSTensor.continuous_rightPerronDensity_of_isInjective,
+        MPSTensor.exists_continuous_rightPerronPair_of_isInjective}
+    \leanok
+    Let $A(t)$ be a continuous family of one-site injective tensors
+    in a fixed positive bond dimension. Its positive right Perron
+    matrix $\rho(t)$ and positive Perron value $r(t)$ admit continuous
+    choices satisfying
+    \[
+        \rho(t)>0,\qquad \tr\rho(t)=1,\qquad
+        \mathcal E_{A(t)}(\rho(t))=r(t)\rho(t).
+    \]
+    In fact, any pointwise choice of positive trace-one Perron matrices
+    is continuous. This is a consequence of positive-map
+    Perron--Frobenius theory, applied to the supplied tensor family
+    \cite[Theorem~6.3]{Wolf2012Quantum}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Perron--Frobenius theory gives a positive definite right eigenmatrix
+    and a positive definite left eigenmatrix at the same positive
+    eigenvalue. Pairing with the left eigenmatrix fixes the eigenvalue
+    of any normalized positive right eigenmatrix. Uniqueness then fixes
+    the matrix itself. Compactness of the density matrices and the
+    closed eigenvector equation give continuity of the normalized choice.
+    Finally $r(t)=\tr\mathcal E_{A(t)}(\rho(t))$ is continuous.
+\end{proof}
+
+\begin{theorem}[Local continuous unital normalization]
+    \label{thm:spt_continuous_unital_normalization}
+    \lean{MPSTensor.exists_local_continuous_unitalNormalization_of_isInjective}
+    \leanok
+    \uses{thm:spt_continuous_right_perron_data, def:gauge_equiv}
+    Let $A(t)$ be continuous in a fixed positive bond dimension and
+    one-site injective at $t_0$. On an open neighborhood of $t_0$,
+    there are continuous Perron data as above and a continuous tensor
+    \[
+        B^i(t)=r(t)^{-1/2}\rho(t)^{-1/2}A^i(t)\rho(t)^{1/2}.
+    \]
+    The tensor $B(t)$ is unital and is gauge-equivalent to
+    $r(t)^{-1/2}A(t)$. The continuous tensor family is a hypothesis;
+    no choice from physical ground vectors is asserted here.
+\end{theorem}
+
+\begin{proof}\leanok
+    Injectivity persists locally. Choose the normalized Perron data
+    there. Positive square roots and their inverses are continuous on
+    the positive definite matrices. The displayed formula is therefore
+    continuous. The Perron equation gives
+    $\sum_iB^i(t)B^i(t)^\dagger=I$, and the invertible matrix
+    $\rho(t)^{-1/2}$ gives the stated bond conjugation.
+\end{proof}
+
+\begin{theorem}[Local continuous canonical bond data]
+    \label{thm:spt_continuous_canonical_normalization}
+    \lean{MPSTensor.exists_local_continuous_canonicalNormalization_of_isInjective}
+    \leanok
+    \uses{thm:spt_continuous_unital_normalization,
+        thm:spt_local_stationary_density}
+    Under the preceding hypotheses, the neighborhood may be chosen
+    so that the unital tensor $B(t)$ also has a continuous normalized
+    adjoint stationary density $\sigma(t)$ satisfying
+    \[
+        \sigma(t)\ge0,\qquad \tr\sigma(t)=1,\qquad
+        \mathcal E_{B(t)}^*(\sigma(t))=\sigma(t).
+    \]
+    This density is unique among all trace-one fixed matrices.
+    The one-dimensional fixed-space property is derived, rather than
+    assumed. These are local canonical data for the supplied tensor
+    family; reconstruction from a physical uniform gap remains separate
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Gauge equivalence and nonzero scalar normalization preserve
+    injectivity. For the unital base tensor, the adjoint channel is
+    trace preserving and irreducible. Its normalized stationary density
+    is positive definite, and Perron--Frobenius theory makes its fixed
+    space one-dimensional. Apply the local continuous stationary-density
+    theorem and restrict the Perron data to the resulting smaller open
+    neighborhood.
+\end{proof}
+
 \begin{theorem}[Endpoint cohomology for a supplied unital family]
     \label{thm:spt_unital_supported_path_class}
     \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points,

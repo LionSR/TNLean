@@ -33,6 +33,7 @@ import TNLean.MPS.Symmetry.CommonPhysicalFixedPointGroundPath
 import TNLean.MPS.Symmetry.CommonPhysicalFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
+import TNLean.MPS.Symmetry.ContinuousCanonicalNormalization
 import TNLean.MPS.Symmetry.ContinuousInvariantCompression
 import TNLean.MPS.Symmetry.ContinuousProjectionFrame
 import TNLean.MPS.Symmetry.ContinuousSpectralCorner

@@ -4559,3 +4559,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   `NormedRing.inverse_continuousAt` directly on the matrix unit, as in
   `continuous_polarIso_family_of_injective`. These two determinant-based
   occurrences are below the promotion threshold.
+
+### Restricting continuous data to an open subtype neighborhood — candidate
+- **Pattern:** recover an ambient open set from an open neighborhood inside an
+  open subtype, intersect the two ambient sets, and restrict the previously
+  chosen continuous data through the two subtype inclusions.
+- **Seen:** `exists_local_continuous_traceQuotientUnit` in
+  `TNLean/MPS/Structure/ContinuousTraceQuotientUnit.lean` and
+  `exists_local_continuous_canonicalNormalization_of_isInjective` in
+  `TNLean/MPS/Symmetry/ContinuousCanonicalNormalization.lean`.
+- **Possible simplification:** use the open image of the subtype inclusion
+  where Mathlib's `IsOpen.isOpenMap_subtype_val` removes the repeated ambient
+  intersection construction. These two occurrences are below the threshold.
