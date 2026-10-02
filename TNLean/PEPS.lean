@@ -52,6 +52,9 @@ import TNLean.PEPS.GInjectiveMPS
 import TNLean.PEPS.GInjectiveMPSIntersection
 import TNLean.PEPS.GInjectiveMPSParentHamiltonian
 import TNLean.PEPS.GInjectiveRangeEquivalence
+import TNLean.PEPS.GInjectiveTorusProjector
+import TNLean.PEPS.GInjectiveTorusSectorCount
+import TNLean.PEPS.GInjectiveTorusSectors
 import TNLean.PEPS.GInjectiveVirtualComparison
 import TNLean.PEPS.GIsometric
 import TNLean.PEPS.GIsometricConcatenation
@@ -92,6 +95,10 @@ import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalSquareUnconditionalFundamentalTheorem
 import TNLean.PEPS.OnSiteOperator
 import TNLean.PEPS.OpenRegionContraction
+import TNLean.PEPS.PairConjugacy
+import TNLean.PEPS.PairConjugacyCentralizer
+import TNLean.PEPS.PairConjugacyOperators
+import TNLean.PEPS.PhysicalProductCut
 import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PositivityCounterexamples
 import TNLean.PEPS.PureCutLocalEquivalence
@@ -110,6 +117,9 @@ import TNLean.PEPS.RegularBoundaryState
 import TNLean.PEPS.RegularBoundaryTransporter
 import TNLean.PEPS.RegularBoundaryUntwisting
 import TNLean.PEPS.RegularClosureSuperposition
+import TNLean.PEPS.RegularGInjectiveTorus
+import TNLean.PEPS.RegularGInjectiveTorusRank
+import TNLean.PEPS.RegularMatrixEquiv
 import TNLean.PEPS.RegularOpenRegion
 import TNLean.PEPS.RegularPhysicalUnitaryTransport
 import TNLean.PEPS.RegularProjectorOpenRegion
@@ -122,6 +132,12 @@ import TNLean.PEPS.RegularRegionGramExpansion
 import TNLean.PEPS.RegularRegionIsometry
 import TNLean.PEPS.RegularSiteGram
 import TNLean.PEPS.RegularSiteSymmetryRecovery
+import TNLean.PEPS.RegularTorusBondCounting
+import TNLean.PEPS.RegularTorusCompatibility
+import TNLean.PEPS.RegularTorusGram
+import TNLean.PEPS.RegularTorusGramExpansion
+import TNLean.PEPS.RegularTorusSectors
+import TNLean.PEPS.RegularTorusSite
 import TNLean.PEPS.SemiRegularBondIsometry
 import TNLean.PEPS.SingletonRegion
 import TNLean.PEPS.SquareLatticeBoundaryMPO
@@ -130,6 +146,7 @@ import TNLean.PEPS.SquareLatticeCoordinateSwap
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.TorusAbsorbedCovariance
+import TNLean.PEPS.TorusClosureSeams
 import TNLean.PEPS.TorusConjCovarianceFamily
 import TNLean.PEPS.TorusCornerRegion
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
@@ -140,11 +157,15 @@ import TNLean.PEPS.TorusEdgeBlockingRegion
 import TNLean.PEPS.TorusEdgeGauge
 import TNLean.PEPS.TorusEdgeGaugeCovariance
 import TNLean.PEPS.TorusFundamentalTheorem
+import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.TorusGaugeUniqueness
 import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusLatticeGraph
 import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusParallelSection
+import TNLean.PEPS.TorusPhysicalMap
+import TNLean.PEPS.TorusProjectorExpansion
+import TNLean.PEPS.TorusProjectorExtraction
 import TNLean.PEPS.TorusRectangleGauge
 import TNLean.PEPS.TorusRectangleReferenceData
 import TNLean.PEPS.TorusRectangleRegion
