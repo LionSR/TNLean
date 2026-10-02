@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
 import TNLean.MPS.Preparation.BlockApproximationError
+import TNLean.MPS.Preparation.BlockGateUnitary
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.BlockSites
 import TNLean.MPS.Preparation.BlockSumUnitary
@@ -39,6 +40,7 @@ import TNLean.MPS.Preparation.GivensDecomposition
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
+import TNLean.MPS.Preparation.IsometricExtension
 import TNLean.MPS.Preparation.LocalChannelCircuit
 import TNLean.MPS.Preparation.LocalChannelConversion
 import TNLean.MPS.Preparation.LocalCircuit
@@ -69,6 +71,7 @@ import TNLean.MPS.Preparation.OverlappingBlockStates
 import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PairProduct
+import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PermutationGates
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.PolarMerge

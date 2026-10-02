@@ -765,3 +765,55 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     divisibility of the transfer map, which characterizes continuum limits of
     translationally invariant MPS (\cite{DeLasCuevas2017Irreducible}).
 \end{remark}
+
+\begin{theorem}[Absorbing the orbitwise gauge into the root]
+    \label{thm:periodic_absorb_orbit_gauge}
+    \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action}
+    \leanok
+    \uses{def:periodic_step_orbit_projection}
+    Let $A$ be left canonical with orthogonal cyclic projections $P_u$
+    summing to the identity and satisfying $P_uA^i=A^iP_{u+1}$.
+    Let $m>0$, $p\ge0$, $r=\gcd(m,p)$, and $c_\alpha^{m/r}=1$.
+    If a matrix $Z$ satisfies
+    \begin{align}
+        \label{eq:periodic_orbit_gauge_action}
+        ZQ_\alpha(A^{[p]})^I & =c_\alpha Q_\alpha(A^{[p]})^I,
+    \end{align}
+    then there is a left-canonical tensor $A'$ of the same dimensions with
+    $(A'^{[p]})^I=Z(A^{[p]})^I$ for every $I$.
+    This is the comparison of the two phase formulas in the proof of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_orbit_phase_tensor}
+    Construct $A'$ using Theorem~\ref{thm:periodic_orbit_phase_tensor}.
+    Regroup its cyclic-sector sum by step orbits to obtain
+    $\sum_\alpha c_\alpha Q_\alpha(A^{[p]})^I$.
+    Substitute (\ref{eq:periodic_orbit_gauge_action}) and use
+    $\sum_\alpha Q_\alpha=\Id$.
+\end{proof}
+
+\begin{theorem}[Unitary conjugation of a blocked root]
+    \label{thm:periodic_unitary_blocked_root}
+    \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_unitary_conj}
+    \leanok
+    If $A$ is left canonical and $(A^{[p]})^I=UC^IU^\dagger$ for a
+    unitary $U$, then $C$ has a left-canonical root $B$ at the original
+    physical dimension: $B^{[p]}=C$.
+    This is the final conjugation in the proof of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Set $B^i=U^\dagger A^iU$. Then
+    $\sum_i(B^i)^\dagger B^i=U^\dagger\bigl(\sum_i(A^i)^\dagger A^i\bigr)U=\Id$, and
+    $UU^\dagger=\Id$ cancels the intermediate factors of every word:
+    \begin{align}
+        B^{i_1}\cdots B^{i_p} & =U^\dagger A^{i_1}UU^\dagger A^{i_2}U\cdots U^\dagger A^{i_p}U
+        =U^\dagger A^{i_1}\cdots A^{i_p}U. \notag
+    \end{align}
+    Hence $B^{[p]}=U^\dagger A^{[p]}U=C$.
+\end{proof}

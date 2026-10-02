@@ -2418,6 +2418,43 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### relabeling normalized source factors into a standard form — candidate
+- **Pattern:** pull source factors back along intermediate-rank equivalences,
+  use the supplied gate entry formulas, and rewrite both finite sums along
+  those equivalences to inherit the open source-factor contraction.
+- **Seen:** `shiftExampleU₂BlockedStandardForm` and
+  `shiftExampleU₃BlockedStandardForm` in `Examples/ShiftStandardForms.lean`.
+- **Notes:** their weighted and ordinary isometry identities are transported
+  along the same column equivalences. Consider a shared constructor when a
+  third tensor requires this exact combination of data.
+
+
+### rescaling a source cut to normalize its virtual weight — candidate
+- **Pattern:** scale the first cut's `X₁` and `Z₁` by a nonzero real scalar,
+  scale `Y₁` inversely, and divide the virtual weight by the scalar's square.
+- **Seen:** `rightShiftPaperSourceFactors` in `Examples/ShiftSourceFactors.lean`
+  and `normalizeProductShiftSourceFactors` in `Examples/ShiftNormalizedSourceFactors.lean`.
+- **Reuse:** the latter helper already serves both counterpropagating families.
+  A third distinct proof should extract the general scalar-weight operation.
+
+
+### delta-contraction standard-form witnesses — candidate
+- **Pattern:** reindex a finite bond sum by `finProdFinEquiv`, expand tensor
+  entries, and contract Kronecker deltas with `simp`; finish reordered
+  equality tests with `split_ifs` and `simp_all`.
+- **Seen:** the unblocked third-family and swap-transformed second-family
+  witnesses in `TNLean/MPS/MPU/Examples/ShiftStandardForms.lean`. The direct
+  identity witness has the trivial bond `Fin 1`, so it contracts deltas without
+  any bond reindexing and is not an occurrence.
+- **Normalization:** the unblocked third family and transformed second family
+  also evaluate Gram sums after the same bond reindexing, with reciprocal
+  square-root scalings. Both occurrences remain in this one module.
+- **Decision:** the two blocked families now use normalized source factors and
+  the shared open-contraction theorem instead. Keep the remaining explicit
+  gate-specific expansions while the pattern is confined to one module; if
+  another example repeats it, first seek a finite-sum lemma rather than a tactic.
+
+
 ### finite three-cocycle entry elimination — candidate
 - **Pattern:** specialize the cocycle equation at a concrete quadruple, reduce its group
   products, and simplify using entries already known to be one.
@@ -3632,6 +3669,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
 - **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
   monoid; below the three-occurrence promotion threshold.
+
+### Unitary transport of left-canonical sums — candidate
+- **Pattern:** expand the conjugate transpose of `U * A i * Uᴴ`, cancel the
+  middle unitary pair, move the outer matrices through the finite sum, and
+  use the original left-canonical identity.
+- **Seen:** two occurrences in two files: the normalization proof in
+  `exists_isLeftCanonical_blockTensor_eq_of_unitary_conj` in
+  `TNLean/MPS/Periodic/SectorPhaseBlocking.lean`, and
+  `leftCanonical_of_unitary_block_intertwining` in
+  `TNLean/MPS/MPU/VirtualUnitaryGauge.lean`.
+- **Abstraction (proposed):** a left-canonical transport lemma for a unitary
+  matrix intertwining two tensor families, if a third occurrence arises.
+- **Notes:** the periodic application uses the inverse unitary orientation.
+  Below the three-occurrence promotion threshold; no custom tactic introduced.
 
 ### measurement-assisted GHZ protocol on two site layouts — candidate
 - **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the

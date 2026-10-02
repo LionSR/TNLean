@@ -878,3 +878,144 @@
     Repeated representatives would have the same matrix-product-vector
     phase class, contrary to their choice.
 \end{proof}
+
+\begin{theorem}[Global similarity between matched block sums]
+    \label{thm:periodic_matched_blocks_global_similarity}
+    \lean{MPSTensor.toTensorFromBlocks_conj_of_matched_blocks}
+    \leanok
+    \uses{def:block_diagonal_tensor}
+    Let $e$ be a bijection between the blocks of $\bigoplus_k\mu_kA_k$ and of
+    $\bigoplus_t\mu'_tB_t$ with $D_k=D'_{e(k)}$, and suppose
+    $\mu_kA_k^i=\mu'_{e(k)}X_{e(k)}B_{e(k)}^iX_{e(k)}^{-1}$ for invertible
+    $X_t$. Then there are matrices $Y$ and $Y'$ with $YY'=\Id$, $Y'Y=\Id$, and
+    \begin{align}
+        \bigoplus_k\mu_kA_k^i & =Y\Bigl(\bigoplus_t\mu'_tB_t^i\Bigr)Y'. \notag
+    \end{align}
+    If every $X_t$ is unitary, then $Y'=Y^\dagger$. This is the matrix
+    $Y=\bigoplus_jT_j\otimes Y_j$ of
+    \cite[line~690]{DeLasCuevas2017Irreducible}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:tensor_from_blocks_globalGauge_conj,thm:heterogeneous_block_sum_reindex}
+    Let $\Pi$ be the permutation matrix carrying the summand $t=e(k)$ of
+    $\bigoplus_t$ to the summand $k$ of $\bigoplus_k$, and set
+    $Y=\Pi\bigl(\bigoplus_tX_t\bigr)$ and
+    $Y'=\bigl(\bigoplus_tX_t^{-1}\bigr)\Pi^\dagger$. Then $YY'=Y'Y=\Id$, and
+    \begin{align}
+        Y\Bigl(\bigoplus_t\mu'_tB_t^i\Bigr)Y'
+         & =\Pi\Bigl(\bigoplus_t\mu'_tX_tB_t^iX_t^{-1}\Bigr)\Pi^\dagger
+        =\bigoplus_k\mu_kA_k^i. \notag
+    \end{align}
+    For unitary $X_t$, $X_t^{-1}=X_t^\dagger$, so $Y'=Y^\dagger$.
+\end{proof}
+
+\begin{definition}[Multiplicities grouped by phase class]
+    \label{def:periodic_grouped_multiplicities}
+    \lean{MPSTensor.MPVPhaseClassData.toSectorDecomposition}
+    \leanok
+    \uses{def:mpv_phase_class_data}
+    Write $\rho_j$ and $e(j,q)$ for the representatives and the enumeration of
+    the phase-class data of Definition~\ref{def:mpv_phase_class_data}, as in
+    Theorem~\ref{thm:periodic_phase_class_unitary_match}. Given nonzero
+    weights $\mu_k$ and unit-modulus phases $\xi_{j,q}$, let $n_j$ be
+    the number of copies in class $j$ and define
+    \begin{align}
+        \label{eq:periodic_grouped_multiplicities}
+        \mu'_{j,q} & =\mu_{e(j,q)}\xi_{j,q},                                 &
+        R_j        & =\operatorname{diag}(\mu'_{j,0},\ldots,\mu'_{j,n_j-1}), &
+        P^i        & =\bigoplus_j R_j\otimes A_{\rho_j}^i.
+    \end{align}
+    This is the multiplicity form of \cite[Section~2.1]{DeLasCuevas2017Irreducible}.
+\end{definition}
+
+\begin{theorem}[Unitary grouping of periodic blocks]
+    \label{thm:periodic_grouped_unitary}
+    \lean{MPSTensor.MPVPhaseClassData.exists_unitary_sectorDecomposition}
+    \leanok
+    \uses{def:periodic_grouped_multiplicities,def:periodic_tensor,def:same_mpv2_pos,
+        def:block_diagonal_tensor}
+    Let $A_k$ be left-canonical periodic blocks and let every $\mu_k$ be
+    nonzero. Set $T^i=\bigoplus_k\mu_k A_k^i$.
+    There are phases $\xi_{j,q}$ in
+    Definition~\ref{def:periodic_grouped_multiplicities} such that $P$
+    has the same total bond dimension as $T$, its representative blocks
+    are periodic and pairwise non-repeated, and
+    $|\mu'_{j,q}|=|\mu_{e(j,q)}|$ for every original copy.
+    There is a matrix $Y$ from the grouped bond space to the original bond
+    space with $YY^\dagger=I$ and $Y^\dagger Y=I$, satisfying
+    $T^i=YP^iY^\dagger$ for every physical index $i$.
+    In particular, $V^{(N)}(T)_\sigma=V^{(N)}(P)_\sigma$ at every positive length.
+    This gives the grouping of \cite[Section~2.1 and the paragraph after
+        Theorem~3.4]{DeLasCuevas2017Irreducible} in a unitary gauge.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_phase_class_unitary_match,thm:coisometry_reconstruction_same_mpv_pos,
+        thm:periodic_matched_blocks_global_similarity}
+    Choose the phases and unitaries of
+    Theorem~\ref{thm:periodic_phase_class_unitary_match}. Multiplying
+    (\ref{eq:periodic_phase_class_unitary}) by $\mu_{e(j,q)}$ and using
+    Definition~\ref{def:periodic_grouped_multiplicities} gives
+    \begin{align}
+        \mu_{e(j,q)}A_{e(j,q)}^i
+         & =\mu_{e(j,q)}\xi_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger
+        =\mu'_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger. \notag
+    \end{align}
+    The enumeration is a bijection between grouped copies and original
+    blocks. Let $\Pi$ be the permutation matrix sending the copy $(j,q)$ to the
+    block $e(j,q)$, and set $Y=\Pi\bigl(\bigoplus_{j,q}U_{j,q}\bigr)$. Then
+    \begin{align}
+        YY^\dagger    & =\Pi\Bigl(\bigoplus_{j,q}U_{j,q}U_{j,q}^\dagger\Bigr)\Pi^\dagger=\Id,
+        \notag                                                                                                 \\
+        YP^iY^\dagger & =\Pi\Bigl(\bigoplus_{j,q}\mu'_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger\Bigr)\Pi^\dagger
+        =\bigoplus_k\mu_kA_k^i=T^i, \notag
+    \end{align}
+    and likewise $Y^\dagger Y=\Id$. The same bijection and the equality of matched
+    block dimensions give equality of total dimensions.
+    The phases have modulus one, so the individual weight moduli are
+    unchanged. For $N>0$, the factors $Y^\dagger Y=I$ between adjacent
+    letters cancel, and cyclicity of the trace removes the outer $Y$ and
+    $Y^\dagger$:
+    \begin{align}
+        V^{(N)}(T)_\sigma
+         & =\tr\bigl(YP^{\sigma_0}Y^\dagger\cdots YP^{\sigma_{N-1}}Y^\dagger\bigr)
+        =\tr\bigl(P^{\sigma_0}\cdots P^{\sigma_{N-1}}\bigr)
+        =V^{(N)}(P)_\sigma. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Unit weight moduli before grouping]
+    \label{thm:periodic_ungrouped_weight_moduli}
+    \lean{MPSTensor.weight_norm_eq_one_of_block_sum_sameMPV₂Pos}
+    \leanok
+    \uses{def:periodic_tensor,def:same_mpv2_pos,def:block_diagonal_tensor}
+    Let $T^i=\bigoplus_k\mu_k A_k^i$, where the $A_k$ are left-canonical
+    periodic blocks and every $\mu_k$ is nonzero. Let $Q$ be a decomposition
+    with pairwise non-repeated left-canonical periodic basis blocks and
+    unit-modulus multiplicities. If $V^{(N)}(T)=V^{(N)}(Q)$ for every positive $N$,
+    then $|\mu_k|=1$ for every $k$.
+    This is the normalization consequence needed in the corrected forward
+    direction of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}; the
+    trace-preservation correction is recorded in
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_grouped_unitary,thm:periodic_equalcase_unit_weights}
+    Group the blocks of $T$ as in Theorem~\ref{thm:periodic_grouped_unitary}.
+    For every $N>0$, the resulting decomposition $P$ satisfies
+    $V^{(N)}(P)=V^{(N)}(T)=V^{(N)}(Q)$.
+    Theorem~\ref{thm:periodic_equalcase_unit_weights} matches the
+    multiplicities of $P$ and $Q$ up to unit-modulus factors. Hence, for every
+    grouped copy,
+    \begin{align}
+        |\mu_{e(j,q)}| & =|\mu'_{j,q}|=1. \notag
+    \end{align}
+    The first equality is the modulus statement of
+    Theorem~\ref{thm:periodic_grouped_unitary}. Since $e$ enumerates every
+    original block, $|\mu_k|=1$ for every $k$.
+\end{proof}

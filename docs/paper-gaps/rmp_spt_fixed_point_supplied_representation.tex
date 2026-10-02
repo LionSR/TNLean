@@ -8,7 +8,7 @@
 \date{2026-09-27}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 In the paragraph ``Symmetry protected topological order'' of
@@ -31,27 +31,39 @@ $\omega$ (\leanid{MPSTensor.sptFixedPointAction},
 \leanid{MPSTensor.twistedTensor_sptFixedPointTensor},
 \leanid{MPSTensor.sptFixedPointTensor_isOnSiteSymmetric},
 \leanid{MPSTensor.cohomologousTo_of_sptFixedPointTensor},
-\leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}). These symmetry
-results are therefore proved for those 2-cocycles that are supplied together
-with a projective representation, which is a special case of the source's
-statement until every 2-cocycle is shown to arise this way.
+\leanid{MPSTensor.exists_virtualRep_sptFixedPointTensor}). These results
+hold for any group. For a finite group, the next section supplies such a
+representation for every 2-cocycle class. Its factor system is a representative
+of the class of $\omega$, not $\omega$ itself. Composed with these results, it
+gives the source's construction from the cocycle alone.
 
-\section{The missing step}
-For finite $G$ every 2-cocycle arises: the twisted regular representation
+\section{Resolution for finite groups}
+For finite $G$ every 2-cocycle class arises. The twisted left regular matrices
 \begin{align}
-    \rho(g)\ket{x} & =\omega(g,x)\ket{gx}
+    L^{\phi}_g\ket{h} & =\phi(g,h)^{-1}\ket{gh}
     \label{eq:rmp_spt_supplied_twisted_regular}
 \end{align}
-on $\mathbb C^G$ satisfies $\rho(g)\rho(h)=\omega(g,h)\rho(gh)$, because
-$\rho(g)\rho(h)\ket{x}=\omega(h,x)\omega(g,hx)\ket{ghx}$ and the 2-cocycle
-equation gives $\omega(h,x)\omega(g,hx)=\omega(g,h)\omega(gh,x)$. This existence
-step is not formalized.
+on $\mathbb C^G$, built from a circle-valued 2-cocycle $\phi$, are unitary and
+satisfy $L^{\phi}_gL^{\phi}_h=\phi(g,h)^{-1}L^{\phi}_{gh}$. Apply this to
+$\phi=\bar\omega^{-1}$, where $\bar\omega=\omega/|\omega|$ is the pointwise phase of $\omega$; for
+finite $G$ it is cohomologous to $\omega$. The result is a unitary projective representation with factor
+system $\bar\omega$, which is cohomologous to $\omega$
+(\leanid{TNLean.Algebra.ScalarCocycle.regularProjectiveForClass},
+\leanid{TNLean.Algebra.ScalarCocycle.regularProjectiveForClass_mem_unitaryGroup}).
+Feeding it to the construction gives
+\leanid{MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle}: from $\omega$ alone,
+the fixed point of bond dimension $|G|$ is symmetric under a unitary physical
+action, \leanid{MPSTensor.sptFixedPointAction_mem_unitaryGroup}, and every virtual
+projective representation of that symmetry has a factor system cohomologous to
+$\omega$.
 
-\section{Elimination plan}
-Define (\ref{eq:rmp_spt_supplied_twisted_regular}) as a projective representation
-of a finite group with factor system $\omega$, and compose it with the formal
-construction to obtain the fixed point from $\omega$ and $\phi$ alone. The
-formal construction is \leanid{MPSTensor.sptFixedPointTensor}.
+The factor system of the supplied representation is $\bar\omega$, not $\omega$
+itself. The source's claim concerns the class of $\omega$, so the class-level
+statement is the faithful one. The results that take a representation $\rho$ as
+input remain available for arbitrary groups. The trivial-character and on-site
+restrictions are recorded separately in
+\cite{gap:rmp_spt_fixed_point_trivial_character} and
+\cite{gap:rmp_spt_fixed_point_onsite_scope}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

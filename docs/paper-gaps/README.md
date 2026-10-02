@@ -63,10 +63,12 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   for continuous compact families of one-site injective tensors with the
   canonical two-site interaction, while the source's path also covers
   non-injective normal forms with several blocks.
-- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction) records
-  that the formal fixed point takes a projective representation with the given
-  factor system as input, whereas the source starts from the 2-cocycle alone; the
-  twisted regular representation on `ℂ^G` would supply it and is not formalized.
+- `rmp_spt_fixed_point_supplied_representation.tex` (scope restriction, resolved)
+  records that the formal fixed point takes a projective representation as input,
+  whereas the source starts from the 2-cocycle alone. For finite groups the twisted
+  regular representation on `ℂ^G` supplies a unitary representation whose factor
+  system lies in the class of the cocycle, and the fixed point built from it
+  realizes that class.
 - `rmp_spt_fixed_point_trivial_character.tex` (scope restriction) records that
   the twist identity `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹` is proved for every
   character `φ`, but on-site symmetry and the realization of the class of `ω`
@@ -158,6 +160,12 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_shift_supplied_standard_forms.tex` records that the shift-family gates
+  of Section VII are formalized as explicit two-site decompositions with
+  supplied gates and normalized half factors. Only the blocked
+  counterpropagating families take their half factors and gates from an
+  explicit source-cut factorization; the unblocked and swap-transformed
+  decompositions are not identified with Definition SF.
 - `mpu_shift_specified_tensor_index_scope.tex` records the resolved distinction
   between the specified-tensor formulas and the public blocking-independent
   MPU index. `ShiftPublicIndex.lean` constructs the right-shift canonical form
@@ -716,6 +724,11 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   walls and their phases are nonzero and that the local action of the
   symmetry on a domain wall holds against blocked regions of the two ground
   states.
+- `gs24_domain_wall_half_string_gluing.tex` (scope restriction) records that
+  the exchange of two left endpoints of domain-wall strings is proved for the
+  half-chain operators glued with right endpoints of strings, not as an
+  identity of half-chain objects with open legs, which needs the fixed-point
+  form of the action tensors.
 - `gs24_unbroken_subgroup_stabilizer.tex` (false source claim) records that
   the unbroken subgroup `H` of the classification of the L-symbols by `H`
   and a point of an `H^2(H, C^×)`-torsor (a class `alpha` once a
@@ -848,10 +861,14 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
-  at most `D`, varying along the ring and handled by zero padding; the
-  remaining restrictions are injective blocked tensors and blocks of at least
-  `3D` sites, with the finite-correlation assumption stated for one ring with
-  error `δ`; open: partial isometries without injectivity and the
+  at most `D`, varying along the ring and handled by zero padding, and for
+  blocked tensors that need not be injective, the block unitaries
+  implementing isometric extensions `W_k` of the partial isometries `V_k`
+  with error exactly `ε(Ω, φ_pos)`; the remaining restriction is blocks of at
+  least `3D` sites, against the source's requirement `d^q ≥ D²`, which for
+  such blocks implies the hypothesis `D² ≤ d^{3D}` of the exact error
+  identity, with the finite-correlation assumption
+  stated for one ring with error `δ`; open: the block-length bound and the
   sequence-level statement.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
