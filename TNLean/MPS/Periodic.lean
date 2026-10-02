@@ -23,6 +23,7 @@ import TNLean.MPS.Periodic.EqualCaseGlobal.Canonical
 import TNLean.MPS.Periodic.EqualCaseGlobal.IrreducibleForm
 import TNLean.MPS.Periodic.FundamentalTheorem
 import TNLean.MPS.Periodic.GlobalGauge
+import TNLean.MPS.Periodic.IrreducibleFormBlocking
 import TNLean.MPS.Periodic.IrreducibleFormPeriods
 import TNLean.MPS.Periodic.NormalCanonicalPeriodOne
 import TNLean.MPS.Periodic.Normalization
