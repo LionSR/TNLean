@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.TeleportationRound
+import TNLean.Circuit.Teleportation.Round
 
 /-!
 # Teleportation chains between distant sites
@@ -12,35 +12,35 @@ The tree-RG circuit of arXiv:2307.01696, eq. (16), applies isometries to registe
 apart on the chain. The paragraph "Tree-RG circuit with measurements" observes that these
 registers "can be teleported at neighboring registers with a constant overhead". This file
 provides the chains of hops that do so, in the measurement-round model
-(`MPSPreparation.MeasurementRound`):
+(`QuantumCircuit.MeasurementRound`):
 
 * for any valid lists of hops `there` and `back` and any layer of gates `G`, the round
   teleporting along `there`, followed by the round applying `G` and teleporting along `back`,
   acts on every outcome as `P_back G P_there` up to a scalar
-  (`MPSPreparation.TeleportHop.exists_eq_smul_of_mem_outputs_conj`); the two rounds have depth
+  (`QuantumCircuit.TeleportHop.exists_eq_smul_of_mem_outputs_conj`); the two rounds have depth
   `2` and `3`, whatever the distances;
 * the forward chain of `L` hops from `a` to `a + 2L` and the backward chain from `a + 2L` to
   `a`, whose permutations of sites are inverse to each other
-  (`MPSPreparation.TeleportHop.sitePerm_backwardChain`), and which leave `|0⟩` at the sites
+  (`QuantumCircuit.TeleportHop.sitePerm_backwardChain`), and which leave `|0⟩` at the sites
   `a, …, a + 2L - 1` when the sites `a + 1, …, a + 2L` carry `|0⟩`
-  (`MPSPreparation.TeleportHop.isZeroOn_chainPerm_forwardChain`).
+  (`QuantumCircuit.TeleportHop.isZeroOn_chainPerm_forwardChain`).
 
 The gates between distant sites built from these chains are in
-`TNLean.MPS.Preparation.LongRangeGates`.
+`TNLean.Circuit.Teleportation.LongRangeGates`.
 
 ## Main definitions
 
-* `MPSPreparation.TeleportHop.chainHop`, `MPSPreparation.TeleportHop.chainHopBack`,
-  `MPSPreparation.TeleportHop.forwardChain`, `MPSPreparation.TeleportHop.backwardChain`.
+* `QuantumCircuit.TeleportHop.chainHop`, `QuantumCircuit.TeleportHop.chainHopBack`,
+  `QuantumCircuit.TeleportHop.forwardChain`, `QuantumCircuit.TeleportHop.backwardChain`.
 
 ## Main results
 
-* `MPSPreparation.permMatrix_cfgPerm_mul_embedOp_mul` — relabelling the sites of an embedded
+* `QuantumCircuit.permMatrix_cfgPerm_mul_embedOp_mul` — relabelling the sites of an embedded
   operator.
-* `MPSPreparation.TeleportHop.exists_eq_smul_of_mem_outputs_conj`.
-* `MPSPreparation.TeleportHop.sitePerm_forwardChain`,
-  `MPSPreparation.TeleportHop.sitePerm_backwardChain`,
-  `MPSPreparation.TeleportHop.isZeroOn_chainPerm_forwardChain`.
+* `QuantumCircuit.TeleportHop.exists_eq_smul_of_mem_outputs_conj`.
+* `QuantumCircuit.TeleportHop.sitePerm_forwardChain`,
+  `QuantumCircuit.TeleportHop.sitePerm_backwardChain`,
+  `QuantumCircuit.TeleportHop.isZeroOn_chainPerm_forwardChain`.
 
 ## References
 
@@ -48,10 +48,10 @@ The gates between distant sites built from these chains are in
   measurements".
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
@@ -60,7 +60,7 @@ variable {d N : ℕ}
 /-- **Relabelling the sites of an embedded operator.** Conjugating `X` at the sites `e` by the
 permutation of configurations `x ↦ x ∘ σ` places `X` at the sites `σ ∘ e`. -/
 theorem permMatrix_cfgPerm_mul_embedOp_mul {m : ℕ} (σ : Equiv.Perm (Fin N)) (e : Fin m → Fin N)
-    (X : Matrix (Cfg d m) (Cfg d m) ℂ) :
+    (X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
     (cfgPerm σ).permMatrix ℂ * embedOp e X * (cfgPerm σ.symm).permMatrix ℂ =
       embedOp (σ ∘ e) X := by
   classical
@@ -91,24 +91,24 @@ theorem permMatrix_cfgPerm_mul_embedOp_mul {m : ℕ} (σ : Equiv.Perm (Fin N)) (
 variable [NeZero d]
 
 /-- Permuting the sites moves the sites carrying `|0⟩`. -/
-theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Set (Fin N)} {v : Cfg d N → ℂ}
+theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
     (h : IsZeroOn S v) (π : Equiv.Perm (Fin N)) :
     IsZeroOn (π '' S) ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
   rintro y hy _ ⟨i, hi, rfl⟩
   rw [permMatrix_mulVec] at hy
   exact h _ hy i hi
 
-private theorem isZeroOn_mulVec_of_finset {S : Finset (Fin N)} {v : Cfg d N → ℂ}
+private theorem isZeroOn_mulVec_of_finset {S : Finset (Fin N)} {v : (Fin N → Fin d) → ℂ}
     (h : IsZeroOn (S : Set (Fin N)) v) {T : Set (Fin N)} (hST : Disjoint (S : Set (Fin N)) T)
-    {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d T) :
+    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
     IsZeroOn (S : Set (Fin N)) (A *ᵥ v) := by
-  have hP : ∀ u : Cfg d N → ℂ, IsZeroOn (S : Set (Fin N)) u ↔ ctrlProj S 0 *ᵥ u = u := by
+  have hP : ∀ u : (Fin N → Fin d) → ℂ, IsZeroOn (S : Set (Fin N)) u ↔ ctrlProj S 0 *ᵥ u = u := by
     intro u
     constructor
     · intro hu
       funext x
       rw [ctrlProj, mulVec_diagonal]
-      by_cases hx : ∀ i ∈ S, x i = (0 : Cfg d N) i
+      by_cases hx : ∀ i ∈ S, x i = (0 : Fin N → Fin d) i
       · rw [ite_eq_left hx, one_mul]
       · rw [ite_eq_right hx, zero_mul]
         by_contra h0
@@ -117,15 +117,15 @@ private theorem isZeroOn_mulVec_of_finset {S : Finset (Fin N)} {v : Cfg d N → 
       rw [← hu, ctrlProj, mulVec_diagonal] at hx
       by_contra hne
       exact hx (by rw [ite_eq_right fun h' => hne (h' i hi), zero_mul])
-  have hc : Commute (ctrlProj S (0 : Cfg d N)) A :=
+  have hc : Commute (ctrlProj S (0 : Fin N → Fin d)) A :=
     commute_of_mem_supportedOperators hST (ctrlProj_mem_supportedOperators S 0) hA
   rw [hP] at h ⊢
   rw [mulVec_mulVec, hc.eq, ← mulVec_mulVec, h]
 
 /-- An operator acting on sites outside `S` keeps `|0⟩` at the sites of `S`. -/
-theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Set (Fin N)} {v : Cfg d N → ℂ}
+theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
     (h : IsZeroOn S v) {T : Set (Fin N)} (hST : Disjoint S T)
-    {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d T) :
+    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
     IsZeroOn S (A *ᵥ v) := by
   classical
   simpa using isZeroOn_mulVec_of_finset (S := S.toFinset) (by simpa using h)
@@ -166,10 +166,10 @@ carrying `|0⟩` at the sites `e`, `f` of `back`. Then every output of the round
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
 theorem exists_eq_smul_of_mem_outputs_conj {there back : List (TeleportHop N)}
-    (hthere : Valid there) (hback : Valid back) (G : Layer d N) {v : Cfg d N → ℂ}
+    (hthere : Valid there) (hback : Valid back) (G : Layer d N) {v : (Fin N → Fin d) → ℂ}
     (hv : IsZeroOn (pairSites there) v)
     (hGv : IsZeroOn (pairSites back) (G.op *ᵥ (chainPerm there *ᵥ v)))
-    {w : Cfg d N → ℂ}
+    {w : (Fin N → Fin d) → ℂ}
     (hw : w ∈ MeasurementRound.outputs [round [] there hthere, round [G] back hback] v) :
     ∃ c : ℂ, w = c • ((chainPerm back * G.op * chainPerm there) *ᵥ v) := by
   have h₁ := isImplementationOn_round (d := d) [] hthere
@@ -371,7 +371,7 @@ theorem allSites_forwardChain_subset (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
 /-- After the forward chain, a vector with `|0⟩` at the sites `a + j`, `1 ≤ j ≤ 2L`, has `|0⟩` at
 the sites `a + j`, `j < 2L`. -/
 theorem isZeroOn_chainPerm_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N)
-    {v : Cfg d N → ℂ} (hv : IsZeroOn {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * L ∧ i = a + (j : Fin N)} v) :
+    {v : (Fin N → Fin d) → ℂ} (hv : IsZeroOn {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * L ∧ i = a + (j : Fin N)} v) :
     IsZeroOn {i | ∃ j < 2 * L, i = a + (j : Fin N)} (chainPerm (forwardChain a L hL) *ᵥ v) := by
   induction L generalizing v with
   | zero => intro y _ i ⟨j, hj, _⟩; omega
@@ -409,4 +409,4 @@ end Chains
 
 end TeleportHop
 
-end MPSPreparation
+end QuantumCircuit
