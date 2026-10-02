@@ -122,6 +122,60 @@ of the virtual projective representation.
     the physical tensor powers.
 \end{proof}
 
+\begin{theorem}[Canonical interactions along a symmetric injective path]
+    \label{thm:spt_canonical_injective_gapped_path}
+    \lean{MPSTensor.continuous_parentInteraction_matrix_family,
+        MPSTensor.interactionHamiltonian_parent_spectrum_gap,
+        MPSTensor.canonicalInjectiveGappedPath}
+    \leanok
+    \uses{def:spt_common_space_gapped_path, thm:compact_parent_gap,
+        thm:spt_parent_hamiltonian_symmetry}
+    Let $\gamma\mapsto A_\gamma$ be a continuous path of one-site injective
+    tensors on fixed physical and bond spaces, with $D>0$. Fix a unitary
+    on-site representation $U$ such that, for every $\gamma\in[0,1]$ and
+    every $g\in G$, physical rotation of $A_\gamma$ by $U_g$ is a virtual
+    gauge change. Then the canonical two-site parent interactions give a
+    symmetric gapped interaction path between the endpoint interactions.
+    Their norms are at most one, their ground energy is zero, and one
+    positive spectral gap works for every parameter and every ring length
+    $N\geq2$ \cite[Section~II.C and Appendix~A]{Schuch2011Phases}.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The injective local ground-space projections vary continuously, so their
+    complementary projections do as well. Their norms are at most one.
+    Compactness gives a uniform norm gap above the kernel. Positivity of
+    the parent Hamiltonian makes all its eigenvalues nonnegative; applying
+    the norm bound to a unit eigenvector orthogonal to the kernel bounds
+    every nonzero eigenvalue below by the same positive constant. The
+    nonzero periodic MPS vector is a zero eigenvector. Finally, covariance
+    makes every local parent projection, and hence its periodic sum,
+    commute with the physical symmetry.
+\end{proof}
+
+\begin{theorem}[Symmetric gapped path to the isometric parent]
+    \label{thm:spt_polar_gapped_interaction_path}
+    \lean{MPSTensor.polarGappedInteractionPath}
+    \leanok
+    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
+    Let $A$ be one-site injective with $D>0$, let $U$ be a unitary on-site
+    representation, and suppose the tensor covariance is expressed by
+    unitary bond conjugation. The canonical two-site parent interactions
+    of $A$ and of its isometric form $W$ are joined by a symmetric gapped
+    interaction path on the original physical space, with the same
+    representation $U$ throughout
+    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
+    No equality between the physical dimension and $D^2$ is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the preceding construction to the injective polar path. The
+    endpoint identities give the canonical parents of $W$ and $A$; unitary
+    bond-conjugation covariance is preserved by the entire interpolation.
+\end{proof}
+
 \begin{theorem}[Classification along symmetric MPS parent-Hamiltonian paths]
     \label{thm:spt_classification}
     \notready

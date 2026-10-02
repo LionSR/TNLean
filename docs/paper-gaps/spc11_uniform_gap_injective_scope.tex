@@ -55,6 +55,17 @@ several-block case or the endpoint embeddings in the classification
 theorem.\footnote{Affected declaration:
     \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation}.}
 
+The canonical parent projections along any continuous one-site injective
+path with fixed on-site symmetry now also give a symmetric gapped
+interaction path on the common physical space. The norm-gap estimate
+gives a spectral gap above zero, since the periodic MPS vector is a
+nonzero zero eigenvector. Applied to the polar path in unitary virtual
+gauge, this joins the canonical parents of the original tensor and
+its isometric form. It does not perform the different-dimension
+endpoint embeddings in the classification theorem.\footnote{Affected
+    declarations: \leanid{MPSTensor.canonicalInjectiveGappedPath} and
+    \leanid{MPSTensor.polarGappedInteractionPath}.}
+
 \section{Elimination plan}
 For a continuous family of tensors in normal form with a fixed number of
 normal blocks, apply the block-diagonal parent-Hamiltonian gap with its
