@@ -22,6 +22,7 @@ import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.CircuitEquivalence
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.MPS.Preparation.CorrelatorFiniteSize
+import TNLean.MPS.Preparation.CutRank
 import TNLean.MPS.Preparation.DecayingCorrelationBound
 import TNLean.MPS.Preparation.DecayingCorrelations
 import TNLean.MPS.Preparation.DepthLogBound
