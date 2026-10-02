@@ -37,8 +37,7 @@ private theorem extractWindow_two_finRotate_eq_one_of_three {N : ℕ}
     (i : Fin N) (σ : Fin N → Fin d) :
     MPSTensor.extractWindow 2 (finRotate N i) σ =
       MPSTensor.extractWindow 2 (1 : Fin 3) (MPSTensor.extractWindow 3 i σ) := by
-  have hrot : (finRotate N i).val = (i.val + 1) % N := by
-    simp [finRotate_apply, Fin.add_def]
+  have hrot : (finRotate N i).val = (i.val + 1) % N := coe_finRotate_mod i
   funext r
   apply congrArg σ
   apply Fin.ext
@@ -81,8 +80,7 @@ private theorem offset_from_finRotate {N : ℕ} (hN : 2 ≤ N) (i k : Fin N) :
       else (k.val + N - i.val) % N - 1 := by
   let r := (k.val + N - i.val) % N
   have hrN : r < N := Nat.mod_lt _ (by omega)
-  have hrot : (finRotate N i).val = (i.val + 1) % N := by
-    simp [finRotate_apply, Fin.add_def]
+  have hrot : (finRotate N i).val = (i.val + 1) % N := coe_finRotate_mod i
   by_cases hr : r = 0
   · have hk : k = i := by
       have hk' := MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos i) hr
