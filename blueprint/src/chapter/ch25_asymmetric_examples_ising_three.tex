@@ -90,7 +90,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
         IsingTwist.isingBondObjectThree_left_mul_eq_mul_left}
     \leanok
     \uses{def:asymex_ising_three_product, thm:asymex_ising_sigma_square,
-        thm:asymex_ising_compression}
+        thm:asymex_ising_compression, prop:asym_split_intertwiners}
     There is an explicit four-target compression of $B_3$ with zero remainder.
     Its left and right maps $W_s,V_s$ satisfy, for every letter $a$ and each
     of the four weighted targets $C_s$,
@@ -104,7 +104,8 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_ising_compression, thm:asymex_ising_sigma_square}
+    \uses{thm:asymex_ising_compression, thm:asymex_ising_sigma_square,
+        prop:asym_split_intertwiners}
     Group the first two summands of $\Theta_3$. The stacked product is the
     direct sum of the twenty-four-dimensional two-object product and
     $\sqrt2$ times the sixteen-dimensional $\sigma$ square.
