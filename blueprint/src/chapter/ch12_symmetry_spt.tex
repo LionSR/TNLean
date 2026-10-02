@@ -657,6 +657,130 @@ and the regrouping of physical registers into bonds.
     this permutation does not change their product.
 \end{proof}
 
+\begin{theorem}[Uniform gap for independent interpolating bonds]
+    \label{thm:spt_bond_product_parent_gap}
+    \lean{MPSTensor.bondProductParentHamiltonian_gap_one,
+        MPSTensor.bondProductParentHamiltonian_groundSpace_eq_span,
+        MPSTensor.normalizedBondInterpolation_parent_gap_one,
+        MPSTensor.normalizedBondInterpolation_parent_groundSpace_eq_span}
+    \leanok
+    \uses{thm:spt_normalized_bond_interpolation,
+        def:spt_incoming_bond_coordinates}
+    Let $D_0,D_1>0$, $N>0$, and $\widehat\omega(\gamma)$ be the
+    normalized bond vector of
+    Theorem~\ref{thm:spt_normalized_bond_interpolation}. In the Hilbert
+    space of $N$ independent two-leg bonds, let
+    \begin{align}
+        h_i(\gamma) &= 1-
+          |\widehat\omega(\gamma)\rangle_i
+          \langle\widehat\omega(\gamma)|_i, &
+        H_N(\gamma) &= \sum_{i=1}^{N}h_i(\gamma).
+        \notag
+    \end{align}
+    The terms $h_i(\gamma)$ are commuting orthogonal projections. Their
+    common kernel is precisely the line spanned by the product vector
+    $\widehat\omega(\gamma)^{\otimes N}$, and for every vector $v$,
+    \begin{align}
+        \langle v,H_N(\gamma)^2v\rangle
+            &\geq \langle v,H_N(\gamma)v\rangle.
+        \notag
+    \end{align}
+    Thus every nonzero eigenvalue is at least one, uniformly in $N$ and
+    $\gamma$ \cite[Sections~II.D.2 and~II.F.2]{Schuch2011Phases}. The
+    same holds for every unit bond vector in place of
+    $\widehat\omega(\gamma)$. This statement uses independent-bond
+    coordinates; the passage to the original site coordinates uses the
+    unitary of Theorem~\ref{thm:spt_incoming_bond_unitary}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Unit norm makes each bond-line operator a rank-one orthogonal
+    projection. Operators on distinct bond factors commute. In the square
+    of their sum, each diagonal term is the original projection and each
+    off-diagonal quadratic form is nonnegative. The product of the
+    complementary projections is the rank-one projection onto
+    $\widehat\omega(\gamma)^{\otimes N}$, which identifies the kernel.
+\end{proof}
+
+\begin{theorem}[Continuity of the bond parent Hamiltonian]
+    \label{thm:spt_bond_parent_continuity}
+    \lean{MPSTensor.continuous_bondProductParentHamiltonian,
+        MPSTensor.continuous_normalizedBondInterpolation_parent}
+    \leanok
+    \uses{thm:spt_normalized_bond_interpolation,
+        thm:spt_bond_product_parent_gap}
+    For $D_0,D_1>0$ and each $N>0$, the independent-bond parent
+    Hamiltonian $H_N(\gamma)$ is continuous in $\gamma\in\mathbb R$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each matrix entry of a bond-line projection is a product of a bond
+    coefficient and a conjugate coefficient. Both depend continuously
+    on $\gamma$. Embedding in the finite chain and summing preserve
+    continuity.
+\end{proof}
+
+\begin{theorem}[Physical parent Hamiltonian of the interpolating bonds]
+    \label{thm:spt_physical_bond_parent_gap}
+    \lean{MPSTensor.normalizedPhysicalBondInterpolation_parent_gap_one,
+        MPSTensor.normalizedPhysicalBondInterpolation_parent_groundSpace,
+        MPSTensor.continuous_normalizedPhysicalBondInterpolation_parent}
+    \leanok
+    \uses{thm:spt_bond_product_parent_gap,
+        thm:spt_bond_parent_continuity,
+        thm:spt_incoming_bond_unitary}
+    Conjugate $H_N(\gamma)$ by the incoming-bond unitary $P_N$. In the
+    original physical-site coordinates, the resulting Hamiltonian
+    $P_NH_N(\gamma)P_N^*$ varies continuously with $\gamma$, has the
+    transported product vector $P_N\widehat\omega(\gamma)^{\otimes N}$
+    as its unique ground line, and satisfies
+    \begin{align}
+        \langle v,(P_NH_N(\gamma)P_N^*)^2v\rangle
+            &\geq \langle v,P_NH_N(\gamma)P_N^*v\rangle
+        \notag
+    \end{align}
+    for every $N>0$ and every physical-chain vector $v$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The incoming-bond change of coordinates is unitary. It carries the
+    product ground line and the quadratic-form inequality to physical
+    coordinates. Continuity follows from the continuity of the
+    finite-chain bond Hamiltonian, since the unitary conjugation is fixed.
+\end{proof}
+
+\begin{theorem}[On-site symmetry of the interpolating-bond parent Hamiltonian]
+    \label{thm:spt_physical_bond_parent_symmetry}
+    \lean{MPSTensor.normalizedBondInterpolationVector_fixed_directSum,
+        MPSTensor.bondProductParentHamiltonian_commute_sitewise_of_unitary_fixed,
+        MPSTensor.normalizedPhysicalBondInterpolation_parent_commute_onSite}
+    \leanok
+    \uses{thm:spt_bond_regrouping_symmetry,
+        thm:spt_physical_bond_parent_gap,
+        thm:spt_bond_interpolation_symmetry}
+    Let $V^{(0)}$ and $V^{(1)}$ be finite-dimensional unitary projective
+    representations with the same factor system, and let $V$ be their
+    direct sum. Let $U$ be the physical action
+    $U(g)=W_g^{\mathsf T}\otimes W_g^{-1}$, $W_g=V_{g^{-1}}$, of the SPT
+    fixed-point tensor of $V$ with trivial character
+    (Definition~\ref{def:spt_fixed_point_tensor}); it does not depend on
+    $\gamma$. For every group element $g$ and every $N>0$,
+    \begin{align}
+        \left[(U_g)^{\otimes N},
+          P_N H_N(\gamma)P_N^*\right]&=0
+        \notag
+    \end{align}
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{theorem}
+
+\begin{proof}\leanok
+    The block-scalar coefficient matrix of the bond is invariant under
+    conjugation by $V_g$. In bond coordinates this fixes the bond vector,
+    so each rank-one bond projection commutes with the bond action.
+    Regrouping carries that action to $(U_g)^{\otimes N}$ and therefore
+    carries the commutation relation to physical coordinates.
+\end{proof}
+
 \subsection{Degeneracy of the entanglement spectrum}
 \label{sec:spt_entanglement_spectrum}
 
