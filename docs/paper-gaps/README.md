@@ -116,9 +116,8 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   of the Gauss-law configurations of trivial holonomy, the only sector the
   dual network reaches on a torus. It also records that stability of
   `G`-isometry under concatenation (Lemma 6.2) is formalized in one
-  dimension, with the constants multiplying, and that in two dimensions only
-  the simplification of the left inverse for the left-regular representation
-  on the contracted link is formalized (open scope restriction).
+  dimension and for the contraction of one link of two PEPS tensors, with
+  the constants multiplying (resolved).
 - `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
   records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
   operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product

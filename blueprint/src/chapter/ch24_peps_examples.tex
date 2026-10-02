@@ -1415,7 +1415,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     Substitute this in the two left inverses.
 \end{proof}
 
-\begin{theorem}[Stability of isometry under concatenation in one dimension]%
+\begin{theorem}[Stability of isometry under concatenation of matrix product tensors]%
     \label{thm:peps_mps_g_isometric_concatenation}
     \lean{TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap,
         TNLean.PEPS.IsGIsometricMPS.concatTensor}
@@ -1426,10 +1426,8 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     $C^{ij}=A^iB^j$: the left inverse built from $\mathcal{P}(A^\dagger)$ and
     $\mathcal{P}(B^\dagger)$ is $\mathcal{P}(C^\dagger)$, and
     $\mathcal{P}(C^\dagger)\mathcal{P}(C)=c_Ac_B\,\sigma$. This is the
-    one-dimensional case of the source's lemma, which is stated for the
-    concatenation of PEPS in general and proved in one dimension; in two
-    dimensions only the simplification of the left inverse in
-    Lemma~\ref{lem:peps_regular_left_inverse} is formalized
+    one-dimensional case of the source's lemma; the two-dimensional case is
+    Theorem~\ref{thm:peps_g_isometric_link_contraction}
     \cite[Lemma~6.2]{Schuch2010PEPS},
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
@@ -1442,6 +1440,85 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     Theorem~\ref{thm:peps_mps_g_injective_concatenation} it is a left
     inverse of $\mathcal{P}(C)$. Invariance of $C$ holds as for
     $G$-injective tensors.
+\end{proof}
+
+In two dimensions the concatenation contracts the right leg of a tensor $A$,
+with virtual system $W_{A}\otimes\mathbb{C}[G]^{*}$, with the left leg of a
+tensor $B$, with virtual system $\mathbb{C}[G]\otimes W_{B}$. In the basis of
+group elements on the link and coordinate bases of the remaining legs and of
+the physical systems, the contracted tensor has the entries
+$C_{(k,l),(a,b)}=\sum_{g}A_{k,(a,g)}B_{l,(g,b)}$, and the representations of
+the two virtual systems are $\sigma_{A}\otimes L$ and $L\otimes\sigma_{B}$,
+where $L$ is the left-regular representation on $\mathbb{C}^{G}$: the
+contragredient of a permutation representation has the same matrices in the
+dual basis.
+
+\begin{theorem}[Stability of isometry under the contraction of one link]%
+    \label{thm:peps_g_isometric_link_contraction}
+    \lean{TNLean.PEPS.leftRegularFun, TNLean.PEPS.leftRegularFun_apply,
+        TNLean.PEPS.coeff_leftRegular, TNLean.PEPS.toMatrix'_leftRegularFun,
+        TNLean.PEPS.toMatrix'_leftRegularFun_mem_unitaryGroup,
+        TNLean.PEPS.kroneckerRep, TNLean.PEPS.toMatrix'_kroneckerRep,
+        TNLean.PEPS.toMatrix'_kroneckerRep_mem_unitaryGroup,
+        TNLean.PEPS.star_averageMap_dotProduct,
+        TNLean.PEPS.conjTranspose_toMatrix'_mul_toMatrix',
+        TNLean.PEPS.linkContractionMatrix, TNLean.PEPS.linkContractionCoord,
+        TNLean.PEPS.conjTranspose_linkContractionMatrix_mul,
+        TNLean.PEPS.conjTranspose_linkContractionMatrix,
+        TNLean.PEPS.toMatrix'_averageMap,
+        TNLean.PEPS.conjTranspose_linkContractionMatrix_mul_eq,
+        TNLean.PEPS.linkContractionCoord_comp_kroneckerRep,
+        TNLean.PEPS.star_linkContractionCoord_dotProduct,
+        TNLean.PEPS.toLin'_conjTranspose_comp_linkContractionCoord,
+        TNLean.PEPS.IsGIsometric.linkContractionCoord,
+        TNLean.PEPS.dualTensorHom_sum_coord_tmul, TNLean.PEPS.linkVector_eq_sum_basis,
+        TNLean.PEPS.linkLeftCoord, TNLean.PEPS.linkRightCoord, TNLean.PEPS.pairCoord,
+        TNLean.PEPS.linkLeftCoord_single, TNLean.PEPS.linkRightCoord_single,
+        TNLean.PEPS.pairCoord_single, TNLean.PEPS.tensorCoord,
+        TNLean.PEPS.tensorCoord_tmul,
+        TNLean.PEPS.tensorCoord_comp_linkContraction_comp_pairCoord,
+        TNLean.PEPS.linkLeftCoord_comp_kroneckerRep,
+        TNLean.PEPS.linkRightCoord_comp_kroneckerRep,
+        TNLean.PEPS.pairCoord_comp_kroneckerRep,
+        TNLean.PEPS.IsGIsometric.linkContraction}
+    \leanok
+    \uses{def:peps_g_injective, thm:peps_g_injective_concatenation}
+    Let $\sigma_{A}$ and $\sigma_{B}$ be unitary representations on the remaining
+    legs of $A$ and $B$, and let the contracted link carry the left-regular
+    representation. If $A$ is $G$-isometric for $\sigma_{A}\otimes L$ with
+    constant $c_{A}$ and $B$ is $G$-isometric for $L\otimes\sigma_{B}$ with
+    constant $c_{B}$, then the contracted tensor $C$ is $G$-isometric for
+    $\sigma_{A}\otimes\sigma_{B}$ with constant $c_{A}c_{B}$, and its left
+    inverse is $(c_{A}c_{B})^{-1}\mathcal{P}(C)^{\dagger}$, the contraction of
+    the adjoints of the two factors. In the source every leg carries the
+    left-regular representation or its contragredient, so the unitarity of
+    $\sigma_{A}$ and $\sigma_{B}$ follows from its hypotheses
+    \cite[Lemma~6.2]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+
+\begin{proof}\leanok
+    For a unitary representation, $G$-isometry with constant $c$ means
+    $\mathcal{P}(A)^{\dagger}\mathcal{P}(A)=c\,\Pi$, since $\mathcal{P}(A)$ is
+    invariant and $\Pi$ is self-adjoint. The Gram matrix of $C$ is
+    \begin{align}
+        (\mathcal{P}(C)^{\dagger}\mathcal{P}(C))_{(a,b),(a',b')}
+        =\sum_{g,g'}(\mathcal{P}(A)^{\dagger}\mathcal{P}(A))_{(a,g),(a',g')}
+        (\mathcal{P}(B)^{\dagger}\mathcal{P}(B))_{(g,b),(g',b')} .
+        \label{eq:peps_link_contraction_gram}
+    \end{align}
+    Writing both projectors as averages over $G$, the link indices contribute
+    $\sum_{g,g'}(L_{h})_{gg'}(L_{k})_{gg'}=|G|\,\delta_{h,k}$, which is the
+    identity $\Delta=|G|^{-1}\mathbb{1}$ for the left-regular representation,
+    so the right-hand side is $c_{A}c_{B}\,\Pi_{(a,b),(a',b')}$ for the
+    projector $\Pi$ of $\sigma_{A}\otimes\sigma_{B}$. Hence
+    $\langle\mathcal{P}(C)x,\mathcal{P}(C)y\rangle=c_{A}c_{B}\langle x,y\rangle$
+    for invariant $x,y$, which also gives injectivity on the invariant
+    subspace. Entrywise,
+    $\mathcal{P}(C)^{\dagger}_{(a,b),(k,l)}
+        =\sum_{g}\mathcal{P}(A)^{\dagger}_{(a,g),k}\mathcal{P}(B)^{\dagger}_{(g,b),l}$,
+    so $\mathcal{P}(C)^{\dagger}$ is the contraction of the adjoints. Invariance of $C$ holds because the actions on the contracted
+    link cancel, as in Theorem~\ref{thm:peps_g_injective_concatenation}.
 \end{proof}
 
 The source shows next that for a $G$-isometric tensor the virtual level,
