@@ -355,7 +355,12 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     (Lemma~\ref{lem:ldpolar_physical_matrix_rotate}), and $X_{W^\dagger W}=X$
     reads $W^\dagger W\widehat X=\widehat X$. Apply
     Theorem~\ref{thm:ldpolar_left_product} and reindex. A relabelling by a
-    bijection is the rotation by its permutation matrix, which is an isometry.
+    bijection is the rotation by its permutation matrix, which is an isometry;
+    this gives $P$ and $\Pi$. For $V$ the relabelling is read off directly:
+    relabelling the rows of $\widehat X$ leaves $\widehat X^\dagger\widehat X$
+    unchanged, so it relabels the rows of
+    $V=\widehat X\,g(\widehat X^\dagger\widehat X)$
+    (Definition~\ref{def:ldpolar_matrix}).
 \end{proof}
 
 \begin{theorem}[Polar factors of an injective tensor]

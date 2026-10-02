@@ -49,6 +49,18 @@ $S$, with last bond $D'_1=\lvert S\rvert$.\footnote{Formal declaration:
 At $q=0$ the map $\Id_D$ vanishes outside $S$ and spans the matrix units in $S$
 only when $D=0$ and $S$ is empty, or $D=1$ and $S$ is the one pair; the
 conclusion requires $\lvert S\rvert=1$ and fails in the first case.
+The bound $q\geq1$ is also assumed by the variant with no injectivity, which
+factors the partial isometry $V$ composed with a unitary $T$ on $\C^{D^2}$ whose
+first $r$ columns span the range of $V^\dagger V$, with last bond
+$D'_1=r$.\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary}
+    in the same module.}
+At $q=0$ this conclusion fails for every $D$. When $D=0$, $r\leq D^2=0$
+contradicts $D'_1=D'_{q+1}=1$. When $D\geq1$, $V^\dagger V$ is the projector
+onto the line of $\Id_D$, so $r=1$, and the conclusion asks that the scalar
+$VT\ket0$ equal the empty product $1$. This scalar has modulus one, and
+multiplying the first column of $T$ by $-1$ keeps the hypotheses and changes its
+sign, so the conclusion fails for one of the two unitaries.
 For every $q\geq1$ the conclusion is exactly
 (\ref{eq:mswc24_sequential_product}) in matrix product form, with no further
 hypothesis. Elimination: replace $q\geq1$ by a positive bond dimension $D\geq1$,

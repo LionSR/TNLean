@@ -207,7 +207,8 @@ theorem gram_mul_eq_of_conjTranspose_mul_self_mul_eq {K : Matrix ι' ι ℂ} {M 
   rw [conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Kᴴ, h]
 
 /-- **Polar factors of a left product**: if `(K M)ᴴ (K M) = Mᴴ M`, then `K M` has the positive
-part of `M`. All three polar factors are functions of the Gram matrix.
+part of `M`. The positive part, its pseudo-inverse and the support projector are functions of
+the Gram matrix `Mᴴ M`; the partial isometry is `M` times a function of it.
 
 Supplied step for arXiv:2307.01696, eq. (16) and the sentence before it: a layer `K` of the
 tree, acting inside its initial space, does not change the positive part ("to the same

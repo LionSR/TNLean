@@ -25,7 +25,7 @@ $\{0,\dots,n-1\}$, and for a tensor $A$ we write $\mathcal B_n=V_nP_n$ for the
 polar decomposition of $A$ blocked over $n$ sites, with $V_n$ read on the
 configurations of the $n$ sites.
 
-\begin{lemma}[The isometry of a block of unequal halves]
+\begin{lemma}[The partial isometry of a block of unequal halves]
     \label{lem:ldp_polar_merge}
     \lean{MPSPreparation.pairProductTensor, MPSPreparation.cfgPolarIso,
         MPSPreparation.mergeIso, MPSPreparation.isIsometry_cfgPolarIso,
@@ -34,10 +34,11 @@ configurations of the $n$ sites.
         MPSPreparation.polarPosTensor_blockTensor_add,
         MPSPreparation.pairProductTensor_self, MPSPreparation.mergeIso_self,
         MPSPreparation.isInjective_pairProductTensor,
-        MPSPreparation.isIsometry_mergeIso}
+        MPSPreparation.isIsometry_mergeIso,
+        MPSPreparation.polarPosTensor_blockTensor_two_pow,
+        MPSPreparation.mergeIso_two_pow}
     \leanok
-    \uses{thm:ldpolar_tensor_rotate, thm:ldpolar_tensor_decomposition,
-        thm:ldpolar_tensor_injective}
+    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_tree_factorization}
     Let $A$ be a tensor, $n_1,n_2\ge0$, and let
     $W:\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ be the partial isometry of the polar
     decomposition of the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two
@@ -50,13 +51,16 @@ configurations of the $n$ sites.
     $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$. No injectivity is assumed, as in the
     footnote of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}.
     For $n_1=n_2=n$ the tensor $(a,b)\mapsto P_n^aP_n^b$ is the two-site blocked
-    tensor of $P_n$, so $W$ is the layer of the tree of
-    \cite[eq.~(16)]{Malz2024Preparation}. If the blocked tensor over $n_1+n_2$
+    tensor of $P_n$, and $W$ is the partial isometry of its polar decomposition.
+    For $n=2^j$, $j\ge1$, the positive part $P_n$ is the tensor $T_j$ of the
+    tree of \cite[eq.~(16)]{Malz2024Preparation}, so $W$ is its layer
+    $V^{(j+1)}$. If the blocked tensor over $n_1+n_2$
     sites is injective, so is the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$, and
     $W$ is an isometry.
 \end{lemma}
 \begin{proof}
     \leanok
+    \uses{thm:ldpolar_tensor_rotate, thm:ldpolar_tensor_injective}
     Write $\mathcal B_{n_i}^{\tau}=\sum_y\bra\tau V_{n_i}\ket yP_{n_i}^y$. Then
     $\mathcal B_{n_1+n_2}^{\tau_1\tau_2}
         =\mathcal B_{n_1}^{\tau_1}\mathcal B_{n_2}^{\tau_2}$, so
@@ -68,7 +72,10 @@ configurations of the $n$ sites.
     positive part of $\mathcal B_{n_1+n_2}$. The matrices
     $\mathcal B_{n_1+n_2}^{\tau}$ are combinations of the products
     $P_{n_1}^aP_{n_2}^b$, so these span the full matrix algebra when the former
-    do.
+    do. For $n=2^j$, the equal-halves case of the identity of positive parts
+    gives $P_{2^{j+1}}$ as the positive part of the two-site blocked tensor of
+    $P_{2^j}$, which is the recursion defining $T_{j+1}$ from $T_j$; induction
+    on $j$ from $P_2=T_1$ gives $P_{2^j}=T_j$.
 \end{proof}
 
 \begin{theorem}[Layers of register gates one after the other]

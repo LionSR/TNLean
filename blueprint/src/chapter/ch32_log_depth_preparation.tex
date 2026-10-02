@@ -592,7 +592,7 @@ remaining eigenvalues have modulus strictly less than $1$.
         MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor,
         MPSTensor.polarSupportMatrix_blockTensor_eq_treeSupportMatrix}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_tensor_rotate}
+    \uses{thm:ldpolar_tensor_decomposition}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
     decomposition of the two-site blocked map of $T_{j-1}$, with
     $V^{(j)\dagger}V^{(j)}=\Pi_j$ the support projector of $P_j$, and let $T_j$
@@ -665,7 +665,8 @@ remaining eigenvalues have modulus strictly less than $1$.
 \begin{proof}
     \leanok
     \uses{lem:physical_rotation_mul, lem:ldpolar_physical_matrix_rotate,
-        lem:physical_rotation_state, thm:block_tensor_rotate_physical}
+        lem:physical_rotation_state, thm:block_tensor_rotate_physical,
+        thm:ldpolar_tensor_rotate}
     Blocking commutes with maps on the physical leg: blocking $C_W$ over $m$
     sites gives the tensor $C$ blocked over $m$ sites, rotated by
     $W^{\otimes m}$ (Theorem~\ref{thm:block_tensor_rotate_physical}). Blocking

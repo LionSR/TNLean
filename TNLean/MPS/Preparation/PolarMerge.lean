@@ -5,14 +5,14 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Preparation.BlockedPolar
-import TNLean.MPS.Preparation.PolarUniqueness
+import TNLean.MPS.Preparation.TreeMERA
 
 /-!
-# The isometry of a block of unequal halves
+# The partial isometry of a block of unequal halves
 
-The tree-RG circuit of arXiv:2307.01696, eq. (16), writes the isometry `V` of the polar
-decomposition `B_q = V P` of a blocked tensor as a tree of isometries, each of which maps the
-virtual space `ℂ^{D²}` of a block to those of its two halves. For blocks of `2^{k+1}` sites, cut
+The tree-RG circuit of arXiv:2307.01696, eq. (16), writes the partial isometry `V` of the polar
+decomposition `B_q = V P` of a blocked tensor as a tree of partial isometries, each of which maps
+the virtual space `ℂ^{D²}` of a block to those of its two halves. For blocks of `2^{k+1}` sites, cut
 into equal halves, this is `MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix`. This file
 proves the step of the tree for two halves of any lengths `n₁` and `n₂`: if `B_{n₁} = V₁ P₁` and
 `B_{n₂} = V₂ P₂`, then
@@ -25,17 +25,19 @@ tensor `(a, b) ↦ P₁^a P₂^b` of two neighbouring sites carrying the positiv
 (`MPSPreparation.polarPosTensor_blockTensor_add`). No injectivity is assumed: the initial
 projector `Π₁ ⊗ Π₂` of `V₁ ⊗ V₂` fixes the tensor of the positive parts, so `V₁ ⊗ V₂` composes
 with its partial isometry (`MPSTensor.polarIsoMatrix_rotatePhysical`). For halves of equal
-lengths, `W` is the layer of the tree (`MPSPreparation.mergeIso_self`).
+lengths, `W` is the partial isometry of the two-site blocked tensor of `P_n`
+(`MPSPreparation.mergeIso_self`); for halves of `2^{j+1}` sites this is the layer `V⁽ʲ⁺²⁾` of
+the tree (`MPSPreparation.mergeIso_two_pow`).
 
-The isometries are read on configurations of the sites of a block
+The partial isometries are read on configurations of the sites of a block
 (`MPSPreparation.cfgPolarIso`), which is how the circuits act on them.
 
 ## Main definitions
 
 * `MPSPreparation.pairProductTensor` — the tensor `(a, b) ↦ X^a Y^b` of two neighbouring sites.
-* `MPSPreparation.cfgPolarIso` — the isometry `V_n` of `A` blocked over `n` sites, on
+* `MPSPreparation.cfgPolarIso` — the partial isometry `V_n` of `A` blocked over `n` sites, on
   configurations.
-* `MPSPreparation.mergeIso` — the isometry `W` joining blocks of `n₁` and `n₂` sites.
+* `MPSPreparation.mergeIso` — the partial isometry `W` joining blocks of `n₁` and `n₂` sites.
 
 ## Main results
 
@@ -44,7 +46,9 @@ The isometries are read on configurations of the sites of a block
 * `MPSPreparation.polarPosTensor_blockTensor_add` — `P_{n₁+n₂}` is the positive part of the
   tensor `(a, b) ↦ P₁^a P₂^b`.
 * `MPSPreparation.pairProductTensor_self`, `MPSPreparation.mergeIso_self` — for halves of equal
-  lengths, `W` is the isometry of the two-site blocked tensor of `P_n`.
+  lengths, `W` is the partial isometry of the two-site blocked tensor of `P_n`.
+* `MPSPreparation.polarPosTensor_blockTensor_two_pow`, `MPSPreparation.mergeIso_two_pow` —
+  for halves of `2^{j+1}` sites, `W` is the layer `V⁽ʲ⁺²⁾` of the tree of eq. (16).
 * `MPSPreparation.isIsometry_mergeIso` — `W` is an isometry when `A` blocked over `n₁ + n₂`
   sites is injective.
 
@@ -69,7 +73,7 @@ noncomputable def pairProductTensor {κ : ℕ} (X Y : MPSTensor κ D) :
     MPSTensor (blockPhysDim κ 2) D :=
   fun e => X (decodeBlock κ 2 e 0) * Y (decodeBlock κ 2 e 1)
 
-/-- The isometry `V_n` of the polar decomposition of `A` blocked over `n` sites, read on the
+/-- The partial isometry `V_n` of the polar decomposition of `A` blocked over `n` sites, read on the
 configurations of the `n` sites: `⟨τ| V_n |x⟩`.
 
 arXiv:2307.01696, paragraph "Approximation through the fixed-point state": `B = V P` with
@@ -77,8 +81,8 @@ arXiv:2307.01696, paragraph "Approximation through the fixed-point state": `B = 
 noncomputable def cfgPolarIso (A : MPSTensor d D) (n : ℕ) : Matrix (Cfg d n) (Fin (D * D)) ℂ :=
   fun τ x => polarIsoMatrix (blockTensor A n) ((decodeBlockEquiv d n).symm τ) x
 
-/-- The isometry `W : ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}` joining a block of `n₁` sites to the block of
-`n₂` sites after it: the partial isometry of the polar decomposition of the tensor
+/-- The partial isometry `W : ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}` joining a block of `n₁` sites to the
+block of `n₂` sites after it: the partial isometry of the polar decomposition of the tensor
 `(a, b) ↦ P₁^a P₂^b`, with `P₁` and `P₂` the positive parts of `A` blocked over `n₁` and `n₂` sites.
 
 arXiv:2307.01696, eq. (16): the isometries `V⁽ʲ⁾ : ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}` of the tree, here
@@ -219,7 +223,7 @@ private theorem blockTensor_add_eq_rotatePhysical (A : MPSTensor d D) (n₁ n₂
       conjTranspose_polarIsoMatrix_mul_polarIsoMatrix, rotatePhysical_polarSupportMatrix,
       rotatePhysical_polarSupportMatrix]
 
-/-- **The isometry of a block of unequal halves** (arXiv:2307.01696, eq. (16), for halves of
+/-- **The partial isometry of a block of unequal halves** (arXiv:2307.01696, eq. (16), for halves of
 lengths `n₁` and `n₂`): `V_{n₁+n₂} = (V_{n₁} ⊗ V_{n₂}) W`, with `W = mergeIso A n₁ n₂`:
 
   `⟨τ₁ τ₂| V_{n₁+n₂} |x⟩ = ∑ₑ ⟨τ₁| V_{n₁} |e₀⟩ ⟨τ₂| V_{n₂} |e₁⟩ ⟨e₀ e₁| W |x⟩`.
@@ -246,7 +250,7 @@ theorem cfgPolarIso_append (A : MPSTensor d D) {n₁ n₂ : ℕ} (τ₁ : Cfg d 
   simp only [splitKron, hσ, pairEquiv_fst, pairEquiv_snd]
   rfl
 
-/-- **The isometry of a block of unequal halves**, for a block of `n = n₁ + n₂` sites:
+/-- **The partial isometry of a block of unequal halves**, for a block of `n = n₁ + n₂` sites:
 `cfgPolarIso_append` with the halves read off a configuration `τ` of the block. -/
 theorem cfgPolarIso_split (A : MPSTensor d D) {n₁ n₂ n : ℕ} (hn : n₁ + n₂ = n)
     (τ : Cfg d n) (x : Fin (D * D)) :
@@ -285,9 +289,9 @@ theorem pairProductTensor_self {κ : ℕ} (X : MPSTensor κ D) :
   funext e
   simp [pairProductTensor, blockTensor, Kraus.blockTensor, Kraus.wordOfBlock, List.ofFn_succ]
 
-/-- **Halves of equal lengths**: joining two blocks of `n` sites, `W` is the isometry of the
-two-site blocked tensor of the positive part `P_n`, the layer `V⁽ʲ⁾` of arXiv:2307.01696,
-eq. (16). -/
+/-- **Halves of equal lengths**: joining two blocks of `n` sites, `W` is the partial isometry
+of the two-site blocked tensor of the positive part `P_n`. For `n = 2^{j+1}` this is the layer
+`V⁽ʲ⁺²⁾` of arXiv:2307.01696, eq. (16) (`mergeIso_two_pow`). -/
 theorem mergeIso_self (A : MPSTensor d D) (n : ℕ) :
     mergeIso A n n = polarIsoMatrix (blockTensor (polarPosTensor (blockTensor A n)) 2) := by
   rw [mergeIso, pairProductTensor_self]
@@ -308,10 +312,37 @@ theorem isInjective_pairProductTensor (A : MPSTensor d D) {n₁ n₂ : ℕ}
   refine Submodule.smul_mem _ _ (Submodule.subset_span ⟨(pairEquiv (D * D)).symm (y₁, y₂), ?_⟩)
   simp [pairProductTensor, pairEquiv, piFinTwoEquiv]
 
-/-- The isometry `W` joining two blocks is an isometry when `A` blocked over the joined block is
-injective. -/
+/-- The partial isometry `W` joining two blocks is an isometry when `A` blocked over the joined
+block is injective. -/
 theorem isIsometry_mergeIso (A : MPSTensor d D) {n₁ n₂ : ℕ}
     (h : Kraus.IsInjective (blockTensor A (n₁ + n₂))) : (mergeIso A n₁ n₂).IsIsometry :=
   isIsometry_polarIsoMatrix_of_isInjective (isInjective_pairProductTensor A h)
+
+/-- **The positive parts along the tree**: the positive part `P_{2^{j+1}}` of `A` blocked over
+`2^{j+1}` sites is the tensor `T_{j+1}` of the tree, obtained by taking `j + 1` times the positive
+part of the two-site blocked tensor. Each step is `polarPosTensor_blockTensor_add` for halves of
+equal lengths.
+
+arXiv:2307.01696, eq. (16) and the sentence before it ("to the same effect"). -/
+theorem polarPosTensor_blockTensor_two_pow (A : MPSTensor d D) (j : ℕ) :
+    polarPosTensor (blockTensor A (2 ^ (j + 1))) =
+      (pairPosTensor : MPSTensor (D * D) D → MPSTensor (D * D) D)^[j] (pairPosTensor A) := by
+  induction j with
+  | zero => rfl
+  | succ j ih =>
+      rw [Function.iterate_succ_apply', ← ih,
+        show 2 ^ (j + 1 + 1) = 2 ^ (j + 1) + 2 ^ (j + 1) by ring, polarPosTensor_blockTensor_add,
+        pairProductTensor_self]
+      rfl
+
+/-- **The layers of the tree as merges**: for halves of `2^{j+1}` sites, `W` is the layer
+`V⁽ʲ⁺²⁾` of the tree-RG circuit, the partial isometry of the two-site blocked tensor of
+`T_{j+1}`.
+
+arXiv:2307.01696, eq. (16). -/
+theorem mergeIso_two_pow (A : MPSTensor d D) {k : ℕ} (j : Fin k) :
+    mergeIso A (2 ^ (j.val + 1)) (2 ^ (j.val + 1)) = treeLayers k A j := by
+  rw [mergeIso_self, polarPosTensor_blockTensor_two_pow]
+  rfl
 
 end MPSPreparation

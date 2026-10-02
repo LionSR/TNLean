@@ -340,8 +340,7 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     \label{thm:ldp_sequential_factorization_partial}
     \lean{MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_tensor_injective_on,
-        lem:ldp_sequential_factorization_first_inputs}
+    \uses{thm:ldpolar_tensor_decomposition}
     Let $A_1,\dots,A_q$, $q\ge1$, be tensors of bond dimension $D$, one on each
     site, with blocked tensor $B=VP$ and $V^\dagger V=\Pi$; no injectivity is
     assumed. Let $r\le D^2$ and let $T$ be a unitary on $\C^{D^2}$ with
@@ -351,13 +350,17 @@ is recorded in~\cite{gap:mswc24_inhomogeneous_scope}.
     families of $b_{p-1}\times b_p$ matrices $X_p^i$ with
     $\sum_i(X_p^i)^\dagger X_p^i=\Id_{b_p}$ for every $p$, such that
     $\bra{i_1\cdots i_q}VT\ket x=(X_1^{i_1}\cdots X_q^{i_q})_{1x}$ for every
-    $x<r$. This is the footnote of~\cite[paragraph ``The sequential-RG
-        circuit'']{Malz2024Preparation}: the derivation of
-    \cite[eqs.~(13)--(15)]{Malz2024Preparation} remains valid for non-injective
-    $B$, with $P^{-1}$ read as a pseudo-inverse.
+    $x<r$. This is the case $q\ge1$ of the footnote
+    of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}: the
+    derivation of \cite[eqs.~(13)--(15)]{Malz2024Preparation} remains valid for
+    non-injective $B$, with $P^{-1}$ read as a pseudo-inverse. The source states
+    no lower bound on $q$; at $q=0$ the conclusion fails for every $D$,
+    see~\cite{gap:mswc24_sequential_factorization_positive_block_length}.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:ldpolar_tensor_injective_on,
+        lem:ldp_sequential_factorization_first_inputs}
     Since $V^\dagger V=\Pi$ and $T$ is unitary, $(VT)^\dagger VT=T^\dagger\Pi
         T=\Lambda$. So the first $r$ columns of $VT$ are orthonormal and the
     others have norm zero. By Theorem~\ref{thm:ldpolar_tensor_injective_on},

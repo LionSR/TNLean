@@ -51,12 +51,16 @@ tensors are then injective only on the rectangle of their bonds, and
 factor on those inputs.
 
 **Scope restriction (positive block length):** the hypothesis `0 < q` of
-`MPSPreparation.exists_isometric_chain_polarIsoMatrix` and
-`MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` is absent from
-arXiv:2307.01696, eqs. (13)–(15), which state no lower bound on the block length. The empty
-block `q = 0` is injective, or injective on a set `S` of bond pairs, only for `D ≤ 1`; the
-conclusion holds trivially at `D = 1` and fails at `D = 0`, where `b₀ = 1` and `b₀ = D²`, or
-`b₀ = |S| = 0`, name the same bond. Documented in
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix`,
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn` and
+`MPSPreparation.exists_isometric_chain_polarIsoMatrix_mul_unitary` is absent from
+arXiv:2307.01696, eqs. (13)–(15) and the footnote to "The sequential-RG circuit", which state
+no lower bound on the block length. The empty block `q = 0` is injective, or injective on a set
+`S` of bond pairs, only for `D ≤ 1`; the conclusion holds trivially at `D = 1` and fails at
+`D = 0`, where `b₀ = 1` and `b₀ = D²`, or `b₀ = |S| = 0`, name the same bond. Without
+injectivity, the conclusion fails at `q = 0` for every `D`: `r = 0` contradicts `b₀ = 1` when
+`D = 0`, and for `D ≥ 1` it asks the unit-modulus scalar `V T |0⟩` to equal `1`, which a sign
+on the first column of `T` breaks. Documented in
 `docs/paper-gaps/mswc24_sequential_factorization_positive_block_length.tex`.
 
 ## References
