@@ -424,7 +424,8 @@ unproved; this scope restriction is recorded in
         MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS}
     \leanok
     \uses{lem:block_ground_space_map_injective_open_propagation,
-        lem:block_ground_space_map_injective, thm:ph_primitive_blocks_word_span}
+        lem:block_ground_space_map_injective, thm:ph_primitive_blocks_word_span,
+        lem:compact_uniform_pos_nat_bounds}
     Let $S$ be compact and let $x\mapsto A_x^j$ be continuous, with fixed
     block dimensions. Suppose that every block is trace preserving on $S$
     and that, for each $x\in S$, the simultaneous word products span the
@@ -432,7 +433,8 @@ unproved; this scope restriction is recorded in
     such that $\Gamma_n^{\oplus}(A_x)$ is injective for all $x\in S$ and
     all $n\geq L$.
     In particular, the spanning hypothesis holds for normalized primitive
-    blocks with positive definite fixed points that are pairwise
+    blocks with positive virtual dimensions and positive definite fixed points
+    that are pairwise
     inequivalent under similarity and phase. No continuity of the
     fixed-point matrices is required.
 \end{theorem}
