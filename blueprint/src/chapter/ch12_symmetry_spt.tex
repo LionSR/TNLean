@@ -915,13 +915,16 @@ and the regrouping of physical registers into bonds.
     relation of the matrix units passes to $A_\gamma$.
 \end{proof}
 
-\begin{theorem}[Two-site fixed-point vectors lie in the bond kernel]
+\begin{theorem}[Canonical parent interaction of the SPT fixed point]
     \label{thm:spt_fixed_point_two_site_bond_kernel}
     \lean{MPSTensor.matrixUnitBondVector,
         MPSTensor.matrixUnitBondVector_sum_normSq,
         MPSTensor.groundSpaceMap_sptFixedPointTensor_two_apply,
         MPSTensor.twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor,
-        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor}
+        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor,
+        MPSTensor.one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_eq_parentInteractionES_sptFixedPointTensor}
     \leanok
     \uses{thm:spt_two_site_bond_interaction, def:spt_fixed_point_tensor}
     Let $D>0$, let $A^{(a,b)}=D^{-1/2}|a\rangle\langle b|$ be the SPT
@@ -930,9 +933,9 @@ and the regrouping of physical registers into bonds.
     For every boundary matrix $X$, the two-site open-boundary vector
     $\Psi_X$ has coefficients
     $\Psi_X(a,b,c,d)=D^{-1}\delta_{bc}X_{da}$ and is annihilated by
-    the interaction $h(I-|\eta\rangle\langle\eta|)$ acting on
-    the middle registers. This bond interaction is bounded above by
-    the canonical two-site parent interaction of $A$
+    the interaction $h=I\otimes(I-|\eta\rangle\langle\eta|)\otimes I$
+    acting on the middle registers. Its kernel is exactly $G_2(A)$, so
+    $h$ equals the canonical two-site parent interaction of $A$
     \cite[Section~II.D.2]{Schuch2011Phases}.
 \end{theorem}
 
@@ -942,8 +945,11 @@ and the regrouping of physical registers into bonds.
     Taking the trace against $X$ gives the coefficient formula.
     The middle-register vector is $\sum_b|b,b\rangle=\sqrt D\,\eta$,
     which lies in the kernel of $I-|\eta\rangle\langle\eta|$.
-    Both interactions are orthogonal projections. The inclusion of
-    their kernels therefore gives the asserted operator inequality.
+    Conversely, for an arbitrary two-site vector $f$, set
+    $X_{da}=\sum_x f(a,x,x,d)$. Direct contraction gives
+    $(I-h)f=\Psi_X$. Thus $\ker h=G_2(A)$.
+    Both interactions are orthogonal projections with this kernel,
+    so they coincide.
 \end{proof}
 
 \subsection{Degeneracy of the entanglement spectrum}

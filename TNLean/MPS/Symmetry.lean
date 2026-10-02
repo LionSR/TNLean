@@ -25,6 +25,7 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.FixedPointGappedPath
 import TNLean.MPS.Symmetry.FixedPointGappedPathWitness
+import TNLean.MPS.Symmetry.FixedPointParentIdentification
 import TNLean.MPS.Symmetry.GInjective
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import TNLean.MPS.Symmetry.GappedInteractionPathComposition

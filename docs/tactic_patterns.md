@@ -2418,6 +2418,24 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### contracting a two-site bond penalty — candidate
+- **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
+  expand the two exterior identity factors, and contract their Kronecker
+  deltas before evaluating the remaining interior sum.
+- **Seen:** two occurrences across two files:
+  `BondProductEndpointGroundSpace.lean` in
+  `twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor`, and
+  `FixedPointParentIdentification.lean` in
+  `one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor`, both under
+  `TNLean/MPS/Symmetry/`.
+- **Abstraction:** if a third calculation needs this reduction, prove the
+  general coefficient formula for `(twoSiteBondInteraction K).mulVec f`, with
+  arbitrary bond matrix `K` and two-site vector `f`.
+- **Notes:** below the rule of three. The present calculation gives the
+  complementary projection explicitly and already identifies its range
+  without further coordinate expansion.
+
+
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
   use the supplied gate entry formulas, and rewrite both finite sums along
