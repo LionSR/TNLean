@@ -29,11 +29,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{definition}[Measurement rounds]
     \label{def:ldp_measurement_rounds}
-    \lean{MPSPreparation.MeasurementRound, MPSPreparation.MeasurementRound.kraus,
-        MPSPreparation.MeasurementRound.depth,
-        MPSPreparation.MeasurementRound.toProtocol,
-        MPSPreparation.MeasurementRound.outputs,
-        MPSPreparation.IsPreparedWithMeasurementRoundsInDepth}
+    \lean{QuantumCircuit.MeasurementRound, QuantumCircuit.MeasurementRound.kraus,
+        QuantumCircuit.MeasurementRound.depth,
+        QuantumCircuit.MeasurementRound.toProtocol,
+        QuantumCircuit.MeasurementRound.outputs,
+        QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth}
     \leanok
     \uses{def:ldp_measurement_preparation}
     A \emph{measurement round} consists of a local circuit $U$, a set $S$ of
@@ -68,16 +68,16 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Outputs of rounds]
     \label{lem:ldp_measurement_rounds_outputs}
-    \lean{MPSPreparation.MeasurementRound.toProtocol_output,
-        MPSPreparation.MeasurementRound.exists_kraus_mulVec_ne_zero,
-        MPSPreparation.MeasurementRound.outputs_nil,
-        MPSPreparation.MeasurementRound.mem_outputs_cons,
-        MPSPreparation.MeasurementRound.mem_outputs_smul,
-        MPSPreparation.MeasurementRound.mem_outputs_append,
-        MPSPreparation.MeasurementRound.exists_mem_outputs_ne_zero,
-        MPSPreparation.IsPreparedWithMeasurementRoundsInDepth.ne_zero,
-        MPSPreparation.IsPreparedWithMeasurementRoundsInDepth.mono,
-        MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth}
+    \lean{QuantumCircuit.MeasurementRound.toProtocol_output,
+        QuantumCircuit.MeasurementRound.exists_kraus_mulVec_ne_zero,
+        QuantumCircuit.MeasurementRound.outputs_nil,
+        QuantumCircuit.MeasurementRound.mem_outputs_cons,
+        QuantumCircuit.MeasurementRound.mem_outputs_smul,
+        QuantumCircuit.MeasurementRound.mem_outputs_append,
+        QuantumCircuit.MeasurementRound.exists_mem_outputs_ne_zero,
+        QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.ne_zero,
+        QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.mono,
+        QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth}
     \leanok
     \uses{def:ldp_measurement_rounds, lem:ldp_measurement_outcomes}
     The output of the protocol of a round and a product vector $\ket\pi$ for
@@ -100,8 +100,8 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{definition}[Implementation by rounds]
     \label{def:ldp_round_implementation}
-    \lean{MPSPreparation.MeasurementRound.IsImplementationOn,
-        MPSPreparation.MeasurementRound.IsRoundsImplementationOn}
+    \lean{QuantumCircuit.MeasurementRound.IsImplementationOn,
+        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn}
     \leanok
     \uses{def:ldp_measurement_rounds}
     Let $E$ be a set of vectors and $W$ a matrix. A round \emph{implements}
@@ -113,11 +113,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Implementations compose]
     \label{lem:ldp_round_implementation_compose}
-    \lean{MPSPreparation.MeasurementRound.IsImplementationOn.exists_mem_outputs,
-        MPSPreparation.MeasurementRound.isRoundsImplementationOn_nil,
-        MPSPreparation.MeasurementRound.IsRoundsImplementationOn.mono,
-        MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append,
-        MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth}
+    \lean{QuantumCircuit.MeasurementRound.IsImplementationOn.exists_mem_outputs,
+        QuantumCircuit.MeasurementRound.isRoundsImplementationOn_nil,
+        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.mono,
+        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append,
+        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth}
     \leanok
     \uses{def:ldp_round_implementation, lem:ldp_measurement_rounds_outputs}
     If a round $R$ implements $W$ on $E$ and $\ket v\in E$, every output of $R$
@@ -141,8 +141,8 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{definition}[Fourier and generalized Pauli matrices]
     \label{def:ldp_qudit_pauli}
-    \lean{MPSPreparation.quditRoot, MPSPreparation.quditFourier,
-        MPSPreparation.quditPauli}
+    \lean{QuantumCircuit.quditRoot, QuantumCircuit.quditFourier,
+        QuantumCircuit.quditPauli}
     \leanok
     Let $\zeta=e^{2\pi i/d}$. The Fourier matrix is
     $F_{ab}=d^{-1/2}\zeta^{ab}$ for $a,b\in\mathbb Z_d$, and for
@@ -152,10 +152,10 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Fourier and Pauli matrices are unitary]
     \label{lem:ldp_qudit_pauli_unitary}
-    \lean{MPSPreparation.isPrimitiveRoot_quditRoot,
-        MPSPreparation.quditFourier_apply,
-        MPSPreparation.quditFourier_mem_unitary,
-        MPSPreparation.quditPauli_apply, MPSPreparation.quditPauli_mem_unitary}
+    \lean{QuantumCircuit.isPrimitiveRoot_quditRoot,
+        QuantumCircuit.quditFourier_apply,
+        QuantumCircuit.quditFourier_mem_unitary,
+        QuantumCircuit.quditPauli_apply, QuantumCircuit.quditPauli_mem_unitary}
     \leanok
     \uses{def:ldp_qudit_pauli}
     The number $\zeta$ is a primitive $d$-th root of unity, and
@@ -172,22 +172,22 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Single-site operators, permutations of sites and sites in the state zero]
     \label{lem:ldp_site_permutations}
-    \lean{MPSPreparation.finKronecker_update_one_mulVec_apply,
-        MPSPreparation.finKronecker_update_one_permMatrix_mulVec,
-        MPSPreparation.IsZeroOn, MPSPreparation.IsZeroOn.mono,
-        MPSPreparation.IsZeroOn.smul,
-        MPSPreparation.IsZeroOn.finKronecker_update_one_mulVec,
-        MPSPreparation.cfgPerm, MPSPreparation.cfgPerm_apply,
-        MPSPreparation.permMatrix_cfgPerm_mul_finKronecker,
-        MPSPreparation.IsZeroOn.permMatrix_cfgPerm_mulVec,
-        MPSPreparation.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
-        MPSPreparation.permMatrix_cfgPerm_one,
-        MPSPreparation.permMatrix_cfgPerm_mul_embedOp_mul,
-        MPSPreparation.IsZeroOn.permMatrix_cfgPerm_mulVec_image,
-        MPSPreparation.IsZeroOn.mulVec_of_mem_supportedOperators,
-        MPSPreparation.list_prod_mem_supportedOperators,
-        MPSPreparation.layerOfListGate, MPSPreparation.layerOfListGate_key,
-        MPSPreparation.layerOfList, MPSPreparation.layerOfList_op,
+    \lean{QuantumCircuit.finKronecker_update_one_mulVec_apply,
+        QuantumCircuit.finKronecker_update_one_permMatrix_mulVec,
+        QuantumCircuit.IsZeroOn, QuantumCircuit.IsZeroOn.mono,
+        QuantumCircuit.IsZeroOn.smul,
+        QuantumCircuit.IsZeroOn.finKronecker_update_one_mulVec,
+        QuantumCircuit.cfgPerm, QuantumCircuit.cfgPerm_apply,
+        QuantumCircuit.permMatrix_cfgPerm_mul_finKronecker,
+        QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec,
+        QuantumCircuit.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
+        QuantumCircuit.permMatrix_cfgPerm_one,
+        QuantumCircuit.permMatrix_cfgPerm_mul_embedOp_mul,
+        QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec_image,
+        QuantumCircuit.IsZeroOn.mulVec_of_mem_supportedOperators,
+        QuantumCircuit.list_prod_mem_supportedOperators,
+        QuantumCircuit.layerOfListGate, QuantumCircuit.layerOfListGate_key,
+        QuantumCircuit.layerOfList, QuantumCircuit.layerOfList_op,
         MPSPreparation.isZeroOn_productVector}
     \leanok
     \uses{def:ldp_local_circuit}
@@ -226,18 +226,18 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[One teleportation hop]
     \label{lem:ldp_teleport_hop}
-    \lean{MPSPreparation.TeleportHop, MPSPreparation.TeleportHop.gate₁,
-        MPSPreparation.TeleportHop.gate₂,
-        MPSPreparation.TeleportHop.gate₁_mem_unitary,
-        MPSPreparation.TeleportHop.gate₂_mem_unitary,
-        MPSPreparation.TeleportHop.gate₁_mem_supportedOperators,
-        MPSPreparation.TeleportHop.gate₂_mem_supportedOperators,
-        MPSPreparation.TeleportHop.pre, MPSPreparation.TeleportHop.frame,
-        MPSPreparation.TeleportHop.frame_mem_unitary,
-        MPSPreparation.TeleportHop.frame_of_ne,
-        MPSPreparation.TeleportHop.swapPerm,
-        MPSPreparation.TeleportHop.pre_mulVec,
-        MPSPreparation.TeleportHop.pre_mem_supportedOperators}
+    \lean{QuantumCircuit.TeleportHop, QuantumCircuit.TeleportHop.gate₁,
+        QuantumCircuit.TeleportHop.gate₂,
+        QuantumCircuit.TeleportHop.gate₁_mem_unitary,
+        QuantumCircuit.TeleportHop.gate₂_mem_unitary,
+        QuantumCircuit.TeleportHop.gate₁_mem_supportedOperators,
+        QuantumCircuit.TeleportHop.gate₂_mem_supportedOperators,
+        QuantumCircuit.TeleportHop.pre, QuantumCircuit.TeleportHop.frame,
+        QuantumCircuit.TeleportHop.frame_mem_unitary,
+        QuantumCircuit.TeleportHop.frame_of_ne,
+        QuantumCircuit.TeleportHop.swapPerm,
+        QuantumCircuit.TeleportHop.pre_mulVec,
+        QuantumCircuit.TeleportHop.pre_mem_supportedOperators}
     \leanok
     \uses{def:ldp_qudit_pauli, lem:ldp_qudit_pauli_unitary,
         lem:ldp_site_permutations, lem:ldp_permutation_layers}
@@ -272,34 +272,34 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{theorem}[Teleportation along chains of hops in one round]
     \label{thm:ldp_teleportation_round}
-    \lean{MPSPreparation.TeleportHop.sites,
-        MPSPreparation.TeleportHop.allSites,
-        MPSPreparation.TeleportHop.pairSites,
-        MPSPreparation.TeleportHop.measuredSites,
-        MPSPreparation.TeleportHop.Valid,
-        MPSPreparation.TeleportHop.mem_allSites,
-        MPSPreparation.TeleportHop.coe_measuredSites_subset_allSites,
-        MPSPreparation.TeleportHop.disjoint_measuredSites,
-        MPSPreparation.TeleportHop.pairwise_disjoint_one,
-        MPSPreparation.TeleportHop.pairwise_disjoint_two,
-        MPSPreparation.TeleportHop.layerOne, MPSPreparation.TeleportHop.layerTwo,
-        MPSPreparation.TeleportHop.layerOne_op,
-        MPSPreparation.TeleportHop.layerTwo_op,
-        MPSPreparation.TeleportHop.sitePerm,
-        MPSPreparation.TeleportHop.chainPerm,
-        MPSPreparation.TeleportHop.chainPerm_nil,
-        MPSPreparation.TeleportHop.chainPerm_cons,
-        MPSPreparation.TeleportHop.chainFrame,
-        MPSPreparation.TeleportHop.chainPre,
-        MPSPreparation.TeleportHop.chainFrame_mem_unitary,
-        MPSPreparation.TeleportHop.chainFrame_of_notMem,
-        MPSPreparation.TeleportHop.prod_gate₂_mem_supportedOperators,
-        MPSPreparation.TeleportHop.chainPre_cons,
-        MPSPreparation.IsZeroOn.chainPerm_mulVec,
-        MPSPreparation.TeleportHop.chainPre_mulVec,
-        MPSPreparation.TeleportHop.extendOutcome,
-        MPSPreparation.TeleportHop.round, MPSPreparation.TeleportHop.depth_round,
-        MPSPreparation.TeleportHop.isImplementationOn_round}
+    \lean{QuantumCircuit.TeleportHop.sites,
+        QuantumCircuit.TeleportHop.allSites,
+        QuantumCircuit.TeleportHop.pairSites,
+        QuantumCircuit.TeleportHop.measuredSites,
+        QuantumCircuit.TeleportHop.Valid,
+        QuantumCircuit.TeleportHop.mem_allSites,
+        QuantumCircuit.TeleportHop.coe_measuredSites_subset_allSites,
+        QuantumCircuit.TeleportHop.disjoint_measuredSites,
+        QuantumCircuit.TeleportHop.pairwise_disjoint_one,
+        QuantumCircuit.TeleportHop.pairwise_disjoint_two,
+        QuantumCircuit.TeleportHop.layerOne, QuantumCircuit.TeleportHop.layerTwo,
+        QuantumCircuit.TeleportHop.layerOne_op,
+        QuantumCircuit.TeleportHop.layerTwo_op,
+        QuantumCircuit.TeleportHop.sitePerm,
+        QuantumCircuit.TeleportHop.chainPerm,
+        QuantumCircuit.TeleportHop.chainPerm_nil,
+        QuantumCircuit.TeleportHop.chainPerm_cons,
+        QuantumCircuit.TeleportHop.chainFrame,
+        QuantumCircuit.TeleportHop.chainPre,
+        QuantumCircuit.TeleportHop.chainFrame_mem_unitary,
+        QuantumCircuit.TeleportHop.chainFrame_of_notMem,
+        QuantumCircuit.TeleportHop.prod_gate₂_mem_supportedOperators,
+        QuantumCircuit.TeleportHop.chainPre_cons,
+        QuantumCircuit.IsZeroOn.chainPerm_mulVec,
+        QuantumCircuit.TeleportHop.chainPre_mulVec,
+        QuantumCircuit.TeleportHop.extendOutcome,
+        QuantumCircuit.TeleportHop.round, QuantumCircuit.TeleportHop.depth_round,
+        QuantumCircuit.TeleportHop.isImplementationOn_round}
     \leanok
     \uses{lem:ldp_teleport_hop, def:ldp_round_implementation,
         lem:ldp_site_permutations}
@@ -337,28 +337,28 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Chains between distant sites]
     \label{lem:ldp_teleportation_chains}
-    \lean{MPSPreparation.add_natCast_injective, MPSPreparation.add_natCast_succ,
-        MPSPreparation.add_natCast_ne,
-        MPSPreparation.TeleportHop.exists_eq_smul_of_mem_outputs_conj,
-        MPSPreparation.TeleportHop.chainHop,
-        MPSPreparation.TeleportHop.chainHopBack,
-        MPSPreparation.TeleportHop.forwardChain,
-        MPSPreparation.TeleportHop.backwardChain,
-        MPSPreparation.TeleportHop.After,
-        MPSPreparation.TeleportHop.valid_iff_pairwise,
-        MPSPreparation.TeleportHop.sitePerm_append,
-        MPSPreparation.TeleportHop.pairSites_append,
-        MPSPreparation.TeleportHop.mem_forwardChain,
-        MPSPreparation.TeleportHop.mem_backwardChain,
-        MPSPreparation.TeleportHop.valid_forwardChain,
-        MPSPreparation.TeleportHop.valid_backwardChain,
-        MPSPreparation.TeleportHop.sitePerm_forwardChain,
-        MPSPreparation.TeleportHop.sitePerm_backwardChain,
-        MPSPreparation.TeleportHop.pairSites_forwardChain_subset,
-        MPSPreparation.TeleportHop.pairSites_backwardChain_subset,
-        MPSPreparation.TeleportHop.allSites_forwardChain_subset,
-        MPSPreparation.TeleportHop.allSites_backwardChain_subset,
-        MPSPreparation.TeleportHop.isZeroOn_chainPerm_forwardChain}
+    \lean{QuantumCircuit.add_natCast_injective, QuantumCircuit.add_natCast_succ,
+        QuantumCircuit.add_natCast_ne,
+        QuantumCircuit.TeleportHop.exists_eq_smul_of_mem_outputs_conj,
+        QuantumCircuit.TeleportHop.chainHop,
+        QuantumCircuit.TeleportHop.chainHopBack,
+        QuantumCircuit.TeleportHop.forwardChain,
+        QuantumCircuit.TeleportHop.backwardChain,
+        QuantumCircuit.TeleportHop.After,
+        QuantumCircuit.TeleportHop.valid_iff_pairwise,
+        QuantumCircuit.TeleportHop.sitePerm_append,
+        QuantumCircuit.TeleportHop.pairSites_append,
+        QuantumCircuit.TeleportHop.mem_forwardChain,
+        QuantumCircuit.TeleportHop.mem_backwardChain,
+        QuantumCircuit.TeleportHop.valid_forwardChain,
+        QuantumCircuit.TeleportHop.valid_backwardChain,
+        QuantumCircuit.TeleportHop.sitePerm_forwardChain,
+        QuantumCircuit.TeleportHop.sitePerm_backwardChain,
+        QuantumCircuit.TeleportHop.pairSites_forwardChain_subset,
+        QuantumCircuit.TeleportHop.pairSites_backwardChain_subset,
+        QuantumCircuit.TeleportHop.allSites_forwardChain_subset,
+        QuantumCircuit.TeleportHop.allSites_backwardChain_subset,
+        QuantumCircuit.TeleportHop.isZeroOn_chainPerm_forwardChain}
     \leanok
     \uses{thm:ldp_teleportation_round, lem:ldp_round_implementation_compose}
     \begin{enumerate}
@@ -397,15 +397,15 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Parallel chains]
     \label{lem:ldp_parallel_chains}
-    \lean{MPSPreparation.TeleportHop.sitePerm_apply_of_notMem,
-        MPSPreparation.TeleportHop.mem_allSites_flatMap,
-        MPSPreparation.TeleportHop.mem_pairSites_flatMap,
-        MPSPreparation.TeleportHop.chainPerm_append,
-        MPSPreparation.TeleportHop.after_of_disjoint,
-        MPSPreparation.TeleportHop.sites_subset_allSites,
-        MPSPreparation.TeleportHop.valid_flatMap,
-        MPSPreparation.TeleportHop.sitePerm_flatMap_apply,
-        MPSPreparation.TeleportHop.sitePerm_flatMap_apply_of_notMem}
+    \lean{QuantumCircuit.TeleportHop.sitePerm_apply_of_notMem,
+        QuantumCircuit.TeleportHop.mem_allSites_flatMap,
+        QuantumCircuit.TeleportHop.mem_pairSites_flatMap,
+        QuantumCircuit.TeleportHop.chainPerm_append,
+        QuantumCircuit.TeleportHop.after_of_disjoint,
+        QuantumCircuit.TeleportHop.sites_subset_allSites,
+        QuantumCircuit.TeleportHop.valid_flatMap,
+        QuantumCircuit.TeleportHop.sitePerm_flatMap_apply,
+        QuantumCircuit.TeleportHop.sitePerm_flatMap_apply_of_notMem}
     \leanok
     \uses{lem:ldp_teleportation_chains}
     The product of the transpositions of a list of hops fixes every site that
@@ -425,40 +425,40 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{theorem}[A layer of distant gates in depth five with measurements]
     \label{thm:ldp_long_range_layer}
-    \lean{MPSPreparation.LongRangeGate, MPSPreparation.LongRangeGate.far,
-        MPSPreparation.LongRangeGate.near, MPSPreparation.LongRangeGate.span,
-        MPSPreparation.LongRangeGate.interior,
-        MPSPreparation.LongRangeGate.cleared, MPSPreparation.LongRangeGate.op,
-        MPSPreparation.LongRangeGate.there, MPSPreparation.LongRangeGate.back,
-        MPSPreparation.LongRangeGate.near_ne_far,
-        MPSPreparation.LongRangeGate.localGate,
-        MPSPreparation.LongRangeGate.localGate_mem_unitary,
-        MPSPreparation.LongRangeGate.localGate_mem_supportedOperators,
-        MPSPreparation.LongRangeGate.a_ne_far,
-        MPSPreparation.LongRangeGate.op_mem_unitary,
-        MPSPreparation.LongRangeGate.op_mem_supportedOperators,
-        MPSPreparation.LongRangeGate.far_mem_span,
-        MPSPreparation.LongRangeGate.bond_near_subset_span,
-        MPSPreparation.LongRangeGate.interior_subset_span,
-        MPSPreparation.LongRangeGate.cleared_subset_span,
-        MPSPreparation.LongRangeGate.allSites_there_subset_span,
-        MPSPreparation.LongRangeGate.allSites_back_subset_span,
-        MPSPreparation.LongRangeGate.disjoint_cleared_bond_near,
-        MPSPreparation.LongRangeGate.sitePerm_back_near,
-        MPSPreparation.LongRangeGate.sitePerm_back_far,
-        MPSPreparation.LongRangeGate.sitePerm_back_sitePerm_there,
-        MPSPreparation.LongRangeGate.pairwise_disjoint_bond,
-        MPSPreparation.LongRangeGate.localLayer,
-        MPSPreparation.LongRangeGate.localLayer_op,
-        MPSPreparation.LongRangeGate.valid_there,
-        MPSPreparation.LongRangeGate.valid_back,
-        MPSPreparation.LongRangeGate.isZeroOn_chainPerm_there,
-        MPSPreparation.LongRangeGate.isZeroOn_localLayer,
-        MPSPreparation.LongRangeGate.sitePerm_there_eq_symm,
-        MPSPreparation.LongRangeGate.chainPerm_back_mul_localLayer_mul_chainPerm_there,
-        MPSPreparation.LongRangeGate.rounds,
-        MPSPreparation.LongRangeGate.sum_depth_rounds,
-        MPSPreparation.LongRangeGate.isRoundsImplementationOn_rounds}
+    \lean{QuantumCircuit.LongRangeGate, QuantumCircuit.LongRangeGate.far,
+        QuantumCircuit.LongRangeGate.near, QuantumCircuit.LongRangeGate.span,
+        QuantumCircuit.LongRangeGate.interior,
+        QuantumCircuit.LongRangeGate.cleared, QuantumCircuit.LongRangeGate.op,
+        QuantumCircuit.LongRangeGate.there, QuantumCircuit.LongRangeGate.back,
+        QuantumCircuit.LongRangeGate.near_ne_far,
+        QuantumCircuit.LongRangeGate.localGate,
+        QuantumCircuit.LongRangeGate.localGate_mem_unitary,
+        QuantumCircuit.LongRangeGate.localGate_mem_supportedOperators,
+        QuantumCircuit.LongRangeGate.a_ne_far,
+        QuantumCircuit.LongRangeGate.op_mem_unitary,
+        QuantumCircuit.LongRangeGate.op_mem_supportedOperators,
+        QuantumCircuit.LongRangeGate.far_mem_span,
+        QuantumCircuit.LongRangeGate.bond_near_subset_span,
+        QuantumCircuit.LongRangeGate.interior_subset_span,
+        QuantumCircuit.LongRangeGate.cleared_subset_span,
+        QuantumCircuit.LongRangeGate.allSites_there_subset_span,
+        QuantumCircuit.LongRangeGate.allSites_back_subset_span,
+        QuantumCircuit.LongRangeGate.disjoint_cleared_bond_near,
+        QuantumCircuit.LongRangeGate.sitePerm_back_near,
+        QuantumCircuit.LongRangeGate.sitePerm_back_far,
+        QuantumCircuit.LongRangeGate.sitePerm_back_sitePerm_there,
+        QuantumCircuit.LongRangeGate.pairwise_disjoint_bond,
+        QuantumCircuit.LongRangeGate.localLayer,
+        QuantumCircuit.LongRangeGate.localLayer_op,
+        QuantumCircuit.LongRangeGate.valid_there,
+        QuantumCircuit.LongRangeGate.valid_back,
+        QuantumCircuit.LongRangeGate.isZeroOn_chainPerm_there,
+        QuantumCircuit.LongRangeGate.isZeroOn_localLayer,
+        QuantumCircuit.LongRangeGate.sitePerm_there_eq_symm,
+        QuantumCircuit.LongRangeGate.chainPerm_back_mul_localLayer_mul_chainPerm_there,
+        QuantumCircuit.LongRangeGate.rounds,
+        QuantumCircuit.LongRangeGate.sum_depth_rounds,
+        QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds}
     \leanok
     \uses{lem:ldp_teleportation_chains, lem:ldp_parallel_chains}
     A \emph{distant gate} is a two-site unitary $u$ on the sites $a$ and

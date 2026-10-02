@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.ControlledGateProducts
+import TNLean.Circuit.Gates.ControlledProducts
 
 /-!
 # Decomposition of a unitary into two-level rotations and phases
 
 Every unitary `X` on `ℂ^ι` with `det X = 1` is a product of at most `f (card ι)` two-level
 operators `twoLevel a b g` with `g` a real rotation `rotTwo z` or a phase `diagTwo ν`
-(`MPSPreparation.isTwoLevelWord_of_det_eq_one`). The proof is the column-by-column
+(`QuantumCircuit.isTwoLevelWord_of_det_eq_one`). The proof is the column-by-column
 elimination of Givens: the column of `X` at `a` is rotated onto `|a⟩` by two-level operators on
 the pairs `{a, b}`, after which `X` acts on the orthogonal complement of `|a⟩`.
 
@@ -22,7 +22,7 @@ gates" of arXiv:2307.01696 (caption of Fig. 1).
 open Matrix
 open scoped BigOperators ComplexConjugate
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
@@ -443,4 +443,4 @@ theorem isTwoLevelWord_of_det_eq_one {X : Matrix ι ι ℂ} (hX : X ∈ unitary 
     (hdet : X.det = 1) : IsTwoLevelWord (3 * Fintype.card ι * Fintype.card ι) X :=
   isTwoLevelWord_of_fixesOutside Finset.univ X hX hdet fun x y h => by simp at h
 
-end MPSPreparation
+end QuantumCircuit

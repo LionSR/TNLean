@@ -28,7 +28,7 @@ tensor take depth $O(q)$ as well.
 
 \begin{definition}[Preparation with measurements and a circuit]
     \label{def:ldp_measurement_circuit_preparation}
-    \lean{MPSPreparation.IsPreparedWithMeasurementsAndCircuitInDepth}
+    \lean{QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth}
     \leanok
     \uses{def:ldp_measurement_preparation, def:ldp_local_circuit}
     A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in
@@ -40,15 +40,15 @@ tensor take depth $O(q)$ as well.
 
 \begin{lemma}[Layers acting on configurations]
     \label{lem:ldp_configuration_layers}
-    \lean{MPSPreparation.apply_eq_ite_of_mulVec_eq_comp, MPSPreparation.sigmaSite,
-        MPSPreparation.sigmaSite_injective, MPSPreparation.layerCfg,
-        MPSPreparation.layerCfg_apply, MPSPreparation.layerCfg_comp,
-        MPSPreparation.layerCfg_apply_of_forall_ne, MPSPreparation.eq_layerCfg_iff,
-        MPSPreparation.noncommProd_embedOp_mulVec_eq_comp,
+    \lean{QuantumCircuit.apply_eq_ite_of_mulVec_eq_comp, QuantumCircuit.sigmaSite,
+        QuantumCircuit.sigmaSite_injective, QuantumCircuit.layerCfg,
+        QuantumCircuit.layerCfg_apply, QuantumCircuit.layerCfg_comp,
+        QuantumCircuit.layerCfg_apply_of_forall_ne, QuantumCircuit.eq_layerCfg_iff,
+        QuantumCircuit.noncommProd_embedOp_mulVec_eq_comp,
         MPSPreparation.blockLayerOp_mulVec_eq_comp,
         MPSPreparation.pairLayerOp_mulVec_eq_comp,
-        MPSPreparation.embedOp_mulVec_eq_comp, MPSPreparation.permOp_mulVec,
-        MPSPreparation.embedOp_mulVec_productVector}
+        QuantumCircuit.embedOp_mulVec_eq_comp, QuantumCircuit.permOp_mulVec,
+        QuantumCircuit.embedOp_mulVec_productVector}
     \leanok
     \uses{def:ldp_local_circuit, lem:ldp_permutation_layers}
     Let $X_k$ be operators on pairwise disjoint sets $S_k$ of sites, each
