@@ -282,12 +282,37 @@ Most results below take a projective representation with that factor system as
 given; for a finite group, the twisted regular representation on $\C^G$ supplies
 one whose factor system lies in the class of the cocycle
 (Theorem~\ref{thm:spt_fixed_point_from_cocycle},
-\cite{gap:rmp_spt_fixed_point_supplied_representation}).  The source's symmetry
-carries the phase of a 1-cocycle; the symmetry and class results below are
-stated for the trivial character \cite{gap:rmp_spt_fixed_point_trivial_character}.
+\cite{gap:rmp_spt_fixed_point_supplied_representation}). The symmetry retains
+an arbitrary character, which acts on the length-$N$ vector by its $N$th power;
+the earlier trivial-character restriction is resolved
+\cite{gap:rmp_spt_fixed_point_trivial_character}.
 The source's symmetry group may also contain time-reversal and reflection
 symmetries, with twisted cocycles; the results below treat on-site symmetries
 only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
+
+\begin{definition}[On-site symmetry up to a character]%
+    \label{def:on_site_symmetric_character}
+    \lean{MPSTensor.IsOnSiteSymmetricUpToCharacter,
+        MPSTensor.IsOnSiteSymmetricUpToCharacter.mpv_twistedTensor}
+    \leanok
+    \uses{def:twisted_tensor, def:gauge_equiv, def:mpv}
+    Let $U$ be a linear representation of a group $G$ on the physical
+    space and let $\phi:G\to\C^\times$ be a character. A tensor $A$ is
+    on-site symmetric up to $\phi$ if, for every $g\in G$, its twist
+    $\widetilde A_g$ is gauge equivalent to $\phi(g)A$. In particular,
+    \begin{align}
+        \ket{V^{(N)}(\widetilde A_g)}
+         & =\phi(g)^N\ket{V^{(N)}(A)}.
+        \label{eq:spt_character_vector}
+    \end{align}
+\end{definition}
+\begin{proof}
+    \leanok
+    \uses{thm:gauge_invariance, lem:mpv_smul}
+    Gauge equivalence preserves every matrix product vector, and scaling
+    every letter by $\phi(g)$ multiplies each length-$N$ coefficient
+    by $\phi(g)^N$.
+\end{proof}
 
 \begin{definition}[SPT fixed-point tensor and its symmetry]
     \label{def:spt_fixed_point_tensor}
@@ -320,36 +345,50 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     multiples of the matrix units.
 \end{proof}
 
-\begin{theorem}[The SPT fixed point realizes the class of $\omega$]
+\begin{theorem}[The SPT fixed point realizes the character and cocycle class]%
     \label{thm:spt_fixed_point_class}
-    \lean{MPSTensor.twistedTensor_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isOnSiteSymmetric, MPSTensor.cohomologousTo_of_sptFixedPointTensor, MPSTensor.exists_virtualRep_sptFixedPointTensor}
+    \lean{MPSTensor.twistedTensor_sptFixedPointTensor,
+        MPSTensor.sptFixedPointTensor_isOnSiteSymmetricUpToCharacter,
+        MPSTensor.sptFixedPointAction_mem_unitaryGroup,
+        MPSTensor.cohomologousTo_of_sptFixedPointTensor,
+        MPSTensor.exists_virtualRep_sptFixedPointTensor}
     \leanok
-    \uses{def:spt_fixed_point_tensor, def:on_site_symmetric}
-    The map $g\mapsto U(g)$ is a representation of $G$.  For every $g$ and $i$,
-    $\sum_jU(g)_{ij}A^j=\phi(g)\,W_gA^iW_g^{-1}$.  For
-    $\phi=1$ the tensor has MPV-family invariance under $U$, and, when $D\geq1$, this
-    symmetry has a virtual projective representation, and every virtual projective
-    representation of it has a factor system cohomologous to $\omega$
-    \cite[Section~III.A]{Cirac2021Matrix}.  The source states the symmetry and
-    the class for every 1-cocycle $\phi$; for $\phi\neq1$ only the identity
-    $\sum_jU(g)_{ij}A^j=\phi(g)\,W_gA^iW_g^{-1}$ is formalized
-    \cite{gap:rmp_spt_fixed_point_trivial_character}.
+    \uses{def:spt_fixed_point_tensor, def:on_site_symmetric_character}
+    The map $g\mapsto U(g)$ is a representation of $G$. For every $g$ and $i$,
+    \begin{align}
+        \sum_jU(g)_{ij}A^j
+         & =\phi(g)W_gA^iW_g^{-1}.
+        \label{eq:spt_character_twist}
+    \end{align}
+    Thus the tensor is on-site symmetric up to $\phi$, with the vector
+    transformation (\ref{eq:spt_character_vector}). For $D\geq1$, there is
+    a virtual projective representation realizing
+    (\ref{eq:spt_character_twist}), and every virtual projective
+    representation realizing that relation with the same character
+    $\phi$ has a factor system cohomologous to $\omega$.
+    If $\rho$ is unitary and $|\phi(g)|=1$ for every $g$, then $U$ is
+    a unitary representation \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:cocycle_gauge_independence, thm:spt_fixed_point_transfer,
+        def:on_site_symmetric_character}
+    Since $W_{gh}$ is a nonzero multiple of $W_hW_g$, its scalar factor
+    cancels in $W\mapsto W^{T}\otimes W^{-1}$. The character law then gives
+    $U(g)U(h)=U(gh)$. The symmetry identity follows by multiplying the
+    matrix units by $W_g$ and $W_g^{-1}$.
 
-\begin{proof}\leanok
-    \uses{thm:cocycle_gauge_independence, thm:virtual_rep_injective, thm:spt_fixed_point_transfer}
-    Since $W_{gh}$ is a nonzero multiple of $W_hW_g$ and scalars cancel in
-    $W\mapsto W^{T}\otimes W^{-1}$, the factor system cancels and
-    $U(g)U(h)=U(gh)$.  The symmetry identity is checked entry by entry:
-    $W_g\ket{a}\bra{b}W_g^{-1}=\sum_{a',b'}(W_g)_{a'a}(W_g^{-1})_{bb'}
-        \ket{a'}\bra{b'}$.  With $\phi=1$ the gauges $\rho(g^{-1})$ realize the
-    symmetry, so Theorem~\ref{thm:cocycle_gauge_independence} makes every other
-    virtual representation cohomologous to $\rho$.  The tensor is injective, so
-    Theorem~\ref{thm:virtual_rep_injective} also produces a virtual representation
-    directly, and its factor system is then cohomologous to $\omega$.
+    The prescribed projective representation $\rho$ itself realizes
+    (\ref{eq:spt_character_twist}). For any other realization, cancel
+    the nonzero scalar $\phi(g)$ and compare the two gauges for the action
+    $\phi(g)^{-1}U(g)$. Since the tensor is injective,
+    Theorem~\ref{thm:cocycle_gauge_independence} makes their factor systems
+    cohomologous. When $\rho$ is unitary, $W_g^{-1}=W_g^\dagger$ and
+    $W_g^T\otimes W_g^\dagger$ is unitary; multiplication by the unit-modulus
+    scalar $\phi(g)$ preserves unitarity.
 \end{proof}
 
-\begin{theorem}[The SPT fixed point of a cocycle class]
+\begin{theorem}[The SPT fixed point of a character and cocycle class]
     \label{thm:spt_fixed_point_from_cocycle}
     \lean{TNLean.Algebra.ScalarCocycle.inverse,
         TNLean.Algebra.ScalarCocycle.inverse_isCocycle,
@@ -360,17 +399,18 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
         TNLean.Algebra.ScalarCocycle.twistedLeftRegularProjective_mem_unitaryGroup,
         TNLean.Algebra.ScalarCocycle.regularProjectiveForClass,
         TNLean.Algebra.ScalarCocycle.regularProjectiveForClass_mem_unitaryGroup,
-        MPSTensor.sptFixedPointAction_mem_unitaryGroup,
         MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle}
     \leanok
     \uses{thm:spt_fixed_point_class, thm:mpug_twisted_regular_multiplication,
         thm:mpug_twisted_regular_unitary, thm:mpug_circle_complex_units_h2}
-    Let $G$ be a finite group and $\omega$ a 2-cocycle.  There is a unitary
+    Let $G$ be a finite group, $\phi:G\to\C^\times$ a character,
+    and $\omega$ a 2-cocycle. There is a unitary
     projective representation $\rho$ of $G$ on $\C^G$ whose factor system is
-    cohomologous to $\omega$.  With $\phi=1$ and $D=|G|$, the physical action $U$ of
+    cohomologous to $\omega$. With $D=|G|$, the physical action $U$ of
     Definition~\ref{def:spt_fixed_point_tensor} is unitary, the SPT fixed-point
-    tensor has MPV-family invariance under $U$, and every virtual projective
-    representation of this symmetry has a factor system cohomologous to $\omega$
+    tensor is on-site symmetric up to $\phi$, and every virtual projective
+    representation realizing the symmetry with this character has a factor
+    system cohomologous to $\omega$
     \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 
@@ -381,9 +421,10 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     cohomologous to $\omega$ because $G$ is finite.
     The twisted left regular matrices $L_g$ of the inverse cocycle
     $\bar\omega^{-1}$ are unitary and satisfy $L_gL_h=\bar\omega(g,h)L_{gh}$.  When
-    $\rho$ is unitary, $W_g^{-1}=W_g^{\dagger}$, so $U(g)=W_g^{T}\otimes W_g^{\dagger}$ is
-    a tensor product of unitaries.  Theorem~\ref{thm:spt_fixed_point_class} gives the
-    symmetry and shows that every virtual factor system is cohomologous to
+    $\rho$ is unitary, $W_g^{-1}=W_g^{\dagger}$. Every element $g$ has finite
+    order, so $\phi(g)^{\operatorname{ord}(g)}=1$ and $|\phi(g)|=1$.
+    Hence $U(g)=\phi(g)(W_g^{T}\otimes W_g^{\dagger})$ is unitary.
+    Theorem~\ref{thm:spt_fixed_point_class} gives the symmetry and shows that every virtual factor system is cohomologous to
     $\bar\omega$, hence to $\omega$.
 \end{proof}
 
