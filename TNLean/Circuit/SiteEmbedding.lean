@@ -54,11 +54,14 @@ def AgreeOff (e : κ → ι) (x y : ι → Fin d) : Prop :=
 instance (e : κ → ι) : DecidableRel (AgreeOff (d := d) e) := fun _ _ => by
   unfold AgreeOff; infer_instance
 
+omit [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] in
 theorem agreeOff_refl (e : κ → ι) (x : ι → Fin d) : AgreeOff e x x := fun _ _ => rfl
 
+omit [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] in
 theorem AgreeOff.symm {e : κ → ι} {x y : ι → Fin d} (h : AgreeOff e x y) :
     AgreeOff e y x := fun i hi => (h i hi).symm
 
+omit [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ] in
 theorem AgreeOff.trans {e : κ → ι} {x y z : ι → Fin d} (h : AgreeOff e x y)
     (h' : AgreeOff e y z) : AgreeOff e x z := fun i hi => (h i hi).trans (h' i hi)
 
@@ -71,6 +74,7 @@ noncomputable def embedOp (e : κ → ι) (X : Matrix (κ → Fin d) (κ → Fin
     Matrix (ι → Fin d) (ι → Fin d) ℂ :=
   of fun x y => if AgreeOff e x y then X (x ∘ e) (y ∘ e) else 0
 
+omit [DecidableEq κ] in
 theorem embedOp_apply (e : κ → ι) (X : Matrix (κ → Fin d) (κ → Fin d) ℂ)
     (x y : ι → Fin d) :
     embedOp e X x y = if AgreeOff e x y then X (x ∘ e) (y ∘ e) else 0 :=
@@ -117,6 +121,7 @@ theorem embedOp_mul {e : κ → ι} (he : Function.Injective e)
     · rw [ite_eq_right fun hzy => hxy (hxz.trans hzy), mul_zero]
     · rw [ite_eq_right hxz, zero_mul]
 
+omit [DecidableEq κ] in
 @[simp] theorem embedOp_one (e : κ → ι) :
     embedOp e (1 : Matrix (κ → Fin d) (κ → Fin d) ℂ) = 1 := by
   ext x y
@@ -132,6 +137,7 @@ theorem embedOp_mul {e : κ → ι} (he : Function.Injective e)
     · rfl
     · rfl
 
+omit [DecidableEq κ] in
 theorem embedOp_conjTranspose (e : κ → ι) (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
     (embedOp e X)ᴴ = embedOp e Xᴴ := by
   ext x y
@@ -140,22 +146,26 @@ theorem embedOp_conjTranspose (e : κ → ι) (X : Matrix (κ → Fin d) (κ →
   · rw [ite_eq_left h.symm, ite_eq_left h]
   · rw [ite_eq_right fun h' => h h'.symm, ite_eq_right h, star_zero]
 
+omit [DecidableEq κ] in
 theorem embedOp_star (e : κ → ι) (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
     star (embedOp e X) = embedOp e (star X) :=
   embedOp_conjTranspose e X
 
+omit [DecidableEq κ] in
 theorem embedOp_add (e : κ → ι) (X Y : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
     embedOp e (X + Y) = embedOp e X + embedOp e Y := by
   ext x y
   simp only [embedOp_apply, Matrix.add_apply]
   split_ifs <;> simp
 
+omit [DecidableEq κ] in
 theorem embedOp_smul (e : κ → ι) (c : ℂ) (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
     embedOp e (c • X) = c • embedOp e X := by
   ext x y
   simp only [embedOp_apply, Matrix.smul_apply]
   split_ifs <;> simp
 
+omit [DecidableEq κ] in
 @[simp] theorem embedOp_zero (e : κ → ι) :
     embedOp e (0 : Matrix (κ → Fin d) (κ → Fin d) ℂ) = 0 := by
   ext x y
@@ -169,6 +179,7 @@ theorem embedOp_mem_unitary {e : κ → ι} (he : Function.Injective e)
   rw [embedOp_star, embedOp_mul he, embedOp_mul he, hX.1, hX.2, embedOp_one]
   exact ⟨rfl, rfl⟩
 
+omit [DecidableEq κ] in
 /-- `(⊗ⱼ mⱼ) ⊗ 1 = ⊗ᵢ m'ᵢ`, where `m'` extends `m` by the identity off the range of `e`. -/
 theorem embedOp_rectKronecker {e : κ → ι} (he : Function.Injective e)
     (A : κ → Matrix (Fin d) (Fin d) ℂ) :
@@ -197,6 +208,7 @@ theorem embedOp_finKronecker {m n : ℕ} {e : Fin m → Fin n} (he : Function.In
     embedOp e (finKronecker A) = finKronecker (Function.extend e A 1) :=
   embedOp_rectKronecker he A
 
+omit [DecidableEq ι] in
 /-- Every operator on the chain acts on the set of all sites. -/
 theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
     X ∈ supportedOperators d (Set.univ : Set ι) := by
@@ -218,6 +230,7 @@ theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) �
   rw [this]
   exact Submodule.smul_mem _ _ (rectKronecker_mem_supportedOperators fun i hi => absurd trivial hi)
 
+omit [DecidableEq κ] in
 /-- An operator acting on the sites `S` of the placed chain acts, as `X ⊗ 1`, on the sites
 `e '' S` of the chain. -/
 theorem embedOp_mem_supportedOperators_image {e : κ → ι} (he : Function.Injective e)
@@ -238,6 +251,7 @@ theorem embedOp_mem_supportedOperators_image {e : κ → ι} (he : Function.Inje
   | add x y _ _ hx hy => rw [embedOp_add]; exact Submodule.add_mem _ hx hy
   | smul c x _ hx => rw [embedOp_smul]; exact Submodule.smul_mem _ _ hx
 
+omit [DecidableEq κ] in
 /-- `X ⊗ 1` acts on the range of `e`. -/
 theorem embedOp_mem_supportedOperators {e : κ → ι} (he : Function.Injective e)
     (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
@@ -246,6 +260,7 @@ theorem embedOp_mem_supportedOperators {e : κ → ι} (he : Function.Injective 
 
 /-! ### Placed operators on placed operators -/
 
+omit [DecidableEq κ] in
 /-- Placing an operator placed by `e` with an injective `f` places it by `f ∘ e`. -/
 theorem embedOp_embedOp {ι' : Type*} [Fintype ι'] [DecidableEq ι'] {f : ι → ι'}
     (hf : Function.Injective f) (e : κ → ι) (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
@@ -309,6 +324,7 @@ theorem sum_extend_zero {α β : Type*} [Fintype α] [Fintype β] {s : α → β
     have : ¬∃ p, s p = u := by simpa using hu
     rw [Function.extend_apply' _ _ _ this, Pi.zero_apply, hH]
 
+omit [Fintype ι] [DecidableEq κ] [DecidableEq ι] [Fintype κ] in
 theorem eq_extend_of_agreeOff {e : κ → ι} (he : Function.Injective e)
     {y z : ι → Fin d} (h : AgreeOff e y z) : z = Function.extend e (z ∘ e) y := by
   funext i

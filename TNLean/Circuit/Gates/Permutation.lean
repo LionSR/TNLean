@@ -50,10 +50,12 @@ def IsLocalPerm (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop :=
   (∀ x, ∀ i ∉ S, σ x i = x i) ∧
     ∀ x y, (∀ j ∈ S, x j = y j) → ∀ i ∈ S, σ x i = σ y i
 
+omit [DecidableEq ι] in
 private theorem permMatrix_cfg_apply (σ : Equiv.Perm (ι → Fin d)) (x y : ι → Fin d) :
     σ.permMatrix ℂ x y = if σ x = y then 1 else 0 := by
   simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
 
+omit [DecidableEq ι] in
 /-- The permutation matrix of a permutation changing and reading only the sites of `S` acts
 on `S`. -/
 theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set ι}
@@ -117,11 +119,13 @@ def shiftPerm (t : ι) (f : (ι → Fin d) → Fin d)
   left_inv x := by simp [hf]
   right_inv x := by simp [hf]
 
+omit [Fintype ι] in
 theorem shiftPerm_apply (t : ι) (f : (ι → Fin d) → Fin d)
     (hf : ∀ x c, f (Function.update x t c) = f x) (x : ι → Fin d) :
     shiftPerm t f hf x = Function.update x t (x t + f x) :=
   rfl
 
+omit [Fintype ι] in
 theorem isLocalPerm_shiftPerm {S : Set ι} {t : ι} (ht : t ∈ S)
     (f : (ι → Fin d) → Fin d)
     (hf : ∀ x c, f (Function.update x t c) = f x)

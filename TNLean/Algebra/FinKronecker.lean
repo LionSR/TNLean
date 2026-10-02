@@ -98,8 +98,9 @@ theorem rectKronecker_mul [Fintype κ] [DecidableEq ν] (K : ν → Matrix ι κ
   exact Finset.sum_congr rfl fun z _ ↦ (Finset.prod_mul_distrib).symm
 
 /-- The product of identities over a finite set of sites is the identity. -/
-@[simp] theorem rectKronecker_one [DecidableEq ν] [Fintype ι] [DecidableEq ι] :
+@[simp] theorem rectKronecker_one [DecidableEq ι] :
     rectKronecker (fun _ : ν ↦ (1 : Matrix ι ι ℂ)) = 1 := by
+  classical
   ext x y
   simp only [rectKronecker_apply]
   by_cases hxy : x = y

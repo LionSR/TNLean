@@ -81,6 +81,7 @@ def supportedOperators (d : ℕ) (S : Set ι) :
   Submodule.span ℂ {A | ∃ m : ι → Matrix (Fin d) (Fin d) ℂ,
     (∀ i ∉ S, m i = 1) ∧ A = rectKronecker m}
 
+omit [DecidableEq ι] in
 theorem rectKronecker_mem_supportedOperators {S : Set ι}
     {m : ι → Matrix (Fin d) (Fin d) ℂ} (hm : ∀ i ∉ S, m i = 1) :
     rectKronecker m ∈ supportedOperators d S :=
@@ -92,12 +93,14 @@ theorem finKronecker_mem_supportedOperators {N : ℕ} {S : Set (Fin N)}
     finKronecker m ∈ supportedOperators d S :=
   rectKronecker_mem_supportedOperators hm
 
+omit [DecidableEq ι] in
 theorem supportedOperators_mono {S S' : Set ι} (h : S ⊆ S') :
     supportedOperators d S ≤ supportedOperators d S' := by
   refine Submodule.span_mono ?_
   rintro _ ⟨m, hm, rfl⟩
   exact ⟨m, fun i hi ↦ hm i fun hiS ↦ hi (h hiS), rfl⟩
 
+omit [DecidableEq ι] in
 theorem one_mem_supportedOperators (S : Set ι) :
     (1 : Matrix (ι → Fin d) (ι → Fin d) ℂ) ∈ supportedOperators d S := by
   rw [← rectKronecker_one]
@@ -115,6 +118,7 @@ theorem mul_mem_supportedOperators {S : Set ι}
   rw [rectKronecker_mul]
   exact rectKronecker_mem_supportedOperators fun i hi ↦ by simp [hm i hi, hm' i hi]
 
+omit [DecidableEq ι] in
 theorem star_mem_supportedOperators {S : Set ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) : star A ∈ supportedOperators d S := by
   induction hA using Submodule.span_induction with
@@ -126,6 +130,7 @@ theorem star_mem_supportedOperators {S : Set ι} {A : Matrix (ι → Fin d) (ι 
   | add x y _ _ hx hy => rw [star_add]; exact Submodule.add_mem _ hx hy
   | smul c x _ hx => rw [star_smul]; exact Submodule.smul_mem _ _ hx
 
+omit [DecidableEq ι] in
 /-- Two bilinear maps agree on every pair of an operator acting on `S` and an operator acting
 on `S'` once they agree on the pairs of product operators `⊗ᵢ mᵢ`, `⊗ᵢ m'ᵢ` with `mᵢ = 1` off
 `S` and `m'ᵢ = 1` off `S'`. -/

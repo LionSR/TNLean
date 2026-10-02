@@ -108,9 +108,9 @@ theorem rectangularKrausMap_rectKronecker_rectKronecker {r : ι → ℕ}
 /-- The chain form of `rectangularKrausMap_rectKronecker_rectKronecker`, for the sites
 `Fin N`. -/
 theorem rectangularKrausMap_rectKronecker_finKronecker {N : ℕ} {r : Fin N → ℕ}
-    (K : (i : ι) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ)
+    (K : (i : Fin N) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ)
     (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    rectangularKrausMap (fun J : (i : ι) → Fin (r i) ↦ rectKronecker fun i ↦ K i (J i))
+    rectangularKrausMap (fun J : (i : Fin N) → Fin (r i) ↦ rectKronecker fun i ↦ K i (J i))
         (finKronecker m) =
       finKronecker fun i ↦ rectangularKrausMap (K i) (m i) :=
   rectangularKrausMap_rectKronecker_rectKronecker K m
@@ -197,6 +197,7 @@ theorem dual_finKronecker {N : ℕ} (Φ : OnsiteChannel d e (Fin N))
     Φ.dual (finKronecker m) = finKronecker fun i ↦ Φ.siteDual i (m i) :=
   Φ.dual_rectKronecker m
 
+omit [Fintype ι] [DecidableEq ι] in
 /-- The dual of a channel is unital. -/
 theorem siteDual_one (Φ : OnsiteChannel d e ι) (i : ι) : Φ.siteDual i 1 = 1 := by
   change ∑ j, (Φ.kraus i j)ᴴ * 1 * (Φ.kraus i j)ᴴᴴ = 1
@@ -287,6 +288,7 @@ noncomputable def attach (d : ℕ) (ι : Type*) {a s : ℕ} (w : Fin s → Fin a
   sum_kraus _ := by
     simp only [conjTranspose_ancillaKraus_mul, ← Finset.sum_smul, hw, one_smul]
 
+omit [Fintype ι] [DecidableEq ι] in
 /-- Attaching an ancilla maps `X` to `X ⊗ τ` with `τ = ∑ₖ wₖ wₖ†`. -/
 theorem attach_siteMap_apply {a s : ℕ} (w : Fin s → Fin a → ℂ)
     (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) (i : ι) (X : Matrix (Fin d) (Fin d) ℂ)
@@ -328,6 +330,7 @@ def discard (d a : ℕ) (ι : Type*) : OnsiteChannel (d * a) d ι where
     simp only [Finset.sum_ite_eq, Finset.mem_univ, ite_true, one_apply]
     exact if_congr eq_comm rfl rfl
 
+omit [Fintype ι] [DecidableEq ι] in
 /-- Discarding the ancilla is the partial trace `Y ↦ ∑_b Y_{(x, b), (y, b)}`. -/
 theorem discard_siteMap_apply {a : ℕ} (i : ι) (Y : Matrix (Fin (d * a)) (Fin (d * a)) ℂ)
     (x y : Fin d) :
@@ -339,6 +342,7 @@ theorem discard_siteMap_apply {a : ℕ} (i : ι) (Y : Matrix (Fin (d * a)) (Fin 
   refine Finset.sum_congr rfl fun b _ ↦ ?_
   simp [ite_mul, mul_ite, Finset.sum_ite_eq']
 
+omit [DecidableEq ι] [Fintype ι] in
 /-- Discarding an attached ancilla gives back the one-site operator. -/
 theorem discard_siteMap_attach_siteMap {a s : ℕ} (w : Fin s → Fin a → ℂ)
     (hw : ∑ k, star (w k) ⬝ᵥ w k = 1) (i : ι) (X : Matrix (Fin d) (Fin d) ℂ) :

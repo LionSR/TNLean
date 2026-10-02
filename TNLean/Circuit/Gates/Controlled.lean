@@ -191,6 +191,7 @@ noncomputable def siteOp (t : ι) (u : Matrix (Fin d) (Fin d) ℂ) :
     Matrix (ι → Fin d) (ι → Fin d) ℂ :=
   embedOp ![t] (u.submatrix (Equiv.funUnique (Fin 1) (Fin d)) (Equiv.funUnique (Fin 1) (Fin d)))
 
+omit [Fintype ι] [DecidableEq ι] in
 theorem siteSites_injective (t : ι) : Function.Injective ![t] := by
   intro a b _; exact Subsingleton.elim a b
 
