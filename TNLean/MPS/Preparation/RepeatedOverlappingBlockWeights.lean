@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.RelativePositivePart
+import TNLean.MPS.Preparation.RepeatedBlockError
 import TNLean.MPS.Preparation.RepeatedOverlappingBlockError
 
 /-!
@@ -45,6 +46,10 @@ replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented i
 * `MPSTensor.CopyWeights.pow` — the weights `μ_{j,k}^q` of the copies on `q` sites.
 * `MPSTensor.ofPhysicalMatrixLM_mul_conjTranspose_pairEmbedding` — the letters of a row placed
   on one copy.
+* `MPSTensor.conjTranspose_copyIsometry_mul_polarPos_eq_sum` — the row `L_jᴴ P` as a sum over the
+  copies.
+* `MPSTensor.ofPhysicalMatrixLM_conjTranspose_copyIsometry_mul_polarPos` — the tensor read from
+  `L_jᴴ P` is the direct sum over the copies of the tensors read from `L_jᴴ P C⁻¹ L_{j'}`.
 * `MPSTensor.mpvOverlap_conjTranspose_copyIsometry_mul_polarPos` — `zⱼ = ∑_{j'} β_{j'} w_{jj'}`.
 * `MPSTensor.exists_norm_mpvOverlap_sub_ite_le` — `w_{jj'} = δ_{jj'}` up to `C y e^{C y}`.
 * `MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum`,

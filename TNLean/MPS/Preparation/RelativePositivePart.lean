@@ -45,6 +45,8 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 * `MPSTensor.norm_polarPos_sub_mul_sum_le` — the relative bound for `B = B₀ C`.
 * `MPSTensor.copyScaleInv`, `MPSTensor.relativeRow`, `MPSTensor.relativeRowLimit` — `C⁻¹`, the
   blocks `L_jᴴ P C⁻¹ L_{j'}` and their limits.
+* `MPSTensor.copyScaleInv_mul_copyIsometry`, `MPSTensor.relativeRow_eq_smul` — `C⁻¹ L_j = cⱼ⁻¹ L_j`
+  and `L_jᴴ P C⁻¹ L_{j'} = c_{j'}⁻¹ L_jᴴ P L_{j'}`.
 * `MPSTensor.relativeRowLimit_self`, `MPSTensor.relativeRowLimit_of_ne` — the limits are
   `(√σ_j)ᵀ ⊗ 1` on the diagonal and `0` off it.
 * `MPSTensor.exists_norm_relativeRow_sub_le` — the relative rate for blocks with
