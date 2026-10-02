@@ -31,7 +31,7 @@ compression theorem then provides the four-block compression, with
 `Θ₃ ⋆ (√2 Aσ)` of bond dimension forty, not the full round-45B boundary
 tensors of bond dimensions forty-eight and sixty-four. The distinction and
 the remaining full-tensor proof are recorded in
-`docs/paper-gaps/ising_three_object_twist_scope.tex`. No vanishing-remainder
+`docs/paper-gaps/tnlean_ising_three_object_twist_scope.tex`. No vanishing-remainder
 claim is made for the compression chosen here.
 -/
 
@@ -126,7 +126,9 @@ theorem isingBondObjectThree_compression_exists :
       rw [show c • A = (fun i => c • A i) from rfl,
         Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
     rw [isingBondObjectThree_trace_evalWord w hw]
-    simp [Fin.sum_univ_succ, Fin.succ, isingThreeTargets]
+    simp only [Nat.reduceMul, isingThreeTargets, Fin.sum_univ_succ, Fin.isValue,
+      Fin.succ, Nat.reduceAdd, Fin.coe_ofNat_eq_mod, Nat.zero_mod, Fin.mk_one,
+      Fin.reduceFinMk, Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton]
     dsimp +instances [isingThreeBlockDim]
     rw [hscale 5 isingSigma.toMPSTensor, hscale 3 isingSigma.toMPSTensor,
       hscale (2 * (Real.sqrt 2 : ℂ)) isingOne.toMPSTensor,

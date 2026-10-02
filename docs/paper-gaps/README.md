@@ -40,7 +40,7 @@ For the Fibonacci string-net example of arXiv:1511.08090:
 
 For the project Ising bond-object twist motivated by arXiv:1606.00608:
 
-- `ising_three_object_twist_scope.tex` records the four channels of the
+- `tnlean_ising_three_object_twist_scope.tex` records the four channels of the
   forty-dimensional local product and distinguishes this compression from
   the unformalized literal round-45B boundary tensors of dimensions
   forty-eight and sixty-four.
