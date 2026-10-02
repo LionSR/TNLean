@@ -15,8 +15,14 @@ unitary identifications are absorbed into the corresponding weights, so every
 weight modulus and the total bond dimension are preserved.
 
 The resulting sector decomposition is related to the original block sum by a
-single unitary similarity. This is the grouping in arXiv:1708.00029,
-`eq:bdnr`, lines 286–305, in the trace-preserving gauge of line 625.
+single unitary similarity. This is the grouping of repeated blocks in the
+trace-preserving gauge.
+
+## References
+
+* De las Cuevas, Cirac, Schuch, Pérez-García, *Irreducible forms of Matrix Product
+  States: Theory and Applications*, arXiv:1708.00029, `eq:bdnr`, lines 286–305, and
+  the trace-preserving gauge of line 625.
 -/
 
 open scoped BigOperators Matrix
