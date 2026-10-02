@@ -57,12 +57,12 @@
     \lean{TNLean.PEPS.windowCornerRegion}
     \lean{TNLean.PEPS.windowCornerVertex}
     \leanok
-    Write $[a,b)$ for the vertices whose chosen coordinate values lie
+    Write ${[a,b)}$ for the vertices whose chosen coordinate values lie
     between $a$ and $b-1$. Define
     \begin{align}
-        S   & =[L,2L+1)\times[K,2K+1),\notag            \\
-        R   & =\bigl([L+1,2L+1)\times[K,2K+1)\bigr)
-        \cup\bigl([L,2L+1)\times[K+1,2K+1)\bigr),\notag \\
+        S   & ={[L,2L+1)}\times{[K,2K+1)},\notag            \\
+        R   & =\bigl({[L+1,2L+1)}\times{[K,2K+1)}\bigr)
+        \cup\bigl({[L,2L+1)}\times{[K+1,2K+1)}\bigr),\notag \\
         v_0 & =(L,K).
         \label{eq:peps_window_corner_regions}
     \end{align}
@@ -86,7 +86,7 @@
     $R\cup\{v_0\}=S$.
     For $L,K>0$, the complement identity is
     \begin{align}
-        R^c=S^c\cup\bigl([1,L+1)\times[1,K+1)\bigr).
+        R^c=S^c\cup\bigl({[1,L+1)}\times{[1,K+1)}\bigr).
         \label{eq:peps_window_corner_complement}
     \end{align}
 \end{theorem}
