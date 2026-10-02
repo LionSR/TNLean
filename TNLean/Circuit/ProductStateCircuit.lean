@@ -4,20 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.IsometryUnitaryExtension
-import TNLean.MPS.Preparation.CircuitComposition
+import TNLean.Circuit.Composition
 
 /-!
 # Product states from the all-`|0⟩` state in depth two
 
-A vector prepared in depth `T` (`MPSPreparation.IsPreparedInDepth`) is a local circuit applied to
+A vector prepared in depth `T` (`QuantumCircuit.IsPreparedInDepth`) is a local circuit applied to
 some product vector `⊗ᵢ |vᵢ⟩`. This file shows that the product vector can be taken to be the
 all-`|0⟩` state at the cost of two more layers, up to a scalar.
 
-* `MPSPreparation.isLocalCircuitOfDepth_finKronecker`: a tensor product `⊗ᵢ uᵢ` of one-site
+* `QuantumCircuit.isLocalCircuitOfDepth_finKronecker`: a tensor product `⊗ᵢ uᵢ` of one-site
   unitaries is a local circuit of depth `2`. The first layer carries the gates `u_k ⊗ u_{k+1}` on
   the pairs `{k, k + 1}` with `k` even and `k + 1 < N`; the second carries the remaining one-site
   gate `u_{N-1}` when `N` is odd.
-* `MPSPreparation.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`: a nonzero
+* `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`: a nonzero
   vector prepared in depth `T` is a multiple of a local circuit of depth `T + 2` applied to the
   all-`|0⟩` state.
 
@@ -25,15 +25,15 @@ These facts are used to compose the preparations of two states into a circuit ma
 other (`TNLean.MPS.Preparation.CircuitEquivalence`).
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
 /-- A nonzero vector of `ℂ^d` is a nonzero multiple of the image of `|0⟩` under a unitary. -/
-theorem exists_mem_unitary_eq_smul_mulVec_single_zero (hd : 0 < d) {x : Fin d → ℂ}
+theorem _root_.Matrix.exists_mem_unitary_eq_smul_mulVec_single_zero (hd : 0 < d) {x : Fin d → ℂ}
     (hx : x ≠ 0) : ∃ u ∈ unitary (Matrix (Fin d) (Fin d) ℂ), ∃ c : ℂ, c ≠ 0 ∧
       x = c • (u *ᵥ Pi.single ⟨0, hd⟩ 1) := by
   classical
@@ -87,7 +87,7 @@ section OneSite
 
 /-- `⊗ᵢ mᵢ` with `mᵢ = u i` on the sites of `P` and `mᵢ = 1` elsewhere. -/
 private noncomputable def siteOp (u : Fin N → Matrix (Fin d) (Fin d) ℂ) (P : Finset (Fin N)) :
-    Matrix (Cfg d N) (Cfg d N) ℂ :=
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   finKronecker fun i => if i ∈ P then u i else 1
 
 private theorem siteOp_union (u : Fin N → Matrix (Fin d) (Fin d) ℂ) {P Q : Finset (Fin N)}
@@ -108,7 +108,7 @@ private theorem siteOp_univ (u : Fin N → Matrix (Fin d) (Fin d) ℂ) :
 
 private theorem siteOp_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
     (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) (P : Finset (Fin N)) :
-    siteOp u P ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+    siteOp u P ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
   have h1 : ∀ i, (if i ∈ P then u i else 1)ᴴ * (if i ∈ P then u i else 1) = 1 := fun i => by
     split_ifs
     · exact Unitary.star_mul_self_of_mem (hu i)
@@ -233,7 +233,7 @@ end OneSite
 product vector is a multiple of a local circuit of depth `T + 2` applied to `|0⋯0⟩`: the product
 vector is a multiple of `(⊗ᵢ uᵢ)|0⋯0⟩`, and `⊗ᵢ uᵢ` has depth `2`. -/
 theorem IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero [NeZero N]
-    (hd : 0 < d) {T : ℕ} {ψ : Cfg d N → ℂ} (h : IsPreparedInDepth T ψ) (hψ : ψ ≠ 0) :
+    (hd : 0 < d) {T : ℕ} {ψ : (Fin N → Fin d) → ℂ} (h : IsPreparedInDepth T ψ) (hψ : ψ ≠ 0) :
     ∃ U, IsLocalCircuitOfDepth U (T + 2) ∧ ∃ c : ℂ,
       ψ = c • (U *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1) := by
   obtain ⟨U, hU, v, rfl⟩ := h
@@ -244,4 +244,4 @@ theorem IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero [NeZer
     exact (isLocalCircuitOfDepth_finKronecker hu).mul hU
   rw [hc, mulVec_smul, mulVec_mulVec]
 
-end MPSPreparation
+end QuantumCircuit

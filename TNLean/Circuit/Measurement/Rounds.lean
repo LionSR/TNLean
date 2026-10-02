@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.MeasurementCircuit
+import TNLean.Circuit.Measurement.Protocol
 
 /-!
 # Several rounds of measurements
@@ -20,15 +20,15 @@ A vector is *prepared with measurement rounds in depth `T`* when some sequence o
 depth at most `T`, applied to a nonzero product vector, gives after every sequence of outcomes
 of nonzero probability a scalar multiple of the vector.
 
-A single round is the protocol of `MPSPreparation.MeasurementProtocol`
-(`MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`).
+A single round is the protocol of `QuantumCircuit.MeasurementProtocol`
+(`QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`).
 Several rounds are needed when a correction must be applied before later gates that do not
 commute with it, as in the tree-RG circuit with measurements of arXiv:2307.01696 (paragraph
 "Tree-RG circuit with measurements"), where the teleportation of a register is corrected before
 an isometry acts on it. arXiv:2103.13367 performs one round in its definition of `QCcc_ℓ` and
 notes, in the paragraph "State transformations with QC and LOCC", that "one could also define a
 more general scheme with multiple rounds of LOCC". The model here is the composition of rounds,
-each of the one-round model of `MPSPreparation.MeasurementProtocol` (so a protocol of `QCcc_ℓ` of
+each of the one-round model of `QuantumCircuit.MeasurementProtocol` (so a protocol of `QCcc_ℓ` of
 no larger depth), with the depth counted as the total number of layers. The number of rounds is
 not bounded (the tree of `k` levels uses `2k` rounds), whereas in the class `QCcc^{(k)}_ℓ` of the
 paragraph "Phases of matter" of arXiv:2103.13367 the number `k` of composed transformations does
@@ -38,27 +38,27 @@ A round *implements* a matrix `W` on a set `E` of vectors when for every outcome
 scalar `c` with `V_m P_m U v = c W v` for every `v ∈ E`: whatever the outcome, the round acts on
 `E` as `W`, up to a scalar independent of the input. A sequence of rounds implements `W` on `E`
 when every output from `v ∈ E` is a scalar multiple of `W v`
-(`MPSPreparation.MeasurementRound.IsRoundsImplementationOn`). Implementations compose along
-sequences of rounds (`MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`), and an
+(`QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`). Implementations compose along
+sequences of rounds (`QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append`), and an
 implementation applied to a nonzero product vector is a preparation.
 
 ## Main definitions
 
-* `MPSPreparation.MeasurementRound` and `MPSPreparation.MeasurementRound.kraus`.
-* `MPSPreparation.MeasurementRound.outputs` — the vectors reached by a sequence of rounds.
-* `MPSPreparation.IsPreparedWithMeasurementRoundsInDepth`.
-* `MPSPreparation.MeasurementRound.IsImplementationOn`,
-  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn`.
+* `QuantumCircuit.MeasurementRound` and `QuantumCircuit.MeasurementRound.kraus`.
+* `QuantumCircuit.MeasurementRound.outputs` — the vectors reached by a sequence of rounds.
+* `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`.
+* `QuantumCircuit.MeasurementRound.IsImplementationOn`,
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`.
 
 ## Main results
 
-* `MPSPreparation.MeasurementRound.exists_mem_outputs_ne_zero` — a nonzero vector has an output
+* `QuantumCircuit.MeasurementRound.exists_mem_outputs_ne_zero` — a nonzero vector has an output
   of nonzero probability, so the definition is not vacuous
-  (`MPSPreparation.IsPreparedWithMeasurementRoundsInDepth.ne_zero`).
-* `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`.
-* `MPSPreparation.MeasurementRound.IsImplementationOn.exists_mem_outputs`,
-  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.append`,
-  `MPSPreparation.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`.
+  (`QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.ne_zero`).
+* `QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`.
+* `QuantumCircuit.MeasurementRound.IsImplementationOn.exists_mem_outputs`,
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append`,
+  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`.
 
 ## References
 
@@ -68,10 +68,10 @@ implementation applied to a nonzero product vector is a preparation.
   measurements".
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ} [NeZero N]
 
@@ -98,13 +98,13 @@ variable (R : MeasurementRound d N)
 
 /-- The Kraus operator `V_m P_m U` of the outcome `m`: the circuit, the projection onto the
 outcome, and the product of the corrections. -/
-noncomputable def kraus (m : R.measured → Fin d) : Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def kraus (m : R.measured → Fin d) : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   finKronecker (R.correction m) * outcomeProj R.measured m * circuitOp R.circuit
 
 /-- The number of layers of the circuit of the round. -/
 def depth : ℕ := R.circuit.length
 
-/-- The one-round protocol of `MPSPreparation.MeasurementProtocol` with the initial product
+/-- The one-round protocol of `QuantumCircuit.MeasurementProtocol` with the initial product
 vector `v` and the round `R`. -/
 def toProtocol (v : Fin N → Fin d → ℂ) : MeasurementProtocol d N where
   initial := v
@@ -119,7 +119,7 @@ theorem toProtocol_output (v : Fin N → Fin d → ℂ) (m : R.measured → Fin 
     MeasurementProtocol.preMeasurement, kraus, toProtocol, mulVec_mulVec, Matrix.mul_assoc]
 
 /-- A nonzero vector stays nonzero for some outcome. -/
-theorem exists_kraus_mulVec_ne_zero {v : Cfg d N → ℂ} (hv : v ≠ 0) :
+theorem exists_kraus_mulVec_ne_zero {v : (Fin N → Fin d) → ℂ} (hv : v ≠ 0) :
     ∃ m, R.kraus m *ᵥ v ≠ 0 := by
   by_contra h
   have h' : ∀ m, R.kraus m *ᵥ v = 0 := fun m => not_not.mp fun hm => h ⟨m, hm⟩
@@ -136,18 +136,18 @@ theorem exists_kraus_mulVec_ne_zero {v : Cfg d N → ℂ} (hv : v ≠ 0) :
 
 /-- The vectors reached from `v` by the sequence of rounds `Rs`, the head applied first, over all
 the sequences of outcomes. -/
-def outputs : List (MeasurementRound d N) → (Cfg d N → ℂ) → Set (Cfg d N → ℂ)
+def outputs : List (MeasurementRound d N) → ((Fin N → Fin d) → ℂ) → Set ((Fin N → Fin d) → ℂ)
   | [], v => {v}
   | R :: Rs, v => ⋃ m, outputs Rs (R.kraus m *ᵥ v)
 
-@[simp] theorem outputs_nil (v : Cfg d N → ℂ) : outputs [] v = {v} := rfl
+@[simp] theorem outputs_nil (v : (Fin N → Fin d) → ℂ) : outputs [] v = {v} := rfl
 
-theorem mem_outputs_cons {Rs : List (MeasurementRound d N)} {v w : Cfg d N → ℂ} :
+theorem mem_outputs_cons {Rs : List (MeasurementRound d N)} {v w : (Fin N → Fin d) → ℂ} :
     w ∈ outputs (R :: Rs) v ↔ ∃ m, w ∈ outputs Rs (R.kraus m *ᵥ v) := by
   simp [outputs]
 
 /-- The outputs of a scalar multiple are the scalar multiples of the outputs. -/
-theorem mem_outputs_smul {Rs : List (MeasurementRound d N)} {v w : Cfg d N → ℂ} (c : ℂ)
+theorem mem_outputs_smul {Rs : List (MeasurementRound d N)} {v w : (Fin N → Fin d) → ℂ} (c : ℂ)
     (hw : w ∈ outputs Rs (c • v)) : ∃ u ∈ outputs Rs v, w = c • u := by
   induction Rs generalizing v with
   | nil => exact ⟨v, rfl, hw⟩
@@ -158,7 +158,7 @@ theorem mem_outputs_smul {Rs : List (MeasurementRound d N)} {v w : Cfg d N → �
     exact ⟨u, (R.mem_outputs_cons).mpr ⟨m, hu⟩, rfl⟩
 
 /-- A nonzero vector has a nonzero output: some sequence of outcomes has nonzero probability. -/
-theorem exists_mem_outputs_ne_zero (Rs : List (MeasurementRound d N)) {v : Cfg d N → ℂ}
+theorem exists_mem_outputs_ne_zero (Rs : List (MeasurementRound d N)) {v : (Fin N → Fin d) → ℂ}
     (hv : v ≠ 0) : ∃ w ∈ outputs Rs v, w ≠ 0 := by
   induction Rs generalizing v with
   | nil => exact ⟨v, rfl, hv⟩
@@ -178,13 +178,13 @@ preparation, and "a more general scheme with multiple rounds of LOCC"); arXiv:23
 paragraph "Tree-RG circuit with measurements". Every round is a protocol of `QCcc_ℓ` of no larger
 depth. The number of rounds is not bounded, whereas in the class `QCcc^{(k)}_ℓ` of the paragraph
 "Phases of matter" of arXiv:2103.13367 the number `k` does not depend on the system size. -/
-def IsPreparedWithMeasurementRoundsInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
+def IsPreparedWithMeasurementRoundsInDepth (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ (v : Fin N → Fin d → ℂ) (Rs : List (MeasurementRound d N)),
     (Rs.map MeasurementRound.depth).sum ≤ T ∧ productVector v ≠ 0 ∧
       ∀ w ∈ MeasurementRound.outputs Rs (productVector v), w ≠ 0 → ∃ c : ℂ, w = c • ψ
 
 /-- A vector prepared with measurement rounds is nonzero. -/
-theorem IsPreparedWithMeasurementRoundsInDepth.ne_zero {T : ℕ} {ψ : Cfg d N → ℂ}
+theorem IsPreparedWithMeasurementRoundsInDepth.ne_zero {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
     (h : IsPreparedWithMeasurementRoundsInDepth T ψ) : ψ ≠ 0 := by
   obtain ⟨v, Rs, -, hv, hRs⟩ := h
   obtain ⟨w, hw, hw0⟩ := MeasurementRound.exists_mem_outputs_ne_zero Rs hv
@@ -192,7 +192,7 @@ theorem IsPreparedWithMeasurementRoundsInDepth.ne_zero {T : ℕ} {ψ : Cfg d N �
   rintro rfl
   exact hw0 (smul_zero c)
 
-theorem IsPreparedWithMeasurementRoundsInDepth.mono {T T' : ℕ} {ψ : Cfg d N → ℂ}
+theorem IsPreparedWithMeasurementRoundsInDepth.mono {T T' : ℕ} {ψ : (Fin N → Fin d) → ℂ}
     (h : IsPreparedWithMeasurementRoundsInDepth T ψ) (hT : T ≤ T') :
     IsPreparedWithMeasurementRoundsInDepth T' ψ := by
   obtain ⟨v, Rs, hd, hv, hRs⟩ := h
@@ -201,7 +201,7 @@ theorem IsPreparedWithMeasurementRoundsInDepth.mono {T T' : ℕ} {ψ : Cfg d N �
 /-- **One round is a protocol.** A vector prepared with measurements in depth `T` is prepared with
 one measurement round in depth `T`. -/
 theorem isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth {T : ℕ}
-    {ψ : Cfg d N → ℂ} (h : IsPreparedWithMeasurementsInDepth T ψ) :
+    {ψ : (Fin N → Fin d) → ℂ} (h : IsPreparedWithMeasurementsInDepth T ψ) :
     IsPreparedWithMeasurementRoundsInDepth T ψ := by
   obtain ⟨P, hT, h0, hP⟩ := h
   let R : MeasurementRound d N :=
@@ -224,15 +224,16 @@ only.
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("correcting (without
 postselection) based on the measurement outcomes"); arXiv:2103.13367, paragraph "State
 transformations with QC and LOCC" (deterministic transformations). -/
-def IsImplementationOn (R : MeasurementRound d N) (E : Set (Cfg d N → ℂ))
-    (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop :=
+def IsImplementationOn (R : MeasurementRound d N) (E : Set ((Fin N → Fin d) → ℂ))
+    (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop :=
   ∀ m, ∃ c : ℂ, ∀ v ∈ E, R.kraus m *ᵥ v = c • (W *ᵥ v)
 
 /-- **Implementations compose.** If the round `R` implements `W` on `E` and `v ∈ E`, every output
 of `R` followed by `Rs` is a scalar multiple of an output of `Rs` from `W v`. -/
 theorem IsImplementationOn.exists_mem_outputs {R : MeasurementRound d N}
-    {E : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ} (hR : R.IsImplementationOn E W)
-    {Rs : List (MeasurementRound d N)} {v w : Cfg d N → ℂ} (hv : v ∈ E)
+    {E : Set ((Fin N → Fin d) → ℂ)} {W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    (hR : R.IsImplementationOn E W)
+    {Rs : List (MeasurementRound d N)} {v w : (Fin N → Fin d) → ℂ} (hv : v ∈ E)
     (hw : w ∈ outputs (R :: Rs) v) : ∃ c : ℂ, ∃ u ∈ outputs Rs (W *ᵥ v), w = c • u := by
   obtain ⟨m, hm⟩ := (R.mem_outputs_cons).mp hw
   obtain ⟨c, hc⟩ := hR m
@@ -242,7 +243,7 @@ theorem IsImplementationOn.exists_mem_outputs {R : MeasurementRound d N}
 
 /-! ### Sequences of rounds implementing a matrix -/
 
-theorem mem_outputs_append {Rs Rs' : List (MeasurementRound d N)} {v w : Cfg d N → ℂ} :
+theorem mem_outputs_append {Rs Rs' : List (MeasurementRound d N)} {v w : (Fin N → Fin d) → ℂ} :
     w ∈ outputs (Rs ++ Rs') v ↔ ∃ u ∈ outputs Rs v, w ∈ outputs Rs' u := by
   induction Rs generalizing v with
   | nil => simp
@@ -256,11 +257,11 @@ outcomes, the rounds act on `E` as `W`, up to a scalar.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("correcting (without
 postselection) based on the measurement outcomes"). -/
-def IsRoundsImplementationOn (Rs : List (MeasurementRound d N)) (E : Set (Cfg d N → ℂ))
-    (W : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop :=
+def IsRoundsImplementationOn (Rs : List (MeasurementRound d N)) (E : Set ((Fin N → Fin d) → ℂ))
+    (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop :=
   ∀ v ∈ E, ∀ w ∈ outputs Rs v, ∃ c : ℂ, w = c • (W *ᵥ v)
 
-theorem isRoundsImplementationOn_nil (E : Set (Cfg d N → ℂ)) :
+theorem isRoundsImplementationOn_nil (E : Set ((Fin N → Fin d) → ℂ)) :
     IsRoundsImplementationOn ([] : List (MeasurementRound d N)) E 1 := by
   intro v _ w hw
   rw [outputs_nil, Set.mem_singleton_iff] at hw
@@ -268,7 +269,7 @@ theorem isRoundsImplementationOn_nil (E : Set (Cfg d N → ℂ)) :
 
 /-- A round implementing a matrix is a sequence of rounds implementing it. -/
 theorem IsImplementationOn.isRoundsImplementationOn {R : MeasurementRound d N}
-    {E : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
+    {E : Set ((Fin N → Fin d) → ℂ)} {W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (h : R.IsImplementationOn E W) : IsRoundsImplementationOn [R] E W := by
   intro v hv w hw
   obtain ⟨c, u, hu, rfl⟩ := h.exists_mem_outputs (Rs := []) hv hw
@@ -276,14 +277,14 @@ theorem IsImplementationOn.isRoundsImplementationOn {R : MeasurementRound d N}
   exact ⟨c, by rw [hu]⟩
 
 theorem IsRoundsImplementationOn.mono {Rs : List (MeasurementRound d N)}
-    {E E' : Set (Cfg d N → ℂ)} {W : Matrix (Cfg d N) (Cfg d N) ℂ}
+    {E E' : Set ((Fin N → Fin d) → ℂ)} {W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (h : IsRoundsImplementationOn Rs E W) (hE : E' ⊆ E) : IsRoundsImplementationOn Rs E' W :=
   fun v hv => h v (hE hv)
 
 /-- **Implementations compose.** If `Rs` implements `W` on `E`, `W` maps `E` into `E'`, and
 `Rs'` implements `W'` on `E'`, then `Rs` followed by `Rs'` implements `W' W` on `E`. -/
 theorem IsRoundsImplementationOn.append {Rs Rs' : List (MeasurementRound d N)}
-    {E E' : Set (Cfg d N → ℂ)} {W W' : Matrix (Cfg d N) (Cfg d N) ℂ}
+    {E E' : Set ((Fin N → Fin d) → ℂ)} {W W' : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (h : IsRoundsImplementationOn Rs E W) (h' : IsRoundsImplementationOn Rs' E' W')
     (hE : ∀ v ∈ E, W *ᵥ v ∈ E') : IsRoundsImplementationOn (Rs ++ Rs') E (W' * W) := by
   intro v hv w hw
@@ -297,12 +298,12 @@ theorem IsRoundsImplementationOn.append {Rs Rs' : List (MeasurementRound d N)}
 product vector `π` lies in `E`, then `W π` is prepared with measurement rounds in the total
 depth of `Rs`. -/
 theorem IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth
-    {Rs : List (MeasurementRound d N)} {E : Set (Cfg d N → ℂ)}
-    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (h : IsRoundsImplementationOn Rs E W)
+    {Rs : List (MeasurementRound d N)} {E : Set ((Fin N → Fin d) → ℂ)}
+    {W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (h : IsRoundsImplementationOn Rs E W)
     {v : Fin N → Fin d → ℂ} (hv : productVector v ≠ 0) (hvE : productVector v ∈ E) :
     IsPreparedWithMeasurementRoundsInDepth (Rs.map depth).sum (W *ᵥ productVector v) :=
   ⟨v, Rs, le_rfl, hv, fun w hw _ => h _ hvE w hw⟩
 
 end MeasurementRound
 
-end MPSPreparation
+end QuantumCircuit

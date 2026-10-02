@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.LocalCircuit
+import TNLean.Circuit.LocalCircuit
 import QICLean.Channel.KrausCPTP
 
 /-!
@@ -13,7 +13,7 @@ A local channel circuit of depth `T` on a ring of `N` sites is a composition of 
 each a composition of trace-preserving completely positive maps (channels) acting on pairwise
 disjoint pairs of neighbouring sites `{k, k + 1}`. These circuits act on density matrices of
 the chain. They are the mixed-state counterpart of the unitary local circuits of
-`TNLean.MPS.Preparation.LocalCircuit`, and they are the operations of a two-way equivalence of
+`TNLean.Circuit.LocalCircuit`, and they are the operations of a two-way equivalence of
 periodic density families by local channel circuits: local channels, fixed product ancillas
 and discarding, with no free classical communication.
 
@@ -36,30 +36,30 @@ whose one-step neighbourhoods are disjoint, since no gate of the layer meets bot
 ## Conventions
 
 Sites, pairs `bond k = {k, k + 1}` and supports are those of
-`TNLean.MPS.Preparation.LocalCircuit`. A gate is an operator on the whole chain given by a
+`TNLean.Circuit.LocalCircuit`. A gate is an operator on the whole chain given by a
 finite family of Kraus operators `K_j` acting on its pair with `∑_j K_j† K_j = 1`; its map on
 states is `ρ ↦ ∑_j K_j ρ K_j†` and its Heisenberg dual is `A ↦ ∑_j K_j† A K_j`. Layers are
 listed in the order in which they are applied.
 
 ## Main definitions
 
-* `MPSPreparation.ChannelLayer` — one layer of channels on pairwise disjoint pairs.
-* `MPSPreparation.ChannelLayer.map`, `MPSPreparation.ChannelLayer.dual` — its map on states
+* `QuantumCircuit.ChannelLayer` — one layer of channels on pairwise disjoint pairs.
+* `QuantumCircuit.ChannelLayer.map`, `QuantumCircuit.ChannelLayer.dual` — its map on states
   and its Heisenberg dual.
-* `MPSPreparation.channelCircuitMap`, `MPSPreparation.channelCircuitDual` — a local channel
+* `QuantumCircuit.channelCircuitMap`, `QuantumCircuit.channelCircuitDual` — a local channel
   circuit and its Heisenberg dual.
-* `MPSPreparation.IsChannelPreparedInDepth` — a density matrix obtained from a product density
+* `QuantumCircuit.IsChannelPreparedInDepth` — a density matrix obtained from a product density
   by a local channel circuit of depth `T`.
 
 ## Main results
 
-* `MPSPreparation.channelCircuitMap_isKrausCPTP` — a local channel circuit is a
+* `QuantumCircuit.channelCircuitMap_isKrausCPTP` — a local channel circuit is a
   trace-preserving completely positive map.
-* `MPSPreparation.trace_channelCircuitMap_mul` — Schrödinger–Heisenberg duality.
-* `MPSPreparation.channelCircuitDual_mem_supportedOperators` — the backward light cone.
-* `MPSPreparation.channelCircuitMap_map_toChannelLayer` — a unitary local circuit is the
+* `QuantumCircuit.trace_channelCircuitMap_mul` — Schrödinger–Heisenberg duality.
+* `QuantumCircuit.channelCircuitDual_mem_supportedOperators` — the backward light cone.
+* `QuantumCircuit.channelCircuitMap_map_toChannelLayer` — a unitary local circuit is the
   local channel circuit with one Kraus operator per gate.
-* `MPSPreparation.trace_mul_mul_eq_of_isChannelPreparedInDepth` — factorization of
+* `QuantumCircuit.trace_mul_mul_eq_of_isChannelPreparedInDepth` — factorization of
   expectations of operators separated by more than `2T`.
 
 ## Follow-ups
@@ -77,16 +77,16 @@ norm, and measurements with feedforward are not treated here.
   discarding the ancillas of such a gate gives a channel on the same pair.
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators ComplexOrder
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
 /-! ### Traces against product densities -/
 
-theorem trace_finKronecker (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
+theorem _root_.Matrix.trace_finKronecker (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
     trace (finKronecker m) = ∏ i, trace (m i) := by
   simp only [trace, diag_apply, finKronecker_apply]
   exact (Fintype.prod_sum fun i j ↦ m i j j).symm
@@ -99,11 +99,11 @@ private theorem trace_finKronecker_eq_one {σ : Fin N → Matrix (Fin d) (Fin d)
 /-- Product densities factorize expectations of products of operators on disjoint sets of
 sites: `tr(σ AB) tr σ = tr(σ A) tr(σ B)` for `σ = ⊗ᵢ σᵢ`. -/
 theorem trace_finKronecker_mul_mul {S S' : Set (Fin N)} (hSS' : Disjoint S S')
-    (σ : Fin N → Matrix (Fin d) (Fin d) ℂ) {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (σ : Fin N → Matrix (Fin d) (Fin d) ℂ) {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S') :
     trace (finKronecker σ * (A * B)) * trace (finKronecker σ) =
       trace (finKronecker σ * A) * trace (finKronecker σ * B) := by
-  let φ := traceLinearMap (Cfg d N) ℂ ℂ ∘ₗ LinearMap.mulLeft ℂ (finKronecker σ)
+  let φ := traceLinearMap (Fin N → Fin d) ℂ ℂ ∘ₗ LinearMap.mulLeft ℂ (finKronecker σ)
   rw [mul_comm]
   refine eq_of_mem_supportedOperators₂ (trace (finKronecker σ) • (LinearMap.mul ℂ _).compr₂ φ)
     ((LinearMap.mul ℂ ℂ).compl₁₂ φ φ) (fun m m' hm hm' ↦ ?_) hA hB
@@ -117,16 +117,18 @@ theorem trace_finKronecker_mul_mul {S S' : Set (Fin N)} (hSS' : Disjoint S S')
 
 /-! ### Kraus maps on the chain -/
 
-private theorem krausMap_apply {ι : Type*} [Fintype ι] (K : ι → Matrix (Cfg d N) (Cfg d N) ℂ)
-    (X : Matrix (Cfg d N) (Cfg d N) ℂ) :
+private theorem krausMap_apply {ι : Type*} [Fintype ι]
+    (K : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
+    (X : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     rectangularKrausMap K X = ∑ j, K j * X * (K j)ᴴ :=
   rfl
 
 /-- Kraus maps whose Kraus operators commute with each other commute as maps. -/
 theorem commute_rectangularKrausMap {ι κ : Type*} [Fintype ι] [Fintype κ]
-    {K : ι → Matrix (Cfg d N) (Cfg d N) ℂ} {K' : κ → Matrix (Cfg d N) (Cfg d N) ℂ}
+    {K : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    {K' : κ → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (h : ∀ i j, Commute (K i) (K' j)) :
-    Commute (rectangularKrausMap K : Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ))
+    Commute (rectangularKrausMap K : Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
       (rectangularKrausMap K') := by
   refine (commute_iff_eq _ _).mpr (LinearMap.ext fun X ↦ ?_)
   simp only [Module.End.mul_apply, krausMap_apply, Matrix.mul_sum, Matrix.sum_mul]
@@ -158,7 +160,7 @@ acts on `bond k`.
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the light cone of a local
 circuit), here for the dual of a channel. -/
 structure IsHeisenbergLocal (S : Set (Fin N))
-    (φ : Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ)) : Prop where
+    (φ : Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)) : Prop where
   map_eq_self : ∀ A ∈ supportedOperators d Sᶜ, φ A = A
   map_mem : ∀ Z, S ⊆ Z → ∀ A ∈ supportedOperators d Z, φ A ∈ supportedOperators d Z
   map_mul_right : ∀ A, ∀ B ∈ supportedOperators d Sᶜ, φ (A * B) = φ A * B
@@ -166,7 +168,7 @@ structure IsHeisenbergLocal (S : Set (Fin N))
 
 namespace IsHeisenbergLocal
 
-variable {S S' : Set (Fin N)} {φ ψ : Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ)}
+variable {S S' : Set (Fin N)} {φ ψ : Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)}
 
 theorem mono (h : IsHeisenbergLocal S φ) (hSS' : S ⊆ S') : IsHeisenbergLocal S' φ where
   map_eq_self A hA :=
@@ -178,7 +180,7 @@ theorem mono (h : IsHeisenbergLocal S φ) (hSS' : S ⊆ S') : IsHeisenbergLocal 
     h.map_mul_left A B (supportedOperators_mono (Set.compl_subset_compl.mpr hSS') hB)
 
 theorem one (S : Set (Fin N)) :
-    IsHeisenbergLocal S (1 : Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ)) where
+    IsHeisenbergLocal S (1 : Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)) where
   map_eq_self _ _ := rfl
   map_mem _ _ _ hA := hA
   map_mul_right _ _ _ := rfl
@@ -200,16 +202,18 @@ end IsHeisenbergLocal
 /-- The Heisenberg dual `A ↦ ∑ⱼ Kⱼ† A Kⱼ` of a channel whose Kraus operators act on `S` acts
 on `S`. -/
 theorem isHeisenbergLocal_rectangularKrausMap {S : Set (Fin N)} {ι : Type*} [Fintype ι]
-    {K : ι → Matrix (Cfg d N) (Cfg d N) ℂ} (hK : ∀ j, K j ∈ supportedOperators d S)
+    {K : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hK : ∀ j, K j ∈ supportedOperators d S)
     (hsum : ∑ j, (K j)ᴴ * K j = 1) :
     IsHeisenbergLocal S (rectangularKrausMap fun j ↦ (K j)ᴴ) := by
-  have happ (A : Matrix (Cfg d N) (Cfg d N) ℂ) :
+  have happ (A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
       rectangularKrausMap (fun j ↦ (K j)ᴴ) A = ∑ j, (K j)ᴴ * A * K j := by
     simp only [krausMap_apply, conjTranspose_conjTranspose]
-  have hcomm {B : Matrix (Cfg d N) (Cfg d N) ℂ} (hB : B ∈ supportedOperators d Sᶜ) (j : ι) :
+  have hcomm {B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hB : B ∈ supportedOperators d Sᶜ)
+    (j : ι) :
       Commute B (K j) :=
     commute_of_mem_supportedOperators disjoint_compl_left hB (hK j)
-  have hcomm' {B : Matrix (Cfg d N) (Cfg d N) ℂ} (hB : B ∈ supportedOperators d Sᶜ) (j : ι) :
+  have hcomm' {B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hB : B ∈ supportedOperators d Sᶜ)
+    (j : ι) :
       Commute (K j)ᴴ B :=
     commute_of_mem_supportedOperators disjoint_compl_right (star_mem_supportedOperators (hK j)) hB
   refine ⟨fun A hA ↦ ?_, fun Z hZ A hA ↦ ?_, fun A B hB ↦ ?_, fun A B hB ↦ ?_⟩
@@ -234,11 +238,11 @@ theorem isHeisenbergLocal_rectangularKrausMap {S : Set (Fin N)} {ι : Type*} [Fi
 /-- If each `f i` is dual to `g i` for the trace pairing, then the product of the commuting
 maps `f i` is dual to the product of the commuting maps `g i`. -/
 theorem trace_noncommProd_mul {ι : Type*} (s : Finset ι)
-    (f g : ι → Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ))
+    (f g : ι → Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
     (hf : (s : Set ι).Pairwise (Function.onFun Commute f))
     (hg : (s : Set ι).Pairwise (Function.onFun Commute g))
     (h : ∀ i ∈ s, ∀ ρ A, trace (f i ρ * A) = trace (ρ * g i A))
-    (ρ A : Matrix (Cfg d N) (Cfg d N) ℂ) :
+    (ρ A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     trace (s.noncommProd f hf ρ * A) = trace (ρ * s.noncommProd g hg A) := by
   induction s using Finset.cons_induction generalizing ρ A with
   | empty => rfl
@@ -270,7 +274,7 @@ structure ChannelLayer (d N : ℕ) [NeZero N] where
   r : Fin N → ℕ
   /-- The Kraus operators of the channel on the pair `{k, k + 1}`, as operators on the
   chain. -/
-  kraus : (k : Fin N) → Fin (r k) → Matrix (Cfg d N) (Cfg d N) ℂ
+  kraus : (k : Fin N) → Fin (r k) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ
   kraus_mem_supportedOperators : ∀ k ∈ bonds, ∀ j, kraus k j ∈ supportedOperators d (bond k)
   sum_kraus : ∀ k ∈ bonds, ∑ j, (kraus k j)ᴴ * kraus k j = 1
   pairwiseDisjoint : (bonds : Set (Fin N)).PairwiseDisjoint bond
@@ -282,13 +286,13 @@ namespace ChannelLayer
 It is defined for every `k`, as `Layer.gate` is, but it is a channel on that pair only for
 `k ∈ L.bonds`, where the fields `kraus_mem_supportedOperators` and `sum_kraus` hold. -/
 noncomputable def gateMap (L : ChannelLayer d N) (k : Fin N) :
-    Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+    Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   rectangularKrausMap (L.kraus k)
 
 /-- The Heisenberg dual `A ↦ ∑ⱼ Kⱼ† A Kⱼ` of the channel on the pair `{k, k + 1}`, meaningful
 for `k ∈ L.bonds` as for `gateMap`. -/
 noncomputable def gateDual (L : ChannelLayer d N) (k : Fin N) :
-    Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+    Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   rectangularKrausMap fun j ↦ (L.kraus k j)ᴴ
 
 theorem gateMap_commute (L : ChannelLayer d N) :
@@ -307,17 +311,19 @@ theorem gateDual_commute (L : ChannelLayer d N) (s : Finset (Fin N)) (hs : s ⊆
 /-- The channel of a layer on states: the composition of its commuting channels.
 
 Source: arXiv:2307.01696, main text before Theorem 1 (a layer of a local circuit). -/
-noncomputable def map (L : ChannelLayer d N) : Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+noncomputable def map (L : ChannelLayer d N) : Module.End ℂ
+    (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   L.bonds.noncommProd L.gateMap L.gateMap_commute
 
 /-- The composition of the Heisenberg duals of the channels of `L` on a subset `s` of its
 pairs. -/
 noncomputable def partialDual (L : ChannelLayer d N) (s : Finset (Fin N)) (hs : s ⊆ L.bonds) :
-    Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+    Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   s.noncommProd L.gateDual (L.gateDual_commute s hs)
 
 /-- The Heisenberg dual of a layer. -/
-noncomputable def dual (L : ChannelLayer d N) : Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+noncomputable def dual (L : ChannelLayer d N) : Module.End ℂ
+    (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   L.partialDual L.bonds subset_rfl
 
 theorem gateMap_isKrausCPTP (L : ChannelLayer d N) {k : Fin N} (hk : k ∈ L.bonds) :
@@ -331,7 +337,7 @@ theorem map_isKrausCPTP (L : ChannelLayer d N) : IsKrausCPTP L.map :=
     (by rw [Module.End.one_eq_id]; exact isKrausCPTP_id) fun _ hk ↦ L.gateMap_isKrausCPTP hk
 
 /-- Schrödinger–Heisenberg duality for a layer: `tr(Φ(ρ) A) = tr(ρ Φ†(A))`. -/
-theorem trace_map_mul (L : ChannelLayer d N) (ρ A : Matrix (Cfg d N) (Cfg d N) ℂ) :
+theorem trace_map_mul (L : ChannelLayer d N) (ρ A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     trace (L.map ρ * A) = trace (ρ * L.dual A) :=
   trace_noncommProd_mul L.bonds L.gateMap L.gateDual L.gateMap_commute
     (L.gateDual_commute _ subset_rfl) (fun k _ ↦ trace_rectangularKrausMap_mul (L.kraus k)) ρ A
@@ -377,7 +383,7 @@ private theorem partialDual_filter_isHeisenbergLocal (L : ChannelLayer d N)
 /-- Any part of the dual of one layer enlarges the support of an operator by at most one site
 on each side. -/
 theorem partialDual_mem_supportedOperators (L : ChannelLayer d N) (s : Finset (Fin N))
-    (hs : s ⊆ L.bonds) {X : Set (Fin N)} {A : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (hs : s ⊆ L.bonds) {X : Set (Fin N)} {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) :
     L.partialDual s hs A ∈ supportedOperators d (neighbourhood X 1) := by
   classical
@@ -389,14 +395,15 @@ theorem partialDual_mem_supportedOperators (L : ChannelLayer d N) (s : Finset (F
 /-- **Light cone of one layer.** The Heisenberg dual of a layer enlarges the support of an
 operator by at most one site on each side. -/
 theorem dual_mem_supportedOperators (L : ChannelLayer d N) {X : Set (Fin N)}
-    {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d X) :
+    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     L.dual A ∈ supportedOperators d (neighbourhood X 1) :=
   L.partialDual_mem_supportedOperators _ _ hA
 
 /-- The Heisenberg dual of a layer is multiplicative on operators acting on sets whose
 one-step neighbourhoods are disjoint: no channel of the layer acts on both. -/
 theorem dual_mul (L : ChannelLayer d N) {X Y : Set (Fin N)}
-    (hXY : Disjoint (neighbourhood X 1) (neighbourhood Y 1)) {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (hXY : Disjoint (neighbourhood X 1) (neighbourhood Y 1))
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
     L.dual (A * B) = L.dual A * L.dual B := by
   classical
@@ -419,14 +426,14 @@ being applied first: `channelCircuitMap [L₁, …, L_T] = Φ_{L_T} ∘ ⋯ ∘ 
 Source: arXiv:2307.01696, main text before Theorem 1 (depth-`T` local circuits), with channels
 in place of unitary gates. -/
 noncomputable def channelCircuitMap :
-    List (ChannelLayer d N) → Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ)
+    List (ChannelLayer d N) → Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
   | [] => 1
   | L :: Ls => channelCircuitMap Ls * L.map
 
 /-- The Heisenberg dual of a local channel circuit:
 `channelCircuitDual [L₁, …, L_T] = Φ_{L₁}† ∘ ⋯ ∘ Φ_{L_T}†`. -/
 noncomputable def channelCircuitDual :
-    List (ChannelLayer d N) → Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ)
+    List (ChannelLayer d N) → Module.End ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
   | [] => 1
   | L :: Ls => L.dual * channelCircuitDual Ls
 
@@ -438,17 +445,17 @@ theorem channelCircuitMap_isKrausCPTP (Ls : List (ChannelLayer d N)) :
   | cons L Ls ih => exact isKrausCPTP_comp L.map_isKrausCPTP ih
 
 theorem trace_channelCircuitMap (Ls : List (ChannelLayer d N))
-    (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) : trace (channelCircuitMap Ls ρ) = trace ρ :=
+    (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : trace (channelCircuitMap Ls ρ) = trace ρ :=
   (channelCircuitMap_isKrausCPTP Ls).trace_map ρ
 
 theorem posSemidef_channelCircuitMap (Ls : List (ChannelLayer d N))
-    {ρ : Matrix (Cfg d N) (Cfg d N) ℂ} (hρ : ρ.PosSemidef) :
+    {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hρ : ρ.PosSemidef) :
     (channelCircuitMap Ls ρ).PosSemidef :=
   (channelCircuitMap_isKrausCPTP Ls).map_posSemidef hρ
 
 /-- Schrödinger–Heisenberg duality for a local channel circuit: `tr(Φ(ρ) A) = tr(ρ Φ†(A))`. -/
 theorem trace_channelCircuitMap_mul (Ls : List (ChannelLayer d N))
-    (ρ A : Matrix (Cfg d N) (Cfg d N) ℂ) :
+    (ρ A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     trace (channelCircuitMap Ls ρ * A) = trace (ρ * channelCircuitDual Ls A) := by
   induction Ls generalizing ρ A with
   | nil => rfl
@@ -463,7 +470,8 @@ of `X`.
 Source: arXiv:2307.01696, main text after Theorem 1 ("strictly finite light cone") and
 Supplemental Material, proof of Theorem 1, here for channels in place of unitary gates. -/
 theorem channelCircuitDual_mem_supportedOperators (Ls : List (ChannelLayer d N))
-    {X : Set (Fin N)} {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d X) :
+    {X : Set (Fin N)} {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    (hA : A ∈ supportedOperators d X) :
     channelCircuitDual Ls A ∈ supportedOperators d (neighbourhood X Ls.length) := by
   induction Ls with
   | nil => exact supportedOperators_mono (subset_neighbourhood X 0) hA
@@ -475,7 +483,7 @@ theorem channelCircuitDual_mem_supportedOperators (Ls : List (ChannelLayer d N))
 acting on sets whose `T`-neighbourhoods are disjoint. -/
 theorem channelCircuitDual_mul (Ls : List (ChannelLayer d N)) {X Y : Set (Fin N)}
     (hXY : Disjoint (neighbourhood X Ls.length) (neighbourhood Y Ls.length))
-    {A B : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d X)
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :
     channelCircuitDual Ls (A * B) = channelCircuitDual Ls A * channelCircuitDual Ls B := by
   induction Ls with
@@ -494,7 +502,8 @@ theorem channelCircuitDual_mul (Ls : List (ChannelLayer d N)) {X Y : Set (Fin N)
 
 /-- Conjugation `X ↦ U X U†`, as a monoid homomorphism from matrices to maps. -/
 noncomputable def conjMonoidHom :
-    Matrix (Cfg d N) (Cfg d N) ℂ →* Module.End ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) where
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →* Module.End ℂ
+    (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) where
   toFun := singleKrausMap
   map_one' := LinearMap.ext fun X ↦ by simp
   map_mul' U V := LinearMap.ext fun X ↦ by
@@ -538,13 +547,13 @@ Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum c
 applied to product states"), with channels in place of unitary gates and product densities in
 place of product vectors; arXiv:2103.13367, main text, paragraph "Quantum circuits and
 LOCC", for circuits of local operations. -/
-def IsChannelPreparedInDepth (T : ℕ) (ρ : Matrix (Cfg d N) (Cfg d N) ℂ) : Prop :=
+def IsChannelPreparedInDepth (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop :=
   ∃ Ls : List (ChannelLayer d N), Ls.length = T ∧
     ∃ σ : Fin N → Matrix (Fin d) (Fin d) ℂ, (∀ i, (σ i).PosSemidef ∧ trace (σ i) = 1) ∧
       ρ = channelCircuitMap Ls (finKronecker σ)
 
 /-- A density matrix prepared in depth `T` by local channels is a density matrix. -/
-theorem IsChannelPreparedInDepth.posSemidef {T : ℕ} {ρ : Matrix (Cfg d N) (Cfg d N) ℂ}
+theorem IsChannelPreparedInDepth.posSemidef {T : ℕ} {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hρ : IsChannelPreparedInDepth T ρ) : ρ.PosSemidef ∧ trace ρ = 1 := by
   obtain ⟨Ls, -, σ, hσ, rfl⟩ := hρ
   exact ⟨posSemidef_channelCircuitMap Ls (finKronecker_posSemidef σ fun i ↦ (hσ i).1),
@@ -558,8 +567,9 @@ Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 ("every conn
 correlation for operators at a distance larger than `2T` vanishes"), here for channels in
 place of unitary gates and product densities in place of product vectors. -/
 theorem trace_mul_mul_eq_of_isChannelPreparedInDepth {T : ℕ}
-    {ρ : Matrix (Cfg d N) (Cfg d N) ℂ} (hρ : IsChannelPreparedInDepth T ρ)
-    {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T)) {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
+    {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hρ : IsChannelPreparedInDepth T ρ)
+    {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
     trace (ρ * (A * B)) = trace (ρ * A) * trace (ρ * B) := by
   obtain ⟨Ls, rfl, σ, hσ, rfl⟩ := hρ
@@ -572,4 +582,4 @@ theorem trace_mul_mul_eq_of_isChannelPreparedInDepth {T : ℕ}
 
 end Ring
 
-end MPSPreparation
+end QuantumCircuit

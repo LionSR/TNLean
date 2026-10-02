@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Preparation.CircuitComposition
-import TNLean.MPS.Preparation.LongRangeGates
+import TNLean.Circuit.Composition
+import TNLean.Circuit.Teleportation.LongRangeGates
 
 /-!
 # Gates between distant registers of several sites in constant depth with measurements
@@ -14,12 +14,12 @@ The isometries of the tree-RG circuit of arXiv:2307.01696, eq. (16), act on regi
 with measurements" teleports such registers "at neighboring registers with a constant
 overhead". This file proves this for a layer of gates on pairs of registers of `s` sites.
 
-A *register gate* (`MPSPreparation.RegisterGate`) is a matrix `X` on `2s` sites acting on the
+A *register gate* (`QuantumCircuit.RegisterGate`) is a matrix `X` on `2s` sites acting on the
 two registers `a, …, a + s - 1` and `a + 2L + s, …, a + 2L + 2s - 1` of the ring, with
 `2L + 2s ≤ N`; the structure does not require `X` to be unitary, and the gate on the ring is
-unitary when `X` is (`MPSPreparation.RegisterGate.op_mem_unitary`). For a list of register
+unitary when `X` is (`QuantumCircuit.RegisterGate.op_mem_unitary`). For a list of register
 gates whose stretches `a, …, a + 2L + 2s - 1` are pairwise disjoint, the measurement rounds
-`MPSPreparation.RegisterGate.rounds` do the following, in parallel for all the gates: teleport
+`QuantumCircuit.RegisterGate.rounds` do the following, in parallel for all the gates: teleport
 the site `a + t` of the first register to `a + 2L + t` along a chain of `L` hops, one round of
 depth `2` for each `t`, from `t = s - 1` down to `t = 0`; apply the matrices `X` to the `2s`
 consecutive sites `a + 2L, …, a + 2L + 2s - 1` by a local circuit; teleport the sites back, one
@@ -29,21 +29,21 @@ chain meets only sites carrying `|0⟩`.
 
 On the vectors with `|0⟩` at the `2L` sites strictly between the two registers of every gate,
 every outcome gives a scalar multiple of the product of the gates `X` at their registers
-(`MPSPreparation.RegisterGate.isRoundsImplementationOn_rounds`). No outcome is post-selected.
+(`QuantumCircuit.RegisterGate.isRoundsImplementationOn_rounds`). No outcome is post-selected.
 If every `X` is a product of at most `K` gates on neighbouring sites, the rounds have total depth
 `4s + K + 2`, independent of the distances `2L` and of the number of gates
-(`MPSPreparation.RegisterGate.exists_rounds`).
+(`QuantumCircuit.RegisterGate.exists_rounds`).
 
 ## Main definitions
 
-* `MPSPreparation.RegisterGate`, `MPSPreparation.RegisterGate.op`.
-* `MPSPreparation.RegisterGate.rounds` — the rounds applying a layer of register gates.
+* `QuantumCircuit.RegisterGate`, `QuantumCircuit.RegisterGate.op`.
+* `QuantumCircuit.RegisterGate.rounds` — the rounds applying a layer of register gates.
 
 ## Main results
 
-* `MPSPreparation.RegisterGate.sum_depth_rounds` — the rounds have depth `4s + K + 2`.
-* `MPSPreparation.RegisterGate.isRoundsImplementationOn_rounds`.
-* `MPSPreparation.RegisterGate.exists_rounds`.
+* `QuantumCircuit.RegisterGate.sum_depth_rounds` — the rounds have depth `4s + K + 2`.
+* `QuantumCircuit.RegisterGate.isRoundsImplementationOn_rounds`.
+* `QuantumCircuit.RegisterGate.exists_rounds`.
 
 ## References
 
@@ -51,10 +51,10 @@ If every `X` is a product of at most `K` gates on neighbouring sites, the rounds
   measurements".
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 open Fin.NatCast TeleportHop
 
@@ -66,7 +66,7 @@ omit [NeZero N] in
 /-- If the permutation `π` maps no site outside `S` into `S'`, it moves the sites carrying
 `|0⟩` from `S` onto `S'`. -/
 theorem IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo [NeZero d] {S S' : Set (Fin N)}
-    {v : Cfg d N → ℂ} (h : IsZeroOn S v) {π : Equiv.Perm (Fin N)}
+    {v : (Fin N → Fin d) → ℂ} (h : IsZeroOn S v) {π : Equiv.Perm (Fin N)}
     (hπ : ∀ x, x ∉ S → π x ∉ S') : IsZeroOn S' ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
   refine (h.permMatrix_cfgPerm_mulVec_image π).mono fun y hy => ?_
   refine ⟨π.symm y, ?_, by simp⟩
@@ -90,7 +90,7 @@ structure RegisterGate (d N s : ℕ) [NeZero N] where
   L : ℕ
   le : 2 * L + 2 * s ≤ N
   /-- The matrix on the two registers, the first register on its first `s` sites. -/
-  X : Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ
+  X : Matrix (Fin (s + s) → Fin d) (Fin (s + s) → Fin d) ℂ
 
 namespace RegisterGate
 
@@ -117,10 +117,10 @@ def zone (t : ℕ) : Set (Fin N) := {i | ∃ j, t ≤ j ∧ j < t + 2 * g.L ∧ 
 def interior : Set (Fin N) := g.zone s
 
 /-- The gate on the ring: `X` at the two registers. -/
-noncomputable def op : Matrix (Cfg d N) (Cfg d N) ℂ := embedOp g.sites g.X
+noncomputable def op : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := embedOp g.sites g.X
 
 /-- The gate `X` on the consecutive sites `a + 2L, …, a + 2L + 2s - 1`. -/
-noncomputable def localOp : Matrix (Cfg d N) (Cfg d N) ℂ := embedOp g.localSites g.X
+noncomputable def localOp : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := embedOp g.localSites g.X
 
 theorem offset_lt (t : Fin (s + s)) : g.offset t < 2 * g.L + 2 * s := by
   unfold offset; split_ifs <;> omega
@@ -152,8 +152,8 @@ theorem localSites_mem_span (t : Fin (s + s)) : g.localSites t ∈ g.span :=
 theorem zone_subset_span {t : ℕ} (ht : t ≤ s) : g.zone t ⊆ g.span :=
   fun _ ⟨j, _, hj, hi⟩ => ⟨j, by omega, hi⟩
 
-theorem op_mem_unitary (hX : g.X ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ)) :
-    g.op ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+theorem op_mem_unitary (hX : g.X ∈ unitary (Matrix (Fin (s + s) → Fin d) (Fin (s + s) → Fin d) ℂ)) :
+    g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   embedOp_mem_unitary g.sites_injective hX
 
 theorem op_mem_supportedOperators : g.op ∈ supportedOperators d (Set.range g.sites) :=
@@ -339,7 +339,7 @@ private theorem notMem_zoneAll_of_mem_span {t : ℕ} (ht : t ≤ s) {g : Registe
 include hgs in
 /-- The forward chains of the site `t` move the sites carrying `|0⟩` from the zones `t + 1` to
 the zones `t`. -/
-theorem isZeroOn_chainPerm_thereAll [NeZero d] {t : ℕ} (ht : t < s) {v : Cfg d N → ℂ}
+theorem isZeroOn_chainPerm_thereAll [NeZero d] {t : ℕ} (ht : t < s) {v : (Fin N → Fin d) → ℂ}
     (hv : IsZeroOn (zoneAll gs (t + 1)) v) :
     IsZeroOn (zoneAll gs t) (chainPerm (thereAll gs t) *ᵥ v) := by
   refine hv.permMatrix_cfgPerm_mulVec_of_mapsTo fun x hx => ?_
@@ -358,7 +358,7 @@ theorem isZeroOn_chainPerm_thereAll [NeZero d] {t : ℕ} (ht : t < s) {v : Cfg d
 include hgs in
 /-- The backward chains of the site `t` move the sites carrying `|0⟩` from the zones `t` to the
 zones `t + 1`. -/
-theorem isZeroOn_chainPerm_backAll [NeZero d] {t : ℕ} (ht : t < s) {v : Cfg d N → ℂ}
+theorem isZeroOn_chainPerm_backAll [NeZero d] {t : ℕ} (ht : t < s) {v : (Fin N → Fin d) → ℂ}
     (hv : IsZeroOn (zoneAll gs t) v) :
     IsZeroOn (zoneAll gs (t + 1)) (chainPerm (backAll gs t) *ᵥ v) := by
   refine hv.permMatrix_cfgPerm_mulVec_of_mapsTo fun x hx => ?_
@@ -510,26 +510,26 @@ private theorem chainPerm_thereAll_mul (t : ℕ) :
 
 theorem isRoundsImplementationOn_thereRounds : ∀ (t : ℕ) (ht : t ≤ s),
     MeasurementRound.IsRoundsImplementationOn (thereRounds gs hgs t ht)
-      {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs t) v}
+      {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs t) v}
         ((cfgPerm (therePerm gs t)).permMatrix ℂ) ∧
-      ∀ v : Cfg d N → ℂ, IsZeroOn (zoneAll gs t) v →
+      ∀ v : (Fin N → Fin d) → ℂ, IsZeroOn (zoneAll gs t) v →
         IsZeroOn (zoneAll gs 0) ((cfgPerm (therePerm gs t)).permMatrix ℂ *ᵥ v)
   | 0, _ => by
     refine ⟨?_, fun v hv => ?_⟩
     · simpa [thereRounds, therePerm, permMatrix_cfgPerm_one] using
         MeasurementRound.isRoundsImplementationOn_nil (d := d) (N := N)
-          {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs 0) v}
+          {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs 0) v}
     · simpa [therePerm, permMatrix_cfgPerm_one] using hv
   | t + 1, ht => by
     obtain ⟨ih, ih'⟩ := isRoundsImplementationOn_thereRounds t (by omega)
     have h₁ := (isImplementationOn_round [] (valid_thereAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
-    have hE : ∀ v ∈ {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
+    have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
         v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t)) (circuitOp [] *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs (t + 1)) v from hv).mono
         (pairSites_thereAll_subset t)
-    have hmap : ∀ v ∈ {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
+    have hmap : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
         (chainPerm (thereAll gs t) * circuitOp []) *ᵥ v ∈ {v | IsZeroOn (zoneAll gs t) v} :=
       fun v hv => by
         simpa [circuitOp] using isZeroOn_chainPerm_thereAll hgs (by omega) hv
@@ -550,21 +550,21 @@ private theorem backRounds_perm {t : ℕ} (ht : t < s) :
 
 theorem isRoundsImplementationOn_backRounds : ∀ (t : ℕ) (ht : t ≤ s),
     MeasurementRound.IsRoundsImplementationOn (backRounds gs hgs t ht)
-      {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs 0) v}
+      {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs 0) v}
         ((cfgPerm (therePerm gs t)⁻¹).permMatrix ℂ) ∧
-      ∀ v : Cfg d N → ℂ, IsZeroOn (zoneAll gs 0) v →
+      ∀ v : (Fin N → Fin d) → ℂ, IsZeroOn (zoneAll gs 0) v →
         IsZeroOn (zoneAll gs t) ((cfgPerm (therePerm gs t)⁻¹).permMatrix ℂ *ᵥ v)
   | 0, _ => by
     refine ⟨?_, fun v hv => ?_⟩
     · simpa [backRounds, therePerm, permMatrix_cfgPerm_one] using
         MeasurementRound.isRoundsImplementationOn_nil (d := d) (N := N)
-          {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs 0) v}
+          {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs 0) v}
     · simpa [therePerm, permMatrix_cfgPerm_one] using hv
   | t + 1, ht => by
     obtain ⟨ih, ih'⟩ := isRoundsImplementationOn_backRounds t (by omega)
     have h₁ := (isImplementationOn_round [] (valid_backAll hgs (t := t) (by omega))
       (d := d)).isRoundsImplementationOn
-    have hE : ∀ v ∈ {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs t) v},
+    have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs t) v},
         v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t)) (circuitOp [] *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs t) v from hv).mono
@@ -578,13 +578,14 @@ theorem isRoundsImplementationOn_backRounds : ∀ (t : ℕ) (ht : t ≤ s),
 /-! ### The gates on the consecutive sites -/
 
 /-- The gates `X` on the consecutive sites `a + 2L, …, a + 2L + 2s - 1` of every gate. -/
-noncomputable def localProd (gs : List (RegisterGate d N s)) : Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def localProd (gs : List (RegisterGate d N s)) : Matrix (Fin N → Fin d)
+    (Fin N → Fin d) ℂ :=
   (gs.map localOp).prod
 
 omit [NeZero s] in
 include hgs in
 /-- The gates on the consecutive sites keep `|0⟩` at the zones `0`. -/
-theorem isZeroOn_localProd_mulVec {v : Cfg d N → ℂ} (hv : IsZeroOn (zoneAll gs 0) v) :
+theorem isZeroOn_localProd_mulVec {v : (Fin N → Fin d) → ℂ} (hv : IsZeroOn (zoneAll gs 0) v) :
     IsZeroOn (zoneAll gs 0) (localProd gs *ᵥ v) := by
   have : Std.Symm fun g g' : RegisterGate d N s => Disjoint g.span g'.span :=
     ⟨fun _ _ h => h.symm⟩
@@ -631,7 +632,7 @@ theorem permMatrix_mul_localProd_mul_permMatrix :
 omit [NeZero s] in
 /-- A vector has `|0⟩` at the zones `s` of all the gates exactly when it has `|0⟩` strictly
 between the two registers of every gate. -/
-theorem isZeroOn_zoneAll_iff {v : Cfg d N → ℂ} :
+theorem isZeroOn_zoneAll_iff {v : (Fin N → Fin d) → ℂ} :
     IsZeroOn (zoneAll gs s) v ↔ ∀ g ∈ gs, IsZeroOn g.interior v :=
   ⟨fun h g hg => h.mono fun _ hi => ⟨g, hg, hi⟩,
     fun h y hy _ ⟨g, hg, hi⟩ => h g hg y hy _ hi⟩
@@ -655,7 +656,7 @@ theorem isRoundsImplementationOn_rounds {Ls : List (Layer d N)}
   obtain ⟨h₁, h₁'⟩ := isRoundsImplementationOn_thereRounds hgs s le_rfl
   obtain ⟨h₃, -⟩ := isRoundsImplementationOn_backRounds hgs s le_rfl
   have h₂ : MeasurementRound.IsRoundsImplementationOn [round Ls [] valid_nil]
-      {v : Cfg d N → ℂ | IsZeroOn (zoneAll gs 0) v} (localProd gs) := by
+      {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs 0) v} (localProd gs) := by
     have := (isImplementationOn_round (d := d) Ls (valid_nil (N := N))).isRoundsImplementationOn
     rw [chainPerm_nil, Matrix.one_mul, hLs] at this
     exact this.mono fun v _ => fun _ _ _ h => h.elim
@@ -710,4 +711,4 @@ end Layer
 
 end RegisterGate
 
-end MPSPreparation
+end QuantumCircuit
