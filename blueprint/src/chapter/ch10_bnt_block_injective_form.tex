@@ -184,10 +184,10 @@ span after blocking.
         MPSTensor.exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor}
     \leanok
     \uses{def:bnt_cpsv, def:blockwise_product_word_span}
-    Let $(A_j)_{j=1}^{g}$ be pairwise inequivalent normalized normal tensors
-    with bond dimensions $D_j$; in particular, they may form a basis of normal
-    tensors. If $K>0$ and $\sum_jD_j\leq K$, then there is a positive integer
-    $L$ with $L+1\leq3K^5$ such that
+    Let $(A_j)_{j=1}^{g}$ be a basis of normal tensors with bond dimensions
+    $D_j$, or more generally pairwise inequivalent normalized normal tensors.
+    If $K>0$ and $\sum_jD_j\leq K$, then there is a positive integer
+    $L$ with $L+1\leq3K^5$, in particular $L\leq3K^5$, such that
     \begin{align}
         \spn_{\C}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=L\}
          & =\prod_{j=1}^{g}\MN{D_j}.
@@ -212,10 +212,9 @@ span after blocking.
     \end{align}
     Positivity of the $D_j$ gives
     $g=\sum_j1\leq\sum_jD_j\leq K$, and hence
-    $L+1\leq3(K-1)(K^4+1)+1\leq3K^5$.
-    For the last inequality, use
-    $(K-1)(K^4+1)<K^5$, which follows from $K-1<K^4$.
-    The same bound includes $L+1$ when $g$ is zero or one.
+    $L+1\leq3(K-1)(K^4+1)+1\leq3K^5$, because
+    $(K-1)(K^4+1)=(K-1)K^4+K-1<K^5$. In the cases $g=0$ and $g=1$ the bound
+    $L+1\leq3K^5$ holds since $K\geq1$.
 \end{proof}
 
 % Source anchors: CPSV16 lines 219--225 and 265--301.

@@ -2478,6 +2478,18 @@ abstracted — record why, so it is not re-proposed).
   subfamily comparison rather than repeating the filter conversion.
 - **Notes:** Both occurrences are in one module; no new tactic is needed.
 
+### Gram products of vertically stacked matrices — candidate
+- **Pattern:** reduce the Gram product of a matrix formed by `Matrix.fromRows`
+  to the sum of the two block Gram products, using
+  `Matrix.conjTranspose_fromRows_eq_fromCols_conjTranspose` and
+  `Matrix.fromCols_mul_fromRows`.
+- **Seen:** three proofs in `TNLean/MPS/MPU/ProjectionPhaseIsometries.lean`:
+  `projectionPrefixMap_isIsometry`, `projectionInteriorMap_isIsometry`, and
+  `projectionSuffixMap_isIsometry` (2026-10-02).
+- **Abstraction:** combine the two existing Mathlib identities into a helper
+  lemma if a second file uses the same reduction.
+- **Notes:** three occurrences in one file; below the two-file promotion
+  threshold. The following projection algebra differs between the proofs.
 
 ### adjoints of left polar identities — candidate (2026-10-02)
 
