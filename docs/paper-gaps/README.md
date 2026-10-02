@@ -743,6 +743,14 @@ For the domain walls of anomalous symmetries in arXiv:2405.00439:
   arXiv:2405.00439; the two agree exactly when the stabilizer is normal, in
   particular for abelian groups, and `S_3` acting on three blocks separates
   them.
+- `gs24_truncation_detector_endpoint_dependence.tex` (false source claim)
+  records that the expectation value of the commutator of two truncated
+  symmetries depends on the choice of truncation: two circuit truncations
+  `Z_j X^{⊗[i,j]}` of the on-site symmetry `X^{⊗N}` give `-1` although the
+  anomaly is trivial; the detection holds for truncations whose walls on
+  `ψ_B` are the images under the symmetry of their walls on `ψ_A`, which the
+  formal theorem takes as the hypothesis that the truncations act on `ψ_A` as
+  the domain-wall strings.
 
 For the group matrix product operators of arXiv:2203.12563:
 
