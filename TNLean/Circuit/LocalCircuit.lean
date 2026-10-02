@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinKronecker
-import TNLean.MPS.Core.ProductVector
+import TNLean.Circuit.ProductVector
 import Mathlib.Algebra.Algebra.Operations
 import Mathlib.Algebra.Star.BigOperators
 import Mathlib.Data.Finset.NoncommProd
@@ -43,15 +43,15 @@ that pair. Layers are listed in the order in which they are applied.
 
 ## Main definitions
 
-* `MPSPreparation.supportedOperators` — operators acting on a set of sites.
-* `MPSPreparation.neighbourhood` — the sites within ring distance `r` of a set.
-* `MPSPreparation.Layer`, `MPSPreparation.circuitOp` — layers and local circuits.
-* `MPSPreparation.IsLocalCircuitOfDepth`, `MPSPreparation.IsPreparedInDepth`.
+* `QuantumCircuit.supportedOperators` — operators acting on a set of sites.
+* `QuantumCircuit.neighbourhood` — the sites within ring distance `r` of a set.
+* `QuantumCircuit.Layer`, `QuantumCircuit.circuitOp` — layers and local circuits.
+* `QuantumCircuit.IsLocalCircuitOfDepth`, `QuantumCircuit.IsPreparedInDepth`.
 
 ## Main results
 
-* `MPSPreparation.conj_circuitOp_mem_supportedOperators` — the backward light cone.
-* `MPSPreparation.expect_mul_eq_of_isPreparedInDepth` — factorization of expectations of
+* `QuantumCircuit.conj_circuitOp_mem_supportedOperators` — the backward light cone.
+* `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth` — factorization of expectations of
   operators separated by more than `2T`.
 
 ## References
@@ -60,10 +60,10 @@ that pair. Layers are listed in the order in which they are applied.
   Supplemental Material, proof of Theorem 1.
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
@@ -75,7 +75,7 @@ variable {d N : ℕ}
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (operators `𝒪₁`, `𝒪'ₛ`
 acting on sites of the chain). -/
 def supportedOperators (d : ℕ) (S : Set (Fin N)) :
-    Submodule ℂ (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+    Submodule ℂ (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   Submodule.span ℂ {A | ∃ m : Fin N → Matrix (Fin d) (Fin d) ℂ,
     (∀ i ∉ S, m i = 1) ∧ A = finKronecker m}
 
@@ -91,11 +91,12 @@ theorem supportedOperators_mono {S S' : Set (Fin N)} (h : S ⊆ S') :
   exact ⟨m, fun i hi ↦ hm i fun hiS ↦ hi (h hiS), rfl⟩
 
 theorem one_mem_supportedOperators (S : Set (Fin N)) :
-    (1 : Matrix (Cfg d N) (Cfg d N) ℂ) ∈ supportedOperators d S := by
+    (1 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) ∈ supportedOperators d S := by
   rw [← finKronecker_one]
   exact finKronecker_mem_supportedOperators fun _ _ ↦ rfl
 
-theorem mul_mem_supportedOperators {S : Set (Fin N)} {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
+theorem mul_mem_supportedOperators {S : Set (Fin N)}
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S) :
     A * B ∈ supportedOperators d S := by
   have hAB := Submodule.mul_mem_mul hA hB
@@ -106,7 +107,7 @@ theorem mul_mem_supportedOperators {S : Set (Fin N)} {A B : Matrix (Cfg d N) (Cf
   rw [finKronecker_mul]
   exact finKronecker_mem_supportedOperators fun i hi ↦ by simp [hm i hi, hm' i hi]
 
-theorem star_mem_supportedOperators {S : Set (Fin N)} {A : Matrix (Cfg d N) (Cfg d N) ℂ}
+theorem star_mem_supportedOperators {S : Set (Fin N)} {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) : star A ∈ supportedOperators d S := by
   induction hA using Submodule.span_induction with
   | mem x hx =>
@@ -122,10 +123,11 @@ on `S'` once they agree on the pairs of product operators `⊗ᵢ mᵢ`, `⊗ᵢ
 `S` and `m'ᵢ = 1` off `S'`. -/
 theorem eq_of_mem_supportedOperators₂ {M : Type*} [AddCommMonoid M] [Module ℂ M]
     {S S' : Set (Fin N)}
-    (f g : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] M)
+    (f g : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d) (Fin N
+    → Fin d) ℂ →ₗ[ℂ] M)
     (h : ∀ m m' : Fin N → Matrix (Fin d) (Fin d) ℂ, (∀ i ∉ S, m i = 1) → (∀ i ∉ S', m' i = 1) →
       f (finKronecker m) (finKronecker m') = g (finKronecker m) (finKronecker m'))
-    {A B : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d S)
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d S)
     (hB : B ∈ supportedOperators d S') : f A B = g A B := by
   have hgen : ∀ m, (∀ i ∉ S, m i = 1) → f (finKronecker m) B = g (finKronecker m) B :=
     fun m hm ↦ LinearMap.eqOn_span' (by rintro _ ⟨m', hm', rfl⟩; exact h m m' hm hm') hB
@@ -134,7 +136,7 @@ theorem eq_of_mem_supportedOperators₂ {M : Type*} [AddCommMonoid M] [Module �
 
 /-- Operators acting on disjoint sets of sites commute. -/
 theorem commute_of_mem_supportedOperators {S S' : Set (Fin N)} (hSS' : Disjoint S S')
-    {A B : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d S)
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d S)
     (hB : B ∈ supportedOperators d S') : Commute A B := by
   refine eq_of_mem_supportedOperators₂ (LinearMap.mul ℂ _) (LinearMap.mul ℂ _).flip
     (fun m m' hm hm' ↦ ?_) hA hB
@@ -152,27 +154,28 @@ theorem commute_of_mem_supportedOperators {S S' : Set (Fin N)} (hSS' : Disjoint 
 
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1
 (`b_Q = ⟨ψ|Q|ψ⟩`). -/
-def expect (ψ : Cfg d N → ℂ) (A : Matrix (Cfg d N) (Cfg d N) ℂ) : ℂ :=
+def expect (ψ : (Fin N → Fin d) → ℂ) (A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : ℂ :=
   star ψ ⬝ᵥ (A *ᵥ ψ)
 
-theorem expect_add (ψ : Cfg d N → ℂ) (A B : Matrix (Cfg d N) (Cfg d N) ℂ) :
+theorem expect_add (ψ : (Fin N → Fin d) → ℂ) (A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     expect ψ (A + B) = expect ψ A + expect ψ B := by
   simp [expect, add_mulVec, dotProduct_add]
 
-theorem expect_smul (ψ : Cfg d N → ℂ) (c : ℂ) (A : Matrix (Cfg d N) (Cfg d N) ℂ) :
+theorem expect_smul (ψ : (Fin N → Fin d) → ℂ) (c : ℂ)
+    (A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     expect ψ (c • A) = c * expect ψ A := by
   simp [expect, smul_mulVec, dotProduct_smul]
 
-theorem expect_zero (ψ : Cfg d N → ℂ) :
-    expect ψ (0 : Matrix (Cfg d N) (Cfg d N) ℂ) = 0 := by
+theorem expect_zero (ψ : (Fin N → Fin d) → ℂ) :
+    expect ψ (0 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) = 0 := by
   simp [expect]
 
-theorem expect_one (ψ : Cfg d N → ℂ) :
-    expect ψ (1 : Matrix (Cfg d N) (Cfg d N) ℂ) = star ψ ⬝ᵥ ψ := by
+theorem expect_one (ψ : (Fin N → Fin d) → ℂ) :
+    expect ψ (1 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) = star ψ ⬝ᵥ ψ := by
   simp [expect]
 
 /-- Expectations in `U ψ` are expectations of `U† A U` in `ψ`. -/
-theorem expect_mulVec (U A : Matrix (Cfg d N) (Cfg d N) ℂ) (ψ : Cfg d N → ℂ) :
+theorem expect_mulVec (U A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (ψ : (Fin N → Fin d) → ℂ) :
     expect (U *ᵥ ψ) A = expect ψ (star U * A * U) := by
   simp only [expect, star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, star_eq_conjTranspose,
     Matrix.mul_assoc]
@@ -191,11 +194,11 @@ theorem expect_productVector_finKronecker (v : Fin N → Fin d → ℂ)
 /-- Product vectors factorize expectations of products of operators on disjoint sets of
 sites: `⟨AB⟩⟨1⟩ = ⟨A⟩⟨B⟩`. -/
 theorem expect_productVector_mul {S S' : Set (Fin N)} (hSS' : Disjoint S S')
-    (v : Fin N → Fin d → ℂ) {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (v : Fin N → Fin d → ℂ) {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S') :
     expect (productVector v) (A * B) * expect (productVector v) 1 =
       expect (productVector v) A * expect (productVector v) B := by
-  let φ : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ] ℂ :=
+  let φ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] ℂ :=
     { toFun := expect (productVector v), map_add' := expect_add _, map_smul' := expect_smul _ }
   rw [mul_comm]
   refine eq_of_mem_supportedOperators₂ (expect (productVector v) 1 • (LinearMap.mul ℂ _).compr₂ φ)
@@ -287,8 +290,8 @@ structure Layer (d N : ℕ) [NeZero N] where
   /-- The left sites `k` of the pairs `{k, k + 1}` carrying a gate. -/
   bonds : Finset (Fin N)
   /-- The gate on the pair `{k, k + 1}`, as an operator on the chain. -/
-  gate : Fin N → Matrix (Cfg d N) (Cfg d N) ℂ
-  gate_mem_unitary : ∀ k ∈ bonds, gate k ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ)
+  gate : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ
+  gate_mem_unitary : ∀ k ∈ bonds, gate k ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
   gate_mem_supportedOperators : ∀ k ∈ bonds, gate k ∈ supportedOperators d (bond k)
   pairwiseDisjoint : (bonds : Set (Fin N)).PairwiseDisjoint bond
 
@@ -301,17 +304,17 @@ theorem gate_commute (L : Layer d N) (s : Finset (Fin N)) (hs : s ⊆ L.bonds) :
 
 /-- The product of the gates of `L` on a subset `s` of its pairs. -/
 noncomputable def partialOp (L : Layer d N) (s : Finset (Fin N)) (hs : s ⊆ L.bonds) :
-    Matrix (Cfg d N) (Cfg d N) ℂ :=
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   s.noncommProd L.gate (L.gate_commute s hs)
 
 /-- The unitary of a layer: the product of its commuting gates.
 
 Source: arXiv:2307.01696, main text before Theorem 1. -/
-noncomputable def op (L : Layer d N) : Matrix (Cfg d N) (Cfg d N) ℂ :=
+noncomputable def op (L : Layer d N) : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   L.partialOp L.bonds subset_rfl
 
 theorem partialOp_mem_unitary (L : Layer d N) (s : Finset (Fin N)) (hs : s ⊆ L.bonds) :
-    L.partialOp s hs ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+    L.partialOp s hs ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   Finset.noncommProd_induction _ _ _ (· ∈ unitary _) (fun _ _ ha hb ↦ Submonoid.mul_mem _ ha hb)
     (Submonoid.one_mem _) fun k hk ↦ L.gate_mem_unitary k (hs hk)
 
@@ -322,12 +325,13 @@ theorem partialOp_mem_supportedOperators (L : Layer d N) (s : Finset (Fin N))
     (fun _ _ ha hb ↦ mul_mem_supportedOperators ha hb) (one_mem_supportedOperators S)
     fun k hk ↦ supportedOperators_mono (hS k hk) (L.gate_mem_supportedOperators k (hs hk))
 
-theorem op_mem_unitary (L : Layer d N) : L.op ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) :=
+theorem op_mem_unitary (L : Layer d N) : L.op ∈ unitary
+    (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   L.partialOp_mem_unitary _ _
 
 /-- One layer enlarges the support of `U† A U` by at most one site on each side. -/
 theorem conj_op_mem_supportedOperators (L : Layer d N) {X : Set (Fin N)}
-    {A : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d X) :
+    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     star L.op * A * L.op ∈ supportedOperators d (neighbourhood X 1) := by
   classical
   set P := L.bonds.filter fun k ↦ (bond k ∩ X).Nonempty
@@ -397,12 +401,12 @@ end Layer
 applied first: `circuitOp [L₁, …, L_T] = L_T ⋯ L₁`.
 
 Source: arXiv:2307.01696, main text before Theorem 1. -/
-noncomputable def circuitOp : List (Layer d N) → Matrix (Cfg d N) (Cfg d N) ℂ
+noncomputable def circuitOp : List (Layer d N) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ
   | [] => 1
   | L :: Ls => circuitOp Ls * L.op
 
 theorem circuitOp_mem_unitary (Ls : List (Layer d N)) :
-    circuitOp Ls ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+    circuitOp Ls ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
   induction Ls with
   | nil => exact Submonoid.one_mem _
   | cons L Ls ih => exact Submonoid.mul_mem _ ih L.op_mem_unitary
@@ -428,15 +432,15 @@ product of unitaries on pairwise disjoint pairs of neighbouring sites.
 
 Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits");
 blueprint `def:ldp_local_circuit`. -/
-def IsLocalCircuitOfDepth (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ) : Prop :=
+def IsLocalCircuitOfDepth (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (T : ℕ) : Prop :=
   ∃ Ls : List (Layer d N), Ls.length = T ∧ U = circuitOp Ls
 
 namespace IsLocalCircuitOfDepth
 
-variable {U U' : Matrix (Cfg d N) (Cfg d N) ℂ} {T T' : ℕ}
+variable {U U' : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} {T T' : ℕ}
 
 theorem mem_unitary (h : IsLocalCircuitOfDepth U T) :
-    U ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+    U ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
   obtain ⟨Ls, -, rfl⟩ := h
   exact circuitOp_mem_unitary Ls
 
@@ -462,7 +466,7 @@ product vector.
 
 Source: arXiv:2307.01696, main text before Theorem 1 ("a sequence obtained from depth-`T`
 local quantum circuits applied to product states"). -/
-def IsPreparedInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
+def IsPreparedInDepth (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop :=
   ∃ U, IsLocalCircuitOfDepth U T ∧ ∃ v : Fin N → Fin d → ℂ, ψ = U *ᵥ productVector v
 
 /-- **Backward light cone.** If `U` is a local circuit of depth `T` and `A` acts on the sites
@@ -470,8 +474,9 @@ def IsPreparedInDepth (T : ℕ) (ψ : Cfg d N → ℂ) : Prop :=
 
 Source: arXiv:2307.01696, main text after Theorem 1 ("`|ψ_N⟩` have a strictly finite light
 cone") and Supplemental Material, proof of Theorem 1. -/
-theorem conj_circuitOp_mem_supportedOperators {U : Matrix (Cfg d N) (Cfg d N) ℂ} {T : ℕ}
-    (hU : IsLocalCircuitOfDepth U T) {X : Set (Fin N)} {A : Matrix (Cfg d N) (Cfg d N) ℂ}
+theorem conj_circuitOp_mem_supportedOperators {U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} {T : ℕ}
+    (hU : IsLocalCircuitOfDepth U T) {X : Set (Fin N)}
+    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) :
     star U * A * U ∈ supportedOperators d (neighbourhood X T) := by
   obtain ⟨Ls, rfl, rfl⟩ := hU
@@ -493,13 +498,13 @@ depth `T` and operators `A`, `B` acting on sets at ring distance larger than `2T
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1: "since `ψ` is created
 from a product state by a depth-`T` circuit, every connected correlation for operators at a
 distance larger than `2T` vanishes". -/
-theorem expect_mul_mul_expect_one_of_isPreparedInDepth {T : ℕ} {ψ : Cfg d N → ℂ}
+theorem expect_mul_mul_expect_one_of_isPreparedInDepth {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
     (hψ : IsPreparedInDepth T ψ) {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
-    {A B : Matrix (Cfg d N) (Cfg d N) ℂ} (hA : A ∈ supportedOperators d X)
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :
     expect ψ (A * B) * expect ψ 1 = expect ψ A * expect ψ B := by
   obtain ⟨U, hU, v, rfl⟩ := hψ
-  have hU' : U ∈ unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+  have hU' : U ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
     obtain ⟨Ls, -, rfl⟩ := hU
     exact circuitOp_mem_unitary Ls
   have hunit : U * star U = 1 := Unitary.mul_star_self_of_mem hU'
@@ -520,9 +525,9 @@ correlation for operators at a distance larger than `2T` vanishes"). The source 
 this at `s = 2T + 1`, where `𝒪₁` and `𝒪'ₛ` sit at ring distance exactly `2T`; the separation
 hypothesis here excludes that case, which would need a sharper light cone than the symmetric
 one proved here, such as that of a brickwork circuit. -/
-theorem expect_mul_eq_of_isPreparedInDepth {T : ℕ} {ψ : Cfg d N → ℂ}
+theorem expect_mul_eq_of_isPreparedInDepth {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
     (hψ : IsPreparedInDepth T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) {X Y : Set (Fin N)}
-    (hXY : IsSeparatedBy X Y (2 * T)) {A B : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (hXY : IsSeparatedBy X Y (2 * T)) {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
     expect ψ (A * B) = expect ψ A * expect ψ B := by
   have h := expect_mul_mul_expect_one_of_isPreparedInDepth hψ hXY hA hB
@@ -530,4 +535,4 @@ theorem expect_mul_eq_of_isPreparedInDepth {T : ℕ} {ψ : Cfg d N → ℂ}
 
 end Ring
 
-end MPSPreparation
+end QuantumCircuit

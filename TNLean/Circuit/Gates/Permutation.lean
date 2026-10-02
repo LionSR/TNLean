@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.PermutationMatrixUnitary
-import TNLean.MPS.Preparation.CircuitComposition
+import TNLean.Circuit.Composition
 
 /-!
 # Gates permuting the computational basis
@@ -12,52 +12,52 @@ import TNLean.MPS.Preparation.CircuitComposition
 A permutation `σ` of the configurations of the chain acts on vectors by its permutation
 matrix, `(P_σ v)(x) = v (σ x)`. When `σ` changes only the sites of a set `S`, by a rule that
 reads only the sites of `S`, the permutation matrix is a unitary acting on `S`
-(`MPSPreparation.IsLocalPerm.permMatrix_mem_supportedOperators`). A layer of such gates on
+(`QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators`). A layer of such gates on
 pairwise disjoint neighbouring pairs acts as a single permutation of the configurations, given
 site by site by the gate of the pair containing the site
-(`MPSPreparation.exists_permLayer_op_mulVec`).
+(`QuantumCircuit.exists_permLayer_op_mulVec`).
 
 These are the gates of the measurement-assisted preparation of GHZ-type states in
 arXiv:2103.13367, Example 1: controlled shifts `|k⟩|a⟩ ↦ |k⟩|a ± k⟩` and single-site shifts
 `X^c`, generalizing the CNOT and Pauli corrections from qubits to qudits. A product of
 single-site permutation matrices acts by permuting the label of every site
-(`MPSPreparation.finKronecker_permMatrix_mulVec`).
+(`Matrix.finKronecker_permMatrix_mulVec`).
 
 ## Main definitions
 
-* `MPSPreparation.IsLocalPerm` — a permutation of configurations changing and reading only
+* `QuantumCircuit.IsLocalPerm` — a permutation of configurations changing and reading only
   the sites of a set.
-* `MPSPreparation.shiftPerm` — adding a value computed from the other sites to one site.
-* `MPSPreparation.permLayer` — the layer of permutation gates on disjoint pairs.
+* `QuantumCircuit.shiftPerm` — adding a value computed from the other sites to one site.
+* `QuantumCircuit.permLayer` — the layer of permutation gates on disjoint pairs.
 
 ## Main results
 
-* `MPSPreparation.IsLocalPerm.permMatrix_mem_supportedOperators`.
-* `MPSPreparation.exists_permLayer_op_mulVec`, `MPSPreparation.exists_shiftLayer_op_mulVec`.
-* `MPSPreparation.finKronecker_permMatrix_mulVec`.
+* `QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators`.
+* `QuantumCircuit.exists_permLayer_op_mulVec`, `QuantumCircuit.exists_shiftLayer_op_mulVec`.
+* `Matrix.finKronecker_permMatrix_mulVec`.
 -/
 
-open Matrix MPSTensor
+open Matrix
 open scoped BigOperators
 
-namespace MPSPreparation
+namespace QuantumCircuit
 
 variable {d N : ℕ}
 
 /-- The permutation `σ` of the configurations changes only the sites of `S`, and the new values
 at the sites of `S` depend only on the old values at the sites of `S`. -/
-def IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Cfg d N)) : Prop :=
+def IsLocalPerm (S : Set (Fin N)) (σ : Equiv.Perm (Fin N → Fin d)) : Prop :=
   (∀ x, ∀ i ∉ S, σ x i = x i) ∧
     ∀ x y, (∀ j ∈ S, x j = y j) → ∀ i ∈ S, σ x i = σ y i
 
-private theorem permMatrix_cfg_apply (σ : Equiv.Perm (Cfg d N)) (x y : Cfg d N) :
+private theorem permMatrix_cfg_apply (σ : Equiv.Perm (Fin N → Fin d)) (x y : Fin N → Fin d) :
     σ.permMatrix ℂ x y = if σ x = y then 1 else 0 := by
   simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
 
 /-- The permutation matrix of a permutation changing and reading only the sites of `S` acts
 on `S`. -/
 theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set (Fin N)}
-    {σ : Equiv.Perm (Cfg d N)} (h : IsLocalPerm S σ) :
+    {σ : Equiv.Perm (Fin N → Fin d)} (h : IsLocalPerm S σ) :
     σ.permMatrix ℂ ∈ supportedOperators d S := by
   classical
   let e : Fin (Fintype.card S) → Fin N := fun j => ((Fintype.equivFin S).symm j : Fin N)
@@ -70,8 +70,8 @@ theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set (Fin N)}
     · rintro ⟨j, rfl⟩
       exact ((Fintype.equivFin S).symm j).prop
   have hrange : Set.range e = S := Set.ext fun i => (hmem i).symm
-  let X : Matrix (Cfg d (Fintype.card S)) (Cfg d (Fintype.card S)) ℂ :=
-    of fun u w => if ∃ x : Cfg d N, x ∘ e = u ∧ σ x ∘ e = w then 1 else 0
+  let X : Matrix (Fin (Fintype.card S) → Fin d) (Fin (Fintype.card S) → Fin d) ℂ :=
+    of fun u w => if ∃ x : Fin N → Fin d, x ∘ e = u ∧ σ x ∘ e = w then 1 else 0
   have hX : σ.permMatrix ℂ = embedOp e X := by
     ext x y
     rw [permMatrix_cfg_apply, embedOp_apply]
@@ -81,7 +81,7 @@ theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set (Fin N)}
       have hag : AgreeOff e x (σ x) := fun i hi =>
         (h.1 x i fun hiS => by obtain ⟨j, hj⟩ := (hmem i).mp hiS; exact hi j hj).symm
       simp only [hag, ite_true,
-        show ∃ x' : Cfg d N, x' ∘ e = x ∘ e ∧ σ x' ∘ e = σ x ∘ e from ⟨x, rfl, rfl⟩]
+        show ∃ x' : Fin N → Fin d, x' ∘ e = x ∘ e ∧ σ x' ∘ e = σ x ∘ e from ⟨x, rfl, rfl⟩]
     · simp only [hxy, ite_false]
       split_ifs with hag hex
       · exfalso
@@ -110,19 +110,20 @@ variable [NeZero d]
 
 /-- The permutation `x ↦ x + f(x) e_t` adding the value `f x` to the site `t`, where `f` does
 not read the site `t`. -/
-def shiftPerm (t : Fin N) (f : Cfg d N → Fin d)
-    (hf : ∀ x c, f (Function.update x t c) = f x) : Equiv.Perm (Cfg d N) where
+def shiftPerm (t : Fin N) (f : (Fin N → Fin d) → Fin d)
+    (hf : ∀ x c, f (Function.update x t c) = f x) : Equiv.Perm (Fin N → Fin d) where
   toFun x := Function.update x t (x t + f x)
   invFun x := Function.update x t (x t - f x)
   left_inv x := by simp [hf]
   right_inv x := by simp [hf]
 
-theorem shiftPerm_apply (t : Fin N) (f : Cfg d N → Fin d)
-    (hf : ∀ x c, f (Function.update x t c) = f x) (x : Cfg d N) :
+theorem shiftPerm_apply (t : Fin N) (f : (Fin N → Fin d) → Fin d)
+    (hf : ∀ x c, f (Function.update x t c) = f x) (x : Fin N → Fin d) :
     shiftPerm t f hf x = Function.update x t (x t + f x) :=
   rfl
 
-theorem isLocalPerm_shiftPerm {S : Set (Fin N)} {t : Fin N} (ht : t ∈ S) (f : Cfg d N → Fin d)
+theorem isLocalPerm_shiftPerm {S : Set (Fin N)} {t : Fin N} (ht : t ∈ S)
+    (f : (Fin N → Fin d) → Fin d)
     (hf : ∀ x c, f (Function.update x t c) = f x)
     (hfS : ∀ x y, (∀ j ∈ S, x j = y j) → f x = f y) : IsLocalPerm S (shiftPerm t f hf) := by
   refine ⟨fun x i hi => ?_, fun x y hxy i hi => ?_⟩
@@ -143,7 +144,7 @@ variable [NeZero N]
 /-- The layer of permutation gates `τ k` on the pairwise disjoint neighbouring pairs
 `{k, k + 1}`, `k ∈ K`. -/
 noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint bond)
-    (τ : Fin N → Equiv.Perm (Cfg d N)) (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (τ k)) :
+    (τ : Fin N → Equiv.Perm (Fin N → Fin d)) (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (τ k)) :
     Layer d N where
   bonds := K
   gate k := (τ k).permMatrix ℂ
@@ -152,9 +153,9 @@ noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).Pairwis
   pairwiseDisjoint := hK
 
 private theorem exists_partialOp_permLayer (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (τ : Fin N → Equiv.Perm (Cfg d N))
+    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (τ : Fin N → Equiv.Perm (Fin N → Fin d))
     (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (τ k)) :
-    ∀ (s : Finset (Fin N)) (hs : s ⊆ K), ∃ P : Equiv.Perm (Cfg d N),
+    ∀ (s : Finset (Fin N)) (hs : s ⊆ K), ∃ P : Equiv.Perm (Fin N → Fin d),
       (permLayer K hK τ hτ).partialOp s hs = P.permMatrix ℂ ∧
       (∀ x, ∀ k ∈ s, ∀ i ∈ bond k, P x i = τ k x i) ∧
       ∀ x i, (∀ k ∈ s, i ∉ bond k) → P x i = x i := by
@@ -191,9 +192,10 @@ private theorem exists_partialOp_permLayer (K : Finset (Fin N))
 disjoint pairs `{k, k + 1}`, `k ∈ K`, acts on vectors as `v ↦ v ∘ P`, where `P` agrees with
 `τ k` on the pair `{k, k + 1}` and with the identity on the sites outside all pairs. -/
 theorem exists_permLayer_op_mulVec (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (τ : Fin N → Equiv.Perm (Cfg d N))
+    (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (τ : Fin N → Equiv.Perm (Fin N → Fin d))
     (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (τ k)) :
-    ∃ P : Cfg d N → Cfg d N, (∀ v : Cfg d N → ℂ, (permLayer K hK τ hτ).op *ᵥ v = v ∘ P) ∧
+    ∃ P : (Fin N → Fin d) → (Fin N → Fin d),
+    (∀ v : (Fin N → Fin d) → ℂ, (permLayer K hK τ hτ).op *ᵥ v = v ∘ P) ∧
       (∀ x, ∀ k ∈ K, ∀ i ∈ bond k, P x i = τ k x i) ∧
       ∀ x i, (∀ k ∈ K, i ∉ bond k) → P x i = x i := by
   obtain ⟨P, hP, h1, h2⟩ := exists_partialOp_permLayer K hK τ hτ K subset_rfl
@@ -208,10 +210,10 @@ pair, the layer acts as `v ↦ v ∘ P`, where `P` adds `f k x` at each site `t 
 other sites unchanged. -/
 theorem exists_shiftLayer_op_mulVec (K : Finset (Fin N))
     (hK : (K : Set (Fin N)).PairwiseDisjoint bond) (t : Fin N → Fin N)
-    (f : Fin N → Cfg d N → Fin d) (hf : ∀ k x c, f k (Function.update x (t k) c) = f k x)
+    (f : Fin N → (Fin N → Fin d) → Fin d) (hf : ∀ k x c, f k (Function.update x (t k) c) = f k x)
     (hτ : ∀ k ∈ K, IsLocalPerm (bond k) (shiftPerm (t k) (f k) (hf k))) :
-    ∃ P : Cfg d N → Cfg d N,
-      (∀ v : Cfg d N → ℂ,
+    ∃ P : (Fin N → Fin d) → (Fin N → Fin d),
+      (∀ v : (Fin N → Fin d) → ℂ,
         (permLayer K hK (fun k => shiftPerm (t k) (f k) (hf k)) hτ).op *ᵥ v = v ∘ P) ∧
       (∀ x, ∀ k ∈ K, t k ∈ bond k → P x (t k) = x (t k) + f k x) ∧
       ∀ x i, (∀ k ∈ K, t k ≠ i) → P x i = x i := by
@@ -230,11 +232,12 @@ end Layer
 /-- **Single-site permutations.** The Kronecker product of the permutation matrices of
 permutations `σ i` of the labels of the sites `i` acts on vectors as `v ↦ v ∘ σ`, where `σ`
 applies `σ i` at every site `i`. -/
-theorem finKronecker_permMatrix_mulVec (σ : Fin N → Equiv.Perm (Fin d)) (v : Cfg d N → ℂ) :
+theorem _root_.Matrix.finKronecker_permMatrix_mulVec (σ : Fin N → Equiv.Perm (Fin d))
+    (v : (Fin N → Fin d) → ℂ) :
     finKronecker (fun i => (σ i).permMatrix ℂ) *ᵥ v = fun x => v fun i => σ i (x i) := by
   classical
   funext x
-  have h : ∀ y : Cfg d N, finKronecker (fun i => (σ i).permMatrix ℂ) x y =
+  have h : ∀ y : Fin N → Fin d, finKronecker (fun i => (σ i).permMatrix ℂ) x y =
       if y = (fun i => σ i (x i)) then 1 else 0 := fun y => by
     simp only [finKronecker_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply,
       Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq]
@@ -243,4 +246,4 @@ theorem finKronecker_permMatrix_mulVec (σ : Fin N → Equiv.Perm (Fin d)) (v : 
   simp only [mulVec, dotProduct, h, ite_mul, one_mul, zero_mul, Finset.sum_ite_eq',
     Finset.mem_univ, ite_true]
 
-end MPSPreparation
+end QuantumCircuit
