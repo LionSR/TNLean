@@ -535,12 +535,17 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{remark}[The tree circuit of matrix product states]
     \label{rem:ldp_tree_measurements_mps}
-    \uses{thm:ldp_tree_measurements, thm:ldp_loglog_depth}
+    \uses{thm:ldp_tree_measurements, thm:ldp_loglog_depth,
+        thm:ldp_loglog_depth_every_length}
     In the tree circuit (\ref{eq:ldp_tree_factorization}) a register above
     the lowest level carries $\mathbb C^{D^2}$, which is a group of sites once
     $D^2>d$. Theorem~\ref{thm:ldp_loglog_depth} takes registers of $s$
     consecutive sites, $s$ a length at which the blocked tensor is injective,
     and obtains the depth $O(\log\log(N/\varepsilon))$ of
     \cite{Malz2024Preparation} for normal tensors and the chain lengths
-    divisible by $s2^{k+1}$ for some $k$ with $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$ \cite{gap:mswc24_tree_measurement_scope}.
+    divisible by $s2^{k+1}$ for some $k$ with
+    $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$, and
+    Theorem~\ref{thm:ldp_loglog_depth_every_length} obtains it for every chain
+    length, with trees on leaves of unequal widths
+    \cite{gap:mswc24_tree_measurement_scope}.
 \end{remark}

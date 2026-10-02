@@ -5,7 +5,7 @@
 \input{command}
 \title{The Tree Circuit with Measurements: Rounds, Registers, and Chain Length}
 \author{}
-\date{2026-10-01}
+\date{2026-10-01; chain length resolved 2026-10-02}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -104,25 +104,93 @@ The formal statements\footnote{Formal declarations:
     in \doclink{TNLean/MPS/Preparation/LogLogDepthPreparation}.}
 are exact, and no outcome is post-selected.
 
-\section{The restriction}
-The block length $q=s2^{k+1}$ divides the chain length $N$, so that the $N/q$
-blocks of eq.~(10) all have $q$ sites and every tree is complete. The depth
-bound therefore holds for the chain lengths $N$ divisible by $s2^{k+1}$ for some
-$k$ with $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$,
-for instance $N=Ms2^K$ with $K$ large, and not for every chain length; since the
-block length $s2^{k+1}$ is even, no odd $N$ is covered. The source states the depth for every
-$N$. Tensors that are not normal, for which the source combines the tree with
-the preparation of a GHZ-type state, are treated without the tree
-in~\cite{gap:mswc24_measurement_preparation_scope} and not here.
+\section{The restriction formerly adopted: the chain length}
+The block length $q=s2^{k+1}$ divided the chain length $N$, so that the $N/q$
+blocks of eq.~(10) all had $q$ sites and every tree was complete. The depth
+bound held for the chain lengths $N$ divisible by $s2^{k+1}$ for some $k$ with
+$a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$, for instance
+$N=Ms2^K$ with $K$ large, and not for every chain length; since the block length
+$s2^{k+1}$ is even, no odd $N$ was covered. The source states the depth for every
+$N$.
 
-\section{Elimination}
+\section{Elimination plan}
 The depth bound for every chain length of the circuit without measurements
 uses unequal blocks: the last block has length $q'$ with $q\le q'<2q$
-\cite{gap:mswc24_depth_upper_bound_divisible_length}. A complete binary tree of registers covers
-$s2^{k+1}$ sites, so the last block needs a tree whose lowest level is unbalanced, or registers
-of unequal lengths; each node is still a unitary on a bounded number of sites,
-so the depth stays $O(k)$. This extends the trees of registers to blocks of
-unequal lengths and is left open.
+\cite{gap:mswc24_depth_upper_bound_divisible_length}. A complete binary tree of
+registers covers $s2^{k+1}$ sites, so the last block needs a tree whose leaves
+have unequal lengths; each node is still a unitary on a bounded number of sites,
+so the depth stays $O(k)$.
+
+\section{Resolution}
+The restriction on the chain length is removed by trees on leaves of unequal
+widths.\footnote{Formal declarations:
+    \leanid{MPSPreparation.cfgPolarIso_split} in
+    \doclink{TNLean/MPS/Preparation/PolarMerge},
+    \leanid{MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp} in
+    \doclink{TNLean/MPS/Preparation/UnequalRegisterTree},
+    \leanid{MPSPreparation.treeBlockOp_apply} in
+    \doclink{TNLean/MPS/Preparation/UnequalRegisterTreeState},
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState}
+    in \doclink{TNLean/MPS/Preparation/UnequalTreePreparation}, and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero}
+    and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
+    in \doclink{TNLean/MPS/Preparation/LogLogDepthEveryLength}.}
+\begin{enumerate}
+    \item \emph{Halves of unequal lengths.} If $A$ blocked over $n_1$ and over
+          $n_2$ sites is injective, with polar decompositions
+          $\mathcal B_{n_i}=V_{n_i}P_{n_i}$, then
+          $V_{n_1+n_2}=(V_{n_1}\otimes V_{n_2})W$, where $W$ is the isometry of
+          the polar decomposition of the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of
+          two neighbouring sites. This is uniqueness of the polar decomposition,
+          as for halves of equal lengths.
+    \item \emph{The tree of a block.} A block of $\ell\ge2^{h+2}s$ sites is cut
+          into $2^{h+1}$ leaves of even widths, as equal as possible, at least
+          $2s$ each; when $\ell$ is odd the last leaf has one more site. The node
+          $p$ of depth $j\le h$ covers $2^{h+1-j}$ consecutive leaves, its
+          registers are its first $s$ sites and the last $s$ sites of its last
+          leaf, not counting the extra site, and its unitary extends the isometry
+          $W$ joining its two halves. The leaves carry unitaries extending
+          $V_{\ell'}$ on their $\ell'$ sites. The widths are even, so the two
+          registers of every node are an even number of sites apart, as the
+          register gates require. The tree implements $V_\ell$ on the input of
+          the block.
+    \item \emph{The legs of the pairs.} The register length is $s=L+2$, with $L$
+          the injectivity length of the tensor in the gauge of eq.~(5), so that
+          $D\le d^{s-1}$ and a leg of a pair is written on the first $s-1$ sites
+          of a register, the last site in $\ket0$. For odd $\ell$ the right leg
+          of the pair of a block then ends on the extra site, which carries
+          $\ket0$, and the input of the block lies on the two registers of the
+          root.
+    \item \emph{The depth.} The depths $0,\dots,h$ of the trees of all the blocks
+          are applied one after the other with measurements, and the leaves by
+          one local circuit; for blocks of lengths between $2^{h+2}s$ and
+          $2^{h+1}c$ the depth is at most $C(h+1)$, with $C$ depending on $d$, $s$
+          and $c$.
+    \item \emph{Every chain length.} With $q=\lceil a\log(N/\varepsilon)+b\rceil$
+          and $q\le N$, the chain is cut into $M-1$ blocks of $q$ sites and one of
+          $q'=q+(N\bmod q)<2q$ sites, Lemma~1'(i) for unequal blocks bounds the
+          error by $\varepsilon$, and $2^{h+2}s\le q<2^{h+3}s$ gives the depth
+          $C(h+1)\le c\log(\log(N/\varepsilon)+1)$. A chain with $N<q$ is one
+          block, and $\ket{\phi_N}$ itself is the state of that block with the
+          pair $\omega\propto P\ket{\mathbb 1}$; below $4s$ sites it is prepared
+          in bounded depth.
+\end{enumerate}
+The main theorem holds for every $N\ge2$ and $0<\varepsilon\le1$ with
+$\ket{\phi_N(A)}\neq0$, the presupposition recorded in
+\path{docs/paper-gaps/mswc24_depth_upper_bound_nonzero_state.tex}, and for every
+$N\ge N_0$.
+The bound $c\log(\log(N/\varepsilon)+1)$ is $O(\log\log(N/\varepsilon))$; the
+shift by $1$ keeps it positive for $N/\varepsilon\ge2$.
+
+\section{The remaining restriction}
+A two-site gate between distant sites joins sites at odd separation, on pairwise
+disjoint stretches; gates at even separation, or on overlapping stretches, are
+not covered, whereas the paragraph of the source speaks of teleporting spatially
+separated sites in general. Neither the tree of two-site gates nor the trees of
+registers need such gates. Tensors that are not normal, for which the source
+combines the tree with the preparation of a GHZ-type state, are treated without
+the tree in~\cite{gap:mswc24_measurement_preparation_scope} and not here.
 
 \bibliographystyle{alpha}
 \bibliography{references}

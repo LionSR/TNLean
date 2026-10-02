@@ -43,6 +43,7 @@ import TNLean.MPS.Preparation.LocalChannelCircuit
 import TNLean.MPS.Preparation.LocalChannelConversion
 import TNLean.MPS.Preparation.LocalCircuit
 import TNLean.MPS.Preparation.LogDepthPreparation
+import TNLean.MPS.Preparation.LogLogDepthEveryLength
 import TNLean.MPS.Preparation.LogLogDepthPreparation
 import TNLean.MPS.Preparation.LongRangeGates
 import TNLean.MPS.Preparation.MatrixPolar
@@ -67,6 +68,7 @@ import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PairProduct
 import TNLean.MPS.Preparation.PermutationGates
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
+import TNLean.MPS.Preparation.PolarMerge
 import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.ProductStateCircuit
@@ -98,6 +100,9 @@ import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA
 import TNLean.MPS.Preparation.TreeMeasurement
 import TNLean.MPS.Preparation.TwoLevel
+import TNLean.MPS.Preparation.UnequalRegisterTree
+import TNLean.MPS.Preparation.UnequalRegisterTreeState
+import TNLean.MPS.Preparation.UnequalTreePreparation
 import TNLean.MPS.Preparation.UnitaryGates
 import TNLean.MPS.Preparation.VarianceOfAverages
 import TNLean.MPS.Preparation.VaryingBondBlocks

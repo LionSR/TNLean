@@ -44,12 +44,14 @@ are injective. With the error bound of Lemma 1'(i) at a slope `a > ξ/2`
 `k ≤ log₂(a log(N/ε) + b)` and the depth `C (k + 1)` is `O(log log(N/ε))`
 (`MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log`).
 
-**Scope restriction (chain length):** the block length `q = s 2^{k+1}` divides `N`, so that the
-`N/q` blocks of eq. (10) all have length `q` and every tree is complete. The preparation and the
-depth bound hold for the chain lengths `N` divisible by `s 2^{k+1}` for some `k` in the window
-`a log(N/ε) + b ≤ s 2^{k+1} ≤ 2 (a log(N/ε) + b)`, for example `N = M s 2^K` with `K` large; for
-other chain lengths the trees of unequal blocks are not formalized. Documented in
-`docs/paper-gaps/mswc24_tree_measurement_scope.tex`.
+The blocks here all have length `q = s 2^{k+1}`, which divides `N`, and every tree is complete:
+the theorems of this file hold for the chain lengths `N` divisible by `s 2^{k+1}` for some `k` in
+the window `a log(N/ε) + b ≤ s 2^{k+1} ≤ 2 (a log(N/ε) + b)`. Every chain length `N ≥ 2` with
+`|φ_N(A)⟩ ≠ 0`, with blocks of unequal lengths as in the Supplemental Material, proof of
+Theorem 1, and trees on leaves of unequal widths, is treated by
+`MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero`,
+and every chain length `N ≥ N₀` by
+`MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log`.
 
 ## Main results
 
@@ -62,7 +64,7 @@ other chain lengths the trees of unequal blocks are not formalized. Documented i
 ## References
 
 * arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), eqs. (5), (10)–(12) and (16), Lemma 1'(i),
-  and paragraph "Tree-RG circuit with measurements".
+  paragraph "Tree-RG circuit with measurements", and Supplemental Material, proof of Theorem 1.
 -/
 
 open Matrix MPSTensor
@@ -76,15 +78,6 @@ open TeleportHop
 
 section Pairs
 
-/-- An injective tensor of physical dimension `d^q` has `D² ≤ d^q`: its matrices span the
-`D²`-dimensional matrix algebra. -/
-private theorem mul_self_le_pow_of_isInjective {d D q : ℕ} (B : MPSTensor (blockPhysDim d q) D)
-    (h : Kraus.IsInjective B) : D * D ≤ d ^ q := by
-  have h1 := finrank_range_le_card (R := ℂ) B
-  rw [Set.finrank, h, finrank_top, Module.finrank_matrix, Fintype.card_fin, Fintype.card_fin,
-    Module.finrank_self, mul_one] at h1
-  simpa [blockPhysDim_eq_pow] using h1
-
 variable {d s M N : ℕ} [NeZero d] [NeZero N] {k : ℕ}
 
 omit [NeZero N] in
@@ -94,17 +87,8 @@ theorem isZeroOn_regCentralSites_pairLayerOp_mulVec (hN : ∑ _ : Fin M, s * 2 ^
     (hr : ∀ _ : Fin M, s + s ≤ s * 2 ^ (k + 1))
     (W : Fin M → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) :
     IsZeroOn (regCentralSites (k := k) (s := s) hN)
-      (pairLayerOp hN hr W *ᵥ productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1) := by
-  intro x hx i hi
-  rw [pairLayerOp_mulVec_apply] at hx
-  split_ifs at hx with h
-  · obtain ⟨b, y, hy1, hy2, rfl⟩ := hi
-    have hx0 := h (blockSite hN b y) fun b' j hj => by
-      have := (blockSite_mem_pairSite hN hr b y).mp ⟨b', j, hj⟩
-      omega
-    rw [hx0]
-    exact Fin.ext (by simp)
-  · exact absurd rfl hx
+      (pairLayerOp hN hr W *ᵥ productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1) :=
+  isZeroOn_pairLayerOp_mulVec_productVector hN hr W
 
 end Pairs
 
@@ -149,7 +133,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState (d s
         _ ≤ 2 ^ (k + 1) := Nat.pow_le_pow_right two_pos (by omega)
     rw [hq]; nlinarith
   -- Registers of `s` sites carry the bond legs and `ℂ^{D²}`.
-  have hDD : D * D ≤ d ^ s := mul_self_le_pow_of_isInjective _ hA
+  have hDD : D * D ≤ d ^ s := mul_self_le_pow_of_isInjective_blockTensor hA
   obtain ⟨enc⟩ : Nonempty (Fin (D * D) ↪ Cfg d s) :=
     Function.Embedding.nonempty_of_card_le (by simpa using hDD)
   obtain ⟨dig⟩ : Nonempty (Fin D ↪ Cfg d s) :=
@@ -224,7 +208,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le {d D
     ht0 ht1 (fun μ hμ hne => (hlam μ hμ hne).trans_eq hnorm) (half_lt_self hξ)
   have hBs : Kraus.IsInjective (blockTensor B (L + 1)) := hinj (L + 1) (by omega)
   have : NeZero d := ⟨fun hd => by
-    have h := mul_self_le_pow_of_isInjective _ hBs
+    have h := mul_self_le_pow_of_isInjective_blockTensor hBs
     rw [hd, zero_pow (by omega)] at h
     exact absurd h (Nat.not_le.2 (Nat.mul_pos (NeZero.pos D) (NeZero.pos D)))⟩
   obtain ⟨C, hC⟩ := exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState d (L + 1)

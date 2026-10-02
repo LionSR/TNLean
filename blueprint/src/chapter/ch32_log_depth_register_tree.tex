@@ -18,7 +18,11 @@ tensor is injective, the trees of all the blocks prepare the approximating state
 with measurements in depth $O(k)$ for block length $s2^{k+1}$, and Lemma~1'(i)
 of \cite{Malz2024Preparation} gives the depth $O(\log\log(N/\varepsilon))$ of
 the paragraph ``Tree-RG circuit with measurements'' of the source, for the chain
-lengths divisible by $s2^{k+1}$ for some $k$ with $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$
+lengths divisible by $s2^{k+1}$ for some $k$ with
+$a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$.
+Section~\ref{sec:ldp_unequal_trees} places trees on blocks of any length and
+obtains this depth for normal tensors $A$ and every chain length $N\ge2$ with
+$\ket{\phi_N(A)}\neq0$, which holds for all large $N$
 \cite{gap:mswc24_tree_measurement_scope}.
 
 Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
@@ -381,9 +385,10 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     $k\le\log_2(a\log(N/\varepsilon)+b)$, so the depth is at most
     $C(\log_2(a\log(N/\varepsilon)+b)+1)=O(\log\log(N/\varepsilon))$. This is
     the depth of the paragraph ``Tree-RG circuit with measurements''
-    of~\cite{Malz2024Preparation} for normal tensors, restricted to the chain
-    lengths divisible by $s2^{k+1}$ for some $k$ in this window, for instance
-    $N=Ms2^K$ with $K$ large \cite{gap:mswc24_tree_measurement_scope}.
+    of~\cite{Malz2024Preparation} for normal tensors and the chain lengths
+    divisible by $s2^{k+1}$ for some $k$ in this window, for instance $N=Ms2^K$
+    with $K$ large; the other chain lengths are treated in
+    Theorem~\ref{thm:ldp_loglog_depth_every_length}.
 \end{theorem}
 \begin{proof}
     \leanok

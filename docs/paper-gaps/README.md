@@ -840,10 +840,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   in one round of depth `2`, layers of two-site gates between distant sites in
   depth `5`, and binary trees of two-site gates with `k` levels in depth `5k`;
   with registers of `s` sites, the approximating state with blocks of
-  `s 2^{k+1}` sites is prepared in depth `C (k + 1)`, which gives the bound
-  `O(log log(N/ε))` for normal tensors when `s 2^{k+1}` divides `N` and
-  `a log(N/ε) + b ≤ s 2^{k+1} ≤ 2 (a log(N/ε) + b)`; open: trees on blocks of
-  unequal lengths, so that every chain length is covered.
+  `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
+  unequal widths remove the former restriction to chain lengths divisible by
+  `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
+  chain length; open: two-site gates between distant sites only at odd
+  separation, on disjoint stretches, which the trees do not need.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
