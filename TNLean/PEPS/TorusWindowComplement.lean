@@ -329,7 +329,7 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex`; the derivation in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
 theorem windowComplement_injective (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
+    (hUnion : RegionInjectivityUnionClosure κ) (hL : 0 < L) (hK : 0 < K)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
     κ.IsInjective (Finset.univ \ torusArcRectangle s L K) := by
   rw [compl_torusArcRectangle s L K (by omega) (by omega)]
@@ -354,7 +354,7 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
 theorem horizontalUnionComplement_injective
     (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
+    (hUnion : RegionInjectivityUnionClosure κ) (hL : 0 < L) (hK : 0 < K)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
     κ.IsInjective (Finset.univ \ torusArcRectangle s (L + 1) K) := by
   rw [compl_torusArcRectangle s (L + 1) K (by omega) (by omega)]
@@ -378,7 +378,7 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
 theorem verticalUnionComplement_injective
     (h : NormalTorusArcWindowInjectivityHypotheses L K κ)
-    (hUnion : RegionInjectivityUnionClosure κ) (hL : 2 ≤ L) (hK : 2 ≤ K)
+    (hUnion : RegionInjectivityUnionClosure κ) (hL : 0 < L) (hK : 0 < K)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) (s : TorusVertex width height) :
     κ.IsInjective (Finset.univ \ torusArcRectangle s L (K + 1)) := by
   rw [compl_torusArcRectangle s L (K + 1) (by omega) (by omega)]
@@ -418,7 +418,7 @@ theorem regionBlockedTensorInjective_windowComplement
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
       (Finset.univ \ torusArcRectangle s L K) := by
@@ -436,7 +436,7 @@ theorem regionBlockedTensorInjective_horizontalUnionComplement
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
       (Finset.univ \ torusArcRectangle s (L + 1) K) := by
@@ -454,7 +454,7 @@ theorem regionBlockedTensorInjective_verticalUnionComplement
       (regionInjectivityDataOf (G := torusGraph width height) B))
     (hUB : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
+    (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
       (Finset.univ \ torusArcRectangle s L (K + 1)) := by

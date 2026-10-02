@@ -13,10 +13,9 @@ algebra isomorphisms on the highlighted horizontal bond. The identity physical o
 the common blocked image. Equality of realized physical actions on that image proves that
 exchanging the two tensors gives the inverse virtual assignment.
 
-**Scope restriction (displayed horizontal staircase, `L, K ≥ 2`):** These results concern the
-non-wrapping horizontal coordinates supported by the staircase comparison. Smaller windows
-and the translation/rotation assembly for the full two-dimensional theorem remain recorded in
-`docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
+The comparison uses displayed non-wrapping horizontal coordinates and positive window
+lengths. Coordinate exchange and translation extend it to both torus edge orientations.
+The derivation is recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 Source: arXiv:1804.04964, the algebra-isomorphism argument at lines 563--582 and its
 two-dimensional reduction at lines 2320--2444 of `Papers/1804.04964/paper_normal.tex`.
@@ -37,7 +36,7 @@ variable (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvari
 variable (hAB : SameState A B)
 variable (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
 variable (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-variable (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+variable (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
 variable (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
 variable (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
 

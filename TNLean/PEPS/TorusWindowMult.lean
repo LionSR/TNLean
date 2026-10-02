@@ -414,10 +414,12 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
   -- The gauge, the bond-dimension equality, and the conjugation coefficient identity from the
   -- coefficient transfer; the host injectivity is the single-window complement at the minimal size.
   obtain ⟨hE, Z, hid⟩ := exists_windowConjCoeffIdentity_of_coeffTransfer (by omega) (by omega)
-    ha0 haw hbh hRA (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
-    hRB (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _)
+    ha0 haw hbh hRA (hA.regionBlockedTensorInjective_windowComplement hUA
+      (by omega) (by omega) hxw hyh _)
+    hRB (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _)
     hAB hposA hposB hDim htransferAB htransferBA hmul
-  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB hL hK ha0 haw hbh
+  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB
+      (by omega) (by omega) ha0 haw hbh
     hxw hyh Z hE hposB ?_⟩⟩
   intro M σ τ
   exact hid M σ τ
@@ -480,9 +482,12 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_transfer
   obtain ⟨hE, Z, hid⟩ := exists_regionConjCoeffIdentity_of_transfer A B
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
     ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A (by omega) (by omega)
-      ha0 haw hbh⟩ T hRA (hA.regionBlockedTensorInjective_windowComplement hUA hL hK hxw hyh _)
-    hRB (hB.regionBlockedTensorInjective_windowComplement hUB hL hK hxw hyh _) hposA hposB
-  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB hL hK ha0 haw hbh
+      ha0 haw hbh⟩ T hRA (hA.regionBlockedTensorInjective_windowComplement hUA
+      (by omega) (by omega) hxw hyh _)
+    hRB (hB.regionBlockedTensorInjective_windowComplement hUB
+      (by omega) (by omega) hxw hyh _) hposA hposB
+  refine ⟨Z, Z, hE, ⟨windowEdgeCoeffIdentityWitness_of_hypotheses hB hUB
+      (by omega) (by omega) ha0 haw hbh
     hxw hyh Z hE hposB ?_⟩⟩
   intro M σ τ
   exact hid M σ τ

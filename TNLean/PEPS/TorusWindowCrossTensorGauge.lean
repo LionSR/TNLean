@@ -14,9 +14,10 @@ Skolem--Noether then expresses its virtual assignment as conjugation by an inver
 matrix. Substitution gives the corresponding coefficient identity, with the non-boundary-bond
 multiplicities retained.
 
-**Scope restriction (displayed horizontal staircase, `L, K ≥ 2`):** These results use the
-non-wrapping horizontal staircase. The rotation and translation argument needed to identify
-all bond dimensions, and hence cancel these multiplicities, remains recorded in
+The displayed non-wrapping horizontal staircase requires positive window lengths.
+Coordinate exchange and translation identify all bond dimensions in
+`TorusWindowCrossTensorDimensions`, and `TorusWindowCrossTensorTransfer` cancels the
+multiplicities. The derivation is recorded in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
 Source: arXiv:1804.04964, the dimension and Skolem--Noether argument at lines 582--586
@@ -39,7 +40,7 @@ variable (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvari
 variable (hAB : SameState A B)
 variable (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
 variable (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-variable (hL : 2 ≤ L) (hK : 2 ≤ K) (ha0 : 1 ≤ a)
+variable (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
 variable (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
 variable (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
 

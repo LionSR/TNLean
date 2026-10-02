@@ -155,7 +155,7 @@ theorem regionInsertedCoeff_endWindows_eq_of_staircase {a b : ℕ}
       (staircaseWindow_last_subset_endPair (by omega) (by omega) _) hpos, ← hClast]
   -- The end-pair equality equates the two corner-extended inserts on `S`; equal inserts give equal
   -- assembled deformed states.
-  rw [staircasePair_insert_eq_open h hUB hpos hL hK hxw hyh _ C common hagree]
+  rw [staircasePair_insert_eq_open h hUB hpos (by omega) (by omega) hxw hyh _ C common hagree]
 
 end Torus
 
