@@ -240,6 +240,93 @@ of the virtual projective representation.
     endpoint identities to obtain the second path.
 \end{proof}
 
+\begin{definition}[Physical embedding replacing an occupied frame]
+    \label{def:spt_frame_embedding}
+    \lean{Matrix.isometricFrameEmbedding, Matrix.finIsometricFrameEmbedding,
+        Matrix.unitaryDirectSum, Matrix.unitaryDirectSumHom,
+        MPSTensor.polarFrameEmbedding}
+    \leanok
+    Let $F:S\to H$ and $J:S\to K$ be linear isometries between finite-dimensional
+    complex Hilbert spaces. Define $E:H\to K\oplus H$ by
+    \begin{align}
+        \label{eq:spt_frame_embedding}
+        Ev=(JF^\dagger v,(I-FF^\dagger)v).
+    \end{align}
+    For an injective tensor $A$, choose $F$ to be its isometric polar factor.
+    The first summand then carries the prescribed target frame, while the
+    second retains the original orthogonal complement. This is an auxiliary
+    construction for the common physical representation in
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{definition}
+
+\begin{theorem}[Isometry and covariance of the frame embedding]
+    \label{thm:spt_frame_embedding}
+    \lean{Matrix.isometricFrameEmbedding_isometry,
+        Matrix.isometricFrameEmbedding_mul_frame,
+        Matrix.conjTranspose_intertwiner_of_unitary,
+        Matrix.isometricFrameEmbedding_intertwiner,
+        Matrix.finIsometricFrameEmbedding_isometry,
+        Matrix.finIsometricFrameEmbedding_intertwiner,
+        Matrix.finIsometricFrameEmbedding_mul_frame,
+        MPSTensor.polarFrameEmbedding_isometry,
+        MPSTensor.polarFrameEmbedding_polar_endpoint,
+        MPSTensor.polarIsoMatrix_covariance_of_isInjective,
+        MPSTensor.polarFrameEmbedding_intertwiner}
+    \leanok
+    \uses{def:spt_frame_embedding, thm:spt_polar_deformation}
+    The map $E$ in~(\ref{eq:spt_frame_embedding}) satisfies $E^\dagger E=I$
+    and $EF=(J,0)$. If unitary actions obey $U_gF=FS_g$ and $V_gJ=JS_g$,
+    then $(V_g\oplus U_g)E=EU_g$. Direct sum preserves multiplication,
+    so two on-site representations give an on-site representation on $K\oplus H$.
+    For injective $A$, its isometric polar factor obeys the same covariance
+    as $A$. Consequently, the physically embedded isometric tensor has
+    exactly the frame $(J,0)$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:spt_frame_embedding, thm:spt_polar_deformation}
+    Put $P=FF^\dagger$. Then $P^2=P=P^\dagger$ and
+    $E^\dagger E=FJ^\dagger JF^\dagger+(I-P)^2=P+I-P=I$.
+    Also $EF=(J,0)$. Taking adjoints of $U_gF=FS_g$ and multiplying by
+    the unitary actions gives $F^\dagger U_g=S_gF^\dagger$.
+    Thus $U_gP=PU_g$ and $V_gJF^\dagger=JF^\dagger U_g$, which give
+    the two components of the intertwining identity.
+    Apply these identities to the polar factor; reading its entries as
+    tensor letters gives the claimed endpoint.
+\end{proof}
+
+\begin{definition}[Gapped parent path for a prescribed target frame]
+    \label{def:spt_polar_frame_path}
+    \lean{MPSTensor.polarFrameGappedInteractionPath}
+    \leanok
+    \uses{thm:spt_frame_embedding, def:spt_embedded_injective_path}
+    Let $A$ be one-site injective with bond dimension $D>0$ and unitary
+    covariance $(U_g A)^i=X_gA^iX_g^\dagger$.
+    Let $J:\C^{D^2}\to K$ be an isometry satisfying
+    $V_gJ=J(X_g^T\otimes X_g^\dagger)$ for a unitary on-site
+    representation $V$. Choose the embedding $E$ in~(\ref{eq:spt_frame_embedding})
+    using the polar isometric factor $F$ of $A$.
+    Embedding the polar deformation gives a symmetric gapped path under
+    $V\oplus U$ from the canonical two-site parent of the tensor with frame
+    $(J,0)$ to the canonical two-site parent of $EA$.
+    The gap is positive uniformly in the path parameter and every ring
+    length $N\ge2$. This is the prescribed-frame version of the embedded
+    polar construction in \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+    The one-site injective restriction is documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_frame_embedding, def:spt_embedded_injective_path}
+    The covariance of $A$ reads $U_gM=M(X_g^T\otimes X_g^\dagger)$
+    for its physical matrix $M$. Both actions are unitary, so its polar
+    isometric factor $F$ has the same intertwining identity.
+    The frame-embedding theorem gives $E^\dagger E=I$ and
+    $(V_g\oplus U_g)E=EU_g$.
+    Apply the embedded polar-path construction and use $EF=(J,0)$
+    to identify the initial tensor.
+\end{proof}
+
 \begin{theorem}[Unitary virtual covariance from unital normalization]
     \label{thm:spt_unitary_virtual_covariance_unital}
     \lean{MPSTensor.exists_posDef_adjoint_fixedPoint_of_isInjective_unital,
