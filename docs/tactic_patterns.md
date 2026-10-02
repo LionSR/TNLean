@@ -2430,6 +2430,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Candidates
 
+### One-site doubled-alphabet transport — candidate
+- **Pattern:** identify the doubled alphabet of one-site MPO blocking with
+  the original ket-bra alphabet, then transport the physical-trace contraction
+  along the one-site equivalence.
+- **Seen:** two occurrences of each identity across two files:
+  `TNLean/MPS/MPDO/Simple.lean:IsSimpleCanonicalForm.isSimple` and
+  `TNLean/MPS/MPDO/TwistedDimerBondSimple.lean` (2026-10-02).
+- **Abstraction:** the bond-factor proof uses private generic identities
+  `blockTensor_one_toMPSTensor` and
+  `doubledPhysTraceTransfer_reindex_singleBlock`. At a third occurrence,
+  move the equivalence and identities to the physical-blocking API and
+  refactor the existing simplicity proof.
+- **Notes:** the generic form also avoids unfolding the concrete four-level
+  matrix-unit tensor during alphabet comparison. The count remains below
+  the rule-of-three threshold.
+
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
   use the supplied gate entry formulas, and rewrite both finite sums along
@@ -3725,6 +3741,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   shift between a register and its ancilla, which spans a block in
   `WindowGHZ.lean`.
 
+
+### Scalar word-trace identities for Ising compression — candidate
+
+- **Pattern:** introduce a local identity
+  `trace (evalWord (c • A) w) = c ^ w.length * trace (evalWord A w)`
+  by `Kraus.evalWord_smul`, `Matrix.trace_smul`, and `smul_eq_mul`, then
+  use it to simplify the traces of the weighted target family.
+- **Seen:** the local `hs` in `IsingWeightedTwist.lean` and `hscale` in
+  `IsingThreeObjectTwist.lean` (2026-10-02).
+- **Abstraction (proposed):** a word-trace form of the existing scalar word
+  evaluation lemma, in QICLean beside `Kraus.evalWord_smul` if another
+  development needs the same statement.
+- **Notes:** two occurrences in two files, below the promotion threshold.
+  The three-object calculation also needs simplification of the finite
+  dependent dimensions before rewriting the trace expressions.
 
 ## Rejected
 

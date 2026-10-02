@@ -1537,7 +1537,6 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
         TNLean.PEPS.regularBondMatrix_regularAdjoint,
         TNLean.PEPS.trace_regularBondMatrix, TNLean.PEPS.regularMPSTensor}
     \leanok
-    \uses{def:peps_mps_g_isometric}
     For a matrix product tensor $A$ with bond space $\mathbb{C}[G]$, write each
     $A^{i}$ as a matrix in the basis of group elements. In this basis the
     adjoint $(A^{i})^{\dagger}$ is the conjugate transpose, and the parent
@@ -1546,10 +1545,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
 
 \begin{theorem}[The local terms for $G$-isometric matrix product states]%
     \label{thm:peps_mps_g_isometric_local_terms}
-    \lean{TNLean.PEPS.regularAdjoint_leftRegular,
-        TNLean.PEPS.commute_leftRegular_regularAdjoint,
-        TNLean.PEPS.trace_regularAdjoint,
-        TNLean.PEPS.sum_trace_concatTensor_mul_trace_regularAdjoint,
+    \lean{TNLean.PEPS.sum_trace_concatTensor_mul_trace_regularAdjoint,
         TNLean.PEPS.IsGIsometricMPS.groundSpaceMap_comp_regularMPSTensor,
         TNLean.PEPS.IsGIsometricMPS.parentInteraction_regularMPSTensor}
     \leanok
@@ -1568,9 +1564,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The left-regular representation is unitary in the basis of group
-    elements, $L_{g}^{\dagger}=L_{g^{-1}}$. By
-    Theorem~\ref{thm:peps_mps_g_isometric_concatenation} the two-site tensor
+    By Theorem~\ref{thm:peps_mps_g_isometric_concatenation} the two-site tensor
     $C^{ab}=A^{a}A^{b}$ is $G$-isometric with some constant $c$, so
     $\mathcal{P}(C^{\dagger})\mathcal{P}(C)=c\,\sigma$. Since $\mathcal{P}(C)$
     is invariant, $\mathcal{P}(C)\sigma=\mathcal{P}(C)$, and
@@ -1581,7 +1575,9 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
 
 \begin{theorem}[Commuting parent Hamiltonians for $G$-isometric matrix product states]%
     \label{thm:peps_mps_g_isometric_commuting}
-    \lean{TNLean.PEPS.sum_trace_mul_smul_regularAdjoint,
+    \lean{TNLean.PEPS.regularAdjoint_leftRegular,
+        TNLean.PEPS.commute_leftRegular_regularAdjoint,
+        TNLean.PEPS.sum_trace_mul_smul_regularAdjoint,
         TNLean.PEPS.sum_trace_mul_regularAdjoint_mul_trace,
         TNLean.PEPS.commute_leftRegular_of_conj,
         TNLean.PEPS.sum_trace_regularAdjoint_left,

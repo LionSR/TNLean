@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Three-Object Ising Twist: Channels and Formal Scope}
+\author{}
+\date{2026-10-02}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The construction and its four channels}
+
+The Ising fusion rules and $F$-symbols are given in
+Ref.~\cite{Bultinck2017Anyons}, Appendix D.2. The weighted bond-object
+construction is a project example motivated by the question following
+Theorem 4.14 of Ref.~\cite{Cirac2016MPDO_arXiv}; it is not a tensor printed
+in either paper. Its local construction record is
+\path{Notes/OpenProblemsTN/checks/asym_ising_action_data.md}, sections
+0 and 1.4. The relevant equations are stated here independently of that
+local record.
+
+Let $A_1,A_\psi,A_\sigma$ be the three Ising operator tensors, of auxiliary
+dimensions $3,3,4$. Write $\widehat A_\sigma=\sqrt2 A_\sigma$ and
+$\Theta_3=5A_1\oplus3A_\psi\oplus2A_\sigma$. On a positive-length ring,
+$O_L(A_1)O_L(\widehat A_\sigma)=O_L(\widehat A_\sigma)$,
+$O_L(A_\psi)O_L(\widehat A_\sigma)=O_L(\widehat A_\sigma)$, and
+$O_L(\widehat A_\sigma)^2=2^L(O_L(A_1)+O_L(A_\psi))$. Hence
+\begin{align}
+ O_L(\Theta_3)O_L(\widehat A_\sigma)
+ &= (5^L+3^L)O_L(\widehat A_\sigma)
+  +(2\sqrt2)^L\bigl(O_L(A_1)+O_L(A_\psi)\bigr).
+ \label{eq:ising_three_fusion}
+\end{align}
+The same formula holds for traces along every nonempty word. It supplies
+four weighted normal blocks, namely $5\widehat A_\sigma$,
+$3\widehat A_\sigma$, $2\sqrt2 A_1$, and $2\sqrt2 A_\psi$.
+Asymmetric compression gives $40=4+4+3+3+26$, with twenty-six
+one-dimensional zero diagonal blocks in an upper-triangular presentation.
+The formal statement does not assert that the off-diagonal remainder vanishes.
+
+The three-term coefficient $5^L+3^L+2^L$ for a single $\sigma$ target,
+and the three-slot compression requested in issue 7833, are not the
+construction's fusion rule. The last bond object contributes to $1$ and
+$\psi$ through $\sigma\times\sigma=1+\psi$. For example, at the one-letter
+word $(h,h')=(0,0)$, the trace of the stacked tensor is $2\sqrt2$, whereas
+the trace of $\widehat A_\sigma^{00}$ is zero. This already excludes the
+proposed single-target formula.
+
+\section{The full boundary tensors remain distinct}
+
+At the numerical point $(\lambda_1,\lambda_\psi,\lambda_\sigma)
+=(1/2,3/10,1/5)$, the unrescaled bond object is $\Theta_3/10$.
+This scalar relation concerns the local forty-dimensional product above.
+The full round-45B boundary tensor of flag $f$ has site space
+$\mathbb C^4\otimes P_f\otimes\mathbb C^4$, of dimension
+$48,48,64$ for $f=1,\psi,\sigma$, and horizontal indices
+$(h,r,s)$ with $h\in\{0,\ldots,9\}$ and $r,s\in\{0,\ldots,3\}$.
+Its matrices take the form
+\begin{align}
+ M_f^{(h,r,s),(h',r',s')}
+ &=X_f^{h,r,s,h'}\otimes E_{r's'}.
+ \label{eq:ising_full_boundary}
+\end{align}
+Their fusion is the separate assertion
+\begin{align}
+ O_L(M_f)O_L(M_{f'})
+ &=\sum_{b,c}\lambda_b^L N^c_{fbf'}O_L(M_c),
+ \label{eq:ising_full_boundary_fusion}
+\end{align}
+where $N^c_{fbf'}$ is the multiplicity of $c$ in $f\otimes b\otimes f'$.
+In particular $N^\sigma_{\sigma\sigma\sigma}=2$.
+Neither (\ref{eq:ising_three_fusion}) nor a common scalar rescaling proves
+(\ref{eq:ising_full_boundary_fusion}).
+
+At $(f,f')=(\sigma,\sigma)$ the stacked auxiliary dimension is $4096$,
+the alphabet has $25600$ letters, and the active targets have dimensions
+$48,48,48,48,64,64$. Direct exhaustive kernel evaluation of dense matrices
+at this size is not a suitable extension of the existing small examples.
+No exact full-tensor certificate is supplied here. The elimination plan is
+to define the reduced letters $X_f$ at the rational point, prove their
+fusion from the sparse Ising $F$-move identities and the register matrix-unit
+contraction, and then restore the outer register in
+(\ref{eq:ising_full_boundary}). Positivity, normalization and refinement
+channels must be established for those same literal tensors.
+This remaining scope is the second part of
+\url{https://github.com/LionSR/TNLean/issues/7833}; it must not be marked
+formalized on the basis of the forty-dimensional compression.
+
+\section{Formal declarations}
+
+The local result is in
+\path{TNLean/MPS/Examples/Ising/IsingThreeObjectTwist.lean}:
+\leanid{IsingTwist.thetaThree_mpo_mul_isingSigma},
+\leanid{IsingTwist.isingBondObjectThree_trace_evalWord},
+\leanid{IsingTwist.isingBondObjectThree_compression_exists}, and
+\leanid{IsingTwist.isingBondObjectThree_z_eq}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
