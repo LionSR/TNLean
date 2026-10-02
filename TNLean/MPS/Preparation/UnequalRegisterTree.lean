@@ -19,7 +19,7 @@ blocks of any length.
 ## The tree of a block
 
 A block of `n` sites is cut into `2^{h+1}` consecutive *leaves* of even widths `w 0, w 1, …`,
-each at least `2s`, followed by at most a remainder of sites that the last leaf also covers
+each at least `2s`; the sites of the block after them belong to the last leaf
 (`MPSPreparation.IsTreeLayout`). The node `p` of depth `j ≤ h + 1` covers the leaves
 `p 2^{h+1-j}, …, (p + 1) 2^{h+1-j} - 1`; its two registers are its first `s` sites and the last
 `s` sites of its last leaf, not counting the remainder (`MPSPreparation.nodeWindow`). The
