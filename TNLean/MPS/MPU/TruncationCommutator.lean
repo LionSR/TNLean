@@ -15,7 +15,7 @@ commutator of the two truncations `U^{[i₁,j₁]}` and `U^{[i₂,j₂]}` on a g
 
 `⟨ψ_A| (U^{[i₂,j₂]})† (U^{[i₁,j₁]})† U^{[i₂,j₂]} U^{[i₁,j₁]} |ψ_A⟩ = ω`  (`detecZ2`),
 
-"precisely measures the commutator" of the two truncations (line 2101). For on-site symmetries
+"precisely measures the commutator" of the two truncations (line 2102). For on-site symmetries
 `U = ⊗_{i ∈ Λ} u`, the truncation is `U^{[a,b]} = ⊗_{i ∈ [a,b]} u`, the commutator is the
 identity and its expectation value is `+1` (lines 2104--2106).
 
@@ -62,14 +62,14 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- **The group commutator** `U₂† U₁† U₂ U₁` of two operators, the operator whose expectation
 value detects the anomaly in arXiv:2405.00439, `detecZ2`, `Papers/2405.00439/MPU-DW.tex`
-lines 2097--2101, with `U₁ = U^{[i₁,j₁]}` and `U₂ = U^{[i₂,j₂]}`. -/
+lines 2097--2102, with `U₁ = U^{[i₁,j₁]}` and `U₂ = U^{[i₂,j₂]}`. -/
 def groupCommutator (U₁ U₂ : Matrix n n ℂ) : Matrix n n ℂ :=
   U₂ᴴ * U₁ᴴ * U₂ * U₁
 
 /-- **The commutator of two unitaries acts by the exchange phase.** If `U₁† U₁ = 1`,
 `U₂† U₂ = 1` and `U₂ U₁ ψ = c U₁ U₂ ψ`, then `U₂† U₁† U₂ U₁ ψ = c ψ`.
 
-Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2097--2101 (the expectation
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2097--2102 (the expectation
 value of the commutator "precisely measures the commutator between `U^{[i₁,j₁]}` and
 `U^{[i₂,j₂]}`"). -/
 theorem groupCommutator_mulVec_eq_smul {U₁ U₂ : Matrix n n ℂ} (hU₁ : U₁ᴴ * U₁ = 1)
@@ -81,7 +81,7 @@ theorem groupCommutator_mulVec_eq_smul {U₁ U₂ : Matrix n n ℂ} (hU₁ : U�
     mulVec_mulVec _ U₂ᴴ U₂, hU₂, one_mulVec]
 
 /-- **The expectation value of the commutator** (arXiv:2405.00439, `detecZ2`,
-`Papers/2405.00439/MPU-DW.tex` lines 2097--2101): if `U₁`, `U₂` are unitary and
+`Papers/2405.00439/MPU-DW.tex` lines 2097--2102): if `U₁`, `U₂` are unitary and
 `U₂ U₁ ψ = c U₁ U₂ ψ`, then `⟨ψ| U₂† U₁† U₂ U₁ |ψ⟩ = c ⟨ψ|ψ⟩`. -/
 theorem star_dotProduct_groupCommutator_mulVec {U₁ U₂ : Matrix n n ℂ} (hU₁ : U₁ᴴ * U₁ = 1)
     (hU₂ : U₂ᴴ * U₂ = 1) {ψ : n → ℂ} {c : ℂ} (h : U₂ *ᵥ (U₁ *ᵥ ψ) = c • (U₁ *ᵥ (U₂ *ᵥ ψ))) :
