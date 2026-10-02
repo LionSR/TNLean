@@ -18,8 +18,8 @@ Let A(t) be continuous in a fixed positive bond dimension and one-site injective
 at t₀. On an open neighborhood of t₀ its right Perron matrix ρ(t) can be chosen
 continuously, with ρ(t) positive definite and of trace one. Its positive Perron
 value r(t) is continuous and satisfies E_A(t)(ρ(t)) = r(t)ρ(t). The unital tensor
-Bⁱ(t) = r(t)⁻¹ᐟ² ρ(t)⁻¹ᐟ² Aⁱ(t) ρ(t)¹ᐟ² is consequently continuous there and is
-gauge-equivalent to r(t)⁻¹ᐟ² A(t).
+Bⁱ(t) = r(t)^(-1/2) ρ(t)^(-1/2) Aⁱ(t) ρ(t)^(1/2) is continuous there and is
+gauge-equivalent to r(t)^(-1/2) A(t).
 
 After this normalization, the unique trace-one adjoint stationary density
 can also be chosen continuously. Its one-dimensional fixed space follows
