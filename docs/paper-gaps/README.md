@@ -848,10 +848,13 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
-  at most `D`, varying along the ring and handled by zero padding; the
-  remaining restrictions are injective blocked tensors and blocks of at least
-  `3D` sites, with the finite-correlation assumption stated for one ring with
-  error `δ`; open: partial isometries without injectivity and the
+  at most `D`, varying along the ring and handled by zero padding, and for
+  blocked tensors that need not be injective, the block unitaries
+  implementing isometric extensions `W_k` of the partial isometries `V_k`
+  with error exactly `ε(Ω, φ_pos)`; the remaining restriction is blocks of at
+  least `3D` sites (with `d ≥ 2` for the exact error identity), against the
+  source's requirement `d^q ≥ D²`, with the finite-correlation assumption
+  stated for one ring with error `δ`; open: the block-length bound and the
   sequence-level statement.
 - `mswc24_measurement_preparation_scope.tex` records the scope of the
   preparation with measurements of a tensor that is not normal (paragraph

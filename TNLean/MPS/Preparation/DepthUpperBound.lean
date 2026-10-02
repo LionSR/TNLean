@@ -38,7 +38,11 @@ For site-dependent tensors the blocked tensor of block `k` need only be injectiv
 (`MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn`): its
 isometric factor is then a partial isometry, and the block unitary implements it on the inputs
 `S_k`. This covers the chains of the source paragraph "Inhomogeneous short-range correlated MPS",
-with "bond dimension at most `D`" varying along the ring, padded with zeros.
+with "bond dimension at most `D`" varying along the ring, padded with zeros. The state of the
+two layers is computed for any matrices on the blocks
+(`MPSPreparation.blockMatVector_pairFamilyVector_eq_mulVec`), which
+`TNLean.MPS.Preparation.PartialIsometryPreparation` uses for blocked tensors that are not
+injective.
 
 **Scope restriction (injective blocks of length at least `3D`):** the site-dependent depth bounds
 `MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn` and

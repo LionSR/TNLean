@@ -27,24 +27,26 @@ tensor injective on the rectangle of its bonds. The source calls such a chain sh
 if `|φ_pos⟩` is close to a product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` of pairs, each joining the right
 leg of one block to the left leg of the next. At a fixed ring this is the statement that the
 error `ε(Ω, φ_pos)` is at most `δ` for some unit pairs
-(`VaryingBondChain.IsPairApproximable`). The state `(⊗ₖ V_k) |Ω⟩` is prepared
-in depth at most `C L` for blocks of lengths at most `L`, with `C` depending only on `d` and
-`D`, and when every blocked tensor is injective its error against `|φ_N⟩` is exactly
-`ε(Ω, φ_pos)` (`MPSPreparation.exists_isPreparedInDepth_inhomogeneous`). The source states a
-total depth `O(log(N/ε))`; the bound `C L` gives this depth when `L = O(log(N/ε))`. Neither the
-choice of the block lengths nor the asymptotic statement is formalized here.
+(`VaryingBondChain.IsPairApproximable`). When every blocked tensor is injective, the state
+`(⊗ₖ V_k) |Ω⟩` is prepared in depth at most `C L` for blocks of lengths at most `L`, with `C`
+depending only on `d` and `D`, and its error against `|φ_N⟩` is exactly `ε(Ω, φ_pos)`
+(`MPSPreparation.exists_isPreparedInDepth_inhomogeneous`). Without injectivity `V_k` is a
+partial isometry and the block unitaries implement isometric extensions of it; that case, and
+the preparation under the approximation hypothesis, are in
+`TNLean.MPS.Preparation.PartialIsometryPreparation`. The source states a total depth
+`O(log(N/ε))`; the bound `C L` gives this depth when `L = O(log(N/ε))`. Neither the choice of
+the block lengths nor the asymptotic statement is formalized here.
 
 The error is `ε(φ, ψ) = 1 - |⟨φ|ψ⟩|` of normalized vectors, as displayed in arXiv:2307.01696,
 paragraph "Preliminaries".
 
-**Scope restriction (injective blocks of length at least `3D`):** the preparation theorems
-`MPSPreparation.exists_isPreparedInDepth_inhomogeneous` and
-`MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` assume that the blocked tensors
-are injective, which the source assumes for its polar decompositions (arXiv:2307.01696, the
-footnote to the paragraph "Approximation through the fixed-point state"), and of lengths at least
-`3D`, which the construction of the circuit needs. The bond dimensions are those of the source,
-at most `D` and varying along the ring. Documented in
-`docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
+**Scope restriction (injective blocks of length at least `3D`):** the preparation theorem
+`MPSPreparation.exists_isPreparedInDepth_inhomogeneous` assumes that the blocked tensors are
+injective, which the source assumes for its polar decompositions (arXiv:2307.01696, the footnote
+to the paragraph "Approximation through the fixed-point state") and which makes
+`(⊗ₖ V_k) |Ω⟩` itself a unit vector, and that the blocks have lengths at least `3D`, which the
+construction of the circuit needs. The bond dimensions are those of the source, at most `D` and
+varying along the ring. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 ## Main results
 
@@ -52,9 +54,7 @@ at most `D` and varying along the ring. Documented in
 * `MPSPreparation.inner_chainBlockIsometryState_normalize` — the isometries preserve the
   overlap: `⟨(⊗ₖ V_k) Ω, φ_N⟩ = ⟨Ω, φ_pos⟩` for the normalized states.
 * `MPSPreparation.exists_isPreparedInDepth_inhomogeneous` — preparation in depth `O(L)` with
-  error `ε(Ω, φ_pos)`.
-* `MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable` — the same under the
-  approximation hypothesis with error `δ`.
+  error `ε(Ω, φ_pos)` for injective blocked tensors.
 
 ## References
 
