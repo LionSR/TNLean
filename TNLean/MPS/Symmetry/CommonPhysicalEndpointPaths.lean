@@ -27,6 +27,22 @@ The several-block and scalar-character restrictions are documented in
 open scoped Matrix
 namespace MPSTensor
 
+/-- An equal initial matrix gives the same interaction family and the same gap. -/
+private def replaceInitialInteraction
+    {G : Type} [Group G] {d : ℕ}
+    {U : G →* Matrix.unitaryGroup (Fin d) ℂ}
+    {h₀ h₁ h₀' : MPOTensor.ChainOperator d 2}
+    (P : SymmetricGappedInteractionPath U h₀ h₁) (h : h₀ = h₀') :
+    SymmetricGappedInteractionPath U h₀' h₁ where
+  interaction := P.interaction
+  interaction_zero := P.interaction_zero.trans h
+  interaction_one := P.interaction_one
+  hermitian := P.hermitian
+  norm_le_one := P.norm_le_one
+  continuous := P.continuous
+  gap := P.gap
+  symmetric := P.symmetric
+
 /-- The first embedded original parent is joined to its prescribed fixed
 point by a symmetric uniformly gapped path in the actual common physical
 representation. Source context: arXiv:1010.3732, Sections II.C and II.F.2,
@@ -62,10 +78,9 @@ noncomputable def commonPhysicalLeftPolarGappedPath
     (commonPhysicalEmbeddingLeft_isometry d₁ D₁ hA)
     (fun g => commonPhysicalEmbeddingLeft_intertwiner ρ₀ ρ₁ h₀ h₁ U₀ U₁ hA g (hMatrix g))
     A hA X hCov
-  exact { hp with
-    interaction_zero := by
-      simpa only [parentInteraction_commonPhysicalEmbeddingLeft_polar_endpoint d₁ D₁ hA]
-        using hp.interaction_zero }
+  exact replaceInitialInteraction hp
+    (congrArg LinearMap.toMatrix'
+      (parentInteraction_commonPhysicalEmbeddingLeft_polar_endpoint d₁ D₁ hA 2))
 
 /-- The second embedded original parent is joined to its prescribed fixed
 point by a symmetric uniformly gapped path in the actual common physical
@@ -102,9 +117,8 @@ noncomputable def commonPhysicalRightPolarGappedPath
     (commonPhysicalEmbeddingRight_isometry d₀ D₀ hA)
     (fun g => commonPhysicalEmbeddingRight_intertwiner ρ₀ ρ₁ h₀ h₁ U₀ U₁ hA g (hMatrix g))
     A hA X hCov
-  exact { hp with
-    interaction_zero := by
-      simpa only [parentInteraction_commonPhysicalEmbeddingRight_polar_endpoint d₀ D₀ hA]
-        using hp.interaction_zero }
+  exact replaceInitialInteraction hp
+    (congrArg LinearMap.toMatrix'
+      (parentInteraction_commonPhysicalEmbeddingRight_polar_endpoint d₀ D₀ hA 2))
 
 end MPSTensor
