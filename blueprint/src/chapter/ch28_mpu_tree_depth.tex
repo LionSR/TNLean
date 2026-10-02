@@ -12,12 +12,12 @@ construction or conditioning bounds.
     Let $T_j,q_j$ be real sequences, let $a\in\mathbb R$ and $C\geq0$, and
     suppose $q_j\geq1$ for every nonnegative integer $j$. If
     \begin{align}
-        T_0&\leq a,&
-        T_{j+1}&\leq q_j(2T_j+C2^{j+1}),
+        T_0     & \leq a,                  &
+        T_{j+1} & \leq q_j(2T_j+C2^{j+1}),
     \end{align}
     then for every nonnegative integer $L$,
     \begin{align}
-        T_L&\leq 2^L(a+CL)\prod_{j=0}^{L-1}q_j.
+        T_L & \leq 2^L(a+CL)\prod_{j=0}^{L-1}q_j.
     \end{align}
 \end{theorem}
 
@@ -27,9 +27,9 @@ construction or conditioning bounds.
     $C2^{L+1}\prod_{j<L}q_j$. Multiplication by $q_L\geq0$ gives
     \begin{align}
         T_{L+1}
-        &\leq q_L\left(2^{L+1}(a+CL)\prod_{j<L}q_j
-              +C2^{L+1}\prod_{j<L}q_j\right)\\
-        &=2^{L+1}(a+C(L+1))\prod_{j<L+1}q_j.
+         & \leq q_L\left(2^{L+1}(a+CL)\prod_{j<L}q_j
+        +C2^{L+1}\prod_{j<L}q_j\right)               \\
+         & =2^{L+1}(a+C(L+1))\prod_{j<L+1}q_j.
     \end{align}
 \end{proof}
 
@@ -41,7 +41,7 @@ construction or conditioning bounds.
     also $a\geq0$. Let $L,c$ be nonnegative integers. If
     $\prod_{j<L}q_j\leq (2^L)^c$, then
     \begin{align}
-        T_L&\leq (a+CL)(2^L)^{c+1}.
+        T_L & \leq (a+CL)(2^L)^{c+1}.
     \end{align}
 \end{theorem}
 
@@ -59,7 +59,7 @@ construction or conditioning bounds.
     Suppose $T_0\leq a$ and $T_{j+1}\leq q(2T_j+C2^{j+1})$ for every
     nonnegative integer $j$. Then
     \begin{align}
-        T_L&\leq (a+CL)(2q)^L.
+        T_L & \leq (a+CL)(2q)^L.
     \end{align}
 \end{theorem}
 
@@ -74,7 +74,7 @@ construction or conditioning bounds.
     \leanok
     For every real $C$ and every nonnegative integer $L$,
     \begin{align}
-        C(L+1)2^{L+1}&=2(CL2^L)+C2^{L+1}.
+        C(L+1)2^{L+1} & =2(CL2^L)+C2^{L+1}.
     \end{align}
 \end{theorem}
 
@@ -100,8 +100,8 @@ admissible boundary states and the infimum defining the conditioning cost.
     \leanok
     For complex numbers $c,s,x,y$, define
     \begin{align}
-        G_A(x)&=\begin{pmatrix}1&x\\x&1\end{pmatrix},&
-        G_B(c,s,y)&=\begin{pmatrix}c^2&icsy\\-icsy&s^2\end{pmatrix}.
+        G_A(x)     & =\begin{pmatrix}1&x\\x&1\end{pmatrix},            &
+        G_B(c,s,y) & =\begin{pmatrix}c^2&icsy\\-icsy&s^2\end{pmatrix}.
     \end{align}
     When the parameters are real, $x,y$ represent the expectations of
     the two involutions in exterior density operators.
@@ -114,7 +114,7 @@ admissible boundary states and the infimum defining the conditioning cost.
     For the matrices of Definition~\ref{def:mpu_parity_boundary_grams},
     \begin{align}
         \operatorname{tr}\bigl[G_B(c,s,y)^{-1}(G_A(x)^{-1})^T\bigr]
-        &=\frac{c^2+s^2}{c^2s^2(1-x^2)(1-y^2)}.
+         & =\frac{c^2+s^2}{c^2s^2(1-x^2)(1-y^2)}.
     \end{align}
     The identity holds for arbitrary complex parameters, with the convention
     that the inverse of a singular matrix and the reciprocal of zero are zero.
@@ -142,9 +142,9 @@ realization by exterior density operators.
     \leanok
     For a square complex matrix $P$ and a complex number $z$, define
     \begin{align}
-        V_{\mathrm{pre}}(P)&=\begin{pmatrix}I-P\\P\end{pmatrix},\\
-        V_{\mathrm{int}}(P)&=\begin{pmatrix}I-P/2\\P/2\\-P/2\\P/2\end{pmatrix},\\
-        V_{\mathrm{suf}}(P,z)&=\begin{pmatrix}I+(z-1)P/2\\(z-1)P/2\end{pmatrix}.
+        V_{\mathrm{pre}}(P)   & =\begin{pmatrix}I-P\\P\end{pmatrix},                \\
+        V_{\mathrm{int}}(P)   & =\begin{pmatrix}I-P/2\\P/2\\-P/2\\P/2\end{pmatrix}, \\
+        V_{\mathrm{suf}}(P,z) & =\begin{pmatrix}I+(z-1)P/2\\(z-1)P/2\end{pmatrix}.
     \end{align}
     The displayed components are stacked vertically. For the interior map,
     their order is the lexicographic order of the two bond labels.
@@ -166,7 +166,7 @@ realization by exterior density operators.
     $I$. For the suffix map, the coefficient of $P$ is
     \begin{align}
         \frac{z-1}{2}+\frac{\bar z-1}{2}+\frac{|z-1|^2}{2}
-        &=\frac{|z|^2-1}{2}=0.
+         & =\frac{|z|^2-1}{2}=0.
     \end{align}
 \end{proof}
 
@@ -176,9 +176,9 @@ realization by exterior density operators.
     \leanok
     Define
     \begin{align}
-        C_L&=\begin{pmatrix}1&1/2\\0&1/2\end{pmatrix},&
-        C_R&=\begin{pmatrix}1&-1\\0&1\end{pmatrix},&
-        K&=\begin{pmatrix}1&-1\\1&1\end{pmatrix}.
+        C_L & =\begin{pmatrix}1&1/2\\0&1/2\end{pmatrix}, &
+        C_R & =\begin{pmatrix}1&-1\\0&1\end{pmatrix},    &
+        K   & =\begin{pmatrix}1&-1\\1&1\end{pmatrix}.
     \end{align}
     The columns of $C_L,C_R$ are the left and right bond vectors, respectively.
     The matrix $K$ gives the coefficients of their bilinear contraction.
@@ -191,10 +191,10 @@ realization by exterior density operators.
     The frames in Definition~\ref{def:mpu_projection_boundary_frames} are
     invertible and obey
     \begin{align}
-        C_R^T K C_L&=I,\\
-        \operatorname{tr}(K^\dagger K)&=4,\\
+        C_R^T K C_L                      & =I, \\
+        \operatorname{tr}(K^\dagger K)   & =4, \\
         \operatorname{tr}\bigl[(C_R^\dagger C_R)^{-1}
-                    ((C_L^\dagger C_L)^{-1})^T\bigr]&=4.
+        ((C_L^\dagger C_L)^{-1})^T\bigr] & =4.
     \end{align}
 \end{theorem}
 
