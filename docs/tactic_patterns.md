@@ -4677,3 +4677,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   mixed overlap in `PEPS/RegularChargePair.lean`.
 - **Status:** Three occurrences in one module. A common normalization
   lemma is appropriate if a second module repeats the calculation.
+
+### Charge motion by exchange of internal reference labels — candidate
+
+- **Pattern:** Reindex the actual weighted projector column by an internal
+  reference exchange, prove equivariance under independent vertex
+  translations, and lift through the local scaled-isometry Gram identity.
+- **Occurrence:** `PEPS/RegularPhysicalChargeMotion.lean`; the exchange moves
+  a literal bond diagonal, with its parameter transported by the derived
+  rooted tree gauge.
+- **Status:** The coordinate permutation and physical lift reuse the
+  general helpers in `PEPS/RegularChargeFluxPhysicalTransport.lean`.
+  The remaining column calculation depends on the actual exchanged weight.

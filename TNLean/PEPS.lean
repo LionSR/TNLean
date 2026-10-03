@@ -190,6 +190,7 @@ import TNLean.PEPS.RegularMinimalRepresentation
 import TNLean.PEPS.RegularOpenBoundaryDimension
 import TNLean.PEPS.RegularOpenRegion
 import TNLean.PEPS.RegularOrderSixDimension
+import TNLean.PEPS.RegularPhysicalChargeMotion
 import TNLean.PEPS.RegularPhysicalChargePairCreation
 import TNLean.PEPS.RegularPhysicalCutColumnAction
 import TNLean.PEPS.RegularPhysicalCutTransfer
@@ -247,6 +248,7 @@ import TNLean.PEPS.RegularTwoSiteChargeNonzero
 import TNLean.PEPS.RegularTwoSitePhysicalChargeMeasurement
 import TNLean.PEPS.RegularWalkHolonomy
 import TNLean.PEPS.RegularWeightedBondContraction
+import TNLean.PEPS.RegularWeightedChargeContraction
 import TNLean.PEPS.RegularWeightedOpenContraction
 import TNLean.PEPS.SemiRegularBondDimension
 import TNLean.PEPS.SemiRegularBondIsometry
@@ -304,6 +306,7 @@ import TNLean.PEPS.TorusMultiplicityBondState
 import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusParallelSection
 import TNLean.PEPS.TorusPhysicalBondRegrouping
+import TNLean.PEPS.TorusPhysicalChargeMotion
 import TNLean.PEPS.TorusPhysicalChargePairCreation
 import TNLean.PEPS.TorusPhysicalChargePairReadout
 import TNLean.PEPS.TorusPhysicalCoherentMap
