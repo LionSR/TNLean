@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Finite linear combinations in a supported subspace — promoted (2026-10-02)
+
+- **Pattern:** prove membership of a sum by `Submodule.sum_mem`, then prove
+  each scalar multiple belongs by `Submodule.smul_mem`.
+- **Seen:** regional support transport in
+  `PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean`,
+  `VertexInverseRegionSlice.lean`, and `VertexVirtualParentTransport.lean`.
+- **Abstraction:** existing Mathlib `Submodule.sum_smul_mem`; all three
+  consumers now apply it directly. No new lemma or tactic is needed.
+- **Notes:** the summands are actual regional slices, transformed by regional
+  site maps or site inverses. The scalar coefficients come from the
+  complementary region; no positivity assumption is involved.
+
 ### Integer-cell collar offset decomposition (promoted, 2026-10-02)
 
 - **Pattern:** Split the displacement from an occupied integer center into

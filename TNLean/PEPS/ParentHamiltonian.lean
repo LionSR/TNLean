@@ -11,6 +11,9 @@ Authors: TNLean contributors
 import TNLean.PEPS.ParentHamiltonian.CycleGroundSpace
 import TNLean.PEPS.ParentHamiltonian.RegionGroundSpace
 import TNLean.PEPS.ParentHamiltonian.RegionParentHamiltonian
+import TNLean.PEPS.ParentHamiltonian.RegionPhysicalDeformation
+import TNLean.PEPS.ParentHamiltonian.RegionPhysicalGroundSpaceTransport
+import TNLean.PEPS.ParentHamiltonian.RegionPhysicalHamiltonianTransport
 import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
 import TNLean.PEPS.ParentHamiltonian.RegularRegionEntropyBound
 import TNLean.PEPS.ParentHamiltonian.RegularRegionSupport
