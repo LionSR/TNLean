@@ -1101,7 +1101,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
         MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
         MPSPreparation.blockIsometryState_eq_mulVec,
         MPSPreparation.approximatingMPVState_eq_blockIsometryState,
-        MPSPreparation.exists_blockUnitary, MPSPreparation.exists_staircase}
+        MPSPreparation.exists_blockUnitary}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Let $A$ be a tensor, let $\omega$ be a unit vector on
@@ -1120,7 +1120,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
 \begin{proof}
     \leanok
     \uses{lem:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization,
+        thm:ldp_sequential_factorization, lem:seqanc_staircase,
         thm:qc_bounded_unitary_two_site_gates, lem:qc_parallel_circuits,
         lem:qc_placed_operators}
     The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
