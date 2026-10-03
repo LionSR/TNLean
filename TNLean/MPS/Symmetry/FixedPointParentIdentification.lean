@@ -14,6 +14,12 @@ registers and a maximally entangled vector on the interior bond. Consequently,
 the canonical two-site parent interaction is exactly the independent-bond
 penalty in Schuch--Pérez-García--Cirac, arXiv:1010.3732, Section II.D.2,
 `eq:phase-nosym:iso-hamiltonian`.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Section II.D.2
 -/
 
 open scoped Matrix InnerProductSpace
