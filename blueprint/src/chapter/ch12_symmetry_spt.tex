@@ -1984,11 +1984,12 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Let $G\in M_d(\C)$ be the complex-bilinear two-site trace form,
     let $F:\C^r\to\C^d$ be a coefficient section, and put $C=GF$.
     For contracted three-site columns $R:\C^{r\times r}\to\C^d$, set
-    \[
-        M=(C^\dagger C)^{-1}C^\dagger R,
-        \qquad
-        \mu(x,y)=M(x_a y_b)_{(a,b)}.
-    \]
+    \begin{align}
+        M        & =(C^\dagger C)^{-1}C^\dagger R,
+        \notag                                     \\
+        \mu(x,y) & =M(x_a y_b)_{(a,b)}.
+        \notag
+    \end{align}
     The positive Hermitian matrix $C^\dagger C$ serves to invert the
     section. No positivity of the bilinear trace form $G$ is assumed.
 \end{definition}
@@ -2042,13 +2043,14 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{Matrix.traceQuotientTripleColumns}
     \leanok
     For an ambient tensor $B$ and a coefficient section $F$, define
-    \[
+    \begin{align}
         R_F(B)_{j,(a,b)}
-        =\tr\left[
+         & =\tr\left[
             \left(\sum_i F_{ia}B^i\right)
             \left(\sum_k F_{kb}B^k\right)B^j
             \right].
-    \]
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Contraction of finite-ring trace data]
@@ -2063,12 +2065,12 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $\Phi_A(X)=(\tr(XA^j))_j$.
     If the two- and three-site traces of $B$ are proportional to those
     of $A$, with constants $\alpha_2,\alpha_3$, then
-    \[
-        GFx=\alpha_2\Phi_A(Qx),
-        \qquad
-        R_F(B)(x_a y_b)_{(a,b)}
-        =\alpha_3\Phi_A(Qx\,Qy).
-    \]
+    \begin{align}
+        GFx                     & =\alpha_2\Phi_A(Qx),
+        \notag                                             \\
+        R_F(B)(x_a y_b)_{(a,b)} & =\alpha_3\Phi_A(Qx\,Qy).
+        \notag
+    \end{align}
     The contracted columns depend continuously on a continuous ambient
     tensor family in a fixed bond dimension.
 \end{theorem}
@@ -2091,9 +2093,10 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Suppose $r=D^2$, $GF$ is injective, and the preceding trace
     proportionalities hold with $\alpha_2\alpha_3\ne0$.
     Then $Q:\C^r\to M_D(\C)$ is a linear isomorphism and
-    \[
-        Q\mu(x,y)=\frac{\alpha_3}{\alpha_2}Qx\,Qy.
-    \]
+    \begin{align}
+        Q\mu(x,y) & =\frac{\alpha_3}{\alpha_2}Qx\,Qy.
+        \notag
+    \end{align}
     Consequently $E=(\alpha_3/\alpha_2)Q$ identifies $\mu$ with
     matrix multiplication, and $\mu$ is associative.
     The minimal tensor and the identification are used only pointwise;
@@ -2130,10 +2133,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     the multiplication coefficients are continuous and the product is
     associative. At each parameter its normalized identification with
     $M_{D(t)}(\C)$ is
-    \[
-        E_t x=\frac{\alpha_3(t)}{\alpha_2(t)}
+    \begin{align}
+        E_t x & =\frac{\alpha_3(t)}{\alpha_2(t)}
         \sum_i(Fx)_iA^i(t).
-    \]
+        \notag
+    \end{align}
     This constant-dimension assertion does not construct a continuous
     tensor realization through a change of rank
     \cite{gap:spc11_spt_interpolation_upper_range}.
