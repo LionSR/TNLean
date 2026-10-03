@@ -2479,6 +2479,22 @@ abstracted — record why, so it is not re-proposed).
   arbitrary-vector formula also handles the complementary projection without
   assuming separable coefficients.
 
+### canonical-parent comparison with a normalized bond interaction — promoted
+
+- **Pattern:** compare positive two-site projections, identify the bond
+  Hamiltonian's periodic ground line with the tensor's periodic vector,
+  and apply affine interpolation with common zero modes and endpoint symmetry.
+- **Seen:** the weighted comparison in `MPS/Symmetry/WeightedMatrixUnitParentPath.lean`
+  and the two embedded endpoint comparisons in `MPS/Symmetry/EmbeddedFixedPointParent.lean`.
+- **Abstraction:** `normalizedBondCanonicalParentComparisonPath`, with the
+  periodic-vector comparison in
+  `ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq`
+  and the local comparison in
+  `twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap`.
+- **Notes:** the three constructors share the spectral and symmetry proof.
+  Bond dimension may differ from the dimension of the normalized bond.
+  No injectivity assumption is used in the comparison itself.
+
 ## Candidates
 
 ### One-site doubled-alphabet transport — candidate
@@ -2535,6 +2551,17 @@ abstracted — record why, so it is not re-proposed).
   repeated Hermitian-factor arguments in a second module.
 - **Notes:** These instances occur in one module and prove distinct polar
   identities. No additional tactic or matrix predicate is introduced.
+
+### coordinate restriction at the two bond endpoints — candidate
+
+- **Pattern:** expand a weighted matrix unit, select the occupied summand,
+  and reduce its endpoint weight to the corresponding inverse square root.
+- **Seen:** the two physical embedding identities in
+  `MPS/Symmetry/EmbeddedFixedPointTensor.lean`.
+- **Abstraction:** a general weighted matrix-unit compression lemma if a
+  third use appears in a second module.
+- **Notes:** currently two occurrences in one module. Isometric inclusions,
+  boundary transport, and covariance restriction already use shared lemmas.
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,

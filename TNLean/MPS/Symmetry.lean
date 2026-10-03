@@ -24,6 +24,8 @@ import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CocycleCoboundary
 import TNLean.MPS.Symmetry.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
+import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 import TNLean.MPS.Symmetry.FixedPointGappedPath
 import TNLean.MPS.Symmetry.FixedPointGappedPathWitness
@@ -44,9 +46,11 @@ import TNLean.MPS.Symmetry.PolarDeformationGap
 import TNLean.MPS.Symmetry.PolarGappedInteractionPath
 import TNLean.MPS.Symmetry.PreparedPolarGappedPath
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
+import TNLean.MPS.Symmetry.ProjectiveDirectSumInclusions
 import TNLean.MPS.Symmetry.ProjectivePathInvariance
 import TNLean.MPS.Symmetry.ProjectiveRephasing
 import TNLean.MPS.Symmetry.SPTFixedPoint
+import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
 import TNLean.MPS.Symmetry.SpinHalfObstruction
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Symmetry.StringOrderAux
