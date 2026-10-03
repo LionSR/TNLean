@@ -22,6 +22,11 @@ representation in the regular representation.
 This module proves the stated bond isometry and its action on representation
 matrices. The identification of its product over lattice bonds with a complete
 PEPS contraction is a separate assertion.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix Kronecker

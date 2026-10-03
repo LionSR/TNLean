@@ -20,6 +20,11 @@ G-injectivity in Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 
 and the cut in the proof of Theorem 6.9, local source lines 1278–1296 and
 2043–2076. The identification of a particular PEPS cut with these regular
 boundary maps is a separate geometric assertion.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix
