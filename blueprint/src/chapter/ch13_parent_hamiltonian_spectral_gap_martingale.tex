@@ -5860,6 +5860,32 @@ tensors.
     description to the common coordinates.
 \end{proof}
 
+\begin{theorem}[Terminal interval kernels]
+    \label{thm:ph_terminal_interval_kernel}
+    \lean{MPSTensor.ker_openSuffixParentHamiltonianES_eq_of_local_kernel,
+        MPSTensor.ker_openSuffixParentHamiltonianES_eq_range_reassocTailBoundaryMapES}
+    \leanok
+    Let $0<R\leq W\leq n\leq N$, and suppose that the range-$R$ open parent
+    Hamiltonian on $W$ sites has kernel $G_W(A)$. On the $N$-site chain,
+    the range-$R$ interaction sum on $[n-W,n)$ and the single parent
+    interaction on the same interval have the same kernel. In particular,
+    for $W=L+Q$ and a chain of length $K+L+Q$, the kernel of the terminal
+    range-$R$ interaction sum is $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$,
+    the boundary space of condition (C3$'$) in
+    \cite{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:cyclic_active_block_local_conjugacy,
+        thm:ph_reassociated_suffix_kernel}
+    The physical coordinate isometry identifies both interval operators
+    with the corresponding $W$-site operators tensored with the identity on
+    the remaining sites. Tensoring with the identity preserves equality of
+    kernels, and the $W$-site kernels are both $G_W(A)$. The terminal case
+    then follows from the reassociated description of the kernel of the
+    single parent interaction on the last $L+Q$ sites.
+\end{proof}
+
 \begin{theorem}[Active grouped projector error]
     \label{thm:ph_active_grouped_projector_error}
     \lean{MPSTensor.norm_suffixProjection_comp_prefixDifference_eq_projector_defect}
@@ -6024,6 +6050,47 @@ tensors.
     every pair of outer lengths at least $p$. The grouped C3 estimate
     then holds with $\epsilon=1/2<1/\sqrt2$. The grouped open-chain
     bound gives $\gamma=(1-\sqrt2/2)^2>0$ at every length $pM$, $M\geq2$.
+\end{proof}
+
+\begin{theorem}[Open-chain gaps at every length for primitive block sums]
+    \label{thm:primitive_block_sum_open_gap_all_lengths}
+    \lean{MPSTensor.%
+        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_isPrimitiveMPS}
+    \leanok
+    Under the hypotheses of
+    Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence}, for every
+    $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and $\delta>0$ such that
+    \begin{align}
+        \delta\|v\|\leq
+        \|H^{\mathrm{open}}_{N,2p}(B)v\|\notag
+    \end{align}
+    for every chain length $N$ and every
+    $v\perp\ker H^{\mathrm{open}}_{N,2p}(B)$. For $N<2p$ the Hamiltonian is
+    zero and the assertion is vacuous. This is the open-chain form of
+    \cite[Theorem~1.2]{Nachtergaele1996Spectral}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:primitive_block_sum_open_gap_subsequence,
+        thm:ph_primitive_blocks_open_kernel,
+        thm:ph_block_diagonal_projector_decay,
+        thm:ph_prefix_kernel_free_right_sites,
+        thm:ph_terminal_interval_kernel,
+        thm:open_interval_gap_transport,
+        thm:open_parent_overlapping_interval_gap}
+    Choose $p$ as in
+    Theorem~\ref{thm:primitive_block_sum_open_gap_subsequence}, above the
+    open-kernel threshold and so large that the three-interval projector
+    error is at most $1/2$. Write $N=pM+q$ with $0\leq q<p$ and $M\geq3$.
+    If $q=0$ the grouped bound applies. Otherwise, the prefix of length
+    $pM$ carries the grouped gap $\gamma$, and the terminal interval of
+    length $2p+q$ carries a gap $\eta>0$, the minimum of the finitely many
+    positive gaps at lengths below $3p$. The two intervals overlap in $2p$
+    sites, their kernels are the boundary spaces of the three-interval
+    estimate, and combining the interval gaps gives the bound
+    $\min\{\gamma,\eta\}/16$ at every $N\geq3p$. The finitely many
+    remaining lengths have positive gaps on their kernel complements, so a
+    uniform $\delta>0$ exists.
 \end{proof}
 
 \begin{theorem}[Uniformly gapped interaction ranges for primitive block sums]
