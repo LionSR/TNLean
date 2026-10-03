@@ -649,6 +649,48 @@ normalizations.
   connectivity; every bridge to a common translation assumes a connected
   induced region or a connected untwisted subgraph.
 
+#### `TNLean.PEPS.IsTorusRegionIntegerLift`
+
+- **Declaration:**
+  `TNLean.PEPS.IsTorusRegionIntegerLift (R : Finset (TorusVertex width height)) (L : {v // v ∈ R} → ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/TorusRegionLiftGauge.lean`.
+- **Meaning:** `L` assigns to every site of the torus region `R` a point of the
+  square lattice `ℤ × ℤ` projecting to that site, such that every rightward and
+  upward native bond inside `R` is a unit step of the lift. It is a supplied
+  combinatorial lift, independent of any group or closure operator.
+- **Source:** no source predicate. It is a locally introduced device for the
+  contiguous-block arguments of arXiv:1001.3807, Theorems 6.7-6.9,
+  `Papers/1001.3807/paper_v3.tex:1931-2072`, used to gauge the native closure
+  operators away inside the region.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_isSimplyConnected` (a lift
+  exists when the closed-cell realization of `R` is simply connected),
+  `TNLean.PEPS.exists_isTorusRegionIntegerLift_of_continuousLift`,
+  `TNLean.PEPS.IsTorusRegionIntegerLift.injective`, and the gauge and
+  coordinate theorems `TNLean.PEPS.torusRegionLiftGauge_gradient` and
+  `TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates_of_torusRegionIntegerLift`.
+- **Caveat:** the predicate does not assert that `R` is a disk or simply
+  connected; it is weaker, and only the first bridge derives it from simple
+  connectedness. The lift statements are stated on tori with both periods at
+  least three.
+
+#### `TNLean.PEPS.IsIntegerCellNear`
+
+- **Declaration:** `TNLean.PEPS.IsIntegerCellNear (q a : ℤ × ℤ) : Prop`.
+- **Defined in:** `TNLean/PEPS/IntegerCellExteriorCollar.lean`.
+- **Meaning:** the two integer centers differ by at most one in each
+  coordinate, so their closed unit cells meet, possibly only at a corner.
+- **Source:** no source predicate. It is locally introduced plane geometry for
+  the exterior collar of a contiguous block in arXiv:1001.3807, proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Sanctioned bridges:**
+  `TNLean.PEPS.isIntegerCellNear_of_integerClosedCell_inter_nonempty`
+  (intersecting closed cells have near centers); the predicate defines the
+  exterior band and collar graph used by
+  `TNLean.PEPS.integerExteriorCollarGraph_connected_of_isSimplyConnected`.
+- **Caveat:** nearness includes diagonal contact, so it is not the
+  four-neighbor adjacency of the square lattice.
+
 `TNLean.PEPS.SingletonRegionTensorInjective`,
 `TNLean.PEPS.VertexComplementTensorInjective`,
 `TNLean.PEPS.RegionBlockedTensorInjective`, and the edge-middle predicates are
@@ -1567,6 +1609,33 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the circuit `U` is applied after the measurement and its
   corrections and does not depend on the outcomes; it is one second round of
   the source's multi-round scheme, with no measurement in it.
+
+#### `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth`
+
+- **Declaration:**
+  `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth (f : ℕ → ℝ) (φ : (N : ℕ) → EuclideanSpace ℂ (Fin N → Fin d)) : Prop`.
+- **Defined in:** `TNLean/Circuit/Measurement/Asymptotic.lean`.
+- **Meaning:** there are unit vectors `ψ_N`, each prepared for all large `N`
+  with `IsPreparedWithMeasurementsAndCircuitInDepth T (ψ_N)` for some
+  `T ≤ f N`, with `‖|ψ_N⟩⟨ψ_N| - |φ_N⟩⟨φ_N|‖₁ → 0`.
+- **Source:** arXiv:2103.13367, paragraph "Phases of matter": `Ψ ↦ Φ` when
+  compositions of `k` channels of `QCcc` of depth `f(M)` map `|ψ_M⟩` to states
+  `σ_M` with `‖σ_M - |φ_M⟩⟨φ_M|‖₁ → 0`.
+- **Sanctioned bridges:**
+  `QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le`
+  (overlap errors `1 - |⟨ψ_N|φ_N⟩|` tending to zero give trace-norm
+  convergence, via `Matrix.traceNormPureSub_le`) and
+  `MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState`
+  (the normalized periodic states of a translation-invariant MPS in depth
+  `C log N`).
+- **Caveat:** the predicate is the relation `Ψ ↦ Φ` of the source only for
+  `Ψ` the trivial sequence of product states, `k = 2` (a preparation with
+  measurements, then a circuit), and `σ_M = |ψ_M⟩⟨ψ_M|` pure and prepared
+  deterministically. The depth `f` is arbitrary; agreement with the source's
+  relation requires `f` polylogarithmic. It is one direction only: the
+  source's equivalence of phases asks for `Ψ ↦ Φ` and `Φ ↦ Ψ`, and the
+  converse direction, with channels acting on arbitrary input states, is not
+  covered (`docs/paper-gaps/psc21_mps_classification_scope.tex`).
 
 #### `QuantumCircuit.IsLocalPerm`
 

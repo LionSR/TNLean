@@ -35,8 +35,9 @@ arXiv:1010.3732, Appendix A, lines 2475--2580, treats a path of normal forms
 with several blocks through Nachtergaele's estimate. The results here assume
 one simultaneous spanning length \(S>0\) for the whole family and range
 \(R\geq S+1\), or pairwise inequivalent normal blocks and range
-\(R\geq3\max(\sum_jD_j,1)^5\). It is not established that these hypotheses
-cover every source path; documented in
+\(R\geq3\max(\sum_jD_j,1)^5\). The source path satisfies the first
+hypothesis with \(S=1\) after its initial blocking, which is proved in
+`IsometricDeformation`; documented in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
