@@ -9,8 +9,11 @@ import TNLean.MPS.Periodic.Symmetry.Theorem41Forward
 /-!
 # Theorem 4.1, reverse direction
 
-This module contains the reverse half of Theorem 4.1 in its current conditional
-formalization.
+This module contains the reverse half of Theorem 4.1. Equality of the transfer
+map with a blocked transfer map gives a refinement tensor, and so does a channel
+root represented by at most the physical dimension's number of Kraus operators.
+The remaining root-selection problem is recorded in
+`docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`.
 -/
 
 open scoped Matrix BigOperators
@@ -139,31 +142,17 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
     _ = (Kraus.transferMap A) ^ p := by rw [← hA]
     _ = Kraus.transferMap (blockTensor A p) := by rw [transferMap_blockTensor]
 
-/-- **Reverse direction of Theorem 4.1 (conditional form).**
-
-Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the inverse
-canonicalization hypothesis `PRefinementInverseCanonicalization` (which states the
-remaining analytic passage from `p`-divisibility of `Kraus.transferMap B` to a compatible
-Kraus-reducible witness). Then `IsPDivisibleChannel (Kraus.transferMap B) p` implies
-`IsPRefinable B p`.
-
-The proof follows the paper (arXiv:1708.00029 Section 4.1, converse paragraph): from the inverse
-canonicalization we obtain `A : MPSTensor d D` with
-`Kraus.transferMap B = Kraus.transferMap (blockTensor A p)`; this matches two Kraus
-representations of the same CP map (`blockTensor A p` with `d^p` operators and `B` with
-`d` operators), so
-Wolf Theorem 2.1(4) (`kraus_isometry_freedom_iff`) supplies an isometry
-`V : Matrix (Fin (d^p)) (Fin d) ℂ` with `Vᴴ V = 1` and
-`blockTensor A p α = ∑_j V α j • B j`. Expanding `coeff (blockTensor A p) (ofFn τ)` with
-the auxiliary `evalWord_sum_smul_ofFn` and linearity of `trace` produces exactly the
-`W`-weighted coefficient identity defining `IsPRefinable B p`. -/
-theorem thm_4_1_p_refinement_reverse
-    (B : MPSTensor d D) (hB : IsIrreducibleForm B)
-    (p : ℕ) (hp : 0 < p)
-    (hInverse : PRefinementInverseCanonicalization d D p)
-    (hDivisible : IsPDivisibleChannel (Kraus.transferMap B) p) :
+/-- Equality with a blocked transfer map gives a refinement isometry.
+No irreducible-form assumption is needed for this Kraus representation step:
+the two Kraus representations of the same map are related by an isometry
+(Wolf Theorem 2.1(4), `kraus_isometry_freedom_iff`), and expanding the blocked
+coefficients with `evalWord_sum_smul_ofFn` gives the weighted coefficient
+identity defining `IsPRefinable B p`.
+Source: arXiv:1708.00029, Theorem 4.1, converse paragraph, lines 812--818. -/
+theorem isPRefinable_of_transferMap_eq_blockTensor
+    (B A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    (hTransferEq : Kraus.transferMap B = Kraus.transferMap (blockTensor A p)) :
     IsPRefinable B p := by
-  obtain ⟨A, hTransferEq⟩ := hInverse hB hDivisible
   classical
   -- `d ≤ d^p = blockPhysDim d p` whenever `p ≥ 1`: the Kraus-rank comparison needed by
   -- Wolf Theorem 2.1(4).
@@ -194,6 +183,42 @@ theorem thm_4_1_p_refinement_reverse
   intro σ _
   rw [Matrix.trace_smul]
   rfl
+
+
+/-- A selected channel root with at most the physical dimension's number
+of Kraus operators gives a refinement tensor.
+
+**Scope restriction (bounded root):** This proves the converse step of
+arXiv:1708.00029, Theorem 4.1, lines 812--818, when the selected root has
+Kraus rank at most `d`. Existence of such a root from divisibility alone is
+not proved; see `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`. -/
+theorem isPRefinable_of_channel_root_hasKrausRankLE
+    (B : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ)
+    (hpow : Kraus.transferMap B = E ^ p)
+    (hRank : Channel.HasKrausRankLE E d) :
+    IsPRefinable B p := by
+  obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE hRank
+  apply isPRefinable_of_transferMap_eq_blockTensor B A hp
+  rw [transferMap_blockTensor, hA]
+  exact hpow
+
+/-- **Reverse direction of Theorem 4.1 (conditional form).**
+
+Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the inverse
+canonicalization hypothesis `PRefinementInverseCanonicalization` (which states the
+remaining analytic passage from `p`-divisibility of `Kraus.transferMap B` to a compatible
+Kraus-reducible witness). Then `IsPDivisibleChannel (Kraus.transferMap B) p` implies
+`IsPRefinable B p`, by `isPRefinable_of_transferMap_eq_blockTensor`.
+Source: arXiv:1708.00029, Section 4.1, converse paragraph. -/
+theorem thm_4_1_p_refinement_reverse
+    (B : MPSTensor d D) (hB : IsIrreducibleForm B)
+    (p : ℕ) (hp : 0 < p)
+    (hInverse : PRefinementInverseCanonicalization d D p)
+    (hDivisible : IsPDivisibleChannel (Kraus.transferMap B) p) :
+    IsPRefinable B p := by
+  obtain ⟨A, hTransferEq⟩ := hInverse hB hDivisible
+  exact isPRefinable_of_transferMap_eq_blockTensor B A hp hTransferEq
 
 end Theorem41Reverse
 
