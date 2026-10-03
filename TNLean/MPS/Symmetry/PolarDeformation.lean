@@ -25,6 +25,12 @@ tensor in normal form, possibly with several blocks, to its isometric form
 case of a tensor that is injective at one site, where the deformation stays
 injective along the whole path. Documented in
 `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
+
+## References
+
+- [arXiv:1010.3732](https://arxiv.org/abs/1010.3732) -- Schuch,
+  Pérez-García, Cirac, *Classifying quantum phases using matrix product
+  states and projected entangled pair states*, Section II.C
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder Kronecker
