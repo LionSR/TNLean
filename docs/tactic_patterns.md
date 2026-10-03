@@ -2460,6 +2460,41 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Algebra/OrthogonalResolution.lean` gives the full multiplication
   table. All three consumers use it; no custom tactic is needed.
 
+### contracting a two-site bond penalty — promoted
+- **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
+  contract the two exterior identity factors, and evaluate the remaining
+  middle-register sum.
+- **Seen:** three contractions across `BondProductEndpointGroundSpace.lean`,
+  `FixedPointParentIdentification.lean`, and `WeightedMatrixUnitParent.lean`,
+  under `TNLean/MPS/Symmetry/`.
+- **Abstraction:** `twoSiteBondInteraction_mulVec_apply` gives the coefficient
+  formula for an arbitrary two-site vector. Its separable specialization
+  `twoSiteBondInteraction_mulVec_separable` and the unit-vector consequence
+  `twoSiteBondPenalty_mulVec_separable` are in `TwoSiteBondContraction.lean`.
+- **Refactoring:** both earlier contractions and the weighted contraction
+  use these lemmas. The two earlier files lose 33 lines in total, while the
+  shared module contributes 87 lines, including documentation and four
+  declarations: net +54 lines. The exterior-index reduction now occurs once.
+- **Notes:** the existing boundary-coefficient formulas remain local; the
+  arbitrary-vector formula also handles the complementary projection without
+  assuming separable coefficients.
+
+### canonical-parent comparison with a normalized bond interaction — promoted
+
+- **Pattern:** compare positive two-site projections, identify the bond
+  Hamiltonian's periodic ground line with the tensor's periodic vector,
+  and apply affine interpolation with common zero modes and endpoint symmetry.
+- **Seen:** the weighted comparison in `MPS/Symmetry/WeightedMatrixUnitParentPath.lean`
+  and the two embedded endpoint comparisons in `MPS/Symmetry/EmbeddedFixedPointParent.lean`.
+- **Abstraction:** `normalizedBondCanonicalParentComparisonPath`, with the
+  periodic-vector comparison in
+  `ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq`
+  and the local comparison in
+  `twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap`.
+- **Notes:** the three constructors share the spectral and symmetry proof.
+  Bond dimension may differ from the dimension of the normalized bond.
+  No injectivity assumption is used in the comparison itself.
+
 ### gauge covariance along the polar deformation — promoted
 
 - **Pattern:** regard a unitary bond matrix as an invertible matrix and
@@ -2516,23 +2551,6 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** three occurrences in one file; below the two-file promotion
   threshold. The following projection algebra differs between the proofs.
 
-### contracting a two-site bond penalty — candidate
-- **Pattern:** reindex the two-site configuration sum by `twoSiteBondEquiv`,
-  expand the two exterior identity factors, and contract their Kronecker
-  deltas before evaluating the remaining interior sum.
-- **Seen:** two occurrences across two files:
-  `BondProductEndpointGroundSpace.lean` in
-  `twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor`, and
-  `FixedPointParentIdentification.lean` in
-  `one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor`, both under
-  `TNLean/MPS/Symmetry/`.
-- **Abstraction:** if a third calculation needs this reduction, prove the
-  general coefficient formula for `(twoSiteBondInteraction K).mulVec f`, with
-  arbitrary bond matrix `K` and two-site vector `f`.
-- **Notes:** below the rule of three. The present calculation gives the
-  complementary projection explicitly and already identifies its range
-  without further coordinate expansion.
-
 ### adjoints of left polar identities — candidate (2026-10-02)
 
 - **Pattern:** Apply `congrArg Matrix.conjTranspose` to a matrix product
@@ -2546,6 +2564,16 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** These instances occur in one module and prove distinct polar
   identities. No additional tactic or matrix predicate is introduced.
 
+### coordinate restriction at the two bond endpoints — candidate
+
+- **Pattern:** expand a weighted matrix unit, select the occupied summand,
+  and reduce its endpoint weight to the corresponding inverse square root.
+- **Seen:** the two physical embedding identities in
+  `MPS/Symmetry/EmbeddedFixedPointTensor.lean`.
+- **Abstraction:** a general weighted matrix-unit compression lemma if a
+  third use appears in a second module.
+- **Notes:** currently two occurrences in one module. Isometric inclusions,
+  boundary transport, and covariance restriction already use shared lemmas.
 
 ### relabeling normalized source factors into a standard form — candidate
 - **Pattern:** pull source factors back along intermediate-rank equivalences,
@@ -4040,6 +4068,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** a nonzero-eigenvalue membership lemma for symmetric
   linear maps would remove the repeated range argument.
 - **Notes:** two occurrences across two files; below the promotion threshold.
+
+### Orthogonal projections are Hermitian — promoted (2026-10-02)
+
+- **Pattern:** obtain the Hermitian matrix identity from an orthogonal projection.
+- **Seen:** the two projected-Gram arguments in
+  `Circuit/UniformPostselection.lean` and the flag projection in
+  `Circuit/UniformSuccessAttenuation.lean`.
+- **Abstraction:** the existing Mathlib results `IsSelfAdjoint.isHermitian`
+  and `Matrix.IsHermitian.eq` give the identity directly.
+- **Result:** all three arguments use `hP.isSelfAdjoint.isHermitian.eq`;
+  the repeated conversion of the matrix star is removed. No new tactic or
+  additional mathematical hypothesis is needed.
 
 ### adjoint Perron eigenvalue from trace duality — candidate
 - **Pattern:** pair a positive definite adjoint eigenvector with a positive

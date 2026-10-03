@@ -155,19 +155,6 @@ theorem embedLocalOperator_commute_onSiteTensorPow {d N : ℕ}
     (fun H : Matrix (Cfg d L) (Cfg d L) ℂ ↦
       H ⊗ₖ onSiteTensorPow (N - L) U) hcomm.eq
 
-/-- The canonical parent interaction is represented by the same matrix in
-the function and Euclidean realizations of the finite configuration space.
-Source: arXiv:1010.3732, Section II.D. -/
-theorem parentInteractionES_eq_toEuclideanLin_parentMatrix {d D : ℕ}
-    (A : MPSTensor d D) (L : ℕ) :
-    parentInteractionES A L = Matrix.toEuclideanLin
-      (LinearMap.toMatrix' (parentInteraction A L)) := by
-  let b := (EuclideanSpace.basisFun (Cfg d L) ℂ).toBasis
-  apply (LinearMap.toMatrix b b).injective
-  rw [← parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix]
-  rw [Matrix.toEuclideanLin_eq_toLin_orthonormal,
-    LinearMap.toMatrix_toLin]
-
 /-- The canonical parent matrix commutes with the finite-window physical
 symmetry. Source: arXiv:1010.3732, Section II.F.2. -/
 theorem parentInteraction_matrix_commute_onSiteTensorPow {d D : ℕ}

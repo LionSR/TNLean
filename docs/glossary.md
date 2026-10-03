@@ -2307,3 +2307,31 @@ involve no boundary.
   the smaller interaction has a uniform gap and the periodic zero modes
   are common. Endpoint commutation with the fixed on-site representation
   suffices for symmetry of the entire path.
+
+- **Weighted canonical endpoints:** `weightedMatrixUnitParentComparisonPath`
+  compares each fixed normalized-bond interaction with the canonical parent
+  of its weighted matrix-unit tensor. The local operator inequality and the
+  shared nonzero periodic ground line hold even when coefficients vanish.
+  `weightedCanonicalFixedPointGappedPath` concatenates the two endpoint
+  comparisons with the continuous bond path. It concerns unitary virtual
+  summands with a common factor system on the common direct-sum physical
+  space; arbitrary isometric tensors still require a separate endpoint
+  identification. Neither construction assumes continuity of the canonical
+  projections as the interpolation parameter varies.
+
+## Exact circuits with initialized auxiliaries
+
+### `QuantumCircuit.IsCleanImplementation`
+
+- **Declaration:** `IsCleanImplementation J C Z`.
+- **Defined in:** `TNLean/Circuit/CleanUnitaryImplementation.lean`.
+- **Meaning:** the matrix identity $CJ=JZ$. When $J$ includes a logical
+  register with its workspace initialized, this identity says that the
+  workspace returns to its initialized state on every logical input.
+- **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
+- **Sanctioned constructions:** `IsCleanImplementation.mul` composes
+  implementations using the same workspace; `IsCleanImplementation.embedOp`
+  places one in a larger register; `exists_isPairProduct_isCleanImplementation`
+  constructs a neighboring-pair circuit for an included logical unitary.
+- **Caveat:** the identity alone does not assert unitarity. It specifies the
+  initialized subspace, rather than the action on arbitrary workspace inputs.
