@@ -22,6 +22,11 @@ no local isometry or block Gram identity is assumed.
 **Scope restriction (regular bonds):** The source allows semi-regular virtual
 representations; this connected-region result uses regular group coordinates.
 The scope is documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

@@ -23,6 +23,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 5.6 and t
 invariance assertion after Definition 5.8, source lines 1515–1525 and 1575–1580.
 This is an auxiliary group-coordinate statement for twisted torus contractions;
 it asserts neither the ground-space theorem nor the full physical entropy theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

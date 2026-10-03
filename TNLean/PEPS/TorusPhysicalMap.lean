@@ -18,6 +18,11 @@ This is the contraction identity used when applying a local G-injective left
 inverse in Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Theorem 5.9,
 `Papers/1001.3807/paper_v3.tex`, lines 1582–1621. The identity itself requires
 neither G-injectivity nor isometry and permits arbitrary bond operators.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

@@ -25,6 +25,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, the rectangular bloc
 and its surrounding stripes in `eq:iso:L-shape-scenario`, source lines 1935–1957.
 This is an auxiliary rectangular geometry statement; it does not replace the
 source's assertion for every topologically trivial block.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS
