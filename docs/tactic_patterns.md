@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Averaged left inverse of a G-injective MPS tensor (promoted, 2026-10-02)
+
+- **Pattern:** Extract the invariant tensor and its averaged left inverse from
+  general G-injectivity, then rewrite map invariance as conjugation invariance
+  of every physical tensor coefficient.
+- **Seen:** The concatenation proof in `PEPS/GInjectiveMPS.lean`, both original
+  intersection and closure proofs in `PEPS/GInjectiveMPSIntersection.lean`,
+  and the inhomogeneous intersection proof in
+  `PEPS/GInjectiveStripIntersection.lean`.
+- **Abstraction:** `IsGInjective.exists_mpsLeftInverse` in
+  `TNLean/PEPS/GInjectiveMPS.lean` combines the existing general left-inverse
+  theorem with the conjugation-invariance characterization.
+- **Notes:** All four consumers use this mathematical helper. The repeated
+  conjugation rewrite is removed; the helper adds no mathematical hypothesis
+  and does not require a finite physical alphabet.
+
 ### Regional PEPS subspace inclusion by open contraction columns — promoted (2026-10-02)
 
 - **Pattern:** Rewrite the regional ground space as the span of its actual

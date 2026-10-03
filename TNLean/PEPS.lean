@@ -58,6 +58,8 @@ import TNLean.PEPS.GInjectivePhysicalEquivalence
 import TNLean.PEPS.GInjectivePhysicalMap
 import TNLean.PEPS.GInjectivePhysicalNormalForm
 import TNLean.PEPS.GInjectiveRangeEquivalence
+import TNLean.PEPS.GInjectiveStripIntersection
+import TNLean.PEPS.GInjectiveStripParentGroundSpace
 import TNLean.PEPS.GInjectiveTorusProjector
 import TNLean.PEPS.GInjectiveTorusSectorCount
 import TNLean.PEPS.GInjectiveTorusSectors
