@@ -7,6 +7,7 @@ import QICLean.Channel.KrausCornerCompression
 import QICLean.Channel.FixedPoint.SupportInvariance
 import TNLean.Algebra.SupportedIsometricCompression
 import TNLean.MPS.Symmetry.LocalInvariantCompression
+import TNLean.MPS.Symmetry.LocalProjectiveClassStability
 import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.StationaryDensitySymmetry
@@ -22,7 +23,8 @@ action on the complementary ambient bond space.
 
 The final unital-family theorem derives local continuity and uniqueness of the
 stationary density from a one-dimensional adjoint fixed space at the base
-parameter. It assumes injectivity only at that parameter.
+parameter. It assumes injectivity only at that parameter. The parameter space is arbitrary;
+the final local theorem requires continuity only at the base point.
 
 These are conditional auxiliary results in the setting of arXiv:1010.3732,
 Appendix C, lines 2653–2717. Continuous ambient canonical tensors, stationary
@@ -117,6 +119,51 @@ theorem stationaryMatrix_compression_unique
     simpa only [Matrix.mul_assoc, ← Matrix.mul_assoc Kᴴ K,
       show Kᴴ * K = 1 from hK, Matrix.one_mul, Matrix.mul_one] using h
 
+private theorem eventually_class_of_continuousAt_pointwise_compression
+    {T : Type*} [TopologicalSpace T] {G : Type} [Group G] {d r : ℕ} (hr : 0 < r)
+    (D : T → ℕ) (ω : T → ScalarCocycle G)
+    (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
+    (A : ∀ t, MPSTensor d (D t))
+    (J : ∀ t, Matrix (Fin (D t)) (Fin r) ℂ)
+    (S : Set T) (hSopen : IsOpen S)
+    (hJ : ∀ t ∈ S, (J t).IsIsometry)
+    (hUnitary : ∀ t ∈ S, ∀ g, ((ρ t).X g : Matrix (Fin (D t)) (Fin (D t)) ℂ) ∈
+      Matrix.unitaryGroup _ ℂ)
+    (hComm : ∀ t ∈ S, ∀ g, Commute ((ρ t).X g : Matrix (Fin (D t)) (Fin (D t)) ℂ)
+      (J t * (J t)ᴴ))
+    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (hCov : ∀ t ∈ S, ∀ g i, ∑ j, (U g : Matrix (Fin d) (Fin d) ℂ) i j • A t j =
+      ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
+        ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
+    (C : T → MPSTensor d r) (hC : ContinuousOn C S)
+    (t₀ : T) (ht₀ : t₀ ∈ S) (hInj : Kraus.IsInjective (C t₀))
+    (hCompress : ∀ t ∈ S, ∀ i, C t i = (J t)ᴴ * A t i * J t) :
+    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+  let : NeZero r := ⟨Nat.ne_of_gt hr⟩
+  choose σ hσ hσUnitary using fun t : S =>
+    (ρ t).exists_unitary_compression (J t) (hJ t t.property)
+      (hUnitary t t.property) (hComm t t.property)
+  have hCovC : ∀ t : S, ∀ g i,
+      ∑ j, (U g : Matrix (Fin d) (Fin d) ℂ) i j • C t j =
+        ((σ t).X g⁻¹ : Matrix (Fin r) (Fin r) ℂ) * C t i *
+          ((σ t).X g⁻¹ : Matrix (Fin r) (Fin r) ℂ)ᴴ := by
+    intro t g i
+    have hrot : ∑ j, (U g : Matrix (Fin d) (Fin d) ℂ) i j • C t j =
+        (J t)ᴴ * (∑ j, (U g : Matrix (Fin d) (Fin d) ℂ) i j • A t j) * J t := by
+      simp only [hCompress t t.property, Matrix.mul_sum, Matrix.sum_mul,
+        Matrix.mul_smul, Matrix.smul_mul]
+    rw [hrot, hCov t t.property, hσ, hCompress t t.property]
+    exact Matrix.isometry_compression_conj_of_commute (J t) (hJ t t.property)
+      _ _ (hComm t t.property g⁻¹)
+  have hClass := eventually_cohomologousTo_of_continuousAt_exact_unitary_covariance
+    (fun t : S => C t) ⟨t₀, ht₀⟩ hC.domRestrict.continuousAt hInj
+    (fun g => U g) (fun t : S => ω t) σ hσUnitary hCovC
+  have hNhds : Filter.map ((↑) : S → T) (𝓝 (⟨t₀, ht₀⟩ : S)) = 𝓝 t₀ :=
+    map_nhds_subtype_coe_eq_nhds ht₀ (hSopen.mem_nhds ht₀)
+  rw [← hNhds]
+  exact hClass
+
+
 end MPSTensor
 
 namespace Matrix
@@ -159,12 +206,12 @@ only at the base parameter. Continuous canonical bond data are supplied;
 no implication from a physical gap is asserted. Source context:
 arXiv:1010.3732, Appendix C, lines 2653–2717. -/
 theorem eventually_cohomologousTo_of_continuousOn_unique_stationary_density
-    {G : Type} [Group G] {d k : ℕ}
-    (D : unitInterval → ℕ) (ω : unitInterval → ScalarCocycle G)
+    {T : Type*} [TopologicalSpace T] {G : Type} [Group G] {d k : ℕ}
+    (D : T → ℕ) (ω : T → ScalarCocycle G)
     (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
-    (B : unitInterval → MPSTensor d k) (hB : Continuous B)
-    (σ : unitInterval → Matrix (Fin k) (Fin k) ℂ)
-    (S : Set unitInterval) (hS : IsOpen S) (hσcont : ContinuousOn σ S)
+    (B : T → MPSTensor d k) (hB : Continuous B)
+    (σ : T → Matrix (Fin k) (Fin k) ℂ)
+    (S : Set T) (hS : IsOpen S) (hσcont : ContinuousOn σ S)
     (hσ : ∀ t, (σ t).PosSemidef) (htrace : ∀ t, (σ t).trace = 1)
     (hfix : ∀ t, Kraus.adjointMap (B t) (σ t) = σ t)
     (huniq : ∀ t ∈ S, ∀ Z, Kraus.adjointMap (B t) Z = Z → Z.trace = 1 → Z = σ t)
@@ -179,7 +226,7 @@ theorem eventually_cohomologousTo_of_continuousOn_unique_stationary_density
     (hCov : ∀ t g, rotatePhysical (U g) (A t) = fun i =>
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
-    (t₀ : unitInterval) (ht₀S : t₀ ∈ S) (hInj : Kraus.IsInjective (A t₀)) :
+    (t₀ : T) (ht₀S : t₀ ∈ S) (hInj : Kraus.IsInjective (A t₀)) :
     ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
   have hD : 0 < D t₀ := Matrix.supportFrame_dimension_pos_of_trace_one
     (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)
@@ -201,7 +248,7 @@ theorem eventually_cohomologousTo_of_continuousOn_unique_stationary_density
     apply Matrix.isometry_absorption_of_projector_absorption (J t) (hJ t ht).1
     rw [hsupport t, (hJ t ht).2]
     exact Matrix.supportProj_mul_spectralCorner (hσ t) ha hab
-  let C : unitInterval → MPSTensor d (D t₀) := fun t i => (J t)ᴴ * B t i * J t
+  let C : T → MPSTensor d (D t₀) := fun t i => (J t)ᴴ * B t i * J t
   have hCcont : ContinuousOn C R := by
     rw [continuousOn_iff_continuous_domRestrict]
     exact continuous_pi fun i =>
@@ -231,21 +278,20 @@ theorem eventually_cohomologousTo_of_continuousOn_unique_stationary_density
     simpa only [C, J', hA t i] using
       (Matrix.isometry_double_compression_eq_of_absorption
         (K t) (J t) (B t i) (hsub t ht)).symm
-  exact eventually_cohomologousTo_of_continuousOn_pointwise_compression
-    hD D ω ρ A J' R hJ' (fun t _ => hUnitary t) hComm' ((Matrix.unitaryGroup _ ℂ).subtype.comp U)
-    (fun t _ g i => congrFun (hCov t g) i) C hCcont t₀ (hRopen.mem_nhds ht₀)
+  exact eventually_class_of_continuousAt_pointwise_compression
+    hD D ω ρ A J' R hRopen hJ' (fun t _ => hUnitary t) hComm' U
+    (fun t _ g i => congrFun (hCov t g) i) C hCcont t₀ ht₀
     (by simpa only [hC₀] using hInj) hCompress
-
 
 /-- The global continuous-density specialization of the neighborhood
 stationary-support theorem. Source context: arXiv:1010.3732, Appendix C,
 lines 2653–2717. -/
 theorem eventually_cohomologousTo_of_continuous_unique_stationary_density
-    {G : Type} [Group G] {d k : ℕ}
-    (D : unitInterval → ℕ) (ω : unitInterval → ScalarCocycle G)
+    {T : Type*} [TopologicalSpace T] {G : Type} [Group G] {d k : ℕ}
+    (D : T → ℕ) (ω : T → ScalarCocycle G)
     (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
-    (B : unitInterval → MPSTensor d k) (hB : Continuous B)
-    (σ : unitInterval → Matrix (Fin k) (Fin k) ℂ) (hσcont : Continuous σ)
+    (B : T → MPSTensor d k) (hB : Continuous B)
+    (σ : T → Matrix (Fin k) (Fin k) ℂ) (hσcont : Continuous σ)
     (hσ : ∀ t, (σ t).PosSemidef) (htrace : ∀ t, (σ t).trace = 1)
     (hfix : ∀ t, Kraus.adjointMap (B t) (σ t) = σ t)
     (huniq : ∀ t Z, Kraus.adjointMap (B t) Z = Z → Z.trace = 1 → Z = σ t)
@@ -260,7 +306,7 @@ theorem eventually_cohomologousTo_of_continuous_unique_stationary_density
     (hCov : ∀ t g, rotatePhysical (U g) (A t) = fun i =>
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
-    (t₀ : unitInterval) (hInj : Kraus.IsInjective (A t₀)) :
+    (t₀ : T) (hInj : Kraus.IsInjective (A t₀)) :
     ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
   exact eventually_cohomologousTo_of_continuousOn_unique_stationary_density
     D ω ρ B hB σ Set.univ isOpen_univ hσcont.continuousOn hσ htrace hfix
@@ -275,12 +321,12 @@ canonical tensors and supported exact covariance remain hypotheses; this
 does not construct them from a physical gap. Source context:
 arXiv:1010.3732, Appendix C, lines 2653–2717. -/
 theorem eventually_cohomologousTo_of_continuous_unital_supported_family
-    {G : Type} [Group G] {d k : ℕ}
-    (D : unitInterval → ℕ) (ω : unitInterval → ScalarCocycle G)
+    {T : Type*} [TopologicalSpace T] {G : Type} [Group G] {d k : ℕ}
+    (D : T → ℕ) (ω : T → ScalarCocycle G)
     (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
-    (B : unitInterval → MPSTensor d k) (hB : Continuous B)
+    (B : T → MPSTensor d k) (hB : Continuous B)
     (hUnital : ∀ t, Kraus.IsUnital (B t))
-    (σ : unitInterval → Matrix (Fin k) (Fin k) ℂ)
+    (σ : T → Matrix (Fin k) (Fin k) ℂ)
     (hσ : ∀ t, (σ t).PosSemidef) (htrace : ∀ t, (σ t).trace = 1)
     (hfix : ∀ t, Kraus.adjointMap (B t) (σ t) = σ t)
     (K : ∀ t, Matrix (Fin k) (Fin (D t)) ℂ)
@@ -294,7 +340,7 @@ theorem eventually_cohomologousTo_of_continuous_unital_supported_family
     (hCov : ∀ t g, rotatePhysical (U g) (A t) = fun i =>
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
-    (t₀ : unitInterval)
+    (t₀ : T)
     (hdim : Module.finrank ℂ
       (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM (B t₀))) = 1)
     (hInj : Kraus.IsInjective (A t₀)) :
@@ -309,5 +355,48 @@ theorem eventually_cohomologousTo_of_continuous_unital_supported_family
   exact eventually_cohomologousTo_of_continuousOn_unique_stationary_density
     D ω ρ B hB σ S hS hcont hσ htrace hfix (fun t ht => (huniq t ht).2)
     K hK hsupport A hA hUnitary U hCov t₀ ht₀ hInj
+
+
+/-- A unital ambient tensor family continuous at one parameter has locally constant
+virtual class on its stationary support, for an arbitrary topological parameter space.
+The adjoint fixed space must be one-dimensional at the base, and only the supported
+base tensor is required injective. The positive trace-one stationary matrices, full
+support frames and virtual representatives need not be continuous. The exact supported
+unitary covariance is supplied; no construction from a physical gap is asserted.
+Source context: arXiv:1010.3732, Appendix C, lines 2653–2717. -/
+theorem eventually_cohomologousTo_of_continuousAt_unital_supported_family
+    {T : Type*} [τ : TopologicalSpace T] {G : Type} [Group G] {d k : ℕ}
+    (D : T → ℕ) (ω : T → ScalarCocycle G)
+    (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
+    (B : T → MPSTensor d k) (t₀ : T) (hB : ContinuousAt B t₀)
+    (hUnital : ∀ t, Kraus.IsUnital (B t))
+    (σ : T → Matrix (Fin k) (Fin k) ℂ)
+    (hσ : ∀ t, (σ t).PosSemidef) (htrace : ∀ t, (σ t).trace = 1)
+    (hfix : ∀ t, Kraus.adjointMap (B t) (σ t) = σ t)
+    (K : ∀ t, Matrix (Fin k) (Fin (D t)) ℂ)
+    (hK : ∀ t, (K t).IsIsometry)
+    (hsupport : ∀ t, K t * (K t)ᴴ = (hσ t).supportProj)
+    (A : ∀ t, MPSTensor d (D t))
+    (hA : ∀ t i, A t i = (K t)ᴴ * B t i * K t)
+    (hUnitary : ∀ t g, ((ρ t).X g : Matrix (Fin (D t)) (Fin (D t)) ℂ) ∈
+      Matrix.unitaryGroup _ ℂ)
+    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (hCov : ∀ t g, rotatePhysical (U g) (A t) = fun i =>
+      ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
+        ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
+    (hdim : Module.finrank ℂ
+      (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM (B t₀))) = 1)
+    (hInj : Kraus.IsInjective (A t₀)) :
+    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+  have hNhds : @nhds T (τ ⊓ TopologicalSpace.induced B inferInstance) t₀ =
+      @nhds T τ t₀ := by
+    rw [nhds_inf, nhds_induced, inf_eq_left]
+    exact tendsto_iff_comap.mp hB
+  let : TopologicalSpace T := τ ⊓ TopologicalSpace.induced B inferInstance
+  have hCont : Continuous B := continuous_iff_le_induced.mpr inf_le_right
+  have hClass := eventually_cohomologousTo_of_continuous_unital_supported_family
+    D ω ρ B hCont hUnital σ hσ htrace hfix K hK hsupport A hA hUnitary U hCov t₀ hdim hInj
+  rw [hNhds] at hClass
+  exact hClass
 
 end MPSTensor
