@@ -75,6 +75,7 @@ import TNLean.PEPS.GraphInsertedSemiRegularFactory
 import TNLean.PEPS.GraphMultiplicityBondState
 import TNLean.PEPS.GraphOpenAveragingBondState
 import TNLean.PEPS.GraphOpenRegionContraction
+import TNLean.PEPS.GraphOpenRegionGluing
 import TNLean.PEPS.GraphRegularStateNonzero
 import TNLean.PEPS.GraphSemiRegularEquivalence
 import TNLean.PEPS.IdentityInsertion
@@ -141,8 +142,10 @@ import TNLean.PEPS.RegularActualCycleTransport
 import TNLean.PEPS.RegularActualTwoChordTransport
 import TNLean.PEPS.RegularBondCounting
 import TNLean.PEPS.RegularBoundary
+import TNLean.PEPS.RegularBoundaryChargeContraction
 import TNLean.PEPS.RegularBoundaryEntropy
 import TNLean.PEPS.RegularBoundaryGibbsSupport
+import TNLean.PEPS.RegularBoundaryRegisterTransport
 import TNLean.PEPS.RegularBoundaryRoute
 import TNLean.PEPS.RegularBoundaryState
 import TNLean.PEPS.RegularBoundaryTransporter
@@ -242,6 +245,7 @@ import TNLean.PEPS.RegularTwoCycleConjugation
 import TNLean.PEPS.RegularTwoCycleFluxMove
 import TNLean.PEPS.RegularTwoCycleGlobalFluxMove
 import TNLean.PEPS.RegularTwoCyclePhysicalFluxMove
+import TNLean.PEPS.RegularTwoPartChargeMotion
 import TNLean.PEPS.RegularTwoSiteChargeCommutation
 import TNLean.PEPS.RegularTwoSiteChargeCoordinates
 import TNLean.PEPS.RegularTwoSiteChargeDetector
@@ -363,6 +367,7 @@ import TNLean.PEPS.TorusTranslatedFluxCreation
 import TNLean.PEPS.TorusTranslatedFluxMove
 import TNLean.PEPS.TorusTranslation
 import TNLean.PEPS.TorusTranslationInvariant
+import TNLean.PEPS.TorusTwoColumnChargeMotion
 import TNLean.PEPS.TorusTwoPlaquetteFluxHolonomy
 import TNLean.PEPS.TorusTwoPlaquetteGlobalFluxMove
 import TNLean.PEPS.TorusTwoPlaquettePhysicalFluxMove
