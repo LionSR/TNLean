@@ -2800,33 +2800,33 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{proof}
 
 % Auxiliary results for local continuous minimal realizations.
-\begin{lemma}[Gram left inverses]
-    \label{lem:spt_gram_left_inverse}
+\begin{theorem}[Gram left inverses]
+    \label{thm:spt_gram_left_inverse}
     \lean{Matrix.gramLeftInverse_mul, Matrix.continuous_gramLeftInverse}
     \leanok
     If a complex rectangular matrix $C$ has independent columns, then
     $H=(C^\dagger C)^{-1}C^\dagger$ satisfies $HC=I$.
     For a continuous family with independent columns, $H$ is continuous.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The Gram matrix is positive definite and hence invertible.
     Matrix inversion is continuous on the invertible matrices.
 \end{proof}
 
-\begin{lemma}[Coordinates of a bilinear map]
-    \label{lem:spt_bilinear_coordinates}
+\begin{theorem}[Coordinates of a bilinear map]
+    \label{thm:spt_bilinear_coordinates}
     \lean{Matrix.toLinearMap₂'_apply_mulVec_prod}
     \leanok
     Let $M$ have columns indexed by pairs $(a,b)$. The associated bilinear
     map satisfies $\mu(x,y)=M(x\otimes y)$, where
     $(x\otimes y)_{(a,b)}=x_a y_b$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Expand both sides in the coordinate basis.
 \end{proof}
 
-\begin{lemma}[Polynomial correction of an idempotent]
-    \label{lem:spt_newton_idempotent}
+\begin{theorem}[Polynomial correction of an idempotent]
+    \label{thm:spt_newton_idempotent}
     \lean{idempotent_newton_defect, idempotent_newton_sub,
         idempotent_newton_twice_sub_one, idempotent_newton_increment_bound,
         idempotent_newton_tendsto_of_small_defect}
@@ -2837,11 +2837,12 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $x_{n+1}-x_n=-(2x_n-1)d_n$.
     If $\|d_0\|\le1/16$, the sequence converges to an idempotent.
     More precisely,
-    \[
-        \|x_{n+1}-x_n\|\le
+    \begin{align}
+        \|x_{n+1}-x_n\| & \le
         \|2x_0-1\|\,\|d_0\|\,2^{-n}.
-    \]
-\end{lemma}
+        \notag
+    \end{align}
+\end{theorem}
 \begin{proof}\leanok
     Polynomial expansion gives the identities, including
     $2x_{n+1}-1=(2x_n-1)(1-2d_n)$.
@@ -2855,7 +2856,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_nearby_idempotent}
     \lean{Matrix.exists_local_continuous_idempotent_in_adjoin}
     \leanok
-    \uses{lem:spt_newton_idempotent}
     Let $X(t)$ be a continuous family of complex square matrices,
     with $X(t_0)$ idempotent. On an open neighborhood of $t_0$ there is
     a continuous family of idempotents $P(t)$, with $P(t_0)=X(t_0)$,
@@ -2863,6 +2863,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     No Hermiticity assumption is required.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_newton_idempotent}
     Shrink the neighborhood so that the idempotency defect is at most
     $1/16$ and $2X-I$ is bounded. Apply the preceding correction in the
     complete normed algebra of bounded continuous matrix functions.
@@ -2870,15 +2871,15 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     by finite dimensionality. At $t_0$ every iterate equals $X(t_0)$.
 \end{proof}
 
-\begin{lemma}[Rank of an idempotent]
-    \label{lem:spt_idempotent_rank}
+\begin{theorem}[Rank of an idempotent]
+    \label{thm:spt_idempotent_rank}
     \lean{Matrix.trace_eq_rank_of_idempotent,
         Matrix.exists_open_constantRank_of_idempotent}
     \leanok
     An idempotent complex matrix has trace equal to its rank.
     Consequently the rank of a continuous family of idempotents is
     locally constant, including for non-Hermitian idempotents.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The associated linear map is the projection onto its range.
     Its trace is the dimension of that range. Continuity of the trace
@@ -2890,8 +2891,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{Matrix.exists_open_continuous_rangeFrame_of_constantRank,
         Matrix.exists_local_continuous_rangeFrame_of_idempotent}
     \leanok
-    \uses{thm:spt_trace_quotient_fixed_section, lem:spt_gram_left_inverse,
-        lem:spt_idempotent_rank}
     A continuous matrix family of constant rank $D$ admits a local
     continuous frame $C(t)=P(t)F$ for its range, with a fixed matrix $F$.
     The matrices $H(t)=(C(t)^\dagger C(t))^{-1}C(t)^\dagger$ are continuous
@@ -2900,32 +2899,31 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     in addition $P(t)C(t)=C(t)$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_trace_quotient_fixed_section, thm:spt_gram_left_inverse,
+        thm:spt_idempotent_rank}
     Choose a section at the base parameter. Injectivity persists nearby.
     Equality of dimensions identifies its range with the matrix range.
     Apply the Gram left inverse and the preceding local rank result.
 \end{proof}
 
-\begin{lemma}[Dimension of a primitive left ideal]
-    \label{lem:spt_primitive_left_ideal_dimension}
+\begin{theorem}[Dimension of a primitive left ideal]
+    \label{thm:spt_primitive_left_ideal_dimension}
     \lean{Matrix.finrank_range_mulRight_single,
         Matrix.finrank_range_rightMul_of_matrixAlgebra}
     \leanok
-    In $M_D(\mathbb C)$ the left ideal $M_D(\mathbb C)E_{ii}$ has
+    In $\MN{D}$ the left ideal $\MN{D}E_{ii}$ has
     dimension $D$. The same holds after transport by any algebra
     isomorphism.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The ideal consists of matrices supported in column $i$.
-    That column is an arbitrary vector in $\mathbb C^D$.
+    That column is an arbitrary vector in $\C^D$.
 \end{proof}
 
 \begin{theorem}[Continuous primitive left ideals of a trace quotient]
     \label{thm:spt_continuous_trace_quotient_primitive}
     \lean{Matrix.exists_local_continuous_traceQuotientPrimitive}
     \leanok
-    \uses{thm:spt_trace_quotient_continuous_unit,
-        thm:spt_continuous_nearby_idempotent,
-        lem:spt_primitive_left_ideal_dimension, lem:spt_idempotent_rank}
     Suppose a continuous raw tensor family has two-site and three-site
     traces proportional, with nonzero factors, to those of pointwise
     injective tensors of constant positive bond dimension $D$.
@@ -2936,6 +2934,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     tensors or algebra identifications is assumed.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_trace_quotient_continuous_unit,
+        thm:spt_continuous_nearby_idempotent,
+        thm:spt_primitive_left_ideal_dimension, thm:spt_idempotent_rank}
     In the base matrix algebra choose a diagonal matrix unit and
     transport it to the quotient. Keep its coordinates fixed and
     correct its left-regular action to a nearby idempotent.
@@ -2963,10 +2964,10 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         MPSTensor.gaugeEquiv_leftIdealFrameAction}
     \leanok
     \uses{def:spt_left_ideal_frame_action}
-    Suppose the quotient algebra is isomorphic to $M_D(\mathbb C)$,
-    with $D>0$, and $J$ identifies $\mathbb C^D$ with a principal left
+    Suppose the quotient algebra is isomorphic to $\MN{D}$,
+    with $D>0$, and $J$ identifies $\C^D$ with a principal left
     ideal, with $HJ=I$. The framed action is an algebra isomorphism
-    onto $M_D(\mathbb C)$ and differs from the given identification
+    onto $\MN{D}$ and differs from the given identification
     by an inner conjugation. It preserves traces. Applying it to
     a family of letters therefore preserves that family's bond gauge
     equivalence.
@@ -2987,53 +2988,54 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $q_i=((GF)^\dagger GF)^{-1}(GF)^\dagger G e_i$.
 \end{definition}
 
-\begin{lemma}[Recovery of the letters]
-    \label{lem:spt_trace_quotient_letter_recovery}
+\begin{theorem}[Recovery of the letters]
+    \label{thm:spt_trace_quotient_letter_recovery}
     \lean{Matrix.traceQuotientLetterCoordinates_recover,
         MPSTensor.gaugeEquiv_traceQuotientLetters,
         Matrix.traceQuotientLetters_of_normalized_linearEquiv}
     \leanok
-    \uses{def:spt_trace_quotient_letter_coordinates,
-        lem:spt_gram_left_inverse, thm:spt_left_ideal_frame_realization,
-        thm:spt_trace_quotient_contraction, thm:trace_pairing_injective}
-    If $G_{ji}=\alpha_2\operatorname{tr}(A^iA^j)$ and the normalized
+    \uses{def:spt_trace_quotient_letter_coordinates}
+    If $G_{ji}=\alpha_2\tr(A^iA^j)$ and the normalized
     quotient identification satisfies
     $E(x)=\kappa\sum_i(Fx)_i A^i$, with $\alpha_2\kappa\ne0$,
     then $E(q_i)=\kappa A^i$. In any left-ideal frame the represented
     letters are gauge-equivalent to $\kappa A$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_gram_left_inverse, thm:spt_left_ideal_frame_realization,
+        thm:spt_trace_quotient_contraction, thm:trace_pairing_injective}
     Injectivity of the minimal tensor makes its trace pairing
     nondegenerate. The Gram left inverse recovers the unique letter
     coordinates. Apply the preceding inner-conjugacy statement.
 \end{proof}
 
-\begin{lemma}[Continuity of represented letters]
-    \label{lem:spt_continuous_left_ideal_letters}
+\begin{theorem}[Continuity of represented letters]
+    \label{thm:spt_continuous_left_ideal_letters}
     \lean{Matrix.continuousOn_leftIdealFrameAction,
         Matrix.continuousOn_traceQuotientLetterCoordinates}
     \leanok
     \uses{def:spt_left_ideal_frame_action,
-        def:spt_trace_quotient_letter_coordinates, lem:spt_gram_left_inverse}
+        def:spt_trace_quotient_letter_coordinates}
     Continuous multiplication coefficients, frames, left inverses,
     and letter coordinates give continuous represented letters.
     The letter coordinates are continuous wherever the fixed section
     is injective.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_gram_left_inverse}
     The formulas are finite sums and matrix products. The only inverse
     is the Gram inverse, which is continuous on this neighborhood.
 \end{proof}
 
-\begin{lemma}[Finite traces from positive-length periodic rays]
-    \label{lem:spt_positive_ray_finite_traces}
+\begin{theorem}[Finite traces from positive-length periodic rays]
+    \label{thm:spt_positive_ray_finite_traces}
     \lean{MPSTensor.exists_nonzero_two_three_trace_scalars_of_samePositiveMpvRay}
     \leanok
     If a raw tensor and a one-site injective tensor of positive bond
     dimension have the same periodic rays at every positive length,
     their two-site and three-site word traces are proportional by
     nonzero scalars $\alpha_2$ and $\alpha_3$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpoalg_length_dependent_phase_power}
     Specialize the ray equality to lengths two and three and evaluate
@@ -3044,21 +3046,16 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_minimal_finite_trace_realization}
     \lean{MPSTensor.exists_local_continuous_minimalTensor_of_two_three_trace_eq}
     \leanok
-    \uses{thm:spt_continuous_trace_quotient_primitive,
-        thm:spt_continuous_idempotent_frame,
-        thm:spt_left_ideal_frame_realization,
-        lem:spt_trace_quotient_letter_recovery,
-        lem:spt_continuous_left_ideal_letters}
     Let $B(t)$ be continuous in a fixed ambient bond dimension.
     Suppose pointwise one-site injective tensors $A(t)$ have a fixed
     positive bond dimension $D$ and satisfy
-    \[
-        \tr(B^i(t)B^j(t))=\alpha_2(t)\tr(A^i(t)A^j(t)),
-    \]
-    \[
-        \tr(B^i(t)B^k(t)B^j(t))=
+    \begin{align}
+        \tr(B^i(t)B^j(t))       & =\alpha_2(t)\tr(A^i(t)A^j(t)),
+        \notag                                                   \\
+        \tr(B^i(t)B^k(t)B^j(t)) & =
         \alpha_3(t)\tr(A^i(t)A^k(t)A^j(t)),
-    \]
+        \notag
+    \end{align}
     with nonzero factors. Around each parameter there is a continuous
     one-site injective tensor $C(t)$ of dimension $D$ that is
     gauge-equivalent to $(\alpha_3(t)/\alpha_2(t))A(t)$.
@@ -3068,6 +3065,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     the raw tensor's longer periodic rays.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_continuous_trace_quotient_primitive,
+        thm:spt_continuous_idempotent_frame,
+        thm:spt_left_ideal_frame_realization,
+        thm:spt_trace_quotient_letter_recovery,
+        thm:spt_continuous_left_ideal_letters}
     Recover the continuous quotient product and unit, choose a
     continuous primitive left ideal, and construct a continuous frame
     for that ideal. Left multiplication in the frame represents
@@ -3079,9 +3081,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_minimal_ray_realization}
     \lean{MPSTensor.exists_local_continuous_minimalTensor_of_samePositiveMpvRay}
     \leanok
-    \uses{lem:spt_positive_ray_finite_traces,
-        thm:spt_continuous_minimal_finite_trace_realization,
-        thm:spt_exact_phase_gauge_invariance}
     Suppose the continuous raw family $B(t)$ has, at every parameter,
     the same positive-length periodic rays as a pointwise one-site
     injective tensor $A(t)$ of a fixed positive bond dimension.
@@ -3090,6 +3089,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     supplied pointwise representatives is assumed.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_positive_ray_finite_traces,
+        thm:spt_continuous_minimal_finite_trace_realization,
+        thm:spt_exact_phase_gauge_invariance}
     Obtain nonzero two-site and three-site trace factors from the
     full ray equality. Apply the preceding reconstruction.
     Nonzero scalar multiplication and bond conjugation preserve
@@ -3100,9 +3102,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_canonical_ray_realization}
     \lean{MPSTensor.exists_local_continuous_unitalTensor_of_samePositiveMpvRay}
     \leanok
-    \uses{thm:spt_continuous_minimal_ray_realization,
-        thm:spt_continuous_canonical_normalization,
-        thm:spt_exact_phase_gauge_invariance}
     Under the preceding hypotheses, the local representatives can
     be chosen continuous, one-site injective, and unital, with a
     continuous normalized adjoint stationary density $\sigma(t)$.
@@ -3113,6 +3112,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \cite{gap:spc11_spt_interpolation_upper_range}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:spt_continuous_minimal_ray_realization,
+        thm:spt_continuous_canonical_normalization,
+        thm:spt_exact_phase_gauge_invariance}
     Apply continuous Perron normalization to the reconstructed family
     on a smaller neighborhood. Its scalar gauge preserves the full
     ray family. Restrict the continuous unital tensor and stationary
@@ -3540,7 +3542,8 @@ only \cite{gap:rmp_spt_fixed_point_onsite_scope}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cocycle_gauge_independence, thm:virtual_rep_injective, thm:spt_fixed_point_transfer}
+    \uses{thm:cocycle_gauge_independence, thm:virtual_rep_injective,
+        thm:spt_fixed_point_transfer}
     Since $W_{gh}$ is a nonzero multiple of $W_hW_g$ and scalars cancel in
     $W\mapsto W^{T}\otimes W^{-1}$, the factor system cancels and
     $U(g)U(h)=U(gh)$.  The symmetry identity is checked entry by entry:
@@ -3807,7 +3810,7 @@ and the regrouping of physical registers into bonds.
     is a symmetric gapped interaction path from $a$ to $b$, with gap
     at least $\delta$. This comparison applies to independent-bond and
     canonical parent interactions in the fixed-point construction
-    \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}.
+    \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{definition}
 
 \begin{proof}\leanok
@@ -4738,7 +4741,8 @@ $\E_A$ itself is used, describes the same spectrum.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:gauge_phase_unique, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
+    \uses{lem:gauge_phase_unique, thm:virtual_unitary_of_twisted_gauge_phase,
+        thm:boundary_state_invariant_of_virtual_unitary}
     Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase}, applied to the
     physical unitary $u^\dagger$, gives a unitary $V$ and a phase $\mu$ with
     $\sum_j (u^\dagger)_{ij}A^j=\mu\,VA^iV^\dagger$, and
@@ -4782,7 +4786,8 @@ $\E_A$ itself is used, describes the same spectrum.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:virtual_gauge_fixes_boundary_state, lem:projective_commutant_eigenspace}
+    \uses{thm:virtual_gauge_fixes_boundary_state,
+        lem:projective_commutant_eigenspace}
     Every $\rho(g)$ is the virtual gauge of $U(g^{-1})$ and commutes with $\Lambda$
     by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
     Lemma~\ref{lem:projective_commutant_eigenspace}.
@@ -4802,7 +4807,8 @@ $\E_A$ itself is used, describes the same spectrum.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:virtual_gauge_fixes_boundary_state, lem:even_finrank_of_anticommute}
+    \uses{thm:virtual_gauge_fixes_boundary_state,
+        lem:even_finrank_of_anticommute}
     Both gauges commute with $\Lambda$ by
     Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
     Lemma~\ref{lem:even_finrank_of_anticommute}.
@@ -4938,7 +4944,8 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted, thm:anticommuting_physical_obstruction}
+    \uses{thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted,
+        thm:anticommuting_physical_obstruction}
     Fix a length $N$.  If $\ket{\psi_N(A)}=0$, every twist leaves it
     unchanged.  Otherwise write
     $U(g)^{\otimes N}\ket{\psi_N(A)}=c_N(g)\ket{\psi_N(A)}$; then
