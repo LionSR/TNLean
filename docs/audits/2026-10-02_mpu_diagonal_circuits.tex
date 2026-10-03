@@ -1,0 +1,299 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{corollary}[lemma]{Corollary}
+\title{Exact rank-two diagonal MPU circuits and approximation at arbitrary rank}
+\author{TNLean contributors}
+\date{2 October 2026}
+\begin{document}
+\maketitle
+
+Let $f:\{0,1\}^N\to\mathbb C$ satisfy $|f(x)|=1$, and let
+$U_f|x\rangle=f(x)|x\rangle$. At cut $k$, write
+$M_k(x,y)=f(xy)$, where $x$ has length $k$. The operator Schmidt rank of
+$U_f$ at this cut is exactly $\operatorname{rank}M_k$. Thus an
+open-boundary diagonal MPO of maximal bond dimension $D$ gives
+$\operatorname{rank}M_k\leq D$. All circuits below use arbitrary one- and
+two-qubit gates; auxiliary qubits begin and end in $|0\rangle$.
+
+The general MPU question in Styliaris--Trivedi--Cirac,
+arXiv:2508.08160, concerns arbitrary unitaries, including those which
+mix computational basis vectors. The results here concern diagonal unitaries,
+and, by a separate reduction, monomial unitaries. They remove the
+smallest-Schmidt-value hypothesis within these classes. The general fixed-bond
+exact polynomial circuit theorem, and its operator-norm approximation
+corollaries with exact auxiliary erasure, are proved in the companion note
+\emph{Exact polynomial circuits for matrix product unitaries}, Section~5
+(\nolinkurl{docs/audits/2026-10-02_mpu_rank_two_circuits.tex}).
+No claim of priority is intended. The relevant source
+passages are \nolinkurl{references/2508.08160/main.tex}, lines 683--690
+and 1373--1402.
+
+\section{The rank-two dichotomy}
+
+\begin{lemma}\label{lem:circle}
+Suppose $M$ is a finite, nonempty matrix, all its entries have modulus one,
+and $\operatorname{rank}M\leq2$. Either its rows have at most two types
+up to multiplication by a nonzero scalar, or its columns have at most two
+such types.
+\end{lemma}
+\begin{proof}
+Rank one gives a single row type. Otherwise choose two independent rows
+$u,v$. Divide each column by its corresponding entry of $u$. Every row
+then has the form $a_x+b_x t_y$, with $t_y=v_y/u_y$ of modulus one.
+If $t$ takes at most two values, there are at most two column types.
+If it takes at least three values, the identity
+\[
+ 1=|a_x+b_x t_y|^2
+   =|a_x|^2+|b_x|^2+2\operatorname{Re}(a_x\overline{b_x}\overline{t_y})
+\]
+forces $a_x\overline{b_x}=0$: a nonconstant real linear functional
+on the plane has a level line, and that line meets the unit circle in
+at most two points. Thus each row is a scalar multiple of either $1$ or
+$t$, giving at most two row types.
+\end{proof}
+
+The circle--line argument, including the dichotomy for a supplied
+factorization $a_x+b_xt_y$, is proved in
+\nolinkurl{TNLean/MPS/MPU/UnitCircleRankTwo.lean}. The matrix-basis step and
+the circuit construction below are mathematical proofs, not claimed as
+completed Lean formalizations.
+
+\begin{lemma}\label{lem:selector}
+Suppose all consecutive cut ranks of a unit-modulus function $f(xy)$ are
+at most two, and there are two projective row types across the displayed
+cut. There are phase functions $g(x),r_0(y),r_1(y)$ and a Boolean function
+$p(x)$ such that
+\[
+ f(xy)=g(x)r_{p(x)}(y).
+\]
+Each of $g,r_0,r_1$ has consecutive cut ranks at most two.
+The Boolean function $p$ has consecutive cut ranks at most five, and
+can be computed reversibly with $O(|x|)$ gates and auxiliary qubits.
+It also admits a reversible computation of depth $O(\log(|x|+1))$
+using $O(|x|)$ gates and auxiliary qubits.
+\end{lemma}
+\begin{proof}
+Fix $y_0$. Normalize representative rows so that $r_s(y_0)=1$ and put
+$g(x)=f(xy_0)$. Then $r_s(y)=f(x_s y)/f(x_s y_0)$ for suitable
+representatives $x_s$. These three functions are restrictions of $f$,
+up to a constant phase, so their internal cut ranks remain at most two.
+Choose $y_1$ with $r_0(y_1)=\alpha\ne\beta=r_1(y_1)$. Then
+\[
+ p(x)=\frac{f(xy_1)\overline{f(xy_0)}-\alpha}{\beta-\alpha}.
+\]
+At an internal cut, the product in the numerator has rank at most
+$2\cdot2=4$; subtraction of a constant raises rank by at most one.
+Thus $p$ has cut ranks at most five, regardless of how small
+$|\beta-\alpha|$ is.
+
+A zero-one coefficient table of rank $r$ has at most $2^r$ distinct rows:
+choose $r$ columns spanning the column space; those columns distinguish
+all rows. Consequently $p$ has at most 32 residual functions at every
+cut. Reading a bit changes the residual function by a deterministic
+transition. The resulting Boolean computation uses a fixed finite set
+of states. Each transition is a function on at most 32 states, selected
+by the input bit. Composition of these functions is associative and
+can be computed by a balanced tree with $O(|x|)$ operations and depth
+$O(\log(|x|+1))$. Each operation has constant size. Its Boolean circuit
+can be made reversible by retaining intermediate results, copying the
+final answer, and reversing the computation. The cost remains linear,
+and the depth remains logarithmic.
+\end{proof}
+
+The finite-alphabet row bound is proved in
+\nolinkurl{TNLean/MPS/MPU/FiniteAlphabetRows.lean}; the affine-product
+factorization and Boolean residual bound are proved in
+\nolinkurl{TNLean/MPS/MPU/PhaseSelectorRows.lean}. The denominator in the
+selector formula is used to identify a Boolean function classically;
+it is not implemented by a quantum amplitude amplification step.
+
+\section{An exact circuit}
+
+\begin{theorem}\label{thm:exact}
+If every consecutive operator Schmidt rank of a diagonal $N$-qubit
+unitary is at most two, it has an exact circuit with
+\[
+ G=O(N^{\log_2 3})
+\]
+one- and two-qubit gates. One may choose either $O(N)$ auxiliary qubits
+and depth $O(G)$, or $O(G)$ auxiliary qubits and depth $O(\log(N+1))$.
+On a line, the first construction can be routed to give gate count and
+depth $O(N^{1+\log_2 3})$, with $O(N)$ auxiliary qubits.
+\end{theorem}
+\begin{proof}
+Pad to a power of two by adding unused variables; this changes $N$ by a
+factor less than two. Split the variables into equal consecutive halves.
+Lemma~\ref{lem:circle} and its transpose give a decomposition as in
+Lemma~\ref{lem:selector}, possibly with the two halves interchanged.
+A rank-one cut requires only two phase factors.
+
+It is convenient to implement a phase function controlled by a single
+bit $c$. Compute $p$ reversibly, and form $c_0=c\wedge\neg p$ and
+$c_1=c\wedge p$. Recursively apply $g$ controlled by $c$, $r_0$
+controlled by $c_0$, and $r_1$ controlled by $c_1$. Erase the two new
+controls and $p$. On every computational basis vector the resulting
+phase is $g(x)^c r_{p(x)}(y)^c$, as required. By linearity the same
+identity holds on an arbitrary input state. At a leaf, an arbitrary
+single-variable phase under one control is a two-qubit diagonal gate.
+The root control is initialized to one and erased at the end.
+
+The gate count satisfies $G(n)\leq3G(n/2)+Cn$, so
+$G(n)=O(n^{\log_2 3})$. In a sequential traversal, auxiliary storage is
+reused between the three recursive calls. The simultaneously needed
+interval lengths sum to at most $n+n/2+n/4+\cdots$, giving $O(n)$
+auxiliary qubits.
+
+For the depth bound, give every node its own copies of the computational
+basis bits in its interval, using controlled-NOT gates. This operation
+is coherent on superpositions; it does not copy an arbitrary unknown
+quantum state. The total number of copies is bounded by
+\[
+ \sum_{d=0}^{\log_2N}3^d\frac{N}{2^d}=O(N^{\log_2 3}).
+\]
+All copies can be distributed in depth $O(\log N)$ with arbitrary
+pairwise interactions. Compute all node selectors in parallel by the
+balanced computations in Lemma~\ref{lem:selector}. Propagate the controls
+from root to leaves, in constant depth per tree level. Apply the leaf
+phase gates in parallel, then reverse the controls, selectors, and
+copies. The total depth is logarithmic and all auxiliary qubits are
+erased. Finally, in the sequential construction, at most $O(N)$ qubits
+are present. Routing each two-qubit interaction by $O(N)$ swaps gives
+the stated bound on a line.
+\end{proof}
+
+The proof is an existence statement for arbitrary exact gates. It does
+not bound the bit complexity of identifying the two projective types
+from inexact tensor data. Nor does it give exact synthesis over a fixed
+finite gate set. These distinctions are essential when phases can be
+arbitrary complex numbers.
+
+\section{Approximation without a rank-two restriction}
+
+\begin{theorem}\label{thm:approx}
+Suppose $\operatorname{rank}M_k\leq D$ at every consecutive cut.
+For $0<\varepsilon<1$, the diagonal unitary $U_f$ has a circuit whose
+restriction to data with clean auxiliary input is
+$\widetilde U_f\otimes|0\rangle$, where
+\[
+ \|\widetilde U_f-U_f\|\leq\varepsilon.
+\]
+Its gate count and auxiliary space are polynomial in
+$N,D,\log(1/\varepsilon)$. No lower bound on a nonzero Schmidt value is
+needed. This is a nonuniform existence statement; a precision or
+conditioning guarantee for converting arbitrary supplied tensor data
+is not asserted.
+\end{theorem}
+\begin{proof}
+Normalize the phase vector as
+$\psi(x)=2^{-N/2}f(x)$. Its norm is one and its consecutive Schmidt
+ranks are at most $D$. Choose a right-canonical open-boundary MPS for
+$\psi$. Write its matrices as $A_j(x_j)$; each has operator norm at most
+one, since the canonical condition is
+$\sum_s A_j(s)A_j(s)^\dagger=I$. The two endpoint bonds have dimension
+one. Hence
+\[
+ \psi(x)=A_1(x_1)\cdots A_N(x_N),\qquad \|A_j(s)\|\leq1.
+\]
+Round every real and imaginary matrix entry to $b$ binary fractional
+places, and evaluate the product with fixed-point arithmetic, rounding
+each intermediate scalar operation to the same precision. There are
+$O(ND^2)$ such operations in a row-vector contraction. A matrix-entry
+error gives operator-norm error at most $2D2^{-b}$. At each step the
+rounding of the vector contraction has Euclidean error at most
+$CD^2 2^{-b}$ for an absolute $C$. Comparing with the exact product,
+and using the norm-one bound on the exact matrices, gives
+\[
+ |\widehat\psi(x)-\psi(x)|\leq C'ND^2 2^{-b}
+\]
+uniformly in $x$, provided $ND^2 2^{-b}$ is sufficiently small.
+For example this follows by iterating
+$e_{j+1}\leq(1+2D2^{-b})e_j+CD^2 2^{-b}$.
+Intermediate vectors stay bounded, so $O(\log(D+1))$ integer guard bits
+suffice, including the unrounded sums.
+
+Take
+\[
+ b=\left\lceil N/2+\log_2(C''ND^2/\varepsilon)\right\rceil
+\]
+with a sufficiently large absolute constant $C''$. Rescaling by
+$2^{N/2}$ then computes a number $v(x)$ with
+$|v(x)-f(x)|\leq\varepsilon/20$. For odd $N$, the additional factor
+$\sqrt2$ can be rounded to the same accuracy. Thus $|v(x)|\geq19/20$.
+Computing its argument to error at most $\varepsilon/10$ requires
+only polynomially many bit operations. One explicit procedure chooses
+the larger absolute component, divides the smaller by it, and reduces
+the argument to $\arctan t$ with $|t|\leq1$. The identity
+\[
+ \arctan t=2\arctan\frac{t}{1+\sqrt{1+t^2}}
+\]
+reduces the Taylor-series argument in absolute value to at most
+$\sqrt2-1$. The series therefore converges geometrically. Division has
+a denominator bounded away from zero; the square root is in $[1,\sqrt2]$.
+Binary division, bisection for the square root, and
+$O(\log(1/\varepsilon))$ Taylor terms, with suitably increased working
+precision, all have polynomial cost. Signs and the chosen component
+determine the quadrant. A possible discontinuity of the principal
+argument across its branch cut is immaterial after exponentiation.
+
+Implement this Boolean calculation reversibly, retaining its intermediate
+results. If its final angle is represented in binary, apply the
+corresponding single-qubit phase gates to those bits. Their product
+multiplies the basis input by the computed phase. Reverse the entire
+calculation. Auxiliary qubits return exactly to zero. The resulting
+phase $\widetilde f(x)$ obeys
+$|\widetilde f(x)-f(x)|\leq\varepsilon$ uniformly: normalization of
+$v(x)$ contributes at most $2|v(x)-f(x)|$, and the angle approximation
+contributes its absolute error. For diagonal operators, the operator
+norm of their difference is precisely this maximum phase error.
+All working precisions and operation counts are polynomial in the
+stated parameters, completing the proof.
+\end{proof}
+
+The factor $2^{N/2}$ costs $O(N)$ precision bits, rather than an
+exponential number of gates. This is the distinction between evaluating
+a diagonal phase and implementing a general unitary from its matrix
+entries. The latter cannot be reduced to phase evaluation in this way.
+
+\begin{corollary}\label{cor:monomial}
+Every monomial MPU of fixed maximal bond dimension admits an
+operator-norm approximation with gate count and clean auxiliary space
+polynomial in $N,\log(1/\varepsilon)$, without restricting its phase
+alphabet or smallest Schmidt value.
+\end{corollary}
+\begin{proof}
+Write $U|x\rangle=f(x)|F(x)\rangle$. The permutation matrix $P_F$ has
+coefficients $|U_{yx}|^2$, so it has an MPO representation of maximal
+bond dimension at most $D^2$. The diagonal unitary $P_F^\dagger U$
+then has maximal bond dimension at most $D^3$. The exact permutation
+circuit proved in
+\nolinkurl{docs/audits/2026-10-02_mpu_finite_alphabet_circuits.tex}
+implements $P_F$ with $O(N8^{D^2})$ gates. Apply
+Theorem~\ref{thm:approx} to the diagonal factor. Left multiplication
+by $P_F$ preserves operator-norm error. The dependence on variable $D$
+in this corollary is exponential, because of the permutation step.
+\end{proof}
+
+\section{Verification and relation to the general theorem}
+
+The script \nolinkurl{scripts/check_mpu_diagonal_rank_two.py} checks
+exact recursive reconstruction on nearest-neighbour phase interactions,
+star interactions in both orientations, parity phases, projection phases, and product phases,
+using rational complex numbers of modulus one. It verifies all cut ranks,
+all Boolean selector rank bounds, and the residual-state bound on each
+recursive call. Enumeration of small examples is a check of the
+identities, not a proof of the asymptotic circuit bound.
+
+The approximation theorem here is a mathematical argument, not a completed
+Lean proof or an implemented reversible arithmetic circuit. The exact
+circuit theorem here is likewise separate from the formalized circle and
+finite-alphabet lemmas. For arbitrary MPUs of fixed bond dimension, the
+companion note's Section~5 proves an exact polynomial circuit bound and
+its operator-norm approximation corollaries, with exactly erased auxiliary
+registers. Those general statements are formalized in Lean. This does not
+assert a formalization of the sharper diagonal circuit bounds or of the
+reversible-arithmetic construction proved in this note.
+\end{document}
