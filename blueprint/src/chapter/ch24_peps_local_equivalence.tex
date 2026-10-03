@@ -1,0 +1,82 @@
+\begin{definition}[Normalized pure-state coefficient matrix]%
+    \label{def:peps_normalized_pure_cut_matrix}
+    \lean{TNLean.PEPS.normalizedPureCutMatrix}
+    \leanok
+    For a coefficient matrix $M$ of a pure state on
+    $\mathcal H_R\otimes\mathcal H_S$, define
+    \begin{align}
+        \widehat M & =\bigl(\operatorname{tr}(MM^\dagger)\bigr)^{-1/2}M.
+        \label{eq:peps_normalized_pure_cut}
+    \end{align}
+    The inverse is taken to be zero when $M=0$. For nonzero $M$,
+    $\widehat M$ represents a normalized pure state.
+\end{definition}
+
+\begin{theorem}[Complementary unitary from equal reduced densities]%
+    \label{thm:peps_pure_cut_local_equivalence}
+    \lean{TNLean.PEPS.normalizedPureCutMatrix_mul_conjTranspose,
+        TNLean.PEPS.exists_unitary_normalizedPureCutMatrix_eq_of_reducedMatrix_eq}
+    \leanok
+    \uses{def:peps_normalized_pure_cut_matrix}
+    Let $A$ and $B$ be coefficient matrices across the same finite
+    bipartition. Every coefficient matrix $M$, in particular $M=A$ and
+    $M=B$, satisfies
+    \begin{align}
+        \widehat M\widehat M^\dagger
+         & =\frac{MM^\dagger}{\operatorname{tr}(MM^\dagger)}.
+        \label{eq:peps_pure_cut_reduced}
+    \end{align}
+    If the reduced densities on $R$ agree, there exists a unitary $U$
+    on $\mathcal H_S$ such that $\widehat B=\widehat A U^{\mathsf T}$.
+    Thus the corresponding pure states differ by the unitary $U$
+    on $S$. This is the finite-dimensional implication used in
+    \cite[Theorem~6.7 and Corollary~6.8]{Schuch2010PEPS}, local source
+    lines 1995--2025.
+\end{theorem}
+
+\begin{proof}\leanok
+    The square of the inverse real square root gives
+    (\ref{eq:peps_pure_cut_reduced}). Equality of the reduced densities
+    is equality of the Gram matrices of $\widehat A^\dagger$ and
+    $\widehat B^\dagger$. The isometry between their ranges extends
+    to a unitary $V$ on $\mathcal H_S$. Taking adjoints gives
+    $\widehat B=\widehat A V^\dagger$, so $U=(V^\dagger)^{\mathsf T}$ suffices.
+\end{proof}
+
+\begin{theorem}[Local equivalence of coherent physical torus closures]%
+    \label{thm:peps_torus_physical_local_equivalence}
+    \lean{TNLean.PEPS.IsGIsometric.torusPhysicalCut_local_equivalence_of_isSimplyConnected_and_winding}
+    \leanok
+    \uses{thm:peps_torus_physical_cut_density,
+        def:peps_normalized_pure_cut_matrix}
+    Assume the geometric winding hypotheses of
+    \ref{thm:peps_torus_physical_cut_density}. Let $A$ and $B$ be the actual
+    physical coefficient matrices of any two nonzero coherent
+    superpositions of commuting torus closures. Every operator $O$ on
+    the physical region $R$ has the same normalized expectation in
+    the two states:
+    \begin{align}
+        \operatorname{tr}(O\widehat B\widehat B^\dagger)
+         & =\operatorname{tr}(O\widehat A\widehat A^\dagger).
+        \label{eq:peps_torus_local_expectation}
+    \end{align}
+    There also exists a unitary $U$ on the complementary physical
+    factor such that $\widehat B=\widehat A U^{\mathsf T}$.
+    This auxiliary statement has the fixed complementary winding
+    loops as explicit hypotheses. It does not assert the width-one
+    stripe construction of \cite[Theorem~6.7]{Schuch2010PEPS}.
+    Theorem~\ref{thm:peps_torus_simply_connected_boundary_loops}
+    derives the exterior walks for the actual simply connected regions
+    on tori with periods at least three.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_physical_cut_density,
+        thm:peps_pure_cut_local_equivalence}
+    The common physical reduced density of
+    \ref{thm:peps_torus_physical_cut_density} gives
+    $\widehat A\widehat A^\dagger=\widehat B\widehat B^\dagger$.
+    Multiplying by $O$ and taking traces proves
+    (\ref{eq:peps_torus_local_expectation}). Apply
+    \ref{thm:peps_pure_cut_local_equivalence} for the complementary unitary.
+\end{proof}

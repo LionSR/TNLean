@@ -31,6 +31,7 @@ TNLean, the remaining source follows these conceptual layers:
 | Layer | Main areas | Responsibility |
 | --- | --- | --- |
 | 0 | `Algebra` | Tensor-network-facing algebra and compatibility results not owned by QICLean. |
+| 1 | `Circuit` | Local quantum circuits on qudit chains: supported operators, layers and light cones, two-site universality, measurement protocols, teleportation and long-range gates, and local channel circuits. It imports nothing from `MPS`, so it could move to QICLean. |
 | 3 | `MPS.Chain`, `MPS.Core`, `MPS.Overlap` | Matrix-product tensor definitions, finite-Kraus compatibility wrappers, words, blocking, transfer matrices, and overlaps. |
 | 3b | `MPS.MPDO` | MPO, MPDO, and LPDO foundations. |
 | 4 | `MPS.FundamentalTheorem`, `MPS.Symmetry` | The single-block fundamental theorem and symmetry consequences. |

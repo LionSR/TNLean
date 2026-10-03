@@ -1,0 +1,33 @@
+\begin{theorem}[Simply connected integer-cell lift with an exterior collar]%
+    \label{thm:peps_torus_integer_cell_lift}
+    \lean{TNLean.PEPS.exists_integerLift_simplyConnected_exteriorCollar_of_isSimplyConnected}
+    \leanok
+    Let $R$ be a finite region of a torus with positive integer
+    periods, and assume its actual closed-cell realization $X_R$
+    is simply connected. There exists an integer lift $L$ of the
+    occupied vertices, preserving each internal unit step. Put
+    $A=L(R)$ and let $P_A$ be the union of the closed unit squares
+    centered at $A$. Then $P_A$ is simply connected, and every point
+    of its exterior collar projects outside $X_R$:
+    \begin{align}
+        \pi\!\left(\bigl(P_A+[-\tfrac34,\tfrac34]^2\bigr)\setminus P_A\right)
+        \cap X_R & =\varnothing.
+        \label{eq:peps_integer_lift_collar}
+    \end{align}
+    Both conclusions hold for the same integer lift. This is an
+    auxiliary geometric consequence for the block decomposition in
+    \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1935--1990.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_region_planar_lift,
+        thm:peps_torus_region_exterior_collar}
+    Simple connectedness gives a continuous lift of the covering
+    projection over $X_R$. Its image is homeomorphic to $X_R$ and is
+    precisely $P_A$, so $P_A$ is simply connected. Distinct period
+    copies of the lifted cells are disjoint. The separation of
+    integer centers implies that the enlargement by
+    $[-\tfrac34,\tfrac34]^2$ misses every other period copy.
+    A point in the exterior collar also misses $P_A$ itself; hence it
+    cannot project to $X_R$, proving (\ref{eq:peps_integer_lift_collar}).
+\end{proof}

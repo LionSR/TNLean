@@ -1,0 +1,65 @@
+\begin{definition}[Ground space of a finite PEPS region]%
+    \label{def:peps_region_ground_space}
+    \lean{TNLean.PEPS.regionGroundSpace,
+        TNLean.PEPS.regionGroundSpace_eq_span,
+        TNLean.PEPS.mem_regionGroundSpace_iff,
+        TNLean.PEPS.openRegionWeight_mem_regionGroundSpace}
+    \leanok
+    \uses{def:peps_open_region_contraction}
+    Let $R$ be a region of a finite graph carrying PEPS site tensors.
+    Write $T_R(\mu;\sigma)$ for the contraction over the internal bonds,
+    with crossing-bond configuration $\mu$ and physical configuration
+    $\sigma$ on $R$. The local ground space is
+    \begin{align}
+        \mathcal G_R
+         & =\left\{\sum_{\mu}x(\mu)T_R(\mu;\cdot):x\right\}
+        =\operatorname{span}\{T_R(\mu;\cdot):\mu\}.
+        \label{eq:peps_region_ground_space}
+    \end{align}
+    This is the construction of \cite[Section~IV.C.1]{Cirac2021Matrix},
+    local source lines 2003--2008. It applies to arbitrary finite graphs
+    and site-dependent tensors.
+\end{definition}
+
+\begin{theorem}[Boundary dimension bound]%
+    \label{thm:peps_region_ground_space_dimension}
+    \lean{TNLean.PEPS.finrank_regionGroundSpace_le}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    If the virtual space on a crossing edge $e$ has dimension $D_e$, then
+    $\dim\mathcal G_R\leq\prod_{e\in\partial R}D_e$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The contraction is a linear map from the boundary virtual space
+    onto $\mathcal G_R$, so its range has dimension at most that of its
+    domain.
+\end{proof}
+
+\begin{theorem}[Local slices of a closed PEPS]%
+    \label{thm:peps_region_ground_space_slice}
+    \lean{TNLean.PEPS.stateCoeff_slice_mem_regionGroundSpace,
+        TNLean.PEPS.localOperator_stateCoeff_slice_eq_zero}
+    \leanok
+    \uses{def:peps_region_ground_space}
+    Let $\psi$ be the closed PEPS vector. For each fixed complementary
+    physical configuration $\tau$, the vector
+    $\sigma\mapsto\psi(\sigma,\tau)$ belongs to $\mathcal G_R$.
+    Consequently, if a linear operator $h_R$ satisfies
+    $\mathcal G_R\subseteq\ker h_R$, then
+    $h_R\psi(\cdot,\tau)=0$.
+    This is the local contraction assertion underlying frustration
+    freeness in \cite[Section~IV.C.1]{Cirac2021Matrix}, local source
+    lines 2008--2011.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_open_region_cut}
+    If a global virtual configuration exists, every bond space has
+    positive dimension. The exact contraction across the cut gives
+    $\psi(\sigma,\tau)=\sum_\mu
+        T_R(\mu;\sigma)T_{R^c}(\mu;\tau)$, which is a vector of
+    (\ref{eq:peps_region_ground_space}). If no global virtual
+    configuration exists, the defining sum for $\psi$ is empty and
+    the slice is zero. Applying $h_R$ proves the final assertion.
+\end{proof}
