@@ -1,0 +1,43 @@
+\begin{theorem}[Physical transport of the two-cycle flux operation]%
+    \label{thm:peps_regular_two_cycle_physical_flux_move}
+    \lean{TNLean.PEPS.regularRegionTwoCycleMove_coordinateTranslation,
+        TNLean.PEPS.regularRegionTwoCyclePhysicalMove_commute_vertexTranslation,
+        TNLean.PEPS.regularRegionTwoCyclePhysicalMove_commute_localProjector,
+        TNLean.PEPS.exists_unitary_regularTwoCyclePhysicalFluxMove}
+    \leanok
+    \uses{thm:peps_regular_two_cycle_flux_move,
+        thm:peps_regular_cycle_permutation_support,
+        thm:peps_regular_physical_unitary_transport}
+    Let the original physical site maps of a finite regular block be
+    $G$-isometric. Choose a spanning tree, a root, and two distinct internal
+    bonds $e_0,e_1$ outside the tree. There is one unitary $W$ on the original
+    physical block such that, for every $g\in G$ and crossing configuration $\theta$,
+    \begin{align}
+        W\Psi_R(u_g,\theta)=\Psi_R(u'_g,\theta).
+    \end{align}
+    Here $u_g$ equals $g$ on $e_0$ and the identity elsewhere;
+    $u'_g$ equals $g$ on $e_0,e_1$ and the identity elsewhere.
+    Both $\Psi_R$ are the actual inserted-bond region contractions of the
+    original tensors. The unitary is chosen before $g$ and $\theta$.
+    No coefficient or Gram identity is a hypothesis.
+    This is the original-physical-space realization of the auxiliary two-cycle
+    operation for \cite[Theorem~6.16]{Schuch2010PEPS}; the six-vertex lattice
+    geometry and arbitrary open-string scope remain separate.
+\end{theorem}
+
+\begin{proof}\leanok
+    In tree coordinates, an independent vertex translation acts on all cycle
+    labels by conjugation with the root translation. Controlled multiplication
+    commutes with that conjugation and leaves the other coordinates unchanged.
+    The canonical physical permutation therefore commutes with independent
+    vertex translations, and hence with their average, the product local
+    invariant projector $P$.
+    If $A$ is the product of the original physical site maps, local
+    $G$-isometry gives $A^\dagger A=cP$ for a derived $c>0$.
+    Thus $A$ and $AQ$ have equal Gram matrices, and the unitary extension
+    theorem gives one $W$ with $WA=AQ$.
+    Apply this identity to each actual canonical twisted column.
+    The canonical two-cycle operation gives the required new column,
+    and the original physical map recovers the actual original contractions
+    for every twist and boundary configuration.
+\end{proof}
