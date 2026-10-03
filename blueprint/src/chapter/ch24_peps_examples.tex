@@ -2014,9 +2014,9 @@ operators.
     Suppose every bond space has positive dimension. The coefficient
     of the PEPS at physical configurations $\sigma$ on $R$ and $\tau$
     on its complement is exactly
-    \[
+    \begin{align}
         \psi(\sigma,\tau)=\sum_\mu T_R(\mu;\sigma)T_{R^c}(\mu;\tau).
-    \]
+    \end{align}
     In particular this holds for regular bonds of any finite group.
     If the region coefficient is instead defined by summing global
     edge assignments, it equals $T_R$ multiplied by the product of
@@ -2075,11 +2075,11 @@ operators.
     Then the genuine open tensor of every region is invariant under
     simultaneous left translation of its crossing labels. Consequently
     $AP=A$ and the physical cut satisfies
-    \[
+    \begin{align}
         K=AB^{\mathsf T}=APB^{\mathsf T},\qquad
         ACB^{\mathsf T}=\frac{K}{\sqrt r},
         \quad C=\frac P{\sqrt r},\quad r=|G|^n.
-    \]
+    \end{align}
     In the group bases of regular and dual regular legs, this is the
     inherited boundary symmetry of the proof of
     \cite[Theorem~6.9]{Schuch2010PEPS}. It identifies the contraction
@@ -2102,11 +2102,11 @@ operators.
     \leanok
     Let $I$ be a finite set, let $J_i$ be finite sets indexed by $i\in I$,
     and let $P_i$ be a condition on $J_i$. In every commutative semiring,
-    \[
+    \begin{align}
         \prod_{i\in I}\sum_{j\in J_i}\mathbf1_{P_i(j)}
         =\sum_{f\in\prod_{i\in I}J_i}
         \mathbf1_{\{P_i(f_i)\text{ for every }i\in I\}}.
-    \]
+    \end{align}
     Thus multiplying the separate numbers of admissible choices counts
     the admissible simultaneous choices.
 \end{lemma}
@@ -2214,20 +2214,20 @@ operators.
     For a region $R$, let $F_v$ be a physical matrix at each vertex, allowing
     different input and output dimensions at different vertices. Their product
     matrix is
-    \[
+    \begin{align}
         F_R(\tau,\sigma)=\prod_{v\in R}F_v(\tau_v,\sigma_v).
-    \]
+    \end{align}
     Then $(FL)_R=F_RL_R$, $(F^\dagger)_R=F_R^\dagger$, and identity local maps
     give the identity on the physical space of the region. In particular,
     local isometries give an isometry $F_R$.
 
     Applying $F_R$ to the actual open-region tensor is the contraction of the
     transformed site coefficients:
-    \[
+    \begin{align}
         (F_R T_R)(\tau,\mu)=
         \sum_{\eta:\eta|_{\partial R}=\mu}
         \prod_{v\in R}\sum_s F_v(\tau_v,s)A_v(s,\eta|_v).
-    \]
+    \end{align}
     This is the physical operation on a block used in
     \cite[\S6.1, accessible virtual coordinates]{Schuch2010PEPS}.
 \end{lemma}
@@ -2257,10 +2257,10 @@ operators.
     $A_v(s,\eta)=a_v(\eta;s)$, for $\eta\in G^{E_v}$.
     Simultaneous left translation acts on functions by
     $(U_gf)(\eta)=f(g^{-1}\eta)$, and its invariant projector has entries
-    \[
+    \begin{align}
         P_v(\eta,\theta)=\frac1{|G|}\sum_{g\in G}
         \mathbf 1_{\{\eta=g\theta\}}.
-    \]
+    \end{align}
     The local Gram kernel is
     $\sum_s\overline{a_v(\eta;s)}a_v(\theta;s)$.
 \end{definition}
@@ -2302,10 +2302,10 @@ operators.
     For any finite region $R$, the entry $(\mu,\nu)$ of
     $T_R^\dagger T_R$ is the sum over pairs of incident-edge assignments
     with crossing labels $\mu,\nu$ of
-    \[
+    \begin{align}
         \prod_{v\in R}\sum_s
         \overline{a_v(\eta|_{E_v};s)}a_v(\theta|_{E_v};s).
-    \]
+    \end{align}
     This identity requires no isometry assumption.
 \end{lemma}
 \begin{proof}\leanok
@@ -2376,11 +2376,11 @@ operators.
     and $I_R$ internal edges. Suppose the local Gram kernels are
     $A_v^\dagger A_v=c_vP_v$. For unnormalized regular bonds and
     no inserted bond operators, the genuine open-region tensor satisfies
-    \[
+    \begin{align}
         T_R^\dagger T_R=\kappa_R P_{\partial R},\qquad
         \kappa_R=\left(\prod_{v\in R}c_v\right)
         \frac{|G|^{I_R+1}}{|G|^{V_R}}.
-    \]
+    \end{align}
     The boundary may be empty. In particular, positive local Gram
     factors give an isometry on the invariant boundary space after
     dividing by $\sqrt{\kappa_R}$, also when the region contains cycles.
@@ -2550,10 +2550,10 @@ operators.
     connected graph. The genuine open-region map $T_R$ is $G$-isometric for
     simultaneous regular translation on the crossing bonds. Its derived
     positive factor is
-    \[
+    \begin{align}
         c_R=\left(\prod_{v\in R}c_v\right)
         |G|^{I_R+1-|R|},
-    \]
+    \end{align}
     where $I_R$ is the number of internal edges. This includes blocks with
     internal cycles and blocks with no crossing bonds. It is the actual
     finite-region form of the stability and blocking argument in
@@ -2932,9 +2932,9 @@ operators.
     \uses{thm:peps_integer_cell_no_holes}
     Let $A\subset\mathbb Z^2$ be finite, with occupied closed-cell union
     $P_A$. Its genuine exterior collar is
-    \[
+    \begin{align}
         E_A=\bigl(P_A+[-3/4,3/4]^2\bigr)\setminus P_A.
-    \]
+    \end{align}
     The exterior band consists of the unoccupied integer centers $q$
     such that $\|q-a\|_\infty\leq1$ for some $a\in A$.
     Join two such centers by an edge precisely when they are horizontal
@@ -2999,9 +2999,9 @@ operators.
     edges pointing north. For a finitely supported signed vertical
     flow $V:\mathbb Z^2\to\mathbb Z$, define its ray potential at the
     cell center $q$ by
-    \[
-        W(q)=\sum_{\substack{a_2=q_2\\q_1<a_1}}V(a).
-    \]
+    \begin{align}
+        W(q)=\sum_{\substack{a_2=q_2 \\q_1<a_1}}V(a).
+    \end{align}
     The sum is finite because $V$ is finitely supported.
 \end{definition}
 
@@ -3013,14 +3013,14 @@ operators.
     \uses{def:peps_integer_contour_ray_potential}
     Write $e=(1,0)$ and $n=(0,1)$. For any finitely supported signed
     vertical flow,
-    \[
+    \begin{align}
         W(q+e)-W(q)=-V(q+e).
-    \]
+    \end{align}
     If a finitely supported horizontal flow $H$ satisfies conservation
-    \[
+    \begin{align}
         H(a)+V(a)-H(a-e)-V(a-n)=0
         \qquad(a\in\mathbb Z^2),
-    \]
+    \end{align}
     then also $W(q+n)-W(q)=H(q+n)$.
     These are auxiliary winding-potential identities for the contour
     argument associated with \cite[proof of Theorem~6.9]{Schuch2010PEPS}.
@@ -4069,10 +4069,10 @@ operators.
     Let $D$ be a nonempty finite set and $\phi\in\mathbb C^A$.
     Define $J_\phi:\mathbb C^D\to\mathbb C^{D\times A}$ by
     $(J_\phi)_{(d,a),s}=\mathbf 1_{\{d=s\}}\phi(a)$, and set
-    \[
+    \begin{align}
         \rho_\phi=|D|^{-1}J_\phi J_\phi^\dagger,
         \qquad K_{\phi,\chi}=|D|^{-1/2}J_\phi J_\chi^{\mathsf T}.
-    \]
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Reduced matrix of a fixed boundary factor]%
@@ -4091,10 +4091,10 @@ operators.
     If $\|\phi\|=1$, then $J_\phi$ is an isometry and $\rho_\phi$ is
     a positive density of trace one and rank $|D|$, satisfying
     $\rho_\phi^2=|D|^{-1}\rho_\phi$. Moreover,
-    \[
+    \begin{align}
         K_{\phi,\chi}K_{\phi,\chi}^\dagger
         =\|\chi\|^2\rho_\phi.
-    \]
+    \end{align}
     These identities persist under bijective changes of physical coordinates.
     A unitary acting on the complementary indices leaves the reduced matrix
     unchanged. If a nonzero coefficient matrix has reduced matrix
@@ -4162,10 +4162,10 @@ operators.
     canonical cut matrix, before the complementary controlled unitary.
     Then the fixed density $\rho_R^0$, chosen before the sectors and
     coefficients, satisfies
-    \[
+    \begin{align}
         C_\lambda C_\lambda^\dagger
         =\operatorname{tr}(C_\lambda C_\lambda^\dagger)\rho_R^0.
-    \]
+    \end{align}
     If $C_\lambda\ne0$, its trace is positive and its normalized reduced
     density equals $\rho_R^0$. Consequently its rank is $|G|^n$, its
     nonzero spectrum is flat, and its von Neumann and all nonnegative
@@ -4659,10 +4659,10 @@ operators.
     \leanok
     \uses{thm:peps_connected_regular_region_gram}
     In a nonempty connected region, $V_R\leq I_R+1$. Thus
-    \[
+    \begin{align}
         \frac{|G|^{I_R+1}}{|G|^{V_R}}
         =|G|^{I_R+1-V_R}.
-    \]
+    \end{align}
     The exponent is the cycle rank. For a tree it vanishes, so that
     the region Gram factor is just the product of the local factors.
 \end{lemma}
@@ -4715,10 +4715,10 @@ operators.
     Set $b=n+1$ and $r=|G|^n$, and let $P$ be the averaging projector
     on $\mathbb C[G^b]$. The unnormalized bipartite boundary vector has
     coefficients
-    \[
+    \begin{align}
         \Psi(a,c)=\sum_{z\in G}\prod_{i=0}^{b-1}\delta_{a_i,zc_i}
         =|G|P_{a,c}.
-    \]
+    \end{align}
     Its normalized coefficient matrix is $C=P/\sqrt r$, and its reduced
     density operator is $\rho=P/r$. These are the virtual vectors used
     in the proof of \cite[Theorem~6.9]{Schuch2010PEPS}.
@@ -4789,10 +4789,10 @@ operators.
     \label{def:peps_renyi_entropy}
     \lean{renyiEntropy}\leanok
     For a positive density $\rho$ and $\alpha>0$, $\alpha\ne1$, define
-    \[
+    \begin{align}
         S_\alpha(\rho)=(1-\alpha)^{-1}
         \log\operatorname{tr}(\rho^\alpha),
-    \]
+    \end{align}
     where the real power is defined spectrally. Set $S_1(\rho)=S(\rho)$
     and $S_0(\rho)=\log\operatorname{rank}\rho$.
 \end{definition}
@@ -4826,9 +4826,9 @@ operators.
     \uses{thm:peps_regular_boundary_density, lem:peps_flat_density_entropy}
     For $b=n+1$ regular boundary legs, the normalized virtual reduced
     density operator has von Neumann entropy
-    \[
+    \begin{align}
         S(\rho)=\log(|G|^n)=n\log|G|=b\log|G|-\log|G|.
-    \]
+    \end{align}
     This is the spectral calculation in
     \cite[Theorem~6.9]{Schuch2010PEPS}, before identifying the virtual
     boundary with a physical PEPS region.
@@ -4904,10 +4904,10 @@ operators.
     Then $\widehat M=M/\sqrt{c_A}$ and
     $\widehat N=N/\sqrt{c_B}$ are isometric on the invariant boundary
     subspace. The normalized bipartite vector with coefficient matrix
-    \[
+    \begin{align}
         \widehat M C\widehat N^{\mathsf T}
         =\frac{MPN^{\mathsf T}}{\sqrt{c_A}\sqrt{c_B}\sqrt r}
-    \]
+    \end{align}
     has reduced von Neumann entropy $n\log|G|$.
     For the actual cut maps of
     Theorem~\ref{thm:peps_regular_open_region_projector}, the numerator
@@ -4950,9 +4950,9 @@ operators.
     the actual physical PEPS vector to a unit vector. Its reduced state
     on $R$ has rank $r=|G|^{b-1}$ and a flat spectrum:
     $\rho_R^2=r^{-1}\rho_R$. Its von Neumann entropy is
-    \[
+    \begin{align}
         S(\rho_R)=(b-1)\log|G|.
-    \]
+    \end{align}
     This finite untwisted statement is a restricted consequence of the
     calculation in \cite[Theorem~6.9]{Schuch2010PEPS}; it does not assert
     the theorem for arbitrary torus closures. The remaining scope is
@@ -4982,10 +4982,10 @@ operators.
         TNLean.PEPS.regularTweezerState_mulVec}
     \leanok
     The permutation
-    \[
+    \begin{align}
         F(a,b,c)=(cb^{-1}a,b,c),\qquad
         F^{-1}(a,b,c)=(bc^{-1}a,b,c)
-    \]
+    \end{align}
     acts unitarily in the group basis. If $c=tb$, then
     $F^{-1}(ta,b,tb)=(a,b,tb)$. In particular this removes the
     conjugated twist $t=x^{-1}gx$ from the first label using the
@@ -5117,11 +5117,11 @@ operators.
     \uses{def:peps_torus_g_closure, lem:peps_torus_bond_network_gauge}
     Let $A$ be invariant under the virtual group action and let $gh=hg$.
     For any column $c$ and row $r$, put
-    \[
+    \begin{align}
         H^c_v=\begin{cases}U_h,&v_x+1=c,\\\mathbb 1,&\text{otherwise},\end{cases}
         \qquad
         V^r_v=\begin{cases}U_g,&v_y+1=r,\\\mathbb 1,&\text{otherwise}.\end{cases}
-    \]
+    \end{align}
     Contracting $A$ with these bond operators gives
     $\ket{\mathcal M(A\mid g,h)}$, independently of $c$ and $r$.
     This is the displacement of commuting loops described after
@@ -5168,10 +5168,10 @@ operators.
     The oriented four-leg
     action sends $(t,r,b,l)$ to $(xt,xr,xb,xl)$; its invariant projector
     has entries
-    \[
+    \begin{align}
         \Pi_{\eta,\theta}
         =\frac{1}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
-    \]
+    \end{align}
     Thus the four regular coordinates agree with the oriented virtual
     action in Definition~6.1 of \cite{Schuch2010PEPS}.
 \end{definition}
@@ -5184,10 +5184,10 @@ operators.
     \uses{def:peps_torus_regular_coordinates, def:peps_g_injective}
     A regular $G$-isometric site tensor $A$ is invariant under common
     translation of its four virtual labels. There is $c>0$ such that
-    \[
+    \begin{align}
         \sum_s\overline{A_s(\eta)}A_s(\theta)
         =\frac{c}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
-    \]
+    \end{align}
     The factor $c$ records the normalization of the site tensor.
 \end{lemma}
 
@@ -5229,12 +5229,12 @@ operators.
     Let $W(\beta)$ denote the product of the bond matrix entries and
     let $\eta_v(\beta)$ be the four labels read by site $v$.
     The overlap of two networks with site tensors $A_v,B_v$ is
-    \[
+    \begin{align}
         \sum_{\beta,\gamma}\overline{W_A(\beta)}W_B(\gamma)
         \prod_v\left(\sum_s
         \overline{A_{v,s}(\eta_v(\beta))}
         B_{v,s}(\eta_v(\gamma))\right).
-    \]
+    \end{align}
     For permutation bonds, the head label is the permutation of the
     tail label. Hence one free label per bond suffices in each network.
 \end{lemma}
@@ -5259,9 +5259,9 @@ operators.
     On a bond $e$ oriented from $s(e)$ to $t(e)$, let $u_e,w_e$ be
     the group elements in the two networks. Vertex translations $q_v$
     are compatible with this bond precisely when
-    \[
+    \begin{align}
         u_e q_{s(e)}=q_{t(e)}w_e.
-    \]
+    \end{align}
     If the equations hold, each bond has one independent group label;
     otherwise there are no compatible labels. For the two bond families
     on a torus with $N$ sites, the count is $|G|^{2N}$.
@@ -5288,9 +5288,9 @@ operators.
         lem:peps_regular_bond_intertwining_count}
     For closures $(g,h)$ and $(g',h')$, a compatible vertex translation
     is constant, $q_v=x$, and its value satisfies
-    \[
+    \begin{align}
         hx=xh',\qquad gx=xg'.
-    \]
+    \end{align}
     Summing over compatible vertex translations therefore gives exactly
     the number of simultaneous intertwiners. This holds also when a
     torus circumference is one.
@@ -5315,11 +5315,11 @@ operators.
         lem:peps_torus_closure_compatibility}
     Let $A_v^\dagger A_v=c_v\Pi_v$ be the local regular isometry identities
     on a torus with $N$ sites, with $c_v>0$. For the actual closure vectors,
-    \[
+    \begin{align}
         \langle\psi_{g,h},\psi_{g',h'}\rangle
         =\left(\prod_v c_v\right)|G|^N
         \#\{x\in G:hx=xh',\ gx=xg'\}.
-    \]
+    \end{align}
     For a uniform tensor the prefactor is $c^N|G|^N$. Neither closure
     pair is required to commute.
 \end{theorem}
@@ -5349,9 +5349,9 @@ operators.
     to each pair-conjugacy class is nonzero, and distinct class vectors
     are orthogonal. Their family is therefore linearly independent.
     More precisely,
-    \[
+    \begin{align}
         \|\psi_{g,h}\|^2=c^N|G|^N|Z_G(g)\cap Z_G(h)|>0.
-    \]
+    \end{align}
     Restricting to commuting classes proves the independence assertion
     underlying \cite[Theorem~5.9]{Schuch2010PEPS} in the regular
     $G$-isometric case. The all-class assertion is an auxiliary extension:
@@ -5452,10 +5452,10 @@ operators.
     \leanok
     Let $F$ be a rectangular physical matrix. Its product over a finite
     site set $\Lambda$ has coefficients
-    \[
+    \begin{align}
         (F^{\otimes\Lambda})_{\tau,\sigma}
         =\prod_{v\in\Lambda}F_{\tau(v),\sigma(v)}.
-    \]
+    \end{align}
     The transformed site tensor is
     $(FA)^q_{t,r,b,l}=\sum_s F_{q,s}A^s_{t,r,b,l}$.
     Input and output physical dimensions may differ.
@@ -5470,10 +5470,10 @@ operators.
     \uses{def:peps_physical_product_map, def:peps_torus_g_closure}
     Applying $F$ at every physical site composes the local site map
     with $F$ and preserves every virtual bond operator. In particular,
-    \[
+    \begin{align}
         F^{\otimes\Lambda}\ket{\mathcal M(A\mid g,h)}
         =\ket{\mathcal M(FA\mid g,h)}.
-    \]
+    \end{align}
     The identity holds for arbitrary torus bond operators, with no
     invariance or injectivity hypothesis. It is the physical inverse
     operation used in \cite[Theorem~5.9]{Schuch2010PEPS}.
@@ -5498,10 +5498,10 @@ operators.
     For a partition $\Lambda=R\sqcup R^c$, let $C_R(\psi)$ be the
     coefficient matrix of a physical vector in the two sets of
     configuration coordinates. Then
-    \[
+    \begin{align}
         C_R(F^{\otimes\Lambda}\psi)
         =F^{\otimes R}C_R(\psi)(F^{\otimes R^c})^{\mathsf T}.
-    \]
+    \end{align}
     Consequently its rank cannot increase. If physical product maps
     send $\psi$ to $\phi$ and $\phi$ back to $\psi$, their Schmidt
     ranks agree across every partition. Neither product map need be
@@ -5566,16 +5566,16 @@ operators.
     neighbours east and north of $v$, and let $s_v=(t_v,r_v,b_v,l_v)$ denote the
     physical basis label of the projector site. For arbitrary bond operators
     $O^H_v,O^V_v$, set
-    \[
+    \begin{align}
         H_v(q)=U_{q_{e(v)}}O^H_vU_{q_v^{-1}},\qquad
         V_v(q)=U_{q_v}O^V_vU_{q_{n(v)}^{-1}}.
-    \]
+    \end{align}
     The actual torus contraction of the projector sites has coefficient
-    \[
+    \begin{align}
         \Psi_\Pi(s)=|G|^{-N}\sum_{q:\mathbb Z_w\times\mathbb Z_h\to G}
         \prod_v H_v(q)_{l_{e(v)},r_v}\,V_v(q)_{t_v,b_{n(v)}},
         \qquad N=wh.
-    \]
+    \end{align}
     No semi-regularity or unitarity assumption is required for this identity.
     It is the expansion of the projector contraction in
     \cite[Theorem~5.9]{Schuch2010PEPS}.
@@ -5780,10 +5780,10 @@ operators.
         lem:peps_physical_product_cut_rank}
     Let $A$ be regular $G$-injective. For every finite family of closure
     pairs and every physical partition $R$, the two vectors
-    \[
+    \begin{align}
         \sum_s\lambda_s\ket{\mathcal M(A\mid g_s,h_s)},\qquad
         \sum_s\lambda_s\ket{\mathcal M(A_0\mid g_s,h_s)}
-    \]
+    \end{align}
     have the same Schmidt rank across $R$. This is the actual local
     deformation step of \cite[Corollary~6.10]{Schuch2010PEPS}; no
     particular boundary-rank formula is asserted here.
@@ -5852,12 +5852,12 @@ operators.
     For an assignment $u_e\in G$, the inserted regular matrix makes
     the label at $t(e)$ equal to $u_e$ times the label at $s(e)$.
     Equivalently, replace the coefficient at vertex $v$ by
-    \[
+    \begin{align}
         A^u_{v,s}(\eta)=A_{v,s}(\eta^u),\qquad
         \eta^u_e=
         \begin{cases}u_e\eta_e, & v=t(e), \\ \eta_e,&v=s(e).
         \end{cases}
-    \]
+    \end{align}
     Contracting the internal bonds with a fixed crossing configuration
     gives the actual open map $T_R^u$.
 \end{definition}
@@ -5901,11 +5901,11 @@ operators.
     choose local matrices $F_v$ satisfying $F_vA_v=P_v$. The same
     matrices work for every region and every assignment of inserted
     group elements:
-    \[
+    \begin{align}
         \left(\bigotimes_{v\in R}F_v\right)T_R^u(\theta)=B_R^u(\theta),
         \qquad
         \left(\bigotimes_{v\in R}A_v\right)B_R^u(\theta)=T_R^u(\theta).
-    \]
+    \end{align}
     If the sites are $G$-isometric with factors $c_v>0$, one may take
     $F_v=c_v^{-1}A_v^\dagger$. No connectedness or global Gram formula
     is required. These are the accessibility identities of
@@ -5937,9 +5937,9 @@ operators.
     The entries of $(T_R^u)^\dagger T_R^w$ are obtained by summing over
     two internal-bond configurations and one translation $q_v$ per vertex.
     At each incident half-bond the constraint is
-    \[
+    \begin{align}
         \eta^u_{v,e}=q_v\theta^w_{v,e}.
-    \]
+    \end{align}
     The prescribed crossing configurations are retained, and the scalar
     from the local averages is $(\prod_{v\in R}c_v)|G|^{-|R|}$.
 \end{lemma}
@@ -5966,10 +5966,10 @@ operators.
     both assignments $u,w$ are the identity. Suppose also that both are
     the identity on crossing bonds. Then compatibility is equivalent to
     one common translation $x$, with
-    \[
+    \begin{align}
         q_v=x,\qquad \eta_e=x\theta_e,\qquad
         u_ex=xw_e\quad\text{for every internal bond }e.
-    \]
+    \end{align}
     Consequently the sum over compatible vertex translations is the
     corresponding restricted sum over $x\in G$.
 \end{lemma}
@@ -5992,9 +5992,9 @@ operators.
     Let $I_R$ count the internal bonds and let $F\subseteq G$ be any
     allowed set of common translations. With crossing configurations
     $\mu,\nu$, the number of translated pairs of bond assignments is
-    \[
+    \begin{align}
         |G|^{I_R}\sum_{x\in F}\mathbf{1}_{\mu=x\nu}.
-    \]
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -6016,10 +6016,10 @@ operators.
     $W_a=\sum_x a_x L_x^{\otimes b}$. Its matrix entries are
     $(W_a)_{\mu,\nu}=\sum_x a_x\mathbf{1}_{\mu=x\nu}$.
     If $P$ is the invariant-boundary projector, then
-    \[
+    \begin{align}
         W_aP=\left(\sum_xa_x\right)P,
         \qquad PW_aP=\left(\sum_xa_x\right)P.
-    \]
+    \end{align}
 \end{lemma}
 
 \begin{proof}\leanok
@@ -6038,20 +6038,20 @@ operators.
         lem:peps_regular_weighted_boundary_translation}
     Under the hypotheses of
     Lemma~\ref{lem:peps_regular_twisted_synchronization}, put
-    \[
+    \begin{align}
         F_{u,w}=\{x\in G:u_ex=xw_e\text{ for every internal bond }e\},
         \qquad
         \kappa_R=\left(\prod_{v\in R}c_v\right)
         \frac{|G|^{I_R+1}}{|G|^{|R|}}.
-    \]
+    \end{align}
     The actual maps satisfy
-    \[
+    \begin{align}
         (T_R^u)^\dagger T_R^w
         =\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},
         \qquad
         P(T_R^u)^\dagger T_R^wP
         =\kappa_R\frac{|F_{u,w}|}{|G|}P.
-    \]
+    \end{align}
     These are auxiliary finite-region identities with identity operators
     on crossing bonds. The general torus cut of
     \cite[Theorem~6.9]{Schuch2010PEPS} remains separate
@@ -6080,18 +6080,18 @@ operators.
         thm:peps_regular_boundary_physical_realization}
     Let $b=n+1$, let $P$ be the regular boundary projector, and suppose
     specified cut maps satisfy
-    \[
+    \begin{align}
         A^\dagger A=c_AP,\quad c_A>0,\qquad
         PN_s^\dagger N_tP=k_{s,t}P.
-    \]
+    \end{align}
     For coefficients $\lambda_s$, put
     $B_\lambda=(\sum_s\lambda_sN_s)P$ and
     $K_\lambda=AB_\lambda^{\mathsf T}$. If $K_\lambda\ne0$, a positive
     scalar normalizes its coefficient vector, whose reduced density is
-    \[
+    \begin{align}
         \rho_A=
         \frac{1}{c_A|G|^n}APA^\dagger.
-    \]
+    \end{align}
     This density is independent of $\lambda$. It has rank $|G|^n$,
     satisfies $\rho_A^2=|G|^{-n}\rho_A$, and has entropy $n\log|G|$.
     This is a conditional matrix statement; identification of its Gram
@@ -6100,10 +6100,10 @@ operators.
 
 \begin{proof}\leanok
     Expanding the mixed Gram matrices gives
-    \[
+    \begin{align}
         B_\lambda^\dagger B_\lambda=\kappa_\lambda P,\qquad
         \kappa_\lambda=\sum_{s,t}\overline{\lambda_s}\lambda_t k_{s,t}.
-    \]
+    \end{align}
     Nonvanishing of $K_\lambda$ implies $B_\lambda\ne0$; positivity of
     its Gram matrix and its nonzero trace imply $\kappa_\lambda>0$.
     Normalize $A$ and $B_\lambda$ by their positive square-root factors
@@ -6133,9 +6133,9 @@ operators.
     satisfies $T_R^\dagger T_R=c_RP$. Every nonzero superposition
     $\sum_s\lambda_s\psi_s$ has a positive normalization whose reduced
     density on $R$ is the same operator
-    \[
+    \begin{align}
         \rho_R=\frac{1}{c_R|G|^n}T_RPT_R^\dagger.
-    \]
+    \end{align}
     In particular its rank is $|G|^n$, its nonzero spectrum is flat,
     and its entropy is $n\log|G|$.
     This is an auxiliary finite-cut statement with twists confined to
@@ -6244,14 +6244,14 @@ operators.
     graph edges are exactly the top, right, down and left virtual legs.
     The actual closure vector $\psi_{g,h}$ equals the contraction of
     the graph tensor with ordered-head assignment
-    \[
+    \begin{align}
         u_e=
         \begin{cases}
             h^{-1}, & e\text{ is a horizontal wrap bond}, \\
             g,      & e\text{ is a vertical wrap bond},   \\
             1,      & \text{otherwise}.
         \end{cases}
-    \]
+    \end{align}
     Its coefficient vector across any region cut is the actual twisted
     physical cut state. No commutativity or isometry assumption is
     required for these contraction identities. The circumference
@@ -6308,19 +6308,19 @@ operators.
     Let $A$ be regular $G$-isometric on a torus of width and height at
     least three. Let $R$ be a coordinate rectangle of positive side
     lengths satisfying
-    \[
+    \begin{align}
         0<x_0,\quad x_0+x_1<w,\qquad
         0<y_0,\quad y_0+y_1<\ell.
-    \]
+    \end{align}
     Write $b$ for its number of crossing bonds and $P$ for the invariant
     boundary projector. There is one $c_R>0$ with
     $T_R^\dagger T_R=c_RP$. For any finite family of closure pairs
     $(g_s,h_s)$ and coefficients $\lambda_s$ such that
     $\sum_s\lambda_s\psi_{g_s,h_s}\ne0$, a positive normalization of this
     actual torus vector has reduced density on $R$
-    \[
+    \begin{align}
         \rho_R=\frac{1}{c_R|G|^{b-1}}T_RPT_R^\dagger.
-    \]
+    \end{align}
     Hence the normalized reduced density is independent of the
     superposition. It has rank $|G|^{b-1}$ and flat nonzero spectrum,
     and its von Neumann entropy is $(b-1)\log|G|$.
@@ -6599,9 +6599,9 @@ around the two non-contractible cycles must be trivial.
     $(g_1g_2)(g_2^{-1}g_3)(g_4g_3)^{-1}(g_1g_4^{-1})^{-1}
         =g_1g_3g_3^{-1}g_4^{-1}g_4g_1^{-1}=1$.
     Since $\pi$ is multiplicative,
-    \[
+    \begin{align}
         \pi(t)\pi(r)\pi(b)^{-1}\pi(l)^{-1}=\pi(t\,r\,b^{-1}l^{-1})=\pi(1)=1
-    \]
+    \end{align}
     on the support, which gives the operator identity entrywise. A
     one-dimensional representation is the case of a character $\chi$, where
     the identity reads $\chi(t)\chi(r)\chi(b)^{-1}\chi(l)^{-1}=1$.
