@@ -81,3 +81,38 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     to (\ref{eq:asymex_ising_three_trace}), and subtract the sum of the
     four target dimensions from forty.
 \end{proof}
+
+\begin{theorem}[A split four-channel Ising compression]%
+    \label{thm:asymex_ising_three_split}
+    \lean{IsingTwist.isingThreeSplitCompression,
+        IsingTwist.isingBondObjectThree_split_remainder,
+        IsingTwist.isingBondObjectThree_mul_right_eq_right_mul,
+        IsingTwist.isingBondObjectThree_left_mul_eq_mul_left}
+    \leanok
+    \uses{def:asymex_ising_three_product, thm:asymex_ising_sigma_square,
+        thm:asymex_ising_compression, prop:asym_split_intertwiners}
+    There is an explicit four-target compression of $B_3$ with zero remainder.
+    Its left and right maps $W_s,V_s$ satisfy, for every letter $a$ and each
+    of the four weighted targets $C_s$,
+    \begin{align*}
+        B_3^aV_s & = V_sC_s^a, & W_sB_3^a & = C_s^aW_s.
+    \end{align*}
+    In its auxiliary coordinates the letters are the direct sum of
+    $5\widehat A_\sigma$, $3\widehat A_\sigma$,
+    $2\sqrt2 A_1$, $2\sqrt2 A_\psi$, and twenty-six zero matrices.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asymex_ising_compression, thm:asymex_ising_sigma_square,
+        prop:asym_split_intertwiners}
+    Group the first two summands of $\Theta_3$. The stacked product is the
+    direct sum of the twenty-four-dimensional two-object product and
+    $\sqrt2$ times the sixteen-dimensional $\sigma$ square.
+    Take the direct sum of their gauges. The first inverse is its transpose;
+    the second inverse is half its transpose. Their letter identities give
+    the four stated blocks and respectively sixteen and ten zero coordinates.
+    Rearranging the auxiliary coordinates yields the block-diagonal form.
+    The remainder therefore vanishes, and multiplication by the block
+    inclusion and projection gives the two intertwining identities.
+\end{proof}
