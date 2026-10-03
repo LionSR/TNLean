@@ -178,17 +178,66 @@ def czyRightInt (a b c : Fin 2) :
   (czyFusionInt a (b + c) * ((1 : Matrix (Fin (czyDim a)) _ ℤ) ⊗ₖ czyFusionInt b c)).submatrix
     (Fin.cast (congrArg czyDim (add_assoc a b c))) (fun x => (x.1.1, x.1.2, x.2))
 
-set_option maxHeartbeats 2000000 in
--- The finite certificate contains all 32 physical letters and triple fusion maps.
+private theorem czyFusion_supported_associativity_int_000 (i k : Fin 2) :
+    czyLeftInt 0 0 0 * czyTripleInt 0 0 0 i k =
+      (1 : ℤ) • (czyRightInt 0 0 0 * czyTripleInt 0 0 0 i k) := by
+  revert_decide_kernel i k
+
+private theorem czyFusion_supported_associativity_int_001 (i k : Fin 2) :
+    czyLeftInt 0 0 1 * czyTripleInt 0 0 1 i k =
+      (1 : ℤ) • (czyRightInt 0 0 1 * czyTripleInt 0 0 1 i k) := by
+  revert_decide_kernel i k
+
+private theorem czyFusion_supported_associativity_int_010 (i k : Fin 2) :
+    czyLeftInt 0 1 0 * czyTripleInt 0 1 0 i k =
+      (1 : ℤ) • (czyRightInt 0 1 0 * czyTripleInt 0 1 0 i k) := by
+  revert_decide_kernel i k
+
+private theorem czyFusion_supported_associativity_int_011 (i k : Fin 2) :
+    czyLeftInt 0 1 1 * czyTripleInt 0 1 1 i k =
+      (1 : ℤ) • (czyRightInt 0 1 1 * czyTripleInt 0 1 1 i k) := by
+  revert_decide_kernel i k
+
+private theorem czyFusion_supported_associativity_int_100 (i k : Fin 2) :
+    czyLeftInt 1 0 0 * czyTripleInt 1 0 0 i k =
+      (1 : ℤ) • (czyRightInt 1 0 0 * czyTripleInt 1 0 0 i k) := by
+  revert_decide_kernel i k
+
+private theorem czyFusion_supported_associativity_int_101 (i k : Fin 2) :
+    czyLeftInt 1 0 1 * czyTripleInt 1 0 1 i k =
+      (1 : ℤ) • (czyRightInt 1 0 1 * czyTripleInt 1 0 1 i k) := by
+  revert_decide_kernel i k
+
+private theorem czyFusion_supported_associativity_int_110 (i k : Fin 2) :
+    czyLeftInt 1 1 0 * czyTripleInt 1 1 0 i k =
+      (1 : ℤ) • (czyRightInt 1 1 0 * czyTripleInt 1 1 0 i k) := by
+  revert_decide_kernel i k
+
+private theorem czyFusion_supported_associativity_int_111 (i k : Fin 2) :
+    czyLeftInt 1 1 1 * czyTripleInt 1 1 1 i k =
+      ((-1 : ℤ) : ℤ) • (czyRightInt 1 1 1 * czyTripleInt 1 1 1 i k) := by
+  revert_decide_kernel i k
+
 /-- The normalized fusion maps have phase `-1` exactly at the nontrivial triple
 after contraction with a physical letter. This is the restricted correction to
 arXiv:2509.03600, Section II, main.tex lines 283–294, described in
-`docs/paper-gaps/lmsvkl25_czy_associator.tex`. -/
+`docs/paper-gaps/lmsvkl25_czy_associator.tex`.
+
+The finite certificate is split by fusion triple, so that the eight kernel checks are
+independent declarations. -/
 theorem czyFusion_supported_associativity_int (a b c i k : Fin 2) :
     czyLeftInt a b c * czyTripleInt a b c i k =
       (if a = 1 ∧ b = 1 ∧ c = 1 then (-1 : ℤ) else 1) •
         (czyRightInt a b c * czyTripleInt a b c i k) := by
-  revert_decide_kernel a b c i k
+  match a, b, c with
+  | 0, 0, 0 => exact czyFusion_supported_associativity_int_000 i k
+  | 0, 0, 1 => exact czyFusion_supported_associativity_int_001 i k
+  | 0, 1, 0 => exact czyFusion_supported_associativity_int_010 i k
+  | 0, 1, 1 => exact czyFusion_supported_associativity_int_011 i k
+  | 1, 0, 0 => exact czyFusion_supported_associativity_int_100 i k
+  | 1, 0, 1 => exact czyFusion_supported_associativity_int_101 i k
+  | 1, 1, 0 => exact czyFusion_supported_associativity_int_110 i k
+  | 1, 1, 1 => exact czyFusion_supported_associativity_int_111 i k
 
 /-- Complex form of the normalized associator relation on one physical-site image.
 This is the corrected formulation documented in
