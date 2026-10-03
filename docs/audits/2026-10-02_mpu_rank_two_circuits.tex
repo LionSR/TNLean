@@ -43,12 +43,12 @@ the arXiv source archive of version~2,
 Circuits use arbitrary one- and two-qudit gates. Auxiliary registers begin
 and end in $|0\rangle$. Gate bounds are nonuniform existence statements;
 they do not assert an efficient classical procedure for obtaining exact
-gate parameters from inexact tensor data. A Lean formalization of the
-general exact circuit theorem of Section~5 and its operator-norm
-approximation corollaries, including neighboring-pair circuits, exact
-auxiliary erasure, and the periodic-boundary specialization, is pending
-in TNLean pull request~\#8590; it is not part of the repository state
-accompanying this note. The separate rank-two structural argument in the
+gate parameters from inexact tensor data. The general exact circuit
+theorem of Section~5 and its operator-norm approximation corollaries,
+including neighboring-pair circuits, exact auxiliary erasure, and the
+periodic-boundary specialization, are formalized in Lean in
+\nolinkurl{TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean} and
+\nolinkurl{TNLean/MPS/MPU/ApproximateBoundedCutRankCircuit.lean}. The separate rank-two structural argument in the
 first three sections is not yet fully formalized.
 
 \section{A two-operator simultaneous singular-value decomposition}
@@ -91,8 +91,7 @@ singular values.
 
 Unitary polar completion, equality of the two conjugations of $H$, and
 the relative-polar commutation conclusion are proved in the Lean module
-\nolinkurl{TNLean/MPS/MPU/TwoKrausPolar.lean}, which is pending in
-pull request~\#8590 and not yet in the repository. Simultaneous
+\nolinkurl{TNLean/MPS/MPU/TwoKrausPolar.lean}. Simultaneous
 diagonalization and the full conclusion of Lemma~\ref{lem:two-kraus}
 are not yet asserted as Lean theorems.
 
@@ -284,8 +283,7 @@ the identities are operator identities and remain valid in that case.
 
 The clean-record merging identity and the cancellation combining sector
 erasure with the final unitary factor are proved in the Lean module
-\nolinkurl{TNLean/MPS/MPU/TwoSectorMerging.lean}, pending in pull
-request~\#8590 and not yet in the repository. Its hypotheses
+\nolinkurl{TNLean/MPS/MPU/TwoSectorMerging.lean}. Its hypotheses
 explicitly supply an orthogonal projection or a Hermitian involution.
 These algebraic identities support the six-call construction; the
 structural decomposition of an arbitrary Schmidt-rank-two unitary and
@@ -347,8 +345,8 @@ of quantum data is used or required.
 
 The numerical estimate for a recursion with a fixed number of child
 calls is formalized separately by the Lean theorem
-\nolinkurl{MPUCircuit.cost_le_pow_of_constant_branching}, pending in
-pull request~\#8590 and not yet in the repository. Its hypotheses
+\nolinkurl{MPUCircuit.cost_le_pow_of_constant_branching} in
+\nolinkurl{TNLean/MPS/MPU/ConstantBranchingBounds.lean}. Its hypotheses
 concern a numerical recurrence; it does not assert that the controlled
 unitary decomposition above has been formalized. The exact finite-matrix
 identity for the six-call merging is checked in
@@ -650,8 +648,8 @@ a stronger result by optimizing over an affine space of positive
 metrics, and covers nonuniform tensors specified at a single length.
 The averaging argument above is a mathematical proof; this separate
 familywise circuit construction is not asserted to have been formalized
-in Lean. A Lean formalization of the stronger general construction of
-Section~5 is pending in pull request~\#8590.
+in Lean. The stronger general construction of Section~5 is formalized
+in Lean.
 
 Fixed trace boundaries are included. If the coefficient is
 $\operatorname{Tr}(bA_{\alpha_1}\cdots A_{\alpha_N})$, take the enlarged
@@ -1005,13 +1003,17 @@ parameters for the determinant maximizers and unitary extensions
 are allowed as gate parameters; no efficient classical computation
 of those parameters is asserted. The gate set consists of arbitrary
 one- and two-qudit unitaries, as in the source, rather than a fixed
-finite alphabet. Lean formalizations are pending in pull
-request~\#8590 and are not yet in the repository: the general exact
-circuit theorem and its periodic-boundary specialization in
-\nolinkurl{TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean}, and the
-operator-norm approximation statements, with exact auxiliary erasure, in
-\nolinkurl{TNLean/MPS/MPU/ApproximateBoundedCutRankCircuit.lean}.
-These pending statements derive the complete circuit from the given finite
+finite alphabet. The general exact circuit theorem and its
+periodic-boundary specialization are formalized in
+\nolinkurl{TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean}
+(\nolinkurl{MPUCircuit.exists_clean_exact_circuit_of_bounded_cutCoefficientRank},
+\nolinkurl{MPUCircuit.exists_clean_exact_circuit_of_periodic_mpo_unitary}).
+The operator-norm approximation statements, with exact auxiliary erasure,
+are formalized in
+\nolinkurl{TNLean/MPS/MPU/ApproximateBoundedCutRankCircuit.lean}
+(\nolinkurl{MPUCircuit.exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientRank},
+\nolinkurl{MPUCircuit.exists_clean_operatorNorm_approximate_circuit_of_periodic_mpo_unitary}).
+These statements derive the complete circuit from the given finite
 unitary and its consecutive cut-rank bound.
 
 The exact theorem also proves the operator-norm approximation statement:
