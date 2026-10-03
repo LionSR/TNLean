@@ -637,8 +637,8 @@ normalizations.
   `η` is `q v` times the corresponding label of `θ`. The twisted predicate says
   the same after the bond operators `u` (bra) and `w` (ket) are inserted at the
   head of each oriented bond.
-- **Source:** arXiv:1001.3807, the region contraction set up before
-  Theorems 6.7-6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
+- **Source:** arXiv:1001.3807, regular-basis contraction in the proof of
+  Theorem 6.9, `Papers/1001.3807/paper_v3.tex:1935-1990`.
 - **Sanctioned bridges:** `TNLean.PEPS.IsRegionLabelCompatible.exists_common_label`
   and `TNLean.PEPS.isRegionLabelCompatible_iff_exists_translation` (on a
   connected region the labels are one simultaneous translation);
