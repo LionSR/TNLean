@@ -117,7 +117,11 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   dual network reaches on a torus. It also records that stability of
   `G`-isometry under concatenation (Lemma 6.2) is formalized in one
   dimension and for the contraction of one link of two PEPS tensors, with
-  the constants multiplying (resolved).
+  the constants multiplying. Finally it records the scope of the physical
+  entropy and local-equivalence results of Section 6: connected regular
+  regions, contiguous simply connected torus regions with periods at least
+  three, and no identification with the entire parent-Hamiltonian ground
+  space; these remaining restrictions are open.
 - `scp10_g_isometric_commuting_parent_hamiltonian.tex` (scope restriction)
   records, for Lemma 6.11 and Theorem 6.12 of arXiv:1001.3807, that the
   operator `∑ tr[AⁱAʲ(AᵏAˡ)†] |ij⟩⟨kl|` of a `G`-isometric matrix product
