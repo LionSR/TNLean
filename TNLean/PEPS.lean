@@ -168,6 +168,7 @@ import TNLean.PEPS.RegularClosureSuperposition
 import TNLean.PEPS.RegularCoherentGlobalTransport
 import TNLean.PEPS.RegularConnectorHolonomy
 import TNLean.PEPS.RegularControlledBoundaryFactor
+import TNLean.PEPS.RegularCorrelatedChargeGlobalTransport
 import TNLean.PEPS.RegularCycleControlledBoundary
 import TNLean.PEPS.RegularCycleControlledSupport
 import TNLean.PEPS.RegularCycleFluxMeasurement
@@ -277,6 +278,7 @@ import TNLean.PEPS.TorusActualPlaquetteVacancy
 import TNLean.PEPS.TorusActualRouteFluxMove
 import TNLean.PEPS.TorusBlockMultiplicityState
 import TNLean.PEPS.TorusBondCoordinateTransport
+import TNLean.PEPS.TorusChargeFluxCrossing
 import TNLean.PEPS.TorusChargeStringDeformation
 import TNLean.PEPS.TorusClosureSeams
 import TNLean.PEPS.TorusComplementCycleWords
@@ -286,6 +288,7 @@ import TNLean.PEPS.TorusConjCovarianceFamily
 import TNLean.PEPS.TorusControlledBoundaryDensity
 import TNLean.PEPS.TorusControlledBoundaryFactor
 import TNLean.PEPS.TorusCornerRegion
+import TNLean.PEPS.TorusCorrelatedChargeFluxCrossing
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusDirectedBondUpdate
