@@ -33,6 +33,7 @@ import TNLean.MPS.Symmetry.CommonPhysicalFixedPointGroundPath
 import TNLean.MPS.Symmetry.CommonPhysicalFixedPointPath
 import TNLean.MPS.Symmetry.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.CommonPhysicalPolarGroundPath
+import TNLean.MPS.Symmetry.CompactUnitalTensors
 import TNLean.MPS.Symmetry.ContinuousCanonicalNormalization
 import TNLean.MPS.Symmetry.ContinuousInvariantCompression
 import TNLean.MPS.Symmetry.ContinuousProjectionFrame
@@ -48,6 +49,7 @@ import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
 import TNLean.MPS.Symmetry.FiniteRingReconstruction
 import TNLean.MPS.Symmetry.FixedBondPhysicalPathInvariance
+import TNLean.MPS.Symmetry.FixedLineLimitSimplicity
 import TNLean.MPS.Symmetry.FixedPointGappedPath
 import TNLean.MPS.Symmetry.FixedPointGappedPathWitness
 import TNLean.MPS.Symmetry.FixedPointParentIdentification
@@ -68,11 +70,13 @@ import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.LocalVirtualGauge
 import TNLean.MPS.Symmetry.MPDO
 import TNLean.MPS.Symmetry.MPOSymmetry
+import TNLean.MPS.Symmetry.MpvRayLimit
 import TNLean.MPS.Symmetry.NearbyInjectiveAdjointActions
 import TNLean.MPS.Symmetry.NormalizedBondLocalSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
+import TNLean.MPS.Symmetry.PeriodicMPSNormLowerBound
 import TNLean.MPS.Symmetry.PhysicalCharacterGappedPath
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.PhysicalInteractionGap
@@ -107,9 +111,11 @@ import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Symmetry.StringOrderDefs
+import TNLean.MPS.Symmetry.SupportedCompressionIrreducible
 import TNLean.MPS.Symmetry.SupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.SymmetricMPS
 import TNLean.MPS.Symmetry.TimeReversalIndex
+import TNLean.MPS.Symmetry.TransientCornerSpectrum
 import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
 import TNLean.MPS.Symmetry.UniformProjectiveRigidity

@@ -4505,6 +4505,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   threshold. No new tactic or theorem is needed; further uses should first
   consult the existing identities and contraction lemma.
 
+### the spectrum after quotienting by a simple fixed line — candidate
+
+- **Pattern:** identify the maximal generalized eigenspace at one with its
+  eigenspace from algebraic simplicity, then exclude one from the quotient
+  spectrum while retaining every other eigenvalue.
+- **Seen:** the private fixed-line quotient arguments in
+  `TNLean/MPS/Symmetry/FixedLineLimitSimplicity.lean` and
+  `TNLean/MPS/Symmetry/PeriodicMPSNormLowerBound.lean` (2026-10-03).
+- **Abstraction:** a finite-dimensional linear-map lemma for the spectrum of
+  the quotient by a simple fixed line would contain the common argument.
+- **Notes:** two occurrences across two modules; below the promotion threshold.
+
 ## Retired
 
 ### block_words — retired
