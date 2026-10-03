@@ -25,6 +25,11 @@ assume a vertex gauge with identity internal residuals. It is an auxiliary
 flat-region calculation, not the unrestricted disk statement of Theorem 6.9;
 the remaining source scope is recorded in
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped Matrix ComplexOrder

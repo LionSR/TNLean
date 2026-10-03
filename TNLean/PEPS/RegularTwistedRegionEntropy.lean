@@ -22,6 +22,11 @@ complement. This is an auxiliary finite-cut version of the calculation in Schuch
 and Pérez-García, arXiv:1001.3807, Theorem 6.9, proof, lines 2043–2076. The source's
 arbitrary disk cut and torus disentangling argument remain separate; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix ComplexOrder

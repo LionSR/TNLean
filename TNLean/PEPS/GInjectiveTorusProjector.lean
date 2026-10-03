@@ -20,6 +20,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 5.1,
 lines 1278–1296, and the local-left-inverse argument in Theorem 5.9, lines 1582–1621.
 The identities also allow noncommuting pairs and size-one torus dimensions as algebraic
 extensions; no parent-Hamiltonian or ground-space assertion is made.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix

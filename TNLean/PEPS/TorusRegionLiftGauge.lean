@@ -27,6 +27,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, seam deformation
 in `eq:2d:move-strings` and the disentangling proof of Theorem 6.9,
 local source lines 1622–1647 and 1935–2072. Torus dimensions are at least three,
 as required by the existing simple-graph realization of the native bonds.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

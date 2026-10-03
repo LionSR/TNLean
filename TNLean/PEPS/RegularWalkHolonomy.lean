@@ -19,6 +19,11 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, seam deformation in
 `eq:2d:move-strings`, local source lines 1622–1647, and the accessible complement
 cycle argument, lines 1935–1990. This module supplies walk words; it does not
 assume a relation between complement holonomies and boundary transports.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

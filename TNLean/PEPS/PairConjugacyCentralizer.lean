@@ -22,6 +22,11 @@ The source calls the subgroup consisting of elements commuting with a fixed
 element its normalizer; the subgroup in the displayed formula is its
 centralizer. This module counts the closure labels. Identification with a
 parent-Hamiltonian ground space requires the separate ground-space theorem.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 namespace TNLean.PEPS

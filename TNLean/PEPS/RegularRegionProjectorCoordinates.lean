@@ -18,6 +18,11 @@ vertex labels are unrestricted, while every residual cycle label is the identity
 Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, accessible virtual coordinates
 and regular blocking, `Papers/1001.3807/paper_v3.tex`, lines 1765–1920. The coefficient
 formula is derived from the original internal-bond summation; no factorization is assumed.
+
+## References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
 open scoped BigOperators Matrix
