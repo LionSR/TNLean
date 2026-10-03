@@ -199,6 +199,10 @@ from the corrected bond interpolation: its two-site interactions are the
 independent-bond penalties of the normalized bond vector, and its uniform gap
 is one. The blueprint theorem \path{thm:spt_direct_sum_fixed_point_path}
 records it with \path{leanok}.
+In independent-bond coordinates, before regrouping the physical registers,
+\leanid{MPSTensor.normalizedBondInterpolation_parent_uniform_gap} proves the
+same uniform gap of one for every parameter and every positive chain length
+(blueprint lemma \path{lem:spt_independent_bond_gap}).
 
 The forward construction now also joins the canonical two-site parents of
 the actual common physical images of two one-site injective tensors.

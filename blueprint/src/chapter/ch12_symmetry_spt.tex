@@ -92,7 +92,7 @@ of the virtual projective representation.
         MPSTensor.rotatePhysical_polarDeformation_of_unitary_covariance,
         MPSTensor.gaugeEquiv_polarDeformation_of_unitary_covariance}
     \leanok
-    \uses{def:spt_polar_deformation, def:injective}
+    \uses{def:spt_polar_deformation, def:injective, def:gauge_equiv}
     Suppose $A$ is one-site injective. Then $P_\gamma=(1-\gamma)I+\gamma P$
     is positive definite, $A_\gamma$ is injective, and the path is continuous,
     with $A_0=W$ and $A_1=A$. If unitaries $U$ and $K$ satisfy $UM=MK$,
@@ -169,14 +169,14 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:compact_parent_gap,
-        thm:spt_parent_hamiltonian_symmetry}
+    \uses{thm:compact_parent_gap, thm:spt_parent_hamiltonian_symmetry}
     The injective local ground-space projections vary continuously, so their
     complementary projections do as well. Their norms are at most one.
     Compactness gives a uniform norm gap above the kernel. Positivity of
     the parent Hamiltonian makes all its eigenvalues nonnegative; applying
-    the norm bound to a unit eigenvector orthogonal to the kernel bounds
-    every nonzero eigenvalue below by the same positive constant. The
+    the norm bound to a unit eigenvector orthogonal to the kernel shows
+    that the same positive constant is a lower bound for every nonzero
+    eigenvalue. The
     nonzero periodic MPS vector is a zero eigenvector. Finally, covariance
     makes every local parent projection, and hence its periodic sum,
     commute with the physical symmetry.
@@ -186,7 +186,7 @@ of the virtual projective representation.
     \label{def:spt_polar_gapped_interaction_path}
     \lean{MPSTensor.polarGappedInteractionPath}
     \leanok
-
+    \uses{def:spt_common_space_gapped_path}
     Let $A$ be one-site injective with $D>0$, let $U$ be a unitary on-site
     representation, and suppose the tensor covariance is expressed by
     unitary bond conjugation. The canonical two-site parent interactions
@@ -198,8 +198,7 @@ of the virtual projective representation.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{thm:spt_canonical_injective_gapped_path,
-        thm:spt_polar_deformation}
+    \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
     Apply the preceding construction to the injective polar path. The
     endpoint identities give the canonical parents of $W$ and $A$; unitary
     bond-conjugation covariance is preserved by the entire interpolation.
@@ -234,8 +233,8 @@ of the virtual projective representation.
     \lean{MPSTensor.embeddedCanonicalInjectiveGappedPath,
         MPSTensor.embeddedPolarGappedInteractionPath}
     \leanok
-    \uses{thm:spt_embedding_covariance,
-        thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
+    \uses{def:injective, def:spt_polar_deformation,
+        def:spt_common_space_gapped_path}
     Let $A_\gamma$ be a continuous family of one-site injective tensors
     with bond dimension $D>0$, and let $U$ and $V$ be unitary on-site
     representations on $\C^d$ and $\C^m$.
@@ -755,8 +754,7 @@ of the virtual projective representation.
         MPSTensor.exists_unitary_covariance_of_isInjective_unital,
         MPSTensor.exists_unitary_virtual_covariance_of_isOnSiteSymmetric_unital}
     \leanok
-    \uses{def:injective, def:on_site_symmetric,
-        thm:virtual_gauge_fixes_boundary_state}
+    \uses{def:injective, def:on_site_symmetric}
     Let $A$ be one-site injective with $D>0$ and $\E_A(I)=I$.
     There is a positive definite matrix $\Lambda$ with
     $\E_A^\dagger(\Lambda)=\Lambda$. If a unitary physical rotation of $A$
@@ -768,6 +766,8 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:injective_irreducible, lem:trace_mul_transfer_map_adjoint,
+        thm:virtual_gauge_fixes_boundary_state, lem:gauge_equiv_twisted}
     Perron--Frobenius theory gives $\Lambda>0$ and $r>0$ with
     $\E_A^\dagger(\Lambda)=r\Lambda$. Trace duality and unitality give
     \begin{align}
@@ -787,7 +787,8 @@ of the virtual projective representation.
     \lean{MPSTensor.exists_unital_parent_representative_of_isInjective,
         MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}
     \leanok
-    \uses{def:injective}
+    \uses{def:injective, def:on_site_symmetric,
+        def:spt_common_space_gapped_path}
     Let $A$ be one-site injective with $D>0$, and let a fixed unitary
     on-site representation $U$ preserve every periodic MPS vector of $A$.
     There are an injective unital tensor $B$, a nonzero scalar $c$, and
@@ -803,9 +804,12 @@ of the virtual projective representation.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:spt_unitary_virtual_covariance_unital,
-        def:spt_polar_gapped_interaction_path,
-        lem:on_site_symmetric_smul_gauge}
+    \uses{thm:injective_irreducible, thm:unital_data_irreducible,
+        thm:local_ground_space_rescaling,
+        thm:local_ground_space_gauge_invariance,
+        lem:on_site_symmetric_smul_gauge,
+        thm:spt_unitary_virtual_covariance_unital,
+        def:spt_polar_gapped_interaction_path}
     Perron normalization gives $B$ by nonzero rescaling and virtual gauge.
     Both operations preserve the local MPS spaces, hence all canonical
     parent interactions; they also preserve on-site symmetry and
@@ -928,7 +932,8 @@ of the virtual projective representation.
         +\gamma\sum_{i=D_0+1}^{D_0+D_1}|i,i\rangle.
         \notag
     \end{align}
-    The commuting parent Hamiltonians along this interpolation remain gapped.
+    The commuting parent Hamiltonians along this interpolation remain gapped,
+    with the uniform spectral estimate of Lemma~\ref{lem:spt_independent_bond_gap}.
     Their symmetry is
     \begin{align}
         (V_g^0\oplus V_g^1)\otimes
@@ -1006,7 +1011,10 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{TNLean.Algebra.ProjectiveRepresentation.rephase,
         TNLean.Algebra.circleScalar_mem_unitaryGroup,
         TNLean.Algebra.ProjectiveRepresentation.rephase_mem_unitaryGroup,
-        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous}
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous,
+        TNLean.Algebra.ProjectiveRepresentation.norm_factorSystem,
+        TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
     Multiplying each matrix $V_g$ of a projective representation with factor system
@@ -1015,7 +1023,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $V^0$ be a unitary projective representation whose factor system is the
     pointwise phase $\omega_0/|\omega_0|$.  If $\omega_1$ is cohomologous to
     $\omega_0$, then multiplying each $V_g^0$ by a unit-modulus scalar gives a unitary
-    projective representation with factor system $\omega_1/|\omega_1|$
+    projective representation with factor system $\omega_1/|\omega_1|$.
+    If two unitary virtual actions on spaces of positive dimension have factor
+    systems $\omega_0$ and $\omega_1$, then $|\omega_0(g,h)|=|\omega_1(g,h)|=1$.
+    If these systems are cohomologous, one can rephase the first action
+    to have the factor system of the second
     \cite[Section~II.F.2, lines~886--921]{Schuch2011Phases}.
 \end{theorem}
 
@@ -1031,6 +1043,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
     Hence $\psi_gV_g^0$ has factor system $\omega_1/|\omega_1|$, and multiplication
     by a unit-modulus scalar preserves unitarity.
+    For a unitary virtual action,
+    $1=\|V_gV_h\|=|\omega(g,h)|\,\|V_{gh}\|=|\omega(g,h)|$.
+    Hence its factor system equals its pointwise unit phase.
 \end{proof}
 
 \begin{definition}[Direct sum with a common factor system]
@@ -1460,10 +1475,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     family, and let $T$ be a tensor on $\C^E$. The isometric bond
     inclusion of $A$ has letters $VA^iV^\dagger$. The supported lift
     with prescribed initial tensor $T$ has letters
-    \[
-        B_\gamma^i=VA_\gamma^iV^\dagger
+    \begin{align}
+        B_\gamma^i & =VA_\gamma^iV^\dagger
         +T^i-VA_0^iV^\dagger.
-    \]
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Supported bond lifts preserve the exact ground realization]
@@ -2624,7 +2640,6 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:spt_supported_frame_comparison}
     Stationarity makes the support of $\sigma$ invariant under each
     adjoint letter of $B$. The adjoint transfer map therefore intertwines
     expansion $Z\mapsto KZK^\dagger$ with the compressed transfer map.
@@ -2657,7 +2672,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \uses{thm:spt_stationary_density_compression,
         thm:spt_unique_stationary_symmetry,
         thm:spt_local_stationary_density,
-        thm:spt_supported_density_class_invariance}
+        thm:spt_local_spectral_support,
+        thm:spt_supported_frame_comparison,
+        thm:spt_local_invariant_compression}
     Compression preserves stationary uniqueness. Exact physical covariance
     then forces each actual virtual action to commute with the compressed
     density. Apply the spectral-corner argument on the open neighborhood.
@@ -3276,6 +3293,41 @@ and the regrouping of physical registers into bonds.
     continuity.
 \end{proof}
 
+\begin{lemma}[Spectral gap in independent-bond coordinates]
+    \label{lem:spt_independent_bond_gap}
+    \lean{MPSTensor.bondPenalty_norm_le_one,
+        MPSTensor.bondProductParentHamiltonian_posSemidef,
+        MPSTensor.bondProductParentHamiltonian_spectrum_gap_one,
+        MPSTensor.normalizedBondInterpolation_parent_uniform_gap}
+    \leanok
+    \uses{thm:spt_bond_product_parent_gap, thm:spt_bond_parent_continuity}
+    Let $\eta$ be a unit bond vector and $N\geq1$. The local penalty
+    $1-|\eta\rangle\langle\eta|$ has operator norm at most one, and the
+    independent-bond Hamiltonian $H_N(\eta)$ is positive semidefinite with
+    \begin{align}
+        0                              & \in\operatorname{spec}(H_N(\eta)), &
+        \operatorname{spec}(H_N(\eta)) & \subseteq\{0\}\cup[1,\infty).
+        \notag
+    \end{align}
+    For $D_0,D_1>0$ and the normalized interpolating bond
+    $\widehat\omega(\gamma)$, the penalty depends continuously on
+    $\gamma$, and these statements hold for every real $\gamma$ and every
+    $N\geq1$, including both endpoints
+    \cite[Section~II.F.2, lines~899--906]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The penalty is an orthogonal projection, so its norm is at most one,
+    and $H_N(\eta)$ is a sum of orthogonal projections. Its kernel is the
+    nonzero line spanned by $\eta^{\otimes N}$, which gives the spectral
+    value $0$. For a unit eigenvector with eigenvalue $\lambda$, the
+    inequality $H_N(\eta)^2\geq H_N(\eta)$ of
+    Theorem~\ref{thm:spt_bond_product_parent_gap} gives
+    $\lambda\leq\lambda^2$; with $\lambda\geq0$ this forces $\lambda=0$ or
+    $\lambda\geq1$. Continuity along the interpolation is
+    Theorem~\ref{thm:spt_bond_parent_continuity}.
+\end{proof}
+
 \begin{theorem}[Physical parent Hamiltonian of the interpolating bonds]
     \label{thm:spt_physical_bond_parent_gap}
     \lean{MPSTensor.normalizedPhysicalBondInterpolation_parent_gap_one,
@@ -3423,6 +3475,40 @@ and the regrouping of physical registers into bonds.
     values strictly between zero and one. The direct-sum action fixes
     the bond vector, so the full Hamiltonian commutes with
     $U_g^{\otimes N}$ for every $g$.
+\end{proof}
+
+\begin{theorem}[Fixed-point path for cohomologous virtual actions]
+    \label{thm:spt_cohomologous_fixed_point_path}
+    \lean{MPSTensor.sptKron_eq_of_eq_smul,
+        MPSTensor.sptFixedPointAction_eq_of_forall_eq_smul,
+        MPSTensor.exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint}
+    \leanok
+    \uses{thm:spt_unitary_rephasing, thm:spt_direct_sum_fixed_point_path,
+        def:spt_fixed_point_tensor}
+    Let $D_0,D_1>0$, and let $V^0$ and $V^1$ be unitary projective
+    representations with cohomologous factor systems $\omega_0$ and
+    $\omega_1$. There is a unitary projective representation $V^{0\prime}$
+    with factor system $\omega_1$ whose fixed-point physical action, with
+    trivial character, equals that of $V^0$.
+    Set $D=D_0+D_1$ and $W_g=V^{0\prime}_{g^{-1}}\oplus V^1_{g^{-1}}$.
+    Under the common on-site action $U_g=W_g^T\otimes W_g^{-1}$, the
+    normalized bond interactions of Theorem~\ref{thm:spt_direct_sum_fixed_point_path}
+    give a symmetric gapped path between their two endpoint interactions on
+    the physical space of dimension $D^2$
+    \cite[Section~II.F.2]{Schuch2011Phases}. The normalized bond follows
+    the corrected second-block range of
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{theorem}
+
+\begin{proof}\leanok
+    Choose $\lambda$ with
+    $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$.
+    Theorem~\ref{thm:spt_unitary_rephasing} gives
+    $V^{0\prime}_g=(\lambda_g/|\lambda_g|)V^0_g$ with factor system
+    $\omega_1$. Scalars cancel in $W^T\otimes W^{-1}$, so the first
+    fixed-point physical action is unchanged.
+    Theorem~\ref{thm:spt_direct_sum_fixed_point_path} now applies to
+    $V^{0\prime}\oplus V^1$.
 \end{proof}
 
 \begin{theorem}[Weighted matrix-unit MPS as a product of bonds]
